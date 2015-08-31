@@ -13,6 +13,9 @@
 #include <QtConcurrentRun>
 #include <QDir>
 #include <QMetaProperty>
+#include "qxrdacquisitionparameterpack.h"
+#include "qxrddarkacquisitionparameterpack.h"
+#include "qxrdprocessargs.h"
 
 QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
                                  QxrdExperimentWPtr doc,
@@ -66,7 +69,6 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
     m_Window(),
     m_Allocator(allocator),
     m_DataProcessor(proc),
-    m_Detector(),
     m_AcquiredImages("acquired"),
     m_ControlPanel(NULL),
     m_Idling(1)
@@ -220,11 +222,6 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
 void QxrdAcquisition::setWindow(QxrdWindowWPtr win)
 {
   m_Window = win;
-}
-
-void QxrdAcquisition::setDetector(QxrdDetectorWPtr det)
-{
-  m_Detector = det;
 }
 
 void QxrdAcquisition::printMessage(QString msg, QDateTime ts) const
@@ -1123,89 +1120,6 @@ void QxrdAcquisition::enqueueAcquiredFrame(QcepInt16ImageDataPtr img)
   m_AcquiredImages.enqueue(img);
 
   m_NAcquiredImages.release(1);
-}
-
-void QxrdAcquisition::onExposureTimeChanged()
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->onExposureTimeChanged();
-  }
-}
-
-void QxrdAcquisition::onBinningModeChanged()
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->onBinningModeChanged();
-  }
-}
-
-void QxrdAcquisition::onCameraGainChanged()
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->onCameraGainChanged();
-  }
-}
-
-
-void QxrdAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->setupExposureMenu(cb, get_ExposureTime());
-  }
-}
-
-void QxrdAcquisition::setupCameraGainMenu(QComboBox *cb)
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->setupCameraGainMenu(cb, get_CameraGain());
-  }
-}
-
-void QxrdAcquisition::setupCameraBinningModeMenu(QComboBox *cb)
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->setupCameraBinningModeMenu(cb, get_BinningMode());
-  }
-}
-
-
-void QxrdAcquisition::beginAcquisition()
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->beginAcquisition();
-  }
-}
-
-void QxrdAcquisition::endAcquisition()
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->endAcquisition();
-  }
-}
-
-void QxrdAcquisition::shutdownAcquisition()
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->shutdownAcquisition();
-  }
 }
 
 void QxrdAcquisition::Message(QString msg)

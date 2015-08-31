@@ -9,7 +9,7 @@
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisitionthread.h"
-#include "qxrdacquisition.h"
+#include "qxrdsingleacquisition.h"
 #include "qxrdserverthread.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserverthread.h"
@@ -145,8 +145,8 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
 //    m_AcquisitionThread -> start();
 //    m_Acquisition = m_AcquisitionThread -> acquisition();
 
-    m_Acquisition = QxrdAcquisitionPtr(
-          new QxrdAcquisition(m_SettingsSaver,
+    m_Acquisition = QxrdSingleAcquisitionPtr(
+          new QxrdSingleAcquisition(m_SettingsSaver,
                               sharedFromThis(),
                               m_DataProcessor,
                               app->allocator()));
@@ -1006,7 +1006,7 @@ void QxrdExperiment::onDetectorTypeChanged()
     set_DetectorTypeName(det->detectorTypeName());
     set_DetectorAddress(det->detectorAddress());
 
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdSingleAcquisitionPtr acq(m_Acquisition);
 
     if (acq) {
       acq->setDetector(det);

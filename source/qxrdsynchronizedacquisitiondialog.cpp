@@ -4,6 +4,7 @@
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdacquisition.h"
 #include "qxrddebug.h"
+#include "qxrdacquisitionparameterpack.h"
 
 QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(
     QxrdSynchronizedAcquisitionDialogSettingsWPtr settings,

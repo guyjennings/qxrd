@@ -15,7 +15,7 @@
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionthread-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdsingleacquisition-ptr.h"
 #include "qxrddataprocessorthread-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdserverthread-ptr.h"
@@ -157,7 +157,7 @@ private:
   QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
 //  QxrdAcquisitionThreadPtr        m_AcquisitionThread;
 //  QxrdAcquisitionWPtr             m_Acquisition;
-  QxrdAcquisitionPtr              m_Acquisition;
+  QxrdSingleAcquisitionPtr              m_Acquisition;
   QxrdDetectorThreadPtr           m_DetectorThread;
   QxrdDetectorWPtr                m_Detector;
   QxrdFileSaverThreadPtr          m_FileSaverThread;
