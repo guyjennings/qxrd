@@ -53,7 +53,7 @@ public:
 
   QStringList makeStringListFromArgs(int argc, char **argv);
 
-  QWidget* window();
+//  QWidget* window();
 
   void readDefaultSettings();
   void writeDefaultSettings();
