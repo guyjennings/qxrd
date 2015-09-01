@@ -48,6 +48,7 @@ Section "Extract qxrd"
   SetShellVarContext all
   SetOutPath "$INSTDIR"
   File "${APPDIR}\qxrd.exe"
+  File "${APPDIR}\vcredist*.exe"
   File "${APPDIR}\*.dll"
 
   SetOutPath "$INSTDIR\plugins"

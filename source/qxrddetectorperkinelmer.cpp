@@ -356,8 +356,10 @@ void QxrdDetectorPerkinElmer::acquisitionError(const char *fn, int ln, int n)
 
 bool QxrdDetectorPerkinElmer::checkPluginAvailable()
 {
-  if (g_Application && m_PerkinElmer == NULL) {
-    m_PerkinElmer = g_Application->perkinElmerPlugin();
+  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+
+  if (app && m_PerkinElmer == NULL) {
+    m_PerkinElmer = app->perkinElmerPlugin();
   }
 
   if (m_PerkinElmer == NULL) {
@@ -898,8 +900,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
     QxrdAcquisitionPtr acq(m_Acquisition);
 
     if (plugin && acq) {
-      QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(acq->allocator(),
-                                                                 QcepAllocator::AllocateFromReserve,
+      QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepAllocator::AllocateFromReserve,
                                                                  acq->get_NCols(), acq->get_NRows());
 
       //    printf("allocator took %d msec\n", tic.restart());
@@ -1152,8 +1153,10 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 {
   //  INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "onEndFrame", Qt::QueuedConnection));
   //  g_Detector->onEndFrameCallback();
-  if (g_Application) {
-    QxrdPerkinElmerPluginInterfacePtr plugin(g_Application->perkinElmerPlugin());
+  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+
+  if (app) {
+    QxrdPerkinElmerPluginInterfacePtr plugin(app->perkinElmerPlugin());
 
     if (hAcqDesc && plugin) {
       ACQDATATYPE object;
