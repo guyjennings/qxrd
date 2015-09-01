@@ -10,6 +10,7 @@
 #include "qxrdwindow.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdsingleacquisition.h"
+#include "qxrdmultipleacquisition.h"
 #include "qxrdserverthread.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserverthread.h"
@@ -54,6 +55,7 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
   m_DataProcessor(),
 //  m_AcquisitionThread(NULL),
   m_Acquisition(),
+  m_MultipleAcquisition(),
   m_FileSaverThread(NULL),
   m_FileSaver(),
 //  m_ScriptEngineThread(NULL),
@@ -73,7 +75,6 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
   m_DetectorNumber(m_SettingsSaver, this, "detectorNumber", 0, "Detector Number"),
   m_DetectorSubType(m_SettingsSaver, this, "detectorSubType", 0, "Detector Sub Type"),
   m_DetectorAddress(m_SettingsSaver, this, "detectorAddress", "", "Detector Address"),
-  m_ProcessorType(m_SettingsSaver, this,"processorType", 0, "Data Processor Type"),
   m_DefaultLayout(QcepSettingsSaverWPtr(), this,"defaultLayout",0, "Default Layout Used?"),
   m_WorkCompleted(QcepSettingsSaverWPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
   m_WorkTarget(QcepSettingsSaverWPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
@@ -153,6 +154,13 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
 
     m_Acquisition -> initialize();
 
+    m_MultipleAcquisition = QxrdMultipleAcquisitionPtr(
+          new QxrdMultipleAcquisition(m_SettingsSaver,
+                                      sharedFromThis(),
+                                      m_DataProcessor,
+                                      app->allocator()));
+    m_MultipleAcquisition -> initialize();
+
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
           new QxrdCalibrantLibrary(m_SettingsSaver, sharedFromThis()));
 
@@ -172,6 +180,10 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
 
     if (acq) {
       acq -> setNIDAQPlugin(app->nidaqPlugin());
+    }
+
+    if (m_MultipleAcquisition) {
+      m_MultipleAcquisition -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
     m_Dataset = QxrdDatasetPtr(new QxrdDataset(m_SettingsSaver, ""));
@@ -527,6 +539,11 @@ QxrdAcquisitionWPtr QxrdExperiment::acquisition() const
   return m_Acquisition;
 }
 
+QxrdAcquisitionWPtr QxrdExperiment::multipleAcquisition() const
+{
+  return m_MultipleAcquisition;
+}
+
 QxrdServerWPtr QxrdExperiment::specServer()
 {
   return m_Server;
@@ -767,7 +784,8 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
   if (settings) {
     QcepExperiment::readSettings(settings, section);
 
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdSingleAcquisitionPtr acq(m_Acquisition);
+    QxrdMultipleAcquisitionPtr mult(m_MultipleAcquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
@@ -776,6 +794,10 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
 
     if (acq) {
       acq  -> readSettings(settings, "acquisition");
+    }
+
+    if (mult) {
+      mult -> readSettings(settings, "multipleAcquisition");
     }
 
     if (proc) {
@@ -829,6 +851,7 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
     QcepExperiment::writeSettings(settings, section);
 
     QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdMultipleAcquisitionPtr mult(m_MultipleAcquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
@@ -837,6 +860,10 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 
     if (acq) {
       acq  -> writeSettings(settings, "acquisition");
+    }
+
+    if (mult) {
+      mult -> writeSettings(settings, "multipleAcquisition");
     }
 
     if (proc) {
@@ -991,7 +1018,7 @@ void QxrdExperiment::onDetectorTypeChanged()
   m_Detector       = QxrdDetectorPtr();
   m_DetectorThread = QxrdDetectorThreadPtr();
 
-  m_DetectorThread = QxrdDetectorThreadPtr(new QxrdDetectorThread(sharedFromThis(), m_Acquisition));
+  m_DetectorThread = QxrdDetectorThreadPtr(new QxrdDetectorThread(m_SettingsSaver, sharedFromThis(), m_Acquisition, newType));
   m_DetectorThread -> start();
 
   if (m_DetectorThread) {

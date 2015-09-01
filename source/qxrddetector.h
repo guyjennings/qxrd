@@ -1,18 +1,21 @@
 #ifndef QXRDDETECTOR_H
 #define QXRDDETECTOR_H
 
-#include <QObject>
+#include "qcepmacros.h"
+#include "qcepproperty.h"
+#include "qcepobject.h"
 #include <QDoubleSpinBox>
 #include <QComboBox>
 
 #include "qxrdacquisition-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
-class QxrdDetector : public QObject
+class QxrdDetector : public QcepObject
 {
   Q_OBJECT
+
 public:
-  explicit QxrdDetector(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
+  explicit QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType);
   virtual ~QxrdDetector();
 
   virtual void initialize();
@@ -37,8 +40,13 @@ public slots:
   virtual void shutdownAcquisition();
 
 protected:
-  QxrdExperimentWPtr  m_Experiment;
-  QxrdAcquisitionWPtr m_Acquisition;
+  QcepSettingsSaverWPtr m_Saver;
+  QxrdExperimentWPtr    m_Experiment;
+  QxrdAcquisitionWPtr   m_Acquisition;
+
+public:
+  Q_PROPERTY(int detectorType READ get_DetectorType WRITE set_DetectorType)
+  QCEP_INTEGER_PROPERTY(DetectorType)
 };
 
 #endif // QXRDDETECTOR_H

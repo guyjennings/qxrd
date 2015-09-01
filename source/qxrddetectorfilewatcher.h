@@ -8,8 +8,7 @@ class QxrdDetectorFileWatcher : public QxrdDetector
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorFileWatcher(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
-  int detectorType() const;
+  explicit QxrdDetectorFileWatcher(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
 
 signals:
   

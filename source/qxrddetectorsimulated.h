@@ -9,11 +9,10 @@ class QxrdDetectorSimulated : public QxrdDetector
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorSimulated(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
+  explicit QxrdDetectorSimulated(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorSimulated();
 
   void initialize();
-  int detectorType() const;
 
 public slots:
   virtual void onExposureTimeChanged();

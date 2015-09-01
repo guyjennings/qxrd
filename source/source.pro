@@ -164,7 +164,8 @@ HEADERS += \
     qxrddarkacquisitionparameterpack-ptr.h \
     qxrdprocessargs-ptr.h \
     qxrdsingleacquisition-ptr.h \
-    qxrdmultipleacquisition-ptr.h
+    qxrdmultipleacquisition-ptr.h \
+    qxrdacquisitionprocessor.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -213,7 +214,8 @@ SOURCES += \
     qxrdmultipleacquisition.cpp \
     qxrdacquisitionparameterpack.cpp \
     qxrddarkacquisitionparameterpack.cpp \
-    qxrdprocessargs.cpp
+    qxrdprocessargs.cpp \
+    qxrdacquisitionprocessor.cpp
 
 OTHER_FILES += testImage.js
 

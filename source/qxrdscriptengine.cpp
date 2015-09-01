@@ -1847,6 +1847,13 @@ void QxrdScriptEngine::initialize()
       }
     }
 
+    QxrdAcquisitionPtr macq(expt->multipleAcquisition());
+
+    if (macq) {
+      QCEP_DOC_OBJECT("multipleAcquisition", "Multi Detector Acquisition Object");
+      globalObject().setProperty("multipleAcquisition", newQObject(macq.data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties));
+    }
+
     QxrdSimpleServerPtr ssrv(expt->simpleServer());
 
     if (ssrv) {
