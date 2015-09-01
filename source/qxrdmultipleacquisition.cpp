@@ -21,7 +21,7 @@ void QxrdMultipleAcquisition::readSettings(QSettings *settings, QString section)
     m_DetectorThreads.resize(n);
     m_Detectors.resize(n);
 
-    for (int i=0; i<n; n++) {
+    for (int i=0; i<n; i++) {
       settings->setArrayIndex(i);
 
       int detType = settings->value("detectorType", 0).toInt();
