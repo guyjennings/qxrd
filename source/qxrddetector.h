@@ -9,6 +9,8 @@
 
 #include "qxrdacquisition-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qxrddetector-ptr.h"
+#include <QScriptEngine>
 
 class QxrdDetector : public QcepObject
 {
@@ -23,6 +25,10 @@ public:
   virtual QString detectorTypeName() const;
   virtual int detectorSubType() const;
   virtual QString detectorAddress() const;
+
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorPtr &det);
+  static void fromScriptValue(const QScriptValue &obj, QxrdDetectorPtr &det);
+
 
 signals:
 
@@ -47,6 +53,9 @@ protected:
 public:
   Q_PROPERTY(int detectorType READ get_DetectorType WRITE set_DetectorType)
   QCEP_INTEGER_PROPERTY(DetectorType)
+
+  Q_PROPERTY(QString detectorTypeName READ get_DetectorTypeName WRITE set_DetectorTypeName STORED false)
+  QCEP_STRING_PROPERTY(DetectorTypeName)
 };
 
 #endif // QXRDDETECTOR_H

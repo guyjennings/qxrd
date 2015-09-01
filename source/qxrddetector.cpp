@@ -8,7 +8,8 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt,
   m_Saver(saver),
   m_Experiment(expt),
   m_Acquisition(acq),
-  m_DetectorType(saver, this, "detectorType", detType, "Detector Type")
+  m_DetectorType(saver, this, "detectorType", detType, "Detector Type"),
+  m_DetectorTypeName(QcepSettingsSaverWPtr(), this, "detectorTypeName", detectorTypeName(), "Detector Type Name")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::QxrdDetector(%p)\n", this);
@@ -80,4 +81,22 @@ void QxrdDetector::endAcquisition()
 
 void QxrdDetector::shutdownAcquisition()
 {
+}
+
+QScriptValue QxrdDetector::toScriptValue(QScriptEngine *engine, const QxrdDetectorPtr &det)
+{
+  return engine->newQObject(det.data());
+}
+
+void QxrdDetector::fromScriptValue(const QScriptValue &obj, QxrdDetectorPtr &det)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QxrdDetector *qdet = qobject_cast<QxrdDetector*>(qobj);
+
+    if (qdet) {
+      det = QxrdDetectorPtr(qdet);
+    }
+  }
 }

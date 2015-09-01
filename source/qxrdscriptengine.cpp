@@ -1746,6 +1746,11 @@ void QxrdScriptEngine::initialize()
 //                          QxrdCalibrantDSpacingVector::toScriptValue,
 //                          QxrdCalibrantDSpacingVector::fromScriptValue);
 
+  qRegisterMetaType<QxrdDetectorPtr>("QxrdDetectorPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdDetector::toScriptValue,
+                          QxrdDetector::fromScriptValue);
+
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
