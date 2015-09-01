@@ -5,6 +5,8 @@
 
 class QxrdSingleAcquisition : public QxrdAcquisition
 {
+  Q_OBJECT
+
 public:
   QxrdSingleAcquisition(QcepSettingsSaverWPtr saver,
                         QxrdExperimentWPtr doc,

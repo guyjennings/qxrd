@@ -141,6 +141,16 @@ QxrdAcquisition::~QxrdAcquisition()
   }
 }
 
+QxrdExperimentWPtr QxrdAcquisition::experiment()
+{
+  return m_Experiment;
+}
+
+QxrdDataProcessorWPtr QxrdAcquisition::dataProcessor()
+{
+  return m_DataProcessor;
+}
+
 void QxrdAcquisition::shutdown()
 {
   if (qcepDebug(DEBUG_APP)) {

@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <QPainter>
 
-QxrdDetectorSimulated::QxrdDetectorSimulated(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
-  QxrdDetector(expt, acq)
+QxrdDetectorSimulated::QxrdDetectorSimulated(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
+  QxrdDetector(saver, expt, acq, QxrdDetectorThread::SimulatedDetector)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorSimulated::QxrdDetectorSimulated(%p)\n", this);
@@ -26,11 +26,6 @@ QxrdDetectorSimulated::~QxrdDetectorSimulated()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorSimulated::~QxrdDetectorSimulated(%p)\n", this);
   }
-}
-
-int QxrdDetectorSimulated::detectorType() const
-{
-  return QxrdDetectorThread::SimulatedDetector;
 }
 
 void QxrdDetectorSimulated::onExposureTimeChanged()

@@ -1,12 +1,7 @@
 #include "qxrddetectorfilewatcher.h"
 #include "qxrddetectorthread.h"
 
-QxrdDetectorFileWatcher::QxrdDetectorFileWatcher(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
-  QxrdDetector(expt, acq)
+QxrdDetectorFileWatcher::QxrdDetectorFileWatcher(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
+  QxrdDetector(saver, expt, acq, QxrdDetectorThread::FileWatcherDetector)
 {
-}
-
-int QxrdDetectorFileWatcher::detectorType() const
-{
-  return QxrdDetectorThread::FileWatcherDetector;
 }

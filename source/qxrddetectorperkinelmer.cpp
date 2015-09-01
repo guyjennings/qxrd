@@ -10,8 +10,8 @@
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 
-QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
-  QxrdDetector(expt, acq),
+QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
+  QxrdDetector(saver, expt, acq, QxrdDetectorThread::PerkinElmerDetector),
   m_Mutex(QMutex::Recursive),
   m_BufferSize(0),
   m_AcqDesc(NULL),
@@ -55,11 +55,6 @@ QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer()
     plugin->Acquisition_Abort(m_AcqDesc);
     plugin->Acquisition_CloseAll();
   }
-}
-
-int QxrdDetectorPerkinElmer::detectorType() const
-{
-  return QxrdDetectorThread::PerkinElmerDetector;
 }
 
 int QxrdDetectorPerkinElmer::detectorSubType() const

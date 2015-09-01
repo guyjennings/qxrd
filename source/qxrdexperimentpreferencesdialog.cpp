@@ -39,8 +39,6 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     int detectorType = expt -> get_DetectorType();
     int detectorSubType = expt -> get_DetectorSubType();
 
-    //  int processorType = m_Experiment -> get_ProcessorType();
-
     int runSpecServer = 0;
     int specServerPort = 0;
 

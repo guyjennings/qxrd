@@ -30,8 +30,6 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     QxrdFileSaverWPtr filesaver) :
 
   QcepObject("processor", NULL),
-  //    m_ProcessorType(this,"processorType",0),
-  //    m_ProcessorTypeName(this,"processorTypeName","processorType"),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),
   m_FileName(QcepSettingsSaverPtr(), this, "fileName","", "Current File Name"),
   m_DataPath(saver, this,"dataPath", "", "Data Path"),

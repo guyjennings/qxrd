@@ -124,6 +124,9 @@ protected:
 
   void getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
+  QxrdExperimentWPtr experiment();
+  QxrdDataProcessorWPtr dataProcessor();
+
 protected slots:
   void onAcquireComplete();
   void onIdleTimeout();
@@ -147,7 +150,7 @@ private:
 
   int cancelling();
 
-private:
+protected:
   QcepSettingsSaverWPtr         m_Saver;
 
 public:

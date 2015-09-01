@@ -3,10 +3,12 @@
 #include "qxrddebug.h"
 #include <stdio.h>
 
-QxrdDetector::QxrdDetector(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
-  QObject(),
+QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType) :
+  QcepObject("detector", NULL),
+  m_Saver(saver),
   m_Experiment(expt),
-  m_Acquisition(acq)
+  m_Acquisition(acq),
+  m_DetectorType(saver, this, "detectorType", detType, "Detector Type")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::QxrdDetector(%p)\n", this);
@@ -22,7 +24,7 @@ QxrdDetector::~QxrdDetector()
 
 int  QxrdDetector::detectorType() const
 {
-  return QxrdDetectorThread::NoDetector;
+  return get_DetectorType();
 }
 
 QString QxrdDetector::detectorTypeName() const

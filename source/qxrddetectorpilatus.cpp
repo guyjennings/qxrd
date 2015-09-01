@@ -1,13 +1,7 @@
 #include "qxrddetectorpilatus.h"
 #include "qxrddetectorthread.h"
 
-QxrdDetectorPilatus::QxrdDetectorPilatus(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
-  QxrdDetector(expt, acq)
+QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
+  QxrdDetector(saver, expt, acq, QxrdDetectorThread::PilatusDetector)
 {
 }
-
-int QxrdDetectorPilatus::detectorType() const
-{
-  return QxrdDetectorThread::PilatusDetector;
-}
-

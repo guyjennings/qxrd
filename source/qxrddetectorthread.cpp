@@ -20,11 +20,16 @@
 
 #include <stdio.h>
 
-QxrdDetectorThread::QxrdDetectorThread(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
+QxrdDetectorThread::QxrdDetectorThread(QcepSettingsSaverWPtr saver,
+                                       QxrdExperimentWPtr    expt,
+                                       QxrdAcquisitionWPtr   acq,
+                                       int                   detType) :
   QxrdThread(),
+  m_Saver(saver),
   m_Experiment(expt),
   m_Acquisition(acq),
-  m_Detector()
+  m_Detector(),
+  m_DetectorType(detType)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorThread::QxrdDetectorThread(%p)\n", this);
@@ -152,43 +157,43 @@ void QxrdDetectorThread::run()
 
     }
     if (expt) {
-      switch(expt->get_DetectorType()) {
+      switch(m_DetectorType) {
       case SimulatedDetector:
         setObjectName("simulatedDetector");
-        p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment, m_Acquisition));
+        p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Saver, m_Experiment, m_Acquisition));
         break;
 
 #ifdef HAVE_PERKIN_ELMER
       case PerkinElmerDetector:
         setObjectName("perkinElmerDetector");
-        p = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Experiment, m_Acquisition));
+        p = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Saver, m_Experiment, m_Acquisition));
         break;
 #endif
 
 #ifdef HAVE_PILATUS
       case PilatusDetector:
         setObjectName("pilatusDetector");
-        p = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Experiment, m_Acquisition));
+        p = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Saver, m_Experiment, m_Acquisition));
         break;
 #endif
 
 #ifdef HAVE_AREADETECTOR
       case EpicsAreaDetector:
         setObjectName("epicsAreaDetector");
-        p = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Experiment, m_Acquisition));
+        p = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Saver, m_Experiment, m_Acquisition));
         break;
 #endif
 
       case FileWatcherDetector:
         setObjectName("fileWatcherDetector");
-        p = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Experiment, m_Acquisition));
+        p = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Saver, m_Experiment, m_Acquisition));
         break;
       }
     }
   }
 
   if (p == NULL) {
-    p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment, m_Acquisition));
+    p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Saver, m_Experiment, m_Acquisition));
   }
 
   int rc = -1;

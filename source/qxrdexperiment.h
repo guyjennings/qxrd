@@ -16,6 +16,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionthread-ptr.h"
 #include "qxrdsingleacquisition-ptr.h"
+#include "qxrdmultipleacquisition-ptr.h"
 #include "qxrddataprocessorthread-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdserverthread-ptr.h"
@@ -59,6 +60,7 @@ public:
 
 //  QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionWPtr acquisition() const;
+  QxrdAcquisitionWPtr multipleAcquisition() const;
   QxrdWindowPtr window();
   QxrdDataProcessorWPtr dataProcessor() const;
   QxrdCenterFinderWPtr centerFinder() const;
@@ -158,6 +160,7 @@ private:
 //  QxrdAcquisitionThreadPtr        m_AcquisitionThread;
 //  QxrdAcquisitionWPtr             m_Acquisition;
   QxrdSingleAcquisitionPtr              m_Acquisition;
+  QxrdMultipleAcquisitionPtr      m_MultipleAcquisition;
   QxrdDetectorThreadPtr           m_DetectorThread;
   QxrdDetectorWPtr                m_Detector;
   QxrdFileSaverThreadPtr          m_FileSaverThread;
@@ -207,9 +210,6 @@ public:  // Properties
 
   Q_PROPERTY(QString    detectorAddress  READ get_DetectorAddress WRITE set_DetectorAddress)
   QCEP_STRING_PROPERTY(DetectorAddress)
-
-  Q_PROPERTY(int    processorType READ get_ProcessorType WRITE set_ProcessorType)
-  QCEP_INTEGER_PROPERTY(ProcessorType)
 
   Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false)
   QCEP_INTEGER_PROPERTY(DefaultLayout)
