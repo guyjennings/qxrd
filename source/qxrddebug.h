@@ -22,7 +22,8 @@ enum {
   DEBUG_FITTING,
   DEBUG_NOPARALLEL,
   DEBUG_HISTOGRAM,
-  DEBUG_CALIBRANT
+  DEBUG_CALIBRANT,
+  DEBUG_PILATUS
 };
 
 class QxrdDebugDictionary : public QcepDebugDictionary {
