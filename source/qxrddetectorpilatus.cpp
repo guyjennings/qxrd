@@ -52,26 +52,51 @@ void QxrdDetectorPilatus::shutdownAcquisition()
 
 void QxrdDetectorPilatus::sendCommand(QString cmd)
 {
-  m_PilatusSocket.write(qPrintable(cmd+"\n"));
-  m_PilatusSocket.waitForBytesWritten();
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "sendCommand", Q_ARG(QString, cmd));
+  } else {
+    m_PilatusSocket.write(qPrintable(cmd+"\n"));
+    m_PilatusSocket.waitForBytesWritten();
+  }
 }
 
 QString QxrdDetectorPilatus::sendCommandReply(QString cmd)
 {
-  m_PilatusSocket.write(qPrintable(cmd+"\n"));
-  m_PilatusSocket.waitForBytesWritten();
+  if (QThread::currentThread() != thread()) {
+    QString res;
 
-  QString a;
+    QMetaObject::invokeMethod(this, "sendCommandReply",
+                              Qt::BlockingQueuedConnection,
+                              Q_RETURN_ARG(QString,res),
+                              Q_ARG(QString, cmd));
 
-  while (m_PilatusSocket.waitForReadyRead(10000)) {
-    a += m_PilatusSocket.readAll();
+    return res;
+  } else {
+    m_PilatusSocket.write(qPrintable(cmd+"\n"));
+    m_PilatusSocket.waitForBytesWritten();
 
-    if (a.contains(QChar(24))) {
-      QStringList sl = a.split(QChar(24));
+    QString a;
 
-      return sl.value(0);
+    while (m_PilatusSocket.waitForReadyRead(10000)) {
+      QString seg = m_PilatusSocket.readAll();
+
+      if (qcepDebug(DEBUG_PILATUS)) {
+        printMessage(tr("Data segment size %1, data %2").arg(seg.count()).arg(seg));
+      }
+
+      a += seg;
+
+      if (a.contains(QChar(24))) {
+        QStringList sl = a.split(QChar(24));
+
+        if (qcepDebug(DEBUG_PILATUS)) {
+          printMessage(tr("Split %1/%2").arg(sl.value(0).count()).arg(sl.value(1).count()));
+        }
+
+        return sl.value(0);
+      }
     }
-  }
 
-  return a;
+    return a;
+  }
 }
