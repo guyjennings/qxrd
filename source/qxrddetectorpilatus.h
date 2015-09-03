@@ -3,17 +3,44 @@
 
 #include "qcepmacros.h"
 #include "qxrddetector.h"
+#include <QTcpSocket>
 
 class QxrdDetectorPilatus : public QxrdDetector
 {
   Q_OBJECT
 public:
   explicit QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
+  virtual ~QxrdDetectorPilatus();
+  void initialize();
 
 signals:
 
 public slots:
+  void beginAcquisition();
+  void endAcquisition();
+  void shutdownAcquisition();
 
+  void    sendCommand(QString cmd);
+  QString sendCommandReply(QString cmd);
+
+private:
+  QTcpSocket m_PilatusSocket;
+
+public:
+  Q_PROPERTY(QString pilatusHost READ get_PilatusHost WRITE set_PilatusHost)
+  QCEP_STRING_PROPERTY(PilatusHost)
+
+  Q_PROPERTY(int pilatusPort READ get_PilatusPort WRITE set_PilatusPort)
+  QCEP_INTEGER_PROPERTY(PilatusPort)
+
+  Q_PROPERTY(QString pilatusFilePattern READ get_PilatusFilePattern WRITE set_PilatusFilePattern)
+  QCEP_STRING_PROPERTY(PilatusFilePattern)
+
+  Q_PROPERTY(QString pilatusDataDirectory READ get_PilatusDataDirectory WRITE set_PilatusDataDirectory)
+  QCEP_STRING_PROPERTY(PilatusDataDirectory)
+
+  Q_PROPERTY(QString localDataDirectory READ get_LocalDataDirectory WRITE set_LocalDataDirectory)
+  QCEP_STRING_PROPERTY(LocalDataDirectory)
 };
 
 #endif // QXRDDETECTORPILATUS_H

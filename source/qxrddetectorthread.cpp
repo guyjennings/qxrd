@@ -7,9 +7,9 @@
 #include "qxrddetectorperkinelmer.h"
 #endif
 
-#ifdef HAVE_PILATUS
+//#ifdef HAVE_PILATUS
 #include "qxrddetectorpilatus.h"
-#endif
+//#endif
 
 #ifdef HAVE_AREADETECTOR
 #include "qxrddetectorepicsarea.h"
@@ -170,12 +170,12 @@ void QxrdDetectorThread::run()
         break;
 #endif
 
-#ifdef HAVE_PILATUS
+//#ifdef HAVE_PILATUS
       case PilatusDetector:
         setObjectName("pilatusDetector");
         p = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Saver, m_Experiment, m_Acquisition));
         break;
-#endif
+//#endif
 
 #ifdef HAVE_AREADETECTOR
       case EpicsAreaDetector:

@@ -69,7 +69,6 @@ public slots:
 
   void shutdown();
 
-
   int acquisitionStatus(double time);
 
   void onBufferSizeChanged(int newMB);

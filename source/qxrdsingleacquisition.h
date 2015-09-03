@@ -21,6 +21,8 @@ public slots:
   void onBinningModeChanged();
   void onCameraGainChanged();
 
+  QxrdDetectorPtr detector();
+
 public:
   void setupExposureMenu(QDoubleSpinBox *cb);
   void setupCameraGainMenu(QComboBox *cb);

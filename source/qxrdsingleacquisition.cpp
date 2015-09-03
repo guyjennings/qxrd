@@ -16,6 +16,11 @@ void QxrdSingleAcquisition::setDetector(QxrdDetectorWPtr det)
   m_Detector = det;
 }
 
+QxrdDetectorPtr QxrdSingleAcquisition::detector()
+{
+  return m_Detector;
+}
+
 void QxrdSingleAcquisition::onExposureTimeChanged()
 {
   QxrdDetectorPtr det(m_Detector);

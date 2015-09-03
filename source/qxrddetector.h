@@ -20,7 +20,6 @@ public:
   explicit QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType);
   virtual ~QxrdDetector();
 
-  virtual void initialize();
   virtual int detectorType() const;
   virtual QString detectorTypeName() const;
   virtual int detectorSubType() const;
@@ -33,6 +32,8 @@ public:
 signals:
 
 public slots:
+  virtual void initialize();
+
   virtual void onExposureTimeChanged();
   virtual void onBinningModeChanged();
   virtual void onCameraGainChanged();
