@@ -36,7 +36,7 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr
   m_UpdateTimer.setSingleShot(true);
   m_UpdateTimer.start(m_UpdateInterval);
 
-//  updaters.setLocalData((void*) this);
+  updaters.setLocalData(this);
 }
 
 QxrdFileBrowserModelUpdater::~QxrdFileBrowserModelUpdater()
