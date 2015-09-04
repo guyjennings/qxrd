@@ -1,15 +1,15 @@
 #ifndef QXRDINFODIALOGSETTINGS_H
 #define QXRDINFODIALOGSETTINGS_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 
-class QxrdInfoDialogSettings : public QObject
+class QxrdInfoDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdInfoDialogSettings(QcepSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdInfoDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
   
 public:
   void readSettings(QSettings *settings, QString section);

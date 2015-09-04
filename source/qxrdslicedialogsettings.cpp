@@ -1,8 +1,8 @@
 #include "qxrdslicedialogsettings.h"
 #include "qcepsettingssaver.h"
 
-QxrdSliceDialogSettings::QxrdSliceDialogSettings(QcepSettingsSaverWPtr saver, QObject *parent) :
-  QObject(parent),
+QxrdSliceDialogSettings::QxrdSliceDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent) :
+  QcepObject("sliceDialogSettings", parent),
   m_SlicePolygon(saver, this, "slicePolygon", QcepPolygon(), "Slice Polygon")
 {
   m_SlicePlotSettings = QxrdSlicePlotSettingsPtr(new QxrdSlicePlotSettings(saver, parent));

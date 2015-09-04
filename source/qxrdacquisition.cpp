@@ -748,7 +748,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPackWPtr parms)
           if (res[p][0] == NULL) {
 
             QcepInt32ImageDataPtr nres = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
-                                                                      get_NCols(), get_NRows());
+                                                                      get_NCols(), get_NRows(), this);
             res[p][0] = nres;
 
             if (nres == NULL) {
@@ -773,7 +773,7 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPackWPtr parms)
 
           if (ovf[p][0] == NULL) {
             QcepMaskDataPtr novf = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
-                                                          get_NCols(), get_NRows(), 0);
+                                                          get_NCols(), get_NRows(), 0, this);
             ovf[p][0] = novf;
 
             if (novf == NULL) {
@@ -946,9 +946,9 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPackWPtr parms)
     }
 
     QcepInt32ImageDataPtr res = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
-                                                             get_NCols(), get_NRows());
+                                                             get_NCols(), get_NRows(), this);
     QcepMaskDataPtr overflow  = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
-                                                       get_NCols(), get_NRows(),0);
+                                                       get_NCols(), get_NRows(),0, this);
     QString fb, fn;
 
     if (res == NULL || overflow == NULL) {

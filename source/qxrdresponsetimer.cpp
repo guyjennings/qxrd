@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "qxrdapplication.h"
 
-QxrdResponseTimer::QxrdResponseTimer(int interval, int allowance,  QObject *parent) :
+QxrdResponseTimer::QxrdResponseTimer(int interval, int allowance,  QcepObject *parent) :
   QObject(parent),
   m_ResponseInterval(interval),
   m_ResponseAllowance(allowance)

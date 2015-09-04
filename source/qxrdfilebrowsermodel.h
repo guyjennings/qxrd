@@ -1,6 +1,7 @@
 #ifndef QXRDFILEBROWSERMODEL_H
 #define QXRDFILEBROWSERMODEL_H
 
+#include "qcepobject.h"
 #include <QAbstractTableModel>
 #include <QVector>
 #include <QFileInfo>
@@ -18,7 +19,7 @@ class QxrdFileBrowserModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  explicit QxrdFileBrowserModel(QObject *parent=0);
+  explicit QxrdFileBrowserModel(QObject *parent);
   ~QxrdFileBrowserModel();
   void initialize(QxrdFileBrowserModelWPtr model);
 
@@ -64,7 +65,7 @@ private:
   mutable QMutex     m_Mutex;
   QxrdFileBrowserModelWPtr m_Model;
   QxrdFileBrowserModelUpdaterThreadPtr m_UpdaterThread;
-  QxrdFileBrowserModelUpdaterPtr m_Updater;
+  QxrdFileBrowserModelUpdaterWPtr m_Updater;
   QString            m_RootPath;
   QStringList        m_NameFilters;
   QVector<QFileInfo> m_DirList;

@@ -1,8 +1,8 @@
 #include "qxrdscriptdialogsettings.h"
 #include "qcepsettingssaver.h"
 
-QxrdScriptDialogSettings::QxrdScriptDialogSettings(QcepSettingsSaverWPtr /*saver*/, QObject *parent) :
-  QObject(parent)
+QxrdScriptDialogSettings::QxrdScriptDialogSettings(QcepSettingsSaverWPtr /*saver*/, QcepObject *parent) :
+  QcepObject("scriptDialogSettings", parent)
 {
 }
 

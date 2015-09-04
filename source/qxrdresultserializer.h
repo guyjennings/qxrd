@@ -3,18 +3,18 @@
 
 #include "qcepmacros.h"
 #include "qcepproperty.h"
-#include <QObject>
+#include "qcepobject.h"
 #include <QMutex>
 #include <QMutexLocker>
 #include <QFuture>
 #include <QQueue>
 #include <QFutureWatcher>
 
-class QxrdResultSerializerBase : public QObject
+class QxrdResultSerializerBase : public QcepObject
 {
   Q_OBJECT
 public:
-  QxrdResultSerializerBase(QObject *parent = 0);
+  QxrdResultSerializerBase(QcepObject *parent);
   virtual ~QxrdResultSerializerBase();
 
 signals:
@@ -28,7 +28,7 @@ template <typename T>
 class QxrdResultSerializer : public QxrdResultSerializerBase
 {
 public:
-  explicit QxrdResultSerializer(QcepIntProperty *ctr=0, QObject *parent=0);
+  explicit QxrdResultSerializer(QcepIntProperty *ctr, QcepObject *parent);
 
   void enqueue(QFuture<T> future);
   T dequeue();

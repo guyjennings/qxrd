@@ -1,7 +1,7 @@
 #ifndef QXRDWINDOWSETTINGS_H
 #define QXRDWINDOWSETTINGS_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdimageplotsettings.h"
 #include "qxrdcenterfinderplotsettings.h"
@@ -15,11 +15,11 @@
 #include "qxrddistortioncorrectiondialogsettings.h"
 #include "qxrddistortioncorrectionplotsettings.h"
 
-class QxrdWindowSettings : public QObject
+class QxrdWindowSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdWindowSettings(QcepSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdWindowSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
   
 public:
   Q_PROPERTY(QByteArray windowGeometry READ get_WindowGeometry WRITE set_WindowGeometry)

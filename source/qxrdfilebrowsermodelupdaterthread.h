@@ -10,7 +10,7 @@ class QxrdFileBrowserModelUpdaterThread : public QxrdThread
   Q_OBJECT
 public:
   explicit QxrdFileBrowserModelUpdaterThread();
-  ~QxrdFileBrowserModelUpdaterThread();
+  virtual ~QxrdFileBrowserModelUpdaterThread();
 
   void setModel(QxrdFileBrowserModelWPtr model);
   QxrdFileBrowserModelUpdaterPtr updater() const;

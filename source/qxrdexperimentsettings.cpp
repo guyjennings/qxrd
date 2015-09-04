@@ -14,7 +14,7 @@ QxrdExperimentSettings::QxrdExperimentSettings(QxrdExperiment *parent)
   }
 }
 
-QxrdExperimentSettings::QxrdExperimentSettings(const QString &path, QSettings::Format format, QObject *parent)
+QxrdExperimentSettings::QxrdExperimentSettings(const QString &path, QSettings::Format format, QcepObject *parent)
   : QSettings(path, format, parent),
     m_Experiment(NULL)
 {

@@ -1,8 +1,8 @@
 #include "qxrdinfodialogsettings.h"
 #include "qcepsettingssaver.h"
 
-QxrdInfoDialogSettings::QxrdInfoDialogSettings(QcepSettingsSaverWPtr /*saver*/, QObject *parent) :
-  QObject(parent)
+QxrdInfoDialogSettings::QxrdInfoDialogSettings(QcepSettingsSaverWPtr /*saver*/, QcepObject *parent) :
+  QcepObject("infoDialogSettings", parent)
 {
 }
 

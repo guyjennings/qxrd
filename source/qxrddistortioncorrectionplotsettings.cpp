@@ -1,6 +1,6 @@
 #include "qxrddistortioncorrectionplotsettings.h"
 
-QxrdDistortionCorrectionPlotSettings::QxrdDistortionCorrectionPlotSettings(QcepSettingsSaverWPtr saver, QObject *parent) :
+QxrdDistortionCorrectionPlotSettings::QxrdDistortionCorrectionPlotSettings(QcepSettingsSaverWPtr saver, QcepObject *parent) :
   QxrdImagePlotSettings(saver, parent)
 {
 }

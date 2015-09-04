@@ -367,11 +367,11 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
 
         m_CachedBinNumbers =  QcepAllocator::newInt32Image(QcepAllocator::AlwaysAllocate,
                                                            m_NCols*m_Oversample,
-                                                           m_NRows*m_Oversample);
+                                                           m_NRows*m_Oversample, expt.data());
 
         m_CachedNormalization = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
                                                               m_NCols*m_Oversample,
-                                                              m_NRows*m_Oversample);
+                                                              m_NRows*m_Oversample, expt.data());
 
         if (m_CachedBinNumbers && m_CachedNormalization) {
           m_CachedBinNumbers -> clear();

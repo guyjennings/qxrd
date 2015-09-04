@@ -1,7 +1,7 @@
 #ifndef QXRDFILEBROWSERMODELUPDATER_H
 #define QXRDFILEBROWSERMODELUPDATER_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include <QFileSystemWatcher>
 #include <QTimer>
 #include <QDateTime>
@@ -10,11 +10,12 @@
 #include "qxrdfilebrowsermodel-ptr.h"
 #include "qxrdfilebrowsermodel.h"
 
-class QxrdFileBrowserModelUpdater : public QObject
+class QxrdFileBrowserModelUpdater : public QcepObject, public QEnableSharedFromThis<QxrdFileBrowserModelUpdater>
 {
     Q_OBJECT
 public:
-  explicit QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr browser, QObject *parent = 0);
+  explicit QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr browser, QcepObject *parent);
+  virtual ~QxrdFileBrowserModelUpdater();
 
   bool updateNeeded();
 

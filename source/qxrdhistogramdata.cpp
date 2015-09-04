@@ -1,6 +1,6 @@
 #include "qxrdhistogramdata.h"
 
-QxrdHistogramData::QxrdHistogramData(QObject *parent) :
-    QObject(parent)
+QxrdHistogramData::QxrdHistogramData(QcepObject *parent) :
+    QcepObject("histogramData", parent)
 {
 }

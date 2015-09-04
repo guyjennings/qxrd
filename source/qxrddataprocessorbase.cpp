@@ -95,7 +95,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_Acquisition(acq),
   m_AcquiredInt16Images("acquiredInt16Images"),
   m_AcquiredInt32Images("acquiredInt32Images"),
-  m_Data(QcepAllocator::newDoubleImage(QcepAllocator::WaitTillAvailable, 2048, 2048)),
+  m_Data(QcepAllocator::newDoubleImage(QcepAllocator::WaitTillAvailable, 2048, 2048, this)),
   m_DarkFrame(NULL),
   m_BadPixels(NULL),
   m_GainMap(NULL),
@@ -332,7 +332,7 @@ QString QxrdDataProcessorBase::integratedOutputDirectory() const
 QcepDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage(int width, int height)
 {
   QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
-                                                             width, height);
+                                                             width, height, this);
 
   return res;
 }
@@ -786,7 +786,7 @@ void QxrdDataProcessorBase::newMaskStack()
 {
 
   QcepMaskDataPtr m = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable,
-                                             newMaskWidth(), newMaskHeight());
+                                             newMaskWidth(), newMaskHeight(), 0, this);
 
   m_Masks.push_front(m);
 
@@ -801,7 +801,7 @@ void QxrdDataProcessorBase::pushMaskStack(QcepMaskDataPtr m)
 {
   if (m == NULL) {
     m =  QcepAllocator::newMask(QcepAllocator::WaitTillAvailable,
-                                newMaskWidth(), newMaskHeight());
+                                newMaskWidth(), newMaskHeight(), 0, this);
 
     if (mask()) {
       mask()->copyMaskTo(m);
@@ -1104,7 +1104,7 @@ void QxrdDataProcessorBase::loadMask(QString name)
     printMessage(tr("QxrdDataProcessorBase::loadMask(%1)").arg(name));
   }
 
-  QcepMaskDataPtr res = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable, 0,0);
+  QcepMaskDataPtr res = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable, 0,0, 0, this);
 
   QString path = filePathInDataDirectory(name);
 
@@ -2188,7 +2188,7 @@ QxrdGenerateTestImageWPtr QxrdDataProcessorBase::generateTestImage() const
 
 void QxrdDataProcessorBase::newOutputScan(QString title)
 {
-  m_OutputScan = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, data());
+  m_OutputScan = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, data(), this);
 
   m_OutputScan -> set_Title(title);
 }

@@ -2,13 +2,13 @@
 #define QXRDROIDATA_H
 
 #include "qcepmacros.h"
-#include <QObject>
+#include "qcepobject.h"
 
-class QxrdROIData : public QObject
+class QxrdROIData : public QcepObject
 {
 Q_OBJECT
 public:
-    explicit QxrdROIData(QObject *parent = 0);
+    explicit QxrdROIData(QcepObject *parent);
 
 signals:
 

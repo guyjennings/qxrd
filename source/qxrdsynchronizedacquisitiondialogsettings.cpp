@@ -1,6 +1,6 @@
 #include "qxrdsynchronizedacquisitiondialogsettings.h"
 
-QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings(QcepSettingsSaverWPtr saver, QObject *parent) :
+QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent) :
   QObject(parent)
 {
   m_SynchronizedAcquisitionPlotSettings = QxrdSynchronizedAcquisitionPlotSettingsPtr(

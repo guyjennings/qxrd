@@ -10,11 +10,18 @@ QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread() :
   m_Model(),
   m_Updater()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(%p)\n", this);
+  }
 }
 
 QxrdFileBrowserModelUpdaterThread::~QxrdFileBrowserModelUpdaterThread()
 {
   shutdown();
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdFileBrowserModelUpdaterThread::~QxrdFileBrowserModelUpdaterThread(%p)\n", this);
+  }
 }
 
 void QxrdFileBrowserModelUpdaterThread::setModel(QxrdFileBrowserModelWPtr model)
@@ -24,7 +31,8 @@ void QxrdFileBrowserModelUpdaterThread::setModel(QxrdFileBrowserModelWPtr model)
 
 void QxrdFileBrowserModelUpdaterThread::shutdown()
 {
-  INVOKE_CHECK(QMetaObject::invokeMethod(m_Updater.data(),"shutdown",Qt::QueuedConnection));
+//  INVOKE_CHECK(QMetaObject::invokeMethod(m_Updater.data(),"shutdown",Qt::QueuedConnection));
+  exit();
 
   wait();
 }

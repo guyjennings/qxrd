@@ -1,6 +1,6 @@
 #include "qxrdroidata.h"
 
-QxrdROIData::QxrdROIData(QObject *parent) :
-    QObject(parent)
+QxrdROIData::QxrdROIData(QcepObject *parent) :
+    QcepObject("roiData", parent)
 {
 }

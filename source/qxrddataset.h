@@ -11,14 +11,14 @@ class QxrdDataset : public QcepDataset
   Q_OBJECT
 
 public:
-  QxrdDataset(QcepSettingsSaverWPtr saver, QString name);
+  QxrdDataset(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent);
 
 public slots:
   QcepDoubleImageDataPtr image(QString path);
-  QcepDoubleImageDataPtr newImage(QString path, int width=0, int height=0);
+  QcepDoubleImageDataPtr newImage(QString path, int width, int height);
 
   QcepIntegratedDataPtr  integratedData(QString path);
-  QcepIntegratedDataPtr  newIntegratedData(QString path, int sz=0);
+  QcepIntegratedDataPtr  newIntegratedData(QString path, int sz);
 };
 
 #endif // QXRDDATASET_H

@@ -1,6 +1,6 @@
 #include "qxrdhistogramplotsettings.h"
 
-QxrdHistogramPlotSettings::QxrdHistogramPlotSettings(QcepSettingsSaverWPtr saver, QObject *parent) :
+QxrdHistogramPlotSettings::QxrdHistogramPlotSettings(QcepSettingsSaverWPtr saver, QcepObject *parent) :
   QcepPlotSettings("histogramPlot", saver, parent)
 {
 }

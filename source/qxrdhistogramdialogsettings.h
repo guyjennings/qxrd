@@ -9,7 +9,7 @@ class QxrdHistogramDialogSettings : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdHistogramDialogSettings(QcepSettingsSaverWPtr saver, QObject *parent = 0);
+  explicit QxrdHistogramDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
   
 public:
   Q_PROPERTY(QRectF histogramRect READ get_HistogramRect WRITE set_HistogramRect)

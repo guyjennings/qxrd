@@ -12,7 +12,7 @@ QxrdGlobalSettings::QxrdGlobalSettings(QxrdApplication *app)
   }
 }
 
-QxrdGlobalSettings::QxrdGlobalSettings(const QString &path, QSettings::Format format, QObject *parent)
+QxrdGlobalSettings::QxrdGlobalSettings(const QString &path, QSettings::Format format, QcepObject *parent)
   : QSettings(path, format, parent)
 {
 

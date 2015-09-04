@@ -20,8 +20,10 @@ QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QcepSettingsSaverWPtr saver
     QxrdAcquisitionWPtr   acq,
     QxrdFileSaverWPtr filesaver)
   : QxrdDataProcessorBase(saver, doc, acq, filesaver),
-    m_CorrectedImages(prop_CorrectionQueueLength()),
-    m_IntegratedData(prop_IntegrationQueueLength())
+    m_CorrectedImages(prop_CorrectionQueueLength(), this),
+    m_IntegratedData(prop_IntegrationQueueLength(), this),
+    m_ROIData(NULL, this),
+    m_HistogramData(NULL, this)
 {
   connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessorThreaded::onCorrectedImageAvailable);
   connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessorThreaded::onIntegratedDataAvailable);
@@ -224,7 +226,7 @@ void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
 {
   QcepDoubleImageDataPtr img = m_CorrectedImages.dequeue();
   QcepMaskDataPtr mask = (img ? img->mask() : QcepMaskDataPtr());
-  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, img);
+  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, img, this);
 
   if (img) {
     m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
@@ -715,7 +717,7 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
   QcepDoubleImageDataPtr img;
   QcepIntegratedDataPtr  result;
 
-  QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AlwaysAllocate, 0,0, img, result);
+  QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AlwaysAllocate, 0,0, this, img, result);
 
   QString path = filePathInDataDirectory(name);
 
@@ -874,7 +876,7 @@ void QxrdDataProcessorThreaded::setFileNormalization(QString name, QList<double>
 
 void QxrdDataProcessorThreaded::slicePolygon(QVector<QPointF> poly)
 {
-  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::WaitTillAvailable, data());
+  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::WaitTillAvailable, data(), this);
 
   m_IntegratedData.enqueue(
       QtConcurrent::run(m_Integrator.data(),
@@ -890,7 +892,7 @@ void QxrdDataProcessorThreaded::integrateSaveAndDisplay()
                  .arg(data()->get_FileName()).arg(m_CenterFinder->get_CenterX()).arg(m_CenterFinder->get_CenterY()));
   }
 
-  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::WaitTillAvailable, data());
+  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::WaitTillAvailable, data(), this);
 
   m_IntegratedData.enqueue(
       QtConcurrent::run(m_Integrator.data(),

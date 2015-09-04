@@ -1,7 +1,7 @@
 #ifndef QXRDDISTORTIONCORRECTIONDIALOGSETTINGS_H
 #define QXRDDISTORTIONCORRECTIONDIALOGSETTINGS_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 
@@ -9,7 +9,7 @@ class QxrdDistortionCorrectionDialogSettings : public QObject
 {
   Q_OBJECT
 public:
-  explicit QxrdDistortionCorrectionDialogSettings(QcepSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdDistortionCorrectionDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
 
 public:
   void readSettings(QSettings *settings, QString section);

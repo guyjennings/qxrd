@@ -1,6 +1,7 @@
 #ifndef QXRDFITPARAMETER_H
 #define QXRDFITPARAMETER_H
 
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdfitparameter-ptr.h"
 #include "qcepsettingssaver-ptr.h"
@@ -9,7 +10,7 @@ class QxrdFitParameter : public QcepDoubleProperty
 {
   Q_OBJECT
 public:
-  QxrdFitParameter(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QVariant value, QString toolTip);
+  QxrdFitParameter(QcepSettingsSaverWPtr saver, QcepObject *parent, const char *name, QVariant value, QString toolTip);
 
   double lowerLimit() const;
   double upperLimit() const;

@@ -2,13 +2,13 @@
 #define QXRDHISTOGRAMDATA_H
 
 #include "qcepmacros.h"
-#include <QObject>
+#include "qcepobject.h"
 
-class QxrdHistogramData : public QObject
+class QxrdHistogramData : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdHistogramData(QObject *parent = 0);
+  explicit QxrdHistogramData(QcepObject *parent = 0);
 
 signals:
 

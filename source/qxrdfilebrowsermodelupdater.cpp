@@ -6,10 +6,10 @@
 #include "qxrdfilebrowsermodel.h"
 #include <QThreadStorage>
 
-static QThreadStorage<QxrdFileBrowserModelUpdater*> updaters;
+static QThreadStorage<void*> updaters;
 
-QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr browser, QObject *parent) :
-  QObject(parent),
+QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr browser, QcepObject *parent) :
+  QcepObject("fileBrowserModelUpdater", parent),
   m_BrowserModel(browser),
   m_RootPath(""),
   m_FileSystemWatcher(NULL),
@@ -36,7 +36,22 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr
   m_UpdateTimer.setSingleShot(true);
   m_UpdateTimer.start(m_UpdateInterval);
 
-  updaters.setLocalData(this);
+//  updaters.setLocalData((void*) this);
+}
+
+QxrdFileBrowserModelUpdater::~QxrdFileBrowserModelUpdater()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting file browser model updater\n");
+#endif
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdFileBrowserModelUpdater::~QxrdFileBrowserModelUpdater(%p)\n", this);
+  }
+
+  if (qcepDebug(DEBUG_APP)) {
+    printMessage("QxrdFileBrowserModelUpdater::~QxrdFileBrowserModelUpdater");
+  }
 }
 
 void QxrdFileBrowserModelUpdater::shutdown()
@@ -94,53 +109,11 @@ bool QxrdFileBrowserModelUpdater::updateNeeded()
   return m_UpdateNeeded.fetchAndAddOrdered(0);
 }
 
-//class QxrdSortInterruptChecker {
-//public:
-//  QxrdSortInterruptChecker(QxrdFileBrowserModelUpdaterWPtr updater);
-
-//  void sortInterruptCheck();
-
-//private:
-//  QxrdFileBrowserModelUpdaterWPtr m_Updater;
-//};
-
-//QxrdSortInterruptChecker::QxrdSortInterruptChecker(QxrdFileBrowserModelUpdaterWPtr updater)
-//  : m_Updater(updater)
-//{
-//}
-
-//void QxrdSortInterruptChecker::sortInterruptCheck()
-//{
-//  QxrdFileBrowserModelUpdaterPtr updater(m_Updater);
-
-//  if (updater && updater->updateNeeded()) {
-//    throw 0;
-//  }
-//}
-
-//class QxrdFileNameLessThan : public QxrdSortInterruptChecker {
-//public:
-//  QxrdFileNameLessThan(QxrdFileBrowserModelUpdaterWPtr updater);
-
-//  bool operator()(QFileInfo f1, QFileInfo f2);
-//};
-
-//QxrdFileNameLessThan::QxrdFileNameLessThan(QxrdFileBrowserModelUpdaterWPtr updater)
-//  : QxrdSortInterruptChecker(updater)
-//{
-//}
-
-//bool QxrdFileNameLessThan::operator()(QFileInfo f1, QFileInfo f2)
-//{
-//  sortInterruptCheck();
-
-//  return f1.fileName().toLower() < f2.fileName().toLower();
-//}
-
 static void checkSortInterrupt()
 {
   if (updaters.hasLocalData()) {
-    QxrdFileBrowserModelUpdater* updater = updaters.localData();
+    QxrdFileBrowserModelUpdater* updater =
+        (QxrdFileBrowserModelUpdater*) updaters.localData();
 
     if (updater && updater->updateNeeded()) {
       throw 0;
@@ -155,50 +128,12 @@ static bool fileNameLessThan(QFileInfo f1, QFileInfo f2)
   return f1.fileName().toLower() < f2.fileName().toLower();
 }
 
-//class QxrdFileNameGreaterThan : public QxrdSortInterruptChecker {
-//public:
-//  QxrdFileNameGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater);
-
-//  bool operator()(QFileInfo f1, QFileInfo f2);
-//};
-
-//QxrdFileNameGreaterThan::QxrdFileNameGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater)
-//  : QxrdSortInterruptChecker(updater)
-//{
-//}
-
-//bool QxrdFileNameGreaterThan::operator()(QFileInfo f1, QFileInfo f2)
-//{
-//  sortInterruptCheck();
-
-//  return f1.fileName().toLower() > f2.fileName().toLower();
-//}
-
 static bool fileNameGreaterThan(QFileInfo f1, QFileInfo f2)
 {
   checkSortInterrupt();
 
   return f1.fileName().toLower() > f2.fileName().toLower();
 }
-
-//class QxrdFileSizeLessThan : public QxrdSortInterruptChecker {
-//public:
-//  QxrdFileSizeLessThan(QxrdFileBrowserModelUpdaterWPtr updater);
-
-//  bool operator()(QFileInfo f1, QFileInfo f2);
-//};
-
-//QxrdFileSizeLessThan::QxrdFileSizeLessThan(QxrdFileBrowserModelUpdaterWPtr updater)
-//  : QxrdSortInterruptChecker(updater)
-//{
-//}
-
-//bool QxrdFileSizeLessThan::operator()(QFileInfo f1, QFileInfo f2)
-//{
-//  sortInterruptCheck();
-
-//  return f1.size() < f2.size();
-//}
 
 static bool fileSizeLessThan(QFileInfo f1, QFileInfo f2)
 {
@@ -207,25 +142,6 @@ static bool fileSizeLessThan(QFileInfo f1, QFileInfo f2)
   return f1.size() < f2.size();
 }
 
-//class QxrdFileSizeGreaterThan : public QxrdSortInterruptChecker {
-//public:
-//  QxrdFileSizeGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater);
-
-//  bool operator()(QFileInfo f1, QFileInfo f2);
-//};
-
-//QxrdFileSizeGreaterThan::QxrdFileSizeGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater)
-//  : QxrdSortInterruptChecker(updater)
-//{
-//}
-
-//bool QxrdFileSizeGreaterThan::operator()(QFileInfo f1, QFileInfo f2)
-//{
-//  sortInterruptCheck();
-
-//  return f1.size() > f2.size();
-//}
-
 static bool fileSizeGreaterThan(QFileInfo f1, QFileInfo f2)
 {
   checkSortInterrupt();
@@ -233,50 +149,12 @@ static bool fileSizeGreaterThan(QFileInfo f1, QFileInfo f2)
   return f1.size() > f2.size();
 }
 
-//class QxrdFileDateLessThan : public QxrdSortInterruptChecker {
-//public:
-//  QxrdFileDateLessThan(QxrdFileBrowserModelUpdaterWPtr updater);
-
-//  bool operator()(QFileInfo f1, QFileInfo f2);
-//};
-
-//QxrdFileDateLessThan::QxrdFileDateLessThan(QxrdFileBrowserModelUpdaterWPtr updater)
-//  : QxrdSortInterruptChecker(updater)
-//{
-//}
-
-//bool QxrdFileDateLessThan::operator()(QFileInfo f1, QFileInfo f2)
-//{
-//  sortInterruptCheck();
-
-//  return f1.lastModified() < f2.lastModified();
-//}
-
 static bool fileDateLessThan(QFileInfo f1, QFileInfo f2)
 {
   checkSortInterrupt();
 
   return f1.lastModified() < f2.lastModified();
 }
-
-//class QxrdFileDateGreaterThan : public QxrdSortInterruptChecker {
-//public:
-//  QxrdFileDateGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater);
-
-//  bool operator()(QFileInfo f1, QFileInfo f2);
-//};
-
-//QxrdFileDateGreaterThan::QxrdFileDateGreaterThan(QxrdFileBrowserModelUpdaterWPtr updater)
-//  : QxrdSortInterruptChecker(updater)
-//{
-//}
-
-//bool QxrdFileDateGreaterThan::operator ()(QFileInfo f1, QFileInfo f2)
-//{
-//  sortInterruptCheck();
-
-//  return f1.lastModified() > f2.lastModified();
-//}
 
 static bool fileDateGreaterThan(QFileInfo f1, QFileInfo f2)
 {

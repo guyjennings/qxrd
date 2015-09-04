@@ -15,7 +15,7 @@ QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
   QAbstractTableModel(parent),
   m_Mutex(QMutex::Recursive),
   m_UpdaterThread(NULL),
-  m_Updater(NULL),
+  m_Updater(),
   m_SortedColumn(0),
   m_SortOrder(Qt::AscendingOrder),
   m_Limit(1000),
@@ -267,7 +267,11 @@ void QxrdFileBrowserModel::updateModel()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  m_Updater->needUpdate();
+  QxrdFileBrowserModelUpdaterPtr updater(m_Updater);
+
+  if (updater) {
+    updater -> needUpdate();
+  }
 }
 
 bool QxrdFileBrowserModel::isDir(const QModelIndex &index) const
@@ -285,7 +289,11 @@ void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
     m_SortedColumn = column;
     m_SortOrder    = order;
 
-    m_Updater -> needUpdate();
+    QxrdFileBrowserModelUpdaterPtr updater(m_Updater);
+
+    if (updater) {
+      updater -> needUpdate();
+    }
   }
 }
 
@@ -320,5 +328,9 @@ void QxrdFileBrowserModel::generateFileUpdates(int doIt)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  m_Updater->generateFileUpdates(doIt);
+  QxrdFileBrowserModelUpdaterPtr updater(m_Updater);
+
+  if (updater) {
+    updater -> generateFileUpdates(doIt);
+  }
 }

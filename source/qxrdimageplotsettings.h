@@ -9,7 +9,7 @@ class QxrdImagePlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdImagePlotSettings(QcepSettingsSaverWPtr saver, QObject *parent);
+  explicit QxrdImagePlotSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
   
 public:
   Q_PROPERTY(double displayMinimumPctle     READ get_DisplayMinimumPctle WRITE set_DisplayMinimumPctle)

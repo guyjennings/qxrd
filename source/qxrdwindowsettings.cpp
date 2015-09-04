@@ -2,8 +2,8 @@
 #include "qcepsettingssaver.h"
 
 QxrdWindowSettings::QxrdWindowSettings(QcepSettingsSaverWPtr saver,
-                                       QObject *parent) :
-  QObject(parent),
+                                       QcepObject *parent) :
+  QcepObject("windowSettings", parent),
   m_WindowGeometry(saver, this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(saver, this, "windowState", QByteArray(), "Window State Settings")
 {

@@ -5,7 +5,7 @@
 #include <QScriptEngine>
 #include <stdio.h>
 
-QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QxrdPowderPoint value, QString toolTip) :
+QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSettingsSaverWPtr saver, QcepObject *parent, const char *name, QxrdPowderPoint value, QString toolTip) :
   QcepProperty(saver, parent, name, toolTip),
   m_Default(value),
   m_Value(value)
@@ -13,7 +13,7 @@ QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSettingsSaverWPtr saver, QO
 }
 
 QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSettingsSaverWPtr saver,
-                                                 QObject *parent,
+                                                 QcepObject *parent,
                                                  const char *name,
                                                  int n1, int n2, int n3, double x, double y, double r1, double r2, double az,
                                                  QString toolTip) :
@@ -449,7 +449,7 @@ void QxrdPowderPointPropertyDoubleSpinBoxHelper::setValue(double value)
   emit subValueChanged(m_Axis, value, m_Property->incIndex(1));
 }
 
-QxrdPowderPointVectorProperty::QxrdPowderPointVectorProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QxrdPowderPointVector value, QString toolTip)
+QxrdPowderPointVectorProperty::QxrdPowderPointVectorProperty(QcepSettingsSaverWPtr saver, QcepObject *parent, const char *name, QxrdPowderPointVector value, QString toolTip)
   : QcepProperty(saver, parent, name, toolTip),
     m_Default(value),
     m_Value(value)

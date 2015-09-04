@@ -128,7 +128,7 @@ void QxrdIntegrator::onIntegrationParametersChanged()
 
 QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask)
 {
-  QcepIntegratedDataPtr res = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, dimg);
+  QcepIntegratedDataPtr res = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, dimg, this);
 
   if (res) {
     return performIntegration(res, dimg, mask);

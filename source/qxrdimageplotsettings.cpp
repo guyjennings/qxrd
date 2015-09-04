@@ -1,7 +1,7 @@
 #include "qxrdimageplotsettings.h"
 #include "qcepsettingssaver.h"
 
-QxrdImagePlotSettings::QxrdImagePlotSettings(QcepSettingsSaverWPtr saver, QObject *parent) :
+QxrdImagePlotSettings::QxrdImagePlotSettings(QcepSettingsSaverWPtr saver, QcepObject *parent) :
   QcepPlotSettings("imageGraph", saver, parent),
   m_DisplayMinimumPctle(saver, this, "displayMinimumPctle", 0, "Minimum Displayed Value (as a percentile)"),
   m_DisplayMaximumPctle(saver, this, "displayMaximumPctle", 100, "Maximum Displayed Value (as a percentile)"),

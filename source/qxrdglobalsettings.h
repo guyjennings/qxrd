@@ -2,7 +2,7 @@
 #define QXRDGLOBALSETTINGS_H
 
 #include "qcepmacros.h"
-
+#include "qcepobject.h"
 #include <QSettings>
 #include "qxrdapplication-ptr.h"
 
@@ -12,7 +12,7 @@ class QxrdGlobalSettings : public QSettings
 
 public:
   QxrdGlobalSettings(QxrdApplication *app);
-  QxrdGlobalSettings(const QString &path, QSettings::Format format = QSettings::IniFormat, QObject *parent=0);
+  QxrdGlobalSettings(const QString &path, QSettings::Format format = QSettings::IniFormat, QcepObject *parent=0);
   ~QxrdGlobalSettings();
 
 private:

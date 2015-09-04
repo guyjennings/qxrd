@@ -92,7 +92,9 @@ void QxrdGenerateTestImage::generateImage()
 {
   QcepDoubleImageDataPtr img = QcepDoubleImageDataPtr(new QcepDoubleImageData(QcepSettingsSaverPtr(),
                                                                               get_NCols(),
-                                                                              get_NRows()));
+                                                                              get_NRows(),
+                                                                              0,
+                                                                              this));
 
   img->clear();
 
@@ -157,7 +159,7 @@ void QxrdGenerateTestImage::generateImage()
 
 void QxrdGenerateTestImage::generateTTHImage()
 {
-  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, get_NCols(), get_NRows());
+  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, get_NCols(), get_NRows(), this);
 
   img->clear();
 
@@ -202,7 +204,7 @@ void QxrdGenerateTestImage::generateTTHImage()
 
 void QxrdGenerateTestImage::generateChiImage()
 {
-  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, get_NCols(), get_NRows());
+  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, get_NCols(), get_NRows(), this);
 
   img->clear();
 
