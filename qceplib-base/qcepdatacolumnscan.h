@@ -16,14 +16,15 @@ public slots:
   int columnCount() const;
 
 public:
-  QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name);
+  QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QcepObject *parent);
 
   typedef QcepDataGroup inherited;
 
   static QcepDataColumnScanPtr newDataColumnScan(QcepSettingsSaverWPtr sav,
                                                  QString name,
                                                  QStringList cols,
-                                                 int npts);
+                                                 int npts,
+                                                 QcepObject *parent);
 
 
   static QScriptValue toColumnScanScriptValue(QScriptEngine *engine, const QcepDataColumnScanPtr &data);

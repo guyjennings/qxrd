@@ -9,8 +9,8 @@
 #include <QFileInfo>
 #include <QDir>
 
-QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name) :
-  QcepDataObject(saver, name, 0)
+QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent) :
+  QcepDataObject(saver, name, 0, parent)
 {
   set_Type("Data Group");
 }
@@ -20,9 +20,9 @@ QString QcepDataGroup::description() const
   return tr("%1 Items").arg(childCount());
 }
 
-QcepDataGroupPtr QcepDataGroup::newDataGroup(QcepSettingsSaverWPtr saver, QString name)
+QcepDataGroupPtr QcepDataGroup::newDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent)
 {
-  QcepDataGroupPtr res(new QcepDataGroup(saver, name));
+  QcepDataGroupPtr res(new QcepDataGroup(saver, name, parent));
 
   return res;
 }
@@ -219,7 +219,7 @@ QcepDataGroupPtr QcepDataGroup::createGroup(QString path)
 
       if (sgr) {
         QcepDataGroupPtr ng =
-            QcepDataGroupPtr(new QcepDataGroup(saver(), object(path)));
+            QcepDataGroupPtr(new QcepDataGroup(saver(), object(path), sgr.data()));
 
         if (ng) {
           sgr->append(ng);
@@ -239,7 +239,7 @@ QcepDataGroupPtr QcepDataGroup::newGroup(QString path)
 
   if (group) {
     QcepDataGroupPtr ng =
-        QcepDataGroupPtr(new QcepDataGroup(saver(), object(path)));
+        QcepDataGroupPtr(new QcepDataGroup(saver(), object(path), group.data()));
 
     if (ng) {
       group->append(ng);
@@ -258,7 +258,7 @@ QcepDataArrayPtr QcepDataGroup::newArray(QString path, QVector<int> dims)
   QcepDataGroupPtr group = createGroup(directoryName(path));
 
   if (group) {
-    QcepDataArrayPtr array(new QcepDataArray(saver(), object(path), dims));
+    QcepDataArrayPtr array(new QcepDataArray(saver(), object(path), dims, group.data()));
 
     if (array) {
       group->append(array);
@@ -277,7 +277,7 @@ QcepDataColumnPtr QcepDataGroup::newColumn(QString path, int nrows)
   QcepDataGroupPtr group = createGroup(directoryName(path));
 
   if (group) {
-    QcepDataColumnPtr column(new QcepDataColumn(saver(), object(path), nrows));
+    QcepDataColumnPtr column(new QcepDataColumn(saver(), object(path), nrows, group.data()));
 
     if (column) {
       group->append(column);
@@ -296,7 +296,7 @@ QcepDataColumnScanPtr QcepDataGroup::newColumnScan(QString path, int nrow, QStri
   QcepDataGroupPtr group = createGroup(directoryName(path));
 
   if (group) {
-    QcepDataColumnScanPtr scan(QcepDataColumnScan::newDataColumnScan(saver(), object(path), cols, nrow));
+    QcepDataColumnScanPtr scan(QcepDataColumnScan::newDataColumnScan(saver(), object(path), cols, nrow, group.data()));
 
     if (scan) {
       group->append(scan);
@@ -315,7 +315,7 @@ QcepDoubleImageDataPtr QcepDataGroup::newImage(QString path, int width, int heig
   QcepDataGroupPtr group = createGroup(directoryName(path));
 
   if (group) {
-    QcepDoubleImageDataPtr image(QcepDoubleImageData::newImage(saver(), object(path), width, height));
+    QcepDoubleImageDataPtr image(QcepDoubleImageData::newImage(saver(), object(path), width, height, group.data()));
 
     if (image) {
       group->append(image);

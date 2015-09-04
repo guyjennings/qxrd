@@ -13,8 +13,9 @@ static QAtomicInt s_ObjectDeleteCount(0);
 static QSet<QcepObject*> s_Allocated;
 #endif
 
-QcepObject::QcepObject(QString name, QObject *parent) :
-  QObject(parent),
+QcepObject::QcepObject(QString name, QcepObject *parent) :
+  QObject(NULL),
+  m_Parent(parent),
   m_ObjectNamer(this, name)/*,
   m_Name(QcepSettingsSaverWPtr(), this, "name", name, "Object Name")*/
 {
@@ -75,15 +76,15 @@ QString QcepObject::get_Name() const
 
 void QcepObject::printLine(QString line)
 {
-  if (parent()) {
-    QMetaObject::invokeMethod( parent(), "printLine", Q_ARG(QString, line));
+  if (m_Parent) {
+    m_Parent->printLine(line);
   }
 }
 
 void QcepObject::printMessage(QString msg, QDateTime dt) const
 {
-  if (parent()) {
-    QMetaObject::invokeMethod( parent(), "printMessage", Q_ARG(QString, msg), Q_ARG(QDateTime, dt));
+  if (m_Parent) {
+    m_Parent->printMessage(msg, dt);
   } else {
     printf("MESSAGE: %s %s\n",
            qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
@@ -92,8 +93,8 @@ void QcepObject::printMessage(QString msg, QDateTime dt) const
 
 void QcepObject::criticalMessage(QString msg, QDateTime dt) const
 {
-  if (parent()) {
-    QMetaObject::invokeMethod( parent(), "criticalMessage", Q_ARG(QString, msg), Q_ARG(QDateTime, dt));
+  if (m_Parent) {
+    m_Parent->criticalMessage(msg, dt);
   } else {
     printf("MESSAGE: %s %s\n",
            qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
@@ -102,8 +103,8 @@ void QcepObject::criticalMessage(QString msg, QDateTime dt) const
 
 void QcepObject::statusMessage(QString msg, QDateTime dt) const
 {
-  if (parent()) {
-    QMetaObject::invokeMethod( parent(), "statusMessage", Q_ARG(QString, msg), Q_ARG(QDateTime, dt));
+  if (m_Parent) {
+    m_Parent->statusMessage(msg, dt);
   } else {
     printf("MESSAGE: %s %s\n",
            qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));

@@ -11,7 +11,7 @@ class QcepObject : public QObject
 {
   Q_OBJECT
 public:
-  explicit QcepObject(QString name, QObject *parent = 0);
+  explicit QcepObject(QString name, QcepObject *parent);
   virtual ~QcepObject();
 
   static int allocatedObjects();
@@ -42,6 +42,7 @@ public:
   static QString addSlashes(QString str);
 
 private:
+  QcepObject                         *m_Parent;
   QcepObjectNamer                     m_ObjectNamer;
 
 public:

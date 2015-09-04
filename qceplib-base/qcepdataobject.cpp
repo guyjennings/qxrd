@@ -10,8 +10,11 @@
 static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
 
-QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name, int byteSize) :
-  QcepObject(name, NULL),
+QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver,
+                               QString name,
+                               int byteSize,
+                               QcepObject *parent) :
+  QcepObject(name, parent),
   m_Saver(saver),
   m_Type(saver,        this, "type", "object", "Data object type"),
   m_ByteSize(QcepSettingsSaverWPtr(), this, "size", byteSize, "Object Size"),
@@ -114,9 +117,9 @@ void QcepDataObject::saveData(QString &name, QString filter, Overwrite canOverwr
 {
 }
 
-QcepDataObjectPtr QcepDataObject::newDataObject(QcepSettingsSaverWPtr saver, QString name)
+QcepDataObjectPtr QcepDataObject::newDataObject(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent)
 {
-  QcepDataObjectPtr res(new QcepDataObject(saver, name, 0));
+  QcepDataObjectPtr res(new QcepDataObject(saver, name, 0, parent));
 
   return res;
 }
