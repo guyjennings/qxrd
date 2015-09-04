@@ -1018,7 +1018,7 @@ void QxrdExperiment::onDetectorTypeChanged()
   m_Detector       = QxrdDetectorPtr();
   m_DetectorThread = QxrdDetectorThreadPtr();
 
-  m_DetectorThread = QxrdDetectorThreadPtr(new QxrdDetectorThread(m_SettingsSaver, sharedFromThis(), m_Acquisition, newType));
+  m_DetectorThread = QxrdDetectorThreadPtr(new QxrdDetectorThread(m_SettingsSaver, sharedFromThis(), m_Acquisition, newType, this));
   m_DetectorThread -> start();
 
   if (m_DetectorThread) {

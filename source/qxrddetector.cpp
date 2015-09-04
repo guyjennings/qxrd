@@ -3,8 +3,8 @@
 #include "qxrddebug.h"
 #include <stdio.h>
 
-QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType) :
-  QcepObject("detector", NULL),
+QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType, QcepObject *parent) :
+  QcepObject("detector", parent),
   m_Saver(saver),
   m_Experiment(expt),
   m_Acquisition(acq),

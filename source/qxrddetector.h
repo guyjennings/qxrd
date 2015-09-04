@@ -17,7 +17,7 @@ class QxrdDetector : public QcepObject
   Q_OBJECT
 
 public:
-  explicit QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType);
+  explicit QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType, QcepObject *parent);
   virtual ~QxrdDetector();
 
   virtual int detectorType() const;

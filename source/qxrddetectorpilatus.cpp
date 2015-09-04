@@ -3,8 +3,8 @@
 #include "qcepproperty.h"
 #include "qxrddebug.h"
 
-QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq) :
-  QxrdDetector(saver, expt, acq, QxrdDetectorThread::PilatusDetector),
+QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent) :
+  QxrdDetector(saver, expt, acq, QxrdDetectorThread::PilatusDetector, parent),
   m_PilatusSocket(),
   m_PilatusHost         (saver, this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
   m_PilatusPort         (saver, this, "pilatusPort",          41234,         "Camserver Port Number"),
@@ -79,28 +79,54 @@ QString QxrdDetectorPilatus::sendCommandReply(QString cmd)
     m_PilatusSocket.write(qPrintable(cmd+"\n"));
     m_PilatusSocket.waitForBytesWritten();
 
-    QString a;
+    return reply();
+  }
+}
 
-    while (m_PilatusSocket.waitForReadyRead(10000)) {
-      QString seg = m_PilatusSocket.readAll();
+QString QxrdDetectorPilatus::reply()
+{
+  if (QThread::currentThread() != thread()) {
+    QString res;
 
-      if (qcepDebug(DEBUG_PILATUS)) {
-        printMessage(tr("Data segment size %1, data %2").arg(seg.count()).arg(seg));
-      }
+    QMetaObject::invokeMethod(this, "reply",
+                              Qt::BlockingQueuedConnection,
+                              Q_RETURN_ARG(QString, res));
+    return res;
+  } else {
+    int pos = m_PilatusReply.indexOf(QChar(24));
 
-      a += seg;
+    if (pos >= 0) {
+      QString res = m_PilatusReply.left(pos);
 
-      if (a.contains(QChar(24))) {
-        QStringList sl = a.split(QChar(24));
+      m_PilatusReply.remove(0, pos+1);
+
+      return res;
+    } else {
+      while (m_PilatusSocket.waitForReadyRead(10000)) {
+        QString seg = m_PilatusSocket.readAll();
 
         if (qcepDebug(DEBUG_PILATUS)) {
-          printMessage(tr("Split %1/%2").arg(sl.value(0).count()).arg(sl.value(1).count()));
+          printMessage(tr("Data segment size %1, data %2").arg(seg.count()).arg(seg));
         }
 
-        return sl.value(0);
-      }
-    }
+        m_PilatusReply += seg;
 
-    return a;
+        pos = m_PilatusReply.indexOf(QChar(24));
+
+        if (pos >= 0) {
+          QString res = m_PilatusReply.left(pos);
+
+          m_PilatusReply.remove(0, pos+1);
+
+          if (qcepDebug(DEBUG_PILATUS)) {
+            printMessage(tr("Split %1/%2").arg(res.count()).arg(m_PilatusReply.count()));
+          }
+
+          return res;
+        }
+      }
+
+      return "";
+    }
   }
 }

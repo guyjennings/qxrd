@@ -27,7 +27,7 @@ void QxrdMultipleAcquisition::readSettings(QSettings *settings, QString section)
       int detType = settings->value("detectorType", 0).toInt();
 
       QxrdDetectorThreadPtr detThread =
-          QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType));
+          QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
 
       if (detThread) {
         detThread->start();
@@ -67,7 +67,7 @@ void QxrdMultipleAcquisition::writeSettings(QSettings *settings, QString section
 void QxrdMultipleAcquisition::appendDetector(int detType)
 {
   QxrdDetectorThreadPtr detThread =
-      QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType));
+      QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
 
   if (detThread) {
     detThread->start();

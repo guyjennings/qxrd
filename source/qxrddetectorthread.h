@@ -11,7 +11,11 @@ class QxrdDetectorThread : public QxrdThread
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorThread(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType);
+  explicit QxrdDetectorThread(QcepSettingsSaverWPtr saver,
+                              QxrdExperimentWPtr expt,
+                              QxrdAcquisitionWPtr acq,
+                              int detType,
+                              QcepObject *parent);
   virtual ~QxrdDetectorThread();
 
   QxrdDetectorPtr detector() const;
@@ -53,6 +57,7 @@ private:
   QxrdAcquisitionWPtr   m_Acquisition;
   QxrdDetectorPtr       m_Detector;
   int                   m_DetectorType;
+  QcepObject           *m_Parent;
 };
 
 #endif // QXRDDETECTORTHREAD_H

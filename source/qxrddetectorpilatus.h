@@ -9,7 +9,7 @@ class QxrdDetectorPilatus : public QxrdDetector
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq);
+  explicit QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent);
   virtual ~QxrdDetectorPilatus();
   void initialize();
 
@@ -23,8 +23,11 @@ public slots:
   void    sendCommand(QString cmd);
   QString sendCommandReply(QString cmd);
 
+  QString reply();
+
 private:
   QTcpSocket m_PilatusSocket;
+  QString    m_PilatusReply;
 
 public:
   Q_PROPERTY(QString pilatusHost READ get_PilatusHost WRITE set_PilatusHost)
