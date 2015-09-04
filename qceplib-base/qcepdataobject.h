@@ -15,13 +15,14 @@ class QcepDataObject : public QcepObject, public QEnableSharedFromThis<QcepDataO
 public:
   QcepDataObject(QcepSettingsSaverWPtr saver,
                  QString name,
-                 int byteSize);
+                 int byteSize,
+                 QcepObject *parent);
   virtual ~QcepDataObject();
 
   QcepSettingsSaverWPtr saver();
 
   static QcepDataObjectPtr newDataObject(QcepSettingsSaverWPtr saver,
-                                         QString name);
+                                         QString name, QcepObject *parent);
 
 signals:
   void dataObjectChanged();

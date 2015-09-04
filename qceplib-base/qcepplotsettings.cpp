@@ -2,7 +2,7 @@
 
 #include <qwt_plot.h>
 
-QcepPlotSettings::QcepPlotSettings(QString name, QcepSettingsSaverWPtr saver, QObject *parent) :
+QcepPlotSettings::QcepPlotSettings(QString name, QcepSettingsSaverWPtr saver, QcepObject *parent) :
   QcepObject(name, parent),
   m_XMouse(QcepSettingsSaverWPtr(), this,"xMouse",0, "X Position of Mouse"),
   m_YMouse(QcepSettingsSaverWPtr(), this,"yMouse",0, "Y Position of Mouse"),

@@ -10,7 +10,7 @@ class QcepExperiment : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QcepExperiment(QString path, QString name, QObject *parent = 0);
+  explicit QcepExperiment(QString path, QString name, QcepObject *parent);
 
 signals:
 

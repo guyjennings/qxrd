@@ -9,14 +9,14 @@ class QcepMaskData : public QcepImageData<short>
   Q_OBJECT
 
 public:
-  QcepMaskData(QcepSettingsSaverWPtr saver, int width, int height, int def=0);
+  QcepMaskData(QcepSettingsSaverWPtr saver, int width, int height, int def, QcepObject *parent);
   ~QcepMaskData();
 
 public slots:
   bool maskValue(int x, int y) const;
   void setMaskValue(int x, int y, bool mval);
 
-  QcepMaskDataPtr copyMask();
+  QcepMaskDataPtr copyMask(QcepObject *parent);
 
   void setCircularMask();
   void showMaskAll();

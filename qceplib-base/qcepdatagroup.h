@@ -16,9 +16,9 @@ class QcepDataGroup : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepDataGroup(QcepSettingsSaverWPtr saver, QString name);
+  QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent);
 
-  static QcepDataGroupPtr newDataGroup(QcepSettingsSaverWPtr saver, QString name);
+  static QcepDataGroupPtr newDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent);
 
 public slots:
   virtual QString description() const;

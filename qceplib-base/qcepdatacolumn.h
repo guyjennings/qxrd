@@ -20,7 +20,8 @@ class QcepDataColumn : public QcepDataObject, public QVector<double>
 public:
   QcepDataColumn(QcepSettingsSaverWPtr saver,
                  QString name,
-                 int npts);
+                 int npts,
+                 QcepObject *parent);
   virtual ~QcepDataColumn();
 
 public slots:
@@ -31,7 +32,8 @@ public slots:
 public:
   static QcepDataColumnPtr newDataColumn(QcepSettingsSaverWPtr saver,
                                          QString name,
-                                         int npts);
+                                         int npts,
+                                         QcepObject *parent);
 
   static QScriptValue toColumnScriptValue(QScriptEngine *engine, const QcepDataColumnPtr &data);
   static void fromColumnScriptValue(const QScriptValue &obj, QcepDataColumnPtr &data);

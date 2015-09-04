@@ -3,7 +3,7 @@
 #include <QFileInfo>
 #include <QDir>
 
-QcepExperiment::QcepExperiment(QString path, QString name, QObject *parent) :
+QcepExperiment::QcepExperiment(QString path, QString name, QcepObject *parent) :
   QcepObject(name, parent),
   m_SettingsSaver(new QcepSettingsSaver(this)),
   m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1, "Kind of Experiment"),

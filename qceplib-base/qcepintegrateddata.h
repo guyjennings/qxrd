@@ -14,7 +14,7 @@ class QcepIntegratedData : public QcepDataObject
 public:
   explicit QcepIntegratedData(QcepSettingsSaverWPtr saver,
                               QcepDoubleImageDataPtr data,
-                              int maxSize, QObject *parent = 0);
+                              int maxSize, QcepObject *parent);
   ~QcepIntegratedData();
 
 public slots:
