@@ -30,12 +30,16 @@ QxrdDetectorPilatus::~QxrdDetectorPilatus()
 
 void QxrdDetectorPilatus::initialize()
 {
-  m_PilatusSocket.connectToHost(get_PilatusHost(), get_PilatusPort());
-  m_PilatusSocket.waitForConnected();
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "initialize");
+  } else {
+    m_PilatusSocket.connectToHost(get_PilatusHost(), get_PilatusPort());
+    m_PilatusSocket.waitForConnected();
 
-  QString a = sendCommandReply("telemetry");
+    QString a = sendCommandReply("telemetry");
 
-  printf("Read %s\n", qPrintable(a));
+    printf("Read %s\n", qPrintable(a));
+  }
 }
 
 void QxrdDetectorPilatus::beginAcquisition()
