@@ -130,3 +130,92 @@ QString QxrdDetectorPilatus::reply()
     }
   }
 }
+
+void QxrdDetectorPilatus::expectReply(QString regexp)
+{
+  QRegExp exp(regexp);
+
+  QString rply = reply();
+
+  while (!exp.exactMatch(rply)) {
+    printMessage(tr("%1 :Does not match: %2").arg(rply).arg(regexp));
+
+    rply = reply();
+
+    if (rply.length() == 0) {
+      return;
+    }
+  }
+
+  printMessage(tr("Matches: %1").arg(rply));
+}
+
+void QxrdDetectorPilatus::exposureTime(double exposure)
+{
+  sendCommand(tr("expt %1").arg(exposure));
+
+  expectReply("15 OK Exposure time set to: (\\d*\\.\\d+) sec(.*)");
+}
+
+void QxrdDetectorPilatus::exposurePeriod(double period)
+{
+  sendCommand(tr("expp %1").arg(period));
+
+  expectReply("15 OK Exposure period set to: (\\d*\\.\\d+) sec(.*)");
+}
+
+void QxrdDetectorPilatus::exposureDelay(double delay)
+{
+  sendCommand(tr("delay %1").arg(delay));
+
+  expectReply("15 OK Delay time set to: (\\d*\\.\\d+) sec(.*)");
+}
+
+void QxrdDetectorPilatus::exposuresPerFrame(int nexp)
+{
+  sendCommand(tr("nexpf %1").arg(nexp));
+
+  expectReply("15 OK Exposures per frame set to: (\\d*)(.*)");
+}
+
+void QxrdDetectorPilatus::exposureFrameCount(int nfram)
+{
+  sendCommand(tr("ni %1").arg(nfram));
+
+  expectReply("15 OK N images set to: (\\d*)(.*)");
+}
+
+void QxrdDetectorPilatus::exposure(QString file)
+{
+  sendCommand(tr("exposure \"%1\"").arg(file));
+
+  expectReply("15 OK  Starting (\\d*\\.\\d+) second background:(.*)");
+}
+
+void QxrdDetectorPilatus::extTrigger(QString file)
+{
+  sendCommand(tr("exttrigger \"%1\"").arg(file));
+
+  expectReply("15 OK Starting externally triggered exposure\(s):(.*)");
+}
+
+void QxrdDetectorPilatus::extEnable(QString file)
+{
+  sendCommand(tr("extenable \"%1\"").arg(file));
+
+  expectReply("15 OK Starting externally enabled exposure\(s):(.*)");
+}
+
+void QxrdDetectorPilatus::imagePath(QString path)
+{
+  sendCommand(tr("imgpath \"%1\"").arg(path));
+
+  expectReply("10 OK (.*)");
+}
+
+void QxrdDetectorPilatus::acquireImage(QString fileName, double exposure)
+{
+  exposureTime(exposure);
+
+  sendCommandReply(tr("exposure \"%1\"").arg(fileName));
+}

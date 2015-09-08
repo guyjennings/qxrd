@@ -20,10 +20,24 @@ public slots:
   void endAcquisition();
   void shutdownAcquisition();
 
+  void exposureTime(double exposure);
+  void exposurePeriod(double period);
+  void exposureDelay(double delay);
+  void exposuresPerFrame(int nexp);
+  void exposureFrameCount(int nfram);
+
+  void imagePath(QString path);
+  void exposure(QString file);
+  void extTrigger(QString file);
+  void extEnable(QString file);
+
+  void acquireImage(QString fileName, double exposure);
+
   void    sendCommand(QString cmd);
   QString sendCommandReply(QString cmd);
 
   QString reply();
+  void expectReply(QString regexp);
 
 private:
   QTcpSocket m_PilatusSocket;
