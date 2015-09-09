@@ -3,15 +3,22 @@
 #include "qcepproperty.h"
 #include "qxrddebug.h"
 #include "qxrdacquisition.h"
+#include <QDir>
+#include <QFile>
+#include "qcepimagedata.h"
+#include "qcepallocator.h"
 
 QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent) :
   QxrdDetector(saver, expt, acq, QxrdDetectorThread::PilatusDetector, parent),
   m_PilatusSocket(),
+  m_ExposureTime(-1),
+  m_ExposuresPerFrame(-1),
+  m_ExposureFrameCount(-1),
   m_PilatusHost         (saver, this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
   m_PilatusPort         (saver, this, "pilatusPort",          41234,         "Camserver Port Number"),
   m_PilatusFilePattern  (saver, this, "pilatusFilePattern",   "%s-%-0.5d%s", "File pattern for saved files"),
-  m_PilatusDataDirectory(saver, this, "pilatusDataDirectory", "",            "Data directory on Camserver computer"),
-  m_LocalDataDirectory  (saver, this, "localDataDirectory",   "",            "Data directory as seen on QXRD computer")
+  m_PilatusDataDirectory(saver, this, "pilatusDataDirectory", "/home/det/shareddata/test/",    "Data directory on Camserver computer"),
+  m_LocalDataDirectory  (saver, this, "localDataDirectory",   "/home/bessrc/shareddata/test/", "Data directory as seen on QXRD computer")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorPilatus::QxrdDetectorPilatus(%p)\n", this);
@@ -37,11 +44,22 @@ void QxrdDetectorPilatus::initialize()
     m_PilatusSocket.connectToHost(get_PilatusHost(), get_PilatusPort());
     m_PilatusSocket.waitForConnected();
 
-    QString a = sendCommandReply("telemetry");
+//    QString a = sendCommandReply("telemetry");
 
-    printf("Read %s\n", qPrintable(a));
+//    printf("Read %s\n", qPrintable(a));
 
     connect(&m_PilatusSocket, &QTcpSocket::readyRead, this, &QxrdDetectorPilatus::readyRead);
+//    connect(&m_FileWatcher,   &QFileSystemWatcher::fileChanged, this, &QxrdDetectorPilatus::fileChanged);
+//    connect(&m_FileWatcher,   &QFileSystemWatcher::directoryChanged, this, &QxrdDetectorPilatus::directoryChanged);
+
+    connect(&m_ExpectedFileTimer, &QTimer::timeout, this, &QxrdDetectorPilatus::checkExpectedFiles);
+
+//    m_ExpectedFileTimer.start(1000);
+
+    sendCommand("telemetry");
+    imagePath(get_PilatusDataDirectory());
+
+//    m_FileWatcher.addPath(get_LocalDataDirectory());
   }
 }
 
@@ -249,24 +267,119 @@ void QxrdDetectorPilatus::acquireImage(QString fileName, double exposure)
 
 void QxrdDetectorPilatus::acquire()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "acquire");
+  } else {
+    QxrdAcquisitionPtr acq(m_Acquisition);
 
-  if (acq) {
-    double expos   = acq->get_ExposureTime();
-    int nsum       = acq->get_SummedExposures();
-    int nimg       = acq->get_PostTriggerFiles();
+    if (acq) {
+      double expos   = acq->get_ExposureTime();
+      int nsum       = acq->get_SummedExposures();
+      int nimg       = acq->get_PostTriggerFiles();
 
-    QString filenm = acq->get_FilePattern();
-    int index      = acq->get_FileIndex();
+      QString filenm = acq->get_FilePattern();
+      int index      = acq->get_FileIndex();
 
-    QString ofil = tr("%1-%2.cbf").arg(filenm).arg(index,5,10,QChar('0'));
+      QString ofil = tr("%1_%2.cbf").arg(filenm).arg(index,5,10,QChar('0'));
 
-    exposureTime(expos);
-    exposurePeriod(expos+0.01);
-    exposureDelay(0);
-    exposuresPerFrame(nsum);
-    exposureFrameCount(nimg);
+      pushFileExpected(ofil);
 
-    exposure(ofil);
+      for (int i=1; i<nimg; i++) {
+        QString fn = tr("%1_%2.cbf").arg(filenm).arg(index+i,5,10,QChar('0'));
+
+        pushFileExpected(fn);
+      }
+
+      if (expos != m_ExposureTime) {
+        exposureTime(expos);
+        exposurePeriod(expos+0.01);
+        exposureDelay(0);
+        m_ExposureTime = expos;
+      }
+
+      if (nsum != m_ExposuresPerFrame) {
+        exposuresPerFrame(nsum);
+        m_ExposuresPerFrame = nsum;
+      }
+
+      if (nimg != m_ExposureFrameCount) {
+        exposureFrameCount(nimg);
+        m_ExposureFrameCount = nimg;
+      }
+
+      exposure(ofil);
+    }
   }
 }
+
+void QxrdDetectorPilatus::pushFileExpected(QString fn)
+{
+  printMessage(tr("Expect file %1").arg(fn));
+
+  QDir d(get_LocalDataDirectory());
+
+  QString fp = d.filePath(fn);
+
+  QFile f(fp);
+
+  if (f.exists()) {
+    printMessage(tr("File %1 exists").arg(f.fileName()));
+
+    f.remove();
+  }
+
+//  m_FileWatcher.addPath(fp);
+
+  m_ExpectedFiles.append(fp);
+
+  if (m_ExpectedFiles.count() == 1) {
+    printMessage("Starting timer");
+    connect(&m_ExpectedFileTimer, &QTimer::timeout, this, &QxrdDetectorPilatus::checkExpectedFiles);
+    m_ExpectedFileTimer.start(100);
+  }
+}
+
+void QxrdDetectorPilatus::checkExpectedFiles()
+{
+  QDir d(get_LocalDataDirectory());
+
+  d.entryList();
+
+  while (m_ExpectedFiles.count() > 0) {
+    QString fn = m_ExpectedFiles.first();
+
+    if (qcepDebug(DEBUG_PILATUS)) {
+      printMessage(tr("Looking for %1").arg(fn));
+    }
+
+    QFile f(fn);
+
+    if (f.exists()) {
+      m_ExpectedFiles.pop_front();
+
+      if (qcepDebug(DEBUG_PILATUS)) {
+        printMessage(tr("File %1 exists").arg(f.fileName()));
+      }
+
+      QcepDoubleImageDataPtr data = QcepAllocator::newDoubleImage("", 0,0, this);
+
+      data->readImage(f.fileName());
+
+      printMessage(tr("File %1 has been read").arg(f.fileName()));
+    } else {
+      return;
+    }
+  }
+
+  m_ExpectedFileTimer.stop();
+}
+
+//void QxrdDetectorPilatus::fileChanged(const QString &path)
+//{
+//  printMessage(tr("QxrdDetectorPilatus::fileChanged: %1").arg(path));
+//}
+
+//void QxrdDetectorPilatus::directoryChanged(const QString &path)
+//{
+//  printMessage(tr("QxrdDetectorPilatus::directoryChanged: %1").arg(path));
+//}

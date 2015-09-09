@@ -4,6 +4,8 @@
 #include "qcepmacros.h"
 #include "qxrddetector.h"
 #include <QTcpSocket>
+//#include <QFileSystemWatcher>
+#include <QTimer>
 
 class QxrdDetectorPilatus : public QxrdDetector
 {
@@ -43,10 +45,23 @@ public slots:
   void expectReply(QString regexp);
 
   void readyRead();
+//  void fileChanged(const QString &path);
+//  void directoryChanged(const QString &path);
+  void checkExpectedFiles();
+
+private:
+  void pushFileExpected(QString f);
 
 private:
   QTcpSocket m_PilatusSocket;
   QString    m_PilatusReply;
+//  QFileSystemWatcher m_FileWatcher;
+  QStringList m_ExpectedFiles;
+  QTimer     m_ExpectedFileTimer;
+
+  double     m_ExposureTime;
+  int        m_ExposuresPerFrame;
+  int        m_ExposureFrameCount;
 
 public:
   Q_PROPERTY(QString pilatusHost READ get_PilatusHost WRITE set_PilatusHost)
