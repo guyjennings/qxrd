@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>873</width>
-    <height>570</height>
+    <width>870</width>
+    <height>583</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,159 +25,15 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>847</width>
-         <height>501</height>
+         <width>844</width>
+         <height>514</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
          <widget class="QWidget" name="widget" native="true">
           <layout class="QGridLayout" name="m_GridLayout">
-           <item row="1" column="0">
-            <widget class="QCommandLinkButton" name="m_NewPerkinElmerAcquisition">
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Start a new Perkin Elmer Experiment...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QCommandLinkButton" name="m_NewPerkinElmerAnalysis">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Start a new Perkin Elmer Analysis...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/system-run.png</normaloff>:/images/system-run.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="0">
-            <widget class="QCommandLinkButton" name="m_NewPilatusAcquisition">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Start a new Pilatus Experiment...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QCommandLinkButton" name="m_NewPilatusAnalysis">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Start a new Pilatus Analysis...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/system-run.png</normaloff>:/images/system-run.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QCommandLinkButton" name="m_NewSimulatedAcquisition">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Start a new Simulated Experiment...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QCommandLinkButton" name="m_NewGenericAnalysis">
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Start a new Generic Analysis...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/system-run.png</normaloff>:/images/system-run.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
             <widget class="QCommandLinkButton" name="m_OpenExistingExperiment">
              <property name="font">
               <font>
@@ -199,7 +55,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="2" column="1">
             <widget class="QCheckBox" name="m_AutoOpenRecent">
              <property name="enabled">
               <bool>false</bool>
@@ -209,6 +65,28 @@
              </property>
              <property name="checked">
               <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCommandLinkButton" name="m_NewExperiment">
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Start a new Experiment...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -242,7 +120,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>873</width>
+     <width>870</width>
      <height>22</height>
     </rect>
    </property>
@@ -250,27 +128,9 @@
     <property name="title">
      <string>File</string>
     </property>
-    <widget class="QMenu" name="menuNew_Analysis_Experiment">
-     <property name="title">
-      <string>New Analysis Experiment</string>
-     </property>
-     <addaction name="m_ActionNewPerkinElmerAnalysis"/>
-     <addaction name="m_ActionNewPilatusAnalysis"/>
-     <addaction name="m_ActionNewGenericAnalysis"/>
-    </widget>
-    <widget class="QMenu" name="menuNew_Acquisition_Experiment">
-     <property name="title">
-      <string>New Acquisition Experiment</string>
-     </property>
-     <addaction name="m_ActionNewPerkinElmerAcquisition"/>
-     <addaction name="m_ActionNewPilatusAcquisition"/>
-     <addaction name="m_ActionNewSimulatedAcquisition"/>
-    </widget>
-    <addaction name="menuNew_Acquisition_Experiment"/>
-    <addaction name="menuNew_Analysis_Experiment"/>
+    <addaction name="m_ActionNewExperiment"/>
     <addaction name="separator"/>
     <addaction name="m_ActionOpenExperiment"/>
-    <addaction name="m_ActionOpenRecentExperiment"/>
     <addaction name="separator"/>
     <addaction name="m_ActionEditApplicationPreferences"/>
     <addaction name="separator"/>
@@ -300,38 +160,19 @@
     <string>Exit Application</string>
    </property>
   </action>
-  <action name="m_ActionNewPerkinElmerAcquisition">
+  <action name="m_ActionNewExperiment">
    <property name="text">
-    <string>New Perkin Elmer Acquisition...</string>
+    <string>New Experiment...</string>
    </property>
-  </action>
-  <action name="m_ActionNewPilatusAcquisition">
-   <property name="text">
-    <string>New Pilatus Acquisition...</string>
-   </property>
-  </action>
-  <action name="m_ActionNewSimulatedAcquisition">
-   <property name="text">
-    <string>New Simulated Acquisition...</string>
-   </property>
-  </action>
-  <action name="m_ActionNewPerkinElmerAnalysis">
-   <property name="text">
-    <string>New Perkin Elmer Analysis...</string>
-   </property>
-  </action>
-  <action name="m_ActionNewGenericAnalysis">
-   <property name="text">
-    <string>New Generic Analysis...</string>
-   </property>
-  </action>
-  <action name="m_ActionNewPilatusAnalysis">
-   <property name="text">
-    <string>New Pilatus Analysis...</string>
+   <property name="toolTip">
+    <string>New Experiment</string>
    </property>
   </action>
   <action name="m_ActionOpenRecentExperiment">
    <property name="text">
+    <string>Open Recent Experiment</string>
+   </property>
+   <property name="toolTip">
     <string>Open Recent Experiment</string>
    </property>
   </action>

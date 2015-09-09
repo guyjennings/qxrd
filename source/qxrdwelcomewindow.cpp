@@ -26,15 +26,11 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdWelcomeWindow::clearStatusMessage);
 
   connect(ui->m_ActionEditApplicationPreferences, &QAction::triggered, m_Application, &QxrdApplication::editGlobalPreferences);
+  connect(ui->m_ActionNewExperiment, &QAction::triggered, m_Application, &QxrdApplication::chooseNewExperiment);
   connect(ui->m_ActionOpenExperiment, &QAction::triggered, m_Application, &QxrdApplication::chooseExistingExperiment);
   connect(ui->m_ActionExitApplication, &QAction::triggered, m_Application, &QxrdApplication::possiblyQuit);
 
-  connect(ui->m_NewPerkinElmerAcquisition, &QAbstractButton::clicked, ui->m_ActionNewPerkinElmerAcquisition, &QAction::trigger);
-  connect(ui->m_NewPilatusAcquisition, &QAbstractButton::clicked, ui->m_ActionNewPilatusAcquisition, &QAction::trigger);
-  connect(ui->m_NewSimulatedAcquisition, &QAbstractButton::clicked, ui->m_ActionNewSimulatedAcquisition, &QAction::trigger);
-  connect(ui->m_NewPerkinElmerAnalysis, &QAbstractButton::clicked, ui->m_ActionNewPerkinElmerAnalysis, &QAction::trigger);
-  connect(ui->m_NewPilatusAnalysis, &QAbstractButton::clicked, ui->m_ActionNewPilatusAnalysis, &QAction::trigger);
-  connect(ui->m_NewGenericAnalysis, &QAbstractButton::clicked, ui->m_ActionNewGenericAnalysis, &QAction::trigger);
+  connect(ui->m_NewExperiment, &QAbstractButton::clicked, ui->m_ActionNewExperiment, &QAction::trigger);
   connect(ui->m_OpenExistingExperiment, &QAbstractButton::clicked, ui->m_ActionOpenExperiment, &QAction::trigger);
 
   connect(&m_SignalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped,
