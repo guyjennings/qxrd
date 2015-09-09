@@ -59,22 +59,11 @@ public:
   void writeDefaultSettings();
   void appendRecentExperiment(QString path);
 
-  QString newAnalysisExperiment(QString path);
-  QString newPerkinElmerExperiment(QString path);
-  QString newPilatusExperiment(QString path);
-
   QString normalizeExperimentName(QString filename);
   void setNewExperimentSettings(QSettings &settings, int type, QString filename);
 
 public slots:
   void finish();
-
-  void doNewPerkinElmerAcquisition();
-  void doNewPilatusAcquisition();
-  void doNewSimulatedAcquisition();
-  void doNewPerkinElmerAnalysis();
-  void doNewPilatusAnalysis();
-  void doNewGenericAnalysis();
 
   void chooseNewExperiment();
   void chooseExistingExperiment();

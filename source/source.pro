@@ -337,12 +337,6 @@ HEADERS += TODO.h \
     qxrdexperimentthread-ptr.h \
     qxrdexperiment.h \
     qxrdexperiment-ptr.h \
-    qxrdexperimentpilatusacquisition.h \
-    qxrdexperimentperkinelmeracquisition.h \
-    qxrdexperimentsimulatedacquisition.h \
-    qxrdexperimentperkinelmeranalysis.h \
-    qxrdexperimentpilatusanalysis.h \
-    qxrdexperimentgenericanalysis.h \
     qxrdwelcomewindow.h \
     qxrdwelcomewindow-ptr.h \
     qxrdglobalpreferencesdialog.h \
@@ -448,12 +442,6 @@ SOURCES += qxrd.cpp \
     qxrdintegratorcache.cpp \
     qxrdexperimentthread.cpp \
     qxrdexperiment.cpp \
-    qxrdexperimentpilatusacquisition.cpp \
-    qxrdexperimentperkinelmeracquisition.cpp \
-    qxrdexperimentsimulatedacquisition.cpp \
-    qxrdexperimentperkinelmeranalysis.cpp \
-    qxrdexperimentpilatusanalysis.cpp \
-    qxrdexperimentgenericanalysis.cpp \
     qxrdwelcomewindow.cpp \
     qxrdglobalpreferencesdialog.cpp \
     qxrdwelcomerecentitem.cpp \

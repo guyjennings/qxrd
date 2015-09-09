@@ -1,19 +1,18 @@
 #include "qxrddebug.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdapplication.h"
-#include "qxrdexperimentperkinelmeracquisition.h"
-#include "qxrdexperimentperkinelmeranalysis.h"
-#include "qxrdexperimentpilatusacquisition.h"
-#include "qxrdexperimentpilatusanalysis.h"
-#include "qxrdexperimentsimulatedacquisition.h"
-#include "qxrdexperimentgenericanalysis.h"
+#include "qxrdexperiment.h"
+//#include "qxrdexperimentperkinelmeranalysis.h"
+//#include "qxrdexperimentpilatusacquisition.h"
+//#include "qxrdexperimentpilatusanalysis.h"
+//#include "qxrdexperimentsimulatedacquisition.h"
+//#include "qxrdexperimentgenericanalysis.h"
 #include "qcepmutexlocker.h"
 
 #include <stdio.h>
 
-QxrdExperimentThread::QxrdExperimentThread(QxrdExperimentKind kind, QString path, QxrdApplicationWPtr app, QSettings *settings) :
+QxrdExperimentThread::QxrdExperimentThread(QString path, QxrdApplicationWPtr app, QSettings *settings) :
   QxrdThread(),
-  m_ExperimentKind(kind),
   m_ExperimentPath(path),
   m_Application(app),
   m_Settings(settings)
@@ -49,62 +48,7 @@ void QxrdExperimentThread::init(QxrdExperimentThreadWPtr expThread)
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(FromSettings, path, app, settings));
-
-  res->start();
-
-  return res;
-}
-
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings)
-{
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PerkinElmerAcquisition, path, app, settings));
-
-  res->start();
-
-  return res;
-}
-
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings)
-{
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PilatusAcquisition, path, app, settings));
-
-  res->start();
-
-  return res;
-}
-
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentSimulatedAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings)
-{
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(SimulatedAcquisition, path, app, settings));
-
-  res->start();
-
-  return res;
-}
-
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPerkinElmerAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings)
-{
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PerkinElmerAnalysis, path, app, settings));
-
-  res->start();
-
-  return res;
-}
-
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentPilatusAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings)
-{
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(PilatusAnalysis, path, app, settings));
-
-  res->start();
-
-  return res;
-}
-
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentGenericAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings)
-{
-  QxrdExperimentThreadPtr res =
-      QxrdExperimentThreadPtr(new QxrdExperimentThread(GenericAnalysis, path, app, settings));
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(path, app, settings));
 
   res->start();
 
@@ -135,50 +79,8 @@ void QxrdExperimentThread::run()
   {
     QxrdExperimentPtr doc;
 
-    if (m_ExperimentKind == FromSettings) {
-      if (m_Settings) {
-        m_ExperimentKind = (QxrdExperimentKind) m_Settings->value("experiment/experimentKind",GenericAnalysis).toInt();
-      } else {
-        m_ExperimentKind = GenericAnalysis;
-      }
-    }
-
-    switch(m_ExperimentKind) {
-    case PerkinElmerAcquisition:
-      doc = QxrdExperimentPtr(
-            new QxrdExperimentPerkinElmerAcquisition(sharedFromThis(), m_ExperimentPath, m_Application));
-      break;
-
-    case PilatusAcquisition:
-      doc = QxrdExperimentPtr(
-            new QxrdExperimentPilatusAcquisition(sharedFromThis(), m_ExperimentPath, m_Application));
-      break;
-
-    case SimulatedAcquisition:
-      doc = QxrdExperimentPtr(
-            new QxrdExperimentSimulatedAcquisition(sharedFromThis(), m_ExperimentPath, m_Application));
-      break;
-
-    case PerkinElmerAnalysis:
-      doc = QxrdExperimentPtr(
-            new QxrdExperimentPerkinElmerAnalysis(sharedFromThis(), m_ExperimentPath, m_Application));
-      break;
-
-    case PilatusAnalysis:
-      doc = QxrdExperimentPtr(
-            new QxrdExperimentPilatusAnalysis(sharedFromThis(), m_ExperimentPath, m_Application));
-      break;
-
-    case GenericAnalysis:
-      doc = QxrdExperimentPtr(
-            new QxrdExperimentGenericAnalysis(sharedFromThis(), m_ExperimentPath, m_Application));
-      break;
-
-    default:
-      doc = QxrdExperimentPtr(
-            new QxrdExperimentGenericAnalysis(sharedFromThis(), m_ExperimentPath, m_Application));
-      break;
-    }
+    doc = QxrdExperimentPtr(
+          new QxrdExperiment(sharedFromThis(), m_ExperimentPath, m_Application));
 
     if (doc) {
       doc -> initialize(m_Settings);

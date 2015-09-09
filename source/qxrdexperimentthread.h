@@ -14,28 +14,12 @@ class QxrdExperimentThread : public QxrdThread, public QEnableSharedFromThis<Qxr
 {
   Q_OBJECT
 public:
-  typedef enum {
-    FromSettings,
-    PerkinElmerAcquisition,
-    PilatusAcquisition,
-    SimulatedAcquisition,
-    PerkinElmerAnalysis,
-    PilatusAnalysis,
-    GenericAnalysis
-  } QxrdExperimentKind;
-
-  QxrdExperimentThread(QxrdExperimentKind kind, QString path, QxrdApplicationWPtr app, QSettings *settings);
+  QxrdExperimentThread(QString path, QxrdApplicationWPtr app, QSettings *settings);
   virtual ~QxrdExperimentThread();
 
   void init(QxrdExperimentThreadWPtr expThread);
 
   static QxrdExperimentThreadPtr newExperiment(QString path, QxrdApplicationWPtr app, QSettings *settings);
-  static QxrdExperimentThreadPtr newExperimentPerkinElmerAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings=0);
-  static QxrdExperimentThreadPtr newExperimentPilatusAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings=0);
-  static QxrdExperimentThreadPtr newExperimentSimulatedAcquisition(QString path, QxrdApplicationWPtr app, QSettings *settings=0);
-  static QxrdExperimentThreadPtr newExperimentPerkinElmerAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings=0);
-  static QxrdExperimentThreadPtr newExperimentPilatusAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings=0);
-  static QxrdExperimentThreadPtr newExperimentGenericAnalysis(QString path, QxrdApplicationWPtr app, QSettings *settings=0);
 
   QxrdExperimentPtr experiment();
 
@@ -49,7 +33,6 @@ protected:
   void run();
 
 private:
-  QxrdExperimentKind  m_ExperimentKind;
   QString             m_ExperimentPath;
   QxrdApplicationWPtr m_Application;
   QSettings          *m_Settings;

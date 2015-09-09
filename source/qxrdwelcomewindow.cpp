@@ -26,12 +26,6 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdWelcomeWindow::clearStatusMessage);
 
   connect(ui->m_ActionEditApplicationPreferences, &QAction::triggered, m_Application, &QxrdApplication::editGlobalPreferences);
-  connect(ui->m_ActionNewPerkinElmerAcquisition, &QAction::triggered, m_Application, &QxrdApplication::doNewPerkinElmerAcquisition);
-  connect(ui->m_ActionNewPilatusAcquisition, &QAction::triggered, m_Application, &QxrdApplication::doNewPilatusAcquisition);
-  connect(ui->m_ActionNewSimulatedAcquisition, &QAction::triggered, m_Application, &QxrdApplication::doNewSimulatedAcquisition);
-  connect(ui->m_ActionNewPerkinElmerAnalysis, &QAction::triggered, m_Application, &QxrdApplication::doNewPerkinElmerAnalysis);
-  connect(ui->m_ActionNewPilatusAnalysis, &QAction::triggered, m_Application, &QxrdApplication::doNewPilatusAnalysis);
-  connect(ui->m_ActionNewGenericAnalysis, &QAction::triggered, m_Application, &QxrdApplication::doNewGenericAnalysis);
   connect(ui->m_ActionOpenExperiment, &QAction::triggered, m_Application, &QxrdApplication::chooseExistingExperiment);
   connect(ui->m_ActionExitApplication, &QAction::triggered, m_Application, &QxrdApplication::possiblyQuit);
 
