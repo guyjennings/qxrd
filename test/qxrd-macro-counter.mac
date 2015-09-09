@@ -1,0 +1,11 @@
+def qxrd_config(a,b,c,d,e) '{
+  printf("qxrd_config(%s,%s,%s,%s,%s)\n", a,b,c,d,e);
+}'
+
+def qxrd_cmd(a,b,c,d,e) '{
+  printf("qxrd_cmd(%s,%s,%s,%s,%s)\n", a,b,c,d,e);
+}'
+
+def qxrd_par(a,b,c,d,e) '{
+  printf("qxrd_par(%s,%s,%s,%s,%s)\n", a,b,c,d,e);
+}'

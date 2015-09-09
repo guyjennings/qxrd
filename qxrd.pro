@@ -24,7 +24,7 @@ win32 {
 
 DISTFILES += source plugins
 
-OTHER_FILES += qxrd.nsi qxrd-qt5.nsi qxrd.dox Doxyfile qxrd.spec.in qxrd.desktop readme.markdown
+OTHER_FILES += qxrd.nsi qxrd-qt5.nsi qxrd.dox Doxyfile qxrd.spec.in qxrd.desktop readme.markdown test/qxrd-macro-counter.mac
 
 QMAKE_EXTRA_TARGETS += tarball
 
