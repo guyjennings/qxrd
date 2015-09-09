@@ -1853,12 +1853,12 @@ void QxrdScriptEngine::initialize()
       }
     }
 
-    QxrdAcquisitionPtr sacq(expt->singleAcquisition());
+//    QxrdAcquisitionPtr sacq(expt->singleAcquisition());
 
-    if (sacq) {
-      QCEP_DOC_OBJECT("singleAcquisition", "Single Detector Acquisition Object");
-      globalObject().setProperty("singleAcquisition", newQObject(sacq.data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties));
-    }
+//    if (sacq) {
+//      QCEP_DOC_OBJECT("singleAcquisition", "Single Detector Acquisition Object");
+//      globalObject().setProperty("singleAcquisition", newQObject(sacq.data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties));
+//    }
 
     QxrdSimpleServerPtr ssrv(expt->simpleServer());
 

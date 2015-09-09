@@ -77,8 +77,8 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     exp  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
     exp  -> prop_DataDirectory() -> linkTo(this -> m_DataDirectory);
     exp  -> prop_ScanFileName() -> linkTo(this -> m_ScanFileName);
-    exp  -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
-    exp  -> prop_DetectorNumber() -> linkTo(this -> m_DetectorNumber);
+//    exp  -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
+//    exp  -> prop_DetectorNumber() -> linkTo(this -> m_DetectorNumber);
 
     connect(m_LogFileName, &QLineEdit::editingFinished, exp, &QxrdExperiment::openNewLogFile);
   }
