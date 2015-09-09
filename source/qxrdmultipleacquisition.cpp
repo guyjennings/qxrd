@@ -154,4 +154,6 @@ void QxrdMultipleAcquisition::acquire()
   foreach (QxrdDetectorPtr det, m_Detectors) {
     det->acquire();
   }
+
+  prop_FileIndex()->incValue(get_PostTriggerFiles());
 }
