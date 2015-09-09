@@ -60,7 +60,7 @@ public:
 
 //  QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionWPtr acquisition() const;
-  QxrdAcquisitionWPtr multipleAcquisition() const;
+  QxrdAcquisitionWPtr singleAcquisition() const;
   QxrdWindowPtr window();
   QxrdDataProcessorWPtr dataProcessor() const;
   QxrdCenterFinderWPtr centerFinder() const;
@@ -159,8 +159,8 @@ private:
   QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
 //  QxrdAcquisitionThreadPtr        m_AcquisitionThread;
 //  QxrdAcquisitionWPtr             m_Acquisition;
-  QxrdSingleAcquisitionPtr              m_Acquisition;
-  QxrdMultipleAcquisitionPtr      m_MultipleAcquisition;
+  QxrdSingleAcquisitionPtr        m_SingleAcquisition;
+  QxrdMultipleAcquisitionPtr      m_Acquisition;
   QxrdDetectorThreadPtr           m_DetectorThread;
   QxrdDetectorWPtr                m_Detector;
   QxrdFileSaverThreadPtr          m_FileSaverThread;

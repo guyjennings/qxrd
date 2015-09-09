@@ -1853,11 +1853,11 @@ void QxrdScriptEngine::initialize()
       }
     }
 
-    QxrdAcquisitionPtr macq(expt->multipleAcquisition());
+    QxrdAcquisitionPtr sacq(expt->singleAcquisition());
 
-    if (macq) {
-      QCEP_DOC_OBJECT("multipleAcquisition", "Multi Detector Acquisition Object");
-      globalObject().setProperty("multipleAcquisition", newQObject(macq.data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties));
+    if (sacq) {
+      QCEP_DOC_OBJECT("singleAcquisition", "Single Detector Acquisition Object");
+      globalObject().setProperty("singleAcquisition", newQObject(sacq.data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties));
     }
 
     QxrdSimpleServerPtr ssrv(expt->simpleServer());

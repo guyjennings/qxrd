@@ -54,8 +54,8 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
 //  m_DataProcessorThread(NULL),
   m_DataProcessor(),
 //  m_AcquisitionThread(NULL),
+  m_SingleAcquisition(),
   m_Acquisition(),
-  m_MultipleAcquisition(),
   m_FileSaverThread(NULL),
   m_FileSaver(),
 //  m_ScriptEngineThread(NULL),
@@ -146,20 +146,20 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
 //    m_AcquisitionThread -> start();
 //    m_Acquisition = m_AcquisitionThread -> acquisition();
 
-    m_Acquisition = QxrdSingleAcquisitionPtr(
+    m_SingleAcquisition = QxrdSingleAcquisitionPtr(
           new QxrdSingleAcquisition(m_SettingsSaver,
                               sharedFromThis(),
                               m_DataProcessor,
                               app->allocator()));
 
-    m_Acquisition -> initialize();
+    m_SingleAcquisition -> initialize();
 
-    m_MultipleAcquisition = QxrdMultipleAcquisitionPtr(
+    m_Acquisition = QxrdMultipleAcquisitionPtr(
           new QxrdMultipleAcquisition(m_SettingsSaver,
                                       sharedFromThis(),
                                       m_DataProcessor,
                                       app->allocator()));
-    m_MultipleAcquisition -> initialize();
+    m_Acquisition -> initialize();
 
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
           new QxrdCalibrantLibrary(m_SettingsSaver, sharedFromThis()));
@@ -182,8 +182,8 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
-    if (m_MultipleAcquisition) {
-      m_MultipleAcquisition -> setNIDAQPlugin(app->nidaqPlugin());
+    if (m_SingleAcquisition) {
+      m_SingleAcquisition -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
     m_Dataset = QxrdDatasetPtr(new QxrdDataset(m_SettingsSaver, "", this));
@@ -539,9 +539,9 @@ QxrdAcquisitionWPtr QxrdExperiment::acquisition() const
   return m_Acquisition;
 }
 
-QxrdAcquisitionWPtr QxrdExperiment::multipleAcquisition() const
+QxrdAcquisitionWPtr QxrdExperiment::singleAcquisition() const
 {
-  return m_MultipleAcquisition;
+  return m_SingleAcquisition;
 }
 
 QxrdServerWPtr QxrdExperiment::specServer()
@@ -784,8 +784,8 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
   if (settings) {
     QcepExperiment::readSettings(settings, section);
 
-    QxrdSingleAcquisitionPtr acq(m_Acquisition);
-    QxrdMultipleAcquisitionPtr mult(m_MultipleAcquisition);
+    QxrdSingleAcquisitionPtr acq(m_SingleAcquisition);
+    QxrdMultipleAcquisitionPtr mult(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
@@ -793,11 +793,11 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
     m_WindowSettings -> readSettings(settings, "window");
 
     if (acq) {
-      acq  -> readSettings(settings, "acquisition");
+      acq  -> readSettings(settings, "singleAcquisition");
     }
 
     if (mult) {
-      mult -> readSettings(settings, "multipleAcquisition");
+      mult -> readSettings(settings, "acquisition");
     }
 
     if (proc) {
@@ -850,8 +850,8 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
   if (settings) {
     QcepExperiment::writeSettings(settings, section);
 
-    QxrdAcquisitionPtr acq(m_Acquisition);
-    QxrdMultipleAcquisitionPtr mult(m_MultipleAcquisition);
+    QxrdSingleAcquisitionPtr acq(m_SingleAcquisition);
+    QxrdMultipleAcquisitionPtr mult(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
@@ -859,11 +859,11 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
     m_WindowSettings -> writeSettings(settings, "window");
 
     if (acq) {
-      acq  -> writeSettings(settings, "acquisition");
+      acq  -> writeSettings(settings, "singleAcquisition");
     }
 
     if (mult) {
-      mult -> writeSettings(settings, "multipleAcquisition");
+      mult -> writeSettings(settings, "acquisition");
     }
 
     if (proc) {
@@ -1033,10 +1033,10 @@ void QxrdExperiment::onDetectorTypeChanged()
     set_DetectorTypeName(det->detectorTypeName());
     set_DetectorAddress(det->detectorAddress());
 
-    QxrdSingleAcquisitionPtr acq(m_Acquisition);
+    QxrdAcquisitionPtr acq(m_Acquisition);
 
     if (acq) {
-      acq->setDetector(det);
+//      acq->setDetector(det);
     }
   }
 }
