@@ -51,14 +51,10 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
   m_Server(),
   m_SimpleServerThread(NULL),
   m_SimpleServer(),
-//  m_DataProcessorThread(NULL),
   m_DataProcessor(),
-//  m_AcquisitionThread(NULL),
-//  m_SingleAcquisition(),
   m_Acquisition(),
   m_FileSaverThread(NULL),
   m_FileSaver(),
-//  m_ScriptEngineThread(NULL),
   m_ScriptEngine(),
   m_ScriptEngineDebugger(NULL),
   m_LogFile(NULL),
@@ -70,11 +66,6 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
   m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path), "Scan File Name"),
   m_ScanFileExtension(m_SettingsSaver, this, "scanFileExtension", ".avg", "Scan File Extension"),
   m_ScanDataNegative(m_SettingsSaver, this, "scanDataNegative", 0, "Scan Data Negative Value Handling"),
-//  m_DetectorType(m_SettingsSaver, this, "detectorType", 0, "Detector Type"),
-//  m_DetectorTypeName(QcepSettingsSaverPtr(), this,"detectorTypeName", QxrdDetectorThread::detectorTypeName(get_DetectorType()), "Name of Detector Type"),
-//  m_DetectorNumber(m_SettingsSaver, this, "detectorNumber", 0, "Detector Number"),
-//  m_DetectorSubType(m_SettingsSaver, this, "detectorSubType", 0, "Detector Sub Type"),
-//  m_DetectorAddress(m_SettingsSaver, this, "detectorAddress", "", "Detector Address"),
   m_DefaultLayout(QcepSettingsSaverWPtr(), this,"defaultLayout",0, "Default Layout Used?"),
   m_WorkCompleted(QcepSettingsSaverWPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
   m_WorkTarget(QcepSettingsSaverWPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
@@ -91,9 +82,6 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
 
 void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp,*/ QSettings *settings)
 {
-//  m_ExperimentThread = expthrd;
-//  m_Experiment       = exp;
-
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
@@ -108,16 +96,6 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
     m_FileSaver = m_FileSaverThread -> fileSaver();
 
     splashMessage("Initializing Data Processing");
-
-//    m_DataProcessorThread = QxrdDataProcessorThreadPtr(
-//          new QxrdDataProcessorThread(m_SettingsSaver,
-//                                      m_Experiment,
-//                                      QxrdAcquisitionPtr(),
-//                                      app->allocator(),
-//                                      m_FileSaver));
-//    m_DataProcessorThread -> setObjectName("proc");
-//    m_DataProcessorThread -> start();
-//    m_DataProcessor = m_DataProcessorThread -> dataProcessor();
 
     m_DataProcessor = QxrdDataProcessorPtr(
           new QxrdDataProcessor(m_SettingsSaver,
@@ -135,24 +113,6 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
     }
 
     splashMessage("Initializing Data Acquisition");
-
-//    m_AcquisitionThread = QxrdAcquisitionThreadPtr(
-//          new QxrdAcquisitionThread(m_SettingsSaver,
-//                                    m_Experiment,
-//                                    m_DataProcessor,
-//                                    app->allocator(),
-//                                    get_DetectorType()));
-//    m_AcquisitionThread -> setObjectName("acqu");
-//    m_AcquisitionThread -> start();
-//    m_Acquisition = m_AcquisitionThread -> acquisition();
-
-//    m_SingleAcquisition = QxrdSingleAcquisitionPtr(
-//          new QxrdSingleAcquisition(m_SettingsSaver,
-//                              sharedFromThis(),
-//                              m_DataProcessor,
-//                              app->allocator()));
-
-//    m_SingleAcquisition -> initialize();
 
     m_Acquisition = QxrdMultipleAcquisitionPtr(
           new QxrdMultipleAcquisition(m_SettingsSaver,
@@ -181,10 +141,6 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
     if (acq) {
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
-
-//    if (m_SingleAcquisition) {
-//      m_SingleAcquisition -> setNIDAQPlugin(app->nidaqPlugin());
-//    }
 
     m_Dataset = QxrdDatasetPtr(new QxrdDataset(m_SettingsSaver, "", this));
 
@@ -353,14 +309,8 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
 
     connect(prop_WorkCompleted(),   &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage);
     connect(prop_WorkTarget(),      &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage);
-//    connect(prop_DetectorType(),    &QcepIntProperty::valueChanged, this, &QxrdExperiment::onDetectorTypeChanged);
-//    connect(prop_DetectorSubType(), &QcepIntProperty::valueChanged, this, &QxrdExperiment::onDetectorTypeChanged);
-//    connect(prop_DetectorNumber(),  &QcepIntProperty::valueChanged, this, &QxrdExperiment::onDetectorTypeChanged);
-//    connect(prop_DetectorAddress(), &QcepStringProperty::valueChanged, this, &QxrdExperiment::onDetectorTypeChanged);
 
     m_SettingsSaver->start();
-
-//    onDetectorTypeChanged();
   }
 }
 
@@ -529,20 +479,10 @@ QxrdWindowPtr QxrdExperiment::window()
   return m_Window;
 }
 
-//QxrdAcquisitionThreadPtr QxrdExperiment::acquisitionThread()
-//{
-//  return m_AcquisitionThread;
-//}
-
 QxrdAcquisitionWPtr QxrdExperiment::acquisition() const
 {
   return m_Acquisition;
 }
-
-//QxrdAcquisitionWPtr QxrdExperiment::singleAcquisition() const
-//{
-//  return m_SingleAcquisition;
-//}
 
 QxrdServerWPtr QxrdExperiment::specServer()
 {
@@ -792,10 +732,6 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
 
     m_WindowSettings -> readSettings(settings, "window");
 
-//    if (acq) {
-//      acq  -> readSettings(settings, "singleAcquisition");
-//    }
-
     if (mult) {
       mult -> readSettings(settings, "acquisition");
     }
@@ -815,8 +751,6 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
     if (ssrv) {
       ssrv -> readSettings(settings, "simpleserver");
     }
-
-//    onDetectorTypeChanged();
   }
 }
 
@@ -850,17 +784,12 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
   if (settings) {
     QcepExperiment::writeSettings(settings, section);
 
-//    QxrdSingleAcquisitionPtr acq(m_SingleAcquisition);
     QxrdMultipleAcquisitionPtr mult(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
     m_WindowSettings -> writeSettings(settings, "window");
-
-//    if (acq) {
-//      acq  -> writeSettings(settings, "singleAcquisition");
-//    }
 
     if (mult) {
       mult -> writeSettings(settings, "acquisition");
@@ -1005,41 +934,6 @@ void QxrdExperiment::finishedWork(int amt)
   prop_WorkCompleted()->incValue(-amt);
   prop_WorkTarget()->incValue(-amt);
 }
-
-//void QxrdExperiment::onDetectorTypeChanged()
-//{
-//  int newType = get_DetectorType();
-//  int newNum  = get_DetectorNumber();
-
-//  if (qcepDebug(DEBUG_ACQUIRE)) {
-//    printMessage(tr("Detector type changed to %1, Number %2").arg(newType).arg(newNum));
-//  }
-
-//  m_Detector       = QxrdDetectorPtr();
-//  m_DetectorThread = QxrdDetectorThreadPtr();
-
-//  m_DetectorThread = QxrdDetectorThreadPtr(new QxrdDetectorThread(m_SettingsSaver, sharedFromThis(), m_Acquisition, newType, this));
-//  m_DetectorThread -> start();
-
-//  if (m_DetectorThread) {
-//    m_Detector = m_DetectorThread->detector();
-//  }
-
-//  QxrdDetectorPtr det(m_Detector);
-
-//  if (det) {
-//    set_DetectorType(det->detectorType());
-//    set_DetectorSubType(det->detectorSubType());
-//    set_DetectorTypeName(det->detectorTypeName());
-//    set_DetectorAddress(det->detectorAddress());
-
-//    QxrdAcquisitionPtr acq(m_Acquisition);
-
-//    if (acq) {
-////      acq->setDetector(det);
-//    }
-//  }
-//}
 
 void QxrdExperiment::dump()
 {

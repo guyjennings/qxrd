@@ -60,7 +60,6 @@ public:
 
 //  QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionWPtr acquisition() const;
-//  QxrdAcquisitionWPtr singleAcquisition() const;
   QxrdWindowPtr window();
   QxrdDataProcessorWPtr dataProcessor() const;
   QxrdCenterFinderWPtr centerFinder() const;
@@ -127,9 +126,6 @@ public slots:
 
   void openAcquisitionWindow();
 
-private slots:
-//  void onDetectorTypeChanged();
-
 private:
   void closeLogFile() const;
   void openLogFile() const;
@@ -143,7 +139,6 @@ public:
 private:
   QxrdApplicationWPtr             m_Application;
   QxrdExperimentThreadWPtr        m_ExperimentThread;
-//  QxrdExperimentWPtr              m_Experiment;
 
 private:
   QxrdWindowSettingsPtr           m_WindowSettings;
@@ -153,13 +148,8 @@ private:
   QxrdServerWPtr                  m_Server;
   QxrdSimpleServerThreadPtr       m_SimpleServerThread;
   QxrdSimpleServerWPtr            m_SimpleServer;
-//  QxrdDataProcessorThreadPtr      m_DataProcessorThread;
-//  QxrdDataProcessorWPtr           m_DataProcessor;
   QxrdDataProcessorPtr            m_DataProcessor;
   QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
-//  QxrdAcquisitionThreadPtr        m_AcquisitionThread;
-//  QxrdAcquisitionWPtr             m_Acquisition;
-//  QxrdSingleAcquisitionPtr        m_SingleAcquisition;
   QxrdMultipleAcquisitionPtr      m_Acquisition;
   QxrdDetectorThreadPtr           m_DetectorThread;
   QxrdDetectorWPtr                m_Detector;
@@ -196,21 +186,6 @@ public:  // Properties
   Q_PROPERTY(int     scanDataNegative      READ get_ScanDataNegative WRITE set_ScanDataNegative)
   QCEP_INTEGER_PROPERTY(ScanDataNegative)
 
-//  Q_PROPERTY(int    detectorType  READ get_DetectorType WRITE set_DetectorType)
-//  QCEP_INTEGER_PROPERTY(DetectorType)
-
-//  Q_PROPERTY(QString detectorTypeName READ get_DetectorTypeName WRITE set_DetectorTypeName STORED false)
-//  QCEP_STRING_PROPERTY(DetectorTypeName)
-
-//  Q_PROPERTY(int    detectorSubType  READ get_DetectorSubType WRITE set_DetectorSubType)
-//  QCEP_INTEGER_PROPERTY(DetectorSubType)
-
-//  Q_PROPERTY(int    detectorNumber  READ get_DetectorNumber WRITE set_DetectorNumber)
-//  QCEP_INTEGER_PROPERTY(DetectorNumber)
-
-//  Q_PROPERTY(QString    detectorAddress  READ get_DetectorAddress WRITE set_DetectorAddress)
-//  QCEP_STRING_PROPERTY(DetectorAddress)
-
   Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false)
   QCEP_INTEGER_PROPERTY(DefaultLayout)
 
@@ -235,8 +210,5 @@ public:  // Properties
   Q_PROPERTY(int spacing READ get_Spacing WRITE set_Spacing)
   QCEP_INTEGER_PROPERTY(Spacing)
 };
-
-//typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
-//typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
 
 #endif // QXRDEXPERIMENT_H
