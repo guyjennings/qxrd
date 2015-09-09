@@ -42,6 +42,7 @@ public slots:
   virtual void setupCameraGainMenu(QComboBox *cb, int initialGain);
   virtual void setupCameraBinningModeMenu(QComboBox *cb, int initialBinning);
 
+  virtual void acquire();
   virtual void beginAcquisition();
   virtual void endAcquisition();
   virtual void shutdownAcquisition();

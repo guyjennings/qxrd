@@ -97,14 +97,23 @@ QxrdDetectorPtr QxrdMultipleAcquisition::detector(int n)
 
 void QxrdMultipleAcquisition::onExposureTimeChanged()
 {
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->onExposureTimeChanged();
+  }
 }
 
 void QxrdMultipleAcquisition::onBinningModeChanged()
 {
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->onBinningModeChanged();
+  }
 }
 
 void QxrdMultipleAcquisition::onCameraGainChanged()
 {
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->onCameraGainChanged();
+  }
 }
 
 void QxrdMultipleAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
@@ -121,12 +130,28 @@ void QxrdMultipleAcquisition::setupCameraBinningModeMenu(QComboBox *cb)
 
 void QxrdMultipleAcquisition::beginAcquisition()
 {
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->beginAcquisition();
+  }
 }
 
 void QxrdMultipleAcquisition::endAcquisition()
 {
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->endAcquisition();
+  }
 }
 
 void QxrdMultipleAcquisition::shutdownAcquisition()
 {
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->shutdownAcquisition();
+  }
+}
+
+void QxrdMultipleAcquisition::acquire()
+{
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->acquire();
+  }
 }

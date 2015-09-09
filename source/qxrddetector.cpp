@@ -43,6 +43,10 @@ QString QxrdDetector::detectorAddress() const
   return "";
 }
 
+void QxrdDetector::acquire()
+{
+}
+
 void QxrdDetector::initialize()
 {
 }

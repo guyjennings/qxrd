@@ -2,6 +2,7 @@
 #include "qxrddetectorthread.h"
 #include "qcepproperty.h"
 #include "qxrddebug.h"
+#include "qxrdacquisition.h"
 
 QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent) :
   QxrdDetector(saver, expt, acq, QxrdDetectorThread::PilatusDetector, parent),
@@ -39,7 +40,24 @@ void QxrdDetectorPilatus::initialize()
     QString a = sendCommandReply("telemetry");
 
     printf("Read %s\n", qPrintable(a));
+
+    connect(&m_PilatusSocket, &QTcpSocket::readyRead, this, &QxrdDetectorPilatus::readyRead);
   }
+}
+
+void QxrdDetectorPilatus::readyRead()
+{
+  if (qcepDebug(DEBUG_PILATUS)) {
+    printMessage("QxrdDetectorPilatus::readyRead");
+
+    printMessage(tr("%1 bytes available").arg(m_PilatusSocket.bytesAvailable()));
+  }
+
+//  while (m_PilatusSocket.canReadLine()) {
+    QString aLine = m_PilatusSocket.readAll();
+
+    printMessage(tr("Line: %1").arg(aLine));
+//  }
 }
 
 void QxrdDetectorPilatus::beginAcquisition()
@@ -133,21 +151,30 @@ QString QxrdDetectorPilatus::reply()
 
 void QxrdDetectorPilatus::expectReply(QString regexp)
 {
-  QRegExp exp(regexp);
+//  QRegExp exp(regexp);
 
-  QString rply = reply();
+//  QString rply = reply();
 
-  while (!exp.exactMatch(rply)) {
-    printMessage(tr("%1 :Does not match: %2").arg(rply).arg(regexp));
+//  while (!exp.exactMatch(rply)) {
+//    printMessage(tr("%1 :Does not match: %2").arg(rply).arg(regexp));
 
-    rply = reply();
+//    rply = reply();
 
-    if (rply.length() == 0) {
-      return;
-    }
+//    if (rply.length() == 0) {
+//      return;
+//    }
+//  }
+
+//  printMessage(tr("Matches: %1").arg(rply));
+}
+
+void QxrdDetectorPilatus::onExposureTimeChanged()
+{
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    exposureTime(acq->get_ExposureTime());
   }
-
-  printMessage(tr("Matches: %1").arg(rply));
 }
 
 void QxrdDetectorPilatus::exposureTime(double exposure)
@@ -217,5 +244,29 @@ void QxrdDetectorPilatus::acquireImage(QString fileName, double exposure)
 {
   exposureTime(exposure);
 
-  sendCommandReply(tr("exposure \"%1\"").arg(fileName));
+  sendCommand(tr("exposure \"%1\"").arg(fileName));
+}
+
+void QxrdDetectorPilatus::acquire()
+{
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    double expos   = acq->get_ExposureTime();
+    int nsum       = acq->get_SummedExposures();
+    int nimg       = acq->get_PostTriggerFiles();
+
+    QString filenm = acq->get_FilePattern();
+    int index      = acq->get_FileIndex();
+
+    QString ofil = tr("%1-%2.cbf").arg(filenm).arg(index,5,10,QChar('0'));
+
+    exposureTime(expos);
+    exposurePeriod(expos+0.01);
+    exposureDelay(0);
+    exposuresPerFrame(nsum);
+    exposureFrameCount(nimg);
+
+    exposure(ofil);
+  }
 }

@@ -16,6 +16,9 @@ public:
 signals:
 
 public slots:
+  void onExposureTimeChanged();
+
+  void acquire();
   void beginAcquisition();
   void endAcquisition();
   void shutdownAcquisition();
@@ -38,6 +41,8 @@ public slots:
 
   QString reply();
   void expectReply(QString regexp);
+
+  void readyRead();
 
 private:
   QTcpSocket m_PilatusSocket;
