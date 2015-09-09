@@ -20,6 +20,8 @@ public:
 signals:
 
 public slots:
+  void acquire();
+
   void onExposureTimeChanged();
   void onBinningModeChanged();
   void onCameraGainChanged();

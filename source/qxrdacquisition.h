@@ -60,9 +60,9 @@ public slots:
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
-  void acquire();
-  void acquireDark();
-  void cancel();
+  virtual void acquire();
+  virtual void acquireDark();
+  virtual void cancel();
   //  void cancelDark();
   void trigger();
   void clearDropped();
