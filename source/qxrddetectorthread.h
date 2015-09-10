@@ -45,6 +45,8 @@ public:
   static QString detectorSubTypeName(int detectorSubType);
   static QStringList detectorSubTypeNames();
 
+  static void pushDefaultsToProxy(int detectorType, QxrdDetectorProxyPtr proxy);
+
 signals:
 
 public slots:

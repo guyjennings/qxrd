@@ -33,6 +33,9 @@ private slots:
 
   void addDetector();
   void removeDetector();
+  void moveDetectorDown();
+  void moveDetectorUp();
+  void configureDetector();
 
 protected:
   void changeEvent(QEvent *e);

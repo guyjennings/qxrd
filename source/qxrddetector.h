@@ -10,6 +10,7 @@
 #include "qxrdacquisition-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrddetector-ptr.h"
+#include "qxrddetectorproxy-ptr.h"
 #include <QScriptEngine>
 
 class QxrdDetector : public QcepObject
@@ -28,6 +29,10 @@ public:
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorPtr &det);
   static void fromScriptValue(const QScriptValue &obj, QxrdDetectorPtr &det);
 
+  virtual void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
+  virtual void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
+
+  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 
 signals:
 

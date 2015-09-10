@@ -6,6 +6,7 @@
 #include "qxrddisplaydialog.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
+#include "qxrdmultipleacquisition.h"
 #include "qxrdimageplot.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
@@ -320,6 +321,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   connect(m_ExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateExperimentsMenu);
   setupRecentExperimentsMenu(m_ActionRecentExperiments);
+
+  connect(m_ConfigureDetectorMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateConfigureDetectorMenu);
 
   connect(m_ActionLoadData, &QAction::triggered, this, &QxrdWindow::doLoadData);
   connect(m_ActionSaveData, &QAction::triggered, this, &QxrdWindow::doSaveData);
@@ -802,9 +805,43 @@ void QxrdWindow::populateRecentExperimentsMenu()
       connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
       mapper->setMapping(action, exp);
 
-      connect(mapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, app.data(), &QxrdApplication::openRecentExperiment);
+      connect(mapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, app.data(),
+              &QxrdApplication::openRecentExperiment);
 
       m_RecentExperimentsMenu -> addAction(action);
+    }
+  }
+}
+
+void QxrdWindow::populateConfigureDetectorMenu()
+{
+  m_ConfigureDetectorMenu->clear();
+
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    QxrdMultipleAcquisitionPtr macq(qSharedPointerCast<QxrdMultipleAcquisition>(acq));
+
+    if (macq) {
+      int nDets = macq->get_DetectorCount();
+
+      for (int i=0; i<nDets; i++) {
+        QString detType = macq->detector(i)->get_DetectorTypeName();
+        QString detName = macq->detector(i)->get_Name();
+
+        QString det = tr("(%1) Configure %2 detector \"%3\"...").arg(i).arg(detType).arg(detName);
+
+        QAction *action = new QAction(det, m_ConfigureDetectorMenu);
+        QSignalMapper *mapper = new QSignalMapper(action);
+
+        connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
+        mapper->setMapping(action,i);
+
+        connect(mapper, (void (QSignalMapper::*)(int)) &QSignalMapper::mapped,
+                macq.data(), &QxrdMultipleAcquisition::configureDetector, Qt::DirectConnection);
+
+        m_ConfigureDetectorMenu->addAction(action);
+      }
     }
   }
 }

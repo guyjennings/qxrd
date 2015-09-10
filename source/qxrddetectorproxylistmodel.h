@@ -15,6 +15,11 @@ public:
   void append(QxrdDetectorProxyPtr proxy);
   void removeDetector(int row);
 
+  void moveDetectorDown(int row);
+  void moveDetectorUp(int row);
+
+  void configureDetector(int row);
+
   QxrdDetectorProxyPtr detectorProxy(int i);
 
 private:

@@ -2,6 +2,7 @@
 #include "qxrdacquisition.h"
 #include "qxrddetector.h"
 #include "qxrddetectorthread.h"
+#include "qxrddetectorconfigurationdialog.h"
 
 QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
                                      QxrdDetectorPtr       det,
@@ -43,4 +44,20 @@ QxrdDetectorThreadPtr QxrdDetectorProxy::detectorThread()
 QxrdDetectorPtr QxrdDetectorProxy::detector()
 {
   return m_Detector;
+}
+
+void QxrdDetectorProxy::configureDetector()
+{
+  if (m_Detector) {
+    m_Detector->pushPropertiesToProxy(sharedFromThis());
+  } else {
+    QxrdDetectorThread::pushDefaultsToProxy(m_DetectorType, sharedFromThis());
+  }
+
+  QxrdDetectorConfigurationDialog *d =
+      new QxrdDetectorConfigurationDialog(sharedFromThis());
+
+  d->exec();
+
+  delete d;
 }

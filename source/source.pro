@@ -170,7 +170,8 @@ HEADERS += \
     qxrddetectorproxywidget.h \
     qxrddetectorproxy-ptr.h \
     qxrddetectorproxylistmodel.h \
-    qxrddetectorproxylistmodel-ptr.h
+    qxrddetectorproxylistmodel-ptr.h \
+    qxrddetectorconfigurationdialog.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -223,7 +224,8 @@ SOURCES += \
     qxrdacquisitionprocessor.cpp \
     qxrddetectorproxy.cpp \
     qxrddetectorproxywidget.cpp \
-    qxrddetectorproxylistmodel.cpp
+    qxrddetectorproxylistmodel.cpp \
+    qxrddetectorconfigurationdialog.cpp
 
 OTHER_FILES += testImage.js
 
@@ -491,7 +493,8 @@ FORMS += qxrdwindow.ui \
     qxrdscriptdialog.ui \
     qxrdcalibrantdialog.ui \
     qxrdacquisitionwindow.ui \
-    qxrddetectorproxywidget.ui
+    qxrddetectorproxywidget.ui \
+    qxrddetectorconfigurationdialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

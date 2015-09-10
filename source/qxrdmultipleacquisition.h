@@ -32,6 +32,8 @@ public slots:
   void appendDetectorProxy(QxrdDetectorProxyPtr proxy);
   void clearDetectors();
 
+  void configureDetector(int i);
+
   QxrdDetectorThreadPtr detectorThread(int n);
   QxrdDetectorPtr       detector(int n);
 

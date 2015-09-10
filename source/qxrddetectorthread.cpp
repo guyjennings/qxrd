@@ -250,3 +250,34 @@ void QxrdDetectorThread::shutdown()
   wait();
 }
 
+void QxrdDetectorThread::pushDefaultsToProxy(int detectorType,
+                                             QxrdDetectorProxyPtr proxy)
+{
+  switch (detectorType) {
+  case NoDetector:
+    break;
+
+  case SimulatedDetector:
+    break;
+
+#ifdef HAVE_PERKIN_ELMER
+  case PerkinElmerDetector:
+    QxrdDetectorPerkinElmer::pushDefaultsToProxy(proxy);
+    break;
+#endif
+
+  case PilatusDetector:
+    QxrdDetectorPilatus::pushDefaultsToProxy(proxy);
+    break;
+
+#ifdef HAVE_AREADETECTOR
+  case EpicsAreaDetector:
+    QxrdDetectorEpicsArea::pushDefaultsToProxy(proxy);
+    break;
+#endif
+
+  case FileWatcherDetector:
+    QxrdDetectorFileWatcher::pushDefaultsToProxy(proxy);
+    break;
+  }
+}

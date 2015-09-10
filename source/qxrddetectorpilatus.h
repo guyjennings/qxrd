@@ -15,6 +15,10 @@ public:
   virtual ~QxrdDetectorPilatus();
   void initialize();
 
+  void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
+  void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
+  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
+
 signals:
 
 public slots:

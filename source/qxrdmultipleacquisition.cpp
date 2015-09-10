@@ -212,3 +212,14 @@ void QxrdMultipleAcquisition::acquire()
 
   prop_FileIndex()->incValue(get_PostTriggerFiles());
 }
+
+void QxrdMultipleAcquisition::configureDetector(int i)
+{
+  printMessage(tr("Configure Detector %1").arg(i));
+
+  QxrdDetectorPtr det = detector(i);
+
+  QxrdDetectorProxyPtr proxy(new QxrdDetectorProxy(detectorThread(i), detector(i), sharedFromThis()));
+
+  proxy->configureDetector();
+}

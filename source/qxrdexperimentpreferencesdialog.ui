@@ -52,7 +52,52 @@
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="m_MoveDetectorUp">
+             <property name="toolTip">
+              <string>Move Detector Up</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/go-up.png</normaloff>:/images/go-up.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_MoveDetectorDown">
+             <property name="toolTip">
+              <string>Move Detector Down</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/go-down.png</normaloff>:/images/go-down.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_ConfigureDetector">
+             <property name="toolTip">
+              <string>Configure Detector</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/preferences.png</normaloff>:/images/preferences.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="m_RemoveDetector">
+             <property name="toolTip">
+              <string>Delete Detector(s)</string>
+             </property>
              <property name="text">
               <string>Remove Detector</string>
              </property>
@@ -60,6 +105,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="m_AddDetector">
+             <property name="toolTip">
+              <string>Add New Detector</string>
+             </property>
              <property name="text">
               <string>Add Detector</string>
              </property>
@@ -563,7 +611,9 @@ Change only by saving a new experiment</string>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="qxrdresources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

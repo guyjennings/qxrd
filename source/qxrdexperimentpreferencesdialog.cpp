@@ -80,8 +80,11 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
 
     m_DetectorsList->setModel(m_DetectorProxyModel.data());
 
-    connect(m_AddDetector,    &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::addDetector);
-    connect(m_RemoveDetector, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::removeDetector);
+    connect(m_AddDetector,      &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::addDetector);
+    connect(m_RemoveDetector,   &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::removeDetector);
+    connect(m_MoveDetectorDown, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::moveDetectorDown);
+    connect(m_MoveDetectorUp,   &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::moveDetectorUp);
+    connect(m_ConfigureDetector,&QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::configureDetector);
 
     m_ExperimentDirectory -> setText(expt->get_ExperimentDirectory());
 
@@ -397,6 +400,70 @@ void QxrdExperimentPreferencesDialog::removeDetector()
     for (int i=selectedRows.count()-1; i>=0; i--) {
 //      printf("Want to remove row %d\n", selectedRows.value(i));
       m_DetectorProxyModel->removeDetector(selectedRows.value(i));
+    }
+  }
+}
+
+void QxrdExperimentPreferencesDialog::moveDetectorDown()
+{
+  int detCount = m_DetectorProxyModel->rowCount(QModelIndex());
+
+  QItemSelectionModel *selected = m_DetectorsList->selectionModel();
+  QVector<int> selectedRows;
+
+  for (int i=0; i<detCount; i++) {
+    if (selected->rowIntersectsSelection(i, QModelIndex())) {
+      selectedRows.append(i);
+    }
+  }
+
+  if (selectedRows.count() != 1) {
+    QMessageBox::information(this, "Only move one", "Must have a single detector selected before moving it", QMessageBox::Ok);
+  } else {
+    m_DetectorProxyModel->moveDetectorDown(selectedRows.first());
+  }
+}
+
+void QxrdExperimentPreferencesDialog::moveDetectorUp()
+{
+  int detCount = m_DetectorProxyModel->rowCount(QModelIndex());
+
+  QItemSelectionModel *selected = m_DetectorsList->selectionModel();
+  QVector<int> selectedRows;
+
+  for (int i=0; i<detCount; i++) {
+    if (selected->rowIntersectsSelection(i, QModelIndex())) {
+      selectedRows.append(i);
+    }
+  }
+
+  if (selectedRows.count() != 1) {
+    QMessageBox::information(this, "Only move one", "Must have a single detector selected before moving it", QMessageBox::Ok);
+  } else {
+    m_DetectorProxyModel->moveDetectorUp(selectedRows.first());
+  }
+}
+
+void QxrdExperimentPreferencesDialog::configureDetector()
+{
+  int detCount = m_DetectorProxyModel->rowCount(QModelIndex());
+
+  QItemSelectionModel *selected = m_DetectorsList->selectionModel();
+  QVector<int> selectedRows;
+
+  for (int i=0; i<detCount; i++) {
+    if (selected->rowIntersectsSelection(i, QModelIndex())) {
+      selectedRows.append(i);
+    }
+  }
+
+  if (selectedRows.count() != 1) {
+    QMessageBox::information(this, "Only configure one", "Must have a single detector selected before configuring it", QMessageBox::Ok);
+  } else {
+    QxrdDetectorProxyPtr proxy = m_DetectorProxyModel->detectorProxy(selectedRows.first());
+
+    if (proxy) {
+      proxy->configureDetector();
     }
   }
 }

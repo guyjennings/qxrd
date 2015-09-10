@@ -23,6 +23,10 @@ public:
   int detectorSubType() const;
   QString detectorAddress() const;
 
+  void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
+  void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
+  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
+
 private slots:
   void onExposureTimeChanged();
   void onBinningModeChanged();

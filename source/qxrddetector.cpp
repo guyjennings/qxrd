@@ -104,3 +104,18 @@ void QxrdDetector::fromScriptValue(const QScriptValue &obj, QxrdDetectorPtr &det
     }
   }
 }
+
+void QxrdDetector::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+{
+  printf("Need to implement QxrdDetector::pushDefaultsToProxy\n");
+}
+
+void QxrdDetector::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+{
+  printf("Need to implement QxrdDetector::pushPropertiesToProxy\n");
+}
+
+void QxrdDetector::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+{
+  printf("Need to implement QxrdDetector::pullPropertiesfromProxy\n");
+}

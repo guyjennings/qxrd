@@ -383,3 +383,24 @@ void QxrdDetectorPilatus::checkExpectedFiles()
 //{
 //  printMessage(tr("QxrdDetectorPilatus::directoryChanged: %1").arg(path));
 //}
+
+void QxrdDetectorPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+{
+  QxrdDetector::pushDefaultsToProxy(proxy);
+
+  printf("Need to implement QxrdDetectorPilatus::pushDefaultsToProxy\n");
+}
+
+void QxrdDetectorPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+{
+  QxrdDetector::pushPropertiesToProxy(proxy);
+
+  printf("Need to implement QxrdDetectorPilatus::pushPropertiesToProxy\n");
+}
+
+void QxrdDetectorPilatus::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+{
+  QxrdDetector::pullPropertiesfromProxy(proxy);
+
+  printf("Need to implement QxrdDetectorPilatus::pullPropertiesfromProxy\n");
+}

@@ -83,7 +83,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -112,7 +112,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -145,7 +145,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -217,7 +217,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -508,7 +508,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -537,7 +537,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -570,7 +570,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -590,7 +590,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -660,7 +660,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
               </property>
               <property name="iconSize">
@@ -689,7 +689,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
               </property>
               <property name="iconSize">
@@ -722,7 +722,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
               </property>
               <property name="iconSize">
@@ -742,7 +742,7 @@
                <string>...</string>
               </property>
               <property name="icon">
-               <iconset resource="qxrdresources.qrc">
+               <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
                 <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
               </property>
               <property name="iconSize">
@@ -794,7 +794,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="qxrdresources.qrc">
+            <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
              <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
            </property>
            <property name="iconSize">
@@ -833,7 +833,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="qxrdresources.qrc">
+            <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
              <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
            </property>
            <property name="iconSize">
@@ -853,7 +853,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="qxrdresources.qrc">
+            <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
              <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
            </property>
            <property name="iconSize">
@@ -873,7 +873,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="qxrdresources.qrc">
+            <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
              <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
            </property>
            <property name="iconSize">
@@ -1111,7 +1111,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -1154,6 +1154,13 @@
     <property name="title">
      <string>Ac&amp;quire</string>
     </property>
+    <widget class="QMenu" name="m_ConfigureDetectorMenu">
+     <property name="title">
+      <string>&amp;Configure Detector...</string>
+     </property>
+     <addaction name="m_ActionConfigureDetector"/>
+    </widget>
+    <addaction name="m_ConfigureDetectorMenu"/>
     <addaction name="m_ActionOpenDetectorControlWindow"/>
    </widget>
    <widget class="QMenu" name="m_DisplayMenu">
@@ -1218,7 +1225,7 @@
    </widget>
    <widget class="QMenu" name="m_OperationsMenu">
     <property name="title">
-     <string>Process</string>
+     <string>P&amp;rocess</string>
     </property>
     <widget class="QMenu" name="m_IntegrateVsMenu">
      <property name="title">
@@ -1392,7 +1399,7 @@
   </action>
   <action name="m_ActionTest">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
      <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
    </property>
    <property name="text">
@@ -1997,9 +2004,14 @@
     <string>Calc&amp;ulate Calibration from Powder Rings</string>
    </property>
   </action>
+  <action name="m_ActionConfigureDetector">
+   <property name="text">
+    <string>&amp;Detector Configuration</string>
+   </property>
+  </action>
   <action name="m_ActionOpenDetectorControlWindow">
    <property name="text">
-    <string>Open Detector Control Window...</string>
+    <string>&amp;Open Detector Control Window</string>
    </property>
   </action>
  </widget>
@@ -2054,6 +2066,7 @@
   <tabstop>m_IntegratorZoomInButton</tabstop>
  </tabstops>
  <resources>
+  <include location="submodules/qceplib/qceplib-base/qcepresources.qrc"/>
   <include location="qxrdresources.qrc"/>
  </resources>
  <connections/>
