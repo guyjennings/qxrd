@@ -6,6 +6,7 @@
 #include "qxrddetector-ptr.h"
 #include "qxrddetectorthread.h"
 #include "qxrddetectorthread-ptr.h"
+#include "qxrddetectorproxy-ptr.h"
 
 class QxrdMultipleAcquisition : public QxrdAcquisition
 {
@@ -16,6 +17,7 @@ public:
                           QxrdExperimentWPtr doc,
                           QxrdDataProcessorWPtr proc,
                           QcepAllocatorWPtr allocator);
+  virtual ~QxrdMultipleAcquisition();
 
 signals:
 
@@ -27,9 +29,11 @@ public slots:
   void onCameraGainChanged();
 
   void appendDetector(int detType);
+  void appendDetectorProxy(QxrdDetectorProxyPtr proxy);
   void clearDetectors();
 
-  QxrdDetectorPtr detector(int n);
+  QxrdDetectorThreadPtr detectorThread(int n);
+  QxrdDetectorPtr       detector(int n);
 
 public:
   void setupExposureMenu(QDoubleSpinBox *cb);

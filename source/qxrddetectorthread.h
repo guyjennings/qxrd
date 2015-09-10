@@ -38,6 +38,7 @@ public:
     GBIF_Scan_SubType
   } DetectorSubType;
 
+  static int detectorTypeCount();
   static QString detectorTypeName(int detectorType);
   static QStringList detectorTypeNames();
 

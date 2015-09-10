@@ -11,6 +11,7 @@
 
 #include "qxrdexperiment-ptr.h"
 #include "qxrddetectorproxy-ptr.h"
+#include "qxrddetectorproxylistmodel-ptr.h"
 
 class QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
   Q_OBJECT
@@ -46,7 +47,7 @@ private:
 
 private:
   QxrdExperimentWPtr            m_Experiment;
-  QVector<QxrdDetectorProxyPtr> m_DetectorProxies;
+  QxrdDetectorProxyListModelPtr m_DetectorProxyModel;
 };
 
 #endif // QXRDEXPERIMENTPREFERENCESDIALOG_H

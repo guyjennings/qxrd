@@ -1,5 +1,7 @@
 #include "qxrdmultipleacquisition.h"
 #include "qxrddetectorthread.h"
+#include "qxrddetectorproxy.h"
+#include "qxrddebug.h"
 
 QxrdMultipleAcquisition::QxrdMultipleAcquisition(QcepSettingsSaverWPtr saver,
                                                  QxrdExperimentWPtr    doc,
@@ -9,6 +11,21 @@ QxrdMultipleAcquisition::QxrdMultipleAcquisition(QcepSettingsSaverWPtr saver,
         m_DetectorCount(m_Saver, this, "detectorCount", 0, "Number of Detectors")
 {
 
+}
+
+QxrdMultipleAcquisition::~QxrdMultipleAcquisition()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deletint multiple acquisition\n");
+#endif
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdMultipleAcquisition::~QxrdMultipleAcquisition(%p)\n", this);
+  }
+
+  if (qcepDebug(DEBUG_APP)) {
+    printMessage("QxrdMultipleAcquisition::~QxrdMultipleAcquisition");
+  }
 }
 
 void QxrdMultipleAcquisition::readSettings(QSettings *settings, QString section)
@@ -66,28 +83,66 @@ void QxrdMultipleAcquisition::writeSettings(QSettings *settings, QString section
 
 void QxrdMultipleAcquisition::appendDetector(int detType)
 {
-  QxrdDetectorThreadPtr detThread =
-      QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "appendDetector", Qt::BlockingQueuedConnection,
+                              Q_ARG(int, detType));
+  } else {
+    QxrdDetectorThreadPtr detThread =
+        QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
 
-  if (detThread) {
-    detThread->start();
+    if (detThread) {
+      detThread->start();
 
-    QxrdDetectorPtr det = detThread->detector();
+      QxrdDetectorPtr det = detThread->detector();
 
-    if (det) {
-      m_DetectorThreads.append(detThread);
-      m_Detectors.append(det);
+      if (det) {
+        m_DetectorThreads.append(detThread);
+        m_Detectors.append(det);
 
-      set_DetectorCount(m_Detectors.count());
+        set_DetectorCount(m_Detectors.count());
+      }
+    }
+  }
+}
+
+void QxrdMultipleAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "appendDetectorProxy", Qt::BlockingQueuedConnection,
+                              Q_ARG(QxrdDetectorProxyPtr, proxy));
+  } else {
+    if (proxy) {
+      QxrdDetectorThreadPtr detThread = proxy->detectorThread();
+      QxrdDetectorPtr       detector  = proxy->detector();
+
+      if (detThread && detector) {
+        m_DetectorThreads.append(detThread);
+        m_Detectors.append(detector);
+
+        set_DetectorCount(m_Detectors.count());
+      } else {
+        int detType = proxy->detectorType();
+
+        appendDetector(detType);
+      }
     }
   }
 }
 
 void QxrdMultipleAcquisition::clearDetectors()
 {
-  m_Detectors.resize(0);
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "clearDetectors", Qt::BlockingQueuedConnection);
+  } else {
+    m_Detectors.resize(0);
 
-  set_DetectorCount(0);
+    set_DetectorCount(0);
+  }
+}
+
+QxrdDetectorThreadPtr QxrdMultipleAcquisition::detectorThread(int n)
+{
+  return m_DetectorThreads.value(n);
 }
 
 QxrdDetectorPtr QxrdMultipleAcquisition::detector(int n)

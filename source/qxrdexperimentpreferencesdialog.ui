@@ -27,7 +27,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="m_PreferencesPanes">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -68,7 +68,11 @@
           </layout>
          </item>
          <item row="0" column="0">
-          <widget class="QListWidget" name="m_DetectorsList"/>
+          <widget class="QTreeView" name="m_DetectorsList">
+           <property name="selectionMode">
+            <enum>QAbstractItemView::ExtendedSelection</enum>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

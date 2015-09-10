@@ -15,6 +15,9 @@
 #include "qxrdmultipleacquisition.h"
 #include "qxrddetectorproxy.h"
 #include "qxrddetectorproxywidget.h"
+#include "qxrddetectorproxylistmodel.h"
+
+#include <QMenu>
 
 QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent, int initialPage) :
   QDialog(parent),
@@ -59,16 +62,23 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
       simpleServerPort = ssrv -> get_SimpleServerPort();
     }
 
+    m_DetectorProxyModel =
+        QxrdDetectorProxyListModelPtr(new QxrdDetectorProxyListModel());
+
     QxrdMultipleAcquisitionPtr macq = qSharedPointerCast<QxrdMultipleAcquisition>(acq);
 
     if (macq) {
       for (int i=0; i<macq->get_DetectorCount(); i++) {
         QxrdDetectorProxyPtr proxy =
-            QxrdDetectorProxyPtr(new QxrdDetectorProxy(macq->detector(i), macq));
+            QxrdDetectorProxyPtr(new QxrdDetectorProxy(
+                                   macq->detectorThread(i),
+                                   macq->detector(i), macq));
 
         appendDetectorProxy(proxy);
       }
     }
+
+    m_DetectorsList->setModel(m_DetectorProxyModel.data());
 
     connect(m_AddDetector,    &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::addDetector);
     connect(m_RemoveDetector, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::removeDetector);
@@ -295,6 +305,18 @@ void QxrdExperimentPreferencesDialog::accept()
       acq  -> set_FileIndexWidth(m_FileIndexWidth -> value());
       acq  -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
       acq  -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
+
+      int nDets = m_DetectorProxyModel->rowCount(QModelIndex());
+
+      QxrdMultipleAcquisitionPtr macq = qSharedPointerCast<QxrdMultipleAcquisition>(acq);
+
+      if (macq) {
+        macq->clearDetectors();
+
+        for (int i = 0; i<nDets; i++) {
+          macq->appendDetectorProxy(m_DetectorProxyModel->detectorProxy(i));
+        }
+      }
     }
 
     expt -> set_FontSize(m_FontSize -> value());
@@ -306,19 +328,82 @@ void QxrdExperimentPreferencesDialog::accept()
 
 void QxrdExperimentPreferencesDialog::addDetector()
 {
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdAcquisitionPtr acq = expt -> acquisition();
+
+    if (acq) {
+      QMenu menu;
+
+      for (int i=0; i<QxrdDetectorThread::detectorTypeCount(); i++) {
+        QAction *a = new QAction(QxrdDetectorThread::detectorTypeName(i), &menu);
+        a->setData(i);
+
+        menu.addAction(a);
+      }
+
+      QAction *choice = menu.exec(QCursor::pos());
+
+      if (choice) {
+        int type = choice->data().toInt();
+
+        QxrdDetectorProxyPtr proxy =
+            QxrdDetectorProxyPtr(new QxrdDetectorProxy(type, acq));
+
+        appendDetectorProxy(proxy);
+      }
+    }
+  }
 }
 
 void QxrdExperimentPreferencesDialog::removeDetector()
 {
+  int detCount = m_DetectorProxyModel->rowCount(QModelIndex());
+
+  QItemSelectionModel *selected = m_DetectorsList->selectionModel();
+  QVector<int> selectedRows;
+
+  for (int i=0; i<detCount; i++) {
+    if (selected->rowIntersectsSelection(i, QModelIndex())) {
+      selectedRows.append(i);
+    }
+  }
+
+  int res = QMessageBox::Cancel;
+
+  if (selectedRows.count() == 0) {
+    QMessageBox::information(this, "No Detectors Selected", "Select detectors to delete", QMessageBox::Ok);
+  } else if (selectedRows.count() == 1) {
+    res = QMessageBox::information(this, "Delete Detector?",
+                             tr("Do you really want to delete detector %1").arg(selectedRows.value(0)),
+                             QMessageBox::Ok, QMessageBox::Cancel);
+  } else {
+    QString dets;
+    foreach (int i, selectedRows) {
+      if (dets=="") {
+        dets = tr("%1").arg(i);
+      } else {
+        dets += tr(", %1").arg(i);
+      }
+    }
+
+    res = QMessageBox::information(this, "Delete Detectors?,",
+                             tr("Do you really want to delete detectors %1").arg(dets),
+                             QMessageBox::Ok, QMessageBox::Cancel);
+  }
+
+  if (res == QMessageBox::Ok) {
+    for (int i=selectedRows.count()-1; i>=0; i--) {
+//      printf("Want to remove row %d\n", selectedRows.value(i));
+      m_DetectorProxyModel->removeDetector(selectedRows.value(i));
+    }
+  }
 }
 
 void QxrdExperimentPreferencesDialog::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
 {
   if (proxy) {
-    m_DetectorProxies.append(proxy);
-
-//    QxrdDetectorProxyWidget *widget = proxy->widget();
-
-    m_DetectorsList->addItem(new QListWidgetItem("detector"));
+    m_DetectorProxyModel->append(proxy);
   }
 }

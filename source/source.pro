@@ -168,7 +168,9 @@ HEADERS += \
     qxrdacquisitionprocessor.h \
     qxrddetectorproxy.h \
     qxrddetectorproxywidget.h \
-    qxrddetectorproxy-ptr.h
+    qxrddetectorproxy-ptr.h \
+    qxrddetectorproxylistmodel.h \
+    qxrddetectorproxylistmodel-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -220,7 +222,8 @@ SOURCES += \
     qxrdprocessargs.cpp \
     qxrdacquisitionprocessor.cpp \
     qxrddetectorproxy.cpp \
-    qxrddetectorproxywidget.cpp
+    qxrddetectorproxywidget.cpp \
+    qxrddetectorproxylistmodel.cpp
 
 OTHER_FILES += testImage.js
 

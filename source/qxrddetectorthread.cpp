@@ -55,6 +55,11 @@ QxrdDetectorThread::~QxrdDetectorThread()
   }
 }
 
+int QxrdDetectorThread::detectorTypeCount()
+{
+  return 6;
+}
+
 QString QxrdDetectorThread::detectorTypeName(int detectorType)
 {
   QString res = "unknown";
