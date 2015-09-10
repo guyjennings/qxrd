@@ -736,6 +736,18 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
       mult -> readSettings(settings, "acquisition");
     }
 
+    if (settings->contains("experiment/detectorType")) {
+      int detType = settings->value("experiment/detectorType", -1).toInt();
+
+      if (detType == QxrdDetectorThread::PerkinElmerDetector) {
+        if (mult) {
+          if (mult->get_DetectorCount() == 0) {
+            mult->appendDetector(detType);
+          }
+        }
+      }
+    }
+
     if (proc) {
       proc -> readSettings(settings, "processor");
     }
