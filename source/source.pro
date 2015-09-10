@@ -165,7 +165,10 @@ HEADERS += \
     qxrdprocessargs-ptr.h \
     qxrdsingleacquisition-ptr.h \
     qxrdmultipleacquisition-ptr.h \
-    qxrdacquisitionprocessor.h
+    qxrdacquisitionprocessor.h \
+    qxrddetectorproxy.h \
+    qxrddetectorproxywidget.h \
+    qxrddetectorproxy-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -215,7 +218,9 @@ SOURCES += \
     qxrdacquisitionparameterpack.cpp \
     qxrddarkacquisitionparameterpack.cpp \
     qxrdprocessargs.cpp \
-    qxrdacquisitionprocessor.cpp
+    qxrdacquisitionprocessor.cpp \
+    qxrddetectorproxy.cpp \
+    qxrddetectorproxywidget.cpp
 
 OTHER_FILES += testImage.js
 
@@ -482,7 +487,8 @@ FORMS += qxrdwindow.ui \
     qxrddistortioncorrectiondialog.ui \
     qxrdscriptdialog.ui \
     qxrdcalibrantdialog.ui \
-    qxrdacquisitionwindow.ui
+    qxrdacquisitionwindow.ui \
+    qxrddetectorproxywidget.ui
 
 macx:
 else:unix:LIBS += -ltiff

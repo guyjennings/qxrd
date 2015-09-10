@@ -12,6 +12,9 @@
 #include <QFileDialog>
 #include <QGridLayout>
 #include "qcepdebug.h"
+#include "qxrdmultipleacquisition.h"
+#include "qxrddetectorproxy.h"
+#include "qxrddetectorproxywidget.h"
 
 QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent, int initialPage) :
   QDialog(parent),
@@ -36,9 +39,6 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     QxrdDataProcessorPtr proc = expt->dataProcessor();
     //  QcepAllocator *alloc = g_Application->allocator();
 
-    int detectorType = 0    /* expt -> get_DetectorType()    */;
-    int detectorSubType = 0 /* expt -> get_DetectorSubType() */;
-
     int runSpecServer = 0;
     int specServerPort = 0;
 
@@ -59,17 +59,19 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
       simpleServerPort = ssrv -> get_SimpleServerPort();
     }
 
-    QStringList detectorTypes = QxrdDetectorThread::detectorTypeNames();
-    QStringList detectorSubTypes = QxrdDetectorThread::detectorSubTypeNames();
+    QxrdMultipleAcquisitionPtr macq = qSharedPointerCast<QxrdMultipleAcquisition>(acq);
 
-    m_DetectorType -> addItems(detectorTypes);
-    m_DetectorType -> setCurrentIndex(detectorType);
+    if (macq) {
+      for (int i=0; i<macq->get_DetectorCount(); i++) {
+        QxrdDetectorProxyPtr proxy =
+            QxrdDetectorProxyPtr(new QxrdDetectorProxy(macq->detector(i), macq));
 
-    m_DetectorSubType -> addItems(detectorSubTypes);
-    m_DetectorSubType -> setCurrentIndex(detectorSubType);
+        appendDetectorProxy(proxy);
+      }
+    }
 
-//    m_DetectorNumber -> setValue(expt->get_DetectorNumber());
-//    m_DetectorAddress -> setText(expt->get_DetectorAddress());
+    connect(m_AddDetector,    &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::addDetector);
+    connect(m_RemoveDetector, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::removeDetector);
 
     m_ExperimentDirectory -> setText(expt->get_ExperimentDirectory());
 
@@ -302,3 +304,21 @@ void QxrdExperimentPreferencesDialog::accept()
   QDialog::accept();
 }
 
+void QxrdExperimentPreferencesDialog::addDetector()
+{
+}
+
+void QxrdExperimentPreferencesDialog::removeDetector()
+{
+}
+
+void QxrdExperimentPreferencesDialog::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
+{
+  if (proxy) {
+    m_DetectorProxies.append(proxy);
+
+//    QxrdDetectorProxyWidget *widget = proxy->widget();
+
+    m_DetectorsList->addItem(new QListWidgetItem("detector"));
+  }
+}

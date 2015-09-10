@@ -10,6 +10,7 @@
 #include "ui_qxrdexperimentpreferencesdialog.h"
 
 #include "qxrdexperiment-ptr.h"
+#include "qxrddetectorproxy-ptr.h"
 
 class QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
   Q_OBJECT
@@ -29,6 +30,9 @@ private slots:
   void saveSubtractedBrowse();
   void saveIntegratedBrowse();
 
+  void addDetector();
+  void removeDetector();
+
 protected:
   void changeEvent(QEvent *e);
 
@@ -38,8 +42,11 @@ private:
   QString experimentDirectory();
   QString dataDirectory();
 
+  void appendDetectorProxy(QxrdDetectorProxyPtr proxy);
+
 private:
-  QxrdExperimentWPtr m_Experiment;
+  QxrdExperimentWPtr            m_Experiment;
+  QVector<QxrdDetectorProxyPtr> m_DetectorProxies;
 };
 
 #endif // QXRDEXPERIMENTPREFERENCESDIALOG_H
