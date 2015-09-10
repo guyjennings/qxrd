@@ -292,7 +292,4 @@ private:
   QAtomicInt             m_Idling;
 };
 
-typedef QSharedPointer<QxrdAcquisition> QxrdAcquisitionPtr;
-typedef QWeakPointer<QxrdAcquisition> QxrdAcquisitionWPtr;
-
 #endif
