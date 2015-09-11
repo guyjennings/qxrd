@@ -10,18 +10,40 @@ int QxrdDetectorProxyListModel::rowCount(const QModelIndex &parent) const
   return m_DetectorProxies.count();
 }
 
+int QxrdDetectorProxyListModel::columnCount(const QModelIndex &parent) const
+{
+  return 3;
+}
+
 QVariant QxrdDetectorProxyListModel::data(const QModelIndex &index, int role) const
 {
-  if (role == Qt::DisplayRole) {
-    int row = index.row();
+  int row = index.row();
+  int col = index.column();
 
+  if (role == Qt::DisplayRole) {
     QxrdDetectorProxyPtr p = m_DetectorProxies.value(row);
 
     if (p) {
-      return p->detectorTypeName();
+      if (col == 1) {
+        return p->detectorTypeName();
+      } else if (col == 2) {
+        return p->get_Name();
+      }
     }
+  }
 
-    return "<<NULL>>";
+  if (role == Qt::CheckStateRole) {
+    QxrdDetectorProxyPtr p = m_DetectorProxies.value(row);
+
+    if (p) {
+      if (col == 0) {
+        if (p->enabled()) {
+          return Qt::Checked;
+        } else {
+          return Qt::Unchecked;
+        }
+      }
+    }
   }
 
   return QVariant();

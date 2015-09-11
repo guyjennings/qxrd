@@ -27,6 +27,7 @@ public slots:
 
   bool configureDetector();
   bool settingsChanged();
+  bool enabled();
 
 public:
   typedef enum {

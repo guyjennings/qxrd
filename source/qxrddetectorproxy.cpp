@@ -3,6 +3,7 @@
 #include "qxrddetector.h"
 #include "qxrddetectorthread.h"
 #include "qxrddetectorconfigurationdialog.h"
+#include "qcepproperty.h"
 
 QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
                                      QxrdDetectorPtr       det,
@@ -25,6 +26,11 @@ QxrdDetectorProxy::QxrdDetectorProxy(int detectorType, QxrdAcquisitionPtr acq)
     m_Detector(),
     m_DetectorType(detectorType)
 {
+}
+
+bool QxrdDetectorProxy::enabled()
+{
+  return property("enabled").toBool();
 }
 
 int QxrdDetectorProxy::detectorType()
