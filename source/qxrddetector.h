@@ -32,7 +32,7 @@ public:
   virtual void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   virtual void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
 
-  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
+  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType);
 
 signals:
 
@@ -63,6 +63,12 @@ public:
 
   Q_PROPERTY(QString detectorTypeName READ get_DetectorTypeName WRITE set_DetectorTypeName STORED false)
   QCEP_STRING_PROPERTY(DetectorTypeName)
+
+  Q_PROPERTY(bool enabled READ get_Enabled WRITE set_Enabled)
+  QCEP_BOOLEAN_PROPERTY(Enabled)
+
+  Q_PROPERTY(QString detectorName READ get_DetectorName WRITE set_DetectorName)
+  QCEP_STRING_PROPERTY(DetectorName)
 };
 
 #endif // QXRDDETECTOR_H

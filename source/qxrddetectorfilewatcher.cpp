@@ -1,5 +1,6 @@
 #include "qxrddetectorfilewatcher.h"
 #include "qxrddetectorthread.h"
+#include <stdio.h>
 
 QxrdDetectorFileWatcher::QxrdDetectorFileWatcher(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent) :
   QxrdDetector(saver, expt, acq, QxrdDetectorThread::FileWatcherDetector, parent)
@@ -8,7 +9,7 @@ QxrdDetectorFileWatcher::QxrdDetectorFileWatcher(QcepSettingsSaverWPtr saver, Qx
 
 void QxrdDetectorFileWatcher::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetector::pushDefaultsToProxy(proxy);
+  QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::FileWatcherDetector);
 
   printf("Need to implement QxrdDetectorFileWatcher::pushDefaultsToProxy\n");
 }

@@ -59,7 +59,7 @@ QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer()
 
 void QxrdDetectorPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetector::pushDefaultsToProxy(proxy);
+  QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::PerkinElmerDetector);
 
   printf("Need to implement QxrdDetectorPerkinElmer::pushDefaultsToProxy\n");
 }

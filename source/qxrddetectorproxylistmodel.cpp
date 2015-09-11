@@ -12,41 +12,109 @@ int QxrdDetectorProxyListModel::rowCount(const QModelIndex &parent) const
 
 int QxrdDetectorProxyListModel::columnCount(const QModelIndex &parent) const
 {
-  return 3;
+  return 4;
 }
 
 QVariant QxrdDetectorProxyListModel::data(const QModelIndex &index, int role) const
 {
   int row = index.row();
   int col = index.column();
+  QxrdDetectorProxyPtr p = m_DetectorProxies.value(row);
 
-  if (role == Qt::DisplayRole) {
-    QxrdDetectorProxyPtr p = m_DetectorProxies.value(row);
-
-    if (p) {
-      if (col == 1) {
-        return p->detectorTypeName();
-      } else if (col == 2) {
-        return p->get_Name();
-      }
-    }
-  }
-
-  if (role == Qt::CheckStateRole) {
-    QxrdDetectorProxyPtr p = m_DetectorProxies.value(row);
-
-    if (p) {
+  if (p) {
+    if (role == Qt::EditRole || role == Qt::DisplayRole) {
       if (col == 0) {
+        return row;
+      } else if (col == 2) {
+        return p->detectorTypeName();
+      } else if (col == 3) {
+        return p->detectorName();
+      }
+    } else if (role == Qt::CheckStateRole) {
+      if (col == 1) {
         if (p->enabled()) {
           return Qt::Checked;
         } else {
           return Qt::Unchecked;
         }
       }
+    } else if (role == Qt::TextAlignmentRole) {
+      if (col == 0 || col == 1) {
+        return Qt::AlignHCenter;
+      } else {
+        return Qt::AlignAbsolute;
+      }
     }
   }
 
   return QVariant();
+}
+
+QVariant QxrdDetectorProxyListModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+  if (orientation == Qt::Horizontal) {
+    if (role == Qt::DisplayRole) {
+      if (section == 0) {
+        return "#";
+      }
+
+      if (section == 1) {
+        return "Enabled";
+      }
+
+      if (section == 2) {
+        return "Type";
+      }
+
+      if (section == 3) {
+        return "Name";
+      }
+    } else if (role == Qt::TextAlignmentRole) {
+      return Qt::AlignHCenter;
+    }
+  }
+
+  return QVariant();
+}
+
+bool QxrdDetectorProxyListModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+  int row = index.row();
+  int col = index.column();
+
+  QxrdDetectorProxyPtr proxy = m_DetectorProxies.value(row);
+
+  if (proxy) {
+    if (col == 1 && role == Qt::CheckStateRole) {
+      proxy->setEnabled(!proxy->enabled());
+
+      emit dataChanged(index, index);
+
+      return true;
+    } else if (col == 3) {
+      if (role == Qt::EditRole || role == Qt::DisplayRole) {
+        proxy->setDetectorName(value.toString());
+
+        emit dataChanged(index, index);
+
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+Qt::ItemFlags QxrdDetectorProxyListModel::flags(const QModelIndex &index) const
+{
+  int row = index.row();
+  int col = index.column();
+
+  if (col == 1 || col == 3) {
+    return QAbstractListModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+  } else {
+    return QAbstractListModel::flags(index);
+  }
 }
 
 void QxrdDetectorProxyListModel::append(QxrdDetectorProxyPtr proxy)

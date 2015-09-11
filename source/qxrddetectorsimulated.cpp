@@ -30,7 +30,7 @@ QxrdDetectorSimulated::~QxrdDetectorSimulated()
 
 void QxrdDetectorSimulated::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetector::pushDefaultsToProxy(proxy);
+  QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::SimulatedDetector);
 
   printf("Need to implement QxrdDetectorSimulated::pushDefaultsToProxy\n");
 }

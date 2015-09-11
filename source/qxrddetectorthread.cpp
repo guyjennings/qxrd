@@ -255,9 +255,12 @@ void QxrdDetectorThread::pushDefaultsToProxy(int detectorType,
 {
   switch (detectorType) {
   case NoDetector:
+  default:
+    QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::NoDetector);
     break;
 
   case SimulatedDetector:
+    QxrdDetectorSimulated::pushDefaultsToProxy(proxy);
     break;
 
 #ifdef HAVE_PERKIN_ELMER

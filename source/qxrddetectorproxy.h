@@ -16,6 +16,7 @@ public:
   explicit QxrdDetectorProxy(
       QxrdDetectorThreadPtr thr, QxrdDetectorPtr det, QxrdAcquisitionPtr acq);
   explicit QxrdDetectorProxy(int detectorType,    QxrdAcquisitionPtr acq);
+  void initialize();
 
 signals:
 
@@ -24,15 +25,21 @@ public slots:
   QString               detectorTypeName();
   QxrdDetectorThreadPtr detectorThread();
   QxrdDetectorPtr       detector();
+  QString               detectorName();
+  void setDetectorName(QString name);
 
   bool configureDetector();
   bool settingsChanged();
+
   bool enabled();
+  void setEnabled(bool a);
 
 public:
   typedef enum {
+    DetectorTypeProperty,
     StringProperty,
     IntegerProperty,
+    BooleanProperty,
     DoubleProperty,
     DirectoryProperty
   } PropertyType;
@@ -47,6 +54,7 @@ private:
   QxrdDetectorPtr       m_Detector;
   int                   m_DetectorType;
   bool                  m_SettingsChanged;
+  bool                  m_Initialized;
   QVector<PropertyType> m_PropertyTypes;
   QVector<QString>      m_PropertyNames;
   QVector<QString>      m_PropertyDescriptions;

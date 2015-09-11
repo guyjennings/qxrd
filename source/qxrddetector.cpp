@@ -1,5 +1,6 @@
 #include "qxrddetector.h"
 #include "qxrddetectorthread.h"
+#include "qxrddetectorproxy.h"
 #include "qxrddebug.h"
 #include <stdio.h>
 
@@ -9,7 +10,9 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt,
   m_Experiment(expt),
   m_Acquisition(acq),
   m_DetectorType(saver, this, "detectorType", detType, "Detector Type"),
-  m_DetectorTypeName(QcepSettingsSaverWPtr(), this, "detectorTypeName", detectorTypeName(), "Detector Type Name")
+  m_DetectorTypeName(QcepSettingsSaverWPtr(), this, "detectorTypeName", detectorTypeName(), "Detector Type Name"),
+  m_Enabled(saver, this, "enabled", true, "Is Detector Enabled?"),
+  m_DetectorName(saver, this, "detectorName", detectorTypeName(), "Detector Name")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::QxrdDetector(%p)\n", this);
@@ -105,17 +108,28 @@ void QxrdDetector::fromScriptValue(const QScriptValue &obj, QxrdDetectorPtr &det
   }
 }
 
-void QxrdDetector::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetector::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType)
 {
-  printf("Need to implement QxrdDetector::pushDefaultsToProxy\n");
+  if (proxy) {
+    proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty, "detectorType", "Detector Type",     detType);
+    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,      "enabled",      "Detector Enabled?", true);
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty,       "detectorName", "Detector Name",     "A " + QxrdDetectorThread::detectorTypeName(detType));
+  }
 }
 
 void QxrdDetector::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
-  printf("Need to implement QxrdDetector::pushPropertiesToProxy\n");
+  if (proxy) {
+    proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty, "detectorType", "Detector Type",     get_DetectorType());
+    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,      "enabled",      "Detector Enabled?", get_Enabled());
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty,       "detectorName", "Detector Name",     get_DetectorName());
+  }
 }
 
 void QxrdDetector::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
-  printf("Need to implement QxrdDetector::pullPropertiesfromProxy\n");
+  if (proxy) {
+    set_Enabled(proxy->property("enabled").toBool());
+    set_DetectorName(proxy->property("detectorName").toString());
+  }
 }

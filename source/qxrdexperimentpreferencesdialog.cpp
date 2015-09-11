@@ -78,6 +78,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
       }
     }
 
+    m_DetectorsList->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_DetectorsList->setModel(m_DetectorProxyModel.data());
 
     connect(m_AddDetector,      &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::addDetector);
@@ -472,15 +473,22 @@ void QxrdExperimentPreferencesDialog::configureDetector()
 void QxrdExperimentPreferencesDialog::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
 {
   if (proxy) {
+    proxy->initialize();
+
     m_DetectorProxyModel->append(proxy);
   }
 }
 
 void QxrdExperimentPreferencesDialog::detectorDoubleClicked(const QModelIndex& item)
 {
-  QxrdDetectorProxyPtr proxy = m_DetectorProxyModel->detectorProxy(item.row());
+  int row = item.row();
+  int col = item.column();
 
-  if (proxy) {
-    proxy->configureDetector();
+  if (col == 0 || col == 2) {
+    QxrdDetectorProxyPtr proxy = m_DetectorProxyModel->detectorProxy(item.row());
+
+    if (proxy) {
+      proxy->configureDetector();
+    }
   }
 }

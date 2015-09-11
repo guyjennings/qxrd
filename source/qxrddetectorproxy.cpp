@@ -12,9 +12,13 @@ QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
     m_Acquisition(acq),
     m_DetectorThread(thr),
     m_Detector(det),
-    m_SettingsChanged(false)
+    m_DetectorType(QxrdDetectorThread::NoDetector),
+    m_SettingsChanged(false),
+    m_Initialized(false)
 {
+
   if (det) {
+    setEnabled(det->get_Enabled());
     m_DetectorType = det->get_DetectorType();
   }
 }
@@ -24,8 +28,28 @@ QxrdDetectorProxy::QxrdDetectorProxy(int detectorType, QxrdAcquisitionPtr acq)
     m_Acquisition(acq),
     m_DetectorThread(),
     m_Detector(),
-    m_DetectorType(detectorType)
+    m_DetectorType(detectorType),
+    m_SettingsChanged(false),
+    m_Initialized(false)
 {
+  setEnabled(true);
+}
+
+void QxrdDetectorProxy::initialize()
+{
+  if (!m_Initialized) {
+    if (sharedFromThis()) {
+      if (m_Detector) {
+        m_Detector->pushPropertiesToProxy(sharedFromThis());
+      } else {
+        QxrdDetectorThread::pushDefaultsToProxy(m_DetectorType, sharedFromThis());
+      }
+
+      m_Initialized = true;
+    } else {
+      printf("Proxy initialize failed\n");
+    }
+  }
 }
 
 bool QxrdDetectorProxy::enabled()
@@ -33,14 +57,29 @@ bool QxrdDetectorProxy::enabled()
   return property("enabled").toBool();
 }
 
+void QxrdDetectorProxy::setEnabled(bool a)
+{
+  setProperty("enabled", a);
+}
+
 int QxrdDetectorProxy::detectorType()
 {
-  return m_DetectorType;
+  return property("detectorType").toInt();
 }
 
 QString QxrdDetectorProxy::detectorTypeName()
 {
-  return QxrdDetectorThread::detectorTypeName(m_DetectorType);
+  return QxrdDetectorThread::detectorTypeName(detectorType());
+}
+
+QString QxrdDetectorProxy::detectorName()
+{
+  return property("detectorName").toString();
+}
+
+void QxrdDetectorProxy::setDetectorName(QString name)
+{
+  setProperty("detectorName", name);
 }
 
 QxrdDetectorThreadPtr QxrdDetectorProxy::detectorThread()
@@ -84,6 +123,8 @@ void QxrdDetectorProxy::pushProperty(PropertyType type, QString name, QString de
   m_PropertyNames.append(name);
   m_PropertyDescriptions.append(description);
   m_PropertyValues.append(value);
+
+  setProperty(qPrintable(name), value);
 }
 
 void QxrdDetectorProxy::pushPropertiesToDialog(QxrdDetectorConfigurationDialog *dialog)

@@ -386,7 +386,7 @@ void QxrdDetectorPilatus::checkExpectedFiles()
 
 void QxrdDetectorPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetector::pushDefaultsToProxy(proxy);
+  QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::PilatusDetector);
 
   printf("Need to implement QxrdDetectorPilatus::pushDefaultsToProxy\n");
 }
