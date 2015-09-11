@@ -14,6 +14,10 @@ public:
 
   void initialize();
 
+  void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
+  void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
+  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
+
 public slots:
   virtual void onExposureTimeChanged();
   virtual void onBinningModeChanged();

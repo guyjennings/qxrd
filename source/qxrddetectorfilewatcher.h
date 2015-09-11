@@ -10,6 +10,10 @@ class QxrdDetectorFileWatcher : public QxrdDetector
 public:
   explicit QxrdDetectorFileWatcher(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent);
 
+  void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
+  void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
+  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
+
 signals:
   
 public slots:

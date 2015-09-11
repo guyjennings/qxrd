@@ -57,6 +57,27 @@ QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer()
   }
 }
 
+void QxrdDetectorPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+{
+  QxrdDetector::pushDefaultsToProxy(proxy);
+
+  printf("Need to implement QxrdDetectorPerkinElmer::pushDefaultsToProxy\n");
+}
+
+void QxrdDetectorPerkinElmer::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+{
+  QxrdDetector::pushPropertiesToProxy(proxy);
+
+  printf("Need to implement QxrdDetectorPerkinElmer::pushPropertiesToProxy\n");
+}
+
+void QxrdDetectorPerkinElmer::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+{
+  QxrdDetector::pullPropertiesfromProxy(proxy);
+
+  printf("Need to implement QxrdDetectorPerkinElmer::pullPropertiesfromProxy\n");
+}
+
 int QxrdDetectorPerkinElmer::detectorSubType() const
 {
   return m_SubType;

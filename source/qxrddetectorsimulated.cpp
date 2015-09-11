@@ -28,6 +28,27 @@ QxrdDetectorSimulated::~QxrdDetectorSimulated()
   }
 }
 
+void QxrdDetectorSimulated::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+{
+  QxrdDetector::pushDefaultsToProxy(proxy);
+
+  printf("Need to implement QxrdDetectorSimulated::pushDefaultsToProxy\n");
+}
+
+void QxrdDetectorSimulated::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+{
+  QxrdDetector::pushPropertiesToProxy(proxy);
+
+  printf("Need to implement QxrdDetectorSimulated::pushPropertiesToProxy\n");
+}
+
+void QxrdDetectorSimulated::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+{
+  QxrdDetector::pullPropertiesfromProxy(proxy);
+
+  printf("Need to implement QxrdDetectorSimulated::pullPropertiesfromProxy\n");
+}
+
 void QxrdDetectorSimulated::onExposureTimeChanged()
 {
   if (QThread::currentThread() != thread()) {
