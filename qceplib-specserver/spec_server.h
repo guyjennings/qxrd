@@ -1,9 +1,9 @@
 /****************************************************************************
-*   @(#)spec_server.h	5.6  09/29/04 CSS
+*   @(#)spec_server.h	6.2  11/04/13 CSS
 *
-*   "Spec" Release 5
+*   "spec" Release 6
 *
-*   Copyright (c) 2002,2003,2004
+*   Copyright (c) 2002,2003,2004,2013
 *   by Certified Scientific Software.
 *   All rights reserved.
 *   Copyrighted as an unpublished work.
@@ -89,3 +89,5 @@ struct  svr_head {
 #define SV_ARR_CHAR     11
 #define SV_ARR_UCHAR    12
 #define SV_ARR_STRING   13
+#define SV_ARR_LONG64   14
+#define SV_ARR_ULONG64  15

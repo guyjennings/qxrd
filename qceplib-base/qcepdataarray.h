@@ -13,12 +13,14 @@ class QcepDataArray : public QcepDataObject
 public:
   QcepDataArray(QcepSettingsSaverWPtr saver,
                 QString name,
-                QVector<int> dims);
+                QVector<int> dims,
+                QcepObject *parent);
   virtual ~QcepDataArray();
 
   static QcepDataArrayPtr newDataArray(QcepSettingsSaverWPtr saver,
                                        QString name,
-                                       QVector<int> dims);
+                                       QVector<int> dims,
+                                       QcepObject *parent);
 
   static QScriptValue toArrayScriptValue(QScriptEngine *engine, const QcepDataArrayPtr &data);
   static void fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayPtr &data);

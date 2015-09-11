@@ -20,8 +20,8 @@
 
 QAtomicInt allocCount = 0;
 
-QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height, int size)
-  : QcepDataObject(saver, tr("image"), size),
+QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height, int size, QcepObject *parent)
+  : QcepDataObject(saver, tr("image"), size, parent),
     m_Width(saver, this, "width", width, "Image Width"),
     m_Height(saver, this, "height", height, "Image Height"),
     m_DataType(saver, this, "dataType", UndefinedData, "Data Type of Image"),
@@ -317,8 +317,8 @@ QString QcepImageDataBase::fileFormatTransposedCSV()
 }
 
 template <typename T>
-QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def)
-  : QcepImageDataBase(saver, width, height, width*height*sizeof(T)),
+QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def, QcepObject *parent)
+  : QcepImageDataBase(saver, width, height, width*height*sizeof(T), parent),
     //    m_Image(width*height, def),
     m_Image(width*height),
     m_MinValue(0),
@@ -352,9 +352,9 @@ QcepImageData<T>::~QcepImageData()
 
 template <typename T>
 QSharedPointer< QcepImageData<T> > QcepImageData<T>::newImage(
-    QcepSettingsSaverWPtr saver, QString name, int width, int height)
+    QcepSettingsSaverWPtr saver, QString name, int width, int height, QcepObject *parent)
 {
-  QSharedPointer< QcepImageData<T> > res(new QcepImageData<T>(saver, width, height));
+  QSharedPointer< QcepImageData<T> > res(new QcepImageData<T>(saver, width, height, 0, parent));
 
   res->setObjectName(name);
 
@@ -557,7 +557,7 @@ void QcepImageData<T>::dumpPixels(int x0, int y0, int x1, int y1)
 template <typename T>
 void QcepImageData<T>::resize(int width, int height)
 {
-  QcepImageData<T> temp(QcepSettingsSaverPtr(), get_Width(), get_Height());
+  QcepImageData<T> temp(QcepSettingsSaverPtr(), get_Width(), get_Height(), 0, this);
 
   int oldwidth = get_Width();
   int oldheight= get_Height();

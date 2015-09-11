@@ -34,17 +34,18 @@ public:
     AlwaysAllocate
   };
 
-  static QcepInt16ImageDataPtr newInt16Image(AllocationStrategy strat, int width, int height);
-  static QcepInt32ImageDataPtr newInt32Image(AllocationStrategy strat, int width, int height);
-  static QcepDoubleImageDataPtr newDoubleImage(AllocationStrategy strat, int width, int height);
-  static QcepMaskDataPtr newMask(AllocationStrategy strat, int width, int height, int def=1);
-  static QcepIntegratedDataPtr newIntegratedData(AllocationStrategy strat, QcepDoubleImageDataPtr image);
+  static QcepInt16ImageDataPtr newInt16Image(AllocationStrategy strat, int width, int height, QcepObject *parent);
+  static QcepInt32ImageDataPtr newInt32Image(AllocationStrategy strat, int width, int height, QcepObject *parent);
+  static QcepDoubleImageDataPtr newDoubleImage(AllocationStrategy strat, int width, int height, QcepObject *parent);
+  static QcepMaskDataPtr newMask(AllocationStrategy strat, int width, int height, int def, QcepObject *parent);
+  static QcepIntegratedDataPtr newIntegratedData(AllocationStrategy strat, QcepDoubleImageDataPtr image, QcepObject *parent);
 
-  static QcepDoubleImageDataPtr newDoubleImage(QString name, int width, int height);
-  static QcepIntegratedDataPtr  newIntegratedData(QString name, int size);
+  static QcepDoubleImageDataPtr newDoubleImage(QString name, int width, int height, QcepObject *parent);
+  static QcepIntegratedDataPtr  newIntegratedData(QString name, int size, QcepObject *parent);
 
   static void newDoubleImageAndIntegratedData(AllocationStrategy strat,
                                        int width, int height,
+                                       QcepObject *parent,
                                        QcepDoubleImageDataPtr &img,
                                        QcepIntegratedDataPtr &integ);
   int int16SizeMB(int width, int height);

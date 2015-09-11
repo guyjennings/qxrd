@@ -3,19 +3,19 @@
 #include "qcepdatacolumn-ptr.h"
 #include <QScriptEngine>
 
-QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name) :
-  QcepDataGroup(sav, name),
+QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QcepObject *parent) :
+  QcepDataGroup(sav, name, parent),
   m_NumPoints(sav, this, "numPoints", 0, "Number of points in scan")
 {
   set_Type("Data Column Scan");
 }
 
-QcepDataColumnScanPtr QcepDataColumnScan::newDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int npts)
+QcepDataColumnScanPtr QcepDataColumnScan::newDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int npts, QcepObject *parent)
 {
-  QcepDataColumnScanPtr res(new QcepDataColumnScan(sav, name));
+  QcepDataColumnScanPtr res(new QcepDataColumnScan(sav, name, parent));
 
   foreach (QString col, cols) {
-    res -> append(QcepDataColumn::newDataColumn(sav, col, npts));
+    res -> append(QcepDataColumn::newDataColumn(sav, col, npts, parent));
   }
 
   res -> set_NumPoints(npts);

@@ -2,8 +2,8 @@
 #include "qcepallocator.h"
 #include <QScriptEngine>
 
-QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts) :
-  QcepDataObject(saver, name, npts*sizeof(double)),
+QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QcepObject *parent) :
+  QcepDataObject(saver, name, npts*sizeof(double), parent),
   m_NPoints(npts)
 {
   set_Type("Data Column");
@@ -23,9 +23,9 @@ QString QcepDataColumn::description() const
   return tr("%1 rows").arg(m_NPoints);
 }
 
-QcepDataColumnPtr QcepDataColumn::newDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts)
+QcepDataColumnPtr QcepDataColumn::newDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QcepObject *parent)
 {
-  QcepDataColumnPtr res(new QcepDataColumn(saver, name, npts));
+  QcepDataColumnPtr res(new QcepDataColumn(saver, name, npts, parent));
 
   return res;
 }
