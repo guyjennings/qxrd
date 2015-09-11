@@ -63,8 +63,8 @@ private:
 
 private:
   mutable QMutex         m_Mutex;
-  int                    m_SubType;
-  QString                m_Address;
+//  int                    m_SubType;
+//  QString                m_Address;
   int                    m_BufferSize;
   int                    m_BufferIndex;
   QVector<quint16>       m_Buffer;
@@ -73,7 +73,7 @@ private:
   HACQDESC               m_AcqDesc;
   int                    m_StartupDelayed;
 
-  int                    m_DetectorNumber;
+//  int                    m_DetectorNumber;
   int                    m_PROMID;
   int                    m_HeaderID;
   int                    m_CameraType;
@@ -87,6 +87,16 @@ private:
   CHwHeaderInfoEx        m_HwHeaderInfoEx;
 
   QxrdPerkinElmerPluginInterfaceWPtr m_PerkinElmer;
+
+public:
+  Q_PROPERTY(int detectorNumber READ get_DetectorNumber WRITE set_DetectorNumber)
+  QCEP_INTEGER_PROPERTY(DetectorNumber)
+
+  Q_PROPERTY(int detectorSubType READ get_DetectorSubType WRITE set_DetectorSubType)
+  QCEP_INTEGER_PROPERTY(DetectorSubType)
+
+  Q_PROPERTY(QString detectorAddress READ get_DetectorAddress WRITE set_DetectorAddress)
+  QCEP_STRING_PROPERTY(DetectorAddress)
 };
 
 #endif // QXRDDETECTORPERKINELMER_H

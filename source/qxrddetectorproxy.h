@@ -42,7 +42,9 @@ public:
     BooleanProperty,
     DoubleProperty,
     DirectoryProperty,
-    FixedIntegerProperty
+    FixedIntegerProperty,
+    PEDetNumProperty,
+    PESubTypeProperty,
   } PropertyType;
 
   void clearProperties();

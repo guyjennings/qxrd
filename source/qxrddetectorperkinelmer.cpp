@@ -5,6 +5,7 @@
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
+#include "qxrddetectorproxy.h"
 
 //static QxrdDetectorPerkinElmer *g_Detector = NULL;
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
@@ -16,7 +17,6 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver, Qx
   m_BufferSize(0),
   m_AcqDesc(NULL),
   m_StartupDelayed(0),
-  m_DetectorNumber(0),
   m_PROMID(-1),
   m_HeaderID(-1),
   m_CameraType(-1),
@@ -24,7 +24,10 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver, Qx
   m_CurrentGain(-1),
   m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
   m_Counter(0),
-  m_PerkinElmer()
+  m_PerkinElmer(),
+  m_DetectorNumber(saver, this,  "detectorNumber",  0, "Perkin Elmer Detector Number"),
+  m_DetectorSubType(saver, this, "detectorSubType", 0, "Perkin Elmer Detector Subtype"),
+  m_DetectorAddress(saver, this, "detectorAddress", "", "Perkin Elmer Detector Address")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(%p)\n", this);
@@ -61,31 +64,43 @@ void QxrdDetectorPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::PerkinElmerDetector);
 
-  printf("Need to implement QxrdDetectorPerkinElmer::pushDefaultsToProxy\n");
+  if (proxy) {
+    proxy->pushProperty(QxrdDetectorProxy::PEDetNumProperty, "detectorNumber", "PE Detector Number", 0);
+    proxy->pushProperty(QxrdDetectorProxy::PESubTypeProperty, "detectorSubType", "PE Detector Type", 0);
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty,   "detectorAddress", "PE Detector Address", "");
+  }
 }
 
 void QxrdDetectorPerkinElmer::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetector::pushPropertiesToProxy(proxy);
 
-  printf("Need to implement QxrdDetectorPerkinElmer::pushPropertiesToProxy\n");
+  if (proxy) {
+    proxy->pushProperty(QxrdDetectorProxy::PEDetNumProperty, "detectorNumber", "PE Detector Number", get_DetectorNumber());
+    proxy->pushProperty(QxrdDetectorProxy::PESubTypeProperty, "detectorSubType", "PE Detector Type", get_DetectorSubType());
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty,   "detectorAddress", "PE Detector Address", get_DetectorAddress());
+  }
 }
 
 void QxrdDetectorPerkinElmer::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetector::pullPropertiesfromProxy(proxy);
 
-  printf("Need to implement QxrdDetectorPerkinElmer::pullPropertiesfromProxy\n");
+  if (proxy) {
+    set_DetectorNumber  (proxy->property("detectorNumber").toInt());
+    set_DetectorSubType (proxy->property("detectorSubType").toInt());
+    set_DetectorAddress (proxy->property("detectorAddress").toString());
+  }
 }
 
 int QxrdDetectorPerkinElmer::detectorSubType() const
 {
-  return m_SubType;
+  return get_DetectorSubType();
 }
 
 QString QxrdDetectorPerkinElmer::detectorAddress() const
 {
-  return m_Address;
+  return get_DetectorAddress();
 }
 
 void QxrdDetectorPerkinElmer::printMessage(QString msg, QDateTime ts)
@@ -439,15 +454,15 @@ void QxrdDetectorPerkinElmer::initialize()
 
     QxrdExperimentPtr exp(m_Experiment);
 
-    if (exp) {
-      m_DetectorNumber = exp->get_DetectorNumber();
-      m_SubType        = exp->get_DetectorSubType();
-      m_Address        = exp->get_DetectorAddress();
-    }
+//    if (exp) {
+//      m_DetectorNumber = exp->get_DetectorNumber();
+//      m_SubType        = exp->get_DetectorSubType();
+//      m_Address        = exp->get_DetectorAddress();
+//    }
 
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
 
-    switch (m_SubType) {
+    switch (get_DetectorSubType()) {
     case QxrdDetectorThread::PCI_SubType:
       {
         printMessage("Initialising PCI/PCIe Perkin Elmer Detector");
@@ -469,15 +484,15 @@ void QxrdDetectorPerkinElmer::initialize()
           printMessage(tr("Number of sensors = %1").arg(nSensors));
         }
 
-        if (m_DetectorNumber == 0 && nSensors != 1) {
+        if (get_DetectorNumber() == 0 && nSensors != 1) {
           acquisitionNSensorsError(__FILE__, __LINE__, nRet);
           return;
-        } else if (m_DetectorNumber < 0 || m_DetectorNumber > nSensors) {
+        } else if (get_DetectorNumber() < 0 || get_DetectorNumber() > nSensors) {
           acquisitionNSensorsError(__FILE__, __LINE__, nRet);
           return;
         }
 
-        for (int i=1; i<=(m_DetectorNumber?m_DetectorNumber:1); i++) {
+        for (int i=1; i<=(get_DetectorNumber() ? get_DetectorNumber() : 1); i++) {
           if (plugin && (nRet = plugin->Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
             acquisitionNSensorsError(__FILE__, __LINE__, nRet);
             return;
@@ -488,12 +503,13 @@ void QxrdDetectorPerkinElmer::initialize()
 
     case QxrdDetectorThread::GBIF_IP_SubType:
       {
-        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at IP Address %1").arg(m_Address));
+        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at IP Address %1")
+                     .arg(get_DetectorAddress()));
 
         if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
                                                             1024, 1024, bSelfInit,
                                                             bAlwaysOpen, 1,
-                                                            (GBIF_STRING_DATATYPE*) qPrintable(m_Address))) != HIS_ALL_OK) {
+                                                            (GBIF_STRING_DATATYPE*) qPrintable(get_DetectorAddress()))) != HIS_ALL_OK) {
           acquisitionInitError(__FILE__, __LINE__, nRet);
           return;
         }
@@ -502,12 +518,12 @@ void QxrdDetectorPerkinElmer::initialize()
 
     case QxrdDetectorThread::GBIF_MAC_SubType:
       {
-        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at MAC address %1").arg(m_Address));
+        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at MAC address %1").arg(get_DetectorAddress()));
 
         if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
                                                             1024, 1024, bSelfInit,
                                                             bAlwaysOpen, 2,
-                                                            (GBIF_STRING_DATATYPE*) qPrintable(m_Address))) != HIS_ALL_OK) {
+                                                            (GBIF_STRING_DATATYPE*) qPrintable(get_DetectorAddress()))) != HIS_ALL_OK) {
           acquisitionInitError(__FILE__, __LINE__, nRet);
           return;
         }
@@ -516,12 +532,12 @@ void QxrdDetectorPerkinElmer::initialize()
 
     case QxrdDetectorThread::GBIF_Name_SubType:
       {
-        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at device name %1").arg(m_Address));
+        printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at device name %1").arg(get_DetectorAddress()));
 
         if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
                                                             1024, 1024, bSelfInit,
                                                             bAlwaysOpen, 3,
-                                                            (GBIF_STRING_DATATYPE*) qPrintable(m_Address))) != HIS_ALL_OK) {
+                                                            (GBIF_STRING_DATATYPE*) qPrintable(get_DetectorAddress()))) != HIS_ALL_OK) {
           acquisitionInitError(__FILE__, __LINE__, nRet);
           return;
         }
@@ -562,8 +578,8 @@ void QxrdDetectorPerkinElmer::initialize()
                        .arg(devs[i].cDeviceName));
         }
 
-        if (m_DetectorNumber >= 0 && m_DetectorNumber <= nBoards) {
-          int n = (m_DetectorNumber?m_DetectorNumber:1);
+        if (get_DetectorNumber() >= 0 && get_DetectorNumber() <= nBoards) {
+          int n = (get_DetectorNumber() ? get_DetectorNumber() : 1);
 
           if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
                                                               1024, 1024, bSelfInit,
@@ -922,7 +938,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
 
     if (plugin && acq) {
       QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepAllocator::AllocateFromReserve,
-                                                                 acq->get_NCols(), acq->get_NRows());
+                                                                 acq->get_NCols(), acq->get_NRows(), this);
 
       //    printf("allocator took %d msec\n", tic.restart());
 

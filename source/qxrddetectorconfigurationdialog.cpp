@@ -92,6 +92,20 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
     propertyEditor = le;
     button = pb;
+  } else if (type == QxrdDetectorProxy::PEDetNumProperty) {
+    QSpinBox *sb = new QSpinBox();
+    sb -> setMinimum(-1);
+    sb -> setMaximum(64);
+    sb -> setValue(value.toInt());
+
+    propertyEditor = sb;
+  } else if (type == QxrdDetectorProxy::PESubTypeProperty) {
+    QComboBox *cb = new QComboBox();
+    QStringList sl = QxrdDetectorThread::detectorSubTypeNames();
+    cb->addItems(sl);
+    cb->setCurrentIndex(value.toInt());
+
+    propertyEditor = cb;
   } else {
     printf("Unknown property type\n");
   }
@@ -125,7 +139,21 @@ QVariant QxrdDetectorConfigurationDialog::propertyValue(int propType, int i)
   } else if (propType == QxrdDetectorProxy::BooleanProperty) {
     QCheckBox *cb = qobject_cast<QCheckBox*>(w);
 
-    return cb->isChecked();
+    if (cb) {
+      return cb->isChecked();
+    }
+  } else if (propType == QxrdDetectorProxy::PEDetNumProperty) {
+    QSpinBox *sb = qobject_cast<QSpinBox*>(w);
+
+    if (sb) {
+      return sb->value();
+    }
+  } else if (propType == QxrdDetectorProxy::PESubTypeProperty) {
+    QComboBox *cb = qobject_cast<QComboBox*>(w);
+
+    if (cb) {
+      return cb->currentIndex();
+    }
   } else {
     printf("Unknown property type\n");
   }
