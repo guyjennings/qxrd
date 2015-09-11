@@ -826,12 +826,18 @@ void QxrdWindow::populateConfigureDetectorMenu()
       int nDets = macq->get_DetectorCount();
 
       for (int i=0; i<nDets; i++) {
-        QString detType = macq->detector(i)->get_DetectorTypeName();
-        QString detName = macq->detector(i)->get_Name();
+        QxrdDetectorPtr det = macq->detector(i);
+        QString detType = det->get_DetectorTypeName();
+        QString detName = det->get_Name();
+        bool    enabled = det->get_Enabled();
 
-        QString det = tr("(%1) Configure %2 detector \"%3\"...").arg(i).arg(detType).arg(detName);
+        QString str = tr("(%1) Configure %2 detector \"%3\"...").arg(i).arg(detType).arg(detName);
 
-        QAction *action = new QAction(det, m_ConfigureDetectorMenu);
+        QAction *action = new QAction(str, m_ConfigureDetectorMenu);
+
+        action->setCheckable(true);
+        action->setChecked(enabled);
+
         QSignalMapper *mapper = new QSignalMapper(action);
 
         connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
