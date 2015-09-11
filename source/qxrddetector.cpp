@@ -110,6 +110,8 @@ void QxrdDetector::fromScriptValue(const QScriptValue &obj, QxrdDetectorPtr &det
 
 void QxrdDetector::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType)
 {
+  proxy->clearProperties();
+
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty, "detectorType", "Detector Type",     detType);
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,      "enabled",      "Detector Enabled?", true);
@@ -119,6 +121,8 @@ void QxrdDetector::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType)
 
 void QxrdDetector::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
+  proxy->clearProperties();
+
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty, "detectorType", "Detector Type",     get_DetectorType());
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,      "enabled",      "Detector Enabled?", get_Enabled());

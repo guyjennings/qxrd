@@ -15,11 +15,23 @@ public:
 
   void accept();
 
+  void appendProperty(int type,
+                      QString name,
+                      QString description,
+                      QVariant value);
+
+  QVariant propertyValue(int propType, int i);
+
 protected:
   void changeEvent(QEvent *e);
 
+private slots:
+  void browseToDirectory(int i);
+
 private:
   QxrdDetectorProxyPtr m_Proxy;
+  int                  m_CurrentRow;
+  QVector<QWidget*>    m_Widgets;
 };
 
 #endif // QXRDDETECTORCONFIGURATIONDIALOG_H

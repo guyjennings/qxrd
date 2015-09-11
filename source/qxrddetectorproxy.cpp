@@ -4,6 +4,8 @@
 #include "qxrddetectorthread.h"
 #include "qxrddetectorconfigurationdialog.h"
 #include "qcepproperty.h"
+#include <QLineEdit>
+#include <QCheckBox>
 
 QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
                                      QxrdDetectorPtr       det,
@@ -117,6 +119,14 @@ bool QxrdDetectorProxy::settingsChanged()
   return m_SettingsChanged;
 }
 
+void QxrdDetectorProxy::clearProperties()
+{
+  m_PropertyTypes.clear();
+  m_PropertyNames.clear();
+  m_PropertyDescriptions.clear();
+  m_PropertyValues.clear();
+}
+
 void QxrdDetectorProxy::pushProperty(PropertyType type, QString name, QString description, QVariant value)
 {
   m_PropertyTypes.append(type);
@@ -129,10 +139,33 @@ void QxrdDetectorProxy::pushProperty(PropertyType type, QString name, QString de
 
 void QxrdDetectorProxy::pushPropertiesToDialog(QxrdDetectorConfigurationDialog *dialog)
 {
-  printf("Need to implement QxrdDetectorProxy::pushPropertiesToDialog\n");
+  if (dialog) {
+    int nProps = m_PropertyTypes.count();
+
+    for (int i = 0; i<nProps; i++) {
+      dialog->appendProperty(m_PropertyTypes.value(i),
+                             m_PropertyNames.value(i),
+                             m_PropertyDescriptions.value(i),
+                             m_PropertyValues.value(i));
+    }
+  }
 }
 
 void QxrdDetectorProxy::pullPropertiesFromDialog(QxrdDetectorConfigurationDialog *dialog)
 {
-  printf("Need to implement QxrdDetectorProxy::pullPropertiesFromDialog\n");
+  if (dialog) {
+    int nProps = m_PropertyTypes.count();
+
+    for (int i=0; i<nProps; i++) {
+      int      propType = m_PropertyTypes.value(i);
+      QString  propName = m_PropertyNames.value(i);
+      QVariant propVal  = dialog->propertyValue(propType, i);
+
+      if (propVal.isValid()) {
+        setProperty(qPrintable(propName), propVal);
+      }
+    }
+
+    clearProperties();
+  }
 }

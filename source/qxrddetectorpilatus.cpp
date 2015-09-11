@@ -7,6 +7,7 @@
 #include <QFile>
 #include "qcepimagedata.h"
 #include "qcepallocator.h"
+#include "qxrddetectorproxy.h"
 
 QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent) :
   QxrdDetector(saver, expt, acq, QxrdDetectorThread::PilatusDetector, parent),
@@ -388,19 +389,36 @@ void QxrdDetectorPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::PilatusDetector);
 
-  printf("Need to implement QxrdDetectorPilatus::pushDefaultsToProxy\n");
+  if (proxy) {
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusHost",          "Camserver Host",    "s11id-pilatus");
+    proxy->pushProperty(QxrdDetectorProxy::FixedIntegerProperty,   "pilatusPort",  "Camserver Port",    41234);
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusFilePattern",   "Save File Pattern", "%s-%-0.5d%s");
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusDataDirectory", "Camserver Data Directory", "/home/det/shareddata/test/");
+    proxy->pushProperty(QxrdDetectorProxy::DirectoryProperty, "localDataDirectory","Local Data Directory", "/home/bessrc/shareddata/test/");
+  }
 }
 
 void QxrdDetectorPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetector::pushPropertiesToProxy(proxy);
 
-  printf("Need to implement QxrdDetectorPilatus::pushPropertiesToProxy\n");
+  if (proxy) {
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusHost",          "Camserver Host",    get_PilatusHost());
+    proxy->pushProperty(QxrdDetectorProxy::FixedIntegerProperty,   "pilatusPort",  "Camserver Port",    get_PilatusPort());
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusFilePattern",   "Save File Pattern", get_PilatusFilePattern());
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusDataDirectory", "Camserver Data Directory", get_PilatusDataDirectory());
+    proxy->pushProperty(QxrdDetectorProxy::DirectoryProperty, "localDataDirectory","Local Data Directory", get_LocalDataDirectory());
+  }
 }
 
 void QxrdDetectorPilatus::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetector::pullPropertiesfromProxy(proxy);
 
-  printf("Need to implement QxrdDetectorPilatus::pullPropertiesfromProxy\n");
+  if (proxy) {
+    set_PilatusHost         (proxy->property("pilatusHost").toString());
+    set_PilatusFilePattern  (proxy->property("pilatusFilePattern").toString());
+    set_PilatusDataDirectory(proxy->property("pilatusDataDirectory").toString());
+    set_LocalDataDirectory  (proxy->property("localDataDirectory").toString());
+  }
 }

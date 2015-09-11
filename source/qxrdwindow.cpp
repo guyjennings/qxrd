@@ -828,7 +828,7 @@ void QxrdWindow::populateConfigureDetectorMenu()
       for (int i=0; i<nDets; i++) {
         QxrdDetectorPtr det = macq->detector(i);
         QString detType = det->get_DetectorTypeName();
-        QString detName = det->get_Name();
+        QString detName = det->get_DetectorName();
         bool    enabled = det->get_Enabled();
 
         QString str = tr("(%1) Configure %2 detector \"%3\"...").arg(i).arg(detType).arg(detName);

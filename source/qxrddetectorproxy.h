@@ -41,9 +41,11 @@ public:
     IntegerProperty,
     BooleanProperty,
     DoubleProperty,
-    DirectoryProperty
+    DirectoryProperty,
+    FixedIntegerProperty
   } PropertyType;
 
+  void clearProperties();
   void pushProperty(PropertyType type, QString name, QString description, QVariant value);
   void pushPropertiesToDialog(QxrdDetectorConfigurationDialog *dialog);
   void pullPropertiesFromDialog(QxrdDetectorConfigurationDialog *dialog);
@@ -59,7 +61,6 @@ private:
   QVector<QString>      m_PropertyNames;
   QVector<QString>      m_PropertyDescriptions;
   QVector<QVariant>     m_PropertyValues;
-  QVector<QWidget*>     m_PropertyWidgets;
 };
 
 #endif // QXRDDETECTORPROXY_H
