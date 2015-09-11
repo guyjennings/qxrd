@@ -115,16 +115,22 @@ void QxrdMultipleAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
       QxrdDetectorThreadPtr detThread = proxy->detectorThread();
       QxrdDetectorPtr       detector  = proxy->detector();
 
-      if (detThread && detector) {
-        m_DetectorThreads.append(detThread);
-        m_Detectors.append(detector);
-
-        set_DetectorCount(m_Detectors.count());
-      } else {
+      if (detThread==NULL || detector==NULL) {
         int detType = proxy->detectorType();
 
-        appendDetector(detType);
+       detThread =
+            QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
+       detThread->start();
+
+       detector = detThread->detector();
       }
+
+      m_DetectorThreads.append(detThread);
+      m_Detectors.append(detector);
+
+      set_DetectorCount(m_Detectors.count());
+
+      detector->pullPropertiesfromProxy(proxy);
     }
   }
 }
@@ -221,5 +227,7 @@ void QxrdMultipleAcquisition::configureDetector(int i)
 
   QxrdDetectorProxyPtr proxy(new QxrdDetectorProxy(detectorThread(i), detector(i), sharedFromThis()));
 
-  proxy->configureDetector();
+  if (proxy && proxy->configureDetector()) {
+    det->pullPropertiesfromProxy(proxy);
+  }
 }

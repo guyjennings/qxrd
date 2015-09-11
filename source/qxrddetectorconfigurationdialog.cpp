@@ -14,7 +14,11 @@ QxrdDetectorConfigurationDialog::QxrdDetectorConfigurationDialog(QxrdDetectorPro
 
   setupUi(this);
 
-  setWindowTitle(tr("Configure %1 Detector").arg(m_Proxy->detectorTypeName()));
+  if (m_Proxy) {
+    setWindowTitle(tr("Configure %1 Detector").arg(m_Proxy->detectorTypeName()));
+
+    m_Proxy->pushPropertiesToDialog(this);
+  }
 }
 
 QxrdDetectorConfigurationDialog::~QxrdDetectorConfigurationDialog()
@@ -35,7 +39,9 @@ void QxrdDetectorConfigurationDialog::changeEvent(QEvent *e)
 
 void QxrdDetectorConfigurationDialog::accept()
 {
-  printf("Need to implement QxrdDetectorConfigurationDialog::accept\n");
+  if (m_Proxy) {
+    m_Proxy->pullPropertiesFromDialog(this);
+  }
 
   QDialog::accept();
 }

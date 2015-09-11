@@ -10,7 +10,8 @@ QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
   : QcepObject("detectorProxy", acq.data()),
     m_Acquisition(acq),
     m_DetectorThread(thr),
-    m_Detector(det)
+    m_Detector(det),
+    m_SettingsChanged(false)
 {
   if (det) {
     m_DetectorType = det->get_DetectorType();
@@ -46,7 +47,7 @@ QxrdDetectorPtr QxrdDetectorProxy::detector()
   return m_Detector;
 }
 
-void QxrdDetectorProxy::configureDetector()
+bool QxrdDetectorProxy::configureDetector()
 {
   if (m_Detector) {
     m_Detector->pushPropertiesToProxy(sharedFromThis());
@@ -57,7 +58,34 @@ void QxrdDetectorProxy::configureDetector()
   QxrdDetectorConfigurationDialog *d =
       new QxrdDetectorConfigurationDialog(sharedFromThis());
 
-  d->exec();
+  if (d->exec() == QDialog::Accepted) {
+    m_SettingsChanged = true;
+  }
 
   delete d;
+
+  return m_SettingsChanged;
+}
+
+bool QxrdDetectorProxy::settingsChanged()
+{
+  return m_SettingsChanged;
+}
+
+void QxrdDetectorProxy::pushProperty(PropertyType type, QString name, QString description, QVariant value)
+{
+  m_PropertyTypes.append(type);
+  m_PropertyNames.append(name);
+  m_PropertyDescriptions.append(description);
+  m_PropertyValues.append(value);
+}
+
+void QxrdDetectorProxy::pushPropertiesToDialog(QxrdDetectorConfigurationDialog *dialog)
+{
+  printf("Need to implement QxrdDetectorProxy::pushPropertiesToDialog\n");
+}
+
+void QxrdDetectorProxy::pullPropertiesFromDialog(QxrdDetectorConfigurationDialog *dialog)
+{
+  printf("Need to implement QxrdDetectorProxy::pullPropertiesFromDialog\n");
 }

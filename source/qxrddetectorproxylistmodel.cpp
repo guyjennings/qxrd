@@ -86,4 +86,9 @@ void QxrdDetectorProxyListModel::moveDetectorUp(int row)
 
 void QxrdDetectorProxyListModel::configureDetector(int row)
 {
+  QxrdDetectorProxyPtr p = m_DetectorProxies.value(row);
+
+  if (p) {
+    p->configureDetector();
+  }
 }
