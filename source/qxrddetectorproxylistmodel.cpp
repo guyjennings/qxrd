@@ -29,7 +29,7 @@ QVariant QxrdDetectorProxyListModel::data(const QModelIndex &index, int role) co
 
 void QxrdDetectorProxyListModel::append(QxrdDetectorProxyPtr proxy)
 {
-  beginInsertRows(QModelIndex(), m_DetectorProxies.count(), 1);
+  beginInsertRows(QModelIndex(), m_DetectorProxies.count(), m_DetectorProxies.count());
 
   m_DetectorProxies.append(proxy);
 
