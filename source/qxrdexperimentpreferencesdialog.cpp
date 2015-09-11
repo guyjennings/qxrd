@@ -85,6 +85,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     connect(m_MoveDetectorDown, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::moveDetectorDown);
     connect(m_MoveDetectorUp,   &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::moveDetectorUp);
     connect(m_ConfigureDetector,&QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::configureDetector);
+    connect(m_DetectorsList,    &QTreeView::doubleClicked, this, &QxrdExperimentPreferencesDialog::detectorDoubleClicked);
 
     m_ExperimentDirectory -> setText(expt->get_ExperimentDirectory());
 
@@ -472,5 +473,14 @@ void QxrdExperimentPreferencesDialog::appendDetectorProxy(QxrdDetectorProxyPtr p
 {
   if (proxy) {
     m_DetectorProxyModel->append(proxy);
+  }
+}
+
+void QxrdExperimentPreferencesDialog::detectorDoubleClicked(const QModelIndex& item)
+{
+  QxrdDetectorProxyPtr proxy = m_DetectorProxyModel->detectorProxy(item.row());
+
+  if (proxy) {
+    proxy->configureDetector();
   }
 }

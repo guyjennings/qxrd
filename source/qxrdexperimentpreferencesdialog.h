@@ -36,6 +36,7 @@ private slots:
   void moveDetectorDown();
   void moveDetectorUp();
   void configureDetector();
+  void detectorDoubleClicked(const QModelIndex& item);
 
 protected:
   void changeEvent(QEvent *e);
