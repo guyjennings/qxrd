@@ -45,6 +45,8 @@ public:
     FixedIntegerProperty,
     PEDetNumProperty,
     PESubTypeProperty,
+    PEGainProperty,
+    PEBinningProperty
   } PropertyType;
 
   void clearProperties();

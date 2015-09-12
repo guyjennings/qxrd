@@ -42,8 +42,11 @@ public:
   static QString detectorTypeName(int detectorType);
   static QStringList detectorTypeNames();
 
-  static QString detectorSubTypeName(int detectorSubType);
-  static QStringList detectorSubTypeNames();
+  static QString detectorSubTypeNamePE(int detectorSubType);
+  static QStringList detectorSubTypeNamesPE();
+
+  static QStringList gainModeNamesPE();
+  static QStringList binningModeNamesPE();
 
   static void pushDefaultsToProxy(int detectorType, QxrdDetectorProxyPtr proxy);
 

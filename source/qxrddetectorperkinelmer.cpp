@@ -25,9 +25,11 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver, Qx
   m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
   m_Counter(0),
   m_PerkinElmer(),
-  m_DetectorNumber(saver, this,  "detectorNumber",  0, "Perkin Elmer Detector Number"),
+  m_DetectorNumber (saver, this, "detectorNumber",  0, "Perkin Elmer Detector Number"),
   m_DetectorSubType(saver, this, "detectorSubType", 0, "Perkin Elmer Detector Subtype"),
-  m_DetectorAddress(saver, this, "detectorAddress", "", "Perkin Elmer Detector Address")
+  m_DetectorAddress(saver, this, "detectorAddress", "", "Perkin Elmer Detector Address"),
+  m_DetectorGain   (saver, this, "detectorGain",    0, "Detector Gain"),
+  m_DetectorBinning(saver, this, "detectorBinning", 0, "Detector Binning Mode")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(%p)\n", this);
@@ -68,6 +70,8 @@ void QxrdDetectorPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::PEDetNumProperty, "detectorNumber", "PE Detector Number", 0);
     proxy->pushProperty(QxrdDetectorProxy::PESubTypeProperty, "detectorSubType", "PE Detector Type", 0);
     proxy->pushProperty(QxrdDetectorProxy::StringProperty,   "detectorAddress", "PE Detector Address", "");
+    proxy->pushProperty(QxrdDetectorProxy::PEGainProperty,    "detectorGain", "PE Detector Gain", 0);
+    proxy->pushProperty(QxrdDetectorProxy::PEBinningProperty, "detectorBinning", "PE Detector Binning", 0);
   }
 }
 
@@ -79,6 +83,8 @@ void QxrdDetectorPerkinElmer::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::PEDetNumProperty, "detectorNumber", "PE Detector Number", get_DetectorNumber());
     proxy->pushProperty(QxrdDetectorProxy::PESubTypeProperty, "detectorSubType", "PE Detector Type", get_DetectorSubType());
     proxy->pushProperty(QxrdDetectorProxy::StringProperty,   "detectorAddress", "PE Detector Address", get_DetectorAddress());
+    proxy->pushProperty(QxrdDetectorProxy::PEGainProperty,    "detectorGain", "PE Detector Gain", get_DetectorGain());
+    proxy->pushProperty(QxrdDetectorProxy::PEBinningProperty, "detectorBinning", "PE Detector Binning", get_DetectorBinning());
   }
 }
 
@@ -90,6 +96,8 @@ void QxrdDetectorPerkinElmer::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy
     set_DetectorNumber  (proxy->property("detectorNumber").toInt());
     set_DetectorSubType (proxy->property("detectorSubType").toInt());
     set_DetectorAddress (proxy->property("detectorAddress").toString());
+    set_DetectorGain    (proxy->property("detectorGain").toInt());
+    set_DetectorBinning (proxy->property("detectorBinning").toInt());
   }
 }
 

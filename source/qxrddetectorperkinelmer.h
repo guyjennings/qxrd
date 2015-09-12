@@ -97,6 +97,12 @@ public:
 
   Q_PROPERTY(QString detectorAddress READ get_DetectorAddress WRITE set_DetectorAddress)
   QCEP_STRING_PROPERTY(DetectorAddress)
+
+  Q_PROPERTY(int detectorGain READ get_DetectorGain WRITE set_DetectorGain)
+  QCEP_INTEGER_PROPERTY(DetectorGain)
+
+  Q_PROPERTY(int detectorBinning READ get_DetectorBinning WRITE set_DetectorBinning)
+  QCEP_INTEGER_PROPERTY(DetectorBinning)
 };
 
 #endif // QXRDDETECTORPERKINELMER_H

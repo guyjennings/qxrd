@@ -70,15 +70,20 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
   if (type == QxrdDetectorProxy::DetectorTypeProperty) {
     propertyEditor = new QLabel(QxrdDetectorThread::detectorTypeName(value.toInt()));
+
   } else if (type == QxrdDetectorProxy::StringProperty) {
     propertyEditor = new QLineEdit(value.toString());
+
   } else if (type == QxrdDetectorProxy::BooleanProperty) {
     QCheckBox *cb = new QCheckBox();
     cb->setCheckable(true);
     cb->setChecked(value.toBool());
+
     propertyEditor = cb;
+
   } else if (type == QxrdDetectorProxy::FixedIntegerProperty) {
     propertyEditor = new QLabel(value.toString());
+
   } else if (type == QxrdDetectorProxy::DirectoryProperty) {
     QLineEdit *le = new QLineEdit(value.toString());
     QPushButton *pb = new QPushButton("Browse");
@@ -92,6 +97,7 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
     propertyEditor = le;
     button = pb;
+
   } else if (type == QxrdDetectorProxy::PEDetNumProperty) {
     QSpinBox *sb = new QSpinBox();
     sb -> setMinimum(-1);
@@ -99,13 +105,30 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
     sb -> setValue(value.toInt());
 
     propertyEditor = sb;
+
   } else if (type == QxrdDetectorProxy::PESubTypeProperty) {
     QComboBox *cb = new QComboBox();
-    QStringList sl = QxrdDetectorThread::detectorSubTypeNames();
+    QStringList sl = QxrdDetectorThread::detectorSubTypeNamesPE();
     cb->addItems(sl);
     cb->setCurrentIndex(value.toInt());
 
     propertyEditor = cb;
+
+  } else if (type == QxrdDetectorProxy::PEGainProperty) {
+    QComboBox *cb = new QComboBox();
+    QStringList sl = QxrdDetectorThread::gainModeNamesPE();
+    cb -> addItems(sl);
+    cb->setCurrentIndex(value.toInt());
+
+    propertyEditor = cb;
+
+  } else if (type == QxrdDetectorProxy::PEBinningProperty) {
+    QComboBox *cb = new QComboBox();
+    QStringList sl = QxrdDetectorThread::binningModeNamesPE();
+    cb -> addItems(sl);
+
+    propertyEditor = cb;
+
   } else {
     printf("Unknown property type\n");
   }
@@ -149,6 +172,18 @@ QVariant QxrdDetectorConfigurationDialog::propertyValue(int propType, int i)
       return sb->value();
     }
   } else if (propType == QxrdDetectorProxy::PESubTypeProperty) {
+    QComboBox *cb = qobject_cast<QComboBox*>(w);
+
+    if (cb) {
+      return cb->currentIndex();
+    }
+  } else if (propType == QxrdDetectorProxy::PEGainProperty) {
+    QComboBox *cb = qobject_cast<QComboBox*>(w);
+
+    if (cb) {
+      return cb->currentIndex();
+    }
+  } else if (propType == QxrdDetectorProxy::PEBinningProperty) {
     QComboBox *cb = qobject_cast<QComboBox*>(w);
 
     if (cb) {

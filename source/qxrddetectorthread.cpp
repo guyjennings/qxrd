@@ -106,7 +106,7 @@ QStringList QxrdDetectorThread::detectorTypeNames()
   return res;
 }
 
-QString QxrdDetectorThread::detectorSubTypeName(int detectorSubType)
+QString QxrdDetectorThread::detectorSubTypeNamePE(int detectorSubType)
 {
   QString res = "unknown";
 
@@ -135,15 +135,39 @@ QString QxrdDetectorThread::detectorSubTypeName(int detectorSubType)
   return res;
 }
 
-QStringList QxrdDetectorThread::detectorSubTypeNames()
+QStringList QxrdDetectorThread::detectorSubTypeNamesPE()
 {
   QStringList res;
 
-  res.append(detectorSubTypeName(PCI_SubType));
-  res.append(detectorSubTypeName(GBIF_IP_SubType));
-  res.append(detectorSubTypeName(GBIF_MAC_SubType));
-  res.append(detectorSubTypeName(GBIF_Name_SubType));
-  res.append(detectorSubTypeName(GBIF_Scan_SubType));
+  res.append(detectorSubTypeNamePE(PCI_SubType));
+  res.append(detectorSubTypeNamePE(GBIF_IP_SubType));
+  res.append(detectorSubTypeNamePE(GBIF_MAC_SubType));
+  res.append(detectorSubTypeNamePE(GBIF_Name_SubType));
+  res.append(detectorSubTypeNamePE(GBIF_Scan_SubType));
+
+  return res;
+}
+
+QStringList QxrdDetectorThread::gainModeNamesPE()
+{
+  QStringList res;
+
+  res.append("0.25 pF (High)");
+  res.append("0.5 pF");
+  res.append("1 pF");
+  res.append("2 pF");
+  res.append("4 pF");
+  res.append("8 pF (Low)");
+
+  return res;
+}
+
+QStringList QxrdDetectorThread::binningModeNamesPE()
+{
+  QStringList res;
+
+  res.append("No Binning");
+  res.append("2x2 Binning");
 
   return res;
 }
