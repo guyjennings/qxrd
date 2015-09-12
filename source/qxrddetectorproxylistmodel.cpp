@@ -110,8 +110,10 @@ Qt::ItemFlags QxrdDetectorProxyListModel::flags(const QModelIndex &index) const
   int row = index.row();
   int col = index.column();
 
-  if (col == 1 || col == 3) {
-    return QAbstractListModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
+  if (col == 1) {
+    return QAbstractListModel::flags(index) | Qt::ItemIsUserCheckable;
+  } else if (col == 3) {
+    return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
   } else {
     return QAbstractListModel::flags(index);
   }
