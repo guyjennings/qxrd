@@ -1,5 +1,6 @@
 #include "qxrdslicedialogsettings.h"
 #include "qcepsettingssaver.h"
+#include "qcepmutexlocker.h"
 
 QxrdSliceDialogSettings::QxrdSliceDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent) :
   QcepObject("sliceDialogSettings", parent),
@@ -10,13 +11,19 @@ QxrdSliceDialogSettings::QxrdSliceDialogSettings(QcepSettingsSaverWPtr saver, Qc
 
 void QxrdSliceDialogSettings::readSettings(QSettings *settings, QString section)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   QcepProperty::readSettings(this, settings, section);
+
   m_SlicePlotSettings->readSettings(settings, section+"/plot");
 }
 
 void QxrdSliceDialogSettings::writeSettings(QSettings *settings, QString section)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   QcepProperty::writeSettings(this, settings, section);
+
   m_SlicePlotSettings->writeSettings(settings, section+"/plot");
 }
 

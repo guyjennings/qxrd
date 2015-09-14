@@ -721,6 +721,8 @@ void QxrdExperiment::readSettings()
 
 void QxrdExperiment::readSettings(QSettings *settings, QString section)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (settings) {
     QcepExperiment::readSettings(settings, section);
 

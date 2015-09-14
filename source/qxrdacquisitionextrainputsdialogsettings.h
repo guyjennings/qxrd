@@ -22,6 +22,7 @@ signals:
 public slots:
 
 private:
+  QMutex              m_Mutex;
   QcepPlotSettingsPtr m_AcquisitionExtraInputsPlotSettings;
 };
 

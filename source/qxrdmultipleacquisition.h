@@ -50,6 +50,7 @@ public:
   QCEP_INTEGER_PROPERTY(DetectorCount)
 
 private:
+  QMutex                         m_Mutex;
   QVector<QxrdDetectorThreadPtr> m_DetectorThreads;
   QVector<QxrdDetectorPtr>       m_Detectors;
 };

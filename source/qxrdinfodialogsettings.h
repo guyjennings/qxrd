@@ -19,6 +19,8 @@ signals:
   
 public slots:
   
+private:
+  QMutex              m_Mutex;
 };
 
 typedef QSharedPointer<QxrdInfoDialogSettings> QxrdInfoDialogSettingsPtr;

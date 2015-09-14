@@ -50,6 +50,7 @@ signals:
 public slots:
   
 private:
+  QMutex                                       m_Mutex;
   QxrdImagePlotSettingsPtr                     m_ImagePlotSettings;
   QxrdCenterFinderPlotSettingsPtr              m_CenterFinderPlotSettings;
   QcepPlotSettingsPtr                          m_IntegratorPlotSettings;

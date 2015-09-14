@@ -21,6 +21,7 @@ signals:
 public slots:
 
 private:
+  QMutex              m_Mutex;
   QxrdSynchronizedAcquisitionPlotSettingsPtr m_SynchronizedAcquisitionPlotSettings;
 };
 

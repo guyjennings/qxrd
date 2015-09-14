@@ -2,6 +2,7 @@
 #include "qxrddetectorthread.h"
 #include "qxrddetectorproxy.h"
 #include "qxrddebug.h"
+#include "qcepmutexlocker.h"
 
 QxrdMultipleAcquisition::QxrdMultipleAcquisition(QcepSettingsSaverWPtr saver,
                                                  QxrdExperimentWPtr    doc,
@@ -32,6 +33,8 @@ QxrdMultipleAcquisition::~QxrdMultipleAcquisition()
 
 void QxrdMultipleAcquisition::readSettings(QSettings *settings, QString section)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   QxrdAcquisition::readSettings(settings, section);
 
   if (get_DetectorCount() > 0) {
@@ -68,6 +71,8 @@ void QxrdMultipleAcquisition::readSettings(QSettings *settings, QString section)
 
 void QxrdMultipleAcquisition::writeSettings(QSettings *settings, QString section)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   QxrdAcquisition::writeSettings(settings, section);
 
   if (get_DetectorCount() > 0) {

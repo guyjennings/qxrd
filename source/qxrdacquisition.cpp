@@ -194,6 +194,8 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
+  QcepObject::writeSettings(settings, section);
+
   if (m_SynchronizedAcquisition) {
     m_SynchronizedAcquisition->writeSettings(settings, section+"/sync");
   }
@@ -201,13 +203,13 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
   if (m_AcquisitionExtraInputs) {
     m_AcquisitionExtraInputs->writeSettings(settings, section+"/extrainputs");
   }
-
-  QcepObject::writeSettings(settings, section);
 }
 
 void QxrdAcquisition::readSettings(QSettings *settings, QString section)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepObject::readSettings(settings, section);
 
   if (m_SynchronizedAcquisition) {
     m_SynchronizedAcquisition->readSettings(settings, section+"/sync");
@@ -216,8 +218,6 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
   if (m_AcquisitionExtraInputs) {
     m_AcquisitionExtraInputs->readSettings(settings, section+"/extrainputs");
   }
-
-  QcepObject::readSettings(settings, section);
 }
 
 void QxrdAcquisition::setWindow(QxrdWindowWPtr win)

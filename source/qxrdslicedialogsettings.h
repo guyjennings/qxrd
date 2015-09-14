@@ -27,6 +27,7 @@ signals:
 public slots:
 
 private:
+  QMutex                   m_Mutex;
   QxrdSlicePlotSettingsPtr m_SlicePlotSettings;
 };
 

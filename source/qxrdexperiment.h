@@ -141,6 +141,7 @@ private:
   QxrdExperimentThreadWPtr        m_ExperimentThread;
 
 private:
+  QMutex                          m_Mutex;
   QxrdWindowSettingsPtr           m_WindowSettings;
   QxrdWindowPtr                   m_Window;
   QxrdAcquisitionWindowPtr        m_AcquisitionWindow;

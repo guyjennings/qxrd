@@ -1,5 +1,6 @@
 #include "qxrdwindowsettings.h"
 #include "qcepsettingssaver.h"
+#include "qcepmutexlocker.h"
 
 QxrdWindowSettings::QxrdWindowSettings(QcepSettingsSaverWPtr saver,
                                        QcepObject *parent) :
@@ -28,6 +29,8 @@ QxrdWindowSettings::QxrdWindowSettings(QcepSettingsSaverWPtr saver,
 
 void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   if (settings) {
     QcepProperty::readSettings(this, settings, section);
 
@@ -49,6 +52,8 @@ void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
 
 void QxrdWindowSettings::writeSettings(QSettings *settings, QString section)
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   //    printf("QxrdWindow::writeSettings\n");
 
   if (settings) {
