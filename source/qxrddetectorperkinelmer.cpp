@@ -745,8 +745,6 @@ void QxrdDetectorPerkinElmer::initialize()
 
       onExposureTimeChanged();
 
-      acq->set_BinningMode(0);
-
       if (plugin && (nRet=plugin->Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_BufferSize,
                                                                        acq->get_NRows(), acq->get_NCols())) != HIS_ALL_OK) {
         acquisitionError(__FILE__, __LINE__, nRet);
@@ -811,7 +809,7 @@ void QxrdDetectorPerkinElmer::onBinningModeChanged()
 
     if (plugin && acq) {
       if (m_HeaderID == 14) {
-        int newMode = acq->get_BinningMode();
+        int newMode = get_DetectorBinning();
 
         printMessage(tr("Binning mode changed to %1").arg(newMode));
 
@@ -859,7 +857,7 @@ void QxrdDetectorPerkinElmer::onCameraGainChanged()
 
     if (acq && plugin) {
       if (m_HeaderID >= 11) {
-        int newGain = acq->get_CameraGain();
+        int newGain = get_DetectorGain();
 
         printMessage(tr("Camera Gain Changed to %1").arg(newGain));
 
@@ -867,12 +865,12 @@ void QxrdDetectorPerkinElmer::onCameraGainChanged()
 
         int nRet;
 
-        if (m_CurrentGain != acq->get_CameraGain()) {
-          if ((nRet=plugin->Acquisition_SetCameraGain(m_AcqDesc, acq->get_CameraGain())) != HIS_ALL_OK) {
+        if (m_CurrentGain != get_DetectorGain()) {
+          if ((nRet=plugin->Acquisition_SetCameraGain(m_AcqDesc, get_DetectorGain())) != HIS_ALL_OK) {
             acquisitionError(__FILE__, __LINE__, nRet);
             return;
           }
-          m_CurrentGain = acq->get_CameraGain();
+          m_CurrentGain = get_DetectorGain();
         }
 
         printMessage("Set camera gain");
