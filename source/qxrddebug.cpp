@@ -10,6 +10,7 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_PERFORM,      "Performance Measurement");
   setMessage(DEBUG_IMAGES,       "Image Operations");
   setMessage(DEBUG_PERKINELMER,  "Perkin Elmer Acquisition");
+  setMessage(DEBUG_PERKINELMERIDLING, "Perkin Elmer Idle Messages");
   setMessage(DEBUG_EXITWAIT,     "Halt at exit");
   setMessage(DEBUG_DELAY_ACQ,    "Delay Acquisition Startup");
   setMessage(DEBUG_BROWSER,      "File Browser Operations");
