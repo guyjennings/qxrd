@@ -85,6 +85,8 @@ void QxrdDetectorSimulated::initialize()
 {
   THREAD_CHECK;
 
+  QxrdDetector::initialize();
+
   QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq) {

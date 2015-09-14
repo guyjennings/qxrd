@@ -42,6 +42,8 @@ void QxrdDetectorPilatus::initialize()
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "initialize");
   } else {
+    QxrdDetector::initialize();
+
     m_PilatusSocket.connectToHost(get_PilatusHost(), get_PilatusPort());
     m_PilatusSocket.waitForConnected();
 
@@ -242,14 +244,14 @@ void QxrdDetectorPilatus::extTrigger(QString file)
 {
   sendCommand(tr("exttrigger \"%1\"").arg(file));
 
-  expectReply("15 OK Starting externally triggered exposure\(s):(.*)");
+  expectReply("15 OK Starting externally triggered exposure\\(s):(.*)");
 }
 
 void QxrdDetectorPilatus::extEnable(QString file)
 {
   sendCommand(tr("extenable \"%1\"").arg(file));
 
-  expectReply("15 OK Starting externally enabled exposure\(s):(.*)");
+  expectReply("15 OK Starting externally enabled exposure\\(s):(.*)");
 }
 
 void QxrdDetectorPilatus::imagePath(QString path)

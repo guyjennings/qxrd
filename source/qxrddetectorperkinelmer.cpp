@@ -445,6 +445,8 @@ void QxrdDetectorPerkinElmer::initialize()
     printMessage(tr("QxrdAcquisitionPerkinElmer::initialize"));
   }
 
+  QxrdDetector::initialize();
+
   if (checkPluginAvailable()) {
     THREAD_CHECK;
 
