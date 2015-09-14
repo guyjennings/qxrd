@@ -105,11 +105,11 @@ HEADERS += \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
     qxrddetector.h \
+    qxrddetector-ptr.h \
+    qxrddetectorthread.h \
+    qxrddetectorthread-ptr.h \
     qxrddetectorpilatus.h \
     qxrddetectorsimulated.h \
-    qxrddetectorthread.h \
-    qxrddetector-ptr.h \
-    qxrddetectorthread-ptr.h \
     qxrddetectorfilewatcher.h \
     qxrdacquisitiondialog-ptr.h \
     qxrdacquisitionextrainputsdialogsettings.h \
@@ -141,14 +141,14 @@ HEADERS += \
     triangulate.h \
     qxrdplanefitter.h \
     qxrdcalibrant.h \
-    qxrdcalibrantlibrary.h \
     qxrdcalibrant-ptr.h \
+    qxrdcalibrantlibrary.h \
     qxrdcalibrantlibrary-ptr.h \
     qxrdcalibrantdialog.h \
     qxrdcalibrantlibrarymodel.h \
+    qxrdcalibrantlibrarymodel-ptr.h \
     qxrdcalibrantdspacingsmodel.h \
     qxrdcalibrantdspacingsmodel-ptr.h \
-    qxrdcalibrantlibrarymodel-ptr.h \
     qxrddataset.h \
     qxrddataset-ptr.h \
     qxrdimageplotzoomer.h \
@@ -156,19 +156,20 @@ HEADERS += \
     qxrdacquisitionwindow-ptr.h \
     qxrdmainwindow.h \
     qxrdsingleacquisition.h \
-    qxrdmultipleacquisition.h \
-    qxrdacquisitionparameterpack.h \
-    qxrddarkacquisitionparameterpack.h \
-    qxrdprocessargs.h \
-    qxrdacquisitionparameterpack-ptr.h \
-    qxrddarkacquisitionparameterpack-ptr.h \
-    qxrdprocessargs-ptr.h \
     qxrdsingleacquisition-ptr.h \
+    qxrdmultipleacquisition.h \
     qxrdmultipleacquisition-ptr.h \
+    qxrdacquisitionparameterpack.h \
+    qxrdacquisitionparameterpack-ptr.h \
+    qxrddarkacquisitionparameterpack.h \
+    qxrddarkacquisitionparameterpack-ptr.h \
+    qxrdprocessargs.h \
+    qxrdprocessargs-ptr.h \
     qxrdacquisitionprocessor.h \
+    qxrdacquisitionprocessor-ptr.h \
     qxrddetectorproxy.h \
-    qxrddetectorproxywidget.h \
     qxrddetectorproxy-ptr.h \
+    qxrddetectorproxywidget.h \
     qxrddetectorproxylistmodel.h \
     qxrddetectorproxylistmodel-ptr.h \
     qxrddetectorconfigurationdialog.h
