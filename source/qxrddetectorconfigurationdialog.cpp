@@ -109,8 +109,8 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
   } else if (type == QxrdDetectorProxy::PESubTypeProperty) {
     QComboBox *cb = new QComboBox();
     QStringList sl = QxrdDetectorThread::detectorSubTypeNamesPE();
-    cb->addItems(sl);
-    cb->setCurrentIndex(value.toInt());
+    cb -> addItems(sl);
+    cb -> setCurrentIndex(value.toInt());
 
     propertyEditor = cb;
 
@@ -118,7 +118,7 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
     QComboBox *cb = new QComboBox();
     QStringList sl = QxrdDetectorThread::gainModeNamesPE();
     cb -> addItems(sl);
-    cb->setCurrentIndex(value.toInt());
+    cb -> setCurrentIndex(value.toInt());
 
     propertyEditor = cb;
 
@@ -126,6 +126,7 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
     QComboBox *cb = new QComboBox();
     QStringList sl = QxrdDetectorThread::binningModeNamesPE();
     cb -> addItems(sl);
+    cb -> setCurrentIndex(value.toInt());
 
     propertyEditor = cb;
 
