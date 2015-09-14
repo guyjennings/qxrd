@@ -29,6 +29,7 @@
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepdatasetmodel.h"
+#include "qxrdacquisitionprocessor.h"
 
 #include <QThread>
 #include <QDir>
@@ -1751,6 +1752,11 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterMetaType(this,
                           QxrdDetector::toScriptValue,
                           QxrdDetector::fromScriptValue);
+
+  qRegisterMetaType<QxrdAcquisitionProcessorPtr>("QxrdAcquisitionProcessorPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdAcquisitionProcessor::toScriptValue,
+                          QxrdAcquisitionProcessor::fromScriptValue);
 
   QxrdApplicationPtr app(m_Application);
 

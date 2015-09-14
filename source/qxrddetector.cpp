@@ -2,17 +2,20 @@
 #include "qxrddetectorthread.h"
 #include "qxrddetectorproxy.h"
 #include "qxrddebug.h"
+#include "qxrdacquisitionprocessor.h"
 #include <stdio.h>
+#include "qcepmutexlocker.h"
 
 QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType, QcepObject *parent) :
   QcepObject("detector", parent),
   m_Saver(saver),
   m_Experiment(expt),
   m_Acquisition(acq),
+  m_AcquisitionProcessor(),
   m_DetectorType(saver, this, "detectorType", detType, "Detector Type"),
-  m_DetectorTypeName(QcepSettingsSaverWPtr(), this, "detectorTypeName", detectorTypeName(), "Detector Type Name"),
+  m_DetectorTypeName(QcepSettingsSaverWPtr(), this, "detectorTypeName", QxrdDetectorThread::detectorTypeName(detType), "Detector Type Name"),
   m_Enabled(saver, this, "enabled", true, "Is Detector Enabled?"),
-  m_DetectorName(saver, this, "detectorName", detectorTypeName(), "Detector Name")
+  m_DetectorName(saver, this, "detectorName", QxrdDetectorThread::detectorTypeName(detType), "Detector Name")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::QxrdDetector(%p)\n", this);
@@ -26,32 +29,38 @@ QxrdDetector::~QxrdDetector()
   }
 }
 
-int  QxrdDetector::detectorType() const
-{
-  return get_DetectorType();
-}
-
-QString QxrdDetector::detectorTypeName() const
-{
-  return QxrdDetectorThread::detectorTypeName(detectorType());
-}
-
-int QxrdDetector::detectorSubType() const
-{
-  return QxrdDetectorThread::PCI_SubType;
-}
-
-QString QxrdDetector::detectorAddress() const
-{
-  return "";
-}
-
-void QxrdDetector::acquire()
-{
-}
-
 void QxrdDetector::initialize()
 {
+  m_AcquisitionProcessor =
+      QxrdAcquisitionProcessorPtr(
+        new QxrdAcquisitionProcessor(m_Saver, m_Experiment, sharedFromThis()));
+}
+
+QxrdAcquisitionProcessorPtr QxrdDetector::acquisitionProcessor()
+{
+  return m_AcquisitionProcessor;
+}
+
+void QxrdDetector::readSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepObject::readSettings(settings, section);
+
+  if (m_AcquisitionProcessor) {
+    m_AcquisitionProcessor->readSettings(settings, section+"/acquisitionProcessor");
+  }
+}
+
+void QxrdDetector::writeSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepObject::writeSettings(settings, section);
+
+  if (m_AcquisitionProcessor) {
+    m_AcquisitionProcessor->writeSettings(settings, section+"/acquisitionProcessor");
+  }
 }
 
 void QxrdDetector::onExposureTimeChanged()
@@ -59,6 +68,10 @@ void QxrdDetector::onExposureTimeChanged()
 }
 
 void QxrdDetector::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*initialExposure*/)
+{
+}
+
+void QxrdDetector::acquire()
 {
 }
 

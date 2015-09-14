@@ -9,6 +9,8 @@
 #include "qxrddetector-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepallocator-ptr.h"
+#include "qxrdacquisitionprocessor-ptr.h"
+#include <QScriptEngine>
 
 class QxrdAcquisitionProcessor : public QcepObject, public QEnableSharedFromThis<QxrdAcquisitionProcessor>
 {
@@ -17,14 +19,16 @@ class QxrdAcquisitionProcessor : public QcepObject, public QEnableSharedFromThis
 public:
   QxrdAcquisitionProcessor(QcepSettingsSaverWPtr saver,
                            QxrdExperimentWPtr    doc,
-                           QxrdDetectorWPtr      det,
-                           QcepAllocatorWPtr     alloc);
+                           QxrdDetectorWPtr      det);
 
 signals:
 
 public slots:
 
 public:
+
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdAcquisitionProcessorPtr &proc);
+  static void fromScriptValue(const QScriptValue &obj, QxrdAcquisitionProcessorPtr &proc);
 
 private:
   QcepSettingsSaverWPtr m_Saver;
@@ -35,7 +39,6 @@ public:
 private:
   QxrdExperimentWPtr    m_Experiment;
   QxrdDetectorWPtr      m_Detector;
-  QcepAllocatorWPtr     m_Allocator;
 };
 
 #endif // QXRDACQUISITIONPROCESSOR_H

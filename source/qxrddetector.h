@@ -11,20 +11,16 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrddetector-ptr.h"
 #include "qxrddetectorproxy-ptr.h"
+#include "qxrdacquisitionprocessor-ptr.h"
 #include <QScriptEngine>
 
-class QxrdDetector : public QcepObject
+class QxrdDetector : public QcepObject, public QEnableSharedFromThis<QxrdDetector>
 {
   Q_OBJECT
 
 public:
   explicit QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType, QcepObject *parent);
   virtual ~QxrdDetector();
-
-  virtual int detectorType() const;
-  virtual QString detectorTypeName() const;
-  virtual int detectorSubType() const;
-  virtual QString detectorAddress() const;
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorPtr &det);
   static void fromScriptValue(const QScriptValue &obj, QxrdDetectorPtr &det);
@@ -33,6 +29,9 @@ public:
   virtual void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
 
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType);
+
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
 signals:
 
@@ -47,10 +46,16 @@ public slots:
   virtual void endAcquisition();
   virtual void shutdownAcquisition();
 
+  QxrdAcquisitionProcessorPtr acquisitionProcessor();
+
 protected:
-  QcepSettingsSaverWPtr m_Saver;
-  QxrdExperimentWPtr    m_Experiment;
-  QxrdAcquisitionWPtr   m_Acquisition;
+  QcepSettingsSaverWPtr       m_Saver;
+  QxrdExperimentWPtr          m_Experiment;
+  QxrdAcquisitionWPtr         m_Acquisition;
+  QxrdAcquisitionProcessorPtr m_AcquisitionProcessor;
+
+private:
+  QMutex                      m_Mutex;
 
 public:
   Q_PROPERTY(int detectorType READ get_DetectorType WRITE set_DetectorType)
