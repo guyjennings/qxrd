@@ -1,5 +1,6 @@
 #include "qxrdsingleacquisition.h"
 #include "qxrddetector.h"
+#include "qxrddebug.h"
 
 QxrdSingleAcquisition::QxrdSingleAcquisition(QcepSettingsSaverWPtr saver,
                                              QxrdExperimentWPtr    doc,
@@ -8,9 +9,25 @@ QxrdSingleAcquisition::QxrdSingleAcquisition(QcepSettingsSaverWPtr saver,
   : QxrdAcquisition(saver, doc, proc, allocator),
     m_Detector()
 {
-
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSingleAcquisition::QxrdSingleAcquisition(%p)\n", this);
+  }
 }
 
+QxrdSingleAcquisition::~QxrdSingleAcquisition()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting single acquisition\n");
+#endif
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdSingleAcquisition::~QxrdSingleAcquisition(%p)\n", this);
+  }
+
+  if (qcepDebug(DEBUG_APP)) {
+    printMessage("QxrdSingleAcquisition::~QxrdSingleAcquisition");
+  }
+}
 void QxrdSingleAcquisition::setDetector(QxrdDetectorWPtr det)
 {
   m_Detector = det;

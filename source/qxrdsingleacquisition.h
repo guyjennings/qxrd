@@ -12,6 +12,8 @@ public:
                         QxrdExperimentWPtr doc,
                         QxrdDataProcessorWPtr proc,
                         QcepAllocatorWPtr allocator);
+  virtual ~QxrdSingleAcquisition();
+
   void setDetector(QxrdDetectorWPtr det);
 
 signals:

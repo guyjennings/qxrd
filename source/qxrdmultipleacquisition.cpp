@@ -10,13 +10,15 @@ QxrdMultipleAcquisition::QxrdMultipleAcquisition(QcepSettingsSaverWPtr saver,
       : QxrdAcquisition(saver, doc, proc, allocator),
         m_DetectorCount(m_Saver, this, "detectorCount", 0, "Number of Detectors")
 {
-
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdMultipleAcquisition::QxrdMultipleAcquisition(%p)\n", this);
+  }
 }
 
 QxrdMultipleAcquisition::~QxrdMultipleAcquisition()
 {
 #ifndef QT_NO_DEBUG
-  printf("Deletint multiple acquisition\n");
+  printf("Deleting multiple acquisition\n");
 #endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
