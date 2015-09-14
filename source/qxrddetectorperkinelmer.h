@@ -27,7 +27,7 @@ public:
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 
-private slots:
+public slots:
   void onExposureTimeChanged();
   void onBinningModeChanged();
   void onCameraGainChanged();

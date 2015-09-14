@@ -737,6 +737,8 @@ void QxrdDetectorPerkinElmer::initialize()
     }
 
     if (acq) {
+      onBinningModeChanged();
+
       onCameraGainChanged();
 
       if (acq->get_ExposureTime() <= 0) {
@@ -801,7 +803,7 @@ void QxrdDetectorPerkinElmer::onExposureTimeChanged()
 
 void QxrdDetectorPerkinElmer::onBinningModeChanged()
 {
-  return;
+//  return;
 
   if (checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
@@ -950,7 +952,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
 
       //    printf("allocator took %d msec\n", tic.restart());
 
-      if (qcepDebug(DEBUG_PERKINELMER)) {
+      if (qcepDebug(DEBUG_PERKINELMERIDLING)) {
         printMessage(tr("QxrdDetectorPerkinElmer::onEndFrame(%1,%2,%3)")
                      .arg(counter).arg(n1).arg(n2));
       }
@@ -988,7 +990,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
       }
 
       if (((actSecFrame-1)%m_BufferSize) != m_BufferIndex) {
-        if (qcepDebug(DEBUG_PERKINELMER)) {
+        if (qcepDebug(DEBUG_PERKINELMERIDLING)) {
           printMessage(tr("actSecFrame %1, m_BufferIndex %2")
                        .arg(actSecFrame).arg(m_BufferIndex));
         }
@@ -1014,7 +1016,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
 
       //  set_Average(avg/npixels);
 
-      if (qcepDebug(DEBUG_PERKINELMER)) {
+      if (qcepDebug(DEBUG_PERKINELMERIDLING)) {
         printMessage(tr("Frame checksum 0x%1, avg %2\n")
                      .arg(cksum,8,16,QChar('0')).arg(avg/npixels));
 
