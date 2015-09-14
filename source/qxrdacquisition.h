@@ -77,8 +77,6 @@ public slots:
   void doAcquireDark(QxrdDarkAcquisitionParameterPackWPtr parms);
 
   virtual void onExposureTimeChanged() = 0;
-  virtual void onBinningModeChanged() = 0;
-  virtual void onCameraGainChanged() = 0;
 
 public:
   void enqueueAcquiredFrame(QcepInt16ImageDataPtr img);
@@ -94,8 +92,6 @@ public:
   virtual void shutdownAcquisition() = 0;
 
   virtual void setupExposureMenu(QDoubleSpinBox *cb) = 0;
-  virtual void setupCameraGainMenu(QComboBox *cb) = 0;
-  virtual void setupCameraBinningModeMenu(QComboBox *cb) = 0;
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -200,12 +196,6 @@ public:
 
   Q_PROPERTY(int     darkSummedExposures READ get_DarkSummedExposures WRITE set_DarkSummedExposures)
   QCEP_INTEGER_PROPERTY(DarkSummedExposures)
-
-  Q_PROPERTY(int     cameraGain      READ get_CameraGain WRITE set_CameraGain)
-  QCEP_INTEGER_PROPERTY(CameraGain)
-
-  Q_PROPERTY(int     binningMode      READ get_BinningMode WRITE set_BinningMode)
-  QCEP_INTEGER_PROPERTY(BinningMode)
 
   Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase)
   QCEP_STRING_PROPERTY(FileBase)

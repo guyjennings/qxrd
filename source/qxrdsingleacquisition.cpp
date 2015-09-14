@@ -30,25 +30,6 @@ void QxrdSingleAcquisition::onExposureTimeChanged()
   }
 }
 
-void QxrdSingleAcquisition::onBinningModeChanged()
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->onBinningModeChanged();
-  }
-}
-
-void QxrdSingleAcquisition::onCameraGainChanged()
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->onCameraGainChanged();
-  }
-}
-
-
 void QxrdSingleAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
 {
   QxrdDetectorPtr det(m_Detector);
@@ -57,25 +38,6 @@ void QxrdSingleAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
     det ->setupExposureMenu(cb, get_ExposureTime());
   }
 }
-
-void QxrdSingleAcquisition::setupCameraGainMenu(QComboBox *cb)
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->setupCameraGainMenu(cb, get_CameraGain());
-  }
-}
-
-void QxrdSingleAcquisition::setupCameraBinningModeMenu(QComboBox *cb)
-{
-  QxrdDetectorPtr det(m_Detector);
-
-  if (det) {
-    det ->setupCameraBinningModeMenu(cb, get_BinningMode());
-  }
-}
-
 
 void QxrdSingleAcquisition::beginAcquisition()
 {

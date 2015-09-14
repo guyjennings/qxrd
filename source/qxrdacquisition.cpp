@@ -25,7 +25,6 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
     m_Saver(saver),
     m_QxrdVersion(QcepSettingsSaverWPtr(), this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
     m_QtVersion(QcepSettingsSaverWPtr(), this,"qtVersion",qVersion(), "QT Version Number"),
-//    m_DetectorType(QcepSettingsSaverWPtr(), this, "detectorType", 0, "Detector Type (0 = simulated, 1 = PE, 2 = Pilatus, 3 = EPICS, 4 = Files)"),
     m_ExposureTime(saver, this,"exposureTime",0.1, "Exposure Time (in sec)"),
     m_SkippedExposuresAtStart(saver, this,"skippedExposuresAtStart",0, "Exposures to Skip at Start"),
     m_LastAcquired(QcepSettingsSaverWPtr(), this, "lastAcquired", 0, "Internal Acquisition Flag"),
@@ -40,8 +39,6 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
     m_FilePhaseWidth(saver, this, "filePhaseWidth", 3, "Digits in Phase Number Field"),
     m_FileOverflowWidth(saver, this, "fileOverflowWidth", 5, "Digits in Overflow Index Field"),
     m_DarkSummedExposures(saver, this,"darkSummedExposures",1, "Summed Exposures in Dark Image"),
-    m_CameraGain(saver, this,"cameraGain",0, "Detector Gain"),
-    m_BinningMode(saver, this,"binningMode",0, "Binning Mode"),
     m_FileBase(saver, this,"fileBase","", "File Base"),
     m_NRows(saver, this, "nRows", 2048, "Number of Rows"),
     m_NCols(saver, this, "nCols", 2048, "Number of Cols"),
@@ -101,12 +98,6 @@ void QxrdAcquisition::initialize()
 
   connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
           this, &QxrdAcquisition::onExposureTimeChanged);
-
-  connect(prop_BinningMode(), &QcepIntProperty::valueChanged,
-          this, &QxrdAcquisition::onBinningModeChanged);
-
-  connect(prop_CameraGain(), &QcepIntProperty::valueChanged,
-          this, &QxrdAcquisition::onCameraGainChanged);
 
   if (alloc) {
     if (sizeof(void*) == 4) {
@@ -528,7 +519,6 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     image -> set_TimeStamp(msec);
     image -> set_HBinning(1);
     image -> set_VBinning(1);
-    image -> set_CameraGain(get_CameraGain());
     image -> set_DataType(QcepInt32ImageData::Raw32Data);
     image -> set_UserComment1(get_UserComment1());
     image -> set_UserComment2(get_UserComment2());
@@ -1039,7 +1029,6 @@ void QxrdAcquisition::onIdleTimeout()
       res -> set_DateTime(QDateTime::currentDateTime());
       res -> set_HBinning(1);
       res -> set_VBinning(1);
-      res -> set_CameraGain(get_CameraGain());
       res -> set_DataType(QcepInt32ImageData::Raw32Data);
       res -> set_UserComment1(get_UserComment1());
       res -> set_UserComment2(get_UserComment2());

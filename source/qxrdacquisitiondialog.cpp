@@ -52,8 +52,6 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     acq -> prop_PhasesInGroup() -> linkTo(this -> m_PhasesInGroup);
     acq -> prop_PreTriggerFiles() -> linkTo(this -> m_PreTriggerFiles);
     acq -> prop_PostTriggerFiles() -> linkTo(this -> m_PostTriggerFiles);
-    acq -> prop_CameraGain() -> linkTo(this -> m_CameraGain);
-    acq -> prop_BinningMode() -> linkTo(this -> m_BinningMode);
     acq -> prop_DroppedFrames() -> linkTo(this -> m_DroppedFrames);
 
     acq -> prop_UserComment1() -> linkTo(this -> m_UserComment1);
@@ -119,8 +117,6 @@ void QxrdAcquisitionDialog::onAcquisitionInit()
 
   if (acqp) {
     acqp -> setupExposureMenu(this -> m_ExposureTime);
-    acqp -> setupCameraGainMenu(this -> m_CameraGain);
-    acqp -> setupCameraBinningModeMenu(this -> m_BinningMode);
   }
 }
 

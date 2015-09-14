@@ -18,15 +18,11 @@ signals:
 
 public slots:
   void onExposureTimeChanged();
-  void onBinningModeChanged();
-  void onCameraGainChanged();
 
   QxrdDetectorPtr detector();
 
 public:
   void setupExposureMenu(QDoubleSpinBox *cb);
-  void setupCameraGainMenu(QComboBox *cb);
-  void setupCameraBinningModeMenu(QComboBox *cb);
 
   void beginAcquisition();
   void endAcquisition();

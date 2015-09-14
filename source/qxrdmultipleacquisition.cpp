@@ -163,29 +163,7 @@ void QxrdMultipleAcquisition::onExposureTimeChanged()
   }
 }
 
-void QxrdMultipleAcquisition::onBinningModeChanged()
-{
-  foreach (QxrdDetectorPtr det, m_Detectors) {
-    det->onBinningModeChanged();
-  }
-}
-
-void QxrdMultipleAcquisition::onCameraGainChanged()
-{
-  foreach (QxrdDetectorPtr det, m_Detectors) {
-    det->onCameraGainChanged();
-  }
-}
-
 void QxrdMultipleAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
-{
-}
-
-void QxrdMultipleAcquisition::setupCameraGainMenu(QComboBox *cb)
-{
-}
-
-void QxrdMultipleAcquisition::setupCameraBinningModeMenu(QComboBox *cb)
 {
 }
 

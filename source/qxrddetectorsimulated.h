@@ -20,15 +20,10 @@ public:
 
 public slots:
   virtual void onExposureTimeChanged();
-  virtual void onBinningModeChanged();
-  virtual void onCameraGainChanged();
-
   void onTimerTimeout();
 
 public:
   void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
-  void setupCameraGainMenu(QComboBox *cb, int initialGain);
-  void setupCameraBinningModeMenu(QComboBox *cb, int initialBinning);
 
 signals:
 

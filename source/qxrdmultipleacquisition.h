@@ -25,8 +25,6 @@ public slots:
   void acquire();
 
   void onExposureTimeChanged();
-  void onBinningModeChanged();
-  void onCameraGainChanged();
 
   void appendDetector(int detType);
   void appendDetectorProxy(QxrdDetectorProxyPtr proxy);
@@ -39,8 +37,6 @@ public slots:
 
 public:
   void setupExposureMenu(QDoubleSpinBox *cb);
-  void setupCameraGainMenu(QComboBox *cb);
-  void setupCameraBinningModeMenu(QComboBox *cb);
 
   void beginAcquisition();
   void endAcquisition();
