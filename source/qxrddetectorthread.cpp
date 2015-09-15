@@ -230,7 +230,7 @@ void QxrdDetectorThread::run()
   int rc = -1;
 
   if (p) {
-    p -> initialize();
+//    p -> initialize();
 
     m_Mutex.lock();
     m_Detector = p;

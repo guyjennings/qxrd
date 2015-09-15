@@ -61,6 +61,8 @@ void QxrdMultipleAcquisition::readSettings(QSettings *settings, QString section)
 
           m_DetectorThreads[i] = detThread;
           m_Detectors[i]       = det;
+
+          det->initialize();
         }
       }
     }
@@ -198,7 +200,9 @@ void QxrdMultipleAcquisition::shutdownAcquisition()
 void QxrdMultipleAcquisition::acquire()
 {
   foreach (QxrdDetectorPtr det, m_Detectors) {
-    det->acquire();
+    if (det && det->get_Enabled()) {
+      det->acquire();
+    }
   }
 
   prop_FileIndex()->incValue(get_PostTriggerFiles());
