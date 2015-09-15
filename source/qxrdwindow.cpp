@@ -895,7 +895,7 @@ void QxrdWindow::displayMessage(QString msg)
 void QxrdWindow::initialLogEntry(QString aline)
 {
   if (QThread::currentThread()==thread()) {
-    m_Messages -> append("<font color=#cccccc>"+aline+"</font>");
+    m_Messages -> append("<font color=#ff0000>"+aline+"</font>");
   } else {
     INVOKE_CHECK(QMetaObject::invokeMethod(this,
                                            "initialLogEntry",
