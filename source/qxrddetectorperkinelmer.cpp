@@ -441,40 +441,43 @@ bool QxrdDetectorPerkinElmer::checkPluginAvailable()
 
 void QxrdDetectorPerkinElmer::initialize()
 {
-  if (qcepDebug(DEBUG_PERKINELMER)) {
-    printMessage(tr("QxrdAcquisitionPerkinElmer::initialize"));
-  }
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "initialize", Qt::BlockingQueuedConnection);
+  } else {
+    if (qcepDebug(DEBUG_PERKINELMER)) {
+      printMessage(tr("QxrdAcquisitionPerkinElmer::initialize"));
+    }
 
-  QxrdDetector::initialize();
+    QxrdDetector::initialize();
 
-  if (checkPluginAvailable()) {
-    THREAD_CHECK;
+    if (checkPluginAvailable()) {
+      THREAD_CHECK;
 
-    int nRet = HIS_ALL_OK;
-    UINT nSensors;
-    BOOL bEnableIRQ = true;
-    BOOL bSelfInit = true;
-    BOOL bAlwaysOpen = true;
-    ACQDESCPOS Pos = 0;
-    UINT nChannelType;
-    int nChannelNr;
-    UINT dwSortFlags, dwDataType, dwRows, dwColumns, dwFrames;
-    DWORD dwAcqType, dwSystemID, dwSyncMode, dwHwAccess;
-    WORD binningMode;
+      int nRet = HIS_ALL_OK;
+      UINT nSensors;
+      BOOL bEnableIRQ = true;
+      BOOL bSelfInit = true;
+      BOOL bAlwaysOpen = true;
+      ACQDESCPOS Pos = 0;
+      UINT nChannelType;
+      int nChannelNr;
+      UINT dwSortFlags, dwDataType, dwRows, dwColumns, dwFrames;
+      DWORD dwAcqType, dwSystemID, dwSyncMode, dwHwAccess;
+      WORD binningMode;
 
-    QxrdExperimentPtr exp(m_Experiment);
+      QxrdExperimentPtr exp(m_Experiment);
 
-//    if (exp) {
-//      m_DetectorNumber = exp->get_DetectorNumber();
-//      m_SubType        = exp->get_DetectorSubType();
-//      m_Address        = exp->get_DetectorAddress();
-//    }
+      //    if (exp) {
+      //      m_DetectorNumber = exp->get_DetectorNumber();
+      //      m_SubType        = exp->get_DetectorSubType();
+      //      m_Address        = exp->get_DetectorAddress();
+      //    }
 
-    QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
+      QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
 
-    switch (get_DetectorSubType()) {
-    case QxrdDetectorThread::PCI_SubType:
-      {
+      int subType = get_DetectorSubType();
+
+      if (subType == QxrdDetectorThread::PCI_SubType) {
         printMessage("Initialising PCI/PCIe Perkin Elmer Detector");
 
         if (plugin) {
@@ -508,11 +511,7 @@ void QxrdDetectorPerkinElmer::initialize()
             return;
           }
         }
-      }
-      break;
-
-    case QxrdDetectorThread::GBIF_IP_SubType:
-      {
+      } else if (subType == QxrdDetectorThread::GBIF_IP_SubType) {
         printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at IP Address %1")
                      .arg(get_DetectorAddress()));
 
@@ -523,11 +522,7 @@ void QxrdDetectorPerkinElmer::initialize()
           acquisitionInitError(__FILE__, __LINE__, nRet);
           return;
         }
-      }
-      break;
-
-    case QxrdDetectorThread::GBIF_MAC_SubType:
-      {
+      } else if (subType == QxrdDetectorThread::GBIF_MAC_SubType) {
         printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at MAC address %1").arg(get_DetectorAddress()));
 
         if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
@@ -537,11 +532,7 @@ void QxrdDetectorPerkinElmer::initialize()
           acquisitionInitError(__FILE__, __LINE__, nRet);
           return;
         }
-      }
-      break;
-
-    case QxrdDetectorThread::GBIF_Name_SubType:
-      {
+      } else if (subType == QxrdDetectorThread::GBIF_Name_SubType) {
         printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at device name %1").arg(get_DetectorAddress()));
 
         if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
@@ -551,11 +542,7 @@ void QxrdDetectorPerkinElmer::initialize()
           acquisitionInitError(__FILE__, __LINE__, nRet);
           return;
         }
-      }
-      break;
-
-    case QxrdDetectorThread::GBIF_Scan_SubType:
-      {
+      } else if (subType == QxrdDetectorThread::GBIF_Scan_SubType) {
         printMessage("Searching for Perkin Elmer Detectors on the network");
 
         long nBoards=0;
@@ -599,169 +586,171 @@ void QxrdDetectorPerkinElmer::initialize()
             return;
           }
         }
+      } else {
+        criticalMessage(tr("Unrecognized detector type %1").arg(subType));
+        return;
       }
-      break;
-    }
 
-    if (plugin && (nRet = plugin->Acquisition_GetCommChannel(m_AcqDesc, &nChannelType, &nChannelNr))!=HIS_ALL_OK) {
-      acquisitionError(__FILE__, __LINE__, nRet);
-      return;
-    }
-
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Acquisition_GetCommChannel channel type = %1, channel no = %2")
-                        .arg(nChannelType).arg(nChannelNr));
-    }
-
-    if (plugin && (nRet=plugin->Acquisition_GetConfiguration(m_AcqDesc, &dwFrames, &dwRows, &dwColumns, &dwDataType,
-                                           &dwSortFlags, &bEnableIRQ, &dwAcqType,
-                                           &dwSystemID, &dwSyncMode, &dwHwAccess))!=HIS_ALL_OK) {
-      acquisitionError(__FILE__, __LINE__, nRet);
-      return;
-    }
-
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Acquisition_GetConfiguration frames = %1, rows = %2, cols = %3")
-                   .arg(dwFrames).arg(dwRows).arg(dwColumns));
-      printMessage(tr("Acquisition_GetConfiguration data type = %1, sort flags = %2, IRQ = %3")
-                   .arg(dwDataType).arg(dwSortFlags).arg(bEnableIRQ));
-      printMessage(tr("Acquisition_GetConfiguration acq type = %1, systemID = %2, syncMode = %3, hwAccess = %4")
-                   .arg(dwAcqType).arg(dwSystemID).arg(dwSyncMode).arg(dwHwAccess));
-    }
-
-    QxrdAcquisitionPtr acq(m_Acquisition);
-
-    if (acq) {
-      acq->set_NRows(dwRows);
-      acq->set_NCols(dwColumns);
-    }
-
-    if (plugin && (nRet=plugin->Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
-      acquisitionError(__FILE__, __LINE__, nRet);
-      return;
-    }
-
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Acquisition_GetCameraBinningMode mode = %1").arg(binningMode));
-    }
-
-    CHwHeaderInfo hwHeaderInfo;
-
-    if (plugin && (nRet=plugin->Acquisition_GetHwHeaderInfo(m_AcqDesc, &hwHeaderInfo)) != HIS_ALL_OK) {
-      acquisitionError(__FILE__, __LINE__, nRet);
-      return;
-    }
-
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Prom ID %1, Header ID %2").arg(hwHeaderInfo.dwPROMID).arg(hwHeaderInfo.dwHeaderID));
-    }
-
-    m_PROMID = hwHeaderInfo.dwPROMID;
-    m_HeaderID = hwHeaderInfo.dwHeaderID;
-
-    if (hwHeaderInfo.dwHeaderID >= 14) {
-      CHwHeaderInfoEx hdrx;
-
-      if (plugin && (nRet = plugin->Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &hwHeaderInfo, &hdrx)) != HIS_ALL_OK) {
+      if (plugin && (nRet = plugin->Acquisition_GetCommChannel(m_AcqDesc, &nChannelType, &nChannelNr))!=HIS_ALL_OK) {
         acquisitionError(__FILE__, __LINE__, nRet);
         return;
       }
 
       if (qcepDebug(DEBUG_PERKINELMER)) {
-        printMessage(tr("Camera Type %1").arg(hdrx.wCameratype));
+        printMessage(tr("Acquisition_GetCommChannel channel type = %1, channel no = %2")
+                     .arg(nChannelType).arg(nChannelNr));
       }
 
-      m_CameraType = hdrx.wCameratype;
-    }
+      if (plugin && (nRet=plugin->Acquisition_GetConfiguration(m_AcqDesc, &dwFrames, &dwRows, &dwColumns, &dwDataType,
+                                                               &dwSortFlags, &bEnableIRQ, &dwAcqType,
+                                                               &dwSystemID, &dwSyncMode, &dwHwAccess))!=HIS_ALL_OK) {
+        acquisitionError(__FILE__, __LINE__, nRet);
+        return;
+      }
 
-    int nReadoutTimes = 8;
-    double readoutTimes[8];
+      if (qcepDebug(DEBUG_PERKINELMER)) {
+        printMessage(tr("Acquisition_GetConfiguration frames = %1, rows = %2, cols = %3")
+                     .arg(dwFrames).arg(dwRows).arg(dwColumns));
+        printMessage(tr("Acquisition_GetConfiguration data type = %1, sort flags = %2, IRQ = %3")
+                     .arg(dwDataType).arg(dwSortFlags).arg(bEnableIRQ));
+        printMessage(tr("Acquisition_GetConfiguration acq type = %1, systemID = %2, syncMode = %3, hwAccess = %4")
+                     .arg(dwAcqType).arg(dwSystemID).arg(dwSyncMode).arg(dwHwAccess));
+      }
 
-    if (plugin && (nRet = plugin->Acquisition_GetIntTimes(m_AcqDesc, readoutTimes, &nReadoutTimes)) != HIS_ALL_OK) {
-      acquisitionError(__FILE__, __LINE__, nRet);
-      return;
-    }
+      QxrdAcquisitionPtr acq(m_Acquisition);
 
-    for (int i=0; i<nReadoutTimes; i++) {
-      m_ReadoutTimes.append(readoutTimes[i]);
-    }
+      if (acq) {
+        acq->set_NRows(dwRows);
+        acq->set_NCols(dwColumns);
+      }
 
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("%1 predefined exposure times available").arg(m_ReadoutTimes.count()));
+      if (plugin && (nRet=plugin->Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
+        acquisitionError(__FILE__, __LINE__, nRet);
+        return;
+      }
+
+      if (qcepDebug(DEBUG_PERKINELMER)) {
+        printMessage(tr("Acquisition_GetCameraBinningMode mode = %1").arg(binningMode));
+      }
+
+      CHwHeaderInfo hwHeaderInfo;
+
+      if (plugin && (nRet=plugin->Acquisition_GetHwHeaderInfo(m_AcqDesc, &hwHeaderInfo)) != HIS_ALL_OK) {
+        acquisitionError(__FILE__, __LINE__, nRet);
+        return;
+      }
+
+      if (qcepDebug(DEBUG_PERKINELMER)) {
+        printMessage(tr("Prom ID %1, Header ID %2").arg(hwHeaderInfo.dwPROMID).arg(hwHeaderInfo.dwHeaderID));
+      }
+
+      m_PROMID = hwHeaderInfo.dwPROMID;
+      m_HeaderID = hwHeaderInfo.dwHeaderID;
+
+      if (hwHeaderInfo.dwHeaderID >= 14) {
+        CHwHeaderInfoEx hdrx;
+
+        if (plugin && (nRet = plugin->Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &hwHeaderInfo, &hdrx)) != HIS_ALL_OK) {
+          acquisitionError(__FILE__, __LINE__, nRet);
+          return;
+        }
+
+        if (qcepDebug(DEBUG_PERKINELMER)) {
+          printMessage(tr("Camera Type %1").arg(hdrx.wCameratype));
+        }
+
+        m_CameraType = hdrx.wCameratype;
+      }
+
+      int nReadoutTimes = 8;
+      double readoutTimes[8];
+
+      if (plugin && (nRet = plugin->Acquisition_GetIntTimes(m_AcqDesc, readoutTimes, &nReadoutTimes)) != HIS_ALL_OK) {
+        acquisitionError(__FILE__, __LINE__, nRet);
+        return;
+      }
 
       for (int i=0; i<nReadoutTimes; i++) {
-        printMessage(tr("Exp %1 = %2").arg(i).arg(m_ReadoutTimes[i]));
+        m_ReadoutTimes.append(readoutTimes[i]);
       }
-    }
-
-    if (plugin && (nRet = plugin->Acquisition_SetAcqData(m_AcqDesc, (ACQDATATYPE) this)) != HIS_ALL_OK) {
-      acquisitionError(__FILE__, __LINE__, nRet);
-      return;
-    }
-
-    if (plugin && (nRet = plugin->Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
-                                                  0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
-      acquisitionError(__FILE__, __LINE__, nRet);
-      return;
-    }
-
-    m_BufferSize = 4;
-    m_BufferIndex = 0;
-
-    if (acq) {
-      m_Buffer.resize(acq->get_NRows()*acq->get_NCols()*m_BufferSize);
-      m_Buffer.fill(0);
 
       if (qcepDebug(DEBUG_PERKINELMER)) {
-        printMessage(tr("Exposure Time = %1").arg(acq->get_ExposureTime()));
+        printMessage(tr("%1 predefined exposure times available").arg(m_ReadoutTimes.count()));
+
+        for (int i=0; i<nReadoutTimes; i++) {
+          printMessage(tr("Exp %1 = %2").arg(i).arg(m_ReadoutTimes[i]));
+        }
       }
-    }
 
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER"));
-    }
-
-    if (plugin && (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
-      if (plugin && (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING)) != HIS_ALL_OK) {
+      if (plugin && (nRet = plugin->Acquisition_SetAcqData(m_AcqDesc, (ACQDATATYPE) this)) != HIS_ALL_OK) {
         acquisitionError(__FILE__, __LINE__, nRet);
         return;
+      }
+
+      if (plugin && (nRet = plugin->Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
+                                                                        0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
+        acquisitionError(__FILE__, __LINE__, nRet);
+        return;
+      }
+
+      m_BufferSize = 4;
+      m_BufferIndex = 0;
+
+      if (acq) {
+        m_Buffer.resize(acq->get_NRows()*acq->get_NCols()*m_BufferSize);
+        m_Buffer.fill(0);
+
+        if (qcepDebug(DEBUG_PERKINELMER)) {
+          printMessage(tr("Exposure Time = %1").arg(acq->get_ExposureTime()));
+        }
+      }
+
+      if (qcepDebug(DEBUG_PERKINELMER)) {
+        printMessage(tr("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER"));
+      }
+
+      if (plugin && (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
+        if (plugin && (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING)) != HIS_ALL_OK) {
+          acquisitionError(__FILE__, __LINE__, nRet);
+          return;
+        } else {
+          m_SyncMode = HIS_SYNCMODE_FREE_RUNNING;
+        }
       } else {
-        m_SyncMode = HIS_SYNCMODE_FREE_RUNNING;
-      }
-    } else {
-      m_SyncMode = HIS_SYNCMODE_INTERNAL_TIMER;
-    }
-
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
-    }
-
-    if (acq) {
-      onBinningModeChanged();
-
-      onCameraGainChanged();
-
-      if (acq->get_ExposureTime() <= 0) {
-        acq->set_ExposureTime(0.135);
+        m_SyncMode = HIS_SYNCMODE_INTERNAL_TIMER;
       }
 
-      onExposureTimeChanged();
-
-      if (plugin && (nRet=plugin->Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_BufferSize,
-                                                                       acq->get_NRows(), acq->get_NCols())) != HIS_ALL_OK) {
-        acquisitionError(__FILE__, __LINE__, nRet);
-        return;
+      if (qcepDebug(DEBUG_PERKINELMER)) {
+        printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
       }
-    }
 
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Define Dest Buffers"));
-    }
+      if (acq) {
+        onBinningModeChanged();
 
-    if (qcepDebug(DEBUG_DELAY_ACQ)) {
-      m_StartupDelayed = 1;
-    } else {
-      startupAcquisition();
+        onCameraGainChanged();
+
+        if (acq->get_ExposureTime() <= 0) {
+          acq->set_ExposureTime(0.135);
+        }
+
+        onExposureTimeChanged();
+
+        if (plugin && (nRet=plugin->Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_BufferSize,
+                                                                  acq->get_NRows(), acq->get_NCols())) != HIS_ALL_OK) {
+          acquisitionError(__FILE__, __LINE__, nRet);
+          return;
+        }
+      }
+
+      if (qcepDebug(DEBUG_PERKINELMER)) {
+        printMessage(tr("Define Dest Buffers"));
+      }
+
+      if (qcepDebug(DEBUG_DELAY_ACQ)) {
+        m_StartupDelayed = 1;
+      } else {
+        startupAcquisition();
+      }
     }
   }
 }
@@ -813,7 +802,7 @@ void QxrdDetectorPerkinElmer::onBinningModeChanged()
       if (m_HeaderID == 14) {
         int newMode = get_DetectorBinning();
 
-        printMessage(tr("Binning mode changed to %1").arg(newMode));
+        printMessage(tr("Change binning mode to %1").arg(newMode));
 
         int nRet;
         WORD binningMode = newMode;
@@ -831,7 +820,7 @@ void QxrdDetectorPerkinElmer::onBinningModeChanged()
           return;
         }
 
-        printMessage(tr("Starting binning mode = %1").arg(originalMode));
+        printMessage(tr("Initial binning mode = %1").arg(originalMode));
 
         printMessage(tr("Setting binning mode = %1").arg(newMode));
 
