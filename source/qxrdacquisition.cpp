@@ -961,7 +961,7 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPackWPtr parms)
       acquireFrame(exposure);
     }
 
-    for (int i=0; i<nsummed; i++) {
+    for (int i=0; i<nsummed;) {
       if (cancelling()) goto cancel;
 
       emit acquiredFrame(res->get_FileBase(), 0, 1, i, nsummed, 0, 1);
