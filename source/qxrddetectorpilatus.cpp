@@ -40,7 +40,7 @@ QxrdDetectorPilatus::~QxrdDetectorPilatus()
 void QxrdDetectorPilatus::initialize()
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "initialize");
+    QMetaObject::invokeMethod(this, "initialize", Qt::BlockingQueuedConnection);
   } else {
     QxrdDetector::initialize();
 
