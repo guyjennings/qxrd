@@ -657,6 +657,7 @@ void QxrdDetectorPerkinElmer::initialize()
 
         if (qcepDebug(DEBUG_PERKINELMER)) {
           printMessage(tr("Camera Type %1").arg(hdrx.wCameratype));
+          printMessage(tr("Binning Mode %1").arg(hdrx.wBinningMode));
         }
 
         m_CameraType = hdrx.wCameratype;
@@ -763,12 +764,12 @@ void QxrdDetectorPerkinElmer::onExposureTimeChanged()
 
     if (plugin && acq) {
       double newTime = acq->get_ExposureTime();
-      if (newTime*1e6 < m_ReadoutTimes.value(0)) {
-        printMessage(tr("Attempt to set exposure time less than minimum supported (%1 < %2)")
-                     .arg(newTime).arg(m_ReadoutTimes.value(0)/1e6));
+//      if (newTime*1e6 < m_ReadoutTimes.value(0)) {
+//        printMessage(tr("Attempt to set exposure time less than minimum supported (%1 < %2)")
+//                     .arg(newTime).arg(m_ReadoutTimes.value(0)/1e6));
 
-        newTime = m_ReadoutTimes.value(0)/1e6;
-      }
+//        newTime = m_ReadoutTimes.value(0)/1e6;
+//      }
 
       printMessage(tr("Exposure time changed to %1").arg(newTime));
 
@@ -785,7 +786,7 @@ void QxrdDetectorPerkinElmer::onExposureTimeChanged()
 
       printMessage(tr("TimerSync = %1").arg(tmp));
 
-      acq->set_ExposureTime(tmp/1.0e6);
+//      acq->set_ExposureTime(tmp/1.0e6);
     }
   }
 }
