@@ -155,10 +155,6 @@ HEADERS += \
     qxrdacquisitionwindow.h \
     qxrdacquisitionwindow-ptr.h \
     qxrdmainwindow.h \
-    qxrdsingleacquisition.h \
-    qxrdsingleacquisition-ptr.h \
-    qxrdmultipleacquisition.h \
-    qxrdmultipleacquisition-ptr.h \
     qxrdacquisitionparameterpack.h \
     qxrdacquisitionparameterpack-ptr.h \
     qxrddarkacquisitionparameterpack.h \
@@ -217,8 +213,6 @@ SOURCES += \
     qxrdimageplotzoomer.cpp \
     qxrdacquisitionwindow.cpp \
     qxrdmainwindow.cpp \
-    qxrdsingleacquisition.cpp \
-    qxrdmultipleacquisition.cpp \
     qxrdacquisitionparameterpack.cpp \
     qxrddarkacquisitionparameterpack.cpp \
     qxrdprocessargs.cpp \

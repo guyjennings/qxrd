@@ -4,7 +4,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qxrdsingleacquisition.h"
+#include "qxrdacquisition.h"
 #include "qcepmutexlocker.h"
 
 #include <QFuture>
@@ -43,7 +43,7 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 void QxrdAcquisitionThread::run()
 {
   QxrdAcquisitionPtr acq = QxrdAcquisitionPtr(
-        new QxrdSingleAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator));
+        new QxrdAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator));
 
   int rc = -1;
 
