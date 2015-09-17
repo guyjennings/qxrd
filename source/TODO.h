@@ -183,10 +183,10 @@ Leak check...
 //BLOCKER
 //Allow finer-grained control of the processing chain
 //
--------------------------------------------------------
+//-------------------------------------------------------
 
-Remove the g_Acquisition global and replace it with
-acquisition handle passed via Acquire_SetAcqData
+//Remove the g_Acquisition global and replace it with
+//acquisition handle passed via Acquire_SetAcqData
 
 //-------------------------------------------------------
 //
@@ -720,6 +720,11 @@ Mouse click behavior for pickers needs to be reviewed/modified - esp. polygon pi
 -------------------------------------------------------
 
 Investigate display update behaviour when scaling parameters changed
+
+-------------------------------------------------------
+
+Fix problem where the saved dark image path is incorrect if the
+dark image acquired was a duplicate and was renamed.  Also for masks, potentially
 
 -------------------------------------------------------
 

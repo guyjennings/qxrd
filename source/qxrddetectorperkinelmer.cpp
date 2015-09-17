@@ -1037,11 +1037,6 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
       }
 
       acq->enqueueAcquiredFrame(image);
-
-      //    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "acquiredFrameAvailable", Qt::QueuedConnection,
-      //                                           Q_ARG(QcepInt16ImageDataPtr, image), Q_ARG(int,counter)));
-
-      //    printf("Invoke took %d msec\n", tic.restart());
     }
   }
 }
@@ -1177,19 +1172,13 @@ void QxrdDetectorPerkinElmer::onEndFrameCallback()
 
       //    printf("m_Counter.fetchAndAddOrdered took %d msec\n", tic.restart());
 
-      //    INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "onEndFrame", Qt::QueuedConnection,
-      //                                           Q_ARG(int, counter),
-      //                                           Q_ARG(unsigned int, actualFrame), Q_ARG(unsigned int, actSecFrame)));
       onEndFrame(counter, actualFrame, actSecFrame);
     }
   }
-    //  printf("onEndFrameCallback took %d msec\n", tic.elapsed());
 }
 
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 {
-  //  INVOKE_CHECK(QMetaObject::invokeMethod(g_Acquisition, "onEndFrame", Qt::QueuedConnection));
-  //  g_Detector->onEndFrameCallback();
   QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
 
   if (app) {
