@@ -83,21 +83,23 @@ void QxrdDetectorSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*
 
 void QxrdDetectorSimulated::initialize()
 {
-  THREAD_CHECK;
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "initialize", Qt::BlockingQueuedConnection);
+  } else {
+    QxrdDetector::initialize();
 
-  QxrdDetector::initialize();
+    QxrdAcquisitionPtr acq(m_Acquisition);
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+    if (acq) {
+      acq->set_NRows(2048);
+      acq->set_NCols(2048);
 
-  if (acq) {
-    acq->set_NRows(2048);
-    acq->set_NCols(2048);
+      if (acq->get_ExposureTime() <= 0) {
+        acq->set_ExposureTime(0.1);
+      }
 
-    if (acq->get_ExposureTime() <= 0) {
-      acq->set_ExposureTime(0.1);
+      onExposureTimeChanged();
     }
-
-    onExposureTimeChanged();
   }
 }
 
