@@ -16,6 +16,9 @@
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrddarkacquisitionparameterpack.h"
 #include "qxrdprocessargs.h"
+#include "qxrddetectorproxy.h"
+#include "qxrddetector.h"
+#include "qxrddetectorthread.h"
 
 QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
                                  QxrdExperimentWPtr doc,
@@ -25,6 +28,7 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
     m_Saver(saver),
     m_QxrdVersion(QcepSettingsSaverWPtr(), this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
     m_QtVersion(QcepSettingsSaverWPtr(), this,"qtVersion",qVersion(), "QT Version Number"),
+    m_DetectorCount(m_Saver, this, "detectorCount", 0, "Number of Detectors"),
     m_ExposureTime(saver, this,"exposureTime",0.1, "Exposure Time (in sec)"),
     m_SkippedExposuresAtStart(saver, this,"skippedExposuresAtStart",0, "Exposures to Skip at Start"),
     m_LastAcquired(QcepSettingsSaverWPtr(), this, "lastAcquired", 0, "Internal Acquisition Flag"),
@@ -203,6 +207,18 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
   if (m_AcquisitionExtraInputs) {
     m_AcquisitionExtraInputs->writeSettings(settings, section+"/extrainputs");
   }
+
+  if (get_DetectorCount() > 0) {
+    settings->beginWriteArray(section+"/detectors");
+
+    for (int i=0; i<get_DetectorCount(); i++) {
+      settings->setArrayIndex(i);
+
+      m_Detectors[i]->writeSettings(settings, "");
+    }
+
+    settings->endArray();
+  }
 }
 
 void QxrdAcquisition::readSettings(QSettings *settings, QString section)
@@ -218,6 +234,114 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
   if (m_AcquisitionExtraInputs) {
     m_AcquisitionExtraInputs->readSettings(settings, section+"/extrainputs");
   }
+
+  if (get_DetectorCount() > 0) {
+    int n = settings->beginReadArray(section+"/detectors");
+
+    m_DetectorThreads.resize(n);
+    m_Detectors.resize(n);
+
+    for (int i=0; i<n; i++) {
+      settings->setArrayIndex(i);
+
+      int detType = settings->value("detectorType", 0).toInt();
+
+      QxrdDetectorThreadPtr detThread =
+          QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
+
+      if (detThread) {
+        detThread->start();
+
+        QxrdDetectorPtr det = detThread->detector();
+
+        if (det) {
+          det->readSettings(settings, "");
+
+          m_DetectorThreads[i] = detThread;
+          m_Detectors[i]       = det;
+
+          det->initialize();
+        }
+      }
+    }
+
+    settings->endArray();
+  }
+}
+
+void QxrdAcquisition::appendDetector(int detType)
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "appendDetector", Qt::BlockingQueuedConnection,
+                              Q_ARG(int, detType));
+  } else {
+    QxrdDetectorThreadPtr detThread =
+        QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
+
+    if (detThread) {
+      detThread->start();
+
+      QxrdDetectorPtr det = detThread->detector();
+
+      if (det) {
+        m_DetectorThreads.append(detThread);
+        m_Detectors.append(det);
+
+        set_DetectorCount(m_Detectors.count());
+      }
+    }
+  }
+}
+
+void QxrdAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "appendDetectorProxy", Qt::BlockingQueuedConnection,
+                              Q_ARG(QxrdDetectorProxyPtr, proxy));
+  } else {
+    if (proxy) {
+      QxrdDetectorThreadPtr detThread = proxy->detectorThread();
+      QxrdDetectorPtr       detector  = proxy->detector();
+
+      if (detThread==NULL || detector==NULL) {
+        int detType = proxy->detectorType();
+
+       detThread =
+            QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
+       detThread->start();
+
+       detector = detThread->detector();
+      }
+
+      m_DetectorThreads.append(detThread);
+      m_Detectors.append(detector);
+
+      set_DetectorCount(m_Detectors.count());
+
+      detector->pullPropertiesfromProxy(proxy);
+    }
+  }
+}
+
+void QxrdAcquisition::clearDetectors()
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "clearDetectors", Qt::BlockingQueuedConnection);
+  } else {
+    m_Detectors.resize(0);
+
+    set_DetectorCount(0);
+  }
+}
+
+QxrdDetectorThreadPtr QxrdAcquisition::detectorThread(int n)
+{
+  return m_DetectorThreads.value(n);
+}
+
+QxrdDetectorPtr QxrdAcquisition::detector(int n)
+{
+  return m_Detectors.value(n);
 }
 
 void QxrdAcquisition::setWindow(QxrdWindowWPtr win)
@@ -284,6 +408,47 @@ void QxrdAcquisition::acquire()
     } else {
       statusMessage("Acquisition is already in progress");
     }
+  }
+}
+
+void QxrdAcquisition::onExposureTimeChanged()
+{
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->onExposureTimeChanged();
+  }
+}
+
+void QxrdAcquisition::beginAcquisition()
+{
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->beginAcquisition();
+  }
+}
+
+void QxrdAcquisition::endAcquisition()
+{
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->endAcquisition();
+  }
+}
+
+void QxrdAcquisition::shutdownAcquisition()
+{
+  foreach (QxrdDetectorPtr det, m_Detectors) {
+    det->shutdownAcquisition();
+  }
+}
+
+void QxrdAcquisition::configureDetector(int i)
+{
+  printMessage(tr("Configure Detector %1").arg(i));
+
+  QxrdDetectorPtr det = detector(i);
+
+  QxrdDetectorProxyPtr proxy(new QxrdDetectorProxy(detectorThread(i), detector(i), sharedFromThis()));
+
+  if (proxy && proxy->configureDetector()) {
+    det->pullPropertiesfromProxy(proxy);
   }
 }
 
@@ -1155,5 +1320,9 @@ void QxrdAcquisition::propertyList()
   foreach(QByteArray name, dynProps) {
     g_Application->printMessage(tr("Dynamic Property %1 = %2").arg(QString(name)).arg(property(name).toString()));
   }
+}
+
+void QxrdAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
+{
 }
 

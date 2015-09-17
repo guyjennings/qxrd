@@ -5,7 +5,7 @@
 #include "qcepobject.h"
 
 #include "qcepsettingssaver-ptr.h"
-#include "qxrdmultipleacquisition-ptr.h"
+#include "qxrdacquisition-ptr.h"
 #include "qxrddetector-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepallocator-ptr.h"

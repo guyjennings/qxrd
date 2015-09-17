@@ -12,7 +12,6 @@
 #include <QFileDialog>
 #include <QGridLayout>
 #include "qcepdebug.h"
-#include "qxrdmultipleacquisition.h"
 #include "qxrddetectorproxy.h"
 #include "qxrddetectorproxywidget.h"
 #include "qxrddetectorproxylistmodel.h"
@@ -65,14 +64,12 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     m_DetectorProxyModel =
         QxrdDetectorProxyListModelPtr(new QxrdDetectorProxyListModel());
 
-    QxrdMultipleAcquisitionPtr macq = qSharedPointerCast<QxrdMultipleAcquisition>(acq);
-
-    if (macq) {
-      for (int i=0; i<macq->get_DetectorCount(); i++) {
+    if (acq) {
+      for (int i=0; i<acq->get_DetectorCount(); i++) {
         QxrdDetectorProxyPtr proxy =
             QxrdDetectorProxyPtr(new QxrdDetectorProxy(
-                                   macq->detectorThread(i),
-                                   macq->detector(i), macq));
+                                   acq->detectorThread(i),
+                                   acq->detector(i), acq));
 
         appendDetectorProxy(proxy);
       }
@@ -313,14 +310,10 @@ void QxrdExperimentPreferencesDialog::accept()
 
       int nDets = m_DetectorProxyModel->rowCount(QModelIndex());
 
-      QxrdMultipleAcquisitionPtr macq = qSharedPointerCast<QxrdMultipleAcquisition>(acq);
+      acq->clearDetectors();
 
-      if (macq) {
-        macq->clearDetectors();
-
-        for (int i = 0; i<nDets; i++) {
-          macq->appendDetectorProxy(m_DetectorProxyModel->detectorProxy(i));
-        }
+      for (int i = 0; i<nDets; i++) {
+        acq->appendDetectorProxy(m_DetectorProxyModel->detectorProxy(i));
       }
     }
 

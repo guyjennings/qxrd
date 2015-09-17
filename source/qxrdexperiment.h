@@ -15,8 +15,7 @@
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionthread-ptr.h"
-#include "qxrdsingleacquisition-ptr.h"
-#include "qxrdmultipleacquisition-ptr.h"
+#include "qxrdacquisition-ptr.h"
 #include "qxrddataprocessorthread-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdserverthread-ptr.h"
@@ -84,6 +83,7 @@ public slots:
   void openNewLogFile() const;
 
   void executeCommand(QString cmd);
+  QString systemCommand(QString cmd);
 
   QString defaultDataDirectory(QString path) const;
   QString defaultLogName(QString path) const;
@@ -151,7 +151,7 @@ private:
   QxrdSimpleServerWPtr            m_SimpleServer;
   QxrdDataProcessorPtr            m_DataProcessor;
   QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
-  QxrdMultipleAcquisitionPtr      m_Acquisition;
+  QxrdAcquisitionPtr              m_Acquisition;
   QxrdDetectorThreadPtr           m_DetectorThread;
   QxrdDetectorWPtr                m_Detector;
   QxrdFileSaverThreadPtr          m_FileSaverThread;

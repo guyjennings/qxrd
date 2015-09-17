@@ -22,37 +22,20 @@ public:
 signals:
 
 public slots:
-  void acquire();
+//  void acquire();
 
-  void onExposureTimeChanged();
-
-  void appendDetector(int detType);
-  void appendDetectorProxy(QxrdDetectorProxyPtr proxy);
-  void clearDetectors();
-
-  void configureDetector(int i);
-
-  QxrdDetectorThreadPtr detectorThread(int n);
-  QxrdDetectorPtr       detector(int n);
+//  void onExposureTimeChanged();
 
 public:
-  void setupExposureMenu(QDoubleSpinBox *cb);
+//  void setupExposureMenu(QDoubleSpinBox *cb);
 
-  void beginAcquisition();
-  void endAcquisition();
-  void shutdownAcquisition();
-
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+//  void beginAcquisition();
+//  void endAcquisition();
+//  void shutdownAcquisition();
 
 public:
-  Q_PROPERTY(int detectorCount READ get_DetectorCount WRITE set_DetectorCount)
-  QCEP_INTEGER_PROPERTY(DetectorCount)
-
 private:
   QMutex                         m_Mutex;
-  QVector<QxrdDetectorThreadPtr> m_DetectorThreads;
-  QVector<QxrdDetectorPtr>       m_Detectors;
 };
 
 #endif // QXRDMULTIPLEACQUISITION_H

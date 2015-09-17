@@ -9,8 +9,7 @@
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisitionthread.h"
-#include "qxrdsingleacquisition.h"
-#include "qxrdmultipleacquisition.h"
+#include "qxrdacquisition.h"
 #include "qxrdserverthread.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserverthread.h"
@@ -37,6 +36,7 @@
 
 #include <QHostInfo>
 #include <QColorDialog>
+#include <QProcess>
 
 QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
     QString path,
@@ -114,11 +114,11 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
 
     splashMessage("Initializing Data Acquisition");
 
-    m_Acquisition = QxrdMultipleAcquisitionPtr(
-          new QxrdMultipleAcquisition(m_SettingsSaver,
-                                      sharedFromThis(),
-                                      m_DataProcessor,
-                                      app->allocator()));
+    m_Acquisition = QxrdAcquisitionPtr(
+          new QxrdAcquisition(m_SettingsSaver,
+                              sharedFromThis(),
+                              m_DataProcessor,
+                              app->allocator()));
     m_Acquisition -> initialize();
 
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
@@ -555,6 +555,16 @@ void QxrdExperiment::executeCommand(QString cmd)
   }
 }
 
+QString QxrdExperiment::systemCommand(QString cmd)
+{
+  QProcess process;
+
+  process.start(cmd);
+  process.waitForReadyRead();
+
+  return process.readAllStandardOutput();
+}
+
 void QxrdExperiment::newLogFile(QString path)
 {
   {
@@ -726,25 +736,24 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
   if (settings) {
     QcepExperiment::readSettings(settings, section);
 
-//    QxrdSingleAcquisitionPtr acq(m_SingleAcquisition);
-    QxrdMultipleAcquisitionPtr mult(m_Acquisition);
+    QxrdAcquisitionPtr acq(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
     m_WindowSettings -> readSettings(settings, "window");
 
-    if (mult) {
-      mult -> readSettings(settings, "acquisition");
+    if (acq) {
+      acq -> readSettings(settings, "acquisition");
     }
 
     if (settings->contains("experiment/detectorType")) {
       int detType = settings->value("experiment/detectorType", -1).toInt();
 
       if (detType == QxrdDetectorThread::PerkinElmerDetector) {
-        if (mult) {
-          if (mult->get_DetectorCount() == 0) {
-            mult->appendDetector(detType);
+        if (acq) {
+          if (acq->get_DetectorCount() == 0) {
+            acq->appendDetector(detType);
           }
         }
       }
@@ -798,15 +807,15 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
   if (settings) {
     QcepExperiment::writeSettings(settings, section);
 
-    QxrdMultipleAcquisitionPtr mult(m_Acquisition);
+    QxrdAcquisitionPtr acq(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
     m_WindowSettings -> writeSettings(settings, "window");
 
-    if (mult) {
-      mult -> writeSettings(settings, "acquisition");
+    if (acq) {
+      acq -> writeSettings(settings, "acquisition");
     }
 
     if (proc) {

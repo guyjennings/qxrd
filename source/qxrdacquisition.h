@@ -25,6 +25,8 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrddetector-ptr.h"
+#include "qxrddetectorthread-ptr.h"
+#include "qxrddetectorproxy-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
@@ -76,7 +78,16 @@ public slots:
   void doAcquire    (QxrdAcquisitionParameterPackWPtr parms);
   void doAcquireDark(QxrdDarkAcquisitionParameterPackWPtr parms);
 
-  virtual void onExposureTimeChanged() = 0;
+  virtual void onExposureTimeChanged();
+
+  void appendDetector(int detType);
+  void appendDetectorProxy(QxrdDetectorProxyPtr proxy);
+  void clearDetectors();
+
+  void configureDetector(int i);
+
+  QxrdDetectorThreadPtr detectorThread(int n);
+  QxrdDetectorPtr       detector(int n);
 
 public:
   void enqueueAcquiredFrame(QcepInt16ImageDataPtr img);
@@ -87,11 +98,11 @@ signals:
   void acquireComplete();
 
 public:
-  virtual void beginAcquisition() = 0;
-  virtual void endAcquisition() = 0;
-  virtual void shutdownAcquisition() = 0;
+  virtual void beginAcquisition();
+  virtual void endAcquisition();
+  virtual void shutdownAcquisition();
 
-  virtual void setupExposureMenu(QDoubleSpinBox *cb) = 0;
+  virtual void setupExposureMenu(QDoubleSpinBox *cb);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -154,6 +165,9 @@ public:
 
   Q_PROPERTY(QString qtVersion READ get_QtVersion STORED false)
   QCEP_STRING_PROPERTY(QtVersion)
+
+  Q_PROPERTY(int detectorCount READ get_DetectorCount WRITE set_DetectorCount)
+  QCEP_INTEGER_PROPERTY(DetectorCount)
 
   Q_PROPERTY(double exposureTime     READ get_ExposureTime WRITE set_ExposureTime)
   QCEP_DOUBLE_PROPERTY(ExposureTime)
@@ -280,6 +294,9 @@ private:
 
   QTimer                 m_IdleTimer;
   QAtomicInt             m_Idling;
+
+  QVector<QxrdDetectorThreadPtr> m_DetectorThreads;
+  QVector<QxrdDetectorPtr>       m_Detectors;
 };
 
 #endif
