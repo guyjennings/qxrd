@@ -7,8 +7,12 @@
 #include <stdio.h>
 #include <QPainter>
 
-QxrdDetectorSimulated::QxrdDetectorSimulated(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent) :
-  QxrdDetector(saver, expt, acq, QxrdDetectorThread::SimulatedDetector, parent)
+QxrdDetectorSimulated::QxrdDetectorSimulated(QcepSettingsSaverWPtr saver,
+                                             QxrdExperimentWPtr    expt,
+                                             QxrdAcquisitionWPtr   acq,
+                                             int                   detNum,
+                                             QcepObject           *parent) :
+  QxrdDetector(saver, expt, acq, QxrdDetectorThread::SimulatedDetector, detNum, parent)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorSimulated::QxrdDetectorSimulated(%p)\n", this);

@@ -24,7 +24,8 @@ QVariant QxrdDetectorProxyListModel::data(const QModelIndex &index, int role) co
   if (p) {
     if (role == Qt::EditRole || role == Qt::DisplayRole) {
       if (col == 0) {
-        return row;
+//        return row;
+        return p->detectorNumber();
       } else if (col == 2) {
         return p->detectorTypeName();
       } else if (col == 3) {
@@ -126,6 +127,8 @@ void QxrdDetectorProxyListModel::append(QxrdDetectorProxyPtr proxy)
   m_DetectorProxies.append(proxy);
 
   endInsertRows();
+
+  renumberDetectors();
 }
 
 QxrdDetectorProxyPtr QxrdDetectorProxyListModel::detectorProxy(int i)
@@ -140,6 +143,8 @@ void QxrdDetectorProxyListModel::removeDetector(int row)
   m_DetectorProxies.remove(row);
 
   endRemoveRows();
+
+  renumberDetectors();
 }
 
 void QxrdDetectorProxyListModel::moveDetectorDown(int row)
@@ -156,6 +161,8 @@ void QxrdDetectorProxyListModel::moveDetectorDown(int row)
     m_DetectorProxies[row+1] = p1;
 
     endMoveRows();
+
+    renumberDetectors();
   }
 }
 
@@ -173,6 +180,8 @@ void QxrdDetectorProxyListModel::moveDetectorUp(int row)
     m_DetectorProxies[row] = p1;
 
     endMoveRows();
+
+    renumberDetectors();
   }
 }
 
@@ -182,5 +191,16 @@ void QxrdDetectorProxyListModel::configureDetector(int row)
 
   if (p) {
     p->configureDetector();
+  }
+}
+
+void QxrdDetectorProxyListModel::renumberDetectors()
+{
+  for (int i=0; i<m_DetectorProxies.count(); i++) {
+    QxrdDetectorProxyPtr p = m_DetectorProxies.value(i);
+
+    if (p) {
+      p->setProperty("detectorNumber", i);
+    }
   }
 }

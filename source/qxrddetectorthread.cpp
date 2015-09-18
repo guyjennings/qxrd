@@ -23,7 +23,7 @@
 QxrdDetectorThread::QxrdDetectorThread(QcepSettingsSaverWPtr saver,
                                        QxrdExperimentWPtr    expt,
                                        QxrdAcquisitionWPtr   acq,
-                                       int                   detType,
+                                       int                   detType, int detNum,
                                        QcepObject           *parent) :
   QxrdThread(),
   m_Saver(saver),
@@ -31,6 +31,7 @@ QxrdDetectorThread::QxrdDetectorThread(QcepSettingsSaverWPtr saver,
   m_Acquisition(acq),
   m_Detector(),
   m_DetectorType(detType),
+  m_DetectorNumber(detNum),
   m_Parent(parent)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -191,40 +192,64 @@ void QxrdDetectorThread::run()
       switch(m_DetectorType) {
       case SimulatedDetector:
         setObjectName("simulatedDetector");
-        p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Saver, m_Experiment, m_Acquisition, m_Parent));
+        p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Saver,
+                                                      m_Experiment,
+                                                      m_Acquisition,
+                                                      m_DetectorNumber,
+                                                      m_Parent));
         break;
 
 #ifdef HAVE_PERKIN_ELMER
       case PerkinElmerDetector:
         setObjectName("perkinElmerDetector");
-        p = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Saver, m_Experiment, m_Acquisition, m_Parent));
+        p = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Saver,
+                                                        m_Experiment,
+                                                        m_Acquisition,
+                                                        m_DetectorNumber,
+                                                        m_Parent));
         break;
 #endif
 
 //#ifdef HAVE_PILATUS
       case PilatusDetector:
         setObjectName("pilatusDetector");
-        p = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Saver, m_Experiment, m_Acquisition, m_Parent));
+        p = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Saver,
+                                                    m_Experiment,
+                                                    m_Acquisition,
+                                                    m_DetectorNumber,
+                                                    m_Parent));
         break;
 //#endif
 
 #ifdef HAVE_AREADETECTOR
       case EpicsAreaDetector:
         setObjectName("epicsAreaDetector");
-        p = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Saver, m_Experiment, m_Acquisition, m_Parent));
+        p = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Saver,
+                                                      m_Experiment,
+                                                      m_Acquisition,
+                                                      m_DetectorNumber,
+                                                      m_Parent));
         break;
 #endif
 
       case FileWatcherDetector:
         setObjectName("fileWatcherDetector");
-        p = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Saver, m_Experiment, m_Acquisition, m_Parent));
+        p = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Saver,
+                                                        m_Experiment,
+                                                        m_Acquisition,
+                                                        m_DetectorNumber,
+                                                        m_Parent));
         break;
       }
     }
   }
 
   if (p == NULL) {
-    p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Saver, m_Experiment, m_Acquisition, m_Parent));
+    p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Saver,
+                                                  m_Experiment,
+                                                  m_Acquisition,
+                                                  m_DetectorNumber,
+                                                  m_Parent));
   }
 
   int rc = -1;

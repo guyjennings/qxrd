@@ -11,7 +11,7 @@ class QxrdDetectorPilatus : public QxrdDetector
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent);
+  explicit QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum, QcepObject *parent);
   virtual ~QxrdDetectorPilatus();
   void initialize();
 

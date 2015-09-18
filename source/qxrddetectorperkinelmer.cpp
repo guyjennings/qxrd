@@ -11,8 +11,12 @@
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 
-QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent) :
-  QxrdDetector(saver, expt, acq, QxrdDetectorThread::PerkinElmerDetector, parent),
+QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver,
+                                                 QxrdExperimentWPtr    expt,
+                                                 QxrdAcquisitionWPtr   acq,
+                                                 int                   detNum,
+                                                 QcepObject           *parent) :
+  QxrdDetector(saver, expt, acq, QxrdDetectorThread::PerkinElmerDetector, detNum, parent),
   m_Mutex(QMutex::Recursive),
   m_BufferSize(0),
   m_AcqDesc(NULL),

@@ -25,6 +25,7 @@ public slots:
   QString               detectorTypeName();
   QxrdDetectorThreadPtr detectorThread();
   QxrdDetectorPtr       detector();
+  int                   detectorNumber();
   QString               detectorName();
   void setDetectorName(QString name);
 
@@ -36,6 +37,7 @@ public slots:
 
 public:
   typedef enum {
+    HiddenProperty,
     DetectorTypeProperty,
     StringProperty,
     IntegerProperty,

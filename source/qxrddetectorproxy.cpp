@@ -64,6 +64,11 @@ void QxrdDetectorProxy::setEnabled(bool a)
   setProperty("enabled", a);
 }
 
+int QxrdDetectorProxy::detectorNumber()
+{
+  return property("detectorNumber").toInt();
+}
+
 int QxrdDetectorProxy::detectorType()
 {
   return property("detectorType").toInt();

@@ -247,7 +247,12 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
       int detType = settings->value("detectorType", 0).toInt();
 
       QxrdDetectorThreadPtr detThread =
-          QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
+          QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
+                                                       experiment(),
+                                                       sharedFromThis(),
+                                                       detType,
+                                                       i,
+                                                       this));
 
       if (detThread) {
         detThread->start();
@@ -275,8 +280,15 @@ void QxrdAcquisition::appendDetector(int detType)
     QMetaObject::invokeMethod(this, "appendDetector", Qt::BlockingQueuedConnection,
                               Q_ARG(int, detType));
   } else {
+    int nDet = get_DetectorCount();
+
     QxrdDetectorThreadPtr detThread =
-        QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
+        QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
+                                                     experiment(),
+                                                     sharedFromThis(),
+                                                     detType,
+                                                     nDet,
+                                                     this));
 
     if (detThread) {
       detThread->start();
@@ -303,11 +315,18 @@ void QxrdAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
       QxrdDetectorThreadPtr detThread = proxy->detectorThread();
       QxrdDetectorPtr       detector  = proxy->detector();
 
+      int nDet = get_DetectorCount();
+
       if (detThread==NULL || detector==NULL) {
         int detType = proxy->detectorType();
 
        detThread =
-            QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver, experiment(), sharedFromThis(), detType, this));
+            QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
+                                                         experiment(),
+                                                         sharedFromThis(),
+                                                         detType,
+                                                         nDet,
+                                                         this));
        detThread->start();
 
        detector = detThread->detector();

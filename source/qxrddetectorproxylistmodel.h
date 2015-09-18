@@ -30,6 +30,9 @@ public:
   QxrdDetectorProxyPtr detectorProxy(int i);
 
 private:
+  void renumberDetectors();
+
+private:
   QVector<QxrdDetectorProxyPtr> m_DetectorProxies;
 };
 

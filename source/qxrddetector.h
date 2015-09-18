@@ -19,7 +19,12 @@ class QxrdDetector : public QcepObject, public QEnableSharedFromThis<QxrdDetecto
   Q_OBJECT
 
 public:
-  explicit QxrdDetector(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType, QcepObject *parent);
+  explicit QxrdDetector(QcepSettingsSaverWPtr saver,
+                        QxrdExperimentWPtr    expt,
+                        QxrdAcquisitionWPtr   acq,
+                        int                   detType,
+                        int                   detNum,
+                        QcepObject *parent);
   virtual ~QxrdDetector();
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorPtr &det);
@@ -58,6 +63,9 @@ private:
   QMutex                      m_Mutex;
 
 public:
+  Q_PROPERTY(int detectorNumber READ get_DetectorNumber WRITE set_DetectorNumber STORED false)
+  QCEP_INTEGER_PROPERTY(DetectorNumber)
+
   Q_PROPERTY(int detectorType READ get_DetectorType WRITE set_DetectorType)
   QCEP_INTEGER_PROPERTY(DetectorType)
 

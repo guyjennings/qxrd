@@ -9,8 +9,12 @@
 #include "qcepallocator.h"
 #include "qxrddetectorproxy.h"
 
-QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, QcepObject *parent) :
-  QxrdDetector(saver, expt, acq, QxrdDetectorThread::PilatusDetector, parent),
+QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver,
+                                         QxrdExperimentWPtr    expt,
+                                         QxrdAcquisitionWPtr   acq,
+                                         int                   detNum,
+                                         QcepObject           *parent) :
+  QxrdDetector(saver, expt, acq, QxrdDetectorThread::PilatusDetector, detNum, parent),
   m_PilatusSocket(),
   m_ExposureTime(-1),
   m_ExposuresPerFrame(-1),

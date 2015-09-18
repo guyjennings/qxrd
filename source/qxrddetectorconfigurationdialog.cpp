@@ -25,7 +25,10 @@ QxrdDetectorConfigurationDialog::QxrdDetectorConfigurationDialog(QxrdDetectorPro
   setupUi(this);
 
   if (m_Proxy) {
-    setWindowTitle(tr("Configure %1 \"%2\"").arg(m_Proxy->detectorTypeName()).arg(m_Proxy->detectorName()));
+    int detNum = m_Proxy->property("detectorNumber").toInt();
+
+    setWindowTitle(tr("Configure Det %1: %2 \"%3\" ")
+                   .arg(detNum).arg(m_Proxy->detectorTypeName()).arg(m_Proxy->detectorName()));
 
     m_Proxy->pushPropertiesToDialog(this);
   }
@@ -68,7 +71,9 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
   QWidget *propertyEditor = NULL;
   QWidget *button = NULL;
 
-  if (type == QxrdDetectorProxy::DetectorTypeProperty) {
+  if (type == QxrdDetectorProxy::HiddenProperty) {
+    // No dialog widgets for hidden properties (e.g. detectorNumber)
+  } else if (type == QxrdDetectorProxy::DetectorTypeProperty) {
     propertyEditor = new QLabel(QxrdDetectorThread::detectorTypeName(value.toInt()));
 
   } else if (type == QxrdDetectorProxy::StringProperty) {
