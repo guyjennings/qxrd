@@ -1111,7 +1111,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -1269,6 +1269,7 @@
     <property name="title">
      <string>E&amp;xperiments</string>
     </property>
+    <addaction name="m_ActionPlaceholder"/>
    </widget>
    <addaction name="m_FileMenu"/>
    <addaction name="m_EditMenu"/>
@@ -2012,6 +2013,11 @@
   <action name="m_ActionOpenDetectorControlWindow">
    <property name="text">
     <string>&amp;Open Detector Control Window</string>
+   </property>
+  </action>
+  <action name="m_ActionPlaceholder">
+   <property name="text">
+    <string>Placeholder</string>
    </property>
   </action>
  </widget>

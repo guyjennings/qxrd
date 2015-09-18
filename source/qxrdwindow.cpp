@@ -318,10 +318,14 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   connect(m_ActionSaveExperimentAs, &QAction::triggered, this, &QxrdWindow::saveExperimentAs);
   connect(m_ActionSaveExperimentCopy, &QAction::triggered, this, &QxrdWindow::saveExperimentCopy);
 
+  m_ExperimentsMenu->menuAction()->setMenuRole(QAction::NoRole);
+
   connect(m_ExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateExperimentsMenu);
   setupRecentExperimentsMenu(m_ActionRecentExperiments);
 
   connect(m_ConfigureDetectorMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateConfigureDetectorMenu);
+
+  m_ConfigureDetectorMenu->menuAction()->setMenuRole(QAction::NoRole);
 
   connect(m_ActionLoadData, &QAction::triggered, this, &QxrdWindow::doLoadData);
   connect(m_ActionSaveData, &QAction::triggered, this, &QxrdWindow::doSaveData);
