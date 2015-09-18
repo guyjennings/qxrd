@@ -37,7 +37,7 @@ public slots:
 
 public:
   typedef enum {
-    HiddenProperty,
+    DetectorNumberProperty,
     DetectorTypeProperty,
     StringProperty,
     IntegerProperty,
