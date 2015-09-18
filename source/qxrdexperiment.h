@@ -42,7 +42,7 @@
 #include "qcepexperiment.h"
 #include "qxrddataset-ptr.h"
 #include "qcepdatasetmodel-ptr.h"
-#include "qxrdacquisitionwindow-ptr.h"
+#include "qxrddetectorcontrolwindow-ptr.h"
 
 class QxrdExperiment : public QcepExperiment, public QEnableSharedFromThis<QxrdExperiment>
 {
@@ -124,7 +124,7 @@ public slots:
   void evaluateScriptFiles(QStringList files);
   void evaluateScriptFile(QString path);
 
-  void openAcquisitionWindow();
+//  void openAcquisitionWindow();
 
 private:
   void closeLogFile() const;
@@ -144,7 +144,7 @@ private:
   QMutex                          m_Mutex;
   QxrdWindowSettingsPtr           m_WindowSettings;
   QxrdWindowPtr                   m_Window;
-  QxrdAcquisitionWindowPtr        m_AcquisitionWindow;
+//  QxrdDetectorControlWindowPtr        m_AcquisitionWindow;
   QxrdServerThreadPtr             m_ServerThread;
   QxrdServerWPtr                  m_Server;
   QxrdSimpleServerThreadPtr       m_SimpleServerThread;

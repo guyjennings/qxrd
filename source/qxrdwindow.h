@@ -89,7 +89,7 @@ public slots:
   void doCorrelate();
   void doReflectVertically();
   void doReflectHorizontally();
-  void doOpenAcquisitionWindow();
+//  void doOpenAcquisitionWindow();
 
   void updateTitle();
   void acquireStarted();
@@ -133,6 +133,7 @@ private slots:
   void populateExperimentsMenu();
   void populateRecentExperimentsMenu();
   void populateConfigureDetectorMenu();
+  void populateDetectorControlWindowsMenu();
   void plotPowderRingRadii();
   void plotPowderRingTwoTheta();
   void plotPowderRingCenters();

@@ -152,8 +152,6 @@ HEADERS += \
     qxrddataset.h \
     qxrddataset-ptr.h \
     qxrdimageplotzoomer.h \
-    qxrdacquisitionwindow.h \
-    qxrdacquisitionwindow-ptr.h \
     qxrdmainwindow.h \
     qxrdacquisitionparameterpack.h \
     qxrdacquisitionparameterpack-ptr.h \
@@ -161,14 +159,16 @@ HEADERS += \
     qxrddarkacquisitionparameterpack-ptr.h \
     qxrdprocessargs.h \
     qxrdprocessargs-ptr.h \
-    qxrdacquisitionprocessor.h \
-    qxrdacquisitionprocessor-ptr.h \
     qxrddetectorproxy.h \
     qxrddetectorproxy-ptr.h \
     qxrddetectorproxywidget.h \
     qxrddetectorproxylistmodel.h \
     qxrddetectorproxylistmodel-ptr.h \
-    qxrddetectorconfigurationdialog.h
+    qxrddetectorconfigurationdialog.h \
+    qxrddetectorcontrolwindow.h \
+    qxrddetectorcontrolwindow-ptr.h \
+    qxrddetectorprocessor.h \
+    qxrddetectorprocessor-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -211,16 +211,16 @@ SOURCES += \
     qxrdcalibrantdspacingsmodel.cpp \
     qxrddataset.cpp \
     qxrdimageplotzoomer.cpp \
-    qxrdacquisitionwindow.cpp \
     qxrdmainwindow.cpp \
     qxrdacquisitionparameterpack.cpp \
     qxrddarkacquisitionparameterpack.cpp \
     qxrdprocessargs.cpp \
-    qxrdacquisitionprocessor.cpp \
     qxrddetectorproxy.cpp \
     qxrddetectorproxywidget.cpp \
     qxrddetectorproxylistmodel.cpp \
-    qxrddetectorconfigurationdialog.cpp
+    qxrddetectorconfigurationdialog.cpp \
+    qxrddetectorcontrolwindow.cpp \
+    qxrddetectorprocessor.cpp
 
 OTHER_FILES += testImage.js
 
@@ -487,9 +487,9 @@ FORMS += qxrdwindow.ui \
     qxrddistortioncorrectiondialog.ui \
     qxrdscriptdialog.ui \
     qxrdcalibrantdialog.ui \
-    qxrdacquisitionwindow.ui \
     qxrddetectorproxywidget.ui \
-    qxrddetectorconfigurationdialog.ui
+    qxrddetectorconfigurationdialog.ui \
+    qxrddetectorcontrolwindow.ui
 
 macx:
 else:unix:LIBS += -ltiff

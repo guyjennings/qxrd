@@ -312,7 +312,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   if (expt) {
     connect(m_ActionSaveExperiment, &QAction::triggered, expt.data(), &QxrdExperiment::saveExperiment);
-    connect(m_ActionOpenDetectorControlWindow, &QAction::triggered, this, &QxrdWindow::doOpenAcquisitionWindow);
+//    connect(m_ActionOpenDetectorControlWindow, &QAction::triggered, this, &QxrdWindow::doOpenAcquisitionWindow);
   }
 
   connect(m_ActionSaveExperimentAs, &QAction::triggered, this, &QxrdWindow::saveExperimentAs);
@@ -324,8 +324,9 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   setupRecentExperimentsMenu(m_ActionRecentExperiments);
 
   connect(m_ConfigureDetectorMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateConfigureDetectorMenu);
-
   m_ConfigureDetectorMenu->menuAction()->setMenuRole(QAction::NoRole);
+
+  connect(m_DetectorControlWindowsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateDetectorControlWindowsMenu);
 
   connect(m_ActionLoadData, &QAction::triggered, this, &QxrdWindow::doLoadData);
   connect(m_ActionSaveData, &QAction::triggered, this, &QxrdWindow::doSaveData);
@@ -847,6 +848,41 @@ void QxrdWindow::populateConfigureDetectorMenu()
               acq.data(), &QxrdAcquisition::configureDetector, Qt::DirectConnection);
 
       m_ConfigureDetectorMenu->addAction(action);
+    }
+  }
+}
+
+void QxrdWindow::populateDetectorControlWindowsMenu()
+{
+  m_DetectorControlWindowsMenu->clear();
+
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    int nDets = acq->get_DetectorCount();
+
+    for (int i=0; i<nDets; i++) {
+      QxrdDetectorPtr det = acq->detector(i);
+      QString detType = det->get_DetectorTypeName();
+      QString detName = det->get_DetectorName();
+      bool    enabled = det->get_Enabled();
+
+      QString str = tr("(%1) Open %2 detector \"%3\" Control...").arg(i).arg(detType).arg(detName);
+
+      QAction *action = new QAction(str, m_DetectorControlWindowsMenu);
+
+      action->setCheckable(true);
+      action->setChecked(enabled);
+
+      QSignalMapper *mapper = new QSignalMapper(action);
+
+      connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
+      mapper->setMapping(action,i);
+
+      connect(mapper, (void (QSignalMapper::*)(int)) &QSignalMapper::mapped,
+              acq.data(), &QxrdAcquisition::openDetectorControlWindow, Qt::DirectConnection);
+
+      m_DetectorControlWindowsMenu->addAction(action);
     }
   }
 }
@@ -1952,13 +1988,13 @@ void QxrdWindow::plotPowderRingCenters()
   }
 }
 
-void QxrdWindow::doOpenAcquisitionWindow()
-{
-  GUI_THREAD_CHECK;
+//void QxrdWindow::doOpenAcquisitionWindow()
+//{
+//  GUI_THREAD_CHECK;
 
-  QxrdExperimentPtr expt(m_Experiment);
+//  QxrdExperimentPtr expt(m_Experiment);
 
-  if (expt) {
-    expt->openAcquisitionWindow();
-  }
-}
+//  if (expt) {
+//    expt->openAcquisitionWindow();
+//  }
+//}

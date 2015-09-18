@@ -11,7 +11,8 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrddetector-ptr.h"
 #include "qxrddetectorproxy-ptr.h"
-#include "qxrdacquisitionprocessor-ptr.h"
+#include "qxrddetectorprocessor-ptr.h"
+#include "qxrddetectorcontrolwindow-ptr.h"
 #include <QScriptEngine>
 
 class QxrdDetector : public QcepObject, public QEnableSharedFromThis<QxrdDetector>
@@ -51,13 +52,16 @@ public slots:
   virtual void endAcquisition();
   virtual void shutdownAcquisition();
 
-  QxrdAcquisitionProcessorPtr acquisitionProcessor();
+  void openControlWindow();
+
+  QxrdDetectorProcessorPtr acquisitionProcessor();
 
 protected:
-  QcepSettingsSaverWPtr       m_Saver;
-  QxrdExperimentWPtr          m_Experiment;
-  QxrdAcquisitionWPtr         m_Acquisition;
-  QxrdAcquisitionProcessorPtr m_AcquisitionProcessor;
+  QcepSettingsSaverWPtr        m_Saver;
+  QxrdExperimentWPtr           m_Experiment;
+  QxrdAcquisitionWPtr          m_Acquisition;
+  QxrdDetectorProcessorPtr     m_AcquisitionProcessor;
+  QxrdDetectorControlWindow   *m_DetectorControlWindow;
 
 private:
   QMutex                      m_Mutex;

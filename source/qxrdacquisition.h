@@ -85,6 +85,7 @@ public slots:
   void clearDetectors();
 
   void configureDetector(int i);
+  void openDetectorControlWindow(int i);
 
   QxrdDetectorThreadPtr detectorThread(int n);
   QxrdDetectorPtr       detector(int n);
@@ -287,7 +288,6 @@ private:
 
   QSemaphore             m_NAcquiredImages;
   QcepInt16ImageQueue    m_AcquiredImages;
-
   QxrdAcquisitionDialogPtr m_ControlPanel;
 
   QFutureWatcher<void>   m_Watcher;
@@ -295,8 +295,8 @@ private:
   QTimer                 m_IdleTimer;
   QAtomicInt             m_Idling;
 
-  QVector<QxrdDetectorThreadPtr> m_DetectorThreads;
-  QVector<QxrdDetectorPtr>       m_Detectors;
+  QVector<QxrdDetectorThreadPtr>    m_DetectorThreads;
+  QVector<QxrdDetectorPtr>          m_Detectors;
 };
 
 #endif

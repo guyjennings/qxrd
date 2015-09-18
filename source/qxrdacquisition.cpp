@@ -471,6 +471,15 @@ void QxrdAcquisition::configureDetector(int i)
   }
 }
 
+void QxrdAcquisition::openDetectorControlWindow(int i)
+{
+  QxrdDetectorPtr det = detector(i);
+
+  if (det) {
+    det->openControlWindow();
+  }
+}
+
 QxrdAcquisitionParameterPackPtr QxrdAcquisition::acquisitionParameterPack()
 {
   return QxrdAcquisitionParameterPackPtr(

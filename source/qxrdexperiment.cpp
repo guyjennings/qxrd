@@ -32,7 +32,7 @@
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumn.h"
 #include "qcepsettingssaver.h"
-#include "qxrdacquisitionwindow.h"
+//#include "qxrddetectorcontrolwindow.h"
 
 #include <QHostInfo>
 #include <QColorDialog>
@@ -46,7 +46,7 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
   m_ExperimentThread(expthrd),
   m_WindowSettings(NULL),
   m_Window(),
-  m_AcquisitionWindow(),
+//  m_AcquisitionWindow(),
   m_ServerThread(NULL),
   m_Server(),
   m_SimpleServerThread(NULL),
@@ -991,14 +991,14 @@ void QxrdExperiment::evaluateScriptFile(QString path)
   }
 }
 
-void QxrdExperiment::openAcquisitionWindow()
-{
-  GUI_THREAD_CHECK;
+//void QxrdExperiment::openAcquisitionWindow()
+//{
+//  GUI_THREAD_CHECK;
 
-  if (m_AcquisitionWindow == NULL) {
-    m_AcquisitionWindow = QxrdAcquisitionWindowPtr(
-          new QxrdAcquisitionWindow(acquisition(), NULL));
-  }
+//  if (m_AcquisitionWindow == NULL) {
+//    m_AcquisitionWindow = QxrdDetectorControlWindowPtr(
+//          new QxrdDetectorControlWindow(acquisition(), NULL));
+//  }
 
-  m_AcquisitionWindow->show();
-}
+//  m_AcquisitionWindow->show();
+//}

@@ -2,9 +2,10 @@
 #include "qxrddetectorthread.h"
 #include "qxrddetectorproxy.h"
 #include "qxrddebug.h"
-#include "qxrdacquisitionprocessor.h"
+#include "qxrddetectorprocessor.h"
 #include <stdio.h>
 #include "qcepmutexlocker.h"
+#include "qxrddetectorcontrolwindow.h"
 
 QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
                            QxrdExperimentWPtr    expt,
@@ -17,6 +18,7 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
   m_Experiment(expt),
   m_Acquisition(acq),
   m_AcquisitionProcessor(),
+  m_DetectorControlWindow(NULL),
   m_DetectorNumber(QcepSettingsSaverWPtr(), this, "detectorNumber", detNum, "Detector Number"),
   m_DetectorType(saver, this, "detectorType", detType, "Detector Type"),
   m_DetectorTypeName(QcepSettingsSaverWPtr(), this, "detectorTypeName", QxrdDetectorThread::detectorTypeName(detType), "Detector Type Name"),
@@ -33,16 +35,20 @@ QxrdDetector::~QxrdDetector()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::~QxrdDetector(%p)\n", this);
   }
+
+  if (m_DetectorControlWindow) {
+    m_DetectorControlWindow->deleteLater();
+  }
 }
 
 void QxrdDetector::initialize()
 {
   m_AcquisitionProcessor =
-      QxrdAcquisitionProcessorPtr(
-        new QxrdAcquisitionProcessor(m_Saver, m_Experiment, sharedFromThis()));
+      QxrdDetectorProcessorPtr(
+        new QxrdDetectorProcessor(m_Saver, m_Experiment, sharedFromThis()));
 }
 
-QxrdAcquisitionProcessorPtr QxrdDetector::acquisitionProcessor()
+QxrdDetectorProcessorPtr QxrdDetector::acquisitionProcessor()
 {
   return m_AcquisitionProcessor;
 }
@@ -141,5 +147,20 @@ void QxrdDetector::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
     set_Enabled(proxy->property("enabled").toBool());
     set_DetectorNumber(proxy->property("detectorNumber").toInt());
     set_DetectorName(proxy->property("detectorName").toString());
+  }
+}
+
+void QxrdDetector::openControlWindow()
+{
+  GUI_THREAD_CHECK;
+
+  if (m_DetectorControlWindow == NULL) {
+    m_DetectorControlWindow =
+        new QxrdDetectorControlWindow(m_Acquisition, m_AcquisitionProcessor, NULL);
+  }
+
+  if (m_DetectorControlWindow) {
+    m_DetectorControlWindow->show();
+    m_DetectorControlWindow->raise();
   }
 }
