@@ -13,7 +13,6 @@ class QxrdDetectorPilatus : public QxrdDetector
 public:
   explicit QxrdDetectorPilatus(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum, QcepObject *parent);
   virtual ~QxrdDetectorPilatus();
-  void initialize();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
@@ -23,6 +22,8 @@ signals:
 
 public slots:
   void onExposureTimeChanged();
+
+  void start();
 
   void acquire();
   void beginAcquisition();

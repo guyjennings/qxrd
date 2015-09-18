@@ -13,6 +13,7 @@
 #include "qxrddetectorprocessor-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
+#include "qxrdroicalculator-ptr.h"
 
 #include <QScriptEngine>
 
@@ -24,12 +25,15 @@ public:
   QxrdDetectorProcessor(QcepSettingsSaverWPtr saver,
                         QxrdExperimentWPtr    doc,
                         QxrdDetectorWPtr      det);
+  virtual ~QxrdDetectorProcessor();
+  void initialize();
 
 signals:
 
 public slots:
-  QxrdCenterFinderPtr centerFinder();
-  QxrdIntegratorPtr   integrator();
+  QxrdCenterFinderPtr  centerFinder();
+  QxrdIntegratorPtr    integrator();
+  QxrdROICalculatorPtr roiCalculator();
 
 public:
   void readSettings(QSettings *settings, QString section);
@@ -52,6 +56,7 @@ private:
 
   QxrdCenterFinderPtr   m_CenterFinder;
   QxrdIntegratorPtr     m_Integrator;
+  QxrdROICalculatorPtr  m_ROICalculator;
 };
 
 #endif // QXRDACQUISITIONPROCESSOR_H

@@ -85,12 +85,12 @@ void QxrdDetectorSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*
 //  cb -> setValidator(new QDoubleValidator(0.0667,8,3,cb));
 }
 
-void QxrdDetectorSimulated::initialize()
+void QxrdDetectorSimulated::start()
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "initialize", Qt::BlockingQueuedConnection);
+    QMetaObject::invokeMethod(this, "start", Qt::BlockingQueuedConnection);
   } else {
-    QxrdDetector::initialize();
+    QxrdDetector::start();
 
     QxrdAcquisitionPtr acq(m_Acquisition);
 

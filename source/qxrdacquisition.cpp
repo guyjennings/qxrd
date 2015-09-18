@@ -260,12 +260,13 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
         QxrdDetectorPtr det = detThread->detector();
 
         if (det) {
+          det->initialize();
           det->readSettings(settings, "");
 
           m_DetectorThreads[i] = detThread;
           m_Detectors[i]       = det;
 
-          det->initialize();
+          det->start();
         }
       }
     }

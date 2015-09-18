@@ -2,6 +2,8 @@
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrator.h"
 #include "qcepmutexlocker.h"
+#include "qxrdroicalculator.h"
+#include "qxrddebug.h"
 
 QxrdDetectorProcessor::QxrdDetectorProcessor(
     QcepSettingsSaverWPtr saver,
@@ -11,9 +13,27 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
     m_Saver(saver),
     m_Experiment(doc),
     m_Detector(det),
-    m_CenterFinder(new QxrdCenterFinder(saver, doc)),
-    m_Integrator(new QxrdIntegrator(saver, doc, m_CenterFinder))
+    m_CenterFinder(),
+    m_Integrator(),
+    m_ROICalculator()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDetectorProcessor::QxrdDetectorProcessor(%p)\n", this);
+  }
+}
+
+QxrdDetectorProcessor::~QxrdDetectorProcessor()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDetectorProcessor::~QxrdDetectorProcessor(%p)\n", this);
+  }
+}
+
+void QxrdDetectorProcessor::initialize()
+{
+  m_CenterFinder  = QxrdCenterFinderPtr(new QxrdCenterFinder(m_Saver, m_Experiment));
+  m_Integrator    = QxrdIntegratorPtr(new QxrdIntegrator(m_Saver, m_Experiment, m_CenterFinder));
+  m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator(m_Saver, m_Experiment, sharedFromThis()));
 }
 
 void QxrdDetectorProcessor::readSettings(QSettings *settings, QString section)
@@ -29,6 +49,10 @@ void QxrdDetectorProcessor::readSettings(QSettings *settings, QString section)
   if (m_Integrator) {
     m_Integrator->readSettings(settings, section+"/integrator");
   }
+
+  if (m_ROICalculator) {
+    m_ROICalculator->readSettings(settings, section+"/roiCalculator");
+  }
 }
 
 void QxrdDetectorProcessor::writeSettings(QSettings *settings, QString section)
@@ -43,6 +67,10 @@ void QxrdDetectorProcessor::writeSettings(QSettings *settings, QString section)
 
   if (m_Integrator) {
     m_Integrator->writeSettings(settings, section+"/integrator");
+  }
+
+  if (m_ROICalculator) {
+    m_ROICalculator->writeSettings(settings, section+"/roiCalculator");
   }
 }
 
@@ -72,4 +100,9 @@ QxrdCenterFinderPtr QxrdDetectorProcessor::centerFinder()
 QxrdIntegratorPtr QxrdDetectorProcessor::integrator()
 {
   return m_Integrator;
+}
+
+QxrdROICalculatorPtr QxrdDetectorProcessor::roiCalculator()
+{
+  return m_ROICalculator;
 }

@@ -19,6 +19,8 @@ class QxrdDetectorPerkinElmer : public QxrdDetector
 public:
   explicit QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum, QcepObject *parent);
   virtual ~QxrdDetectorPerkinElmer();
+  void initialize();
+
   int detectorNumber() const;
   int detectorSubType() const;
   QString detectorAddress() const;
@@ -33,7 +35,7 @@ public slots:
   void onCameraGainChanged();
 
 public slots:
-  void initialize();
+  void start();
   void onEndFrame(int counter, unsigned int n1, unsigned int n2);
   void onEndFrameCallback();
 

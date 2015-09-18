@@ -41,12 +41,12 @@ QxrdDetectorPilatus::~QxrdDetectorPilatus()
   }
 }
 
-void QxrdDetectorPilatus::initialize()
+void QxrdDetectorPilatus::start()
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "initialize", Qt::BlockingQueuedConnection);
+    QMetaObject::invokeMethod(this, "start", Qt::BlockingQueuedConnection);
   } else {
-    QxrdDetector::initialize();
+    QxrdDetector::start();
 
     m_PilatusSocket.connectToHost(get_PilatusHost(), get_PilatusPort());
     m_PilatusSocket.waitForConnected();

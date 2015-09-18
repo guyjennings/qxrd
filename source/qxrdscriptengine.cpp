@@ -30,6 +30,7 @@
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepdatasetmodel.h"
 #include "qxrddetectorprocessor.h"
+#include "qxrdroicalculator.h"
 
 #include <QThread>
 #include <QDir>
@@ -1767,6 +1768,11 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterMetaType(this,
                           QxrdIntegrator::toScriptValue,
                           QxrdIntegrator::fromScriptValue);
+
+  qRegisterMetaType<QxrdROICalculatorPtr>("QxrdROICalculatorPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdROICalculator::toScriptValue,
+                          QxrdROICalculator::fromScriptValue);
 
   QxrdApplicationPtr app(m_Application);
 

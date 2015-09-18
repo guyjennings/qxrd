@@ -168,7 +168,9 @@ HEADERS += \
     qxrddetectorcontrolwindow.h \
     qxrddetectorcontrolwindow-ptr.h \
     qxrddetectorprocessor.h \
-    qxrddetectorprocessor-ptr.h
+    qxrddetectorprocessor-ptr.h \
+    qxrdroicalculator.h \
+    qxrdroicalculator-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -220,7 +222,8 @@ SOURCES += \
     qxrddetectorproxylistmodel.cpp \
     qxrddetectorconfigurationdialog.cpp \
     qxrddetectorcontrolwindow.cpp \
-    qxrddetectorprocessor.cpp
+    qxrddetectorprocessor.cpp \
+    qxrdroicalculator.cpp
 
 OTHER_FILES += testImage.js
 

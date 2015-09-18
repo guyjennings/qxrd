@@ -443,16 +443,16 @@ bool QxrdDetectorPerkinElmer::checkPluginAvailable()
  XRD 1621 AN        14
  */
 
-void QxrdDetectorPerkinElmer::initialize()
+void QxrdDetectorPerkinElmer::start()
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "initialize", Qt::BlockingQueuedConnection);
+    QMetaObject::invokeMethod(this, "start", Qt::BlockingQueuedConnection);
   } else {
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("QxrdAcquisitionPerkinElmer::initialize"));
+      printMessage(tr("QxrdAcquisitionPerkinElmer::start"));
     }
 
-    QxrdDetector::initialize();
+    QxrdDetector::start();
 
     if (checkPluginAvailable()) {
       THREAD_CHECK;

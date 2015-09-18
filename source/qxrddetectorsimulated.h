@@ -12,13 +12,12 @@ public:
   explicit QxrdDetectorSimulated(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum, QcepObject *parent);
   virtual ~QxrdDetectorSimulated();
 
-  void initialize();
-
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 
 public slots:
+  void start();
   virtual void onExposureTimeChanged();
   void onTimerTimeout();
 

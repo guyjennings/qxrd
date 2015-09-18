@@ -46,6 +46,8 @@ void QxrdDetector::initialize()
   m_Processor =
       QxrdDetectorProcessorPtr(
         new QxrdDetectorProcessor(m_Saver, m_Experiment, sharedFromThis()));
+
+  m_Processor->initialize();
 }
 
 QxrdDetectorProcessorPtr QxrdDetector::processor()
@@ -73,6 +75,10 @@ void QxrdDetector::writeSettings(QSettings *settings, QString section)
   if (m_Processor) {
     m_Processor->writeSettings(settings, section+"/processor");
   }
+}
+
+void QxrdDetector::start()
+{
 }
 
 void QxrdDetector::onExposureTimeChanged()

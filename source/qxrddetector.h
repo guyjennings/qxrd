@@ -26,6 +26,7 @@ public:
                         int                   detType,
                         int                   detNum,
                         QcepObject *parent);
+  virtual void initialize();
   virtual ~QxrdDetector();
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorPtr &det);
@@ -42,7 +43,7 @@ public:
 signals:
 
 public slots:
-  virtual void initialize();
+  virtual void start();
 
   virtual void onExposureTimeChanged();
   virtual void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
