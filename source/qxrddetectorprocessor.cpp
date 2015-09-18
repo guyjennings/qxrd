@@ -64,3 +64,12 @@ void QxrdDetectorProcessor::fromScriptValue(const QScriptValue &obj, QxrdDetecto
   }
 }
 
+QxrdCenterFinderPtr QxrdDetectorProcessor::centerFinder()
+{
+  return m_CenterFinder;
+}
+
+QxrdIntegratorPtr QxrdDetectorProcessor::integrator()
+{
+  return m_Integrator;
+}

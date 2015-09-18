@@ -114,6 +114,9 @@ public:
 
   QString XLabel() const;
 
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdIntegratorPtr &proc);
+  static void fromScriptValue(const QScriptValue &obj, QxrdIntegratorPtr &proc);
+
 public slots:
   void                  clearAccumulator(QString resPath);
   void                  prepareAccumulator(QString resPath, int nImages);

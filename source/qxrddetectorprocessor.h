@@ -28,6 +28,8 @@ public:
 signals:
 
 public slots:
+  QxrdCenterFinderPtr centerFinder();
+  QxrdIntegratorPtr   integrator();
 
 public:
   void readSettings(QSettings *settings, QString section);

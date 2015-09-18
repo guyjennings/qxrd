@@ -506,3 +506,21 @@ void QxrdIntegrator::saveAccumulator(QString resPath, QString &fileName, QString
     }
   }
 }
+
+QScriptValue QxrdIntegrator::toScriptValue(QScriptEngine *engine, const QxrdIntegratorPtr &proc)
+{
+  return engine->newQObject(proc.data());
+}
+
+void QxrdIntegrator::fromScriptValue(const QScriptValue &obj, QxrdIntegratorPtr &proc)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QxrdIntegrator *f = qobject_cast<QxrdIntegrator*>(qobj);
+
+    if (f) {
+      proc = QxrdIntegratorPtr(f);
+    }
+  }
+}

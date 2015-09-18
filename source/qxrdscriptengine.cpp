@@ -1753,10 +1753,20 @@ void QxrdScriptEngine::initialize()
                           QxrdDetector::toScriptValue,
                           QxrdDetector::fromScriptValue);
 
-  qRegisterMetaType<QxrdDetectorProcessorPtr>("QxrdAcquisitionProcessorPtr");
+  qRegisterMetaType<QxrdDetectorProcessorPtr>("QxrdDetectorProcessorPtr");
   qScriptRegisterMetaType(this,
                           QxrdDetectorProcessor::toScriptValue,
                           QxrdDetectorProcessor::fromScriptValue);
+
+  qRegisterMetaType<QxrdCenterFinderPtr>("QxrdCenterFinderPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdCenterFinder::toScriptValue,
+                          QxrdCenterFinder::fromScriptValue);
+
+  qRegisterMetaType<QxrdIntegratorPtr>("QxrdIntegratorPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdIntegrator::toScriptValue,
+                          QxrdIntegrator::fromScriptValue);
 
   QxrdApplicationPtr app(m_Application);
 

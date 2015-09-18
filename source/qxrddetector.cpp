@@ -17,7 +17,7 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
   m_Saver(saver),
   m_Experiment(expt),
   m_Acquisition(acq),
-  m_AcquisitionProcessor(),
+  m_Processor(),
   m_DetectorControlWindow(NULL),
   m_DetectorNumber(QcepSettingsSaverWPtr(), this, "detectorNumber", detNum, "Detector Number"),
   m_DetectorType(saver, this, "detectorType", detType, "Detector Type"),
@@ -43,14 +43,14 @@ QxrdDetector::~QxrdDetector()
 
 void QxrdDetector::initialize()
 {
-  m_AcquisitionProcessor =
+  m_Processor =
       QxrdDetectorProcessorPtr(
         new QxrdDetectorProcessor(m_Saver, m_Experiment, sharedFromThis()));
 }
 
-QxrdDetectorProcessorPtr QxrdDetector::acquisitionProcessor()
+QxrdDetectorProcessorPtr QxrdDetector::processor()
 {
-  return m_AcquisitionProcessor;
+  return m_Processor;
 }
 
 void QxrdDetector::readSettings(QSettings *settings, QString section)
@@ -59,8 +59,8 @@ void QxrdDetector::readSettings(QSettings *settings, QString section)
 
   QcepObject::readSettings(settings, section);
 
-  if (m_AcquisitionProcessor) {
-    m_AcquisitionProcessor->readSettings(settings, section+"/acquisitionProcessor");
+  if (m_Processor) {
+    m_Processor->readSettings(settings, section+"/processor");
   }
 }
 
@@ -70,8 +70,8 @@ void QxrdDetector::writeSettings(QSettings *settings, QString section)
 
   QcepObject::writeSettings(settings, section);
 
-  if (m_AcquisitionProcessor) {
-    m_AcquisitionProcessor->writeSettings(settings, section+"/acquisitionProcessor");
+  if (m_Processor) {
+    m_Processor->writeSettings(settings, section+"/processor");
   }
 }
 
@@ -156,7 +156,7 @@ void QxrdDetector::openControlWindow()
 
   if (m_DetectorControlWindow == NULL) {
     m_DetectorControlWindow =
-        new QxrdDetectorControlWindow(m_Acquisition, m_AcquisitionProcessor, NULL);
+        new QxrdDetectorControlWindow(m_Acquisition, m_Processor, NULL);
   }
 
   if (m_DetectorControlWindow) {

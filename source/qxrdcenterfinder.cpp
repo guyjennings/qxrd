@@ -1483,3 +1483,22 @@ void QxrdCenterFinder::calculateCalibration()
     }
   }
 }
+
+QScriptValue QxrdCenterFinder::toScriptValue(QScriptEngine *engine, const QxrdCenterFinderPtr &proc)
+{
+  return engine->newQObject(proc.data());
+}
+
+void QxrdCenterFinder::fromScriptValue(const QScriptValue &obj, QxrdCenterFinderPtr &proc)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QxrdCenterFinder *f = qobject_cast<QxrdCenterFinder*>(qobj);
+
+    if (f) {
+      proc = QxrdCenterFinderPtr(f);
+    }
+  }
+}
+

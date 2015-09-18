@@ -54,13 +54,13 @@ public slots:
 
   void openControlWindow();
 
-  QxrdDetectorProcessorPtr acquisitionProcessor();
+  QxrdDetectorProcessorPtr processor();
 
 protected:
   QcepSettingsSaverWPtr        m_Saver;
   QxrdExperimentWPtr           m_Experiment;
   QxrdAcquisitionWPtr          m_Acquisition;
-  QxrdDetectorProcessorPtr     m_AcquisitionProcessor;
+  QxrdDetectorProcessorPtr     m_Processor;
   QxrdDetectorControlWindow   *m_DetectorControlWindow;
 
 private:
