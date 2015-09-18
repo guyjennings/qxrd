@@ -8,6 +8,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QSpinBox>
+#include <QComboBox>
 #include <QGridLayout>
 #include <QSignalMapper>
 #include <QPushButton>
@@ -71,8 +73,8 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
   QWidget *propertyEditor = NULL;
   QWidget *button = NULL;
 
-  if (type == QxrdDetectorProxy::HiddenProperty) {
-    // No dialog widgets for hidden properties (e.g. detectorNumber)
+  if (type == QxrdDetectorProxy::DetectorNumberProperty) {
+    propertyEditor = new QLabel(value.toString());
   } else if (type == QxrdDetectorProxy::DetectorTypeProperty) {
     propertyEditor = new QLabel(QxrdDetectorThread::detectorTypeName(value.toInt()));
 
@@ -150,16 +152,20 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
     }
 
     m_CurrentRow++;
-
-    m_Widgets.append(propertyEditor);
   }
+
+  m_Widgets.append(propertyEditor);
 }
 
 QVariant QxrdDetectorConfigurationDialog::propertyValue(int propType, int i)
 {
-  QWidget *w = m_Widgets.value(i);
+  QObject *w = m_Widgets.value(i);
 
-  if (propType == QxrdDetectorProxy::StringProperty) {
+  if (propType == QxrdDetectorProxy::DetectorNumberProperty) {
+    return QVariant();
+  } else if (propType == QxrdDetectorProxy::DetectorTypeProperty) {
+    return QVariant();
+  } else if (propType == QxrdDetectorProxy::StringProperty) {
     QLineEdit *le = qobject_cast<QLineEdit*>(w);
 
     if (le) {

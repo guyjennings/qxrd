@@ -116,10 +116,10 @@ void QxrdDetector::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType)
   proxy->clearProperties();
 
   if (proxy) {
-    proxy->pushProperty(QxrdDetectorProxy::HiddenProperty,       "detectorNumber", "Detector Number",  -1);
-    proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty, "detectorType",   "Detector Type",     detType);
-    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,      "enabled",        "Detector Enabled?", true);
-    proxy->pushProperty(QxrdDetectorProxy::StringProperty,       "detectorName",   "Detector Name",     "A " + QxrdDetectorThread::detectorTypeName(detType));
+    proxy->pushProperty(QxrdDetectorProxy::DetectorNumberProperty, "detectorNumber", "Detector Number",  -1);
+    proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty,   "detectorType",   "Detector Type",     detType);
+    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,        "enabled",        "Detector Enabled?", true);
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "detectorName",   "Detector Name",     "A " + QxrdDetectorThread::detectorTypeName(detType));
   }
 }
 
@@ -128,10 +128,10 @@ void QxrdDetector::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
   proxy->clearProperties();
 
   if (proxy) {
-    proxy->pushProperty(QxrdDetectorProxy::HiddenProperty,       "detectorNumber", "Detector Number",   get_DetectorNumber());
-    proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty, "detectorType",   "Detector Type",     get_DetectorType());
-    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,      "enabled",        "Detector Enabled?", get_Enabled());
-    proxy->pushProperty(QxrdDetectorProxy::StringProperty,       "detectorName",   "Detector Name",     get_DetectorName());
+    proxy->pushProperty(QxrdDetectorProxy::DetectorNumberProperty, "detectorNumber", "Detector Number",   get_DetectorNumber());
+    proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty,   "detectorType",   "Detector Type",     get_DetectorType());
+    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,        "enabled",        "Detector Enabled?", get_Enabled());
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "detectorName",   "Detector Name",     get_DetectorName());
   }
 }
 
