@@ -1106,16 +1106,19 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
-          <widget class="QTreeView" name="m_ToDoList">
+          <widget class="QTableView" name="m_ToDoList">
+           <property name="textElideMode">
+            <enum>Qt::ElideNone</enum>
+           </property>
+           <property name="showGrid">
+            <bool>false</bool>
+           </property>
+           <property name="gridStyle">
+            <enum>Qt::SolidLine</enum>
+           </property>
            <property name="sortingEnabled">
             <bool>true</bool>
            </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <attribute name="headerShowSortIndicator" stdset="0">
-            <bool>true</bool>
-           </attribute>
           </widget>
          </item>
         </layout>
