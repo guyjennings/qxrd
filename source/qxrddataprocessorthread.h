@@ -27,8 +27,6 @@ public:
 
   QxrdDataProcessorPtr dataProcessor() const;
 
-  static void msleep(long unsigned int);
-
 protected:
   void run();
 

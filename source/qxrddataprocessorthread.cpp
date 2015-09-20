@@ -83,8 +83,3 @@ QxrdDataProcessorPtr QxrdDataProcessorThread::dataProcessor() const
 
   return QxrdDataProcessorPtr();
 }
-
-void QxrdDataProcessorThread::msleep(unsigned long t)
-{
-  QThread::msleep(t);
-}
