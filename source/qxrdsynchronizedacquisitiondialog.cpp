@@ -156,27 +156,30 @@ void QxrdSynchronizedAcquisitionDialog::deviceChanged()
 
 void QxrdSynchronizedAcquisitionDialog::waveformChanged()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcquisitionPtr             acq(m_Acquisition);
   QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
-  QxrdAcquisitionParameterPackPtr parms = acq->acquisitionParameterPack();
 
-  if (acq && sync && parms) {
-    sync->prepareForAcquisition(parms);
+  if (acq && sync) {
+    QxrdAcquisitionParameterPackPtr parms(acq->acquisitionParameterPack());
 
-    m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
-    m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+    if (parms) {
+      sync->prepareForAcquisition(parms);
 
-    if (sync -> get_SyncAcquisitionMode() && (parms->nphases() >= 1)) {
-      QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_WaveformPlot, "Output Waveform");
+      m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+      m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
 
-      pc->setSamples(sync->outputTimes(), sync->outputVoltage());
+      if (sync -> get_SyncAcquisitionMode() && (parms->nphases() >= 1)) {
+        QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_WaveformPlot, "Output Waveform");
 
-      pc->attach(m_WaveformPlot);
+        pc->setSamples(sync->outputTimes(), sync->outputVoltage());
+
+        pc->attach(m_WaveformPlot);
+      }
+
+      m_WaveformPlot->updateZoomer();
+      m_WaveformPlot->replot();
+
+      sync->finishedAcquisition();
     }
-
-    m_WaveformPlot->updateZoomer();
-    m_WaveformPlot->replot();
-
-    sync->finishedAcquisition();
   }
 }

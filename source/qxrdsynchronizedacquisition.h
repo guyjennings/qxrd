@@ -81,6 +81,8 @@ public:
   QVector<double>  outputTimes();
   QVector<double>  outputVoltage();
 
+  QxrdAcquisitionParameterPackWPtr parms();
+
 private:
   mutable QMutex              m_Mutex;
   QxrdAcquisitionWPtr         m_Acquisition;

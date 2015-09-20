@@ -41,6 +41,11 @@ QxrdNIDAQPluginInterfaceWPtr QxrdSynchronizedAcquisition::nidaqPlugin() const
   return m_NIDAQPlugin;
 }
 
+QxrdAcquisitionParameterPackWPtr QxrdSynchronizedAcquisition::parms()
+{
+  return m_AcquisitionParms;
+}
+
 void QxrdSynchronizedAcquisition::finishedAcquisition()
 {
   m_AcquisitionParms = QxrdAcquisitionParameterPackWPtr();
@@ -234,9 +239,9 @@ void QxrdSynchronizedAcquisition::triggerOnce()
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
   QxrdNIDAQPluginInterfacePtr nidaq(m_NIDAQPlugin);
+  QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
 
-  if (acq && nidaq) {
-    QxrdAcquisitionParameterPackPtr parms = acq->acquisitionParameterPack();
+  if (acq && nidaq && parms) {
     prepareForAcquisition(parms);
     nidaq->triggerAnalogWaveform();
   }
