@@ -101,132 +101,6 @@ include(submodules/qceplib/qceplib-hdf5.pri)
 
 include(submodules/qceplib/qceplib-specserver.pri)
 
-HEADERS += \
-    qxrddebug.h \
-    qxrdacquisitionextrainputsplot.h \
-    qxrddetector.h \
-    qxrddetector-ptr.h \
-    qxrddetectorthread.h \
-    qxrddetectorthread-ptr.h \
-    qxrddetectorpilatus.h \
-    qxrddetectorsimulated.h \
-    qxrddetectorfilewatcher.h \
-    qxrdacquisitiondialog-ptr.h \
-    qxrdacquisitionextrainputsdialogsettings.h \
-    qxrdhelpbrowser.h \
-    qxrduserscriptdialog.h \
-    qxrdsynchronizedacquisitiondialogsettings.h \
-    qxrdsynchronizedacquisitionplotsettings.h \
-    qxrdimagedataformatcbf.h \
-    qxrddistortioncorrection.h \
-    qxrddistortioncorrection-ptr.h \
-    qxrddistortioncorrectiondialog.h \
-    qxrddistortioncorrectiondialogsettings.h \
-    qxrddistortioncorrectionplot.h \
-    qxrddistortioncorrectionplotsettings.h \
-    qxrdplotvectorfieldcurve.h \
-    qxrdpoint4d.h \
-    qxrdplotvectorfielddata.h \
-    qxrdscriptdialog.h \
-    qxrdscriptdialogsettings.h \
-    qxrdscripteditwidget.h \
-    qxrdpowderpoint.h \
-    qxrdpowderpointproperty.h \
-    qxrdfitter.h \
-    qxrdfitterpeakpoint.h \
-    qxrdfitterringpoint.h \
-    qxrdfitterpeakorring.h \
-    qxrdfitterringcircle.h \
-    qxrdfitterringellipse.h \
-    triangulate.h \
-    qxrdplanefitter.h \
-    qxrdcalibrant.h \
-    qxrdcalibrant-ptr.h \
-    qxrdcalibrantlibrary.h \
-    qxrdcalibrantlibrary-ptr.h \
-    qxrdcalibrantdialog.h \
-    qxrdcalibrantlibrarymodel.h \
-    qxrdcalibrantlibrarymodel-ptr.h \
-    qxrdcalibrantdspacingsmodel.h \
-    qxrdcalibrantdspacingsmodel-ptr.h \
-    qxrddataset.h \
-    qxrddataset-ptr.h \
-    qxrdimageplotzoomer.h \
-    qxrdmainwindow.h \
-    qxrdacquisitionparameterpack.h \
-    qxrdacquisitionparameterpack-ptr.h \
-    qxrddarkacquisitionparameterpack.h \
-    qxrddarkacquisitionparameterpack-ptr.h \
-    qxrdprocessargs.h \
-    qxrdprocessargs-ptr.h \
-    qxrddetectorproxy.h \
-    qxrddetectorproxy-ptr.h \
-    qxrddetectorproxywidget.h \
-    qxrddetectorproxylistmodel.h \
-    qxrddetectorproxylistmodel-ptr.h \
-    qxrddetectorconfigurationdialog.h \
-    qxrddetectorcontrolwindow.h \
-    qxrddetectorcontrolwindow-ptr.h \
-    qxrddetectorprocessor.h \
-    qxrddetectorprocessor-ptr.h \
-    qxrdroicalculator.h \
-    qxrdroicalculator-ptr.h
-
-SOURCES += \
-    qxrddebug.cpp \
-    qxrdacquisitionextrainputsplot.cpp \
-    qxrddetector.cpp \
-    qxrddetectorpilatus.cpp \
-    qxrddetectorsimulated.cpp \
-    qxrddetectorthread.cpp \
-    qxrddetectorfilewatcher.cpp \
-    qxrdacquisitionextrainputsdialogsettings.cpp \
-    qxrdhelpbrowser.cpp \
-    qxrduserscriptdialog.cpp \
-    qxrdsynchronizedacquisitiondialogsettings.cpp \
-    qxrdsynchronizedacquisitionplotsettings.cpp \
-    qxrdimagedataformatcbf.cpp \
-    qxrddistortioncorrection.cpp \
-    qxrddistortioncorrectiondialog.cpp \
-    qxrddistortioncorrectiondialogsettings.cpp \
-    qxrddistortioncorrectionplot.cpp \
-    qxrddistortioncorrectionplotsettings.cpp \
-    qxrdplotvectorfieldcurve.cpp \
-    qxrdpoint4d.cpp \
-    qxrdplotvectorfielddata.cpp \
-    qxrdscriptdialog.cpp \
-    qxrdscriptdialogsettings.cpp \
-    qxrdscripteditwidget.cpp \
-    qxrdpowderpoint.cpp \
-    qxrdpowderpointproperty.cpp \
-    qxrdfitter.cpp \
-    qxrdfitterpeakpoint.cpp \
-    qxrdfitterringpoint.cpp \
-    qxrdfitterpeakorring.cpp \
-    qxrdfitterringcircle.cpp \
-    qxrdfitterringellipse.cpp \
-    qxrdplanefitter.cpp \
-    qxrdcalibrant.cpp \
-    qxrdcalibrantlibrary.cpp \
-    qxrdcalibrantdialog.cpp \
-    qxrdcalibrantlibrarymodel.cpp \
-    qxrdcalibrantdspacingsmodel.cpp \
-    qxrddataset.cpp \
-    qxrdimageplotzoomer.cpp \
-    qxrdmainwindow.cpp \
-    qxrdacquisitionparameterpack.cpp \
-    qxrddarkacquisitionparameterpack.cpp \
-    qxrdprocessargs.cpp \
-    qxrddetectorproxy.cpp \
-    qxrddetectorproxywidget.cpp \
-    qxrddetectorproxylistmodel.cpp \
-    qxrddetectorconfigurationdialog.cpp \
-    qxrddetectorcontrolwindow.cpp \
-    qxrddetectorprocessor.cpp \
-    qxrdroicalculator.cpp
-
-OTHER_FILES += testImage.js
-
 HEADERS += TODO.h \
     qxrdapplication.h \
     qxrdapplication-ptr.h \
@@ -366,7 +240,82 @@ HEADERS += TODO.h \
     qxrdinfodialogsettings.h \
     qxrdcenterfinderplotsettings.h \
     qxrdsliceplotsettings.h \
-    triangulate.h
+    triangulate.h \
+    qxrddebug.h \
+    qxrdacquisitionextrainputsplot.h \
+    qxrddetector.h \
+    qxrddetector-ptr.h \
+    qxrddetectorthread.h \
+    qxrddetectorthread-ptr.h \
+    qxrddetectorpilatus.h \
+    qxrddetectorsimulated.h \
+    qxrddetectorfilewatcher.h \
+    qxrdacquisitiondialog-ptr.h \
+    qxrdacquisitionextrainputsdialogsettings.h \
+    qxrdhelpbrowser.h \
+    qxrduserscriptdialog.h \
+    qxrdsynchronizedacquisitiondialogsettings.h \
+    qxrdsynchronizedacquisitionplotsettings.h \
+    qxrdimagedataformatcbf.h \
+    qxrddistortioncorrection.h \
+    qxrddistortioncorrection-ptr.h \
+    qxrddistortioncorrectiondialog.h \
+    qxrddistortioncorrectiondialogsettings.h \
+    qxrddistortioncorrectionplot.h \
+    qxrddistortioncorrectionplotsettings.h \
+    qxrdplotvectorfieldcurve.h \
+    qxrdpoint4d.h \
+    qxrdplotvectorfielddata.h \
+    qxrdscriptdialog.h \
+    qxrdscriptdialogsettings.h \
+    qxrdscripteditwidget.h \
+    qxrdpowderpoint.h \
+    qxrdpowderpointproperty.h \
+    qxrdfitter.h \
+    qxrdfitterpeakpoint.h \
+    qxrdfitterringpoint.h \
+    qxrdfitterpeakorring.h \
+    qxrdfitterringcircle.h \
+    qxrdfitterringellipse.h \
+    triangulate.h \
+    qxrdplanefitter.h \
+    qxrdcalibrant.h \
+    qxrdcalibrant-ptr.h \
+    qxrdcalibrantlibrary.h \
+    qxrdcalibrantlibrary-ptr.h \
+    qxrdcalibrantdialog.h \
+    qxrdcalibrantlibrarymodel.h \
+    qxrdcalibrantlibrarymodel-ptr.h \
+    qxrdcalibrantdspacingsmodel.h \
+    qxrdcalibrantdspacingsmodel-ptr.h \
+    qxrddataset.h \
+    qxrddataset-ptr.h \
+    qxrdimageplotzoomer.h \
+    qxrdmainwindow.h \
+    qxrdacquisitionparameterpack.h \
+    qxrdacquisitionparameterpack-ptr.h \
+    qxrddarkacquisitionparameterpack.h \
+    qxrddarkacquisitionparameterpack-ptr.h \
+    qxrdprocessargs.h \
+    qxrdprocessargs-ptr.h \
+    qxrddetectorproxy.h \
+    qxrddetectorproxy-ptr.h \
+    qxrddetectorproxywidget.h \
+    qxrddetectorproxylistmodel.h \
+    qxrddetectorproxylistmodel-ptr.h \
+    qxrddetectorconfigurationdialog.h \
+    qxrddetectorcontrolwindow.h \
+    qxrddetectorcontrolwindow-ptr.h \
+    qxrddetectorprocessor.h \
+    qxrddetectorprocessor-ptr.h \
+    qxrdroicalculator.h \
+    qxrdroicalculator-ptr.h \
+    qxrdacquisitioninterface.h \
+    qxrdacquisitioninterface-ptr.h \
+    qxrdacquisitionexecutionthread.h \
+    qxrdacquisitionexecutionthread-ptr.h \
+    qxrdacquisitionexecution.h \
+    qxrdacquisitionexecution-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -466,7 +415,63 @@ SOURCES += qxrd.cpp \
     qxrdinfodialogsettings.cpp \
     qxrdcenterfinderplotsettings.cpp \
     qxrdsliceplotsettings.cpp \
-    triangulate.c
+    triangulate.c \
+    qxrddebug.cpp \
+    qxrdacquisitionextrainputsplot.cpp \
+    qxrddetector.cpp \
+    qxrddetectorpilatus.cpp \
+    qxrddetectorsimulated.cpp \
+    qxrddetectorthread.cpp \
+    qxrddetectorfilewatcher.cpp \
+    qxrdacquisitionextrainputsdialogsettings.cpp \
+    qxrdhelpbrowser.cpp \
+    qxrduserscriptdialog.cpp \
+    qxrdsynchronizedacquisitiondialogsettings.cpp \
+    qxrdsynchronizedacquisitionplotsettings.cpp \
+    qxrdimagedataformatcbf.cpp \
+    qxrddistortioncorrection.cpp \
+    qxrddistortioncorrectiondialog.cpp \
+    qxrddistortioncorrectiondialogsettings.cpp \
+    qxrddistortioncorrectionplot.cpp \
+    qxrddistortioncorrectionplotsettings.cpp \
+    qxrdplotvectorfieldcurve.cpp \
+    qxrdpoint4d.cpp \
+    qxrdplotvectorfielddata.cpp \
+    qxrdscriptdialog.cpp \
+    qxrdscriptdialogsettings.cpp \
+    qxrdscripteditwidget.cpp \
+    qxrdpowderpoint.cpp \
+    qxrdpowderpointproperty.cpp \
+    qxrdfitter.cpp \
+    qxrdfitterpeakpoint.cpp \
+    qxrdfitterringpoint.cpp \
+    qxrdfitterpeakorring.cpp \
+    qxrdfitterringcircle.cpp \
+    qxrdfitterringellipse.cpp \
+    qxrdplanefitter.cpp \
+    qxrdcalibrant.cpp \
+    qxrdcalibrantlibrary.cpp \
+    qxrdcalibrantdialog.cpp \
+    qxrdcalibrantlibrarymodel.cpp \
+    qxrdcalibrantdspacingsmodel.cpp \
+    qxrddataset.cpp \
+    qxrdimageplotzoomer.cpp \
+    qxrdmainwindow.cpp \
+    qxrdacquisitionparameterpack.cpp \
+    qxrddarkacquisitionparameterpack.cpp \
+    qxrdprocessargs.cpp \
+    qxrddetectorproxy.cpp \
+    qxrddetectorproxywidget.cpp \
+    qxrddetectorproxylistmodel.cpp \
+    qxrddetectorconfigurationdialog.cpp \
+    qxrddetectorcontrolwindow.cpp \
+    qxrddetectorprocessor.cpp \
+    qxrdroicalculator.cpp \
+    qxrdacquisitioninterface.cpp \
+    qxrdacquisitionexecutionthread.cpp \
+    qxrdacquisitionexecution.cpp
+
+OTHER_FILES += testImage.js
 
 FORMS += qxrdwindow.ui \
     qxrdcenterfinderdialog.ui \

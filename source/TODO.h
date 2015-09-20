@@ -728,6 +728,15 @@ dark image acquired was a duplicate and was renamed.  Also for masks, potentiall
 
 -------------------------------------------------------
 
+Do we really need QxrdAcquisitionParameterPack and QxrdDarkAcquisitionParameterPack
+
+-------------------------------------------------------
+
+Fix problems when copying dynamic properties between objects in different threads - get
+errors in debug builds because dynamic property changed events get sent.
+
+-------------------------------------------------------
+
 */
 
 #endif // TODO_H

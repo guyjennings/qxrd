@@ -9,47 +9,34 @@
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
 #include "qxrdacquisition-ptr.h"
-#include <QThreadPool>
+//#include <QThreadPool>
 #include <QtConcurrentRun>
 #include <QDir>
 #include <QMetaProperty>
-#include "qxrdacquisitionparameterpack.h"
-#include "qxrddarkacquisitionparameterpack.h"
 #include "qxrdprocessargs.h"
 #include "qxrddetectorproxy.h"
 #include "qxrddetector.h"
 #include "qxrddetectorthread.h"
+#include "qxrdacquisitionparameterpack.h"
+#include "qxrddarkacquisitionparameterpack.h"
 
 QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
                                  QxrdExperimentWPtr doc,
                                  QxrdDataProcessorWPtr proc,
                                  QcepAllocatorWPtr allocator)
-  : QcepObject("acquisition", NULL),
-    m_Saver(saver),
+  : QxrdAcquisitionInterface(saver, doc, proc, allocator),
     m_QxrdVersion(QcepSettingsSaverWPtr(), this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
     m_QtVersion(QcepSettingsSaverWPtr(), this,"qtVersion",qVersion(), "QT Version Number"),
     m_DetectorCount(m_Saver, this, "detectorCount", 0, "Number of Detectors"),
-    m_ExposureTime(saver, this,"exposureTime",0.1, "Exposure Time (in sec)"),
-    m_SkippedExposuresAtStart(saver, this,"skippedExposuresAtStart",0, "Exposures to Skip at Start"),
     m_LastAcquired(QcepSettingsSaverWPtr(), this, "lastAcquired", 0, "Internal Acquisition Flag"),
-    m_PhasesInGroup(saver, this,"phasesInGroup",1, "Number of Image Phases"),
-    m_SummedExposures(saver, this,"summedExposures",1, "Summed Exposures per Image"),
-    m_SkippedExposures(saver, this,"skippedExposures",0, "Skipped Exposures between Images"),
-    m_PreTriggerFiles(saver, this,"preTriggerFiles",0, "Number of pre-Trigger Images"),
-    m_PostTriggerFiles(saver, this,"postTriggerFiles",1, "Number of post-Trigger Images"),
     m_FileIndex(saver, this,"fileIndex",0, "File Index"),
-    m_FilePattern(saver, this,"filePattern","", "File Name Pattern"),
     m_FileIndexWidth(saver, this, "fileIndexWidth", 5, "Digits in File Index Field"),
     m_FilePhaseWidth(saver, this, "filePhaseWidth", 3, "Digits in Phase Number Field"),
     m_FileOverflowWidth(saver, this, "fileOverflowWidth", 5, "Digits in Overflow Index Field"),
-    m_DarkSummedExposures(saver, this,"darkSummedExposures",1, "Summed Exposures in Dark Image"),
     m_FileBase(saver, this,"fileBase","", "File Base"),
     m_NRows(saver, this, "nRows", 2048, "Number of Rows"),
     m_NCols(saver, this, "nCols", 2048, "Number of Cols"),
     m_OverflowLevel(saver, this, "overflowLevel", 65500, "Overflow level (per exposure)"),
-    m_AcquireDark(QcepSettingsSaverWPtr(), this, "acquireDark", 0, "Acquire Dark Image?"),
-    m_Cancelling(QcepSettingsSaverWPtr(), this, "cancelling", 0, "Cancel Acquisition?"),
-    m_Triggered(QcepSettingsSaverWPtr(), this, "triggered", 0, "Trigger Acquisition"),
     m_Raw16SaveTime(saver, this,"raw16SaveTime", 0.1, "Time to save 16 bit images"),
     m_Raw32SaveTime(saver, this,"raw32SaveTime", 0.2, "Time to save 32 bit images"),
     m_RawSaveTime(saver, this,"rawSaveTime", 0.2, "Time to save raw images"),
@@ -79,8 +66,21 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
   }
 }
 
+QxrdAcquisitionPtr QxrdAcquisition::myself()
+{
+  QxrdAcquisitionPtr me = qSharedPointerCast<QxrdAcquisition>(sharedFromThis());
+
+//  if (me == NULL) {
+//    printf("QxrdAcquisition::myself returns NULL\n");
+//  }
+
+  return me;
+}
+
 void QxrdAcquisition::initialize()
 {
+  QxrdAcquisitionInterface::initialize();
+
   connect(prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_SummedExposures(), &QcepIntProperty::valueChanged,  this, &QxrdAcquisition::updateSaveTimes);
@@ -95,9 +95,10 @@ void QxrdAcquisition::initialize()
   }
 
   m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
-        new QxrdSynchronizedAcquisition(m_Saver, sharedFromThis()));
+        new QxrdSynchronizedAcquisition(m_Saver, myself()));
 
-  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, sharedFromThis()));
+  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(
+        new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, myself()));
   m_AcquisitionExtraInputs -> initialize(m_AcquisitionExtraInputs);
 
   connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
@@ -115,7 +116,7 @@ void QxrdAcquisition::initialize()
     }
   }
 
-  connect(&m_Watcher, &QFutureWatcherBase::finished, this, &QxrdAcquisition::onAcquireComplete);
+//  connect(&m_Watcher, &QFutureWatcherBase::finished, this, &QxrdAcquisition::onAcquireComplete);
   connect(&m_IdleTimer, &QTimer::timeout, this, &QxrdAcquisition::onIdleTimeout);
 
   m_IdleTimer.start(1000);
@@ -249,7 +250,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
       QxrdDetectorThreadPtr detThread =
           QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
                                                        experiment(),
-                                                       sharedFromThis(),
+                                                       myself(),
                                                        detType,
                                                        i,
                                                        this));
@@ -286,7 +287,7 @@ void QxrdAcquisition::appendDetector(int detType)
     QxrdDetectorThreadPtr detThread =
         QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
                                                      experiment(),
-                                                     sharedFromThis(),
+                                                     myself(),
                                                      detType,
                                                      nDet,
                                                      this));
@@ -324,7 +325,7 @@ void QxrdAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
        detThread =
             QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
                                                          experiment(),
-                                                         sharedFromThis(),
+                                                         myself(),
                                                          detType,
                                                          nDet,
                                                          this));
@@ -410,27 +411,6 @@ QcepAllocatorWPtr QxrdAcquisition::allocator() const
   return m_Allocator;
 }
 
-void QxrdAcquisition::acquire()
-{
-  if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquire", Qt::BlockingQueuedConnection));
-  } else {
-    if (m_Acquiring.tryLock()) {
-      set_Cancelling(false);
-      set_Triggered(false);
-
-      statusMessage("Starting acquisition");
-      emit acquireStarted();
-
-      QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquire, acquisitionParameterPack());
-
-      m_Watcher.setFuture(res);
-    } else {
-      statusMessage("Acquisition is already in progress");
-    }
-  }
-}
-
 void QxrdAcquisition::onExposureTimeChanged()
 {
   foreach (QxrdDetectorPtr det, m_Detectors) {
@@ -465,7 +445,7 @@ void QxrdAcquisition::configureDetector(int i)
 
   QxrdDetectorPtr det = detector(i);
 
-  QxrdDetectorProxyPtr proxy(new QxrdDetectorProxy(detectorThread(i), detector(i), sharedFromThis()));
+  QxrdDetectorProxyPtr proxy(new QxrdDetectorProxy(detectorThread(i), detector(i), myself()));
 
   if (proxy && proxy->configureDetector()) {
     det->pullPropertiesfromProxy(proxy);
@@ -481,94 +461,9 @@ void QxrdAcquisition::openDetectorControlWindow(int i)
   }
 }
 
-QxrdAcquisitionParameterPackPtr QxrdAcquisition::acquisitionParameterPack()
-{
-  return QxrdAcquisitionParameterPackPtr(
-        new QxrdAcquisitionParameterPack (get_FilePattern(),
-                                          get_ExposureTime(),
-                                          get_SummedExposures(),
-                                          get_PreTriggerFiles(),
-                                          get_PostTriggerFiles(),
-                                          get_PhasesInGroup(),
-                                          get_SkippedExposuresAtStart(),
-                                          get_SkippedExposures()));
-}
-
-QxrdDarkAcquisitionParameterPackPtr QxrdAcquisition::darkAcquisitionParameterPack()
-{
-  return QxrdDarkAcquisitionParameterPackPtr(
-        new QxrdDarkAcquisitionParameterPack(get_FilePattern(),
-                                          get_ExposureTime(),
-                                          get_DarkSummedExposures(),
-                                          get_SkippedExposuresAtStart()));
-
-}
-
-void QxrdAcquisition::acquireDark()
-{
-  if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquireDark", Qt::BlockingQueuedConnection));
-  } else {
-    if (m_Acquiring.tryLock()) {
-      set_Cancelling(false);
-      set_Triggered(true);
-
-      statusMessage("Starting dark acquisition");
-      emit acquireStarted();
-
-      QFuture<void> res = QtConcurrent::run(this, &QxrdAcquisition::doAcquireDark, darkAcquisitionParameterPack());
-
-      m_Watcher.setFuture(res);
-    } else {
-      statusMessage("Acquisition is already in progress");
-    }
-  }
-}
-
-void QxrdAcquisition::onAcquireComplete()
-{
-  m_Acquiring.unlock();
-
-  emit acquireComplete();
-}
-
-void QxrdAcquisition::cancel()
-{
-  set_Cancelling(true);
-
-  m_NAcquiredImages.release(1);
-}
-
-void QxrdAcquisition::trigger()
-{
-  set_Triggered(true);
-}
-
 void QxrdAcquisition::clearDropped()
 {
   prop_DroppedFrames() -> setValue(0);
-}
-
-int  QxrdAcquisition::acquisitionStatus(double time)
-{
-  if (m_Acquiring.tryLock()) {
-    m_Acquiring.unlock();
-
-    //    printf("m_Acquiring.tryLock() succeeded\n");
-
-    return 1;
-  }
-
-  QMutex mutex;
-  QcepMutexLocker lock(__FILE__, __LINE__, &mutex);
-
-  if (m_StatusWaiting.wait(&mutex, (int)(time*1000))) {
-    //    printf("m_StatusWaiting.wait succeeded\n");
-    return 1;
-  } else {
-    //    printf("m_StatusWaiting.wait failed\n");
-    return 0;
-  }
 }
 
 void QxrdAcquisition::indicateDroppedFrame(int n)
@@ -793,7 +688,7 @@ QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindowWPtr win)
 
     m_ControlPanel = new QxrdAcquisitionDialog(m_Experiment,
                                                m_Window,
-                                               sharedFromThis(),
+                                               myself(),
                                                m_DataProcessor,
                                                m_Window.data());
 
@@ -845,9 +740,9 @@ int QxrdAcquisition::cancelling()
   return res;
 }
 
-void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPackWPtr parms)
+void QxrdAcquisition::doAcquire()
 {
-  QxrdAcquisitionParameterPackPtr parmsp (parms);
+  QxrdAcquisitionParameterPackPtr parmsp = acquisitionParameterPack();
 
   if (parmsp) {
     QTime acqTimer;
@@ -882,11 +777,11 @@ void QxrdAcquisition::doAcquire(QxrdAcquisitionParameterPackWPtr parms)
     }
 
     if (synchronizedAcquisition()) {
-      synchronizedAcquisition()->prepareForAcquisition(parms);
+      synchronizedAcquisition()->prepareForAcquisition(parmsp);
     }
 
     if (acquisitionExtraInputs()) {
-      acquisitionExtraInputs()->prepareForAcquisition(parms);
+      acquisitionExtraInputs()->prepareForAcquisition(parmsp);
     }
 
     QVector<QVector<QcepInt32ImageDataPtr> >res(nphases);
@@ -1097,11 +992,15 @@ cancel:
 
     startIdling();
   }
+
+  m_Acquiring.unlock();
+
+  emit acquireComplete();
 }
 
-void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPackWPtr parms)
+void QxrdAcquisition::doAcquireDark()
 {
-  QxrdDarkAcquisitionParameterPackPtr parmsp(parms);
+  QxrdDarkAcquisitionParameterPackPtr parmsp = darkAcquisitionParameterPack();
 
   if (parmsp) {
     QThread::currentThread()->setObjectName("doAcquireDark");
@@ -1126,7 +1025,7 @@ void QxrdAcquisition::doAcquireDark(QxrdDarkAcquisitionParameterPackWPtr parms)
                  .arg(fileBase).arg(exposure).arg(nsummed).arg(fileIndex));
 
     if (synchronizedAcquisition()) {
-      synchronizedAcquisition()->prepareForDarkAcquisition(parms);
+      synchronizedAcquisition()->prepareForDarkAcquisition(parmsp);
     }
 
     QcepInt32ImageDataPtr res = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
@@ -1192,6 +1091,10 @@ cancel:
 
     startIdling();
   }
+
+  m_Acquiring.unlock();
+
+  emit acquireComplete();
 }
 
 void QxrdAcquisition::stopIdling()
