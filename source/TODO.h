@@ -659,16 +659,6 @@ always saved.
 //If 'acquire(...)' is given 4 or fewer arguments, set
 //'preTriggerFiles' to zero.
 //
--------------------------------------------------------
-
-Add a status function which waits until sufficient
-pre-trigger files have been acquired.
-
-//-------------------------------------------------------
-
-//Start thinking about how to synchronise acquisition with
-//external processes - possible support for running a
-//National Instruments MIO card in sync with acquisition
 
 //-------------------------------------------------------
 
@@ -677,29 +667,6 @@ pre-trigger files have been acquired.
 
 //Changed QcepImageData::writeSettings to use staticMetaObject
 //rather than metaObject()
-
--------------------------------------------------------
-
-Load/Save mask stack state on program entry/exit
-
--------------------------------------------------------
-
-Overall mask should be made to be a combination of the various
-mask stack levels.
-
--------------------------------------------------------
-
-Make the PE acquisition code work for a wider variety
-of PE detectors, ideally for all of them.   Need to check
-model number before trying to e.g. set gain, or allow
-failures when setting gain to still permit acquisition.
-
--------------------------------------------------------
-
-PE Acquisition fails in debug builds - sending messages
-to object in different thread
-
--------------------------------------------------------
 
 Gain setting menu missing for PE acquisition
 
@@ -713,30 +680,55 @@ Crashes on exit from PE acquisition
 
 //Fixed by improving memory allocation tracking by using more QSharedPointers
 
--------------------------------------------------------
-
-Mouse click behavior for pickers needs to be reviewed/modified - esp. polygon pickers
-
--------------------------------------------------------
-
-Investigate display update behaviour when scaling parameters changed
-
--------------------------------------------------------
-
-Fix problem where the saved dark image path is incorrect if the
-dark image acquired was a duplicate and was renamed.  Also for masks, potentially
-
--------------------------------------------------------
-
-Do we really need QxrdAcquisitionParameterPack and QxrdDarkAcquisitionParameterPack
-
--------------------------------------------------------
-
-Fix problems when copying dynamic properties between objects in different threads - get
-errors in debug builds because dynamic property changed events get sent.
-
--------------------------------------------------------
-
 */
+
+DONE("2010-11-04", "2014-03-05",
+     "Start thinking about how to synchronise acquisition with "
+     "external processes - possible support for running a "
+     "National Instruments MIO card in sync with acquisition");
+
+TODO("2010-11-04", "",
+     "Add a status function which waits until sufficient "
+     "pre-trigger files have been acquired.");
+
+TODO("2011-02-24", "",
+     "Load/Save mask stack state on program entry/exit");
+
+TODO("2011-02-24", "",
+     "Overall mask should be made to be a combination of the various "
+     "mask stack levels.");
+
+TODO("2011-01-17", "",
+     "Make the PE acquisition code work for a wider variety "
+     "of PE detectors, ideally for all of them.   Need to check "
+     "model number before trying to e.g. set gain, or allow "
+     "failures when setting gain to still permit acquisition.");
+
+TODO("2011-01-17", "",
+     "PE Acquisition fails in debug builds - sending messages "
+     "to object in different thread");
+
+TODO("2014-03-05", "",
+     "Mouse click behavior for pickers needs to be reviewed/modified - esp. polygon pickers");
+
+TODO("2014-03-05", "",
+     "Investigate display update behaviour when scaling parameters changed");
+
+TODO("2015-09-18", "",
+     "Fix problem where the saved dark image path is incorrect if the "
+     "dark image acquired was a duplicate and was renamed.  Also for masks, potentially");
+
+TODO("2015-09-20", "",
+     "Do we really need QxrdAcquisitionParameterPack and QxrdDarkAcquisitionParameterPack");
+
+TODO("2015-09-20", "",
+     "Fix problems when copying dynamic properties between objects in different threads - get "
+     "errors in debug builds because dynamic property changed events get sent.");
+
+TODO("2015-09-20", "",
+     "Enable sorting in TODO list view");
+
+TODO("2015-09-20", "",
+     "TODO List items should resize to contents, with word wrap");
 
 #endif // TODO_H

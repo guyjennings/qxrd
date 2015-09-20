@@ -315,7 +315,10 @@ HEADERS += TODO.h \
     qxrdacquisitionexecutionthread.h \
     qxrdacquisitionexecutionthread-ptr.h \
     qxrdacquisitionexecution.h \
-    qxrdacquisitionexecution-ptr.h
+    qxrdacquisitionexecution-ptr.h \
+    qxrdtodolist.h \
+    qxrdtodolistitem.h \
+    qxrdtodolistitem-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -469,7 +472,9 @@ SOURCES += qxrd.cpp \
     qxrdroicalculator.cpp \
     qxrdacquisitioninterface.cpp \
     qxrdacquisitionexecutionthread.cpp \
-    qxrdacquisitionexecution.cpp
+    qxrdacquisitionexecution.cpp \
+    qxrdtodolist.cpp \
+    qxrdtodolistitem.cpp
 
 OTHER_FILES += testImage.js
 

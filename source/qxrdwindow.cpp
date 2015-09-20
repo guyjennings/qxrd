@@ -33,6 +33,7 @@
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisitionextrainputsdialog.h"
 #include "qxrddataset.h"
+#include "qxrdtodolist.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -653,6 +654,10 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 //  if (expt) {
 //    expt->prop_DefaultScript()->linkTo(m_ScriptEdit);
 //  }
+
+  QxrdToDoList *toDoList = new QxrdToDoList();
+
+  m_ToDoList->setModel(toDoList);
 
   connect(m_ImagePlot, &QxrdImagePlot::slicePolygon,
           m_SliceDialog, &QxrdSliceDialog::slicePolygon);

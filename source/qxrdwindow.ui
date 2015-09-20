@@ -1100,6 +1100,26 @@
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="tab_7">
+        <attribute name="title">
+         <string>To Do</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <widget class="QTreeView" name="m_ToDoList">
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+           <attribute name="headerShowSortIndicator" stdset="0">
+            <bool>true</bool>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
