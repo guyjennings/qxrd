@@ -54,6 +54,7 @@
 #include <QMetaMethod>
 #include <QMenu>
 #include <QDesktopWidget>
+#include <QSortFilterProxyModel>
 
 QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
                        QxrdApplicationWPtr appl,
@@ -656,8 +657,12 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 //  }
 
   QxrdToDoList *toDoList = new QxrdToDoList();
+  QSortFilterProxyModel *sorted = new QSortFilterProxyModel();
 
-  m_ToDoList->setModel(toDoList);
+  sorted->setSourceModel(toDoList);
+
+  m_ToDoList->setModel(sorted);
+
   m_ToDoList->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
   m_ToDoList->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
   m_ToDoList->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);

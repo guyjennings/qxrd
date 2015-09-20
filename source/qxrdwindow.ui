@@ -1107,6 +1107,9 @@
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
           <widget class="QTableView" name="m_ToDoList">
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
            <property name="textElideMode">
             <enum>Qt::ElideNone</enum>
            </property>

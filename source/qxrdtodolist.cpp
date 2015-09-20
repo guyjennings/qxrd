@@ -2,11 +2,13 @@
 #include "qxrdtodolistitem.h"
 #include "qcepmacros.h"
 
-#define TODO(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(new QxrdToDoListItem(true,d1,d2,s)));
-#define DONE(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(new QxrdToDoListItem(false,d1,d2,s)));
+#define TODO(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(new QxrdToDoListItem(id++,true,d1,d2,s)));
+#define DONE(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(new QxrdToDoListItem(id++,false,d1,d2,s)));
 
 QxrdToDoList::QxrdToDoList()
 {
+  int id=0;
+
 #include "TODO.h"
 }
 
@@ -17,7 +19,7 @@ int QxrdToDoList::rowCount(const QModelIndex &parent) const
 
 int QxrdToDoList::columnCount(const QModelIndex &parent) const
 {
-  return 4;
+  return 5;
 }
 
 QVariant QxrdToDoList::data(const QModelIndex &index, int role) const
@@ -28,14 +30,22 @@ QVariant QxrdToDoList::data(const QModelIndex &index, int role) const
   QxrdToDoListItemPtr item = m_Items.value(row);
 
   if (role == Qt::DisplayRole && item) {
-    if (col == 0) {
+    if (col == IdentifierColumn) {
+      return item->identifier();
+    } else if (col == ActiveColumn) {
       return item->isActive();
-    } else if (col == 1) {
+    } else if (col == InsertedDateColumn) {
       return item->insertedDate();
-    } else if (col == 2) {
+    } else if (col == CompletedDateColumn) {
       return item->completedDate();
-    } else if (col == 3) {
+    } else if (col == DescriptionColumn) {
       return item->description();
+    }
+  } else if (role == Qt::TextAlignmentRole) {
+    if (col == IdentifierColumn || col == ActiveColumn || col == InsertedDateColumn || col == CompletedDateColumn) {
+      return QVariant(Qt::AlignHCenter | Qt::AlignTop);
+    } else if (col == DescriptionColumn) {
+      return QVariant(Qt::AlignLeft | Qt::AlignTop);
     }
   }
 
@@ -46,13 +56,15 @@ QVariant QxrdToDoList::headerData(int section, Qt::Orientation orientation, int 
 {
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole) {
-      if (section == 0) {
+      if (section == IdentifierColumn) {
+        return "Id";
+      } else if (section == ActiveColumn) {
         return "Active";
-      } else if (section == 1) {
+      } else if (section == InsertedDateColumn) {
         return "Started";
-      } else if (section == 2) {
+      } else if (section == CompletedDateColumn) {
         return "Completed";
-      } else if (section == 3) {
+      } else if (section == DescriptionColumn) {
         return "Description";
       }
     }

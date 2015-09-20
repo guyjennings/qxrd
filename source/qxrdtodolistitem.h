@@ -6,8 +6,9 @@
 class QxrdToDoListItem : public QcepObject
 {
 public:
-  QxrdToDoListItem(bool active, QString d1, QString d2, QString s);
+  QxrdToDoListItem(int id, bool active, QString d1, QString d2, QString s);
 
+  int identifier();
   bool isActive();
   QDateTime insertedDate();
   QDateTime completedDate();
@@ -18,7 +19,8 @@ signals:
 public slots:
 
 private:
-  bool m_Active;
+  int       m_Identifier;
+  bool      m_Active;
   QDateTime m_InsertedDate;
   QDateTime m_CompletedDate;
   QString   m_Description;

@@ -1,307 +1,224 @@
 #ifndef TODO_H
 #define TODO_H
 
+DONE("2009-08-27", "2009-08-27",
+     "Check that settings are not being saved twice (in QxrdWindow destructor):");
+
+DONE("2009-08-27", "2009-08-27",
+     "Check thread correctness of acquisition\n"
+     "Adopt the same threading model as qavrg"
+     );
+
+DONE("2009-07-08", "2009-07-08",
+     "Run script engine in separate thread");
+
+DONE("2009-09-13", "2009-09-13",
+     "Correct signal/slot corrections to use new properties");
+
+DONE("2009-06-28", "2009-06-28",
+     "Cut down the number of warnings - currently 96!\n"
+     "Reduced to 7, 6 of those within qwt code");
+
+DONE("2010-09-13", "2010-09-13",
+     "Add a plausible simulation mode - this should accurately mimic "
+     "the real acquisition.");
+
+DONE("2009-08-27", "2009-08-27",
+     "Add window position/state saving.\n"
+     "Load and save settings for everything...");
+
+DONE("2009-08-27", "2009-08-27",
+     "Eliminate the duplicate script engine object from QxrdAcquisitionScripting");
+
+TODO("2009-07-20", "",
+     "Optimise screen redrawing to eliminate redundant replot calls - will need "
+     "a rigorous reorganisation and layering of code to ensure this.");
+
+DONE("2009-09-13", "2009-09-13",
+     "Ensure that program will not overwrite files without warning.  Use modified "
+     "file names where necessary.   Only do this for programmatic saves, saves "
+     "after a dialog box will already have been given a confirmation dialog\n\n"
+     "Done, but there is a bug on linux which stops the file overwrite confirmation "
+     "dialog from being shown.");
+
+DONE("2009-09-14", "2009-09-14",
+     "Automatically reload dark, bad pixel and gain images when program restarts\n"
+     "Load/save mask and dark images when program starts/exits, make default mask "
+     "all visible.\n"
+     "(Will need to load/save more metadata before this will work well).");
+
+TODO("2009-08-27", "",
+     "Investigate why the vertical window size increases each time program is run "
+     "(Only happens on linux...)");
+
+TODO("2009-08-09", "",
+     "Implement generalized image slicing routine - integrate over a rectangular "
+     "region, rather than along a line.");
+
+TODO("2009-08-09", "",
+     "Re-implement center finder plot to use routine above.");
+
+TODO("2009-08-14", "",
+     "Add some kind of beam presence detection threshold");
+
+DONE("2009-09-15", "2009-09-15",
+     "Make it possible to interrupt spec more gracefully - add some "
+     "kind of cancel operation.");
+
+DONE("2009-08-27", "2009-08-27",
+     "Allow cancelling to happen sooner - especially during long exposures");
+
+DONE("2009-11-13", "2009-11-13",
+     "Zooming on graphs does not work properly when program first starts - "
+     "graphs need an autoscale operation before they start zooming properly");
+
+DONE("2009-09-14", "2009-09-14",
+     "Add menu commands to show/hide toolbox windows");
+
+DONE("2009-09-30", "2009-09-30",
+     "Automatically add integrated curves to output panel.");
+
+TODO("2009-08-24", "",
+     "Display range choosing doesn't work very well");
+
+DONE("2009-09-04", "2009-09-04",
+     "Dark subtraction doesn't seem to be working at the moment\n"
+     "caused by typing 'if (m_DarkFrame = NULL) {'\n"
+     "instead of       'if (m_DarkFrame == NULL) {'\n"
+     "spotted by following up compiler warnings");
+
+TODO("2009-08-27", "",
+     "Simplify the interactions between the various processing options and "
+     "perform a simple sanity check before starting acquisition");
+
+DONE("2009-09-28", "2009-09-28",
+     "Improve GUI performance when doing rapid acquisition sequences -\n"
+     "don't queue processed output images for display - have a current "
+     "and alternate image and swap as appropriate.");
+
+DONE("2010-09-13", "2010-09-13",
+     "Optimize processing routines");
+
+DONE("2009-09-11", "2009-09-11",
+     "Make processing single-threaded");
+
+DONE("2010-09-13", "2010-09-13",
+     "Flag dropped frames more obviously.");
+
+DONE("2009-09-28", "2009-09-28",
+     "Add timestamps and other metadata to saved files\n"
+     "e.g.  TIFFTAG_ORIENTATION, TIFFTAG_DOCUMENTNAME\n"
+     "TIFFTAG_IMAGEDESCRIPTION, TIFFTAG_DATETIME\n"
+     "TIFFTAG_FRAMECOUNT?, TIFFTAG_UNIQUECAMERAMODEL?");
+
+DONE("2010-09-13", "2010-09-13",
+     "Provide facility to save integrated scans");
+
+TODO("2009-08-27", "",
+     "Leak check...");
+
+DONE("2009-09-11", "2009-09-11",
+     "Coalesce controls from the 'output' panel into the 'acquire' panel");
+
+DONE("2009-09-28", "2009-09-28",
+     "Do camera model number check...\n"
+     "Check more hardware settings when entering program...\n"
+     "Support binning modes...\n"
+     "Is not calling Acquisition_Init a problem?");
+
+DONE("2009-09-28", "2009-09-28",
+     "Provide a user interface to the camera gain setting");
+
+DONE("2009-09-28", "2009-09-28",
+     "Allow finer-grained control of the processing chain");
+
+DONE("2009-09-28", "2015-09-17",
+     "Remove the g_Acquisition global and replace it with "
+     "acquisition handles passed via Acquire_SetAcqData");
+
+DONE("2010-09-13", "2010-09-13",
+     "Rearrange the QxrdAcquisition hierarchy so that "
+     "QxrdAcquisition becomes a base class and "
+     "QxrdAcquisitionPerkinElmer the 'leaf' class that "
+     "is instantiated.  Will simplify working with multiple "
+     "detector types.");
+
+DONE("2009-09-11", "2009-09-11",
+     "Check that the load/save data, dark and mask routines "
+     "actually work!\n"
+     "The problem was that the file conversion factories for raw and mask data "
+     "were not initialized.");
+
+TODO("2009-08-31", "",
+     "Check handling of image dimensions for mask, acquisition etc.");
+
+DONE("2010-09-13", "2010-09-13",
+     "Try LZW encoding images to see how it affects performance");
+
+TODO("2009-09-04", "",
+     "Don't allow program to quit or start a new acquisition "
+     "until outstanding processing has completed.");
+
+DONE("2009-09-11", "2009-09-11",
+     "Combine the tails of QxrdDataProcessor::processAcquiredInt{16,32}Image "
+     "to eliminate duplicated code.");
+
+DONE("2009-09-08", "2009-09-08",
+     "Provide a means to remove dark image, gain map, mask etc.\n"
+     "(and put them back again!)");
+
+DONE("2010-09-13", "2010-09-13",
+     "Add frame skip option in acquisition");
+
+DONE("2009-09-30", "2009-09-30",
+     "The script:\n"
+     "for (i=0; i<6; i++) {\n"
+     "   print(\"Camera Gain = \",i);\n"
+     "   acquisition.cameraGain = i;\n"
+     "   acquire(\"h:/junk-test/testing\",0.1,1,1,0)\n"
+     "   while (status(0.5) != 1) {\n"
+     "     print(\"Waiting\")\n"
+     "   }\n"
+     "}\n"
+     "gets deadlocked");
+
+TODO("2009-09-08", "",
+     "If acquisition is triggered before sufficient pre-trigger "
+     "images have been taken, then post-triggered acquisition "
+     "will continue until a total of pre- plus post- images "
+     "have been taken - i.e. extra post-trigger images will be "
+     "taken.");
+
+
+DONE("2009-09-28", "2009-09-28",
+     "Add error return checking wherever appropriate -\n"
+     "particularly in TIFF, Acquire_ and file i/o routines\n"
+     "Check output directory exists before starting acquisition sequence.");
+
+DONE("2009-09-30", "2009-09-30",
+     "Add acquireStatus and processStatus functions and "
+     "processor.status() and acquisition.status() methods "
+     "which test status of acquisition and processing operations");
+
+DONE("2009-09-20", "2009-09-20",
+     "Separate printMessage, warnMessage and errorMessage signals\n"
+     "Color code in output.");
+
+TODO("2009-09-20", "",
+     "Binning mode not working");
+
+DONE("2009-09-21", "2009-09-21",
+     "Added user interface to log file choosing");
+
+DONE("2009-09-23", "2009-09-23",
+     "Copy acquisition dynamic properties into acquired images\n"
+     "Copy processor dynamic properties into processed images\n"
+     "Doesn't work at present because setProperty is not thread-safe");
+
+DONE("2009-09-22", "2009-09-22",
+     "Provide a means of saving raw data files in separate sub-directories");
+
 /*
-
-//-------------------------------------------------------
-//
-//Check that settings are not being saved twice (in QxrdWindow destructor):
-//
-//-------------------------------------------------------
-//
-//Check thread correctness of acquisition
-//Adopt the same threading model as qavrg
-//
-//-------------------------------------------------------
-//
-//Run script engine in separate thread
-//
-//-------------------------------------------------------
-//
-//Correct signal/slot corrections to use new properties
-//
-//-------------------------------------------------------
-//
-//Cut down the number of warnings - currently 96!
-//Reduced to 7, 6 of those within qwt code
-//
-//-------------------------------------------------------
-//
-//Add a plausible simulation mode - this should accurately mimic
-//the real acquisition.
-//
-//-------------------------------------------------------
-//
-//Add window position/state saving.
-//Load and save settings for everything...
-//
-//-------------------------------------------------------
-//
-//Eliminate the duplicate script engine object from QxrdAcquisitionScripting
-//
--------------------------------------------------------
-
-Optimise screen redrawing to eliminate redundant replot calls - will need
-a rigorous reorganisation and layering of code to ensure this.
-
-//-------------------------------------------------------
-//
-//BLOCKER
-//Ensure that program will not overwrite files without warning.  Use modified
-//file names where necessary.   Only do this for programmatic saves, saves
-//after a dialog box will already have been given a confirmation dialog
-
-Done, but there is a bug on linux which stops the file overwrite confirmation
-dialog from being shown.
-
-//-------------------------------------------------------
-//
-//BLOCKER
-//Automatically reload dark, bad pixel and gain images when program restarts
-//Load/save mask and dark images when program starts/exits, make default mask
-//all visible.
-//(Will need to load/save more metadata before this will work well).
-//
--------------------------------------------------------
-
-Investigate why the vertical window size increases each time program is run
-(Only happens on linux...)
-
--------------------------------------------------------
-
-Implement generalized image slicing routine - integrate over a rectangular
-region, rather than along a line.
-
--------------------------------------------------------
-
-Re-implement center finder plot to use routine above.
-
--------------------------------------------------------
-
-Add some kind of beam presence detection threshold
-
-//-------------------------------------------------------
-//
-//BLOCKER
-//Make it possible to interrupt spec more gracefully - add some
-//kind of cancel operation.
-//
-//-------------------------------------------------------
-//
-//Allow cancelling to happen sooner - especially during long exposures
-//
-//-------------------------------------------------------
-//
-//Zooming on graphs does not work properly when program first starts - graphs need
-//an autoscale operation before they start zooming properly
-//
-//-------------------------------------------------------
-//
-//Add menu commands to show/hide toolbox windows
-//
-//-------------------------------------------------------
-//
-//Automatically add integrated curves to output panel.
-//
--------------------------------------------------------
-
-Display range choosing doesn't work very well
-
-//-------------------------------------------------------
-//
-//BLOCKER
-//Dark subtraction doesn't seem to be working at the moment
-//
-// caused by typing 'if (m_DarkFrame = NULL) {'
-// instead of       'if (m_DarkFrame == NULL) {'
-// spotted by following up compiler warnings
--------------------------------------------------------
-
-BLOCKER
-Simplify the interactions between the various processing options and
-perform a simple sanity check before starting acquisition
-
-//-------------------------------------------------------
-//
-//BLOCKER
-//Improve GUI performance when doing rapid acquisition sequences -
-//don't queue processed output images for display - have a current and alternate image
-//and swap as appropriate.
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Optimize processing routines
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Make processing single-threaded
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Flag dropped frames more obviously.
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Add timestamps and other metadata to saved files
-//e.g.  TIFFTAG_ORIENTATION, TIFFTAG_DOCUMENTNAME
-//TIFFTAG_IMAGEDESCRIPTION, TIFFTAG_DATETIME
-//TIFFTAG_FRAMECOUNT?, TIFFTAG_UNIQUECAMERAMODEL?
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Provide facility to save integrated scans
-//
--------------------------------------------------------
-
-BLOCKER
-Leak check...
-
-//-------------------------------------------------------
-//
-//Coalesce controls from the 'output' panel into the 'acquire' panel
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Do camera model number check...
-//Check more hardware settings when entering program...
-//Support binning modes...
-//Is not calling Acquisition_Init a problem?
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Provide a user interface to the camera gain setting
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Allow finer-grained control of the processing chain
-//
-//-------------------------------------------------------
-
-//Remove the g_Acquisition global and replace it with
-//acquisition handle passed via Acquire_SetAcqData
-
-//-------------------------------------------------------
-//
-//Rearrange the QxrdAcquisition hierarchy so that
-//QxrdAcquisition becomes a base class and
-//QxrdAcquisitionPerkinElmer the 'leaf' class that
-//is instantiated.  Will simplify working with multiple
-//detector types.
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Check that the load/save data, dark and mask routines
-//actually work!
-//The problem was that the file conversion factories for raw and mask data
-//were not initialized.
-//
--------------------------------------------------------
-
-BLOCKER
-Check handling of image dimensions for mask, acquisition
-etc.
-
-//-------------------------------------------------------
-//
-//Try LZW encoding images to see how it affects performance
-//
--------------------------------------------------------
-
-BLOCKER
-Don't allow program to quit or start a new acquisition
-until outstanding processing has completed.
-
-//-------------------------------------------------------
-//
-//BLOCKER
-//Combine the tails of QxrdDataProcessor::processAcquiredInt{16,32}Image to eliminate
-//duplicated code.
-//
--------------------------------------------------------
-
-BLOCKER
-Provide a means to remove dark image, gain map, mask etc.
-(and put them back again!)
-
-//-------------------------------------------------------
-//
-//BLOCKER
-//Add frame skip option in acquisition
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//The script:
-//for (i=0; i<6; i++) {
-//   print("Camera Gain = ",i);
-//   acquisition.cameraGain = i;
-//   acquire("h:/junk-test/testing",0.1,1,1,0)
-//   while (status(0.5) != 1) {
-//     print("Waiting")
-//   }
-//}
-//gets deadlocked
-
--------------------------------------------------------
-
-If acquisition is triggered before sufficient pre-trigger
-images have been taken, then post-triggered acquisition
-will continue until a total of pre- plus post- images
-have been taken - i.e. extra post-trigger images will be
-taken.
-
-//-------------------------------------------------------
-//
-//BLOCKER
-//Add error return checking wherever appropriate -
-//particularly in TIFF, Acquire_ and file i/o routines
-//Check output directory exists before starting acquisition sequence.
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Add acquireStatus and processStatus functions and
-//processor.status() and acquisition.status() methods
-//which test status of acquisition and processing operations
-//
--------------------------------------------------------
-
-BLOCKER
-Separate printMessage, warnMessage and errorMessage signals
-Color code in output.
-
-//-------------------------------------------------------
-//
-//BLOCKER
-//Binning mode not working
-//Disabled
-//
-//-------------------------------------------------------
-//
-//Added user interface to log file choosing
-//
-//-------------------------------------------------------
-//
-//BLOCKER - DEFERRED
-//Copy acquisition dynamic properties into acquired images
-//Copy processor dynamic properties into processed images
-//Doesn't work at present because setProperty is not thread-safe
-//
--------------------------------------------------------
-
-BLOCKER
-Provide a means of saving raw data files in separate
-sub-directories
-
 //-------------------------------------------------------
 //
 //BLOCKER
@@ -676,9 +593,9 @@ Crashes on exit from PE acquisition
 
 //-------------------------------------------------------
 
-//May crash on exit if live view active
+//
 
-//Fixed by improving memory allocation tracking by using more QSharedPointers
+//
 
 */
 
@@ -708,6 +625,10 @@ TODO("2011-01-17", "",
      "PE Acquisition fails in debug builds - sending messages "
      "to object in different thread");
 
+DONE("2012-12-05", "2012-12-05",
+     "May crash on exit if live view active\n"
+     "Fixed by improving memory allocation tracking by using more QSharedPointers");
+
 TODO("2014-03-05", "",
      "Mouse click behavior for pickers needs to be reviewed/modified - esp. polygon pickers");
 
@@ -730,5 +651,38 @@ TODO("2015-09-20", "",
 
 TODO("2015-09-20", "",
      "TODO List items should resize to contents, with word wrap");
+
+TODO("2015-09-20", "",
+     "Implement separate processing chain for acquired data, attached to each detector");
+
+TODO("2015-09-20", "",
+     "Implement multi-threaded tiled integration routines to reduce integration latency");
+
+TODO("2015-09-20", "",
+     "Implement ROI intensity calculations");
+
+TODO("2015-09-20", "",
+     "Implement UI to set up and visualize ROIs");
+
+TODO("2015-09-20", "",
+     "Implement routines to pass ROI values to spec as macro counter channels");
+
+TODO("2015-09-20", "",
+     "Implement Pilatus Detector readout");
+
+TODO("2015-09-20", "",
+     "Implement detector enable/disable");
+
+TODO("2015-09-20", "",
+     "Implement multi-detector readout");
+
+TODO("2015-09-20", "",
+     "Improve NI-DAQ extra inputs readout - support detector enable");
+
+TODO("2015-09-20", "",
+     "Detector enable script commands");
+
+TODO("2015-09-20", "",
+     "Improve NI-DAQ output synchronization");
 
 #endif // TODO_H

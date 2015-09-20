@@ -15,6 +15,14 @@ public:
   QVariant data(const QModelIndex &index, int role) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+  typedef enum {
+    IdentifierColumn,
+    ActiveColumn,
+    InsertedDateColumn,
+    CompletedDateColumn,
+    DescriptionColumn
+  } Columns;
+
 signals:
 
 public slots:
