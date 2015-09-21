@@ -661,15 +661,13 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   sorted->setSourceModel(toDoList);
 
+  sorted->sort(0, Qt::DescendingOrder);
+
   m_ToDoList->setModel(sorted);
-
-  m_ToDoList->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-  m_ToDoList->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-  m_ToDoList->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
-  m_ToDoList->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
+  m_ToDoList->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   m_ToDoList->horizontalHeader()->setStretchLastSection(true);
-
   m_ToDoList->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  m_ToDoList->setSelectionBehavior(QAbstractItemView::SelectRows);
 
   connect(m_ImagePlot, &QxrdImagePlot::slicePolygon,
           m_SliceDialog, &QxrdSliceDialog::slicePolygon);
