@@ -36,21 +36,21 @@ void QxrdDetectorSimulated::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::SimulatedDetector);
 
-  printf("Need to implement QxrdDetectorSimulated::pushDefaultsToProxy\n");
+//  printf("Need to implement QxrdDetectorSimulated::pushDefaultsToProxy\n");
 }
 
 void QxrdDetectorSimulated::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetector::pushPropertiesToProxy(proxy);
 
-  printf("Need to implement QxrdDetectorSimulated::pushPropertiesToProxy\n");
+//  printf("Need to implement QxrdDetectorSimulated::pushPropertiesToProxy\n");
 }
 
 void QxrdDetectorSimulated::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetector::pullPropertiesfromProxy(proxy);
 
-  printf("Need to implement QxrdDetectorSimulated::pullPropertiesfromProxy\n");
+//  printf("Need to implement QxrdDetectorSimulated::pullPropertiesfromProxy\n");
 }
 
 void QxrdDetectorSimulated::onExposureTimeChanged()
@@ -61,7 +61,7 @@ void QxrdDetectorSimulated::onExposureTimeChanged()
     QxrdExperimentPtr expt(m_Experiment);
     QxrdAcquisitionPtr acq(m_Acquisition);
 
-    if (acq && expt) {
+    if (checkDetectorEnabled() && acq && expt) {
       double newTime = acq->get_ExposureTime();
 
       expt->printMessage(tr("Exposure time changed to %1").arg(newTime));
@@ -85,16 +85,18 @@ void QxrdDetectorSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*
 //  cb -> setValidator(new QDoubleValidator(0.0667,8,3,cb));
 }
 
-void QxrdDetectorSimulated::start()
+void QxrdDetectorSimulated::startDetector()
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "start", Qt::BlockingQueuedConnection);
+    QMetaObject::invokeMethod(this, "startDetector", Qt::BlockingQueuedConnection);
   } else {
-    QxrdDetector::start();
+    QxrdDetector::startDetector();
 
     QxrdAcquisitionPtr acq(m_Acquisition);
 
-    if (acq) {
+    if (checkDetectorEnabled() && acq) {
+      printMessage(tr("Starting simulated detector \"%1\"").arg(get_DetectorName()));
+
       acq->set_NRows(2048);
       acq->set_NCols(2048);
 
@@ -104,6 +106,19 @@ void QxrdDetectorSimulated::start()
 
       onExposureTimeChanged();
     }
+  }
+}
+
+void QxrdDetectorSimulated::stopDetector()
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "startDetector", Qt::BlockingQueuedConnection);
+  } else {
+    printMessage(tr("Stopping simulated detector \"%1\"").arg(get_DetectorName()));
+
+    QxrdDetector::stopDetector();
+
+    m_Timer.stop();
   }
 }
 
@@ -126,7 +141,7 @@ void QxrdDetectorSimulated::onTimerTimeout()
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
 
-  if (acq) {
+  if (checkDetectorEnabled() && acq) {
     if (acq->synchronizedAcquisition()) {
       acq->synchronizedAcquisition()->acquiredFrameAvailable(frameCounter);
     }

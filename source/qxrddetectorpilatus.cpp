@@ -41,33 +41,40 @@ QxrdDetectorPilatus::~QxrdDetectorPilatus()
   }
 }
 
-void QxrdDetectorPilatus::start()
+void QxrdDetectorPilatus::startDetector()
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "start", Qt::BlockingQueuedConnection);
+    QMetaObject::invokeMethod(this, "startDetector"/*, Qt::BlockingQueuedConnection*/);
   } else {
-    QxrdDetector::start();
+    QxrdDetector::startDetector();
+
+    printMessage(tr("Starting Pilatus Detector at %1").arg(get_PilatusHost()));
 
     m_PilatusSocket.connectToHost(get_PilatusHost(), get_PilatusPort());
     m_PilatusSocket.waitForConnected();
 
-//    QString a = sendCommandReply("telemetry");
+    //    QString a = sendCommandReply("telemetry");
 
-//    printf("Read %s\n", qPrintable(a));
+    //    printf("Read %s\n", qPrintable(a));
 
     connect(&m_PilatusSocket, &QTcpSocket::readyRead, this, &QxrdDetectorPilatus::readyRead);
-//    connect(&m_FileWatcher,   &QFileSystemWatcher::fileChanged, this, &QxrdDetectorPilatus::fileChanged);
-//    connect(&m_FileWatcher,   &QFileSystemWatcher::directoryChanged, this, &QxrdDetectorPilatus::directoryChanged);
+    //    connect(&m_FileWatcher,   &QFileSystemWatcher::fileChanged, this, &QxrdDetectorPilatus::fileChanged);
+    //    connect(&m_FileWatcher,   &QFileSystemWatcher::directoryChanged, this, &QxrdDetectorPilatus::directoryChanged);
 
     connect(&m_ExpectedFileTimer, &QTimer::timeout, this, &QxrdDetectorPilatus::checkExpectedFiles);
 
-//    m_ExpectedFileTimer.start(1000);
+    //    m_ExpectedFileTimer.start(1000);
 
     sendCommand("telemetry");
     imagePath(get_PilatusDataDirectory());
 
-//    m_FileWatcher.addPath(get_LocalDataDirectory());
+    //    m_FileWatcher.addPath(get_LocalDataDirectory());
   }
+}
+
+void QxrdDetectorPilatus::stopDetector()
+{
+  printMessage(tr("Stopping Pilatus Detector at %1").arg(get_PilatusHost()));
 }
 
 void QxrdDetectorPilatus::readyRead()
@@ -78,11 +85,11 @@ void QxrdDetectorPilatus::readyRead()
     printMessage(tr("%1 bytes available").arg(m_PilatusSocket.bytesAvailable()));
   }
 
-//  while (m_PilatusSocket.canReadLine()) {
-    QString aLine = m_PilatusSocket.readAll();
+  //  while (m_PilatusSocket.canReadLine()) {
+  QString aLine = m_PilatusSocket.readAll();
 
-    printMessage(tr("Line: %1").arg(aLine));
-//  }
+  printMessage(tr("Line: %1").arg(aLine));
+  //  }
 }
 
 void QxrdDetectorPilatus::beginAcquisition()
@@ -136,61 +143,65 @@ QString QxrdDetectorPilatus::reply()
                               Q_RETURN_ARG(QString, res));
     return res;
   } else {
-    int pos = m_PilatusReply.indexOf(QChar(24));
+    if (checkDetectorEnabled()) {
+      int pos = m_PilatusReply.indexOf(QChar(24));
 
-    if (pos >= 0) {
-      QString res = m_PilatusReply.left(pos);
+      if (pos >= 0) {
+        QString res = m_PilatusReply.left(pos);
 
-      m_PilatusReply.remove(0, pos+1);
+        m_PilatusReply.remove(0, pos+1);
 
-      return res;
-    } else {
-      while (m_PilatusSocket.waitForReadyRead(10000)) {
-        QString seg = m_PilatusSocket.readAll();
-
-        if (qcepDebug(DEBUG_PILATUS)) {
-          printMessage(tr("Data segment size %1, data %2").arg(seg.count()).arg(seg));
-        }
-
-        m_PilatusReply += seg;
-
-        pos = m_PilatusReply.indexOf(QChar(24));
-
-        if (pos >= 0) {
-          QString res = m_PilatusReply.left(pos);
-
-          m_PilatusReply.remove(0, pos+1);
+        return res;
+      } else {
+        while (m_PilatusSocket.waitForReadyRead(10000)) {
+          QString seg = m_PilatusSocket.readAll();
 
           if (qcepDebug(DEBUG_PILATUS)) {
-            printMessage(tr("Split %1/%2").arg(res.count()).arg(m_PilatusReply.count()));
+            printMessage(tr("Data segment size %1, data %2").arg(seg.count()).arg(seg));
           }
 
-          return res;
-        }
-      }
+          m_PilatusReply += seg;
 
-      return "";
+          pos = m_PilatusReply.indexOf(QChar(24));
+
+          if (pos >= 0) {
+            QString res = m_PilatusReply.left(pos);
+
+            m_PilatusReply.remove(0, pos+1);
+
+            if (qcepDebug(DEBUG_PILATUS)) {
+              printMessage(tr("Split %1/%2").arg(res.count()).arg(m_PilatusReply.count()));
+            }
+
+            return res;
+          }
+        }
+
+        return "";
+      }
     }
   }
+
+  return "";
 }
 
 void QxrdDetectorPilatus::expectReply(QString regexp)
 {
-//  QRegExp exp(regexp);
+  //  QRegExp exp(regexp);
 
-//  QString rply = reply();
+  //  QString rply = reply();
 
-//  while (!exp.exactMatch(rply)) {
-//    printMessage(tr("%1 :Does not match: %2").arg(rply).arg(regexp));
+  //  while (!exp.exactMatch(rply)) {
+  //    printMessage(tr("%1 :Does not match: %2").arg(rply).arg(regexp));
 
-//    rply = reply();
+  //    rply = reply();
 
-//    if (rply.length() == 0) {
-//      return;
-//    }
-//  }
+  //    if (rply.length() == 0) {
+  //      return;
+  //    }
+  //  }
 
-//  printMessage(tr("Matches: %1").arg(rply));
+  //  printMessage(tr("Matches: %1").arg(rply));
 }
 
 void QxrdDetectorPilatus::onExposureTimeChanged()
@@ -204,72 +215,92 @@ void QxrdDetectorPilatus::onExposureTimeChanged()
 
 void QxrdDetectorPilatus::exposureTime(double exposure)
 {
-  sendCommand(tr("expt %1").arg(exposure));
+  if (checkDetectorEnabled()) {
+    sendCommand(tr("expt %1").arg(exposure));
 
-  expectReply("15 OK Exposure time set to: (\\d*\\.\\d+) sec(.*)");
+    expectReply("15 OK Exposure time set to: (\\d*\\.\\d+) sec(.*)");
+  }
 }
 
 void QxrdDetectorPilatus::exposurePeriod(double period)
 {
-  sendCommand(tr("expp %1").arg(period));
+  if (checkDetectorEnabled()) {
+    sendCommand(tr("expp %1").arg(period));
 
-  expectReply("15 OK Exposure period set to: (\\d*\\.\\d+) sec(.*)");
+    expectReply("15 OK Exposure period set to: (\\d*\\.\\d+) sec(.*)");
+  }
 }
 
 void QxrdDetectorPilatus::exposureDelay(double delay)
 {
-  sendCommand(tr("delay %1").arg(delay));
+  if (checkDetectorEnabled()) {
+    sendCommand(tr("delay %1").arg(delay));
 
-  expectReply("15 OK Delay time set to: (\\d*\\.\\d+) sec(.*)");
+    expectReply("15 OK Delay time set to: (\\d*\\.\\d+) sec(.*)");
+  }
 }
 
 void QxrdDetectorPilatus::exposuresPerFrame(int nexp)
 {
-  sendCommand(tr("nexpf %1").arg(nexp));
+  if (checkDetectorEnabled()) {
+    sendCommand(tr("nexpf %1").arg(nexp));
 
-  expectReply("15 OK Exposures per frame set to: (\\d*)(.*)");
+    expectReply("15 OK Exposures per frame set to: (\\d*)(.*)");
+  }
 }
 
 void QxrdDetectorPilatus::exposureFrameCount(int nfram)
 {
-  sendCommand(tr("ni %1").arg(nfram));
+  if (checkDetectorEnabled()) {
+    sendCommand(tr("ni %1").arg(nfram));
 
-  expectReply("15 OK N images set to: (\\d*)(.*)");
+    expectReply("15 OK N images set to: (\\d*)(.*)");
+  }
 }
 
 void QxrdDetectorPilatus::exposure(QString file)
 {
-  sendCommand(tr("exposure \"%1\"").arg(file));
+  if (checkDetectorEnabled()) {
+    sendCommand(tr("exposure \"%1\"").arg(file));
 
-  expectReply("15 OK  Starting (\\d*\\.\\d+) second background:(.*)");
+    expectReply("15 OK  Starting (\\d*\\.\\d+) second background:(.*)");
+  }
 }
 
 void QxrdDetectorPilatus::extTrigger(QString file)
 {
-  sendCommand(tr("exttrigger \"%1\"").arg(file));
+  if (checkDetectorEnabled()) {
+    sendCommand(tr("exttrigger \"%1\"").arg(file));
 
-  expectReply("15 OK Starting externally triggered exposure\\(s):(.*)");
+    expectReply("15 OK Starting externally triggered exposure\\(s):(.*)");
+  }
 }
 
 void QxrdDetectorPilatus::extEnable(QString file)
 {
-  sendCommand(tr("extenable \"%1\"").arg(file));
+  if (checkDetectorEnabled()) {
+    sendCommand(tr("extenable \"%1\"").arg(file));
 
-  expectReply("15 OK Starting externally enabled exposure\\(s):(.*)");
+    expectReply("15 OK Starting externally enabled exposure\\(s):(.*)");
+  }
 }
 
 void QxrdDetectorPilatus::imagePath(QString path)
 {
-  sendCommand(tr("imgpath \"%1\"").arg(path));
+  if (checkDetectorEnabled()) {
+    sendCommand(tr("imgpath \"%1\"").arg(path));
 
-  expectReply("10 OK (.*)");
+    expectReply("10 OK (.*)");
+  }
 }
 
 void QxrdDetectorPilatus::acquireImage(QString fileName, double exposure)
 {
-  exposureTime(exposure);
+  if (checkDetectorEnabled()) {
+    exposureTime(exposure);
 
-  sendCommand(tr("exposure \"%1\"").arg(fileName));
+    sendCommand(tr("exposure \"%1\"").arg(fileName));
+  }
 }
 
 void QxrdDetectorPilatus::acquire()
@@ -279,7 +310,7 @@ void QxrdDetectorPilatus::acquire()
   } else {
     QxrdAcquisitionPtr acq(m_Acquisition);
 
-    if (acq) {
+    if (checkDetectorEnabled() && acq) {
       double expos   = acq->get_ExposureTime();
       int nsum       = acq->get_SummedExposures();
       int nimg       = acq->get_PostTriggerFiles();
@@ -321,64 +352,68 @@ void QxrdDetectorPilatus::acquire()
 
 void QxrdDetectorPilatus::pushFileExpected(QString fn)
 {
-  printMessage(tr("Expect file %1").arg(fn));
+  if (checkDetectorEnabled()) {
+    printMessage(tr("Expect file %1").arg(fn));
 
-  QDir d(get_LocalDataDirectory());
+    QDir d(get_LocalDataDirectory());
 
-  QString fp = d.filePath(fn);
+    QString fp = d.filePath(fn);
 
-  QFile f(fp);
+    QFile f(fp);
 
-  if (f.exists()) {
-    printMessage(tr("File %1 exists").arg(f.fileName()));
+    if (f.exists()) {
+      printMessage(tr("File %1 exists").arg(f.fileName()));
 
-    f.remove();
-  }
+      f.remove();
+    }
 
-//  m_FileWatcher.addPath(fp);
+    //  m_FileWatcher.addPath(fp);
 
-  m_ExpectedFiles.append(fp);
+    m_ExpectedFiles.append(fp);
 
-  if (m_ExpectedFiles.count() == 1) {
-    printMessage("Starting timer");
-    connect(&m_ExpectedFileTimer, &QTimer::timeout, this, &QxrdDetectorPilatus::checkExpectedFiles);
-    m_ExpectedFileTimer.start(100);
+    if (m_ExpectedFiles.count() == 1) {
+      printMessage("Starting timer");
+      connect(&m_ExpectedFileTimer, &QTimer::timeout, this, &QxrdDetectorPilatus::checkExpectedFiles);
+      m_ExpectedFileTimer.start(100);
+    }
   }
 }
 
 void QxrdDetectorPilatus::checkExpectedFiles()
 {
-  QDir d(get_LocalDataDirectory());
+  if (checkDetectorEnabled()) {
+    QDir d(get_LocalDataDirectory());
 
-  d.entryList();
+    d.entryList();
 
-  while (m_ExpectedFiles.count() > 0) {
-    QString fn = m_ExpectedFiles.first();
-
-    if (qcepDebug(DEBUG_PILATUS)) {
-      printMessage(tr("Looking for %1").arg(fn));
-    }
-
-    QFile f(fn);
-
-    if (f.exists()) {
-      m_ExpectedFiles.pop_front();
+    while (m_ExpectedFiles.count() > 0) {
+      QString fn = m_ExpectedFiles.first();
 
       if (qcepDebug(DEBUG_PILATUS)) {
-        printMessage(tr("File %1 exists").arg(f.fileName()));
+        printMessage(tr("Looking for %1").arg(fn));
       }
 
-      QcepDoubleImageDataPtr data = QcepAllocator::newDoubleImage("", 0,0, this);
+      QFile f(fn);
 
-      data->readImage(f.fileName());
+      if (f.exists()) {
+        m_ExpectedFiles.pop_front();
 
-      printMessage(tr("File %1 has been read").arg(f.fileName()));
-    } else {
-      return;
+        if (qcepDebug(DEBUG_PILATUS)) {
+          printMessage(tr("File %1 exists").arg(f.fileName()));
+        }
+
+        QcepDoubleImageDataPtr data = QcepAllocator::newDoubleImage("", 0,0, this);
+
+        data->readImage(f.fileName());
+
+        printMessage(tr("File %1 has been read").arg(f.fileName()));
+      } else {
+        return;
+      }
     }
-  }
 
-  m_ExpectedFileTimer.stop();
+    m_ExpectedFileTimer.stop();
+  }
 }
 
 //void QxrdDetectorPilatus::fileChanged(const QString &path)

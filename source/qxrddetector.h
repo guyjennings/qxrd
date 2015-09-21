@@ -43,7 +43,12 @@ public:
 signals:
 
 public slots:
-  virtual void start();
+  bool isEnabled();
+
+  bool checkDetectorEnabled();
+
+  virtual void startDetector();
+  virtual void stopDetector();
 
   virtual void onExposureTimeChanged();
   virtual void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
@@ -56,6 +61,7 @@ public slots:
   void openControlWindow();
 
   QxrdDetectorProcessorPtr processor();
+  void startOrStop(bool enabled);
 
 protected:
   QcepSettingsSaverWPtr        m_Saver;

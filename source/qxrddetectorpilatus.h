@@ -23,7 +23,8 @@ signals:
 public slots:
   void onExposureTimeChanged();
 
-  void start();
+  void startDetector();
+  void stopDetector();
 
   void acquire();
   void beginAcquisition();

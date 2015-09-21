@@ -34,7 +34,8 @@ public slots:
   void onCameraGainChanged();
 
 public slots:
-  void start();
+  void startDetector();
+  void stopDetector();
   void onEndFrame(int counter, unsigned int n1, unsigned int n2);
   void onEndFrameCallback();
 

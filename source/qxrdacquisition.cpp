@@ -267,7 +267,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
           m_DetectorThreads[i] = detThread;
           m_Detectors[i]       = det;
 
-          det->start();
+          det->startOrStop(det->isEnabled());
         }
       }
     }

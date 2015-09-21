@@ -17,7 +17,9 @@ public:
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 
 public slots:
-  void start();
+  void startDetector();
+  void stopDetector();
+
   virtual void onExposureTimeChanged();
   void onTimerTimeout();
 

@@ -28,6 +28,9 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::QxrdDetector(%p)\n", this);
   }
+
+  connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
+          this,           &QxrdDetector::startOrStop);
 }
 
 QxrdDetector::~QxrdDetector()
@@ -77,7 +80,35 @@ void QxrdDetector::writeSettings(QSettings *settings, QString section)
   }
 }
 
-void QxrdDetector::start()
+bool QxrdDetector::isEnabled()
+{
+  return get_Enabled();
+}
+
+void QxrdDetector::startOrStop(bool enabled)
+{
+  if (enabled) {
+    startDetector();
+  } else {
+    stopDetector();
+  }
+}
+
+bool QxrdDetector::checkDetectorEnabled()
+{
+  if (isEnabled()) {
+    return true;
+  } else {
+    criticalMessage("Attempt to use disabled detector");
+    return false;
+  }
+}
+
+void QxrdDetector::startDetector()
+{
+}
+
+void QxrdDetector::stopDetector()
 {
 }
 

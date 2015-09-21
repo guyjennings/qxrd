@@ -599,4 +599,7 @@ TODO("2015-09-20", "",
 TODO("2015-09-20", "",
      "Improve NI-DAQ output synchronization");
 
+TODO("2015-09-21", "",
+     "Make detectors honor the 'enabled' property");
+
 #endif // TODO_H
