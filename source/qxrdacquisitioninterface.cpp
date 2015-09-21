@@ -44,7 +44,7 @@ void QxrdAcquisitionInterface::acquire()
 {
   if (QThread::currentThread() != thread()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquire", Qt::BlockingQueuedConnection));
-  } else {
+  } else if (sanityCheckAcquire()) {
     if (m_Acquiring.tryLock()) {
       set_Cancelling(false);
       set_Triggered(false);
@@ -52,7 +52,7 @@ void QxrdAcquisitionInterface::acquire()
       statusMessage("Starting acquisition");
       emit acquireStarted();
 
-//      QtConcurrent::run(this, &QxrdAcquisitionInterface::doAcquire, acquisitionParameterPack());
+      //      QtConcurrent::run(this, &QxrdAcquisitionInterface::doAcquire, acquisitionParameterPack());
 
       if (m_ExecutionThread) {
         m_ExecutionThread->doAcquire();
@@ -67,7 +67,7 @@ void QxrdAcquisitionInterface::acquireDark()
 {
   if (QThread::currentThread() != thread()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquireDark", Qt::BlockingQueuedConnection));
-  } else {
+  } else if (sanityCheckAcquireDark()) {
     if (m_Acquiring.tryLock()) {
       set_Cancelling(false);
       set_Triggered(true);
@@ -75,7 +75,7 @@ void QxrdAcquisitionInterface::acquireDark()
       statusMessage("Starting dark acquisition");
       emit acquireStarted();
 
-//      QtConcurrent::run(this, &QxrdAcquisitionInterface::doAcquireDark, darkAcquisitionParameterPack());
+      //      QtConcurrent::run(this, &QxrdAcquisitionInterface::doAcquireDark, darkAcquisitionParameterPack());
 
       if (m_ExecutionThread) {
         m_ExecutionThread->doAcquireDark();

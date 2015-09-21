@@ -411,6 +411,76 @@ QcepAllocatorWPtr QxrdAcquisition::allocator() const
   return m_Allocator;
 }
 
+bool QxrdAcquisition::sanityCheckCommon()
+{
+  if (get_DetectorCount() == 0) {
+    criticalMessage("No Detectors are configured");
+    return false;
+  }
+
+  int ndet = 0;
+
+  for (int i=0; i<get_DetectorCount(); i++) {
+    QxrdDetectorPtr det = detector(i);
+
+    if (det && det->isEnabled()) {
+      ndet++;
+    }
+  }
+
+  if (ndet == 0) {
+    criticalMessage("No detectors are enabled");
+    return false;
+  }
+
+  if (get_FilePattern() == "") {
+    criticalMessage("No save file name has been provided");
+    return false;
+  }
+
+  return true;
+}
+
+bool QxrdAcquisition::sanityCheckAcquire()
+{
+  bool res = false;
+
+  if (sanityCheckCommon() == false) {
+  } else if (get_PreTriggerFiles() < 0) {
+    criticalMessage("pretrigger files cannot be < 0");
+  } else if (get_PostTriggerFiles() < 0) {
+    criticalMessage("posttrigger files cannot be < 0");
+  } else if (get_PreTriggerFiles() + get_PostTriggerFiles() <= 0) {
+    criticalMessage("pre+post trigger files must be >= 1");
+  } else if (get_SummedExposures() <= 0) {
+    criticalMessage("Summed exposures must be >= 1");
+  } else if (get_SkippedExposures() < 0) {
+    criticalMessage("Skipped exposures must be >= 0");
+  } else if (get_ExposureTime() <= 0) {
+    criticalMessage("Exposure time must be > 0");
+  } else {
+    res = true;
+  }
+
+  return res;
+}
+
+bool QxrdAcquisition::sanityCheckAcquireDark()
+{
+  bool res = false;
+
+  if (sanityCheckCommon() == false) {
+  } else if (get_DarkSummedExposures() <= 0) {
+    criticalMessage("Dark summed exposures must be >= 0");
+  } else if (get_ExposureTime() <= 0) {
+    criticalMessage("Exposure time must be > 0");
+  } else {
+    res = true;
+  }
+
+  return res;
+}
+
 void QxrdAcquisition::onExposureTimeChanged()
 {
   foreach (QxrdDetectorPtr det, m_Detectors) {

@@ -46,6 +46,9 @@ public slots:
   virtual void doAcquire    () = 0;
   virtual void doAcquireDark() = 0;
 
+  virtual bool sanityCheckAcquire()     = 0;
+  virtual bool sanityCheckAcquireDark() = 0;
+
 public:
   QxrdAcquisitionParameterPackPtr acquisitionParameterPack();
   QxrdDarkAcquisitionParameterPackPtr darkAcquisitionParameterPack();

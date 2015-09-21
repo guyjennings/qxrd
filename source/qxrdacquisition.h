@@ -32,7 +32,7 @@
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdprocessargs-ptr.h"
 
-class QxrdAcquisition : public QxrdAcquisitionInterface/*, public QEnableSharedFromThis<QxrdAcquisition>*/
+class QxrdAcquisition : public QxrdAcquisitionInterface
 {
   Q_OBJECT
 
@@ -66,6 +66,10 @@ public slots:
 
   void doAcquire    ();
   void doAcquireDark();
+
+  bool sanityCheckCommon();
+  bool sanityCheckAcquire();
+  bool sanityCheckAcquireDark();
 
   virtual void onExposureTimeChanged();
 
