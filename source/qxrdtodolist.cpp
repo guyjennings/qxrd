@@ -6,7 +6,8 @@
 #define TODO(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(new QxrdToDoListItem(id++,true,d1,d2,s)));
 #define DONE(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(new QxrdToDoListItem(id++,false,d1,d2,s)));
 
-QxrdToDoList::QxrdToDoList()
+QxrdToDoList::QxrdToDoList(QObject *parent)
+  : QAbstractListModel(parent)
 {
   int id=0;
 

@@ -656,8 +656,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 //    expt->prop_DefaultScript()->linkTo(m_ScriptEdit);
 //  }
 
-  QxrdToDoList *toDoList = new QxrdToDoList();
-  QSortFilterProxyModel *sorted = new QSortFilterProxyModel();
+  QxrdToDoList *toDoList = new QxrdToDoList(this);
+  QSortFilterProxyModel *sorted = new QSortFilterProxyModel(this);
 
   sorted->setSourceModel(toDoList);
 
