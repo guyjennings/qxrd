@@ -48,11 +48,11 @@ QVariant QxrdToDoList::data(const QModelIndex &index, int role) const
     } else if (col == DescriptionColumn) {
       return QVariant(Qt::AlignLeft | Qt::AlignTop);
     }
-  } else if (role == Qt::FontRole) {
-    QFont f;
-    f.setPointSize(10);
+//  } else if (role == Qt::FontRole) {
+//    QFont f;
+//    f.setPointSize(10);
 
-    return QVariant(f);
+//    return QVariant(f);
   }
 
   return QVariant();
