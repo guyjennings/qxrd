@@ -1,6 +1,7 @@
 #include "qxrdtodolist.h"
 #include "qxrdtodolistitem.h"
 #include "qcepmacros.h"
+#include <QFont>
 
 #define TODO(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(new QxrdToDoListItem(id++,true,d1,d2,s)));
 #define DONE(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(new QxrdToDoListItem(id++,false,d1,d2,s)));
@@ -47,6 +48,11 @@ QVariant QxrdToDoList::data(const QModelIndex &index, int role) const
     } else if (col == DescriptionColumn) {
       return QVariant(Qt::AlignLeft | Qt::AlignTop);
     }
+  } else if (role == Qt::FontRole) {
+    QFont f;
+    f.setPointSize(10);
+
+    return QVariant(f);
   }
 
   return QVariant();

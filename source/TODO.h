@@ -173,11 +173,11 @@ DONE("2010-09-13", "2010-09-13",
 DONE("2009-09-30", "2009-09-30",
      "The script:\n"
      "for (i=0; i<6; i++) {\n"
-     "   print(\"Camera Gain = \",i);\n"
-     "   acquisition.cameraGain = i;\n"
-     "   acquire(\"h:/junk-test/testing\",0.1,1,1,0)\n"
-     "   while (status(0.5) != 1) {\n"
-     "     print(\"Waiting\")\n"
+     "   print(\"Camera Gain = \",i);"
+     "   acquisition.cameraGain = i;"
+     "   acquire(\"h:/junk-test/testing\",0.1,1,1,0);\n"
+     "   while (status(0.5) != 1) {"
+     "     print(\"Waiting\");"
      "   }\n"
      "}\n"
      "gets deadlocked");
@@ -218,386 +218,300 @@ DONE("2009-09-23", "2009-09-23",
 DONE("2009-09-22", "2009-09-22",
      "Provide a means of saving raw data files in separate sub-directories");
 
-/*
-//-------------------------------------------------------
-//
-//BLOCKER
-//the ProcessedCount variable should not depend on the display progress, only
-//on the Processor progress.
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Something wrong with acquired data summation (16-32 bit problem?)
-//Actually caused by forgetting to clear image before summation.
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Masking operations don't seem to work.
-//copyMask operations were other way round
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Image doesn't update when display parameters are changed.
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//There's some kind of deadlock in the acquisition process
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Can't interrupt acquisition from GUI if it was started from script
-//The GUI cancel calls should call the acquisition object directly, rather
-//than via invokeMethod
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Need to limit the number of curves that can be added to the az avg window
-//Need to implement saving the az avg data
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Allow for acquired but not yet processed images when calculating number of
-//buffered images.
-//
-//-------------------------------------------------------
-//
-//Investigate whether the intensities would be more stable if the acquisition
-//was running continuously rather than being started and stopped during each
-//acquisition sequence. - could also include some kind of continuously updating
-//display.
-//
--------------------------------------------------------
+DONE("2009-09-28", "2009-09-28",
+     "the ProcessedCount variable should not depend on the display progress, only "
+     "on the Processor progress.");
 
-Provide commands for printing graphs.
+DONE("2009-09-25", "2009-09-25",
+     "Something wrong with acquired data summation (16-32 bit problem?)\n"
+     "Actually caused by forgetting to clear image before summation.");
 
-//-------------------------------------------------------
-//
-//The first average after the program has been started, is always zero
-//
-//-------------------------------------------------------
-//
-//BLOCKER
-//Need to re-enable adding sliced data to az avg graph
-//
--------------------------------------------------------
+DONE("2009-09-28", "2009-09-28",
+     "Masking operations don't seem to work.\n"
+     "copyMask operations were other way round");
 
-Implement processor.processDataSequence
+DONE("2009-11-13", "2009-11-13",
+     "Image doesn't update when display parameters are changed.");
 
-//-------------------------------------------------------
-//
-//BLOCKER
-//Manual integration should update graph and/or save integrated data
-//
-//-------------------------------------------------------
-//
-//Memory handling is still poor, at least in simulation mode.  If you do a 1000 frame
-//acquisition the memory usage may reach ~10GB, regardless of the memory usage limit
-//
-//Simulation mode allocates images via new, the PE driver does not, so the memory
-//handling is only a problem for simulation mode.
+DONE("2009-10-02", "2009-10-02",
+     "There's some kind of deadlock in the acquisition process");
 
-//-------------------------------------------------------
-//
-//Initial choice of 'home' directory under windows is the application directory - a poor place
-//to save data!
-//
-//Added code (in windows only) to set the current directory to QDir::homePath() at startup.
-//
+DONE("2009-09-30", "2009-09-30",
+     "Can't interrupt acquisition from GUI if it was started from script\n"
+     "The GUI cancel calls should call the acquisition object directly, rather "
+     "than via invokeMethod");
 
-//-------------------------------------------------------
-//
-//File browser should automatically switch to the output data directory when this is changed.
-//
-//-------------------------------------------------------
-//
-//Check that the image buffer memory allocation works before trying
-//to use the allocated buffers.  (Exception handler needed?)
-//
-//-------------------------------------------------------
-//
-//Investigate a situation which can arise (twice now) where the GUI becomes unresponsive even
-//though acquisition and processing continues to run.  Presumably some kind of race condition?
-//This is caused by poor performance of file browser window.  I have disabled the file browser
-//for the moment.
-//
--------------------------------------------------------
+DONE("2009-10-02", "2009-10-02",
+     "Need to limit the number of curves that can be added to the az avg window\n"
+     "Need to implement saving the az avg data");
 
-Display some progress indication when angular integration is taking place.
+DONE("2010-09-13", "2010-09-13",
+     "Allow for acquired but not yet processed images when calculating number of "
+     "buffered images.");
 
-//-------------------------------------------------------
-//
-//Complete implementation of file browser panel
-//
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "Investigate whether the intensities would be more stable if the acquisition "
+     "was running continuously rather than being started and stopped during each "
+     "acquisition sequence. - could also include some kind of continuously updating "
+     "display.");
 
-Implement an image statistics panel
+DONE("2009-09-30", "2015-01-01",
+     "Provide commands for printing graphs.");
 
--------------------------------------------------------
+DONE("2009-11-13", "2009-11-13",
+     "The first average after the program has been started is always zero");
 
-Implement an image slice panel ?
+DONE("2009-10-21", "2009-10-21",
+     "Need to re-enable adding sliced data to az avg graph");
 
--------------------------------------------------------
+TODO("2009-10-02", "",
+     "Implement processor.processDataSequence");
 
-Implement an image histogram panel ?
+DONE("2009-10-05", "2009-10-05",
+     "Manual integration should update graph and/or save integrated data");
 
--------------------------------------------------------
+DONE("2009-10-21", "2009-10-21",
+     "Memory handling is still poor, at least in simulation mode. "
+     "If you do a 1000 frame acquisition the memory usage may reach "
+     "~10GB, regardless of the memory usage limit\n"
+     "Simulation mode allocates images via new, the PE driver does not, "
+     "so the memory handling is only a problem for simulation mode.");
 
-Implement an image calculator panel ?
+DONE("2009-10-22", "2009-10-22",
+     "Initial choice of 'home' directory under windows is the application directory "
+     "- a poor place to save data!\n"
+     "Added code (in windows only) to set the current directory "
+     "to QDir::homePath() at startup.");
 
-//-------------------------------------------------------
-//
-//Additional acquisition features requested:
-//Allow skipping frames at start of acquisition,
-//Allow skipping frames between frames of acquisition,
-//Allow saving of intermediate frames as an insurance during long acquisitions - alternatively save an 'accumulated' image
-//at the end of an acquisition.
-//Provide some kind of beam intensity monitoring facility and pause acquisition when beam is not present.
-//
-//
-//Skip at start doesn't work yet
-//
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "File browser should automatically switch to the output data "
+     "directory when this is changed.");
 
-If qxrd crashes the TCP/IP server socket gets left in CLOSE_WAIT state.  If you then restart qxrd it will
-automatically use the next socket in sequence - unfortunately spec will still try to use the original socket
-when searching for host:qxrd and will fail to connect.
-Could try to use SO_REUSEADDR, perhaps.
+DONE("2010-09-13", "2010-09-13",
+     "Check that the image buffer memory allocation works before trying "
+     "to use the allocated buffers.  (Exception handler needed?)");
 
-//-------------------------------------------------------
-//
-//Errors during acquisition (e.g. file save errors) are handled extremely poorly!
-//
-//-------------------------------------------------------
-//
-//Implement some kind of control of the maximum size of the text in the messages window
-//
-//Limited to 20000 lines
-//
--------------------------------------------------------
+DONE("2009-11-17", "2009-11-17",
+     "Investigate a situation which can arise (twice now) where the GUI "
+     "becomes unresponsive even though acquisition and processing continues "
+     "to run.  Presumably some kind of race condition?\n"
+     "This is caused by poor performance of file browser window.  "
+     "I have disabled the file browser for the moment.");
 
-Rename 'Correction' panel to 'Processing' ?
+TODO("2009-11-13", "",
+     "Display some progress indication when angular integration is taking place.");
 
-//-------------------------------------------------------
-//
-//Provide control of whether dark images are saved - probably via the Save 'raw' images option.
-//
-//-------------------------------------------------------
-//
-//Better handling of cancellation would be desirable
-//
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "Complete implementation of file browser panel");
 
-Try to find cause of a problem where acquisition stalls during long sequence.  Seen twice
-now, application was still responsive afterwards but acquisition stopped.  On attempting
-to cancel there were two different results - 1: when acquiring dark frame, cancel button
-did not operate, 2: when acquiring data, cancel button did operate, but application
-crashed imediately.
+DONE("2009-11-13", "2009-11-13",
+     "Implement an image statistics panel");
 
-//-------------------------------------------------------
-//
-//Modify handling of file index numbers during acquisition so that dark measurements do not increment the file index.
-//This is to simplify subsequent processing of image sequences with embedded dark measurements.
-// Done
-//
-//-------------------------------------------------------
-//
-//Program doesn't remember output directory  (possibly only on OSX?)
-//Also doesn't restore dark image - in fact it doesn't save any preferences at all
-//
-//QxrdDataProcessor properties were no being saved because the writeSettings method
-//was in a super class - QxrdDataProcessorBase while the properties were in QxrdDataProcessor
-//
-//-------------------------------------------------------
-//
-//Modify preferences handling so that updated prefs are saved as they are modified (or perhaps after a few seconds delay)
-//
-//-------------------------------------------------------
-//
-//Saved raw images appear to be full of zeroes.  No - they are OK
-//
-//-------------------------------------------------------
-//
-//Add a separate file io thread for image saving.
-//
-//-------------------------------------------------------
-//
-//Image display isn't working any more - perhaps due to initialization
-//of m_NewData and/or m_NewMask to NULL in qxrdwindow -
-//Had failed to copy m_Range in QxrdRasterData::copy
-//
-//-------------------------------------------------------
-//
-//Doesn't auto-load dark data on startup - caused by failure
-// to save QxrdDataProcessor preferences
-//
--------------------------------------------------------
+DONE("2009-11-13", "2009-11-13",
+     "Implement an image slice panel");
 
-Need progress info during acquisition/processing
+DONE("2009-11-13", "2009-11-13",
+     "Implement an image histogram panel ?");
 
-//-------------------------------------------------------
-//
-//Make the average signal level widget allow for the background, calculate in data processor thread
-//
--------------------------------------------------------
+TODO("2009-11-13", "",
+     "Implement an image calculator panel ?");
 
-Live image update?
+DONE("2010-09-13", "2010-09-13",
+     "Additional acquisition features requested:\n"
+     "Allow skipping frames at start of acquisition,\n"
+     "Allow skipping frames between frames of acquisition,\n"
+     "Allow saving of intermediate frames as an insurance during long acquisitions "
+     " - alternatively save an 'accumulated' image at the end of an acquisition.\n"
+     "Provide some kind of beam intensity monitoring facility and pause acquisition "
+     "when beam is not present.\n"
+     "Skip at start doesn't work yet");
 
--------------------------------------------------------
+TODO("2009-11-17", "",
+     "If qxrd crashes the TCP/IP server socket gets left in CLOSE_WAIT state.  "
+     "If you then restart qxrd it will automatically use the next socket "
+     "in sequence - unfortunately spec will still try to use the original socket "
+     "when searching for host:qxrd and will fail to connect.\n"
+     "Could try to use SO_REUSEADDR, perhaps.");
 
-Image statistics/histogram display?
 
-//-------------------------------------------------------
-//
-//Cancel PE acquisition -> crash
-//
-//-------------------------------------------------------
-//
-//Problem with fast readout - the queueing between the PE callback thread and
-//the acquisition thread builds up so that the buffer numbers are no longer valid
-//
-//-------------------------------------------------------
-//
-//There's a skipped readout frame after each readout image is finished - this
-//makes image sequences take longer than they should - e.g. 0.5 sec exposure,
-//single frame produces a new frame every 1 second.
-//
-//-------------------------------------------------------
-//
-//The integration routines are not properly threaded...
-//
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "Errors during acquisition (e.g. file save errors) are handled extremely poorly!");
 
-Need to make the allocator algorithm more optimal.
+DONE("2010-01-26", "2010-01-26",
+     "Implement some kind of control of the maximum size of the text "
+     "in the messages window\n"
+     "Limited by preferences parameter");
 
-//-------------------------------------------------------
-//
-//Only display dropped frames during acquisition
-//
-//-------------------------------------------------------
-//
-//Add detector tilt, distance and rotation parameters to center finder window
-//
-//-------------------------------------------------------
-//
-//Update center finder slicing and integration routines to use tilt parameters where appropriate
-//
-// not sure what to do for polygon slicing - will ignore for now
-//-------------------------------------------------------
-//
-//Disable ring fitting dialog
-//
-//-------------------------------------------------------
-//
-//Add percentile display mode
-//
-//-------------------------------------------------------
-//
-//Add display of bad and over exposed pixels
-//
--------------------------------------------------------
+TODO("2009-12-03", "",
+     "Rename 'Correction' panel to 'Processing' ?");
 
-Improve user interface for setting debug mode
+DONE("2010-09-13", "2010-09-13",
+     "Provide control of whether dark images are saved - "
+     "probably via the Save 'raw' images option.");
 
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "Better handling of cancellation would be desirable");
 
-Update help documentation to reflect changes
+TODO("2010-02-04", "",
+     "Try to find cause of a problem where acquisition stalls during long sequences.  "
+     "Seen twice now, application was still responsive afterwards but acquisition "
+     "stopped.  On attempting to cancel there were two different results - \n"
+     "1: when acquiring dark frame, cancel button did not operate\n"
+     "2: when acquiring data, cancel button did operate, but application "
+     "crashed imediately.");
 
-//-------------------------------------------------------
-//
-//Remove single-threaded and disable cuda processor options
-//
-//-------------------------------------------------------
-//
-//Reduce idle-time CPU load by reducing number of calls to
-//idle image routine
-//
--------------------------------------------------------
+DONE("2010-01-26", "2010-01-26",
+     "Modify handling of file index numbers during acquisition "
+     "so that dark measurements do not increment the file index.\n"
+     "This is to simplify subsequent processing of image sequences "
+     "with embedded dark measurements.\n"
+     "Done - dark acquisition does not increment index number");
 
-Add AB image acquisition mode
+DONE("2010-09-13", "2010-09-13",
+     "Program doesn't remember output directory  (possibly only on OSX?)\n"
+     "Also doesn't restore dark image - in fact it doesn't save any preferences at all\n"
+     "QxrdDataProcessor properties were not being saved because the writeSettings method "
+     "was in a super class - QxrdDataProcessorBase while the properties were in QxrdDataProcessor");
 
-//-------------------------------------------------------
-//
-//Test 64 bit readout mode
-//
-//Works.
-//
--------------------------------------------------------
+DONE("2010-11-04", "2010-11-04",
+     "Modify preferences handling so that updated prefs are saved as "
+     "they are modified (or perhaps after a few seconds delay)");
 
-Improve behaviour when plugins do not load
+DONE("2010-09-13", "2010-09-13",
+     "Saved raw images appear to be full of zeroes.  No - they are OK");
 
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "Add a separate file io thread for image saving.");
 
-Track integrated graph update time to suppress updates during
-rapid acquisition
+DONE("2010-09-13", "2010-09-13",
+     "Image display isn't working any more - perhaps due to initialization "
+     "of m_NewData and/or m_NewMask to NULL in qxrdwindow -\n"
+     "Had failed to copy m_Range in QxrdRasterData::copy");
 
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "Doesn't auto-load dark data on startup - \n"
+     "caused by failure to save QxrdDataProcessor preferences");
 
-Find threading problem when quitting debug build - QNativeSocketEngine
+DONE("2010-09-13", "2010-09-13",
+     "Need progress info during acquisition/processing");
 
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "Make the average signal level widget allow for the background, "
+     "calculate in data processor thread");
 
-Make proxy script objects for GUI script so that they can be called
-from different threads. - or maybe look at putting the script engine
-in the main thread.
+DONE("2010-09-13", "2010-09-13",
+     "Live image update");
 
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "Image statistics/histogram display");
 
-Be more aggressive about memory preallocation on 64 bit systems -
-or possibly have another go at recycling images.
+DONE("2010-09-13", "2010-09-13",
+     "Cancel PE acquisition -> crash\n"
+     "Fixed");
 
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "Problem with fast readout - the queueing between the PE "
+     "callback thread and the acquisition thread builds up so that the "
+     "buffer numbers are no longer valid");
 
-Investigate file naming problems when acquiring - sometimes
-data seem to be saved in wrong file names, also metadata not
-always saved.
+DONE("2010-09-13", "2010-09-13",
+     "There's a skipped readout frame after each readout image is finished"
+     " - this makes image sequences take longer than they should "
+     " - e.g. 0.5 sec exposure, single frame produces a new frame every 1 second.");
 
-//-------------------------------------------------------
-//
-//'trigger()' script command doesnt work - blocks, while
-//'acquisition.triggered=1' does work.
-//
-//Does work, but is unintuitive - 'trigger()' returns
-//the trigger state, 'trigger(1)' sets the trigger.
-//
-//Changed so that 'trigger()' does a trigger
-//
-//-------------------------------------------------------
-//
-//Make 'preTriggerFiles' default to zero if not given
-//explicitly.
-//
-//If 'acquire(...)' is given 4 or fewer arguments, set
-//'preTriggerFiles' to zero.
-//
+DONE("2010-09-13", "2010-09-13",
+     "The integration routines are not properly threaded...");
 
-//-------------------------------------------------------
+TODO("2010-09-13", "",
+     "Need to make the allocator algorithm more optimal.");
 
-//Metadata is not saved for QcepDoubleImageData, because
-//the metadata saving stuff doesn't know about inheritance
+DONE("2010-09-13", "2010-09-13",
+     "Only display dropped frames during acquisition");
 
-//Changed QcepImageData::writeSettings to use staticMetaObject
-//rather than metaObject()
+DONE("2010-09-13", "2010-09-13",
+     "Add detector tilt, distance and rotation parameters to center finder window");
 
-Gain setting menu missing for PE acquisition
+DONE("2010-09-17", "2010-09-17",
+     "Update center finder slicing and integration routines to use "
+     "tilt parameters where appropriate\n"
+     "not sure what to do for polygon slicing - will ignore for now");
 
--------------------------------------------------------
+DONE("2010-09-13", "2010-09-13",
+     "Disable ring fitting dialog");
 
-Crashes on exit from PE acquisition
+DONE("2010-09-13", "2010-09-13",
+     "Add percentile display mode");
 
-//-------------------------------------------------------
+DONE("2010-11-04", "2010-11-04",
+     "Add display of bad and over exposed pixels");
 
-//
+DONE("2010-09-13", "2010-09-13",
+     "Improve user interface for setting debug mode");
 
-//
+TODO("2010-09-13", "",
+     "Update help documentation to reflect changes");
 
-*/
+DONE("2010-09-13", "2010-09-13",
+     "Remove single-threaded and disable cuda processor options");
+
+DONE("2010-09-13", "2010-09-13",
+     "Reduce idle-time CPU load by reducing number of calls to "
+     "idle image routine");
+
+TODO("2010-09-13", "",
+     "Add AB image acquisition mode");
+
+DONE("2010-11-04", "2010-11-04",
+     "Test 64 bit readout mode\n"
+     "Works.");
+
+TODO("2010-09-23", "",
+     "Improve behaviour when plugins do not load");
+
+TODO("2010-09-23", "",
+     "Track integrated graph update time to suppress updates during "
+     "rapid acquisition");
+
+TODO("2010-09-28", "",
+     "Find threading problem when quitting debug build - QNativeSocketEngine");
+
+DONE("2010-09-28", "2010-09-28",
+     "Make proxy script objects for GUI script so that they can be called "
+     "from different threads. - or maybe look at putting the script engine "
+     "in the main thread.");
+
+DONE("2010-09-28", "2010-09-28",
+     "Be more aggressive about memory preallocation on 64 bit systems - "
+     "or possibly have another go at recycling images.");
+
+DONE("2010-11-03", "2010-11-03",
+     "Investigate file naming problems when acquiring - sometimes "
+     "data seem to be saved in wrong file names, also metadata not "
+     "always saved.");
+
+DONE("2010-11-04", "2010-11-04",
+     "'trigger()' script command doesnt work - blocks, while "
+     "'acquisition.triggered=1' does work.\n"
+     "Does work, but is unintuitive - 'trigger()' returns "
+     "the trigger state, 'trigger(1)' sets the trigger.\n"
+     "Changed so that 'trigger()' does a trigger");
+
+DONE("2010-11-04", "2010-11-04",
+     "Make 'preTriggerFiles' default to zero if not given explicitly.\n"
+     "If 'acquire(...)' is given 4 or fewer arguments, set "
+     "'preTriggerFiles' to zero.");
+
+DONE("2010-11-09", "2010-11-09",
+     "Metadata is not saved for QcepDoubleImageData, because "
+     "the metadata saving stuff doesn't know about inheritance\n"
+     "Changed QcepImageData::writeSettings to use staticMetaObject "
+     "rather than metaObject()");
+
+TODO("2012-01-09", "",
+     "Gain setting menu missing for PE acquisition");
+
+TODO("2012-01-09", "",
+     "Crashes on exit from PE acquisition");
 
 DONE("2010-11-04", "2014-03-05",
      "Start thinking about how to synchronise acquisition with "

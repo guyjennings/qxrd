@@ -666,9 +666,10 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   m_ToDoList->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
   m_ToDoList->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
   m_ToDoList->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+  m_ToDoList->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
   m_ToDoList->horizontalHeader()->setStretchLastSection(true);
 
-//  m_ToDoList->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  m_ToDoList->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
   connect(m_ImagePlot, &QxrdImagePlot::slicePolygon,
           m_SliceDialog, &QxrdSliceDialog::slicePolygon);
