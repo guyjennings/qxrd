@@ -899,8 +899,10 @@ void QxrdDetectorPerkinElmer::startupAcquisition()
   }
 }
 
-void QxrdDetectorPerkinElmer::beginAcquisition()
+void QxrdDetectorPerkinElmer::beginAcquisition(double exposure)
 {
+  QxrdDetector::beginAcquisition(exposure);
+
   if (m_StartupDelayed) {
     if (qcepDebug(DEBUG_PERKINELMER)) {
       printMessage("Delayed Acquisition Startup");
@@ -925,10 +927,13 @@ void QxrdDetectorPerkinElmer::beginAcquisition()
 
 void QxrdDetectorPerkinElmer::endAcquisition()
 {
+  QxrdDetector::endAcquisition();
 }
 
 void QxrdDetectorPerkinElmer::shutdownAcquisition()
 {
+  QxrdDetector::shutdownAcquisition();
+
   QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
 
   if (plugin && m_AcqDesc) {

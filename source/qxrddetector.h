@@ -6,7 +6,7 @@
 #include "qcepobject.h"
 #include <QDoubleSpinBox>
 #include <QComboBox>
-
+#include "qcepimagedata-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrddetector-ptr.h"
@@ -54,7 +54,7 @@ public slots:
   virtual void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
 
   virtual void acquire();
-  virtual void beginAcquisition();
+  virtual void beginAcquisition(double exposure);
   virtual void endAcquisition();
   virtual void shutdownAcquisition();
 
@@ -62,6 +62,8 @@ public slots:
 
   QxrdDetectorProcessorPtr processor();
   void startOrStop(bool enabled);
+
+  virtual QcepInt16ImageDataPtr acquireFrame();
 
 protected:
   QcepSettingsSaverWPtr        m_Saver;
@@ -88,6 +90,12 @@ public:
 
   Q_PROPERTY(QString detectorName READ get_DetectorName WRITE set_DetectorName)
   QCEP_STRING_PROPERTY(DetectorName)
+
+  Q_PROPERTY(int nCols READ get_NCols WRITE set_NCols STORED false)
+  QCEP_INTEGER_PROPERTY(NCols)
+
+  Q_PROPERTY(int nRows READ get_NRows WRITE set_NRows STORED false)
+  QCEP_INTEGER_PROPERTY(NRows)
 };
 
 #endif // QXRDDETECTOR_H

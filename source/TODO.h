@@ -47,9 +47,10 @@ DONE("2009-09-14", "2009-09-14",
      "all visible.\n"
      "(Will need to load/save more metadata before this will work well).");
 
-TODO("2009-08-27", "",
+DONE("2009-08-27", "2015-09-21",
      "Investigate why the vertical window size increases each time program is run "
-     "(Only happens on linux...)");
+     "(Only happens on linux...)\n"
+     "Doesn't happen any more!");
 
 TODO("2009-08-09", "",
      "Implement generalized image slicing routine - integrate over a rectangular "
@@ -87,9 +88,10 @@ DONE("2009-09-04", "2009-09-04",
      "instead of       'if (m_DarkFrame == NULL) {'\n"
      "spotted by following up compiler warnings");
 
-TODO("2009-08-27", "",
+DONE("2009-08-27", "2015-09-21",
      "Simplify the interactions between the various processing options and "
-     "perform a simple sanity check before starting acquisition");
+     "perform a simple sanity check before starting acquisition\n"
+     "Pre-acquisition sanity check added");
 
 DONE("2009-09-28", "2009-09-28",
      "Improve GUI performance when doing rapid acquisition sequences -\n"
@@ -342,8 +344,10 @@ DONE("2010-01-26", "2010-01-26",
      "in the messages window\n"
      "Limited by preferences parameter");
 
-TODO("2009-12-03", "",
-     "Rename 'Correction' panel to 'Processing' ?");
+DONE("2009-12-03", "2015-09-21",
+     "Rename 'Correction' panel to 'Processing' ?\n"
+     "No longer relevant since correction panel is replaced by "
+     "separate detector control windows");
 
 DONE("2010-09-13", "2010-09-13",
      "Provide control of whether dark images are saved - "
@@ -584,8 +588,9 @@ TODO("2015-09-20", "",
 TODO("2015-09-20", "",
      "Implement Pilatus Detector readout");
 
-TODO("2015-09-20", "",
-     "Implement detector enable/disable");
+DONE("2015-09-20", "2015-09-21",
+     "Implement detector enable/disable\n"
+     "Now working");
 
 TODO("2015-09-20", "",
      "Implement multi-detector readout");
@@ -598,8 +603,5 @@ TODO("2015-09-20", "",
 
 TODO("2015-09-20", "",
      "Improve NI-DAQ output synchronization");
-
-TODO("2015-09-21", "",
-     "Make detectors honor the 'enabled' property");
 
 #endif // TODO_H

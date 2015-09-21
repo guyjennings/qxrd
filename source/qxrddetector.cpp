@@ -23,7 +23,9 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
   m_DetectorType(saver, this, "detectorType", detType, "Detector Type"),
   m_DetectorTypeName(QcepSettingsSaverWPtr(), this, "detectorTypeName", QxrdDetectorThread::detectorTypeName(detType), "Detector Type Name"),
   m_Enabled(saver, this, "enabled", true, "Is Detector Enabled?"),
-  m_DetectorName(saver, this, "detectorName", QxrdDetectorThread::detectorTypeName(detType), "Detector Name")
+  m_DetectorName(saver, this, "detectorName", QxrdDetectorThread::detectorTypeName(detType), "Detector Name"),
+  m_NCols(QcepSettingsSaverWPtr(), this, "nCols", 0, "No of detector cols"),
+  m_NRows(QcepSettingsSaverWPtr(), this, "nRows", 0, "No of detector rows")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::QxrdDetector(%p)\n", this);
@@ -124,7 +126,7 @@ void QxrdDetector::acquire()
 {
 }
 
-void QxrdDetector::beginAcquisition()
+void QxrdDetector::beginAcquisition(double exposure)
 {
 }
 
@@ -200,4 +202,9 @@ void QxrdDetector::openControlWindow()
     m_DetectorControlWindow->show();
     m_DetectorControlWindow->raise();
   }
+}
+
+QcepInt16ImageDataPtr QxrdDetector::acquireFrame()
+{
+  return QcepInt16ImageDataPtr();
 }

@@ -106,3 +106,20 @@ QxrdROICalculatorPtr QxrdDetectorProcessor::roiCalculator()
 {
   return m_ROICalculator;
 }
+
+void QxrdDetectorProcessor::processAcquiredImage(QString filePattern,
+                                                 int fileIndex,
+                                                 int phase,
+                                                 int nPhases,
+                                                 bool trig,
+                                                 QcepInt32ImageDataPtr image,
+                                                 QcepMaskDataPtr overflow)
+{
+}
+
+void QxrdDetectorProcessor::processDarkImage(QString filePattern,
+                                             int fileIndex,
+                                             QcepInt32ImageDataPtr image,
+                                             QcepMaskDataPtr overflow)
+{
+}

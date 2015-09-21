@@ -92,16 +92,19 @@ void QxrdDetectorPilatus::readyRead()
   //  }
 }
 
-void QxrdDetectorPilatus::beginAcquisition()
+void QxrdDetectorPilatus::beginAcquisition(double exposure)
 {
+  QxrdDetector::beginAcquisition(exposure);
 }
 
 void QxrdDetectorPilatus::endAcquisition()
 {
+  QxrdDetector::endAcquisition();
 }
 
 void QxrdDetectorPilatus::shutdownAcquisition()
 {
+  QxrdDetector::shutdownAcquisition();
 }
 
 void QxrdDetectorPilatus::sendCommand(QString cmd)

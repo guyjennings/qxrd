@@ -97,8 +97,8 @@ void QxrdDetectorSimulated::startDetector()
     if (checkDetectorEnabled() && acq) {
       printMessage(tr("Starting simulated detector \"%1\"").arg(get_DetectorName()));
 
-      acq->set_NRows(2048);
-      acq->set_NCols(2048);
+      set_NRows(2048);
+      set_NCols(2048);
 
       if (acq->get_ExposureTime() <= 0) {
         acq->set_ExposureTime(0.1);
@@ -124,17 +124,21 @@ void QxrdDetectorSimulated::stopDetector()
 
 static int frameCounter = 0;
 
-void QxrdDetectorSimulated::beginAcquisition()
+void QxrdDetectorSimulated::beginAcquisition(double exposure)
 {
+  QxrdDetector::beginAcquisition(exposure);
+
   frameCounter = 0;
 }
 
 void QxrdDetectorSimulated::endAcquisition()
 {
+  QxrdDetector::endAcquisition();
 }
 
 void QxrdDetectorSimulated::shutdownAcquisition()
 {
+  QxrdDetector::shutdownAcquisition();
 }
 
 void QxrdDetectorSimulated::onTimerTimeout()
@@ -146,8 +150,8 @@ void QxrdDetectorSimulated::onTimerTimeout()
       acq->synchronizedAcquisition()->acquiredFrameAvailable(frameCounter);
     }
 
-    int nRows = acq->get_NRows();
-    int nCols = acq->get_NCols();
+    int nRows = get_NRows();
+    int nCols = get_NCols();
 
     QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepAllocator::AllocateFromReserve,
                                                                nCols, nRows, acq.data());

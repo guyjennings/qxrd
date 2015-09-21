@@ -27,7 +27,7 @@ public slots:
   void stopDetector();
 
   void acquire();
-  void beginAcquisition();
+  void beginAcquisition(double exposure);
   void endAcquisition();
   void shutdownAcquisition();
 

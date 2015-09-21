@@ -29,7 +29,7 @@ public:
 signals:
 
 protected:
-  void beginAcquisition();
+  void beginAcquisition(double exposure);
   void endAcquisition();
   void shutdownAcquisition();
 

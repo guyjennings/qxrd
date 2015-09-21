@@ -142,6 +142,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
       m_FileIndexWidth -> setValue(acq->get_FileIndexWidth());
       m_FilePhaseWidth -> setValue(acq->get_FilePhaseWidth());
       m_FileOverflowWidth -> setValue(acq->get_FileOverflowWidth());
+      m_DetectorNumberWidth -> setValue(acq->get_DetectorNumberWidth());
     }
 
     m_FontSize -> setValue(expt->get_FontSize());
@@ -307,6 +308,7 @@ void QxrdExperimentPreferencesDialog::accept()
       acq  -> set_FileIndexWidth(m_FileIndexWidth -> value());
       acq  -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
       acq  -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
+      acq  -> set_DetectorNumberWidth(m_DetectorNumberWidth -> value());
 
       int nDets = m_DetectorProxyModel->rowCount(QModelIndex());
 

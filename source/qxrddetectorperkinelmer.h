@@ -44,7 +44,7 @@ public slots:
   QString acquisitionErrorString(int n);
 
 protected:
-  void beginAcquisition();
+  void beginAcquisition(double exposure);
   void endAcquisition();
   void shutdownAcquisition();
 

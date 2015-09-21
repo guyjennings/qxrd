@@ -87,10 +87,6 @@ public:
   void enqueueAcquiredFrame(QcepInt16ImageDataPtr img);
 
 public:
-  virtual void beginAcquisition();
-  virtual void endAcquisition();
-  virtual void shutdownAcquisition();
-
   virtual void setupExposureMenu(QDoubleSpinBox *cb);
 
   void readSettings(QSettings *settings, QString section);
@@ -114,7 +110,7 @@ protected:
   void acquisition(int isDark);
   void copyParameters(int isDark);
 
-  void getFileBaseAndName(QString filePattern, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
+  void getFileBaseAndName(QString filePattern, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
   QxrdExperimentWPtr experiment();
   QxrdDataProcessorWPtr dataProcessor();
@@ -168,14 +164,17 @@ public:
   Q_PROPERTY(int    fileOverflowWidth        READ get_FileOverflowWidth WRITE set_FileOverflowWidth)
   QCEP_INTEGER_PROPERTY(FileOverflowWidth)
 
+  Q_PROPERTY(int detectorNumberWidth READ get_DetectorNumberWidth WRITE set_DetectorNumberWidth)
+  QCEP_INTEGER_PROPERTY(DetectorNumberWidth)
+
   Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase)
   QCEP_STRING_PROPERTY(FileBase)
 
-  Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)
-  QCEP_INTEGER_PROPERTY(NRows)
+//  Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)
+//  QCEP_INTEGER_PROPERTY(NRows)
 
-  Q_PROPERTY(int     nCols      READ get_NCols WRITE set_NCols)
-  QCEP_INTEGER_PROPERTY(NCols)
+//  Q_PROPERTY(int     nCols      READ get_NCols WRITE set_NCols)
+//  QCEP_INTEGER_PROPERTY(NCols)
 
   Q_PROPERTY(int     overflowLevel      READ get_OverflowLevel WRITE set_OverflowLevel)
   QCEP_INTEGER_PROPERTY(OverflowLevel)

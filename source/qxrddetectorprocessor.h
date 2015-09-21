@@ -14,7 +14,8 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qxrdroicalculator-ptr.h"
-
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
 #include <QScriptEngine>
 
 class QxrdDetectorProcessor : public QcepObject, public QEnableSharedFromThis<QxrdDetectorProcessor>
@@ -34,6 +35,19 @@ public slots:
   QxrdCenterFinderPtr  centerFinder();
   QxrdIntegratorPtr    integrator();
   QxrdROICalculatorPtr roiCalculator();
+
+  void processAcquiredImage(QString filePattern,
+                            int fileIndex,
+                            int phase,
+                            int nPhases,
+                            bool trig,
+                            QcepInt32ImageDataPtr image,
+                            QcepMaskDataPtr overflow);
+
+  void processDarkImage(QString filePattern,
+                        int fileIndex,
+                        QcepInt32ImageDataPtr image,
+                        QcepMaskDataPtr overflow);
 
 public:
   void readSettings(QSettings *settings, QString section);
