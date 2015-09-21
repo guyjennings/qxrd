@@ -2,6 +2,7 @@
 #include "qxrdacquisitionexecutionthread.h"
 #include "qxrdacquisitioninterface.h"
 #include "qxrdacquisitionexecution.h"
+#include <stdio.h>
 
 QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcquisitionInterfaceWPtr acq)
   : QxrdThread(),
