@@ -173,11 +173,11 @@ DONE("2010-09-13", "2010-09-13",
 DONE("2009-09-30", "2009-09-30",
      "The script:\n"
      "for (i=0; i<6; i++) {\n"
-     "   print(\"Camera Gain = \",i);"
-     "   acquisition.cameraGain = i;"
+     "   print(\"Camera Gain = \",i);\n"
+     "   acquisition.cameraGain = i;\n"
      "   acquire(\"h:/junk-test/testing\",0.1,1,1,0);\n"
-     "   while (status(0.5) != 1) {"
-     "     print(\"Waiting\");"
+     "   while (status(0.5) != 1) {\n"
+     "     print(\"Waiting\");\n"
      "   }\n"
      "}\n"
      "gets deadlocked");
