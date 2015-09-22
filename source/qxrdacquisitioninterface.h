@@ -31,7 +31,7 @@ public:
   virtual void initialize();
 
 signals:
-  void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
+  void acquiredFrame(QString fileName, int iphase, int nphases, int isum, int nsum, int igroup, int ngroup);
   void acquireStarted();
   void acquireComplete();
 
