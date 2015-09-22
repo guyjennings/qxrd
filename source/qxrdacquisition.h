@@ -15,7 +15,6 @@
 #endif
 
 #include "qxrdrasterdata.h"
-#include "qcepimagequeue.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitiondialog-ptr.h"
@@ -84,9 +83,6 @@ public slots:
   QxrdDetectorPtr       detector(int n);
 
 public:
-  void enqueueAcquiredFrame(QcepInt16ImageDataPtr img);
-
-public:
   virtual void setupExposureMenu(QDoubleSpinBox *cb);
 
   void readSettings(QSettings *settings, QString section);
@@ -121,11 +117,11 @@ protected slots:
   void onIdleTimeout();
 
 private:
-  enum { MegaBytes = 0x100000 };
+//  enum { MegaBytes = 0x100000 };
 
-  QcepInt16ImageDataPtr acquireFrame(double exposure);
-  QcepInt16ImageDataPtr acquireFrameIfAvailable(double exposure);
-  void flushImageQueue();
+//  QcepInt16ImageDataPtr acquireFrame(double exposure);
+//  QcepInt16ImageDataPtr acquireFrameIfAvailable(double exposure);
+//  void flushImageQueue();
 
   virtual void stopIdling();
   virtual void startIdling();
@@ -232,7 +228,6 @@ private:
   QcepAllocatorWPtr      m_Allocator;
   QxrdDataProcessorWPtr  m_DataProcessor;
 
-  QcepInt16ImageQueue    m_AcquiredImages;
   QxrdAcquisitionDialogPtr m_ControlPanel;
 
   QTimer                 m_IdleTimer;

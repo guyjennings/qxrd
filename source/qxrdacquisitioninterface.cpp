@@ -95,7 +95,7 @@ void QxrdAcquisitionInterface::cancel()
 {
   set_Cancelling(true);
 
-  m_NAcquiredImages.release(1);
+//  m_NAcquiredImages.release(1);
 }
 
 //void QxrdAcquisitionInterface::onAcquireComplete()

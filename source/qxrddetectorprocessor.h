@@ -49,6 +49,8 @@ public slots:
                         QcepInt32ImageDataPtr image,
                         QcepMaskDataPtr overflow);
 
+  void processIdleImage(QcepInt16ImageDataPtr image);
+
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

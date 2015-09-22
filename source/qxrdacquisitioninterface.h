@@ -57,7 +57,6 @@ protected:
   QcepSettingsSaverWPtr  m_Saver;
   QMutex                 m_Acquiring;
   QWaitCondition         m_StatusWaiting;
-  QSemaphore             m_NAcquiredImages;
 
 private:
   QxrdAcquisitionExecutionThreadPtr m_ExecutionThread;

@@ -211,7 +211,7 @@ void QxrdDetectorSimulated::onTimerTimeout()
       }
     }
 
-    acq->enqueueAcquiredFrame(image);
+    enqueueAcquiredFrame(image);
 
     frameCounter++;
   }

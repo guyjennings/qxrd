@@ -4,12 +4,13 @@
 #include "qcepmutexlocker.h"
 #include "qxrdroicalculator.h"
 #include "qxrddebug.h"
+#include "qxrdexperiment.h"
 
 QxrdDetectorProcessor::QxrdDetectorProcessor(
     QcepSettingsSaverWPtr saver,
     QxrdExperimentWPtr    doc,
     QxrdDetectorWPtr      det)
-  : QcepObject("acquisitionProcessor", NULL),
+  : QcepObject("acquisitionProcessor", doc.data()),
     m_Saver(saver),
     m_Experiment(doc),
     m_Detector(det),
@@ -115,6 +116,8 @@ void QxrdDetectorProcessor::processAcquiredImage(QString filePattern,
                                                  QcepInt32ImageDataPtr image,
                                                  QcepMaskDataPtr overflow)
 {
+  printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...")
+               .arg(image->get_FileName()));
 }
 
 void QxrdDetectorProcessor::processDarkImage(QString filePattern,
@@ -122,4 +125,11 @@ void QxrdDetectorProcessor::processDarkImage(QString filePattern,
                                              QcepInt32ImageDataPtr image,
                                              QcepMaskDataPtr overflow)
 {
+  printMessage(tr("QxrdDetectorProcessor::processDarkImage(\"%1\",...")
+               .arg(image->get_FileName()));
+}
+
+void QxrdDetectorProcessor::processIdleImage(QcepInt16ImageDataPtr image)
+{
+  printMessage(tr("QxrdDetectorProcessor::processIdleImage"));
 }

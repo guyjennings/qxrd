@@ -14,6 +14,8 @@
 #include "qxrddetectorprocessor-ptr.h"
 #include "qxrddetectorcontrolwindow-ptr.h"
 #include <QScriptEngine>
+#include <QSemaphore>
+#include "qcepimagequeue.h"
 
 class QxrdDetector : public QcepObject, public QEnableSharedFromThis<QxrdDetector>
 {
@@ -37,8 +39,14 @@ public:
 
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType);
 
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
+
+  void enqueueAcquiredFrame(QcepInt16ImageDataPtr img);
 
 signals:
 
@@ -63,17 +71,20 @@ public slots:
   QxrdDetectorProcessorPtr processor();
   void startOrStop(bool enabled);
 
+  virtual QcepInt16ImageDataPtr acquireFrameIfAvailable();
   virtual QcepInt16ImageDataPtr acquireFrame();
 
 protected:
-  QcepSettingsSaverWPtr        m_Saver;
-  QxrdExperimentWPtr           m_Experiment;
-  QxrdAcquisitionWPtr          m_Acquisition;
-  QxrdDetectorProcessorPtr     m_Processor;
-  QxrdDetectorControlWindow   *m_DetectorControlWindow;
+  QcepSettingsSaverWPtr       m_Saver;
+  QxrdExperimentWPtr          m_Experiment;
+  QxrdAcquisitionWPtr         m_Acquisition;
+  QxrdDetectorProcessorPtr    m_Processor;
+  QxrdDetectorControlWindow  *m_DetectorControlWindow;
 
 private:
   QMutex                      m_Mutex;
+  QSemaphore                  m_NAcquiredImages;
+  QcepInt16ImageQueue         m_AcquiredImages;
 
 public:
   Q_PROPERTY(int detectorNumber READ get_DetectorNumber WRITE set_DetectorNumber STORED false)

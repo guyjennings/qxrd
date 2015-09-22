@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include "qcepmutexlocker.h"
 #include "qxrddetectorcontrolwindow.h"
+#include "qxrdexperiment.h"
+#include "qcepimagedata.h"
 
 QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
                            QxrdExperimentWPtr    expt,
@@ -19,6 +21,8 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
   m_Acquisition(acq),
   m_Processor(),
   m_DetectorControlWindow(NULL),
+  m_NAcquiredImages(),
+  m_AcquiredImages("acquired"),
   m_DetectorNumber(QcepSettingsSaverWPtr(), this, "detectorNumber", detNum, "Detector Number"),
   m_DetectorType(saver, this, "detectorType", detType, "Detector Type"),
   m_DetectorTypeName(QcepSettingsSaverWPtr(), this, "detectorTypeName", QxrdDetectorThread::detectorTypeName(detType), "Detector Type Name"),
@@ -58,6 +62,33 @@ void QxrdDetector::initialize()
 QxrdDetectorProcessorPtr QxrdDetector::processor()
 {
   return m_Processor;
+}
+
+void QxrdDetector::printMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    exp->printMessage(msg, ts);
+  }
+}
+
+void QxrdDetector::criticalMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    exp->criticalMessage(msg);
+  }
+}
+
+void QxrdDetector::statusMessage(QString msg, QDateTime ts)
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    exp->statusMessage(msg);
+  }
 }
 
 void QxrdDetector::readSettings(QSettings *settings, QString section)
@@ -204,7 +235,27 @@ void QxrdDetector::openControlWindow()
   }
 }
 
+void QxrdDetector::enqueueAcquiredFrame(QcepInt16ImageDataPtr img)
+{
+  m_AcquiredImages.enqueue(img);
+
+  m_NAcquiredImages.release(1);
+}
+
 QcepInt16ImageDataPtr QxrdDetector::acquireFrame()
 {
-  return QcepInt16ImageDataPtr();
+  m_NAcquiredImages.acquire(1);
+
+  return m_AcquiredImages.dequeue();
+}
+
+QcepInt16ImageDataPtr QxrdDetector::acquireFrameIfAvailable()
+{
+  QcepInt16ImageDataPtr res;
+
+  while (m_NAcquiredImages.available() >= 1) {
+    res = acquireFrame();
+  }
+
+  return res;
 }

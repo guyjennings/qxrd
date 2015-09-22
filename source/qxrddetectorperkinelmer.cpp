@@ -115,33 +115,6 @@ QString QxrdDetectorPerkinElmer::detectorAddress() const
   return get_DetectorAddress();
 }
 
-void QxrdDetectorPerkinElmer::printMessage(QString msg, QDateTime ts)
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->printMessage(msg, ts);
-  }
-}
-
-void QxrdDetectorPerkinElmer::criticalMessage(QString msg, QDateTime ts)
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->criticalMessage(msg);
-  }
-}
-
-void QxrdDetectorPerkinElmer::statusMessage(QString msg, QDateTime ts)
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->statusMessage(msg);
-  }
-}
-
 QString QxrdDetectorPerkinElmer::acquisitionErrorString(int n)
 {
   QString res = "No Error";
@@ -624,8 +597,8 @@ void QxrdDetectorPerkinElmer::startDetector()
       QxrdAcquisitionPtr acq(m_Acquisition);
 
       if (acq) {
-        acq->set_NRows(dwRows);
-        acq->set_NCols(dwColumns);
+        set_NRows(dwRows);
+        set_NCols(dwColumns);
       }
 
       if (plugin && (nRet=plugin->Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
@@ -702,7 +675,7 @@ void QxrdDetectorPerkinElmer::startDetector()
       m_BufferIndex = 0;
 
       if (acq) {
-        m_Buffer.resize(acq->get_NRows()*acq->get_NCols()*m_BufferSize);
+        m_Buffer.resize(get_NRows()*get_NCols()*m_BufferSize);
         m_Buffer.fill(0);
 
         if (qcepDebug(DEBUG_PERKINELMER)) {
@@ -741,7 +714,7 @@ void QxrdDetectorPerkinElmer::startDetector()
         onExposureTimeChanged();
 
         if (plugin && (nRet=plugin->Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_BufferSize,
-                                                                  acq->get_NRows(), acq->get_NCols())) != HIS_ALL_OK) {
+                                                                  get_NRows(), get_NCols())) != HIS_ALL_OK) {
           acquisitionError(__FILE__, __LINE__, nRet);
           return;
         }
@@ -952,7 +925,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
 
     if (plugin && acq) {
       QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepAllocator::AllocateFromReserve,
-                                                                 acq->get_NCols(), acq->get_NRows(), this);
+                                                                 get_NCols(), get_NRows(), this);
 
       //    printf("allocator took %d msec\n", tic.restart());
 
@@ -968,7 +941,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
       //    return /*true*/;
       //  }
 
-      long npixels = acq->get_NRows()*acq->get_NCols();
+      long npixels = get_NRows()*get_NCols();
 
       unsigned short* frame = m_Buffer.data() + m_BufferIndex*npixels;
 
@@ -1050,7 +1023,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
         image->set_ImageNumber(n1);
       }
 
-      acq->enqueueAcquiredFrame(image);
+      enqueueAcquiredFrame(image);
     }
   }
 }

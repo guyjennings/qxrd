@@ -59,7 +59,6 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
     m_Window(),
     m_Allocator(allocator),
     m_DataProcessor(proc),
-    m_AcquiredImages("acquired"),
     m_ControlPanel(NULL),
     m_Idling(1)
 {
@@ -887,7 +886,7 @@ void QxrdAcquisition::doAcquire()
     }
 
     for (int d=0; d<nDet; d++) {
-      dets[d]->beginAcquisition(exposure);
+      dets[d] -> beginAcquisition(exposure);
     }
 
     printMessage(tr("acquire(\"%1\", %2, %3, %4, %5, %6) // fileIndex = %7")
@@ -952,7 +951,8 @@ void QxrdAcquisition::doAcquire()
 
                 nres -> set_SummedExposures(0);
 
-                getFileBaseAndName(fileBase, det->get_DetectorNumber(), fileIndex+i, p, nphases, fb, fn);
+                getFileBaseAndName(fileBase, det->get_DetectorNumber(),
+                                   fileIndex+i, p, nphases, fb, fn);
 
                 nres -> set_FileBase(fb);
                 nres -> set_FileName(fn);
@@ -982,7 +982,7 @@ void QxrdAcquisition::doAcquire()
               emit acquiredFrame(res[d][p][0]->get_FileBase(), p, nphases, s, nsummed, i, postTrigger);
             }
 
-            QcepInt16ImageDataPtr img = acquireFrame(exposure);
+            QcepInt16ImageDataPtr img = det -> acquireFrame();
 
             if (img && res[d][p][0] && ovf[d][p][0]) {
               accumulateAcquiredImage(img, res[d][p][0], ovf[d][p][0]);
@@ -1272,7 +1272,7 @@ cancel:
 void QxrdAcquisition::stopIdling()
 {
   m_Idling.fetchAndStoreOrdered(0);
-  flushImageQueue();
+//  flushImageQueue();
 
   if (get_AcquisitionCancelsLiveView()) {
     set_LiveViewAtIdle(false);
@@ -1287,105 +1287,118 @@ void QxrdAcquisition::startIdling()
 void QxrdAcquisition::onIdleTimeout()
 {
   if (m_Idling.fetchAndAddOrdered(0)) {
-    QcepInt16ImageDataPtr res = acquireFrameIfAvailable(get_ExposureTime());
-    QxrdDataProcessorPtr proc(m_DataProcessor);
+    for (int i=0; i<get_DetectorCount(); i++) {
+      QxrdDetectorPtr det = detector(i);
 
-    if (res && proc) {
-      res -> set_ExposureTime(get_ExposureTime());
-      res -> set_DateTime(QDateTime::currentDateTime());
-      res -> set_HBinning(1);
-      res -> set_VBinning(1);
-      res -> set_DataType(QcepInt32ImageData::Raw32Data);
-      res -> set_UserComment1(get_UserComment1());
-      res -> set_UserComment2(get_UserComment2());
-      res -> set_UserComment3(get_UserComment3());
-      res -> set_UserComment4(get_UserComment4());
-      res -> set_ObjectSaved(false);
+      if (det && det->isEnabled()) {
+        QcepInt16ImageDataPtr res = det -> acquireFrameIfAvailable();
 
-      proc->idleInt16Image(res, this->get_LiveViewAtIdle());
+        QxrdDetectorProcessorPtr proc = det->processor();
+
+        if (proc) {
+          proc->processIdleImage(res);
+        }
+      }
     }
+//    get_ExposureTime());
+//    QxrdDataProcessorPtr proc(m_DataProcessor);
+
+//    if (res && proc) {
+//      res -> set_ExposureTime(get_ExposureTime());
+//      res -> set_DateTime(QDateTime::currentDateTime());
+//      res -> set_HBinning(1);
+//      res -> set_VBinning(1);
+//      res -> set_DataType(QcepInt32ImageData::Raw32Data);
+//      res -> set_UserComment1(get_UserComment1());
+//      res -> set_UserComment2(get_UserComment2());
+//      res -> set_UserComment3(get_UserComment3());
+//      res -> set_UserComment4(get_UserComment4());
+//      res -> set_ObjectSaved(false);
+
+//      proc->idleInt16Image(res, this->get_LiveViewAtIdle());
+//    }
   }
 }
 
-void QxrdAcquisition::flushImageQueue()
-{
-  int n = m_NAcquiredImages.available();
-  m_NAcquiredImages.acquire(n);
+//void QxrdAcquisition::flushImageQueue()
+//{
+//  int n = m_NAcquiredImages.available();
+//  m_NAcquiredImages.acquire(n);
 
-  for (int i=0; i<n; i++) {
-    m_AcquiredImages.dequeue();
-  }
-}
+//  for (int i=0; i<n; i++) {
+//    m_AcquiredImages.dequeue();
+//  }
+//}
 
-QcepInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
-{
-  if (qcepDebug(DEBUG_ACQUIRE)) {
-    QcepAllocatorPtr alloc(m_Allocator);
+//QcepInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
+//{
+//  if (qcepDebug(DEBUG_ACQUIRE)) {
+//    QcepAllocatorPtr alloc(m_Allocator);
 
-    if (alloc) {
-      printMessage(tr("acquireFrame(%1) : allocated %2 MB : %3 images available")
-                   .arg(exposure)
-                   .arg(alloc->allocatedMemoryMB())
-                   .arg(m_NAcquiredImages.available())
-                   );
-    }
-  }
+//    if (alloc) {
+//      printMessage(tr("acquireFrame(%1) : allocated %2 MB : %3 images available")
+//                   .arg(exposure)
+//                   .arg(alloc->allocatedMemoryMB())
+//                   .arg(m_NAcquiredImages.available())
+//                   );
+//    }
+//  }
 
-  m_NAcquiredImages.acquire(1);
+//  m_NAcquiredImages.acquire(1);
 
-  QcepInt16ImageDataPtr res = m_AcquiredImages.dequeue();
+//  QcepInt16ImageDataPtr res = m_AcquiredImages.dequeue();
 
-  if (qcepDebug(DEBUG_EXTRAINPUTS) && res) {
-    QcepDoubleList extra = res->get_ExtraInputs();
+//  if (qcepDebug(DEBUG_EXTRAINPUTS) && res) {
+//    QcepDoubleList extra = res->get_ExtraInputs();
 
-    for (int i=0; i<extra.count(); i++) {
-      printMessage(tr("QxrdAcquisition::acquireFrame : Extra Inputs[%1] = %2").arg(i).arg(extra[i]));
-    }
-  }
+//    for (int i=0; i<extra.count(); i++) {
+//      printMessage(tr("QxrdAcquisition::acquireFrame : Extra Inputs[%1] = %2").arg(i).arg(extra[i]));
+//    }
+//  }
 
-  return res;
-}
+//  return res;
+//}
 
-QcepInt16ImageDataPtr QxrdAcquisition::acquireFrameIfAvailable(double exposure)
-{
-  if (qcepDebug(DEBUG_ACQUIRE)) {
-    QcepAllocatorPtr alloc(m_Allocator);
+//QcepInt16ImageDataPtr QxrdAcquisition::acquireFrameIfAvailable(double exposure)
+//{
+//  if (qcepDebug(DEBUG_ACQUIRE)) {
+//    QcepAllocatorPtr alloc(m_Allocator);
 
-    if (alloc) {
-      printMessage(tr("acquireFrameIfAvailable(%1) : allocated %2 MB").arg(exposure).arg(alloc->allocatedMemoryMB()));
-    }
-  }
+//    if (alloc) {
+//      printMessage(tr("acquireFrameIfAvailable(%1) : allocated %2 MB").arg(exposure).arg(alloc->allocatedMemoryMB()));
+//    }
+//  }
 
-  QcepInt16ImageDataPtr res;
+//  QcepInt16ImageDataPtr res;
 
-  while (m_NAcquiredImages.available() >= 1) {
-    res = acquireFrame(exposure);
-  }
+//  while (m_NAcquiredImages.available() >= 1) {
+//    res = acquireFrame(exposure);
+//  }
 
-  return res;
-}
+//  return res;
+//}
 
-void QxrdAcquisition::enqueueAcquiredFrame(QcepInt16ImageDataPtr img)
-{
-  if (m_AcquisitionExtraInputs) {
-    m_AcquisitionExtraInputs->acquire();
-    m_AcquisitionExtraInputs->logToImage(img);
-  }
+//void QxrdAcquisition::enqueueAcquiredFrame(QcepInt16ImageDataPtr img)
+//{
+//  if (m_AcquisitionExtraInputs) {
+//    m_AcquisitionExtraInputs->acquire();
+//    m_AcquisitionExtraInputs->logToImage(img);
+//  }
 
-  if (qcepDebug(DEBUG_EXTRAINPUTS) && img) {
-    QcepDoubleList extra = img->get_ExtraInputs();
+//  if (qcepDebug(DEBUG_EXTRAINPUTS) && img) {
+//    QcepDoubleList extra = img->get_ExtraInputs();
 
-    printMessage(tr("QxrdAcquisition::enqueueAcquiredFrame : %1 Extra Inputs").arg(extra.count()));
+//    printMessage(tr("QxrdAcquisition::enqueueAcquiredFrame : %1 Extra Inputs").arg(extra.count()));
 
-    for (int i=0; i<extra.count(); i++) {
-      printMessage(tr("QxrdAcquisition::enqueueAcquiredFrame : Extra Inputs[%1] = %2").arg(i).arg(extra[i]));
-    }
-  }
+//    for (int i=0; i<extra.count(); i++) {
+//      printMessage(tr("QxrdAcquisition::enqueueAcquiredFrame : Extra Inputs[%1] = %2").arg(i).arg(extra[i]));
+//    }
+//  }
 
-  m_AcquiredImages.enqueue(img);
+//  m_AcquiredImages.enqueue(img);
 
-  m_NAcquiredImages.release(1);
-}
+//  m_NAcquiredImages.release(1);
+//}
 
 void QxrdAcquisition::Message(QString msg)
 {
