@@ -1178,7 +1178,7 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 
       QxrdDetectorPerkinElmer *detector = reinterpret_cast<QxrdDetectorPerkinElmer*>(object);
 
-      if (detector) {
+      if (detector && detector->isEnabled()) {
         detector->onEndFrameCallback();
       }
     }
