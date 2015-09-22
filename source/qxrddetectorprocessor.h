@@ -64,6 +64,39 @@ private:
 public:
   // Properties...
 
+  Q_PROPERTY(bool performDarkSubtraction READ get_PerformDarkSubtraction WRITE set_PerformDarkSubtraction)
+  QCEP_BOOLEAN_PROPERTY(PerformDarkSubtraction)
+
+  Q_PROPERTY(bool saveRawImages READ get_SaveRawImages WRITE set_SaveRawImages)
+  QCEP_BOOLEAN_PROPERTY(SaveRawImages)
+
+  Q_PROPERTY(bool saveDarkImages READ get_SaveDarkImages WRITE set_SaveDarkImages)
+  QCEP_BOOLEAN_PROPERTY(SaveDarkImages)
+
+  Q_PROPERTY(bool performBadPixels READ get_PerformBadPixels WRITE set_PerformBadPixels)
+  QCEP_BOOLEAN_PROPERTY(PerformBadPixels)
+
+  Q_PROPERTY(bool performGainCorrection READ get_PerformGainCorrection WRITE set_PerformGainCorrection)
+  QCEP_BOOLEAN_PROPERTY(PerformGainCorrection)
+
+  Q_PROPERTY(bool saveSubtracted READ get_SaveSubtracted WRITE set_SaveSubtracted)
+  QCEP_BOOLEAN_PROPERTY(SaveSubtracted)
+
+  Q_PROPERTY(bool performIntegration READ get_PerformIntegration WRITE set_PerformIntegration)
+  QCEP_BOOLEAN_PROPERTY(PerformIntegration)
+
+  Q_PROPERTY(bool displayIntegratedData READ get_DisplayIntegratedData WRITE set_DisplayIntegratedData)
+  QCEP_BOOLEAN_PROPERTY(DisplayIntegratedData)
+
+  Q_PROPERTY(bool saveIntegratedData READ get_SaveIntegratedData WRITE set_SaveIntegratedData)
+  QCEP_BOOLEAN_PROPERTY(SaveIntegratedData)
+
+  Q_PROPERTY(bool accumulateIntegrated2D READ get_AccumulateIntegrated2D WRITE set_AccumulateIntegrated2D)
+  QCEP_BOOLEAN_PROPERTY(AccumulateIntegrated2D)
+
+  Q_PROPERTY(bool calculateROICounts READ get_CalculateROICounts WRITE set_CalculateROICounts)
+  QCEP_BOOLEAN_PROPERTY(CalculateROICounts)
+
 private:
   QMutex                m_Mutex;
 
