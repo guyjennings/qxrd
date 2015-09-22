@@ -979,7 +979,10 @@ void QxrdAcquisition::doAcquire()
             }
 
             if (res[d][p][0]) {
-              emit acquiredFrame(res[d][p][0]->get_FileBase(), p, nphases, s, nsummed, i, postTrigger);
+              emit acquiredFrame(res[d][p][0]->get_FileBase(),
+                  p, nphases,
+                  s, nsummed,
+                  i, postTrigger);
             }
 
             QcepInt16ImageDataPtr img = det -> acquireFrame();
@@ -1002,39 +1005,39 @@ void QxrdAcquisition::doAcquire()
 
             if (cancelling()) goto saveCancel;
           }
+        }
 
-          if (get_RetryDropped()) {
-            int minSum = nsummed+10;
+        if (get_RetryDropped()) {
+          int minSum = nsummed+10;
 
-            for (int p=0; p<nphases; p++) {
-              for (int d=0; d<nDet; d++) {
-                if (res[d][p][0]) {
-                  int ns = res[d][p][0]->get_SummedExposures();
+          for (int p=0; p<nphases; p++) {
+            for (int d=0; d<nDet; d++) {
+              if (res[d][p][0]) {
+                int ns = res[d][p][0]->get_SummedExposures();
 
-                  if (ns < minSum) {
-                    minSum = ns;
-                  }
-                } else {
-                  minSum = 0;
+                if (ns < minSum) {
+                  minSum = ns;
                 }
+              } else {
+                minSum = 0;
               }
             }
-
-            if (qcepDebug(DEBUG_ACQUIRETIME)) {
-              printMessage(tr("i = %1, Minsum = %2, s = %3, nsummed = %4").arg(i).arg(minSum).arg(s).arg(nsummed));
-            }
-
-            if (minSum == nsummed+10) {
-              if (qcepDebug(DEBUG_ACQUIRETIME)) {
-                printMessage("No acquired images allocated");
-              }
-              //          s = s+1;
-            } else {
-              s = minSum;
-            }
-          } else {
-            s = s+1;
           }
+
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("i = %1, Minsum = %2, s = %3, nsummed = %4").arg(i).arg(minSum).arg(s).arg(nsummed));
+          }
+
+          if (minSum == nsummed+10) {
+            if (qcepDebug(DEBUG_ACQUIRETIME)) {
+              printMessage("No acquired images allocated");
+            }
+            //          s = s+1;
+          } else {
+            s = minSum;
+          }
+        } else {
+          s = s+1;
         }
       }
 
@@ -1188,7 +1191,9 @@ void QxrdAcquisition::doAcquireDark()
     }
 
     for (int d=0; d<nDet; d++) {
-      getFileBaseAndName(fileBase, d, fileIndex, -1, 1, fb, fn);
+      QxrdDetectorPtr det = dets[d];
+
+      getFileBaseAndName(fileBase, det->get_DetectorNumber(), fileIndex, -1, 1, fb, fn);
 
       res[d] -> set_FileBase(fb);
       res[d] -> set_FileName(fn);
