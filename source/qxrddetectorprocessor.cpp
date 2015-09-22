@@ -116,8 +116,12 @@ void QxrdDetectorProcessor::processAcquiredImage(QString filePattern,
                                                  QcepInt32ImageDataPtr image,
                                                  QcepMaskDataPtr overflow)
 {
-  printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...")
-               .arg(image->get_FileName()));
+  if (image) {
+    printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...")
+                 .arg(image->get_FileName()));
+  } else {
+    printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(NULL,..."));
+  }
 }
 
 void QxrdDetectorProcessor::processDarkImage(QString filePattern,
@@ -125,8 +129,12 @@ void QxrdDetectorProcessor::processDarkImage(QString filePattern,
                                              QcepInt32ImageDataPtr image,
                                              QcepMaskDataPtr overflow)
 {
-  printMessage(tr("QxrdDetectorProcessor::processDarkImage(\"%1\",...")
-               .arg(image->get_FileName()));
+  if (image) {
+    printMessage(tr("QxrdDetectorProcessor::processDarkImage(\"%1\",...")
+                 .arg(image->get_FileName()));
+  } else {
+    printMessage(tr("QxrdDetectorProcessor::processDarkImage(NULL,..."));
+  }
 }
 
 void QxrdDetectorProcessor::processIdleImage(QcepInt16ImageDataPtr image)
