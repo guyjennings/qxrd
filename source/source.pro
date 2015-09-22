@@ -318,7 +318,11 @@ HEADERS += TODO.h \
     qxrdacquisitionexecution-ptr.h \
     qxrdtodolist.h \
     qxrdtodolistitem.h \
-    qxrdtodolistitem-ptr.h
+    qxrdtodolistitem-ptr.h \
+    qxrdroicoordinates.h \
+    qxrdroicoordinates-ptr.h \
+    qxrdroicoordinateslist.h \
+    qxrdroicoordinateslist-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -474,7 +478,9 @@ SOURCES += qxrd.cpp \
     qxrdacquisitionexecutionthread.cpp \
     qxrdacquisitionexecution.cpp \
     qxrdtodolist.cpp \
-    qxrdtodolistitem.cpp
+    qxrdtodolistitem.cpp \
+    qxrdroicoordinates.cpp \
+    qxrdroicoordinateslist.cpp
 
 OTHER_FILES += testImage.js
 

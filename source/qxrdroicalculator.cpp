@@ -2,13 +2,14 @@
 #include "qxrddebug.h"
 #include <stdio.h>
 #include "qcepmutexlocker.h"
+#include "qxrdroicoordinateslist.h"
 
 QxrdROICalculator::QxrdROICalculator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdDetectorProcessorWPtr proc)
   : QcepObject("ROIcalculator", NULL),
     m_Saver(saver),
     m_Experiment(exp),
     m_Processor(proc),
-    m_RoiCount(saver, this, "roiCount", 0, "Number of ROIs")
+    m_ROICoordinates(new QxrdROICoordinatesList(saver, exp))
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdROICalculator::QxrdROICalculator(%p)\n", this);
@@ -53,6 +54,10 @@ void QxrdROICalculator::readSettings(QSettings *settings, QString section)
 //  if (m_Processor) {
 //    m_Processor->readSettings(settings, section+"/processor");
 //  }
+
+  if (m_ROICoordinates) {
+    m_ROICoordinates->readSettings(settings, section+"/coords");
+  }
 }
 
 void QxrdROICalculator::writeSettings(QSettings *settings, QString section)
@@ -64,4 +69,22 @@ void QxrdROICalculator::writeSettings(QSettings *settings, QString section)
 //  if (m_Processor) {
 //    m_Processor->writeSettings(settings, section+"/processor");
 //  }
+
+  if (m_ROICoordinates) {
+    m_ROICoordinates->writeSettings(settings, section+"/coords");
+  }
+}
+
+QxrdROICoordinatesListPtr QxrdROICalculator::coordinates()
+{
+  return m_ROICoordinates;
+}
+
+QxrdROICoordinatesPtr     QxrdROICalculator::coordinate(int i)
+{
+  if (m_ROICoordinates) {
+    return m_ROICoordinates->roi(i);
+  } else {
+    return QxrdROICoordinatesPtr();
+  }
 }

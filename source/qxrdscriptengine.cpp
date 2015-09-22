@@ -31,6 +31,8 @@
 #include "qcepdatasetmodel.h"
 #include "qxrddetectorprocessor.h"
 #include "qxrdroicalculator.h"
+#include "qxrdroicoordinates.h"
+#include "qxrdroicoordinateslist.h"
 
 #include <QThread>
 #include <QDir>
@@ -1773,6 +1775,16 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterMetaType(this,
                           QxrdROICalculator::toScriptValue,
                           QxrdROICalculator::fromScriptValue);
+
+  qRegisterMetaType<QxrdROICoordinatesPtr>("QxrdROICoordinatesPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdROICoordinates::toScriptValue,
+                          QxrdROICoordinates::fromScriptValue);
+
+  qRegisterMetaType<QxrdROICoordinatesListPtr>("QxrdROICoordinatesListPtr");
+  qScriptRegisterMetaType(this,
+                          QxrdROICoordinatesList::toScriptValue,
+                          QxrdROICoordinatesList::fromScriptValue);
 
   QxrdApplicationPtr app(m_Application);
 

@@ -9,6 +9,8 @@
 #include "qxrdexperiment-ptr.h"
 #include <QScriptEngine>
 #include "qxrdroicalculator-ptr.h"
+#include "qxrdroicoordinateslist-ptr.h"
+#include "qxrdroicoordinates-ptr.h"
 
 class QxrdROICalculator : public QcepObject, public QEnableSharedFromThis<QxrdROICalculator>
 {
@@ -27,6 +29,8 @@ public:
 signals:
 
 public slots:
+  QxrdROICoordinatesListPtr coordinates();
+  QxrdROICoordinatesPtr     coordinate(int i);
 
 private:
   QMutex                    m_Mutex;
@@ -34,9 +38,9 @@ private:
   QxrdExperimentWPtr        m_Experiment;
   QxrdDetectorProcessorWPtr m_Processor;
 
+  QxrdROICoordinatesListPtr m_ROICoordinates;
+
 public:
-  Q_PROPERTY(int roiCount READ get_RoiCount WRITE set_RoiCount)
-  QCEP_INTEGER_PROPERTY(RoiCount)
 };
 
 #endif // QXRDROICALCULATOR_H
