@@ -871,8 +871,8 @@ void QxrdAcquisition::doAcquire()
         ovf[nDet-1].resize(nphases);
 
         for (int p=0; p<nphases; p++) {
-          res[nDet][p].resize(preTrigger+1);
-          ovf[nDet][p].resize(preTrigger+1);
+          res[nDet-1][p].resize(preTrigger+1);
+          ovf[nDet-1][p].resize(preTrigger+1);
         }
       }
     }
