@@ -952,7 +952,7 @@ void QxrdAcquisition::doAcquire()
                 nres -> set_SummedExposures(0);
 
                 getFileBaseAndName(fileBase, det->get_DetectorNumber(),
-                                   fileIndex+i, p, nphases, fb, fn);
+                                   fileIndex, p, nphases, fb, fn);
 
                 nres -> set_FileBase(fb);
                 nres -> set_FileName(fn);
