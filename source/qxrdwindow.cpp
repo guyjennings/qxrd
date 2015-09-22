@@ -990,31 +990,41 @@ void QxrdWindow::acquireComplete()
 }
 
 void QxrdWindow::acquiredFrame(
-    QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup)
+    QString fileName, int iphase, int nphases, int isum, int nsum, int igroup, int ngroup)
 {
-  //   printf("QxrdWindow::acquiredFrame(\"%s\",%d,%d,%d,%d,%d)\n",
+  printMessage(tr("QxrdWindow::acquiredFrame(\"%1\",%2,%3,%4,%5,%6,%7)")
+               .arg(fileName)
+               .arg(iphase).arg(nphases)
+               .arg(isum).arg(nsum)
+               .arg(igroup).arg(ngroup));
+  //   printf("\n",
   // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
 
-  int totalframes = (nsum*nframe*ngroup <= 0 ? 1 : nsum*nframe*ngroup);
-  int thisframe = igroup*nframe*nsum + iframe*nsum + isum + 1;
+  int totalFrames = (nphases*nsum*ngroup <= 0 ? 1 : nphases*nsum*ngroup);
+  int thisFrame   = igroup*nphases*nsum + isum*nphases + iphase + 1;
 
-  //  printf("%d %% progress\n", thisframe*100/totalframes);
+  printMessage(tr("Frame %1 of %2").arg(thisFrame).arg(totalFrames));
+
+  //  printf("%d %% progress\n", thisFrame*100/totalFrames);
 
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    if (nsum == 1) {
+    if (nphases <= 1) {
       expt->statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
                           .arg(fileName)
-                          .arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
+                          .arg(isum+1).arg(nsum)
+                          .arg(igroup+1).arg(ngroup));
     } else {
       expt->statusMessage(tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
                           .arg(fileName)
-                          .arg(isum+1).arg(nsum).arg(iframe+1).arg(nframe).arg(igroup+1).arg(ngroup));
+                          .arg(iphase+1).arg(nphases)
+                          .arg(isum+1).arg(nsum)
+                          .arg(igroup+1).arg(ngroup));
     }
   }
 
-  m_Progress -> setValue(thisframe*100/totalframes);
+  m_Progress -> setValue(thisFrame*100/totalFrames);
 }
 
 void QxrdWindow::captureSize()
