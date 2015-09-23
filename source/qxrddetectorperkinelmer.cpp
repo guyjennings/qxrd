@@ -1054,83 +1054,83 @@ void QxrdDetectorPerkinElmer::acquisitionNSensorsError(const char *fn, int ln, i
   criticalMessage("Detector Initialization Failed");
 }
 
-void QxrdDetectorPerkinElmer::setupCameraGainMenu(QComboBox *cb, int initialGain)
-{
-  if (qcepDebug(DEBUG_PERKINELMER)) {
-    printMessage(tr("QxrdAcquisitionPerkinElmer::setupCameraGainMenu m_HeaderID == %1").arg(m_HeaderID));
-  }
+//void QxrdDetectorPerkinElmer::setupCameraGainMenu(QComboBox *cb, int initialGain)
+//{
+//  if (qcepDebug(DEBUG_PERKINELMER)) {
+//    printMessage(tr("QxrdAcquisitionPerkinElmer::setupCameraGainMenu m_HeaderID == %1").arg(m_HeaderID));
+//  }
 
-  bool b = cb -> blockSignals(true);
+//  bool b = cb -> blockSignals(true);
 
-  if (m_HeaderID == 11) { /* AM type */
-    for (int i=0; i<16; i++) {
-      QString msg;
+//  if (m_HeaderID == 11) { /* AM type */
+//    for (int i=0; i<16; i++) {
+//      QString msg;
 
-      if (i==0) {
-        msg = "High: ";
-      } else if (i==15) {
-        msg = "Low: ";
-      }
+//      if (i==0) {
+//        msg = "High: ";
+//      } else if (i==15) {
+//        msg = "Low: ";
+//      }
 
-      double value = 0.1;
-      if (i & 1) {
-        value += 0.3;
-      }
+//      double value = 0.1;
+//      if (i & 1) {
+//        value += 0.3;
+//      }
 
-      if (i & 2) {
-        value += 0.9;
-      }
+//      if (i & 2) {
+//        value += 0.9;
+//      }
 
-      if (i & 4) {
-        value += 4.7;
-      }
+//      if (i & 4) {
+//        value += 4.7;
+//      }
 
-      if (i & 8) {
-        value += 10.0;
-      }
+//      if (i & 8) {
+//        value += 10.0;
+//      }
 
-      msg += tr("%1 pF").arg(value);
+//      msg += tr("%1 pF").arg(value);
 
-      cb -> addItem(msg);
-    }
-  } else if (m_HeaderID >= 12) { /* AN type */
-    cb -> addItem(tr("High: 0.25 pF"));
-    cb -> addItem(tr("0.5 pF"));
-    cb -> addItem(tr("1 pF"));
-    cb -> addItem(tr("2 pF"));
-    cb -> addItem(tr("4 pF"));
-    cb -> addItem(tr("Low: 8 pF"));
-  } else {
-    cb -> addItem(tr("Gain not settable"));
-  }
+//      cb -> addItem(msg);
+//    }
+//  } else if (m_HeaderID >= 12) { /* AN type */
+//    cb -> addItem(tr("High: 0.25 pF"));
+//    cb -> addItem(tr("0.5 pF"));
+//    cb -> addItem(tr("1 pF"));
+//    cb -> addItem(tr("2 pF"));
+//    cb -> addItem(tr("4 pF"));
+//    cb -> addItem(tr("Low: 8 pF"));
+//  } else {
+//    cb -> addItem(tr("Gain not settable"));
+//  }
 
-  cb -> setCurrentIndex(initialGain);
+//  cb -> setCurrentIndex(initialGain);
 
-  cb -> blockSignals(b);
-}
+//  cb -> blockSignals(b);
+//}
 
-void QxrdDetectorPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb, int initialBinning)
-{
-//  printf("QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu m_HeaderID == %d, m_CameraType == %d\n",
-//         m_HeaderID, m_CameraType);
-  bool b = cb -> blockSignals(true);
+//void QxrdDetectorPerkinElmer::setupCameraBinningModeMenu(QComboBox *cb, int initialBinning)
+//{
+////  printf("QxrdAcquisitionPerkinElmer::setupCameraBinningModeMenu m_HeaderID == %d, m_CameraType == %d\n",
+////         m_HeaderID, m_CameraType);
+//  bool b = cb -> blockSignals(true);
 
-  if (m_HeaderID == 14) {
-    if (m_CameraType == 1) {
-      cb -> addItem(tr("No binning"));
-      cb -> addItem(tr("2x2 binning"));
-    } else {
-      cb -> addItem(tr("No binning"));
-      cb -> addItem(tr("2x2 binning"));
-    }
-  } else {
-    cb -> addItem(tr("No binning"));
-  }
+//  if (m_HeaderID == 14) {
+//    if (m_CameraType == 1) {
+//      cb -> addItem(tr("No binning"));
+//      cb -> addItem(tr("2x2 binning"));
+//    } else {
+//      cb -> addItem(tr("No binning"));
+//      cb -> addItem(tr("2x2 binning"));
+//    }
+//  } else {
+//    cb -> addItem(tr("No binning"));
+//  }
 
-  cb -> setCurrentIndex(initialBinning);
+//  cb -> setCurrentIndex(initialBinning);
 
-  cb -> blockSignals(b);
-}
+//  cb -> blockSignals(b);
+//}
 
 void QxrdDetectorPerkinElmer::onEndFrameCallback()
 {

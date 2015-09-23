@@ -52,8 +52,8 @@ private:
   void acquisitionError(const char *fn, int ln, int n);
 
   void startupAcquisition();
-  void setupCameraGainMenu(QComboBox *cb, int initialGain);
-  void setupCameraBinningModeMenu(QComboBox *cb, int initialBinning);
+//  void setupCameraGainMenu(QComboBox *cb, int initialGain);
+//  void setupCameraBinningModeMenu(QComboBox *cb, int initialBinning);
   bool checkPluginAvailable();
 
   void acquisitionInitError(const char *fn, int ln, int n);
