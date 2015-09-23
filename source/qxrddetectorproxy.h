@@ -48,7 +48,8 @@ public:
     PEDetNumProperty,
     PESubTypeProperty,
     PEGainProperty,
-    PEBinningProperty
+    PEBinningProperty,
+    PilatusModeProperty
   } PropertyType;
 
   void clearProperties();

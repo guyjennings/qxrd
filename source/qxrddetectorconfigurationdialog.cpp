@@ -137,6 +137,31 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
     propertyEditor = cb;
 
+  } else if (type == QxrdDetectorProxy::IntegerProperty) {
+    QSpinBox *sb = new QSpinBox();
+    sb -> setMinimum(-100000);
+    sb -> setMaximum(+100000);
+    sb -> setValue(value.toInt());
+
+    propertyEditor = sb;
+
+  } else if (type == QxrdDetectorProxy::DoubleProperty) {
+    QDoubleSpinBox *sb = new QDoubleSpinBox();
+    sb -> setMinimum(-100000);
+    sb -> setMaximum(+100000);
+    sb -> setValue(value.toDouble());
+
+    propertyEditor = sb;
+
+  } else if (type == QxrdDetectorProxy::PilatusModeProperty) {
+    QComboBox *cb = new QComboBox();
+    cb -> addItem("Internal Triggering");
+    cb -> addItem("External Trigger");
+    cb -> addItem("External Enable");
+    cb -> setCurrentIndex(value.toInt());
+
+    propertyEditor = cb;
+
   } else {
     printf("Unknown property type\n");
   }
@@ -161,48 +186,34 @@ QVariant QxrdDetectorConfigurationDialog::propertyValue(int propType, int i)
 {
   QObject *w = m_Widgets.value(i);
 
-  if (propType == QxrdDetectorProxy::DetectorNumberProperty) {
-    return QVariant();
-  } else if (propType == QxrdDetectorProxy::DetectorTypeProperty) {
-    return QVariant();
-  } else if (propType == QxrdDetectorProxy::StringProperty) {
-    QLineEdit *le = qobject_cast<QLineEdit*>(w);
+  QLineEdit *le = qobject_cast<QLineEdit*>(w);
 
-    if (le) {
-      return le->text();
-    }
-  } else if (propType == QxrdDetectorProxy::BooleanProperty) {
-    QCheckBox *cb = qobject_cast<QCheckBox*>(w);
+  if (le) {
+    return le->text();
+  }
 
-    if (cb) {
-      return cb->isChecked();
-    }
-  } else if (propType == QxrdDetectorProxy::PEDetNumProperty) {
-    QSpinBox *sb = qobject_cast<QSpinBox*>(w);
+  QCheckBox *cb = qobject_cast<QCheckBox*>(w);
 
-    if (sb) {
-      return sb->value();
-    }
-  } else if (propType == QxrdDetectorProxy::PESubTypeProperty) {
-    QComboBox *cb = qobject_cast<QComboBox*>(w);
+  if (cb) {
+    return cb->isChecked();
+  }
 
-    if (cb) {
-      return cb->currentIndex();
-    }
-  } else if (propType == QxrdDetectorProxy::PEGainProperty) {
-    QComboBox *cb = qobject_cast<QComboBox*>(w);
+  QSpinBox *sb = qobject_cast<QSpinBox*>(w);
 
-    if (cb) {
-      return cb->currentIndex();
-    }
-  } else if (propType == QxrdDetectorProxy::PEBinningProperty) {
-    QComboBox *cb = qobject_cast<QComboBox*>(w);
+  if (sb) {
+    return sb->value();
+  }
 
-    if (cb) {
-      return cb->currentIndex();
-    }
-  } else {
-    printf("Unknown property type\n");
+  QDoubleSpinBox *ds = qobject_cast<QDoubleSpinBox*>(w);
+
+  if (ds) {
+    return ds->value();
+  }
+
+  QComboBox *bx = qobject_cast<QComboBox*>(w);
+
+  if (bx) {
+    return bx->currentIndex();
   }
 
   return QVariant();
