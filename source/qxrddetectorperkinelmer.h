@@ -52,7 +52,6 @@ private:
   void acquisitionError(const char *fn, int ln, int n);
 
   void startupAcquisition();
-  void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
   void setupCameraGainMenu(QComboBox *cb, int initialGain);
   void setupCameraBinningModeMenu(QComboBox *cb, int initialBinning);
   bool checkPluginAvailable();
@@ -62,8 +61,6 @@ private:
 
 private:
   mutable QMutex         m_Mutex;
-//  int                    m_SubType;
-//  QString                m_Address;
   int                    m_BufferSize;
   int                    m_BufferIndex;
   QVector<quint16>       m_Buffer;
@@ -72,7 +69,6 @@ private:
   HACQDESC               m_AcqDesc;
   int                    m_StartupDelayed;
 
-//  int                    m_DetectorNumber;
   int                    m_PROMID;
   int                    m_HeaderID;
   int                    m_CameraType;

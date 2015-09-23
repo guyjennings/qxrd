@@ -149,14 +149,6 @@ void QxrdDetector::onExposureTimeChanged()
 {
 }
 
-void QxrdDetector::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*initialExposure*/)
-{
-}
-
-void QxrdDetector::acquire()
-{
-}
-
 void QxrdDetector::beginAcquisition(double exposure)
 {
 }

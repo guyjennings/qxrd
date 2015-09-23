@@ -19,11 +19,14 @@ QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver,
   m_ExposureTime(-1),
   m_ExposuresPerFrame(-1),
   m_ExposureFrameCount(-1),
-  m_PilatusHost         (saver, this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
-  m_PilatusPort         (saver, this, "pilatusPort",          41234,         "Camserver Port Number"),
-  m_PilatusFilePattern  (saver, this, "pilatusFilePattern",   "%s-%-0.5d%s", "File pattern for saved files"),
-  m_PilatusDataDirectory(saver, this, "pilatusDataDirectory", "/home/det/shareddata/test/",    "Data directory on Camserver computer"),
-  m_LocalDataDirectory  (saver, this, "localDataDirectory",   "/home/bessrc/shareddata/test/", "Data directory as seen on QXRD computer")
+  m_PilatusHost            (saver, this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
+  m_PilatusPort            (saver, this, "pilatusPort",          41234,         "Camserver Port Number"),
+  m_PilatusFilePattern     (saver, this, "pilatusFilePattern",   "%s-%-0.5d%s", "File pattern for saved files"),
+  m_PilatusDataDirectory   (saver, this, "pilatusDataDirectory", "/home/det/shareddata/test/",    "Data directory on Camserver computer"),
+  m_LocalDataDirectory     (saver, this, "localDataDirectory",   "/home/bessrc/shareddata/test/", "Data directory as seen on QXRD computer"),
+  m_DeleteFilesAfterReading(saver, this, "deleteFilesAfterReading", false, "Delete files from Camserver computer after reading"),
+  m_ExposureMode           (saver, this, "exposureMode",         0, "Pilatus Exposure Mode = (0:No Trigger, 1:ExtTrigger, 2:ExtEnable"),
+  m_EnableFrequency        (saver, this, "enableFrequency",      1000, "Frequency of ext enable signal")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorPilatus::QxrdDetectorPilatus(%p)\n", this);
@@ -48,33 +51,60 @@ void QxrdDetectorPilatus::startDetector()
   } else {
     QxrdDetector::startDetector();
 
-    printMessage(tr("Starting Pilatus Detector at %1").arg(get_PilatusHost()));
+    printMessage(tr("Starting Pilatus Detector at %1:%2").arg(get_PilatusHost()).arg(get_PilatusPort()));
 
     m_PilatusSocket.connectToHost(get_PilatusHost(), get_PilatusPort());
     m_PilatusSocket.waitForConnected();
 
-    //    QString a = sendCommandReply("telemetry");
-
-    //    printf("Read %s\n", qPrintable(a));
+    if (qcepDebug(DEBUG_PILATUS)) {
+      printMessage("Connected to pilatus...");
+    }
 
     connect(&m_PilatusSocket, &QTcpSocket::readyRead, this, &QxrdDetectorPilatus::readyRead);
-    //    connect(&m_FileWatcher,   &QFileSystemWatcher::fileChanged, this, &QxrdDetectorPilatus::fileChanged);
-    //    connect(&m_FileWatcher,   &QFileSystemWatcher::directoryChanged, this, &QxrdDetectorPilatus::directoryChanged);
-
     connect(&m_ExpectedFileTimer, &QTimer::timeout, this, &QxrdDetectorPilatus::checkExpectedFiles);
 
     //    m_ExpectedFileTimer.start(1000);
 
     sendCommand("telemetry");
-    imagePath(get_PilatusDataDirectory());
 
-    //    m_FileWatcher.addPath(get_LocalDataDirectory());
+    imagePath(get_PilatusDataDirectory());
   }
 }
 
 void QxrdDetectorPilatus::stopDetector()
 {
   printMessage(tr("Stopping Pilatus Detector at %1").arg(get_PilatusHost()));
+}
+
+void QxrdDetectorPilatus::beginAcquisition(double exposure)
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "beginAcquisition", Qt::BlockingQueuedConnection, Q_ARG(double, exposure));
+  } else {
+    QxrdDetector::beginAcquisition(exposure);
+
+    if (qcepDebug(DEBUG_PILATUS)) {
+      printMessage(tr("QxrdDetectorPilatus::beginAcquisition(%1)").arg(exposure));
+    }
+  }
+}
+
+void QxrdDetectorPilatus::endAcquisition()
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "endAcquisition", Qt::BlockingQueuedConnection);
+  } else {
+    QxrdDetector::endAcquisition();
+  }
+}
+
+void QxrdDetectorPilatus::shutdownAcquisition()
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "shutdownAcquisition", Qt::BlockingQueuedConnection);
+  } else {
+    QxrdDetector::shutdownAcquisition();
+  }
 }
 
 void QxrdDetectorPilatus::readyRead()
@@ -85,103 +115,74 @@ void QxrdDetectorPilatus::readyRead()
     printMessage(tr("%1 bytes available").arg(m_PilatusSocket.bytesAvailable()));
   }
 
-  //  while (m_PilatusSocket.canReadLine()) {
-  QString aLine = m_PilatusSocket.readAll();
+  while (m_PilatusSocket.canReadLine()) {
+    QString aLine = m_PilatusSocket.readLine();
 
-  printMessage(tr("Line: %1").arg(aLine));
-  //  }
-}
-
-void QxrdDetectorPilatus::beginAcquisition(double exposure)
-{
-  QxrdDetector::beginAcquisition(exposure);
-}
-
-void QxrdDetectorPilatus::endAcquisition()
-{
-  QxrdDetector::endAcquisition();
-}
-
-void QxrdDetectorPilatus::shutdownAcquisition()
-{
-  QxrdDetector::shutdownAcquisition();
+    printMessage(tr("Line: %1").arg(aLine));
+  }
 }
 
 void QxrdDetectorPilatus::sendCommand(QString cmd)
 {
-  if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "sendCommand", Q_ARG(QString, cmd));
-  } else {
-    m_PilatusSocket.write(qPrintable(cmd+"\n"));
-    m_PilatusSocket.waitForBytesWritten();
+  THREAD_CHECK;
+
+  if (qcepDebug(DEBUG_PILATUS)) {
+    printMessage(tr("QxrdDetectorPilatus::sendCommand(\"%1\")").arg(cmd));
   }
+
+  m_PilatusSocket.write(qPrintable(cmd+"\n"));
+  m_PilatusSocket.waitForBytesWritten();
 }
 
 QString QxrdDetectorPilatus::sendCommandReply(QString cmd)
 {
-  if (QThread::currentThread() != thread()) {
-    QString res;
+  THREAD_CHECK;
 
-    QMetaObject::invokeMethod(this, "sendCommandReply",
-                              Qt::BlockingQueuedConnection,
-                              Q_RETURN_ARG(QString,res),
-                              Q_ARG(QString, cmd));
+  m_PilatusSocket.write(qPrintable(cmd+"\n"));
+  m_PilatusSocket.waitForBytesWritten();
 
-    return res;
-  } else {
-    m_PilatusSocket.write(qPrintable(cmd+"\n"));
-    m_PilatusSocket.waitForBytesWritten();
-
-    return reply();
-  }
+  return reply();
 }
 
 QString QxrdDetectorPilatus::reply()
 {
-  if (QThread::currentThread() != thread()) {
-    QString res;
+  THREAD_CHECK;
 
-    QMetaObject::invokeMethod(this, "reply",
-                              Qt::BlockingQueuedConnection,
-                              Q_RETURN_ARG(QString, res));
-    return res;
-  } else {
-    if (checkDetectorEnabled()) {
-      int pos = m_PilatusReply.indexOf(QChar(24));
+  if (checkDetectorEnabled()) {
+    int pos = m_PilatusReply.indexOf(QChar(24));
 
-      if (pos >= 0) {
-        QString res = m_PilatusReply.left(pos);
+    if (pos >= 0) {
+      QString res = m_PilatusReply.left(pos);
 
-        m_PilatusReply.remove(0, pos+1);
+      m_PilatusReply.remove(0, pos+1);
 
-        return res;
-      } else {
-        while (m_PilatusSocket.waitForReadyRead(10000)) {
-          QString seg = m_PilatusSocket.readAll();
+      return res;
+    } else {
+      while (m_PilatusSocket.waitForReadyRead(10000)) {
+        QString seg = m_PilatusSocket.readAll();
 
-          if (qcepDebug(DEBUG_PILATUS)) {
-            printMessage(tr("Data segment size %1, data %2").arg(seg.count()).arg(seg));
-          }
-
-          m_PilatusReply += seg;
-
-          pos = m_PilatusReply.indexOf(QChar(24));
-
-          if (pos >= 0) {
-            QString res = m_PilatusReply.left(pos);
-
-            m_PilatusReply.remove(0, pos+1);
-
-            if (qcepDebug(DEBUG_PILATUS)) {
-              printMessage(tr("Split %1/%2").arg(res.count()).arg(m_PilatusReply.count()));
-            }
-
-            return res;
-          }
+        if (qcepDebug(DEBUG_PILATUS)) {
+          printMessage(tr("Data segment size %1, data %2").arg(seg.count()).arg(seg));
         }
 
-        return "";
+        m_PilatusReply += seg;
+
+        pos = m_PilatusReply.indexOf(QChar(24));
+
+        if (pos >= 0) {
+          QString res = m_PilatusReply.left(pos);
+
+          m_PilatusReply.remove(0, pos+1);
+
+          if (qcepDebug(DEBUG_PILATUS)) {
+            printMessage(tr("Split %1/%2").arg(res.count()).arg(m_PilatusReply.count()));
+          }
+
+          return res;
+        }
       }
+
+      return "";
     }
   }
 
@@ -209,10 +210,16 @@ void QxrdDetectorPilatus::expectReply(QString regexp)
 
 void QxrdDetectorPilatus::onExposureTimeChanged()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "onExposureTimeChanged", Qt::BlockingQueuedConnection);
+  } else {
+    if (checkDetectorEnabled()) {
+      QxrdAcquisitionPtr acq(m_Acquisition);
 
-  if (acq) {
-    exposureTime(acq->get_ExposureTime());
+      if (acq) {
+        exposureTime(acq->get_ExposureTime());
+      }
+    }
   }
 }
 
@@ -306,52 +313,52 @@ void QxrdDetectorPilatus::acquireImage(QString fileName, double exposure)
   }
 }
 
-void QxrdDetectorPilatus::acquire()
-{
-  if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "acquire");
-  } else {
-    QxrdAcquisitionPtr acq(m_Acquisition);
+//void QxrdDetectorPilatus::acquire()
+//{
+//  if (QThread::currentThread() != thread()) {
+//    QMetaObject::invokeMethod(this, "acquire");
+//  } else {
+//    QxrdAcquisitionPtr acq(m_Acquisition);
 
-    if (checkDetectorEnabled() && acq) {
-      double expos   = acq->get_ExposureTime();
-      int nsum       = acq->get_SummedExposures();
-      int nimg       = acq->get_PostTriggerFiles();
+//    if (checkDetectorEnabled() && acq) {
+//      double expos   = acq->get_ExposureTime();
+//      int nsum       = acq->get_SummedExposures();
+//      int nimg       = acq->get_PostTriggerFiles();
 
-      QString filenm = acq->get_FilePattern();
-      int index      = acq->get_FileIndex();
+//      QString filenm = acq->get_FilePattern();
+//      int index      = acq->get_FileIndex();
 
-      QString ofil = tr("%1_%2.cbf").arg(filenm).arg(index,5,10,QChar('0'));
+//      QString ofil = tr("%1_%2.cbf").arg(filenm).arg(index,5,10,QChar('0'));
 
-      pushFileExpected(ofil);
+//      pushFileExpected(ofil);
 
-      for (int i=1; i<nimg; i++) {
-        QString fn = tr("%1_%2.cbf").arg(filenm).arg(index+i,5,10,QChar('0'));
+//      for (int i=1; i<nimg; i++) {
+//        QString fn = tr("%1_%2.cbf").arg(filenm).arg(index+i,5,10,QChar('0'));
 
-        pushFileExpected(fn);
-      }
+//        pushFileExpected(fn);
+//      }
 
-      if (expos != m_ExposureTime) {
-        exposureTime(expos);
-        exposurePeriod(expos+0.01);
-        exposureDelay(0);
-        m_ExposureTime = expos;
-      }
+//      if (expos != m_ExposureTime) {
+//        exposureTime(expos);
+//        exposurePeriod(expos+0.01);
+//        exposureDelay(0);
+//        m_ExposureTime = expos;
+//      }
 
-      if (nsum != m_ExposuresPerFrame) {
-        exposuresPerFrame(nsum);
-        m_ExposuresPerFrame = nsum;
-      }
+//      if (nsum != m_ExposuresPerFrame) {
+//        exposuresPerFrame(nsum);
+//        m_ExposuresPerFrame = nsum;
+//      }
 
-      if (nimg != m_ExposureFrameCount) {
-        exposureFrameCount(nimg);
-        m_ExposureFrameCount = nimg;
-      }
+//      if (nimg != m_ExposureFrameCount) {
+//        exposureFrameCount(nimg);
+//        m_ExposureFrameCount = nimg;
+//      }
 
-      exposure(ofil);
-    }
-  }
-}
+//      exposure(ofil);
+//    }
+//  }
+//}
 
 void QxrdDetectorPilatus::pushFileExpected(QString fn)
 {
@@ -439,6 +446,9 @@ void QxrdDetectorPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusFilePattern",   "Save File Pattern", "%s-%-0.5d%s");
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusDataDirectory", "Camserver Data Directory", "/home/det/shareddata/test/");
     proxy->pushProperty(QxrdDetectorProxy::DirectoryProperty, "localDataDirectory","Local Data Directory", "/home/bessrc/shareddata/test/");
+    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "deleteFilesAfterReading", "Delete files from camserver computer after use", false);
+    proxy->pushProperty(QxrdDetectorProxy::PilatusModeProperty, "exposureMode",     "Pilatus Exposure Mode", 0);
+    proxy->pushProperty(QxrdDetectorProxy::DoubleProperty, "enableFrequency",       "Ext Enable Frequency", 1000);
   }
 }
 
@@ -452,6 +462,9 @@ void QxrdDetectorPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusFilePattern",   "Save File Pattern", get_PilatusFilePattern());
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusDataDirectory", "Camserver Data Directory", get_PilatusDataDirectory());
     proxy->pushProperty(QxrdDetectorProxy::DirectoryProperty, "localDataDirectory","Local Data Directory", get_LocalDataDirectory());
+    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "deleteFilesAfterReading", "Delete files from camserver computer after use", get_DeleteFilesAfterReading());
+    proxy->pushProperty(QxrdDetectorProxy::PilatusModeProperty, "exposureMode",     "Pilatus Exposure Mode", get_ExposureMode());
+    proxy->pushProperty(QxrdDetectorProxy::DoubleProperty, "enableFrequency",       "Ext Enable Frequency", get_EnableFrequency());
   }
 }
 
@@ -460,9 +473,12 @@ void QxrdDetectorPilatus::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
   QxrdDetector::pullPropertiesfromProxy(proxy);
 
   if (proxy) {
-    set_PilatusHost         (proxy->property("pilatusHost").toString());
-    set_PilatusFilePattern  (proxy->property("pilatusFilePattern").toString());
-    set_PilatusDataDirectory(proxy->property("pilatusDataDirectory").toString());
-    set_LocalDataDirectory  (proxy->property("localDataDirectory").toString());
+    set_PilatusHost            (proxy->property("pilatusHost").toString());
+    set_PilatusFilePattern     (proxy->property("pilatusFilePattern").toString());
+    set_PilatusDataDirectory   (proxy->property("pilatusDataDirectory").toString());
+    set_LocalDataDirectory     (proxy->property("localDataDirectory").toString());
+    set_DeleteFilesAfterReading(proxy->property("deleteFilesAfterReading").toBool());
+    set_ExposureMode           (proxy->property("exposureMode").toInt());
+    set_EnableFrequency        (proxy->property("enableFrequency").toDouble());
   }
 }

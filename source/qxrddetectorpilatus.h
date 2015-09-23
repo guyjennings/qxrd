@@ -26,11 +26,12 @@ public slots:
   void startDetector();
   void stopDetector();
 
-  void acquire();
+//  void acquire();
   void beginAcquisition(double exposure);
   void endAcquisition();
   void shutdownAcquisition();
 
+private:
   void exposureTime(double exposure);
   void exposurePeriod(double period);
   void exposureDelay(double delay);
@@ -84,6 +85,15 @@ public:
 
   Q_PROPERTY(QString localDataDirectory READ get_LocalDataDirectory WRITE set_LocalDataDirectory)
   QCEP_STRING_PROPERTY(LocalDataDirectory)
+
+  Q_PROPERTY(bool deleteFilesAfterReading READ get_DeleteFilesAfterReading WRITE set_DeleteFilesAfterReading)
+  QCEP_BOOLEAN_PROPERTY(DeleteFilesAfterReading)
+
+  Q_PROPERTY(int exposureMode READ get_ExposureMode WRITE set_ExposureMode)
+  QCEP_INTEGER_PROPERTY(ExposureMode)
+
+  Q_PROPERTY(double enableFrequency READ get_EnableFrequency WRITE set_EnableFrequency)
+  QCEP_DOUBLE_PROPERTY(EnableFrequency)
 };
 
 #endif // QXRDDETECTORPILATUS_H

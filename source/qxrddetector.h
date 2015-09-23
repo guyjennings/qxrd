@@ -59,9 +59,6 @@ public slots:
   virtual void stopDetector();
 
   virtual void onExposureTimeChanged();
-  virtual void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
-
-  virtual void acquire();
   virtual void beginAcquisition(double exposure);
   virtual void endAcquisition();
   virtual void shutdownAcquisition();

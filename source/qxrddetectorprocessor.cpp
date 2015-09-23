@@ -150,5 +150,8 @@ void QxrdDetectorProcessor::processDarkImage(QString filePattern,
 
 void QxrdDetectorProcessor::processIdleImage(QcepInt16ImageDataPtr image)
 {
-  printMessage(tr("QxrdDetectorProcessor::processIdleImage"));
+  if (image) {
+    printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\"")
+               .arg(image->get_FileName()));
+  }
 }

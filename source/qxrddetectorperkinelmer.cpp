@@ -874,43 +874,55 @@ void QxrdDetectorPerkinElmer::startupAcquisition()
 
 void QxrdDetectorPerkinElmer::beginAcquisition(double exposure)
 {
-  QxrdDetector::beginAcquisition(exposure);
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "beginAcquisition", Qt::BlockingQueuedConnection, Q_ARG(double, exposure));
+  } else {
+    QxrdDetector::beginAcquisition(exposure);
 
-  if (m_StartupDelayed) {
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage("Delayed Acquisition Startup");
+    if (m_StartupDelayed) {
+      if (qcepDebug(DEBUG_PERKINELMER)) {
+        printMessage("Delayed Acquisition Startup");
+      }
+
+      startupAcquisition();
+      m_StartupDelayed = 0;
     }
 
-    startupAcquisition();
-    m_StartupDelayed = 0;
-  }
+    m_Counter.fetchAndStoreOrdered(0);
 
-  m_Counter.fetchAndStoreOrdered(0);
+    QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
 
-  QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
+    if (plugin && m_AcqDesc) {
+      if (qcepDebug(DEBUG_PERKINELMER)) {
+        printMessage("Reset frame counter");
+      }
 
-  if (plugin && m_AcqDesc) {
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage("Reset frame counter");
+      plugin -> Acquisition_ResetFrameCnt(m_AcqDesc);
     }
-
-    plugin -> Acquisition_ResetFrameCnt(m_AcqDesc);
   }
 }
 
 void QxrdDetectorPerkinElmer::endAcquisition()
 {
-  QxrdDetector::endAcquisition();
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "endAcquisition", Qt::BlockingQueuedConnection);
+  } else {
+    QxrdDetector::endAcquisition();
+  }
 }
 
 void QxrdDetectorPerkinElmer::shutdownAcquisition()
 {
-  QxrdDetector::shutdownAcquisition();
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "shutdownAcquisition", Qt::BlockingQueuedConnection);
+  } else {
+    QxrdDetector::shutdownAcquisition();
 
-  QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
+    QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
 
-  if (plugin && m_AcqDesc) {
-    plugin->Acquisition_Abort(m_AcqDesc);
+    if (plugin && m_AcqDesc) {
+      plugin->Acquisition_Abort(m_AcqDesc);
+    }
   }
 }
 
@@ -1040,13 +1052,6 @@ void QxrdDetectorPerkinElmer::acquisitionNSensorsError(const char *fn, int ln, i
   acquisitionError(fn, ln, n);
 
   criticalMessage("Detector Initialization Failed");
-}
-
-void QxrdDetectorPerkinElmer::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*initialExposure*/)
-{
-//  foreach(double t, m_ReadoutTimes) {
-//    cb -> addItem(tr("%1").arg(t/1e6,5,'f'));
-//  }
 }
 
 void QxrdDetectorPerkinElmer::setupCameraGainMenu(QComboBox *cb, int initialGain)

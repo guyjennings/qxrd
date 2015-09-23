@@ -71,19 +71,19 @@ void QxrdDetectorSimulated::onExposureTimeChanged()
   }
 }
 
-void QxrdDetectorSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*initialExposure*/)
-{
-//  cb -> addItem(tr("0.067"));
-//  cb -> addItem(tr("0.1"));
-//  cb -> addItem(tr("0.2"));
-//  cb -> addItem(tr("0.5"));
-//  cb -> addItem(tr("1"));
-//  cb -> addItem(tr("2"));
-//  cb -> addItem(tr("5"));
-//  cb -> addItem(tr("7"));
-//
-//  cb -> setValidator(new QDoubleValidator(0.0667,8,3,cb));
-}
+//void QxrdDetectorSimulated::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*initialExposure*/)
+//{
+////  cb -> addItem(tr("0.067"));
+////  cb -> addItem(tr("0.1"));
+////  cb -> addItem(tr("0.2"));
+////  cb -> addItem(tr("0.5"));
+////  cb -> addItem(tr("1"));
+////  cb -> addItem(tr("2"));
+////  cb -> addItem(tr("5"));
+////  cb -> addItem(tr("7"));
+////
+////  cb -> setValidator(new QDoubleValidator(0.0667,8,3,cb));
+//}
 
 void QxrdDetectorSimulated::startDetector()
 {
@@ -126,19 +126,31 @@ static int frameCounter = 0;
 
 void QxrdDetectorSimulated::beginAcquisition(double exposure)
 {
-  QxrdDetector::beginAcquisition(exposure);
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "beginAcquisition", Qt::BlockingQueuedConnection, Q_ARG(double, exposure));
+  } else {
+    QxrdDetector::beginAcquisition(exposure);
 
-  frameCounter = 0;
+    frameCounter = 0;
+  }
 }
 
 void QxrdDetectorSimulated::endAcquisition()
 {
-  QxrdDetector::endAcquisition();
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "endAcquisition", Qt::BlockingQueuedConnection);
+  } else {
+    QxrdDetector::endAcquisition();
+  }
 }
 
 void QxrdDetectorSimulated::shutdownAcquisition()
 {
-  QxrdDetector::shutdownAcquisition();
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "shutdownAcquisition", Qt::BlockingQueuedConnection);
+  } else {
+    QxrdDetector::shutdownAcquisition();
+  }
 }
 
 void QxrdDetectorSimulated::onTimerTimeout()

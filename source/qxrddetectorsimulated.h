@@ -24,11 +24,11 @@ public slots:
   void onTimerTimeout();
 
 public:
-  void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
+//  void setupExposureMenu(QDoubleSpinBox *cb, double initialExposure);
 
 signals:
 
-protected:
+public:
   void beginAcquisition(double exposure);
   void endAcquisition();
   void shutdownAcquisition();
