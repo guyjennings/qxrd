@@ -36,11 +36,13 @@ private:
   QString        m_Name;
 };
 
+typedef QcepImageQueue<QcepImageDataBase>    QcepImageBaseQueue;
 typedef QcepImageQueue<QcepInt16ImageData>   QcepInt16ImageQueue;
 typedef QcepImageQueue<QcepInt32ImageData>   QcepInt32ImageQueue;
 typedef QcepImageQueue<QcepDoubleImageData>  QcepDoubleImageQueue;
 typedef QcepImageQueue<QcepMaskData>         QcepMaskQueue;
 
+typedef QSharedPointer<QcepImageBaseQueue>   QcepImageBaseQueuePtr;
 typedef QSharedPointer<QcepInt16ImageQueue>  QcepInt16ImageQueuePtr;
 typedef QSharedPointer<QcepInt32ImageQueue>  QcepInt32ImageQueuePtr;
 typedef QSharedPointer<QcepDoubleImageQueue> QcepDoubleImageQueuePtr;

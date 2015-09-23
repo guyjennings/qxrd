@@ -109,3 +109,4 @@ int QcepImageQueue<T>::size() const
 
 template class QcepImageQueue<QcepImageData<unsigned short> >;
 template class QcepImageQueue<QcepImageData<unsigned int> >;
+template class QcepImageQueue<QcepImageDataBase>;
