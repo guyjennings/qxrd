@@ -31,7 +31,19 @@ public slots:
   void endAcquisition();
   void shutdownAcquisition();
 
+  void beginFrame();
+
 private:
+  enum {
+    NoExternalTrigger,
+    ExternalTrigger,
+    ExternalEnable
+  };
+
+  void beginExposure(double exposure);
+  void interpretReply(QString reply);
+  void expose();
+
   void exposureTime(double exposure);
   void exposurePeriod(double period);
   void exposureDelay(double delay);
@@ -63,6 +75,8 @@ private:
   QTcpSocket m_PilatusSocket;
   QString    m_PilatusReply;
 //  QFileSystemWatcher m_FileWatcher;
+  QByteArray m_Preread;
+  QString    m_CurrentFile;
   QStringList m_ExpectedFiles;
   QTimer     m_ExpectedFileTimer;
 
@@ -82,6 +96,9 @@ public:
 
   Q_PROPERTY(QString pilatusDataDirectory READ get_PilatusDataDirectory WRITE set_PilatusDataDirectory)
   QCEP_STRING_PROPERTY(PilatusDataDirectory)
+
+  Q_PROPERTY(bool readFilesLocally READ get_ReadFilesLocally WRITE set_ReadFilesLocally)
+  QCEP_BOOLEAN_PROPERTY(ReadFilesLocally)
 
   Q_PROPERTY(QString localDataDirectory READ get_LocalDataDirectory WRITE set_LocalDataDirectory)
   QCEP_STRING_PROPERTY(LocalDataDirectory)

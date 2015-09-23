@@ -77,11 +77,17 @@ public:
   Q_PROPERTY(int    phasesInGroup  READ get_PhasesInGroup WRITE set_PhasesInGroup)
   QCEP_INTEGER_PROPERTY(PhasesInGroup)
 
+  Q_PROPERTY(int    currentPhase READ get_CurrentPhase WRITE set_CurrentPhase STORED false)
+  QCEP_INTEGER_PROPERTY(CurrentPhase)
+
   Q_PROPERTY(int    summedExposures  READ get_SummedExposures WRITE set_SummedExposures)
   QCEP_INTEGER_PROPERTY(SummedExposures)
 
-  Q_PROPERTY(int     darkSummedExposures READ get_DarkSummedExposures WRITE set_DarkSummedExposures)
+  Q_PROPERTY(int    darkSummedExposures READ get_DarkSummedExposures WRITE set_DarkSummedExposures)
   QCEP_INTEGER_PROPERTY(DarkSummedExposures)
+
+  Q_PROPERTY(int    currentSummation READ get_CurrentSummation WRITE set_CurrentSummation STORED false)
+  QCEP_INTEGER_PROPERTY(CurrentSummation)
 
   Q_PROPERTY(int    skippedExposures  READ get_SkippedExposures WRITE set_SkippedExposures)
   QCEP_INTEGER_PROPERTY(SkippedExposures)
@@ -91,6 +97,9 @@ public:
 
   Q_PROPERTY(int    postTriggerFiles  READ get_PostTriggerFiles WRITE set_PostTriggerFiles)
   QCEP_INTEGER_PROPERTY(PostTriggerFiles)
+
+  Q_PROPERTY(int    currentFile  READ get_CurrentFile WRITE set_CurrentFile STORED false)
+  QCEP_INTEGER_PROPERTY(CurrentFile)
 
   Q_PROPERTY(QString filePattern     READ get_FilePattern WRITE set_FilePattern)
   QCEP_STRING_PROPERTY(FilePattern)

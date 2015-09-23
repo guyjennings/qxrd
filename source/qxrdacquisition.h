@@ -82,6 +82,8 @@ public slots:
   QxrdDetectorThreadPtr detectorThread(int n);
   QxrdDetectorPtr       detector(int n);
 
+  QString currentFileBase(int detNum);
+
 public:
   virtual void setupExposureMenu(QDoubleSpinBox *cb);
 
@@ -127,6 +129,8 @@ private:
   virtual void startIdling();
 
   void accumulateAcquiredImage(QcepInt16ImageDataPtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepInt32ImageDataPtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepImageDataBasePtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
 
   void processImage(const QxrdProcessArgs &args);
   void processImage        (QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);

@@ -227,23 +227,27 @@ void QxrdDetector::openControlWindow()
   }
 }
 
-void QxrdDetector::enqueueAcquiredFrame(QcepInt16ImageDataPtr img)
+void QxrdDetector::enqueueAcquiredFrame(QcepImageDataBasePtr img)
 {
   m_AcquiredImages.enqueue(img);
 
   m_NAcquiredImages.release(1);
 }
 
-QcepInt16ImageDataPtr QxrdDetector::acquireFrame()
+void QxrdDetector::beginFrame()
+{
+}
+
+QcepImageDataBasePtr QxrdDetector::acquireFrame()
 {
   m_NAcquiredImages.acquire(1);
 
   return m_AcquiredImages.dequeue();
 }
 
-QcepInt16ImageDataPtr QxrdDetector::acquireFrameIfAvailable()
+QcepImageDataBasePtr QxrdDetector::acquireFrameIfAvailable()
 {
-  QcepInt16ImageDataPtr res;
+  QcepImageDataBasePtr res;
 
   while (m_NAcquiredImages.available() >= 1) {
     res = acquireFrame();

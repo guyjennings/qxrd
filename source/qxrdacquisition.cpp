@@ -535,6 +535,23 @@ void QxrdAcquisition::indicateDroppedFrame(int n)
   }
 }
 
+void QxrdAcquisition::accumulateAcquiredImage(QcepImageDataBasePtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow)
+{
+  QcepInt16ImageDataPtr img16 = qSharedPointerCast<QcepInt16ImageData>(image);
+
+  if (img16) {
+    accumulateAcquiredImage(img16, accum, overflow);
+  } else {
+    QcepInt32ImageDataPtr img32 = qSharedPointerCast<QcepInt32ImageData>(image);
+
+    if (img32) {
+      accumulateAcquiredImage(img32, accum, overflow);
+    } else {
+      printMessage("type conversion failed in QxrdAcquisition::accumulateAcquiredImage");
+    }
+  }
+}
+
 void QxrdAcquisition::accumulateAcquiredImage(QcepInt16ImageDataPtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow)
 {
   if (image && accum && overflow) {
@@ -591,6 +608,77 @@ void QxrdAcquisition::accumulateAcquiredImage(QcepInt16ImageDataPtr image, QcepI
   }
 }
 
+void QxrdAcquisition::accumulateAcquiredImage(QcepInt32ImageDataPtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow)
+{
+  if (image && accum && overflow) {
+    long nPixels = image->get_Height()*image->get_Width();
+    int ovflwlvl = get_OverflowLevel();
+    quint32* src = image->data();
+    quint32* dst = accum->data();
+    short int* ovf = overflow->data();
+    int nsummed = accum->get_SummedExposures();
+
+    if (nsummed == 0) {
+      if (qcepDebug(DEBUG_ACQUIRE)) {
+        printMessage(tr("Frame %1 saved").arg(nsummed));
+      }
+
+      for (long i=0; i<nPixels; i++) {
+        quint32 val = *src++;
+
+        if (val>ovflwlvl) {
+          *ovf++ = 1;
+        } else {
+          *ovf++ = 0;
+        }
+
+        *dst++ = val;
+      }
+
+      accum->set_Normalization(image->get_Normalization());
+      accum->set_ExtraInputs(image->get_ExtraInputs());
+      accum->set_SummedExposures(1);
+      accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
+    } else {
+      if (qcepDebug(DEBUG_ACQUIRE)) {
+        printMessage(tr("Frame %1 summed").arg(nsummed));
+      }
+
+      for (long i=0; i<nPixels; i++) {
+        quint32 val = *src++;
+
+        if (val>ovflwlvl) {
+          *ovf++ += 1;
+        } else {
+          ovf++;
+        }
+
+        *dst++ += val;
+      }
+
+      accum->prop_Normalization()   -> incValue(image->get_Normalization());
+      accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
+      accum->prop_SummedExposures() -> incValue(1);
+      accum->prop_ImageSequenceNumber() -> incValue(image->get_ImageSequenceNumber());
+    }
+  }
+}
+
+QString QxrdAcquisition::currentFileBase(int detNum)
+{
+  QString fileBase, fileName;
+
+  getFileBaseAndName(
+        get_FilePattern(),
+        detNum,
+        get_CurrentFile(),
+        get_CurrentPhase(),
+        get_PhasesInGroup(),
+        fileBase, fileName);
+
+  return fileBase;
+}
+
 void QxrdAcquisition::getFileBaseAndName(QString filePattern, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName)
 {
   int width = get_FileIndexWidth();
@@ -600,7 +688,7 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int detNum, int fi
   int nDet = get_DetectorCount();
 
   if (proc) {
-    if (nphases == 0) {
+    if (nphases == 0 || phase < 0) {
       if (nDet <= 1) {
         fileBase = tr("%1-%2.dark.tif")
             .arg(filePattern).arg(fileIndex,width,10,QChar('0'));
@@ -893,10 +981,18 @@ void QxrdAcquisition::doAcquire()
                  .arg(fileBase).arg(exposure).arg(nsummed).arg(postTrigger).arg(preTrigger).arg(nphases).arg(fileIndex));
 
 
+    set_CurrentPhase(0);
+    set_CurrentSummation(-1);
+    set_CurrentFile(fileIndex);
+
     for (int i=0; i<skipBefore; i++) {
       if (cancelling()) goto cancel;
       if (qcepDebug(DEBUG_ACQUIRETIME)) {
         printMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
+      }
+
+      for (int d=0; d<nDet; d++) {
+        dets[d]->beginFrame();
       }
 
       for (int d=0; d<nDet; d++) {
@@ -906,6 +1002,8 @@ void QxrdAcquisition::doAcquire()
 
     for (int i=0; i<postTrigger; i += (get_Triggered() ? 1:0)) {
       if (cancelling()) goto cancel;
+
+      set_CurrentFile(fileIndex);
 
       if (i != 0) {
         for (int k=0; k<skipBetween; k++) {
@@ -927,7 +1025,17 @@ void QxrdAcquisition::doAcquire()
       if (cancelling()) goto cancel;
 
       for (int s=0; s<nsummed;) {
+        set_CurrentSummation(s);
+
         for (int p=0; p<nphases; p++) {
+          set_CurrentPhase(p);
+
+          for (int d=0; d<nDet; d++) {
+            QxrdDetectorPtr det = dets[d];
+
+            det->beginFrame();
+          }
+
           for (int d=0; d<nDet; d++) {
             QxrdDetectorPtr det = dets[d];
             int nCols = det->get_NCols();
@@ -985,7 +1093,7 @@ void QxrdAcquisition::doAcquire()
                   i, postTrigger);
             }
 
-            QcepInt16ImageDataPtr img = det -> acquireFrame();
+            QcepImageDataBasePtr img = det -> acquireFrame();
 
             if (img && res[d][p][0] && ovf[d][p][0]) {
               accumulateAcquiredImage(img, res[d][p][0], ovf[d][p][0]);
@@ -1157,6 +1265,10 @@ void QxrdAcquisition::doAcquireDark()
     QVector<QcepInt32ImageDataPtr> res;
     QVector<QcepMaskDataPtr> overflow;
 
+    set_CurrentPhase(-1);
+    set_CurrentSummation(0);
+    set_CurrentFile(fileIndex);
+
     for (int i=0; i<get_DetectorCount(); i++) {
       QxrdDetectorPtr det = detector(i);
 
@@ -1202,6 +1314,12 @@ void QxrdAcquisition::doAcquireDark()
     for (int i=0; i<skipBefore; i++) {
       if (cancelling()) goto cancel;
 
+      set_CurrentSummation(-1);
+
+      for (int d=0; d<nDet; d++) {
+        dets[i] -> beginFrame();
+      }
+
       if (qcepDebug(DEBUG_ACQUIRETIME)) {
         printMessage(tr("Skipping %1 of %2").arg(i+1).arg(skipBefore));
       }
@@ -1214,10 +1332,16 @@ void QxrdAcquisition::doAcquireDark()
     for (int i=0; i<nsummed;) {
       if (cancelling()) goto cancel;
 
+      set_CurrentSummation(i);
+
+      for (int d=0; d<nDet; d++) {
+        dets[d] -> beginFrame();
+      }
+
       for (int d=0; d<nDet; d++) {
         emit acquiredFrame(res[d]->get_FileBase(), 0, 1, i, nsummed, 0, 1);
 
-        QcepInt16ImageDataPtr img =
+        QcepImageDataBasePtr img =
             dets[d] -> acquireFrame();
 
         if (img) {
@@ -1296,7 +1420,7 @@ void QxrdAcquisition::onIdleTimeout()
       QxrdDetectorPtr det = detector(i);
 
       if (det && det->isEnabled()) {
-        QcepInt16ImageDataPtr res = det -> acquireFrameIfAvailable();
+        QcepImageDataBasePtr res = det -> acquireFrameIfAvailable();
 
         QxrdDetectorProcessorPtr proc = det->processor();
 

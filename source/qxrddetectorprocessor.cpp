@@ -148,7 +148,7 @@ void QxrdDetectorProcessor::processDarkImage(QString filePattern,
   }
 }
 
-void QxrdDetectorProcessor::processIdleImage(QcepInt16ImageDataPtr image)
+void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
 {
   if (image) {
     printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\"")

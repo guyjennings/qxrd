@@ -23,6 +23,7 @@ QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver,
   m_PilatusPort            (saver, this, "pilatusPort",          41234,         "Camserver Port Number"),
   m_PilatusFilePattern     (saver, this, "pilatusFilePattern",   "%s-%-0.5d%s", "File pattern for saved files"),
   m_PilatusDataDirectory   (saver, this, "pilatusDataDirectory", "/home/det/shareddata/test/",    "Data directory on Camserver computer"),
+  m_ReadFilesLocally       (saver, this, "readFilesLocally",     true, "Attempt to read acquired files into QXRD for further processing"),
   m_LocalDataDirectory     (saver, this, "localDataDirectory",   "/home/bessrc/shareddata/test/", "Data directory as seen on QXRD computer"),
   m_DeleteFilesAfterReading(saver, this, "deleteFilesAfterReading", false, "Delete files from Camserver computer after reading"),
   m_ExposureMode           (saver, this, "exposureMode",         0, "Pilatus Exposure Mode = (0:No Trigger, 1:ExtTrigger, 2:ExtEnable"),
@@ -66,7 +67,8 @@ void QxrdDetectorPilatus::startDetector()
     //    m_ExpectedFileTimer.start(1000);
 
     sendCommand("telemetry");
-
+    sendCommand("nimages 1");
+    sendCommand("nexpframe 1");
     imagePath(get_PilatusDataDirectory());
   }
 }
@@ -86,6 +88,8 @@ void QxrdDetectorPilatus::beginAcquisition(double exposure)
     if (qcepDebug(DEBUG_PILATUS)) {
       printMessage(tr("QxrdDetectorPilatus::beginAcquisition(%1)").arg(exposure));
     }
+
+    beginExposure(exposure);
   }
 }
 
@@ -115,11 +119,62 @@ void QxrdDetectorPilatus::readyRead()
     printMessage(tr("%1 bytes available").arg(m_PilatusSocket.bytesAvailable()));
   }
 
-  while (m_PilatusSocket.canReadLine()) {
-    QString aLine = m_PilatusSocket.readLine();
+  QByteArray data = m_Preread + m_PilatusSocket.readAll();
 
-    printMessage(tr("Line: %1").arg(aLine));
+  QList<QByteArray> lines = data.split(char(24)/*'\n'*/);
+
+  if (lines.last() != "") {
+    m_Preread = lines.last();
+    lines.last() == "";
   }
+
+  foreach(QByteArray line, lines) {
+    if (line.count()) {
+      QStringList lines = QString(line).split('\n');
+
+      foreach(QString line, lines) {
+        if (line.count()) {
+          if (qcepDebug(DEBUG_PILATUS)) {
+            printMessage(tr("(%1) : \"%2\"").arg(line.count()).arg(QString(line)));
+          }
+
+          interpretReply(line);
+        }
+      }
+    }
+  }
+
+//  while (m_PilatusSocket.bytesAvailable()) {
+//    if (qcepDebug(DEBUG_PILATUS)) {
+//      printMessage(tr("%1 bytes available").arg(m_PilatusSocket.bytesAvailable()));
+//    }
+
+//    while (m_PilatusSocket.canReadLine()) {
+//      QString aLine = m_PilatusSocket.readLine();
+
+//      if (qcepDebug(DEBUG_PILATUS)) {
+//        printMessage(tr("Line: %1").arg(aLine));
+//      }
+
+//      interpretReply(aLine);
+//    }
+
+//    if (m_PilatusSocket.bytesAvailable()) {
+//      char c;
+//      m_PilatusSocket.getChar(&c);
+
+//      if (qcepDebug(DEBUG_PILATUS)) {
+//        printMessage(tr("%1 bytes available, first char %2")
+//                     .arg(m_PilatusSocket.bytesAvailable())
+//                     .arg((int) c));
+//      }
+
+//      if (c != 24) {
+//        m_PilatusSocket.ungetChar(c);
+//        break;
+//      }
+//    }
+//  }
 }
 
 void QxrdDetectorPilatus::sendCommand(QString cmd)
@@ -282,7 +337,7 @@ void QxrdDetectorPilatus::extTrigger(QString file)
   if (checkDetectorEnabled()) {
     sendCommand(tr("exttrigger \"%1\"").arg(file));
 
-    expectReply("15 OK Starting externally triggered exposure\\(s):(.*)");
+    expectReply("15 OK Starting externally triggered exposure\\(s\\):(.*)");
   }
 }
 
@@ -291,7 +346,7 @@ void QxrdDetectorPilatus::extEnable(QString file)
   if (checkDetectorEnabled()) {
     sendCommand(tr("extenable \"%1\"").arg(file));
 
-    expectReply("15 OK Starting externally enabled exposure\\(s):(.*)");
+    expectReply("15 OK Starting externally enabled exposure\\(s\\):(.*)");
   }
 }
 
@@ -310,6 +365,87 @@ void QxrdDetectorPilatus::acquireImage(QString fileName, double exposure)
     exposureTime(exposure);
 
     sendCommand(tr("exposure \"%1\"").arg(fileName));
+  }
+}
+
+void QxrdDetectorPilatus::beginExposure(double exposure)
+{
+  int expMode = get_ExposureMode();
+
+  if (expMode == NoExternalTrigger) {
+    sendCommand(tr("ExpTime %1").arg(exposure));
+    sendCommand("nexpframe 1");
+  } else if (expMode == ExternalTrigger) {
+    sendCommand("Delay 0");
+    sendCommand(tr("ExpPeriod %1").arg(exposure));
+    sendCommand(tr("ExpTime %1").arg(exposure));
+    sendCommand("nexpframe 1");
+  } else if (expMode == ExternalEnable) {
+    int nFrames = (int) (get_EnableFrequency()*exposure);
+    sendCommand(tr("nexpframe %1").arg(nFrames));
+  }
+}
+
+void QxrdDetectorPilatus::expose()
+{
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    m_CurrentFile = acq->currentFileBase(get_DetectorNumber());
+
+    int expMode = get_ExposureMode();
+
+    if (expMode == NoExternalTrigger) {
+      sendCommand(tr("Exposure \"%1\"").arg(m_CurrentFile));
+    } else if (expMode == ExternalTrigger) {
+      sendCommand(tr("ExtTrigger \"%1\"").arg(m_CurrentFile));
+    } else if (expMode == ExternalEnable) {
+      sendCommand(tr("ExtEnable \"%1\"").arg(m_CurrentFile));
+    }
+  }
+}
+
+void QxrdDetectorPilatus::beginFrame()
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "beginFrame", Qt::BlockingQueuedConnection);
+  } else {
+    if (qcepDebug(DEBUG_PILATUS)) {
+      printMessage("QxrdDetectorPilatus::beginFrame");
+    }
+
+    QxrdDetector::beginFrame();
+
+    expose();
+  }
+}
+
+void QxrdDetectorPilatus::interpretReply(QString reply)
+{
+  printMessage(tr("QxrdDetectorPilatus::interpretReply(\"%1\")").arg(reply));
+
+
+  if (reply.startsWith("7 OK")) { // Image has been saved...
+    if (get_ReadFilesLocally() == false) {
+      enqueueAcquiredFrame(QcepInt16ImageDataPtr());
+    } else {
+      pushFileExpected(m_CurrentFile);
+    }
+  } else if (reply.startsWith("Image format:")) {
+    QRegExp matcher("Image format\\: (\\d+)\\(w\\) x (\\d+)\\(h\\) pixels(.*)");
+
+    if (matcher.exactMatch(reply)) {
+      int width = matcher.cap(1).toInt();
+      int height = matcher.cap(2).toInt();
+
+      printMessage(tr("Detector dimensions %1 cols x %2 rows").arg(width).arg(height));
+
+      set_NRows(height);
+      set_NCols(width);
+    } else {
+      printMessage(tr("Unmatched: %1, %2").arg(reply).arg(matcher.pattern()));
+      printMessage(tr("Matched Length %1").arg(matcher.matchedLength()));
+    }
   }
 }
 
@@ -412,11 +548,11 @@ void QxrdDetectorPilatus::checkExpectedFiles()
           printMessage(tr("File %1 exists").arg(f.fileName()));
         }
 
-        QcepDoubleImageDataPtr data = QcepAllocator::newDoubleImage("", 0,0, this);
+        QcepInt32ImageDataPtr data = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve, 0,0, this);
 
         data->readImage(f.fileName());
 
-        printMessage(tr("File %1 has been read").arg(f.fileName()));
+        enqueueAcquiredFrame(data);
       } else {
         return;
       }
@@ -445,6 +581,7 @@ void QxrdDetectorPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::FixedIntegerProperty,   "pilatusPort",  "Camserver Port",    41234);
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusFilePattern",   "Save File Pattern", "%s-%-0.5d%s");
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusDataDirectory", "Camserver Data Directory", "/home/det/shareddata/test/");
+    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "readFilesLocally",     "Attempt to read acquired files into QXRD for further processing", true);
     proxy->pushProperty(QxrdDetectorProxy::DirectoryProperty, "localDataDirectory","Local Data Directory", "/home/bessrc/shareddata/test/");
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "deleteFilesAfterReading", "Delete files from camserver computer after use", false);
     proxy->pushProperty(QxrdDetectorProxy::PilatusModeProperty, "exposureMode",     "Pilatus Exposure Mode", 0);
@@ -461,6 +598,7 @@ void QxrdDetectorPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::FixedIntegerProperty,   "pilatusPort",  "Camserver Port",    get_PilatusPort());
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusFilePattern",   "Save File Pattern", get_PilatusFilePattern());
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusDataDirectory", "Camserver Data Directory", get_PilatusDataDirectory());
+    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "readFilesLocally",     "Attempt to read acquired files into QXRD for further processing", get_ReadFilesLocally());
     proxy->pushProperty(QxrdDetectorProxy::DirectoryProperty, "localDataDirectory","Local Data Directory", get_LocalDataDirectory());
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "deleteFilesAfterReading", "Delete files from camserver computer after use", get_DeleteFilesAfterReading());
     proxy->pushProperty(QxrdDetectorProxy::PilatusModeProperty, "exposureMode",     "Pilatus Exposure Mode", get_ExposureMode());
@@ -476,6 +614,7 @@ void QxrdDetectorPilatus::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
     set_PilatusHost            (proxy->property("pilatusHost").toString());
     set_PilatusFilePattern     (proxy->property("pilatusFilePattern").toString());
     set_PilatusDataDirectory   (proxy->property("pilatusDataDirectory").toString());
+    set_ReadFilesLocally       (proxy->property("readFilesLocally").toBool());
     set_LocalDataDirectory     (proxy->property("localDataDirectory").toString());
     set_DeleteFilesAfterReading(proxy->property("deleteFilesAfterReading").toBool());
     set_ExposureMode           (proxy->property("exposureMode").toInt());

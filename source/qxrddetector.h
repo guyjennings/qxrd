@@ -46,7 +46,7 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
-  void enqueueAcquiredFrame(QcepInt16ImageDataPtr img);
+  void enqueueAcquiredFrame(QcepImageDataBasePtr img);
 
 signals:
 
@@ -68,8 +68,9 @@ public slots:
   QxrdDetectorProcessorPtr processor();
   void startOrStop(bool enabled);
 
-  virtual QcepInt16ImageDataPtr acquireFrameIfAvailable();
-  virtual QcepInt16ImageDataPtr acquireFrame();
+  virtual void beginFrame();
+  virtual QcepImageDataBasePtr acquireFrameIfAvailable();
+  virtual QcepImageDataBasePtr acquireFrame();
 
 protected:
   QcepSettingsSaverWPtr       m_Saver;
@@ -81,7 +82,7 @@ protected:
 private:
   QMutex                      m_Mutex;
   QSemaphore                  m_NAcquiredImages;
-  QcepInt16ImageQueue         m_AcquiredImages;
+  QcepImageBaseQueue          m_AcquiredImages;
 
 public:
   Q_PROPERTY(int detectorNumber READ get_DetectorNumber WRITE set_DetectorNumber STORED false)
