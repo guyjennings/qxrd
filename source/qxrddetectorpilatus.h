@@ -6,6 +6,7 @@
 #include <QTcpSocket>
 //#include <QFileSystemWatcher>
 #include <QTimer>
+#include "qxrddetectorpilatusremote-ptr.h"
 
 class QxrdDetectorPilatus : public QxrdDetector
 {
@@ -32,6 +33,11 @@ public slots:
   void shutdownAcquisition();
 
   void beginFrame();
+
+  void remoteConnect(QString sshCmd);
+  void remoteCommand(QString cmd);
+  void remoteCopy   (QString file);
+  void remoteDelete (QString file);
 
 private:
   enum {
@@ -70,6 +76,7 @@ private:
 
 private:
   void pushFileExpected(QString f);
+  void loadAndPush(QString f);
 
 private:
   QTcpSocket m_PilatusSocket;
@@ -83,6 +90,8 @@ private:
   double     m_ExposureTime;
   int        m_ExposuresPerFrame;
   int        m_ExposureFrameCount;
+
+  QxrdDetectorPilatusRemotePtr m_Remote;
 
 public:
   Q_PROPERTY(QString pilatusHost READ get_PilatusHost WRITE set_PilatusHost)
