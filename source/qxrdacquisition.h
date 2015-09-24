@@ -108,7 +108,7 @@ protected:
   void acquisition(int isDark);
   void copyParameters(int isDark);
 
-  void getFileBaseAndName(QString filePattern, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
+  void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
   QxrdExperimentWPtr experiment();
   QxrdDataProcessorWPtr dataProcessor();
@@ -133,9 +133,9 @@ private:
   void accumulateAcquiredImage(QcepImageDataBasePtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
 
   void processImage(const QxrdProcessArgs &args);
-  void processImage        (QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
-  void processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
-  void processDarkImage    (QString filePattern, int fileIndex,                                    QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+  void processImage        (QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+  void processAcquiredImage(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+  void processDarkImage    (QString filePattern, QString extent, int fileIndex,                                    QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
 
   int cancelling();
 

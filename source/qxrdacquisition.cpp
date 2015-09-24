@@ -668,8 +668,18 @@ QString QxrdAcquisition::currentFileBase(int detNum)
 {
   QString fileBase, fileName;
 
+  QxrdDetectorPtr det = detector(detNum);
+  QString extent;
+
+  if (det) {
+    extent = det->get_Extension();
+  } else {
+    extent = "tif";
+  }
+
   getFileBaseAndName(
         get_FilePattern(),
+        extent,
         detNum,
         get_CurrentFile(),
         get_CurrentPhase(),
@@ -679,7 +689,7 @@ QString QxrdAcquisition::currentFileBase(int detNum)
   return fileBase;
 }
 
-void QxrdAcquisition::getFileBaseAndName(QString filePattern, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName)
+void QxrdAcquisition::getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName)
 {
   int width = get_FileIndexWidth();
   int detWidth = get_DetectorNumberWidth();
@@ -690,11 +700,11 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int detNum, int fi
   if (proc) {
     if (nphases == 0 || phase < 0) {
       if (nDet <= 1) {
-        fileBase = tr("%1-%2.dark.tif")
-            .arg(filePattern).arg(fileIndex,width,10,QChar('0'));
+        fileBase = tr("%1-%2.dark.%3")
+            .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(extent);
       } else {
-        fileBase = tr("%1-%2-%3.dark.tif")
-            .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0'));
+        fileBase = tr("%1-%2-%3.dark.%4")
+            .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0')).arg(extent);
       }
 
       fileName = QDir(proc -> darkOutputDirectory()).filePath(fileBase);
@@ -702,19 +712,20 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int detNum, int fi
       if (nphases > 1) {
         int phswidth = get_FilePhaseWidth();
         if (nDet <= 1) {
-          fileBase = tr("%1-%2-%3.tif")
-              .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(phase,phswidth,10,QChar('0'));
+          fileBase = tr("%1-%2-%3.%4")
+              .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(phase,phswidth,10,QChar('0')).arg(extent);
         } else {
-          fileBase = tr("%1-%2-%3-%4.tif")
-              .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0')).arg(phase,phswidth,10,QChar('0'));
+          fileBase = tr("%1-%2-%3-%4.%5")
+              .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0'))
+              .arg(phase,phswidth,10,QChar('0')).arg(extent);
         }
       } else {
         if (nDet <= 1) {
-          fileBase = tr("%1-%2.tif")
-              .arg(filePattern).arg(fileIndex,width,10,QChar('0'));
+          fileBase = tr("%1-%2.%3")
+              .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(extent);
         } else {
-          fileBase = tr("%1-%2-%3.tif")
-              .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0'));
+          fileBase = tr("%1-%2-%3.%4")
+              .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0')).arg(extent);
         }
       }
       fileName = QDir(proc -> rawOutputDirectory()).filePath(fileBase);
@@ -722,7 +733,7 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, int detNum, int fi
   }
 }
 
-void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
+void QxrdAcquisition::processImage(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
 {
   if (image) {
 //    int w=image->get_Width(), h=image->get_Height();
@@ -746,7 +757,7 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     QString fileName;
     QString fileBase;
 
-    getFileBaseAndName(filePattern, 0, fileIndex, phase, nPhases, fileBase, fileName);
+    getFileBaseAndName(filePattern, extent, 0, fileIndex, phase, nPhases, fileBase, fileName);
 
     if (qcepDebug(DEBUG_ACQUIRE) || qcepDebug(DEBUG_ACQUIRETIME)) {
       printMessage(tr("Fn: %1, Fi: %2, Phs: %3")
@@ -814,14 +825,14 @@ void QxrdAcquisition::processImage(const QxrdProcessArgs &args)
     printMessage(tr("QxrdAcquisition::processImage %1 %2 start").arg(args.m_FilePattern).arg(args.m_FileIndex));
   }
 
-  processImage(args.m_FilePattern, args.m_FileIndex, args.m_Phase, args.m_NPhases, args.m_Trig, args.m_Image, args.m_Overflow);
+  processImage(args.m_FilePattern, args.m_Extension, args.m_FileIndex, args.m_Phase, args.m_NPhases, args.m_Trig, args.m_Image, args.m_Overflow);
 
   if (qcepDebug(DEBUG_ACQUIRETIME)) {
     printMessage(tr("QxrdAcquisition::processImage %1 %2 end").arg(args.m_FilePattern).arg(args.m_FileIndex));
   }
 }
 
-void QxrdAcquisition::processAcquiredImage(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
+void QxrdAcquisition::processAcquiredImage(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
 {
   //  printf("processAcquiredImage(""%s"",%d,%d,img,ovf)\n", qPrintable(filePattern), fileIndex, phase);
 
@@ -832,14 +843,14 @@ void QxrdAcquisition::processAcquiredImage(QString filePattern, int fileIndex, i
   }
 
   QtConcurrent::run(this, &QxrdAcquisition::processImage,
-                    QxrdProcessArgs(filePattern, fileIndex, phase, nPhases, trig, image, overflow));
+                    QxrdProcessArgs(filePattern, extent, fileIndex, phase, nPhases, trig, image, overflow));
 }
 
-void QxrdAcquisition::processDarkImage(QString filePattern, int fileIndex, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
+void QxrdAcquisition::processDarkImage(QString filePattern, QString extent, int fileIndex, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
 {
   //  printf("processDarkImage(""%s"",%d,img,ovf)\n", qPrintable(filePattern), fileIndex);
 
-  processImage(filePattern, fileIndex, -1, 0, true, image, overflow);
+  processImage(filePattern, extent, fileIndex, -1, 0, true, image, overflow);
 }
 
 QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindowWPtr win)
@@ -1059,7 +1070,8 @@ void QxrdAcquisition::doAcquire()
 
                 nres -> set_SummedExposures(0);
 
-                getFileBaseAndName(fileBase, det->get_DetectorNumber(),
+                getFileBaseAndName(fileBase, det->get_Extension(),
+                                   det->get_DetectorNumber(),
                                    fileIndex, p, nphases, fb, fn);
 
                 nres -> set_FileBase(fb);
@@ -1305,7 +1317,7 @@ void QxrdAcquisition::doAcquireDark()
     for (int d=0; d<nDet; d++) {
       QxrdDetectorPtr det = dets[d];
 
-      getFileBaseAndName(fileBase, det->get_DetectorNumber(), fileIndex, -1, 1, fb, fn);
+      getFileBaseAndName(fileBase, det->get_Extension(), det->get_DetectorNumber(), fileIndex, -1, 1, fb, fn);
 
       res[d] -> set_FileBase(fb);
       res[d] -> set_FileName(fn);
