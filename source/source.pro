@@ -322,7 +322,9 @@ HEADERS += TODO.h \
     qxrdroicoordinates.h \
     qxrdroicoordinates-ptr.h \
     qxrdroicoordinateslist.h \
-    qxrdroicoordinateslist-ptr.h
+    qxrdroicoordinateslist-ptr.h \
+    qxrddetectorpilatusremote.h \
+    qxrddetectorpilatusremote-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -480,7 +482,8 @@ SOURCES += qxrd.cpp \
     qxrdtodolist.cpp \
     qxrdtodolistitem.cpp \
     qxrdroicoordinates.cpp \
-    qxrdroicoordinateslist.cpp
+    qxrdroicoordinateslist.cpp \
+    qxrddetectorpilatusremote.cpp
 
 OTHER_FILES += testImage.js
 

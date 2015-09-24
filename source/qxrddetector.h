@@ -105,6 +105,9 @@ public:
 
   Q_PROPERTY(int nRows READ get_NRows WRITE set_NRows STORED false)
   QCEP_INTEGER_PROPERTY(NRows)
+
+  Q_PROPERTY(QString extension READ get_Extension WRITE set_Extension)
+  QCEP_STRING_PROPERTY(Extension)
 };
 
 #endif // QXRDDETECTOR_H

@@ -30,7 +30,8 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
   m_Enabled(saver, this, "enabled", true, "Is Detector Enabled?"),
   m_DetectorName(saver, this, "detectorName", QxrdDetectorThread::detectorTypeName(detType), "Detector Name"),
   m_NCols(QcepSettingsSaverWPtr(), this, "nCols", 0, "No of detector cols"),
-  m_NRows(QcepSettingsSaverWPtr(), this, "nRows", 0, "No of detector rows")
+  m_NRows(QcepSettingsSaverWPtr(), this, "nRows", 0, "No of detector rows"),
+  m_Extension(saver, this, "extension", "tif", "File extension")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::QxrdDetector(%p)\n", this);
@@ -189,6 +190,7 @@ void QxrdDetector::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType)
     proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty,   "detectorType",   "Detector Type",     detType);
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,        "enabled",        "Detector Enabled?", true);
     proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "detectorName",   "Detector Name",     "A " + QxrdDetectorThread::detectorTypeName(detType));
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "extension",      "File extension",    "tif");
   }
 }
 
@@ -201,6 +203,7 @@ void QxrdDetector::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty,   "detectorType",   "Detector Type",     get_DetectorType());
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,        "enabled",        "Detector Enabled?", get_Enabled());
     proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "detectorName",   "Detector Name",     get_DetectorName());
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "extension",      "File extension",    get_Extension());
   }
 }
 
@@ -210,6 +213,7 @@ void QxrdDetector::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
     set_Enabled(proxy->property("enabled").toBool());
     set_DetectorNumber(proxy->property("detectorNumber").toInt());
     set_DetectorName(proxy->property("detectorName").toString());
+    set_Extension(proxy->property("extension").toString());
   }
 }
 

@@ -7,8 +7,9 @@
 
 class QxrdProcessArgs {
 public:
-  QxrdProcessArgs(QString filePattern, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
+  QxrdProcessArgs(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
     : m_FilePattern(filePattern),
+      m_Extension(extent),
       m_FileIndex(fileIndex),
       m_Phase(phase),
       m_NPhases(nPhases),
@@ -18,6 +19,7 @@ public:
 
 public:
   QString               m_FilePattern;
+  QString               m_Extension;
   int                   m_FileIndex;
   int                   m_Phase;
   int                   m_NPhases;
