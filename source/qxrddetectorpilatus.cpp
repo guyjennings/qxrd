@@ -424,8 +424,9 @@ void QxrdDetectorPilatus::interpretReply(QString reply)
 {
   printMessage(tr("QxrdDetectorPilatus::interpretReply(\"%1\")").arg(reply));
 
-
-  if (reply.startsWith("7 OK")) { // Image has been saved...
+  if (reply.startsWith("1 ERR")) {
+    criticalMessage(tr("Error with pilatus detector: %1").arg(reply));
+  } else if (reply.startsWith("7 OK")) { // Image has been saved...
     if (get_ReadFilesLocally() == false) {
       enqueueAcquiredFrame(QcepInt16ImageDataPtr());
     } else {
