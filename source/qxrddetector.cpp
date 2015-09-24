@@ -8,6 +8,7 @@
 #include "qxrddetectorcontrolwindow.h"
 #include "qxrdexperiment.h"
 #include "qcepimagedata.h"
+#include "qxrdacquisition.h"
 
 QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
                            QxrdExperimentWPtr    expt,
@@ -240,9 +241,19 @@ void QxrdDetector::beginFrame()
 
 QcepImageDataBasePtr QxrdDetector::acquireFrame()
 {
-  m_NAcquiredImages.acquire(1);
+  QxrdAcquisitionPtr acq(m_Acquisition);
 
-  return m_AcquiredImages.dequeue();
+  if (acq) {
+    while (1) {
+      if (m_NAcquiredImages.tryAcquire(1, 100)) {
+        return m_AcquiredImages.dequeue();
+      } else if (acq->get_Cancelling()) {
+        return QcepImageDataBasePtr();
+      }
+    }
+  }
+
+  return QcepImageDataBasePtr();
 }
 
 QcepImageDataBasePtr QxrdDetector::acquireFrameIfAvailable()
