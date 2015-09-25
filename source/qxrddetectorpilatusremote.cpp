@@ -1,7 +1,10 @@
 #include "qxrddetectorpilatusremote.h"
+#include "qxrddebug.h"
+#include <QCryptographicHash>
 
 QxrdDetectorPilatusRemote::QxrdDetectorPilatusRemote(QcepObject *owner)
-  : QcepObject("pilatusRemote", owner)
+  : QcepObject("pilatusRemote", owner),
+    m_FileTransferSize(0)
 {
   printMessage("Constructed Pilatus Remote Object");
 
@@ -20,16 +23,66 @@ void QxrdDetectorPilatusRemote::executeRemote(QString cmd)
 {
   printMessage(tr("Exceute %1").arg(cmd));
 
-  m_Process.write(qPrintable(cmd));
+  m_Process.write(qPrintable(cmd+"\n"));
 }
 
 void QxrdDetectorPilatusRemote::onReadyRead()
 {
-  printMessage("On ready read");
+  printMessage(tr("Remote On ready read (%1 bytes available)").arg(m_Process.bytesAvailable()));
 
-  while (m_Process.canReadLine()) {
-    QString aLine = m_Process.readLine();
+  m_Buffer.append(m_Process.readAll());
 
-    printMessage(tr("Out: %1").arg(aLine));
+  while (1) {
+    if (m_FileTransferSize > 0) { // Doing a file transfer
+      if (m_Buffer.count() >= m_FileTransferSize) {
+        m_TransferredFile = m_Buffer.left(m_FileTransferSize);
+
+        QByteArray hash = QCryptographicHash::hash(m_TransferredFile, QCryptographicHash::Md5);
+
+        printMessage(tr("%1 byte file transferred, md5sum %2")
+                     .arg(m_FileTransferSize)
+                     .arg(QString(hash.toHex())));
+
+        m_Buffer.remove(0, m_FileTransferSize);
+
+        m_FileTransferSize = 0;
+      } else {
+        return;
+      }
+    } else {
+      int ind = m_Buffer.indexOf('\n');
+
+      if (ind >= 0) {
+        QString line = m_Buffer.left(ind); // Don't include newline
+        m_Buffer.remove(0, ind+1);
+
+        if (qcepDebug(DEBUG_PILATUS)) {
+          printMessage(tr("(%1) : \"%2\"").arg(line.count()).arg(QString(line)));
+        }
+
+        interpretLine(line);
+      } else { // No new lines when expected
+        return;
+      }
+    }
+  }
+}
+
+void QxrdDetectorPilatusRemote::interpretLine(QString line)
+{
+  printMessage(tr("QxrdDetectorPilatusRemote::interpretLine(\"%1\")").arg(line));
+
+  if (line.startsWith("transfer:")) {
+    QStringList fields = line.split(QRegExp("\\s+"));
+
+    printMessage(tr("transfer: %1 args").arg(fields.count()));
+
+    foreach(QString f, fields) {
+      printMessage(tr("Arg:%1").arg(f));
+    }
+
+    m_FileTransferSize = fields.value(4).toInt();
+
+    printMessage(tr("Transfer %1 bytes").arg(m_FileTransferSize));
   }
 }

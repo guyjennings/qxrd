@@ -4,8 +4,6 @@
 #include "qcepmacros.h"
 #include "qxrddetector.h"
 #include <QTcpSocket>
-//#include <QFileSystemWatcher>
-#include <QTimer>
 #include "qxrddetectorpilatusremote-ptr.h"
 
 class QxrdDetectorPilatus : public QxrdDetector
@@ -22,22 +20,20 @@ public:
 signals:
 
 public slots:
-  void onExposureTimeChanged();
-
   void startDetector();
   void stopDetector();
 
-//  void acquire();
   void beginAcquisition(double exposure);
   void endAcquisition();
   void shutdownAcquisition();
 
   void beginFrame();
 
-  void remoteConnect(QString sshCmd);
-  void remoteCommand(QString cmd);
-  void remoteCopy   (QString file);
-  void remoteDelete (QString file);
+  void remoteConnect  (QString sshCmd);
+  void remoteCommand  (QString cmd);
+  void remoteCopy     (QString file);
+  void remoteDelete   (QString file);
+  void remoteTransfer (QString file);
 
 private:
   enum {
@@ -50,42 +46,20 @@ private:
   void interpretReply(QString reply);
   void expose();
 
-  void exposureTime(double exposure);
-  void exposurePeriod(double period);
-  void exposureDelay(double delay);
-  void exposuresPerFrame(int nexp);
-  void exposureFrameCount(int nfram);
-
   void imagePath(QString path);
-  void exposure(QString file);
-  void extTrigger(QString file);
-  void extEnable(QString file);
-
-  void acquireImage(QString fileName, double exposure);
 
   void    sendCommand(QString cmd);
-  QString sendCommandReply(QString cmd);
-
-  QString reply();
-  void expectReply(QString regexp);
 
   void readyRead();
-//  void fileChanged(const QString &path);
-//  void directoryChanged(const QString &path);
-  void checkExpectedFiles();
 
 private:
-  void pushFileExpected(QString f);
   void loadAndPush(QString f);
 
 private:
   QTcpSocket m_PilatusSocket;
   QString    m_PilatusReply;
-//  QFileSystemWatcher m_FileWatcher;
-  QByteArray m_Preread;
+  QByteArray m_Buffer;
   QString    m_CurrentFile;
-  QStringList m_ExpectedFiles;
-  QTimer     m_ExpectedFileTimer;
 
   double     m_ExposureTime;
   int        m_ExposuresPerFrame;
@@ -100,17 +74,14 @@ public:
   Q_PROPERTY(int pilatusPort READ get_PilatusPort WRITE set_PilatusPort)
   QCEP_INTEGER_PROPERTY(PilatusPort)
 
-  Q_PROPERTY(QString pilatusFilePattern READ get_PilatusFilePattern WRITE set_PilatusFilePattern)
-  QCEP_STRING_PROPERTY(PilatusFilePattern)
+  Q_PROPERTY(QString pilatusUser READ get_PilatusUser WRITE set_PilatusUser)
+  QCEP_STRING_PROPERTY(PilatusUser)
 
   Q_PROPERTY(QString pilatusDataDirectory READ get_PilatusDataDirectory WRITE set_PilatusDataDirectory)
   QCEP_STRING_PROPERTY(PilatusDataDirectory)
 
   Q_PROPERTY(bool readFilesLocally READ get_ReadFilesLocally WRITE set_ReadFilesLocally)
   QCEP_BOOLEAN_PROPERTY(ReadFilesLocally)
-
-  Q_PROPERTY(QString localDataDirectory READ get_LocalDataDirectory WRITE set_LocalDataDirectory)
-  QCEP_STRING_PROPERTY(LocalDataDirectory)
 
   Q_PROPERTY(bool deleteFilesAfterReading READ get_DeleteFilesAfterReading WRITE set_DeleteFilesAfterReading)
   QCEP_BOOLEAN_PROPERTY(DeleteFilesAfterReading)

@@ -20,7 +20,13 @@ public slots:
   void onReadyRead();
 
 private:
-  QProcess m_Process;
+  void interpretLine(QString line);
+
+private:
+  QProcess   m_Process;
+  QByteArray m_Buffer;
+  int        m_FileTransferSize;
+  QByteArray m_TransferredFile;
 };
 
 #endif // QXRDDETECTORPILATUSREMOTE_H
