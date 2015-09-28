@@ -35,6 +35,8 @@ public slots:
   void remoteDelete   (QString file);
   void remoteTransfer (QString file);
 
+  void executeCommand (QString cmd);
+
 private:
   enum {
     NoExternalTrigger,
@@ -48,7 +50,7 @@ private:
 
   void imagePath(QString path);
 
-  void    sendCommand(QString cmd);
+  void sendCommand(QString cmd);
 
   void readyRead();
 

@@ -69,15 +69,22 @@ void QxrdDetectorPilatus::startDetector()
     sendCommand("telemetry");
     sendCommand("nimages 1");
     sendCommand("nexpframe 1");
+
     imagePath(get_PilatusDataDirectory());
   }
 }
 
 void QxrdDetectorPilatus::stopDetector()
 {
-  printMessage(tr("Stopping Pilatus Detector at %1").arg(get_PilatusHost()));
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "stopDetector");
+  } else {
+    QxrdDetector::stopDetector();
 
-  m_PilatusSocket.close();
+    printMessage(tr("Stopping Pilatus Detector at %1").arg(get_PilatusHost()));
+
+    m_PilatusSocket.close();
+  }
 }
 
 void QxrdDetectorPilatus::beginAcquisition(double exposure)
@@ -112,6 +119,15 @@ void QxrdDetectorPilatus::shutdownAcquisition()
     QMetaObject::invokeMethod(this, "shutdownAcquisition", Qt::BlockingQueuedConnection);
   } else {
     QxrdDetector::shutdownAcquisition();
+  }
+}
+
+void QxrdDetectorPilatus::executeCommand(QString cmd)
+{
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "executeCommand", Qt::BlockingQueuedConnection, Q_ARG(QString, cmd));
+  } else {
+    sendCommand(cmd);
   }
 }
 
@@ -250,7 +266,10 @@ void QxrdDetectorPilatus::interpretReply(QString reply)
       remoteCopy(m_CurrentFile);
 //      pushFileExpected(m_CurrentFile);
       loadAndPush(m_CurrentFile);
-      remoteDelete(m_CurrentFile);
+
+      if (get_DeleteFilesAfterReading()) {
+        remoteDelete(m_CurrentFile);
+      }
     }
   } else if (reply.startsWith("Image format:")) {
     QRegExp matcher("Image format\\: (\\d+)\\(w\\) x (\\d+)\\(h\\) pixels(.*)");
@@ -341,7 +360,7 @@ void QxrdDetectorPilatus::remoteCommand(QString cmd)
 
 void QxrdDetectorPilatus::remoteDelete(QString file)
 {
-  QString cmd = tr("ssh %1@%2 rm %3/%4")
+  QString cmd = tr("ssh -o ForwardX11=No %1@%2 rm %3/%4")
       .arg(get_PilatusUser())
       .arg(get_PilatusHost())
       .arg(get_PilatusDataDirectory()).arg(file);
@@ -367,7 +386,7 @@ void QxrdDetectorPilatus::remoteCopy(QString file)
     if (proc) {
       QString dest = proc->filePathInRawOutputDirectory(file);
 
-      QString cmd = tr("scp %1@%2:%3/%4 %5")
+      QString cmd = tr("scp -o ForwardX11=No %1@%2:%3/%4 %5")
           .arg(get_PilatusUser())
           .arg(get_PilatusHost())
           .arg(get_PilatusDataDirectory()).arg(file)
