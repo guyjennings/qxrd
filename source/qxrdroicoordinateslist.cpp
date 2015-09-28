@@ -94,11 +94,27 @@ void QxrdROICoordinatesList::clear()
   set_RoiCount(0);
 }
 
+void QxrdROICoordinatesList::appendROI(QxrdROICoordinatesPtr coords)
+{
+  if (coords) {
+    m_ROICoordinates.append(coords);
+
+    set_RoiCount(m_ROICoordinates.count());
+  }
+}
+
 void QxrdROICoordinatesList::appendROI(int roiType, double left, double top, double right, double bottom)
 {
   m_ROICoordinates.append(
         QxrdROICoordinatesPtr(
           new QxrdROICoordinates(m_Saver, m_Experiment, roiType, left, top, right, bottom)));
+
+  set_RoiCount(m_ROICoordinates.count());
+}
+
+void QxrdROICoordinatesList::removeROI(int i)
+{
+  m_ROICoordinates.remove(i);
 
   set_RoiCount(m_ROICoordinates.count());
 }

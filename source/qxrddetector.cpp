@@ -223,7 +223,7 @@ void QxrdDetector::openControlWindow()
 
   if (m_DetectorControlWindow == NULL) {
     m_DetectorControlWindow =
-        new QxrdDetectorControlWindow(m_Acquisition, m_Processor, NULL);
+        new QxrdDetectorControlWindow(m_Saver, m_Experiment, m_Acquisition, m_Processor, NULL);
   }
 
   if (m_DetectorControlWindow) {

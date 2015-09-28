@@ -10,6 +10,7 @@ QxrdROICoordinates::QxrdROICoordinates(QcepSettingsSaverWPtr saver,
                                        double                bottom)
   : QcepObject("coords", exp.data()),
     m_RoiType(saver, this, "roiType", roiType, "ROI Type"),
+    m_RoiTypeName(QcepSettingsSaverWPtr(), this, "roiTypeName", roiTypeName(roiType), "ROI Type Name"),
     m_Coords(saver, this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords")
 {
 }
@@ -36,3 +37,20 @@ void QxrdROICoordinates::fromScriptValue(const QScriptValue &obj, QxrdROICoordin
   }
 }
 
+QString QxrdROICoordinates::roiTypeName(int roiType)
+{
+  if (roiType == RectangularROI) {
+    return "Rectangle";
+  } else if (roiType == EllipticalROI) {
+    return "Elliptical";
+  } else if (roiType == PeakAndBackgroundROI) {
+    return "Peak and Background";
+  }
+
+  return "";
+}
+
+int QxrdROICoordinates::roiTypeCount()
+{
+  return 3;
+}

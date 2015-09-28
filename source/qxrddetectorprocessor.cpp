@@ -12,6 +12,7 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
     QxrdDetectorWPtr      det)
   : QcepObject("acquisitionProcessor", doc.data()),
     m_Saver(saver),
+    m_DetectorDisplayMode(saver, this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
     m_PerformDarkSubtraction(saver, this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
     m_SaveRawImages(saver, this, "saveRawImages", true, "Save Raw Images?"),
     m_SaveDarkImages(saver, this, "saveDarkImages", true, "Save Dark Images?"),
@@ -23,6 +24,7 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
     m_SaveIntegratedData(saver, this, "saveIntegratedData", true, "Save Integrated Data?"),
     m_AccumulateIntegrated2D(saver, this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
     m_CalculateROICounts(saver, this, "calculateROICounts", true, "Calculate ROI Counts"),
+    m_DisplayROIBorders(saver, this, "displayROIBorders", true, "Display ROIs in image"),
     m_Experiment(doc),
     m_Detector(det),
     m_CenterFinder(),

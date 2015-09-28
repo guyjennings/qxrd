@@ -15,31 +15,215 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" rowspan="2">
-     <widget class="QxrdImagePlot" name="m_DetectorImage" native="true"/>
-    </item>
-    <item row="0" column="1" rowspan="2">
-     <widget class="QListWidget" name="m_ROIWidget"/>
-    </item>
-    <item row="0" column="2">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>PushButton</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <spacer name="verticalSpacer">
+    <item row="0" column="0">
+     <widget class="QSplitter" name="splitter">
       <property name="orientation">
-       <enum>Qt::Vertical</enum>
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>492</height>
-       </size>
-      </property>
-     </spacer>
+      <widget class="QxrdImagePlot" name="m_DetectorImage" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Options</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="14" column="0">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="6" column="0">
+          <widget class="QCheckBox" name="m_GainCorrection">
+           <property name="text">
+            <string>Gain Correction</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QCheckBox" name="m_BadPixelCorrection">
+           <property name="text">
+            <string>Bad Pixel Correction</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0">
+          <widget class="QCheckBox" name="m_DisplayIntegratedData">
+           <property name="text">
+            <string>Display Integrated Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="0">
+          <widget class="QCheckBox" name="m_CalculateROICounts">
+           <property name="text">
+            <string>Calculate ROI Counts</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QCheckBox" name="m_SaveRawData">
+           <property name="text">
+            <string>Save Raw Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QCheckBox" name="m_PerformDarkSubtraction">
+           <property name="text">
+            <string>Perform Dark Subtraction</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QCheckBox" name="m_SaveDarkData">
+           <property name="text">
+            <string>Save Dark Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="0">
+          <widget class="QCheckBox" name="m_PerformIntegration">
+           <property name="text">
+            <string>Perform Integration</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="0">
+          <widget class="QCheckBox" name="m_SaveIntegratedData">
+           <property name="text">
+            <string>Save Integrated Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QCheckBox" name="m_AccumulateIntegratedData">
+           <property name="text">
+            <string>Accumulate Integrated Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="13" column="0">
+          <widget class="QCheckBox" name="m_DisplayROIBorders">
+           <property name="text">
+            <string>Display ROI Borders</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QCheckBox" name="m_SaveSubtractedData">
+           <property name="text">
+            <string>Save Subtracted Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QComboBox" name="m_DetectorDisplayMode">
+           <item>
+            <property name="text">
+             <string>Display Nothing</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Display Acquired Image</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Display Integrated Data</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>ROI</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="2">
+          <widget class="QPushButton" name="m_MoveROIDown">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/go-down.png</normaloff>:/images/go-down.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QPushButton" name="m_DeleteROI">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="4">
+          <widget class="QPushButton" name="m_NewROI">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="m_MoveROIUp">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="qxrdresources.qrc">
+             <normaloff>:/images/go-up.png</normaloff>:/images/go-up.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="5">
+          <widget class="QTableView" name="m_ROIWidget"/>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -62,6 +246,8 @@
    <header>qxrdimageplot.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="qxrdresources.qrc"/>
+ </resources>
  <connections/>
 </ui>

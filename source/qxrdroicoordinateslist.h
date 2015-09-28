@@ -28,7 +28,9 @@ signals:
 
 public slots:
   void clear();
+  void appendROI(QxrdROICoordinatesPtr coords);
   void appendROI(int roiType, double left=0, double top=0, double right=0, double bottom=0);
+  void removeROI(int i);
 
   QxrdROICoordinatesPtr roi(int i);
 

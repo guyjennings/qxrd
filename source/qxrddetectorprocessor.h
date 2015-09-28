@@ -58,11 +58,20 @@ public:
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorProcessorPtr &proc);
   static void fromScriptValue(const QScriptValue &obj, QxrdDetectorProcessorPtr &proc);
 
+  enum {
+    NoDisplayMode,
+    ImageDisplayMode,
+    IntegratedDisplayMode
+  };
+
 private:
   QcepSettingsSaverWPtr m_Saver;
 
 public:
   // Properties...
+
+  Q_PROPERTY(int detectorDisplayMode READ get_DetectorDisplayMode WRITE set_DetectorDisplayMode)
+  QCEP_INTEGER_PROPERTY(DetectorDisplayMode)
 
   Q_PROPERTY(bool performDarkSubtraction READ get_PerformDarkSubtraction WRITE set_PerformDarkSubtraction)
   QCEP_BOOLEAN_PROPERTY(PerformDarkSubtraction)
@@ -96,6 +105,9 @@ public:
 
   Q_PROPERTY(bool calculateROICounts READ get_CalculateROICounts WRITE set_CalculateROICounts)
   QCEP_BOOLEAN_PROPERTY(CalculateROICounts)
+
+  Q_PROPERTY(bool displayROIBorders READ get_DisplayROIBorders WRITE set_DisplayROIBorders)
+  QCEP_BOOLEAN_PROPERTY(DisplayROIBorders)
 
 private:
   QMutex                m_Mutex;
