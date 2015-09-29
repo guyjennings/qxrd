@@ -30,14 +30,31 @@
       </widget>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
-         <string>Options</string>
+         <string>Corrections</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="14" column="0">
+         <item row="8" column="2">
+          <widget class="QPushButton" name="m_BrowseDarkSubdir">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QPushButton" name="m_BrowseDarkImage">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="m_DarkImagePath"/>
+         </item>
+         <item row="16" column="0" colspan="3">
           <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -50,42 +67,14 @@
            </property>
           </spacer>
          </item>
-         <item row="6" column="0">
+         <item row="11" column="0">
           <widget class="QCheckBox" name="m_GainCorrection">
            <property name="text">
             <string>Gain Correction</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
-          <widget class="QCheckBox" name="m_BadPixelCorrection">
-           <property name="text">
-            <string>Bad Pixel Correction</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="QCheckBox" name="m_DisplayIntegratedData">
-           <property name="text">
-            <string>Display Integrated Data</string>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="0">
-          <widget class="QCheckBox" name="m_CalculateROICounts">
-           <property name="text">
-            <string>Calculate ROI Counts</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QCheckBox" name="m_SaveRawData">
-           <property name="text">
-            <string>Save Raw Data</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
+         <item row="3" column="0" colspan="3">
           <widget class="QCheckBox" name="m_PerformDarkSubtraction">
            <property name="text">
             <string>Perform Dark Subtraction</string>
@@ -93,41 +82,161 @@
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QCheckBox" name="m_SaveDarkData">
+          <widget class="QLabel" name="label_12">
            <property name="text">
-            <string>Save Dark Data</string>
+            <string>Dark Image Path</string>
            </property>
           </widget>
          </item>
-         <item row="8" column="0">
-          <widget class="QCheckBox" name="m_PerformIntegration">
+         <item row="6" column="1">
+          <widget class="QLineEdit" name="m_RawDataSubdir"/>
+         </item>
+         <item row="14" column="2">
+          <widget class="QPushButton" name="m_BrowseSubtractedSubdir">
            <property name="text">
-            <string>Perform Integration</string>
+            <string>Browse</string>
            </property>
           </widget>
          </item>
-         <item row="10" column="0">
-          <widget class="QCheckBox" name="m_SaveIntegratedData">
+         <item row="12" column="3">
+          <widget class="QPushButton" name="m_ClearGainImage">
            <property name="text">
-            <string>Save Integrated Data</string>
+            <string>Clear</string>
            </property>
           </widget>
          </item>
-         <item row="11" column="0">
-          <widget class="QCheckBox" name="m_AccumulateIntegratedData">
+         <item row="8" column="1">
+          <widget class="QLineEdit" name="m_DarkDataSubdir"/>
+         </item>
+         <item row="6" column="3">
+          <widget class="QPushButton" name="m_ClearRawSubdir">
            <property name="text">
-            <string>Accumulate Integrated Data</string>
+            <string>Clear</string>
            </property>
           </widget>
          </item>
-         <item row="7" column="0">
+         <item row="12" column="0">
+          <widget class="QLabel" name="label_17">
+           <property name="text">
+            <string>Gain Correction Image</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="2">
+          <widget class="QPushButton" name="m_BrowseBadPixels">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="2">
+          <widget class="QPushButton" name="m_BrowseGainImage">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="1">
+          <widget class="QLineEdit" name="m_SubtractedDataSubdir"/>
+         </item>
+         <item row="5" column="0">
+          <widget class="QCheckBox" name="m_SaveRawData">
+           <property name="text">
+            <string>Save Raw Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <widget class="QLineEdit" name="m_BadPixelPath"/>
+         </item>
+         <item row="6" column="2">
+          <widget class="QPushButton" name="m_BrowseRawSubdir">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="0">
+          <widget class="QLabel" name="label_18">
+           <property name="text">
+            <string>Subtracted Data Subdirectory</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="3">
+          <widget class="QPushButton" name="m_ClearDarkSubdir">
+           <property name="text">
+            <string>Clear</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="3">
+          <widget class="QPushButton" name="m_ClearBadPixels">
+           <property name="text">
+            <string>Clear</string>
+           </property>
+          </widget>
+         </item>
+         <item row="13" column="0">
           <widget class="QCheckBox" name="m_SaveSubtractedData">
            <property name="text">
             <string>Save Subtracted Data</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item row="4" column="3">
+          <widget class="QPushButton" name="m_ClearDarkImage">
+           <property name="text">
+            <string>Clear</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Raw Data Subdirectory</string>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="3">
+          <widget class="QPushButton" name="m_ClearSubtractedSubdir">
+           <property name="text">
+            <string>Clear</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QCheckBox" name="m_SaveDarkData">
+           <property name="text">
+            <string>Save Dark Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="0">
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>Bad Pixel Image</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0">
+          <widget class="QCheckBox" name="m_BadPixelCorrection">
+           <property name="text">
+            <string>Bad Pixel Correction</string>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="1">
+          <widget class="QLineEdit" name="m_GainCorrectionPath"/>
+         </item>
+         <item row="8" column="0">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>Dark Data Subdirectory</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="3">
           <widget class="QComboBox" name="m_DetectorDisplayMode">
            <item>
             <property name="text">
@@ -148,77 +257,194 @@
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="tab_3">
+        <attribute name="title">
+         <string>Integration</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="8" column="0" colspan="4">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>598</width>
+             <height>249</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="3" column="1" colspan="2">
+          <widget class="QLineEdit" name="m_IntegratedDataFile"/>
+         </item>
+         <item row="5" column="1" colspan="2">
+          <widget class="QLineEdit" name="m_IntegratedDataSubdir"/>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Integrated Data File Subdirectory</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Integrated Data File</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="3">
+          <widget class="QPushButton" name="m_BrowseIntegFile">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="3">
+          <widget class="QPushButton" name="m_BrowseIntegSubdir">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Accumulated Dataset Name</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="3">
+          <widget class="QPushButton" name="m_BrowseAccumulatedName">
+           <property name="text">
+            <string>Browse</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1" colspan="2">
+          <widget class="QLineEdit" name="m_AccumulateIntegratedName"/>
+         </item>
+         <item row="0" column="0" colspan="4">
+          <widget class="QCheckBox" name="m_PerformIntegration">
+           <property name="text">
+            <string>Perform Integration</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="4">
+          <widget class="QCheckBox" name="m_DisplayIntegratedData">
+           <property name="text">
+            <string>Display Integrated Data</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="4">
+          <widget class="QCheckBox" name="m_SaveIntegratedData">
+           <property name="text">
+            <string>Save Integrated Data in single file</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0" colspan="4">
+          <widget class="QCheckBox" name="_SaveIntergratedDataSeparate">
+           <property name="text">
+            <string>Save Integrated Data in Separate Files</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0" colspan="4">
+          <widget class="QCheckBox" name="m_AccumulateIntegratedData">
+           <property name="text">
+            <string>Accumulate Integrated Data</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
          <string>ROI</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="4">
-          <widget class="QPushButton" name="m_MoveROIDown">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="qxrdresources.qrc">
-             <normaloff>:/images/go-down.png</normaloff>:/images/go-down.png</iconset>
-           </property>
-          </widget>
+         <item row="0" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QCheckBox" name="m_CalculateROICounts">
+             <property name="text">
+              <string>Calculate ROI Counts</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="m_DisplayROIBorders">
+             <property name="text">
+              <string>Display ROI Borders</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_MoveROIUp">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/go-up.png</normaloff>:/images/go-up.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_MoveROIDown">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/go-down.png</normaloff>:/images/go-down.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_DeleteROI">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_NewROI">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
-         <item row="0" column="6">
-          <widget class="QPushButton" name="m_NewROI">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="qxrdresources.qrc">
-             <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="5">
-          <widget class="QPushButton" name="m_DeleteROI">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="qxrdresources.qrc">
-             <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="QPushButton" name="m_MoveROIUp">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="qxrdresources.qrc">
-             <normaloff>:/images/go-up.png</normaloff>:/images/go-up.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0" colspan="7">
+         <item row="1" column="0">
           <widget class="QTableView" name="m_ROIWidget"/>
-         </item>
-         <item row="0" column="1">
-          <widget class="QCheckBox" name="m_DisplayROIBorders">
-           <property name="text">
-            <string>Display ROI Borders</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </widget>
@@ -236,8 +462,32 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>Fi&amp;le</string>
+    </property>
+    <addaction name="m_ActionLoadData"/>
+    <addaction name="m_ActionLoadDarkImage"/>
+    <addaction name="m_ActionLoadMask"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="m_ActionLoadData">
+   <property name="text">
+    <string>Load Data...</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadDarkImage">
+   <property name="text">
+    <string>Load Dark Image...</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadMask">
+   <property name="text">
+    <string>Load Mask...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

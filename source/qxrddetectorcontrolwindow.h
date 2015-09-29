@@ -8,6 +8,7 @@
 #include "qxrddetectorprocessor-ptr.h"
 #include "qxrdroicoordinateslistmodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include <QTimer>
 
 class QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::QxrdDetectorControlWindow
 {
@@ -24,6 +25,10 @@ public:
 public slots:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
+public:
+  void displayNewData(QcepImageDataBasePtr img, QcepMaskDataPtr overflow);
+  void displayNewMask(QcepMaskDataPtr mask);
+
 protected:
   void changeEvent(QEvent *e);
 
@@ -32,6 +37,9 @@ private slots:
   void doDeleteROI();
   void doMoveROIDown();
   void doMoveROIUp();
+
+  void updateImageDisplay();
+  void onUpdateIntervalMsecChanged(int newVal);
 
 private:
   QVector<int>  selectedROIs();
@@ -42,6 +50,20 @@ private:
   QxrdAcquisitionWPtr             m_Acquisition;
   QxrdDetectorProcessorWPtr       m_Processor;
   QxrdROICoordinatesListModelPtr  m_ROIModel;
+
+  QMutex                          m_UpdateMutex;
+  QTimer                          m_UpdateTimer;
+
+  QcepImageDataBasePtr            m_DisplayedImage;
+  QcepMaskDataPtr                 m_DisplayedMask;
+  QcepMaskDataPtr                 m_DisplayedOverflow;
+
+  QcepImageDataBasePtr            m_NewImage;
+  QcepMaskDataPtr                 m_NewMask;
+  QcepMaskDataPtr                 m_NewOverflow;
+
+  QAtomicInt                      m_NewDataAvailable;
+  QAtomicInt                      m_NewMaskAvailable;
 };
 
 #endif // QXRDDETECTORCONTROLWINDOW_H

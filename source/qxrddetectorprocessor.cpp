@@ -5,6 +5,7 @@
 #include "qxrdroicalculator.h"
 #include "qxrddebug.h"
 #include "qxrdexperiment.h"
+#include "qxrddetectorcontrolwindow.h"
 
 QxrdDetectorProcessor::QxrdDetectorProcessor(
     QcepSettingsSaverWPtr saver,
@@ -25,11 +26,17 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
     m_AccumulateIntegrated2D(saver, this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
     m_CalculateROICounts(saver, this, "calculateROICounts", true, "Calculate ROI Counts"),
     m_DisplayROIBorders(saver, this, "displayROIBorders", true, "Display ROIs in image"),
+    m_DarkImagePath(saver, this, "darkImagePath", "", "Dark Images Path"),
+    m_BadPixelsPath(saver, this, "badPixelsPath", "", "Bad Pixels Path"),
+    m_GainMapPath(saver, this, "gainMapPath", "", "Gain Map Path"),
+    m_MaskPath(saver, this, "maskPath", "", "Mask Path"),
     m_Experiment(doc),
     m_Detector(det),
     m_CenterFinder(),
     m_Integrator(),
-    m_ROICalculator()
+    m_ROICalculator(),
+    m_ControlWindow(),
+    m_ImagePlotSettings(new QxrdImagePlotSettings(saver, this))
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorProcessor::QxrdDetectorProcessor(%p)\n", this);
@@ -50,6 +57,11 @@ void QxrdDetectorProcessor::initialize()
   m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator(m_Saver, m_Experiment, sharedFromThis()));
 }
 
+void QxrdDetectorProcessor::setControlWindow(QxrdDetectorControlWindowWPtr ctrl)
+{
+  m_ControlWindow = ctrl;
+}
+
 void QxrdDetectorProcessor::readSettings(QSettings *settings, QString section)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -66,6 +78,10 @@ void QxrdDetectorProcessor::readSettings(QSettings *settings, QString section)
 
   if (m_ROICalculator) {
     m_ROICalculator->readSettings(settings, section+"/roiCalculator");
+  }
+
+  if (m_ImagePlotSettings) {
+    m_ImagePlotSettings->readSettings(settings, section+"/imagePlotSettings");
   }
 }
 
@@ -85,6 +101,10 @@ void QxrdDetectorProcessor::writeSettings(QSettings *settings, QString section)
 
   if (m_ROICalculator) {
     m_ROICalculator->writeSettings(settings, section+"/roiCalculator");
+  }
+
+  if (m_ImagePlotSettings) {
+    m_ImagePlotSettings->writeSettings(settings, section+"/imagePlotSettings");
   }
 }
 
@@ -135,6 +155,12 @@ void QxrdDetectorProcessor::processAcquiredImage(QString filePattern,
   } else {
     printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(NULL,..."));
   }
+
+  QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+
+  if (ctrl) {
+    ctrl->displayNewData(image, overflow);
+  }
 }
 
 void QxrdDetectorProcessor::processDarkImage(QString filePattern,
@@ -156,4 +182,9 @@ void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
     printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\"")
                .arg(image->get_FileName()));
   }
+}
+
+QxrdImagePlotSettingsWPtr QxrdDetectorProcessor::imagePlotSettings()
+{
+  return m_ImagePlotSettings;
 }

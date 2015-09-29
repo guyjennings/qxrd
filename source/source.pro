@@ -326,7 +326,8 @@ HEADERS += TODO.h \
     qxrddetectorpilatusremote.h \
     qxrddetectorpilatusremote-ptr.h \
     qxrdroicoordinateslistmodel.h \
-    qxrdroicoordinateslistmodel-ptr.h
+    qxrdroicoordinateslistmodel-ptr.h \
+    qxrdimageplotsettings-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \

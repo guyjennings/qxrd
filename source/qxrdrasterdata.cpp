@@ -3,7 +3,7 @@
 #include "qxrdapplication.h"
 #include <QString>
 
-QxrdRasterData::QxrdRasterData(QcepDoubleImageDataPtr img, int interp, QcepMaskDataPtr mask, QwtInterval range)
+QxrdRasterData::QxrdRasterData(QcepImageDataBasePtr img, int interp, QcepMaskDataPtr mask, QwtInterval range)
   : QwtRasterData(/*QRectF(0,0,(img?img->get_Width():0),(img?img->get_Height():0))*/),
     m_Data(img),
     m_Mask(mask),
@@ -46,10 +46,10 @@ double QxrdRasterData::value(double x, double y) const
       int ix = ((int) x), iy = ((int) y);
       double dx = x-ix, dy = y-iy;
 
-      double f00 = m_Data->value((ix)   , (iy));
-      double f10 = m_Data->value((ix+1) , (iy));
-      double f01 = m_Data->value((ix)   , (iy+1));
-      double f11 = m_Data->value((ix+1) , (iy+1));
+      double f00 = m_Data->getImageData((ix)   , (iy));
+      double f10 = m_Data->getImageData((ix+1) , (iy));
+      double f01 = m_Data->getImageData((ix)   , (iy+1));
+      double f11 = m_Data->getImageData((ix+1) , (iy+1));
 
       double f0 = f00*(1-dx)+f10*dx;
       double f1 = f01*(1-dx)+f11*dx;
@@ -58,7 +58,7 @@ double QxrdRasterData::value(double x, double y) const
 
       return f;
     } else {
-      return m_Data->value(((int) qRound(x)) , ((int) qRound(y)));
+      return m_Data->getImageData(((int) qRound(x)) , ((int) qRound(y)));
     }
   } else {
     return 0;
@@ -98,41 +98,8 @@ void QxrdRasterData::setDisplayedRange(double min, double max)
 
 double QxrdRasterData::minValue()
 {
-  int npixels = m_NRows*m_NCols;
-
   if (m_Data) {
-    double *data = m_Data->data();
-    bool first = 1;
-    double min = 0;
-
-    if (m_Mask == NULL) {
-      for (int i=0; i<npixels; i++) {
-        double val = data[i];
-        if (first) {
-          min = val;
-          first = 0;
-        } else if (val<min) {
-          min = val;
-        }
-      }
-    } else {
-      short *mask = m_Mask->mask();
-
-      for (int i=0; i<npixels; i++) {
-        bool msk = mask[i];
-        if (msk) {
-          double val = data[i];
-          if (first) {
-            min = val;
-            first = 0;
-          } else if (val<min) {
-            min = val;
-          }
-        }
-      }
-    }
-
-    return min;
+    return m_Data->minValue();
   } else {
     return 0;
   }
@@ -140,41 +107,8 @@ double QxrdRasterData::minValue()
 
 double QxrdRasterData::maxValue()
 {
-  int npixels = m_NRows*m_NCols;
-
   if (m_Data) {
-    double *data = m_Data->data();
-    bool first = 1;
-    double max = 0;
-
-    if (m_Mask == NULL) {
-      for (int i=0; i<npixels; i++) {
-        double val = data[i];
-        if (first) {
-          max = val;
-          first = 0;
-        } else if (val>max) {
-          max = val;
-        }
-      }
-    } else {
-      short *mask = m_Mask->mask();
-
-      for (int i=0; i<npixels; i++) {
-        bool msk = mask[i];
-        if (msk) {
-          double val = data[i];
-          if (first) {
-            max = val;
-            first = 0;
-          } else if (val>max) {
-            max = val;
-          }
-        }
-      }
-    }
-
-    return max;
+    return m_Data->maxValue();
   } else {
     return 0;
   }
@@ -185,121 +119,10 @@ QwtInterval QxrdRasterData::percentileRange(double lowpct, double highpct)
   QwtInterval res;
 
   if (m_Data) {
-    const int histSize = 65536;
-    QVector<int> histogramVec(histSize+1);
-    histogramVec.fill(0.0);
-    int *histogram = histogramVec.data();
+    QPointF r = m_Data->percentileRange(lowpct, highpct);
 
-    bool first = 1;
-    double minVal=0, maxVal=0;
-    int npixels = m_NRows*m_NCols;
-    double histStep=0;
-    int nAbove = 0, nBelow = 0, nTotal = 0;
-
-    double *data = m_Data->data();
-
-    if (m_Mask == NULL) {
-      for (int i=0; i<npixels; i++) {
-        double val = data[i];
-
-        if (val==val) {
-          if (first) {
-            minVal = val;
-            maxVal = val;
-            first = 0;
-          } else if (val>maxVal) {
-            maxVal = val;
-          } else if (val<minVal) {
-            minVal = val;
-          }
-        }
-      }
-
-      if (!first) {
-        histStep = (maxVal - minVal + 2)/histSize;
-        for (int i=0; i<npixels; i++) {
-          double val = data[i];
-          if (val==val) {
-            double bin = (val - minVal)/histStep;
-
-            if (bin < 0) {
-              nBelow += 1;
-            } else if (bin > histSize) {
-              nAbove += 1;
-            } else {
-              histogram[((int)bin)] += 1;
-            }
-
-            nTotal += 1;
-          }
-        }
-      }
-    } else {
-      short *mask = m_Mask->mask();
-
-      for (int i=0; i<npixels; i++) {
-        bool msk = mask[i];
-        if (msk) {
-          double val = data[i];
-          if (first) {
-            minVal = val;
-            maxVal = val;
-            first = 0;
-          } else if (val>maxVal) {
-            maxVal = val;
-          } else if (val<minVal) {
-            minVal = val;
-          }
-        }
-      }
-
-      if (!first) {
-        histStep = (maxVal - minVal + 2)/histSize;
-        for (int i=0; i<npixels; i++) {
-          bool msk = mask[i];
-          if (msk) {
-            double val = data[i];
-            double bin = (val - minVal)/histStep;
-
-            if (bin < 0) {
-              nBelow += 1;
-            } else if (bin > histSize) {
-              nAbove += 1;
-            } else {
-              histogram[((int)bin)] += 1;
-            }
-
-            nTotal += 1;
-          }
-        }
-      }
-    }
-
-    double lowCount = ((double) nTotal) * lowpct / 100.0;
-    double highCount = ((double) nTotal) * highpct / 100.0;
-    double count = nBelow;
-
-    for (int i=0; i<histSize; i++) {
-      double binVal = minVal + i*histStep;
-
-//      if (histogram[i]>100) {
-//        printf("%g\t%d\t%g\n", binVal, histogram[i], count);
-//      }
-
-      count += histogram[i];
-
-      if (count < lowCount) {
-        res.setMinValue(binVal);
-      }
-
-      if (count < highCount) {
-        res.setMaxValue(binVal);
-      }
-    }
-  }
-
-  if (res.maxValue() <= res.minValue()) {
-    res.setMaxValue(res.minValue()+1);
+    res.setMinValue(r.x());
+    res.setMaxValue(r.y());
   }
 
   return res;

@@ -7,6 +7,8 @@
 #include "qxrdroicalculator.h"
 #include <QMessageBox>
 #include "qxrdroicoordinates.h"
+#include "qxrdapplication.h"
+#include "qcepmutexlocker.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr saver,
                                                      QxrdExperimentWPtr        exp,
@@ -24,6 +26,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr saver
   setAttribute(Qt::WA_DeleteOnClose, false);
 
   QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
 
   if (dp) {
     dp->prop_DetectorDisplayMode()     -> linkTo(m_DetectorDisplayMode);
@@ -55,6 +58,18 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr saver
 
       m_ROIWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     }
+
+    m_DetectorImage->init(dp->imagePlotSettings());
+  }
+
+  if (app) {
+    connect(app->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged,
+            this, &QxrdDetectorControlWindow::onUpdateIntervalMsecChanged);
+
+    connect(&m_UpdateTimer, &QTimer::timeout,
+            this, &QxrdDetectorControlWindow::updateImageDisplay);
+
+    m_UpdateTimer.start(app->get_UpdateIntervalMsec());
   }
 }
 
@@ -189,4 +204,62 @@ void QxrdDetectorControlWindow::doMoveROIUp()
       m_ROIModel->moveROIUp(rois.first());
     }
   }
+}
+
+void QxrdDetectorControlWindow::updateImageDisplay()
+{
+  if (m_NewDataAvailable.fetchAndStoreOrdered(0)) {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_UpdateMutex);
+
+    m_DisplayedImage = m_NewImage;
+    m_NewImage       = QcepImageDataBasePtr();
+
+    m_DisplayedOverflow = m_NewOverflow;
+    m_DisplayedOverflow = QcepMaskDataPtr();
+
+    QxrdDetectorProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      if (proc->get_DetectorDisplayMode() == QxrdDetectorProcessor::ImageDisplayMode) {
+        m_DetectorImage->onProcessedImageAvailable(m_DisplayedImage, m_DisplayedOverflow);
+      }
+    }
+  } else if (m_NewMaskAvailable.fetchAndStoreOrdered(0)) {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_UpdateMutex);
+
+    m_DisplayedMask = m_NewMask;
+    m_NewMask       = QcepMaskDataPtr();
+
+    QxrdDetectorProcessorPtr proc(m_Processor);
+
+    if (proc) {
+      if (proc->get_DetectorDisplayMode() == QxrdDetectorProcessor::ImageDisplayMode) {
+        m_DetectorImage->onMaskedImageAvailable(m_DisplayedImage, m_DisplayedMask);
+      }
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::onUpdateIntervalMsecChanged(int newVal)
+{
+  m_UpdateTimer.setInterval(newVal);
+}
+
+void QxrdDetectorControlWindow::displayNewData(QcepImageDataBasePtr img, QcepMaskDataPtr overflow)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_UpdateMutex);
+
+  m_NewImage    = img;
+  m_NewOverflow = overflow;
+
+  m_NewDataAvailable.fetchAndStoreOrdered(1);
+}
+
+void QxrdDetectorControlWindow::displayNewMask(QcepMaskDataPtr mask)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_UpdateMutex);
+
+  m_NewMask = mask;
+
+  m_NewMaskAvailable.fetchAndStoreOrdered(1);
 }

@@ -12,7 +12,7 @@ class QxrdRasterData : public QwtRasterData
 //  Q_OBJECT
 
 public:
-  QxrdRasterData(QcepDoubleImageDataPtr img = QcepDoubleImageDataPtr(),
+  QxrdRasterData(QcepImageDataBasePtr img = QcepImageDataBasePtr(),
                  int interp = 1,
                  QcepMaskDataPtr msk = QcepMaskDataPtr(),
                  QwtInterval range = QwtInterval(0,40000));
@@ -34,14 +34,14 @@ public:
   int width() const;
   int height() const;
 
-  const QcepDoubleImageDataPtr data() const { return m_Data; }
+  const QcepImageDataBasePtr data() const { return m_Data; }
   const QcepMaskDataPtr mask() const { return m_Mask; }
   int interp() const          { return m_Interpolate; }
 
   QPointF optimizePeakPosition(QPointF pt) const;
 
 private:
-  QcepDoubleImageDataPtr m_Data;
+  QcepImageDataBasePtr   m_Data;
   QcepMaskDataPtr        m_Mask;
   int                    m_NRows;
   int                    m_NCols;

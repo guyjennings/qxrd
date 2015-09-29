@@ -636,7 +636,7 @@ void QxrdImagePlot::setOverflows(QxrdMaskRasterData *overflow)
   replot();
 }
 
-void QxrdImagePlot::onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow)
+void QxrdImagePlot::onProcessedImageAvailable(QcepImageDataBasePtr image, QcepMaskDataPtr overflow)
 {
   QTime tic;
   tic.start();
@@ -648,6 +648,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QcepDoubleImageDataPtr image, Qcep
     m_Overflow = overflow;
 
     if (!image ||
+        m_DataRaster == NULL ||
         image->get_Width() != m_DataRaster->width() ||
         image->get_Height() != m_DataRaster->height()) {
       m_FirstTime = true;
@@ -676,7 +677,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QcepDoubleImageDataPtr image, Qcep
   }
 }
 
-void QxrdImagePlot::onMaskedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask)
+void QxrdImagePlot::onMaskedImageAvailable(QcepImageDataBasePtr image, QcepMaskDataPtr mask)
 {
   QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
@@ -706,7 +707,7 @@ void QxrdImagePlot::onMaskedImageAvailable(QcepDoubleImageDataPtr image, QcepMas
   }
 }
 
-void QxrdImagePlot::onDarkImageAvailable(QcepDoubleImageDataPtr /*image*/)
+void QxrdImagePlot::onDarkImageAvailable(QcepImageDataBasePtr /*image*/)
 {
 }
 
@@ -1037,15 +1038,15 @@ void QxrdImagePlot::zapPixel(int x, int y)
 
   for (int ix = x-1; ix <= x+1; ix++) {
     for (int iy = y-1; iy <= y+1; iy++) {
-      sum += m_Data->value(ix, iy);
+      sum += m_Data->getImageData(ix, iy);
       npx += 1;
     }
   }
 
-  sum -= m_Data->value(x,y);
+  sum -= m_Data->getImageData(x,y);
   npx -= 1;
 
-  m_Data->setValue(x,y, sum/npx);
+  m_Data->setImageData(x,y, sum/npx);
 
   replot();
 }

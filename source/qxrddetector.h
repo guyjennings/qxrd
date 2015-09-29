@@ -77,7 +77,7 @@ protected:
   QxrdExperimentWPtr          m_Experiment;
   QxrdAcquisitionWPtr         m_Acquisition;
   QxrdDetectorProcessorPtr    m_Processor;
-  QxrdDetectorControlWindow  *m_DetectorControlWindow;
+  QxrdDetectorControlWindowPtr m_DetectorControlWindow;
 
 private:
   QMutex                      m_Mutex;

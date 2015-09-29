@@ -47,9 +47,9 @@ QxrdDetector::~QxrdDetector()
     printf("QxrdDetector::~QxrdDetector(%p)\n", this);
   }
 
-  if (m_DetectorControlWindow) {
-    m_DetectorControlWindow->deleteLater();
-  }
+//  if (m_DetectorControlWindow) {
+//    m_DetectorControlWindow->deleteLater();
+//  }
 }
 
 void QxrdDetector::initialize()
@@ -223,7 +223,14 @@ void QxrdDetector::openControlWindow()
 
   if (m_DetectorControlWindow == NULL) {
     m_DetectorControlWindow =
-        new QxrdDetectorControlWindow(m_Saver, m_Experiment, m_Acquisition, m_Processor, NULL);
+        QxrdDetectorControlWindowPtr(
+          new QxrdDetectorControlWindow(m_Saver, m_Experiment, m_Acquisition, m_Processor, NULL));
+
+    QxrdDetectorProcessorPtr dp(m_Processor);
+
+    if (dp) {
+      dp->setControlWindow(m_DetectorControlWindow);
+    }
   }
 
   if (m_DetectorControlWindow) {

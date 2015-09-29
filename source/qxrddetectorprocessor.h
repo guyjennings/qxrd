@@ -17,6 +17,8 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include <QScriptEngine>
+#include "qxrddetectorcontrolwindow-ptr.h"
+#include "qxrdimageplotsettings-ptr.h"
 
 class QxrdDetectorProcessor : public QcepObject, public QEnableSharedFromThis<QxrdDetectorProcessor>
 {
@@ -28,6 +30,8 @@ public:
                         QxrdDetectorWPtr      det);
   virtual ~QxrdDetectorProcessor();
   void initialize();
+
+  void setControlWindow(QxrdDetectorControlWindowWPtr ctrl);
 
 signals:
 
@@ -57,6 +61,8 @@ public:
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorProcessorPtr &proc);
   static void fromScriptValue(const QScriptValue &obj, QxrdDetectorProcessorPtr &proc);
+
+  QxrdImagePlotSettingsWPtr imagePlotSettings();
 
   enum {
     NoDisplayMode,
@@ -109,6 +115,18 @@ public:
   Q_PROPERTY(bool displayROIBorders READ get_DisplayROIBorders WRITE set_DisplayROIBorders)
   QCEP_BOOLEAN_PROPERTY(DisplayROIBorders)
 
+  Q_PROPERTY(QString darkImagePath   READ get_DarkImagePath WRITE set_DarkImagePath)
+  QCEP_STRING_PROPERTY(DarkImagePath)
+
+  Q_PROPERTY(QString badPixelsPath   READ get_BadPixelsPath WRITE set_BadPixelsPath)
+  QCEP_STRING_PROPERTY(BadPixelsPath)
+
+  Q_PROPERTY(QString gainMapPath     READ get_GainMapPath WRITE set_GainMapPath)
+  QCEP_STRING_PROPERTY(GainMapPath)
+
+  Q_PROPERTY(QString maskPath     READ get_MaskPath WRITE set_MaskPath)
+  QCEP_STRING_PROPERTY(MaskPath)
+
 private:
   QMutex                m_Mutex;
 
@@ -118,6 +136,18 @@ private:
   QxrdCenterFinderPtr   m_CenterFinder;
   QxrdIntegratorPtr     m_Integrator;
   QxrdROICalculatorPtr  m_ROICalculator;
+
+  QxrdDetectorControlWindowWPtr m_ControlWindow;
+
+  QxrdImagePlotSettingsPtr m_ImagePlotSettings;
+
+  QcepDoubleImageDataPtr m_Data;
+  QcepDoubleImageDataPtr m_DarkFrame;
+  QcepDoubleImageDataPtr m_BadPixels;
+  QcepDoubleImageDataPtr m_GainMap;
+  QcepDoubleImageDataPtr m_LiveData;
+  QcepMaskDataPtr        m_Mask;
+  QcepMaskDataPtr        m_Overflow;
 };
 
 #endif // QXRDACQUISITIONPROCESSOR_H

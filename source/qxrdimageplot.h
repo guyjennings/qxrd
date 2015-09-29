@@ -66,9 +66,9 @@ public slots:
   void onInterpolateChanged(bool interp);
   void onMaintainAspectChanged(bool interp);
 
-  void onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
-  void onMaskedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
-  void onDarkImageAvailable(QcepDoubleImageDataPtr image);
+  void onProcessedImageAvailable(QcepImageDataBasePtr image, QcepMaskDataPtr overflow);
+  void onMaskedImageAvailable(QcepImageDataBasePtr image, QcepMaskDataPtr mask);
+  void onDarkImageAvailable(QcepImageDataBasePtr image);
   void onCenterXChanged(double cx);
   void onCenterYChanged(double cy);
   void onCenterChanged(QPointF c);
@@ -139,7 +139,7 @@ private:
   QxrdHistogramSelector     *m_HistogramSelector;
 //  QwtLegendPtr               m_Legend;
 
-  QcepDoubleImageDataPtr     m_Data;
+  QcepImageDataBasePtr       m_Data;
   QcepMaskDataPtr            m_Mask;
   QcepMaskDataPtr            m_Overflow;
 
