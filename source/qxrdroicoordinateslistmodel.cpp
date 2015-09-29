@@ -85,11 +85,44 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
 
 Qt::ItemFlags QxrdROICoordinatesListModel::flags(const QModelIndex &index) const
 {
-  return QAbstractListModel::flags(index);
+  int row = index.row();
+  int col = index.column();
+
+  if (col == 2 || col == 3 || col == 4 || col == 5) {
+    return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
+  } else {
+    return QAbstractListModel::flags(index);
+  }
 }
 
 bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+  int row = index.row();
+  int col = index.column();
+
+  QxrdROICoordinatesPtr c = roi(row);
+
+  if (c) {
+    if (role == Qt::EditRole || role == Qt::DisplayRole) {
+      if (col == 2) {
+        c->setLeft(value.toDouble());
+      } else if (col == 3) {
+        c->setTop(value.toDouble());
+      } else if (col == 4) {
+        c->setRight(value.toDouble());
+      } else if (col == 5) {
+        c->setBottom(value.toDouble());
+      } else {
+        return false;
+      }
+
+      setRoi(row, c);
+
+      emit dataChanged(index, index);
+
+      return true;
+    }
+  }
   return false;
 }
 
@@ -125,10 +158,48 @@ void QxrdROICoordinatesListModel::removeROI(int row)
 
 void QxrdROICoordinatesListModel::moveROIDown(int row)
 {
+  QxrdROICoordinatesListPtr rois(m_ROICoordinates);
+
+  if (rois) {
+    int nRows = rois->get_RoiCount();
+
+    if (row >= 0 && row < (nRows-1)) {
+      beginMoveRows(QModelIndex(), row+1, row+1, QModelIndex(), row);
+
+      QxrdROICoordinatesPtr p1 = rois->roi(row);
+      QxrdROICoordinatesPtr p2 = rois->roi(row+1);
+
+      rois->setRoi(row, p2);
+      rois->setRoi(row+1, p1);
+
+      endMoveRows();
+
+//      renumberROIs();
+    }
+  }
 }
 
 void QxrdROICoordinatesListModel::moveROIUp(int row)
 {
+  QxrdROICoordinatesListPtr rois(m_ROICoordinates);
+
+  if (rois) {
+    int nRows = rois->get_RoiCount();
+
+    if (row >= 1 && row < nRows) {
+      beginMoveRows(QModelIndex(), row, row, QModelIndex(), row-1);
+
+      QxrdROICoordinatesPtr p1 = rois->roi(row-1);
+      QxrdROICoordinatesPtr p2 = rois->roi(row);
+
+      rois->setRoi(row-1, p2);
+      rois->setRoi(row, p1);
+
+      endMoveRows();
+
+//      renumberROIs();
+    }
+  }
 }
 
 void QxrdROICoordinatesListModel::editROI(int row)
@@ -145,4 +216,13 @@ QxrdROICoordinatesPtr QxrdROICoordinatesListModel::roi(int row) const
   }
 
   return res;
+}
+
+void QxrdROICoordinatesListModel::setRoi(int row, QxrdROICoordinatesPtr c)
+{
+  QxrdROICoordinatesListPtr coords(m_ROICoordinates);
+
+  if (coords) {
+    coords->setRoi(row, c);
+  }
 }

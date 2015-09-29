@@ -123,3 +123,10 @@ QxrdROICoordinatesPtr QxrdROICoordinatesList::roi(int i)
 {
   return m_ROICoordinates.value(i);
 }
+
+void QxrdROICoordinatesList::setRoi(int i, QxrdROICoordinatesPtr c)
+{
+  if (i >= 0 && i < m_ROICoordinates.count()) {
+    m_ROICoordinates[i] = c;
+  }
+}

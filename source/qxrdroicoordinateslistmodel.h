@@ -29,6 +29,7 @@ public:
   void editROI(int row);
 
   QxrdROICoordinatesPtr roi(int row) const;
+  void setRoi(int row, QxrdROICoordinatesPtr c);
 
 signals:
 

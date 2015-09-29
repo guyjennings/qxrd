@@ -38,6 +38,23 @@ public:
 signals:
 
 public slots:
+  double left() const;
+  double top() const;
+  double right() const;
+  double bottom() const;
+  double width() const;
+  double height() const;
+
+  QPointF center() const;
+  QSizeF size() const;
+
+  void setLeft(double l);
+  void setTop(double t);
+  void setRight(double r);
+  void setBottom(double b);
+
+  void setCenter(QPointF c);
+  void setSize(QSizeF s);
 
 public:
   Q_PROPERTY(int roiType READ get_RoiType WRITE set_RoiType)

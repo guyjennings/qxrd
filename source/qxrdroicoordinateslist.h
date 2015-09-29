@@ -33,6 +33,7 @@ public slots:
   void removeROI(int i);
 
   QxrdROICoordinatesPtr roi(int i);
+  void setRoi(int i, QxrdROICoordinatesPtr c);
 
 private:
   QxrdROICoordinatesPtr newROI(int roiType);
