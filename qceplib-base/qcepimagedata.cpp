@@ -470,17 +470,17 @@ void QcepImageData<T>::divideValue(int x, int y, T val)
   }
 }
 
-template <typename T>
-T QcepImageData<T>::minValue() const
-{
-  return m_MinValue;
-}
+//template <typename T>
+//T QcepImageData<T>::minValue() const
+//{
+//  return m_MinValue;
+//}
 
-template <typename T>
-T QcepImageData<T>::maxValue() const
-{
-  return m_MaxValue;
-}
+//template <typename T>
+//T QcepImageData<T>::maxValue() const
+//{
+//  return m_MaxValue;
+//}
 
 template <typename T>
 void QcepImageData<T>::calculateRange()
@@ -957,6 +957,18 @@ QcepMaskDataPtr QcepImageData<T>::overflow() const
 }
 
 template <typename T>
+double QcepImageData<T>::minValue() const
+{
+  return findMin();
+}
+
+template <typename T>
+double QcepImageData<T>::maxValue() const
+{
+  return findMax();
+}
+
+template <typename T>
 T QcepImageData<T>::findMin() const
 {
   int ncols = this -> get_Width();
@@ -969,11 +981,13 @@ T QcepImageData<T>::findMin() const
       if (m_Mask == NULL || m_Mask->value(col,row)) {
         T val = this->value(col, row);
 
-        if (first) {
-          minv = val;
-          first = false;
-        } else if (val < minv){
-          minv = val;
+        if (val == val) { // Skip NaNs
+          if (first) {
+            minv = val;
+            first = false;
+          } else if (val < minv){
+            minv = val;
+          }
         }
       }
     }
@@ -993,13 +1007,15 @@ T QcepImageData<T>::findMax() const
   for (int row=0; row<nrows; row++) {
     for (int col=0; col<ncols; col++) {
       if (m_Mask == NULL || m_Mask->value(col,row)) {
-        double val = this -> value(col, row);
+        T val = this -> value(col, row);
 
-        if (first) {
-          maxv = val;
-          first = false;
-        } else if (val > maxv){
-          maxv = val;
+        if (val == val) {
+          if (first) {
+            maxv = val;
+            first = false;
+          } else if (val > maxv){
+            maxv = val;
+          }
         }
       }
     }
@@ -1020,8 +1036,11 @@ double QcepImageData<T>::findAverage() const
     for (int col=0; col<ncols; col++) {
       if (m_Mask == NULL || m_Mask->value(col,row)) {
         double val = this -> value(col, row);
-        npix += 1;
-        sum += val;
+
+        if (val==val) {
+          npix += 1;
+          sum += val;
+        }
       }
     }
   }
@@ -1031,6 +1050,72 @@ double QcepImageData<T>::findAverage() const
   } else {
     return sum/npix;
   }
+}
+
+template <typename T>
+QPointF QcepImageData<T>::percentileRange(double lowpct, double highpct)
+{
+  const int histSize = 65536;
+  QVector<int> histogramVec(histSize+1);
+  histogramVec.fill(0.0);
+  int *histogram = histogramVec.data();
+
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+
+  double minVal = minValue();
+  double maxVal = maxValue();
+
+  double histStep = (maxVal - minVal + 2)/histSize;
+  int nAbove = 0, nBelow = 0, nTotal = 0;
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        double val = value(col, row);
+
+        if (val==val) {
+          double bin = (val - minVal)/histStep;
+
+          if (bin < 0) {
+            nBelow += 1;
+          } else if (bin >= histSize) {
+            nAbove += 1;
+          } else {
+            histogram[(int) bin] += 1;
+          }
+
+          nTotal += 1;
+        }
+      }
+    }
+  }
+
+  double lowCount = ((double) nTotal) * lowpct / 100.0;
+  double highCount = ((double) nTotal) * highpct / 100.0;
+  double count = nBelow;
+
+  QPointF res(0,0);
+
+  for (int i=0; i<histSize; i++) {
+    double binVal = minVal + i*histStep;
+
+    count += histogram[i];
+
+    if (count < lowCount) {
+      res.setX(binVal);
+    }
+
+    if (count < highCount) {
+      res.setY(binVal);
+    }
+  }
+
+  if (res.y() <= res.x()) {
+    res.setY(res.x() + 1);
+  }
+
+  return res;
 }
 
 template <typename T>

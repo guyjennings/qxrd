@@ -119,6 +119,11 @@ public slots:
   virtual void clear() = 0;
   virtual void resize(int width, int height) = 0;
 
+  virtual double minValue() const = 0;
+  virtual double maxValue() const = 0;
+
+  virtual QPointF percentileRange(double lowpct, double highpct) = 0;
+
 public:
 //  int get_Width() const
 //  {
@@ -219,6 +224,10 @@ public:
   virtual void saveData(QString &name, QString filter, Overwrite canOverwrite=NoOverwrite);
   void saveTIFFData(QString name);
 
+  double minValue() const;
+  double maxValue() const;
+  QPointF percentileRange(double lowpct, double highpct);
+
 public:
   template <typename T2>
   void subtractDark(const QSharedPointer< QcepImageData<T2> > dark);
@@ -233,9 +242,6 @@ public:
 public:
   T value(int x, int y) const;
   T value(double x, double y) const;
-
-  T minValue() const;
-  T maxValue() const;
 
   void setValue(int x, int y, T val);
   void addValue(int x, int y, T val);
