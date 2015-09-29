@@ -607,4 +607,7 @@ TODO("2015-09-20", "",
 TODO("2015-09-22", "",
      "Redo acquireStatus function");
 
+TODO("2015-09-29", "",
+     "Updates to saved settings not stored as properties do not trigger re-saves");
+
 #endif // TODO_H
