@@ -8,6 +8,7 @@
 #include "qxrddetectorprocessor-ptr.h"
 #include "qxrdroicoordinateslistmodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qxrddetector-ptr.h"
 #include <QTimer>
 
 class QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::QxrdDetectorControlWindow
@@ -18,6 +19,7 @@ public:
   explicit QxrdDetectorControlWindow(QcepSettingsSaverWPtr     saver,
                                      QxrdExperimentWPtr        exp,
                                      QxrdAcquisitionWPtr       acq,
+                                     QxrdDetectorWPtr          det,
                                      QxrdDetectorProcessorWPtr proc,
                                      QWidget                  *parent = 0);
   ~QxrdDetectorControlWindow();
@@ -40,6 +42,7 @@ private slots:
 
   void updateImageDisplay();
   void onUpdateIntervalMsecChanged(int newVal);
+  void updateWindowTitle();
 
 private:
   QVector<int>  selectedROIs();
@@ -48,6 +51,7 @@ private:
   QcepSettingsSaverWPtr           m_Saver;
   QxrdExperimentWPtr              m_Experiment;
   QxrdAcquisitionWPtr             m_Acquisition;
+  QxrdDetectorWPtr                m_Detector;
   QxrdDetectorProcessorWPtr       m_Processor;
   QxrdROICoordinatesListModelPtr  m_ROIModel;
 

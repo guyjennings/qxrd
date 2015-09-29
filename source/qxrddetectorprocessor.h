@@ -97,6 +97,28 @@ public:
   Q_PROPERTY(bool saveSubtracted READ get_SaveSubtracted WRITE set_SaveSubtracted)
   QCEP_BOOLEAN_PROPERTY(SaveSubtracted)
 
+  Q_PROPERTY(QString darkImagePath   READ get_DarkImagePath WRITE set_DarkImagePath)
+  QCEP_STRING_PROPERTY(DarkImagePath)
+
+  Q_PROPERTY(QString rawDataSubdir READ get_RawDataSubdir WRITE set_RawDataSubdir)
+  QCEP_STRING_PROPERTY(RawDataSubdir)
+
+  Q_PROPERTY(QString darkDataSubdir READ get_DarkDataSubdir WRITE set_DarkDataSubdir)
+  QCEP_STRING_PROPERTY(DarkDataSubdir)
+
+  Q_PROPERTY(QString badPixelsPath   READ get_BadPixelsPath WRITE set_BadPixelsPath)
+  QCEP_STRING_PROPERTY(BadPixelsPath)
+
+  Q_PROPERTY(QString gainMapPath     READ get_GainMapPath WRITE set_GainMapPath)
+  QCEP_STRING_PROPERTY(GainMapPath)
+
+  Q_PROPERTY(QString subtractedSubdir READ get_SubtractedSubdir WRITE set_SubtractedSubdir)
+  QCEP_STRING_PROPERTY(SubtractedSubdir)
+
+  Q_PROPERTY(QString maskPath     READ get_MaskPath WRITE set_MaskPath)
+  QCEP_STRING_PROPERTY(MaskPath)
+
+
   Q_PROPERTY(bool performIntegration READ get_PerformIntegration WRITE set_PerformIntegration)
   QCEP_BOOLEAN_PROPERTY(PerformIntegration)
 
@@ -106,26 +128,26 @@ public:
   Q_PROPERTY(bool saveIntegratedData READ get_SaveIntegratedData WRITE set_SaveIntegratedData)
   QCEP_BOOLEAN_PROPERTY(SaveIntegratedData)
 
+  Q_PROPERTY(QString integratedDataFile READ get_IntegratedDataFile WRITE set_IntegratedDataFile)
+  QCEP_STRING_PROPERTY(IntegratedDataFile)
+
+  Q_PROPERTY(bool saveIntegratedDataSeparate READ get_SaveIntegratedDataSeparate WRITE set_SaveIntegratedDataSeparate)
+  QCEP_BOOLEAN_PROPERTY(SaveIntegratedDataSeparate)
+
+  Q_PROPERTY(QString integratedDataSubdir READ get_IntegratedDataSubdir WRITE set_IntegratedDataSubdir)
+  QCEP_STRING_PROPERTY(IntegratedDataSubdir)
+
   Q_PROPERTY(bool accumulateIntegrated2D READ get_AccumulateIntegrated2D WRITE set_AccumulateIntegrated2D)
   QCEP_BOOLEAN_PROPERTY(AccumulateIntegrated2D)
+
+  Q_PROPERTY(QString accumulateIntegratedName READ get_AccumulateIntegratedName WRITE set_AccumulateIntegratedName)
+  QCEP_STRING_PROPERTY(AccumulateIntegratedName)
 
   Q_PROPERTY(bool calculateROICounts READ get_CalculateROICounts WRITE set_CalculateROICounts)
   QCEP_BOOLEAN_PROPERTY(CalculateROICounts)
 
   Q_PROPERTY(bool displayROIBorders READ get_DisplayROIBorders WRITE set_DisplayROIBorders)
   QCEP_BOOLEAN_PROPERTY(DisplayROIBorders)
-
-  Q_PROPERTY(QString darkImagePath   READ get_DarkImagePath WRITE set_DarkImagePath)
-  QCEP_STRING_PROPERTY(DarkImagePath)
-
-  Q_PROPERTY(QString badPixelsPath   READ get_BadPixelsPath WRITE set_BadPixelsPath)
-  QCEP_STRING_PROPERTY(BadPixelsPath)
-
-  Q_PROPERTY(QString gainMapPath     READ get_GainMapPath WRITE set_GainMapPath)
-  QCEP_STRING_PROPERTY(GainMapPath)
-
-  Q_PROPERTY(QString maskPath     READ get_MaskPath WRITE set_MaskPath)
-  QCEP_STRING_PROPERTY(MaskPath)
 
 private:
   QMutex                m_Mutex;

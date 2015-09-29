@@ -9,16 +9,19 @@
 #include "qxrdroicoordinates.h"
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
+#include "qxrddetector.h"
 
-QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr saver,
+QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     saver,
                                                      QxrdExperimentWPtr        exp,
                                                      QxrdAcquisitionWPtr       acq,
+                                                     QxrdDetectorWPtr          det,
                                                      QxrdDetectorProcessorWPtr proc,
                                                      QWidget                  *parent) :
   QxrdMainWindow(parent),
   m_Saver(saver),
   m_Experiment(exp),
   m_Acquisition(acq),
+  m_Detector(det),
   m_Processor(proc)
 {
   setupUi(this);
@@ -27,6 +30,8 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr saver
 
   QxrdDetectorProcessorPtr dp(m_Processor);
   QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+  QxrdExperimentPtr expt(m_Experiment);
+  QxrdDetectorPtr dt(m_Detector);
 
   if (dp) {
     dp->prop_DetectorDisplayMode()     -> linkTo(m_DetectorDisplayMode);
@@ -36,10 +41,26 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr saver
     dp->prop_PerformBadPixels()        -> linkTo(m_BadPixelCorrection);
     dp->prop_PerformGainCorrection()   -> linkTo(m_GainCorrection);
     dp->prop_SaveSubtracted()          -> linkTo(m_SaveSubtractedData);
+
+    dp->prop_DarkImagePath()           -> linkTo(m_DarkImagePath);
+    dp->prop_RawDataSubdir()           -> linkTo(m_RawDataSubdir);
+    dp->prop_DarkDataSubdir()          -> linkTo(m_DarkDataSubdir);
+    dp->prop_BadPixelsPath()           -> linkTo(m_BadPixelPath);
+    dp->prop_GainMapPath()             -> linkTo(m_GainCorrectionPath);
+    dp->prop_SubtractedSubdir()        -> linkTo(m_SubtractedDataSubdir);
+
+    dp->prop_MaskPath()                -> linkTo(m_MaskImagePath);
+
     dp->prop_PerformIntegration()      -> linkTo(m_PerformIntegration);
     dp->prop_DisplayIntegratedData()   -> linkTo(m_DisplayIntegratedData);
     dp->prop_SaveIntegratedData()      -> linkTo(m_SaveIntegratedData);
+    dp->prop_IntegratedDataFile()      -> linkTo(m_IntegratedDataFile);
+    dp->prop_SaveIntegratedDataSeparate() -> linkTo(m_SaveIntegratedDataSeparate);
+    dp->prop_IntegratedDataSubdir()    -> linkTo(m_IntegratedDataSubdir);
+
     dp->prop_AccumulateIntegrated2D()  -> linkTo(m_AccumulateIntegratedData);
+    dp->prop_AccumulateIntegratedName()-> linkTo(m_AccumulateIntegratedName);
+
     dp->prop_CalculateROICounts()      -> linkTo(m_CalculateROICounts);
     dp->prop_DisplayROIBorders()       -> linkTo(m_DisplayROIBorders);
 
@@ -71,6 +92,30 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr saver
 
     m_UpdateTimer.start(app->get_UpdateIntervalMsec());
   }
+
+  if (expt) {
+    int fs = expt->get_FontSize();
+    int sp = expt->get_Spacing();
+
+    if (fs > 0) {
+      setFontSize(fs);
+    }
+
+    if (sp >= 0) {
+      setSpacing(sp);
+    }
+
+    connect(expt->prop_FontSize(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setFontSize);
+    connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setSpacing);
+  }
+
+  if (dt) {
+    connect(dt->prop_DetectorNumber(),   &QcepIntProperty::valueChanged,    this, &QxrdDetectorControlWindow::updateWindowTitle);
+    connect(dt->prop_DetectorTypeName(), &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateWindowTitle);
+    connect(dt->prop_DetectorName(),     &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateWindowTitle);
+
+    updateWindowTitle();
+  }
 }
 
 QxrdDetectorControlWindow::~QxrdDetectorControlWindow()
@@ -78,6 +123,18 @@ QxrdDetectorControlWindow::~QxrdDetectorControlWindow()
 #ifndef QT_NO_DEBUG
   printf("Deleting detector control window\n");
 #endif
+}
+
+void QxrdDetectorControlWindow::updateWindowTitle()
+{
+  QxrdDetectorPtr dt(m_Detector);
+
+  if (dt) {
+    setWindowTitle(tr("%1: Control %2 detector \"%3\"")
+                   .arg(dt->get_DetectorNumber())
+                   .arg(dt->get_DetectorTypeName())
+                   .arg(dt->get_DetectorName()));
+  }
 }
 
 void QxrdDetectorControlWindow::changeEvent(QEvent *e)
