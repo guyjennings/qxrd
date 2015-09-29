@@ -1,9 +1,9 @@
 #ifndef QCEPDATAOBJECTWINDOW_H
 #define QCEPDATAOBJECTWINDOW_H
 
-#include <QMainWindow>
+#include "qcepmainwindow.h"
 
-class QcepDataObjectWindow : public QMainWindow
+class QcepDataObjectWindow : public QcepMainWindow
 {
   Q_OBJECT
 public:
@@ -12,6 +12,7 @@ public:
 signals:
 
 public slots:
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 };
 
 #endif // QCEPDATAOBJECTWINDOW_H

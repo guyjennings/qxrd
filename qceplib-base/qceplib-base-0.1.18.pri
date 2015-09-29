@@ -68,7 +68,8 @@ SOURCES += \
   $${PWD}/qcepdataobjectpropertieswindow.cpp \
   $${PWD}/qcepdataobjectspreadsheetwindow.cpp \
   $${PWD}/qcepscriptengine.cpp \
-  $${PWD}/qcepdataobjectwindow.cpp
+  $${PWD}/qcepdataobjectwindow.cpp \
+    $$PWD/qcepmainwindow.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -162,7 +163,9 @@ HEADERS += \
   $${PWD}/qcepobject-ptr.h \
   $${PWD}/qcepscriptengine.h \
   $${PWD}/qcepscriptengine-ptr.h \
-  $${PWD}/qcepdataobjectwindow.h
+  $${PWD}/qcepdataobjectwindow.h \
+    $$PWD/qcepmainwindow.h \
+    $$PWD/qcepmainwindow-ptr.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \
