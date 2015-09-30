@@ -1130,6 +1130,14 @@ void QxrdImagePlot::setROIModel(QxrdROICoordinatesListModelPtr model)
   m_ROIModel = model;
 
   updateROIDisplay();
+
+  if (m_ROIModel) {
+    connect(m_ROIModel.data(), &QAbstractItemModel::modelReset,    this, &QxrdImagePlot::updateROIDisplay);
+    connect(m_ROIModel.data(), &QAbstractItemModel::dataChanged,   this, &QxrdImagePlot::updateROIDisplay);
+    connect(m_ROIModel.data(), &QAbstractItemModel::rowsInserted,  this, &QxrdImagePlot::updateROIDisplay);
+    connect(m_ROIModel.data(), &QAbstractItemModel::rowsMoved,     this, &QxrdImagePlot::updateROIDisplay);
+    connect(m_ROIModel.data(), &QAbstractItemModel::rowsRemoved,   this, &QxrdImagePlot::updateROIDisplay);
+  }
 }
 
 void QxrdImagePlot::setROISelection(QItemSelectionModel *select)
@@ -1138,8 +1146,10 @@ void QxrdImagePlot::setROISelection(QItemSelectionModel *select)
 
   updateROIDisplay();
 
-  connect(m_ROISelection, &QItemSelectionModel::selectionChanged,
-          this, &QxrdImagePlot::updateROISelection);
+  if (m_ROISelection) {
+    connect(m_ROISelection, &QItemSelectionModel::selectionChanged,
+            this, &QxrdImagePlot::updateROISelection);
+  }
 }
 
 void QxrdImagePlot::clearROIDisplay()
