@@ -105,6 +105,20 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
     propertyEditor = le;
     button = pb;
 
+  } else if (type == QxrdDetectorProxy::FilenameProperty) {
+    QLineEdit *le = new QLineEdit(value.toString());
+    QPushButton *pb = new QPushButton("Browse");
+
+    QSignalMapper *mapper = new QSignalMapper(pb);
+
+    connect(pb, &QPushButton::clicked, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
+    mapper->setMapping(pb, m_CurrentRow);
+    connect(mapper, (void (QSignalMapper::*)(int)) &QSignalMapper::mapped,
+            this,   &QxrdDetectorConfigurationDialog::browseToFilename);
+
+    propertyEditor = le;
+    button = pb;
+
   } else if (type == QxrdDetectorProxy::PEDetNumProperty) {
     QSpinBox *sb = new QSpinBox();
     sb -> setMinimum(-1);
@@ -225,6 +239,19 @@ void QxrdDetectorConfigurationDialog::browseToDirectory(int i)
 
   if (le) {
     QString newPath = QFileDialog::getExistingDirectory(this, "Browse to Directory", le->text());
+
+    if (newPath.length() > 0) {
+      le->setText(newPath);
+    }
+  }
+}
+
+void QxrdDetectorConfigurationDialog::browseToFilename(int i)
+{
+  QLineEdit *le = qobject_cast<QLineEdit*>(m_Widgets.value(i));
+
+  if (le) {
+    QString newPath = QFileDialog::getOpenFileName(this, "Browse to File", le->text());
 
     if (newPath.length() > 0) {
       le->setText(newPath);

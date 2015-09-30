@@ -27,6 +27,7 @@ protected:
 
 private slots:
   void browseToDirectory(int i);
+  void browseToFilename(int i);
 
 private:
   QxrdDetectorProxyPtr m_Proxy;
