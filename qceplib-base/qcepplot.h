@@ -39,8 +39,8 @@ public slots:
   void enableZooming();
   void enableMeasuring();
 
-  void onLegendClicked(const QVariant &itemInfo, int index);
-  void onLegendChecked(const QVariant &itemInfo, bool on, int index);
+  virtual void onLegendClicked(const QVariant &itemInfo, int index);
+  virtual void onLegendChecked(const QVariant &itemInfo, bool on, int index);
 
   void setXAxisLog(bool isLog);
   void setYAxisLog(bool isLog);
