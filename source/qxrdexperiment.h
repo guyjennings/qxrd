@@ -69,6 +69,7 @@ public:
   QxrdSimpleServerThreadWPtr simpleServerThread();
   QxrdCalibrantLibraryWPtr calibrantLibrary() const;
   QcepDatasetModelPtr dataset() const;
+  QxrdFileSaverWPtr fileSaver() const;
 
   FILE* logFile();
 

@@ -484,6 +484,11 @@ QxrdAcquisitionWPtr QxrdExperiment::acquisition() const
   return m_Acquisition;
 }
 
+QxrdFileSaverWPtr QxrdExperiment::fileSaver() const
+{
+  return m_FileSaver;
+}
+
 QxrdServerWPtr QxrdExperiment::specServer()
 {
   return m_Server;

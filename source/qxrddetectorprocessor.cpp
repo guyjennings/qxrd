@@ -10,6 +10,7 @@
 QxrdDetectorProcessor::QxrdDetectorProcessor(
     QcepSettingsSaverWPtr saver,
     QxrdExperimentWPtr    doc,
+    QxrdFileSaverWPtr     fsav,
     QxrdDetectorWPtr      det)
   : QcepObject("acquisitionProcessor", doc.data()),
     m_Saver(saver),
@@ -40,7 +41,11 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
 
     m_CalculateROICounts(saver, this, "calculateROICounts", true, "Calculate ROI Counts"),
     m_DisplayROIBorders(saver, this, "displayROIBorders", true, "Display ROIs in image"),
+
+    m_RoiCounts(QcepSettingsSaverWPtr(), this, "roiCounts", QcepDoubleVector(), "ROI Counts"),
+
     m_Experiment(doc),
+    m_FileSaver(fsav),
     m_Detector(det),
     m_CenterFinder(),
     m_Integrator(),
@@ -160,16 +165,62 @@ void QxrdDetectorProcessor::processAcquiredImage(QString filePattern,
                                                  QcepMaskDataPtr overflow)
 {
   if (image) {
-    printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...")
-                 .arg(image->get_FileName()));
-  } else {
-    printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(NULL,..."));
-  }
+    QcepImageDataBasePtr img = image;
 
-  QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+    if (qcepDebug(DEBUG_ACQUIRE)) {
+      printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...")
+                   .arg(img->get_FileName()));
+    }
 
-  if (ctrl) {
-    ctrl->displayNewData(image, overflow);
+    QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+
+    if (get_SaveRawImages()) {
+      doSaveRawImage(img);
+    }
+
+    if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+      ctrl->displayNewData(image, overflow);
+    }
+
+    if (get_PerformDarkSubtraction()) {
+      img = doDarkSubtraction(img);
+    }
+
+    if (get_PerformBadPixels()) {
+      img = doBadPixels(img);
+    }
+
+    if (get_PerformGainCorrection()) {
+      img = doGainCorrection(img);
+    }
+
+    if (get_CalculateROICounts()) {
+      set_RoiCounts(doCalculateROICounts(img));
+    }
+
+    if (get_SaveSubtracted()) {
+      doSaveSubtractedImage(img);
+    }
+
+//    if (get_PerformIntegration()) {
+//      integ = doPerformIntegration(img);
+
+//      if (ctrl && get_DisplayIntegratedData()) {
+//        ctrl->displayIntegratedData(integ);
+//      }
+
+//      if (get_SaveIntegratedData()) {
+//        doSaveIntegratedData(integ);
+//      }
+
+//      if (get_SaveIntegratedDataSeparate()) {
+//        doSaveIntegratedDataSeparate(integ);
+//      }
+
+//      if (get_AccumulateIntegrated2D()) {
+//        doAccumulateIntegrated2D(integ);
+//      }
+//    }
   }
 }
 
@@ -179,10 +230,14 @@ void QxrdDetectorProcessor::processDarkImage(QString filePattern,
                                              QcepMaskDataPtr overflow)
 {
   if (image) {
-    printMessage(tr("QxrdDetectorProcessor::processDarkImage(\"%1\",...")
-                 .arg(image->get_FileName()));
-  } else {
-    printMessage(tr("QxrdDetectorProcessor::processDarkImage(NULL,..."));
+    if (qcepDebug(DEBUG_ACQUIRE)) {
+      printMessage(tr("QxrdDetectorProcessor::processDarkImage(\"%1\",...")
+                   .arg(image->get_FileName()));
+    }
+
+    if (get_SaveDarkImages()) {
+      doSaveDarkImage(image);
+    }
   }
 }
 
@@ -197,4 +252,47 @@ void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
 QxrdImagePlotSettingsWPtr QxrdDetectorProcessor::imagePlotSettings()
 {
   return m_ImagePlotSettings;
+}
+
+QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBasePtr img)
+{
+  printMessage("Dark Subtraction not yet implemented");
+
+  return img;
+}
+
+QcepImageDataBasePtr QxrdDetectorProcessor::doBadPixels(QcepImageDataBasePtr img)
+{
+  printMessage("Bad Pixel Correction not yet implemented");
+
+  return img;
+}
+
+QcepImageDataBasePtr QxrdDetectorProcessor::doGainCorrection(QcepImageDataBasePtr img)
+{
+  printMessage("Gain Correction not yet implemented");
+
+  return img;
+}
+
+QcepDoubleVector QxrdDetectorProcessor::doCalculateROICounts(QcepImageDataBasePtr img)
+{
+  printMessage("ROI Calculation not yet implemented");
+
+  return QcepDoubleVector();
+}
+
+void QxrdDetectorProcessor::doSaveRawImage(QcepImageDataBasePtr img)
+{
+  printMessage("Save Raw Image not yet implemented");
+}
+
+void QxrdDetectorProcessor::doSaveDarkImage(QcepImageDataBasePtr img)
+{
+  printMessage("Save Dark Image not yet implemented");
+}
+
+void QxrdDetectorProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img)
+{
+  printMessage("Save Subtracted Image not yet implemented");
 }

@@ -54,11 +54,15 @@ QxrdDetector::~QxrdDetector()
 
 void QxrdDetector::initialize()
 {
-  m_Processor =
-      QxrdDetectorProcessorPtr(
-        new QxrdDetectorProcessor(m_Saver, m_Experiment, sharedFromThis()));
+  QxrdExperimentPtr expt(m_Experiment);
 
-  m_Processor->initialize();
+  if (expt) {
+    m_Processor =
+        QxrdDetectorProcessorPtr(
+          new QxrdDetectorProcessor(m_Saver, m_Experiment, expt->fileSaver(), sharedFromThis()));
+
+    m_Processor->initialize();
+  }
 }
 
 QxrdDetectorProcessorPtr QxrdDetector::processor()

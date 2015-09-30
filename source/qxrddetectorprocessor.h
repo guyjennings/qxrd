@@ -19,6 +19,7 @@
 #include <QScriptEngine>
 #include "qxrddetectorcontrolwindow-ptr.h"
 #include "qxrdimageplotsettings-ptr.h"
+#include "qxrdfilesaver-ptr.h"
 
 class QxrdDetectorProcessor : public QcepObject, public QEnableSharedFromThis<QxrdDetectorProcessor>
 {
@@ -27,6 +28,7 @@ class QxrdDetectorProcessor : public QcepObject, public QEnableSharedFromThis<Qx
 public:
   QxrdDetectorProcessor(QcepSettingsSaverWPtr saver,
                         QxrdExperimentWPtr    doc,
+                        QxrdFileSaverWPtr     fsav,
                         QxrdDetectorWPtr      det);
   virtual ~QxrdDetectorProcessor();
   void initialize();
@@ -69,6 +71,15 @@ public:
     ImageDisplayMode,
     IntegratedDisplayMode
   };
+
+private:
+  QcepImageDataBasePtr doDarkSubtraction    (QcepImageDataBasePtr img);
+  QcepImageDataBasePtr doBadPixels          (QcepImageDataBasePtr img);
+  QcepImageDataBasePtr doGainCorrection     (QcepImageDataBasePtr img);
+  QVector<double>      doCalculateROICounts (QcepImageDataBasePtr img);
+  void                 doSaveRawImage       (QcepImageDataBasePtr img);
+  void                 doSaveSubtractedImage(QcepImageDataBasePtr img);
+  void                 doSaveDarkImage      (QcepImageDataBasePtr img);
 
 private:
   QcepSettingsSaverWPtr m_Saver;
@@ -149,10 +160,14 @@ public:
   Q_PROPERTY(bool displayROIBorders READ get_DisplayROIBorders WRITE set_DisplayROIBorders)
   QCEP_BOOLEAN_PROPERTY(DisplayROIBorders)
 
+  Q_PROPERTY(QcepDoubleVector roiCounts READ get_RoiCounts WRITE set_RoiCounts STORED false)
+  QCEP_DOUBLE_VECTOR_PROPERTY(RoiCounts)
+
 private:
   QMutex                m_Mutex;
 
   QxrdExperimentWPtr    m_Experiment;
+  QxrdFileSaverWPtr     m_FileSaver;
   QxrdDetectorWPtr      m_Detector;
 
   QxrdCenterFinderPtr   m_CenterFinder;
