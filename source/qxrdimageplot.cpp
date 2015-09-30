@@ -55,7 +55,6 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_FirstTime(true),
     m_ContextMenuEnabled(true),
 
-    m_ROIDisplayed(false),
     m_ROIModel(),
     m_ROISelection(NULL),
     m_ROICurves()
@@ -591,6 +590,44 @@ void QxrdImagePlot::changeOverflowShown(bool shown)
   }
 }
 
+void QxrdImagePlot::toggleShowROI()
+{
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+
+  if (set) {
+    changeROIShown(!set->get_DisplayROI());
+  }
+}
+
+void QxrdImagePlot::changeROIShown(bool shown)
+{
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+
+  if (set) {
+    set->set_DisplayROI(shown);
+
+    updateROIDisplay();
+  }
+}
+
+void QxrdImagePlot::toggleLogDisplay()
+{
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+
+  if (set) {
+    changeLogDisplay(!set->get_DisplayLog());
+  }
+}
+
+void QxrdImagePlot::changeLogDisplay(bool isLog)
+{
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+
+  if (set) {
+    set->set_DisplayLog(isLog);
+  }
+}
+
 void QxrdImagePlot::changedColorMap()
 {
   m_DataImage -> setColorMap(m_ColorMap);
@@ -1120,7 +1157,11 @@ void QxrdImagePlot::clearPowderMarkers()
 
 void QxrdImagePlot::enableROIDisplay(bool enable)
 {
-  m_ROIDisplayed = enable;
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+
+  if (set) {
+    set->set_DisplayROI(enable);
+  }
 
   updateROIDisplay();
 }
@@ -1166,7 +1207,9 @@ void QxrdImagePlot::updateROIDisplay()
 {
   clearROIDisplay();
 
-  if (m_ROIDisplayed && m_ROIModel && m_ROISelection) {
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+
+  if (set && set->get_DisplayROI() && m_ROIModel && m_ROISelection) {
     int nROI = m_ROIModel->rowCount(QModelIndex());
 
     for (int i=0; i<nROI; i++) {

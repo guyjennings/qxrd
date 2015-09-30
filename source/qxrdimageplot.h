@@ -60,10 +60,14 @@ public slots:
   void toggleShowImage();
   void toggleShowMask();
   void toggleShowOverflow();
+  void toggleShowROI();
+  void toggleLogDisplay();
 
   void changeImageShown(bool shown);
   void changeMaskShown(bool shown);
   void changeOverflowShown(bool shown);
+  void changeROIShown(bool shown);
+  void changeLogDisplay(bool isLog);
 
   void onInterpolateChanged(bool interp);
   void onMaintainAspectChanged(bool interp);
@@ -146,7 +150,11 @@ public:
 
 private:
   QcepObjectNamer            m_ObjectNamer;
+
+protected:
   QxrdImagePlotSettingsWPtr  m_ImagePlotSettings;
+
+private:
   QwtPlotRescaler           *m_Rescaler;
   QxrdPlotSlicer            *m_Slicer;
   QxrdImagePlotMeasurer     *m_Measurer;
@@ -188,7 +196,6 @@ private:
 
   bool                       m_ContextMenuEnabled;
 
-  bool                           m_ROIDisplayed;
   QxrdROICoordinatesListModelPtr m_ROIModel;
   QItemSelectionModel           *m_ROISelection;
   QVector<QwtPlotCurve*>         m_ROICurves;

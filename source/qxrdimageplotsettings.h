@@ -54,6 +54,9 @@ public:
   Q_PROPERTY(bool maintainAspectRatio        READ get_MaintainAspectRatio WRITE set_MaintainAspectRatio)
   QCEP_BOOLEAN_PROPERTY(MaintainAspectRatio)
 
+  Q_PROPERTY(bool displayROI READ get_DisplayROI WRITE set_DisplayROI)
+  QCEP_BOOLEAN_PROPERTY(DisplayROI)
+
   Q_PROPERTY(double tthMouse READ get_TTHMouse WRITE set_TTHMouse STORED false)
   QCEP_DOUBLE_PROPERTY(TTHMouse)
 

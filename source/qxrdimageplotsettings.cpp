@@ -17,6 +17,7 @@ QxrdImagePlotSettings::QxrdImagePlotSettings(QcepSettingsSaverWPtr saver, QcepOb
   m_OverflowShown(saver, this, "overflowShown", 0, "Overflow Shown?"),
   m_InterpolatePixels(saver, this, "interpolatePixels", 1, "Interpolated Pixel Display?"),
   m_MaintainAspectRatio(saver, this, "maintainAspectRatio", 1, "Maintain Equal Scaling in X and Y"),
+  m_DisplayROI(saver, this, "displayROI", 1, "Display ROI Outlines"),
   m_TTHMouse(QcepSettingsSaverWPtr(), this,"tthMouse",0, "2 Theta at Mouse"),
   m_QMouse(QcepSettingsSaverWPtr(), this,"qMouse",0, "Q at Mouse"),
   m_RMouse(QcepSettingsSaverWPtr(), this,"rMouse",0, "R at Mouse"),
