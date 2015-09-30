@@ -25,7 +25,9 @@ QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver,
   m_Remote(new QxrdDetectorPilatusRemote(this)),
   m_PilatusHost            (saver, this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
   m_PilatusPort            (saver, this, "pilatusPort",          41234,         "Camserver Port Number"),
-  m_PilatusUser            (saver, this, "pilatusSSH",           "det",         "Camserver User Name"),
+  m_PilatusUser            (saver, this, "pilatusUser",          "det",         "Camserver User Name"),
+  m_PilatusSSH             (saver, this, "pilatusSSH",           "ssh",         "ssh command path"),
+  m_PilatusSCP             (saver, this, "pilatusSCP",           "scp",         "scp command path"),
   m_PilatusDataDirectory   (saver, this, "pilatusDataDirectory", "/home/det/shareddata/test/",    "Data directory on Camserver computer"),
   m_ReadFilesLocally       (saver, this, "readFilesLocally",     true, "Attempt to read acquired files into QXRD for further processing"),
   m_DeleteFilesAfterReading(saver, this, "deleteFilesAfterReading", false, "Delete files from Camserver computer after reading"),
@@ -297,7 +299,9 @@ void QxrdDetectorPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusHost",          "Camserver Host",    "s11id-pilatus");
     proxy->pushProperty(QxrdDetectorProxy::FixedIntegerProperty,   "pilatusPort",  "Camserver Port",    41234);
     proxy->pushProperty(QxrdDetectorProxy::StringProperty,  "pilatusUser",         "Camserver User",    "det");
-    proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusDataDirectory", "Camserver Data Directory", "/home/det/shareddata/test/");
+    proxy->pushProperty(QxrdDetectorProxy::FilenameProperty,  "pilatusSSH",        "ssh command",       "ssh");
+    proxy->pushProperty(QxrdDetectorProxy::FilenameProperty,  "pilatusSCP",        "scp command",       "scp");
+    proxy->pushProperty(QxrdDetectorProxy::DirectoryProperty, "pilatusDataDirectory", "Camserver Data Directory", "/home/det/shareddata/test/");
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "readFilesLocally",     "Attempt to read acquired files into QXRD for further processing", true);
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "deleteFilesAfterReading", "Delete files from camserver computer after use", false);
     proxy->pushProperty(QxrdDetectorProxy::PilatusModeProperty, "exposureMode",     "Pilatus Exposure Mode", 0);
@@ -312,8 +316,10 @@ void QxrdDetectorPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusHost",          "Camserver Host",    get_PilatusHost());
     proxy->pushProperty(QxrdDetectorProxy::FixedIntegerProperty,   "pilatusPort",  "Camserver Port",    get_PilatusPort());
-    proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusUser",          "Camserver User", get_PilatusUser());
-    proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusDataDirectory", "Camserver Data Directory", get_PilatusDataDirectory());
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusUser",          "Camserver User",    get_PilatusUser());
+    proxy->pushProperty(QxrdDetectorProxy::FilenameProperty,  "pilatusSSH",        "ssh command",       get_PilatusSSH());
+    proxy->pushProperty(QxrdDetectorProxy::FilenameProperty,  "pilatusSCP",        "scp command",       get_PilatusSCP());
+    proxy->pushProperty(QxrdDetectorProxy::DirectoryProperty, "pilatusDataDirectory", "Camserver Data Directory", get_PilatusDataDirectory());
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "readFilesLocally",     "Attempt to read acquired files into QXRD for further processing", get_ReadFilesLocally());
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "deleteFilesAfterReading", "Delete files from camserver computer after use", get_DeleteFilesAfterReading());
     proxy->pushProperty(QxrdDetectorProxy::PilatusModeProperty, "exposureMode",     "Pilatus Exposure Mode", get_ExposureMode());
@@ -328,6 +334,8 @@ void QxrdDetectorPilatus::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
   if (proxy) {
     set_PilatusHost            (proxy->property("pilatusHost").toString());
     set_PilatusUser            (proxy->property("pilatusUser").toString());
+    set_PilatusSSH             (proxy->property("pilatusSSH").toString());
+    set_PilatusSCP             (proxy->property("pilatusSCP").toString());
     set_PilatusDataDirectory   (proxy->property("pilatusDataDirectory").toString());
     set_ReadFilesLocally       (proxy->property("readFilesLocally").toBool());
     set_DeleteFilesAfterReading(proxy->property("deleteFilesAfterReading").toBool());
@@ -360,7 +368,8 @@ void QxrdDetectorPilatus::remoteCommand(QString cmd)
 
 void QxrdDetectorPilatus::remoteDelete(QString file)
 {
-  QString cmd = tr("ssh -o ForwardX11=No %1@%2 rm %3/%4")
+  QString cmd = tr("%1 -o ForwardX11=No %2@%3 rm %4/%5")
+      .arg(get_PilatusSSH())
       .arg(get_PilatusUser())
       .arg(get_PilatusHost())
       .arg(get_PilatusDataDirectory()).arg(file);
@@ -386,7 +395,8 @@ void QxrdDetectorPilatus::remoteCopy(QString file)
     if (proc) {
       QString dest = proc->filePathInRawOutputDirectory(file);
 
-      QString cmd = tr("scp -o ForwardX11=No %1@%2:%3/%4 %5")
+      QString cmd = tr("%1 -o ForwardX11=No %2@%3:%4/%5 %6")
+          .arg(get_PilatusSCP())
           .arg(get_PilatusUser())
           .arg(get_PilatusHost())
           .arg(get_PilatusDataDirectory()).arg(file)

@@ -79,6 +79,12 @@ public:
   Q_PROPERTY(QString pilatusUser READ get_PilatusUser WRITE set_PilatusUser)
   QCEP_STRING_PROPERTY(PilatusUser)
 
+  Q_PROPERTY(QString pilatusSSH READ get_PilatusSSH WRITE set_PilatusSSH)
+  QCEP_STRING_PROPERTY(PilatusSSH)
+
+  Q_PROPERTY(QString pilatusSCP READ get_PilatusSCP WRITE set_PilatusSCP)
+  QCEP_STRING_PROPERTY(PilatusSCP)
+
   Q_PROPERTY(QString pilatusDataDirectory READ get_PilatusDataDirectory WRITE set_PilatusDataDirectory)
   QCEP_STRING_PROPERTY(PilatusDataDirectory)
 
