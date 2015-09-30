@@ -693,42 +693,45 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, QString extent, in
 {
   int width = get_FileIndexWidth();
   int detWidth = get_DetectorNumberWidth();
+  QxrdDetectorPtr det(detector(detNum));
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
-  int nDet = get_DetectorCount();
+  if (det) {
+    QxrdDetectorProcessorPtr proc(det->processor());
+    int nDet = get_DetectorCount();
 
-  if (proc) {
-    if (nphases == 0 || phase < 0) {
-      if (nDet <= 1) {
-        fileBase = tr("%1-%2.dark.%3")
-            .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(extent);
-      } else {
-        fileBase = tr("%1-%2-%3.dark.%4")
-            .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0')).arg(extent);
-      }
-
-      fileName = QDir(proc -> darkOutputDirectory()).filePath(fileBase);
-    } else {
-      if (nphases > 1) {
-        int phswidth = get_FilePhaseWidth();
+    if (proc) {
+      if (nphases == 0 || phase < 0) {
         if (nDet <= 1) {
-          fileBase = tr("%1-%2-%3.%4")
-              .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(phase,phswidth,10,QChar('0')).arg(extent);
-        } else {
-          fileBase = tr("%1-%2-%3-%4.%5")
-              .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0'))
-              .arg(phase,phswidth,10,QChar('0')).arg(extent);
-        }
-      } else {
-        if (nDet <= 1) {
-          fileBase = tr("%1-%2.%3")
+          fileBase = tr("%1-%2.dark.%3")
               .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(extent);
         } else {
-          fileBase = tr("%1-%2-%3.%4")
+          fileBase = tr("%1-%2-%3.dark.%4")
               .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0')).arg(extent);
         }
+
+        fileName = proc -> filePathInDarkOutputDirectory(fileBase);
+      } else {
+        if (nphases > 1) {
+          int phswidth = get_FilePhaseWidth();
+          if (nDet <= 1) {
+            fileBase = tr("%1-%2-%3.%4")
+                .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(phase,phswidth,10,QChar('0')).arg(extent);
+          } else {
+            fileBase = tr("%1-%2-%3-%4.%5")
+                .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0'))
+                .arg(phase,phswidth,10,QChar('0')).arg(extent);
+          }
+        } else {
+          if (nDet <= 1) {
+            fileBase = tr("%1-%2.%3")
+                .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(extent);
+          } else {
+            fileBase = tr("%1-%2-%3.%4")
+                .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0')).arg(extent);
+          }
+        }
+        fileName = proc -> filePathInRawOutputDirectory(fileBase);
       }
-      fileName = QDir(proc -> rawOutputDirectory()).filePath(fileBase);
     }
   }
 }

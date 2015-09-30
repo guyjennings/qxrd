@@ -188,6 +188,7 @@ void QxrdFileSaver::saveDoubleDataPrivate(QString name, QcepDoubleImageDataPtr i
 
       TIFFClose(tif);
 
+      image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);
       image -> set_ObjectSaved(true);
 
@@ -298,6 +299,7 @@ void QxrdFileSaver::saveMaskDataPrivate(QString name, QcepMaskDataPtr image, int
 
       TIFFClose(tif);
 
+      image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);
       image -> set_ObjectSaved(true);
 
@@ -411,6 +413,8 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepInt32ImageDataPtr ima
 
       TIFFClose(tif);
 
+      image -> set_FileBase(QFileInfo(name).fileName());
+      image -> set_FileName(name);
       image -> set_ObjectSaved(true);
       image -> saveMetaData(name);
 
@@ -502,6 +506,7 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString name, QcepInt16ImageDataPtr ima
 
       TIFFClose(tif);
 
+      image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);
       image -> set_ObjectSaved(true);
 
@@ -605,6 +610,7 @@ void QxrdFileSaver::saveTextDataPrivate(QString name, QcepDoubleImageDataPtr ima
 
     fclose(file);
 
+    image -> set_FileBase(QFileInfo(name).fileName());
     image -> set_FileName(name);
     image -> set_ObjectSaved(true);
 

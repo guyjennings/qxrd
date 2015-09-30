@@ -6,6 +6,7 @@
 #include "qxrddebug.h"
 #include "qxrdexperiment.h"
 #include "qxrddetectorcontrolwindow.h"
+#include <QDir>
 
 QxrdDetectorProcessor::QxrdDetectorProcessor(
     QcepSettingsSaverWPtr saver,
@@ -175,7 +176,7 @@ void QxrdDetectorProcessor::processAcquiredImage(QString filePattern,
     QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
 
     if (get_SaveRawImages()) {
-      doSaveRawImage(img);
+      doSaveRawImage(img, overflow);
     }
 
     if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
@@ -199,7 +200,7 @@ void QxrdDetectorProcessor::processAcquiredImage(QString filePattern,
     }
 
     if (get_SaveSubtracted()) {
-      doSaveSubtractedImage(img);
+      doSaveSubtractedImage(img, overflow);
     }
 
 //    if (get_PerformIntegration()) {
@@ -236,7 +237,7 @@ void QxrdDetectorProcessor::processDarkImage(QString filePattern,
     }
 
     if (get_SaveDarkImages()) {
-      doSaveDarkImage(image);
+      doSaveDarkImage(image, overflow);
     }
   }
 }
@@ -282,17 +283,92 @@ QcepDoubleVector QxrdDetectorProcessor::doCalculateROICounts(QcepImageDataBasePt
   return QcepDoubleVector();
 }
 
-void QxrdDetectorProcessor::doSaveRawImage(QcepImageDataBasePtr img)
+void QxrdDetectorProcessor::doSaveRawImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
 {
+  QxrdExperimentPtr expt(m_Experiment);
+  QxrdFileSaverPtr  fsav(m_FileSaver);
+
+  if (fsav && expt) {
+  }
+
   printMessage("Save Raw Image not yet implemented");
 }
 
-void QxrdDetectorProcessor::doSaveDarkImage(QcepImageDataBasePtr img)
+void QxrdDetectorProcessor::doSaveDarkImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
 {
+  QxrdExperimentPtr expt(m_Experiment);
+  QxrdFileSaverPtr  fsav(m_FileSaver);
+
+  if (fsav && expt) {
+
+  }
   printMessage("Save Dark Image not yet implemented");
 }
 
-void QxrdDetectorProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img)
+void QxrdDetectorProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
 {
+  QxrdExperimentPtr expt(m_Experiment);
+  QxrdFileSaverPtr  fsav(m_FileSaver);
+
+  if (fsav && expt) {
+//    QString fileBase = fileBase(img->get_FileName());
+  }
+
   printMessage("Save Subtracted Image not yet implemented");
+}
+
+QString QxrdDetectorProcessor::dataDirectory() const
+{
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    return QDir(expt->get_ExperimentDirectory()).filePath(expt->get_DataDirectory());
+  } else {
+    return QString();
+  }
+}
+
+QString QxrdDetectorProcessor::existingOutputDirectory(QString dir, QString subdir) const
+{
+  return QDir(dir).filePath(subdir);
+}
+
+QString QxrdDetectorProcessor::darkOutputDirectory() const
+{
+  return existingOutputDirectory(dataDirectory(), get_DarkDataSubdir());
+}
+
+QString QxrdDetectorProcessor::filePathInDarkOutputDirectory(QString fileName) const
+{
+  return QDir(darkOutputDirectory()).filePath(fileName);
+}
+
+QString QxrdDetectorProcessor::rawOutputDirectory() const
+{
+  return existingOutputDirectory(dataDirectory(), get_RawDataSubdir());
+}
+
+QString QxrdDetectorProcessor::filePathInRawOutputDirectory(QString fileName) const
+{
+  return QDir(rawOutputDirectory()).filePath(fileName);
+}
+
+QString QxrdDetectorProcessor::subtractedOutputDirectory() const
+{
+  return existingOutputDirectory(dataDirectory(), get_SubtractedSubdir());
+}
+
+QString QxrdDetectorProcessor::filePathInSubtractedOutputDirectory(QString fileName) const
+{
+  return QDir(subtractedOutputDirectory()).filePath(fileName);
+}
+
+QString QxrdDetectorProcessor::integratedOutputDirectory() const
+{
+  return existingOutputDirectory(dataDirectory(), get_IntegratedDataSubdir());
+}
+
+QString QxrdDetectorProcessor::filePathInIntegratedOutputDirectory(QString fileName) const
+{
+  return QDir(integratedOutputDirectory()).filePath(fileName);
 }

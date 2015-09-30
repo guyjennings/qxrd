@@ -72,14 +72,26 @@ public:
     IntegratedDisplayMode
   };
 
+  QString              filePathInDarkOutputDirectory(QString fileName) const;
+  QString              filePathInRawOutputDirectory(QString fileName) const;
+  QString              filePathInSubtractedOutputDirectory(QString fileName) const;
+  QString              filePathInIntegratedOutputDirectory(QString fileName) const;
+
 private:
   QcepImageDataBasePtr doDarkSubtraction    (QcepImageDataBasePtr img);
   QcepImageDataBasePtr doBadPixels          (QcepImageDataBasePtr img);
   QcepImageDataBasePtr doGainCorrection     (QcepImageDataBasePtr img);
   QVector<double>      doCalculateROICounts (QcepImageDataBasePtr img);
-  void                 doSaveRawImage       (QcepImageDataBasePtr img);
-  void                 doSaveSubtractedImage(QcepImageDataBasePtr img);
-  void                 doSaveDarkImage      (QcepImageDataBasePtr img);
+  void                 doSaveRawImage       (QcepImageDataBasePtr img, QcepMaskDataPtr ovf);
+  void                 doSaveSubtractedImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf);
+  void                 doSaveDarkImage      (QcepImageDataBasePtr img, QcepMaskDataPtr ovf);
+
+  QString              dataDirectory() const;
+  QString              darkOutputDirectory() const;
+  QString              rawOutputDirectory() const;
+  QString              subtractedOutputDirectory() const;
+  QString              integratedOutputDirectory() const;
+  QString              existingOutputDirectory(QString dir, QString subdir) const;
 
 private:
   QcepSettingsSaverWPtr m_Saver;
