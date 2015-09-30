@@ -21,6 +21,8 @@
 #include <QTime>
 #include <QMenu>
 #include <QContextMenuEvent>
+#include "qxrdroicoordinateslistmodel.h"
+#include "qxrdroicoordinates.h"
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QcepPlot(parent),
@@ -51,7 +53,12 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Polygons(NULL),
     m_PowderPointPicker(NULL),
     m_FirstTime(true),
-    m_ContextMenuEnabled(true)
+    m_ContextMenuEnabled(true),
+
+    m_ROIDisplayed(false),
+    m_ROIModel(),
+    m_ROISelection(NULL),
+    m_ROICurves()
 {
 }
 
@@ -1111,3 +1118,172 @@ void QxrdImagePlot::clearPowderMarkers()
   m_PowderPointCurves.clear();
 }
 
+void QxrdImagePlot::enableROIDisplay(bool enable)
+{
+  m_ROIDisplayed = enable;
+
+  updateROIDisplay();
+}
+
+void QxrdImagePlot::setROIModel(QxrdROICoordinatesListModelPtr model)
+{
+  m_ROIModel = model;
+
+  updateROIDisplay();
+}
+
+void QxrdImagePlot::setROISelection(QItemSelectionModel *select)
+{
+  m_ROISelection = select;
+
+  updateROIDisplay();
+
+  connect(m_ROISelection, &QItemSelectionModel::selectionChanged,
+          this, &QxrdImagePlot::updateROISelection);
+}
+
+void QxrdImagePlot::clearROIDisplay()
+{
+  foreach (QwtPlotCurve *curve, m_ROICurves) {
+    curve->detach();
+    delete curve;
+  }
+
+  m_ROICurves.clear();
+}
+
+void QxrdImagePlot::updateROIDisplay()
+{
+  clearROIDisplay();
+
+  if (m_ROIDisplayed && m_ROIModel && m_ROISelection) {
+    int nROI = m_ROIModel->rowCount(QModelIndex());
+
+    for (int i=0; i<nROI; i++) {
+      QxrdROICoordinatesPtr roi = m_ROIModel->roi(i);
+
+      QVector<double> x,y;
+
+      x.append(roi->left());  y.append(roi->top());
+      x.append(roi->left());  y.append(roi->bottom());
+      x.append(roi->right()); y.append(roi->bottom());
+      x.append(roi->right()); y.append(roi->top());
+      x.append(roi->left());  y.append(roi->top());
+
+      QwtPlotCurve *pc = new QwtPlotCurve(tr("ROI %1").arg(i));
+
+      setPlotCurveStyle(i, pc);
+
+      bool on = m_ROISelection->rowIntersectsSelection(i, QModelIndex());
+
+      if (pc) {
+        QPen pen = pc->pen();
+        const QwtSymbol *oldsym = pc->symbol();
+        QwtSymbol *sym = NULL;
+
+        if (oldsym) {
+         sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
+        }
+
+        if (on) {
+          pen.setWidth(3);
+          if (sym) {
+            sym->setSize(9,9);
+          }
+        } else {
+          pen.setWidth(1);
+          if (sym) {
+            sym->setSize(5,5);
+          }
+        }
+        pc->setPen(pen);
+        if (sym) {
+          pc->setSymbol(sym);
+        }
+      }
+
+      pc->setSamples(x, y);
+
+      pc->attach(this);
+
+      m_ROICurves.append(pc);
+    }
+  }
+
+  replot();
+}
+
+void QxrdImagePlot::onLegendChecked(const QVariant &itemInfo, bool on, int index)
+{
+  QwtPlotItem *item = infoToItem(itemInfo);
+
+  if (item) {
+    QwtPlotCurve *pc = dynamic_cast<QwtPlotCurve*>(item);
+
+    int i = m_ROICurves.indexOf(pc);
+
+    if (i >= 0) {
+      if (m_ROISelection && m_ROIModel) {
+        m_ROISelection->select(m_ROIModel->index(i,0), QItemSelectionModel::Rows);
+      }
+    }
+  }
+
+  QcepPlot::onLegendChecked(itemInfo, on, index);
+}
+
+void QxrdImagePlot::selectROIItem(int n, bool selected)
+{
+  QwtPlotCurve *pc = m_ROICurves.value(n);
+
+  if (pc) {
+    QPen pen = pc->pen();
+    const QwtSymbol *oldsym = pc->symbol();
+    QwtSymbol *sym = NULL;
+
+    if (oldsym) {
+     sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
+    }
+
+    if (selected) {
+      pen.setWidth(3);
+      if (sym) {
+        sym->setSize(9,9);
+      }
+    } else {
+      pen.setWidth(1);
+      if (sym) {
+        sym->setSize(5,5);
+      }
+    }
+    pc->setPen(pen);
+    if (sym) {
+      pc->setSymbol(sym);
+    }
+  }
+}
+
+void QxrdImagePlot::updateROISelection(
+    const QItemSelection &selected,
+    const QItemSelection &deselected)
+{
+  if (m_ROIModel && m_ROISelection) {
+    int n = m_ROIModel->rowCount(QModelIndex());
+
+    foreach(QItemSelectionRange r, selected) {
+      for (int i=r.top(); i<=r.bottom(); i++) {
+//        printMessage(tr("select row %1").arg(i));
+        selectROIItem(i, true);
+      }
+    }
+
+    foreach(QItemSelectionRange r, deselected) {
+      for (int i=r.top(); i<=r.bottom(); i++) {
+//        printMessage(tr("deselect row %1").arg(i));
+        selectROIItem(i, false);
+      }
+    }
+
+    replot();
+  }
+}

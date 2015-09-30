@@ -24,6 +24,8 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdimageplotsettings.h"
 #include "qxrdpowderpointpicker.h"
+#include "qxrdroicoordinateslistmodel-ptr.h"
+#include <QItemSelectionModel>
 
 class QxrdImagePlot : public QcepPlot
 {
@@ -92,6 +94,8 @@ public slots:
 
   void zapPixel(int x, int y);
 
+  virtual void onLegendChecked(const QVariant &itemInfo, bool on, int index);
+
 public:
   QxrdImagePlotSettingsWPtr imagePlotSettings();
 
@@ -110,6 +114,10 @@ public:
 
   void contextMenuEvent(QContextMenuEvent *event);
 
+  void enableROIDisplay(bool enable);
+  void setROIModel(QxrdROICoordinatesListModelPtr model);
+  void setROISelection(QItemSelectionModel *select);
+
 private:
   void replotImage();
   void setImage(QxrdRasterData *data);
@@ -122,6 +130,12 @@ private:
   void setTrackerPen(const QPen &pen);
 
   void disablePickers();
+
+  void clearROIDisplay();
+  void updateROIDisplay();
+  void selectROIItem(int n, bool selected);
+  void updateROISelection(const QItemSelection &selected,
+                          const QItemSelection &deselected);
 
 public:
   enum {
@@ -173,6 +187,11 @@ private:
   bool                       m_FirstTime;
 
   bool                       m_ContextMenuEnabled;
+
+  bool                           m_ROIDisplayed;
+  QxrdROICoordinatesListModelPtr m_ROIModel;
+  QItemSelectionModel           *m_ROISelection;
+  QVector<QwtPlotCurve*>         m_ROICurves;
 };
 
 #endif

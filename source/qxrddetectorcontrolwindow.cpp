@@ -64,6 +64,10 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     s
     dp->prop_CalculateROICounts()      -> linkTo(m_CalculateROICounts);
     dp->prop_DisplayROIBorders()       -> linkTo(m_DisplayROIBorders);
 
+    connect(dp->prop_DisplayROIBorders(), &QcepBoolProperty::valueChanged, this, &QxrdDetectorControlWindow::updateROIDisplay);
+
+    updateROIDisplay(dp->get_DisplayROIBorders());
+
     QxrdROICalculatorPtr calc(dp->roiCalculator());
 
     if (calc) {
@@ -81,6 +85,9 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     s
     }
 
     m_DetectorImage->init(dp->imagePlotSettings());
+
+    m_DetectorImage->setROIModel(m_ROIModel);
+    m_DetectorImage->setROISelection(m_ROIWidget->selectionModel());
   }
 
   if (app) {
@@ -319,4 +326,9 @@ void QxrdDetectorControlWindow::displayNewMask(QcepMaskDataPtr mask)
   m_NewMask = mask;
 
   m_NewMaskAvailable.fetchAndStoreOrdered(1);
+}
+
+void QxrdDetectorControlWindow::updateROIDisplay(bool show)
+{
+  m_DetectorImage -> enableROIDisplay(show);
 }

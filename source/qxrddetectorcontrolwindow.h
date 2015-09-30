@@ -44,6 +44,8 @@ private slots:
   void onUpdateIntervalMsecChanged(int newVal);
   void updateWindowTitle();
 
+  void updateROIDisplay(bool show);
+
 private:
   QVector<int>  selectedROIs();
 
