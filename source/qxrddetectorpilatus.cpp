@@ -284,6 +284,8 @@ void QxrdDetectorPilatus::interpretReply(QString reply)
 
       set_NRows(height);
       set_NCols(width);
+      set_HBinning(1);
+      set_VBinning(1);
     } else {
       printMessage(tr("Unmatched: %1, %2").arg(reply).arg(matcher.pattern()));
       printMessage(tr("Matched Length %1").arg(matcher.matchedLength()));

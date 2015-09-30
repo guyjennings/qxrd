@@ -31,6 +31,8 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
   m_DetectorName(saver, this, "detectorName", QxrdDetectorThread::detectorTypeName(detType), "Detector Name"),
   m_NCols(QcepSettingsSaverWPtr(), this, "nCols", 0, "No of detector cols"),
   m_NRows(QcepSettingsSaverWPtr(), this, "nRows", 0, "No of detector rows"),
+  m_HBinning(QcepSettingsSaverWPtr(), this, "hBinning", 0, "Horiz Binning"),
+  m_VBinning(QcepSettingsSaverWPtr(), this, "vBinning", 0, "Vert Binning"),
   m_Extension(saver, this, "extension", "tif", "File extension")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -63,6 +65,16 @@ void QxrdDetector::initialize()
 
     m_Processor->initialize();
   }
+}
+
+QxrdExperimentWPtr QxrdDetector::experiment()
+{
+  return m_Experiment;
+}
+
+QxrdAcquisitionWPtr QxrdDetector::acquisition()
+{
+  return m_Acquisition;
 }
 
 QxrdDetectorProcessorPtr QxrdDetector::processor()

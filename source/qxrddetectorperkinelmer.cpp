@@ -818,6 +818,14 @@ void QxrdDetectorPerkinElmer::onBinningModeChanged()
         }
 
         printMessage(tr("Binning mode was set to %1").arg(binningMode));
+
+        if (binningMode <= 1) {
+          set_HBinning(1);
+          set_VBinning(1);
+        } else {
+          set_HBinning(2);
+          set_VBinning(2);
+        }
       }
     }
   }

@@ -31,6 +31,9 @@ public:
   virtual void initialize();
   virtual ~QxrdDetector();
 
+  QxrdExperimentWPtr experiment();
+  QxrdAcquisitionWPtr acquisition();
+
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorPtr &det);
   static void fromScriptValue(const QScriptValue &obj, QxrdDetectorPtr &det);
 
@@ -105,6 +108,12 @@ public:
 
   Q_PROPERTY(int nRows READ get_NRows WRITE set_NRows STORED false)
   QCEP_INTEGER_PROPERTY(NRows)
+
+  Q_PROPERTY(int hBinning READ get_HBinning WRITE set_HBinning STORED false)
+  QCEP_INTEGER_PROPERTY(HBinning)
+
+  Q_PROPERTY(int vBinning READ get_VBinning WRITE set_VBinning STORED false)
+  QCEP_INTEGER_PROPERTY(VBinning)
 
   Q_PROPERTY(QString extension READ get_Extension WRITE set_Extension)
   QCEP_STRING_PROPERTY(Extension)

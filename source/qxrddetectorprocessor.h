@@ -42,18 +42,16 @@ public slots:
   QxrdIntegratorPtr    integrator();
   QxrdROICalculatorPtr roiCalculator();
 
-  void processAcquiredImage(QString filePattern,
+  void processAcquiredImage(QcepInt32ImageDataPtr image,
+                            QcepMaskDataPtr overflow,
                             int fileIndex,
                             int phase,
                             int nPhases,
-                            bool trig,
-                            QcepInt32ImageDataPtr image,
-                            QcepMaskDataPtr overflow);
+                            bool trig);
 
-  void processDarkImage(QString filePattern,
-                        int fileIndex,
-                        QcepInt32ImageDataPtr image,
-                        QcepMaskDataPtr overflow);
+  void processDarkImage(QcepInt32ImageDataPtr image,
+                        QcepMaskDataPtr overflow,
+                        int fileIndex);
 
   void processIdleImage(QcepImageDataBasePtr image);
 
@@ -78,6 +76,12 @@ public:
   QString              filePathInIntegratedOutputDirectory(QString fileName) const;
 
 private:
+  void setAcquiredImageProperties(QcepImageDataBasePtr image,
+                                  int fileIndex,
+                                  int phase,
+                                  int nPhases,
+                                  bool trig);
+
   QcepImageDataBasePtr doDarkSubtraction    (QcepImageDataBasePtr img);
   QcepImageDataBasePtr doBadPixels          (QcepImageDataBasePtr img);
   QcepImageDataBasePtr doGainCorrection     (QcepImageDataBasePtr img);

@@ -1172,7 +1172,7 @@ saveCancel:
           for (int p=0; p<nphases; p++) {
             for (int d=0; d<nDet; d++) {
 
-              procs[d] -> processAcquiredImage(fileBase, fileIndex, p, nphases, false, res[d][p][ii], ovf[d][p][ii]);
+              procs[d] -> processAcquiredImage(res[d][p][ii], ovf[d][p][ii], fileIndex, p, nphases, false);
 
               if (qcepDebug(DEBUG_ACQUIRETIME)) {
                 printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
@@ -1197,7 +1197,7 @@ saveCancel:
 
         for (int p=0; p<nphases; p++) {
           for (int d=0; d<nDet; d++) {
-            procs[d] -> processAcquiredImage(fileBase, fileIndex, p, nphases, true, res[d][p][0], ovf[d][p][0]);
+            procs[d] -> processAcquiredImage(res[d][p][0], ovf[d][p][0], fileIndex, p, nphases, true);
 
             if (qcepDebug(DEBUG_ACQUIRETIME)) {
               printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
@@ -1394,7 +1394,7 @@ void QxrdAcquisition::doAcquireDark()
     //saveCancel:
 
     for (int d=0; d<nDet; d++) {
-      procs[d]->processDarkImage(fileBase, fileIndex, res[d], overflow[d]);
+      procs[d]->processDarkImage(res[d], overflow[d], fileIndex);
     }
 
     statusMessage(tr("Acquisition complete"));

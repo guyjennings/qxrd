@@ -6,6 +6,7 @@
 #include "qxrddebug.h"
 #include "qxrdexperiment.h"
 #include "qxrddetectorcontrolwindow.h"
+#include "qxrdacquisition.h"
 #include <QDir>
 
 QxrdDetectorProcessor::QxrdDetectorProcessor(
@@ -157,13 +158,53 @@ QxrdROICalculatorPtr QxrdDetectorProcessor::roiCalculator()
   return m_ROICalculator;
 }
 
-void QxrdDetectorProcessor::processAcquiredImage(QString filePattern,
+void QxrdDetectorProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image,
+                                                       int fileIndex,
+                                                       int phase,
+                                                       int nPhases,
+                                                       bool trig)
+{
+  QxrdDetectorPtr    det(m_Detector);
+
+  if (det) {
+    QxrdAcquisitionPtr acq(det->acquisition());
+
+    if (image && acq) {
+      QDateTime now = QDateTime::currentDateTime();
+      double msec = QcepImageDataBase::secondsSinceEpoch();
+
+      image -> set_Title            (image -> get_FileBase());
+      image -> set_ExposureTime     (acq   -> get_ExposureTime());
+      image -> set_DateTime         (now);
+      image -> set_TimeStamp        (msec);
+      image -> set_HBinning         (det   -> get_HBinning());
+      image -> set_VBinning         (det   -> get_VBinning());
+
+      image -> set_DataType(QcepInt32ImageData::Raw32Data);
+
+      image -> set_UserComment1     (acq   -> get_UserComment1());
+      image -> set_UserComment2     (acq   -> get_UserComment2());
+      image -> set_UserComment3     (acq   -> get_UserComment3());
+      image -> set_UserComment4     (acq   -> get_UserComment4());
+      image -> set_ObjectSaved      (false);
+      image -> set_Triggered        (trig);
+      image -> set_Normalization    (acq   -> get_Normalization());
+
+      image -> set_ImageNumber      (fileIndex);
+      image -> set_PhaseNumber      (phase);
+      image -> set_NPhases          (nPhases);
+
+      acq -> copyDynamicProperties(image.data());
+    }
+  }
+}
+
+void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
+                                                 QcepMaskDataPtr overflow,
                                                  int fileIndex,
                                                  int phase,
                                                  int nPhases,
-                                                 bool trig,
-                                                 QcepInt32ImageDataPtr image,
-                                                 QcepMaskDataPtr overflow)
+                                                 bool trig)
 {
   if (image) {
     QcepImageDataBasePtr img = image;
@@ -172,6 +213,8 @@ void QxrdDetectorProcessor::processAcquiredImage(QString filePattern,
       printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...")
                    .arg(img->get_FileName()));
     }
+
+    setAcquiredImageProperties(img, fileIndex, phase, nPhases, trig);
 
     QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
 
@@ -225,10 +268,9 @@ void QxrdDetectorProcessor::processAcquiredImage(QString filePattern,
   }
 }
 
-void QxrdDetectorProcessor::processDarkImage(QString filePattern,
-                                             int fileIndex,
-                                             QcepInt32ImageDataPtr image,
-                                             QcepMaskDataPtr overflow)
+void QxrdDetectorProcessor::processDarkImage(QcepInt32ImageDataPtr image,
+                                             QcepMaskDataPtr overflow,
+                                             int fileIndex)
 {
   if (image) {
     if (qcepDebug(DEBUG_ACQUIRE)) {
