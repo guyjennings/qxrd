@@ -239,7 +239,7 @@ void QxrdDetectorControlWindow::doDeleteROI()
 
   if (res == QMessageBox::Ok && m_ROIModel) {
     for (int i=rois.count()-1; i>=0; i--) {
-      m_ROIModel->removeROI(i);
+      m_ROIModel->removeROI(rois.value(i));
     }
   }
 }
