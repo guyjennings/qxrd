@@ -58,6 +58,10 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorProcessor::QxrdDetectorProcessor(%p)\n", this);
   }
+
+  m_CenterFinder  = QxrdCenterFinderPtr(new QxrdCenterFinder(m_Saver, m_Experiment));
+  m_Integrator    = QxrdIntegratorPtr(new QxrdIntegrator(m_Saver, m_Experiment, m_CenterFinder));
+  m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator(m_Saver, m_Experiment, sharedFromThis()));
 }
 
 QxrdDetectorProcessor::~QxrdDetectorProcessor()
@@ -65,13 +69,6 @@ QxrdDetectorProcessor::~QxrdDetectorProcessor()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorProcessor::~QxrdDetectorProcessor(%p)\n", this);
   }
-}
-
-void QxrdDetectorProcessor::initialize()
-{
-  m_CenterFinder  = QxrdCenterFinderPtr(new QxrdCenterFinder(m_Saver, m_Experiment));
-  m_Integrator    = QxrdIntegratorPtr(new QxrdIntegrator(m_Saver, m_Experiment, m_CenterFinder));
-  m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator(m_Saver, m_Experiment, sharedFromThis()));
 }
 
 void QxrdDetectorProcessor::setControlWindow(QxrdDetectorControlWindowWPtr ctrl)
@@ -206,65 +203,75 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
                                                  int nPhases,
                                                  bool trig)
 {
-  if (image) {
-    QcepImageDataBasePtr img = image;
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "processAcquiredImage",
+                              Q_ARG(QcepInt32ImageDataPtr, image),
+                              Q_ARG(QcepMaskDataPtr, overflow),
+                              Q_ARG(int, fileIndex),
+                              Q_ARG(int, phase),
+                              Q_ARG(int, nPhases),
+                              Q_ARG(bool, trig));
+  } else {
+    if (image) {
+      QcepImageDataBasePtr img = image;
 
-    if (qcepDebug(DEBUG_ACQUIRE)) {
-      printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...")
-                   .arg(img->get_FileName()));
+      if (qcepDebug(DEBUG_ACQUIRE)) {
+        printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...)")
+                     .arg(img->get_FileName()));
+      }
+
+      setAcquiredImageProperties(img, fileIndex, phase, nPhases, trig);
+
+      QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+
+      if (get_SaveRawImages()) {
+        doSaveRawImage(img, overflow);
+      }
+
+      if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+        ctrl->displayNewData(image, overflow);
+      }
+
+      if (get_PerformDarkSubtraction()) {
+        img = doDarkSubtraction(img);
+      }
+
+      if (get_PerformBadPixels()) {
+        img = doBadPixels(img);
+      }
+
+      if (get_PerformGainCorrection()) {
+        img = doGainCorrection(img);
+      }
+
+      if (get_CalculateROICounts()) {
+        set_RoiCounts(doCalculateROICounts(img));
+      }
+
+      if (get_SaveSubtracted()) {
+        doSaveSubtractedImage(img, overflow);
+      }
+
+      //    if (get_PerformIntegration()) {
+      //      integ = doPerformIntegration(img);
+
+      //      if (ctrl && get_DisplayIntegratedData()) {
+      //        ctrl->displayIntegratedData(integ);
+      //      }
+
+      //      if (get_SaveIntegratedData()) {
+      //        doSaveIntegratedData(integ);
+      //      }
+
+      //      if (get_SaveIntegratedDataSeparate()) {
+      //        doSaveIntegratedDataSeparate(integ);
+      //      }
+
+      //      if (get_AccumulateIntegrated2D()) {
+      //        doAccumulateIntegrated2D(integ);
+      //      }
+      //    }
     }
-
-    setAcquiredImageProperties(img, fileIndex, phase, nPhases, trig);
-
-    QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
-
-    if (get_SaveRawImages()) {
-      doSaveRawImage(img, overflow);
-    }
-
-    if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
-      ctrl->displayNewData(image, overflow);
-    }
-
-    if (get_PerformDarkSubtraction()) {
-      img = doDarkSubtraction(img);
-    }
-
-    if (get_PerformBadPixels()) {
-      img = doBadPixels(img);
-    }
-
-    if (get_PerformGainCorrection()) {
-      img = doGainCorrection(img);
-    }
-
-    if (get_CalculateROICounts()) {
-      set_RoiCounts(doCalculateROICounts(img));
-    }
-
-    if (get_SaveSubtracted()) {
-      doSaveSubtractedImage(img, overflow);
-    }
-
-//    if (get_PerformIntegration()) {
-//      integ = doPerformIntegration(img);
-
-//      if (ctrl && get_DisplayIntegratedData()) {
-//        ctrl->displayIntegratedData(integ);
-//      }
-
-//      if (get_SaveIntegratedData()) {
-//        doSaveIntegratedData(integ);
-//      }
-
-//      if (get_SaveIntegratedDataSeparate()) {
-//        doSaveIntegratedDataSeparate(integ);
-//      }
-
-//      if (get_AccumulateIntegrated2D()) {
-//        doAccumulateIntegrated2D(integ);
-//      }
-//    }
   }
 }
 
@@ -272,23 +279,35 @@ void QxrdDetectorProcessor::processDarkImage(QcepInt32ImageDataPtr image,
                                              QcepMaskDataPtr overflow,
                                              int fileIndex)
 {
-  if (image) {
-    if (qcepDebug(DEBUG_ACQUIRE)) {
-      printMessage(tr("QxrdDetectorProcessor::processDarkImage(\"%1\",...")
-                   .arg(image->get_FileName()));
-    }
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "processDarkImage",
+                              Q_ARG(QcepInt32ImageDataPtr, image),
+                              Q_ARG(QcepMaskDataPtr, overflow),
+                              Q_ARG(int, fileIndex));
+  } else {
+    if (image) {
+      if (qcepDebug(DEBUG_ACQUIRE)) {
+        printMessage(tr("QxrdDetectorProcessor::processDarkImage(\"%1\",...)")
+                     .arg(image->get_FileName()));
+      }
 
-    if (get_SaveDarkImages()) {
-      doSaveDarkImage(image, overflow);
+      if (get_SaveDarkImages()) {
+        doSaveDarkImage(image, overflow);
+      }
     }
   }
 }
 
 void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
 {
-  if (image) {
-    printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\"")
-               .arg(image->get_FileName()));
+  if (QThread::currentThread() != thread()) {
+    QMetaObject::invokeMethod(this, "processIdleImage",
+                              Q_ARG(QcepImageDataBasePtr, image));
+  } else {
+    if (image) {
+      printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\")")
+                   .arg(image->get_FileName()));
+    }
   }
 }
 

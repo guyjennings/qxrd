@@ -31,7 +31,6 @@ public:
                         QxrdFileSaverWPtr     fsav,
                         QxrdDetectorWPtr      det);
   virtual ~QxrdDetectorProcessor();
-  void initialize();
 
   void setControlWindow(QxrdDetectorControlWindowWPtr ctrl);
 

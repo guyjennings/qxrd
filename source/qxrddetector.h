@@ -28,7 +28,6 @@ public:
                         int                   detType,
                         int                   detNum,
                         QcepObject *parent);
-  virtual void initialize();
   virtual ~QxrdDetector();
 
   QxrdExperimentWPtr experiment();

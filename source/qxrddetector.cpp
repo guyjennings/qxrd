@@ -41,6 +41,14 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
 
   connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
           this,           &QxrdDetector::startOrStop);
+
+  QxrdExperimentPtr exper(m_Experiment);
+
+  if (exper) {
+    m_Processor =
+        QxrdDetectorProcessorPtr(
+          new QxrdDetectorProcessor(m_Saver, m_Experiment, exper->fileSaver(), sharedFromThis()));
+  }
 }
 
 QxrdDetector::~QxrdDetector()
@@ -52,19 +60,6 @@ QxrdDetector::~QxrdDetector()
 //  if (m_DetectorControlWindow) {
 //    m_DetectorControlWindow->deleteLater();
 //  }
-}
-
-void QxrdDetector::initialize()
-{
-  QxrdExperimentPtr expt(m_Experiment);
-
-  if (expt) {
-    m_Processor =
-        QxrdDetectorProcessorPtr(
-          new QxrdDetectorProcessor(m_Saver, m_Experiment, expt->fileSaver(), sharedFromThis()));
-
-    m_Processor->initialize();
-  }
 }
 
 QxrdExperimentWPtr QxrdDetector::experiment()
