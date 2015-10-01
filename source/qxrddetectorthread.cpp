@@ -245,6 +245,7 @@ void QxrdDetectorThread::run()
   }
 
   if (p == NULL) {
+    setObjectName("simulatedDetector");
     p = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Saver,
                                                   m_Experiment,
                                                   m_Acquisition,
