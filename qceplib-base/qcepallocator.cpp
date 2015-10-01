@@ -124,6 +124,8 @@ QcepInt16ImageDataPtr QcepAllocator::newInt16Image(AllocationStrategy strat, int
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->int16SizeMB(width, height))) {
       QcepInt16ImageDataPtr res(new QcepInt16ImageData(QcepSettingsSaverPtr(), width, height, 0, parent));
 
+      res->moveToThread(NULL);
+
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newInt16Image() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
       }
@@ -147,6 +149,8 @@ QcepInt32ImageDataPtr QcepAllocator::newInt32Image(AllocationStrategy strat, int
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->int32SizeMB(width, height))) {
       QcepInt32ImageDataPtr res(new QcepInt32ImageData(QcepSettingsSaverPtr(), width, height, 0, parent));
 
+      res->moveToThread(NULL);
+
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newInt32Image() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
       }
@@ -169,6 +173,8 @@ QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(AllocationStrategy strat, i
 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->doubleSizeMB(width, height))) {
       QcepDoubleImageDataPtr res(new QcepDoubleImageData(QcepSettingsSaverPtr(), width, height, 0, parent));
+
+      res -> moveToThread(NULL);
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newDoubleImage() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
@@ -194,6 +200,7 @@ QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(QString name, int width, in
 
    if (img) {
      img->set_Name(name);
+     img->moveToThread(NULL);
    }
   }
 
@@ -207,6 +214,8 @@ QcepMaskDataPtr QcepAllocator::newMask(AllocationStrategy strat, int width, int 
 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->maskSizeMB(width, height))) {
       QcepMaskDataPtr res(new QcepMaskData(QcepSettingsSaverPtr(), width, height, def, parent));
+
+      res->moveToThread(NULL);
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newMask() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
@@ -234,6 +243,8 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(AllocationStrategy strat,
                                                        10000,
                                                        parent));
 
+      res->moveToThread(NULL);
+
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newIntegratedData() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
       }
@@ -258,7 +269,7 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QString name, int size, Q
 
     if (integ) {
       integ->set_Name(name);
-
+      integ->moveToThread(NULL);
       integ->resize(size);
     }
   }
@@ -276,6 +287,9 @@ void QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AllocationStr
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->doubleSizeMB(width, height) + g_Allocator->integratedSizeMB(10000))) {
       img = QcepDoubleImageDataPtr(new QcepDoubleImageData(QcepSettingsSaverPtr(), width, height, 0, parent));
       integ = QcepIntegratedDataPtr(new QcepIntegratedData(QcepSettingsSaverPtr(), img, 10000, parent));
+
+      img->moveToThread(NULL);
+      integ->moveToThread(NULL);
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newDoubleImageAndIntegratedData() succeeded [%1] [%2] [%3]")
