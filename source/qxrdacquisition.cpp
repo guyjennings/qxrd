@@ -264,7 +264,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
         QxrdDetectorPtr det = detThread->detector();
 
         if (det) {
-          det->initialize();
+//          det->initialize();
           det->readSettings(settings, "");
 
           m_DetectorThreads[i] = detThread;
@@ -1058,6 +1058,7 @@ void QxrdAcquisition::doAcquire()
             if (res[d][p][0] == NULL) {
               QcepInt32ImageDataPtr nres = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
                                                                         nCols, nRows, this);
+
               res[d][p][0] = nres;
 
               if (nres == NULL) {
@@ -1292,11 +1293,15 @@ void QxrdAcquisition::doAcquireDark()
         dets.append(det);
         procs.append(det->processor());
 
-        res.append(QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
-                                                det->get_NCols(), det->get_NRows(), this));
+        QcepInt32ImageDataPtr img = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
+                                                                 det->get_NCols(), det->get_NRows(), this);
 
-        overflow.append(QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
-                                               det->get_NCols(), det->get_NRows(),0, this));
+        res.append(img);
+
+        QcepMaskDataPtr msk = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
+                                                     det->get_NCols(), det->get_NRows(),0, this);
+
+        overflow.append(msk);
       }
     }
 
