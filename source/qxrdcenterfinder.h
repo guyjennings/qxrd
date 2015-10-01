@@ -154,6 +154,9 @@ public:
   Q_PROPERTY(double fittedPositionMaxDistance READ get_FittedPositionMaxDistance WRITE set_FittedPositionMaxDistance)
   QCEP_DOUBLE_PROPERTY(FittedPositionMaxDistance)
 
+  Q_PROPERTY(bool fitPowderPointPosition READ get_FitPowderPointPosition WRITE set_FitPowderPointPosition)
+  QCEP_BOOLEAN_PROPERTY(FitPowderPointPosition)
+
 public:
   enum {
     UserAbsorptionNone = 0,

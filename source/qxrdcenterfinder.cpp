@@ -70,6 +70,7 @@ QxrdCenterFinder::QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWP
     m_FittedWidthMax(saver, this, "fittedWidthMax", 3.0, "Maximum acceptable fitted width (pixels)"),
     m_FittedHeightMinRatio(saver, this, "fittedHeightMinRatio", 0.25, "Minimum acceptable peak height ratio"),
     m_FittedPositionMaxDistance(saver, this, "fittedPositionMaxDistance", 2.0, "Maximum acceptable fitted position shift (pixels)"),
+    m_FitPowderPointPosition(saver, this, "fitPowderPointPosition", true, "Fit to nearby peak when adding powder points individually"),
     m_Experiment(expt)
 {
   qRegisterMetaType<QPointF>("QPointF");
@@ -281,7 +282,11 @@ double QxrdCenterFinder::getR(double x, double y) const
 
 void QxrdCenterFinder::onPointSelected(QPointF pt)
 {
-  fitPeakNear(pt.x(), pt.y());
+  if (get_FitPowderPointPosition()) {
+    fitPeakNear(pt.x(), pt.y());
+  } else {
+    appendPowderPoint(pt.x(), pt.y());
+  }
 }
 
 void QxrdCenterFinder::printMessage(QString msg, QDateTime ts) const

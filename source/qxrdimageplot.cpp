@@ -1002,6 +1002,9 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QAction *fitCircle        = plotMenu.addAction(tr("Fit Circle Center from Points on Ring %1").arg(nearest.n1()));
           QAction *fitEllipse       = plotMenu.addAction(tr("Fit Ellipse from Points on Ring %1").arg(nearest.n1()));
           QAction *fitEllipses      = plotMenu.addAction(tr("Fit Ellipses to all powder rings"));
+          QAction *adjustFit        = plotMenu.addAction(tr("Fit to nearby peak when adding powder points?"));
+          adjustFit->setCheckable(true); adjustFit->setChecked(cf->get_FitPowderPointPosition());
+          QAction *addPoint         = plotMenu.addAction(tr("Add point at (%1,%2)").arg(x).arg(y));
           QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
           QAction *delRing          = plotMenu.addAction(tr("Delete Ring %1").arg(nearest.n1()));
           QAction *deleteAllPoints  = plotMenu.addAction(tr("Delete all Rings"));
@@ -1027,6 +1030,10 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             cf->fitPowderEllipse(nearest.n1());
           } else if (action == fitEllipses) {
             cf->fitPowderEllipses();
+          } else if (action == adjustFit) {
+            cf->toggle_FitPowderPointPosition();
+          } else if (action == addPoint) {
+            cf->appendPowderPoint(x,y);
           } else if (action == delPoint) {
             cf->deletePowderPointNear(x,y);
           } else if (action == delRing) {
