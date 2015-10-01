@@ -1720,6 +1720,11 @@ void QxrdScriptEngine::initialize()
                           QcepDataColumnScan::toColumnScanScriptValue,
                           QcepDataColumnScan::fromColumnScanScriptValue);
 
+  qRegisterMetaType<QcepImageDataBasePtr>("QcepImageDataBasePtr");
+  qScriptRegisterMetaType(this,
+                          QcepImageDataBase::toScriptValue,
+                          QcepImageDataBase::fromScriptValue);
+
   qRegisterMetaType<QcepDoubleImageDataPtr>("QcepDoubleImageDataPtr");
   qScriptRegisterMetaType(this,
                           QcepDoubleImageData::toScriptValue,
