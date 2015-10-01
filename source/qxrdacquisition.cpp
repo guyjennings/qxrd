@@ -212,17 +212,19 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
     m_AcquisitionExtraInputs->writeSettings(settings, section+"/extrainputs");
   }
 
-  if (get_DetectorCount() > 0) {
-    settings->beginWriteArray(section+"/detectors");
+  settings->beginWriteArray(section+"/detectors");
 
-    for (int i=0; i<get_DetectorCount(); i++) {
-      settings->setArrayIndex(i);
+  for (int i=0; i<m_Detectors.count(); i++) {
+    settings->setArrayIndex(i);
 
-      m_Detectors[i]->writeSettings(settings, "");
+    QxrdDetectorPtr det = m_Detectors.value(i);
+
+    if (det) {
+      det->writeSettings(settings, "");
     }
-
-    settings->endArray();
   }
+
+  settings->endArray();
 }
 
 void QxrdAcquisition::readSettings(QSettings *settings, QString section)
@@ -239,44 +241,44 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
     m_AcquisitionExtraInputs->readSettings(settings, section+"/extrainputs");
   }
 
-  if (get_DetectorCount() > 0) {
-    int n = settings->beginReadArray(section+"/detectors");
+  int n = settings->beginReadArray(section+"/detectors");
 
-    m_DetectorThreads.resize(n);
-    m_Detectors.resize(n);
+  m_DetectorThreads.resize(n);
+  m_Detectors.resize(n);
 
-    for (int i=0; i<n; i++) {
-      settings->setArrayIndex(i);
+  for (int i=0; i<n; i++) {
+    settings->setArrayIndex(i);
 
-      int detType = settings->value("detectorType", 0).toInt();
+    int detType = settings->value("detectorType", 0).toInt();
 
-      QxrdDetectorThreadPtr detThread =
-          QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
-                                                       experiment(),
-                                                       myself(),
-                                                       detType,
-                                                       i,
-                                                       this));
+    QxrdDetectorThreadPtr detThread =
+        QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
+                                                     experiment(),
+                                                     myself(),
+                                                     detType,
+                                                     i,
+                                                     this));
 
-      if (detThread) {
-        detThread->start();
+    if (detThread) {
+      detThread->start();
 
-        QxrdDetectorPtr det = detThread->detector();
+      QxrdDetectorPtr det = detThread->detector();
 
-        if (det) {
-//          det->initialize();
-          det->readSettings(settings, "");
+      if (det) {
+        //          det->initialize();
+        det->readSettings(settings, "");
 
-          m_DetectorThreads[i] = detThread;
-          m_Detectors[i]       = det;
+        m_DetectorThreads[i] = detThread;
+        m_Detectors[i]       = det;
 
-          det->startOrStop(det->isEnabled());
-        }
+        det->startOrStop(det->isEnabled());
       }
     }
-
-    settings->endArray();
   }
+
+  set_DetectorCount(m_Detectors.count());
+
+  settings->endArray();
 }
 
 void QxrdAcquisition::appendDetector(int detType)
