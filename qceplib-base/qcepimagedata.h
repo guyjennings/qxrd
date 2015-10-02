@@ -124,6 +124,12 @@ public slots:
 
   virtual QPointF percentileRange(double lowpct, double highpct) = 0;
 
+  virtual double sumInRectangle(QRectF rect);
+  virtual double averageInRectangle(QRectF rect);
+  virtual double sumInEllipse(QRectF rect);
+  virtual double averageInEllipse(QRectF rect);
+  virtual double sumInPeak(QRectF rect);
+
 public:
 //  int get_Width() const
 //  {
