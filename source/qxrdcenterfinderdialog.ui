@@ -755,6 +755,16 @@ center in the right direction</string>
         </property>
        </widget>
       </item>
+      <item row="4" column="0" colspan="2">
+       <widget class="QCheckBox" name="m_FitPowderPointPosition">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="text">
+         <string>Fit Powder Points to Nearby Peaks</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item row="2" column="0">

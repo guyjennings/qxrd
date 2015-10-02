@@ -47,6 +47,7 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   m_CenterFinder -> prop_FittedWidthMax() -> linkTo(m_FittedWidthMax);
   m_CenterFinder -> prop_FittedHeightMinRatio() -> linkTo(m_FittedHeightMinRatio);
   m_CenterFinder -> prop_FittedPositionMaxDistance() -> linkTo(m_FittedPositionMaxDistance);
+  m_CenterFinder -> prop_FitPowderPointPosition() -> linkTo(m_FitPowderPointPosition);
 
   connect(m_CenterFinder -> prop_ImplementTilt(), &QcepBoolProperty::valueChanged, this, &QxrdCenterFinderDialog::onImplementTiltChanged);
 
