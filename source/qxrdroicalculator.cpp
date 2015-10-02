@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include "qcepmutexlocker.h"
 #include "qxrdroicoordinateslist.h"
+#include <QtConcurrentMap>
+#include "qxrdroicoordinates.h"
+#include "qcepimagedata.h"
 
 QxrdROICalculator::QxrdROICalculator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdDetectorProcessorWPtr proc)
   : QcepObject("ROIcalculator", NULL),
@@ -87,4 +90,54 @@ QxrdROICoordinatesPtr     QxrdROICalculator::coordinate(int i)
   } else {
     return QxrdROICoordinatesPtr();
   }
+}
+
+QVector<double> QxrdROICalculator::values(QcepImageDataBasePtr img)
+{
+  QVector<double> res;
+
+  if (img && m_ROICoordinates) {
+    int nVals = m_ROICoordinates->get_RoiCount();
+
+    for (int i=0; i<nVals; i++) {
+      res.append(value(img, i));
+    }
+  }
+
+  return res;
+}
+
+double QxrdROICalculator::value(QcepImageDataBasePtr img, int i)
+{
+  double res = 0;
+
+  if (img && m_ROICoordinates) {
+    QxrdROICoordinatesPtr roi = m_ROICoordinates->roi(i);
+
+    if (roi) {
+      switch (roi->get_RoiType()) {
+      case QxrdROICoordinates::SumInRectangle:
+        res = img->sumInRectangle(roi->get_Coords());
+        break;
+
+      case QxrdROICoordinates::AverageInRectangle:
+        res = img->averageInRectangle(roi->get_Coords());
+        break;
+
+      case QxrdROICoordinates::SumInEllipse:
+        res = img->sumInEllipse(roi->get_Coords());
+        break;
+
+      case QxrdROICoordinates::AverageInEllipse:
+        res = img->averageInEllipse(roi->get_Coords());
+        break;
+
+      case QxrdROICoordinates::SumInPeak:
+        res = img->sumInPeak(roi->get_Coords());
+        break;
+      }
+    }
+  }
+
+  return res;
 }

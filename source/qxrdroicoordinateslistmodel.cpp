@@ -44,13 +44,13 @@ QVariant QxrdROICoordinatesListModel::data(const QModelIndex &index, int role) c
       } else if (col == 1) {
         return c->get_RoiTypeName();
       } else if (col == 2) {
-        return c->get_Coords().left();
+        return c->get_Coords().center().x();
       } else if (col == 3) {
-        return c->get_Coords().top();
+        return c->get_Coords().center().y();
       } else if (col == 4) {
-        return c->get_Coords().right();
+        return c->get_Coords().width();
       } else if (col == 5) {
-        return c->get_Coords().bottom();
+        return c->get_Coords().height();
       }
     }
   }
@@ -67,13 +67,13 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
       } else if (section == 1) {
         return "Type";
       } else if (section == 2) {
-        return "Left";
+        return "CenterX";
       } else if (section == 3) {
-        return "Top";
+        return "CenterY";
       } else if (section == 4) {
-        return "Right";
+        return "Width";
       } else if (section == 5) {
-        return "Bottom";
+        return "Height";
       }
     } else if (role == Qt::TextAlignmentRole) {
       return Qt::AlignHCenter;
@@ -105,13 +105,13 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
   if (c) {
     if (role == Qt::EditRole || role == Qt::DisplayRole) {
       if (col == 2) {
-        c->setLeft(value.toDouble());
+        c->setCenterX(value.toDouble());
       } else if (col == 3) {
-        c->setTop(value.toDouble());
+        c->setCenterY(value.toDouble());
       } else if (col == 4) {
-        c->setRight(value.toDouble());
+        c->setWidth(value.toDouble());
       } else if (col == 5) {
-        c->setBottom(value.toDouble());
+        c->setHeight(value.toDouble());
       } else {
         return false;
       }

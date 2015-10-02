@@ -30,9 +30,11 @@ public:
   static void fromScriptValue(const QScriptValue &obj, QxrdROICoordinatesPtr &coords);
 
   enum {
-    RectangularROI,
-    EllipticalROI,
-    PeakAndBackgroundROI
+    SumInRectangle,
+    AverageInRectangle,
+    SumInEllipse,
+    AverageInEllipse,
+    SumInPeak
   };
 
 signals:
@@ -55,6 +57,11 @@ public slots:
 
   void setCenter(QPointF c);
   void setSize(QSizeF s);
+
+  void setCenterX(double cx);
+  void setCenterY(double cy);
+  void setWidth(double w);
+  void setHeight(double h);
 
 public:
   Q_PROPERTY(int roiType READ get_RoiType WRITE set_RoiType)

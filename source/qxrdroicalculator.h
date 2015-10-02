@@ -11,6 +11,7 @@
 #include "qxrdroicalculator-ptr.h"
 #include "qxrdroicoordinateslist-ptr.h"
 #include "qxrdroicoordinates-ptr.h"
+#include "qcepimagedata-ptr.h"
 
 class QxrdROICalculator : public QcepObject, public QEnableSharedFromThis<QxrdROICalculator>
 {
@@ -31,6 +32,9 @@ signals:
 public slots:
   QxrdROICoordinatesListPtr coordinates();
   QxrdROICoordinatesPtr     coordinate(int i);
+
+  QVector<double>           values(QcepImageDataBasePtr img);
+  double                    value(QcepImageDataBasePtr img, int i);
 
 private:
   QMutex                    m_Mutex;

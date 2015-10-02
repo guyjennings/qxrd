@@ -340,9 +340,29 @@ QcepImageDataBasePtr QxrdDetectorProcessor::doGainCorrection(QcepImageDataBasePt
 
 QcepDoubleVector QxrdDetectorProcessor::doCalculateROICounts(QcepImageDataBasePtr img)
 {
-  printMessage("ROI Calculation not yet implemented");
+  QcepDoubleVector res;
 
-  return QcepDoubleVector();
+  if (img && m_ROICalculator) {
+    res = m_ROICalculator->values(img);
+  }
+
+  if (qcepDebug(DEBUG_ACQUIRE)) {
+    QString s = "[";
+
+    for (int i=0; i<res.count(); i++) {
+      if (i == 0) {
+        s.append(tr("%1").arg(res.value(i)));
+      } else {
+        s.append(tr(", %1").arg(res.value(i)));
+      }
+    }
+
+    s.append("]");
+
+    printMessage(tr("ROI Values = %1").arg(s));
+  }
+
+  return res;
 }
 
 void QxrdDetectorProcessor::doSaveRawImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)

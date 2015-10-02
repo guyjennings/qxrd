@@ -39,12 +39,16 @@ void QxrdROICoordinates::fromScriptValue(const QScriptValue &obj, QxrdROICoordin
 
 QString QxrdROICoordinates::roiTypeName(int roiType)
 {
-  if (roiType == RectangularROI) {
-    return "Rectangle";
-  } else if (roiType == EllipticalROI) {
-    return "Elliptical";
-  } else if (roiType == PeakAndBackgroundROI) {
-    return "Peak and Background";
+  if (roiType == SumInRectangle) {
+    return "Rectangle Sum";
+  } else if (roiType == AverageInRectangle) {
+    return "Rectangle Avg";
+  } else if (roiType == SumInEllipse) {
+    return "Ellipse Sum";
+  } else if (roiType == AverageInEllipse) {
+    return "Ellipse Avg";
+  } else if (roiType == SumInPeak) {
+    return "Peak Sum";
   }
 
   return "";
@@ -52,7 +56,7 @@ QString QxrdROICoordinates::roiTypeName(int roiType)
 
 int QxrdROICoordinates::roiTypeCount()
 {
-  return 3;
+  return 5;
 }
 
 double QxrdROICoordinates::left() const
@@ -146,6 +150,50 @@ void QxrdROICoordinates::setSize(QSizeF s)
   QPointF cen = c.center();
 
   c.setSize(s);
+  c.moveCenter(cen);
+
+  set_Coords(c);
+}
+
+void QxrdROICoordinates::setCenterX(double cx)
+{
+  QRectF  c = get_Coords();
+  QPointF cen = c.center();
+
+  cen.setX(cx);
+  c.moveCenter(cen);
+
+  set_Coords(c);
+}
+
+void QxrdROICoordinates::setCenterY(double cy)
+{
+  QRectF  c = get_Coords();
+  QPointF cen = c.center();
+
+  cen.setY(cy);
+  c.moveCenter(cen);
+
+  set_Coords(c);
+}
+
+void QxrdROICoordinates::setWidth(double w)
+{
+  QRectF c = get_Coords();
+  QPointF cen = c.center();
+
+  c.setWidth(w);
+  c.moveCenter(cen);
+
+  set_Coords(c);
+}
+
+void QxrdROICoordinates::setHeight(double h)
+{
+  QRectF c = get_Coords();
+  QPointF cen = c.center();
+
+  c.setHeight(h);
   c.moveCenter(cen);
 
   set_Coords(c);
