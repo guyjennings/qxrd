@@ -350,8 +350,10 @@ void QxrdDetectorProcessor::doSaveRawImage(QcepImageDataBasePtr img, QcepMaskDat
   QxrdExperimentPtr expt(m_Experiment);
   QxrdFileSaverPtr  fsav(m_FileSaver);
 
-  if (fsav && expt) {
-    fsav->saveImageData(img, ovf, QxrdFileSaver::NoOverwrite);
+  if (fsav && expt && img) {
+    QString fullPath = filePathInRawOutputDirectory(img->get_FileBase());
+
+    fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
   }
 }
 
@@ -360,8 +362,10 @@ void QxrdDetectorProcessor::doSaveDarkImage(QcepImageDataBasePtr img, QcepMaskDa
   QxrdExperimentPtr expt(m_Experiment);
   QxrdFileSaverPtr  fsav(m_FileSaver);
 
-  if (fsav && expt) {
-    fsav->saveImageData(img, ovf, QxrdFileSaver::NoOverwrite);
+  if (fsav && expt && img) {
+    QString fullPath = filePathInDarkOutputDirectory(img->get_FileBase());
+
+    fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
   }
 }
 
@@ -370,8 +374,10 @@ void QxrdDetectorProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img, Qcep
   QxrdExperimentPtr expt(m_Experiment);
   QxrdFileSaverPtr  fsav(m_FileSaver);
 
-  if (fsav && expt) {
-    fsav->saveImageData(img, ovf, QxrdFileSaver::NoOverwrite);
+  if (fsav && expt && img) {
+    QString fullPath = filePathInSubtractedOutputDirectory(img->get_FileBase());
+
+    fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
   }
 
   printMessage("Save Subtracted Image not yet implemented");

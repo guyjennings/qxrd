@@ -129,26 +129,25 @@ QString QxrdFileSaver::uniqueFileName(QString name)
 
 #define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
 
-void QxrdFileSaver::saveImageData(QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveImageData(QString name, QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   incBacklog();
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveImageDataPrivate",
                                          Qt::QueuedConnection,
+                                         Q_ARG(QString, name),
                                          Q_ARG(QcepImageDataBasePtr, image),
                                          Q_ARG(QcepMaskDataPtr, overflow),
                                          Q_ARG(int, canOverwrite)));
 }
 
-void QxrdFileSaver::saveImageDataPrivate(QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveImageDataPrivate(QString name, QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
       g_Application->criticalMessage(tr("QxrdFileSaver::saveImageData: image == NULL"));
     }
   } else {
-    QString name = image->get_FileName();
-
     QcepDoubleImageDataPtr dimage = qSharedPointerDynamicCast<QcepDoubleImageData>(image);
 
     if (dimage) {
@@ -167,12 +166,12 @@ void QxrdFileSaver::saveImageDataPrivate(QcepImageDataBasePtr image, QcepMaskDat
           if (g_Application) {
             g_Application->criticalMessage(tr("QxrdFileSaver::saveImageData: unknown image type"));
           }
+
+          decBacklog();
         }
       }
     }
   }
-
-  decBacklog();
 }
 
 void QxrdFileSaver::saveDoubleData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
