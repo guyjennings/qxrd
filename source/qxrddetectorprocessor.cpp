@@ -8,6 +8,7 @@
 #include "qxrddetectorcontrolwindow.h"
 #include "qxrdacquisition.h"
 #include <QDir>
+#include "qxrdfilesaver.h"
 
 QxrdDetectorProcessor::QxrdDetectorProcessor(
     QcepSettingsSaverWPtr saver,
@@ -350,9 +351,8 @@ void QxrdDetectorProcessor::doSaveRawImage(QcepImageDataBasePtr img, QcepMaskDat
   QxrdFileSaverPtr  fsav(m_FileSaver);
 
   if (fsav && expt) {
+    fsav->saveImageData(img, ovf, QxrdFileSaver::NoOverwrite);
   }
-
-  printMessage("Save Raw Image not yet implemented");
 }
 
 void QxrdDetectorProcessor::doSaveDarkImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
@@ -361,9 +361,8 @@ void QxrdDetectorProcessor::doSaveDarkImage(QcepImageDataBasePtr img, QcepMaskDa
   QxrdFileSaverPtr  fsav(m_FileSaver);
 
   if (fsav && expt) {
-
+    fsav->saveImageData(img, ovf, QxrdFileSaver::NoOverwrite);
   }
-  printMessage("Save Dark Image not yet implemented");
 }
 
 void QxrdDetectorProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
@@ -372,7 +371,7 @@ void QxrdDetectorProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img, Qcep
   QxrdFileSaverPtr  fsav(m_FileSaver);
 
   if (fsav && expt) {
-//    QString fileBase = fileBase(img->get_FileName());
+    fsav->saveImageData(img, ovf, QxrdFileSaver::NoOverwrite);
   }
 
   printMessage("Save Subtracted Image not yet implemented");

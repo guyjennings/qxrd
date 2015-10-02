@@ -40,6 +40,7 @@ public:
   };
 
 public slots:
+  void saveImageData(QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveDoubleData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveInt32Data(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveInt16Data(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
@@ -51,6 +52,7 @@ public slots:
   void writeOutputScan(QString dir, QcepIntegratedDataPtr data, QString fileName = QString());
 
 private slots:
+  void saveImageDataPrivate(QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveDoubleDataPrivate(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveMaskDataPrivate(QString name, QcepMaskDataPtr image, int canOverwrite);
   void saveRaw32DataPrivate(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
