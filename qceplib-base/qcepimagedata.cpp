@@ -432,6 +432,7 @@ double QcepImageDataBase::averageInEllipse(QRectF rect)
 
 double QcepImageDataBase::sumInPeak(QRectF rect)
 {
+  return 0;
 }
 
 template <typename T>
