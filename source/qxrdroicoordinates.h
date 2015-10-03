@@ -63,6 +63,8 @@ public slots:
   void setWidth(double w);
   void setHeight(double h);
 
+  QVector<QPointF> markerCoords();
+
 public:
   Q_PROPERTY(int roiType READ get_RoiType WRITE set_RoiType)
   QCEP_INTEGER_PROPERTY(RoiType)

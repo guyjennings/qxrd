@@ -1222,51 +1222,47 @@ void QxrdImagePlot::updateROIDisplay()
     for (int i=0; i<nROI; i++) {
       QxrdROICoordinatesPtr roi = m_ROIModel->roi(i);
 
-      QVector<double> x,y;
+      if (roi) {
+        QVector<QPointF> pts = roi->markerCoords();
 
-      x.append(roi->left());  y.append(roi->top());
-      x.append(roi->left());  y.append(roi->bottom());
-      x.append(roi->right()); y.append(roi->bottom());
-      x.append(roi->right()); y.append(roi->top());
-      x.append(roi->left());  y.append(roi->top());
+        QwtPlotCurve *pc = new QwtPlotCurve(tr("ROI %1").arg(i));
 
-      QwtPlotCurve *pc = new QwtPlotCurve(tr("ROI %1").arg(i));
+        setPlotCurveStyle(i, pc);
 
-      setPlotCurveStyle(i, pc);
+        bool on = m_ROISelection->rowIntersectsSelection(i, QModelIndex());
 
-      bool on = m_ROISelection->rowIntersectsSelection(i, QModelIndex());
+        if (pc) {
+          QPen pen = pc->pen();
+          const QwtSymbol *oldsym = pc->symbol();
+          QwtSymbol *sym = NULL;
 
-      if (pc) {
-        QPen pen = pc->pen();
-        const QwtSymbol *oldsym = pc->symbol();
-        QwtSymbol *sym = NULL;
-
-        if (oldsym) {
-         sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
-        }
-
-        if (on) {
-          pen.setWidth(3);
-          if (sym) {
-            sym->setSize(9,9);
+          if (oldsym) {
+            sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
           }
-        } else {
-          pen.setWidth(1);
+
+          if (on) {
+            pen.setWidth(3);
+            if (sym) {
+              sym->setSize(9,9);
+            }
+          } else {
+            pen.setWidth(1);
+            if (sym) {
+              sym->setSize(5,5);
+            }
+          }
+          pc->setPen(pen);
           if (sym) {
-            sym->setSize(5,5);
+            pc->setSymbol(sym);
           }
         }
-        pc->setPen(pen);
-        if (sym) {
-          pc->setSymbol(sym);
-        }
+
+        pc->setSamples(pts);
+
+        pc->attach(this);
+
+        m_ROICurves.append(pc);
       }
-
-      pc->setSamples(x, y);
-
-      pc->attach(this);
-
-      m_ROICurves.append(pc);
     }
   }
 

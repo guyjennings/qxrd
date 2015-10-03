@@ -1,5 +1,6 @@
 #include "qxrdroicoordinates.h"
 #include "qxrdexperiment.h"
+#include <QtMath>
 
 QxrdROICoordinates::QxrdROICoordinates(QcepSettingsSaverWPtr saver,
                                        QxrdExperimentWPtr    exp,
@@ -197,4 +198,73 @@ void QxrdROICoordinates::setHeight(double h)
   c.moveCenter(cen);
 
   set_Coords(c);
+}
+
+QVector<QPointF> QxrdROICoordinates::markerCoords()
+{
+  QVector<QPointF> res;
+  QRectF c = get_Coords();
+
+  switch (get_RoiType()) {
+  case SumInRectangle:
+  case AverageInRectangle:
+  default:
+    {
+      res.append(c.topLeft());
+      res.append(c.bottomLeft());
+      res.append(c.bottomRight());
+      res.append(c.topRight());
+      res.append(c.topLeft());
+    }
+    break;
+
+  case SumInEllipse:
+  case AverageInEllipse:
+    {
+      double a=c.width()/2.0;
+      double b=c.height()/2.0;
+      QPointF cen = c.center();
+
+      for (int i=0; i<=16; i++) {
+        double theta = M_PI*i/8.0;
+        double x = cen.x() + a*cos(theta);
+        double y = cen.y() + b*sin(theta);
+
+        res.append(QPointF(x,y));
+      }
+    }
+    break;
+
+  case SumInPeak:
+    {
+      QRectF pkr;
+      pkr.setSize(c.size()/2.0);
+      pkr.moveCenter(c.center());
+
+      res.append(c.topLeft());
+      res.append(c.bottomLeft());
+      res.append(c.bottomRight());
+      res.append(c.topRight());
+      res.append(c.topLeft());
+
+      res.append(pkr.topLeft());
+
+      res.append(pkr.bottomLeft());
+      res.append(c.bottomLeft());
+      res.append(pkr.bottomLeft());
+
+      res.append(pkr.bottomRight());
+      res.append(c.bottomRight());
+      res.append(pkr.bottomRight());
+
+      res.append(pkr.topRight());
+      res.append(c.topRight());
+      res.append(pkr.topRight());
+
+      res.append(pkr.topLeft());
+    }
+    break;
+  }
+
+  return res;
 }
