@@ -610,4 +610,7 @@ TODO("2015-09-22", "",
 TODO("2015-09-29", "",
      "Updates to saved settings not stored as properties do not trigger re-saves");
 
+TODO("2015-10-05", "",
+     "Implement masking in ROI calculations");
+
 #endif // TODO_H
