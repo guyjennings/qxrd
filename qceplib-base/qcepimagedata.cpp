@@ -316,125 +316,6 @@ QString QcepImageDataBase::fileFormatTransposedCSV()
   return "Transposed CSV (*.csv)";
 }
 
-double QcepImageDataBase::sumInRectangle(QRectF rect)
-{
-  int l = qRound(rect.left());
-  int t = qRound(rect.top());
-  int r = qRound(rect.right());
-  int b = qRound(rect.bottom());
-
-  if (l > r) {
-    l = qRound(rect.right());
-    r = qRound(rect.left());
-  }
-
-  if (b > t) {
-    b = qRound(rect.top());
-    t = qRound(rect.bottom());
-  }
-
-  int np = 0;
-  double sum = 0;
-
-  for (int row=b; row<=t; row++) {
-    for (int col=l; col<=r; col++) {
-      np++;
-      sum += getImageData(col,row);
-    }
-  }
-
-  return sum;
-}
-
-double QcepImageDataBase::averageInRectangle(QRectF rect)
-{
-  int l = qRound(rect.left());
-  int t = qRound(rect.top());
-  int r = qRound(rect.right());
-  int b = qRound(rect.bottom());
-
-  if (l > r) {
-    l = qRound(rect.right());
-    r = qRound(rect.left());
-  }
-
-  if (b > t) {
-    b = qRound(rect.top());
-    t = qRound(rect.bottom());
-  }
-
-  int np = 0;
-  double sum = 0;
-
-  for (int row=b; row<=t; row++) {
-    for (int col=l; col<=r; col++) {
-      np++;
-      sum += getImageData(col,row);
-    }
-  }
-
-  return sum/np;
-}
-
-double QcepImageDataBase::sumInEllipse(QRectF rect)
-{
-  QPointF c = rect.center();
-  double  a = rect.width()/2;
-  double  b = rect.height()/2;
-
-  int bt = qRound(rect.bottom());
-  int tp = qRound(rect.top());
-
-  int np = 0;
-  double sum = 0;
-
-  for (int row=tp; row<=bt; row++) {
-    double y=row - c.y();
-    double xx = a*sqrt(1 - pow(y/b,2));
-    int x1 = qRound(c.x() - xx);
-    int x2 = qRound(c.x() + xx);
-
-    for (int col=x1; col<=x2; col++) {
-      np++;
-      sum += getImageData(col,row);
-    }
-  }
-
-  return sum;
-}
-
-double QcepImageDataBase::averageInEllipse(QRectF rect)
-{
-  QPointF c = rect.center();
-  double  a = rect.width()/2;
-  double  b = rect.height()/2;
-
-  int bt = qRound(rect.bottom());
-  int tp = qRound(rect.top());
-
-  int np = 0;
-  double sum = 0;
-
-  for (int row=tp; row<=bt; row++) {
-    double y=row - c.y();
-    double xx = a*sqrt(1 - pow(y/b,2));
-    int x1 = qRound(c.x() - xx);
-    int x2 = qRound(c.x() + xx);
-
-    for (int col=x1; col<=x2; col++) {
-      np++;
-      sum += getImageData(col,row);
-    }
-  }
-
-  return sum/np;
-}
-
-double QcepImageDataBase::sumInPeak(QRectF rect)
-{
-  return 0;
-}
-
 template <typename T>
 QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def, QcepObject *parent)
   : QcepImageDataBase(saver, width, height, width*height*sizeof(T), parent),
@@ -1482,6 +1363,154 @@ void QcepImageData<T>::saveData(QString &name, QString filter, Overwrite canOver
   } else if (filter == fileFormatTransposedCSV()) {
     saveTextData(name, ", ", true);
   }
+}
+
+template <typename T>
+double QcepImageData<T>::sumInRectangle(QRectF rect)
+{
+  int l = qRound(rect.left());
+  int t = qRound(rect.top());
+  int r = qRound(rect.right());
+  int b = qRound(rect.bottom());
+
+  if (l > r) {
+    l = qRound(rect.right());
+    r = qRound(rect.left());
+  }
+
+  if (b > t) {
+    b = qRound(rect.top());
+    t = qRound(rect.bottom());
+  }
+
+  int np = 0;
+  double sum = 0;
+
+  for (int row=b; row<=t; row++) {
+    for (int col=l; col<=r; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          np++;
+          sum += val;
+        }
+      }
+    }
+  }
+
+  return sum;
+}
+
+template <typename T>
+double QcepImageData<T>::averageInRectangle(QRectF rect)
+{
+  int l = qRound(rect.left());
+  int t = qRound(rect.top());
+  int r = qRound(rect.right());
+  int b = qRound(rect.bottom());
+
+  if (l > r) {
+    l = qRound(rect.right());
+    r = qRound(rect.left());
+  }
+
+  if (b > t) {
+    b = qRound(rect.top());
+    t = qRound(rect.bottom());
+  }
+
+  int np = 0;
+  double sum = 0;
+
+  for (int row=b; row<=t; row++) {
+    for (int col=l; col<=r; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          np++;
+          sum += val;
+        }
+      }
+    }
+  }
+
+  return sum/np;
+}
+
+template <typename T>
+double QcepImageData<T>::sumInEllipse(QRectF rect)
+{
+  QPointF c = rect.center();
+  double  a = rect.width()/2;
+  double  b = rect.height()/2;
+
+  int bt = qRound(rect.bottom());
+  int tp = qRound(rect.top());
+
+  int np = 0;
+  double sum = 0;
+
+  for (int row=tp; row<=bt; row++) {
+    double y=row - c.y();
+    double xx = a*sqrt(1 - pow(y/b,2));
+    int x1 = qRound(c.x() - xx);
+    int x2 = qRound(c.x() + xx);
+
+    for (int col=x1; col<=x2; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          np++;
+          sum += val;
+        }
+      }
+    }
+  }
+
+  return sum;
+}
+
+template <typename T>
+double QcepImageData<T>::averageInEllipse(QRectF rect)
+{
+  QPointF c = rect.center();
+  double  a = rect.width()/2;
+  double  b = rect.height()/2;
+
+  int bt = qRound(rect.bottom());
+  int tp = qRound(rect.top());
+
+  int np = 0;
+  double sum = 0;
+
+  for (int row=tp; row<=bt; row++) {
+    double y=row - c.y();
+    double xx = a*sqrt(1 - pow(y/b,2));
+    int x1 = qRound(c.x() - xx);
+    int x2 = qRound(c.x() + xx);
+
+    for (int col=x1; col<=x2; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          np++;
+          sum += val;
+        }
+      }
+    }
+  }
+
+  return sum/np;
+}
+
+template <typename T>
+double QcepImageData<T>::sumInPeak(QRectF rect)
+{
+  return 0;
 }
 
 template class QcepImageData<unsigned short>;

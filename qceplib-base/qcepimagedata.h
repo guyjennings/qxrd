@@ -124,11 +124,11 @@ public slots:
 
   virtual QPointF percentileRange(double lowpct, double highpct) = 0;
 
-  virtual double sumInRectangle(QRectF rect);
-  virtual double averageInRectangle(QRectF rect);
-  virtual double sumInEllipse(QRectF rect);
-  virtual double averageInEllipse(QRectF rect);
-  virtual double sumInPeak(QRectF rect);
+  virtual double sumInRectangle(QRectF rect) = 0;
+  virtual double averageInRectangle(QRectF rect) = 0;
+  virtual double sumInEllipse(QRectF rect) = 0;
+  virtual double averageInEllipse(QRectF rect) = 0;
+  virtual double sumInPeak(QRectF rect) = 0;
 
 public:
 //  int get_Width() const
@@ -233,6 +233,12 @@ public:
   double minValue() const;
   double maxValue() const;
   QPointF percentileRange(double lowpct, double highpct);
+
+  double sumInRectangle(QRectF rect);
+  double averageInRectangle(QRectF rect);
+  double sumInEllipse(QRectF rect);
+  double averageInEllipse(QRectF rect);
+  double sumInPeak(QRectF rect);
 
 public:
   template <typename T2>
