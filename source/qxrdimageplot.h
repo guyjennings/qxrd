@@ -142,6 +142,7 @@ private:
                           const QItemSelection &deselected);
 
 protected:
+  void selectROILabel(int i, bool on);
   void moveSelectedROICenter(double x, double y);
 
 public:

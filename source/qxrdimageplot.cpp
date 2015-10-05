@@ -14,6 +14,7 @@
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_marker.h>
 #include <qwt_legend.h>
+#include <qwt_legend_label.h>
 #include <qwt_plot_spectrogram.h>
 #include <qwt_scale_widget.h>
 #include <qwt_symbol.h>
@@ -1280,7 +1281,13 @@ void QxrdImagePlot::onLegendChecked(const QVariant &itemInfo, bool on, int index
 
     if (i >= 0) {
       if (m_ROISelection && m_ROIModel) {
-        m_ROISelection->select(m_ROIModel->index(i,0), QItemSelectionModel::Rows);
+        if (on) {
+          m_ROISelection->select(m_ROIModel->index(i,0),
+                                 QItemSelectionModel::Select | QItemSelectionModel::Rows);
+        } else {
+          m_ROISelection->select(m_ROIModel->index(i,0),
+                                 QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
+        }
       }
     }
   }
@@ -1319,17 +1326,31 @@ void QxrdImagePlot::selectROIItem(int n, bool selected)
   }
 }
 
+void QxrdImagePlot::selectROILabel(int i, bool on)
+{
+  const QVariant itemInfo = itemToInfo(m_ROICurves.value(i));
+
+  QwtLegendLabel *legendLabel =
+      qobject_cast<QwtLegendLabel*>(
+        m_Legend->legendWidget(itemInfo));
+
+  if (legendLabel) {
+    legendLabel->setChecked(on);
+  }
+}
+
 void QxrdImagePlot::updateROISelection(
     const QItemSelection &selected,
     const QItemSelection &deselected)
 {
   if (m_ROIModel && m_ROISelection) {
-    int n = m_ROIModel->rowCount(QModelIndex());
+//    int n = m_ROIModel->rowCount(QModelIndex());
 
     foreach(QItemSelectionRange r, selected) {
       for (int i=r.top(); i<=r.bottom(); i++) {
 //        printMessage(tr("select row %1").arg(i));
         selectROIItem(i, true);
+        selectROILabel(i, true);
       }
     }
 
@@ -1337,6 +1358,7 @@ void QxrdImagePlot::updateROISelection(
       for (int i=r.top(); i<=r.bottom(); i++) {
 //        printMessage(tr("deselect row %1").arg(i));
         selectROIItem(i, false);
+        selectROILabel(i, false);
       }
     }
 
