@@ -20,6 +20,7 @@
 #include "qxrddetectorprocessor.h"
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrddarkacquisitionparameterpack.h"
+#include "qxrdacquisitionscalermodel.h"
 
 QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
                                  QxrdExperimentWPtr doc,
@@ -121,6 +122,11 @@ void QxrdAcquisition::initialize()
   connect(&m_IdleTimer, &QTimer::timeout, this, &QxrdAcquisition::onIdleTimeout);
 
   m_IdleTimer.start(1000);
+
+  QxrdAcquisitionPtr myself = qSharedPointerDynamicCast<QxrdAcquisition>(sharedFromThis());
+
+  m_ScalerModel = QxrdAcquisitionScalerModelPtr(
+        new QxrdAcquisitionScalerModel(myself));
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -146,6 +152,11 @@ QxrdExperimentWPtr QxrdAcquisition::experiment()
 QxrdDataProcessorWPtr QxrdAcquisition::dataProcessor()
 {
   return m_DataProcessor;
+}
+
+QxrdAcquisitionScalerModelPtr QxrdAcquisition::acquisitionScalerModel() const
+{
+  return m_ScalerModel;
 }
 
 void QxrdAcquisition::shutdown()

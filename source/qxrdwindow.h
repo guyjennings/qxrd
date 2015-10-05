@@ -13,7 +13,7 @@
 #include "qcepallocator.h"
 #include "qxrdscriptengine.h"
 #include "qxrdacquisitiondialog.h"
-
+#include "qxrdacquisitionscalerdialog-ptr.h"
 #include "qxrddisplaydialog.h"
 #include "qxrdcenterfinderdialog.h"
 #include "qxrdcorrectiondialog.h"
@@ -169,6 +169,7 @@ private:
   QxrdDataProcessorWPtr                  m_DataProcessor;
   QcepAllocatorWPtr                      m_Allocator;
   QxrdAcquisitionDialog                 *m_AcquisitionDialog;
+  QxrdAcquisitionScalerDialog           *m_AcquisitionScalerDialog;
   QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
   QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;

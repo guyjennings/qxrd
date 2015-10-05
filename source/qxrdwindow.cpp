@@ -32,6 +32,7 @@
 #include "qxrdhighlighter.h"
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisitionextrainputsdialog.h"
+#include "qxrdacquisitionscalerdialog.h"
 #include "qxrddataset.h"
 #include "qxrdtodolist.h"
 
@@ -73,6 +74,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_DataProcessor(procw),
     m_Allocator(allocw),
     m_AcquisitionDialog(NULL),
+    m_AcquisitionScalerDialog(NULL),
     m_AcquisitionExtraInputsDialog(NULL),
     m_SynchronizedAcquisitionDialog(NULL),
     m_DisplayDialog(NULL),
@@ -133,6 +135,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   if (acq) {
     m_AcquisitionDialog = acq -> controlPanel(m_Window);
+    m_AcquisitionScalerDialog = new QxrdAcquisitionScalerDialog(m_Acquisition, this);
     m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(set->synchronizedAcquisitionDialogSettings(), this, m_Acquisition);
     m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
   }
@@ -214,7 +217,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
     tabifyDockWidget(m_InputFileBrowser, m_DatasetBrowserDialog);
 
-    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionExtraInputsDialog);
+    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionScalerDialog);
+    tabifyDockWidget(m_AcquisitionScalerDialog, m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
@@ -232,7 +236,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
     tabifyDockWidget(m_InputFileBrowser, m_DatasetBrowserDialog);
 
-    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionExtraInputsDialog);
+    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionScalerDialog);
+    tabifyDockWidget(m_AcquisitionScalerDialog, m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
     tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
@@ -247,7 +252,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
     tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
     tabifyDockWidget(m_IntegratorDialog, m_DistortionCorrectionDialog);
   } else {
-    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionExtraInputsDialog);
+    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionScalerDialog);
+    tabifyDockWidget(m_AcquisitionScalerDialog, m_AcquisitionExtraInputsDialog);
     tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
     tabifyDockWidget(m_CenterFinderDialog, m_IntegratorDialog);
 
@@ -633,6 +639,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   }
 
   m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_AcquisitionScalerDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_AcquisitionExtraInputsDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
   m_WindowsMenu -> addAction(m_OutputFileBrowser -> toggleViewAction());

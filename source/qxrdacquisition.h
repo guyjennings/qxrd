@@ -30,6 +30,7 @@
 #include "qcepallocator-ptr.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdprocessargs-ptr.h"
+#include "qxrdacquisitionscalermodel-ptr.h"
 
 class QxrdAcquisition : public QxrdAcquisitionInterface
 {
@@ -103,6 +104,8 @@ public:
 
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
   QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
+
+  QxrdAcquisitionScalerModelPtr acquisitionScalerModel() const;
 
 protected:
   void acquisition(int isDark);
@@ -239,6 +242,8 @@ private:
 
   QVector<QxrdDetectorThreadPtr>    m_DetectorThreads;
   QVector<QxrdDetectorPtr>          m_Detectors;
+
+  QxrdAcquisitionScalerModelPtr m_ScalerModel;
 };
 
 #endif

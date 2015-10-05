@@ -329,7 +329,11 @@ HEADERS += TODO.h \
     qxrdroicoordinateslistmodel-ptr.h \
     qxrdimageplotsettings-ptr.h \
     qxrddetectorimageplot.h \
-    qxrdroitypedelegate.h
+    qxrdroitypedelegate.h \
+    qxrdacquisitionscalerdialog.h \
+    qxrdacquisitionscalermodel.h \
+    qxrdacquisitionscalermodel-ptr.h \
+    qxrdacquisitionscalerdialog-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -491,7 +495,9 @@ SOURCES += qxrd.cpp \
     qxrddetectorpilatusremote.cpp \
     qxrdroicoordinateslistmodel.cpp \
     qxrddetectorimageplot.cpp \
-    qxrdroitypedelegate.cpp
+    qxrdroitypedelegate.cpp \
+    qxrdacquisitionscalerdialog.cpp \
+    qxrdacquisitionscalermodel.cpp
 
 OTHER_FILES += testImage.js
 
@@ -519,7 +525,8 @@ FORMS += qxrdwindow.ui \
     qxrdcalibrantdialog.ui \
     qxrddetectorproxywidget.ui \
     qxrddetectorconfigurationdialog.ui \
-    qxrddetectorcontrolwindow.ui
+    qxrddetectorcontrolwindow.ui \
+    qxrdacquisitionscalerdialog.ui
 
 macx:
 else:unix:LIBS += -ltiff
