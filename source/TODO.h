@@ -613,4 +613,7 @@ TODO("2015-09-29", "",
 TODO("2015-10-05", "",
      "Implement masking in ROI calculations");
 
+TODO("2015-10-05", "",
+     "Reimplement mask/dark/gain loading in detector initialization");
+
 #endif // TODO_H
