@@ -10,6 +10,7 @@
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
 #include "qxrddetector.h"
+#include "qxrdroitypedelegate.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     saver,
                                                      QxrdExperimentWPtr        exp,
@@ -74,6 +75,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     s
       m_ROIModel = QxrdROICoordinatesListModelPtr(
             new QxrdROICoordinatesListModel(calc->coordinates()));
 
+      m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::TypeCol, new QxrdROITypeDelegate());
       m_ROIWidget->setModel(m_ROIModel.data());
 
       connect(m_NewROI,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doAppendROI);

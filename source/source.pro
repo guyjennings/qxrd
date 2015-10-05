@@ -328,7 +328,8 @@ HEADERS += TODO.h \
     qxrdroicoordinateslistmodel.h \
     qxrdroicoordinateslistmodel-ptr.h \
     qxrdimageplotsettings-ptr.h \
-    qxrddetectorimageplot.h
+    qxrddetectorimageplot.h \
+    qxrdroitypedelegate.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -489,7 +490,8 @@ SOURCES += qxrd.cpp \
     qxrdroicoordinateslist.cpp \
     qxrddetectorpilatusremote.cpp \
     qxrdroicoordinateslistmodel.cpp \
-    qxrddetectorimageplot.cpp
+    qxrddetectorimageplot.cpp \
+    qxrdroitypedelegate.cpp
 
 OTHER_FILES += testImage.js
 

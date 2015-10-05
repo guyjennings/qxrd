@@ -24,7 +24,7 @@ int QxrdROICoordinatesListModel::columnCount(const QModelIndex &parent) const
   QxrdROICoordinatesListPtr coords(m_ROICoordinates);
 
   if (coords) {
-    return 6;
+    return ColCount;
   } else {
     return 0;
   }
@@ -39,17 +39,19 @@ QVariant QxrdROICoordinatesListModel::data(const QModelIndex &index, int role) c
 
   if (c) {
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
-      if (col == 0) {
+      if (col == NumCol) {
         return row;
-      } else if (col == 1) {
+      } else if (col == ValueCol) {
+        return c->get_Value();
+      } else if (col == TypeCol) {
         return c->get_RoiTypeName();
-      } else if (col == 2) {
+      } else if (col == CenterXCol) {
         return c->get_Coords().center().x();
-      } else if (col == 3) {
+      } else if (col == CenterYCol) {
         return c->get_Coords().center().y();
-      } else if (col == 4) {
+      } else if (col == WidthCol) {
         return c->get_Coords().width();
-      } else if (col == 5) {
+      } else if (col == HeightCol) {
         return c->get_Coords().height();
       }
     }
@@ -62,17 +64,19 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
 {
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole) {
-      if (section == 0) {
+      if (section == NumCol) {
         return "#";
-      } else if (section == 1) {
+      } else if (section == ValueCol) {
+        return "Value";
+      } else if (section == TypeCol) {
         return "Type";
-      } else if (section == 2) {
+      } else if (section == CenterXCol) {
         return "CenterX";
-      } else if (section == 3) {
+      } else if (section == CenterYCol) {
         return "CenterY";
-      } else if (section == 4) {
+      } else if (section == WidthCol) {
         return "Width";
-      } else if (section == 5) {
+      } else if (section == HeightCol) {
         return "Height";
       }
     } else if (role == Qt::TextAlignmentRole) {
@@ -88,7 +92,11 @@ Qt::ItemFlags QxrdROICoordinatesListModel::flags(const QModelIndex &index) const
   int row = index.row();
   int col = index.column();
 
-  if (col == 2 || col == 3 || col == 4 || col == 5) {
+  if (col == TypeCol ||
+      col == CenterXCol ||
+      col == CenterYCol ||
+      col == WidthCol ||
+      col == HeightCol) {
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
   } else {
     return QAbstractListModel::flags(index);
@@ -104,13 +112,17 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
 
   if (c) {
     if (role == Qt::EditRole || role == Qt::DisplayRole) {
-      if (col == 2) {
+      if (col == ValueCol) {
+        c->set_Value(value.toDouble());
+      } else if (col == TypeCol) {
+        c->selectNamedROIType(value.toString());
+      } else if (col == CenterXCol) {
         c->setCenterX(value.toDouble());
-      } else if (col == 3) {
+      } else if (col == CenterYCol) {
         c->setCenterY(value.toDouble());
-      } else if (col == 4) {
+      } else if (col == WidthCol) {
         c->setWidth(value.toDouble());
-      } else if (col == 5) {
+      } else if (col == HeightCol) {
         c->setHeight(value.toDouble());
       } else {
         return false;

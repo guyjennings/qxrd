@@ -40,6 +40,8 @@ public:
 signals:
 
 public slots:
+  void selectNamedROIType(QString nm);
+
   double left() const;
   double top() const;
   double right() const;
@@ -74,6 +76,9 @@ public:
 
   Q_PROPERTY(QRectF coords READ get_Coords WRITE set_Coords)
   QCEP_DOUBLE_RECT_PROPERTY(Coords)
+
+  Q_PROPERTY(double value READ get_Value WRITE set_Value STORED false)
+  QCEP_DOUBLE_PROPERTY(Value)
 };
 
 #endif // QXRDROICOORDINATES_H

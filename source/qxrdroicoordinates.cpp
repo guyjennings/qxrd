@@ -12,7 +12,8 @@ QxrdROICoordinates::QxrdROICoordinates(QcepSettingsSaverWPtr saver,
   : QcepObject("coords", exp.data()),
     m_RoiType(saver, this, "roiType", roiType, "ROI Type"),
     m_RoiTypeName(QcepSettingsSaverWPtr(), this, "roiTypeName", roiTypeName(roiType), "ROI Type Name"),
-    m_Coords(saver, this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords")
+    m_Coords(saver, this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords"),
+    m_Value(QcepSettingsSaverWPtr(), this, "value", 0, "ROI Value")
 {
 }
 
@@ -53,6 +54,17 @@ QString QxrdROICoordinates::roiTypeName(int roiType)
   }
 
   return "";
+}
+
+void QxrdROICoordinates::selectNamedROIType(QString nm)
+{
+  for (int i=0; i<roiTypeCount(); i++) {
+    if (roiTypeName(i) == nm) {
+      set_RoiType(i);
+      set_RoiTypeName(nm);
+      return;
+    }
+  }
 }
 
 int QxrdROICoordinates::roiTypeCount()

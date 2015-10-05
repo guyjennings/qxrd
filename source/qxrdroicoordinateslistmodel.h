@@ -31,6 +31,17 @@ public:
   QxrdROICoordinatesPtr roi(int row) const;
   void setRoi(int row, QxrdROICoordinatesPtr c);
 
+  enum {
+    NumCol,
+    ValueCol,
+    TypeCol,
+    CenterXCol,
+    CenterYCol,
+    WidthCol,
+    HeightCol,
+    ColCount
+  };
+
 signals:
 
 public slots:
