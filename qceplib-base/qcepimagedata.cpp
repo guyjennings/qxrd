@@ -388,7 +388,7 @@ double QcepImageDataBase::sumInEllipse(QRectF rect)
   int np = 0;
   double sum = 0;
 
-  for (int row=bt; row<=tp; row++) {
+  for (int row=tp; row<=bt; row++) {
     double y=row - c.y();
     double xx = a*sqrt(1 - pow(y/b,2));
     int x1 = qRound(c.x() - xx);
@@ -415,7 +415,7 @@ double QcepImageDataBase::averageInEllipse(QRectF rect)
   int np = 0;
   double sum = 0;
 
-  for (int row=bt; row<=tp; row++) {
+  for (int row=tp; row<=bt; row++) {
     double y=row - c.y();
     double xx = a*sqrt(1 - pow(y/b,2));
     int x1 = qRound(c.x() - xx);
