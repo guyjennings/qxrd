@@ -6,6 +6,8 @@
 
 class QxrdDetectorProxyListModel : public QAbstractListModel
 {
+  Q_OBJECT
+
 public:
   QxrdDetectorProxyListModel();
 

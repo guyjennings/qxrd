@@ -6,6 +6,8 @@
 
 class QxrdToDoList : public QAbstractListModel
 {
+  Q_OBJECT
+
 public:
   QxrdToDoList(QObject *parent=NULL);
 

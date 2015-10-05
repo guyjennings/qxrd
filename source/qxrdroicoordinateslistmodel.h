@@ -7,6 +7,8 @@
 
 class QxrdROICoordinatesListModel : public QAbstractListModel
 {
+  Q_OBJECT
+
 public:
   QxrdROICoordinatesListModel(QxrdROICoordinatesListWPtr coords);
 
