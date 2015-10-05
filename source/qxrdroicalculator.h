@@ -9,6 +9,7 @@
 #include "qxrdexperiment-ptr.h"
 #include <QScriptEngine>
 #include "qxrdroicalculator-ptr.h"
+#include "qxrdroicoordinateslistmodel-ptr.h"
 #include "qxrdroicoordinateslist-ptr.h"
 #include "qxrdroicoordinates-ptr.h"
 #include "qcepimagedata-ptr.h"
@@ -31,18 +32,20 @@ signals:
 
 public slots:
   QxrdROICoordinatesListPtr coordinates();
-  QxrdROICoordinatesPtr     coordinate(int i);
+  QxrdROICoordinatesListModelPtr coordinatesModel();
+  QxrdROICoordinatesPtr coordinate(int i);
 
   QVector<double>           values(QcepImageDataBasePtr img);
   double                    value(QcepImageDataBasePtr img, int i);
 
 private:
-  QMutex                    m_Mutex;
-  QcepSettingsSaverWPtr     m_Saver;
-  QxrdExperimentWPtr        m_Experiment;
-  QxrdDetectorProcessorWPtr m_Processor;
+  QMutex                         m_Mutex;
+  QcepSettingsSaverWPtr          m_Saver;
+  QxrdExperimentWPtr             m_Experiment;
+  QxrdDetectorProcessorWPtr      m_Processor;
 
-  QxrdROICoordinatesListPtr m_ROICoordinates;
+  QxrdROICoordinatesListPtr      m_ROICoordinates;
+  QxrdROICoordinatesListModelPtr m_ROICoordinatesModel;
 
 public:
 };

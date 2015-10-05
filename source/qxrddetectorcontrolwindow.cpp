@@ -72,8 +72,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     s
     QxrdROICalculatorPtr calc(dp->roiCalculator());
 
     if (calc) {
-      m_ROIModel = QxrdROICoordinatesListModelPtr(
-            new QxrdROICoordinatesListModel(calc->coordinates()));
+      m_ROIModel = calc->coordinatesModel();
 
       m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::TypeCol, new QxrdROITypeDelegate());
       m_ROIWidget->setModel(m_ROIModel.data());

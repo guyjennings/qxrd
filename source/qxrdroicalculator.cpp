@@ -2,6 +2,7 @@
 #include "qxrddebug.h"
 #include <stdio.h>
 #include "qcepmutexlocker.h"
+#include "qxrdroicoordinateslistmodel.h"
 #include "qxrdroicoordinateslist.h"
 #include <QtConcurrentMap>
 #include "qxrdroicoordinates.h"
@@ -12,7 +13,8 @@ QxrdROICalculator::QxrdROICalculator(QcepSettingsSaverWPtr saver, QxrdExperiment
     m_Saver(saver),
     m_Experiment(exp),
     m_Processor(proc),
-    m_ROICoordinates(new QxrdROICoordinatesList(saver, exp))
+    m_ROICoordinates(new QxrdROICoordinatesList(saver, exp)),
+    m_ROICoordinatesModel(new QxrdROICoordinatesListModel(m_ROICoordinates))
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdROICalculator::QxrdROICalculator(%p)\n", this);
@@ -78,12 +80,17 @@ void QxrdROICalculator::writeSettings(QSettings *settings, QString section)
   }
 }
 
+QxrdROICoordinatesListModelPtr QxrdROICalculator::coordinatesModel()
+{
+  return m_ROICoordinatesModel;
+}
+
 QxrdROICoordinatesListPtr QxrdROICalculator::coordinates()
 {
   return m_ROICoordinates;
 }
 
-QxrdROICoordinatesPtr     QxrdROICalculator::coordinate(int i)
+QxrdROICoordinatesPtr QxrdROICalculator::coordinate(int i)
 {
   if (m_ROICoordinates) {
     return m_ROICoordinates->roi(i);
@@ -136,6 +143,10 @@ double QxrdROICalculator::value(QcepImageDataBasePtr img, int i)
         res = img->sumInPeak(roi->get_Coords());
         break;
       }
+
+      QModelIndex index = m_ROICoordinatesModel->index(i, QxrdROICoordinatesListModel::ValueCol);
+
+      m_ROICoordinatesModel->setData(index, res, Qt::DisplayRole);
     }
   }
 
