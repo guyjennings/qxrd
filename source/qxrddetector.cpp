@@ -77,7 +77,7 @@ QxrdDetectorProcessorPtr QxrdDetector::processor()
   return m_Processor;
 }
 
-void QxrdDetector::printMessage(QString msg, QDateTime ts)
+void QxrdDetector::printMessage(QString msg, QDateTime ts) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -86,7 +86,7 @@ void QxrdDetector::printMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdDetector::criticalMessage(QString msg, QDateTime ts)
+void QxrdDetector::criticalMessage(QString msg, QDateTime ts) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -95,7 +95,7 @@ void QxrdDetector::criticalMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdDetector::statusMessage(QString msg, QDateTime ts)
+void QxrdDetector::statusMessage(QString msg, QDateTime ts) const
 {
   QxrdExperimentPtr exp(m_Experiment);
 

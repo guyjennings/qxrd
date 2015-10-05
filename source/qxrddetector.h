@@ -41,9 +41,9 @@ public:
 
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType);
 
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
