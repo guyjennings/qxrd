@@ -15,14 +15,10 @@ QWidget *QxrdROITypeDelegate::createEditor(QWidget *parent, const QStyleOptionVi
 {
   if (index.column() == QxrdROICoordinatesListModel::TypeCol) {
     QComboBox *editor = new QComboBox(parent);
-//    QMenu *editor = new QMenu(parent);
+
     for (int i=0; i<QxrdROICoordinates::roiTypeCount(); i++) {
       QString name = QxrdROICoordinates::roiTypeName(i);
       editor->addItem(name);
-
-//      if (name == roiTypeName) {
-//        editor->setCurrentIndex(i);
-//      }
     }
 
     return editor;
@@ -38,15 +34,15 @@ void QxrdROITypeDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
 
     if (cb) {
       QString roiTypeName = index.data().toString();
-//      int roiType = index.data(Qt::EditRole).toInt();
+
       int cbindex = cb->findText(roiTypeName);
 
       if (cbindex >= 0) {
         cb->setCurrentIndex(cbindex);
       }
 
-//      connect(cb, (void (QComboBox::*)(int)) &QComboBox::currentIndexChanged,
-//              this, &QxrdROITypeDelegate::typeChanged);
+      connect(cb, (void (QComboBox::*)(int)) &QComboBox::currentIndexChanged,
+              this, &QxrdROITypeDelegate::typeChanged);
     }
   } else {
     QStyledItemDelegate::setEditorData(editor, index);
