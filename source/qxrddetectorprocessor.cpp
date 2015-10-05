@@ -221,36 +221,81 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
                      .arg(img->get_FileName()));
       }
 
+      QTime tic;
+      tic.start();
+
       setAcquiredImageProperties(img, fileIndex, phase, nPhases, trig);
 
       QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
 
       if (get_SaveRawImages()) {
         doSaveRawImage(img, overflow);
+
+        int saveTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Save took %1 msec").arg(saveTime));
+        }
       }
 
       if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
         ctrl->displayNewData(image, overflow);
+
+        int displayTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Display took %1 msec").arg(displayTime));
+        }
       }
 
       if (get_PerformDarkSubtraction()) {
         img = doDarkSubtraction(img);
+
+        int subTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Subtraction took %1 msec").arg(subTime));
+        }
       }
 
       if (get_PerformBadPixels()) {
         img = doBadPixels(img);
+
+        int pxlTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
+        }
       }
 
       if (get_PerformGainCorrection()) {
         img = doGainCorrection(img);
+
+        int gainTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Gain correction took %1 msec").arg(gainTime));
+        }
       }
 
       if (get_CalculateROICounts()) {
         set_RoiCounts(doCalculateROICounts(img));
+
+        int roiTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
+        }
       }
 
       if (get_SaveSubtracted()) {
         doSaveSubtractedImage(img, overflow);
+
+        int saveTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Save Subtracted took %1 msec").arg(saveTime));
+        }
       }
 
       //    if (get_PerformIntegration()) {
@@ -306,8 +351,10 @@ void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
                               Q_ARG(QcepImageDataBasePtr, image));
   } else {
     if (image) {
-      printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\")")
-                   .arg(image->get_FileName()));
+      if (qcepDebug(DEBUG_ACQUIRE)) {
+        printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\")")
+                     .arg(image->get_FileName()));
+      }
     }
   }
 }
