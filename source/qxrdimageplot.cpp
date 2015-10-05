@@ -1343,3 +1343,16 @@ void QxrdImagePlot::updateROISelection(
     replot();
   }
 }
+
+void QxrdImagePlot::moveSelectedROICenter(double x, double y)
+{
+  if (m_ROIModel && m_ROISelection) {
+    int n = m_ROIModel->rowCount(QModelIndex());
+
+    for (int i=0; i<n; i++) {
+      if (m_ROISelection->rowIntersectsSelection(i,QModelIndex())) {
+        m_ROIModel->moveROICenter(i, x, y);
+      }
+    }
+  }
+}

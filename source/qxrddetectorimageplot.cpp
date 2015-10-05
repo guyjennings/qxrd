@@ -43,6 +43,7 @@ void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
     QAction *shRoi  = plotMenu.addAction("Show ROI Outlines?");
     shRoi->setCheckable(true);
     shRoi->setChecked(set->get_DisplayROI());
+    QAction *mvRoi  = plotMenu.addAction(tr("Move selected ROI centers to (%1,%2)").arg(x).arg(y));
     plotMenu.addSeparator();
 
     QAction *zap    = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
@@ -59,6 +60,8 @@ void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
       toggleShowMask();
     } else if (action == shRoi) {
       toggleShowROI();
+    } else if (action == mvRoi) {
+      moveSelectedROICenter(x,y);
     } else if (action == zap) {
       zapPixel(qRound(x), qRound(y));
     }

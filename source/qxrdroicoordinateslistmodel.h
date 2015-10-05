@@ -28,6 +28,8 @@ public:
 
   void editROI(int row);
 
+  void moveROICenter(int row, double x, double y);
+
   QxrdROICoordinatesPtr roi(int row) const;
   void setRoi(int row, QxrdROICoordinatesPtr c);
 

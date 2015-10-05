@@ -238,3 +238,18 @@ void QxrdROICoordinatesListModel::setRoi(int row, QxrdROICoordinatesPtr c)
     coords->setRoi(row, c);
   }
 }
+
+void QxrdROICoordinatesListModel::moveROICenter(int i, double x, double y)
+{
+  QxrdROICoordinatesListPtr coords(m_ROICoordinates);
+
+  if (coords) {
+    QxrdROICoordinatesPtr roi = coords->roi(i);
+
+    if (roi) {
+      roi->setCenter(QPointF(x,y));
+
+      emit dataChanged(index(i,0), index(i,columnCount(QModelIndex())));
+    }
+  }
+}

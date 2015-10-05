@@ -141,6 +141,9 @@ private:
   void updateROISelection(const QItemSelection &selected,
                           const QItemSelection &deselected);
 
+protected:
+  void moveSelectedROICenter(double x, double y);
+
 public:
   enum {
     PercentageMode,
