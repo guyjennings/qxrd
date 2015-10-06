@@ -121,6 +121,9 @@ protected:
 protected slots:
   void onIdleTimeout();
 
+signals:
+  void detectorStateChanged();
+
 private:
 //  enum { MegaBytes = 0x100000 };
 

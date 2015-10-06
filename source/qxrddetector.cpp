@@ -39,7 +39,10 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::QxrdDetector(%p)\n", this);
   }
+}
 
+void QxrdDetector::initialize()
+{
   connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
           this,           &QxrdDetector::startOrStop);
 
@@ -49,6 +52,13 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
     m_Processor =
         QxrdDetectorProcessorPtr(
           new QxrdDetectorProcessor(m_Saver, m_Experiment, exper->fileSaver(), sharedFromThis()));
+  }
+
+  QxrdAcquisitionPtr a(m_Acquisition);
+
+  if (a) {
+    connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
+            a.data(), &QxrdAcquisition::detectorStateChanged);
   }
 }
 

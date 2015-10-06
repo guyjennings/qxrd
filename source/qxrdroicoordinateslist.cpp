@@ -2,6 +2,7 @@
 #include "qxrdroicoordinates.h"
 #include "qcepmutexlocker.h"
 #include "qxrdexperiment.h"
+#include "qxrdacquisition.h"
 
 QxrdROICoordinatesList::QxrdROICoordinatesList(QcepSettingsSaverWPtr saver,
                                                QxrdExperimentWPtr    exp)
@@ -10,6 +11,19 @@ QxrdROICoordinatesList::QxrdROICoordinatesList(QcepSettingsSaverWPtr saver,
     m_Experiment(exp),
     m_RoiCount(saver, this, "roiCount", 0, "Number of ROIs")
 {
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdAcquisitionPtr acq(expt->acquisition());
+
+    if (acq) {
+      connect(prop_RoiCount(), &QcepIntProperty::valueChanged,
+              acq.data(),      &QxrdAcquisition::detectorStateChanged);
+
+      connect(this,            &QxrdROICoordinatesList::roiChanged,
+              acq.data(),      &QxrdAcquisition::detectorStateChanged);
+    }
+  }
 }
 
 QxrdROICoordinatesList::~QxrdROICoordinatesList()
@@ -128,5 +142,7 @@ void QxrdROICoordinatesList::setRoi(int i, QxrdROICoordinatesPtr c)
 {
   if (i >= 0 && i < m_ROICoordinates.count()) {
     m_ROICoordinates[i] = c;
+
+    emit roiChanged(i);
   }
 }
