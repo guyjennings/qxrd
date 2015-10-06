@@ -25,6 +25,7 @@ public:
   static void fromScriptValue(const QScriptValue &obj, QxrdROICoordinatesListPtr &coords);
 
 signals:
+  void roiChanged(int i);
 
 public slots:
   void clear();

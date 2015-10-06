@@ -10,7 +10,12 @@
 QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcquisitionWPtr acq)
   : m_Acquisition(acq)
 {
+  QxrdAcquisitionPtr acqr(m_Acquisition);
 
+  if (acqr) {
+    connect(acqr.data(), &QxrdAcquisition::detectorStateChanged,
+            this,        &QxrdAcquisitionScalerModel::forceFullUpdate);
+  }
 }
 
 int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
@@ -71,7 +76,7 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
     if (role == Qt::DisplayRole) {
       if (row == 0) {
         if (col == DescriptionCol) {
-          return "NIDAQ Inputs";
+          return "====== NIDAQ Inputs ======";
         }
       } else {
         row -= 1;
@@ -98,7 +103,7 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
             if (d && d->isEnabled()) {
               if (row == 0) {
                 if (col == DescriptionCol) {
-                  return tr("Detector %1 : %2").arg(det).arg(d->get_DetectorName());
+                  return tr("====== Detector %1 : %2 ======").arg(det).arg(d->get_DetectorName());
                 }
               } else {
                 row -= 1;
@@ -147,4 +152,11 @@ QVariant QxrdAcquisitionScalerModel::headerData(int section, Qt::Orientation ori
   }
 
   return QVariant();
+}
+
+void QxrdAcquisitionScalerModel::forceFullUpdate()
+{
+  beginResetModel();
+
+  endResetModel();
 }

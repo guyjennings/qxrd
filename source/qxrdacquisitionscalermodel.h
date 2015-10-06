@@ -26,6 +26,7 @@ public:
 signals:
 
 public slots:
+  void forceFullUpdate();
 
 private:
   QxrdAcquisitionWPtr m_Acquisition;
