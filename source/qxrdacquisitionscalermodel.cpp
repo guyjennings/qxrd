@@ -44,6 +44,7 @@ int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
 
       if (d && d->isEnabled()) {
         nRows += 1;
+        nRows += QxrdDetector::ExtraScalers;
         nRows += d->roiCount();
       }
     }
@@ -111,19 +112,23 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
               } else {
                 row -= 1;
 
-                int nROI = d->roiCount();
+                int nROI = d->roiCount() + QxrdDetector::ExtraScalers;
 
                 if (row < nROI) {
                   if (col == NumCol) {
                     return scalerchan+row;
                   } else if (col == ValueCol) {
-                    QxrdROICoordinatesPtr rr = d->roi(row);
+                    double val = d->scalerCounts(row);
 
-                    if (rr) {
-                      return rr->get_Value();
-                    }
+                    return val;
                   } else if (col == DescriptionCol) {
-                    return tr("Detector %1 : ROI %2").arg(det).arg(row);
+                    if (row == QxrdDetector::FileIndexScaler) {
+                      return tr("Detector %1 : File Index").arg(det);
+                    } else if (row == QxrdDetector::FilePhaseScaler) {
+                      return tr("Detector %1 : File Phase").arg(det);
+                    } else {
+                      return tr("Detector %1 : ROI %2").arg(det).arg(row - QxrdDetector::ExtraScalers);
+                    }
                   }
                 } else {
                   row -= nROI;

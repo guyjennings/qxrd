@@ -342,3 +342,12 @@ QcepDoubleVector QxrdDetector::scalerCounts()
     return QcepDoubleVector();
   }
 }
+
+double QxrdDetector::scalerCounts(int chan)
+{
+  if (m_Processor) {
+    return m_Processor->get_RoiCounts().value(chan);
+  } else {
+    return 0;
+  }
+}

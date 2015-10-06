@@ -52,6 +52,12 @@ public:
 
   void enqueueAcquiredFrame(QcepImageDataBasePtr img);
 
+  enum {
+    FileIndexScaler,
+    FilePhaseScaler,
+    ExtraScalers
+  };
+
 signals:
 
 public slots:
@@ -80,6 +86,7 @@ public slots:
   QxrdROICoordinatesPtr roi(int i);
 
   QcepDoubleVector scalerCounts();
+  double scalerCounts(int chan);
 
 protected:
   QcepSettingsSaverWPtr       m_Saver;
