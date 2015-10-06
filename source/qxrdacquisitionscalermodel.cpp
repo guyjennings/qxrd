@@ -10,7 +10,12 @@
 QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcquisitionWPtr acq)
   : m_Acquisition(acq)
 {
+  QxrdAcquisitionPtr a(m_Acquisition);
 
+  if (a) {
+    connect(a->prop_ScalerValues(), SIGNAL(valueChanged(QcepDoubleVector,int)),
+            this, SLOT(scalerValuesChanged)
+  }
 }
 
 int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
