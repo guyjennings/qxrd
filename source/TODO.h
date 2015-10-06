@@ -616,4 +616,7 @@ TODO("2015-10-05", "",
 TODO("2015-10-05", "",
      "Reimplement mask/dark/gain loading in detector initialization");
 
+TODO("2015-10-06", "",
+     "Make file index, phase number available as scaler channels");
+
 #endif // TODO_H
