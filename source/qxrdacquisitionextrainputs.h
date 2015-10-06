@@ -39,6 +39,7 @@ public:
 
 signals:
   void newDataAvailable();
+  void channelCountChanged();
 
 public slots:
   void prepareForAcquisition(QxrdAcquisitionParameterPackWPtr parms);

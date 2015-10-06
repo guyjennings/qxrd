@@ -241,6 +241,8 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
   if (saver) {
       saver->changed();
   }
+
+  emit channelCountChanged();
 }
 
 void QxrdAcquisitionExtraInputs::removeChannel(int ch)
@@ -252,6 +254,8 @@ void QxrdAcquisitionExtraInputs::removeChannel(int ch)
   if (saver) {
       saver->changed();
   }
+
+  emit channelCountChanged();
 }
 
 void QxrdAcquisitionExtraInputs::acquire()

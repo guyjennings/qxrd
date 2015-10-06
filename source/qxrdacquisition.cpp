@@ -104,6 +104,9 @@ void QxrdAcquisition::initialize()
         new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, myself()));
   m_AcquisitionExtraInputs -> initialize(m_AcquisitionExtraInputs);
 
+  connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
+          this, &QxrdAcquisition::extraInputsChanged);
+
   connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
           this, &QxrdAcquisition::onExposureTimeChanged);
 

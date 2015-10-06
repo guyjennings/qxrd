@@ -123,6 +123,7 @@ protected slots:
 
 signals:
   void detectorStateChanged();
+  void extraInputsChanged();
 
 private:
 //  enum { MegaBytes = 0x100000 };

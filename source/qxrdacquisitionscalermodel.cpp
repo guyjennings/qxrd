@@ -16,6 +16,9 @@ QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcquisitionWPtr acq)
     connect(acqr.data(),               &QxrdAcquisition::detectorStateChanged,
             this,                      &QxrdAcquisitionScalerModel::forceFullUpdate);
 
+    connect(acqr.data(),               &QxrdAcquisition::extraInputsChanged,
+            this,                      &QxrdAcquisitionScalerModel::forceFullUpdate);
+
     connect(acqr->prop_ScalerValues(), &QcepDoubleVectorProperty::valueChanged,
             this,                      &QxrdAcquisitionScalerModel::forceFullUpdate);
   }
@@ -23,7 +26,7 @@ QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcquisitionWPtr acq)
 
 int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
 {
-  int nRows = 1;
+  int nRows = 0;
 
   QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -35,7 +38,11 @@ int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
       xchans = xtra->channels();
     }
 
-    nRows += xchans.count();
+    int nXtra = xchans.count();
+
+    if (nXtra) {
+      nRows += nXtra+1;
+    }
 
     int nDet = acq->get_DetectorCount();
 
@@ -78,12 +85,14 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
     int nDet = acq->get_DetectorCount();
 
     if (role == Qt::DisplayRole) {
-      if (row == 0) {
+      if (nXtra && row == 0) {
         if (col == DescriptionCol) {
           return "====== NIDAQ Inputs ======";
         }
       } else {
-        row -= 1;
+        if (nXtra) {
+          row -= 1;
+        }
 
         if (row < nXtra) {
           if (col == NumCol) {
