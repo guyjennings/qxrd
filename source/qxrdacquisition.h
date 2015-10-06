@@ -224,6 +224,9 @@ public:
   Q_PROPERTY(bool     retryDropped READ get_RetryDropped WRITE set_RetryDropped)
   QCEP_BOOLEAN_PROPERTY(RetryDropped)
 
+  Q_PROPERTY(QcepDoubleVector scalerValues READ get_ScalerValues WRITE set_ScalerValues STORED false)
+  QCEP_DOUBLE_VECTOR_PROPERTY(ScalerValues)
+
 private:
   mutable QMutex                m_Mutex;
 

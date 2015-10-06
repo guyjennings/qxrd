@@ -1,3 +1,4 @@
+#include "qcepmacros.h"
 #include "qxrddetectorprocessor.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrator.h"
@@ -214,6 +215,11 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
                               Q_ARG(bool, trig));
   } else {
     if (image) {
+      QcepDoubleVector scalers;
+
+      scalers.append(fileIndex);
+      scalers.append(phase);
+
       QcepImageDataBasePtr img = image;
 
       if (qcepDebug(DEBUG_ACQUIRE)) {
@@ -279,7 +285,11 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
       }
 
       if (get_CalculateROICounts()) {
-        set_RoiCounts(doCalculateROICounts(img));
+        const QcepDoubleVector s = doCalculateROICounts(img);
+
+        scalers += s;
+
+        set_RoiCounts(scalers);
 
         int roiTime = tic.restart();
 

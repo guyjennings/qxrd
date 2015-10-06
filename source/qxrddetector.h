@@ -78,6 +78,8 @@ public slots:
   int roiCount();
   QxrdROICoordinatesPtr roi(int i);
 
+  QcepDoubleVector scalerCounts();
+
 protected:
   QcepSettingsSaverWPtr       m_Saver;
   QxrdExperimentWPtr          m_Experiment;

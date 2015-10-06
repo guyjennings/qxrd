@@ -323,3 +323,12 @@ QcepImageDataBasePtr QxrdDetector::acquireFrameIfAvailable()
 
   return res;
 }
+
+QcepDoubleVector QxrdDetector::scalerCounts()
+{
+  if (m_Processor) {
+    return m_Processor->get_RoiCounts();
+  } else {
+    return QcepDoubleVector();
+  }
+}

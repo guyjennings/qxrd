@@ -84,7 +84,7 @@ private:
   QcepImageDataBasePtr doDarkSubtraction    (QcepImageDataBasePtr img);
   QcepImageDataBasePtr doBadPixels          (QcepImageDataBasePtr img);
   QcepImageDataBasePtr doGainCorrection     (QcepImageDataBasePtr img);
-  QVector<double>      doCalculateROICounts (QcepImageDataBasePtr img);
+  QcepDoubleVector     doCalculateROICounts (QcepImageDataBasePtr img);
   void                 doSaveRawImage       (QcepImageDataBasePtr img, QcepMaskDataPtr ovf);
   void                 doSaveSubtractedImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf);
   void                 doSaveDarkImage      (QcepImageDataBasePtr img, QcepMaskDataPtr ovf);

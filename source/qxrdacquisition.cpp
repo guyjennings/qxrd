@@ -53,6 +53,7 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
     m_LiveViewAtIdle(saver, this, "liveViewAtIdle", false, "Live View during Idle"),
     m_AcquisitionCancelsLiveView(saver, this, "acquisitionCancelsLiveView", true, "Acquisition operations cancel live view"),
     m_RetryDropped(saver, this, "retryDropped", false, "Automatically retry dropped frames during acquisition"),
+    m_ScalerValues(QcepSettingsSaverWPtr(), this, "scalerValues", QcepDoubleVector(), "Scaler Values"),
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL),
     m_AcquisitionExtraInputs(NULL),
@@ -1253,6 +1254,18 @@ cancel:
     for (int d=0; d<nDet; d++) {
       dets[d]->endAcquisition();
     }
+
+    QVector<double> scalers;
+
+    if (synchronizedAcquisition()) {
+      scalers = synchronizedAcquisition()->outputVoltage();
+    }
+
+    for (int d=0; d<nDet; d++) {
+      scalers += dets[d]->scalerCounts();
+    }
+
+    set_ScalerValues(scalers);
 
     startIdling();
   }
