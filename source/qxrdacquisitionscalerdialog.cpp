@@ -19,6 +19,15 @@ QxrdAcquisitionScalerDialog::QxrdAcquisitionScalerDialog(QxrdAcquisitionWPtr acq
 
   if (m_Model) {
     m_AcquisitionScalerView->setModel(m_Model.data());
+    m_AcquisitionScalerView->horizontalHeader()->setStretchLastSection(true);
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    m_AcquisitionScalerView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_AcquisitionScalerView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+#else
+    m_AcquisitionScalerView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    m_AcquisitionScalerView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+#endif
   }
 }
 
