@@ -80,17 +80,26 @@ void QxrdROICalculator::writeSettings(QSettings *settings, QString section)
   }
 }
 
-QxrdROICoordinatesListModelPtr QxrdROICalculator::coordinatesModel()
+int QxrdROICalculator::roiCount()
+{
+  if (m_ROICoordinates) {
+    return m_ROICoordinates->get_RoiCount();
+  } else {
+    return 0;
+  }
+}
+
+QxrdROICoordinatesListModelPtr QxrdROICalculator::roiModel()
 {
   return m_ROICoordinatesModel;
 }
 
-QxrdROICoordinatesListPtr QxrdROICalculator::coordinates()
+QxrdROICoordinatesListPtr QxrdROICalculator::roiList()
 {
   return m_ROICoordinates;
 }
 
-QxrdROICoordinatesPtr QxrdROICalculator::coordinate(int i)
+QxrdROICoordinatesPtr QxrdROICalculator::roi(int i)
 {
   if (m_ROICoordinates) {
     return m_ROICoordinates->roi(i);

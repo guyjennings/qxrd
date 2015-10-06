@@ -9,6 +9,7 @@
 #include "qxrdexperiment.h"
 #include "qcepimagedata.h"
 #include "qxrdacquisition.h"
+#include "qxrdroicalculator.h"
 
 QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
                            QxrdExperimentWPtr    expt,
@@ -75,6 +76,36 @@ QxrdAcquisitionWPtr QxrdDetector::acquisition()
 QxrdDetectorProcessorPtr QxrdDetector::processor()
 {
   return m_Processor;
+}
+
+int QxrdDetector::roiCount()
+{
+  int res = 0;
+
+  if (m_Processor) {
+    QxrdROICalculatorPtr calc = m_Processor->roiCalculator();
+
+    if (calc) {
+      res = calc->roiCount();
+    }
+  }
+
+  return res;
+}
+
+QxrdROICoordinatesPtr QxrdDetector::roi(int i)
+{
+  QxrdROICoordinatesPtr res;
+
+  if (m_Processor) {
+    QxrdROICalculatorPtr calc = m_Processor->roiCalculator();
+
+    if (calc) {
+      res = calc->roi(i);
+    }
+  }
+
+  return res;
 }
 
 void QxrdDetector::printMessage(QString msg, QDateTime ts) const

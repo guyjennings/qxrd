@@ -16,6 +16,7 @@
 #include <QScriptEngine>
 #include <QSemaphore>
 #include "qcepimagequeue.h"
+#include "qxrdroicoordinates-ptr.h"
 
 class QxrdDetector : public QcepObject, public QEnableSharedFromThis<QxrdDetector>
 {
@@ -73,6 +74,9 @@ public slots:
   virtual void beginFrame();
   virtual QcepImageDataBasePtr acquireFrameIfAvailable();
   virtual QcepImageDataBasePtr acquireFrame();
+
+  int roiCount();
+  QxrdROICoordinatesPtr roi(int i);
 
 protected:
   QcepSettingsSaverWPtr       m_Saver;

@@ -31,9 +31,10 @@ public:
 signals:
 
 public slots:
-  QxrdROICoordinatesListPtr coordinates();
-  QxrdROICoordinatesListModelPtr coordinatesModel();
-  QxrdROICoordinatesPtr coordinate(int i);
+  int roiCount();
+  QxrdROICoordinatesListPtr roiList();
+  QxrdROICoordinatesListModelPtr roiModel();
+  QxrdROICoordinatesPtr roi(int i);
 
   QVector<double>           values(QcepImageDataBasePtr img);
   double                    value(QcepImageDataBasePtr img, int i);
