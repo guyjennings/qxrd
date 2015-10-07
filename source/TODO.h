@@ -619,4 +619,7 @@ TODO("2015-10-05", "",
 TODO("2015-10-06", "",
      "Make file index, phase number available as scaler channels");
 
+TODO("2015-10-07", "",
+     "Need to make sure detector image processing steps are not too slow");
+
 #endif // TODO_H
