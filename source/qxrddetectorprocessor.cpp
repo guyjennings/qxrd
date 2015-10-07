@@ -475,7 +475,7 @@ QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBaseP
     int width  = img->get_Width();
     int nres = img -> get_SummedExposures();
     int ndrk = dark -> get_SummedExposures();
-    int npixels = 0;
+    int npixels = width*height;
 
     if (nres <= 0) nres = 1;
 
@@ -489,16 +489,53 @@ QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBaseP
 
       double sumraw = 0, sumdark = 0;
 
-      for (int row=0; row<height; row++) {
-        for (int col=0; col<width; col++) {
-          double valraw  = img  -> getImageData(col, row);
-          double valdark = dark -> getImageData(col, row);
-          if (valraw == valraw && valdark == valdark) { // Check for NaNs
-            sumraw += valraw; sumdark += valdark;
-            npixels += 1;
-            double resval = valraw - ratio*valdark;
+      double  *resptr = result->data();
+      quint32 *drkptr = dark->data();
 
-            result->setImageData(col, row, resval);
+      QcepInt16ImageDataPtr i16 = qSharedPointerDynamicCast<QcepInt16ImageData>(img);
+
+      if (i16) {
+        quint16 *imgptr = i16->data();
+
+        for (int i=0; i<npixels; i++) {
+          double valraw = imgptr[i];
+          double valdark = drkptr[i];
+
+          sumraw  += valraw;
+          sumdark += valdark;
+
+          resptr[i] = valraw - ratio*valdark;
+        }
+      } else {
+        QcepInt32ImageDataPtr i32 = qSharedPointerDynamicCast<QcepInt32ImageData>(img);
+
+        if (i32) {
+          quint32 *imgptr = i32->data();
+
+          for (int i=0; i<npixels; i++) {
+            double valraw = imgptr[i];
+            double valdark = drkptr[i];
+
+            sumraw  += valraw;
+            sumdark += valdark;
+
+            resptr[i] = valraw - ratio*valdark;
+          }
+        } else {
+          npixels = 0;
+
+          for (int row=0; row<height; row++) {
+            for (int col=0; col<width; col++) {
+              double valraw  = img  -> getImageData(col, row);
+              double valdark = dark -> getImageData(col, row);
+              if (valraw == valraw && valdark == valdark) { // Check for NaNs
+                sumraw += valraw; sumdark += valdark;
+                npixels += 1;
+                double resval = valraw - ratio*valdark;
+
+                result->setImageData(col, row, resval);
+              }
+            }
           }
         }
       }
