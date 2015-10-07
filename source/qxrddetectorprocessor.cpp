@@ -245,16 +245,6 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
         }
       }
 
-      if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
-        ctrl->displayNewData(image, overflow);
-
-        int displayTime = tic.restart();
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Display took %1 msec").arg(displayTime));
-        }
-      }
-
       if (img && get_PerformDarkSubtraction()) {
         img = doDarkSubtraction(img);
 
@@ -282,6 +272,16 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
 
         if (qcepDebug(DEBUG_ACQUIRETIME)) {
           printMessage(tr("Gain correction took %1 msec").arg(gainTime));
+        }
+      }
+
+      if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+        ctrl->displayNewData(img, overflow);
+
+        int displayTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Display took %1 msec").arg(displayTime));
         }
       }
 
@@ -348,6 +348,8 @@ void QxrdDetectorProcessor::processDarkImage(QcepInt32ImageDataPtr image,
                      .arg(image->get_FileName()));
       }
 
+      setAcquiredImageProperties(image, fileIndex, -1, 0, true);
+
       if (get_SaveDarkImages()) {
         doSaveDarkImage(image, overflow);
 
@@ -366,9 +368,77 @@ void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
                               Q_ARG(QcepImageDataBasePtr, image));
   } else {
     if (image) {
+      QcepDoubleVector scalers;
+
+      scalers.append(-1);
+      scalers.append(-1);
+
+      QcepImageDataBasePtr img = image;
+
       if (qcepDebug(DEBUG_ACQUIRE)) {
         printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\")")
                      .arg(image->get_FileName()));
+      }
+
+      QTime tic;
+      tic.start();
+
+      setAcquiredImageProperties(img, -1, -1, 0, true);
+
+      QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+
+      if (img && get_PerformDarkSubtraction()) {
+        img = doDarkSubtraction(img);
+
+        int subTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Subtraction took %1 msec").arg(subTime));
+        }
+      }
+
+      if (img && get_PerformBadPixels()) {
+        img = doBadPixels(img);
+
+        int pxlTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
+        }
+      }
+
+      if (img && get_PerformGainCorrection()) {
+        img = doGainCorrection(img);
+
+        int gainTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Gain correction took %1 msec").arg(gainTime));
+        }
+      }
+
+      if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+        ctrl->displayNewData(img, QcepMaskDataWPtr());
+
+        int displayTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Display took %1 msec").arg(displayTime));
+        }
+      }
+
+      if (img && get_CalculateROICounts()) {
+        const QcepDoubleVector s = doCalculateROICounts(img);
+
+        scalers += s;
+
+        set_RoiCounts(scalers);
+
+        int roiTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
+        }
       }
     }
   }
