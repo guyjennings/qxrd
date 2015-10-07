@@ -783,7 +783,21 @@ void QxrdDetectorPerkinElmer::onBinningModeChanged()
 
     if (plugin && acq) {
       if (m_HeaderID == 14) {
-        int newMode = get_DetectorBinning();
+        int newMode = 1;
+
+        switch (get_DetectorBinning()) {
+        case QxrdDetectorThread::Binning1x1:
+          newMode = 1;
+          break;
+
+        case QxrdDetectorThread::Binning2x2Average:
+          newMode = 2 + 256;
+          break;
+
+        case QxrdDetectorThread::Binning2x2Summed:
+          newMode = 2 + 512;
+          break;
+        }
 
         printMessage(tr("Change binning mode to %1").arg(newMode));
 
