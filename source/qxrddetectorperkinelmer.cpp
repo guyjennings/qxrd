@@ -740,7 +740,7 @@ void QxrdDetectorPerkinElmer::stopDetector()
 
 void QxrdDetectorPerkinElmer::onExposureTimeChanged()
 {
-  if (checkDetectorEnabled() && checkPluginAvailable()) {
+  if (isEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
     QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -777,7 +777,7 @@ void QxrdDetectorPerkinElmer::onBinningModeChanged()
 {
 //  return;
 
-  if (checkDetectorEnabled() && checkPluginAvailable()) {
+  if (isEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
     QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -847,7 +847,7 @@ void QxrdDetectorPerkinElmer::onBinningModeChanged()
 
 void QxrdDetectorPerkinElmer::onCameraGainChanged()
 {
-  if (checkDetectorEnabled() && checkPluginAvailable()) {
+  if (isEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
     QxrdAcquisitionPtr  acq(m_Acquisition);
 
