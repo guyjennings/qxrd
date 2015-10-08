@@ -685,6 +685,27 @@ QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, Q
 }
 
 QCEP_DOC_FUNCTION(
+    "acquireScalers",
+    "vals <- acquireScalers()",
+    "Returns the scaler counts values for the latest acquisition operation",
+    "")
+
+QScriptValue QxrdScriptEngine::acquireScalersFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisitionPtr acq(eng->acquisition());
+
+    if (acq) {
+      return qScriptValueFromSequence(eng, acq->get_ScalerValues());
+    }
+  }
+
+  return QScriptValue();
+}
+
+QCEP_DOC_FUNCTION(
     "trigger",
     "trigger()",
     "Trigger triggered acquisition",
@@ -1817,6 +1838,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("acquireStatus", newFunction(acquireStatusFunc));
   globalObject().setProperty("processStatus", newFunction(processStatusFunc, 1));
   globalObject().setProperty("acquireCancel", newFunction(acquireCancelFunc));
+  globalObject().setProperty("acquireScalers", newFunction(acquireScalersFunc));
   globalObject().setProperty("trigger", newFunction(triggerFunc));
   globalObject().setProperty("exposureTime", newFunction(exposureTimeFunc, 1));
   globalObject().setProperty("summedExposures", newFunction(summedExposuresFunc, 1));
