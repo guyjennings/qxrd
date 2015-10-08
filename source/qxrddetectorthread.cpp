@@ -163,12 +163,34 @@ QStringList QxrdDetectorThread::gainModeNamesPE()
   return res;
 }
 
+QString QxrdDetectorThread::binningModeNamePE(int binningMode)
+{
+  QString res = "Unkown Binning";
+
+  switch (binningMode) {
+  case Binning1x1:
+    res = "No Binning";
+    break;
+
+  case Binning2x2Average:
+    res = "2x2 Averaged Binning";
+    break;
+
+  case Binning2x2Summed:
+    res = "2x2 Summed Binning";
+    break;
+  }
+
+  return res;
+}
+
 QStringList QxrdDetectorThread::binningModeNamesPE()
 {
   QStringList res;
 
-  res.append("No Binning");
-  res.append("2x2 Binning");
+  for (int i=0; i<BinningModeCount; i++) {
+    res.append(binningModeNamePE(i));
+  }
 
   return res;
 }

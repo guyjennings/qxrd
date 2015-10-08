@@ -39,6 +39,13 @@ public:
     GBIF_Scan_SubType
   } DetectorSubType;
 
+  typedef enum {
+    Binning1x1,
+    Binning2x2Average,
+    Binning2x2Summed,
+    BinningModeCount
+  } BinningModePE;
+
   static int detectorTypeCount();
   static QString detectorTypeName(int detectorType);
   static QStringList detectorTypeNames();
@@ -47,6 +54,8 @@ public:
   static QStringList detectorSubTypeNamesPE();
 
   static QStringList gainModeNamesPE();
+
+  static QString     binningModeNamePE(int binningMode);
   static QStringList binningModeNamesPE();
 
   static void pushDefaultsToProxy(int detectorType, QxrdDetectorProxyPtr proxy);

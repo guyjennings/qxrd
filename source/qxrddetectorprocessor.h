@@ -194,7 +194,7 @@ private:
   QxrdImagePlotSettingsPtr m_ImagePlotSettings;
 
   QcepDoubleImageDataPtr m_Data;
-  QcepDoubleImageDataPtr m_DarkFrame;
+  QcepInt32ImageDataPtr  m_DarkImage;
   QcepDoubleImageDataPtr m_BadPixels;
   QcepDoubleImageDataPtr m_GainMap;
   QcepDoubleImageDataPtr m_LiveData;

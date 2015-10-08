@@ -10,6 +10,7 @@
 #include "qxrdacquisition.h"
 #include <QDir>
 #include "qxrdfilesaver.h"
+#include "qcepallocator.h"
 
 QxrdDetectorProcessor::QxrdDetectorProcessor(
     QcepSettingsSaverWPtr saver,
@@ -244,17 +245,7 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
         }
       }
 
-      if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
-        ctrl->displayNewData(image, overflow);
-
-        int displayTime = tic.restart();
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Display took %1 msec").arg(displayTime));
-        }
-      }
-
-      if (get_PerformDarkSubtraction()) {
+      if (img && get_PerformDarkSubtraction()) {
         img = doDarkSubtraction(img);
 
         int subTime = tic.restart();
@@ -264,7 +255,7 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
         }
       }
 
-      if (get_PerformBadPixels()) {
+      if (img && get_PerformBadPixels()) {
         img = doBadPixels(img);
 
         int pxlTime = tic.restart();
@@ -274,7 +265,7 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
         }
       }
 
-      if (get_PerformGainCorrection()) {
+      if (img && get_PerformGainCorrection()) {
         img = doGainCorrection(img);
 
         int gainTime = tic.restart();
@@ -284,7 +275,17 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
         }
       }
 
-      if (get_CalculateROICounts()) {
+      if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+        ctrl->displayNewData(img, overflow);
+
+        int displayTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Display took %1 msec").arg(displayTime));
+        }
+      }
+
+      if (img && get_CalculateROICounts()) {
         const QcepDoubleVector s = doCalculateROICounts(img);
 
         scalers += s;
@@ -298,7 +299,7 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
         }
       }
 
-      if (get_SaveSubtracted()) {
+      if (img && get_SaveSubtracted()) {
         doSaveSubtractedImage(img, overflow);
 
         int saveTime = tic.restart();
@@ -347,9 +348,15 @@ void QxrdDetectorProcessor::processDarkImage(QcepInt32ImageDataPtr image,
                      .arg(image->get_FileName()));
       }
 
+      setAcquiredImageProperties(image, fileIndex, -1, 0, true);
+
       if (get_SaveDarkImages()) {
         doSaveDarkImage(image, overflow);
+
+        set_DarkImagePath(image->get_FileName());
       }
+
+      m_DarkImage = image;
     }
   }
 }
@@ -361,9 +368,77 @@ void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
                               Q_ARG(QcepImageDataBasePtr, image));
   } else {
     if (image) {
+      QcepDoubleVector scalers;
+
+      scalers.append(-1);
+      scalers.append(-1);
+
+      QcepImageDataBasePtr img = image;
+
       if (qcepDebug(DEBUG_ACQUIRE)) {
         printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\")")
                      .arg(image->get_FileName()));
+      }
+
+      QTime tic;
+      tic.start();
+
+      setAcquiredImageProperties(img, -1, -1, 0, true);
+
+      QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+
+      if (img && get_PerformDarkSubtraction()) {
+        img = doDarkSubtraction(img);
+
+        int subTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Subtraction took %1 msec").arg(subTime));
+        }
+      }
+
+      if (img && get_PerformBadPixels()) {
+        img = doBadPixels(img);
+
+        int pxlTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
+        }
+      }
+
+      if (img && get_PerformGainCorrection()) {
+        img = doGainCorrection(img);
+
+        int gainTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Gain correction took %1 msec").arg(gainTime));
+        }
+      }
+
+      if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+        ctrl->displayNewData(img, QcepMaskDataWPtr());
+
+        int displayTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Display took %1 msec").arg(displayTime));
+        }
+      }
+
+      if (img && get_CalculateROICounts()) {
+        const QcepDoubleVector s = doCalculateROICounts(img);
+
+        scalers += s;
+
+        set_RoiCounts(scalers);
+
+        int roiTime = tic.restart();
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
+        }
       }
     }
   }
@@ -376,9 +451,100 @@ QxrdImagePlotSettingsWPtr QxrdDetectorProcessor::imagePlotSettings()
 
 QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBasePtr img)
 {
-  printMessage("Dark Subtraction not yet implemented");
+  QcepInt32ImageDataPtr dark = m_DarkImage;
+  QcepImageDataBasePtr res = img;
 
-  return img;
+  if (img && dark) {
+    if (img->get_ExposureTime() != dark->get_ExposureTime()) {
+      printMessage("Exposure times of acquired data and dark image are different, skipping");
+      return img;
+    }
+
+    if (img->get_Width() != dark->get_Width() ||
+        img->get_Height() != dark->get_Height()) {
+      printMessage("Dimensions of acquired data and dark image are different, skipping");
+      return img;
+    }
+
+    if (img->get_CameraGain() != dark->get_CameraGain()) {
+      printMessage("Gains of acquired data and dark image are different, skipping");
+      return img;
+    }
+
+    int height = img->get_Height();
+    int width  = img->get_Width();
+    int nres = img -> get_SummedExposures();
+    int ndrk = dark -> get_SummedExposures();
+    int npixels = width*height;
+
+    if (nres <= 0) nres = 1;
+
+
+    double ratio = ((double) nres)/((double) ndrk);
+
+    QcepDoubleImageDataPtr result = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, width, height, NULL);
+
+    if (result) {
+      result->copyPropertiesFrom(img);
+
+      double sumraw = 0, sumdark = 0;
+
+      double  *resptr = result->data();
+      quint32 *drkptr = dark->data();
+
+      QcepInt16ImageDataPtr i16 = qSharedPointerDynamicCast<QcepInt16ImageData>(img);
+
+      if (i16) {
+        quint16 *imgptr = i16->data();
+
+        for (int i=0; i<npixels; i++) {
+          double valraw = imgptr[i];
+          double valdark = drkptr[i];
+
+          sumraw  += valraw;
+          sumdark += valdark;
+
+          resptr[i] = valraw - ratio*valdark;
+        }
+      } else {
+        QcepInt32ImageDataPtr i32 = qSharedPointerDynamicCast<QcepInt32ImageData>(img);
+
+        if (i32) {
+          quint32 *imgptr = i32->data();
+
+          for (int i=0; i<npixels; i++) {
+            double valraw = imgptr[i];
+            double valdark = drkptr[i];
+
+            sumraw  += valraw;
+            sumdark += valdark;
+
+            resptr[i] = valraw - ratio*valdark;
+          }
+        } else {
+          npixels = 0;
+
+          for (int row=0; row<height; row++) {
+            for (int col=0; col<width; col++) {
+              double valraw  = img  -> getImageData(col, row);
+              double valdark = dark -> getImageData(col, row);
+              if (valraw == valraw && valdark == valdark) { // Check for NaNs
+                sumraw += valraw; sumdark += valdark;
+                npixels += 1;
+                double resval = valraw - ratio*valdark;
+
+                result->setImageData(col, row, resval);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    res = result;
+  }
+
+  return res;
 }
 
 QcepImageDataBasePtr QxrdDetectorProcessor::doBadPixels(QcepImageDataBasePtr img)
