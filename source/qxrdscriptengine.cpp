@@ -698,7 +698,9 @@ QScriptValue QxrdScriptEngine::acquireScalersFunc(QScriptContext *context, QScri
     QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
-      return qScriptValueFromSequence(eng, acq->get_ScalerValues());
+      int i = context->argument(0).toInteger();
+
+      return QScriptValue(eng, acq->scalerValue(i));
     }
   }
 

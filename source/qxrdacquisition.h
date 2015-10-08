@@ -85,6 +85,8 @@ public slots:
 
   QString currentFileBase(int detNum);
 
+  double scalerValue(int i);
+
 public:
   virtual void setupExposureMenu(QDoubleSpinBox *cb);
 

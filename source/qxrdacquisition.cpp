@@ -1618,3 +1618,7 @@ void QxrdAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
 {
 }
 
+double QxrdAcquisition::scalerValue(int i)
+{
+  return get_ScalerValues().value(i);
+}
