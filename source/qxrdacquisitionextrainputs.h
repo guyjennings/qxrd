@@ -52,7 +52,7 @@ public slots:
   void appendChannel(int ch = -1);
   void removeChannel(int ch = -1);
 
-  QcepDoubleList  evaluateChannels();
+  QVector<double> evaluateChannels();
   double          evaluateChannel(int ch);
   QVector<double> readChannel(int ch);
   QVector<double> readXChannel();

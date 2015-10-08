@@ -1260,8 +1260,8 @@ cancel:
 
     QVector<double> scalers;
 
-    if (synchronizedAcquisition()) {
-      scalers = synchronizedAcquisition()->outputVoltage();
+    if (acquisitionExtraInputs()) {
+      scalers = acquisitionExtraInputs()->evaluateChannels();
     }
 
     for (int d=0; d<nDet; d++) {

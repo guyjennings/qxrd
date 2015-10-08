@@ -287,7 +287,7 @@ void QxrdAcquisitionExtraInputs::acquire()
 void QxrdAcquisitionExtraInputs::logToImage(QcepInt16ImageDataPtr img)
 {
   if (get_Enabled() && img) {
-    img->set_ExtraInputs(evaluateChannels());
+    img->set_ExtraInputs(evaluateChannels().toList());
   }
 }
 
@@ -302,9 +302,9 @@ void QxrdAcquisitionExtraInputs::finish()
   set_Enabled(false);
 }
 
-QcepDoubleList QxrdAcquisitionExtraInputs::evaluateChannels()
+QVector<double> QxrdAcquisitionExtraInputs::evaluateChannels()
 {
-  QcepDoubleList res;
+  QVector<double> res;
 
   for(int i=0; i<m_Channels.count(); i++) {
     QxrdAcquisitionExtraInputsChannelPtr chanp = channel(i);
