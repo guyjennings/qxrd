@@ -103,6 +103,9 @@ private:
   static QScriptValue mapUserFunctionFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue timeStampFunc(QScriptContext *context, QScriptEngine *engine);
 
+  static QScriptValue detectorFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue roiFunc(QScriptContext *context, QScriptEngine *engine);
+
   static QScriptValue dataObjectFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue dataGroupFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue dataArrayFunc(QScriptContext *context, QScriptEngine *engine);

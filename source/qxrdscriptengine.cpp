@@ -1567,6 +1567,58 @@ QScriptValue QxrdScriptEngine::dataImageFunc(QScriptContext *context, QScriptEng
   return QScriptValue();
 }
 
+QCEP_DOC_FUNCTION(
+    "detector",
+    "detector(n)",
+    "Returns a reference to the 'n'th detector",
+    "")
+
+QScriptValue QxrdScriptEngine::detectorFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisitionPtr acq(eng->acquisition());
+
+    if (acq) {
+      int n = context->argument(0).toInteger();
+
+      return engine->newQObject(acq->detector(n).data());
+    }
+  }
+
+  return QScriptValue();
+}
+
+QCEP_DOC_FUNCTION(
+    "roi",
+    "roi(n,m)",
+    "Returns a reference to the 'm'th ROI of the 'n'th detector",
+    ""
+    )
+
+QScriptValue QxrdScriptEngine::roiFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisitionPtr acq(eng->acquisition());
+
+    if (acq) {
+      int n = context->argument(0).toInteger();
+      int m = context->argument(0).toInteger();
+
+      QxrdDetectorPtr d = acq->detector(n);
+
+      if (d) {
+        return engine->newQObject(d->roi(m).data());
+      }
+    }
+  }
+
+  return QScriptValue();
+}
+
 QCEP_DOC_OBJECT(
     "JSON",
     "Qt Built-in JSON Parser"
@@ -1868,6 +1920,9 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
   globalObject().setProperty("mapUserFunction", newFunction(mapUserFunctionFunc, 1));
   globalObject().setProperty("timeStamp", newFunction(timeStampFunc, 1));
+
+  globalObject().setProperty("detector", newFunction(detectorFunc, 1));
+  globalObject().setProperty("roi", newFunction(roiFunc, 1));
 
   globalObject().setProperty("dataObject", newFunction(dataObjectFunc));
   globalObject().setProperty("dataGroup", newFunction(dataGroupFunc));
