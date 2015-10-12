@@ -73,9 +73,11 @@ OTHER_FILES += help/qxrdhelptext.html \
     qxrdexampleusergeometry.js \
     qxrdexampleuserabsorption.js \
     help/qxrdhelpuserfunctions.html \
+    qxrd_macrocounter.mac \
     calgrid.js \
     findring.js \
     dumpRings.js
+
 DISTFILES += qxrd.dox \
     download/index.php \
     images/*.* \
