@@ -1,0 +1,45 @@
+#
+# macro counter macros to run qxrd
+#
+
+global QXRD_PARS
+
+def qxrd_cmd(mne, key, p1, p2, unit) '{
+#  printf("qxrd_cmd(\"%s\", \"%s\", %s, %s, %s)\n", mne, key, p1, p2, unit)
+  
+  if (key == "prestart_all") {
+    QXRD_PARS[sprintf("%d,start",unit)]=1
+#    print "Prestart", QXRD_PARS
+  } else if (key == "start_one") {
+    addr = counter_par(mne, "address")
+    unit = counter_par(mne, "unit")
+    if (QXRD_PARS[sprintf("%d,start",unit)]) {
+#      printf ("Start acquire unit %d, addr %s\n", unit, addr)
+      if (addr) {
+        remote_eval(addr, sprintf("acquire(\"%s\",%g)", DATAFILE, p1))
+      }
+    }
+    QXRD_PARS[sprintf("%d,start",unit)]=0
+  } else if (key == "get_status") {
+    addr = counter_par(mne, "address")
+#    printf("get_status: ctrl %d, chan %d, addr %s\n", counter_par(mne, "unit"), counter_par(mne, "channel"), counter_par(mne, "address"))
+    if (addr) {
+      counting = remote_eval(addr, "acquireStatus(0.1)")==0
+      if (counting) {
+        printf("Waiting for %s\n", addr)
+      }
+      return counting 
+    } else {
+      return 0
+    }
+  } else if (key == "counts") {
+    addr = counter_par(mne, "address")
+    chan = counter_par(mne, "channel")
+    
+    if (addr) {
+      return remote_eval(addr, sprintf("acquireScalers(%g)",chan))
+    } else {
+      return 0;
+    }
+  }
+}'
