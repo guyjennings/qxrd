@@ -100,11 +100,11 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
       double divideBy2 = divide/2;
       int shift = (int)((double) phase*iSamples/360.0 + nphases) % iSamples;
 
-      m_OutputTimes.resize(iSamples+1);
-      m_OutputVoltage.resize(iSamples+1);
+      QVector<double> outputTimes(iSamples+1);
+      QVector<double> outputVoltage(iSamples+1);
 
       for (int i=0; i<=iSamples; i++) {
-        m_OutputTimes[i] = ((double)i)/((double) sampleRate);
+        outputTimes[i] = ((double)i)/((double) sampleRate);
       }
 
       switch (wfm) {
@@ -112,9 +112,9 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
         for (int ii=0; ii<iSamples; ii++) {
           int i = (ii+iSamples-shift) % iSamples;
           if (i<divide) {
-            m_OutputVoltage[ii] = minVal;
+            outputVoltage[ii] = minVal;
           } else {
-            m_OutputVoltage[ii] = maxVal;
+            outputVoltage[ii] = maxVal;
           }
         }
         break;
@@ -128,7 +128,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
           } else {
             x = M_PI+M_PI*(i-divide)/(iSamples-divide);
           }
-          m_OutputVoltage[ii] = minVal + (maxVal-minVal)*(1.0 - cos(x))/2.0;
+          outputVoltage[ii] = minVal + (maxVal-minVal)*(1.0 - cos(x))/2.0;
         }
         break;
 
@@ -136,9 +136,9 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
         for (int ii=0; ii<iSamples; ii++) {
           int i = (ii+iSamples-shift) % iSamples;
           if (i<divide) {
-            m_OutputVoltage[ii] = minVal + i*(maxVal-minVal)/divide;
+            outputVoltage[ii] = minVal + i*(maxVal-minVal)/divide;
           } else {
-            m_OutputVoltage[ii] = maxVal - (i-divide)*(maxVal-minVal)/(iSamples-divide);
+            outputVoltage[ii] = maxVal - (i-divide)*(maxVal-minVal)/(iSamples-divide);
           }
         }
         break;
@@ -147,11 +147,11 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
         for (int ii=0; ii<iSamples; ii++) {
           int i = (ii+iSamples-shift) % iSamples;
           if (i < divideBy2) {
-            m_OutputVoltage[ii] = minVal + i*(maxVal-minVal)/divideBy2;
+            outputVoltage[ii] = minVal + i*(maxVal-minVal)/divideBy2;
           } else if (i < (iSamples-divideBy2)) {
-            m_OutputVoltage[ii] = maxVal - (i-divideBy2)*(maxVal-minVal)/((iSamples-divide)/2);
+            outputVoltage[ii] = maxVal - (i-divideBy2)*(maxVal-minVal)/((iSamples-divide)/2);
           } else {
-            m_OutputVoltage[ii] = minVal - (iSamples-i)*(maxVal-minVal)/divideBy2;
+            outputVoltage[ii] = minVal - (iSamples-i)*(maxVal-minVal)/divideBy2;
           }
         }
         break;
@@ -160,17 +160,24 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
       default:
         for (int ii=0; ii<iSamples; ii++) {
           int i = (ii+iSamples-shift) % iSamples;
-          m_OutputVoltage[ii] = minVal + i*(maxVal-minVal)/iSamples;
+          outputVoltage[ii] = minVal + i*(maxVal-minVal)/iSamples;
         }
         break;
       }
 
-      m_OutputVoltage[iSamples] = m_OutputVoltage[0]; // Return output voltage to starting value at the end of the waveform
+      outputVoltage[iSamples] = outputVoltage[0]; // Return output voltage to starting value at the end of the waveform
 
       QxrdNIDAQPluginInterfacePtr nidaq(m_NIDAQPlugin);
 
       if (nidaq) {
-        nidaq->setAnalogWaveform(chan, sampleRate, m_OutputVoltage.data(), iSamples+1);
+        nidaq->setAnalogWaveform(chan, sampleRate, outputVoltage.data(), iSamples+1);
+      }
+
+      {
+        QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+        m_OutputTimes = outputTimes;
+        m_OutputVoltage = outputVoltage;
       }
     }
   }
@@ -249,10 +256,14 @@ void QxrdSynchronizedAcquisition::triggerOnce()
 
 QVector<double>  QxrdSynchronizedAcquisition::outputTimes()
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   return m_OutputTimes;
 }
 
 QVector<double>  QxrdSynchronizedAcquisition::outputVoltage()
 {
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
   return m_OutputVoltage;
 }
