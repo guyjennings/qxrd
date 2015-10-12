@@ -622,4 +622,7 @@ TODO("2015-10-06", "",
 TODO("2015-10-07", "",
      "Need to make sure detector image processing steps are not too slow");
 
+TODO("2015-10-12", "",
+     "Implement 'Live View at Idle' flags for multi-detector acquisition");
+
 #endif // TODO_H
