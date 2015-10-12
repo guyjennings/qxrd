@@ -156,12 +156,12 @@ void QxrdFileSaver::saveImageDataPrivate(QString name, QcepImageDataBasePtr imag
       QcepInt32ImageDataPtr i32image = qSharedPointerDynamicCast<QcepInt32ImageData>(image);
 
       if (i32image) {
-        saveInt32Data(name, i32image, overflow, canOverwrite);
+        saveRaw32DataPrivate(name, i32image, overflow, canOverwrite);
       } else {
         QcepInt16ImageDataPtr i16image = qSharedPointerDynamicCast<QcepInt16ImageData>(image);
 
         if (i16image) {
-          saveInt16Data(name, i16image, overflow, canOverwrite);
+          saveRaw16DataPrivate(name, i16image, overflow, canOverwrite);
         } else {
           if (g_Application) {
             g_Application->criticalMessage(tr("QxrdFileSaver::saveImageData: unknown image type"));
