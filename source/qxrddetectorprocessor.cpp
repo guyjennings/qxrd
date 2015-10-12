@@ -622,8 +622,6 @@ void QxrdDetectorProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img, Qcep
 
     fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
   }
-
-  printMessage("Save Subtracted Image not yet implemented");
 }
 
 QString QxrdDetectorProcessor::dataDirectory() const
