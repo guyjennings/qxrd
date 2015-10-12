@@ -9,14 +9,22 @@ def qxrd_cmd(mne, key, p1, p2, unit) '{
   
   if (key == "prestart_all") {
     QXRD_PARS[sprintf("%d,start",unit)]=1
+    if (QXRD_PARS["scanstart"]) {
+      QXRD_PARS[sprintf("%d,scanstart",unit)]=1
+    }
 #    print "Prestart", QXRD_PARS
   } else if (key == "start_one") {
+    QXRD_PARS["scanstart"]=0
     addr = counter_par(mne, "address")
     unit = counter_par(mne, "unit")
+    if (QXRD_PARS[sprintf("%d,scanstart",unit)]) {
+      qxrd_scan_start_handler(mne)
+      QXRD_PARS[sprintf("%d,scanstart",unit)]=0
+    }
     if (QXRD_PARS[sprintf("%d,start",unit)]) {
 #      printf ("Start acquire unit %d, addr %s\n", unit, addr)
       if (addr) {
-        remote_eval(addr, sprintf("acquire(\"%s\",%g)", DATAFILE, p1))
+        remote_eval(addr, sprintf("exposureTime(%g);acquire()", p1))
       }
     }
     QXRD_PARS[sprintf("%d,start",unit)]=0
@@ -26,7 +34,7 @@ def qxrd_cmd(mne, key, p1, p2, unit) '{
     if (addr) {
       counting = remote_eval(addr, "acquireStatus(0.1)")==0
       if (counting) {
-        printf("Waiting for %s\n", addr)
+#        printf("Waiting for %s\n", addr)
       }
       return counting 
     } else {
@@ -43,3 +51,42 @@ def qxrd_cmd(mne, key, p1, p2, unit) '{
     }
   }
 }'
+
+def qxrd_init '{
+  print "Setup QXRD Detector:"
+  QXRD_PARS["datadir"] = getsval("QXRD Data Directory?", QXRD_PARS["datadir"])
+  QXRD_PARS["scansub"] = yesno("Save data in scan-dependent subdirs?", QXRD_PARS["scansub"])
+  if (QXRD_PARS["scansub"]) {
+    QXRD_PARS["resetindex"] = yesno("Reset QXRD file index at start of each scan?", QXRD_PARS["resetindex"])
+    QXRD_PARS["scanfmt"] = getsval("Scan-dependent subdir name?", QXRD_PARS["scanfmt"])
+    QXRD_PARS["scanpat"] = getsval("Scan-dependent filename?", QXRD_PARS["scanpat"])
+  }
+
+  cdef("user_postscan_head", "qxrd_scan_head();", "qxrd", 0)
+}'
+
+def qxrd_scan_head() '{
+  QXRD_PARS["scanstart"]=1
+}'
+
+def qxrd_scan_start_handler(mne) '{
+  # printf("Start scan for unit %d, address %s\n", counter_par(mne,"unit"), counter_par(mne,"address"))
+  addr = counter_par(mne, "address")
+
+  if (QXRD_PARS["scansub"]) {
+    subdir = sprintf("%s/%s", QXRD_PARS["datadir"], sprintf(QXRD_PARS["scanfmt"],SCAN_N))
+  } else {
+    subdir = QXRD_PARS["datadir"]
+  }
+
+  if (addr) {
+    if (QXRD_PARS["scansub"] && QXRD_PARS["resetindex"]) {
+      if (QXRD_PARS["scanpat"]) {
+        remote_eval(addr, sprintf("filePattern(\"%s\")", sprintf(QXRD_PARS["scanpat"], SCAN_N)))
+      }
+      remote_eval(addr, "fileIndex(0)")
+    }
+    remote_eval(addr, sprintf("outputDirectory(\"%s\")", subdir))
+  }
+}'
+
