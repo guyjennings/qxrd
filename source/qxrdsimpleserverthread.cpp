@@ -15,6 +15,7 @@ QxrdSimpleServerThread::QxrdSimpleServerThread(QcepSettingsSaverWPtr saver, Qxrd
     printf("QxrdSimpleServerThread::QxrdSimpleServerThread(%p)\n", this);
   }
 
+  setObjectName("simpleserver");
 }
 
 QxrdSimpleServerThread::~QxrdSimpleServerThread()

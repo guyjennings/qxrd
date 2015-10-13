@@ -29,6 +29,8 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QcepSettingsSaverWPtr saver,
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionThread::QxrdAcquisitionThread(%p)\n", this);
   }
+
+  setObjectName("acquisition");
 }
 
 QxrdAcquisitionThread::~QxrdAcquisitionThread()

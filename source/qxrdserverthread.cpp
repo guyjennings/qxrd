@@ -17,6 +17,8 @@ QxrdServerThread::QxrdServerThread(QcepSettingsSaverWPtr saver, QxrdExperimentWP
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdServerThread::QxrdServerThread(%p)\n", this);
   }
+
+  setObjectName("specserver");
 }
 
 QxrdServerThread::~QxrdServerThread()

@@ -25,6 +25,8 @@ QxrdFileSaverThread::QxrdFileSaverThread(QcepAllocatorWPtr allocator)
   qRegisterMetaType< QVector<double> >("QVector<double>");
 
   m_Allocator = allocator;
+
+  setObjectName("fileSaver");
 }
 
 QxrdFileSaverThread::~QxrdFileSaverThread()

@@ -16,6 +16,8 @@ QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplicationWPtr app, QxrdExpe
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngineThread::QxrdScriptEngineThread(%p)\n", this);
   }
+
+  setObjectName("script");
 }
 
 QxrdScriptEngineThread::~QxrdScriptEngineThread()

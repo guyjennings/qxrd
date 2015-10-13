@@ -37,6 +37,8 @@ QxrdDetectorThread::QxrdDetectorThread(QcepSettingsSaverWPtr saver,
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorThread::QxrdDetectorThread(%p)\n", this);
   }
+
+  setObjectName(detectorTypeName(detType));
 }
 
 QxrdDetectorThread::~QxrdDetectorThread()

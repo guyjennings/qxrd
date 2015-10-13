@@ -13,6 +13,8 @@ QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread() :
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(%p)\n", this);
   }
+
+  setObjectName("updater");
 }
 
 QxrdFileBrowserModelUpdaterThread::~QxrdFileBrowserModelUpdaterThread()

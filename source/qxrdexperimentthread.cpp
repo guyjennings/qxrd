@@ -20,6 +20,8 @@ QxrdExperimentThread::QxrdExperimentThread(QString path, QxrdApplicationWPtr app
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperimentThread::QxrdExperimentThread(%p)\n", this);
   }
+
+  setObjectName("experiment");
 }
 
 QxrdExperimentThread::~QxrdExperimentThread()

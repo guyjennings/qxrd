@@ -22,6 +22,8 @@ QxrdDataProcessorThread::QxrdDataProcessorThread(QcepSettingsSaverWPtr saver,
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDataProcessorThread::QxrdDataProcessorThread(%p)\n", this);
   }
+
+  setObjectName("processor");
 }
 
 QxrdDataProcessorThread::~QxrdDataProcessorThread()

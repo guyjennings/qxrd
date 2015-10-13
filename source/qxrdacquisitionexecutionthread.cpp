@@ -11,6 +11,8 @@ QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcquisitionIn
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionThread::QxrdAcquisitionThread(%p)\n", this);
   }
+
+  setObjectName("acqExec");
 }
 
 QxrdAcquisitionExecutionThread::~QxrdAcquisitionExecutionThread()

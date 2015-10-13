@@ -839,7 +839,7 @@ void QxrdAcquisition::processImage(QString filePattern, QString extent, int file
 
 void QxrdAcquisition::processImage(const QxrdProcessArgs &args)
 {
-  QThread::currentThread()->setObjectName("processImage");
+//  QThread::currentThread()->setObjectName("processImage");
 
   if (qcepDebug(DEBUG_ACQUIRETIME)) {
     printMessage(tr("QxrdAcquisition::processImage %1 %2 start").arg(args.m_FilePattern).arg(args.m_FileIndex));
@@ -940,7 +940,7 @@ void QxrdAcquisition::doAcquire()
     QTime acqTimer;
     acqTimer.start();
 
-    QThread::currentThread()->setObjectName("doAcquire");
+//    QThread::currentThread()->setObjectName("doAcquire");
 
     stopIdling();
 
@@ -1283,7 +1283,7 @@ void QxrdAcquisition::doAcquireDark()
   QxrdDarkAcquisitionParameterPackPtr parmsp = darkAcquisitionParameterPack();
 
   if (parmsp) {
-    QThread::currentThread()->setObjectName("doAcquireDark");
+//    QThread::currentThread()->setObjectName("doAcquireDark");
 
     stopIdling();
 

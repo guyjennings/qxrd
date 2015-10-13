@@ -610,13 +610,13 @@ TODO("2015-09-22", "",
 TODO("2015-09-29", "",
      "Updates to saved settings not stored as properties do not trigger re-saves");
 
-TODO("2015-10-05", "",
+DONE("2015-10-05", "2015-10-13",
      "Implement masking in ROI calculations");
 
 TODO("2015-10-05", "",
      "Reimplement mask/dark/gain loading in detector initialization");
 
-TODO("2015-10-06", "",
+DONE("2015-10-06", "2015-10-13",
      "Make file index, phase number available as scaler channels");
 
 TODO("2015-10-07", "",
