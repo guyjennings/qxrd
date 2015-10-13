@@ -37,9 +37,9 @@ QVariant QxrdToDoList::data(const QModelIndex &index, int role) const
     } else if (col == ActiveColumn) {
       return item->isActive();
     } else if (col == InsertedDateColumn) {
-      return item->insertedDate();
+      return item->insertedDate().date();
     } else if (col == CompletedDateColumn) {
-      return item->completedDate();
+      return item->completedDate().date();
     } else if (col == DescriptionColumn) {
       return item->description();
     }
