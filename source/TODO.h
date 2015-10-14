@@ -579,10 +579,10 @@ TODO("2015-09-20", "",
 TODO("2015-09-20", "",
      "Implement ROI intensity calculations");
 
-TODO("2015-09-20", "",
+DONE("2015-09-20", "2015-10-14",
      "Implement UI to set up and visualize ROIs");
 
-TODO("2015-09-20", "",
+DONE("2015-09-20", "2015-10-14",
      "Implement routines to pass ROI values to spec as macro counter channels");
 
 TODO("2015-09-20", "",
@@ -592,7 +592,7 @@ DONE("2015-09-20", "2015-09-21",
      "Implement detector enable/disable\n"
      "Now working");
 
-TODO("2015-09-20", "",
+DONE("2015-09-20", "2015-10-14",
      "Implement multi-detector readout");
 
 TODO("2015-09-20", "",
@@ -613,10 +613,10 @@ TODO("2015-09-29", "",
 DONE("2015-10-05", "2015-10-13",
      "Implement masking in ROI calculations");
 
-TODO("2015-10-05", "",
+DONE("2015-10-05", "2015-10-14",
      "Reimplement mask/dark/gain loading in detector initialization");
 
-TODO("2015-10-06", "",
+DONE("2015-10-06", "2015-10-14",
      "Make file index, phase number available as scaler channels"
      " - global channels though, since they are identical for each detector");
 
