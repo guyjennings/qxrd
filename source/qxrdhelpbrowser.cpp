@@ -47,6 +47,30 @@ QVariant QxrdHelpBrowser::loadResource(int type, const QUrl &name)
 //            printf("QxrdHelpBrowser::loadResource res.length = %d\n", res.count());
 
             return res;
+          } else if (name.path() == "/help/macrocounter") {
+            QByteArray res = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
+                             "<html>\n"
+                             "  <head>\n"
+                             "    <title>QXRD Spec Macro Counter</title>\n"
+                             "  </head>\n"
+                             "\n"
+                             "  <body>\n"
+                             "  <h1>QXRD Spec Macro Counter</h1>\n"
+                             "    <p><code><pre>\n";
+
+            QFile macroFile(":/qxrd_macrocounter.mac");
+
+            if (macroFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+              res.append(macroFile.readAll());
+            } else {
+              res.append("Couldn't open macro file");
+            }
+
+            res.append("    </pre></code></p>\n"
+                       "  </body>\n"
+                       "</html>\n");
+
+            return res;
           }
         }
       }

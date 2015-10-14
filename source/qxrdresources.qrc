@@ -103,5 +103,7 @@
         <file>help/qxrdhelpuserfunctions.html</file>
         <file>help/images/script-editor.png</file>
         <file>images/lock-16x16.png</file>
+        <file>qxrd_macrocounter.mac</file>
+        <file>help/qxrdspecmacro.html</file>
     </qresource>
 </RCC>
