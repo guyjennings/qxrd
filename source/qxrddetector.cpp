@@ -242,7 +242,7 @@ void QxrdDetector::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType)
     proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty,   "detectorType",   "Detector Type",     detType);
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,        "enabled",        "Detector Enabled?", true);
     proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "detectorName",   "Detector Name",     "A " + QxrdDetectorThread::detectorTypeName(detType));
-    proxy->pushProperty(QxrdDetectorProxy::ExtensionProperty,      "extension",      "File extension",    "tif");
+//    proxy->pushProperty(QxrdDetectorProxy::ExtensionProperty,      "extension",      "File extension",    "tif");
   }
 }
 
@@ -255,7 +255,7 @@ void QxrdDetector::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty,   "detectorType",   "Detector Type",     get_DetectorType());
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,        "enabled",        "Detector Enabled?", get_Enabled());
     proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "detectorName",   "Detector Name",     get_DetectorName());
-    proxy->pushProperty(QxrdDetectorProxy::ExtensionProperty,      "extension",      "File extension",    get_Extension());
+//    proxy->pushProperty(QxrdDetectorProxy::ExtensionProperty,      "extension",      "File extension",    get_Extension());
   }
 }
 
@@ -265,7 +265,7 @@ void QxrdDetector::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
     set_Enabled(proxy->property("enabled").toBool());
     set_DetectorNumber(proxy->property("detectorNumber").toInt());
     set_DetectorName(proxy->property("detectorName").toString());
-    set_Extension(proxy->property("extension").toString());
+//    set_Extension(proxy->property("extension").toString());
   }
 }
 
