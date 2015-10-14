@@ -1245,6 +1245,8 @@ cancel:
 
     QVector<double> scalers;
 
+    scalers.append(get_FileIndex()-1);
+
     if (acquisitionExtraInputs()) {
       scalers = acquisitionExtraInputs()->evaluateChannels();
     }

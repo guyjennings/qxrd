@@ -26,7 +26,7 @@ QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcquisitionWPtr acq)
 
 int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
 {
-  int nRows = 0;
+  int nRows = 2;
 
   QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -51,7 +51,7 @@ int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
 
       if (d && d->isEnabled()) {
         nRows += 1;
-        nRows += QxrdDetector::ExtraScalers;
+//        nRows += QxrdDetector::ExtraScalers;
         nRows += d->roiCount();
       }
     }
@@ -85,63 +85,74 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
     int nDet = acq->get_DetectorCount();
 
     if (role == Qt::DisplayRole) {
-      if (nXtra && row == 0) {
+      if (row == 0) {
         if (col == DescriptionCol) {
-          return "====== NIDAQ Inputs ======";
+          return "====== Acquisition ======";
+        }
+      } else if (row == 1) {
+        if (col == NumCol) {
+          return 0;
+        } else if (col == ValueCol) {
+          return acq->get_FileIndex()-1;
+        } else if (col == DescriptionCol) {
+          return "File Index";
         }
       } else {
-        if (nXtra) {
-          row -= 1;
-        }
+        row -= 2;
+        scalerchan += 1;
 
-        if (row < nXtra) {
-          if (col == NumCol) {
-            return scalerchan+row;
-          } else if (col == ValueCol) {
-            QxrdAcquisitionExtraInputsChannelPtr chan = xchans.value(row);
-
-            if (chan) {
-              return chan->evaluateChannel();
-            }
-          } else if (col == DescriptionCol) {
-            return tr("NIDAQ Channel %1").arg(row);
+        if (nXtra && row == 0) {
+          if (col == DescriptionCol) {
+            return "====== NIDAQ Inputs ======";
           }
         } else {
-          row -= nXtra;
-          scalerchan += nXtra;
+          if (nXtra) {
+            row -= 1;
+          }
 
-          for (int det=0; det<nDet; det++) {
-            QxrdDetectorPtr d = acq->detector(det);
+          if (row < nXtra) {
+            if (col == NumCol) {
+              return scalerchan+row;
+            } else if (col == ValueCol) {
+              QxrdAcquisitionExtraInputsChannelPtr chan = xchans.value(row);
 
-            if (d && d->isEnabled()) {
-              if (row == 0) {
-                if (col == DescriptionCol) {
-                  return tr("====== Detector %1 : %2 ======").arg(det).arg(d->get_DetectorName());
-                }
-              } else {
-                row -= 1;
+              if (chan) {
+                return chan->evaluateChannel();
+              }
+            } else if (col == DescriptionCol) {
+              return tr("NIDAQ Channel %1").arg(row);
+            }
+          } else {
+            row -= nXtra;
+            scalerchan += nXtra;
 
-                int nROI = d->roiCount() + QxrdDetector::ExtraScalers;
+            for (int det=0; det<nDet; det++) {
+              QxrdDetectorPtr d = acq->detector(det);
 
-                if (row < nROI) {
-                  if (col == NumCol) {
-                    return scalerchan+row;
-                  } else if (col == ValueCol) {
-                    double val = d->scalerCounts(row);
-
-                    return val;
-                  } else if (col == DescriptionCol) {
-                    if (row == QxrdDetector::FileIndexScaler) {
-                      return tr("Detector %1 : File Index").arg(det);
-                    } else if (row == QxrdDetector::FilePhaseScaler) {
-                      return tr("Detector %1 : File Phase").arg(det);
-                    } else {
-                      return tr("Detector %1 : ROI %2").arg(det).arg(row - QxrdDetector::ExtraScalers);
-                    }
+              if (d && d->isEnabled()) {
+                if (row == 0) {
+                  if (col == DescriptionCol) {
+                    return tr("====== Detector %1 : %2 ======").arg(det).arg(d->get_DetectorName());
                   }
                 } else {
-                  row -= nROI;
-                  scalerchan += nROI;
+                  row -= 1;
+
+                  int nROI = d->roiCount();
+
+                  if (row < nROI) {
+                    if (col == NumCol) {
+                      return scalerchan+row;
+                    } else if (col == ValueCol) {
+                      double val = d->scalerCounts(row);
+
+                      return val;
+                    } else if (col == DescriptionCol) {
+                      return tr("Detector %1 : ROI %2").arg(det).arg(row);
+                    }
+                  } else {
+                    row -= nROI;
+                    scalerchan += nROI;
+                  }
                 }
               }
             }

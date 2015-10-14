@@ -218,8 +218,8 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
     if (image) {
       QcepDoubleVector scalers;
 
-      scalers.append(fileIndex);
-      scalers.append(phase);
+//      scalers.append(fileIndex);
+//      scalers.append(phase);
 
       QcepImageDataBasePtr img = image;
 
@@ -376,8 +376,8 @@ void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
         if (acq && acq->get_LiveViewAtIdle()) {
           QcepDoubleVector scalers;
 
-          scalers.append(-1);
-          scalers.append(-1);
+//          scalers.append(-1);
+//          scalers.append(-1);
 
           QcepImageDataBasePtr img = image;
 
