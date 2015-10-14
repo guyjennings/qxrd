@@ -368,76 +368,84 @@ void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
                               Q_ARG(QcepImageDataBasePtr, image));
   } else {
     if (image) {
-      QcepDoubleVector scalers;
+      QxrdExperimentPtr expt(m_Experiment);
 
-      scalers.append(-1);
-      scalers.append(-1);
+      if (expt) {
+        QxrdAcquisitionPtr acq(expt->acquisition());
 
-      QcepImageDataBasePtr img = image;
+        if (acq && acq->get_LiveViewAtIdle()) {
+          QcepDoubleVector scalers;
 
-      if (qcepDebug(DEBUG_ACQUIRE)) {
-        printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\")")
-                     .arg(image->get_FileName()));
-      }
+          scalers.append(-1);
+          scalers.append(-1);
 
-      QTime tic;
-      tic.start();
+          QcepImageDataBasePtr img = image;
 
-      setAcquiredImageProperties(img, -1, -1, 0, true);
+          if (qcepDebug(DEBUG_ACQUIRE)) {
+            printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\")")
+                         .arg(image->get_FileName()));
+          }
 
-      QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+          QTime tic;
+          tic.start();
 
-      if (img && get_PerformDarkSubtraction()) {
-        img = doDarkSubtraction(img);
+          setAcquiredImageProperties(img, -1, -1, 0, true);
 
-        int subTime = tic.restart();
+          QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
 
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Subtraction took %1 msec").arg(subTime));
-        }
-      }
+          if (img && get_PerformDarkSubtraction()) {
+            img = doDarkSubtraction(img);
 
-      if (img && get_PerformBadPixels()) {
-        img = doBadPixels(img);
+            int subTime = tic.restart();
 
-        int pxlTime = tic.restart();
+            if (qcepDebug(DEBUG_ACQUIRETIME)) {
+              printMessage(tr("Subtraction took %1 msec").arg(subTime));
+            }
+          }
 
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
-        }
-      }
+          if (img && get_PerformBadPixels()) {
+            img = doBadPixels(img);
 
-      if (img && get_PerformGainCorrection()) {
-        img = doGainCorrection(img);
+            int pxlTime = tic.restart();
 
-        int gainTime = tic.restart();
+            if (qcepDebug(DEBUG_ACQUIRETIME)) {
+              printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
+            }
+          }
 
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Gain correction took %1 msec").arg(gainTime));
-        }
-      }
+          if (img && get_PerformGainCorrection()) {
+            img = doGainCorrection(img);
 
-      if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
-        ctrl->displayNewData(img, QcepMaskDataWPtr());
+            int gainTime = tic.restart();
 
-        int displayTime = tic.restart();
+            if (qcepDebug(DEBUG_ACQUIRETIME)) {
+              printMessage(tr("Gain correction took %1 msec").arg(gainTime));
+            }
+          }
 
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Display took %1 msec").arg(displayTime));
-        }
-      }
+          if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+            ctrl->displayNewData(img, QcepMaskDataWPtr());
 
-      if (img && get_CalculateROICounts()) {
-        const QcepDoubleVector s = doCalculateROICounts(img);
+            int displayTime = tic.restart();
 
-        scalers += s;
+            if (qcepDebug(DEBUG_ACQUIRETIME)) {
+              printMessage(tr("Display took %1 msec").arg(displayTime));
+            }
+          }
 
-        set_RoiCounts(scalers);
+          if (img && get_CalculateROICounts()) {
+            const QcepDoubleVector s = doCalculateROICounts(img);
 
-        int roiTime = tic.restart();
+            scalers += s;
 
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
+            set_RoiCounts(scalers);
+
+            int roiTime = tic.restart();
+
+            if (qcepDebug(DEBUG_ACQUIRETIME)) {
+              printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
+            }
+          }
         }
       }
     }
