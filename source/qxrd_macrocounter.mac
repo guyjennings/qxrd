@@ -5,14 +5,19 @@
 global QXRD_PARS
 
 def qxrd_cmd(mne, key, p1, p2, unit) '{
-#  printf("qxrd_cmd(\"%s\", \"%s\", %s, %s, %s)\n", mne, key, p1, p2, unit)
-  
+  if (QXRD_PARS["debug"]) {
+    printf("qxrd_cmd(\"%s\", \"%s\", %s, %s, %s)\n", mne, key, p1, p2, unit)
+  }
+
   if (key == "prestart_all") {
     QXRD_PARS[sprintf("%d,start",unit)]=1
     if (QXRD_PARS["scanstart"]) {
       QXRD_PARS[sprintf("%d,scanstart",unit)]=1
     }
-#    print "Prestart", QXRD_PARS
+
+    if (QXRD_PARS["debug"]) {
+      print "Prestart", QXRD_PARS
+    }
   } else if (key == "start_one") {
     QXRD_PARS["scanstart"]=0
     addr = counter_par(mne, "address")
@@ -22,7 +27,9 @@ def qxrd_cmd(mne, key, p1, p2, unit) '{
       QXRD_PARS[sprintf("%d,scanstart",unit)]=0
     }
     if (QXRD_PARS[sprintf("%d,start",unit)]) {
-#      printf ("Start acquire unit %d, addr %s\n", unit, addr)
+      if (QXRD_PARS["debug"]) {
+        printf ("Start acquire unit %d, addr %s\n", unit, addr)
+      }
       if (addr) {
         remote_eval(addr, sprintf("exposureTime(%g);acquire()", p1))
       }
@@ -30,11 +37,13 @@ def qxrd_cmd(mne, key, p1, p2, unit) '{
     QXRD_PARS[sprintf("%d,start",unit)]=0
   } else if (key == "get_status") {
     addr = counter_par(mne, "address")
-#    printf("get_status: ctrl %d, chan %d, addr %s\n", counter_par(mne, "unit"), counter_par(mne, "channel"), counter_par(mne, "address"))
+    if (QXRD_PARS["debug"]) {
+      printf("get_status: ctrl %d, chan %d, addr %s\n", counter_par(mne, "unit"), counter_par(mne, "channel"), counter_par(mne, "address"))
+    }
     if (addr) {
       counting = remote_eval(addr, "acquireStatus(0.1)")==0
-      if (counting) {
-#        printf("Waiting for %s\n", addr)
+      if (counting && QXRD_PARS["debug"]) {
+        printf("Waiting for %s\n", addr)
       }
       return counting 
     } else {
@@ -52,7 +61,7 @@ def qxrd_cmd(mne, key, p1, p2, unit) '{
   }
 }'
 
-def qxrd_init '{
+def qxrd_setup '{
   print "Setup QXRD Detector:"
   QXRD_PARS["datadir"] = getsval("QXRD Data Directory?", QXRD_PARS["datadir"])
   QXRD_PARS["scansub"] = yesno("Save data in scan-dependent subdirs?", QXRD_PARS["scansub"])
@@ -61,7 +70,7 @@ def qxrd_init '{
     QXRD_PARS["scanfmt"] = getsval("Scan-dependent subdir name?", QXRD_PARS["scanfmt"])
     QXRD_PARS["scanpat"] = getsval("Scan-dependent filename?", QXRD_PARS["scanpat"])
   }
-
+  QXRD_PARS["debug"] = yesno("Extra debugging output?", QXRD_PARS["debug"])
   cdef("user_postscan_head", "qxrd_scan_head();", "qxrd", 0)
 }'
 
@@ -70,7 +79,10 @@ def qxrd_scan_head() '{
 }'
 
 def qxrd_scan_start_handler(mne) '{
-  # printf("Start scan for unit %d, address %s\n", counter_par(mne,"unit"), counter_par(mne,"address"))
+  if (QXRD_PARS["debug"]) {
+    printf("Start scan for unit %d, address %s\n", counter_par(mne,"unit"), counter_par(mne,"address"))
+  }
+
   addr = counter_par(mne, "address")
 
   if (QXRD_PARS["scansub"]) {
