@@ -553,24 +553,24 @@ TODO("2014-03-05", "",
 TODO("2014-03-05", "",
      "Investigate display update behaviour when scaling parameters changed");
 
-TODO("2015-09-18", "",
+DONE("2015-09-18", "2015-10-14",
      "Fix problem where the saved dark image path is incorrect if the "
      "dark image acquired was a duplicate and was renamed.  Also for masks, potentially");
 
-TODO("2015-09-20", "",
-     "Do we really need QxrdAcquisitionParameterPack and QxrdDarkAcquisitionParameterPack");
+DONE("2015-09-20", "2015-10-14",
+     "Do we really need QxrdAcquisitionParameterPack and QxrdDarkAcquisitionParameterPack - yes");
 
 TODO("2015-09-20", "",
      "Fix problems when copying dynamic properties between objects in different threads - get "
      "errors in debug builds because dynamic property changed events get sent.");
 
-TODO("2015-09-20", "",
+DONE("2015-09-20", "2015-10-14",
      "Enable sorting in TODO list view");
 
-TODO("2015-09-20", "",
+DONE("2015-09-20", "2015-10-14",
      "TODO List items should resize to contents, with word wrap");
 
-TODO("2015-09-20", "",
+DONE("2015-09-20", "2015-10-14",
      "Implement separate processing chain for acquired data, attached to each detector");
 
 TODO("2015-09-20", "",
@@ -616,13 +616,17 @@ DONE("2015-10-05", "2015-10-13",
 TODO("2015-10-05", "",
      "Reimplement mask/dark/gain loading in detector initialization");
 
-DONE("2015-10-06", "2015-10-13",
-     "Make file index, phase number available as scaler channels");
+TODO("2015-10-06", "",
+     "Make file index, phase number available as scaler channels"
+     " - global channels though, since they are identical for each detector");
 
 TODO("2015-10-07", "",
      "Need to make sure detector image processing steps are not too slow");
 
 DONE("2015-10-12", "2015-10-14",
      "Implement 'Live View at Idle' flags for multi-detector acquisition");
+
+TODO("2015-10-14", "",
+     "Implement different output file format options");
 
 #endif // TODO_H
