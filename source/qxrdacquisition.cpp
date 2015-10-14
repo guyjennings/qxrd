@@ -37,8 +37,6 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
     m_FileOverflowWidth(saver, this, "fileOverflowWidth", 5, "Digits in Overflow Index Field"),
     m_DetectorNumberWidth(saver, this, "detectorNumberWidth", 2, "Digits in detector number field"),
     m_FileBase(saver, this,"fileBase","", "File Base"),
-//    m_NRows(saver, this, "nRows", 2048, "Number of Rows"),
-//    m_NCols(saver, this, "nCols", 2048, "Number of Cols"),
     m_OverflowLevel(saver, this, "overflowLevel", 65500, "Overflow level (per exposure)"),
     m_Raw16SaveTime(saver, this,"raw16SaveTime", 0.1, "Time to save 16 bit images"),
     m_Raw32SaveTime(saver, this,"raw32SaveTime", 0.2, "Time to save 32 bit images"),
@@ -756,19 +754,6 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, QString extent, in
 void QxrdAcquisition::processImage(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
 {
   if (image) {
-//    int w=image->get_Width(), h=image->get_Height();
-
-//    QcepInt32ImageDataPtr proc = QcepAllocator::newInt32Image(m_Allocator, QcepAllocator::AllocateFromReserve, w,h);
-//    QcepMaskDataPtr ovf = QcepAllocator::newMask(m_Allocator, QcepAllocator::AllocateFromReserve, w,h, 0);
-
-//    if (proc == NULL || ovf == NULL) {
-//      indicateDroppedFrame(0);
-//      return;
-//    }
-
-//    proc->copyFrom(image);
-//    overflow->copyMaskTo(ovf);
-
     if (qcepDebug(DEBUG_ACQUIRE) || qcepDebug(DEBUG_ACQUIRETIME)) {
       printMessage(tr("processAcquiredImage(%1,%2) %3 summed exposures")
                    .arg(fileIndex).arg(phase).arg(image->get_SummedExposures()));
@@ -939,8 +924,6 @@ void QxrdAcquisition::doAcquire()
   if (parmsp) {
     QTime acqTimer;
     acqTimer.start();
-
-//    QThread::currentThread()->setObjectName("doAcquire");
 
     stopIdling();
 
@@ -1283,8 +1266,6 @@ void QxrdAcquisition::doAcquireDark()
   QxrdDarkAcquisitionParameterPackPtr parmsp = darkAcquisitionParameterPack();
 
   if (parmsp) {
-//    QThread::currentThread()->setObjectName("doAcquireDark");
-
     stopIdling();
 
     QString fileBase = parmsp->fileBase();
@@ -1478,105 +1459,8 @@ void QxrdAcquisition::onIdleTimeout()
         }
       }
     }
-//    get_ExposureTime());
-//    QxrdDataProcessorPtr proc(m_DataProcessor);
-
-//    if (res && proc) {
-//      res -> set_ExposureTime(get_ExposureTime());
-//      res -> set_DateTime(QDateTime::currentDateTime());
-//      res -> set_HBinning(1);
-//      res -> set_VBinning(1);
-//      res -> set_DataType(QcepInt32ImageData::Raw32Data);
-//      res -> set_UserComment1(get_UserComment1());
-//      res -> set_UserComment2(get_UserComment2());
-//      res -> set_UserComment3(get_UserComment3());
-//      res -> set_UserComment4(get_UserComment4());
-//      res -> set_ObjectSaved(false);
-
-//      proc->idleInt16Image(res, this->get_LiveViewAtIdle());
-//    }
   }
 }
-
-//void QxrdAcquisition::flushImageQueue()
-//{
-//  int n = m_NAcquiredImages.available();
-//  m_NAcquiredImages.acquire(n);
-
-//  for (int i=0; i<n; i++) {
-//    m_AcquiredImages.dequeue();
-//  }
-//}
-
-//QcepInt16ImageDataPtr QxrdAcquisition::acquireFrame(double exposure)
-//{
-//  if (qcepDebug(DEBUG_ACQUIRE)) {
-//    QcepAllocatorPtr alloc(m_Allocator);
-
-//    if (alloc) {
-//      printMessage(tr("acquireFrame(%1) : allocated %2 MB : %3 images available")
-//                   .arg(exposure)
-//                   .arg(alloc->allocatedMemoryMB())
-//                   .arg(m_NAcquiredImages.available())
-//                   );
-//    }
-//  }
-
-//  m_NAcquiredImages.acquire(1);
-
-//  QcepInt16ImageDataPtr res = m_AcquiredImages.dequeue();
-
-//  if (qcepDebug(DEBUG_EXTRAINPUTS) && res) {
-//    QcepDoubleList extra = res->get_ExtraInputs();
-
-//    for (int i=0; i<extra.count(); i++) {
-//      printMessage(tr("QxrdAcquisition::acquireFrame : Extra Inputs[%1] = %2").arg(i).arg(extra[i]));
-//    }
-//  }
-
-//  return res;
-//}
-
-//QcepInt16ImageDataPtr QxrdAcquisition::acquireFrameIfAvailable(double exposure)
-//{
-//  if (qcepDebug(DEBUG_ACQUIRE)) {
-//    QcepAllocatorPtr alloc(m_Allocator);
-
-//    if (alloc) {
-//      printMessage(tr("acquireFrameIfAvailable(%1) : allocated %2 MB").arg(exposure).arg(alloc->allocatedMemoryMB()));
-//    }
-//  }
-
-//  QcepInt16ImageDataPtr res;
-
-//  while (m_NAcquiredImages.available() >= 1) {
-//    res = acquireFrame(exposure);
-//  }
-
-//  return res;
-//}
-
-//void QxrdAcquisition::enqueueAcquiredFrame(QcepInt16ImageDataPtr img)
-//{
-//  if (m_AcquisitionExtraInputs) {
-//    m_AcquisitionExtraInputs->acquire();
-//    m_AcquisitionExtraInputs->logToImage(img);
-//  }
-
-//  if (qcepDebug(DEBUG_EXTRAINPUTS) && img) {
-//    QcepDoubleList extra = img->get_ExtraInputs();
-
-//    printMessage(tr("QxrdAcquisition::enqueueAcquiredFrame : %1 Extra Inputs").arg(extra.count()));
-
-//    for (int i=0; i<extra.count(); i++) {
-//      printMessage(tr("QxrdAcquisition::enqueueAcquiredFrame : Extra Inputs[%1] = %2").arg(i).arg(extra[i]));
-//    }
-//  }
-
-//  m_AcquiredImages.enqueue(img);
-
-//  m_NAcquiredImages.release(1);
-//}
 
 void QxrdAcquisition::Message(QString msg)
 {

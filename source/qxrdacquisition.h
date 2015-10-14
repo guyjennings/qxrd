@@ -57,7 +57,6 @@ public slots:
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
-  //  void cancelDark();
   void clearDropped();
 
   void shutdown();
@@ -128,12 +127,6 @@ signals:
   void extraInputsChanged();
 
 private:
-//  enum { MegaBytes = 0x100000 };
-
-//  QcepInt16ImageDataPtr acquireFrame(double exposure);
-//  QcepInt16ImageDataPtr acquireFrameIfAvailable(double exposure);
-//  void flushImageQueue();
-
   virtual void stopIdling();
   virtual void startIdling();
 
@@ -179,17 +172,8 @@ public:
   Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase)
   QCEP_STRING_PROPERTY(FileBase)
 
-//  Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)
-//  QCEP_INTEGER_PROPERTY(NRows)
-
-//  Q_PROPERTY(int     nCols      READ get_NCols WRITE set_NCols)
-//  QCEP_INTEGER_PROPERTY(NCols)
-
   Q_PROPERTY(int     overflowLevel      READ get_OverflowLevel WRITE set_OverflowLevel)
   QCEP_INTEGER_PROPERTY(OverflowLevel)
-
-//  Q_PROPERTY(int     acquireDark      READ get_AcquireDark WRITE set_AcquireDark STORED false)
-//  QCEP_INTEGER_PROPERTY(AcquireDark)
 
   Q_PROPERTY(double     raw16SaveTime    READ get_Raw16SaveTime WRITE set_Raw16SaveTime)
   QCEP_DOUBLE_PROPERTY(Raw16SaveTime)
