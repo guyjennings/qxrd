@@ -45,6 +45,7 @@ public:
     DoubleProperty,
     DirectoryProperty,
     FilenameProperty,
+    ExtensionProperty,
     FixedIntegerProperty,
     PEDetNumProperty,
     PESubTypeProperty,

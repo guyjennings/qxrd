@@ -119,6 +119,14 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
     propertyEditor = le;
     button = pb;
 
+  } else if (type == QxrdDetectorProxy::ExtensionProperty) {
+    QComboBox *cb = new QComboBox();
+    cb -> addItem("tiff");
+    cb -> addItem("cbf");
+    cb -> setCurrentText(value.toString());
+
+    propertyEditor = cb;
+
   } else if (type == QxrdDetectorProxy::PEDetNumProperty) {
     QSpinBox *sb = new QSpinBox();
     sb -> setMinimum(-1);
@@ -227,7 +235,11 @@ QVariant QxrdDetectorConfigurationDialog::propertyValue(int propType, int i)
   QComboBox *bx = qobject_cast<QComboBox*>(w);
 
   if (bx) {
-    return bx->currentIndex();
+    if (propType == QxrdDetectorProxy::ExtensionProperty) {
+      return bx->currentText();
+    } else {
+      return bx->currentIndex();
+    }
   }
 
   return QVariant();
