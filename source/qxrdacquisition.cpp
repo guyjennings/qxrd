@@ -1248,7 +1248,7 @@ cancel:
     scalers.append(get_FileIndex()-1);
 
     if (acquisitionExtraInputs()) {
-      scalers = acquisitionExtraInputs()->evaluateChannels();
+      scalers += acquisitionExtraInputs()->evaluateChannels();
     }
 
     for (int d=0; d<nDet; d++) {

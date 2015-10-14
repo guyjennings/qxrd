@@ -163,7 +163,7 @@ QxrdROICalculatorPtr QxrdDetectorProcessor::roiCalculator()
   return m_ROICalculator;
 }
 
-QcepDoubleImageDataPtr QxrdDetectorProcessor::data()
+QcepImageDataBasePtr QxrdDetectorProcessor::data()
 {
   return m_Data;
 }
@@ -251,10 +251,10 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
                               Q_ARG(bool, trig));
   } else {
     if (image) {
-      QcepDoubleVector scalers;
+      m_Data     = image;
+      m_Overflow = overflow;
 
-//      scalers.append(fileIndex);
-//      scalers.append(phase);
+      QcepDoubleVector scalers;
 
       QcepImageDataBasePtr img = image;
 
@@ -410,9 +410,6 @@ void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
 
         if (acq && acq->get_LiveViewAtIdle()) {
           QcepDoubleVector scalers;
-
-//          scalers.append(-1);
-//          scalers.append(-1);
 
           QcepImageDataBasePtr img = image;
 

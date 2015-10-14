@@ -54,7 +54,7 @@ public slots:
 
   void processIdleImage(QcepImageDataBasePtr image);
 
-  QcepDoubleImageDataPtr data();
+  QcepImageDataBasePtr   data();
   QcepInt32ImageDataPtr  dark();
   QcepDoubleImageDataPtr badPixels();
   QcepDoubleImageDataPtr gainCorrection();
@@ -206,7 +206,7 @@ private:
 
   QxrdImagePlotSettingsPtr m_ImagePlotSettings;
 
-  QcepDoubleImageDataPtr m_Data;
+  QcepImageDataBasePtr   m_Data;
   QcepInt32ImageDataPtr  m_DarkImage;
   QcepDoubleImageDataPtr m_BadPixels;
   QcepDoubleImageDataPtr m_GainMap;
