@@ -6,6 +6,7 @@
 #include "qxrdroicalculator-ptr.h"
 #include "qxrdroicalculator.h"
 #include <QMessageBox>
+#include <QFileDialog>
 #include "qxrdroicoordinates.h"
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
@@ -66,6 +67,18 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     s
     dp->prop_DisplayROIBorders()       -> linkTo(m_DisplayROIBorders);
 
     connect(dp->prop_DisplayROIBorders(), &QcepBoolProperty::valueChanged, this, &QxrdDetectorControlWindow::updateROIDisplay);
+
+    connect(m_BrowseMask,          &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseMask);
+    connect(m_ClearMask,           &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearMask);
+    connect(m_BrowseDarkImage,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseDark);
+    connect(m_ClearDarkImage,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearDark);
+    connect(m_BrowseBadPixels,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseBadPixels);
+    connect(m_ClearBadPixels,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearBadPixels);
+    connect(m_BrowseGainImage,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseGainCorrection);
+    connect(m_ClearGainImage,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearGainCorrection);
+
+    connect(m_ActionLoadDarkImage, &QAction::triggered, this, &QxrdDetectorControlWindow::doBrowseDark);
+    connect(m_ActionLoadMask,      &QAction::triggered, this, &QxrdDetectorControlWindow::doBrowseMask);
 
     updateROIDisplay(dp->get_DisplayROIBorders());
 
@@ -332,4 +345,112 @@ void QxrdDetectorControlWindow::displayNewMask(QcepMaskDataPtr mask)
 void QxrdDetectorControlWindow::updateROIDisplay(bool show)
 {
   m_DetectorImage -> enableROIDisplay(show);
+}
+
+void QxrdDetectorControlWindow::doBrowseMask()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    QString newPath = QFileDialog::getOpenFileName(this, "Select Mask Image",
+                                                   dp->get_MaskPath());
+
+    if (newPath.length() > 0) {
+      dp->set_MaskPath(newPath);
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doClearMask()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    int res = QMessageBox::information(this, "Clear Mask?", "Do you really want to clear the mask?", QMessageBox::Ok, QMessageBox::Cancel);
+
+    if (res == QMessageBox::Ok) {
+      dp->set_MaskPath("");
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doBrowseDark()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    QString newPath = QFileDialog::getOpenFileName(this, "Select Dark Image",
+                                                   dp->get_DarkImagePath());
+
+    if (newPath.length() > 0) {
+      dp->set_DarkImagePath(newPath);
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doClearDark()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    int res = QMessageBox::information(this, "Clear Dark?", "Do you really want to clear the dark image?", QMessageBox::Ok, QMessageBox::Cancel);
+
+    if (res == QMessageBox::Ok) {
+      dp->set_DarkImagePath("");
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doBrowseBadPixels()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    QString newPath = QFileDialog::getOpenFileName(this, "Select Bad Pixels Image",
+                                                   dp->get_BadPixelsPath());
+
+    if (newPath.length() > 0) {
+      dp->set_BadPixelsPath(newPath);
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doClearBadPixels()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    int res = QMessageBox::information(this, "Clear Bad Pixels?", "Do you really want to clear the bad pixels image?", QMessageBox::Ok, QMessageBox::Cancel);
+
+    if (res == QMessageBox::Ok) {
+      dp->set_BadPixelsPath("");
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doBrowseGainCorrection()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    QString newPath = QFileDialog::getOpenFileName(this, "Select Gain Correction Image",
+                                                   dp->get_GainMapPath());
+
+    if (newPath.length() > 0) {
+      dp->set_GainMapPath(newPath);
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doClearGainCorrection()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    int res = QMessageBox::information(this, "Clear Gain Correction?", "Do you really want to clear the gain correction image?", QMessageBox::Ok, QMessageBox::Cancel);
+
+    if (res == QMessageBox::Ok) {
+      dp->set_GainMapPath("");
+    }
+  }
 }

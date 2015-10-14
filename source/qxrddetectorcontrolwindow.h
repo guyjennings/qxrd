@@ -46,6 +46,18 @@ private slots:
 
   void updateROIDisplay(bool show);
 
+  void doBrowseMask();
+  void doClearMask();
+
+  void doBrowseDark();
+  void doClearDark();
+
+  void doBrowseBadPixels();
+  void doClearBadPixels();
+
+  void doBrowseGainCorrection();
+  void doClearGainCorrection();
+
 private:
   QVector<int>  selectedROIs();
 

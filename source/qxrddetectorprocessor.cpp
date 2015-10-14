@@ -65,6 +65,11 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
   m_CenterFinder  = QxrdCenterFinderPtr(new QxrdCenterFinder(m_Saver, m_Experiment));
   m_Integrator    = QxrdIntegratorPtr(new QxrdIntegrator(m_Saver, m_Experiment, m_CenterFinder));
   m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator(m_Saver, m_Experiment, sharedFromThis()));
+
+  connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onMaskPathChanged);
+  connect(prop_DarkImagePath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onDarkImagePathChanged);
+  connect(prop_BadPixelsPath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onBadPixelsPathChanged);
+  connect(prop_GainMapPath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onGainMapPathChanged);
 }
 
 QxrdDetectorProcessor::~QxrdDetectorProcessor()
@@ -156,6 +161,36 @@ QxrdIntegratorPtr QxrdDetectorProcessor::integrator()
 QxrdROICalculatorPtr QxrdDetectorProcessor::roiCalculator()
 {
   return m_ROICalculator;
+}
+
+QcepDoubleImageDataPtr QxrdDetectorProcessor::data()
+{
+  return m_Data;
+}
+
+QcepInt32ImageDataPtr  QxrdDetectorProcessor::dark()
+{
+  return m_DarkImage;
+}
+
+QcepDoubleImageDataPtr QxrdDetectorProcessor::badPixels()
+{
+  return m_BadPixels;
+}
+
+QcepDoubleImageDataPtr QxrdDetectorProcessor::gainCorrection()
+{
+  return m_GainMap;
+}
+
+QcepMaskDataPtr        QxrdDetectorProcessor::mask()
+{
+  return m_Mask;
+}
+
+QcepMaskDataPtr        QxrdDetectorProcessor::overflow()
+{
+  return m_Overflow;
 }
 
 void QxrdDetectorProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image,
@@ -686,4 +721,61 @@ QString QxrdDetectorProcessor::integratedOutputDirectory() const
 QString QxrdDetectorProcessor::filePathInIntegratedOutputDirectory(QString fileName) const
 {
   return QDir(integratedOutputDirectory()).filePath(fileName);
+}
+
+void QxrdDetectorProcessor::onMaskPathChanged(QString newPath)
+{
+  if (newPath.length() == 0) {
+    printMessage("Clear Mask");
+    m_Mask = QcepMaskDataPtr();
+  } else {
+    printMessage(tr("Load mask from %1").arg(newPath));
+
+    QcepMaskDataPtr mask = QcepAllocator::newMask(QcepAllocator::AlwaysAllocate, 0,0, 0, this);
+
+    if (mask && mask->readImage(newPath)) {
+      m_Mask = mask;
+    }
+  }
+}
+
+void QxrdDetectorProcessor::onDarkImagePathChanged(QString newPath)
+{
+  if (newPath.length() == 0) {
+    printMessage("Clear Dark Image");
+    m_DarkImage = QcepInt32ImageDataPtr();
+  } else {
+    printMessage(tr("Load Dark Image from %1").arg(newPath));
+
+    QcepInt32ImageDataPtr dark = QcepAllocator::newInt32Image(QcepAllocator::AlwaysAllocate, 0,0, this);
+
+    if (dark && dark -> readImage(newPath)) {
+      m_DarkImage = dark;
+    }
+  }
+}
+
+void QxrdDetectorProcessor::onBadPixelsPathChanged(QString newPath)
+{
+  if (newPath.length() == 0) {
+    printMessage("Clear Bad Pixels");
+    m_BadPixels = QcepDoubleImageDataPtr();
+  } else {
+    printMessage(tr("Load Bad Pixels from %1").arg(newPath));
+
+    QcepDoubleImageDataPtr bad = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, 0,0, this);
+
+    if (bad && bad->readImage(newPath)) {
+      m_BadPixels = bad;
+    }
+  }
+}
+
+void QxrdDetectorProcessor::onGainMapPathChanged(QString newPath)
+{
+  if (newPath.length() == 0) {
+    printMessage("Clear Gain Map");
+  } else {
+    printMessage(tr("Load Gain Map from %1").arg(newPath));
+  }
 }

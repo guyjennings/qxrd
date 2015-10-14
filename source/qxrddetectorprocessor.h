@@ -54,6 +54,13 @@ public slots:
 
   void processIdleImage(QcepImageDataBasePtr image);
 
+  QcepDoubleImageDataPtr data();
+  QcepInt32ImageDataPtr  dark();
+  QcepDoubleImageDataPtr badPixels();
+  QcepDoubleImageDataPtr gainCorrection();
+  QcepMaskDataPtr        mask();
+  QcepMaskDataPtr        overflow();
+
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -73,6 +80,12 @@ public:
   QString              filePathInRawOutputDirectory(QString fileName) const;
   QString              filePathInSubtractedOutputDirectory(QString fileName) const;
   QString              filePathInIntegratedOutputDirectory(QString fileName) const;
+
+private slots:
+  void onMaskPathChanged(QString newPath);
+  void onDarkImagePathChanged(QString newPath);
+  void onBadPixelsPathChanged(QString newPath);
+  void onGainMapPathChanged(QString newPath);
 
 private:
   void setAcquiredImageProperties(QcepImageDataBasePtr image,

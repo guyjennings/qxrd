@@ -90,7 +90,14 @@
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QLineEdit" name="m_DarkImagePath"/>
+          <widget class="QLineEdit" name="m_DarkImagePath">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
          <item row="3" column="1">
           <widget class="QPushButton" name="m_BrowseDarkImage">
@@ -190,7 +197,11 @@
           </widget>
          </item>
          <item row="12" column="0">
-          <widget class="QLineEdit" name="m_BadPixelPath"/>
+          <widget class="QLineEdit" name="m_BadPixelPath">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="12" column="1">
           <widget class="QPushButton" name="m_BrowseBadPixels">
@@ -221,7 +232,11 @@
           </widget>
          </item>
          <item row="15" column="0">
-          <widget class="QLineEdit" name="m_GainCorrectionPath"/>
+          <widget class="QLineEdit" name="m_GainCorrectionPath">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="15" column="1">
           <widget class="QPushButton" name="m_BrowseGainImage">
@@ -276,7 +291,11 @@
           </widget>
          </item>
          <item row="20" column="0">
-          <widget class="QLineEdit" name="m_MaskImagePath"/>
+          <widget class="QLineEdit" name="m_MaskImagePath">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item row="20" column="1">
           <widget class="QPushButton" name="m_BrowseMask">
@@ -537,7 +556,7 @@
      <x>0</x>
      <y>0</y>
      <width>562</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
