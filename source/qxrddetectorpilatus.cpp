@@ -32,7 +32,8 @@ QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver,
   m_ReadFilesLocally       (saver, this, "readFilesLocally",     true, "Attempt to read acquired files into QXRD for further processing"),
   m_DeleteFilesAfterReading(saver, this, "deleteFilesAfterReading", false, "Delete files from Camserver computer after reading"),
   m_ExposureMode           (saver, this, "exposureMode",         0, "Pilatus Exposure Mode = (0:No Trigger, 1:ExtTrigger, 2:ExtEnable"),
-  m_EnableFrequency        (saver, this, "enableFrequency",      1000, "Frequency of ext enable signal")
+  m_EnableFrequency        (saver, this, "enableFrequency",      1000, "Frequency of ext enable signal"),
+  m_PilatusExtension       (saver, this, "pilatusExtension",     "cbf",         "File format to be used by camserver")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorPilatus::QxrdDetectorPilatus(%p)\n", this);
@@ -218,7 +219,7 @@ void QxrdDetectorPilatus::expose()
   QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq) {
-    m_CurrentFile = acq->currentFileBase(get_DetectorNumber());
+    m_CurrentFile = acq->currentFileBase(get_DetectorNumber(), get_PilatusExtension());
 
     if (get_ReadFilesLocally()) { // Check to see if file exists...
       if (get_DeleteFilesAfterReading()) {
@@ -306,6 +307,7 @@ void QxrdDetectorPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::DirectoryProperty, "pilatusDataDirectory", "Camserver Data Directory", "/home/det/shareddata/test/");
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "readFilesLocally",     "Attempt to read acquired files into QXRD for further processing", true);
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "deleteFilesAfterReading", "Delete files from camserver computer after use", false);
+    proxy->pushProperty(QxrdDetectorProxy::ExtensionProperty, "pilatusExtension",   "File format for camserver", "cbf");
     proxy->pushProperty(QxrdDetectorProxy::PilatusModeProperty, "exposureMode",     "Pilatus Exposure Mode", 0);
     proxy->pushProperty(QxrdDetectorProxy::DoubleProperty, "enableFrequency",       "Ext Enable Frequency", 1000);
   }
@@ -324,6 +326,7 @@ void QxrdDetectorPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
     proxy->pushProperty(QxrdDetectorProxy::DirectoryProperty, "pilatusDataDirectory", "Camserver Data Directory", get_PilatusDataDirectory());
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "readFilesLocally",     "Attempt to read acquired files into QXRD for further processing", get_ReadFilesLocally());
     proxy->pushProperty(QxrdDetectorProxy::BooleanProperty, "deleteFilesAfterReading", "Delete files from camserver computer after use", get_DeleteFilesAfterReading());
+    proxy->pushProperty(QxrdDetectorProxy::ExtensionProperty, "pilatusExtension",   "File format for camserver", get_PilatusExtension());
     proxy->pushProperty(QxrdDetectorProxy::PilatusModeProperty, "exposureMode",     "Pilatus Exposure Mode", get_ExposureMode());
     proxy->pushProperty(QxrdDetectorProxy::DoubleProperty, "enableFrequency",       "Ext Enable Frequency", get_EnableFrequency());
   }
@@ -341,6 +344,7 @@ void QxrdDetectorPilatus::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
     set_PilatusDataDirectory   (proxy->property("pilatusDataDirectory").toString());
     set_ReadFilesLocally       (proxy->property("readFilesLocally").toBool());
     set_DeleteFilesAfterReading(proxy->property("deleteFilesAfterReading").toBool());
+    set_PilatusExtension       (proxy->property("pilatusExtension").toString());
     set_ExposureMode           (proxy->property("exposureMode").toInt());
     set_EnableFrequency        (proxy->property("enableFrequency").toDouble());
   }

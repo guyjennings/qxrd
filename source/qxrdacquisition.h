@@ -82,7 +82,7 @@ public slots:
   QxrdDetectorThreadPtr detectorThread(int n);
   QxrdDetectorPtr       detector(int n);
 
-  QString currentFileBase(int detNum);
+  QString currentFileBase(int detNum, QString extension="");
 
   double scalerValue(int i);
 

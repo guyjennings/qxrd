@@ -99,6 +99,9 @@ public:
 
   Q_PROPERTY(double enableFrequency READ get_EnableFrequency WRITE set_EnableFrequency)
   QCEP_DOUBLE_PROPERTY(EnableFrequency)
+
+  Q_PROPERTY(QString pilatusExtension READ get_PilatusExtension WRITE set_PilatusExtension)
+  QCEP_STRING_PROPERTY(PilatusExtension)
 };
 
 #endif // QXRDDETECTORPILATUS_H

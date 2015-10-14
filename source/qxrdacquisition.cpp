@@ -679,14 +679,16 @@ void QxrdAcquisition::accumulateAcquiredImage(QcepInt32ImageDataPtr image, QcepI
   }
 }
 
-QString QxrdAcquisition::currentFileBase(int detNum)
+QString QxrdAcquisition::currentFileBase(int detNum, QString extension)
 {
   QString fileBase, fileName;
 
   QxrdDetectorPtr det = detector(detNum);
   QString extent;
 
-  if (det) {
+  if (extension.length()) {
+    extent = extension;
+  } else if (det) {
     extent = det->get_Extension();
   } else {
     extent = "tif";
