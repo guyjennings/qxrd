@@ -87,7 +87,8 @@ DISTFILES += qxrd.dox \
     tiffconfig/win32/tiffconf.h \
     tiffconfig/macx/tif_config.h \
     tiffconfig/macx/tiffconf.h \
-    help/qxrdspecmacro.html
+    help/qxrdspecmacro.html \
+    qxrd_tests.mac
 
 include(submodules/qceplib/qceplib-qwt.pri)
 include(submodules/qceplib/qceplib-base.pri)

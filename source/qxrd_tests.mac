@@ -1,0 +1,50 @@
+#
+# Test macros for qxrd integration:
+#
+
+def motor_dump '{
+  for(i=0; i<MOTORS; i++) {
+    printf("M%d: mne:%s, ctl:%s, dev:%s, unit:%s, addr:%s\n", i, \
+           motor_mne(i), \
+           motor_par(i, "controller"), \
+           motor_par(i, "device_id"), \
+           motor_par(i, "unit"), \
+           motor_par(i, "address") \
+           )
+  }
+}'
+
+def counter_dump '{
+  for(i=0; i<COUNTERS; i++) {
+    printf("S%d: mne:%s, ctl:%s, dev:%s, unit:%s, addr:%s\n", i, \
+           cnt_mne(i), \
+           counter_par(i, "controller"), \
+           counter_par(i, "device_id"), \
+           counter_par(i, "unit"), \
+           counter_par(i, "address") \
+           )
+  }
+}'
+
+def qxrd_counters '{
+  for(i=0; i<COUNTERS; i++) {
+    ctl = counter_par(i, "controller")
+    dev = counter_par(i, "device_id")
+    if (ctl == "MAC_CNT" || ctl == "MAC_CNTP") {
+      if (dev == "qxrd") {
+        printf("S%d: mne:%s, ctl:%s, dev:%s, unit:%s, addr:%s\n", i, \
+               cnt_mne(i), \
+               counter_par(i, "controller"), \
+               counter_par(i, "device_id"), \
+               counter_par(i, "unit"), \
+               counter_par(i, "address") \
+               )
+      }
+    }
+  }
+}'
+
+def qxrd_config(mne, key, unit, module, chan) '{
+  printf("qxrd_config(\"%s\", \"%s\", %s, %s, %s)\n", mne, key, unit, module, chan)
+}'
+
