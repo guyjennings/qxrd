@@ -43,8 +43,3 @@ def qxrd_counters '{
     }
   }
 }'
-
-def qxrd_config(mne, key, unit, module, chan) '{
-  printf("qxrd_config(\"%s\", \"%s\", %s, %s, %s)\n", mne, key, unit, module, chan)
-}'
-

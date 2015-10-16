@@ -9,55 +9,115 @@ def qxrd_cmd(mne, key, p1, p2, unit) '{
     printf("qxrd_cmd(\"%s\", \"%s\", %s, %s, %s)\n", mne, key, p1, p2, unit)
   }
 
-  if (key == "prestart_all") {
-    QXRD_PARS[sprintf("%d,start",unit)]=1
-    if (QXRD_PARS["scanstart"]) {
-      QXRD_PARS[sprintf("%d,scanstart",unit)]=1
-    }
+  if (mne == "..") {
+    if (key == "prestart_all" && QXRD_PARS[sprintf("%d,enable",unit)]) {
+      if (key == "prestart_all") {
+        QXRD_PARS[sprintf("%d,start",unit)]=1
+        if (QXRD_PARS["scanstart"]) {
+          QXRD_PARS[sprintf("%d,scanstart",unit)]=1
+        }
 
-    if (QXRD_PARS["debug"]) {
-      print "Prestart", QXRD_PARS
+        if (QXRD_PARS["debug"]) {
+          print "Prestart", QXRD_PARS
+        }
+      }
     }
-  } else if (key == "start_one") {
-    QXRD_PARS["scanstart"]=0
-    addr = counter_par(mne, "address")
+  } else {
     unit = counter_par(mne, "unit")
-    if (QXRD_PARS[sprintf("%d,scanstart",unit)]) {
-      qxrd_scan_start_handler(mne)
-      QXRD_PARS[sprintf("%d,scanstart",unit)]=0
-    }
-    if (QXRD_PARS[sprintf("%d,start",unit)]) {
-      if (QXRD_PARS["debug"]) {
-        printf ("Start acquire unit %d, addr %s\n", unit, addr)
-      }
-      if (addr) {
-        remote_eval(addr, sprintf("exposureTime(%g);acquire()", p1))
-      }
-    }
-    QXRD_PARS[sprintf("%d,start",unit)]=0
-  } else if (key == "get_status") {
-    addr = counter_par(mne, "address")
-    if (QXRD_PARS["debug"]) {
-      printf("get_status: ctrl %d, chan %d, addr %s\n", counter_par(mne, "unit"), counter_par(mne, "channel"), counter_par(mne, "address"))
-    }
-    if (addr) {
-      counting = remote_eval(addr, "acquireStatus(0.1)")==0
-      if (counting && QXRD_PARS["debug"]) {
-        printf("Waiting for %s\n", addr)
-      }
-      return counting 
-    } else {
-      return 0
-    }
-  } else if (key == "counts") {
     addr = counter_par(mne, "address")
     chan = counter_par(mne, "channel")
-    
-    if (addr) {
-      return remote_eval(addr, sprintf("acquireScalers(%g)",chan))
-    } else {
-      return 0;
+
+    if (QXRD_PARS[sprintf("%d,enable",unit)]) {
+      if (key == "start_one") {
+        QXRD_PARS["scanstart"]=0
+
+        if (QXRD_PARS[sprintf("%d,scanstart",unit)]) {
+          qxrd_scan_start_handler(mne)
+          QXRD_PARS[sprintf("%d,scanstart",unit)]=0
+        }
+
+        if (QXRD_PARS[sprintf("%d,start",unit)]) {
+          if (QXRD_PARS["debug"]) {
+            printf ("Start acquire unit %d, addr %s\n", unit, addr)
+          }
+
+          if (addr) {
+            remote_eval(addr, sprintf("exposureTime(%g);acquire()", p1))
+          }
+        }
+        QXRD_PARS[sprintf("%d,start",unit)]=0
+      } else if (key == "get_status") {
+        if (QXRD_PARS["debug"]) {
+          printf("get_status: ctrl %d, chan %d, addr %s\n", counter_par(mne, "unit"), counter_par(mne, "channel"), counter_par(mne, "address"))
+        }
+        if (addr) {
+          counting = remote_eval(addr, "acquireStatus(0.1)")==0
+          if (counting && QXRD_PARS["debug"]) {
+            printf("Waiting for %s\n", addr)
+          }
+          return counting
+        } else {
+          return 0
+        }
+      } else if (key == "counts") {
+        if (addr) {
+          return remote_eval(addr, sprintf("acquireScalers(%g)",chan))
+        } else {
+          return 0;
+        }
+      }
     }
+  }
+}'
+
+def qxrd_config(mne, type, unit, module, chan) '{
+  if (mne == ".." && type == "ctrl") {
+    QXRD_PARS["count"]=unit+1
+  }
+
+  local i
+
+  for (i=0; i<COUNTERS; i++) {
+    ctrl = counter_par(i, "controller")
+    dev  = counter_par(i, "device_id")
+    n    = counter_par(i, "unit")
+    if (ctrl == "MAC_CNTP" || ctrl == "MAC_CNT") {
+      if (dev == "qxrd" && n == unit) {
+        if (QXRD_PARS[sprintf("%d,enable",unit)]) {
+          counter_par(i, "disable", 0)
+        } else {
+          counter_par(i, "disable", 1)
+        }
+      }
+    }
+  }
+}'
+
+def qxrd_enable(unit,enabled) '{
+  n=QXRD_PARS["count"]
+
+  if (QXRD_PARS["debug"]) {
+    printf("qxrd_enable(%d,%d)\n", unit, enabled)
+  }
+
+  QXRD_PARS[sprintf("%d,enable",unit)]=enabled
+
+  qxrd_config("..", "ctrl", unit, 0, 0)
+
+  QXRD_PARS["count"] = n
+}'
+
+def qxrd_on '{
+  n=QXRD_PARS["count"]
+  for(i=0; i<n; i++) {
+    qxrd_enable(i,1)
+  }
+}'
+
+def qxrd_off '{
+  n=QXRD_PARS["count"]
+  for(i=0; i<n; i++) {
+    qxrd_enable(i,0)
   }
 }'
 
