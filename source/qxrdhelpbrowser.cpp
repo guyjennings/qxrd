@@ -61,7 +61,13 @@ QVariant QxrdHelpBrowser::loadResource(int type, const QUrl &name)
             QFile macroFile(":/qxrd_macrocounter.mac");
 
             if (macroFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-              res.append(macroFile.readAll());
+              QByteArray macros = macroFile.readAll();
+
+              macros.replace("&", "&amp;");
+              macros.replace("<", "&lt;");
+              macros.replace(">", "&gt;");
+
+              res.append(macros);
             } else {
               res.append("Couldn't open macro file");
             }
