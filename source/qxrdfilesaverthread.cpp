@@ -55,6 +55,12 @@ void QxrdFileSaverThread::run()
   if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("File Saver Thread Terminated with rc %1").arg(rc));
   }
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    m_FileSaver = QxrdFileSaverPtr();
+  }
 }
 
 void QxrdFileSaverThread::shutdown()

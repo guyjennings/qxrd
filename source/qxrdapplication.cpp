@@ -120,7 +120,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
   m_AllocatorThread(NULL),
-  m_Allocator(NULL),
+  m_Allocator(),
   m_NIDAQPluginInterface(NULL),
   #ifdef HAVE_PERKIN_ELMER
   m_PerkinElmerPluginInterface(NULL),
@@ -558,8 +558,10 @@ void QxrdApplication::readSettings(QSettings *settings, QString section)
 {
   QcepProperty::readSettings(this, settings, section);
 
-  if (m_Allocator) {
-    m_Allocator->readSettings(settings, "allocator");
+  QcepAllocatorPtr alloc(m_Allocator);
+
+  if (alloc) {
+    alloc->readSettings(settings, "allocator");
   }
 }
 
@@ -576,8 +578,10 @@ void QxrdApplication::writeSettings(QSettings *settings, QString section)
 {
   QcepProperty::writeSettings(this, settings, section);
 
-  if (m_Allocator) {
-    m_Allocator->writeSettings(settings, "allocator");
+  QcepAllocatorPtr alloc(m_Allocator);
+
+  if (alloc) {
+    alloc->writeSettings(settings, "allocator");
   }
 }
 
@@ -843,7 +847,7 @@ void QxrdApplication::openExperiment(QString path)
   }
 }
 
-void QxrdApplication::closeExperiment(QxrdExperimentPtr exp)
+void QxrdApplication::closeExperiment(QxrdExperimentWPtr exp)
 {
   if (qcepDebug(DEBUG_APP)) {
     printf("QxrdApplication::closeExperiment(%p)\n", exp.data());
@@ -1013,7 +1017,7 @@ void QxrdApplication::closedExperiment(QxrdExperimentThreadPtr expthrdw)
   }
 }
 
-QList<QxrdExperimentPtr> &QxrdApplication::experiments()
+QList<QxrdExperimentWPtr> &QxrdApplication::experiments()
 {
   return m_Experiments;
 }

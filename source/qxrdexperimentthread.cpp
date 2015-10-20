@@ -106,6 +106,12 @@ void QxrdExperimentThread::run()
       }
     }
   }
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    m_Experiment = QxrdExperimentPtr();
+  }
 }
 
 void QxrdExperimentThread::shutdown()

@@ -71,11 +71,11 @@ public slots:
 
   void activateExperiment(QString path);
   void openExperiment(QString path);
-  void closeExperiment(QxrdExperimentPtr exp);
+  void closeExperiment(QxrdExperimentWPtr exp);
 
   void openedExperiment(QxrdExperimentThreadPtr expthrdw);
   void closedExperiment(QxrdExperimentThreadPtr expthrdw);
-  QList<QxrdExperimentPtr> &experiments();
+  QList<QxrdExperimentWPtr> &experiments();
 
   QxrdExperimentPtr experiment(int i);
 
@@ -189,14 +189,14 @@ public:
 private:
   QxrdApplicationWPtr             m_Application;
   QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
-  QList<QxrdExperimentPtr>        m_Experiments;
+  QList<QxrdExperimentWPtr>       m_Experiments;
 
   QTimer                          m_SplashTimer;
   QxrdSplashScreenPtr             m_Splash;
 
   QxrdWelcomeWindowPtr            m_WelcomeWindow;
   QcepAllocatorThreadPtr          m_AllocatorThread;
-  QcepAllocatorPtr                m_Allocator;
+  QcepAllocatorWPtr               m_Allocator;
   QxrdNIDAQPluginInterfacePtr     m_NIDAQPluginInterface;
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterfacePtr m_PerkinElmerPluginInterface;

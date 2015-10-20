@@ -78,4 +78,10 @@ void QxrdSimpleServerThread::run()
       expt->printMessage(tr("Simple Server Thread Terminated with rc %1").arg(rc));
     }
   }
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    m_Server = QxrdSimpleServerPtr();
+  }
 }
