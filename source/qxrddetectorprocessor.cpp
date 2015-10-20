@@ -732,6 +732,12 @@ void QxrdDetectorProcessor::onMaskPathChanged(QString newPath)
 
     if (mask && mask->readImage(newPath)) {
       m_Mask = mask;
+
+      QxrdDetectorControlWindowPtr ctl(m_ControlWindow);
+
+      if (ctl) {
+        ctl->displayNewMask(m_Mask);
+      }
     }
   }
 }
