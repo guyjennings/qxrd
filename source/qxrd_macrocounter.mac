@@ -146,9 +146,9 @@ def qxrd_scan_start_handler(mne) '{
   addr = counter_par(mne, "address")
 
   if (QXRD_PARS["scansub"]) {
-    subdir = sprintf("%s/%s", QXRD_PARS["datadir"], sprintf(QXRD_PARS["scanfmt"],SCAN_N))
+    subdir = sprintf("%s/%s", sprintf(QXRD_PARS["datadir"],DATAFILE), sprintf(QXRD_PARS["scanfmt"],SCAN_N))
   } else {
-    subdir = QXRD_PARS["datadir"]
+    subdir = sprintf(QXRD_PARS["datadir"],DATAFILE)
   }
 
   if (addr) {
