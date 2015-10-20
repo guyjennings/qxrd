@@ -1510,7 +1510,51 @@ double QcepImageData<T>::averageInEllipse(QRectF rect)
 template <typename T>
 double QcepImageData<T>::sumInPeak(QRectF rect)
 {
-  return 0;
+  QPointF c = rect.center();
+  double  w = rect.width()/2;
+  double  h = rect.height()/2;
+
+  int bt = qRound(rect.bottom());
+  int tp = qRound(rect.top());
+  int lf = qRound(rect.left());
+  int rt = qRound(rect.right());
+
+  int ptp = qRound(c.y() - h/2);
+  int pbt = qRound(c.y() + h/2);
+  int plf = qRound(c.x() - w/2);
+  int prt = qRound(c.x() + w/2);
+
+  int    np    = 0;
+  double sum   = 0;
+  int    npk   = 0;
+  double sumpk = 0;
+
+  for (int row=tp; row<=bt; row++) {
+    for (int col=lf; col<=rt; col++) {
+      if (m_Mask == NULL || m_Mask->value(col,row)) {
+        T val = value(col,row);
+
+        if (val == val) {
+          if (ptp <= row && row <= pbt && plf <= col && col <= prt) {
+            npk++;
+            sumpk += val;
+          } else {
+            np++;
+            sum += val;
+          }
+        }
+      }
+    }
+  }
+
+  if (np > 0 && npk > 0) {
+    double avbk = sum/np;
+    double avpk = sumpk/npk;
+
+    return (avpk-avbk)*npk;
+  } else {
+    return 0;
+  }
 }
 
 template class QcepImageData<unsigned short>;
