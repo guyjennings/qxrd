@@ -32,12 +32,18 @@ public:
   enum {
     SumInRectangle,
     AverageInRectangle,
+    MinInRectangle,
+    MaxInRectangle,
     SumInEllipse,
     AverageInEllipse,
-    SumInPeak
+    MinInEllipse,
+    MaxInEllipse,
+    SumInPeak,
+    ROITypeCount
   };
 
 signals:
+  void roiChanged();
 
 public slots:
   void selectNamedROIType(QString nm);
@@ -58,7 +64,9 @@ public slots:
   void setBottom(double b);
 
   void setCenter(QPointF c);
+  void setCenter(double cx, double cy);
   void setSize(QSizeF s);
+  void setSize(double w, double h);
 
   void setCenterX(double cx);
   void setCenterY(double cy);

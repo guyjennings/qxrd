@@ -24,7 +24,11 @@ public:
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesListPtr &coords);
   static void fromScriptValue(const QScriptValue &obj, QxrdROICoordinatesListPtr &coords);
 
+  int findRowOf(QxrdROICoordinatesWPtr c);
+  int findRowOf(QxrdROICoordinates *c);
+
 signals:
+  void roisChanged();
   void roiChanged(int i);
 
 public slots:

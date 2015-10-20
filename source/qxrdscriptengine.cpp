@@ -1608,7 +1608,7 @@ QScriptValue QxrdScriptEngine::roiFunc(QScriptContext *context, QScriptEngine *e
 
     if (acq) {
       int n = context->argument(0).toInteger();
-      int m = context->argument(0).toInteger();
+      int m = context->argument(1).toInteger();
 
       QxrdDetectorPtr d = acq->detector(n);
 

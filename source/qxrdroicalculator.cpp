@@ -140,12 +140,28 @@ double QxrdROICalculator::value(QcepImageDataBasePtr img, int i)
         res = img->averageInRectangle(roi->get_Coords());
         break;
 
+      case QxrdROICoordinates::MinInRectangle:
+        res = img->minInRectangle(roi->get_Coords());
+        break;
+
+      case QxrdROICoordinates::MaxInRectangle:
+        res = img->maxInRectangle(roi->get_Coords());
+        break;
+
       case QxrdROICoordinates::SumInEllipse:
         res = img->sumInEllipse(roi->get_Coords());
         break;
 
       case QxrdROICoordinates::AverageInEllipse:
         res = img->averageInEllipse(roi->get_Coords());
+        break;
+
+      case QxrdROICoordinates::MinInEllipse:
+        res = img->minInEllipse(roi->get_Coords());
+        break;
+
+      case QxrdROICoordinates::MaxInEllipse:
+        res = img->maxInEllipse(roi->get_Coords());
         break;
 
       case QxrdROICoordinates::SumInPeak:

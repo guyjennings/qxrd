@@ -49,6 +49,8 @@ public:
 signals:
 
 public slots:
+  void onROIChanged(int i);
+  void onROIsChanged();
 
 private:
   QxrdROICoordinatesListWPtr m_ROICoordinates;

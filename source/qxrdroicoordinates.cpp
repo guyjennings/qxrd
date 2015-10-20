@@ -45,10 +45,18 @@ QString QxrdROICoordinates::roiTypeName(int roiType)
     return "Rectangle Sum";
   } else if (roiType == AverageInRectangle) {
     return "Rectangle Avg";
+  } else if (roiType == MinInRectangle) {
+    return "Rectangle Min";
+  } else if (roiType == MaxInRectangle) {
+    return "Rectangle Max";
   } else if (roiType == SumInEllipse) {
     return "Ellipse Sum";
   } else if (roiType == AverageInEllipse) {
     return "Ellipse Avg";
+  } else if (roiType == MinInEllipse) {
+    return "Ellipse Min";
+  } else if (roiType == MaxInEllipse) {
+    return "Ellipse Max";
   } else if (roiType == SumInPeak) {
     return "Peak Sum";
   }
@@ -62,6 +70,7 @@ void QxrdROICoordinates::selectNamedROIType(QString nm)
     if (roiTypeName(i) == nm) {
       set_RoiType(i);
       set_RoiTypeName(nm);
+      emit roiChanged();
       return;
     }
   }
@@ -69,7 +78,7 @@ void QxrdROICoordinates::selectNamedROIType(QString nm)
 
 int QxrdROICoordinates::roiTypeCount()
 {
-  return 5;
+  return ROITypeCount;
 }
 
 double QxrdROICoordinates::left() const
@@ -119,6 +128,8 @@ void QxrdROICoordinates::setLeft(double l)
   c.setLeft(l);
 
   set_Coords(c);
+
+  emit roiChanged();
 }
 
 void QxrdROICoordinates::setTop(double t)
@@ -128,6 +139,8 @@ void QxrdROICoordinates::setTop(double t)
   c.setTop(t);
 
   set_Coords(c);
+
+  emit roiChanged();
 }
 
 void QxrdROICoordinates::setRight(double r)
@@ -137,6 +150,8 @@ void QxrdROICoordinates::setRight(double r)
   c.setRight(r);
 
   set_Coords(c);
+
+  emit roiChanged();
 }
 
 void QxrdROICoordinates::setBottom(double b)
@@ -146,6 +161,8 @@ void QxrdROICoordinates::setBottom(double b)
   c.setBottom(b);
 
   set_Coords(c);
+
+  emit roiChanged();
 }
 
 void QxrdROICoordinates::setCenter(QPointF c)
@@ -155,6 +172,13 @@ void QxrdROICoordinates::setCenter(QPointF c)
   crd.moveCenter(c);
 
   set_Coords(crd);
+
+  emit roiChanged();
+}
+
+void QxrdROICoordinates::setCenter(double cx, double cy)
+{
+  setCenter(QPointF(cx, cy));
 }
 
 void QxrdROICoordinates::setSize(QSizeF s)
@@ -166,6 +190,13 @@ void QxrdROICoordinates::setSize(QSizeF s)
   c.moveCenter(cen);
 
   set_Coords(c);
+
+  emit roiChanged();
+}
+
+void QxrdROICoordinates::setSize(double w, double h)
+{
+  setSize(QSizeF(w,h));
 }
 
 void QxrdROICoordinates::setCenterX(double cx)
@@ -177,6 +208,8 @@ void QxrdROICoordinates::setCenterX(double cx)
   c.moveCenter(cen);
 
   set_Coords(c);
+
+  emit roiChanged();
 }
 
 void QxrdROICoordinates::setCenterY(double cy)
@@ -188,6 +221,8 @@ void QxrdROICoordinates::setCenterY(double cy)
   c.moveCenter(cen);
 
   set_Coords(c);
+
+  emit roiChanged();
 }
 
 void QxrdROICoordinates::setWidth(double w)
@@ -199,6 +234,8 @@ void QxrdROICoordinates::setWidth(double w)
   c.moveCenter(cen);
 
   set_Coords(c);
+
+  emit roiChanged();
 }
 
 void QxrdROICoordinates::setHeight(double h)
@@ -210,6 +247,8 @@ void QxrdROICoordinates::setHeight(double h)
   c.moveCenter(cen);
 
   set_Coords(c);
+
+  emit roiChanged();
 }
 
 QVector<QPointF> QxrdROICoordinates::markerCoords()
@@ -220,6 +259,8 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
   switch (get_RoiType()) {
   case SumInRectangle:
   case AverageInRectangle:
+  case MinInRectangle:
+  case MaxInRectangle:
   default:
     {
       res.append(c.topLeft());
@@ -232,6 +273,8 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
 
   case SumInEllipse:
   case AverageInEllipse:
+  case MinInEllipse:
+  case MaxInEllipse:
     {
       double a=c.width()/2.0;
       double b=c.height()/2.0;

@@ -106,6 +106,8 @@ void QxrdROICoordinatesList::clear()
   m_ROICoordinates.resize(0);
 
   set_RoiCount(0);
+
+  emit roisChanged();
 }
 
 void QxrdROICoordinatesList::appendROI(QxrdROICoordinatesPtr coords)
@@ -114,6 +116,8 @@ void QxrdROICoordinatesList::appendROI(QxrdROICoordinatesPtr coords)
     m_ROICoordinates.append(coords);
 
     set_RoiCount(m_ROICoordinates.count());
+
+    emit roiChanged(m_ROICoordinates.count()-1);
   }
 }
 
@@ -124,6 +128,8 @@ void QxrdROICoordinatesList::appendROI(int roiType, double left, double top, dou
           new QxrdROICoordinates(m_Saver, m_Experiment, roiType, left, top, right, bottom)));
 
   set_RoiCount(m_ROICoordinates.count());
+
+  emit roiChanged(m_ROICoordinates.count()-1);
 }
 
 void QxrdROICoordinatesList::removeROI(int i)
@@ -131,6 +137,8 @@ void QxrdROICoordinatesList::removeROI(int i)
   m_ROICoordinates.remove(i);
 
   set_RoiCount(m_ROICoordinates.count());
+
+  emit roisChanged();
 }
 
 QxrdROICoordinatesPtr QxrdROICoordinatesList::roi(int i)
@@ -145,4 +153,28 @@ void QxrdROICoordinatesList::setRoi(int i, QxrdROICoordinatesPtr c)
 
     emit roiChanged(i);
   }
+}
+
+int QxrdROICoordinatesList::findRowOf(QxrdROICoordinates *c)
+{
+  for (int i=0; i<m_ROICoordinates.count(); i++) {
+    QxrdROICoordinatesPtr r = roi(i);
+
+    if (r && r.data() == c) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+int QxrdROICoordinatesList::findRowOf(QxrdROICoordinatesWPtr c)
+{
+  QxrdROICoordinatesPtr r(c);
+
+  if (r) {
+    return findRowOf(r.data());
+  }
+
+  return -1;
 }

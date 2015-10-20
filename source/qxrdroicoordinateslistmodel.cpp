@@ -6,6 +6,12 @@ QxrdROICoordinatesListModel::QxrdROICoordinatesListModel(QxrdROICoordinatesListW
   : QAbstractListModel(),
     m_ROICoordinates(coords)
 {
+  QxrdROICoordinatesListPtr crds(m_ROICoordinates);
+
+  if (crds) {
+    connect(crds.data(), &QxrdROICoordinatesList::roiChanged, this, &QxrdROICoordinatesListModel::onROIChanged);
+    connect(crds.data(), &QxrdROICoordinatesList::roisChanged, this, &QxrdROICoordinatesListModel::onROIsChanged);
+  }
 }
 
 int QxrdROICoordinatesListModel::rowCount(const QModelIndex &parent) const
@@ -148,8 +154,6 @@ void QxrdROICoordinatesListModel::append(QxrdROICoordinatesPtr coords)
     rois->appendROI(coords);
 
     endInsertRows();
-
-//    renumberROIs();
   }
 }
 
@@ -163,8 +167,6 @@ void QxrdROICoordinatesListModel::removeROI(int row)
     rois->removeROI(row);
 
     endRemoveRows();
-
-//    renumberROIs();
   }
 }
 
@@ -185,8 +187,6 @@ void QxrdROICoordinatesListModel::moveROIDown(int row)
       rois->setRoi(row+1, p1);
 
       endMoveRows();
-
-//      renumberROIs();
     }
   }
 }
@@ -208,8 +208,6 @@ void QxrdROICoordinatesListModel::moveROIUp(int row)
       rois->setRoi(row, p1);
 
       endMoveRows();
-
-//      renumberROIs();
     }
   }
 }
@@ -252,4 +250,14 @@ void QxrdROICoordinatesListModel::moveROICenter(int i, double x, double y)
       emit dataChanged(index(i,0), index(i,columnCount(QModelIndex())));
     }
   }
+}
+
+void QxrdROICoordinatesListModel::onROIChanged(int i)
+{
+  emit dataChanged(index(i,0), index(i,columnCount(QModelIndex())));
+}
+
+void QxrdROICoordinatesListModel::onROIsChanged()
+{
+  emit dataChanged(index(0,0), index(rowCount(QModelIndex()), columnCount(QModelIndex())));
 }
