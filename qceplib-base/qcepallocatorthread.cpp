@@ -48,6 +48,12 @@ void QcepAllocatorThread::run()
   if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Allocator Thread Terminated with rc %1").arg(rc));
   }
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    m_Allocator = QcepAllocatorPtr();
+  }
 }
 
 void QcepAllocatorThread::shutdown()
