@@ -126,8 +126,12 @@ public slots:
 
   virtual double sumInRectangle(QRectF rect) = 0;
   virtual double averageInRectangle(QRectF rect) = 0;
+  virtual double maxInRectangle(QRectF rect) = 0;
+  virtual double minInRectangle(QRectF rect) = 0;
   virtual double sumInEllipse(QRectF rect) = 0;
   virtual double averageInEllipse(QRectF rect) = 0;
+  virtual double minInEllipse(QRectF rect) = 0;
+  virtual double maxInEllipse(QRectF rect) = 0;
   virtual double sumInPeak(QRectF rect) = 0;
 
 public:
@@ -236,8 +240,12 @@ public:
 
   double sumInRectangle(QRectF rect);
   double averageInRectangle(QRectF rect);
+  double minInRectangle(QRectF rect);
+  double maxInRectangle(QRectF rect);
   double sumInEllipse(QRectF rect);
   double averageInEllipse(QRectF rect);
+  double minInEllipse(QRectF rect);
+  double maxInEllipse(QRectF rect);
   double sumInPeak(QRectF rect);
 
 public:

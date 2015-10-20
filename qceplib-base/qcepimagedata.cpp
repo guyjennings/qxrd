@@ -1440,6 +1440,88 @@ double QcepImageData<T>::averageInRectangle(QRectF rect)
 }
 
 template <typename T>
+double QcepImageData<T>::minInRectangle(QRectF rect)
+{
+  int l = qRound(rect.left());
+  int t = qRound(rect.top());
+  int r = qRound(rect.right());
+  int b = qRound(rect.bottom());
+
+  if (l > r) {
+    l = qRound(rect.right());
+    r = qRound(rect.left());
+  }
+
+  if (b > t) {
+    b = qRound(rect.top());
+    t = qRound(rect.bottom());
+  }
+
+  int first  = true;
+  double min = 0;
+
+  for (int row=b; row<=t; row++) {
+    for (int col=l; col<=r; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          if (first) {
+            min = val;
+            first = false;
+          } else if (val < min) {
+            min = val;
+          }
+        }
+      }
+    }
+  }
+
+  return min;
+}
+
+template <typename T>
+double QcepImageData<T>::maxInRectangle(QRectF rect)
+{
+  int l = qRound(rect.left());
+  int t = qRound(rect.top());
+  int r = qRound(rect.right());
+  int b = qRound(rect.bottom());
+
+  if (l > r) {
+    l = qRound(rect.right());
+    r = qRound(rect.left());
+  }
+
+  if (b > t) {
+    b = qRound(rect.top());
+    t = qRound(rect.bottom());
+  }
+
+  int first  = true;
+  double max = 0;
+
+  for (int row=b; row<=t; row++) {
+    for (int col=l; col<=r; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          if (first) {
+            max = val;
+            first = false;
+          } else if (val > max) {
+            max = val;
+          }
+        }
+      }
+    }
+  }
+
+  return max;
+}
+
+template <typename T>
 double QcepImageData<T>::sumInEllipse(QRectF rect)
 {
   QPointF c = rect.center();
@@ -1505,6 +1587,82 @@ double QcepImageData<T>::averageInEllipse(QRectF rect)
   }
 
   return sum/np;
+}
+
+template <typename T>
+double QcepImageData<T>::minInEllipse(QRectF rect)
+{
+  QPointF c = rect.center();
+  double  a = rect.width()/2;
+  double  b = rect.height()/2;
+
+  int bt = qRound(rect.bottom());
+  int tp = qRound(rect.top());
+
+  int first = true;
+  double min = 0;
+
+  for (int row=tp; row<=bt; row++) {
+    double y=row - c.y();
+    double xx = a*sqrt(1 - pow(y/b,2));
+    int x1 = qRound(c.x() - xx);
+    int x2 = qRound(c.x() + xx);
+
+    for (int col=x1; col<=x2; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          if (first) {
+            min = val;
+            first = false;
+          } else if (val < min) {
+            min = val;
+          }
+        }
+      }
+    }
+  }
+
+  return min;
+}
+
+template <typename T>
+double QcepImageData<T>::maxInEllipse(QRectF rect)
+{
+  QPointF c = rect.center();
+  double  a = rect.width()/2;
+  double  b = rect.height()/2;
+
+  int bt = qRound(rect.bottom());
+  int tp = qRound(rect.top());
+
+  int first = true;
+  double max = 0;
+
+  for (int row=tp; row<=bt; row++) {
+    double y=row - c.y();
+    double xx = a*sqrt(1 - pow(y/b,2));
+    int x1 = qRound(c.x() - xx);
+    int x2 = qRound(c.x() + xx);
+
+    for (int col=x1; col<=x2; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          if (first) {
+            max = val;
+            first = false;
+          } else if (val > max) {
+            max = val;
+          }
+        }
+      }
+    }
+  }
+
+  return max;
 }
 
 template <typename T>
