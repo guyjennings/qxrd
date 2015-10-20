@@ -85,6 +85,12 @@ void QxrdServerThread::run()
       expt->printMessage(tr("Spec Server Thread Terminated with rc %1").arg(rc));
     }
   }
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    m_Server = QxrdServerPtr();
+  }
 }
 
 void QxrdServerThread::executeScript(QString cmd)

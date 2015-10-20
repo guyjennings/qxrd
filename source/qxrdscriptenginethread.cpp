@@ -74,4 +74,10 @@ void QxrdScriptEngineThread::run()
   if (g_Application && qcepDebug(DEBUG_THREADS)) {
     g_Application->printMessage(tr("Script Engine Thread Terminated with rc %1").arg(rc));
   }
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    m_ScriptEngine = QxrdScriptEnginePtr();
+  }
 }

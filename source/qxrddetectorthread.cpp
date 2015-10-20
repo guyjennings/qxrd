@@ -300,6 +300,12 @@ void QxrdDetectorThread::run()
       printf("Detector Thread Terminated with rc %d\n", rc);
     }
   }
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    m_Detector = QxrdDetectorPtr();
+  }
 }
 
 QxrdDetectorPtr QxrdDetectorThread::detector() const

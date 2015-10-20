@@ -62,6 +62,12 @@ void QxrdDataProcessorThread::run()
       exp->printMessage(tr("Processor Thread Terminated with rc %1").arg(rc));
     }
   }
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    m_DataProcessor = QxrdDataProcessorPtr();
+  }
 }
 
 void QxrdDataProcessorThread::shutdown()

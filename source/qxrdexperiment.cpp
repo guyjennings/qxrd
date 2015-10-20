@@ -334,7 +334,7 @@ void QxrdExperiment::openWindows()
                          m_Acquisition,
                          m_DataProcessor,
                          app->allocator(),
-                         NULL));
+                         NULL), &QObject::deleteLater);
 
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdAcquisitionPtr acq(m_Acquisition);

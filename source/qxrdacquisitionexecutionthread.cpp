@@ -38,6 +38,8 @@ void QxrdAcquisitionExecutionThread::run()
 
   int rc = exec();
 
+  m_AcquisitionExecution = QxrdAcquisitionExecutionPtr();
+
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Acquisition Execution Thread terminated with rc %d\n", rc);
   }
