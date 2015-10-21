@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include "qcepmutexlocker.h"
 #include "qxrdroicoordinateslistmodel.h"
-#include "qxrdroicoordinateslist.h"
 #include <QtConcurrentMap>
 #include "qxrdroicoordinates.h"
 #include "qcepimagedata.h"
@@ -13,8 +12,7 @@ QxrdROICalculator::QxrdROICalculator(QcepSettingsSaverWPtr saver, QxrdExperiment
     m_Saver(saver),
     m_Experiment(exp),
     m_Processor(proc),
-    m_ROICoordinates(new QxrdROICoordinatesList(saver, exp)),
-    m_ROICoordinatesModel(new QxrdROICoordinatesListModel(m_ROICoordinates))
+    m_ROICoordinatesModel(new QxrdROICoordinatesListModel(saver, exp))
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdROICalculator::QxrdROICalculator(%p)\n", this);
@@ -56,12 +54,8 @@ void QxrdROICalculator::readSettings(QSettings *settings, QString section)
 
   QcepObject::readSettings(settings, section);
 
-//  if (m_Processor) {
-//    m_Processor->readSettings(settings, section+"/processor");
-//  }
-
-  if (m_ROICoordinates) {
-    m_ROICoordinates->readSettings(settings, section+"/coords");
+  if (m_ROICoordinatesModel) {
+    m_ROICoordinatesModel->readSettings(settings, section+"/coords");
   }
 }
 
@@ -71,19 +65,15 @@ void QxrdROICalculator::writeSettings(QSettings *settings, QString section)
 
   QcepObject::writeSettings(settings, section);
 
-//  if (m_Processor) {
-//    m_Processor->writeSettings(settings, section+"/processor");
-//  }
-
-  if (m_ROICoordinates) {
-    m_ROICoordinates->writeSettings(settings, section+"/coords");
+  if (m_ROICoordinatesModel) {
+    m_ROICoordinatesModel->writeSettings(settings, section+"/coords");
   }
 }
 
 int QxrdROICalculator::roiCount()
 {
-  if (m_ROICoordinates) {
-    return m_ROICoordinates->get_RoiCount();
+  if (m_ROICoordinatesModel) {
+    return m_ROICoordinatesModel->roiCount();
   } else {
     return 0;
   }
@@ -94,15 +84,10 @@ QxrdROICoordinatesListModelPtr QxrdROICalculator::roiModel()
   return m_ROICoordinatesModel;
 }
 
-QxrdROICoordinatesListPtr QxrdROICalculator::roiList()
-{
-  return m_ROICoordinates;
-}
-
 QxrdROICoordinatesPtr QxrdROICalculator::roi(int i)
 {
-  if (m_ROICoordinates) {
-    return m_ROICoordinates->roi(i);
+  if (m_ROICoordinatesModel) {
+    return m_ROICoordinatesModel->roi(i);
   } else {
     return QxrdROICoordinatesPtr();
   }
@@ -112,8 +97,8 @@ QVector<double> QxrdROICalculator::values(QcepImageDataBasePtr img)
 {
   QVector<double> res;
 
-  if (img && m_ROICoordinates) {
-    int nVals = m_ROICoordinates->get_RoiCount();
+  if (img && m_ROICoordinatesModel) {
+    int nVals = m_ROICoordinatesModel->roiCount();
 
     for (int i=0; i<nVals; i++) {
       res.append(value(img, i));
@@ -127,8 +112,8 @@ double QxrdROICalculator::value(QcepImageDataBasePtr img, int i)
 {
   double res = 0;
 
-  if (img && m_ROICoordinates) {
-    QxrdROICoordinatesPtr roi = m_ROICoordinates->roi(i);
+  if (img && m_ROICoordinatesModel) {
+    QxrdROICoordinatesPtr roi = m_ROICoordinatesModel->roi(i);
 
     if (roi) {
       switch (roi->get_RoiType()) {

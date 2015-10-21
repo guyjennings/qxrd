@@ -4,7 +4,6 @@
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrddetectorprocessor.h"
 #include "qxrdroicalculator.h"
-#include "qxrdroicoordinateslist.h"
 #include "qxrdroicoordinates.h"
 
 QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcquisitionWPtr acq)

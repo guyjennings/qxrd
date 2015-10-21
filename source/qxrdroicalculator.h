@@ -10,7 +10,6 @@
 #include <QScriptEngine>
 #include "qxrdroicalculator-ptr.h"
 #include "qxrdroicoordinateslistmodel-ptr.h"
-#include "qxrdroicoordinateslist-ptr.h"
 #include "qxrdroicoordinates-ptr.h"
 #include "qcepimagedata-ptr.h"
 
@@ -32,7 +31,6 @@ signals:
 
 public slots:
   int roiCount();
-  QxrdROICoordinatesListPtr roiList();
   QxrdROICoordinatesListModelPtr roiModel();
   QxrdROICoordinatesPtr roi(int i);
 
@@ -45,7 +43,6 @@ private:
   QxrdExperimentWPtr             m_Experiment;
   QxrdDetectorProcessorWPtr      m_Processor;
 
-  QxrdROICoordinatesListPtr      m_ROICoordinates;
   QxrdROICoordinatesListModelPtr m_ROICoordinatesModel;
 
 public:

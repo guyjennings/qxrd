@@ -32,7 +32,7 @@
 #include "qxrddetectorprocessor.h"
 #include "qxrdroicalculator.h"
 #include "qxrdroicoordinates.h"
-#include "qxrdroicoordinateslist.h"
+#include "qxrdroicoordinateslistmodel.h"
 
 #include <QThread>
 #include <QDir>
@@ -1861,10 +1861,10 @@ void QxrdScriptEngine::initialize()
                           QxrdROICoordinates::toScriptValue,
                           QxrdROICoordinates::fromScriptValue);
 
-  qRegisterMetaType<QxrdROICoordinatesListPtr>("QxrdROICoordinatesListPtr");
+  qRegisterMetaType<QxrdROICoordinatesListModelPtr>("QxrdROICoordinatesListModelPtr");
   qScriptRegisterMetaType(this,
-                          QxrdROICoordinatesList::toScriptValue,
-                          QxrdROICoordinatesList::fromScriptValue);
+                          QxrdROICoordinatesListModel::toScriptValue,
+                          QxrdROICoordinatesListModel::fromScriptValue);
 
   QxrdApplicationPtr app(m_Application);
 
