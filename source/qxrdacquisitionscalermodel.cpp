@@ -51,7 +51,7 @@ int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
       if (d && d->isEnabled()) {
         nRows += 1;
 //        nRows += QxrdDetector::ExtraScalers;
-        nRows += d->roiCount();
+        nRows += d->roiCount()*QxrdROICoordinates::OutputCount;
       }
     }
   }
@@ -136,7 +136,7 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
                 } else {
                   row -= 1;
 
-                  int nROI = d->roiCount();
+                  int nROI = d->roiCount()*QxrdROICoordinates::OutputCount;
 
                   if (row < nROI) {
                     if (col == NumCol) {
@@ -146,7 +146,11 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
 
                       return val;
                     } else if (col == DescriptionCol) {
-                      return tr("Detector %1 : ROI %2").arg(det).arg(row);
+                      int roiNum = row / QxrdROICoordinates::OutputCount;
+                      int optNum = row % QxrdROICoordinates::OutputCount;
+
+                      return tr("Detector %1 : ROI %2 : %3")
+                          .arg(det).arg(roiNum).arg(QxrdROICoordinates::outputName(optNum));
                     }
                   } else {
                     row -= nROI;

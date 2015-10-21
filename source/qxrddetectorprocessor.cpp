@@ -606,7 +606,7 @@ QcepDoubleVector QxrdDetectorProcessor::doCalculateROICounts(QcepImageDataBasePt
   QcepDoubleVector res;
 
   if (img && m_ROICalculator) {
-    res = m_ROICalculator->values(img);
+    res = m_ROICalculator->values(img, m_Mask);
   }
 
   if (qcepDebug(DEBUG_ACQUIRE)) {

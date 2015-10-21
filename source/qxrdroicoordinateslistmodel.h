@@ -9,6 +9,8 @@
 #include "qxrdroicoordinateslistmodel-ptr.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
 
 class QxrdROICoordinatesListModel : public QAbstractListModel
 {
@@ -49,14 +51,22 @@ public:
 
   int roiCount() const;
 
+  void recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+
   enum {
     NumCol,
-    ValueCol,
+    SumCol,
+    AverageCol,
+    MinimumCol,
+    MaximumCol,
+    NPixelsCol,
     TypeCol,
     CenterXCol,
     CenterYCol,
     WidthCol,
     HeightCol,
+    Width2Col,
+    Height2Col,
     ColCount
   };
 

@@ -13,7 +13,13 @@ QxrdROICoordinates::QxrdROICoordinates(QcepSettingsSaverWPtr saver,
     m_RoiType(saver, this, "roiType", roiType, "ROI Type"),
     m_RoiTypeName(QcepSettingsSaverWPtr(), this, "roiTypeName", roiTypeName(roiType), "ROI Type Name"),
     m_Coords(saver, this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords"),
-    m_Value(QcepSettingsSaverWPtr(), this, "value", 0, "ROI Value")
+    m_Width2(saver, this, "width2", 0, "Width of inner region"),
+    m_Height2(saver, this, "height2", 0, "Height of inner region"),
+    m_Sum(QcepSettingsSaverWPtr(), this, "sum", 0, "ROI Pixel Sum"),
+    m_Average(QcepSettingsSaverWPtr(), this, "average", 0, "ROI Pixel Average"),
+    m_Minimum(QcepSettingsSaverWPtr(), this, "minimum", 0, "ROI Pixel Minimum"),
+    m_Maximum(QcepSettingsSaverWPtr(), this, "maximum", 0, "ROI Pixel Maximum"),
+    m_NPixels(QcepSettingsSaverWPtr(), this, "nPixels", 0, "ROI N Pixels")
 {
 }
 
@@ -41,24 +47,18 @@ void QxrdROICoordinates::fromScriptValue(const QScriptValue &obj, QxrdROICoordin
 
 QString QxrdROICoordinates::roiTypeName(int roiType)
 {
-  if (roiType == SumInRectangle) {
-    return "Rectangle Sum";
-  } else if (roiType == AverageInRectangle) {
-    return "Rectangle Avg";
-  } else if (roiType == MinInRectangle) {
-    return "Rectangle Min";
-  } else if (roiType == MaxInRectangle) {
-    return "Rectangle Max";
-  } else if (roiType == SumInEllipse) {
-    return "Ellipse Sum";
-  } else if (roiType == AverageInEllipse) {
-    return "Ellipse Avg";
-  } else if (roiType == MinInEllipse) {
-    return "Ellipse Min";
-  } else if (roiType == MaxInEllipse) {
-    return "Ellipse Max";
-  } else if (roiType == SumInPeak) {
-    return "Peak Sum";
+  if (roiType == Rectangle) {
+    return "Rectangle";
+  } else if (roiType == Ellipse) {
+    return "Ellipse";
+  } else if (roiType == RectangleInRectangle) {
+    return "Rectangle inside Rectangle";
+  } else if (roiType == EllipseInRectangle) {
+    return "Ellipse inside Rectangle";
+  } else if (roiType == RectangleInEllipse) {
+    return "Rectangle inside Ellipse";
+  } else if (roiType == EllipseInEllipse) {
+    return "Ellipse inside Ellipse";
   }
 
   return "";
@@ -119,6 +119,21 @@ QPointF QxrdROICoordinates::center() const
 QSizeF QxrdROICoordinates::size() const
 {
   return get_Coords().size();
+}
+
+double QxrdROICoordinates::width2() const
+{
+  return get_Width2();
+}
+
+double QxrdROICoordinates::height2() const
+{
+  return get_Height2();
+}
+
+QSizeF QxrdROICoordinates::size2() const
+{
+  return QSizeF(get_Width2(), get_Height2());
 }
 
 void QxrdROICoordinates::setLeft(double l)
@@ -251,16 +266,40 @@ void QxrdROICoordinates::setHeight(double h)
   emit roiChanged();
 }
 
+void QxrdROICoordinates::setSize2(QSizeF s)
+{
+  set_Width2(s.width());
+  set_Height2(s.height());
+
+  emit roiChanged();
+}
+
+void QxrdROICoordinates::setSize2(double w, double h)
+{
+  setSize2(QSizeF(w,h));
+}
+
+void QxrdROICoordinates::setWidth2(double w)
+{
+  set_Width2(w);
+
+  emit roiChanged();
+}
+
+void QxrdROICoordinates::setHeight2(double w)
+{
+  set_Height2(w);
+
+  emit roiChanged();
+}
+
 QVector<QPointF> QxrdROICoordinates::markerCoords()
 {
   QVector<QPointF> res;
   QRectF c = get_Coords();
 
   switch (get_RoiType()) {
-  case SumInRectangle:
-  case AverageInRectangle:
-  case MinInRectangle:
-  case MaxInRectangle:
+  case Rectangle:
   default:
     {
       res.append(c.topLeft());
@@ -271,10 +310,7 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
     }
     break;
 
-  case SumInEllipse:
-  case AverageInEllipse:
-  case MinInEllipse:
-  case MaxInEllipse:
+  case Ellipse:
     {
       double a=c.width()/2.0;
       double b=c.height()/2.0;
@@ -290,7 +326,7 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
     }
     break;
 
-  case SumInPeak:
+  case RectangleInRectangle:
     {
       QRectF pkr;
       pkr.setSize(c.size()/2.0);
@@ -318,6 +354,144 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
 
       res.append(pkr.topLeft());
     }
+    break;
+  }
+
+  return res;
+}
+
+void QxrdROICoordinates::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+  switch (get_RoiType()) {
+  case Rectangle:
+    recalculateRectangle(img, mask);
+    break;
+  case Ellipse:
+    recalculateEllipse(img, mask);
+    break;
+  case RectangleInRectangle:
+    recalculateRectangleInRectangle(img, mask);
+    break;
+  case RectangleInEllipse:
+    recalculateRectangleInEllipse(img, mask);
+    break;
+  case EllipseInRectangle:
+    recalculateEllipseInRectangle(img, mask);
+    break;
+  case EllipseInEllipse:
+    recalculateEllipseInEllipse(img, mask);
+    break;
+  }
+}
+
+void QxrdROICoordinates::recalculateRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+  int first = true;
+  double min = 0;
+  double max = 0;
+  double sum = 0;
+  double npx = 0;
+
+  if (img) {
+    int l = qRound(left());
+    int t = qRound(top());
+    int r = qRound(right());
+    int b = qRound(bottom());
+
+
+    for (int row=t; row<=b; row++) {
+      for (int col=l; col<=r; col++) {
+        if (mask == NULL || mask->value(col,row)) {
+          double val = img->getImageData(col, row);
+
+          if (val==val) {
+            if (first) {
+              min = val;
+              max = val;
+              first = false;
+            } else if (val > max) {
+              max = val;
+            } else if (val < min) {
+              min = val;
+            }
+
+            sum += val;
+            npx += 1;
+          }
+        }
+      }
+    }
+  }
+
+  set_Sum(sum);
+  set_NPixels(npx);
+  set_Minimum(min);
+  set_Maximum(max);
+
+  if (npx > 0) {
+    set_Average(sum/npx);
+  } else {
+    set_Average(0);
+  }
+}
+
+void QxrdROICoordinates::recalculateEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+}
+
+void QxrdROICoordinates::recalculateRectangleInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+}
+
+void QxrdROICoordinates::recalculateEllipseInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+}
+
+void QxrdROICoordinates::recalculateRectangleInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+}
+
+void QxrdROICoordinates::recalculateEllipseInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+}
+
+QVector<double> QxrdROICoordinates::values() const
+{
+  QVector<double> res;
+
+  res.append(get_Sum());
+  res.append(get_Average());
+  res.append(get_Minimum());
+  res.append(get_Maximum());
+  res.append(get_NPixels());
+
+  return res;
+}
+
+int QxrdROICoordinates::outputCount()
+{
+  return OutputCount;
+}
+
+QString QxrdROICoordinates::outputName(int opt)
+{
+  QString res;
+
+  switch (opt) {
+  case SumOutput:
+    res = "Sum";
+    break;
+  case AverageOutput:
+    res = "Average";
+    break;
+  case MinimumOutput:
+    res = "Minimum";
+    break;
+  case MaximumOutput:
+    res = "Maximum";
+    break;
+  case NPixelsOutput:
+    res = "# Pixels";
     break;
   }
 

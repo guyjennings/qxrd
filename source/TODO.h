@@ -629,4 +629,13 @@ DONE("2015-10-12", "2015-10-14",
 TODO("2015-10-14", "",
      "Implement different output file format options");
 
+TODO("2015-10-21", "",
+     "Finish implementing remaining ROI calculations");
+
+TODO("2015-10-21", "",
+     "Find if/why mask range commands don't seem to work");
+
+TODO("2015-10-21", "",
+     "Fix mask display issues in detector control windows");
+
 #endif // TODO_H

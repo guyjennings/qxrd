@@ -7,6 +7,9 @@
 #include "qxrdexperiment-ptr.h"
 #include "qcepproperty.h"
 #include "qxrdroicoordinates-ptr.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
+
 #include <QScriptEngine>
 
 class QxrdROICoordinates : public QcepObject
@@ -26,26 +29,39 @@ public:
   static int     roiTypeCount();
   static QString roiTypeName(int roiType);
 
+  static int     outputCount();
+  static QString outputName(int opt);
+
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesPtr &coords);
   static void fromScriptValue(const QScriptValue &obj, QxrdROICoordinatesPtr &coords);
 
   enum {
-    SumInRectangle,
-    AverageInRectangle,
-    MinInRectangle,
-    MaxInRectangle,
-    SumInEllipse,
-    AverageInEllipse,
-    MinInEllipse,
-    MaxInEllipse,
-    SumInPeak,
+    Rectangle,
+    Ellipse,
+    RectangleInRectangle,
+    EllipseInRectangle,
+    RectangleInEllipse,
+    EllipseInEllipse,
     ROITypeCount
+  };
+
+  enum {
+    SumOutput,
+    AverageOutput,
+    MinimumOutput,
+    MaximumOutput,
+    NPixelsOutput,
+    OutputCount
   };
 
 signals:
   void roiChanged();
 
 public slots:
+  void recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+
+  QVector<double> values() const;
+
   void selectNamedROIType(QString nm);
 
   double left() const;
@@ -54,9 +70,12 @@ public slots:
   double bottom() const;
   double width() const;
   double height() const;
+  double width2() const;
+  double height2() const;
 
   QPointF center() const;
   QSizeF size() const;
+  QSizeF size2() const;
 
   void setLeft(double l);
   void setTop(double t);
@@ -67,13 +86,25 @@ public slots:
   void setCenter(double cx, double cy);
   void setSize(QSizeF s);
   void setSize(double w, double h);
+  void setSize2(QSizeF s);
+  void setSize2(double w, double h);
 
   void setCenterX(double cx);
   void setCenterY(double cy);
   void setWidth(double w);
   void setHeight(double h);
+  void setWidth2(double w);
+  void setHeight2(double h);
 
   QVector<QPointF> markerCoords();
+
+private:
+  void recalculateRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+  void recalculateEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+  void recalculateRectangleInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+  void recalculateEllipseInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+  void recalculateRectangleInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+  void recalculateEllipseInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
 
 public:
   Q_PROPERTY(int roiType READ get_RoiType WRITE set_RoiType)
@@ -85,8 +116,29 @@ public:
   Q_PROPERTY(QRectF coords READ get_Coords WRITE set_Coords)
   QCEP_DOUBLE_RECT_PROPERTY(Coords)
 
-  Q_PROPERTY(double value READ get_Value WRITE set_Value STORED false)
-  QCEP_DOUBLE_PROPERTY(Value)
+  Q_PROPERTY(double width2 READ get_Width2 WRITE set_Width2)
+  QCEP_DOUBLE_PROPERTY(Width2)
+
+  Q_PROPERTY(double height2 READ get_Height2 WRITE set_Height2)
+  QCEP_DOUBLE_PROPERTY(Height2)
+
+//  Q_PROPERTY(double value READ get_Value WRITE set_Value STORED false)
+//  QCEP_DOUBLE_PROPERTY(Value)
+
+  Q_PROPERTY(double sum READ get_Sum WRITE set_Sum STORED false)
+  QCEP_DOUBLE_PROPERTY(Sum)
+
+  Q_PROPERTY(double average READ get_Average WRITE set_Average STORED false)
+  QCEP_DOUBLE_PROPERTY(Average)
+
+  Q_PROPERTY(double minimum READ get_Minimum WRITE set_Minimum STORED false)
+  QCEP_DOUBLE_PROPERTY(Minimum)
+
+  Q_PROPERTY(double maximum READ get_Maximum WRITE set_Maximum STORED false)
+  QCEP_DOUBLE_PROPERTY(Maximum)
+
+  Q_PROPERTY(double nPixels READ get_NPixels WRITE set_NPixels STORED false)
+  QCEP_DOUBLE_PROPERTY(NPixels)
 };
 
 #endif // QXRDROICOORDINATES_H

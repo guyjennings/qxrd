@@ -12,6 +12,7 @@
 #include "qxrdroicoordinateslistmodel-ptr.h"
 #include "qxrdroicoordinates-ptr.h"
 #include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
 
 class QxrdROICalculator : public QcepObject, public QEnableSharedFromThis<QxrdROICalculator>
 {
@@ -34,8 +35,7 @@ public slots:
   QxrdROICoordinatesListModelPtr roiModel();
   QxrdROICoordinatesPtr roi(int i);
 
-  QVector<double>           values(QcepImageDataBasePtr img);
-  double                    value(QcepImageDataBasePtr img, int i);
+  QVector<double>           values(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
 
 private:
   QMutex                         m_Mutex;

@@ -109,8 +109,16 @@ QVariant QxrdROICoordinatesListModel::data(const QModelIndex &index, int role) c
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
       if (col == NumCol) {
         return row;
-      } else if (col == ValueCol) {
-        return c->get_Value();
+      } else if (col == SumCol) {
+        return c->get_Sum();
+      } else if (col == AverageCol) {
+        return c->get_Average();
+      } else if (col == MinimumCol) {
+        return c->get_Minimum();
+      } else if (col == MaximumCol) {
+        return c->get_Maximum();
+      } else if (col == NPixelsCol) {
+        return c->get_NPixels();
       } else if (col == TypeCol) {
         return c->get_RoiTypeName();
       } else if (col == CenterXCol) {
@@ -121,6 +129,10 @@ QVariant QxrdROICoordinatesListModel::data(const QModelIndex &index, int role) c
         return c->get_Coords().width();
       } else if (col == HeightCol) {
         return c->get_Coords().height();
+      } else if (col == Width2Col) {
+        return c->get_Width2();
+      } else if (col == Height2Col) {
+        return c->get_Height2();
       }
     }
   }
@@ -134,8 +146,16 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
     if (role == Qt::DisplayRole) {
       if (section == NumCol) {
         return "#";
-      } else if (section == ValueCol) {
-        return "Value";
+      } else if (section == SumCol) {
+        return "Sum";
+      } else if (section == AverageCol) {
+        return "Avg";
+      } else if (section == MinimumCol) {
+        return "Min";
+      } else if (section == MaximumCol) {
+        return "Max";
+      } else if (section == NPixelsCol) {
+        return "NPix";
       } else if (section == TypeCol) {
         return "Type";
       } else if (section == CenterXCol) {
@@ -146,6 +166,10 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
         return "Width";
       } else if (section == HeightCol) {
         return "Height";
+      } else if (section == Width2Col) {
+        return "Wd 2";
+      } else if (section == Height2Col) {
+        return "Ht 2";
       }
     } else if (role == Qt::TextAlignmentRole) {
       return Qt::AlignHCenter;
@@ -164,7 +188,9 @@ Qt::ItemFlags QxrdROICoordinatesListModel::flags(const QModelIndex &index) const
       col == CenterXCol ||
       col == CenterYCol ||
       col == WidthCol ||
-      col == HeightCol) {
+      col == HeightCol ||
+      col == Width2Col ||
+      col == Height2Col) {
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
   } else {
     return QAbstractListModel::flags(index);
@@ -180,8 +206,16 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
 
   if (c) {
     if (role == Qt::EditRole || role == Qt::DisplayRole) {
-      if (col == ValueCol) {
-        c->set_Value(value.toDouble());
+      if (col == SumCol) {
+        c->set_Sum(value.toDouble());
+      } else if (col == AverageCol) {
+        c->set_Average(value.toDouble());
+      } else if (col == MinimumCol) {
+        c->set_Minimum(value.toDouble());
+      } else if (col == MaximumCol) {
+        c->set_Maximum(value.toDouble());
+      } else if (col == NPixelsCol) {
+        c->set_NPixels(value.toDouble());
       } else if (col == TypeCol) {
         c->selectNamedROIType(value.toString());
       } else if (col == CenterXCol) {
@@ -192,6 +226,10 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
         c->setWidth(value.toDouble());
       } else if (col == HeightCol) {
         c->setHeight(value.toDouble());
+      } else if (col == Width2Col) {
+        c->setWidth2(value.toDouble());
+      } else if (col == Height2Col) {
+        c->setHeight2(value.toDouble());
       } else {
         return false;
       }
@@ -319,4 +357,17 @@ void QxrdROICoordinatesListModel::onROIChanged()
 void QxrdROICoordinatesListModel::onROIsChanged()
 {
   emit dataChanged(index(0,0), index(rowCount(QModelIndex()), columnCount(QModelIndex())));
+}
+
+void QxrdROICoordinatesListModel::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+  for (int i=0; i<m_ROICoordinates.count(); i++) {
+    QxrdROICoordinatesPtr r = m_ROICoordinates.value(i);
+
+    if (r) {
+      r->recalculate(img, mask);
+    }
+  }
+
+  emit dataChanged(index(0,SumCol), index(m_ROICoordinates.count(),NPixelsCol));
 }
