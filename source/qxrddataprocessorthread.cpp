@@ -37,6 +37,10 @@ QxrdDataProcessorThread::~QxrdDataProcessorThread()
 
 void QxrdDataProcessorThread::run()
 {
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Processor Thread Started\n");
+  }
+
   QxrdDataProcessorPtr p(new QxrdDataProcessor(m_Saver,
                                                m_Experiment,
                                                m_Acquisition,
@@ -55,18 +59,15 @@ void QxrdDataProcessorThread::run()
     rc = exec();
   }
 
-  {
-    QxrdExperimentPtr exp(m_Experiment);
-
-    if (exp && qcepDebug(DEBUG_THREADS)) {
-      exp->printMessage(tr("Processor Thread Terminated with rc %1").arg(rc));
-    }
-  }
 
   {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_DataProcessor = QxrdDataProcessorPtr();
+  }
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Processor Thread Terminated with rc %d\n", rc);
   }
 }
 

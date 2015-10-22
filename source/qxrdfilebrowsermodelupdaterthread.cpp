@@ -41,8 +41,8 @@ void QxrdFileBrowserModelUpdaterThread::shutdown()
 
 void QxrdFileBrowserModelUpdaterThread::run()
 {
-  if (g_Application && qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage("Starting Browser Model Updater Thread");
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Browser Model Updater Thread Started\n");
   }
 
   QxrdFileBrowserModelUpdaterPtr p =
@@ -59,14 +59,14 @@ void QxrdFileBrowserModelUpdaterThread::run()
     rc = exec();
   }
 
-  if (g_Application && qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage(tr("Browser Model Updater Thread Terminated with rc %1").arg(rc));
-  }
-
   {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Updater = QxrdFileBrowserModelUpdaterPtr();
+  }
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Browser Model Updater Thread Terminated with rc %d\n", rc);
   }
 }
 

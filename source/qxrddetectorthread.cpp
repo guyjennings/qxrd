@@ -199,19 +199,15 @@ QStringList QxrdDetectorThread::binningModeNamesPE()
 
 void QxrdDetectorThread::run()
 {
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Detector Thread Started\n");
+  }
+
   QxrdDetectorPtr p;
 
   {
     QxrdExperimentPtr expt(m_Experiment);
 
-    if (expt && qcepDebug(DEBUG_THREADS)) {
-      expt->printMessage("Starting Detector Thread");
-    }
-
-    if (qcepDebug(DEBUG_THREADS)) {
-      printf("Starting Detector Thread\n");
-
-    }
     if (expt) {
       switch(m_DetectorType) {
       case SimulatedDetector:
@@ -290,21 +286,13 @@ void QxrdDetectorThread::run()
   }
 
   {
-    QxrdExperimentPtr expt(m_Experiment);
-
-    if (expt && qcepDebug(DEBUG_THREADS)) {
-      expt->printMessage(tr("Detector Thread Terminated with rc %1").arg(rc));
-    }
-
-    if (qcepDebug(DEBUG_THREADS)) {
-      printf("Detector Thread Terminated with rc %d\n", rc);
-    }
-  }
-
-  {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Detector = QxrdDetectorPtr();
+  }
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Detector Thread Terminated with rc %d\n", rc);
   }
 }
 

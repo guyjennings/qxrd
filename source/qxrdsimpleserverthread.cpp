@@ -51,13 +51,11 @@ void QxrdSimpleServerThread::shutdown()
 
 void QxrdSimpleServerThread::run()
 {
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Simple Server Thread Started\n");
+  }
+
   {
-    QxrdExperimentPtr expt(m_Experiment);
-
-    if (expt && qcepDebug(DEBUG_THREADS)) {
-      expt->printMessage("Starting Simple Server Thread");
-    }
-
     QxrdSimpleServerPtr server(new QxrdSimpleServer(m_Saver, m_Experiment, m_Name));
 
     if (server) {
@@ -73,15 +71,12 @@ void QxrdSimpleServerThread::run()
   rc = exec();
 
   {
-    QxrdExperimentPtr expt(m_Experiment);
-    if (expt && qcepDebug(DEBUG_THREADS)) {
-      expt->printMessage(tr("Simple Server Thread Terminated with rc %1").arg(rc));
-    }
-  }
-
-  {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Server = QxrdSimpleServerPtr();
+  }
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Simple Server Thread Terminated with rc %d\n", rc);
   }
 }

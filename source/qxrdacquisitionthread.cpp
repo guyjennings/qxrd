@@ -44,6 +44,10 @@ QxrdAcquisitionThread::~QxrdAcquisitionThread()
 
 void QxrdAcquisitionThread::run()
 {
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Acquisition Thread Started\n");
+  }
+
   QxrdAcquisitionPtr acq = QxrdAcquisitionPtr(
         new QxrdAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator));
 
@@ -60,17 +64,13 @@ void QxrdAcquisitionThread::run()
   }
 
   {
-    QxrdExperimentPtr exp(m_Experiment);
-
-    if (exp && qcepDebug(DEBUG_THREADS)) {
-      exp->printMessage(tr("Acquisition Thread Terminated with rc %1").arg(rc));
-    }
-  }
-
-  {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Acquisition = QxrdAcquisitionPtr();
+  }
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Acquisition Thread Terminated with rc %d\n", rc);
   }
 }
 

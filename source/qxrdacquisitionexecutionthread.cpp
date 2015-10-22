@@ -3,6 +3,7 @@
 #include "qxrdacquisitioninterface.h"
 #include "qxrdacquisitionexecution.h"
 #include <stdio.h>
+#include "qcepmutexlocker.h"
 
 QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcquisitionInterfaceWPtr acq)
   : QxrdThread(),
@@ -33,12 +34,20 @@ void QxrdAcquisitionExecutionThread::shutdown()
 
 void QxrdAcquisitionExecutionThread::run()
 {
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Acquisition Execution Thread Started\n");
+  }
+
   m_AcquisitionExecution =
       QxrdAcquisitionExecutionPtr(new QxrdAcquisitionExecution(m_Acquisition));
 
   int rc = exec();
 
-  m_AcquisitionExecution = QxrdAcquisitionExecutionPtr();
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    m_AcquisitionExecution = QxrdAcquisitionExecutionPtr();
+  }
 
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Acquisition Execution Thread terminated with rc %d\n", rc);

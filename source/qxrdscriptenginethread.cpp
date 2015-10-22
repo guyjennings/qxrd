@@ -53,8 +53,8 @@ QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
 
 void QxrdScriptEngineThread::run()
 {
-  if (g_Application && qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage("Starting Script Engine Thread");
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Script Engine Thread Started\n");
   }
 
   QxrdScriptEnginePtr p(new QxrdScriptEngine(m_Application, m_Experiment));
@@ -71,13 +71,13 @@ void QxrdScriptEngineThread::run()
     rc = exec();
   }
 
-  if (g_Application && qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage(tr("Script Engine Thread Terminated with rc %1").arg(rc));
-  }
-
   {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_ScriptEngine = QxrdScriptEnginePtr();
+  }
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Script Engine Thread Terminated with rc %d\n", rc);
   }
 }

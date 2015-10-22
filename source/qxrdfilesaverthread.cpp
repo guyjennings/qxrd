@@ -40,8 +40,8 @@ QxrdFileSaverThread::~QxrdFileSaverThread()
 
 void QxrdFileSaverThread::run()
 {
-  if (g_Application && qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage("Starting File Saver Thread");
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("File Saver Thread Started\n");
   }
 
   QxrdFileSaverPtr res(new QxrdFileSaver(m_Allocator));
@@ -52,14 +52,14 @@ void QxrdFileSaverThread::run()
 
   int rc = exec();
 
-  if (g_Application && qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage(tr("File Saver Thread Terminated with rc %1").arg(rc));
-  }
-
   {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_FileSaver = QxrdFileSaverPtr();
+  }
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("File Saver Thread Terminated with rc %d\n", rc);
   }
 }
 

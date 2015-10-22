@@ -74,8 +74,8 @@ QxrdExperimentPtr QxrdExperimentThread::experiment()
 
 void QxrdExperimentThread::run()
 {
-  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdExperimentThread::run(%p)\n", this);
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Experiment Thread Started\n");
   }
 
   {
@@ -98,19 +98,13 @@ void QxrdExperimentThread::run()
   rc = exec();
 
   {
-    if (qcepDebug(DEBUG_THREADS)) {
-      QxrdApplicationPtr app(m_Application);
-
-      if (app) {
-        app->printMessage(tr("Experiment Thread Terminated with rc %1").arg(rc));
-      }
-    }
-  }
-
-  {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Experiment = QxrdExperimentPtr();
+  }
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Experiment Thread Terminated with rc %d\n", rc);
   }
 }
 

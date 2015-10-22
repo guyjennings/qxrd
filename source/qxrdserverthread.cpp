@@ -54,13 +54,11 @@ void QxrdServerThread::shutdown()
 
 void QxrdServerThread::run()
 {
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Spec Server Thread Started\n");
+  }
+
   {
-    QxrdExperimentPtr expt(m_Experiment);
-
-    if (expt && qcepDebug(DEBUG_THREADS)) {
-      expt->printMessage("Starting Spec Server Thread");
-    }
-
     QxrdServerPtr server(new QxrdServer(m_Saver, m_Experiment, m_Name));
 
 
@@ -79,17 +77,13 @@ void QxrdServerThread::run()
   }
 
   {
-    QxrdExperimentPtr expt(m_Experiment);
-
-    if (expt && qcepDebug(DEBUG_THREADS)) {
-      expt->printMessage(tr("Spec Server Thread Terminated with rc %1").arg(rc));
-    }
-  }
-
-  {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     m_Server = QxrdServerPtr();
+  }
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Spec Server Thread Terminated with rc %d\n", rc);
   }
 }
 
