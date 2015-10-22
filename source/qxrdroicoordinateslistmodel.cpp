@@ -119,6 +119,12 @@ QVariant QxrdROICoordinatesListModel::data(const QModelIndex &index, int role) c
         return c->get_Maximum();
       } else if (col == NPixelsCol) {
         return c->get_NPixels();
+      } else if (col == BackgroundCol) {
+        return c->get_Background();
+      } else if (col == XGradientCol) {
+        return c->get_XGradient();
+      } else if (col == YGradientCol) {
+        return c->get_YGradient();
       } else if (col == TypeCol) {
         return c->get_RoiTypeName();
       } else if (col == CenterXCol) {
@@ -156,6 +162,12 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
         return "Max";
       } else if (section == NPixelsCol) {
         return "NPix";
+      } else if (section == BackgroundCol) {
+        return "Bkgd";
+      } else if (section == XGradientCol) {
+        return "XGrad";
+      } else if (section == YGradientCol) {
+        return "YGrad";
       } else if (section == TypeCol) {
         return "Type";
       } else if (section == CenterXCol) {
@@ -216,6 +228,12 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
         c->set_Maximum(value.toDouble());
       } else if (col == NPixelsCol) {
         c->set_NPixels(value.toDouble());
+      } else if (col == BackgroundCol) {
+        c->set_Background(value.toDouble());
+      } else if (col == XGradientCol) {
+        c->set_XGradient(value.toDouble());
+      } else if (col == YGradientCol) {
+        c->set_YGradient(value.toDouble());
       } else if (col == TypeCol) {
         c->selectNamedROIType(value.toString());
       } else if (col == CenterXCol) {
