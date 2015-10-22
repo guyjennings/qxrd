@@ -51,7 +51,22 @@ public:
     MinimumOutput,
     MaximumOutput,
     NPixelsOutput,
+    BackgroundOutput,
+    XGradientOutput,
+    YGradientOutput,
     OutputCount
+  };
+
+  enum {
+    NoBounds,
+    RectangleBounds,
+    EllipseBounds
+  };
+
+  enum {
+    VisualizeNone,
+    VisualizeBackground,
+    VisualizePeak
   };
 
 signals:
@@ -59,6 +74,8 @@ signals:
 
 public slots:
   void recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+  void visualizeBackground(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+  void visualizePeak(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
 
   QVector<double> values() const;
 
@@ -72,6 +89,10 @@ public slots:
   double height() const;
   double width2() const;
   double height2() const;
+  double left2() const;
+  double right2() const;
+  double top2() const;
+  double bottom2() const;
 
   QPointF center() const;
   QSizeF size() const;
@@ -99,12 +120,14 @@ public slots:
   QVector<QPointF> markerCoords();
 
 private:
-  void recalculateRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
-  void recalculateEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
-  void recalculateRectangleInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
-  void recalculateEllipseInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
-  void recalculateRectangleInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
-  void recalculateEllipseInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+  void recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis);
+
+//  void recalculateRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+//  void recalculateEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+//  void recalculateRectangleInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+//  void recalculateEllipseInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+//  void recalculateRectangleInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+//  void recalculateEllipseInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
 
 public:
   Q_PROPERTY(int roiType READ get_RoiType WRITE set_RoiType)
@@ -139,6 +162,15 @@ public:
 
   Q_PROPERTY(double nPixels READ get_NPixels WRITE set_NPixels STORED false)
   QCEP_DOUBLE_PROPERTY(NPixels)
+
+  Q_PROPERTY(double background READ get_Background WRITE set_Background STORED false)
+  QCEP_DOUBLE_PROPERTY(Background)
+
+  Q_PROPERTY(double xGradient READ get_XGradient WRITE set_XGradient STORED false)
+  QCEP_DOUBLE_PROPERTY(XGradient)
+
+  Q_PROPERTY(double yGradient READ get_YGradient WRITE set_YGradient STORED false)
+  QCEP_DOUBLE_PROPERTY(YGradient)
 };
 
 #endif // QXRDROICOORDINATES_H

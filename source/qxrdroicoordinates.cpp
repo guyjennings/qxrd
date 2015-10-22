@@ -19,7 +19,10 @@ QxrdROICoordinates::QxrdROICoordinates(QcepSettingsSaverWPtr saver,
     m_Average(QcepSettingsSaverWPtr(), this, "average", 0, "ROI Pixel Average"),
     m_Minimum(QcepSettingsSaverWPtr(), this, "minimum", 0, "ROI Pixel Minimum"),
     m_Maximum(QcepSettingsSaverWPtr(), this, "maximum", 0, "ROI Pixel Maximum"),
-    m_NPixels(QcepSettingsSaverWPtr(), this, "nPixels", 0, "ROI N Pixels")
+    m_NPixels(QcepSettingsSaverWPtr(), this, "nPixels", 0, "ROI N Pixels"),
+    m_Background(QcepSettingsSaverWPtr(), this, "background", 0, "ROI Background"),
+    m_XGradient(QcepSettingsSaverWPtr(), this, "xGradient", 0, "ROI X Gradient"),
+    m_YGradient(QcepSettingsSaverWPtr(), this, "yGradient", 0, "ROI Y Gradient")
 {
 }
 
@@ -134,6 +137,26 @@ double QxrdROICoordinates::height2() const
 QSizeF QxrdROICoordinates::size2() const
 {
   return QSizeF(get_Width2(), get_Height2());
+}
+
+double QxrdROICoordinates::left2() const
+{
+  return center().x() - width2()/2.0;
+}
+
+double QxrdROICoordinates::right2() const
+{
+  return center().x() + width2()/2.0;
+}
+
+double QxrdROICoordinates::top2() const
+{
+  return center().y() - height2()/2.0;
+}
+
+double QxrdROICoordinates::bottom2() const
+{
+  return center().y() + height2()/2.0;
 }
 
 void QxrdROICoordinates::setLeft(double l)
@@ -329,7 +352,7 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
   case RectangleInRectangle:
     {
       QRectF pkr;
-      pkr.setSize(c.size()/2.0);
+      pkr.setSize(size2());
       pkr.moveCenter(c.center());
 
       res.append(c.topLeft());
@@ -338,21 +361,94 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
       res.append(c.topRight());
       res.append(c.topLeft());
 
-      res.append(pkr.topLeft());
+      res.append(QPointF(qQNaN(), qQNaN()));
 
+      res.append(pkr.topLeft());
       res.append(pkr.bottomLeft());
+      res.append(pkr.bottomRight());
+      res.append(pkr.topRight());
+      res.append(pkr.topLeft());
+    }
+    break;
+
+  case RectangleInEllipse:
+    {
+      QRectF pkr;
+      pkr.setSize(size2());
+      pkr.moveCenter(c.center());
+
+      double a=c.width()/2.0;
+      double b=c.height()/2.0;
+      QPointF cen = c.center();
+
+      for (int i=0; i<=16; i++) {
+        double theta = M_PI*i/8.0;
+        double x = cen.x() + a*cos(theta);
+        double y = cen.y() + b*sin(theta);
+
+        res.append(QPointF(x,y));
+      }
+
+      res.append(QPointF(qQNaN(), qQNaN()));
+
+      res.append(pkr.topLeft());
+      res.append(pkr.bottomLeft());
+      res.append(pkr.bottomRight());
+      res.append(pkr.topRight());
+      res.append(pkr.topLeft());
+    }
+    break;
+
+  case EllipseInRectangle:
+    {
+      res.append(c.topLeft());
       res.append(c.bottomLeft());
-      res.append(pkr.bottomLeft());
-
-      res.append(pkr.bottomRight());
       res.append(c.bottomRight());
-      res.append(pkr.bottomRight());
-
-      res.append(pkr.topRight());
       res.append(c.topRight());
-      res.append(pkr.topRight());
+      res.append(c.topLeft());
 
-      res.append(pkr.topLeft());
+      res.append(QPointF(qQNaN(), qQNaN()));
+
+      double a2=width2()/2.0;
+      double b2=height2()/2.0;
+      QPointF cen = center();
+
+      for (int i=0; i<=16; i++) {
+        double theta = M_PI*i/8.0;
+        double x = cen.x() + a2*cos(theta);
+        double y = cen.y() + b2*sin(theta);
+
+        res.append(QPointF(x,y));
+      }
+    }
+    break;
+
+  case EllipseInEllipse:
+    {
+      double a=c.width()/2.0;
+      double b=c.height()/2.0;
+      QPointF cen = c.center();
+
+      for (int i=0; i<=16; i++) {
+        double theta = M_PI*i/8.0;
+        double x = cen.x() + a*cos(theta);
+        double y = cen.y() + b*sin(theta);
+
+        res.append(QPointF(x,y));
+      }
+
+      res.append(QPointF(qQNaN(), qQNaN()));
+
+      double a2=width2()/2.0;
+      double b2=height2()/2.0;
+
+      for (int i=0; i<=16; i++) {
+        double theta = M_PI*i/8.0;
+        double x = cen.x() + a2*cos(theta);
+        double y = cen.y() + b2*sin(theta);
+
+        res.append(QPointF(x,y));
+      }
     }
     break;
   }
@@ -362,61 +458,204 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
 
 void QxrdROICoordinates::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
-  switch (get_RoiType()) {
-  case Rectangle:
-    recalculateRectangle(img, mask);
-    break;
-  case Ellipse:
-    recalculateEllipse(img, mask);
-    break;
-  case RectangleInRectangle:
-    recalculateRectangleInRectangle(img, mask);
-    break;
-  case RectangleInEllipse:
-    recalculateRectangleInEllipse(img, mask);
-    break;
-  case EllipseInRectangle:
-    recalculateEllipseInRectangle(img, mask);
-    break;
-  case EllipseInEllipse:
-    recalculateEllipseInEllipse(img, mask);
-    break;
-  }
+  recalculatePrivate(img, mask, VisualizeNone);
 }
 
-void QxrdROICoordinates::recalculateRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+void QxrdROICoordinates::visualizeBackground(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
+  recalculatePrivate(img, mask, VisualizeBackground);
+}
+
+void QxrdROICoordinates::visualizePeak(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+  recalculatePrivate(img, mask, VisualizePeak);
+}
+
+void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis)
+{
+  int outerBounds = NoBounds;
+  int innerBounds = NoBounds;
+
+  switch (get_RoiType()) {
+  case Rectangle:
+    outerBounds = RectangleBounds;
+    break;
+  case Ellipse:
+    outerBounds = EllipseBounds;
+    break;
+  case RectangleInRectangle:
+    outerBounds = RectangleBounds;
+    innerBounds = RectangleBounds;
+    break;
+  case RectangleInEllipse:
+    outerBounds = EllipseBounds;
+    innerBounds = RectangleBounds;
+    break;
+  case EllipseInRectangle:
+    outerBounds = RectangleBounds;
+    innerBounds = EllipseBounds;
+    break;
+  case EllipseInEllipse:
+    outerBounds = EllipseBounds;
+    innerBounds = EllipseBounds;
+    break;
+  }
+
   int first = true;
   double min = 0;
   double max = 0;
   double sum = 0;
   double npx = 0;
 
+  double sumvn = 0;
+  double sumvx = 0;
+  double sumvy = 0;
+
+  double sumct = 0;
+  double sumnn = 0;
+  double sumnx = 0;
+  double sumny = 0;
+  double sumxy = 0;
+  double sumxx = 0;
+  double sumyy = 0;
+
+  double bkgd = 0;
+  double gradx = 0;
+  double grady = 0;
+
   if (img) {
-    int l = qRound(left());
-    int t = qRound(top());
-    int r = qRound(right());
-    int b = qRound(bottom());
+    int tp = qRound(top());
+    int bt = qRound(bottom());
+    int lf = qRound(left());
+    int rt = qRound(right());
 
+    int tp2 = qRound(top2());
+    int bt2 = qRound(bottom2());
+    int lf2 = qRound(left2());
+    int rt2 = qRound(right2());
 
-    for (int row=t; row<=b; row++) {
-      for (int col=l; col<=r; col++) {
-        if (mask == NULL || mask->value(col,row)) {
-          double val = img->getImageData(col, row);
+    double cx = center().x();
+    double cy = center().y();
+    double a  = width()/2.0;
+    double b  = height()/2.0;
+    double a2 = width2()/2.0;
+    double b2 = height2()/2.0;
 
-          if (val==val) {
-            if (first) {
-              min = val;
-              max = val;
-              first = false;
-            } else if (val > max) {
-              max = val;
-            } else if (val < min) {
-              min = val;
+    for (int row=tp; row<=bt; row++) {
+      double dy = row - cy;
+
+      if (outerBounds == EllipseBounds) {
+        double xx = a*sqrt(1 - pow(dy/b,2));
+        lf = qRound(cx - xx);
+        rt = qRound(cx + xx);
+      }
+
+      for (int col=lf; col<=rt; col++) {
+        double dx = col - cx;
+
+        if (innerBounds == EllipseBounds) {
+          double xx2 = a2*sqrt(1 - pow(dy/b2,2));
+          if (xx2==xx2) {
+            lf2 = qRound(cx - xx2);
+            rt2 = qRound(cx + xx2);
+          } else {
+            lf2 = rt;
+            rt2 = rt;
+          }
+        }
+
+        if (innerBounds == NoBounds
+            || (row <= tp2)
+            || (row >= bt2)
+            || (col <= lf2)
+            || (col >= rt2)) {
+          if (mask == NULL || mask->value(col, row)) {
+            double val = img->getImageData(col, row);
+
+            if (val == val) {
+              sumct += 1;
+              sumnn += 1;
+              sumnx += dx;
+              sumny += dy;
+              sumxy += dx*dy;
+              sumxx += dx*dx;
+              sumyy += dy*dy;
+
+              sumvn += val;
+              sumvx += val*dx;
+              sumvy += val*dy;
+
+              if (innerBounds == NoBounds) {
+                if (first) {
+                  min = val;
+                  max = val;
+                  first = false;
+                } else if (val > max) {
+                  max = val;
+                } else if (val < min) {
+                  min = val;
+                }
+              }
+
+              sum += val;
+              npx += 1;
+
+              if (vis == VisualizeBackground) {
+                img->setImageData(col, row, 1000 - val);
+              }
             }
+          }
+        }
+      }
+    }
 
-            sum += val;
-            npx += 1;
+    if (innerBounds != NoBounds) {
+      first = true;
+      min = 0;
+      max = 0;
+      sum = 0;
+      npx = 0;
+
+      for (int row=tp2; row<=bt2; row++) {
+        double dy = row - cy;
+
+        if (innerBounds == EllipseBounds) {
+          double xx2 = a2*sqrt(1 - pow(dy/b2,2));
+          if (xx2==xx2) {
+            lf2 = qRound(cx - xx2);
+            rt2 = qRound(cx + xx2);
+          } else {
+            lf2 = rt;
+            rt2 = rt-1;
+          }
+        }
+
+        for (int col=lf2; col<=rt2; col++) {
+          if (mask == NULL || mask->value(col, row)) {
+            double val = img->getImageData(col, row);
+
+            if (val == val) {
+              double dx = col - cx;
+              double bk = bkgd + dx*gradx + dy*grady;
+              double v  = val - bk;
+
+              if (first) {
+                min = v;
+                max = v;
+                first = false;
+              } else if (v > max) {
+                max = v;
+              } else if (v < min) {
+                min = v;
+              }
+
+              sum += v;
+              npx += 1;
+
+              if (vis == VisualizePeak) {
+                img->setImageData(col, row, 1000 - val);
+              }
+            }
           }
         }
       }
@@ -424,6 +663,7 @@ void QxrdROICoordinates::recalculateRectangle(QcepImageDataBasePtr img, QcepMask
   }
 
   set_Sum(sum);
+
   set_NPixels(npx);
   set_Minimum(min);
   set_Maximum(max);
@@ -433,27 +673,227 @@ void QxrdROICoordinates::recalculateRectangle(QcepImageDataBasePtr img, QcepMask
   } else {
     set_Average(0);
   }
+
+  set_Background(bkgd);
+  set_XGradient(gradx);
+  set_YGradient(grady);
 }
 
-void QxrdROICoordinates::recalculateEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-{
-}
+//void QxrdROICoordinates::recalculateRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+//{
+//  int first = true;
+//  double min = 0;
+//  double max = 0;
+//  double sum = 0;
+//  double npx = 0;
 
-void QxrdROICoordinates::recalculateRectangleInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-{
-}
+//  if (img) {
+//    int lf = qRound(left());
+//    int tp = qRound(top());
+//    int rt = qRound(right());
+//    int bt = qRound(bottom());
 
-void QxrdROICoordinates::recalculateEllipseInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-{
-}
 
-void QxrdROICoordinates::recalculateRectangleInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-{
-}
+//    for (int row=tp; row<=bt; row++) {
+//      for (int col=lf; col<=rt; col++) {
+//        if (mask == NULL || mask->value(col,row)) {
+//          double val = img->getImageData(col, row);
 
-void QxrdROICoordinates::recalculateEllipseInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-{
-}
+//          if (val==val) {
+//            if (first) {
+//              min = val;
+//              max = val;
+//              first = false;
+//            } else if (val > max) {
+//              max = val;
+//            } else if (val < min) {
+//              min = val;
+//            }
+
+//            sum += val;
+//            npx += 1;
+//          }
+//        }
+//      }
+//    }
+//  }
+
+//  set_Sum(sum);
+//  set_NPixels(npx);
+//  set_Minimum(min);
+//  set_Maximum(max);
+
+//  if (npx > 0) {
+//    set_Average(sum/npx);
+//  } else {
+//    set_Average(0);
+//  }
+//}
+
+//void QxrdROICoordinates::recalculateEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+//{
+//  int first = true;
+//  double min = 0;
+//  double max = 0;
+//  double sum = 0;
+//  double npx = 0;
+
+//  if (img) {
+//    int tp = qRound(top());
+//    int bt = qRound(bottom());
+
+//    double cx = center().x();
+//    double cy = center().y();
+//    double a  = width()/2.0;
+//    double b  = height()/2.0;
+
+//    for (int row=tp; row<=bt; row++) {
+//      double y = row - cy;
+//      double xx = a*sqrt(1 - pow(y/b,2));
+//      int x1 = qRound(cx - xx);
+//      int x2 = qRound(cx + xx);
+
+//      for (int col=x1; col<=x2; col++) {
+//        if (mask == NULL || mask->value(col,row)) {
+//          double val = img->getImageData(col, row);
+
+//          if (val==val) {
+//            if (first) {
+//              min = val;
+//              max = val;
+//              first = false;
+//            } else if (val > max) {
+//              max = val;
+//            } else if (val < min) {
+//              min = val;
+//            }
+
+//            sum += val;
+//            npx += 1;
+//          }
+//        }
+//      }
+//    }
+//  }
+
+//  set_Sum(sum);
+//  set_NPixels(npx);
+//  set_Minimum(min);
+//  set_Maximum(max);
+
+//  if (npx > 0) {
+//    set_Average(sum/npx);
+//  } else {
+//    set_Average(0);
+//  }
+//}
+
+//void QxrdROICoordinates::recalculateRectangleInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+//{
+//  int first = true;
+//  double min = 0;
+//  double max = 0;
+//  double sum = 0;
+//  double npx = 0;
+
+//  double sumvn = 0;
+//  double sumvx = 0;
+//  double sumvy = 0;
+
+//  double sumct = 0;
+//  double sumnn = 0;
+//  double sumnx = 0;
+//  double sumny = 0;
+//  double sumxy = 0;
+//  double sumxx = 0;
+//  double sumyy = 0;
+
+//  double bkgd = 0;
+//  double gradx = 0;
+//  double grady = 0;
+
+//  if (img) {
+//    int tp = qRound(top());
+//    int bt = qRound(bottom());
+//    int lf = qRound(left());
+//    int rt = qRound(right());
+
+//    int tp2 = qRound(top2());
+//    int bt2 = qRound(bottom2());
+//    int lf2 = qRound(left2());
+//    int rt2 = qRound(right2());
+
+//    double cx = center().x();
+//    double cy = center().y();
+
+//    for (int row=tp; row<=bt; row++) {
+//      for (int col=lf; col<=rt; col++) {
+//        if (row <= lf2 && row >= rt2 && col <= tp2 && col >= bt2) {
+//          if (mask == NULL || mask->value(col,row)) {
+//            double val = img->getImageData(col, row);
+
+//            if (val == val) {
+//              double dx = col - cx;
+//              double dy = row - cy;
+
+//              sumct += 1;
+//              sumnn += 1;
+//              sumnx += dx;
+//              sumny += dy;
+//              sumxy += dx*dy;
+//              sumxx += dx*dx;
+//              sumyy += dy*dy;
+
+//              sumvn += val;
+//              sumvx += val*dx;
+//              sumvy += val*dy;
+//            }
+//          }
+//        }
+//      }
+//    }
+
+//    for (int row=tp2; row<=bt2; row++) {
+//      for (int col=lf2; col<=rt2; col++) {
+//        if (mask == NULL || mask->value(col, row)) {
+//          double val = img->getImageData(col, row);
+
+//          if (val == val) {
+//            double dx = col - cx;
+//            double dy = row - cy;
+//            double bk = bkgd + dx*gradx + dy*grady;
+//            double v = v-bk;
+
+//            if (first) {
+//              min = v;
+//              max = v;
+//              first = false;
+//            } else if (v > max) {
+//              max = v;
+//            } else if (v < min) {
+//              min = v;
+//            }
+
+//            sum += v;
+//            npx += 1;
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
+
+//void QxrdROICoordinates::recalculateEllipseInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+//{
+//}
+
+//void QxrdROICoordinates::recalculateRectangleInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+//{
+//}
+
+//void QxrdROICoordinates::recalculateEllipseInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+//{
+//}
 
 QVector<double> QxrdROICoordinates::values() const
 {
@@ -464,6 +904,9 @@ QVector<double> QxrdROICoordinates::values() const
   res.append(get_Minimum());
   res.append(get_Maximum());
   res.append(get_NPixels());
+  res.append(get_Background());
+  res.append(get_XGradient());
+  res.append(get_YGradient());
 
   return res;
 }
@@ -492,6 +935,15 @@ QString QxrdROICoordinates::outputName(int opt)
     break;
   case NPixelsOutput:
     res = "# Pixels";
+    break;
+  case BackgroundOutput:
+    res = "Background";
+    break;
+  case XGradientOutput:
+    res = "X Gradient";
+    break;
+  case YGradientOutput:
+    res = "Y Gradient";
     break;
   }
 

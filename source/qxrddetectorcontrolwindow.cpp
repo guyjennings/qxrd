@@ -76,7 +76,6 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     s
     connect(m_ClearBadPixels,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearBadPixels);
     connect(m_BrowseGainImage,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseGainCorrection);
     connect(m_ClearGainImage,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearGainCorrection);
-
     connect(m_ActionLoadDarkImage, &QAction::triggered, this, &QxrdDetectorControlWindow::doBrowseDark);
     connect(m_ActionLoadMask,      &QAction::triggered, this, &QxrdDetectorControlWindow::doBrowseMask);
 
@@ -94,6 +93,10 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     s
       connect(m_DeleteROI,   &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doDeleteROI);
       connect(m_MoveROIDown, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doMoveROIDown);
       connect(m_MoveROIUp,   &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doMoveROIUp);
+
+      connect(m_RecalculateButton,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doRecalculate);
+      connect(m_VisualizeROIBackground, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doVisualizeBackground);
+      connect(m_VisualizeROIPeak,       &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doVisualizePeak);
 
       m_ROIWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     }
@@ -451,6 +454,51 @@ void QxrdDetectorControlWindow::doClearGainCorrection()
 
     if (res == QMessageBox::Ok) {
       dp->set_GainMapPath("");
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doRecalculate()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    if (m_ROIModel) {
+      m_ROIModel->recalculate(dp->data(), dp->mask());
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doVisualizeBackground()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    QVector<int> rois = selectedROIs();
+
+    if (rois.count() != 1) {
+      QMessageBox::information(this, "Visualize ROI", "Select one ROI to visualize", QMessageBox::Ok);
+    } else if (m_ROIModel) {
+      m_ROIModel->visualizeBackground(rois.first(), dp->data(), dp->mask());
+
+      displayNewData(dp->data(), QcepMaskDataPtr());
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doVisualizePeak()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+
+  if (dp) {
+    QVector<int> rois = selectedROIs();
+
+    if (rois.count() != 1) {
+      QMessageBox::information(this, "Visualize ROI", "Select one ROI to visualize", QMessageBox::Ok);
+    } else if (m_ROIModel) {
+      m_ROIModel->visualizePeak(rois.first(), dp->data(), dp->mask());
+
+      displayNewData(dp->data(), QcepMaskDataPtr());
     }
   }
 }

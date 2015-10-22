@@ -58,6 +58,10 @@ private slots:
   void doBrowseGainCorrection();
   void doClearGainCorrection();
 
+  void doRecalculate();
+  void doVisualizeBackground();
+  void doVisualizePeak();
+
 private:
   QVector<int>  selectedROIs();
 

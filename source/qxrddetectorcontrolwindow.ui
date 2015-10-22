@@ -464,6 +464,39 @@
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="m_RecalculateButton">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_VisualizeROIBackground">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/mask_invert.png</normaloff>:/images/mask_invert.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_VisualizeROIPeak">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/mask_polygon.png</normaloff>:/images/mask_polygon.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="m_MoveROIUp">
              <property name="text">
               <string/>

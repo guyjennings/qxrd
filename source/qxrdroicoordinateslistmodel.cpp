@@ -371,3 +371,21 @@ void QxrdROICoordinatesListModel::recalculate(QcepImageDataBasePtr img, QcepMask
 
   emit dataChanged(index(0,SumCol), index(m_ROICoordinates.count(),NPixelsCol));
 }
+
+void QxrdROICoordinatesListModel::visualizeBackground(int n, QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+  QxrdROICoordinatesPtr r = m_ROICoordinates.value(n);
+
+  if (r) {
+    r->visualizeBackground(img, mask);
+  }
+}
+
+void QxrdROICoordinatesListModel::visualizePeak(int n, QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+{
+  QxrdROICoordinatesPtr r = m_ROICoordinates.value(n);
+
+  if (r) {
+    r->visualizePeak(img, mask);
+  }
+}

@@ -25,6 +25,8 @@
 #include "qxrdroicoordinateslistmodel.h"
 #include "qxrdroicoordinates.h"
 
+#include "qwt_plot_piecewise_curve.h"
+
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QcepPlot(parent),
     m_ObjectNamer(this, "imageGraph"),
@@ -1226,7 +1228,7 @@ void QxrdImagePlot::updateROIDisplay()
       if (roi) {
         QVector<QPointF> pts = roi->markerCoords();
 
-        QwtPlotCurve *pc = new QwtPlotCurve(tr("ROI %1").arg(i));
+        QwtPlotPiecewiseCurve *pc = new QwtPlotPiecewiseCurve(this, tr("ROI %1").arg(i));
 
         setPlotCurveStyle(i, pc);
 

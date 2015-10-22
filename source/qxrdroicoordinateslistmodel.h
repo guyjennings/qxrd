@@ -52,6 +52,8 @@ public:
   int roiCount() const;
 
   void recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+  void visualizeBackground(int n, QcepImageDataBasePtr img, QcepMaskDataPtr mask);
+  void visualizePeak(int n, QcepImageDataBasePtr img, QcepMaskDataPtr mask);
 
   enum {
     NumCol,
