@@ -1,6 +1,7 @@
 #include "qxrdroicoordinates.h"
 #include "qxrdexperiment.h"
 #include <QtMath>
+#include <QMatrix4x4>
 
 QxrdROICoordinates::QxrdROICoordinates(QcepSettingsSaverWPtr saver,
                                        QxrdExperimentWPtr    exp,
@@ -609,6 +610,33 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
       }
     }
 
+    if (sumct > 5) {
+      QMatrix4x4 m;
+
+      m(0,0) = sumnn;
+      m(1,0) = sumnx;
+      m(0,1) = sumnx;
+      m(2,0) = sumny;
+      m(0,2) = sumny;
+      m(1,1) = sumxx;
+      m(2,1) = sumxy;
+      m(1,2) = sumxy;
+      m(2,2) = sumyy;
+
+      bool invertible;
+
+      QMatrix4x4 inv = m.inverted(&invertible);
+
+      if (invertible) {
+        bkgd   = inv(0,0)*sumvn + inv(0,1)*sumvx + inv(0,2)*sumvy;
+        gradx  = inv(1,0)*sumvn + inv(1,1)*sumvx + inv(1,2)*sumvy;
+        grady  = inv(2,0)*sumvn + inv(2,1)*sumvx + inv(2,2)*sumvy;
+      } else {
+        bkgd = sumvn/sumct;
+      }
+    } else if (sumct > 0) {
+      bkgd = sumvn/sumct;
+    }
     if (innerBounds != NoBounds) {
       first = true;
       min = 0;
@@ -678,222 +706,6 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
   set_XGradient(gradx);
   set_YGradient(grady);
 }
-
-//void QxrdROICoordinates::recalculateRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-//{
-//  int first = true;
-//  double min = 0;
-//  double max = 0;
-//  double sum = 0;
-//  double npx = 0;
-
-//  if (img) {
-//    int lf = qRound(left());
-//    int tp = qRound(top());
-//    int rt = qRound(right());
-//    int bt = qRound(bottom());
-
-
-//    for (int row=tp; row<=bt; row++) {
-//      for (int col=lf; col<=rt; col++) {
-//        if (mask == NULL || mask->value(col,row)) {
-//          double val = img->getImageData(col, row);
-
-//          if (val==val) {
-//            if (first) {
-//              min = val;
-//              max = val;
-//              first = false;
-//            } else if (val > max) {
-//              max = val;
-//            } else if (val < min) {
-//              min = val;
-//            }
-
-//            sum += val;
-//            npx += 1;
-//          }
-//        }
-//      }
-//    }
-//  }
-
-//  set_Sum(sum);
-//  set_NPixels(npx);
-//  set_Minimum(min);
-//  set_Maximum(max);
-
-//  if (npx > 0) {
-//    set_Average(sum/npx);
-//  } else {
-//    set_Average(0);
-//  }
-//}
-
-//void QxrdROICoordinates::recalculateEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-//{
-//  int first = true;
-//  double min = 0;
-//  double max = 0;
-//  double sum = 0;
-//  double npx = 0;
-
-//  if (img) {
-//    int tp = qRound(top());
-//    int bt = qRound(bottom());
-
-//    double cx = center().x();
-//    double cy = center().y();
-//    double a  = width()/2.0;
-//    double b  = height()/2.0;
-
-//    for (int row=tp; row<=bt; row++) {
-//      double y = row - cy;
-//      double xx = a*sqrt(1 - pow(y/b,2));
-//      int x1 = qRound(cx - xx);
-//      int x2 = qRound(cx + xx);
-
-//      for (int col=x1; col<=x2; col++) {
-//        if (mask == NULL || mask->value(col,row)) {
-//          double val = img->getImageData(col, row);
-
-//          if (val==val) {
-//            if (first) {
-//              min = val;
-//              max = val;
-//              first = false;
-//            } else if (val > max) {
-//              max = val;
-//            } else if (val < min) {
-//              min = val;
-//            }
-
-//            sum += val;
-//            npx += 1;
-//          }
-//        }
-//      }
-//    }
-//  }
-
-//  set_Sum(sum);
-//  set_NPixels(npx);
-//  set_Minimum(min);
-//  set_Maximum(max);
-
-//  if (npx > 0) {
-//    set_Average(sum/npx);
-//  } else {
-//    set_Average(0);
-//  }
-//}
-
-//void QxrdROICoordinates::recalculateRectangleInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-//{
-//  int first = true;
-//  double min = 0;
-//  double max = 0;
-//  double sum = 0;
-//  double npx = 0;
-
-//  double sumvn = 0;
-//  double sumvx = 0;
-//  double sumvy = 0;
-
-//  double sumct = 0;
-//  double sumnn = 0;
-//  double sumnx = 0;
-//  double sumny = 0;
-//  double sumxy = 0;
-//  double sumxx = 0;
-//  double sumyy = 0;
-
-//  double bkgd = 0;
-//  double gradx = 0;
-//  double grady = 0;
-
-//  if (img) {
-//    int tp = qRound(top());
-//    int bt = qRound(bottom());
-//    int lf = qRound(left());
-//    int rt = qRound(right());
-
-//    int tp2 = qRound(top2());
-//    int bt2 = qRound(bottom2());
-//    int lf2 = qRound(left2());
-//    int rt2 = qRound(right2());
-
-//    double cx = center().x();
-//    double cy = center().y();
-
-//    for (int row=tp; row<=bt; row++) {
-//      for (int col=lf; col<=rt; col++) {
-//        if (row <= lf2 && row >= rt2 && col <= tp2 && col >= bt2) {
-//          if (mask == NULL || mask->value(col,row)) {
-//            double val = img->getImageData(col, row);
-
-//            if (val == val) {
-//              double dx = col - cx;
-//              double dy = row - cy;
-
-//              sumct += 1;
-//              sumnn += 1;
-//              sumnx += dx;
-//              sumny += dy;
-//              sumxy += dx*dy;
-//              sumxx += dx*dx;
-//              sumyy += dy*dy;
-
-//              sumvn += val;
-//              sumvx += val*dx;
-//              sumvy += val*dy;
-//            }
-//          }
-//        }
-//      }
-//    }
-
-//    for (int row=tp2; row<=bt2; row++) {
-//      for (int col=lf2; col<=rt2; col++) {
-//        if (mask == NULL || mask->value(col, row)) {
-//          double val = img->getImageData(col, row);
-
-//          if (val == val) {
-//            double dx = col - cx;
-//            double dy = row - cy;
-//            double bk = bkgd + dx*gradx + dy*grady;
-//            double v = v-bk;
-
-//            if (first) {
-//              min = v;
-//              max = v;
-//              first = false;
-//            } else if (v > max) {
-//              max = v;
-//            } else if (v < min) {
-//              min = v;
-//            }
-
-//            sum += v;
-//            npx += 1;
-//          }
-//        }
-//      }
-//    }
-//  }
-//}
-
-//void QxrdROICoordinates::recalculateEllipseInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-//{
-//}
-
-//void QxrdROICoordinates::recalculateRectangleInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-//{
-//}
-
-//void QxrdROICoordinates::recalculateEllipseInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
-//{
-//}
 
 QVector<double> QxrdROICoordinates::values() const
 {
