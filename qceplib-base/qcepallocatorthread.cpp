@@ -27,8 +27,8 @@ QcepAllocatorThread::~QcepAllocatorThread()
 
 void QcepAllocatorThread::run()
 {
-  if (g_Application && qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage("Starting Allocator Thread");
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Starting Allocator Thread\n");
   }
 
   QcepAllocatorPtr p(new QcepAllocator(m_Saver));
@@ -45,8 +45,8 @@ void QcepAllocatorThread::run()
     rc = exec();
   }
 
-  if (g_Application && qcepDebug(DEBUG_THREADS)) {
-    g_Application->printMessage(tr("Allocator Thread Terminated with rc %1").arg(rc));
+  if (qcepDebug(DEBUG_THREADS)) {
+    printf("Allocator Thread Terminated with rc %d\n", rc);
   }
 
   {
