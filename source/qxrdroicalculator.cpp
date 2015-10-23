@@ -106,7 +106,9 @@ QVector<double> QxrdROICalculator::values(QcepImageDataBasePtr img, QcepMaskData
       QxrdROICoordinatesPtr roi = m_ROICoordinatesModel->roi(i);
 
       if (roi) {
-        res.append(roi->values());
+//        res.append();
+
+        res += roi->values();
       }
     }
   }
