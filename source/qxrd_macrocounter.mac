@@ -123,12 +123,12 @@ def qxrd_off '{
 
 def qxrd_setup '{
   print "Setup QXRD Detector:"
-  QXRD_PARS["datadir"] = getsval("QXRD Data Directory?", QXRD_PARS["datadir"])
+  QXRD_PARS["datadir"] = getsval("QXRD Data Directory (%s replaced by DATAFILE) ?", QXRD_PARS["datadir"])
   QXRD_PARS["scansub"] = yesno("Save data in scan-dependent subdirs?", QXRD_PARS["scansub"])
   if (QXRD_PARS["scansub"]) {
     QXRD_PARS["resetindex"] = yesno("Reset QXRD file index at start of each scan?", QXRD_PARS["resetindex"])
-    QXRD_PARS["scanfmt"] = getsval("Scan-dependent subdir name?", QXRD_PARS["scanfmt"])
-    QXRD_PARS["scanpat"] = getsval("Scan-dependent filename?", QXRD_PARS["scanpat"])
+    QXRD_PARS["scanfmt"] = getsval("Scan-dependent subdir name (%d replaced by SCAN_N) ?", QXRD_PARS["scanfmt"])
+    QXRD_PARS["scanpat"] = getsval("Scan-dependent filename (%d replaced by SCAN_N) ?", QXRD_PARS["scanpat"])
   }
   QXRD_PARS["debug"] = yesno("Extra debugging output?", QXRD_PARS["debug"])
   cdef("user_postscan_head", "qxrd_scan_head();", "qxrd", 0)
