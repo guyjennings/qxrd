@@ -1346,22 +1346,13 @@ void QxrdImagePlot::updateROISelection(
     const QItemSelection &deselected)
 {
   if (m_ROIModel && m_ROISelection) {
-//    int n = m_ROIModel->rowCount(QModelIndex());
+    int n = m_ROIModel->roiCount();
 
-    foreach(QItemSelectionRange r, selected) {
-      for (int i=r.top(); i<=r.bottom(); i++) {
-//        printMessage(tr("select row %1").arg(i));
-        selectROIItem(i, true);
-        selectROILabel(i, true);
-      }
-    }
+    for (int i=0; i<n; i++) {
+      bool sel = m_ROISelection->rowIntersectsSelection(i, QModelIndex());
 
-    foreach(QItemSelectionRange r, deselected) {
-      for (int i=r.top(); i<=r.bottom(); i++) {
-//        printMessage(tr("deselect row %1").arg(i));
-        selectROIItem(i, false);
-        selectROILabel(i, false);
-      }
+      selectROIItem(i, sel);
+      selectROILabel(i, sel);
     }
 
     replot();
@@ -1371,7 +1362,7 @@ void QxrdImagePlot::updateROISelection(
 void QxrdImagePlot::moveSelectedROICenter(double x, double y)
 {
   if (m_ROIModel && m_ROISelection) {
-    int n = m_ROIModel->rowCount(QModelIndex());
+    int n = m_ROIModel->roiCount();
 
     for (int i=0; i<n; i++) {
       if (m_ROISelection->rowIntersectsSelection(i,QModelIndex())) {
