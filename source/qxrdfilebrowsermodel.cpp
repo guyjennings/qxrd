@@ -29,9 +29,13 @@ QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
 
 QxrdFileBrowserModel::~QxrdFileBrowserModel()
 {
-  if (m_UpdaterThread) {
-    m_UpdaterThread->shutdown();
-  }
+#ifndef QT_NO_DEBUG
+  printf("Deleting file browser model\n");
+#endif
+
+//  if (m_UpdaterThread) {
+//    m_UpdaterThread->shutdown();
+//  }
 }
 
 void QxrdFileBrowserModel::initialize(QxrdFileBrowserModelWPtr model)

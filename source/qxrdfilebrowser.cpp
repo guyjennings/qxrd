@@ -106,6 +106,10 @@ QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
 
 QxrdFileBrowser::~QxrdFileBrowser()
 {
+#ifndef QT_NO_DEBUG
+  printf("Deleting file browser\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdFileBrowser::~QxrdFileBrowser(%p)\n", this);
   }

@@ -14,13 +14,13 @@ class QxrdFileBrowserModelUpdater : public QcepObject, public QEnableSharedFromT
 {
     Q_OBJECT
 public:
-  explicit QxrdFileBrowserModelUpdater(QxrdFileBrowserModelPtr browser, QcepObject *parent);
+  explicit QxrdFileBrowserModelUpdater(QxrdFileBrowserModelWPtr browser, QcepObject *parent);
   virtual ~QxrdFileBrowserModelUpdater();
 
   bool updateNeeded();
 
 public slots:
-  void shutdown();
+//  void shutdown();
   void changeRoot(const QString &path);
   void changeContents(const QString &path);
   void updateTimeout();
@@ -29,7 +29,7 @@ public slots:
   void generateFileUpdates(int doIt);
 
 private:
-  QxrdFileBrowserModelPtr  m_BrowserModel;
+  QxrdFileBrowserModelWPtr m_BrowserModel;
   QString                  m_RootPath;
   QFileSystemWatcher      *m_FileSystemWatcher;
   QAtomicInt               m_UpdateNeeded;
