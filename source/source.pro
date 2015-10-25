@@ -598,7 +598,11 @@ win32 {
     }
 
     win32-msvc2013 {
-      libs += icudt53 icuin53 icuuc53
+      isEqual(QT_MINOR_VERSION, 5) {
+        libs += icudt54 icuin54 icuuc54
+      } else {
+        libs += icudt53 icuin53 icuuc53
+      }
     } else:win32-msvc* {
       libs += icudt51 icuin51 icuuc51
     } else:win32-g++ {
