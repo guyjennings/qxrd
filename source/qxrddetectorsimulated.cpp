@@ -61,7 +61,7 @@ void QxrdDetectorSimulated::onExposureTimeChanged()
     QxrdExperimentPtr expt(m_Experiment);
     QxrdAcquisitionPtr acq(m_Acquisition);
 
-    if (checkDetectorEnabled() && acq && expt) {
+    if (isEnabled() && acq && expt) {
       double newTime = acq->get_ExposureTime();
 
       expt->printMessage(tr("Exposure time changed to %1").arg(newTime));
