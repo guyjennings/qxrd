@@ -598,8 +598,9 @@ DONE("2015-09-20", "2015-10-14",
 TODO("2015-09-20", "",
      "Improve NI-DAQ extra inputs readout - support detector enable");
 
-TODO("2015-09-20", "",
-     "Detector enable script commands");
+DONE("2015-09-20", "2015-10-23",
+     "Detector enable script commands -\n"
+     "detector(n).enabled=<true|false>");
 
 TODO("2015-09-20", "",
      "Improve NI-DAQ output synchronization");
@@ -629,7 +630,7 @@ DONE("2015-10-12", "2015-10-14",
 TODO("2015-10-14", "",
      "Implement different output file format options");
 
-TODO("2015-10-21", "",
+DONE("2015-10-21", "2015-10-23",
      "Finish implementing remaining ROI calculations");
 
 TODO("2015-10-21", "",
