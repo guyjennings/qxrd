@@ -73,8 +73,12 @@ def qxrd_cmd(mne, key, p1, p2, unit) '{
 def qxrd_config(mne, type, unit, module, chan) '{
   if (mne == ".." && type == "ctrl") {
     QXRD_PARS["count"]=unit+1
-  }
 
+    qxrd_config_unit(unit)
+  }
+}'
+
+def qxrd_config_unit(unit) '{
   local i
 
   for (i=0; i<COUNTERS; i++) {
@@ -94,17 +98,13 @@ def qxrd_config(mne, type, unit, module, chan) '{
 }'
 
 def qxrd_enable(unit,enabled) '{
-  n=QXRD_PARS["count"]
-
   if (QXRD_PARS["debug"]) {
     printf("qxrd_enable(%d,%d)\n", unit, enabled)
   }
 
   QXRD_PARS[sprintf("%d,enable",unit)]=enabled
 
-  qxrd_config("..", "ctrl", unit, 0, 0)
-
-  QXRD_PARS["count"] = n
+  qxrd_config_unit(unit)
 }'
 
 def qxrd_on '{
