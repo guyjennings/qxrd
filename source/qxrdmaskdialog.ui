@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>352</width>
+    <width>374</width>
     <height>443</height>
    </rect>
   </property>
@@ -572,6 +572,28 @@ selected mask to top</string>
         </property>
         <property name="text">
          <string>EXCHG...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QToolButton" name="m_ZingerMask">
+        <property name="minimumSize">
+         <size>
+          <width>64</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>64</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>mask &lt;- mask AND NOT mask2</string>
+        </property>
+        <property name="text">
+         <string>ZINGERS...</string>
         </property>
        </widget>
       </item>

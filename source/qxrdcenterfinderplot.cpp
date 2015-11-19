@@ -165,7 +165,7 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
               int iy = (int)qRound(y);
 
               if (ix >= 0 && iy >= 0 && ix < width && iy < height) {
-                double v = img->value(x,y);
+                double v = img->value(ix,iy);
 
                 bool mv = true;
 
@@ -196,7 +196,7 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
               int iy = (int)qRound(y);
 
               if (ix >= 0 && iy >= 0 && ix < width && iy < height) {
-                double v = img->value(x,y);
+                double v = img->value(ix,iy);
 
                 bool mv = true;
 

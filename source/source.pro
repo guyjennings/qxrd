@@ -335,7 +335,8 @@ HEADERS += TODO.h \
     qxrdacquisitionscalerdialog.h \
     qxrdacquisitionscalermodel.h \
     qxrdacquisitionscalermodel-ptr.h \
-    qxrdacquisitionscalerdialog-ptr.h
+    qxrdacquisitionscalerdialog-ptr.h \
+    qxrdzingerdialog.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -498,7 +499,8 @@ SOURCES += qxrd.cpp \
     qxrddetectorimageplot.cpp \
     qxrdroitypedelegate.cpp \
     qxrdacquisitionscalerdialog.cpp \
-    qxrdacquisitionscalermodel.cpp
+    qxrdacquisitionscalermodel.cpp \
+    qxrdzingerdialog.cpp
 
 OTHER_FILES += testImage.js
 
@@ -527,7 +529,8 @@ FORMS += qxrdwindow.ui \
     qxrddetectorproxywidget.ui \
     qxrddetectorconfigurationdialog.ui \
     qxrddetectorcontrolwindow.ui \
-    qxrdacquisitionscalerdialog.ui
+    qxrdacquisitionscalerdialog.ui \
+    qxrdzingerdialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

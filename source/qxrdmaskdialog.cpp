@@ -5,6 +5,7 @@
 #include "qxrdmaskstackmodel.h"
 #include "qxrdapplication.h"
 #include "qxrddebug.h"
+#include "qxrdzingerdialog.h"
 
 QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
   QDockWidget(parent),
@@ -40,6 +41,7 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
   connect(m_ClearMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doClearMask);
   connect(m_ClearMaskTop, &QAbstractButton::clicked, this, &QxrdMaskDialog::doClearMaskTop);
   connect(m_UndoMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doUndoMask);
+  connect(m_ZingerMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doZingersMask);
 
   QxrdDataProcessorPtr proc(m_Processor);
 
@@ -162,6 +164,28 @@ void QxrdMaskDialog::doShowMaskRange()
       proc->showMaskRangeStack(n);
       proc->statusMessage("Mask Stack Show In Range");
     }
+  }
+}
+
+void QxrdMaskDialog::doZingersMask()
+{
+//  int n = maskStackSelectPopup();
+
+//  if (n >= 0) {
+//    QxrdDataProcessorPtr proc(m_Processor);
+
+//    if (proc) {
+//      proc->zingersStack(n);
+//      proc->statusMessage("Find Zingers");
+//    }
+//  }
+
+  QxrdDataProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QxrdZingerDialog dlg(proc);
+
+    dlg.exec();
   }
 }
 

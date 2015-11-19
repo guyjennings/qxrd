@@ -42,6 +42,7 @@ private slots:
   void doNewMask();
   void doPushMask();
   void doUndoMask();
+  void doZingersMask();
 
 private:
   int maskStackSelectPopup();
