@@ -1,5 +1,5 @@
 #include "qcepmacros.h"
-#include "qxrddebug.h"
+#include "qcepdebug.h"
 #include "qcepmainwindow.h"
 #include <QMessageBox>
 #include <QThread>
