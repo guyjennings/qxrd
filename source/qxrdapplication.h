@@ -174,6 +174,9 @@ public:
   Q_PROPERTY(int    guiWanted  READ get_GuiWanted WRITE set_GuiWanted STORED false)
   QCEP_INTEGER_PROPERTY(GuiWanted)
 
+  Q_PROPERTY(int    startDetectors READ get_StartDetectors WRITE set_StartDetectors STORED false)
+  QCEP_INTEGER_PROPERTY(StartDetectors)
+
   Q_PROPERTY(QStringList cmdList READ get_CmdList WRITE set_CmdList STORED false)
   QCEP_STRING_LIST_PROPERTY(CmdList)
 

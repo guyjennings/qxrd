@@ -113,6 +113,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_Argc(QcepSettingsSaverPtr(), this, "argc", argc, "Number of Command Line Arguments"),
   m_Argv(QcepSettingsSaverPtr(), this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
   m_GuiWanted(QcepSettingsSaverPtr(), this, "guiWanted", 1, "GUI Wanted?"),
+  m_StartDetectors(QcepSettingsSaverPtr(), this, "startDetectors", 1, "Start Detectors when opening experiments"),
   m_CmdList(QcepSettingsSaverPtr(), this, "cmdList", QStringList(), "Commands to Execute"),
   m_FileList(QcepSettingsSaverPtr(), this, "fileList", QStringList(), "Files to Process"),
   m_LockerCount(QcepSettingsSaverPtr(), this, "lockerCount", 0, "Number of mutex locks taken"),
@@ -202,6 +203,11 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
       set_GuiWanted(false);
     } else if (strcmp(argv[i],"-gui")==0) {
       set_GuiWanted(true);
+    } else if (strcmp(argv[i],"-nostart")==0) {
+      printf("Don't start detectors\n");
+      set_StartDetectors(false);
+    } else if (strcmp(argv[i],"-start")==0) {
+      set_StartDetectors(true);
     } else if (strcmp(argv[i],"-c")==0) {
       if (i++ < argc) {
         prop_CmdList()->appendValue(argv[i]);

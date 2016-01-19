@@ -284,6 +284,12 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
         m_DetectorThreads[i] = detThread;
         m_Detectors[i]       = det;
 
+        QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+
+        if (app && app->get_StartDetectors() == 0) {
+          det->set_Enabled(false);
+        }
+
         det->startOrStop(det->isEnabled());
       }
     }
