@@ -323,8 +323,10 @@ bool QcepDatasetModel::removeRows(int row, int count, const QModelIndex &parent)
 
 void QcepDatasetModel::onDataObjectChanged()
 {
-  beginResetModel();
-  endResetModel();
+//  beginResetModel();
+//  endResetModel();
+
+  emit dataChanged(index(0,0), index(rowCount(), columnCount()));
 }
 
 QcepDataObjectPtr      QcepDatasetModel::item(const QModelIndex &index)
@@ -345,6 +347,17 @@ QcepDataObjectPtr      QcepDatasetModel::item(QString path)
   }
 }
 
+QcepDataObjectPtr      QcepDatasetModel::item(int n)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->item(n);
+  } else {
+    return QcepDataObjectPtr();
+  }
+}
+
 QcepDataGroupPtr       QcepDatasetModel::group(const QModelIndex &index)
 {
   return QcepDataGroupPtr();
@@ -356,6 +369,17 @@ QcepDataGroupPtr       QcepDatasetModel::group(QString path)
 
   if (ds) {
     return ds->group(path);
+  } else {
+    return QcepDataGroupPtr();
+  }
+}
+
+QcepDataGroupPtr       QcepDatasetModel::group(int n)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->group(n);
   } else {
     return QcepDataGroupPtr();
   }
@@ -388,6 +412,17 @@ QcepDataArrayPtr       QcepDatasetModel::array(QString path)
   }
 }
 
+QcepDataArrayPtr       QcepDatasetModel::array(int n)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->array(n);
+  } else {
+    return QcepDataArrayPtr();
+  }
+}
+
 QcepDataArrayPtr       QcepDatasetModel::newArray(QString path, QVector<int> dims)
 {
   QcepDatasetPtr ds(m_Dataset);
@@ -410,6 +445,17 @@ QcepDataColumnPtr      QcepDatasetModel::column(QString path)
 
   if (ds) {
     return ds->column(path);
+  } else {
+    return QcepDataColumnPtr();
+  }
+}
+
+QcepDataColumnPtr      QcepDatasetModel::column(int n)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->column(n);
   } else {
     return QcepDataColumnPtr();
   }
@@ -442,6 +488,17 @@ QcepDataColumnScanPtr  QcepDatasetModel::columnScan(QString path)
   }
 }
 
+QcepDataColumnScanPtr  QcepDatasetModel::columnScan(int n)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->columnScan(n);
+  } else {
+    return QcepDataColumnScanPtr();
+  }
+}
+
 QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, int nRows, QStringList cols)
 {
   QcepDatasetPtr ds(m_Dataset);
@@ -464,6 +521,17 @@ QcepDoubleImageDataPtr QcepDatasetModel::image(QString path)
 
   if (ds) {
     return ds->image(path);
+  } else {
+    return QcepDoubleImageDataPtr();
+  }
+}
+
+QcepDoubleImageDataPtr QcepDatasetModel::image(int n)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->image(n);
   } else {
     return QcepDoubleImageDataPtr();
   }

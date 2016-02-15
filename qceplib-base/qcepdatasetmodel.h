@@ -46,26 +46,32 @@ public slots:
 public slots:
   QcepDataObjectPtr      item(const QModelIndex &index);
   QcepDataObjectPtr      item(QString path);
+  QcepDataObjectPtr      item(int n);
 
   QcepDataGroupPtr       group(const QModelIndex &index);
   QcepDataGroupPtr       group(QString path);
+  QcepDataGroupPtr       group(int n);
   QcepDataGroupPtr       newGroup(QString path);
 
   QcepDataArrayPtr       array(const QModelIndex &index);
   QcepDataArrayPtr       array(QString path);
+  QcepDataArrayPtr       array(int n);
   QcepDataArrayPtr       newArray(QString path, QVector<int> dims = QVector<int>());
 
   QcepDataColumnPtr      column(const QModelIndex &index);
   QcepDataColumnPtr      column(QString path);
+  QcepDataColumnPtr      column(int n);
   QcepDataColumnPtr      newColumn(QString path, int nRows=0);
 
   QcepDataColumnScanPtr  columnScan(const QModelIndex &index);
   QcepDataColumnScanPtr  columnScan(QString path);
+  QcepDataColumnScanPtr  columnScan(int n);
   QcepDataColumnScanPtr  newColumnScan(QString path,
                                        int nRows=0, QStringList cols=QStringList());
 
   QcepDoubleImageDataPtr image(const QModelIndex &index);
   QcepDoubleImageDataPtr image(QString path);
+  QcepDoubleImageDataPtr image(int n);
   QcepDoubleImageDataPtr newImage(QString path, int width=0, int height=0);
 
   void                   append(const QModelIndex &index, QcepDataObjectPtr obj);

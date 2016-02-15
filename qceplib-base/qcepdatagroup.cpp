@@ -74,9 +74,23 @@ QcepDataGroupPtr  QcepDataGroup::group(QString path)
   return qSharedPointerDynamicCast<QcepDataGroup>(obj);
 }
 
+QcepDataGroupPtr  QcepDataGroup::group(int n)
+{
+  QcepDataObjectPtr obj = item(n);
+
+  return qSharedPointerDynamicCast<QcepDataGroup>(obj);
+}
+
 QcepDataArrayPtr  QcepDataGroup::array(QString path)
 {
   QcepDataObjectPtr obj = item(path);
+
+  return qSharedPointerDynamicCast<QcepDataArray>(obj);
+}
+
+QcepDataArrayPtr  QcepDataGroup::array(int n)
+{
+  QcepDataObjectPtr obj = item(n);
 
   return qSharedPointerDynamicCast<QcepDataArray>(obj);
 }
@@ -88,6 +102,13 @@ QcepDataColumnPtr QcepDataGroup::column(QString path)
   return qSharedPointerDynamicCast<QcepDataColumn>(obj);
 }
 
+QcepDataColumnPtr QcepDataGroup::column(int n)
+{
+  QcepDataObjectPtr obj = item(n);
+
+  return qSharedPointerDynamicCast<QcepDataColumn>(obj);
+}
+
 QcepDataColumnScanPtr QcepDataGroup::columnScan(QString path)
 {
   QcepDataObjectPtr obj = item(path);
@@ -95,9 +116,23 @@ QcepDataColumnScanPtr QcepDataGroup::columnScan(QString path)
   return qSharedPointerDynamicCast<QcepDataColumnScan>(obj);
 }
 
+QcepDataColumnScanPtr QcepDataGroup::columnScan(int n)
+{
+  QcepDataObjectPtr obj = item(n);
+
+  return qSharedPointerDynamicCast<QcepDataColumnScan>(obj);
+}
+
 QcepDoubleImageDataPtr QcepDataGroup::image(QString path)
 {
   QcepDataObjectPtr obj = item(path);
+
+  return qSharedPointerDynamicCast<QcepDoubleImageData>(obj);
+}
+
+QcepDoubleImageDataPtr QcepDataGroup::image(int n)
+{
+  QcepDataObjectPtr obj = item(n);
 
   return qSharedPointerDynamicCast<QcepDoubleImageData>(obj);
 }

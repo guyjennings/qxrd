@@ -23,14 +23,23 @@ public:
 public slots:
   virtual QString description() const;
 
-  QcepDataObjectPtr item(int n);
   QcepDataObjectPtr item(QString nm);
+  QcepDataObjectPtr item(int n);
 
   QcepDataGroupPtr  group(QString path);
+  QcepDataGroupPtr  group(int n);
+
   QcepDataArrayPtr  array(QString path);
+  QcepDataArrayPtr  array(int n);
+
   QcepDataColumnPtr column(QString path);
+  QcepDataColumnPtr column(int n);
+
   QcepDataColumnScanPtr columnScan(QString path);
+  QcepDataColumnScanPtr columnScan(int n);
+
   QcepDoubleImageDataPtr image(QString path);
+  QcepDoubleImageDataPtr image(int n);
 
   int                childCount() const;
 
