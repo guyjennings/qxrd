@@ -1399,38 +1399,38 @@ QScriptValue QxrdScriptEngine::timeStampFunc(QScriptContext * /*context*/, QScri
   return engine->toScriptValue(val);
 }
 
+//QCEP_DOC_FUNCTION(
+//    "dataObject",
+//    "dataObject(name)",
+//    "Creates a new named data object",
+//    ""
+//    )
+
+//QScriptValue QxrdScriptEngine::dataObjectFunc(QScriptContext *context, QScriptEngine *engine)
+//{
+//  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+//  if (eng) {
+//    QxrdExperimentPtr expt = eng->experiment();
+
+//    if (expt) {
+//      QString name = context->argument(0).toString();
+
+//      return engine->newQObject(new QcepDataObject(QcepSettingsSaverWPtr(), name, 0, expt.data()));
+//    }
+//  }
+
+//  return QScriptValue();
+//}
+
 QCEP_DOC_FUNCTION(
-    "dataObject",
-    "dataObject(name)",
-    "Creates a new named data object",
-    ""
-    )
-
-QScriptValue QxrdScriptEngine::dataObjectFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
-
-  if (eng) {
-    QxrdExperimentPtr expt = eng->experiment();
-
-    if (expt) {
-      QString name = context->argument(0).toString();
-
-      return engine->newQObject(new QcepDataObject(QcepSettingsSaverWPtr(), name, 0, expt.data()));
-    }
-  }
-
-  return QScriptValue();
-}
-
-QCEP_DOC_FUNCTION(
-    "dataGroup",
-    "dataGroup(name)",
+    "newDataGroup",
+    "newDataGroup(name)",
     "Creates a new named data group",
     ""
     )
 
-QScriptValue QxrdScriptEngine::dataGroupFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::newDataGroupFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
@@ -1438,9 +1438,15 @@ QScriptValue QxrdScriptEngine::dataGroupFunc(QScriptContext *context, QScriptEng
     QxrdExperimentPtr expt = eng->experiment();
 
     if (expt) {
-      QString name = context->argument(0).toString();
+      QcepDatasetModelPtr dataModel = expt->dataset();
 
-      return engine->newQObject(new QcepDataGroup(QcepSettingsSaverWPtr(), name, expt.data()));
+      if (dataModel) {
+        QString name = context->argument(0).toString();
+
+        return engine->newQObject(
+              dataModel->newGroup(name).data());
+//              new QcepDataGroup(QcepSettingsSaverWPtr(), name, expt.data()));
+      }
     }
   }
 
@@ -1448,13 +1454,13 @@ QScriptValue QxrdScriptEngine::dataGroupFunc(QScriptContext *context, QScriptEng
 }
 
 QCEP_DOC_FUNCTION(
-    "dataArray",
-    "dataArray(name,dim1 .. dimn)",
+    "newDataArray",
+    "newDataArray(name,dim1 .. dimn)",
     "Creates a new named n-dimensional data array",
     ""
     )
 
-QScriptValue QxrdScriptEngine::dataArrayFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::newDataArrayFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
@@ -1462,15 +1468,21 @@ QScriptValue QxrdScriptEngine::dataArrayFunc(QScriptContext *context, QScriptEng
     QxrdExperimentPtr expt = eng->experiment();
 
     if (expt) {
-      QString name = context->argument(0).toString();
+      QcepDatasetModelPtr dataModel = expt->dataset();
 
-      QVector<int> dims;
+      if (dataModel) {
+        QString name = context->argument(0).toString();
 
-      for (int i=1; i<context->argumentCount(); i++) {
-        dims.append(context->argument(i).toInteger());
+        QVector<int> dims;
+
+        for (int i=1; i<context->argumentCount(); i++) {
+          dims.append(context->argument(i).toInteger());
+        }
+
+        return engine->newQObject(
+              dataModel->newArray(name, dims).data());
+//              new QcepDataArray(QcepSettingsSaverWPtr(), name, dims, expt.data()));
       }
-
-      return engine->newQObject(new QcepDataArray(QcepSettingsSaverWPtr(), name, dims, expt.data()));
     }
   }
 
@@ -1478,13 +1490,13 @@ QScriptValue QxrdScriptEngine::dataArrayFunc(QScriptContext *context, QScriptEng
 }
 
 QCEP_DOC_FUNCTION(
-    "dataColumn",
-    "dataColumn(name, npts)",
+    "newDataColumn",
+    "newDataColumn(name, npts)",
     "Creates a new named data column",
     ""
     )
 
-QScriptValue QxrdScriptEngine::dataColumnFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::newDataColumnFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
@@ -1492,10 +1504,16 @@ QScriptValue QxrdScriptEngine::dataColumnFunc(QScriptContext *context, QScriptEn
     QxrdExperimentPtr expt = eng->experiment();
 
     if (expt) {
-      QString name = context->argument(0).toString();
-      int     npts = context->argument(1).toInteger();
+      QcepDatasetModelPtr dataModel = expt->dataset();
 
-      return engine->newQObject(new QcepDataColumn(QcepSettingsSaverWPtr(), name, npts, expt.data()));
+      if (dataModel) {
+        QString name = context->argument(0).toString();
+        int     npts = context->argument(1).toInteger();
+
+        return engine->newQObject(
+              dataModel->newColumn(name, npts).data());
+//              new QcepDataColumn(QcepSettingsSaverWPtr(), name, npts, expt.data()));
+      }
     }
   }
 
@@ -1503,13 +1521,13 @@ QScriptValue QxrdScriptEngine::dataColumnFunc(QScriptContext *context, QScriptEn
 }
 
 QCEP_DOC_FUNCTION(
-    "dataColumnScan",
-    "dataColumnScan(name, npts, col1name .. colnname)",
+    "newDataColumnScan",
+    "newDataColumnScan(name, npts, col1name .. colnname)",
     "Creates a new named data column scan",
     ""
     )
 
-QScriptValue QxrdScriptEngine::dataColumnScanFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::newDataColumnScanFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
@@ -1517,16 +1535,22 @@ QScriptValue QxrdScriptEngine::dataColumnScanFunc(QScriptContext *context, QScri
     QxrdExperimentPtr expt = eng->experiment();
 
     if (expt) {
-      QString name = context->argument(0).toString();
-      int     npts = context->argument(1).toInteger();
+      QcepDatasetModelPtr dataModel = expt->dataset();
 
-      QStringList cols;
+      if (dataModel) {
+        QString name = context->argument(0).toString();
+        int     npts = context->argument(1).toInteger();
 
-      for (int i=2; i<context->argumentCount(); i++) {
-        cols.append(context->argument(i).toString());
+        QStringList cols;
+
+        for (int i=2; i<context->argumentCount(); i++) {
+          cols.append(context->argument(i).toString());
+        }
+
+        return engine->newQObject(
+              dataModel->newColumnScan(name, npts, cols).data());
+//              new QcepDataColumnScan(QcepSettingsSaverWPtr(), name, expt.data()));
       }
-
-      return engine->newQObject(new QcepDataColumnScan(QcepSettingsSaverWPtr(), name, expt.data()));
     }
   }
 
@@ -1534,13 +1558,13 @@ QScriptValue QxrdScriptEngine::dataColumnScanFunc(QScriptContext *context, QScri
 }
 
 QCEP_DOC_FUNCTION(
-    "dataImage",
-    "dataImage(name, width, height)",
+    "newDataImage",
+    "newDataImage(name, width, height)",
     "Creates a new named data image",
     ""
     )
 
-QScriptValue QxrdScriptEngine::dataImageFunc(QScriptContext *context, QScriptEngine *engine)
+QScriptValue QxrdScriptEngine::newDataImageFunc(QScriptContext *context, QScriptEngine *engine)
 {
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
@@ -1926,12 +1950,12 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("detector", newFunction(detectorFunc, 1));
   globalObject().setProperty("roi", newFunction(roiFunc, 1));
 
-  globalObject().setProperty("dataObject", newFunction(dataObjectFunc));
-  globalObject().setProperty("dataGroup", newFunction(dataGroupFunc));
-  globalObject().setProperty("dataArray", newFunction(dataArrayFunc));
-  globalObject().setProperty("dataColumn", newFunction(dataColumnFunc));
-  globalObject().setProperty("dataColumnScan", newFunction(dataColumnScanFunc));
-  globalObject().setProperty("dataImage", newFunction(dataImageFunc));
+//  globalObject().setProperty("dataObject", newFunction(dataObjectFunc));
+  globalObject().setProperty("newDataGroup", newFunction(newDataGroupFunc));
+  globalObject().setProperty("newDataArray", newFunction(newDataArrayFunc));
+  globalObject().setProperty("newDataColumn", newFunction(newDataColumnFunc));
+  globalObject().setProperty("newDataColumnScan", newFunction(newDataColumnScanFunc));
+  globalObject().setProperty("newDataImage", newFunction(newDataImageFunc));
 
   if (app) {
     QObject *plugin = dynamic_cast<QObject*>(app->nidaqPlugin().data());

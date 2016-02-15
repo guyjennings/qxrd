@@ -106,12 +106,12 @@ private:
   static QScriptValue detectorFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue roiFunc(QScriptContext *context, QScriptEngine *engine);
 
-  static QScriptValue dataObjectFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue dataGroupFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue dataArrayFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue dataColumnFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue dataColumnScanFunc(QScriptContext *context, QScriptEngine *engine);
-  static QScriptValue dataImageFunc(QScriptContext *context, QScriptEngine *engine);
+//  static QScriptValue dataObjectFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue newDataGroupFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue newDataArrayFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue newDataColumnFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue newDataColumnScanFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue newDataImageFunc(QScriptContext *context, QScriptEngine *engine);
 
   static QScriptValue QPointFToScriptValue(QScriptEngine *engine, const QPointF &in);
   static void         QPointFFromScriptValue(const QScriptValue &object, QPointF &pt);
