@@ -292,8 +292,6 @@ HEADERS += TODO.h \
     qxrdcalibrantlibrarymodel-ptr.h \
     qxrdcalibrantdspacingsmodel.h \
     qxrdcalibrantdspacingsmodel-ptr.h \
-    qxrddataset.h \
-    qxrddataset-ptr.h \
     qxrdimageplotzoomer.h \
     qxrdmainwindow.h \
     qxrdacquisitionparameterpack.h \
@@ -475,7 +473,6 @@ SOURCES += qxrd.cpp \
     qxrdcalibrantdialog.cpp \
     qxrdcalibrantlibrarymodel.cpp \
     qxrdcalibrantdspacingsmodel.cpp \
-    qxrddataset.cpp \
     qxrdimageplotzoomer.cpp \
     qxrdmainwindow.cpp \
     qxrdacquisitionparameterpack.cpp \

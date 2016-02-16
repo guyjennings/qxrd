@@ -10,7 +10,6 @@
 #include "qxrdexperiment.h"
 #include "qxrdintegratorcache.h"
 #include "qcepallocator.h"
-#include "qxrddataset.h"
 #include "qcepdatasetmodel.h"
 
 #include <QTime>

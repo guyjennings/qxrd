@@ -19,7 +19,6 @@
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
 #include "qcepdocumentationdictionary.h"
-#include "qxrddataset.h"
 #include "qcepdatagroup.h"
 #include "qcepdatagroup-ptr.h"
 #include "qcepdataarray.h"
@@ -1399,29 +1398,6 @@ QScriptValue QxrdScriptEngine::timeStampFunc(QScriptContext * /*context*/, QScri
   return engine->toScriptValue(val);
 }
 
-//QCEP_DOC_FUNCTION(
-//    "dataObject",
-//    "dataObject(name)",
-//    "Creates a new named data object",
-//    ""
-//    )
-
-//QScriptValue QxrdScriptEngine::dataObjectFunc(QScriptContext *context, QScriptEngine *engine)
-//{
-//  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
-
-//  if (eng) {
-//    QxrdExperimentPtr expt = eng->experiment();
-
-//    if (expt) {
-//      QString name = context->argument(0).toString();
-
-//      return engine->newQObject(new QcepDataObject(QcepSettingsSaverWPtr(), name, 0, expt.data()));
-//    }
-//  }
-
-//  return QScriptValue();
-//}
 
 QCEP_DOC_FUNCTION(
     "newDataGroup",
@@ -1445,7 +1421,6 @@ QScriptValue QxrdScriptEngine::newDataGroupFunc(QScriptContext *context, QScript
 
         return engine->newQObject(
               dataModel->newGroup(name).data());
-//              new QcepDataGroup(QcepSettingsSaverWPtr(), name, expt.data()));
       }
     }
   }
@@ -1481,7 +1456,6 @@ QScriptValue QxrdScriptEngine::newDataArrayFunc(QScriptContext *context, QScript
 
         return engine->newQObject(
               dataModel->newArray(name, dims).data());
-//              new QcepDataArray(QcepSettingsSaverWPtr(), name, dims, expt.data()));
       }
     }
   }
@@ -1512,7 +1486,6 @@ QScriptValue QxrdScriptEngine::newDataColumnFunc(QScriptContext *context, QScrip
 
         return engine->newQObject(
               dataModel->newColumn(name, npts).data());
-//              new QcepDataColumn(QcepSettingsSaverWPtr(), name, npts, expt.data()));
       }
     }
   }
@@ -1549,7 +1522,6 @@ QScriptValue QxrdScriptEngine::newDataColumnScanFunc(QScriptContext *context, QS
 
         return engine->newQObject(
               dataModel->newColumnScan(name, npts, cols).data());
-//              new QcepDataColumnScan(QcepSettingsSaverWPtr(), name, expt.data()));
       }
     }
   }
@@ -1573,19 +1545,47 @@ QScriptValue QxrdScriptEngine::newDataImageFunc(QScriptContext *context, QScript
     QxrdApplicationPtr app(eng->application());
 
     if (expt && app) {
-      QString name   = context->argument(0).toString();
-      int     width  = context->argument(1).toInteger();
-      int     height = context->argument(2).toInteger();
 
-      QcepDatasetModelPtr ds = expt->dataset();
+      QcepDatasetModelPtr dataModel = expt->dataset();
 
-      if (ds) {
-        QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(QcepAllocator::WaitTillAvailable,
-                                                                   width, height, expt.data());
+      if (dataModel) {
+        QString name   = context->argument(0).toString();
+        int     width  = context->argument(1).toInteger();
+        int     height = context->argument(2).toInteger();
 
-        ds->append(name, img);
+        return engine->newQObject(
+              dataModel->newImage(name, width, height).data());
+      }
+    }
+  }
 
-        return engine->newQObject(img.data());
+  return QScriptValue();
+}
+
+QCEP_DOC_FUNCTION(
+    "newIntegratedData",
+    "newIntegratedData(name, size)",
+    "Creates a new integrated data object",
+    ""
+    )
+
+QScriptValue QxrdScriptEngine::newIntegratedDataFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdExperimentPtr expt = eng->experiment();
+    QxrdApplicationPtr app(eng->application());
+
+    if (expt && app) {
+      QcepDatasetModelPtr dataModel = expt->dataset();
+
+      if (dataModel) {
+        QString name   = context->argument(0).toString();
+        int     size   = context->argument(1).toInteger();
+
+        return engine->newQObject(
+              dataModel->newIntegratedData(name, size).data());
       }
     }
   }
@@ -1956,6 +1956,7 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("newDataColumn", newFunction(newDataColumnFunc));
   globalObject().setProperty("newDataColumnScan", newFunction(newDataColumnScanFunc));
   globalObject().setProperty("newDataImage", newFunction(newDataImageFunc));
+  globalObject().setProperty("newIntegratedData", newFunction(newIntegratedDataFunc));
 
   if (app) {
     QObject *plugin = dynamic_cast<QObject*>(app->nidaqPlugin().data());

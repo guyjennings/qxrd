@@ -33,7 +33,6 @@
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisitionextrainputsdialog.h"
 #include "qxrdacquisitionscalerdialog.h"
-#include "qxrddataset.h"
 #include "qxrdtodolist.h"
 
 #include <qwt_plot.h>

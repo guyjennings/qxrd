@@ -26,7 +26,7 @@
 #include "qxrddetectorthread.h"
 #include "qcepmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
-#include "qxrddataset.h"
+#include "qcepdataset.h"
 #include "qcepdatasetmodel.h"
 #include "qcepdatagroup.h"
 #include "qcepdatacolumnscan.h"
@@ -142,7 +142,7 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
-    m_Dataset      = QxrdDatasetPtr(new QxrdDataset(m_SettingsSaver, "", this));
+    m_Dataset      = QcepDatasetPtr(new QcepDataset(m_SettingsSaver, "", this));
     m_DatasetModel = QcepDatasetModelPtr(new QcepDatasetModel(m_Dataset));
 
     m_DatasetModel -> newGroup("group1");

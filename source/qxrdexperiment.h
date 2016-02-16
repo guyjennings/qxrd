@@ -40,7 +40,7 @@
 #include "qxrdintegrator-ptr.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 #include "qcepexperiment.h"
-#include "qxrddataset-ptr.h"
+#include "qcepdataset-ptr.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qxrddetectorcontrolwindow-ptr.h"
 
@@ -162,7 +162,7 @@ private:
   QxrdScriptEnginePtr             m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
-  QxrdDatasetPtr                  m_Dataset;
+  QcepDatasetPtr                  m_Dataset;
   QcepDatasetModelPtr             m_DatasetModel;
   mutable QMutex                  m_LogFileMutex;
   mutable FILE                   *m_LogFile;

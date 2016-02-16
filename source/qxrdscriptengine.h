@@ -112,6 +112,7 @@ private:
   static QScriptValue newDataColumnFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue newDataColumnScanFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue newDataImageFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue newIntegratedDataFunc(QScriptContext *context, QScriptEngine *engine);
 
   static QScriptValue QPointFToScriptValue(QScriptEngine *engine, const QPointF &in);
   static void         QPointFFromScriptValue(const QScriptValue &object, QPointF &pt);
