@@ -63,14 +63,14 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(QcepExperimentWPtr expt, Qc
   m_HistCTop     (m_SettingsSaver, this, "histCTop",      50,    "Histogram B Top"),
   m_HistCRight   (m_SettingsSaver, this, "histCRight",    60,    "Histogram B Right"),
   m_HistCBottom  (m_SettingsSaver, this, "histCBottom",   60,    "Histogram B Bottom"),
-  m_SliceHStart  (m_SettingsSaver, this, "sliceHStart",   10,    "Horizontal Slice Start"),
+  m_SliceHStart  (m_SettingsSaver, this, "sliceHStart",   0,     "Horizontal Slice Start"),
   m_SliceHSummed (m_SettingsSaver, this, "sliceHSummed",  1,     "Horizontal Slice Summed"),
   m_SliceHSkipped(m_SettingsSaver, this, "sliceHSkipped", 0,     "Horizontal Slice Skipped"),
-  m_SliceHRepeats(m_SettingsSaver, this, "sliceHRepeats", 1,     "Horizontal Slice Repeats"),
-  m_SliceVStart  (m_SettingsSaver, this, "sliceVStart",   10,    "Vertical Slice Start"),
+  m_SliceHRepeats(m_SettingsSaver, this, "sliceHRepeats", 100,   "Horizontal Slice Repeats"),
+  m_SliceVStart  (m_SettingsSaver, this, "sliceVStart",   0,     "Vertical Slice Start"),
   m_SliceVSummed (m_SettingsSaver, this, "sliceVSummed",  1,     "Vertical Slice Summed"),
   m_SliceVSkipped(m_SettingsSaver, this, "sliceVSkipped", 0,     "Vertical Slice Skipped"),
-  m_SliceVRepeats(m_SettingsSaver, this, "sliceVRepeats", 1,     "Vertical Slice Repeats")
+  m_SliceVRepeats(m_SettingsSaver, this, "sliceVRepeats", 100,   "Vertical Slice Repeats")
 {
   setupUi(this);
 
