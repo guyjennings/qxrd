@@ -548,6 +548,44 @@ QcepDoubleImageDataPtr QcepDatasetModel::newImage(QString path, int width, int h
   }
 }
 
+QcepIntegratedDataPtr QcepDatasetModel::integratedData(const QModelIndex &index)
+{
+  return QcepIntegratedDataPtr();
+}
+
+QcepIntegratedDataPtr QcepDatasetModel::integratedData(QString path)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->integratedData(path);
+  } else {
+    return QcepIntegratedDataPtr();
+  }
+}
+
+QcepIntegratedDataPtr QcepDatasetModel::integratedData(int n)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->integratedData(n);
+  } else {
+    return QcepIntegratedDataPtr();
+  }
+}
+
+QcepIntegratedDataPtr QcepDatasetModel::newIntegratedData(QString path, int sz)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    return ds->newIntegratedData(path, sz);
+  } else {
+    return QcepIntegratedDataPtr();
+  }
+}
+
 void                   QcepDatasetModel::append(const QModelIndex &index, QcepDataObjectPtr obj)
 {
 }

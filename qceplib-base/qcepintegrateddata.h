@@ -13,6 +13,7 @@ class QcepIntegratedData : public QcepDataObject
 
 public:
   explicit QcepIntegratedData(QcepSettingsSaverWPtr saver,
+                              QString name,
                               QcepDoubleImageDataPtr data,
                               int maxSize, QcepObject *parent);
   ~QcepIntegratedData();
@@ -26,6 +27,10 @@ public slots:
   int size() const;
 
 public:
+  static QcepIntegratedDataPtr newIntegratedData(QcepSettingsSaverWPtr saver,
+                                                 QString name,
+                                                 int sz,
+                                                 QcepObject *parent);
   void append(double x, double y);
   void set_Center(double cx, double cy);
   void set_Image(QcepDoubleImageDataPtr image);

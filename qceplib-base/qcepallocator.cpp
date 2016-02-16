@@ -239,6 +239,7 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(AllocationStrategy strat,
 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->integratedSizeMB(10000))) {
       QcepIntegratedDataPtr res(new QcepIntegratedData(QcepSettingsSaverPtr(),
+                                                       "",
                                                        data,
                                                        10000,
                                                        parent));
@@ -286,7 +287,7 @@ void QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AllocationStr
 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->doubleSizeMB(width, height) + g_Allocator->integratedSizeMB(10000))) {
       img = QcepDoubleImageDataPtr(new QcepDoubleImageData(QcepSettingsSaverPtr(), width, height, 0, parent));
-      integ = QcepIntegratedDataPtr(new QcepIntegratedData(QcepSettingsSaverPtr(), img, 10000, parent));
+      integ = QcepIntegratedDataPtr(new QcepIntegratedData(QcepSettingsSaverPtr(), "", img, 10000, parent));
 
       img->moveToThread(NULL);
       integ->moveToThread(NULL);

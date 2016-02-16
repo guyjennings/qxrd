@@ -16,6 +16,8 @@
 #include "qcepdatacolumnscan.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepimagedata.h"
+#include "qcepintegrateddata-ptr.h"
+#include "qcepintegrateddata.h"
 
 class QcepDatasetModel : public QAbstractItemModel
 {
@@ -73,6 +75,11 @@ public slots:
   QcepDoubleImageDataPtr image(QString path);
   QcepDoubleImageDataPtr image(int n);
   QcepDoubleImageDataPtr newImage(QString path, int width=0, int height=0);
+
+  QcepIntegratedDataPtr  integratedData(const QModelIndex &index);
+  QcepIntegratedDataPtr  integratedData(QString path);
+  QcepIntegratedDataPtr  integratedData(int n);
+  QcepIntegratedDataPtr  newIntegratedData(QString path, int sz);
 
   void                   append(const QModelIndex &index, QcepDataObjectPtr obj);
   void                   append(QString path, QcepDataObjectPtr obj);

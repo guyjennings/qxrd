@@ -5,6 +5,7 @@
 #include "qcepdatacolumn.h"
 #include "qcepdatacolumnscan.h"
 #include "qcepimagedata.h"
+#include "qcepintegrateddata.h"
 
 #include <QFileInfo>
 #include <QDir>
@@ -137,6 +138,19 @@ QcepDoubleImageDataPtr QcepDataGroup::image(int n)
   return qSharedPointerDynamicCast<QcepDoubleImageData>(obj);
 }
 
+QcepIntegratedDataPtr QcepDataGroup::integratedData(QString path)
+{
+  QcepDataObjectPtr obj = item(path);
+
+  return qSharedPointerDynamicCast<QcepIntegratedData>(obj);
+}
+
+QcepIntegratedDataPtr QcepDataGroup::integratedData(int n)
+{
+  QcepDataObjectPtr obj = item(n);
+
+  return qSharedPointerDynamicCast<QcepIntegratedData>(obj);
+}
 
 QString QcepDataGroup::directoryName(QString path)
 {
@@ -362,6 +376,25 @@ QcepDoubleImageDataPtr QcepDataGroup::newImage(QString path, int width, int heig
   }
 
   return QcepDoubleImageDataPtr();
+}
+
+QcepIntegratedDataPtr QcepDataGroup::newIntegratedData(QString path, int sz)
+{
+  QcepDataGroupPtr group = createGroup(directoryName(path));
+
+  if (group) {
+    QcepIntegratedDataPtr data(QcepIntegratedData::newIntegratedData(saver(), object(path), sz, group.data()));
+
+    if (data) {
+      group->append(data);
+
+      emit dataObjectChanged();
+
+      return data;
+    }
+  }
+
+  return QcepIntegratedDataPtr();
 }
 
 QScriptValue QcepDataGroup::toGroupScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data)

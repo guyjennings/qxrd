@@ -10,6 +10,7 @@
 #include "qcepdatacolumn-ptr.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepimagedata-ptr.h"
+#include "qcepintegrateddata-ptr.h"
 
 class QcepDataGroup : public QcepDataObject
 {
@@ -41,6 +42,9 @@ public slots:
   QcepDoubleImageDataPtr image(QString path);
   QcepDoubleImageDataPtr image(int n);
 
+  QcepIntegratedDataPtr  integratedData(QString path);
+  QcepIntegratedDataPtr  integratedData(int n);
+
   int                childCount() const;
 
   void append(QcepDataObjectPtr obj);
@@ -55,6 +59,7 @@ public slots:
   QcepDataColumnPtr newColumn(QString path, int nrow);
   QcepDataColumnScanPtr newColumnScan(QString path, int nrow, QStringList cols);
   QcepDoubleImageDataPtr newImage(QString path, int width=0, int height=0);
+  QcepIntegratedDataPtr  newIntegratedData(QString path, int sz);
 
   static QScriptValue toGroupScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data);
   static void fromGroupScriptValue(const QScriptValue &obj, QcepDataGroupPtr &data);
