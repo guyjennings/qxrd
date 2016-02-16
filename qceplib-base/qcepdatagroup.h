@@ -47,6 +47,8 @@ public slots:
 
   int                childCount() const;
 
+  void insert(int atRow, QcepDataObjectPtr obj);
+
   void append(QcepDataObjectPtr obj);
   void append(QString path, QcepDataObjectPtr obj);
   void remove(QcepDataObjectPtr obj);

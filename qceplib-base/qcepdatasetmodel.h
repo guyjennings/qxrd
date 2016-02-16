@@ -28,6 +28,7 @@ public:
 
 public slots:
   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex index(int row, int column, const QcepDataObjectPtr &obj) const;
   QModelIndex parent(const QModelIndex &index) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -86,11 +87,15 @@ public slots:
   void                   remove(const QModelIndex &index);
   void                   remove(QString path);
 
+  void insertGroup(int atRow, QString name);
+
 private slots:
   void onDataObjectChanged();
 
 private:
   QString indexDescription(const QModelIndex& index) const;
+  QString groupName(QString path);
+  QString objectName(QString path);
 
 private:
   QcepDatasetWPtr m_Dataset;

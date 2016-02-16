@@ -200,6 +200,19 @@ QcepDataObjectPtr QcepDataGroup::referencedObject(QString path)
   }
 }
 
+void QcepDataGroup::insert(int atRow, QcepDataObjectPtr obj)
+{
+  if (obj) {
+    if (atRow <= 0) {
+      m_Objects.prepend(obj);
+    } else if (atRow >= m_Objects.count()) {
+      m_Objects.append(obj);
+    } else {
+      m_Objects.insert(atRow, obj);
+    }
+  }
+}
+
 void QcepDataGroup::append(QcepDataObjectPtr obj)
 {
   if (obj) {

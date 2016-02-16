@@ -5,6 +5,8 @@
 #include "qcepdebug.h"
 #include <QMimeData>
 #include <stdio.h>
+#include <QFileInfo>
+#include <QDir>
 
 QcepDatasetModel::QcepDatasetModel(QcepDatasetWPtr ds) :
   m_Dataset(ds)
@@ -82,6 +84,17 @@ QModelIndex QcepDatasetModel::index(int row, int column, const QModelIndex &pare
   }
 
   return res;
+}
+
+QModelIndex QcepDatasetModel::index(int row, int column, const QcepDataObjectPtr &obj) const
+{
+  if (obj == m_Dataset) {
+    return createIndex(row, column);
+  } else {
+    QcepDataObjectPtr item = obj->item(row);
+
+    return createIndex(row, column, item.data());
+  }
 }
 
 QModelIndex QcepDatasetModel::parent(const QModelIndex &index) const
@@ -329,6 +342,24 @@ void QcepDatasetModel::onDataObjectChanged()
   emit dataChanged(index(0,0), index(rowCount(), columnCount()));
 }
 
+QString QcepDatasetModel::groupName(QString path)
+{
+  QFileInfo info(path);
+
+  if (info.isAbsolute()) {
+    return info.dir().absolutePath();
+  } else {
+    return info.dir().path();
+  }
+}
+
+QString QcepDatasetModel::objectName(QString path)
+{
+  QFileInfo info(path);
+
+  return info.fileName();
+}
+
 QcepDataObjectPtr      QcepDatasetModel::item(const QModelIndex &index)
 {
   printf("QcepDatasetModel::item([%d,%d])\n", index.row(), index.column());
@@ -387,13 +418,39 @@ QcepDataGroupPtr       QcepDatasetModel::group(int n)
 
 QcepDataGroupPtr       QcepDatasetModel::newGroup(QString path)
 {
-  QcepDatasetPtr ds(m_Dataset);
+  QcepDataGroupPtr gr = group(path);
 
-  if (ds) {
-    return ds->newGroup(path);
+  if (gr) {
+    return gr;
   } else {
-    return QcepDataGroupPtr();
+    QcepDataObjectPtr obj = item(path);
+    QcepDatasetPtr    ds(m_Dataset);
+
+    if (obj) {
+      if (ds) {
+        ds->printMessage(tr("Item %1 exists and is not a data group").arg(path));
+      }
+    } else {
+      QcepDataGroupPtr sgr = newGroup(groupName(path));
+
+      if (sgr && ds) {
+        QcepDataGroupPtr ng =
+            QcepDataGroupPtr(new QcepDataGroup(ds->saver(), objectName(path), sgr.data()));
+
+        if (ng) {
+          beginInsertRows(index(0,0,sgr), sgr->rowCount(), sgr->rowCount()+1);
+
+          sgr->append(ng);
+
+          endInsertRows();
+
+          return ng;
+        }
+      }
+    }
   }
+
+  return QcepDataGroupPtr();
 }
 
 QcepDataArrayPtr       QcepDatasetModel::array(const QModelIndex &index)
@@ -583,6 +640,19 @@ QcepIntegratedDataPtr QcepDatasetModel::newIntegratedData(QString path, int sz)
     return ds->newIntegratedData(path, sz);
   } else {
     return QcepIntegratedDataPtr();
+  }
+}
+
+void QcepDatasetModel::insertGroup(int atRow, QString name)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    beginInsertRows(QModelIndex(), atRow, atRow+1);
+
+    ds->insert(atRow, QcepDataGroupPtr(new QcepDataGroup(ds->saver(), name, ds.data())));
+
+    endInsertRows();
   }
 }
 
