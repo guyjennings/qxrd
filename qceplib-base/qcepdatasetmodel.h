@@ -28,7 +28,7 @@ public:
 
 public slots:
   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-  QModelIndex index(int row, int column, const QcepDataObjectPtr &obj) const;
+  QModelIndex index(const QcepDataObjectPtr &obj) const;
   QModelIndex parent(const QModelIndex &index) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
