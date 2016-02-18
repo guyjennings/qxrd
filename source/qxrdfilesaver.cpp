@@ -103,8 +103,10 @@ QString QxrdFileSaver::uniqueFileName(QString name)
 
   if (f.exists()) {
     QDir dir = f.dir();
-    QString base = f.baseName();
-    QString suff = f.completeSuffix();
+//    QString base = f.baseName();
+//    QString suff = f.completeSuffix();
+    QString base = f.completeBaseName();
+    QString suff = f.suffix();
 
     QxrdAcquisitionPtr acq(acquisition());
 
