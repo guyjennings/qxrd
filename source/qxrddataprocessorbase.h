@@ -20,6 +20,8 @@
 #include "qxrdfilesaver-ptr.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdgeneratetestimage-ptr.h"
+#include "qxrdpolartransform-ptr.h"
+#include "qxrdpolartransform.h"
 #include "qxrdintegrator-ptr.h"
 #include "qxrdintegrator.h"
 #include "qxrdcenterfinder-ptr.h"
@@ -396,6 +398,7 @@ public:
   QxrdExperimentPtr      experiment() const;
   QxrdCenterFinderPtr    centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
+  QxrdPolarTransformPtr  polarTransform() const;
 
   QxrdGenerateTestImageWPtr generateTestImage() const;
 
@@ -477,6 +480,7 @@ protected:
 
   QxrdCenterFinderPtr    m_CenterFinder;
   QxrdIntegratorPtr      m_Integrator;
+  QxrdPolarTransformPtr  m_PolarTransform;
 
   QxrdGenerateTestImagePtr m_GenerateTestImage;
 

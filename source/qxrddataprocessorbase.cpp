@@ -109,6 +109,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_AcquiredCount(0),
   m_CenterFinder(NULL),
   m_Integrator(NULL),
+  m_PolarTransform(NULL),
   m_GenerateTestImage(NULL)
 {
 //  m_SaverQueueLength.setDebug(1);
@@ -125,6 +126,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
 
   m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(saver, m_Experiment));
   m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, m_CenterFinder));
+  m_PolarTransform = QxrdPolarTransformPtr(new QxrdPolarTransform(saver, m_Experiment));
 
 //  m_Integrator->initialize(m_Integrator);
 
@@ -201,6 +203,7 @@ void QxrdDataProcessorBase::writeSettings(QSettings *settings, QString section)
 
   m_CenterFinder -> writeSettings(settings, section+"/centerfinder");
   m_Integrator   -> writeSettings(settings, section+"/integrator");
+  m_PolarTransform -> writeSettings(settings, section+"/polarTRansform");
   m_DistortionCorrection -> writeSettings(settings, section+"/distortion");
 }
 
@@ -212,6 +215,7 @@ void QxrdDataProcessorBase::readSettings(QSettings *settings, QString section)
 
   m_CenterFinder -> readSettings(settings, section+"/centerfinder");
   m_Integrator   -> readSettings(settings, section+"/integrator");
+  m_PolarTransform -> readSettings(settings, section+"/polarTransform");
   m_DistortionCorrection -> readSettings(settings, section+"/distortion");
 }
 
@@ -1923,6 +1927,15 @@ QxrdIntegratorPtr QxrdDataProcessorBase::integrator() const
   }
 
   return m_Integrator;
+}
+
+QxrdPolarTransformPtr QxrdDataProcessorBase::polarTransform() const
+{
+  if (m_PolarTransform == NULL) {
+    printMessage("Problem QxrdDataProcessorBase::polarTransform == NULL");
+  }
+
+  return m_PolarTransform;
 }
 
 QxrdDistortionCorrectionPtr QxrdDataProcessorBase::distortionCorrection() const

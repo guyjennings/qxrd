@@ -334,7 +334,10 @@ HEADERS += TODO.h \
     qxrdacquisitionscalermodel.h \
     qxrdacquisitionscalermodel-ptr.h \
     qxrdacquisitionscalerdialog-ptr.h \
-    qxrdzingerdialog.h
+    qxrdzingerdialog.h \
+    qxrdpolartransform.h \
+    qxrdpolartransformdialog.h \
+    qxrdpolartransform-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -497,7 +500,9 @@ SOURCES += qxrd.cpp \
     qxrdroitypedelegate.cpp \
     qxrdacquisitionscalerdialog.cpp \
     qxrdacquisitionscalermodel.cpp \
-    qxrdzingerdialog.cpp
+    qxrdzingerdialog.cpp \
+    qxrdpolartransform.cpp \
+    qxrdpolartransformdialog.cpp
 
 OTHER_FILES += testImage.js
 
@@ -527,7 +532,8 @@ FORMS += qxrdwindow.ui \
     qxrddetectorconfigurationdialog.ui \
     qxrddetectorcontrolwindow.ui \
     qxrdacquisitionscalerdialog.ui \
-    qxrdzingerdialog.ui
+    qxrdzingerdialog.ui \
+    qxrdpolartransformdialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

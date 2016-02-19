@@ -2031,6 +2031,9 @@ void QxrdScriptEngine::initialize()
       QCEP_DOC_OBJECT("integrator", "Image Circular Integration Options");
       globalObject().setProperty("integrator",      newQObject(dp->integrator().data()));
 
+      QCEP_DOC_OBJECT("polarTransform", "Polar Transform Options");
+      globalObject().setProperty("polarTransform",      newQObject(dp->polarTransform().data()));
+
       QxrdGenerateTestImagePtr gti(dp->generateTestImage());
 
       if (gti) {

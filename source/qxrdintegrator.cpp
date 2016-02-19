@@ -22,7 +22,6 @@
 
 QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw)
   : QcepObject("integrator", NULL),
-    m_Saver(saver),
     m_Oversample(saver, this, "oversample", 1, "Oversampling for Integration"),
     m_IntegrationStep(saver, this, "integrationStep", 0.001, "Integration Step Size"),
     m_IntegrationNSteps(saver, this, "integrationNSteps", 0, "Integration Number of Steps"),
@@ -44,6 +43,7 @@ QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr e
     m_SelfNormalization(saver, this, "selfNormalization", false, "Normalize result based on average value within specified range"),
     m_SelfNormalizationMinimum(saver, this, "selfNormalizationMinimum", 0, "Self Normalization Range Minimum"),
     m_SelfNormalizationMaximum(saver, this, "selfNormalizationMaximum", 0, "Self Normalization Range Maximum"),
+    m_Saver(saver),
     m_Experiment(exp),
     m_CenterFinder(cfw),
     m_IntegratorCache()

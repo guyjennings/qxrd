@@ -34,6 +34,7 @@
 #include "qxrdacquisitionextrainputsdialog.h"
 #include "qxrdacquisitionscalerdialog.h"
 #include "qxrdtodolist.h"
+#include "qxrdpolartransformdialog.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -472,6 +473,8 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
           m_DataProcessor.data(), &QxrdDataProcessorThreaded::integrateSaveAndDisplay);
   connect(m_ActionIntegrateInputImages, &QAction::triggered,
           m_InputFileBrowser, &QxrdFileBrowser::doIntegrate);
+
+  connect(m_ActionPolarTransform, &QAction::triggered, this, &QxrdWindow::doPolarTransform);
 
   connect(m_IntegratorDialog -> m_ClearGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
   connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
@@ -2029,3 +2032,21 @@ void QxrdWindow::plotPowderRingCenters()
 //    expt->openAcquisitionWindow();
 //  }
 //}
+
+void QxrdWindow::doPolarTransform()
+{
+  GUI_THREAD_CHECK;
+
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+
+    if (proc) {
+      QxrdPolarTransformDialog transform(proc, this);
+
+      transform.exec();
+    }
+  }
+}

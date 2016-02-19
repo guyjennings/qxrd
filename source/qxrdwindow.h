@@ -91,6 +91,8 @@ public slots:
   void doReflectHorizontally();
 //  void doOpenAcquisitionWindow();
 
+  void doPolarTransform();
+
   void updateTitle();
   void acquireStarted();
   void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);

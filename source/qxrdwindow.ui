@@ -1137,7 +1137,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -1188,7 +1188,7 @@
     </widget>
     <widget class="QMenu" name="m_DetectorControlWindowsMenu">
      <property name="title">
-      <string>Detector Control Windows...</string>
+      <string>&amp;Detector Control Windows...</string>
      </property>
      <addaction name="m_ActionOpenDetectorControlWindow"/>
     </widget>
@@ -1279,6 +1279,8 @@
     <addaction name="m_IntegrateVsMenu"/>
     <addaction name="m_ActionClearIntegratedData"/>
     <addaction name="m_ActionClearSelectedIntegratedData"/>
+    <addaction name="separator"/>
+    <addaction name="m_ActionPolarTransform"/>
     <addaction name="separator"/>
     <addaction name="m_ActionProcessData"/>
     <addaction name="m_ActionSaveCachedGeometry"/>
@@ -2050,6 +2052,14 @@
   <action name="m_ActionPlaceholder">
    <property name="text">
     <string>&amp;Placeholder</string>
+   </property>
+  </action>
+  <action name="m_ActionPolarTransform">
+   <property name="text">
+    <string>Polar Transform...</string>
+   </property>
+   <property name="toolTip">
+    <string>Polar Transform of Image</string>
    </property>
   </action>
  </widget>
