@@ -27,7 +27,7 @@ QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr e
     m_IntegrationNSteps(saver, this, "integrationNSteps", 0, "Integration Number of Steps"),
     m_IntegrationMinimum(saver, this, "integrationMinimum", 0, "Integration Minimum"),
     m_IntegrationMaximum(saver, this, "integrationMaximum", 100000, "Integration Maximum"),
-    m_IntegrationXUnits(saver, this, "integrationXUnits", IntegrateTTH, "X Units for Integration (0 = TTH, 1 = Q, 2 = R)"),
+    m_IntegrationXUnits(saver, this, "integrationXUnits", RadialIntegrateTTH, "X Units for Integration (0 = TTH, 1 = Q, 2 = R)"),
     m_EnableGeometricCorrections(saver, this, "enableGeometricCorrections", false, "Enable Geometric Corrections (tilt and distance) in Integration"),
     m_EnablePolarizationCorrections(saver, this, "enablePolarizationCorrections", false, "Enable Polarization Corrections in Integration"),
     m_Polarization(saver, this, "polarization", 1.0, "Beam Polarization Factor"),
@@ -156,7 +156,10 @@ QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepIntegratedDataPtr i
       dimg->get_Height() != cache->get_NRows()) {
 
     cache = QxrdIntegratorCachePtr(
-          new QxrdIntegratorCache(m_Experiment, sharedFromThis(), m_CenterFinder));
+          new QxrdIntegratorCache(m_Experiment,
+                                  (QxrdIntegratorWPtr) sharedFromThis(),
+                                  QxrdPolarTransformWPtr(),
+                                  m_CenterFinder));
 
     m_IntegratorCache = cache;
   }
@@ -177,15 +180,15 @@ double QxrdIntegrator::XValue(double x, double y) const
 
   if (cf) {
     switch(get_IntegrationXUnits()) {
-    case IntegrateTTH:
+    case RadialIntegrateTTH:
       xVal = cf->getTTH(x,y);
       break;
 
-    case IntegrateQ:
+    case RadialIntegrateQ:
       xVal = cf->getQ(x,y);
       break;
 
-    case IntegrateR:
+    case RadialIntegrateR:
       xVal = cf->getR(x,y);
       break;
     }
@@ -208,15 +211,15 @@ double QxrdIntegrator::XValue(double x, double y,
   double junk;
 
   switch(xUnits) {
-  case IntegrateTTH:
+  case RadialIntegrateTTH:
     xVal = cf->getTwoTheta(xc,yc,dst,x,y,pxl,pxh,cosb,sinb,cosr,sinr);
     break;
 
-  case IntegrateQ:
+  case RadialIntegrateQ:
     cf->getQChi(xc,yc,dst,nrg,x,y,pxl,pxh,rot,cosb,sinb,cosa,sina,cosr,sinr,&xVal, &junk);
     break;
 
-  case IntegrateR:
+  case RadialIntegrateR:
     xVal = cf->getRadius(xc,yc,dst,x,y,pxl,pxh,cosb,sinb,cosr,sinr);
     break;
   }
@@ -229,15 +232,15 @@ QString QxrdIntegrator::XLabel() const
   QString label = "";
 
   switch(get_IntegrationXUnits()) {
-  case IntegrateTTH:
+  case RadialIntegrateTTH:
     label = "2 Theta (deg)";
     break;
 
-  case IntegrateQ:
+  case RadialIntegrateQ:
     label = "Q";
     break;
 
-  case IntegrateR:
+  case RadialIntegrateR:
     label = "r (mm)";
     break;
   }
@@ -326,17 +329,17 @@ QcepIntegratedDataPtr QxrdIntegrator::slicePolygon(QcepIntegratedDataPtr integ, 
 
 void QxrdIntegrator::integrateVsQ()
 {
-  set_IntegrationXUnits(IntegrateQ);
+  set_IntegrationXUnits(RadialIntegrateQ);
 }
 
 void QxrdIntegrator::integrateVsR()
 {
-  set_IntegrationXUnits(IntegrateR);
+  set_IntegrationXUnits(RadialIntegrateR);
 }
 
 void QxrdIntegrator::integrateVsTTH()
 {
-  set_IntegrationXUnits(IntegrateTTH);
+  set_IntegrationXUnits(RadialIntegrateTTH);
 }
 
 QcepInt32ImageDataPtr QxrdIntegrator::cachedGeometry()

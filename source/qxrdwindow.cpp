@@ -1790,9 +1790,9 @@ void QxrdWindow::doProcessSequence()
 
 void QxrdWindow::integrationXUnitsChanged(int newXUnits)
 {
-  m_ActionIntegrateVsR   -> setChecked(newXUnits == QxrdIntegrator::IntegrateR);
-  m_ActionIntegrateVsQ   -> setChecked(newXUnits == QxrdIntegrator::IntegrateQ);
-  m_ActionIntegrateVsTTH -> setChecked(newXUnits == QxrdIntegrator::IntegrateTTH);
+  m_ActionIntegrateVsR   -> setChecked(newXUnits == QxrdIntegrator::RadialIntegrateR);
+  m_ActionIntegrateVsQ   -> setChecked(newXUnits == QxrdIntegrator::RadialIntegrateQ);
+  m_ActionIntegrateVsTTH -> setChecked(newXUnits == QxrdIntegrator::RadialIntegrateTTH);
 }
 
 void QxrdWindow::crashProgram()

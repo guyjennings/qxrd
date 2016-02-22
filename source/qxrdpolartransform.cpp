@@ -1,4 +1,5 @@
 #include "qxrdpolartransform.h"
+#include "qxrdexperiment.h"
 
 QxrdPolarTransform::QxrdPolarTransform(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp) :
   QcepObject("polarTransform", NULL),
@@ -17,4 +18,19 @@ QxrdPolarTransform::QxrdPolarTransform(QcepSettingsSaverWPtr saver, QxrdExperime
   m_Saver(saver),
   m_Experiment(exp)
 {
+}
+
+QxrdPolarTransform::~QxrdPolarTransform()
+{
+}
+
+QxrdIntegratorWPtr QxrdPolarTransform::integrator() const
+{
+  QxrdIntegratorWPtr res;
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    res = expt->integrator();
+  }
 }

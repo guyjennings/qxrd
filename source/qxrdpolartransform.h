@@ -8,13 +8,19 @@
 
 #include "qxrdexperiment-ptr.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qxrdcenterfinder-ptr.h"
+#include "qxrdintegrator-ptr.h"
 
 class QxrdPolarTransform : public QcepObject
 {
   Q_OBJECT
 
 public:
-  QxrdPolarTransform(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp);
+  QxrdPolarTransform(QcepSettingsSaverWPtr saver,
+                     QxrdExperimentWPtr    exp);
+  virtual ~QxrdPolarTransform();
+
+  QxrdIntegratorWPtr integrator() const;
 
 public:
   Q_PROPERTY(QString destination READ get_Destination WRITE set_Destination)

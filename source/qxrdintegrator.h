@@ -97,7 +97,11 @@ public:
   QxrdExperimentWPtr experiment() const;
 
   enum {
-    IntegrateTTH, IntegrateQ, IntegrateR
+    RadialIntegrateTTH, RadialIntegrateQ, RadialIntegrateR, RadialIntegrateNone
+  };
+
+  enum {
+    PolarIntegrateNone, PolarIntegrateChi
   };
 
   double XValue(double x, double y) const;
