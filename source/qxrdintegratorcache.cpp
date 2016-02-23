@@ -363,6 +363,22 @@ QString QxrdIntegratorCache::XLabel() const
   return label;
 }
 
+int QxrdIntegratorCache::resultSize() const
+{
+  int nRange = 0;
+
+  int nStride = m_NRMax - m_NRMin;
+
+  if (m_CachedPolarBinNumbers) {
+    int ncRange = m_NCMax - m_NCMin;
+    nRange = nStride*ncRange;
+  } else {
+    nRange = nStride;
+  }
+
+  return nRange;
+}
+
 void QxrdIntegratorCache::partialIntegrationStep1(int i, int n)
 {
   int strideSize = m_NRows / m_ThreadCount;
@@ -409,7 +425,7 @@ void QxrdIntegratorCache::partialIntegrationStep1(int i, int n)
             }
           }
 
-          m_CachedNormalization->setValue(ix, iy, r);
+          m_CachedRadialValues->setValue(ix, iy, r);
 
           if (hasChi) {
             double c = YValue(xx, yy);
@@ -525,6 +541,25 @@ void QxrdIntegratorCache::partialIntegrationStep2(int i, int n)
     rStep = (rMax - rMin)/nStep;
   }
 
+  double cMin, cMax, cStep;
+
+  if (hasChi) {
+    cMin = (m_CFirst ? 0   : qMax(m_CMin, m_PolarStart));
+    cMax = (m_CFirst ? 360 : qMin(m_CMax, m_PolarEnd));
+
+    cStep = m_PolarStep;
+
+    if (cStep == 0) {
+      int nStep = m_PolarNSteps;
+
+      if (nStep <= 0) {
+        nStep = 512;
+      }
+
+      cStep = (cMax - cMin)/nStep;
+    }
+  }
+
   for(int y = rowStart; y<rowEnd; y++) {
     for (int x = 0; x < m_NCols; x++) {
       for (int oversampley = 0; oversampley < noversample; oversampley++) {
@@ -534,7 +569,7 @@ void QxrdIntegratorCache::partialIntegrationStep2(int i, int n)
           double xx = x+oversamplex*oversampleStep+halfOversampleStep;
           int ix = x*noversample+oversamplex;
 
-          double r = m_CachedNormalization->value(ix, iy);
+          double r = m_CachedRadialValues->value(ix, iy);
           double n = -1;
 
           if (r == r) {
@@ -550,8 +585,109 @@ void QxrdIntegratorCache::partialIntegrationStep2(int i, int n)
             m_CachedRadialBinNumbers->setValue(ix, iy, -1);
             m_CachedNormalization->setValue(ix, iy, 0.0);
           }
+
+          if (hasChi) {
+            double chi = m_CachedPolarValues->value(ix, iy);
+            double n   = -1;
+
+            if (chi == chi) {
+              n = floor(chi/m_CStep);
+            }
+
+            if (n >= m_NCMin && n < m_NCMax) {
+              int bin = n - m_NCMin;
+
+              m_CachedPolarBinNumbers->setValue(ix, iy, bin);
+            } else {
+              m_CachedPolarBinNumbers->setValue(ix, iy, -1);
+            }
+          }
         }
       }
+    }
+  }
+}
+
+void QxrdIntegratorCache::partialIntegrationStep3(
+    int i,
+    int n,
+    QcepDoubleImageDataPtr dimg,
+    QcepMaskDataPtr mask,
+    int normalize)
+{
+  int strideSize = m_NRows / m_ThreadCount;
+  bool hasChi = m_CachedPolarBinNumbers;
+
+  while (strideSize*m_ThreadCount < m_NRows) {
+    strideSize++;
+  }
+
+  int rowStart = strideSize*i;
+  int rowEnd   = rowStart + strideSize;
+
+  if (rowEnd > m_NRows) {
+    rowEnd = m_NRows;
+  }
+
+  int noversample = m_Oversample;
+  double oversampleStep = 1.0/m_Oversample;
+  double halfOversampleStep = oversampleStep/2.0;
+
+  int nRange = 0;
+
+  int nStride = m_NRMax - m_NRMin;
+
+  if (hasChi) {
+    int ncRange = m_NCMax - m_NCMin;
+    nRange = nStride*ncRange;
+  } else {
+    nRange = nStride;
+  }
+
+  QVector<double> integral(nRange), sumValue(nRange);
+
+  for(int y = rowStart; y<rowEnd; y++) {
+    for (int x = 0; x < m_NCols; x++) {
+      if ((mask == NULL) || (mask->value(x, y))) {
+        double val = dimg->value(x,y);
+        for (int oversampley = 0; oversampley < noversample; oversampley++) {
+          double yy = y+oversampley*oversampleStep+halfOversampleStep;
+          int iy = y*noversample+oversampley;
+          for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
+            double xx = x+oversamplex*oversampleStep+halfOversampleStep;
+            int    ix = x*noversample+oversamplex;
+
+            int    rbin = m_CachedRadialBinNumbers->value(ix,iy);
+            double norm = m_CachedNormalization->value(ix,iy);
+
+            int    bin  = -1;
+
+            if (hasChi) {
+              int cbin = m_CachedPolarBinNumbers->value(ix,iy);
+
+              if (cbin >= 0) {
+                bin = cbin*nStride + rbin;
+              }
+            } else {
+              bin = rbin;
+            }
+
+            if (bin >= 0) {
+              integral[bin] += val*norm;
+              sumValue[bin] += 1;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    for (int i=0; i<nRange; i++) {
+      m_Integral[i] += integral[i];
+      m_SumValue[i] += sumValue[i];
     }
   }
 }
@@ -572,7 +708,12 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
       expt->printMessage(tr("QxrdIntegratorCache::performIntegration"));
     }
 
+    m_Integral.resize(0);
+    m_SumValue.resize(0);
+
     if (integ && dimg) {
+      m_HasChi = false;
+
       int noversample = m_Oversample;
       double oversampleStep = 1.0/m_Oversample;
       double halfOversampleStep = oversampleStep/2.0;
@@ -604,6 +745,10 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         m_CachedRadialBinNumbers =  QcepAllocator::newInt32Image(QcepAllocator::AlwaysAllocate,
                                                            m_NCols*m_Oversample,
                                                            m_NRows*m_Oversample, expt.data());
+
+        m_CachedRadialValues = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
+                                                              m_NCols*m_Oversample,
+                                                              m_NRows*m_Oversample, expt.data());
 
         m_CachedNormalization = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
                                                               m_NCols*m_Oversample,
@@ -645,34 +790,38 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           if (m_ThreadCount == 1) {
             partialIntegrationStep1(0, 1);
           } else {
-            QVector< QFuture<void> > res1;
+            QVector< QFuture<void> > res;
 
             for (int i=0; i<m_ThreadCount; i++) {
-              res1.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep1, i, m_ThreadCount));
+              res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep1, i, m_ThreadCount));
             }
 
             for (int i=0; i<m_ThreadCount; i++) {
-              res1[i].waitForFinished();
+              res[i].waitForFinished();
             }
           }
 
-          expt->printMessage(tr("1st stage complete after %1 msec").arg(tic.elapsed()));
+          if (qcepDebug(DEBUG_INTEGRATOR)) {
+            expt->printMessage(tr("1st stage complete after %1 msec").arg(tic.elapsed()));
+          }
 
           if (m_ThreadCount == 1) {
             partialIntegrationStep2(0, 1);
           } else {
-            QVector< QFuture<void> > res2;
+            QVector< QFuture<void> > res;
 
             for (int i=0; i<m_ThreadCount; i++) {
-              res2.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep2, i, m_ThreadCount));
+              res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep2, i, m_ThreadCount));
             }
 
             for (int i=0; i<m_ThreadCount; i++) {
-              res2[i].waitForFinished();
+              res[i].waitForFinished();
             }
           }
 
-          expt->printMessage(tr("2nd stage complete after %1 msec").arg(tic.elapsed()));
+          if (qcepDebug(DEBUG_INTEGRATOR)) {
+            expt->printMessage(tr("2nd stage complete after %1 msec").arg(tic.elapsed()));
+          }
 
           m_CacheFillLevel.fetchAndStoreOrdered(m_NPix);
 
@@ -705,36 +854,37 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           expt->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
         }
 
-        expt->printMessage(tr("Cache complete after %1 msec").arg(tic.elapsed()));
+        m_Integral.resize(resultSize());
+        m_SumValue.resize(resultSize());
 
-        int nRange = m_NRMax - m_NRMin;
-        int nRows = m_NRows;
-        int nCols = m_NCols;
-        double rMin = m_RMin;
-        double rStep = m_RStep;
+        if (m_ThreadCount == 1) {
+          partialIntegrationStep3(0, 1, dimg, mask, normalize);
+        } else {
+          QVector< QFuture<void> > res;
 
-        QVector<double> integral(nRange), sumvalue(nRange);
-
-        int noversample = m_Oversample;
-
-        for (int y = 0; y < nRows; y++) {
-          for (int x = 0; x < nCols; x++) {
-            if ((mask == NULL) || (mask->value(x, y))) {
-              double val = dimg->value(x,y);
-              for (int oversampley = 0; oversampley < noversample; oversampley++) {
-                for (int oversamplex = 0; oversamplex < noversample; oversamplex++) {
-                  int iy = y*noversample+oversampley;
-                  int ix = x*noversample+oversamplex;
-                  int bin = m_CachedRadialBinNumbers->value(ix, iy);
-                  double norm = m_CachedNormalization->value(ix, iy);
-                  if (bin >= 0) {
-                    integral[bin] += val*norm;
-                    sumvalue[bin] += 1;
-                  }
-                }
-              }
-            }
+          for (int i=0; i<m_ThreadCount; i++) {
+            res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep3,
+                                         i, m_ThreadCount, dimg, mask, normalize));
           }
+
+          for (int i=0; i<m_ThreadCount; i++) {
+            res[i].waitForFinished();
+          }
+        }
+
+        if (qcepDebug(DEBUG_INTEGRATOR)) {
+          expt->printMessage(tr("Stage 3 complete after %1 msec").arg(tic.elapsed()));
+        }
+
+        int nRange = 0;
+
+        int nStride = m_NRMax - m_NRMin;
+
+        if (m_HasChi) {
+          int ncRange = m_NCMax - m_NCMin;
+          nRange = nStride*ncRange;
+        } else {
+          nRange = nStride;
         }
 
         double scalingFactor = m_ScalingFactor;
@@ -743,14 +893,14 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           double nsum = 0, ninteg = 0;
 
           for(int ir=0; ir<nRange; ir++) {
-            int sv = sumvalue[ir];
+            int sv = m_SumValue[ir];
 
             if (sv > 0) {
-              double xv = rMin + (ir+0.5)*rStep;
+              double xv = m_RMin + (ir+0.5)*m_RStep;
 
               if (xv >= m_SelfNormalizationMinimum && xv < m_SelfNormalizationMaximum) {
                 nsum   += sv;
-                ninteg += integral[ir];
+                ninteg += m_Integral[ir];
               }
             }
           }
@@ -764,15 +914,15 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
         integ -> set_Center(m_CenterX, m_CenterY);
 
         for(int ir=0; ir<nRange; ir++) {
-          int sv = sumvalue[ir];
+          int sv = m_SumValue[ir];
 
           if (sv > 0) {
-            double xv = rMin + (ir+0.5)* /*oversampleStep+halfOversampleStep**/ rStep;
+            double xv = m_RMin + (ir+0.5)*m_RStep;
 
             if (normalize) {
-              integ -> append(xv, scalingFactor*normVal*integral[ir]/sv);
+              integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv);
             } else {
-              integ -> append(xv, scalingFactor*normVal*integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+              integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
             }
           }
         }

@@ -120,16 +120,23 @@ private:
   double NormValue(double x, double y);
   QString XLabel() const;
 
+  int resultSize() const;
+
   void partialIntegrationStep1(int i, int n);
   void partialIntegrationStep2(int i, int n);
+  void partialIntegrationStep3(int i, int n, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask, int normalize);
 
 private:
   QAtomicInt             m_CacheFillLevel;
   QAtomicInt             m_CacheFullLevel;
+  bool                   m_HasChi;
   QcepInt32ImageDataPtr  m_CachedRadialBinNumbers;
   QcepInt32ImageDataPtr  m_CachedPolarBinNumbers;
   QcepDoubleImageDataPtr m_CachedNormalization;
+  QcepDoubleImageDataPtr m_CachedRadialValues;
   QcepDoubleImageDataPtr m_CachedPolarValues;
+  QVector<double>        m_Integral;
+  QVector<double>        m_SumValue;
   QxrdExperimentWPtr     m_Experiment;
   QxrdIntegratorWPtr     m_Integrator;
   QxrdPolarTransformWPtr m_PolarTransform;
