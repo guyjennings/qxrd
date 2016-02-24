@@ -493,7 +493,7 @@ QxrdCalibrantLibraryWPtr QxrdExperiment::calibrantLibrary() const
   return m_CalibrantLibrary;
 }
 
-QcepDatasetModelPtr QxrdExperiment::dataset() const
+QcepDatasetModelPtr QxrdExperiment::dataset()
 {
   return m_DatasetModel;
 }

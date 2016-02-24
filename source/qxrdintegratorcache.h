@@ -8,6 +8,7 @@
 
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
+#include "qcepdataobject-ptr.h"
 #include "qcepintegrateddata-ptr.h"
 #include "qcepallocator-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -104,10 +105,10 @@ private:
   double m_SelfNormalizationMaximum;
 
 public:
-    QcepIntegratedDataPtr performIntegration(QcepIntegratedDataPtr integ,
-                                             QcepDoubleImageDataPtr dimg,
-                                             QcepMaskDataPtr mask,
-                                             int normalize);
+    void performIntegration(QcepDataObjectPtr      res,
+                            QcepDoubleImageDataPtr dimg,
+                            QcepMaskDataPtr mask,
+                            int normalize);
 
 private:
   double getTTH(double x, double y);

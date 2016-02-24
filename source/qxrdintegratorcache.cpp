@@ -13,6 +13,7 @@
 #include "qxrdpolartransform.h"
 #include "qxrdcenterfinder.h"
 #include "qcepmutexlocker.h"
+#include "qcepdataobject.h"
 
 #include <stdio.h>
 #include <QThread>
@@ -72,6 +73,7 @@ QxrdIntegratorCache::QxrdIntegratorCache
   m_ScalingFactor(1.0),
   m_CacheFillLevel(-1),
   m_CacheFullLevel(-1),
+  m_HasChi(false),
   m_Experiment(exp),
   m_Integrator(integ),
   m_PolarTransform(xform),
@@ -129,6 +131,8 @@ QxrdIntegratorCache::QxrdIntegratorCache
     m_PolarStart   = xformp->get_PolarStart();
     m_PolarEnd     = xformp->get_PolarEnd();
     m_PolarUnits   = xformp->get_PolarUnits();
+
+    m_HasChi       = true;
   }
 
   QxrdCenterFinderPtr cfp(m_CenterFinder);
@@ -692,8 +696,8 @@ void QxrdIntegratorCache::partialIntegrationStep3(
   }
 }
 
-QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
-  QcepIntegratedDataPtr integ,
+void QxrdIntegratorCache::performIntegration(
+  QcepDataObjectPtr      res,
   QcepDoubleImageDataPtr dimg,
   QcepMaskDataPtr mask,
   int normalize)
@@ -711,9 +715,7 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
     m_Integral.resize(0);
     m_SumValue.resize(0);
 
-    if (integ && dimg) {
-      m_HasChi = false;
-
+    if (res && dimg) {
       int noversample = m_Oversample;
       double oversampleStep = 1.0/m_Oversample;
       double halfOversampleStep = oversampleStep/2.0;
@@ -910,26 +912,51 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
           }
         }
 
-        integ -> resize(0);
-        integ -> set_Center(m_CenterX, m_CenterY);
+        if (m_HasChi) {
+          QcepDoubleImageDataPtr img = qSharedPointerDynamicCast<QcepDoubleImageData>(res);
+          int nRadial = m_NRMax - m_NRMin;
+          int nPolar  = m_NCMax - m_NCMin;
 
-        for(int ir=0; ir<nRange; ir++) {
-          int sv = m_SumValue[ir];
+          img->resize(nRadial, nPolar);
 
-          if (sv > 0) {
-            double xv = m_RMin + (ir+0.5)*m_RStep;
+          for (int y=0; y<nPolar; y++) {
+            for (int x=0; x<nRadial; x++) {
+              int bin = y*nRadial + x;
 
-            if (normalize) {
-              integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv);
-            } else {
-              integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+              int   sv = m_SumValue[bin];
+              double v = m_Integral[bin];
+
+              img->setValue(x,y, scalingFactor*normVal*v/sv);
             }
           }
-        }
 
-        integ->set_XUnitsLabel(XLabel());
-        integ->set_Oversample(m_Oversample);
-        // Integrate entirely out of cache
+          img->dataObjectChanged();
+        } else {
+          QcepIntegratedDataPtr integ = qSharedPointerDynamicCast<QcepIntegratedData>(res);
+
+          if (integ) {
+            integ -> resize(0);
+            integ -> set_Center(m_CenterX, m_CenterY);
+
+            for(int ir=0; ir<nRange; ir++) {
+              int sv = m_SumValue[ir];
+
+              if (sv > 0) {
+                double xv = m_RMin + (ir+0.5)*m_RStep;
+
+                if (normalize) {
+                  integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv);
+                } else {
+                  integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+                }
+              }
+            }
+
+            integ->set_XUnitsLabel(XLabel());
+            integ->set_Oversample(m_Oversample);
+            // Integrate entirely out of cache
+          }
+        }
       }
 
       expt->printMessage(tr("Integration of %1 took %2 msec")
@@ -939,8 +966,6 @@ QcepIntegratedDataPtr QxrdIntegratorCache::performIntegration(
       expt->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));
     }
   }
-
-  return integ;
 }
 
 void QxrdIntegratorCache::grabScriptEngine()

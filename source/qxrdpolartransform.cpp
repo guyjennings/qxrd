@@ -1,5 +1,10 @@
 #include "qxrdpolartransform.h"
 #include "qxrdexperiment.h"
+#include "qxrdintegratorcache.h"
+#include "qxrddataprocessor.h"
+#include "qcepdatasetmodel-ptr.h"
+#include "qcepdatasetmodel.h"
+#include "qcepimagedata.h"
 
 QxrdPolarTransform::QxrdPolarTransform(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp) :
   QcepObject("polarTransform", NULL),
@@ -32,5 +37,33 @@ QxrdIntegratorWPtr QxrdPolarTransform::integrator() const
 
   if (expt) {
     res = expt->integrator();
+  }
+
+  return res;
+}
+
+void QxrdPolarTransform::execute()
+{
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+    QxrdCenterFinderPtr  cf(expt->centerFinder());
+    QxrdIntegratorPtr    integ(expt->integrator());
+
+    if (proc && cf) {
+      QcepDoubleImageDataPtr img  = proc->data();
+      QcepMaskDataPtr        mask = proc->mask();
+
+      m_IntegratorCache =
+          QxrdIntegratorCachePtr(new QxrdIntegratorCache(
+                                   expt, integ, sharedFromThis(), cf));
+
+      QcepDatasetModelPtr    ds  = expt->dataset();
+
+      QcepDoubleImageDataPtr res = ds->newImage(get_Destination());
+
+      m_IntegratorCache->performIntegration(res, img, mask, 0);
+    }
   }
 }

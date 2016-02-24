@@ -164,7 +164,9 @@ QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepIntegratedDataPtr i
     m_IntegratorCache = cache;
   }
 
-  return cache->performIntegration(integ, dimg, mask, true);
+  cache->performIntegration(integ, dimg, mask, true);
+
+  return integ;
 }
 
 double QxrdIntegrator::XValue(QPointF pt) const

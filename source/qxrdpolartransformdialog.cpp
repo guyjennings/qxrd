@@ -54,6 +54,8 @@ void QxrdPolarTransformDialog::accept()
       transform->set_RadialNSteps(m_RadialNSteps->value());
       transform->set_RadialStart(m_RadialStart->value());
       transform->set_RadialEnd(m_RadialEnd->value());
+
+      transform->execute();
     }
   }
 

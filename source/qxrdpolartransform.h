@@ -10,8 +10,9 @@
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
+#include "qxrdintegratorcache-ptr.h"
 
-class QxrdPolarTransform : public QcepObject
+class QxrdPolarTransform : public QcepObject, public QEnableSharedFromThis<QxrdPolarTransform>
 {
   Q_OBJECT
 
@@ -21,6 +22,8 @@ public:
   virtual ~QxrdPolarTransform();
 
   QxrdIntegratorWPtr integrator() const;
+
+  void execute();
 
 public:
   Q_PROPERTY(QString destination READ get_Destination WRITE set_Destination)
@@ -60,9 +63,10 @@ public:
   QCEP_DOUBLE_PROPERTY(RadialEnd)
 
 private:
-  mutable QMutex        m_Mutex;
-  QcepSettingsSaverWPtr m_Saver;
-  QxrdExperimentWPtr    m_Experiment;
+  mutable QMutex         m_Mutex;
+  QcepSettingsSaverWPtr  m_Saver;
+  QxrdExperimentWPtr     m_Experiment;
+  QxrdIntegratorCachePtr m_IntegratorCache;
 };
 
 #endif // QXRDPOLARTRANSFORM_H
