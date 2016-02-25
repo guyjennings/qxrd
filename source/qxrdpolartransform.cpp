@@ -10,6 +10,7 @@ QxrdPolarTransform::QxrdPolarTransform(QcepSettingsSaverWPtr saver, QxrdExperime
   QcepObject("polarTransform", NULL),
   m_Destination(saver, this, "destination", "Polar/image", "Destination for polar transform"),
   m_OutputType(saver, this, "outputType", 3, "Output type 0=none, 1=data, 2=radial plot, 3=polar plot"),
+  m_Oversample(saver, this, "oversample", 1, "Oversample factor"),
   m_PolarUnits(saver, this, "polarUnits", QxrdIntegrator::PolarIntegrateChi, "Polar Integration Type (0=Angle)"),
   m_PolarStep(saver, this, "polarStep", 0.5, "Polar Integration Step Size"),
   m_PolarNSteps(saver, this, "polarNSteps", 0, "Polar Integration Number of Steps"),

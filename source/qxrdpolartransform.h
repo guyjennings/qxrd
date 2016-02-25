@@ -32,6 +32,9 @@ public:
   Q_PROPERTY(int outputType READ get_OutputType WRITE set_OutputType)
   QCEP_INTEGER_PROPERTY(OutputType)
 
+  Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
+  QCEP_INTEGER_PROPERTY(Oversample)
+
   Q_PROPERTY(int polarUnits READ get_PolarUnits WRITE set_PolarUnits)
   QCEP_INTEGER_PROPERTY(PolarUnits)
 

@@ -132,6 +132,8 @@ QxrdIntegratorCache::QxrdIntegratorCache
     m_PolarEnd     = xformp->get_PolarEnd();
     m_PolarUnits   = xformp->get_PolarUnits();
 
+    m_Oversample   = xformp->get_Oversample();
+
     m_HasChi       = true;
   }
 

@@ -16,7 +16,7 @@ QxrdPolarTransformDialog::QxrdPolarTransformDialog(QxrdDataProcessorWPtr procw, 
       m_OutputType->setCurrentIndex(transform->get_OutputType());
       m_Destination->setText(transform->get_Destination());
 
-//      m_PolarType->setCurrentIndex(transform->get_PolarUnits());
+      m_PolarType->setCurrentIndex(transform->get_PolarUnits());
       m_PolarStep->setValue(transform->get_PolarStep());
       m_PolarNSteps->setValue(transform->get_PolarNSteps());
       m_PolarStart->setValue(transform->get_PolarStart());
@@ -27,6 +27,8 @@ QxrdPolarTransformDialog::QxrdPolarTransformDialog(QxrdDataProcessorWPtr procw, 
       m_RadialNSteps->setValue(transform->get_RadialNSteps());
       m_RadialStart->setValue(transform->get_RadialStart());
       m_RadialEnd->setValue(transform->get_RadialEnd());
+
+      m_Oversample->setValue(transform->get_Oversample());
     }
   }
 }
@@ -44,6 +46,7 @@ void QxrdPolarTransformDialog::accept()
       transform->set_OutputType(m_OutputType->currentIndex());
       transform->set_Destination(m_Destination->text());
 
+      transform->set_PolarUnits(m_PolarType->currentIndex());
       transform->set_PolarStep(m_PolarStep->value());
       transform->set_PolarNSteps(m_PolarNSteps->value());
       transform->set_PolarStart(m_PolarStart->value());
@@ -54,6 +57,8 @@ void QxrdPolarTransformDialog::accept()
       transform->set_RadialNSteps(m_RadialNSteps->value());
       transform->set_RadialStart(m_RadialStart->value());
       transform->set_RadialEnd(m_RadialEnd->value());
+
+      transform->set_Oversample(m_Oversample->value());
 
       transform->execute();
     }
