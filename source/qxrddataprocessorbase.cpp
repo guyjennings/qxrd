@@ -203,7 +203,7 @@ void QxrdDataProcessorBase::writeSettings(QSettings *settings, QString section)
 
   m_CenterFinder -> writeSettings(settings, section+"/centerfinder");
   m_Integrator   -> writeSettings(settings, section+"/integrator");
-  m_PolarTransform -> writeSettings(settings, section+"/polarTRansform");
+  m_PolarTransform -> writeSettings(settings, section+"/polarTransform");
   m_DistortionCorrection -> writeSettings(settings, section+"/distortion");
 }
 
