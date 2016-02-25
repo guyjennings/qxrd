@@ -219,7 +219,7 @@ void QxrdDetectorGeometry::getTwoThetaChi(double xCenter,double yCenter,
   // better way to do this if I really thought through
   // exactly how chi is defined. For the moment, through,
   // this does exactly the right thing.
-  *chi = (*chi + rotation)*(-1);
+  *chi = (*chi + rotation*180.0/M_PI)*(-1);
 
   // make sure that chi is b/n 0 and 360
   *chi = mod(*chi, 360.0);
