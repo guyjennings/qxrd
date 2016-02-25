@@ -386,7 +386,6 @@ int QxrdIntegratorCache::resultSize() const
 void QxrdIntegratorCache::partialIntegrationStep1(int i, int n)
 {
   int strideSize = m_NRows / m_ThreadCount;
-  bool hasChi = m_CachedPolarBinNumbers;
 
   while (strideSize*m_ThreadCount < m_NRows) {
     strideSize++;
@@ -431,7 +430,7 @@ void QxrdIntegratorCache::partialIntegrationStep1(int i, int n)
 
           m_CachedRadialValues->setValue(ix, iy, r);
 
-          if (hasChi) {
+          if (m_HasChi) {
             double c = YValue(xx, yy);
 
             if (c==c) {
@@ -513,7 +512,6 @@ void QxrdIntegratorCache::partialIntegrationStep1(int i, int n)
 void QxrdIntegratorCache::partialIntegrationStep2(int i, int n)
 {
   int strideSize = m_NRows / m_ThreadCount;
-  bool hasChi = m_CachedPolarBinNumbers;
 
   while (strideSize*m_ThreadCount < m_NRows) {
     strideSize++;
@@ -547,7 +545,7 @@ void QxrdIntegratorCache::partialIntegrationStep2(int i, int n)
 
   double cMin, cMax, cStep;
 
-  if (hasChi) {
+  if (m_HasChi) {
     cMin = (m_CFirst ? 0   : qMax(m_CMin, m_PolarStart));
     cMax = (m_CFirst ? 360 : qMin(m_CMax, m_PolarEnd));
 
@@ -590,7 +588,7 @@ void QxrdIntegratorCache::partialIntegrationStep2(int i, int n)
             m_CachedNormalization->setValue(ix, iy, 0.0);
           }
 
-          if (hasChi) {
+          if (m_HasChi) {
             double chi = m_CachedPolarValues->value(ix, iy);
             double n   = -1;
 
@@ -620,7 +618,6 @@ void QxrdIntegratorCache::partialIntegrationStep3(
     int normalize)
 {
   int strideSize = m_NRows / m_ThreadCount;
-  bool hasChi = m_CachedPolarBinNumbers;
 
   while (strideSize*m_ThreadCount < m_NRows) {
     strideSize++;
@@ -641,7 +638,7 @@ void QxrdIntegratorCache::partialIntegrationStep3(
 
   int nStride = m_NRMax - m_NRMin;
 
-  if (hasChi) {
+  if (m_HasChi) {
     int ncRange = m_NCMax - m_NCMin;
     nRange = nStride*ncRange;
   } else {
@@ -666,7 +663,7 @@ void QxrdIntegratorCache::partialIntegrationStep3(
 
             int    bin  = -1;
 
-            if (hasChi) {
+            if (m_HasChi) {
               int cbin = m_CachedPolarBinNumbers->value(ix,iy);
 
               if (cbin >= 0) {
@@ -926,7 +923,11 @@ void QxrdIntegratorCache::performIntegration(
               int   sv = m_SumValue[bin];
               double v = m_Integral[bin];
 
-              img->setValue(x,y, scalingFactor*normVal*v/sv);
+              if (sv > 0) {
+                img->setValue(x,y, scalingFactor*normVal*v/sv);
+              } else {
+                img->setValue(x,y, 0.0/0.0);
+              }
             }
           }
 
