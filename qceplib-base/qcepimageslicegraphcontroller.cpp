@@ -4,6 +4,7 @@
 #include "qcepimageslicegraphcontrols.h"
 #include "qcepimagedata.h"
 #include "qcepimagedata-ptr.h"
+#include "qwt_plot_piecewise_curve.h"
 
 QcepImageSliceGraphController::QcepImageSliceGraphController(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object)
   : QcepDataObjectGraphController(window, mode, object)
@@ -81,9 +82,9 @@ void QcepImageSliceGraphController::updateDisplay()
           QwtPlotCurve *curve = NULL;
 
           if (st == en) {
-            curve = new QwtPlotCurve(tr("row %1").arg(st));
+            curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("row %1").arg(st));
           } else {
-            curve = new QwtPlotCurve(tr("rows %1 to %2").arg(st).arg(en));
+            curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("rows %1 to %2").arg(st).arg(en));
           }
 
           curve->setSamples(x, y);
@@ -133,12 +134,12 @@ void QcepImageSliceGraphController::updateDisplay()
             en = nCols-1;
           }
 
-          QwtPlotCurve *curve = NULL;
+          QwtPlotPiecewiseCurve *curve = NULL;
 
           if (st == en) {
-            curve = new QwtPlotCurve(tr("col %1").arg(st));
+            curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("col %1").arg(st));
           } else {
-            curve = new QwtPlotCurve(tr("cols %1 to %2").arg(st).arg(en));
+            curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("cols %1 to %2").arg(st).arg(en));
           }
 
           curve->setSamples(x, y);
