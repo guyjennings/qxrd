@@ -686,9 +686,16 @@ void QxrdIntegratorCache::partialIntegrationStep3(
   {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
+    double *s1 = m_SumValue.data();
+    double *s2 = sumValue.data();
+    double *v1 = m_Integral.data();
+    double *v2 = integral.data();
+
     for (int i=0; i<nRange; i++) {
-      m_Integral[i] += integral[i];
-      m_SumValue[i] += sumValue[i];
+      if (s2[i] > 0) {
+        v1[i] += v2[i];
+        s1[i] += s2[i];
+      }
     }
   }
 }
