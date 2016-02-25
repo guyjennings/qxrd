@@ -60,15 +60,17 @@ void QcepImageSliceGraphController::updateDisplay()
             int row=start+rpt*(summed+skipped)+sum;
 
             if (row < nRows) {
-              s += data->getImageData(col, row);
-              n += 1;
+              double v = data->getImageData(col, row);
+
+              if (v==v) {
+                s += v;
+                n += 1;
+              }
             }
           }
 
-          if (n > 0) {
-            x.append(col);
-            y.append(s/n);
-          }
+          x.append(col);
+          y.append(s/n);
         }
 
         if (x.count() > 0) {
@@ -115,15 +117,17 @@ void QcepImageSliceGraphController::updateDisplay()
             int col=start+rpt*(summed+skipped)+sum;
 
             if (col < nCols) {
-              s += data->getImageData(col, row);
-              n += 1;
+              double v = data->getImageData(col, row);
+
+              if (v==v) {
+                s += v;
+                n += 1;
+              }
             }
           }
 
-          if (n > 0) {
-            x.append(row);
-            y.append(s/n);
-          }
+          x.append(row);
+          y.append(s/n);
         }
 
         if (x.count() > 0) {
