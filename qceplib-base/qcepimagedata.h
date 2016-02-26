@@ -34,6 +34,30 @@ public:
   Q_PROPERTY(int height READ get_Height WRITE set_Height)
   QCEP_INTEGER_PROPERTY(Height)
 
+  Q_PROPERTY(double hStart READ get_HStart WRITE set_HStart)
+  QCEP_DOUBLE_PROPERTY(HStart)
+
+  Q_PROPERTY(double hStep READ get_HStep WRITE set_HStep)
+  QCEP_DOUBLE_PROPERTY(HStep)
+
+  Q_PROPERTY(double vStart READ get_VStart WRITE set_VStart)
+  QCEP_DOUBLE_PROPERTY(VStart)
+
+  Q_PROPERTY(double vStep READ get_VStep WRITE set_VStep)
+  QCEP_DOUBLE_PROPERTY(VStep)
+
+  Q_PROPERTY(QString hLabel READ get_HLabel WRITE set_HLabel)
+  QCEP_STRING_PROPERTY(HLabel)
+
+  Q_PROPERTY(QString hUnits READ get_HUnits WRITE set_HUnits)
+  QCEP_STRING_PROPERTY(HUnits)
+
+  Q_PROPERTY(QString vLabel READ get_VLabel WRITE set_VLabel)
+  QCEP_STRING_PROPERTY(VLabel)
+
+  Q_PROPERTY(QString vUnits READ get_VUnits WRITE set_VUnits)
+  QCEP_STRING_PROPERTY(VUnits)
+
   Q_PROPERTY(int dataType READ get_DataType WRITE set_DataType)
   QCEP_INTEGER_PROPERTY(DataType)
 
