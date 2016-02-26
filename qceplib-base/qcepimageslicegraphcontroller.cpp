@@ -39,7 +39,17 @@ void QcepImageSliceGraphController::updateDisplay()
     int nRows = data->get_Height();
     int nCols = data->get_Width();
 
+    double hStart = data->get_HStart();
+    double hStep  = data->get_HStep();
+
+    double vStart = data->get_VStart();
+    double vStep  = data->get_VStep();
+
     if (mode == QcepDataObjectGraphWindow::HorizontalSlice) {
+      m_Window -> m_ImagePlot -> setAxisTitle(QwtPlot::xBottom, tr("%1 (%2)")
+                                              .arg(data->get_HLabel()).arg(data->get_HUnits()));
+      m_Window -> m_ImagePlot -> setAxisTitle(QwtPlot::yLeft, "Intensity");
+
       int start   = m_Window->get_SliceHStart();
       int summed  = m_Window->get_SliceHSummed();
       int skipped = m_Window->get_SliceHSkipped();
@@ -50,53 +60,67 @@ void QcepImageSliceGraphController::updateDisplay()
       if (repeats < 1) repeats = 1;
 
       for (int rpt = 0; rpt<repeats; rpt++) {
-        QVector<double> x,y;
+        int st = start+rpt*(summed+skipped);
 
-        for (int col=0; col<nCols; col++) {
-          double s=0;
-          int n=0;
+        if (st < nRows) {
+          QVector<double> x,y;
 
-          for (int sum=0; sum<summed; sum++) {
-            int row=start+rpt*(summed+skipped)+sum;
+          for (int col=0; col<nCols; col++) {
+            double s=0;
+            int n=0;
 
-            if (row < nRows) {
-              double v = data->getImageData(col, row);
+            for (int sum=0; sum<summed; sum++) {
+              int row=start+rpt*(summed+skipped)+sum;
 
-              if (v==v) {
-                s += v;
-                n += 1;
+              if (row < nRows) {
+                double v = data->getImageData(col, row);
+
+                if (v==v) {
+                  s += v;
+                  n += 1;
+                }
               }
             }
+
+            x.append(hStart+col*hStep);
+            y.append(s/n);
           }
 
-          x.append(col);
-          y.append(s/n);
-        }
+          if (x.count() > 0) {
+            int st = start+rpt*(summed+skipped);
+            int en = st+summed-1;
 
-        if (x.count() > 0) {
-          int st = start+rpt*(summed+skipped);
-          int en = st+summed-1;
+            if (en >= nRows) {
+              en = nRows-1;
+            }
 
-          if (en >= nRows) {
-            en = nRows-1;
+            QwtPlotCurve *curve = NULL;
+
+            if (st == en) {
+              curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("%1 = %2")
+                                                .arg(data->get_VLabel())
+                                                .arg(vStart+st*vStep)
+                                                .arg(data->get_VUnits()));
+            } else {
+              curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("%1 = %2 to %3 %4")
+                                                .arg(data->get_VLabel())
+                                                .arg(vStart+st*vStep).arg(vStart+en*vStep)
+                                                .arg(data->get_VUnits()));
+            }
+
+            curve->setSamples(x, y);
+
+            m_Window->m_ImagePlot->setPlotCurveStyle(curveNumber++, curve);
+
+            m_Window->appendCurve(curve);
           }
-
-          QwtPlotCurve *curve = NULL;
-
-          if (st == en) {
-            curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("row %1").arg(st));
-          } else {
-            curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("rows %1 to %2").arg(st).arg(en));
-          }
-
-          curve->setSamples(x, y);
-
-          m_Window->m_ImagePlot->setPlotCurveStyle(curveNumber++, curve);
-
-          m_Window->appendCurve(curve);
         }
       }
     } else if (mode == QcepDataObjectGraphWindow::VerticalSlice) {
+      m_Window -> m_ImagePlot -> setAxisTitle(QwtPlot::xBottom, tr("%1 (%2)")
+                                              .arg(data->get_VLabel()).arg(data->get_VUnits()));
+      m_Window -> m_ImagePlot -> setAxisTitle(QwtPlot::yLeft, "Intensity");
+
       int start   = m_Window->get_SliceVStart();
       int summed  = m_Window->get_SliceVSummed();
       int skipped = m_Window->get_SliceVSkipped();
@@ -107,50 +131,60 @@ void QcepImageSliceGraphController::updateDisplay()
       if (repeats < 1) repeats = 1;
 
       for (int rpt = 0; rpt<repeats; rpt++) {
-        QVector<double> x,y;
+        int st = start+rpt*(summed+skipped);
 
-        for (int row=0; row<nRows; row++) {
-          double s=0;
-          int n=0;
+        if (st < nCols) {
+          QVector<double> x,y;
 
-          for (int sum=0; sum<summed; sum++) {
-            int col=start+rpt*(summed+skipped)+sum;
+          for (int row=0; row<nRows; row++) {
+            double s=0;
+            int n=0;
 
-            if (col < nCols) {
-              double v = data->getImageData(col, row);
+            for (int sum=0; sum<summed; sum++) {
+              int col=start+rpt*(summed+skipped)+sum;
 
-              if (v==v) {
-                s += v;
-                n += 1;
+              if (col < nCols) {
+                double v = data->getImageData(col, row);
+
+                if (v==v) {
+                  s += v;
+                  n += 1;
+                }
               }
             }
+
+            x.append(vStart+row*vStep);
+            y.append(s/n);
           }
 
-          x.append(row);
-          y.append(s/n);
-        }
+          if (x.count() > 0) {
+            int st = start+rpt*(summed+skipped);
+            int en = st+summed-1;
 
-        if (x.count() > 0) {
-          int st = start+rpt*(summed+skipped);
-          int en = st+summed-1;
+            if (en >= nCols) {
+              en = nCols-1;
+            }
 
-          if (en >= nCols) {
-            en = nCols-1;
+            QwtPlotPiecewiseCurve *curve = NULL;
+
+            if (st == en) {
+              curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("%1 = %2 %3")
+                                                .arg(data->get_HLabel())
+                                                .arg(hStart+st*hStep)
+                                                .arg(data->get_HUnits()));
+            } else {
+              curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("%1 = %2 to %3 %4")
+                                                .arg(data->get_HLabel())
+                                                .arg(hStart+st*hStep).arg(hStart+en*hStep)
+                                                .arg(data->get_HUnits()));
+            }
+
+            curve->setSamples(x, y);
+
+            m_Window->m_ImagePlot->setPlotCurveStyle(curveNumber++, curve);
+
+            m_Window->appendCurve(curve);
           }
-
-          QwtPlotPiecewiseCurve *curve = NULL;
-
-          if (st == en) {
-            curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("col %1").arg(st));
-          } else {
-            curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("cols %1 to %2").arg(st).arg(en));
-          }
-
-          curve->setSamples(x, y);
-
-          m_Window->m_ImagePlot->setPlotCurveStyle(curveNumber++, curve);
-
-          m_Window->appendCurve(curve);
         }
       }
     }
