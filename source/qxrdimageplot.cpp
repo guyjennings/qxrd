@@ -701,7 +701,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QcepImageDataBasePtr image, QcepMa
       m_FirstTime = true;
     }
 
-    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QcepMaskDataPtr(NULL));
+    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels());
 
     if (overflow == NULL) {
       setImage(data);
@@ -738,7 +738,7 @@ void QxrdImagePlot::onMaskedImageAvailable(QcepImageDataBasePtr image, QcepMaskD
       m_FirstTime = true;
     }
 
-    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QcepMaskDataPtr(NULL));
+    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels());
     QxrdMaskRasterData *msk = new QxrdMaskRasterData(mask, false);
 
     setImage(data);

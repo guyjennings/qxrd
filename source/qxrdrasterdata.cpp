@@ -3,10 +3,9 @@
 #include "qxrdapplication.h"
 #include <QString>
 
-QxrdRasterData::QxrdRasterData(QcepImageDataBasePtr img, int interp, QcepMaskDataPtr mask, QwtInterval range)
-  : QwtRasterData(/*QRectF(0,0,(img?img->get_Width():0),(img?img->get_Height():0))*/),
+QxrdRasterData::QxrdRasterData(QcepImageDataBasePtr img, int interp, QwtInterval range)
+  : QwtRasterData(),
     m_Data(img),
-    m_Mask(mask),
     m_NRows((img ? img->get_Height(): 0)),
     m_NCols((img ? img->get_Width() : 0)),
     m_Range(range),
@@ -14,8 +13,8 @@ QxrdRasterData::QxrdRasterData(QcepImageDataBasePtr img, int interp, QcepMaskDat
 {
   if (qcepDebug(DEBUG_IMAGES)) {
     if (g_Application) {
-      g_Application->printMessage(QObject::tr("QxrdRasterData::QxrdRasterData(%1,%2,%3) [%4]")
-                        .HEXARG(img.data()).arg(interp).HEXARG(mask.data()).HEXARG(this));
+      g_Application->printMessage(QObject::tr("QxrdRasterData::QxrdRasterData(%1,%2) [%3]")
+                        .HEXARG(img.data()).arg(interp).HEXARG(this));
     }
   }
 
@@ -62,25 +61,6 @@ double QxrdRasterData::value(double x, double y) const
     }
   } else {
     return 0;
-  }
-}
-
-QxrdRasterData* QxrdRasterData::copy() const
-{
-  if (g_Application && qcepDebug(DEBUG_IMAGES)) {
-    g_Application->printMessage(QObject::tr("QxrdMaskRasterData::copy() [%1]").HEXARG((void*) this));
-  }
-
-  try {
-    return new QxrdRasterData(this->data(), this->interp(), this->mask(), this->range());
-  }
-
-  catch (...) {
-    if (g_Application) {
-      g_Application->printMessage("QxrdRasterData::copy failed");
-    }
-
-    return NULL;
   }
 }
 

@@ -19,16 +19,6 @@ QxrdMaskRasterData::QxrdMaskRasterData(QcepMaskDataPtr mask, int interp)
   setInterval(Qt::ZAxis, range());
 }
 
-//QxrdMaskRasterData::QxrdMaskRasterData()
-//  : QxrdMaskRasterData(NULL, 0)
-//{
-//}
-//
-//QxrdMaskRasterData::QxrdMaskRasterData(const QxrdMaskRasterData& cpy)
-//  : QxrdMaskRasterData(cpy.mask(), cpy.interp())
-//{
-//}
-//
 double QxrdMaskRasterData::value(double x, double y) const
 {
   if (m_Mask) {
@@ -67,15 +57,4 @@ short int *QxrdMaskRasterData::data() const
 QwtInterval QxrdMaskRasterData::range() const
 {
   return QwtInterval(0.0, 3.0);
-}
-
-QxrdMaskRasterData* QxrdMaskRasterData::copy() const
-{
-  if (g_Application && qcepDebug(DEBUG_IMAGES)) {
-    g_Application->printMessage(QObject::tr("QxrdMaskRasterData::copy() [%1]").HEXARG((void*) this));
-  }
-
-  QxrdMaskRasterData *n = new QxrdMaskRasterData(this->mask(), this->interp());
-
-  return n;
 }

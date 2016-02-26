@@ -15,8 +15,6 @@ public:
   double value(double x, double y) const;
   QwtInterval range() const;
 
-  QxrdMaskRasterData* copy() const;
-
   short int *data() const;
 
   const QcepMaskDataPtr mask() const { return m_Mask; }
