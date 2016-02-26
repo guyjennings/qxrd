@@ -2034,6 +2034,9 @@ void QxrdScriptEngine::initialize()
       QCEP_DOC_OBJECT("polarTransform", "Polar Transform Options");
       globalObject().setProperty("polarTransform",      newQObject(dp->polarTransform().data()));
 
+      QCEP_DOC_OBJECT("polarNormalization", "Polar Normalization Options");
+      globalObject().setProperty("polarNormalization",      newQObject(dp->polarNormalization().data()));
+
       QxrdGenerateTestImagePtr gti(dp->generateTestImage());
 
       if (gti) {

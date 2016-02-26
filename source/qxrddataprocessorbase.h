@@ -22,6 +22,8 @@
 #include "qxrdgeneratetestimage-ptr.h"
 #include "qxrdpolartransform-ptr.h"
 #include "qxrdpolartransform.h"
+#include "qxrdpolarnormalization-ptr.h"
+#include "qxrdpolarnormalization.h"
 #include "qxrdintegrator-ptr.h"
 #include "qxrdintegrator.h"
 #include "qxrdcenterfinder-ptr.h"
@@ -399,6 +401,7 @@ public:
   QxrdCenterFinderPtr    centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
   QxrdPolarTransformPtr  polarTransform() const;
+  QxrdPolarNormalizationPtr  polarNormalization() const;
 
   QxrdGenerateTestImageWPtr generateTestImage() const;
 
@@ -478,9 +481,10 @@ protected:
 
   QAtomicInt             m_AcquiredCount;
 
-  QxrdCenterFinderPtr    m_CenterFinder;
-  QxrdIntegratorPtr      m_Integrator;
-  QxrdPolarTransformPtr  m_PolarTransform;
+  QxrdCenterFinderPtr       m_CenterFinder;
+  QxrdIntegratorPtr         m_Integrator;
+  QxrdPolarTransformPtr     m_PolarTransform;
+  QxrdPolarNormalizationPtr m_PolarNormalization;
 
   QxrdGenerateTestImagePtr m_GenerateTestImage;
 

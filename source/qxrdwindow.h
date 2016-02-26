@@ -92,6 +92,7 @@ public slots:
 //  void doOpenAcquisitionWindow();
 
   void doPolarTransform();
+  void doPolarNormalization();
 
   void updateTitle();
   void acquireStarted();

@@ -35,6 +35,7 @@
 #include "qxrdacquisitionscalerdialog.h"
 #include "qxrdtodolist.h"
 #include "qxrdpolartransformdialog.h"
+#include "qxrdpolarnormalizationdialog.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -475,6 +476,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
           m_InputFileBrowser, &QxrdFileBrowser::doIntegrate);
 
   connect(m_ActionPolarTransform, &QAction::triggered, this, &QxrdWindow::doPolarTransform);
+  connect(m_ActionPolarNormalization, &QAction::triggered, this, &QxrdWindow::doPolarNormalization);
 
   connect(m_IntegratorDialog -> m_ClearGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
   connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
@@ -2047,6 +2049,24 @@ void QxrdWindow::doPolarTransform()
       QxrdPolarTransformDialog transform(proc, this);
 
       transform.exec();
+    }
+  }
+}
+
+void QxrdWindow::doPolarNormalization()
+{
+  GUI_THREAD_CHECK;
+
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+
+    if (proc) {
+      QxrdPolarNormalizationDialog norm(proc, this);
+
+      norm.exec();
     }
   }
 }

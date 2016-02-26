@@ -1281,6 +1281,7 @@
     <addaction name="m_ActionClearSelectedIntegratedData"/>
     <addaction name="separator"/>
     <addaction name="m_ActionPolarTransform"/>
+    <addaction name="m_ActionPolarNormalization"/>
     <addaction name="separator"/>
     <addaction name="m_ActionProcessData"/>
     <addaction name="m_ActionSaveCachedGeometry"/>
@@ -2056,10 +2057,18 @@
   </action>
   <action name="m_ActionPolarTransform">
    <property name="text">
-    <string>Polar Transform...</string>
+    <string>P&amp;olar Transform...</string>
    </property>
    <property name="toolTip">
     <string>Polar Transform of Image</string>
+   </property>
+  </action>
+  <action name="m_ActionPolarNormalization">
+   <property name="text">
+    <string>P&amp;olar Normalization...</string>
+   </property>
+   <property name="toolTip">
+    <string>Polar Normalization</string>
    </property>
   </action>
  </widget>

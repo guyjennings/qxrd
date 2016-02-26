@@ -110,6 +110,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_CenterFinder(NULL),
   m_Integrator(NULL),
   m_PolarTransform(NULL),
+  m_PolarNormalization(NULL),
   m_GenerateTestImage(NULL)
 {
 //  m_SaverQueueLength.setDebug(1);
@@ -127,6 +128,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(saver, m_Experiment));
   m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, m_CenterFinder));
   m_PolarTransform = QxrdPolarTransformPtr(new QxrdPolarTransform(saver, m_Experiment));
+  m_PolarNormalization = QxrdPolarNormalizationPtr(new QxrdPolarNormalization(saver, m_Experiment));
 
 //  m_Integrator->initialize(m_Integrator);
 
@@ -204,6 +206,7 @@ void QxrdDataProcessorBase::writeSettings(QSettings *settings, QString section)
   m_CenterFinder -> writeSettings(settings, section+"/centerfinder");
   m_Integrator   -> writeSettings(settings, section+"/integrator");
   m_PolarTransform -> writeSettings(settings, section+"/polarTransform");
+  m_PolarNormalization -> writeSettings(settings, section+"/polarNormalization");
   m_DistortionCorrection -> writeSettings(settings, section+"/distortion");
 }
 
@@ -216,6 +219,7 @@ void QxrdDataProcessorBase::readSettings(QSettings *settings, QString section)
   m_CenterFinder -> readSettings(settings, section+"/centerfinder");
   m_Integrator   -> readSettings(settings, section+"/integrator");
   m_PolarTransform -> readSettings(settings, section+"/polarTransform");
+  m_PolarNormalization -> readSettings(settings, section+"/polarNormalization");
   m_DistortionCorrection -> readSettings(settings, section+"/distortion");
 }
 
@@ -1936,6 +1940,15 @@ QxrdPolarTransformPtr QxrdDataProcessorBase::polarTransform() const
   }
 
   return m_PolarTransform;
+}
+
+QxrdPolarNormalizationPtr QxrdDataProcessorBase::polarNormalization() const
+{
+  if (m_PolarNormalization == NULL) {
+    printMessage("Problem QxrdDataProcessorBase::polarNormalization == NULL");
+  }
+
+  return m_PolarNormalization;
 }
 
 QxrdDistortionCorrectionPtr QxrdDataProcessorBase::distortionCorrection() const
