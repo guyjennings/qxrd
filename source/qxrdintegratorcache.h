@@ -26,12 +26,6 @@ public:
                       QxrdIntegratorWPtr integ,
                       QxrdPolarTransformWPtr xform,
                       QxrdCenterFinderWPtr cf);
-//  QxrdIntegratorCache(QxrdExperimentWPtr exp,
-//                      QxrdIntegratorWPtr integ,
-//                      QxrdCenterFinderWPtr cf);
-//  QxrdIntegratorCache(QxrdExperimentWPtr exp,
-//                      QxrdPolarTransformWPtr xform,
-//                      QxrdCenterFinderWPtr cf);
   virtual ~QxrdIntegratorCache();
 
   int get_NRows() const;
@@ -79,14 +73,15 @@ private:
   bool   m_RFirst;
   double m_RMin;
   double m_RMax;
-  int    m_NRMin;
-  int    m_NRMax;
   double m_CStep;
   bool   m_CFirst;
   double m_CMin;
   double m_CMax;
-  int    m_NCMin;
-  int    m_NCMax;
+
+  int    m_ResultSize;
+  int    m_NRSteps;
+  int    m_NCSteps;
+
   double m_Beta;
   double m_CosBeta;
   double m_SinBeta;
@@ -120,8 +115,6 @@ private:
   double YValue(double x, double y);
   double NormValue(double x, double y);
   QString XLabel() const;
-
-  int resultSize() const;
 
   void partialIntegrationStep1(int i, int n);
   void partialIntegrationStep2(int i, int n);
