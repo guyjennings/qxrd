@@ -115,6 +115,9 @@ private:
   double YValue(double x, double y);
   double NormValue(double x, double y);
   QString XLabel() const;
+  QString XUnits() const;
+  QString YLabel() const;
+  QString YUnits() const;
 
   void partialIntegrationStep1(int i, int n);
   void partialIntegrationStep2(int i, int n);

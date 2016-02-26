@@ -354,7 +354,7 @@ QString QxrdIntegratorCache::XLabel() const
 
   switch(m_RadialUnits) {
   case QxrdIntegrator::RadialIntegrateTTH:
-    label = "2 Theta (deg)";
+    label = "TTH";
     break;
 
   case QxrdIntegrator::RadialIntegrateQ:
@@ -362,11 +362,42 @@ QString QxrdIntegratorCache::XLabel() const
     break;
 
   case QxrdIntegrator::RadialIntegrateR:
-    label = "r (mm)";
+    label = "r";
     break;
   }
 
   return label;
+}
+
+QString QxrdIntegratorCache::XUnits() const
+{
+  QString units = "";
+
+  switch(m_RadialUnits) {
+  case QxrdIntegrator::RadialIntegrateTTH:
+    units = "deg";
+    break;
+
+  case QxrdIntegrator::RadialIntegrateQ:
+    units = "/&Ang;";
+    break;
+
+  case QxrdIntegrator::RadialIntegrateR:
+    units = "mm";
+    break;
+  }
+
+  return units;
+}
+
+QString QxrdIntegratorCache::YLabel() const
+{
+  return "Chi";
+}
+
+QString QxrdIntegratorCache::YUnits() const
+{
+  return "deg";
 }
 
 void QxrdIntegratorCache::partialIntegrationStep1(int i, int n)
@@ -877,6 +908,16 @@ void QxrdIntegratorCache::performIntegration(
           QcepDoubleImageDataPtr img = qSharedPointerDynamicCast<QcepDoubleImageData>(res);
 
           img->resize(m_NRSteps, m_NCSteps);
+
+          img->set_HStart(m_RadialStart);
+          img->set_HStep(m_RStep);
+          img->set_VStart(m_PolarStart);
+          img->set_VStep(m_CStep);
+
+          img->set_HLabel(XLabel());
+          img->set_HUnits(XUnits());
+          img->set_VLabel(YLabel());
+          img->set_VUnits(YUnits());
 
           for (int y=0; y<m_NCSteps; y++) {
             for (int x=0; x<m_NRSteps; x++) {

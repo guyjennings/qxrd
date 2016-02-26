@@ -41,6 +41,15 @@ void QxrdInfoDialog::onProcessedImageAvailable(QcepDoubleImageDataPtr image, Qce
     m_InfoText->append(tr("Acquired with Qt Version %1").arg(image->get_QtVersion()));
     m_InfoText->append(tr("Data type %1 (%2)").arg(image->get_DataType()).arg(image->get_DataTypeName()));
     m_InfoText->append(tr("Dimensions %1 x %2").arg(image->get_Width()).arg(image->get_Height()));
+
+    m_InfoText->append(tr("H: %1 (%2) x V: %3 (%4")
+                       .arg(image->get_HLabel()).arg(image->get_HUnits())
+                       .arg(image->get_VLabel()).arg(image->get_VUnits()));
+
+    m_InfoText->append(tr("H Scaling: Start:%1, Step:%2, V Scaling: Start:%3, Step:%4")
+                       .arg(image->get_HStart()).arg(image->get_HStep())
+                       .arg(image->get_VStart()).arg(image->get_VStep()));
+
     m_InfoText->append(tr("Minimum Value %1, Maximum Value %2").arg(image->minValue()).arg(image->maxValue()));
 
     m_InfoText->append(tr("Detector gain setting %1").arg(image->get_CameraGain()));
