@@ -905,7 +905,7 @@ void QxrdIntegratorCache::performIntegration(
               int sv = m_SumValue[ir];
 
               if (sv > 0) {
-                double xv = m_RMin + (ir+0.5)*m_RStep;
+                double xv = m_RadialStart + (ir+0.5)*m_RStep;
 
                 if (normalize) {
                   integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv);
