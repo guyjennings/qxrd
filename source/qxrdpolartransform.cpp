@@ -62,7 +62,11 @@ void QxrdPolarTransform::execute()
 
       QcepDatasetModelPtr    ds  = expt->dataset();
 
-      QcepDoubleImageDataPtr res = ds->newImage(get_Destination());
+      QcepDoubleImageDataPtr res = ds->image(get_Destination());
+
+      if (res == NULL) {
+        res = ds->newImage(get_Destination());
+      }
 
       m_IntegratorCache->performIntegration(res, img, mask, 0);
     }
