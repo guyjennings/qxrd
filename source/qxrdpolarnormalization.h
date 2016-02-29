@@ -7,6 +7,7 @@
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qcepimagedata-ptr.h"
 
 class QxrdPolarNormalization : public QcepObject
 {
@@ -17,6 +18,9 @@ public:
                          QxrdExperimentWPtr    exp);
 
   void execute();
+
+private:
+  void executeCol(QcepDoubleImageDataPtr dst, QcepDoubleImageDataPtr img, int col);
 
 public:
   Q_PROPERTY(QString source READ get_Source WRITE set_Source)
