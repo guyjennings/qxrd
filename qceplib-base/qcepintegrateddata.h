@@ -32,6 +32,9 @@ public:
                                                  int sz,
                                                  QcepObject *parent);
   void append(double x, double y);
+  void setValue(int n, double x, double y);
+  void selfNormalize(double minx, double maxx);
+
   void set_Center(double cx, double cy);
   void set_Image(QcepDoubleImageDataPtr image);
   QcepDoubleImageDataPtr get_Image() const;

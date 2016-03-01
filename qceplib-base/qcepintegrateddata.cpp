@@ -108,6 +108,42 @@ void QcepIntegratedData::append(double x, double y)
   m_Y[size()-1] = y;
 }
 
+void QcepIntegratedData::setValue(int n, double x, double y)
+{
+  m_X.replace(n, x);
+  m_Y.replace(n, y);
+}
+
+void QcepIntegratedData::selfNormalize(double minx, double maxx)
+{
+  double sumn = 0, sumv = 0;
+
+  for (int i=0; i<m_Size; i++) {
+    double x = m_X.value(i);
+    double y = m_Y.value(i);
+
+    if (x == x && y == y) {
+      if (x >= minx && x <= maxx) {
+        sumn += 1;
+        sumv += y;
+      }
+    }
+  }
+
+  if (sumn >= 5) {
+    double norm = sumn/sumv;
+
+    for (int i=0; i<m_Size; i++) {
+      double x = m_X.value(i);
+      double y = m_Y.value(i);
+
+      if (x == x && y == y) {
+        m_Y[i] = y*norm;
+      }
+    }
+  }
+}
+
 void QcepIntegratedData::set_Image(QcepDoubleImageDataPtr image)
 {
   m_Image = image;
