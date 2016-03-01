@@ -142,6 +142,7 @@ public slots:
 
   virtual void clear() = 0;
   virtual void resize(int width, int height) = 0;
+  virtual void fill(double val) = 0;
 
   virtual double minValue() const = 0;
   virtual double maxValue() const = 0;
@@ -157,6 +158,9 @@ public slots:
   virtual double minInEllipse(QRectF rect) = 0;
   virtual double maxInEllipse(QRectF rect) = 0;
   virtual double sumInPeak(QRectF rect) = 0;
+
+  double hValue(int n) const;
+  double vValue(int n) const;
 
 public:
 //  int get_Width() const
@@ -250,6 +254,7 @@ public:
 
   void resize(int width, int height);
   void clear();
+  void fill(double val);
 
   double getImageData(int x, int y) const;
   QVector<double> getImageData(int x0, int y0, int x1, int y1) const;
@@ -292,7 +297,7 @@ public:
   void subtractValue(int x, int y, T val);
   void multiplyValue(int x, int y, T val);
   void divideValue(int x, int y, T val);
-  void fill(T val);
+//  void fill(T val);
 
   T defaultValue() const;
   void setDefaultValue(T def);
