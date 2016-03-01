@@ -324,6 +324,16 @@ QString QcepImageDataBase::fileFormatTransposedCSV()
   return "Transposed CSV (*.csv)";
 }
 
+double QcepImageDataBase::hValue(int n) const
+{
+  return get_HStart() + n*get_HStep();
+}
+
+double QcepImageDataBase::vValue(int n) const
+{
+  return get_VStart() + n*get_VStep();
+}
+
 template <typename T>
 QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def, QcepObject *parent)
   : QcepImageDataBase(saver, width, height, width*height*sizeof(T), parent),
@@ -424,8 +434,14 @@ double QcepImageData<T>::getImageData(int x, int y) const
   return this->value(x,y);
 }
 
+//template <typename T>
+//void QcepImageData<T>::fill(T val)
+//{
+//  m_Image.fill(val);
+//}
+
 template <typename T>
-void QcepImageData<T>::fill(T val)
+void QcepImageData<T>::fill(double val)
 {
   m_Image.fill(val);
 }
