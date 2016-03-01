@@ -33,31 +33,32 @@ int QxrdPolarIntensityFitter::fit()
     double vStart = m_Data->get_VStart();
     double vStep  = m_Data->get_VStep();
 
-    double sumnn = 0, sumnx = 0, sumxx = 0, sumva = 0, sumvb = 0;
+    double sumn = 0, sumaa = 0, sumab = 0, sumbb = 0, sumva = 0, sumvb = 0;
 
     for (int i=0; i<nRows; i++) {
       double x = vStart + i*vStep;
       double a = 1;
-      double b = cos(x*M_PI/180.0);
+      double b = cos(2.0*x*M_PI/180.0);
       double v = m_Data->value(m_ColNum, i);
 
       if (v == v) {
-        sumnn += 1;
-        sumnx += x;
-        sumxx += x*x;
+        sumn  += 1;
+        sumaa += a*a;
+        sumab += a*b;
+        sumbb += b*b;
 
         sumva += v*a;
         sumvb += v*b;
       }
     }
 
-    if (sumnn > 5) {
+    if (sumn > 5) {
       QMatrix4x4 m; // Initialized as unit matrix
 
-      m(0,0) = sumnn;
-      m(1,0) = sumnx;
-      m(0,1) = sumnx;
-      m(1,1) = sumxx;
+      m(0,0) = sumaa;
+      m(1,0) = sumab;
+      m(0,1) = sumab;
+      m(1,1) = sumbb;
 
       bool invertible;
 
@@ -67,7 +68,7 @@ int QxrdPolarIntensityFitter::fit()
         m_FittedAverage   = inv(0,0)*sumva + inv(0,1)*sumvb;
         m_FittedAmplitude = inv(1,0)*sumva + inv(1,1)*sumvb;
       } else {
-        m_FittedAverage   = sumva/sumnn;
+        m_FittedAverage   = sumva/sumaa;
         m_FittedAmplitude = 0;
       }
     }

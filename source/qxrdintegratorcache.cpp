@@ -919,6 +919,8 @@ void QxrdIntegratorCache::performIntegration(
           img->set_VLabel(YLabel());
           img->set_VUnits(YUnits());
 
+          img->set_Title(dimg->get_Title());
+
           for (int y=0; y<m_NCSteps; y++) {
             for (int x=0; x<m_NRSteps; x++) {
               int bin = y*m_NRSteps + x;

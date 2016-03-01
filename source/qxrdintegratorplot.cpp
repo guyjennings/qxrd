@@ -73,7 +73,7 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QcepIntegratedDataPtr data)
 
     QcepDoubleImageDataPtr img(data->get_Image());
 
-    QString title = (img ? img -> get_Title() : "");
+    QString title = (img ? img -> get_Title() : data -> get_Title());
     QString tooltip;
 
     if (data->get_Oversample() > 1) {
