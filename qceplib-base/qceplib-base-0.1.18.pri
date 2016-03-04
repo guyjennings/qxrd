@@ -69,7 +69,8 @@ SOURCES += \
   $${PWD}/qcepdataobjectspreadsheetwindow.cpp \
   $${PWD}/qcepscriptengine.cpp \
   $${PWD}/qcepdataobjectwindow.cpp \
-    $$PWD/qcepmainwindow.cpp
+    $$PWD/qcepmainwindow.cpp \
+    $$PWD/qcepscatterplotgraphmodel.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -165,7 +166,9 @@ HEADERS += \
   $${PWD}/qcepscriptengine-ptr.h \
   $${PWD}/qcepdataobjectwindow.h \
     $$PWD/qcepmainwindow.h \
-    $$PWD/qcepmainwindow-ptr.h
+    $$PWD/qcepmainwindow-ptr.h \
+    $$PWD/qcepscatterplotgraphmodel.h \
+    $$PWD/qcepscatterplotgraphmodel-ptr.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \

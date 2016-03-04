@@ -121,6 +121,11 @@ QcepDataObjectGraphWindow::~QcepDataObjectGraphWindow()
 #endif
 }
 
+QcepExperimentWPtr QcepDataObjectGraphWindow::experiment()
+{
+  return m_Experiment;
+}
+
 void QcepDataObjectGraphWindow::setGraphMode(int mode)
 {
   if (mode != m_PlottingMode) {

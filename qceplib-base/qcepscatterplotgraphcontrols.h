@@ -3,6 +3,7 @@
 
 #include "qcepgraphcontrolswidget.h"
 #include "ui_qcepscatterplotgraphcontrols.h"
+#include "qcepscatterplotgraphmodel-ptr.h"
 
 class QcepScatterPlotGraphControls : public QcepGraphControlsWidget, public Ui::QcepScatterPlotGraphControls
 {
@@ -12,11 +13,12 @@ public:
   explicit QcepScatterPlotGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
   ~QcepScatterPlotGraphControls();
 
-protected:
-  void changeEvent(QEvent *e);
+public slots:
+//  void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+  void onClicked(const QModelIndex &index);
 
 private:
-  Ui::QcepScatterPlotGraphControls *ui;
+  QcepScatterPlotGraphModelPtr m_Model;
 };
 
 #endif // QCEPSCATTERPLOTGRAPHCONTROLS_H

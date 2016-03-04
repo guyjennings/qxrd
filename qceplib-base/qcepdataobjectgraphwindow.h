@@ -32,6 +32,8 @@ public:
   void clearPlot();
   void appendCurve(QwtPlotCurve *curve);
 
+  QcepExperimentWPtr experiment();
+
 signals:
 
 public slots:
