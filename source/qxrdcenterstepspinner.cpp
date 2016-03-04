@@ -1,5 +1,5 @@
 #include "qxrdcenterstepspinner.h"
-#include <math.h>
+#include <qmath.h>
 #include <stdio.h>
 
 QxrdCenterStepSpinner::QxrdCenterStepSpinner(QWidget *parent) :

@@ -2,7 +2,7 @@
 #include "qcepmutexlocker.h"
 #include "qcepsettingssaver.h"
 #include "levmar.h"
-#include <math.h>
+#include <qmath.h>
 #include <stdio.h>
 #include "qxrdexperiment.h"
 

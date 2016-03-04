@@ -13,7 +13,7 @@
 #include <QTime>
 #include <QPainter>
 #include <QDirIterator>
-#include <math.h>
+#include <qmath.h>
 
 QxrdDataProcessor::QxrdDataProcessor
     (QcepSettingsSaverWPtr saver,

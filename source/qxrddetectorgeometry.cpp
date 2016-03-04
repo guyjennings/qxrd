@@ -1,9 +1,6 @@
 #include "qxrddetectorgeometry.h"
 
-#define _USE_MATH_DEFINES
-
-#include <cmath>
-#include "math.h"
+#include "qmath.h"
 
 QxrdDetectorGeometry::QxrdDetectorGeometry(QString name, QcepObject *parent) :
     QcepObject(name, parent)

@@ -20,7 +20,7 @@
 
 #include <QTime>
 #include <QPainter>
-#include <math.h>
+#include <qmath.h>
 #include <QDir>
 
 QxrdDataProcessorBase::QxrdDataProcessorBase(

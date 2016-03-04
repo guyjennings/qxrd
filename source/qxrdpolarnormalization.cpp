@@ -5,6 +5,7 @@
 #include "qtconcurrentrun.h"
 #include "qxrdpolarintensityfitter.h"
 #include "qxrddataprocessor.h"
+#include <qmath.h>
 
 QxrdPolarNormalization::QxrdPolarNormalization(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp) :
   QcepObject("polarNormalization", NULL),

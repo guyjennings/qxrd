@@ -5,9 +5,7 @@
 #include <QScriptEngine>
 #include "qxrddebug.h"
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <math.h>
+#include <qmath.h>
 
 QxrdCalibrant::QxrdCalibrant(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib)
   : QcepObject("calibrant", NULL),
