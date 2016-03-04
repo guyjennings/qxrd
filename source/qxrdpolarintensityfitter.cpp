@@ -1,6 +1,6 @@
 #include "qxrdpolarintensityfitter.h"
 #include "qcepimagedata.h"
-#include <math.h>
+#include <qmath.h>
 #include <qmatrix4x4.h>
 
 QxrdPolarIntensityFitter::QxrdPolarIntensityFitter(QcepDoubleImageDataPtr data, int colNum) :
@@ -73,5 +73,7 @@ int QxrdPolarIntensityFitter::fit()
       }
     }
   }
+
+  return true;
 }
 

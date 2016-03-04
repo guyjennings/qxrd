@@ -18,9 +18,9 @@
 #include <stdio.h>
 #include <QThread>
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include "math.h"
+#include "qmath.h"
+
+#include <qmath.h>
 
 #include <QtConcurrentRun>
 
@@ -931,7 +931,7 @@ void QxrdIntegratorCache::performIntegration(
               if (sv > 0) {
                 img->setValue(x,y, scalingFactor*normVal*v/sv);
               } else {
-                img->setValue(x,y, 0.0/0.0);
+                img->setValue(x,y, qQNaN());
               }
             }
           }
