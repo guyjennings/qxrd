@@ -6,6 +6,8 @@
 
 class QcepScatterPlotGraphModel : public QAbstractTableModel
 {
+  Q_OBJECT
+
 public:
   QcepScatterPlotGraphModel(QcepDataObjectWPtr object);
 
@@ -25,6 +27,8 @@ public:
   void toggleY2(int row);
 
   int checkState(bool val) const;
+
+signals:
 
 private:
   QcepDataObjectWPtr m_Object;

@@ -27,44 +27,30 @@ QcepScatterPlotGraphControls::QcepScatterPlotGraphControls(QcepDataObjectGraphWi
 
   connect(m_ScatterColumns, &QAbstractItemView::clicked,
           this, &QcepScatterPlotGraphControls::onClicked);
+
+  connect(m_Model.data(), &QAbstractItemModel::dataChanged,
+          this,           &QcepScatterPlotGraphControls::onPlotDataChanged);
 }
 
 QcepScatterPlotGraphControls::~QcepScatterPlotGraphControls()
 {
 }
 
-//void QcepScatterPlotGraphControls::onSelectionChanged(
-//    const QItemSelection &selected, const QItemSelection &deselected)
-//{
-//  QcepExperimentPtr exp(m_Window->experiment());
-
-//  if (exp) {
-//    exp->printMessage(tr("QcepScatterPlotGraphControls::onSelectionChanged: %1 selected, %2 deselected")
-//                      .arg(selected.count()).arg(deselected.count()));
-
-//    for (int i=0; i<selected.count(); i++) {
-//      QItemSelectionRange s = selected.value(i);
-
-//      exp->printMessage(tr("Selected [%1,%2]-[%3,%4]\n")
-//             .arg(s.left()).arg(s.top()).arg(s.right()).arg(s.bottom()));
-//    }
-
-//    for (int i=0; i<deselected.count(); i++) {
-//      QItemSelectionRange s = deselected.value(i);
-
-//      exp->printMessage(tr("Deselected [%1,%2]-[%3,%4]\n")
-//             .arg(s.left()).arg(s.top()).arg(s.right()).arg(s.bottom()));
-//    }
-//  }
-//}
-
 void QcepScatterPlotGraphControls::onClicked(const QModelIndex &index)
+{
+
+  m_Model -> toggle(index);
+}
+
+void QcepScatterPlotGraphControls::onPlotDataChanged(
+    const QModelIndex &topLeft, const QModelIndex &bottomRight,
+    const QVector<int> &roles)
 {
   QcepExperimentPtr exp(m_Window->experiment());
 
   if (exp) {
-    exp->printMessage(tr("QcepScatterPlotGraphControls::onClicked(%1,%2)").arg(index.column()).arg(index.row()));
+    exp->printMessage(tr("QcepScatterPlotGraphControls::onPlotDataChanged([%1,%2],[%3,%4])")
+                      .arg(topLeft.column()).arg(topLeft.row())
+                      .arg(bottomRight.column()).arg(bottomRight.row()));
   }
-
-  m_Model -> toggle(index);
 }
