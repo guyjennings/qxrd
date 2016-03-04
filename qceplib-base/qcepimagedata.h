@@ -8,7 +8,7 @@
 #include <QSharedPointer>
 #include <QFileInfo>
 #include <QDateTime>
-#include <math.h>
+#include <qmath.h>
 #include <stdio.h>
 
 #include "qcepdataobject.h"
