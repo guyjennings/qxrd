@@ -34,10 +34,24 @@ void QxrdPolarNormalization::execute()
       dst = ds->newImage(get_Destination());
     }
 
-    QcepIntegratedDataPtr  integ = ds->integratedData(get_Integrated());
+//    QcepIntegratedDataPtr  integ = ds->integratedData(get_Integrated());
+
+//    if (integ == NULL) {
+//      integ = ds->newIntegratedData(get_Integrated(), 0);
+//    }
+
+    QcepDataColumnScanPtr integ = ds->columnScan(get_Integrated());
 
     if (integ == NULL) {
-      integ = ds->newIntegratedData(get_Integrated(), 0);
+      integ = ds->newColumnScan(get_Integrated());
+    }
+
+    if (integ) {
+      integ->clear();
+      integ->appendColumn(img->get_HLabel());
+      integ->appendColumn("avg");
+      integ->appendColumn("amp");
+      integ->appendColumn("amp/avg");
     }
 
     if (img && dst && integ) {
@@ -45,7 +59,7 @@ void QxrdPolarNormalization::execute()
       int nRows = img->get_Height();
 
       dst->resize(nCols, nRows);
-      integ->resize(nCols);
+      integ->resizeRows(nCols);
 
       dst->set_HStart(img->get_HStart());
       dst->set_HStep(img->get_HStep());
@@ -72,19 +86,19 @@ void QxrdPolarNormalization::execute()
       }
 
       if (get_SelfNormalize()) {
-        integ->selfNormalize(get_SelfNormalizeMin(), get_SelfNormalizeMax());
+//        integ->selfNormalize(get_SelfNormalizeMin(), get_SelfNormalizeMax());
       }
 
       QxrdDataProcessorPtr proc(expt->dataProcessor());
 
       if (proc) {
-        proc->displayIntegratedData(integ);
+//        proc->displayIntegratedData(integ);
       }
     }
   }
 }
 
-void QxrdPolarNormalization::executeCol(QcepIntegratedDataPtr  integ,
+void QxrdPolarNormalization::executeCol(QcepDataColumnScanPtr  integ,
                                         QcepDoubleImageDataPtr dst,
                                         QcepDoubleImageDataPtr img, int col)
 {
@@ -106,6 +120,9 @@ void QxrdPolarNormalization::executeCol(QcepIntegratedDataPtr  integ,
 //    dst->setValue(col, 1, amp);
 //    dst->setValue(col, 2, amp/avg);
 
-    integ->setValue(col, img->hValue(col), avg);
+    integ->setValue(0, col, img->hValue(col));
+    integ->setValue(1, col, avg);
+    integ->setValue(2, col, amp);
+    integ->setValue(3, col, amp/avg);
   }
 }
