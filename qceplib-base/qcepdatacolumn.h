@@ -13,7 +13,7 @@
 
  */
 
-class QcepDataColumn : public QcepDataObject, public QVector<double>
+class QcepDataColumn : public QcepDataObject
 {
   Q_OBJECT
 
@@ -28,6 +28,11 @@ public slots:
   virtual QString description() const;
   virtual int columnCount() const;
   virtual int rowCount() const;
+  virtual double value(int i) const;
+  virtual void setValue(int i, const double value);
+  virtual void resize(int n);
+  virtual int count() const;
+  virtual double *data();
 
 public:
   static QcepDataColumnPtr newDataColumn(QcepSettingsSaverWPtr saver,
@@ -39,7 +44,8 @@ public:
   static void fromColumnScriptValue(const QScriptValue &obj, QcepDataColumnPtr &data);
 
 private:
-  int m_NPoints;
+  int             m_NPoints;
+  QVector<double> m_Vector;
 };
 
 #endif // QCEPDATACOLUMN_H

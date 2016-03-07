@@ -5,7 +5,8 @@
 
 QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QcepObject *parent) :
   QcepDataGroup(sav, name, parent),
-  m_NumPoints(sav, this, "numPoints", 0, "Number of points in scan")
+  m_NumPoints(sav, this, "numPoints", 0, "Number of points in scan"),
+  m_Title(sav, this, "title", "", "Scan Title")
 {
   set_Type("Data Column Scan");
 }
@@ -69,4 +70,46 @@ int QcepDataColumnScan::columnCount() const
 int QcepDataColumnScan::rowCount() const
 {
   return get_NumPoints();
+}
+
+void QcepDataColumnScan::appendColumn(QString title)
+{
+  QcepDataColumnPtr col = QcepDataColumn::newDataColumn(saver(), title, 0, this);
+
+  append(col);
+}
+
+void QcepDataColumnScan::resizeRows(int nRows)
+{
+  int nc = columnCount();
+
+  for (int i=0; i<nc; i++) {
+    QcepDataColumnPtr c = column(i);
+
+    if (c) {
+      c -> resize(nRows);
+    }
+  }
+
+  set_NumPoints(nRows);
+}
+
+void QcepDataColumnScan::setValue(int col, int row, double val)
+{
+  QcepDataColumnPtr c = column(col);
+
+  if (c) {
+    c -> setValue(row, val);
+  }
+}
+
+double QcepDataColumnScan::value(int col, int row)
+{
+  QcepDataColumnPtr c = column(col);
+
+  if (c) {
+    return c->value(row);
+  } else {
+    return qQNaN();
+  }
 }

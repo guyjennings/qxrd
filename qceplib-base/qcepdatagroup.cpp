@@ -200,6 +200,13 @@ QcepDataObjectPtr QcepDataGroup::referencedObject(QString path)
   }
 }
 
+void QcepDataGroup::clear()
+{
+  m_Objects.clear();
+
+  emit dataObjectChanged();
+}
+
 void QcepDataGroup::insert(int atRow, QcepDataObjectPtr obj)
 {
   if (obj) {

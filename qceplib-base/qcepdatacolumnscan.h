@@ -14,6 +14,10 @@ public slots:
   QcepDataColumnPtr column(int n);
   int rowCount() const;
   int columnCount() const;
+  void resizeRows(int nRows);
+  void appendColumn(QString title);
+  double value(int col, int row);
+  void setValue(int col, int row, double val);
 
 public:
   QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QcepObject *parent);
@@ -33,6 +37,9 @@ public:
 public:
   Q_PROPERTY(int numPoints READ get_NumPoints WRITE set_NumPoints)
   QCEP_INTEGER_PROPERTY(NumPoints)
+
+  Q_PROPERTY(QString title READ get_Title WRITE set_Title)
+  QCEP_STRING_PROPERTY(Title)
 };
 
 #endif // QCEPDATACOLUMNSCAN_H
