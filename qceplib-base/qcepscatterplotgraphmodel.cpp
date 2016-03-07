@@ -173,7 +173,7 @@ void QcepScatterPlotGraphModel::toggleX(int row)
 
     m_X[row] = true;
 
-    emit dataChanged(index(0,1), index(nr,1));
+    emit dataChanged(index(0,1), index(nr-1,1));
   }
 }
 

@@ -16,9 +16,9 @@ public:
 public slots:
 //  void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
   void onClicked(const QModelIndex &index);
-  void onPlotDataChanged(const QModelIndex &topLeft,
-                         const QModelIndex &bottomRight,
-                         const QVector<int> &roles = QVector<int>());
+
+public:
+  QcepScatterPlotGraphModelPtr model();
 
 private:
   QcepScatterPlotGraphModelPtr m_Model;

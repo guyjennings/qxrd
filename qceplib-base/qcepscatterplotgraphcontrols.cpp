@@ -2,8 +2,6 @@
 #include "ui_qcepscatterplotgraphcontrols.h"
 #include "qcepscatterplotgraphmodel.h"
 #include <stdio.h>
-#include "qcepexperiment-ptr.h"
-#include "qcepexperiment.h"
 #include "qcepdataobjectgraphwindow.h"
 
 QcepScatterPlotGraphControls::QcepScatterPlotGraphControls(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object) :
@@ -26,10 +24,10 @@ QcepScatterPlotGraphControls::QcepScatterPlotGraphControls(QcepDataObjectGraphWi
 //          this, &QcepScatterPlotGraphControls::onSelectionChanged);
 
   connect(m_ScatterColumns, &QAbstractItemView::clicked,
-          this, &QcepScatterPlotGraphControls::onClicked);
+          m_Model.data(),   &QcepScatterPlotGraphModel::toggle);
 
-  connect(m_Model.data(), &QAbstractItemModel::dataChanged,
-          this,           &QcepScatterPlotGraphControls::onPlotDataChanged);
+//  connect(m_Model.data(), &QAbstractItemModel::dataChanged,
+//          this,           &QcepScatterPlotGraphControls::onPlotDataChanged);
 }
 
 QcepScatterPlotGraphControls::~QcepScatterPlotGraphControls()
@@ -38,19 +36,10 @@ QcepScatterPlotGraphControls::~QcepScatterPlotGraphControls()
 
 void QcepScatterPlotGraphControls::onClicked(const QModelIndex &index)
 {
-
   m_Model -> toggle(index);
 }
 
-void QcepScatterPlotGraphControls::onPlotDataChanged(
-    const QModelIndex &topLeft, const QModelIndex &bottomRight,
-    const QVector<int> &roles)
+QcepScatterPlotGraphModelPtr QcepScatterPlotGraphControls::model()
 {
-  QcepExperimentPtr exp(m_Window->experiment());
-
-  if (exp) {
-    exp->printMessage(tr("QcepScatterPlotGraphControls::onPlotDataChanged([%1,%2],[%3,%4])")
-                      .arg(topLeft.column()).arg(topLeft.row())
-                      .arg(bottomRight.column()).arg(bottomRight.row()));
-  }
+  return m_Model;
 }
