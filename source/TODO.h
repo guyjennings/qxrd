@@ -639,4 +639,13 @@ TODO("2015-10-21", "",
 TODO("2015-10-21", "",
      "Fix mask display issues in detector control windows");
 
+TODO("2016-03-07", "",
+     "Investigate problems with last column of polar transforms");
+
+TODO("2016-03-07", "",
+     "Reinstate self normalize option for polar normalized integration");
+
+TODO("2016-03-07", "",
+     "Auto plotting of polar normalized integration results");
+
 #endif // TODO_H
