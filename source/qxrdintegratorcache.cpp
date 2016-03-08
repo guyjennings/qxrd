@@ -301,8 +301,8 @@ double QxrdIntegratorCache::NormValue(double x, double y)
     }
 
     if (m_EnablePolarization) {
-      res /= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
-              (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth/2),2)));
+      res *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth),2)) +
+              (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth),2)));
     }
 
     switch (m_EnableUserAbsorption) {
