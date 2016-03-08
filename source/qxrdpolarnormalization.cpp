@@ -12,6 +12,7 @@ QxrdPolarNormalization::QxrdPolarNormalization(QcepSettingsSaverWPtr saver, Qxrd
   m_Source(saver, this, "source", "Polar/image", "Source for normalization operation"),
   m_Destination(saver, this, "destination", "Polar/normed", "Destination for normalization operation"),
   m_Integrated(saver, this, "integrated", "Polar/integrated", "Integrated result"),
+  m_ColumnScan(saver, this, "columnScan", "Polar/columnScan", "Data Column Scan result"),
   m_SelfNormalize(saver, this, "selfNormalize", false, "Self-Normalize integrated curves"),
   m_SelfNormalizeMin(saver, this, "selfNormalizeMin", 0, "Self-Normalize Range Minimum"),
   m_SelfNormalizeMax(saver, this, "selfNormalizeMax", 0, "Self-Normalize Range Maximum"),
@@ -28,38 +29,52 @@ void QxrdPolarNormalization::execute()
     QcepDatasetModelPtr ds = expt->dataset();
 
     QcepDoubleImageDataPtr img = ds->image(get_Source());
-    QcepDoubleImageDataPtr dst = ds->image(get_Destination());
 
-    if (dst == NULL) {
-      dst = ds->newImage(get_Destination());
+
+    QcepDoubleImageDataPtr dst;
+
+    if (get_Destination().length()>0) {
+      dst = ds->image(get_Destination());
+
+      if (dst == NULL) {
+        dst = ds->newImage(get_Destination());
+      }
     }
 
-//    QcepIntegratedDataPtr  integ = ds->integratedData(get_Integrated());
+    QcepIntegratedDataPtr  integ;
 
-//    if (integ == NULL) {
-//      integ = ds->newIntegratedData(get_Integrated(), 0);
-//    }
+    if (get_Integrated().length()>0) {
+      integ = ds->integratedData(get_Integrated());
 
-    QcepDataColumnScanPtr integ = ds->columnScan(get_Integrated());
-
-    if (integ == NULL) {
-      integ = ds->newColumnScan(get_Integrated());
+      if (integ == NULL) {
+        integ = ds->newIntegratedData(get_Integrated(), 0);
+      }
     }
 
-    if (integ) {
-      integ->clear();
-      integ->appendColumn(img->get_HLabel());
-      integ->appendColumn("avg");
-      integ->appendColumn("amp");
-      integ->appendColumn("amp/avg");
+    QcepDataColumnScanPtr cols;
+
+    if (get_ColumnScan().length()>0) {
+      cols = ds->columnScan(get_ColumnScan());
+
+      if (cols == NULL) {
+        cols = ds->newColumnScan(get_ColumnScan());
+      }
     }
 
-    if (img && dst && integ) {
+    if (img && dst && integ && cols) {
       int nCols = img->get_Width();
       int nRows = img->get_Height();
 
       dst->resize(nCols, nRows);
-      integ->resizeRows(nCols);
+
+      cols->clear();
+      cols->appendColumn(img->get_HLabel());
+      cols->appendColumn("avg");
+      cols->appendColumn("amp");
+      cols->appendColumn("amp/avg");
+      cols->resizeRows(nCols);
+
+      integ->resize(nCols);
 
       dst->set_HStart(img->get_HStart());
       dst->set_HStep(img->get_HStep());
@@ -72,27 +87,31 @@ void QxrdPolarNormalization::execute()
       dst->set_VLabel(img->get_VLabel());
 
       dst->set_Title(img->get_Title());
-
+      cols->set_Title(img->get_Title());
       integ->set_Title(img->get_Title());
 
       QVector< QFuture<void> > res;
 
       for (int i=0; i<nCols; i++) {
-        res.append(QtConcurrent::run(this, &QxrdPolarNormalization::executeCol, integ, dst, img, i));
+        res.append(QtConcurrent::run(this, &QxrdPolarNormalization::executeCol, cols, dst, img, i));
       }
 
       for (int i=0; i<nCols; i++) {
         res[i].waitForFinished();
       }
 
+      for (int i=0; i<nCols; i++) {
+        integ->setValue(i, cols->value(0,i), cols->value(1,i));
+      }
+
       if (get_SelfNormalize()) {
-//        integ->selfNormalize(get_SelfNormalizeMin(), get_SelfNormalizeMax());
+        integ->selfNormalize(get_SelfNormalizeMin(), get_SelfNormalizeMax());
       }
 
       QxrdDataProcessorPtr proc(expt->dataProcessor());
 
       if (proc) {
-//        proc->displayIntegratedData(integ);
+        proc->displayIntegratedData(integ);
       }
     }
   }

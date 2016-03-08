@@ -15,6 +15,7 @@ QxrdPolarNormalizationDialog::QxrdPolarNormalizationDialog(QxrdDataProcessorWPtr
     if (norm) {
       m_Source     ->setText(norm->get_Source());
       m_Destination->setText(norm->get_Destination());
+      m_ColumnScan ->setText(norm->get_ColumnScan());
       m_Integrated ->setText(norm->get_Integrated());
 
       m_SelfNormalize->setChecked(norm->get_SelfNormalize());
@@ -37,6 +38,7 @@ void QxrdPolarNormalizationDialog::accept()
     if (norm) {
       norm -> set_Source(m_Source->text());
       norm -> set_Destination(m_Destination->text());
+      norm -> set_ColumnScan(m_ColumnScan->text());
       norm -> set_Integrated(m_Integrated->text());
 
       norm -> set_SelfNormalize(m_SelfNormalize->isChecked());

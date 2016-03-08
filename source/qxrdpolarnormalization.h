@@ -33,6 +33,9 @@ public:
   Q_PROPERTY(QString integrated READ get_Integrated WRITE set_Integrated)
   QCEP_STRING_PROPERTY(Integrated)
 
+  Q_PROPERTY(QString columnScan READ get_ColumnScan WRITE set_ColumnScan)
+  QCEP_STRING_PROPERTY(ColumnScan)
+
   Q_PROPERTY(bool selfNormalize READ get_SelfNormalize WRITE set_SelfNormalize)
   QCEP_BOOLEAN_PROPERTY(SelfNormalize)
 
