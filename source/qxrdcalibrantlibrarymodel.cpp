@@ -171,3 +171,10 @@ void QxrdCalibrantLibraryModel::setIsUsed(int n, int v)
     emit dataChanged(index(n,0), index(n,0));
   }
 }
+
+void QxrdCalibrantLibraryModel::calibrantChanged(int n)
+{
+  int nc = columnCount();
+
+  emit dataChanged(index(n,0), index(n,nc-1));
+}

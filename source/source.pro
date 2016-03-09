@@ -341,7 +341,8 @@ HEADERS += TODO.h \
     qxrdpolarintensityfitter.h \
     qxrdpolarnormalization.h \
     qxrdpolarnormalizationdialog.h \
-    qxrdpolarnormalization-ptr.h
+    qxrdpolarnormalization-ptr.h \
+    qxrdcalibrantpropertiesdialog.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -509,7 +510,8 @@ SOURCES += qxrd.cpp \
     qxrdpolartransformdialog.cpp \
     qxrdpolarintensityfitter.cpp \
     qxrdpolarnormalization.cpp \
-    qxrdpolarnormalizationdialog.cpp
+    qxrdpolarnormalizationdialog.cpp \
+    qxrdcalibrantpropertiesdialog.cpp
 
 OTHER_FILES += testImage.js
 
@@ -541,7 +543,8 @@ FORMS += qxrdwindow.ui \
     qxrdacquisitionscalerdialog.ui \
     qxrdzingerdialog.ui \
     qxrdpolartransformdialog.ui \
-    qxrdpolarnormalizationdialog.ui
+    qxrdpolarnormalizationdialog.ui \
+    qxrdcalibrantpropertiesdialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

@@ -8,6 +8,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QClipboard>
+#include "qxrdcalibrantpropertiesdialog.h"
 
 QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenterFinderWPtr cf, QWidget *parent) :
   QDockWidget(parent),
@@ -87,12 +88,39 @@ void QxrdCalibrantDialog::onLibrarySelectionChanged(const QItemSelection &select
 void QxrdCalibrantDialog::calibrantTableContextMenu(const QPoint &pos)
 {
   QModelIndex index  = m_CalibrantTableView->indexAt(pos);
+  QxrdCalibrantPtr cal;
+
+  if (index.isValid()) {
+    cal = m_CalibrantLibrary->calibrant(index.row());
+  }
+
   QMenu      *menu   = new QMenu(this);
   QAction    *copy   = menu->addAction("Copy");
+  QAction    *dupe   = NULL;
+  QAction    *props  = NULL;
+  QAction    *del    = NULL;
+
+  if (cal) {
+    dupe  = menu->addAction(tr("Duplicate Calibrant %1").arg(cal->get_Name()));
+    props = menu->addAction(tr("Calibrant %1 Properties...").arg(cal->get_Name()));
+
+    if (!cal->isLocked()) {
+      del = menu->addAction(tr("Delete Calibrant %1...").arg(cal->get_Name()));
+    }
+  }
+
   QAction    *chosen = menu->exec(m_CalibrantTableView->viewport()->mapToGlobal(pos));
 
-  if (chosen == copy) {
-    doCopyFromTable(m_CalibrantTableView);
+  if (chosen) {
+    if (chosen == copy) {
+      doCopyFromTable(m_CalibrantTableView);
+    } else if (chosen == dupe) {
+      doDuplicateCalibrant(index.row());
+    } else if (chosen == props) {
+      doCalibrantProperties(index.row());
+    } else if (chosen == del) {
+      doDeleteCalibrant(index.row());
+    }
   }
 }
 
@@ -180,6 +208,29 @@ void QxrdCalibrantDialog::onCalibrantDoubleClick(const QModelIndex &item)
   if (item.column() == 0) {
     if (m_CalibrantLibraryModel) {
       m_CalibrantLibraryModel->toggleIsUsed(item.row());
+    }
+  }
+}
+
+void QxrdCalibrantDialog::doDuplicateCalibrant(int n)
+{
+  printf("Duplicate Calibrant %d\n", n);
+}
+
+void QxrdCalibrantDialog::doDeleteCalibrant(int n)
+{
+  printf("Delete Calibrant %d\n", n);
+}
+
+void QxrdCalibrantDialog::doCalibrantProperties(int n)
+{
+  if (m_CalibrantLibrary && m_CalibrantLibraryModel) {
+    QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(n);
+
+    QxrdCalibrantPropertiesDialog dlg(this, cal);
+
+    if (dlg.exec() == QDialog::Accepted) {
+      m_CalibrantLibraryModel->calibrantChanged(n);
     }
   }
 }

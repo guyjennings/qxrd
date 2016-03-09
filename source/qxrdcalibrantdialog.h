@@ -29,6 +29,9 @@ public slots:
 
 private:
   void doCopyFromTable(QTableView *table);
+  void doDuplicateCalibrant(int n);
+  void doDeleteCalibrant(int n);
+  void doCalibrantProperties(int n);
 
 private:
   QxrdCalibrantLibraryPtr m_CalibrantLibrary;

@@ -664,4 +664,7 @@ TODO("2016-03-09", "",
      "Make sure that detector data processing options and parameters are easy to set up"
      " - possibly support copying parameters from the main processor to the detector processors");
 
+TODO("2016-03-09", "",
+     "Implement QxrdCalibrant duplication, deletion and property dialog");
+
 #endif // TODO_H

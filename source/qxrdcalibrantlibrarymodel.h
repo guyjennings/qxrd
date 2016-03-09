@@ -31,6 +31,8 @@ public:
   int isUsed(int n);
   void setIsUsed(int n, int v);
 
+  void calibrantChanged(int n);
+
 private:
   QxrdCalibrantLibraryPtr m_CalibrantLibrary;
 };
