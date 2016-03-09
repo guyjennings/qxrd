@@ -24,6 +24,9 @@ public slots:
   void calibrantTableContextMenu(const QPoint &pos);
   void calibrantDSpacingsContextMenu(const QPoint &pos);
 
+  void onCalibrantClick      (const QModelIndex &item);
+  void onCalibrantDoubleClick(const QModelIndex &item);
+
 private:
   void doCopyFromTable(QTableView *table);
 

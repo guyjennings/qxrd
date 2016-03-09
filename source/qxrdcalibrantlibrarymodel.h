@@ -19,12 +19,18 @@ public:
   virtual QVariant         headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
   enum {
+    IsUsedColumn,
     FlagsColumn,
     NameColumn,
     SymmetryColumn,
     DescriptionColumn,
     NumColumns
   };
+
+  void toggleIsUsed(int n);
+  int isUsed(int n);
+  void setIsUsed(int n, int v);
+
 private:
   QxrdCalibrantLibraryPtr m_CalibrantLibrary;
 };

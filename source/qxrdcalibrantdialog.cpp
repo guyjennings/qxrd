@@ -45,6 +45,9 @@ QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenter
   connect(m_CalibrantTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &QxrdCalibrantDialog::onLibrarySelectionChanged);
   connect(m_CalibrantTableView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantDialog::calibrantTableContextMenu);
   connect(m_CalibrantDSpacingsView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantDialog::calibrantDSpacingsContextMenu);
+
+  connect(m_CalibrantTableView, &QTableView::clicked,       this, &QxrdCalibrantDialog::onCalibrantClick);
+  connect(m_CalibrantTableView, &QTableView::doubleClicked, this, &QxrdCalibrantDialog::onCalibrantDoubleClick);
 }
 
 QxrdCalibrantDialog::~QxrdCalibrantDialog()
@@ -157,5 +160,21 @@ void QxrdCalibrantDialog::doCopyFromTable(QTableView *table)
     clip->setText(result);
   } else {
     printf("No cells selected\n");
+  }
+}
+
+void QxrdCalibrantDialog::onCalibrantClick(const QModelIndex &item)
+{
+//  printf("Single click [%d,%d]\n", item.column(), item.row());
+}
+
+void QxrdCalibrantDialog::onCalibrantDoubleClick(const QModelIndex &item)
+{
+//  printf("Double click [%d,%d]\n", item.column(), item.row());
+
+  if (item.column() == 0) {
+    if (m_CalibrantLibraryModel) {
+      m_CalibrantLibraryModel->toggleIsUsed(item.row());
+    }
   }
 }

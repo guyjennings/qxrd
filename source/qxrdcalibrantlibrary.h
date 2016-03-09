@@ -9,15 +9,14 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 
-class QxrdCalibrantLibrary : public QcepObject
+class QxrdCalibrantLibrary : public QcepObject, public QEnableSharedFromThis<QxrdCalibrantLibrary>
 {
   Q_OBJECT
 
 public:
   QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp);
   virtual ~QxrdCalibrantLibrary();
-  void initialize(QxrdCalibrantLibraryWPtr lib);
-  QxrdCalibrantLibraryWPtr calibrantLibraryPtr() const;
+  void initialize();
 
 public slots:
   int count();
@@ -39,7 +38,6 @@ private:
   mutable QMutex            m_Mutex;
   QcepSettingsSaverWPtr     m_Saver;
   QxrdExperimentWPtr        m_Experiment;
-  QxrdCalibrantLibraryWPtr  m_CalibrantLibrary;
   QVector<QxrdCalibrantPtr> m_Calibrants;
 };
 

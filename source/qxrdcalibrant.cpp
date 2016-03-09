@@ -9,8 +9,9 @@
 
 QxrdCalibrant::QxrdCalibrant(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib)
   : QcepObject("calibrant", NULL),
-    m_Description(saver, this, "description", "Description", "Calibrant Description"),
+    m_IsUsed(saver, this, "isUsed", 0, "Is Calibrant used?"),
     m_Flags(saver, this, "flags", 0, "Calibrant flags"),
+    m_Description(saver, this, "description", "Description", "Calibrant Description"),
     m_Symmetry(saver, this, "symmetry", 0, "Calibrant Symmetry"),
     m_A(saver, this, "a", 1, "calibrant a-axis"),
     m_B(saver, this, "b", 1, "calibrant b-axis"),

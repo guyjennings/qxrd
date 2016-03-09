@@ -42,13 +42,19 @@ QVariant QxrdCalibrantLibraryModel::data (const QModelIndex & index, int role) c
   if (cal) {
     int col = index.column();
 
-    if (col == FlagsColumn) {
+    if (col == IsUsedColumn) {
+      if (role == Qt::CheckStateRole) {
+        if (cal->get_IsUsed()) {
+          return Qt::Checked;
+        } else {
+          return Qt::Unchecked;
+        }
+      }
+    } else if (col == FlagsColumn) {
       if (role == Qt::DecorationRole) {
         if (cal->isLocked()) {
           return QPixmap(":/images/lock-16x16.png");
         }
-//      } else if (role == Qt::SizeHintRole) {
-//        return QSize(50,20);
       }
     } else if (col == NameColumn) {
       if (role == Qt::DisplayRole) {
@@ -102,12 +108,16 @@ QVariant QxrdCalibrantLibraryModel::headerData ( int section, Qt::Orientation or
     if (orientation==Qt::Horizontal) {
       if (role==Qt::DisplayRole) {
         switch (section) {
+        case IsUsedColumn:
+          return "Used?";
+          break;
+
         case FlagsColumn:
-          return "F";
+          return "Flags";
           break;
 
         case SymmetryColumn:
-          return "Symm";
+          return "Symmetry";
           break;
 
         case NameColumn:
@@ -127,4 +137,37 @@ QVariant QxrdCalibrantLibraryModel::headerData ( int section, Qt::Orientation or
   }
 
   return QVariant();
+}
+
+int QxrdCalibrantLibraryModel::isUsed(int n)
+{
+  QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(n);
+
+  if (cal) {
+    return cal->get_IsUsed();
+  } else {
+    return 0;
+  }
+}
+
+void QxrdCalibrantLibraryModel::toggleIsUsed(int n)
+{
+  QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(n);
+
+  if (cal) {
+    cal->set_IsUsed(!cal->get_IsUsed());
+
+    emit dataChanged(index(n,0), index(n,0));
+  }
+}
+
+void QxrdCalibrantLibraryModel::setIsUsed(int n, int v)
+{
+  QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(n);
+
+  if (cal) {
+    cal->set_IsUsed(v);
+
+    emit dataChanged(index(n,0), index(n,0));
+  }
 }

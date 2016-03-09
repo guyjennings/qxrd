@@ -124,7 +124,7 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
           new QxrdCalibrantLibrary(m_SettingsSaver, sharedFromThis()));
 
-    m_CalibrantLibrary -> initialize(m_CalibrantLibrary);
+    m_CalibrantLibrary -> initialize();
 
     QxrdDataProcessorPtr proc(m_DataProcessor);
 

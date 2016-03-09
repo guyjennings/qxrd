@@ -54,11 +54,14 @@ private:
   QxrdCalibrantDSpacingVector dSpacingsHexagonal(double energy);
 
 public:
-  Q_PROPERTY(QString description READ get_Description WRITE set_Description)
-  QCEP_STRING_PROPERTY(Description)
+  Q_PROPERTY(int isUsed READ get_IsUsed WRITE set_IsUsed)
+  QCEP_INTEGER_PROPERTY(IsUsed)
 
   Q_PROPERTY(int flags READ get_Flags WRITE set_Flags)
   QCEP_INTEGER_PROPERTY(Flags)
+
+  Q_PROPERTY(QString description READ get_Description WRITE set_Description)
+  QCEP_STRING_PROPERTY(Description)
 
   Q_PROPERTY(int symmetry READ get_Symmetry WRITE set_Symmetry)
   QCEP_INTEGER_PROPERTY(Symmetry)
