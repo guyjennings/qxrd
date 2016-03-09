@@ -103,7 +103,7 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
                                 QxrdAcquisitionPtr(),
                                 app->allocator(),
                                 m_FileSaver));
-    m_DataProcessor -> initialize(m_DataProcessor);
+    m_DataProcessor -> initialize();
 
     QxrdFileSaverPtr saver(m_FileSaver);
 
@@ -315,7 +315,7 @@ void QxrdExperiment::openWindows()
     QxrdScriptEnginePtr eng(m_ScriptEngine);
 
     if (m_Window) {
-      m_Window -> initialize(m_Window);
+      m_Window -> initialize();
 
       if (proc) {
         proc -> setWindow(m_Window);

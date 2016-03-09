@@ -100,7 +100,7 @@ void QxrdAcquisition::initialize()
 
   m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(
         new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, myself()));
-  m_AcquisitionExtraInputs -> initialize(m_AcquisitionExtraInputs);
+  m_AcquisitionExtraInputs -> initialize();
 
   connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
           this, &QxrdAcquisition::extraInputsChanged);

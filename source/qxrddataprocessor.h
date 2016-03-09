@@ -3,7 +3,7 @@
 
 #include "qxrddataprocessorthreaded.h"
 
-class QxrdDataProcessor : public QxrdDataProcessorThreaded
+class QxrdDataProcessor : public QxrdDataProcessorThreaded, public QEnableSharedFromThis<QxrdDataProcessor>
 {
   Q_OBJECT
 
@@ -15,10 +15,9 @@ public:
                     QxrdFileSaverWPtr filesaver);
   ~QxrdDataProcessor();
 
-  void initialize(QxrdDataProcessorWPtr proc);
+  void initialize();
 
 private:
-  QxrdDataProcessorWPtr m_Processor;
 };
 
 #endif

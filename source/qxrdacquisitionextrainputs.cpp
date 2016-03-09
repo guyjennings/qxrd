@@ -43,9 +43,8 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QcepSettingsSaverWPtr sav
   }
 }
 
-void QxrdAcquisitionExtraInputs::initialize(QxrdAcquisitionExtraInputsWPtr extra)
+void QxrdAcquisitionExtraInputs::initialize()
 {
-  m_ExtraInputs = extra;
 }
 
 QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
@@ -232,7 +231,7 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 
   m_Channels.insert(n,
                     QxrdAcquisitionExtraInputsChannelPtr(
-                        chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment, m_ExtraInputs)));
+                        chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment, sharedFromThis())));
 
   connect(chan, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
 

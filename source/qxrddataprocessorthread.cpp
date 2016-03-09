@@ -50,7 +50,7 @@ void QxrdDataProcessorThread::run()
   int rc = -1;
 
   if (p) {
-    p -> initialize(p);
+    p -> initialize();
 
     m_Mutex.lock();
     m_DataProcessor = p;

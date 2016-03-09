@@ -16,14 +16,14 @@
 #include <QMutex>
 #include "qxrdacquisitionparameterpack-ptr.h"
 
-class QxrdAcquisitionExtraInputs : public QcepObject
+class QxrdAcquisitionExtraInputs : public QcepObject, public QEnableSharedFromThis<QxrdAcquisitionExtraInputs>
 {
   Q_OBJECT
 public:
   explicit QxrdAcquisitionExtraInputs(QcepSettingsSaverWPtr saver,
                                       QxrdExperimentWPtr    doc,
                                       QxrdAcquisitionWPtr   acq);
-  void initialize(QxrdAcquisitionExtraInputsWPtr extra);
+  void initialize();
   virtual ~QxrdAcquisitionExtraInputs();
 
 public:
@@ -84,7 +84,6 @@ private:
   mutable QMutex              m_Mutex;
   QxrdExperimentWPtr          m_Experiment;
   QxrdAcquisitionWPtr         m_Acquisition;
-  QxrdAcquisitionExtraInputsWPtr m_ExtraInputs;
   QcepSettingsSaverWPtr       m_Saver;
   QVector<QxrdAcquisitionExtraInputsChannelPtr> m_Channels;
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;

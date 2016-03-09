@@ -38,13 +38,12 @@ QxrdFileBrowserModel::~QxrdFileBrowserModel()
 //  }
 }
 
-void QxrdFileBrowserModel::initialize(QxrdFileBrowserModelWPtr model)
+void QxrdFileBrowserModel::initialize()
 {
-  m_Model = model;
   m_UpdaterThread =
       QxrdFileBrowserModelUpdaterThreadPtr(
         new QxrdFileBrowserModelUpdaterThread());
-  m_UpdaterThread -> setModel(m_Model);
+  m_UpdaterThread -> setModel(sharedFromThis());
 //  m_UpdaterThread -> setObjectName("browser");
   m_UpdaterThread -> start();
   m_Updater = m_UpdaterThread->updater();

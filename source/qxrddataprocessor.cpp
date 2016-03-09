@@ -29,11 +29,9 @@ QxrdDataProcessor::~QxrdDataProcessor()
 {
 }
 
-void QxrdDataProcessor::initialize(QxrdDataProcessorWPtr proc)
+void QxrdDataProcessor::initialize()
 {
-  m_Processor = proc;
-
   if (m_GenerateTestImage) {
-    m_GenerateTestImage -> setProcessor(m_Processor);
+    m_GenerateTestImage -> setProcessor(sharedFromThis());
   }
 }

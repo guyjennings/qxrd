@@ -14,14 +14,14 @@
 #include "qxrdfilebrowsermodelupdater-ptr.h"
 #include "qxrdfilebrowsermodel-ptr.h"
 
-class QxrdFileBrowserModel : public QAbstractTableModel
+class QxrdFileBrowserModel : public QAbstractTableModel, public QEnableSharedFromThis<QxrdFileBrowserModel>
 {
   Q_OBJECT
 
 public:
   explicit QxrdFileBrowserModel(QObject *parent);
   ~QxrdFileBrowserModel();
-  void initialize(QxrdFileBrowserModelWPtr model);
+  void initialize();
 
   typedef QAbstractTableModel inherited;
 
@@ -63,7 +63,6 @@ private:
 
 private:
   mutable QMutex     m_Mutex;
-  QxrdFileBrowserModelWPtr m_Model;
   QxrdFileBrowserModelUpdaterThreadPtr m_UpdaterThread;
   QxrdFileBrowserModelUpdaterWPtr m_Updater;
   QString            m_RootPath;

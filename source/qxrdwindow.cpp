@@ -117,10 +117,8 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   }
 }
 
-void QxrdWindow::initialize(QxrdWindowWPtr win)
+void QxrdWindow::initialize()
 {
-  m_Window = win;
-
   setupUi(this);
 
   QxrdApplicationPtr app(m_Application);
@@ -135,7 +133,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
   QxrdDataProcessorPtr proc(m_DataProcessor);
 
   if (acq) {
-    m_AcquisitionDialog = acq -> controlPanel(m_Window);
+    m_AcquisitionDialog = acq -> controlPanel(sharedFromThis());
     m_AcquisitionScalerDialog = new QxrdAcquisitionScalerDialog(m_Acquisition, this);
     m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(set->synchronizedAcquisitionDialogSettings(), this, m_Acquisition);
     m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
@@ -145,7 +143,7 @@ void QxrdWindow::initialize(QxrdWindowWPtr win)
 
   if (proc) {
     m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
-    m_DistortionCorrectionDialog = new QxrdDistortionCorrectionDialog(proc->distortionCorrection(), m_Window);
+    m_DistortionCorrectionDialog = new QxrdDistortionCorrectionDialog(proc->distortionCorrection(), sharedFromThis());
   }
 
   if (proc) {

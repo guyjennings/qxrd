@@ -38,7 +38,7 @@
 #include "qxrdwindowsettings.h"
 #include "qcepobjectnamer.h"
 
-class QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow
+class QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow, public QEnableSharedFromThis<QxrdWindow>
 {
   Q_OBJECT
 
@@ -51,7 +51,7 @@ public:
              QcepAllocatorWPtr allocw,
              QWidget *parent);
   virtual ~QxrdWindow();
-  void initialize(QxrdWindowWPtr win);
+  void initialize();
 
   void onAcquisitionInit();
 
@@ -163,7 +163,6 @@ private:
 
 private:
   QcepObjectNamer                        m_ObjectNamer;
-  QxrdWindowWPtr                         m_Window;
   mutable QMutex                         m_Mutex;
   QxrdWindowSettingsWPtr                 m_WindowSettings;
   QxrdApplicationWPtr                    m_Application;
