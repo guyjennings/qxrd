@@ -10,12 +10,13 @@ public:
   QxrdFitter();
 
   enum FitResult {
+    Successful,
     NoResult,
     OutsideData,
-    Successful,
     BadWidth,
     BadPosition,
-    BadHeight
+    BadHeight,
+    LastReason
   };
 
   virtual int     fit() = 0;
@@ -23,6 +24,8 @@ public:
   QxrdCenterFinder *cf() const { return m_CenterFinder; }
   FitResult        reason() const { return m_Reason; }
   QString          reasonString() const;
+
+  static QString   reasonString(FitResult i);
 
 protected:
   QxrdCenterFinder *m_CenterFinder;

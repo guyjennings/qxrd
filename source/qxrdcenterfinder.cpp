@@ -16,6 +16,8 @@
 #include <QVector>
 #include "triangulate.h"
 #include "qxrdplanefitter.h"
+#include "qcepdatasetmodel-ptr.h"
+#include "qcepdatasetmodel.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -739,12 +741,85 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
 
   QxrdPowderPointVector pts = get_MarkedPoints();
 
+  QVector<int> nreason(QxrdFitter::LastReason);
+
   for(int i=0; i<fits.count(); i++) {
     QxrdFitterRingPoint &fit = fits[i];
 
     if (fit.reason() == QxrdFitter::Successful) {
       nok += 1;
       pts.append(QxrdPowderPoint(get_RingIndex(), 0, 0, fit.fittedX(), fit.fittedY(), fit.fittedR(), fit.fittedR(), fit.fittedAz()));
+    }
+
+    nreason[fit.reason()] += 1;
+  }
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QcepDatasetModelPtr data = expt->dataset();
+
+    if (data) {
+      QcepDataColumnScanPtr scan = data->columnScan(tr("fitted/ring%1").arg(get_RingIndex()));
+
+      if (scan == NULL) {
+        scan = data->newColumnScan(tr("fitted/ring%1").arg(get_RingIndex()));
+      }
+
+      if (scan) {
+        scan->clear();
+
+        scan->appendColumn("i");
+        scan->appendColumn("index");
+        scan->appendColumn("Reason");
+        scan->appendColumn("X0");
+        scan->appendColumn("Y0");
+        scan->appendColumn("pkht");
+        scan->appendColumn("bkgd");
+        scan->appendColumn("XFit");
+        scan->appendColumn("YFit");
+        scan->appendColumn("WdFit");
+        scan->appendColumn("HtFit");
+        scan->appendColumn("BkgdFit");
+        scan->appendColumn("BkgdXFit");
+        scan->appendColumn("BkgdYFit");
+        scan->appendColumn("RFit");
+        scan->appendColumn("AzFit");
+        scan->appendColumn("dx");
+        scan->appendColumn("dy");
+        scan->appendColumn("dr");
+
+        scan->resizeRows(fits.count());
+
+        for (int i=0; i<fits.count(); i++) {
+          QxrdFitterRingPoint &fit = fits[i];
+          int col=0;
+
+          double dx = fit.fittedX() - fit.x0();
+          double dy = fit.fittedY() - fit.y0();
+          double dr = sqrt(dx*dx + dy*dy);
+
+          scan->setValue(col++, i, i);
+          scan->setValue(col++, i, fit.index());
+          scan->setValue(col++, i, fit.reason());
+          scan->setValue(col++, i, fit.x0());
+          scan->setValue(col++, i, fit.y0());
+          scan->setValue(col++, i, fit.pkht());
+          scan->setValue(col++, i, fit.bkgd());
+          scan->setValue(col++, i, fit.fittedX());
+          scan->setValue(col++, i, fit.fittedY());
+          scan->setValue(col++, i, fit.fittedWidth());
+          scan->setValue(col++, i, fit.fittedHeight());
+          scan->setValue(col++, i, fit.fittedBkgd());
+          scan->setValue(col++, i, fit.fittedBkgdX());
+          scan->setValue(col++, i, fit.fittedBkgdY());
+          scan->setValue(col++, i, fit.fittedR());
+          scan->setValue(col++, i, fit.fittedAz()*180.0/M_PI);
+          scan->setValue(col++, i, dx);
+          scan->setValue(col++, i, dy);
+          scan->setValue(col++, i, dr);
+        }
+      }
     }
   }
 
@@ -753,6 +828,13 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
 
     printMessage(msg);
     statusMessage(msg);
+
+    for (int i=0; i<QxrdFitter::LastReason; i++) {
+      if (nreason[i] > 0) {
+        QString msg(tr("  %1 : %2").arg(nreason[i]).arg(QxrdFitter::reasonString((QxrdFitter::FitResult) i)));
+        printMessage(msg);
+      }
+    }
 
     if (nok) {
       prop_RingIndex()->incValue(1);

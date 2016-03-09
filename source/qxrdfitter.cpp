@@ -14,9 +14,15 @@ QxrdFitter::QxrdFitter() :
 
 QString QxrdFitter::reasonString() const
 {
+  return QxrdFitter::reasonString(m_Reason);
+}
+
+QString QxrdFitter::reasonString(FitResult reason)
+{
   QString res = "Unknown";
 
-  switch (m_Reason) {
+  switch (reason) {
+
   case NoResult:
     res = "No Result";
     break;
