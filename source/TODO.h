@@ -648,4 +648,20 @@ TODO("2016-03-07", "",
 TODO("2016-03-07", "",
      "Auto plotting of polar normalized integration results");
 
+TODO("2016-03-09", "",
+     "Make peak fitting and ring tracing routines honour masks");
+
+TODO("2016-03-09", "",
+     "Make peak fitting and ring tracing save results as data objects");
+
+TODO("2016-03-09", "",
+     "Rework masking operations to make them a bit easier to use");
+
+TODO("2016-03-09", "",
+     "Add undo facility to mask operations");
+
+TODO("2016-03-09", "",
+     "Make sure that detector data processing options and parameters are easy to set up"
+     " - possibly support copying parameters from the main processor to the detector processors");
+
 #endif // TODO_H
