@@ -29,6 +29,10 @@ QxrdPolarTransformDialog::QxrdPolarTransformDialog(QxrdDataProcessorWPtr procw, 
       m_RadialEnd->setValue(transform->get_RadialEnd());
 
       m_Oversample->setValue(transform->get_Oversample());
+
+      m_EnableGeometry->setChecked(transform->get_EnableGeometricCorrections());
+      m_EnablePolarization->setChecked(transform->get_EnablePolarizationCorrections());
+      m_Polarization->setValue(transform->get_Polarization());
     }
   }
 }
@@ -59,6 +63,10 @@ void QxrdPolarTransformDialog::accept()
       transform->set_RadialEnd(m_RadialEnd->value());
 
       transform->set_Oversample(m_Oversample->value());
+
+      transform->set_EnableGeometricCorrections(m_EnableGeometry->isChecked());
+      transform->set_EnablePolarizationCorrections(m_EnablePolarization->isChecked());
+      transform->set_Polarization(m_Polarization->value());
 
       transform->execute();
     }

@@ -35,6 +35,15 @@ public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
   QCEP_INTEGER_PROPERTY(Oversample)
 
+  Q_PROPERTY(bool enableGeometricCorrections READ get_EnableGeometricCorrections WRITE set_EnableGeometricCorrections)
+  QCEP_BOOLEAN_PROPERTY(EnableGeometricCorrections)
+
+  Q_PROPERTY(bool enablePolarizationCorrections READ get_EnablePolarizationCorrections WRITE set_EnablePolarizationCorrections)
+  QCEP_BOOLEAN_PROPERTY(EnablePolarizationCorrections)
+
+  Q_PROPERTY(double polarization READ get_Polarization WRITE set_Polarization)
+  QCEP_DOUBLE_PROPERTY(Polarization)
+
   Q_PROPERTY(int polarUnits READ get_PolarUnits WRITE set_PolarUnits)
   QCEP_INTEGER_PROPERTY(PolarUnits)
 

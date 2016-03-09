@@ -133,6 +133,9 @@ QxrdIntegratorCache::QxrdIntegratorCache
     m_PolarUnits   = xformp->get_PolarUnits();
 
     m_Oversample   = xformp->get_Oversample();
+    m_EnableGeometry     = xformp->get_EnableGeometricCorrections();
+    m_EnablePolarization = xformp->get_EnablePolarizationCorrections();
+    m_Polarization       = xformp->get_Polarization();
 
     m_HasChi       = true;
   }

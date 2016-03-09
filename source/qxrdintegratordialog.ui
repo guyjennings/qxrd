@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>622</width>
-    <height>611</height>
+    <width>713</width>
+    <height>647</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -250,8 +250,8 @@ if == 0, use step size instead</string>
      <widget class="QCheckBox" name="m_EnablePolarization">
       <property name="toolTip">
        <string>Enable polarization correction during integration:
-intensity /= (m_Polarization      *(1 - pow(sin(chi)*sin(tth/2),2)) +
-                   (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth/2),2)));</string>
+intensity *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth),2)) +
+                   (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth),2)));</string>
       </property>
       <property name="text">
        <string>Enable Polarization Corrections </string>
