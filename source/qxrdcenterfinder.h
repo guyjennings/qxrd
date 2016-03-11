@@ -70,17 +70,17 @@ public:
   Q_PROPERTY(QxrdPowderPointVector fittedRings READ get_FittedRings WRITE set_FittedRings)
   QXRD_POWDERPOINTVECTOR_PROPERTY(FittedRings)
 
-  Q_PROPERTY(QString calibrantName READ get_CalibrantName WRITE set_CalibrantName)
-  QCEP_STRING_PROPERTY(CalibrantName)
+//  Q_PROPERTY(QString calibrantName READ get_CalibrantName WRITE set_CalibrantName)
+//  QCEP_STRING_PROPERTY(CalibrantName)
 
-  Q_PROPERTY(double calibrantLattice READ get_CalibrantLattice WRITE set_CalibrantLattice)
-  QCEP_DOUBLE_PROPERTY(CalibrantLattice)
+//  Q_PROPERTY(double calibrantLattice READ get_CalibrantLattice WRITE set_CalibrantLattice)
+//  QCEP_DOUBLE_PROPERTY(CalibrantLattice)
 
-  Q_PROPERTY(int calibrantSymmetry READ get_CalibrantSymmetry WRITE set_CalibrantSymmetry)
-  QCEP_INTEGER_PROPERTY(CalibrantSymmetry)
+//  Q_PROPERTY(int calibrantSymmetry READ get_CalibrantSymmetry WRITE set_CalibrantSymmetry)
+//  QCEP_INTEGER_PROPERTY(CalibrantSymmetry)
 
-  Q_PROPERTY(QxrdPowderPointVector calibrantDSpacings READ get_CalibrantDSpacings WRITE set_CalibrantDSpacings)
-  QXRD_POWDERPOINTVECTOR_PROPERTY(CalibrantDSpacings)
+//  Q_PROPERTY(QxrdPowderPointVector calibrantDSpacings READ get_CalibrantDSpacings WRITE set_CalibrantDSpacings)
+//  QXRD_POWDERPOINTVECTOR_PROPERTY(CalibrantDSpacings)
 
   Q_PROPERTY(double ringRadius READ get_RingRadius WRITE set_RingRadius)
   QCEP_DOUBLE_PROPERTY(RingRadius)
@@ -204,6 +204,9 @@ public slots:
   void fitPowderEllipse(int n=0);
   void fitPowderEllipses();
 
+  void adjustEnergy(int n);
+  void adjustDistance(int n);
+
   void deletePowderPointNear(double x, double y);
   void deletePowderPoints();
   void deletePowderRing(int n);
@@ -243,7 +246,7 @@ public slots:
   double powderRingAverageTTH(int r) const;
   double powderRingAverageQ(int r) const;
 
-  void updateCalibrantDSpacings();
+//  void updateCalibrantDSpacings();
   double calibrantDSpacing(int n);
   double calibrantTTH(int n);
 

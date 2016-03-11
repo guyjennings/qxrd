@@ -667,4 +667,10 @@ TODO("2016-03-09", "",
 TODO("2016-03-09", "",
      "Implement QxrdCalibrant duplication, deletion and property dialog");
 
+TODO("2016-03-11", "",
+     "Powder point renormalization should update data objects");
+
+TODO("2016-03-11", "",
+     "Center Finder should use calibrant library, instead of its own internal vars");
+
 #endif // TODO_H

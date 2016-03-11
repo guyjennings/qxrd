@@ -1912,7 +1912,7 @@ void QxrdWindow::plotPowderRingTwoTheta()
     QxrdCenterFinderPtr cf(expt->centerFinder());
 
     if (cf) {
-      cf->updateCalibrantDSpacings();
+//      cf->updateCalibrantDSpacings();
 
       m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
       m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);

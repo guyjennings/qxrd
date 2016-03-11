@@ -18,6 +18,7 @@
 #include "qxrdplanefitter.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepdatasetmodel.h"
+#include "qxrdcalibrantlibrary.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -44,10 +45,10 @@ QxrdCenterFinder::QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWP
     m_TiltPlaneRotationStep(saver, this, "tiltPlaneRotationStep", 10, "Tilt Plane Rotation Step (deg)"),
     m_MarkedPoints(saver, this, "markedPoints", QxrdPowderPointVector(), "Marker Points"),
     m_FittedRings(saver, this, "fittedRings", QxrdPowderPointVector(), "Fitted Powder Rings"),
-    m_CalibrantName(saver, this, "calibrantName", "NAC", "Calibrant Name"),
-    m_CalibrantLattice(saver, this, "calibrantLattice", 10.251437, "Calibrant Lattice Constant (Angstrom)"),
-    m_CalibrantSymmetry(saver, this, "calibrantSymmetry", 1, "Calibrant Symmetry [0=Cubic,1=BCC,2=FCC]"),
-    m_CalibrantDSpacings(saver, this, "calibrantDSpacings", QxrdPowderPointVector(), "Calibrant D Spacings"),
+//    m_CalibrantName(saver, this, "calibrantName", "NAC", "Calibrant Name"),
+//    m_CalibrantLattice(saver, this, "calibrantLattice", 10.251437, "Calibrant Lattice Constant (Angstrom)"),
+//    m_CalibrantSymmetry(saver, this, "calibrantSymmetry", 1, "Calibrant Symmetry [0=Cubic,1=BCC,2=FCC]"),
+//    m_CalibrantDSpacings(saver, this, "calibrantDSpacings", QxrdPowderPointVector(), "Calibrant D Spacings"),
     m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
     m_RingRadiusA(saver, this, "ringRadiusA", 0.0, "Estimated Powder Ellipse Major Axis Radius"),
     m_RingRadiusB(saver, this, "ringRadiusB", 0.0, "Estimated Powder Ellipse Minor Axis Radius"),
@@ -442,6 +443,34 @@ void QxrdCenterFinder::fitPowderEllipses()
   }
 
   set_FittedRings(pts);
+}
+
+void QxrdCenterFinder::adjustEnergy(int n)
+{
+  double r = powderRingAverageR(n);
+  double tth = calibrantTTH(n);
+  double lambda = 12398.4187/get_Energy();
+}
+
+void QxrdCenterFinder::adjustDistance(int n)
+{
+  double r = powderRingAverageR(n);
+  double tth = calibrantTTH(n);
+  double d = r/sin(tth*M_PI/180.0);
+
+  QString message;
+
+  message.append(tr("Ring %1 average radius = %2\n").arg(n).arg(r));
+  message.append(tr("Calibrant Peak %1 TTH = %2\n").arg(n).arg(tth));
+  message.append(tr("Adjust sample - detector distance from %1 to %2\n")
+                 .arg(get_DetectorDistance()).arg(d));
+  message.append(tr("to improve fit to ring %1").arg(n));
+
+  if (QMessageBox::question(NULL, "Update Detector Distance?",
+                            message, QMessageBox::Ok | QMessageBox::No, QMessageBox::Ok)
+      == QMessageBox::Ok) {
+    set_DetectorDistance(d);
+  }
 }
 
 QxrdPowderPoint QxrdCenterFinder::powderPoint(int i)
@@ -1255,96 +1284,108 @@ private:
   int m_L;
 };
 
-void QxrdCenterFinder::updateCalibrantDSpacings()
-{
-  double a = get_CalibrantLattice();
-  int s = get_CalibrantSymmetry();
-  double lambda = 12398.4187/get_Energy();
+//void QxrdCenterFinder::updateCalibrantDSpacings()
+//{
+//  double a = get_CalibrantLattice();
+//  int s = get_CalibrantSymmetry();
+//  double lambda = 12398.4187/get_Energy();
 
-  int mmax = 2.0*a/lambda + 1;
+//  int mmax = 2.0*a/lambda + 1;
 
-  if (qcepDebug(DEBUG_CALIBRANT)) {
-    printMessage(tr("mmax = %1").arg(mmax));
-  }
+//  if (qcepDebug(DEBUG_CALIBRANT)) {
+//    printMessage(tr("mmax = %1").arg(mmax));
+//  }
 
-  QVector<QuadInt> ex(mmax*mmax);
+//  QVector<QuadInt> ex(mmax*mmax);
 
-  for (int h=1; h<=mmax; h++) {
-    for (int k=0; k<=h; k++) {
-      for (int l=0; l<=k; l++) {
-        int r = h*h+k*k+l*l;
+//  for (int h=1; h<=mmax; h++) {
+//    for (int k=0; k<=h; k++) {
+//      for (int l=0; l<=k; l++) {
+//        int r = h*h+k*k+l*l;
 
-        if (r < mmax*mmax) {
-          bool ok=false;
+//        if (r < mmax*mmax) {
+//          bool ok=false;
 
-          switch (s) {
-          case 0:  // Simple cubic - all OK
-            ok = true;
-            break;
+//          switch (s) {
+//          case 0:  // Simple cubic - all OK
+//            ok = true;
+//            break;
 
-          case 1:  // BCC h+k+l even
-            ok = ((h + k + l) % 2) == 0;
-            break;
+//          case 1:  // BCC h+k+l even
+//            ok = ((h + k + l) % 2) == 0;
+//            break;
 
-          case 2:  // FCC h,k,l all even or all odd
-            int n = h%2 + k%2 + l%2;
-            ok = (n==0) || (n==3);
-            break;
-          }
+//          case 2:  // FCC h,k,l all even or all odd
+//            int n = h%2 + k%2 + l%2;
+//            ok = (n==0) || (n==3);
+//            break;
+//          }
 
-          if (ok) {
-            if (ex[r].n() == 0) {
-              ex[r] = QuadInt(1, h,k,l);
-            } else {
-              ex[r].n()++;
-            }            
-          }
-        }
-      }
-    }
-  }
+//          if (ok) {
+//            if (ex[r].n() == 0) {
+//              ex[r] = QuadInt(1, h,k,l);
+//            } else {
+//              ex[r].n()++;
+//            }
+//          }
+//        }
+//      }
+//    }
+//  }
 
-  QxrdPowderPointVector pts;
+//  QxrdPowderPointVector pts;
 
-  for (int i=1; i<mmax*mmax; i++) {
-    QuadInt e = ex[i];
-    if (e.n() > 0) {
-      double d = a/sqrt(i);
-      double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
+//  for (int i=1; i<mmax*mmax; i++) {
+//    QuadInt e = ex[i];
+//    if (e.n() > 0) {
+//      double d = a/sqrt(i);
+//      double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
 
-      if (tth <= 180) {
-        pts.append(QxrdPowderPoint(e.h(), e.k(), e.l(), d, tth, 0, 0, 0));
+//      if (tth <= 180) {
+//        pts.append(QxrdPowderPoint(e.h(), e.k(), e.l(), d, tth, 0, 0, 0));
 
-        if (qcepDebug(DEBUG_CALIBRANT)) {
-          printMessage(tr("%1(%2): [%3,%4,%5], d:%6, tth:%7").arg(i).arg(e.n()).arg(e.h()).arg(e.k()).arg(e.l()).arg(d).arg(tth));
-        }
-      }
-    }
-  }
+//        if (qcepDebug(DEBUG_CALIBRANT)) {
+//          printMessage(tr("%1(%2): [%3,%4,%5], d:%6, tth:%7").arg(i).arg(e.n()).arg(e.h()).arg(e.k()).arg(e.l()).arg(d).arg(tth));
+//        }
+//      }
+//    }
+//  }
 
-  set_CalibrantDSpacings(pts);
-}
+//  set_CalibrantDSpacings(pts);
+//}
 
 double QxrdCenterFinder::calibrantDSpacing(int n)
 {
-  QxrdPowderPointVector ds = get_CalibrantDSpacings();
+  double res = qQNaN();
 
-  if (n>=0 && n<ds.count()) {
-    return ds[n].x();
-  } else {
-    return 0;
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdCalibrantLibraryPtr cal(expt->calibrantLibrary());
+
+    if (cal) {
+      res = cal->calibrantDSpacing(n);
+    }
   }
+
+  return res;
 }
 
 double QxrdCenterFinder::calibrantTTH(int n)
 {
-  QxrdPowderPointVector ds = get_CalibrantDSpacings();
+  double res = qQNaN();
 
-  if (n>=0 && n<ds.count()) {
-    return ds[n].y();
-  } else {
-    return 0;
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdCalibrantLibraryPtr cal(expt->calibrantLibrary());
+
+    if (cal) {
+      res = cal->calibrantTTH(n);
+    }
   }
+
+  return res;
 }
 
 static int XYZCompare(const void *v1, const void *v2)

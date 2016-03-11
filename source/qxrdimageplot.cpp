@@ -1005,6 +1005,10 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
           QAction *fitCircle        = plotMenu.addAction(tr("Fit Circle Center from Points on Ring %1").arg(nearest.n1()));
           QAction *fitEllipse       = plotMenu.addAction(tr("Fit Ellipse from Points on Ring %1").arg(nearest.n1()));
           QAction *fitEllipses      = plotMenu.addAction(tr("Fit Ellipses to all powder rings"));
+
+          QAction *adjustEnergy     = plotMenu.addAction(tr("Adjust Energy to match Calibrant Ring %1").arg(nearest.n1()));
+          QAction *adjustDistance   = plotMenu.addAction(tr("Adjust Detector Distance to match Calibrant Ring %1").arg(nearest.n1()));
+
           QAction *adjustFit        = plotMenu.addAction(tr("Fit to nearby peak when adding powder points?"));
           adjustFit->setCheckable(true); adjustFit->setChecked(cf->get_FitPowderPointPosition());
           QAction *addPoint         = plotMenu.addAction(tr("Add point at (%1,%2)").arg(x).arg(y));
@@ -1033,6 +1037,10 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
             cf->fitPowderEllipse(nearest.n1());
           } else if (action == fitEllipses) {
             cf->fitPowderEllipses();
+          } else if (action == adjustEnergy) {
+            cf->adjustEnergy(nearest.n1());
+          } else if (action == adjustDistance) {
+            cf->adjustDistance(nearest.n1());
           } else if (action == adjustFit) {
             cf->toggle_FitPowderPointPosition();
           } else if (action == addPoint) {

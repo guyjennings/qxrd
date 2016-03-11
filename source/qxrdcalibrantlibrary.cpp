@@ -263,3 +263,13 @@ QxrdCalibrantWPtr QxrdCalibrantLibrary::calibrant(int n)
 {
   return m_Calibrants.value(n);
 }
+
+double QxrdCalibrantLibrary::calibrantDSpacing(int n)
+{
+  return qQNaN();
+}
+
+double QxrdCalibrantLibrary::calibrantTTH(int n)
+{
+  return qQNaN();
+}
