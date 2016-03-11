@@ -19,10 +19,10 @@ public:
   virtual ~QxrdCalibrantDialog();
 
 public slots:
-  void onLibrarySelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-
   void calibrantTableContextMenu(const QPoint &pos);
   void calibrantDSpacingsContextMenu(const QPoint &pos);
+
+  void onCalibrantChanged();
 
   void onCalibrantClick      (const QModelIndex &item);
   void onCalibrantDoubleClick(const QModelIndex &item);

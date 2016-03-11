@@ -43,45 +43,51 @@ QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenter
 #endif
   }
 
-  connect(m_CalibrantTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &QxrdCalibrantDialog::onLibrarySelectionChanged);
   connect(m_CalibrantTableView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantDialog::calibrantTableContextMenu);
   connect(m_CalibrantDSpacingsView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantDialog::calibrantDSpacingsContextMenu);
 
   connect(m_CalibrantTableView, &QTableView::clicked,       this, &QxrdCalibrantDialog::onCalibrantClick);
   connect(m_CalibrantTableView, &QTableView::doubleClicked, this, &QxrdCalibrantDialog::onCalibrantDoubleClick);
+
+  connect(m_CalibrantLibraryModel.data(), &QAbstractItemModel::dataChanged,
+          this, &QxrdCalibrantDialog::onCalibrantChanged);
+
+  QxrdCenterFinderPtr cen(m_CenterFinder);
+
+  if (cen) {
+    connect(cen->prop_Energy(), &QcepDoubleProperty::valueChanged,
+            this, &QxrdCalibrantDialog::onCalibrantChanged);
+  }
+
+  onCalibrantChanged();
 }
 
 QxrdCalibrantDialog::~QxrdCalibrantDialog()
 {
 }
 
-void QxrdCalibrantDialog::onLibrarySelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+
+void QxrdCalibrantDialog::onCalibrantChanged()
 {
-  if (selected.size() > 0) {
-    int row = selected.first().top();
+  if (m_CalibrantLibrary) {
+    QxrdCenterFinderPtr cf(m_CenterFinder);
 
-    if (m_CalibrantLibrary) {
-      //    m_CalibrantLibrary->printMessage(tr("Row %1 selected").arg(row));
+    double energy = 15000;
+    if (cf) {
+      energy = cf->get_Energy();
+    }
 
-      QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(row);
+    m_CalibrantDSpacingsVector.clear();
 
-      if (cal) {
-        QxrdCenterFinderPtr cf(m_CenterFinder);
+    for (int i=0; i<m_CalibrantLibrary->count(); i++) {
+      QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(i);
 
-        if (cf) {
-          m_CalibrantDSpacingsVector = cal->dSpacings(cf->get_Energy());
-        } else {
-          m_CalibrantDSpacingsVector = cal->dSpacings(15000);
-        }
-
-        m_CalibrantDSpacingsModel -> everythingChanged(m_CalibrantDSpacingsVector.count());
-
-        //      m_CalibrantLibrary->printMessage(tr("%1 diffraction peaks").arg(m_CalibrantDSpacingsVector.count()));
+      if (cal && cal->get_IsUsed()) {
+        m_CalibrantDSpacingsVector.merge(cal->dSpacings(energy));
       }
     }
-  } else {
-    m_CalibrantDSpacingsVector.clear();
-    m_CalibrantDSpacingsModel -> everythingChanged(0);
+
+    m_CalibrantDSpacingsModel -> everythingChanged(m_CalibrantDSpacingsVector.count());
   }
 }
 

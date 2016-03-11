@@ -20,6 +20,7 @@ public:
   void everythingChanged(int nrows);
 
   enum {
+    IndexColumn,
     FlagsColumn,
     HColumn,
     KColumn,

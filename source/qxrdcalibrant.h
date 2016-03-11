@@ -18,7 +18,7 @@ class QxrdCalibrant : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdCalibrant(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib);
+  QxrdCalibrant(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib, int index);
   ~QxrdCalibrant();
 
 public slots:
@@ -56,6 +56,9 @@ private:
 public:
   Q_PROPERTY(int isUsed READ get_IsUsed WRITE set_IsUsed)
   QCEP_INTEGER_PROPERTY(IsUsed)
+
+  Q_PROPERTY(int index READ get_Index WRITE set_Index STORED false)
+  QCEP_INTEGER_PROPERTY(Index)
 
   Q_PROPERTY(int flags READ get_Flags WRITE set_Flags)
   QCEP_INTEGER_PROPERTY(Flags)
@@ -95,11 +98,12 @@ Q_DECLARE_METATYPE(QxrdCalibrantWPtr)
 class QxrdCalibrantDSpacing
 {
 public:
-  QxrdCalibrantDSpacing(int h, int k, int l, int n, double d, double tth);
+  QxrdCalibrantDSpacing(int calIndex, int h, int k, int l, int n, double d, double tth);
   QxrdCalibrantDSpacing(const QxrdCalibrantDSpacing& spc);
   QxrdCalibrantDSpacing();
 
 public:
+  int     index() const { return m_Index; }
   int     h() const { return m_H; }
   int     k() const { return m_K; }
   int     l() const { return m_L; }
@@ -107,6 +111,7 @@ public:
   double  d() const { return m_D; }
   double  tth() const { return m_TTH; }
 
+  int&    index() { return m_Index; }
   int&    h() { return m_H; }
   int&    k() { return m_K; }
   int&    l() { return m_L; }
@@ -129,6 +134,7 @@ public:
   static void fromScriptValue(const QScriptValue &obj, QxrdCalibrantDSpacing &spc);
 
 private:
+  int m_Index;
   int m_H;
   int m_K;
   int m_L;
@@ -158,7 +164,9 @@ public:
 //  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdCalibrantDSpacingVector &vec);
 //  static void fromScriptValue(const QScriptValue &obj, QxrdCalibrantDSpacingVector &vec);
 
-  void insertUnique(int h, int k, int l, double d, double tth);
+  void insertUnique(int index, int h, int k, int l, double d, double tth);
+
+  void merge(const QxrdCalibrantDSpacingVector& vec);
 };
 
 Q_DECLARE_METATYPE(QxrdCalibrantDSpacingVector)

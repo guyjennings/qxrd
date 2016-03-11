@@ -42,6 +42,9 @@ QVariant QxrdCalibrantDSpacingsModel::headerData ( int section, Qt::Orientation 
   } else {
     if (orientation==Qt::Horizontal && role==Qt::DisplayRole) {
       switch (section) {
+      case IndexColumn:
+        return "Cal";
+
       case FlagsColumn:
         return "F";
 
@@ -88,6 +91,20 @@ QVariant QxrdCalibrantDSpacingsModel::data (const QModelIndex & index, int role)
 
     if (role == Qt::DisplayRole) {
       if (spc.isValid()) {
+        if (col == IndexColumn) {
+          QString res="";
+
+          if (m_CalibrantLibrary) {
+            QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(spc.index());
+
+            if (cal) {
+              res = cal->get_Name();
+            }
+          }
+
+          return res;
+        }
+
         if (col == FlagsColumn) {
           return "X";
         }
