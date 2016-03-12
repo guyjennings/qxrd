@@ -1,5 +1,7 @@
 #include "qxrdcalibrant.h"
 #include "qxrdcalibrantlibrary.h"
+#include "qxrdcalibrantdspacing.h"
+#include "qxrdcalibrantdspacings.h"
 #include "qcepsettingssaver.h"
 #include "qxrdexperiment.h"
 #include <QScriptEngine>
@@ -75,7 +77,7 @@ private:
   int m_L;
 };
 
-QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacings(double energy)
+QxrdCalibrantDSpacings QxrdCalibrant::dSpacings(double energy)
 {
   int s = get_Symmetry();
 
@@ -92,11 +94,11 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacings(double energy)
     return dSpacingsHexagonal(energy);
 
   default:
-    return QxrdCalibrantDSpacingVector();
+    return QxrdCalibrantDSpacings();
   }
 }
 
-QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsCubic(double energy)
+QxrdCalibrantDSpacings QxrdCalibrant::dSpacingsCubic(double energy)
 {
   int    s = get_Symmetry();
   double a = get_A();
@@ -163,7 +165,7 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsCubic(double energy)
     }
   }
 
-  QxrdCalibrantDSpacingVector pts;
+  QxrdCalibrantDSpacings pts;
 
   for (int i=1; i<mmax*mmax; i++) {
     QxrdCalibrantQuadInt e = ex[i];
@@ -189,7 +191,7 @@ bool lessThan(const QxrdCalibrantDSpacing &d1, const QxrdCalibrantDSpacing&d2)
   return d1.tth() < d2.tth();
 }
 
-QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsHexagonal(double energy)
+QxrdCalibrantDSpacings QxrdCalibrant::dSpacingsHexagonal(double energy)
 {
   int    s = get_Symmetry();
   double a = get_A();
@@ -204,7 +206,7 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsHexagonal(double energy)
 //    printMessage(tr("mmax = %1").arg(mmax));
 //  }
 
-  QxrdCalibrantDSpacingVector pts;
+  QxrdCalibrantDSpacings pts;
 
   int lmin = 0;
   if (s == RHexagonal) {
@@ -250,223 +252,3 @@ QxrdCalibrantDSpacingVector QxrdCalibrant::dSpacingsHexagonal(double energy)
   return pts;
 }
 
-QxrdCalibrantDSpacing::QxrdCalibrantDSpacing(int calIndex, int h, int k, int l, int n, double d, double tth) :
-  m_Index(calIndex),
-  m_H(h),
-  m_K(k),
-  m_L(l),
-  m_N(n),
-  m_D(d),
-  m_TTH(tth)
-{
-}
-
-QxrdCalibrantDSpacing::QxrdCalibrantDSpacing(const QxrdCalibrantDSpacing &spc) :
-  m_Index(spc.index()),
-  m_H(spc.h()),
-  m_K(spc.k()),
-  m_L(spc.l()),
-  m_N(spc.n()),
-  m_D(spc.d()),
-  m_TTH(spc.tth())
-{
-}
-
-QxrdCalibrantDSpacing::QxrdCalibrantDSpacing() :
-  m_Index(-1),
-  m_H(0),
-  m_K(0),
-  m_L(0),
-  m_N(0),
-  m_D(0),
-  m_TTH(0)
-{
-}
-
-bool QxrdCalibrantDSpacing::isValid() const
-{
-  return (m_Index >= 0) && (m_H != 0 || m_K != 0 || m_L != 0) && (m_N >= 0) && (m_D > 0.0) && (m_TTH > 0.0);
-}
-
-bool QxrdCalibrantDSpacing::operator == ( const QxrdCalibrantDSpacing &spc) const
-{
-  return index()==spc.index() && h()==spc.h() && k()==spc.k() && l()==spc.l() && d()==spc.d() && tth()==spc.tth();
-}
-
-bool QxrdCalibrantDSpacing::operator != ( const QxrdCalibrantDSpacing &spc) const
-{
-  return index()!=spc.index() || h()!=spc.h() || k()!=spc.k() || l()!=spc.l() || d()!=spc.d() || tth()!=spc.tth();
-}
-
-void QxrdCalibrantDSpacing::setSettingsValue(QSettings *settings, QString name)
-{
-  settings->beginGroup(name);
-  settings->setValue("index", index());
-  settings->setValue("h", h());
-  settings->setValue("k", k());
-  settings->setValue("l", l());
-  settings->setValue("n", n());
-  settings->setValue("d", d());
-  settings->setValue("tth", tth());
-  settings->endGroup();
-}
-
-void QxrdCalibrantDSpacing::customSaver(const QVariant &val, QSettings *settings, QString name)
-{
-  QxrdCalibrantDSpacing spc = val.value<QxrdCalibrantDSpacing>();
-
-  spc.setSettingsValue(settings, name);
-}
-
-
-QString QxrdCalibrantDSpacing::toString() const
-{
-  return QObject::tr("{index:%1, h:%2, k:%3, l:%4, n:%5, d:%6, tth:%7}")
-      .arg(index()).arg(h()).arg(k()).arg(l()).arg(n()).arg(d()).arg(tth());
-}
-
-void QxrdCalibrantDSpacing::registerMetaTypes()
-{
-  qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
-
-  qRegisterMetaTypeStreamOperators<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
-
-  QcepProperty::registerCustomSaver("QxrdCalibrantDSpacing", QxrdCalibrantDSpacing::customSaver);
-}
-
-QScriptValue QxrdCalibrantDSpacing::toScriptValue(QScriptEngine *engine, const QxrdCalibrantDSpacing &spc)
-{
-  QScriptValue obj = engine->newObject();
-
-  obj.setProperty("index", spc.index());
-  obj.setProperty("h", spc.h());
-  obj.setProperty("k", spc.k());
-  obj.setProperty("l", spc.l());
-  obj.setProperty("n", spc.n());
-  obj.setProperty("d", spc.d());
-  obj.setProperty("tth", spc.tth());
-
-  return obj;
-}
-
-void QxrdCalibrantDSpacing::fromScriptValue(const QScriptValue &obj, QxrdCalibrantDSpacing &spc)
-{
-  spc.index() = obj.property("index").toInteger();
-  spc.h() = obj.property("h").toInteger();
-  spc.k() = obj.property("k").toInteger();
-  spc.l() = obj.property("l").toInteger();
-  spc.n() = obj.property("n").toInteger();
-  spc.d() = obj.property("d").toNumber();
-  spc.tth() = obj.property("tth").toNumber();
-}
-
-#ifndef QT_NO_DATASTREAM
-
-QDataStream &operator<<(QDataStream &stream, const QxrdCalibrantDSpacing &pt)
-{
-  stream << pt.index() << pt.h() << pt.k() << pt.l() << pt.n() << pt.d() << pt.tth();
-
-  return stream;
-}
-
-QDataStream &operator>>(QDataStream &stream, QxrdCalibrantDSpacing &pt)
-{
-  stream >> pt.index() >> pt.h() >> pt.k() >> pt.l() >> pt.n() >> pt.d() >> pt.tth();
-
-  return stream;
-}
-
-#endif
-
-
-void QxrdCalibrantDSpacingVector::setSettingsValue(QSettings *settings, QString name)
-{
-  settings->beginWriteArray(name, count());
-
-  for (int i=0; i<count(); i++) {
-    settings->setArrayIndex(i);
-    const QxrdCalibrantDSpacing &pt = at(i);
-    settings->setValue("index", pt.index());
-    settings->setValue("h", pt.h());
-    settings->setValue("k", pt.k());
-    settings->setValue("l", pt.l());
-    settings->setValue("d", pt.d());
-    settings->setValue("tth", pt.tth());
-  }
-
-  settings->endArray();
-}
-
-void QxrdCalibrantDSpacingVector::customSaver(const QVariant &val, QSettings *settings, QString name)
-{
-  QxrdCalibrantDSpacingVector vec = val.value<QxrdCalibrantDSpacingVector>();
-
-  vec.setSettingsValue(settings, name);
-}
-
-QString QxrdCalibrantDSpacingVector::toString() const
-{
-  QString res="[";
-
-  for (int i=0; i<count(); i++) {
-    if (i != 0) {
-      res += ", \n";
-    }
-
-    res += at(i).toString();
-  }
-
-  res += "]";
-
-  return res;
-}
-
-void QxrdCalibrantDSpacingVector::registerMetaTypes()
-{
-  qRegisterMetaType< QxrdCalibrantDSpacingVector >("QxrdCalibrantDSpacingVector");
-
-  qRegisterMetaTypeStreamOperators< QxrdCalibrantDSpacingVector >("QxrdCalibrantDSpacingVector");
-
-  QcepProperty::registerCustomSaver("QxrdCalibrantDSpacingVector", QxrdCalibrantDSpacingVector::customSaver);
-}
-
-void QxrdCalibrantDSpacingVector::insertUnique(int index, int h, int k, int l, double d, double tth)
-{
-  int n = count();
-
-  for (int i=0; i<n; i++) {
-    QxrdCalibrantDSpacing s = value(i);
-
-    if (d == s.d()) {
-      s.n() = s.n()+1;
-
-      replace(i, s);
-
-      return;
-    }
-  }
-
-  append(QxrdCalibrantDSpacing(index,h,k,l,1,d,tth));
-}
-
-void QxrdCalibrantDSpacingVector::merge(const QxrdCalibrantDSpacingVector &vec)
-{
-  QxrdCalibrantDSpacingVector a = *this;
-  QxrdCalibrantDSpacingVector b = vec;
-
-  clear();
-
-  while (a.count() > 0 || b.count() > 0) {
-    if (a.count() > 0 && b.count() > 0) {
-      if (a.first().d() > b.first().d()) {
-        append(a.takeFirst());
-      } else {
-        append(b.takeFirst());
-      }
-    } else if (a.count() > 0) {
-      append(a.takeFirst());
-    } else if (b.count() > 0) {
-      append(b.takeFirst());
-    }
-  }
-}

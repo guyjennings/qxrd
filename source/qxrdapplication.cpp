@@ -138,7 +138,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   QxrdPowderPoint::registerMetaTypes();
   QxrdPowderPointVector::registerMetaTypes();
   QxrdCalibrantDSpacing::registerMetaTypes();
-  QxrdCalibrantDSpacingVector::registerMetaTypes();
+  QxrdCalibrantDSpacings::registerMetaTypes();
 }
 
 bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)

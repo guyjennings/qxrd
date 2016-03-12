@@ -4,11 +4,12 @@
 #include <QAbstractTableModel>
 #include "qxrdcalibrantlibrary-ptr.h"
 #include "qxrdcalibrant.h"
+#include "qxrdcalibrantdspacings.h"
 
 class QxrdCalibrantDSpacingsModel : public QAbstractTableModel
 {
 public:
-  QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryPtr cal, QxrdCalibrantDSpacingVector *vec);
+  QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryPtr cal, QxrdCalibrantDSpacings *vec);
   ~QxrdCalibrantDSpacingsModel();
 
   virtual QVariant	   data ( const QModelIndex & index, int role ) const;
@@ -32,7 +33,7 @@ public:
   };
 private:
   QxrdCalibrantLibraryPtr m_CalibrantLibrary;
-  QxrdCalibrantDSpacingVector *m_CalibrantDSpacingVector;
+  QxrdCalibrantDSpacings *m_CalibrantDSpacingVector;
 };
 
 #endif // QXRDCALIBRANTDSPACINGSMODEL_H

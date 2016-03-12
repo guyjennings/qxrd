@@ -5,6 +5,7 @@
 #include "ui_qxrdcalibrantdialog.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 #include "qxrdcalibrant-ptr.h"
+#include "qxrdcalibrantdspacings.h"
 #include "qxrdcalibrantdspacingsmodel-ptr.h"
 #include "qxrdcalibrantlibrarymodel-ptr.h"
 #include "qxrdcalibrant.h"
@@ -37,7 +38,7 @@ private:
   QxrdCalibrantLibraryPtr m_CalibrantLibrary;
   QxrdCalibrantLibraryModelPtr m_CalibrantLibraryModel;
   QxrdCalibrantDSpacingsModelPtr m_CalibrantDSpacingsModel;
-  QxrdCalibrantDSpacingVector m_CalibrantDSpacingsVector;
+  QxrdCalibrantDSpacings m_CalibrantDSpacingsVector;
   QxrdCenterFinderWPtr        m_CenterFinder;
 };
 

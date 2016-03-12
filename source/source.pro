@@ -342,7 +342,11 @@ HEADERS += TODO.h \
     qxrdpolarnormalization.h \
     qxrdpolarnormalizationdialog.h \
     qxrdpolarnormalization-ptr.h \
-    qxrdcalibrantpropertiesdialog.h
+    qxrdcalibrantpropertiesdialog.h \
+    qxrdcalibrantdspacings.h \
+    qxrdcalibrantdspacing.h \
+    qxrdcalibrantdspacing-ptr.h \
+    qxrdcalibrantdspacings-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -511,7 +515,9 @@ SOURCES += qxrd.cpp \
     qxrdpolarintensityfitter.cpp \
     qxrdpolarnormalization.cpp \
     qxrdpolarnormalizationdialog.cpp \
-    qxrdcalibrantpropertiesdialog.cpp
+    qxrdcalibrantpropertiesdialog.cpp \
+    qxrdcalibrantdspacings.cpp \
+    qxrdcalibrantdspacing.cpp
 
 OTHER_FILES += testImage.js
 

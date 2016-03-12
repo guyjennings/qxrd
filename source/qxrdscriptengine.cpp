@@ -1845,7 +1845,7 @@ void QxrdScriptEngine::initialize()
                           QcepMaskData::fromScriptValue);
 
   qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
-  qScriptRegisterSequenceMetaType<QxrdCalibrantDSpacingVector>(this);
+  qScriptRegisterSequenceMetaType<QxrdCalibrantDSpacings>(this);
 
   qScriptRegisterMetaType(this,
                           QxrdCalibrantDSpacing::toScriptValue,
