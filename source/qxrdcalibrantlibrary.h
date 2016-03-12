@@ -16,7 +16,6 @@ class QxrdCalibrantLibrary : public QcepObject, public QEnableSharedFromThis<Qxr
 public:
   QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp);
   virtual ~QxrdCalibrantLibrary();
-  void initialize();
 
 public slots:
   int count();

@@ -162,7 +162,7 @@ void QxrdWindow::initialize()
     QxrdCalibrantLibraryPtr cal(expt->calibrantLibrary());
 
     if (cal) {
-      m_CalibrantDialog = new QxrdCalibrantDialog(cal, proc -> centerFinder(), this);
+      m_CalibrantDialog = new QxrdCalibrantDialog(expt, proc -> centerFinder());
     }
   }
 

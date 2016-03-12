@@ -1,11 +1,10 @@
 #include "qxrdcalibrantdspacingsmodel.h"
 #include "qxrdcalibrantlibrary.h"
 
-QxrdCalibrantDSpacingsModel::QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryPtr cal, QxrdCalibrantDSpacings *vec)
+QxrdCalibrantDSpacingsModel::QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryPtr cal, QxrdCalibrantDSpacingsPtr vec)
   : m_CalibrantLibrary(cal),
-    m_CalibrantDSpacingVector(vec)
+    m_CalibrantDSpacings(vec)
 {
-
 }
 
 QxrdCalibrantDSpacingsModel::~QxrdCalibrantDSpacingsModel()
@@ -19,8 +18,10 @@ int QxrdCalibrantDSpacingsModel::rowCount (const QModelIndex & parent) const
     return 0;
   }
 
-  if (m_CalibrantDSpacingVector) {
-    return m_CalibrantDSpacingVector->count(); /*m_Calibrant->countDSpacings();*/
+  QxrdCalibrantDSpacingsPtr spc(m_CalibrantDSpacings);
+
+  if (spc) {
+    return spc->count(); /*m_Calibrant->countDSpacings();*/
   } else {
     return 0;
   }
@@ -76,8 +77,10 @@ QVariant QxrdCalibrantDSpacingsModel::headerData ( int section, Qt::Orientation 
 
 QVariant QxrdCalibrantDSpacingsModel::data (const QModelIndex & index, int role) const
 {
-  if (m_CalibrantDSpacingVector) {
-    if (index.row() < 0 || index.row() >= m_CalibrantDSpacingVector->count()) {
+  QxrdCalibrantDSpacingsPtr spc(m_CalibrantDSpacings);
+
+  if (spc) {
+    if (index.row() < 0 || index.row() >= spc->count()) {
       return QVariant();
     }
     //  if (role == Qt::DisplayRole) {
@@ -87,15 +90,17 @@ QVariant QxrdCalibrantDSpacingsModel::data (const QModelIndex & index, int role)
     int col = index.column();
     int row = index.row();
 
-    QxrdCalibrantDSpacing spc(m_CalibrantDSpacingVector->value(row));
+    QxrdCalibrantDSpacing dspc(spc->value(row));
 
     if (role == Qt::DisplayRole) {
-      if (spc.isValid()) {
+      if (dspc.isValid()) {
         if (col == IndexColumn) {
           QString res="";
 
-          if (m_CalibrantLibrary) {
-            QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(spc.index());
+          QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
+
+          if (lib) {
+            QxrdCalibrantPtr cal = lib->calibrant(dspc.index());
 
             if (cal) {
               res = cal->get_Name();
@@ -110,69 +115,31 @@ QVariant QxrdCalibrantDSpacingsModel::data (const QModelIndex & index, int role)
         }
 
         if (col == HColumn) {
-          return spc.h();
+          return dspc.h();
         }
 
         if (col == KColumn) {
-          return spc.k();
+          return dspc.k();
         }
 
         if (col == LColumn) {
-          return spc.l();
+          return dspc.l();
         }
 
         if (col == NColumn) {
-          return spc.n();
+          return dspc.n();
         }
 
         if (col == DColumn) {
-          return spc.d();
+          return dspc.d();
         }
 
         if (col == TTHColumn) {
-          return spc.tth();
+          return dspc.tth();
         }
       }
     }
   }
-//  QcepMaskDataPtr p = m_MaskStack->at(index.row());
-
-//  if (p) {
-//
-
-//    if (columnCount()==1) {
-//      if (col == 0) {
-//        if (role == Qt::DecorationRole) {
-//          return p->thumbnailImage();
-//        } else if (role == Qt::CheckStateRole) {
-//          return (p->get_Used()?Qt::Checked:Qt::Unchecked);
-//        } else if (role == Qt::DisplayRole || role == Qt::EditRole) {
-//          //        return tr("%1 : %2").arg(m_MaskStack->stackLevelName(index.row())).arg(p->get_Title());
-//          return p->get_Title();
-//        }
-//      }
-//    } else {
-//      if (col == ThumbnailColumn) {
-//        if (role == Qt::DecorationRole) {
-//          return p->thumbnailImage();
-//        } else if (role == Qt::SizeHintRole) {
-//          return p->thumbnailImageSize();
-//        }
-//      } else if (col == VisibilityColumn) {
-//        if (role == Qt::CheckStateRole) {
-//          return (p->get_Used()?Qt::Checked:Qt::Unchecked);
-//        } else if (role == Qt::SizeHintRole) {
-//          return 30;
-//        }
-//      } else if (col == TitleColumn) {
-//        if (role == Qt::DisplayRole || role == Qt::EditRole) {
-//          return p->get_Title();
-//        } else if (role==Qt::SizeHintRole) {
-//          return 120;
-//        }
-//      }
-//    }
-//  }
 
   return QVariant();
 }

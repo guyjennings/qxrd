@@ -7,6 +7,9 @@
 #include "qxrddataprocessorthread.h"
 #include "qxrddataprocessor.h"
 #include "qxrdcalibrantlibrary.h"
+#include "qxrdcalibrantlibrarymodel.h"
+#include "qxrdcalibrantdspacings.h"
+#include "qxrdcalibrantdspacingsmodel.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
@@ -124,7 +127,14 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
           new QxrdCalibrantLibrary(m_SettingsSaver, sharedFromThis()));
 
-    m_CalibrantLibrary -> initialize();
+    m_CalibrantLibraryModel = QxrdCalibrantLibraryModelPtr(
+          new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
+
+    m_CalibrantDSpacings = QxrdCalibrantDSpacingsPtr(
+          new QxrdCalibrantDSpacings());
+
+    m_CalibrantDSpacingsModel = QxrdCalibrantDSpacingsModelPtr(
+          new QxrdCalibrantDSpacingsModel(m_CalibrantLibrary, m_CalibrantDSpacings));
 
     QxrdDataProcessorPtr proc(m_DataProcessor);
 
@@ -491,6 +501,21 @@ QxrdDataProcessorWPtr QxrdExperiment::dataProcessor() const
 QxrdCalibrantLibraryWPtr QxrdExperiment::calibrantLibrary() const
 {
   return m_CalibrantLibrary;
+}
+
+QxrdCalibrantLibraryModelWPtr QxrdExperiment::calibrantLibraryModel() const
+{
+  return m_CalibrantLibraryModel;
+}
+
+QxrdCalibrantDSpacingsWPtr QxrdExperiment::calibrantDSpacings() const
+{
+  return m_CalibrantDSpacings;
+}
+
+QxrdCalibrantDSpacingsModelWPtr QxrdExperiment::calibrantDSpacingsModel() const
+{
+  return m_CalibrantDSpacingsModel;
 }
 
 QcepDatasetModelPtr QxrdExperiment::dataset()

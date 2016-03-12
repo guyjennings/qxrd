@@ -9,26 +9,36 @@
 #include <QAction>
 #include <QClipboard>
 #include "qxrdcalibrantpropertiesdialog.h"
+#include "qxrdexperiment.h"
 
-QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenterFinderWPtr cf, QWidget *parent) :
-  QDockWidget(parent),
-  m_CalibrantLibrary(cal),
+QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdExperimentPtr expt, QxrdCenterFinderWPtr cf) :
+  QDockWidget(),
+  m_Experiment(expt),
   m_CenterFinder(cf)
 {
   setupUi(this);
 
-  if (m_CalibrantLibrary) {
-    m_CalibrantLibraryModel = QxrdCalibrantLibraryModelPtr(
-          new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
+  QxrdCenterFinderPtr cfp(m_CenterFinder);
+  QxrdExperimentPtr   exp(m_Experiment);
 
-    m_CalibrantDSpacingsModel = QxrdCalibrantDSpacingsModelPtr(
-          new QxrdCalibrantDSpacingsModel(m_CalibrantLibrary, &m_CalibrantDSpacingsVector));
+  if (cfp && exp) {
+    m_CalibrantLibrary        = exp->calibrantLibrary();
+    m_CalibrantLibraryModel   = exp->calibrantLibraryModel();
 
-    m_CalibrantTableView -> setModel(m_CalibrantLibraryModel.data());
-    m_CalibrantDSpacingsView -> setModel(m_CalibrantDSpacingsModel.data());
+    m_CalibrantDSpacings      = exp->calibrantDSpacings();
+    m_CalibrantDSpacingsModel = exp->calibrantDSpacingsModel();
+  }
 
-    m_CalibrantTableView->horizontalHeader()->setStretchLastSection(true);
-    m_CalibrantDSpacingsView->horizontalHeader()->setStretchLastSection(true);
+  QxrdCalibrantLibraryModelPtr   lib(m_CalibrantLibraryModel);
+  QxrdCalibrantDSpacingsModelPtr dsp(m_CalibrantDSpacingsModel);
+
+  if (lib && dsp) {
+    m_CalibrantTableView     -> setModel(lib.data());
+    m_CalibrantDSpacingsView -> setModel(dsp.data());
+  }
+
+  m_CalibrantTableView->horizontalHeader()->setStretchLastSection(true);
+  m_CalibrantDSpacingsView->horizontalHeader()->setStretchLastSection(true);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   m_CalibrantTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -41,7 +51,6 @@ QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenter
   m_CalibrantDSpacingsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
   m_CalibrantDSpacingsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 #endif
-  }
 
   connect(m_CalibrantTableView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantDialog::calibrantTableContextMenu);
   connect(m_CalibrantDSpacingsView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantDialog::calibrantDSpacingsContextMenu);
@@ -52,10 +61,8 @@ QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenter
   connect(m_CalibrantLibraryModel.data(), &QAbstractItemModel::dataChanged,
           this, &QxrdCalibrantDialog::onCalibrantChanged);
 
-  QxrdCenterFinderPtr cen(m_CenterFinder);
-
-  if (cen) {
-    connect(cen->prop_Energy(), &QcepDoubleProperty::valueChanged,
+  if (cfp) {
+    connect(cfp->prop_Energy(), &QcepDoubleProperty::valueChanged,
             this, &QxrdCalibrantDialog::onCalibrantChanged);
   }
 
@@ -69,35 +76,36 @@ QxrdCalibrantDialog::~QxrdCalibrantDialog()
 
 void QxrdCalibrantDialog::onCalibrantChanged()
 {
-  if (m_CalibrantLibrary) {
-    QxrdCenterFinderPtr cf(m_CenterFinder);
+  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
+  QxrdCalibrantDSpacingsPtr dsp(m_CalibrantDSpacings);
+  QxrdCenterFinderPtr cf(m_CenterFinder);
+  QxrdCalibrantDSpacingsModelPtr model(m_CalibrantDSpacingsModel);
 
-    double energy = 15000;
-    if (cf) {
-      energy = cf->get_Energy();
-    }
+  if (lib && dsp && cf && model) {
+    double energy = cf->get_Energy();
 
-    m_CalibrantDSpacingsVector.clear();
+    dsp->clear();
 
-    for (int i=0; i<m_CalibrantLibrary->count(); i++) {
-      QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(i);
+    for (int i=0; i<lib->count(); i++) {
+      QxrdCalibrantPtr cal = lib->calibrant(i);
 
       if (cal && cal->get_IsUsed()) {
-        m_CalibrantDSpacingsVector.merge(cal->dSpacings(energy));
+        dsp->merge(cal->dSpacings(energy));
       }
     }
 
-    m_CalibrantDSpacingsModel -> everythingChanged(m_CalibrantDSpacingsVector.count());
+    model -> everythingChanged(dsp->count());
   }
 }
 
 void QxrdCalibrantDialog::calibrantTableContextMenu(const QPoint &pos)
 {
   QModelIndex index  = m_CalibrantTableView->indexAt(pos);
+  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
   QxrdCalibrantPtr cal;
 
-  if (index.isValid()) {
-    cal = m_CalibrantLibrary->calibrant(index.row());
+  if (index.isValid() && lib) {
+    cal = lib->calibrant(index.row());
   }
 
   QMenu      *menu   = new QMenu(this);
@@ -212,8 +220,10 @@ void QxrdCalibrantDialog::onCalibrantDoubleClick(const QModelIndex &item)
 //  printf("Double click [%d,%d]\n", item.column(), item.row());
 
   if (item.column() == 0) {
-    if (m_CalibrantLibraryModel) {
-      m_CalibrantLibraryModel->toggleIsUsed(item.row());
+    QxrdCalibrantLibraryModelPtr lib(m_CalibrantLibraryModel);
+
+    if (lib) {
+      lib->toggleIsUsed(item.row());
     }
   }
 }
@@ -230,13 +240,16 @@ void QxrdCalibrantDialog::doDeleteCalibrant(int n)
 
 void QxrdCalibrantDialog::doCalibrantProperties(int n)
 {
-  if (m_CalibrantLibrary && m_CalibrantLibraryModel) {
-    QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(n);
+  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
+  QxrdCalibrantLibraryModelPtr mdl(m_CalibrantLibraryModel);
+
+  if (lib && mdl) {
+    QxrdCalibrantPtr cal = lib->calibrant(n);
 
     QxrdCalibrantPropertiesDialog dlg(this, cal);
 
     if (dlg.exec() == QDialog::Accepted) {
-      m_CalibrantLibraryModel->calibrantChanged(n);
+      mdl->calibrantChanged(n);
     }
   }
 }

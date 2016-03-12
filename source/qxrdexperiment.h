@@ -39,7 +39,9 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qxrdcalibrantlibrary-ptr.h"
+#include "qxrdcalibrantlibrarymodel-ptr.h"
 #include "qxrdcalibrantdspacings-ptr.h"
+#include "qxrdcalibrantdspacingsmodel-ptr.h"
 #include "qcepexperiment.h"
 #include "qcepdataset-ptr.h"
 #include "qcepdatasetmodel-ptr.h"
@@ -69,6 +71,10 @@ public:
   QxrdSimpleServerWPtr simpleServer();
   QxrdSimpleServerThreadWPtr simpleServerThread();
   QxrdCalibrantLibraryWPtr calibrantLibrary() const;
+  QxrdCalibrantLibraryModelWPtr calibrantLibraryModel() const;
+  QxrdCalibrantDSpacingsWPtr calibrantDSpacings() const;
+  QxrdCalibrantDSpacingsModelWPtr calibrantDSpacingsModel() const;
+
   QcepDatasetModelPtr dataset();
   QxrdFileSaverWPtr fileSaver() const;
 
@@ -153,7 +159,9 @@ private:
   QxrdSimpleServerWPtr            m_SimpleServer;
   QxrdDataProcessorPtr            m_DataProcessor;
   QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
+  QxrdCalibrantLibraryModelPtr    m_CalibrantLibraryModel;
   QxrdCalibrantDSpacingsPtr       m_CalibrantDSpacings;
+  QxrdCalibrantDSpacingsModelPtr  m_CalibrantDSpacingsModel;
   QxrdAcquisitionPtr              m_Acquisition;
   QxrdDetectorThreadPtr           m_DetectorThread;
   QxrdDetectorWPtr                m_Detector;

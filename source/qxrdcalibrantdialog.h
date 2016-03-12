@@ -16,7 +16,7 @@ class QxrdCalibrantDialog : public QDockWidget, public Ui::QxrdCalibrantDialog
   Q_OBJECT
 
 public:
-  QxrdCalibrantDialog(QxrdCalibrantLibraryPtr cal, QxrdCenterFinderWPtr cf, QWidget *parent = 0);
+  QxrdCalibrantDialog(QxrdExperimentPtr expt, QxrdCenterFinderWPtr cf);
   virtual ~QxrdCalibrantDialog();
 
 public slots:
@@ -35,11 +35,12 @@ private:
   void doCalibrantProperties(int n);
 
 private:
-  QxrdCalibrantLibraryPtr m_CalibrantLibrary;
-  QxrdCalibrantLibraryModelPtr m_CalibrantLibraryModel;
-  QxrdCalibrantDSpacingsModelPtr m_CalibrantDSpacingsModel;
-  QxrdCalibrantDSpacings m_CalibrantDSpacingsVector;
-  QxrdCenterFinderWPtr        m_CenterFinder;
+  QxrdExperimentWPtr              m_Experiment;
+  QxrdCenterFinderWPtr            m_CenterFinder;
+  QxrdCalibrantLibraryWPtr        m_CalibrantLibrary;
+  QxrdCalibrantLibraryModelWPtr   m_CalibrantLibraryModel;
+  QxrdCalibrantDSpacingsModelWPtr m_CalibrantDSpacingsModel;
+  QxrdCalibrantDSpacingsWPtr      m_CalibrantDSpacings;
 };
 
 #endif // QXRDCALIBRANTDIALOG_H

@@ -8,6 +8,11 @@ QxrdCalibrantLibrary::QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExpe
     m_Saver(saver),
     m_Experiment(exp)
 {
+  int nCals = numberStandardCalibrants();
+
+  for (int i=0; i<nCals; i++) {
+    appendCalibrant(standardCalibrant(i));
+  }
 }
 
 QxrdCalibrantLibrary::~QxrdCalibrantLibrary()
@@ -15,15 +20,6 @@ QxrdCalibrantLibrary::~QxrdCalibrantLibrary()
 #ifndef QT_NO_DEBUG
   printf("Deleting calibrant library\n");
 #endif
-}
-
-void QxrdCalibrantLibrary::initialize()
-{
-  int nCals = numberStandardCalibrants();
-
-  for (int i=0; i<nCals; i++) {
-    appendCalibrant(standardCalibrant(i));
-  }
 }
 
 void QxrdCalibrantLibrary::readSettings(QSettings *settings, QString section)

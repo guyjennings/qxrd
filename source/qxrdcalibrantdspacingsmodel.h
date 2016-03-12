@@ -9,7 +9,7 @@
 class QxrdCalibrantDSpacingsModel : public QAbstractTableModel
 {
 public:
-  QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryPtr cal, QxrdCalibrantDSpacings *vec);
+  QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryPtr cal, QxrdCalibrantDSpacingsPtr vec);
   ~QxrdCalibrantDSpacingsModel();
 
   virtual QVariant	   data ( const QModelIndex & index, int role ) const;
@@ -32,8 +32,8 @@ public:
     NumColumns
   };
 private:
-  QxrdCalibrantLibraryPtr m_CalibrantLibrary;
-  QxrdCalibrantDSpacings *m_CalibrantDSpacingVector;
+  QxrdCalibrantLibraryWPtr   m_CalibrantLibrary;
+  QxrdCalibrantDSpacingsWPtr m_CalibrantDSpacings;
 };
 
 #endif // QXRDCALIBRANTDSPACINGSMODEL_H
