@@ -447,16 +447,33 @@ void QxrdCenterFinder::fitPowderEllipses()
 
 void QxrdCenterFinder::adjustEnergy(int n)
 {
-  double r = powderRingAverageR(n);
-  double tth = calibrantTTH(n);
-  double lambda = 12398.4187/get_Energy();
+  double tth    = powderRingAverageTTH(n);
+  double th     = tth/2.0;
+  double dlatt  = calibrantDSpacing(n);
+  double caltth = calibrantTTH(n);
+
+  double newLambda = 2.0*dlatt*sin(th*M_PI/180.0);
+  double newEnergy = 12398.4187/newLambda;
+
+  QString message;
+
+  message.append(tr("Ring %1 average TTH = %2\n").arg(n).arg(tth));
+  message.append(tr("Calibrant Peak %1 TTH = %2\n").arg(n).arg(caltth));
+  message.append(tr("Adjust Energy from %1 to %2\n").arg(get_Energy()).arg(newEnergy));
+  message.append(tr("to improve fit to ring %1").arg(n));
+
+  if (QMessageBox::question(NULL, "Update Energy?",
+                            message, QMessageBox::Ok | QMessageBox::No, QMessageBox::Ok)
+      == QMessageBox::Ok) {
+    set_Energy(newEnergy);
+  }
 }
 
 void QxrdCenterFinder::adjustDistance(int n)
 {
   double r = powderRingAverageR(n);
   double tth = calibrantTTH(n);
-  double d = r/sin(tth*M_PI/180.0);
+  double d = r/tan(tth*M_PI/180.0);
 
   QString message;
 
@@ -1361,10 +1378,10 @@ double QxrdCenterFinder::calibrantDSpacing(int n)
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdCalibrantLibraryPtr cal(expt->calibrantLibrary());
+    QxrdCalibrantDSpacingsPtr dsp(expt->calibrantDSpacings());
 
-    if (cal) {
-      res = cal->calibrantDSpacing(n);
+    if (dsp) {
+      res = dsp->calibrantDSpacing(n);
     }
   }
 
@@ -1378,10 +1395,10 @@ double QxrdCenterFinder::calibrantTTH(int n)
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdCalibrantLibraryPtr cal(expt->calibrantLibrary());
+    QxrdCalibrantDSpacingsPtr dsp(expt->calibrantDSpacings());
 
-    if (cal) {
-      res = cal->calibrantTTH(n);
+    if (dsp) {
+      res = dsp->calibrantTTH(n);
     }
   }
 

@@ -22,9 +22,6 @@ public slots:
   QString calibrantName(int n);
   QxrdCalibrantWPtr calibrant(int n);
 
-  double calibrantDSpacing(int n);
-  double calibrantTTH(int n);
-
 public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

@@ -22,6 +22,9 @@ public:
   void insertUnique(int index, int h, int k, int l, double d, double tth);
 
   void merge(const QxrdCalibrantDSpacings& vec);
+
+  double calibrantDSpacing(int n);
+  double calibrantTTH(int n);
 };
 
 Q_DECLARE_METATYPE(QxrdCalibrantDSpacings)

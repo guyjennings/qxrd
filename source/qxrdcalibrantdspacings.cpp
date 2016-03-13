@@ -91,3 +91,25 @@ void QxrdCalibrantDSpacings::merge(const QxrdCalibrantDSpacings &vec)
     }
   }
 }
+
+double QxrdCalibrantDSpacings::calibrantDSpacing(int n)
+{
+  double res = qQNaN();
+
+  if (n >= 0 && n < count()) {
+    res = value(n).d();
+  }
+
+  return res;
+}
+
+double QxrdCalibrantDSpacings::calibrantTTH(int n)
+{
+  double res = qQNaN();
+
+  if (n >= 0 && n < count()) {
+    res = value(n).tth();
+  }
+
+  return res;
+}
