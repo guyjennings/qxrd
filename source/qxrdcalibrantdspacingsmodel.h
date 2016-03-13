@@ -8,6 +8,8 @@
 
 class QxrdCalibrantDSpacingsModel : public QAbstractTableModel
 {
+  Q_OBJECT
+
 public:
   QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryPtr cal, QxrdCalibrantDSpacingsPtr vec);
   ~QxrdCalibrantDSpacingsModel();

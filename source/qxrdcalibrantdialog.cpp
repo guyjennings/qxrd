@@ -58,7 +58,7 @@ QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdExperimentPtr expt, QxrdCenterFinde
   connect(m_CalibrantTableView, &QTableView::clicked,       this, &QxrdCalibrantDialog::onCalibrantClick);
   connect(m_CalibrantTableView, &QTableView::doubleClicked, this, &QxrdCalibrantDialog::onCalibrantDoubleClick);
 
-  connect(m_CalibrantLibraryModel.data(), &QAbstractItemModel::dataChanged,
+  connect(lib.data(), &QAbstractItemModel::dataChanged,
           this, &QxrdCalibrantDialog::onCalibrantChanged);
 
   if (cfp) {

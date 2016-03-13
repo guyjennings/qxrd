@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 QxrdCalibrantLibrary::QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp)
-  : QcepObject("calibrantlibrary", NULL),
+  : QcepObject("calibrantLibrary", NULL),
     m_Saver(saver),
     m_Experiment(exp)
 {
