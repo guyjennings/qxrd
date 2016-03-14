@@ -68,6 +68,9 @@ int QcepDataColumn::rowCount() const
 void QcepDataColumn::resize(int n)
 {
   m_Vector.resize(n);
+
+  QcepAllocator::allocate(sizeof(double), 1, n-m_NPoints);
+
   m_NPoints = n;
 }
 
