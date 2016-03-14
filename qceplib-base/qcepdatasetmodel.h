@@ -84,6 +84,7 @@ public slots:
 
   void                   append(const QModelIndex &index, QcepDataObjectPtr obj);
   void                   append(QString path, QcepDataObjectPtr obj);
+  void                   remove(QcepDataObjectPtr obj);
   void                   remove(const QModelIndex &index);
   void                   remove(QString path);
 

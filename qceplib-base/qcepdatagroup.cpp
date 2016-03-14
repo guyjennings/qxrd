@@ -248,15 +248,20 @@ void QcepDataGroup::append(QString path, QcepDataObjectPtr obj)
   }
 }
 
-void QcepDataGroup::remove(QcepDataObjectPtr obj)
+void QcepDataGroup::remove(int n)
 {
-  int n = m_Objects.indexOf(obj);
-
-  if (n >= 0) {
+  if (n >= 0 && n < m_Objects.count()) {
     m_Objects.remove(n);
 
     emit dataObjectChanged();
   }
+}
+
+void QcepDataGroup::remove(QcepDataObjectPtr obj)
+{
+  int n = m_Objects.indexOf(obj);
+
+  remove(n);
 }
 
 void QcepDataGroup::remove(QString path)

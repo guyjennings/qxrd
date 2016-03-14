@@ -254,4 +254,12 @@ void QcepDatasetBrowserDialog::saveData(const QModelIndex &idx)
 void QcepDatasetBrowserDialog::deleteData(const QModelIndex &idx)
 {
   QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
+
+  if (obj) {
+    if (QMessageBox::question(NULL, "Delete Object?",
+                              tr("Do you really want to delete %1").arg(obj->get_Name()),
+                              QMessageBox::Ok | QMessageBox::No, QMessageBox::No) == QMessageBox::Ok) {
+      m_DatasetModel->remove(idx);
+    }
+  }
 }

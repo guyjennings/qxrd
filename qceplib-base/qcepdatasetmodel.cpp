@@ -26,18 +26,12 @@ QcepDataObjectPtr QcepDatasetModel::indexedObject(const QModelIndex &index) cons
     QcepDataObject *obj = static_cast<QcepDataObject*>(index.internalPointer());
 
     if (obj) {
-//      if (qcepDebug(DEBUG_DATABROWSER)) {
-//        printf("of object %s\n", qPrintable(obj->get_Name()));
-//      }
-
       res = obj->sharedFromThis();
 
       if (!res) {
         printf("QcepDatasetModel::indexedObject returns NULL\n");
       }
     }
-//  } else {
-//    res = NULL;
   }
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
@@ -370,9 +364,7 @@ QString QcepDatasetModel::objectName(QString path)
 
 QcepDataObjectPtr      QcepDatasetModel::item(const QModelIndex &index)
 {
-  printf("QcepDatasetModel::item([%d,%d])\n", index.row(), index.column());
-
-  return QcepDataObjectPtr();
+  return indexedObject(index);
 }
 
 QcepDataObjectPtr      QcepDatasetModel::item(QString path)
@@ -399,7 +391,7 @@ QcepDataObjectPtr      QcepDatasetModel::item(int n)
 
 QcepDataGroupPtr       QcepDatasetModel::group(const QModelIndex &index)
 {
-  return QcepDataGroupPtr();
+  return qSharedPointerDynamicCast<QcepDataGroup>(indexedObject(index));
 }
 
 QcepDataGroupPtr       QcepDatasetModel::group(QString path)
@@ -465,7 +457,7 @@ QcepDataGroupPtr       QcepDatasetModel::newGroup(QString path)
 
 QcepDataArrayPtr       QcepDatasetModel::array(const QModelIndex &index)
 {
-  return QcepDataArrayPtr();
+  return qSharedPointerDynamicCast<QcepDataArray>(indexedObject(index));
 }
 
 QcepDataArrayPtr       QcepDatasetModel::array(QString path)
@@ -521,7 +513,7 @@ QcepDataArrayPtr       QcepDatasetModel::newArray(QString path, QVector<int> dim
 
 QcepDataColumnPtr      QcepDatasetModel::column(const QModelIndex &index)
 {
-  return QcepDataColumnPtr();
+  return qSharedPointerDynamicCast<QcepDataColumn>(indexedObject(index));
 }
 
 QcepDataColumnPtr      QcepDatasetModel::column(QString path)
@@ -577,7 +569,7 @@ QcepDataColumnPtr      QcepDatasetModel::newColumn(QString path, int nRows)
 
 QcepDataColumnScanPtr  QcepDatasetModel::columnScan(const QModelIndex &index)
 {
-  return QcepDataColumnScanPtr();
+  return qSharedPointerDynamicCast<QcepDataColumnScan>(indexedObject(index));
 }
 
 QcepDataColumnScanPtr  QcepDatasetModel::columnScan(QString path)
@@ -633,7 +625,7 @@ QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, int nRows, 
 
 QcepDoubleImageDataPtr QcepDatasetModel::image(const QModelIndex &index)
 {
-  return QcepDoubleImageDataPtr();
+  return qSharedPointerDynamicCast<QcepDoubleImageData>(indexedObject(index));
 }
 
 QcepDoubleImageDataPtr QcepDatasetModel::image(QString path)
@@ -689,7 +681,7 @@ QcepDoubleImageDataPtr QcepDatasetModel::newImage(QString path, int width, int h
 
 QcepIntegratedDataPtr QcepDatasetModel::integratedData(const QModelIndex &index)
 {
-  return QcepIntegratedDataPtr();
+  return qSharedPointerDynamicCast<QcepIntegratedData>(indexedObject(index));
 }
 
 QcepIntegratedDataPtr QcepDatasetModel::integratedData(QString path)
@@ -756,18 +748,38 @@ void QcepDatasetModel::insertGroup(int atRow, QString name)
   }
 }
 
-void                   QcepDatasetModel::append(const QModelIndex &index, QcepDataObjectPtr obj)
+void QcepDatasetModel::append(const QModelIndex &index, QcepDataObjectPtr obj)
 {
 }
 
-void                   QcepDatasetModel::append(QString path, QcepDataObjectPtr obj)
+void QcepDatasetModel::append(QString path, QcepDataObjectPtr obj)
 {
 }
 
-void                   QcepDatasetModel::remove(const QModelIndex &index)
+void QcepDatasetModel::remove(QcepDataObjectPtr obj)
 {
+  if (obj) {
+    QcepDataGroupPtr  par = obj->parentItem();
+    int n = obj->indexInParent();
+
+    if (par && n >= 0 && n < par->childCount()) {
+      beginRemoveRows(index(par), n, n);
+      par->remove(n);
+      endRemoveRows();
+    }
+  }
 }
 
-void                   QcepDatasetModel::remove(QString path)
+void QcepDatasetModel::remove(const QModelIndex &index)
 {
+  QcepDataObjectPtr obj = indexedObject(index);
+
+  remove(obj);
+}
+
+void QcepDatasetModel::remove(QString path)
+{
+  QcepDataObjectPtr obj = item(path);
+
+  remove(obj);
 }

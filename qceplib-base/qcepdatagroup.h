@@ -52,6 +52,7 @@ public slots:
 
   void append(QcepDataObjectPtr obj);
   void append(QString path, QcepDataObjectPtr obj);
+  void remove(int n);
   void remove(QcepDataObjectPtr obj);
   void remove(QString path);
 
