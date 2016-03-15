@@ -673,4 +673,7 @@ TODO("2016-03-11", "",
 DONE("2016-03-11", "2016-03-15",
      "Center Finder should use calibrant library, instead of its own internal vars");
 
+TODO("2016-03-15", "",
+     "Check integration paramaters for excessive memory use before execution");
+
 #endif // TODO_H
