@@ -1,6 +1,27 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.16 - Mar 15 2016
+Added 'adjust energy' and 'adjust distance' commands
+Reworked calibrant library code
+Added polarTransform (cake) command
+Work on polarization corrections
+Reworked integration routines to use multiple threads
+More work on data objects
+
+## v0.11.15 - Nov 19 2015
+Preliminary support for detector ROIs as pseudoscalers
+
+## v0.11.14 - Oct 16 2015
+Preliminary support for driving Pilatus detectors
+Preliminary support for driving multiple detectors simultaneously
+Preliminary support for per-detector processing chains
+Preliminary spec macro counter support
+
+## v0.11.12 - Jul 22 2015
+Implement a tree of data objects - with browser etc.
+Implement library of powder calibrants
+
 ## v0.11.10 - Apr 01 2015
 Output synchronization waveform available for nPhases==1 as well
 

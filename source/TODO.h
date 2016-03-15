@@ -642,7 +642,7 @@ TODO("2015-10-21", "",
 TODO("2016-03-07", "",
      "Investigate problems with last column of polar transforms");
 
-TODO("2016-03-07", "",
+DONE("2016-03-07", "2016-03-15",
      "Reinstate self normalize option for polar normalized integration");
 
 TODO("2016-03-07", "",
@@ -651,7 +651,7 @@ TODO("2016-03-07", "",
 TODO("2016-03-09", "",
      "Make peak fitting and ring tracing routines honour masks");
 
-TODO("2016-03-09", "",
+DONE("2016-03-09", "2016-03-15",
      "Make peak fitting and ring tracing save results as data objects");
 
 TODO("2016-03-09", "",
@@ -670,7 +670,7 @@ TODO("2016-03-09", "",
 TODO("2016-03-11", "",
      "Powder point renormalization should update data objects");
 
-TODO("2016-03-11", "",
+DONE("2016-03-11", "2016-03-15",
      "Center Finder should use calibrant library, instead of its own internal vars");
 
 #endif // TODO_H
