@@ -21,7 +21,7 @@ public:
   void onAcquisitionInit();
 
   void acquisitionReady();
-  void setupAcquireMenu(QMenu *menu);
+  void setupDetectorsMenu(QMenu *menu);
 
 protected:
   void changeEvent(QEvent *e);

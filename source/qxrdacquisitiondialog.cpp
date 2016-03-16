@@ -102,7 +102,7 @@ QxrdAcquisitionDialog::~QxrdAcquisitionDialog()
 {
 }
 
-void QxrdAcquisitionDialog::setupAcquireMenu(QMenu *menu)
+void QxrdAcquisitionDialog::setupDetectorsMenu(QMenu *menu)
 {
   menu->addSeparator();
   menu->addAction(m_ActionAcquire);

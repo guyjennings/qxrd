@@ -26,7 +26,7 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
   connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdWelcomeWindow::clearStatusMessage);
 
   connect(ui->m_ActionEditApplicationPreferences, &QAction::triggered, m_Application, &QxrdApplication::editGlobalPreferences);
-  connect(ui->m_ActionNewExperiment, &QAction::triggered, m_Application, &QxrdApplication::chooseNewExperiment);
+  connect(ui->m_ActionNewExperiment, &QAction::triggered, m_Application, &QxrdApplication::createNewExperiment);
   connect(ui->m_ActionOpenExperiment, &QAction::triggered, m_Application, &QxrdApplication::chooseExistingExperiment);
   connect(ui->m_ActionExitApplication, &QAction::triggered, m_Application, &QxrdApplication::possiblyQuit);
 

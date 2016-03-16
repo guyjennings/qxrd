@@ -865,6 +865,10 @@ void QxrdIntegratorCache::performIntegration(
         m_Integral.resize(m_ResultSize);
         m_SumValue.resize(m_ResultSize);
 
+        expt->printMessage(tr("QxrdIntegratorCache storage required for step 3 = %1 x %2 = %3")
+                           .arg(m_ThreadCount).arg(m_ResultSize*2*sizeof(double))
+                           .arg(m_ThreadCount*m_ResultSize*2*sizeof(double)));
+
         if (m_ThreadCount == 1) {
           partialIntegrationStep3(0, 1, dimg, mask, normalize);
         } else {

@@ -312,7 +312,7 @@ void QxrdWindow::initialize()
     connect(m_ActionLoadPreferences, &QAction::triggered, app.data(), &QxrdApplication::doLoadPreferences);
     connect(m_ActionSavePreferences, &QAction::triggered, app.data(), &QxrdApplication::doSavePreferences);
 
-    connect(m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdApplication::chooseNewExperiment);
+    connect(m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdApplication::createNewExperiment);
     connect(m_ActionOpenExperiment, &QAction::triggered, app.data(), &QxrdApplication::chooseExistingExperiment);
     connect(m_ActionCloseExperiment, &QAction::triggered, this, &QWidget::close);
   }
@@ -334,6 +334,8 @@ void QxrdWindow::initialize()
   m_ConfigureDetectorMenu->menuAction()->setMenuRole(QAction::NoRole);
 
   connect(m_DetectorControlWindowsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateDetectorControlWindowsMenu);
+
+  connect(m_ActionSetupDetectors, &QAction::triggered, this, &QxrdWindow::doEditDetectorPreferences);
 
   connect(m_ActionLoadData, &QAction::triggered, this, &QxrdWindow::doLoadData);
   connect(m_ActionSaveData, &QAction::triggered, this, &QxrdWindow::doSaveData);
@@ -398,7 +400,7 @@ void QxrdWindow::initialize()
   connect(m_ActionPlotPowderRingTwoTheta, &QAction::triggered, this, &QxrdWindow::plotPowderRingTwoTheta);
   connect(m_ActionPlotPowderRingCenters, &QAction::triggered, this, &QxrdWindow::plotPowderRingCenters);
 
-  m_AcquisitionDialog->setupAcquireMenu(m_AcquireMenu);
+  m_AcquisitionDialog->setupDetectorsMenu(m_DetectorsMenu);
 
   m_AcquisitionDialog->acquisitionReady();
 

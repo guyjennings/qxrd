@@ -106,6 +106,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_CurrentDirectory(m_Saver, this, "currentDirectory", QDir::homePath(), "Current Directory"),
 //  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
   m_Debug(m_Saver, this,"debug", 0, "Debug Level"),
+  m_OpenNew(QcepSettingsSaverPtr(), this,"openNew", 0, "Open a new experiment"),
   m_FreshStart(QcepSettingsSaverPtr(), this,"freshStart", 0, "Do a Fresh Start"),
   m_FileBrowserLimit(m_Saver, this, "fileBrowserLimit", 1000, "Max Number of Files in Browser Windows (0 = unlimited)"),
   m_MessageWindowLines(m_Saver, this, "messageWindowLines", 1000, "Number of Lines in Message Window (0 = unlimited)"),
@@ -195,7 +196,9 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
   for (int i=1; i<argc; i++) {
     int dbg=0;
 
-    if (strcmp(argv[i],"-fresh") == 0) {
+    if (strcmp(argv[i],"-new") == 0) {
+      set_OpenNew(true);
+    } else if (strcmp(argv[i],"-fresh") == 0) {
       set_FreshStart(true);
     } else if (sscanf(argv[i],"-debug=%d",&dbg)==1) {
       set_Debug(dbg);
@@ -252,11 +255,15 @@ bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
 
 //  m_ResponseTimer = new QxrdResponseTimer(30000, 5000, this);
 
-  if (get_FreshStart()) {
-    editGlobalPreferences();
-  }
+//  if (get_FreshStart()) {
+//    editGlobalPreferences();
+//  }
 
-  if (/*get_OpenDirectly() &&*/ (get_CurrentExperiment().length()>0)) {
+  if (get_OpenNew()) {
+    createNewExperiment();
+  } else if (get_FreshStart()) {
+    openWelcomeWindow();
+  } else if (/*get_OpenDirectly() &&*/ (get_CurrentExperiment().length()>0)) {
     openExperiment(get_CurrentExperiment());
   } else {
     openWelcomeWindow();
@@ -820,9 +827,17 @@ void QxrdApplication::writeDefaultSettings()
   settings.setValue("currentExperiment", get_CurrentExperiment());
 }
 
-void QxrdApplication::chooseNewExperiment()
+void QxrdApplication::createNewExperiment()
 {
-  openWelcomeWindow();
+  QxrdExperimentThreadPtr experimentThread = QxrdExperimentThread::newExperiment("", m_Application, NULL);
+
+  if (experimentThread) {
+    QxrdExperimentPtr exp = experimentThread->experiment();
+
+    openedExperiment(experimentThread);
+
+    closeWelcomeWindow();
+  }
 }
 
 void QxrdApplication::chooseExistingExperiment()

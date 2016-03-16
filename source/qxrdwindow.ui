@@ -1137,7 +1137,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -1176,9 +1176,9 @@
      <string>Edit</string>
     </property>
    </widget>
-   <widget class="QMenu" name="m_AcquireMenu">
+   <widget class="QMenu" name="m_DetectorsMenu">
     <property name="title">
-     <string>Ac&amp;quire</string>
+     <string>Detectors</string>
     </property>
     <widget class="QMenu" name="m_ConfigureDetectorMenu">
      <property name="title">
@@ -1192,6 +1192,7 @@
      </property>
      <addaction name="m_ActionOpenDetectorControlWindow"/>
     </widget>
+    <addaction name="m_ActionSetupDetectors"/>
     <addaction name="m_ConfigureDetectorMenu"/>
     <addaction name="m_DetectorControlWindowsMenu"/>
    </widget>
@@ -1308,7 +1309,7 @@
    </widget>
    <addaction name="m_FileMenu"/>
    <addaction name="m_EditMenu"/>
-   <addaction name="m_AcquireMenu"/>
+   <addaction name="m_DetectorsMenu"/>
    <addaction name="m_OperationsMenu"/>
    <addaction name="m_CalibrationMenu"/>
    <addaction name="m_DisplayMenu"/>
@@ -2069,6 +2070,17 @@
    </property>
    <property name="toolTip">
     <string>Polar Normalization</string>
+   </property>
+  </action>
+  <action name="m_ActionSetupDetectors">
+   <property name="text">
+    <string>Setup Detectors...</string>
+   </property>
+   <property name="toolTip">
+    <string>Setup Detectors...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
  </widget>
