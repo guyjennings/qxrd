@@ -26,22 +26,37 @@ QString QcepExperiment::defaultExperimentDirectory(QString path) const
 QString QcepExperiment::defaultExperimentFileName(QString path) const
 {
   QFileInfo info(path);
+  QString baseName = info.completeBaseName();
+//  QString suffix   = info.suffix();
 
-  if (info.suffix() == "qxrdp") {
-    return info.fileName();
-  } else {
-    return info.fileName()+".qxrdp";
+  if (baseName.length() == 0) {
+    baseName = "Untitled";
   }
+//  if (suffix == "qxrdp") {
+//    return info.fileName();
+//  } else {
+//    return info.fileName()+".qxrdp";
+//  }
+
+  return baseName + ".qxrdp";
 }
 
 QString QcepExperiment::defaultExperimentName(QString path) const
 {
   QFileInfo info(path);
+  QString baseName = info.completeBaseName();
+//  QString suffix   = info.suffix();
 
-  if (info.suffix() == "qxrdp") {
-    return info.completeBaseName();
-  } else {
-    return info.fileName();
+  if (baseName.length() == 0) {
+    baseName = "Untitled";
   }
+
+//  if (info.suffix() == "qxrdp") {
+//    return info.completeBaseName();
+//  } else {
+//    return info.fileName();
+//  }
+
+  return baseName;
 }
 
