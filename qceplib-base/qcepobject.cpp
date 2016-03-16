@@ -118,6 +118,15 @@ void QcepObject::writeSettings(QSettings *set, QString section)
 
 void QcepObject::readSettings(QSettings *set, QString section)
 {
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "readObjectSettings", Qt::BlockingQueuedConnection, Q_ARG(QSettings*, set), Q_ARG(QString, section)));
+  } else {
+    readObjectSettings(set, section);
+  }
+}
+
+void QcepObject::readObjectSettings(QSettings *set, QString section)
+{
   QcepProperty::readSettings(this, set, section);
 }
 

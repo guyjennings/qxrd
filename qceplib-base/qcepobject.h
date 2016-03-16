@@ -32,6 +32,8 @@ public slots:
   virtual QString settingsScript();
   QString scriptValueLiteral(QVariant v);
 
+  void readObjectSettings(QSettings *set, QString section);
+
 public:
   virtual void writeSettings(QSettings *set, QString section);
   virtual void readSettings(QSettings *set, QString section);
