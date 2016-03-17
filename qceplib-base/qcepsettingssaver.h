@@ -27,6 +27,7 @@ private:
   QMutex             m_Mutex;
   QObject           *m_Owner;
   QAtomicInt         m_ChangeCount;
+  QAtomicPointer<QcepProperty> m_LastChanged;
   QTimer             m_Timer;
   int                m_SaveDelay;
 };
