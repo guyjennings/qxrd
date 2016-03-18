@@ -34,7 +34,13 @@ QVariant QcepDataColumnSpreadsheetModel::data(const QModelIndex &index, int role
         QcepDataColumnPtr col(m_Column);
 
         if (col) {
-          res = col->value(index.row());
+          QcepDataColumnFormatter f = col->formatter();
+
+          if (f) {
+            res = f(col->value(index.row()));
+          } else {
+            res = col->value(index.row());
+          }
         }
       }
     }

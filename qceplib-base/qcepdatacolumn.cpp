@@ -5,7 +5,8 @@
 QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QcepObject *parent) :
   QcepDataObject(saver, name, npts*sizeof(double), parent),
   m_NPoints(npts),
-  m_Vector(npts)
+  m_Vector(npts),
+  m_Formatter(NULL)
 {
   set_Type("Data Column");
 
@@ -94,4 +95,14 @@ int QcepDataColumn::count() const
 double * QcepDataColumn::data()
 {
   return m_Vector.data();
+}
+
+QcepDataColumnFormatter QcepDataColumn::formatter()
+{
+  return m_Formatter;
+}
+
+void QcepDataColumn::setFormatter(QcepDataColumnFormatter f)
+{
+  m_Formatter = f;
 }

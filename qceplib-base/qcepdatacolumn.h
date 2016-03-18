@@ -13,6 +13,8 @@
 
  */
 
+typedef QString (*QcepDataColumnFormatter)(double);
+
 class QcepDataColumn : public QcepDataObject
 {
   Q_OBJECT
@@ -33,6 +35,8 @@ public slots:
   virtual void resize(int n);
   virtual int count() const;
   virtual double *data();
+  virtual QcepDataColumnFormatter formatter();
+  void setFormatter(QcepDataColumnFormatter f);
 
 public:
   static QcepDataColumnPtr newDataColumn(QcepSettingsSaverWPtr saver,
@@ -46,6 +50,7 @@ public:
 private:
   int             m_NPoints;
   QVector<double> m_Vector;
+  QcepDataColumnFormatter       m_Formatter;
 };
 
 #endif // QCEPDATACOLUMN_H
