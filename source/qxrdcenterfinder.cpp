@@ -832,6 +832,7 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
         scan->appendColumn("dr");
 
         scan->resizeRows(fits.count());
+        scan->column(2)->setFormatter(&QxrdFitter::reasonString);
 
         for (int i=0; i<fits.count(); i++) {
           QxrdFitterRingPoint &fit = fits[i];

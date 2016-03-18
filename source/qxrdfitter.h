@@ -26,6 +26,7 @@ public:
   QString          reasonString() const;
 
   static QString   reasonString(FitResult i);
+  static QString   reasonString(double v);
 
 protected:
   QxrdCenterFinder *m_CenterFinder;

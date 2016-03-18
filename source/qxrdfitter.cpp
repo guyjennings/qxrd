@@ -50,3 +50,8 @@ QString QxrdFitter::reasonString(FitResult reason)
 
   return res;
 }
+
+QString QxrdFitter::reasonString(double v)
+{
+  return reasonString((FitResult) v);
+}
