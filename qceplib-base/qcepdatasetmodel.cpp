@@ -754,6 +754,20 @@ void QcepDatasetModel::append(const QModelIndex &index, QcepDataObjectPtr obj)
 
 void QcepDatasetModel::append(QString path, QcepDataObjectPtr obj)
 {
+  QcepDataGroupPtr sgr = newGroup(groupName(path));
+  QcepDatasetPtr   ds(m_Dataset);
+
+  if (sgr && ds) {
+    QcepDataObjectPtr ptr = item(path);
+
+    if (ptr) {
+      ds->printMessage(tr("%1 exists already").arg(path));
+    } else {
+      beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
+      sgr->append(obj);
+      endInsertRows();
+    }
+  }
 }
 
 void QcepDatasetModel::remove(QcepDataObjectPtr obj)
