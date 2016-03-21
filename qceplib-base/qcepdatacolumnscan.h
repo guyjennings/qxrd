@@ -15,9 +15,12 @@ public slots:
   int rowCount() const;
   int columnCount() const;
   void resizeRows(int nRows);
-  void appendColumn(QString title);
+  QcepDataColumnPtr appendColumn(QString title);
   double value(int col, int row);
   void setValue(int col, int row, double val);
+
+  void add(QcepDataColumnScanPtr scan);
+  void subtract(QcepDataColumnScanPtr scan);
 
 public:
   QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QcepObject *parent);
@@ -33,6 +36,9 @@ public:
 
   static QScriptValue toColumnScanScriptValue(QScriptEngine *engine, const QcepDataColumnScanPtr &data);
   static void fromColumnScanScriptValue(const QScriptValue &obj, QcepDataColumnScanPtr &data);
+
+private:
+  bool checkCompatibility(QcepDataColumnScanPtr scan);
 
 public:
   Q_PROPERTY(int numPoints READ get_NumPoints WRITE set_NumPoints)

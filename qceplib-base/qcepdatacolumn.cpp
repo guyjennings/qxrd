@@ -2,8 +2,11 @@
 #include "qcepallocator.h"
 #include <QScriptEngine>
 
-QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QcepObject *parent) :
+QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QcepObject *parent, ColumnType colType, int col1, int col2) :
   QcepDataObject(saver, name, npts*sizeof(double), parent),
+  m_ColumnType(saver, this, "columnType", colType, "Column Type"),
+  m_Column1(saver, this, "column1", col1, "1st dependent column"),
+  m_Column2(saver, this, "column2", col2, "2nd dependent column"),
   m_NPoints(npts),
   m_Vector(npts),
   m_Formatter(NULL)
@@ -23,9 +26,9 @@ QString QcepDataColumn::description() const
   return tr("%1 rows").arg(m_NPoints);
 }
 
-QcepDataColumnPtr QcepDataColumn::newDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QcepObject *parent)
+QcepDataColumnPtr QcepDataColumn::newDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QcepObject *parent, ColumnType colType, int col1, int col2)
 {
-  QcepDataColumnPtr res(new QcepDataColumn(saver, name, npts, parent));
+  QcepDataColumnPtr res(new QcepDataColumn(saver, name, npts, parent, colType, col1, col2));
 
   return res;
 }
@@ -106,3 +109,154 @@ void QcepDataColumn::setFormatter(QcepDataColumnFormatter f)
 {
   m_Formatter = f;
 }
+
+void QcepDataColumn::add(QcepDataColumnPtr col)
+{
+  if (col) {
+    double *dst = data();
+    double *src = col->data();
+
+    if (src && dst) {
+      int nR = qMin(rowCount(), col->rowCount());
+
+      for (int i=0; i<nR; i++) {
+        dst[i] += src[i];
+      }
+
+      emit dataObjectChanged();
+    }
+  }
+}
+
+void QcepDataColumn::subtract(QcepDataColumnPtr col)
+{
+  if (col) {
+    double *dst = data();
+    double *src = col->data();
+
+    if (src && dst) {
+      int nR = qMin(rowCount(), col->rowCount());
+
+      for (int i=0; i<nR; i++) {
+        dst[i] -= src[i];
+      }
+
+      emit dataObjectChanged();
+    }
+  }
+}
+
+void QcepDataColumn::copy(QcepDataColumnPtr col)
+{
+  if (col) {
+    double *dst = data();
+    double *src = col->data();
+
+    if (src && dst) {
+      int nR = qMin(rowCount(), col->rowCount());
+
+      for (int i=0; i<nR; i++) {
+        dst[i] = src[i];
+      }
+
+      emit dataObjectChanged();
+    }
+  }
+}
+
+void QcepDataColumn::multiply(QcepDataColumnPtr col)
+{
+  if (col) {
+    double *dst = data();
+    double *src = col->data();
+
+    if (src && dst) {
+      int nR = qMin(rowCount(), col->rowCount());
+
+      for (int i=0; i<nR; i++) {
+        dst[i] *= src[i];
+      }
+
+      emit dataObjectChanged();
+    }
+  }
+}
+
+void QcepDataColumn::divide(QcepDataColumnPtr col)
+{
+  if (col) {
+    double *dst = data();
+    double *src = col->data();
+
+    if (src && dst) {
+      int nR = qMin(rowCount(), col->rowCount());
+
+      for (int i=0; i<nR; i++) {
+        dst[i] /= src[i];
+      }
+
+      emit dataObjectChanged();
+    }
+  }
+}
+
+void QcepDataColumn::add(double val)
+{
+  double *dst = data();
+  int    nR = rowCount();
+
+  if (dst) {
+    for (int i=0; i<nR; i++) {
+      dst[i] += val;
+    }
+  }
+}
+
+void QcepDataColumn::subtract(double val)
+{
+  double *dst = data();
+  int    nR = rowCount();
+
+  if (dst) {
+    for (int i=0; i<nR; i++) {
+      dst[i] -= val;
+    }
+  }
+}
+
+void QcepDataColumn::copy(double val)
+{
+  double *dst = data();
+  int    nR = rowCount();
+
+  if (dst) {
+    for (int i=0; i<nR; i++) {
+      dst[i] = val;
+    }
+  }
+}
+
+void QcepDataColumn::multiply(double val)
+{
+  double *dst = data();
+  int    nR = rowCount();
+
+  if (dst) {
+    for (int i=0; i<nR; i++) {
+      dst[i] *= val;
+    }
+  }
+}
+
+void QcepDataColumn::divide(double val)
+{
+  double *dst = data();
+  int    nR = rowCount();
+
+  if (dst) {
+    for (int i=0; i<nR; i++) {
+      dst[i] /= val;
+    }
+  }
+}
+

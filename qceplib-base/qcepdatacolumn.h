@@ -1,8 +1,10 @@
 #ifndef QCEPDATACOLUMN_H
 #define QCEPDATACOLUMN_H
 
+#include "qcepmacros.h"
 #include <QObject>
 #include <QVector>
+#include "qcepproperty.h"
 #include "qcepdataobject.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepdatacolumn-ptr.h"
@@ -20,11 +22,34 @@ class QcepDataColumn : public QcepDataObject
   Q_OBJECT
 
 public:
+  enum ColumnType {
+    NormalColumn,
+    XValueColumn,
+    CountsColumn,
+    WeightColumn,
+    RatioColumn
+  };
+
+public:
   QcepDataColumn(QcepSettingsSaverWPtr saver,
                  QString name,
                  int npts,
-                 QcepObject *parent);
+                 QcepObject *parent,
+                 ColumnType colType = NormalColumn,
+                 int col1 = -1,
+                 int col2 = -1);
+
   virtual ~QcepDataColumn();
+
+public:
+  Q_PROPERTY(int columnType READ get_ColumnType WRITE set_ColumnType)
+  QCEP_INTEGER_PROPERTY(ColumnType)
+
+  Q_PROPERTY(int column1 READ get_Column1 WRITE set_Column1)
+  QCEP_INTEGER_PROPERTY(Column1)
+
+  Q_PROPERTY(int column2 READ get_Column2 WRITE set_Column2)
+  QCEP_INTEGER_PROPERTY(Column2)
 
 public slots:
   virtual QString description() const;
@@ -38,11 +63,26 @@ public slots:
   virtual QcepDataColumnFormatter formatter();
   void setFormatter(QcepDataColumnFormatter f);
 
+  virtual void add(QcepDataColumnPtr col);
+  virtual void subtract(QcepDataColumnPtr col);
+  virtual void copy(QcepDataColumnPtr col);
+  virtual void multiply(QcepDataColumnPtr col);
+  virtual void divide(QcepDataColumnPtr col);
+
+  virtual void add(double val);
+  virtual void subtract(double val);
+  virtual void copy(double val);
+  virtual void multiply(double val);
+  virtual void divide(double val);
+
 public:
   static QcepDataColumnPtr newDataColumn(QcepSettingsSaverWPtr saver,
                                          QString name,
                                          int npts,
-                                         QcepObject *parent);
+                                         QcepObject *parent,
+                                         ColumnType colType = NormalColumn,
+                                         int col1 = -1,
+                                         int col2 = -1);
 
   static QScriptValue toColumnScriptValue(QScriptEngine *engine, const QcepDataColumnPtr &data);
   static void fromColumnScriptValue(const QScriptValue &obj, QcepDataColumnPtr &data);

@@ -72,11 +72,13 @@ int QcepDataColumnScan::rowCount() const
   return get_NumPoints();
 }
 
-void QcepDataColumnScan::appendColumn(QString title)
+QcepDataColumnPtr QcepDataColumnScan::appendColumn(QString title)
 {
   QcepDataColumnPtr col = QcepDataColumn::newDataColumn(saver(), title, 0, this);
 
   append(col);
+
+  return col;
 }
 
 void QcepDataColumnScan::resizeRows(int nRows)
@@ -111,5 +113,136 @@ double QcepDataColumnScan::value(int col, int row)
     return c->value(row);
   } else {
     return qQNaN();
+  }
+}
+
+bool QcepDataColumnScan::checkCompatibility(QcepDataColumnScanPtr scan)
+{
+  if (scan == NULL) return false;
+
+  int nCols = columnCount();
+  int nRows = rowCount();
+  int snCols = scan->columnCount();
+  int snRows = scan->rowCount();
+
+  if (nCols == 0) { // If 'this' is empty, copy columns from 'scan'
+    for (int i=0; i<snCols; i++) {
+      appendColumn(scan->column(i)->get_Name());
+    }
+
+    resizeRows(snRows);
+
+    for (int i=0; i<snCols; i++) {
+      QcepDataColumnPtr c = column(i);
+      QcepDataColumnPtr sc = scan->column(i);
+
+      if (c && sc) {
+        c->set_ColumnType(sc->get_ColumnType());
+        c->set_Column1(sc->get_Column1());
+        c->set_Column2(sc->get_Column2());
+      }
+    }
+  } else if (nCols != snCols || nRows != snRows) { // Size mismatch
+    printMessage("Scan size mismatch - not compatible");
+
+    return false;
+  } else {
+    for (int i=0; i<nCols; i++) {
+      QcepDataColumnPtr c = column(i);
+      QcepDataColumnPtr sc = scan->column(i);
+
+      if (c && sc) {
+        if (c->get_ColumnType() != sc->get_ColumnType()) {
+          printMessage(tr("Column %1 type mismatch, [%2,%3]")
+                       .arg(i).arg(c->get_ColumnType()).arg(sc->get_ColumnType()));
+          return false;
+        }
+
+        if (c->get_Column1() != sc->get_Column1()) {
+          printMessage(tr("Column %1 1st dependent mismatch, [%2,%3]")
+                       .arg(i).arg(c->get_Column1()).arg(sc->get_Column1()));
+          return false;
+        }
+
+        if (c->get_Column2() != sc->get_Column2()) {
+          printMessage(tr("Column %1 2nd dependent mismatch, [%2,%3]")
+                       .arg(i).arg(c->get_Column1()).arg(sc->get_Column1()));
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
+}
+
+void QcepDataColumnScan::add(QcepDataColumnScanPtr scan)
+{
+  if (checkCompatibility(scan)) {
+    int nCols = columnCount();
+
+    for (int i=0; i<nCols; i++) {
+      QcepDataColumnPtr c = column(i);
+      QcepDataColumnPtr sc = scan->column(i);
+
+      if (c && sc) {
+        switch (c->get_ColumnType()) {
+        case QcepDataColumn::NormalColumn:
+        case QcepDataColumn::CountsColumn:
+        case QcepDataColumn::WeightColumn:
+          c->add(sc);
+          break;
+
+        case QcepDataColumn::XValueColumn:
+          c->copy(sc);
+          break;
+
+        case QcepDataColumn::RatioColumn:
+          {
+            QcepDataColumnPtr col1 = scan->column(c->get_Column1());
+            QcepDataColumnPtr col2 = scan->column(c->get_Column2());
+            c->copy(col1);
+            c->divide(col2);
+          }
+          break;
+        }
+      }
+    }
+  }
+}
+
+void QcepDataColumnScan::subtract(QcepDataColumnScanPtr scan)
+{
+  if (checkCompatibility(scan)) {
+    int nCols = columnCount();
+    int nRows = rowCount();
+
+    for (int i=0; i<nCols; i++) {
+      QcepDataColumnPtr c = column(i);
+      QcepDataColumnPtr sc = scan->column(i);
+
+      if (c && sc) {
+        switch (c->get_ColumnType()) {
+        case QcepDataColumn::NormalColumn:
+        case QcepDataColumn::CountsColumn:
+        case QcepDataColumn::WeightColumn:
+          c->subtract(sc);
+          break;
+
+        case QcepDataColumn::XValueColumn:
+          c->copy(sc);
+          break;
+
+        case QcepDataColumn::RatioColumn:
+          {
+            QcepDataColumnPtr col1 = scan->column(c->get_Column1());
+            QcepDataColumnPtr col2 = scan->column(c->get_Column2());
+            c->copy(col1);
+            c->divide(col2);
+          }
+          break;
+        }
+      }
+    }
   }
 }
