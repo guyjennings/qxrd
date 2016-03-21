@@ -68,10 +68,18 @@ void QxrdPolarNormalization::execute()
       dst->resize(nCols, nRows);
 
       cols->clear();
-      cols->appendColumn(img->get_HLabel());
-      cols->appendColumn("avg");
-      cols->appendColumn("amp");
-      cols->appendColumn("amp/avg");
+      QcepDataColumnPtr xc = cols->appendColumn(img->get_HLabel());
+      QcepDataColumnPtr av = cols->appendColumn("avg");
+      QcepDataColumnPtr am = cols->appendColumn("amp");
+      QcepDataColumnPtr rt = cols->appendColumn("amp/avg");
+
+      xc->set_ColumnType(QcepDataColumn::XValueColumn);
+      av->set_ColumnType(QcepDataColumn::WeightColumn);
+      am->set_ColumnType(QcepDataColumn::CountsColumn);
+      rt->set_ColumnType(QcepDataColumn::RatioColumn);
+      rt->set_Column1(2);
+      rt->set_Column2(1);
+
       cols->resizeRows(nCols);
 
       integ->resize(nCols);
