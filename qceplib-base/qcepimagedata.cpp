@@ -638,6 +638,7 @@ bool QcepImageData<T>::readImage(QString path)
     if (res) {
       QString fileBase = QFileInfo(path).fileName();
 
+      set_Name(fileBase);
       set_FileBase(fileBase);
       set_Title(fileBase);
       set_FileName(path);
