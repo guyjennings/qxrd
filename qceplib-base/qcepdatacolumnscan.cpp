@@ -152,6 +152,12 @@ bool QcepDataColumnScan::checkCompatibility(QcepDataColumnScanPtr scan)
       QcepDataColumnPtr sc = scan->column(i);
 
       if (c && sc) {
+        if (c->get_Name() != sc->get_Name()) {
+          printMessage(tr("Column %1 name mismatch, [%2,%3]")
+                       .arg(i).arg(c->get_Name()).arg(sc->get_Name()));
+          return false;
+        }
+
         if (c->get_ColumnType() != sc->get_ColumnType()) {
           printMessage(tr("Column %1 type mismatch, [%2,%3]")
                        .arg(i).arg(c->get_ColumnType()).arg(sc->get_ColumnType()));
@@ -169,6 +175,9 @@ bool QcepDataColumnScan::checkCompatibility(QcepDataColumnScanPtr scan)
                        .arg(i).arg(c->get_Column1()).arg(sc->get_Column1()));
           return false;
         }
+      } else {
+        printMessage("Null column(s) present");
+        return false;
       }
     }
   }
@@ -241,6 +250,80 @@ void QcepDataColumnScan::subtract(QcepDataColumnScanPtr scan)
             c->divide(col2);
           }
           break;
+        }
+      }
+    }
+  }
+}
+
+void QcepDataColumnScan::concat(QcepDataColumnScanPtr scan)
+{
+  if (scan) {
+    int nCols = columnCount();
+    int snCols = scan->columnCount();
+    int snRows = scan->rowCount();
+
+    if (nCols == 0) {
+      for (int i=0; i<snCols; i++) {
+        appendColumn(scan->column(i)->get_Name());
+      }
+
+      resizeRows(snRows);
+
+      for (int i=0; i<snCols; i++) {
+        QcepDataColumnPtr c = column(i);
+        QcepDataColumnPtr sc = scan->column(i);
+
+        if (c && sc) {
+          c->set_ColumnType(sc->get_ColumnType());
+          c->set_Column1(sc->get_Column1());
+          c->set_Column2(sc->get_Column2());
+          c->copy(sc);
+        }
+      }
+    } else if (nCols != snCols) {
+      printMessage("Appended scan has different # columns");
+    } else {
+      for (int i=0; i<nCols; i++) {
+        QcepDataColumnPtr c = column(i);
+        QcepDataColumnPtr sc = scan->column(i);
+
+        if (c && sc) {
+          if (c->get_Name() != sc->get_Name()) {
+            printMessage(tr("Column %1 name mismatch, [%2,%3]")
+                         .arg(i).arg(c->get_Name()).arg(sc->get_Name()));
+            return;
+          }
+
+          if (c->get_ColumnType() != sc->get_ColumnType()) {
+            printMessage(tr("Column %1 type mismatch, [%2,%3]")
+                         .arg(i).arg(c->get_ColumnType()).arg(sc->get_ColumnType()));
+            return;
+          }
+
+          if (c->get_Column1() != sc->get_Column1()) {
+            printMessage(tr("Column %1 1st dependent mismatch, [%2,%3]")
+                         .arg(i).arg(c->get_Column1()).arg(sc->get_Column1()));
+            return;
+          }
+
+          if (c->get_Column2() != sc->get_Column2()) {
+            printMessage(tr("Column %1 2nd dependent mismatch, [%2,%3]")
+                         .arg(i).arg(c->get_Column1()).arg(sc->get_Column1()));
+            return;
+          }
+        } else {
+          printMessage("Null column(s) present");
+          return;
+        }
+      }
+
+      for (int i=0; i<nCols; i++) {
+        QcepDataColumnPtr c = column(i);
+        QcepDataColumnPtr sc = scan->column(i);
+
+        if (c && sc) {
+          c->concat(sc);
         }
       }
     }

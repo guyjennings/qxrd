@@ -200,6 +200,25 @@ void QcepDataColumn::divide(QcepDataColumnPtr col)
   }
 }
 
+void QcepDataColumn::concat(QcepDataColumnPtr col)
+{
+  if (col) {
+    int nr1 = rowCount();
+    int nr2 = col->rowCount();
+
+    resize(nr1 + nr2);
+
+    double *dst = data();
+    double *src = col->data();
+
+    for (int i=0; i<nr2; i++) {
+      dst[nr1+i] = src[i];
+    }
+
+    emit dataObjectChanged();
+  }
+}
+
 void QcepDataColumn::add(double val)
 {
   double *dst = data();
@@ -209,6 +228,8 @@ void QcepDataColumn::add(double val)
     for (int i=0; i<nR; i++) {
       dst[i] += val;
     }
+
+    emit dataObjectChanged();
   }
 }
 
@@ -221,6 +242,8 @@ void QcepDataColumn::subtract(double val)
     for (int i=0; i<nR; i++) {
       dst[i] -= val;
     }
+
+    emit dataObjectChanged();
   }
 }
 
@@ -233,6 +256,8 @@ void QcepDataColumn::copy(double val)
     for (int i=0; i<nR; i++) {
       dst[i] = val;
     }
+
+    emit dataObjectChanged();
   }
 }
 
@@ -245,6 +270,8 @@ void QcepDataColumn::multiply(double val)
     for (int i=0; i<nR; i++) {
       dst[i] *= val;
     }
+
+    emit dataObjectChanged();
   }
 }
 
@@ -257,6 +284,22 @@ void QcepDataColumn::divide(double val)
     for (int i=0; i<nR; i++) {
       dst[i] /= val;
     }
+
+    emit dataObjectChanged();
   }
 }
 
+void QcepDataColumn::concat(double val)
+{
+  int nR = rowCount();
+
+  resize(nR+1);
+
+  double *dst = data();
+
+  if (dst) {
+    dst[nR] = val;
+
+    emit dataObjectChanged();
+  }
+}

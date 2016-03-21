@@ -21,6 +21,7 @@ public slots:
 
   void add(QcepDataColumnScanPtr scan);
   void subtract(QcepDataColumnScanPtr scan);
+  void concat(QcepDataColumnScanPtr scan);
 
 public:
   QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QcepObject *parent);
@@ -39,6 +40,7 @@ public:
 
 private:
   bool checkCompatibility(QcepDataColumnScanPtr scan);
+  bool checkAppendability(QcepDataColumnScanPtr scan);
 
 public:
   Q_PROPERTY(int numPoints READ get_NumPoints WRITE set_NumPoints)

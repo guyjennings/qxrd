@@ -68,12 +68,14 @@ public slots:
   virtual void copy(QcepDataColumnPtr col);
   virtual void multiply(QcepDataColumnPtr col);
   virtual void divide(QcepDataColumnPtr col);
+  virtual void concat(QcepDataColumnPtr col);
 
   virtual void add(double val);
   virtual void subtract(double val);
   virtual void copy(double val);
   virtual void multiply(double val);
   virtual void divide(double val);
+  virtual void concat(double val);
 
 public:
   static QcepDataColumnPtr newDataColumn(QcepSettingsSaverWPtr saver,
