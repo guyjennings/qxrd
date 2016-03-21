@@ -17,6 +17,7 @@
 #include "qxrdgeneratetestimage.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
+#include "qcepdatasetmodel.h"
 
 #include <QTime>
 #include <QPainter>
@@ -364,6 +365,16 @@ void QxrdDataProcessorBase::newData(QcepDoubleImageDataPtr image, QcepMaskDataPt
 
   if (m_CenterFinder) {
     m_CenterFinder->setData(m_Data);
+  }
+
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    QcepDatasetModelPtr ds = exp->dataset();
+
+    if (ds) {
+      ds->append(image->get_Title(), image);
+    }
   }
 }
 
