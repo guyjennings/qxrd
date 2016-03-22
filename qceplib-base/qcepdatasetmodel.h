@@ -88,6 +88,28 @@ public slots:
   void                   remove(const QModelIndex &index);
   void                   remove(QString path);
 
+  void                   concatenateData(const QModelIndex &dest, const QModelIndexList &src);
+  void                   concatenateData(const QModelIndex &dest, const QModelIndex &src);
+  void                   concatenateData(const QModelIndex &dest, double val);
+
+  void                   addData(const QModelIndex &dest, const QModelIndexList &src);
+  void                   addData(const QModelIndex &dest, const QModelIndex &src);
+  void                   addData(const QModelIndex &dest, double val);
+
+  void                   subtractData(const QModelIndex &dest, const QModelIndexList &src);
+  void                   subtractData(const QModelIndex &dest, const QModelIndex &src);
+  void                   subtractData(const QModelIndex &dest, double val);
+
+  void                   multiplyData(const QModelIndex &dest, const QModelIndexList &src);
+  void                   multiplyData(const QModelIndex &dest, const QModelIndex &src);
+  void                   multiplyData(const QModelIndex &dest, double val);
+
+  void                   divideData(const QModelIndex &dest, const QModelIndexList &src);
+  void                   divideData(const QModelIndex &dest, const QModelIndex &src);
+  void                   divideData(const QModelIndex &dest, double val);
+
+  void                   integrate(const QModelIndex &src);
+
   void insertGroup(int atRow, QString name);
 
 private slots:

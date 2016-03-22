@@ -797,3 +797,192 @@ void QcepDatasetModel::remove(QString path)
 
   remove(obj);
 }
+
+void QcepDatasetModel::concatenateData(const QModelIndex &dest, const QModelIndexList &src)
+{
+  for (int i=0; i<src.count(); i++) {
+    concatenateData(dest, src.at(i));
+  }
+}
+
+void QcepDatasetModel::concatenateData(const QModelIndex &dest, const QModelIndex &src)
+{
+  QcepDataColumnPtr     col  = column(dest);
+
+  if (col) {
+    col->concat(column(src));
+  } else {
+    QcepDataColumnScanPtr scan = columnScan(dest);
+
+    if (scan) {
+      scan->concat(columnScan(src));
+    }
+  }
+}
+
+void QcepDatasetModel::concatenateData(const QModelIndex &dest, double val)
+{
+  QcepDataColumnPtr     col  = column(dest);
+
+  if (col) {
+    col->concat(val);
+//  } else {
+//    QcepDataColumnScanPtr scan = columnScan(dest);
+
+//    if (scan) {
+//      scan->concat(val);
+//    }
+  }
+}
+
+void QcepDatasetModel::addData(const QModelIndex &dest, const QModelIndexList &src)
+{
+  for (int i=0; i<src.count(); i++) {
+    addData(dest, src.at(i));
+  }
+}
+
+void QcepDatasetModel::addData(const QModelIndex &dest, const QModelIndex &src)
+{
+  QcepDataColumnPtr     col  = column(dest);
+
+  if (col) {
+    col->add(column(src));
+  } else {
+    QcepDoubleImageDataPtr img = image(dest);
+
+    if (img) {
+      img->add(image(src));
+    }
+  }
+}
+
+void QcepDatasetModel::addData(const QModelIndex &dest, double val)
+{
+  QcepDataColumnPtr     col  = column(dest);
+
+  if (col) {
+    col->add(val);
+  } else {
+    QcepDoubleImageDataPtr img = image(dest);
+
+    if (img) {
+      img->add(val);
+    }
+  }
+}
+
+void QcepDatasetModel::subtractData(const QModelIndex &dest, const QModelIndexList &src)
+{
+  for (int i=0; i<src.count(); i++) {
+    subtractData(dest, src.at(i));
+  }
+}
+
+void QcepDatasetModel::subtractData(const QModelIndex &dest, const QModelIndex &src)
+{
+  QcepDataColumnPtr     col  = column(dest);
+
+  if (col) {
+    col->subtract(column(src));
+  } else {
+    QcepDoubleImageDataPtr img = image(dest);
+
+    if (img) {
+      img->subtract(image(src));
+    }
+  }
+}
+
+void QcepDatasetModel::subtractData(const QModelIndex &dest, double val)
+{
+  QcepDataColumnPtr     col  = column(dest);
+
+  if (col) {
+    col->subtract(val);
+  } else {
+    QcepDoubleImageDataPtr img = image(dest);
+
+    if (img) {
+      img->subtract(val);
+    }
+  }
+}
+
+void QcepDatasetModel::multiplyData(const QModelIndex &dest, const QModelIndexList &src)
+{
+  for (int i=0; i<src.count(); i++) {
+    multiplyData(dest, src.at(i));
+  }
+}
+
+void QcepDatasetModel::multiplyData(const QModelIndex &dest, const QModelIndex &src)
+{
+  QcepDataColumnPtr     col  = column(dest);
+
+  if (col) {
+    col->multiply(column(src));
+  } else {
+    QcepDoubleImageDataPtr img = image(dest);
+
+    if (img) {
+      img->multiply(image(src));
+    }
+  }
+}
+
+void QcepDatasetModel::multiplyData(const QModelIndex &dest, double val)
+{
+  QcepDataColumnPtr     col  = column(dest);
+
+  if (col) {
+    col->multiply(val);
+  } else {
+    QcepDoubleImageDataPtr img = image(dest);
+
+    if (img) {
+      img->multiply(val);
+    }
+  }
+}
+
+void QcepDatasetModel::divideData(const QModelIndex &dest, const QModelIndexList &src)
+{
+  for (int i=0; i<src.count(); i++) {
+    divideData(dest, src.at(i));
+  }
+}
+
+void QcepDatasetModel::divideData(const QModelIndex &dest, const QModelIndex &src)
+{
+  QcepDataColumnPtr     col  = column(dest);
+
+  if (col) {
+    col->divide(column(src));
+  } else {
+    QcepDoubleImageDataPtr img = image(dest);
+
+    if (img) {
+      img->divide(image(src));
+    }
+  }
+}
+
+void QcepDatasetModel::divideData(const QModelIndex &dest, double val)
+{
+  QcepDataColumnPtr     col  = column(dest);
+
+  if (col) {
+    col->divide(val);
+  } else {
+    QcepDoubleImageDataPtr img = image(dest);
+
+    if (img) {
+      img->divide(val);
+    }
+  }
+}
+
+void QcepDatasetModel::integrate(const QModelIndex &src)
+{
+}

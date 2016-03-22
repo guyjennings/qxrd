@@ -315,15 +315,19 @@ public:
 
   template <typename T2>
   void add(QSharedPointer< QcepImageData<T2> > image);
+  void add(double val);
 
   template <typename T2>
   void subtract(QSharedPointer< QcepImageData<T2> > image);
+  void subtract(double val);
 
   template <typename T2>
   void multiply(QSharedPointer< QcepImageData<T2> > image);
+  void multiply(double val);
 
   template <typename T2>
   void divide(QSharedPointer< QcepImageData<T2> > image);
+  void divide(double val);
 
   void setMask(QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepMaskDataPtr mask() const;

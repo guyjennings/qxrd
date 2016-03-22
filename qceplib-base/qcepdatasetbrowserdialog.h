@@ -23,12 +23,18 @@ private slots:
   void newColumnScan(const QModelIndex &idx);
   void newImage(const QModelIndex &idx);
   void newArray(const QModelIndex &idx);
+  void concatenateData(const QModelIndex &idx);
+  void addData(const QModelIndex &idx);
+  void subtractData(const QModelIndex &idx);
+  void multiplyData(const QModelIndex &idx);
+  void divideData(const QModelIndex &idx);
+  void integrateData(const QModelIndexList &idx);
   void readData(const QModelIndex &idx);
   void saveData(const QModelIndex &idx);
-  void openGraph(const QModelIndex &idx);
-  void openSpreadsheet(const QModelIndex &idx);
-  void openProperties(const QModelIndex &idx);
-  void deleteData(const QModelIndex &idx);
+  void openGraph(const QModelIndexList &idx);
+  void openSpreadsheet(const QModelIndexList &idx);
+  void openProperties(const QModelIndexList &idx);
+  void deleteData(const QModelIndexList &idx);
 
 private:
   QcepExperimentWPtr  m_Experiment;

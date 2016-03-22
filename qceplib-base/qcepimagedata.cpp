@@ -842,6 +842,20 @@ void QcepImageData<T>::add(QSharedPointer< QcepImageData<T2> > image)
 }
 
 template <typename T>
+void QcepImageData<T>::add(double val)
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int npix = ncols*nrows;
+
+  T *srcp = this -> data();
+
+  for (int i=0; i<npix; i++) {
+    *srcp++ += val;
+  }
+}
+
+template <typename T>
 template <typename T2>
 void QcepImageData<T>::subtract(QSharedPointer< QcepImageData<T2> > image)
 {
@@ -867,6 +881,20 @@ void QcepImageData<T>::subtract(QSharedPointer< QcepImageData<T2> > image)
         }
       }
     }
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::subtract(double val)
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int npix = ncols*nrows;
+
+  T *srcp = this -> data();
+
+  for (int i=0; i<npix; i++) {
+    *srcp++ -= val;
   }
 }
 
@@ -900,6 +928,20 @@ void QcepImageData<T>::multiply(QSharedPointer< QcepImageData<T2> > image)
 }
 
 template <typename T>
+void QcepImageData<T>::multiply(double val)
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int npix = ncols*nrows;
+
+  T *srcp = this -> data();
+
+  for (int i=0; i<npix; i++) {
+    *srcp++ *= val;
+  }
+}
+
+template <typename T>
 template <typename T2>
 void QcepImageData<T>::divide(QSharedPointer< QcepImageData<T2> > image)
 {
@@ -925,6 +967,20 @@ void QcepImageData<T>::divide(QSharedPointer< QcepImageData<T2> > image)
         }
       }
     }
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::divide(double val)
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int npix = ncols*nrows;
+
+  T *srcp = this -> data();
+
+  for (int i=0; i<npix; i++) {
+    *srcp++ /= val;
   }
 }
 
