@@ -11,7 +11,7 @@ class QxrdPolarTransformDialog : public QDialog, public Ui::QxrdPolarTransformDi
   Q_OBJECT
 
 public:
-  explicit QxrdPolarTransformDialog(QxrdDataProcessorWPtr procw, QWidget *parent = 0);
+  explicit QxrdPolarTransformDialog(QxrdDataProcessorWPtr procw);
   ~QxrdPolarTransformDialog();
 
   void accept();

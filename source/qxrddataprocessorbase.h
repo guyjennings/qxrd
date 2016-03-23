@@ -10,6 +10,7 @@
 //#include <QStack>
 
 #include "qcepproperty.h"
+#include "qcepdataprocessorbase.h"
 #include "qcepimagequeue.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
@@ -34,7 +35,7 @@
 #include "qxrddistortioncorrection-ptr.h"
 #include "qxrddistortioncorrection.h"
 
-class QxrdDataProcessorBase : public QcepObject
+class QxrdDataProcessorBase : public QcepDataProcessorBase
 {
   Q_OBJECT
 
@@ -413,6 +414,14 @@ public:
 
 public slots:
   void newData(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
+
+  QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img);
+  QcepDataObjectPtr polarTransform(QcepDoubleImageDataPtr img);
+  QcepDataObjectPtr polarIntegrate(QcepDoubleImageDataPtr img);
+
+  bool integrateParameters();
+  bool polarTransformParameters();
+  bool polarIntegrateParameters();
 
 protected:
   void saveNamedImageData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);

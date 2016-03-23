@@ -11,6 +11,9 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qxrdintegratorcache-ptr.h"
+#include "qcepdataobject-ptr.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
 
 class QxrdPolarTransform : public QcepObject, public QEnableSharedFromThis<QxrdPolarTransform>
 {
@@ -23,14 +26,16 @@ public:
 
   QxrdIntegratorWPtr integrator() const;
 
-  void execute();
+//  void execute();
+
+  QcepDataObjectPtr transform(QcepDoubleImageDataPtr img, QcepMaskDataPtr mask);
 
 public:
-  Q_PROPERTY(QString destination READ get_Destination WRITE set_Destination)
-  QCEP_STRING_PROPERTY(Destination)
+//  Q_PROPERTY(QString destination READ get_Destination WRITE set_Destination)
+//  QCEP_STRING_PROPERTY(Destination)
 
-  Q_PROPERTY(int outputType READ get_OutputType WRITE set_OutputType)
-  QCEP_INTEGER_PROPERTY(OutputType)
+//  Q_PROPERTY(int outputType READ get_OutputType WRITE set_OutputType)
+//  QCEP_INTEGER_PROPERTY(OutputType)
 
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
   QCEP_INTEGER_PROPERTY(Oversample)

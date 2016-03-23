@@ -3,8 +3,8 @@
 #include "qxrddataprocessor.h"
 #include "qxrdpolartransform.h"
 
-QxrdPolarTransformDialog::QxrdPolarTransformDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
-  QDialog(parent),
+QxrdPolarTransformDialog::QxrdPolarTransformDialog(QxrdDataProcessorWPtr procw) :
+  QDialog(NULL),
   m_Processor(procw)
 {
   setupUi(this);
@@ -13,8 +13,8 @@ QxrdPolarTransformDialog::QxrdPolarTransformDialog(QxrdDataProcessorWPtr procw, 
     QxrdPolarTransformPtr transform = m_Processor->polarTransform();
 
     if (transform) {
-      m_OutputType->setCurrentIndex(transform->get_OutputType());
-      m_Destination->setText(transform->get_Destination());
+//      m_OutputType->setCurrentIndex(transform->get_OutputType());
+//      m_Destination->setText(transform->get_Destination());
 
       m_PolarType->setCurrentIndex(transform->get_PolarUnits());
       m_PolarStep->setValue(transform->get_PolarStep());
@@ -47,8 +47,8 @@ void QxrdPolarTransformDialog::accept()
     QxrdPolarTransformPtr transform = m_Processor->polarTransform();
 
     if (transform) {
-      transform->set_OutputType(m_OutputType->currentIndex());
-      transform->set_Destination(m_Destination->text());
+//      transform->set_OutputType(m_OutputType->currentIndex());
+//      transform->set_Destination(m_Destination->text());
 
       transform->set_PolarUnits(m_PolarType->currentIndex());
       transform->set_PolarStep(m_PolarStep->value());
@@ -68,7 +68,7 @@ void QxrdPolarTransformDialog::accept()
       transform->set_EnablePolarizationCorrections(m_EnablePolarization->isChecked());
       transform->set_Polarization(m_Polarization->value());
 
-      transform->execute();
+//      transform->execute();
     }
   }
 

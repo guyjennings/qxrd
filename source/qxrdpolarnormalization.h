@@ -9,6 +9,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepdatacolumnscan-ptr.h"
+#include "qcepdataobject-ptr.h"
 
 class QxrdPolarNormalization : public QcepObject
 {
@@ -18,23 +19,20 @@ public:
   QxrdPolarNormalization(QcepSettingsSaverWPtr saver,
                          QxrdExperimentWPtr    exp);
 
-  void execute();
+  QcepDataObjectPtr transform(QcepDoubleImageDataPtr img);
+
+  enum {
+    IntegratedOutput,
+    FittedData,
+    FittedDeltas
+  };
 
 private:
   void executeCol(QcepDataColumnScanPtr integ, QcepDoubleImageDataPtr dst, QcepDoubleImageDataPtr img, int col);
 
 public:
-  Q_PROPERTY(QString source READ get_Source WRITE set_Source)
-  QCEP_STRING_PROPERTY(Source)
-
-  Q_PROPERTY(QString destination READ get_Destination WRITE set_Destination)
-  QCEP_STRING_PROPERTY(Destination)
-
-  Q_PROPERTY(QString integrated READ get_Integrated WRITE set_Integrated)
-  QCEP_STRING_PROPERTY(Integrated)
-
-  Q_PROPERTY(QString columnScan READ get_ColumnScan WRITE set_ColumnScan)
-  QCEP_STRING_PROPERTY(ColumnScan)
+  Q_PROPERTY(int outputType READ get_OutputType WRITE set_OutputType)
+  QCEP_INTEGER_PROPERTY(OutputType)
 
   Q_PROPERTY(bool selfNormalize READ get_SelfNormalize WRITE set_SelfNormalize)
   QCEP_BOOLEAN_PROPERTY(SelfNormalize)

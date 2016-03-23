@@ -5,11 +5,12 @@
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepdatasetmodel.h"
 #include "qcepimagedata.h"
+#include "qcepallocator.h"
 
 QxrdPolarTransform::QxrdPolarTransform(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp) :
   QcepObject("polarTransform", NULL),
-  m_Destination(saver, this, "destination", "Polar/image", "Destination for polar transform"),
-  m_OutputType(saver, this, "outputType", 3, "Output type 0=none, 1=data, 2=radial plot, 3=polar plot"),
+//  m_Destination(saver, this, "destination", "Polar/image", "Destination for polar transform"),
+//  m_OutputType(saver, this, "outputType", 3, "Output type 0=none, 1=data, 2=radial plot, 3=polar plot"),
   m_Oversample(saver, this, "oversample", 1, "Oversample factor"),
   m_EnableGeometricCorrections(saver, this, "enableGeometricCorrections", false, "Enable Geometric Corrections (tilt and distance) in Integration"),
   m_EnablePolarizationCorrections(saver, this, "enablePolarizationCorrections", false, "Enable Polarization Corrections in Integration"),
@@ -46,32 +47,60 @@ QxrdIntegratorWPtr QxrdPolarTransform::integrator() const
   return res;
 }
 
-void QxrdPolarTransform::execute()
+//void QxrdPolarTransform::execute()
+//{
+//  QxrdExperimentPtr expt(m_Experiment);
+
+//  if (expt) {
+//    QxrdDataProcessorPtr proc(expt->dataProcessor());
+//    QxrdCenterFinderPtr  cf(expt->centerFinder());
+//    QxrdIntegratorPtr    integ(expt->integrator());
+
+//    if (proc && cf) {
+//      QcepDoubleImageDataPtr img  = proc->data();
+//      QcepMaskDataPtr        mask = proc->mask();
+
+//      m_IntegratorCache =
+//          QxrdIntegratorCachePtr(new QxrdIntegratorCache(
+//                                   expt, integ, sharedFromThis(), cf));
+
+//      QcepDatasetModelPtr    ds  = expt->dataset();
+
+//      QcepDoubleImageDataPtr res = ds->image(get_Destination());
+
+//      if (res == NULL) {
+//        res = ds->newImage(get_Destination());
+//      }
+
+//      m_IntegratorCache->performIntegration(res, img, mask, 0);
+//    }
+//  }
+//}
+
+QcepDataObjectPtr QxrdPolarTransform::transform(QcepDoubleImageDataPtr img, QcepMaskDataPtr mask)
 {
+  QcepDataObjectPtr res;
+
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdDataProcessorPtr proc(expt->dataProcessor());
-    QxrdCenterFinderPtr  cf(expt->centerFinder());
+    QxrdDataProcessorPtr proc (expt->dataProcessor());
+    QxrdCenterFinderPtr  cf   (expt->centerFinder());
     QxrdIntegratorPtr    integ(expt->integrator());
 
     if (proc && cf) {
-      QcepDoubleImageDataPtr img  = proc->data();
-      QcepMaskDataPtr        mask = proc->mask();
-
-      m_IntegratorCache =
+      QxrdIntegratorCachePtr integCache =
           QxrdIntegratorCachePtr(new QxrdIntegratorCache(
                                    expt, integ, sharedFromThis(), cf));
 
-      QcepDatasetModelPtr    ds  = expt->dataset();
+      QcepDoubleImageDataPtr resimg = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, 0, 0, NULL);
 
-      QcepDoubleImageDataPtr res = ds->image(get_Destination());
-
-      if (res == NULL) {
-        res = ds->newImage(get_Destination());
+      if (integ && img && resimg) {
+        integCache->performIntegration(resimg, img, mask, 0);
+        res = resimg;
       }
-
-      m_IntegratorCache->performIntegration(res, img, mask, 0);
     }
   }
+
+  return res;
 }

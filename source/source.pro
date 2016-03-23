@@ -346,7 +346,8 @@ HEADERS += TODO.h \
     qxrdcalibrantdspacings.h \
     qxrdcalibrantdspacing.h \
     qxrdcalibrantdspacing-ptr.h \
-    qxrdcalibrantdspacings-ptr.h
+    qxrdcalibrantdspacings-ptr.h \
+    qxrdintegratorparmsdialog.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -517,7 +518,8 @@ SOURCES += qxrd.cpp \
     qxrdpolarnormalizationdialog.cpp \
     qxrdcalibrantpropertiesdialog.cpp \
     qxrdcalibrantdspacings.cpp \
-    qxrdcalibrantdspacing.cpp
+    qxrdcalibrantdspacing.cpp \
+    qxrdintegratorparmsdialog.cpp
 
 OTHER_FILES += testImage.js
 
@@ -550,7 +552,8 @@ FORMS += qxrdwindow.ui \
     qxrdzingerdialog.ui \
     qxrdpolartransformdialog.ui \
     qxrdpolarnormalizationdialog.ui \
-    qxrdcalibrantpropertiesdialog.ui
+    qxrdcalibrantpropertiesdialog.ui \
+    qxrdintegratorparmsdialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

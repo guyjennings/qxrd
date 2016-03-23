@@ -475,8 +475,8 @@ void QxrdWindow::initialize()
   connect(m_ActionIntegrateInputImages, &QAction::triggered,
           m_InputFileBrowser, &QxrdFileBrowser::doIntegrate);
 
-  connect(m_ActionPolarTransform, &QAction::triggered, this, &QxrdWindow::doPolarTransform);
-  connect(m_ActionPolarNormalization, &QAction::triggered, this, &QxrdWindow::doPolarNormalization);
+//  connect(m_ActionPolarTransform, &QAction::triggered, this, &QxrdWindow::doPolarTransform);
+//  connect(m_ActionPolarNormalization, &QAction::triggered, this, &QxrdWindow::doPolarNormalization);
 
   connect(m_IntegratorDialog -> m_ClearGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
   connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
@@ -2035,38 +2035,36 @@ void QxrdWindow::plotPowderRingCenters()
 //  }
 //}
 
-void QxrdWindow::doPolarTransform()
-{
-  GUI_THREAD_CHECK;
+//void QxrdWindow::doPolarTransform()
+//{
+//  GUI_THREAD_CHECK;
 
+//  QxrdExperimentPtr expt(m_Experiment);
 
-  QxrdExperimentPtr expt(m_Experiment);
+//  if (expt) {
+//    QxrdDataProcessorPtr proc(expt->dataProcessor());
 
-  if (expt) {
-    QxrdDataProcessorPtr proc(expt->dataProcessor());
+//    if (proc) {
+//      QxrdPolarTransformDialog transform(proc);
 
-    if (proc) {
-      QxrdPolarTransformDialog transform(proc, this);
+//      transform.exec();
+//    }
+//  }
+//}
 
-      transform.exec();
-    }
-  }
-}
+//void QxrdWindow::doPolarNormalization()
+//{
+//  GUI_THREAD_CHECK;
 
-void QxrdWindow::doPolarNormalization()
-{
-  GUI_THREAD_CHECK;
+//  QxrdExperimentPtr expt(m_Experiment);
 
+//  if (expt) {
+//    QxrdDataProcessorPtr proc(expt->dataProcessor());
 
-  QxrdExperimentPtr expt(m_Experiment);
+//    if (proc) {
+//      QxrdPolarNormalizationDialog norm(proc);
 
-  if (expt) {
-    QxrdDataProcessorPtr proc(expt->dataProcessor());
-
-    if (proc) {
-      QxrdPolarNormalizationDialog norm(proc, this);
-
-      norm.exec();
-    }
-  }
-}
+//      norm.exec();
+//    }
+//  }
+//}

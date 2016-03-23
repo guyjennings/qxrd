@@ -11,7 +11,7 @@ class QxrdPolarNormalizationDialog : public QDialog, public Ui::QxrdPolarNormali
   Q_OBJECT
 
 public:
-  explicit QxrdPolarNormalizationDialog(QxrdDataProcessorWPtr procw, QWidget *parent = 0);
+  explicit QxrdPolarNormalizationDialog(QxrdDataProcessorWPtr procw);
   ~QxrdPolarNormalizationDialog();
 
   void accept();

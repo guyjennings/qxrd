@@ -91,8 +91,8 @@ public slots:
   void doReflectHorizontally();
 //  void doOpenAcquisitionWindow();
 
-  void doPolarTransform();
-  void doPolarNormalization();
+//  void doPolarTransform();
+//  void doPolarNormalization();
 
   void updateTitle();
   void acquireStarted();

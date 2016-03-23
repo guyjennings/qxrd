@@ -7,14 +7,38 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>458</height>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Polar Transform Current Image...</string>
+   <string>Polar Transform Parameters...</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="6" column="2">
+   <item row="6" column="0" colspan="3">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
+      <string>Polarization Factor</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="label_10">
+     <property name="text">
+      <string>Oversample Factor</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
     <widget class="QSpinBox" name="m_Oversample">
      <property name="minimum">
       <number>1</number>
@@ -25,6 +49,29 @@
     </widget>
    </item>
    <item row="2" column="0" colspan="3">
+    <widget class="QCheckBox" name="m_EnablePolarization">
+     <property name="toolTip">
+      <string>Enable polarization correction during integration:
+intensity *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth),2)) +
+                   (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth),2)));</string>
+     </property>
+     <property name="text">
+      <string>Enable Polarization Corrections </string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="QCheckBox" name="m_EnableGeometry">
+     <property name="toolTip">
+      <string>Enable geometry corrections during integration
+intensity *= pow(distance/m_DetectorDistance, 2)/cos(tth);</string>
+     </property>
+     <property name="text">
+      <string>Enable Geometry Corrections </string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="3">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="1">
       <widget class="QLabel" name="label">
@@ -202,101 +249,7 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_9">
-     <property name="text">
-      <string>Output Type:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="3">
-    <widget class="QCheckBox" name="m_EnableGeometry">
-     <property name="toolTip">
-      <string>Enable geometry corrections during integration
-intensity *= pow(distance/m_DetectorDistance, 2)/cos(tth);</string>
-     </property>
-     <property name="text">
-      <string>Enable Geometry Corrections </string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QLabel" name="label_10">
-     <property name="text">
-      <string>Oversample Factor</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QComboBox" name="m_OutputType">
-     <item>
-      <property name="text">
-       <string>No Output</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Data in 'Destination'</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Radial Plot</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Polar Plot</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="8" column="0" colspan="3">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0" colspan="3">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>268</width>
-       <height>119</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="2">
-    <widget class="QLineEdit" name="m_Destination"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Destination:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="3">
-    <widget class="QCheckBox" name="m_EnablePolarization">
-     <property name="toolTip">
-      <string>Enable polarization correction during integration:
-intensity *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth),2)) +
-                   (1 - m_Polarization)*(1 - pow(cos(chi)*sin(tth),2)));</string>
-     </property>
-     <property name="text">
-      <string>Enable Polarization Corrections </string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="2">
+   <item row="3" column="2">
     <widget class="QDoubleSpinBox" name="m_Polarization">
      <property name="decimals">
       <number>5</number>
@@ -312,12 +265,18 @@ intensity *= (m_Polarization      *(1 - pow(sin(chi)*sin(tth),2)) +
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_11">
-     <property name="text">
-      <string>Polarization Factor</string>
+   <item row="5" column="0" colspan="3">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>268</width>
+       <height>119</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

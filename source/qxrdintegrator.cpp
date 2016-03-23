@@ -23,10 +23,10 @@
 QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw)
   : QcepObject("integrator", NULL),
     m_Oversample(saver, this, "oversample", 1, "Oversampling for Integration"),
-    m_IntegrationStep(saver, this, "integrationStep", 0.001, "Integration Step Size"),
+    m_IntegrationStep(saver, this, "integrationStep", 0.01, "Integration Step Size"),
     m_IntegrationNSteps(saver, this, "integrationNSteps", 0, "Integration Number of Steps"),
     m_IntegrationMinimum(saver, this, "integrationMinimum", 0, "Integration Minimum"),
-    m_IntegrationMaximum(saver, this, "integrationMaximum", 100000, "Integration Maximum"),
+    m_IntegrationMaximum(saver, this, "integrationMaximum", 100, "Integration Maximum"),
     m_IntegrationXUnits(saver, this, "integrationXUnits", RadialIntegrateTTH, "X Units for Integration (0 = TTH, 1 = Q, 2 = R)"),
     m_EnableGeometricCorrections(saver, this, "enableGeometricCorrections", false, "Enable Geometric Corrections (tilt and distance) in Integration"),
     m_EnablePolarizationCorrections(saver, this, "enablePolarizationCorrections", false, "Enable Polarization Corrections in Integration"),

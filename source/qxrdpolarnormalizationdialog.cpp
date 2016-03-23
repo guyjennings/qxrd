@@ -3,8 +3,8 @@
 #include "qxrddataprocessor.h"
 #include "qxrdpolarnormalization.h"
 
-QxrdPolarNormalizationDialog::QxrdPolarNormalizationDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
-  QDialog(parent),
+QxrdPolarNormalizationDialog::QxrdPolarNormalizationDialog(QxrdDataProcessorWPtr procw) :
+  QDialog(NULL),
   m_Processor(procw)
 {
   setupUi(this);
@@ -13,10 +13,10 @@ QxrdPolarNormalizationDialog::QxrdPolarNormalizationDialog(QxrdDataProcessorWPtr
     QxrdPolarNormalizationPtr norm = m_Processor->polarNormalization();
 
     if (norm) {
-      m_Source     ->setText(norm->get_Source());
-      m_Destination->setText(norm->get_Destination());
-      m_ColumnScan ->setText(norm->get_ColumnScan());
-      m_Integrated ->setText(norm->get_Integrated());
+      m_OutputType -> addItem("Integrated Scan");
+      m_OutputType -> addItem("Fitted Data");
+      m_OutputType -> addItem("Delta Fits");
+      m_OutputType -> setCurrentIndex(norm->get_OutputType());
 
       m_SelfNormalize->setChecked(norm->get_SelfNormalize());
 
@@ -36,16 +36,11 @@ void QxrdPolarNormalizationDialog::accept()
     QxrdPolarNormalizationPtr norm = m_Processor->polarNormalization();
 
     if (norm) {
-      norm -> set_Source(m_Source->text());
-      norm -> set_Destination(m_Destination->text());
-      norm -> set_ColumnScan(m_ColumnScan->text());
-      norm -> set_Integrated(m_Integrated->text());
+      norm -> set_OutputType(m_OutputType->currentIndex());
 
       norm -> set_SelfNormalize(m_SelfNormalize->isChecked());
       norm -> set_SelfNormalizeMin(m_SelfNormalizeMin->value());
       norm -> set_SelfNormalizeMax(m_SelfNormalizeMax->value());
-
-      norm -> execute();
     }
   }
 

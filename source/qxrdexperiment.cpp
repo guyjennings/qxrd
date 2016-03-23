@@ -153,7 +153,7 @@ void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperime
     }
 
     m_Dataset      = QcepDatasetPtr(new QcepDataset(m_SettingsSaver, "", this));
-    m_DatasetModel = QcepDatasetModelPtr(new QcepDatasetModel(m_Dataset));
+    m_DatasetModel = QcepDatasetModelPtr(new QcepDatasetModel(sharedFromThis(), m_DataProcessor, m_Dataset));
 
     m_DatasetModel -> newGroup("group1");
     m_DatasetModel -> newGroup("group2");

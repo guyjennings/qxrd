@@ -18,7 +18,9 @@
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qcepdatasetmodel.h"
-
+#include "qxrdintegratorparmsdialog.h"
+#include "qxrdpolartransformdialog.h"
+#include "qxrdpolarnormalizationdialog.h"
 #include <QTime>
 #include <QPainter>
 #include <qmath.h>
@@ -30,7 +32,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     QxrdAcquisitionWPtr acq,
     QxrdFileSaverWPtr filesaver) :
 
-  QcepObject("processor", NULL),
+  QcepDataProcessorBase("processor", NULL),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),
   m_FileName(QcepSettingsSaverPtr(), this, "fileName","", "Current File Name"),
   m_DataPath(saver, this,"dataPath", "", "Data Path"),
@@ -2416,3 +2418,101 @@ void QxrdDataProcessorBase::findZingers()
   newMask();
 }
 
+
+QcepDataObjectPtr QxrdDataProcessorBase::integrate(QcepDoubleImageDataPtr img)
+{
+  QcepDataObjectPtr res;
+  QxrdIntegratorPtr integ = integrator();
+
+  if (integ) {
+    res = integ->performIntegration(img, mask());
+  }
+
+  return res;
+}
+
+QcepDataObjectPtr QxrdDataProcessorBase::polarTransform(QcepDoubleImageDataPtr img)
+{
+  QcepDataObjectPtr res;
+  QxrdPolarTransformPtr xform = polarTransform();
+
+  if (xform) {
+    res = xform->transform(img, mask());
+  }
+
+  return res;
+}
+
+QcepDataObjectPtr QxrdDataProcessorBase::polarIntegrate(QcepDoubleImageDataPtr img)
+{
+  QcepDataObjectPtr res;
+  QxrdPolarNormalizationPtr norm = polarNormalization();
+
+  if (norm) {
+    res = norm->transform(img);
+  }
+}
+
+bool QxrdDataProcessorBase::integrateParameters()
+{
+  GUI_THREAD_CHECK;
+
+  bool res = false;
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+
+    if (proc) {
+      QxrdIntegratorParmsDialog dlg(proc);
+
+      if (dlg.exec() == QDialog::Accepted) {
+        res = true;
+      }
+    }
+  }
+
+  return res;
+}
+
+bool QxrdDataProcessorBase::polarTransformParameters()
+{
+  GUI_THREAD_CHECK;
+
+  bool res = false;
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+
+    if (proc) {
+      QxrdPolarTransformDialog dlg(proc);
+
+      if (dlg.exec() == QDialog::Accepted) {
+        res = true;
+      }
+    }
+  }
+}
+
+bool QxrdDataProcessorBase::polarIntegrateParameters()
+{
+  GUI_THREAD_CHECK;
+
+  bool res = false;
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdDataProcessorPtr proc(expt->dataProcessor());
+
+    if (proc) {
+      QxrdPolarNormalizationDialog dlg(proc);
+
+      if (dlg.exec() == QDialog::Accepted) {
+        res = true;
+      }
+    }
+  }
+}
