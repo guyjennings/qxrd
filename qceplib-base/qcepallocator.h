@@ -13,6 +13,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qcepintegrateddata-ptr.h"
+#include "qcepdatacolumnscan.h"
 
 class QcepAllocator : public QcepObject, public QEnableSharedFromThis<QcepAllocator>
 {
@@ -39,6 +40,8 @@ public:
   static QcepDoubleImageDataPtr newDoubleImage(AllocationStrategy strat, int width, int height, QcepObject *parent);
   static QcepMaskDataPtr newMask(AllocationStrategy strat, int width, int height, int def, QcepObject *parent);
   static QcepIntegratedDataPtr newIntegratedData(AllocationStrategy strat, QcepDoubleImageDataPtr image, QcepObject *parent);
+
+  static QcepDataColumnScanPtr newColumnScan();
 
   static QcepDoubleImageDataPtr newDoubleImage(QString name, int width, int height, QcepObject *parent);
   static QcepIntegratedDataPtr  newIntegratedData(QString name, int size, QcepObject *parent);

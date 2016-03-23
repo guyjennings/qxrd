@@ -29,6 +29,11 @@ private slots:
   void multiplyData(const QModelIndex &idx);
   void divideData(const QModelIndex &idx);
   void integrateData(const QModelIndexList &idx);
+  void integrateParameters(const QModelIndexList &idx);
+  void polarTransformData(const QModelIndexList &idx);
+  void polarTransformParameters(const QModelIndexList &idx);
+  void polarIntegrateData(const QModelIndexList &idx);
+  void polarIntegrateParameters(const QModelIndexList &idx);
   void readData(const QModelIndex &idx);
   void saveData(const QModelIndex &idx);
   void openGraph(const QModelIndexList &idx);

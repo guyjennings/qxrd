@@ -57,6 +57,8 @@ public:
   static int allocatedObjects();
   static int deletedObjects();
 
+  void setNameAndSuffix(QString oldName, QString newSuffix);
+
   virtual void saveData(QString &name, QString filter, Overwrite canOverwrite=NoOverwrite);
 
 protected:

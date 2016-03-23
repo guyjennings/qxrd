@@ -18,13 +18,14 @@
 #include "qcepimagedata.h"
 #include "qcepintegrateddata-ptr.h"
 #include "qcepintegrateddata.h"
+#include "qcepdataprocessorbase-ptr.h"
 
 class QcepDatasetModel : public QAbstractItemModel
 {
   Q_OBJECT
 
 public:
-  QcepDatasetModel(QcepDatasetWPtr ds);
+  QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBaseWPtr proc, QcepDatasetWPtr ds);
 
 public slots:
   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
@@ -82,7 +83,7 @@ public slots:
   QcepIntegratedDataPtr  integratedData(int n);
   QcepIntegratedDataPtr  newIntegratedData(QString path, int sz);
 
-  void                   append(const QModelIndex &index, QcepDataObjectPtr obj);
+  void                   append(const QModelIndex &idx, QcepDataObjectPtr obj);
   void                   append(QString path, QcepDataObjectPtr obj);
   void                   remove(QcepDataObjectPtr obj);
   void                   remove(const QModelIndex &index);
@@ -109,6 +110,12 @@ public slots:
   void                   divideData(const QModelIndex &dest, double val);
 
   void                   integrate(const QModelIndex &src);
+  void                   polarTransform(const QModelIndex &src);
+  void                   polarIntegrate(const QModelIndex &src);
+
+  bool                   integrateParameters();
+  bool                   polarTransformParameters();
+  bool                   polarIntegrateParameters();
 
   void insertGroup(int atRow, QString name);
 
@@ -121,7 +128,9 @@ private:
   QString objectName(QString path);
 
 private:
-  QcepDatasetWPtr m_Dataset;
+  QcepExperimentWPtr        m_Experiment;
+  QcepDataProcessorBaseWPtr m_Processor;
+  QcepDatasetWPtr           m_Dataset;
 };
 
 #endif // QCEPDATASETMODEL_H

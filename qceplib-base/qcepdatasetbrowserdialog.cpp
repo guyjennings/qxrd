@@ -115,6 +115,11 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   QAction *mul = ops->addAction(tr("Multiply %1 by...").arg(name));
   QAction *div = ops->addAction(tr("Divide %1 by...").arg(name));
   QAction *ntg = ops->addAction(tr("Circular Integrate %1").arg(names));
+  QAction *ntgp = ops->addAction(tr("Circular Integrate %1 Parameters...").arg(names));
+  QAction *pol = ops->addAction(tr("Polar Transform %1").arg(names));
+  QAction *polp = ops->addAction(tr("Polar Transform %1 Parameters...").arg(names));
+  QAction *pli = ops->addAction(tr("Polar Integrate %1").arg(names));
+  QAction *plip = ops->addAction(tr("Polar Integrate %1 Parameters...").arg(names));
 
   QAction *rd = menu.addAction(tr("Read Data into %1 ...").arg(name));
   QAction *sv = menu.addAction(tr("Save %1 as ...").arg(name));
@@ -177,6 +182,16 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
     divideData(indexes.first());
   } else if (action == ntg) {
     integrateData(indexes);
+  } else if (action == ntgp) {
+    integrateParameters(indexes);
+  } else if (action == pol) {
+    polarTransformData(indexes);
+  } else if (action == polp) {
+    polarTransformParameters(indexes);
+  } else if (action == pli) {
+    polarIntegrateData(indexes);
+  } else if (action == plip) {
+    polarIntegrateParameters(indexes);
   } else if (action == rd) {
     readData(indexes.first());
   } else if (action == sv) {
@@ -424,5 +439,46 @@ void QcepDatasetBrowserDialog::integrateData(const QModelIndexList &idx)
 {
   for (int i=0; i<idx.count(); i++) {
     m_DatasetModel->integrate(idx.at(i));
+  }
+}
+
+void QcepDatasetBrowserDialog::polarTransformData(const QModelIndexList &idx)
+{
+  for (int i=0; i<idx.count(); i++) {
+    m_DatasetModel->polarTransform(idx.at(i));
+  }
+}
+
+void QcepDatasetBrowserDialog::polarIntegrateData(const QModelIndexList &idx)
+{
+  for (int i=0; i<idx.count(); i++) {
+    m_DatasetModel->polarIntegrate(idx.at(i));
+  }
+}
+
+void QcepDatasetBrowserDialog::integrateParameters(const QModelIndexList &idx)
+{
+  if (m_DatasetModel->integrateParameters()) {
+    for (int i=0; i<idx.count(); i++) {
+      m_DatasetModel->integrate(idx.at(i));
+    }
+  }
+}
+
+void QcepDatasetBrowserDialog::polarTransformParameters(const QModelIndexList &idx)
+{
+  if (m_DatasetModel->polarTransformParameters()) {
+    for (int i=0; i<idx.count(); i++) {
+      m_DatasetModel->polarTransform(idx.at(i));
+    }
+  }
+}
+
+void QcepDatasetBrowserDialog::polarIntegrateParameters(const QModelIndexList &idx)
+{
+  if (m_DatasetModel->polarIntegrateParameters()) {
+    for (int i=0; i<idx.count(); i++) {
+      m_DatasetModel->polarIntegrate(idx.at(i));
+    }
   }
 }

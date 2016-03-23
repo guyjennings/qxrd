@@ -71,7 +71,8 @@ SOURCES += \
   $${PWD}/qcepdataobjectwindow.cpp \
     $$PWD/qcepmainwindow.cpp \
     $$PWD/qcepscatterplotgraphmodel.cpp \
-    $$PWD/qcepdatasetselectiondialog.cpp
+    $$PWD/qcepdatasetselectiondialog.cpp \
+    $$PWD/qcepdataprocessorbase.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -170,7 +171,9 @@ HEADERS += \
     $$PWD/qcepmainwindow-ptr.h \
     $$PWD/qcepscatterplotgraphmodel.h \
     $$PWD/qcepscatterplotgraphmodel-ptr.h \
-    $$PWD/qcepdatasetselectiondialog.h
+    $$PWD/qcepdatasetselectiondialog.h \
+    $$PWD/qcepdataprocessorbase.h \
+    $$PWD/qcepdataprocessorbase-ptr.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \

@@ -1,14 +1,18 @@
 #include "qcepdatasetmodel.h"
 #include "qcepdataobject.h"
 #include "qcepdataobject-ptr.h"
+#include "qcepexperiment.h"
 #include "qcepdataset.h"
 #include "qcepdebug.h"
+#include "qcepdataprocessorbase.h"
 #include <QMimeData>
 #include <stdio.h>
 #include <QFileInfo>
 #include <QDir>
 
-QcepDatasetModel::QcepDatasetModel(QcepDatasetWPtr ds) :
+QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBaseWPtr proc, QcepDatasetWPtr ds) :
+  m_Experiment(expt),
+  m_Processor(proc),
   m_Dataset(ds)
 {
   connect(ds.data(), SIGNAL(dataObjectChanged()), this, SLOT(onDataObjectChanged()));
@@ -748,8 +752,29 @@ void QcepDatasetModel::insertGroup(int atRow, QString name)
   }
 }
 
-void QcepDatasetModel::append(const QModelIndex &index, QcepDataObjectPtr obj)
+void QcepDatasetModel::append(const QModelIndex &idx, QcepDataObjectPtr obj)
 {
+  QcepDatasetPtr    ds = m_Dataset;
+  QcepDataObjectPtr ob = item(idx);
+  QcepDataGroupPtr  gr = group(idx);
+
+  if (ds) {
+    if (ob==NULL) {
+      QcepDatasetPtr dset(m_Dataset);
+
+      if (dset) {
+        beginInsertRows(idx, rowCount(idx), rowCount(idx)+1);
+        dset->append(obj);
+        endInsertRows();
+      }
+    } else if (gr==NULL) {
+      ds->printMessage("Containing object is not a container");
+    } else {
+      beginInsertRows(index(gr), gr->rowCount(), gr->rowCount()+1);
+      gr->append(obj);
+      endInsertRows();
+    }
+  }
 }
 
 void QcepDatasetModel::append(QString path, QcepDataObjectPtr obj)
@@ -985,4 +1010,84 @@ void QcepDatasetModel::divideData(const QModelIndex &dest, double val)
 
 void QcepDatasetModel::integrate(const QModelIndex &src)
 {
+  QcepDoubleImageDataPtr   img = image(src);
+  QcepDataProcessorBasePtr proc(m_Processor);
+
+  if (img && proc) {
+    QcepDataObjectPtr res = proc->integrate(img);
+
+    if (res) {
+      res->setNameAndSuffix(img->get_Name(), "integ");
+
+      append(parent(src), res);
+    }
+  }
+}
+
+void QcepDatasetModel::polarTransform(const QModelIndex &src)
+{
+  QcepDoubleImageDataPtr   img = image(src);
+  QcepDataProcessorBasePtr proc(m_Processor);
+
+  if (img && proc) {
+    QcepDataObjectPtr res = proc->polarTransform(img);
+
+    if (res) {
+      res->setNameAndSuffix(img->get_Name(), "xform");
+
+      append(parent(src), res);
+    }
+  }
+}
+
+void QcepDatasetModel::polarIntegrate(const QModelIndex &src)
+{
+  QcepDoubleImageDataPtr   img = image(src);
+  QcepDataProcessorBasePtr proc(m_Processor);
+
+  if (img && proc) {
+    QcepDataObjectPtr res = proc->polarIntegrate(img);
+
+    if (res) {
+      res->setNameAndSuffix(img->get_Name(), "pinteg");
+
+      append(parent(src), res);
+    }
+  }
+}
+
+bool QcepDatasetModel::integrateParameters()
+{
+  bool res = false;
+  QcepDataProcessorBasePtr proc(m_Processor);
+
+  if (proc) {
+    res = proc->integrateParameters();
+  }
+
+  return res;
+}
+
+bool QcepDatasetModel::polarTransformParameters()
+{
+  bool res = false;
+  QcepDataProcessorBasePtr proc(m_Processor);
+
+  if (proc) {
+    res = proc->polarTransformParameters();
+  }
+
+  return res;
+}
+
+bool QcepDatasetModel::polarIntegrateParameters()
+{
+  bool res = false;
+  QcepDataProcessorBasePtr proc(m_Processor);
+
+  if (proc) {
+    res = proc->polarIntegrateParameters();
+  }
+
+  return res;
 }

@@ -83,6 +83,13 @@ void QcepDataObject::mkPath(QString filePath)
   }
 }
 
+void QcepDataObject::setNameAndSuffix(QString oldName, QString newSuffix)
+{
+  QFileInfo f(oldName);
+
+  set_Name(f.completeBaseName()+"."+newSuffix);
+}
+
 QString QcepDataObject::uniqueFileName(QString name)
 {
   QFileInfo f(name);

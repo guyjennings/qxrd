@@ -278,6 +278,11 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QString name, int size, Q
   return integ;
 }
 
+QcepDataColumnScanPtr QcepAllocator::newColumnScan()
+{
+  return QcepDataColumnScanPtr(new QcepDataColumnScan(QcepSettingsSaverWPtr(),"",NULL));
+}
+
 void QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AllocationStrategy strat, int width,
                                                     int height, QcepObject *parent,
                                                     QcepDoubleImageDataPtr &img, QcepIntegratedDataPtr &integ)

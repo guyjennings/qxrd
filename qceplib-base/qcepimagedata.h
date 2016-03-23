@@ -346,6 +346,7 @@ public:
   static QScriptValue toScriptValue(QScriptEngine *engine, const QSharedPointer< QcepImageData<T> > &data);
   static void fromScriptValue(const QScriptValue &obj, QSharedPointer< QcepImageData<T> > &data);
 
+
 protected:
   QVector<T> m_Image;
   T m_MinValue;
