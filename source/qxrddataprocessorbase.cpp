@@ -2451,6 +2451,8 @@ QcepDataObjectPtr QxrdDataProcessorBase::polarIntegrate(QcepDoubleImageDataPtr i
   if (norm) {
     res = norm->transform(img);
   }
+
+  return res;
 }
 
 bool QxrdDataProcessorBase::integrateParameters()
@@ -2494,6 +2496,8 @@ bool QxrdDataProcessorBase::polarTransformParameters()
       }
     }
   }
+
+  return res;
 }
 
 bool QxrdDataProcessorBase::polarIntegrateParameters()
@@ -2515,4 +2519,6 @@ bool QxrdDataProcessorBase::polarIntegrateParameters()
       }
     }
   }
+
+  return res;
 }
