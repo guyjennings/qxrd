@@ -96,7 +96,7 @@ int QxrdMaskDialog::maskStackSelectPopup()
         QcepMaskDataPtr p = m->at(i);
         if (p) {
           QString lvl = m->stackLevelName(i);
-          actions.addAction(tr("%1: %2").arg(lvl).arg(p->get_Title()))->setData(i);
+          actions.addAction(tr("%1: %2").arg(lvl).arg(p->get_Name()))->setData(i);
         }
       }
     }

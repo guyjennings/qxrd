@@ -787,7 +787,7 @@ void QxrdAcquisition::processImage(QString filePattern, QString extent, int file
 
     image -> set_FileBase(fileBase);
     image -> set_FileName(fileName);
-    image -> set_Title(finfo.fileName());
+    image -> set_Name(finfo.fileName());
     image -> set_ExposureTime(get_ExposureTime());
     image -> set_DateTime(now);
     image -> set_TimeStamp(msec);

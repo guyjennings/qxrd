@@ -208,7 +208,7 @@ void QxrdDetectorProcessor::setAcquiredImageProperties(QcepImageDataBasePtr imag
       QDateTime now = QDateTime::currentDateTime();
       double msec = QcepImageDataBase::secondsSinceEpoch();
 
-      image -> set_Title            (image -> get_FileBase());
+      image -> set_Name             (image -> get_FileBase());
       image -> set_ExposureTime     (acq   -> get_ExposureTime());
       image -> set_DateTime         (now);
       image -> set_TimeStamp        (msec);

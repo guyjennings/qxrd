@@ -316,7 +316,7 @@ QcepIntegratedDataPtr QxrdIntegrator::slicePolygon(QcepIntegratedDataPtr integ, 
         r  -= len;
       }
       //
-      //    emit newIntegrationAvailable(image->get_Title(),xs,ys);
+      //    emit newIntegrationAvailable(image->get_Name(),xs,ys);
     }
   } else {
     QxrdExperimentPtr expt(m_Experiment);

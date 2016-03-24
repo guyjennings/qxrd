@@ -926,7 +926,7 @@ void QxrdIntegratorCache::performIntegration(
           img->set_VLabel(YLabel());
           img->set_VUnits(YUnits());
 
-          img->set_Title(dimg->get_Title());
+          img->set_Name(dimg->get_Name());
 
           for (int y=0; y<m_NCSteps; y++) {
             for (int x=0; x<m_NRSteps; x++) {
@@ -973,7 +973,7 @@ void QxrdIntegratorCache::performIntegration(
       }
 
       expt->printMessage(tr("Integration of %1 took %2 msec")
-                         .arg(dimg->get_Title())
+                         .arg(dimg->get_Name())
                          .arg(tic.restart()));
     } else {
       expt->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));

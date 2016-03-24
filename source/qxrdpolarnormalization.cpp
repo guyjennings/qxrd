@@ -92,9 +92,9 @@ QxrdPolarNormalization::QxrdPolarNormalization(QcepSettingsSaverWPtr saver, Qxrd
 //      dst->set_VUnits(img->get_VUnits());
 //      dst->set_VLabel(img->get_VLabel());
 
-//      dst->set_Title(img->get_Title());
-//      cols->set_Title(img->get_Title());
-//      integ->set_Title(img->get_Title());
+//      dst->set_Name(img->get_Name());
+//      cols->set_Name(img->get_Name());
+//      integ->set_Name(img->get_Name());
 
 //      QVector< QFuture<void> > res;
 
@@ -180,7 +180,7 @@ QcepDataObjectPtr QxrdPolarNormalization::transform(QcepDoubleImageDataPtr img)
       rt->set_Column2(1);
 
       integ->resizeRows(nCols);
-      integ->set_Title(img->get_Title());
+      integ->set_Name(img->get_Name());
 
       integ->setNameAndSuffix(img->get_Name(), "integ");
 
@@ -198,7 +198,7 @@ QcepDataObjectPtr QxrdPolarNormalization::transform(QcepDoubleImageDataPtr img)
       fit->set_VUnits(img->get_VUnits());
       fit->set_VLabel(img->get_VLabel());
 
-      fit->set_Title(img->get_Title());
+      fit->set_Name(img->get_Name());
 
       res = fit;
     }

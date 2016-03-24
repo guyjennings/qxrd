@@ -30,7 +30,7 @@ void QxrdInfoDialog::onProcessedImageAvailable(QcepDoubleImageDataPtr image, Qce
   if (image) {
     image->calculateRange();
 
-    m_InfoText->append(tr("Information about %1").arg(image->get_Title()));
+    m_InfoText->append(tr("Information about %1").arg(image->get_Name()));
     m_InfoText->append(tr("Saved in %1").arg(image->get_FileName()));
     m_InfoText->append(tr("User Comment 1 %1").arg(image->get_UserComment1()));
     m_InfoText->append(tr("User Comment 2 %1").arg(image->get_UserComment2()));

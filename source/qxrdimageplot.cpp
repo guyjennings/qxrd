@@ -711,7 +711,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QcepImageDataBasePtr image, QcepMa
     }
 
     if (image) {
-      setTitle(image -> get_Title());
+      setTitle(image -> get_Name());
     } else {
       setTitle("");
     }
@@ -745,7 +745,7 @@ void QxrdImagePlot::onMaskedImageAvailable(QcepImageDataBasePtr image, QcepMaskD
     setMask(msk);
 
     if (image) {
-      setTitle(image -> get_Title());
+      setTitle(image -> get_Name());
     } else {
       setTitle("");
     }

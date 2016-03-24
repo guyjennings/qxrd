@@ -56,7 +56,7 @@ void QxrdSliceDialog::reslice()
 
   if (set && m_Image) {
     QVector<double> xp,yp;
-    QString title = m_Image->get_Title();
+    QString title = m_Image->get_Name();
 
     double length = 0;
 

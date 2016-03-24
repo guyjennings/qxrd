@@ -375,7 +375,7 @@ void QxrdDataProcessorBase::newData(QcepDoubleImageDataPtr image, QcepMaskDataPt
     QcepDatasetModelPtr ds = exp->dataset();
 
     if (ds) {
-      ds->append(image->get_Title(), image);
+      ds->append(image->get_Name(), image);
     }
   }
 }
@@ -2235,7 +2235,7 @@ void QxrdDataProcessorBase::newOutputScan(QString title)
 {
   m_OutputScan = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, data(), this);
 
-  m_OutputScan -> set_Title(title);
+  m_OutputScan -> set_Name(title);
 }
 
 void QxrdDataProcessorBase::appendToOutputScan(double x, double y)

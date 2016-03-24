@@ -239,7 +239,7 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
           pc->attach(this);
         }
 
-        QString title = QString("Center:%1:").arg(img->get_Title());
+        QString title = QString("Center:%1:").arg(img->get_Name());
         title += QString("(%1,%2):").arg(cx).arg(cy);
 
         setTitle(title);

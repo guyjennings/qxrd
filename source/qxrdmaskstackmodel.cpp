@@ -44,8 +44,8 @@ QVariant QxrdMaskStackModel::data (const QModelIndex & index, int role) const
         } else if (role == Qt::CheckStateRole) {
           return (p->get_Used()?Qt::Checked:Qt::Unchecked);
         } else if (role == Qt::DisplayRole || role == Qt::EditRole) {
-          //        return tr("%1 : %2").arg(m_MaskStack->stackLevelName(index.row())).arg(p->get_Title());
-          return p->get_Title();
+          //        return tr("%1 : %2").arg(m_MaskStack->stackLevelName(index.row())).arg(p->get_Name());
+          return p->get_Name();
         }
       }
     } else {
@@ -63,7 +63,7 @@ QVariant QxrdMaskStackModel::data (const QModelIndex & index, int role) const
         }
       } else if (col == TitleColumn) {
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
-          return p->get_Title();
+          return p->get_Name();
         } else if (role==Qt::SizeHintRole) {
           return 120;
         }
@@ -130,7 +130,7 @@ bool QxrdMaskStackModel::setData ( const QModelIndex & index, const QVariant & v
 
         if ((role == Qt::EditRole || role == Qt::DisplayRole)) {
           if (p) {
-            p->set_Title(value.toString());
+            p->set_Name(value.toString());
           }
 
           emit dataChanged(index, index);
@@ -155,7 +155,7 @@ bool QxrdMaskStackModel::setData ( const QModelIndex & index, const QVariant & v
 
       if (index.column() == TitleColumn && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         if (p) {
-          p->set_Title(value.toString());
+          p->set_Name(value.toString());
         }
 
         emit dataChanged(index, index);

@@ -237,7 +237,7 @@ void QxrdFileSaver::saveDoubleDataPrivate(QString name, QcepDoubleImageDataPtr i
 
       image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);
-      image -> set_Title(name);
+      image -> set_Name(name);
 
       image -> set_ObjectSaved(true);
 
@@ -350,7 +350,7 @@ void QxrdFileSaver::saveMaskDataPrivate(QString name, QcepMaskDataPtr image, int
 
       image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);
-      image -> set_Title(name);
+      image -> set_Name(name);
 
       image -> set_ObjectSaved(true);
 
@@ -466,7 +466,7 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepInt32ImageDataPtr ima
 
       image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);
-      image -> set_Title(name);
+      image -> set_Name(name);
 
       image -> set_ObjectSaved(true);
 
@@ -562,7 +562,7 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString name, QcepInt16ImageDataPtr ima
 
       image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);
-      image -> set_Title(name);
+      image -> set_Name(name);
 
       image -> set_ObjectSaved(true);
 
@@ -668,7 +668,7 @@ void QxrdFileSaver::saveTextDataPrivate(QString name, QcepDoubleImageDataPtr ima
 
     image -> set_FileBase(QFileInfo(name).fileName());
     image -> set_FileName(name);
-    image -> set_Title(name);
+    image -> set_Name(name);
 
     image -> set_ObjectSaved(true);
 
