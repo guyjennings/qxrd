@@ -676,4 +676,7 @@ DONE("2016-03-11", "2016-03-15",
 TODO("2016-03-15", "",
      "Check integration paramaters for excessive memory use before execution");
 
+TODO("2016-03-24", "",
+     "Consider removing the separate Title property of images and scans - use Name instead");
+
 #endif // TODO_H
