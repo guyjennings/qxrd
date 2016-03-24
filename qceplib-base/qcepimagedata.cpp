@@ -34,7 +34,7 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int
     m_VUnits(saver, this, "vUnits", "pix", "V Units"),
     m_DataType(saver, this, "dataType", UndefinedData, "Data Type of Image"),
     m_FileBase(saver, this, "fileBase", "", "File Base of Image"),
-    m_Title(saver, this, "title", "", "Title of Image"),
+//    m_Title(saver, this, "title", "", "Title of Image"),
     m_ReadoutMode(saver, this, "readoutMode", 0, "Image Readout Mode"),
     m_ExposureTime(saver, this, "exposureTime", 0, "Image Exposure Time"),
     m_SummedExposures(saver, this, "summedExposures", 0, "Summed Exposures in Image"),
@@ -126,7 +126,7 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
   dest -> set_DataType(get_DataType());
   dest -> set_FileBase(get_FileBase());
   dest -> set_FileName(get_FileName());
-  dest -> set_Title(get_Title());
+  dest -> set_Name(get_Name()+" copy");
   dest -> set_ReadoutMode(get_ReadoutMode());
   dest -> set_ExposureTime(get_ExposureTime());
   dest -> set_SummedExposures(get_SummedExposures());
@@ -164,7 +164,7 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   set_DataType(src -> get_DataType());
   set_FileBase(src -> get_FileBase());
   set_FileName(src -> get_FileName());
-  set_Title(src -> get_Title());
+  set_Name(src -> get_Name()+" copy");
   set_ReadoutMode(src -> get_ReadoutMode());
   set_ExposureTime(src -> get_ExposureTime());
   set_SummedExposures(src -> get_SummedExposures());
@@ -257,7 +257,7 @@ void QcepImageDataBase::saveMetaData(QString name)
 void QcepImageDataBase::setDefaultFileName(QString path)
 {
   set_FileName(path);
-  set_Title(QFileInfo(path).fileName());
+  set_Name(QFileInfo(path).fileName());
 }
 
 QString QcepImageDataBase::get_DataTypeName() const
@@ -640,7 +640,6 @@ bool QcepImageData<T>::readImage(QString path)
 
       set_Name(fileBase);
       set_FileBase(fileBase);
-      set_Title(fileBase);
       set_FileName(path);
       set_ObjectSaved(true);
     }

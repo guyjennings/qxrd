@@ -66,8 +66,8 @@ public:
   Q_PROPERTY(QString fileBase READ get_FileBase WRITE set_FileBase)
   QCEP_STRING_PROPERTY(FileBase)
 
-  Q_PROPERTY(QString title READ get_Title WRITE set_Title)
-  QCEP_STRING_PROPERTY(Title)
+//  Q_PROPERTY(QString title READ get_Title WRITE set_Title)
+//  QCEP_STRING_PROPERTY(Title)
 
   Q_PROPERTY(int readoutMode READ get_ReadoutMode WRITE set_ReadoutMode)
   QCEP_INTEGER_PROPERTY(ReadoutMode)

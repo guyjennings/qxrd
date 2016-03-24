@@ -7,7 +7,7 @@ QcepIntegratedData::QcepIntegratedData(QcepSettingsSaverWPtr saver,
                                        QString name,
                                        QcepDoubleImageDataPtr image, int maxSize, QcepObject *parent) :
   QcepDataObject(saver, name, 2*maxSize*sizeof(double), parent),
-  m_Title(saver, this, "title", "", "Integrated Data Title"),
+//  m_Title(saver, this, "title", "", "Integrated Data Title"),
   m_Image(image),
   m_MaxSize(maxSize),
   m_Size(0),

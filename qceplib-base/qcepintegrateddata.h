@@ -54,8 +54,8 @@ public:
   static QScriptValue toIntegratedDataScriptValue(QScriptEngine *engine, const QcepIntegratedDataPtr &data);
   static void fromIntegratedDataScriptValue(const QScriptValue &obj, QcepIntegratedDataPtr &data);
 
-  Q_PROPERTY(QString title READ get_Title WRITE set_Title STORED false)
-  QCEP_STRING_PROPERTY(Title)
+//  Q_PROPERTY(QString title READ get_Title WRITE set_Title STORED false)
+//  QCEP_STRING_PROPERTY(Title)
 
 private:
   QcepDoubleImageDataPtr     m_Image;

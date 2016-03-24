@@ -45,9 +45,6 @@ private:
 public:
   Q_PROPERTY(int numPoints READ get_NumPoints WRITE set_NumPoints)
   QCEP_INTEGER_PROPERTY(NumPoints)
-
-  Q_PROPERTY(QString title READ get_Title WRITE set_Title)
-  QCEP_STRING_PROPERTY(Title)
 };
 
 #endif // QCEPDATACOLUMNSCAN_H

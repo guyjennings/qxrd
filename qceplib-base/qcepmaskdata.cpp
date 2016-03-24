@@ -27,7 +27,7 @@ void QcepMaskData::copyMaskTo(QcepMaskDataPtr dest)
     }
   }
 
-  dest -> set_Title(get_Title()+" copy");
+  dest -> set_Name(get_Name()+" copy");
 //
 //  setMask(from -> m_Mask);
 }

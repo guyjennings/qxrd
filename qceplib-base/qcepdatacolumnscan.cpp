@@ -5,8 +5,7 @@
 
 QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QcepObject *parent) :
   QcepDataGroup(sav, name, parent),
-  m_NumPoints(sav, this, "numPoints", 0, "Number of points in scan"),
-  m_Title(sav, this, "title", "", "Scan Title")
+  m_NumPoints(sav, this, "numPoints", 0, "Number of points in scan")
 {
   set_Type("Data Column Scan");
 }
