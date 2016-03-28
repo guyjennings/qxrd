@@ -42,6 +42,7 @@ QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QcepExperimentWPtr expt, Qcep
     m_DatasetBrowserView -> viewport() ->setAcceptDrops(true);
     m_DatasetBrowserView -> setDropIndicatorShown(true);
     m_DatasetBrowserView -> setDragDropMode(QAbstractItemView::InternalMove);
+    m_DatasetBrowserView -> setDragDropOverwriteMode(false);
   }
 }
 

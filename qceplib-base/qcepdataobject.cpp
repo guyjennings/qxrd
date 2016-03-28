@@ -43,6 +43,11 @@ QcepDataObject::~QcepDataObject()
   s_ObjectDeleteCount.fetchAndAddOrdered(1);
 }
 
+QString QcepDataObject::mimeType()
+{
+  return "application/x-qcepdataobject";
+}
+
 int QcepDataObject::allocatedObjects()
 {
   return s_ObjectAllocateCount.load();

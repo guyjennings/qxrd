@@ -24,6 +24,8 @@ public:
   static QcepDataObjectPtr newDataObject(QcepSettingsSaverWPtr saver,
                                          QString name, QcepObject *parent);
 
+  static QString mimeType();
+
 signals:
   void dataObjectChanged();
 

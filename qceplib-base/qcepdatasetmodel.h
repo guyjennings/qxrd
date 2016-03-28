@@ -44,16 +44,17 @@ public slots:
 
   QcepDataObjectPtr indexedObject(const QModelIndex& index) const;
 
-//  QStringList mimeTypes() const;
-//  QMimeData  *mimeData(const QModelIndexList &indexes) const;
+  QStringList mimeTypes() const;
+  QMimeData  *mimeData(const QModelIndexList &indexes) const;
+  bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
   bool insertRows(int row, int count, const QModelIndex &parent);
   bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
   bool removeRows(int row, int count, const QModelIndex &parent);
 
-  bool insertColumns(int col, int count, const QModelIndex &parent);
-  bool moveColumns(const QModelIndex &sourceParent, int sourceCol, int count, const QModelIndex &destinationParent, int destinationChild);
-  bool removeColumns(int col, int count, const QModelIndex &parent);
+//  bool insertColumns(int col, int count, const QModelIndex &parent);
+//  bool moveColumns(const QModelIndex &sourceParent, int sourceCol, int count, const QModelIndex &destinationParent, int destinationChild);
+//  bool removeColumns(int col, int count, const QModelIndex &parent);
 
 public slots:
   QcepDataObjectPtr      item(const QModelIndex &index);
