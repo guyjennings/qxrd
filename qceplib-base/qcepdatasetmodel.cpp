@@ -18,12 +18,21 @@ QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBas
   connect(ds.data(), SIGNAL(dataObjectChanged()), this, SLOT(onDataObjectChanged()));
 }
 
+void QcepDatasetModel::printMessage(QString msg, QDateTime dt) const
+{
+  QcepExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt->printMessage(msg, dt);
+  }
+}
+
 QcepDataObjectPtr QcepDatasetModel::indexedObject(const QModelIndex &index) const
 {
   QcepDataObjectPtr res;
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
-    printf("QcepDatasetModel::indexedObject(%s)\n", qPrintable(indexDescription(index)));
+    printMessage(tr("QcepDatasetModel::indexedObject(%1)").arg(indexDescription(index)));
   }
 
   if (index.isValid()) {
@@ -33,17 +42,19 @@ QcepDataObjectPtr QcepDatasetModel::indexedObject(const QModelIndex &index) cons
       res = obj->sharedFromThis();
 
       if (!res) {
-        printf("QcepDatasetModel::indexedObject returns NULL\n");
+        printMessage("QcepDatasetModel::indexedObject returns NULL\n");
       }
     }
   }
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
-    printf("QcepDatasetModel::indexedObject(%s)", qPrintable(indexDescription(index)));
     if (res) {
-      printf(" = %s\n", qPrintable(res->get_Name()));
+      printMessage(tr("QcepDatasetModel::indexedObject(%1) = %2")
+                   .arg(indexDescription(index))
+                   .arg(res->get_Name()));
     } else {
-      printf(" = null\n");
+      printMessage(tr("QcepDatasetModel::indexedObject(%1) = NULL")
+                   .arg(indexDescription(index)));
     }
   }
 
@@ -226,7 +237,7 @@ QVariant QcepDatasetModel::data(const QModelIndex &index, int role) const
     QcepDataObjectPtr object = indexedObject(index);
 
     if (object) {
-      if (role == Qt::DisplayRole) {
+      if (role == Qt::DisplayRole || role == Qt::EditRole) {
         res = object->columnData(index.column());
       } else if (role == Qt::ToolTipRole) {
         res = object->pathName() + "\n" +
@@ -244,68 +255,96 @@ QVariant QcepDatasetModel::data(const QModelIndex &index, int role) const
   return res;
 }
 
+bool QcepDatasetModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+  printMessage(tr("QcepDatasetModel::setData(%1,%2,%3)")
+         .arg(indexDescription(index)).arg(value.toString()).arg(role));
+
+  if (index.isValid() && role == Qt::EditRole) {
+    QcepDataObjectPtr obj = indexedObject(index);
+
+    if (obj && index.column() == 0) {
+      obj->set_Name(value.toString());
+
+
+      emit dataChanged(index, index);
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
 Qt::ItemFlags QcepDatasetModel::flags(const QModelIndex &index) const
 {
   Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
+  Qt::ItemFlags flags;
 
   if (index.isValid()) {
-    return defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+    flags = defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+
+    if (index.column() == 0) { // Name is editable
+      flags |= Qt::ItemIsEditable;
+    }
   } else {
-    return defaultFlags | Qt::ItemIsDropEnabled;
+    flags = defaultFlags | Qt::ItemIsDropEnabled;
   }
+
+//  printf("QcepDatasetModel::flags(%s) = %d\n", qPrintable(indexDescription(index)), flags);
+
+  return flags;
 }
 
-QStringList QcepDatasetModel::mimeTypes() const
+Qt::DropActions QcepDatasetModel::supportedDropActions() const
 {
-//  if (qcepDebug(DEBUG_DRAGDROP)) {
-    printf("QcepDatasetModel::mimeTypes\n");
+  return /*Qt::CopyAction |*/ Qt::MoveAction;
+}
+
+//QStringList QcepDatasetModel::mimeTypes() const
+//{
+////  if (qcepDebug(DEBUG_DRAGDROP)) {
+//    printf("QcepDatasetModel::mimeTypes\n");
+////  }
+
+//  QStringList types;
+//  types << "application/vnd.text.list";
+////  types << "text/plain";
+//  return types;
+//}
+
+//QMimeData  *QcepDatasetModel::mimeData(const QModelIndexList &indexes) const
+//{
+//  QMimeData *mimeData = new QMimeData();
+//  QString textData;
+
+//  foreach (const QModelIndex &index, indexes) {
+//      if (index.isValid()) {
+//          QString text = data(index, Qt::DisplayRole).toString();
+//          textData += text;
+//      }
 //  }
 
-  QStringList types;
-  types << "application/vnd.text.list";
-//  types << "text/plain";
-  return types;
-}
+//  if (qcepDebug(DEBUG_DRAGDROP)) {
+//    printf("QcepDatasetModel::mimeData = %s\n", qPrintable(textData));
+//  }
 
-QMimeData  *QcepDatasetModel::mimeData(const QModelIndexList &indexes) const
-{
-  QMimeData *mimeData = new QMimeData();
-  QString textData;
-
-  foreach (const QModelIndex &index, indexes) {
-      if (index.isValid()) {
-          QString text = data(index, Qt::DisplayRole).toString();
-          textData += text;
-      }
-  }
-
-  if (qcepDebug(DEBUG_DRAGDROP)) {
-    printf("QcepDatasetModel::mimeData = %s\n", qPrintable(textData));
-  }
-
-  mimeData->setText(textData);
-//  mimeData->setData("text/plain", encodedData);
-  return mimeData;
-}
+//  mimeData->setText(textData);
+////  mimeData->setData("text/plain", encodedData);
+//  return mimeData;
+//}
 
 QString QcepDatasetModel::indexDescription(const QModelIndex &index) const
 {
   if (index.isValid()) {
-    QcepDataObject* obj = static_cast<QcepDataObject*>(index.internalPointer());
+    QcepDataObjectPtr obj = indexedObject(index);
+    QcepDataObjectPtr par = indexedObject(parent(index));
 
     if (obj) {
-      return tr("(%1,%2,\"%3\")")
-          .arg(index.row()).arg(index.column())
-          .arg(obj->get_Name());
-    } else {
-      QcepDatasetPtr ds(m_Dataset);
-
-      if (ds) {
-        return tr("(%1,%2,\"%3\")")
-            .arg(index.row()).arg(index.column())
-            .arg(ds->get_Name());
+      if (par) {
+        return tr("\"%1\" : Row %2, Col %3 of \"%4\"").arg(obj->get_Name()).arg(index.row()).arg(index.column()).arg(par->get_Name());
       } else {
-        return "";
+        return tr("\"%1\" : Row %2, Col %3 of \"/\"").arg(obj->get_Name()).arg(index.row()).arg(index.column());
       }
     }
   }
@@ -315,7 +354,8 @@ QString QcepDatasetModel::indexDescription(const QModelIndex &index) const
 
 bool QcepDatasetModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-  printf("QcepDatasetModel::insertRows(row:%d, count:%d, parent:%s)\n", row, count, qPrintable(indexDescription(parent)));
+  printMessage(tr("QcepDatasetModel::insertRows(row:%1, count:%2, parent:%3)")
+               .arg(row).arg(count).arg(indexDescription(parent)));
 
   return QAbstractItemModel::insertRows(row, count, parent);
 }
@@ -324,10 +364,10 @@ bool QcepDatasetModel::moveRows
   (const QModelIndex &sourceParent, int sourceRow, int count,
    const QModelIndex &destinationParent, int destinationChild)
 {
-  printf("QAbstractItemModel::moveRows(sourceParent:%s, sourceRow:%d, count:%d,\n"
-         "                             destinationParent:%s, destinationChild:%d)\n",
-         qPrintable(indexDescription(sourceParent)), sourceRow, count,
-         qPrintable(indexDescription(destinationParent)), destinationChild);
+  printMessage(tr("QAbstractItemModel::moveRows(sourceParent:%1, sourceRow:%2, count:%3,\n"
+         "                             destinationParent:%4, destinationChild:%5)")
+         .arg(indexDescription(sourceParent)).arg(sourceRow).arg(count)
+         .arg(indexDescription(destinationParent)).arg(destinationChild));
 
   return QAbstractItemModel::moveRows(sourceParent, sourceRow, count,
                                       destinationParent, destinationChild);
@@ -335,9 +375,39 @@ bool QcepDatasetModel::moveRows
 
 bool QcepDatasetModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-  printf("QcepDatasetModel::removeRows(row:%d, count:%d, parent:%s)\n", row, count, qPrintable(indexDescription(parent)));
+  printMessage(tr("QcepDatasetModel::removeRows(row:%1, count:%2, parent:%3)")
+               .arg(row).arg(count).arg(indexDescription(parent)));
 
   return QAbstractItemModel::removeRows(row, count, parent);
+}
+
+bool QcepDatasetModel::insertColumns(int col, int count, const QModelIndex &parent)
+{
+  printMessage(tr("QcepDatasetModel::insertColumns(col:%1, count:%2, parent:%3)")
+               .arg(col).arg(count).arg(indexDescription(parent)));
+
+  return QAbstractItemModel::insertColumns(col, count, parent);
+}
+
+bool QcepDatasetModel::moveColumns
+  (const QModelIndex &sourceParent, int sourceCol, int count,
+   const QModelIndex &destinationParent, int destinationChild)
+{
+  printMessage(tr("QAbstractItemModel::moveColumns(sourceParent:%1, sourceCol:%2, count:%3,\n"
+         "                             destinationParent:%4, destinationChild:%5)")
+         .arg(indexDescription(sourceParent)).arg(sourceCol).arg(count)
+         .arg(indexDescription(destinationParent)).arg(destinationChild));
+
+  return QAbstractItemModel::moveColumns(sourceParent, sourceCol, count,
+                                      destinationParent, destinationChild);
+}
+
+bool QcepDatasetModel::removeColumns(int col, int count, const QModelIndex &parent)
+{
+  printMessage(tr("QcepDatasetModel::removeColumns(col:%1, count:%2, parent:%3)")
+               .arg(col).arg(count).arg(indexDescription(parent)));
+
+  return QAbstractItemModel::removeColumns(col, count, parent);
 }
 
 void QcepDatasetModel::onDataObjectChanged()

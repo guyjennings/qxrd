@@ -28,6 +28,8 @@ public:
   QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBaseWPtr proc, QcepDatasetWPtr ds);
 
 public slots:
+  virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
+
   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   QModelIndex index(const QcepDataObjectPtr &obj) const;
   QModelIndex parent(const QModelIndex &index) const;
@@ -36,16 +38,22 @@ public slots:
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+  bool setData(const QModelIndex &index, const QVariant &value, int role);
+
   Qt::ItemFlags flags(const QModelIndex &index) const;
 
   QcepDataObjectPtr indexedObject(const QModelIndex& index) const;
 
-  QStringList mimeTypes() const;
-  QMimeData  *mimeData(const QModelIndexList &indexes) const;
+//  QStringList mimeTypes() const;
+//  QMimeData  *mimeData(const QModelIndexList &indexes) const;
 
   bool insertRows(int row, int count, const QModelIndex &parent);
   bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
   bool removeRows(int row, int count, const QModelIndex &parent);
+
+  bool insertColumns(int col, int count, const QModelIndex &parent);
+  bool moveColumns(const QModelIndex &sourceParent, int sourceCol, int count, const QModelIndex &destinationParent, int destinationChild);
+  bool removeColumns(int col, int count, const QModelIndex &parent);
 
 public slots:
   QcepDataObjectPtr      item(const QModelIndex &index);
@@ -118,6 +126,9 @@ public slots:
   bool                   polarIntegrateParameters();
 
   void insertGroup(int atRow, QString name);
+
+public:
+  Qt::DropActions       supportedDropActions() const;
 
 private slots:
   void onDataObjectChanged();

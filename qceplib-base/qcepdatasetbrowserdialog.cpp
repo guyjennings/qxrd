@@ -34,6 +34,14 @@ QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QcepExperimentWPtr expt, Qcep
 
     m_DatasetBrowserView -> setContextMenuPolicy(Qt::CustomContextMenu);
     m_DatasetBrowserView -> header() -> setSectionResizeMode(QHeaderView::Stretch);
+
+    m_DatasetBrowserView -> setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_DatasetBrowserView -> setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_DatasetBrowserView -> setDragEnabled(true);
+    m_DatasetBrowserView -> setAcceptDrops(true);
+    m_DatasetBrowserView -> viewport() ->setAcceptDrops(true);
+    m_DatasetBrowserView -> setDropIndicatorShown(true);
+    m_DatasetBrowserView -> setDragDropMode(QAbstractItemView::InternalMove);
   }
 }
 
