@@ -45,6 +45,8 @@ QcepDataObjectPtr QcepDatasetModel::indexedObject(const QModelIndex &index) cons
         printMessage("QcepDatasetModel::indexedObject returns NULL\n");
       }
     }
+  } else {
+    res = m_Dataset;
   }
 
   if (qcepDebug(DEBUG_DATABROWSER)) {
@@ -257,8 +259,10 @@ QVariant QcepDatasetModel::data(const QModelIndex &index, int role) const
 
 bool QcepDatasetModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-  printMessage(tr("QcepDatasetModel::setData(%1,%2,%3)")
-         .arg(indexDescription(index)).arg(value.toString()).arg(role));
+  if (qcepDebug(DEBUG_DATABROWSER)) {
+    printMessage(tr("QcepDatasetModel::setData(%1,%2,%3)")
+                 .arg(indexDescription(index)).arg(value.toString()).arg(role));
+  }
 
   if (index.isValid() && role == Qt::EditRole) {
     QcepDataObjectPtr obj = indexedObject(index);
@@ -278,29 +282,37 @@ bool QcepDatasetModel::setData(const QModelIndex &index, const QVariant &value, 
 
 Qt::ItemFlags QcepDatasetModel::flags(const QModelIndex &index) const
 {
-//  Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
-//  Qt::ItemFlags flags;
+  Qt::ItemFlags flags = Qt::NoItemFlags;
 
-//  if (index.isValid()) {
-//    flags = defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+  if (index.isValid()) {
+    flags |= Qt::ItemIsEnabled;
+    flags |= Qt::ItemIsSelectable;
 
-//    if (index.column() == 0) { // Name is editable
-//      flags |= Qt::ItemIsEditable;
-//    }
-//  } else {
-//    flags = defaultFlags | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-//  }
+    QcepDataObjectPtr obj = indexedObject(index);
 
-////  printf("QcepDatasetModel::flags(%s) = %d\n", qPrintable(indexDescription(index)), flags);
+    if (obj) {
+      flags |= Qt::ItemIsDragEnabled;
 
-//  return flags;
+      if (index.column() == 0) {
+        flags |= Qt::ItemIsEditable;
+      }
 
-  return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+      QcepDataGroupPtr grp = qSharedPointerDynamicCast<QcepDataGroup>(obj);
+
+      if (grp) { // Is a container...
+        flags |= Qt::ItemIsDropEnabled;
+      }
+    }
+  } else {
+    flags |= Qt::ItemIsDropEnabled;
+  }
+
+  return flags;
 }
 
 Qt::DropActions QcepDatasetModel::supportedDropActions() const
 {
-  return /*Qt::CopyAction |*/ Qt::MoveAction;
+  return Qt::CopyAction | Qt::MoveAction;
 }
 
 QStringList QcepDatasetModel::mimeTypes() const
@@ -314,27 +326,6 @@ QStringList QcepDatasetModel::mimeTypes() const
   return types;
 }
 
-//QMimeData  *QcepDatasetModel::mimeData(const QModelIndexList &indexes) const
-//{
-//  QMimeData *mimeData = new QMimeData();
-//  QString textData;
-
-//  foreach (const QModelIndex &index, indexes) {
-//      if (index.isValid()) {
-//          QString text = data(index, Qt::DisplayRole).toString();
-//          textData += text;
-//      }
-//  }
-
-//  if (qcepDebug(DEBUG_DRAGDROP)) {
-//    printf("QcepDatasetModel::mimeData = %s\n", qPrintable(textData));
-//  }
-
-//  mimeData->setText(textData);
-////  mimeData->setData("text/plain", encodedData);
-//  return mimeData;
-//}
-
 QMimeData *QcepDatasetModel::mimeData(const QModelIndexList &indexes) const
 {
   QMimeData *mimeData = QAbstractItemModel::mimeData(indexes);
@@ -344,28 +335,31 @@ QMimeData *QcepDatasetModel::mimeData(const QModelIndexList &indexes) const
   QDataStream dataStream(&objectData, QIODevice::WriteOnly);
 
   foreach (const QModelIndex &index, indexes) {
-    printMessage(tr("Mime data for %1").arg(indexDescription(index)));
+    if (qcepDebug(DEBUG_DRAGDROP) || qcepDebug(DEBUG_DATABROWSER)) {
+      printMessage(tr("Mime data for %1").arg(indexDescription(index)));
+    }
 
     if (index.isValid()) {
       if (index.column() != 0) {
         textData += "\t";
       }
       textData += data(index, Qt::DisplayRole).toString();
+      textData += "\n";
+
+      if (index.column() == 0) {
+        QcepDataObjectPtr obj = indexedObject(index);
+
+        quint64 objn = (quint64) obj.data();
+
+        dataStream << objn
+                   << index.row()
+                   << index.column()
+                   /*<< data(index, Qt::DisplayRole).toString()*/;
+      }
     }
-    textData += "\n";
-
-    dataStream << index.internalId() << index.row() << index.column() << data(index, Qt::DisplayRole).toString();
-//    if (index.column() == 0) {
-//      QcepDataObjectPtr object = indexedObject(index);
-
-//      if (object) {
-//        dataStream << object->pathName();
-//        printMessage(tr("objectData += %1").arg(object->pathName()));
-//      }
-//    }
   }
 
-  printMessage(tr("QcepDatasetModel::mimeData = %1").arg((QString) objectData));
+//  printMessage(tr("QcepDatasetModel::mimeData = %1").arg((QString) objectData));
 
   mimeData->setData(QcepDataObject::mimeType(), objectData);
   mimeData->setText(textData);
@@ -375,30 +369,64 @@ QMimeData *QcepDatasetModel::mimeData(const QModelIndexList &indexes) const
 
 bool QcepDatasetModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
-  printMessage(tr("dropMime data into row:%1 col:%2 parent:%3 action %4")
-               .arg(row).arg(column).arg(indexDescription(parent)).arg(action));
+  if (qcepDebug(DEBUG_DRAGDROP) || qcepDebug(DEBUG_DATABROWSER)) {
+    printMessage(tr("dropMimeData into row:%1 col:%2 parent:%3 action %4")
+                 .arg(row).arg(column).arg(indexDescription(parent)).arg(action));
+  }
 
   if (data -> hasFormat(QcepDataObject::mimeType())) {
     QByteArray encodedData = data->data(QcepDataObject::mimeType());
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QHash<qint64, QMap<int,QHash<int,QString> > > newItems;
 
+    QList<int>               rows;
+    QList<QcepDataObjectPtr> objs;
+
     while (!stream.atEnd()) {
-      qint64 id;
+      quint64 id;
       int row;
       int column;
-      QString text;
-      stream >> id >> row >> column >> text;
-      newItems[id][row][column] = text;
+      stream >> id >> row >> column;
 
-      printMessage(tr("dropMimeData: id:%1 row:%2 col:%3 data:%4")
-                   .arg(id).arg(row).arg(column).arg(text));
+      QcepDataObject *obj = (QcepDataObject*) id;
+
+      if (obj) {
+        if (qcepDebug(DEBUG_DRAGDROP) || qcepDebug(DEBUG_DATABROWSER)) {
+          printMessage(tr("dropMimeData: id:%1 row:%2 col:%3 path:%4")
+                       .arg(id).arg(row).arg(column).arg(obj->pathName()));
+        }
+
+        QcepDataObjectPtr objp = obj->sharedFromThis();
+
+        if (objp) {
+          rows.append(row);
+          objs.append(objp);
+        }
+      }
     }
 
-//    return true;
-  }
+    emit layoutAboutToBeChanged();
 
-  return /*false;*/ QAbstractItemModel::dropMimeData(data, action, row, column, parent);
+    for (int i=0; i<objs.count(); i++) {
+      removeRows(rows[i], 1, index(objs[i]->parentItem()));
+    }
+
+    if (row >= 0) {
+      for (int i=0; i<objs.count(); i++) {
+        insert(row+i, parent, objs[i]);
+      }
+    } else {
+      for (int i=0; i<objs.count(); i++) {
+        append(parent, objs[i]);
+      }
+    }
+
+    emit layoutChanged();
+
+    return false;
+//  } else {
+//    return /*false;*/ QAbstractItemModel::dropMimeData(data, action, row, column, parent);
+  }
 }
 
 QString QcepDatasetModel::indexDescription(const QModelIndex &index) const
@@ -442,40 +470,53 @@ bool QcepDatasetModel::moveRows
 
 bool QcepDatasetModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-  printMessage(tr("QcepDatasetModel::removeRows(row:%1, count:%2, parent:%3)")
-               .arg(row).arg(count).arg(indexDescription(parent)));
+  bool res = false;
+  QcepDataGroupPtr grp = group(parent);
 
-  return QAbstractItemModel::removeRows(row, count, parent);
+  if (grp) {
+
+    beginRemoveRows(parent, row, row+count+1);
+
+    for (int i=0; i<count; i++) {
+      grp->remove(row);
+    }
+
+    endRemoveRows();
+
+    res = true;
+  }
+
+  if (qcepDebug(DEBUG_DATABROWSER)) {
+    printMessage(tr("QcepDatasetModel::removeRows(row:%1, count:%2, parent:%3)")
+                 .arg(row).arg(count).arg(indexDescription(parent)));
+  }
+
+  return res;
 }
 
-//bool QcepDatasetModel::insertColumns(int col, int count, const QModelIndex &parent)
-//{
-//  printMessage(tr("QcepDatasetModel::insertColumns(col:%1, count:%2, parent:%3)")
-//               .arg(col).arg(count).arg(indexDescription(parent)));
+bool QcepDatasetModel::insert(int row, const QModelIndex &parent, QcepDataObjectPtr obj)
+{
+  bool res = false;
 
-//  return QAbstractItemModel::insertColumns(col, count, parent);
-//}
+  if (qcepDebug(DEBUG_DATABROWSER)) {
+    printMessage(tr("QcepDatasetModel::insertAfter row:%1 parent:%2 object:%3")
+                 .arg(row).arg(indexDescription(parent)).arg(obj->pathName()));
+  }
 
-//bool QcepDatasetModel::moveColumns
-//  (const QModelIndex &sourceParent, int sourceCol, int count,
-//   const QModelIndex &destinationParent, int destinationChild)
-//{
-//  printMessage(tr("QAbstractItemModel::moveColumns(sourceParent:%1, sourceCol:%2, count:%3,\n"
-//         "                             destinationParent:%4, destinationChild:%5)")
-//         .arg(indexDescription(sourceParent)).arg(sourceCol).arg(count)
-//         .arg(indexDescription(destinationParent)).arg(destinationChild));
+  QcepDataGroupPtr grp = group(parent);
 
-//  return QAbstractItemModel::moveColumns(sourceParent, sourceCol, count,
-//                                      destinationParent, destinationChild);
-//}
+  if (grp) {
+    beginInsertRows(parent, row, row);
 
-//bool QcepDatasetModel::removeColumns(int col, int count, const QModelIndex &parent)
-//{
-//  printMessage(tr("QcepDatasetModel::removeColumns(col:%1, count:%2, parent:%3)")
-//               .arg(col).arg(count).arg(indexDescription(parent)));
+    grp->insert(row, obj);
 
-//  return QAbstractItemModel::removeColumns(col, count, parent);
-//}
+    endInsertRows();
+
+    res = true;
+  }
+
+  return res;
+}
 
 void QcepDatasetModel::onDataObjectChanged()
 {
@@ -633,9 +674,9 @@ QcepDataArrayPtr       QcepDatasetModel::newArray(QString path, QVector<int> dim
     QcepDataArrayPtr  arr = array(path);
 
     if (ptr && arr == NULL) {
-      ds->printMessage(tr("%1 exists but is not an array").arg(path));
+      printMessage(tr("%1 exists but is not an array").arg(path));
     } else if (arr) {
-      ds->printMessage(tr("Array %1 already exists").arg(path));
+      printMessage(tr("Array %1 already exists").arg(path));
     } else {
       QcepDataArrayPtr arr(new QcepDataArray(ds->saver(), objectName(path), dims, sgr.data()));
 
@@ -689,9 +730,9 @@ QcepDataColumnPtr      QcepDatasetModel::newColumn(QString path, int nRows)
     QcepDataColumnPtr col = column(path);
 
     if (ptr && col == NULL) {
-      ds->printMessage(tr("%1 exists but is not a data column").arg(path));
+      printMessage(tr("%1 exists but is not a data column").arg(path));
     } else if (col) {
-      ds->printMessage(tr("Column %1 already exists").arg(path));
+      printMessage(tr("Column %1 already exists").arg(path));
     } else {
       QcepDataColumnPtr col(new QcepDataColumn(ds->saver(), objectName(path), nRows, sgr.data()));
 
@@ -745,9 +786,9 @@ QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, int nRows, 
     QcepDataColumnScanPtr scan = columnScan(path);
 
     if (ptr && scan == NULL) {
-      ds->printMessage(tr("%1 exists but is not a data column scan").arg(path));
+      printMessage(tr("%1 exists but is not a data column scan").arg(path));
     } else if (scan) {
-      ds->printMessage(tr("Column Scan %1 already exists").arg(path));
+      printMessage(tr("Column Scan %1 already exists").arg(path));
     } else {
       QcepDataColumnScanPtr scan(QcepDataColumnScan::newDataColumnScan(ds->saver(), objectName(path), cols, nRows, sgr.data()));
 
@@ -801,9 +842,9 @@ QcepDoubleImageDataPtr QcepDatasetModel::newImage(QString path, int width, int h
     QcepDoubleImageDataPtr img = image(path);
 
     if (ptr && img == NULL) {
-      ds->printMessage(tr("%1 exists but is not an image").arg(path));
+      printMessage(tr("%1 exists but is not an image").arg(path));
     } else if (img) {
-      ds->printMessage(tr("Image %1 already exists").arg(path));
+      printMessage(tr("Image %1 already exists").arg(path));
     } else {
       QcepDoubleImageDataPtr img(QcepDoubleImageData::newImage(ds->saver(), objectName(path), width, height, sgr.data()));
 
@@ -857,9 +898,9 @@ QcepIntegratedDataPtr QcepDatasetModel::newIntegratedData(QString path, int sz)
     QcepIntegratedDataPtr dat  = integratedData(path);
 
     if (ptr && dat == NULL) {
-      ds->printMessage(tr("%1 exists but is not an integrated dataset").arg(path));
+      printMessage(tr("%1 exists but is not an integrated dataset").arg(path));
     } else if (dat) {
-      ds->printMessage(tr("Integrated dataset %1 already exists").arg(path));
+      printMessage(tr("Integrated dataset %1 already exists").arg(path));
     } else {
       QcepIntegratedDataPtr dat(QcepIntegratedData::newIntegratedData(ds->saver(), objectName(path), sz, sgr.data()));
 

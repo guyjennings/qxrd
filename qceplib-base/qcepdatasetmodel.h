@@ -52,6 +52,8 @@ public slots:
   bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count, const QModelIndex &destinationParent, int destinationChild);
   bool removeRows(int row, int count, const QModelIndex &parent);
 
+  bool insert(int row, const QModelIndex &parent, QcepDataObjectPtr obj);
+
 //  bool insertColumns(int col, int count, const QModelIndex &parent);
 //  bool moveColumns(const QModelIndex &sourceParent, int sourceCol, int count, const QModelIndex &destinationParent, int destinationChild);
 //  bool removeColumns(int col, int count, const QModelIndex &parent);

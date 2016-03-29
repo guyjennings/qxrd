@@ -217,6 +217,8 @@ void QcepDataGroup::insert(int atRow, QcepDataObjectPtr obj)
     } else {
       m_Objects.insert(atRow, obj);
     }
+
+    obj->setParentItem(qSharedPointerDynamicCast<QcepDataGroup>(sharedFromThis()));
   }
 }
 
