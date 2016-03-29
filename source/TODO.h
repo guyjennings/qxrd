@@ -676,7 +676,13 @@ DONE("2016-03-11", "2016-03-15",
 TODO("2016-03-15", "",
      "Check integration paramaters for excessive memory use before execution");
 
-TODO("2016-03-24", "",
+TODO("2016-03-24", "2016-03-28",
      "Consider removing the separate Title property of images and scans - use Name instead");
+
+TODO("2016-03-29", "",
+     "More work on drag and drop data items");
+
+TODO("2016-03-29", "",
+     "Allow creating new data items at top level");
 
 #endif // TODO_H
