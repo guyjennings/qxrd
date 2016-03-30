@@ -369,6 +369,8 @@ QMimeData *QcepDatasetModel::mimeData(const QModelIndexList &indexes) const
 
 bool QcepDatasetModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
+  bool res = false;
+
   if (qcepDebug(DEBUG_DRAGDROP) || qcepDebug(DEBUG_DATABROWSER)) {
     printMessage(tr("dropMimeData into row:%1 col:%2 parent:%3 action %4")
                  .arg(row).arg(column).arg(indexDescription(parent)).arg(action));
@@ -379,28 +381,41 @@ bool QcepDatasetModel::dropMimeData(const QMimeData *data, Qt::DropAction action
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QHash<qint64, QMap<int,QHash<int,QString> > > newItems;
 
+    QcepDataObjectPtr        parentobj = item(parent);
+
     QList<int>               rows;
     QList<QcepDataObjectPtr> objs;
+    int                      nsameparent = 0;
 
     while (!stream.atEnd()) {
       quint64 id;
-      int row;
-      int column;
-      stream >> id >> row >> column;
+      int srcrow;
+      int srccolumn;
+      stream >> id >> srcrow >> srccolumn;
 
       QcepDataObject *obj = (QcepDataObject*) id;
 
       if (obj) {
         if (qcepDebug(DEBUG_DRAGDROP) || qcepDebug(DEBUG_DATABROWSER)) {
           printMessage(tr("dropMimeData: id:%1 row:%2 col:%3 path:%4")
-                       .arg(id).arg(row).arg(column).arg(obj->pathName()));
+                       .arg(id).arg(srcrow).arg(srccolumn).arg(obj->pathName()));
         }
 
         QcepDataObjectPtr objp = obj->sharedFromThis();
 
         if (objp) {
-          rows.append(row);
+          rows.append(srcrow);
           objs.append(objp);
+
+          if (objp->parentItem() == parentobj) {
+            if (qcepDebug(DEBUG_DRAGDROP) || qcepDebug(DEBUG_DATABROWSER)) {
+              printMessage(tr("item from same parent as destination FromRow: %1, ToRow: %2").arg(srcrow).arg(row));
+            }
+
+            if (srcrow < row) {
+              nsameparent++;
+            }
+          }
         }
       }
     }
@@ -408,12 +423,13 @@ bool QcepDatasetModel::dropMimeData(const QMimeData *data, Qt::DropAction action
     emit layoutAboutToBeChanged();
 
     for (int i=0; i<objs.count(); i++) {
-      removeRows(rows[i], 1, index(objs[i]->parentItem()));
+      remove(objs[i]);
+//      removeRows(rows[i], 1, index(objs[i]->parentItem()));
     }
 
     if (row >= 0) {
       for (int i=0; i<objs.count(); i++) {
-        insert(row+i, parent, objs[i]);
+        insert(row+i-nsameparent, parent, objs[i]);
       }
     } else {
       for (int i=0; i<objs.count(); i++) {
@@ -423,10 +439,12 @@ bool QcepDatasetModel::dropMimeData(const QMimeData *data, Qt::DropAction action
 
     emit layoutChanged();
 
-    return false;
+    res = true;
 //  } else {
 //    return /*false;*/ QAbstractItemModel::dropMimeData(data, action, row, column, parent);
   }
+
+  return res;
 }
 
 QString QcepDatasetModel::indexDescription(const QModelIndex &index) const
