@@ -1,30 +1,34 @@
 #include "qcepnewdatagroupdialog.h"
 #include "ui_qcepnewdatagroupdialog.h"
-#include "qcepdataobject.h"
+#include "qcepdatasetmodel.h"
 
-QcepNewDataGroupDialog::QcepNewDataGroupDialog(QcepDataObject *obj, QWidget *parent) :
-  QDialog(parent),
-  m_Object(obj)
+static QString s_GroupName;
+
+QcepNewDataGroupDialog::QcepNewDataGroupDialog(QcepDatasetModelPtr model, const QModelIndex &idx) :
+  QDialog(),
+  m_Model(model),
+  m_Index(idx)
 {
   setupUi(this);
 
-  if (obj) {
-    setWindowTitle(tr("Create new data group in %1").arg(obj->pathName()));
+  if (m_Model) {
+    setWindowTitle(tr("Create new data group in %1").arg(m_Model->pathName(idx)));
   }
+
+  m_GroupName -> setText(s_GroupName);
 }
 
 QcepNewDataGroupDialog::~QcepNewDataGroupDialog()
 {
 }
 
-void QcepNewDataGroupDialog::changeEvent(QEvent *e)
+void QcepNewDataGroupDialog::accept()
 {
-  QDialog::changeEvent(e);
-  switch (e->type()) {
-  case QEvent::LanguageChange:
-    retranslateUi(this);
-    break;
-  default:
-    break;
+  s_GroupName = m_GroupName -> text();
+
+  if (m_Model) {
+    m_Model -> newGroup(m_Index, s_GroupName);
   }
+
+  QDialog::accept();
 }

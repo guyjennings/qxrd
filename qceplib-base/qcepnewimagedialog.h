@@ -4,21 +4,21 @@
 #include <QDialog>
 #include "ui_qcepnewimagedialog.h"
 
-class QcepDataObject;
+#include "qcepdatasetmodel-ptr.h"
 
 class QcepNewImageDialog : public QDialog, public Ui::QcepNewImageDialog
 {
   Q_OBJECT
 
 public:
-  explicit QcepNewImageDialog(QcepDataObject *obj, QWidget *parent = 0);
+  explicit QcepNewImageDialog(QcepDatasetModelPtr model, const QModelIndex &idx);
   ~QcepNewImageDialog();
 
-protected:
-  void changeEvent(QEvent *e);
+  void accept();
 
 private:
-  QcepDataObject *m_Object;
+  QcepDatasetModelPtr m_Model;
+  QModelIndex         m_Index;
 };
 
 #endif // QCEPNEWIMAGEDIALOG_H

@@ -4,21 +4,22 @@
 #include <QDialog>
 #include "ui_qcepnewdataarraydialog.h"
 
-class QcepDataObject;
+#include "qcepdatasetmodel-ptr.h"
 
 class QcepNewDataArrayDialog : public QDialog, public Ui::QcepNewDataArrayDialog
 {
   Q_OBJECT
 
 public:
-  explicit QcepNewDataArrayDialog(QcepDataObject *obj, QWidget *parent = 0);
+  explicit QcepNewDataArrayDialog(QcepDatasetModelPtr model, const QModelIndex &idx);
   ~QcepNewDataArrayDialog();
 
 protected:
-  void changeEvent(QEvent *e);
+  void accept();
 
 private:
-  QcepDataObject *m_Object;
+  QcepDatasetModelPtr m_Model;
+  QModelIndex         m_Index;
 };
 
 #endif // QCEPNEWDATAARRAYDIALOG_H

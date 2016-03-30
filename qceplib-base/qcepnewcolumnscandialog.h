@@ -4,21 +4,25 @@
 #include <QDialog>
 #include "ui_qcepnewcolumnscandialog.h"
 
-class QcepDataObject;
+#include "qcepdatasetmodel-ptr.h"
 
 class QcepNewColumnScanDialog : public QDialog, public Ui::QcepNewColumnScanDialog
 {
   Q_OBJECT
 
 public:
-  explicit QcepNewColumnScanDialog(QcepDataObject *obj, QWidget *parent = 0);
+  explicit QcepNewColumnScanDialog(QcepDatasetModelPtr model, const QModelIndex &idx);
   ~QcepNewColumnScanDialog();
 
-protected:
-  void changeEvent(QEvent *e);
+  void accept();
+
+private slots:
+  void addColumn();
+  void delColumn();
 
 private:
-  QcepDataObject *m_Object;
+  QcepDatasetModelPtr m_Model;
+  QModelIndex         m_Index;
 };
 
 #endif // QCEPNEWCOLUMNSCANDIALOG_H

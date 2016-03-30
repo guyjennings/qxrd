@@ -1,15 +1,16 @@
 #include "qcepnewdatacolumndialog.h"
 #include "ui_qcepnewdatacolumndialog.h"
-#include "qcepdataobject.h"
+#include "qcepdatasetmodel.h"
 
-QcepNewDataColumnDialog::QcepNewDataColumnDialog(QcepDataObject *obj, QWidget *parent) :
-  QDialog(parent),
-  m_Object(obj)
+QcepNewDataColumnDialog::QcepNewDataColumnDialog(QcepDatasetModelPtr model, const QModelIndex &idx) :
+  QDialog(),
+  m_Model(model),
+  m_Index(idx)
 {
   setupUi(this);
 
-  if (obj) {
-    setWindowTitle(tr("Create new data column in %1").arg(obj->pathName()));
+  if (m_Model) {
+    setWindowTitle(tr("Create new data column in %1").arg(m_Model->pathName(idx)));
   }
 }
 
@@ -17,14 +18,8 @@ QcepNewDataColumnDialog::~QcepNewDataColumnDialog()
 {
 }
 
-void QcepNewDataColumnDialog::changeEvent(QEvent *e)
+void QcepNewDataColumnDialog::accept()
 {
-  QDialog::changeEvent(e);
-  switch (e->type()) {
-  case QEvent::LanguageChange:
-    retranslateUi(this);
-    break;
-  default:
-    break;
-  }
+
+  QDialog::accept();
 }

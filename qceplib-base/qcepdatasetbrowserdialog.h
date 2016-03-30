@@ -18,11 +18,11 @@ private slots:
   void onCustomContextMenuRequested(QPoint pt);
   void onDoubleClicked(QModelIndex idx);
 
-  void newGroup(const QModelIndex &idx);
-  void newDataColumn(const QModelIndex &idx);
-  void newColumnScan(const QModelIndex &idx);
-  void newImage(const QModelIndex &idx);
-  void newArray(const QModelIndex &idx);
+  void newGroup(const QModelIndexList &idx);
+  void newDataColumn(const QModelIndexList &idx);
+  void newColumnScan(const QModelIndexList &idx);
+  void newImage(const QModelIndexList &idx);
+  void newArray(const QModelIndexList &idx);
   void concatenateData(const QModelIndex &idx);
   void addData(const QModelIndex &idx);
   void subtractData(const QModelIndex &idx);

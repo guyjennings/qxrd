@@ -97,6 +97,17 @@ QModelIndex QcepDatasetModel::index(int row, int column, const QModelIndex &pare
   return res;
 }
 
+QString QcepDatasetModel::pathName(const QModelIndex &index)
+{
+  QcepDataObjectPtr obj = item(index);
+
+  if (obj) {
+    return obj->pathName();
+  } else {
+    return "NULL";
+  }
+}
+
 QModelIndex QcepDatasetModel::index(const QcepDataObjectPtr &obj) const
 {
   if (obj == NULL || obj == m_Dataset) {
@@ -655,6 +666,28 @@ QcepDataGroupPtr       QcepDatasetModel::newGroup(QString path)
   return QcepDataGroupPtr();
 }
 
+QcepDataGroupPtr       QcepDatasetModel::newGroup(const QModelIndex &index, QString name)
+{
+  QcepDataGroupPtr res;
+  QcepDataGroupPtr grp = group(index);
+  QcepDatasetPtr   ds(m_Dataset);
+
+  if (grp && ds) {
+    QcepDataGroupPtr ng =
+        QcepDataGroupPtr(new QcepDataGroup(ds->saver(), name, grp.data()));
+
+    if (ng) {
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      grp->append(ng);
+      endInsertRows();
+
+      res = ng;
+    }
+  }
+
+  return res;
+}
+
 QcepDataArrayPtr       QcepDatasetModel::array(const QModelIndex &index)
 {
   return qSharedPointerDynamicCast<QcepDataArray>(indexedObject(index));
@@ -709,6 +742,28 @@ QcepDataArrayPtr       QcepDatasetModel::newArray(QString path, QVector<int> dim
   }
 
   return QcepDataArrayPtr();
+}
+
+QcepDataArrayPtr       QcepDatasetModel::newArray(const QModelIndex &index, QString name, QVector<int> dims)
+{
+  QcepDataArrayPtr res;
+  QcepDataGroupPtr grp = group(index);
+  QcepDatasetPtr   ds(m_Dataset);
+
+  if (grp && ds) {
+    QcepDataArrayPtr na =
+        QcepDataArrayPtr(new QcepDataArray(ds->saver(), name, dims, grp.data()));
+
+    if (na) {
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      grp->append(na);
+      endInsertRows();
+
+      res = na;
+    }
+  }
+
+  return res;
 }
 
 QcepDataColumnPtr      QcepDatasetModel::column(const QModelIndex &index)
@@ -767,6 +822,28 @@ QcepDataColumnPtr      QcepDatasetModel::newColumn(QString path, int nRows)
   return QcepDataColumnPtr();
 }
 
+QcepDataColumnPtr       QcepDatasetModel::newColumn(const QModelIndex &index, QString name, int nRows)
+{
+  QcepDataColumnPtr res;
+  QcepDataGroupPtr grp = group(index);
+  QcepDatasetPtr   ds(m_Dataset);
+
+  if (grp && ds) {
+    QcepDataColumnPtr nc =
+        QcepDataColumnPtr(new QcepDataColumn(ds->saver(), name, nRows, grp.data()));
+
+    if (nc) {
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      grp->append(nc);
+      endInsertRows();
+
+      res = nc;
+    }
+  }
+
+  return res;
+}
+
 QcepDataColumnScanPtr  QcepDatasetModel::columnScan(const QModelIndex &index)
 {
   return qSharedPointerDynamicCast<QcepDataColumnScan>(indexedObject(index));
@@ -821,6 +898,31 @@ QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, int nRows, 
   }
 
   return QcepDataColumnScanPtr();
+}
+
+QcepDataColumnScanPtr       QcepDatasetModel::newColumnScan(const QModelIndex &index,
+                                                            QString name,
+                                                            int nRows,
+                                                            QStringList cols)
+{
+  QcepDataColumnScanPtr res;
+  QcepDataGroupPtr grp = group(index);
+  QcepDatasetPtr   ds(m_Dataset);
+
+  if (grp && ds) {
+    QcepDataColumnScanPtr ns =
+        QcepDataColumnScan::newDataColumnScan(ds->saver(), name, cols, nRows, grp.data());
+
+    if (ns) {
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      grp->append(ns);
+      endInsertRows();
+
+      res = ns;
+    }
+  }
+
+  return res;
 }
 
 QcepDoubleImageDataPtr QcepDatasetModel::image(const QModelIndex &index)
@@ -879,6 +981,28 @@ QcepDoubleImageDataPtr QcepDatasetModel::newImage(QString path, int width, int h
   return QcepDoubleImageDataPtr();
 }
 
+QcepDoubleImageDataPtr QcepDatasetModel::newImage(const QModelIndex &index, QString name, int width, int height)
+{
+  QcepDoubleImageDataPtr res;
+  QcepDataGroupPtr grp = group(index);
+  QcepDatasetPtr   ds(m_Dataset);
+
+  if (grp && ds) {
+    QcepDoubleImageDataPtr ni =
+        QcepDoubleImageData::newImage(ds->saver(), name, width, height, grp.data());
+
+    if (ni) {
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      grp->append(ni);
+      endInsertRows();
+
+      res = ni;
+    }
+  }
+
+  return res;
+}
+
 QcepIntegratedDataPtr QcepDatasetModel::integratedData(const QModelIndex &index)
 {
   return qSharedPointerDynamicCast<QcepIntegratedData>(indexedObject(index));
@@ -933,6 +1057,28 @@ QcepIntegratedDataPtr QcepDatasetModel::newIntegratedData(QString path, int sz)
   }
 
   return QcepIntegratedDataPtr();
+}
+
+QcepIntegratedDataPtr QcepDatasetModel::newIntegratedData(const QModelIndex &index, QString name, int sz)
+{
+  QcepIntegratedDataPtr res;
+  QcepDataGroupPtr grp = group(index);
+  QcepDatasetPtr   ds(m_Dataset);
+
+  if (grp && ds) {
+    QcepIntegratedDataPtr ni =
+        QcepIntegratedData::newIntegratedData(ds->saver(), name, sz, grp.data());
+
+    if (ni) {
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      grp->append(ni);
+      endInsertRows();
+
+      res = ni;
+    }
+  }
+
+  return res;
 }
 
 void QcepDatasetModel::insertGroup(int atRow, QString name)

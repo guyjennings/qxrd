@@ -54,29 +54,43 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
 {
 //  m_Dataset->printMessage(tr("QcepDatasetBrowserDialog::onCustomContextMenuRequested([%1,%2])").arg(pt.x()).arg(pt.y()));
 
-//  QModelIndex index = m_DatasetBrowserView->indexAt(pt);
+  QModelIndex index = m_DatasetBrowserView->indexAt(pt);
+
+  QcepExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt->printMessage(tr("Custom context menu clicked at: %1").arg(m_DatasetModel->indexDescription(index)));
+  }
 
   QModelIndexList indexes = m_DatasetBrowserView
       ->selectionModel()->selectedRows();
 
   int nSel = indexes.count();
 
-  QcepDataObject     *obj = NULL;
-  QcepDataGroup      *grp = NULL;
-  QcepDataColumn     *col = NULL;
-  QcepDataColumnScan *scn = NULL;
-  QcepDataObject     *prn = NULL;
-  QcepDataColumnScan *psc = NULL;
-  QcepImageDataBase  *img = NULL;
+  QcepDataObjectPtr     obj;
+  QcepDataGroupPtr      grp;
+  QcepDataColumnPtr     col;
+  QcepDataColumnScanPtr scn;
+  QcepDataObjectPtr     prn;
+  QcepDataColumnScanPtr psc;
+  QcepImageDataBasePtr  img;
 
   if (nSel == 1) {
-    obj = static_cast<QcepDataObject*>(indexes.first().internalPointer());
-    grp = qobject_cast<QcepDataGroup*>(obj);
-    col = qobject_cast<QcepDataColumn*>(obj);
-    scn = qobject_cast<QcepDataColumnScan*>(obj);
-    prn = (obj ? obj->parentItem().data() : NULL);
-    psc = qobject_cast<QcepDataColumnScan*>(prn);
-    img = qobject_cast<QcepImageDataBase*>(obj);
+    QModelIndex idx = indexes.value(0);
+
+    obj = m_DatasetModel->item(idx);
+    grp = m_DatasetModel->group(idx);
+    col = m_DatasetModel->column(idx);
+    scn = m_DatasetModel->columnScan(idx);
+    img = m_DatasetModel->image(idx);
+
+    if (obj) {
+      prn = obj->parentItem();
+      psc = qSharedPointerDynamicCast<QcepDataColumnScan>(prn);
+    }
+  } else if (nSel == 0) {
+    obj = m_DatasetModel->item(QModelIndex());
+    grp = m_DatasetModel->group(QModelIndex());
   }
 
   QMenu menu(NULL, NULL);
@@ -84,8 +98,8 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   QString names;
 
   for (int i=0; i<nSel; i++) {
-    QcepDataObject *o =
-        static_cast<QcepDataObject*>(indexes.at(i).internalPointer());
+    QcepDataObjectPtr o = m_DatasetModel->item(indexes.value(i));
+//        static_cast<QcepDataObject*>(indexes.at(i).internalPointer());
 
     if (i != 0) {
       names += ", ";
@@ -137,11 +151,11 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   QAction *op = menu.addAction(tr("Open %1 in properties window").arg(names));
   QAction *dl = menu.addAction(tr("Delete %1").arg(names));
 
-  ng->setEnabled(nSel == 1 && (grp != NULL && scn == NULL));
-  nc->setEnabled(nSel == 1 && (grp != NULL || psc != NULL));
-  ns->setEnabled(nSel == 1 && (grp != NULL && scn == NULL));
-  ni->setEnabled(nSel == 1 && (grp != NULL && scn == NULL));
-  na->setEnabled(nSel == 1 && (grp != NULL && scn == NULL));
+  ng->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
+  nc->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL || psc != NULL)));
+  ns->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
+  ni->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
+  na->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
 
   cat->setEnabled(nSel == 1 && scn);
   add->setEnabled(nSel == 1 && (scn || col || img));
@@ -170,25 +184,25 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   QAction *action = menu.exec(QCursor::pos(), tt);
 
   if (action == ng) {
-    newGroup(indexes.first());
+    newGroup(indexes);
   } else if (action == nc) {
-    newDataColumn(indexes.first());
+    newDataColumn(indexes);
   } else if (action == ns) {
-    newColumnScan(indexes.first());
+    newColumnScan(indexes);
   } else if (action == ni) {
-    newImage(indexes.first());
+    newImage(indexes);
   } else if (action == na) {
-    newArray(indexes.first());
+    newArray(indexes);
   } else if (action == cat) {
-    concatenateData(indexes.first());
+    concatenateData(indexes.value(0));
   } else if (action == add) {
-    addData(indexes.first());
+    addData(indexes.value(0));
   } else if (action == sub) {
-    subtractData(indexes.first());
+    subtractData(indexes.value(0));
   } else if (action == mul) {
-    multiplyData(indexes.first());
+    multiplyData(indexes.value(0));
   } else if (action == div) {
-    divideData(indexes.first());
+    divideData(indexes.value(0));
   } else if (action == ntg) {
     integrateData(indexes);
   } else if (action == ntgp) {
@@ -228,12 +242,12 @@ void QcepDatasetBrowserDialog::onDoubleClicked(QModelIndex idx)
 void QcepDatasetBrowserDialog::openGraph(const QModelIndexList &idx)
 {
   for (int i=0; i<idx.count(); i++) {
-    QcepDataObject *obj = static_cast<QcepDataObject*>(idx.at(i).internalPointer());
+    QcepDataObjectPtr obj = m_DatasetModel -> item(idx.value(i));
 
     QcepExperimentPtr expt(m_Experiment);
 
     if (obj && expt) {
-      QcepDataObjectGraphWindow *gw = new QcepDataObjectGraphWindow(expt, obj->sharedFromThis());
+      QcepDataObjectGraphWindow *gw = new QcepDataObjectGraphWindow(expt, obj);
 
       gw->show();
     }
@@ -243,12 +257,12 @@ void QcepDatasetBrowserDialog::openGraph(const QModelIndexList &idx)
 void QcepDatasetBrowserDialog::openSpreadsheet(const QModelIndexList &idx)
 {
   for (int i=0; i<idx.count(); i++) {
-    QcepDataObject *obj = static_cast<QcepDataObject*>(idx.at(i).internalPointer());
+    QcepDataObjectPtr obj = m_DatasetModel -> item(idx.value(i));
 
     QcepExperimentPtr expt(m_Experiment);
 
     if (obj && expt) {
-      QcepDataObjectSpreadsheetWindow *sw = new QcepDataObjectSpreadsheetWindow(expt, obj->sharedFromThis());
+      QcepDataObjectSpreadsheetWindow *sw = new QcepDataObjectSpreadsheetWindow(expt, obj);
 
       sw->show();
     }
@@ -258,23 +272,21 @@ void QcepDatasetBrowserDialog::openSpreadsheet(const QModelIndexList &idx)
 void QcepDatasetBrowserDialog::openProperties(const QModelIndexList &idx)
 {
   for (int i=0; i<idx.count(); i++) {
-    QcepDataObject *obj = static_cast<QcepDataObject*>(idx.at(i).internalPointer());
+    QcepDataObjectPtr obj = m_DatasetModel -> item(idx.value(i));
 
     QcepExperimentPtr expt(m_Experiment);
 
     if (obj && expt) {
-      QcepDataObjectPropertiesWindow *pw = new QcepDataObjectPropertiesWindow(expt, obj->sharedFromThis());
+      QcepDataObjectPropertiesWindow *pw = new QcepDataObjectPropertiesWindow(expt, obj);
 
       pw->show();
     }
   }
 }
 
-void QcepDatasetBrowserDialog::newGroup(const QModelIndex &idx)
+void QcepDatasetBrowserDialog::newGroup(const QModelIndexList &idx)
 {
-  QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
-
-  QcepNewDataGroupDialog *dlog = new QcepNewDataGroupDialog(obj);
+  QcepNewDataGroupDialog *dlog = new QcepNewDataGroupDialog(m_DatasetModel, idx.value(0));
 
   if (dlog->exec()) {
   }
@@ -282,11 +294,9 @@ void QcepDatasetBrowserDialog::newGroup(const QModelIndex &idx)
   delete dlog;
 }
 
-void QcepDatasetBrowserDialog::newDataColumn(const QModelIndex &idx)
+void QcepDatasetBrowserDialog::newDataColumn(const QModelIndexList &idx)
 {
-  QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
-
-  QcepNewDataColumnDialog *dlog = new QcepNewDataColumnDialog(obj);
+  QcepNewDataColumnDialog *dlog = new QcepNewDataColumnDialog(m_DatasetModel, idx.value(0));
 
   if (dlog->exec()) {
   }
@@ -294,11 +304,9 @@ void QcepDatasetBrowserDialog::newDataColumn(const QModelIndex &idx)
   delete dlog;
 }
 
-void QcepDatasetBrowserDialog::newColumnScan(const QModelIndex &idx)
+void QcepDatasetBrowserDialog::newColumnScan(const QModelIndexList &idx)
 {
-  QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
-
-  QcepNewColumnScanDialog *dlog = new QcepNewColumnScanDialog(obj);
+  QcepNewColumnScanDialog *dlog = new QcepNewColumnScanDialog(m_DatasetModel, idx.value(0));
 
   if (dlog->exec()) {
   }
@@ -306,11 +314,9 @@ void QcepDatasetBrowserDialog::newColumnScan(const QModelIndex &idx)
   delete dlog;
 }
 
-void QcepDatasetBrowserDialog::newImage(const QModelIndex &idx)
+void QcepDatasetBrowserDialog::newImage(const QModelIndexList &idx)
 {
-  QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
-
-  QcepNewImageDialog *dlog = new QcepNewImageDialog(obj);
+  QcepNewImageDialog *dlog = new QcepNewImageDialog(m_DatasetModel, idx.value(0));
 
   if (dlog->exec()) {
   }
@@ -318,11 +324,9 @@ void QcepDatasetBrowserDialog::newImage(const QModelIndex &idx)
   delete dlog;
 }
 
-void QcepDatasetBrowserDialog::newArray(const QModelIndex &idx)
+void QcepDatasetBrowserDialog::newArray(const QModelIndexList &idx)
 {
-  QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
-
-  QcepNewDataArrayDialog *dlog = new QcepNewDataArrayDialog(obj);
+  QcepNewDataArrayDialog *dlog = new QcepNewDataArrayDialog(m_DatasetModel, idx.value(0));
 
   if (dlog->exec()) {
   }
@@ -332,12 +336,12 @@ void QcepDatasetBrowserDialog::newArray(const QModelIndex &idx)
 
 void QcepDatasetBrowserDialog::readData(const QModelIndex &idx)
 {
-  QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
+  QcepDataObjectPtr obj = m_DatasetModel -> item(idx);
 }
 
 void QcepDatasetBrowserDialog::saveData(const QModelIndex &idx)
 {
-  QcepDataObject *obj = static_cast<QcepDataObject*>(idx.internalPointer());
+  QcepDataObjectPtr obj = m_DatasetModel -> item(idx);
 
   if (obj) {
     static QString selectedFilter;
@@ -356,7 +360,7 @@ void QcepDatasetBrowserDialog::deleteData(const QModelIndexList &idx)
   QString name;
 
   for (int i=0; i<idx.count(); i++) {
-    QcepDataObject *obj = static_cast<QcepDataObject*>(idx.at(i).internalPointer());
+    QcepDataObjectPtr obj = m_DatasetModel -> item(idx.value(i));
 
     if (obj) {
       if (i != 0) {
@@ -447,21 +451,21 @@ void QcepDatasetBrowserDialog::divideData(const QModelIndex &idx)
 void QcepDatasetBrowserDialog::integrateData(const QModelIndexList &idx)
 {
   for (int i=0; i<idx.count(); i++) {
-    m_DatasetModel->integrate(idx.at(i));
+    m_DatasetModel->integrate(idx.value(i));
   }
 }
 
 void QcepDatasetBrowserDialog::polarTransformData(const QModelIndexList &idx)
 {
   for (int i=0; i<idx.count(); i++) {
-    m_DatasetModel->polarTransform(idx.at(i));
+    m_DatasetModel->polarTransform(idx.value(i));
   }
 }
 
 void QcepDatasetBrowserDialog::polarIntegrateData(const QModelIndexList &idx)
 {
   for (int i=0; i<idx.count(); i++) {
-    m_DatasetModel->polarIntegrate(idx.at(i));
+    m_DatasetModel->polarIntegrate(idx.value(i));
   }
 }
 
@@ -469,7 +473,7 @@ void QcepDatasetBrowserDialog::integrateParameters(const QModelIndexList &idx)
 {
   if (m_DatasetModel->integrateParameters()) {
     for (int i=0; i<idx.count(); i++) {
-      m_DatasetModel->integrate(idx.at(i));
+      m_DatasetModel->integrate(idx.value(i));
     }
   }
 }
@@ -478,7 +482,7 @@ void QcepDatasetBrowserDialog::polarTransformParameters(const QModelIndexList &i
 {
   if (m_DatasetModel->polarTransformParameters()) {
     for (int i=0; i<idx.count(); i++) {
-      m_DatasetModel->polarTransform(idx.at(i));
+      m_DatasetModel->polarTransform(idx.value(i));
     }
   }
 }
@@ -487,7 +491,7 @@ void QcepDatasetBrowserDialog::polarIntegrateParameters(const QModelIndexList &i
 {
   if (m_DatasetModel->polarIntegrateParameters()) {
     for (int i=0; i<idx.count(); i++) {
-      m_DatasetModel->polarIntegrate(idx.at(i));
+      m_DatasetModel->polarIntegrate(idx.value(i));
     }
   }
 }

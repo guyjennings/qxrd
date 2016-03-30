@@ -38,6 +38,8 @@ public slots:
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+  QString pathName(const QModelIndex &index);
+
   bool setData(const QModelIndex &index, const QVariant &value, int role);
 
   Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -67,32 +69,40 @@ public slots:
   QcepDataGroupPtr       group(QString path);
   QcepDataGroupPtr       group(int n);
   QcepDataGroupPtr       newGroup(QString path);
+  QcepDataGroupPtr       newGroup(const QModelIndex &index, QString name);
 
   QcepDataArrayPtr       array(const QModelIndex &index);
   QcepDataArrayPtr       array(QString path);
   QcepDataArrayPtr       array(int n);
   QcepDataArrayPtr       newArray(QString path, QVector<int> dims = QVector<int>());
+  QcepDataArrayPtr       newArray(const QModelIndex &index, QString name, QVector<int> dims = QVector<int>());
 
   QcepDataColumnPtr      column(const QModelIndex &index);
   QcepDataColumnPtr      column(QString path);
   QcepDataColumnPtr      column(int n);
   QcepDataColumnPtr      newColumn(QString path, int nRows=0);
+  QcepDataColumnPtr      newColumn(const QModelIndex &index, QString name, int nRows=0);
 
   QcepDataColumnScanPtr  columnScan(const QModelIndex &index);
   QcepDataColumnScanPtr  columnScan(QString path);
   QcepDataColumnScanPtr  columnScan(int n);
   QcepDataColumnScanPtr  newColumnScan(QString path,
                                        int nRows=0, QStringList cols=QStringList());
+  QcepDataColumnScanPtr  newColumnScan(const QModelIndex &index,
+                                       QString name,
+                                       int nRows=0, QStringList cols=QStringList());
 
   QcepDoubleImageDataPtr image(const QModelIndex &index);
   QcepDoubleImageDataPtr image(QString path);
   QcepDoubleImageDataPtr image(int n);
   QcepDoubleImageDataPtr newImage(QString path, int width=0, int height=0);
+  QcepDoubleImageDataPtr newImage(const QModelIndex &index, QString name, int width=0, int height=0);
 
   QcepIntegratedDataPtr  integratedData(const QModelIndex &index);
   QcepIntegratedDataPtr  integratedData(QString path);
   QcepIntegratedDataPtr  integratedData(int n);
   QcepIntegratedDataPtr  newIntegratedData(QString path, int sz);
+  QcepIntegratedDataPtr  newIntegratedData(const QModelIndex &index, QString path, int sz);
 
   void                   append(const QModelIndex &idx, QcepDataObjectPtr obj);
   void                   append(QString path, QcepDataObjectPtr obj);
@@ -132,12 +142,12 @@ public slots:
 
 public:
   Qt::DropActions       supportedDropActions() const;
+  QString indexDescription(const QModelIndex& index) const;
 
 private slots:
   void onDataObjectChanged();
 
 private:
-  QString indexDescription(const QModelIndex& index) const;
   QString groupName(QString path);
   QString objectName(QString path);
 

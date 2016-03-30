@@ -4,21 +4,21 @@
 #include <QDialog>
 #include "ui_qcepnewdatagroupdialog.h"
 
-class QcepDataObject;
+#include "qcepdatasetmodel-ptr.h"
 
 class QcepNewDataGroupDialog : public QDialog, public Ui::QcepNewDataGroupDialog
 {
   Q_OBJECT
 
 public:
-  explicit QcepNewDataGroupDialog(QcepDataObject *obj, QWidget *parent = 0);
+  explicit QcepNewDataGroupDialog(QcepDatasetModelPtr model, const QModelIndex &idx);
   ~QcepNewDataGroupDialog();
 
-protected:
-  void changeEvent(QEvent *e);
+  void accept();
 
 private:
-  QcepDataObject *m_Object;
+  QcepDatasetModelPtr m_Model;
+  QModelIndex         m_Index;
 };
 
 #endif // QCEPNEWDATAGROUPDIALOG_H

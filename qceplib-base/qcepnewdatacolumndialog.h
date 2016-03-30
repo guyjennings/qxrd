@@ -4,21 +4,21 @@
 #include <QDialog>
 #include "ui_qcepnewdatacolumndialog.h"
 
-class QcepDataObject;
+#include "qcepdatasetmodel-ptr.h"
 
 class QcepNewDataColumnDialog : public QDialog, public Ui::QcepNewDataColumnDialog
 {
   Q_OBJECT
 
 public:
-  explicit QcepNewDataColumnDialog(QcepDataObject *obj, QWidget *parent = 0);
+  explicit QcepNewDataColumnDialog(QcepDatasetModelPtr model, const QModelIndex &idx);
   ~QcepNewDataColumnDialog();
 
-protected:
-  void changeEvent(QEvent *e);
+  void accept();
 
 private:
-  QcepDataObject *m_Object;
+  QcepDatasetModelPtr m_Model;
+  QModelIndex         m_Index;
 };
 
 #endif // QCEPNEWDATACOLUMNDIALOG_H
