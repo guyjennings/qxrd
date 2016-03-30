@@ -679,7 +679,7 @@ TODO("2016-03-15", "",
 TODO("2016-03-24", "2016-03-28",
      "Consider removing the separate Title property of images and scans - use Name instead");
 
-TODO("2016-03-29", "",
+TODO("2016-03-29", "2016-03-30",
      "More work on drag and drop data items");
 
 TODO("2016-03-29", "",
