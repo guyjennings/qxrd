@@ -73,7 +73,11 @@ SOURCES += \
     $$PWD/qcepscatterplotgraphmodel.cpp \
     $$PWD/qcepdatasetselectiondialog.cpp \
     $$PWD/qcepdataprocessorbase.cpp \
-    $$PWD/qcepdatasetbrowserview.cpp
+    $$PWD/qcepdatasetbrowserview.cpp \
+    $$PWD/qcepdataimportcommand.cpp \
+    $$PWD/qcepdataexportcommand.cpp \
+    $$PWD/qcepdataimportdialog.cpp \
+    $$PWD/qcepdataexportdialog.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -175,7 +179,11 @@ HEADERS += \
     $$PWD/qcepdatasetselectiondialog.h \
     $$PWD/qcepdataprocessorbase.h \
     $$PWD/qcepdataprocessorbase-ptr.h \
-    $$PWD/qcepdatasetbrowserview.h
+    $$PWD/qcepdatasetbrowserview.h \
+    $$PWD/qcepdataimportcommand.h \
+    $$PWD/qcepdataexportcommand.h \
+    $$PWD/qcepdataimportdialog.h \
+    $$PWD/qcepdataexportdialog.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \
@@ -209,7 +217,9 @@ FORMS += \
   $${PWD}/qcepnewdataarraydialog.ui \
   $${PWD}/qcepdataobjectpropertieswindow.ui \
   $${PWD}/qcepdataobjectspreadsheetwindow.ui \
-    $$PWD/qcepdatasetselectiondialog.ui
+    $$PWD/qcepdatasetselectiondialog.ui \
+    $$PWD/qcepdataimportdialog.ui \
+    $$PWD/qcepdataexportdialog.ui
 
 contains(DEFINES, HAVE_QWT) {
  FORMS += \

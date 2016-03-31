@@ -34,8 +34,8 @@ private slots:
   void polarTransformParameters(const QModelIndexList &idx);
   void polarIntegrateData(const QModelIndexList &idx);
   void polarIntegrateParameters(const QModelIndexList &idx);
-  void readData(const QModelIndex &idx);
-  void saveData(const QModelIndex &idx);
+  void readData(const QModelIndexList &idx);
+  void saveData(const QModelIndexList &idx);
   void openGraph(const QModelIndexList &idx);
   void openSpreadsheet(const QModelIndexList &idx);
   void openProperties(const QModelIndexList &idx);

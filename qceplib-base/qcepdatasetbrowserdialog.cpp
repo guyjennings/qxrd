@@ -18,6 +18,8 @@
 #include "qcepnewimagedialog.h"
 #include <QFileDialog>
 #include "qcepdatasetselectiondialog.h"
+#include "qcepdataexportdialog.h"
+#include "qcepdataimportdialog.h"
 
 QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QcepExperimentWPtr expt, QcepDatasetModelPtr ds, QWidget *parent) :
   QDockWidget(parent),
@@ -216,9 +218,9 @@ void QcepDatasetBrowserDialog::onCustomContextMenuRequested(QPoint pt)
   } else if (action == plip) {
     polarIntegrateParameters(indexes);
   } else if (action == rd) {
-    readData(indexes.first());
+    readData(indexes);
   } else if (action == sv) {
-    saveData(indexes.first());
+    saveData(indexes);
   } else if (action == og) {
     openGraph(indexes);
   } else if (action == os) {
@@ -286,72 +288,66 @@ void QcepDatasetBrowserDialog::openProperties(const QModelIndexList &idx)
 
 void QcepDatasetBrowserDialog::newGroup(const QModelIndexList &idx)
 {
-  QcepNewDataGroupDialog *dlog = new QcepNewDataGroupDialog(m_DatasetModel, idx.value(0));
+  QcepNewDataGroupDialog dlog(m_DatasetModel, idx.value(0));
 
-  if (dlog->exec()) {
-  }
-
-  delete dlog;
+  dlog.exec();
 }
 
 void QcepDatasetBrowserDialog::newDataColumn(const QModelIndexList &idx)
 {
-  QcepNewDataColumnDialog *dlog = new QcepNewDataColumnDialog(m_DatasetModel, idx.value(0));
+  QcepNewDataColumnDialog dlog(m_DatasetModel, idx.value(0));
 
-  if (dlog->exec()) {
-  }
-
-  delete dlog;
+  dlog.exec();
 }
 
 void QcepDatasetBrowserDialog::newColumnScan(const QModelIndexList &idx)
 {
-  QcepNewColumnScanDialog *dlog = new QcepNewColumnScanDialog(m_DatasetModel, idx.value(0));
+  QcepNewColumnScanDialog dlog(m_DatasetModel, idx.value(0));
 
-  if (dlog->exec()) {
-  }
-
-  delete dlog;
+  dlog.exec();
 }
 
 void QcepDatasetBrowserDialog::newImage(const QModelIndexList &idx)
 {
-  QcepNewImageDialog *dlog = new QcepNewImageDialog(m_DatasetModel, idx.value(0));
+  QcepNewImageDialog dlog(m_DatasetModel, idx.value(0));
 
-  if (dlog->exec()) {
-  }
-
-  delete dlog;
+  dlog.exec();
 }
 
 void QcepDatasetBrowserDialog::newArray(const QModelIndexList &idx)
 {
-  QcepNewDataArrayDialog *dlog = new QcepNewDataArrayDialog(m_DatasetModel, idx.value(0));
+  QcepNewDataArrayDialog dlog(m_DatasetModel, idx.value(0));
 
-  if (dlog->exec()) {
+  dlog.exec();
+}
+
+void QcepDatasetBrowserDialog::readData(const QModelIndexList &idx)
+{
+  static QString selectedFilter;
+  QStringList theFiles = QFileDialog::getOpenFileNames(this,
+                                                       "Load data from", "",
+                                                       "", &selectedFilter);
+
+  if (theFiles.length() > 0) {
+    QcepDataImportDialog dlog(m_DatasetModel, idx);
+
+    dlog.exec();
   }
-
-  delete dlog;
 }
 
-void QcepDatasetBrowserDialog::readData(const QModelIndex &idx)
+void QcepDatasetBrowserDialog::saveData(const QModelIndexList &idx)
 {
-  QcepDataObjectPtr obj = m_DatasetModel -> item(idx);
-}
+  QcepDataObjectPtr obj = m_DatasetModel -> item(idx.value(0));
 
-void QcepDatasetBrowserDialog::saveData(const QModelIndex &idx)
-{
-  QcepDataObjectPtr obj = m_DatasetModel -> item(idx);
+  static QString selectedFilter;
+  QString theFile = QFileDialog::getSaveFileName(this,
+                                                 "Save data in", obj->get_FileName(),
+                                                 obj->fileFormatFilterString(), &selectedFilter);
 
-  if (obj) {
-    static QString selectedFilter;
-    QString theFile = QFileDialog::getSaveFileName(this,
-                                                   "Save data in", obj->get_FileName(),
-                                                   obj->fileFormatFilterString(), &selectedFilter);
+  if (theFile.length()) {
+    QcepDataExportDialog dlog(m_DatasetModel, idx);
 
-    if (theFile.length()) {
-      obj -> saveData(theFile, selectedFilter, QcepDataObject::CanOverwrite);
-    }
+    dlog.exec();
   }
 }
 
