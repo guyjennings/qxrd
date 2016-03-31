@@ -1,8 +1,7 @@
 #include "qcepnewdatagroupdialog.h"
 #include "ui_qcepnewdatagroupdialog.h"
 #include "qcepdatasetmodel.h"
-
-static QString s_GroupName;
+#include "qcepexperiment.h"
 
 QcepNewDataGroupDialog::QcepNewDataGroupDialog(QcepDatasetModelPtr model, const QModelIndex &idx) :
   QDialog(),
@@ -13,9 +12,13 @@ QcepNewDataGroupDialog::QcepNewDataGroupDialog(QcepDatasetModelPtr model, const 
 
   if (m_Model) {
     setWindowTitle(tr("Create new data group in %1").arg(m_Model->pathName(idx)));
-  }
 
-  m_GroupName -> setText(s_GroupName);
+    QcepExperimentPtr expt = m_Model -> experiment();
+
+    if (expt) {
+      m_GroupName -> setText(expt -> get_NewGroupName());
+    }
+  }
 }
 
 QcepNewDataGroupDialog::~QcepNewDataGroupDialog()
@@ -24,10 +27,16 @@ QcepNewDataGroupDialog::~QcepNewDataGroupDialog()
 
 void QcepNewDataGroupDialog::accept()
 {
-  s_GroupName = m_GroupName -> text();
-
   if (m_Model) {
-    m_Model -> newGroup(m_Index, s_GroupName);
+    QcepExperimentPtr expt = m_Model -> experiment();
+
+    if (expt) {
+      QString newGroupName = m_GroupName -> text();
+
+      expt -> set_NewGroupName(newGroupName);
+
+      m_Model -> newGroup(m_Index, newGroupName);
+    }
   }
 
   QDialog::accept();

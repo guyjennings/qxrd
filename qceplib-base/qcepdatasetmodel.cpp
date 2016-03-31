@@ -27,6 +27,16 @@ void QcepDatasetModel::printMessage(QString msg, QDateTime dt) const
   }
 }
 
+QcepExperimentWPtr QcepDatasetModel::experiment()
+{
+  return m_Experiment;
+}
+
+QcepDataProcessorBaseWPtr QcepDatasetModel::processor()
+{
+  return m_Processor;
+}
+
 QcepDataObjectPtr QcepDatasetModel::indexedObject(const QModelIndex &index) const
 {
   QcepDataObjectPtr res;

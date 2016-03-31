@@ -60,6 +60,9 @@ public slots:
 //  bool moveColumns(const QModelIndex &sourceParent, int sourceCol, int count, const QModelIndex &destinationParent, int destinationChild);
 //  bool removeColumns(int col, int count, const QModelIndex &parent);
 
+  QcepExperimentWPtr        experiment();
+  QcepDataProcessorBaseWPtr processor();
+
 public slots:
   QcepDataObjectPtr      item(const QModelIndex &index);
   QcepDataObjectPtr      item(QString path);

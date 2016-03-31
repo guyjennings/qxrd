@@ -40,6 +40,51 @@ public:
 
   Q_PROPERTY(QString experimentDescription     READ get_ExperimentDescription WRITE set_ExperimentDescription)
   QCEP_STRING_PROPERTY(ExperimentDescription)
+
+  Q_PROPERTY(QString newGroupName READ get_NewGroupName WRITE set_NewGroupName)
+  QCEP_STRING_PROPERTY(NewGroupName)
+
+  Q_PROPERTY(QString newScanName READ get_NewScanName WRITE set_NewScanName)
+  QCEP_STRING_PROPERTY(NewScanName)
+
+  Q_PROPERTY(QStringList newScanColumns READ get_NewScanColumns WRITE set_NewScanColumns)
+  QCEP_STRING_LIST_PROPERTY(NewScanColumns)
+
+  Q_PROPERTY(int newScanSize READ get_NewScanSize WRITE set_NewScanSize)
+  QCEP_INTEGER_PROPERTY(NewScanSize)
+
+  Q_PROPERTY(QString newArrayName READ get_NewArrayName WRITE set_NewArrayName)
+  QCEP_STRING_PROPERTY(NewArrayName)
+
+  Q_PROPERTY(int newArrayNumDimensions READ get_NewArrayNumDimensions WRITE set_NewArrayNumDimensions)
+  QCEP_INTEGER_PROPERTY(NewArrayNumDimensions)
+
+  Q_PROPERTY(int newArrayXDimension READ get_NewArrayXDimension WRITE set_NewArrayXDimension)
+  QCEP_INTEGER_PROPERTY(NewArrayXDimension)
+
+  Q_PROPERTY(int newArrayYDimension READ get_NewArrayYDimension WRITE set_NewArrayYDimension)
+  QCEP_INTEGER_PROPERTY(NewArrayYDimension)
+
+  Q_PROPERTY(int newArrayZDimension READ get_NewArrayZDimension WRITE set_NewArrayZDimension)
+  QCEP_INTEGER_PROPERTY(NewArrayZDimension)
+
+  Q_PROPERTY(int newArrayTDimension READ get_NewArrayTDimension WRITE set_NewArrayTDimension)
+  QCEP_INTEGER_PROPERTY(NewArrayTDimension)
+
+  Q_PROPERTY(QString newColumnName READ get_NewColumnName WRITE set_NewColumnName)
+  QCEP_STRING_PROPERTY(NewColumnName)
+
+  Q_PROPERTY(int newColumnSize READ get_NewColumnSize WRITE set_NewColumnSize)
+  QCEP_INTEGER_PROPERTY(NewColumnSize)
+
+  Q_PROPERTY(QString newImageName READ get_NewImageName WRITE set_NewImageName)
+  QCEP_STRING_PROPERTY(NewImageName)
+
+  Q_PROPERTY(int newImageWidth READ get_NewImageWidth WRITE set_NewImageWidth)
+  QCEP_INTEGER_PROPERTY(NewImageWidth)
+
+  Q_PROPERTY(int newImageHeight READ get_NewImageHeight WRITE set_NewImageHeight)
+  QCEP_INTEGER_PROPERTY(NewImageHeight)
 };
 
 #endif // QCEPEXPERIMENT_H
