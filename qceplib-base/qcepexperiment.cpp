@@ -75,3 +75,7 @@ QString QcepExperiment::defaultExperimentName(QString path) const
   return baseName;
 }
 
+QUndoStack *QcepExperiment::undoStack()
+{
+  return &m_UndoStack;
+}

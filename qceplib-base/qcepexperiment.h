@@ -3,6 +3,7 @@
 
 #include "qcepobject.h"
 #include <QDateTime>
+#include <QUndoStack>
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qcepdataobject-ptr.h"
@@ -22,8 +23,13 @@ public slots:
   QString defaultExperimentFileName(QString path) const;
   QString defaultExperimentName(QString path) const;
 
+public:
+  QUndoStack *undoStack();
+
 protected:
   QcepSettingsSaverPtr            m_SettingsSaver;
+
+  QUndoStack m_UndoStack;
 
 public:
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
