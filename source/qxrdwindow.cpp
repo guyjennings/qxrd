@@ -498,6 +498,21 @@ void QxrdWindow::initialize()
     connect(m_ActionIntegrateVsTTH, &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsTTH);
   }
 
+  if (expt) {
+    m_ActionUndo = expt->undoStack()->createUndoAction(this);
+    m_ActionRedo = expt->undoStack()->createRedoAction(this);
+
+    m_EditMenu->addAction(m_ActionUndo);
+    m_EditMenu->addAction(m_ActionRedo);
+    m_EditMenu->addSeparator();
+    m_EditMenu->addAction(m_ActionCut);
+    m_EditMenu->addAction(m_ActionCopy);
+    m_EditMenu->addAction(m_ActionPaste);
+    m_EditMenu->addAction(m_ActionDelete);
+    m_EditMenu->addSeparator();
+    m_EditMenu->addAction(m_ActionSelectAll);
+  }
+
   if (set) {
     QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
 

@@ -2080,6 +2080,41 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
+  <action name="m_ActionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="m_ActionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+  </action>
+  <action name="m_ActionCut">
+   <property name="text">
+    <string>Cut</string>
+   </property>
+  </action>
+  <action name="m_ActionCopy">
+   <property name="text">
+    <string>Copy</string>
+   </property>
+  </action>
+  <action name="m_ActionPaste">
+   <property name="text">
+    <string>Paste</string>
+   </property>
+  </action>
+  <action name="m_ActionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="m_ActionSelectAll">
+   <property name="text">
+    <string>Select All</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
