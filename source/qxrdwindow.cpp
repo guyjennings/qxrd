@@ -330,6 +330,15 @@ void QxrdWindow::initialize()
   connect(m_ExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateExperimentsMenu);
   setupRecentExperimentsMenu(m_ActionRecentExperiments);
 
+  connect(m_EditMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateEditMenu);
+  connect(m_ActionUndo, &QAction::triggered, this, &QxrdWindow::doUndo);
+  connect(m_ActionRedo, &QAction::triggered, this, &QxrdWindow::doRedo);
+  connect(m_ActionCut, &QAction::triggered, this, &QxrdWindow::doCut);
+  connect(m_ActionCopy, &QAction::triggered, this, &QxrdWindow::doCopy);
+  connect(m_ActionPaste, &QAction::triggered, this, &QxrdWindow::doPaste);
+  connect(m_ActionDelete, &QAction::triggered, this, &QxrdWindow::doDelete);
+  connect(m_ActionSelectAll, &QAction::triggered, this, &QxrdWindow::doSelectAll);
+
   connect(m_ConfigureDetectorMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateConfigureDetectorMenu);
   m_ConfigureDetectorMenu->menuAction()->setMenuRole(QAction::NoRole);
 
@@ -496,21 +505,6 @@ void QxrdWindow::initialize()
     connect(m_ActionIntegrateVsR,   &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsR);
     connect(m_ActionIntegrateVsQ,   &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsQ);
     connect(m_ActionIntegrateVsTTH, &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsTTH);
-  }
-
-  if (expt) {
-    m_ActionUndo = expt->undoStack()->createUndoAction(this);
-    m_ActionRedo = expt->undoStack()->createRedoAction(this);
-
-    m_EditMenu->addAction(m_ActionUndo);
-    m_EditMenu->addAction(m_ActionRedo);
-    m_EditMenu->addSeparator();
-    m_EditMenu->addAction(m_ActionCut);
-    m_EditMenu->addAction(m_ActionCopy);
-    m_EditMenu->addAction(m_ActionPaste);
-    m_EditMenu->addAction(m_ActionDelete);
-    m_EditMenu->addSeparator();
-    m_EditMenu->addAction(m_ActionSelectAll);
   }
 
   if (set) {
@@ -1254,6 +1248,227 @@ void QxrdWindow::saveExperimentCopy()
     if (newChoice.length()>0) {
       expt->saveExperimentCopyAs(newChoice);
       app->appendRecentExperiment(newChoice);
+    }
+  }
+}
+
+void QxrdWindow::populateEditMenu()
+{
+  QcepExperimentPtr expt(m_Experiment);
+
+  m_EditMenu -> clear();
+
+  if (expt) {
+    QAction *undoAction = NULL, *redoAction = NULL;
+
+    QWidget* focusWidget = QApplication::focusWidget();
+
+    if (focusWidget) {
+      printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+      QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+      QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+      QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+      QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+      QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+      if (txed || lned || ispn || dspn || cbox) {
+        undoAction = m_ActionUndo;
+        redoAction = m_ActionRedo;
+      }
+    }
+
+    if (undoAction == NULL) {
+      undoAction = expt->undoStack()->createUndoAction(this);
+    }
+
+    if (redoAction == NULL) {
+      redoAction = expt->undoStack()->createRedoAction(this);
+    }
+
+    m_EditMenu->addAction(undoAction);
+    m_EditMenu->addAction(redoAction);
+    m_EditMenu->addSeparator();
+    m_EditMenu->addAction(m_ActionCut);
+    m_EditMenu->addAction(m_ActionCopy);
+    m_EditMenu->addAction(m_ActionPaste);
+    m_EditMenu->addAction(m_ActionDelete);
+    m_EditMenu->addSeparator();
+    m_EditMenu->addAction(m_ActionSelectAll);
+  }
+}
+
+void QxrdWindow::doUndo()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      txed->undo();
+    } else if (lned) {
+      lned->undo();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QxrdWindow::doRedo()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      txed->redo();
+    } else if (lned) {
+      lned->redo();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QxrdWindow::doCut()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      txed->cut();
+    } else if (lned) {
+      lned->cut();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QxrdWindow::doCopy()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      txed->copy();
+    } else if (lned) {
+      lned->copy();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QxrdWindow::doPaste()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      txed->paste();
+    } else if (lned) {
+      lned->paste();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QxrdWindow::doDelete()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      if (txed->textCursor().hasSelection()) {
+        txed->textCursor().deleteChar();
+      }
+    } else if (lned) {
+      if (lned->selectedText().length()) {
+        lned->del();
+      }
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QxrdWindow::doSelectAll()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+    QAbstractItemView *itmv = qobject_cast<QAbstractItemView*>(focusWidget);
+
+    if (txed) {
+      txed->selectAll();
+    } else if (lned) {
+      lned->selectAll();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    } else if (itmv) {
+      itmv->selectAll();
     }
   }
 }

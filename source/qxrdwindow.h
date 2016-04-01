@@ -127,6 +127,13 @@ signals:
   void executeCommand(QString cmd);
 
 private slots:
+  void doUndo();
+  void doRedo();
+  void doCut();
+  void doCopy();
+  void doPaste();
+  void doDelete();
+  void doSelectAll();
   void newData();
   void newMask();
   void allocatedMemoryChanged();
@@ -134,6 +141,7 @@ private slots:
   void onMessageWindowLinesChanged(int newVal);
   void onUpdateIntervalMsecChanged(int newVal);
   void populateExperimentsMenu();
+  void populateEditMenu();
   void populateRecentExperimentsMenu();
   void populateConfigureDetectorMenu();
   void populateDetectorControlWindowsMenu();
