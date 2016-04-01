@@ -83,12 +83,14 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
   }
 }
 
-void QxrdExperiment::initialize(/*QxrdExperimentThreadWPtr expthrd, QxrdExperimentWPtr exp,*/ QSettings *settings)
+void QxrdExperiment::initialize(QSettings *settings)
 {
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
 //    QThread::currentThread()->setObjectName("experiment");
+
+    QcepExperiment::initialize(settings);
 
     splashMessage("Initializing File Saver");
 

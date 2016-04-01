@@ -54,7 +54,7 @@ class QxrdExperiment : public QcepExperiment, public QEnableSharedFromThis<QxrdE
 public:
   QxrdExperiment(QxrdExperimentThreadWPtr expthrd, QString path, QxrdApplicationWPtr app);
   virtual ~QxrdExperiment();
-  void initialize(QSettings *settings);
+  virtual void initialize(QSettings *settings);
 
   void openWindows();
 

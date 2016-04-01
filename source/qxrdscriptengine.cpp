@@ -32,7 +32,8 @@
 #include "qxrdroicalculator.h"
 #include "qxrdroicoordinates.h"
 #include "qxrdroicoordinateslistmodel.h"
-
+#include "qcepdataexportparameters.h"
+#include "qcepdataimportparameters.h"
 #include <QThread>
 #include <QDir>
 #include <QScriptValueIterator>
@@ -2059,6 +2060,18 @@ void QxrdScriptEngine::initialize()
 
     if (ds) {
       globalObject().setProperty("dataset", newQObject(ds.data()));
+    }
+
+    QcepDataExportParametersPtr exp = expt->dataExportParameters();
+
+    if (exp) {
+      globalObject().setProperty("exportParameters", newQObject(exp.data()));
+    }
+
+    QcepDataImportParametersPtr imp = expt->dataImportParameters();
+
+    if (imp) {
+      globalObject().setProperty("importParameters", newQObject(imp.data()));
     }
   }
 }
