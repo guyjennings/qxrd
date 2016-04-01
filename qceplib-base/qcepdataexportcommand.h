@@ -8,6 +8,8 @@
 
 class QcepDataExportCommand : public QcepObject
 {
+  Q_OBJECT
+
 public:
   QcepDataExportCommand(QcepDatasetModelPtr model, const QModelIndexList &idx);
 

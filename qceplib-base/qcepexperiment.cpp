@@ -2,6 +2,8 @@
 #include "qcepsettingssaver.h"
 #include <QFileInfo>
 #include <QDir>
+#include "qcepdataexportparameters.h"
+#include "qcepdataimportparameters.h"
 
 QcepExperiment::QcepExperiment(QString path, QString name, QcepObject *parent) :
   QcepObject(name, parent),
@@ -27,6 +29,15 @@ QcepExperiment::QcepExperiment(QString path, QString name, QcepObject *parent) :
   m_NewImageWidth(m_SettingsSaver, this, "newImageWidth", 2048, "Width of new image"),
   m_NewImageHeight(m_SettingsSaver, this, "newImageHeight", 2048, "Height of new image")
 {
+}
+
+void QcepExperiment::initialize(QSettings *settings)
+{
+  m_DataExportParameters = QcepDataExportParametersPtr(
+        new QcepDataExportParameters(m_SettingsSaver, "exportParameters"));
+
+  m_DataImportParameters = QcepDataImportParametersPtr(
+        new QcepDataImportParameters(m_SettingsSaver, "importParameters"));
 }
 
 QString QcepExperiment::defaultExperimentDirectory(QString path) const
@@ -78,4 +89,44 @@ QString QcepExperiment::defaultExperimentName(QString path) const
 QUndoStack *QcepExperiment::undoStack()
 {
   return &m_UndoStack;
+}
+
+QcepDataExportParametersPtr QcepExperiment::dataExportParameters()
+{
+  return m_DataExportParameters;
+}
+
+QcepDataImportParametersPtr QcepExperiment::dataImportParameters()
+{
+  return m_DataImportParameters;
+}
+
+void QcepExperiment::readSettings(QSettings *settings, QString section)
+{
+  if (settings) {
+    QcepObject::readSettings(settings, section);
+
+    if (m_DataExportParameters) {
+      m_DataExportParameters -> readSettings(settings, "exportParameters");
+    }
+
+    if (m_DataImportParameters) {
+      m_DataImportParameters -> readSettings(settings, "importParameters");
+    }
+  }
+}
+
+void QcepExperiment::writeSettings(QSettings *settings, QString section)
+{
+  if (settings) {
+    QcepObject::writeSettings(settings, section);
+
+    if (m_DataExportParameters) {
+      m_DataExportParameters -> writeSettings(settings, "exportParameters");
+    }
+
+    if (m_DataImportParameters) {
+      m_DataImportParameters -> writeSettings(settings, "importParameters");
+    }
+  }
 }

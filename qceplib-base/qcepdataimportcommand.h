@@ -8,6 +8,8 @@
 
 class QcepDataImportCommand : public QcepObject
 {
+  Q_OBJECT
+
 public:
   QcepDataImportCommand(QcepDatasetModelPtr model, const QModelIndexList &idx);
 

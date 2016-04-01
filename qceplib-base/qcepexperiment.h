@@ -8,12 +8,15 @@
 #include "qcepsettingssaver-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepimagedata-ptr.h"
+#include "qcepdataexportparameters-ptr.h"
+#include "qcepdataimportparameters-ptr.h"
 
 class QcepExperiment : public QcepObject
 {
   Q_OBJECT
 public:
   explicit QcepExperiment(QString path, QString name, QcepObject *parent);
+  virtual void initialize(QSettings *settings);
 
 signals:
 
@@ -23,6 +26,9 @@ public slots:
   QString defaultExperimentFileName(QString path) const;
   QString defaultExperimentName(QString path) const;
 
+  QcepDataExportParametersPtr dataExportParameters();
+  QcepDataImportParametersPtr dataImportParameters();
+
 public:
   QUndoStack *undoStack();
 
@@ -30,6 +36,13 @@ protected:
   QcepSettingsSaverPtr            m_SettingsSaver;
 
   QUndoStack m_UndoStack;
+
+  virtual void readSettings(QSettings *settings, QString section);
+  virtual void writeSettings(QSettings *settings, QString section);
+
+private:
+  QcepDataExportParametersPtr    m_DataExportParameters;
+  QcepDataImportParametersPtr    m_DataImportParameters;
 
 public:
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
