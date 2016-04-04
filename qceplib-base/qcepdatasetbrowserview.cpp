@@ -21,8 +21,8 @@
 #include "qcepnewimagedialog.h"
 #include <QFileDialog>
 #include "qcepdatasetselectiondialog.h"
-#include "qcepdataexportdialog.h"
-#include "qcepdataimportdialog.h"
+#include "qcepdataexportcommand.h"
+#include "qcepdataimportcommand.h"
 
 QcepDatasetBrowserView::QcepDatasetBrowserView(QWidget *parent)
   : QTreeView(parent)
@@ -330,9 +330,9 @@ void QcepDatasetBrowserView::readData(const QModelIndexList &idx)
                                                        "", &selectedFilter);
 
   if (theFiles.length() > 0) {
-    QcepDataImportDialog dlog(m_DatasetModel, idx);
+    QcepDataImportCommand cmd(m_DatasetModel, idx, theFiles);
 
-    dlog.exec();
+    cmd.exec();
   }
 }
 
@@ -346,9 +346,9 @@ void QcepDatasetBrowserView::saveData(const QModelIndexList &idx)
                                                  obj->fileFormatFilterString(), &selectedFilter);
 
   if (theFile.length()) {
-    QcepDataExportDialog dlog(m_DatasetModel, idx);
+    QcepDataExportCommand cmd(m_DatasetModel, idx, theFile);
 
-    dlog.exec();
+    cmd.exec();
   }
 }
 
