@@ -25,7 +25,9 @@ class QcepDatasetModel : public QAbstractItemModel
   Q_OBJECT
 
 public:
-  QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBaseWPtr proc, QcepDatasetWPtr ds);
+  QcepDatasetModel(QcepExperimentWPtr expt,
+                   QcepDataProcessorBaseWPtr proc = QcepDataProcessorBaseWPtr(),
+                   QcepDatasetWPtr ds = QcepDatasetWPtr());
 
 public slots:
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;

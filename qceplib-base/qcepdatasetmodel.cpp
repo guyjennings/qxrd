@@ -15,7 +15,12 @@ QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBas
   m_Processor(proc),
   m_Dataset(ds)
 {
-  connect(ds.data(), SIGNAL(dataObjectChanged()), this, SLOT(onDataObjectChanged()));
+  if (m_Dataset == NULL) {
+    m_Dataset = QcepDatasetPtr(
+          new QcepDataset(QcepSettingsSaverWPtr(), "model", NULL));
+  }
+
+  connect(m_Dataset.data(), SIGNAL(dataObjectChanged()), this, SLOT(onDataObjectChanged()));
 }
 
 void QcepDatasetModel::printMessage(QString msg, QDateTime dt) const

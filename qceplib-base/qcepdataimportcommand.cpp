@@ -3,6 +3,7 @@
 #include "qcepexperiment.h"
 #include "qcepdataimportparameters.h"
 #include "qcepdataimportdialog.h"
+#include "qcepfileimporter.h"
 
 QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelPtr model, const QModelIndexList &idx, QStringList files) :
   QcepObject("dataExport", NULL),
@@ -15,6 +16,13 @@ QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelPtr model, const QM
 
     if (m_Experiment) {
       m_Parameters = m_Experiment->dataImportParameters();
+
+      m_ImportedData = QcepDatasetModelPtr(
+            new QcepDatasetModel(m_Experiment));
+
+      m_FileImporter = QcepFileImporter::importFiles(m_ImportedData,
+                                                     m_ImportedIndexes,
+                                                     files);
     }
   }
 }

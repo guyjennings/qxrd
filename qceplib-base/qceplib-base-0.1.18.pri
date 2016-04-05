@@ -79,7 +79,11 @@ SOURCES += \
     $$PWD/qcepdataimportdialog.cpp \
     $$PWD/qcepdataexportdialog.cpp \
     $$PWD/qcepdataimportparameters.cpp \
-    $$PWD/qcepdataexportparameters.cpp
+    $$PWD/qcepdataexportparameters.cpp \
+    $$PWD/qcepfileimporter.cpp \
+    $$PWD/qcepfileimportertext.cpp \
+    $$PWD/qcepfileimportertiff.cpp \
+    $$PWD/qcepfileimporterhdf.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -191,7 +195,12 @@ HEADERS += \
     $$PWD/qcepdataexportparameters-ptr.h \
     $$PWD/qcepdataexportcommand-ptr.h \
     $$PWD/qcepdataimportparameters-ptr.h \
-    $$PWD/qcepdataimportcommand-ptr.h
+    $$PWD/qcepdataimportcommand-ptr.h \
+    $$PWD/qcepfileimporter.h \
+    $$PWD/qcepfileimportertext.h \
+    $$PWD/qcepfileimportertiff.h \
+    $$PWD/qcepfileimporterhdf.h \
+    $$PWD/qcepfileimporter-ptr.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \

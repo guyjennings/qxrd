@@ -6,6 +6,7 @@
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepexperiment-ptr.h"
 #include "qcepdataimportparameters-ptr.h"
+#include "qcepfileimporter-ptr.h"
 #include <QModelIndexList>
 
 class QcepDataImportCommand : public QcepObject
@@ -18,6 +19,7 @@ public:
   bool exec();
 
 private:
+  QcepFileImporterPtr         m_FileImporter;
   QcepDatasetModelPtr         m_ImportedData;
   QModelIndexList             m_ImportedIndexes;
   QcepDatasetModelPtr         m_Model;
