@@ -3,6 +3,7 @@
 
 #include "qcepmacros.h"
 #include "qcepobject.h"
+#include "qcepdataset-ptr.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepexperiment-ptr.h"
 #include "qcepdataimportparameters-ptr.h"
@@ -20,7 +21,8 @@ public:
 
 private:
   QcepFileImporterPtr         m_FileImporter;
-  QcepDatasetModelPtr         m_ImportedData;
+  QcepDatasetPtr              m_ImportedData;
+  QcepDatasetModelPtr         m_ImportedDataset;
   QModelIndexList             m_ImportedIndexes;
   QcepDatasetModelPtr         m_Model;
   QModelIndexList             m_Indexes;

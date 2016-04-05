@@ -26,6 +26,12 @@ public:
   static QcepFileImporterPtr importFiles(QcepDatasetModelPtr model,
                                          QModelIndexList &indexes,
                                          QStringList paths);
+
+signals:
+  void importStarted();
+  void importProgress(double pct);
+  void importCompleted();
+
 protected:
   QcepDatasetModelPtr m_Model;
   QModelIndexList    &m_Indexes;

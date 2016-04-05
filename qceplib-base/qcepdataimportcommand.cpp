@@ -17,10 +17,11 @@ QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelPtr model, const QM
     if (m_Experiment) {
       m_Parameters = m_Experiment->dataImportParameters();
 
-      m_ImportedData = QcepDatasetModelPtr(
-            new QcepDatasetModel(m_Experiment));
+      m_ImportedData = QcepDatasetPtr(new QcepDataset(QcepSettingsSaverWPtr(), "import", NULL));
+      m_ImportedDataset = QcepDatasetModelPtr(
+            new QcepDatasetModel(m_Experiment, QcepDataProcessorBaseWPtr(), m_ImportedData));
 
-      m_FileImporter = QcepFileImporter::importFiles(m_ImportedData,
+      m_FileImporter = QcepFileImporter::importFiles(m_ImportedDataset,
                                                      m_ImportedIndexes,
                                                      files);
     }
@@ -30,7 +31,7 @@ QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelPtr model, const QM
 bool QcepDataImportCommand::exec()
 {
   bool res = false;
-  QcepDataImportDialog dlog(m_ImportedData,
+  QcepDataImportDialog dlog(m_ImportedDataset,
                             m_ImportedIndexes,
                             m_Model,
                             m_Indexes,
