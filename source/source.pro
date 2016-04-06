@@ -96,11 +96,11 @@ include(submodules/qceplib/qceplib-mar345.pri)
 include(submodules/qceplib/qceplib-cbf.pri)
 include(submodules/qceplib/qceplib-tiff.pri)
 include(submodules/qceplib/qceplib-levmar.pri)
-
-macx {
 include(submodules/qceplib/qceplib-szip.pri)
 include(submodules/qceplib/qceplib-zlib.pri)
 include(submodules/qceplib/qceplib-hdf5.pri)
+
+macx {
 }
 
 include(submodules/qceplib/qceplib-specserver.pri)
