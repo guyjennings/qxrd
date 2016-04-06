@@ -4,9 +4,9 @@
 #include "qcepdataimportparameters.h"
 
 QcepDataImportDialog::QcepDataImportDialog(QcepDatasetModelPtr indata,
-                                           const QModelIndexList &inselect,
+                                           QModelIndexList &inselect,
                                            QcepDatasetModelPtr destdata,
-                                           const QModelIndexList &destselect,
+                                           QModelIndexList &destselect,
                                            QStringList files,
                                            QcepExperimentPtr expt,
                                            QcepDataImportParametersPtr parms) :
@@ -48,6 +48,8 @@ QcepDataImportDialog::QcepDataImportDialog(QcepDatasetModelPtr indata,
       i = m_DestData->parent(i);
     }
   }
+
+  m_ButtonBox->setEnabled(false);
 }
 
 QcepDataImportDialog::~QcepDataImportDialog()
@@ -56,5 +58,19 @@ QcepDataImportDialog::~QcepDataImportDialog()
 
 void QcepDataImportDialog::accept()
 {
+  m_InSelect =  m_ImportedData->selectionModel()->selectedRows();
+
   QDialog::accept();
+}
+
+void QcepDataImportDialog::importProgress(double pct)
+{
+  m_ProgressBar->setVisible(true);
+  m_ProgressBar->setValue((int) pct);
+}
+
+void QcepDataImportDialog::importCompleted()
+{
+  m_ProgressBar->setVisible(false);
+  m_ButtonBox->setEnabled(true);
 }

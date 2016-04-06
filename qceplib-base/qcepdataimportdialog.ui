@@ -50,8 +50,8 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QDialogButtonBox" name="buttonBox">
+   <item row="2" column="1">
+    <widget class="QDialogButtonBox" name="m_ButtonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -60,12 +60,19 @@
      </property>
     </widget>
    </item>
+   <item row="2" column="0">
+    <widget class="QProgressBar" name="m_ProgressBar">
+     <property name="value">
+      <number>0</number>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>m_ButtonBox</sender>
    <signal>accepted()</signal>
    <receiver>QcepDataImportDialog</receiver>
    <slot>accept()</slot>
@@ -81,7 +88,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>m_ButtonBox</sender>
    <signal>rejected()</signal>
    <receiver>QcepDataImportDialog</receiver>
    <slot>reject()</slot>
