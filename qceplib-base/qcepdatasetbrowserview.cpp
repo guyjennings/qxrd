@@ -56,7 +56,7 @@ void QcepDatasetBrowserView::setDatasetModel(QcepDatasetModelPtr model)
 
 void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
 {
-//  m_Dataset->printMessage(tr("QcepDatasetBrowserView::onCustomContextMenuRequested([%1,%2])").arg(pt.x()).arg(pt.y()));
+  //  m_Dataset->printMessage(tr("QcepDatasetBrowserView::onCustomContextMenuRequested([%1,%2])").arg(pt.x()).arg(pt.y()));
 
   QModelIndex index = indexAt(pt);
 
@@ -64,172 +64,172 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
 
   if (expt) {
     expt->printMessage(tr("Custom context menu clicked at: %1").arg(m_DatasetModel->indexDescription(index)));
-  }
 
-  QModelIndexList indexes = selectionModel()->selectedRows();
+    QModelIndexList indexes = selectionModel()->selectedRows();
 
-  int nSel = indexes.count();
+    int nSel = indexes.count();
 
-  QcepDataObjectPtr     obj;
-  QcepDataGroupPtr      grp;
-  QcepDataColumnPtr     col;
-  QcepDataColumnScanPtr scn;
-  QcepDataObjectPtr     prn;
-  QcepDataColumnScanPtr psc;
-  QcepImageDataBasePtr  img;
+    QcepDataObjectPtr     obj;
+    QcepDataGroupPtr      grp;
+    QcepDataColumnPtr     col;
+    QcepDataColumnScanPtr scn;
+    QcepDataObjectPtr     prn;
+    QcepDataColumnScanPtr psc;
+    QcepImageDataBasePtr  img;
 
-  if (nSel == 1) {
-    QModelIndex idx = indexes.value(0);
+    if (nSel == 1) {
+      QModelIndex idx = indexes.value(0);
 
-    obj = m_DatasetModel->item(idx);
-    grp = m_DatasetModel->group(idx);
-    col = m_DatasetModel->column(idx);
-    scn = m_DatasetModel->columnScan(idx);
-    img = m_DatasetModel->image(idx);
+      obj = m_DatasetModel->item(idx);
+      grp = m_DatasetModel->group(idx);
+      col = m_DatasetModel->column(idx);
+      scn = m_DatasetModel->columnScan(idx);
+      img = m_DatasetModel->image(idx);
 
-    if (obj) {
-      prn = obj->parentItem();
-      psc = qSharedPointerDynamicCast<QcepDataColumnScan>(prn);
-    }
-  } else if (nSel == 0) {
-    obj = m_DatasetModel->item(QModelIndex());
-    grp = m_DatasetModel->group(QModelIndex());
-  }
-
-  QMenu menu(NULL, NULL);
-
-  QString names;
-
-  for (int i=0; i<nSel; i++) {
-    QcepDataObjectPtr o = m_DatasetModel->item(indexes.value(i));
-//        static_cast<QcepDataObject*>(indexes.at(i).internalPointer());
-
-    if (i != 0) {
-      names += ", ";
+      if (obj) {
+        prn = obj->parentItem();
+        psc = qSharedPointerDynamicCast<QcepDataColumnScan>(prn);
+      }
+    } else if (nSel == 0) {
+      obj = m_DatasetModel->item(QModelIndex());
+      grp = m_DatasetModel->group(QModelIndex());
     }
 
-    names += ( o ? o -> pathName() : "<NULL>");
-  }
+    QMenu menu(NULL, NULL);
 
-  QString name = (obj ? obj->pathName() : "");
+    QString names;
 
-  QAction *tt = menu.addAction("Data operations...");
+    for (int i=0; i<nSel; i++) {
+      QcepDataObjectPtr o = m_DatasetModel->item(indexes.value(i));
+      //        static_cast<QcepDataObject*>(indexes.at(i).internalPointer());
 
-  tt->setDisabled(true);
+      if (i != 0) {
+        names += ", ";
+      }
 
-  QMenu   *nm = menu.addMenu("Create New");
+      names += ( o ? o -> pathName() : "<NULL>");
+    }
 
-  QAction *ng = nm->addAction(tr("New Group in %1").arg(name));
+    QString name = (obj ? obj->pathName() : "");
 
-  QAction *nc = NULL;
+    QAction *tt = menu.addAction("Data operations...");
 
-  if (psc == NULL) {
-    nc = nm->addAction(tr("New Data Column in %1").arg(name));
-  } else {
-    nc = nm->addAction(tr("Insert Data Column after %1").arg(name));
-  }
+    tt->setDisabled(true);
 
-  QAction *ns = nm->addAction(tr("New Column Scan in %1").arg(name));
-  QAction *ni = nm->addAction(tr("New Image in %1").arg(name));
-  QAction *na = nm->addAction(tr("New Array in %1").arg(name));
+    QMenu   *nm = menu.addMenu("Create New");
 
-  QMenu   *ops = menu.addMenu(tr("Operations on %1 ...").arg(name));
+    QAction *ng = nm->addAction(tr("New Group in %1").arg(name));
 
-  QAction *cat = ops->addAction(tr("Concatenate to %1...").arg(name));
-  QAction *add = ops->addAction(tr("Add to %1...").arg(name));
-  QAction *sub = ops->addAction(tr("Subtract from %1...").arg(name));
-  QAction *mul = ops->addAction(tr("Multiply %1 by...").arg(name));
-  QAction *div = ops->addAction(tr("Divide %1 by...").arg(name));
-  QAction *ntg = ops->addAction(tr("Circular Integrate %1").arg(names));
-  QAction *ntgp = ops->addAction(tr("Circular Integrate %1 Parameters...").arg(names));
-  QAction *pol = ops->addAction(tr("Polar Transform %1").arg(names));
-  QAction *polp = ops->addAction(tr("Polar Transform %1 Parameters...").arg(names));
-  QAction *pli = ops->addAction(tr("Polar Integrate %1").arg(names));
-  QAction *plip = ops->addAction(tr("Polar Integrate %1 Parameters...").arg(names));
+    QAction *nc = NULL;
 
-  QAction *rd = menu.addAction(tr("Read Data into %1 ...").arg(name));
-  QAction *sv = menu.addAction(tr("Save %1 as ...").arg(name));
-  QAction *og = menu.addAction(tr("Open %1 in graph window").arg(names));
-  QAction *os = menu.addAction(tr("Open %1 in spreadsheet window").arg(names));
-  QAction *op = menu.addAction(tr("Open %1 in properties window").arg(names));
-  QAction *dl = menu.addAction(tr("Delete %1").arg(names));
+    if (psc == NULL) {
+      nc = nm->addAction(tr("New Data Column in %1").arg(name));
+    } else {
+      nc = nm->addAction(tr("Insert Data Column after %1").arg(name));
+    }
 
-  ng->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
-  nc->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL || psc != NULL)));
-  ns->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
-  ni->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
-  na->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
+    QAction *ns = nm->addAction(tr("New Column Scan in %1").arg(name));
+    QAction *ni = nm->addAction(tr("New Image in %1").arg(name));
+    QAction *na = nm->addAction(tr("New Array in %1").arg(name));
 
-  cat->setEnabled(nSel == 1 && scn);
-  add->setEnabled(nSel == 1 && (scn || col || img));
-  sub->setEnabled(nSel == 1 && (scn || col || img));
-  mul->setEnabled(nSel == 1 && (scn || col || img));
-  div->setEnabled(nSel == 1 && (scn || col || img));
+    QMenu   *ops = menu.addMenu(tr("Operations on %1 ...").arg(name));
 
-  ntg->setEnabled(nSel >= 1);
+    QAction *cat = ops->addAction(tr("Concatenate to %1...").arg(name));
+    QAction *add = ops->addAction(tr("Add to %1...").arg(name));
+    QAction *sub = ops->addAction(tr("Subtract from %1...").arg(name));
+    QAction *mul = ops->addAction(tr("Multiply %1 by...").arg(name));
+    QAction *div = ops->addAction(tr("Divide %1 by...").arg(name));
+    QAction *ntg = ops->addAction(tr("Circular Integrate %1").arg(names));
+    QAction *ntgp = ops->addAction(tr("Circular Integrate %1 Parameters...").arg(names));
+    QAction *pol = ops->addAction(tr("Polar Transform %1").arg(names));
+    QAction *polp = ops->addAction(tr("Polar Transform %1 Parameters...").arg(names));
+    QAction *pli = ops->addAction(tr("Polar Integrate %1").arg(names));
+    QAction *plip = ops->addAction(tr("Polar Integrate %1 Parameters...").arg(names));
 
-  rd->setEnabled(true);
-  sv->setEnabled(true);
-  og->setEnabled(nSel >= 1);
-  os->setEnabled(nSel >= 1);
-  op->setEnabled(nSel >= 1);
-  dl->setEnabled(nSel >= 1);
+    QAction *rd = menu.addAction(tr("Read Data into %1 ...").arg(name));
+    QAction *sv = menu.addAction(tr("Save %1 as ...").arg(name));
+    QAction *og = menu.addAction(tr("Open %1 in graph window").arg(names));
+    QAction *os = menu.addAction(tr("Open %1 in spreadsheet window").arg(names));
+    QAction *op = menu.addAction(tr("Open %1 in properties window").arg(names));
+    QAction *dl = menu.addAction(tr("Delete %1").arg(names));
 
-  nm->setEnabled(ng->isEnabled()
-                 || nc->isEnabled()
-                 || ns->isEnabled()
-                 || ni->isEnabled()
-                 || na->isEnabled());
+    ng->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
+    nc->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL || psc != NULL)));
+    ns->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
+    ni->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
+    na->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
 
-  rd->setEnabled(grp != NULL);
+    cat->setEnabled(nSel == 1 && scn);
+    add->setEnabled(nSel == 1 && (scn || col || img));
+    sub->setEnabled(nSel == 1 && (scn || col || img));
+    mul->setEnabled(nSel == 1 && (scn || col || img));
+    div->setEnabled(nSel == 1 && (scn || col || img));
+
+    ntg->setEnabled(nSel >= 1);
+
+    rd->setEnabled(true);
+    sv->setEnabled(true);
+    og->setEnabled(nSel >= 1);
+    os->setEnabled(nSel >= 1);
+    op->setEnabled(nSel >= 1);
+    dl->setEnabled(nSel >= 1);
+
+    nm->setEnabled(ng->isEnabled()
+                   || nc->isEnabled()
+                   || ns->isEnabled()
+                   || ni->isEnabled()
+                   || na->isEnabled());
+
+    rd->setEnabled(grp != NULL);
 
 
-  QAction *action = menu.exec(QCursor::pos(), tt);
+    QAction *action = menu.exec(QCursor::pos(), tt);
 
-  if (action == ng) {
-    newGroup(indexes);
-  } else if (action == nc) {
-    newDataColumn(indexes);
-  } else if (action == ns) {
-    newColumnScan(indexes);
-  } else if (action == ni) {
-    newImage(indexes);
-  } else if (action == na) {
-    newArray(indexes);
-  } else if (action == cat) {
-    concatenateData(indexes.value(0));
-  } else if (action == add) {
-    addData(indexes.value(0));
-  } else if (action == sub) {
-    subtractData(indexes.value(0));
-  } else if (action == mul) {
-    multiplyData(indexes.value(0));
-  } else if (action == div) {
-    divideData(indexes.value(0));
-  } else if (action == ntg) {
-    integrateData(indexes);
-  } else if (action == ntgp) {
-    integrateParameters(indexes);
-  } else if (action == pol) {
-    polarTransformData(indexes);
-  } else if (action == polp) {
-    polarTransformParameters(indexes);
-  } else if (action == pli) {
-    polarIntegrateData(indexes);
-  } else if (action == plip) {
-    polarIntegrateParameters(indexes);
-  } else if (action == rd) {
-    readData(indexes);
-  } else if (action == sv) {
-    saveData(indexes);
-  } else if (action == og) {
-    openGraph(indexes);
-  } else if (action == os) {
-    openSpreadsheet(indexes);
-  } else if (action == op) {
-    openProperties(indexes);
-  } else if (action == dl) {
-    deleteData(indexes);
+    if (action == ng) {
+      newGroup(indexes);
+    } else if (action == nc) {
+      newDataColumn(indexes);
+    } else if (action == ns) {
+      newColumnScan(indexes);
+    } else if (action == ni) {
+      newImage(indexes);
+    } else if (action == na) {
+      newArray(indexes);
+    } else if (action == cat) {
+      concatenateData(indexes.value(0));
+    } else if (action == add) {
+      addData(indexes.value(0));
+    } else if (action == sub) {
+      subtractData(indexes.value(0));
+    } else if (action == mul) {
+      multiplyData(indexes.value(0));
+    } else if (action == div) {
+      divideData(indexes.value(0));
+    } else if (action == ntg) {
+      integrateData(indexes);
+    } else if (action == ntgp) {
+      integrateParameters(indexes);
+    } else if (action == pol) {
+      polarTransformData(indexes);
+    } else if (action == polp) {
+      polarTransformParameters(indexes);
+    } else if (action == pli) {
+      polarIntegrateData(indexes);
+    } else if (action == plip) {
+      polarIntegrateParameters(indexes);
+    } else if (action == rd) {
+      readData(indexes);
+    } else if (action == sv) {
+      saveData(indexes);
+    } else if (action == og) {
+      openGraph(indexes);
+    } else if (action == os) {
+      openSpreadsheet(indexes);
+    } else if (action == op) {
+      openProperties(indexes);
+    } else if (action == dl) {
+      deleteData(indexes);
+    }
   }
 }
 
