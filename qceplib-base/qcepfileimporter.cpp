@@ -2,6 +2,10 @@
 #include "qcepfileimporterhdf.h"
 #include "qcepfileimportertext.h"
 #include "qcepfileimportertiff.h"
+#include "qcepfileimportermultiple.h"
+#include "hdf5.h"
+#include <tiff.h>
+#include <tiffio.h>
 
 QcepFileImporter::QcepFileImporter(QcepDatasetModelPtr model,
                                    QModelIndexList &indexes,
@@ -16,12 +20,41 @@ QcepFileImporter::QcepFileImporter(QcepDatasetModelPtr model,
 
 static bool isHDF(QString path)
 {
-  return false;
+  bool res = false;
+
+  if (H5Fis_hdf5(qPrintable(path))) {
+    res = true;
+  }
+
+  return res;
 }
 
 static bool isTIFF(QString path)
 {
-  return false;
+  bool res = false;
+
+#ifdef TIFF_VERSION
+  TIFFHeader header;
+#else
+  TIFFHeaderCommon header;
+#endif
+  FILE *file = fopen(qPrintable(path), "r");
+
+  if (file) {
+    if (fread(&header, sizeof(header), 1, file) == 1) {
+      switch (header.tiff_magic) {
+      case TIFF_BIGENDIAN:
+      case TIFF_LITTLEENDIAN:
+      case MDI_LITTLEENDIAN:
+      case MDI_BIGENDIAN:
+        res = true;
+      }
+    }
+
+    fclose(file);
+  }
+
+  return res;
 }
 
 static bool isText(QString path)
@@ -39,15 +72,12 @@ QcepFileImporter::importFile(QcepDatasetModelPtr model,
   if (isHDF(path)) {
     res = QcepFileImporterPtr(
           new QcepFileImporterHDF(model, indexes, path));
-    res -> exec();
   } else if (isTIFF(path)) {
     res = QcepFileImporterPtr(
           new QcepFileImporterTIFF(model, indexes, path));
-    res -> exec();
   } else if (isText(path)) {
     res = QcepFileImporterPtr(
           new QcepFileImporterText(model, indexes, path));
-    res -> exec();
   }
 
   return res;
@@ -58,25 +88,27 @@ QcepFileImporter::importFiles(QcepDatasetModelPtr model,
                               QModelIndexList &indexes,
                               QStringList paths)
 {
-  foreach(QString path, paths) {
-    if (isHDF(path)) {
-      QcepFileImporterHDF importer(model, indexes, path);
-      importer.exec();
-    } else if (isTIFF(path)) {
-      QcepFileImporterTIFF importer(model, indexes, path);
-      importer.exec();
-    } else if (isText(path)) {
-      QcepFileImporterText importer(model, indexes, path);
-      importer.exec();
+  QcepFileImporterMultiple *res = NULL;
+
+  if (paths.count() == 1) {
+    return importFile(model, indexes, paths.value(0));
+  } else if (paths.count() >= 1) {
+    res = new QcepFileImporterMultiple(model, indexes);
+
+    if (res) {
+      foreach(QString path, paths) {
+        if (isHDF(path)) {
+          res-> append(QcepFileImporterPtr(new QcepFileImporterHDF(model, indexes, path)));
+        } else if (isTIFF(path)) {
+          res -> append(QcepFileImporterPtr(new QcepFileImporterTIFF(model, indexes, path)));
+        } else if (isText(path)) {
+          res -> append(QcepFileImporterPtr(new QcepFileImporterText(model, indexes, path)));
+        }
+      }
     }
   }
 
-  return QcepFileImporterPtr(
-        new QcepFileImporter(model, indexes, ""));
-}
-
-void QcepFileImporter::start()
-{
+  return QcepFileImporterPtr(res);
 }
 
 void QcepFileImporter::exec()

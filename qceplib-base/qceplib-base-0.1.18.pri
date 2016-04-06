@@ -83,7 +83,8 @@ SOURCES += \
     $$PWD/qcepfileimporter.cpp \
     $$PWD/qcepfileimportertext.cpp \
     $$PWD/qcepfileimportertiff.cpp \
-    $$PWD/qcepfileimporterhdf.cpp
+    $$PWD/qcepfileimporterhdf.cpp \
+    $$PWD/qcepfileimportermultiple.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -200,7 +201,8 @@ HEADERS += \
     $$PWD/qcepfileimportertext.h \
     $$PWD/qcepfileimportertiff.h \
     $$PWD/qcepfileimporterhdf.h \
-    $$PWD/qcepfileimporter-ptr.h
+    $$PWD/qcepfileimporter-ptr.h \
+    $$PWD/qcepfileimportermultiple.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \

@@ -15,10 +15,6 @@ QcepFileImporterText::QcepFileImporterText(QcepDatasetModelPtr model,
 {
 }
 
-void QcepFileImporterText::start()
-{
-}
-
 void QcepFileImporterText::exec()
 {
   QFile aFile(m_Path);
@@ -95,6 +91,9 @@ void QcepFileImporterText::processScan(QString aLine)
 
       m_Model->append(QModelIndex(), m_LatestScan);
     }
+
+    m_RowCount = 0;
+    m_ColumnCount = 0;
   }
 }
 
@@ -141,16 +140,16 @@ void QcepFileImporterText::processDataLine(QString aLine)
 {
   QRegExp splitWs("\\s+");
 
-  QStringList nums = aLine.split(splitWs);
+  QStringList nums = aLine.split(splitWs, QString::SkipEmptyParts);
 
-  if (m_LatestScan) {
-    int nRows = m_LatestScan->rowCount();
+  if (m_LatestScan && (nums.count() >= 1)) {
+    m_LatestScan->resizeRows(m_RowCount+1);
 
-    m_LatestScan->resizeRows(nRows+1);
-
-    for (int i=0; i<nums.count(); i++) {
+    for (int i=0; i<m_ColumnCount; i++) {
       double val = nums.value(i).toDouble();
-      m_LatestScan->setValue(i, nRows, val);
+      m_LatestScan->setValue(i, m_RowCount, val);
     }
+
+    m_RowCount++;
   }
 }

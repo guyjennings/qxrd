@@ -14,7 +14,6 @@ public:
                        QModelIndexList &indexes,
                        QString path);
 
-  void start();
   void exec();
 
 private:
@@ -37,6 +36,7 @@ private:
   QRegExp               m_ColumnNamesLine;
   QRegExp               m_DataLine;
   int                   m_ColumnCount;
+  int                   m_RowCount;
 };
 
 #endif // QCEPFILEIMPORTERTEXT_H

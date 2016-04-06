@@ -7,6 +7,8 @@ QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QcepExperimentWPtr expt, Qcep
 {
   setupUi(this);
 
+  m_DatasetBrowserView->setExperiment(m_Experiment);
+
   if (m_DatasetModel) {
     m_DatasetBrowserView -> setDatasetModel(m_DatasetModel);
   }

@@ -16,7 +16,6 @@ public:
                    QModelIndexList &indexes,
                    QString path);
 
-  virtual void start();
   virtual void exec();
 
   static QcepFileImporterPtr importFile(QcepDatasetModelPtr model,
