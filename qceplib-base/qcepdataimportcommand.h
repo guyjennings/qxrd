@@ -18,6 +18,7 @@ public:
   QcepDataImportCommand(QcepDatasetModelPtr model, const QModelIndexList &idx, QStringList files);
 
   bool exec();
+  void copyResults();
 
 private:
   QcepFileImporterPtr         m_FileImporter;
