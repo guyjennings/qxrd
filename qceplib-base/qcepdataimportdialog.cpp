@@ -73,4 +73,6 @@ void QcepDataImportDialog::importCompleted()
 {
   m_ProgressBar->setVisible(false);
   m_ButtonBox->setEnabled(true);
+
+  m_ImportedData->selectAll();
 }

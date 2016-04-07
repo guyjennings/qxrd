@@ -306,7 +306,7 @@ QString QcepImageDataBase::fileFormatTIFF()
 
 QString QcepImageDataBase::fileFormatTabDelimited()
 {
-  return "Tab delimited (*.txt.*.dat)";
+  return "Tab delimited (*.txt, *.dat)";
 }
 
 QString QcepImageDataBase::fileFormatTransposedTabDelimited()

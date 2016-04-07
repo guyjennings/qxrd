@@ -23,6 +23,8 @@
 #include "qcepdatasetselectiondialog.h"
 #include "qcepdataexportcommand.h"
 #include "qcepdataimportcommand.h"
+#include "qcepdataimportparameters.h"
+#include "qcepdataexportparameters.h"
 
 QcepDatasetBrowserView::QcepDatasetBrowserView(QWidget *parent)
   : QTreeView(parent)
@@ -324,31 +326,57 @@ void QcepDatasetBrowserView::newArray(const QModelIndexList &idx)
 
 void QcepDatasetBrowserView::readData(const QModelIndexList &idx)
 {
-  static QString selectedFilter;
-  QStringList theFiles = QFileDialog::getOpenFileNames(this,
-                                                       "Load data from", "",
-                                                       "", &selectedFilter);
+  QcepExperimentPtr expt(m_Experiment);
 
-  if (theFiles.length() > 0) {
-    QcepDataImportCommand cmd(m_DatasetModel, idx, theFiles);
+  if (expt) {
+    QcepDataImportParametersPtr p(expt->dataImportParameters());
 
-    cmd.exec();
+    if (p) {
+      QString selectedFilter = p->get_SelectedFilter();
+
+      QStringList theFiles = QFileDialog::getOpenFileNames(this,
+                                                           "Load data from",
+                                                           p->lastDirectory(),
+                                                           p->fileFormatFilterString(),
+                                                           &selectedFilter);
+
+      if (theFiles.length() > 0) {
+        p->setLastDirectory(theFiles);
+        p->set_SelectedFilter(selectedFilter);
+
+        QcepDataImportCommand cmd(m_DatasetModel, idx, theFiles);
+
+        cmd.exec();
+      }
+    }
   }
 }
 
 void QcepDatasetBrowserView::saveData(const QModelIndexList &idx)
 {
-  QcepDataObjectPtr obj = m_DatasetModel -> item(idx.value(0));
+  QcepExperimentPtr expt(m_Experiment);
 
-  static QString selectedFilter;
-  QString theFile = QFileDialog::getSaveFileName(this,
-                                                 "Save data in", obj->get_FileName(),
-                                                 obj->fileFormatFilterString(), &selectedFilter);
+  if (expt) {
+    QcepDataExportParametersPtr p(expt->dataExportParameters());
 
-  if (theFile.length()) {
-    QcepDataExportCommand cmd(m_DatasetModel, idx, theFile);
+    if (p) {
+      QString selectedFilter = p->get_SelectedFilter();
 
-    cmd.exec();
+      QString theFile = QFileDialog::getSaveFileName(this,
+                                                     "Save data in",
+                                                     p->get_FileName(),
+                                                     p->fileFormatFilterString(),
+                                                     &selectedFilter);
+
+      if (theFile.length()) {
+        p->set_FileName(theFile);
+        p->set_SelectedFilter(selectedFilter);
+
+        QcepDataExportCommand cmd(m_DatasetModel, idx, theFile);
+
+        cmd.exec();
+      }
+    }
   }
 }
 

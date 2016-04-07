@@ -48,6 +48,21 @@ QString QcepDataObject::mimeType()
   return "application/x-qcepdataobject";
 }
 
+QString QcepDataObject::fileFormatAny()
+{
+  return "Any file (*)";
+}
+
+QString QcepDataObject::fileFormatHDF5()
+{
+  return "HDF5 file (*.h5)";
+}
+
+QString QcepDataObject::fileFormatNexus()
+{
+  return "Nexus file (*.nxs)";
+}
+
 int QcepDataObject::allocatedObjects()
 {
   return s_ObjectAllocateCount.load();

@@ -26,6 +26,10 @@ public:
 
   static QString mimeType();
 
+  static QString fileFormatAny();
+  static QString fileFormatHDF5();
+  static QString fileFormatNexus();
+
 signals:
   void dataObjectChanged();
 
