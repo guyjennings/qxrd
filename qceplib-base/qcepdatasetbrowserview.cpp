@@ -25,6 +25,7 @@
 #include "qcepdataimportcommand.h"
 #include "qcepdataimportparameters.h"
 #include "qcepdataexportparameters.h"
+#include "qcepdebug.h"
 
 QcepDatasetBrowserView::QcepDatasetBrowserView(QWidget *parent)
   : QTreeView(parent)
@@ -65,7 +66,9 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
   QcepExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    expt->printMessage(tr("Custom context menu clicked at: %1").arg(m_DatasetModel->indexDescription(index)));
+    if (qcepDebug(DEBUG_DATABROWSER)) {
+      expt->printMessage(tr("Custom context menu clicked at: %1").arg(m_DatasetModel->indexDescription(index)));
+    }
 
     QModelIndexList indexes = selectionModel()->selectedRows();
 
@@ -103,7 +106,6 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
 
     for (int i=0; i<nSel; i++) {
       QcepDataObjectPtr o = m_DatasetModel->item(indexes.value(i));
-      //        static_cast<QcepDataObject*>(indexes.at(i).internalPointer());
 
       if (i != 0) {
         names += ", ";
@@ -134,6 +136,17 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     QAction *ni = nm->addAction(tr("New Image in %1").arg(name));
     QAction *na = nm->addAction(tr("New Array in %1").arg(name));
 
+    QAction *rd = menu.addAction(tr("Read Data into %1 ...").arg(name));
+    QAction *sv = menu.addAction(tr("Save %1 as ...").arg(name));
+
+    menu.addSeparator();
+
+    QAction *og = menu.addAction(tr("Open %1 in graph window").arg(names));
+    QAction *os = menu.addAction(tr("Open %1 in spreadsheet window").arg(names));
+    QAction *op = menu.addAction(tr("Open %1 in properties window").arg(names));
+
+    menu.addSeparator();
+
     QMenu   *ops = menu.addMenu(tr("Operations on %1 ...").arg(name));
 
     QAction *cat = ops->addAction(tr("Concatenate to %1...").arg(name));
@@ -148,11 +161,8 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     QAction *pli = ops->addAction(tr("Polar Integrate %1").arg(names));
     QAction *plip = ops->addAction(tr("Polar Integrate %1 Parameters...").arg(names));
 
-    QAction *rd = menu.addAction(tr("Read Data into %1 ...").arg(name));
-    QAction *sv = menu.addAction(tr("Save %1 as ...").arg(name));
-    QAction *og = menu.addAction(tr("Open %1 in graph window").arg(names));
-    QAction *os = menu.addAction(tr("Open %1 in spreadsheet window").arg(names));
-    QAction *op = menu.addAction(tr("Open %1 in properties window").arg(names));
+    menu.addSeparator();
+
     QAction *dl = menu.addAction(tr("Delete %1").arg(names));
 
     ng->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
@@ -237,10 +247,12 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
 
 void QcepDatasetBrowserView::onDoubleClicked(QModelIndex idx)
 {
-  QcepExperimentPtr expt(m_Experiment);
+  if (qcepDebug(DEBUG_DATABROWSER)) {
+    QcepExperimentPtr expt(m_Experiment);
 
-  if (expt) {
-    expt->printMessage(tr("QcepDatasetBrowserView::onDoubleClicked([%1,%2])").arg(idx.row()).arg(idx.column()));
+    if (expt) {
+      expt->printMessage(tr("QcepDatasetBrowserView::onDoubleClicked([%1,%2])").arg(idx.row()).arg(idx.column()));
+    }
   }
 }
 

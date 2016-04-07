@@ -1,6 +1,7 @@
 #ifndef QCEPDATASETBROWSERVIEW_H
 #define QCEPDATASETBROWSERVIEW_H
 
+#include "qcepmacros.h"
 #include <QTreeView>
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepexperiment-ptr.h"
