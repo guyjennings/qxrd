@@ -676,13 +676,16 @@ DONE("2016-03-11", "2016-03-15",
 TODO("2016-03-15", "",
      "Check integration paramaters for excessive memory use before execution");
 
-TODO("2016-03-24", "2016-03-28",
+DONE("2016-03-24", "2016-03-28",
      "Consider removing the separate Title property of images and scans - use Name instead");
 
-TODO("2016-03-29", "2016-03-30",
+DONE("2016-03-29", "2016-03-30",
      "More work on drag and drop data items");
 
-TODO("2016-03-29", "",
+DONE("2016-03-29", "2016-04-06",
      "Allow creating new data items at top level");
+
+TODO("2016-04-06", "",
+     "Set initial selection of imported data");
 
 #endif // TODO_H
