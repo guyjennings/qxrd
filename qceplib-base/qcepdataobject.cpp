@@ -63,6 +63,41 @@ QString QcepDataObject::fileFormatNexus()
   return "Nexus file (*.nxs)";
 }
 
+QString QcepDataObject::fileFormatTIFF()
+{
+  return "TIFF (*.tif, *.tiff)";
+}
+
+QString QcepDataObject::fileFormatTabDelimited()
+{
+  return "Tab delimited (*.txt, *.dat)";
+}
+
+QString QcepDataObject::fileFormatTransposedTabDelimited()
+{
+  return "Transposed Tab delimited (*.txt, *.dat)";
+}
+
+QString QcepDataObject::fileFormatCSV()
+{
+  return "CSV (*.csv)";
+}
+
+QString QcepDataObject::fileFormatTransposedCSV()
+{
+  return "Transposed CSV (*.csv)";
+}
+
+QString QcepDataObject::fileFormatSpec()
+{
+  return "Spec Data File (*)";
+}
+
+QString QcepDataObject::fileFormatCIF()
+{
+  return "CIF File (*.cif,*)";
+}
+
 int QcepDataObject::allocatedObjects()
 {
   return s_ObjectAllocateCount.load();

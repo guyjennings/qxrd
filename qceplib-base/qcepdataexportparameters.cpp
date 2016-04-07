@@ -12,9 +12,10 @@ QcepDataExportParameters::QcepDataExportParameters(QcepSettingsSaverWPtr saver, 
 
 QString QcepDataExportParameters::fileFormatFilterString()
 {
-  return QcepImageDataBase::fileFormatTIFF() + ";;" +
+  return QcepDataObject::fileFormatTIFF() + ";;" +
       QcepDataObject::fileFormatHDF5() + ";;" +
       QcepDataObject::fileFormatNexus() + ";;" +
-      QcepDataColumnScan::fileFormatSpec() + ";;" +
+      QcepDataObject::fileFormatSpec() + ";;" +
+      QcepDataObject::fileFormatTabDelimited() + ";;" +
       QcepDataObject::fileFormatAny();
 }

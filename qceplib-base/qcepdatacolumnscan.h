@@ -38,8 +38,6 @@ public:
   static QScriptValue toColumnScanScriptValue(QScriptEngine *engine, const QcepDataColumnScanPtr &data);
   static void fromColumnScanScriptValue(const QScriptValue &obj, QcepDataColumnScanPtr &data);
 
-  static QString fileFormatSpec();
-
 private:
   bool checkCompatibility(QcepDataColumnScanPtr scan);
   bool checkAppendability(QcepDataColumnScanPtr scan);

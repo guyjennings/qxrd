@@ -56,6 +56,13 @@ public:
   virtual QVariant columnData(int col) const;
 
   virtual QString fileFormatFilterString();
+  static  QString fileFormatTIFF();
+  static  QString fileFormatTabDelimited();
+  static  QString fileFormatTransposedTabDelimited();
+  static  QString fileFormatCSV();
+  static  QString fileFormatTransposedCSV();
+  static  QString fileFormatSpec();
+  static  QString fileFormatCIF();
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QcepDataObjectPtr &data);
   static void fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr &data);

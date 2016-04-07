@@ -23,11 +23,6 @@ QcepDataColumnScanPtr QcepDataColumnScan::newDataColumnScan(QcepSettingsSaverWPt
   return res;
 }
 
-QString QcepDataColumnScan::fileFormatSpec()
-{
-  return "Spec Data File (*.dat, *.*, *)";
-}
-
 QString QcepDataColumnScan::description() const
 {
   return tr("%1 rows x %2 cols").arg(rowCount()).arg(columnCount());

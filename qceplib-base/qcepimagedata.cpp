@@ -299,31 +299,6 @@ QString QcepImageDataBase::fileFormatFilterString()
       fileFormatTransposedCSV();
 }
 
-QString QcepImageDataBase::fileFormatTIFF()
-{
-  return "TIFF (*.tif, *.tiff)";
-}
-
-QString QcepImageDataBase::fileFormatTabDelimited()
-{
-  return "Tab delimited (*.txt, *.dat)";
-}
-
-QString QcepImageDataBase::fileFormatTransposedTabDelimited()
-{
-  return "Transposed Tab delimited (*.txt,*.dat)";
-}
-
-QString QcepImageDataBase::fileFormatCSV()
-{
-  return "CSV (*.csv)";
-}
-
-QString QcepImageDataBase::fileFormatTransposedCSV()
-{
-  return "Transposed CSV (*.csv)";
-}
-
 double QcepImageDataBase::hValue(int n) const
 {
   return get_HStart() + n*get_HStep();

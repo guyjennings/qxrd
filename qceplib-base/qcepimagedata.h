@@ -204,11 +204,6 @@ public:
   void setDefaultFileName(QString path);
 
   virtual QString fileFormatFilterString();
-  static  QString fileFormatTIFF();
-  static  QString fileFormatTabDelimited();
-  static  QString fileFormatTransposedTabDelimited();
-  static  QString fileFormatCSV();
-  static  QString fileFormatTransposedCSV();
 
   static double secondsSinceEpoch();
 
