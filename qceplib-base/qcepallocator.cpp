@@ -7,6 +7,8 @@
 #include "qcepmaskdata.h"
 #include "qcepintegrateddata.h"
 #include "qcepthread.h"
+#include "qcepdatacolumn.h"
+#include "qcepdataarray.h"
 
 static QcepAllocator *g_Allocator = NULL;
 static quint64        g_AllocatedMemory = 0;
@@ -281,6 +283,16 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QString name, int size, Q
 QcepDataColumnScanPtr QcepAllocator::newColumnScan()
 {
   return QcepDataColumnScanPtr(new QcepDataColumnScan(QcepSettingsSaverWPtr(),"",NULL));
+}
+
+QcepDataColumnPtr QcepAllocator::newColumn(QString name, int sz)
+{
+  return QcepDataColumnPtr(new QcepDataColumn(QcepSettingsSaverWPtr(), name, sz, NULL));
+}
+
+QcepDataArrayPtr QcepAllocator::newArray(QString name, QVector<int> dims)
+{
+  return QcepDataArrayPtr(new QcepDataArray(QcepSettingsSaverWPtr(), name, dims, NULL));
 }
 
 void QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AllocationStrategy strat, int width,

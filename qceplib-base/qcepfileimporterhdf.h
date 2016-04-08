@@ -17,8 +17,8 @@ public:
 
 private:
   void scanGroup(QModelIndex dest, hid_t gid, int level=0);
-  void scanDataset(hid_t dsid);
-  void scanLink(hid_t lkid);
+  void scanDataset(QModelIndex dest, hid_t dsid);
+  void scanLink(QModelIndex dest, hid_t gid, char *name);
 };
 
 #endif // QCEPFILEIMPORTERHDF_H
