@@ -1125,7 +1125,7 @@ QModelIndex QcepDatasetModel::append(const QModelIndex &idx, QcepDataObjectPtr o
         dset->append(obj);
         endInsertRows();
 
-        res = index(rc, 0, idx);
+        res = index(obj);
       }
     } else if (gr==NULL) {
       ds->printMessage("Containing object is not a container");
@@ -1135,8 +1135,12 @@ QModelIndex QcepDatasetModel::append(const QModelIndex &idx, QcepDataObjectPtr o
       gr->append(obj);
       endInsertRows();
 
-      res = index(rc, 0, idx);
+      res = index(obj);
     }
+  }
+
+  if (item(res) != obj) {
+    printMessage("result of append is wrong");
   }
 
   return res;
@@ -1159,8 +1163,12 @@ QModelIndex QcepDatasetModel::append(QString path, QcepDataObjectPtr obj)
       sgr->append(obj);
       endInsertRows();
 
-      res = index(rc, 0, index(sgr));
+      res = index(obj);
     }
+  }
+
+  if (item(res) != obj) {
+    printMessage("result of append is wrong");
   }
 
   return res;
