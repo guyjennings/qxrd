@@ -109,8 +109,9 @@ public slots:
   QcepIntegratedDataPtr  newIntegratedData(QString path, int sz);
   QcepIntegratedDataPtr  newIntegratedData(const QModelIndex &index, QString path, int sz);
 
-  void                   append(const QModelIndex &idx, QcepDataObjectPtr obj);
-  void                   append(QString path, QcepDataObjectPtr obj);
+  QModelIndex            append(const QModelIndex &idx, QcepDataObjectPtr obj);
+  QModelIndex            append(QString path, QcepDataObjectPtr obj);
+
   void                   remove(QcepDataObjectPtr obj);
   void                   remove(const QModelIndex &index);
   void                   remove(QString path);

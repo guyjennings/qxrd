@@ -1109,33 +1109,42 @@ void QcepDatasetModel::insertGroup(int atRow, QString name)
   }
 }
 
-void QcepDatasetModel::append(const QModelIndex &idx, QcepDataObjectPtr obj)
+QModelIndex QcepDatasetModel::append(const QModelIndex &idx, QcepDataObjectPtr obj)
 {
+  QModelIndex       res;
   QcepDatasetPtr    ds = m_Dataset;
-  QcepDataObjectPtr ob = item(idx);
   QcepDataGroupPtr  gr = group(idx);
 
   if (ds) {
-    if (ob==NULL) {
+    if (gr==NULL) {
       QcepDatasetPtr dset(m_Dataset);
 
       if (dset) {
-        beginInsertRows(idx, rowCount(idx), rowCount(idx)+1);
+        int rc = rowCount(idx);
+        beginInsertRows(idx, rc, rc+1);
         dset->append(obj);
         endInsertRows();
+
+        res = index(rc, 0, idx);
       }
     } else if (gr==NULL) {
       ds->printMessage("Containing object is not a container");
     } else {
-      beginInsertRows(index(gr), gr->rowCount(), gr->rowCount()+1);
+      int rc = gr->rowCount();
+      beginInsertRows(index(gr), rc, rc+1);
       gr->append(obj);
       endInsertRows();
+
+      res = index(rc, 0, idx);
     }
   }
+
+  return res;
 }
 
-void QcepDatasetModel::append(QString path, QcepDataObjectPtr obj)
+QModelIndex QcepDatasetModel::append(QString path, QcepDataObjectPtr obj)
 {
+  QModelIndex       res;
   QcepDataGroupPtr sgr = newGroup(groupName(path));
   QcepDatasetPtr   ds(m_Dataset);
 
@@ -1145,11 +1154,16 @@ void QcepDatasetModel::append(QString path, QcepDataObjectPtr obj)
     if (ptr) {
       ds->printMessage(tr("%1 exists already").arg(path));
     } else {
-      beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
+      int rc = sgr->rowCount();
+      beginInsertRows(index(sgr), rc, rc+1);
       sgr->append(obj);
       endInsertRows();
+
+      res = index(rc, 0, index(sgr));
     }
   }
+
+  return res;
 }
 
 void QcepDatasetModel::remove(QcepDataObjectPtr obj)
