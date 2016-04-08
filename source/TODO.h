@@ -685,7 +685,16 @@ DONE("2016-03-29", "2016-03-30",
 DONE("2016-03-29", "2016-04-06",
      "Allow creating new data items at top level");
 
-TODO("2016-04-06", "",
+DONE("2016-04-06", "2016-04-08",
      "Set initial selection of imported data");
+
+TODO("2016-04-08", "",
+     "Make scatter plot windows work with columns in data groups as well as column scans");
+
+TODO("2016-04-08", "",
+     "Rationalize and simplify the interfaces to QcepAllocator");
+
+TODO("2016-04-08", "",
+     "Consider a variant-typed QcepDataValue type");
 
 #endif // TODO_H
