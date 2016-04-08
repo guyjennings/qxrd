@@ -23,7 +23,7 @@ void QcepFileImporterHDF::exec()
 
   m_Model -> printMessage(tr("/"));
 
-  scanGroup(group);
+  scanGroup(QModelIndex(), group);
 
   status = H5Fclose(file);
 
@@ -32,7 +32,7 @@ void QcepFileImporterHDF::exec()
 
 #define MAX_NAME 1024
 
-void QcepFileImporterHDF::scanGroup(hid_t gid, int level)
+void QcepFileImporterHDF::scanGroup(QModelIndex dest, hid_t gid, int level)
 {
   char group_name[MAX_NAME];
   char memb_name[MAX_NAME];
@@ -51,8 +51,12 @@ void QcepFileImporterHDF::scanGroup(hid_t gid, int level)
     if (otype == H5G_LINK) {
 
     } else if (otype == H5G_GROUP) {
+//      QcepDataGroupPtr dgrp = m_Model->group(dest);
+      QcepDataGroupPtr ngrp = QcepDataGroup::newDataGroup(QcepSettingsSaverWPtr(), memb_name, NULL);
+      QModelIndex      inst = m_Model->append(dest, ngrp);
+
       hid_t grpid = H5Gopen(gid, memb_name, H5P_DEFAULT);
-      scanGroup(grpid, level+1);
+      scanGroup(inst, grpid, level+1);
       H5Gclose(grpid);
     } else if (otype == H5G_DATASET) {
       hid_t dsid = H5Dopen(gid, memb_name, H5P_DEFAULT);

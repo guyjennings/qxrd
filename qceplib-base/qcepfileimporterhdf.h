@@ -16,7 +16,7 @@ public:
   void exec();
 
 private:
-  void scanGroup(hid_t gid, int level=0);
+  void scanGroup(QModelIndex dest, hid_t gid, int level=0);
   void scanDataset(hid_t dsid);
   void scanLink(hid_t lkid);
 };
