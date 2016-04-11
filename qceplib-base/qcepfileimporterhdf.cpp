@@ -123,7 +123,7 @@ void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
     QVector<int> idims(rank);
 
     for (int i=0; i<rank; i++) {
-      idims[rank-i]=dims[i];
+      idims[rank-i-1]=dims[i];
     }
 
     QcepDataArrayPtr narr = QcepAllocator::newArray(name, idims);
