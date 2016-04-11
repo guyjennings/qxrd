@@ -449,7 +449,7 @@ void QxrdDetectorPilatus::loadAndPush(QString f)
     if (proc) {
       QString dest = proc->filePathInRawOutputDirectory(f);
 
-      QcepInt32ImageDataPtr data = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve, 0,0, this);
+      QcepInt32ImageDataPtr data = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve, 0,0);
 
       if (data->readImage(dest)) {
         printMessage(tr("Read %1 successfully").arg(dest));

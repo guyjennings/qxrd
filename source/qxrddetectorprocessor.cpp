@@ -522,7 +522,7 @@ QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBaseP
 
     double ratio = ((double) nres)/((double) ndrk);
 
-    QcepDoubleImageDataPtr result = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, width, height, NULL);
+    QcepDoubleImageDataPtr result = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, width, height);
 
     if (result) {
       result->copyPropertiesFrom(img);
@@ -728,7 +728,7 @@ void QxrdDetectorProcessor::onMaskPathChanged(QString newPath)
   } else {
     printMessage(tr("Load mask from %1").arg(newPath));
 
-    QcepMaskDataPtr mask = QcepAllocator::newMask(QcepAllocator::AlwaysAllocate, 0,0, 0, this);
+    QcepMaskDataPtr mask = QcepAllocator::newMask(QcepAllocator::AlwaysAllocate, 0,0, 0);
 
     if (mask && mask->readImage(newPath)) {
       m_Mask = mask;
@@ -750,7 +750,7 @@ void QxrdDetectorProcessor::onDarkImagePathChanged(QString newPath)
   } else {
     printMessage(tr("Load Dark Image from %1").arg(newPath));
 
-    QcepInt32ImageDataPtr dark = QcepAllocator::newInt32Image(QcepAllocator::AlwaysAllocate, 0,0, this);
+    QcepInt32ImageDataPtr dark = QcepAllocator::newInt32Image(QcepAllocator::AlwaysAllocate, 0,0);
 
     if (dark && dark -> readImage(newPath)) {
       m_DarkImage = dark;
@@ -766,7 +766,7 @@ void QxrdDetectorProcessor::onBadPixelsPathChanged(QString newPath)
   } else {
     printMessage(tr("Load Bad Pixels from %1").arg(newPath));
 
-    QcepDoubleImageDataPtr bad = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, 0,0, this);
+    QcepDoubleImageDataPtr bad = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, 0,0);
 
     if (bad && bad->readImage(newPath)) {
       m_BadPixels = bad;

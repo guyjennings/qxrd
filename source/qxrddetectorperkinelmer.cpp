@@ -959,7 +959,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
 
     if (plugin && acq) {
       QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepAllocator::AllocateFromReserve,
-                                                                 get_NCols(), get_NRows(), this);
+                                                                 get_NCols(), get_NRows());
 
       //    printf("allocator took %d msec\n", tic.restart());
 

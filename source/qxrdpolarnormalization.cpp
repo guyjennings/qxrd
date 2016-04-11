@@ -165,7 +165,7 @@ QcepDataObjectPtr QxrdPolarNormalization::transform(QcepDoubleImageDataPtr img)
     int nRows = img->get_Height();
 
     if (get_OutputType() == IntegratedOutput) {
-      integ = QcepAllocator::newColumnScan();
+      integ = QcepAllocator::newColumnScan(img->get_Name());
 
       QcepDataColumnPtr xc = integ->appendColumn(img->get_HLabel());
       QcepDataColumnPtr av = integ->appendColumn("avg");
@@ -180,13 +180,12 @@ QcepDataObjectPtr QxrdPolarNormalization::transform(QcepDoubleImageDataPtr img)
       rt->set_Column2(1);
 
       integ->resizeRows(nCols);
-      integ->set_Name(img->get_Name());
 
       integ->setNameAndSuffix(img->get_Name(), "integ");
 
       res = integ;
     } else if (get_OutputType() == FittedData || get_OutputType() == FittedDeltas) {
-      fit = QcepAllocator::newDoubleImage(QcepAllocator::NullIfNotAvailable, nCols, nRows, NULL);
+      fit = QcepAllocator::newDoubleImage(QcepAllocator::NullIfNotAvailable, nCols, nRows);
 
       fit->set_HStart(img->get_HStart());
       fit->set_HStep(img->get_HStep());

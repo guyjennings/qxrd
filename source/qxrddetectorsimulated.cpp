@@ -166,7 +166,7 @@ void QxrdDetectorSimulated::onTimerTimeout()
     int nCols = get_NCols();
 
     QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepAllocator::AllocateFromReserve,
-                                                               nCols, nRows, acq.data());
+                                                               nCols, nRows);
     int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
     int frame = frameCounter % 8;
 

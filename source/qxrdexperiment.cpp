@@ -154,7 +154,7 @@ void QxrdExperiment::initialize(QSettings *settings)
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
-    m_Dataset      = QcepDatasetPtr(new QcepDataset(m_SettingsSaver, "", this));
+    m_Dataset      = QcepAllocator::newDataset("/");
     m_DatasetModel = QcepDatasetModelPtr(new QcepDatasetModel(sharedFromThis(), m_DataProcessor, m_Dataset));
 
     m_DatasetModel -> newGroup("group1");
@@ -164,9 +164,9 @@ void QxrdExperiment::initialize(QSettings *settings)
     QStringList cols;
     cols << "x" << "y" << "z" << "v" << "sdev";
 
-    m_DatasetModel -> newColumnScan("group1/scan1", 1000, cols);
-    m_DatasetModel -> newColumnScan("group2/scan2", 1000, cols);
-    m_DatasetModel -> newColumnScan("group3/scan3", 1000, cols);
+    m_DatasetModel -> newColumnScan("group1/scan1", cols, 1000);
+    m_DatasetModel -> newColumnScan("group2/scan2", cols, 1000);
+    m_DatasetModel -> newColumnScan("group3/scan3", cols, 1000);
 
     m_DatasetModel -> newColumn("group4/x", 1000);
     m_DatasetModel -> newColumn("group4/y", 1000);

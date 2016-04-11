@@ -1522,7 +1522,7 @@ QScriptValue QxrdScriptEngine::newDataColumnScanFunc(QScriptContext *context, QS
         }
 
         return engine->newQObject(
-              dataModel->newColumnScan(name, npts, cols).data());
+              dataModel->newColumnScan(name, cols, npts).data());
       }
     }
   }

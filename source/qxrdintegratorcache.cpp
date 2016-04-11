@@ -710,24 +710,24 @@ void QxrdIntegratorCache::performIntegration(
 
         m_CachedRadialBinNumbers =  QcepAllocator::newInt32Image(QcepAllocator::AlwaysAllocate,
                                                            m_NCols*m_Oversample,
-                                                           m_NRows*m_Oversample, expt.data());
+                                                           m_NRows*m_Oversample);
 
         m_CachedRadialValues = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
                                                               m_NCols*m_Oversample,
-                                                              m_NRows*m_Oversample, expt.data());
+                                                              m_NRows*m_Oversample);
 
         m_CachedNormalization = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
                                                               m_NCols*m_Oversample,
-                                                              m_NRows*m_Oversample, expt.data());
+                                                              m_NRows*m_Oversample);
 
         if (m_PolarTransform) {
           m_CachedPolarBinNumbers = QcepAllocator::newInt32Image(QcepAllocator::AlwaysAllocate,
                                                                  m_NCols*m_Oversample,
-                                                                 m_NRows*m_Oversample, expt.data());
+                                                                 m_NRows*m_Oversample);
 
           m_CachedPolarValues = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
                                                               m_NCols*m_Oversample,
-                                                              m_NRows*m_Oversample, expt.data());
+                                                              m_NRows*m_Oversample);
         }
 
         if (m_CachedRadialBinNumbers && m_CachedNormalization) {

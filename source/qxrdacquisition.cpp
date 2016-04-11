@@ -1065,7 +1065,7 @@ void QxrdAcquisition::doAcquire()
 
             if (res[d][p][0] == NULL) {
               QcepInt32ImageDataPtr nres = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
-                                                                        nCols, nRows, this);
+                                                                        nCols, nRows);
 
               res[d][p][0] = nres;
 
@@ -1093,7 +1093,7 @@ void QxrdAcquisition::doAcquire()
 
             if (ovf[d][p][0] == NULL) {
               QcepMaskDataPtr novf = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
-                                                            nCols, nRows, 0, this);
+                                                            nCols, nRows, 0);
               ovf[d][p][0] = novf;
 
               if (novf == NULL) {
@@ -1314,12 +1314,12 @@ void QxrdAcquisition::doAcquireDark()
         procs.append(det->processor());
 
         QcepInt32ImageDataPtr img = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
-                                                                 det->get_NCols(), det->get_NRows(), this);
+                                                                 det->get_NCols(), det->get_NRows());
 
         res.append(img);
 
         QcepMaskDataPtr msk = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
-                                                     det->get_NCols(), det->get_NRows(),0, this);
+                                                     det->get_NCols(), det->get_NRows(),0);
 
         overflow.append(msk);
       }

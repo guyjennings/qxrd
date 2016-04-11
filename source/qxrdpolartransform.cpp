@@ -93,7 +93,7 @@ QcepDataObjectPtr QxrdPolarTransform::transform(QcepDoubleImageDataPtr img, Qcep
           QxrdIntegratorCachePtr(new QxrdIntegratorCache(
                                    expt, integ, sharedFromThis(), cf));
 
-      QcepDoubleImageDataPtr resimg = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, 0, 0, NULL);
+      QcepDoubleImageDataPtr resimg = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, 0, 0);
 
       if (integ && img && resimg) {
         integCache->performIntegration(resimg, img, mask, 0);

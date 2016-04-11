@@ -104,7 +104,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_Acquisition(acq),
   m_AcquiredInt16Images("acquiredInt16Images"),
   m_AcquiredInt32Images("acquiredInt32Images"),
-  m_Data(QcepAllocator::newDoubleImage(QcepAllocator::WaitTillAvailable, 2048, 2048, this)),
+  m_Data(QcepAllocator::newDoubleImage(QcepAllocator::WaitTillAvailable, 2048, 2048)),
   m_DarkFrame(NULL),
   m_BadPixels(NULL),
   m_GainMap(NULL),
@@ -349,7 +349,7 @@ QString QxrdDataProcessorBase::integratedOutputDirectory() const
 QcepDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage(int width, int height)
 {
   QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
-                                                             width, height, this);
+                                                             width, height);
 
   return res;
 }
@@ -813,7 +813,7 @@ void QxrdDataProcessorBase::newMaskStack()
 {
 
   QcepMaskDataPtr m = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable,
-                                             newMaskWidth(), newMaskHeight(), 0, this);
+                                             newMaskWidth(), newMaskHeight(), 0);
 
   m_Masks.push_front(m);
 
@@ -828,7 +828,7 @@ void QxrdDataProcessorBase::pushMaskStack(QcepMaskDataPtr m)
 {
   if (m == NULL) {
     m =  QcepAllocator::newMask(QcepAllocator::WaitTillAvailable,
-                                newMaskWidth(), newMaskHeight(), 0, this);
+                                newMaskWidth(), newMaskHeight(), 0);
 
     if (mask()) {
       mask()->copyMaskTo(m);
@@ -1131,7 +1131,7 @@ void QxrdDataProcessorBase::loadMask(QString name)
     printMessage(tr("QxrdDataProcessorBase::loadMask(%1)").arg(name));
   }
 
-  QcepMaskDataPtr res = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable, 0,0, 0, this);
+  QcepMaskDataPtr res = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable, 0,0, 0);
 
   QString path = filePathInDataDirectory(name);
 
@@ -2233,7 +2233,7 @@ QxrdGenerateTestImageWPtr QxrdDataProcessorBase::generateTestImage() const
 
 void QxrdDataProcessorBase::newOutputScan(QString title)
 {
-  m_OutputScan = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, data(), this);
+  m_OutputScan = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, data());
 
   m_OutputScan -> set_Name(title);
 }
@@ -2369,7 +2369,7 @@ void QxrdDataProcessorBase::findZingers()
   double thr = get_ZingerThreshold();
 
   QcepMaskDataPtr dest
-      = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable, wid, ht, 1, this);
+      = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable, wid, ht, 1);
 
   for (int y=0; y<ht; y++) {
     for (int x=0; x<wid; x++) {
