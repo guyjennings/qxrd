@@ -9,6 +9,9 @@ class QcepDataColumnScan : public QcepDataGroup
 {
   Q_OBJECT
 
+public:
+  QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int sz);
+
 public slots:
   virtual QString description() const;
   QcepDataColumnPtr column(int n);
@@ -24,16 +27,6 @@ public slots:
   void concat(QcepDataColumnScanPtr scan);
 
 public:
-  QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QcepObject *parent);
-
-  typedef QcepDataGroup inherited;
-
-  static QcepDataColumnScanPtr newDataColumnScan(QcepSettingsSaverWPtr sav,
-                                                 QString name,
-                                                 QStringList cols,
-                                                 int npts,
-                                                 QcepObject *parent);
-
 
   static QScriptValue toColumnScanScriptValue(QScriptEngine *engine, const QcepDataColumnScanPtr &data);
   static void fromColumnScanScriptValue(const QScriptValue &obj, QcepDataColumnScanPtr &data);

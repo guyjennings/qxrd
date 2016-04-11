@@ -15,14 +15,8 @@ class QcepDataObject : public QcepObject, public QEnableSharedFromThis<QcepDataO
 public:
   QcepDataObject(QcepSettingsSaverWPtr saver,
                  QString name,
-                 int byteSize,
-                 QcepObject *parent);
+                 int byteSize);
   virtual ~QcepDataObject();
-
-  QcepSettingsSaverWPtr saver();
-
-  static QcepDataObjectPtr newDataObject(QcepSettingsSaverWPtr saver,
-                                         QString name, QcepObject *parent);
 
   static QString mimeType();
 
@@ -80,7 +74,7 @@ protected:
 
 private:
   QcepDataGroupWPtr     m_Parent;
-  QcepSettingsSaverWPtr m_Saver;
+//  QcepSettingsSaverWPtr m_Saver;
 
 public:
   Q_PROPERTY(QString type READ get_Type WRITE set_Type)

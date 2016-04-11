@@ -17,9 +17,7 @@ class QcepDataGroup : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent);
-
-  static QcepDataGroupPtr newDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent);
+  QcepDataGroup(QcepSettingsSaverWPtr saver, QString name);
 
 public slots:
   virtual QString description() const;
@@ -57,13 +55,6 @@ public slots:
   void remove(QString path);
 
   QcepDataGroupPtr createGroup(QString path);
-
-  QcepDataGroupPtr newGroup(QString path);
-  QcepDataArrayPtr newArray(QString path, QVector<int> dims);
-  QcepDataColumnPtr newColumn(QString path, int nrow);
-  QcepDataColumnScanPtr newColumnScan(QString path, int nrow, QStringList cols);
-  QcepDoubleImageDataPtr newImage(QString path, int width=0, int height=0);
-  QcepIntegratedDataPtr  newIntegratedData(QString path, int sz);
 
   static QScriptValue toGroupScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data);
   static void fromGroupScriptValue(const QScriptValue &obj, QcepDataGroupPtr &data);

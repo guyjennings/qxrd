@@ -5,8 +5,8 @@
 
 QcepIntegratedData::QcepIntegratedData(QcepSettingsSaverWPtr saver,
                                        QString name,
-                                       QcepDoubleImageDataPtr image, int maxSize, QcepObject *parent) :
-  QcepDataObject(saver, name, 2*maxSize*sizeof(double), parent),
+                                       QcepDoubleImageDataPtr image, int maxSize) :
+  QcepDataObject(saver, name, 2*maxSize*sizeof(double)),
 //  m_Title(saver, this, "title", "", "Integrated Data Title"),
   m_Image(image),
   m_MaxSize(maxSize),
@@ -34,13 +34,13 @@ QString QcepIntegratedData::description() const
   return tr("%1 Rows").arg(m_Size);
 }
 
-QcepIntegratedDataPtr QcepIntegratedData::newIntegratedData(
-    QcepSettingsSaverWPtr saver, QString name, int sz, QcepObject *parent)
-{
-  QcepIntegratedDataPtr res(new QcepIntegratedData(saver, name, QcepDoubleImageDataPtr(), sz, parent));
+//QcepIntegratedDataPtr QcepIntegratedData::newIntegratedData(
+//    QcepSettingsSaverWPtr saver, QString name, int sz, QcepObject *parent)
+//{
+//  QcepIntegratedDataPtr res(new QcepIntegratedData(saver, name, QcepDoubleImageDataPtr(), sz, parent));
 
-  return res;
-}
+//  return res;
+//}
 
 void QcepIntegratedData::resize(int n)
 {

@@ -4,6 +4,7 @@
 #include "qcepdataimportparameters.h"
 #include "qcepdataimportdialog.h"
 #include "qcepfileimporter.h"
+#include "qcepallocator.h"
 #include <QtConcurrentRun>
 
 QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelPtr model, const QModelIndexList &idx, QStringList files) :
@@ -18,7 +19,9 @@ QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelPtr model, const QM
     if (m_Experiment) {
       m_Parameters = m_Experiment->dataImportParameters();
 
-      m_ImportedData = QcepDatasetPtr(new QcepDataset(QcepSettingsSaverWPtr(), "import", NULL));
+      m_ImportedData =
+          QcepAllocator::newDataset("import");
+
       m_ImportedDataset = QcepDatasetModelPtr(
             new QcepDatasetModel(m_Experiment, QcepDataProcessorBaseWPtr(), m_ImportedData));
 

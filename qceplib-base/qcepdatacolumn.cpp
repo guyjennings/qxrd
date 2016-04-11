@@ -2,8 +2,8 @@
 #include "qcepallocator.h"
 #include <QScriptEngine>
 
-QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QcepObject *parent, ColumnType colType, int col1, int col2) :
-  QcepDataObject(saver, name, npts*sizeof(double), parent),
+QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, ColumnType colType, int col1, int col2) :
+  QcepDataObject(saver, name, npts*sizeof(double)),
   m_ColumnType(saver, this, "columnType", colType, "Column Type"),
   m_Column1(saver, this, "column1", col1, "1st dependent column"),
   m_Column2(saver, this, "column2", col2, "2nd dependent column"),
@@ -24,13 +24,6 @@ QcepDataColumn::~QcepDataColumn()
 QString QcepDataColumn::description() const
 {
   return tr("%1 rows").arg(m_NPoints);
-}
-
-QcepDataColumnPtr QcepDataColumn::newDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, QcepObject *parent, ColumnType colType, int col1, int col2)
-{
-  QcepDataColumnPtr res(new QcepDataColumn(saver, name, npts, parent, colType, col1, col2));
-
-  return res;
 }
 
 QScriptValue QcepDataColumn::toColumnScriptValue(QScriptEngine *engine, const QcepDataColumnPtr &data)

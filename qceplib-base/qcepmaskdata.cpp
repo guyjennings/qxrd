@@ -1,8 +1,8 @@
 #include "qcepmaskdata.h"
 #include "qcepallocator.h"
 
-QcepMaskData::QcepMaskData(QcepSettingsSaverWPtr saver, int width, int height, int def, QcepObject *parent)
-  : QcepImageData<short>(saver, width, height, def, parent)
+QcepMaskData::QcepMaskData(QcepSettingsSaverWPtr saver, int width, int height, int def)
+  : QcepImageData<short>(saver, width, height, def)
 {
   set_Type("Mask Data");
 }
@@ -91,9 +91,9 @@ void QcepMaskData::invertMask()
   }
 }
 
-QcepMaskDataPtr QcepMaskData::copyMask(QcepObject *parent)
+QcepMaskDataPtr QcepMaskData::copyMask()
 {
-  QcepMaskDataPtr copy(QcepAllocator::newMask(QcepAllocator::AlwaysAllocate, get_Width(), get_Height(), 0, parent));
+  QcepMaskDataPtr copy(QcepAllocator::newMask(QcepAllocator::AlwaysAllocate, get_Width(), get_Height(), 0));
 
   copyMaskTo(copy);
 
@@ -102,7 +102,7 @@ QcepMaskDataPtr QcepMaskData::copyMask(QcepObject *parent)
 
 void QcepMaskData::growMask()
 {
-  QcepMaskDataPtr copy(copyMask(this));
+  QcepMaskDataPtr copy = copyMask();
 
   int height = get_Height();
   int width  = get_Width();
@@ -122,7 +122,7 @@ void QcepMaskData::growMask()
 
 void QcepMaskData::shrinkMask()
 {
-  QcepMaskDataPtr copy(copyMask(this));
+  QcepMaskDataPtr copy = copyMask();
 
   int height = get_Height();
   int width  = get_Width();

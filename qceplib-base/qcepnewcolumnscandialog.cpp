@@ -73,7 +73,7 @@ void QcepNewColumnScanDialog::accept()
       expt -> set_NewScanSize(newScanSize);
       expt -> set_NewScanColumns(newScanColumns);
 
-      m_Model -> newColumnScan(m_Index, newScanName, newScanSize, newScanColumns);
+      m_Model -> newColumnScan(m_Index, newScanName, newScanColumns, newScanSize);
     }
   }
 

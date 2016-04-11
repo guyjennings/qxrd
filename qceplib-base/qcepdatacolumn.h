@@ -34,7 +34,6 @@ public:
   QcepDataColumn(QcepSettingsSaverWPtr saver,
                  QString name,
                  int npts,
-                 QcepObject *parent,
                  ColumnType colType = NormalColumn,
                  int col1 = -1,
                  int col2 = -1);
@@ -78,14 +77,6 @@ public slots:
   virtual void concat(double val);
 
 public:
-  static QcepDataColumnPtr newDataColumn(QcepSettingsSaverWPtr saver,
-                                         QString name,
-                                         int npts,
-                                         QcepObject *parent,
-                                         ColumnType colType = NormalColumn,
-                                         int col1 = -1,
-                                         int col2 = -1);
-
   static QScriptValue toColumnScriptValue(QScriptEngine *engine, const QcepDataColumnPtr &data);
   static void fromColumnScriptValue(const QScriptValue &obj, QcepDataColumnPtr &data);
 

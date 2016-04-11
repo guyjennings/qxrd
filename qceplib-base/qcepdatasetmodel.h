@@ -92,10 +92,12 @@ public slots:
   QcepDataColumnScanPtr  columnScan(QString path);
   QcepDataColumnScanPtr  columnScan(int n);
   QcepDataColumnScanPtr  newColumnScan(QString path,
-                                       int nRows=0, QStringList cols=QStringList());
+                                       QStringList cols=QStringList(),
+                                       int nRows=0);
   QcepDataColumnScanPtr  newColumnScan(const QModelIndex &index,
                                        QString name,
-                                       int nRows=0, QStringList cols=QStringList());
+                                       QStringList cols=QStringList(),
+                                       int nRows=0);
 
   QcepDoubleImageDataPtr image(const QModelIndex &index);
   QcepDoubleImageDataPtr image(QString path);

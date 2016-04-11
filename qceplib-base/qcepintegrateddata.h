@@ -15,7 +15,7 @@ public:
   explicit QcepIntegratedData(QcepSettingsSaverWPtr saver,
                               QString name,
                               QcepDoubleImageDataPtr data,
-                              int maxSize, QcepObject *parent);
+                              int maxSize);
   ~QcepIntegratedData();
 
 public slots:
@@ -27,10 +27,10 @@ public slots:
   int size() const;
 
 public:
-  static QcepIntegratedDataPtr newIntegratedData(QcepSettingsSaverWPtr saver,
-                                                 QString name,
-                                                 int sz,
-                                                 QcepObject *parent);
+//  static QcepIntegratedDataPtr newIntegratedData(QcepSettingsSaverWPtr saver,
+//                                                 QString name,
+//                                                 int sz,
+//                                                 QcepObject *parent);
   void append(double x, double y);
   void setValue(int n, double x, double y);
   void selfNormalize(double minx, double maxx);

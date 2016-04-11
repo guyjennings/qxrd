@@ -82,11 +82,11 @@ void QcepFileImporterText::processScan(QString aLine)
   if (m_ScanLine.exactMatch(aLine)) {
     int     scanNum = m_ScanLine.cap(1).toInt();
     QString scanCmd = m_ScanLine.cap(2);
+    QString name    = tr("scan_%1").arg(scanNum);
 
-    m_LatestScan = QcepAllocator::newColumnScan();
+    m_LatestScan = QcepAllocator::newColumnScan(name);
 
     if (m_LatestScan) {
-      m_LatestScan->set_Name(tr("scan_%1").arg(scanNum));
       m_LatestScan->set_Description(scanCmd);
 
       m_Model->append(QModelIndex(), m_LatestScan);

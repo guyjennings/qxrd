@@ -6,12 +6,12 @@
 #include "qcepdatacolumnscan.h"
 #include "qcepimagedata.h"
 #include "qcepintegrateddata.h"
-
+#include "qcepallocator.h"
 #include <QFileInfo>
 #include <QDir>
 
-QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent) :
-  QcepDataObject(saver, name, 0, parent)
+QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name) :
+  QcepDataObject(saver, name, 0)
 {
   set_Type("Data Group");
 }
@@ -19,13 +19,6 @@ QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepObje
 QString QcepDataGroup::description() const
 {
   return tr("%1 Items").arg(childCount());
-}
-
-QcepDataGroupPtr QcepDataGroup::newDataGroup(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent)
-{
-  QcepDataGroupPtr res(new QcepDataGroup(saver, name, parent));
-
-  return res;
 }
 
 QcepDataObjectPtr QcepDataGroup::item(int n)
@@ -295,7 +288,7 @@ QcepDataGroupPtr QcepDataGroup::createGroup(QString path)
 
       if (sgr) {
         QcepDataGroupPtr ng =
-            QcepDataGroupPtr(new QcepDataGroup(saver(), object(path), sgr.data()));
+            QcepAllocator::newGroup(object(path));
 
         if (ng) {
           sgr->append(ng);
@@ -307,121 +300,6 @@ QcepDataGroupPtr QcepDataGroup::createGroup(QString path)
   }
 
   return QcepDataGroupPtr();
-}
-
-QcepDataGroupPtr QcepDataGroup::newGroup(QString path)
-{
-  QcepDataGroupPtr group = createGroup(directoryName(path));
-
-  if (group) {
-    QcepDataGroupPtr ng =
-        QcepDataGroupPtr(new QcepDataGroup(saver(), object(path), group.data()));
-
-    if (ng) {
-      group->append(ng);
-
-      emit dataObjectChanged();
-
-      return ng;
-    }
-  }
-
-  return QcepDataGroupPtr();
-}
-
-QcepDataArrayPtr QcepDataGroup::newArray(QString path, QVector<int> dims)
-{
-  QcepDataGroupPtr group = createGroup(directoryName(path));
-
-  if (group) {
-    QcepDataArrayPtr array(new QcepDataArray(saver(), object(path), dims, group.data()));
-
-    if (array) {
-      group->append(array);
-
-      emit dataObjectChanged();
-
-      return array;
-    }
-  }
-
-  return QcepDataArrayPtr();
-}
-
-QcepDataColumnPtr QcepDataGroup::newColumn(QString path, int nrows)
-{
-  QcepDataGroupPtr group = createGroup(directoryName(path));
-
-  if (group) {
-    QcepDataColumnPtr column(new QcepDataColumn(saver(), object(path), nrows, group.data()));
-
-    if (column) {
-      group->append(column);
-
-      emit dataObjectChanged();
-
-      return column;
-    }
-  }
-
-  return QcepDataColumnPtr();
-}
-
-QcepDataColumnScanPtr QcepDataGroup::newColumnScan(QString path, int nrow, QStringList cols)
-{
-  QcepDataGroupPtr group = createGroup(directoryName(path));
-
-  if (group) {
-    QcepDataColumnScanPtr scan(QcepDataColumnScan::newDataColumnScan(saver(), object(path), cols, nrow, group.data()));
-
-    if (scan) {
-      group->append(scan);
-
-      emit dataObjectChanged();
-
-      return scan;
-    }
-  }
-
-  return QcepDataColumnScanPtr();
-}
-
-QcepDoubleImageDataPtr QcepDataGroup::newImage(QString path, int width, int height)
-{
-  QcepDataGroupPtr group = createGroup(directoryName(path));
-
-  if (group) {
-    QcepDoubleImageDataPtr image(QcepDoubleImageData::newImage(saver(), object(path), width, height, group.data()));
-
-    if (image) {
-      group->append(image);
-
-      emit dataObjectChanged();
-
-      return image;
-    }
-  }
-
-  return QcepDoubleImageDataPtr();
-}
-
-QcepIntegratedDataPtr QcepDataGroup::newIntegratedData(QString path, int sz)
-{
-  QcepDataGroupPtr group = createGroup(directoryName(path));
-
-  if (group) {
-    QcepIntegratedDataPtr data(QcepIntegratedData::newIntegratedData(saver(), object(path), sz, group.data()));
-
-    if (data) {
-      group->append(data);
-
-      emit dataObjectChanged();
-
-      return data;
-    }
-  }
-
-  return QcepIntegratedDataPtr();
 }
 
 QScriptValue QcepDataGroup::toGroupScriptValue(QScriptEngine *engine, const QcepDataGroupPtr &data)

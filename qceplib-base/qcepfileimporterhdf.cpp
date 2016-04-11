@@ -56,7 +56,7 @@ void QcepFileImporterHDF::scanGroup(QModelIndex dest, hid_t gid, int level)
       scanLink(dest, gid, memb_name);
     } else if (otype == H5G_GROUP) {
 //      QcepDataGroupPtr dgrp = m_Model->group(dest);
-      QcepDataGroupPtr ngrp = QcepDataGroup::newDataGroup(QcepSettingsSaverWPtr(), memb_name, NULL);
+      QcepDataGroupPtr ngrp = QcepAllocator::newGroup(memb_name);
       QModelIndex      inst = m_Model->append(dest, ngrp);
 
       hid_t grpid = H5Gopen(gid, memb_name, H5P_DEFAULT);
@@ -112,7 +112,7 @@ void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
       m_Model->append(dest, ncol);
     }
   } else if (rank == 2) {
-    QcepDoubleImageDataPtr nimg = QcepAllocator::newDoubleImage(name, dims.value(1), dims.value(0), NULL);
+    QcepDoubleImageDataPtr nimg = QcepAllocator::newDoubleImage(name, dims.value(1), dims.value(0));
 
     if (nimg) {
       readImageData(nimg, dsid);

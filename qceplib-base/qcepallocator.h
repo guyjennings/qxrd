@@ -15,6 +15,7 @@
 #include "qcepintegrateddata-ptr.h"
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumn-ptr.h"
+#include "qcepdataset-ptr.h"
 
 class QcepAllocator : public QcepObject, public QEnableSharedFromThis<QcepAllocator>
 {
@@ -36,22 +37,24 @@ public:
     AlwaysAllocate
   };
 
-  static QcepInt16ImageDataPtr newInt16Image(AllocationStrategy strat, int width, int height, QcepObject *parent);
-  static QcepInt32ImageDataPtr newInt32Image(AllocationStrategy strat, int width, int height, QcepObject *parent);
-  static QcepDoubleImageDataPtr newDoubleImage(AllocationStrategy strat, int width, int height, QcepObject *parent);
-  static QcepMaskDataPtr newMask(AllocationStrategy strat, int width, int height, int def, QcepObject *parent);
-  static QcepIntegratedDataPtr newIntegratedData(AllocationStrategy strat, QcepDoubleImageDataPtr image, QcepObject *parent);
+  static QcepInt16ImageDataPtr  newInt16Image(AllocationStrategy strat, int width, int height);
+  static QcepInt32ImageDataPtr  newInt32Image(AllocationStrategy strat, int width, int height);
+  static QcepDoubleImageDataPtr newDoubleImage(AllocationStrategy strat, int width, int height);
+  static QcepMaskDataPtr        newMask(AllocationStrategy strat, int width, int height, int def);
+  static QcepIntegratedDataPtr  newIntegratedData(AllocationStrategy strat, QcepDoubleImageDataPtr image);
 
-  static QcepDataColumnScanPtr newColumnScan();
-  static QcepDataColumnPtr     newColumn(QString name, int sz);
-  static QcepDataArrayPtr      newArray(QString name, QVector<int> dims);
+  static QcepDataColumnScanPtr  newColumnScan(QString name, QStringList cols = QStringList(), int nRows = 0);
+  static QcepDataColumnPtr      newColumn(QString name, int sz = 0);
+  static QcepDataArrayPtr       newArray(QString name, QVector<int> dims = QVector<int>());
 
-  static QcepDoubleImageDataPtr newDoubleImage(QString name, int width, int height, QcepObject *parent);
-  static QcepIntegratedDataPtr  newIntegratedData(QString name, int size, QcepObject *parent);
+  static QcepDoubleImageDataPtr newDoubleImage(QString name, int width, int height);
+  static QcepIntegratedDataPtr  newIntegratedData(QString name, int size);
+
+  static QcepDataGroupPtr       newGroup(QString name);
+  static QcepDatasetPtr         newDataset(QString name);
 
   static void newDoubleImageAndIntegratedData(AllocationStrategy strat,
                                        int width, int height,
-                                       QcepObject *parent,
                                        QcepDoubleImageDataPtr &img,
                                        QcepIntegratedDataPtr &integ);
   int int16SizeMB(int width, int height);

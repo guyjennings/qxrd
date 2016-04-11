@@ -12,10 +12,9 @@ static QAtomicInt s_ObjectDeleteCount(0);
 
 QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver,
                                QString name,
-                               int byteSize,
-                               QcepObject *parent) :
-  QcepObject(name, parent),
-  m_Saver(saver),
+                               int byteSize) :
+  QcepObject(name, NULL),
+//  m_Saver(saver),
   m_Type(saver,        this, "type", "object", "Data object type"),
   m_ByteSize(QcepSettingsSaverWPtr(), this, "size", byteSize, "Object Size"),
   m_Creator(saver,     this, "creator", "Unknown", "QXRD Version Number"),
@@ -177,18 +176,6 @@ QString QcepDataObject::uniqueFileName(QString name)
 
 void QcepDataObject::saveData(QString &name, QString filter, Overwrite canOverwrite)
 {
-}
-
-QcepDataObjectPtr QcepDataObject::newDataObject(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent)
-{
-  QcepDataObjectPtr res(new QcepDataObject(saver, name, 0, parent));
-
-  return res;
-}
-
-QcepSettingsSaverWPtr QcepDataObject::saver()
-{
-  return m_Saver;
 }
 
 QScriptValue QcepDataObject::toScriptValue(QScriptEngine *engine, const QcepDataObjectPtr &data)

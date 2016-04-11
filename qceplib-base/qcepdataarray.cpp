@@ -2,8 +2,8 @@
 #include <QScriptEngine>
 #include "qcepallocator.h"
 
-QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims, QcepObject *parent) :
-  QcepDataObject(saver, name, 0, parent),
+QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims) :
+  QcepDataObject(saver, name, 0),
   m_Dimensions(dims)
 {
   set_Type("Data Array");
@@ -40,13 +40,6 @@ QString QcepDataArray::description() const
   desc += "]";
 
   return desc;
-}
-
-QcepDataArrayPtr QcepDataArray::newDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims, QcepObject *parent)
-{
-  QcepDataArrayPtr res(new QcepDataArray(saver, name, dims, parent));
-
-  return res;
 }
 
 QVector<int> QcepDataArray::dimensions()

@@ -2,25 +2,13 @@
 #include "qcepdatacolumn.h"
 #include "qcepdatacolumn-ptr.h"
 #include <QScriptEngine>
+#include "qcepallocator.h"
 
-QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QcepObject *parent) :
-  QcepDataGroup(sav, name, parent),
-  m_NumPoints(sav, this, "numPoints", 0, "Number of points in scan")
+QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int sz) :
+  QcepDataGroup(sav, name),
+  m_NumPoints(sav, this, "numPoints", sz, "Number of points in scan")
 {
   set_Type("Data Column Scan");
-}
-
-QcepDataColumnScanPtr QcepDataColumnScan::newDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int npts, QcepObject *parent)
-{
-  QcepDataColumnScanPtr res(new QcepDataColumnScan(sav, name, parent));
-
-  foreach (QString col, cols) {
-    res -> append(QcepDataColumn::newDataColumn(sav, col, npts, parent));
-  }
-
-  res -> set_NumPoints(npts);
-
-  return res;
 }
 
 QString QcepDataColumnScan::description() const
@@ -73,7 +61,7 @@ int QcepDataColumnScan::rowCount() const
 
 QcepDataColumnPtr QcepDataColumnScan::appendColumn(QString title)
 {
-  QcepDataColumnPtr col = QcepDataColumn::newDataColumn(saver(), title, 0, this);
+  QcepDataColumnPtr col = QcepAllocator::newColumn(title, 0);
 
   append(col);
 

@@ -9,7 +9,7 @@ class QcepDataset : public QcepDataGroup
   Q_OBJECT
 
 public:
-  QcepDataset(QcepSettingsSaverWPtr saver, QString name, QcepObject *parent);
+  QcepDataset(QcepSettingsSaverWPtr saver, QString name);
 };
 
 #endif // QCEPDATASET_H
