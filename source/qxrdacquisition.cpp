@@ -1064,8 +1064,9 @@ void QxrdAcquisition::doAcquire()
             int nRows = det->get_NRows();
 
             if (res[d][p][0] == NULL) {
-              QcepInt32ImageDataPtr nres = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
-                                                                        nCols, nRows);
+              QcepInt32ImageDataPtr nres = QcepAllocator::newInt32Image(tr("acc-%1-%2").arg(d).arg(p),
+                                                                        nCols, nRows,
+                                                                        QcepAllocator::AllocateFromReserve);
 
               res[d][p][0] = nres;
 
@@ -1092,8 +1093,9 @@ void QxrdAcquisition::doAcquire()
             }
 
             if (ovf[d][p][0] == NULL) {
-              QcepMaskDataPtr novf = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
-                                                            nCols, nRows, 0);
+              QcepMaskDataPtr novf = QcepAllocator::newMask(tr("mask-%1-%2").arg(d).arg(p),
+                                                            nCols, nRows, 0,
+                                                            QcepAllocator::AllocateFromReserve);
               ovf[d][p][0] = novf;
 
               if (novf == NULL) {
@@ -1313,13 +1315,15 @@ void QxrdAcquisition::doAcquireDark()
         dets.append(det);
         procs.append(det->processor());
 
-        QcepInt32ImageDataPtr img = QcepAllocator::newInt32Image(QcepAllocator::AllocateFromReserve,
-                                                                 det->get_NCols(), det->get_NRows());
+        QcepInt32ImageDataPtr img = QcepAllocator::newInt32Image(tr("dark-%1").arg(i),
+                                                                 det->get_NCols(), det->get_NRows(),
+                                                                 QcepAllocator::AllocateFromReserve);
 
         res.append(img);
 
-        QcepMaskDataPtr msk = QcepAllocator::newMask(QcepAllocator::AllocateFromReserve,
-                                                     det->get_NCols(), det->get_NRows(),0);
+        QcepMaskDataPtr msk = QcepAllocator::newMask(tr("mask-%1").arg(i),
+                                                     det->get_NCols(), det->get_NRows(),0,
+                                                     QcepAllocator::AllocateFromReserve);
 
         overflow.append(msk);
       }

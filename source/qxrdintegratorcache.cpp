@@ -663,12 +663,12 @@ void QxrdIntegratorCache::partialIntegrationStep3(
   }
 }
 
-void QxrdIntegratorCache::performIntegration(
-  QcepDataObjectPtr      res,
-  QcepDoubleImageDataPtr dimg,
-  QcepMaskDataPtr mask,
-  int normalize)
+QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr dimg,
+                                                              QcepMaskDataPtr mask,
+                                                              int normalize)
 {
+  QcepDataObjectPtr result;
+
   QTime tic;
   tic.start();
 
@@ -682,303 +682,317 @@ void QxrdIntegratorCache::performIntegration(
     m_Integral.resize(0);
     m_SumValue.resize(0);
 
-    if (res && dimg) {
-      int noversample = m_Oversample;
-      double oversampleStep = 1.0/m_Oversample;
-      double halfOversampleStep = oversampleStep/2.0;
+    if (dimg) {
+        int noversample = m_Oversample;
+        double oversampleStep = 1.0/m_Oversample;
+        double halfOversampleStep = oversampleStep/2.0;
 
-      m_NRows = dimg->get_Height();
-      m_NCols = dimg->get_Width();
-      m_NPix  = m_NRows*m_NCols*m_Oversample*m_Oversample;
+        m_NRows = dimg->get_Height();
+        m_NCols = dimg->get_Width();
+        m_NPix  = m_NRows*m_NCols*m_Oversample*m_Oversample;
 
-      m_CacheFullLevel.fetchAndStoreOrdered(m_NPix);
+        m_CacheFullLevel.fetchAndStoreOrdered(m_NPix);
 
-      QcepDoubleList norm = dimg->get_Normalization();
+        QcepDoubleList norm = dimg->get_Normalization();
 
-      double normVal = 1;
+        double normVal = 1;
 
-      if (norm.length()>=1) {
-        normVal = norm[0];
-      }
-
-      if (m_CacheFillLevel.testAndSetOrdered(-1,0)) {
-        if (qcepDebug(DEBUG_INTEGRATOR)) {
-          expt->printMessage(tr("QxrdIntegratorCache::performIntegration - fill cache"));
+        if (norm.length()>=1) {
+          normVal = norm[0];
         }
 
-        // Allocate new cache and fill it...
-
-        m_CachedRadialBinNumbers =  QcepAllocator::newInt32Image(QcepAllocator::AlwaysAllocate,
-                                                           m_NCols*m_Oversample,
-                                                           m_NRows*m_Oversample);
-
-        m_CachedRadialValues = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
-                                                              m_NCols*m_Oversample,
-                                                              m_NRows*m_Oversample);
-
-        m_CachedNormalization = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
-                                                              m_NCols*m_Oversample,
-                                                              m_NRows*m_Oversample);
-
-        if (m_PolarTransform) {
-          m_CachedPolarBinNumbers = QcepAllocator::newInt32Image(QcepAllocator::AlwaysAllocate,
-                                                                 m_NCols*m_Oversample,
-                                                                 m_NRows*m_Oversample);
-
-          m_CachedPolarValues = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
-                                                              m_NCols*m_Oversample,
-                                                              m_NRows*m_Oversample);
-        }
-
-        if (m_CachedRadialBinNumbers && m_CachedNormalization) {
-          m_CachedRadialBinNumbers -> clear();
-          m_CachedNormalization -> clear();
-
-          if (m_CachedPolarBinNumbers) {
-            m_CachedPolarBinNumbers -> clear();
+        if (m_CacheFillLevel.testAndSetOrdered(-1,0)) {
+          if (qcepDebug(DEBUG_INTEGRATOR)) {
+            expt->printMessage(tr("QxrdIntegratorCache::performIntegration - fill cache"));
           }
 
-          if (m_CachedPolarValues) {
-            m_CachedPolarValues -> clear();
+          // Allocate new cache and fill it...
+
+          m_CachedRadialBinNumbers =  QcepAllocator::newInt32Image("cachedRadialBins",
+                                                                   m_NCols*m_Oversample,
+                                                                   m_NRows*m_Oversample,
+                                                                   QcepAllocator::NullIfNotAvailable);
+
+          m_CachedRadialValues = QcepAllocator::newDoubleImage("cachedRadialValues",
+                                                               m_NCols*m_Oversample,
+                                                               m_NRows*m_Oversample,
+                                                               QcepAllocator::NullIfNotAvailable);
+
+          m_CachedNormalization = QcepAllocator::newDoubleImage("cachedNormalization",
+                                                                m_NCols*m_Oversample,
+                                                                m_NRows*m_Oversample,
+                                                                QcepAllocator::NullIfNotAvailable);
+
+          if (m_PolarTransform) {
+            m_CachedPolarBinNumbers = QcepAllocator::newInt32Image("cachedPolarBins",
+                                                                   m_NCols*m_Oversample,
+                                                                   m_NRows*m_Oversample,
+                                                                   QcepAllocator::NullIfNotAvailable);
+
+            m_CachedPolarValues = QcepAllocator::newDoubleImage("cachedPolarValues",
+                                                                m_NCols*m_Oversample,
+                                                                m_NRows*m_Oversample,
+                                                                QcepAllocator::NullIfNotAvailable);
           }
 
-          if (m_EnableUserGeometry || m_EnableUserAbsorption) {
-            expt->printMessage(tr("Threaded integration disabled because of user supplied functions"));
+          if (m_CachedRadialBinNumbers && m_CachedNormalization) {
+            m_CachedRadialBinNumbers -> clear();
+            m_CachedNormalization -> clear();
 
-            m_ThreadCount = 1;
-
-            grabScriptEngine();
-          }
-
-          m_RFirst = true;
-          m_CFirst = true;
-
-          // Step one fills m_CachedRadialValues ( & m_CachedPolarValues if 2D)
-          // and sets m_RMin, m_RMax (& m_CMin and m_CMax) to range of values
-
-          if (m_ThreadCount == 1) {
-            partialIntegrationStep1(0, 1);
-          } else {
-            QVector< QFuture<void> > res;
-
-            for (int i=0; i<m_ThreadCount; i++) {
-              res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep1, i, m_ThreadCount));
+            if (m_CachedPolarBinNumbers) {
+              m_CachedPolarBinNumbers -> clear();
             }
 
-            for (int i=0; i<m_ThreadCount; i++) {
-              res[i].waitForFinished();
-            }
-          }
-
-          m_RStep = m_RadialStep;
-
-          if (m_RStep == 0) {
-            m_NRSteps = m_RadialNSteps;
-
-            if (m_NRSteps <= 0) {
-              m_NRSteps = 512;
+            if (m_CachedPolarValues) {
+              m_CachedPolarValues -> clear();
             }
 
-            m_RStep = (m_RadialEnd - m_RadialStart)/m_NRSteps;
-          } else {
-            m_NRSteps = ceil((m_RadialEnd - m_RadialStart)/m_RStep);
-          }
+            if (m_EnableUserGeometry || m_EnableUserAbsorption) {
+              expt->printMessage(tr("Threaded integration disabled because of user supplied functions"));
 
-          if (m_HasChi) {
-            m_CStep = m_PolarStep;
+              m_ThreadCount = 1;
 
-            if (m_CStep == 0) {
-              m_NCSteps = m_PolarNSteps;
+              grabScriptEngine();
+            }
 
-              if (m_NCSteps <= 0) {
-                m_NCSteps = 512;
+            m_RFirst = true;
+            m_CFirst = true;
+
+            // Step one fills m_CachedRadialValues ( & m_CachedPolarValues if 2D)
+            // and sets m_RMin, m_RMax (& m_CMin and m_CMax) to range of values
+
+            if (m_ThreadCount == 1) {
+              partialIntegrationStep1(0, 1);
+            } else {
+              QVector< QFuture<void> > res;
+
+              for (int i=0; i<m_ThreadCount; i++) {
+                res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep1, i, m_ThreadCount));
               }
 
-              m_CStep = (m_PolarEnd - m_PolarStart)/m_NCSteps;
+              for (int i=0; i<m_ThreadCount; i++) {
+                res[i].waitForFinished();
+              }
+            }
+
+            m_RStep = m_RadialStep;
+
+            if (m_RStep == 0) {
+              m_NRSteps = m_RadialNSteps;
+
+              if (m_NRSteps <= 0) {
+                m_NRSteps = 512;
+              }
+
+              m_RStep = (m_RadialEnd - m_RadialStart)/m_NRSteps;
             } else {
-              m_NCSteps = ceil((m_PolarEnd - m_PolarStart)/m_CStep);
+              m_NRSteps = ceil((m_RadialEnd - m_RadialStart)/m_RStep);
+            }
+
+            if (m_HasChi) {
+              m_CStep = m_PolarStep;
+
+              if (m_CStep == 0) {
+                m_NCSteps = m_PolarNSteps;
+
+                if (m_NCSteps <= 0) {
+                  m_NCSteps = 512;
+                }
+
+                m_CStep = (m_PolarEnd - m_PolarStart)/m_NCSteps;
+              } else {
+                m_NCSteps = ceil((m_PolarEnd - m_PolarStart)/m_CStep);
+              }
+            }
+
+            if (qcepDebug(DEBUG_INTEGRATOR)) {
+              expt->printMessage(tr("1st stage complete after %1 msec").arg(tic.elapsed()));
+            }
+
+            // Step two calculates the bin numbers and stores them in m_CachedRadialBinNumbers
+            // and m_CachedPolarBinNumbers
+
+            if (m_ThreadCount == 1) {
+              partialIntegrationStep2(0, 1);
+            } else {
+              QVector< QFuture<void> > res;
+
+              for (int i=0; i<m_ThreadCount; i++) {
+                res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep2, i, m_ThreadCount));
+              }
+
+              for (int i=0; i<m_ThreadCount; i++) {
+                res[i].waitForFinished();
+              }
+            }
+
+            if (m_HasChi) {
+              m_ResultSize = m_NRSteps * m_NCSteps;
+            } else {
+              m_ResultSize = m_NRSteps;
+            }
+
+            if (qcepDebug(DEBUG_INTEGRATOR)) {
+              expt->printMessage(tr("2nd stage complete after %1 msec").arg(tic.elapsed()));
+            }
+
+            m_CacheFillLevel.fetchAndStoreOrdered(m_NPix);
+
+            if (m_EnableUserGeometry || m_EnableUserAbsorption) {
+              releaseScriptEngine();
             }
           }
 
           if (qcepDebug(DEBUG_INTEGRATOR)) {
-            expt->printMessage(tr("1st stage complete after %1 msec").arg(tic.elapsed()));
+            expt->printMessage(tr("QxrdIntegratorCache::performIntegration - cache finished"));
           }
+        }
 
-          // Step two calculates the bin numbers and stores them in m_CachedRadialBinNumbers
-          // and m_CachedPolarBinNumbers
-
-          if (m_ThreadCount == 1) {
-            partialIntegrationStep2(0, 1);
-          } else {
-            QVector< QFuture<void> > res;
-
-            for (int i=0; i<m_ThreadCount; i++) {
-              res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep2, i, m_ThreadCount));
-            }
-
-            for (int i=0; i<m_ThreadCount; i++) {
-              res[i].waitForFinished();
-            }
-          }
-
-          if (m_HasChi) {
-            m_ResultSize = m_NRSteps * m_NCSteps;
-          } else {
-            m_ResultSize = m_NRSteps;
-          }
-
+        while (m_CacheFillLevel.fetchAndAddOrdered(0) < m_CacheFullLevel.fetchAndAddOrdered(0)) {
           if (qcepDebug(DEBUG_INTEGRATOR)) {
-            expt->printMessage(tr("2nd stage complete after %1 msec").arg(tic.elapsed()));
+            expt->printMessage(tr("QxrdIntegratorCache::performIntegration - waiting for cache [%1,%2]")
+                               .arg(m_CacheFillLevel.fetchAndAddOrdered(0))
+                               .arg(m_CacheFullLevel.fetchAndAddOrdered(0)));
           }
 
-          m_CacheFillLevel.fetchAndStoreOrdered(m_NPix);
-
-          if (m_EnableUserGeometry || m_EnableUserAbsorption) {
-            releaseScriptEngine();
-          }
+          QThreadAccess::msleep(100);
         }
 
-        if (qcepDebug(DEBUG_INTEGRATOR)) {
-          expt->printMessage(tr("QxrdIntegratorCache::performIntegration - cache finished"));
-        }
-      }
-
-      while (m_CacheFillLevel.fetchAndAddOrdered(0) < m_CacheFullLevel.fetchAndAddOrdered(0)) {
-        if (qcepDebug(DEBUG_INTEGRATOR)) {
-          expt->printMessage(tr("QxrdIntegratorCache::performIntegration - waiting for cache [%1,%2]")
+        if (m_CacheFillLevel.fetchAndAddOrdered(0) != m_CacheFullLevel.fetchAndAddOrdered(0)) {
+          expt->printMessage(tr("QxrdIntegratorCache::performIntegration - anomalous cache [%1,%2]")
                              .arg(m_CacheFillLevel.fetchAndAddOrdered(0))
                              .arg(m_CacheFullLevel.fetchAndAddOrdered(0)));
-        }
-
-        QThreadAccess::msleep(100);
-      }
-
-      if (m_CacheFillLevel.fetchAndAddOrdered(0) != m_CacheFullLevel.fetchAndAddOrdered(0)) {
-        expt->printMessage(tr("QxrdIntegratorCache::performIntegration - anomalous cache [%1,%2]")
-                           .arg(m_CacheFillLevel.fetchAndAddOrdered(0))
-                           .arg(m_CacheFullLevel.fetchAndAddOrdered(0)));
-      } else {
-        if (qcepDebug(DEBUG_INTEGRATOR)) {
-          expt->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
-        }
-
-        m_Integral.resize(m_ResultSize);
-        m_SumValue.resize(m_ResultSize);
-
-        expt->printMessage(tr("QxrdIntegratorCache storage required for step 3 = %1 x %2 = %3")
-                           .arg(m_ThreadCount).arg(m_ResultSize*2*sizeof(double))
-                           .arg(m_ThreadCount*m_ResultSize*2*sizeof(double)));
-
-        if (m_ThreadCount == 1) {
-          partialIntegrationStep3(0, 1, dimg, mask, normalize);
         } else {
-          QVector< QFuture<void> > res;
-
-          for (int i=0; i<m_ThreadCount; i++) {
-            res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep3,
-                                         i, m_ThreadCount, dimg, mask, normalize));
+          if (qcepDebug(DEBUG_INTEGRATOR)) {
+            expt->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
           }
 
-          for (int i=0; i<m_ThreadCount; i++) {
-            res[i].waitForFinished();
-          }
-        }
+          m_Integral.resize(m_ResultSize);
+          m_SumValue.resize(m_ResultSize);
 
-        if (qcepDebug(DEBUG_INTEGRATOR)) {
-          expt->printMessage(tr("Stage 3 complete after %1 msec").arg(tic.elapsed()));
-        }
+          expt->printMessage(tr("QxrdIntegratorCache storage required for step 3 = %1 x %2 = %3")
+                             .arg(m_ThreadCount).arg(m_ResultSize*2*sizeof(double))
+                             .arg(m_ThreadCount*m_ResultSize*2*sizeof(double)));
 
-        double scalingFactor = m_ScalingFactor;
+          if (m_ThreadCount == 1) {
+            partialIntegrationStep3(0, 1, dimg, mask, normalize);
+          } else {
+            QVector< QFuture<void> > res;
 
-        if (m_SelfNormalization) {
-          double nsum = 0, ninteg = 0;
+            for (int i=0; i<m_ThreadCount; i++) {
+              res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep3,
+                                           i, m_ThreadCount, dimg, mask, normalize));
+            }
 
-          for(int ir=0; ir<m_ResultSize; ir++) {
-            int sv = m_SumValue[ir];
-
-            if (sv > 0) {
-              double xv = m_RMin + (ir+0.5)*m_RStep;
-
-              if (xv >= m_SelfNormalizationMinimum && xv < m_SelfNormalizationMaximum) {
-                nsum   += sv;
-                ninteg += m_Integral[ir];
-              }
+            for (int i=0; i<m_ThreadCount; i++) {
+              res[i].waitForFinished();
             }
           }
 
-          if ((nsum > 0) && (ninteg != 0)) {
-            scalingFactor = m_ScalingFactor * nsum / ninteg;
-          }
-        }
-
-        if (m_HasChi) {
-          QcepDoubleImageDataPtr img = qSharedPointerDynamicCast<QcepDoubleImageData>(res);
-
-          img->resize(m_NRSteps, m_NCSteps);
-
-          img->set_HStart(m_RadialStart);
-          img->set_HStep(m_RStep);
-          img->set_VStart(m_PolarStart);
-          img->set_VStep(m_CStep);
-
-          img->set_HLabel(XLabel());
-          img->set_HUnits(XUnits());
-          img->set_VLabel(YLabel());
-          img->set_VUnits(YUnits());
-
-          img->set_Name(dimg->get_Name());
-
-          for (int y=0; y<m_NCSteps; y++) {
-            for (int x=0; x<m_NRSteps; x++) {
-              int bin = y*m_NRSteps + x;
-
-              int   sv = m_SumValue[bin];
-              double v = m_Integral[bin];
-
-              if (sv > 0) {
-                img->setValue(x,y, scalingFactor*normVal*v/sv);
-              } else {
-                img->setValue(x,y, qQNaN());
-              }
-            }
+          if (qcepDebug(DEBUG_INTEGRATOR)) {
+            expt->printMessage(tr("Stage 3 complete after %1 msec").arg(tic.elapsed()));
           }
 
-          img->dataObjectChanged();
-        } else {
-          QcepIntegratedDataPtr integ = qSharedPointerDynamicCast<QcepIntegratedData>(res);
+          double scalingFactor = m_ScalingFactor;
 
-          if (integ) {
-            integ -> resize(0);
-            integ -> set_Center(m_CenterX, m_CenterY);
+          if (m_SelfNormalization) {
+            double nsum = 0, ninteg = 0;
 
             for(int ir=0; ir<m_ResultSize; ir++) {
               int sv = m_SumValue[ir];
 
               if (sv > 0) {
-                double xv = m_RadialStart + (ir+0.5)*m_RStep;
+                double xv = m_RMin + (ir+0.5)*m_RStep;
 
-                if (normalize) {
-                  integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv);
-                } else {
-                  integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+                if (xv >= m_SelfNormalizationMinimum && xv < m_SelfNormalizationMaximum) {
+                  nsum   += sv;
+                  ninteg += m_Integral[ir];
                 }
               }
             }
 
-            integ->set_XUnitsLabel(XLabel());
-            integ->set_Oversample(m_Oversample);
-            // Integrate entirely out of cache
+            if ((nsum > 0) && (ninteg != 0)) {
+              scalingFactor = m_ScalingFactor * nsum / ninteg;
+            }
+          }
+
+          if (m_HasChi) {
+            QcepDoubleImageDataPtr img =
+                QcepAllocator::newDoubleImage(dimg->get_Name(), m_NRSteps, m_NCSteps,
+                                              QcepAllocator::NullIfNotAvailable);
+
+            if (img) {
+              img->set_HStart(m_RadialStart);
+              img->set_HStep(m_RStep);
+              img->set_VStart(m_PolarStart);
+              img->set_VStep(m_CStep);
+
+              img->set_HLabel(XLabel());
+              img->set_HUnits(XUnits());
+              img->set_VLabel(YLabel());
+              img->set_VUnits(YUnits());
+
+              img->set_Name(dimg->get_Name());
+
+              for (int y=0; y<m_NCSteps; y++) {
+                for (int x=0; x<m_NRSteps; x++) {
+                  int bin = y*m_NRSteps + x;
+
+                  int   sv = m_SumValue[bin];
+                  double v = m_Integral[bin];
+
+                  if (sv > 0) {
+                    img->setValue(x,y, scalingFactor*normVal*v/sv);
+                  } else {
+                    img->setValue(x,y, qQNaN());
+                  }
+                }
+              }
+
+              img->dataObjectChanged();
+
+              result = img;
+            }
+          } else {
+            QcepIntegratedDataPtr integ =
+                QcepAllocator::newIntegratedData(dimg->get_Name(), 0, QcepAllocator::NullIfNotAvailable);
+
+            if (integ) {
+              integ -> resize(0);
+              integ -> set_Center(m_CenterX, m_CenterY);
+
+              for(int ir=0; ir<m_ResultSize; ir++) {
+                int sv = m_SumValue[ir];
+
+                if (sv > 0) {
+                  double xv = m_RadialStart + (ir+0.5)*m_RStep;
+
+                  if (normalize) {
+                    integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv);
+                  } else {
+                    integ -> append(xv, scalingFactor*normVal*m_Integral[ir]/sv*(ir*oversampleStep+halfOversampleStep));
+                  }
+                }
+              }
+
+              integ->set_XUnitsLabel(XLabel());
+              integ->set_Oversample(m_Oversample);
+              // Integrate entirely out of cache
+
+              result = integ;
+            }
           }
         }
-      }
 
-      expt->printMessage(tr("Integration of %1 took %2 msec")
-                         .arg(dimg->get_Name())
-                         .arg(tic.restart()));
-    } else {
-      expt->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));
+        expt->printMessage(tr("Integration of %1 took %2 msec")
+                           .arg(dimg->get_Name())
+                           .arg(tic.restart()));
+      } else {
+        expt->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));
+      }
     }
-  }
+
+  return result;
 }
 
 void QxrdIntegratorCache::grabScriptEngine()

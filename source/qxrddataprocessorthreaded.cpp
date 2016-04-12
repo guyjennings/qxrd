@@ -226,11 +226,9 @@ void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
 {
   QcepDoubleImageDataPtr img = m_CorrectedImages.dequeue();
   QcepMaskDataPtr mask = (img ? img->mask() : QcepMaskDataPtr());
-  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, img);
 
   if (img) {
     m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
-                                               integ,
                                                img, mask,
                                                centerFinder() -> get_CenterX(),
                                                centerFinder() -> get_CenterY()));
@@ -244,8 +242,10 @@ void QxrdDataProcessorThreaded::onCorrectedImageAvailable()
 }
 
 QcepIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
-    (QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr image, QcepMaskDataPtr mask, double /*cx*/, double /*cy*/)
+    (QcepDoubleImageDataPtr image, QcepMaskDataPtr mask, double /*cx*/, double /*cy*/)
 {
+  QcepIntegratedDataPtr res;
+
   QThread::currentThread()->setObjectName("integrateImage");
 
   if (qcepDebug(DEBUG_PROCESS)) {
@@ -256,14 +256,12 @@ QcepIntegratedDataPtr QxrdDataProcessorThreaded::integrateImage
     QTime tic;
     tic.start();
 
-    m_Integrator -> performIntegration(integ, image, mask);
+    res = m_Integrator -> performIntegration(image, mask);
 
     updateEstimatedTime(prop_PerformIntegrationTime(), tic.restart());
-
-    return integ;
   }
 
-  return QcepIntegratedDataPtr();
+  return res;
 }
 
 void QxrdDataProcessorThreaded::onIntegratedDataAvailable()
@@ -714,29 +712,26 @@ void QxrdDataProcessorThreaded::integrateData(QString name)
 {
   QThread::currentThread()->setObjectName("integrateData");
 
-  QcepDoubleImageDataPtr img;
-  QcepIntegratedDataPtr  result;
+  QcepDoubleImageDataPtr img =
+      QcepAllocator::newDoubleImage(name, 0,0, QcepAllocator::NullIfNotAvailable);
 
-  QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AlwaysAllocate, 0,0, img, result);
+  if (img) {
+    QString path = filePathInDataDirectory(name);
 
-  QString path = filePathInDataDirectory(name);
+    if (img -> readImage(path)) {
+      printMessage(tr("Load image from %1").arg(path));
+      statusMessage(tr("Load image from %1").arg(path));
 
-  if (img -> readImage(path)) {
-    printMessage(tr("Load image from %1").arg(path));
-    statusMessage(tr("Load image from %1").arg(path));
+      img -> loadMetaData();
 
-    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
-
-    img -> loadMetaData();
-
-    m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
-                                               result,
-                                               img, mask(),
-                                               centerFinder() -> get_CenterX(),
-                                               centerFinder() -> get_CenterY()));
-  } else {
-    printMessage(tr("Couldn't load %1").arg(path));
-    statusMessage(tr("Couldn't load %1").arg(path));
+      m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessorThreaded::integrateImage,
+                                                 img, mask(),
+                                                 centerFinder() -> get_CenterX(),
+                                                 centerFinder() -> get_CenterY()));
+    } else {
+      printMessage(tr("Couldn't load %1").arg(path));
+      statusMessage(tr("Couldn't load %1").arg(path));
+    }
   }
 }
 
@@ -876,12 +871,9 @@ void QxrdDataProcessorThreaded::setFileNormalization(QString name, QList<double>
 
 void QxrdDataProcessorThreaded::slicePolygon(QVector<QPointF> poly)
 {
-  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::WaitTillAvailable, data());
-
   m_IntegratedData.enqueue(
       QtConcurrent::run(m_Integrator.data(),
                         &QxrdIntegrator::slicePolygon,
-                        integ,
                         m_Data, poly, 0));
 }
 
@@ -892,12 +884,9 @@ void QxrdDataProcessorThreaded::integrateSaveAndDisplay()
                  .arg(data()->get_FileName()).arg(m_CenterFinder->get_CenterX()).arg(m_CenterFinder->get_CenterY()));
   }
 
-  QcepIntegratedDataPtr integ = QcepAllocator::newIntegratedData(QcepAllocator::WaitTillAvailable, data());
-
   m_IntegratedData.enqueue(
       QtConcurrent::run(m_Integrator.data(),
                         &QxrdIntegrator::performIntegration,
-                        integ,
                         data(), mask()));
 }
 

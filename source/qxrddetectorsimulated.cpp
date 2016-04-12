@@ -165,10 +165,13 @@ void QxrdDetectorSimulated::onTimerTimeout()
     int nRows = get_NRows();
     int nCols = get_NCols();
 
-    QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepAllocator::AllocateFromReserve,
-                                                               nCols, nRows);
     int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
     int frame = frameCounter % 8;
+
+    QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(tr("simdet-%1").arg(frame),
+                                                               nCols, nRows,
+                                                               QcepAllocator::AllocateFromReserve);
+
 
     if (image) {
       quint16 *ptr = image->data();

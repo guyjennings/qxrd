@@ -165,7 +165,7 @@ QcepDataObjectPtr QxrdPolarNormalization::transform(QcepDoubleImageDataPtr img)
     int nRows = img->get_Height();
 
     if (get_OutputType() == IntegratedOutput) {
-      integ = QcepAllocator::newColumnScan(img->get_Name());
+      integ = QcepAllocator::newColumnScan(img->get_Name(), QStringList(), 0, QcepAllocator::NullIfNotAvailable);
 
       QcepDataColumnPtr xc = integ->appendColumn(img->get_HLabel());
       QcepDataColumnPtr av = integ->appendColumn("avg");
@@ -185,7 +185,7 @@ QcepDataObjectPtr QxrdPolarNormalization::transform(QcepDoubleImageDataPtr img)
 
       res = integ;
     } else if (get_OutputType() == FittedData || get_OutputType() == FittedDeltas) {
-      fit = QcepAllocator::newDoubleImage(QcepAllocator::NullIfNotAvailable, nCols, nRows);
+      fit = QcepAllocator::newDoubleImage(img->get_Name(), nCols, nRows, QcepAllocator::NullIfNotAvailable);
 
       fit->set_HStart(img->get_HStart());
       fit->set_HStep(img->get_HStep());
@@ -197,7 +197,7 @@ QcepDataObjectPtr QxrdPolarNormalization::transform(QcepDoubleImageDataPtr img)
       fit->set_VUnits(img->get_VUnits());
       fit->set_VLabel(img->get_VLabel());
 
-      fit->set_Name(img->get_Name());
+      fit->setNameAndSuffix(img->get_Name(), "fit");
 
       res = fit;
     }

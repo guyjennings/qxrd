@@ -125,19 +125,25 @@ void QxrdIntegrator::onIntegrationParametersChanged()
   m_IntegratorCache = QxrdIntegratorCachePtr();
 }
 
+//QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask)
+//{
+//  QcepIntegratedDataPtr res;
+
+//  if (dimg) {
+//    res = QcepAllocator::newIntegratedData(dimg->get_Name(), 0, QcepAllocator::AlwaysAllocate);
+//  }
+
+//  if (res) {
+//    return performIntegration(res, dimg, mask);
+//  } else {
+//    return res;
+//  }
+//}
+
 QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask)
 {
-  QcepIntegratedDataPtr res = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, dimg);
+  QcepIntegratedDataPtr integ;
 
-  if (res) {
-    return performIntegration(res, dimg, mask);
-  } else {
-    return res;
-  }
-}
-
-QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask)
-{
   if (qcepDebug(DEBUG_INTEGRATOR)) {
     QxrdExperimentPtr expt(m_Experiment);
 
@@ -164,7 +170,7 @@ QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepIntegratedDataPtr i
     m_IntegratorCache = cache;
   }
 
-  cache->performIntegration(integ, dimg, mask, true);
+  integ = qSharedPointerDynamicCast<QcepIntegratedData>(cache->performIntegration(dimg, mask, true));
 
   return integ;
 }
@@ -250,14 +256,19 @@ QString QxrdIntegrator::XLabel() const
   return label;
 }
 
-QcepIntegratedDataPtr QxrdIntegrator::sliceLine(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr image, double x0, double y0, double x1, double y1, double width)
+QcepIntegratedDataPtr QxrdIntegrator::sliceLine(QcepDoubleImageDataPtr image,
+                                                double x0, double y0,
+                                                double x1, double y1,
+                                                double width)
 {
+  QcepIntegratedDataPtr res;
+
   try {
     QVector<QPointF> poly;
     poly.append(QPointF(x0,y0));
     poly.append(QPointF(x1,y1));
 
-    return slicePolygon(integ, image, poly, width);
+    return slicePolygon(image, poly, width);
   }
 
   catch (...) {
@@ -271,58 +282,66 @@ QcepIntegratedDataPtr QxrdIntegrator::sliceLine(QcepIntegratedDataPtr integ, Qce
   return QcepIntegratedDataPtr();
 }
 
-QcepIntegratedDataPtr QxrdIntegrator::slicePolygon(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr image, QVector<QPointF> poly, double /*width*/)
+QcepIntegratedDataPtr QxrdIntegrator::slicePolygon(QcepDoubleImageDataPtr image,
+                                                   QVector<QPointF> poly,
+                                                   double /*width*/)
 {
+  QcepIntegratedDataPtr integ;
+
   QThread::currentThread()->setObjectName("slicePolygon");
 
-  if (integ && image) {
-    double length = 0;
+  if (image) {
+    integ = QcepAllocator::newIntegratedData(image->get_Name(), 0, QcepAllocator::NullIfNotAvailable);
 
-    if (poly.size() >= 2) {
-      QPointF p0 = poly[0];
+    if (integ) {
+      double length = 0;
 
-      for (int i=1; i<poly.size(); i++) {
-        QPointF p1 = poly[i];
-        double dx = p1.x() - p0.x();
-        double dy = p1.y() - p0.y();
-        length += sqrt(dx*dx + dy*dy);
-        p0=p1;
-      }
+      if (poly.size() >= 2) {
+        QPointF p0 = poly[0];
 
-      p0 = poly[0];
-      double r = 0;
-      double r0 = 0;
-
-      //    QVector<double> xs,ys;
-      integ -> resize(0);
-
-      for (int i=1; i<poly.size(); i++) {
-        QPointF p1 = poly[i];
-        double dx = p1.x() - p0.x();
-        double dy = p1.y() - p0.y();
-        double len = sqrt(dx*dx + dy*dy);
-
-        if (len > 0) {
-          for (; r<len; r+=1) {
-            double x = p0.x() + r*dx/len;
-            double y = p0.y() + r*dy/len;
-
-            integ -> append(r+r0, image->value((int) x, (int) y));
-          }
+        for (int i=1; i<poly.size(); i++) {
+          QPointF p1 = poly[i];
+          double dx = p1.x() - p0.x();
+          double dy = p1.y() - p0.y();
+          length += sqrt(dx*dx + dy*dy);
+          p0=p1;
         }
 
-        p0 = p1;
-        r0 += len;
-        r  -= len;
-      }
-      //
-      //    emit newIntegrationAvailable(image->get_Name(),xs,ys);
-    }
-  } else {
-    QxrdExperimentPtr expt(m_Experiment);
+        p0 = poly[0];
+        double r = 0;
+        double r0 = 0;
 
-    if (expt) {
-      expt->printMessage("QxrdIntegrator::slicePolygon failed");
+        //    QVector<double> xs,ys;
+        integ -> resize(0);
+
+        for (int i=1; i<poly.size(); i++) {
+          QPointF p1 = poly[i];
+          double dx = p1.x() - p0.x();
+          double dy = p1.y() - p0.y();
+          double len = sqrt(dx*dx + dy*dy);
+
+          if (len > 0) {
+            for (; r<len; r+=1) {
+              double x = p0.x() + r*dx/len;
+              double y = p0.y() + r*dy/len;
+
+              integ -> append(r+r0, image->value((int) x, (int) y));
+            }
+          }
+
+          p0 = p1;
+          r0 += len;
+          r  -= len;
+        }
+        //
+        //    emit newIntegrationAvailable(image->get_Name(),xs,ys);
+      }
+    } else {
+      QxrdExperimentPtr expt(m_Experiment);
+
+      if (expt) {
+        expt->printMessage("QxrdIntegrator::slicePolygon failed");
+      }
     }
   }
 

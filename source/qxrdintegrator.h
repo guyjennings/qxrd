@@ -131,13 +131,13 @@ public slots:
   void                  appendIntegration(QString resPath, QcepIntegratedDataPtr integ);
   void                  appendIntegration(QcepDoubleImageDataPtr res, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask = QcepMaskDataPtr());
   void                  appendIntegration(QcepDoubleImageDataPtr res, QcepIntegratedDataPtr integ);
-  QcepIntegratedDataPtr performIntegration(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask);
+//  QcepIntegratedDataPtr performIntegration(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask);
   QcepIntegratedDataPtr performIntegration(QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask = QcepMaskDataPtr());
 
 //  QcepIntegratedDataPtr integrate(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask, int oversample, int normalize);
 
-  QcepIntegratedDataPtr sliceLine(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
-  QcepIntegratedDataPtr slicePolygon(QcepIntegratedDataPtr integ, QcepDoubleImageDataPtr dimg, QVector<QPointF> poly, double width);
+  QcepIntegratedDataPtr sliceLine(/*QcepIntegratedDataPtr integ,*/ QcepDoubleImageDataPtr dimg, double x0, double y0, double x1, double y1, double width);
+  QcepIntegratedDataPtr slicePolygon(/*QcepIntegratedDataPtr integ,*/ QcepDoubleImageDataPtr dimg, QVector<QPointF> poly, double width);
 
   void integrateVsR();
   void integrateVsQ();

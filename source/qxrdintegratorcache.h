@@ -100,10 +100,9 @@ private:
   double m_SelfNormalizationMaximum;
 
 public:
-    void performIntegration(QcepDataObjectPtr      res,
-                            QcepDoubleImageDataPtr dimg,
-                            QcepMaskDataPtr mask,
-                            int normalize);
+    QcepDataObjectPtr performIntegration(QcepDoubleImageDataPtr dimg,
+                                             QcepMaskDataPtr mask,
+                                             int normalize);
 
 private:
   double getTTH(double x, double y);

@@ -57,7 +57,7 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QcepIntegratedDataPtr data)
 
 //  printf("New integration available, %d, %d points\n", x.size(), y.size());
 
-  if (m_PlotIndex < 40) {
+  if (data && m_PlotIndex < 40) {
     QTime tic;
     tic.start();
 
@@ -71,9 +71,7 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QcepIntegratedDataPtr data)
 
     setAxisTitle(QwtPlot::xBottom, m_XUnitsLabel);
 
-    QcepDoubleImageDataPtr img(data->get_Image());
-
-    QString title = (img ? img -> get_Name() : data -> get_Name());
+    QString title = data -> get_Name();
     QString tooltip;
 
     if (data->get_Oversample() > 1) {

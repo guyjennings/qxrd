@@ -91,73 +91,76 @@ void QxrdGenerateTestImage::appendRing(double tth, double intensity, double widt
 void QxrdGenerateTestImage::generateImage()
 {
   QcepDoubleImageDataPtr img =
-      QcepAllocator::newDoubleImage("testImage", get_NCols(), get_NRows());
+      QcepAllocator::newDoubleImage("testImage", get_NCols(), get_NRows(), QcepAllocator::NullIfNotAvailable);
 
-  img->clear();
+  if (img) {
+    img->clear();
 
-  int col, row, ncols = get_NCols(), nrows = get_NRows();
+    int col, row, ncols = get_NCols(), nrows = get_NRows();
 
-  double xc = get_CenterX();
-  double yc = get_CenterY();
-  double distance = get_Distance();
-  double pixWidth = get_PixelWidth();
-  double pixHeight = get_PixelHeight();
-  double alpha = get_Alpha();
-  double cos_alpha = cos(alpha*M_PI/180.0);
-  double sin_alpha = sin(alpha*M_PI/180.0);
-  double beta = get_Beta();
-  double cos_beta = cos(beta*M_PI/180.0);
-  double sin_beta = sin(beta*M_PI/180.0);
-  double rotation = get_Gamma();
-  double cos_rotation = cos(rotation*M_PI/180.0);
-  double sin_rotation = sin(rotation*M_PI/180.0);
+    double xc = get_CenterX();
+    double yc = get_CenterY();
+    double distance = get_Distance();
+    double pixWidth = get_PixelWidth();
+    double pixHeight = get_PixelHeight();
+    double alpha = get_Alpha();
+    double cos_alpha = cos(alpha*M_PI/180.0);
+    double sin_alpha = sin(alpha*M_PI/180.0);
+    double beta = get_Beta();
+    double cos_beta = cos(beta*M_PI/180.0);
+    double sin_beta = sin(beta*M_PI/180.0);
+    double rotation = get_Gamma();
+    double cos_rotation = cos(rotation*M_PI/180.0);
+    double sin_rotation = sin(rotation*M_PI/180.0);
 
-  double twoTheta, chi;
-  double chiMin = get_ChiMin();
-  double chiMax = get_ChiMax();
+    double twoTheta, chi;
+    double chiMin = get_ChiMin();
+    double chiMax = get_ChiMax();
 
-  int nrings = get_RingTTH().length();
+    int nrings = get_RingTTH().length();
 
-  for (row = 0; row < nrows; row++) {
-    for (col = 0; col < ncols; col++) {
-      m_Geometry -> getTwoThetaChi(xc,yc,distance,col,row,
-                                   pixWidth, pixHeight,
-                                   rotation, cos_beta, sin_beta,
-                                   cos_alpha, sin_alpha,
-                                   cos_rotation, sin_rotation,
-                                   &twoTheta, &chi);
+    for (row = 0; row < nrows; row++) {
+      for (col = 0; col < ncols; col++) {
+        m_Geometry -> getTwoThetaChi(xc,yc,distance,col,row,
+                                     pixWidth, pixHeight,
+                                     rotation, cos_beta, sin_beta,
+                                     cos_alpha, sin_alpha,
+                                     cos_rotation, sin_rotation,
+                                     &twoTheta, &chi);
 
-      if (chiMin <= chi && chi <= chiMax) {
-        double sum = 0;
+        if (chiMin <= chi && chi <= chiMax) {
+          double sum = 0;
 
-        for (int i = 0; i<nrings; i++) {
-          double ringTTH = get_RingTTH()[i];
-          double ringInt = get_RingIntensity()[i];
-          double ringWdt = get_RingWidth()[i];
+          for (int i = 0; i<nrings; i++) {
+            double ringTTH = get_RingTTH()[i];
+            double ringInt = get_RingIntensity()[i];
+            double ringWdt = get_RingWidth()[i];
 
-          double nsigma = fabs((ringTTH-twoTheta)/ringWdt);
+            double nsigma = fabs((ringTTH-twoTheta)/ringWdt);
 
-          if (nsigma < 5) {
-            sum += ringInt*exp(-nsigma*nsigma);
+            if (nsigma < 5) {
+              sum += ringInt*exp(-nsigma*nsigma);
+            }
           }
-        }
 
-        img->setValue(col,row,sum);
+          img->setValue(col,row,sum);
+        }
       }
     }
-  }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+    QxrdDataProcessorPtr proc(m_Processor);
 
-  if (proc) {
-    proc -> newData(img, QcepMaskDataPtr());
+    if (proc) {
+      proc -> newData(img, QcepMaskDataPtr());
+    }
   }
 }
 
 void QxrdGenerateTestImage::generateTTHImage()
 {
-  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, get_NCols(), get_NRows());
+  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage("testImage", get_NCols(), get_NRows(), QcepAllocator::NullIfNotAvailable);
 
+  if (img) {
   img->clear();
 
   int col, row, ncols = get_NCols(), nrows = get_NRows();
@@ -197,49 +200,52 @@ void QxrdGenerateTestImage::generateTTHImage()
   if (proc) {
     proc -> newData(img, QcepMaskDataPtr());
   }
+  }
 }
 
 void QxrdGenerateTestImage::generateChiImage()
 {
-  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate, get_NCols(), get_NRows());
+  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage("testImage", get_NCols(), get_NRows(), QcepAllocator::NullIfNotAvailable);
 
-  img->clear();
+  if (img) {
+    img->clear();
 
-  int col, row, ncols = get_NCols(), nrows = get_NRows();
+    int col, row, ncols = get_NCols(), nrows = get_NRows();
 
-  double xc = get_CenterX();
-  double yc = get_CenterY();
-  double distance = get_Distance();
-  double pixWidth = get_PixelWidth();
-  double pixHeight = get_PixelHeight();
-  double alpha = get_Alpha();
-  double cos_alpha = cos(alpha*M_PI/180.0);
-  double sin_alpha = sin(alpha*M_PI/180.0);
-  double beta = get_Beta();
-  double cos_beta = cos(beta*M_PI/180.0);
-  double sin_beta = sin(beta*M_PI/180.0);
-  double rotation = get_Gamma();
-  double cos_rotation = cos(rotation*M_PI/180.0);
-  double sin_rotation = sin(rotation*M_PI/180.0);
+    double xc = get_CenterX();
+    double yc = get_CenterY();
+    double distance = get_Distance();
+    double pixWidth = get_PixelWidth();
+    double pixHeight = get_PixelHeight();
+    double alpha = get_Alpha();
+    double cos_alpha = cos(alpha*M_PI/180.0);
+    double sin_alpha = sin(alpha*M_PI/180.0);
+    double beta = get_Beta();
+    double cos_beta = cos(beta*M_PI/180.0);
+    double sin_beta = sin(beta*M_PI/180.0);
+    double rotation = get_Gamma();
+    double cos_rotation = cos(rotation*M_PI/180.0);
+    double sin_rotation = sin(rotation*M_PI/180.0);
 
-  double twoTheta, chi;
+    double twoTheta, chi;
 
-  for (row = 0; row < nrows; row++) {
-    for (col = 0; col < ncols; col++) {
-      m_Geometry -> getTwoThetaChi(xc,yc,distance,col,row,
-                                   pixWidth, pixHeight,
-                                   rotation, cos_beta, sin_beta,
-                                   cos_alpha, sin_alpha,
-                                   cos_rotation, sin_rotation,
-                                   &twoTheta, &chi);
+    for (row = 0; row < nrows; row++) {
+      for (col = 0; col < ncols; col++) {
+        m_Geometry -> getTwoThetaChi(xc,yc,distance,col,row,
+                                     pixWidth, pixHeight,
+                                     rotation, cos_beta, sin_beta,
+                                     cos_alpha, sin_alpha,
+                                     cos_rotation, sin_rotation,
+                                     &twoTheta, &chi);
 
-      img->setValue(col,row,chi);
+        img->setValue(col,row,chi);
+      }
     }
-  }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+    QxrdDataProcessorPtr proc(m_Processor);
 
-  if (proc) {
-    proc -> newData(img, QcepMaskDataPtr());
+    if (proc) {
+      proc -> newData(img, QcepMaskDataPtr());
+    }
   }
 }

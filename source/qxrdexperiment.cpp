@@ -154,7 +154,7 @@ void QxrdExperiment::initialize(QSettings *settings)
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
-    m_Dataset      = QcepAllocator::newDataset("/");
+    m_Dataset      = QcepAllocator::newDataset("dataset");
     m_DatasetModel = QcepDatasetModelPtr(new QcepDatasetModel(sharedFromThis(), m_DataProcessor, m_Dataset));
 
     m_DatasetModel -> newGroup("group1");

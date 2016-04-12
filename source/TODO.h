@@ -697,4 +697,7 @@ TODO("2016-04-08", "",
 TODO("2016-04-08", "",
      "Consider a variant-typed QcepDataValue type");
 
+TODO("2016-04-12", "",
+     "Re-implement QcepDataArray to use chunked format");
+
 #endif // TODO_H

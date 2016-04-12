@@ -104,7 +104,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_Acquisition(acq),
   m_AcquiredInt16Images("acquiredInt16Images"),
   m_AcquiredInt32Images("acquiredInt32Images"),
-  m_Data(QcepAllocator::newDoubleImage(QcepAllocator::WaitTillAvailable, 2048, 2048)),
+  m_Data(QcepAllocator::newDoubleImage("data", 2048, 2048, QcepAllocator::WaitTillAvailable)),
   m_DarkFrame(NULL),
   m_BadPixels(NULL),
   m_GainMap(NULL),
@@ -348,8 +348,9 @@ QString QxrdDataProcessorBase::integratedOutputDirectory() const
 
 QcepDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage(int width, int height)
 {
-  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage(QcepAllocator::AlwaysAllocate,
-                                                             width, height);
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("image",
+                                                             width, height,
+                                                             QcepAllocator::NullIfNotAvailable);
 
   return res;
 }
@@ -812,38 +813,44 @@ int QxrdDataProcessorBase::newMaskHeight() const
 void QxrdDataProcessorBase::newMaskStack()
 {
 
-  QcepMaskDataPtr m = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable,
-                                             newMaskWidth(), newMaskHeight(), 0);
+  QcepMaskDataPtr m = QcepAllocator::newMask("mask",
+                                             newMaskWidth(), newMaskHeight(), 0,
+                                             QcepAllocator::NullIfNotAvailable);
 
-  m_Masks.push_front(m);
+  if (m) {
+    m_Masks.push_front(m);
 
-  printMessage(tr("new mask, %1 on stack").arg(m_Masks.count()));
+    printMessage(tr("new mask, %1 on stack").arg(m_Masks.count()));
 
-  m_Masks.changed();
+    m_Masks.changed();
 
-  newMask();
+    newMask();
+  }
 }
 
 void QxrdDataProcessorBase::pushMaskStack(QcepMaskDataPtr m)
 {
   if (m == NULL) {
-    m =  QcepAllocator::newMask(QcepAllocator::WaitTillAvailable,
-                                newMaskWidth(), newMaskHeight(), 0);
+    m =  QcepAllocator::newMask("mask",
+                                newMaskWidth(), newMaskHeight(), 0,
+                                QcepAllocator::NullIfNotAvailable);
 
     if (mask()) {
       mask()->copyMaskTo(m);
     }
   }
 
-  m_Masks.push_front(m);
+  if (m) {
+    m_Masks.push_front(m);
 
-//  m_Mask = mask;
+    //  m_Mask = mask;
 
-  printMessage(tr("dup mask, %1 on stack").arg(m_Masks.count()));
+    printMessage(tr("dup mask, %1 on stack").arg(m_Masks.count()));
 
-  m_Masks.changed();
+    m_Masks.changed();
 
-  newMask();
+    newMask();
+  }
 }
 
 void QxrdDataProcessorBase::popMaskStack(int amount)
@@ -1131,11 +1138,11 @@ void QxrdDataProcessorBase::loadMask(QString name)
     printMessage(tr("QxrdDataProcessorBase::loadMask(%1)").arg(name));
   }
 
-  QcepMaskDataPtr res = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable, 0,0, 0);
-
   QString path = filePathInDataDirectory(name);
 
-  if (res -> readImage(path)) {
+  QcepMaskDataPtr res = QcepAllocator::newMask(path, 0,0, 0, QcepAllocator::NullIfNotAvailable);
+
+  if (res && res -> readImage(path)) {
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -2233,9 +2240,7 @@ QxrdGenerateTestImageWPtr QxrdDataProcessorBase::generateTestImage() const
 
 void QxrdDataProcessorBase::newOutputScan(QString title)
 {
-  m_OutputScan = QcepAllocator::newIntegratedData(QcepAllocator::AlwaysAllocate, data());
-
-  m_OutputScan -> set_Name(title);
+  m_OutputScan = QcepAllocator::newIntegratedData(title, 0, QcepAllocator::NullIfNotAvailable);
 }
 
 void QxrdDataProcessorBase::appendToOutputScan(double x, double y)
@@ -2369,53 +2374,55 @@ void QxrdDataProcessorBase::findZingers()
   double thr = get_ZingerThreshold();
 
   QcepMaskDataPtr dest
-      = QcepAllocator::newMask(QcepAllocator::WaitTillAvailable, wid, ht, 1);
+      = QcepAllocator::newMask("zingers", wid, ht, 1, QcepAllocator::NullIfNotAvailable);
 
-  for (int y=0; y<ht; y++) {
-    for (int x=0; x<wid; x++) {
-      if (mask==NULL || mask->value(x,y)) {
-        double sum = 0, n = 0;
-        double val = 0;
+  if (dest) {
+    for (int y=0; y<ht; y++) {
+      for (int x=0; x<wid; x++) {
+        if (mask==NULL || mask->value(x,y)) {
+          double sum = 0, n = 0;
+          double val = 0;
 
-        for (int dy=-sz2; dy<=sz2; dy++) {
-          for (int dx=-sz2; dx<=sz2; dx++) {
-            if (mask==NULL || mask->value(x+dx, y+dy)) {
-              if (dx == 0 && dy == 0) {
-                val = m_Data->value(x+dx, y+dy);
-              } else {
-                sum += m_Data->value(x+dx, y+dy);
-                n   += 1;
+          for (int dy=-sz2; dy<=sz2; dy++) {
+            for (int dx=-sz2; dx<=sz2; dx++) {
+              if (mask==NULL || mask->value(x+dx, y+dy)) {
+                if (dx == 0 && dy == 0) {
+                  val = m_Data->value(x+dx, y+dy);
+                } else {
+                  sum += m_Data->value(x+dx, y+dy);
+                  n   += 1;
+                }
               }
             }
           }
-        }
 
-        if (n > 0 && fabs(val-sum/n) >= thr) {
-          dest->setValue(x,y,0);
-        }
-      }
-    }
-  }
-
-  if (sz1 > 0) {
-    for (int i=0; i<sz1; i++) {
-      dest->growMask();
-    }
-  }
-
-  if (mask) {
-    for (int y=0; y<ht; y++) {
-      for (int x=0; x<wid; x++) {
-        if (mask->value(x,y) == 0) {
-          dest->setValue(x,y,0);
+          if (n > 0 && fabs(val-sum/n) >= thr) {
+            dest->setValue(x,y,0);
+          }
         }
       }
     }
-  }
 
-  pushMaskStack(dest);
-  m_Masks.changed();
-  newMask();
+    if (sz1 > 0) {
+      for (int i=0; i<sz1; i++) {
+        dest->growMask();
+      }
+    }
+
+    if (mask) {
+      for (int y=0; y<ht; y++) {
+        for (int x=0; x<wid; x++) {
+          if (mask->value(x,y) == 0) {
+            dest->setValue(x,y,0);
+          }
+        }
+      }
+    }
+
+    pushMaskStack(dest);
+    m_Masks.changed();
+    newMask();
+  }
 }
 
 

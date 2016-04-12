@@ -705,16 +705,7 @@ void QxrdFileSaver::writeOutputScanPrivate(QString dir, QcepIntegratedDataPtr da
     }
   } else {
     if (fileName.isNull()) {
-      QcepDoubleImageDataPtr image = data -> get_Image();
-      if (image == NULL) {
-        if (g_Application) {
-          g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
-        }
-        decBacklog();
-        return;
-      }
-
-      fileName    = image -> get_FileName();
+      fileName    = data -> get_FileName();
     }
 
     QFileInfo fi(fileName);
@@ -779,16 +770,8 @@ void QxrdFileSaver::writeOutputScanPrivate(FILE* logFile, QcepIntegratedDataPtr 
     int imageNumber = 0;
 
     if (fileName.isNull()) {
-      QcepDoubleImageDataPtr image = data -> get_Image();
-      if (image == NULL) {
-        if (g_Application) {
-          g_Application->criticalMessage(tr("QxrdFileSaver::writeOutputScan: image == NULL"));
-        }
-        return;
-      }
-
-      fileName    = image -> get_FileName();
-      imageNumber = image -> get_ImageNumber();
+      fileName    = data -> get_FileName();
+      imageNumber = data -> get_Index();
     }
 
     fprintf(logFile, "#S %d qxrd.integrate \"%s\" %g %g\n",
