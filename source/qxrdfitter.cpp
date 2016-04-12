@@ -53,5 +53,5 @@ QString QxrdFitter::reasonString(FitResult reason)
 
 QString QxrdFitter::reasonString(double v)
 {
-  return reasonString((FitResult) v);
+  return reasonString((FitResult) (int) v);
 }
