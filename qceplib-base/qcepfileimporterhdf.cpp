@@ -104,7 +104,7 @@ void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
 
   if (rank == 0) {
   } else if (rank == 1) {
-    QcepDataColumnPtr ncol = QcepAllocator::newColumn(name, dims.value(0));
+    QcepDataColumnPtr ncol = QcepAllocator::newColumn(name, dims.value(0), QcepAllocator::NullIfNotAvailable);
 
     if (ncol) {
       readColumnData(ncol, dsid);
@@ -112,7 +112,9 @@ void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
       m_Model->append(dest, ncol);
     }
   } else if (rank == 2) {
-    QcepDoubleImageDataPtr nimg = QcepAllocator::newDoubleImage(name, dims.value(1), dims.value(0));
+    QcepDoubleImageDataPtr nimg = QcepAllocator::newDoubleImage(name,
+                                                                dims.value(1), dims.value(0),
+                                                                QcepAllocator::NullIfNotAvailable);
 
     if (nimg) {
       readImageData(nimg, dsid);
@@ -126,7 +128,7 @@ void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
       idims[rank-i-1]=dims[i];
     }
 
-    QcepDataArrayPtr narr = QcepAllocator::newArray(name, idims);
+    QcepDataArrayPtr narr = QcepAllocator::newArray(name, idims, QcepAllocator::NullIfNotAvailable);
 
     if (narr) {
       readArrayData(narr, dsid);

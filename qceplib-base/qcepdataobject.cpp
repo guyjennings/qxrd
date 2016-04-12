@@ -22,7 +22,8 @@ QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver,
   m_QtVersion(saver,   this, "qtVersion", QT_VERSION_STR, "QT Version Number"),
   m_Description(saver, this, "description", "", "Object Description"),
   m_FileName(saver,    this, "fileName", "", "File Name of Image"),
-  m_ObjectSaved(saver, this, "objectSaved",0, "Object is Saved?")
+  m_ObjectSaved(QcepSettingsSaverWPtr(), this, "objectSaved",0, "Object is Saved?"),
+  m_Index(saver,       this, "index", 0, "Object Index Number")
 {
   s_ObjectAllocateCount.fetchAndAddOrdered(1);
 

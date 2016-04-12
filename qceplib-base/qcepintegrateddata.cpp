@@ -5,10 +5,10 @@
 
 QcepIntegratedData::QcepIntegratedData(QcepSettingsSaverWPtr saver,
                                        QString name,
-                                       QcepDoubleImageDataPtr image, int maxSize) :
+                                       /*QcepDoubleImageDataPtr image,*/ int maxSize) :
   QcepDataObject(saver, name, 2*maxSize*sizeof(double)),
 //  m_Title(saver, this, "title", "", "Integrated Data Title"),
-  m_Image(image),
+//  m_Image(image),
   m_MaxSize(maxSize),
   m_Size(0),
   m_AllocStep(1024),
@@ -144,15 +144,15 @@ void QcepIntegratedData::selfNormalize(double minx, double maxx)
   }
 }
 
-void QcepIntegratedData::set_Image(QcepDoubleImageDataPtr image)
-{
-  m_Image = image;
-}
+//void QcepIntegratedData::set_Image(QcepDoubleImageDataPtr image)
+//{
+//  m_Image = image;
+//}
 
-QcepDoubleImageDataPtr QcepIntegratedData::get_Image() const
-{
-  return m_Image;
-}
+//QcepDoubleImageDataPtr QcepIntegratedData::get_Image() const
+//{
+//  return m_Image;
+//}
 
 QString QcepIntegratedData::get_XUnitsLabel() const
 {

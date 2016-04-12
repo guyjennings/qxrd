@@ -1,8 +1,8 @@
 #include "qcepmaskdata.h"
 #include "qcepallocator.h"
 
-QcepMaskData::QcepMaskData(QcepSettingsSaverWPtr saver, int width, int height, int def)
-  : QcepImageData<short>(saver, width, height, def)
+QcepMaskData::QcepMaskData(QcepSettingsSaverWPtr saver, QString name, int width, int height, int def)
+  : QcepImageData<short>(saver, name, width, height, def)
 {
   set_Type("Mask Data");
 }
@@ -93,9 +93,12 @@ void QcepMaskData::invertMask()
 
 QcepMaskDataPtr QcepMaskData::copyMask()
 {
-  QcepMaskDataPtr copy(QcepAllocator::newMask(QcepAllocator::AlwaysAllocate, get_Width(), get_Height(), 0));
+  QcepMaskDataPtr copy =
+      QcepAllocator::newMask(get_Name(), get_Width(), get_Height(), 0, QcepAllocator::NullIfNotAvailable);
 
-  copyMaskTo(copy);
+  if (copy) {
+    copyMaskTo(copy);
+  }
 
   return copy;
 }

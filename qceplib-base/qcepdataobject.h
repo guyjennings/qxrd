@@ -98,8 +98,11 @@ public:
   Q_PROPERTY(QString fileName READ get_FileName WRITE set_FileName)
   QCEP_STRING_PROPERTY(FileName)
 
-  Q_PROPERTY(int objectSaved READ get_ObjectSaved WRITE set_ObjectSaved)
+  Q_PROPERTY(int objectSaved READ get_ObjectSaved WRITE set_ObjectSaved STORED false)
   QCEP_INTEGER_PROPERTY(ObjectSaved)
+
+  Q_PROPERTY(int index READ get_Index WRITE set_Index)
+  QCEP_INTEGER_PROPERTY(Index)
 };
 
 #endif // QCEPDATAOBJECT_H

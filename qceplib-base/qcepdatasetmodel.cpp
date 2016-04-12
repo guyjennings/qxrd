@@ -744,7 +744,7 @@ QcepDataArrayPtr       QcepDatasetModel::newArray(QString path, QVector<int> dim
       printMessage(tr("Array %1 already exists").arg(path));
     } else {
       QcepDataArrayPtr arr =
-          QcepAllocator::newArray(objectName(path), dims);
+          QcepAllocator::newArray(objectName(path), dims, QcepAllocator::NullIfNotAvailable);
 
       if (arr) {
         beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
@@ -767,7 +767,7 @@ QcepDataArrayPtr       QcepDatasetModel::newArray(const QModelIndex &index, QStr
 
   if (grp && ds) {
     QcepDataArrayPtr na =
-        QcepAllocator::newArray(name, dims);
+        QcepAllocator::newArray(name, dims, QcepAllocator::NullIfNotAvailable);
 
     if (na) {
       beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
@@ -823,7 +823,7 @@ QcepDataColumnPtr      QcepDatasetModel::newColumn(QString path, int nRows)
       printMessage(tr("Column %1 already exists").arg(path));
     } else {
       QcepDataColumnPtr col
-          = QcepAllocator::newColumn(objectName(path), nRows);
+          = QcepAllocator::newColumn(objectName(path), nRows, QcepAllocator::NullIfNotAvailable);
 
       if (col) {
         beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
@@ -846,7 +846,7 @@ QcepDataColumnPtr       QcepDatasetModel::newColumn(const QModelIndex &index, QS
 
   if (grp && ds) {
     QcepDataColumnPtr nc =
-        QcepAllocator::newColumn(name, nRows);
+        QcepAllocator::newColumn(name, nRows, QcepAllocator::NullIfNotAvailable);
 
     if (nc) {
       beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
@@ -901,7 +901,7 @@ QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, QStringList
     } else if (scan) {
       printMessage(tr("Column Scan %1 already exists").arg(path));
     } else {
-      QcepDataColumnScanPtr scan = QcepAllocator::newColumnScan(objectName(path), cols, nRows);
+      QcepDataColumnScanPtr scan = QcepAllocator::newColumnScan(objectName(path), cols, nRows, QcepAllocator::NullIfNotAvailable);
 
       if (scan) {
         beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
@@ -927,7 +927,7 @@ QcepDataColumnScanPtr       QcepDatasetModel::newColumnScan(const QModelIndex &i
 
   if (grp && ds) {
     QcepDataColumnScanPtr ns =
-        QcepAllocator::newColumnScan(name, cols, nRows);
+        QcepAllocator::newColumnScan(name, cols, nRows, QcepAllocator::NullIfNotAvailable);
 
     if (ns) {
       beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
@@ -983,7 +983,7 @@ QcepDoubleImageDataPtr QcepDatasetModel::newImage(QString path, int width, int h
       printMessage(tr("Image %1 already exists").arg(path));
     } else {
       QcepDoubleImageDataPtr img
-          = QcepAllocator::newDoubleImage(objectName(path), width, height);
+          = QcepAllocator::newDoubleImage(objectName(path), width, height, QcepAllocator::NullIfNotAvailable);
 
       if (img) {
         beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
@@ -1006,7 +1006,7 @@ QcepDoubleImageDataPtr QcepDatasetModel::newImage(const QModelIndex &index, QStr
 
   if (grp && ds) {
     QcepDoubleImageDataPtr ni =
-        QcepAllocator::newDoubleImage(name, width, height);
+        QcepAllocator::newDoubleImage(name, width, height, QcepAllocator::NullIfNotAvailable);
 
     if (ni) {
       beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
@@ -1062,7 +1062,7 @@ QcepIntegratedDataPtr QcepDatasetModel::newIntegratedData(QString path, int sz)
       printMessage(tr("Integrated dataset %1 already exists").arg(path));
     } else {
       QcepIntegratedDataPtr dat =
-          QcepAllocator::newIntegratedData(objectName(path), sz);
+          QcepAllocator::newIntegratedData(objectName(path), sz, QcepAllocator::NullIfNotAvailable);
 
       if (dat) {
         beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
@@ -1085,7 +1085,7 @@ QcepIntegratedDataPtr QcepDatasetModel::newIntegratedData(const QModelIndex &ind
 
   if (grp && ds) {
     QcepIntegratedDataPtr ni =
-        QcepAllocator::newIntegratedData(name, sz);
+        QcepAllocator::newIntegratedData(name, sz, QcepAllocator::NullIfNotAvailable);
 
     if (ni) {
       beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);

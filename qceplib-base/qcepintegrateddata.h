@@ -14,7 +14,7 @@ class QcepIntegratedData : public QcepDataObject
 public:
   explicit QcepIntegratedData(QcepSettingsSaverWPtr saver,
                               QString name,
-                              QcepDoubleImageDataPtr data,
+//                              QcepDoubleImageDataPtr data,
                               int maxSize);
   ~QcepIntegratedData();
 
@@ -36,8 +36,8 @@ public:
   void selfNormalize(double minx, double maxx);
 
   void set_Center(double cx, double cy);
-  void set_Image(QcepDoubleImageDataPtr image);
-  QcepDoubleImageDataPtr get_Image() const;
+//  void set_Image(QcepDoubleImageDataPtr image);
+//  QcepDoubleImageDataPtr get_Image() const;
 
   QString get_XUnitsLabel() const;
   void set_XUnitsLabel(QString units);
@@ -58,7 +58,7 @@ public:
 //  QCEP_STRING_PROPERTY(Title)
 
 private:
-  QcepDoubleImageDataPtr     m_Image;
+//  QcepDoubleImageDataPtr     m_Image;
   int                        m_MaxSize;
   int                        m_Size;
   const int                  m_AllocStep;

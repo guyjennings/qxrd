@@ -37,31 +37,29 @@ public:
     AlwaysAllocate
   };
 
-  static QcepInt16ImageDataPtr  newInt16Image(AllocationStrategy strat, int width, int height);
-  static QcepInt32ImageDataPtr  newInt32Image(AllocationStrategy strat, int width, int height);
-  static QcepDoubleImageDataPtr newDoubleImage(AllocationStrategy strat, int width, int height);
-  static QcepMaskDataPtr        newMask(AllocationStrategy strat, int width, int height, int def);
-  static QcepIntegratedDataPtr  newIntegratedData(AllocationStrategy strat, QcepDoubleImageDataPtr image);
+  static QcepInt16ImageDataPtr  newInt16Image(QString name, int width, int height, AllocationStrategy strat);
+  static QcepInt32ImageDataPtr  newInt32Image(QString name, int width, int height, AllocationStrategy strat);
+  static QcepDoubleImageDataPtr newDoubleImage(QString name, int width, int height, AllocationStrategy strat);
+  static QcepMaskDataPtr        newMask(QString name, int width, int height, int def, AllocationStrategy strat);
 
-  static QcepDataColumnScanPtr  newColumnScan(QString name, QStringList cols = QStringList(), int nRows = 0);
-  static QcepDataColumnPtr      newColumn(QString name, int sz = 0);
-  static QcepDataArrayPtr       newArray(QString name, QVector<int> dims = QVector<int>());
+  static QcepIntegratedDataPtr  newIntegratedData(QString name, int size, AllocationStrategy strat);
 
-  static QcepDoubleImageDataPtr newDoubleImage(QString name, int width, int height);
-  static QcepIntegratedDataPtr  newIntegratedData(QString name, int size);
+  static QcepDataColumnScanPtr  newColumnScan(QString name, QStringList cols, int nRows, AllocationStrategy strat);
+  static QcepDataColumnPtr      newColumn(QString name, int sz, AllocationStrategy strat);
+  static QcepDataArrayPtr       newArray(QString name, QVector<int> dims, AllocationStrategy strat);
+
 
   static QcepDataGroupPtr       newGroup(QString name);
   static QcepDatasetPtr         newDataset(QString name);
 
-  static void newDoubleImageAndIntegratedData(AllocationStrategy strat,
-                                       int width, int height,
-                                       QcepDoubleImageDataPtr &img,
-                                       QcepIntegratedDataPtr &integ);
   int int16SizeMB(int width, int height);
   int int32SizeMB(int width, int height);
   int doubleSizeMB(int width, int height);
   int maskSizeMB(int width, int height);
   int integratedSizeMB(int nrows);
+  int columnSizeMB(int sz);
+  int columnScanSizeMB(int nCols, int nRows);
+  int arraySizeMB(QVector<int> dims);
 
   double allocatedMemoryMB();
   double maximumMemoryMB();

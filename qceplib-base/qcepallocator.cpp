@@ -119,15 +119,17 @@ int QcepAllocator::waitTillAvailable(AllocationStrategy strat, int sizeMB)
   }
 }
 
-QcepInt16ImageDataPtr QcepAllocator::newInt16Image(AllocationStrategy strat, int width, int height)
+QcepInt16ImageDataPtr QcepAllocator::newInt16Image(QString name, int width, int height, AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->int16SizeMB(width, height))) {
-      QcepInt16ImageDataPtr res(new QcepInt16ImageData(QcepSettingsSaverPtr(), width, height, 0));
+      QcepInt16ImageDataPtr res(new QcepInt16ImageData(QcepSettingsSaverPtr(), name, width, height, 0));
 
-      res->moveToThread(NULL);
+      if (res) {
+        res->moveToThread(NULL);
+      }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newInt16Image() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
@@ -144,15 +146,17 @@ QcepInt16ImageDataPtr QcepAllocator::newInt16Image(AllocationStrategy strat, int
   return QcepInt16ImageDataPtr(NULL);
 }
 
-QcepInt32ImageDataPtr QcepAllocator::newInt32Image(AllocationStrategy strat, int width, int height)
+QcepInt32ImageDataPtr QcepAllocator::newInt32Image(QString name, int width, int height, AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->int32SizeMB(width, height))) {
-      QcepInt32ImageDataPtr res(new QcepInt32ImageData(QcepSettingsSaverPtr(), width, height, 0));
+      QcepInt32ImageDataPtr res(new QcepInt32ImageData(QcepSettingsSaverPtr(), name, width, height, 0));
 
-      res->moveToThread(NULL);
+      if (res) {
+        res->moveToThread(NULL);
+      }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newInt32Image() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
@@ -169,15 +173,17 @@ QcepInt32ImageDataPtr QcepAllocator::newInt32Image(AllocationStrategy strat, int
   return QcepInt32ImageDataPtr(NULL);
 }
 
-QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(AllocationStrategy strat, int width, int height)
+QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(QString name, int width, int height, AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->doubleSizeMB(width, height))) {
-      QcepDoubleImageDataPtr res(new QcepDoubleImageData(QcepSettingsSaverPtr(), width, height, 0));
+      QcepDoubleImageDataPtr res(new QcepDoubleImageData(QcepSettingsSaverPtr(), name, width, height, 0));
 
-      res -> moveToThread(NULL);
+      if (res) {
+        res -> moveToThread(NULL);
+      }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newDoubleImage() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
@@ -194,31 +200,17 @@ QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(AllocationStrategy strat, i
   return QcepDoubleImageDataPtr(NULL);
 }
 
-QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(QString name, int width, int height)
-{
-  QcepDoubleImageDataPtr img;
-
-  if (g_Application) {
-   img = newDoubleImage(QcepAllocator::NullIfNotAvailable, width, height);
-
-   if (img) {
-     img->set_Name(name);
-     img->moveToThread(NULL);
-   }
-  }
-
-  return img;
-}
-
-QcepMaskDataPtr QcepAllocator::newMask(AllocationStrategy strat, int width, int height, int def)
+QcepMaskDataPtr QcepAllocator::newMask(QString name, int width, int height, int def, AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, g_Allocator->maskSizeMB(width, height))) {
-      QcepMaskDataPtr res(new QcepMaskData(QcepSettingsSaverPtr(), width, height, def));
+      QcepMaskDataPtr res(new QcepMaskData(QcepSettingsSaverPtr(), name, width, height, def));
 
-      res->moveToThread(NULL);
+      if (res) {
+        res->moveToThread(NULL);
+      }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newMask() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
@@ -235,16 +227,15 @@ QcepMaskDataPtr QcepAllocator::newMask(AllocationStrategy strat, int width, int 
   return QcepMaskDataPtr(NULL);
 }
 
-QcepIntegratedDataPtr QcepAllocator::newIntegratedData(AllocationStrategy strat, QcepDoubleImageDataPtr data)
+QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QString name, int size, AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-    if (g_Allocator->waitTillAvailable(strat, g_Allocator->integratedSizeMB(10000))) {
+    if (g_Allocator->waitTillAvailable(strat, g_Allocator->integratedSizeMB(size))) {
       QcepIntegratedDataPtr res(new QcepIntegratedData(QcepSettingsSaverPtr(),
-                                                       "",
-                                                       data,
-                                                       10000));
+                                                       name,
+                                                       size));
 
       res->moveToThread(NULL);
 
@@ -263,36 +254,85 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(AllocationStrategy strat,
   return QcepIntegratedDataPtr(NULL);
 }
 
-QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QString name, int size)
+QcepDataColumnScanPtr QcepAllocator::newColumnScan(QString name, QStringList cols, int nRows, AllocationStrategy strat)
 {
-  QcepIntegratedDataPtr integ;
+  if (g_Allocator) {
+    QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-  if (g_Application) {
-    integ = newIntegratedData(QcepAllocator::NullIfNotAvailable, QcepDoubleImageDataPtr());
+    if (g_Allocator->waitTillAvailable(strat, g_Allocator->columnScanSizeMB(cols.count(), nRows))) {
+      QcepDataColumnScanPtr res(new QcepDataColumnScan(QcepSettingsSaverWPtr(),name, cols, nRows));
 
-    if (integ) {
-      integ->set_Name(name);
-      integ->moveToThread(NULL);
-      integ->resize(size);
+      if (res) {
+        res -> moveToThread(NULL);
+      }
+
+      if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
+        g_Application->printMessage(tr("QcepAllocator::newColumnScan() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
+      }
+
+      return res;
     }
   }
 
-  return integ;
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
+    g_Application->printMessage("QcepAllocator::newColumnScan() returned NULL");
+  }
+
+  return QcepDataColumnScanPtr();
 }
 
-QcepDataColumnScanPtr QcepAllocator::newColumnScan(QString name, QStringList cols, int nRows)
+QcepDataColumnPtr QcepAllocator::newColumn(QString name, int sz, AllocationStrategy strat)
 {
-  return QcepDataColumnScanPtr(new QcepDataColumnScan(QcepSettingsSaverWPtr(),name, cols, nRows));
+  if (g_Allocator) {
+    QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
+
+    if (g_Allocator->waitTillAvailable(strat, g_Allocator->columnSizeMB(sz))) {
+      QcepDataColumnPtr res(new QcepDataColumn(QcepSettingsSaverWPtr(),name, sz));
+
+      if (res) {
+        res -> moveToThread(NULL);
+      }
+
+      if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
+        g_Application->printMessage(tr("QcepAllocator::newColumn() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
+      }
+
+      return res;
+    }
+  }
+
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
+    g_Application->printMessage("QcepAllocator::newColumn() returned NULL");
+  }
+
+  return QcepDataColumnPtr();
 }
 
-QcepDataColumnPtr QcepAllocator::newColumn(QString name, int sz)
+QcepDataArrayPtr QcepAllocator::newArray(QString name, QVector<int> dims, AllocationStrategy strat)
 {
-  return QcepDataColumnPtr(new QcepDataColumn(QcepSettingsSaverWPtr(), name, sz));
-}
+  if (g_Allocator) {
+    QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-QcepDataArrayPtr QcepAllocator::newArray(QString name, QVector<int> dims)
-{
-  return QcepDataArrayPtr(new QcepDataArray(QcepSettingsSaverWPtr(), name, dims));
+    if (g_Allocator->waitTillAvailable(strat, g_Allocator->arraySizeMB(dims))) {
+      QcepDataArrayPtr res(new QcepDataArray(QcepSettingsSaverWPtr(),name, dims));
+
+      if (res) {
+        res -> moveToThread(NULL);
+      }
+
+      if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
+        g_Application->printMessage(tr("QcepAllocator::newArray() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
+      }
+
+      return res;
+    }
+  }
+
+  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
+    g_Application->printMessage("QcepAllocator::newArray() returned NULL");
+  }
+
+  return QcepDataArrayPtr();
 }
 
 QcepDataGroupPtr QcepAllocator::newGroup(QString name)
@@ -303,32 +343,6 @@ QcepDataGroupPtr QcepAllocator::newGroup(QString name)
 QcepDatasetPtr QcepAllocator::newDataset(QString name)
 {
   return QcepDatasetPtr(new QcepDataset(QcepSettingsSaverWPtr(), name));
-}
-
-void QcepAllocator::newDoubleImageAndIntegratedData(QcepAllocator::AllocationStrategy strat, int width,
-                                                    int height,
-                                                    QcepDoubleImageDataPtr &img, QcepIntegratedDataPtr &integ)
-{
-  if (g_Allocator) {
-    QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
-
-    if (g_Allocator->waitTillAvailable(strat, g_Allocator->doubleSizeMB(width, height) + g_Allocator->integratedSizeMB(10000))) {
-      img = QcepDoubleImageDataPtr(new QcepDoubleImageData(QcepSettingsSaverPtr(), width, height, 0));
-      integ = QcepIntegratedDataPtr(new QcepIntegratedData(QcepSettingsSaverPtr(), "", img, 10000));
-
-      img->moveToThread(NULL);
-      integ->moveToThread(NULL);
-
-      if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-        g_Application->printMessage(tr("QcepAllocator::newDoubleImageAndIntegratedData() succeeded [%1] [%2] [%3]")
-                          .HEXARG(img.data()).HEXARG(integ.data()).arg(g_Allocator->allocatedMemoryMB()));
-      }
-    }
-  }
-
-  if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
-    g_Application->printMessage("QcepAllocator::newDoubleImageAndIntegratedData() returned NULL");
-  }
 }
 
 /* static */
@@ -404,6 +418,27 @@ int QcepAllocator::maskSizeMB(int width, int height)
 int QcepAllocator::integratedSizeMB(int nrows)
 {
   return (sizeof(double)*4*nrows)/MegaBytes;
+}
+
+int QcepAllocator::columnSizeMB(int sz)
+{
+  return (sizeof(double)*sz)/MegaBytes;
+}
+
+int QcepAllocator::columnScanSizeMB(int nCols, int nRows)
+{
+  return (sizeof(double)*nCols*nRows)/MegaBytes;
+}
+
+int QcepAllocator::arraySizeMB(QVector<int> dims)
+{
+  int res=1;
+
+  foreach (int d, dims) {
+    res *= d;
+  }
+
+  return res*sizeof(double)/MegaBytes;
 }
 
 void QcepAllocator::allocatorHeartbeat()
