@@ -8,14 +8,11 @@ QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<
 {
   set_Type("Data Array");
 
-  int prod = 1;
-  for (int i=0; i<m_Dimensions.count(); i++) {
-    prod *= m_Dimensions[i];
-  }
+  qint64 prod = arrayCount(dims);
 
   m_Data.resize(prod);
 
-  set_ByteSize(prod);
+  set_ByteSize(prod*sizeof(double));
 
   QcepAllocator::allocate(get_ByteSize());
 }
@@ -50,6 +47,17 @@ QVector<int> QcepDataArray::dimensions()
 QVector<double> QcepDataArray::vectorData()
 {
   return m_Data;
+}
+
+int QcepDataArray::arrayCount(QVector<int> dims)
+{
+  int res=1;
+
+  foreach(int dim, dims) {
+    res *= dim;
+  }
+
+  return res;
 }
 
 QScriptValue QcepDataArray::toArrayScriptValue(QScriptEngine *engine, const QcepDataArrayPtr &data)

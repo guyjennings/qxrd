@@ -52,51 +52,54 @@ public:
   static QcepDataGroupPtr       newGroup(QString name);
   static QcepDatasetPtr         newDataset(QString name);
 
-  int int16SizeMB(int width, int height);
-  int int32SizeMB(int width, int height);
-  int doubleSizeMB(int width, int height);
-  int maskSizeMB(int width, int height);
-  int integratedSizeMB(int nrows);
-  int columnSizeMB(int sz);
-  int columnScanSizeMB(int nCols, int nRows);
-  int arraySizeMB(QVector<int> dims);
+  static qint64 allocatedMemoryMB();
+  static qint64 availableMemoryMB();
+  static qint64 availableMemory();
 
-  double allocatedMemoryMB();
-  double maximumMemoryMB();
-  double maximumMemory();
+  static void changedAvailableBytes(qint64 newsize);
 
-  void changedSizeMB(int newMB);
+  static void allocate(qint64 sz, qint64 width, qint64 height);
+  static void deallocate(qint64 sz, qint64 width, qint64 height);
 
-  QMutex *mutex();
+  static void allocate(qint64 amt);
+  static void deallocate(qint64 amt);
 
-  static void allocate(int sz, int width, int height);
-  static void deallocate(int sz, int width, int height);
+  static qint64 allocatedMemory();
 
-  static void allocate(quint64 amt);
-  static void deallocate(quint64 amt);
-
-  static quint64 allocatedMemory();
-
-protected:
-  void allocateBytes(quint64 amt);
-  void deallocateBytes(quint64 amt);
-
-private slots:
-  void allocatorHeartbeat();
+  static qint64 int16Size(int width, int height);
+  static qint64 int32Size(int width, int height);
+  static qint64 doubleSize(int width, int height);
+  static qint64 maskSize(int width, int height);
+  static qint64 integratedSize(int nrows);
+  static qint64 columnSize(int sz);
+  static qint64 columnScanSize(int nCols, int nRows);
+  static qint64 arraySize(QVector<int> dims);
 
 private:
-  int waitTillAvailable(AllocationStrategy strat, int sizeMB);
+  QMutex *mutex();
+
+protected:
+  void allocateBytes(qint64 amt);
+  void deallocateBytes(qint64 amt);
+  qint64 allocatedBytes();
+  qint64 availableBytes();
+  void setAvailableBytes(qint64 newsize);
+
+//private slots:
+//  void allocatorHeartbeat();
+
+private:
+  int waitTillAvailable(AllocationStrategy strat, qint64 size);
 
 private:
   QMutex                m_Mutex;
-  QTimer                m_Timer;
-  QAtomicInt            m_AllocatedMemoryMB;
+//  QTimer                m_Timer;
+//  QAtomicInt            m_AllocatedMemoryMB;
+//  qint64                m_AllocatedBytes;
+//  qint64                m_AvailableBytes;
 
 public:
   enum { MegaBytes = 0x100000 };
-
-  Q_PROPERTY(int     max        READ get_Max   WRITE set_Max)
-  QCEP_INTEGER_PROPERTY(Max)
 
   Q_PROPERTY(int     totalBufferSizeMB32    READ get_TotalBufferSizeMB32 WRITE set_TotalBufferSizeMB32)
   QCEP_INTEGER_PROPERTY(TotalBufferSizeMB32)
@@ -104,11 +107,14 @@ public:
   Q_PROPERTY(int     totalBufferSizeMB64    READ get_TotalBufferSizeMB64 WRITE set_TotalBufferSizeMB64)
   QCEP_INTEGER_PROPERTY(TotalBufferSizeMB64)
 
-  Q_PROPERTY(int     reserve        READ get_Reserve   WRITE set_Reserve)
-  QCEP_INTEGER_PROPERTY(Reserve)
+  Q_PROPERTY(qint64     reserve             READ get_Reserve     WRITE set_Reserve)
+  QCEP_INTEGER64_PROPERTY(Reserve)
 
-  Q_PROPERTY(int     allocated        READ get_Allocated   WRITE set_Allocated STORED false)
-  QCEP_INTEGER_PROPERTY(Allocated)
+  Q_PROPERTY(qint64     availableBytes      READ get_AvailableBytes WRITE set_AvailableBytes STORED false)
+  QCEP_INTEGER64_PROPERTY(AvailableBytes)
+
+  Q_PROPERTY(qint64     allocatedBytes      READ get_AllocatedBytes WRITE set_AllocatedBytes STORED false)
+  QCEP_INTEGER64_PROPERTY(AllocatedBytes)
 };
 
 #endif // QCEPALLOCATOR_H

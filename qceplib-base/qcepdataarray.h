@@ -26,6 +26,9 @@ public slots:
   QVector<double> vectorData();
 
 private:
+  int arrayCount(QVector<int> dims);
+
+private:
   QVector<int>    m_Dimensions;
   QVector<double> m_Data;
 };

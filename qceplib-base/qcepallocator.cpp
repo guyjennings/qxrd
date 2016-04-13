@@ -11,19 +11,21 @@
 #include "qcepdataarray.h"
 #include "qcepdataset.h"
 
+//static QMutex         g_Mutex(QMutex::Recursive);
 static QcepAllocator *g_Allocator = NULL;
-static quint64        g_AllocatedMemory = 0;
+//static qint64         g_AllocatedMemory = 0;
+//static qint64         g_AvailableMemory = 0;
 
 QcepAllocator::QcepAllocator
 (QcepSettingsSaverPtr saver)
   : QcepObject("allocator", NULL),
     m_Mutex(QMutex::Recursive),
-    m_AllocatedMemoryMB(0),
-    m_Max(saver, this, "max", 800, "Maximum Image Memory (MB)"),
+//    m_AllocatedMemoryMB(0),
     m_TotalBufferSizeMB32(saver, this,"totalBufferSizeMB32", 800, "Maximum Image Memory in 32 bit system (MB)"),
     m_TotalBufferSizeMB64(saver, this,"totalBufferSizeMB64", 2000,"Maximum Image Memory in 64 bit system (MB)"),
     m_Reserve(saver, this,"reserve",100, "Extra Reserved Memory (MB)"),
-    m_Allocated(QcepSettingsSaverPtr(), this, "allocated", 0, "Allocated Memory (MB)")
+    m_AvailableBytes(QcepSettingsSaverPtr(), this, "availableBytes", 0, "Total Available Data Memory (Bytes)"),
+    m_AllocatedBytes(QcepSettingsSaverPtr(), this, "allocatedBytes", 0, "Allocated Data Memory (Bytes)")
 {
   if (g_Allocator) {
     printf("Only one allocator can be created\n");
@@ -39,11 +41,17 @@ QcepAllocator::QcepAllocator
     g_Application->printMessage(tr("allocator %1 constructed").HEXARG(this));
   };
 
-  connect(&m_Timer, SIGNAL(timeout()), this, SLOT(allocatorHeartbeat()));
+//  connect(&m_Timer, SIGNAL(timeout()), this, SLOT(allocatorHeartbeat()));
 
-  m_Timer.start(100);
+//  m_Timer.start(100);
 
-  allocatorHeartbeat();
+//  allocatorHeartbeat();
+
+  if (sizeof(void*) == 4) {
+    set_AvailableBytes(get_TotalBufferSizeMB32()*MegaBytes);
+  } else {
+    set_AvailableBytes(get_TotalBufferSizeMB64()*MegaBytes);
+  }
 }
 
 QcepAllocator::~QcepAllocator()
@@ -83,6 +91,12 @@ void QcepAllocator::readSettings(QSettings *settings, QString section)
   if (get_TotalBufferSizeMB64() > 100000000) {
     set_TotalBufferSizeMB64(get_TotalBufferSizeMB64()/MegaBytes);
   }
+
+  if (sizeof(void*) == 4) {
+    set_AvailableBytes(get_TotalBufferSizeMB32()*MegaBytes);
+  } else {
+    set_AvailableBytes(get_TotalBufferSizeMB64()*MegaBytes);
+  }
 }
 
 QMutex *QcepAllocator::mutex()
@@ -90,10 +104,10 @@ QMutex *QcepAllocator::mutex()
   return &m_Mutex;
 }
 
-int QcepAllocator::waitTillAvailable(AllocationStrategy strat, int sizeMB)
+int QcepAllocator::waitTillAvailable(AllocationStrategy strat, qint64 size)
 {
   if (strat == QcepAllocator::WaitTillAvailable) {
-    while((m_AllocatedMemoryMB.fetchAndAddOrdered(0) + sizeMB) > get_Max()) {
+    while((get_AllocatedBytes() + size) > get_AvailableBytes()) {
       m_Mutex.unlock();
 
       if (qcepDebug(DEBUG_ALLOCATOR)) {
@@ -109,9 +123,9 @@ int QcepAllocator::waitTillAvailable(AllocationStrategy strat, int sizeMB)
 
     return true;
   } else if (strat == QcepAllocator::NullIfNotAvailable) {
-    return ((m_AllocatedMemoryMB.fetchAndAddOrdered(0) + sizeMB) < get_Max());
+    return ((get_AllocatedBytes() + size) < get_AvailableBytes());
   } else if (strat == QcepAllocator::AllocateFromReserve) {
-    return ((m_AllocatedMemoryMB.fetchAndAddOrdered(0) + sizeMB) < (get_Max() + get_Reserve()));
+    return ((get_AllocatedBytes() + size) < (get_AvailableBytes() + get_Reserve()*MegaBytes));
   } else if (strat == QcepAllocator::AlwaysAllocate) {
     return true;
   } else {
@@ -124,7 +138,7 @@ QcepInt16ImageDataPtr QcepAllocator::newInt16Image(QString name, int width, int 
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-    if (g_Allocator->waitTillAvailable(strat, g_Allocator->int16SizeMB(width, height))) {
+    if (g_Allocator->waitTillAvailable(strat, int16Size(width, height))) {
       QcepInt16ImageDataPtr res(new QcepInt16ImageData(QcepSettingsSaverPtr(), name, width, height, 0));
 
       if (res) {
@@ -151,7 +165,7 @@ QcepInt32ImageDataPtr QcepAllocator::newInt32Image(QString name, int width, int 
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-    if (g_Allocator->waitTillAvailable(strat, g_Allocator->int32SizeMB(width, height))) {
+    if (g_Allocator->waitTillAvailable(strat, int32Size(width, height))) {
       QcepInt32ImageDataPtr res(new QcepInt32ImageData(QcepSettingsSaverPtr(), name, width, height, 0));
 
       if (res) {
@@ -178,7 +192,7 @@ QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(QString name, int width, in
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-    if (g_Allocator->waitTillAvailable(strat, g_Allocator->doubleSizeMB(width, height))) {
+    if (g_Allocator->waitTillAvailable(strat, doubleSize(width, height))) {
       QcepDoubleImageDataPtr res(new QcepDoubleImageData(QcepSettingsSaverPtr(), name, width, height, 0));
 
       if (res) {
@@ -205,7 +219,7 @@ QcepMaskDataPtr QcepAllocator::newMask(QString name, int width, int height, int 
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-    if (g_Allocator->waitTillAvailable(strat, g_Allocator->maskSizeMB(width, height))) {
+    if (g_Allocator->waitTillAvailable(strat, maskSize(width, height))) {
       QcepMaskDataPtr res(new QcepMaskData(QcepSettingsSaverPtr(), name, width, height, def));
 
       if (res) {
@@ -232,7 +246,7 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QString name, int size, A
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-    if (g_Allocator->waitTillAvailable(strat, g_Allocator->integratedSizeMB(size))) {
+    if (g_Allocator->waitTillAvailable(strat, integratedSize(size))) {
       QcepIntegratedDataPtr res(new QcepIntegratedData(QcepSettingsSaverPtr(),
                                                        name,
                                                        size));
@@ -259,7 +273,7 @@ QcepDataColumnScanPtr QcepAllocator::newColumnScan(QString name, QStringList col
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-    if (g_Allocator->waitTillAvailable(strat, g_Allocator->columnScanSizeMB(cols.count(), nRows))) {
+    if (g_Allocator->waitTillAvailable(strat, columnScanSize(cols.count(), nRows))) {
       QcepDataColumnScanPtr res(new QcepDataColumnScan(QcepSettingsSaverWPtr(),name, cols, nRows));
 
       if (res) {
@@ -286,7 +300,7 @@ QcepDataColumnPtr QcepAllocator::newColumn(QString name, int sz, AllocationStrat
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-    if (g_Allocator->waitTillAvailable(strat, g_Allocator->columnSizeMB(sz))) {
+    if (g_Allocator->waitTillAvailable(strat, columnSize(sz))) {
       QcepDataColumnPtr res(new QcepDataColumn(QcepSettingsSaverWPtr(),name, sz));
 
       if (res) {
@@ -313,7 +327,7 @@ QcepDataArrayPtr QcepAllocator::newArray(QString name, QVector<int> dims, Alloca
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
-    if (g_Allocator->waitTillAvailable(strat, g_Allocator->arraySizeMB(dims))) {
+    if (g_Allocator->waitTillAvailable(strat, arraySize(dims))) {
       QcepDataArrayPtr res(new QcepDataArray(QcepSettingsSaverWPtr(),name, dims));
 
       if (res) {
@@ -346,127 +360,146 @@ QcepDatasetPtr QcepAllocator::newDataset(QString name)
 }
 
 /* static */
-void QcepAllocator::allocate(int sz, int width, int height)
+void QcepAllocator::allocate(qint64 sz, qint64 width, qint64 height)
 {
-  if (g_Allocator) {
-    g_Allocator -> allocate((quint64) sz*width*height);
-  }
+  allocate(sz*width*height);
 }
 
 /* static */
-void QcepAllocator::allocate(quint64 amt)
+void QcepAllocator::allocate(qint64 amt)
 {
   if (g_Allocator) {
     g_Allocator -> allocateBytes(amt);
   }
 }
 
-void QcepAllocator::allocateBytes(quint64 amt)
+void QcepAllocator::allocateBytes(qint64 amt)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  g_AllocatedMemory += amt;
-
-  m_AllocatedMemoryMB.fetchAndStoreOrdered(g_AllocatedMemory/MegaBytes);
+  m_AllocatedBytes.incValue(amt);
 }
 
 /* static */
-void QcepAllocator::deallocate(int sz, int width, int height)
+void QcepAllocator::deallocate(qint64 sz, qint64 width, qint64 height)
 {
-  if (g_Allocator) {
-    g_Allocator -> deallocate((quint64) sz*width*height);
-  }
+  deallocate(sz*width*height);
 }
 
 /* static */
-void QcepAllocator::deallocate(quint64 amt)
+void QcepAllocator::deallocate(qint64 amt)
 {
   if (g_Allocator) {
     g_Allocator -> deallocateBytes(amt);
   }
 }
 
-void QcepAllocator::deallocateBytes(quint64 amt)
+void QcepAllocator::deallocateBytes(qint64 amt)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  g_AllocatedMemory -= amt;
-
-  m_AllocatedMemoryMB.fetchAndStoreOrdered(g_AllocatedMemory/MegaBytes);
+  m_AllocatedBytes.incValue(-amt);
 }
 
-int QcepAllocator::int16SizeMB(int width, int height)
+qint64 QcepAllocator::int16Size(int width, int height)
 {
-  return sizeof(quint16)*width*height/MegaBytes;
+  return sizeof(quint16)*width*height;
 }
 
-int QcepAllocator::int32SizeMB(int width, int height)
+qint64 QcepAllocator::int32Size(int width, int height)
 {
-  return sizeof(quint32)*width*height/MegaBytes;
+  return sizeof(quint32)*width*height;
 }
 
-int QcepAllocator::doubleSizeMB(int width, int height)
+qint64 QcepAllocator::doubleSize(int width, int height)
 {
-  return sizeof(double)*width*height/MegaBytes;
+  return sizeof(double)*width*height;
 }
 
-int QcepAllocator::maskSizeMB(int width, int height)
+qint64 QcepAllocator::maskSize(int width, int height)
 {
-  return sizeof(quint16)*width*height/MegaBytes;
+  return sizeof(quint16)*width*height;
 }
 
-int QcepAllocator::integratedSizeMB(int nrows)
+qint64 QcepAllocator::integratedSize(int nrows)
 {
-  return (sizeof(double)*4*nrows)/MegaBytes;
+  return (sizeof(double)*4*nrows);
 }
 
-int QcepAllocator::columnSizeMB(int sz)
+qint64 QcepAllocator::columnSize(int sz)
 {
-  return (sizeof(double)*sz)/MegaBytes;
+  return (sizeof(double)*sz);
 }
 
-int QcepAllocator::columnScanSizeMB(int nCols, int nRows)
+qint64 QcepAllocator::columnScanSize(int nCols, int nRows)
 {
-  return (sizeof(double)*nCols*nRows)/MegaBytes;
+  return (sizeof(double)*nCols*nRows);
 }
 
-int QcepAllocator::arraySizeMB(QVector<int> dims)
+qint64 QcepAllocator::arraySize(QVector<int> dims)
 {
-  int res=1;
+  qint64 res=1;
 
   foreach (int d, dims) {
     res *= d;
   }
 
-  return res*sizeof(double)/MegaBytes;
+  return res*sizeof(double);
 }
 
-void QcepAllocator::allocatorHeartbeat()
+//void QcepAllocator::allocatorHeartbeat()
+//{
+//  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+//  set_Allocated(m_AllocatedBytes);
+//}
+
+qint64 QcepAllocator::allocatedMemoryMB()
 {
-  set_Allocated(m_AllocatedMemoryMB.fetchAndAddOrdered(0));
+  return allocatedMemory()/MegaBytes;
 }
 
-double QcepAllocator::allocatedMemoryMB()
+qint64 QcepAllocator::allocatedMemory()
 {
-  return m_AllocatedMemoryMB.fetchAndAddOrdered(0);
+  if (g_Allocator) {
+    return g_Allocator->allocatedBytes();
+  } else {
+    return 0;
+  }
 }
 
-quint64 QcepAllocator::allocatedMemory()
+qint64 QcepAllocator::availableMemoryMB()
 {
-  return g_AllocatedMemory;
+  return availableMemory()/MegaBytes;
 }
 
-double QcepAllocator::maximumMemoryMB()
+qint64 QcepAllocator::availableMemory()
 {
-  return get_Max();
+  if (g_Allocator) {
+    return g_Allocator->availableBytes();
+  } else {
+    return 0;
+  }
 }
 
-double QcepAllocator::maximumMemory()
+void QcepAllocator::changedAvailableBytes(qint64 newsize)
 {
-  return get_Max()*MegaBytes;
+  if (g_Allocator) {
+    g_Allocator->setAvailableBytes(newsize);
+  }
 }
 
-void QcepAllocator::changedSizeMB(int newMB)
+qint64 QcepAllocator::availableBytes()
 {
-  set_Max(newMB);
+  return get_AvailableBytes();
+}
+
+qint64 QcepAllocator::allocatedBytes()
+{
+  return get_AllocatedBytes();
+}
+
+void QcepAllocator::setAvailableBytes(qint64 newsize)
+{
+  set_AvailableBytes(newsize);
 }
