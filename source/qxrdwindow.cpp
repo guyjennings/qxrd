@@ -647,8 +647,8 @@ void QxrdWindow::initialize()
   QcepAllocatorPtr alloc(m_Allocator);
 
   if (alloc) {
-    connect(alloc -> prop_Allocated(), &QcepIntProperty::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
-    connect(alloc -> prop_Max(), &QcepIntProperty::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
+    connect(alloc -> prop_AllocatedBytes(), &QcepInt64Property::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
+    connect(alloc -> prop_AvailableBytes(), &QcepInt64Property::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
   }
 
   m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
@@ -1863,15 +1863,11 @@ QcepMaskDataPtr QxrdWindow::mask()
 
 void QxrdWindow::allocatedMemoryChanged()
 {
-  QcepAllocatorPtr allocator(m_Allocator);
+  int alloc = QcepAllocator::allocatedMemoryMB();
+  int avail = QcepAllocator::availableMemoryMB();
 
-  if (allocator) {
-    int alloc = allocator -> get_Allocated();
-    int maxalloc = allocator -> get_Max();
-
-    m_AllocationStatus -> setMaximum(maxalloc);
-    m_AllocationStatus -> setValue(alloc);
-  }
+  m_AllocationStatus -> setMaximum(avail);
+  m_AllocationStatus -> setValue(alloc);
 }
 
 void QxrdWindow::doRefineCenterTilt()

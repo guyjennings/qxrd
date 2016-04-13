@@ -61,7 +61,7 @@ public slots:
 
   void shutdown();
 
-  void onBufferSizeChanged(int newMB);
+  void onMemorySizeChanged(qint64 newMB);
 
   void doAcquire    ();
   void doAcquireDark();

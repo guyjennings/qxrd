@@ -123,7 +123,8 @@ QcepDoubleImageDataPtr QxrdCenterFinder::newData()
     QxrdDataProcessorPtr proc(expt->dataProcessor());
 
     if (proc) {
-      QcepDoubleImageDataPtr res = proc->takeNextFreeImage(wd,ht);
+      QcepDoubleImageDataPtr res =
+          QcepAllocator::newDoubleImage("newData", wd,ht, QcepAllocator::NullIfNotAvailable);
 
       return res;
     }

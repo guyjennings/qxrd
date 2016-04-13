@@ -346,15 +346,6 @@ QString QxrdDataProcessorBase::integratedOutputDirectory() const
   }
 }
 
-QcepDoubleImageDataPtr QxrdDataProcessorBase::takeNextFreeImage(int width, int height)
-{
-  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("image",
-                                                             width, height,
-                                                             QcepAllocator::NullIfNotAvailable);
-
-  return res;
-}
-
 void QxrdDataProcessorBase::newData(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow)
 {
   m_Data = image;
@@ -411,12 +402,13 @@ void QxrdDataProcessorBase::newDarkImage(QcepInt16ImageDataPtr image)
 {
   if (image) {
     if (m_DarkFrame == NULL) {
-      m_DarkFrame = takeNextFreeImage(image->get_Width(), image->get_Height());
+      m_DarkFrame = QcepAllocator::newDoubleImage("dark", image->get_Width(), image->get_Height(), QcepAllocator::NullIfNotAvailable);
     }
 
-    m_DarkFrame -> copyFrom(image);
-    newDarkImage(m_DarkFrame);
-
+    if (m_DarkFrame) {
+      m_DarkFrame -> copyFrom(image);
+      newDarkImage(m_DarkFrame);
+    }
     // set_DarkImagePath(m_DarkFrame -> get_FileName());
   } else {
     newDarkImage(QcepDoubleImageDataPtr(NULL));
@@ -427,12 +419,13 @@ void QxrdDataProcessorBase::newDarkImage(QcepInt32ImageDataPtr image)
 {
   if (image) {
     if (m_DarkFrame == NULL) {
-      m_DarkFrame = takeNextFreeImage(image->get_Width(), image->get_Height());
+      m_DarkFrame = QcepAllocator::newDoubleImage("dark", image->get_Width(), image->get_Height(), QcepAllocator::NullIfNotAvailable);
     }
 
-    m_DarkFrame -> copyFrom(image);
-    newDarkImage(m_DarkFrame);
-
+    if (m_DarkFrame) {
+      m_DarkFrame -> copyFrom(image);
+      newDarkImage(m_DarkFrame);
+    }
     //  set_DarkImagePath(m_DarkFrame -> get_FileName());
   } else {
     newDarkImage(QcepDoubleImageDataPtr(NULL));
@@ -545,7 +538,7 @@ void QxrdDataProcessorBase::loadData(QString name)
             tr("QxrdDataProcessorBase::loadData(%1)").arg(name));
     }
 
-    QcepDoubleImageDataPtr res = takeNextFreeImage(0,0);
+    QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("data", 0,0, QcepAllocator::NullIfNotAvailable);
 
     QString path = filePathInDataDirectory(name);
 
@@ -629,7 +622,8 @@ void QxrdDataProcessorBase::loadDark(QString name)
             tr("QxrdDataProcessorBase::loadDark(%1)").arg(name));
     }
 
-    QcepDoubleImageDataPtr res = takeNextFreeImage(0,0);
+    QcepDoubleImageDataPtr res =
+        QcepAllocator::newDoubleImage("dark", 0,0, QcepAllocator::NullIfNotAvailable);
 
     QString path = filePathInDataDirectory(name);
 
@@ -672,7 +666,7 @@ void QxrdDataProcessorBase::loadBadPixels(QString name)
     printMessage(tr("QxrdDataProcessorBase::loadBadPixels(%1)").arg(name));
   }
 
-  QcepDoubleImageDataPtr res = takeNextFreeImage(0,0);
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("bad", 0,0, QcepAllocator::NullIfNotAvailable);
 
   QString path = filePathInDataDirectory(name);
 
@@ -706,11 +700,11 @@ void QxrdDataProcessorBase::loadGainMap(QString name)
     printMessage(tr("QxrdDataProcessorBase::loadGainMap(%1)").arg(name));
   }
 
-  QcepDoubleImageDataPtr res = takeNextFreeImage(0,0);
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("gain", 0,0, QcepAllocator::NullIfNotAvailable);
 
   QString path = filePathInDataDirectory(name);
 
-  if (res -> readImage(path)) {
+  if (res && res -> readImage(path)) {
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
@@ -1140,7 +1134,7 @@ void QxrdDataProcessorBase::loadMask(QString name)
 
   QString path = filePathInDataDirectory(name);
 
-  QcepMaskDataPtr res = QcepAllocator::newMask(path, 0,0, 0, QcepAllocator::NullIfNotAvailable);
+  QcepMaskDataPtr res = QcepAllocator::newMask("mask", 0,0, 0, QcepAllocator::NullIfNotAvailable);
 
   if (res && res -> readImage(path)) {
 

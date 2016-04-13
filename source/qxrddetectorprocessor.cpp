@@ -522,7 +522,7 @@ QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBaseP
 
     double ratio = ((double) nres)/((double) ndrk);
 
-    QcepDoubleImageDataPtr result = QcepAllocator::newDoubleImage(img -> get_Name(),
+    QcepDoubleImageDataPtr result = QcepAllocator::newDoubleImage("image",
                                                                   width, height,
                                                                   QcepAllocator::NullIfNotAvailable);
 
@@ -752,7 +752,7 @@ void QxrdDetectorProcessor::onDarkImagePathChanged(QString newPath)
   } else {
     printMessage(tr("Load Dark Image from %1").arg(newPath));
 
-    QcepInt32ImageDataPtr dark = QcepAllocator::newInt32Image(newPath, 0,0, QcepAllocator::NullIfNotAvailable);
+    QcepInt32ImageDataPtr dark = QcepAllocator::newInt32Image("dark", 0,0, QcepAllocator::NullIfNotAvailable);
 
     if (dark && dark -> readImage(newPath)) {
       m_DarkImage = dark;
@@ -768,7 +768,7 @@ void QxrdDetectorProcessor::onBadPixelsPathChanged(QString newPath)
   } else {
     printMessage(tr("Load Bad Pixels from %1").arg(newPath));
 
-    QcepDoubleImageDataPtr bad = QcepAllocator::newDoubleImage(newPath, 0,0, QcepAllocator::NullIfNotAvailable);
+    QcepDoubleImageDataPtr bad = QcepAllocator::newDoubleImage("bad", 0,0, QcepAllocator::NullIfNotAvailable);
 
     if (bad && bad->readImage(newPath)) {
       m_BadPixels = bad;

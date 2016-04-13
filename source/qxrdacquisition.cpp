@@ -111,12 +111,12 @@ void QxrdAcquisition::initialize()
   if (alloc) {
     if (sizeof(void*) == 4) {
       connect(alloc->prop_TotalBufferSizeMB32(), &QcepIntProperty::valueChanged,
-              this, &QxrdAcquisition::onBufferSizeChanged);
-      onBufferSizeChanged(alloc->get_TotalBufferSizeMB32());
+              this, &QxrdAcquisition::onMemorySizeChanged);
+      onMemorySizeChanged(alloc->get_TotalBufferSizeMB32());
     } else {
       connect(alloc->prop_TotalBufferSizeMB64(), &QcepIntProperty::valueChanged,
-              this, &QxrdAcquisition::onBufferSizeChanged);
-      onBufferSizeChanged(alloc->get_TotalBufferSizeMB64());
+              this, &QxrdAcquisition::onMemorySizeChanged);
+      onMemorySizeChanged(alloc->get_TotalBufferSizeMB64());
     }
   }
 
@@ -421,13 +421,9 @@ void QxrdAcquisition::statusMessage(QString msg, QDateTime ts) const
   }
 }
 
-void QxrdAcquisition::onBufferSizeChanged(int newMB)
+void QxrdAcquisition::onMemorySizeChanged(qint64 newMB)
 {
-  QcepAllocatorPtr alloc(m_Allocator);
-
-  if (alloc) {
-    alloc -> changedSizeMB(newMB);
-  }
+  QcepAllocator::changedAvailableBytes(newMB*QcepAllocator::MegaBytes);
 }
 
 QcepAllocatorWPtr QxrdAcquisition::allocator() const
@@ -541,19 +537,15 @@ void QxrdAcquisition::clearDropped()
 
 void QxrdAcquisition::indicateDroppedFrame(int n)
 {
-  QcepAllocatorPtr alloc(m_Allocator);
+  QString msg = tr("Frame %1 dropped [%2/%3 MB Used]")
+      .arg(n)
+      .arg(QcepAllocator::allocatedMemoryMB())
+      .arg(QcepAllocator::availableMemoryMB());
 
-  if (alloc) {
-    QString msg = tr("Frame %1 dropped [%2/%3 MB Used]")
-        .arg(n)
-        .arg(alloc->allocatedMemoryMB())
-        .arg(alloc->maximumMemoryMB());
+  statusMessage(msg);
+  printMessage(msg);
 
-    statusMessage(msg);
-    printMessage(msg);
-
-    prop_DroppedFrames() -> incValue(1);
-  }
+  prop_DroppedFrames() -> incValue(1);
 }
 
 void QxrdAcquisition::accumulateAcquiredImage(QcepImageDataBasePtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow)

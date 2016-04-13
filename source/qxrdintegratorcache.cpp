@@ -918,7 +918,7 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
 
           if (m_HasChi) {
             QcepDoubleImageDataPtr img =
-                QcepAllocator::newDoubleImage(dimg->get_Name(), m_NRSteps, m_NCSteps,
+                QcepAllocator::newDoubleImage(dimg->get_FileBase(), m_NRSteps, m_NCSteps,
                                               QcepAllocator::NullIfNotAvailable);
 
             if (img) {
