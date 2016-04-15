@@ -33,11 +33,7 @@ QxrdServerThread::~QxrdServerThread()
 QxrdServerPtr QxrdServerThread::server() const
 {
   while (isRunning()) {
-    {
-      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-      if (m_Server) return m_Server;
-    }
+    if (m_Server) return m_Server;
 
     QThread::msleep(50);
   }
@@ -58,29 +54,12 @@ void QxrdServerThread::run()
     printf("Spec Server Thread Started\n");
   }
 
-  {
-    QxrdServerPtr server(new QxrdServer(m_Saver, m_Experiment, m_Name));
+  m_Server = QxrdServerPtr(
+        new QxrdServer(m_Saver, m_Experiment, m_Name));
 
+  int rc = exec();
 
-    if (server) {
-      m_Mutex.lock();
-//      server -> moveToThread(g_Application->thread());
-      m_Server = server;
-      m_Mutex.unlock();
-    }
-  }
-
-  int rc = -1;
-
-  if (m_Server) {
-    rc = exec();
-  }
-
-  {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-    m_Server = QxrdServerPtr();
-  }
+  m_Server = QxrdServerPtr();
 
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Spec Server Thread Terminated with rc %d\n", rc);

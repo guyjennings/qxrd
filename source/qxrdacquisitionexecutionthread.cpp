@@ -43,11 +43,7 @@ void QxrdAcquisitionExecutionThread::run()
 
   int rc = exec();
 
-  {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-    m_AcquisitionExecution = QxrdAcquisitionExecutionPtr();
-  }
+  m_AcquisitionExecution = QxrdAcquisitionExecutionPtr();
 
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Acquisition Execution Thread terminated with rc %d\n", rc);

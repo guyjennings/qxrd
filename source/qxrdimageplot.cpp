@@ -1184,18 +1184,20 @@ void QxrdImagePlot::enableROIDisplay(bool enable)
   updateROIDisplay();
 }
 
-void QxrdImagePlot::setROIModel(QxrdROICoordinatesListModelPtr model)
+void QxrdImagePlot::setROIModel(QxrdROICoordinatesListModelWPtr model)
 {
   m_ROIModel = model;
 
   updateROIDisplay();
 
-  if (m_ROIModel) {
-    connect(m_ROIModel.data(), &QAbstractItemModel::modelReset,    this, &QxrdImagePlot::updateROIDisplay);
-    connect(m_ROIModel.data(), &QAbstractItemModel::dataChanged,   this, &QxrdImagePlot::updateROIDisplay);
-    connect(m_ROIModel.data(), &QAbstractItemModel::rowsInserted,  this, &QxrdImagePlot::updateROIDisplay);
-    connect(m_ROIModel.data(), &QAbstractItemModel::rowsMoved,     this, &QxrdImagePlot::updateROIDisplay);
-    connect(m_ROIModel.data(), &QAbstractItemModel::rowsRemoved,   this, &QxrdImagePlot::updateROIDisplay);
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+  if (roiModel) {
+    connect(roiModel.data(), &QAbstractItemModel::modelReset,    this, &QxrdImagePlot::updateROIDisplay);
+    connect(roiModel.data(), &QAbstractItemModel::dataChanged,   this, &QxrdImagePlot::updateROIDisplay);
+    connect(roiModel.data(), &QAbstractItemModel::rowsInserted,  this, &QxrdImagePlot::updateROIDisplay);
+    connect(roiModel.data(), &QAbstractItemModel::rowsMoved,     this, &QxrdImagePlot::updateROIDisplay);
+    connect(roiModel.data(), &QAbstractItemModel::rowsRemoved,   this, &QxrdImagePlot::updateROIDisplay);
   }
 }
 
@@ -1228,51 +1230,55 @@ void QxrdImagePlot::updateROIDisplay()
   QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
   if (set && set->get_DisplayROI() && m_ROIModel && m_ROISelection) {
-    int nROI = m_ROIModel->rowCount(QModelIndex());
+    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-    for (int i=0; i<nROI; i++) {
-      QxrdROICoordinatesPtr roi = m_ROIModel->roi(i);
+    if (roiModel) {
+      int nROI = roiModel->rowCount(QModelIndex());
 
-      if (roi) {
-        QVector<QPointF> pts = roi->markerCoords();
+      for (int i=0; i<nROI; i++) {
+        QxrdROICoordinatesPtr roi = roiModel->roi(i);
 
-        QwtPlotPiecewiseCurve *pc = new QwtPlotPiecewiseCurve(this, tr("ROI %1").arg(i));
+        if (roi) {
+          QVector<QPointF> pts = roi->markerCoords();
 
-        setPlotCurveStyle(i, pc);
+          QwtPlotPiecewiseCurve *pc = new QwtPlotPiecewiseCurve(this, tr("ROI %1").arg(i));
 
-        bool on = m_ROISelection->rowIntersectsSelection(i, QModelIndex());
+          setPlotCurveStyle(i, pc);
 
-        if (pc) {
-          QPen pen = pc->pen();
-          const QwtSymbol *oldsym = pc->symbol();
-          QwtSymbol *sym = NULL;
+          bool on = m_ROISelection->rowIntersectsSelection(i, QModelIndex());
 
-          if (oldsym) {
-            sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
-          }
+          if (pc) {
+            QPen pen = pc->pen();
+            const QwtSymbol *oldsym = pc->symbol();
+            QwtSymbol *sym = NULL;
 
-          if (on) {
-            pen.setWidth(3);
-            if (sym) {
-              sym->setSize(9,9);
+            if (oldsym) {
+              sym = new QwtSymbol(oldsym->style(), oldsym->brush(), oldsym->pen(), oldsym->size());
             }
-          } else {
-            pen.setWidth(1);
+
+            if (on) {
+              pen.setWidth(3);
+              if (sym) {
+                sym->setSize(9,9);
+              }
+            } else {
+              pen.setWidth(1);
+              if (sym) {
+                sym->setSize(5,5);
+              }
+            }
+            pc->setPen(pen);
             if (sym) {
-              sym->setSize(5,5);
+              pc->setSymbol(sym);
             }
           }
-          pc->setPen(pen);
-          if (sym) {
-            pc->setSymbol(sym);
-          }
+
+          pc->setSamples(pts);
+
+          pc->attach(this);
+
+          m_ROICurves.append(pc);
         }
-
-        pc->setSamples(pts);
-
-        pc->attach(this);
-
-        m_ROICurves.append(pc);
       }
     }
   }
@@ -1290,12 +1296,14 @@ void QxrdImagePlot::onLegendChecked(const QVariant &itemInfo, bool on, int index
     int i = m_ROICurves.indexOf(pc);
 
     if (i >= 0) {
-      if (m_ROISelection && m_ROIModel) {
+      QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+      if (m_ROISelection && roiModel) {
         if (on) {
-          m_ROISelection->select(m_ROIModel->index(i,0),
+          m_ROISelection->select(roiModel->index(i,0),
                                  QItemSelectionModel::Select | QItemSelectionModel::Rows);
         } else {
-          m_ROISelection->select(m_ROIModel->index(i,0),
+          m_ROISelection->select(roiModel->index(i,0),
                                  QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
         }
       }
@@ -1353,8 +1361,10 @@ void QxrdImagePlot::updateROISelection(
     const QItemSelection &selected,
     const QItemSelection &deselected)
 {
-  if (m_ROIModel && m_ROISelection) {
-    int n = m_ROIModel->roiCount();
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+  if (roiModel && m_ROISelection) {
+    int n = roiModel->roiCount();
 
     for (int i=0; i<n; i++) {
       bool sel = m_ROISelection->rowIntersectsSelection(i, QModelIndex());
@@ -1369,12 +1379,14 @@ void QxrdImagePlot::updateROISelection(
 
 void QxrdImagePlot::moveSelectedROICenter(double x, double y)
 {
-  if (m_ROIModel && m_ROISelection) {
-    int n = m_ROIModel->roiCount();
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+  if (roiModel && m_ROISelection) {
+    int n = roiModel->roiCount();
 
     for (int i=0; i<n; i++) {
       if (m_ROISelection->rowIntersectsSelection(i,QModelIndex())) {
-        m_ROIModel->moveROICenter(i, x, y);
+        roiModel->moveROICenter(i, x, y);
       }
     }
   }

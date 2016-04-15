@@ -4,6 +4,9 @@
 QxrdSplashScreen::QxrdSplashScreen(QWidget *parent) :
   QSplashScreen(parent, QPixmap(":images/qxrd-splash-screen.png"))
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing splash screen\n");
+#endif
 }
 
 QxrdSplashScreen::~QxrdSplashScreen()

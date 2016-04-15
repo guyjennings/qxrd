@@ -17,8 +17,6 @@ public:
   QxrdExperimentThread(QString path, QxrdApplicationWPtr app, QSettings *settings);
   virtual ~QxrdExperimentThread();
 
-  void init(QxrdExperimentThreadWPtr expThread);
-
   static QxrdExperimentThreadPtr newExperiment(QString path, QxrdApplicationWPtr app, QSettings *settings);
 
   QxrdExperimentPtr experiment();
@@ -36,7 +34,6 @@ private:
   QString             m_ExperimentPath;
   QxrdApplicationWPtr m_Application;
   QSettings          *m_Settings;
-  QxrdExperimentThreadWPtr m_ExperimentThread;
   QxrdExperimentPtr   m_Experiment;
 };
 

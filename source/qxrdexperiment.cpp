@@ -78,8 +78,44 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
   m_FontSize(m_SettingsSaver, this, "fontSize", -1, "Suggested font size"),
   m_Spacing(m_SettingsSaver, this, "spacing", -1, "Suggested widget spacing")
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing experiment\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::QxrdExperiment(%p)\n", this);
+  }
+
+  QxrdApplicationPtr appl(m_Application);
+
+  if (appl) {
+    appl->prop_ExperimentCount()->incValue(1);
+  }
+}
+
+QxrdExperiment::~QxrdExperiment()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting experiment\n");
+#endif
+
+  QxrdApplicationPtr app(m_Application);
+
+  if (app && qcepDebug(DEBUG_APP)) {
+    app->printMessage("QxrdExperiment::~QxrdExperiment");
+  }
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdExperiment::~QxrdExperiment(%p)\n", this);
+  }
+
+  m_SettingsSaver->performSave();
+
+  closeScanFile();
+  closeLogFile();
+
+  if (app) {
+    app->prop_ExperimentCount()->incValue(-1);
   }
 }
 
@@ -358,28 +394,6 @@ void QxrdExperiment::openWindows()
       }
     }
   }
-}
-
-QxrdExperiment::~QxrdExperiment()
-{
-#ifndef QT_NO_DEBUG
-  printf("Deleting experiment\n");
-#endif
-
-  QxrdApplicationPtr app(m_Application);
-
-  if (app && qcepDebug(DEBUG_APP)) {
-    app->printMessage("QxrdExperiment::~QxrdExperiment");
-  }
-
-  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdExperiment::~QxrdExperiment(%p)\n", this);
-  }
-
-  m_SettingsSaver->performSave();
-
-  closeScanFile();
-  closeLogFile();
 }
 
 void QxrdExperiment::splashMessage(QString msg)

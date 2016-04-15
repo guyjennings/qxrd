@@ -24,6 +24,10 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QcepSettingsSaverWPtr sav
   m_Channels(),
   m_NIDAQPlugin()
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing acquisition extra inputs\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(%p)\n", this);
   }

@@ -134,7 +134,7 @@ private slots:
   void doPaste();
   void doDelete();
   void doSelectAll();
-  void newData();
+  void doTimerUpdate();
   void newMask();
   void allocatedMemoryChanged();
   void integrationXUnitsChanged(int newXUnits);

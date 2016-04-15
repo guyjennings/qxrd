@@ -39,11 +39,7 @@ void QxrdScriptEngineThread::shutdown()
 QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
 {
   while (isRunning()) {
-    {
-      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-      if (m_ScriptEngine) return m_ScriptEngine;
-    }
+    if (m_ScriptEngine) return m_ScriptEngine;
 
     QThread::msleep(50);
   }
@@ -57,25 +53,19 @@ void QxrdScriptEngineThread::run()
     printf("Script Engine Thread Started\n");
   }
 
-  QxrdScriptEnginePtr p(new QxrdScriptEngine(m_Application, m_Experiment));
-
-  int rc = -1;
-
-  if (p) {
-    p -> initialize();
-
-    m_Mutex.lock();
-    m_ScriptEngine = p;
-    m_Mutex.unlock();
-
-    rc = exec();
-  }
-
   {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+    QxrdScriptEnginePtr engine = QxrdScriptEnginePtr(
+          new QxrdScriptEngine(m_Application, m_Experiment));
 
-    m_ScriptEngine = QxrdScriptEnginePtr();
+    if (engine) {
+      engine -> initialize();
+    }
+    m_ScriptEngine = engine;
   }
+
+  int rc = exec();
+
+  m_ScriptEngine = QxrdScriptEnginePtr();
 
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Script Engine Thread Terminated with rc %d\n", rc);

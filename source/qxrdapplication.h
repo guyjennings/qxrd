@@ -24,7 +24,7 @@
 #include "qxrdperkinelmerplugininterface-ptr.h"
 #endif
 
-class QxrdApplication : public QcepApplication
+class QxrdApplication : public QcepApplication, public QEnableSharedFromThis<QxrdApplication>
 {
   Q_OBJECT
 
@@ -32,7 +32,7 @@ public:
   QxrdApplication(int &argc, char **argv);
   virtual ~QxrdApplication();
 
-  bool init(QxrdApplicationWPtr app, int &argc, char **argv);
+  bool init(int &argc, char **argv);
 
   QcepAllocatorWPtr allocator() const;
 
@@ -192,8 +192,10 @@ public:
   Q_PROPERTY(double lockerRate READ get_LockerRate WRITE set_LockerRate STORED false)
   QCEP_DOUBLE_PROPERTY(LockerRate)
 
+  Q_PROPERTY(int experimentCount READ get_ExperimentCount WRITE set_ExperimentCount STORED false)
+  QCEP_INTEGER_PROPERTY(ExperimentCount)
+
 private:
-  QxrdApplicationWPtr             m_Application;
   QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
   QList<QxrdExperimentWPtr>       m_Experiments;
 

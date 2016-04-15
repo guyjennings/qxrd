@@ -14,6 +14,10 @@ QxrdDetectorSimulated::QxrdDetectorSimulated(QcepSettingsSaverWPtr saver,
                                              QcepObject           *parent) :
   QxrdDetector(saver, expt, acq, QxrdDetectorThread::SimulatedDetector, detNum, parent)
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing simulated detector\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorSimulated::QxrdDetectorSimulated(%p)\n", this);
   }

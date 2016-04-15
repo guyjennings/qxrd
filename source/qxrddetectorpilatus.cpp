@@ -35,6 +35,10 @@ QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver,
   m_EnableFrequency        (saver, this, "enableFrequency",      1000, "Frequency of ext enable signal"),
   m_PilatusExtension       (saver, this, "pilatusExtension",     "cbf",         "File format to be used by camserver")
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing Pilatus detector\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorPilatus::QxrdDetectorPilatus(%p)\n", this);
   }
@@ -449,7 +453,7 @@ void QxrdDetectorPilatus::loadAndPush(QString f)
     if (proc) {
       QString dest = proc->filePathInRawOutputDirectory(f);
 
-      QcepInt32ImageDataPtr data = QcepAllocator::newInt32Image(dest, 0,0, QcepAllocator::AllocateFromReserve);
+      QcepInt32ImageDataPtr data = QcepAllocator::newInt32Image("pilatus", 0,0, QcepAllocator::AllocateFromReserve);
 
       if (data->readImage(dest)) {
         printMessage(tr("Read %1 successfully").arg(dest));

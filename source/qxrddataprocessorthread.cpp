@@ -41,30 +41,23 @@ void QxrdDataProcessorThread::run()
     printf("Processor Thread Started\n");
   }
 
-  QxrdDataProcessorPtr p(new QxrdDataProcessor(m_Saver,
-                                               m_Experiment,
-                                               m_Acquisition,
-                                               m_Allocator,
-                                               m_FileSaver));
-
-  int rc = -1;
-
-  if (p) {
-    p -> initialize();
-
-    m_Mutex.lock();
-    m_DataProcessor = p;
-    m_Mutex.unlock();
-
-    rc = exec();
-  }
-
-
   {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+    QxrdDataProcessorPtr proc = QxrdDataProcessorPtr(new QxrdDataProcessor(m_Saver,
+                                                                           m_Experiment,
+                                                                           m_Acquisition,
+                                                                           m_Allocator,
+                                                                           m_FileSaver));
 
-    m_DataProcessor = QxrdDataProcessorPtr();
+    if (proc) {
+      proc->initialize();
+    }
+
+    m_DataProcessor = proc;
   }
+
+  int rc = exec();
+
+  m_DataProcessor = QxrdDataProcessorPtr();
 
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Processor Thread Terminated with rc %d\n", rc);
@@ -81,11 +74,7 @@ void QxrdDataProcessorThread::shutdown()
 QxrdDataProcessorPtr QxrdDataProcessorThread::dataProcessor() const
 {
   while (isRunning()) {
-    {
-      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-      if (m_DataProcessor) return m_DataProcessor;
-    }
+    if (m_DataProcessor) return m_DataProcessor;
 
     QThread::msleep(50);
   }

@@ -119,6 +119,9 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
 //  m_SaverQueueLength.setDebug(1);
 //  m_IntegrationQueueLength.setDebug(1);
 //  m_CorrectionQueueLength.setDebug(1);
+#ifndef QT_NO_DEBUG
+  printf("Constructing processor\n");
+#endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDataProcessorBase::QxrdDataProcessorBase(%p)\n", this);
@@ -1920,14 +1923,14 @@ int QxrdDataProcessorBase::status(double time)
   }
 }
 
-QxrdExperimentPtr QxrdDataProcessorBase::experiment() const
-{
-  if (m_Experiment == NULL) {
-    printMessage("Problem: QxrdDataProcessorBase::experiment == NULL");
-  }
+//QxrdExperimentPtr QxrdDataProcessorBase::experiment() const
+//{
+//  if (m_Experiment == NULL) {
+//    printMessage("Problem: QxrdDataProcessorBase::experiment == NULL");
+//  }
 
-  return m_Experiment;
-}
+//  return m_Experiment;
+//}
 
 QxrdCenterFinderPtr QxrdDataProcessorBase::centerFinder() const
 {

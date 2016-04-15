@@ -36,6 +36,10 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
   m_VBinning(QcepSettingsSaverWPtr(), this, "vBinning", 0, "Vert Binning"),
   m_Extension(saver, this, "extension", "tif", "File extension")
 {
+#ifndef QT_DEBUG
+  printf("Constructing detector\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::QxrdDetector(%p)\n", this);
   }
@@ -64,6 +68,10 @@ void QxrdDetector::initialize()
 
 QxrdDetector::~QxrdDetector()
 {
+#ifndef QT_DEBUG
+  printf("Deleting detector\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::~QxrdDetector(%p)\n", this);
   }

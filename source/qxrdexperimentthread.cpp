@@ -43,11 +43,6 @@ QxrdExperimentThread::~QxrdExperimentThread()
   shutdown();
 }
 
-void QxrdExperimentThread::init(QxrdExperimentThreadWPtr expThread)
-{
-  m_ExperimentThread = expThread;
-}
-
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
   QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(path, app, settings));
@@ -60,11 +55,7 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdAp
 QxrdExperimentPtr QxrdExperimentThread::experiment()
 {
   while (isRunning()) {
-    {
-      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-      if (m_Experiment) return m_Experiment;
-    }
+    if (m_Experiment) return m_Experiment;
 
     msleep(100);
   }
@@ -79,29 +70,19 @@ void QxrdExperimentThread::run()
   }
 
   {
-    QxrdExperimentPtr doc;
-
-    doc = QxrdExperimentPtr(
+    QxrdExperimentPtr expt(
           new QxrdExperiment(sharedFromThis(), m_ExperimentPath, m_Application));
 
-    if (doc) {
-      doc -> initialize(m_Settings);
-
-      m_Mutex.lock();
-      m_Experiment = doc;
-      m_Mutex.unlock();
+    if (expt) {
+      expt -> initialize(m_Settings);
     }
+
+    m_Experiment = expt;
   }
 
-  int rc = -1;
+  int rc = exec();
 
-  rc = exec();
-
-  {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-    m_Experiment = QxrdExperimentPtr();
-  }
+  m_Experiment = QxrdExperimentPtr();
 
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Experiment Thread Terminated with rc %d\n", rc);

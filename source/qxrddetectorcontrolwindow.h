@@ -71,7 +71,7 @@ private:
   QxrdAcquisitionWPtr             m_Acquisition;
   QxrdDetectorWPtr                m_Detector;
   QxrdDetectorProcessorWPtr       m_Processor;
-  QxrdROICoordinatesListModelPtr  m_ROIModel;
+  QxrdROICoordinatesListModelWPtr  m_ROIModel;
 
   QMutex                          m_UpdateMutex;
   QTimer                          m_UpdateTimer;

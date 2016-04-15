@@ -48,6 +48,10 @@ QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr e
     m_CenterFinder(cfw),
     m_IntegratorCache()
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing integrator\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdIntegrator::QxrdIntegrator(%p)\n", this);
   }

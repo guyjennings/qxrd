@@ -264,7 +264,11 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
 
 QxrdROICoordinatesPtr QxrdROICoordinatesListModel::newROI(int roiType)
 {
-  return QxrdROICoordinatesPtr(new QxrdROICoordinates(m_Saver, m_Experiment, roiType));
+  QxrdROICoordinates *coord = new QxrdROICoordinates(m_Saver, m_Experiment, roiType);
+
+  coord->moveToThread(thread());
+
+  return QxrdROICoordinatesPtr(coord);
 }
 
 void QxrdROICoordinatesListModel::append(QxrdROICoordinatesPtr coords)
@@ -326,7 +330,7 @@ void QxrdROICoordinatesListModel::editROI(int row)
 {
 }
 
-QxrdROICoordinatesPtr QxrdROICoordinatesListModel::roi(int row) const
+QxrdROICoordinatesWPtr QxrdROICoordinatesListModel::roi(int row) const
 {
   return m_ROICoordinates.value(row);
 }

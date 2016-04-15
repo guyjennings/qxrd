@@ -14,6 +14,10 @@ QxrdROICalculator::QxrdROICalculator(QcepSettingsSaverWPtr saver, QxrdExperiment
     m_Processor(proc),
     m_ROICoordinatesModel(new QxrdROICoordinatesListModel(saver, exp))
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing ROI Calculator\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdROICalculator::QxrdROICalculator(%p)\n", this);
   }
@@ -79,12 +83,12 @@ int QxrdROICalculator::roiCount()
   }
 }
 
-QxrdROICoordinatesListModelPtr QxrdROICalculator::roiModel()
+QxrdROICoordinatesListModelWPtr QxrdROICalculator::roiModel()
 {
   return m_ROICoordinatesModel;
 }
 
-QxrdROICoordinatesPtr QxrdROICalculator::roi(int i)
+QxrdROICoordinatesWPtr QxrdROICalculator::roi(int i)
 {
   if (m_ROICoordinatesModel) {
     return m_ROICoordinatesModel->roi(i);

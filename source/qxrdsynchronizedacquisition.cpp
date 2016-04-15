@@ -22,6 +22,9 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QcepSettingsSaverWPtr s
   m_Acquisition(acq),
   m_SyncMode(0)
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing synchronized acquisition\n");
+#endif
 }
 
 QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()

@@ -8,6 +8,10 @@ QxrdCalibrantLibrary::QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExpe
     m_Saver(saver),
     m_Experiment(exp)
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing calibrant library\n");
+#endif
+
   int nCals = numberStandardCalibrants();
 
   for (int i=0; i<nCals; i++) {

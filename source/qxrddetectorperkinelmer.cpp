@@ -35,6 +35,10 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver,
   m_DetectorGain   (saver, this, "detectorGain",    0, "Detector Gain"),
   m_DetectorBinning(saver, this, "detectorBinning", 0, "Detector Binning Mode")
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing Perkin Elmer Detector\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(%p)\n", this);
   }
@@ -48,6 +52,10 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver,
 
 QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer()
 {
+#ifndef QT_NO_DEBUG
+  printf("Deleting Perkin Elmer Detector\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer(%p)\n", this);
   }

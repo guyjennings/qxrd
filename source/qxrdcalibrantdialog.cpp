@@ -11,7 +11,7 @@
 #include "qxrdcalibrantpropertiesdialog.h"
 #include "qxrdexperiment.h"
 
-QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdExperimentPtr expt, QxrdCenterFinderWPtr cf) :
+QxrdCalibrantDialog::QxrdCalibrantDialog(QxrdExperimentWPtr expt, QxrdCenterFinderWPtr cf) :
   QDockWidget(),
   m_Experiment(expt),
   m_CenterFinder(cf)

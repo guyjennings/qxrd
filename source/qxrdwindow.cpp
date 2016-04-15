@@ -106,6 +106,10 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_ImageDisplay(NULL),
     m_Highlighter(NULL)
 {
+#ifndef QT_DEBUG
+  printf("Constructing main window\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdWindow::QxrdWindow(%p)\n", this);
   }
@@ -476,7 +480,7 @@ void QxrdWindow::initialize()
 
   m_HelpBrowser->init(m_Experiment);
 
-  connect(&m_UpdateTimer, &QTimer::timeout, this, &QxrdWindow::newData);
+  connect(&m_UpdateTimer, &QTimer::timeout, this, &QxrdWindow::doTimerUpdate);
 
   connect(m_ActionIntegrate, &QAction::triggered, this, &QxrdWindow::doIntegrateSequence);
   connect(m_ActionIntegrateCurrent, &QAction::triggered,
@@ -646,10 +650,10 @@ void QxrdWindow::initialize()
 
   QcepAllocatorPtr alloc(m_Allocator);
 
-  if (alloc) {
-    connect(alloc -> prop_AllocatedBytes(), &QcepInt64Property::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
-    connect(alloc -> prop_AvailableBytes(), &QcepInt64Property::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
-  }
+//  if (alloc) {
+//    connect(alloc -> prop_AllocatedBytes(), &QcepInt64Property::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
+//    connect(alloc -> prop_AvailableBytes(), &QcepInt64Property::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
+//  }
 
   m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_AcquisitionScalerDialog -> toggleViewAction());
@@ -733,8 +737,8 @@ void QxrdWindow::initialize()
 QxrdWindow::~QxrdWindow()
 {
 #ifndef QT_NO_DEBUG
-  printf("Deleting window\n");
-#endif
+  printf("Deleting main window\n");
+#endif  
 
   QxrdApplicationPtr app(m_Application);
 
@@ -1120,8 +1124,10 @@ void QxrdWindow::newMaskAvailable(QcepMaskDataPtr mask)
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "newMask", Qt::QueuedConnection));
 }
 
-void QxrdWindow::newData()
+void QxrdWindow::doTimerUpdate()
 {
+  allocatedMemoryChanged();
+
   captureSize();
 
   //  QcepMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);

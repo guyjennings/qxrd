@@ -22,6 +22,10 @@ QxrdFileSaver::QxrdFileSaver
     m_Allocator(allocator),
     m_Acquisition()
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing file saver\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdFileSaver::QxrdFileSaver(%p)\n", this);
   }
@@ -29,6 +33,10 @@ QxrdFileSaver::QxrdFileSaver
 
 QxrdFileSaver::~QxrdFileSaver()
 {
+#ifndef QT_NO_DEBUG
+  printf("Deleting file saver\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdFileSaver::~QxrdFileSaver(%p)\n", this);
   }

@@ -72,6 +72,10 @@ QxrdCenterFinder::QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWP
     m_FitPowderPointPosition(saver, this, "fitPowderPointPosition", true, "Fit to nearby peak when adding powder points individually"),
     m_Experiment(expt)
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing center finder\n");
+#endif
+
   qRegisterMetaType<QPointF>("QPointF");
 
 //  m_CenterX.setDebug(true);

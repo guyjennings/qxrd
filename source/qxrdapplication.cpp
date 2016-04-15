@@ -119,6 +119,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_FileList(QcepSettingsSaverPtr(), this, "fileList", QStringList(), "Files to Process"),
   m_LockerCount(QcepSettingsSaverPtr(), this, "lockerCount", 0, "Number of mutex locks taken"),
   m_LockerRate(QcepSettingsSaverPtr(), this, "lockerRate", 0, "Mutex Locking Rate"),
+  m_ExperimentCount(QcepSettingsSaverWPtr(), this, "experimentCount", 0, "Number of open experiments"),
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
   m_AllocatorThread(NULL),
@@ -131,6 +132,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_SettingsMutex(),
   m_LastLockerCount(0)
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing application\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdApplication::QxrdApplication(%p)\n", this);
   }
@@ -142,10 +147,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   QxrdCalibrantDSpacings::registerMetaTypes();
 }
 
-bool QxrdApplication::init(QxrdApplicationWPtr app, int &argc, char **argv)
+bool QxrdApplication::init(int &argc, char **argv)
 {
-  m_Application = app;
-
   connect(this, &QCoreApplication::aboutToQuit, this, &QxrdApplication::finish);
 
   connect(&m_SplashTimer, &QTimer::timeout, this, &QxrdApplication::hideSplash);
@@ -285,18 +288,41 @@ QxrdApplication::~QxrdApplication()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdApplication::~QxrdApplication(%p)\n", this);
   }
+
+  int nExp = get_ExperimentCount();
+
+  while (nExp > 0) {
+    printf("Attempt to stop when %d experiments still existing\n", nExp);
+    QcepThread::sleep(5);
+    nExp = get_ExperimentCount();
+  }
 }
 
 void QxrdApplication::finish()
 {
+#ifndef QT_NO_DEBUG
+  printf("QxrdApplication::finish()\n");
+#endif
+
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdApplication::finish()");
   }
 
   writeSettings();
 
-  m_ExperimentThreads.clear();
-  m_Experiments.clear();
+//  foreach(QxrdExperimentThreadPtr t, m_ExperimentThreads) {
+//    t->quit();
+//    t->wait();
+//  }
+
+  while(m_ExperimentThreads.count()) {
+    QxrdExperimentThreadPtr t = m_ExperimentThreads.takeFirst();
+
+    if (t) {
+      t->quit();
+      t->wait();
+    }
+  }
 
   m_AllocatorThread = QcepAllocatorThreadPtr();
 }
@@ -829,7 +855,8 @@ void QxrdApplication::writeDefaultSettings()
 
 void QxrdApplication::createNewExperiment()
 {
-  QxrdExperimentThreadPtr experimentThread = QxrdExperimentThread::newExperiment("", m_Application, NULL);
+  QxrdExperimentThreadPtr experimentThread =
+      QxrdExperimentThread::newExperiment("", sharedFromThis(), NULL);
 
   if (experimentThread) {
     QxrdExperimentPtr exp = experimentThread->experiment();
@@ -857,7 +884,8 @@ void QxrdApplication::openExperiment(QString path)
   if (path.length() > 0) {
     QxrdExperimentSettings settings(path);
 
-    QxrdExperimentThreadPtr experimentThread = QxrdExperimentThread::newExperiment(path, m_Application, &settings);
+    QxrdExperimentThreadPtr experimentThread =
+        QxrdExperimentThread::newExperiment(path, sharedFromThis(), &settings);
 
     QxrdExperimentPtr exp = experimentThread->experiment();
 

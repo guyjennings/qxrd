@@ -48,26 +48,20 @@ void QxrdAcquisitionThread::run()
     printf("Acquisition Thread Started\n");
   }
 
-  QxrdAcquisitionPtr acq = QxrdAcquisitionPtr(
-        new QxrdAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator));
-
-  int rc = -1;
-
-  if (acq) {
-    acq -> initialize();
-
-    m_Mutex.lock();
-    m_Acquisition = acq;
-    m_Mutex.unlock();
-
-    rc = exec();
-  }
-
   {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+    QxrdAcquisitionPtr acq = QxrdAcquisitionPtr(
+          new QxrdAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator));
 
-    m_Acquisition = QxrdAcquisitionPtr();
+    if (acq) {
+      acq -> initialize();
+    }
+
+    m_Acquisition = acq;
   }
+
+  int rc = exec();
+
+  m_Acquisition = QxrdAcquisitionPtr();
 
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Acquisition Thread Terminated with rc %d\n", rc);
@@ -89,11 +83,7 @@ void QxrdAcquisitionThread::msleep(int msec)
 QxrdAcquisitionPtr QxrdAcquisitionThread::acquisition() const
 {
   while (isRunning()) {
-    {
-      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-      if (m_Acquisition) return m_Acquisition;
-    }
+    if (m_Acquisition) return m_Acquisition;
 
     QThread::msleep(50);
   }

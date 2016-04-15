@@ -16,7 +16,7 @@ class QxrdCalibrantDialog : public QDockWidget, public Ui::QxrdCalibrantDialog
   Q_OBJECT
 
 public:
-  QxrdCalibrantDialog(QxrdExperimentPtr expt, QxrdCenterFinderWPtr cf);
+  QxrdCalibrantDialog(QxrdExperimentWPtr expt, QxrdCenterFinderWPtr cf);
   virtual ~QxrdCalibrantDialog();
 
 public slots:

@@ -7,6 +7,10 @@ QxrdAcquisitionExecution::QxrdAcquisitionExecution(QxrdAcquisitionInterfaceWPtr 
   : QcepObject("acquisitionExecution", NULL),
     m_Acquisition(acq)
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing acquisition execution\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionExecution::QxrdAcquisitionExecution(%p)\n", this);
   }

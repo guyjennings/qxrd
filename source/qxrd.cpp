@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     QxrdApplicationPtr app = QxrdApplicationPtr(
           new QxrdApplication(argc, argv));
 
-    if (app->init(app, argc, argv)) {
+    if (app->init(argc, argv)) {
       if (app->get_GuiWanted()) {
         res = app->exec();
       } else {

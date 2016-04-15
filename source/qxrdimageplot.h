@@ -119,7 +119,7 @@ public:
   void contextMenuEvent(QContextMenuEvent *event);
 
   void enableROIDisplay(bool enable);
-  void setROIModel(QxrdROICoordinatesListModelPtr model);
+  void setROIModel(QxrdROICoordinatesListModelWPtr model);
   void setROISelection(QItemSelectionModel *select);
 
 private:
@@ -200,7 +200,7 @@ private:
 
   bool                       m_ContextMenuEnabled;
 
-  QxrdROICoordinatesListModelPtr m_ROIModel;
+  QxrdROICoordinatesListModelWPtr m_ROIModel;
   QItemSelectionModel           *m_ROISelection;
   QVector<QwtPlotCurve*>         m_ROICurves;
 };

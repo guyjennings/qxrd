@@ -185,9 +185,10 @@ void QxrdDetectorControlWindow::printMessage(QString msg, QDateTime ts)
 QVector<int> QxrdDetectorControlWindow::selectedROIs()
 {
   QVector<int> res;
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-  if (m_ROIModel) {
-    int roiCount = m_ROIModel->rowCount(QModelIndex());
+  if (roiModel) {
+    int roiCount = roiModel->rowCount(QModelIndex());
 
     QItemSelectionModel *selected = m_ROIWidget->selectionModel();
 
@@ -204,8 +205,9 @@ QVector<int> QxrdDetectorControlWindow::selectedROIs()
 void QxrdDetectorControlWindow::doAppendROI()
 {
   QVector<int> rois = selectedROIs();
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-  if (m_ROIModel) {
+  if (roiModel) {
     QMenu menu;
 
     for (int i=0; i<QxrdROICoordinates::roiTypeCount(); i++) {
@@ -223,7 +225,7 @@ void QxrdDetectorControlWindow::doAppendROI()
       QxrdROICoordinatesPtr roi =
           QxrdROICoordinatesPtr(new QxrdROICoordinates(m_Saver, m_Experiment, roiType));
 
-      m_ROIModel->append(roi);
+      roiModel->append(roi);
     }
   }
 }
@@ -255,8 +257,12 @@ void QxrdDetectorControlWindow::doDeleteROI()
   }
 
   if (res == QMessageBox::Ok && m_ROIModel) {
-    for (int i=rois.count()-1; i>=0; i--) {
-      m_ROIModel->removeROI(rois.value(i));
+    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+    if (roiModel) {
+      for (int i=rois.count()-1; i>=0; i--) {
+        roiModel->removeROI(rois.value(i));
+      }
     }
   }
 }
@@ -268,8 +274,10 @@ void QxrdDetectorControlWindow::doMoveROIDown()
   if (rois.count() != 1) {
     QMessageBox::information(this, "Only Move One", "Must have a single ROI selected before moving it", QMessageBox::Ok);
   } else {
-    if (m_ROIModel) {
-      m_ROIModel->moveROIDown(rois.first());
+    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+    if (roiModel) {
+      roiModel->moveROIDown(rois.first());
     }
   }
 }
@@ -281,8 +289,10 @@ void QxrdDetectorControlWindow::doMoveROIUp()
   if (rois.count() != 1) {
     QMessageBox::information(this, "Only Move One", "Must have a single ROI selected before moving it", QMessageBox::Ok);
   } else {
-    if (m_ROIModel) {
-      m_ROIModel->moveROIUp(rois.first());
+    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+    if (roiModel) {
+      roiModel->moveROIUp(rois.first());
     }
   }
 }
@@ -461,25 +471,25 @@ void QxrdDetectorControlWindow::doClearGainCorrection()
 void QxrdDetectorControlWindow::doRecalculate()
 {
   QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-  if (dp) {
-    if (m_ROIModel) {
-      m_ROIModel->recalculate(dp->data(), dp->mask());
-    }
+  if (dp && roiModel) {
+    roiModel->recalculate(dp->data(), dp->mask());
   }
 }
 
 void QxrdDetectorControlWindow::doVisualizeBackground()
 {
   QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
   if (dp) {
     QVector<int> rois = selectedROIs();
 
     if (rois.count() != 1) {
       QMessageBox::information(this, "Visualize ROI", "Select one ROI to visualize", QMessageBox::Ok);
-    } else if (m_ROIModel) {
-      m_ROIModel->visualizeBackground(rois.first(), dp->data(), dp->mask());
+    } else if (roiModel) {
+      roiModel->visualizeBackground(rois.first(), dp->data(), dp->mask());
 
       displayNewData(dp->data(), QcepMaskDataPtr());
     }
@@ -489,14 +499,15 @@ void QxrdDetectorControlWindow::doVisualizeBackground()
 void QxrdDetectorControlWindow::doVisualizePeak()
 {
   QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
   if (dp) {
     QVector<int> rois = selectedROIs();
 
     if (rois.count() != 1) {
       QMessageBox::information(this, "Visualize ROI", "Select one ROI to visualize", QMessageBox::Ok);
-    } else if (m_ROIModel) {
-      m_ROIModel->visualizePeak(rois.first(), dp->data(), dp->mask());
+    } else if (roiModel) {
+      roiModel->visualizePeak(rois.first(), dp->data(), dp->mask());
 
       displayNewData(dp->data(), QcepMaskDataPtr());
     }

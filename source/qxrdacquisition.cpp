@@ -62,6 +62,10 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
     m_ControlPanel(NULL),
     m_Idling(1)
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing acquisition\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisition::QxrdAcquisition(%p)\n", this);
   }
