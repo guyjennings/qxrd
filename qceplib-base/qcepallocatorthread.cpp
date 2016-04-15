@@ -53,10 +53,7 @@ QcepAllocatorPtr QcepAllocatorThread::allocator() const
 {
 
   while (isRunning()) {
-    {
-      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-      if (m_Allocator) return m_Allocator;
-    }
+    if (m_Allocator) return m_Allocator;
 
     QThread::msleep(50);
   }

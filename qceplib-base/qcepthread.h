@@ -12,9 +12,6 @@ public:
   QcepThread(QObject *parent = 0);
 
   static void msleep(long unsigned int);
-
-protected:
-  mutable QMutex    m_Mutex;
 };
 
 #endif // QCEPTHREAD_H

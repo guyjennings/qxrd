@@ -1,10 +1,8 @@
 #include "qcepthread.h"
 
 QcepThread::QcepThread(QObject *parent) :
-  QThread(parent),
-  m_Mutex(QMutex::Recursive)
+  QThread(parent)
 {
-
 }
 
 void QcepThread::msleep(unsigned long t)
