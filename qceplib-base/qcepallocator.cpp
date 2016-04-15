@@ -27,6 +27,10 @@ QcepAllocator::QcepAllocator
     m_AvailableBytes(QcepSettingsSaverPtr(), this, "availableBytes", 0, "Total Available Data Memory (Bytes)"),
     m_AllocatedBytes(QcepSettingsSaverPtr(), this, "allocatedBytes", 0, "Allocated Data Memory (Bytes)")
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing allocator\n");
+#endif
+
   if (g_Allocator) {
     printf("Only one allocator can be created\n");
   } else {

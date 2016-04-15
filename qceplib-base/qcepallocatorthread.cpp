@@ -31,28 +31,14 @@ void QcepAllocatorThread::run()
     printf("Starting Allocator Thread\n");
   }
 
-  QcepAllocatorPtr p(new QcepAllocator(m_Saver));
+  m_Allocator = QcepAllocatorPtr(new QcepAllocator(m_Saver));
 
-  int rc = -1;
+  int rc = exec();
 
-  if (p) {
-    m_Mutex.lock();
-
-    m_Allocator = p;
-
-    m_Mutex.unlock();
-
-    rc = exec();
-  }
+  m_Allocator = QcepAllocatorPtr();
 
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Allocator Thread Terminated with rc %d\n", rc);
-  }
-
-  {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-    m_Allocator = QcepAllocatorPtr();
   }
 }
 

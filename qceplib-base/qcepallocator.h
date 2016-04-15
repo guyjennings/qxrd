@@ -95,8 +95,8 @@ private:
   QMutex                m_Mutex;
 //  QTimer                m_Timer;
 //  QAtomicInt            m_AllocatedMemoryMB;
-//  qint64                m_AllocatedBytes;
-//  qint64                m_AvailableBytes;
+//  qint64                m_AllocatedMemory;
+//  qint64                m_AvailableMemory;
 
 public:
   enum { MegaBytes = 0x100000 };
