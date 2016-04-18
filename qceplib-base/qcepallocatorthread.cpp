@@ -31,7 +31,8 @@ void QcepAllocatorThread::run()
     printf("Starting Allocator Thread\n");
   }
 
-  m_Allocator = QcepAllocatorPtr(new QcepAllocator(m_Saver));
+  m_Allocator = QcepAllocatorPtr(new QcepAllocator(m_Saver),
+                                 &QObject::deleteLater);
 
   int rc = exec();
 

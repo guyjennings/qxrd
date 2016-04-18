@@ -32,7 +32,7 @@ QcepObject::~QcepObject()
   QThread *currTh = QThread::currentThread();
   QThread *objTh  = thread();
 
-  if (objTh && currTh != objTh) {
+  if (objTh && (currTh != objTh)) {
     printf("Deleting object from different thread obj:%s (curr:%s, objth:%s)\n",
            qPrintable(objectName()),
            qPrintable(currTh ? currTh->objectName() : "null"),

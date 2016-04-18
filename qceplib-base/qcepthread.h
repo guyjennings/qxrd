@@ -10,6 +10,7 @@ class QcepThread : public QThread
 
 public:
   QcepThread(QObject *parent = 0);
+  virtual ~QcepThread();
 
   static void msleep(long unsigned int);
 };
