@@ -31,6 +31,10 @@ QxrdDetectorSimulated::~QxrdDetectorSimulated()
   printf("Deleting simulated detector\n");
 #endif
 
+  if (QThread::currentThread() != thread()) {
+    printf("Deleting simulated detector from wrong thread\n");
+  }
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorSimulated::~QxrdDetectorSimulated(%p)\n", this);
   }
@@ -116,7 +120,7 @@ void QxrdDetectorSimulated::startDetector()
 void QxrdDetectorSimulated::stopDetector()
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "startDetector", Qt::BlockingQueuedConnection);
+    QMetaObject::invokeMethod(this, "stopDetector", Qt::BlockingQueuedConnection);
   } else {
     printMessage(tr("Stopping simulated detector \"%1\"").arg(get_DetectorName()));
 

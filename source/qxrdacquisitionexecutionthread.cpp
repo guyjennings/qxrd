@@ -39,7 +39,8 @@ void QxrdAcquisitionExecutionThread::run()
   }
 
   m_AcquisitionExecution =
-      QxrdAcquisitionExecutionPtr(new QxrdAcquisitionExecution(m_Acquisition));
+      QxrdAcquisitionExecutionPtr(new QxrdAcquisitionExecution(m_Acquisition),
+                                  &QObject::deleteLater);
 
   int rc = exec();
 

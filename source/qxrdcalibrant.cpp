@@ -51,7 +51,7 @@ void QxrdCalibrant::fromScriptValue(const QScriptValue &obj, QxrdCalibrantWPtr &
     QxrdCalibrant *qcal = qobject_cast<QxrdCalibrant*>(qobj);
 
     if (qcal) {
-      cal = QxrdCalibrantPtr(qcal);
+      cal = qcal->sharedFromThis();
     }
   }
 }

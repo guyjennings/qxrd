@@ -148,6 +148,29 @@ QxrdAcquisition::~QxrdAcquisition()
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdAcquisition::~QxrdAcquisition");
   }
+
+  while (m_DetectorThreads.count()) {
+    QxrdDetectorThreadPtr t = m_DetectorThreads.takeFirst();
+
+    if (t) {
+      QxrdDetectorPtr d = t->detector();
+
+      if (d) {
+        d->stopDetector();
+      }
+
+      t->quit();
+      t->wait();
+    }
+  }
+
+  int nDet = get_DetectorCount();
+
+  while (nDet > 0) {
+    printf("Attempting to stop acquisition while %d detectors still present\n", nDet);
+    QcepThread::sleep(5);
+    nDet = get_DetectorCount();
+  }
 }
 
 QxrdExperimentWPtr QxrdAcquisition::experiment()
@@ -172,7 +195,11 @@ void QxrdAcquisition::shutdown()
   }
 
   for (int i=0; i<get_DetectorCount(); i++) {
-    detector(i) -> shutdownAcquisition();
+    QxrdDetectorPtr det = detector(i);
+
+    if (det) {
+     det -> shutdownAcquisition();
+    }
   }
 
   thread()->exit();
@@ -299,7 +326,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
     }
   }
 
-  set_DetectorCount(m_Detectors.count());
+//  set_DetectorCount(m_Detectors.count());
 
   settings->endArray();
 }
@@ -329,7 +356,7 @@ void QxrdAcquisition::appendDetector(int detType)
         m_DetectorThreads.append(detThread);
         m_Detectors.append(det);
 
-        set_DetectorCount(m_Detectors.count());
+//        set_DetectorCount(m_Detectors.count());
       }
     }
   }
@@ -365,7 +392,7 @@ void QxrdAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
       m_DetectorThreads.append(detThread);
       m_Detectors.append(detector);
 
-      set_DetectorCount(m_Detectors.count());
+//      set_DetectorCount(m_Detectors.count());
 
       detector->pullPropertiesfromProxy(proxy);
     }
@@ -379,7 +406,7 @@ void QxrdAcquisition::clearDetectors()
   } else {
     m_Detectors.resize(0);
 
-    set_DetectorCount(0);
+//    set_DetectorCount(0);
   }
 }
 
@@ -388,7 +415,7 @@ QxrdDetectorThreadPtr QxrdAcquisition::detectorThread(int n)
   return m_DetectorThreads.value(n);
 }
 
-QxrdDetectorPtr QxrdAcquisition::detector(int n)
+QxrdDetectorWPtr QxrdAcquisition::detector(int n)
 {
   return m_Detectors.value(n);
 }

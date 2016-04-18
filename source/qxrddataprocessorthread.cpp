@@ -46,7 +46,8 @@ void QxrdDataProcessorThread::run()
                                                                            m_Experiment,
                                                                            m_Acquisition,
                                                                            m_Allocator,
-                                                                           m_FileSaver));
+                                                                           m_FileSaver),
+                                                     &QObject::deleteLater);
 
     if (proc) {
       proc->initialize();

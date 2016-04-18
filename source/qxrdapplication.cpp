@@ -296,6 +296,12 @@ QxrdApplication::~QxrdApplication()
     QcepThread::sleep(5);
     nExp = get_ExperimentCount();
   }
+
+//  int nExp = m_ExperimentThreads.count();
+
+//  if (nExp) {
+//    printf("deleting application while %d experiments still active\n", nExp);
+//  }
 }
 
 void QxrdApplication::finish()
@@ -1028,7 +1034,7 @@ void QxrdApplication::openRecentExperiment(QString path)
   }
 }
 
-void QxrdApplication::openedExperiment(QxrdExperimentThreadPtr expthrdw)
+void QxrdApplication::openedExperiment(QxrdExperimentThreadWPtr expthrdw)
 {
   QxrdExperimentThreadPtr expthrd(expthrdw);
 
@@ -1054,7 +1060,7 @@ void QxrdApplication::openedExperiment(QxrdExperimentThreadPtr expthrdw)
   }
 }
 
-void QxrdApplication::closedExperiment(QxrdExperimentThreadPtr expthrdw)
+void QxrdApplication::closedExperiment(QxrdExperimentThreadWPtr expthrdw)
 {
   QxrdExperimentThreadPtr expthrd(expthrdw);
 

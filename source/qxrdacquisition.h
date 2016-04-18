@@ -80,7 +80,7 @@ public slots:
   void openDetectorControlWindow(int i);
 
   QxrdDetectorThreadPtr detectorThread(int n);
-  QxrdDetectorPtr       detector(int n);
+  QxrdDetectorWPtr      detector(int n);
 
   QString currentFileBase(int detNum, QString extension="");
 
@@ -148,7 +148,7 @@ public:
   Q_PROPERTY(QString qtVersion READ get_QtVersion STORED false)
   QCEP_STRING_PROPERTY(QtVersion)
 
-  Q_PROPERTY(int detectorCount READ get_DetectorCount WRITE set_DetectorCount)
+  Q_PROPERTY(int detectorCount READ get_DetectorCount WRITE set_DetectorCount STORED false)
   QCEP_INTEGER_PROPERTY(DetectorCount)
 
   Q_PROPERTY(int    lastAcquired  READ get_LastAcquired WRITE set_LastAcquired STORED false)
@@ -234,7 +234,7 @@ private:
   QAtomicInt             m_Idling;
 
   QVector<QxrdDetectorThreadPtr>    m_DetectorThreads;
-  QVector<QxrdDetectorPtr>          m_Detectors;
+  QVector<QxrdDetectorWPtr>         m_Detectors;
 
   QxrdAcquisitionScalerModelPtr m_ScalerModel;
 };

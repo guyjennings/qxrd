@@ -19,7 +19,7 @@ public:
                               QcepObject *parent);
   virtual ~QxrdDetectorThread();
 
-  QxrdDetectorPtr detector() const;
+  QxrdDetectorWPtr detector() const;
   void shutdown();
 
   typedef enum {

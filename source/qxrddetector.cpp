@@ -43,6 +43,12 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::QxrdDetector(%p)\n", this);
   }
+
+  QxrdAcquisitionPtr acqs(m_Acquisition);
+
+  if (acqs) {
+    acqs->prop_DetectorCount()->incValue(1);
+  }
 }
 
 void QxrdDetector::initialize()
@@ -79,6 +85,11 @@ QxrdDetector::~QxrdDetector()
 //  if (m_DetectorControlWindow) {
 //    m_DetectorControlWindow->deleteLater();
 //  }
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    acq->prop_DetectorCount()->incValue(-1);
+  }
 }
 
 QxrdExperimentWPtr QxrdDetector::experiment()
@@ -223,12 +234,12 @@ void QxrdDetector::shutdownAcquisition()
 {
 }
 
-QScriptValue QxrdDetector::toScriptValue(QScriptEngine *engine, const QxrdDetectorPtr &det)
+QScriptValue QxrdDetector::toScriptValue(QScriptEngine *engine, const QxrdDetectorWPtr &det)
 {
   return engine->newQObject(det.data());
 }
 
-void QxrdDetector::fromScriptValue(const QScriptValue &obj, QxrdDetectorPtr &det)
+void QxrdDetector::fromScriptValue(const QScriptValue &obj, QxrdDetectorWPtr &det)
 {
   QObject *qobj = obj.toQObject();
 
@@ -236,7 +247,7 @@ void QxrdDetector::fromScriptValue(const QScriptValue &obj, QxrdDetectorPtr &det
     QxrdDetector *qdet = qobject_cast<QxrdDetector*>(qobj);
 
     if (qdet) {
-      det = QxrdDetectorPtr(qdet);
+      det = qdet->sharedFromThis();
     }
   }
 }

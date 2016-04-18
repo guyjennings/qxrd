@@ -46,7 +46,8 @@ void QxrdFileBrowserModelUpdaterThread::run()
   }
 
   m_Updater = QxrdFileBrowserModelUpdaterPtr(
-        new QxrdFileBrowserModelUpdater(m_Model, NULL));
+        new QxrdFileBrowserModelUpdater(m_Model, NULL),
+        &QObject::deleteLater);
 
   int rc = exec();
 

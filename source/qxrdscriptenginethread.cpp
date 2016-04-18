@@ -55,7 +55,8 @@ void QxrdScriptEngineThread::run()
 
   {
     QxrdScriptEnginePtr engine = QxrdScriptEnginePtr(
-          new QxrdScriptEngine(m_Application, m_Experiment));
+          new QxrdScriptEngine(m_Application, m_Experiment),
+          &QObject::deleteLater);
 
     if (engine) {
       engine -> initialize();

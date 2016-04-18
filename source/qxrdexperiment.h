@@ -163,8 +163,8 @@ private:
   QxrdCalibrantDSpacingsPtr       m_CalibrantDSpacings;
   QxrdCalibrantDSpacingsModelPtr  m_CalibrantDSpacingsModel;
   QxrdAcquisitionPtr              m_Acquisition;
-  QxrdDetectorThreadPtr           m_DetectorThread;
-  QxrdDetectorWPtr                m_Detector;
+//  QxrdDetectorThreadPtr           m_DetectorThread;
+//  QxrdDetectorWPtr                m_Detector;
   QxrdFileSaverThreadPtr          m_FileSaverThread;
   QxrdFileSaverWPtr               m_FileSaver;
 //  QxrdScriptEngineThreadPtr       m_ScriptEngineThread;

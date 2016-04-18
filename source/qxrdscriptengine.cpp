@@ -1856,7 +1856,7 @@ void QxrdScriptEngine::initialize()
 //                          QxrdCalibrantDSpacingVector::toScriptValue,
 //                          QxrdCalibrantDSpacingVector::fromScriptValue);
 
-  qRegisterMetaType<QxrdDetectorPtr>("QxrdDetectorPtr");
+  qRegisterMetaType<QxrdDetectorPtr>("QxrdDetectorWPtr");
   qScriptRegisterMetaType(this,
                           QxrdDetector::toScriptValue,
                           QxrdDetector::fromScriptValue);

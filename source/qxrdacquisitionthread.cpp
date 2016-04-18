@@ -50,7 +50,8 @@ void QxrdAcquisitionThread::run()
 
   {
     QxrdAcquisitionPtr acq = QxrdAcquisitionPtr(
-          new QxrdAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator));
+          new QxrdAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator),
+          &QObject::deleteLater);
 
     if (acq) {
       acq -> initialize();
