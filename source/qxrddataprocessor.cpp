@@ -19,7 +19,6 @@ QxrdDataProcessor::QxrdDataProcessor
     (QcepSettingsSaverWPtr saver,
      QxrdExperimentWPtr doc,
      QxrdAcquisitionWPtr acq,
-     QcepAllocatorWPtr allocator,
      QxrdFileSaverWPtr filesaver)
   : QxrdDataProcessorThreaded(saver, doc, acq, filesaver)
 {

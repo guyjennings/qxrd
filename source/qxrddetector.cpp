@@ -299,7 +299,7 @@ void QxrdDetector::openControlWindow()
                                         m_Experiment,
                                         m_Acquisition,
                                         sharedFromThis(),
-                                        m_Processor, NULL), &QObject::deleteLater);
+                                        m_Processor, NULL));
 
     QxrdDetectorProcessorPtr dp(m_Processor);
 

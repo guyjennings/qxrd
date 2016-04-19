@@ -132,7 +132,7 @@ private:
 
 private:
   QcepObjectNamer      m_ObjectNamer;
-  QcepSettingsSaverPtr m_Saver;
+  QcepSettingsSaverPtr m_AppSaver;
 
 public:
   Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)

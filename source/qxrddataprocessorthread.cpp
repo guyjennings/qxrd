@@ -9,10 +9,8 @@
 QxrdDataProcessorThread::QxrdDataProcessorThread(QcepSettingsSaverWPtr saver,
                                                  QxrdExperimentWPtr doc,
                                                  QxrdAcquisitionWPtr acq,
-                                                 QcepAllocatorWPtr allocator,
                                                  QxrdFileSaverWPtr filesaver)
   : QxrdThread(),
-    m_Allocator(allocator),
     m_FileSaver(filesaver),
     m_Acquisition(acq),
     m_Experiment(doc),
@@ -45,9 +43,7 @@ void QxrdDataProcessorThread::run()
     QxrdDataProcessorPtr proc = QxrdDataProcessorPtr(new QxrdDataProcessor(m_Saver,
                                                                            m_Experiment,
                                                                            m_Acquisition,
-                                                                           m_Allocator,
-                                                                           m_FileSaver),
-                                                     &QObject::deleteLater);
+                                                                           m_FileSaver));
 
     if (proc) {
       proc->initialize();

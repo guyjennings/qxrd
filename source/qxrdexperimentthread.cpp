@@ -45,7 +45,8 @@ QxrdExperimentThread::~QxrdExperimentThread()
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperiment(QString path, QxrdApplicationWPtr app, QSettings *settings)
 {
-  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(new QxrdExperimentThread(path, app, settings));
+  QxrdExperimentThreadPtr res = QxrdExperimentThreadPtr(
+        new QxrdExperimentThread(path, app, settings));
 
   res->start();
 

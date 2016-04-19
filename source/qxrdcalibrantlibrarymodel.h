@@ -9,7 +9,7 @@ class QxrdCalibrantLibraryModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  QxrdCalibrantLibraryModel(QxrdCalibrantLibraryPtr cal);
+  QxrdCalibrantLibraryModel(QxrdCalibrantLibraryWPtr cal);
   ~QxrdCalibrantLibraryModel();
 
   virtual int	           rowCount ( const QModelIndex & parent = QModelIndex() ) const;
@@ -34,7 +34,7 @@ public:
   void calibrantChanged(int n);
 
 private:
-  QxrdCalibrantLibraryPtr m_CalibrantLibrary;
+  QxrdCalibrantLibraryWPtr m_CalibrantLibrary;
 };
 
 #endif // QXRDCALIBRANTLIBRARYMODEL_H

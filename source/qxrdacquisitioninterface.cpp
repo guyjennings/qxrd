@@ -34,7 +34,8 @@ QxrdAcquisitionInterface::QxrdAcquisitionInterface(QcepSettingsSaverWPtr saver,
 void QxrdAcquisitionInterface::initialize()
 {
   m_ExecutionThread =
-      QxrdAcquisitionExecutionThreadPtr(new QxrdAcquisitionExecutionThread(sharedFromThis()));
+      QxrdAcquisitionExecutionThreadPtr(
+        new QxrdAcquisitionExecutionThread(sharedFromThis()));
 
   m_ExecutionThread->start();
 }

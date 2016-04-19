@@ -2,7 +2,7 @@
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdcalibrant.h"
 
-QxrdCalibrantLibraryModel::QxrdCalibrantLibraryModel(QxrdCalibrantLibraryPtr cal)
+QxrdCalibrantLibraryModel::QxrdCalibrantLibraryModel(QxrdCalibrantLibraryWPtr cal)
   : m_CalibrantLibrary(cal)
 {
 
@@ -19,7 +19,13 @@ int QxrdCalibrantLibraryModel::rowCount (const QModelIndex & parent) const
     return 0;
   }
 
-  return m_CalibrantLibrary->count();
+  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
+
+  if (lib) {
+    return lib->count();
+  }
+
+  return 0;
 }
 
 int QxrdCalibrantLibraryModel::columnCount(const QModelIndex & parent) const
@@ -33,66 +39,70 @@ int QxrdCalibrantLibraryModel::columnCount(const QModelIndex & parent) const
 
 QVariant QxrdCalibrantLibraryModel::data (const QModelIndex & index, int role) const
 {
-  if (index.row() < 0 || index.row() >= m_CalibrantLibrary->count()) {
-    return QVariant();
-  }
+  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
 
-  QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(index.row());
+  if (lib) {
+    if (index.row() < 0 || index.row() >= lib->count()) {
+      return QVariant();
+    }
 
-  if (cal) {
-    int col = index.column();
+    QxrdCalibrantPtr cal = lib->calibrant(index.row());
 
-    if (col == IsUsedColumn) {
-      if (role == Qt::CheckStateRole) {
-        if (cal->get_IsUsed()) {
-          return Qt::Checked;
-        } else {
-          return Qt::Unchecked;
+    if (cal) {
+      int col = index.column();
+
+      if (col == IsUsedColumn) {
+        if (role == Qt::CheckStateRole) {
+          if (cal->get_IsUsed()) {
+            return Qt::Checked;
+          } else {
+            return Qt::Unchecked;
+          }
         }
-      }
-    } else if (col == FlagsColumn) {
-      if (role == Qt::DecorationRole) {
-        if (cal->isLocked()) {
-          return QPixmap(":/images/lock-16x16.png");
+      } else if (col == FlagsColumn) {
+        if (role == Qt::DecorationRole) {
+          if (cal->isLocked()) {
+            return QPixmap(":/images/lock-16x16.png");
+          }
         }
-      }
-    } else if (col == NameColumn) {
-      if (role == Qt::DisplayRole) {
-        return cal->get_Name();
-      }
-    } else if (col == SymmetryColumn) {
-      if (role == Qt::DisplayRole) {
-        switch (cal->get_Symmetry()) {
-        case QxrdCalibrant::Hexagonal:
-          return "Hexagonal";
-          break;
-
-        case QxrdCalibrant::RHexagonal:
-          return "R-Hexagonal";
-          break;
-
-        case QxrdCalibrant::SimpleCubic:
-          return "Cubic";
-          break;
-
-        case QxrdCalibrant::BodyCenteredCubic:
-          return "BCC";
-          break;
-
-        case QxrdCalibrant::FaceCenteredCubic:
-          return "FCC";
-          break;
-
-        case QxrdCalibrant::DiamondCubic:
-          return "Diamond";
-          break;
+      } else if (col == NameColumn) {
+        if (role == Qt::DisplayRole) {
+          return cal->get_Name();
         }
-      }
-    } else if (col == DescriptionColumn) {
-      if (role == Qt::DisplayRole) {
-        return cal->get_Description();
-//      } else if (role==Qt::SizeHintRole) {
-//        return QSize(120,20);
+      } else if (col == SymmetryColumn) {
+        if (role == Qt::DisplayRole) {
+          switch (cal->get_Symmetry()) {
+          case QxrdCalibrant::Hexagonal:
+            return "Hexagonal";
+            break;
+
+          case QxrdCalibrant::RHexagonal:
+            return "R-Hexagonal";
+            break;
+
+          case QxrdCalibrant::SimpleCubic:
+            return "Cubic";
+            break;
+
+          case QxrdCalibrant::BodyCenteredCubic:
+            return "BCC";
+            break;
+
+          case QxrdCalibrant::FaceCenteredCubic:
+            return "FCC";
+            break;
+
+          case QxrdCalibrant::DiamondCubic:
+            return "Diamond";
+            break;
+          }
+        }
+      } else if (col == DescriptionColumn) {
+        if (role == Qt::DisplayRole) {
+          return cal->get_Description();
+          //      } else if (role==Qt::SizeHintRole) {
+          //        return QSize(120,20);
+        }
       }
     }
   }
@@ -141,34 +151,46 @@ QVariant QxrdCalibrantLibraryModel::headerData ( int section, Qt::Orientation or
 
 int QxrdCalibrantLibraryModel::isUsed(int n)
 {
-  QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(n);
+  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
 
-  if (cal) {
-    return cal->get_IsUsed();
-  } else {
-    return 0;
+  if (lib) {
+    QxrdCalibrantPtr cal = lib->calibrant(n);
+
+    if (cal) {
+      return cal->get_IsUsed();
+    }
   }
+
+  return 0;
 }
 
 void QxrdCalibrantLibraryModel::toggleIsUsed(int n)
 {
-  QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(n);
+  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
 
-  if (cal) {
-    cal->set_IsUsed(!cal->get_IsUsed());
+  if (lib) {
+    QxrdCalibrantPtr cal = lib->calibrant(n);
 
-    emit dataChanged(index(n,0), index(n,0));
+    if (cal) {
+      cal->set_IsUsed(!cal->get_IsUsed());
+
+      emit dataChanged(index(n,0), index(n,0));
+    }
   }
 }
 
 void QxrdCalibrantLibraryModel::setIsUsed(int n, int v)
 {
-  QxrdCalibrantPtr cal = m_CalibrantLibrary->calibrant(n);
+  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
 
-  if (cal) {
-    cal->set_IsUsed(v);
+  if (lib) {
+    QxrdCalibrantPtr cal = lib->calibrant(n);
 
-    emit dataChanged(index(n,0), index(n,0));
+    if (cal) {
+      cal->set_IsUsed(v);
+
+      emit dataChanged(index(n,0), index(n,0));
+    }
   }
 }
 

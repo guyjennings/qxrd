@@ -98,27 +98,27 @@ QStringList QxrdApplication::makeStringListFromArgs(int argc, char **argv)
 QxrdApplication::QxrdApplication(int &argc, char **argv) :
   QcepApplication(argc, argv),
   m_ObjectNamer(this, "application"),
-  m_Saver(QcepSettingsSaverPtr(
+  m_AppSaver(QcepSettingsSaverPtr(
             new QcepSettingsSaver(this))),
-  m_RecentExperiments(m_Saver, this, "recentExperiments", QStringList(), "Recent Experiments"),
-  m_RecentExperimentsSize(m_Saver, this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
-  m_CurrentExperiment(m_Saver, this, "currentExperiment", "", "Current Experiment"),
-  m_CurrentDirectory(m_Saver, this, "currentDirectory", QDir::homePath(), "Current Directory"),
+  m_RecentExperiments(m_AppSaver, this, "recentExperiments", QStringList(), "Recent Experiments"),
+  m_RecentExperimentsSize(m_AppSaver, this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
+  m_CurrentExperiment(m_AppSaver, this, "currentExperiment", "", "Current Experiment"),
+  m_CurrentDirectory(m_AppSaver, this, "currentDirectory", QDir::homePath(), "Current Directory"),
 //  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
-  m_Debug(m_Saver, this,"debug", 0, "Debug Level"),
-  m_OpenNew(QcepSettingsSaverPtr(), this,"openNew", 0, "Open a new experiment"),
-  m_FreshStart(QcepSettingsSaverPtr(), this,"freshStart", 0, "Do a Fresh Start"),
-  m_FileBrowserLimit(m_Saver, this, "fileBrowserLimit", 1000, "Max Number of Files in Browser Windows (0 = unlimited)"),
-  m_MessageWindowLines(m_Saver, this, "messageWindowLines", 1000, "Number of Lines in Message Window (0 = unlimited)"),
-  m_UpdateIntervalMsec(m_Saver, this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)"),
-  m_Argc(QcepSettingsSaverPtr(), this, "argc", argc, "Number of Command Line Arguments"),
-  m_Argv(QcepSettingsSaverPtr(), this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
-  m_GuiWanted(QcepSettingsSaverPtr(), this, "guiWanted", 1, "GUI Wanted?"),
-  m_StartDetectors(QcepSettingsSaverPtr(), this, "startDetectors", 1, "Start Detectors when opening experiments"),
-  m_CmdList(QcepSettingsSaverPtr(), this, "cmdList", QStringList(), "Commands to Execute"),
-  m_FileList(QcepSettingsSaverPtr(), this, "fileList", QStringList(), "Files to Process"),
-  m_LockerCount(QcepSettingsSaverPtr(), this, "lockerCount", 0, "Number of mutex locks taken"),
-  m_LockerRate(QcepSettingsSaverPtr(), this, "lockerRate", 0, "Mutex Locking Rate"),
+  m_Debug(m_AppSaver, this,"debug", 0, "Debug Level"),
+  m_OpenNew(QcepSettingsSaverWPtr(), this,"openNew", 0, "Open a new experiment"),
+  m_FreshStart(QcepSettingsSaverWPtr(), this,"freshStart", 0, "Do a Fresh Start"),
+  m_FileBrowserLimit(m_AppSaver, this, "fileBrowserLimit", 1000, "Max Number of Files in Browser Windows (0 = unlimited)"),
+  m_MessageWindowLines(m_AppSaver, this, "messageWindowLines", 1000, "Number of Lines in Message Window (0 = unlimited)"),
+  m_UpdateIntervalMsec(m_AppSaver, this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)"),
+  m_Argc(QcepSettingsSaverWPtr(), this, "argc", argc, "Number of Command Line Arguments"),
+  m_Argv(QcepSettingsSaverWPtr(), this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
+  m_GuiWanted(QcepSettingsSaverWPtr(), this, "guiWanted", 1, "GUI Wanted?"),
+  m_StartDetectors(QcepSettingsSaverWPtr(), this, "startDetectors", 1, "Start Detectors when opening experiments"),
+  m_CmdList(QcepSettingsSaverWPtr(), this, "cmdList", QStringList(), "Commands to Execute"),
+  m_FileList(QcepSettingsSaverWPtr(), this, "fileList", QStringList(), "Files to Process"),
+  m_LockerCount(QcepSettingsSaverWPtr(), this, "lockerCount", 0, "Number of mutex locks taken"),
+  m_LockerRate(QcepSettingsSaverWPtr(), this, "lockerRate", 0, "Mutex Locking Rate"),
   m_ExperimentCount(QcepSettingsSaverWPtr(), this, "experimentCount", 0, "Number of open experiments"),
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
@@ -238,7 +238,8 @@ bool QxrdApplication::init(int &argc, char **argv)
   }
 
   m_AllocatorThread = QcepAllocatorThreadPtr(
-        new QcepAllocatorThread(m_Saver));
+        new QcepAllocatorThread(m_AppSaver));
+
   m_AllocatorThread -> setObjectName("alloc");
   m_AllocatorThread -> start();
   m_Allocator = m_AllocatorThread -> allocator();
@@ -272,7 +273,7 @@ bool QxrdApplication::init(int &argc, char **argv)
     openWelcomeWindow();
   }
 
-  m_Saver->start();
+  m_AppSaver->start();
 
   return true;
 }
@@ -283,19 +284,19 @@ QxrdApplication::~QxrdApplication()
   printf("Deleting application\n");
 #endif
 
-  m_Saver->performSave();
+  m_AppSaver->performSave();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdApplication::~QxrdApplication(%p)\n", this);
   }
 
-  int nExp = get_ExperimentCount();
+//  int nExp = get_ExperimentCount();
 
-  while (nExp > 0) {
-    printf("Attempt to stop when %d experiments still existing\n", nExp);
-    QcepThread::sleep(5);
-    nExp = get_ExperimentCount();
-  }
+//  while (nExp > 0) {
+//    printf("Attempt to stop when %d experiments still existing\n", nExp);
+//    QcepThread::sleep(5);
+//    nExp = get_ExperimentCount();
+//  }
 
 //  int nExp = m_ExperimentThreads.count();
 

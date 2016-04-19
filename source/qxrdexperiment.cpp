@@ -99,10 +99,8 @@ QxrdExperiment::~QxrdExperiment()
   printf("Deleting experiment\n");
 #endif
 
-  QxrdApplicationPtr app(m_Application);
-
-  if (app && qcepDebug(DEBUG_APP)) {
-    app->printMessage("QxrdExperiment::~QxrdExperiment");
+  if (qcepDebug(DEBUG_APP)) {
+    printMessage("QxrdExperiment::~QxrdExperiment");
   }
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -113,6 +111,8 @@ QxrdExperiment::~QxrdExperiment()
 
   closeScanFile();
   closeLogFile();
+
+  QxrdApplicationPtr app(m_Application);
 
   if (app) {
     app->prop_ExperimentCount()->incValue(-1);
@@ -132,6 +132,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     m_FileSaverThread = QxrdFileSaverThreadPtr(
           new QxrdFileSaverThread(app->allocator()));
+
 //    m_FileSaverThread -> setObjectName("saver");
     m_FileSaverThread -> start();
     m_FileSaver = m_FileSaverThread -> fileSaver();
@@ -141,9 +142,9 @@ void QxrdExperiment::initialize(QSettings *settings)
     m_DataProcessor = QxrdDataProcessorPtr(
           new QxrdDataProcessor(m_SettingsSaver,
                                 sharedFromThis(),
-                                QxrdAcquisitionPtr(),
-                                app->allocator(),
+                                QxrdAcquisitionWPtr(),
                                 m_FileSaver));
+
     m_DataProcessor -> initialize();
 
     QxrdFileSaverPtr saver(m_FileSaver);
@@ -156,10 +157,8 @@ void QxrdExperiment::initialize(QSettings *settings)
     splashMessage("Initializing Data Acquisition");
 
     m_Acquisition = QxrdAcquisitionPtr(
-          new QxrdAcquisition(m_SettingsSaver,
-                              sharedFromThis(),
-                              m_DataProcessor,
-                              app->allocator()));
+          new QxrdAcquisition(m_SettingsSaver, sharedFromThis(), m_DataProcessor, app->allocator()));
+
     m_Acquisition -> initialize();
 
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
@@ -191,7 +190,8 @@ void QxrdExperiment::initialize(QSettings *settings)
     }
 
     m_Dataset      = QcepAllocator::newDataset("dataset");
-    m_DatasetModel = QcepDatasetModelPtr(new QcepDatasetModel(sharedFromThis(), m_DataProcessor, m_Dataset));
+    m_DatasetModel = QcepDatasetModelPtr(
+          new QcepDatasetModel(sharedFromThis(), m_DataProcessor, m_Dataset));
 
     m_DatasetModel -> newGroup("group1");
     m_DatasetModel -> newGroup("group2");
@@ -210,12 +210,14 @@ void QxrdExperiment::initialize(QSettings *settings)
     m_DatasetModel -> newColumn("group4/t", 1000);
     m_DatasetModel -> newColumn("group4/sdev", 1000);
 
-    m_WindowSettings = QxrdWindowSettingsPtr(new QxrdWindowSettings(m_SettingsSaver, NULL));
+    m_WindowSettings = QxrdWindowSettingsPtr(
+          new QxrdWindowSettings(m_SettingsSaver, NULL));
 
     splashMessage("Starting SPEC Server");
 
     m_ServerThread = QxrdServerThreadPtr(
           new QxrdServerThread(m_SettingsSaver, sharedFromThis(), "qxrd"));
+
 //    m_ServerThread -> setObjectName("server");
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
@@ -224,6 +226,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
           new QxrdSimpleServerThread(m_SettingsSaver, sharedFromThis(), "simpleserver"));
+
 //    m_SimpleServerThread -> setObjectName("smpsrv");
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
@@ -236,6 +239,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     m_ScriptEngine = QxrdScriptEnginePtr(
           new QxrdScriptEngine(app, sharedFromThis()));
+
     m_ScriptEngine -> initialize();
 
     QxrdServerPtr srv(m_Server);
@@ -356,7 +360,8 @@ void QxrdExperiment::openWindows()
                          m_Acquisition,
                          m_DataProcessor,
                          app->allocator(),
-                         NULL), &QObject::deleteLater);
+                         NULL),
+          &QObject::deleteLater);
 
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdAcquisitionPtr acq(m_Acquisition);

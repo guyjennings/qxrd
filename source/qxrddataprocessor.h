@@ -11,7 +11,6 @@ public:
   QxrdDataProcessor(QcepSettingsSaverWPtr saver,
                     QxrdExperimentWPtr doc,
                     QxrdAcquisitionWPtr acq,
-                    QcepAllocatorWPtr allocator,
                     QxrdFileSaverWPtr filesaver);
   ~QxrdDataProcessor();
 

@@ -34,6 +34,10 @@ QxrdDetectorThread::QxrdDetectorThread(QcepSettingsSaverWPtr saver,
   m_DetectorNumber(detNum),
   m_Parent(parent)
 {
+#ifndef QT_NODEBUG
+  printf("Detector thread constructed\n");
+#endif
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorThread::QxrdDetectorThread(%p)\n", this);
   }
@@ -43,6 +47,10 @@ QxrdDetectorThread::QxrdDetectorThread(QcepSettingsSaverWPtr saver,
 
 QxrdDetectorThread::~QxrdDetectorThread()
 {
+#ifndef QT_NODEBUG
+  printf("Detector thread destroyed\n");
+#endif
+
   if (qcepDebug(DEBUG_APP)) {
     QxrdExperimentPtr expt(m_Experiment);
 
@@ -51,7 +59,7 @@ QxrdDetectorThread::~QxrdDetectorThread()
     }
   }
 
-//  shutdown();
+  shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorThread::~QxrdDetectorThread(%p)\n", this);
@@ -213,8 +221,7 @@ void QxrdDetectorThread::run()
                                                       m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber,
-                                                      m_Parent),
-                            &QObject::deleteLater);
+                                                      m_Parent));
       break;
 
 #ifdef HAVE_PERKIN_ELMER
@@ -224,8 +231,7 @@ void QxrdDetectorThread::run()
                                                         m_Experiment,
                                                         m_Acquisition,
                                                         m_DetectorNumber,
-                                                        m_Parent),
-                            &QObject::deleteLater);
+                                                        m_Parent));
       break;
 #endif
 
@@ -236,8 +242,7 @@ void QxrdDetectorThread::run()
                                                     m_Experiment,
                                                     m_Acquisition,
                                                     m_DetectorNumber,
-                                                    m_Parent),
-                            &QObject::deleteLater);
+                                                    m_Parent));
       break;
       //#endif
 
@@ -248,8 +253,7 @@ void QxrdDetectorThread::run()
                                                       m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber,
-                                                      m_Parent),
-                            &QObject::deleteLater);
+                                                      m_Parent));
       break;
 #endif
 
@@ -259,8 +263,7 @@ void QxrdDetectorThread::run()
                                                         m_Experiment,
                                                         m_Acquisition,
                                                         m_DetectorNumber,
-                                                        m_Parent),
-                            &QObject::deleteLater);
+                                                        m_Parent));
       break;
     }
 
@@ -270,8 +273,7 @@ void QxrdDetectorThread::run()
                                                       m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber,
-                                                      m_Parent),
-                            &QObject::deleteLater);
+                                                      m_Parent));
     }
 
     if (det) {

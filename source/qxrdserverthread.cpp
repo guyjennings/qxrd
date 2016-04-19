@@ -55,8 +55,7 @@ void QxrdServerThread::run()
   }
 
   m_Server = QxrdServerPtr(
-        new QxrdServer(m_Saver, m_Experiment, m_Name),
-        &QObject::deleteLater);
+        new QxrdServer(m_Saver, m_Experiment, m_Name));
 
   int rc = exec();
 

@@ -11,7 +11,7 @@ class QxrdCalibrantDSpacingsModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryPtr cal, QxrdCalibrantDSpacingsPtr vec);
+  QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryWPtr cal, QxrdCalibrantDSpacingsWPtr vec);
   ~QxrdCalibrantDSpacingsModel();
 
   virtual QVariant	   data ( const QModelIndex & index, int role ) const;

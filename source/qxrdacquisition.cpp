@@ -71,9 +71,9 @@ QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
   }
 }
 
-QxrdAcquisitionPtr QxrdAcquisition::myself()
+QxrdAcquisitionWPtr QxrdAcquisition::myself()
 {
-  QxrdAcquisitionPtr me = qSharedPointerCast<QxrdAcquisition>(sharedFromThis());
+  QxrdAcquisitionWPtr me = qSharedPointerCast<QxrdAcquisition>(sharedFromThis());
 
 //  if (me == NULL) {
 //    printf("QxrdAcquisition::myself returns NULL\n");
@@ -164,13 +164,13 @@ QxrdAcquisition::~QxrdAcquisition()
     }
   }
 
-  int nDet = get_DetectorCount();
+//  int nDet = get_DetectorCount();
 
-  while (nDet > 0) {
-    printf("Attempting to stop acquisition while %d detectors still present\n", nDet);
-    QcepThread::sleep(5);
-    nDet = get_DetectorCount();
-  }
+//  while (nDet > 0) {
+//    printf("Attempting to stop acquisition while %d detectors still present\n", nDet);
+//    QcepThread::sleep(5);
+//    nDet = get_DetectorCount();
+//  }
 }
 
 QxrdExperimentWPtr QxrdAcquisition::experiment()
@@ -295,13 +295,8 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
 
     int detType = settings->value("detectorType", 0).toInt();
 
-    QxrdDetectorThreadPtr detThread =
-        QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
-                                                     experiment(),
-                                                     myself(),
-                                                     detType,
-                                                     i,
-                                                     this));
+    QxrdDetectorThreadPtr detThread = QxrdDetectorThreadPtr(
+          new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, i, this));
 
     if (detThread) {
       detThread->start();
@@ -339,13 +334,8 @@ void QxrdAcquisition::appendDetector(int detType)
   } else {
     int nDet = get_DetectorCount();
 
-    QxrdDetectorThreadPtr detThread =
-        QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
-                                                     experiment(),
-                                                     myself(),
-                                                     detType,
-                                                     nDet,
-                                                     this));
+    QxrdDetectorThreadPtr detThread = QxrdDetectorThreadPtr(
+          new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, nDet, this));
 
     if (detThread) {
       detThread->start();
@@ -377,13 +367,9 @@ void QxrdAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
       if (detThread==NULL || detector==NULL) {
         int detType = proxy->detectorType();
 
-       detThread =
-            QxrdDetectorThreadPtr(new QxrdDetectorThread(m_Saver,
-                                                         experiment(),
-                                                         myself(),
-                                                         detType,
-                                                         nDet,
-                                                         this));
+       detThread = QxrdDetectorThreadPtr(
+             new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, nDet, this));
+
        detThread->start();
 
        detector = detThread->detector();
@@ -457,10 +443,10 @@ void QxrdAcquisition::onMemorySizeChanged(qint64 newMB)
   QcepAllocator::changedAvailableBytes(newMB*QcepAllocator::MegaBytes);
 }
 
-QcepAllocatorWPtr QxrdAcquisition::allocator() const
-{
-  return m_Allocator;
-}
+//QcepAllocatorWPtr QxrdAcquisition::allocator() const
+//{
+//  return m_Allocator;
+//}
 
 bool QxrdAcquisition::sanityCheckCommon()
 {

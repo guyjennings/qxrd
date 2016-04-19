@@ -7,7 +7,7 @@
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
     int chnum, QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra) :
   QcepObject(tr("extraChannel(%1)").arg(chnum), NULL),
-  m_ChannelNumber(QcepSettingsSaverPtr(), this, "channelNumber", chnum, "Extra Input Channel Number"),
+  m_ChannelNumber(QcepSettingsSaverWPtr(), this, "channelNumber", chnum, "Extra Input Channel Number"),
   m_Enabled(saver, this, "enabled", 1, "Enabled?"),
   m_Plotted(saver, this, "plotted", 1, "Plotted?"),
   m_ChannelName(saver, this, "channelName", "", "NIDAQ name of channel"),
@@ -23,7 +23,7 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
   m_TriggerMode(saver, this, "triggerMode", 0, "Trigger Mode (0 = None, 1 = +Edge, 2 = -Edge, 3 = +Level, 4 = -Level)"),
   m_TriggerLevel(saver, this, "triggerLevel", 0.0, "Trigger Level (in Volts)"),
   m_TriggerHysteresis(saver, this, "triggerHysteresis", 0.0, "Trigger Hysteresis (in Volts)"),
-  m_PhysicalChannel(QcepSettingsSaverPtr(), this, "physicalChannel", 0, "Physical Channel Number"),
+  m_PhysicalChannel(QcepSettingsSaverWPtr(), this, "physicalChannel", 0, "Physical Channel Number"),
   m_Value(QcepSettingsSaverWPtr(), this, "value", 0.0, "Current Value of Channel"),
   m_Triggered(QcepSettingsSaverWPtr(), this, "triggered", 0, "Was channel triggered?"),
   m_NLow(QcepSettingsSaverWPtr(), this, "nLow", 0, "Number of untriggered data points"),

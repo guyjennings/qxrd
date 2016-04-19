@@ -117,7 +117,7 @@ protected:
   QxrdExperimentWPtr experiment();
   QxrdDataProcessorWPtr dataProcessor();
 
-  QxrdAcquisitionPtr myself();
+  QxrdAcquisitionWPtr myself();
 
 protected slots:
   void onIdleTimeout();

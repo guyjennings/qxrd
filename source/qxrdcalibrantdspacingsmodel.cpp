@@ -1,7 +1,7 @@
 #include "qxrdcalibrantdspacingsmodel.h"
 #include "qxrdcalibrantlibrary.h"
 
-QxrdCalibrantDSpacingsModel::QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryPtr cal, QxrdCalibrantDSpacingsPtr vec)
+QxrdCalibrantDSpacingsModel::QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryWPtr cal, QxrdCalibrantDSpacingsWPtr vec)
   : m_CalibrantLibrary(cal),
     m_CalibrantDSpacings(vec)
 {

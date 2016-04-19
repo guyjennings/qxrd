@@ -18,7 +18,6 @@ public:
   QxrdDataProcessorThread(QcepSettingsSaverWPtr saver,
                           QxrdExperimentWPtr doc,
                           QxrdAcquisitionWPtr acq,
-                          QcepAllocatorWPtr allocator,
                           QxrdFileSaverWPtr filesaver);
 
   ~QxrdDataProcessorThread();
@@ -31,7 +30,6 @@ protected:
   void run();
 
 private:
-  QcepAllocatorWPtr       m_Allocator;
   QxrdFileSaverWPtr       m_FileSaver;
   QxrdAcquisitionWPtr     m_Acquisition;
   QxrdExperimentWPtr      m_Experiment;
