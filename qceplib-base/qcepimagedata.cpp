@@ -545,7 +545,7 @@ void QcepImageData<T>::dumpPixels(int x0, int y0, int x1, int y1)
 template <typename T>
 void QcepImageData<T>::resize(int width, int height)
 {
-  QcepImageData<T> temp(QcepSettingsSaverPtr(), get_Name(), get_Width(), get_Height(), 0);
+  QcepImageData<T> temp(QcepSettingsSaverWPtr(), get_Name(), get_Width(), get_Height(), 0);
 
   int oldwidth = get_Width();
   int oldheight= get_Height();

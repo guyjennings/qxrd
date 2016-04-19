@@ -11,12 +11,12 @@ class QcepDatasetBrowserDialog : public QDockWidget, public Ui::QcepDatasetBrows
   Q_OBJECT
 
 public:
-  explicit QcepDatasetBrowserDialog(QcepExperimentWPtr expt, QcepDatasetModelPtr ds, QWidget *parent = 0);
+  explicit QcepDatasetBrowserDialog(QcepExperimentWPtr expt, QcepDatasetModelWPtr ds, QWidget *parent = 0);
   virtual ~QcepDatasetBrowserDialog();
 
 private:
   QcepExperimentWPtr  m_Experiment;
-  QcepDatasetModelPtr m_DatasetModel;
+  QcepDatasetModelWPtr m_DatasetModel;
 };
 
 #endif // QCEPDATASETBROWSERDIALOG_H

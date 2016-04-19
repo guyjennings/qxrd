@@ -17,15 +17,15 @@ static QcepAllocator *g_Allocator = NULL;
 //static qint64         g_AvailableMemory = 0;
 
 QcepAllocator::QcepAllocator
-(QcepSettingsSaverPtr saver)
+(QcepSettingsSaverWPtr saver)
   : QcepObject("allocator", NULL),
     m_Mutex(QMutex::Recursive),
 //    m_AllocatedMemoryMB(0),
     m_TotalBufferSizeMB32(saver, this,"totalBufferSizeMB32", 800, "Maximum Image Memory in 32 bit system (MB)"),
     m_TotalBufferSizeMB64(saver, this,"totalBufferSizeMB64", 2000,"Maximum Image Memory in 64 bit system (MB)"),
     m_Reserve(saver, this,"reserve",100, "Extra Reserved Memory (MB)"),
-    m_AvailableBytes(QcepSettingsSaverPtr(), this, "availableBytes", 0, "Total Available Data Memory (Bytes)"),
-    m_AllocatedBytes(QcepSettingsSaverPtr(), this, "allocatedBytes", 0, "Allocated Data Memory (Bytes)")
+    m_AvailableBytes(QcepSettingsSaverWPtr(), this, "availableBytes", 0, "Total Available Data Memory (Bytes)"),
+    m_AllocatedBytes(QcepSettingsSaverWPtr(), this, "allocatedBytes", 0, "Allocated Data Memory (Bytes)")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing allocator\n");
@@ -143,7 +143,7 @@ QcepInt16ImageDataPtr QcepAllocator::newInt16Image(QString name, int width, int 
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, int16Size(width, height))) {
-      QcepInt16ImageDataPtr res(new QcepInt16ImageData(QcepSettingsSaverPtr(), name, width, height, 0));
+      QcepInt16ImageDataPtr res(new QcepInt16ImageData(QcepSettingsSaverWPtr(), name, width, height, 0));
 
       if (res) {
         res->moveToThread(NULL);
@@ -170,7 +170,7 @@ QcepInt32ImageDataPtr QcepAllocator::newInt32Image(QString name, int width, int 
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, int32Size(width, height))) {
-      QcepInt32ImageDataPtr res(new QcepInt32ImageData(QcepSettingsSaverPtr(), name, width, height, 0));
+      QcepInt32ImageDataPtr res(new QcepInt32ImageData(QcepSettingsSaverWPtr(), name, width, height, 0));
 
       if (res) {
         res->moveToThread(NULL);
@@ -197,7 +197,7 @@ QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(QString name, int width, in
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, doubleSize(width, height))) {
-      QcepDoubleImageDataPtr res(new QcepDoubleImageData(QcepSettingsSaverPtr(), name, width, height, 0));
+      QcepDoubleImageDataPtr res(new QcepDoubleImageData(QcepSettingsSaverWPtr(), name, width, height, 0));
 
       if (res) {
         res -> moveToThread(NULL);
@@ -224,7 +224,7 @@ QcepMaskDataPtr QcepAllocator::newMask(QString name, int width, int height, int 
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, maskSize(width, height))) {
-      QcepMaskDataPtr res(new QcepMaskData(QcepSettingsSaverPtr(), name, width, height, def));
+      QcepMaskDataPtr res(new QcepMaskData(QcepSettingsSaverWPtr(), name, width, height, def));
 
       if (res) {
         res->moveToThread(NULL);
@@ -251,7 +251,7 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QString name, int size, A
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, integratedSize(size))) {
-      QcepIntegratedDataPtr res(new QcepIntegratedData(QcepSettingsSaverPtr(),
+      QcepIntegratedDataPtr res(new QcepIntegratedData(QcepSettingsSaverWPtr(),
                                                        name,
                                                        size));
 

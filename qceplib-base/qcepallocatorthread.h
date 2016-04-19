@@ -11,7 +11,7 @@ class QcepAllocatorThread : public QcepThread
   Q_OBJECT
 
 public:
-  QcepAllocatorThread(QcepSettingsSaverPtr saver);
+  QcepAllocatorThread(QcepSettingsSaverWPtr saver);
   ~QcepAllocatorThread();
 
   void shutdown();
@@ -22,8 +22,8 @@ protected:
   void run();
 
 private:
-  QcepAllocatorPtr     m_Allocator;
-  QcepSettingsSaverPtr m_Saver;
+  QcepAllocatorPtr      m_Allocator;
+  QcepSettingsSaverWPtr m_Saver;
 };
 
 #endif // QCEPALLOCATORTHREAD_H

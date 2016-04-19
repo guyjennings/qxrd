@@ -13,16 +13,16 @@ class QcepDataExportCommand : public QcepObject
   Q_OBJECT
 
 public:
-  QcepDataExportCommand(QcepDatasetModelPtr model, const QModelIndexList &idx, QString file);
+  QcepDataExportCommand(QcepDatasetModelWPtr model, const QModelIndexList &idx, QString file);
 
   bool exec();
 
 private:
-  QcepDatasetModelPtr         m_Model;
+  QcepDatasetModelWPtr         m_Model;
   QModelIndexList             m_Indexes;
   QString                     m_File;
-  QcepExperimentPtr           m_Experiment;
-  QcepDataExportParametersPtr m_Parameters;
+  QcepExperimentWPtr          m_Experiment;
+  QcepDataExportParametersWPtr m_Parameters;
 };
 
 #endif // QCEPDATAEXPORTCOMMAND_H

@@ -51,7 +51,7 @@ void QcepDatasetBrowserView::setExperiment(QcepExperimentWPtr expt)
   m_Experiment = expt;
 }
 
-void QcepDatasetBrowserView::setDatasetModel(QcepDatasetModelPtr model)
+void QcepDatasetBrowserView::setDatasetModel(QcepDatasetModelWPtr model)
 {
   m_DatasetModel = model;
   setModel(m_DatasetModel.data());
@@ -64,10 +64,11 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
   QModelIndex index = indexAt(pt);
 
   QcepExperimentPtr expt(m_Experiment);
+  QcepDatasetModelPtr model(m_DatasetModel);
 
-  if (expt) {
+  if (expt && model) {
     if (qcepDebug(DEBUG_DATABROWSER)) {
-      expt->printMessage(tr("Custom context menu clicked at: %1").arg(m_DatasetModel->indexDescription(index)));
+      expt->printMessage(tr("Custom context menu clicked at: %1").arg(model->indexDescription(index)));
     }
 
     QModelIndexList indexes = selectionModel()->selectedRows();
@@ -85,19 +86,19 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     if (nSel == 1) {
       QModelIndex idx = indexes.value(0);
 
-      obj = m_DatasetModel->item(idx);
-      grp = m_DatasetModel->group(idx);
-      col = m_DatasetModel->column(idx);
-      scn = m_DatasetModel->columnScan(idx);
-      img = m_DatasetModel->image(idx);
+      obj = model->item(idx);
+      grp = model->group(idx);
+      col = model->column(idx);
+      scn = model->columnScan(idx);
+      img = model->image(idx);
 
       if (obj) {
         prn = obj->parentItem();
         psc = qSharedPointerDynamicCast<QcepDataColumnScan>(prn);
       }
     } else if (nSel == 0) {
-      obj = m_DatasetModel->item(QModelIndex());
-      grp = m_DatasetModel->group(QModelIndex());
+      obj = model->item(QModelIndex());
+      grp = model->group(QModelIndex());
     }
 
     QMenu menu(NULL, NULL);
@@ -105,7 +106,7 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     QString names;
 
     for (int i=0; i<nSel; i++) {
-      QcepDataObjectPtr o = m_DatasetModel->item(indexes.value(i));
+      QcepDataObjectPtr o = model->item(indexes.value(i));
 
       if (i != 0) {
         names += ", ";
@@ -258,45 +259,57 @@ void QcepDatasetBrowserView::onDoubleClicked(QModelIndex idx)
 
 void QcepDatasetBrowserView::openGraph(const QModelIndexList &idx)
 {
-  for (int i=0; i<idx.count(); i++) {
-    QcepDataObjectPtr obj = m_DatasetModel -> item(idx.value(i));
+  QcepDatasetModelPtr model(m_DatasetModel);
 
-    QcepExperimentPtr expt(m_Experiment);
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      QcepDataObjectPtr obj = model -> item(idx.value(i));
 
-    if (obj && expt) {
-      QcepDataObjectGraphWindow *gw = new QcepDataObjectGraphWindow(expt, obj);
+      QcepExperimentPtr expt(m_Experiment);
 
-      gw->show();
+      if (obj && expt) {
+        QcepDataObjectGraphWindow *gw = new QcepDataObjectGraphWindow(expt, obj);
+
+        gw->show();
+      }
     }
   }
 }
 
 void QcepDatasetBrowserView::openSpreadsheet(const QModelIndexList &idx)
 {
-  for (int i=0; i<idx.count(); i++) {
-    QcepDataObjectPtr obj = m_DatasetModel -> item(idx.value(i));
+  QcepDatasetModelPtr model(m_DatasetModel);
 
-    QcepExperimentPtr expt(m_Experiment);
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      QcepDataObjectPtr obj = model -> item(idx.value(i));
 
-    if (obj && expt) {
-      QcepDataObjectSpreadsheetWindow *sw = new QcepDataObjectSpreadsheetWindow(expt, obj);
+      QcepExperimentPtr expt(m_Experiment);
 
-      sw->show();
+      if (obj && expt) {
+        QcepDataObjectSpreadsheetWindow *sw = new QcepDataObjectSpreadsheetWindow(expt, obj);
+
+        sw->show();
+      }
     }
   }
 }
 
 void QcepDatasetBrowserView::openProperties(const QModelIndexList &idx)
 {
-  for (int i=0; i<idx.count(); i++) {
-    QcepDataObjectPtr obj = m_DatasetModel -> item(idx.value(i));
+  QcepDatasetModelPtr model(m_DatasetModel);
 
-    QcepExperimentPtr expt(m_Experiment);
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      QcepDataObjectPtr obj = model -> item(idx.value(i));
 
-    if (obj && expt) {
-      QcepDataObjectPropertiesWindow *pw = new QcepDataObjectPropertiesWindow(expt, obj);
+      QcepExperimentPtr expt(m_Experiment);
 
-      pw->show();
+      if (obj && expt) {
+        QcepDataObjectPropertiesWindow *pw = new QcepDataObjectPropertiesWindow(expt, obj);
+
+        pw->show();
+      }
     }
   }
 }
@@ -395,26 +408,29 @@ void QcepDatasetBrowserView::saveData(const QModelIndexList &idx)
 void QcepDatasetBrowserView::deleteData(const QModelIndexList &idx)
 {
   QString name;
+  QcepDatasetModelPtr model(m_DatasetModel);
 
-  for (int i=0; i<idx.count(); i++) {
-    QcepDataObjectPtr obj = m_DatasetModel -> item(idx.value(i));
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      QcepDataObjectPtr obj = model -> item(idx.value(i));
 
-    if (obj) {
-      if (i != 0) {
-        name += ", ";
+      if (obj) {
+        if (i != 0) {
+          name += ", ";
+        }
+
+        name += obj->get_Name();
       }
-
-      name += obj->get_Name();
     }
-  }
 
-  if (name.length() > 0) {
-    if (QMessageBox::question(NULL, "Delete Object(s)?",
-                              tr("Do you really want to delete %1").arg(name),
-                              QMessageBox::Ok | QMessageBox::No, QMessageBox::No) == QMessageBox::Ok) {
+    if (name.length() > 0) {
+      if (QMessageBox::question(NULL, "Delete Object(s)?",
+                                tr("Do you really want to delete %1").arg(name),
+                                QMessageBox::Ok | QMessageBox::No, QMessageBox::No) == QMessageBox::Ok) {
 
-      for (int i=0; i<idx.count(); i++) {
-        m_DatasetModel->remove(idx.at(i));
+        for (int i=0; i<idx.count(); i++) {
+          model->remove(idx.at(i));
+        }
       }
     }
   }
@@ -422,113 +438,157 @@ void QcepDatasetBrowserView::deleteData(const QModelIndexList &idx)
 
 void QcepDatasetBrowserView::concatenateData(const QModelIndex &idx)
 {
-  QcepDatasetSelectionDialog dlg("Concatenate to %1", m_DatasetModel, idx);
+  QcepDatasetModelPtr model(m_DatasetModel);
 
-  if (dlg.exec() == QDialog::Accepted) {
-    if (dlg.constantChosen()) {
-      m_DatasetModel->concatenateData(idx, dlg.constantValue());
-    } else {
-      m_DatasetModel->concatenateData(idx, dlg.selectedIndexes());
+  if (model) {
+    QcepDatasetSelectionDialog dlg("Concatenate to %1", model, idx);
+
+    if (dlg.exec() == QDialog::Accepted) {
+      if (dlg.constantChosen()) {
+        model->concatenateData(idx, dlg.constantValue());
+      } else {
+        model->concatenateData(idx, dlg.selectedIndexes());
+      }
     }
   }
 }
 
 void QcepDatasetBrowserView::addData(const QModelIndex &idx)
 {
-  QcepDatasetSelectionDialog dlg("Add to %1", m_DatasetModel, idx);
+  QcepDatasetModelPtr model(m_DatasetModel);
 
-  if (dlg.exec() == QDialog::Accepted) {
-    if (dlg.constantChosen()) {
-      m_DatasetModel->addData(idx, dlg.constantValue());
-    } else {
-      m_DatasetModel->addData(idx, dlg.selectedIndexes());
+  if (model) {
+    QcepDatasetSelectionDialog dlg("Add to %1", model, idx);
+
+    if (dlg.exec() == QDialog::Accepted) {
+      if (dlg.constantChosen()) {
+        model->addData(idx, dlg.constantValue());
+      } else {
+        model->addData(idx, dlg.selectedIndexes());
+      }
     }
   }
 }
 
 void QcepDatasetBrowserView::subtractData(const QModelIndex &idx)
 {
-  QcepDatasetSelectionDialog dlg("Subtract from %1", m_DatasetModel, idx);
+  QcepDatasetModelPtr model(m_DatasetModel);
 
-  if (dlg.exec() == QDialog::Accepted) {
-    if (dlg.constantChosen()) {
-      m_DatasetModel->subtractData(idx, dlg.constantValue());
-    } else {
-      m_DatasetModel->subtractData(idx, dlg.selectedIndexes());
+  if (model) {
+    QcepDatasetSelectionDialog dlg("Subtract from %1", model, idx);
+
+    if (dlg.exec() == QDialog::Accepted) {
+      if (dlg.constantChosen()) {
+        model->subtractData(idx, dlg.constantValue());
+      } else {
+        model->subtractData(idx, dlg.selectedIndexes());
+      }
     }
   }
 }
 
 void QcepDatasetBrowserView::multiplyData(const QModelIndex &idx)
 {
-  QcepDatasetSelectionDialog dlg("Multiply %1 by", m_DatasetModel, idx);
+  QcepDatasetModelPtr model(m_DatasetModel);
 
-  if (dlg.exec() == QDialog::Accepted) {
-    if (dlg.constantChosen()) {
-      m_DatasetModel->multiplyData(idx, dlg.constantValue());
-    } else {
-      m_DatasetModel->multiplyData(idx, dlg.selectedIndexes());
+  if (model) {
+    QcepDatasetSelectionDialog dlg("Multiply %1 by", model, idx);
+
+    if (dlg.exec() == QDialog::Accepted) {
+      if (dlg.constantChosen()) {
+        model->multiplyData(idx, dlg.constantValue());
+      } else {
+        model->multiplyData(idx, dlg.selectedIndexes());
+      }
     }
   }
 }
 
 void QcepDatasetBrowserView::divideData(const QModelIndex &idx)
 {
-  QcepDatasetSelectionDialog dlg("Divide %1 by", m_DatasetModel, idx);
+  QcepDatasetModelPtr model(m_DatasetModel);
 
-  if (dlg.exec() == QDialog::Accepted) {
-    if (dlg.constantChosen()) {
-      m_DatasetModel->divideData(idx, dlg.constantValue());
-    } else {
-      m_DatasetModel->divideData(idx, dlg.selectedIndexes());
+  if (model) {
+    QcepDatasetSelectionDialog dlg("Divide %1 by", model, idx);
+
+    if (dlg.exec() == QDialog::Accepted) {
+      if (dlg.constantChosen()) {
+        model->divideData(idx, dlg.constantValue());
+      } else {
+        model->divideData(idx, dlg.selectedIndexes());
+      }
     }
   }
 }
 
 void QcepDatasetBrowserView::integrateData(const QModelIndexList &idx)
 {
-  for (int i=0; i<idx.count(); i++) {
-    m_DatasetModel->integrate(idx.value(i));
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      model->integrate(idx.value(i));
+    }
   }
 }
 
 void QcepDatasetBrowserView::polarTransformData(const QModelIndexList &idx)
 {
-  for (int i=0; i<idx.count(); i++) {
-    m_DatasetModel->polarTransform(idx.value(i));
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      model->polarTransform(idx.value(i));
+    }
   }
 }
 
 void QcepDatasetBrowserView::polarIntegrateData(const QModelIndexList &idx)
 {
-  for (int i=0; i<idx.count(); i++) {
-    m_DatasetModel->polarIntegrate(idx.value(i));
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      model->polarIntegrate(idx.value(i));
+    }
   }
 }
 
 void QcepDatasetBrowserView::integrateParameters(const QModelIndexList &idx)
 {
-  if (m_DatasetModel->integrateParameters()) {
-    for (int i=0; i<idx.count(); i++) {
-      m_DatasetModel->integrate(idx.value(i));
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    if (model->integrateParameters()) {
+      for (int i=0; i<idx.count(); i++) {
+        model->integrate(idx.value(i));
+      }
     }
   }
 }
 
 void QcepDatasetBrowserView::polarTransformParameters(const QModelIndexList &idx)
 {
-  if (m_DatasetModel->polarTransformParameters()) {
-    for (int i=0; i<idx.count(); i++) {
-      m_DatasetModel->polarTransform(idx.value(i));
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    if (model->polarTransformParameters()) {
+      for (int i=0; i<idx.count(); i++) {
+        model->polarTransform(idx.value(i));
+      }
     }
   }
 }
 
 void QcepDatasetBrowserView::polarIntegrateParameters(const QModelIndexList &idx)
 {
-  if (m_DatasetModel->polarIntegrateParameters()) {
-    for (int i=0; i<idx.count(); i++) {
-      m_DatasetModel->polarIntegrate(idx.value(i));
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    if (model->polarIntegrateParameters()) {
+      for (int i=0; i<idx.count(); i++) {
+        model->polarIntegrate(idx.value(i));
+      }
     }
   }
 }

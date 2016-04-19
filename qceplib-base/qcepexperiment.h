@@ -26,8 +26,8 @@ public slots:
   QString defaultExperimentFileName(QString path) const;
   QString defaultExperimentName(QString path) const;
 
-  QcepDataExportParametersPtr dataExportParameters();
-  QcepDataImportParametersPtr dataImportParameters();
+  QcepDataExportParametersWPtr dataExportParameters();
+  QcepDataImportParametersWPtr dataImportParameters();
 
 public:
   QUndoStack *undoStack();

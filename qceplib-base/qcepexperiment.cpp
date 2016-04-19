@@ -9,9 +9,9 @@ QcepExperiment::QcepExperiment(QString path, QString name, QcepObject *parent) :
   QcepObject(name, parent),
   m_SettingsSaver(new QcepSettingsSaver(this)),
   m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1, "Kind of Experiment"),
-  m_ExperimentDirectory(QcepSettingsSaverPtr(), this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
-  m_ExperimentFileName(QcepSettingsSaverPtr(), this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),
-  m_ExperimentName(QcepSettingsSaverPtr(), this, "experimentName", defaultExperimentName(path), "Experiment Name"),
+  m_ExperimentDirectory(QcepSettingsSaverWPtr(), this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
+  m_ExperimentFileName(QcepSettingsSaverWPtr(), this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),
+  m_ExperimentName(QcepSettingsSaverWPtr(), this, "experimentName", defaultExperimentName(path), "Experiment Name"),
   m_ExperimentDescription(m_SettingsSaver, this, "experimentDescription", "", "Experiment Description"),
   m_NewGroupName(m_SettingsSaver, this, "newGroupName", "group", "Default name of newly created data group"),
   m_NewScanName(m_SettingsSaver, this, "newScanName", "scan", "Default name of newly created scans"),
@@ -91,12 +91,12 @@ QUndoStack *QcepExperiment::undoStack()
   return &m_UndoStack;
 }
 
-QcepDataExportParametersPtr QcepExperiment::dataExportParameters()
+QcepDataExportParametersWPtr QcepExperiment::dataExportParameters()
 {
   return m_DataExportParameters;
 }
 
-QcepDataImportParametersPtr QcepExperiment::dataImportParameters()
+QcepDataImportParametersWPtr QcepExperiment::dataImportParameters()
 {
   return m_DataImportParameters;
 }

@@ -14,7 +14,7 @@ public:
   QcepDatasetBrowserView(QWidget *parent = 0);
 
   void setExperiment(QcepExperimentWPtr expt);
-  void setDatasetModel(QcepDatasetModelPtr model);
+  void setDatasetModel(QcepDatasetModelWPtr model);
 
 private slots:
   void onCustomContextMenuRequested(QPoint pt);
@@ -44,8 +44,8 @@ private slots:
   void deleteData(const QModelIndexList &idx);
 
 private:
-  QcepExperimentWPtr  m_Experiment;
-  QcepDatasetModelPtr m_DatasetModel;
+  QcepExperimentWPtr   m_Experiment;
+  QcepDatasetModelWPtr m_DatasetModel;
 };
 
 #endif // QCEPDATASETBROWSERVIEW_H

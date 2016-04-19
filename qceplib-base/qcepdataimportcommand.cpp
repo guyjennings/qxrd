@@ -7,7 +7,7 @@
 #include "qcepallocator.h"
 #include <QtConcurrentRun>
 
-QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelPtr model, const QModelIndexList &idx, QStringList files) :
+QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelWPtr model, const QModelIndexList &idx, QStringList files) :
   QcepObject("dataExport", NULL),
   m_Model(model),
   m_Indexes(idx),

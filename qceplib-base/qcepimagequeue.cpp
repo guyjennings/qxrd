@@ -5,8 +5,8 @@
 
 template <typename T>
 QcepImageQueue<T>::QcepImageQueue(QString name)
-  : m_NRows(QcepSettingsSaverPtr(), NULL, "nRows", 2048, "Number of Rows in Queued Images"),
-    m_NCols(QcepSettingsSaverPtr(), NULL, "nCols", 2048, "Number of Cols in Queued Images"),
+  : m_NRows(QcepSettingsSaverWPtr(), NULL, "nRows", 2048, "Number of Rows in Queued Images"),
+    m_NCols(QcepSettingsSaverWPtr(), NULL, "nCols", 2048, "Number of Cols in Queued Images"),
     m_Name(name)
 {
   if (g_Application && qcepDebug(DEBUG_QUEUES)) {
