@@ -676,6 +676,7 @@ void QxrdApplication::savePreferences(QString path)
 void QxrdApplication::possiblyQuit()
 {
   if (wantToQuit()) {
+    finish();
     quit();
   }
 }
