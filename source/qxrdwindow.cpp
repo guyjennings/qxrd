@@ -119,12 +119,14 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   if (app && qcepDebug(DEBUG_APP)) {
     app->printMessage("QxrdWindow::QxrdWindow");
   }
+
+  setupUi(this);
+
+  setAttribute(Qt::WA_DeleteOnClose, false);
 }
 
 void QxrdWindow::initialize()
 {
-  setupUi(this);
-
   QxrdApplicationPtr app(m_Application);
   QxrdExperimentPtr expt(m_Experiment);
   QxrdWindowSettingsPtr set(m_WindowSettings);
@@ -136,37 +138,43 @@ void QxrdWindow::initialize()
   QxrdAcquisitionPtr acq(m_Acquisition);
   QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  if (acq) {
-    m_AcquisitionDialog = acq -> controlPanel(sharedFromThis());
-    m_AcquisitionScalerDialog = new QxrdAcquisitionScalerDialog(m_Acquisition, this);
-    m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(set->synchronizedAcquisitionDialogSettings(), this, m_Acquisition);
-    m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
-  }
+  m_AcquisitionDialog = new QxrdAcquisitionDialog(m_Experiment,
+                                                  sharedFromThis(),
+                                                  m_Acquisition,
+                                                  m_DataProcessor,
+                                                  this);
+
+  m_AcquisitionScalerDialog = new QxrdAcquisitionScalerDialog(m_Acquisition, this);
+  m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(set->synchronizedAcquisitionDialogSettings(), this, m_Acquisition);
+  m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
 
   m_DisplayDialog      = new QxrdDisplayDialog(this);
 
   if (proc) {
     m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
     m_DistortionCorrectionDialog = new QxrdDistortionCorrectionDialog(proc->distortionCorrection(), sharedFromThis());
+  } else {
+    m_CenterFinderDialog = new QxrdCenterFinderDialog(QxrdCenterFinderWPtr());
+    m_DistortionCorrectionDialog = new QxrdDistortionCorrectionDialog(QxrdDistortionCorrectionWPtr(), sharedFromThis());
   }
 
-  if (proc) {
-    m_MaskDialog       = new QxrdMaskDialog(m_DataProcessor, this);
-  }
+  m_MaskDialog       = new QxrdMaskDialog(m_DataProcessor, this);
 
-  if (acq) {
-    m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
-  }
+  m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
 
   if (proc) {
     m_IntegratorDialog   = new QxrdIntegratorDialog(proc -> integrator());
+  } else {
+    m_IntegratorDialog   = new QxrdIntegratorDialog(QxrdIntegratorWPtr());
   }
 
-  if (expt && proc) {
+  if (expt) {
     QxrdCalibrantLibraryPtr cal(expt->calibrantLibrary());
 
-    if (cal) {
+    if (cal && proc) {
       m_CalibrantDialog = new QxrdCalibrantDialog(expt, proc -> centerFinder());
+    } else {
+      m_CalibrantDialog = new QxrdCalibrantDialog(expt, QxrdCenterFinderWPtr());
     }
   }
 
@@ -175,6 +183,8 @@ void QxrdWindow::initialize()
 
     if (ds) {
       m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(expt, ds, this);
+    } else {
+      m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(expt, QcepDatasetModelWPtr(), this);
     }
   }
 
@@ -308,11 +318,12 @@ void QxrdWindow::initialize()
   connect(m_LoadScriptButton, &QAbstractButton::clicked, m_ActionLoadScript, &QAction::triggered);
   connect(m_ActionLoadScript, &QAction::triggered, this, &QxrdWindow::doLoadScript);
 
+  connect(m_ActionAutoScale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::autoScale);
+  connect(m_ActionExperimentPreferences, &QAction::triggered, this, &QxrdWindow::doEditPreferences);
+
   if (app) {
-    connect(m_ActionAutoScale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::autoScale);
     connect(m_ActionQuit, &QAction::triggered, app.data(), &QxrdApplication::possiblyQuit);
     connect(m_ActionGlobalPreferences, &QAction::triggered, app.data(), &QxrdApplication::editGlobalPreferences);
-    connect(m_ActionExperimentPreferences, &QAction::triggered, this, &QxrdWindow::doEditPreferences);
     connect(m_ActionLoadPreferences, &QAction::triggered, app.data(), &QxrdApplication::doLoadPreferences);
     connect(m_ActionSavePreferences, &QAction::triggered, app.data(), &QxrdApplication::doSavePreferences);
 
@@ -483,8 +494,12 @@ void QxrdWindow::initialize()
   connect(&m_UpdateTimer, &QTimer::timeout, this, &QxrdWindow::doTimerUpdate);
 
   connect(m_ActionIntegrate, &QAction::triggered, this, &QxrdWindow::doIntegrateSequence);
-  connect(m_ActionIntegrateCurrent, &QAction::triggered,
-          m_DataProcessor.data(), &QxrdDataProcessorThreaded::integrateSaveAndDisplay);
+
+  if (proc) {
+    connect(m_ActionIntegrateCurrent, &QAction::triggered,
+            proc.data(), &QxrdDataProcessorThreaded::integrateSaveAndDisplay);
+  }
+
   connect(m_ActionIntegrateInputImages, &QAction::triggered,
           m_InputFileBrowser, &QxrdFileBrowser::doIntegrate);
 
@@ -549,18 +564,18 @@ void QxrdWindow::initialize()
 
   statusBar() -> addPermanentWidget(m_AllocationStatus);
 
-  if (app && m_Acquisition == NULL) {
-    app->criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
-  }
-
-  connect(m_Acquisition.data(), &QxrdAcquisition::acquireStarted,
-          this,                 &QxrdWindow::acquireStarted);
-  connect(m_Acquisition.data(), SIGNAL(acquiredFrame(QString,int,int,int,int,int,int)),
-          this,                 SLOT(acquiredFrame(QString,int,int,int,int,int,int)));
-  connect(m_Acquisition.data(), &QxrdAcquisition::acquireComplete,
-          this,                 &QxrdWindow::acquireComplete);
+//  if (app && m_Acquisition == NULL) {
+//    app->criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
+//  }
 
   if (acq) {
+    connect(acq.data(), &QxrdAcquisition::acquireStarted,
+            this,       &QxrdWindow::acquireStarted);
+    connect(acq.data(), SIGNAL(acquiredFrame(QString,int,int,int,int,int,int)),
+            this,       SLOT(acquiredFrame(QString,int,int,int,int,int,int)));
+    connect(acq.data(), &QxrdAcquisition::acquireComplete,
+            this,       &QxrdWindow::acquireComplete);
+
     acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
     acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
     acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
@@ -737,7 +752,7 @@ void QxrdWindow::initialize()
 QxrdWindow::~QxrdWindow()
 {
 #ifndef QT_NO_DEBUG
-  printf("Deleting main window\n");
+  printf("Deleting main window from thread %s\n", qPrintable(QThread::currentThread()->objectName()));
 #endif  
 
   QxrdApplicationPtr app(m_Application);

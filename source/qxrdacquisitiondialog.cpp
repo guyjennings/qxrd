@@ -22,12 +22,10 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
   QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (acqp) {
-    QxrdAcquisition *acq = acqp.data();
-
     connect(m_ActionAcquire, &QAction::triggered, this, &QxrdAcquisitionDialog::doAcquire);
     connect(m_ActionCancel, &QAction::triggered, this, &QxrdAcquisitionDialog::doCancel);
     connect(m_ActionAcquireDark, &QAction::triggered, this, &QxrdAcquisitionDialog::doAcquireDark);
-    connect(m_ActionTrigger, &QAction::triggered, acq, &QxrdAcquisition::trigger);
+    connect(m_ActionTrigger, &QAction::triggered, acqp.data(), &QxrdAcquisition::trigger);
 
     connect(m_BrowseLogFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionDialog::browseLogFile);
     connect(m_BrowseScanFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionDialog::browseScanFile);
@@ -37,48 +35,44 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     connect(m_TriggerButton, &QAbstractButton::clicked, m_ActionTrigger, &QAction::triggered);
     connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered);
 
-    connect(m_ClearDroppedButton, &QAbstractButton::clicked, acq, &QxrdAcquisition::clearDropped);
+    connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcquisition::clearDropped);
 
-    connect(acq, &QxrdAcquisition::acquireStarted, this, &QxrdAcquisitionDialog::acquireStarted);
-    connect(acq, &QxrdAcquisition::acquireComplete, this, &QxrdAcquisitionDialog::acquireComplete);
+    connect(acqp.data(), &QxrdAcquisition::acquireStarted, this, &QxrdAcquisitionDialog::acquireStarted);
+    connect(acqp.data(), &QxrdAcquisition::acquireComplete, this, &QxrdAcquisitionDialog::acquireComplete);
 
-    acq -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
-    acq -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
-    acq -> prop_SkippedExposures() -> linkTo(this -> m_SkippedExposures);
-    acq -> prop_SkippedExposuresAtStart() -> linkTo(this -> m_SkippedExposuresAtStart);
-    acq -> prop_DarkSummedExposures() -> linkTo(this -> m_DarkSummedExposures);
-    acq -> prop_FilePattern() -> linkTo(this -> m_FilePattern);
-    acq -> prop_FileIndex() -> linkTo(this -> m_FileIndex);
-    acq -> prop_PhasesInGroup() -> linkTo(this -> m_PhasesInGroup);
-    acq -> prop_PreTriggerFiles() -> linkTo(this -> m_PreTriggerFiles);
-    acq -> prop_PostTriggerFiles() -> linkTo(this -> m_PostTriggerFiles);
-    acq -> prop_DroppedFrames() -> linkTo(this -> m_DroppedFrames);
+    acqp -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
+    acqp -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
+    acqp -> prop_SkippedExposures() -> linkTo(this -> m_SkippedExposures);
+    acqp -> prop_SkippedExposuresAtStart() -> linkTo(this -> m_SkippedExposuresAtStart);
+    acqp -> prop_DarkSummedExposures() -> linkTo(this -> m_DarkSummedExposures);
+    acqp -> prop_FilePattern() -> linkTo(this -> m_FilePattern);
+    acqp -> prop_FileIndex() -> linkTo(this -> m_FileIndex);
+    acqp -> prop_PhasesInGroup() -> linkTo(this -> m_PhasesInGroup);
+    acqp -> prop_PreTriggerFiles() -> linkTo(this -> m_PreTriggerFiles);
+    acqp -> prop_PostTriggerFiles() -> linkTo(this -> m_PostTriggerFiles);
+    acqp -> prop_DroppedFrames() -> linkTo(this -> m_DroppedFrames);
 
-    acq -> prop_UserComment1() -> linkTo(this -> m_UserComment1);
-    acq -> prop_UserComment2() -> linkTo(this -> m_UserComment2);
-    acq -> prop_UserComment3() -> linkTo(this -> m_UserComment3);
-    acq -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
+    acqp -> prop_UserComment1() -> linkTo(this -> m_UserComment1);
+    acqp -> prop_UserComment2() -> linkTo(this -> m_UserComment2);
+    acqp -> prop_UserComment3() -> linkTo(this -> m_UserComment3);
+    acqp -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
 
-    acq -> prop_LiveViewAtIdle() -> linkTo(this -> m_LiveViewAtIdle);
-    acq -> prop_AcquisitionCancelsLiveView() -> linkTo(this -> m_AcquisitionCancelsLiveView);
-    acq -> prop_RetryDropped() -> linkTo(this -> m_RetryDropped);
-  } else {
-    printf("acq == NULL in QxrdAcquisitionDialog::QxrdAcquisitionDialog");
+    acqp -> prop_LiveViewAtIdle() -> linkTo(this -> m_LiveViewAtIdle);
+    acqp -> prop_AcquisitionCancelsLiveView() -> linkTo(this -> m_AcquisitionCancelsLiveView);
+    acqp -> prop_RetryDropped() -> linkTo(this -> m_RetryDropped);
   }
 
   QxrdExperimentPtr expp(m_Experiment);
 
   if (expp) {
-    QxrdExperiment *exp = expp.data();
-
-    exp  -> prop_ExperimentDirectory() -> linkTo(this -> m_ExperimentDirectory);
-    exp  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
-    exp  -> prop_DataDirectory() -> linkTo(this -> m_DataDirectory);
-    exp  -> prop_ScanFileName() -> linkTo(this -> m_ScanFileName);
+    expp  -> prop_ExperimentDirectory() -> linkTo(this -> m_ExperimentDirectory);
+    expp  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
+    expp  -> prop_DataDirectory() -> linkTo(this -> m_DataDirectory);
+    expp  -> prop_ScanFileName() -> linkTo(this -> m_ScanFileName);
 //    exp  -> prop_DetectorTypeName() -> linkTo(this -> m_DetectorTypeNameLabel);
 //    exp  -> prop_DetectorNumber() -> linkTo(this -> m_DetectorNumber);
 
-    connect(m_LogFileName, &QLineEdit::editingFinished, exp, &QxrdExperiment::openNewLogFile);
+    connect(m_LogFileName, &QLineEdit::editingFinished, expp.data(), &QxrdExperiment::openNewLogFile);
   }
 
   QxrdDataProcessorPtr procp(m_DataProcessor);

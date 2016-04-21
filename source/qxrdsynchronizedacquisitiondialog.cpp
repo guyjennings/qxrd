@@ -28,7 +28,7 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(
     m_WaveformPlot->init(set->synchronizedAcquisitionPlotSettings());
   }
 
-  QxrdAcquisitionPtr acq(acqw);
+  QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq) {
     m_SynchronizedAcquisition = acq->synchronizedAcquisition();

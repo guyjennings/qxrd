@@ -124,8 +124,6 @@ void QxrdExperiment::initialize(QSettings *settings)
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
-//    QThread::currentThread()->setObjectName("experiment");
-
     QcepExperiment::initialize(settings);
 
     splashMessage("Initializing File Saver");
@@ -133,7 +131,6 @@ void QxrdExperiment::initialize(QSettings *settings)
     m_FileSaverThread = QxrdFileSaverThreadPtr(
           new QxrdFileSaverThread(app->allocator()));
 
-//    m_FileSaverThread -> setObjectName("saver");
     m_FileSaverThread -> start();
     m_FileSaver = m_FileSaverThread -> fileSaver();
 
@@ -218,7 +215,6 @@ void QxrdExperiment::initialize(QSettings *settings)
     m_ServerThread = QxrdServerThreadPtr(
           new QxrdServerThread(m_SettingsSaver, sharedFromThis(), "qxrd"));
 
-//    m_ServerThread -> setObjectName("server");
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
 
@@ -227,7 +223,6 @@ void QxrdExperiment::initialize(QSettings *settings)
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
           new QxrdSimpleServerThread(m_SettingsSaver, sharedFromThis(), "simpleserver"));
 
-//    m_SimpleServerThread -> setObjectName("smpsrv");
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
 
@@ -399,6 +394,11 @@ void QxrdExperiment::openWindows()
       }
     }
   }
+}
+
+void QxrdExperiment::closeWindows()
+{
+  m_Window = QxrdWindowPtr();
 }
 
 void QxrdExperiment::splashMessage(QString msg)

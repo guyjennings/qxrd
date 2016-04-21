@@ -57,6 +57,7 @@ public:
   virtual void initialize(QSettings *settings);
 
   void openWindows();
+  void closeWindows();
 
   QxrdExperimentThreadWPtr experimentThread();
 

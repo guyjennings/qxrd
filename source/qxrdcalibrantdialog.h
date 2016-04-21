@@ -37,10 +37,10 @@ private:
 private:
   QxrdExperimentWPtr              m_Experiment;
   QxrdCenterFinderWPtr            m_CenterFinder;
-  QxrdCalibrantLibraryWPtr        m_CalibrantLibrary;
-  QxrdCalibrantLibraryModelWPtr   m_CalibrantLibraryModel;
-  QxrdCalibrantDSpacingsModelWPtr m_CalibrantDSpacingsModel;
-  QxrdCalibrantDSpacingsWPtr      m_CalibrantDSpacings;
+  QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
+  QxrdCalibrantLibraryModelPtr    m_CalibrantLibraryModel;
+  QxrdCalibrantDSpacingsModelPtr  m_CalibrantDSpacingsModel;
+  QxrdCalibrantDSpacingsPtr       m_CalibrantDSpacings;
 };
 
 #endif // QXRDCALIBRANTDIALOG_H

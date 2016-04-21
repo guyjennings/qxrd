@@ -145,6 +145,8 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   QxrdPowderPointVector::registerMetaTypes();
   QxrdCalibrantDSpacing::registerMetaTypes();
   QxrdCalibrantDSpacings::registerMetaTypes();
+
+  setQuitOnLastWindowClosed(false);
 }
 
 bool QxrdApplication::init(int &argc, char **argv)
@@ -315,6 +317,8 @@ void QxrdApplication::finish()
     printMessage("QxrdApplication::finish()");
   }
 
+  GUI_THREAD_CHECK;
+
   writeSettings();
 
 //  foreach(QxrdExperimentThreadPtr t, m_ExperimentThreads) {
@@ -326,6 +330,14 @@ void QxrdApplication::finish()
     QxrdExperimentThreadPtr t = m_ExperimentThreads.takeFirst();
 
     if (t) {
+      QxrdExperimentPtr expt(t->experiment());
+
+      if (expt) {
+        expt->closeWindows();
+      }
+
+      expt = QxrdExperimentWPtr();
+
       t->quit();
       t->wait();
     }
@@ -676,7 +688,7 @@ void QxrdApplication::savePreferences(QString path)
 void QxrdApplication::possiblyQuit()
 {
   if (wantToQuit()) {
-    finish();
+//    finish();
     quit();
   }
 }

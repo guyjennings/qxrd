@@ -31,7 +31,7 @@ private:
   void moveCenter(int dx, int dy);
 
 private:
-  QxrdCenterFinderPtr m_CenterFinder;
+  QxrdCenterFinderWPtr m_CenterFinder;
 };
 
 #endif // QXRDCENTERFINDERDIALOG_H

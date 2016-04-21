@@ -18,7 +18,7 @@ public:
 
 private:
   QxrdAcquisitionWPtr             m_Acquisition;
-  QxrdAcquisitionScalerModelWPtr  m_Model;
+  QxrdAcquisitionScalerModelPtr   m_Model;
 };
 
 #endif // QXRDACQUISITIONSCALERDIALOG_H
