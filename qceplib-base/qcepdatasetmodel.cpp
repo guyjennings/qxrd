@@ -20,6 +20,8 @@ QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBas
     m_Dataset = QcepAllocator::newDataset("model");
   }
 
+  qRegisterMetaType< QVector<int> >("QVector<int>");
+
   connect(m_Dataset.data(), SIGNAL(dataObjectChanged()), this, SLOT(onDataObjectChanged()));
 }
 

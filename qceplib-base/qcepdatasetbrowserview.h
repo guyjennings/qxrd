@@ -45,7 +45,7 @@ private slots:
 
 private:
   QcepExperimentWPtr   m_Experiment;
-  QcepDatasetModelWPtr m_DatasetModel;
+  QcepDatasetModelPtr  m_DatasetModel;
 };
 
 #endif // QCEPDATASETBROWSERVIEW_H
