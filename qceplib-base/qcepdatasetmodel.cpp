@@ -25,6 +25,24 @@ QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBas
   connect(m_Dataset.data(), SIGNAL(dataObjectChanged()), this, SLOT(onDataObjectChanged()));
 }
 
+void QcepDatasetModel::readSettings(QSettings *settings, QString section)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    ds->readSettings(settings, section);
+  }
+}
+
+void QcepDatasetModel::writeSettings(QSettings *settings, QString section)
+{
+  QcepDatasetPtr ds(m_Dataset);
+
+  if (ds) {
+    ds->writeSettings(settings, section);
+  }
+}
+
 void QcepDatasetModel::printMessage(QString msg, QDateTime dt) const
 {
   QcepExperimentPtr expt(m_Experiment);

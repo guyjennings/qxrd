@@ -1,6 +1,7 @@
 #include "qcepdatacolumn.h"
 #include "qcepallocator.h"
 #include <QScriptEngine>
+#include "qcepmutexlocker.h"
 
 QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int npts, ColumnType colType, int col1, int col2) :
   QcepDataObject(saver, name, npts*sizeof(double)),
@@ -12,6 +13,7 @@ QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int np
   m_Formatter(NULL)
 {
   set_Type("Data Column");
+  set_TypeID(QcepDataObject::DataColumn);
 
   QcepAllocator::allocate(m_NPoints*sizeof(double));
 }
@@ -19,6 +21,47 @@ QcepDataColumn::QcepDataColumn(QcepSettingsSaverWPtr saver, QString name, int np
 QcepDataColumn::~QcepDataColumn()
 {
   QcepAllocator::deallocate(m_NPoints*sizeof(double));
+}
+
+void QcepDataColumn::writeSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepDataObject::writeSettings(settings, section);
+
+  if (settings) {
+    settings->beginWriteArray("d");
+
+    for (int i=0; i<m_NPoints; i++) {
+      settings->setArrayIndex(i);
+      settings->setValue("v", m_Vector.value(i));
+    }
+
+    settings->endArray();
+  }
+}
+
+void QcepDataColumn::readSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepDataObject::readSettings(settings, section);
+
+  if (settings) {
+    int n = settings->beginReadArray("d");
+
+    for (int i=0; i<n; i++) {
+      settings->setArrayIndex(i);
+
+      double v = settings->value("v").toDouble();
+
+      append(v);
+    }
+
+    emit dataObjectChanged();
+
+    settings->endArray();
+  }
 }
 
 QString QcepDataColumn::description() const
@@ -81,6 +124,13 @@ void QcepDataColumn::setValue(int i, const double value)
   if (i >= 0 && i < count()) {
     m_Vector[i] = value;
   }
+}
+
+void QcepDataColumn::append(double v)
+{
+  m_Vector.append(v);
+
+  m_NPoints = m_Vector.count();
 }
 
 int QcepDataColumn::count() const

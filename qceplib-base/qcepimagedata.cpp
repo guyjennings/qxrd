@@ -60,6 +60,7 @@ QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, QString name, 
     m_Saver(saver)
 {
   set_Type("Image");
+  set_TypeID(QcepDataObject::DataImage);
 
   if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
     printf("QcepImageDataBase::QcepImageDataBase(%p)\n", this);
@@ -120,6 +121,7 @@ QMutex *QcepImageDataBase::mutex()
 void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 {
   dest -> set_Type(get_Type());
+  dest -> set_TypeID(get_TypeID());
   dest -> set_Creator(get_Creator());
   dest -> set_Version(get_Version());
   dest -> set_QtVersion(get_QtVersion());
@@ -158,6 +160,7 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src)
 {
   set_Type(src -> get_Type());
+  set_TypeID(src -> get_TypeID());
   set_Creator(src -> get_Creator());
   set_Version(src -> get_Version());
   set_QtVersion(src->get_QtVersion());
@@ -331,6 +334,7 @@ QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, QString name, int w
   }
 
   set_Type("Image Data");
+  set_TypeID(imageTypeID());
 }
 
 template <typename T>
@@ -1759,11 +1763,48 @@ double QcepImageData<T>::sumInPeak(QRectF rect)
   }
 }
 
+template<>
+QcepDataObject::ObjectTypeID QcepImageData<unsigned short>::imageTypeID()
+{
+  return QcepDataObject::DataImageUShort;
+}
+
+template<>
+QcepDataObject::ObjectTypeID QcepImageData<short>::imageTypeID()
+{
+  return QcepDataObject::DataImageShort;
+}
+
+template<>
+QcepDataObject::ObjectTypeID QcepImageData<unsigned int>::imageTypeID()
+{
+  return QcepDataObject::DataImageUInt;
+}
+
+template<>
+QcepDataObject::ObjectTypeID QcepImageData<int>::imageTypeID()
+{
+  return QcepDataObject::DataImageInt;
+}
+
+template<>
+QcepDataObject::ObjectTypeID QcepImageData<double>::imageTypeID()
+{
+  return QcepDataObject::DataImageDouble;
+}
+
+template<>
+QcepDataObject::ObjectTypeID QcepImageData<float>::imageTypeID()
+{
+  return QcepDataObject::DataImageFloat;
+}
+
 template class QcepImageData<unsigned short>;
 template class QcepImageData<short>;
 template class QcepImageData<unsigned int>;
 template class QcepImageData<int>;
 template class QcepImageData<double>;
+template class QcepImageData<float>;
 
 template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<unsigned short> > dark);
 template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<short> > dark);

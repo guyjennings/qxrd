@@ -1,12 +1,14 @@
 #include "qcepdataarray.h"
 #include <QScriptEngine>
 #include "qcepallocator.h"
+#include "qcepmutexlocker.h"
 
 QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims) :
   QcepDataObject(saver, name, 0),
   m_Dimensions(dims)
 {
   set_Type("Data Array");
+  set_TypeID(QcepDataObject::DataArray);
 
   qint64 prod = arrayCount(dims);
 
@@ -20,6 +22,28 @@ QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<
 QcepDataArray::~QcepDataArray()
 {
   QcepAllocator::deallocate(get_ByteSize());
+}
+
+void QcepDataArray::writeSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepDataObject::writeSettings(settings, section);
+
+  if (settings) {
+    settings->beginWriteArray("dims");
+
+    for (int i=0; i<m_Dimensions.count(); i++) {
+      settings->setArrayIndex(i);
+      settings->setValue("size", m_Dimensions.value(i));
+    }
+
+    settings->endArray();
+  }
+}
+
+void QcepDataArray::readSettings(QSettings *settings, QString section)
+{
 }
 
 QString QcepDataArray::description() const

@@ -29,6 +29,9 @@ public:
                    QcepDataProcessorBaseWPtr proc = QcepDataProcessorBaseWPtr(),
                    QcepDatasetWPtr ds = QcepDatasetWPtr());
 
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
+
 public slots:
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
 

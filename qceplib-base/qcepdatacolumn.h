@@ -40,6 +40,9 @@ public:
 
   virtual ~QcepDataColumn();
 
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
+
 public:
   Q_PROPERTY(int columnType READ get_ColumnType WRITE set_ColumnType)
   QCEP_INTEGER_PROPERTY(ColumnType)
@@ -61,6 +64,8 @@ public slots:
   virtual double *data();
   virtual QcepDataColumnFormatter formatter();
   void setFormatter(QcepDataColumnFormatter f);
+
+  void append(double v);
 
   virtual void add(QcepDataColumnPtr col);
   virtual void subtract(QcepDataColumnPtr col);

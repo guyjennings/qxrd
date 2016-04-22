@@ -18,6 +18,9 @@ public:
                  int byteSize);
   virtual ~QcepDataObject();
 
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
+
   static QString mimeType();
 
   static QString fileFormatAny();
@@ -39,6 +42,22 @@ public:
     NoOverwrite,
     CanOverwrite
   } Overwrite;
+
+  typedef enum {
+    DataObject,
+    DataGroup,
+    DataSet,
+    DataColumn,
+    DataColumnScan,
+    DataImage,
+    DataImageUShort,
+    DataImageShort,
+    DataImageUInt,
+    DataImageInt,
+    DataImageFloat,
+    DataImageDouble,
+    DataArray
+  } ObjectTypeID;
 
   virtual int childCount() const;
   virtual QcepDataObjectPtr item(int n);
@@ -76,9 +95,15 @@ private:
   QcepDataGroupWPtr     m_Parent;
 //  QcepSettingsSaverWPtr m_Saver;
 
+protected:
+  mutable QMutex        m_Mutex;
+
 public:
   Q_PROPERTY(QString type READ get_Type WRITE set_Type)
   QCEP_STRING_PROPERTY(Type)
+
+  Q_PROPERTY(int typeID READ get_TypeID WRITE set_TypeID)
+  QCEP_INTEGER_PROPERTY(TypeID)
 
   Q_PROPERTY(quint64 byteSize READ get_ByteSize WRITE set_ByteSize STORED false)
   QCEP_INTEGER64_PROPERTY(ByteSize)

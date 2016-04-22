@@ -240,7 +240,12 @@ public:
   virtual ~QcepImageData();
 
 public:
+  static QcepDataObject::ObjectTypeID imageTypeID();
+
   bool readImage(QString filename);
+
+//  void readSettings(QSettings *settings, QString section);
+//  void writeSettings(QSettings *settings, QString section);
 
   void resize(int width, int height);
   void clear();

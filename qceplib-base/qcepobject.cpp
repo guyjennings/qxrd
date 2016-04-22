@@ -113,6 +113,10 @@ void QcepObject::statusMessage(QString msg, QDateTime dt) const
 
 void QcepObject::writeSettings(QSettings *set, QString section)
 {
+  if (set) {
+    set->setValue("name", get_Name());
+  }
+
   QcepProperty::writeSettings(this, set, section);
 }
 

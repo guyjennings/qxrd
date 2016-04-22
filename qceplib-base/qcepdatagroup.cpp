@@ -7,6 +7,7 @@
 #include "qcepimagedata.h"
 #include "qcepintegrateddata.h"
 #include "qcepallocator.h"
+#include "qcepmutexlocker.h"
 #include <QFileInfo>
 #include <QDir>
 
@@ -14,6 +15,66 @@ QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name) :
   QcepDataObject(saver, name, 0)
 {
   set_Type("Data Group");
+  set_TypeID(QcepDataObject::DataGroup);
+}
+
+void QcepDataGroup::writeSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepDataObject::writeSettings(settings, "");
+
+  if (settings) {
+    settings->beginWriteArray("items");
+
+    for (int i=0; i<m_Objects.count(); i++) {
+      settings->setArrayIndex(i);
+
+      QcepDataObjectPtr p = m_Objects.value(i);
+
+      if (p) {
+        p-> writeSettings(settings, "");
+      }
+    }
+
+    settings->endArray();
+  }
+}
+
+void QcepDataGroup::readSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  int id = get_TypeID();
+
+  QcepDataObject::readSettings(settings, "");
+
+#ifndef QT_NODEBUG
+  if (get_TypeID() != id) {
+    printMessage(tr("Data object type ID changed from %1 to %2 on reading").arg(id).arg(get_TypeID()));
+  }
+#endif
+
+  if (settings) {
+    int n = settings->beginReadArray("items");
+
+    for (int i=0; i<n; i++) {
+      settings->setArrayIndex(i);
+
+      QString name = settings->value("name").toString();
+      int id = settings->value("typeID").toInt();
+
+      QcepDataObjectPtr obj = QcepAllocator::newDataObject(
+            (QcepDataObject::ObjectTypeID) id, name);
+
+      if (obj) {
+        m_Objects.append(obj);
+        obj -> readSettings(settings, "");
+      }
+    }
+
+    settings->endArray();
+  }
 }
 
 QString QcepDataGroup::description() const

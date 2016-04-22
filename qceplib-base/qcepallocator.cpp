@@ -507,3 +507,24 @@ void QcepAllocator::setAvailableBytes(qint64 newsize)
 {
   set_AvailableBytes(newsize);
 }
+
+QcepDataObjectPtr QcepAllocator::newDataObject(QcepDataObject::ObjectTypeID id, QString name)
+{
+  QcepDataObjectPtr res;
+
+  switch (id) {
+  case QcepDataObject::DataGroup:
+    res = newGroup(name);
+    break;
+
+  case QcepDataObject::DataColumn:
+    res = newColumn(name, 0, QcepAllocator::NullIfNotAvailable);
+    break;
+
+  case QcepDataObject::DataColumnScan:
+    res = newColumnScan(name, QStringList(), 0, QcepAllocator::NullIfNotAvailable);
+    break;
+  }
+
+  return res;
+}

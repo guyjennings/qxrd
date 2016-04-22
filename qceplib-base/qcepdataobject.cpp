@@ -3,6 +3,7 @@
 #include "qcepdatagroup.h"
 #include <stdio.h>
 #include "qcepapplication.h"
+#include "qcepmutexlocker.h"
 #include <QAtomicInteger>
 #include <QFileInfo>
 #include <QDir>
@@ -15,7 +16,9 @@ QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver,
                                int byteSize) :
   QcepObject(name, NULL),
 //  m_Saver(saver),
+  m_Mutex(QMutex::Recursive),
   m_Type(saver,        this, "type", "object", "Data object type"),
+  m_TypeID(saver,      this, "typeID", QcepDataObject::DataObject, "Data object type ID"),
   m_ByteSize(QcepSettingsSaverWPtr(), this, "size", byteSize, "Object Size"),
   m_Creator(saver,     this, "creator", "Unknown", "QXRD Version Number"),
   m_Version(saver,     this, "version", "Unknown", "QXRD Version Number"),
@@ -28,6 +31,7 @@ QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver,
   s_ObjectAllocateCount.fetchAndAddOrdered(1);
 
   set_Type("object");
+  set_TypeID(QcepDataObject::DataObject);
 
   if (name.contains("/")) {
     printMessage(tr("object %1 name contains \"/\"").arg(name));
@@ -41,6 +45,20 @@ QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver,
 QcepDataObject::~QcepDataObject()
 {
   s_ObjectDeleteCount.fetchAndAddOrdered(1);
+}
+
+void QcepDataObject::writeSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepObject::writeSettings(settings, section);
+}
+
+void QcepDataObject::readSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepObject::readSettings(settings, section);
 }
 
 QString QcepDataObject::mimeType()

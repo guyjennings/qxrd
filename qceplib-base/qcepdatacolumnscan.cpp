@@ -3,12 +3,28 @@
 #include "qcepdatacolumn-ptr.h"
 #include <QScriptEngine>
 #include "qcepallocator.h"
+#include "qcepmutexlocker.h"
 
 QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int sz) :
   QcepDataGroup(sav, name),
   m_NumPoints(sav, this, "numPoints", sz, "Number of points in scan")
 {
   set_Type("Data Column Scan");
+  set_TypeID(QcepDataObject::DataColumnScan);
+}
+
+void QcepDataColumnScan::writeSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepDataGroup::writeSettings(settings, section);
+}
+
+void QcepDataColumnScan::readSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepDataGroup::readSettings(settings, section);
 }
 
 QString QcepDataColumnScan::description() const
