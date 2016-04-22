@@ -190,22 +190,22 @@ void QxrdExperiment::initialize(QSettings *settings)
     m_DatasetModel = QcepDatasetModelPtr(
           new QcepDatasetModel(sharedFromThis(), m_DataProcessor, m_Dataset));
 
-    m_DatasetModel -> newGroup("group1");
-    m_DatasetModel -> newGroup("group2");
-    m_DatasetModel -> newGroup("group3");
+//    m_DatasetModel -> newGroup("group1");
+//    m_DatasetModel -> newGroup("group2");
+//    m_DatasetModel -> newGroup("group3");
 
-    QStringList cols;
-    cols << "x" << "y" << "z" << "v" << "sdev";
+//    QStringList cols;
+//    cols << "x" << "y" << "z" << "v" << "sdev";
 
-    m_DatasetModel -> newColumnScan("group1/scan1", cols, 1000);
-    m_DatasetModel -> newColumnScan("group2/scan2", cols, 1000);
-    m_DatasetModel -> newColumnScan("group3/scan3", cols, 1000);
+//    m_DatasetModel -> newColumnScan("group1/scan1", cols, 1000);
+//    m_DatasetModel -> newColumnScan("group2/scan2", cols, 1000);
+//    m_DatasetModel -> newColumnScan("group3/scan3", cols, 1000);
 
-    m_DatasetModel -> newColumn("group4/x", 1000);
-    m_DatasetModel -> newColumn("group4/y", 1000);
-    m_DatasetModel -> newColumn("group4/z", 1000);
-    m_DatasetModel -> newColumn("group4/t", 1000);
-    m_DatasetModel -> newColumn("group4/sdev", 1000);
+//    m_DatasetModel -> newColumn("group4/x", 1000);
+//    m_DatasetModel -> newColumn("group4/y", 1000);
+//    m_DatasetModel -> newColumn("group4/z", 1000);
+//    m_DatasetModel -> newColumn("group4/t", 1000);
+//    m_DatasetModel -> newColumn("group4/sdev", 1000);
 
     m_WindowSettings = QxrdWindowSettingsPtr(
           new QxrdWindowSettings(m_SettingsSaver, NULL));
@@ -799,6 +799,12 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
     if (ssrv) {
       ssrv -> readSettings(settings, "simpleserver");
     }
+
+    if (m_DatasetModel) {
+      settings->beginGroup("dataset");
+      m_DatasetModel->readSettings(settings, "dataset");
+      settings->endGroup();
+    }
   }
 }
 
@@ -857,6 +863,12 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 
     if (ssrv) {
       ssrv -> writeSettings(settings, "simpleserver");
+    }
+
+    if (m_DatasetModel) {
+      settings->beginGroup("dataset");
+      m_DatasetModel -> writeSettings(settings, "dataset");
+      settings->endGroup();
     }
   }
 }
