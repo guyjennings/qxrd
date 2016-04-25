@@ -3,10 +3,11 @@
 #include "qcepallocator.h"
 #include <QScriptEngine>
 
-QcepIntegratedData::QcepIntegratedData(QcepSettingsSaverWPtr saver,
+QcepIntegratedData::QcepIntegratedData(QcepObjectWPtr parent,
+                                       QcepSettingsSaverWPtr saver,
                                        QString name,
                                        /*QcepDoubleImageDataPtr image,*/ int maxSize) :
-  QcepDataObject(saver, name, 2*maxSize*sizeof(double)),
+  QcepDataObject(parent, saver, name, 2*maxSize*sizeof(double)),
 //  m_Title(saver, this, "title", "", "Integrated Data Title"),
 //  m_Image(image),
   m_MaxSize(maxSize),
@@ -187,7 +188,7 @@ void QcepIntegratedData::fromIntegratedDataScriptValue(const QScriptValue &obj, 
     QcepIntegratedData *qdobj = qobject_cast<QcepIntegratedData*>(qobj);
 
     if (qdobj) {
-      QcepDataObjectPtr p = qdobj->sharedFromThis();
+      QcepObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
         QcepIntegratedDataPtr cs = qSharedPointerDynamicCast<QcepIntegratedData>(p);

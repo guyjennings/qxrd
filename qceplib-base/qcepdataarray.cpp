@@ -3,8 +3,8 @@
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
 
-QcepDataArray::QcepDataArray(QcepSettingsSaverWPtr saver, QString name, QVector<int> dims) :
-  QcepDataObject(saver, name, 0),
+QcepDataArray::QcepDataArray(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name, QVector<int> dims) :
+  QcepDataObject(parent, saver, name, 0),
   m_Dimensions(dims)
 {
   set_Type("Data Array");
@@ -97,7 +97,7 @@ void QcepDataArray::fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayP
     QcepDataArray *qdobj = qobject_cast<QcepDataArray*>(qobj);
 
     if (qdobj) {
-      QcepDataObjectPtr p = qdobj->sharedFromThis();
+      QcepObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
         QcepDataArrayPtr cs = qSharedPointerDynamicCast<QcepDataArray>(p);

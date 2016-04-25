@@ -7,8 +7,8 @@
 #include "qcepallocator.h"
 #include <QtConcurrentRun>
 
-QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelWPtr model, const QModelIndexList &idx, QStringList files) :
-  QcepObject("dataExport", NULL),
+QcepDataImportCommand::QcepDataImportCommand(QcepObjectWPtr parent, QcepDatasetModelWPtr model, const QModelIndexList &idx, QStringList files) :
+  QcepObject("dataExport", parent),
   m_Model(model),
   m_Indexes(idx),
   m_Files(files)
@@ -26,12 +26,14 @@ QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelWPtr model, const Q
             new QcepDatasetModel(m_Experiment, QcepDataProcessorBaseWPtr(), m_ImportedData));
 
       if (files.count() == 1) {
-        m_FileImporter = QcepFileImporter::importFile(m_ImportedDataset,
+        m_FileImporter = QcepFileImporter::importFile(parent,
+                                                      m_ImportedDataset,
                                                       m_ImportedIndexes,
                                                       files.value(0));
 
       } else {
-        m_FileImporter = QcepFileImporter::importFiles(m_ImportedDataset,
+        m_FileImporter = QcepFileImporter::importFiles(parent,
+                                                       m_ImportedDataset,
                                                        m_ImportedIndexes,
                                                        files);
       }

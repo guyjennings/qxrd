@@ -12,7 +12,8 @@ class QcepIntegratedData : public QcepDataObject
   Q_OBJECT
 
 public:
-  explicit QcepIntegratedData(QcepSettingsSaverWPtr saver,
+  explicit QcepIntegratedData(QcepObjectWPtr parent,
+                              QcepSettingsSaverWPtr saver,
                               QString name,
 //                              QcepDoubleImageDataPtr data,
                               int maxSize);

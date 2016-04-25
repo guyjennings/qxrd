@@ -9,7 +9,8 @@ class QcepFileImporterMultiple : public QcepFileImporter
   Q_OBJECT
 
 public:
-  QcepFileImporterMultiple(QcepDatasetModelPtr model,
+  QcepFileImporterMultiple(QcepObjectWPtr parent,
+                           QcepDatasetModelPtr model,
                            QModelIndexList &indexes);
 
   void append(QcepFileImporterPtr importer);

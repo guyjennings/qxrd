@@ -8,14 +8,16 @@
 #include <QScriptValue>
 #include "qcepproperty.h"
 
-class QcepDataObject : public QcepObject, public QEnableSharedFromThis<QcepDataObject>
+class QcepDataObject : public QcepObject
 {
   Q_OBJECT
 
 public:
-  QcepDataObject(QcepSettingsSaverWPtr saver,
+  QcepDataObject(QcepObjectWPtr parent,
+                 QcepSettingsSaverWPtr saver,
                  QString name,
                  int byteSize);
+
   virtual ~QcepDataObject();
 
   void readSettings(QSettings *settings, QString section);

@@ -31,7 +31,8 @@ public:
   };
 
 public:
-  QcepDataColumn(QcepSettingsSaverWPtr saver,
+  QcepDataColumn(QcepObjectWPtr parent,
+                 QcepSettingsSaverWPtr saver,
                  QString name,
                  int npts,
                  ColumnType colType = NormalColumn,

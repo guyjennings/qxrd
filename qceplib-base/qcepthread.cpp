@@ -1,8 +1,9 @@
 #include "qcepthread.h"
 #include <stdio.h>
 
-QcepThread::QcepThread(QObject *parent) :
-  QThread(parent)
+QcepThread::QcepThread(QcepObjectWPtr parent) :
+  QThread(),
+  m_Parent(parent)
 {
 }
 
@@ -21,3 +22,7 @@ void QcepThread::msleep(unsigned long t)
   QThread::msleep(t);
 }
 
+QcepObjectWPtr QcepThread::parent()
+{
+  return m_Parent;
+}

@@ -1,8 +1,9 @@
 #include "qcepfileimportermultiple.h"
 
-QcepFileImporterMultiple::QcepFileImporterMultiple(QcepDatasetModelPtr model,
+QcepFileImporterMultiple::QcepFileImporterMultiple(QcepObjectWPtr parent,
+                                                   QcepDatasetModelPtr model,
                                                    QModelIndexList &indexes) :
-  QcepFileImporter(model, indexes, ""),
+  QcepFileImporter(parent, model, indexes, ""),
   m_Progress()
 {
 }

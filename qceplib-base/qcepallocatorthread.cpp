@@ -6,8 +6,8 @@
 #include "qcepmutexlocker.h"
 #include <stdio.h>
 
-QcepAllocatorThread::QcepAllocatorThread(QcepSettingsSaverWPtr saver)
-  : QcepThread(),
+QcepAllocatorThread::QcepAllocatorThread(QcepApplicationWPtr app, QcepSettingsSaverWPtr saver)
+  : QcepThread(QcepObjectWPtr()),
     m_Allocator(NULL),
     m_Saver(saver)
 {
@@ -31,7 +31,7 @@ void QcepAllocatorThread::run()
     printf("Starting Allocator Thread\n");
   }
 
-  m_Allocator = QcepAllocatorPtr(new QcepAllocator(m_Saver));
+  m_Allocator = QcepAllocatorPtr(new QcepAllocator(parent(), m_Saver));
 
   int rc = exec();
 

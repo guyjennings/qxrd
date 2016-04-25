@@ -9,7 +9,12 @@ class QcepMaskData : public QcepImageData<short>
   Q_OBJECT
 
 public:
-  QcepMaskData(QcepSettingsSaverWPtr saver, QString name, int width, int height, int def);
+  QcepMaskData(QcepObjectWPtr parent,
+               QcepSettingsSaverWPtr saver,
+               QString name,
+               int width,
+               int height,
+               int def);
   ~QcepMaskData();
 
 public slots:

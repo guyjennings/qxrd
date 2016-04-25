@@ -5,8 +5,8 @@
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
 
-QcepDataColumnScan::QcepDataColumnScan(QcepSettingsSaverWPtr sav, QString name, QStringList cols, int sz) :
-  QcepDataGroup(sav, name),
+QcepDataColumnScan::QcepDataColumnScan(QcepObjectWPtr parent, QcepSettingsSaverWPtr sav, QString name, QStringList cols, int sz) :
+  QcepDataGroup(parent, sav, name),
   m_NumPoints(sav, this, "numPoints", sz, "Number of points in scan")
 {
   set_Type("Data Column Scan");
@@ -45,7 +45,7 @@ void QcepDataColumnScan::fromColumnScanScriptValue(const QScriptValue &obj, Qcep
     QcepDataColumnScan *qdobj = qobject_cast<QcepDataColumnScan*>(qobj);
 
     if (qdobj) {
-      QcepDataObjectPtr p = qdobj->sharedFromThis();
+      QcepObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
         QcepDataColumnScanPtr cs = qSharedPointerDynamicCast<QcepDataColumnScan>(p);

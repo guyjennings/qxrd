@@ -11,7 +11,8 @@ class QcepDataArray : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepDataArray(QcepSettingsSaverWPtr saver,
+  QcepDataArray(QcepObjectWPtr parent,
+                QcepSettingsSaverWPtr saver,
                 QString name,
                 QVector<int> dims);
   virtual ~QcepDataArray();

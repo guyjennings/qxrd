@@ -6,7 +6,7 @@
 #include "qcepproperty.h"
 #include "qcepdataobject-ptr.h"
 
-class QcepApplication : public QApplication
+class QcepApplication : public QApplication, public QEnableSharedFromThis<QcepApplication>
 {
 public:
   QcepApplication(int &argc, char **argv);

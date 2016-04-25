@@ -12,7 +12,7 @@ class QcepDataProcessorBase : public QcepObject
   Q_OBJECT
 
 public:
-  QcepDataProcessorBase(QString name, QcepObject *parent);
+  QcepDataProcessorBase(QString name, QcepObjectWPtr parent);
 
 public slots:
   virtual QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img) = 0;

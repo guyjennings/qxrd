@@ -10,7 +10,8 @@ class QcepFileImporterText : public QcepFileImporter
   Q_OBJECT
 
 public:
-  QcepFileImporterText(QcepDatasetModelPtr model,
+  QcepFileImporterText(QcepObjectWPtr parent,
+                       QcepDatasetModelPtr model,
                        QModelIndexList &indexes,
                        QString path);
 

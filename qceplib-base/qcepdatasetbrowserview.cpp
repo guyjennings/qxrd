@@ -369,7 +369,7 @@ void QcepDatasetBrowserView::readData(const QModelIndexList &idx)
         p->setLastDirectory(theFiles);
         p->set_SelectedFilter(selectedFilter);
 
-        QcepDataImportCommand cmd(m_DatasetModel, idx, theFiles);
+        QcepDataImportCommand cmd(m_Experiment, m_DatasetModel, idx, theFiles);
 
         cmd.exec();
       }
@@ -397,7 +397,7 @@ void QcepDatasetBrowserView::saveData(const QModelIndexList &idx)
         p->set_FileName(theFile);
         p->set_SelectedFilter(selectedFilter);
 
-        QcepDataExportCommand cmd(m_DatasetModel, idx, theFile);
+        QcepDataExportCommand cmd(m_Experiment, m_DatasetModel, idx, theFile);
 
         cmd.exec();
       }

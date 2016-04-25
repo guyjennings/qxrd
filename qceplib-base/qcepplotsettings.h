@@ -10,7 +10,7 @@ class QcepPlotSettings : public QcepObject
   Q_OBJECT
 
 public:
-  explicit QcepPlotSettings(QString name, QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QcepPlotSettings(QString name, QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
 
   Q_PROPERTY(double xMouse READ get_XMouse WRITE set_XMouse STORED false)
   QCEP_DOUBLE_PROPERTY(XMouse)

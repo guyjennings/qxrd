@@ -11,10 +11,11 @@
 static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
 
-QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver,
+QcepDataObject::QcepDataObject(QcepObjectWPtr parent,
+                               QcepSettingsSaverWPtr saver,
                                QString name,
                                int byteSize) :
-  QcepObject(name, NULL),
+  QcepObject(name, parent),
 //  m_Saver(saver),
   m_Mutex(QMutex::Recursive),
   m_Type(saver,        this, "type", "object", "Data object type"),
@@ -210,12 +211,14 @@ void QcepDataObject::fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr 
     QcepDataObject *qdobj = qobject_cast<QcepDataObject*>(qobj);
 
     if (qdobj) {
-      QcepDataObjectPtr p = qdobj->sharedFromThis();
+      QcepObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
-        data = p;
-      } else {
-        printf("QcepDataObject::fromScriptValue returns NULL\n");
+        QcepDataObjectPtr dp = qSharedPointerDynamicCast<QcepDataObject>(p);
+
+        if (dp) {
+          data = dp;
+        }
       }
     }
   }
@@ -258,7 +261,7 @@ QcepDataGroupPtr QcepDataObject::rootItem()
   if (parent) {
     return parent->rootItem();
   } else {
-    QcepDataObjectPtr obj = sharedFromThis();
+    QcepObjectPtr obj = sharedFromThis();
 
     return qSharedPointerDynamicCast<QcepDataGroup>(obj);
   }

@@ -88,7 +88,7 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(QcepExperimentWPtr expt, Qc
     setWindowTitle("Unknown Graph");
   }
 
-  QcepPlotSettingsPtr settings(new QcepPlotSettings("plotSettings", m_SettingsSaver, NULL));
+  QcepPlotSettingsPtr settings(new QcepPlotSettings("plotSettings", m_SettingsSaver, expt));
   m_ImagePlot->init(settings);
 
   m_PlotModeSelector->clear();

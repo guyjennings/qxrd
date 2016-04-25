@@ -2,7 +2,7 @@
 #define QCEPALLOCATORTHREAD_H
 
 #include "qcepthread.h"
-
+#include "qcepapplication-ptr.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qcepallocator-ptr.h"
 
@@ -11,7 +11,8 @@ class QcepAllocatorThread : public QcepThread
   Q_OBJECT
 
 public:
-  QcepAllocatorThread(QcepSettingsSaverWPtr saver);
+  QcepAllocatorThread(QcepApplicationWPtr   app,
+                      QcepSettingsSaverWPtr saver);
   ~QcepAllocatorThread();
 
   void shutdown();

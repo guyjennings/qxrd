@@ -6,10 +6,11 @@
 #include "qcepimagedata.h"
 #include "qcepdataarray.h"
 
-QcepFileImporterHDF::QcepFileImporterHDF(QcepDatasetModelPtr model,
+QcepFileImporterHDF::QcepFileImporterHDF(QcepObjectWPtr parent,
+                                         QcepDatasetModelPtr model,
                                          QModelIndexList &indexes,
                                          QString path)
-  : QcepFileImporter(model, indexes, path)
+  : QcepFileImporter(parent, model, indexes, path)
 {
 }
 

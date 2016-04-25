@@ -74,7 +74,7 @@ QcepDataObjectPtr QcepDatasetModel::indexedObject(const QModelIndex &index) cons
     QcepDataObject *obj = static_cast<QcepDataObject*>(index.internalPointer());
 
     if (obj) {
-      res = obj->sharedFromThis();
+      res = qSharedPointerDynamicCast<QcepDataObject>(obj->sharedFromThis());
 
       if (!res) {
         printMessage("QcepDatasetModel::indexedObject returns NULL\n");
@@ -447,7 +447,8 @@ bool QcepDatasetModel::dropMimeData(const QMimeData *data, Qt::DropAction action
                        .arg(id).arg(srcrow).arg(srccolumn).arg(obj->pathName()));
         }
 
-        QcepDataObjectPtr objp = obj->sharedFromThis();
+        QcepDataObjectPtr objp =
+            qSharedPointerDynamicCast<QcepDataObject>(obj->sharedFromThis());
 
         if (objp) {
           rows.append(srcrow);

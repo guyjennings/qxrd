@@ -5,7 +5,7 @@
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
 
-QcepExperiment::QcepExperiment(QString path, QString name, QcepObject *parent) :
+QcepExperiment::QcepExperiment(QString path, QString name, QcepObjectWPtr parent) :
   QcepObject(name, parent),
   m_SettingsSaver(new QcepSettingsSaver(this)),
   m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1, "Kind of Experiment"),
@@ -34,10 +34,10 @@ QcepExperiment::QcepExperiment(QString path, QString name, QcepObject *parent) :
 void QcepExperiment::initialize(QSettings *settings)
 {
   m_DataExportParameters = QcepDataExportParametersPtr(
-        new QcepDataExportParameters(m_SettingsSaver, "exportParameters"));
+        new QcepDataExportParameters(sharedFromThis(), m_SettingsSaver, "exportParameters"));
 
   m_DataImportParameters = QcepDataImportParametersPtr(
-        new QcepDataImportParameters(m_SettingsSaver, "importParameters"));
+        new QcepDataImportParameters(sharedFromThis(), m_SettingsSaver, "importParameters"));
 }
 
 QString QcepExperiment::defaultExperimentDirectory(QString path) const

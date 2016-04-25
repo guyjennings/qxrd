@@ -8,7 +8,8 @@ class QcepFileImporterTIFF : public QcepFileImporter
   Q_OBJECT
 
 public:
-  QcepFileImporterTIFF(QcepDatasetModelPtr model,
+  QcepFileImporterTIFF(QcepObjectWPtr parent,
+                       QcepDatasetModelPtr model,
                        QModelIndexList &indexes,
                        QString path);
 };

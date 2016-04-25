@@ -5,10 +5,11 @@
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumn.h"
 
-QcepFileImporterText::QcepFileImporterText(QcepDatasetModelPtr model,
+QcepFileImporterText::QcepFileImporterText(QcepObjectWPtr parent,
+                                           QcepDatasetModelPtr model,
                                            QModelIndexList &indexes,
                                            QString path) :
-  QcepFileImporter(model, indexes, path),
+  QcepFileImporter(parent, model, indexes, path),
   m_ScanLine("#S\\s*(\\d+)\\s(.*)"),
   m_ColumnCountLine("#N\\s*(\\d+)(.*)"),
   m_ColumnNamesLine("#L\\s+(.*)")

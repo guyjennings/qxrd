@@ -6,12 +6,14 @@
 #include "qcepobjectnamer.h"
 #include <QDateTime>
 #include <QSet>
+#include "qcepobject-ptr.h"
+#include <QVector>
 
-class QcepObject : public QObject
+class QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
 {
   Q_OBJECT
 public:
-  explicit QcepObject(QString name, QcepObject *parent);
+  explicit QcepObject(QString name, QcepObjectWPtr parent);
   virtual ~QcepObject();
 
   static int allocatedObjects();
@@ -43,8 +45,13 @@ public:
 
   static QString addSlashes(QString str);
 
+  QcepObjectWPtr parentPtr();
+  QVector<QcepObjectPtr> childrenPtr();
+  void addChildPtr(QcepObjectWPtr child);
+
 private:
-  QcepObject                         *m_Parent;
+  QcepObjectWPtr                      m_Parent;
+  QVector<QcepObjectPtr>              m_Children;
   QcepObjectNamer                     m_ObjectNamer;
 
 public:

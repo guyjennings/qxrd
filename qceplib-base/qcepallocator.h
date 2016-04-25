@@ -22,7 +22,8 @@ class QcepAllocator : public QcepObject, public QEnableSharedFromThis<QcepAlloca
   Q_OBJECT
 
 public:
-  QcepAllocator(QcepSettingsSaverWPtr saver);
+  QcepAllocator(QcepObjectWPtr parent,
+                QcepSettingsSaverWPtr saver);
   virtual ~QcepAllocator();
 
   void readSettings(QSettings *settings, QString section);

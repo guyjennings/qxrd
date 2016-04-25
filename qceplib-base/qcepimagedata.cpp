@@ -20,8 +20,8 @@
 
 QAtomicInt allocCount = 0;
 
-QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, QString name, int width, int height, int size)
-  : QcepDataObject(saver, name, size),
+QcepImageDataBase::QcepImageDataBase(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name, int width, int height, int size)
+  : QcepDataObject(parent, saver, name, size),
     m_Width(saver, this, "width", width, "Image Width"),
     m_Height(saver, this, "height", height, "Image Height"),
     m_HStart(saver, this, "hStart", 0.0, "H Start Coord"),
@@ -313,8 +313,8 @@ double QcepImageDataBase::vValue(int n) const
 }
 
 template <typename T>
-QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, QString name, int width, int height, T def)
-  : QcepImageDataBase(saver, name, width, height, width*height*sizeof(T)),
+QcepImageData<T>::QcepImageData(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name, int width, int height, T def)
+  : QcepImageDataBase(parent, saver, name, width, height, width*height*sizeof(T)),
     //    m_Image(width*height, def),
     m_Image(width*height),
     m_MinValue(0),
@@ -549,7 +549,7 @@ void QcepImageData<T>::dumpPixels(int x0, int y0, int x1, int y1)
 template <typename T>
 void QcepImageData<T>::resize(int width, int height)
 {
-  QcepImageData<T> temp(QcepSettingsSaverWPtr(), get_Name(), get_Width(), get_Height(), 0);
+  QcepImageData<T> temp(QcepObjectWPtr(), QcepSettingsSaverWPtr(), get_Name(), get_Width(), get_Height(), 0);
 
   int oldwidth = get_Width();
   int oldheight= get_Height();
@@ -1205,7 +1205,7 @@ void QcepImageData<T>::fromScriptValue(const QScriptValue &obj, QSharedPointer<Q
     QcepDataObject *qdobj = qobject_cast<QcepDataObject*>(qobj);
 
     if (qdobj) {
-      QcepDataObjectPtr p = qdobj->sharedFromThis();
+      QcepObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
         QSharedPointer<QcepImageData<T> > cs = qSharedPointerDynamicCast< QcepImageData<T> >(p);

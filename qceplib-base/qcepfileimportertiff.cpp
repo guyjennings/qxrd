@@ -1,9 +1,10 @@
 #include "qcepfileimportertiff.h"
 
-QcepFileImporterTIFF::QcepFileImporterTIFF(QcepDatasetModelPtr model,
+QcepFileImporterTIFF::QcepFileImporterTIFF(QcepObjectWPtr parent,
+                                           QcepDatasetModelPtr model,
                                            QModelIndexList &indexes,
                                            QString path)
-  : QcepFileImporter(model, indexes, path)
+  : QcepFileImporter(parent, model, indexes, path)
 {
 
 }

@@ -4,8 +4,8 @@
 #include "qcepdataexportparameters.h"
 #include "qcepdataexportdialog.h"
 
-QcepDataExportCommand::QcepDataExportCommand(QcepDatasetModelWPtr model, const QModelIndexList &idx, QString file) :
-  QcepObject("dataExport", NULL),
+QcepDataExportCommand::QcepDataExportCommand(QcepObjectWPtr parent, QcepDatasetModelWPtr model, const QModelIndexList &idx, QString file) :
+  QcepObject("dataExport", parent),
   m_Model(model),
   m_Indexes(idx),
   m_File(file)

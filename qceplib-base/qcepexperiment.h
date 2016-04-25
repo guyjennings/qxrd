@@ -15,7 +15,7 @@ class QcepExperiment : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QcepExperiment(QString path, QString name, QcepObject *parent);
+  explicit QcepExperiment(QString path, QString name, QcepObjectWPtr parent);
   virtual void initialize(QSettings *settings);
 
 signals:

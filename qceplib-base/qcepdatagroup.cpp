@@ -11,8 +11,8 @@
 #include <QFileInfo>
 #include <QDir>
 
-QcepDataGroup::QcepDataGroup(QcepSettingsSaverWPtr saver, QString name) :
-  QcepDataObject(saver, name, 0)
+QcepDataGroup::QcepDataGroup(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name) :
+  QcepDataObject(parent, saver, name, 0)
 {
   set_Type("Data Group");
   set_TypeID(QcepDataObject::DataGroup);
@@ -94,7 +94,7 @@ QcepDataObjectPtr QcepDataGroup::item(QString nm)
   if (info.isRoot()) {
     return rootItem();
   } else if (nm == ".") {
-    return sharedFromThis();
+    return qSharedPointerDynamicCast<QcepDataGroup>(sharedFromThis());
   } else if (info.fileName() == nm) {
     foreach(QcepDataObjectPtr p, m_Objects) {
       if (p && (p->get_Name() == nm)) {
@@ -376,7 +376,7 @@ void QcepDataGroup::fromGroupScriptValue(const QScriptValue &obj, QcepDataGroupP
     QcepDataGroup *qdobj = qobject_cast<QcepDataGroup*>(qobj);
 
     if (qdobj) {
-      QcepDataObjectPtr p = qdobj->sharedFromThis();
+      QcepObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
         QcepDataGroupPtr cs = qSharedPointerDynamicCast<QcepDataGroup>(p);
