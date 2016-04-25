@@ -14,7 +14,7 @@ class QxrdFileBrowserModelUpdater : public QcepObject, public QEnableSharedFromT
 {
     Q_OBJECT
 public:
-  explicit QxrdFileBrowserModelUpdater(QxrdFileBrowserModelWPtr browser, QcepObject *parent);
+  explicit QxrdFileBrowserModelUpdater(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr parent);
   virtual ~QxrdFileBrowserModelUpdater();
 
   bool updateNeeded();

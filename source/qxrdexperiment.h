@@ -47,7 +47,7 @@
 #include "qcepdatasetmodel-ptr.h"
 #include "qxrddetectorcontrolwindow-ptr.h"
 
-class QxrdExperiment : public QcepExperiment, public QEnableSharedFromThis<QxrdExperiment>
+class QxrdExperiment : public QcepExperiment
 {
   Q_OBJECT
 

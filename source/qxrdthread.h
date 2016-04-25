@@ -2,13 +2,14 @@
 #define QXRDTHREAD_H
 
 #include "qcepthread.h"
+#include "qcepobject-ptr.h"
 
 class QxrdThread : public QcepThread
 {
   Q_OBJECT
 
 public:
-  explicit QxrdThread(QObject *parent = 0);
+  QxrdThread(QcepObjectWPtr      parent);
 
   virtual void shutdown() = 0;
 };

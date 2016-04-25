@@ -6,9 +6,10 @@
 #include <QtConcurrentMap>
 #include "qxrdroicoordinates.h"
 #include "qcepimagedata.h"
+#include "qxrddetectorprocessor.h"
 
 QxrdROICalculator::QxrdROICalculator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdDetectorProcessorWPtr proc)
-  : QcepObject("ROIcalculator", NULL),
+  : QcepObject("ROIcalculator", proc),
     m_Saver(saver),
     m_Experiment(exp),
     m_Processor(proc),

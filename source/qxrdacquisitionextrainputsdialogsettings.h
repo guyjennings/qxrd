@@ -9,7 +9,7 @@ class QxrdAcquisitionExtraInputsDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdAcquisitionExtraInputsDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QxrdAcquisitionExtraInputsDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
   
 public:
   void readSettings(QSettings *settings, QString section);

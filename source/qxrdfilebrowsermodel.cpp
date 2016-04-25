@@ -11,8 +11,9 @@
 #include "qxrdfilebrowsermodelupdaterthread.h"
 #include "qcepmutexlocker.h"
 
-QxrdFileBrowserModel::QxrdFileBrowserModel(QObject *parent) :
-  QAbstractTableModel(parent),
+QxrdFileBrowserModel::QxrdFileBrowserModel(QcepObjectWPtr parent) :
+  QAbstractTableModel(),
+  m_Parent(parent),
   m_Mutex(QMutex::Recursive),
   m_UpdaterThread(NULL),
   m_Updater(),
@@ -42,7 +43,7 @@ void QxrdFileBrowserModel::initialize()
 {
   m_UpdaterThread =
       QxrdFileBrowserModelUpdaterThreadPtr(
-        new QxrdFileBrowserModelUpdaterThread());
+        new QxrdFileBrowserModelUpdaterThread(m_Parent));
 
   m_UpdaterThread -> setModel(sharedFromThis());
 //  m_UpdaterThread -> setObjectName("browser");

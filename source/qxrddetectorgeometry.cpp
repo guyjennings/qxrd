@@ -2,7 +2,7 @@
 
 #include "qmath.h"
 
-QxrdDetectorGeometry::QxrdDetectorGeometry(QString name, QcepObject *parent) :
+QxrdDetectorGeometry::QxrdDetectorGeometry(QString name, QcepObjectWPtr parent) :
     QcepObject(name, parent)
 {
 }

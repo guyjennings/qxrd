@@ -1,8 +1,8 @@
 #include "qxrdsynchronizedacquisitiondialogsettings.h"
 #include "qcepmutexlocker.h"
 
-QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent) :
-  QObject(parent)
+QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent) :
+  QcepObject("syncDialog", parent)
 {
   m_SynchronizedAcquisitionPlotSettings = QxrdSynchronizedAcquisitionPlotSettingsPtr(
         new QxrdSynchronizedAcquisitionPlotSettings(saver, parent));

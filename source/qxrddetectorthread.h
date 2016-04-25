@@ -16,7 +16,7 @@ public:
                               QxrdAcquisitionWPtr acq,
                               int detType,
                               int detNum,
-                              QcepObject *parent);
+                              QcepObjectWPtr parent);
   virtual ~QxrdDetectorThread();
 
   QxrdDetectorWPtr detector() const;
@@ -74,7 +74,6 @@ private:
   QxrdDetectorPtr       m_Detector;
   int                   m_DetectorType;
   int                   m_DetectorNumber;
-  QcepObject           *m_Parent;
 };
 
 #endif // QXRDDETECTORTHREAD_H

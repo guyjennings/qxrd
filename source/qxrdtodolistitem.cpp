@@ -1,7 +1,7 @@
 #include "qxrdtodolistitem.h"
 
-QxrdToDoListItem::QxrdToDoListItem(int id, bool active, QString d1, QString d2, QString s)
-  : QcepObject("toDoItem", NULL),
+QxrdToDoListItem::QxrdToDoListItem(QObject *parent, int id, bool active, QString d1, QString d2, QString s)
+  : QObject(parent),
     m_Identifier(id),
     m_Active(active),
     m_InsertedDate(QDateTime::fromString(d1, Qt::ISODate)),

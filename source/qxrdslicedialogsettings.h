@@ -10,7 +10,7 @@ class QxrdSliceDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSliceDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QxrdSliceDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
   
 public:
   Q_PROPERTY(QcepPolygon slicePolygon READ get_SlicePolygon WRITE set_SlicePolygon)

@@ -5,11 +5,11 @@
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 
-class QxrdDistortionCorrectionDialogSettings : public QObject
+class QxrdDistortionCorrectionDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdDistortionCorrectionDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QxrdDistortionCorrectionDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
 
 public:
   void readSettings(QSettings *settings, QString section);

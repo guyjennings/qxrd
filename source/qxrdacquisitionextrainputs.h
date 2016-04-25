@@ -16,7 +16,7 @@
 #include <QMutex>
 #include "qxrdacquisitionparameterpack-ptr.h"
 
-class QxrdAcquisitionExtraInputs : public QcepObject, public QEnableSharedFromThis<QxrdAcquisitionExtraInputs>
+class QxrdAcquisitionExtraInputs : public QcepObject
 {
   Q_OBJECT
 public:

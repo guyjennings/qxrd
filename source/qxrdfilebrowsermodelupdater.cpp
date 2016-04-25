@@ -7,7 +7,7 @@
 #include "qxrdfilebrowsermodelupdaterthread.h"
 #include "qxrdfilebrowsermodelupdaterthread-ptr.h"
 
-QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelWPtr browser, QcepObject *parent) :
+QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr parent) :
   QcepObject("fileBrowserModelUpdater", parent),
   m_BrowserModel(browser),
   m_RootPath(""),

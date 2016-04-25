@@ -3,28 +3,28 @@
 #include "qcepmutexlocker.h"
 
 QxrdWindowSettings::QxrdWindowSettings(QcepSettingsSaverWPtr saver,
-                                       QcepObject *parent) :
+                                       QcepObjectWPtr parent) :
   QcepObject("windowSettings", parent),
   m_WindowGeometry(saver, this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(saver, this, "windowState", QByteArray(), "Window State Settings")
 {
-  m_ImagePlotSettings         = QxrdImagePlotSettingsPtr(new QxrdImagePlotSettings(saver, NULL));
-  m_CenterFinderPlotSettings  = QxrdCenterFinderPlotSettingsPtr(new QxrdCenterFinderPlotSettings(saver, NULL));
-  m_IntegratorPlotSettings    = QcepPlotSettingsPtr(new QcepPlotSettings("integratorPlot", saver, NULL));
-  m_InputFileBrowserSettings  = QxrdFileBrowserSettingsPtr(new QxrdFileBrowserSettings(saver, NULL));
-  m_OutputFileBrowserSettings = QxrdFileBrowserSettingsPtr(new QxrdFileBrowserSettings(saver, NULL));
-  m_HistogramDialogSettings   = QxrdHistogramDialogSettingsPtr(new QxrdHistogramDialogSettings(saver, NULL));
-  m_SliceDialogSettings       = QxrdSliceDialogSettingsPtr(new QxrdSliceDialogSettings(saver, NULL));
-  m_InfoDialogSettings        = QxrdInfoDialogSettingsPtr(new QxrdInfoDialogSettings(saver, NULL));
-  m_ScriptDialogSettings      = QxrdScriptDialogSettingsPtr(new QxrdScriptDialogSettings(saver, NULL));
+  m_ImagePlotSettings         = QxrdImagePlotSettingsPtr(new QxrdImagePlotSettings(saver, sharedFromThis()));
+  m_CenterFinderPlotSettings  = QxrdCenterFinderPlotSettingsPtr(new QxrdCenterFinderPlotSettings(saver,  sharedFromThis()));
+  m_IntegratorPlotSettings    = QcepPlotSettingsPtr(new QcepPlotSettings("integratorPlot", saver,  sharedFromThis()));
+  m_InputFileBrowserSettings  = QxrdFileBrowserSettingsPtr(new QxrdFileBrowserSettings(saver,  sharedFromThis()));
+  m_OutputFileBrowserSettings = QxrdFileBrowserSettingsPtr(new QxrdFileBrowserSettings(saver,  sharedFromThis()));
+  m_HistogramDialogSettings   = QxrdHistogramDialogSettingsPtr(new QxrdHistogramDialogSettings(saver,  sharedFromThis()));
+  m_SliceDialogSettings       = QxrdSliceDialogSettingsPtr(new QxrdSliceDialogSettings(saver,  sharedFromThis()));
+  m_InfoDialogSettings        = QxrdInfoDialogSettingsPtr(new QxrdInfoDialogSettings(saver,  sharedFromThis()));
+  m_ScriptDialogSettings      = QxrdScriptDialogSettingsPtr(new QxrdScriptDialogSettings(saver,  sharedFromThis()));
   m_SynchronizedAcquisitionDialogSettings = QxrdSynchronizedAcquisitionDialogSettingsPtr(
-        new QxrdSynchronizedAcquisitionDialogSettings(saver, NULL));
+        new QxrdSynchronizedAcquisitionDialogSettings(saver,  sharedFromThis()));
   m_AcquisitionExtraInputsDialogSettings = QxrdAcquisitionExtraInputsDialogSettingsPtr(
-        new QxrdAcquisitionExtraInputsDialogSettings(saver, NULL));
+        new QxrdAcquisitionExtraInputsDialogSettings(saver,  sharedFromThis()));
   m_DistortionCorrectionDialogSettings = QxrdDistortionCorrectionDialogSettingsPtr(
-        new QxrdDistortionCorrectionDialogSettings(saver, NULL));
+        new QxrdDistortionCorrectionDialogSettings(saver,  sharedFromThis()));
   m_DistortionCorrectionPlotSettings = QxrdDistortionCorrectionPlotSettingsPtr(
-        new QxrdDistortionCorrectionPlotSettings(saver, NULL));
+        new QxrdDistortionCorrectionPlotSettings(saver,  sharedFromThis()));
 }
 
 void QxrdWindowSettings::readSettings(QSettings *settings, QString section)

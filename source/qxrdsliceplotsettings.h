@@ -7,7 +7,7 @@ class QxrdSlicePlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdSlicePlotSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QxrdSlicePlotSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
   
 signals:
   

@@ -7,7 +7,7 @@ class QxrdHistogramPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdHistogramPlotSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QxrdHistogramPlotSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
   
 signals:
   

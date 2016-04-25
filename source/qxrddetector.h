@@ -18,7 +18,7 @@
 #include "qcepimagequeue.h"
 #include "qxrdroicoordinates-ptr.h"
 
-class QxrdDetector : public QcepObject, public QEnableSharedFromThis<QxrdDetector>
+class QxrdDetector : public QcepObject
 {
   Q_OBJECT
 
@@ -28,7 +28,7 @@ public:
                         QxrdAcquisitionWPtr   acq,
                         int                   detType,
                         int                   detNum,
-                        QcepObject *parent);
+                        QcepObjectWPtr        parent);
   void initialize();
   virtual ~QxrdDetector();
 

@@ -24,7 +24,7 @@
 #include "qxrdperkinelmerplugininterface-ptr.h"
 #endif
 
-class QxrdApplication : public QcepApplication, public QEnableSharedFromThis<QxrdApplication>
+class QxrdApplication : public QcepApplication
 {
   Q_OBJECT
 

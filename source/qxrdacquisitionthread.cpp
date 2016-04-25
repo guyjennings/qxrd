@@ -18,7 +18,7 @@ QxrdAcquisitionThread::QxrdAcquisitionThread(QcepSettingsSaverWPtr saver,
                                              QxrdDataProcessorWPtr proc,
                                              QcepAllocatorWPtr allocator,
                                              int detectorType)
-  : QxrdThread(),
+  : QxrdThread(doc),
     m_Saver(saver),
     m_Experiment(doc),
     m_Allocator(allocator),

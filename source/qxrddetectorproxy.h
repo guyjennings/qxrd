@@ -8,7 +8,7 @@
 #include <QVector>
 #include "qxrddetectorconfigurationdialog.h"
 
-class QxrdDetectorProxy : public QcepObject, public QEnableSharedFromThis<QxrdDetectorProxy>
+class QxrdDetectorProxy : public QcepObject
 {
   Q_OBJECT
 

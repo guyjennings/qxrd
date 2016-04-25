@@ -1,5 +1,6 @@
 #include "qxrdthread.h"
+#include "qxrdapplication.h"
 
-QxrdThread::QxrdThread(QObject *parent) : QcepThread(parent)
+QxrdThread::QxrdThread(QcepObjectWPtr parent) : QcepThread(parent)
 {
 }

@@ -6,7 +6,7 @@
 #include "qcepmutexlocker.h"
 
 QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcquisitionInterfaceWPtr acq)
-  : QxrdThread(),
+  : QxrdThread(acq),
     m_Acquisition(acq)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {

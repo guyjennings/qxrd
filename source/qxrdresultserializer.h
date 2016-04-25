@@ -14,7 +14,7 @@ class QxrdResultSerializerBase : public QcepObject
 {
   Q_OBJECT
 public:
-  QxrdResultSerializerBase(QcepObject *parent);
+  QxrdResultSerializerBase(QcepObjectWPtr parent);
   virtual ~QxrdResultSerializerBase();
 
 signals:
@@ -28,7 +28,7 @@ template <typename T>
 class QxrdResultSerializer : public QxrdResultSerializerBase
 {
 public:
-  explicit QxrdResultSerializer(QcepIntProperty *ctr, QcepObject *parent);
+  explicit QxrdResultSerializer(QcepIntProperty *ctr, QcepObjectWPtr parent);
 
   void enqueue(QFuture<T> future);
   T dequeue();

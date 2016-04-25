@@ -5,11 +5,11 @@
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 
-class QxrdFileBrowserSettings : public QObject
+class QxrdFileBrowserSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdFileBrowserSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QxrdFileBrowserSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
   
 public:
   Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter)

@@ -20,8 +20,10 @@
 
 #include <cmath>
 
-QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw)
-  : QcepObject("integrator", NULL),
+QxrdIntegrator::QxrdIntegrator(QcepSettingsSaverWPtr saver,
+                               QxrdExperimentWPtr exp,
+                               QxrdCenterFinderWPtr cfw)
+  : QcepObject("integrator", cfw),
     m_Oversample(saver, this, "oversample", 1, "Oversampling for Integration"),
     m_IntegrationStep(saver, this, "integrationStep", 0.01, "Integration Step Size"),
     m_IntegrationNSteps(saver, this, "integrationNSteps", 0, "Integration Number of Steps"),
@@ -167,7 +169,7 @@ QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepDoubleImageDataPtr 
 
     cache = QxrdIntegratorCachePtr(
           new QxrdIntegratorCache(m_Experiment,
-                                  (QxrdIntegratorWPtr) sharedFromThis(),
+                                  qSharedPointerDynamicCast<QxrdIntegrator>(sharedFromThis()),
                                   QxrdPolarTransformWPtr(),
                                   m_CenterFinder));
 

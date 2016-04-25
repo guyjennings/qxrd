@@ -21,7 +21,7 @@
 #include "qxrdimageplotsettings-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 
-class QxrdDetectorProcessor : public QcepObject, public QEnableSharedFromThis<QxrdDetectorProcessor>
+class QxrdDetectorProcessor : public QcepObject
 {
     Q_OBJECT
 

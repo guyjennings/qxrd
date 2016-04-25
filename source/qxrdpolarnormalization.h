@@ -17,7 +17,7 @@ class QxrdPolarNormalization : public QcepObject
 
 public:
   QxrdPolarNormalization(QcepSettingsSaverWPtr saver,
-                         QxrdExperimentWPtr    exp);
+                         QcepObjectWPtr parent);
 
   QcepDataObjectPtr transform(QcepDoubleImageDataPtr img);
 
@@ -46,7 +46,6 @@ public:
 private:
   mutable QMutex        m_Mutex;
   QcepSettingsSaverWPtr m_Saver;
-  QxrdExperimentWPtr    m_Experiment;
 };
 
 #endif // QXRDPOLARNORMALIZATION_H

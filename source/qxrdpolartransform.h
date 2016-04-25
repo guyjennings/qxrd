@@ -15,7 +15,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
-class QxrdPolarTransform : public QcepObject, public QEnableSharedFromThis<QxrdPolarTransform>
+class QxrdPolarTransform : public QcepObject
 {
   Q_OBJECT
 

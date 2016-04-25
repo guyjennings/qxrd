@@ -296,7 +296,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
     int detType = settings->value("detectorType", 0).toInt();
 
     QxrdDetectorThreadPtr detThread = QxrdDetectorThreadPtr(
-          new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, i, this));
+          new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, i, sharedFromThis()));
 
     if (detThread) {
       detThread->start();
@@ -335,7 +335,7 @@ void QxrdAcquisition::appendDetector(int detType)
     int nDet = get_DetectorCount();
 
     QxrdDetectorThreadPtr detThread = QxrdDetectorThreadPtr(
-          new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, nDet, this));
+          new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, nDet, sharedFromThis()));
 
     if (detThread) {
       detThread->start();
@@ -368,7 +368,7 @@ void QxrdAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
         int detType = proxy->detectorType();
 
        detThread = QxrdDetectorThreadPtr(
-             new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, nDet, this));
+             new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, nDet, sharedFromThis()));
 
        detThread->start();
 

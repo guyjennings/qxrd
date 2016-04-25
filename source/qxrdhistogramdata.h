@@ -8,7 +8,7 @@ class QxrdHistogramData : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdHistogramData(QcepObject *parent = 0);
+  explicit QxrdHistogramData(QcepObjectWPtr parent);
 
 signals:
 

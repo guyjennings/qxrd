@@ -8,14 +8,13 @@
 #include <qmath.h>
 #include "qcepallocator.h"
 
-QxrdPolarNormalization::QxrdPolarNormalization(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp) :
-  QcepObject("polarNormalization", NULL),
+QxrdPolarNormalization::QxrdPolarNormalization(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent) :
+  QcepObject("polarNormalization", parent),
   m_OutputType(saver, this, "outputType", IntegratedOutput, "Output Type (0=Integ, 1=Fit, 2=Deltas"),
   m_SelfNormalize(saver, this, "selfNormalize", false, "Self-Normalize integrated curves"),
   m_SelfNormalizeMin(saver, this, "selfNormalizeMin", 0, "Self-Normalize Range Minimum"),
   m_SelfNormalizeMax(saver, this, "selfNormalizeMax", 0, "Self-Normalize Range Maximum"),
-  m_Saver(saver),
-  m_Experiment(exp)
+  m_Saver(saver)
 {
 }
 

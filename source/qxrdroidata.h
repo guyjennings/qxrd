@@ -8,7 +8,7 @@ class QxrdROIData : public QcepObject
 {
 Q_OBJECT
 public:
-    explicit QxrdROIData(QcepObject *parent);
+    explicit QxrdROIData(QcepObjectWPtr parent);
 
 signals:
 

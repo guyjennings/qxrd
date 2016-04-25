@@ -8,7 +8,7 @@ class QxrdDistortionCorrectionPlotSettings : public QxrdImagePlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdDistortionCorrectionPlotSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QxrdDistortionCorrectionPlotSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
 
 signals:
 

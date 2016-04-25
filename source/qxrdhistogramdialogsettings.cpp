@@ -1,8 +1,8 @@
 #include "qxrdhistogramdialogsettings.h"
 #include "qcepsettingssaver.h"
 
-QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent) :
-  QObject(parent),
+QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent) :
+  QcepObject("histDialogSettings", parent),
   m_HistogramRect(saver, this, "histogramRect", QRectF(), "Histogram Selection Rectangle")
 {
   m_HistogramPlotSettings = QxrdHistogramPlotSettingsPtr(new QxrdHistogramPlotSettings(saver, parent));

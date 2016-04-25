@@ -5,11 +5,11 @@
 #include "qcepproperty.h"
 #include "qxrdhistogramplotsettings.h"
 
-class QxrdHistogramDialogSettings : public QObject
+class QxrdHistogramDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdHistogramDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QxrdHistogramDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
   
 public:
   Q_PROPERTY(QRectF histogramRect READ get_HistogramRect WRITE set_HistogramRect)

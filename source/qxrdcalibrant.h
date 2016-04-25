@@ -14,7 +14,7 @@
 #include "qxrdcalibrantdspacings.h"
 #include <qscriptengine.h>
 
-class QxrdCalibrant : public QcepObject, public QEnableSharedFromThis<QxrdCalibrant>
+class QxrdCalibrant : public QcepObject
 {
   Q_OBJECT
 

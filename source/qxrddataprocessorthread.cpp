@@ -10,7 +10,7 @@ QxrdDataProcessorThread::QxrdDataProcessorThread(QcepSettingsSaverWPtr saver,
                                                  QxrdExperimentWPtr doc,
                                                  QxrdAcquisitionWPtr acq,
                                                  QxrdFileSaverWPtr filesaver)
-  : QxrdThread(),
+  : QxrdThread(doc),
     m_FileSaver(filesaver),
     m_Acquisition(acq),
     m_Experiment(doc),

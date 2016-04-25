@@ -24,15 +24,14 @@ QxrdDetectorThread::QxrdDetectorThread(QcepSettingsSaverWPtr saver,
                                        QxrdExperimentWPtr    expt,
                                        QxrdAcquisitionWPtr   acq,
                                        int                   detType, int detNum,
-                                       QcepObject           *parent) :
-  QxrdThread(),
+                                       QcepObjectWPtr        parent) :
+  QxrdThread(parent),
   m_Saver(saver),
   m_Experiment(expt),
   m_Acquisition(acq),
   m_Detector(),
   m_DetectorType(detType),
-  m_DetectorNumber(detNum),
-  m_Parent(parent)
+  m_DetectorNumber(detNum)
 {
 #ifndef QT_NODEBUG
   printf("Detector thread constructed\n");
@@ -221,7 +220,7 @@ void QxrdDetectorThread::run()
                                                       m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber,
-                                                      m_Parent));
+                                                      parent()));
       break;
 
 #ifdef HAVE_PERKIN_ELMER
@@ -231,7 +230,7 @@ void QxrdDetectorThread::run()
                                                         m_Experiment,
                                                         m_Acquisition,
                                                         m_DetectorNumber,
-                                                        m_Parent));
+                                                        parent()));
       break;
 #endif
 
@@ -242,7 +241,7 @@ void QxrdDetectorThread::run()
                                                     m_Experiment,
                                                     m_Acquisition,
                                                     m_DetectorNumber,
-                                                    m_Parent));
+                                                    parent()));
       break;
       //#endif
 
@@ -253,7 +252,7 @@ void QxrdDetectorThread::run()
                                                       m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber,
-                                                      m_Parent));
+                                                      parent()));
       break;
 #endif
 
@@ -263,7 +262,7 @@ void QxrdDetectorThread::run()
                                                         m_Experiment,
                                                         m_Acquisition,
                                                         m_DetectorNumber,
-                                                        m_Parent));
+                                                        parent()));
       break;
     }
 
@@ -273,7 +272,7 @@ void QxrdDetectorThread::run()
                                                       m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber,
-                                                      m_Parent));
+                                                      parent()));
     }
 
     if (det) {

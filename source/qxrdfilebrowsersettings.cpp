@@ -1,8 +1,8 @@
 #include "qxrdfilebrowsersettings.h"
 #include "qcepsettingssaver.h"
 
-QxrdFileBrowserSettings::QxrdFileBrowserSettings(QcepSettingsSaverWPtr saver, QcepObject *parent) :
-  QObject(parent),
+QxrdFileBrowserSettings::QxrdFileBrowserSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent) :
+  QcepObject("fileBrowserSettings", parent),
   m_BrowserFilter(saver, this, "browserFilter",1, "Browser Filter"),
   m_BrowserSelector(saver, this, "browserSelector","", "Browser Selector"),
   m_RootDirectory(saver, this, "rootDirectory","", "Browser Root Directory")/*,

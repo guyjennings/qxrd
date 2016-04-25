@@ -4,11 +4,12 @@
 #include "qxrdscriptengine.h"
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
+#include "qxrdexperiment.h"
 
 #include <stdio.h>
 
 QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplicationWPtr app, QxrdExperimentWPtr exp)
-  : QxrdThread(NULL),
+  : QxrdThread(exp),
     m_ScriptEngine(NULL),
     m_Application(app),
     m_Experiment(exp)

@@ -347,7 +347,8 @@ HEADERS += TODO.h \
     qxrdcalibrantdspacing.h \
     qxrdcalibrantdspacing-ptr.h \
     qxrdcalibrantdspacings-ptr.h \
-    qxrdintegratorparmsdialog.h
+    qxrdintegratorparmsdialog.h \
+    qxrddataprocessorbase-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \

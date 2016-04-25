@@ -6,7 +6,7 @@ QxrdDetectorFileWatcher::QxrdDetectorFileWatcher(QcepSettingsSaverWPtr saver,
                                                  QxrdExperimentWPtr    expt,
                                                  QxrdAcquisitionWPtr   acq,
                                                  int                   detNum,
-                                                 QcepObject           *parent) :
+                                                 QcepObjectWPtr        parent) :
   QxrdDetector(saver, expt, acq, QxrdDetectorThread::FileWatcherDetector, detNum, parent)
 {
 }

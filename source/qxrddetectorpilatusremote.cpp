@@ -2,7 +2,7 @@
 #include "qxrddebug.h"
 #include <QCryptographicHash>
 
-QxrdDetectorPilatusRemote::QxrdDetectorPilatusRemote(QcepObject *owner)
+QxrdDetectorPilatusRemote::QxrdDetectorPilatusRemote(QcepObjectWPtr owner)
   : QcepObject("pilatusRemote", owner),
     m_FileTransferSize(0)
 {

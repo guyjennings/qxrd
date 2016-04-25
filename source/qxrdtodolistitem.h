@@ -3,10 +3,10 @@
 
 #include "qcepobject.h"
 
-class QxrdToDoListItem : public QcepObject
+class QxrdToDoListItem : public QObject
 {
 public:
-  QxrdToDoListItem(int id, bool active, QString d1, QString d2, QString s);
+  QxrdToDoListItem(QObject *parent, int id, bool active, QString d1, QString d2, QString s);
 
   int identifier();
   bool isActive();

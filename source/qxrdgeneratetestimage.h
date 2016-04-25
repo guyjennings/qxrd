@@ -6,7 +6,7 @@
 #include "qcepobject.h"
 
 #include "qcepproperty.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrddataprocessorbase-ptr.h"
 #include "qcepallocator-ptr.h"
 #include "qxrddetectorgeometry-ptr.h"
 #include "qxrddetectorgeometry.h"
@@ -16,7 +16,8 @@ class QxrdGenerateTestImage : public QcepObject
 {
   Q_OBJECT
 public:
-  QxrdGenerateTestImage(QcepSettingsSaverWPtr saver);
+  QxrdGenerateTestImage(QcepObjectWPtr parent,
+                        QcepSettingsSaverWPtr saver);
 
 public slots:
   void setDimension(int nc, int nr);
@@ -33,11 +34,11 @@ public slots:
   void generateChiImage();
 
 public:
-  void setProcessor(QxrdDataProcessorWPtr proc);
+  void setProcessor(QxrdDataProcessorBaseWPtr proc);
 
 private:
-  QxrdDataProcessorWPtr   m_Processor;
-  QxrdDetectorGeometryPtr m_Geometry;
+  QxrdDataProcessorBaseWPtr m_Processor;
+  QxrdDetectorGeometryPtr   m_Geometry;
 
 public:
   Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)

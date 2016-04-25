@@ -44,7 +44,7 @@
 QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
     QString path,
     QxrdApplicationWPtr app) :
-  QcepExperiment(path, "experiment", NULL),
+  QcepExperiment(path, "experiment", QcepDataObjectWPtr()),
   m_Application(app),
   m_ExperimentThread(expthrd),
   m_WindowSettings(NULL),
@@ -124,12 +124,14 @@ void QxrdExperiment::initialize(QSettings *settings)
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
+    QxrdExperimentPtr myself(qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()));
+
     QcepExperiment::initialize(settings);
 
     splashMessage("Initializing File Saver");
 
     m_FileSaverThread = QxrdFileSaverThreadPtr(
-          new QxrdFileSaverThread(app->allocator()));
+          new QxrdFileSaverThread(sharedFromThis(), app->allocator()));
 
     m_FileSaverThread -> start();
     m_FileSaver = m_FileSaverThread -> fileSaver();
@@ -138,7 +140,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     m_DataProcessor = QxrdDataProcessorPtr(
           new QxrdDataProcessor(m_SettingsSaver,
-                                sharedFromThis(),
+                                myself,
                                 QxrdAcquisitionWPtr(),
                                 m_FileSaver));
 
@@ -148,18 +150,20 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     if (saver) {
       saver -> setProcessor(m_DataProcessor);
-      saver -> setExperiment(sharedFromThis());
+      saver -> setExperiment(myself);
     }
 
     splashMessage("Initializing Data Acquisition");
 
     m_Acquisition = QxrdAcquisitionPtr(
-          new QxrdAcquisition(m_SettingsSaver, sharedFromThis(), m_DataProcessor, app->allocator()));
+          new QxrdAcquisition(m_SettingsSaver,
+                              myself,
+                              m_DataProcessor, app->allocator()));
 
     m_Acquisition -> initialize();
 
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
-          new QxrdCalibrantLibrary(m_SettingsSaver, sharedFromThis()));
+          new QxrdCalibrantLibrary(m_SettingsSaver, myself));
 
     m_CalibrantLibraryModel = QxrdCalibrantLibraryModelPtr(
           new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
@@ -188,7 +192,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     m_Dataset      = QcepAllocator::newDataset("dataset");
     m_DatasetModel = QcepDatasetModelPtr(
-          new QcepDatasetModel(sharedFromThis(), m_DataProcessor, m_Dataset));
+          new QcepDatasetModel(myself, m_DataProcessor, m_Dataset));
 
 //    m_DatasetModel -> newGroup("group1");
 //    m_DatasetModel -> newGroup("group2");
@@ -208,12 +212,12 @@ void QxrdExperiment::initialize(QSettings *settings)
 //    m_DatasetModel -> newColumn("group4/sdev", 1000);
 
     m_WindowSettings = QxrdWindowSettingsPtr(
-          new QxrdWindowSettings(m_SettingsSaver, NULL));
+          new QxrdWindowSettings(m_SettingsSaver, myself));
 
     splashMessage("Starting SPEC Server");
 
     m_ServerThread = QxrdServerThreadPtr(
-          new QxrdServerThread(m_SettingsSaver, sharedFromThis(), "qxrd"));
+          new QxrdServerThread(m_SettingsSaver, myself, "qxrd"));
 
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
@@ -221,7 +225,7 @@ void QxrdExperiment::initialize(QSettings *settings)
     splashMessage("Starting Simple Socket Server");
 
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
-          new QxrdSimpleServerThread(m_SettingsSaver, sharedFromThis(), "simpleserver"));
+          new QxrdSimpleServerThread(m_SettingsSaver, myself, "simpleserver"));
 
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
@@ -233,7 +237,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 //    m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
 
     m_ScriptEngine = QxrdScriptEnginePtr(
-          new QxrdScriptEngine(app, sharedFromThis()));
+          new QxrdScriptEngine(app, myself));
 
     m_ScriptEngine -> initialize();
 
@@ -351,7 +355,7 @@ void QxrdExperiment::openWindows()
     m_Window = QxrdWindowPtr(
           new QxrdWindow(m_WindowSettings,
                          m_Application,
-                         sharedFromThis(),
+                         qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()),
                          m_Acquisition,
                          m_DataProcessor,
                          app->allocator(),
@@ -800,11 +804,11 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
       ssrv -> readSettings(settings, "simpleserver");
     }
 
-    if (m_DatasetModel) {
-      settings->beginGroup("dataset");
-      m_DatasetModel->readSettings(settings, "dataset");
-      settings->endGroup();
-    }
+//    if (m_DatasetModel) {
+//      settings->beginGroup("dataset");
+//      m_DatasetModel->readSettings(settings, "dataset");
+//      settings->endGroup();
+//    }
   }
 }
 
@@ -865,11 +869,11 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
       ssrv -> writeSettings(settings, "simpleserver");
     }
 
-    if (m_DatasetModel) {
-      settings->beginGroup("dataset");
-      m_DatasetModel -> writeSettings(settings, "dataset");
-      settings->endGroup();
-    }
+//    if (m_DatasetModel) {
+//      settings->beginGroup("dataset");
+//      m_DatasetModel -> writeSettings(settings, "dataset");
+//      settings->endGroup();
+//    }
   }
 }
 

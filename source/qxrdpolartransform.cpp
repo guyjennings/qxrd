@@ -8,7 +8,7 @@
 #include "qcepallocator.h"
 
 QxrdPolarTransform::QxrdPolarTransform(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp) :
-  QcepObject("polarTransform", NULL),
+  QcepObject("polarTransform", exp),
 //  m_Destination(saver, this, "destination", "Polar/image", "Destination for polar transform"),
 //  m_OutputType(saver, this, "outputType", 3, "Output type 0=none, 1=data, 2=radial plot, 3=polar plot"),
   m_Oversample(saver, this, "oversample", 1, "Oversample factor"),
@@ -91,7 +91,9 @@ QcepDataObjectPtr QxrdPolarTransform::transform(QcepDoubleImageDataPtr img, Qcep
     if (proc && cf) {
       QxrdIntegratorCachePtr integCache =
           QxrdIntegratorCachePtr(new QxrdIntegratorCache(
-                                   expt, integ, sharedFromThis(), cf));
+                                   expt, integ,
+                                   qSharedPointerDynamicCast<QxrdPolarTransform>(sharedFromThis()),
+                                   cf));
 
       if (img) {
         res = integCache->performIntegration(img, mask, 0);

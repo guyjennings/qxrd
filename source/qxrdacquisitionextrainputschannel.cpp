@@ -6,7 +6,7 @@
 
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
     int chnum, QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra) :
-  QcepObject(tr("extraChannel(%1)").arg(chnum), NULL),
+  QcepObject(tr("extraChannel(%1)").arg(chnum), xtra),
   m_ChannelNumber(QcepSettingsSaverWPtr(), this, "channelNumber", chnum, "Extra Input Channel Number"),
   m_Enabled(saver, this, "enabled", 1, "Enabled?"),
   m_Plotted(saver, this, "plotted", 1, "Plotted?"),

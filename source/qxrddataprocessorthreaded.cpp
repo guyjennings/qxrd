@@ -20,10 +20,10 @@ QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QcepSettingsSaverWPtr saver
     QxrdAcquisitionWPtr   acq,
     QxrdFileSaverWPtr filesaver)
   : QxrdDataProcessorBase(saver, doc, acq, filesaver),
-    m_CorrectedImages(prop_CorrectionQueueLength(), this),
-    m_IntegratedData(prop_IntegrationQueueLength(), this),
-    m_ROIData(NULL, this),
-    m_HistogramData(NULL, this)
+    m_CorrectedImages(prop_CorrectionQueueLength(), sharedFromThis()),
+    m_IntegratedData(prop_IntegrationQueueLength(), sharedFromThis()),
+    m_ROIData(NULL, sharedFromThis()),
+    m_HistogramData(NULL, sharedFromThis())
 {
   connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessorThreaded::onCorrectedImageAvailable);
   connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessorThreaded::onIntegratedDataAvailable);

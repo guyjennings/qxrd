@@ -9,7 +9,7 @@ class QxrdScriptDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdScriptDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QxrdScriptDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
 
 public:
   void readSettings(QSettings *settings, QString section);

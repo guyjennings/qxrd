@@ -19,7 +19,7 @@ class QxrdFileBrowserModel : public QAbstractTableModel, public QEnableSharedFro
   Q_OBJECT
 
 public:
-  explicit QxrdFileBrowserModel(QObject *parent);
+  explicit QxrdFileBrowserModel(QcepObjectWPtr parent);
   ~QxrdFileBrowserModel();
   void initialize();
 
@@ -62,6 +62,7 @@ private:
   void updateModel();
 
 private:
+  QcepObjectWPtr     m_Parent;
   mutable QMutex     m_Mutex;
   QxrdFileBrowserModelUpdaterThreadPtr m_UpdaterThread;
   QxrdFileBrowserModelUpdaterWPtr m_Updater;

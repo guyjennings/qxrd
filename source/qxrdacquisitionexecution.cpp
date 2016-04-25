@@ -4,7 +4,7 @@
 #include "qxrdacquisitioninterface.h"
 
 QxrdAcquisitionExecution::QxrdAcquisitionExecution(QxrdAcquisitionInterfaceWPtr acq)
-  : QcepObject("acquisitionExecution", NULL),
+  : QcepObject("acquisitionExecution", acq),
     m_Acquisition(acq)
 {
 #ifndef QT_NO_DEBUG

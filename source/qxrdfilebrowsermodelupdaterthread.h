@@ -9,7 +9,7 @@ class QxrdFileBrowserModelUpdaterThread : public QxrdThread
 {
   Q_OBJECT
 public:
-  explicit QxrdFileBrowserModelUpdaterThread();
+  explicit QxrdFileBrowserModelUpdaterThread(QcepObjectWPtr parent);
   virtual ~QxrdFileBrowserModelUpdaterThread();
 
   void setModel(QxrdFileBrowserModelWPtr model);

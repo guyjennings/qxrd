@@ -10,7 +10,7 @@ QxrdROICoordinates::QxrdROICoordinates(QcepSettingsSaverWPtr saver,
                                        double                top,
                                        double                right,
                                        double                bottom)
-  : QcepObject("coords", NULL),
+  : QcepObject("coords", exp),
     m_RoiType(saver, this, "roiType", roiType, "ROI Type"),
     m_RoiTypeName(QcepSettingsSaverWPtr(), this, "roiTypeName", roiTypeName(roiType), "ROI Type Name"),
     m_Coords(saver, this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords"),

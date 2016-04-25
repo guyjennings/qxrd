@@ -3,7 +3,7 @@
 
 #include "qxrddataprocessorthreaded.h"
 
-class QxrdDataProcessor : public QxrdDataProcessorThreaded, public QEnableSharedFromThis<QxrdDataProcessor>
+class QxrdDataProcessor : public QxrdDataProcessorThreaded
 {
   Q_OBJECT
 

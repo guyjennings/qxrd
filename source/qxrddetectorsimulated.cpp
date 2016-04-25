@@ -11,7 +11,7 @@ QxrdDetectorSimulated::QxrdDetectorSimulated(QcepSettingsSaverWPtr saver,
                                              QxrdExperimentWPtr    expt,
                                              QxrdAcquisitionWPtr   acq,
                                              int                   detNum,
-                                             QcepObject           *parent) :
+                                             QcepObjectWPtr parent) :
   QxrdDetector(saver, expt, acq, QxrdDetectorThread::SimulatedDetector, detNum, parent)
 {
 #ifndef QT_NO_DEBUG

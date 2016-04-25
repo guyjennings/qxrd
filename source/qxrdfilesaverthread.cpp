@@ -7,8 +7,9 @@
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
 
-QxrdFileSaverThread::QxrdFileSaverThread(QcepAllocatorWPtr allocator)
-  : QxrdThread(),
+QxrdFileSaverThread::QxrdFileSaverThread(QcepObjectWPtr parent,
+                                         QcepAllocatorWPtr allocator)
+  : QxrdThread(parent),
     m_FileSaver(),
     m_Allocator()
 {

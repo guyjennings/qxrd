@@ -5,8 +5,8 @@
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
 
-QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread() :
-  QxrdThread(),
+QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(QcepObjectWPtr parent) :
+  QxrdThread(parent),
   m_Model(),
   m_Updater()
 {
@@ -46,7 +46,7 @@ void QxrdFileBrowserModelUpdaterThread::run()
   }
 
   m_Updater = QxrdFileBrowserModelUpdaterPtr(
-        new QxrdFileBrowserModelUpdater(m_Model, NULL));
+        new QxrdFileBrowserModelUpdater(m_Model, parent()));
 
   int rc = exec();
 

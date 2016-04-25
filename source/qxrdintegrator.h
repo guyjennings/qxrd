@@ -20,12 +20,14 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 
-class QxrdIntegrator : public QcepObject, public QEnableSharedFromThis<QxrdIntegrator>
+class QxrdIntegrator : public QcepObject
 {
   Q_OBJECT
 
 public:
-  QxrdIntegrator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw);
+  QxrdIntegrator(QcepSettingsSaverWPtr saver,
+                 QxrdExperimentWPtr exp,
+                 QxrdCenterFinderWPtr cfw);
   virtual ~QxrdIntegrator();
 
 public:

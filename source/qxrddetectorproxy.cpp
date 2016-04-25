@@ -10,7 +10,7 @@
 QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
                                      QxrdDetectorPtr       det,
                                      QxrdAcquisitionPtr    acq)
-  : QcepObject("detectorProxy", acq.data()),
+  : QcepObject("detectorProxy", acq),
     m_Acquisition(acq),
     m_DetectorThread(thr),
     m_Detector(det),
@@ -26,7 +26,7 @@ QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
 }
 
 QxrdDetectorProxy::QxrdDetectorProxy(int detectorType, QxrdAcquisitionPtr acq)
-  : QcepObject("detectorProxy", acq.data()),
+  : QcepObject("detectorProxy", acq),
     m_Acquisition(acq),
     m_DetectorThread(),
     m_Detector(),
@@ -40,11 +40,13 @@ QxrdDetectorProxy::QxrdDetectorProxy(int detectorType, QxrdAcquisitionPtr acq)
 void QxrdDetectorProxy::initialize()
 {
   if (!m_Initialized) {
-    if (sharedFromThis()) {
+    QxrdDetectorProxyPtr myself(qSharedPointerDynamicCast<QxrdDetectorProxy>(sharedFromThis()));
+
+    if (myself) {
       if (m_Detector) {
-        m_Detector->pushPropertiesToProxy(sharedFromThis());
+        m_Detector->pushPropertiesToProxy(myself);
       } else {
-        QxrdDetectorThread::pushDefaultsToProxy(m_DetectorType, sharedFromThis());
+        QxrdDetectorThread::pushDefaultsToProxy(m_DetectorType, myself);
       }
 
       m_Initialized = true;
@@ -101,14 +103,16 @@ QxrdDetectorPtr QxrdDetectorProxy::detector()
 
 bool QxrdDetectorProxy::configureDetector()
 {
+  QxrdDetectorProxyPtr myself(qSharedPointerDynamicCast<QxrdDetectorProxy>(sharedFromThis()));
+
   if (m_Detector) {
-    m_Detector->pushPropertiesToProxy(sharedFromThis());
+    m_Detector->pushPropertiesToProxy(myself);
   } else {
-    QxrdDetectorThread::pushDefaultsToProxy(m_DetectorType, sharedFromThis());
+    QxrdDetectorThread::pushDefaultsToProxy(m_DetectorType, myself);
   }
 
   QxrdDetectorConfigurationDialog *d =
-      new QxrdDetectorConfigurationDialog(sharedFromThis());
+      new QxrdDetectorConfigurationDialog(myself);
 
   if (d->exec() == QDialog::Accepted) {
     m_SettingsChanged = true;

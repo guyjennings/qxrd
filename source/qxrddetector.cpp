@@ -16,7 +16,7 @@ QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
                            QxrdAcquisitionWPtr   acq,
                            int                   detType,
                            int                   detNum,
-                           QcepObject           *parent) :
+                           QcepObjectWPtr        parent) :
   QcepObject("detector", parent),
   m_Saver(saver),
   m_Experiment(expt),
@@ -61,7 +61,8 @@ void QxrdDetector::initialize()
   if (exper) {
     m_Processor =
         QxrdDetectorProcessorPtr(
-          new QxrdDetectorProcessor(m_Saver, m_Experiment, exper->fileSaver(), sharedFromThis()));
+          new QxrdDetectorProcessor(m_Saver, m_Experiment, exper->fileSaver(),
+                                    qSharedPointerDynamicCast<QxrdDetector>(sharedFromThis())));
   }
 
   QxrdAcquisitionPtr a(m_Acquisition);
@@ -247,7 +248,11 @@ void QxrdDetector::fromScriptValue(const QScriptValue &obj, QxrdDetectorWPtr &de
     QxrdDetector *qdet = qobject_cast<QxrdDetector*>(qobj);
 
     if (qdet) {
-      det = qdet->sharedFromThis();
+      QxrdDetectorPtr dp(qSharedPointerDynamicCast<QxrdDetector>(qdet->sharedFromThis()));
+
+      if (dp) {
+        det = dp;
+      }
     }
   }
 }
@@ -298,7 +303,7 @@ void QxrdDetector::openControlWindow()
           new QxrdDetectorControlWindow(m_Saver,
                                         m_Experiment,
                                         m_Acquisition,
-                                        sharedFromThis(),
+                                        qSharedPointerDynamicCast<QxrdDetector>(sharedFromThis()),
                                         m_Processor, NULL));
 
     QxrdDetectorProcessorPtr dp(m_Processor);

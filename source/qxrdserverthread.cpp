@@ -9,6 +9,7 @@
 #include "qcepmutexlocker.h"
 
 QxrdServerThread::QxrdServerThread(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
+  QxrdThread(doc),
   m_Saver(saver),
   m_Experiment(doc),
   m_Name(name),

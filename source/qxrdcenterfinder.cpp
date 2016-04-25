@@ -29,7 +29,7 @@
 # endif /* LINSOLVERS_RETAIN_MEMORY */
 
 QxrdCenterFinder::QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
-  : QxrdDetectorGeometry("centering", NULL),
+  : QxrdDetectorGeometry("centering", expt),
     m_CenterX(saver, this, "centerX", 0, "X Center"),
     m_CenterY(saver, this, "centerY", 0, "Y Center"),
     m_CenterStep(saver, this, "centerStep", 1, "Center Step"),

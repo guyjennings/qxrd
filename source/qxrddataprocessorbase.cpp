@@ -32,7 +32,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     QxrdAcquisitionWPtr acq,
     QxrdFileSaverWPtr filesaver) :
 
-  QcepDataProcessorBase("processor", NULL),
+  QcepDataProcessorBase("processor", doc),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),
   m_FileName(QcepSettingsSaverWPtr(), this, "fileName","", "Current File Name"),
   m_DataPath(saver, this,"dataPath", "", "Data Path"),
@@ -138,10 +138,9 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
 
 //  m_Integrator->initialize(m_Integrator);
 
-  m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(saver));
+  m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(sharedFromThis(), saver));
 
   m_DistortionCorrection = QxrdDistortionCorrectionPtr(new QxrdDistortionCorrection(saver, m_Experiment));
-
 }
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()

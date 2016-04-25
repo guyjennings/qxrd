@@ -3,13 +3,14 @@
 
 #include <QAbstractListModel>
 #include "qxrdtodolistitem-ptr.h"
+#include "qcepobject-ptr.h"
 
 class QxrdToDoList : public QAbstractListModel
 {
   Q_OBJECT
 
 public:
-  QxrdToDoList(QObject *parent=NULL);
+  QxrdToDoList(QObject *parent);
 
   int rowCount(const QModelIndex &parent) const;
   int columnCount(const QModelIndex &parent) const;

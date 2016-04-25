@@ -10,7 +10,7 @@
 #include <qmath.h>
 
 QxrdCalibrant::QxrdCalibrant(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib, int index)
-  : QcepObject("calibrant", NULL),
+  : QcepObject("calibrant", lib),
     m_Index(QcepSettingsSaverWPtr(), this, "index", index, "Calibrant Index"),
     m_IsUsed(saver, this, "isUsed", 0, "Is Calibrant used?"),
     m_Flags(saver, this, "flags", 0, "Calibrant flags"),
@@ -51,7 +51,7 @@ void QxrdCalibrant::fromScriptValue(const QScriptValue &obj, QxrdCalibrantWPtr &
     QxrdCalibrant *qcal = qobject_cast<QxrdCalibrant*>(qobj);
 
     if (qcal) {
-      cal = qcal->sharedFromThis();
+      cal = qSharedPointerDynamicCast<QxrdCalibrant>(qcal->sharedFromThis());
     }
   }
 }

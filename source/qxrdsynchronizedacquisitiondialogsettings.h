@@ -5,11 +5,11 @@
 #include "qcepproperty.h"
 #include "qxrdsynchronizedacquisitionplotsettings.h"
 
-class QxrdSynchronizedAcquisitionDialogSettings : public QObject
+class QxrdSynchronizedAcquisitionDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisitionDialogSettings(QcepSettingsSaverWPtr saver, QcepObject *parent);
+  explicit QxrdSynchronizedAcquisitionDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
 
 public:
   void readSettings(QSettings *settings, QString section);

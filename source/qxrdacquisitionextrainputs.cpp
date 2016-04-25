@@ -11,7 +11,7 @@
 #include <QTimer>
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
-  QcepObject("extraInputs", NULL),
+  QcepObject("extraInputs", acq),
   m_Enabled(QcepSettingsSaverWPtr(), this, "enabled", 0, "Extra Inputs Enabled?"),
   m_Skipping(QcepSettingsSaverWPtr(), this, "skipping", 0, "Skipping initial readout?"),
   m_SampleRate(saver, this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
@@ -235,7 +235,8 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 
   m_Channels.insert(n,
                     QxrdAcquisitionExtraInputsChannelPtr(
-                        chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment, sharedFromThis())));
+                        chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment,
+                                                                     qSharedPointerDynamicCast<QxrdAcquisitionExtraInputs>(sharedFromThis()))));
 
   connect(chan, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
 

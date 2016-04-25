@@ -240,7 +240,7 @@ bool QxrdApplication::init(int &argc, char **argv)
   }
 
   m_AllocatorThread = QcepAllocatorThreadPtr(
-        new QcepAllocatorThread(m_AppSaver));
+        new QcepAllocatorThread(sharedFromThis(), m_AppSaver));
 
   m_AllocatorThread -> setObjectName("alloc");
   m_AllocatorThread -> start();
@@ -876,7 +876,7 @@ void QxrdApplication::writeDefaultSettings()
 void QxrdApplication::createNewExperiment()
 {
   QxrdExperimentThreadPtr experimentThread =
-      QxrdExperimentThread::newExperiment("", sharedFromThis(), NULL);
+      QxrdExperimentThread::newExperiment("", qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()), NULL);
 
   if (experimentThread) {
     QxrdExperimentPtr exp = experimentThread->experiment();
@@ -905,7 +905,7 @@ void QxrdApplication::openExperiment(QString path)
     QxrdExperimentSettings settings(path);
 
     QxrdExperimentThreadPtr experimentThread =
-        QxrdExperimentThread::newExperiment(path, sharedFromThis(), &settings);
+        QxrdExperimentThread::newExperiment(path, qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()), &settings);
 
     QxrdExperimentPtr exp = experimentThread->experiment();
 

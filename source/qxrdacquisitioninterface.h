@@ -17,7 +17,7 @@
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 
-class QxrdAcquisitionInterface : public QcepObject, public QEnableSharedFromThis<QxrdAcquisitionInterface>
+class QxrdAcquisitionInterface : public QcepObject
 {
   Q_OBJECT
 

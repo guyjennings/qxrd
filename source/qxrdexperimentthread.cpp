@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 QxrdExperimentThread::QxrdExperimentThread(QString path, QxrdApplicationWPtr app, QSettings *settings) :
-  QxrdThread(),
+  QxrdThread(QcepObjectWPtr()),
   m_ExperimentPath(path),
   m_Application(app),
   m_Settings(settings)

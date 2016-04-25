@@ -9,7 +9,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 
-class QxrdCalibrantLibrary : public QcepObject, public QEnableSharedFromThis<QxrdCalibrantLibrary>
+class QxrdCalibrantLibrary : public QcepObject
 {
   Q_OBJECT
 

@@ -31,6 +31,6 @@ QxrdDataProcessor::~QxrdDataProcessor()
 void QxrdDataProcessor::initialize()
 {
   if (m_GenerateTestImage) {
-    m_GenerateTestImage -> setProcessor(sharedFromThis());
+    m_GenerateTestImage -> setProcessor(qSharedPointerDynamicCast<QxrdDataProcessor>(sharedFromThis()));
   }
 }

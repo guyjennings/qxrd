@@ -9,10 +9,10 @@
 #include "qcepallocator.h"
 #include "qcepsettingssaver.h"
 
-QxrdGenerateTestImage::QxrdGenerateTestImage(QcepSettingsSaverWPtr saver) :
-  QcepObject("testImage", NULL),
+QxrdGenerateTestImage::QxrdGenerateTestImage(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver) :
+  QcepObject("testImage", parent),
   m_Processor(),
-  m_Geometry(new QxrdDetectorGeometry("testGeometry", NULL)),
+  m_Geometry(new QxrdDetectorGeometry("testGeometry", parent)),
   m_NRows(saver, this, "nRows", 2048, "Number of Rows"),
   m_NCols(saver, this, "nCols", 2048, "Number of Cols"),
   m_CenterX(saver, this, "centerX", 1024, "X Center"),
@@ -32,7 +32,7 @@ QxrdGenerateTestImage::QxrdGenerateTestImage(QcepSettingsSaverWPtr saver) :
 {
 }
 
-void QxrdGenerateTestImage::setProcessor(QxrdDataProcessorWPtr proc)
+void QxrdGenerateTestImage::setProcessor(QxrdDataProcessorBaseWPtr proc)
 {
   m_Processor = proc;
 }
@@ -148,7 +148,7 @@ void QxrdGenerateTestImage::generateImage()
       }
     }
 
-    QxrdDataProcessorPtr proc(m_Processor);
+    QxrdDataProcessorBasePtr proc(m_Processor);
 
     if (proc) {
       proc -> newData(img, QcepMaskDataPtr());
@@ -195,7 +195,7 @@ void QxrdGenerateTestImage::generateTTHImage()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdDataProcessorBasePtr proc(m_Processor);
 
   if (proc) {
     proc -> newData(img, QcepMaskDataPtr());
@@ -242,7 +242,7 @@ void QxrdGenerateTestImage::generateChiImage()
       }
     }
 
-    QxrdDataProcessorPtr proc(m_Processor);
+    QxrdDataProcessorBasePtr proc(m_Processor);
 
     if (proc) {
       proc -> newData(img, QcepMaskDataPtr());

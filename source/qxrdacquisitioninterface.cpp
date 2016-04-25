@@ -6,12 +6,13 @@
 #include "qxrddarkacquisitionparameterpack.h"
 #include "qcepmutexlocker.h"
 #include "qxrdacquisitionexecutionthread.h"
+#include "qxrddataprocessor.h"
 
 QxrdAcquisitionInterface::QxrdAcquisitionInterface(QcepSettingsSaverWPtr saver,
                                                    QxrdExperimentWPtr    doc,
                                                    QxrdDataProcessorWPtr proc,
                                                    QcepAllocatorWPtr     allocator)
-  : QcepObject("acquisition", NULL),
+  : QcepObject("acquisition", proc),
     m_Saver(saver),
     m_ExecutionThread(),
     m_Cancelling(QcepSettingsSaverWPtr(), this, "cancelling", 0, "Cancel Acquisition?"),
@@ -35,7 +36,7 @@ void QxrdAcquisitionInterface::initialize()
 {
   m_ExecutionThread =
       QxrdAcquisitionExecutionThreadPtr(
-        new QxrdAcquisitionExecutionThread(sharedFromThis()));
+        new QxrdAcquisitionExecutionThread(qSharedPointerDynamicCast<QxrdAcquisitionInterface>(sharedFromThis())));
 
   m_ExecutionThread->start();
 }

@@ -2,7 +2,7 @@
 #include "qcepsettingssaver.h"
 #include "qcepmutexlocker.h"
 
-QxrdInfoDialogSettings::QxrdInfoDialogSettings(QcepSettingsSaverWPtr /*saver*/, QcepObject *parent) :
+QxrdInfoDialogSettings::QxrdInfoDialogSettings(QcepSettingsSaverWPtr /*saver*/, QcepObjectWPtr parent) :
   QcepObject("infoDialogSettings", parent)
 {
 }

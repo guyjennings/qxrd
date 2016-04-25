@@ -17,7 +17,7 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
     QxrdExperimentWPtr    doc,
     QxrdFileSaverWPtr     fsav,
     QxrdDetectorWPtr      det)
-  : QcepObject("acquisitionProcessor", doc.data()),
+  : QcepObject("acquisitionProcessor", det),
     m_Saver(saver),
     m_DetectorDisplayMode(saver, this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
     m_PerformDarkSubtraction(saver, this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
@@ -56,7 +56,7 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
     m_Integrator(),
     m_ROICalculator(),
     m_ControlWindow(),
-    m_ImagePlotSettings(new QxrdImagePlotSettings(saver, this))
+    m_ImagePlotSettings(new QxrdImagePlotSettings(saver, sharedFromThis()))
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorProcessor::QxrdDetectorProcessor(%p)\n", this);
@@ -64,7 +64,8 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
 
   m_CenterFinder  = QxrdCenterFinderPtr(new QxrdCenterFinder(m_Saver, m_Experiment));
   m_Integrator    = QxrdIntegratorPtr(new QxrdIntegrator(m_Saver, m_Experiment, m_CenterFinder));
-  m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator(m_Saver, m_Experiment, sharedFromThis()));
+  m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator(m_Saver, m_Experiment,
+                                                               qSharedPointerDynamicCast<QxrdDetectorProcessor>(sharedFromThis())));
 
   connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onMaskPathChanged);
   connect(prop_DarkImagePath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onDarkImagePathChanged);
