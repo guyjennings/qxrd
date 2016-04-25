@@ -15,7 +15,7 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver,
                                                  QxrdExperimentWPtr    expt,
                                                  QxrdAcquisitionWPtr   acq,
                                                  int                   detNum,
-                                                 QcepObject           *parent) :
+                                                 QcepObjectWPtr parent) :
   QxrdDetector(saver, expt, acq, QxrdDetectorThread::PerkinElmerDetector, detNum, parent),
   m_Mutex(QMutex::Recursive),
   m_BufferSize(0),
