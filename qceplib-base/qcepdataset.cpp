@@ -4,8 +4,6 @@
 QcepDataset::QcepDataset(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name) :
   QcepDataGroup(parent, saver, name)
 {
-  set_Type("dataset");
-  set_TypeID(QcepDataObject::DataSet);
 }
 
 //void QcepDataset::writeSettings(QSettings *settings, QString section)

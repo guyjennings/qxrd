@@ -250,7 +250,7 @@ public:
   virtual ~QcepImageData();
 
 public:
-  static QcepDataObject::ObjectTypeID imageTypeID();
+//  static int imageTypeID();
 
   bool readImage(QString filename);
 
@@ -360,6 +360,96 @@ protected:
 
   QcepMaskDataPtr            m_Mask;
   QcepMaskDataPtr            m_Overflow;
+};
+
+class QcepDoubleImageData : public QcepImageData<double> {
+  Q_OBJECT
+
+public:
+  QcepDoubleImageData(QcepObjectWPtr parent,
+                QcepSettingsSaverWPtr saver,
+                QString name,
+                int width,
+                int height,
+                double def);
+
+  void add     (QcepDoubleImageDataPtr img);
+  void add     (double val);
+
+  void subtract(QcepDoubleImageDataPtr img);
+  void subtract(double val);
+
+  void multiply(QcepDoubleImageDataPtr img);
+  void multiply(double val);
+
+  void divide  (QcepDoubleImageDataPtr img);
+  void divide  (double val);
+
+  void copyFrom(QcepUInt16ImageDataPtr img);
+  void copyFrom(QcepUInt32ImageDataPtr img);
+  void copyFrom(QcepDoubleImageDataPtr img);
+
+  void accumulateImage(QcepDoubleImageDataPtr img);
+};
+
+class QcepFloatImageData : public QcepImageData<float> {
+  Q_OBJECT
+
+public:
+  QcepFloatImageData(QcepObjectWPtr parent,
+                QcepSettingsSaverWPtr saver,
+                QString name,
+                int width,
+                int height,
+                float def);
+};
+
+class QcepUInt16ImageData : public QcepImageData<quint16> {
+  Q_OBJECT
+
+public:
+  QcepUInt16ImageData(QcepObjectWPtr parent,
+                QcepSettingsSaverWPtr saver,
+                QString name,
+                int width,
+                int height,
+                quint16 def);
+};
+
+class QcepInt16ImageData : public QcepImageData<qint16> {
+  Q_OBJECT
+
+public:
+  QcepInt16ImageData(QcepObjectWPtr parent,
+                QcepSettingsSaverWPtr saver,
+                QString name,
+                int width,
+                int height,
+                qint16 def);
+};
+
+class QcepUInt32ImageData : public QcepImageData<quint32> {
+  Q_OBJECT
+
+public:
+  QcepUInt32ImageData(QcepObjectWPtr parent,
+                QcepSettingsSaverWPtr saver,
+                QString name,
+                int width,
+                int height,
+                quint32 def);
+};
+
+class QcepInt32ImageData : public QcepImageData<qint32> {
+  Q_OBJECT
+
+public:
+  QcepInt32ImageData(QcepObjectWPtr parent,
+                QcepSettingsSaverWPtr saver,
+                QString name,
+                int width,
+                int height,
+                qint32 def);
 };
 
 #endif

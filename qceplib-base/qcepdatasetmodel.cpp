@@ -17,7 +17,7 @@ QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBas
   m_Dataset(ds)
 {
   if (m_Dataset == NULL) {
-    m_Dataset = QcepAllocator::newDataset("model");
+    m_Dataset = QcepAllocator::newDataset("model", m_Experiment);
   }
 
   qRegisterMetaType< QVector<int> >("QVector<int>");

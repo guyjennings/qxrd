@@ -38,9 +38,9 @@ public:
     AlwaysAllocate
   };
 
-  static QcepDataObjectPtr      newDataObject(QcepDataObject::ObjectTypeID id, QString name);
-  static QcepInt16ImageDataPtr  newInt16Image(QString name, int width, int height, AllocationStrategy strat);
-  static QcepInt32ImageDataPtr  newInt32Image(QString name, int width, int height, AllocationStrategy strat);
+  static QcepDataObjectPtr      newDataObject(QString id, QString name);
+  static QcepUInt16ImageDataPtr  newInt16Image(QString name, int width, int height, AllocationStrategy strat);
+  static QcepUInt32ImageDataPtr  newInt32Image(QString name, int width, int height, AllocationStrategy strat);
   static QcepDoubleImageDataPtr newDoubleImage(QString name, int width, int height, AllocationStrategy strat);
   static QcepMaskDataPtr        newMask(QString name, int width, int height, int def, AllocationStrategy strat);
 
@@ -52,7 +52,7 @@ public:
 
 
   static QcepDataGroupPtr       newGroup(QString name);
-  static QcepDatasetPtr         newDataset(QString name);
+  static QcepDatasetPtr         newDataset(QString name, QcepObjectPtr parent);
 
   static qint64 allocatedMemoryMB();
   static qint64 availableMemoryMB();

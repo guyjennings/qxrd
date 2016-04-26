@@ -45,22 +45,6 @@ public:
     CanOverwrite
   } Overwrite;
 
-  typedef enum {
-    DataObject,
-    DataGroup,
-    DataSet,
-    DataColumn,
-    DataColumnScan,
-    DataImage,
-    DataImageUShort,
-    DataImageShort,
-    DataImageUInt,
-    DataImageInt,
-    DataImageFloat,
-    DataImageDouble,
-    DataArray
-  } ObjectTypeID;
-
   virtual int childCount() const;
   virtual QcepDataObjectPtr item(int n);
   virtual QcepDataObjectPtr item(QString nm);
@@ -101,12 +85,6 @@ protected:
   mutable QMutex        m_Mutex;
 
 public:
-  Q_PROPERTY(QString type READ get_Type WRITE set_Type)
-  QCEP_STRING_PROPERTY(Type)
-
-  Q_PROPERTY(int typeID READ get_TypeID WRITE set_TypeID)
-  QCEP_INTEGER_PROPERTY(TypeID)
-
   Q_PROPERTY(quint64 byteSize READ get_ByteSize WRITE set_ByteSize STORED false)
   QCEP_INTEGER64_PROPERTY(ByteSize)
 

@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include <QObject>
+#include "qcepobject-ptr.h"
 #include <QVariant>
 #include <QMutex>
 #include <QVector>

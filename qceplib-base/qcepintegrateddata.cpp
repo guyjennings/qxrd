@@ -20,8 +20,6 @@ QcepIntegratedData::QcepIntegratedData(QcepObjectWPtr parent,
   m_XUnitsLabel("TTH"),
   m_Oversample(1)
 {
-  set_Type("Integrated Data");
-
   QcepAllocator::allocate(sizeof(double), 2, m_MaxSize);
 }
 

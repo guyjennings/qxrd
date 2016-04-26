@@ -137,13 +137,13 @@ int QcepAllocator::waitTillAvailable(AllocationStrategy strat, qint64 size)
   }
 }
 
-QcepInt16ImageDataPtr QcepAllocator::newInt16Image(QString name, int width, int height, AllocationStrategy strat)
+QcepUInt16ImageDataPtr QcepAllocator::newInt16Image(QString name, int width, int height, AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, int16Size(width, height))) {
-      QcepInt16ImageDataPtr res(new QcepInt16ImageData(QcepObjectWPtr(),
+      QcepUInt16ImageDataPtr res(new QcepUInt16ImageData(QcepObjectWPtr(),
                                                        QcepSettingsSaverWPtr(),
                                                        name, width, height, 0));
 
@@ -163,16 +163,16 @@ QcepInt16ImageDataPtr QcepAllocator::newInt16Image(QString name, int width, int 
     g_Application->printMessage("QcepAllocator::newInt16Image() returned NULL");
   }
 
-  return QcepInt16ImageDataPtr(NULL);
+  return QcepUInt16ImageDataPtr(NULL);
 }
 
-QcepInt32ImageDataPtr QcepAllocator::newInt32Image(QString name, int width, int height, AllocationStrategy strat)
+QcepUInt32ImageDataPtr QcepAllocator::newInt32Image(QString name, int width, int height, AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
 
     if (g_Allocator->waitTillAvailable(strat, int32Size(width, height))) {
-      QcepInt32ImageDataPtr res(new QcepInt32ImageData(QcepObjectWPtr(),
+      QcepUInt32ImageDataPtr res(new QcepUInt32ImageData(QcepObjectWPtr(),
                                                        QcepSettingsSaverWPtr(),
                                                        name, width, height, 0));
 
@@ -192,7 +192,7 @@ QcepInt32ImageDataPtr QcepAllocator::newInt32Image(QString name, int width, int 
     g_Application->printMessage("QcepAllocator::newInt32Image() returned NULL");
   }
 
-  return QcepInt32ImageDataPtr(NULL);
+  return QcepUInt32ImageDataPtr(NULL);
 }
 
 QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(QString name, int width, int height, AllocationStrategy strat)
@@ -371,9 +371,9 @@ QcepDataGroupPtr QcepAllocator::newGroup(QString name)
   return QcepDataGroupPtr(new QcepDataGroup(QcepObjectWPtr(), QcepSettingsSaverWPtr(), name));
 }
 
-QcepDatasetPtr QcepAllocator::newDataset(QString name)
+QcepDatasetPtr QcepAllocator::newDataset(QString name, QcepObjectPtr parent)
 {
-  return QcepDatasetPtr(new QcepDataset(QcepObjectWPtr(), QcepSettingsSaverWPtr(), name));
+  return QcepDatasetPtr(new QcepDataset(parent, QcepSettingsSaverWPtr(), name));
 }
 
 /* static */
@@ -521,22 +521,16 @@ void QcepAllocator::setAvailableBytes(qint64 newsize)
   set_AvailableBytes(newsize);
 }
 
-QcepDataObjectPtr QcepAllocator::newDataObject(QcepDataObject::ObjectTypeID id, QString name)
+QcepDataObjectPtr QcepAllocator::newDataObject(QString id, QString name)
 {
   QcepDataObjectPtr res;
 
-  switch (id) {
-  case QcepDataObject::DataGroup:
+  if (id == "QcepDataGroup") {
     res = newGroup(name);
-    break;
-
-  case QcepDataObject::DataColumn:
+  } else if (id == "QcepDataColumn") {
     res = newColumn(name, 0, QcepAllocator::NullIfNotAvailable);
-    break;
-
-  case QcepDataObject::DataColumnScan:
+  } else if (id == "QcepDataColumnScan") {
     res = newColumnScan(name, QStringList(), 0, QcepAllocator::NullIfNotAvailable);
-    break;
   }
 
   return res;

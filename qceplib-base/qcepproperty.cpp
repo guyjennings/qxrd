@@ -1,5 +1,6 @@
 #include "qcepdebug.h"
 #include "qcepproperty.h"
+#include "qcepobject.h"
 #include "qcepsettingssaver.h"
 #include "qcepdocumentationdictionary.h"
 #include "qcepmutexlocker.h"

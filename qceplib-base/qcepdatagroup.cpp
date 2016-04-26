@@ -14,8 +14,6 @@
 QcepDataGroup::QcepDataGroup(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name) :
   QcepDataObject(parent, saver, name, 0)
 {
-  set_Type("Data Group");
-  set_TypeID(QcepDataObject::DataGroup);
 }
 
 void QcepDataGroup::writeSettings(QSettings *settings, QString section)
@@ -45,13 +43,13 @@ void QcepDataGroup::readSettings(QSettings *settings, QString section)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  int id = get_TypeID();
+  QString id = get_Type();
 
   QcepDataObject::readSettings(settings, "");
 
 #ifndef QT_NODEBUG
-  if (get_TypeID() != id) {
-    printMessage(tr("Data object type ID changed from %1 to %2 on reading").arg(id).arg(get_TypeID()));
+  if (get_Type() != id) {
+    printMessage(tr("Data object type ID changed from %1 to %2 on reading").arg(id).arg(get_Type()));
   }
 #endif
 
@@ -62,10 +60,9 @@ void QcepDataGroup::readSettings(QSettings *settings, QString section)
       settings->setArrayIndex(i);
 
       QString name = settings->value("name").toString();
-      int id = settings->value("typeID").toInt();
+      QString id = settings->value("type").toString();
 
-      QcepDataObjectPtr obj = QcepAllocator::newDataObject(
-            (QcepDataObject::ObjectTypeID) id, name);
+      QcepDataObjectPtr obj = QcepAllocator::newDataObject(id, name);
 
       if (obj) {
         m_Objects.append(obj);

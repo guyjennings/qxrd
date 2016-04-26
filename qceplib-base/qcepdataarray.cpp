@@ -7,9 +7,6 @@ QcepDataArray::QcepDataArray(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver,
   QcepDataObject(parent, saver, name, 0),
   m_Dimensions(dims)
 {
-  set_Type("Data Array");
-  set_TypeID(QcepDataObject::DataArray);
-
   qint64 prod = arrayCount(dims);
 
   m_Data.resize(prod);

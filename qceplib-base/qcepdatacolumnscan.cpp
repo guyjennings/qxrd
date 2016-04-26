@@ -9,8 +9,6 @@ QcepDataColumnScan::QcepDataColumnScan(QcepObjectWPtr parent, QcepSettingsSaverW
   QcepDataGroup(parent, sav, name),
   m_NumPoints(sav, this, "numPoints", sz, "Number of points in scan")
 {
-  set_Type("Data Column Scan");
-  set_TypeID(QcepDataObject::DataColumnScan);
 }
 
 void QcepDataColumnScan::writeSettings(QSettings *settings, QString section)

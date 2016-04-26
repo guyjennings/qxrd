@@ -59,9 +59,6 @@ QcepImageDataBase::QcepImageDataBase(QcepObjectWPtr parent, QcepSettingsSaverWPt
     m_Mutex(QMutex::Recursive),
     m_Saver(saver)
 {
-  set_Type("Image");
-  set_TypeID(QcepDataObject::DataImage);
-
   if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
     printf("QcepImageDataBase::QcepImageDataBase(%p)\n", this);
   }
@@ -120,8 +117,6 @@ QMutex *QcepImageDataBase::mutex()
 
 void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 {
-  dest -> set_Type(get_Type());
-  dest -> set_TypeID(get_TypeID());
   dest -> set_Creator(get_Creator());
   dest -> set_Version(get_Version());
   dest -> set_QtVersion(get_QtVersion());
@@ -159,8 +154,6 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 
 void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src)
 {
-  set_Type(src -> get_Type());
-  set_TypeID(src -> get_TypeID());
   set_Creator(src -> get_Creator());
   set_Version(src -> get_Version());
   set_QtVersion(src->get_QtVersion());
@@ -332,9 +325,6 @@ QcepImageData<T>::QcepImageData(QcepObjectWPtr parent, QcepSettingsSaverWPtr sav
   if (def) {
     m_Image.fill(def);
   }
-
-  set_Type("Image Data");
-  set_TypeID(imageTypeID());
 }
 
 template <typename T>
@@ -1763,59 +1753,114 @@ double QcepImageData<T>::sumInPeak(QRectF rect)
   }
 }
 
-template<>
-QcepDataObject::ObjectTypeID QcepImageData<unsigned short>::imageTypeID()
+QcepUInt16ImageData::QcepUInt16ImageData(QcepObjectWPtr parent,
+                                         QcepSettingsSaverWPtr saver,
+                                         QString name,
+                                         int width,
+                                         int height,
+                                         quint16 def) :
+  QcepImageData<quint16>(parent, saver, name, width, height, def)
 {
-  return QcepDataObject::DataImageUShort;
 }
 
-template<>
-QcepDataObject::ObjectTypeID QcepImageData<short>::imageTypeID()
+QcepUInt32ImageData::QcepUInt32ImageData(QcepObjectWPtr parent,
+                                         QcepSettingsSaverWPtr saver,
+                                         QString name,
+                                         int width,
+                                         int height,
+                                         quint32 def) :
+  QcepImageData<quint32>(parent, saver, name, width, height, def)
 {
-  return QcepDataObject::DataImageShort;
 }
 
-template<>
-QcepDataObject::ObjectTypeID QcepImageData<unsigned int>::imageTypeID()
+QcepDoubleImageData::QcepDoubleImageData(QcepObjectWPtr parent,
+                                         QcepSettingsSaverWPtr saver,
+                                         QString name,
+                                         int width,
+                                         int height,
+                                         double def)  :
+  QcepImageData<double>(parent, saver, name, width, height, def)
 {
-  return QcepDataObject::DataImageUInt;
 }
 
-template<>
-QcepDataObject::ObjectTypeID QcepImageData<int>::imageTypeID()
+void QcepDoubleImageData::add(QcepDoubleImageDataPtr img)
 {
-  return QcepDataObject::DataImageInt;
+  QcepImageData<double>::add<double>(img);
 }
 
-template<>
-QcepDataObject::ObjectTypeID QcepImageData<double>::imageTypeID()
+void QcepDoubleImageData::add(double val)
 {
-  return QcepDataObject::DataImageDouble;
+  QcepImageData<double>::add(val);
 }
 
-template<>
-QcepDataObject::ObjectTypeID QcepImageData<float>::imageTypeID()
+void QcepDoubleImageData::subtract(QcepDoubleImageDataPtr img)
 {
-  return QcepDataObject::DataImageFloat;
+  QcepImageData<double>::subtract<double>(img);
 }
 
-template class QcepImageData<unsigned short>;
-template class QcepImageData<short>;
-template class QcepImageData<unsigned int>;
-template class QcepImageData<int>;
+void QcepDoubleImageData::subtract(double val)
+{
+  QcepImageData<double>::subtract(val);
+}
+
+void QcepDoubleImageData::multiply(QcepDoubleImageDataPtr img)
+{
+  QcepImageData<double>::multiply<double>(img);
+}
+
+void QcepDoubleImageData::multiply(double val)
+{
+  QcepImageData<double>::multiply(val);
+}
+
+void QcepDoubleImageData::divide(QcepDoubleImageDataPtr img)
+{
+  QcepImageData<double>::divide<double>(img);
+}
+
+void QcepDoubleImageData::divide(double val)
+{
+  QcepImageData<double>::divide(val);
+}
+
+void QcepDoubleImageData::copyFrom(QcepDoubleImageDataPtr img)
+{
+  QcepImageData<double>::copyFrom<double>(img);
+}
+
+void QcepDoubleImageData::copyFrom(QcepUInt16ImageDataPtr img)
+{
+  QcepImageData<double>::copyFrom<quint16>(img);
+}
+
+void QcepDoubleImageData::copyFrom(QcepUInt32ImageDataPtr img)
+{
+  QcepImageData<double>::copyFrom<quint32>(img);
+}
+
+void QcepDoubleImageData::accumulateImage(QcepDoubleImageDataPtr img)
+{
+  QcepImageData<double>::accumulateImage<double>(img);
+}
+
+template class QcepImageData<quint16>;
+template class QcepImageData<qint16>;
+template class QcepImageData<quint32>;
+template class QcepImageData<qint32>;
 template class QcepImageData<double>;
 template class QcepImageData<float>;
 
-template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<unsigned short> > dark);
-template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<short> > dark);
-template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<unsigned int> > dark);
-template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<int> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<quint16> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<qint16> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<quint32> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<qint32> > dark);
 template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<double> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<float> > dark);
 
-template void QcepImageData<double>::copyFrom<unsigned int>(QSharedPointer<QcepImageData<unsigned int> >);
-template void QcepImageData<double>::copyFrom<unsigned short>(QSharedPointer<QcepImageData<unsigned short> >);
+template void QcepImageData<double>::copyFrom<quint32>(QSharedPointer<QcepImageData<quint32> >);
+template void QcepImageData<double>::copyFrom<quint16>(QSharedPointer<QcepImageData<quint16> >);
 template void QcepImageData<double>::copyFrom<double>(QSharedPointer<QcepImageData<double> >);
-template void QcepImageData<unsigned int>::copyFrom<unsigned int>(QSharedPointer<QcepImageData<unsigned int> >);
+//template void QcepImageData<quint32>::copyFrom<quint32>(QSharedPointer<QcepImageData<quint32> >);
 
 template void QcepImageData<double>::accumulateImage<double>(QSharedPointer<QcepImageData<double> >);
 

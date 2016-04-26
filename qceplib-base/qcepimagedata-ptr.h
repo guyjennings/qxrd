@@ -6,18 +6,21 @@
 class QcepImageDataBase;
 template <typename T> class QcepImageData;
 
-typedef QcepImageData<quint16> QcepInt16ImageData;
-typedef QcepImageData<quint32> QcepInt32ImageData;
-typedef QcepImageData<double>  QcepDoubleImageData;
+class QcepUInt16ImageData;
+class QcepInt16ImageData;
+class QcepUInt32ImageData;
+class QcepInt32ImageData;
+class QcepDoubleImageData;
+class QcepFloatImageData;
 
 typedef QSharedPointer<QcepImageDataBase>  QcepImageDataBasePtr;
-typedef QSharedPointer<QcepInt16ImageData> QcepInt16ImageDataPtr;
-typedef QSharedPointer<QcepInt32ImageData> QcepInt32ImageDataPtr;
+typedef QSharedPointer<QcepUInt16ImageData> QcepUInt16ImageDataPtr;
+typedef QSharedPointer<QcepUInt32ImageData> QcepUInt32ImageDataPtr;
 typedef QSharedPointer<QcepDoubleImageData> QcepDoubleImageDataPtr;
 
 typedef QWeakPointer<QcepImageDataBase> QcepImageDataBaseWPtr;
-typedef QWeakPointer<QcepInt16ImageData> QcepInt16ImageDataWPtr;
-typedef QWeakPointer<QcepInt32ImageData> QcepInt32ImageDataWPtr;
+typedef QWeakPointer<QcepUInt16ImageData> QcepUInt16ImageDataWPtr;
+typedef QWeakPointer<QcepUInt32ImageData> QcepUInt32ImageDataWPtr;
 typedef QWeakPointer<QcepDoubleImageData> QcepDoubleImageDataWPtr;
 
 #endif

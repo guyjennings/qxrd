@@ -12,9 +12,6 @@ QcepDataColumn::QcepDataColumn(QcepObjectWPtr parent, QcepSettingsSaverWPtr save
   m_Vector(npts),
   m_Formatter(NULL)
 {
-  set_Type("Data Column");
-  set_TypeID(QcepDataObject::DataColumn);
-
   QcepAllocator::allocate(m_NPoints*sizeof(double));
 }
 

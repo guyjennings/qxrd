@@ -8,6 +8,7 @@
 #include <QSet>
 #include "qcepobject-ptr.h"
 #include <QVector>
+#include "qcepproperty.h"
 
 class QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
 {
@@ -36,6 +37,8 @@ public slots:
 
   void readObjectSettings(QSettings *set, QString section);
 
+  void dumpObjectTreePtr(int level=0);
+
 public:
   virtual void writeSettings(QSettings *set, QString section);
   virtual void readSettings(QSettings *set, QString section);
@@ -43,20 +46,29 @@ public:
   QString get_Name() const;
   void    set_Name(QString name);
 
+  QString get_Type() const;
+//  void    set_Type(QString name);
+
   static QString addSlashes(QString str);
 
   QcepObjectWPtr parentPtr();
   QVector<QcepObjectPtr> childrenPtr();
-  void addChildPtr(QcepObjectWPtr child);
+  void addChildPtr(QcepObject *child);
 
 private:
   QcepObjectWPtr                      m_Parent;
-  QVector<QcepObjectPtr>              m_Children;
+  QVector<QcepObject*>                m_Children;
   QcepObjectNamer                     m_ObjectNamer;
 
 public:
   Q_PROPERTY(QString name READ get_Name WRITE set_Name STORED false)
 //  QCEP_STRING_PROPERTY(Name)
+
+  Q_PROPERTY(QString type READ get_Type /*WRITE set_Type*/ STORED false)
+//  QCEP_STRING_PROPERTY(Type)
+
+//  Q_PROPERTY(int typeID READ get_TypeID WRITE set_TypeID STORED false)
+//  QCEP_INTEGER_PROPERTY(TypeID)
 };
 
 #endif // QCEPOBJECT_H

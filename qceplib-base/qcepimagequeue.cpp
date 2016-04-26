@@ -107,6 +107,10 @@ int QcepImageQueue<T>::size() const
   return m_Queue.size();
 }
 
-template class QcepImageQueue<QcepImageData<unsigned short> >;
-template class QcepImageQueue<QcepImageData<unsigned int> >;
 template class QcepImageQueue<QcepImageDataBase>;
+template class QcepImageQueue<QcepUInt16ImageData>;
+template class QcepImageQueue<QcepInt16ImageData>;
+template class QcepImageQueue<QcepUInt32ImageData>;
+template class QcepImageQueue<QcepInt32ImageData>;
+template class QcepImageQueue<QcepDoubleImageData>;
+template class QcepImageQueue<QcepFloatImageData>;

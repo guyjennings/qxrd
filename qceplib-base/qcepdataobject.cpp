@@ -18,8 +18,6 @@ QcepDataObject::QcepDataObject(QcepObjectWPtr parent,
   QcepObject(name, parent),
 //  m_Saver(saver),
   m_Mutex(QMutex::Recursive),
-  m_Type(saver,        this, "type", "object", "Data object type"),
-  m_TypeID(saver,      this, "typeID", QcepDataObject::DataObject, "Data object type ID"),
   m_ByteSize(QcepSettingsSaverWPtr(), this, "size", byteSize, "Object Size"),
   m_Creator(saver,     this, "creator", "Unknown", "QXRD Version Number"),
   m_Version(saver,     this, "version", "Unknown", "QXRD Version Number"),
@@ -30,9 +28,6 @@ QcepDataObject::QcepDataObject(QcepObjectWPtr parent,
   m_Index(saver,       this, "index", 0, "Object Index Number")
 {
   s_ObjectAllocateCount.fetchAndAddOrdered(1);
-
-  set_Type("object");
-  set_TypeID(QcepDataObject::DataObject);
 
   if (name.contains("/")) {
     printMessage(tr("object %1 name contains \"/\"").arg(name));

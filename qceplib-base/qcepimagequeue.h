@@ -37,8 +37,8 @@ private:
 };
 
 typedef QcepImageQueue<QcepImageDataBase>    QcepImageBaseQueue;
-typedef QcepImageQueue<QcepInt16ImageData>   QcepInt16ImageQueue;
-typedef QcepImageQueue<QcepInt32ImageData>   QcepInt32ImageQueue;
+typedef QcepImageQueue<QcepUInt16ImageData>  QcepInt16ImageQueue;
+typedef QcepImageQueue<QcepUInt32ImageData>  QcepInt32ImageQueue;
 typedef QcepImageQueue<QcepDoubleImageData>  QcepDoubleImageQueue;
 typedef QcepImageQueue<QcepMaskData>         QcepMaskQueue;
 

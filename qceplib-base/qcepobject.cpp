@@ -16,8 +16,7 @@ static QSet<QcepObject*> s_Allocated;
 QcepObject::QcepObject(QString name, QcepObjectWPtr parent) :
   QObject(NULL),
   m_Parent(parent),
-  m_ObjectNamer(this, name)/*,
-  m_Name(QcepSettingsSaverWPtr(), this, "name", name, "Object Name")*/
+  m_ObjectNamer(this, name)
 {
   s_ObjectAllocateCount.fetchAndAddOrdered(1);
 
@@ -25,10 +24,10 @@ QcepObject::QcepObject(QString name, QcepObjectWPtr parent) :
   s_Allocated.insert(this);
 #endif
 
-  QcepObjectPtr p(m_Parent);
+  QcepObject *p = parent.data();
 
   if (p) {
-    p->addChildPtr(sharedFromThis());
+    p->addChildPtr(this);
   }
 }
 
@@ -53,7 +52,7 @@ QcepObject::~QcepObject()
 #endif
 }
 
-void QcepObject::addChildPtr(QcepObjectWPtr child)
+void QcepObject::addChildPtr(QcepObject *child)
 {
   m_Children.append(child);
 }
@@ -83,6 +82,15 @@ void QcepObject::set_Name(QString name)
 QString QcepObject::get_Name() const
 {
   return objectName();
+}
+
+//void QcepObject::set_Type(QString name)
+//{
+//}
+
+QString QcepObject::get_Type() const
+{
+  return metaObject()->className();
 }
 
 void QcepObject::printLine(QString line)
@@ -170,6 +178,9 @@ QString QcepObject::addSlashes(QString str)
     } else if(str[i] == '\\') {
       newStr.append('\\');
       newStr.append('\\');
+    } else if (str[i] == '\n') {
+      newStr.append("\\");
+      newStr.append("n");
     } else {
       newStr.append(str[i]);
     }
@@ -203,4 +214,80 @@ QString QcepObject::settingsScript()
   }
 
   return res;
+}
+
+void QcepObject::dumpObjectTreePtr(int level)
+{
+  const QMetaObject* metaObject = this->metaObject();
+  QcepObjectPtr parent(m_Parent);
+
+  printLine(tr("%1// %2: %3 constrs, parent %4")
+            .arg("", level)
+            .arg(metaObject->className())
+            .arg(metaObject->constructorCount())
+            .arg(parent ? parent->get_Type() : "NULL"));
+
+  int nDumped = 0;
+
+  int nDumpedProperties = 0;
+
+  for (int i=1; i < metaObject->propertyCount(); i++) {
+    QMetaProperty prop = metaObject->property(i);
+
+    if (prop.isStored()) {
+      if (nDumped == 0) {
+        printLine(tr("%1%2 {")
+                  .arg("",level)
+                  .arg(get_Type()));
+      }
+
+      if (nDumpedProperties == 0) {
+        printLine(tr("%1properties{").arg("",level+1));
+      }
+
+      nDumped++;
+      nDumpedProperties++;
+
+      printLine(tr("%1%2 = %3")
+                .arg("",level+2)
+                .arg(prop.name())
+                .arg(scriptValueLiteral(this->property(prop.name()))));
+    }
+  }
+
+  if (nDumped > 0) {
+    printLine(tr("%1}").arg("",level+1));
+  }
+
+  int nDumpedChildren = 0;
+
+  for (int i=0; i<m_Children.count(); i++) {
+    QcepObject *obj = m_Children.value(i);
+    if (obj) {
+      if (nDumped == 0) {
+        printLine(tr("%1%2 {")
+                  .arg("",level)
+                  .arg(get_Type()));
+      }
+
+      if (nDumpedChildren == 0) {
+        printLine(tr("%1children{").arg("",level+1));
+      }
+
+      nDumped++;
+      nDumpedChildren++;
+
+      obj->dumpObjectTreePtr(level+2);
+    }
+  }
+
+  if (nDumpedChildren > 0) {
+    printLine(tr("%1}").arg("",level+1));
+  }
+
+  if (nDumped > 0) {
+    printLine(tr("%1}").arg("",level));
+  } else {
+    printLine(tr("%1// %2").arg("",level).arg(metaObject->className()));
+  }
 }
