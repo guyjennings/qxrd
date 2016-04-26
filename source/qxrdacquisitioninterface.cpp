@@ -7,12 +7,13 @@
 #include "qcepmutexlocker.h"
 #include "qxrdacquisitionexecutionthread.h"
 #include "qxrddataprocessor.h"
+#include "qxrdexperiment.h"
 
 QxrdAcquisitionInterface::QxrdAcquisitionInterface(QcepSettingsSaverWPtr saver,
                                                    QxrdExperimentWPtr    doc,
                                                    QxrdDataProcessorWPtr proc,
                                                    QcepAllocatorWPtr     allocator)
-  : QcepObject("acquisition", proc),
+  : QcepObject("acquisition", doc),
     m_Saver(saver),
     m_ExecutionThread(),
     m_Cancelling(QcepSettingsSaverWPtr(), this, "cancelling", 0, "Cancel Acquisition?"),

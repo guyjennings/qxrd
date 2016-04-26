@@ -42,11 +42,11 @@ public:
 public slots:
   void saveImageData(QString name, QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveDoubleData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
-  void saveInt32Data(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
-  void saveInt16Data(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
+  void saveInt32Data(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
+  void saveInt16Data(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveMaskData(QString name, QcepMaskDataPtr image, int canOverwrite);
-  void saveRaw32Data(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
-  void saveRaw16Data(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
+  void saveRaw32Data(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
+  void saveRaw16Data(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveTextData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void writeOutputScan(FILE* logFile, QcepIntegratedDataPtr data, QString fileName = QString());
   void writeOutputScan(QString dir, QcepIntegratedDataPtr data, QString fileName = QString());
@@ -55,8 +55,8 @@ private slots:
   void saveImageDataPrivate(QString name, QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveDoubleDataPrivate(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveMaskDataPrivate(QString name, QcepMaskDataPtr image, int canOverwrite);
-  void saveRaw32DataPrivate(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
-  void saveRaw16DataPrivate(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
+  void saveRaw32DataPrivate(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
+  void saveRaw16DataPrivate(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void saveTextDataPrivate(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite);
   void writeOutputScanPrivate(FILE* logFile, QcepIntegratedDataPtr data, QString fileName = QString());
   void writeOutputScanPrivate(QString dir, QcepIntegratedDataPtr data, QString fileName = QString());

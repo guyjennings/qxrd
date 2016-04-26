@@ -268,7 +268,7 @@ void QxrdDetectorPilatus::interpretReply(QString reply)
     criticalMessage(tr("Error with pilatus detector: %1").arg(reply));
   } else if (reply.startsWith("7 OK")) { // Image has been saved...
     if (get_ReadFilesLocally() == false) {
-      enqueueAcquiredFrame(QcepInt16ImageDataPtr());
+      enqueueAcquiredFrame(QcepUInt16ImageDataPtr());
     } else {
       remoteCopy(m_CurrentFile);
 //      pushFileExpected(m_CurrentFile);
@@ -453,7 +453,7 @@ void QxrdDetectorPilatus::loadAndPush(QString f)
     if (proc) {
       QString dest = proc->filePathInRawOutputDirectory(f);
 
-      QcepInt32ImageDataPtr data = QcepAllocator::newInt32Image("pilatus", 0,0, QcepAllocator::AllocateFromReserve);
+      QcepUInt32ImageDataPtr data = QcepAllocator::newInt32Image("pilatus", 0,0, QcepAllocator::AllocateFromReserve);
 
       if (data->readImage(dest)) {
         printMessage(tr("Read %1 successfully").arg(dest));

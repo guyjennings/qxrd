@@ -369,12 +369,12 @@ void QxrdIntegrator::integrateVsTTH()
   set_IntegrationXUnits(RadialIntegrateTTH);
 }
 
-QcepInt32ImageDataPtr QxrdIntegrator::cachedGeometry()
+QcepUInt32ImageDataPtr QxrdIntegrator::cachedGeometry()
 {
   if (m_IntegratorCache) {
     return m_IntegratorCache->cachedGeometry();
   } else {
-    return QcepInt32ImageDataPtr();
+    return QcepUInt32ImageDataPtr();
   }
 }
 

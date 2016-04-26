@@ -1830,15 +1830,15 @@ void QxrdScriptEngine::initialize()
                           QcepDoubleImageData::toScriptValue,
                           QcepDoubleImageData::fromScriptValue);
 
-  qRegisterMetaType<QcepInt16ImageDataPtr>("QcepInt16ImageDataPtr");
+  qRegisterMetaType<QcepUInt16ImageDataPtr>("QcepInt16ImageDataPtr");
   qScriptRegisterMetaType(this,
-                          QcepInt16ImageData::toScriptValue,
-                          QcepInt16ImageData::fromScriptValue);
+                          QcepUInt16ImageData::toScriptValue,
+                          QcepUInt16ImageData::fromScriptValue);
 
-  qRegisterMetaType<QcepInt32ImageDataPtr>("QcepInt32ImageDataPtr");
+  qRegisterMetaType<QcepUInt32ImageDataPtr>("QcepInt32ImageDataPtr");
   qScriptRegisterMetaType(this,
-                          QcepInt32ImageData::toScriptValue,
-                          QcepInt32ImageData::fromScriptValue);
+                          QcepUInt32ImageData::toScriptValue,
+                          QcepUInt32ImageData::fromScriptValue);
 
   qRegisterMetaType<QcepMaskDataPtr>("QcepMaskDataPtr");
   qScriptRegisterMetaType(this,

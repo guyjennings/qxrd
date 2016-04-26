@@ -169,7 +169,7 @@ QcepImageDataBasePtr QxrdDetectorProcessor::data()
   return m_Data;
 }
 
-QcepInt32ImageDataPtr  QxrdDetectorProcessor::dark()
+QcepUInt32ImageDataPtr  QxrdDetectorProcessor::dark()
 {
   return m_DarkImage;
 }
@@ -216,7 +216,7 @@ void QxrdDetectorProcessor::setAcquiredImageProperties(QcepImageDataBasePtr imag
       image -> set_HBinning         (det   -> get_HBinning());
       image -> set_VBinning         (det   -> get_VBinning());
 
-      image -> set_DataType(QcepInt32ImageData::Raw32Data);
+      image -> set_DataType(QcepUInt32ImageData::Raw32Data);
 
       image -> set_UserComment1     (acq   -> get_UserComment1());
       image -> set_UserComment2     (acq   -> get_UserComment2());
@@ -235,7 +235,7 @@ void QxrdDetectorProcessor::setAcquiredImageProperties(QcepImageDataBasePtr imag
   }
 }
 
-void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
+void QxrdDetectorProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
                                                  QcepMaskDataPtr overflow,
                                                  int fileIndex,
                                                  int phase,
@@ -244,7 +244,7 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "processAcquiredImage",
-                              Q_ARG(QcepInt32ImageDataPtr, image),
+                              Q_ARG(QcepUInt32ImageDataPtr, image),
                               Q_ARG(QcepMaskDataPtr, overflow),
                               Q_ARG(int, fileIndex),
                               Q_ARG(int, phase),
@@ -368,13 +368,13 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepInt32ImageDataPtr image,
   }
 }
 
-void QxrdDetectorProcessor::processDarkImage(QcepInt32ImageDataPtr image,
+void QxrdDetectorProcessor::processDarkImage(QcepUInt32ImageDataPtr image,
                                              QcepMaskDataPtr overflow,
                                              int fileIndex)
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "processDarkImage",
-                              Q_ARG(QcepInt32ImageDataPtr, image),
+                              Q_ARG(QcepUInt32ImageDataPtr, image),
                               Q_ARG(QcepMaskDataPtr, overflow),
                               Q_ARG(int, fileIndex));
   } else {
@@ -492,7 +492,7 @@ QxrdImagePlotSettingsWPtr QxrdDetectorProcessor::imagePlotSettings()
 
 QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBasePtr img)
 {
-  QcepInt32ImageDataPtr dark = m_DarkImage;
+  QcepUInt32ImageDataPtr dark = m_DarkImage;
   QcepImageDataBasePtr res = img;
 
   if (img && dark) {
@@ -535,7 +535,7 @@ QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBaseP
       double  *resptr = result->data();
       quint32 *drkptr = dark->data();
 
-      QcepInt16ImageDataPtr i16 = qSharedPointerDynamicCast<QcepInt16ImageData>(img);
+      QcepUInt16ImageDataPtr i16 = qSharedPointerDynamicCast<QcepUInt16ImageData>(img);
 
       if (i16) {
         quint16 *imgptr = i16->data();
@@ -550,7 +550,7 @@ QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBaseP
           resptr[i] = valraw - ratio*valdark;
         }
       } else {
-        QcepInt32ImageDataPtr i32 = qSharedPointerDynamicCast<QcepInt32ImageData>(img);
+        QcepUInt32ImageDataPtr i32 = qSharedPointerDynamicCast<QcepUInt32ImageData>(img);
 
         if (i32) {
           quint32 *imgptr = i32->data();
@@ -749,11 +749,11 @@ void QxrdDetectorProcessor::onDarkImagePathChanged(QString newPath)
 {
   if (newPath.length() == 0) {
     printMessage("Clear Dark Image");
-    m_DarkImage = QcepInt32ImageDataPtr();
+    m_DarkImage = QcepUInt32ImageDataPtr();
   } else {
     printMessage(tr("Load Dark Image from %1").arg(newPath));
 
-    QcepInt32ImageDataPtr dark = QcepAllocator::newInt32Image("dark", 0,0, QcepAllocator::NullIfNotAvailable);
+    QcepUInt32ImageDataPtr dark = QcepAllocator::newInt32Image("dark", 0,0, QcepAllocator::NullIfNotAvailable);
 
     if (dark && dark -> readImage(newPath)) {
       m_DarkImage = dark;

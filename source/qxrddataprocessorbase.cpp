@@ -400,7 +400,7 @@ void QxrdDataProcessorBase::newDarkImage(QcepDoubleImageDataPtr image)
   }
 }
 
-void QxrdDataProcessorBase::newDarkImage(QcepInt16ImageDataPtr image)
+void QxrdDataProcessorBase::newDarkImage(QcepUInt16ImageDataPtr image)
 {
   if (image) {
     if (m_DarkFrame == NULL) {
@@ -417,7 +417,7 @@ void QxrdDataProcessorBase::newDarkImage(QcepInt16ImageDataPtr image)
   }
 }
 
-void QxrdDataProcessorBase::newDarkImage(QcepInt32ImageDataPtr image)
+void QxrdDataProcessorBase::newDarkImage(QcepUInt32ImageDataPtr image)
 {
   if (image) {
     if (m_DarkFrame == NULL) {
@@ -735,7 +735,7 @@ void QxrdDataProcessorBase::saveCachedGeometry(QString name)
 {
   QString path = filePathInDataDirectory(name);
 
-  QcepInt32ImageDataPtr data = m_Integrator->cachedGeometry();
+  QcepUInt32ImageDataPtr data = m_Integrator->cachedGeometry();
 
   if (data) {
     saveNamedImageData(path, data, QcepMaskDataPtr(), true);
@@ -1186,7 +1186,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepDoubleImageData
   }
 }
 
-void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   QxrdFileSaverPtr f(m_FileSaver);
 
@@ -1195,7 +1195,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepInt16ImageDataP
   }
 }
 
-void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   QxrdFileSaverPtr f(m_FileSaver);
 
@@ -1204,7 +1204,7 @@ void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QcepInt16ImageDa
   }
 }
 
-void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   QxrdFileSaverPtr f(m_FileSaver);
 
@@ -1213,7 +1213,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepInt32ImageDataP
   }
 }
 
-void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   QxrdFileSaverPtr f(m_FileSaver);
 
@@ -1263,7 +1263,7 @@ void QxrdDataProcessorBase::clearGainMap()
 
 QcepDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image(
     QcepDoubleImageDataPtr corrected,
-    QcepInt16ImageDataPtr img,
+    QcepUInt16ImageDataPtr img,
     QcepDoubleImageDataPtr dark,
     QcepMaskDataPtr mask,
     QcepMaskDataPtr overflow)
@@ -1295,7 +1295,7 @@ QcepDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt16Image(
 
 QcepDoubleImageDataPtr QxrdDataProcessorBase::processAcquiredInt32Image(
     QcepDoubleImageDataPtr corrected,
-    QcepInt32ImageDataPtr img,
+    QcepUInt32ImageDataPtr img,
     QcepDoubleImageDataPtr dark,
     QcepMaskDataPtr mask,
     QcepMaskDataPtr overflow)

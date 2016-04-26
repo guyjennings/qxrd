@@ -46,7 +46,7 @@ public slots:
   void initiate();
   void reinitiate();
   void acquire();
-  void logToImage(QcepInt16ImageDataPtr img);
+  void logToImage(QcepUInt16ImageDataPtr img);
   void finish();
   void timerDone();
   void appendChannel(int ch = -1);

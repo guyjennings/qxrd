@@ -163,12 +163,12 @@ void QxrdFileSaver::saveImageDataPrivate(QString name, QcepImageDataBasePtr imag
     if (dimage) {
       saveDoubleDataPrivate(name, dimage, overflow, canOverwrite);
     } else {
-      QcepInt32ImageDataPtr i32image = qSharedPointerDynamicCast<QcepInt32ImageData>(image);
+      QcepUInt32ImageDataPtr i32image = qSharedPointerDynamicCast<QcepUInt32ImageData>(image);
 
       if (i32image) {
         saveRaw32DataPrivate(name, i32image, overflow, canOverwrite);
       } else {
-        QcepInt16ImageDataPtr i16image = qSharedPointerDynamicCast<QcepInt16ImageData>(image);
+        QcepUInt16ImageDataPtr i16image = qSharedPointerDynamicCast<QcepUInt16ImageData>(image);
 
         if (i16image) {
           saveRaw16DataPrivate(name, i16image, overflow, canOverwrite);
@@ -278,7 +278,7 @@ void QxrdFileSaver::saveDoubleDataPrivate(QString name, QcepDoubleImageDataPtr i
   decBacklog();
 }
 
-void QxrdFileSaver::saveInt32Data(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveInt32Data(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
@@ -289,7 +289,7 @@ void QxrdFileSaver::saveInt32Data(QString name, QcepInt32ImageDataPtr image, Qce
   }
 }
 
-void QxrdFileSaver::saveInt16Data(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveInt16Data(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
@@ -375,19 +375,19 @@ void QxrdFileSaver::saveMaskDataPrivate(QString name, QcepMaskDataPtr image, int
   decBacklog();
 }
 
-void QxrdFileSaver::saveRaw32Data(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveRaw32Data(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   incBacklog();
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw32DataPrivate",
                                          Qt::QueuedConnection,
                                          Q_ARG(QString,name),
-                                         Q_ARG(QcepInt32ImageDataPtr,image),
+                                         Q_ARG(QcepUInt32ImageDataPtr,image),
                                          Q_ARG(QcepMaskDataPtr,overflow),
                                          Q_ARG(int,canOverwrite)));
 }
 
-void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {
@@ -508,19 +508,19 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepInt32ImageDataPtr ima
   decBacklog();
 }
 
-void QxrdFileSaver::saveRaw16Data(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveRaw16Data(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   incBacklog();
 
   INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw16DataPrivate",
                                          Qt::QueuedConnection,
                                          Q_ARG(QString,name),
-                                         Q_ARG(QcepInt16ImageDataPtr,image),
+                                         Q_ARG(QcepUInt16ImageDataPtr,image),
                                          Q_ARG(QcepMaskDataPtr,overflow),
                                          Q_ARG(int,canOverwrite)))
 }
 
-void QxrdFileSaver::saveRaw16DataPrivate(QString name, QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
+void QxrdFileSaver::saveRaw16DataPrivate(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
   if (image == NULL) {
     if (g_Application) {

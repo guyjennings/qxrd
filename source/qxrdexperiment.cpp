@@ -190,7 +190,7 @@ void QxrdExperiment::initialize(QSettings *settings)
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
-    m_Dataset      = QcepAllocator::newDataset("dataset");
+    m_Dataset      = QcepAllocator::newDataset("dataset", myself);
     m_DatasetModel = QcepDatasetModelPtr(
           new QcepDatasetModel(myself, m_DataProcessor, m_Dataset));
 
@@ -464,7 +464,7 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts) const
       win->displayMessage(message);
 //    } else if (m_Application) {
 //      m_Application->printMessage(message);
-    } else {
+//    } else {
 //      printf("%s\n", qPrintable(message));
     }
   }
@@ -472,9 +472,9 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts) const
 
 void QxrdExperiment::printLine(QString msg)
 {
-#ifndef QT_NO_DEBUG
-    printf("%s\n", qPrintable(msg));
-#endif
+//#ifndef QT_NO_DEBUG
+//    printf("%s\n", qPrintable(msg));
+//#endif
 
   QxrdWindowPtr win = m_Window;
 

@@ -42,7 +42,7 @@ void QxrdDataProcessorThreaded::beginAcquisition(int /*isDark*/)
 {
 }
 
-void QxrdDataProcessorThreaded::idleInt16Image(QcepInt16ImageDataPtr image, bool liveView)
+void QxrdDataProcessorThreaded::idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, image->mutex());
   int height = image->get_Height();
@@ -78,7 +78,7 @@ void QxrdDataProcessorThreaded::idleInt16Image(QcepInt16ImageDataPtr image, bool
   }
 }
 
-void QxrdDataProcessorThreaded::acquiredInt16Image(QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow)
+void QxrdDataProcessorThreaded::acquiredInt16Image(QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow)
 {
   QcepDoubleImageDataPtr corrected =
       QcepAllocator::newDoubleImage("acquired", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
@@ -88,7 +88,7 @@ void QxrdDataProcessorThreaded::acquiredInt16Image(QcepInt16ImageDataPtr image, 
                                               corrected, image, darkImage(), mask(), overflow));
 }
 
-void QxrdDataProcessorThreaded::acquiredInt32Image(QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow)
+void QxrdDataProcessorThreaded::acquiredInt32Image(QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow)
 {
   QcepDoubleImageDataPtr corrected =
       QcepAllocator::newDoubleImage("acquired", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
@@ -125,7 +125,7 @@ void QxrdDataProcessorThreaded::acquiredDoubleImage(QcepDoubleImageDataPtr image
 }
 
 QcepDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
-    (QcepDoubleImageDataPtr corrected, QcepInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
+    (QcepDoubleImageDataPtr corrected, QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
 {
   QThread::currentThread()->setObjectName("correctInt16Image");
 
@@ -150,7 +150,7 @@ QcepDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt16Image
 }
 
 QcepDoubleImageDataPtr QxrdDataProcessorThreaded::correctInt32Image
-    (QcepDoubleImageDataPtr corrected, QcepInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
+    (QcepDoubleImageDataPtr corrected, QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
 {
   QThread::currentThread()->setObjectName("correctInt32Image");
 

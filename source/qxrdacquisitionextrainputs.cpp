@@ -288,7 +288,7 @@ void QxrdAcquisitionExtraInputs::acquire()
   }
 }
 
-void QxrdAcquisitionExtraInputs::logToImage(QcepInt16ImageDataPtr img)
+void QxrdAcquisitionExtraInputs::logToImage(QcepUInt16ImageDataPtr img)
 {
   if (get_Enabled() && img) {
     img->set_ExtraInputs(evaluateChannels().toList());

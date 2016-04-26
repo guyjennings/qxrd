@@ -1067,7 +1067,7 @@ void QxrdIntegratorCache::releaseScriptEngine()
   }
 }
 
-QcepInt32ImageDataPtr QxrdIntegratorCache::cachedGeometry()
+QcepUInt32ImageDataPtr QxrdIntegratorCache::cachedGeometry()
 {
   return m_CachedRadialBinNumbers;
 }

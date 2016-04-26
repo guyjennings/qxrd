@@ -25,9 +25,9 @@ public:
 
 public:
   void beginAcquisition(int isDark);
-  void idleInt16Image(QcepInt16ImageDataPtr image, bool liveView);
-  void acquiredInt16Image(QcepInt16ImageDataPtr image, QcepMaskDataPtr overflow);
-  void acquiredInt32Image(QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+  void idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView);
+  void acquiredInt16Image(QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow);
+  void acquiredInt32Image(QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
   void acquiredDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
   void acquiredDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, QcepDoubleList v);
 
@@ -73,8 +73,8 @@ public slots:
   void fixupBadBackgroundSubtraction(QString imagePattern, int nImgExposures, QString darkPath, int nDarkExposures);
 
 private:
-  QcepDoubleImageDataPtr correctInt16Image(QcepDoubleImageDataPtr corrected, QcepInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
-  QcepDoubleImageDataPtr correctInt32Image(QcepDoubleImageDataPtr corrected, QcepInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr correctInt16Image(QcepDoubleImageDataPtr corrected, QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr correctInt32Image(QcepDoubleImageDataPtr corrected, QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr correctDoubleImage(QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr correctDoubleImage(QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr overflow, QcepDoubleList v);
   QcepIntegratedDataPtr  integrateImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask, double, double cx);

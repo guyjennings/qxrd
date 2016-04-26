@@ -130,14 +130,14 @@ private:
   virtual void stopIdling();
   virtual void startIdling();
 
-  void accumulateAcquiredImage(QcepInt16ImageDataPtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
-  void accumulateAcquiredImage(QcepInt32ImageDataPtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
-  void accumulateAcquiredImage(QcepImageDataBasePtr image, QcepInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepUInt16ImageDataPtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepUInt32ImageDataPtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepImageDataBasePtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
 
   void processImage(const QxrdProcessArgs &args);
-  void processImage        (QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
-  void processAcquiredImage(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
-  void processDarkImage    (QString filePattern, QString extent, int fileIndex,                                    QcepInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+  void processImage        (QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+  void processAcquiredImage(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+  void processDarkImage    (QString filePattern, QString extent, int fileIndex,                                    QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
 
   int cancelling();
 

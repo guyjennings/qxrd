@@ -34,8 +34,8 @@ public:
   void grabScriptEngine();
   void releaseScriptEngine();
 
-  QcepInt32ImageDataPtr  cachedGeometry();
-  QcepInt32ImageDataPtr  cachedPolarGeometry();
+  QcepUInt32ImageDataPtr  cachedGeometry();
+  QcepUInt32ImageDataPtr  cachedPolarGeometry();
   QcepDoubleImageDataPtr cachedIntensity();
 
 private:
@@ -126,8 +126,8 @@ private:
   QAtomicInt             m_CacheFillLevel;
   QAtomicInt             m_CacheFullLevel;
   bool                   m_HasChi;
-  QcepInt32ImageDataPtr  m_CachedRadialBinNumbers;
-  QcepInt32ImageDataPtr  m_CachedPolarBinNumbers;
+  QcepUInt32ImageDataPtr  m_CachedRadialBinNumbers;
+  QcepUInt32ImageDataPtr  m_CachedPolarBinNumbers;
   QcepDoubleImageDataPtr m_CachedNormalization;
   QcepDoubleImageDataPtr m_CachedRadialValues;
   QcepDoubleImageDataPtr m_CachedPolarValues;

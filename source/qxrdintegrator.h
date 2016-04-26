@@ -147,7 +147,7 @@ public slots:
 
   void onIntegrationParametersChanged();
 
-  QcepInt32ImageDataPtr  cachedGeometry();
+  QcepUInt32ImageDataPtr  cachedGeometry();
   QcepDoubleImageDataPtr cachedIntensity();
 
   QString defaultUserGeometryScript();

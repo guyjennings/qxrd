@@ -966,7 +966,7 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
     QxrdAcquisitionPtr acq(m_Acquisition);
 
     if (plugin && acq) {
-      QcepInt16ImageDataPtr image = QcepAllocator::newInt16Image(tr("frame-%1").arg(counter),
+      QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(tr("frame-%1").arg(counter),
                                                                  get_NCols(), get_NRows(),
                                                                  QcepAllocator::AllocateFromReserve);
 

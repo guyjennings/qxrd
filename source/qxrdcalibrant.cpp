@@ -25,7 +25,6 @@ QxrdCalibrant::QxrdCalibrant(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp
     m_Experiment(exp),
     m_CalibrantLibrary(lib)
 {
-
 }
 
 QxrdCalibrant::~QxrdCalibrant()
