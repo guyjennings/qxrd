@@ -121,6 +121,7 @@ HEADERS += \
   $${PWD}/qcepsettingssaver.h \
   $${PWD}/qcepsettingssaver-ptr.h \
   $${PWD}/qcepimagedata.h \
+  $${PWD}/qcepimagedata-ptr.h \
   $${PWD}/qcepimagequeue.h \
   $${PWD}/qcepimagedataformatfactory.h \
   $${PWD}/qcepimagedataformatfactory-ptr.h \
@@ -132,16 +133,17 @@ HEADERS += \
   $${PWD}/qcepmatrix3x3.h \
   $${PWD}/qcepvector3d.h \
   $${PWD}/qcepobject.h \
+  $${PWD}/qcepobject-ptr.h \
   $${PWD}/qcepdataobject.h \
-  $${PWD}/qcepdatagroup.h \
-  $${PWD}/qcepdataarray.h \
-  $${PWD}/qcepdatacolumnscan.h \
-  $${PWD}/qcepdatacolumn.h \
-  $${PWD}/qcepdataarray-ptr.h \
-  $${PWD}/qcepdatacolumn-ptr.h \
-  $${PWD}/qcepdatacolumnscan-ptr.h \
-  $${PWD}/qcepdatagroup-ptr.h \
   $${PWD}/qcepdataobject-ptr.h \
+  $${PWD}/qcepdatagroup.h \
+  $${PWD}/qcepdatagroup-ptr.h \
+  $${PWD}/qcepdataarray.h \
+  $${PWD}/qcepdataarray-ptr.h \
+  $${PWD}/qcepdatacolumn.h \
+  $${PWD}/qcepdatacolumn-ptr.h \
+  $${PWD}/qcepdatacolumnscan.h \
+  $${PWD}/qcepdatacolumnscan-ptr.h \
   $${PWD}/qcepdataset.h \
   $${PWD}/qcepdataset-ptr.h \
   $${PWD}/qcepdatasetmodel.h \
@@ -175,7 +177,6 @@ HEADERS += \
   $${PWD}/qcepnewdataarraydialog.h \
   $${PWD}/qcepdataobjectpropertieswindow.h \
   $${PWD}/qcepdataobjectspreadsheetwindow.h \
-  $${PWD}/qcepobject-ptr.h \
   $${PWD}/qcepscriptengine.h \
   $${PWD}/qcepscriptengine-ptr.h \
   $${PWD}/qcepdataobjectwindow.h \
