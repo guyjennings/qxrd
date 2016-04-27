@@ -3,11 +3,11 @@
 #include "qcepdatacolumnscan.h"
 #include "qcepsettingssaver.h"
 
-QcepDataExportParameters::QcepDataExportParameters(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString  name) :
+QcepDataExportParameters::QcepDataExportParameters(QcepObjectWPtr parent, QString  name) :
   QcepObject(name, parent),
-  m_OutputFormat(saver, this, "outputFormat", 0, "File format for data export"),
-  m_FileName(saver, this, "fileName", "", "Last exported file name"),
-  m_SelectedFilter(saver, this, "selectedFilter", "", "Last export filter")
+  m_OutputFormat  (this, "outputFormat", 0, "File format for data export"),
+  m_FileName      (this, "fileName", "", "Last exported file name"),
+  m_SelectedFilter(this, "selectedFilter", "", "Last export filter")
 {
 }
 

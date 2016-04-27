@@ -8,36 +8,36 @@
 QcepExperiment::QcepExperiment(QString path, QString name, QcepObjectWPtr parent) :
   QcepObject(name, parent),
   m_SettingsSaver(new QcepSettingsSaver(this)),
-  m_ExperimentKind(m_SettingsSaver, this, "experimentKind", -1, "Kind of Experiment"),
-  m_ExperimentDirectory(QcepSettingsSaverWPtr(), this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
-  m_ExperimentFileName(QcepSettingsSaverWPtr(), this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),
-  m_ExperimentName(QcepSettingsSaverWPtr(), this, "experimentName", defaultExperimentName(path), "Experiment Name"),
-  m_ExperimentDescription(m_SettingsSaver, this, "experimentDescription", "", "Experiment Description"),
-  m_NewGroupName(m_SettingsSaver, this, "newGroupName", "group", "Default name of newly created data group"),
-  m_NewScanName(m_SettingsSaver, this, "newScanName", "scan", "Default name of newly created scans"),
-  m_NewScanColumns(m_SettingsSaver, this, "newScanColumns", QStringList(), "Column names for new scan"),
-  m_NewScanSize(m_SettingsSaver, this, "newScanSize", 0, "Number of points in new scan"),
-  m_NewArrayName(m_SettingsSaver, this, "newArrayName", "array", "Default name of newly created array"),
-  m_NewArrayNumDimensions(m_SettingsSaver, this, "newArrayNumDimensions", 2, "Dimensionality of newly created array"),
-  m_NewArrayXDimension(m_SettingsSaver, this, "newArrayXDimension", 2048, "X Dimension of new array"),
-  m_NewArrayYDimension(m_SettingsSaver, this, "newArrayYDimension", 2048, "Y Dimension of new array"),
-  m_NewArrayZDimension(m_SettingsSaver, this, "newArrayZDimension", 1, "Z Dimension of new array"),
-  m_NewArrayTDimension(m_SettingsSaver, this, "newArrayTDimension", 1, "T Dimension of new array"),
-  m_NewColumnName(m_SettingsSaver, this, "newColumnName", "colummn", "Default name of newly created column"),
-  m_NewColumnSize(m_SettingsSaver, this, "newColumnSize", 1024, "Size of newly created column"),
-  m_NewImageName(m_SettingsSaver, this, "newImageName", "image", "Name of newly created image"),
-  m_NewImageWidth(m_SettingsSaver, this, "newImageWidth", 2048, "Width of new image"),
-  m_NewImageHeight(m_SettingsSaver, this, "newImageHeight", 2048, "Height of new image")
+  m_ExperimentKind        (this, "experimentKind", -1, "Kind of Experiment"),
+  m_ExperimentDirectory   (this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
+  m_ExperimentFileName    (this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),
+  m_ExperimentName        (this, "experimentName", defaultExperimentName(path), "Experiment Name"),
+  m_ExperimentDescription (this, "experimentDescription", "", "Experiment Description"),
+  m_NewGroupName          (this, "newGroupName", "group", "Default name of newly created data group"),
+  m_NewScanName           (this, "newScanName", "scan", "Default name of newly created scans"),
+  m_NewScanColumns        (this, "newScanColumns", QStringList(), "Column names for new scan"),
+  m_NewScanSize           (this, "newScanSize", 0, "Number of points in new scan"),
+  m_NewArrayName          (this, "newArrayName", "array", "Default name of newly created array"),
+  m_NewArrayNumDimensions (this, "newArrayNumDimensions", 2, "Dimensionality of newly created array"),
+  m_NewArrayXDimension    (this, "newArrayXDimension", 2048, "X Dimension of new array"),
+  m_NewArrayYDimension    (this, "newArrayYDimension", 2048, "Y Dimension of new array"),
+  m_NewArrayZDimension    (this, "newArrayZDimension", 1, "Z Dimension of new array"),
+  m_NewArrayTDimension    (this, "newArrayTDimension", 1, "T Dimension of new array"),
+  m_NewColumnName         (this, "newColumnName", "colummn", "Default name of newly created column"),
+  m_NewColumnSize         (this, "newColumnSize", 1024, "Size of newly created column"),
+  m_NewImageName          (this, "newImageName", "image", "Name of newly created image"),
+  m_NewImageWidth         (this, "newImageWidth", 2048, "Width of new image"),
+  m_NewImageHeight        (this, "newImageHeight", 2048, "Height of new image")
 {
 }
 
 void QcepExperiment::initialize(QSettings *settings)
 {
   m_DataExportParameters = QcepDataExportParametersPtr(
-        new QcepDataExportParameters(sharedFromThis(), m_SettingsSaver, "exportParameters"));
+        new QcepDataExportParameters(sharedFromThis(), "exportParameters"));
 
   m_DataImportParameters = QcepDataImportParametersPtr(
-        new QcepDataImportParameters(sharedFromThis(), m_SettingsSaver, "importParameters"));
+        new QcepDataImportParameters(sharedFromThis(), "importParameters"));
 }
 
 QString QcepExperiment::defaultExperimentDirectory(QString path) const

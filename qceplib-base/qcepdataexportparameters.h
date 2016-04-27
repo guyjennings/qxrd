@@ -10,7 +10,7 @@ class QcepDataExportParameters : public QcepObject
   Q_OBJECT
 
 public:
-  QcepDataExportParameters(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name);
+  QcepDataExportParameters(QcepObjectWPtr parent, QString name);
 
   QString fileFormatFilterString();
 

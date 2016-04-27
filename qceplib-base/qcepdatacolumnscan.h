@@ -11,7 +11,7 @@ class QcepDataColumnScan : public QcepDataGroup
 
 public:
   QcepDataColumnScan(QcepObjectWPtr parent,
-                     QcepSettingsSaverWPtr sav, QString name, QStringList cols, int sz);
+                     QString name, QStringList cols, int sz);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

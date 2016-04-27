@@ -13,9 +13,7 @@ class QcepIntegratedData : public QcepDataObject
 
 public:
   explicit QcepIntegratedData(QcepObjectWPtr parent,
-                              QcepSettingsSaverWPtr saver,
                               QString name,
-//                              QcepDoubleImageDataPtr data,
                               int maxSize);
   ~QcepIntegratedData();
 
@@ -28,17 +26,11 @@ public slots:
   int size() const;
 
 public:
-//  static QcepIntegratedDataPtr newIntegratedData(QcepSettingsSaverWPtr saver,
-//                                                 QString name,
-//                                                 int sz,
-//                                                 QcepObject *parent);
   void append(double x, double y);
   void setValue(int n, double x, double y);
   void selfNormalize(double minx, double maxx);
 
   void set_Center(double cx, double cy);
-//  void set_Image(QcepDoubleImageDataPtr image);
-//  QcepDoubleImageDataPtr get_Image() const;
 
   QString get_XUnitsLabel() const;
   void set_XUnitsLabel(QString units);
@@ -55,11 +47,7 @@ public:
   static QScriptValue toIntegratedDataScriptValue(QScriptEngine *engine, const QcepIntegratedDataPtr &data);
   static void fromIntegratedDataScriptValue(const QScriptValue &obj, QcepIntegratedDataPtr &data);
 
-//  Q_PROPERTY(QString title READ get_Title WRITE set_Title STORED false)
-//  QCEP_STRING_PROPERTY(Title)
-
 private:
-//  QcepDoubleImageDataPtr     m_Image;
   int                        m_MaxSize;
   int                        m_Size;
   const int                  m_AllocStep;

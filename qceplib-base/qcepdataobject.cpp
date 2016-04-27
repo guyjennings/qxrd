@@ -12,20 +12,19 @@ static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
 
 QcepDataObject::QcepDataObject(QcepObjectWPtr parent,
-                               QcepSettingsSaverWPtr saver,
                                QString name,
                                int byteSize) :
   QcepObject(name, parent),
 //  m_Saver(saver),
   m_Mutex(QMutex::Recursive),
-  m_ByteSize(QcepSettingsSaverWPtr(), this, "size", byteSize, "Object Size"),
-  m_Creator(saver,     this, "creator", "Unknown", "QXRD Version Number"),
-  m_Version(saver,     this, "version", "Unknown", "QXRD Version Number"),
-  m_QtVersion(saver,   this, "qtVersion", QT_VERSION_STR, "QT Version Number"),
-  m_Description(saver, this, "description", "", "Object Description"),
-  m_FileName(saver,    this, "fileName", "", "File Name of Image"),
-  m_ObjectSaved(QcepSettingsSaverWPtr(), this, "objectSaved",0, "Object is Saved?"),
-  m_Index(saver,       this, "index", 0, "Object Index Number")
+  m_ByteSize   (this, "size", byteSize, "Object Size"),
+  m_Creator    (this, "creator", "Unknown", "QXRD Version Number"),
+  m_Version    (this, "version", "Unknown", "QXRD Version Number"),
+  m_QtVersion  (this, "qtVersion", QT_VERSION_STR, "QT Version Number"),
+  m_Description(this, "description", "", "Object Description"),
+  m_FileName   (this, "fileName", "", "File Name of Image"),
+  m_ObjectSaved(this, "objectSaved",0, "Object is Saved?"),
+  m_Index      (this, "index", 0, "Object Index Number")
 {
   s_ObjectAllocateCount.fetchAndAddOrdered(1);
 

@@ -14,7 +14,6 @@ class QcepDataObject : public QcepObject
 
 public:
   QcepDataObject(QcepObjectWPtr parent,
-                 QcepSettingsSaverWPtr saver,
                  QString name,
                  int byteSize);
 

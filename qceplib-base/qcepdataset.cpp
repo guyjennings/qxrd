@@ -1,8 +1,8 @@
 #include "qcepdataset.h"
 #include "qcepmutexlocker.h"
 
-QcepDataset::QcepDataset(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name) :
-  QcepDataGroup(parent, saver, name)
+QcepDataset::QcepDataset(QcepObjectWPtr parent, QString name) :
+  QcepDataGroup(parent, name)
 {
 }
 

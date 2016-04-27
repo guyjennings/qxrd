@@ -22,8 +22,6 @@ public:
   void init(QcepPlotSettingsWPtr settings);
 
 public:
-//  virtual void setSaver(QcepSettingsSaverPtr saver);
-
   void setPlotCurveStyle(int index, QwtPlotCurve *curve);
   virtual QwtText trackerTextF(const QPointF &pos);
 

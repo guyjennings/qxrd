@@ -17,13 +17,14 @@
 #include "qcepdatacolumn-ptr.h"
 #include "qcepdataset-ptr.h"
 
+extern QcepAllocator *g_Allocator;
+
 class QcepAllocator : public QcepObject, public QEnableSharedFromThis<QcepAllocator>
 {
   Q_OBJECT
 
 public:
-  QcepAllocator(QcepObjectWPtr parent,
-                QcepSettingsSaverWPtr saver);
+  QcepAllocator(QcepObjectWPtr parent);
   virtual ~QcepAllocator();
 
   void readSettings(QSettings *settings, QString section);
@@ -39,8 +40,8 @@ public:
   };
 
   static QcepDataObjectPtr      newDataObject(QString id, QString name);
-  static QcepUInt16ImageDataPtr  newInt16Image(QString name, int width, int height, AllocationStrategy strat);
-  static QcepUInt32ImageDataPtr  newInt32Image(QString name, int width, int height, AllocationStrategy strat);
+  static QcepUInt16ImageDataPtr newInt16Image(QString name, int width, int height, AllocationStrategy strat);
+  static QcepUInt32ImageDataPtr newInt32Image(QString name, int width, int height, AllocationStrategy strat);
   static QcepDoubleImageDataPtr newDoubleImage(QString name, int width, int height, AllocationStrategy strat);
   static QcepMaskDataPtr        newMask(QString name, int width, int height, int def, AllocationStrategy strat);
 

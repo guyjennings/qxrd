@@ -1,5 +1,6 @@
 #include "qcepdebug.h"
 #include "qcepmacros.h"
+#include "qcepobject.h"
 #include "qcepsettingssaver.h"
 #include "qcepproperty.h"
 #include <stdio.h>
@@ -66,7 +67,7 @@ void QcepSettingsSaver::performSave()
   }
 }
 
-void QcepSettingsSaver::changed(QcepProperty * prop)
+void QcepSettingsSaver::propertyChanged(QcepProperty * prop)
 {
   m_ChangeCount.fetchAndAddOrdered(1);
   m_LastChanged.store(prop);

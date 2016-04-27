@@ -1,8 +1,8 @@
 #include "qcepmaskdata.h"
 #include "qcepallocator.h"
 
-QcepMaskData::QcepMaskData(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name, int width, int height, int def)
-  : QcepImageData<short>(parent, saver, name, width, height, def)
+QcepMaskData::QcepMaskData(QcepObjectWPtr parent, QString name, int width, int height, int def)
+  : QcepImageData<short>(parent, name, width, height, def)
 {
 }
 

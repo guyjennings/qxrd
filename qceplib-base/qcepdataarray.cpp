@@ -3,8 +3,8 @@
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
 
-QcepDataArray::QcepDataArray(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name, QVector<int> dims) :
-  QcepDataObject(parent, saver, name, 0),
+QcepDataArray::QcepDataArray(QcepObjectWPtr parent, QString name, QVector<int> dims) :
+  QcepDataObject(parent, name, 0),
   m_Dimensions(dims)
 {
   qint64 prod = arrayCount(dims);

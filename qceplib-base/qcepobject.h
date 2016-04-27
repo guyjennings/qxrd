@@ -55,10 +55,14 @@ public:
   QVector<QcepObjectPtr> childrenPtr();
   void addChildPtr(QcepObject *child);
 
+  void propertyChanged(QcepProperty *prop);
+
 private:
   QcepObjectWPtr                      m_Parent;
   QVector<QcepObject*>                m_Children;
   QcepObjectNamer                     m_ObjectNamer;
+  QAtomicInt                          m_ChangeCount;
+  QAtomicPointer<QcepProperty>        m_LastChanged;
 
 public:
   Q_PROPERTY(QString name READ get_Name WRITE set_Name STORED false)

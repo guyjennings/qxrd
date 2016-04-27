@@ -52,6 +52,23 @@ QcepObject::~QcepObject()
 #endif
 }
 
+void QcepObject::propertyChanged(QcepProperty *prop)
+{
+  m_ChangeCount.fetchAndAddOrdered(1);
+  m_LastChanged.store(prop);
+
+  QcepObjectPtr parent(m_Parent);
+
+  if (parent) {
+    parent -> propertyChanged(prop);
+  }
+}
+
+QcepObjectWPtr QcepObject::parentPtr()
+{
+  return m_Parent;
+}
+
 void QcepObject::addChildPtr(QcepObject *child)
 {
   m_Children.append(child);
@@ -145,6 +162,8 @@ void QcepObject::writeSettings(QSettings *set, QString section)
   }
 
   QcepProperty::writeSettings(this, set, section);
+
+  m_ChangeCount.fetchAndStoreOrdered(0);
 }
 
 void QcepObject::readSettings(QSettings *set, QString section)

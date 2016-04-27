@@ -26,7 +26,6 @@ class QcepImageDataBase : public QcepDataObject
 
 public:
   QcepImageDataBase(QcepObjectWPtr parent,
-                    QcepSettingsSaverWPtr saver,
                     QString name,
                     int width,
                     int height,
@@ -139,7 +138,6 @@ public:
 
 public slots:
   virtual QString description() const;
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   virtual double getImageData(int x, int y) const = 0;
   virtual QVector<double> getImageData(int x0, int y0, int x1, int y1) const = 0;
@@ -232,9 +230,6 @@ protected:
 
 private:
   mutable QMutex m_Mutex;
-
-protected:
-  QcepSettingsSaverWPtr m_Saver;
 };
 
 template <typename T>
@@ -242,7 +237,6 @@ template <typename T>
 {
 public:
   QcepImageData(QcepObjectWPtr parent,
-                QcepSettingsSaverWPtr saver,
                 QString name,
                 int width,
                 int height,
@@ -367,7 +361,6 @@ class QcepDoubleImageData : public QcepImageData<double> {
 
 public:
   QcepDoubleImageData(QcepObjectWPtr parent,
-                QcepSettingsSaverWPtr saver,
                 QString name,
                 int width,
                 int height,
@@ -397,7 +390,6 @@ class QcepFloatImageData : public QcepImageData<float> {
 
 public:
   QcepFloatImageData(QcepObjectWPtr parent,
-                QcepSettingsSaverWPtr saver,
                 QString name,
                 int width,
                 int height,
@@ -409,7 +401,6 @@ class QcepUInt16ImageData : public QcepImageData<quint16> {
 
 public:
   QcepUInt16ImageData(QcepObjectWPtr parent,
-                QcepSettingsSaverWPtr saver,
                 QString name,
                 int width,
                 int height,
@@ -421,7 +412,6 @@ class QcepInt16ImageData : public QcepImageData<qint16> {
 
 public:
   QcepInt16ImageData(QcepObjectWPtr parent,
-                QcepSettingsSaverWPtr saver,
                 QString name,
                 int width,
                 int height,
@@ -433,7 +423,6 @@ class QcepUInt32ImageData : public QcepImageData<quint32> {
 
 public:
   QcepUInt32ImageData(QcepObjectWPtr parent,
-                QcepSettingsSaverWPtr saver,
                 QString name,
                 int width,
                 int height,
@@ -445,7 +434,6 @@ class QcepInt32ImageData : public QcepImageData<qint32> {
 
 public:
   QcepInt32ImageData(QcepObjectWPtr parent,
-                QcepSettingsSaverWPtr saver,
                 QString name,
                 int width,
                 int height,

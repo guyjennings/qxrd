@@ -10,7 +10,6 @@ class QcepMaskData : public QcepImageData<short>
 
 public:
   QcepMaskData(QcepObjectWPtr parent,
-               QcepSettingsSaverWPtr saver,
                QString name,
                int width,
                int height,

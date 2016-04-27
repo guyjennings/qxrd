@@ -10,7 +10,7 @@ class QcepDataImportParameters : public QcepObject
   Q_OBJECT
 
 public:
-  QcepDataImportParameters(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name);
+  QcepDataImportParameters(QcepObjectWPtr parent, QString name);
 
   QString lastDirectory();
   QString fileFormatFilterString();

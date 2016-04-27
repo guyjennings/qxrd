@@ -20,44 +20,43 @@
 
 QAtomicInt allocCount = 0;
 
-QcepImageDataBase::QcepImageDataBase(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name, int width, int height, int size)
-  : QcepDataObject(parent, saver, name, size),
-    m_Width(saver, this, "width", width, "Image Width"),
-    m_Height(saver, this, "height", height, "Image Height"),
-    m_HStart(saver, this, "hStart", 0.0, "H Start Coord"),
-    m_HStep(saver, this, "hStep", 1.0, "H Step"),
-    m_VStart(saver, this, "vStart", 0.0, "V Start Coord"),
-    m_VStep(saver, this, "vStep", 1.0, "V Step"),
-    m_HLabel(saver, this, "hLabel", "X", "H Label"),
-    m_HUnits(saver, this, "hUnits", "pix", "H Units"),
-    m_VLabel(saver, this, "vLabel", "Y", "V Label"),
-    m_VUnits(saver, this, "vUnits", "pix", "V Units"),
-    m_DataType(saver, this, "dataType", UndefinedData, "Data Type of Image"),
-    m_FileBase(saver, this, "fileBase", "", "File Base of Image"),
+QcepImageDataBase::QcepImageDataBase(QcepObjectWPtr parent, QString name, int width, int height, int size)
+  : QcepDataObject(parent, name, size),
+    m_Width(this, "width", width, "Image Width"),
+    m_Height(this, "height", height, "Image Height"),
+    m_HStart(this, "hStart", 0.0, "H Start Coord"),
+    m_HStep(this, "hStep", 1.0, "H Step"),
+    m_VStart(this, "vStart", 0.0, "V Start Coord"),
+    m_VStep(this, "vStep", 1.0, "V Step"),
+    m_HLabel(this, "hLabel", "X", "H Label"),
+    m_HUnits(this, "hUnits", "pix", "H Units"),
+    m_VLabel(this, "vLabel", "Y", "V Label"),
+    m_VUnits(this, "vUnits", "pix", "V Units"),
+    m_DataType(this, "dataType", UndefinedData, "Data Type of Image"),
+    m_FileBase(this, "fileBase", "", "File Base of Image"),
 //    m_Title(saver, this, "title", "", "Title of Image"),
-    m_ReadoutMode(saver, this, "readoutMode", 0, "Image Readout Mode"),
-    m_ExposureTime(saver, this, "exposureTime", 0, "Image Exposure Time"),
-    m_SummedExposures(saver, this, "summedExposures", 0, "Summed Exposures in Image"),
-    m_ImageSequenceNumber(saver, this, "imageSequenceNumber", -1, "Image Sequence Number"),
-    m_ImageNumber(saver, this, "imageNumber", 0, "Image Number"),
-    m_PhaseNumber(saver, this, "phaseNumber", -1, "Image Phase Number"),
-    m_NPhases(saver, this, "nPhases", -1, "Number of Image Phases"),
-    m_DateTime(saver, this, "dateTime", QDateTime::currentDateTime(), "Image Creation Date and Time"),
-    m_TimeStamp(saver, this, "timeStamp", secondsSinceEpoch(), "Image creation time (secs after UNIX epoch)"),
-    m_HBinning(saver, this, "hBinning", 1, "Image Horizontal Binning Factor"),
-    m_VBinning(saver, this, "vBinning", 1, "Image Vertical Binning Factor"),
-    m_CameraGain(saver, this, "cameraGain", 0, "Image Detector Gain"),
-    m_Triggered(saver, this, "triggered", 0, "Triggered Flag"),
-    m_UserComment1(saver, this,"userComment1","", "User Comment 1"),
-    m_UserComment2(saver, this,"userComment2","", "User Comment 2"),
-    m_UserComment3(saver, this,"userComment3","", "User Comment 3"),
-    m_UserComment4(saver, this,"userComment4","", "User Comment 4"),
-    m_Normalization(saver, this, "normalization", QcepDoubleList(), "Normalization Values"),
-    m_ExtraInputs(saver, this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
-    m_Used(saver, this, "used", true, "Image Used?"),
+    m_ReadoutMode(this, "readoutMode", 0, "Image Readout Mode"),
+    m_ExposureTime(this, "exposureTime", 0, "Image Exposure Time"),
+    m_SummedExposures(this, "summedExposures", 0, "Summed Exposures in Image"),
+    m_ImageSequenceNumber(this, "imageSequenceNumber", -1, "Image Sequence Number"),
+    m_ImageNumber(this, "imageNumber", 0, "Image Number"),
+    m_PhaseNumber(this, "phaseNumber", -1, "Image Phase Number"),
+    m_NPhases(this, "nPhases", -1, "Number of Image Phases"),
+    m_DateTime(this, "dateTime", QDateTime::currentDateTime(), "Image Creation Date and Time"),
+    m_TimeStamp(this, "timeStamp", secondsSinceEpoch(), "Image creation time (secs after UNIX epoch)"),
+    m_HBinning(this, "hBinning", 1, "Image Horizontal Binning Factor"),
+    m_VBinning(this, "vBinning", 1, "Image Vertical Binning Factor"),
+    m_CameraGain(this, "cameraGain", 0, "Image Detector Gain"),
+    m_Triggered(this, "triggered", 0, "Triggered Flag"),
+    m_UserComment1(this,"userComment1","", "User Comment 1"),
+    m_UserComment2(this,"userComment2","", "User Comment 2"),
+    m_UserComment3(this,"userComment3","", "User Comment 3"),
+    m_UserComment4(this,"userComment4","", "User Comment 4"),
+    m_Normalization(this, "normalization", QcepDoubleList(), "Normalization Values"),
+    m_ExtraInputs(this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
+    m_Used(this, "used", true, "Image Used?"),
     m_ImageCounter(allocCount.fetchAndAddOrdered(1)),
-    m_Mutex(QMutex::Recursive),
-    m_Saver(saver)
+    m_Mutex(QMutex::Recursive)
 {
   if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
     printf("QcepImageDataBase::QcepImageDataBase(%p)\n", this);
@@ -84,17 +83,6 @@ QcepImageDataBase::~QcepImageDataBase()
 QString QcepImageDataBase::description() const
 {
   return tr("[%1 x %2] elements").arg(get_Width()).arg(get_Height());
-}
-
-void QcepImageDataBase::printMessage(QString msg, QDateTime ts) const
-{
-  QcepSettingsSaverPtr s(m_Saver);
-
-  if (s) {
-    s->printMessage(msg, ts);
-  } else {
-    printf("%s\n", qPrintable(msg));
-  }
 }
 
 double QcepImageDataBase::secondsSinceEpoch()
@@ -306,8 +294,8 @@ double QcepImageDataBase::vValue(int n) const
 }
 
 template <typename T>
-QcepImageData<T>::QcepImageData(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver, QString name, int width, int height, T def)
-  : QcepImageDataBase(parent, saver, name, width, height, width*height*sizeof(T)),
+QcepImageData<T>::QcepImageData(QcepObjectWPtr parent, QString name, int width, int height, T def)
+  : QcepImageDataBase(parent, name, width, height, width*height*sizeof(T)),
     //    m_Image(width*height, def),
     m_Image(width*height),
     m_MinValue(0),
@@ -539,7 +527,7 @@ void QcepImageData<T>::dumpPixels(int x0, int y0, int x1, int y1)
 template <typename T>
 void QcepImageData<T>::resize(int width, int height)
 {
-  QcepImageData<T> temp(QcepObjectWPtr(), QcepSettingsSaverWPtr(), get_Name(), get_Width(), get_Height(), 0);
+  QcepImageData<T> temp(QcepObjectWPtr(), get_Name(), get_Width(), get_Height(), 0);
 
   int oldwidth = get_Width();
   int oldheight= get_Height();
@@ -1753,33 +1741,57 @@ double QcepImageData<T>::sumInPeak(QRectF rect)
   }
 }
 
+QcepInt16ImageData::QcepInt16ImageData(QcepObjectWPtr parent,
+                                         QString name,
+                                         int width,
+                                         int height,
+                                         qint16 def) :
+  QcepImageData<qint16>(parent, name, width, height, def)
+{
+}
+
 QcepUInt16ImageData::QcepUInt16ImageData(QcepObjectWPtr parent,
-                                         QcepSettingsSaverWPtr saver,
                                          QString name,
                                          int width,
                                          int height,
                                          quint16 def) :
-  QcepImageData<quint16>(parent, saver, name, width, height, def)
+  QcepImageData<quint16>(parent, name, width, height, def)
 {
 }
 
 QcepUInt32ImageData::QcepUInt32ImageData(QcepObjectWPtr parent,
-                                         QcepSettingsSaverWPtr saver,
                                          QString name,
                                          int width,
                                          int height,
                                          quint32 def) :
-  QcepImageData<quint32>(parent, saver, name, width, height, def)
+  QcepImageData<quint32>(parent, name, width, height, def)
+{
+}
+
+QcepInt32ImageData::QcepInt32ImageData(QcepObjectWPtr parent,
+                                       QString name,
+                                       int width,
+                                       int height,
+                                       qint32 def) :
+  QcepImageData<qint32>(parent, name, width, height, def)
+{
+}
+
+QcepFloatImageData::QcepFloatImageData(QcepObjectWPtr parent,
+                                       QString name,
+                                       int width,
+                                       int height,
+                                       float def) :
+  QcepImageData<float>(parent, name, width, height, def)
 {
 }
 
 QcepDoubleImageData::QcepDoubleImageData(QcepObjectWPtr parent,
-                                         QcepSettingsSaverWPtr saver,
                                          QString name,
                                          int width,
                                          int height,
                                          double def)  :
-  QcepImageData<double>(parent, saver, name, width, height, def)
+  QcepImageData<double>(parent, name, width, height, def)
 {
 }
 

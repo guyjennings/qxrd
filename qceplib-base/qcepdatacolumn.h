@@ -32,7 +32,6 @@ public:
 
 public:
   QcepDataColumn(QcepObjectWPtr parent,
-                 QcepSettingsSaverWPtr saver,
                  QString name,
                  int npts,
                  ColumnType colType = NormalColumn,

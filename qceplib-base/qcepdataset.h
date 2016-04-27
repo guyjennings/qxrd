@@ -10,7 +10,7 @@ class QcepDataset : public QcepDataGroup
 
 public:
   QcepDataset(QcepObjectWPtr parent,
-              QcepSettingsSaverWPtr saver, QString name);
+              QString name);
 
 //  void readSettings(QSettings *settings, QString section);
 //  void writeSettings(QSettings *settings, QString section);

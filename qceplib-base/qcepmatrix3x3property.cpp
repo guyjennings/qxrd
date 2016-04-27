@@ -2,20 +2,21 @@
 #include "qcepmutexlocker.h"
 #include "qcepdebug.h"
 #include "qcepsettingssaver.h"
+#include "qcepobject.h"
 
-QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepMatrix3x3 value, QString toolTip) :
-  QcepProperty(saver, parent, name, toolTip),
+QcepMatrix3x3Property::QcepMatrix3x3Property(QcepObject *parent, const char *name, QcepMatrix3x3 value, QString toolTip) :
+  QcepProperty(parent, name, toolTip),
   m_Default(value),
   m_Value(value)
 {
 }
 
-QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSettingsSaverWPtr saver, QObject *parent, const char *name,
+QcepMatrix3x3Property::QcepMatrix3x3Property(QcepObject *parent, const char *name,
                                              double r0c0, double r0c1, double r0c2,
                                              double r1c0, double r1c1, double r1c2,
                                              double r2c0, double r2c1, double r2c2,
                                              QString toolTip) :
-  QcepProperty(saver, parent, name, toolTip),
+  QcepProperty(parent, name, toolTip),
   m_Default(),
   m_Value()
 {
@@ -73,10 +74,8 @@ void QcepMatrix3x3Property::incValue(QcepMatrix3x3 step)
 
   m_Value += step;
 
-  QcepSettingsSaverPtr saver(m_Saver);
-
-  if (saver) {
-    saver->changed(this);
+  if (m_Parent) {
+    m_Parent->propertyChanged(this);
   }
 
   emit valueChanged(m_Value, incIndex(1));
@@ -118,10 +117,8 @@ void QcepMatrix3x3Property::setValue(QcepMatrix3x3 val)
 
     m_Value = val;
 
-    QcepSettingsSaverPtr saver(m_Saver);
-
-    if (saver) {
-      saver->changed(this);
+    if (m_Parent) {
+      m_Parent->propertyChanged(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));

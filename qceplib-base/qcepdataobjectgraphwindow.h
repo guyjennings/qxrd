@@ -51,7 +51,7 @@ private:
   QcepDataObjectWPtr                            m_Object;
   int                                           m_PlottingMode;
   QcepDataObjectGraphControllerPtr              m_Controller;
-  QcepSettingsSaverPtr                          m_SettingsSaver;
+//  QcepSettingsSaverPtr                          m_SettingsSaver;
 //  QcepPlotSettingsPtr                           m_PlotSettings;
 
 public:

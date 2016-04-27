@@ -18,7 +18,7 @@ class QcepDataGroup : public QcepDataObject
 
 public:
   QcepDataGroup(QcepObjectWPtr parent,
-                QcepSettingsSaverWPtr saver, QString name);
+                QString name);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

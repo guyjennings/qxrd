@@ -37,40 +37,40 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(QcepExperimentWPtr expt, Qc
   m_Experiment(expt),
   m_Object(obj),
   m_PlottingMode(NoPlot),
-  m_SettingsSaver(new QcepSettingsSaver(this)),
+//  m_SettingsSaver(new QcepSettingsSaver(this)),
 //  m_PlotSettings(new QcepPlotSettings("plotSettings", m_SettingsSaver, NULL)),
-  m_ColorMap     (m_SettingsSaver, this, "colorMap",      0,     "Image Color Map Index"),
-  m_ScalingMode  (m_SettingsSaver, this, "scalingMode",   0,     "Image Scaling Mode"),
-  m_MinimumPct   (m_SettingsSaver, this, "minimumPct",    0,     "Image Display Minimum %"),
-  m_MaximumPct   (m_SettingsSaver, this, "maximumPct",    100,   "Image Display Maximum %"),
-  m_MinimumPctle (m_SettingsSaver, this, "minimumPctle",  0,     "Image Display Minimum Percentile"),
-  m_MaximumPctle (m_SettingsSaver, this, "maximumPctle",  99,    "Image Display Maximum Percentile"),
-  m_MinimumVal   (m_SettingsSaver, this, "minimumVal",    0,     "Image Display Minimum Value"),
-  m_MaximumVal   (m_SettingsSaver, this, "maximumVal",    10000, "Image Display Maximum Value"),
-  m_HistFullVis  (m_SettingsSaver, this, "histFullVis",   true,  "Full Image Histogram Visible?"),
-  m_HistAVis     (m_SettingsSaver, this, "histAVis",      false, "Histogram A Visible?"),
-  m_HistBVis     (m_SettingsSaver, this, "histBVis",      false, "Histogram B Visible?"),
-  m_HistCVis     (m_SettingsSaver, this, "histCVis",      false, "Histogram C Visible"),
-  m_HistALeft    (m_SettingsSaver, this, "histALeft",     10,    "Histogram A Left"),
-  m_HistATop     (m_SettingsSaver, this, "histATop",      10,    "Histogram A Top"),
-  m_HistARight   (m_SettingsSaver, this, "histARight",    20,    "Histogram A Right"),
-  m_HistABottom  (m_SettingsSaver, this, "histABottom",   20,    "Histogram A Bottom"),
-  m_HistBLeft    (m_SettingsSaver, this, "histBLeft",     30,    "Histogram B Left"),
-  m_HistBTop     (m_SettingsSaver, this, "histBTop",      30,    "Histogram B Top"),
-  m_HistBRight   (m_SettingsSaver, this, "histBRight",    40,    "Histogram B Right"),
-  m_HistBBottom  (m_SettingsSaver, this, "histBBottom",   40,    "Histogram B Bottom"),
-  m_HistCLeft    (m_SettingsSaver, this, "histCLeft",     50,    "Histogram B Left"),
-  m_HistCTop     (m_SettingsSaver, this, "histCTop",      50,    "Histogram B Top"),
-  m_HistCRight   (m_SettingsSaver, this, "histCRight",    60,    "Histogram B Right"),
-  m_HistCBottom  (m_SettingsSaver, this, "histCBottom",   60,    "Histogram B Bottom"),
-  m_SliceHStart  (m_SettingsSaver, this, "sliceHStart",   0,     "Horizontal Slice Start"),
-  m_SliceHSummed (m_SettingsSaver, this, "sliceHSummed",  1,     "Horizontal Slice Summed"),
-  m_SliceHSkipped(m_SettingsSaver, this, "sliceHSkipped", 0,     "Horizontal Slice Skipped"),
-  m_SliceHRepeats(m_SettingsSaver, this, "sliceHRepeats", 100,   "Horizontal Slice Repeats"),
-  m_SliceVStart  (m_SettingsSaver, this, "sliceVStart",   0,     "Vertical Slice Start"),
-  m_SliceVSummed (m_SettingsSaver, this, "sliceVSummed",  1,     "Vertical Slice Summed"),
-  m_SliceVSkipped(m_SettingsSaver, this, "sliceVSkipped", 0,     "Vertical Slice Skipped"),
-  m_SliceVRepeats(m_SettingsSaver, this, "sliceVRepeats", 100,   "Vertical Slice Repeats")
+  m_ColorMap     (NULL, "colorMap",      0,     "Image Color Map Index"),
+  m_ScalingMode  (NULL, "scalingMode",   0,     "Image Scaling Mode"),
+  m_MinimumPct   (NULL, "minimumPct",    0,     "Image Display Minimum %"),
+  m_MaximumPct   (NULL, "maximumPct",    100,   "Image Display Maximum %"),
+  m_MinimumPctle (NULL, "minimumPctle",  0,     "Image Display Minimum Percentile"),
+  m_MaximumPctle (NULL, "maximumPctle",  99,    "Image Display Maximum Percentile"),
+  m_MinimumVal   (NULL, "minimumVal",    0,     "Image Display Minimum Value"),
+  m_MaximumVal   (NULL, "maximumVal",    10000, "Image Display Maximum Value"),
+  m_HistFullVis  (NULL, "histFullVis",   true,  "Full Image Histogram Visible?"),
+  m_HistAVis     (NULL, "histAVis",      false, "Histogram A Visible?"),
+  m_HistBVis     (NULL, "histBVis",      false, "Histogram B Visible?"),
+  m_HistCVis     (NULL, "histCVis",      false, "Histogram C Visible"),
+  m_HistALeft    (NULL, "histALeft",     10,    "Histogram A Left"),
+  m_HistATop     (NULL, "histATop",      10,    "Histogram A Top"),
+  m_HistARight   (NULL, "histARight",    20,    "Histogram A Right"),
+  m_HistABottom  (NULL, "histABottom",   20,    "Histogram A Bottom"),
+  m_HistBLeft    (NULL, "histBLeft",     30,    "Histogram B Left"),
+  m_HistBTop     (NULL, "histBTop",      30,    "Histogram B Top"),
+  m_HistBRight   (NULL, "histBRight",    40,    "Histogram B Right"),
+  m_HistBBottom  (NULL, "histBBottom",   40,    "Histogram B Bottom"),
+  m_HistCLeft    (NULL, "histCLeft",     50,    "Histogram B Left"),
+  m_HistCTop     (NULL, "histCTop",      50,    "Histogram B Top"),
+  m_HistCRight   (NULL, "histCRight",    60,    "Histogram B Right"),
+  m_HistCBottom  (NULL, "histCBottom",   60,    "Histogram B Bottom"),
+  m_SliceHStart  (NULL, "sliceHStart",   0,     "Horizontal Slice Start"),
+  m_SliceHSummed (NULL, "sliceHSummed",  1,     "Horizontal Slice Summed"),
+  m_SliceHSkipped(NULL, "sliceHSkipped", 0,     "Horizontal Slice Skipped"),
+  m_SliceHRepeats(NULL, "sliceHRepeats", 100,   "Horizontal Slice Repeats"),
+  m_SliceVStart  (NULL, "sliceVStart",   0,     "Vertical Slice Start"),
+  m_SliceVSummed (NULL, "sliceVSummed",  1,     "Vertical Slice Summed"),
+  m_SliceVSkipped(NULL, "sliceVSkipped", 0,     "Vertical Slice Skipped"),
+  m_SliceVRepeats(NULL, "sliceVRepeats", 100,   "Vertical Slice Repeats")
 {
   setupUi(this);
 
@@ -88,7 +88,8 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(QcepExperimentWPtr expt, Qc
     setWindowTitle("Unknown Graph");
   }
 
-  QcepPlotSettingsPtr settings(new QcepPlotSettings("plotSettings", m_SettingsSaver, expt));
+  QcepPlotSettingsPtr settings(new QcepPlotSettings("plotSettings", expt));
+
   m_ImagePlot->init(settings);
 
   m_PlotModeSelector->clear();

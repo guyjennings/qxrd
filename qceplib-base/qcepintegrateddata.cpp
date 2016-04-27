@@ -4,12 +4,9 @@
 #include <QScriptEngine>
 
 QcepIntegratedData::QcepIntegratedData(QcepObjectWPtr parent,
-                                       QcepSettingsSaverWPtr saver,
                                        QString name,
-                                       /*QcepDoubleImageDataPtr image,*/ int maxSize) :
-  QcepDataObject(parent, saver, name, 2*maxSize*sizeof(double)),
-//  m_Title(saver, this, "title", "", "Integrated Data Title"),
-//  m_Image(image),
+                                       int maxSize) :
+  QcepDataObject(parent, name, 2*maxSize*sizeof(double)),
   m_MaxSize(maxSize),
   m_Size(0),
   m_AllocStep(1024),
@@ -32,14 +29,6 @@ QString QcepIntegratedData::description() const
 {
   return tr("%1 Rows").arg(m_Size);
 }
-
-//QcepIntegratedDataPtr QcepIntegratedData::newIntegratedData(
-//    QcepSettingsSaverWPtr saver, QString name, int sz, QcepObject *parent)
-//{
-//  QcepIntegratedDataPtr res(new QcepIntegratedData(saver, name, QcepDoubleImageDataPtr(), sz, parent));
-
-//  return res;
-//}
 
 void QcepIntegratedData::resize(int n)
 {
@@ -142,16 +131,6 @@ void QcepIntegratedData::selfNormalize(double minx, double maxx)
     }
   }
 }
-
-//void QcepIntegratedData::set_Image(QcepDoubleImageDataPtr image)
-//{
-//  m_Image = image;
-//}
-
-//QcepDoubleImageDataPtr QcepIntegratedData::get_Image() const
-//{
-//  return m_Image;
-//}
 
 QString QcepIntegratedData::get_XUnitsLabel() const
 {

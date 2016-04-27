@@ -3,6 +3,7 @@
 
 #include "qcepmacros.h"
 #include <QObject>
+#include "qcepobject-ptr.h"
 #include <QTimer>
 #include <QMutex>
 #include <QDateTime>
@@ -16,7 +17,7 @@ public:
   explicit QcepSettingsSaver(QObject *owner);
   ~QcepSettingsSaver();
 
-  void changed(QcepProperty *prop = NULL);
+  void propertyChanged(QcepProperty *prop = NULL);
 
 public slots:
   void start();

@@ -5,9 +5,9 @@
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
 
-QcepDataColumnScan::QcepDataColumnScan(QcepObjectWPtr parent, QcepSettingsSaverWPtr sav, QString name, QStringList cols, int sz) :
-  QcepDataGroup(parent, sav, name),
-  m_NumPoints(sav, this, "numPoints", sz, "Number of points in scan")
+QcepDataColumnScan::QcepDataColumnScan(QcepObjectWPtr parent, QString name, QStringList cols, int sz) :
+  QcepDataGroup(parent, name),
+  m_NumPoints(this, "numPoints", sz, "Number of points in scan")
 {
 }
 
