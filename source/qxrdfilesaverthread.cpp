@@ -7,11 +7,9 @@
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
 
-QxrdFileSaverThread::QxrdFileSaverThread(QcepObjectWPtr parent,
-                                         QcepAllocatorWPtr allocator)
+QxrdFileSaverThread::QxrdFileSaverThread(QcepObjectWPtr parent)
   : QxrdThread(parent),
-    m_FileSaver(),
-    m_Allocator()
+    m_FileSaver()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdFileSaverThread::QxrdFileSaverThread(%p)\n", this);
@@ -24,8 +22,6 @@ QxrdFileSaverThread::QxrdFileSaverThread(QcepObjectWPtr parent,
   qRegisterMetaType<QcepIntegratedDataPtr>("QcepIntegratedDataPtr");
   qRegisterMetaType<FILE*>("FILE*");
   qRegisterMetaType< QVector<double> >("QVector<double>");
-
-  m_Allocator = allocator;
 
   setObjectName("fileSaver");
 }
@@ -45,7 +41,7 @@ void QxrdFileSaverThread::run()
     printf("File Saver Thread Started\n");
   }
 
-  m_FileSaver = QxrdFileSaverPtr(new QxrdFileSaver(m_Allocator));
+  m_FileSaver = QxrdFileSaverPtr(new QxrdFileSaver(parent()));
 
   int rc = exec();
 

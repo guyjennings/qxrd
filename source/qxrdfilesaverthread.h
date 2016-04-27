@@ -12,8 +12,7 @@ class QxrdFileSaverThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdFileSaverThread(QcepObjectWPtr parent,
-                      QcepAllocatorWPtr acq);
+  QxrdFileSaverThread(QcepObjectWPtr parent);
   ~QxrdFileSaverThread();
 
   void shutdown();
@@ -24,7 +23,6 @@ protected:
 
 private:
   QxrdFileSaverPtr  m_FileSaver;
-  QcepAllocatorWPtr m_Allocator;
 };
 
 #endif // QXRDFILESAVERTHREAD_H

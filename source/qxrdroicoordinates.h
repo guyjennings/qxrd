@@ -17,8 +17,7 @@ class QxrdROICoordinates : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdROICoordinates(QcepSettingsSaverWPtr saver,
-                     QxrdExperimentWPtr    exp,
+  QxrdROICoordinates(QxrdExperimentWPtr    exp,
                      int                   roiType,
                      double                left=0,
                      double                top=0,

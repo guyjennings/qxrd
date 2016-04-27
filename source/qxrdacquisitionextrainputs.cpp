@@ -10,17 +10,16 @@
 #include "qxrdacquisitionparameterpack.h"
 #include <QTimer>
 
-QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
+QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
   QcepObject("extraInputs", acq),
-  m_Enabled(QcepSettingsSaverWPtr(), this, "enabled", 0, "Extra Inputs Enabled?"),
-  m_Skipping(QcepSettingsSaverWPtr(), this, "skipping", 0, "Skipping initial readout?"),
-  m_SampleRate(saver, this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
-  m_AcquireDelay(saver, this, "acquireDelay", 0.107, "Delay between exposure end and Image available in QXRD"),
-  m_ExposureTime(QcepSettingsSaverWPtr(), this, "exposureTime", 0.107, "Exposure time (in seconds)"),
-  m_DeviceName(saver, this, "deviceName", "", "NI-DAQ Device Name"),
+  m_Enabled(this, "enabled", 0, "Extra Inputs Enabled?"),
+  m_Skipping(this, "skipping", 0, "Skipping initial readout?"),
+  m_SampleRate(this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
+  m_AcquireDelay(this, "acquireDelay", 0.107, "Delay between exposure end and Image available in QXRD"),
+  m_ExposureTime(this, "exposureTime", 0.107, "Exposure time (in seconds)"),
+  m_DeviceName(this, "deviceName", "", "NI-DAQ Device Name"),
   m_Experiment(doc),
   m_Acquisition(acq),
-  m_Saver(saver),
   m_Channels(),
   m_NIDAQPlugin()
 {
@@ -235,15 +234,15 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 
   m_Channels.insert(n,
                     QxrdAcquisitionExtraInputsChannelPtr(
-                        chan = new QxrdAcquisitionExtraInputsChannel(n, m_Saver, m_Experiment,
+                        chan = new QxrdAcquisitionExtraInputsChannel(n, m_Experiment,
                                                                      qSharedPointerDynamicCast<QxrdAcquisitionExtraInputs>(sharedFromThis()))));
 
   connect(chan, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
 
-  QcepSettingsSaverPtr saver(m_Saver);
+  QcepObjectPtr p(parentPtr());
 
-  if (saver) {
-      saver->changed();
+  if (p) {
+      p->propertyChanged(NULL);
   }
 
   emit channelCountChanged();
@@ -253,10 +252,10 @@ void QxrdAcquisitionExtraInputs::removeChannel(int ch)
 {
   m_Channels.remove((ch < 0 ? m_Channels.size()-1 : ch));
 
-  QcepSettingsSaverPtr saver(m_Saver);
+  QcepObjectPtr p(parentPtr());
 
-  if (saver) {
-      saver->changed();
+  if (p) {
+      p->propertyChanged(NULL);
   }
 
   emit channelCountChanged();

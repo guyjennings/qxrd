@@ -9,18 +9,17 @@
 #include <QFileDialog>
 #include "qxrdroicoordinates.h"
 #include "qxrdapplication.h"
+#include "qxrdapplicationsettings.h"
 #include "qcepmutexlocker.h"
 #include "qxrddetector.h"
 #include "qxrdroitypedelegate.h"
 
-QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     saver,
-                                                     QxrdExperimentWPtr        exp,
+QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,
                                                      QxrdAcquisitionWPtr       acq,
                                                      QxrdDetectorWPtr          det,
                                                      QxrdDetectorProcessorWPtr proc,
                                                      QWidget                  *parent) :
   QxrdMainWindow(parent),
-  m_Saver(saver),
   m_Experiment(exp),
   m_Acquisition(acq),
   m_Detector(det),
@@ -108,13 +107,15 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QcepSettingsSaverWPtr     s
   }
 
   if (app) {
-    connect(app->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged,
+    QxrdApplicationSettingsPtr set(app->settings());
+
+    connect(set->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged,
             this, &QxrdDetectorControlWindow::onUpdateIntervalMsecChanged);
 
     connect(&m_UpdateTimer, &QTimer::timeout,
             this, &QxrdDetectorControlWindow::updateImageDisplay);
 
-    m_UpdateTimer.start(app->get_UpdateIntervalMsec());
+    m_UpdateTimer.start(set->get_UpdateIntervalMsec());
   }
 
   if (expt) {
@@ -223,7 +224,7 @@ void QxrdDetectorControlWindow::doAppendROI()
       int roiType = choice->data().toInt();
 
       QxrdROICoordinatesPtr roi =
-          QxrdROICoordinatesPtr(new QxrdROICoordinates(m_Saver, m_Experiment, roiType));
+          QxrdROICoordinatesPtr(new QxrdROICoordinates(m_Experiment, roiType));
 
       roiModel->append(roi);
     }

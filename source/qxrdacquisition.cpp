@@ -21,43 +21,41 @@
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrddarkacquisitionparameterpack.h"
 #include "qxrdacquisitionscalermodel.h"
+#include "qxrdapplicationsettings.h"
 
-QxrdAcquisition::QxrdAcquisition(QcepSettingsSaverWPtr saver,
-                                 QxrdExperimentWPtr doc,
-                                 QxrdDataProcessorWPtr proc,
-                                 QcepAllocatorWPtr allocator)
-  : QxrdAcquisitionInterface(saver, doc, proc, allocator),
-    m_QxrdVersion(QcepSettingsSaverWPtr(), this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
-    m_QtVersion(QcepSettingsSaverWPtr(), this,"qtVersion",qVersion(), "QT Version Number"),
-    m_DetectorCount(m_Saver, this, "detectorCount", 0, "Number of Detectors"),
-    m_LastAcquired(QcepSettingsSaverWPtr(), this, "lastAcquired", 0, "Internal Acquisition Flag"),
-    m_FileIndex(saver, this,"fileIndex",0, "File Index"),
-    m_FileIndexWidth(saver, this, "fileIndexWidth", 5, "Digits in File Index Field"),
-    m_FilePhaseWidth(saver, this, "filePhaseWidth", 3, "Digits in Phase Number Field"),
-    m_FileOverflowWidth(saver, this, "fileOverflowWidth", 5, "Digits in Overflow Index Field"),
-    m_DetectorNumberWidth(saver, this, "detectorNumberWidth", 2, "Digits in detector number field"),
-    m_FileBase(saver, this,"fileBase","", "File Base"),
-    m_OverflowLevel(saver, this, "overflowLevel", 65500, "Overflow level (per exposure)"),
-    m_Raw16SaveTime(saver, this,"raw16SaveTime", 0.1, "Time to save 16 bit images"),
-    m_Raw32SaveTime(saver, this,"raw32SaveTime", 0.2, "Time to save 32 bit images"),
-    m_RawSaveTime(saver, this,"rawSaveTime", 0.2, "Time to save raw images"),
-    m_DarkSaveTime(saver, this,"darkSaveTime", 0.2, "Time to save dark images"),
-    m_UserComment1(saver, this,"userComment1","", "User Comment 1"),
-    m_UserComment2(saver, this,"userComment2","", "User Comment 2"),
-    m_UserComment3(saver, this,"userComment3","", "User Comment 3"),
-    m_UserComment4(saver, this,"userComment4","", "User Comment 4"),
-    m_Normalization(saver, this, "normalization", QcepDoubleList(), "Normalization Values"),
-    m_DroppedFrames(QcepSettingsSaverWPtr(), this,"droppedFrames",0, "Number of Dropped Frames"),
-    m_LiveViewAtIdle(saver, this, "liveViewAtIdle", false, "Live View during Idle"),
-    m_AcquisitionCancelsLiveView(saver, this, "acquisitionCancelsLiveView", true, "Acquisition operations cancel live view"),
-    m_RetryDropped(saver, this, "retryDropped", false, "Automatically retry dropped frames during acquisition"),
-    m_ScalerValues(QcepSettingsSaverWPtr(), this, "scalerValues", QcepDoubleVector(), "Scaler Values"),
+QxrdAcquisition::QxrdAcquisition(QxrdExperimentWPtr doc,
+                                 QxrdDataProcessorWPtr proc)
+  : QxrdAcquisitionInterface(doc, proc),
+    m_QxrdVersion(this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
+    m_QtVersion(this,"qtVersion",qVersion(), "QT Version Number"),
+    m_DetectorCount(this, "detectorCount", 0, "Number of Detectors"),
+    m_LastAcquired(this, "lastAcquired", 0, "Internal Acquisition Flag"),
+    m_FileIndex(this,"fileIndex",0, "File Index"),
+    m_FileIndexWidth(this, "fileIndexWidth", 5, "Digits in File Index Field"),
+    m_FilePhaseWidth(this, "filePhaseWidth", 3, "Digits in Phase Number Field"),
+    m_FileOverflowWidth(this, "fileOverflowWidth", 5, "Digits in Overflow Index Field"),
+    m_DetectorNumberWidth(this, "detectorNumberWidth", 2, "Digits in detector number field"),
+    m_FileBase(this,"fileBase","", "File Base"),
+    m_OverflowLevel(this, "overflowLevel", 65500, "Overflow level (per exposure)"),
+    m_Raw16SaveTime(this,"raw16SaveTime", 0.1, "Time to save 16 bit images"),
+    m_Raw32SaveTime(this,"raw32SaveTime", 0.2, "Time to save 32 bit images"),
+    m_RawSaveTime(this,"rawSaveTime", 0.2, "Time to save raw images"),
+    m_DarkSaveTime(this,"darkSaveTime", 0.2, "Time to save dark images"),
+    m_UserComment1(this,"userComment1","", "User Comment 1"),
+    m_UserComment2(this,"userComment2","", "User Comment 2"),
+    m_UserComment3(this,"userComment3","", "User Comment 3"),
+    m_UserComment4(this,"userComment4","", "User Comment 4"),
+    m_Normalization(this, "normalization", QcepDoubleList(), "Normalization Values"),
+    m_DroppedFrames(this,"droppedFrames",0, "Number of Dropped Frames"),
+    m_LiveViewAtIdle(this, "liveViewAtIdle", false, "Live View during Idle"),
+    m_AcquisitionCancelsLiveView(this, "acquisitionCancelsLiveView", true, "Acquisition operations cancel live view"),
+    m_RetryDropped(this, "retryDropped", false, "Automatically retry dropped frames during acquisition"),
+    m_ScalerValues(this, "scalerValues", QcepDoubleVector(), "Scaler Values"),
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL),
     m_AcquisitionExtraInputs(NULL),
     m_Experiment(doc),
     m_Window(),
-    m_Allocator(allocator),
     m_DataProcessor(proc),
     m_ControlPanel(NULL),
     m_Idling(1)
@@ -93,17 +91,15 @@ void QxrdAcquisition::initialize()
 
 //  m_FileIndex.setDebug(1);
 
-  QcepAllocatorPtr alloc(m_Allocator);
-
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdAcquisition::QxrdAcquisition");
   }
 
   m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
-        new QxrdSynchronizedAcquisition(m_Saver, myself()));
+        new QxrdSynchronizedAcquisition(myself()));
 
   m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(
-        new QxrdAcquisitionExtraInputs(m_Saver, m_Experiment, myself()));
+        new QxrdAcquisitionExtraInputs(m_Experiment, myself()));
   m_AcquisitionExtraInputs -> initialize();
 
   connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
@@ -112,15 +108,15 @@ void QxrdAcquisition::initialize()
   connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
           this, &QxrdAcquisition::onExposureTimeChanged);
 
-  if (alloc) {
+  if (g_Allocator) {
     if (sizeof(void*) == 4) {
-      connect(alloc->prop_TotalBufferSizeMB32(), &QcepIntProperty::valueChanged,
+      connect(g_Allocator->prop_TotalBufferSizeMB32(), &QcepIntProperty::valueChanged,
               this, &QxrdAcquisition::onMemorySizeChanged);
-      onMemorySizeChanged(alloc->get_TotalBufferSizeMB32());
+      onMemorySizeChanged(g_Allocator->get_TotalBufferSizeMB32());
     } else {
-      connect(alloc->prop_TotalBufferSizeMB64(), &QcepIntProperty::valueChanged,
+      connect(g_Allocator->prop_TotalBufferSizeMB64(), &QcepIntProperty::valueChanged,
               this, &QxrdAcquisition::onMemorySizeChanged);
-      onMemorySizeChanged(alloc->get_TotalBufferSizeMB64());
+      onMemorySizeChanged(g_Allocator->get_TotalBufferSizeMB64());
     }
   }
 
@@ -296,7 +292,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
     int detType = settings->value("detectorType", 0).toInt();
 
     QxrdDetectorThreadPtr detThread = QxrdDetectorThreadPtr(
-          new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, i, sharedFromThis()));
+          new QxrdDetectorThread(experiment(), myself(), detType, i, sharedFromThis()));
 
     if (detThread) {
       detThread->start();
@@ -310,9 +306,9 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
         m_DetectorThreads[i] = detThread;
         m_Detectors[i]       = det;
 
-        QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+        QxrdApplicationSettings *set = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
 
-        if (app && app->get_StartDetectors() == 0) {
+        if (set && set->get_StartDetectors() == 0) {
           det->set_Enabled(false);
         }
 
@@ -335,7 +331,7 @@ void QxrdAcquisition::appendDetector(int detType)
     int nDet = get_DetectorCount();
 
     QxrdDetectorThreadPtr detThread = QxrdDetectorThreadPtr(
-          new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, nDet, sharedFromThis()));
+          new QxrdDetectorThread(experiment(), myself(), detType, nDet, sharedFromThis()));
 
     if (detThread) {
       detThread->start();
@@ -368,7 +364,7 @@ void QxrdAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
         int detType = proxy->detectorType();
 
        detThread = QxrdDetectorThreadPtr(
-             new QxrdDetectorThread(m_Saver, experiment(), myself(), detType, nDet, sharedFromThis()));
+             new QxrdDetectorThread(experiment(), myself(), detType, nDet, sharedFromThis()));
 
        detThread->start();
 

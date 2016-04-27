@@ -9,19 +9,19 @@
 
 #include <qmath.h>
 
-QxrdCalibrant::QxrdCalibrant(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib, int index)
+QxrdCalibrant::QxrdCalibrant(QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib, int index)
   : QcepObject("calibrant", lib),
-    m_Index(QcepSettingsSaverWPtr(), this, "index", index, "Calibrant Index"),
-    m_IsUsed(saver, this, "isUsed", 0, "Is Calibrant used?"),
-    m_Flags(saver, this, "flags", 0, "Calibrant flags"),
-    m_Description(saver, this, "description", "Description", "Calibrant Description"),
-    m_Symmetry(saver, this, "symmetry", 0, "Calibrant Symmetry"),
-    m_A(saver, this, "a", 1, "calibrant a-axis"),
-    m_B(saver, this, "b", 1, "calibrant b-axis"),
-    m_C(saver, this, "c", 1, "calibrant c-axis"),
-    m_Alpha(saver, this, "alpha", 90, "calibrant alpha angle (deg)"),
-    m_Beta(saver, this, "beta", 90, "calibrant beta angle (deg)"),
-    m_Gamma(saver, this, "gamma", 90, "calibrant gamma angle (deg)"),
+    m_Index(this, "index", index, "Calibrant Index"),
+    m_IsUsed(this, "isUsed", 0, "Is Calibrant used?"),
+    m_Flags(this, "flags", 0, "Calibrant flags"),
+    m_Description(this, "description", "Description", "Calibrant Description"),
+    m_Symmetry(this, "symmetry", 0, "Calibrant Symmetry"),
+    m_A(this, "a", 1, "calibrant a-axis"),
+    m_B(this, "b", 1, "calibrant b-axis"),
+    m_C(this, "c", 1, "calibrant c-axis"),
+    m_Alpha(this, "alpha", 90, "calibrant alpha angle (deg)"),
+    m_Beta(this, "beta", 90, "calibrant beta angle (deg)"),
+    m_Gamma(this, "gamma", 90, "calibrant gamma angle (deg)"),
     m_Experiment(exp),
     m_CalibrantLibrary(lib)
 {

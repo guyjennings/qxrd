@@ -1,12 +1,12 @@
 #include "qxrdfilebrowsersettings.h"
 #include "qcepsettingssaver.h"
 
-QxrdFileBrowserSettings::QxrdFileBrowserSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent) :
+QxrdFileBrowserSettings::QxrdFileBrowserSettings(QcepObjectWPtr parent) :
   QcepObject("fileBrowserSettings", parent),
-  m_BrowserFilter(saver, this, "browserFilter",1, "Browser Filter"),
-  m_BrowserSelector(saver, this, "browserSelector","", "Browser Selector"),
-  m_RootDirectory(saver, this, "rootDirectory","", "Browser Root Directory")/*,
-  m_ColumnWidths(saver, this, "columnWidths", QcepIntList(), "Browser Column Widths")*/
+  m_BrowserFilter(this, "browserFilter",1, "Browser Filter"),
+  m_BrowserSelector(this, "browserSelector","", "Browser Selector"),
+  m_RootDirectory(this, "rootDirectory","", "Browser Root Directory")/*,
+  m_ColumnWidths(this, "columnWidths", QcepIntList(), "Browser Column Widths")*/
 {
 }
 

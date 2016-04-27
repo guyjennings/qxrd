@@ -36,6 +36,7 @@
 #include "qxrdtodolist.h"
 #include "qxrdpolartransformdialog.h"
 #include "qxrdpolarnormalizationdialog.h"
+#include "qxrdapplicationsettings.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
@@ -63,7 +64,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
                        QxrdExperimentWPtr docw,
                        QxrdAcquisitionWPtr acqw,
                        QxrdDataProcessorWPtr procw,
-                       QcepAllocatorWPtr allocw,
                        QWidget *parent)
   : QxrdMainWindow(parent),
     m_ObjectNamer(this, "window"),
@@ -73,7 +73,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_Experiment(docw),
     m_Acquisition(acqw),
     m_DataProcessor(procw),
-    m_Allocator(allocw),
     m_AcquisitionDialog(NULL),
     m_AcquisitionScalerDialog(NULL),
     m_AcquisitionExtraInputsDialog(NULL),
@@ -663,13 +662,6 @@ void QxrdWindow::initialize()
             m_IntegratorPlot, &QxrdIntegratorPlot::onNewIntegrationAvailable);
   }
 
-  QcepAllocatorPtr alloc(m_Allocator);
-
-//  if (alloc) {
-//    connect(alloc -> prop_AllocatedBytes(), &QcepInt64Property::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
-//    connect(alloc -> prop_AvailableBytes(), &QcepInt64Property::valueChanged, this, &QxrdWindow::allocatedMemoryChanged);
-//  }
-
   m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_AcquisitionScalerDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_AcquisitionExtraInputsDialog -> toggleViewAction());
@@ -715,35 +707,37 @@ void QxrdWindow::initialize()
           m_HistogramDialog, &QxrdHistogramDialog::histogramSelectionChanged);
 
   if (app) {
-    m_Messages -> document() -> setMaximumBlockCount(app->get_MessageWindowLines());
+    QxrdApplicationSettingsPtr appset(app->settings());
 
-    connect(app->prop_MessageWindowLines(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onMessageWindowLinesChanged);
-    connect(app->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onUpdateIntervalMsecChanged);
-  }
+    if (appset) {
+      m_Messages -> document() -> setMaximumBlockCount(appset->get_MessageWindowLines());
+
+      connect(appset->prop_MessageWindowLines(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onMessageWindowLinesChanged);
+      connect(appset->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onUpdateIntervalMsecChanged);
 
 #ifdef QT_NO_DEBUG
-  m_ActionRefineCenterTilt->setEnabled(false);
+      m_ActionRefineCenterTilt->setEnabled(false);
 #endif
 
-  if (expt && set) {
-    if (!expt->get_DefaultLayout()) {
-      QByteArray geometry = set->get_WindowGeometry();
-      QByteArray winstate = set->get_WindowState();
+      if (expt && set) {
+        if (!expt->get_DefaultLayout()) {
+          QByteArray geometry = set->get_WindowGeometry();
+          QByteArray winstate = set->get_WindowState();
 
-      if (!restoreGeometry(geometry)) {
-        printf("Restore geometry failed\n");
+          if (!restoreGeometry(geometry)) {
+            printf("Restore geometry failed\n");
+          }
+
+          if (!restoreState(winstate,2)) {
+            printf("Restore state failed\n");
+          }
+        } else{
+          expt->set_DefaultLayout(0);
+        }
       }
 
-      if (!restoreState(winstate,2)) {
-        printf("Restore state failed\n");
-      }
-    } else{
-      expt->set_DefaultLayout(0);
+      m_UpdateTimer.start(appset->get_UpdateIntervalMsec());
     }
-  }
-
-  if (app) {
-    m_UpdateTimer.start(app->get_UpdateIntervalMsec());
   }
 
   captureSize();
@@ -855,18 +849,22 @@ void QxrdWindow::populateRecentExperimentsMenu()
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
-    QStringList recent = app->get_RecentExperiments();
+    QxrdApplicationSettingsPtr set(app->settings());
 
-    foreach (QString exp, recent) {
-      QAction *action = new QAction(exp, m_RecentExperimentsMenu);
-      QSignalMapper *mapper = new QSignalMapper(action);
-      connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
-      mapper->setMapping(action, exp);
+    if (set) {
+      QStringList recent = set->get_RecentExperiments();
 
-      connect(mapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, app.data(),
-              &QxrdApplication::openRecentExperiment);
+      foreach (QString exp, recent) {
+        QAction *action = new QAction(exp, m_RecentExperimentsMenu);
+        QSignalMapper *mapper = new QSignalMapper(action);
+        connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
+        mapper->setMapping(action, exp);
 
-      m_RecentExperimentsMenu -> addAction(action);
+        connect(mapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, app.data(),
+                &QxrdApplication::openRecentExperiment);
+
+        m_RecentExperimentsMenu -> addAction(action);
+      }
     }
   }
 }

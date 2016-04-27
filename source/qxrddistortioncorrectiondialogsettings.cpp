@@ -1,7 +1,7 @@
 #include "qxrddistortioncorrectiondialogsettings.h"
 #include "qcepsettingssaver.h"
 
-QxrdDistortionCorrectionDialogSettings::QxrdDistortionCorrectionDialogSettings(QcepSettingsSaverWPtr /*saver*/, QcepObjectWPtr parent) :
+QxrdDistortionCorrectionDialogSettings::QxrdDistortionCorrectionDialogSettings(QcepObjectWPtr parent) :
   QcepObject("distortionCorrectionDialogSettings", parent)
 {
 }

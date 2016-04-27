@@ -17,8 +17,7 @@ class QxrdDataProcessorThreaded : public QxrdDataProcessorBase
 {
   Q_OBJECT
 public:
-  QxrdDataProcessorThreaded(QcepSettingsSaverWPtr saver,
-                            QxrdExperimentWPtr doc,
+  QxrdDataProcessorThreaded(QxrdExperimentWPtr doc,
                             QxrdAcquisitionWPtr acq,
                             QxrdFileSaverWPtr filesaver);
   virtual ~QxrdDataProcessorThreaded();

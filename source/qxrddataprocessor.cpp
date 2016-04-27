@@ -16,11 +16,10 @@
 #include <qmath.h>
 
 QxrdDataProcessor::QxrdDataProcessor
-    (QcepSettingsSaverWPtr saver,
-     QxrdExperimentWPtr doc,
+    (QxrdExperimentWPtr doc,
      QxrdAcquisitionWPtr acq,
      QxrdFileSaverWPtr filesaver)
-  : QxrdDataProcessorThreaded(saver, doc, acq, filesaver)
+  : QxrdDataProcessorThreaded(doc, acq, filesaver)
 {
 }
 

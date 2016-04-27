@@ -12,28 +12,27 @@
 #include "qxrdexperiment.h"
 #include "qxrddataprocessor.h"
 
-QxrdDetectorPilatus::QxrdDetectorPilatus(QcepSettingsSaverWPtr saver,
-                                         QxrdExperimentWPtr    expt,
+QxrdDetectorPilatus::QxrdDetectorPilatus(QxrdExperimentWPtr    expt,
                                          QxrdAcquisitionWPtr   acq,
                                          int                   detNum,
                                          QcepObjectWPtr        parent) :
-  QxrdDetector(saver, expt, acq, QxrdDetectorThread::PilatusDetector, detNum, parent),
+  QxrdDetector(expt, acq, QxrdDetectorThread::PilatusDetector, detNum, parent),
   m_PilatusSocket(),
   m_ExposureTime(-1),
   m_ExposuresPerFrame(-1),
   m_ExposureFrameCount(-1),
   m_Remote(new QxrdDetectorPilatusRemote(sharedFromThis())),
-  m_PilatusHost            (saver, this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
-  m_PilatusPort            (saver, this, "pilatusPort",          41234,         "Camserver Port Number"),
-  m_PilatusUser            (saver, this, "pilatusUser",          "det",         "Camserver User Name"),
-  m_PilatusSSH             (saver, this, "pilatusSSH",           "ssh",         "ssh command path"),
-  m_PilatusSCP             (saver, this, "pilatusSCP",           "scp",         "scp command path"),
-  m_PilatusDataDirectory   (saver, this, "pilatusDataDirectory", "/home/det/shareddata/test/",    "Data directory on Camserver computer"),
-  m_ReadFilesLocally       (saver, this, "readFilesLocally",     true, "Attempt to read acquired files into QXRD for further processing"),
-  m_DeleteFilesAfterReading(saver, this, "deleteFilesAfterReading", false, "Delete files from Camserver computer after reading"),
-  m_ExposureMode           (saver, this, "exposureMode",         0, "Pilatus Exposure Mode = (0:No Trigger, 1:ExtTrigger, 2:ExtEnable"),
-  m_EnableFrequency        (saver, this, "enableFrequency",      1000, "Frequency of ext enable signal"),
-  m_PilatusExtension       (saver, this, "pilatusExtension",     "cbf",         "File format to be used by camserver")
+  m_PilatusHost            (this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
+  m_PilatusPort            (this, "pilatusPort",          41234,         "Camserver Port Number"),
+  m_PilatusUser            (this, "pilatusUser",          "det",         "Camserver User Name"),
+  m_PilatusSSH             (this, "pilatusSSH",           "ssh",         "ssh command path"),
+  m_PilatusSCP             (this, "pilatusSCP",           "scp",         "scp command path"),
+  m_PilatusDataDirectory   (this, "pilatusDataDirectory", "/home/det/shareddata/test/",    "Data directory on Camserver computer"),
+  m_ReadFilesLocally       (this, "readFilesLocally",     true, "Attempt to read acquired files into QXRD for further processing"),
+  m_DeleteFilesAfterReading(this, "deleteFilesAfterReading", false, "Delete files from Camserver computer after reading"),
+  m_ExposureMode           (this, "exposureMode",         0, "Pilatus Exposure Mode = (0:No Trigger, 1:ExtTrigger, 2:ExtEnable"),
+  m_EnableFrequency        (this, "enableFrequency",      1000, "Frequency of ext enable signal"),
+  m_PilatusExtension       (this, "pilatusExtension",     "cbf",         "File format to be used by camserver")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing Pilatus detector\n");

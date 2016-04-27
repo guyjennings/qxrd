@@ -1897,11 +1897,9 @@ void QxrdScriptEngine::initialize()
     QCEP_DOC_OBJECT("application", "The QXRD Application Object");
     globalObject().setProperty("application", newQObject(app.data()));
 
-    QcepAllocatorPtr alloc(app->allocator());
-
-    if (alloc) {
+    if (g_Allocator) {
       QCEP_DOC_OBJECT("allocator", "The QXRD Memory Allocator");
-      globalObject().setProperty("allocator", newQObject(alloc.data()));
+      globalObject().setProperty("allocator", newQObject(g_Allocator));
     }
   }
 

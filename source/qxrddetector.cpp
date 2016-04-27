@@ -11,30 +11,28 @@
 #include "qxrdacquisition.h"
 #include "qxrdroicalculator.h"
 
-QxrdDetector::QxrdDetector(QcepSettingsSaverWPtr saver,
-                           QxrdExperimentWPtr    expt,
+QxrdDetector::QxrdDetector(QxrdExperimentWPtr    expt,
                            QxrdAcquisitionWPtr   acq,
                            int                   detType,
                            int                   detNum,
                            QcepObjectWPtr        parent) :
   QcepObject("detector", parent),
-  m_Saver(saver),
   m_Experiment(expt),
   m_Acquisition(acq),
   m_Processor(),
   m_DetectorControlWindow(NULL),
   m_NAcquiredImages(),
   m_AcquiredImages("acquired"),
-  m_DetectorNumber(QcepSettingsSaverWPtr(), this, "detectorNumber", detNum, "Detector Number"),
-  m_DetectorType(saver, this, "detectorType", detType, "Detector Type"),
-  m_DetectorTypeName(QcepSettingsSaverWPtr(), this, "detectorTypeName", QxrdDetectorThread::detectorTypeName(detType), "Detector Type Name"),
-  m_Enabled(saver, this, "enabled", true, "Is Detector Enabled?"),
-  m_DetectorName(saver, this, "detectorName", QxrdDetectorThread::detectorTypeName(detType), "Detector Name"),
-  m_NCols(QcepSettingsSaverWPtr(), this, "nCols", 0, "No of detector cols"),
-  m_NRows(QcepSettingsSaverWPtr(), this, "nRows", 0, "No of detector rows"),
-  m_HBinning(QcepSettingsSaverWPtr(), this, "hBinning", 0, "Horiz Binning"),
-  m_VBinning(QcepSettingsSaverWPtr(), this, "vBinning", 0, "Vert Binning"),
-  m_Extension(saver, this, "extension", "tif", "File extension")
+  m_DetectorNumber(this, "detectorNumber", detNum, "Detector Number"),
+  m_DetectorType(this, "detectorType", detType, "Detector Type"),
+  m_DetectorTypeName(this, "detectorTypeName", QxrdDetectorThread::detectorTypeName(detType), "Detector Type Name"),
+  m_Enabled(this, "enabled", true, "Is Detector Enabled?"),
+  m_DetectorName(this, "detectorName", QxrdDetectorThread::detectorTypeName(detType), "Detector Name"),
+  m_NCols(this, "nCols", 0, "No of detector cols"),
+  m_NRows(this, "nRows", 0, "No of detector rows"),
+  m_HBinning(this, "hBinning", 0, "Horiz Binning"),
+  m_VBinning(this, "vBinning", 0, "Vert Binning"),
+  m_Extension(this, "extension", "tif", "File extension")
 {
 #ifndef QT_DEBUG
   printf("Constructing detector\n");
@@ -61,7 +59,8 @@ void QxrdDetector::initialize()
   if (exper) {
     m_Processor =
         QxrdDetectorProcessorPtr(
-          new QxrdDetectorProcessor(m_Saver, m_Experiment, exper->fileSaver(),
+          new QxrdDetectorProcessor(m_Experiment,
+                                    exper->fileSaver(),
                                     qSharedPointerDynamicCast<QxrdDetector>(sharedFromThis())));
   }
 
@@ -300,8 +299,7 @@ void QxrdDetector::openControlWindow()
   if (m_DetectorControlWindow == NULL) {
     m_DetectorControlWindow =
         QxrdDetectorControlWindowPtr(
-          new QxrdDetectorControlWindow(m_Saver,
-                                        m_Experiment,
+          new QxrdDetectorControlWindow(m_Experiment,
                                         m_Acquisition,
                                         qSharedPointerDynamicCast<QxrdDetector>(sharedFromThis()),
                                         m_Processor, NULL));

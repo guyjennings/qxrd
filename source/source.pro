@@ -348,7 +348,9 @@ HEADERS += TODO.h \
     qxrdcalibrantdspacing-ptr.h \
     qxrdcalibrantdspacings-ptr.h \
     qxrdintegratorparmsdialog.h \
-    qxrddataprocessorbase-ptr.h
+    qxrddataprocessorbase-ptr.h \
+    qxrdapplicationsettings.h \
+    qxrdapplicationsettings-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -520,7 +522,8 @@ SOURCES += qxrd.cpp \
     qxrdcalibrantpropertiesdialog.cpp \
     qxrdcalibrantdspacings.cpp \
     qxrdcalibrantdspacing.cpp \
-    qxrdintegratorparmsdialog.cpp
+    qxrdintegratorparmsdialog.cpp \
+    qxrdapplicationsettings.cpp
 
 OTHER_FILES += testImage.js
 

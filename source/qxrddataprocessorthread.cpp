@@ -6,15 +6,13 @@
 #include "qxrdexperiment.h"
 #include "qcepmutexlocker.h"
 
-QxrdDataProcessorThread::QxrdDataProcessorThread(QcepSettingsSaverWPtr saver,
-                                                 QxrdExperimentWPtr doc,
+QxrdDataProcessorThread::QxrdDataProcessorThread(QxrdExperimentWPtr doc,
                                                  QxrdAcquisitionWPtr acq,
                                                  QxrdFileSaverWPtr filesaver)
   : QxrdThread(doc),
     m_FileSaver(filesaver),
     m_Acquisition(acq),
     m_Experiment(doc),
-    m_Saver(saver),
     m_DataProcessor(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -40,8 +38,7 @@ void QxrdDataProcessorThread::run()
   }
 
   {
-    QxrdDataProcessorPtr proc = QxrdDataProcessorPtr(new QxrdDataProcessor(m_Saver,
-                                                                           m_Experiment,
+    QxrdDataProcessorPtr proc = QxrdDataProcessorPtr(new QxrdDataProcessor(m_Experiment,
                                                                            m_Acquisition,
                                                                            m_FileSaver));
 

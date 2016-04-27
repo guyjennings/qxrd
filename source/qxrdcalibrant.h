@@ -19,7 +19,7 @@ class QxrdCalibrant : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdCalibrant(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib, int index);
+  QxrdCalibrant(QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib, int index);
   ~QxrdCalibrant();
 
 public slots:

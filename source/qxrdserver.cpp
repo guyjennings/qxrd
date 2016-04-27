@@ -11,10 +11,11 @@
 #include "qcepexperiment.h"
 #include "qxrdexperiment.h"
 
-QxrdServer::QxrdServer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
-  QSpecServer(doc, name),
-  m_RunSpecServer(saver, this,"runSpecServer", 1, "Run SPEC Server?"),
-  m_SpecServerPort(saver, this,"specServerPort", -1, "Port for SPEC Server")
+QxrdServer::QxrdServer(QxrdExperimentWPtr doc, QString name) :
+  QcepObject(name, doc),
+  m_RunSpecServer(this,"runSpecServer", 1, "Run SPEC Server?"),
+  m_SpecServerPort(this,"specServerPort", -1, "Port for SPEC Server"),
+  m_Server(doc, name)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdServer::QxrdServer(%p)\n", this);
@@ -22,6 +23,9 @@ QxrdServer::QxrdServer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QStr
 
   connect(prop_RunSpecServer(), &QcepIntProperty::valueChanged, this, &QxrdServer::runModeChanged);
   connect(prop_SpecServerPort(), &QcepIntProperty::valueChanged, this, &QxrdServer::serverPortChanged);
+
+  connect(&m_Server, &QSpecServer::executeCommand,
+          this,      &QxrdServer::executeCommand);
 }
 
 QxrdServer::~QxrdServer()
@@ -49,9 +53,9 @@ void QxrdServer::runModeChanged()
     QMetaObject::invokeMethod(this, "runModeChanged");
   } else {
     if (get_RunSpecServer()) {
-      startServer(QHostAddress::Any, get_SpecServerPort());
+      m_Server.startServer(QHostAddress::Any, get_SpecServerPort());
     } else {
-      stopServer();
+      m_Server.stopServer();
     }
   }
 }
@@ -61,28 +65,22 @@ void QxrdServer::serverPortChanged()
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "serverPortChanged");
   } else {
-    stopServer();
+    m_Server.stopServer();
 
     if (get_RunSpecServer()) {
-      startServer(QHostAddress::Any, get_SpecServerPort());
+      m_Server.startServer(QHostAddress::Any, get_SpecServerPort());
     }
   }
 }
 
-QVariant QxrdServer::readProperty(QString name)
-{
-  QVariant res;
-
-  if (name=="test") {
-    return 42;
-  }
-
-  return QSpecServer::readProperty(name);
-}
-
 void QxrdServer::shutdown()
 {
-  close();
+  m_Server.close();
 
   thread()->exit();
+}
+
+void QxrdServer::finishedCommand(QScriptValue result)
+{
+  m_Server.finishedCommand(result);
 }

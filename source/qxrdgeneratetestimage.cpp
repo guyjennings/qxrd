@@ -9,26 +9,26 @@
 #include "qcepallocator.h"
 #include "qcepsettingssaver.h"
 
-QxrdGenerateTestImage::QxrdGenerateTestImage(QcepObjectWPtr parent, QcepSettingsSaverWPtr saver) :
+QxrdGenerateTestImage::QxrdGenerateTestImage(QcepObjectWPtr parent) :
   QcepObject("testImage", parent),
   m_Processor(),
   m_Geometry(new QxrdDetectorGeometry("testGeometry", parent)),
-  m_NRows(saver, this, "nRows", 2048, "Number of Rows"),
-  m_NCols(saver, this, "nCols", 2048, "Number of Cols"),
-  m_CenterX(saver, this, "centerX", 1024, "X Center"),
-  m_CenterY(saver, this, "centerY", 1024, "Y Center"),
-  m_Distance(saver, this, "distance", 1000, "Detector - Sample Distance (in mm)"),
-  m_Energy(saver, this, "energy", 22000, "Beam Energy (in eV)"),
-  m_PixelWidth(saver, this, "pixelWidth", 10, "Pixel Width (in um)"),
-  m_PixelHeight(saver, this, "pixelHeight", 10, "Pixel Height (in um)"),
-  m_Alpha(saver, this, "alpha", 0, "Alpha"),
-  m_Beta(saver, this, "beta", 0, "Beta"),
-  m_Gamma(saver, this, "gamma", 0, "Gamma"),
-  m_ChiMin(saver, this, "chiMin", 0, "Chi Min"),
-  m_ChiMax(saver, this, "chiMax", 360, "Chi Max"),
-  m_RingTTH(saver, this, "ringTTH", QcepDoubleList(), "TTH values of rings"),
-  m_RingIntensity(saver, this, "ringIntensity", QcepDoubleList(), "Intensities of rings"),
-  m_RingWidth(saver, this, "ringWidth", QcepDoubleList(), "Widths of Rings")
+  m_NRows(this, "nRows", 2048, "Number of Rows"),
+  m_NCols(this, "nCols", 2048, "Number of Cols"),
+  m_CenterX(this, "centerX", 1024, "X Center"),
+  m_CenterY(this, "centerY", 1024, "Y Center"),
+  m_Distance(this, "distance", 1000, "Detector - Sample Distance (in mm)"),
+  m_Energy(this, "energy", 22000, "Beam Energy (in eV)"),
+  m_PixelWidth(this, "pixelWidth", 10, "Pixel Width (in um)"),
+  m_PixelHeight(this, "pixelHeight", 10, "Pixel Height (in um)"),
+  m_Alpha(this, "alpha", 0, "Alpha"),
+  m_Beta(this, "beta", 0, "Beta"),
+  m_Gamma(this, "gamma", 0, "Gamma"),
+  m_ChiMin(this, "chiMin", 0, "Chi Min"),
+  m_ChiMax(this, "chiMax", 360, "Chi Max"),
+  m_RingTTH(this, "ringTTH", QcepDoubleList(), "TTH values of rings"),
+  m_RingIntensity(this, "ringIntensity", QcepDoubleList(), "Intensities of rings"),
+  m_RingWidth(this, "ringWidth", QcepDoubleList(), "Widths of Rings")
 {
 }
 

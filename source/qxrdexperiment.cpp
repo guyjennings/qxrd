@@ -2,8 +2,10 @@
 
 #include "qxrddebug.h"
 #include "qcepmacros.h"
+#include "qcepallocator.h"
 #include "qxrdexperiment.h"
 #include "qxrdapplication.h"
+#include "qxrdapplicationsettings.h"
 #include "qxrddataprocessorthread.h"
 #include "qxrddataprocessor.h"
 #include "qxrdcalibrantlibrary.h"
@@ -64,19 +66,19 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
   m_ScanFile(NULL),
   m_ExperimentFileMutex(),
 
-  m_DataDirectory(m_SettingsSaver, this, "dataDirectory", defaultDataDirectory(path), "Saved Data Directory"),
-  m_LogFileName(m_SettingsSaver, this, "logFileName", defaultLogName(path), "Log File Name"),
-  m_ScanFileName(m_SettingsSaver, this, "scanFileName", defaultScanName(path), "Scan File Name"),
-  m_ScanFileExtension(m_SettingsSaver, this, "scanFileExtension", ".avg", "Scan File Extension"),
-  m_ScanDataNegative(m_SettingsSaver, this, "scanDataNegative", 0, "Scan Data Negative Value Handling"),
-  m_DefaultLayout(QcepSettingsSaverWPtr(), this,"defaultLayout",0, "Default Layout Used?"),
-  m_WorkCompleted(QcepSettingsSaverWPtr(), this, "workCompleted", 0, "Amount of Work Completed"),
-  m_WorkTarget(QcepSettingsSaverWPtr(), this, "workTarget", 0, "Amount of Work Targetted"),
-  m_CompletionPercentage(QcepSettingsSaverWPtr(), this, "completionPercentage", 0, "Percentage of Work Completed"),
-  m_DefaultScript(m_SettingsSaver, this, "defaultScript", "", "Default script for experiment"),
-  m_ExtraScriptFiles(m_SettingsSaver, this, "extraScriptFiles", QStringList(), "Additional script files for experiment"),
-  m_FontSize(m_SettingsSaver, this, "fontSize", -1, "Suggested font size"),
-  m_Spacing(m_SettingsSaver, this, "spacing", -1, "Suggested widget spacing")
+  m_DataDirectory(this, "dataDirectory", defaultDataDirectory(path), "Saved Data Directory"),
+  m_LogFileName(this, "logFileName", defaultLogName(path), "Log File Name"),
+  m_ScanFileName(this, "scanFileName", defaultScanName(path), "Scan File Name"),
+  m_ScanFileExtension(this, "scanFileExtension", ".avg", "Scan File Extension"),
+  m_ScanDataNegative(this, "scanDataNegative", 0, "Scan Data Negative Value Handling"),
+  m_DefaultLayout(this,"defaultLayout",0, "Default Layout Used?"),
+  m_WorkCompleted(this, "workCompleted", 0, "Amount of Work Completed"),
+  m_WorkTarget(this, "workTarget", 0, "Amount of Work Targetted"),
+  m_CompletionPercentage(this, "completionPercentage", 0, "Percentage of Work Completed"),
+  m_DefaultScript(this, "defaultScript", "", "Default script for experiment"),
+  m_ExtraScriptFiles(this, "extraScriptFiles", QStringList(), "Additional script files for experiment"),
+  m_FontSize(this, "fontSize", -1, "Suggested font size"),
+  m_Spacing(this, "spacing", -1, "Suggested widget spacing")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing experiment\n");
@@ -89,7 +91,11 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
   QxrdApplicationPtr appl(m_Application);
 
   if (appl) {
-    appl->prop_ExperimentCount()->incValue(1);
+    QxrdApplicationSettingsPtr set(appl->settings());
+
+    if (set) {
+      set->prop_ExperimentCount()->incValue(1);
+    }
   }
 }
 
@@ -115,7 +121,11 @@ QxrdExperiment::~QxrdExperiment()
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
-    app->prop_ExperimentCount()->incValue(-1);
+    QxrdApplicationSettingsPtr set(app->settings());
+
+    if (set) {
+      set->prop_ExperimentCount()->incValue(-1);
+    }
   }
 }
 
@@ -131,7 +141,7 @@ void QxrdExperiment::initialize(QSettings *settings)
     splashMessage("Initializing File Saver");
 
     m_FileSaverThread = QxrdFileSaverThreadPtr(
-          new QxrdFileSaverThread(sharedFromThis(), app->allocator()));
+          new QxrdFileSaverThread(sharedFromThis()));
 
     m_FileSaverThread -> start();
     m_FileSaver = m_FileSaverThread -> fileSaver();
@@ -139,8 +149,7 @@ void QxrdExperiment::initialize(QSettings *settings)
     splashMessage("Initializing Data Processing");
 
     m_DataProcessor = QxrdDataProcessorPtr(
-          new QxrdDataProcessor(m_SettingsSaver,
-                                myself,
+          new QxrdDataProcessor(myself,
                                 QxrdAcquisitionWPtr(),
                                 m_FileSaver));
 
@@ -156,14 +165,13 @@ void QxrdExperiment::initialize(QSettings *settings)
     splashMessage("Initializing Data Acquisition");
 
     m_Acquisition = QxrdAcquisitionPtr(
-          new QxrdAcquisition(m_SettingsSaver,
-                              myself,
-                              m_DataProcessor, app->allocator()));
+          new QxrdAcquisition(myself,
+                              m_DataProcessor));
 
     m_Acquisition -> initialize();
 
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
-          new QxrdCalibrantLibrary(m_SettingsSaver, myself));
+          new QxrdCalibrantLibrary(myself));
 
     m_CalibrantLibraryModel = QxrdCalibrantLibraryModelPtr(
           new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
@@ -212,12 +220,12 @@ void QxrdExperiment::initialize(QSettings *settings)
 //    m_DatasetModel -> newColumn("group4/sdev", 1000);
 
     m_WindowSettings = QxrdWindowSettingsPtr(
-          new QxrdWindowSettings(m_SettingsSaver, myself));
+          new QxrdWindowSettings(myself));
 
     splashMessage("Starting SPEC Server");
 
     m_ServerThread = QxrdServerThreadPtr(
-          new QxrdServerThread(m_SettingsSaver, myself, "qxrd"));
+          new QxrdServerThread(myself, "qxrd"));
 
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
@@ -225,7 +233,7 @@ void QxrdExperiment::initialize(QSettings *settings)
     splashMessage("Starting Simple Socket Server");
 
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
-          new QxrdSimpleServerThread(m_SettingsSaver, myself, "simpleserver"));
+          new QxrdSimpleServerThread(myself, "simpleserver"));
 
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
@@ -251,11 +259,11 @@ void QxrdExperiment::initialize(QSettings *settings)
 //    }
 
     if (srv && eng) {
-      connect(srv.data(),   &QSpecServer::executeCommand,
+      connect(srv.data(),   &QxrdServer::executeCommand,
               eng.data(),   &QxrdScriptEngine::evaluateSpecCommand);
 
       connect(eng.data(),   &QxrdScriptEngine::specResultAvailable,
-              srv.data(),   &QSpecServer::finishedCommand);
+              srv.data(),   &QxrdServer::finishedCommand);
     }
 
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
@@ -350,51 +358,53 @@ void QxrdExperiment::openWindows()
 
   QxrdApplicationPtr app(m_Application);
 
-  if (app && app->get_GuiWanted()) {
-    splashMessage("Opening Main Window");
-    m_Window = QxrdWindowPtr(
-          new QxrdWindow(m_WindowSettings,
-                         m_Application,
-                         qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()),
-                         m_Acquisition,
-                         m_DataProcessor,
-                         app->allocator(),
-                         NULL),
-          &QObject::deleteLater);
+  if (app) {
+    QxrdApplicationSettingsPtr set(app->settings());
+    if (set && set->get_GuiWanted()) {
+      splashMessage("Opening Main Window");
+      m_Window = QxrdWindowPtr(
+            new QxrdWindow(m_WindowSettings,
+                           m_Application,
+                           qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()),
+                           m_Acquisition,
+                           m_DataProcessor,
+                           NULL),
+            &QObject::deleteLater);
 
-    QxrdDataProcessorPtr proc(m_DataProcessor);
-    QxrdAcquisitionPtr acq(m_Acquisition);
-    QxrdScriptEnginePtr eng(m_ScriptEngine);
+      QxrdDataProcessorPtr proc(m_DataProcessor);
+      QxrdAcquisitionPtr acq(m_Acquisition);
+      QxrdScriptEnginePtr eng(m_ScriptEngine);
 
-    if (m_Window) {
-      m_Window -> initialize();
+      if (m_Window) {
+        m_Window -> initialize();
 
-      if (proc) {
-        proc -> setWindow(m_Window);
-      }
+        if (proc) {
+          proc -> setWindow(m_Window);
+        }
 
-      if (acq) {
-        acq -> setWindow(m_Window);
-      }
+        if (acq) {
+          acq -> setWindow(m_Window);
+        }
 
-      if (eng) {
-        eng -> setWindow(m_Window);
-      }
+        if (eng) {
+          eng -> setWindow(m_Window);
+        }
 
-      m_Window -> onAcquisitionInit();
+        m_Window -> onAcquisitionInit();
 
-      if (eng) {
-        connect(m_Window.data(),   &QxrdWindow::executeCommand,
-                eng.data(),   &QxrdScriptEngine::evaluateAppCommand);
+        if (eng) {
+          connect(m_Window.data(),   &QxrdWindow::executeCommand,
+                  eng.data(),   &QxrdScriptEngine::evaluateAppCommand);
 
-        connect(eng.data(),   &QxrdScriptEngine::appResultAvailable,
-                m_Window.data(),   &QxrdWindow::finishedCommand);
-      }
+          connect(eng.data(),   &QxrdScriptEngine::appResultAvailable,
+                  m_Window.data(),   &QxrdWindow::finishedCommand);
+        }
 
-      readInitialLogFile();
+        readInitialLogFile();
 
-      if (m_Window && app && app->get_GuiWanted()) {
-        m_Window -> show();
+        if (m_Window && set && set->get_GuiWanted()) {
+          m_Window -> show();
+        }
       }
     }
   }

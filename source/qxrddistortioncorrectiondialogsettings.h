@@ -9,7 +9,7 @@ class QxrdDistortionCorrectionDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdDistortionCorrectionDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
+  explicit QxrdDistortionCorrectionDialogSettings(QcepObjectWPtr parent);
 
 public:
   void readSettings(QSettings *settings, QString section);

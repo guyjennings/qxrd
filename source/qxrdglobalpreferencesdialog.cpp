@@ -1,13 +1,13 @@
 #include "qxrddebug.h"
 #include "qxrdglobalpreferencesdialog.h"
 #include "ui_qxrdglobalpreferencesdialog.h"
-#include "qxrdapplication.h"
+#include "qxrdapplicationsettings.h"
 #include "qcepallocator.h"
 #include <stdio.h>
 
-QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, QWidget *parent) :
-  QDialog(parent),
-  m_Application(app)
+QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplicationSettingsWPtr set) :
+  QDialog(NULL),
+  m_ApplicationSettings(set)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(%p)\n", this);
@@ -16,11 +16,11 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, Q
   setupUi(this);
 
 //  m_OpenDirectly -> setChecked(m_Application->get_OpenDirectly());
-  m_RecentExperimentsSize -> setValue(m_Application->get_RecentExperimentsSize());
+  m_RecentExperimentsSize -> setValue(m_ApplicationSettings->get_RecentExperimentsSize());
 
-  qint64 debugLevel = m_Application -> get_Debug();
+  qint64 debugLevel = m_ApplicationSettings -> get_Debug();
 
-  QcepAllocatorPtr alloc(m_Application->allocator());
+  QcepAllocatorPtr alloc(m_ApplicationSettings->allocator());
 
   if (alloc) {
     m_ReservedMemory32 -> setRange(500, 3000);
@@ -31,10 +31,10 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplication *app, Q
     m_ExtraReservedMemory -> setValue(alloc->get_Reserve());
   }
 
-  m_FileBrowserLimit -> setValue(m_Application->get_FileBrowserLimit());
+  m_FileBrowserLimit -> setValue(m_ApplicationSettings->get_FileBrowserLimit());
 
-  m_MessageWindowLines -> setValue(m_Application->get_MessageWindowLines());
-  m_UpdateIntervalMsec -> setValue(m_Application->get_UpdateIntervalMsec());
+  m_MessageWindowLines -> setValue(m_ApplicationSettings->get_MessageWindowLines());
+  m_UpdateIntervalMsec -> setValue(m_ApplicationSettings->get_UpdateIntervalMsec());
 
   setupDebugWidgets(debugLevel);
 }
@@ -63,16 +63,16 @@ void QxrdGlobalPreferencesDialog::accept()
   qint64 debugLevel = readDebugWidgets();
 
 //  m_Application -> set_OpenDirectly(m_OpenDirectly->isChecked());
-  m_Application -> set_RecentExperimentsSize(m_RecentExperimentsSize->value());
+  m_ApplicationSettings -> set_RecentExperimentsSize(m_RecentExperimentsSize->value());
 
   int bufferSize32 = m_ReservedMemory32 -> value();
   int bufferSize64 = m_ReservedMemory64 -> value();
   int extraReserve = m_ExtraReservedMemory -> value();
 
 
-  m_Application -> set_Debug(debugLevel);
+  m_ApplicationSettings -> set_Debug(debugLevel);
 
-  QcepAllocatorPtr alloc(m_Application->allocator());
+  QcepAllocatorPtr alloc(m_ApplicationSettings->allocator());
 
   if (alloc) {
     alloc         -> set_TotalBufferSizeMB32(bufferSize32);
@@ -80,9 +80,9 @@ void QxrdGlobalPreferencesDialog::accept()
     alloc         -> set_Reserve(extraReserve);
   }
 
-  m_Application -> set_FileBrowserLimit(m_FileBrowserLimit->value());
-  m_Application -> set_MessageWindowLines(m_MessageWindowLines -> value());
-  m_Application -> set_UpdateIntervalMsec(m_UpdateIntervalMsec -> value());
+  m_ApplicationSettings -> set_FileBrowserLimit(m_FileBrowserLimit->value());
+  m_ApplicationSettings -> set_MessageWindowLines(m_MessageWindowLines -> value());
+  m_ApplicationSettings -> set_UpdateIntervalMsec(m_UpdateIntervalMsec -> value());
 
   QDialog::accept();
 }

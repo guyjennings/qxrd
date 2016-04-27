@@ -8,7 +8,7 @@ class QxrdDetectorFileWatcher : public QxrdDetector
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorFileWatcher(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum, QcepObjectWPtr parent);
+  explicit QxrdDetectorFileWatcher(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum, QcepObjectWPtr parent);
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);

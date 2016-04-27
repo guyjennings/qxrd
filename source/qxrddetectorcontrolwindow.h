@@ -16,8 +16,7 @@ class QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::QxrdDetector
   Q_OBJECT
 
 public:
-  explicit QxrdDetectorControlWindow(QcepSettingsSaverWPtr     saver,
-                                     QxrdExperimentWPtr        exp,
+  explicit QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,
                                      QxrdAcquisitionWPtr       acq,
                                      QxrdDetectorWPtr          det,
                                      QxrdDetectorProcessorWPtr proc,
@@ -66,7 +65,6 @@ private:
   QVector<int>  selectedROIs();
 
 private:
-  QcepSettingsSaverWPtr           m_Saver;
   QxrdExperimentWPtr              m_Experiment;
   QxrdAcquisitionWPtr             m_Acquisition;
   QxrdDetectorWPtr                m_Detector;

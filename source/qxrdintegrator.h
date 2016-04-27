@@ -25,8 +25,7 @@ class QxrdIntegrator : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdIntegrator(QcepSettingsSaverWPtr saver,
-                 QxrdExperimentWPtr exp,
+  QxrdIntegrator(QxrdExperimentWPtr exp,
                  QxrdCenterFinderWPtr cfw);
   virtual ~QxrdIntegrator();
 
@@ -154,8 +153,6 @@ public slots:
   QString defaultUserAbsorptionScript();
 
 private:
-  mutable QMutex         m_Mutex;
-  QcepSettingsSaverWPtr  m_Saver;
   QxrdExperimentWPtr     m_Experiment;
   QxrdCenterFinderWPtr   m_CenterFinder;
   QxrdIntegratorCachePtr m_IntegratorCache;

@@ -21,7 +21,7 @@ class QxrdCenterFinder : public QxrdDetectorGeometry
   Q_OBJECT
 
 public:
-  QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt);
+  QxrdCenterFinder(QxrdExperimentWPtr expt);
   virtual ~QxrdCenterFinder();
 
 public:

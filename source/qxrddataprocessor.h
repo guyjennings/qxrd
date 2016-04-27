@@ -8,8 +8,7 @@ class QxrdDataProcessor : public QxrdDataProcessorThreaded
   Q_OBJECT
 
 public:
-  QxrdDataProcessor(QcepSettingsSaverWPtr saver,
-                    QxrdExperimentWPtr doc,
+  QxrdDataProcessor(QxrdExperimentWPtr doc,
                     QxrdAcquisitionWPtr acq,
                     QxrdFileSaverWPtr filesaver);
   ~QxrdDataProcessor();

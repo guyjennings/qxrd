@@ -3,27 +3,26 @@
 #include <QtMath>
 #include <QMatrix4x4>
 
-QxrdROICoordinates::QxrdROICoordinates(QcepSettingsSaverWPtr saver,
-                                       QxrdExperimentWPtr    exp,
+QxrdROICoordinates::QxrdROICoordinates(QxrdExperimentWPtr    exp,
                                        int                   roiType,
                                        double                left,
                                        double                top,
                                        double                right,
                                        double                bottom)
   : QcepObject("coords", exp),
-    m_RoiType(saver, this, "roiType", roiType, "ROI Type"),
-    m_RoiTypeName(QcepSettingsSaverWPtr(), this, "roiTypeName", roiTypeName(roiType), "ROI Type Name"),
-    m_Coords(saver, this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords"),
-    m_Width2(saver, this, "width2", 0, "Width of inner region"),
-    m_Height2(saver, this, "height2", 0, "Height of inner region"),
-    m_Sum(QcepSettingsSaverWPtr(), this, "sum", 0, "ROI Pixel Sum"),
-    m_Average(QcepSettingsSaverWPtr(), this, "average", 0, "ROI Pixel Average"),
-    m_Minimum(QcepSettingsSaverWPtr(), this, "minimum", 0, "ROI Pixel Minimum"),
-    m_Maximum(QcepSettingsSaverWPtr(), this, "maximum", 0, "ROI Pixel Maximum"),
-    m_NPixels(QcepSettingsSaverWPtr(), this, "nPixels", 0, "ROI N Pixels"),
-    m_Background(QcepSettingsSaverWPtr(), this, "background", 0, "ROI Background"),
-    m_XGradient(QcepSettingsSaverWPtr(), this, "xGradient", 0, "ROI X Gradient"),
-    m_YGradient(QcepSettingsSaverWPtr(), this, "yGradient", 0, "ROI Y Gradient")
+    m_RoiType(this, "roiType", roiType, "ROI Type"),
+    m_RoiTypeName(this, "roiTypeName", roiTypeName(roiType), "ROI Type Name"),
+    m_Coords(this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords"),
+    m_Width2(this, "width2", 0, "Width of inner region"),
+    m_Height2(this, "height2", 0, "Height of inner region"),
+    m_Sum(this, "sum", 0, "ROI Pixel Sum"),
+    m_Average(this, "average", 0, "ROI Pixel Average"),
+    m_Minimum(this, "minimum", 0, "ROI Pixel Minimum"),
+    m_Maximum(this, "maximum", 0, "ROI Pixel Maximum"),
+    m_NPixels(this, "nPixels", 0, "ROI N Pixels"),
+    m_Background(this, "background", 0, "ROI Background"),
+    m_XGradient(this, "xGradient", 0, "ROI X Gradient"),
+    m_YGradient(this, "yGradient", 0, "ROI Y Gradient")
 {
 }
 

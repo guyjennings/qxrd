@@ -27,78 +27,76 @@
 #include <QDir>
 
 QxrdDataProcessorBase::QxrdDataProcessorBase(
-    QcepSettingsSaverWPtr saver,
     QxrdExperimentWPtr doc,
     QxrdAcquisitionWPtr acq,
     QxrdFileSaverWPtr filesaver) :
 
   QcepDataProcessorBase("processor", doc),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),
-  m_FileName(QcepSettingsSaverWPtr(), this, "fileName","", "Current File Name"),
-  m_DataPath(saver, this,"dataPath", "", "Data Path"),
-  m_DarkImagePath(saver, this, "darkImagePath", "", "Dark Images Path"),
-  m_BadPixelsPath(saver, this, "badPixelsPath", "", "Bad Pixels Path"),
-  m_GainMapPath(saver, this, "gainMapPath", "", "Gain Map Path"),
-  m_MaskPath(saver, this, "maskPath", "", "Mask Path"),
-  m_ScriptPath(saver, this, "scriptPath", "", "Script Path"),
-  m_PerformDarkSubtraction(saver, this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
-  m_SaveRawImages(saver, this, "saveRawImages", true, "Save Raw Images?"),
-  m_SaveDarkImages(saver, this, "saveDarkImages", true, "Save Dark Images?"),
-  m_PerformBadPixels(saver, this, "performBadPixels", true, "Perform Bad Pixel Correction?"),
-  m_PerformGainCorrection(saver, this, "performGainCorrection", true, "Perform Gain Correction?"),
-  m_SaveSubtracted(saver, this, "saveSubtracted", true, "Save Dark Subtracted Data?"),
-  m_SaveAsText(saver, this, "saveAsText", false, "Save as Text Files (warning - Large and Slow!)"),
-  m_SaveAsTextSeparator(saver, this, "saveAsTextSeparator", " ", "Separator for Images Saved as Text"),
-  m_SaveAsTextPerLine(saver, this,"saveAsTextPerLine",16, "Pixels per line in Images Saved as Text"),
-  m_SaveOverflowFiles(saver, this,"saveOverflowFiles",0, "Save Overflow Pixel Files?"),
-  m_PerformIntegration(saver, this, "performIntegration", true, "Perform Circular Integration?"),
-  m_DisplayIntegratedData(saver, this, "displayIntegratedData", true, "Display Integrated Data?"),
-  m_SaveIntegratedData(saver, this, "saveIntegratedData", true, "Save Integrated Data?"),
-  m_SaveIntegratedPath(saver, this, "saveIntegratedPath", "", "Integrated Data Path"),
-  m_SaveDarkInSubdirectory(saver, this,"saveDarkInSubdirectory",0, "Save Dark In Subdirectory?"),
-  m_SaveDarkSubdirectory(saver, this,"saveDarkSubdirectory","", "Dark Subdirectory"),
-  m_SaveRawInSubdirectory(saver, this,"saveRawInSubdirectory",0, "Save Raw in Subdirectory?"),
-  m_SaveRawSubdirectory(saver, this,"saveRawSubdirectory","", "Raw Subdirectory"),
-  m_SaveSubtractedInSubdirectory(saver, this,"saveSubtractedInSubdirectory",0, "Save Subtracted in Subdirectory?"),
-  m_SaveSubtractedSubdirectory(saver, this,"saveSubtractedSubdirectory","", "Subtracted Subdirectory"),
-  m_SaveIntegratedInSeparateFiles(saver, this,"saveIntegratedInSeparateFiles",0, "Save Integrated in Separate Files?"),
-  m_SaveIntegratedInSubdirectory(saver, this,"saveIntegratedInSubdirectory",0, "Save Integrated in Subdirectory?"),
-  m_SaveIntegratedSubdirectory(saver, this,"saveIntegratedSubdirectory","", "Integrated Subdirectory"),
-  m_AccumulateIntegrated2D(saver, this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
-  m_AccumulateIntegratedName(saver, this, "accumulateIntegratedName", "/accumulated/2d-data", "Dataset to accumulate to"),
-  m_AccumulateIntegratedDirectory(saver, this, "accumulateIntegratedDirectory", "", "Accumulator save directory"),
-  m_AccumulateIntegratedFileName(saver, this, "accumulateIntegratedFileName", "", "Accumulator save file"),
-  m_AccumulateIntegratedFormat(saver, this, "accumulateIntegratedFormat", "", "Accumulator save format"),
-  m_PerformDarkSubtractionTime(saver, this, "performDarkSubtractionTime", 0.01, "Avg Time to Perform Dark Subtraction (in sec)"),
-  m_PerformBadPixelsTime(saver, this, "performBadPixelsTime", 0.01, "Avg Time to Perform Bad Pixel Correction (in sec)"),
-  m_PerformGainCorrectionTime(saver, this, "performGainCorrectionTime", 0.01, "Avg Time to Perform Gain Correction (in sec)"),
-  m_SaveSubtractedTime(saver, this, "saveSubtractedTime", 0.1, "Avg Time to Save Subtracted Data (in sec)"),
-  m_SaveAsTextTime(saver, this, "saveAsTextTime", 0.1, "Avg Time to Save Images as Text (in sec)"),
-  m_PerformIntegrationTime(saver, this, "performIntegrationTime", 0.05, "Avg Time to Perform Integration (in sec/core)"),
-  m_DisplayIntegratedDataTime(saver, this, "displayIntegratedDataTime", 0.2, "Avg Time to Display Integrated Data (in sec)"),
-  m_SaveIntegratedDataTime(saver, this, "saveIntegratedDataTime", 0.01, "Avg Time to Save Integrated Data (in sec)"),
-  m_EstimatedProcessingTime(saver, this, "estimatedProcessingTime", 0.1, "Overall Estimated Processing Time (in sec/image)"),
-  m_AveragingRatio(saver, this, "averagingRatio", 0.1, "Averaging Ratio for Estimated Timing"),
-  m_MaskMinimumValue(saver, this, "maskMinimumValue", 0, "Mask Minimum Value"),
-  m_MaskMaximumValue(saver, this, "maskMaximumValue", 20000, "Mask Maximum Value"),
-  m_MaskCircleRadius(saver, this, "maskCircleRadius", 10, "Mask Circle Radius"),
-  m_MaskSetPixels(saver, this, "maskSetPixels", true, "Mask Set Pixels"),
-//  m_CompressImages(saver, this, "compressImages", false, "Compress Images"),
-  m_Average(QcepSettingsSaverWPtr(), this,"average",0.0, "Average Value of Acquired Image (per exposure)"),
-  m_AverageDark(QcepSettingsSaverWPtr(), this,"averageDark",0.0, "Average Value of Dark Image"),
-  m_AverageRaw(QcepSettingsSaverWPtr(), this,"averageRaw",0.0, "Average Value of Raw Image"),
-  m_CorrectionQueueLength(QcepSettingsSaverWPtr(), this, "correctionQueueLength", 0, "Image correction backlog"),
-  m_IntegrationQueueLength(QcepSettingsSaverWPtr(), this, "integrationQueueLength", 0, "Image integration backlog"),
-  m_SaverQueueLength(QcepSettingsSaverWPtr(), this, "saverQueueLength", 0, "Data saving backlog"),
-  m_ZingerAlgorithm(saver, this, "zingerAlgorithm", 0, "Zinger Detection Algorithm"),
-  m_ZingerMask(saver, this, "zingerMask", 0, "Zinger Mask Source"),
-  m_ZingerDestination(saver, this, "zingerDestination", -1, "Zinger Destination"),
-  m_ZingerSize1(saver, this, "zingerSize1", 1, "Inner Zinger Search Box Size"),
-  m_ZingerSize2(saver, this, "zingerSize2", 5, "Outer Zinger Search Box Size"),
-  m_ZingerThreshold(saver, this, "zingerThreshold", 2.5, "Zinger Detection Threshold"),
+  m_FileName(this, "fileName","", "Current File Name"),
+  m_DataPath(this,"dataPath", "", "Data Path"),
+  m_DarkImagePath(this, "darkImagePath", "", "Dark Images Path"),
+  m_BadPixelsPath(this, "badPixelsPath", "", "Bad Pixels Path"),
+  m_GainMapPath(this, "gainMapPath", "", "Gain Map Path"),
+  m_MaskPath(this, "maskPath", "", "Mask Path"),
+  m_ScriptPath(this, "scriptPath", "", "Script Path"),
+  m_PerformDarkSubtraction(this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
+  m_SaveRawImages(this, "saveRawImages", true, "Save Raw Images?"),
+  m_SaveDarkImages(this, "saveDarkImages", true, "Save Dark Images?"),
+  m_PerformBadPixels(this, "performBadPixels", true, "Perform Bad Pixel Correction?"),
+  m_PerformGainCorrection(this, "performGainCorrection", true, "Perform Gain Correction?"),
+  m_SaveSubtracted(this, "saveSubtracted", true, "Save Dark Subtracted Data?"),
+  m_SaveAsText(this, "saveAsText", false, "Save as Text Files (warning - Large and Slow!)"),
+  m_SaveAsTextSeparator(this, "saveAsTextSeparator", " ", "Separator for Images Saved as Text"),
+  m_SaveAsTextPerLine(this,"saveAsTextPerLine",16, "Pixels per line in Images Saved as Text"),
+  m_SaveOverflowFiles(this,"saveOverflowFiles",0, "Save Overflow Pixel Files?"),
+  m_PerformIntegration(this, "performIntegration", true, "Perform Circular Integration?"),
+  m_DisplayIntegratedData(this, "displayIntegratedData", true, "Display Integrated Data?"),
+  m_SaveIntegratedData(this, "saveIntegratedData", true, "Save Integrated Data?"),
+  m_SaveIntegratedPath(this, "saveIntegratedPath", "", "Integrated Data Path"),
+  m_SaveDarkInSubdirectory(this,"saveDarkInSubdirectory",0, "Save Dark In Subdirectory?"),
+  m_SaveDarkSubdirectory(this,"saveDarkSubdirectory","", "Dark Subdirectory"),
+  m_SaveRawInSubdirectory(this,"saveRawInSubdirectory",0, "Save Raw in Subdirectory?"),
+  m_SaveRawSubdirectory(this,"saveRawSubdirectory","", "Raw Subdirectory"),
+  m_SaveSubtractedInSubdirectory(this,"saveSubtractedInSubdirectory",0, "Save Subtracted in Subdirectory?"),
+  m_SaveSubtractedSubdirectory(this,"saveSubtractedSubdirectory","", "Subtracted Subdirectory"),
+  m_SaveIntegratedInSeparateFiles(this,"saveIntegratedInSeparateFiles",0, "Save Integrated in Separate Files?"),
+  m_SaveIntegratedInSubdirectory(this,"saveIntegratedInSubdirectory",0, "Save Integrated in Subdirectory?"),
+  m_SaveIntegratedSubdirectory(this,"saveIntegratedSubdirectory","", "Integrated Subdirectory"),
+  m_AccumulateIntegrated2D(this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
+  m_AccumulateIntegratedName(this, "accumulateIntegratedName", "/accumulated/2d-data", "Dataset to accumulate to"),
+  m_AccumulateIntegratedDirectory(this, "accumulateIntegratedDirectory", "", "Accumulator save directory"),
+  m_AccumulateIntegratedFileName(this, "accumulateIntegratedFileName", "", "Accumulator save file"),
+  m_AccumulateIntegratedFormat(this, "accumulateIntegratedFormat", "", "Accumulator save format"),
+  m_PerformDarkSubtractionTime(this, "performDarkSubtractionTime", 0.01, "Avg Time to Perform Dark Subtraction (in sec)"),
+  m_PerformBadPixelsTime(this, "performBadPixelsTime", 0.01, "Avg Time to Perform Bad Pixel Correction (in sec)"),
+  m_PerformGainCorrectionTime(this, "performGainCorrectionTime", 0.01, "Avg Time to Perform Gain Correction (in sec)"),
+  m_SaveSubtractedTime(this, "saveSubtractedTime", 0.1, "Avg Time to Save Subtracted Data (in sec)"),
+  m_SaveAsTextTime(this, "saveAsTextTime", 0.1, "Avg Time to Save Images as Text (in sec)"),
+  m_PerformIntegrationTime(this, "performIntegrationTime", 0.05, "Avg Time to Perform Integration (in sec/core)"),
+  m_DisplayIntegratedDataTime(this, "displayIntegratedDataTime", 0.2, "Avg Time to Display Integrated Data (in sec)"),
+  m_SaveIntegratedDataTime(this, "saveIntegratedDataTime", 0.01, "Avg Time to Save Integrated Data (in sec)"),
+  m_EstimatedProcessingTime(this, "estimatedProcessingTime", 0.1, "Overall Estimated Processing Time (in sec/image)"),
+  m_AveragingRatio(this, "averagingRatio", 0.1, "Averaging Ratio for Estimated Timing"),
+  m_MaskMinimumValue(this, "maskMinimumValue", 0, "Mask Minimum Value"),
+  m_MaskMaximumValue(this, "maskMaximumValue", 20000, "Mask Maximum Value"),
+  m_MaskCircleRadius(this, "maskCircleRadius", 10, "Mask Circle Radius"),
+  m_MaskSetPixels(this, "maskSetPixels", true, "Mask Set Pixels"),
+//  m_CompressImages(this, "compressImages", false, "Compress Images"),
+  m_Average(this,"average",0.0, "Average Value of Acquired Image (per exposure)"),
+  m_AverageDark(this,"averageDark",0.0, "Average Value of Dark Image"),
+  m_AverageRaw(this,"averageRaw",0.0, "Average Value of Raw Image"),
+  m_CorrectionQueueLength(this, "correctionQueueLength", 0, "Image correction backlog"),
+  m_IntegrationQueueLength(this, "integrationQueueLength", 0, "Image integration backlog"),
+  m_SaverQueueLength(this, "saverQueueLength", 0, "Data saving backlog"),
+  m_ZingerAlgorithm(this, "zingerAlgorithm", 0, "Zinger Detection Algorithm"),
+  m_ZingerMask(this, "zingerMask", 0, "Zinger Mask Source"),
+  m_ZingerDestination(this, "zingerDestination", -1, "Zinger Destination"),
+  m_ZingerSize1(this, "zingerSize1", 1, "Inner Zinger Search Box Size"),
+  m_ZingerSize2(this, "zingerSize2", 5, "Outer Zinger Search Box Size"),
+  m_ZingerThreshold(this, "zingerThreshold", 2.5, "Zinger Detection Threshold"),
   m_Mutex(QMutex::Recursive),
   m_Experiment(doc),
-  m_Saver(saver),
   m_Window(),
   m_FileSaver(filesaver),
   m_Acquisition(acq),
@@ -131,16 +129,16 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
     printMessage("QxrdDataProcessorBase::QxrdDataProcessorBase");
   }
 
-  m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(saver, m_Experiment));
-  m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(saver, m_Experiment, m_CenterFinder));
-  m_PolarTransform = QxrdPolarTransformPtr(new QxrdPolarTransform(saver, m_Experiment));
-  m_PolarNormalization = QxrdPolarNormalizationPtr(new QxrdPolarNormalization(saver, m_Experiment));
+  m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(m_Experiment));
+  m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(m_Experiment, m_CenterFinder));
+  m_PolarTransform = QxrdPolarTransformPtr(new QxrdPolarTransform(m_Experiment));
+  m_PolarNormalization = QxrdPolarNormalizationPtr(new QxrdPolarNormalization(m_Experiment));
 
 //  m_Integrator->initialize(m_Integrator);
 
-  m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(sharedFromThis(), saver));
+  m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(sharedFromThis()));
 
-  m_DistortionCorrection = QxrdDistortionCorrectionPtr(new QxrdDistortionCorrection(saver, m_Experiment));
+  m_DistortionCorrection = QxrdDistortionCorrectionPtr(new QxrdDistortionCorrection(m_Experiment));
 }
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()
@@ -368,7 +366,7 @@ void QxrdDataProcessorBase::newData(QcepDoubleImageDataPtr image, QcepMaskDataPt
   if (exp) {
     QcepDatasetModelPtr ds = exp->dataset();
 
-    if (ds) {
+    if (ds && image) {
       ds->append(image->get_Name(), image);
     }
   }

@@ -26,8 +26,7 @@ class QxrdDetectorProcessor : public QcepObject
     Q_OBJECT
 
 public:
-  QxrdDetectorProcessor(QcepSettingsSaverWPtr saver,
-                        QxrdExperimentWPtr    doc,
+  QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
                         QxrdFileSaverWPtr     fsav,
                         QxrdDetectorWPtr      det);
   virtual ~QxrdDetectorProcessor();
@@ -108,9 +107,6 @@ private:
   QString              subtractedOutputDirectory() const;
   QString              integratedOutputDirectory() const;
   QString              existingOutputDirectory(QString dir, QString subdir) const;
-
-private:
-  QcepSettingsSaverWPtr m_Saver;
 
 public:
   // Properties...

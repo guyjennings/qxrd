@@ -20,8 +20,7 @@ class QxrdAcquisitionExtraInputs : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdAcquisitionExtraInputs(QcepSettingsSaverWPtr saver,
-                                      QxrdExperimentWPtr    doc,
+  explicit QxrdAcquisitionExtraInputs(QxrdExperimentWPtr    doc,
                                       QxrdAcquisitionWPtr   acq);
   void initialize();
   virtual ~QxrdAcquisitionExtraInputs();
@@ -84,7 +83,6 @@ private:
   mutable QMutex              m_Mutex;
   QxrdExperimentWPtr          m_Experiment;
   QxrdAcquisitionWPtr         m_Acquisition;
-  QcepSettingsSaverWPtr       m_Saver;
   QVector<QxrdAcquisitionExtraInputsChannelPtr> m_Channels;
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
   QVector< QVector<double> >  m_ChannelData;

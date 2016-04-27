@@ -15,8 +15,7 @@ class QxrdDataProcessorThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdDataProcessorThread(QcepSettingsSaverWPtr saver,
-                          QxrdExperimentWPtr doc,
+  QxrdDataProcessorThread(QxrdExperimentWPtr doc,
                           QxrdAcquisitionWPtr acq,
                           QxrdFileSaverWPtr filesaver);
 
@@ -33,7 +32,6 @@ private:
   QxrdFileSaverWPtr       m_FileSaver;
   QxrdAcquisitionWPtr     m_Acquisition;
   QxrdExperimentWPtr      m_Experiment;
-  QcepSettingsSaverWPtr   m_Saver;
   QxrdDataProcessorPtr    m_DataProcessor;
 };
 

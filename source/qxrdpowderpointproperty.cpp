@@ -5,19 +5,18 @@
 #include <QScriptEngine>
 #include <stdio.h>
 
-QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSettingsSaverWPtr saver, QcepObject *parent, const char *name, QxrdPowderPoint value, QString toolTip) :
-  QcepProperty(saver, parent, name, toolTip),
+QxrdPowderPointProperty::QxrdPowderPointProperty(QcepObject *parent, const char *name, QxrdPowderPoint value, QString toolTip) :
+  QcepProperty(parent, name, toolTip),
   m_Default(value),
   m_Value(value)
 {
 }
 
-QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSettingsSaverWPtr saver,
-                                                 QcepObject *parent,
+QxrdPowderPointProperty::QxrdPowderPointProperty(QcepObject *parent,
                                                  const char *name,
                                                  int n1, int n2, int n3, double x, double y, double r1, double r2, double az,
                                                  QString toolTip) :
-  QcepProperty(saver, parent, name, toolTip),
+  QcepProperty(parent, name, toolTip),
   m_Default(QxrdPowderPoint(n1,n2,n3,x,y,r1,r2,az)),
   m_Value(QxrdPowderPoint(n1,n2,n3,x,y,r1,r2,az))
 {
@@ -269,10 +268,8 @@ void QxrdPowderPointProperty::setValue(QxrdPowderPoint val)
 
     m_Value = val;
 
-    QcepSettingsSaverPtr saver(m_Saver);
-
-    if (saver) {
-      saver->changed(this);
+    if (m_Parent) {
+      m_Parent->propertyChanged(this);
     }
 
     emit valueChanged(m_Value, newIndex);
@@ -449,8 +446,8 @@ void QxrdPowderPointPropertyDoubleSpinBoxHelper::setValue(double value)
   emit subValueChanged(m_Axis, value, m_Property->incIndex(1));
 }
 
-QxrdPowderPointVectorProperty::QxrdPowderPointVectorProperty(QcepSettingsSaverWPtr saver, QcepObject *parent, const char *name, QxrdPowderPointVector value, QString toolTip)
-  : QcepProperty(saver, parent, name, toolTip),
+QxrdPowderPointVectorProperty::QxrdPowderPointVectorProperty(QcepObject *parent, const char *name, QxrdPowderPointVector value, QString toolTip)
+  : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
 {
@@ -536,10 +533,8 @@ void QxrdPowderPointVectorProperty::setValue(QxrdPowderPointVector val)
 
     m_Value = val;
 
-    QcepSettingsSaverPtr saver(m_Saver);
-
-    if (saver) {
-      saver->changed(this);
+    if (m_Parent) {
+      m_Parent->propertyChanged(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));

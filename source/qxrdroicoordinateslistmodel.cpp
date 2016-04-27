@@ -3,9 +3,8 @@
 #include "qcepmutexlocker.h"
 #include <stdio.h>
 
-QxrdROICoordinatesListModel::QxrdROICoordinatesListModel(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp)
+QxrdROICoordinatesListModel::QxrdROICoordinatesListModel(QxrdExperimentWPtr exp)
   : QAbstractListModel(),
-    m_Saver(saver),
     m_Experiment(exp),
     m_ROICoordinates()
 {
@@ -264,7 +263,7 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
 
 QxrdROICoordinatesPtr QxrdROICoordinatesListModel::newROI(int roiType)
 {
-  QxrdROICoordinates *coord = new QxrdROICoordinates(m_Saver, m_Experiment, roiType);
+  QxrdROICoordinates *coord = new QxrdROICoordinates(m_Experiment, roiType);
 
   coord->moveToThread(thread());
 

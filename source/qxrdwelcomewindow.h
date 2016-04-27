@@ -15,7 +15,7 @@ class QxrdWelcomeWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  explicit QxrdWelcomeWindow(QxrdApplication *app);
+  explicit QxrdWelcomeWindow(QxrdApplicationWPtr appw);
   ~QxrdWelcomeWindow();
 
   void appendRecentExperiment(QString title);
@@ -43,7 +43,7 @@ private:
 
 private:
   Ui::QxrdWelcomeWindow *ui;
-  QxrdApplication       *m_Application;
+  QxrdApplicationWPtr    m_Application;
   int                    m_InsertRow;
   QSignalMapper          m_SignalMapper;
   QLabel                *m_StatusMsg;

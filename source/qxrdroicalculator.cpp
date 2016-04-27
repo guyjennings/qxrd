@@ -8,12 +8,11 @@
 #include "qcepimagedata.h"
 #include "qxrddetectorprocessor.h"
 
-QxrdROICalculator::QxrdROICalculator(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp, QxrdDetectorProcessorWPtr proc)
+QxrdROICalculator::QxrdROICalculator(QxrdExperimentWPtr exp, QxrdDetectorProcessorWPtr proc)
   : QcepObject("ROIcalculator", proc),
-    m_Saver(saver),
     m_Experiment(exp),
     m_Processor(proc),
-    m_ROICoordinatesModel(new QxrdROICoordinatesListModel(saver, exp))
+    m_ROICoordinatesModel(new QxrdROICoordinatesListModel(exp))
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing ROI Calculator\n");

@@ -9,12 +9,13 @@
 #include "qxrdexperiment-ptr.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qcepobject.h"
 
-class QxrdSimpleServer : public QTcpServer
+class QxrdSimpleServer : public QcepObject
 {
   Q_OBJECT
 public:
-  QxrdSimpleServer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
+  QxrdSimpleServer(QxrdExperimentWPtr doc, QString name);
   virtual ~QxrdSimpleServer();
 
   Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer)
@@ -52,6 +53,7 @@ private:
   QxrdExperimentWPtr       m_Experiment;
   QString                  m_Name;
   int                      m_Port;
+  QTcpServer               m_Server;
   QTcpSocket              *m_Socket;
 };
 

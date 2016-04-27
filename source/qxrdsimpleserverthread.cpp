@@ -5,9 +5,8 @@
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
 
-QxrdSimpleServerThread::QxrdSimpleServerThread(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
+QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdExperimentWPtr doc, QString name) :
   QxrdThread(doc),
-  m_Saver(saver),
   m_Experiment(doc),
   m_Name(name),
   m_Server(NULL)
@@ -53,7 +52,7 @@ void QxrdSimpleServerThread::run()
   }
 
   m_Server = QxrdSimpleServerPtr(
-        new QxrdSimpleServer(m_Saver, m_Experiment, m_Name));
+        new QxrdSimpleServer(m_Experiment, m_Name));
 
   int rc = exec();
 

@@ -15,11 +15,10 @@
 #include "tiffio.h"
 
 QxrdFileSaver::QxrdFileSaver
-(QcepAllocatorWPtr allocator)
-  : QObject(NULL),
+(QcepObjectWPtr parent)
+  : QcepObject("fileSaver", parent),
     m_Experiment(),
     m_Processor(),
-    m_Allocator(allocator),
     m_Acquisition()
 {
 #ifndef QT_NO_DEBUG
@@ -49,8 +48,8 @@ void QxrdFileSaver::setExperiment(QxrdExperimentWPtr expt)
 
 QxrdExperimentWPtr QxrdFileSaver::experiment() const
 {
-  if (g_Application && m_Experiment == NULL) {
-    g_Application->printMessage(("experiment == NULL in QxrdFileSaver::experiment\n"));
+  if (m_Experiment == NULL) {
+    printMessage(("experiment == NULL in QxrdFileSaver::experiment\n"));
   }
 
   return m_Experiment;
@@ -68,8 +67,8 @@ void QxrdFileSaver::setAcquisition(QxrdAcquisitionWPtr acq)
 
 QxrdAcquisitionWPtr QxrdFileSaver::acquisition() const
 {
-  if (g_Application && m_Acquisition == NULL) {
-    g_Application->printMessage("acquisition == NULL in QxrdFileSaver::acquisition\n");
+  if (m_Acquisition == NULL) {
+    printMessage("acquisition == NULL in QxrdFileSaver::acquisition\n");
   }
 
   return m_Acquisition;

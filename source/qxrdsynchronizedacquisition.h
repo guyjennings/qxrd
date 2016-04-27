@@ -16,8 +16,7 @@ class QxrdSynchronizedAcquisition : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisition(QcepSettingsSaverWPtr saver,
-                                       QxrdAcquisitionWPtr acq);
+  explicit QxrdSynchronizedAcquisition(QxrdAcquisitionWPtr acq);
   virtual ~QxrdSynchronizedAcquisition();
 
 public:

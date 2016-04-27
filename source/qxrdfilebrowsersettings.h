@@ -9,7 +9,7 @@ class QxrdFileBrowserSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdFileBrowserSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
+  explicit QxrdFileBrowserSettings(QcepObjectWPtr parent);
   
 public:
   Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter)

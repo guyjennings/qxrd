@@ -12,7 +12,7 @@ class QxrdAcquisitionExtraInputsChannel : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdAcquisitionExtraInputsChannel(int chnum, QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra);
+  explicit QxrdAcquisitionExtraInputsChannel(int chnum, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra);
   
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

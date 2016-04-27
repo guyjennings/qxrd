@@ -12,42 +12,39 @@
 #include "qxrdfilesaver.h"
 #include "qcepallocator.h"
 
-QxrdDetectorProcessor::QxrdDetectorProcessor(
-    QcepSettingsSaverWPtr saver,
-    QxrdExperimentWPtr    doc,
+QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     QxrdFileSaverWPtr     fsav,
     QxrdDetectorWPtr      det)
   : QcepObject("acquisitionProcessor", det),
-    m_Saver(saver),
-    m_DetectorDisplayMode(saver, this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
-    m_PerformDarkSubtraction(saver, this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
-    m_SaveRawImages(saver, this, "saveRawImages", true, "Save Raw Images?"),
-    m_SaveDarkImages(saver, this, "saveDarkImages", true, "Save Dark Images?"),
-    m_PerformBadPixels(saver, this, "performBadPixels", true, "Perform Bad Pixel Correction?"),
-    m_PerformGainCorrection(saver, this, "performGainCorrection", true, "Perform Gain Correction?"),
-    m_SaveSubtracted(saver, this, "saveSubtracted", true, "Save Dark Subtracted Data?"),
-    m_DarkImagePath(saver, this, "darkImagePath", "", "Dark Images Path"),
-    m_RawDataSubdir(saver, this, "rawDataSubdir", "", "Raw Data Subdirectory"),
-    m_DarkDataSubdir(saver, this, "darkDataSubdir", "", "Dark Data Subdirectory"),
-    m_BadPixelsPath(saver, this, "badPixelsPath", "", "Bad Pixels Path"),
-    m_GainMapPath(saver, this, "gainMapPath", "", "Gain Map Path"),
-    m_SubtractedSubdir(saver, this, "subtractedSubdir", "", "Subtracted Data Subdirectory"),
-    m_MaskPath(saver, this, "maskPath", "", "Mask Path"),
+    m_DetectorDisplayMode(this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
+    m_PerformDarkSubtraction(this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
+    m_SaveRawImages(this, "saveRawImages", true, "Save Raw Images?"),
+    m_SaveDarkImages(this, "saveDarkImages", true, "Save Dark Images?"),
+    m_PerformBadPixels(this, "performBadPixels", true, "Perform Bad Pixel Correction?"),
+    m_PerformGainCorrection(this, "performGainCorrection", true, "Perform Gain Correction?"),
+    m_SaveSubtracted(this, "saveSubtracted", true, "Save Dark Subtracted Data?"),
+    m_DarkImagePath(this, "darkImagePath", "", "Dark Images Path"),
+    m_RawDataSubdir(this, "rawDataSubdir", "", "Raw Data Subdirectory"),
+    m_DarkDataSubdir(this, "darkDataSubdir", "", "Dark Data Subdirectory"),
+    m_BadPixelsPath(this, "badPixelsPath", "", "Bad Pixels Path"),
+    m_GainMapPath(this, "gainMapPath", "", "Gain Map Path"),
+    m_SubtractedSubdir(this, "subtractedSubdir", "", "Subtracted Data Subdirectory"),
+    m_MaskPath(this, "maskPath", "", "Mask Path"),
 
-    m_PerformIntegration(saver, this, "performIntegration", true, "Perform Circular Integration?"),
-    m_DisplayIntegratedData(saver, this, "displayIntegratedData", true, "Display Integrated Data?"),
-    m_SaveIntegratedData(saver, this, "saveIntegratedData", true, "Save Integrated Data?"),
-    m_IntegratedDataFile(saver, this, "integratedDataFile", "", "Integrated Data File"),
-    m_SaveIntegratedDataSeparate(saver, this, "saveIntegratedDataSeparate", false, "Save Integrated Data in Separate Files?"),
-    m_IntegratedDataSubdir(saver, this, "integratedDataSubdir", "", "Integrated Data Subdir"),
+    m_PerformIntegration(this, "performIntegration", true, "Perform Circular Integration?"),
+    m_DisplayIntegratedData(this, "displayIntegratedData", true, "Display Integrated Data?"),
+    m_SaveIntegratedData(this, "saveIntegratedData", true, "Save Integrated Data?"),
+    m_IntegratedDataFile(this, "integratedDataFile", "", "Integrated Data File"),
+    m_SaveIntegratedDataSeparate(this, "saveIntegratedDataSeparate", false, "Save Integrated Data in Separate Files?"),
+    m_IntegratedDataSubdir(this, "integratedDataSubdir", "", "Integrated Data Subdir"),
 
-    m_AccumulateIntegrated2D(saver, this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
-    m_AccumulateIntegratedName(saver, this, "accumulateIntegratedName", "", "Dataset name for accumulated data"),
+    m_AccumulateIntegrated2D(this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
+    m_AccumulateIntegratedName(this, "accumulateIntegratedName", "", "Dataset name for accumulated data"),
 
-    m_CalculateROICounts(saver, this, "calculateROICounts", true, "Calculate ROI Counts"),
-    m_DisplayROIBorders(saver, this, "displayROIBorders", true, "Display ROIs in image"),
+    m_CalculateROICounts(this, "calculateROICounts", true, "Calculate ROI Counts"),
+    m_DisplayROIBorders(this, "displayROIBorders", true, "Display ROIs in image"),
 
-    m_RoiCounts(QcepSettingsSaverWPtr(), this, "roiCounts", QcepDoubleVector(), "ROI Counts"),
+    m_RoiCounts(this, "roiCounts", QcepDoubleVector(), "ROI Counts"),
 
     m_Experiment(doc),
     m_FileSaver(fsav),
@@ -56,15 +53,15 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(
     m_Integrator(),
     m_ROICalculator(),
     m_ControlWindow(),
-    m_ImagePlotSettings(new QxrdImagePlotSettings(saver, sharedFromThis()))
+    m_ImagePlotSettings(new QxrdImagePlotSettings(sharedFromThis()))
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorProcessor::QxrdDetectorProcessor(%p)\n", this);
   }
 
-  m_CenterFinder  = QxrdCenterFinderPtr(new QxrdCenterFinder(m_Saver, m_Experiment));
-  m_Integrator    = QxrdIntegratorPtr(new QxrdIntegrator(m_Saver, m_Experiment, m_CenterFinder));
-  m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator(m_Saver, m_Experiment,
+  m_CenterFinder  = QxrdCenterFinderPtr(new QxrdCenterFinder(m_Experiment));
+  m_Integrator    = QxrdIntegratorPtr(new QxrdIntegrator(m_Experiment, m_CenterFinder));
+  m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator(m_Experiment,
                                                                qSharedPointerDynamicCast<QxrdDetectorProcessor>(sharedFromThis())));
 
   connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onMaskPathChanged);

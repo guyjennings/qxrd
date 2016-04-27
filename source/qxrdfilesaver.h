@@ -21,12 +21,12 @@
 #include "qcepintegrateddata-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
-class QxrdFileSaver : public QObject
+class QxrdFileSaver : public QcepObject
 {
   Q_OBJECT
 
 public:
-  QxrdFileSaver(QcepAllocatorWPtr allocator);
+  QxrdFileSaver(QcepObjectWPtr parent);
   ~QxrdFileSaver();
 
   void setProcessor(QxrdDataProcessorWPtr proc);
@@ -74,7 +74,6 @@ private:
 private:
   QxrdExperimentWPtr    m_Experiment;
   QxrdDataProcessorWPtr m_Processor;
-  QcepAllocatorWPtr     m_Allocator;
   QxrdAcquisitionWPtr   m_Acquisition;
 };
 

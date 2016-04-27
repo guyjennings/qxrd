@@ -11,8 +11,7 @@ class QxrdDetectorThread : public QxrdThread
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorThread(QcepSettingsSaverWPtr saver,
-                              QxrdExperimentWPtr expt,
+  explicit QxrdDetectorThread(QxrdExperimentWPtr expt,
                               QxrdAcquisitionWPtr acq,
                               int detType,
                               int detNum,
@@ -68,7 +67,6 @@ protected:
   void run();
 
 private:
-  QcepSettingsSaverWPtr m_Saver;
   QxrdExperimentWPtr    m_Experiment;
   QxrdAcquisitionWPtr   m_Acquisition;
   QxrdDetectorPtr       m_Detector;

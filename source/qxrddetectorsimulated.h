@@ -9,7 +9,7 @@ class QxrdDetectorSimulated : public QxrdDetector
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorSimulated(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum, QcepObjectWPtr parent);
+  explicit QxrdDetectorSimulated(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum, QcepObjectWPtr parent);
   virtual ~QxrdDetectorSimulated();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);

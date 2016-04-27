@@ -7,10 +7,10 @@
 #include "qxrdexperiment.h"
 #include <QScriptValueIterator>
 
-QxrdSimpleServer::QxrdSimpleServer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name) :
-  QTcpServer(NULL),
-  m_RunSimpleServer(saver, this,"runSimpleServer", 1, "Run Simple Socket Server?"),
-  m_SimpleServerPort(saver, this,"simpleServerPort", 1234, "Port for Simple Socket Server"),
+QxrdSimpleServer::QxrdSimpleServer(QxrdExperimentWPtr doc, QString name) :
+  QcepObject("simpleServer", doc),
+  m_RunSimpleServer(this,"runSimpleServer", 1, "Run Simple Socket Server?"),
+  m_SimpleServerPort(this,"simpleServerPort", 1234, "Port for Simple Socket Server"),
   m_Experiment(doc),
   m_Name(name)
 {
@@ -21,7 +21,7 @@ QxrdSimpleServer::QxrdSimpleServer(QcepSettingsSaverWPtr saver, QxrdExperimentWP
   connect(prop_RunSimpleServer(), &QcepIntProperty::valueChanged, this, &QxrdSimpleServer::runModeChanged);
   connect(prop_SimpleServerPort(), &QcepIntProperty::valueChanged, this, &QxrdSimpleServer::serverPortChanged);
 
-  connect(this, &QTcpServer::newConnection, this, &QxrdSimpleServer::openNewConnection);
+  connect(&m_Server, &QTcpServer::newConnection, this, &QxrdSimpleServer::openNewConnection);
 }
 
 QxrdSimpleServer::~QxrdSimpleServer()
@@ -96,27 +96,27 @@ void QxrdSimpleServer::startServer(QHostAddress addr, int port)
                  .arg(addr.toString()).arg(port));
   }
 
-  setMaxPendingConnections(1);
+  m_Server.setMaxPendingConnections(1);
 
-  if (isListening()) {
-    close();
+  if (m_Server.isListening()) {
+    m_Server.close();
   }
 
-  if (!listen(addr, port)) {
+  if (!m_Server.listen(addr, port)) {
     criticalMessage(tr("Failed to bind to address %1 port %2\nIs there another copy of qxrd running already?").arg(addr.toString()).arg(port));
   }
 }
 
 void QxrdSimpleServer::stopServer()
 {
-  if (isListening()) {
-    close();
+  if (m_Server.isListening()) {
+    m_Server.close();
   }
 }
 
 void QxrdSimpleServer::openNewConnection()
 {
-  m_Socket = nextPendingConnection();
+  m_Socket = m_Server.nextPendingConnection();
 
   connect(m_Socket, &QIODevice::readyRead, this,     &QxrdSimpleServer::clientRead);
 
@@ -160,7 +160,7 @@ void QxrdSimpleServer::finishedCommand(QScriptValue result)
 
 void QxrdSimpleServer::shutdown()
 {
-  close();
+  m_Server.close();
 
   thread()->exit();
 }

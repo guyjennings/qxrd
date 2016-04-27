@@ -9,27 +9,24 @@
 #include "qxrddataprocessor.h"
 #include "qxrdexperiment.h"
 
-QxrdAcquisitionInterface::QxrdAcquisitionInterface(QcepSettingsSaverWPtr saver,
-                                                   QxrdExperimentWPtr    doc,
-                                                   QxrdDataProcessorWPtr proc,
-                                                   QcepAllocatorWPtr     allocator)
+QxrdAcquisitionInterface::QxrdAcquisitionInterface(QxrdExperimentWPtr    doc,
+                                                   QxrdDataProcessorWPtr proc)
   : QcepObject("acquisition", doc),
-    m_Saver(saver),
     m_ExecutionThread(),
-    m_Cancelling(QcepSettingsSaverWPtr(), this, "cancelling", 0, "Cancel Acquisition?"),
-    m_Triggered(QcepSettingsSaverWPtr(), this, "triggered", 0, "Trigger Acquisition"),
-    m_ExposureTime(saver, this,"exposureTime",0.1, "Exposure Time (in sec)"),
-    m_SkippedExposuresAtStart(saver, this,"skippedExposuresAtStart",0, "Exposures to Skip at Start"),
-    m_PhasesInGroup(saver, this,"phasesInGroup",1, "Number of Image Phases"),
-    m_CurrentPhase(QcepSettingsSaverWPtr(), this, "currentPhase", 0, "Current Acquisition Phase"),
-    m_SummedExposures(saver, this,"summedExposures",1, "Summed Exposures per Image"),
-    m_DarkSummedExposures(saver, this,"darkSummedExposures",1, "Summed Exposures in Dark Image"),
-    m_CurrentSummation(QcepSettingsSaverWPtr(), this, "currentSumation", 0, "Current Acquisition Summation"),
-    m_SkippedExposures(saver, this,"skippedExposures",0, "Skipped Exposures between Images"),
-    m_PreTriggerFiles(saver, this,"preTriggerFiles",0, "Number of pre-Trigger Images"),
-    m_PostTriggerFiles(saver, this,"postTriggerFiles",1, "Number of post-Trigger Images"),
-    m_CurrentFile(QcepSettingsSaverWPtr(), this, "currentFile", 0, "File Index of Current File"),
-    m_FilePattern(saver, this,"filePattern","", "File Name Pattern")
+    m_Cancelling(this, "cancelling", 0, "Cancel Acquisition?"),
+    m_Triggered(this, "triggered", 0, "Trigger Acquisition"),
+    m_ExposureTime(this,"exposureTime",0.1, "Exposure Time (in sec)"),
+    m_SkippedExposuresAtStart(this,"skippedExposuresAtStart",0, "Exposures to Skip at Start"),
+    m_PhasesInGroup(this,"phasesInGroup",1, "Number of Image Phases"),
+    m_CurrentPhase(this, "currentPhase", 0, "Current Acquisition Phase"),
+    m_SummedExposures(this,"summedExposures",1, "Summed Exposures per Image"),
+    m_DarkSummedExposures(this,"darkSummedExposures",1, "Summed Exposures in Dark Image"),
+    m_CurrentSummation(this, "currentSumation", 0, "Current Acquisition Summation"),
+    m_SkippedExposures(this,"skippedExposures",0, "Skipped Exposures between Images"),
+    m_PreTriggerFiles(this,"preTriggerFiles",0, "Number of pre-Trigger Images"),
+    m_PostTriggerFiles(this,"postTriggerFiles",1, "Number of post-Trigger Images"),
+    m_CurrentFile(this, "currentFile", 0, "File Index of Current File"),
+    m_FilePattern(this,"filePattern","", "File Name Pattern")
 {
 }
 

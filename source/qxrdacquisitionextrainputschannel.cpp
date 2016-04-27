@@ -5,30 +5,30 @@
 #include "qcepsettingssaver.h"
 
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
-    int chnum, QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra) :
+    int chnum, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra) :
   QcepObject(tr("extraChannel(%1)").arg(chnum), xtra),
-  m_ChannelNumber(QcepSettingsSaverWPtr(), this, "channelNumber", chnum, "Extra Input Channel Number"),
-  m_Enabled(saver, this, "enabled", 1, "Enabled?"),
-  m_Plotted(saver, this, "plotted", 1, "Plotted?"),
-  m_ChannelName(saver, this, "channelName", "", "NIDAQ name of channel"),
-//  m_Kind(saver, this, "kind", 0, "Channel Kind (0 = none, 1 = Analog In, 2 = Counter In)"),
-  m_Mode(saver, this, "mode", 0, "Channel Mode (0 = summed, 1 = averaged, 2 = maximum, 3 = minimum)"),
-  m_SaveWave(saver, this, "saveWave", 0, "Save entire waveform (0 = no, 1 = yes)"),
-  m_Min(saver, this, "min", -10.0, "Minimum Input value for Analog Channel (in Volts)"),
-  m_Max(saver, this, "max", 10.0, "Maximum Input Value for Analog Channel (in Volts)"),
-  m_Start(saver, this, "start", 0.0, "Start Offset for Channel (in sec after notional exposure start)\n"
+  m_ChannelNumber(this, "channelNumber", chnum, "Extra Input Channel Number"),
+  m_Enabled(this, "enabled", 1, "Enabled?"),
+  m_Plotted(this, "plotted", 1, "Plotted?"),
+  m_ChannelName(this, "channelName", "", "NIDAQ name of channel"),
+//  m_Kind(this, "kind", 0, "Channel Kind (0 = none, 1 = Analog In, 2 = Counter In)"),
+  m_Mode(this, "mode", 0, "Channel Mode (0 = summed, 1 = averaged, 2 = maximum, 3 = minimum)"),
+  m_SaveWave(this, "saveWave", 0, "Save entire waveform (0 = no, 1 = yes)"),
+  m_Min(this, "min", -10.0, "Minimum Input value for Analog Channel (in Volts)"),
+  m_Max(this, "max", 10.0, "Maximum Input Value for Analog Channel (in Volts)"),
+  m_Start(this, "start", 0.0, "Start Offset for Channel (in sec after notional exposure start)\n"
                                  "i.e. Negative values mean times before start of exposure"),
-  m_End(saver, this, "end", 0.0, "End Offset for Channel (in sec before notional exposure end)\n"
+  m_End(this, "end", 0.0, "End Offset for Channel (in sec before notional exposure end)\n"
                                  "i.e. Negative values mean times after end of exposure"),
-  m_TriggerMode(saver, this, "triggerMode", 0, "Trigger Mode (0 = None, 1 = +Edge, 2 = -Edge, 3 = +Level, 4 = -Level)"),
-  m_TriggerLevel(saver, this, "triggerLevel", 0.0, "Trigger Level (in Volts)"),
-  m_TriggerHysteresis(saver, this, "triggerHysteresis", 0.0, "Trigger Hysteresis (in Volts)"),
-  m_PhysicalChannel(QcepSettingsSaverWPtr(), this, "physicalChannel", 0, "Physical Channel Number"),
-  m_Value(QcepSettingsSaverWPtr(), this, "value", 0.0, "Current Value of Channel"),
-  m_Triggered(QcepSettingsSaverWPtr(), this, "triggered", 0, "Was channel triggered?"),
-  m_NLow(QcepSettingsSaverWPtr(), this, "nLow", 0, "Number of untriggered data points"),
-  m_NHigh(QcepSettingsSaverWPtr(), this, "nHigh", 0, "Number of triggered data points"),
-  m_Waveform(QcepSettingsSaverWPtr(), this, "waveform", QcepDoubleVector(), "Waveform on Channel"),
+  m_TriggerMode(this, "triggerMode", 0, "Trigger Mode (0 = None, 1 = +Edge, 2 = -Edge, 3 = +Level, 4 = -Level)"),
+  m_TriggerLevel(this, "triggerLevel", 0.0, "Trigger Level (in Volts)"),
+  m_TriggerHysteresis(this, "triggerHysteresis", 0.0, "Trigger Hysteresis (in Volts)"),
+  m_PhysicalChannel(this, "physicalChannel", 0, "Physical Channel Number"),
+  m_Value(this, "value", 0.0, "Current Value of Channel"),
+  m_Triggered(this, "triggered", 0, "Was channel triggered?"),
+  m_NLow(this, "nLow", 0, "Number of untriggered data points"),
+  m_NHigh(this, "nHigh", 0, "Number of triggered data points"),
+  m_Waveform(this, "waveform", QcepDoubleVector(), "Waveform on Channel"),
   m_Experiment(doc),
   m_ExtraInputs(xtra)
 {

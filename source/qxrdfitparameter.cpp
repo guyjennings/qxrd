@@ -2,8 +2,8 @@
 #include <QSettings>
 #include "qcepsettingssaver.h"
 
-QxrdFitParameter::QxrdFitParameter(QcepSettingsSaverWPtr saver, QcepObject *parent, const char *name, QVariant value, QString toolTip) :
-    QcepDoubleProperty(saver, parent, name, value.toDouble(), toolTip),
+QxrdFitParameter::QxrdFitParameter(QcepObject *parent, const char *name, QVariant value, QString toolTip) :
+    QcepDoubleProperty(parent, name, value.toDouble(), toolTip),
     m_LowerLimit(0),
     m_UpperLimit(0),
     m_IsFitted(true),

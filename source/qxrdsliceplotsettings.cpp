@@ -1,6 +1,6 @@
 #include "qxrdsliceplotsettings.h"
 
-QxrdSlicePlotSettings::QxrdSlicePlotSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent) :
-  QcepPlotSettings("slicePlot", saver, parent)
+QxrdSlicePlotSettings::QxrdSlicePlotSettings(QcepObjectWPtr parent) :
+  QcepPlotSettings("slicePlot", parent)
 {
 }

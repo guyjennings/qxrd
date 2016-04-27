@@ -1,6 +1,6 @@
 #include "qxrdsynchronizedacquisitionplotsettings.h"
 
-QxrdSynchronizedAcquisitionPlotSettings::QxrdSynchronizedAcquisitionPlotSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent) :
-  QcepPlotSettings("syncAcqPlot", saver, parent)
+QxrdSynchronizedAcquisitionPlotSettings::QxrdSynchronizedAcquisitionPlotSettings(QcepObjectWPtr parent) :
+  QcepPlotSettings("syncAcqPlot", parent)
 {
 }

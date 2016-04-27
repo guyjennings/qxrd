@@ -2,12 +2,11 @@
 #include "qxrddetectorthread.h"
 #include <stdio.h>
 
-QxrdDetectorFileWatcher::QxrdDetectorFileWatcher(QcepSettingsSaverWPtr saver,
-                                                 QxrdExperimentWPtr    expt,
+QxrdDetectorFileWatcher::QxrdDetectorFileWatcher(QxrdExperimentWPtr    expt,
                                                  QxrdAcquisitionWPtr   acq,
                                                  int                   detNum,
                                                  QcepObjectWPtr        parent) :
-  QxrdDetector(saver, expt, acq, QxrdDetectorThread::FileWatcherDetector, detNum, parent)
+  QxrdDetector(expt, acq, QxrdDetectorThread::FileWatcherDetector, detNum, parent)
 {
 }
 

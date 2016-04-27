@@ -1,3 +1,4 @@
+#include "qcepallocator.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdcenterfinderdialog.h"
 #include "qxrdcenterfinderpicker.h"
@@ -6,7 +7,7 @@
 #include "qcepmutexlocker.h"
 #include "levmar.h"
 #include <QMessageBox>
-#include "qxrdapplication.h"
+#include "qxrdapplicationsettings.h"
 #include <QtConcurrentMap>
 #include "qxrddebug.h"
 #include "qxrdfitterpeakpoint.h"
@@ -19,6 +20,7 @@
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepdatasetmodel.h"
 #include "qxrdcalibrantlibrary.h"
+#include "qxrdexperiment.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -28,48 +30,48 @@
 #  endif /* _MSC_VER */
 # endif /* LINSOLVERS_RETAIN_MEMORY */
 
-QxrdCenterFinder::QxrdCenterFinder(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr expt)
+QxrdCenterFinder::QxrdCenterFinder(QxrdExperimentWPtr expt)
   : QxrdDetectorGeometry("centering", expt),
-    m_CenterX(saver, this, "centerX", 0, "X Center"),
-    m_CenterY(saver, this, "centerY", 0, "Y Center"),
-    m_CenterStep(saver, this, "centerStep", 1, "Center Step"),
-    m_DetectorXPixelSize(saver, this, "detectorXPixelSize", 200, "Detector X Pixels (um)"),
-    m_DetectorYPixelSize(saver, this, "detectorYPixelSize", 200, "Detector Y Pixels (um)"),
-    m_DetectorDistance(saver, this, "detectorDistance", 1000, "Sample-Detector Distance (mm)"),
-    m_DetectorDistanceStep(saver, this, "detectorDistanceStep", 100, "Sample-Detector Distance Step (mm)"),
-    m_Energy(saver, this, "energy", 20000, "Beam Energy (eV)"),
-    m_ImplementTilt(saver, this,"implementTilt", false, "Implement Detector Tilt?"),
-    m_DetectorTilt(saver, this, "detectorTilt", 0, "Tilt Angle (deg)"),
-    m_DetectorTiltStep(saver, this, "detectorTiltStep", 0.1, "Tilt Angle Step(deg)"),
-    m_TiltPlaneRotation(saver, this, "tiltPlaneRotation", 90, "Tilt Plane Rotation (deg)"),
-    m_TiltPlaneRotationStep(saver, this, "tiltPlaneRotationStep", 10, "Tilt Plane Rotation Step (deg)"),
-    m_MarkedPoints(saver, this, "markedPoints", QxrdPowderPointVector(), "Marker Points"),
-    m_FittedRings(saver, this, "fittedRings", QxrdPowderPointVector(), "Fitted Powder Rings"),
-    m_RingRadius(saver, this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
-    m_RingRadiusA(saver, this, "ringRadiusA", 0.0, "Estimated Powder Ellipse Major Axis Radius"),
-    m_RingRadiusB(saver, this, "ringRadiusB", 0.0, "Estimated Powder Ellipse Minor Axis Radius"),
-    m_RingRotation(saver, this, "ringRotation", 0.0, "Estimated Powder Ellipse Major Axis Rotation"),
-    m_PeakFitRadius(saver, this, "peakFitRadius", 10, "Half size of fitted area for peak fitting"),
-    m_PeakHeight(saver, this, "peakHeight", 100.0, "Height of fitted peak"),
-    m_PeakCenterX(saver, this, "peakCenterX", 0, "X Center of fitted peak"),
-    m_PeakCenterY(saver, this, "peakCenterY", 0, "Y Center of fitted peak"),
-    m_PeakWidth(saver, this, "peakWidth", 2.0, "Width of fitted peak"),
-    m_PeakBackground(saver, this, "peakBackground", 0, "Background Height of fitted peak"),
-    m_PeakBackgroundX(saver, this, "peakBackgroundX", 0, "X Slope of Background"),
-    m_PeakBackgroundY(saver, this, "peakBackgroundY", 0, "Y Slope of Background"),
-    m_PeakFitDebug(saver, this, "peakFitDebug", false, "Debug Print for peak fitting"),
-    m_PeakFitIterations(saver, this, "peakFitIterations", 200, "Max Iterations during fitting"),
-    m_RingAngles(saver, this, "ringAngles", QcepDoubleVector(), "Diffraction ring angles"),
-    m_RingAngleTolerance(saver, this, "ringAngleTolerance", 0.1, "Diffraction ring angle tolerance"),
-    m_PowderFitOptions(saver, this, "powderFitOptions", 0, "Powder fitting options"),
-    m_RingIndex(saver, this, "ringIndex", 0, "Fitted Powder Ring Index"),
-    m_SubtractRingAverages(saver, this, "subtractRingAverages", false, "Plot deviations of each ring from average"),
-    m_RingAverageDisplacement(saver, this, "ringAverageDisplacement", 0.0, "Extra displacement between curves in ring radius plot"),
-    m_FittedWidthMin(saver, this, "fittedWidthMin", 0.5, "Minimum acceptable fitted width (pixels)"),
-    m_FittedWidthMax(saver, this, "fittedWidthMax", 3.0, "Maximum acceptable fitted width (pixels)"),
-    m_FittedHeightMinRatio(saver, this, "fittedHeightMinRatio", 0.25, "Minimum acceptable peak height ratio"),
-    m_FittedPositionMaxDistance(saver, this, "fittedPositionMaxDistance", 2.0, "Maximum acceptable fitted position shift (pixels)"),
-    m_FitPowderPointPosition(saver, this, "fitPowderPointPosition", true, "Fit to nearby peak when adding powder points individually"),
+    m_CenterX(this, "centerX", 0, "X Center"),
+    m_CenterY(this, "centerY", 0, "Y Center"),
+    m_CenterStep(this, "centerStep", 1, "Center Step"),
+    m_DetectorXPixelSize(this, "detectorXPixelSize", 200, "Detector X Pixels (um)"),
+    m_DetectorYPixelSize(this, "detectorYPixelSize", 200, "Detector Y Pixels (um)"),
+    m_DetectorDistance(this, "detectorDistance", 1000, "Sample-Detector Distance (mm)"),
+    m_DetectorDistanceStep(this, "detectorDistanceStep", 100, "Sample-Detector Distance Step (mm)"),
+    m_Energy(this, "energy", 20000, "Beam Energy (eV)"),
+    m_ImplementTilt(this,"implementTilt", false, "Implement Detector Tilt?"),
+    m_DetectorTilt(this, "detectorTilt", 0, "Tilt Angle (deg)"),
+    m_DetectorTiltStep(this, "detectorTiltStep", 0.1, "Tilt Angle Step(deg)"),
+    m_TiltPlaneRotation(this, "tiltPlaneRotation", 90, "Tilt Plane Rotation (deg)"),
+    m_TiltPlaneRotationStep(this, "tiltPlaneRotationStep", 10, "Tilt Plane Rotation Step (deg)"),
+    m_MarkedPoints(this, "markedPoints", QxrdPowderPointVector(), "Marker Points"),
+    m_FittedRings(this, "fittedRings", QxrdPowderPointVector(), "Fitted Powder Rings"),
+    m_RingRadius(this, "ringRadius", 0.0, "Estimated Powder Ring Radius"),
+    m_RingRadiusA(this, "ringRadiusA", 0.0, "Estimated Powder Ellipse Major Axis Radius"),
+    m_RingRadiusB(this, "ringRadiusB", 0.0, "Estimated Powder Ellipse Minor Axis Radius"),
+    m_RingRotation(this, "ringRotation", 0.0, "Estimated Powder Ellipse Major Axis Rotation"),
+    m_PeakFitRadius(this, "peakFitRadius", 10, "Half size of fitted area for peak fitting"),
+    m_PeakHeight(this, "peakHeight", 100.0, "Height of fitted peak"),
+    m_PeakCenterX(this, "peakCenterX", 0, "X Center of fitted peak"),
+    m_PeakCenterY(this, "peakCenterY", 0, "Y Center of fitted peak"),
+    m_PeakWidth(this, "peakWidth", 2.0, "Width of fitted peak"),
+    m_PeakBackground(this, "peakBackground", 0, "Background Height of fitted peak"),
+    m_PeakBackgroundX(this, "peakBackgroundX", 0, "X Slope of Background"),
+    m_PeakBackgroundY(this, "peakBackgroundY", 0, "Y Slope of Background"),
+    m_PeakFitDebug(this, "peakFitDebug", false, "Debug Print for peak fitting"),
+    m_PeakFitIterations(this, "peakFitIterations", 200, "Max Iterations during fitting"),
+    m_RingAngles(this, "ringAngles", QcepDoubleVector(), "Diffraction ring angles"),
+    m_RingAngleTolerance(this, "ringAngleTolerance", 0.1, "Diffraction ring angle tolerance"),
+    m_PowderFitOptions(this, "powderFitOptions", 0, "Powder fitting options"),
+    m_RingIndex(this, "ringIndex", 0, "Fitted Powder Ring Index"),
+    m_SubtractRingAverages(this, "subtractRingAverages", false, "Plot deviations of each ring from average"),
+    m_RingAverageDisplacement(this, "ringAverageDisplacement", 0.0, "Extra displacement between curves in ring radius plot"),
+    m_FittedWidthMin(this, "fittedWidthMin", 0.5, "Minimum acceptable fitted width (pixels)"),
+    m_FittedWidthMax(this, "fittedWidthMax", 3.0, "Maximum acceptable fitted width (pixels)"),
+    m_FittedHeightMinRatio(this, "fittedHeightMinRatio", 0.25, "Minimum acceptable peak height ratio"),
+    m_FittedPositionMaxDistance(this, "fittedPositionMaxDistance", 2.0, "Maximum acceptable fitted position shift (pixels)"),
+    m_FitPowderPointPosition(this, "fitPowderPointPosition", true, "Fit to nearby peak when adding powder points individually"),
     m_Experiment(expt)
 {
 #ifndef QT_NO_DEBUG
@@ -334,9 +336,9 @@ void QxrdCenterFinder::fitPowderCircle(int n)
 
   printMessage(message);
 
-  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+  QxrdApplicationSettings *set = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
 
-  if (app && app->get_GuiWanted()) {
+  if (set && set->get_GuiWanted()) {
     if (niter >= 0) {
       message.append(tr("Do you want to update the beam centering parameters?"));
 
@@ -382,9 +384,9 @@ void QxrdCenterFinder::fitPowderEllipse(int n)
 
   printMessage(message);
 
-  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+  QxrdApplicationSettings *set = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
 
-  if (app && app->get_GuiWanted()) {
+  if (set && set->get_GuiWanted()) {
     if (fitter.reason() == QxrdFitter::Successful) {
       message.append(tr("Do you want to update the beam centering parameters?"));
       if (QMessageBox::question(NULL, "Update Fitted Center?", message, QMessageBox::Ok | QMessageBox::No, QMessageBox::Ok) == QMessageBox::Ok) {

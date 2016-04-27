@@ -2,7 +2,7 @@
 #include "qcepsettingssaver.h"
 #include "qcepmutexlocker.h"
 
-QxrdScriptDialogSettings::QxrdScriptDialogSettings(QcepSettingsSaverWPtr /*saver*/, QcepObjectWPtr parent) :
+QxrdScriptDialogSettings::QxrdScriptDialogSettings(QcepObjectWPtr parent) :
   QcepObject("scriptDialogSettings", parent)
 {
 }

@@ -2,10 +2,10 @@
 #include "qcepplotsettings.h"
 #include "qcepmutexlocker.h"
 
-QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent) :
+QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettings(QcepObjectWPtr parent) :
   QcepObject("extraInputsDialog", parent)
 {
-  m_AcquisitionExtraInputsPlotSettings = QcepPlotSettingsPtr(new QcepPlotSettings("extraInputsPlot", saver, parent));
+  m_AcquisitionExtraInputsPlotSettings = QcepPlotSettingsPtr(new QcepPlotSettings("extraInputsPlot", parent));
 }
 
 void QxrdAcquisitionExtraInputsDialogSettings::readSettings(QSettings *settings, QString section)

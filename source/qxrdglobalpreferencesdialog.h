@@ -4,14 +4,14 @@
 #include <QDialog>
 #include <QCheckBox>
 #include "ui_qxrdglobalpreferencesdialog.h"
-#include "qxrdapplication-ptr.h"
+#include "qxrdapplicationsettings-ptr.h"
 
 class QxrdGlobalPreferencesDialog : public QDialog, public Ui::QxrdGlobalPreferencesDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdGlobalPreferencesDialog(QxrdApplication *app, QWidget *parent = 0);
+  explicit QxrdGlobalPreferencesDialog(QxrdApplicationSettingsWPtr set);
   ~QxrdGlobalPreferencesDialog();
 
 public slots:
@@ -25,7 +25,7 @@ private:
   qint64 readDebugWidgets();
 
 private:
-  QxrdApplication                 *m_Application;
+  QxrdApplicationSettingsPtr       m_ApplicationSettings;
   QVector<QCheckBox*>              m_DebugWidgetList;
 };
 

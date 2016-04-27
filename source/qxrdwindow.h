@@ -10,7 +10,6 @@
 #include "ui_qxrdwindow.h"
 
 #include "qxrdmainwindow.h"
-#include "qcepallocator.h"
 #include "qxrdscriptengine.h"
 #include "qxrdacquisitiondialog.h"
 #include "qxrdacquisitionscalerdialog-ptr.h"
@@ -48,7 +47,6 @@ public:
              QxrdExperimentWPtr docw,
              QxrdAcquisitionWPtr acqw,
              QxrdDataProcessorWPtr procw,
-             QcepAllocatorWPtr allocw,
              QWidget *parent);
   virtual ~QxrdWindow();
   void initialize();
@@ -177,7 +175,6 @@ private:
   QxrdExperimentWPtr                     m_Experiment;
   QxrdAcquisitionWPtr                    m_Acquisition;
   QxrdDataProcessorWPtr                  m_DataProcessor;
-  QcepAllocatorWPtr                      m_Allocator;
   QxrdAcquisitionDialog                 *m_AcquisitionDialog;
   QxrdAcquisitionScalerDialog           *m_AcquisitionScalerDialog;
   QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;

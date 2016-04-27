@@ -1,6 +1,6 @@
 #include "qxrdcenterfinderplotsettings.h"
 
-QxrdCenterFinderPlotSettings::QxrdCenterFinderPlotSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent) :
-  QcepPlotSettings("centeringPlot", saver, parent)
+QxrdCenterFinderPlotSettings::QxrdCenterFinderPlotSettings(QcepObjectWPtr parent) :
+  QcepPlotSettings("centeringPlot", parent)
 {
 }

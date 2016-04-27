@@ -6,17 +6,23 @@
 #include "qspecserver.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qcepobject.h"
 
-class QxrdServer : public QSpecServer
+class QxrdServer : public QcepObject
 {
   Q_OBJECT
 
 public:
-  QxrdServer(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
+  QxrdServer(QxrdExperimentWPtr doc, QString name);
   virtual ~QxrdServer();
 
   virtual void readSettings(QSettings *settings, QString section);
   virtual void writeSettings(QSettings *settings, QString section);
+
+signals:
+  void executeCommand(QString cmd);
+public slots:
+  void finishedCommand(QScriptValue result);
 
 public:
   Q_PROPERTY(int    runSpecServer    READ get_RunSpecServer WRITE set_RunSpecServer)
@@ -28,8 +34,10 @@ public:
 public slots:
   void runModeChanged();
   void serverPortChanged();
-  QVariant readProperty(QString name);
   void shutdown();
+
+private:
+  QSpecServer m_Server;
 };
 
 #endif

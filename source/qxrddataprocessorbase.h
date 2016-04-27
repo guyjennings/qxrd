@@ -40,8 +40,7 @@ class QxrdDataProcessorBase : public QcepDataProcessorBase
   Q_OBJECT
 
 public:
-  QxrdDataProcessorBase(QcepSettingsSaverWPtr saver,
-                        QxrdExperimentWPtr doc,
+  QxrdDataProcessorBase(QxrdExperimentWPtr doc,
                         QxrdAcquisitionWPtr acq,
                         QxrdFileSaverWPtr filesaver);
   virtual ~QxrdDataProcessorBase();
@@ -469,7 +468,6 @@ private:
 
 protected:
   QxrdExperimentWPtr     m_Experiment;
-  QcepSettingsSaverWPtr  m_Saver;
   QxrdWindowWPtr         m_Window;
   QxrdFileSaverWPtr      m_FileSaver;
   QxrdAcquisitionWPtr    m_Acquisition;

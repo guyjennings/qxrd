@@ -14,10 +14,8 @@ class QxrdAcquisitionThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdAcquisitionThread(QcepSettingsSaverWPtr saver,
-                        QxrdExperimentWPtr doc,
+  QxrdAcquisitionThread(QxrdExperimentWPtr doc,
                         QxrdDataProcessorWPtr proc,
-                        QcepAllocatorWPtr allocator,
                         int detectorType);
 
   ~QxrdAcquisitionThread();
@@ -35,9 +33,7 @@ protected:
   void run();
 
 private:
-  QcepSettingsSaverWPtr m_Saver;
   QxrdExperimentWPtr    m_Experiment;
-  QcepAllocatorWPtr     m_Allocator;
   QxrdDataProcessorWPtr m_Processor;
   int                   m_DetectorType;
   QxrdAcquisitionPtr    m_Acquisition;

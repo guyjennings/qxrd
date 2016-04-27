@@ -11,12 +11,11 @@
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 
-QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver,
-                                                 QxrdExperimentWPtr    expt,
+QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QxrdExperimentWPtr    expt,
                                                  QxrdAcquisitionWPtr   acq,
                                                  int                   detNum,
                                                  QcepObjectWPtr parent) :
-  QxrdDetector(saver, expt, acq, QxrdDetectorThread::PerkinElmerDetector, detNum, parent),
+  QxrdDetector(expt, acq, QxrdDetectorThread::PerkinElmerDetector, detNum, parent),
   m_Mutex(QMutex::Recursive),
   m_BufferSize(0),
   m_AcqDesc(NULL),
@@ -29,11 +28,11 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QcepSettingsSaverWPtr saver,
   m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
   m_Counter(0),
   m_PerkinElmer(),
-  m_DetectorNumber (saver, this, "detectorNumber",  0, "Perkin Elmer Detector Number"),
-  m_DetectorSubType(saver, this, "detectorSubType", 0, "Perkin Elmer Detector Subtype"),
-  m_DetectorAddress(saver, this, "detectorAddress", "", "Perkin Elmer Detector Address"),
-  m_DetectorGain   (saver, this, "detectorGain",    0, "Detector Gain"),
-  m_DetectorBinning(saver, this, "detectorBinning", 0, "Detector Binning Mode")
+  m_DetectorNumber (this, "detectorNumber",  0, "Perkin Elmer Detector Number"),
+  m_DetectorSubType(this, "detectorSubType", 0, "Perkin Elmer Detector Subtype"),
+  m_DetectorAddress(this, "detectorAddress", "", "Perkin Elmer Detector Address"),
+  m_DetectorGain   (this, "detectorGain",    0, "Detector Gain"),
+  m_DetectorBinning(this, "detectorBinning", 0, "Detector Binning Mode")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing Perkin Elmer Detector\n");

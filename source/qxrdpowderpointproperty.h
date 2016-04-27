@@ -9,8 +9,8 @@ class QxrdPowderPointProperty : public QcepProperty
 {
   Q_OBJECT
 public:
-  explicit QxrdPowderPointProperty(QcepSettingsSaverWPtr saver, QcepObject *parent, const char *name, QxrdPowderPoint value, QString toolTip);
-  explicit QxrdPowderPointProperty(QcepSettingsSaverWPtr saver, QcepObject *parent, const char *name, int n1, int n2, int n3, double x, double y, double r1, double r2, double az, QString toolTip);
+  explicit QxrdPowderPointProperty(QcepObject *parent, const char *name, QxrdPowderPoint value, QString toolTip);
+  explicit QxrdPowderPointProperty(QcepObject *parent, const char *name, int n1, int n2, int n3, double x, double y, double r1, double r2, double az, QString toolTip);
 
   QxrdPowderPoint value() const;
   QxrdPowderPoint defaultValue() const;
@@ -84,8 +84,7 @@ private:
 class QxrdPowderPointVectorProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QxrdPowderPointVectorProperty(QcepSettingsSaverWPtr saver,
-                                QcepObject *parent,
+  QxrdPowderPointVectorProperty(QcepObject *parent,
                                 const char *name,
                                 QxrdPowderPointVector value,
                                 QString toolTip);

@@ -23,8 +23,7 @@ class QxrdDetector : public QcepObject
   Q_OBJECT
 
 public:
-  explicit QxrdDetector(QcepSettingsSaverWPtr saver,
-                        QxrdExperimentWPtr    expt,
+  explicit QxrdDetector(QxrdExperimentWPtr    expt,
                         QxrdAcquisitionWPtr   acq,
                         int                   detType,
                         int                   detNum,
@@ -89,7 +88,6 @@ public slots:
   double scalerCounts(int chan);
 
 protected:
-  QcepSettingsSaverWPtr       m_Saver;
   QxrdExperimentWPtr          m_Experiment;
   QxrdAcquisitionWPtr         m_Acquisition;
   QxrdDetectorProcessorPtr    m_Processor;

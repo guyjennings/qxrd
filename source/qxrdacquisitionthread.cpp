@@ -13,15 +13,11 @@
 
 //static int g_DetectorType = -1;
 
-QxrdAcquisitionThread::QxrdAcquisitionThread(QcepSettingsSaverWPtr saver,
-                                             QxrdExperimentWPtr doc,
+QxrdAcquisitionThread::QxrdAcquisitionThread(QxrdExperimentWPtr doc,
                                              QxrdDataProcessorWPtr proc,
-                                             QcepAllocatorWPtr allocator,
                                              int detectorType)
   : QxrdThread(doc),
-    m_Saver(saver),
     m_Experiment(doc),
-    m_Allocator(allocator),
     m_Processor(proc),
     m_DetectorType(detectorType),
     m_Acquisition()
@@ -50,7 +46,7 @@ void QxrdAcquisitionThread::run()
 
   {
     QxrdAcquisitionPtr acq = QxrdAcquisitionPtr(
-          new QxrdAcquisition(m_Saver, m_Experiment, m_Processor, m_Allocator));
+          new QxrdAcquisition(m_Experiment, m_Processor));
 
     if (acq) {
       acq -> initialize();

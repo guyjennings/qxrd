@@ -22,10 +22,8 @@ class QxrdAcquisitionInterface : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdAcquisitionInterface(QcepSettingsSaverWPtr saver,
-                           QxrdExperimentWPtr doc,
-                           QxrdDataProcessorWPtr proc,
-                           QcepAllocatorWPtr allocator);
+  QxrdAcquisitionInterface(QxrdExperimentWPtr doc,
+                           QxrdDataProcessorWPtr proc);
   ~QxrdAcquisitionInterface();
 
   virtual void initialize();
@@ -54,7 +52,6 @@ public:
   QxrdDarkAcquisitionParameterPackPtr darkAcquisitionParameterPack();
 
 protected:
-  QcepSettingsSaverWPtr  m_Saver;
   QMutex                 m_Acquiring;
   QWaitCondition         m_StatusWaiting;
 

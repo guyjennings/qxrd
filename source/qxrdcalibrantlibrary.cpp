@@ -4,9 +4,8 @@
 #include <stdio.h>
 #include "qxrdexperiment.h"
 
-QxrdCalibrantLibrary::QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp)
+QxrdCalibrantLibrary::QxrdCalibrantLibrary(QxrdExperimentWPtr exp)
   : QcepObject("calibrantLibrary", exp),
-    m_Saver(saver),
     m_Experiment(exp)
 {
 #ifndef QT_NO_DEBUG
@@ -122,7 +121,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
   switch (n) {
   case 0: // Silicon Powder
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, myself, n));
+      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Experiment, myself, n));
       res->set_Name("Si");
       res->set_Description("Silicon Powder");
       res->set_Symmetry(QxrdCalibrant::DiamondCubic);
@@ -137,7 +136,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
 
   case 1: // Alumina
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, myself, n));
+      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Experiment, myself, n));
       res->set_Name("Al2O3");
       res->set_Description("Alumina Powder");
       res->set_Symmetry(QxrdCalibrant::RHexagonal);
@@ -152,7 +151,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
 
   case 2: // NAC
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, myself, n));
+      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Experiment, myself, n));
       res->set_Name("NAC");
       res->set_Description("NAC Powder");
       res->set_Symmetry(QxrdCalibrant::BodyCenteredCubic);
@@ -167,7 +166,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
 
   case 3: // LaB6
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, myself, n));
+      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Experiment, myself, n));
       res->set_Name("LaB6");
       res->set_Description("NIST SRM LaB6 660a");
       res->set_Symmetry(QxrdCalibrant::SimpleCubic);
@@ -182,7 +181,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
 
   case 4: // ZnO
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, myself, n));
+      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Experiment, myself, n));
       res->set_Name("ZnO");
       res->set_Description("Zinc oxide");
       res->set_Symmetry(QxrdCalibrant::RHexagonal);
@@ -197,7 +196,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
 
   case 5: // CeO2
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, myself, n));
+      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Experiment, myself, n));
       res->set_Name("CeO2");
       res->set_Description("Cerium(IV) dioxide");
       res->set_Symmetry(QxrdCalibrant::FaceCenteredCubic);
@@ -212,7 +211,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
 
   case 6: // Cr2O3
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, myself, n));
+      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Experiment, myself, n));
       res->set_Name("Cr2O3");
       res->set_Description("Chromium oxide");
       res->set_Symmetry(QxrdCalibrant::RHexagonal);
@@ -227,7 +226,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
 
   case 7: // Germanium Powder
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Saver, m_Experiment, myself, n));
+      res = QxrdCalibrantPtr(new QxrdCalibrant(m_Experiment, myself, n));
       res->set_Name("Ge");
       res->set_Description("Germanium Powder");
       res->set_Symmetry(QxrdCalibrant::DiamondCubic);

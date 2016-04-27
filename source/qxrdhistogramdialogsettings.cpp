@@ -1,11 +1,11 @@
 #include "qxrdhistogramdialogsettings.h"
 #include "qcepsettingssaver.h"
 
-QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent) :
+QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QcepObjectWPtr parent) :
   QcepObject("histDialogSettings", parent),
-  m_HistogramRect(saver, this, "histogramRect", QRectF(), "Histogram Selection Rectangle")
+  m_HistogramRect(this, "histogramRect", QRectF(), "Histogram Selection Rectangle")
 {
-  m_HistogramPlotSettings = QxrdHistogramPlotSettingsPtr(new QxrdHistogramPlotSettings(saver, parent));
+  m_HistogramPlotSettings = QxrdHistogramPlotSettingsPtr(new QxrdHistogramPlotSettings(parent));
 }
 
 void QxrdHistogramDialogSettings::readSettings(QSettings *settings, QString section)

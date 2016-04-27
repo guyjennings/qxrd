@@ -6,19 +6,18 @@
 #include "qcepsettingssaver.h"
 #include "qxrdacquisitionparameterpack.h"
 
-QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QcepSettingsSaverWPtr saver, QxrdAcquisitionWPtr acq) :
+QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdAcquisitionWPtr acq) :
   QcepObject("synchronization", acq),
-  m_SyncAcquisitionMode(saver, this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
-  m_SyncAcquisitionWaveform(saver, this,"syncAcquisitionWaveform", 0,
+  m_SyncAcquisitionMode(this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
+  m_SyncAcquisitionWaveform(this,"syncAcquisitionWaveform", 0,
                             "Synchronized Acquisition Waveform (0 = Square, 1 = Sine, 2 = Triangle, 3 = Sawtooth, 4 = Bipolar Triangle)"),
-  m_SyncAcquisitionOutputDevice(saver, this,"syncAcquisitionOutputDevice", "", "Synchronized Acquisition Output Device"),
-  m_SyncAcquisitionOutputChannel(saver, this,"syncAcquisitionOutputChannel", "", "Synchronized Acquisition Output Channel"),
-//  m_SyncAcquisitionFlagChannel(saver, this,"syncAcquisitionFlagChannel", 0, "Synchronized Acquisition Flags"),
-  m_SyncAcquisitionMinimum(saver, this,"syncAcquisitionMinimum", 0.0, "Synchronized Acquisition Minimum (in Volts)"),
-  m_SyncAcquisitionMaximum(saver, this,"syncAcquisitionMaximum", 5.0, "Synchronized Acquisition Maximum (in Volts)"),
-  m_SyncAcquisitionSymmetry(saver, this,"syncAcquisitionSymmetry", 0.0, "Synchronized Acquisition Symmetry (0 = symmetric)"),
-  m_SyncAcquisitionPhaseShift(saver, this,"syncAcquisitionPhaseShift", 0.0, "Synchronized Acquisition Phase Shift (deg)"),
-  m_SyncAcquisitionManualValue(saver, this,"syncAcquisitionManualValue", 0.0, "Manual Output Voltage (in Volts)"),
+  m_SyncAcquisitionOutputDevice(this,"syncAcquisitionOutputDevice", "", "Synchronized Acquisition Output Device"),
+  m_SyncAcquisitionOutputChannel(this,"syncAcquisitionOutputChannel", "", "Synchronized Acquisition Output Channel"),
+  m_SyncAcquisitionMinimum(this,"syncAcquisitionMinimum", 0.0, "Synchronized Acquisition Minimum (in Volts)"),
+  m_SyncAcquisitionMaximum(this,"syncAcquisitionMaximum", 5.0, "Synchronized Acquisition Maximum (in Volts)"),
+  m_SyncAcquisitionSymmetry(this,"syncAcquisitionSymmetry", 0.0, "Synchronized Acquisition Symmetry (0 = symmetric)"),
+  m_SyncAcquisitionPhaseShift(this,"syncAcquisitionPhaseShift", 0.0, "Synchronized Acquisition Phase Shift (deg)"),
+  m_SyncAcquisitionManualValue(this,"syncAcquisitionManualValue", 0.0, "Manual Output Voltage (in Volts)"),
   m_Acquisition(acq),
   m_SyncMode(0)
 {

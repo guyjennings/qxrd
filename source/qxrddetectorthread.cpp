@@ -20,13 +20,11 @@
 
 #include <stdio.h>
 
-QxrdDetectorThread::QxrdDetectorThread(QcepSettingsSaverWPtr saver,
-                                       QxrdExperimentWPtr    expt,
+QxrdDetectorThread::QxrdDetectorThread(QxrdExperimentWPtr    expt,
                                        QxrdAcquisitionWPtr   acq,
                                        int                   detType, int detNum,
                                        QcepObjectWPtr        parent) :
   QxrdThread(parent),
-  m_Saver(saver),
   m_Experiment(expt),
   m_Acquisition(acq),
   m_Detector(),
@@ -216,8 +214,7 @@ void QxrdDetectorThread::run()
     switch(m_DetectorType) {
     case SimulatedDetector:
       setObjectName("simulatedDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Saver,
-                                                      m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber,
                                                       parent()));
@@ -226,8 +223,7 @@ void QxrdDetectorThread::run()
 #ifdef HAVE_PERKIN_ELMER
     case PerkinElmerDetector:
       setObjectName("perkinElmerDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Saver,
-                                                        m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Experiment,
                                                         m_Acquisition,
                                                         m_DetectorNumber,
                                                         parent()));
@@ -237,8 +233,7 @@ void QxrdDetectorThread::run()
       //#ifdef HAVE_PILATUS
     case PilatusDetector:
       setObjectName("pilatusDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Saver,
-                                                    m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Experiment,
                                                     m_Acquisition,
                                                     m_DetectorNumber,
                                                     parent()));
@@ -248,8 +243,7 @@ void QxrdDetectorThread::run()
 #ifdef HAVE_AREADETECTOR
     case EpicsAreaDetector:
       setObjectName("epicsAreaDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Saver,
-                                                      m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber,
                                                       parent()));
@@ -258,8 +252,7 @@ void QxrdDetectorThread::run()
 
     case FileWatcherDetector:
       setObjectName("fileWatcherDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Saver,
-                                                        m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Experiment,
                                                         m_Acquisition,
                                                         m_DetectorNumber,
                                                         parent()));
@@ -268,8 +261,7 @@ void QxrdDetectorThread::run()
 
     if (det == NULL) {
       setObjectName("simulatedDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Saver,
-                                                      m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber,
                                                       parent()));

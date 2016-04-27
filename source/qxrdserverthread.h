@@ -14,7 +14,7 @@ class QxrdServerThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdServerThread(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr doc, QString name);
+  QxrdServerThread(QxrdExperimentWPtr doc, QString name);
   ~QxrdServerThread();
 
   QxrdServerPtr server() const;
@@ -29,7 +29,6 @@ protected:
   void run();
 
 private:
-  QcepSettingsSaverWPtr m_Saver;
   QxrdExperimentWPtr    m_Experiment;
   QString               m_Name;
   QxrdServerPtr         m_Server;

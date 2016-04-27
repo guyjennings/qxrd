@@ -20,8 +20,7 @@ class QxrdPolarTransform : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdPolarTransform(QcepSettingsSaverWPtr saver,
-                     QxrdExperimentWPtr    exp);
+  QxrdPolarTransform(QxrdExperimentWPtr    exp);
   virtual ~QxrdPolarTransform();
 
   QxrdIntegratorWPtr integrator() const;
@@ -81,7 +80,6 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  QcepSettingsSaverWPtr  m_Saver;
   QxrdExperimentWPtr     m_Experiment;
   QxrdIntegratorCachePtr m_IntegratorCache;
 };

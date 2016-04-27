@@ -14,7 +14,7 @@ class QxrdCalibrantLibrary : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdCalibrantLibrary(QcepSettingsSaverWPtr saver, QxrdExperimentWPtr exp);
+  QxrdCalibrantLibrary(QxrdExperimentWPtr exp);
   virtual ~QxrdCalibrantLibrary();
 
 public slots:
@@ -35,7 +35,6 @@ public:
 
 private:
   mutable QMutex            m_Mutex;
-  QcepSettingsSaverWPtr     m_Saver;
   QxrdExperimentWPtr        m_Experiment;
   QVector<QxrdCalibrantPtr> m_Calibrants;
 };

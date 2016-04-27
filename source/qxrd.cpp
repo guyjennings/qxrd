@@ -1,8 +1,10 @@
 #include "qxrddebug.h"
 #include <QApplication>
 
+#include "qcepallocator.h"
 #include "qxrdapplication.h"
 #include "qxrdapplication-ptr.h"
+#include "qxrdapplicationsettings.h"
 #include "qxrdwindow.h"
 #include "qxrdsplashscreen.h"
 #include "qxrdsplashscreen-ptr.h"
@@ -42,7 +44,9 @@ int main(int argc, char *argv[])
           new QxrdApplication(argc, argv));
 
     if (app->init(argc, argv)) {
-      if (app->get_GuiWanted()) {
+      QxrdApplicationSettingsPtr set(app->settings());
+
+      if (set && set->get_GuiWanted()) {
         res = app->exec();
       } else {
         app->processEvents();

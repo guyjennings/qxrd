@@ -9,7 +9,7 @@ class QxrdSynchronizedAcquisitionDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisitionDialogSettings(QcepSettingsSaverWPtr saver, QcepObjectWPtr parent);
+  explicit QxrdSynchronizedAcquisitionDialogSettings(QcepObjectWPtr parent);
 
 public:
   void readSettings(QSettings *settings, QString section);

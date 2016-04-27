@@ -37,10 +37,8 @@ class QxrdAcquisition : public QxrdAcquisitionInterface
   Q_OBJECT
 
 public:
-  QxrdAcquisition(QcepSettingsSaverWPtr saver,
-                  QxrdExperimentWPtr doc,
-                  QxrdDataProcessorWPtr proc,
-                  QcepAllocatorWPtr allocator);
+  QxrdAcquisition(QxrdExperimentWPtr doc,
+                  QxrdDataProcessorWPtr proc);
   ~QxrdAcquisition();
   void initialize();
 
@@ -225,7 +223,6 @@ private:
 
   QxrdExperimentWPtr     m_Experiment;
   QxrdWindowWPtr         m_Window;
-  QcepAllocatorWPtr      m_Allocator;
   QxrdDataProcessorWPtr  m_DataProcessor;
 
   QxrdAcquisitionDialogPtr m_ControlPanel;

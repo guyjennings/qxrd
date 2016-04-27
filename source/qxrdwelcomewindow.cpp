@@ -5,44 +5,53 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QThread>
+#include "qxrdapplicationsettings.h"
 
-QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplication *app) :
+QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplicationWPtr appw) :
   QMainWindow(NULL),
   ui(new Ui::QxrdWelcomeWindow),
-  m_Application(app),
+  m_Application(appw),
   m_InsertRow(5),
   m_SignalMapper(NULL),
   m_RecentExperimentsMenu(NULL)
 {
-  ui->setupUi(this);
+  QxrdApplicationPtr app(m_Application);
 
-  m_StatusMsg = new QLabel(NULL);
-  m_StatusMsg -> setMinimumWidth(500);
-  m_StatusMsg -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  m_StatusMsg -> setToolTip(tr("Status Messages"));
+  if (app) {
+    ui->setupUi(this);
 
-  statusBar() -> addPermanentWidget(m_StatusMsg);
+    m_StatusMsg = new QLabel(NULL);
+    m_StatusMsg -> setMinimumWidth(500);
+    m_StatusMsg -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_StatusMsg -> setToolTip(tr("Status Messages"));
 
-  connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdWelcomeWindow::clearStatusMessage);
+    statusBar() -> addPermanentWidget(m_StatusMsg);
 
-  connect(ui->m_ActionEditApplicationPreferences, &QAction::triggered, m_Application, &QxrdApplication::editGlobalPreferences);
-  connect(ui->m_ActionNewExperiment, &QAction::triggered, m_Application, &QxrdApplication::createNewExperiment);
-  connect(ui->m_ActionOpenExperiment, &QAction::triggered, m_Application, &QxrdApplication::chooseExistingExperiment);
-  connect(ui->m_ActionExitApplication, &QAction::triggered, m_Application, &QxrdApplication::possiblyQuit);
+    connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdWelcomeWindow::clearStatusMessage);
 
-  connect(ui->m_NewExperiment, &QAbstractButton::clicked, ui->m_ActionNewExperiment, &QAction::trigger);
-  connect(ui->m_OpenExistingExperiment, &QAbstractButton::clicked, ui->m_ActionOpenExperiment, &QAction::trigger);
+    connect(ui->m_ActionEditApplicationPreferences, &QAction::triggered, app.data(), &QxrdApplication::editGlobalPreferences);
+    connect(ui->m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdApplication::createNewExperiment);
+    connect(ui->m_ActionOpenExperiment, &QAction::triggered, app.data(), &QxrdApplication::chooseExistingExperiment);
+    connect(ui->m_ActionExitApplication, &QAction::triggered, app.data(), &QxrdApplication::possiblyQuit);
 
-  connect(&m_SignalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped,
-          m_Application, &QxrdApplication::openRecentExperiment);
+    connect(ui->m_NewExperiment, &QAbstractButton::clicked, ui->m_ActionNewExperiment, &QAction::trigger);
+    connect(ui->m_OpenExistingExperiment, &QAbstractButton::clicked, ui->m_ActionOpenExperiment, &QAction::trigger);
 
-  QStringList recents = m_Application->get_RecentExperiments();
+    connect(&m_SignalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped,
+            app.data(), &QxrdApplication::openRecentExperiment);
 
-  foreach (QString recent, recents) {
-    appendRecentExperiment(recent);
+    QxrdApplicationSettingsPtr settings(app->settings());
+
+    if (settings) {
+      QStringList recents = settings->get_RecentExperiments();
+
+      foreach (QString recent, recents) {
+        appendRecentExperiment(recent);
+      }
+    }
+
+    setupRecentExperimentsMenu(ui->m_ActionOpenRecentExperiment);
   }
-
-  setupRecentExperimentsMenu(ui->m_ActionOpenRecentExperiment);
 }
 
 QxrdWelcomeWindow::~QxrdWelcomeWindow()
@@ -75,18 +84,26 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
 {
 //  printMessage("Populating recent experiments menu");
 
-  m_RecentExperimentsMenu->clear();
+  QxrdApplicationPtr app(m_Application);
 
-  QStringList recent = m_Application->get_RecentExperiments();
+  if (app) {
+    m_RecentExperimentsMenu->clear();
 
-  foreach (QString exp, recent) {
-//    printf("Recent experiment: %s\n", qPrintable(exp));
+    QxrdApplicationSettingsPtr settings(app->settings());
 
-    QAction *action = new QAction(exp, m_RecentExperimentsMenu);
-    connect(action, &QAction::triggered, &m_SignalMapper, (void (QSignalMapper::*) ()) &QSignalMapper::map);
-    m_SignalMapper.setMapping(action, exp);
+    if (settings) {
+      QStringList recent = settings->get_RecentExperiments();
 
-    m_RecentExperimentsMenu -> addAction(action);
+      foreach (QString exp, recent) {
+        //    printf("Recent experiment: %s\n", qPrintable(exp));
+
+        QAction *action = new QAction(exp, m_RecentExperimentsMenu);
+        connect(action, &QAction::triggered, &m_SignalMapper, (void (QSignalMapper::*) ()) &QSignalMapper::map);
+        m_SignalMapper.setMapping(action, exp);
+
+        m_RecentExperimentsMenu -> addAction(action);
+      }
+    }
   }
 }
 
@@ -169,9 +186,17 @@ void QxrdWelcomeWindow::clearStatusMessage()
 
 void QxrdWelcomeWindow::openMostRecent()
 {
-  QString experiment = m_Application->get_RecentExperiments().value(0);
+  QxrdApplicationPtr app(m_Application);
 
-  if (experiment.length()) {
-    m_Application->openExperiment(experiment);
+  if (app) {
+    QxrdApplicationSettingsPtr settings(app->settings());
+
+    if (settings) {
+      QString experiment = settings->get_RecentExperiments().value(0);
+
+      if (experiment.length()) {
+        app->openExperiment(experiment);
+      }
+    }
   }
 }

@@ -15,11 +15,10 @@
 #include <QtConcurrentRun>
 #include <QDirIterator>
 
-QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QcepSettingsSaverWPtr saver,
-    QxrdExperimentWPtr    doc,
-    QxrdAcquisitionWPtr   acq,
-    QxrdFileSaverWPtr filesaver)
-  : QxrdDataProcessorBase(saver, doc, acq, filesaver),
+QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QxrdExperimentWPtr    doc,
+                                                     QxrdAcquisitionWPtr   acq,
+                                                     QxrdFileSaverWPtr filesaver)
+  : QxrdDataProcessorBase(doc, acq, filesaver),
     m_CorrectedImages(prop_CorrectionQueueLength(), sharedFromThis()),
     m_IntegratedData(prop_IntegrationQueueLength(), sharedFromThis()),
     m_ROIData(NULL, sharedFromThis()),
