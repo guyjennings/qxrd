@@ -104,7 +104,8 @@ contains (DEFINES, HAVE_QWT) {
   $${PWD}/qcepplot.cpp \
   $${PWD}/qcepplotsettings.cpp \
   $${PWD}/qcepplotmeasurer.cpp \
-  $${PWD}/qcepplotzoomer.cpp
+  $${PWD}/qcepplotzoomer.cpp \
+  $${PWD}/qwt_plot_piecewise_curve.cpp
 }
 
 
@@ -229,7 +230,8 @@ contains (DEFINES, HAVE_QWT) {
   $${PWD}/qcepplotsettings.h \
   $${PWD}/qcepplotmeasurer-ptr.h \
   $${PWD}/qcepplotmeasurer.h \
-  $${PWD}/qcepplotzoomer.h
+  $${PWD}/qcepplotzoomer.h \
+  $${PWD}/qwt_plot_piecewise_curve.h
 }
 
 FORMS += \
