@@ -186,7 +186,6 @@ HEADERS += TODO.h \
     qxrdsimpleserverthread-ptr.h \
     qxrdcenterstepspinner.h \
     qxrdimagedisplaywidget.h \
-    qwt_plot_piecewise_curve.h \
     qxrdmaskdialog.h \
     qxrdmaskdialog-ptr.h \
     qxrdmaskstackmodel.h \
@@ -408,7 +407,6 @@ SOURCES += qxrd.cpp \
     qxrdsimpleserverthread.cpp \
     qxrdcenterstepspinner.cpp \
     qxrdimagedisplaywidget.cpp \
-    qwt_plot_piecewise_curve.cpp \
     qxrdmaskdialog.cpp \
     qxrdmaskstackmodel.cpp \
     qxrdmaskstack.cpp \

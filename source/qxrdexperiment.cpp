@@ -480,7 +480,7 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts) const
   }
 }
 
-void QxrdExperiment::printLine(QString msg)
+void QxrdExperiment::printLine(QString msg) const
 {
 //#ifndef QT_NO_DEBUG
 //    printf("%s\n", qPrintable(msg));
