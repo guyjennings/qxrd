@@ -51,6 +51,8 @@ public:
   int debug() const;
   void setDebug(int dbg);
 
+  int isStored() const;
+
   static void setSettingsValue(QSettings *settings, QString name, QVariant value);
   static void writeSettings(QObject *object, QSettings *settings, QString section);
   static void readSettings(QObject *object, QSettings *settings, QString section);

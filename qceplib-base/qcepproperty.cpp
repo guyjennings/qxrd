@@ -124,6 +124,11 @@ void QcepProperty::setWidgetToolTip(QWidget *widget)
   }
 }
 
+int QcepProperty::isStored() const
+{
+  return m_IsStored;
+}
+
 int QcepProperty::index()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);

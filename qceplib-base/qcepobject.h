@@ -27,7 +27,7 @@ public:
 signals:
 
 public slots:
-  virtual void printLine(QString line);
+  virtual void printLine(QString line) const;
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
   virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
@@ -38,6 +38,20 @@ public slots:
   void readObjectSettings(QSettings *set, QString section);
 
   void dumpObjectTreePtr(int level=0);
+
+  int childCount() const;
+
+  int isChanged() const;
+  QString changedBy() const;
+
+  int childrenChanged() const;
+  QString childrenChangedBy() const;
+
+  int checkChildren(int verbose=0, int level=0) const;
+
+  QcepObjectWPtr parentPtr() const;
+  QVector<QcepObjectWPtr> childrenPtr() const;
+  QcepObjectWPtr childPtr(int n) const;
 
 public:
   virtual void writeSettings(QSettings *set, QString section);
@@ -51,8 +65,6 @@ public:
 
   static QString addSlashes(QString str);
 
-  QcepObjectWPtr parentPtr();
-  QVector<QcepObjectPtr> childrenPtr();
   void addChildPtr(QcepObject *child);
 
   void propertyChanged(QcepProperty *prop);

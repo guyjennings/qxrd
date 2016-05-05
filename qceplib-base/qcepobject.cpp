@@ -54,17 +54,107 @@ QcepObject::~QcepObject()
 
 void QcepObject::propertyChanged(QcepProperty *prop)
 {
-  m_ChangeCount.fetchAndAddOrdered(1);
-  m_LastChanged.store(prop);
+  if (prop == NULL || prop->isStored()) {
+    m_ChangeCount.fetchAndAddOrdered(1);
+    m_LastChanged.store(prop);
 
-  QcepObjectPtr parent(m_Parent);
+    QcepObjectPtr parent(m_Parent);
 
-  if (parent) {
-    parent -> propertyChanged(prop);
+    if (parent) {
+      parent -> propertyChanged(prop);
+    }
   }
 }
 
-QcepObjectWPtr QcepObject::parentPtr()
+int QcepObject::isChanged() const
+{
+  return m_ChangeCount.load();
+}
+
+QString QcepObject::changedBy() const
+{
+  QcepProperty *p = m_LastChanged.load();
+
+  if (p) {
+    return p->parentName()+"."+p->name();
+  } else {
+    return "NULL";
+  }
+}
+
+int QcepObject::childrenChanged() const
+{
+  if (isChanged()) {
+    return true;
+  } else {
+    foreach(QcepObject* child, m_Children) {
+      if(child) {
+        int chg = child->childrenChanged();
+
+        if (chg) return chg;
+      }
+    }
+  }
+
+  return 0;
+}
+
+QString QcepObject::childrenChangedBy() const
+{
+  if (isChanged()) {
+    return changedBy();
+  } else {
+    foreach(QcepObject* child, m_Children) {
+      if (child) {
+        int chg = child->childrenChanged();
+
+        if (chg) {
+          return child->changedBy();
+        }
+      }
+    }
+  }
+
+  return "NULL";
+}
+
+int QcepObject::checkChildren(int verbose, int level) const
+{
+  int ck = true;
+
+  if (verbose) {
+    const QMetaObject *meta = metaObject();
+
+    printLine(tr("%1Checking %2 : %3 children : class %4")
+              .arg("",level*2)
+              .arg(get_Name())
+              .arg(childCount())
+              .arg(meta->className()));
+  }
+
+  foreach(QcepObject* child, m_Children) {
+    if (child == NULL) {
+      printLine(tr("NULL child of %1").arg(get_Name()));
+      ck = false;
+    } else {
+      QcepObjectWPtr parent = child->parentPtr();
+
+      if (parent != sharedFromThis()) {
+        printLine(tr("parent of %1 is not %2")
+                     .arg(child->get_Name())
+                     .arg(get_Name()));
+      }
+
+      if (!child->checkChildren(verbose, level+1)) {
+        ck = false;
+      }
+    }
+  }
+
+  return ck;
+}
+
+QcepObjectWPtr QcepObject::parentPtr() const
 {
   return m_Parent;
 }
@@ -72,6 +162,37 @@ QcepObjectWPtr QcepObject::parentPtr()
 void QcepObject::addChildPtr(QcepObject *child)
 {
   m_Children.append(child);
+}
+
+int QcepObject::childCount() const
+{
+  return m_Children.count();
+}
+
+QcepObjectWPtr QcepObject::childPtr(int n) const
+{
+  QcepObject* p = m_Children.value(n);
+
+  if (p) {
+    return p->sharedFromThis();
+  } else {
+    return QcepObjectWPtr();
+  }
+}
+
+QVector<QcepObjectWPtr> QcepObject::childrenPtr() const
+{
+  QVector<QcepObjectWPtr> res;
+
+  foreach (QcepObject* child, m_Children) {
+    if (child) {
+      res.append(child->sharedFromThis());
+    } else {
+      res.append(QcepObjectWPtr());
+    }
+  }
+
+  return res;
 }
 
 int QcepObject::allocatedObjects()
@@ -110,7 +231,7 @@ QString QcepObject::get_Type() const
   return metaObject()->className();
 }
 
-void QcepObject::printLine(QString line)
+void QcepObject::printLine(QString line) const
 {
   QcepObjectPtr parent(m_Parent);
 
@@ -164,6 +285,7 @@ void QcepObject::writeSettings(QSettings *set, QString section)
   QcepProperty::writeSettings(this, set, section);
 
   m_ChangeCount.fetchAndStoreOrdered(0);
+  m_LastChanged.store(NULL);
 }
 
 void QcepObject::readSettings(QSettings *set, QString section)
