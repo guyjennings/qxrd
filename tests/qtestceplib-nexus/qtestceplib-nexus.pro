@@ -9,11 +9,13 @@ include(../../qceplib-hdf5.pri)
 include(../../qceplib-nexus.pri)
 
 HEADERS += \
-    qtestceplibnexusmainwindow.h
+    qtestceplibnexusmainwindow.h \
+    qtestceplibnexusdocument.h
 
 SOURCES += \
     qtestceplibnexusmain.cpp \
-    qtestceplibnexusmainwindow.cpp
+    qtestceplibnexusmainwindow.cpp \
+    qtestceplibnexusdocument.cpp
 
 FORMS += \
     qtestceplibnexusmainwindow.ui

@@ -1,4 +1,5 @@
 #include "qtestceplibtiffmainwindow.h"
+#include "qtestceplibtiffdocument.h"
 #include <QApplication>
 #include "qcepproperty.h"
 #include "qcepvector3dproperty.h"
@@ -16,7 +17,9 @@ int main(int argc, char *argv[])
   QcepVector3DProperty::registerMetaTypes();
   QcepMatrix3x3Property::registerMetaTypes();
 
-  w = new QtestceplibTiffMainWindow();
+  QtestceplibTiffDocument *doc = new QtestceplibTiffDocument();
+
+  w = new QtestceplibTiffMainWindow(doc);
   w -> show();
 
   return a.exec();

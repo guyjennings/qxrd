@@ -4,9 +4,15 @@
 #include "qcepfileimportertiff.h"
 #include "qcepfileimportermultiple.h"
 #include "qcepdatasetmodel.h"
+
+#ifdef HAVE_HDF5
 #include "hdf5.h"
+#endif
+
+#ifdef HAVE_TIFF
 #include <tiff.h>
 #include <tiffio.h>
+#endif
 
 QcepFileImporter::QcepFileImporter(QcepObjectWPtr parent,
                                    QcepDatasetModelPtr model,
@@ -22,6 +28,7 @@ QcepFileImporter::QcepFileImporter(QcepObjectWPtr parent,
 
 static bool isHDF(QString path)
 {
+#ifdef HAVE_HDF5
   bool res = false;
 
   if (H5Fis_hdf5(qPrintable(path))) {
@@ -29,10 +36,14 @@ static bool isHDF(QString path)
   }
 
   return res;
+#else
+  return false;
+#endif
 }
 
 static bool isTIFF(QString path)
 {
+#ifdef HAVE_TIFF
   bool res = false;
 
 #ifdef TIFF_VERSION
@@ -57,6 +68,9 @@ static bool isTIFF(QString path)
   }
 
   return res;
+#else
+  return false;
+#endif
 }
 
 static bool isText(QString path)

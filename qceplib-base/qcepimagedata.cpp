@@ -1201,6 +1201,7 @@ void QcepImageData<T>::fromScriptValue(const QScriptValue &obj, QSharedPointer<Q
 template <>
 void QcepImageData<double>::saveTIFFData(QString name)
 {
+#ifdef HAVE_TIFF
   int nrows = get_Height();
   int ncols = get_Width();
 
@@ -1237,11 +1238,15 @@ void QcepImageData<double>::saveTIFFData(QString name)
 
     saveMetaData();
   }
+#else
+  printMessage("Unable to save TIFF data, TIFF support not configured");
+#endif
 }
 
 template <typename T>
 void QcepImageData<T>::saveTIFFData(QString name)
 {
+#ifdef HAVE_TIFF
   int nrows = get_Height();
   int ncols = get_Width();
 
@@ -1312,6 +1317,9 @@ void QcepImageData<T>::saveTIFFData(QString name)
 
     saveMetaData();
   }
+#else
+  printMessage("Unable to save TIFF data, TIFF support not configured");
+#endif
 }
 
 void QcepImageDataBase::saveTextData(QString name, QString sep, bool transp)

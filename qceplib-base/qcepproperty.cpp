@@ -24,10 +24,10 @@ QMap<QString, CustomSettingsSaver*> QcepProperty::m_CustomSavers;
 QcepProperty::QcepProperty(QcepObject *parent, const char *name, QString toolTip)
   : QObject(),
     m_Mutex(QMutex::Recursive),
+    m_Parent(parent),
     m_Debug(false),
     m_IsStored(false),
     m_Name(name),
-    m_Parent(parent),
     m_ToolTip(toolTip)
 {
   setObjectName(name);

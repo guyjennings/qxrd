@@ -1,4 +1,5 @@
 #include "qtestceplibqwtmainwindow.h"
+#include "qtestceplibqwtdocument.h"
 #include <QApplication>
 #include "qcepproperty.h"
 #include "qcepvector3dproperty.h"
@@ -16,7 +17,9 @@ int main(int argc, char *argv[])
   QcepVector3DProperty::registerMetaTypes();
   QcepMatrix3x3Property::registerMetaTypes();
 
-  w = new QtestceplibQwtMainWindow();
+  QtestceplibQwtDocument *doc = new QtestceplibQwtDocument();
+
+  w = new QtestceplibQwtMainWindow(doc);
   w -> show();
 
   return a.exec();

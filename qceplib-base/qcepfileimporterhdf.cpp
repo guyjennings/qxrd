@@ -1,5 +1,9 @@
 #include "qcepfileimporterhdf.h"
+
+#ifdef HAVE_HDF5
 #include "hdf5.h"
+#endif
+
 #include "qcepdatasetmodel.h"
 #include "qcepallocator.h"
 #include "qcepdatacolumn.h"
@@ -16,6 +20,7 @@ QcepFileImporterHDF::QcepFileImporterHDF(QcepObjectWPtr parent,
 
 void QcepFileImporterHDF::exec()
 {
+#ifdef HAVE_HDF5
   hid_t file;
   hid_t group;
   herr_t status;
@@ -33,10 +38,14 @@ void QcepFileImporterHDF::exec()
   status = H5Fclose(file);
 
   emit importCompleted();
+#else
+  printMessage("Cannot import HDF file, HDF not configured");
+#endif
 }
 
 #define MAX_NAME 1024
 
+#ifdef HAVE_HDF5
 void QcepFileImporterHDF::scanGroup(QModelIndex dest, hid_t gid, int level)
 {
   char group_name[MAX_NAME];
@@ -76,7 +85,9 @@ void QcepFileImporterHDF::scanGroup(QModelIndex dest, hid_t gid, int level)
     }
   }
 }
+#endif
 
+#ifdef HAVE_HDF5
 void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
 {
 //  m_Model -> printMessage("Scan Dataset");
@@ -138,7 +149,9 @@ void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
     }
   }
 }
+#endif
 
+#ifdef HAVE_HDF5
 void QcepFileImporterHDF::scanLink(QModelIndex dest, hid_t gid, char *name)
 {
   herr_t status;
@@ -148,7 +161,9 @@ void QcepFileImporterHDF::scanLink(QModelIndex dest, hid_t gid, char *name)
 
   m_Model->printMessage(tr("Scan link %1 -> %2").arg(name).arg(target));
 }
+#endif
 
+#ifdef HAVE_HDF5
 void QcepFileImporterHDF::readColumnData(QcepDataColumnPtr col, hid_t dsid)
 {
   hid_t sid = H5Dget_space(dsid);
@@ -161,7 +176,9 @@ void QcepFileImporterHDF::readColumnData(QcepDataColumnPtr col, hid_t dsid)
     m_Model->printMessage(tr("Error reading column data %1").arg(rderr));
   }
 }
+#endif
 
+#ifdef HAVE_HDF5
 void QcepFileImporterHDF::readImageData(QcepDoubleImageDataPtr img, hid_t dsid)
 {
   hid_t sid = H5Dget_space(dsid);
@@ -175,8 +192,11 @@ void QcepFileImporterHDF::readImageData(QcepDoubleImageDataPtr img, hid_t dsid)
     m_Model->printMessage(tr("Error reading image data %1").arg(rderr));
   }
 }
+#endif
 
+#ifdef HAVE_HDF5
 void QcepFileImporterHDF::readArrayData(QcepDataArrayPtr arr, hid_t dsid)
 {
   m_Model->printMessage("QcepFileImporterHDF::readArrayData not yet implemented");
 }
+#endif
