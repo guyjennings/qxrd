@@ -57,6 +57,9 @@
 /* Define the default virtual file driver to compile */
 #define H5_DEFAULT_VFD H5FD_SEC2
 
+/* Define the default plugins path to compile */
+#define H5_DEFAULT_PLUGINDIR "%ALLUSERSPROFILE%/hdf5/lib/plugin"
+
 /* Define if `dev_t' is a scalar */
 /* #undef H5_DEV_T_IS_SCALAR */
 

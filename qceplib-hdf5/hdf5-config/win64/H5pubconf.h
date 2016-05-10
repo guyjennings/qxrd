@@ -60,6 +60,9 @@
 /* Define if `dev_t' is a scalar */
 /* #undef H5_DEV_T_IS_SCALAR */
 
+/* Define the default plugins path to compile */
+#define H5_DEFAULT_PLUGINDIR "%ALLUSERSPROFILE%/hdf5/lib/plugin"
+
 /* Define to dummy `main' function (if any) required to link to the Fortran
    libraries. */
 /* #undef H5_FC_DUMMY_MAIN */
