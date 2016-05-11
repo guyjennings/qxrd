@@ -5,6 +5,7 @@
 #include <QAtomicInt>
 #include <QSet>
 #include <QThread>
+#include "qcepfileformatter.h"
 
 static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
@@ -431,4 +432,65 @@ void QcepObject::dumpObjectTreePtr(int level)
   } else {
     printLine(tr("%1// %2").arg("",level).arg(metaObject->className()));
   }
+}
+
+QcepObjectPtr QcepObject::readDataObject(QcepFileFormatterPtr fmt)
+{
+  return QcepObjectPtr();
+}
+
+void QcepObject::writeObject(QcepFileFormatterPtr fmt)
+{
+  const QMetaObject* metaObject = this->metaObject();
+//  QcepObjectPtr parent(m_Parent);
+
+  fmt->beginWriteObject(get_Name(), metaObject->className());
+
+  int count = metaObject->propertyCount();
+  int offset = QObject::staticMetaObject.propertyCount();
+
+  fmt->beginWriteProperties();
+
+  for (int i=offset; i<count; i++) {
+    QMetaProperty metaProperty = metaObject->property(i);
+
+    if (metaProperty.isStored()) {
+      const char *name = metaProperty.name();
+      QVariant value   = property(name);
+
+      fmt->writeProperty(name, value);
+    }
+  }
+
+  foreach (QByteArray name, dynamicPropertyNames()) {
+    fmt->writeProperty(name.data(), property(name.data()));
+  }
+
+  fmt->endWriteProperties();
+
+  fmt->beginWriteChildren();
+
+  for (int i=0; i<m_Children.count(); i++) {
+    QcepObject *obj = m_Children.value(i);
+
+    if (obj) {
+      obj->writeObject(fmt);
+    }
+  }
+
+  fmt->endWriteChildren();
+
+  fmt->beginWriteData();
+  writeObjectData(fmt);
+  fmt->endWriteData();
+
+  fmt->endWriteObject();
+}
+
+void QcepObject::writeObjectData(QcepFileFormatterPtr fmt)
+{
+}
+
+void QcepObject::readObjectData(QcepFileFormatterPtr fmt)
+{
 }

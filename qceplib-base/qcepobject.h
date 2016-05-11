@@ -9,6 +9,7 @@
 #include "qcepobject-ptr.h"
 #include <QVector>
 #include "qcepproperty.h"
+#include "qcepfileformatter-ptr.h"
 
 class QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
 {
@@ -23,6 +24,14 @@ public:
 #ifndef QT_NO_DEBUG
   static QSet<QcepObject*> allocatedObjectsSet();
 #endif
+
+  static QcepObjectPtr readDataObject(QcepFileFormatterPtr fmt);
+
+  void readObject(QcepFileFormatterPtr fmt);
+  void writeObject(QcepFileFormatterPtr fmt);
+
+  virtual void readObjectData(QcepFileFormatterPtr fmt);
+  virtual void writeObjectData(QcepFileFormatterPtr fmt);
 
 signals:
 
