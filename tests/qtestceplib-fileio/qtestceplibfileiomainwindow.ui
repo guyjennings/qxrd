@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QtestceplibFileIOMainWindow</class>
+ <widget class="QMainWindow" name="QtestceplibFileIOMainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1089</width>
+    <height>882</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Test ceplib File IO</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPlainTextEdit" name="m_Messages">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1089</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="m_FileMenu">
+    <property name="title">
+     <string>Fi&amp;le</string>
+    </property>
+    <addaction name="m_ActionReadDataObjects"/>
+    <addaction name="m_ActionWriteDataObjects"/>
+    <addaction name="m_ActionReadSettings"/>
+    <addaction name="m_ActionWriteSettings"/>
+    <addaction name="m_ActionLoadImage"/>
+    <addaction name="m_ActionLoadTIFFImage"/>
+   </widget>
+   <addaction name="m_FileMenu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="m_ActionReadSettings">
+   <property name="text">
+    <string>&amp;Read Settings...</string>
+   </property>
+   <property name="toolTip">
+    <string>Read Settings</string>
+   </property>
+  </action>
+  <action name="m_ActionWriteSettings">
+   <property name="text">
+    <string>&amp;Write Settings...</string>
+   </property>
+   <property name="toolTip">
+    <string>Write Settings</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadTIFFImage">
+   <property name="text">
+    <string>Load TIFF &amp;Image...</string>
+   </property>
+  </action>
+  <action name="m_ActionLoadImage">
+   <property name="text">
+    <string>&amp;Load Image...</string>
+   </property>
+  </action>
+  <action name="m_ActionReadDataObjects">
+   <property name="text">
+    <string>Read Data Objects...</string>
+   </property>
+  </action>
+  <action name="m_ActionWriteDataObjects">
+   <property name="text">
+    <string>Write Data Objects...</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
