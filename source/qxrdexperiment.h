@@ -121,6 +121,7 @@ public slots:
   void printLine(QString msg) const;
 
   void saveExperiment();
+  void saveExperimentAsText(QString filePath);
 
   void completeWork(int amt);
   void commenceWork(int amt);

@@ -338,6 +338,7 @@ void QxrdWindow::initialize()
 
   connect(m_ActionSaveExperimentAs, &QAction::triggered, this, &QxrdWindow::saveExperimentAs);
   connect(m_ActionSaveExperimentCopy, &QAction::triggered, this, &QxrdWindow::saveExperimentCopy);
+  connect(m_ActionSaveExperimentAsText, &QAction::triggered, this, &QxrdWindow::doSaveExperimentAsText);
 
   m_ExperimentsMenu->menuAction()->setMenuRole(QAction::NoRole);
 
@@ -1239,6 +1240,32 @@ void QxrdWindow::saveExperimentAs()
     if (newChoice.length()>0) {
       expt->saveExperimentAs(newChoice);
       app->appendRecentExperiment(newChoice);
+    }
+  }
+}
+
+void QxrdWindow::doSaveExperimentAsText()
+{
+  GUI_THREAD_CHECK;
+
+  QxrdExperimentPtr expt(m_Experiment);
+  QxrdApplicationPtr app(m_Application);
+
+  if (app && expt) {
+    QString path = expt->experimentFilePath();
+    QString name = expt->defaultExperimentName(path);
+    QString dirp = expt->defaultExperimentDirectory(path);
+
+    QDir dir(expt->get_ExperimentDirectory());
+
+    QString newPath = dir.filePath(name+".txt");
+
+    QString newChoice = QFileDialog::getSaveFileName(NULL,
+                                                     "Save Experiment As Text",
+                                                     newPath);
+
+    if (newChoice.length() > 0) {
+      expt->saveExperimentAsText(newChoice);
     }
   }
 }

@@ -38,6 +38,7 @@
 #include "qcepdatacolumn.h"
 #include "qcepsettingssaver.h"
 //#include "qxrddetectorcontrolwindow.h"
+#include "qcepfileformattertext.h"
 
 #include <QHostInfo>
 #include <QColorDialog>
@@ -962,6 +963,17 @@ void QxrdExperiment::saveExperimentAs(QString path)
   setExperimentFilePath(path);
 
   writeSettings(&settings, "experiment");
+}
+
+void QxrdExperiment::saveExperimentAsText(QString filePath)
+{
+  QcepFileFormatterPtr fmt = QcepFileFormatterPtr(new QcepFileFormatterText(filePath));
+
+  fmt -> beginWriteFile();
+
+  writeObject(fmt);
+
+  fmt -> endWriteFile();
 }
 
 void QxrdExperiment::saveExperimentCopyAs(QString path)

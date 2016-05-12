@@ -1790,6 +1790,11 @@ void QxrdScriptEngine::initialize()
                           QxrdCalibrant::toScriptValue,
                           QxrdCalibrant::fromScriptValue);
 
+  qRegisterMetaType<QcepObjectPtr>("QcepObjectPtr");
+  qScriptRegisterMetaType(this,
+                          QcepObject::toScriptValue,
+                          QcepObject::fromScriptValue);
+
   qRegisterMetaType<QcepDataObjectPtr>("QcepDataObjectPtr");
   qScriptRegisterMetaType(this,
                           QcepDataObject::toScriptValue,
