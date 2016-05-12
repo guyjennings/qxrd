@@ -5,6 +5,7 @@
 #include "qcepdocumentationdictionary.h"
 #include "qcepmutexlocker.h"
 #include "qceppropertyvalue.h"
+#include "qcepdataobject.h"
 
 #include <QSpinBox>
 #include <QComboBox>
@@ -159,6 +160,8 @@ int QcepProperty::debug() const
 
 void QcepProperty::registerMetaTypes()
 {
+  qRegisterMetaType< QcepObject* >("QcepObject*");
+  qRegisterMetaType< QcepDataObject*>("QcepDataObject*");
   qRegisterMetaType< QcepDoubleVector >("QcepDoubleVector");
   qRegisterMetaType< QcepBoolVector >("QcepBoolVector");
   qRegisterMetaType< QcepIntVector >("QcepIntVector");

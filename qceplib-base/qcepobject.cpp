@@ -6,6 +6,7 @@
 #include <QSet>
 #include <QThread>
 #include "qcepfileformatter.h"
+#include <QScriptEngine>
 
 static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
@@ -31,6 +32,13 @@ QcepObject::QcepObject(QString name, QcepObjectWPtr parent) :
     p->addChildPtr(this);
   }
 }
+
+//QcepObject::QcepObject() :
+//  QObject(NULL),
+//  m_Parent(),
+//  m_ObjectNamer(this, "")
+//{
+//}
 
 QcepObject::~QcepObject()
 {
@@ -331,15 +339,6 @@ QString QcepObject::addSlashes(QString str)
   return newStr;
 }
 
-QString QcepObject::scriptValueLiteral(QVariant v)
-{
-  if (v.type() == QMetaType::QString) {
-    return "\"" + addSlashes(v.toString()) + "\"";
-  } else {
-    return v.toString();
-  }
-}
-
 QString QcepObject::settingsScript()
 {
   QString res = "";
@@ -351,7 +350,7 @@ QString QcepObject::settingsScript()
     if (prop.isStored()) {
       res += tr("%1.%2 = %3;\n").arg(this->get_Name())
                                 .arg(prop.name())
-                                .arg(scriptValueLiteral(this->property(prop.name())));
+                                .arg(toScriptLiteral(this->property(prop.name())));
     }
   }
 
@@ -393,7 +392,7 @@ void QcepObject::dumpObjectTreePtr(int level)
       printLine(tr("%1%2 = %3")
                 .arg("",level+2)
                 .arg(prop.name())
-                .arg(scriptValueLiteral(this->property(prop.name()))));
+                .arg(toScriptLiteral(this->property(prop.name()))));
     }
   }
 
@@ -448,37 +447,62 @@ void QcepObject::writeObject(QcepFileFormatterPtr fmt)
 
   int count = metaObject->propertyCount();
   int offset = QObject::staticMetaObject.propertyCount();
-
-  fmt->beginWriteProperties();
+  int nProperties = 0;
 
   for (int i=offset; i<count; i++) {
     QMetaProperty metaProperty = metaObject->property(i);
 
     if (metaProperty.isStored()) {
-      const char *name = metaProperty.name();
-      QVariant value   = property(name);
-
-      fmt->writeProperty(name, value);
+      nProperties++;
     }
   }
 
-  foreach (QByteArray name, dynamicPropertyNames()) {
-    fmt->writeProperty(name.data(), property(name.data()));
+  nProperties += dynamicPropertyNames().length();
+
+  if (nProperties > 0) {
+    fmt->beginWriteProperties();
+
+    for (int i=offset; i<count; i++) {
+      QMetaProperty metaProperty = metaObject->property(i);
+
+      if (metaProperty.isStored()) {
+        const char *name = metaProperty.name();
+        QVariant value   = property(name);
+
+        fmt->writeProperty(name, value);
+      }
+    }
+
+    foreach (QByteArray name, dynamicPropertyNames()) {
+      fmt->writeProperty(name.data(), property(name.data()));
+    }
+
+    fmt->endWriteProperties();
   }
 
-  fmt->endWriteProperties();
-
-  fmt->beginWriteChildren();
+  int nChildren = 0;
 
   for (int i=0; i<m_Children.count(); i++) {
     QcepObject *obj = m_Children.value(i);
 
     if (obj) {
-      obj->writeObject(fmt);
+      nChildren++;
     }
   }
 
-  fmt->endWriteChildren();
+  if (nChildren > 0) {
+    fmt->beginWriteChildren();
+
+    for (int i=0; i<m_Children.count(); i++) {
+      QcepObject *obj = m_Children.value(i);
+
+      if (obj) {
+        obj->writeObject(fmt);
+      }
+    }
+
+    fmt->endWriteChildren();
+  }
 
   fmt->beginWriteData();
   writeObjectData(fmt);
@@ -493,4 +517,103 @@ void QcepObject::writeObjectData(QcepFileFormatterPtr fmt)
 
 void QcepObject::readObjectData(QcepFileFormatterPtr fmt)
 {
+}
+
+QString QcepObject::toScriptLiteral(QVariant v)
+{
+  if (v.type() == QMetaType::QString) {
+    return "\"" + addSlashes(v.toString()) + "\"";
+  }
+
+  else if (v.type() == QMetaType::QStringList) {
+    QStringList l = v.toStringList();
+    QString res = "@QStringList(";
+    for(int i=0; i<l.length(); i++) {
+      if (i > 0) {
+        res += ", ";
+      }
+      res += toScriptLiteral(l.value(i));
+    }
+    res += ")";
+    return res;
+  }
+
+  else if (v.type() == QMetaType::QPointF) {
+    QPointF p = v.toPointF();
+    return tr("@QPointF(%1,%2)").arg(p.x()).arg(p.y());
+  }
+
+  else if (v.type() == QMetaType::QByteArray) {
+    QByteArray comp = qCompress(v.toByteArray());
+    return tr("@QByteArray(\"%1\")").arg(QString(comp.toBase64()));
+  }
+
+  else {
+    QString s = v.toString();
+
+    if (s.length() > 0) {
+      return s;
+    } else {
+      return tr("@%1()").arg(v.typeName());
+    }
+  }
+}
+
+QVariant QcepObject::fromScriptLiteral(QString lit)
+{
+}
+
+QScriptValue QcepObject::toScriptValue(QScriptEngine *engine, const QcepObjectPtr &data)
+{
+  return engine->newQObject(data.data());
+}
+
+void QcepObject::fromScriptValue(const QScriptValue &obj, QcepObjectPtr &data)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QcepObject *qcobj = qobject_cast<QcepObject*>(qobj);
+
+    if (qcobj) {
+      QcepObjectPtr p = qcobj->sharedFromThis();
+
+      if (p) {
+        data = p;
+      }
+    }
+  }
+}
+
+QcepObjectPtr QcepObject::construct(QString className)
+{
+  QcepObjectPtr res;
+
+  int typeId = QMetaType::type(qPrintable(className+"*"));
+
+  if (typeId == QMetaType::UnknownType) {
+    printMessage(tr("Type %1 is unknown").arg(className));
+  } else {
+    const QMetaObject *obj = QMetaType::metaObjectForType(typeId);
+
+    if (obj == NULL) {
+      printMessage(tr("Metaobject is NULL"));
+    } else {
+      QObject *qobj = obj->newInstance();
+
+      if (qobj == NULL) {
+        printMessage(tr("qObject == NULL"));
+      } else {
+        QcepObject *qcobj = qobject_cast<QcepObject*>(qobj);
+
+        if (qcobj == NULL) {
+          printMessage(tr("QcepObject == NULL"));
+        } else {
+          res= QcepObjectPtr(qcobj);
+        }
+      }
+    }
+  }
+
+  return res;
 }

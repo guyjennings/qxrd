@@ -10,12 +10,13 @@
 #include <QVector>
 #include "qcepproperty.h"
 #include "qcepfileformatter-ptr.h"
+#include <QScriptValue>
 
 class QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
 {
   Q_OBJECT
 public:
-  explicit QcepObject(QString name, QcepObjectWPtr parent);
+  Q_INVOKABLE QcepObject(QString name = "", QcepObjectWPtr parent = QcepObjectWPtr());
   virtual ~QcepObject();
 
   static int allocatedObjects();
@@ -42,7 +43,9 @@ public slots:
   virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   virtual QString settingsScript();
-  QString scriptValueLiteral(QVariant v);
+
+  QString toScriptLiteral(QVariant v);
+  QVariant fromScriptLiteral(QString lit);
 
   void readObjectSettings(QSettings *set, QString section);
 
@@ -62,6 +65,8 @@ public slots:
   QVector<QcepObjectWPtr> childrenPtr() const;
   QcepObjectWPtr childPtr(int n) const;
 
+  QcepObjectPtr construct(QString className);
+
 public:
   virtual void writeSettings(QSettings *set, QString section);
   virtual void readSettings(QSettings *set, QString section);
@@ -77,6 +82,9 @@ public:
   void addChildPtr(QcepObject *child);
 
   void propertyChanged(QcepProperty *prop);
+
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QcepObjectPtr &data);
+  static void fromScriptValue(const QScriptValue &obj, QcepObjectPtr &data);
 
 private:
   QcepObjectWPtr                      m_Parent;
@@ -95,5 +103,7 @@ public:
 //  Q_PROPERTY(int typeID READ get_TypeID WRITE set_TypeID STORED false)
 //  QCEP_INTEGER_PROPERTY(TypeID)
 };
+
+Q_DECLARE_METATYPE(QcepObject*)
 
 #endif // QCEPOBJECT_H

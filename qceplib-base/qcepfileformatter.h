@@ -11,6 +11,9 @@ public:
 
   static QcepFileFormatterPtr defaultFormatter(QString filePath, QString exten);
 
+  virtual void beginWriteFile() = 0;
+  virtual void endWriteFile() = 0;
+
   virtual void beginWriteObject(QString objectName, QString className) = 0;
   virtual void endWriteObject() = 0;
 
