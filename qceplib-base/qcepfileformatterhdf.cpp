@@ -16,6 +16,10 @@ void QcepFileFormatterHDF::endWriteObject()
 {
 }
 
+void QcepFileFormatterHDF::writeComment(QString cmt)
+{
+}
+
 void QcepFileFormatterHDF::beginWriteProperties()
 {
 }
@@ -43,4 +47,18 @@ void QcepFileFormatterHDF::beginWriteData()
 void QcepFileFormatterHDF::endWriteData()
 {
 }
+
+void QcepFileFormatterHDF::beginReadFile()
+{
+}
+
+void QcepFileFormatterHDF::endReadFile()
+{
+}
+
+QcepObjectPtr QcepFileFormatterHDF::nextObject()
+{
+  return QcepObjectPtr();
+}
+
 #endif

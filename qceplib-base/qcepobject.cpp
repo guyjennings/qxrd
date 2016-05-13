@@ -435,7 +435,11 @@ void QcepObject::dumpObjectTreePtr(int level)
 
 QcepObjectPtr QcepObject::readDataObject(QcepFileFormatterPtr fmt)
 {
-  return QcepObjectPtr();
+  if (fmt) {
+    return fmt->nextObject();
+  } else {
+    return QcepObjectPtr();
+  }
 }
 
 void QcepObject::writeObject(QcepFileFormatterPtr fmt)
@@ -444,6 +448,10 @@ void QcepObject::writeObject(QcepFileFormatterPtr fmt)
 //  QcepObjectPtr parent(m_Parent);
 
   fmt->beginWriteObject(get_Name(), metaObject->className());
+
+  if (metaObject->constructorCount() == 0) {
+    fmt->writeComment("Has no invokable constructors");
+  }
 
   int count = metaObject->propertyCount();
   int offset = QObject::staticMetaObject.propertyCount();
@@ -509,6 +517,57 @@ void QcepObject::writeObject(QcepFileFormatterPtr fmt)
   fmt->endWriteData();
 
   fmt->endWriteObject();
+}
+
+void QcepObject::readObject(QcepFileFormatterPtr fmt)
+{
+  fmt->printMessage("QcepObject::readObject");
+
+  fmt->beginReadObject(sharedFromThis());
+
+  if (fmt->beginReadProperties()) {
+    QString propName;
+    QVariant propVal;
+
+    do {
+      fmt->printMessage("QcepObject::readObject : read property");
+
+      propName = fmt->nextPropertyName();
+
+      if (propName.length() > 0) {
+        propVal = fmt->nextPropertyValue();
+        setProperty(qPrintable(propName), propVal);
+      }
+    } while (propName.length()>0);
+
+    fmt->endReadProperties();
+  }
+
+  if (fmt->beginReadChildren()) {
+    QcepObjectPtr child;
+
+    do {
+      fmt->printMessage("QcepObject::readObject : read child");
+
+      child = fmt->nextChild();
+
+      if (child) {
+        addChildPtr(child.data());
+      }
+    } while (child);
+
+    fmt->endReadChildren();
+  }
+
+  if (fmt->beginReadData()) {
+    fmt->printMessage("QcepObject::readObject : read data");
+
+    readObjectData(fmt);
+
+    fmt->endReadData();
+  }
+
+  fmt->endReadObject();
 }
 
 void QcepObject::writeObjectData(QcepFileFormatterPtr fmt)

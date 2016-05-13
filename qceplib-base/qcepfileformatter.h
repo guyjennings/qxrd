@@ -2,6 +2,7 @@
 #define QCEPFILEFORMATTER_H
 
 #include "qcepobject.h"
+#include "qcepobject-ptr.h"
 #include "qcepfileformatter-ptr.h"
 
 class QcepFileFormatter : public QcepObject
@@ -13,6 +14,8 @@ public:
 
   virtual void beginWriteFile() = 0;
   virtual void endWriteFile() = 0;
+
+  virtual void writeComment(QString cmt) = 0;
 
   virtual void beginWriteObject(QString objectName, QString className) = 0;
   virtual void endWriteObject() = 0;
@@ -26,6 +29,27 @@ public:
 
   virtual void beginWriteData() = 0;
   virtual void endWriteData() = 0;
+
+
+  virtual void beginReadFile() = 0;
+  virtual void endReadFile() = 0;
+
+  virtual QcepObjectPtr nextObject() = 0;
+
+  virtual void beginReadObject(QcepObjectPtr obj) = 0;
+  virtual void endReadObject() = 0;
+
+  virtual bool beginReadProperties() = 0;
+  virtual QString nextPropertyName() = 0;
+  virtual QVariant nextPropertyValue() = 0;
+  virtual void endReadProperties() = 0;
+
+  virtual bool beginReadChildren() = 0;
+  virtual QcepObjectPtr nextChild() = 0;
+  virtual void endReadChildren() = 0;
+
+  virtual bool beginReadData() = 0;
+  virtual void endReadData() = 0;
 
 protected:
   QString     m_FilePath;

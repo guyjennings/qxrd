@@ -9,11 +9,13 @@ class QcepDataset : public QcepDataGroup
   Q_OBJECT
 
 public:
-  QcepDataset(QcepObjectWPtr parent,
+  Q_INVOKABLE QcepDataset(QcepObjectWPtr parent,
               QString name);
 
 //  void readSettings(QSettings *settings, QString section);
 //  void writeSettings(QSettings *settings, QString section);
 };
+
+Q_DECLARE_METATYPE(QcepDataset*)
 
 #endif // QCEPDATASET_H

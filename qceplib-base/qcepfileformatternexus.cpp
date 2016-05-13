@@ -16,6 +16,10 @@ void QcepFileFormatterNexus::endWriteObject()
 {
 }
 
+void QcepFileFormatterNexus::writeComment(QString cmt)
+{
+}
+
 void QcepFileFormatterNexus::beginWriteProperties()
 {
 }
@@ -42,6 +46,19 @@ void QcepFileFormatterNexus::beginWriteData()
 
 void QcepFileFormatterNexus::endWriteData()
 {
+}
+
+void QcepFileFormatterNexus::beginReadFile()
+{
+}
+
+void QcepFileFormatterNexus::endReadFile()
+{
+}
+
+QcepObjectPtr QcepFileFormatterNexus::nextObject()
+{
+  return QcepObjectPtr();
 }
 
 #endif

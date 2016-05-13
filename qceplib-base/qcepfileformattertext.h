@@ -14,6 +14,8 @@ public:
   virtual void beginWriteFile();
   virtual void endWriteFile();
 
+  virtual void writeComment(QString cmt);
+
   virtual void beginWriteObject(QString objectName, QString className);
   virtual void endWriteObject();
 
@@ -32,8 +34,31 @@ public:
     Number,
     String,
     Operator,
-    Identifier
+    Identifier,
+    Variant
   } TokenType;
+
+
+
+  virtual void beginReadFile();
+  virtual void endReadFile();
+
+  virtual QcepObjectPtr nextObject();
+
+  virtual void beginReadObject(QcepObjectPtr obj);
+  virtual void endReadObject();
+
+  virtual bool beginReadProperties();
+  virtual QString nextPropertyName();
+  virtual QVariant nextPropertyValue();
+  virtual void endReadProperties();
+
+  virtual bool beginReadChildren();
+  virtual QcepObjectPtr nextChild();
+  virtual void endReadChildren();
+
+  virtual bool beginReadData();
+  virtual void endReadData();
 
 private:
   void    openForWriting();
@@ -46,16 +71,25 @@ private:
   void    openForReading();
   void    closeForReading();
 
+  QChar skipWhiteSpace();
+  QChar nextChar();
+  void  ungetChar(QChar ch);
+
+  void nextToken();
+
   TokenType  nextToken(QString &token);
   TokenType  numberToken(QString &token);
   TokenType  stringToken(QString &token);
   TokenType  operatorToken(QString &token);
   TokenType  identifierToken(QString &token);
+  TokenType  variantToken(QString &token);
 
 private:
   int          m_OutputIndent;
   int          m_OutputStep;
   FILE        *m_File;
+  TokenType    m_TokenType;
+  QString      m_Token;
 };
 
 #endif // QCEPFILEFORMATTERTEXT_H
