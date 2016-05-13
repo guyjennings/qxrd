@@ -16,7 +16,7 @@ class QxrdSynchronizedAcquisition : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisition(QxrdAcquisitionWPtr acq);
+  Q_INVOKABLE QxrdSynchronizedAcquisition(QxrdAcquisitionWPtr acq);
   virtual ~QxrdSynchronizedAcquisition();
 
 public:
@@ -92,5 +92,7 @@ private:
   QVector<double>             m_OutputTimes;
   QVector<double>             m_OutputVoltage;
 };
+
+Q_DECLARE_METATYPE(QxrdSynchronizedAcquisition*)
 
 #endif // QXRDSYNCHRONIZEDACQUISITION_H

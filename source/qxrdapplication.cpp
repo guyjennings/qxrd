@@ -113,6 +113,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   QxrdPowderPointVector::registerMetaTypes();
   QxrdCalibrantDSpacing::registerMetaTypes();
   QxrdCalibrantDSpacings::registerMetaTypes();
+  QxrdExperiment::registerMetaTypes();
 
   setQuitOnLastWindowClosed(false);
 }

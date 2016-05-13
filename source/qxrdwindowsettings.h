@@ -19,7 +19,7 @@ class QxrdWindowSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdWindowSettings(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdWindowSettings(QcepObjectWPtr parent);
   
 public:
   Q_PROPERTY(QByteArray windowGeometry READ get_WindowGeometry WRITE set_WindowGeometry)
@@ -68,5 +68,7 @@ private:
 
 typedef QSharedPointer<QxrdWindowSettings> QxrdWindowSettingsPtr;
 typedef QWeakPointer<QxrdWindowSettings>   QxrdWindowSettingsWPtr;
+
+Q_DECLARE_METATYPE(QxrdWindowSettings*)
 
 #endif // QXRDWINDOWSETTINGS_H

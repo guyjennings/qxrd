@@ -21,7 +21,7 @@ class QxrdScriptEngine : public QcepScriptEngine
   Q_OBJECT
 
 public:
-  QxrdScriptEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp);
+  Q_INVOKABLE QxrdScriptEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp);
   virtual ~QxrdScriptEngine();
   void initialize();
 
@@ -126,5 +126,7 @@ private:
   QxrdWindowWPtr         m_Window;
   FILE                  *m_ScriptOutput;
 };
+
+Q_DECLARE_METATYPE(QxrdScriptEngine*)
 
 #endif // QXRDSCRIPTENGINE_H

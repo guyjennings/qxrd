@@ -25,7 +25,7 @@ class QxrdIntegrator : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdIntegrator(QxrdExperimentWPtr exp,
+  Q_INVOKABLE QxrdIntegrator(QxrdExperimentWPtr exp,
                  QxrdCenterFinderWPtr cfw);
   virtual ~QxrdIntegrator();
 
@@ -157,5 +157,7 @@ private:
   QxrdCenterFinderWPtr   m_CenterFinder;
   QxrdIntegratorCachePtr m_IntegratorCache;
 };
+
+Q_DECLARE_METATYPE(QxrdIntegrator*)
 
 #endif // QXRDINTEGRATOR_H

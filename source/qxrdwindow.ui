@@ -1150,6 +1150,7 @@
     <addaction name="m_ActionSaveExperimentAs"/>
     <addaction name="m_ActionSaveExperimentAsText"/>
     <addaction name="separator"/>
+    <addaction name="m_ActionReadObjectTreeFromText"/>
     <addaction name="m_ActionLoadData"/>
     <addaction name="m_ActionSaveData"/>
     <addaction name="m_ActionPrintImage"/>
@@ -2119,6 +2120,11 @@
   <action name="m_ActionSaveExperimentAsText">
    <property name="text">
     <string>Save Experiment as Text...</string>
+   </property>
+  </action>
+  <action name="m_ActionReadObjectTreeFromText">
+   <property name="text">
+    <string>Read Object Tree From Text...</string>
    </property>
   </action>
  </widget>

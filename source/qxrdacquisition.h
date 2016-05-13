@@ -37,7 +37,7 @@ class QxrdAcquisition : public QxrdAcquisitionInterface
   Q_OBJECT
 
 public:
-  QxrdAcquisition(QxrdExperimentWPtr doc,
+  Q_INVOKABLE QxrdAcquisition(QxrdExperimentWPtr doc,
                   QxrdDataProcessorWPtr proc);
   ~QxrdAcquisition();
   void initialize();
@@ -235,5 +235,7 @@ private:
 
   QxrdAcquisitionScalerModelPtr m_ScalerModel;
 };
+
+Q_DECLARE_METATYPE(QxrdAcquisition*)
 
 #endif

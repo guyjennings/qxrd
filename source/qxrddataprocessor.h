@@ -8,7 +8,7 @@ class QxrdDataProcessor : public QxrdDataProcessorThreaded
   Q_OBJECT
 
 public:
-  QxrdDataProcessor(QxrdExperimentWPtr doc,
+  Q_INVOKABLE QxrdDataProcessor(QxrdExperimentWPtr doc,
                     QxrdAcquisitionWPtr acq,
                     QxrdFileSaverWPtr filesaver);
   ~QxrdDataProcessor();
@@ -17,5 +17,7 @@ public:
 
 private:
 };
+
+Q_DECLARE_METATYPE(QxrdDataProcessor*)
 
 #endif

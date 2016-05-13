@@ -20,7 +20,7 @@ class QxrdPolarTransform : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdPolarTransform(QxrdExperimentWPtr    exp);
+  Q_INVOKABLE QxrdPolarTransform(QxrdExperimentWPtr    exp);
   virtual ~QxrdPolarTransform();
 
   QxrdIntegratorWPtr integrator() const;
@@ -83,5 +83,7 @@ private:
   QxrdExperimentWPtr     m_Experiment;
   QxrdIntegratorCachePtr m_IntegratorCache;
 };
+
+Q_DECLARE_METATYPE(QxrdPolarTransform*)
 
 #endif // QXRDPOLARTRANSFORM_H

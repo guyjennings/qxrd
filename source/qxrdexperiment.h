@@ -52,9 +52,13 @@ class QxrdExperiment : public QcepExperiment
   Q_OBJECT
 
 public:
-  QxrdExperiment(QxrdExperimentThreadWPtr expthrd, QString path, QxrdApplicationWPtr app);
+  Q_INVOKABLE QxrdExperiment(QxrdExperimentThreadWPtr expthrd = QxrdExperimentThreadPtr(),
+                             QString path = "",
+                             QxrdApplicationWPtr app =  QxrdApplicationWPtr());
   virtual ~QxrdExperiment();
   virtual void initialize(QSettings *settings);
+
+  static void registerMetaTypes();
 
   void openWindows();
   void closeWindows();
@@ -122,6 +126,8 @@ public slots:
 
   void saveExperiment();
   void saveExperimentAsText(QString filePath);
+
+  void readObjectTreeFromText(QString filePath);
 
   void completeWork(int amt);
   void commenceWork(int amt);
@@ -224,5 +230,7 @@ public:  // Properties
   Q_PROPERTY(int spacing READ get_Spacing WRITE set_Spacing)
   QCEP_INTEGER_PROPERTY(Spacing)
 };
+
+Q_DECLARE_METATYPE(QxrdExperiment*)
 
 #endif // QXRDEXPERIMENT_H

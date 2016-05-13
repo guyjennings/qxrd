@@ -26,7 +26,7 @@ class QxrdFileSaver : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdFileSaver(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdFileSaver(QcepObjectWPtr parent);
   ~QxrdFileSaver();
 
   void setProcessor(QxrdDataProcessorWPtr proc);
@@ -76,6 +76,8 @@ private:
   QxrdDataProcessorWPtr m_Processor;
   QxrdAcquisitionWPtr   m_Acquisition;
 };
+
+Q_DECLARE_METATYPE(QxrdFileSaver*)
 
 typedef QSharedPointer<QxrdFileSaver> QxrdFileSaverPtr;
 typedef QWeakPointer<QxrdFileSaver> QxrdFileSaverWPtr;

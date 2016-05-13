@@ -39,7 +39,13 @@
 #include "qcepsettingssaver.h"
 //#include "qxrddetectorcontrolwindow.h"
 #include "qcepfileformattertext.h"
-
+#include "qxrdacquisitionexecution.h"
+#include "qxrdacquisitionextrainputschannel.h"
+#include "qxrdfilebrowsermodelupdater.h"
+#include "qxrdacquisitionextrainputs.h"
+#include "qxrdfitparameter.h"
+#include "qcepdataexportparameters.h"
+#include "qcepdataimportparameters.h"
 #include <QHostInfo>
 #include <QColorDialog>
 #include <QProcess>
@@ -346,6 +352,40 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     m_SettingsSaver->start();
   }
+}
+
+void QxrdExperiment::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdExperiment*>("QxrdExperiment*");
+  qRegisterMetaType<QxrdAcquisition*>("QxrdAcquisition*");
+  qRegisterMetaType<QxrdAcquisitionExecution*>("QxrdAcquisitionExecution*");
+  qRegisterMetaType<QxrdAcquisitionExtraInputs*>("QxrdAcquisitionExtraInputs*");
+  qRegisterMetaType<QxrdAcquisitionExtraInputsChannel*>("QxrdAcquisitionExtraInputsChannel*");
+  qRegisterMetaType<QxrdCalibrantWPtr>("QxrdCalibrantWPtr");
+  qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
+  qRegisterMetaType<QxrdCalibrantDSpacings>("QxrdCalibrantDSpacings");
+  qRegisterMetaType<QxrdCalibrantLibrary*>("QxrdCalibrantLibrary*");
+  qRegisterMetaType<QxrdCenterFinder*>("QxrdCenterFinder*");
+  qRegisterMetaType<QxrdDataProcessor*>("QxrdDataProcessor*");
+  qRegisterMetaType<QxrdDistortionCorrection*>("QxrdDistortionCorrection*");
+  qRegisterMetaType<QxrdFileBrowserModelUpdater*>("QxrdFileBrowserModelUpdater*");
+  qRegisterMetaType<QxrdFileSaver*>("QxrdFileSaver*");
+  qRegisterMetaType<QxrdFitParameterPtr>("QxrdFitParameterPtr");
+  qRegisterMetaType<QxrdIntegrator*>("QxrdIntegrator*");
+  qRegisterMetaType<QxrdPolarNormalization*>("QxrdPolarNormalization*");
+  qRegisterMetaType<QxrdPolarTransform*>("QxrdPolarTransform*");
+  qRegisterMetaType<QxrdPowderPoint>("QxrdPowderPoint");
+  qRegisterMetaType<QxrdPowderPointVector>("QxrdPowderPointVector");
+  qRegisterMetaType<QxrdScriptEngine*>("QxrdScriptEngine*");
+  qRegisterMetaType<QxrdServer*>("QxrdServer*");
+  qRegisterMetaType<QxrdSimpleServer*>("QxrdSimpleServer*");
+  qRegisterMetaType<QxrdSynchronizedAcquisition*>("QxrdSynchronizedAcquisition*");
+  qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
+  qRegisterMetaType<QcepDataset*>("QcepDataset*");
+  qRegisterMetaType<QcepDataObject*>("QcepDataObject*");
+  qRegisterMetaType<QcepDataExportParameters*>("QcepDataExportParameters*");
+  qRegisterMetaType<QcepDataImportParameters*>("QcepDataImportParameters*");
+  qRegisterMetaType<QcepObject*>("QcepObject*");
 }
 
 QxrdExperimentThreadWPtr QxrdExperiment::experimentThread()
@@ -1065,3 +1105,23 @@ void QxrdExperiment::evaluateScriptFile(QString path)
 
 //  m_AcquisitionWindow->show();
 //}
+
+void QxrdExperiment::readObjectTreeFromText(QString filePath)
+{
+  printMessage(tr("Reading Object Tree from %1 ...").arg(filePath));
+
+  QcepFileFormatterPtr fmt = QcepFileFormatterPtr(
+        new QcepFileFormatterText(filePath));
+
+  fmt -> beginReadFile();
+
+  QcepObjectPtr obj = QcepObject::readDataObject(fmt);
+
+  fmt -> endReadFile();
+
+  if (obj) {
+    obj -> dumpObjectTreePtr();
+  } else {
+    printMessage("NULL");
+  }
+}

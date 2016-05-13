@@ -16,7 +16,7 @@ class QxrdPolarNormalization : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdPolarNormalization(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdPolarNormalization(QcepObjectWPtr parent);
 
   QcepDataObjectPtr transform(QcepDoubleImageDataPtr img);
 
@@ -45,5 +45,7 @@ public:
 private:
   mutable QMutex        m_Mutex;
 };
+
+Q_DECLARE_METATYPE(QxrdPolarNormalization*)
 
 #endif // QXRDPOLARNORMALIZATION_H

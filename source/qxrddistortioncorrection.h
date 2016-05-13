@@ -13,7 +13,7 @@ class QxrdDistortionCorrection : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdDistortionCorrection(QxrdExperimentWPtr expt);
+  Q_INVOKABLE QxrdDistortionCorrection(QxrdExperimentWPtr expt);
 
 public:
   Q_PROPERTY(QString distortionImagePath READ get_DistortionImagePath WRITE set_DistortionImagePath)
@@ -105,5 +105,7 @@ private:
   QxrdExperimentWPtr         m_Experiment;
   QcepDoubleImageDataPtr     m_Data;
 };
+
+Q_DECLARE_METATYPE(QxrdDistortionCorrection*)
 
 #endif // QXRDDISTORTIONCORRECTION_H

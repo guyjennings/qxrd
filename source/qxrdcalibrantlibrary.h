@@ -14,7 +14,7 @@ class QxrdCalibrantLibrary : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdCalibrantLibrary(QxrdExperimentWPtr exp);
+  Q_INVOKABLE QxrdCalibrantLibrary(QxrdExperimentWPtr exp);
   virtual ~QxrdCalibrantLibrary();
 
 public slots:
@@ -38,5 +38,7 @@ private:
   QxrdExperimentWPtr        m_Experiment;
   QVector<QxrdCalibrantPtr> m_Calibrants;
 };
+
+Q_DECLARE_METATYPE(QxrdCalibrantLibrary*)
 
 #endif // QXRDCALIBRANTLIBRARY_H

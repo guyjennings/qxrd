@@ -13,7 +13,7 @@ class QxrdServer : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdServer(QxrdExperimentWPtr doc, QString name);
+  Q_INVOKABLE QxrdServer(QxrdExperimentWPtr doc, QString name);
   virtual ~QxrdServer();
 
   virtual void readSettings(QSettings *settings, QString section);
@@ -39,5 +39,7 @@ public slots:
 private:
   QSpecServer m_Server;
 };
+
+Q_DECLARE_METATYPE(QxrdServer*)
 
 #endif

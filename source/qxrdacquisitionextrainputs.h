@@ -20,7 +20,7 @@ class QxrdAcquisitionExtraInputs : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdAcquisitionExtraInputs(QxrdExperimentWPtr    doc,
+  Q_INVOKABLE QxrdAcquisitionExtraInputs(QxrdExperimentWPtr    doc,
                                       QxrdAcquisitionWPtr   acq);
   void initialize();
   virtual ~QxrdAcquisitionExtraInputs();
@@ -87,5 +87,7 @@ private:
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
   QVector< QVector<double> >  m_ChannelData;
 };
+
+Q_DECLARE_METATYPE(QxrdAcquisitionExtraInputs*)
 
 #endif // QXRDACQUISITIONEXTRAINPUTS_H

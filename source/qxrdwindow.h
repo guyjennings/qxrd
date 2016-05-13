@@ -57,6 +57,7 @@ public slots:
   void saveExperimentCopy();
   void saveExperimentAs();
   void doSaveExperimentAsText();
+  void doReadObjectTreeFromText();
   void doEditPreferences();
   void doEditDetectorPreferences();
   void doSaveData();

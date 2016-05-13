@@ -21,7 +21,7 @@ class QxrdCenterFinder : public QxrdDetectorGeometry
   Q_OBJECT
 
 public:
-  QxrdCenterFinder(QxrdExperimentWPtr expt);
+  Q_INVOKABLE QxrdCenterFinder(QxrdExperimentWPtr expt);
   virtual ~QxrdCenterFinder();
 
 public:
@@ -263,5 +263,6 @@ private:
   int                        m_CenterFitRingNumber;
 };
 
+Q_DECLARE_METATYPE(QxrdCenterFinder*)
 
 #endif // QXRDCENTERFINDER_H

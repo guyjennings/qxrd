@@ -15,7 +15,7 @@ class QxrdSimpleServer : public QcepObject
 {
   Q_OBJECT
 public:
-  QxrdSimpleServer(QxrdExperimentWPtr doc, QString name);
+  Q_INVOKABLE QxrdSimpleServer(QxrdExperimentWPtr doc, QString name);
   virtual ~QxrdSimpleServer();
 
   Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer)
@@ -56,5 +56,7 @@ private:
   QTcpServer               m_Server;
   QTcpSocket              *m_Socket;
 };
+
+Q_DECLARE_METATYPE(QxrdSimpleServer*)
 
 #endif // QXRDSIMPLESERVER_H
