@@ -10,16 +10,14 @@
 #include "qxrdacquisitionparameterpack.h"
 #include <QTimer>
 
-QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdExperimentWPtr doc, QxrdAcquisitionWPtr acq) :
-  QcepObject("extraInputs", acq),
+QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QString name) :
+  QcepObject(name),
   m_Enabled(this, "enabled", 0, "Extra Inputs Enabled?"),
   m_Skipping(this, "skipping", 0, "Skipping initial readout?"),
   m_SampleRate(this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
   m_AcquireDelay(this, "acquireDelay", 0.107, "Delay between exposure end and Image available in QXRD"),
   m_ExposureTime(this, "exposureTime", 0.107, "Exposure time (in seconds)"),
   m_DeviceName(this, "deviceName", "", "NI-DAQ Device Name"),
-  m_Experiment(doc),
-  m_Acquisition(acq),
   m_Channels(),
   m_NIDAQPlugin()
 {
@@ -31,7 +29,7 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QxrdExperimentWPtr doc, Q
     printf("QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(%p)\n", this);
   }
 
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcquisitionPtr acqp(acquisition());
 
   if (acqp) {
     m_NIDAQPlugin = acqp->nidaqPlugin();
@@ -234,9 +232,10 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 
   m_Channels.insert(n,
                     QxrdAcquisitionExtraInputsChannelPtr(
-                        chan = new QxrdAcquisitionExtraInputsChannel(n, m_Experiment,
+                        chan = new QxrdAcquisitionExtraInputsChannel(n, 
                                                                      qSharedPointerDynamicCast<QxrdAcquisitionExtraInputs>(sharedFromThis()))));
 
+  addChildPtr();
   connect(chan, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
 
   QcepObjectPtr p(parentPtr());

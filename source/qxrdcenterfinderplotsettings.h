@@ -8,13 +8,16 @@ class QxrdCenterFinderPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdCenterFinderPlotSettings(QcepObjectWPtr parent);
-  
+  Q_INVOKABLE QxrdCenterFinderPlotSettings(QString name);
+  QxrdCenterFinderPlotSettings();
+
 signals:
   
 public slots:
   
 };
+
+Q_DECLARE_METATYPE(QxrdCenterFinderPlotSettings*)
 
 typedef QSharedPointer<QxrdCenterFinderPlotSettings> QxrdCenterFinderPlotSettingsPtr;
 typedef QWeakPointer<QxrdCenterFinderPlotSettings>   QxrdCenterFinderPlotSettingsWPtr;

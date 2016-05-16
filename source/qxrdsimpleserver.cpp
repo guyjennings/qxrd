@@ -7,12 +7,10 @@
 #include "qxrdexperiment.h"
 #include <QScriptValueIterator>
 
-QxrdSimpleServer::QxrdSimpleServer(QxrdExperimentWPtr doc, QString name) :
-  QcepObject("simpleServer", doc),
+QxrdSimpleServer::QxrdSimpleServer(QString name) :
+  QcepObject(name),
   m_RunSimpleServer(this,"runSimpleServer", 1, "Run Simple Socket Server?"),
-  m_SimpleServerPort(this,"simpleServerPort", 1234, "Port for Simple Socket Server"),
-  m_Experiment(doc),
-  m_Name(name)
+  m_SimpleServerPort(this,"simpleServerPort", 1234, "Port for Simple Socket Server")
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdSimpleServer::QxrdSimpleServer(%p)\n", this);
@@ -68,24 +66,6 @@ void QxrdSimpleServer::serverPortChanged()
     if (get_RunSimpleServer()) {
       startServer(QHostAddress::Any, get_SimpleServerPort());
     }
-  }
-}
-
-void QxrdSimpleServer::printMessage(QString msg, QDateTime ts)
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->printMessage(msg, ts);
-  }
-}
-
-void QxrdSimpleServer::criticalMessage(QString msg)
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->criticalMessage(msg);
   }
 }
 

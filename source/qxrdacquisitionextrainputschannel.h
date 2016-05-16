@@ -12,8 +12,9 @@ class QxrdAcquisitionExtraInputsChannel : public QcepObject
 {
   Q_OBJECT
 public:
-  Q_INVOKABLE QxrdAcquisitionExtraInputsChannel(int chnum, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra);
-  
+  QxrdAcquisitionExtraInputsChannel(int chnum);
+  Q_INVOKABLE QxrdAcquisitionExtraInputsChannel(QString name);
+
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
@@ -31,6 +32,9 @@ public slots:
   int             endIndex();
   bool            evaluateTrigger();
   bool            evalTrig(int polarity, bool edgeTrig);
+
+private:
+  QxrdAcquisitionExtraInputsWPtr extraInputs();
 
 public:
   enum {
@@ -110,7 +114,6 @@ public:
 
 private:
   mutable QMutex                 m_Mutex;
-  QxrdExperimentWPtr             m_Experiment;
   QxrdAcquisitionExtraInputsWPtr m_ExtraInputs;
 };
 

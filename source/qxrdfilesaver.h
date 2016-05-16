@@ -26,7 +26,7 @@ class QxrdFileSaver : public QcepObject
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdFileSaver(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdFileSaver();
   ~QxrdFileSaver();
 
   void setProcessor(QxrdDataProcessorWPtr proc);

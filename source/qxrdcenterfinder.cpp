@@ -30,8 +30,8 @@
 #  endif /* _MSC_VER */
 # endif /* LINSOLVERS_RETAIN_MEMORY */
 
-QxrdCenterFinder::QxrdCenterFinder(QxrdExperimentWPtr expt)
-  : QxrdDetectorGeometry("centering", expt),
+QxrdCenterFinder::QxrdCenterFinder(QString name)
+  : QxrdDetectorGeometry(name),
     m_CenterX(this, "centerX", 0, "X Center"),
     m_CenterY(this, "centerY", 0, "Y Center"),
     m_CenterStep(this, "centerStep", 1, "Center Step"),
@@ -72,7 +72,7 @@ QxrdCenterFinder::QxrdCenterFinder(QxrdExperimentWPtr expt)
     m_FittedHeightMinRatio(this, "fittedHeightMinRatio", 0.25, "Minimum acceptable peak height ratio"),
     m_FittedPositionMaxDistance(this, "fittedPositionMaxDistance", 2.0, "Maximum acceptable fitted position shift (pixels)"),
     m_FitPowderPointPosition(this, "fitPowderPointPosition", true, "Fit to nearby peak when adding powder points individually"),
-    m_Experiment(expt)
+    m_Experiment()
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing center finder\n");
@@ -99,6 +99,22 @@ QxrdCenterFinder::~QxrdCenterFinder()
 #ifndef QT_NO_DEBUG
   printf("Deleting center finder\n");
 #endif
+}
+
+void QxrdCenterFinder::addChildPtr(QcepObjectPtr child)
+{
+  QxrdDetectorGeometry::addChildPtr(child);
+
+  QxrdExperimentPtr expt = qSharedPointerDynamicCast<QxrdExperiment>(child);
+
+  if (expt) {
+    m_Experiment = expt;
+  }
+}
+
+void QxrdCenterFinder::removeChildPtr(QcepObjectPtr child)
+{
+  printMessage("Need to write QxrdCenterFinder::removeChildPtr");
 }
 
 QxrdExperimentWPtr QxrdCenterFinder::experiment() const

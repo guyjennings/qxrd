@@ -16,7 +16,7 @@ class QxrdSynchronizedAcquisition : public QcepObject
 {
   Q_OBJECT
 public:
-  Q_INVOKABLE QxrdSynchronizedAcquisition(QxrdAcquisitionWPtr acq);
+  Q_INVOKABLE QxrdSynchronizedAcquisition(QString name);
   virtual ~QxrdSynchronizedAcquisition();
 
 public:
@@ -84,8 +84,10 @@ public:
   QxrdAcquisitionParameterPackWPtr parms();
 
 private:
+  QxrdAcquisitionWPtr acquisition();
+
+private:
   mutable QMutex              m_Mutex;
-  QxrdAcquisitionWPtr         m_Acquisition;
   QxrdAcquisitionParameterPackWPtr m_AcquisitionParms;
   QxrdNIDAQPluginInterfaceWPtr m_NIDAQPlugin;
   int                         m_SyncMode;

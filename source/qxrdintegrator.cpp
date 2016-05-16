@@ -20,9 +20,8 @@
 
 #include <cmath>
 
-QxrdIntegrator::QxrdIntegrator(QxrdExperimentWPtr exp,
-                               QxrdCenterFinderWPtr cfw)
-  : QcepObject("integrator", cfw),
+QxrdIntegrator::QxrdIntegrator(QString name)
+  : QcepObject(name),
     m_Oversample(this, "oversample", 1, "Oversampling for Integration"),
     m_IntegrationStep(this, "integrationStep", 0.01, "Integration Step Size"),
     m_IntegrationNSteps(this, "integrationNSteps", 0, "Integration Number of Steps"),
@@ -44,8 +43,8 @@ QxrdIntegrator::QxrdIntegrator(QxrdExperimentWPtr exp,
     m_SelfNormalization(this, "selfNormalization", false, "Normalize result based on average value within specified range"),
     m_SelfNormalizationMinimum(this, "selfNormalizationMinimum", 0, "Self Normalization Range Minimum"),
     m_SelfNormalizationMaximum(this, "selfNormalizationMaximum", 0, "Self Normalization Range Maximum"),
-    m_Experiment(exp),
-    m_CenterFinder(cfw),
+    m_Experiment(),
+    m_CenterFinder(),
     m_IntegratorCache()
 {
 #ifndef QT_NO_DEBUG
@@ -81,12 +80,6 @@ QxrdIntegrator::QxrdIntegrator(QxrdExperimentWPtr exp,
   connect(prop_SelfNormalization(), &QcepBoolProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
   connect(prop_SelfNormalizationMinimum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
   connect(prop_SelfNormalizationMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-
-  QxrdCenterFinderPtr cf(m_CenterFinder);
-
-  if (cf) {
-    connect(cf.data(), &QxrdCenterFinder::parameterChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  }
 }
 
 QxrdIntegrator::~QxrdIntegrator()
@@ -97,6 +90,18 @@ QxrdIntegrator::~QxrdIntegrator()
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdIntegrator::~QxrdIntegrator(%p)\n", this);
+  }
+}
+
+void QxrdIntegrator::initialize(QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw)
+{
+  m_Experiment = exp;
+  m_CenterFinder = cfw;
+
+  QxrdCenterFinderPtr cf(m_CenterFinder);
+
+  if (cf) {
+    connect(cf.data(), &QxrdCenterFinder::parameterChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
   }
 }
 

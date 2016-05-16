@@ -9,7 +9,7 @@ class QxrdDetectorGeometry : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorGeometry(QString name, QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdDetectorGeometry(QString name);
 
 public slots:
   static double convertEnergyToWavelength(double energy);
@@ -52,5 +52,7 @@ public slots:
              double cos_rotation,double sin_rotation,
              double * xPixel,double * yPixel);
 };
+
+Q_DECLARE_METATYPE(QxrdDetectorGeometry*)
 
 #endif // QXRDDETECTORGEOMETRY_H

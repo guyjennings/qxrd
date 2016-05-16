@@ -17,7 +17,7 @@ class QxrdPolarNormalization : public QcepObject
 
 public:
   Q_INVOKABLE QxrdPolarNormalization(QcepObjectWPtr parent);
-
+  QxrdPolarNormalization();
   QcepDataObjectPtr transform(QcepDoubleImageDataPtr img);
 
   enum {

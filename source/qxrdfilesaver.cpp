@@ -14,9 +14,8 @@
 
 #include "tiffio.h"
 
-QxrdFileSaver::QxrdFileSaver
-(QcepObjectWPtr parent)
-  : QcepObject("fileSaver", parent),
+QxrdFileSaver::QxrdFileSaver()
+  : QcepObject("fileSaver"),
     m_Experiment(),
     m_Processor(),
     m_Acquisition()

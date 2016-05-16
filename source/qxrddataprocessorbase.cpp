@@ -26,12 +26,8 @@
 #include <qmath.h>
 #include <QDir>
 
-QxrdDataProcessorBase::QxrdDataProcessorBase(
-    QxrdExperimentWPtr doc,
-    QxrdAcquisitionWPtr acq,
-    QxrdFileSaverWPtr filesaver) :
-
-  QcepDataProcessorBase("processor", doc),
+QxrdDataProcessorBase::QxrdDataProcessorBase(QString name) :
+  QcepDataProcessorBase(name),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),
   m_FileName(this, "fileName","", "Current File Name"),
   m_DataPath(this,"dataPath", "", "Data Path"),
@@ -96,10 +92,7 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   m_ZingerSize2(this, "zingerSize2", 5, "Outer Zinger Search Box Size"),
   m_ZingerThreshold(this, "zingerThreshold", 2.5, "Zinger Detection Threshold"),
   m_Mutex(QMutex::Recursive),
-  m_Experiment(doc),
   m_Window(),
-  m_FileSaver(filesaver),
-  m_Acquisition(acq),
   m_AcquiredInt16Images("acquiredInt16Images"),
   m_AcquiredInt32Images("acquiredInt32Images"),
   m_Data(QcepAllocator::newDoubleImage("data", 2048, 2048, QcepAllocator::WaitTillAvailable)),
@@ -128,17 +121,6 @@ QxrdDataProcessorBase::QxrdDataProcessorBase(
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdDataProcessorBase::QxrdDataProcessorBase");
   }
-
-  m_CenterFinder = QxrdCenterFinderPtr(new QxrdCenterFinder(m_Experiment));
-  m_Integrator   = QxrdIntegratorPtr(new QxrdIntegrator(m_Experiment, m_CenterFinder));
-  m_PolarTransform = QxrdPolarTransformPtr(new QxrdPolarTransform(m_Experiment));
-  m_PolarNormalization = QxrdPolarNormalizationPtr(new QxrdPolarNormalization(m_Experiment));
-
-//  m_Integrator->initialize(m_Integrator);
-
-  m_GenerateTestImage = QxrdGenerateTestImagePtr(new QxrdGenerateTestImage(sharedFromThis()));
-
-  m_DistortionCorrection = QxrdDistortionCorrectionPtr(new QxrdDistortionCorrection(m_Experiment));
 }
 
 QxrdDataProcessorBase::~QxrdDataProcessorBase()
@@ -152,6 +134,34 @@ QxrdDataProcessorBase::~QxrdDataProcessorBase()
   }
 }
 
+QxrdDataProcessorBase::QxrdDataProcessorBase() :
+  QxrdDataProcessorBase("processor")
+{
+  addChildPtr(QxrdCenterFinderPtr(new QxrdCenterFinder()));
+  addChildPtr(QxrdIntegratorPtr(new QxrdIntegrator()));
+  addChildPtr(QxrdPolarTransformPtr(new QxrdPolarTransform()));
+  addChildPtr(QxrdPolarNormalizationPtr(new QxrdPolarNormalization()));
+  addChildPtr(QxrdGenerateTestImagePtr(new QxrdGenerateTestImage()));
+  addChildPtr(QxrdDistortionCorrectionPtr(new QxrdDistortionCorrection()));
+}
+
+void QxrdDataProcessorBase::addChildPtr(QcepObjectPtr child)
+{
+  QcepDataProcessorBase::addChildPtr(child);
+
+  if (checkPointer<QxrdCenterFinder>(child, m_CenterFinder)) {}
+  else if (checkPointer<QxrdIntegrator>(child, m_Integrator)) {}
+  else if (checkPointer<QxrdPolarTransform>(child, m_PolarTransform)) {}
+  else if (checkPointer<QxrdPolarNormalization>(child, m_PolarNormalization)) {}
+  else if (checkPointer<QxrdGenerateTestImage>(child, m_GenerateTestImage)) {}
+  else if (checkPointer<QxrdDistortionCorrection>(child, m_DistortionCorrection)) {}
+}
+
+void QxrdDataProcessorBase::removeChildPtr(QcepObjectPtr child)
+{
+  printMessage("Need to write QxrdDataProcessorBase::removeChildPtr");
+}
+
 void QxrdDataProcessorBase::shutdown()
 {
   thread()->exit();
@@ -159,8 +169,6 @@ void QxrdDataProcessorBase::shutdown()
 
 void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionWPtr acq)
 {
-  m_Acquisition = acq;
-
   connect(prop_SaveRawImages(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
   connect(prop_PerformDarkSubtraction(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
   connect(prop_PerformBadPixels(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
@@ -179,7 +187,7 @@ void QxrdDataProcessorBase::setAcquisition(QxrdAcquisitionWPtr acq)
   connect(prop_DisplayIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
   connect(prop_SaveIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
 
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcquisitionPtr acqp(acq);
 
   if (acqp) {
     connect(acqp -> prop_SummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdDataProcessorBase::updateEstimatedProcessingTime);
@@ -226,33 +234,6 @@ void QxrdDataProcessorBase::readSettings(QSettings *settings, QString section)
   m_DistortionCorrection -> readSettings(settings, section+"/distortion");
 }
 
-void QxrdDataProcessorBase::printMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->printMessage(msg, ts);
-  }
-}
-
-void QxrdDataProcessorBase::criticalMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->criticalMessage(msg, ts);
-  }
-}
-
-void QxrdDataProcessorBase::statusMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->statusMessage(msg, ts);
-  }
-}
-
 QString QxrdDataProcessorBase::existingOutputDirectory(QString dir, QString subdir) const
 {
   return QDir(dir).filePath(subdir);
@@ -265,7 +246,7 @@ QString QxrdDataProcessorBase::filePathInExperimentDirectory(QString name) const
 
 QString QxrdDataProcessorBase::experimentDirectory() const
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(experiment());
 
   if (exp) {
     return exp->get_ExperimentDirectory();
@@ -281,7 +262,7 @@ QString QxrdDataProcessorBase::filePathInDataDirectory(QString name) const
 
 QString QxrdDataProcessorBase::dataDirectory() const
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(experiment());
 
   if (exp) {
     return QDir(exp->get_ExperimentDirectory()).filePath(exp->get_DataDirectory());
@@ -361,7 +342,7 @@ void QxrdDataProcessorBase::newData(QcepDoubleImageDataPtr image, QcepMaskDataPt
     m_CenterFinder->setData(m_Data);
   }
 
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(experiment());
 
   if (exp) {
     QcepDatasetModelPtr ds = exp->dataset();
@@ -1177,7 +1158,7 @@ void QxrdDataProcessorBase::clearMask()
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f(m_FileSaver);
+  QxrdFileSaverPtr f(fileSaver());
 
   if (f) {
     f -> saveDoubleData(name, image, overflow, canOverwrite);
@@ -1186,7 +1167,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepDoubleImageData
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f(m_FileSaver);
+  QxrdFileSaverPtr f(fileSaver());
 
   if (f) {
     f -> saveInt16Data(name, image, overflow, canOverwrite);
@@ -1195,7 +1176,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepUInt16ImageData
 
 void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f(m_FileSaver);
+  QxrdFileSaverPtr f(fileSaver());
 
   if (f) {
     f -> saveRaw16Data(name, image, overflow, canOverwrite);
@@ -1204,7 +1185,7 @@ void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QcepUInt16ImageD
 
 void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f(m_FileSaver);
+  QxrdFileSaverPtr f(fileSaver());
 
   if (f) {
     f -> saveInt32Data(name, image, overflow, canOverwrite);
@@ -1213,7 +1194,7 @@ void QxrdDataProcessorBase::saveNamedImageData(QString name, QcepUInt32ImageData
 
 void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f(m_FileSaver);
+  QxrdFileSaverPtr f(fileSaver());
 
   if (f) {
     f -> saveRaw32Data(name, image, overflow, canOverwrite);
@@ -1222,7 +1203,7 @@ void QxrdDataProcessorBase::saveNamedRawImageData(QString name, QcepUInt32ImageD
 
 void QxrdDataProcessorBase::saveNamedMaskData(QString name, QcepMaskDataPtr image, int canOverwrite)
 {
-  QxrdFileSaverPtr f(m_FileSaver);
+  QxrdFileSaverPtr f(fileSaver());
 
   if (f) {
     f -> saveMaskData(name, image, canOverwrite);
@@ -1231,7 +1212,7 @@ void QxrdDataProcessorBase::saveNamedMaskData(QString name, QcepMaskDataPtr imag
 
 void QxrdDataProcessorBase::saveNamedImageDataAsText(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f(m_FileSaver);
+  QxrdFileSaverPtr f(fileSaver());
 
   if (f) {
     f -> saveTextData(name, image, overflow, canOverwrite);
@@ -1584,7 +1565,7 @@ void QxrdDataProcessorBase::updateEstimatedProcessingTime()
 {
   double estSerialTime = 0, estParallelTime = 0;
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcquisitionPtr acq(acquisition());
 
   if (acq && get_SaveRawImages()) {
     if (acq -> get_SummedExposures() > 1) {
@@ -2105,11 +2086,11 @@ void QxrdDataProcessorBase::ellipse(double cx, double cy, double a, double e, do
 
 void QxrdDataProcessorBase::writeOutputScan(QcepIntegratedDataPtr data)
 {
-  QxrdFileSaverPtr f(m_FileSaver);
+  QxrdFileSaverPtr f(fileSaver());
 
   if (f) {
     if (this->get_SaveIntegratedData()) {
-      QxrdExperimentPtr expt(m_Experiment);
+      QxrdExperimentPtr expt(experiment());
 
       if (expt) {
         expt->openScanFile();
@@ -2461,7 +2442,7 @@ bool QxrdDataProcessorBase::integrateParameters()
   GUI_THREAD_CHECK;
 
   bool res = false;
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QxrdDataProcessorPtr proc(expt->dataProcessor());
@@ -2484,7 +2465,7 @@ bool QxrdDataProcessorBase::polarTransformParameters()
 
   bool res = false;
 
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QxrdDataProcessorPtr proc(expt->dataProcessor());
@@ -2507,7 +2488,7 @@ bool QxrdDataProcessorBase::polarIntegrateParameters()
 
   bool res = false;
 
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QxrdDataProcessorPtr proc(expt->dataProcessor());

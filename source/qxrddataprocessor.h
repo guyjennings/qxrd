@@ -8,12 +8,13 @@ class QxrdDataProcessor : public QxrdDataProcessorThreaded
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdDataProcessor(QxrdExperimentWPtr doc,
-                    QxrdAcquisitionWPtr acq,
-                    QxrdFileSaverWPtr filesaver);
+  Q_INVOKABLE QxrdDataProcessor(QString name);
+  QxrdDataProcessor();
   ~QxrdDataProcessor();
 
-  void initialize();
+//  void initialize(QxrdExperimentWPtr doc,
+//                  QxrdAcquisitionWPtr acq,
+//                  QxrdFileSaverWPtr fileSaver);
 
 private:
 };

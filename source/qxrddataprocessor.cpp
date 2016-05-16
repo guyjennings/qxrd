@@ -15,11 +15,13 @@
 #include <QDirIterator>
 #include <qmath.h>
 
-QxrdDataProcessor::QxrdDataProcessor
-    (QxrdExperimentWPtr doc,
-     QxrdAcquisitionWPtr acq,
-     QxrdFileSaverWPtr filesaver)
-  : QxrdDataProcessorThreaded(doc, acq, filesaver)
+QxrdDataProcessor::QxrdDataProcessor(QString name)
+  : QxrdDataProcessorThreaded(name)
+{
+}
+
+QxrdDataProcessor::QxrdDataProcessor()
+  : QxrdDataProcessor("processor")
 {
 }
 
@@ -27,9 +29,13 @@ QxrdDataProcessor::~QxrdDataProcessor()
 {
 }
 
-void QxrdDataProcessor::initialize()
-{
-  if (m_GenerateTestImage) {
-    m_GenerateTestImage -> setProcessor(qSharedPointerDynamicCast<QxrdDataProcessor>(sharedFromThis()));
-  }
-}
+//void QxrdDataProcessor::initialize(QxrdExperimentWPtr doc,
+//                                   QxrdAcquisitionWPtr acq,
+//                                   QxrdFileSaverWPtr fileSaver)
+//{
+//  QxrdDataProcessorThreaded::initialize(doc, acq, fileSaver);
+
+//  if (m_GenerateTestImage) {
+//    m_GenerateTestImage -> setProcessor(qSharedPointerDynamicCast<QxrdDataProcessor>(sharedFromThis()));
+//  }
+//}

@@ -14,6 +14,8 @@ public:
   QxrdCalibrantDSpacingsModel(QxrdCalibrantLibraryWPtr cal, QxrdCalibrantDSpacingsWPtr vec);
   ~QxrdCalibrantDSpacingsModel();
 
+  void setCalibrantDSpacings(QxrdCalibrantDSpacingsWPtr dsp);
+
   virtual QVariant	   data ( const QModelIndex & index, int role ) const;
   virtual QVariant         headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 

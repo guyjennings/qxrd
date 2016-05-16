@@ -7,13 +7,16 @@ class QxrdSlicePlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdSlicePlotSettings(QcepObjectWPtr parent);
-  
+  Q_INVOKABLE QxrdSlicePlotSettings(QString name);
+  QxrdSlicePlotSettings();
+
 signals:
   
 public slots:
   
 };
+
+Q_DECLARE_METATYPE(QxrdSlicePlotSettings*)
 
 typedef QSharedPointer<QxrdSlicePlotSettings> QxrdSlicePlotSettingsPtr;
 typedef QWeakPointer<QxrdSlicePlotSettings>   QxrdSlicePlotSettingsWPtr;

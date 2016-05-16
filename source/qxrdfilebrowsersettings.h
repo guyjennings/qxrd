@@ -9,7 +9,7 @@ class QxrdFileBrowserSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdFileBrowserSettings(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdFileBrowserSettings(QString name);
   
 public:
   Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter)
@@ -20,18 +20,6 @@ public:
 
   Q_PROPERTY(QString rootDirectory READ get_RootDirectory WRITE set_RootDirectory)
   QCEP_STRING_PROPERTY(RootDirectory)
-
-//  Q_PROPERTY(QcepIntList columnWidths READ get_ColumnWidths WRITE set_ColumnWidths)
-//  QCEP_INTEGER_LIST_PROPERTY(ColumnWidths)
-
-public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
-
-signals:
-  
-public slots:
-  
 };
 
 typedef QSharedPointer<QxrdFileBrowserSettings> QxrdFileBrowserSettingsPtr;

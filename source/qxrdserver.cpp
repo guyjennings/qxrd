@@ -11,11 +11,11 @@
 #include "qcepexperiment.h"
 #include "qxrdexperiment.h"
 
-QxrdServer::QxrdServer(QxrdExperimentWPtr doc, QString name) :
-  QcepObject(name, doc),
+QxrdServer::QxrdServer(QString name) :
+  QcepObject(name),
   m_RunSpecServer(this,"runSpecServer", 1, "Run SPEC Server?"),
   m_SpecServerPort(this,"specServerPort", -1, "Port for SPEC Server"),
-  m_Server(doc, name)
+  m_Server(name)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdServer::QxrdServer(%p)\n", this);
@@ -26,6 +26,11 @@ QxrdServer::QxrdServer(QxrdExperimentWPtr doc, QString name) :
 
   connect(&m_Server, &QSpecServer::executeCommand,
           this,      &QxrdServer::executeCommand);
+}
+
+void QxrdServer::initialize(QcepObjectWPtr parent)
+{
+  m_Server.initialize(parent);
 }
 
 QxrdServer::~QxrdServer()

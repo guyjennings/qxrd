@@ -52,7 +52,7 @@ void QxrdSimpleServerThread::run()
   }
 
   m_Server = QxrdSimpleServerPtr(
-        new QxrdSimpleServer(m_Experiment, m_Name));
+        new QxrdSimpleServer(m_Name));
 
   int rc = exec();
 

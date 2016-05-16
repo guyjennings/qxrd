@@ -23,9 +23,8 @@
 #include "qxrdacquisitionscalermodel.h"
 #include "qxrdapplicationsettings.h"
 
-QxrdAcquisition::QxrdAcquisition(QxrdExperimentWPtr doc,
-                                 QxrdDataProcessorWPtr proc)
-  : QxrdAcquisitionInterface(doc, proc),
+QxrdAcquisition::QxrdAcquisition(QString name)
+  : QxrdAcquisitionInterface(name),
     m_QxrdVersion(this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
     m_QtVersion(this,"qtVersion",qVersion(), "QT Version Number"),
     m_DetectorCount(this, "detectorCount", 0, "Number of Detectors"),
@@ -54,9 +53,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdExperimentWPtr doc,
     m_Mutex(QMutex::Recursive),
     m_SynchronizedAcquisition(NULL),
     m_AcquisitionExtraInputs(NULL),
-    m_Experiment(doc),
     m_Window(),
-    m_DataProcessor(proc),
     m_ControlPanel(NULL),
     m_Idling(1)
 {
@@ -69,21 +66,10 @@ QxrdAcquisition::QxrdAcquisition(QxrdExperimentWPtr doc,
   }
 }
 
-QxrdAcquisitionWPtr QxrdAcquisition::myself()
+
+QxrdAcquisition::QxrdAcquisition() :
+  QxrdAcquisition("acquisition")
 {
-  QxrdAcquisitionWPtr me = qSharedPointerCast<QxrdAcquisition>(sharedFromThis());
-
-//  if (me == NULL) {
-//    printf("QxrdAcquisition::myself returns NULL\n");
-//  }
-
-  return me;
-}
-
-void QxrdAcquisition::initialize()
-{
-  QxrdAcquisitionInterface::initialize();
-
   connect(prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_SummedExposures(), &QcepIntProperty::valueChanged,  this, &QxrdAcquisition::updateSaveTimes);
@@ -95,30 +81,15 @@ void QxrdAcquisition::initialize()
     printMessage("QxrdAcquisition::QxrdAcquisition");
   }
 
-  m_SynchronizedAcquisition = QxrdSynchronizedAcquisitionPtr(
-        new QxrdSynchronizedAcquisition(myself()));
+  addChildPtr(QxrdSynchronizedAcquisitionPtr(
+        new QxrdSynchronizedAcquisition("synchronized"));
 
-  m_AcquisitionExtraInputs = QxrdAcquisitionExtraInputsPtr(
-        new QxrdAcquisitionExtraInputs(m_Experiment, myself()));
-  m_AcquisitionExtraInputs -> initialize();
+  addChildPtr(QxrdAcquisitionExtraInputsPtr(
+        new QxrdAcquisitionExtraInputs("");
 
-  connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
-          this, &QxrdAcquisition::extraInputsChanged);
 
   connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
           this, &QxrdAcquisition::onExposureTimeChanged);
-
-  if (g_Allocator) {
-    if (sizeof(void*) == 4) {
-      connect(g_Allocator->prop_TotalBufferSizeMB32(), &QcepIntProperty::valueChanged,
-              this, &QxrdAcquisition::onMemorySizeChanged);
-      onMemorySizeChanged(g_Allocator->get_TotalBufferSizeMB32());
-    } else {
-      connect(g_Allocator->prop_TotalBufferSizeMB64(), &QcepIntProperty::valueChanged,
-              this, &QxrdAcquisition::onMemorySizeChanged);
-      onMemorySizeChanged(g_Allocator->get_TotalBufferSizeMB64());
-    }
-  }
 
 //  connect(&m_Watcher, &QFutureWatcherBase::finished, this, &QxrdAcquisition::onAcquireComplete);
   connect(&m_IdleTimer, &QTimer::timeout, this, &QxrdAcquisition::onIdleTimeout);
@@ -129,6 +100,16 @@ void QxrdAcquisition::initialize()
 
   m_ScalerModel = QxrdAcquisitionScalerModelPtr(
         new QxrdAcquisitionScalerModel(myself));
+}
+
+void QxrdAcquisition::addChildPtr(QcepObjectPtr child)
+{
+  if (checkPointer<QxrdSynchronizedAcquisition>(child, m_SynchronizedAcquisition)) {}
+  if (checkPointer<QxrdAcquisitionExtraInputs>(child, m_AcquisitionExtraInputs)) {
+    connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
+            this, &QxrdAcquisition::extraInputsChanged);
+
+  }
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -406,43 +387,6 @@ void QxrdAcquisition::setWindow(QxrdWindowWPtr win)
 {
   m_Window = win;
 }
-
-void QxrdAcquisition::printMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->printMessage(msg, ts);
-  }
-}
-
-void QxrdAcquisition::criticalMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->criticalMessage(msg, ts);
-  }
-}
-
-void QxrdAcquisition::statusMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->statusMessage(msg, ts);
-  }
-}
-
-void QxrdAcquisition::onMemorySizeChanged(qint64 newMB)
-{
-  QcepAllocator::changedAvailableBytes(newMB*QcepAllocator::MegaBytes);
-}
-
-//QcepAllocatorWPtr QxrdAcquisition::allocator() const
-//{
-//  return m_Allocator;
-//}
 
 bool QxrdAcquisition::sanityCheckCommon()
 {

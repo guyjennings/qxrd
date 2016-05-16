@@ -2,28 +2,64 @@
 #include "qcepsettingssaver.h"
 #include "qcepmutexlocker.h"
 
-QxrdWindowSettings::QxrdWindowSettings(QcepObjectWPtr parent) :
-  QcepObject("windowSettings", parent),
+QxrdWindowSettings::QxrdWindowSettings(QString name) :
+  QcepObject(name),
   m_WindowGeometry(this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(this, "windowState", QByteArray(), "Window State Settings")
 {
-  m_ImagePlotSettings         = QxrdImagePlotSettingsPtr(new QxrdImagePlotSettings(sharedFromThis()));
-  m_CenterFinderPlotSettings  = QxrdCenterFinderPlotSettingsPtr(new QxrdCenterFinderPlotSettings(sharedFromThis()));
-  m_IntegratorPlotSettings    = QcepPlotSettingsPtr(new QcepPlotSettings("integratorPlot", sharedFromThis()));
-  m_InputFileBrowserSettings  = QxrdFileBrowserSettingsPtr(new QxrdFileBrowserSettings(sharedFromThis()));
-  m_OutputFileBrowserSettings = QxrdFileBrowserSettingsPtr(new QxrdFileBrowserSettings(sharedFromThis()));
-  m_HistogramDialogSettings   = QxrdHistogramDialogSettingsPtr(new QxrdHistogramDialogSettings(sharedFromThis()));
-  m_SliceDialogSettings       = QxrdSliceDialogSettingsPtr(new QxrdSliceDialogSettings(sharedFromThis()));
-  m_InfoDialogSettings        = QxrdInfoDialogSettingsPtr(new QxrdInfoDialogSettings(sharedFromThis()));
-  m_ScriptDialogSettings      = QxrdScriptDialogSettingsPtr(new QxrdScriptDialogSettings(sharedFromThis()));
-  m_SynchronizedAcquisitionDialogSettings = QxrdSynchronizedAcquisitionDialogSettingsPtr(
-        new QxrdSynchronizedAcquisitionDialogSettings(sharedFromThis()));
-  m_AcquisitionExtraInputsDialogSettings = QxrdAcquisitionExtraInputsDialogSettingsPtr(
-        new QxrdAcquisitionExtraInputsDialogSettings(sharedFromThis()));
-  m_DistortionCorrectionDialogSettings = QxrdDistortionCorrectionDialogSettingsPtr(
-        new QxrdDistortionCorrectionDialogSettings(sharedFromThis()));
-  m_DistortionCorrectionPlotSettings = QxrdDistortionCorrectionPlotSettingsPtr(
-        new QxrdDistortionCorrectionPlotSettings(sharedFromThis()));
+}
+
+QxrdWindowSettings::QxrdWindowSettings() :
+  QxrdWindowSettings("windowSettings")
+{
+  addChildPtr(QxrdImagePlotSettingsPtr(new QxrdImagePlotSettings()));
+  addChildPtr(QxrdCenterFinderPlotSettings(new QxrdCenterFinderPlotSettings()));
+  addChildPtr(QcepPlotSettingsPtr(new QcepPlotSettings()));
+  addChildPtr(new QxrdFileBrowserSettings());
+  addChildPtr(new QxrdFileBrowserSettings());
+  addChildPtr(new QxrdHistogramDialogSettings());
+  addChildPtr(new QxrdSliceDialogSettings());
+  addChildPtr(new QxrdInfoDialogSettings());
+  addChildPtr(new QxrdScriptDialogSettings());
+  addChildPtr(new QxrdSynchronizedAcquisitionDialogSettings());
+  addChildPtr(new QxrdAcquisitionExtraInputsDialogSettings());
+  addChildPtr(new QxrdDistortionCorrectionDialogSettings());
+  addChildPtr(new QxrdDistortionCorrectionPlotSettings());
+}
+
+bool QxrdWindowSettings::checkBrowserPointer(QcepObjectPtr child)
+{
+  QxrdFileBrowserSettingsPtr p;
+
+  if (checkPointer<QxrdFileBrowserSettings>(child,p)) {
+    if (p->get_Name().startsWith("inputFile")) {
+      m_InputFileBrowserSettings = p;
+      return true;
+    } else if (p->get_Name().startsWith("outputFile")) {
+      m_OutputFileBrowserSettings = p;
+      return true;
+    }
+  }
+
+  return false;
+}
+
+void QxrdWindowSettings::addChildPtr(QcepObjectPtr child)
+{
+  QcepObject::addChildPtr(child);
+
+  if (checkPointer<QxrdImagePlotSettings>(child, m_ImagePlotSettings)) {}
+  else if (checkPointer<QxrdCenterFinderPlotSettings>(child, m_CenterFinderPlotSettings)) {}
+  else if (checkPointer<QcepPlotSettings>(child, m_IntegratorPlotSettings)) {}
+  else if (checkBrowserPointer(child)) {}
+  else if (checkPointer<QxrdHistogramDialogSettings>(child, m_HistogramDialogSettings)) {}
+  else if (checkPointer<QxrdSliceDialogSettings>(child, m_SliceDialogSettings)) {}
+  else if (checkPointer<QxrdInfoDialogSettings>(child, m_InfoDialogSettings)) {}
+  else if (checkPointer<QxrdScriptDialogSettings>(child, m_ScriptDialogSettings)) {}
+  else if (checkPointer<QxrdSynchronizedAcquisitionDialogSettings>(child, m_SynchronizedAcquisitionDialogSettings)) {}
+  else if (checkPointer<QxrdAcquisitionExtraInputsDialogSettings>(child, m_AcquisitionExtraInputsDialogSettings)) {}
+  else if (checkPointer<QxrdDistortionCorrectionDialogSettings>(child, m_DistortionCorrectionDialogSettings)) {}
+  else if (checkPointer<QxrdDistortionCorrectionPlotSettings>(child, m_DistortionCorrectionPlotSettings)) {}
 }
 
 void QxrdWindowSettings::readSettings(QSettings *settings, QString section)

@@ -1,6 +1,11 @@
 #include "qxrdsliceplotsettings.h"
 
-QxrdSlicePlotSettings::QxrdSlicePlotSettings(QcepObjectWPtr parent) :
-  QcepPlotSettings("slicePlot", parent)
+QxrdSlicePlotSettings::QxrdSlicePlotSettings(QString name) :
+  QcepPlotSettings(name)
+{
+}
+
+QxrdSlicePlotSettings::QxrdSlicePlotSettings()
+  : QxrdSlicePlotSettings("slicePlot")
 {
 }

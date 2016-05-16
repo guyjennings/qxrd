@@ -46,7 +46,9 @@ void QxrdFileBrowserModelUpdaterThread::run()
   }
 
   m_Updater = QxrdFileBrowserModelUpdaterPtr(
-        new QxrdFileBrowserModelUpdater(m_Model, parent()));
+        new QxrdFileBrowserModelUpdater("browserModelUpdater"));
+
+  m_Updater -> setBrowserModel(m_Model);
 
   int rc = exec();
 

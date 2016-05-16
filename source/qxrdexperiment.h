@@ -58,6 +58,9 @@ public:
   virtual ~QxrdExperiment();
   virtual void initialize(QSettings *settings);
 
+  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void removeChildPtr(QcepObjectPtr child);
+
   static void registerMetaTypes();
 
   void openWindows();

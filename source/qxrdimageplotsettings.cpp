@@ -1,8 +1,8 @@
 #include "qxrdimageplotsettings.h"
 #include "qcepsettingssaver.h"
 
-QxrdImagePlotSettings::QxrdImagePlotSettings(QcepObjectWPtr parent) :
-  QcepPlotSettings("imageGraph", parent),
+QxrdImagePlotSettings::QxrdImagePlotSettings(QString name) :
+  QcepPlotSettings(name),
   m_DisplayMinimumPctle(this, "displayMinimumPctle", 0, "Minimum Displayed Value (as a percentile)"),
   m_DisplayMaximumPctle(this, "displayMaximumPctle", 100, "Maximum Displayed Value (as a percentile)"),
   m_DisplayMinimumPct(this, "displayMinimumPct", 0, "Minimum Displayed Value (as % of data range)"),
@@ -23,5 +23,10 @@ QxrdImagePlotSettings::QxrdImagePlotSettings(QcepObjectWPtr parent) :
   m_RMouse(this,"rMouse",0, "R at Mouse"),
   m_ValMouse(this,"valMouse",0, "Image Value at Mouse"),
   m_MaskMouse(this,"maskMouse",0, "Mask Value at Mouse")
+{
+}
+
+QxrdImagePlotSettings::QxrdImagePlotSettings() :
+  QxrdImagePlotSettings("imagePlotSettings")
 {
 }

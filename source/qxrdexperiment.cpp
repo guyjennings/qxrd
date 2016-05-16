@@ -226,8 +226,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 //    m_DatasetModel -> newColumn("group4/t", 1000);
 //    m_DatasetModel -> newColumn("group4/sdev", 1000);
 
-    m_WindowSettings = QxrdWindowSettingsPtr(
-          new QxrdWindowSettings(myself));
+    addChildPtr(new QxrdWindowSettings("windowSettings"));
 
     splashMessage("Starting SPEC Server");
 
@@ -354,6 +353,67 @@ void QxrdExperiment::initialize(QSettings *settings)
   }
 }
 
+void QxrdExperiment::addChildPtr(QcepObjectPtr child)
+{
+  printMessage("QxrdExperiment::addChildPtr");
+
+  QcepExperiment::addChildPtr(child);
+
+  if (checkPointer<QxrdWindowSettings>(child, m_WindowSettings)) {}
+
+  else if (checkPointer<QxrdServer>(child, m_Server)) {
+    QxrdServerPtr srv(m_Server);
+    srv -> moveToThread(m_ServerThread.data());
+  }
+
+  else if (checkPointer<QxrdSimpleServer>(child, m_SimpleServer)) {
+    QxrdSimpleServerPtr ssrv(m_SimpleServer);
+    ssrv -> moveToThread(m_SimpleServerThread.data());
+  }
+
+  else if (checkPointer<QxrdDataProcessor>(child, m_DataProcessor)) {}
+
+  else if (checkPointer<QxrdCalibrantLibrary>(child, m_CalibrantLibrary)) {
+    if (m_CalibrantLibraryModel == NULL) {
+      printMessage("Calibrant Library Model == NULL");
+    } else {
+      m_CalibrantLibraryModel->setCalibrantLibrary(m_CalibrantLibrary);
+    }
+  }
+
+  else if (checkPointer<QxrdCalibrantDSpacings>(child, m_CalibrantDSpacings)) {
+    if (m_CalibrantDSpacingsModel == NULL) {
+      printMessage(("Calibrant D Spacings Model == NULL"));
+    } else {
+      m_CalibrantDSpacingsModel->setCalibrantDSpacings(m_CalibrantDSpacings);
+    }
+  }
+
+  else if (checkPointer<QxrdAcquisition>(child, m_Acquisition)) {}
+
+  else if (checkPointer<QxrdFileSaver>(child, m_FileSaver)) {
+    QxrdFileSaverPtr fsav(m_FileSaver);
+    fsav -> moveToThread(m_FileSaverThread.data());
+  }
+
+  else if (checkPointer<QxrdScriptEngine>(child, m_ScriptEngine)) {}
+
+  else if (checkPointer<QcepDataset>(child, m_Dataset)) {
+    if (m_DatasetModel == NULL) {
+      printMessage("Dataset Model == NULL");
+    } else {
+      m_DatasetModel->setDataset(m_Dataset);
+    }
+  }
+}
+
+void QxrdExperiment::removeChildPtr(QcepObjectPtr child)
+{
+  printMessage("Need to write QxrdExperiment::removeChildPtr");
+
+  QcepExperiment::removeChildPtr(child);
+}
+
 void QxrdExperiment::registerMetaTypes()
 {
   qRegisterMetaType<QxrdExperiment*>("QxrdExperiment*");
@@ -372,6 +432,7 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdFileSaver*>("QxrdFileSaver*");
   qRegisterMetaType<QxrdFitParameterPtr>("QxrdFitParameterPtr");
   qRegisterMetaType<QxrdIntegrator*>("QxrdIntegrator*");
+  qRegisterMetaType<QxrdDetectorGeometry*>("QxrdDetectorGeometry*");
   qRegisterMetaType<QxrdPolarNormalization*>("QxrdPolarNormalization*");
   qRegisterMetaType<QxrdPolarTransform*>("QxrdPolarTransform*");
   qRegisterMetaType<QxrdPowderPoint>("QxrdPowderPoint");
@@ -382,10 +443,20 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdSynchronizedAcquisition*>("QxrdSynchronizedAcquisition*");
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
   qRegisterMetaType<QcepDataset*>("QcepDataset*");
-  qRegisterMetaType<QcepDataObject*>("QcepDataObject*");
+  qRegisterMetaType<QcepDataColumn*>("QcepDataColumn*");
+  qRegisterMetaType<QcepDataGroup*>("QcepDataGroup*");
+  qRegisterMetaType<QcepDataArray*>("QcepDataArray*");
+  qRegisterMetaType<QcepDoubleImageData*>("QcepDoubleImageData*");
+  qRegisterMetaType<QcepFloatImageData*>("QcepFloatImageData*");
+  qRegisterMetaType<QcepInt32ImageData*>("QcepInt32ImageData*");
+  qRegisterMetaType<QcepUInt32ImageData*>("QcepUInt32ImageData*");
+  qRegisterMetaType<QcepInt16ImageData*>("QcepInt16ImageData*");
+  qRegisterMetaType<QcepUInt16ImageData*>("QcepUInt16ImageData*");
+  qRegisterMetaType<QcepMaskData*>("QcepMaskData*");
+  qRegisterMetaType<QcepIntegratedData*>("QcepIntegratedData*");
+  qRegisterMetaType<QcepDataColumnScan*>("QcepDataColumnScan*");
   qRegisterMetaType<QcepDataExportParameters*>("QcepDataExportParameters*");
   qRegisterMetaType<QcepDataImportParameters*>("QcepDataImportParameters*");
-  qRegisterMetaType<QcepObject*>("QcepObject*");
 }
 
 QxrdExperimentThreadWPtr QxrdExperiment::experimentThread()

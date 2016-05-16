@@ -2,11 +2,21 @@
 #include "qcepsettingssaver.h"
 #include "qcepmutexlocker.h"
 
-QxrdSliceDialogSettings::QxrdSliceDialogSettings(QcepObjectWPtr parent) :
-  QcepObject("sliceDialogSettings", parent),
+QxrdSliceDialogSettings::QxrdSliceDialogSettings(QString name) :
+  QcepObject(name),
   m_SlicePolygon(this, "slicePolygon", QcepPolygon(), "Slice Polygon")
 {
-  m_SlicePlotSettings = QxrdSlicePlotSettingsPtr(new QxrdSlicePlotSettings(parent));
+}
+
+QxrdSliceDialogSettings::QxrdSliceDialogSettings()
+  : QxrdSliceDialogSettings("sliceDialogSettings")
+{
+  addChildPtr(new QxrdSlicePlotSettings());
+}
+
+void QxrdSliceDialogSettings::addChildPtr(QcepObjectPtr child)
+{
+  if (checkPointer<QxrdSlicePlotSettings>(child, m_SlicePlotSettings)) {}
 }
 
 void QxrdSliceDialogSettings::readSettings(QSettings *settings, QString section)

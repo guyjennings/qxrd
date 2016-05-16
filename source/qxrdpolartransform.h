@@ -20,7 +20,8 @@ class QxrdPolarTransform : public QcepObject
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdPolarTransform(QxrdExperimentWPtr    exp);
+  Q_INVOKABLE QxrdPolarTransform(QString name);
+  QxrdPolarTransform();
   virtual ~QxrdPolarTransform();
 
   QxrdIntegratorWPtr integrator() const;

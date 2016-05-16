@@ -37,10 +37,11 @@ class QxrdAcquisition : public QxrdAcquisitionInterface
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdAcquisition(QxrdExperimentWPtr doc,
-                  QxrdDataProcessorWPtr proc);
+  Q_INVOKABLE QxrdAcquisition(QString name);
+  QxrdAcquisition();
   ~QxrdAcquisition();
-  void initialize();
+
+  virtual void addChildPtr(QcepObjectPtr child);
 
   void setWindow(QxrdWindowWPtr win);
 
@@ -51,15 +52,9 @@ public slots:
   void dynamicProperties();
   void updateSaveTimes();
 
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-
   void clearDropped();
 
   void shutdown();
-
-  void onMemorySizeChanged(qint64 newMB);
 
   void doAcquire    ();
   void doAcquireDark();
@@ -114,8 +109,6 @@ protected:
 
   QxrdExperimentWPtr experiment();
   QxrdDataProcessorWPtr dataProcessor();
-
-  QxrdAcquisitionWPtr myself();
 
 protected slots:
   void onIdleTimeout();
@@ -221,9 +214,7 @@ private:
   QxrdSynchronizedAcquisitionPtr  m_SynchronizedAcquisition;
   QxrdAcquisitionExtraInputsPtr   m_AcquisitionExtraInputs;
 
-  QxrdExperimentWPtr     m_Experiment;
   QxrdWindowWPtr         m_Window;
-  QxrdDataProcessorWPtr  m_DataProcessor;
 
   QxrdAcquisitionDialogPtr m_ControlPanel;
 

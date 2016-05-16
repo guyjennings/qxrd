@@ -6,8 +6,8 @@
 #include "qcepsettingssaver.h"
 #include "qxrdacquisitionparameterpack.h"
 
-QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdAcquisitionWPtr acq) :
-  QcepObject("synchronization", acq),
+QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
+  QcepObject(name),
   m_SyncAcquisitionMode(this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
   m_SyncAcquisitionWaveform(this,"syncAcquisitionWaveform", 0,
                             "Synchronized Acquisition Waveform (0 = Square, 1 = Sine, 2 = Triangle, 3 = Sawtooth, 4 = Bipolar Triangle)"),
@@ -18,7 +18,6 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QxrdAcquisitionWPtr acq
   m_SyncAcquisitionSymmetry(this,"syncAcquisitionSymmetry", 0.0, "Synchronized Acquisition Symmetry (0 = symmetric)"),
   m_SyncAcquisitionPhaseShift(this,"syncAcquisitionPhaseShift", 0.0, "Synchronized Acquisition Phase Shift (deg)"),
   m_SyncAcquisitionManualValue(this,"syncAcquisitionManualValue", 0.0, "Manual Output Voltage (in Volts)"),
-  m_Acquisition(acq),
   m_SyncMode(0)
 {
 #ifndef QT_NO_DEBUG
@@ -36,6 +35,15 @@ QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
 void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfaceWPtr nidaqPlugin)
 {
   m_NIDAQPlugin = nidaqPlugin;
+}
+
+QxrdAcquisitionWPtr QxrdSynchronizedAcquisition::acquisition()
+{
+  if (parentPtr()==NULL) {
+    printMessage("QxrdSynchronizedAcquisition Parent == NULL");
+  } else {
+    return qSharedPointerDynamicCast<QxrdAcquisition>(parentPtr());
+  }
 }
 
 QxrdNIDAQPluginInterfaceWPtr QxrdSynchronizedAcquisition::nidaqPlugin() const
@@ -195,7 +203,7 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
     nidaq->pulseOutput();
   }
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcquisitionPtr acq(acquisition());
   QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
 
   if (m_SyncMode && acq && parms) {
@@ -230,7 +238,7 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
 
 void QxrdSynchronizedAcquisition::setManualOutput()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcquisitionPtr acq(acquisition());
   QxrdNIDAQPluginInterfacePtr nidaq(m_NIDAQPlugin);
 
   if (acq && nidaq) {
@@ -246,7 +254,7 @@ void QxrdSynchronizedAcquisition::setManualOutput()
 
 void QxrdSynchronizedAcquisition::triggerOnce()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcquisitionPtr acq(acquisition());
   QxrdNIDAQPluginInterfacePtr nidaq(m_NIDAQPlugin);
   QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
 

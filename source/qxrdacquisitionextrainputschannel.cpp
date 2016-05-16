@@ -4,34 +4,11 @@
 #include "qxrdnidaqplugininterface.h"
 #include "qcepsettingssaver.h"
 
-QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
-    int chnum, QxrdExperimentWPtr doc, QxrdAcquisitionExtraInputsWPtr xtra) :
-  QcepObject(tr("extraChannel(%1)").arg(chnum), xtra),
-  m_ChannelNumber(this, "channelNumber", chnum, "Extra Input Channel Number"),
-  m_Enabled(this, "enabled", 1, "Enabled?"),
-  m_Plotted(this, "plotted", 1, "Plotted?"),
-  m_ChannelName(this, "channelName", "", "NIDAQ name of channel"),
-//  m_Kind(this, "kind", 0, "Channel Kind (0 = none, 1 = Analog In, 2 = Counter In)"),
-  m_Mode(this, "mode", 0, "Channel Mode (0 = summed, 1 = averaged, 2 = maximum, 3 = minimum)"),
-  m_SaveWave(this, "saveWave", 0, "Save entire waveform (0 = no, 1 = yes)"),
-  m_Min(this, "min", -10.0, "Minimum Input value for Analog Channel (in Volts)"),
-  m_Max(this, "max", 10.0, "Maximum Input Value for Analog Channel (in Volts)"),
-  m_Start(this, "start", 0.0, "Start Offset for Channel (in sec after notional exposure start)\n"
-                                 "i.e. Negative values mean times before start of exposure"),
-  m_End(this, "end", 0.0, "End Offset for Channel (in sec before notional exposure end)\n"
-                                 "i.e. Negative values mean times after end of exposure"),
-  m_TriggerMode(this, "triggerMode", 0, "Trigger Mode (0 = None, 1 = +Edge, 2 = -Edge, 3 = +Level, 4 = -Level)"),
-  m_TriggerLevel(this, "triggerLevel", 0.0, "Trigger Level (in Volts)"),
-  m_TriggerHysteresis(this, "triggerHysteresis", 0.0, "Trigger Hysteresis (in Volts)"),
-  m_PhysicalChannel(this, "physicalChannel", 0, "Physical Channel Number"),
-  m_Value(this, "value", 0.0, "Current Value of Channel"),
-  m_Triggered(this, "triggered", 0, "Was channel triggered?"),
-  m_NLow(this, "nLow", 0, "Number of untriggered data points"),
-  m_NHigh(this, "nHigh", 0, "Number of triggered data points"),
-  m_Waveform(this, "waveform", QcepDoubleVector(), "Waveform on Channel"),
-  m_Experiment(doc),
-  m_ExtraInputs(xtra)
+QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(int chnum) :
+  QxrdAcquisitionExtraInputsChannel(tr("extraChannel(%1)").arg(chnum))
 {
+  set_ChannelNumber(chnum);
+
   connect(prop_ChannelName(), &QcepStringProperty::valueChanged,
           this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
 
@@ -43,6 +20,42 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(
 
   connect(prop_Enabled(),     &QcepBoolProperty::valueChanged,
           this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
+}
+
+QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(QString name) :
+  QcepObject(name),
+  m_ChannelNumber(this, "channelNumber", -1, "Extra Input Channel Number"),
+  m_Enabled(this, "enabled", 1, "Enabled?"),
+  m_Plotted(this, "plotted", 1, "Plotted?"),
+  m_ChannelName(this, "channelName", "", "NIDAQ name of channel"),
+  //  m_Kind(this, "kind", 0, "Channel Kind (0 = none, 1 = Analog In, 2 = Counter In)"),
+  m_Mode(this, "mode", 0, "Channel Mode (0 = summed, 1 = averaged, 2 = maximum, 3 = minimum)"),
+  m_SaveWave(this, "saveWave", 0, "Save entire waveform (0 = no, 1 = yes)"),
+  m_Min(this, "min", -10.0, "Minimum Input value for Analog Channel (in Volts)"),
+  m_Max(this, "max", 10.0, "Maximum Input Value for Analog Channel (in Volts)"),
+  m_Start(this, "start", 0.0, "Start Offset for Channel (in sec after notional exposure start)\n"
+                              "i.e. Negative values mean times before start of exposure"),
+  m_End(this, "end", 0.0, "End Offset for Channel (in sec before notional exposure end)\n"
+                          "i.e. Negative values mean times after end of exposure"),
+  m_TriggerMode(this, "triggerMode", 0, "Trigger Mode (0 = None, 1 = +Edge, 2 = -Edge, 3 = +Level, 4 = -Level)"),
+  m_TriggerLevel(this, "triggerLevel", 0.0, "Trigger Level (in Volts)"),
+  m_TriggerHysteresis(this, "triggerHysteresis", 0.0, "Trigger Hysteresis (in Volts)"),
+  m_PhysicalChannel(this, "physicalChannel", 0, "Physical Channel Number"),
+  m_Value(this, "value", 0.0, "Current Value of Channel"),
+  m_Triggered(this, "triggered", 0, "Was channel triggered?"),
+  m_NLow(this, "nLow", 0, "Number of untriggered data points"),
+  m_NHigh(this, "nHigh", 0, "Number of triggered data points"),
+  m_Waveform(this, "waveform", QcepDoubleVector(), "Waveform on Channel")
+{
+}
+
+QxrdAcquisitionExtraInputsWPtr QxrdAcquisitionExtraInputsChannel::extraInputs()
+{
+  if (parentPtr() == NULL) {
+    printMessage("QxrdAcquisitionExtraInputsChannel Parent == NULL");
+  } else {
+    return qSharedPointerDynamicCast<QxrdAcquisitionExtraInputs>(parentPtr());
+  }
 }
 
 void QxrdAcquisitionExtraInputsChannel::readSettings(QSettings *settings, QString section)
@@ -61,7 +74,7 @@ void QxrdAcquisitionExtraInputsChannel::writeSettings(QSettings *settings, QStri
 
 QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()
 {
-  QxrdAcquisitionExtraInputsPtr xtra(m_ExtraInputs);
+  QxrdAcquisitionExtraInputsPtr xtra(extraInputs());
 
   if (xtra) {
     QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
@@ -78,7 +91,7 @@ int QxrdAcquisitionExtraInputsChannel::startIndex()
 {
   int res = 0;
 
-  QxrdAcquisitionExtraInputsPtr xtra(m_ExtraInputs);
+  QxrdAcquisitionExtraInputsPtr xtra(extraInputs());
 
   if (xtra) {
     QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
@@ -102,7 +115,7 @@ int QxrdAcquisitionExtraInputsChannel::endIndex()
 {
   int res = 0;
 
-  QxrdAcquisitionExtraInputsPtr xtra(m_ExtraInputs);
+  QxrdAcquisitionExtraInputsPtr xtra(extraInputs());
 
   if (xtra) {
     QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();

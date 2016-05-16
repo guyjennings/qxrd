@@ -9,8 +9,9 @@ class QxrdImagePlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdImagePlotSettings(QcepObjectWPtr parent);
-  
+  Q_INVOKABLE QxrdImagePlotSettings(QString name);
+  QxrdImagePlotSettings();
+
 public:
   Q_PROPERTY(double displayMinimumPctle     READ get_DisplayMinimumPctle WRITE set_DisplayMinimumPctle)
   QCEP_DOUBLE_PROPERTY(DisplayMinimumPctle)
@@ -71,12 +72,9 @@ public:
 
   Q_PROPERTY(double maskMouse READ get_MaskMouse WRITE set_MaskMouse STORED false)
   QCEP_DOUBLE_PROPERTY(MaskMouse)
-
-signals:
-  
-public slots:
-  
 };
+
+Q_DECLARE_METATYPE(QxrdImagePlotSettings*)
 
 typedef QSharedPointer<QxrdImagePlotSettings> QxrdImagePlotSettingsPtr;
 typedef QWeakPointer<QxrdImagePlotSettings>   QxrdImagePlotSettingsWPtr;

@@ -90,6 +90,10 @@ DISTFILES += qxrd.dox \
     help/qxrdspecmacro.html \
     qxrd_tests.mac
 
+CONFIG += qceplib-qwt qceplib-hdf5
+
+#CONFIG += qceplib-nexus
+
 include(submodules/qceplib/qceplib-qwt.pri)
 include(submodules/qceplib/qceplib-base.pri)
 include(submodules/qceplib/qceplib-mar345.pri)
@@ -99,6 +103,7 @@ include(submodules/qceplib/qceplib-levmar.pri)
 include(submodules/qceplib/qceplib-szip.pri)
 include(submodules/qceplib/qceplib-zlib.pri)
 include(submodules/qceplib/qceplib-hdf5.pri)
+#include(submodules/qceplib/qceplib-nexus.pri)
 
 macx {
 }

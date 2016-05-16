@@ -55,7 +55,9 @@ void QxrdServerThread::run()
   }
 
   m_Server = QxrdServerPtr(
-        new QxrdServer(m_Experiment, m_Name));
+        new QxrdServer(m_Name));
+
+  m_Server->initialize(m_Experiment);
 
   int rc = exec();
 

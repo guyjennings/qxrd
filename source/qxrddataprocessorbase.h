@@ -40,10 +40,16 @@ class QxrdDataProcessorBase : public QcepDataProcessorBase
   Q_OBJECT
 
 public:
-  QxrdDataProcessorBase(QxrdExperimentWPtr doc,
-                        QxrdAcquisitionWPtr acq,
-                        QxrdFileSaverWPtr filesaver);
+  QxrdDataProcessorBase(QString name);
+  QxrdDataProcessorBase();
   virtual ~QxrdDataProcessorBase();
+
+  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void removeChildPtr(QcepObjectPtr child);
+
+  QxrdExperimentWPtr  experiment() const;
+  QxrdAcquisitionWPtr acquisition() const;
+  QxrdFileSaverWPtr   fileSaver() const;
 
 public:
 //  Q_PROPERTY(QString outputDirectory READ get_OutputDirectory WRITE set_OutputDirectory)
@@ -246,11 +252,6 @@ public:
 
 signals:
   void newIntegrationAvailable(QcepIntegratedDataPtr data);
-
-public slots:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
 public slots:
   void shutdown();
@@ -462,15 +463,11 @@ protected:
   void correctImageGains(QcepDoubleImageDataPtr image);
   void performImageCorrections(QcepDoubleImageDataPtr image);
 
-
 private:
   mutable QMutex         m_Mutex;
 
 protected:
-  QxrdExperimentWPtr     m_Experiment;
   QxrdWindowWPtr         m_Window;
-  QxrdFileSaverWPtr      m_FileSaver;
-  QxrdAcquisitionWPtr    m_Acquisition;
   QWaitCondition         m_ProcessWaiting;
   QcepInt16ImageQueue    m_AcquiredInt16Images;
   QcepInt32ImageQueue    m_AcquiredInt32Images;

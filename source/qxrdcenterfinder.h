@@ -21,8 +21,12 @@ class QxrdCenterFinder : public QxrdDetectorGeometry
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdCenterFinder(QxrdExperimentWPtr expt);
+  Q_INVOKABLE QxrdCenterFinder(QString name);
+  QxrdCenterFinder();
   virtual ~QxrdCenterFinder();
+
+  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void removeChildPtr(QcepObjectPtr child);
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)

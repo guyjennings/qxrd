@@ -15,10 +15,8 @@
 #include <QtConcurrentRun>
 #include <QDirIterator>
 
-QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QxrdExperimentWPtr    doc,
-                                                     QxrdAcquisitionWPtr   acq,
-                                                     QxrdFileSaverWPtr filesaver)
-  : QxrdDataProcessorBase(doc, acq, filesaver),
+QxrdDataProcessorThreaded::QxrdDataProcessorThreaded(QString name)
+  : QxrdDataProcessorBase(name),
     m_CorrectedImages(prop_CorrectionQueueLength(), sharedFromThis()),
     m_IntegratedData(prop_IntegrationQueueLength(), sharedFromThis()),
     m_ROIData(NULL, sharedFromThis()),
@@ -556,7 +554,7 @@ void QxrdDataProcessorThreaded::projectImages(QStringList names, int px, int py,
     printMessage(tr("Projecting %1 images onto Z").arg(nz));
   }
 
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     expt->commenceWork(nz);
@@ -869,8 +867,6 @@ void QxrdDataProcessorThreaded::setFileNormalization(QString name, QList<double>
 
     //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    QxrdExperimentPtr exp(m_Experiment);
-
     res -> loadMetaData();
     res -> setMask(mask(), QcepMaskDataPtr());
     res -> set_Normalization(v);
@@ -930,7 +926,7 @@ void QxrdDataProcessorThreaded::fixupBadBackgroundSubtraction(QString imagePatte
 
         image->correctBadBackgroundSubtraction(dark,nImgExposures,nDarkExposures);
 
-        QxrdFileSaverPtr saver(m_FileSaver);
+        QxrdFileSaverPtr saver(fileSaver());
 
         if (saver) {
           saver->saveDoubleData(path, image, QcepMaskDataPtr(), NoOverwrite);

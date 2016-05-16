@@ -15,7 +15,7 @@ class QxrdSimpleServer : public QcepObject
 {
   Q_OBJECT
 public:
-  Q_INVOKABLE QxrdSimpleServer(QxrdExperimentWPtr doc, QString name);
+  Q_INVOKABLE QxrdSimpleServer(QString name);
   virtual ~QxrdSimpleServer();
 
   Q_PROPERTY(int    runSimpleServer    READ get_RunSimpleServer WRITE set_RunSimpleServer)
@@ -45,13 +45,7 @@ signals:
 public slots:
   void finishedCommand(QScriptValue result);
 
-protected:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg);
-
 private:
-  QxrdExperimentWPtr       m_Experiment;
-  QString                  m_Name;
   int                      m_Port;
   QTcpServer               m_Server;
   QTcpSocket              *m_Socket;

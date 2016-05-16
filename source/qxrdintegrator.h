@@ -25,9 +25,11 @@ class QxrdIntegrator : public QcepObject
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdIntegrator(QxrdExperimentWPtr exp,
-                 QxrdCenterFinderWPtr cfw);
+  Q_INVOKABLE QxrdIntegrator(QString name);
+  QxrdIntegrator();
   virtual ~QxrdIntegrator();
+
+  void initialize(QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw);
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)

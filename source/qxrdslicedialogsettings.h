@@ -10,8 +10,11 @@ class QxrdSliceDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSliceDialogSettings(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdSliceDialogSettings(QString name);
+  QxrdSliceDialogSettings();
   
+  virtual void addChildPtr(QcepObjectPtr child);
+
 public:
   Q_PROPERTY(QcepPolygon slicePolygon READ get_SlicePolygon WRITE set_SlicePolygon)
   QCEP_POLYGON_PROPERTY(SlicePolygon)
@@ -30,6 +33,8 @@ private:
   QMutex                   m_Mutex;
   QxrdSlicePlotSettingsPtr m_SlicePlotSettings;
 };
+
+Q_DECLARE_METATYPE(QxrdSliceDialogSettings*)
 
 typedef QSharedPointer<QxrdSliceDialogSettings> QxrdSliceDialogSettingsPtr;
 typedef QWeakPointer<QxrdSliceDialogSettings>   QxrdSliceDialogSettingsWPtr;

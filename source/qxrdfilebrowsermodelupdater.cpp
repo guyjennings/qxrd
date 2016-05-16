@@ -7,9 +7,9 @@
 #include "qxrdfilebrowsermodelupdaterthread.h"
 #include "qxrdfilebrowsermodelupdaterthread-ptr.h"
 
-QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr parent) :
-  QcepObject("fileBrowserModelUpdater", parent),
-  m_BrowserModel(browser),
+QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QString name) :
+  QcepObject("name"),
+  m_BrowserModel(),
   m_RootPath(""),
   m_FileSystemWatcher(NULL),
   m_UpdateNeeded(1),
@@ -21,6 +21,19 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QxrdFileBrowserModelWPt
   if (qcepDebug(DEBUG_BROWSER)) {
     printMessage("Starting Browser Model Updater");
   }
+
+}
+
+void QxrdFileBrowserModelUpdater::initialize(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr parent)
+{
+  setBrowserModel(browser);
+}
+
+void QxrdFileBrowserModelUpdater::setBrowserModel(QxrdFileBrowserModelWPtr browser)
+{
+  m_BrowserModel = browser;
+
+  delete m_FileSystemWatcher;
 
   m_FileSystemWatcher = new QFileSystemWatcher(this);
 

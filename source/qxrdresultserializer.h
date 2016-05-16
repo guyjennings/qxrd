@@ -14,7 +14,7 @@ class QxrdResultSerializerBase : public QcepObject
 {
   Q_OBJECT
 public:
-  QxrdResultSerializerBase(QcepObjectWPtr parent);
+  QxrdResultSerializerBase();
   virtual ~QxrdResultSerializerBase();
 
 signals:

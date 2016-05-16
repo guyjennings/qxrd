@@ -45,12 +45,7 @@ void QxrdAcquisitionThread::run()
   }
 
   {
-    QxrdAcquisitionPtr acq = QxrdAcquisitionPtr(
-          new QxrdAcquisition(m_Experiment, m_Processor));
-
-    if (acq) {
-      acq -> initialize();
-    }
+    QxrdAcquisitionPtr acq = QxrdAcquisitionPtr(new QxrdAcquisition());
 
     m_Acquisition = acq;
   }

@@ -1,8 +1,8 @@
 #include "qxrdresultserializer.h"
 #include "qcepmutexlocker.h"
 
-QxrdResultSerializerBase::QxrdResultSerializerBase(QcepObjectWPtr parent) :
-    QcepObject("resultSerializer", parent)
+QxrdResultSerializerBase::QxrdResultSerializerBase() :
+    QcepObject("resultSerializer")
 {
 }
 
@@ -13,7 +13,7 @@ QxrdResultSerializerBase::~QxrdResultSerializerBase()
 
 template <typename T>
 QxrdResultSerializer<T>::QxrdResultSerializer(QcepIntProperty *ctr, QcepObjectWPtr parent)
- : QxrdResultSerializerBase(parent),
+ : QxrdResultSerializerBase(),
    m_Counter(ctr)
 {
   connect(&m_Watcher, &QFutureWatcherBase::finished, this, &QxrdResultSerializerBase::resultAvailable);

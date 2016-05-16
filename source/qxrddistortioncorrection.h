@@ -13,7 +13,8 @@ class QxrdDistortionCorrection : public QcepObject
 {
   Q_OBJECT
 public:
-  Q_INVOKABLE QxrdDistortionCorrection(QxrdExperimentWPtr expt);
+  Q_INVOKABLE QxrdDistortionCorrection(QString name);
+  QxrdDistortionCorrection();
 
 public:
   Q_PROPERTY(QString distortionImagePath READ get_DistortionImagePath WRITE set_DistortionImagePath)

@@ -16,7 +16,8 @@ class QxrdGenerateTestImage : public QcepObject
 {
   Q_OBJECT
 public:
-  QxrdGenerateTestImage(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdGenerateTestImage(QString name);
+  QxrdGenerateTestImage();
 
 public slots:
   void setDimension(int nc, int nr);

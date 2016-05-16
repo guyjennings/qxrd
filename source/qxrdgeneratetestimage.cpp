@@ -9,10 +9,10 @@
 #include "qcepallocator.h"
 #include "qcepsettingssaver.h"
 
-QxrdGenerateTestImage::QxrdGenerateTestImage(QcepObjectWPtr parent) :
-  QcepObject("testImage", parent),
+QxrdGenerateTestImage::QxrdGenerateTestImage() :
+  QcepObject("testImage"),
   m_Processor(),
-  m_Geometry(new QxrdDetectorGeometry("testGeometry", parent)),
+  m_Geometry(new QxrdDetectorGeometry("testGeometry")),
   m_NRows(this, "nRows", 2048, "Number of Rows"),
   m_NCols(this, "nCols", 2048, "Number of Cols"),
   m_CenterX(this, "centerX", 1024, "X Center"),

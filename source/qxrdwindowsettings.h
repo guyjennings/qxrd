@@ -19,8 +19,11 @@ class QxrdWindowSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  Q_INVOKABLE QxrdWindowSettings(QcepObjectWPtr parent);
-  
+  Q_INVOKABLE QxrdWindowSettings(QString name);
+  QxrdWindowSettings();
+
+  virtual void addChildPtr(QcepObjectPtr child);
+
 public:
   Q_PROPERTY(QByteArray windowGeometry READ get_WindowGeometry WRITE set_WindowGeometry)
   QCEP_BYTE_ARRAY_PROPERTY(WindowGeometry)
@@ -49,6 +52,9 @@ signals:
   
 public slots:
   
+private:
+  bool checkBrowserPointer(QcepObjectPtr child);
+
 private:
   QMutex                                       m_Mutex;
   QxrdImagePlotSettingsPtr                     m_ImagePlotSettings;

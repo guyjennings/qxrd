@@ -13,7 +13,8 @@ class QxrdServer : public QcepObject
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdServer(QxrdExperimentWPtr doc, QString name);
+  Q_INVOKABLE QxrdServer(QString name);
+  void initialize(QcepObjectWPtr parent);
   virtual ~QxrdServer();
 
   virtual void readSettings(QSettings *settings, QString section);
