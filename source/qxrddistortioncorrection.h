@@ -102,8 +102,6 @@ public:
   void evaluateFitGrid(double parms[], double hx[], int m, int n);
 
 private:
-  mutable QMutex             m_Mutex;
-  QxrdExperimentWPtr         m_Experiment;
   QcepDoubleImageDataPtr     m_Data;
 };
 

@@ -1,8 +1,9 @@
 #include "qxrdcalibrantdialog.h"
 #include "ui_qxrdcalibrantdialog.h"
-#include "qxrdcalibrantlibrarymodel.h"
-#include "qxrdcalibrantdspacingsmodel.h"
 #include "qxrdcalibrantlibrary.h"
+#include "qxrdcalibrantlibrarymodel.h"
+#include "qxrdcalibrantdspacings.h"
+#include "qxrdcalibrantdspacingsmodel.h"
 #include "qxrdcalibrant.h"
 #include "qxrdcenterfinder.h"
 #include <QMenu>

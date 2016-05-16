@@ -5,7 +5,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "ui_qxrdacquisitionextrainputsdialog.h"
-#include "qxrdacquisitionextrainputsdialogsettings.h"
+#include "qxrdacquisitionextrainputsdialogsettings-ptr.h"
 
 class QxrdAcquisitionExtraInputsDialog : public QDockWidget, public Ui::QxrdAcquisitionExtraInputsDialog
 {

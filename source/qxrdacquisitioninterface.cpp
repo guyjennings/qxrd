@@ -9,9 +9,8 @@
 #include "qxrddataprocessor.h"
 #include "qxrdexperiment.h"
 
-QxrdAcquisitionInterface::QxrdAcquisitionInterface(QxrdExperimentWPtr    doc,
-                                                   QxrdDataProcessorWPtr proc)
-  : QcepObject("acquisition", doc),
+QxrdAcquisitionInterface::QxrdAcquisitionInterface(QString name)
+  : QcepObject(name),
     m_ExecutionThread(),
     m_Cancelling(this, "cancelling", 0, "Cancel Acquisition?"),
     m_Triggered(this, "triggered", 0, "Trigger Acquisition"),

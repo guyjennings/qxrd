@@ -3,17 +3,18 @@
 
 #include "qcepobject.h"
 #include "qcepproperty.h"
-#include "qxrdimageplotsettings.h"
-#include "qxrdcenterfinderplotsettings.h"
-#include "qxrdfilebrowsersettings.h"
-#include "qxrdhistogramdialogsettings.h"
-#include "qxrdinfodialogsettings.h"
-#include "qxrdscriptdialogsettings.h"
-#include "qxrdslicedialogsettings.h"
-#include "qxrdsynchronizedacquisitiondialogsettings.h"
-#include "qxrdacquisitionextrainputsdialogsettings.h"
-#include "qxrddistortioncorrectiondialogsettings.h"
-#include "qxrddistortioncorrectionplotsettings.h"
+#include "qxrdimageplotsettings-ptr.h"
+#include "qxrdintegratorplotsettings-ptr.h"
+#include "qxrdcenterfinderplotsettings-ptr.h"
+#include "qxrdfilebrowsersettings-ptr.h"
+#include "qxrdhistogramdialogsettings-ptr.h"
+#include "qxrdinfodialogsettings-ptr.h"
+#include "qxrdscriptdialogsettings-ptr.h"
+#include "qxrdslicedialogsettings-ptr.h"
+#include "qxrdsynchronizedacquisitiondialogsettings-ptr.h"
+#include "qxrdacquisitionextrainputsdialogsettings-ptr.h"
+#include "qxrddistortioncorrectiondialogsettings-ptr.h"
+#include "qxrddistortioncorrectionplotsettings-ptr.h"
 
 class QxrdWindowSettings : public QcepObject
 {
@@ -37,9 +38,9 @@ public:
 
   QxrdImagePlotSettingsWPtr                    imagePlotSettings();
   QxrdCenterFinderPlotSettingsWPtr             centerFinderPlotSettings();
-  QcepPlotSettingsWPtr                         integratorPlotSettings();
-  QxrdFileBrowserSettingsWPtr                  inputFileBrowserSettings();
-  QxrdFileBrowserSettingsWPtr                  outputFileBrowserSettings();
+  QxrdIntegratorPlotSettingsWPtr               integratorPlotSettings();
+  QxrdInputFileBrowserSettingsWPtr             inputFileBrowserSettings();
+  QxrdOutputFileBrowserSettingsWPtr            outputFileBrowserSettings();
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
   QxrdSliceDialogSettingsWPtr                  sliceDialogSettings();
   QxrdInfoDialogSettingsWPtr                   infoDialogSettings();
@@ -53,15 +54,12 @@ signals:
 public slots:
   
 private:
-  bool checkBrowserPointer(QcepObjectPtr child);
-
-private:
   QMutex                                       m_Mutex;
   QxrdImagePlotSettingsPtr                     m_ImagePlotSettings;
   QxrdCenterFinderPlotSettingsPtr              m_CenterFinderPlotSettings;
-  QcepPlotSettingsPtr                          m_IntegratorPlotSettings;
-  QxrdFileBrowserSettingsPtr                   m_InputFileBrowserSettings;
-  QxrdFileBrowserSettingsPtr                   m_OutputFileBrowserSettings;
+  QxrdIntegratorPlotSettingsPtr                m_IntegratorPlotSettings;
+  QxrdInputFileBrowserSettingsPtr              m_InputFileBrowserSettings;
+  QxrdOutputFileBrowserSettingsPtr             m_OutputFileBrowserSettings;
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;
   QxrdSliceDialogSettingsPtr                   m_SliceDialogSettings;
   QxrdInfoDialogSettingsPtr                    m_InfoDialogSettings;
@@ -71,9 +69,6 @@ private:
   QxrdDistortionCorrectionDialogSettingsPtr    m_DistortionCorrectionDialogSettings;
   QxrdDistortionCorrectionPlotSettingsPtr      m_DistortionCorrectionPlotSettings;
 };
-
-typedef QSharedPointer<QxrdWindowSettings> QxrdWindowSettingsPtr;
-typedef QWeakPointer<QxrdWindowSettings>   QxrdWindowSettingsWPtr;
 
 Q_DECLARE_METATYPE(QxrdWindowSettings*)
 

@@ -44,8 +44,30 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QString name) :
   }
 }
 
-void QxrdAcquisitionExtraInputs::initialize()
+void QxrdAcquisitionExtraInputs::addChildPtr(QcepObjectPtr child)
 {
+  QcepObject::addChildPtr(child);
+
+  QxrdAcquisitionExtraInputsChannelPtr chan = qSharedPointerDynamicCast<QxrdAcquisitionExtraInputsChannel>(child);
+
+  if (chan) {
+    int ch = chan->get_ChannelNumber();
+
+    int n = (ch < 0 ? m_Channels.size() : ch+1);
+
+    m_Channels.insert(n, chan);
+  }
+}
+
+void QxrdAcquisitionExtraInputs::removeChildPtr(QcepObjectPtr child)
+{
+  QxrdAcquisitionExtraInputsChannelPtr chan = qSharedPointerDynamicCast<QxrdAcquisitionExtraInputsChannel>(child);
+
+  if (chan) {
+    m_Channels.removeAll(chan);
+  }
+
+  QcepObject::removeChildPtr(child);
 }
 
 QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
@@ -57,6 +79,17 @@ QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs(%p)\n", this);
   }
+}
+
+QxrdAcquisitionWPtr QxrdAcquisitionExtraInputs::acquisition()
+{
+  QxrdAcquisitionPtr acq = qSharedPointerDynamicCast<QxrdAcquisition>(parentPtr());
+
+  if (acq == NULL) {
+    printMessage("QxrdAcquisitionExtraInputs::acquisition == NULL");
+  }
+
+  return acq;
 }
 
 void QxrdAcquisitionExtraInputs::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
@@ -122,33 +155,6 @@ void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString sect
   settings->endArray();
 }
 
-void QxrdAcquisitionExtraInputs::printMessage(QString msg, QDateTime ts) const
-{
-  QxrdAcquisitionPtr acq(m_Acquisition);
-
-  if (acq) {
-    acq->printMessage(msg, ts);
-  }
-}
-
-void QxrdAcquisitionExtraInputs::criticalMessage(QString msg, QDateTime ts) const
-{
-  QxrdAcquisitionPtr acq(m_Acquisition);
-
-  if (acq) {
-    acq->criticalMessage(msg, ts);
-  }
-}
-
-void QxrdAcquisitionExtraInputs::statusMessage(QString msg, QDateTime ts) const
-{
-  QxrdAcquisitionPtr acq(m_Acquisition);
-
-  if (acq) {
-    acq->statusMessage(msg, ts);
-  }
-}
-
 void QxrdAcquisitionExtraInputs::prepareForAcquisition(QxrdAcquisitionParameterPackWPtr /*parms*/)
 {
   if (!get_Enabled()) {
@@ -158,7 +164,7 @@ void QxrdAcquisitionExtraInputs::prepareForAcquisition(QxrdAcquisitionParameterP
 
 void QxrdAcquisitionExtraInputs::initiate()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcquisitionPtr acq(acquisition());
 
   if (acq && m_NIDAQPlugin) {
     QStringList uniqueChannels;
@@ -228,14 +234,10 @@ QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputs::channel(int cha
 void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 {
   QxrdAcquisitionExtraInputsChannel *chan = 0;
-  int n = (ch < 0 ? m_Channels.size() : ch+1);
 
-  m_Channels.insert(n,
-                    QxrdAcquisitionExtraInputsChannelPtr(
-                        chan = new QxrdAcquisitionExtraInputsChannel(n, 
-                                                                     qSharedPointerDynamicCast<QxrdAcquisitionExtraInputs>(sharedFromThis()))));
+  addChildPtr(QxrdAcquisitionExtraInputsChannelPtr(
+                chan = new QxrdAcquisitionExtraInputsChannel(ch)));
 
-  addChildPtr();
   connect(chan, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
 
   QcepObjectPtr p(parentPtr());
@@ -249,22 +251,26 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 
 void QxrdAcquisitionExtraInputs::removeChannel(int ch)
 {
-  m_Channels.remove((ch < 0 ? m_Channels.size()-1 : ch));
+  QxrdAcquisitionExtraInputsChannelPtr chan = channel(ch);
 
-  QcepObjectPtr p(parentPtr());
+  if (chan) {
+    removeChildPtr(chan);
 
-  if (p) {
+    QcepObjectPtr p(parentPtr());
+
+    if (p) {
       p->propertyChanged(NULL);
-  }
+    }
 
-  emit channelCountChanged();
+    emit channelCountChanged();
+  }
 }
 
 void QxrdAcquisitionExtraInputs::acquire()
 {
   if (get_Enabled()) {
     if (!get_Skipping()) {
-      QxrdAcquisitionPtr acq(m_Acquisition);
+      QxrdAcquisitionPtr acq(acquisition());
 
       if (acq && m_NIDAQPlugin) {
         m_NIDAQPlugin->readContinuousInput();
@@ -295,7 +301,7 @@ void QxrdAcquisitionExtraInputs::logToImage(QcepUInt16ImageDataPtr img)
 
 void QxrdAcquisitionExtraInputs::finish()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcquisitionPtr acq(acquisition());
 
   if (acq && m_NIDAQPlugin) {
     m_NIDAQPlugin->finishContinuousInput();

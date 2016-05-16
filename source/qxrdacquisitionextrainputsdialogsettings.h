@@ -3,30 +3,30 @@
 
 #include "qcepobject.h"
 #include "qcepproperty.h"
-#include "qcepplotsettings-ptr.h"
+#include "qxrdacquisitionextrainputsplotsettings-ptr.h"
 
 class QxrdAcquisitionExtraInputsDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdAcquisitionExtraInputsDialogSettings(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdAcquisitionExtraInputsDialogSettings(QString name);
+  QxrdAcquisitionExtraInputsDialogSettings();
   
 public:
+  virtual void addChildPtr(QcepObjectPtr child);
+
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
-  QcepPlotSettingsWPtr plotSettings() const;
+  QxrdAcquisitionExtraInputsPlotSettingsWPtr plotSettings() const;
 
 signals:
   
 public slots:
 
 private:
-  QMutex              m_Mutex;
-  QcepPlotSettingsPtr m_AcquisitionExtraInputsPlotSettings;
+  QMutex                                    m_Mutex;
+  QxrdAcquisitionExtraInputsPlotSettingsPtr m_AcquisitionExtraInputsPlotSettings;
 };
-
-typedef QSharedPointer<QxrdAcquisitionExtraInputsDialogSettings> QxrdAcquisitionExtraInputsDialogSettingsPtr;
-typedef QWeakPointer<QxrdAcquisitionExtraInputsDialogSettings>   QxrdAcquisitionExtraInputsDialogSettingsWPtr;
 
 #endif // QXRDACQUISITIONEXTRAINPUTSDIALOGSETTINGS_H

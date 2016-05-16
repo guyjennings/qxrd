@@ -1,18 +1,31 @@
 #include "qxrdsynchronizedacquisitiondialogsettings.h"
 #include "qcepmutexlocker.h"
+#include "qxrdsynchronizedacquisitionplotsettings.h"
 
-QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings(QcepObjectWPtr parent) :
-  QcepObject("syncDialog", parent)
+QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings(QString name) :
+  QcepObject(name)
 {
-  m_SynchronizedAcquisitionPlotSettings = QxrdSynchronizedAcquisitionPlotSettingsPtr(
-        new QxrdSynchronizedAcquisitionPlotSettings(parent));
+}
+
+QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings() :
+  QxrdSynchronizedAcquisitionDialogSettings("syncDialog")
+{
+  addChildPtr(QxrdSynchronizedAcquisitionPlotSettingsPtr(
+                new QxrdSynchronizedAcquisitionPlotSettings()));
+}
+
+void QxrdSynchronizedAcquisitionDialogSettings::addChildPtr(QcepObjectPtr child)
+{
+  QcepObject::addChildPtr(child);
+
+  if (checkPointer<QxrdSynchronizedAcquisitionPlotSettings>(child, m_SynchronizedAcquisitionPlotSettings)) {}
 }
 
 void QxrdSynchronizedAcquisitionDialogSettings::readSettings(QSettings *settings, QString section)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, settings, section);
+  QcepObject::readSettings(settings, section);
 
   m_SynchronizedAcquisitionPlotSettings->readSettings(settings, section+"/plot");
 }
@@ -21,7 +34,7 @@ void QxrdSynchronizedAcquisitionDialogSettings::writeSettings(QSettings *setting
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, settings, section);
+  QcepObject::writeSettings(settings, section);
 
   m_SynchronizedAcquisitionPlotSettings->writeSettings(settings, section+"/plot");
 }

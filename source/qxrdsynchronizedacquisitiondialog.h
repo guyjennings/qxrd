@@ -5,7 +5,7 @@
 #include "ui_qxrdsynchronizedacquisitiondialog.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
-#include "qxrdsynchronizedacquisitiondialogsettings.h"
+#include "qxrdsynchronizedacquisitiondialogsettings-ptr.h"
 
 class QxrdSynchronizedAcquisitionDialog : public QDockWidget, public Ui::QxrdSynchronizedAcquisitionDialog
 {

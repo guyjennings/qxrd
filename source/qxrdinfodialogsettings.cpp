@@ -2,22 +2,12 @@
 #include "qcepsettingssaver.h"
 #include "qcepmutexlocker.h"
 
-QxrdInfoDialogSettings::QxrdInfoDialogSettings(QcepObjectWPtr parent) :
-  QcepObject("infoDialogSettings", parent)
+QxrdInfoDialogSettings::QxrdInfoDialogSettings(QString name) :
+  QcepObject(name)
 {
 }
 
-void QxrdInfoDialogSettings::readSettings(QSettings *settings, QString section)
+QxrdInfoDialogSettings::QxrdInfoDialogSettings() :
+  QxrdInfoDialogSettings("infoDialogSettings")
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::readSettings(this, settings, section);
 }
-
-void QxrdInfoDialogSettings::writeSettings(QSettings *settings, QString section)
-{
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::writeSettings(this, settings, section);
-}
-

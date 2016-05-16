@@ -10,7 +10,7 @@ class QxrdDetectorPilatus : public QxrdDetector
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorPilatus(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum, QcepObjectWPtr parent);
+  explicit QxrdDetectorPilatus(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
   virtual ~QxrdDetectorPilatus();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);

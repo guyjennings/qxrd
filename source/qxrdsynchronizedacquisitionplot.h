@@ -2,7 +2,7 @@
 #define QXRDSYNCHRONIZEDACQUISITIONPLOT_H
 
 #include "qcepplot.h"
-#include "qxrdsynchronizedacquisitionplotsettings.h"
+#include "qxrdsynchronizedacquisitionplotsettings-ptr.h"
 
 class QxrdSynchronizedAcquisitionPlot : public QcepPlot
 {

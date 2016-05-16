@@ -162,6 +162,43 @@ void QxrdDataProcessorBase::removeChildPtr(QcepObjectPtr child)
   printMessage("Need to write QxrdDataProcessorBase::removeChildPtr");
 }
 
+QxrdExperimentWPtr QxrdDataProcessorBase::experiment() const
+{
+  QxrdExperimentWPtr expt(qSharedPointerDynamicCast<QxrdExperiment>(parentPtr()));
+
+  if (expt == NULL) {
+    printMessage("QxrdDataProcessorBase::experiment == NULL");
+  }
+
+  return expt;
+}
+
+QxrdFileSaverWPtr QxrdDataProcessorBase::fileSaver() const
+{
+  QxrdFileSaverWPtr res;
+
+  QxrdExperimentPtr expt(experiment());
+
+  if (expt) {
+    res = expt->fileSaver();
+  }
+
+  return res;
+}
+
+QxrdAcquisitionWPtr QxrdDataProcessorBase::acquisition() const
+{
+  QxrdAcquisitionWPtr res;
+
+  QxrdExperimentPtr expt(experiment());
+
+  if (expt) {
+    res = expt->acquisition();
+  }
+
+  return res;
+}
+
 void QxrdDataProcessorBase::shutdown()
 {
   thread()->exit();

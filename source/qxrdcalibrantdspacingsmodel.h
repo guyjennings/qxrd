@@ -4,7 +4,7 @@
 #include <QAbstractTableModel>
 #include "qxrdcalibrantlibrary-ptr.h"
 #include "qxrdcalibrant.h"
-#include "qxrdcalibrantdspacings.h"
+#include "qxrdcalibrantdspacings-ptr.h"
 
 class QxrdCalibrantDSpacingsModel : public QAbstractTableModel
 {

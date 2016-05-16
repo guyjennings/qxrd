@@ -9,8 +9,8 @@
 #include "qcepallocator.h"
 #include "qcepsettingssaver.h"
 
-QxrdGenerateTestImage::QxrdGenerateTestImage() :
-  QcepObject("testImage"),
+QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
+  QcepObject(name),
   m_Processor(),
   m_Geometry(new QxrdDetectorGeometry("testGeometry")),
   m_NRows(this, "nRows", 2048, "Number of Rows"),
@@ -29,6 +29,11 @@ QxrdGenerateTestImage::QxrdGenerateTestImage() :
   m_RingTTH(this, "ringTTH", QcepDoubleList(), "TTH values of rings"),
   m_RingIntensity(this, "ringIntensity", QcepDoubleList(), "Intensities of rings"),
   m_RingWidth(this, "ringWidth", QcepDoubleList(), "Widths of Rings")
+{
+}
+
+QxrdGenerateTestImage::QxrdGenerateTestImage() :
+  QxrdGenerateTestImage("testImage")
 {
 }
 

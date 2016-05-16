@@ -9,8 +9,10 @@ class QxrdAcquisitionExecution : public QcepObject
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdAcquisitionExecution(QxrdAcquisitionInterfaceWPtr acq);
+  explicit QxrdAcquisitionExecution(QxrdAcquisitionInterfaceWPtr acq);
   virtual ~QxrdAcquisitionExecution();
+
+  void setAcquisition(QxrdAcquisitionInterfaceWPtr acq);
 
 signals:
 
@@ -21,7 +23,5 @@ public slots:
 private:
   QxrdAcquisitionInterfaceWPtr m_Acquisition;
 };
-
-Q_DECLARE_METATYPE(QxrdAcquisitionExecution*)
 
 #endif // QXRDACQUISITIONEXECUTION_H

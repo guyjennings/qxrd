@@ -2,7 +2,7 @@
 #define QXRDHISTOGRAMPLOT_H
 
 #include "qcepplot.h"
-#include "qxrdhistogramplotsettings.h"
+#include "qxrdhistogramplotsettings-ptr.h"
 
 class QxrdHistogramPlot : public QcepPlot
 {

@@ -3,15 +3,19 @@
 
 #include <QObject>
 #include "qcepproperty.h"
-#include "qxrdsynchronizedacquisitionplotsettings.h"
+#include "qcepobject.h"
+#include "qxrdsynchronizedacquisitionplotsettings-ptr.h"
 
 class QxrdSynchronizedAcquisitionDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisitionDialogSettings(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdSynchronizedAcquisitionDialogSettings(QString name);
+  QxrdSynchronizedAcquisitionDialogSettings();
 
 public:
+  virtual void addChildPtr(QcepObjectPtr child);
+
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
@@ -25,7 +29,6 @@ private:
   QxrdSynchronizedAcquisitionPlotSettingsPtr m_SynchronizedAcquisitionPlotSettings;
 };
 
-typedef QSharedPointer<QxrdSynchronizedAcquisitionDialogSettings> QxrdSynchronizedAcquisitionDialogSettingsPtr;
-typedef QWeakPointer<QxrdSynchronizedAcquisitionDialogSettings>   QxrdSynchronizedAcquisitionDialogSettingsWPtr;
+Q_DECLARE_METATYPE(QxrdSynchronizedAcquisitionDialogSettings*)
 
 #endif // QXRDSYNCHRONIZEDACQUISITIONDIALOGSETTINGS_H

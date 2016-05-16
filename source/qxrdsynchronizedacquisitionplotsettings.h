@@ -7,7 +7,8 @@ class QxrdSynchronizedAcquisitionPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdSynchronizedAcquisitionPlotSettings(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdSynchronizedAcquisitionPlotSettings(QString name);
+  QxrdSynchronizedAcquisitionPlotSettings();
 
 signals:
 
@@ -15,7 +16,6 @@ public slots:
 
 };
 
-typedef QSharedPointer<QxrdSynchronizedAcquisitionPlotSettings> QxrdSynchronizedAcquisitionPlotSettingsPtr;
-typedef QWeakPointer<QxrdSynchronizedAcquisitionPlotSettings>   QxrdSynchronizedAcquisitionPlotSettingsWPtr;
+Q_DECLARE_METATYPE(QxrdSynchronizedAcquisitionPlotSettings*)
 
 #endif // QXRDSYNCHRONIZEDACQUISITIONPLOTSETTINGS_H

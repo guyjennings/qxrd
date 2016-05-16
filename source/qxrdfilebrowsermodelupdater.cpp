@@ -8,7 +8,7 @@
 #include "qxrdfilebrowsermodelupdaterthread-ptr.h"
 
 QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QString name) :
-  QcepObject("name"),
+  QcepObject(name),
   m_BrowserModel(),
   m_RootPath(""),
   m_FileSystemWatcher(NULL),
@@ -21,7 +21,6 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QString name) :
   if (qcepDebug(DEBUG_BROWSER)) {
     printMessage("Starting Browser Model Updater");
   }
-
 }
 
 void QxrdFileBrowserModelUpdater::initialize(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr parent)

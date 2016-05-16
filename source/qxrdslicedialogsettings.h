@@ -3,7 +3,7 @@
 
 #include "qcepobject.h"
 #include "qcepproperty.h"
-#include "qxrdsliceplotsettings.h"
+#include "qxrdsliceplotsettings-ptr.h"
 #include "qcepsettingssaver-ptr.h"
 
 class QxrdSliceDialogSettings : public QcepObject
@@ -35,8 +35,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(QxrdSliceDialogSettings*)
-
-typedef QSharedPointer<QxrdSliceDialogSettings> QxrdSliceDialogSettingsPtr;
-typedef QWeakPointer<QxrdSliceDialogSettings>   QxrdSliceDialogSettingsWPtr;
 
 #endif // QXRDSLICEDIALOGSETTINGS_H

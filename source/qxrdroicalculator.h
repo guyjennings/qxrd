@@ -19,7 +19,8 @@ class QxrdROICalculator : public QcepObject, public QEnableSharedFromThis<QxrdRO
   Q_OBJECT
 
 public:
-  QxrdROICalculator(QxrdExperimentWPtr exp, QxrdDetectorProcessorWPtr proc);
+  Q_INVOKABLE QxrdROICalculator(QString name);
+  QxrdROICalculator();
   virtual ~QxrdROICalculator();
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICalculatorPtr &proc);
@@ -39,12 +40,11 @@ public slots:
 
 private:
   QMutex                         m_Mutex;
-  QxrdExperimentWPtr             m_Experiment;
-  QxrdDetectorProcessorWPtr      m_Processor;
-
   QxrdROICoordinatesListModelPtr m_ROICoordinatesModel;
 
 public:
 };
+
+Q_DECLARE_METATYPE(QxrdROICalculator*)
 
 #endif // QXRDROICALCULATOR_H

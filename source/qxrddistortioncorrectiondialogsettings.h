@@ -9,19 +9,10 @@ class QxrdDistortionCorrectionDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdDistortionCorrectionDialogSettings(QcepObjectWPtr parent);
-
-public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
-
-signals:
-
-public slots:
-
+  Q_INVOKABLE QxrdDistortionCorrectionDialogSettings(QString name);
+  QxrdDistortionCorrectionDialogSettings();
 };
 
-typedef QSharedPointer<QxrdDistortionCorrectionDialogSettings> QxrdDistortionCorrectionDialogSettingsPtr;
-typedef QWeakPointer<QxrdDistortionCorrectionDialogSettings>   QxrdDistortionCorrectionDialogSettingsWPtr;
+Q_DECLARE_METATYPE(QxrdDistortionCorrectionDialogSettings*)
 
 #endif // QXRDDISTORTIONCORRECTIONDIALOGSETTINGS_H

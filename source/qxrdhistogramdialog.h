@@ -7,7 +7,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata.h"
 #include "qcepmaskdata-ptr.h"
-#include "qxrdhistogramdialogsettings.h"
+#include "qxrdhistogramdialogsettings-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
 class QxrdHistogramDialog : public QDockWidget, public Ui::QxrdHistogramDialog

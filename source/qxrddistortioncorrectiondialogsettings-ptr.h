@@ -1,0 +1,11 @@
+#ifndef QXRDDISTORTIONCORRECTIONDIALOGSETTINGSPTR_H
+#define QXRDDISTORTIONCORRECTIONDIALOGSETTINGSPTR_H
+
+#include <QSharedPointer>
+
+class QxrdDistortionCorrectionDialogSettings;
+
+typedef QSharedPointer<QxrdDistortionCorrectionDialogSettings> QxrdDistortionCorrectionDialogSettingsPtr;
+typedef QWeakPointer<QxrdDistortionCorrectionDialogSettings>   QxrdDistortionCorrectionDialogSettingsWPtr;
+
+#endif // QXRDDISTORTIONCORRECTIONDIALOGSETTINGSPTR_H

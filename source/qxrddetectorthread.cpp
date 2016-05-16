@@ -22,9 +22,9 @@
 
 QxrdDetectorThread::QxrdDetectorThread(QxrdExperimentWPtr    expt,
                                        QxrdAcquisitionWPtr   acq,
-                                       int                   detType, int detNum,
-                                       QcepObjectWPtr        parent) :
-  QxrdThread(parent),
+                                       int                   detType,
+                                       int                   detNum) :
+  QxrdThread(QcepObjectWPtr()),
   m_Experiment(expt),
   m_Acquisition(acq),
   m_Detector(),
@@ -216,8 +216,7 @@ void QxrdDetectorThread::run()
       setObjectName("simulatedDetector");
       det = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment,
                                                       m_Acquisition,
-                                                      m_DetectorNumber,
-                                                      parent()));
+                                                      m_DetectorNumber));
       break;
 
 #ifdef HAVE_PERKIN_ELMER
@@ -225,8 +224,7 @@ void QxrdDetectorThread::run()
       setObjectName("perkinElmerDetector");
       det = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Experiment,
                                                         m_Acquisition,
-                                                        m_DetectorNumber,
-                                                        parent()));
+                                                        m_DetectorNumber));
       break;
 #endif
 
@@ -235,8 +233,7 @@ void QxrdDetectorThread::run()
       setObjectName("pilatusDetector");
       det = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Experiment,
                                                     m_Acquisition,
-                                                    m_DetectorNumber,
-                                                    parent()));
+                                                    m_DetectorNumber));
       break;
       //#endif
 
@@ -245,8 +242,7 @@ void QxrdDetectorThread::run()
       setObjectName("epicsAreaDetector");
       det = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Experiment,
                                                       m_Acquisition,
-                                                      m_DetectorNumber,
-                                                      parent()));
+                                                      m_DetectorNumber));
       break;
 #endif
 
@@ -254,8 +250,7 @@ void QxrdDetectorThread::run()
       setObjectName("fileWatcherDetector");
       det = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Experiment,
                                                         m_Acquisition,
-                                                        m_DetectorNumber,
-                                                        parent()));
+                                                        m_DetectorNumber));
       break;
     }
 
@@ -263,8 +258,7 @@ void QxrdDetectorThread::run()
       setObjectName("simulatedDetector");
       det = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment,
                                                       m_Acquisition,
-                                                      m_DetectorNumber,
-                                                      parent()));
+                                                      m_DetectorNumber));
     }
 
     if (det) {

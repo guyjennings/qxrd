@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "qxrdwindow.h"
 #include "qxrdplotvectorfieldcurve.h"
+#include "qxrddistortioncorrectiondialogsettings.h"
 
 QxrdDistortionCorrectionDialog::QxrdDistortionCorrectionDialog(QxrdDistortionCorrectionPtr dis, QxrdWindowPtr parent) :
   QDockWidget(parent.data()),

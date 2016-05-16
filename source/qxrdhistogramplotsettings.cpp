@@ -1,6 +1,11 @@
 #include "qxrdhistogramplotsettings.h"
 
-QxrdHistogramPlotSettings::QxrdHistogramPlotSettings(QcepObjectWPtr parent) :
-  QcepPlotSettings("histogramPlot", parent)
+QxrdHistogramPlotSettings::QxrdHistogramPlotSettings(QString name) :
+  QcepPlotSettings(name)
+{
+}
+
+QxrdHistogramPlotSettings::QxrdHistogramPlotSettings() :
+  QxrdHistogramPlotSettings("histogramPlot")
 {
 }

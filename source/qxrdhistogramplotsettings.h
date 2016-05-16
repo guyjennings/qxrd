@@ -7,15 +7,13 @@ class QxrdHistogramPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdHistogramPlotSettings(QcepObjectWPtr parent);
-  
+  Q_INVOKABLE QxrdHistogramPlotSettings(QString name);
+   QxrdHistogramPlotSettings();
+
 signals:
   
 public slots:
   
 };
-
-typedef QSharedPointer<QxrdHistogramPlotSettings> QxrdHistogramPlotSettingsPtr;
-typedef QWeakPointer<QxrdHistogramPlotSettings>   QxrdHistogramPlotSettingsWPtr;
 
 #endif // QXRDHISTOGRAMPLOTSETTINGS_H

@@ -24,6 +24,7 @@ public:
   QxrdPolarTransform();
   virtual ~QxrdPolarTransform();
 
+  QxrdExperimentWPtr experiment() const;
   QxrdIntegratorWPtr integrator() const;
 
 //  void execute();
@@ -81,7 +82,6 @@ public:
 
 private:
   mutable QMutex         m_Mutex;
-  QxrdExperimentWPtr     m_Experiment;
   QxrdIntegratorCachePtr m_IntegratorCache;
 };
 

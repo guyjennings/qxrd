@@ -14,9 +14,8 @@
 QxrdDetector::QxrdDetector(QxrdExperimentWPtr    expt,
                            QxrdAcquisitionWPtr   acq,
                            int                   detType,
-                           int                   detNum,
-                           QcepObjectWPtr        parent) :
-  QcepObject("detector", parent),
+                           int                   detNum) :
+  QcepObject("detector"),
   m_Experiment(expt),
   m_Acquisition(acq),
   m_Processor(),
@@ -135,33 +134,6 @@ QxrdROICoordinatesPtr QxrdDetector::roi(int i)
   }
 
   return res;
-}
-
-void QxrdDetector::printMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->printMessage(msg, ts);
-  }
-}
-
-void QxrdDetector::criticalMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->criticalMessage(msg);
-  }
-}
-
-void QxrdDetector::statusMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->statusMessage(msg);
-  }
 }
 
 void QxrdDetector::readSettings(QSettings *settings, QString section)

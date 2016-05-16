@@ -8,15 +8,10 @@ class QxrdDistortionCorrectionPlotSettings : public QxrdImagePlotSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdDistortionCorrectionPlotSettings(QcepObjectWPtr parent);
-
-signals:
-
-public slots:
-
+  Q_INVOKABLE QxrdDistortionCorrectionPlotSettings(QString name);
+  QxrdDistortionCorrectionPlotSettings();
 };
 
-typedef QSharedPointer<QxrdDistortionCorrectionPlotSettings> QxrdDistortionCorrectionPlotSettingsPtr;
-typedef QWeakPointer<QxrdDistortionCorrectionPlotSettings>   QxrdDistortionCorrectionPlotSettingsWPtr;
+Q_DECLARE_METATYPE(QxrdDistortionCorrectionPlotSettings*)
 
 #endif // QXRDDISTORTIONCORRECTIONPLOTSETTINGS_H

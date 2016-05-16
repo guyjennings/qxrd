@@ -3,32 +3,32 @@
 
 #include <QObject>
 #include "qcepproperty.h"
-#include "qxrdhistogramplotsettings.h"
+#include "qcepobject.h"
+#include "qxrdhistogramplotsettings-ptr.h"
 
 class QxrdHistogramDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdHistogramDialogSettings(QcepObjectWPtr parent);
-  
-public:
-  Q_PROPERTY(QRectF histogramRect READ get_HistogramRect WRITE set_HistogramRect)
-  QCEP_DOUBLE_RECT_PROPERTY(HistogramRect)
+  Q_INVOKABLE QxrdHistogramDialogSettings(QString name);
+  QxrdHistogramDialogSettings();
 
 public:
+  virtual void addChildPtr(QcepObjectPtr child);
+
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
   QxrdHistogramPlotSettingsWPtr histogramPlotSettings();
-signals:
-  
-public slots:
-  
+
+public:
+  Q_PROPERTY(QRectF histogramRect READ get_HistogramRect WRITE set_HistogramRect)
+  QCEP_DOUBLE_RECT_PROPERTY(HistogramRect)
+
 private:
   QxrdHistogramPlotSettingsPtr  m_HistogramPlotSettings;
 };
 
-typedef QSharedPointer<QxrdHistogramDialogSettings> QxrdHistogramDialogSettingsPtr;
-typedef QWeakPointer<QxrdHistogramDialogSettings>   QxrdHistogramDialogSettingsWPtr;
+Q_DECLARE_METATYPE(QxrdHistogramDialogSettings*)
 
 #endif // QXRDHISTOGRAMDIALOGSETTINGS_H

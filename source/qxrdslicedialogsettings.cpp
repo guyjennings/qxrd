@@ -1,6 +1,7 @@
 #include "qxrdslicedialogsettings.h"
 #include "qcepsettingssaver.h"
 #include "qcepmutexlocker.h"
+#include "qxrdsliceplotsettings.h"
 
 QxrdSliceDialogSettings::QxrdSliceDialogSettings(QString name) :
   QcepObject(name),
@@ -11,11 +12,13 @@ QxrdSliceDialogSettings::QxrdSliceDialogSettings(QString name) :
 QxrdSliceDialogSettings::QxrdSliceDialogSettings()
   : QxrdSliceDialogSettings("sliceDialogSettings")
 {
-  addChildPtr(new QxrdSlicePlotSettings());
+  addChildPtr(QxrdSlicePlotSettingsPtr(new QxrdSlicePlotSettings()));
 }
 
 void QxrdSliceDialogSettings::addChildPtr(QcepObjectPtr child)
 {
+  QcepObject::addChildPtr(child);
+
   if (checkPointer<QxrdSlicePlotSettings>(child, m_SlicePlotSettings)) {}
 }
 

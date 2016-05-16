@@ -224,7 +224,7 @@ void QxrdDetectorControlWindow::doAppendROI()
       int roiType = choice->data().toInt();
 
       QxrdROICoordinatesPtr roi =
-          QxrdROICoordinatesPtr(new QxrdROICoordinates(m_Experiment, roiType));
+          QxrdROICoordinatesPtr(new QxrdROICoordinates(roiType));
 
       roiModel->append(roi);
     }

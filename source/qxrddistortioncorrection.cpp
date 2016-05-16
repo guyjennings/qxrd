@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include "qxrdexperiment.h"
 
-QxrdDistortionCorrection::QxrdDistortionCorrection(QxrdExperimentWPtr expt)
-  : QcepObject("distortion", expt),
+QxrdDistortionCorrection::QxrdDistortionCorrection(QString name)
+  : QcepObject(name),
     m_DistortionImagePath(this, "distortionImagePath", "", "File path for distortion calibration image"),
     m_P0(this, "p0", QPointF(100,100), "Origin of distortion image grid"),
     m_P1(this, "p1", QPointF(200,100), "1st X Position on distortion grid"),
@@ -30,8 +30,12 @@ QxrdDistortionCorrection::QxrdDistortionCorrection(QxrdExperimentWPtr expt)
     m_WNom(this, "wNom", 2, "Nominal initial grid peak width (pixels)"),
     m_RatMin(this, "ratMin", 3, "Minimum acceptable peak/background ratio for grid peaks"),
     m_HgtMin(this, "hgtMin", 1000, "Minimum acceptable peak height for grid peaks"),
-    m_DistMax(this, "distMax", QPointF(5,5), "Maximum acceptable grid peak position distance from nominal"),
-    m_Experiment(expt)
+    m_DistMax(this, "distMax", QPointF(5,5), "Maximum acceptable grid peak position distance from nominal")
+{
+}
+
+QxrdDistortionCorrection::QxrdDistortionCorrection() :
+  QxrdDistortionCorrection("distortion")
 {
 }
 
@@ -154,8 +158,6 @@ void QxrdDistortionCorrection::evalCalibrationGrid()
 void QxrdDistortionCorrection::dumpCalibrationGrid(QString path)
 {
   int n = get_IVals().count();
-
-  QxrdExperimentPtr exp(m_Experiment);
 
   FILE *f = fopen(qPrintable(path), "a+");
 

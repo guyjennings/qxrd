@@ -10,7 +10,7 @@ class QxrdDetectorPilatusRemote : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdDetectorPilatusRemote(QcepObjectWPtr owner);
+  QxrdDetectorPilatusRemote();
 
 signals:
 

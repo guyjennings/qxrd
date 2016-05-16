@@ -82,10 +82,10 @@ QxrdAcquisition::QxrdAcquisition() :
   }
 
   addChildPtr(QxrdSynchronizedAcquisitionPtr(
-        new QxrdSynchronizedAcquisition("synchronized"));
+        new QxrdSynchronizedAcquisition("synchronized")));
 
   addChildPtr(QxrdAcquisitionExtraInputsPtr(
-        new QxrdAcquisitionExtraInputs("");
+        new QxrdAcquisitionExtraInputs("")));
 
 
   connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
@@ -104,11 +104,12 @@ QxrdAcquisition::QxrdAcquisition() :
 
 void QxrdAcquisition::addChildPtr(QcepObjectPtr child)
 {
+  QxrdAcquisitionInterface::addChildPtr(child);
+
   if (checkPointer<QxrdSynchronizedAcquisition>(child, m_SynchronizedAcquisition)) {}
   if (checkPointer<QxrdAcquisitionExtraInputs>(child, m_AcquisitionExtraInputs)) {
     connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
             this, &QxrdAcquisition::extraInputsChanged);
-
   }
 }
 
@@ -150,14 +151,27 @@ QxrdAcquisition::~QxrdAcquisition()
 //  }
 }
 
-QxrdExperimentWPtr QxrdAcquisition::experiment()
+QxrdAcquisitionWPtr QxrdAcquisition::myself()
 {
-  return m_Experiment;
+  return qSharedPointerDynamicCast<QxrdAcquisition>(sharedFromThis());
 }
 
-QxrdDataProcessorWPtr QxrdAcquisition::dataProcessor()
+QxrdExperimentWPtr QxrdAcquisition::experiment() const
 {
-  return m_DataProcessor;
+  QxrdExperimentWPtr expt = qSharedPointerDynamicCast<QxrdExperiment>(parentPtr());
+
+  return expt;
+}
+
+QxrdDataProcessorWPtr QxrdAcquisition::dataProcessor() const
+{
+  QxrdExperimentPtr expt(experiment());
+
+  if (expt) {
+    return expt->dataProcessor();
+  } else {
+    return QxrdDataProcessorWPtr();
+  }
 }
 
 QxrdAcquisitionScalerModelPtr QxrdAcquisition::acquisitionScalerModel() const
@@ -273,7 +287,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
     int detType = settings->value("detectorType", 0).toInt();
 
     QxrdDetectorThreadPtr detThread = QxrdDetectorThreadPtr(
-          new QxrdDetectorThread(experiment(), myself(), detType, i, sharedFromThis()));
+          new QxrdDetectorThread(experiment(), myself(), detType, i));
 
     if (detThread) {
       detThread->start();
@@ -312,7 +326,7 @@ void QxrdAcquisition::appendDetector(int detType)
     int nDet = get_DetectorCount();
 
     QxrdDetectorThreadPtr detThread = QxrdDetectorThreadPtr(
-          new QxrdDetectorThread(experiment(), myself(), detType, nDet, sharedFromThis()));
+          new QxrdDetectorThread(experiment(), myself(), detType, nDet));
 
     if (detThread) {
       detThread->start();
@@ -345,7 +359,7 @@ void QxrdAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
         int detType = proxy->detectorType();
 
        detThread = QxrdDetectorThreadPtr(
-             new QxrdDetectorThread(experiment(), myself(), detType, nDet, sharedFromThis()));
+             new QxrdDetectorThread(experiment(), myself(), detType, nDet));
 
        detThread->start();
 
@@ -771,7 +785,7 @@ void QxrdAcquisition::processImage(QString filePattern, QString extent, int file
       image -> set_NPhases(nPhases);
     }
 
-    QxrdDataProcessorPtr processor(m_DataProcessor);
+    QxrdDataProcessorPtr processor(dataProcessor());
 
     if (processor) {
       processor -> acquiredInt32Image(image, overflow);
@@ -820,10 +834,10 @@ QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindowWPtr win)
   if (win) {
     m_Window = win;
 
-    m_ControlPanel = new QxrdAcquisitionDialog(m_Experiment,
+    m_ControlPanel = new QxrdAcquisitionDialog(experiment(),
                                                m_Window,
                                                myself(),
-                                               m_DataProcessor,
+                                               dataProcessor(),
                                                m_Window.data());
 
     return m_ControlPanel;
@@ -1427,7 +1441,7 @@ void QxrdAcquisition::onIdleTimeout()
 
 void QxrdAcquisition::Message(QString msg)
 {
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     expt->statusMessage(msg);

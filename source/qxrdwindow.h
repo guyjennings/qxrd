@@ -34,7 +34,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdsynchronizedacquisitiondialog-ptr.h"
 #include "qxrdacquisitionextrainputsdialog-ptr.h"
-#include "qxrdwindowsettings.h"
+#include "qxrdwindowsettings-ptr.h"
 #include "qcepobjectnamer.h"
 
 class QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow, public QEnableSharedFromThis<QxrdWindow>

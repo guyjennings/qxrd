@@ -22,8 +22,7 @@ class QxrdAcquisitionInterface : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdAcquisitionInterface(QxrdExperimentWPtr doc,
-                           QxrdDataProcessorWPtr proc);
+  QxrdAcquisitionInterface(QString name);
   ~QxrdAcquisitionInterface();
 
   virtual void initialize();

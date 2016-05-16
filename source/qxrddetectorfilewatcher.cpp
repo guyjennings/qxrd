@@ -4,9 +4,8 @@
 
 QxrdDetectorFileWatcher::QxrdDetectorFileWatcher(QxrdExperimentWPtr    expt,
                                                  QxrdAcquisitionWPtr   acq,
-                                                 int                   detNum,
-                                                 QcepObjectWPtr        parent) :
-  QxrdDetector(expt, acq, QxrdDetectorThread::FileWatcherDetector, detNum, parent)
+                                                 int                   detNum) :
+  QxrdDetector(expt, acq, QxrdDetectorThread::FileWatcherDetector, detNum)
 {
 }
 

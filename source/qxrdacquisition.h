@@ -45,6 +45,8 @@ public:
 
   void setWindow(QxrdWindowWPtr win);
 
+  QxrdAcquisitionWPtr myself();
+
 public slots:
   void propertyList();
   void Message(QString cmd);
@@ -107,8 +109,8 @@ protected:
 
   void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
-  QxrdExperimentWPtr experiment();
-  QxrdDataProcessorWPtr dataProcessor();
+  QxrdExperimentWPtr experiment() const;
+  QxrdDataProcessorWPtr dataProcessor() const;
 
 protected slots:
   void onIdleTimeout();

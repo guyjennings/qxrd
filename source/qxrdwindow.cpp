@@ -1,5 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdwindow.h"
+#include "qxrdwindowsettings.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisitiondialog.h"
@@ -37,6 +38,10 @@
 #include "qxrdpolartransformdialog.h"
 #include "qxrdpolarnormalizationdialog.h"
 #include "qxrdapplicationsettings.h"
+#include "qxrdfilebrowsersettings.h"
+#include "qxrdcenterfinderplotsettings.h"
+#include "qxrddistortioncorrectionplotsettings.h"
+#include "qxrdintegratorplotsettings.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>

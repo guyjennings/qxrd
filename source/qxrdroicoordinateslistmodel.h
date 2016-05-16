@@ -17,7 +17,7 @@ class QxrdROICoordinatesListModel : public QAbstractListModel
   Q_OBJECT
 
 public:
-  QxrdROICoordinatesListModel(QxrdExperimentWPtr exp);
+  QxrdROICoordinatesListModel();
   virtual ~QxrdROICoordinatesListModel();
 
   void readSettings(QSettings *settings, QString section);
@@ -86,7 +86,6 @@ private:
 
 private:
   QMutex                         m_Mutex;
-  QxrdExperimentWPtr             m_Experiment;
   QVector<QxrdROICoordinatesPtr> m_ROICoordinates;
 };
 

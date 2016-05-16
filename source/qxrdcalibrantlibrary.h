@@ -14,8 +14,11 @@ class QxrdCalibrantLibrary : public QcepObject
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdCalibrantLibrary(QxrdExperimentWPtr exp);
+  Q_INVOKABLE QxrdCalibrantLibrary(QString name);
+  QxrdCalibrantLibrary();
   virtual ~QxrdCalibrantLibrary();
+
+  virtual void addChildPtr(QcepObjectPtr child);
 
 public slots:
   int count();

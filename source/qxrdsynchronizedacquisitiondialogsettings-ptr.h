@@ -1,0 +1,11 @@
+#ifndef QXRDSYNCHRONIZEDACQUISITIONDIALOGSETTINGSPTR_H
+#define QXRDSYNCHRONIZEDACQUISITIONDIALOGSETTINGSPTR_H
+
+#include <QSharedPointer>
+
+class QxrdSynchronizedAcquisitionDialogSettings;
+
+typedef QSharedPointer<QxrdSynchronizedAcquisitionDialogSettings> QxrdSynchronizedAcquisitionDialogSettingsPtr;
+typedef QWeakPointer<QxrdSynchronizedAcquisitionDialogSettings>   QxrdSynchronizedAcquisitionDialogSettingsWPtr;
+
+#endif // QXRDSYNCHRONIZEDACQUISITIONDIALOGSETTINGSPTR_H

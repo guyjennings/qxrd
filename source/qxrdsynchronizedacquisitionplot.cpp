@@ -1,4 +1,5 @@
 #include "qxrdsynchronizedacquisitionplot.h"
+#include "qxrdsynchronizedacquisitionplotsettings.h"
 
 QxrdSynchronizedAcquisitionPlot::QxrdSynchronizedAcquisitionPlot(QWidget *parent) :
     QcepPlot(parent)

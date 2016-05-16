@@ -10,7 +10,7 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdfilebrowsermodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdfilebrowsersettings.h"
+#include "qxrdfilebrowsersettings-ptr.h"
 
 class QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
 {

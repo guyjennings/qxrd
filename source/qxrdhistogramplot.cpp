@@ -1,4 +1,5 @@
 #include "qxrdhistogramplot.h"
+#include "qxrdhistogramplotsettings.h"
 
 QxrdHistogramPlot::QxrdHistogramPlot(QWidget *parent) :
     QcepPlot(parent)

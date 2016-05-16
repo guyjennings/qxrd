@@ -9,3 +9,27 @@ QxrdFileBrowserSettings::QxrdFileBrowserSettings(QString name) :
 {
 }
 
+QxrdFileBrowserSettings::QxrdFileBrowserSettings() :
+  QxrdFileBrowserSettings("fileBrowserSettings")
+{
+}
+
+QxrdInputFileBrowserSettings::QxrdInputFileBrowserSettings(QString name) :
+  QxrdFileBrowserSettings(name)
+{
+}
+
+QxrdInputFileBrowserSettings::QxrdInputFileBrowserSettings() :
+  QxrdInputFileBrowserSettings("inputFileBrowserSettings")
+{
+}
+
+QxrdOutputFileBrowserSettings::QxrdOutputFileBrowserSettings(QString name) :
+  QxrdFileBrowserSettings(name)
+{
+}
+
+QxrdOutputFileBrowserSettings::QxrdOutputFileBrowserSettings() :
+  QxrdOutputFileBrowserSettings("outputFileBrowserSettings")
+{
+}

@@ -14,14 +14,13 @@
 
 QxrdDetectorPilatus::QxrdDetectorPilatus(QxrdExperimentWPtr    expt,
                                          QxrdAcquisitionWPtr   acq,
-                                         int                   detNum,
-                                         QcepObjectWPtr        parent) :
-  QxrdDetector(expt, acq, QxrdDetectorThread::PilatusDetector, detNum, parent),
+                                         int                   detNum) :
+  QxrdDetector(expt, acq, QxrdDetectorThread::PilatusDetector, detNum),
   m_PilatusSocket(),
   m_ExposureTime(-1),
   m_ExposuresPerFrame(-1),
   m_ExposureFrameCount(-1),
-  m_Remote(new QxrdDetectorPilatusRemote(sharedFromThis())),
+  m_Remote(new QxrdDetectorPilatusRemote()),
   m_PilatusHost            (this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
   m_PilatusPort            (this, "pilatusPort",          41234,         "Camserver Port Number"),
   m_PilatusUser            (this, "pilatusUser",          "det",         "Camserver User Name"),

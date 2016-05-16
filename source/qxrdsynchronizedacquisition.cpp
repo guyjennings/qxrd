@@ -25,6 +25,11 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
 #endif
 }
 
+QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition() :
+  QxrdSynchronizedAcquisition("synchronized")
+{
+}
+
 QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
 {
 #ifndef QT_NO_DEBUG

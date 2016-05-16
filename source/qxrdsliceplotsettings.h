@@ -18,7 +18,4 @@ public slots:
 
 Q_DECLARE_METATYPE(QxrdSlicePlotSettings*)
 
-typedef QSharedPointer<QxrdSlicePlotSettings> QxrdSlicePlotSettingsPtr;
-typedef QWeakPointer<QxrdSlicePlotSettings>   QxrdSlicePlotSettingsWPtr;
-
 #endif // QXRDSLICEPLOTSETTINGS_H

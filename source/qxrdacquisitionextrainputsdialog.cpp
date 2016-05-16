@@ -6,6 +6,8 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include "qxrddebug.h"
+#include "qxrdacquisitionextrainputsdialogsettings.h"
+#include "qxrdacquisitionextrainputsplotsettings.h"
 
 QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisitionExtraInputsDialogSettingsWPtr set, QWidget *parent, QxrdAcquisitionWPtr acq) :
   QDockWidget(parent),

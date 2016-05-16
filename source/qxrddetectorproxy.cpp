@@ -10,7 +10,7 @@
 QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
                                      QxrdDetectorPtr       det,
                                      QxrdAcquisitionPtr    acq)
-  : QcepObject("detectorProxy", acq),
+  : QcepObject("detectorProxy"),
     m_Acquisition(acq),
     m_DetectorThread(thr),
     m_Detector(det),
@@ -26,7 +26,7 @@ QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
 }
 
 QxrdDetectorProxy::QxrdDetectorProxy(int detectorType, QxrdAcquisitionPtr acq)
-  : QcepObject("detectorProxy", acq),
+  : QcepObject("detectorProxy"),
     m_Acquisition(acq),
     m_DetectorThread(),
     m_Detector(),

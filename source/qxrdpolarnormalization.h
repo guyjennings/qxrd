@@ -16,7 +16,7 @@ class QxrdPolarNormalization : public QcepObject
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdPolarNormalization(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdPolarNormalization(QString name);
   QxrdPolarNormalization();
   QcepDataObjectPtr transform(QcepDoubleImageDataPtr img);
 
@@ -41,9 +41,6 @@ public:
 
   Q_PROPERTY(double selfNormalizeMax READ get_SelfNormalizeMax WRITE set_SelfNormalizeMax)
   QCEP_DOUBLE_PROPERTY(SelfNormalizeMax)
-
-private:
-  mutable QMutex        m_Mutex;
 };
 
 Q_DECLARE_METATYPE(QxrdPolarNormalization*)

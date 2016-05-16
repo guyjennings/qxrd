@@ -4,6 +4,8 @@
 #include <QSettings>
 #include "qcepsettingssaver.h"
 #include "qxrddebug.h"
+#include "qxrdslicedialogsettings.h"
+#include "qxrdsliceplotsettings.h"
 
 QxrdSliceDialog::QxrdSliceDialog(QxrdSliceDialogSettingsWPtr settings, QWidget *parent) :
   QDockWidget(parent),

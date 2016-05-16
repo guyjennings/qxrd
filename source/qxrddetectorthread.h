@@ -14,8 +14,7 @@ public:
   explicit QxrdDetectorThread(QxrdExperimentWPtr expt,
                               QxrdAcquisitionWPtr acq,
                               int detType,
-                              int detNum,
-                              QcepObjectWPtr parent);
+                              int detNum);
   virtual ~QxrdDetectorThread();
 
   QxrdDetectorWPtr detector() const;

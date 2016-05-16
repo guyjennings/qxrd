@@ -354,7 +354,27 @@ HEADERS += TODO.h \
     qxrdintegratorparmsdialog.h \
     qxrddataprocessorbase-ptr.h \
     qxrdapplicationsettings.h \
-    qxrdapplicationsettings-ptr.h
+    qxrdapplicationsettings-ptr.h \
+    qxrdintegratorplotsettings.h \
+    qxrdintegratorplotsettings-ptr.h \
+    qxrddistortioncorrectionplotsettings-ptr.h \
+    qxrddistortioncorrectiondialogsettings-ptr.h \
+    qxrdacquisitionextrainputsdialogsettings-ptr.h \
+    qxrdacquisitionextrainputsplotsettings.h \
+    qxrdacquisitionextrainputsplotsettings-ptr.h \
+    qxrdhistogramplotsettings-ptr.h \
+    qxrdhistogramdialogsettings-ptr.h \
+    qxrdcenterfinderplotsettings-ptr.h \
+    qxrdfilebrowsersettings-ptr.h \
+    qxrdinfodialogsettings-ptr.h \
+    qxrdscriptdialogsettings-ptr.h \
+    qxrdsynchronizedacquisitiondialogsettings-ptr.h \
+    qxrdsynchronizedacquisitionplotsettings-ptr.h \
+    qxrdslicedialogsettings-ptr.h \
+    qxrdsliceplotsettings-ptr.h \
+    qxrdwindowsettings-ptr.h \
+    qxrdroicoordinateslist.h \
+    qxrdroicoordinateslist-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -526,7 +546,10 @@ SOURCES += qxrd.cpp \
     qxrdcalibrantdspacings.cpp \
     qxrdcalibrantdspacing.cpp \
     qxrdintegratorparmsdialog.cpp \
-    qxrdapplicationsettings.cpp
+    qxrdapplicationsettings.cpp \
+    qxrdintegratorplotsettings.cpp \
+    qxrdacquisitionextrainputsplotsettings.cpp \
+    qxrdroicoordinateslist.cpp
 
 OTHER_FILES += testImage.js
 

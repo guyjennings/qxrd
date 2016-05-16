@@ -1,29 +1,24 @@
 #include "qxrdcalibrant.h"
-#include "qxrdcalibrantlibrary.h"
 #include "qxrdcalibrantdspacing.h"
 #include "qxrdcalibrantdspacings.h"
-#include "qcepsettingssaver.h"
-#include "qxrdexperiment.h"
 #include <QScriptEngine>
 #include "qxrddebug.h"
 
 #include <qmath.h>
 
-QxrdCalibrant::QxrdCalibrant(QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib, int index)
-  : QcepObject("calibrant", lib),
-    m_Index(this, "index", index, "Calibrant Index"),
+QxrdCalibrant::QxrdCalibrant(QString name)
+  : QcepObject(name),
     m_IsUsed(this, "isUsed", 0, "Is Calibrant used?"),
+    m_Index(this, "index", 0, "Calibrant Index"),
     m_Flags(this, "flags", 0, "Calibrant flags"),
     m_Description(this, "description", "Description", "Calibrant Description"),
     m_Symmetry(this, "symmetry", 0, "Calibrant Symmetry"),
-    m_A(this, "a", 1, "calibrant a-axis"),
-    m_B(this, "b", 1, "calibrant b-axis"),
-    m_C(this, "c", 1, "calibrant c-axis"),
-    m_Alpha(this, "alpha", 90, "calibrant alpha angle (deg)"),
-    m_Beta(this, "beta", 90, "calibrant beta angle (deg)"),
-    m_Gamma(this, "gamma", 90, "calibrant gamma angle (deg)"),
-    m_Experiment(exp),
-    m_CalibrantLibrary(lib)
+    m_A(this, "a", 1.0, "calibrant a-axis"),
+    m_B(this, "b", 1.0, "calibrant b-axis"),
+    m_C(this, "c", 1.0, "calibrant c-axis"),
+    m_Alpha(this, "alpha", 90.0, "calibrant alpha angle (deg)"),
+    m_Beta(this, "beta", 90.0, "calibrant beta angle (deg)"),
+    m_Gamma(this, "gamma", 90.0, "calibrant gamma angle (deg)")
 {
 }
 

@@ -10,7 +10,8 @@ class QxrdFileBrowserSettings : public QcepObject
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdFileBrowserSettings(QString name);
-  
+  QxrdFileBrowserSettings();
+
 public:
   Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter)
   QCEP_INTEGER_PROPERTY(BrowserFilter)
@@ -22,7 +23,28 @@ public:
   QCEP_STRING_PROPERTY(RootDirectory)
 };
 
-typedef QSharedPointer<QxrdFileBrowserSettings> QxrdFileBrowserSettingsPtr;
-typedef QWeakPointer<QxrdFileBrowserSettings>   QxrdFileBrowserSettingsWPtr;
+Q_DECLARE_METATYPE(QxrdFileBrowserSettings*)
+
+class QxrdInputFileBrowserSettings : public QxrdFileBrowserSettings
+{
+  Q_OBJECT
+
+public:
+  Q_INVOKABLE QxrdInputFileBrowserSettings(QString name);
+  QxrdInputFileBrowserSettings();
+};
+
+Q_DECLARE_METATYPE(QxrdInputFileBrowserSettings*)
+
+class QxrdOutputFileBrowserSettings : public QxrdFileBrowserSettings
+{
+  Q_OBJECT
+
+public:
+  Q_INVOKABLE QxrdOutputFileBrowserSettings(QString name);
+  QxrdOutputFileBrowserSettings();
+};
+
+Q_DECLARE_METATYPE(QxrdOutputFileBrowserSettings*)
 
 #endif // QXRDFILEBROWSERSETTINGS_H

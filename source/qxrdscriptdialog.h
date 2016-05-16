@@ -4,7 +4,7 @@
 #include <QDockWidget>
 #include "ui_qxrdscriptdialog.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdscriptdialogsettings.h"
+#include "qxrdscriptdialogsettings-ptr.h"
 
 class QxrdScriptDialog : public QDockWidget, public Ui::QxrdScriptDialog
 {
@@ -16,7 +16,6 @@ public:
 
 private:
   QxrdScriptDialogSettingsWPtr m_ScriptDialogSettings;
-  QxrdExperimentWPtr           m_Experiment;
 };
 
 #endif // QXRDSCRIPTDIALOG_H

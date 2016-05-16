@@ -4,7 +4,7 @@
 #include <QDockWidget>
 #include "qxrddistortioncorrection-ptr.h"
 #include "ui_qxrddistortioncorrectiondialog.h"
-#include "qxrddistortioncorrectiondialogsettings.h"
+#include "qxrddistortioncorrectiondialogsettings-ptr.h"
 #include "qxrdwindow-ptr.h"
 
 class QxrdDistortionCorrectionDialog : public QDockWidget, public Ui::QxrdDistortionCorrectionDialog

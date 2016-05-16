@@ -3,13 +3,12 @@
 #include <QtMath>
 #include <QMatrix4x4>
 
-QxrdROICoordinates::QxrdROICoordinates(QxrdExperimentWPtr    exp,
-                                       int                   roiType,
+QxrdROICoordinates::QxrdROICoordinates(int                   roiType,
                                        double                left,
                                        double                top,
                                        double                right,
                                        double                bottom)
-  : QcepObject("coords", exp),
+  : QcepObject("coords"),
     m_RoiType(this, "roiType", roiType, "ROI Type"),
     m_RoiTypeName(this, "roiTypeName", roiTypeName(roiType), "ROI Type Name"),
     m_Coords(this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords"),

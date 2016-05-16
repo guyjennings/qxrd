@@ -82,6 +82,11 @@ QxrdIntegrator::QxrdIntegrator(QString name)
   connect(prop_SelfNormalizationMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
 }
 
+QxrdIntegrator::QxrdIntegrator() :
+  QxrdIntegrator("integrator")
+{
+}
+
 QxrdIntegrator::~QxrdIntegrator()
 {
 #ifndef QT_NO_DEBUG

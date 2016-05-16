@@ -1,11 +1,25 @@
 #include "qxrdacquisitionextrainputsdialogsettings.h"
 #include "qcepplotsettings.h"
 #include "qcepmutexlocker.h"
+#include "qxrdacquisitionextrainputsplotsettings.h"
 
-QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettings(QcepObjectWPtr parent) :
-  QcepObject("extraInputsDialog", parent)
+QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettings(QString name) :
+  QcepObject(name)
 {
-  m_AcquisitionExtraInputsPlotSettings = QcepPlotSettingsPtr(new QcepPlotSettings("extraInputsPlot", parent));
+}
+
+QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettings() :
+  QxrdAcquisitionExtraInputsDialogSettings("extraInputsDialog")
+{
+  addChildPtr(QxrdAcquisitionExtraInputsPlotSettingsPtr(
+                new QxrdAcquisitionExtraInputsPlotSettings()));
+}
+
+void QxrdAcquisitionExtraInputsDialogSettings::addChildPtr(QcepObjectPtr child)
+{
+  QcepObject::addChildPtr(child);
+
+  if (checkPointer<QxrdAcquisitionExtraInputsPlotSettings>(child, m_AcquisitionExtraInputsPlotSettings)) {}
 }
 
 void QxrdAcquisitionExtraInputsDialogSettings::readSettings(QSettings *settings, QString section)
@@ -26,7 +40,7 @@ void QxrdAcquisitionExtraInputsDialogSettings::writeSettings(QSettings *settings
   m_AcquisitionExtraInputsPlotSettings->writeSettings(settings, section+"/plot");
 }
 
-QcepPlotSettingsWPtr QxrdAcquisitionExtraInputsDialogSettings::plotSettings() const
+QxrdAcquisitionExtraInputsPlotSettingsWPtr QxrdAcquisitionExtraInputsDialogSettings::plotSettings() const
 {
   return m_AcquisitionExtraInputsPlotSettings;
 }

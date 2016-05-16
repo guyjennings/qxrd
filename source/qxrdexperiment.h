@@ -26,7 +26,7 @@
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdwindow-ptr.h"
-#include "qxrdwindowsettings.h"
+#include "qxrdwindowsettings-ptr.h"
 #include "qxrdscriptengine.h"
 #include "qxrdscriptengine-ptr.h"
 #include "qxrdscriptenginethread.h"

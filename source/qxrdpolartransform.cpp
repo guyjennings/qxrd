@@ -24,8 +24,12 @@ QxrdPolarTransform::QxrdPolarTransform(QString name) :
   m_RadialStep(this, "radialStep", 0.001, "Radial Integration Step Size"),
   m_RadialNSteps(this, "radialNSteps", 0, "Radial Integration Number of Steps"),
   m_RadialStart(this, "radialStart", 0, "Radial Integration Start"),
-  m_RadialEnd(this, "radialEnd", 100000, "Radial Integration End"),
-  m_Experiment(exp)
+  m_RadialEnd(this, "radialEnd", 100000, "Radial Integration End")
+{
+}
+
+QxrdPolarTransform::QxrdPolarTransform() :
+  QxrdPolarTransform("polarTransform")
 {
 }
 
@@ -33,11 +37,18 @@ QxrdPolarTransform::~QxrdPolarTransform()
 {
 }
 
+QxrdExperimentWPtr QxrdPolarTransform::experiment() const
+{
+  QxrdExperimentWPtr expt = qSharedPointerDynamicCast<QxrdExperiment>(parentPtr());
+
+  return expt;
+}
+
 QxrdIntegratorWPtr QxrdPolarTransform::integrator() const
 {
   QxrdIntegratorWPtr res;
 
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     res = expt->integrator();
@@ -80,7 +91,7 @@ QcepDataObjectPtr QxrdPolarTransform::transform(QcepDoubleImageDataPtr img, Qcep
 {
   QcepDataObjectPtr res;
 
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QxrdDataProcessorPtr proc (expt->dataProcessor());

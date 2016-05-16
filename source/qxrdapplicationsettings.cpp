@@ -41,7 +41,7 @@ QxrdApplicationSettings::~QxrdApplicationSettings()
 void QxrdApplicationSettings::init()
 {
   m_Allocator = QcepAllocatorPtr(
-        new QcepAllocator(sharedFromThis()));
+        new QcepAllocator("allocator"));
 }
 
 QStringList QxrdApplicationSettings::makeStringListFromArgs(int argc, char **argv)

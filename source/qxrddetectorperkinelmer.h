@@ -17,7 +17,7 @@ class QxrdDetectorPerkinElmer : public QxrdDetector
 {
     Q_OBJECT
 public:
-  explicit QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum, QcepObjectWPtr parent);
+  explicit QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
   virtual ~QxrdDetectorPerkinElmer();
 
   int detectorNumber() const;

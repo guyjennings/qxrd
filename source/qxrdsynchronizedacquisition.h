@@ -17,6 +17,7 @@ class QxrdSynchronizedAcquisition : public QcepObject
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdSynchronizedAcquisition(QString name);
+  QxrdSynchronizedAcquisition();
   virtual ~QxrdSynchronizedAcquisition();
 
 public:

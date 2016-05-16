@@ -5,11 +5,12 @@
 #include "ui_qxrdcalibrantdialog.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 #include "qxrdcalibrant-ptr.h"
-#include "qxrdcalibrantdspacings.h"
+#include "qxrdcalibrantdspacings-ptr.h"
 #include "qxrdcalibrantdspacingsmodel-ptr.h"
 #include "qxrdcalibrantlibrarymodel-ptr.h"
 #include "qxrdcalibrant.h"
 #include "qxrdcenterfinder-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 class QxrdCalibrantDialog : public QDockWidget, public Ui::QxrdCalibrantDialog
 {

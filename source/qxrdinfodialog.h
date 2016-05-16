@@ -5,7 +5,7 @@
 #include "ui_qxrdinfodialog.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
-#include "qxrdinfodialogsettings.h"
+#include "qxrdinfodialogsettings-ptr.h"
 
 class QxrdInfoDialog : public QDockWidget, public Ui::QxrdInfoDialog
 {

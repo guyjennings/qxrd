@@ -3,14 +3,9 @@
 
 #include "qcepmacros.h"
 #include "qcepobject.h"
-#include "qxrdcalibrantlibrary-ptr.h"
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
-#include "qxrdexperiment-ptr.h"
 #include "qxrdcalibrant-ptr.h"
-#include "qxrdcalibrantdspacing-ptr.h"
 #include "qxrdcalibrantdspacing.h"
-#include "qxrdcalibrantdspacings-ptr.h"
 #include "qxrdcalibrantdspacings.h"
 #include <qscriptengine.h>
 
@@ -19,7 +14,7 @@ class QxrdCalibrant : public QcepObject
   Q_OBJECT
 
 public:
-  QxrdCalibrant(QxrdExperimentWPtr exp, QxrdCalibrantLibraryWPtr lib, int index);
+  Q_INVOKABLE QxrdCalibrant(QString name);
   ~QxrdCalibrant();
 
 public slots:
@@ -87,11 +82,6 @@ public:
 
   Q_PROPERTY(double gamma READ get_Gamma WRITE set_Gamma)
   QCEP_DOUBLE_PROPERTY(Gamma)
-
-private:
-  mutable QMutex            m_Mutex;
-  QxrdExperimentWPtr        m_Experiment;
-  QxrdCalibrantLibraryWPtr  m_CalibrantLibrary;
 };
 
 Q_DECLARE_METATYPE(QxrdCalibrantWPtr)

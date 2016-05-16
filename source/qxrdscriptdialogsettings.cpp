@@ -2,22 +2,12 @@
 #include "qcepsettingssaver.h"
 #include "qcepmutexlocker.h"
 
-QxrdScriptDialogSettings::QxrdScriptDialogSettings(QcepObjectWPtr parent) :
-  QcepObject("scriptDialogSettings", parent)
+QxrdScriptDialogSettings::QxrdScriptDialogSettings(QString name) :
+  QcepObject(name)
 {
 }
 
-void QxrdScriptDialogSettings::readSettings(QSettings *settings, QString section)
+QxrdScriptDialogSettings::QxrdScriptDialogSettings() :
+  QxrdScriptDialogSettings("scriptDialogSettings")
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::readSettings(this, settings, section);
 }
-
-void QxrdScriptDialogSettings::writeSettings(QSettings *settings, QString section)
-{
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepProperty::writeSettings(this, settings, section);
-}
-

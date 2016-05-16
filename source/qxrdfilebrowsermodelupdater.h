@@ -14,12 +14,9 @@ class QxrdFileBrowserModelUpdater : public QcepObject, public QEnableSharedFromT
 {
     Q_OBJECT
 public:
-  Q_INVOKABLE QxrdFileBrowserModelUpdater(QString name);
+  explicit QxrdFileBrowserModelUpdater(QString name);
   void initialize(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr parent);
   virtual ~QxrdFileBrowserModelUpdater();
-
-  virtual void addChildPtr(QcepObjectPtr child);
-  virtual void removeChildPtr(QcepObjectPtr child);
 
   bool updateNeeded();
   void setBrowserModel(QxrdFileBrowserModelWPtr browser);
@@ -45,7 +42,5 @@ private:
   QDateTime                m_PreviousUpdate;
   QAtomicInt               m_GenerateUpdates;
 };
-
-Q_DECLARE_METATYPE(QxrdFileBrowserModelUpdater*)
 
 #endif // QXRDFILEBROWSERMODELUPDATER_H

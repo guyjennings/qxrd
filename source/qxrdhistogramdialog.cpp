@@ -6,6 +6,8 @@
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
+#include "qxrdhistogramdialogsettings.h"
+#include "qxrdhistogramplotsettings.h"
 
 QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings,
                                          QxrdExperimentWPtr expt,

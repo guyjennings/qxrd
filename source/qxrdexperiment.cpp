@@ -49,11 +49,12 @@
 #include <QHostInfo>
 #include <QColorDialog>
 #include <QProcess>
+#include "qxrdwindowsettings.h"
 
 QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
     QString path,
     QxrdApplicationWPtr app) :
-  QcepExperiment(path, "experiment", QcepDataObjectWPtr()),
+  QcepExperiment(path, "experiment"),
   m_Application(app),
   m_ExperimentThread(expthrd),
   m_WindowSettings(NULL),
@@ -156,11 +157,7 @@ void QxrdExperiment::initialize(QSettings *settings)
     splashMessage("Initializing Data Processing");
 
     m_DataProcessor = QxrdDataProcessorPtr(
-          new QxrdDataProcessor(myself,
-                                QxrdAcquisitionWPtr(),
-                                m_FileSaver));
-
-    m_DataProcessor -> initialize();
+          new QxrdDataProcessor());
 
     QxrdFileSaverPtr saver(m_FileSaver);
 
@@ -172,13 +169,12 @@ void QxrdExperiment::initialize(QSettings *settings)
     splashMessage("Initializing Data Acquisition");
 
     m_Acquisition = QxrdAcquisitionPtr(
-          new QxrdAcquisition(myself,
-                              m_DataProcessor));
+          new QxrdAcquisition());
 
     m_Acquisition -> initialize();
 
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
-          new QxrdCalibrantLibrary(myself));
+          new QxrdCalibrantLibrary());
 
     m_CalibrantLibraryModel = QxrdCalibrantLibraryModelPtr(
           new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
@@ -205,7 +201,8 @@ void QxrdExperiment::initialize(QSettings *settings)
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
-    m_Dataset      = QcepAllocator::newDataset("dataset", myself);
+    addChildPtr(QcepAllocator::newDataset("dataset"));
+
     m_DatasetModel = QcepDatasetModelPtr(
           new QcepDatasetModel(myself, m_DataProcessor, m_Dataset));
 
@@ -226,7 +223,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 //    m_DatasetModel -> newColumn("group4/t", 1000);
 //    m_DatasetModel -> newColumn("group4/sdev", 1000);
 
-    addChildPtr(new QxrdWindowSettings("windowSettings"));
+    addChildPtr(QxrdWindowSettingsPtr(new QxrdWindowSettings()));
 
     splashMessage("Starting SPEC Server");
 
@@ -418,7 +415,6 @@ void QxrdExperiment::registerMetaTypes()
 {
   qRegisterMetaType<QxrdExperiment*>("QxrdExperiment*");
   qRegisterMetaType<QxrdAcquisition*>("QxrdAcquisition*");
-  qRegisterMetaType<QxrdAcquisitionExecution*>("QxrdAcquisitionExecution*");
   qRegisterMetaType<QxrdAcquisitionExtraInputs*>("QxrdAcquisitionExtraInputs*");
   qRegisterMetaType<QxrdAcquisitionExtraInputsChannel*>("QxrdAcquisitionExtraInputsChannel*");
   qRegisterMetaType<QxrdCalibrantWPtr>("QxrdCalibrantWPtr");

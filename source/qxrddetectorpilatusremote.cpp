@@ -2,8 +2,8 @@
 #include "qxrddebug.h"
 #include <QCryptographicHash>
 
-QxrdDetectorPilatusRemote::QxrdDetectorPilatusRemote(QcepObjectWPtr owner)
-  : QcepObject("pilatusRemote", owner),
+QxrdDetectorPilatusRemote::QxrdDetectorPilatusRemote()
+  : QcepObject("pilatusRemote"),
     m_FileTransferSize(0)
 {
   printMessage("Constructed Pilatus Remote Object");

@@ -19,7 +19,4 @@ public slots:
 
 Q_DECLARE_METATYPE(QxrdCenterFinderPlotSettings*)
 
-typedef QSharedPointer<QxrdCenterFinderPlotSettings> QxrdCenterFinderPlotSettingsPtr;
-typedef QWeakPointer<QxrdCenterFinderPlotSettings>   QxrdCenterFinderPlotSettingsWPtr;
-
 #endif // QXRDCENTERFINDERPLOTSETTINGS_H

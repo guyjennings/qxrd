@@ -5,6 +5,8 @@
 #include "qxrdacquisition.h"
 #include "qxrddebug.h"
 #include "qxrdacquisitionparameterpack.h"
+#include "qxrdsynchronizedacquisitiondialogsettings.h"
+#include "qxrdsynchronizedacquisitionplotsettings.h"
 
 QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(
     QxrdSynchronizedAcquisitionDialogSettingsWPtr settings,

@@ -12,6 +12,11 @@ QxrdCalibrantDSpacingsModel::~QxrdCalibrantDSpacingsModel()
 
 }
 
+void QxrdCalibrantDSpacingsModel::setCalibrantDSpacings(QxrdCalibrantDSpacingsWPtr dsp)
+{
+  printf("Need to write QxrdCalibrantDSpacingsModel::setCalibrantDSpacings\n");
+}
+
 int QxrdCalibrantDSpacingsModel::rowCount (const QModelIndex & parent) const
 {
   if (parent.isValid()) {

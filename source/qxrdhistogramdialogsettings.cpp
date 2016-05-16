@@ -1,11 +1,24 @@
 #include "qxrdhistogramdialogsettings.h"
 #include "qcepsettingssaver.h"
+#include "qxrdhistogramplotsettings.h"
 
-QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QcepObjectWPtr parent) :
-  QcepObject("histDialogSettings", parent),
+QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QString name) :
+  QcepObject(name),
   m_HistogramRect(this, "histogramRect", QRectF(), "Histogram Selection Rectangle")
 {
-  m_HistogramPlotSettings = QxrdHistogramPlotSettingsPtr(new QxrdHistogramPlotSettings(parent));
+}
+
+QxrdHistogramDialogSettings::QxrdHistogramDialogSettings() :
+  QxrdHistogramDialogSettings("histDialogSettings")
+{
+  addChildPtr(QxrdHistogramPlotSettingsPtr(new QxrdHistogramPlotSettings()));
+}
+
+void QxrdHistogramDialogSettings::addChildPtr(QcepObjectPtr child)
+{
+  QcepObject::addChildPtr(child);
+
+  if (checkPointer<QxrdHistogramPlotSettings>(child, m_HistogramPlotSettings)) {}
 }
 
 void QxrdHistogramDialogSettings::readSettings(QSettings *settings, QString section)

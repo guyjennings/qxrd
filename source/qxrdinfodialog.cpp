@@ -4,6 +4,7 @@
 #include "qcepsettingssaver.h"
 #include "qcepimagedata.h"
 #include "qxrddebug.h"
+#include "qxrdinfodialogsettings.h"
 
 QxrdInfoDialog::QxrdInfoDialog(QxrdInfoDialogSettingsWPtr settings, QWidget *parent) :
   QDockWidget(parent),

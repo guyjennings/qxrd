@@ -12,7 +12,7 @@ public:
   QxrdCalibrantLibraryModel(QxrdCalibrantLibraryWPtr cal);
   ~QxrdCalibrantLibraryModel();
 
-  void setCalibrantLibraryModel(QxrdCalibrantLibraryWPtr cal);
+  void setCalibrantLibrary(QxrdCalibrantLibraryWPtr cal);
 
   virtual int	           rowCount ( const QModelIndex & parent = QModelIndex() ) const;
   virtual int	           columnCount ( const QModelIndex & parent = QModelIndex() ) const;

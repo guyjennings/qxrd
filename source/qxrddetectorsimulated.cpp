@@ -9,9 +9,8 @@
 
 QxrdDetectorSimulated::QxrdDetectorSimulated(QxrdExperimentWPtr    expt,
                                              QxrdAcquisitionWPtr   acq,
-                                             int                   detNum,
-                                             QcepObjectWPtr parent) :
-  QxrdDetector(expt, acq, QxrdDetectorThread::SimulatedDetector, detNum, parent)
+                                             int                   detNum) :
+  QxrdDetector(expt, acq, QxrdDetectorThread::SimulatedDetector, detNum)
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing simulated detector\n");

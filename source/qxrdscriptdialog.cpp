@@ -6,8 +6,7 @@
 
 QxrdScriptDialog::QxrdScriptDialog(QxrdScriptDialogSettingsWPtr settings, QxrdExperimentWPtr experiment, QWidget *parent) :
   QDockWidget(parent),
-  m_ScriptDialogSettings(settings),
-  m_Experiment(experiment)
+  m_ScriptDialogSettings(settings)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptDialog::QxrdScriptDialog(%p)\n", this);

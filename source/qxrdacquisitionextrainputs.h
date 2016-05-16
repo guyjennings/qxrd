@@ -21,19 +21,17 @@ class QxrdAcquisitionExtraInputs : public QcepObject
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdAcquisitionExtraInputs(QString name);
-  void initialize();
   virtual ~QxrdAcquisitionExtraInputs();
 
 public:
+  void addChildPtr(QcepObjectPtr child);
+  void removeChildPtr(QcepObjectPtr child);
+
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
   QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
-
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
 signals:
   void newDataAvailable();

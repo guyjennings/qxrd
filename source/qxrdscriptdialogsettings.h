@@ -9,21 +9,10 @@ class QxrdScriptDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  explicit QxrdScriptDialogSettings(QcepObjectWPtr parent);
-
-public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
-
-signals:
-
-public slots:
-
-private:
-  QMutex              m_Mutex;
+  Q_INVOKABLE QxrdScriptDialogSettings(QString name);
+  QxrdScriptDialogSettings();
 };
 
-typedef QSharedPointer<QxrdScriptDialogSettings> QxrdScriptDialogSettingsPtr;
-typedef QWeakPointer<QxrdScriptDialogSettings>   QxrdScriptDialogSettingsWPtr;
+Q_DECLARE_METATYPE(QxrdScriptDialogSettings*)
 
 #endif // QXRDSCRIPTDIALOGSETTINGS_H
