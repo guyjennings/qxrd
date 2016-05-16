@@ -13,4 +13,3 @@ QcepPlotSettings::QcepPlotSettings(QString name) :
   m_Y2AxisLog     (this,"y2AxisLog",0, "Logarithmic 2nd Y Axis?")
 {
 }
-

@@ -90,10 +90,30 @@ public:
 
 protected:
   template <typename T>
-  bool checkPointer(QcepObjectWPtr ptr, QSharedPointer<T>& field);
+  inline bool checkPointer(QcepObjectWPtr ptr, QSharedPointer<T>& field)
+  {
+    QSharedPointer<T> fp = qSharedPointerDynamicCast<T>(ptr);
+
+    if (fp) {
+      field = fp;
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   template <typename T>
-  bool checkPointer(QcepObjectWPtr ptr, QWeakPointer<T>& field);
+  inline bool checkPointer(QcepObjectWPtr ptr, QWeakPointer<T>& field)
+  {
+    QWeakPointer<T> fp = qSharedPointerDynamicCast<T>(ptr);
+
+    if (fp) {
+      field = fp;
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 private:
   QcepObjectWPtr                      m_Parent;

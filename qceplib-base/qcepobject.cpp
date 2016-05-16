@@ -213,32 +213,6 @@ void QcepObject::removeChildPtr(QcepObjectPtr child)
   }
 }
 
-template <typename T>
-bool QcepObject::checkPointer(QcepObjectWPtr ptr, QSharedPointer<T> &field)
-{
-  QSharedPointer<T> fp = qSharedPointerDynamicCast<T>(ptr);
-
-  if (fp) {
-    field = fp;
-    return true;
-  } else {
-    return false;
-  }
-}
-
-template <typename T>
-bool QcepObject::checkPointer(QcepObjectWPtr ptr, QWeakPointer<T> &field)
-{
-  QWeakPointer<T> fp = qSharedPointerDynamicCast<T>(ptr);
-
-  if (fp) {
-    field = fp;
-    return true;
-  } else {
-    return false;
-  }
-}
-
 int QcepObject::childCount() const
 {
   return m_Children.count();

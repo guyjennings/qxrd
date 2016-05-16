@@ -29,6 +29,7 @@ public:
                    QcepDataProcessorBaseWPtr proc = QcepDataProcessorBaseWPtr(),
                    QcepDatasetPtr ds = QcepDatasetPtr());
 
+  void setDataset(QcepDatasetPtr ds);
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
