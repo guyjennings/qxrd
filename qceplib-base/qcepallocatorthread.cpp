@@ -30,7 +30,7 @@ void QcepAllocatorThread::run()
     printf("Starting Allocator Thread\n");
   }
 
-  m_Allocator = QcepAllocatorPtr(new QcepAllocator(parent()));
+  m_Allocator = QcepAllocatorPtr(new QcepAllocator("allocator"));
 
   int rc = exec();
 

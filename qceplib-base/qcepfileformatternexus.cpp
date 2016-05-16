@@ -8,15 +8,23 @@ QcepFileFormatterNexus::QcepFileFormatterNexus(QString filePath)
 
 }
 
+void QcepFileFormatterNexus::beginWriteFile()
+{
+}
+
+void QcepFileFormatterNexus::endWriteFile()
+{
+}
+
+void QcepFileFormatterNexus::writeComment(QString cmt)
+{
+}
+
 void QcepFileFormatterNexus::beginWriteObject(QString objectName, QString className)
 {
 }
 
 void QcepFileFormatterNexus::endWriteObject()
-{
-}
-
-void QcepFileFormatterNexus::writeComment(QString cmt)
 {
 }
 
@@ -59,6 +67,56 @@ void QcepFileFormatterNexus::endReadFile()
 QcepObjectPtr QcepFileFormatterNexus::nextObject()
 {
   return QcepObjectPtr();
+}
+
+void QcepFileFormatterNexus::beginReadObject(QcepObjectPtr obj)
+{
+}
+
+void QcepFileFormatterNexus::endReadObject()
+{
+}
+
+bool QcepFileFormatterNexus::beginReadProperties()
+{
+  return false;
+}
+
+QString QcepFileFormatterNexus::nextPropertyName()
+{
+  return "";
+}
+
+QVariant QcepFileFormatterNexus::nextPropertyValue()
+{
+  return QVariant();
+}
+
+void QcepFileFormatterNexus::endReadProperties()
+{
+}
+
+bool QcepFileFormatterNexus::beginReadChildren()
+{
+  return false;
+}
+
+QcepObjectPtr QcepFileFormatterNexus::nextChild()
+{
+  return QcepObjectPtr();
+}
+
+void QcepFileFormatterNexus::endReadChildren()
+{
+}
+
+bool QcepFileFormatterNexus::beginReadData()
+{
+  return false;
+}
+
+void QcepFileFormatterNexus::endReadData()
+{
 }
 
 #endif

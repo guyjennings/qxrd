@@ -2,8 +2,8 @@
 #include "qcepimagedata.h"
 #include "qcepdatacolumnscan.h"
 
-QcepDataImportParameters::QcepDataImportParameters(QcepObjectWPtr parent, QString name) :
-  QcepObject(name, parent),
+QcepDataImportParameters::QcepDataImportParameters(QString name) :
+  QcepObject(name),
   m_InputFormat   (this, "inputFormat", 0, "File format for data import"),
   m_LastImportPath(this, "lastImportPath", "", "Last imported path"),
   m_SelectedFilter(this, "selectedFilter", "", "Last import filter")

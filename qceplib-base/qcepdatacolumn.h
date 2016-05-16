@@ -31,9 +31,8 @@ public:
   };
 
 public:
-  QcepDataColumn(QcepObjectWPtr parent,
-                 QString name,
-                 int npts,
+  Q_INVOKABLE QcepDataColumn(QString name,
+                 int npts = 0,
                  ColumnType colType = NormalColumn,
                  int col1 = -1,
                  int col2 = -1);
@@ -90,5 +89,7 @@ private:
   QVector<double> m_Vector;
   QcepDataColumnFormatter       m_Formatter;
 };
+
+Q_DECLARE_METATYPE(QcepDataColumn*)
 
 #endif // QCEPDATACOLUMN_H

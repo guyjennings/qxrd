@@ -24,7 +24,7 @@ class QcepAllocator : public QcepObject, public QEnableSharedFromThis<QcepAlloca
   Q_OBJECT
 
 public:
-  QcepAllocator(QcepObjectWPtr parent);
+  QcepAllocator(QString name);
   virtual ~QcepAllocator();
 
   void readSettings(QSettings *settings, QString section);
@@ -53,7 +53,7 @@ public:
 
 
   static QcepDataGroupPtr       newGroup(QString name);
-  static QcepDatasetPtr         newDataset(QString name, QcepObjectPtr parent);
+  static QcepDatasetPtr         newDataset(QString name);
 
   static qint64 allocatedMemoryMB();
   static qint64 availableMemoryMB();
@@ -77,6 +77,9 @@ public:
   static qint64 columnSize(int sz);
   static qint64 columnScanSize(int nCols, int nRows);
   static qint64 arraySize(QVector<int> dims);
+
+private slots:
+  void onMemorySizeChanged(qint64 newMB);
 
 private:
   QMutex *mutex();

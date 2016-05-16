@@ -4,7 +4,7 @@
 #include "qcepfileformattertext.h"
 
 QcepFileFormatter::QcepFileFormatter(QString filePath) :
-  QcepObject("fileFormatter", QcepObjectWPtr()),
+  QcepObject("fileFormatter"),
   m_FilePath(filePath)
 {
 }

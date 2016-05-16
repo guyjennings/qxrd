@@ -26,7 +26,9 @@ class QSpecServer : public QTcpServer
   Q_OBJECT
 
 public:
-  QSpecServer(QcepObjectWPtr owner, QString name);
+  QSpecServer(QString name);
+  void initialize(QcepObjectWPtr owner);
+
   virtual ~QSpecServer();
 
 public:

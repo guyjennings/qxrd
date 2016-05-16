@@ -12,9 +12,9 @@ class QcepIntegratedData : public QcepDataObject
   Q_OBJECT
 
 public:
-  explicit QcepIntegratedData(QcepObjectWPtr parent,
-                              QString name,
-                              int maxSize);
+  Q_INVOKABLE QcepIntegratedData(QString name,
+      int maxSize=0);
+
   ~QcepIntegratedData();
 
 public slots:
@@ -59,5 +59,6 @@ private:
 };
 
 Q_DECLARE_METATYPE(QcepIntegratedDataPtr)
+Q_DECLARE_METATYPE(QcepIntegratedData*)
 
 #endif // QCEPINTEGRATEDDATA_H

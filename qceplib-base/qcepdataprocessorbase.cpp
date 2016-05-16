@@ -1,6 +1,6 @@
 #include "qcepdataprocessorbase.h"
 
-QcepDataProcessorBase::QcepDataProcessorBase(QString name, QcepObjectWPtr parent) :
-  QcepObject(name, parent)
+QcepDataProcessorBase::QcepDataProcessorBase(QString name) :
+  QcepObject(name)
 {
 }

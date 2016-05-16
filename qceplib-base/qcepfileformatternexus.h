@@ -10,10 +10,13 @@ class QcepFileFormatterNexus : public QcepFileFormatter
 public:
   QcepFileFormatterNexus(QString filePath);
 
-  virtual void beginWriteObject(QString objectName, QString className);
-  virtual void endWriteObject();
+  virtual void beginWriteFile();
+  virtual void endWriteFile();
 
   virtual void writeComment(QString cmt);
+
+  virtual void beginWriteObject(QString objectName, QString className);
+  virtual void endWriteObject();
 
   virtual void beginWriteProperties();
   virtual void writeProperty(QString name, QVariant val);
@@ -30,6 +33,21 @@ public:
   virtual void endReadFile();
 
   virtual QcepObjectPtr nextObject();
+
+  virtual void beginReadObject(QcepObjectPtr obj);
+  virtual void endReadObject();
+
+  virtual bool beginReadProperties();
+  virtual QString nextPropertyName();
+  virtual QVariant nextPropertyValue();
+  virtual void endReadProperties();
+
+  virtual bool beginReadChildren();
+  virtual QcepObjectPtr nextChild();
+  virtual void endReadChildren();
+
+  virtual bool beginReadData();
+  virtual void endReadData();
 };
 
 #endif // HAVE_NEXUS

@@ -20,8 +20,8 @@
 
 QAtomicInt allocCount = 0;
 
-QcepImageDataBase::QcepImageDataBase(QcepObjectWPtr parent, QString name, int width, int height, int size)
-  : QcepDataObject(parent, name, size),
+QcepImageDataBase::QcepImageDataBase(QString name, int width, int height, int size)
+  : QcepDataObject(name, size),
     m_Width(this, "width", width, "Image Width"),
     m_Height(this, "height", height, "Image Height"),
     m_HStart(this, "hStart", 0.0, "H Start Coord"),
@@ -294,9 +294,8 @@ double QcepImageDataBase::vValue(int n) const
 }
 
 template <typename T>
-QcepImageData<T>::QcepImageData(QcepObjectWPtr parent, QString name, int width, int height, T def)
-  : QcepImageDataBase(parent, name, width, height, width*height*sizeof(T)),
-    //    m_Image(width*height, def),
+QcepImageData<T>::QcepImageData(QString name, int width, int height, T def)
+  : QcepImageDataBase(name, width, height, width*height*sizeof(T)),
     m_Image(width*height),
     m_MinValue(0),
     m_MaxValue(0),
@@ -527,7 +526,7 @@ void QcepImageData<T>::dumpPixels(int x0, int y0, int x1, int y1)
 template <typename T>
 void QcepImageData<T>::resize(int width, int height)
 {
-  QcepImageData<T> temp(QcepObjectWPtr(), get_Name(), get_Width(), get_Height(), 0);
+  QcepImageData<T> temp(get_Name(), get_Width(), get_Height(), 0);
 
   int oldwidth = get_Width();
   int oldheight= get_Height();
@@ -1749,57 +1748,51 @@ double QcepImageData<T>::sumInPeak(QRectF rect)
   }
 }
 
-QcepInt16ImageData::QcepInt16ImageData(QcepObjectWPtr parent,
-                                         QString name,
-                                         int width,
-                                         int height,
-                                         qint16 def) :
-  QcepImageData<qint16>(parent, name, width, height, def)
+QcepInt16ImageData::QcepInt16ImageData(QString name,
+                                       int width,
+                                       int height,
+                                       qint16 def) :
+  QcepImageData<qint16>(name, width, height, def)
 {
 }
 
-QcepUInt16ImageData::QcepUInt16ImageData(QcepObjectWPtr parent,
-                                         QString name,
+QcepUInt16ImageData::QcepUInt16ImageData(QString name,
                                          int width,
                                          int height,
                                          quint16 def) :
-  QcepImageData<quint16>(parent, name, width, height, def)
+  QcepImageData<quint16>(name, width, height, def)
 {
 }
 
-QcepUInt32ImageData::QcepUInt32ImageData(QcepObjectWPtr parent,
-                                         QString name,
+QcepUInt32ImageData::QcepUInt32ImageData(QString name,
                                          int width,
                                          int height,
                                          quint32 def) :
-  QcepImageData<quint32>(parent, name, width, height, def)
+  QcepImageData<quint32>(name, width, height, def)
 {
 }
 
-QcepInt32ImageData::QcepInt32ImageData(QcepObjectWPtr parent,
-                                       QString name,
+QcepInt32ImageData::QcepInt32ImageData(QString name,
                                        int width,
                                        int height,
                                        qint32 def) :
-  QcepImageData<qint32>(parent, name, width, height, def)
+  QcepImageData<qint32>(name, width, height, def)
 {
 }
 
-QcepFloatImageData::QcepFloatImageData(QcepObjectWPtr parent,
-                                       QString name,
+QcepFloatImageData::QcepFloatImageData(QString name,
                                        int width,
                                        int height,
                                        float def) :
-  QcepImageData<float>(parent, name, width, height, def)
+  QcepImageData<float>(name, width, height, def)
 {
 }
 
-QcepDoubleImageData::QcepDoubleImageData(QcepObjectWPtr parent,
-                                         QString name,
+QcepDoubleImageData::QcepDoubleImageData(QString name,
                                          int width,
                                          int height,
                                          double def)  :
-  QcepImageData<double>(parent, name, width, height, def)
+  QcepImageData<double>(name, width, height, def)
 {
 }
 

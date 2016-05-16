@@ -16,8 +16,7 @@ class QcepFileImporterHDF : public QcepFileImporter
   Q_OBJECT
 
 public:
-  QcepFileImporterHDF(QcepObjectWPtr parent,
-                      QcepDatasetModelPtr model,
+  QcepFileImporterHDF(QcepDatasetModelPtr model,
                       QModelIndexList &indexes,
                       QString path);
 

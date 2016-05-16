@@ -3,10 +3,9 @@
 #include "qcepallocator.h"
 #include <QScriptEngine>
 
-QcepIntegratedData::QcepIntegratedData(QcepObjectWPtr parent,
-                                       QString name,
+QcepIntegratedData::QcepIntegratedData(QString name,
                                        int maxSize) :
-  QcepDataObject(parent, name, 2*maxSize*sizeof(double)),
+  QcepDataObject(name, 2*maxSize*sizeof(double)),
   m_MaxSize(maxSize),
   m_Size(0),
   m_AllocStep(1024),

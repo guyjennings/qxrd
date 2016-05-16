@@ -10,7 +10,7 @@ class QcepDataExportParameters : public QcepObject
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QcepDataExportParameters(QcepObjectWPtr parent = QcepObjectWPtr(), QString name = "");
+  Q_INVOKABLE QcepDataExportParameters(QString name = "");
 
   QString fileFormatFilterString();
 

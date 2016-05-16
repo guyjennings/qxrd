@@ -5,8 +5,8 @@
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
 
-QcepExperiment::QcepExperiment(QString path, QString name, QcepObjectWPtr parent) :
-  QcepObject(name, parent),
+QcepExperiment::QcepExperiment(QString path, QString name) :
+  QcepObject(name),
   m_SettingsSaver(new QcepSettingsSaver(this)),
   m_ExperimentKind        (this, "experimentKind", -1, "Kind of Experiment"),
   m_ExperimentDirectory   (this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
@@ -23,7 +23,7 @@ QcepExperiment::QcepExperiment(QString path, QString name, QcepObjectWPtr parent
   m_NewArrayYDimension    (this, "newArrayYDimension", 2048, "Y Dimension of new array"),
   m_NewArrayZDimension    (this, "newArrayZDimension", 1, "Z Dimension of new array"),
   m_NewArrayTDimension    (this, "newArrayTDimension", 1, "T Dimension of new array"),
-  m_NewColumnName         (this, "newColumnName", "colummn", "Default name of newly created column"),
+  m_NewColumnName         (this, "newColumnName", "column", "Default name of newly created column"),
   m_NewColumnSize         (this, "newColumnSize", 1024, "Size of newly created column"),
   m_NewImageName          (this, "newImageName", "image", "Name of newly created image"),
   m_NewImageWidth         (this, "newImageWidth", 2048, "Width of new image"),
@@ -34,10 +34,33 @@ QcepExperiment::QcepExperiment(QString path, QString name, QcepObjectWPtr parent
 void QcepExperiment::initialize(QSettings *settings)
 {
   m_DataExportParameters = QcepDataExportParametersPtr(
-        new QcepDataExportParameters(sharedFromThis(), "exportParameters"));
+        new QcepDataExportParameters("exportParameters"));
+
+  addChildPtr(m_DataExportParameters);
 
   m_DataImportParameters = QcepDataImportParametersPtr(
-        new QcepDataImportParameters(sharedFromThis(), "importParameters"));
+        new QcepDataImportParameters("importParameters"));
+
+  addChildPtr(m_DataImportParameters);
+}
+
+void QcepExperiment::addChildPtr(QcepObjectPtr child)
+{
+  QcepObject::addChildPtr(child);
+
+  QcepDataExportParametersPtr ex =
+      qSharedPointerDynamicCast<QcepDataExportParameters>(child);
+
+  if (ex) {
+    m_DataExportParameters = ex;
+  }
+
+  QcepDataImportParametersPtr im =
+      qSharedPointerDynamicCast<QcepDataImportParameters>(child);
+
+  if (im) {
+    m_DataImportParameters = im;
+  }
 }
 
 QString QcepExperiment::defaultExperimentDirectory(QString path) const

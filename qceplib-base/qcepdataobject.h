@@ -13,9 +13,7 @@ class QcepDataObject : public QcepObject
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QcepDataObject(QcepObjectWPtr parent = QcepObjectWPtr(),
-                 QString name = "",
-                 int byteSize = 0);
+  QcepDataObject(QString name, qint64 byteSize);
   virtual ~QcepDataObject();
 
   void readSettings(QSettings *settings, QString section);
@@ -107,7 +105,5 @@ public:
   Q_PROPERTY(int index READ get_Index WRITE set_Index)
   QCEP_INTEGER_PROPERTY(Index)
 };
-
-Q_DECLARE_METATYPE(QcepDataObject*)
 
 #endif // QCEPDATAOBJECT_H

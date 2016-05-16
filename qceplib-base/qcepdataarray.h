@@ -11,9 +11,8 @@ class QcepDataArray : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepDataArray(QcepObjectWPtr parent,
-                QString name,
-                QVector<int> dims);
+  QcepDataArray(QString name,
+                QVector<int> dims = QVector<int>());
   virtual ~QcepDataArray();
 
   static QScriptValue toArrayScriptValue(QScriptEngine *engine, const QcepDataArrayPtr &data);

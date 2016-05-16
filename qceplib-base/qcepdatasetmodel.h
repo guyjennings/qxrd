@@ -27,7 +27,7 @@ class QcepDatasetModel : public QAbstractItemModel
 public:
   QcepDatasetModel(QcepExperimentWPtr expt,
                    QcepDataProcessorBaseWPtr proc = QcepDataProcessorBaseWPtr(),
-                   QcepDatasetWPtr ds = QcepDatasetWPtr());
+                   QcepDatasetPtr ds = QcepDatasetPtr());
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -165,7 +165,7 @@ private:
 private:
   QcepExperimentWPtr        m_Experiment;
   QcepDataProcessorBaseWPtr m_Processor;
-  QcepDatasetWPtr           m_Dataset;
+  QcepDatasetPtr            m_Dataset;
 };
 
 #endif // QCEPDATASETMODEL_H

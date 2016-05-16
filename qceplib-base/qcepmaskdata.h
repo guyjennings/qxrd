@@ -9,11 +9,10 @@ class QcepMaskData : public QcepImageData<short>
   Q_OBJECT
 
 public:
-  QcepMaskData(QcepObjectWPtr parent,
-               QString name,
-               int width,
-               int height,
-               int def);
+  Q_INVOKABLE QcepMaskData(QString name,
+      int width = 0,
+      int height = 0,
+      int def = true);
   ~QcepMaskData();
 
 public slots:
@@ -63,5 +62,7 @@ private:
     ThumbnailHeight = 24
   };
 };
+
+Q_DECLARE_METATYPE(QcepMaskData*)
 
 #endif // QCEPMASKDATA_H

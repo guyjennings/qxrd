@@ -16,7 +16,7 @@ class QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
 {
   Q_OBJECT
 public:
-  Q_INVOKABLE QcepObject(QString name = "", QcepObjectWPtr parent = QcepObjectWPtr());
+  QcepObject(QString name);
   virtual ~QcepObject();
 
   static int allocatedObjects();
@@ -61,8 +61,9 @@ public slots:
 
   int checkChildren(int verbose=0, int level=0) const;
 
+  void setParentPtr(QcepObjectWPtr parent);
   QcepObjectWPtr parentPtr() const;
-  QVector<QcepObjectWPtr> childrenPtr() const;
+  QVector<QcepObjectPtr> childrenPtr() const;
   QcepObjectWPtr childPtr(int n) const;
 
   QcepObjectPtr construct(QString className);
@@ -79,16 +80,24 @@ public:
 
   static QString addSlashes(QString str);
 
-  void addChildPtr(QcepObject *child);
+  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void removeChildPtr(QcepObjectPtr child);
 
   void propertyChanged(QcepProperty *prop);
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QcepObjectPtr &data);
   static void fromScriptValue(const QScriptValue &obj, QcepObjectPtr &data);
 
+protected:
+  template <typename T>
+  bool checkPointer(QcepObjectWPtr ptr, QSharedPointer<T>& field);
+
+  template <typename T>
+  bool checkPointer(QcepObjectWPtr ptr, QWeakPointer<T>& field);
+
 private:
   QcepObjectWPtr                      m_Parent;
-  QVector<QcepObject*>                m_Children;
+  QVector<QcepObjectPtr>              m_Children;
   QcepObjectNamer                     m_ObjectNamer;
   QAtomicInt                          m_ChangeCount;
   QAtomicPointer<QcepProperty>        m_LastChanged;

@@ -12,20 +12,17 @@ class QcepFileImporter : public QcepObject
   Q_OBJECT
 
 public:
-  QcepFileImporter(QcepObjectWPtr parent,
-                   QcepDatasetModelPtr model,
+  QcepFileImporter(QcepDatasetModelPtr model,
                    QModelIndexList &indexes,
                    QString path);
 
   virtual void exec();
 
-  static QcepFileImporterPtr importFile(QcepObjectWPtr parent,
-                                        QcepDatasetModelPtr model,
+  static QcepFileImporterPtr importFile(QcepDatasetModelPtr model,
                                         QModelIndexList &indexes,
                                         QString path);
 
-  static QcepFileImporterPtr importFiles(QcepObjectWPtr parent,
-                                         QcepDatasetModelPtr model,
+  static QcepFileImporterPtr importFiles(QcepDatasetModelPtr model,
                                          QModelIndexList &indexes,
                                          QStringList paths);
 

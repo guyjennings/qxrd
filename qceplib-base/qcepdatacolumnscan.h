@@ -10,8 +10,8 @@ class QcepDataColumnScan : public QcepDataGroup
   Q_OBJECT
 
 public:
-  QcepDataColumnScan(QcepObjectWPtr parent,
-                     QString name, QStringList cols, int sz);
+  Q_INVOKABLE QcepDataColumnScan(QString name,
+      QStringList cols = QStringList(), int sz=0);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

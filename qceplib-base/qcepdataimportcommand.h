@@ -15,8 +15,7 @@ class QcepDataImportCommand : public QcepObject
   Q_OBJECT
 
 public:
-  QcepDataImportCommand(QcepObjectWPtr parent,
-                        QcepDatasetModelWPtr model,
+  QcepDataImportCommand(QcepDatasetModelWPtr model,
                         const QModelIndexList &idx,
                         QStringList files);
 

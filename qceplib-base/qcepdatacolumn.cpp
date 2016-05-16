@@ -3,8 +3,8 @@
 #include <QScriptEngine>
 #include "qcepmutexlocker.h"
 
-QcepDataColumn::QcepDataColumn(QcepObjectWPtr parent, QString name, int npts, ColumnType colType, int col1, int col2) :
-  QcepDataObject(parent, name, npts*sizeof(double)),
+QcepDataColumn::QcepDataColumn(QString name, int npts, ColumnType colType, int col1, int col2) :
+  QcepDataObject(name, npts*sizeof(double)),
   m_ColumnType(this, "columnType", colType, "Column Type"),
   m_Column1   (this, "column1", col1, "1st dependent column"),
   m_Column2   (this, "column2", col2, "2nd dependent column"),

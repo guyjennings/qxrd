@@ -12,9 +12,9 @@
 #include <QHostInfo>
 #include "qcepexperiment.h"
 
-QSpecServer::QSpecServer(QcepObjectWPtr owner, QString name)
+QSpecServer::QSpecServer(QString name)
   : QTcpServer(NULL),
-    m_Owner(owner),
+    m_Owner(),
     m_ServerName(name),
     m_Socket(NULL),
     m_Address(QHostAddress::Any),
@@ -26,6 +26,11 @@ QSpecServer::QSpecServer(QcepObjectWPtr owner, QString name)
   init_svr_head(&m_Reply);
 
   connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
+}
+
+void QSpecServer::initialize(QcepObjectWPtr owner)
+{
+  m_Owner = owner;
 }
 
 QSpecServer::~QSpecServer()

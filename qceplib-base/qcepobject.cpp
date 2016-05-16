@@ -15,9 +15,8 @@ static QAtomicInt s_ObjectDeleteCount(0);
 static QSet<QcepObject*> s_Allocated;
 #endif
 
-QcepObject::QcepObject(QString name, QcepObjectWPtr parent) :
+QcepObject::QcepObject(QString name) :
   QObject(NULL),
-  m_Parent(parent),
   m_ObjectNamer(this, name)
 {
   s_ObjectAllocateCount.fetchAndAddOrdered(1);
@@ -26,17 +25,17 @@ QcepObject::QcepObject(QString name, QcepObjectWPtr parent) :
   s_Allocated.insert(this);
 #endif
 
-  QcepObject *p = parent.data();
+  QcepObjectPtr p(m_Parent);
 
   if (p) {
-    p->addChildPtr(this);
+    p->addChildPtr(sharedFromThis());
   }
 }
 
 //QcepObject::QcepObject() :
 //  QObject(NULL),
 //  m_Parent(),
-//  m_ObjectNamer(this, "")
+//  m_ObjectNamer(this, "object")
 //{
 //}
 
@@ -96,7 +95,7 @@ int QcepObject::childrenChanged() const
   if (isChanged()) {
     return true;
   } else {
-    foreach(QcepObject* child, m_Children) {
+    foreach(QcepObjectPtr child, m_Children) {
       if(child) {
         int chg = child->childrenChanged();
 
@@ -113,7 +112,7 @@ QString QcepObject::childrenChangedBy() const
   if (isChanged()) {
     return changedBy();
   } else {
-    foreach(QcepObject* child, m_Children) {
+    foreach(QcepObjectPtr child, m_Children) {
       if (child) {
         int chg = child->childrenChanged();
 
@@ -141,7 +140,7 @@ int QcepObject::checkChildren(int verbose, int level) const
               .arg(meta->className()));
   }
 
-  foreach(QcepObject* child, m_Children) {
+  foreach(QcepObjectPtr child, m_Children) {
     if (child == NULL) {
       printLine(tr("NULL child of %1").arg(get_Name()));
       ck = false;
@@ -163,14 +162,81 @@ int QcepObject::checkChildren(int verbose, int level) const
   return ck;
 }
 
+void QcepObject::setParentPtr(QcepObjectWPtr parent)
+{
+  if (m_Parent != parent) {
+    QcepObjectPtr oldParent(m_Parent);
+    QcepObjectPtr newParent(parent);
+
+    if (newParent) {
+      m_Parent = newParent;
+    } else {
+      printMessage("Attempt to set parent to non-existing object");
+    }
+
+    if (oldParent) {
+      oldParent->removeChildPtr(sharedFromThis());
+    }
+
+    if (newParent) {
+      newParent->addChildPtr(sharedFromThis());
+    }
+  }
+}
+
 QcepObjectWPtr QcepObject::parentPtr() const
 {
   return m_Parent;
 }
 
-void QcepObject::addChildPtr(QcepObject *child)
+void QcepObject::addChildPtr(QcepObjectPtr child)
 {
-  m_Children.append(child);
+  if (m_Children.contains(child)) {
+    printMessage("Added same child more than once");
+  } else {
+    m_Children.append(child);
+  }
+
+  if (sharedFromThis()) {
+    child->setParentPtr(sharedFromThis());
+  } else {
+    printMessage("Adding child when sharedFromThis() == NULL");
+  }
+}
+
+void QcepObject::removeChildPtr(QcepObjectPtr child)
+{
+  if (m_Children.contains(child)) {
+    m_Children.removeAll(child);
+  } else {
+    printMessage("Removing object which is not a child");
+  }
+}
+
+template <typename T>
+bool QcepObject::checkPointer(QcepObjectWPtr ptr, QSharedPointer<T> &field)
+{
+  QSharedPointer<T> fp = qSharedPointerDynamicCast<T>(ptr);
+
+  if (fp) {
+    field = fp;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+template <typename T>
+bool QcepObject::checkPointer(QcepObjectWPtr ptr, QWeakPointer<T> &field)
+{
+  QWeakPointer<T> fp = qSharedPointerDynamicCast<T>(ptr);
+
+  if (fp) {
+    field = fp;
+    return true;
+  } else {
+    return false;
+  }
 }
 
 int QcepObject::childCount() const
@@ -180,28 +246,28 @@ int QcepObject::childCount() const
 
 QcepObjectWPtr QcepObject::childPtr(int n) const
 {
-  QcepObject* p = m_Children.value(n);
+  QcepObjectPtr p = m_Children.value(n);
 
   if (p) {
-    return p->sharedFromThis();
+    return p;
   } else {
     return QcepObjectWPtr();
   }
 }
 
-QVector<QcepObjectWPtr> QcepObject::childrenPtr() const
+QVector<QcepObjectPtr> QcepObject::childrenPtr() const
 {
-  QVector<QcepObjectWPtr> res;
+//  QVector<QcepObjectWPtr> res;
 
-  foreach (QcepObject* child, m_Children) {
-    if (child) {
-      res.append(child->sharedFromThis());
-    } else {
-      res.append(QcepObjectWPtr());
-    }
-  }
+//  foreach (QcepObject* child, m_Children) {
+//    if (child) {
+//      res.append(child->sharedFromThis());
+//    } else {
+//      res.append(QcepObjectWPtr());
+//    }
+//  }
 
-  return res;
+  return m_Children;
 }
 
 int QcepObject::allocatedObjects()
@@ -403,7 +469,7 @@ void QcepObject::dumpObjectTreePtr(int level)
   int nDumpedChildren = 0;
 
   for (int i=0; i<m_Children.count(); i++) {
-    QcepObject *obj = m_Children.value(i);
+    QcepObjectPtr obj = m_Children.value(i);
     if (obj) {
       if (nDumped == 0) {
         printLine(tr("%1%2 {")
@@ -491,7 +557,7 @@ void QcepObject::writeObject(QcepFileFormatterPtr fmt)
   int nChildren = 0;
 
   for (int i=0; i<m_Children.count(); i++) {
-    QcepObject *obj = m_Children.value(i);
+    QcepObjectPtr obj = m_Children.value(i);
 
     if (obj) {
       nChildren++;
@@ -502,7 +568,7 @@ void QcepObject::writeObject(QcepFileFormatterPtr fmt)
     fmt->beginWriteChildren();
 
     for (int i=0; i<m_Children.count(); i++) {
-      QcepObject *obj = m_Children.value(i);
+      QcepObjectPtr obj = m_Children.value(i);
 
       if (obj) {
         obj->writeObject(fmt);
@@ -552,7 +618,7 @@ void QcepObject::readObject(QcepFileFormatterPtr fmt)
       child = fmt->nextChild();
 
       if (child) {
-        addChildPtr(child.data());
+        addChildPtr(child);
       }
     } while (child);
 

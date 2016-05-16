@@ -11,13 +11,14 @@
 #include <QFileInfo>
 #include <QDir>
 
-QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBaseWPtr proc, QcepDatasetWPtr ds) :
+QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBaseWPtr proc, QcepDatasetPtr ds) :
   m_Experiment(expt),
   m_Processor(proc),
   m_Dataset(ds)
 {
   if (m_Dataset == NULL) {
-    m_Dataset = QcepAllocator::newDataset("model", m_Experiment);
+    m_Dataset = QcepAllocator::newDataset("model");
+    m_Dataset -> setParentPtr(m_Experiment);
   }
 
   qRegisterMetaType< QVector<int> >("QVector<int>");

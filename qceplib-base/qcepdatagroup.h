@@ -17,8 +17,7 @@ class QcepDataGroup : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepDataGroup(QcepObjectWPtr parent,
-                QString name);
+  Q_INVOKABLE QcepDataGroup(QString name);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
@@ -72,5 +71,7 @@ public slots:
 private:
   QVector<QcepDataObjectPtr> m_Objects;
 };
+
+Q_DECLARE_METATYPE(QcepDataGroup*)
 
 #endif // QCEPDATAGROUP_H

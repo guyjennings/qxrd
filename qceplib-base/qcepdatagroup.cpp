@@ -11,8 +11,8 @@
 #include <QFileInfo>
 #include <QDir>
 
-QcepDataGroup::QcepDataGroup(QcepObjectWPtr parent, QString name) :
-  QcepDataObject(parent, name, 0)
+QcepDataGroup::QcepDataGroup(QString name) :
+  QcepDataObject(name, 0)
 {
 }
 

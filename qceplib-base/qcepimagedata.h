@@ -25,8 +25,7 @@ class QcepImageDataBase : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepImageDataBase(QcepObjectWPtr parent,
-                    QString name,
+  QcepImageDataBase(QString name,
                     int width,
                     int height,
                     int size);
@@ -236,8 +235,7 @@ template <typename T>
     class QcepImageData : public QcepImageDataBase
 {
 public:
-  QcepImageData(QcepObjectWPtr parent,
-                QString name,
+  QcepImageData(QString name,
                 int width,
                 int height,
                 T def);
@@ -360,11 +358,11 @@ class QcepDoubleImageData : public QcepImageData<double> {
   Q_OBJECT
 
 public:
-  QcepDoubleImageData(QcepObjectWPtr parent,
-                QString name,
-                int width,
-                int height,
-                double def);
+  Q_INVOKABLE QcepDoubleImageData(
+      QString name,
+      int width,
+      int height,
+      double def);
 
   void add     (QcepDoubleImageDataPtr img);
   void add     (double val);
@@ -385,59 +383,71 @@ public:
   void accumulateImage(QcepDoubleImageDataPtr img);
 };
 
+Q_DECLARE_METATYPE(QcepDoubleImageData*)
+
 class QcepFloatImageData : public QcepImageData<float> {
   Q_OBJECT
 
 public:
-  QcepFloatImageData(QcepObjectWPtr parent,
-                QString name,
-                int width,
-                int height,
-                float def);
+  Q_INVOKABLE QcepFloatImageData(
+      QString name,
+      int width,
+      int height,
+      float def);
 };
+
+Q_DECLARE_METATYPE(QcepFloatImageData*)
 
 class QcepUInt16ImageData : public QcepImageData<quint16> {
   Q_OBJECT
 
 public:
-  QcepUInt16ImageData(QcepObjectWPtr parent,
-                QString name,
-                int width,
-                int height,
-                quint16 def);
+  Q_INVOKABLE QcepUInt16ImageData(
+      QString name,
+      int width,
+      int height,
+      quint16 def);
 };
+
+Q_DECLARE_METATYPE(QcepUInt16ImageData*)
 
 class QcepInt16ImageData : public QcepImageData<qint16> {
   Q_OBJECT
 
 public:
-  QcepInt16ImageData(QcepObjectWPtr parent,
-                QString name,
-                int width,
-                int height,
-                qint16 def);
+  Q_INVOKABLE QcepInt16ImageData(
+      QString name,
+      int width,
+      int height,
+      qint16 def);
 };
+
+Q_DECLARE_METATYPE(QcepInt16ImageData*)
 
 class QcepUInt32ImageData : public QcepImageData<quint32> {
   Q_OBJECT
 
 public:
-  QcepUInt32ImageData(QcepObjectWPtr parent,
-                QString name,
-                int width,
-                int height,
-                quint32 def);
+  Q_INVOKABLE QcepUInt32ImageData(
+      QString name,
+      int width,
+      int height,
+      quint32 def);
 };
+
+Q_DECLARE_METATYPE(QcepUInt32ImageData*)
 
 class QcepInt32ImageData : public QcepImageData<qint32> {
   Q_OBJECT
 
 public:
-  QcepInt32ImageData(QcepObjectWPtr parent,
-                QString name,
-                int width,
-                int height,
-                qint32 def);
+  Q_INVOKABLE QcepInt32ImageData(
+      QString name,
+      int width,
+      int height,
+      qint32 def);
 };
+
+Q_DECLARE_METATYPE(QcepInt32ImageData*)
 
 #endif
