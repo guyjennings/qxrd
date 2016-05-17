@@ -164,24 +164,25 @@ int QcepObject::checkChildren(int verbose, int level) const
 
 void QcepObject::setParentPtr(QcepObjectWPtr parent)
 {
-  if (m_Parent != parent) {
-    QcepObjectPtr oldParent(m_Parent);
-    QcepObjectPtr newParent(parent);
+  m_Parent = parent;
+//  if (m_Parent != parent) {
+//    QcepObjectPtr oldParent(m_Parent);
+//    QcepObjectPtr newParent(parent);
 
-    if (newParent) {
-      m_Parent = newParent;
-    } else {
-      printMessage("Attempt to set parent to non-existing object");
-    }
+//    if (newParent) {
+//      m_Parent = newParent;
+//    } else {
+//      printMessage("Attempt to set parent to non-existing object");
+//    }
 
-    if (oldParent) {
-      oldParent->removeChildPtr(sharedFromThis());
-    }
+//    if (oldParent) {
+//      oldParent->removeChildPtr(sharedFromThis());
+//    }
 
-    if (newParent) {
-      newParent->addChildPtr(sharedFromThis());
-    }
-  }
+//    if (newParent) {
+//      newParent->addChildPtr(sharedFromThis());
+//    }
+//  }
 }
 
 QcepObjectWPtr QcepObject::parentPtr() const
@@ -189,19 +190,41 @@ QcepObjectWPtr QcepObject::parentPtr() const
   return m_Parent;
 }
 
+#ifndef QT_NO_DEBUG
+void QcepObject::checkPointerMatchCount(QcepObjectWPtr ptr)
+{
+  QcepObjectPtr p(ptr);
+
+  if (p) {
+    if (m_PointerMatchCount > 0) {
+      printMessage(tr("%1:%2 matches multiple times").arg(p->get_Name()).arg(p->className()));
+    }
+    m_PointerMatchCount++;
+  }
+}
+#endif
+
 void QcepObject::addChildPtr(QcepObjectPtr child)
 {
+  QcepObjectWPtr myself(sharedFromThis());
+
   if (m_Children.contains(child)) {
     printMessage("Added same child more than once");
   } else {
     m_Children.append(child);
   }
 
-  if (sharedFromThis()) {
-    child->setParentPtr(sharedFromThis());
-  } else {
-    printMessage("Adding child when sharedFromThis() == NULL");
+  if (child) {
+    child->setParentPtr(myself);
   }
+//  if (sharedFromThis()) {
+//  } else {
+//    printMessage("Adding child when sharedFromThis() == NULL");
+//  }
+
+#ifndef QT_NO_DEBUG
+  m_PointerMatchCount = 0;
+#endif
 }
 
 void QcepObject::removeChildPtr(QcepObjectPtr child)
@@ -274,6 +297,11 @@ QString QcepObject::get_Name() const
 //void QcepObject::set_Type(QString name)
 //{
 //}
+
+QString QcepObject::className() const
+{
+  return metaObject()->className();
+}
 
 QString QcepObject::get_Type() const
 {

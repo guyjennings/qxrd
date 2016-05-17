@@ -75,6 +75,8 @@ public:
   QString get_Name() const;
   void    set_Name(QString name);
 
+  QString className() const;
+
   QString get_Type() const;
 //  void    set_Type(QString name);
 
@@ -89,6 +91,11 @@ public:
   static void fromScriptValue(const QScriptValue &obj, QcepObjectPtr &data);
 
 protected:
+
+#ifndef QT_NO_DEBUG
+  void checkPointerMatchCount(QcepObjectWPtr ptr);
+#endif
+
   template <typename T>
   inline bool checkPointer(QcepObjectWPtr ptr, QSharedPointer<T>& field)
   {
@@ -96,7 +103,12 @@ protected:
 
     if (fp) {
       field = fp;
+#ifdef QT_NO_DEBUG
       return true;
+#else
+      checkPointerMatchCount(ptr);
+      return false;
+#endif
     } else {
       return false;
     }
@@ -109,7 +121,12 @@ protected:
 
     if (fp) {
       field = fp;
+#ifdef QT_NO_DEBUG
       return true;
+#else
+      checkPointerMatchCount(ptr);
+      return false;
+#endif
     } else {
       return false;
     }
@@ -121,6 +138,10 @@ private:
   QcepObjectNamer                     m_ObjectNamer;
   QAtomicInt                          m_ChangeCount;
   QAtomicPointer<QcepProperty>        m_LastChanged;
+
+#ifndef QT_NO_DEBUG
+  int                                 m_PointerMatchCount;
+#endif
 
 public:
   Q_PROPERTY(QString name READ get_Name WRITE set_Name STORED false)
