@@ -14,6 +14,7 @@
 #include "qcepdataobject-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
+#include "qxrdpolartransform-ptr.h"
 
 class QxrdPolarTransform : public QcepObject
 {
@@ -21,7 +22,7 @@ class QxrdPolarTransform : public QcepObject
 
 public:
   Q_INVOKABLE QxrdPolarTransform(QString name);
-  QxrdPolarTransform();
+  static QxrdPolarTransformPtr newPolarTransform();
   virtual ~QxrdPolarTransform();
 
   QxrdExperimentWPtr experiment() const;

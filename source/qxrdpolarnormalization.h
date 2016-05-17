@@ -10,6 +10,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepdataobject-ptr.h"
+#include "qxrdpolarnormalization-ptr.h"
 
 class QxrdPolarNormalization : public QcepObject
 {
@@ -17,7 +18,7 @@ class QxrdPolarNormalization : public QcepObject
 
 public:
   Q_INVOKABLE QxrdPolarNormalization(QString name);
-  QxrdPolarNormalization();
+  static QxrdPolarNormalizationPtr newPolarNormalization();
   QcepDataObjectPtr transform(QcepDoubleImageDataPtr img);
 
   enum {

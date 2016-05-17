@@ -2,9 +2,9 @@
 #define QXRDDISTORTIONCORRECTIONPLOTSETTINGS_H
 
 #include <QObject>
-#include "qxrdimageplotsettings.h"
+#include "qcepplotsettings.h"
 
-class QxrdDistortionCorrectionPlotSettings : public QxrdImagePlotSettings
+class QxrdDistortionCorrectionPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

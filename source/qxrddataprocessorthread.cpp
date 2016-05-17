@@ -33,7 +33,7 @@ void QxrdDataProcessorThread::run()
   }
 
   {
-    QxrdDataProcessorPtr proc = QxrdDataProcessorPtr(new QxrdDataProcessor());
+    QxrdDataProcessorPtr proc = QxrdDataProcessor::newDataProcessor();
 
     m_DataProcessor = proc;
   }

@@ -128,8 +128,6 @@ HEADERS += TODO.h \
     qxrddataprocessorthread-ptr.h \
     qxrddataprocessor.h \
     qxrddataprocessor-ptr.h \
-    qxrddataprocessorbase.h \
-    qxrddataprocessorthreaded.h \
     qxrdfilesaverthread.h \
     qxrdfilesaverthread-ptr.h \
     qxrdfilesaver.h \
@@ -352,7 +350,6 @@ HEADERS += TODO.h \
     qxrdcalibrantdspacing-ptr.h \
     qxrdcalibrantdspacings-ptr.h \
     qxrdintegratorparmsdialog.h \
-    qxrddataprocessorbase-ptr.h \
     qxrdapplicationsettings.h \
     qxrdapplicationsettings-ptr.h \
     qxrdintegratorplotsettings.h \
@@ -388,8 +385,6 @@ SOURCES += qxrd.cpp \
     qxrdmaskcolormap.cpp \
     qxrdwindow.cpp \
     qxrddataprocessor.cpp \
-    qxrddataprocessorbase.cpp \
-    qxrddataprocessorthreaded.cpp \
     qxrdfilesaverthread.cpp \
     qxrdfilesaver.cpp \
     qxrdcenterfinder.cpp \

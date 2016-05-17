@@ -59,8 +59,8 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     printf("QxrdDetectorProcessor::QxrdDetectorProcessor(%p)\n", this);
   }
 
-  m_CenterFinder  = QxrdCenterFinderPtr(new QxrdCenterFinder());
-  m_Integrator    = QxrdIntegratorPtr(new QxrdIntegrator());
+  m_CenterFinder  = QxrdCenterFinder::newCenterFinder();
+  m_Integrator    = QxrdIntegrator::newIntegrator();
   m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator());
 
   connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onMaskPathChanged);

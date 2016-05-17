@@ -17,9 +17,11 @@ QxrdPolarNormalization::QxrdPolarNormalization(QString name) :
 {
 }
 
-QxrdPolarNormalization::QxrdPolarNormalization() :
-  QxrdPolarNormalization("polarNormalization")
+QxrdPolarNormalizationPtr QxrdPolarNormalization::newPolarNormalization()
 {
+  QxrdPolarNormalizationPtr norm(new QxrdPolarNormalization("polarNormalization"));
+
+  return norm;
 }
 
 //void QxrdPolarNormalization::execute()

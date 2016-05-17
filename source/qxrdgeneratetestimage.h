@@ -6,18 +6,19 @@
 #include "qcepobject.h"
 
 #include "qcepproperty.h"
-#include "qxrddataprocessorbase-ptr.h"
+#include "qxrddataprocessor-ptr.h"
 #include "qcepallocator-ptr.h"
 #include "qxrddetectorgeometry-ptr.h"
 #include "qxrddetectorgeometry.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qxrdgeneratetestimage-ptr.h"
 
 class QxrdGenerateTestImage : public QcepObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdGenerateTestImage(QString name);
-  QxrdGenerateTestImage();
+  static QxrdGenerateTestImagePtr newGenerateTestImage();
 
 public slots:
   void setDimension(int nc, int nr);
@@ -34,10 +35,10 @@ public slots:
   void generateChiImage();
 
 public:
-  void setProcessor(QxrdDataProcessorBaseWPtr proc);
+  void setProcessor(QxrdDataProcessorWPtr proc);
 
 private:
-  QxrdDataProcessorBaseWPtr m_Processor;
+  QxrdDataProcessorWPtr     m_Processor;
   QxrdDetectorGeometryPtr   m_Geometry;
 
 public:

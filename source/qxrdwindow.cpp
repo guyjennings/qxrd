@@ -440,16 +440,16 @@ void QxrdWindow::initialize()
   connect(m_ActionShowOverflow, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowOverflow);
 
   if (proc) {
-    connect(m_ActionShowMaskRange, &QAction::triggered, proc.data(), (void (QxrdDataProcessorBase::*)()) &QxrdDataProcessorBase::showMaskRange);
-    connect(m_ActionHideMaskRange, &QAction::triggered, proc.data(), (void (QxrdDataProcessorBase::*)()) &QxrdDataProcessorBase::hideMaskRange);
-    connect(m_ActionShowMaskAll, &QAction::triggered, proc.data(), &QxrdDataProcessorBase::showMaskAll);
-    connect(m_ActionHideMaskAll, &QAction::triggered, proc.data(), &QxrdDataProcessorBase::hideMaskAll);
-    connect(m_ActionInvertMask, &QAction::triggered, proc.data(), &QxrdDataProcessorBase::invertMask);
+    connect(m_ActionShowMaskRange, &QAction::triggered, proc.data(), (void (QxrdDataProcessor::*)()) &QxrdDataProcessor::showMaskRange);
+    connect(m_ActionHideMaskRange, &QAction::triggered, proc.data(), (void (QxrdDataProcessor::*)()) &QxrdDataProcessor::hideMaskRange);
+    connect(m_ActionShowMaskAll, &QAction::triggered, proc.data(), &QxrdDataProcessor::showMaskAll);
+    connect(m_ActionHideMaskAll, &QAction::triggered, proc.data(), &QxrdDataProcessor::hideMaskAll);
+    connect(m_ActionInvertMask, &QAction::triggered, proc.data(), &QxrdDataProcessor::invertMask);
     connect(m_ActionMaskCircles, &QAction::triggered, m_ImageMaskCirclesButton, &QAbstractButton::click);
     connect(m_ActionMaskPolygons, &QAction::triggered, m_ImageMaskPolygonsButton, &QAbstractButton::click);
 
-    connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdDataProcessorBase::calculateROI);
-    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdDataProcessorBase::calculateHistogram);
+    connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateROI);
+    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateHistogram);
   }
 
   connect(m_ActionTest, &QAction::triggered, this, &QxrdWindow::doTest);
@@ -504,7 +504,7 @@ void QxrdWindow::initialize()
 
   if (proc) {
     connect(m_ActionIntegrateCurrent, &QAction::triggered,
-            proc.data(), &QxrdDataProcessorThreaded::integrateSaveAndDisplay);
+            proc.data(), &QxrdDataProcessor::integrateSaveAndDisplay);
   }
 
   connect(m_ActionIntegrateInputImages, &QAction::triggered,
@@ -666,7 +666,7 @@ void QxrdWindow::initialize()
     connect(proc -> centerFinder() -> prop_CenterY(), &QcepDoubleProperty::valueChanged,
             m_CenterFinderPlot, &QxrdCenterFinderPlot::onCenterYChanged);
 
-    connect(proc.data(), &QxrdDataProcessorBase::newIntegrationAvailable,
+    connect(proc.data(), &QxrdDataProcessor::newIntegrationAvailable,
             m_IntegratorPlot, &QxrdIntegratorPlot::onNewIntegrationAvailable);
   }
 

@@ -82,9 +82,12 @@ QxrdIntegrator::QxrdIntegrator(QString name)
   connect(prop_SelfNormalizationMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
 }
 
-QxrdIntegrator::QxrdIntegrator() :
-  QxrdIntegrator("integrator")
+QxrdIntegratorPtr QxrdIntegrator::newIntegrator()
+
 {
+  QxrdIntegratorPtr integ(new QxrdIntegrator("integrator"));
+
+  return integ;
 }
 
 QxrdIntegrator::~QxrdIntegrator()
@@ -112,13 +115,7 @@ void QxrdIntegrator::initialize(QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw
 
 QxrdDataProcessorWPtr QxrdIntegrator::dataProcessor() const
 {
-  QxrdExperimentPtr expt(m_Experiment);
-
-  if (expt) {
-    return expt->dataProcessor();
-  } else {
-    return QxrdDataProcessorWPtr();
-  }
+  return qSharedPointerDynamicCast<QxrdDataProcessor>(parentPtr());
 }
 
 QxrdExperimentWPtr QxrdIntegrator::experiment() const

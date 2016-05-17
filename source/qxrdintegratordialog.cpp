@@ -17,7 +17,7 @@ QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegratorWPtr integw, QWidget *p
 
   if (integ) {
     connect(m_IntegrateButton, &QAbstractButton::clicked,
-            integ -> dataProcessor().data(), &QxrdDataProcessorThreaded::integrateSaveAndDisplay);
+            integ -> dataProcessor().data(), &QxrdDataProcessor::integrateSaveAndDisplay);
 
     integ -> prop_Oversample()         -> linkTo(m_OversampleFactor);
     integ -> prop_IntegrationStep()    -> linkTo(m_IntegratorStepSize);

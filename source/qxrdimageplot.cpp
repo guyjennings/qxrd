@@ -179,13 +179,13 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
               cf.data(), &QxrdCenterFinder::onCenterChanged);
 
       connect(m_Circles, (void (QcepPlotMeasurer::*)( const QRectF &)) &QwtPlotPicker::selected,
-              dp.data(), &QxrdDataProcessorBase::maskCircle);
+              dp.data(), &QxrdDataProcessor::maskCircle);
 
       connect(m_Polygons, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
-              dp.data(), &QxrdDataProcessorBase::maskPolygon);
+              dp.data(), &QxrdDataProcessor::maskPolygon);
 
       connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
-              dp.data(), &QxrdDataProcessorBase::measurePolygon);
+              dp.data(), &QxrdDataProcessor::measurePolygon);
 
       connect(m_PowderPointPicker, (void (QcepPlotMeasurer::*)( const QPointF &)) &QwtPlotPicker::selected,
               cf.data(), &QxrdCenterFinder::onPointSelected);

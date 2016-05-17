@@ -1,7 +1,7 @@
 #include "qxrdintegratorplotsettings.h"
 
 QxrdIntegratorPlotSettings::QxrdIntegratorPlotSettings(QString name) :
-  QxrdImagePlotSettings(name)
+  QcepPlotSettings(name)
 {
 }
 

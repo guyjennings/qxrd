@@ -2,9 +2,9 @@
 #define QXRDINTEGRATORPLOTSETTINGS_H
 
 #include <QObject>
-#include "qxrdimageplotsettings.h"
+#include "qcepplotsettings.h"
 
-class QxrdIntegratorPlotSettings : public QxrdImagePlotSettings
+class QxrdIntegratorPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

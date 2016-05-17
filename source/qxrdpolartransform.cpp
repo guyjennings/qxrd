@@ -28,9 +28,11 @@ QxrdPolarTransform::QxrdPolarTransform(QString name) :
 {
 }
 
-QxrdPolarTransform::QxrdPolarTransform() :
-  QxrdPolarTransform("polarTransform")
+QxrdPolarTransformPtr QxrdPolarTransform::newPolarTransform()
 {
+  QxrdPolarTransformPtr xform(new QxrdPolarTransform("polarTransform"));
+
+  return xform;
 }
 
 QxrdPolarTransform::~QxrdPolarTransform()

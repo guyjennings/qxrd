@@ -94,9 +94,11 @@ QxrdCenterFinder::QxrdCenterFinder(QString name)
   connect(prop_TiltPlaneRotation(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
 }
 
-QxrdCenterFinder::QxrdCenterFinder() :
-  QxrdCenterFinder("centerFinder")
+QxrdCenterFinderPtr QxrdCenterFinder::newCenterFinder()
 {
+  QxrdCenterFinderPtr cf(new QxrdCenterFinder("centerFinder"));
+
+  return cf;
 }
 
 QxrdCenterFinder::~QxrdCenterFinder()

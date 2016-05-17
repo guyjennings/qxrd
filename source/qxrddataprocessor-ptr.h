@@ -4,6 +4,7 @@
 #include <QSharedPointer>
 
 class QxrdDataProcessor;
+
 typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;
 typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
 

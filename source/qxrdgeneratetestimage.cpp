@@ -32,12 +32,14 @@ QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
 {
 }
 
-QxrdGenerateTestImage::QxrdGenerateTestImage() :
-  QxrdGenerateTestImage("testImage")
+QxrdGenerateTestImagePtr QxrdGenerateTestImage::newGenerateTestImage()
 {
+  QxrdGenerateTestImagePtr test(new QxrdGenerateTestImage("testImage"));
+
+  return test;
 }
 
-void QxrdGenerateTestImage::setProcessor(QxrdDataProcessorBaseWPtr proc)
+void QxrdGenerateTestImage::setProcessor(QxrdDataProcessorWPtr proc)
 {
   m_Processor = proc;
 }
@@ -153,7 +155,7 @@ void QxrdGenerateTestImage::generateImage()
       }
     }
 
-    QxrdDataProcessorBasePtr proc(m_Processor);
+    QxrdDataProcessorPtr proc(m_Processor);
 
     if (proc) {
       proc -> newData(img, QcepMaskDataPtr());
@@ -200,7 +202,7 @@ void QxrdGenerateTestImage::generateTTHImage()
     }
   }
 
-  QxrdDataProcessorBasePtr proc(m_Processor);
+  QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
     proc -> newData(img, QcepMaskDataPtr());
@@ -247,7 +249,7 @@ void QxrdGenerateTestImage::generateChiImage()
       }
     }
 
-    QxrdDataProcessorBasePtr proc(m_Processor);
+    QxrdDataProcessorPtr proc(m_Processor);
 
     if (proc) {
       proc -> newData(img, QcepMaskDataPtr());

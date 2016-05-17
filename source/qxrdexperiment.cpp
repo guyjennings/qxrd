@@ -156,8 +156,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     splashMessage("Initializing Data Processing");
 
-    m_DataProcessor = QxrdDataProcessorPtr(
-          new QxrdDataProcessor());
+    addChildPtr(QxrdDataProcessor::newDataProcessor());
 
     QxrdFileSaverPtr saver(m_FileSaver);
 
@@ -166,11 +165,11 @@ void QxrdExperiment::initialize(QSettings *settings)
       saver -> setExperiment(myself);
     }
 
+    addChildPtr(m_FileSaver);
+
     splashMessage("Initializing Data Acquisition");
 
-    m_Acquisition = QxrdAcquisitionPtr(
-          new QxrdAcquisition());
-
+    addChildPtr(QxrdAcquisitionPtr(new QxrdAcquisition()));
     m_Acquisition -> initialize();
 
     m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
@@ -178,6 +177,8 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     m_CalibrantLibraryModel = QxrdCalibrantLibraryModelPtr(
           new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
+
+    addChildPtr(m_CalibrantLibrary);
 
     m_CalibrantDSpacings = QxrdCalibrantDSpacingsPtr(
           new QxrdCalibrantDSpacings());
@@ -233,6 +234,8 @@ void QxrdExperiment::initialize(QSettings *settings)
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
 
+    addChildPtr(m_Server);
+
     splashMessage("Starting Simple Socket Server");
 
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
@@ -240,6 +243,8 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
+
+    addChildPtr(m_SimpleServer);
 
 //    m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
 //          new QxrdScriptEngineThread(m_Application, m_Experiment));
@@ -378,13 +383,13 @@ void QxrdExperiment::addChildPtr(QcepObjectPtr child)
     }
   }
 
-  else if (checkPointer<QxrdCalibrantDSpacings>(child, m_CalibrantDSpacings)) {
-    if (m_CalibrantDSpacingsModel == NULL) {
-      printMessage(("Calibrant D Spacings Model == NULL"));
-    } else {
-      m_CalibrantDSpacingsModel->setCalibrantDSpacings(m_CalibrantDSpacings);
-    }
-  }
+//  else if (checkPointer<QxrdCalibrantDSpacings>(child, m_CalibrantDSpacings)) {
+//    if (m_CalibrantDSpacingsModel == NULL) {
+//      printMessage(("Calibrant D Spacings Model == NULL"));
+//    } else {
+//      m_CalibrantDSpacingsModel->setCalibrantDSpacings(m_CalibrantDSpacings);
+//    }
+//  }
 
   else if (checkPointer<QxrdAcquisition>(child, m_Acquisition)) {}
 
@@ -393,7 +398,7 @@ void QxrdExperiment::addChildPtr(QcepObjectPtr child)
     fsav -> moveToThread(m_FileSaverThread.data());
   }
 
-  else if (checkPointer<QxrdScriptEngine>(child, m_ScriptEngine)) {}
+//  else if (checkPointer<QxrdScriptEngine>(child, m_ScriptEngine)) {}
 
   else if (checkPointer<QcepDataset>(child, m_Dataset)) {
     if (m_DatasetModel == NULL) {

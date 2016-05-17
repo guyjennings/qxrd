@@ -48,7 +48,7 @@ void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessorWPtr proc)
     m_Integrator = dp -> integrator();
 
     connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
-            dp.data(), &QxrdDataProcessorBase::printMeasuredPolygon);
+            dp.data(), &QxrdDataProcessor::printMeasuredPolygon);
   }
 }
 

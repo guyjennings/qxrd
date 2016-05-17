@@ -34,9 +34,11 @@ QxrdDistortionCorrection::QxrdDistortionCorrection(QString name)
 {
 }
 
-QxrdDistortionCorrection::QxrdDistortionCorrection() :
-  QxrdDistortionCorrection("distortion")
+QxrdDistortionCorrectionPtr QxrdDistortionCorrection::newDistortionCorrection()
 {
+  QxrdDistortionCorrectionPtr dist(new QxrdDistortionCorrection("distortion"));
+
+  return dist;
 }
 
 QPointF QxrdDistortionCorrection::transform(QPointF pt)

@@ -22,7 +22,7 @@ class QxrdCenterFinder : public QxrdDetectorGeometry
 
 public:
   Q_INVOKABLE QxrdCenterFinder(QString name);
-  QxrdCenterFinder();
+  static QxrdCenterFinderPtr newCenterFinder();
   virtual ~QxrdCenterFinder();
 
   virtual void addChildPtr(QcepObjectPtr child);

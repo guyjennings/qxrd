@@ -8,13 +8,14 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepimagedata.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qxrddistortioncorrection-ptr.h"
 
 class QxrdDistortionCorrection : public QcepObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdDistortionCorrection(QString name);
-  QxrdDistortionCorrection();
+  static QxrdDistortionCorrectionPtr newDistortionCorrection();
 
 public:
   Q_PROPERTY(QString distortionImagePath READ get_DistortionImagePath WRITE set_DistortionImagePath)
