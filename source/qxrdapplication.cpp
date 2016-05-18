@@ -36,6 +36,7 @@
 #include "qxrdcalibrant.h"
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdapplicationsettings.h"
+#include "qxrdwindowsettings.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -114,6 +115,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   QxrdCalibrantDSpacing::registerMetaTypes();
   QxrdCalibrantDSpacings::registerMetaTypes();
   QxrdExperiment::registerMetaTypes();
+  QxrdWindowSettings::registerMetaTypes();
 
   setQuitOnLastWindowClosed(false);
 }

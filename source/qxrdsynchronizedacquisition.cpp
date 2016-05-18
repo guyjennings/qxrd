@@ -25,9 +25,11 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
 #endif
 }
 
-QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition() :
-  QxrdSynchronizedAcquisition("synchronized")
+QxrdSynchronizedAcquisitionPtr QxrdSynchronizedAcquisition::newSynchronizedAcquisition()
 {
+  QxrdSynchronizedAcquisitionPtr acq(new QxrdSynchronizedAcquisition("synchronized"));
+
+  return acq;
 }
 
 QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()

@@ -81,11 +81,9 @@ QxrdAcquisition::QxrdAcquisition() :
     printMessage("QxrdAcquisition::QxrdAcquisition");
   }
 
-  addChildPtr(QxrdSynchronizedAcquisitionPtr(
-        new QxrdSynchronizedAcquisition("synchronized")));
+  addChildPtr(QxrdSynchronizedAcquisition::newSynchronizedAcquisition());
 
-  addChildPtr(QxrdAcquisitionExtraInputsPtr(
-        new QxrdAcquisitionExtraInputs("")));
+  addChildPtr(QxrdAcquisitionExtraInputs::newAcquisitionExtraInputs());
 
 
   connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged,

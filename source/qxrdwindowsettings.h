@@ -25,6 +25,8 @@ public:
 
   virtual void addChildPtr(QcepSerializableObjectPtr child);
 
+  static void registerMetaTypes();
+
 public:
   Q_PROPERTY(QByteArray windowGeometry READ get_WindowGeometry WRITE set_WindowGeometry)
   QCEP_BYTE_ARRAY_PROPERTY(WindowGeometry)

@@ -11,13 +11,14 @@
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
+#include "qxrdsynchronizedacquisition-ptr.h"
 
 class QxrdSynchronizedAcquisition : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdSynchronizedAcquisition(QString name);
-  QxrdSynchronizedAcquisition();
+  static QxrdSynchronizedAcquisitionPtr newSynchronizedAcquisition();
   virtual ~QxrdSynchronizedAcquisition();
 
 public:

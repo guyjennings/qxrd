@@ -44,6 +44,13 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QString name) :
   }
 }
 
+QxrdAcquisitionExtraInputsPtr QxrdAcquisitionExtraInputs::newAcquisitionExtraInputs()
+{
+  QxrdAcquisitionExtraInputsPtr xtra(new QxrdAcquisitionExtraInputs("extraInputs"));
+
+  return xtra;
+}
+
 void QxrdAcquisitionExtraInputs::addChildPtr(QcepSerializableObjectPtr child)
 {
   QcepSerializableObject::addChildPtr(child);

@@ -52,11 +52,13 @@ class QxrdExperiment : public QcepExperiment
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdExperiment(QxrdExperimentThreadWPtr expthrd = QxrdExperimentThreadPtr(),
+  Q_INVOKABLE QxrdExperiment(QString name);
+
+  QxrdExperiment(QxrdExperimentThreadWPtr expthrd = QxrdExperimentThreadPtr(),
                              QString path = "",
                              QxrdApplicationWPtr app =  QxrdApplicationWPtr());
   virtual ~QxrdExperiment();
-  virtual void initialize(QSettings *settings);
+  void initialize(QSettings *settings);
 
   virtual void addChildPtr(QcepSerializableObjectPtr child);
   virtual void removeChildPtr(QcepSerializableObjectPtr child);
@@ -66,7 +68,10 @@ public:
   void openWindows();
   void closeWindows();
 
+  void setExperimentThread(QxrdExperimentThreadWPtr thrd);
   QxrdExperimentThreadWPtr experimentThread();
+
+  void setExperimentApplication(QxrdApplicationWPtr app);
 
 //  QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionWPtr acquisition() const;

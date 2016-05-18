@@ -13,6 +13,10 @@
 #include "qxrdacquisitionextrainputsdialogsettings.h"
 #include "qxrddistortioncorrectiondialogsettings.h"
 #include "qxrddistortioncorrectionplotsettings.h"
+#include "qxrdsliceplotsettings.h"
+#include "qxrdsynchronizedacquisitionplotsettings.h"
+#include "qxrdacquisitionextrainputsplotsettings.h"
+#include "qxrdhistogramplotsettings.h"
 
 QxrdWindowSettings::QxrdWindowSettings(QString name) :
   QcepSerializableObject(name),
@@ -56,6 +60,28 @@ void QxrdWindowSettings::addChildPtr(QcepSerializableObjectPtr child)
   else if (checkPointer<QxrdDistortionCorrectionDialogSettings>(child, m_DistortionCorrectionDialogSettings)) {}
   else if (checkPointer<QxrdDistortionCorrectionPlotSettings>(child, m_DistortionCorrectionPlotSettings)) {}
   else if (checkPointer<QxrdImagePlotSettings>(child, m_ImagePlotSettings)) {}
+}
+
+void QxrdWindowSettings::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
+  qRegisterMetaType<QxrdImagePlotSettings*>("QxrdImagePlotSettings*");
+  qRegisterMetaType<QxrdCenterFinderPlotSettings*>("QxrdCenterFinderPlotSettings*");
+  qRegisterMetaType<QxrdIntegratorPlotSettings*>("QxrdIntegratorPlotSettings*");
+  qRegisterMetaType<QxrdInputFileBrowserSettings*>("QxrdInputFileBrowserSettings*");
+  qRegisterMetaType<QxrdOutputFileBrowserSettings*>("QxrdOutputFileBrowserSettings*");
+  qRegisterMetaType<QxrdHistogramDialogSettings*>("QxrdHistogramDialogSettings*");
+  qRegisterMetaType<QxrdHistogramPlotSettings*>("QxrdHistogramPlotSettings*");
+  qRegisterMetaType<QxrdSliceDialogSettings*>("QxrdSliceDialogSettings*");
+  qRegisterMetaType<QxrdSlicePlotSettings*>("QxrdSlicePlotSettings*");
+  qRegisterMetaType<QxrdInfoDialogSettings*>("QxrdInfoDialogSettings*");
+  qRegisterMetaType<QxrdScriptDialogSettings*>("QxrdScriptDialogSettings*");
+  qRegisterMetaType<QxrdSynchronizedAcquisitionDialogSettings*>("QxrdSynchronizedAcquisitionDialogSettings*");
+  qRegisterMetaType<QxrdSynchronizedAcquisitionPlotSettings*>("QxrdSynchronizedAcquisitionPlotSettings*");
+  qRegisterMetaType<QxrdAcquisitionExtraInputsDialogSettings*>("QxrdAcquisitionExtraInputsDialogSettings*");
+  qRegisterMetaType<QxrdAcquisitionExtraInputsPlotSettings*>("QxrdAcquisitionExtraInputsPlotSettings*");
+  qRegisterMetaType<QxrdDistortionCorrectionDialogSettings*>("QxrdDistortionCorrectionDialogSettings*");
+  qRegisterMetaType<QxrdDistortionCorrectionPlotSettings*>("QxrdDistortionCorrectionPlotSettings*");
 }
 
 void QxrdWindowSettings::readSettings(QSettings *settings, QString section)

@@ -50,13 +50,12 @@
 #include <QColorDialog>
 #include <QProcess>
 #include "qxrdwindowsettings.h"
+#include "qxrdgeneratetestimage.h"
 
-QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
-    QString path,
-    QxrdApplicationWPtr app) :
-  QcepExperiment(path, "experiment"),
-  m_Application(app),
-  m_ExperimentThread(expthrd),
+QxrdExperiment::QxrdExperiment(QString name) :
+  QcepExperiment("", name),
+  m_Application(),
+  m_ExperimentThread(),
   m_WindowSettings(NULL),
   m_Window(),
 //  m_AcquisitionWindow(),
@@ -74,9 +73,9 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
   m_ScanFile(NULL),
   m_ExperimentFileMutex(),
 
-  m_DataDirectory(this, "dataDirectory", defaultDataDirectory(path), "Saved Data Directory"),
-  m_LogFileName(this, "logFileName", defaultLogName(path), "Log File Name"),
-  m_ScanFileName(this, "scanFileName", defaultScanName(path), "Scan File Name"),
+  m_DataDirectory(this, "dataDirectory", defaultDataDirectory(""), "Saved Data Directory"),
+  m_LogFileName(this, "logFileName", defaultLogName(""), "Log File Name"),
+  m_ScanFileName(this, "scanFileName", defaultScanName(""), "Scan File Name"),
   m_ScanFileExtension(this, "scanFileExtension", ".avg", "Scan File Extension"),
   m_ScanDataNegative(this, "scanDataNegative", 0, "Scan Data Negative Value Handling"),
   m_DefaultLayout(this,"defaultLayout",0, "Default Layout Used?"),
@@ -105,6 +104,16 @@ QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
       set->prop_ExperimentCount()->incValue(1);
     }
   }
+}
+
+QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
+    QString path,
+    QxrdApplicationWPtr app) :
+  QxrdExperiment("experiment")
+{
+  setExperimentThread(expthrd);
+  setExperimentFilePath(path);
+  setExperimentApplication(app);
 }
 
 QxrdExperiment::~QxrdExperiment()
@@ -144,7 +153,7 @@ void QxrdExperiment::initialize(QSettings *settings)
   if (app) {
     QxrdExperimentPtr myself(qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()));
 
-    QcepExperiment::initialize(settings);
+    QcepExperiment::initialize();
 
     splashMessage("Initializing File Saver");
 
@@ -456,11 +465,22 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QcepDataColumnScan*>("QcepDataColumnScan*");
   qRegisterMetaType<QcepDataExportParameters*>("QcepDataExportParameters*");
   qRegisterMetaType<QcepDataImportParameters*>("QcepDataImportParameters*");
+  qRegisterMetaType<QxrdGenerateTestImage*>("QxrdGenerateTestImage*");
+}
+
+void QxrdExperiment::setExperimentThread(QxrdExperimentThreadWPtr thrd)
+{
+  m_ExperimentThread = thrd;
 }
 
 QxrdExperimentThreadWPtr QxrdExperiment::experimentThread()
 {
   return m_ExperimentThread;
+}
+
+void QxrdExperiment::setExperimentApplication(QxrdApplicationWPtr app)
+{
+  m_Application = app;
 }
 
 void QxrdExperiment::openWindows()

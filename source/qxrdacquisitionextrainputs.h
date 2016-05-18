@@ -21,6 +21,7 @@ class QxrdAcquisitionExtraInputs : public QcepSerializableObject
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdAcquisitionExtraInputs(QString name);
+  static QxrdAcquisitionExtraInputsPtr newAcquisitionExtraInputs();
   virtual ~QxrdAcquisitionExtraInputs();
 
 public:
