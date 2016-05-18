@@ -43,8 +43,6 @@ void QxrdFileSaverThread::run()
 
   m_FileSaver = QxrdFileSaverPtr(new QxrdFileSaver());
 
-  m_FileSaver -> setParentPtr(parent());
-
   int rc = exec();
 
   m_FileSaver = QxrdFileSaverPtr();

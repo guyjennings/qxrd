@@ -25,8 +25,8 @@ public:
   static QxrdCenterFinderPtr newCenterFinder();
   virtual ~QxrdCenterFinder();
 
-  virtual void addChildPtr(QcepSerializableObjectPtr child);
-  virtual void removeChildPtr(QcepSerializableObjectPtr child);
+//  virtual void addChildPtr(QcepSerializableObjectPtr child);
+//  virtual void removeChildPtr(QcepSerializableObjectPtr child);
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
@@ -169,9 +169,6 @@ signals:
   void parameterChanged();
 
 public slots:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-
   void onCenterChanged(QPointF pt);
   void onPointSelected(QPointF pt);
 
@@ -254,7 +251,7 @@ public:
   void setData(QcepDoubleImageDataPtr data);
   double imageValue(double x, double y);
 
-  QxrdExperimentWPtr experiment() const;
+  QxrdExperimentWPtr     experiment() const;
   QcepDoubleImageDataPtr data() const;
   QcepDoubleImageDataPtr newData();
 
@@ -262,7 +259,7 @@ public:
 
 private:
   mutable QMutex             m_Mutex;
-  QxrdExperimentWPtr         m_Experiment;
+//  QxrdExperimentWPtr         m_Experiment;
   QcepDoubleImageDataPtr     m_Data;
   int                        m_CenterFitRingNumber;
 };

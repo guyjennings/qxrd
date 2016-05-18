@@ -71,8 +71,8 @@ QxrdCenterFinder::QxrdCenterFinder(QString name)
     m_FittedWidthMax(this, "fittedWidthMax", 3.0, "Maximum acceptable fitted width (pixels)"),
     m_FittedHeightMinRatio(this, "fittedHeightMinRatio", 0.25, "Minimum acceptable peak height ratio"),
     m_FittedPositionMaxDistance(this, "fittedPositionMaxDistance", 2.0, "Maximum acceptable fitted position shift (pixels)"),
-    m_FitPowderPointPosition(this, "fitPowderPointPosition", true, "Fit to nearby peak when adding powder points individually"),
-    m_Experiment()
+    m_FitPowderPointPosition(this, "fitPowderPointPosition", true, "Fit to nearby peak when adding powder points individually")/*,
+    m_Experiment()*/
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing center finder\n");
@@ -108,25 +108,37 @@ QxrdCenterFinder::~QxrdCenterFinder()
 #endif
 }
 
-void QxrdCenterFinder::addChildPtr(QcepSerializableObjectPtr child)
-{
-  QxrdDetectorGeometry::addChildPtr(child);
+//void QxrdCenterFinder::addChildPtr(QcepSerializableObjectPtr child)
+//{
+//  QxrdDetectorGeometry::addChildPtr(child);
 
-  QxrdExperimentPtr expt = qSharedPointerDynamicCast<QxrdExperiment>(child);
+//  QxrdExperimentPtr expt = qSharedPointerDynamicCast<QxrdExperiment>(child);
 
-  if (expt) {
-    m_Experiment = expt;
-  }
-}
+//  if (expt) {
+//    m_Experiment = expt;
+//  }
+//}
 
-void QxrdCenterFinder::removeChildPtr(QcepSerializableObjectPtr child)
-{
-  printMessage("Need to write QxrdCenterFinder::removeChildPtr");
-}
+//void QxrdCenterFinder::removeChildPtr(QcepSerializableObjectPtr child)
+//{
+//  printMessage("Need to write QxrdCenterFinder::removeChildPtr");
+//}
 
 QxrdExperimentWPtr QxrdCenterFinder::experiment() const
 {
-  return m_Experiment;
+  QcepSerializableObjectPtr p = parentPtr();
+
+  while (p) {
+    QxrdExperimentWPtr e = qSharedPointerDynamicCast<QxrdExperiment>(p);
+
+    if (e) {
+      return e;
+    } else {
+      p = p->parentPtr();
+    }
+  }
+
+  return QxrdExperimentWPtr();
 }
 
 QcepDoubleImageDataPtr QxrdCenterFinder::data() const
@@ -146,7 +158,7 @@ QcepDoubleImageDataPtr QxrdCenterFinder::newData()
     ht = 2048;
   }
 
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QxrdDataProcessorPtr proc(expt->dataProcessor());
@@ -316,24 +328,6 @@ void QxrdCenterFinder::onPointSelected(QPointF pt)
     fitPeakNear(pt.x(), pt.y());
   } else {
     appendPowderPoint(pt.x(), pt.y());
-  }
-}
-
-void QxrdCenterFinder::printMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->printMessage(msg, ts);
-  }
-}
-
-void QxrdCenterFinder::statusMessage(QString msg, QDateTime ts) const
-{
-  QxrdExperimentPtr exp(m_Experiment);
-
-  if (exp) {
-    exp->statusMessage(msg, ts);
   }
 }
 
@@ -826,7 +820,7 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
     nreason[fit.reason()] += 1;
   }
 
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QcepDatasetModelPtr data = expt->dataset();
@@ -1071,7 +1065,7 @@ void QxrdCenterFinder::setPowderPoint(int i, int n1, int n2, int n3, double x, d
 
 QScriptValue QxrdCenterFinder::getPowderPoint(int i)
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(experiment());
 
   if (exp) {
     QxrdScriptEnginePtr eng(exp->scriptEngine());
@@ -1100,7 +1094,7 @@ QScriptValue QxrdCenterFinder::getPowderPoint(int i)
 
 QScriptValue QxrdCenterFinder::getPowderPoints()
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(experiment());
 
   if (exp) {
     QxrdScriptEnginePtr eng(exp->scriptEngine());
@@ -1402,7 +1396,7 @@ double QxrdCenterFinder::calibrantDSpacing(int n)
 {
   double res = qQNaN();
 
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QxrdCalibrantDSpacingsPtr dsp(expt->calibrantDSpacings());
@@ -1419,7 +1413,7 @@ double QxrdCenterFinder::calibrantTTH(int n)
 {
   double res = qQNaN();
 
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QxrdCalibrantDSpacingsPtr dsp(expt->calibrantDSpacings());
@@ -1466,7 +1460,7 @@ static int nearby(double x1, double y1, double x2, double y2)
 void QxrdCenterFinder::calculateCalibration()
 {
   printMessage("centering.calculateCalibration()");
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QxrdDataProcessorPtr proc(expt->dataProcessor());

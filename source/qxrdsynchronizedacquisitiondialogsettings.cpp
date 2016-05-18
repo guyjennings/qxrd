@@ -3,7 +3,7 @@
 #include "qxrdsynchronizedacquisitionplotsettings.h"
 
 QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings(QString name) :
-  QcepObject(name)
+  QcepSerializableObject(name)
 {
 }
 

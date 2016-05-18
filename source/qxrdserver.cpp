@@ -12,7 +12,7 @@
 #include "qxrdexperiment.h"
 
 QxrdServer::QxrdServer(QString name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
   m_RunSpecServer(this,"runSpecServer", 1, "Run SPEC Server?"),
   m_SpecServerPort(this,"specServerPort", -1, "Port for SPEC Server"),
   m_Server(name)

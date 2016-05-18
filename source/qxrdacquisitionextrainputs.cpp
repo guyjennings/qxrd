@@ -11,7 +11,7 @@
 #include <QTimer>
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QString name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
   m_Enabled(this, "enabled", 0, "Extra Inputs Enabled?"),
   m_Skipping(this, "skipping", 0, "Skipping initial readout?"),
   m_SampleRate(this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),

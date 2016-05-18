@@ -4,7 +4,7 @@
 #include "qxrdacquisitionextrainputsplotsettings.h"
 
 QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettings(QString name) :
-  QcepObject(name)
+  QcepSerializableObject(name)
 {
 }
 
@@ -17,7 +17,7 @@ QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettin
 
 void QxrdAcquisitionExtraInputsDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
 {
-  QcepObject::addChildPtr(child);
+  QcepSerializableObject::addChildPtr(child);
 
   if (checkPointer<QxrdAcquisitionExtraInputsPlotSettings>(child, m_AcquisitionExtraInputsPlotSettings)) {}
 }

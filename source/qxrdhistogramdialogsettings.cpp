@@ -3,7 +3,7 @@
 #include "qxrdhistogramplotsettings.h"
 
 QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QString name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
   m_HistogramRect(this, "histogramRect", QRectF(), "Histogram Selection Rectangle")
 {
 }

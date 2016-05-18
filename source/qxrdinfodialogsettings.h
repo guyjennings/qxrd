@@ -1,11 +1,11 @@
 #ifndef QXRDINFODIALOGSETTINGS_H
 #define QXRDINFODIALOGSETTINGS_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 
-class QxrdInfoDialogSettings : public QcepObject
+class QxrdInfoDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:

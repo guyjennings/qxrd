@@ -165,7 +165,7 @@ void QxrdExperiment::initialize(QSettings *settings)
       saver -> setExperiment(myself);
     }
 
-    addChildPtr(m_FileSaver);
+//    addChildPtr(m_FileSaver);
 
     splashMessage("Initializing Data Acquisition");
 
@@ -357,8 +357,6 @@ void QxrdExperiment::initialize(QSettings *settings)
 
 void QxrdExperiment::addChildPtr(QcepSerializableObjectPtr child)
 {
-  printMessage("QxrdExperiment::addChildPtr");
-
   QcepExperiment::addChildPtr(child);
 
   if (checkPointer<QxrdWindowSettings>(child, m_WindowSettings)) {}
@@ -393,10 +391,10 @@ void QxrdExperiment::addChildPtr(QcepSerializableObjectPtr child)
 
   else if (checkPointer<QxrdAcquisition>(child, m_Acquisition)) {}
 
-  else if (checkPointer<QxrdFileSaver>(child, m_FileSaver)) {
-    QxrdFileSaverPtr fsav(m_FileSaver);
-    fsav -> moveToThread(m_FileSaverThread.data());
-  }
+//  else if (checkPointer<QxrdFileSaver>(child, m_FileSaver)) {
+//    QxrdFileSaverPtr fsav(m_FileSaver);
+//    fsav -> moveToThread(m_FileSaverThread.data());
+//  }
 
 //  else if (checkPointer<QxrdScriptEngine>(child, m_ScriptEngine)) {}
 
@@ -1187,7 +1185,7 @@ void QxrdExperiment::readObjectTreeFromText(QString filePath)
 
   fmt -> beginReadFile();
 
-  QcepObjectPtr obj = QcepObject::readDataObject(fmt);
+  QcepSerializableObjectPtr obj = QcepSerializableObject::readDataObject(fmt);
 
   fmt -> endReadFile();
 

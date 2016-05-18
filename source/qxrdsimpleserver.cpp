@@ -8,7 +8,7 @@
 #include <QScriptValueIterator>
 
 QxrdSimpleServer::QxrdSimpleServer(QString name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
   m_RunSimpleServer(this,"runSimpleServer", 1, "Run Simple Socket Server?"),
   m_SimpleServerPort(this,"simpleServerPort", 1234, "Port for Simple Socket Server")
 {

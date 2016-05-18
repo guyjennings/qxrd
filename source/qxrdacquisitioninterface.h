@@ -2,7 +2,7 @@
 #define QXRDACQUISITIONINTERFACE_H
 
 #include "qcepmacros.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include <QWaitCondition>
 //#include <QFutureWatcher>
@@ -17,7 +17,7 @@
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 
-class QxrdAcquisitionInterface : public QcepObject
+class QxrdAcquisitionInterface : public QcepSerializableObject
 {
   Q_OBJECT
 

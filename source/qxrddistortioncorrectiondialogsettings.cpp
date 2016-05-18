@@ -2,7 +2,7 @@
 #include "qcepsettingssaver.h"
 
 QxrdDistortionCorrectionDialogSettings::QxrdDistortionCorrectionDialogSettings(QString name) :
-  QcepObject(name)
+  QcepSerializableObject(name)
 {
 }
 

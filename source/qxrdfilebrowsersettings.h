@@ -1,11 +1,11 @@
 #ifndef QXRDFILEBROWSERSETTINGS_H
 #define QXRDFILEBROWSERSETTINGS_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 
-class QxrdFileBrowserSettings : public QcepObject
+class QxrdFileBrowserSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:

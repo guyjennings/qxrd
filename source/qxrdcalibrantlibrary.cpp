@@ -5,7 +5,7 @@
 #include "qxrdexperiment.h"
 
 QxrdCalibrantLibrary::QxrdCalibrantLibrary(QString name)
-  : QcepObject(name)
+  : QcepSerializableObject(name)
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing calibrant library\n");

@@ -9,9 +9,9 @@
 #include "qxrdexperiment-ptr.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 
-class QxrdSimpleServer : public QcepObject
+class QxrdSimpleServer : public QcepSerializableObject
 {
   Q_OBJECT
 public:

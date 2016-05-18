@@ -1,11 +1,11 @@
 #ifndef QXRDDISTORTIONCORRECTIONDIALOGSETTINGS_H
 #define QXRDDISTORTIONCORRECTIONDIALOGSETTINGS_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 
-class QxrdDistortionCorrectionDialogSettings : public QcepObject
+class QxrdDistortionCorrectionDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:

@@ -10,7 +10,7 @@
 #include "qxrdexperiment.h"
 
 QxrdAcquisitionInterface::QxrdAcquisitionInterface(QString name)
-  : QcepObject(name),
+  : QcepSerializableObject(name),
     m_ExecutionThread(),
     m_Cancelling(this, "cancelling", 0, "Cancel Acquisition?"),
     m_Triggered(this, "triggered", 0, "Trigger Acquisition"),

@@ -15,7 +15,7 @@
 #include "qxrddistortioncorrectionplotsettings.h"
 
 QxrdWindowSettings::QxrdWindowSettings(QString name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
   m_WindowGeometry(this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(this, "windowState", QByteArray(), "Window State Settings")
 {

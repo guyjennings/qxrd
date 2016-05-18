@@ -4,7 +4,7 @@
 #include "qxrdsliceplotsettings.h"
 
 QxrdSliceDialogSettings::QxrdSliceDialogSettings(QString name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
   m_SlicePolygon(this, "slicePolygon", QcepPolygon(), "Slice Polygon")
 {
 }

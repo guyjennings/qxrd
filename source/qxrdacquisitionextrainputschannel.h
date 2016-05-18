@@ -1,14 +1,14 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTSCHANNEL_H
 #define QXRDACQUISITIONEXTRAINPUTSCHANNEL_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qcepsettingssaver-ptr.h"
 
-class QxrdAcquisitionExtraInputsChannel : public QcepObject
+class QxrdAcquisitionExtraInputsChannel : public QcepSerializableObject
 {
   Q_OBJECT
 public:
