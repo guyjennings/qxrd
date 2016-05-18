@@ -102,7 +102,7 @@ QxrdAcquisition::QxrdAcquisition() :
         new QxrdAcquisitionScalerModel(myself));
 }
 
-void QxrdAcquisition::addChildPtr(QcepObjectPtr child)
+void QxrdAcquisition::addChildPtr(QcepSerializableObjectPtr child)
 {
   QxrdAcquisitionInterface::addChildPtr(child);
 

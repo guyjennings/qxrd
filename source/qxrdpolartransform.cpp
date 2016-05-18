@@ -8,7 +8,7 @@
 #include "qcepallocator.h"
 
 QxrdPolarTransform::QxrdPolarTransform(QString name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
 //  m_Destination(saver, this, "destination", "Polar/image", "Destination for polar transform"),
 //  m_OutputType(saver, this, "outputType", 3, "Output type 0=none, 1=data, 2=radial plot, 3=polar plot"),
   m_Oversample(this, "oversample", 1, "Oversample factor"),

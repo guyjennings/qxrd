@@ -39,9 +39,9 @@ QxrdWindowSettings::QxrdWindowSettings() :
   addChildPtr(QxrdDistortionCorrectionPlotSettingsPtr(new QxrdDistortionCorrectionPlotSettings()));
 }
 
-void QxrdWindowSettings::addChildPtr(QcepObjectPtr child)
+void QxrdWindowSettings::addChildPtr(QcepSerializableObjectPtr child)
 {
-  QcepObject::addChildPtr(child);
+  QcepSerializableObject::addChildPtr(child);
 
   if (checkPointer<QxrdCenterFinderPlotSettings>(child, m_CenterFinderPlotSettings)) {}
   else if (checkPointer<QxrdIntegratorPlotSettings>(child, m_IntegratorPlotSettings)) {}

@@ -14,7 +14,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
-class QxrdROICalculator : public QcepObject, public QEnableSharedFromThis<QxrdROICalculator>
+class QxrdROICalculator : public QcepObject
 {
   Q_OBJECT
 

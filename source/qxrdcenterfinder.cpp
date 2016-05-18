@@ -108,7 +108,7 @@ QxrdCenterFinder::~QxrdCenterFinder()
 #endif
 }
 
-void QxrdCenterFinder::addChildPtr(QcepObjectPtr child)
+void QxrdCenterFinder::addChildPtr(QcepSerializableObjectPtr child)
 {
   QxrdDetectorGeometry::addChildPtr(child);
 
@@ -119,7 +119,7 @@ void QxrdCenterFinder::addChildPtr(QcepObjectPtr child)
   }
 }
 
-void QxrdCenterFinder::removeChildPtr(QcepObjectPtr child)
+void QxrdCenterFinder::removeChildPtr(QcepSerializableObjectPtr child)
 {
   printMessage("Need to write QxrdCenterFinder::removeChildPtr");
 }

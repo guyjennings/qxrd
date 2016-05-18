@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -12,7 +12,7 @@
 #include "qcepdataobject-ptr.h"
 #include "qxrdpolarnormalization-ptr.h"
 
-class QxrdPolarNormalization : public QcepObject
+class QxrdPolarNormalization : public QcepSerializableObject
 {
   Q_OBJECT
 

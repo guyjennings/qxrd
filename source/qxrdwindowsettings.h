@@ -1,7 +1,7 @@
 #ifndef QXRDWINDOWSETTINGS_H
 #define QXRDWINDOWSETTINGS_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrdimageplotsettings-ptr.h"
 #include "qxrdintegratorplotsettings-ptr.h"
@@ -16,14 +16,14 @@
 #include "qxrddistortioncorrectiondialogsettings-ptr.h"
 #include "qxrddistortioncorrectionplotsettings-ptr.h"
 
-class QxrdWindowSettings : public QcepObject
+class QxrdWindowSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdWindowSettings(QString name);
   QxrdWindowSettings();
 
-  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepSerializableObjectPtr child);
 
 public:
   Q_PROPERTY(QByteArray windowGeometry READ get_WindowGeometry WRITE set_WindowGeometry)

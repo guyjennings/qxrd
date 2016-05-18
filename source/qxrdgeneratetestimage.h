@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 
 #include "qcepproperty.h"
 #include "qxrddataprocessor-ptr.h"
@@ -13,7 +13,7 @@
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdgeneratetestimage-ptr.h"
 
-class QxrdGenerateTestImage : public QcepObject
+class QxrdGenerateTestImage : public QcepSerializableObject
 {
   Q_OBJECT
 public:

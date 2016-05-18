@@ -44,9 +44,9 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QString name) :
   }
 }
 
-void QxrdAcquisitionExtraInputs::addChildPtr(QcepObjectPtr child)
+void QxrdAcquisitionExtraInputs::addChildPtr(QcepSerializableObjectPtr child)
 {
-  QcepObject::addChildPtr(child);
+  QcepSerializableObject::addChildPtr(child);
 
   QxrdAcquisitionExtraInputsChannelPtr chan = qSharedPointerDynamicCast<QxrdAcquisitionExtraInputsChannel>(child);
 
@@ -59,7 +59,7 @@ void QxrdAcquisitionExtraInputs::addChildPtr(QcepObjectPtr child)
   }
 }
 
-void QxrdAcquisitionExtraInputs::removeChildPtr(QcepObjectPtr child)
+void QxrdAcquisitionExtraInputs::removeChildPtr(QcepSerializableObjectPtr child)
 {
   QxrdAcquisitionExtraInputsChannelPtr chan = qSharedPointerDynamicCast<QxrdAcquisitionExtraInputsChannel>(child);
 
@@ -67,7 +67,7 @@ void QxrdAcquisitionExtraInputs::removeChildPtr(QcepObjectPtr child)
     m_Channels.removeAll(chan);
   }
 
-  QcepObject::removeChildPtr(child);
+  QcepSerializableObject::removeChildPtr(child);
 }
 
 QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()

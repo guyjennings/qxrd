@@ -14,9 +14,9 @@ QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSett
                 new QxrdSynchronizedAcquisitionPlotSettings()));
 }
 
-void QxrdSynchronizedAcquisitionDialogSettings::addChildPtr(QcepObjectPtr child)
+void QxrdSynchronizedAcquisitionDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
 {
-  QcepObject::addChildPtr(child);
+  QcepSerializableObject::addChildPtr(child);
 
   if (checkPointer<QxrdSynchronizedAcquisitionPlotSettings>(child, m_SynchronizedAcquisitionPlotSettings)) {}
 }

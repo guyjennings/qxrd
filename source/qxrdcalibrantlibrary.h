@@ -2,14 +2,14 @@
 #define QXRDCALIBRANTLIBRARY_H
 
 #include "qcepmacros.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qxrdcalibrant-ptr.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 
-class QxrdCalibrantLibrary : public QcepObject
+class QxrdCalibrantLibrary : public QcepSerializableObject
 {
   Q_OBJECT
 
@@ -18,7 +18,7 @@ public:
   QxrdCalibrantLibrary();
   virtual ~QxrdCalibrantLibrary();
 
-  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepSerializableObjectPtr child);
 
 public slots:
   int count();

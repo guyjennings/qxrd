@@ -1,7 +1,7 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTS_H
 #define QXRDACQUISITIONEXTRAINPUTS_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -16,7 +16,7 @@
 #include <QMutex>
 #include "qxrdacquisitionparameterpack-ptr.h"
 
-class QxrdAcquisitionExtraInputs : public QcepObject
+class QxrdAcquisitionExtraInputs : public QcepSerializableObject
 {
   Q_OBJECT
 public:
@@ -24,8 +24,8 @@ public:
   virtual ~QxrdAcquisitionExtraInputs();
 
 public:
-  void addChildPtr(QcepObjectPtr child);
-  void removeChildPtr(QcepObjectPtr child);
+  void addChildPtr(QcepSerializableObjectPtr child);
+  void removeChildPtr(QcepSerializableObjectPtr child);
 
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
   QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;

@@ -1,11 +1,11 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTSDIALOGSETTINGS_H
 #define QXRDACQUISITIONEXTRAINPUTSDIALOGSETTINGS_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrdacquisitionextrainputsplotsettings-ptr.h"
 
-class QxrdAcquisitionExtraInputsDialogSettings : public QcepObject
+class QxrdAcquisitionExtraInputsDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
@@ -13,7 +13,7 @@ public:
   QxrdAcquisitionExtraInputsDialogSettings();
   
 public:
-  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepSerializableObjectPtr child);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

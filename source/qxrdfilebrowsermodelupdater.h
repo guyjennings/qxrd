@@ -10,7 +10,7 @@
 #include "qxrdfilebrowsermodel-ptr.h"
 #include "qxrdfilebrowsermodel.h"
 
-class QxrdFileBrowserModelUpdater : public QcepObject, public QEnableSharedFromThis<QxrdFileBrowserModelUpdater>
+class QxrdFileBrowserModelUpdater : public QcepObject
 {
     Q_OBJECT
 public:

@@ -58,8 +58,8 @@ public:
   virtual ~QxrdExperiment();
   virtual void initialize(QSettings *settings);
 
-  virtual void addChildPtr(QcepObjectPtr child);
-  virtual void removeChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepSerializableObjectPtr child);
+  virtual void removeChildPtr(QcepSerializableObjectPtr child);
 
   static void registerMetaTypes();
 

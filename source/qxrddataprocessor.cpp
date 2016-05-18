@@ -160,7 +160,7 @@ QxrdDataProcessorPtr QxrdDataProcessor::newDataProcessor()
   return proc;
 }
 
-void QxrdDataProcessor::addChildPtr(QcepObjectPtr child)
+void QxrdDataProcessor::addChildPtr(QcepSerializableObjectPtr child)
 {
   QcepDataProcessorBase::addChildPtr(child);
 
@@ -172,7 +172,7 @@ void QxrdDataProcessor::addChildPtr(QcepObjectPtr child)
   else if (checkPointer<QxrdDistortionCorrection>(child, m_DistortionCorrection)) {}
 }
 
-void QxrdDataProcessor::removeChildPtr(QcepObjectPtr child)
+void QxrdDataProcessor::removeChildPtr(QcepSerializableObjectPtr child)
 {
   printMessage("Need to write QxrdDataProcessorBase::removeChildPtr");
 }

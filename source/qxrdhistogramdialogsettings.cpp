@@ -14,9 +14,9 @@ QxrdHistogramDialogSettings::QxrdHistogramDialogSettings() :
   addChildPtr(QxrdHistogramPlotSettingsPtr(new QxrdHistogramPlotSettings()));
 }
 
-void QxrdHistogramDialogSettings::addChildPtr(QcepObjectPtr child)
+void QxrdHistogramDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
 {
-  QcepObject::addChildPtr(child);
+  QcepSerializableObject::addChildPtr(child);
 
   if (checkPointer<QxrdHistogramPlotSettings>(child, m_HistogramPlotSettings)) {}
 }

@@ -3,7 +3,7 @@
 #include "qmath.h"
 
 QxrdDetectorGeometry::QxrdDetectorGeometry(QString name) :
-    QcepObject(name)
+    QcepSerializableObject(name)
 {
 }
 

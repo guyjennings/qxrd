@@ -3,10 +3,10 @@
 
 #include <QObject>
 #include "qcepproperty.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qxrdhistogramplotsettings-ptr.h"
 
-class QxrdHistogramDialogSettings : public QcepObject
+class QxrdHistogramDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
@@ -14,7 +14,7 @@ public:
   QxrdHistogramDialogSettings();
 
 public:
-  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepSerializableObjectPtr child);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

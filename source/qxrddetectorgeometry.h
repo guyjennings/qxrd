@@ -3,9 +3,9 @@
 
 #include "qcepmacros.h"
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 
-class QxrdDetectorGeometry : public QcepObject
+class QxrdDetectorGeometry : public QcepSerializableObject
 {
   Q_OBJECT
 public:

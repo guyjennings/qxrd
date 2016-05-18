@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include <QObject>
+#include "qcepobject.h"
 #include <QReadWriteLock>
 #include <QAtomicInt>
 #include <QWaitCondition>

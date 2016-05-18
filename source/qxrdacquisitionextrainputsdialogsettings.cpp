@@ -15,7 +15,7 @@ QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettin
                 new QxrdAcquisitionExtraInputsPlotSettings()));
 }
 
-void QxrdAcquisitionExtraInputsDialogSettings::addChildPtr(QcepObjectPtr child)
+void QxrdAcquisitionExtraInputsDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
 {
   QcepObject::addChildPtr(child);
 

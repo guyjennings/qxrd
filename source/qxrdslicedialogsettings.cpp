@@ -15,9 +15,9 @@ QxrdSliceDialogSettings::QxrdSliceDialogSettings()
   addChildPtr(QxrdSlicePlotSettingsPtr(new QxrdSlicePlotSettings()));
 }
 
-void QxrdSliceDialogSettings::addChildPtr(QcepObjectPtr child)
+void QxrdSliceDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
 {
-  QcepObject::addChildPtr(child);
+  QcepSerializableObject::addChildPtr(child);
 
   if (checkPointer<QxrdSlicePlotSettings>(child, m_SlicePlotSettings)) {}
 }

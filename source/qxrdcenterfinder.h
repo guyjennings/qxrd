@@ -25,8 +25,8 @@ public:
   static QxrdCenterFinderPtr newCenterFinder();
   virtual ~QxrdCenterFinder();
 
-  virtual void addChildPtr(QcepObjectPtr child);
-  virtual void removeChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepSerializableObjectPtr child);
+  virtual void removeChildPtr(QcepSerializableObjectPtr child);
 
 public:
   Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)

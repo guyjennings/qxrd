@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 
 #include "qxrdexperiment-ptr.h"
@@ -20,7 +20,7 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 
-class QxrdIntegrator : public QcepObject
+class QxrdIntegrator : public QcepSerializableObject
 {
   Q_OBJECT
 

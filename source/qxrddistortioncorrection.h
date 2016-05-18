@@ -2,7 +2,7 @@
 #define QXRDDISTORTIONCORRECTION_H
 
 #include "qcepmacros.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepimagedata-ptr.h"
@@ -10,7 +10,7 @@
 #include "qcepsettingssaver-ptr.h"
 #include "qxrddistortioncorrection-ptr.h"
 
-class QxrdDistortionCorrection : public QcepObject
+class QxrdDistortionCorrection : public QcepSerializableObject
 {
   Q_OBJECT
 public:

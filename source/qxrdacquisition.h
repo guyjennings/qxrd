@@ -41,7 +41,7 @@ public:
   QxrdAcquisition();
   ~QxrdAcquisition();
 
-  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepSerializableObjectPtr child);
 
   void setWindow(QxrdWindowWPtr win);
 

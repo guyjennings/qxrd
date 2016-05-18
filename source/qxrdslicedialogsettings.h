@@ -1,19 +1,19 @@
 #ifndef QXRDSLICEDIALOGSETTINGS_H
 #define QXRDSLICEDIALOGSETTINGS_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrdsliceplotsettings-ptr.h"
 #include "qcepsettingssaver-ptr.h"
 
-class QxrdSliceDialogSettings : public QcepObject
+class QxrdSliceDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdSliceDialogSettings(QString name);
   QxrdSliceDialogSettings();
   
-  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepSerializableObjectPtr child);
 
 public:
   Q_PROPERTY(QcepPolygon slicePolygon READ get_SlicePolygon WRITE set_SlicePolygon)
