@@ -1,7 +1,7 @@
 #ifndef QCEPEXPERIMENT_H
 #define QCEPEXPERIMENT_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include <QDateTime>
 #include <QUndoStack>
 #include "qcepproperty.h"
@@ -11,14 +11,14 @@
 #include "qcepdataexportparameters-ptr.h"
 #include "qcepdataimportparameters-ptr.h"
 
-class QcepExperiment : public QcepObject
+class QcepExperiment : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   explicit QcepExperiment(QString path, QString name);
   virtual void initialize(QSettings *settings);
 
-  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepSerializableObjectPtr child);
 
 signals:
 

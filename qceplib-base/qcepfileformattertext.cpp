@@ -1,4 +1,5 @@
 #include "qcepfileformattertext.h"
+#include "qcepserializableobject.h"
 
 QcepFileFormatterText::QcepFileFormatterText(QString filePath) :
   QcepFileFormatter(filePath),
@@ -351,7 +352,7 @@ void QcepFileFormatterText::closeForReading()
   fclose(m_File);
 }
 
-QcepObjectPtr QcepFileFormatterText::nextObject()
+QcepSerializableObjectPtr QcepFileFormatterText::nextObject()
 {
   QString s1, s2, s3, s4;
   int     i1, i2, i3, i4;
@@ -361,10 +362,10 @@ QcepObjectPtr QcepFileFormatterText::nextObject()
   i3 = nextToken(s3);
   i4 = nextToken(s4);
 
-  QcepObjectPtr obj;
+  QcepSerializableObjectPtr obj;
 
   if (i1 == Identifier && s2 == ":" && i3 == Identifier && s4 == "{") {
-    obj = QcepObject::construct(s3);
+    obj = QcepSerializableObject::construct(s3);
 
     if (obj) {
       obj->set_Name(s1);
@@ -377,7 +378,7 @@ QcepObjectPtr QcepFileFormatterText::nextObject()
   return obj;
 }
 
-void QcepFileFormatterText::beginReadObject(QcepObjectPtr obj)
+void QcepFileFormatterText::beginReadObject(QcepSerializableObjectPtr obj)
 {
   nextToken();
 }
@@ -466,7 +467,7 @@ bool QcepFileFormatterText::beginReadChildren()
   return res;
 }
 
-QcepObjectPtr QcepFileFormatterText::nextChild()
+QcepSerializableObjectPtr QcepFileFormatterText::nextChild()
 {
   return nextObject();
 }

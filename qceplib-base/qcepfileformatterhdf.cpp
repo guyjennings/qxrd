@@ -64,12 +64,12 @@ void QcepFileFormatterHDF::endReadFile()
 {
 }
 
-QcepObjectPtr QcepFileFormatterHDF::nextObject()
+QcepSerializableObjectPtr QcepFileFormatterHDF::nextObject()
 {
   return QcepObjectPtr();
 }
 
-void QcepFileFormatterHDF::beginReadObject(QcepObjectPtr obj)
+void QcepFileFormatterHDF::beginReadObject(QcepSerializableObjectPtr obj)
 {
 }
 
@@ -101,9 +101,9 @@ bool QcepFileFormatterHDF::beginReadChildren()
   return false;
 }
 
-QcepObjectPtr QcepFileFormatterHDF::nextChild()
+QcepSerializableObjectPtr QcepFileFormatterHDF::nextChild()
 {
-  return QcepObjectPtr();
+  return QcepSerializableObjectPtr();
 }
 
 void QcepFileFormatterHDF::endReadChildren()

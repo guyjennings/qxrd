@@ -88,7 +88,8 @@ SOURCES += \
     $$PWD/qcepfileformatter.cpp \
     $$PWD/qcepfileformattertext.cpp \
     $$PWD/qcepfileformatterhdf.cpp \
-    $$PWD/qcepfileformatternexus.cpp
+    $$PWD/qcepfileformatternexus.cpp \
+    $$PWD/qcepserializableobject.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -215,7 +216,9 @@ HEADERS += \
     $$PWD/qcepfileformatter-ptr.h \
     $$PWD/qcepfileformattertext.h \
     $$PWD/qcepfileformatterhdf.h \
-    $$PWD/qcepfileformatternexus.h
+    $$PWD/qcepfileformatternexus.h \
+    $$PWD/qcepserializableobject.h \
+    $$PWD/qcepserializableobject-ptr.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \

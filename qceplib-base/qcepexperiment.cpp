@@ -6,7 +6,7 @@
 #include "qcepdataimportparameters.h"
 
 QcepExperiment::QcepExperiment(QString path, QString name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
   m_SettingsSaver(new QcepSettingsSaver(this)),
   m_ExperimentKind        (this, "experimentKind", -1, "Kind of Experiment"),
   m_ExperimentDirectory   (this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
@@ -44,23 +44,12 @@ void QcepExperiment::initialize(QSettings *settings)
   addChildPtr(m_DataImportParameters);
 }
 
-void QcepExperiment::addChildPtr(QcepObjectPtr child)
+void QcepExperiment::addChildPtr(QcepSerializableObjectPtr child)
 {
-  QcepObject::addChildPtr(child);
+  QcepSerializableObject::addChildPtr(child);
 
-  QcepDataExportParametersPtr ex =
-      qSharedPointerDynamicCast<QcepDataExportParameters>(child);
-
-  if (ex) {
-    m_DataExportParameters = ex;
-  }
-
-  QcepDataImportParametersPtr im =
-      qSharedPointerDynamicCast<QcepDataImportParameters>(child);
-
-  if (im) {
-    m_DataImportParameters = im;
-  }
+  if (checkPointer<QcepDataExportParameters>(child, m_DataExportParameters)) {}
+  else if (checkPointer<QcepDataImportParameters>(child, m_DataImportParameters)) {}
 }
 
 QString QcepExperiment::defaultExperimentDirectory(QString path) const

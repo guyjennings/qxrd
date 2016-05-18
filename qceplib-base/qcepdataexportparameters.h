@@ -2,10 +2,10 @@
 #define QCEPDATAEXPORTPARAMETERS_H
 
 #include "qcepmacros.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 
-class QcepDataExportParameters : public QcepObject
+class QcepDataExportParameters : public QcepSerializableObject
 {
   Q_OBJECT
 

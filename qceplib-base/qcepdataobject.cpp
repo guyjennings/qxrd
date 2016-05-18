@@ -12,7 +12,7 @@ static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
 
 QcepDataObject::QcepDataObject(QString name, qint64 byteSize) :
-  QcepObject(name),
+  QcepSerializableObject(name),
 //  m_Saver(saver),
   m_Mutex(QMutex::Recursive),
   m_ByteSize   (this, "size", byteSize, "Object Size"),

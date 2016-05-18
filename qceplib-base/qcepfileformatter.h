@@ -2,7 +2,7 @@
 #define QCEPFILEFORMATTER_H
 
 #include "qcepobject.h"
-#include "qcepobject-ptr.h"
+#include "qcepserializableobject-ptr.h"
 #include "qcepfileformatter-ptr.h"
 
 class QcepFileFormatter : public QcepObject
@@ -34,9 +34,9 @@ public:
   virtual void beginReadFile() = 0;
   virtual void endReadFile() = 0;
 
-  virtual QcepObjectPtr nextObject() = 0;
+  virtual QcepSerializableObjectPtr nextObject() = 0;
 
-  virtual void beginReadObject(QcepObjectPtr obj) = 0;
+  virtual void beginReadObject(QcepSerializableObjectPtr obj) = 0;
   virtual void endReadObject() = 0;
 
   virtual bool beginReadProperties() = 0;
@@ -45,7 +45,7 @@ public:
   virtual void endReadProperties() = 0;
 
   virtual bool beginReadChildren() = 0;
-  virtual QcepObjectPtr nextChild() = 0;
+  virtual QcepSerializableObjectPtr nextChild() = 0;
   virtual void endReadChildren() = 0;
 
   virtual bool beginReadData() = 0;

@@ -19,7 +19,7 @@
 
 extern QcepAllocator *g_Allocator;
 
-class QcepAllocator : public QcepObject, public QEnableSharedFromThis<QcepAllocator>
+class QcepAllocator : public QcepObject
 {
   Q_OBJECT
 

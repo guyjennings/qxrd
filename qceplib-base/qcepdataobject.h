@@ -2,13 +2,13 @@
 #define QCEPDATAOBJECT_H
 
 #include <QObject>
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepdatagroup-ptr.h"
 #include <QScriptValue>
 #include "qcepproperty.h"
 
-class QcepDataObject : public QcepObject
+class QcepDataObject : public QcepSerializableObject
 {
   Q_OBJECT
 
