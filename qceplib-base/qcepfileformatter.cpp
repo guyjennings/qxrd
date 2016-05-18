@@ -3,6 +3,8 @@
 #include "qcepfileformatternexus.h"
 #include "qcepfileformattertext.h"
 #include "qcepserializableobject.h"
+#include "qcepmacros.h"
+#include "qcepdebug.h"
 
 QcepFileFormatter::QcepFileFormatter(QString filePath) :
   QcepObject("fileFormatter"),
@@ -31,7 +33,7 @@ QcepFileFormatterPtr QcepFileFormatter::defaultFormatter(QString filePath, QStri
   return QcepFileFormatterPtr(new QcepFileFormatterText(filePath));
 }
 
-QcepSerializableObjectPtr QcepFileFormatter::construct(QString className)
+QcepSerializableObjectPtr QcepFileFormatter::construct(QString name, QString className)
 {
   QcepSerializableObjectPtr res;
 
@@ -45,7 +47,7 @@ QcepSerializableObjectPtr QcepFileFormatter::construct(QString className)
     if (obj == NULL) {
       printMessage(tr("Metaobject is NULL"));
     } else {
-      QObject *qobj = obj->newInstance();
+      QObject *qobj = obj->newInstance(Q_ARG(QString, name));
 
       if (qobj == NULL) {
         printMessage(tr("qObject == NULL"));
@@ -61,7 +63,7 @@ QcepSerializableObjectPtr QcepFileFormatter::construct(QString className)
     }
   }
 
-  if (res) {
+  if (qcepDebug(DEBUG_IMPORT) && res) {
     printMessage(tr("Constructed %1:%2").arg(res->get_Name()).arg(res->className()));
   }
 

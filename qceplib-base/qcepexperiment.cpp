@@ -31,17 +31,13 @@ QcepExperiment::QcepExperiment(QString path, QString name) :
 {
 }
 
-void QcepExperiment::initialize(QSettings *settings)
+void QcepExperiment::initialize()
 {
-  m_DataExportParameters = QcepDataExportParametersPtr(
-        new QcepDataExportParameters("exportParameters"));
+  addChildPtr(QcepDataExportParametersPtr(
+                new QcepDataExportParameters("exportParameters")));
 
-  addChildPtr(m_DataExportParameters);
-
-  m_DataImportParameters = QcepDataImportParametersPtr(
-        new QcepDataImportParameters("importParameters"));
-
-  addChildPtr(m_DataImportParameters);
+  addChildPtr(QcepDataImportParametersPtr(
+                new QcepDataImportParameters("importParameters")));
 }
 
 void QcepExperiment::addChildPtr(QcepSerializableObjectPtr child)

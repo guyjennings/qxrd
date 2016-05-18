@@ -1,3 +1,4 @@
+#include "qcepdebug.h"
 #include "qcepserializableobject.h"
 #include "qcepfileformatter.h"
 #include <QMetaProperty>
@@ -193,8 +194,14 @@ void QcepSerializableObject::writeObject(QcepFileFormatterPtr fmt)
 
   fmt->beginWriteObject(get_Name(), metaObject->className());
 
+  int typeId = QMetaType::type(qPrintable(className()+"*"));
+
+  if (typeId == QMetaType::UnknownType) {
+    fmt -> writeComment("Has unknown type");
+  }
+
   if (metaObject->constructorCount() == 0) {
-    fmt->writeComment("Has no invokable constructors");
+    fmt -> writeComment("Has no invokable constructors");
   }
 
   int count = metaObject->propertyCount();
@@ -268,7 +275,9 @@ void QcepSerializableObject::readObject(QcepFileFormatterPtr fmt)
   QcepSerializableObjectWPtr myself =
       qSharedPointerDynamicCast<QcepSerializableObject>(sharedFromThis());
 
-  fmt->printMessage("QcepSerializableObject::readObject");
+  if (qcepDebug(DEBUG_IMPORT)) {
+    fmt->printMessage("QcepSerializableObject::readObject");
+  }
 
   fmt->beginReadObject(myself);
 
@@ -277,13 +286,19 @@ void QcepSerializableObject::readObject(QcepFileFormatterPtr fmt)
     QVariant propVal;
 
     do {
-      fmt->printMessage("QcepSerializableObject::readObject : read property");
+      if (qcepDebug(DEBUG_IMPORT)) {
+        fmt->printMessage("QcepSerializableObject::readObject : read property");
+      }
 
       propName = fmt->nextPropertyName();
 
       if (propName.length() > 0) {
         propVal = fmt->nextPropertyValue();
         setProperty(qPrintable(propName), propVal);
+
+        if (qcepDebug(DEBUG_IMPORT)) {
+          fmt->printMessage(tr("Set property %1 to %2").arg(propName).arg(propVal.toString()));
+        }
       }
     } while (propName.length()>0);
 
@@ -294,7 +309,9 @@ void QcepSerializableObject::readObject(QcepFileFormatterPtr fmt)
     QcepSerializableObjectPtr child;
 
     do {
-      fmt->printMessage("QcepSerializableObject::readObject : read child");
+      if (qcepDebug(DEBUG_IMPORT)) {
+        fmt->printMessage("QcepSerializableObject::readObject : read child");
+      }
 
       child = fmt->nextChild();
 
@@ -307,7 +324,9 @@ void QcepSerializableObject::readObject(QcepFileFormatterPtr fmt)
   }
 
   if (fmt->beginReadData()) {
-    fmt->printMessage("QcepObject::readObject : read data");
+    if (qcepDebug(DEBUG_IMPORT)) {
+      fmt->printMessage("QcepObject::readObject : read data");
+    }
 
     readObjectData(fmt);
 

@@ -10,7 +10,7 @@ class QcepDataImportParameters : public QcepSerializableObject
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QcepDataImportParameters(QString name = "");
+  Q_INVOKABLE QcepDataImportParameters(QString name);
 
   QString lastDirectory();
   QString fileFormatFilterString();

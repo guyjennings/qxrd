@@ -16,7 +16,7 @@ class QcepExperiment : public QcepSerializableObject
   Q_OBJECT
 public:
   explicit QcepExperiment(QString path, QString name);
-  virtual void initialize(QSettings *settings);
+  void initialize();
 
   virtual void addChildPtr(QcepSerializableObjectPtr child);
 

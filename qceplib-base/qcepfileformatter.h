@@ -51,7 +51,7 @@ public:
   virtual bool beginReadData() = 0;
   virtual void endReadData() = 0;
 
-  virtual QcepSerializableObjectPtr construct(QString className);
+  virtual QcepSerializableObjectPtr construct(QString name, QString className);
 
 protected:
   QString     m_FilePath;
