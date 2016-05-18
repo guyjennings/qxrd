@@ -2,6 +2,7 @@
 #include "qcepfileformatterhdf.h"
 #include "qcepfileformatternexus.h"
 #include "qcepfileformattertext.h"
+#include "qcepserializableobject.h"
 
 QcepFileFormatter::QcepFileFormatter(QString filePath) :
   QcepObject("fileFormatter"),
@@ -28,4 +29,41 @@ QcepFileFormatterPtr QcepFileFormatter::defaultFormatter(QString filePath, QStri
   }
 
   return QcepFileFormatterPtr(new QcepFileFormatterText(filePath));
+}
+
+QcepSerializableObjectPtr QcepFileFormatter::construct(QString className)
+{
+  QcepSerializableObjectPtr res;
+
+  int typeId = QMetaType::type(qPrintable(className+"*"));
+
+  if (typeId == QMetaType::UnknownType) {
+    printMessage(tr("Type %1 is unknown").arg(className));
+  } else {
+    const QMetaObject *obj = QMetaType::metaObjectForType(typeId);
+
+    if (obj == NULL) {
+      printMessage(tr("Metaobject is NULL"));
+    } else {
+      QObject *qobj = obj->newInstance();
+
+      if (qobj == NULL) {
+        printMessage(tr("qObject == NULL"));
+      } else {
+        QcepSerializableObject *qcobj = qobject_cast<QcepSerializableObject*>(qobj);
+
+        if (qcobj == NULL) {
+          printMessage(tr("QcepSerializableObject == NULL"));
+        } else {
+          res= QcepSerializableObjectPtr(qcobj);
+        }
+      }
+    }
+  }
+
+  if (res) {
+    printMessage(tr("Constructed %1:%2").arg(res->get_Name()).arg(res->className()));
+  }
+
+  return res;
 }

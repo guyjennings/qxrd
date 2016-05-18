@@ -66,7 +66,7 @@ void QcepFileFormatterHDF::endReadFile()
 
 QcepSerializableObjectPtr QcepFileFormatterHDF::nextObject()
 {
-  return QcepObjectPtr();
+  return QcepSerializableObjectPtr();
 }
 
 void QcepFileFormatterHDF::beginReadObject(QcepSerializableObjectPtr obj)

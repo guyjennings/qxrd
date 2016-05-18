@@ -40,21 +40,8 @@ public slots:
 
   void readObjectSettings(QSettings *set, QString section);
 
-  void dumpObjectTreePtr(int level=0);
-
-  int childCount() const;
-
   int isChanged() const;
   QString changedBy() const;
-
-  int childrenChanged() const;
-  QString childrenChangedBy() const;
-
-  int checkChildren(int verbose=0, int level=0) const;
-
-  QcepObjectWPtr parentPtr() const;
-  QVector<QcepObjectPtr> childrenPtr() const;
-  QcepObjectWPtr childPtr(int n) const;
 
 public:
   virtual void writeSettings(QSettings *set, QString section);
@@ -70,14 +57,11 @@ public:
 
   static QString addSlashes(QString str);
 
-  void propertyChanged(QcepProperty *prop);
+  virtual void propertyChanged(QcepProperty *prop);
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QcepObjectPtr &data);
   static void fromScriptValue(const QScriptValue &obj, QcepObjectPtr &data);
 
-protected:
-  QcepObjectWPtr                      m_Parent;
-  QVector<QcepObjectPtr>              m_Children;
 private:
   QcepObjectNamer                     m_ObjectNamer;
   QAtomicInt                          m_ChangeCount;

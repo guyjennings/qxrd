@@ -365,7 +365,7 @@ QcepSerializableObjectPtr QcepFileFormatterText::nextObject()
   QcepSerializableObjectPtr obj;
 
   if (i1 == Identifier && s2 == ":" && i3 == Identifier && s4 == "{") {
-    obj = QcepSerializableObject::construct(s3);
+    obj = construct(s3);
 
     if (obj) {
       obj->set_Name(s1);

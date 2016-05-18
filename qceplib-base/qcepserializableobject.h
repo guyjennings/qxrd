@@ -15,7 +15,6 @@ public:
   virtual ~QcepSerializableObject();
 
   static QcepSerializableObjectPtr readDataObject(QcepFileFormatterPtr fmt);
-  QcepSerializableObjectPtr construct(QString className);
 
   void readObject(QcepFileFormatterPtr fmt);
   void writeObject(QcepFileFormatterPtr fmt);
@@ -27,6 +26,27 @@ public:
 
   virtual void addChildPtr(QcepSerializableObjectPtr child);
   virtual void removeChildPtr(QcepSerializableObjectPtr child);
+
+  virtual void propertyChanged(QcepProperty *prop);
+
+public slots:
+  virtual void printLine(QString line) const;
+  virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
+  virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+
+  void dumpObjectTreePtr(int level=0);
+
+  int childrenChanged() const;
+  QString childrenChangedBy() const;
+
+  int childCount() const;
+
+  int checkChildren(int verbose=0, int level=0) const;
+
+  QcepSerializableObjectWPtr parentPtr() const;
+  QVector<QcepSerializableObjectPtr> childrenPtr() const;
+  QcepSerializableObjectWPtr childPtr(int n) const;
 
 protected:
 
@@ -71,6 +91,8 @@ protected:
   }
 
 private:
+  QcepSerializableObjectWPtr          m_Parent;
+  QVector<QcepSerializableObjectPtr>  m_Children;
 
 #ifndef QT_NO_DEBUG
   int                                 m_PointerMatchCount;

@@ -3,7 +3,7 @@
 #include <qwt_plot.h>
 
 QcepPlotSettings::QcepPlotSettings(QString name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
   m_XMouse        (this,"xMouse",0, "X Position of Mouse"),
   m_YMouse        (this,"yMouse",0, "Y Position of Mouse"),
   m_LegendPosition(this, "legendPosition", QwtPlot::RightLegend, "Plot Legend Position"),

@@ -11,6 +11,172 @@ QcepSerializableObject::~QcepSerializableObject()
 {
 }
 
+void QcepSerializableObject::printLine(QString line) const
+{
+  QcepSerializableObjectPtr parent(m_Parent);
+
+  if (parent) {
+    parent->printLine(line);
+  }
+}
+
+void QcepSerializableObject::printMessage(QString msg, QDateTime dt) const
+{
+  QcepSerializableObjectPtr parent(m_Parent);
+
+  if (parent) {
+    parent->printMessage(msg, dt);
+  } else {
+    printf("MESSAGE: %s %s\n",
+           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+  }
+}
+
+void QcepSerializableObject::criticalMessage(QString msg, QDateTime dt) const
+{
+  QcepSerializableObjectPtr parent(m_Parent);
+
+  if (parent) {
+    parent->criticalMessage(msg, dt);
+  } else {
+    printf("MESSAGE: %s %s\n",
+           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+  }
+}
+
+void QcepSerializableObject::statusMessage(QString msg, QDateTime dt) const
+{
+  QcepSerializableObjectPtr parent(m_Parent);
+
+  if (parent) {
+    parent->statusMessage(msg, dt);
+  } else {
+    printf("MESSAGE: %s %s\n",
+           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+  }
+}
+
+void QcepSerializableObject::propertyChanged(QcepProperty *prop)
+{
+  if (prop == NULL || prop->isStored()) {
+    QcepObject::propertyChanged(prop);
+
+    QcepSerializableObjectPtr parent(m_Parent);
+
+    if (parent) {
+      parent->propertyChanged(prop);
+    }
+  }
+}
+
+int QcepSerializableObject::childrenChanged() const
+{
+  if (isChanged()) {
+    return true;
+  } else {
+    foreach(QcepSerializableObjectPtr child, m_Children) {
+      if(child) {
+        int chg = child->childrenChanged();
+
+        if (chg) return chg;
+      }
+    }
+  }
+
+  return 0;
+}
+
+QString QcepSerializableObject::childrenChangedBy() const
+{
+  if (isChanged()) {
+    return changedBy();
+  } else {
+    foreach(QcepSerializableObjectPtr child, m_Children) {
+      if (child) {
+        int chg = child->childrenChanged();
+
+        if (chg) {
+          return child->changedBy();
+        }
+      }
+    }
+  }
+
+  return "NULL";
+}
+
+int QcepSerializableObject::checkChildren(int verbose, int level) const
+{
+  int ck = true;
+
+  if (verbose) {
+    const QMetaObject *meta = metaObject();
+
+    printLine(tr("%1Checking %2 : %3 children : class %4")
+              .arg("",level*2)
+              .arg(get_Name())
+              .arg(childCount())
+              .arg(meta->className()));
+  }
+
+  foreach(QcepSerializableObjectPtr child, m_Children) {
+    if (child == NULL) {
+      printLine(tr("NULL child of %1").arg(get_Name()));
+      ck = false;
+    } else {
+      QcepSerializableObjectWPtr parent = child->parentPtr();
+
+      if (parent != sharedFromThis()) {
+        printLine(tr("parent of %1 is not %2")
+                     .arg(child->get_Name())
+                     .arg(get_Name()));
+      }
+
+      if (!child->checkChildren(verbose, level+1)) {
+        ck = false;
+      }
+    }
+  }
+
+  return ck;
+}
+
+QcepSerializableObjectWPtr QcepSerializableObject::parentPtr() const
+{
+  return m_Parent;
+}
+
+int QcepSerializableObject::childCount() const
+{
+  return m_Children.count();
+}
+
+QcepSerializableObjectWPtr QcepSerializableObject::childPtr(int n) const
+{
+  QcepSerializableObjectPtr p = m_Children.value(n);
+
+  if (p) {
+    return p;
+  } else {
+    return QcepSerializableObjectWPtr();
+  }
+}
+
+QVector<QcepSerializableObjectPtr> QcepSerializableObject::childrenPtr() const
+{
+//  QVector<QcepObjectWPtr> res;
+
+//  foreach (QcepObject* child, m_Children) {
+//    if (child) {
+//      res.append(child->sharedFromThis());
+//    } else {
+//      res.append(QcepObjectWPtr());
+//    }
+//  }
+
+  return m_Children;
+}
+
 QcepSerializableObjectPtr QcepSerializableObject::readDataObject(QcepFileFormatterPtr fmt)
 {
   if (fmt) {
@@ -80,7 +246,7 @@ void QcepSerializableObject::writeObject(QcepFileFormatterPtr fmt)
     fmt->beginWriteChildren();
 
     for (int i=0; i<m_Children.count(); i++) {
-      QcepObjectPtr obj = m_Children.value(i);
+      QcepSerializableObjectPtr obj = m_Children.value(i);
 
       if (obj) {
         obj->writeObject(fmt);
@@ -99,16 +265,19 @@ void QcepSerializableObject::writeObject(QcepFileFormatterPtr fmt)
 
 void QcepSerializableObject::readObject(QcepFileFormatterPtr fmt)
 {
-  fmt->printMessage("QcepObject::readObject");
+  QcepSerializableObjectWPtr myself =
+      qSharedPointerDynamicCast<QcepSerializableObject>(sharedFromThis());
 
-  fmt->beginReadObject(sharedFromThis());
+  fmt->printMessage("QcepSerializableObject::readObject");
+
+  fmt->beginReadObject(myself);
 
   if (fmt->beginReadProperties()) {
     QString propName;
     QVariant propVal;
 
     do {
-      fmt->printMessage("QcepObject::readObject : read property");
+      fmt->printMessage("QcepSerializableObject::readObject : read property");
 
       propName = fmt->nextPropertyName();
 
@@ -122,10 +291,10 @@ void QcepSerializableObject::readObject(QcepFileFormatterPtr fmt)
   }
 
   if (fmt->beginReadChildren()) {
-    QcepObjectPtr child;
+    QcepSerializableObjectPtr child;
 
     do {
-      fmt->printMessage("QcepObject::readObject : read child");
+      fmt->printMessage("QcepSerializableObject::readObject : read child");
 
       child = fmt->nextChild();
 
@@ -195,7 +364,8 @@ void QcepSerializableObject::checkPointerMatchCount(QcepSerializableObjectWPtr p
 
 void QcepSerializableObject::addChildPtr(QcepSerializableObjectPtr child)
 {
-  QcepObjectWPtr myself(sharedFromThis());
+  QcepSerializableObjectWPtr myself =
+      qSharedPointerDynamicCast<QcepSerializableObject>(sharedFromThis());
 
   if (m_Children.contains(child)) {
     printMessage("Added same child more than once");
@@ -225,36 +395,79 @@ void QcepSerializableObject::removeChildPtr(QcepSerializableObjectPtr child)
   }
 }
 
-
-QcepSerializableObjectPtr QcepSerializableObject::construct(QString className)
+void QcepSerializableObject::dumpObjectTreePtr(int level)
 {
-  QcepSerializableObjectPtr res;
+  const QMetaObject* metaObject = this->metaObject();
+  QcepSerializableObjectPtr parent(m_Parent);
 
-  int typeId = QMetaType::type(qPrintable(className+"*"));
+  printLine(tr("%1// %2: %3 constrs, parent %4")
+            .arg("", level)
+            .arg(metaObject->className())
+            .arg(metaObject->constructorCount())
+            .arg(parent ? parent->get_Type() : "NULL"));
 
-  if (typeId == QMetaType::UnknownType) {
-    printMessage(tr("Type %1 is unknown").arg(className));
-  } else {
-    const QMetaObject *obj = QMetaType::metaObjectForType(typeId);
+  int nDumped = 0;
 
-    if (obj == NULL) {
-      printMessage(tr("Metaobject is NULL"));
-    } else {
-      QObject *qobj = obj->newInstance();
+  int nDumpedProperties = 0;
 
-      if (qobj == NULL) {
-        printMessage(tr("qObject == NULL"));
-      } else {
-        QcepSerializableObject *qcobj = qobject_cast<QcepSerializableObject*>(qobj);
+  for (int i=1; i < metaObject->propertyCount(); i++) {
+    QMetaProperty prop = metaObject->property(i);
 
-        if (qcobj == NULL) {
-          printMessage(tr("QcepSerializableObject == NULL"));
-        } else {
-          res= QcepSerializableObjectPtr(qcobj);
-        }
+    if (prop.isStored()) {
+      if (nDumped == 0) {
+        printLine(tr("%1%2 {")
+                  .arg("",level)
+                  .arg(get_Type()));
       }
+
+      if (nDumpedProperties == 0) {
+        printLine(tr("%1properties{").arg("",level+1));
+      }
+
+      nDumped++;
+      nDumpedProperties++;
+
+      printLine(tr("%1%2 = %3")
+                .arg("",level+2)
+                .arg(prop.name())
+                .arg(toScriptLiteral(this->property(prop.name()))));
     }
   }
 
-  return res;
+  if (nDumped > 0) {
+    printLine(tr("%1}").arg("",level+1));
+  }
+
+  int nDumpedChildren = 0;
+
+  for (int i=0; i<m_Children.count(); i++) {
+    QcepSerializableObjectPtr obj = m_Children.value(i);
+    if (obj) {
+      if (nDumped == 0) {
+        printLine(tr("%1%2 {")
+                  .arg("",level)
+                  .arg(get_Type()));
+      }
+
+      if (nDumpedChildren == 0) {
+        printLine(tr("%1children{").arg("",level+1));
+      }
+
+      nDumped++;
+      nDumpedChildren++;
+
+      obj->dumpObjectTreePtr(level+2);
+    }
+  }
+
+  if (nDumpedChildren > 0) {
+    printLine(tr("%1}").arg("",level+1));
+  }
+
+  if (nDumped > 0) {
+    printLine(tr("%1}").arg("",level));
+  } else {
+    printLine(tr("%1// %2").arg("",level).arg(metaObject->className()));
+  }
 }
+

@@ -65,12 +65,6 @@ void QcepObject::propertyChanged(QcepProperty *prop)
   if (prop == NULL || prop->isStored()) {
     m_ChangeCount.fetchAndAddOrdered(1);
     m_LastChanged.store(prop);
-
-    QcepObjectPtr parent(m_Parent);
-
-    if (parent) {
-      parent -> propertyChanged(prop);
-    }
   }
 }
 
@@ -88,114 +82,6 @@ QString QcepObject::changedBy() const
   } else {
     return "NULL";
   }
-}
-
-int QcepObject::childrenChanged() const
-{
-  if (isChanged()) {
-    return true;
-  } else {
-    foreach(QcepObjectPtr child, m_Children) {
-      if(child) {
-        int chg = child->childrenChanged();
-
-        if (chg) return chg;
-      }
-    }
-  }
-
-  return 0;
-}
-
-QString QcepObject::childrenChangedBy() const
-{
-  if (isChanged()) {
-    return changedBy();
-  } else {
-    foreach(QcepObjectPtr child, m_Children) {
-      if (child) {
-        int chg = child->childrenChanged();
-
-        if (chg) {
-          return child->changedBy();
-        }
-      }
-    }
-  }
-
-  return "NULL";
-}
-
-int QcepObject::checkChildren(int verbose, int level) const
-{
-  int ck = true;
-
-  if (verbose) {
-    const QMetaObject *meta = metaObject();
-
-    printLine(tr("%1Checking %2 : %3 children : class %4")
-              .arg("",level*2)
-              .arg(get_Name())
-              .arg(childCount())
-              .arg(meta->className()));
-  }
-
-  foreach(QcepObjectPtr child, m_Children) {
-    if (child == NULL) {
-      printLine(tr("NULL child of %1").arg(get_Name()));
-      ck = false;
-    } else {
-      QcepObjectWPtr parent = child->parentPtr();
-
-      if (parent != sharedFromThis()) {
-        printLine(tr("parent of %1 is not %2")
-                     .arg(child->get_Name())
-                     .arg(get_Name()));
-      }
-
-      if (!child->checkChildren(verbose, level+1)) {
-        ck = false;
-      }
-    }
-  }
-
-  return ck;
-}
-
-QcepObjectWPtr QcepObject::parentPtr() const
-{
-  return m_Parent;
-}
-
-int QcepObject::childCount() const
-{
-  return m_Children.count();
-}
-
-QcepObjectWPtr QcepObject::childPtr(int n) const
-{
-  QcepObjectPtr p = m_Children.value(n);
-
-  if (p) {
-    return p;
-  } else {
-    return QcepObjectWPtr();
-  }
-}
-
-QVector<QcepObjectPtr> QcepObject::childrenPtr() const
-{
-//  QVector<QcepObjectWPtr> res;
-
-//  foreach (QcepObject* child, m_Children) {
-//    if (child) {
-//      res.append(child->sharedFromThis());
-//    } else {
-//      res.append(QcepObjectWPtr());
-//    }
-//  }
-
-  return m_Children;
 }
 
 int QcepObject::allocatedObjects()
@@ -241,19 +127,21 @@ QString QcepObject::get_Type() const
 
 void QcepObject::printLine(QString line) const
 {
-  QcepObjectPtr parent(m_Parent);
+  QcepObject *p = qobject_cast<QcepObject*>(parent());
 
-  if (parent) {
-    parent->printLine(line);
+  if (p) {
+    p->printLine(line);
+  } else {
+    printf("%s\n", qPrintable(line));
   }
 }
 
 void QcepObject::printMessage(QString msg, QDateTime dt) const
 {
-  QcepObjectPtr parent(m_Parent);
+  QcepObject *p = qobject_cast<QcepObject*>(parent());
 
-  if (parent) {
-    parent->printMessage(msg, dt);
+  if (p) {
+    p->printMessage(msg, dt);
   } else {
     printf("MESSAGE: %s %s\n",
            qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
@@ -262,24 +150,24 @@ void QcepObject::printMessage(QString msg, QDateTime dt) const
 
 void QcepObject::criticalMessage(QString msg, QDateTime dt) const
 {
-  QcepObjectPtr parent(m_Parent);
+  QcepObject *p = qobject_cast<QcepObject*>(parent());
 
-  if (parent) {
-    parent->criticalMessage(msg, dt);
+  if (p) {
+    p->criticalMessage(msg, dt);
   } else {
-    printf("MESSAGE: %s %s\n",
+    printf("CRITICAL: %s %s\n",
            qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
   }
 }
 
 void QcepObject::statusMessage(QString msg, QDateTime dt) const
 {
-  QcepObjectPtr parent(m_Parent);
+  QcepObject *p = qobject_cast<QcepObject*>(parent());
 
-  if (parent) {
-    parent->statusMessage(msg, dt);
+  if (p) {
+    p->statusMessage(msg, dt);
   } else {
-    printf("MESSAGE: %s %s\n",
+    printf("STATUS: %s %s\n",
            qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
   }
 }
@@ -354,82 +242,6 @@ QString QcepObject::settingsScript()
   }
 
   return res;
-}
-
-void QcepObject::dumpObjectTreePtr(int level)
-{
-  const QMetaObject* metaObject = this->metaObject();
-  QcepObjectPtr parent(m_Parent);
-
-  printLine(tr("%1// %2: %3 constrs, parent %4")
-            .arg("", level)
-            .arg(metaObject->className())
-            .arg(metaObject->constructorCount())
-            .arg(parent ? parent->get_Type() : "NULL"));
-
-  int nDumped = 0;
-
-  int nDumpedProperties = 0;
-
-  for (int i=1; i < metaObject->propertyCount(); i++) {
-    QMetaProperty prop = metaObject->property(i);
-
-    if (prop.isStored()) {
-      if (nDumped == 0) {
-        printLine(tr("%1%2 {")
-                  .arg("",level)
-                  .arg(get_Type()));
-      }
-
-      if (nDumpedProperties == 0) {
-        printLine(tr("%1properties{").arg("",level+1));
-      }
-
-      nDumped++;
-      nDumpedProperties++;
-
-      printLine(tr("%1%2 = %3")
-                .arg("",level+2)
-                .arg(prop.name())
-                .arg(toScriptLiteral(this->property(prop.name()))));
-    }
-  }
-
-  if (nDumped > 0) {
-    printLine(tr("%1}").arg("",level+1));
-  }
-
-  int nDumpedChildren = 0;
-
-  for (int i=0; i<m_Children.count(); i++) {
-    QcepObjectPtr obj = m_Children.value(i);
-    if (obj) {
-      if (nDumped == 0) {
-        printLine(tr("%1%2 {")
-                  .arg("",level)
-                  .arg(get_Type()));
-      }
-
-      if (nDumpedChildren == 0) {
-        printLine(tr("%1children{").arg("",level+1));
-      }
-
-      nDumped++;
-      nDumpedChildren++;
-
-      obj->dumpObjectTreePtr(level+2);
-    }
-  }
-
-  if (nDumpedChildren > 0) {
-    printLine(tr("%1}").arg("",level+1));
-  }
-
-  if (nDumped > 0) {
-    printLine(tr("%1}").arg("",level));
-  } else {
-    printLine(tr("%1// %2").arg("",level).arg(metaObject->className()));
-  }
 }
 
 QString QcepObject::toScriptLiteral(QVariant v)
