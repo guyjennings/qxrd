@@ -147,8 +147,6 @@ HEADERS += TODO.h \
     qxrdserver-ptr.h \
     qxrdserverthread.h \
     qxrdserverthread-ptr.h \
-    qxrdacquisitionthread.h \
-    qxrdacquisitionthread-ptr.h \
     qxrdacquisition.h \
     qxrdacquisition-ptr.h \
     qxrdacquisitiondialog.h \
@@ -398,7 +396,6 @@ SOURCES += qxrd.cpp \
     qxrdimageplot.cpp \
     qxrdserver.cpp \
     qxrdserverthread.cpp \
-    qxrdacquisitionthread.cpp \
     qxrdacquisition.cpp \
     qxrdacquisitiondialog.cpp \
     qxrdplotslicer.cpp \

@@ -10,7 +10,7 @@ QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcquisitionIn
     m_Acquisition(acq)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdAcquisitionThread::QxrdAcquisitionThread(%p)\n", this);
+    printf("QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(%p)\n", this);
   }
 
   setObjectName("acqExec");
@@ -21,7 +21,7 @@ QxrdAcquisitionExecutionThread::~QxrdAcquisitionExecutionThread()
   shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdAcquisitionThread::~QxrdAcquisitionThread(%p)\n", this);
+    printf("QxrdAcquisitionExecutionThread::~QxrdAcquisitionExecutionThread(%p)\n", this);
   }
 }
 

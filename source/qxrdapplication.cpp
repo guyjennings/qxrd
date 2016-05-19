@@ -12,7 +12,6 @@
 #include "qxrddataprocessorthread.h"
 #include "qxrddataprocessor.h"
 #include "qxrdintegrator.h"
-#include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
 #include "qcepallocatorthread.h"
 #include "qcepallocator.h"

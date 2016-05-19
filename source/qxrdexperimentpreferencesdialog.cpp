@@ -1,7 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisition.h"
-#include "qxrdacquisitionthread.h"
 #include "qxrddataprocessor.h"
 #include "qxrdapplication.h"
 #include "qcepallocator.h"

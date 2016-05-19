@@ -13,7 +13,6 @@
 #include "qxrdcalibrantdspacings.h"
 #include "qxrdcalibrantdspacingsmodel.h"
 #include "qxrdwindow.h"
-#include "qxrdacquisitionthread.h"
 #include "qxrdacquisition.h"
 #include "qxrdserverthread.h"
 #include "qxrdserver.h"

@@ -14,7 +14,6 @@
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdacquisitionthread-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrddataprocessorthread-ptr.h"
 #include "qxrddataprocessor-ptr.h"
@@ -73,7 +72,6 @@ public:
 
   void setExperimentApplication(QxrdApplicationWPtr app);
 
-//  QxrdAcquisitionThreadPtr acquisitionThread();
   QxrdAcquisitionWPtr acquisition() const;
   QxrdWindowPtr window();
   QxrdDataProcessorWPtr dataProcessor() const;
