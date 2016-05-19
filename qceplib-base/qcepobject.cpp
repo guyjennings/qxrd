@@ -218,6 +218,9 @@ QString QcepObject::addSlashes(QString str)
     } else if (str[i] == '\n') {
       newStr.append("\\");
       newStr.append("n");
+    } else if (str[i] == '\r') {
+      newStr.append("\\");
+      newStr.append("r");
     } else {
       newStr.append(str[i]);
     }
