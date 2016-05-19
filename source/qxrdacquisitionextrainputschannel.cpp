@@ -5,7 +5,7 @@
 #include "qcepsettingssaver.h"
 
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(int chnum) :
-  QxrdAcquisitionExtraInputsChannel(tr("extraChannel(%1)").arg(chnum))
+  QxrdAcquisitionExtraInputsChannel(tr("extraChannel")/*.arg(chnum)*/)
 {
   set_ChannelNumber(chnum);
 
@@ -47,6 +47,9 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(QString nam
   m_NHigh(this, "nHigh", 0, "Number of triggered data points"),
   m_Waveform(this, "waveform", QcepDoubleVector(), "Waveform on Channel")
 {
+#ifndef QT_NO_DEBUG
+  printf("Constructing acquisition extra inputs channel\n");
+#endif
 }
 
 QxrdAcquisitionExtraInputsWPtr QxrdAcquisitionExtraInputsChannel::extraInputs()

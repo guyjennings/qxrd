@@ -52,7 +52,7 @@ public:
     TriggerModeLevelNeg
   };
 
-  Q_PROPERTY(int channelNumber READ get_ChannelNumber WRITE set_ChannelNumber STORED false)
+  Q_PROPERTY(int channelNumber READ get_ChannelNumber WRITE set_ChannelNumber)
   QCEP_INTEGER_PROPERTY(ChannelNumber)
 
   Q_PROPERTY(bool enabled READ get_Enabled WRITE set_Enabled)
