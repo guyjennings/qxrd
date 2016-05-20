@@ -25,7 +25,6 @@
 #include "qxrdprocessorinterface.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdglobalsettings.h"
-#include "qxrdexperimentthread.h"
 #include "qxrdexperiment.h"
 #include "qxrdexperimentsettings.h"
 #include "qcepsettingssaver.h"
@@ -296,20 +295,11 @@ void QxrdApplication::finish()
 //    t->wait();
 //  }
 
-  while(m_ExperimentThreads.count()) {
-    QxrdExperimentThreadPtr t = m_ExperimentThreads.takeFirst();
+  while(m_Experiments.count()) {
+    QxrdExperimentPtr expt = m_Experiments.takeFirst();
 
-    if (t) {
-      QxrdExperimentPtr expt(t->experiment());
-
-      if (expt) {
-        expt->closeWindows();
-      }
-
-      expt = QxrdExperimentWPtr();
-
-      t->quit();
-      t->wait();
+    if (expt) {
+      expt->closeWindows();
     }
   }
 }
@@ -829,13 +819,11 @@ void QxrdApplication::writeDefaultSettings()
 
 void QxrdApplication::createNewExperiment()
 {
-  QxrdExperimentThreadPtr experimentThread =
-      QxrdExperimentThread::newExperiment("", qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()), NULL);
+  QxrdExperimentPtr exp =
+      QxrdExperiment::newExperiment("", qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()));
 
-  if (experimentThread) {
-    QxrdExperimentPtr exp = experimentThread->experiment();
-
-    openedExperiment(experimentThread);
+  if (exp) {
+    openedExperiment(exp);
 
     closeWelcomeWindow();
   }
@@ -858,15 +846,15 @@ void QxrdApplication::openExperiment(QString path)
   if (path.length() > 0) {
     QxrdExperimentSettings settings(path);
 
-    QxrdExperimentThreadPtr experimentThread =
-        QxrdExperimentThread::newExperiment(path, qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()), &settings);
+    QxrdExperimentPtr exp =
+        QxrdExperiment::newExperiment(path, qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()));
 
-    QxrdExperimentPtr exp = experimentThread->experiment();
+    exp->initialize(&settings);
 
     printMessage("");
     printMessage(tr("===== Open Experiment %1").arg(path));
 
-    openedExperiment(experimentThread);
+    openedExperiment(exp);
   }
 }
 
@@ -876,14 +864,8 @@ void QxrdApplication::closeExperiment(QxrdExperimentWPtr exp)
     printf("QxrdApplication::closeExperiment(%p)\n", exp.data());
   }
 
-  QxrdExperimentPtr expp(exp);
-
-  if (expp) {
-    QxrdExperimentThreadPtr expthrd = expp -> experimentThread();
-
-    if (expthrd) {
-      closedExperiment(expthrd);
-    }
+  if (exp) {
+    closedExperiment(exp);
   }
 }
 
@@ -940,57 +922,6 @@ void QxrdApplication::setNewExperimentSettings(QSettings &settings, int type, QS
   }
 }
 
-//QString QxrdApplication::newAnalysisExperiment(QString path)
-//{
-//  path = normalizeExperimentName(path);
-
-//  if (path.length() > 0) {
-//    savePreferences(path);
-
-//    QSettings settings(path, QSettings::IniFormat);
-
-//    setNewExperimentSettings(settings, 4, path);
-
-//    return path;
-//  } else {
-//    return QString();
-//  }
-//}
-
-//QString QxrdApplication::newPerkinElmerExperiment(QString path)
-//{
-//  path = normalizeExperimentName(path);
-
-//  if (path.length() > 0) {
-//    savePreferences(path);
-
-//    QSettings settings(path, QSettings::IniFormat);
-
-//    setNewExperimentSettings(settings, 1, path);
-
-//    return path;
-//  } else {
-//    return QString();
-//  }
-//}
-
-//QString QxrdApplication::newPilatusExperiment(QString path)
-//{
-//  path = normalizeExperimentName(path);
-
-//  if (path.length() > 0) {
-//    savePreferences(path);
-
-//    QSettings settings(path, QSettings::IniFormat);
-
-//    setNewExperimentSettings(settings, 2, path);
-
-//    return path;
-//  } else {
-//    return QString();
-//  }
-//}
-
 void QxrdApplication::openRecentExperiment(QString path)
 {
   QFileInfo info(path);
@@ -1002,45 +933,37 @@ void QxrdApplication::openRecentExperiment(QString path)
   }
 }
 
-void QxrdApplication::openedExperiment(QxrdExperimentThreadWPtr expthrdw)
+void QxrdApplication::openedExperiment(QxrdExperimentWPtr exp)
 {
-  QxrdExperimentThreadPtr expthrd(expthrdw);
+  QxrdExperimentPtr expt(exp);
 
-  if (expthrd) {
-    QxrdExperimentPtr expt = expthrd->experiment();
+  if (expt) {
+    QString path = expt->experimentFilePath();
+    m_ApplicationSettings -> set_CurrentExperiment(path);
+    appendRecentExperiment(path);
 
-    if (expt) {
-      QString path = expt->experimentFilePath();
-      m_ApplicationSettings -> set_CurrentExperiment(path);
-      appendRecentExperiment(path);
+    m_Experiments.append(expt);
 
-      m_ExperimentThreads.append(expthrd);
-      m_Experiments.append(expt);
+    printMessage("");
+    printMessage("New experiment loaded");
+    printMessage("");
 
-      printMessage("");
-      printMessage("New experiment loaded");
-      printMessage("");
+    closeWelcomeWindow();
 
-      closeWelcomeWindow();
-
-      expt->openWindows();
-    }
+    expt->openWindows();
   }
 }
 
-void QxrdApplication::closedExperiment(QxrdExperimentThreadWPtr expthrdw)
+void QxrdApplication::closedExperiment(QxrdExperimentWPtr exp)
 {
-  QxrdExperimentThreadPtr expthrd(expthrdw);
+  QxrdExperimentPtr expt(exp);
 
-  if (expthrd) {
-    QxrdExperimentPtr expt = expthrd->experiment();
-
-    m_ExperimentThreads.removeAll(expthrd);
+  if (expt) {
     m_Experiments.removeAll(expt);
   }
 }
 
-QList<QxrdExperimentWPtr> &QxrdApplication::experiments()
+QList<QxrdExperimentPtr> &QxrdApplication::experiments()
 {
   return m_Experiments;
 }
@@ -1062,102 +985,6 @@ void QxrdApplication::activateExperiment(QString path)
     }
   }
 }
-
-//void QxrdApplication::doNewPerkinElmerAcquisition()
-//{
-//  QString newExperiment = QFileDialog::getSaveFileName(NULL,
-//                                                       "New Perkin Elmer Experiment",
-//                                                       get_CurrentExperiment(),
-//                                                       "QXRD Experiments (*.qxrdp)");
-
-//  if (newExperiment.length() >= 1) {
-//    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPerkinElmerAcquisition(normalizeExperimentName(newExperiment), m_Application);
-
-//    docThread->init(docThread);
-
-//    openedExperiment(docThread);
-//  }
-//}
-
-//void QxrdApplication::doNewPilatusAcquisition()
-//{
-//  QString newExperiment = QFileDialog::getSaveFileName(NULL,
-//                                                       "New Pilatus Experiment",
-//                                                       get_CurrentExperiment(),
-//                                                       "QXRD Experiments (*.qxrdp)");
-
-//  if (newExperiment.length() >= 1) {
-//    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPilatusAcquisition(normalizeExperimentName(newExperiment), m_Application);
-
-//    docThread->init(docThread);
-
-//    openedExperiment(docThread);
-//  }
-//}
-
-//void QxrdApplication::doNewSimulatedAcquisition()
-//{
-//  QString newExperiment = QFileDialog::getSaveFileName(NULL,
-//                                                       "New Simulated Acquisition Experiment",
-//                                                       get_CurrentExperiment(),
-//                                                       "QXRD Experiments (*.qxrdp)");
-
-//  if (newExperiment.length() >= 1) {
-//    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentSimulatedAcquisition(normalizeExperimentName(newExperiment), m_Application);
-
-//    docThread->init(docThread);
-
-//    openedExperiment(docThread);
-//  }
-//}
-
-//void QxrdApplication::doNewPerkinElmerAnalysis()
-//{
-//  QString newExperiment = QFileDialog::getSaveFileName(NULL,
-//                                                       "New Perkin Elmer Analysis Experiment",
-//                                                       get_CurrentExperiment(),
-//                                                       "QXRD Experiments (*.qxrdp)");
-
-//  if (newExperiment.length() >= 1) {
-//    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPerkinElmerAnalysis(normalizeExperimentName(newExperiment), m_Application);
-
-//    docThread->init(docThread);
-
-//    openedExperiment(docThread);
-//  }
-//}
-
-//void QxrdApplication::doNewPilatusAnalysis()
-//{
-//  QString newExperiment = QFileDialog::getSaveFileName(NULL,
-//                                                       "New Pilatus Analysis Experiment",
-//                                                       get_CurrentExperiment(),
-//                                                       "QXRD Experiments (*.qxrdp)");
-
-//  if (newExperiment.length() >= 1) {
-//    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentPilatusAnalysis(normalizeExperimentName(newExperiment), m_Application);
-
-//    docThread->init(docThread);
-
-//    openedExperiment(docThread);
-//  }
-//}
-
-//void QxrdApplication::doNewGenericAnalysis()
-//{
-//  QString newExperiment = QFileDialog::getSaveFileName(NULL,
-//                                                       "New Generic Analysis Experiment",
-//                                                       get_CurrentExperiment(),
-//                                                       "QXRD Experiments (*.qxrdp)");
-
-//  if (newExperiment.length() >= 1) {
-//    QxrdExperimentThreadPtr docThread = QxrdExperimentThread::newExperimentGenericAnalysis(normalizeExperimentName(newExperiment), m_Application);
-
-//    docThread->init(docThread);
-
-//    openedExperiment(docThread);
-//  }
-//}
 
 void QxrdApplication::incLockerCount()
 {

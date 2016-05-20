@@ -219,8 +219,6 @@ HEADERS += TODO.h \
     qxrdfilebrowsermodelupdaterthread-ptr.h \
     qxrdintegratorcache.h \
     qxrdintegratorcache-ptr.h \
-    qxrdexperimentthread.h \
-    qxrdexperimentthread-ptr.h \
     qxrdexperiment.h \
     qxrdexperiment-ptr.h \
     qxrdwelcomewindow.h \
@@ -447,7 +445,6 @@ SOURCES += qxrd.cpp \
     qxrdfilebrowsermodelupdater.cpp \
     qxrdfilebrowsermodelupdaterthread.cpp \
     qxrdintegratorcache.cpp \
-    qxrdexperimentthread.cpp \
     qxrdexperiment.cpp \
     qxrdwelcomewindow.cpp \
     qxrdglobalpreferencesdialog.cpp \

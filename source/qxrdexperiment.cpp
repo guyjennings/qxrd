@@ -26,7 +26,6 @@
 #include "qxrdfilesaverthread.h"
 #include "qcepsettingssaver.h"
 #include "qxrdfilesaver.h"
-#include "qxrdexperimentthread.h"
 #include "qxrddetectorthread.h"
 #include "qcepmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
@@ -54,7 +53,6 @@
 QxrdExperiment::QxrdExperiment(QString name) :
   QcepExperiment("", name),
   m_Application(),
-  m_ExperimentThread(),
   m_WindowSettings(NULL),
   m_Window(),
 //  m_AcquisitionWindow(),
@@ -105,14 +103,16 @@ QxrdExperiment::QxrdExperiment(QString name) :
   }
 }
 
-QxrdExperiment::QxrdExperiment(QxrdExperimentThreadWPtr expthrd,
-    QString path,
-    QxrdApplicationWPtr app) :
-  QxrdExperiment("experiment")
+QxrdExperimentPtr QxrdExperiment::newExperiment(QString path, QxrdApplicationWPtr app)
 {
-  setExperimentThread(expthrd);
-  setExperimentFilePath(path);
-  setExperimentApplication(app);
+  QxrdExperimentPtr expt(new QxrdExperiment("experiment"));
+
+  if (expt) {
+    expt->setExperimentFilePath(path);
+    expt->setExperimentApplication(app);
+  }
+
+  return expt;
 }
 
 QxrdExperiment::~QxrdExperiment()
@@ -465,16 +465,6 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QcepDataExportParameters*>("QcepDataExportParameters*");
   qRegisterMetaType<QcepDataImportParameters*>("QcepDataImportParameters*");
   qRegisterMetaType<QxrdGenerateTestImage*>("QxrdGenerateTestImage*");
-}
-
-void QxrdExperiment::setExperimentThread(QxrdExperimentThreadWPtr thrd)
-{
-  m_ExperimentThread = thrd;
-}
-
-QxrdExperimentThreadWPtr QxrdExperiment::experimentThread()
-{
-  return m_ExperimentThread;
 }
 
 void QxrdExperiment::setExperimentApplication(QxrdApplicationWPtr app)

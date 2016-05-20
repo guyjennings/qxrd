@@ -826,11 +826,9 @@ void QxrdWindow::populateExperimentsMenu()
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
-    QList<QxrdExperimentWPtr> exps = app->experiments();
+    QList<QxrdExperimentPtr> exps = app->experiments();
 
-    foreach (QxrdExperimentWPtr expw, exps) {
-      QxrdExperimentPtr exp(expw);
-
+    foreach (QxrdExperimentPtr exp, exps) {
       if (exp) {
         QString path = exp->experimentFilePath();
 

@@ -111,6 +111,13 @@ void QxrdAcquisition::addChildPtr(QcepSerializableObjectPtr child)
   }
 }
 
+void QxrdAcquisition::removeChildPtr(QcepSerializableObjectPtr child)
+{
+  printMessage("Need to implement QxrdAcquisition::removeChildPtr");
+
+  QxrdAcquisitionInterface::removeChildPtr(child);
+}
+
 QxrdAcquisition::~QxrdAcquisition()
 {
 #ifndef QT_NO_DEBUG

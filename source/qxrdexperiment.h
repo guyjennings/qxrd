@@ -12,7 +12,6 @@
 #include <QScriptEngineDebugger>
 #include "qcepexperiment.h"
 #include "qxrdapplication-ptr.h"
-#include "qxrdexperimentthread-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrddataprocessorthread-ptr.h"
@@ -53,9 +52,8 @@ class QxrdExperiment : public QcepExperiment
 public:
   Q_INVOKABLE QxrdExperiment(QString name);
 
-  QxrdExperiment(QxrdExperimentThreadWPtr expthrd = QxrdExperimentThreadPtr(),
-                             QString path = "",
-                             QxrdApplicationWPtr app =  QxrdApplicationWPtr());
+  static QxrdExperimentPtr newExperiment(QString path = "", QxrdApplicationWPtr app =  QxrdApplicationWPtr());
+
   virtual ~QxrdExperiment();
   void initialize(QSettings *settings);
 
@@ -66,9 +64,6 @@ public:
 
   void openWindows();
   void closeWindows();
-
-  void setExperimentThread(QxrdExperimentThreadWPtr thrd);
-  QxrdExperimentThreadWPtr experimentThread();
 
   void setExperimentApplication(QxrdApplicationWPtr app);
 
@@ -160,7 +155,6 @@ public:
 
 private:
   QxrdApplicationWPtr             m_Application;
-  QxrdExperimentThreadWPtr        m_ExperimentThread;
 
 private:
   QMutex                          m_Mutex;

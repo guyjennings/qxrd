@@ -42,6 +42,7 @@ public:
   ~QxrdAcquisition();
 
   virtual void addChildPtr(QcepSerializableObjectPtr child);
+  virtual void removeChildPtr(QcepSerializableObjectPtr child);
 
   void setWindow(QxrdWindowWPtr win);
 
@@ -211,22 +212,22 @@ public:
   QCEP_DOUBLE_VECTOR_PROPERTY(ScalerValues)
 
 private:
-  mutable QMutex                m_Mutex;
+  mutable QMutex                  m_Mutex;
 
   QxrdSynchronizedAcquisitionPtr  m_SynchronizedAcquisition;
   QxrdAcquisitionExtraInputsPtr   m_AcquisitionExtraInputs;
 
-  QxrdWindowWPtr         m_Window;
+  QxrdWindowWPtr                  m_Window;
 
-  QxrdAcquisitionDialogPtr m_ControlPanel;
+  QxrdAcquisitionDialogPtr        m_ControlPanel;
 
-  QTimer                 m_IdleTimer;
-  QAtomicInt             m_Idling;
+  QTimer                          m_IdleTimer;
+  QAtomicInt                      m_Idling;
 
-  QVector<QxrdDetectorThreadPtr>    m_DetectorThreads;
-  QVector<QxrdDetectorWPtr>         m_Detectors;
+  QVector<QxrdDetectorThreadPtr>  m_DetectorThreads;
+  QVector<QxrdDetectorWPtr>       m_Detectors;
 
-  QxrdAcquisitionScalerModelPtr m_ScalerModel;
+  QxrdAcquisitionScalerModelPtr   m_ScalerModel;
 };
 
 Q_DECLARE_METATYPE(QxrdAcquisition*)
