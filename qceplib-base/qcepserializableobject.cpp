@@ -490,3 +490,37 @@ void QcepSerializableObject::dumpObjectTreePtr(int level)
   }
 }
 
+void QcepSerializableObject::clearChildren()
+{
+  int n = childCount();
+
+  for (int i=n-1; i>=0; i--) {
+    removeChildPtr(childPtr(i));
+  }
+}
+
+void QcepSerializableObject::prependChildPtr(QcepSerializableObjectPtr child)
+{
+  addChildPtr(child);
+
+  int n = childCount();
+
+  for (int i=n-2; i>=0; i--) {
+    m_Children[i+1] = m_Children[i];
+  }
+
+  m_Children[0] = child;
+}
+
+void QcepSerializableObject::insertChildPtr(int atRow, QcepSerializableObjectPtr child)
+{
+  addChildPtr(child);
+
+  int n = childCount();
+
+  for (int i=n-2; i>=atRow; i--) {
+    m_Children[i+1] = m_Children[i];
+  }
+
+  m_Children[atRow] = child;
+}

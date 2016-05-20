@@ -29,6 +29,10 @@ public:
 
   virtual void propertyChanged(QcepProperty *prop);
 
+  virtual void clearChildren();
+  virtual void prependChildPtr(QcepSerializableObjectPtr child);
+  virtual void insertChildPtr(int atRow, QcepSerializableObjectPtr child);
+
 public slots:
   virtual void printLine(QString line) const;
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;

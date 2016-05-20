@@ -41,7 +41,7 @@ public:
     CanOverwrite
   } Overwrite;
 
-  virtual int childCount() const;
+//  virtual int childCount() const;
   virtual QcepDataObjectPtr item(int n);
   virtual QcepDataObjectPtr item(QString nm);
   virtual void setParentItem(QcepDataGroupWPtr parent);
@@ -74,7 +74,7 @@ protected:
   QString uniqueFileName(QString name);
 
 private:
-  QcepDataGroupWPtr     m_Parent;
+//  QcepDataGroupWPtr     m_Parent;
 //  QcepSettingsSaverWPtr m_Saver;
 
 protected:

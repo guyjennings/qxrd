@@ -230,10 +230,10 @@ void QcepDataObject::fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr 
   }
 }
 
-int QcepDataObject::childCount() const
-{
-  return 0;
-}
+//int QcepDataObject::childCount() const
+//{
+//  return 0;
+//}
 
 int QcepDataObject::rowCount() const
 {
@@ -257,15 +257,15 @@ QcepDataObjectPtr QcepDataObject::item(QString nm)
 
 QcepDataGroupPtr QcepDataObject::parentItem() const
 {
-  return m_Parent;
+  return qSharedPointerDynamicCast<QcepDataGroup>(parentPtr());
 }
 
 QcepDataGroupPtr QcepDataObject::rootItem()
 {
-  QcepDataGroupPtr parent(m_Parent);
+  QcepDataGroupPtr p = parentItem();
 
-  if (parent) {
-    return parent->rootItem();
+  if (p) {
+    return p->rootItem();
   } else {
     QcepObjectPtr obj = sharedFromThis();
 
@@ -275,16 +275,16 @@ QcepDataGroupPtr QcepDataObject::rootItem()
 
 void QcepDataObject::setParentItem(QcepDataGroupWPtr parent)
 {
-  m_Parent = parent;
+  setParentPtr(parent);
 }
 
 int QcepDataObject::indexInParent() const
 {
-  QcepDataObjectPtr parent = m_Parent;
+  QcepDataObjectPtr p = parentItem();
 
-  if (parent) {
+  if (p) {
     QcepDataGroup *parentGroup =
-          qobject_cast<QcepDataGroup*>(parent.data());
+          qobject_cast<QcepDataGroup*>(p.data());
 
     if (parentGroup) {
       for (int i=0; i<parentGroup->childCount(); i++) {

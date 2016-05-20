@@ -464,11 +464,9 @@ QVariant QcepFileFormatterText::nextPropertyValue()
         res = QVariant(false);
       }
     } else if (m_TokenType == String) {
-      printMessage("Need to parse string literal to string value");
-      res = QVariant(m_Token);
+      res = QVariant(removeSlashes(m_Token));
     } else if (m_TokenType == Variant) {
-      printMessage("Need to parse token to QVariant");
-      res = m_Token;
+      res = parseVariant(m_Token);
     } else {
       printMessage(tr("nextPropertyValue : unexpected token %1").arg(m_Token));
     }
