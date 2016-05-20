@@ -56,6 +56,9 @@ public:
 //  void    set_Type(QString name);
 
   static QString addSlashes(QString str);
+  static QString removeSlashes(QString str);
+
+  QVariant parseVariant(QString str);
 
   virtual void propertyChanged(QcepProperty *prop);
 

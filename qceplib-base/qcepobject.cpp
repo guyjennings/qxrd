@@ -229,6 +229,13 @@ QString QcepObject::addSlashes(QString str)
   return newStr;
 }
 
+QString QcepObject::removeSlashes(QString str)
+{
+  QString newStr;
+
+  return str;
+}
+
 QString QcepObject::settingsScript()
 {
   QString res = "";
@@ -276,6 +283,14 @@ QString QcepObject::toScriptLiteral(QVariant v)
     return tr("@QByteArray(\"%1\")").arg(QString(comp.toBase64()));
   }
 
+  else if (v.type() == QMetaType::QDateTime) {
+    return tr("@QDateTime(\"%1\")").arg(v.toString());
+  }
+
+  else if (v.type() == QMetaType::QDate) {
+    return tr("@QDate(\"%1\")").arg(v.toString());
+  }
+
   else {
     QString s = v.toString();
 
@@ -289,6 +304,15 @@ QString QcepObject::toScriptLiteral(QVariant v)
 
 QVariant QcepObject::fromScriptLiteral(QString lit)
 {
+}
+
+QVariant QcepObject::parseVariant(QString str)
+{
+  if (str.startsWith("@")) {
+
+  }
+
+  return QVariant();
 }
 
 QScriptValue QcepObject::toScriptValue(QScriptEngine *engine, const QcepObjectPtr &data)
