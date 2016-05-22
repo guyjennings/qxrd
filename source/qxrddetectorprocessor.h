@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 #include "qcepproperty.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdacquisition-ptr.h"
@@ -21,7 +21,7 @@
 #include "qxrdimageplotsettings-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 
-class QxrdDetectorProcessor : public QcepObject
+class QxrdDetectorProcessor : public QcepSerializableObject
 {
     Q_OBJECT
 

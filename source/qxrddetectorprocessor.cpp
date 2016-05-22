@@ -15,7 +15,7 @@
 QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     QxrdFileSaverWPtr     fsav,
     QxrdDetectorWPtr      det)
-  : QcepObject("acquisitionProcessor"),
+  : QcepSerializableObject("acquisitionProcessor"),
     m_DetectorDisplayMode(this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
     m_PerformDarkSubtraction(this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
     m_SaveRawImages(this, "saveRawImages", true, "Save Raw Images?"),

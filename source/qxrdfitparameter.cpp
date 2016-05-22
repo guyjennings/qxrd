@@ -2,7 +2,7 @@
 #include <QSettings>
 #include "qcepsettingssaver.h"
 
-QxrdFitParameter::QxrdFitParameter(QcepObject *parent, const char *name, QVariant value, QString toolTip) :
+QxrdFitParameter::QxrdFitParameter(QcepSerializableObject *parent, const char *name, QVariant value, QString toolTip) :
     QcepDoubleProperty(parent, name, value.toDouble(), toolTip),
     m_LowerLimit(0),
     m_UpperLimit(0),

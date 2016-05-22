@@ -8,7 +8,7 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiType,
                                        double                top,
                                        double                right,
                                        double                bottom)
-  : QcepObject("coords"),
+  : QcepSerializableObject("coords"),
     m_RoiType(this, "roiType", roiType, "ROI Type"),
     m_RoiTypeName(this, "roiTypeName", roiTypeName(roiType), "ROI Type Name"),
     m_Coords(this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords"),

@@ -3,7 +3,7 @@
 
 #include "qcepmacros.h"
 #include "qcepproperty.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include <QDoubleSpinBox>
 #include <QComboBox>
 #include "qcepimagedata-ptr.h"
@@ -18,7 +18,7 @@
 #include "qcepimagequeue.h"
 #include "qxrdroicoordinates-ptr.h"
 
-class QxrdDetector : public QcepObject
+class QxrdDetector : public QcepSerializableObject
 {
   Q_OBJECT
 

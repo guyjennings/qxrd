@@ -2,14 +2,14 @@
 #define QXRDCALIBRANT_H
 
 #include "qcepmacros.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrdcalibrant-ptr.h"
 #include "qxrdcalibrantdspacing.h"
 #include "qxrdcalibrantdspacings.h"
 #include <qscriptengine.h>
 
-class QxrdCalibrant : public QcepObject
+class QxrdCalibrant : public QcepSerializableObject
 {
   Q_OBJECT
 

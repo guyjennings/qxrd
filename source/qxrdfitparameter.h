@@ -10,7 +10,7 @@ class QxrdFitParameter : public QcepDoubleProperty
 {
   Q_OBJECT
 public:
-  QxrdFitParameter(QcepObject *parent, const char *name, QVariant value, QString toolTip);
+  QxrdFitParameter(QcepSerializableObject *parent, const char *name, QVariant value, QString toolTip);
 
   double lowerLimit() const;
   double upperLimit() const;

@@ -4,17 +4,22 @@
 #include "qcepsettingssaver.h"
 #include <QScriptEngine>
 #include <stdio.h>
+#include "qcepserializableobject.h"
 
-QxrdPowderPointProperty::QxrdPowderPointProperty(QcepObject *parent, const char *name, QxrdPowderPoint value, QString toolTip) :
+QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSerializableObject *parent,
+                                                 const char *name,
+                                                 QxrdPowderPoint value,
+                                                 QString toolTip) :
   QcepProperty(parent, name, toolTip),
   m_Default(value),
   m_Value(value)
 {
 }
 
-QxrdPowderPointProperty::QxrdPowderPointProperty(QcepObject *parent,
+QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSerializableObject *parent,
                                                  const char *name,
-                                                 int n1, int n2, int n3, double x, double y, double r1, double r2, double az,
+                                                 int n1, int n2, int n3,
+                                                 double x, double y, double r1, double r2, double az,
                                                  QString toolTip) :
   QcepProperty(parent, name, toolTip),
   m_Default(QxrdPowderPoint(n1,n2,n3,x,y,r1,r2,az)),
@@ -446,7 +451,10 @@ void QxrdPowderPointPropertyDoubleSpinBoxHelper::setValue(double value)
   emit subValueChanged(m_Axis, value, m_Property->incIndex(1));
 }
 
-QxrdPowderPointVectorProperty::QxrdPowderPointVectorProperty(QcepObject *parent, const char *name, QxrdPowderPointVector value, QString toolTip)
+QxrdPowderPointVectorProperty::QxrdPowderPointVectorProperty(QcepSerializableObject *parent,
+                                                             const char *name,
+                                                             QxrdPowderPointVector value,
+                                                             QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)

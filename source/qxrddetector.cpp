@@ -15,7 +15,7 @@ QxrdDetector::QxrdDetector(QxrdExperimentWPtr    expt,
                            QxrdAcquisitionWPtr   acq,
                            int                   detType,
                            int                   detNum) :
-  QcepObject("detector"),
+  QcepSerializableObject("detector"),
   m_Experiment(expt),
   m_Acquisition(acq),
   m_Processor(),

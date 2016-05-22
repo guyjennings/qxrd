@@ -2,7 +2,7 @@
 #define QXRDROICOORDINATES_H
 
 #include "qcepmacros.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepproperty.h"
@@ -12,7 +12,7 @@
 
 #include <QScriptEngine>
 
-class QxrdROICoordinates : public QcepObject
+class QxrdROICoordinates : public QcepSerializableObject
 {
   Q_OBJECT
 
