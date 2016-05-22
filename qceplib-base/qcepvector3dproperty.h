@@ -8,8 +8,14 @@ class QcepVector3DProperty : public QcepProperty
 {
   Q_OBJECT
 public:
-  explicit QcepVector3DProperty(QcepObject *parent, const char *name, QcepVector3D value, QString toolTip);
-  explicit QcepVector3DProperty(QcepObject *parent, const char *name, double x, double y, double z, QString toolTip);
+  explicit QcepVector3DProperty(QcepSerializableObject *parent,
+                                const char *name,
+                                QcepVector3D value,
+                                QString toolTip);
+  explicit QcepVector3DProperty(QcepSerializableObject *parent,
+                                const char *name,
+                                double x, double y, double z,
+                                QString toolTip);
 
   QcepVector3D value() const;
   QcepVector3D defaultValue() const;

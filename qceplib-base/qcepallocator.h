@@ -2,7 +2,7 @@
 #define QCEPALLOCATOR_H
 
 #include "qcepmacros.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 
 #include <QMutex>
 #include <QTimer>
@@ -19,7 +19,7 @@
 
 extern QcepAllocator *g_Allocator;
 
-class QcepAllocator : public QcepObject
+class QcepAllocator : public QcepSerializableObject
 {
   Q_OBJECT
 

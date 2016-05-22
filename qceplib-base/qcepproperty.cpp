@@ -22,7 +22,7 @@
 
 QMap<QString, CustomSettingsSaver*> QcepProperty::m_CustomSavers;
 
-QcepProperty::QcepProperty(QcepObject *parent, const char *name, QString toolTip)
+QcepProperty::QcepProperty(QcepSerializableObject *parent, const char *name, QString toolTip)
   : QObject(),
     m_Mutex(QMutex::Recursive),
     m_Parent(parent),
@@ -690,7 +690,7 @@ void QcepProperty::registerCustomSaver(QString typeName, CustomSettingsSaver *sa
   m_CustomSavers[typeName] = saver;
 }
 
-QcepDoubleProperty::QcepDoubleProperty(QcepObject *parent, const char *name, double value, QString toolTip)
+QcepDoubleProperty::QcepDoubleProperty(QcepSerializableObject *parent, const char *name, double value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -890,7 +890,7 @@ void QcepDoublePropertyDoubleSpinBoxHelper::setValue(double value)
   emit valueChanged(value, m_Property->incIndex(1));
 }
 
-QcepIntProperty::QcepIntProperty(QcepObject *parent, const char *name, int value, QString toolTip)
+QcepIntProperty::QcepIntProperty(QcepSerializableObject *parent, const char *name, int value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1146,7 +1146,7 @@ void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value)
   emit currentIndexChanged(value, m_Property->incIndex(1));
 }
 
-QcepBoolProperty::QcepBoolProperty(QcepObject *parent, const char *name, bool value, QString toolTip)
+QcepBoolProperty::QcepBoolProperty(QcepSerializableObject *parent, const char *name, bool value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1300,7 +1300,7 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value)
   emit toggled(value, m_Property->incIndex(1));
 }
 
-QcepStringProperty::QcepStringProperty(QcepObject *parent, const char *name, QString value, QString toolTip)
+QcepStringProperty::QcepStringProperty(QcepSerializableObject *parent, const char *name, QString value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1596,7 +1596,7 @@ void QcepStringPropertyComboBoxHelper::setCurrentIndex(int current)
   emit valueChanged(value, m_Property->incIndex(1));
 }
 
-QcepDateTimeProperty::QcepDateTimeProperty(QcepObject *parent, const char *name, QDateTime value, QString toolTip)
+QcepDateTimeProperty::QcepDateTimeProperty(QcepSerializableObject *parent, const char *name, QDateTime value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1672,7 +1672,7 @@ void QcepDateTimeProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepDoubleListProperty::QcepDoubleListProperty(QcepObject *parent, const char *name, QcepDoubleList value, QString toolTip)
+QcepDoubleListProperty::QcepDoubleListProperty(QcepSerializableObject *parent, const char *name, QcepDoubleList value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1803,7 +1803,7 @@ void QcepDoubleListProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepDoubleVectorProperty::QcepDoubleVectorProperty(QcepObject *parent, const char *name, QcepDoubleVector value, QString toolTip)
+QcepDoubleVectorProperty::QcepDoubleVectorProperty(QcepSerializableObject *parent, const char *name, QcepDoubleVector value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1934,7 +1934,7 @@ void QcepDoubleVectorProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepIntListProperty::QcepIntListProperty(QcepObject *parent, const char *name, QcepIntList value, QString toolTip)
+QcepIntListProperty::QcepIntListProperty(QcepSerializableObject *parent, const char *name, QcepIntList value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2065,7 +2065,7 @@ void QcepIntListProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepIntVectorProperty::QcepIntVectorProperty(QcepObject *parent, const char *name, QcepIntVector value, QString toolTip)
+QcepIntVectorProperty::QcepIntVectorProperty(QcepSerializableObject *parent, const char *name, QcepIntVector value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2196,7 +2196,7 @@ void QcepIntVectorProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepStringListProperty::QcepStringListProperty(QcepObject *parent, const char *name, QStringList value, QString toolTip)
+QcepStringListProperty::QcepStringListProperty(QcepSerializableObject *parent, const char *name, QStringList value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2307,7 +2307,7 @@ void QcepStringListProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepByteArrayProperty::QcepByteArrayProperty(QcepObject *parent, const char *name, QByteArray value, QString toolTip)
+QcepByteArrayProperty::QcepByteArrayProperty(QcepSerializableObject *parent, const char *name, QByteArray value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2408,7 +2408,7 @@ void QcepByteArrayProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepDoublePointProperty::QcepDoublePointProperty(QcepObject *parent, const char *name, QPointF value, QString toolTip)
+QcepDoublePointProperty::QcepDoublePointProperty(QcepSerializableObject *parent, const char *name, QPointF value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2601,7 +2601,7 @@ void QcepDoublePointPropertyDoubleSpinBoxHelper::setValue(double value)
   emit subValueChanged(m_Axis, value, m_Property->incIndex(1));
 }
 
-QcepDoubleRectProperty::QcepDoubleRectProperty(QcepObject *parent, const char *name, QRectF value, QString toolTip)
+QcepDoubleRectProperty::QcepDoubleRectProperty(QcepSerializableObject *parent, const char *name, QRectF value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2677,7 +2677,7 @@ void QcepDoubleRectProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepPolygonProperty::QcepPolygonProperty(QcepObject *parent, const char *name, QcepPolygon value, QString toolTip)
+QcepPolygonProperty::QcepPolygonProperty(QcepSerializableObject *parent, const char *name, QcepPolygon value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2768,7 +2768,7 @@ void QcepPolygonProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepInt64Property::QcepInt64Property(QcepObject *parent, const char *name, qint64 value, QString toolTip)
+QcepInt64Property::QcepInt64Property(QcepSerializableObject *parent, const char *name, qint64 value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)

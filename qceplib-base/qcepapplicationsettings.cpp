@@ -3,7 +3,7 @@
 QcepApplicationSettings *g_ApplicationSettings = NULL;
 
 QcepApplicationSettings::QcepApplicationSettings(QcepApplicationWPtr app) :
-  QcepObject("appSettings")
+  QcepSerializableObject("appSettings")
 {
   g_ApplicationSettings = this;
 }
