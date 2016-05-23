@@ -18,7 +18,7 @@ class QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::QxrdDetector
 public:
   explicit QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,
                                      QxrdAcquisitionWPtr       acq,
-                                     QxrdDetectorWPtr          det,
+                                     QxrdDetectorSettingsWPtr          det,
                                      QxrdDetectorProcessorWPtr proc,
                                      QWidget                  *parent = 0);
   ~QxrdDetectorControlWindow();
@@ -67,7 +67,7 @@ private:
 private:
   QxrdExperimentWPtr              m_Experiment;
   QxrdAcquisitionWPtr             m_Acquisition;
-  QxrdDetectorWPtr                m_Detector;
+  QxrdDetectorSettingsWPtr                m_Detector;
   QxrdDetectorProcessorWPtr       m_Processor;
   QxrdROICoordinatesListModelWPtr  m_ROIModel;
 

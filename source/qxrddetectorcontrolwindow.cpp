@@ -16,7 +16,7 @@
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,
                                                      QxrdAcquisitionWPtr       acq,
-                                                     QxrdDetectorWPtr          det,
+                                                     QxrdDetectorSettingsWPtr          det,
                                                      QxrdDetectorProcessorWPtr proc,
                                                      QWidget                  *parent) :
   QxrdMainWindow(parent),
@@ -32,7 +32,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        e
   QxrdDetectorProcessorPtr dp(m_Processor);
   QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
   QxrdExperimentPtr expt(m_Experiment);
-  QxrdDetectorPtr dt(m_Detector);
+  QxrdDetectorSettingsPtr dt(m_Detector);
 
   if (dp) {
     dp->prop_DetectorDisplayMode()     -> linkTo(m_DetectorDisplayMode);
@@ -152,7 +152,7 @@ QxrdDetectorControlWindow::~QxrdDetectorControlWindow()
 
 void QxrdDetectorControlWindow::updateWindowTitle()
 {
-  QxrdDetectorPtr dt(m_Detector);
+  QxrdDetectorSettingsPtr dt(m_Detector);
 
   if (dt) {
     setWindowTitle(tr("%1: Control %2 detector \"%3\"")

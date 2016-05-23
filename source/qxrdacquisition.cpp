@@ -136,7 +136,7 @@ QxrdAcquisition::~QxrdAcquisition()
     QxrdDetectorThreadPtr t = m_DetectorThreads.takeFirst();
 
     if (t) {
-      QxrdDetectorPtr d = t->detector();
+      QxrdDetectorSettingsPtr d = t->detector();
 
       if (d) {
         d->stopDetector();
@@ -191,7 +191,7 @@ void QxrdAcquisition::shutdown()
   }
 
   for (int i=0; i<get_DetectorCount(); i++) {
-    QxrdDetectorPtr det = detector(i);
+    QxrdDetectorSettingsPtr det = detector(i);
 
     if (det) {
      det -> shutdownAcquisition();
@@ -257,7 +257,7 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
   for (int i=0; i<m_Detectors.count(); i++) {
     settings->setArrayIndex(i);
 
-    QxrdDetectorPtr det = m_Detectors.value(i);
+    QxrdDetectorSettingsPtr det = m_Detectors.value(i);
 
     if (det) {
       det->writeSettings(settings, "");
@@ -297,7 +297,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
     if (detThread) {
       detThread->start();
 
-      QxrdDetectorPtr det = detThread->detector();
+      QxrdDetectorSettingsPtr det = detThread->detector();
 
       if (det) {
         //          det->initialize();
@@ -336,7 +336,7 @@ void QxrdAcquisition::appendDetector(int detType)
     if (detThread) {
       detThread->start();
 
-      QxrdDetectorPtr det = detThread->detector();
+      QxrdDetectorSettingsPtr det = detThread->detector();
 
       if (det) {
         m_DetectorThreads.append(detThread);
@@ -356,7 +356,7 @@ void QxrdAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
   } else {
     if (proxy) {
       QxrdDetectorThreadPtr detThread = proxy->detectorThread();
-      QxrdDetectorPtr       detector  = proxy->detector();
+      QxrdDetectorSettingsPtr       detector  = proxy->detector();
 
       int nDet = get_DetectorCount();
 
@@ -397,7 +397,7 @@ QxrdDetectorThreadPtr QxrdAcquisition::detectorThread(int n)
   return m_DetectorThreads.value(n);
 }
 
-QxrdDetectorWPtr QxrdAcquisition::detector(int n)
+QxrdDetectorSettingsWPtr QxrdAcquisition::detector(int n)
 {
   return m_Detectors.value(n);
 }
@@ -417,7 +417,7 @@ bool QxrdAcquisition::sanityCheckCommon()
   int ndet = 0;
 
   for (int i=0; i<get_DetectorCount(); i++) {
-    QxrdDetectorPtr det = detector(i);
+    QxrdDetectorSettingsPtr det = detector(i);
 
     if (det && det->isEnabled()) {
       ndet++;
@@ -479,7 +479,7 @@ bool QxrdAcquisition::sanityCheckAcquireDark()
 
 void QxrdAcquisition::onExposureTimeChanged()
 {
-  foreach (QxrdDetectorPtr det, m_Detectors) {
+  foreach (QxrdDetectorSettingsPtr det, m_Detectors) {
     det->onExposureTimeChanged();
   }
 }
@@ -488,7 +488,7 @@ void QxrdAcquisition::configureDetector(int i)
 {
   printMessage(tr("Configure Detector %1").arg(i));
 
-  QxrdDetectorPtr det = detector(i);
+  QxrdDetectorSettingsPtr det = detector(i);
 
   QxrdDetectorProxyPtr proxy(new QxrdDetectorProxy(detectorThread(i), detector(i), myself()));
 
@@ -499,7 +499,7 @@ void QxrdAcquisition::configureDetector(int i)
 
 void QxrdAcquisition::openDetectorControlWindow(int i)
 {
-  QxrdDetectorPtr det = detector(i);
+  QxrdDetectorSettingsPtr det = detector(i);
 
   if (det) {
     det->openControlWindow();
@@ -657,7 +657,7 @@ QString QxrdAcquisition::currentFileBase(int detNum, QString extension)
 {
   QString fileBase, fileName;
 
-  QxrdDetectorPtr det = detector(detNum);
+  QxrdDetectorSettingsPtr det = detector(detNum);
   QString extent;
 
   if (extension.length()) {
@@ -684,7 +684,7 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, QString extent, in
 {
   int width = get_FileIndexWidth();
   int detWidth = get_DetectorNumberWidth();
-  QxrdDetectorPtr det(detector(detNum));
+  QxrdDetectorSettingsPtr det(detector(detNum));
 
   if (det) {
     QxrdDetectorProcessorPtr proc(det->processor());
@@ -928,13 +928,13 @@ void QxrdAcquisition::doAcquire()
     }
 
     int nDet = 0;
-    QVector<QxrdDetectorPtr> dets;
+    QVector<QxrdDetectorSettingsPtr> dets;
     QVector<QxrdDetectorProcessorPtr> procs;
     QVector<QVector<QVector<QcepUInt32ImageDataPtr> > >res;
     QVector<QVector<QVector<QcepMaskDataPtr> > >      ovf;
 
     for (int i=0; i<get_DetectorCount(); i++) {
-      QxrdDetectorPtr det = detector(i);
+      QxrdDetectorSettingsPtr det = detector(i);
 
       if (det && det->isEnabled()) {
         nDet++;
@@ -1021,13 +1021,13 @@ void QxrdAcquisition::doAcquire()
           set_CurrentPhase(p);
 
           for (int d=0; d<nDet; d++) {
-            QxrdDetectorPtr det = dets[d];
+            QxrdDetectorSettingsPtr det = dets[d];
 
             det->beginFrame();
           }
 
           for (int d=0; d<nDet; d++) {
-            QxrdDetectorPtr det = dets[d];
+            QxrdDetectorSettingsPtr det = dets[d];
             int nCols = det->get_NCols();
             int nRows = det->get_NRows();
 
@@ -1266,7 +1266,7 @@ void QxrdAcquisition::doAcquireDark()
                  .arg(fileBase).arg(exposure).arg(nsummed).arg(fileIndex));
 
     int nDet = 0;
-    QVector<QxrdDetectorPtr> dets;
+    QVector<QxrdDetectorSettingsPtr> dets;
     QVector<QxrdDetectorProcessorPtr> procs;
     QVector<QcepUInt32ImageDataPtr> res;
     QVector<QcepMaskDataPtr> overflow;
@@ -1276,7 +1276,7 @@ void QxrdAcquisition::doAcquireDark()
     set_CurrentFile(fileIndex);
 
     for (int i=0; i<get_DetectorCount(); i++) {
-      QxrdDetectorPtr det = detector(i);
+      QxrdDetectorSettingsPtr det = detector(i);
 
       if (det && det->isEnabled()) {
         nDet++;
@@ -1315,7 +1315,7 @@ void QxrdAcquisition::doAcquireDark()
     }
 
     for (int d=0; d<nDet; d++) {
-      QxrdDetectorPtr det = dets[d];
+      QxrdDetectorSettingsPtr det = dets[d];
 
       getFileBaseAndName(fileBase, det->get_Extension(), det->get_DetectorNumber(), fileIndex, -1, 1, fb, fn);
 
@@ -1429,7 +1429,7 @@ void QxrdAcquisition::onIdleTimeout()
 {
   if (m_Idling.fetchAndAddOrdered(0)) {
     for (int i=0; i<get_DetectorCount(); i++) {
-      QxrdDetectorPtr det = detector(i);
+      QxrdDetectorSettingsPtr det = detector(i);
 
       if (det && det->isEnabled()) {
         QcepImageDataBasePtr res = det -> acquireFrameIfAvailable();

@@ -884,7 +884,7 @@ void QxrdWindow::populateConfigureDetectorMenu()
     int nDets = acq->get_DetectorCount();
 
     for (int i=0; i<nDets; i++) {
-      QxrdDetectorPtr det = acq->detector(i);
+      QxrdDetectorSettingsPtr det = acq->detector(i);
       QString detType = det->get_DetectorTypeName();
       QString detName = det->get_DetectorName();
       bool    enabled = det->get_Enabled();
@@ -919,7 +919,7 @@ void QxrdWindow::populateDetectorControlWindowsMenu()
     int nDets = acq->get_DetectorCount();
 
     for (int i=0; i<nDets; i++) {
-      QxrdDetectorPtr det = acq->detector(i);
+      QxrdDetectorSettingsPtr det = acq->detector(i);
       QString detType = det->get_DetectorTypeName();
       QString detName = det->get_DetectorName();
       bool    enabled = det->get_Enabled();

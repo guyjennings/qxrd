@@ -46,7 +46,7 @@ int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
     int nDet = acq->get_DetectorCount();
 
     for (int det=0; det<nDet; det++) {
-      QxrdDetectorPtr d = acq->detector(det);
+      QxrdDetectorSettingsPtr d = acq->detector(det);
 
       if (d && d->isEnabled()) {
         nRows += 1;
@@ -126,7 +126,7 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
             scalerchan += nXtra;
 
             for (int det=0; det<nDet; det++) {
-              QxrdDetectorPtr d = acq->detector(det);
+              QxrdDetectorSettingsPtr d = acq->detector(det);
 
               if (d && d->isEnabled()) {
                 if (row == 0) {

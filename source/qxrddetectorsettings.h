@@ -33,8 +33,8 @@ public:
   QxrdExperimentWPtr experiment();
   QxrdAcquisitionWPtr acquisition();
 
-  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorWPtr &det);
-  static void fromScriptValue(const QScriptValue &obj, QxrdDetectorWPtr &det);
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorSettingsWPtr &det);
+  static void fromScriptValue(const QScriptValue &obj, QxrdDetectorSettingsWPtr &det);
 
   virtual void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   virtual void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);

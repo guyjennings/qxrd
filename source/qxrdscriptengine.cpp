@@ -1635,7 +1635,7 @@ QScriptValue QxrdScriptEngine::roiFunc(QScriptContext *context, QScriptEngine *e
       int n = context->argument(0).toInteger();
       int m = context->argument(1).toInteger();
 
-      QxrdDetectorPtr d = acq->detector(n);
+      QxrdDetectorSettingsPtr d = acq->detector(n);
 
       if (d) {
         return engine->newQObject(d->roi(m).data());
@@ -1861,7 +1861,7 @@ void QxrdScriptEngine::initialize()
 //                          QxrdCalibrantDSpacingVector::toScriptValue,
 //                          QxrdCalibrantDSpacingVector::fromScriptValue);
 
-  qRegisterMetaType<QxrdDetectorPtr>("QxrdDetectorWPtr");
+  qRegisterMetaType<QxrdDetectorSettingsPtr>("QxrdDetectorWPtr");
   qScriptRegisterMetaType(this,
                           QxrdDetectorSettings::toScriptValue,
                           QxrdDetectorSettings::fromScriptValue);

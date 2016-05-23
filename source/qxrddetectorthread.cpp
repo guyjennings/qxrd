@@ -200,40 +200,40 @@ void QxrdDetectorThread::run()
   }
 
   {
-    QxrdDetectorPtr det;
+    QxrdDetectorSettingsPtr det;
 
     switch(m_DetectorType) {
     case SimulatedDetector:
       setObjectName("simulatedDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorSettingsSimulated(m_Experiment,
+      det = QxrdDetectorSettingsPtr(new QxrdDetectorSettingsSimulated(m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber));
       break;
 
     case PerkinElmerDetector:
       setObjectName("perkinElmerDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorSettingsPerkinElmer(m_Experiment,
+      det = QxrdDetectorSettingsPtr(new QxrdDetectorSettingsPerkinElmer(m_Experiment,
                                                         m_Acquisition,
                                                         m_DetectorNumber));
       break;
 
     case PilatusDetector:
       setObjectName("pilatusDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorSettingsPilatus(m_Experiment,
+      det = QxrdDetectorSettingsPtr(new QxrdDetectorSettingsPilatus(m_Experiment,
                                                     m_Acquisition,
                                                     m_DetectorNumber));
       break;
 
     case EpicsAreaDetector:
       setObjectName("epicsAreaDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorSettingsEpicsArea(m_Experiment,
+      det = QxrdDetectorSettingsPtr(new QxrdDetectorSettingsEpicsArea(m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber));
       break;
 
     case FileWatcherDetector:
       setObjectName("fileWatcherDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorSettingsFileWatcher(m_Experiment,
+      det = QxrdDetectorSettingsPtr(new QxrdDetectorSettingsFileWatcher(m_Experiment,
                                                         m_Acquisition,
                                                         m_DetectorNumber));
       break;
@@ -241,7 +241,7 @@ void QxrdDetectorThread::run()
 
     if (det == NULL) {
       setObjectName("simulatedDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorSettingsSimulated(m_Experiment,
+      det = QxrdDetectorSettingsPtr(new QxrdDetectorSettingsSimulated(m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber));
     }
@@ -259,14 +259,14 @@ void QxrdDetectorThread::run()
     m_Detector -> stopDetector();
   }
 
-  m_Detector = QxrdDetectorPtr();
+  m_Detector = QxrdDetectorSettingsPtr();
 
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Detector Thread Terminated with rc %d\n", rc);
   }
 }
 
-QxrdDetectorWPtr QxrdDetectorThread::detector() const
+QxrdDetectorSettingsWPtr QxrdDetectorThread::detector() const
 {
   while (isRunning()) {
     if (m_Detector) return m_Detector;
@@ -274,7 +274,7 @@ QxrdDetectorWPtr QxrdDetectorThread::detector() const
     QThread::msleep(50);
   }
 
-  return QxrdDetectorWPtr();
+  return QxrdDetectorSettingsWPtr();
 }
 
 void QxrdDetectorThread::shutdown()

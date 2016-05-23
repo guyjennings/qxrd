@@ -206,12 +206,12 @@ void QxrdDetectorSettings::shutdownAcquisition()
 {
 }
 
-QScriptValue QxrdDetectorSettings::toScriptValue(QScriptEngine *engine, const QxrdDetectorWPtr &det)
+QScriptValue QxrdDetectorSettings::toScriptValue(QScriptEngine *engine, const QxrdDetectorSettingsWPtr &det)
 {
   return engine->newQObject(det.data());
 }
 
-void QxrdDetectorSettings::fromScriptValue(const QScriptValue &obj, QxrdDetectorWPtr &det)
+void QxrdDetectorSettings::fromScriptValue(const QScriptValue &obj, QxrdDetectorSettingsWPtr &det)
 {
   QObject *qobj = obj.toQObject();
 
@@ -219,7 +219,7 @@ void QxrdDetectorSettings::fromScriptValue(const QScriptValue &obj, QxrdDetector
     QxrdDetectorSettings *qdet = qobject_cast<QxrdDetectorSettings*>(qobj);
 
     if (qdet) {
-      QxrdDetectorPtr dp(qSharedPointerDynamicCast<QxrdDetectorSettings>(qdet->sharedFromThis()));
+      QxrdDetectorSettingsPtr dp(qSharedPointerDynamicCast<QxrdDetectorSettings>(qdet->sharedFromThis()));
 
       if (dp) {
         det = dp;

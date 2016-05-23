@@ -14,7 +14,7 @@ class QxrdDetectorProxy : public QcepObject
 
 public:
   explicit QxrdDetectorProxy(
-      QxrdDetectorThreadPtr thr, QxrdDetectorPtr det, QxrdAcquisitionPtr acq);
+      QxrdDetectorThreadPtr thr, QxrdDetectorSettingsPtr det, QxrdAcquisitionPtr acq);
   explicit QxrdDetectorProxy(int detectorType,    QxrdAcquisitionPtr acq);
   void initialize();
 
@@ -24,7 +24,7 @@ public slots:
   int                   detectorType();
   QString               detectorTypeName();
   QxrdDetectorThreadPtr detectorThread();
-  QxrdDetectorPtr       detector();
+  QxrdDetectorSettingsPtr       detector();
   int                   detectorNumber();
   QString               detectorName();
   void setDetectorName(QString name);
@@ -62,7 +62,7 @@ public:
 private:
   QxrdAcquisitionPtr    m_Acquisition;
   QxrdDetectorThreadPtr m_DetectorThread;
-  QxrdDetectorPtr       m_Detector;
+  QxrdDetectorSettingsPtr       m_Detector;
   int                   m_DetectorType;
   bool                  m_SettingsChanged;
   bool                  m_Initialized;

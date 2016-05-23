@@ -14,7 +14,7 @@
 
 QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     QxrdFileSaverWPtr     fsav,
-    QxrdDetectorWPtr      det)
+    QxrdDetectorSettingsWPtr      det)
   : QcepSerializableObject("acquisitionProcessor"),
     m_DetectorDisplayMode(this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
     m_PerformDarkSubtraction(this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
@@ -196,7 +196,7 @@ void QxrdDetectorProcessor::setAcquiredImageProperties(QcepImageDataBasePtr imag
                                                        int nPhases,
                                                        bool trig)
 {
-  QxrdDetectorPtr    det(m_Detector);
+  QxrdDetectorSettingsPtr    det(m_Detector);
 
   if (det) {
     QxrdAcquisitionPtr acq(det->acquisition());

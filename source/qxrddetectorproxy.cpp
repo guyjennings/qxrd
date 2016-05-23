@@ -8,7 +8,7 @@
 #include <QCheckBox>
 
 QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
-                                     QxrdDetectorPtr       det,
+                                     QxrdDetectorSettingsPtr       det,
                                      QxrdAcquisitionPtr    acq)
   : QcepObject("detectorProxy"),
     m_Acquisition(acq),
@@ -96,7 +96,7 @@ QxrdDetectorThreadPtr QxrdDetectorProxy::detectorThread()
   return m_DetectorThread;
 }
 
-QxrdDetectorPtr QxrdDetectorProxy::detector()
+QxrdDetectorSettingsPtr QxrdDetectorProxy::detector()
 {
   return m_Detector;
 }

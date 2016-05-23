@@ -28,7 +28,7 @@ class QxrdDetectorProcessor : public QcepSerializableObject
 public:
   QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
                         QxrdFileSaverWPtr     fsav,
-                        QxrdDetectorWPtr      det);
+                        QxrdDetectorSettingsWPtr      det);
   virtual ~QxrdDetectorProcessor();
 
   void setControlWindow(QxrdDetectorControlWindowWPtr ctrl);
@@ -192,7 +192,7 @@ private:
 
   QxrdExperimentWPtr    m_Experiment;
   QxrdFileSaverWPtr     m_FileSaver;
-  QxrdDetectorWPtr      m_Detector;
+  QxrdDetectorSettingsWPtr      m_Detector;
 
   QxrdCenterFinderPtr   m_CenterFinder;
   QxrdIntegratorPtr     m_Integrator;

@@ -17,7 +17,7 @@ public:
                               int detNum);
   virtual ~QxrdDetectorThread();
 
-  QxrdDetectorWPtr detector() const;
+  QxrdDetectorSettingsWPtr detector() const;
   void shutdown();
 
   typedef enum {
@@ -68,7 +68,7 @@ protected:
 private:
   QxrdExperimentWPtr    m_Experiment;
   QxrdAcquisitionWPtr   m_Acquisition;
-  QxrdDetectorPtr       m_Detector;
+  QxrdDetectorSettingsPtr       m_Detector;
   int                   m_DetectorType;
   int                   m_DetectorNumber;
 };

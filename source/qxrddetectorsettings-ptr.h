@@ -5,7 +5,7 @@
 
 class QxrdDetectorSettings;
 
-typedef QSharedPointer<QxrdDetectorSettings> QxrdDetectorPtr;
-typedef QWeakPointer<QxrdDetectorSettings>   QxrdDetectorWPtr;
+typedef QSharedPointer<QxrdDetectorSettings> QxrdDetectorSettingsPtr;
+typedef QWeakPointer<QxrdDetectorSettings>   QxrdDetectorSettingsWPtr;
 
 #endif // QXRDDETECTORPTR_H
