@@ -1,6 +1,7 @@
 #include "qxrddetectordriversimulated.h"
 
-QxrdDetectorDriverSimulated::QxrdDetectorDriverSimulated()
+QxrdDetectorDriverSimulated::QxrdDetectorDriverSimulated(QString name) :
+  QxrdDetectorDriver(name)
 {
 
 }

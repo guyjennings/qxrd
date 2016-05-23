@@ -1,6 +1,7 @@
 #include "qxrddetectordriverperkinelmer.h"
 
-QxrdDetectorDriverPerkinElmer::QxrdDetectorDriverPerkinElmer()
+QxrdDetectorDriverPerkinElmer::QxrdDetectorDriverPerkinElmer(QString name) :
+  QxrdDetectorDriver(name)
 {
 
 }

@@ -1,11 +1,14 @@
 #ifndef QXRDDETECTORDRIVERSIMULATED_H
 #define QXRDDETECTORDRIVERSIMULATED_H
 
+#include "qxrddetectordriver.h"
 
-class QxrdDetectorDriverSimulated
+class QxrdDetectorDriverSimulated : public QxrdDetectorDriver
 {
+  Q_OBJECT
+
 public:
-  QxrdDetectorDriverSimulated();
+  QxrdDetectorDriverSimulated(QString name);
 };
 
 #endif // QXRDDETECTORDRIVERSIMULATED_H
