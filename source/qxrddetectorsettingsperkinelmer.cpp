@@ -16,7 +16,7 @@ static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer(QxrdExperimentWPtr    expt,
                                                  QxrdAcquisitionWPtr   acq,
                                                  int                   detNum) :
-  QxrdDetectorSettings(expt, acq, QxrdDetectorThread::PerkinElmerDetector, detNum),
+  QxrdDetectorSettings(expt, acq, PerkinElmerDetector, detNum),
   m_Mutex(QMutex::Recursive),
   m_BufferSize(0),
 #ifdef HAVE_PERKIN_ELMER
@@ -80,7 +80,7 @@ QxrdDetectorSettingsPerkinElmer::~QxrdDetectorSettingsPerkinElmer()
 
 void QxrdDetectorSettingsPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetectorSettings::pushDefaultsToProxy(proxy, QxrdDetectorThread::PerkinElmerDetector);
+//  QxrdDetectorSettings::pushDefaultsToProxy(proxy, PerkinElmerDetector);
 
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::PEDetNumProperty, "detectorNumber", "PE Detector Number", 0);

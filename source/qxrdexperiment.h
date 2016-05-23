@@ -30,8 +30,6 @@
 #include "qxrdscriptenginethread.h"
 #include "qxrdscriptenginethread-ptr.h"
 #include "qcepsettingssaver.h"
-#include "qxrddetectorthread.h"
-#include "qxrddetectorthread-ptr.h"
 #include "qxrddetectorsettings.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdcenterfinder-ptr.h"

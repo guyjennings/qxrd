@@ -1,5 +1,5 @@
 #include "qxrddetectorsettings.h"
-#include "qxrddetectorthread.h"
+#include "qxrddetectordriverthread.h"
 #include "qxrddetectorproxy.h"
 #include "qxrddebug.h"
 #include "qxrddetectorprocessor.h"
@@ -10,6 +10,11 @@
 #include "qcepimagedata.h"
 #include "qxrdacquisition.h"
 #include "qxrdroicalculator.h"
+#include "qxrddetectorsettingsepicsarea.h"
+#include "qxrddetectorsettingsfilewatcher.h"
+#include "qxrddetectorsettingsperkinelmer.h"
+#include "qxrddetectorsettingspilatus.h"
+#include "qxrddetectorsettingssimulated.h"
 
 QxrdDetectorSettings::QxrdDetectorSettings(QxrdExperimentWPtr    expt,
                            QxrdAcquisitionWPtr   acq,
@@ -24,9 +29,9 @@ QxrdDetectorSettings::QxrdDetectorSettings(QxrdExperimentWPtr    expt,
   m_AcquiredImages("acquired"),
   m_DetectorNumber(this, "detectorNumber", detNum, "Detector Number"),
   m_DetectorType(this, "detectorType", detType, "Detector Type"),
-  m_DetectorTypeName(this, "detectorTypeName", QxrdDetectorThread::detectorTypeName(detType), "Detector Type Name"),
+  m_DetectorTypeName(this, "detectorTypeName", detectorTypeName(detType), "Detector Type Name"),
   m_Enabled(this, "enabled", true, "Is Detector Enabled?"),
-  m_DetectorName(this, "detectorName", QxrdDetectorThread::detectorTypeName(detType), "Detector Name"),
+  m_DetectorName(this, "detectorName", detectorTypeName(detType), "Detector Name"),
   m_NCols(this, "nCols", 0, "No of detector cols"),
   m_NRows(this, "nRows", 0, "No of detector rows"),
   m_HBinning(this, "hBinning", 0, "Horiz Binning"),
@@ -89,6 +94,57 @@ QxrdDetectorSettings::~QxrdDetectorSettings()
   if (acq) {
     acq->prop_DetectorCount()->incValue(-1);
   }
+}
+
+int QxrdDetectorSettings::detectorTypeCount()
+{
+  return 6;
+}
+
+QString QxrdDetectorSettings::detectorTypeName(int detectorType)
+{
+  QString res = "unknown";
+  switch (detectorType) {
+  case NoDetector:
+    res = "No Detector";
+    break;
+
+  case SimulatedDetector:
+    res = "Simulated Detector";
+    break;
+
+  case PerkinElmerDetector:
+    res = "Perkin Elmer Detector";
+    break;
+
+  case PilatusDetector:
+    res = "Pilatus Detector";
+    break;
+
+  case EpicsAreaDetector:
+    res = "Epics Area Detector";
+    break;
+
+  case FileWatcherDetector:
+    res = "File Watcher";
+    break;
+  }
+
+  return res;
+}
+
+QStringList QxrdDetectorSettings::detectorTypeNames()
+{
+  QStringList res;
+
+  res.append(detectorTypeName(NoDetector));
+  res.append(detectorTypeName(SimulatedDetector));
+  res.append(detectorTypeName(PerkinElmerDetector));
+  res.append(detectorTypeName(PilatusDetector));
+  res.append(detectorTypeName(EpicsAreaDetector));
+  res.append(detectorTypeName(FileWatcherDetector));
+
+  return res;
 }
 
 QxrdExperimentWPtr QxrdDetectorSettings::experiment()
@@ -235,9 +291,35 @@ void QxrdDetectorSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int d
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::DetectorNumberProperty, "detectorNumber", "Detector Number",  -1);
     proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty,   "detectorType",   "Detector Type",     detType);
-    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,        "enabled",        "Detector Enabled?", true);
-    proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "detectorName",   "Detector Name",     "A " + QxrdDetectorThread::detectorTypeName(detType));
-//    proxy->pushProperty(QxrdDetectorProxy::ExtensionProperty,      "extension",      "File extension",    "tif");
+    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,        "enabled",        "Detector Enabled?", false);
+    proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "detectorName",   "Detector Name",     "A " + detectorTypeName(detType));
+    //    proxy->pushProperty(QxrdDetectorProxy::ExtensionProperty,      "extension",      "File extension",    "tif");
+
+    switch (detType) {
+    case NoDetector:
+    default:
+      break;
+
+    case SimulatedDetector:
+      QxrdDetectorSettingsSimulated::pushDefaultsToProxy(proxy);
+      break;
+
+    case PerkinElmerDetector:
+      QxrdDetectorSettingsPerkinElmer::pushDefaultsToProxy(proxy);
+      break;
+
+    case PilatusDetector:
+      QxrdDetectorSettingsPilatus::pushDefaultsToProxy(proxy);
+      break;
+
+    case EpicsAreaDetector:
+      QxrdDetectorSettingsEpicsArea::pushDefaultsToProxy(proxy);
+      break;
+
+    case FileWatcherDetector:
+      QxrdDetectorSettingsFileWatcher::pushDefaultsToProxy(proxy);
+      break;
+    }
   }
 }
 
@@ -344,4 +426,48 @@ double QxrdDetectorSettings::scalerCounts(int chan)
   } else {
     return 0;
   }
+}
+
+QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(
+    QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType, int detNum)
+{
+  QxrdDetectorSettingsPtr det;
+
+  switch (detType) {
+  case SimulatedDetector:
+    det = QxrdDetectorSettingsPtr(
+          new QxrdDetectorSettingsSimulated(expt, acq, detNum));
+    break;
+
+  case PerkinElmerDetector:
+    det = QxrdDetectorSettingsPtr(
+          new QxrdDetectorSettingsPerkinElmer(expt, acq, detNum));
+    break;
+
+  case PilatusDetector:
+    det = QxrdDetectorSettingsPtr(
+          new QxrdDetectorSettingsPilatus(expt, acq, detNum));
+    break;
+
+  case EpicsAreaDetector:
+    det = QxrdDetectorSettingsPtr(
+          new QxrdDetectorSettingsEpicsArea(expt, acq, detNum));
+    break;
+
+  case FileWatcherDetector:
+    det = QxrdDetectorSettingsPtr(
+          new QxrdDetectorSettingsFileWatcher(expt, acq, detNum));
+    break;
+  }
+
+  if (det == NULL) {
+    det = QxrdDetectorSettingsPtr(
+          new QxrdDetectorSettingsSimulated(expt, acq, detNum));
+  }
+
+  if (det) {
+    det -> initialize();
+  }
+
+  return det;
 }

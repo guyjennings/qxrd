@@ -21,7 +21,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
-#include "qxrddetectorthread-ptr.h"
+//#include "qxrddetectorthread-ptr.h"
 #include "qxrddetectorproxy-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdsynchronizedacquisition.h"
@@ -75,7 +75,6 @@ public slots:
   void configureDetector(int i);
   void openDetectorControlWindow(int i);
 
-  QxrdDetectorThreadPtr detectorThread(int n);
   QxrdDetectorSettingsWPtr      detector(int n);
 
   QString currentFileBase(int detNum, QString extension="");
@@ -212,22 +211,21 @@ public:
   QCEP_DOUBLE_VECTOR_PROPERTY(ScalerValues)
 
 private:
-  mutable QMutex                  m_Mutex;
+  mutable QMutex                   m_Mutex;
 
-  QxrdSynchronizedAcquisitionPtr  m_SynchronizedAcquisition;
-  QxrdAcquisitionExtraInputsPtr   m_AcquisitionExtraInputs;
+  QxrdSynchronizedAcquisitionPtr   m_SynchronizedAcquisition;
+  QxrdAcquisitionExtraInputsPtr    m_AcquisitionExtraInputs;
 
-  QxrdWindowWPtr                  m_Window;
+  QxrdWindowWPtr                   m_Window;
 
-  QxrdAcquisitionDialogPtr        m_ControlPanel;
+  QxrdAcquisitionDialogPtr         m_ControlPanel;
 
-  QTimer                          m_IdleTimer;
-  QAtomicInt                      m_Idling;
+  QTimer                           m_IdleTimer;
+  QAtomicInt                       m_Idling;
 
-  QVector<QxrdDetectorThreadPtr>  m_DetectorThreads;
-  QVector<QxrdDetectorSettingsWPtr>       m_Detectors;
+  QVector<QxrdDetectorSettingsPtr> m_Detectors;
 
-  QxrdAcquisitionScalerModelPtr   m_ScalerModel;
+  QxrdAcquisitionScalerModelPtr    m_ScalerModel;
 };
 
 Q_DECLARE_METATYPE(QxrdAcquisition*)

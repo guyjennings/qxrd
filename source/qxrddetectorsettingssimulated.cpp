@@ -10,7 +10,7 @@
 QxrdDetectorSettingsSimulated::QxrdDetectorSettingsSimulated(QxrdExperimentWPtr    expt,
                                              QxrdAcquisitionWPtr   acq,
                                              int                   detNum) :
-  QxrdDetectorSettings(expt, acq, QxrdDetectorThread::SimulatedDetector, detNum)
+  QxrdDetectorSettings(expt, acq, SimulatedDetector, detNum)
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing simulated detector\n");
@@ -40,7 +40,7 @@ QxrdDetectorSettingsSimulated::~QxrdDetectorSettingsSimulated()
 
 void QxrdDetectorSettingsSimulated::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetectorSettings::pushDefaultsToProxy(proxy, QxrdDetectorThread::SimulatedDetector);
+//  QxrdDetectorSettings::pushDefaultsToProxy(proxy, SimulatedDetector);
 
 //  printf("Need to implement QxrdDetectorSimulated::pushDefaultsToProxy\n");
 }

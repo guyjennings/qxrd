@@ -67,7 +67,6 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
       for (int i=0; i<acq->get_DetectorCount(); i++) {
         QxrdDetectorProxyPtr proxy =
             QxrdDetectorProxyPtr(new QxrdDetectorProxy(
-                                   acq->detectorThread(i),
                                    acq->detector(i), acq));
 
         appendDetectorProxy(proxy);
@@ -335,8 +334,8 @@ void QxrdExperimentPreferencesDialog::addDetector()
     if (acq) {
       QMenu menu;
 
-      for (int i=0; i<QxrdDetectorThread::detectorTypeCount(); i++) {
-        QAction *a = new QAction(QxrdDetectorThread::detectorTypeName(i), &menu);
+      for (int i=0; i<QxrdDetectorSettings::detectorTypeCount(); i++) {
+        QAction *a = new QAction(QxrdDetectorSettings::detectorTypeName(i), &menu);
         a->setData(i);
 
         menu.addAction(a);

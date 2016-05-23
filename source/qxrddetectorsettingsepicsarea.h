@@ -10,6 +10,8 @@ class QxrdDetectorSettingsEpicsArea : public QxrdDetectorSettings
 public:
   QxrdDetectorSettingsEpicsArea(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
   virtual ~QxrdDetectorSettingsEpicsArea();
+
+  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 };
 
 #endif // QXRDDETECTORSETTINGSEPICSAREA_H

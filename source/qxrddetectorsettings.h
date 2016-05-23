@@ -17,6 +17,7 @@
 #include <QSemaphore>
 #include "qcepimagequeue.h"
 #include "qxrdroicoordinates-ptr.h"
+#include "qxrddetectordriverthread-ptr.h"
 
 class QxrdDetectorSettings : public QcepSerializableObject
 {
@@ -24,11 +25,21 @@ class QxrdDetectorSettings : public QcepSerializableObject
 
 public:
   explicit QxrdDetectorSettings(QxrdExperimentWPtr    expt,
-                        QxrdAcquisitionWPtr   acq,
-                        int                   detType,
-                        int                   detNum);
+                                QxrdAcquisitionWPtr   acq,
+                                int                   detType,
+                                int                   detNum);
+
   void initialize();
   virtual ~QxrdDetectorSettings();
+
+  static QxrdDetectorSettingsPtr newDetector(QxrdExperimentWPtr    expt,
+                                             QxrdAcquisitionWPtr   acq,
+                                             int                   detType,
+                                             int                   detNum);
+
+  static int detectorTypeCount();
+  static QString detectorTypeName(int detectorType);
+  static QStringList detectorTypeNames();
 
   QxrdExperimentWPtr experiment();
   QxrdAcquisitionWPtr acquisition();
@@ -45,6 +56,15 @@ public:
   void writeSettings(QSettings *settings, QString section);
 
   void enqueueAcquiredFrame(QcepImageDataBasePtr img);
+
+  typedef enum {
+    NoDetector,
+    SimulatedDetector,
+    PerkinElmerDetector,
+    PilatusDetector,
+    EpicsAreaDetector,
+    FileWatcherDetector
+  } DetectorType;
 
   enum {
     FileIndexScaler,
@@ -87,6 +107,8 @@ protected:
   QxrdAcquisitionWPtr         m_Acquisition;
   QxrdDetectorProcessorPtr    m_Processor;
   QxrdDetectorControlWindowPtr m_DetectorControlWindow;
+
+  QxrdDetectorDriverThreadPtr m_DetectorDriver;
 
 private:
   QMutex                      m_Mutex;

@@ -1,5 +1,4 @@
 #include "qxrddetectorsettingspilatus.h"
-#include "qxrddetectorthread.h"
 #include "qcepproperty.h"
 #include "qxrddebug.h"
 #include "qxrdacquisition.h"
@@ -15,7 +14,7 @@
 QxrdDetectorSettingsPilatus::QxrdDetectorSettingsPilatus(QxrdExperimentWPtr    expt,
                                          QxrdAcquisitionWPtr   acq,
                                          int                   detNum) :
-  QxrdDetectorSettings(expt, acq, QxrdDetectorThread::PilatusDetector, detNum),
+  QxrdDetectorSettings(expt, acq, PilatusDetector, detNum),
   m_PilatusSocket(),
   m_ExposureTime(-1),
   m_ExposuresPerFrame(-1),
@@ -299,8 +298,6 @@ void QxrdDetectorSettingsPilatus::interpretReply(QString reply)
 
 void QxrdDetectorSettingsPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetectorSettings::pushDefaultsToProxy(proxy, QxrdDetectorThread::PilatusDetector);
-
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusHost",          "Camserver Host",    "s11id-pilatus");
     proxy->pushProperty(QxrdDetectorProxy::FixedIntegerProperty,   "pilatusPort",  "Camserver Port",    41234);

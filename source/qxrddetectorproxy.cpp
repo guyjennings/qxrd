@@ -1,20 +1,17 @@
 #include "qxrddetectorproxy.h"
 #include "qxrdacquisition.h"
 #include "qxrddetectorsettings.h"
-#include "qxrddetectorthread.h"
 #include "qxrddetectorconfigurationdialog.h"
 #include "qcepproperty.h"
 #include <QLineEdit>
 #include <QCheckBox>
 
-QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
-                                     QxrdDetectorSettingsPtr       det,
+QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorSettingsPtr       det,
                                      QxrdAcquisitionPtr    acq)
   : QcepObject("detectorProxy"),
     m_Acquisition(acq),
-    m_DetectorThread(thr),
     m_Detector(det),
-    m_DetectorType(QxrdDetectorThread::NoDetector),
+    m_DetectorType(QxrdDetectorSettings::NoDetector),
     m_SettingsChanged(false),
     m_Initialized(false)
 {
@@ -28,7 +25,6 @@ QxrdDetectorProxy::QxrdDetectorProxy(QxrdDetectorThreadPtr thr,
 QxrdDetectorProxy::QxrdDetectorProxy(int detectorType, QxrdAcquisitionPtr acq)
   : QcepObject("detectorProxy"),
     m_Acquisition(acq),
-    m_DetectorThread(),
     m_Detector(),
     m_DetectorType(detectorType),
     m_SettingsChanged(false),
@@ -46,7 +42,7 @@ void QxrdDetectorProxy::initialize()
       if (m_Detector) {
         m_Detector->pushPropertiesToProxy(myself);
       } else {
-        QxrdDetectorThread::pushDefaultsToProxy(m_DetectorType, myself);
+        QxrdDetectorSettings::pushDefaultsToProxy(myself, m_DetectorType);
       }
 
       m_Initialized = true;
@@ -78,7 +74,7 @@ int QxrdDetectorProxy::detectorType()
 
 QString QxrdDetectorProxy::detectorTypeName()
 {
-  return QxrdDetectorThread::detectorTypeName(detectorType());
+  return QxrdDetectorSettings::detectorTypeName(detectorType());
 }
 
 QString QxrdDetectorProxy::detectorName()
@@ -89,11 +85,6 @@ QString QxrdDetectorProxy::detectorName()
 void QxrdDetectorProxy::setDetectorName(QString name)
 {
   setProperty("detectorName", name);
-}
-
-QxrdDetectorThreadPtr QxrdDetectorProxy::detectorThread()
-{
-  return m_DetectorThread;
 }
 
 QxrdDetectorSettingsPtr QxrdDetectorProxy::detector()
@@ -108,7 +99,7 @@ bool QxrdDetectorProxy::configureDetector()
   if (m_Detector) {
     m_Detector->pushPropertiesToProxy(myself);
   } else {
-    QxrdDetectorThread::pushDefaultsToProxy(m_DetectorType, myself);
+    QxrdDetectorSettings::pushDefaultsToProxy(myself, m_DetectorType);
   }
 
   QxrdDetectorConfigurationDialog *d =

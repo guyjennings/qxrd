@@ -14,6 +14,7 @@ public:
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
+
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 
 public slots:

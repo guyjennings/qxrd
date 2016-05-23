@@ -9,6 +9,10 @@ class QxrdDetectorDriver : public QcepObject
 
 public:
   QxrdDetectorDriver(QString name);
+
+public slots:
+  virtual bool startDetectorDriver();
+  virtual bool stopDetectorDriver();
 };
 
 #endif // QXRDDETECTORDRIVER_H

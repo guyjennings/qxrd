@@ -1,11 +1,14 @@
 #include "qxrddetectorsettingsepicsarea.h"
-#include "qxrddetectorthread.h"
 
 QxrdDetectorSettingsEpicsArea::QxrdDetectorSettingsEpicsArea(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum) :
-  QxrdDetectorSettings(expt, acq, QxrdDetectorThread::EpicsAreaDetector, detNum)
+  QxrdDetectorSettings(expt, acq, EpicsAreaDetector, detNum)
 {
 }
 
 QxrdDetectorSettingsEpicsArea::~QxrdDetectorSettingsEpicsArea()
+{
+}
+
+void QxrdDetectorSettingsEpicsArea::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
 }

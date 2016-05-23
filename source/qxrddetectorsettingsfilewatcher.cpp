@@ -1,17 +1,16 @@
 #include "qxrddetectorsettingsfilewatcher.h"
-#include "qxrddetectorthread.h"
 #include <stdio.h>
 
 QxrdDetectorSettingsFileWatcher::QxrdDetectorSettingsFileWatcher(QxrdExperimentWPtr    expt,
                                                  QxrdAcquisitionWPtr   acq,
                                                  int                   detNum) :
-  QxrdDetectorSettings(expt, acq, QxrdDetectorThread::FileWatcherDetector, detNum)
+  QxrdDetectorSettings(expt, acq, FileWatcherDetector, detNum)
 {
 }
 
 void QxrdDetectorSettingsFileWatcher::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetectorSettings::pushDefaultsToProxy(proxy, QxrdDetectorThread::FileWatcherDetector);
+//  QxrdDetectorSettings::pushDefaultsToProxy(proxy, FileWatcherDetector);
 
   printf("Need to implement QxrdDetectorSettingsFileWatcher::pushDefaultsToProxy\n");
 }

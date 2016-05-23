@@ -245,8 +245,6 @@ HEADERS += TODO.h \
     triangulate.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
-    qxrddetectorthread.h \
-    qxrddetectorthread-ptr.h \
     qxrdacquisitiondialog-ptr.h \
     qxrdacquisitionextrainputsdialogsettings.h \
     qxrdhelpbrowser.h \
@@ -376,7 +374,9 @@ HEADERS += TODO.h \
     qxrddetectordriverfilewatcher.h \
     qxrddetectordriverepicsarea.h \
     qxrddetectorsettingsepicsarea.h \
-    qxrddetectordriver-ptr.h
+    qxrddetectordriver-ptr.h \
+    qxrddetectordriverthread.h \
+    qxrddetectordriverthread-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -474,7 +474,6 @@ SOURCES += qxrd.cpp \
     triangulate.c \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
-    qxrddetectorthread.cpp \
     qxrdacquisitionextrainputsdialogsettings.cpp \
     qxrdhelpbrowser.cpp \
     qxrduserscriptdialog.cpp \
@@ -555,7 +554,8 @@ SOURCES += qxrd.cpp \
     qxrddetectordriverpilatus.cpp \
     qxrddetectordriverfilewatcher.cpp \
     qxrddetectordriverepicsarea.cpp \
-    qxrddetectorsettingsepicsarea.cpp
+    qxrddetectorsettingsepicsarea.cpp \
+    qxrddetectordriverthread.cpp
 
 OTHER_FILES += testImage.js
 

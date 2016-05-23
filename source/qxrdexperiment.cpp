@@ -26,7 +26,6 @@
 #include "qxrdfilesaverthread.h"
 #include "qcepsettingssaver.h"
 #include "qxrdfilesaver.h"
-#include "qxrddetectorthread.h"
 #include "qcepmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
 #include "qcepdataset.h"
@@ -909,7 +908,7 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
     if (settings->contains("experiment/detectorType")) {
       int detType = settings->value("experiment/detectorType", -1).toInt();
 
-      if (detType == QxrdDetectorThread::PerkinElmerDetector) {
+      if (detType == QxrdDetectorSettings::PerkinElmerDetector) {
         if (acq) {
           if (acq->get_DetectorCount() == 0) {
             acq->appendDetector(detType);
