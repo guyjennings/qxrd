@@ -3,7 +3,7 @@
 
 #include "qcepobject.h"
 #include "qxrddetectorthread-ptr.h"
-#include "qxrddetector-ptr.h"
+#include "qxrddetectorsettings-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include <QVector>
 #include "qxrddetectorconfigurationdialog.h"

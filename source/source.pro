@@ -245,13 +245,8 @@ HEADERS += TODO.h \
     triangulate.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
-    qxrddetector.h \
-    qxrddetector-ptr.h \
     qxrddetectorthread.h \
     qxrddetectorthread-ptr.h \
-    qxrddetectorpilatus.h \
-    qxrddetectorsimulated.h \
-    qxrddetectorfilewatcher.h \
     qxrdacquisitiondialog-ptr.h \
     qxrdacquisitionextrainputsdialogsettings.h \
     qxrdhelpbrowser.h \
@@ -367,7 +362,21 @@ HEADERS += TODO.h \
     qxrdsliceplotsettings-ptr.h \
     qxrdwindowsettings-ptr.h \
     qxrdroicoordinateslist.h \
-    qxrdroicoordinateslist-ptr.h
+    qxrdroicoordinateslist-ptr.h \
+    qxrddetectorsettingsfilewatcher.h \
+    qxrddetectorsettingssimulated.h \
+    qxrddetectorsettingspilatus.h \
+    qxrddetectorsettingsperkinelmer.h \
+    qxrddetectorsettings.h \
+    qxrddetectorsettings-ptr.h \
+    qxrddetectordriver.h \
+    qxrddetectordriversimulated.h \
+    qxrddetectordriverperkinelmer.h \
+    qxrddetectordriverpilatus.h \
+    qxrddetectordriverfilewatcher.h \
+    qxrddetectordriverepicsarea.h \
+    qxrddetectorsettingsepicsarea.h \
+    qxrddetectordriver-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -465,11 +474,7 @@ SOURCES += qxrd.cpp \
     triangulate.c \
     qxrddebug.cpp \
     qxrdacquisitionextrainputsplot.cpp \
-    qxrddetector.cpp \
-    qxrddetectorpilatus.cpp \
-    qxrddetectorsimulated.cpp \
     qxrddetectorthread.cpp \
-    qxrddetectorfilewatcher.cpp \
     qxrdacquisitionextrainputsdialogsettings.cpp \
     qxrdhelpbrowser.cpp \
     qxrduserscriptdialog.cpp \
@@ -538,7 +543,19 @@ SOURCES += qxrd.cpp \
     qxrdapplicationsettings.cpp \
     qxrdintegratorplotsettings.cpp \
     qxrdacquisitionextrainputsplotsettings.cpp \
-    qxrdroicoordinateslist.cpp
+    qxrdroicoordinateslist.cpp \
+    qxrddetectorsettings.cpp \
+    qxrddetectorsettingspilatus.cpp \
+    qxrddetectorsettingsperkinelmer.cpp \
+    qxrddetectorsettingssimulated.cpp \
+    qxrddetectorsettingsfilewatcher.cpp \
+    qxrddetectordriver.cpp \
+    qxrddetectordriversimulated.cpp \
+    qxrddetectordriverperkinelmer.cpp \
+    qxrddetectordriverpilatus.cpp \
+    qxrddetectordriverfilewatcher.cpp \
+    qxrddetectordriverepicsarea.cpp \
+    qxrddetectorsettingsepicsarea.cpp
 
 OTHER_FILES += testImage.js
 
@@ -581,9 +598,9 @@ else:win32 {
 }
 
 contains(DEFINES,HAVE_PERKIN_ELMER) {
-  SOURCES += qxrddetectorperkinelmer.cpp \
+  SOURCES += \
              qxrdperkinelmerplugininterface.cpp
-  HEADERS += qxrddetectorperkinelmer.h \
+  HEADERS += \
              qxrdperkinelmerplugininterface.h \
              qxrdperkinelmerplugininterface-ptr.h
 }

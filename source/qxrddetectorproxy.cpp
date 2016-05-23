@@ -1,6 +1,6 @@
 #include "qxrddetectorproxy.h"
 #include "qxrdacquisition.h"
-#include "qxrddetector.h"
+#include "qxrddetectorsettings.h"
 #include "qxrddetectorthread.h"
 #include "qxrddetectorconfigurationdialog.h"
 #include "qcepproperty.h"

@@ -1,17 +1,17 @@
-#ifndef QXRDDETECTORPILATUS_H
-#define QXRDDETECTORPILATUS_H
+#ifndef QXRDDETECTORSETTINGSPILATUS_H
+#define QXRDDETECTORSETTINGSPILATUS_H
 
 #include "qcepmacros.h"
-#include "qxrddetector.h"
+#include "qxrddetectorsettings.h"
 #include <QTcpSocket>
 #include "qxrddetectorpilatusremote-ptr.h"
 
-class QxrdDetectorPilatus : public QxrdDetector
+class QxrdDetectorSettingsPilatus : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorPilatus(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
-  virtual ~QxrdDetectorPilatus();
+  explicit QxrdDetectorSettingsPilatus(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
+  virtual ~QxrdDetectorSettingsPilatus();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);

@@ -1,4 +1,4 @@
-#include "qxrddetectorpilatus.h"
+#include "qxrddetectorsettingspilatus.h"
 #include "qxrddetectorthread.h"
 #include "qcepproperty.h"
 #include "qxrddebug.h"
@@ -12,10 +12,10 @@
 #include "qxrdexperiment.h"
 #include "qxrddataprocessor.h"
 
-QxrdDetectorPilatus::QxrdDetectorPilatus(QxrdExperimentWPtr    expt,
+QxrdDetectorSettingsPilatus::QxrdDetectorSettingsPilatus(QxrdExperimentWPtr    expt,
                                          QxrdAcquisitionWPtr   acq,
                                          int                   detNum) :
-  QxrdDetector(expt, acq, QxrdDetectorThread::PilatusDetector, detNum),
+  QxrdDetectorSettings(expt, acq, QxrdDetectorThread::PilatusDetector, detNum),
   m_PilatusSocket(),
   m_ExposureTime(-1),
   m_ExposuresPerFrame(-1),
@@ -42,7 +42,7 @@ QxrdDetectorPilatus::QxrdDetectorPilatus(QxrdExperimentWPtr    expt,
   }
 }
 
-QxrdDetectorPilatus::~QxrdDetectorPilatus()
+QxrdDetectorSettingsPilatus::~QxrdDetectorSettingsPilatus()
 {
 #ifndef QT_NO_DEBUG
   printf("Deleting Pilatus detector\n");
@@ -53,12 +53,12 @@ QxrdDetectorPilatus::~QxrdDetectorPilatus()
   }
 }
 
-void QxrdDetectorPilatus::startDetector()
+void QxrdDetectorSettingsPilatus::startDetector()
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "startDetector"/*, Qt::BlockingQueuedConnection*/);
   } else {
-    QxrdDetector::startDetector();
+    QxrdDetectorSettings::startDetector();
 
     printMessage(tr("Starting Pilatus Detector at %1:%2").arg(get_PilatusHost()).arg(get_PilatusPort()));
 
@@ -69,7 +69,8 @@ void QxrdDetectorPilatus::startDetector()
       printMessage("Connected to pilatus...");
     }
 
-    connect(&m_PilatusSocket, &QTcpSocket::readyRead, this, &QxrdDetectorPilatus::readyRead);
+    connect(&m_PilatusSocket, &QTcpSocket::readyRead,
+            this, &QxrdDetectorSettingsPilatus::readyRead);
 
     sendCommand("telemetry");
     sendCommand("nimages 1");
@@ -79,12 +80,12 @@ void QxrdDetectorPilatus::startDetector()
   }
 }
 
-void QxrdDetectorPilatus::stopDetector()
+void QxrdDetectorSettingsPilatus::stopDetector()
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "stopDetector");
   } else {
-    QxrdDetector::stopDetector();
+    QxrdDetectorSettings::stopDetector();
 
     printMessage(tr("Stopping Pilatus Detector at %1").arg(get_PilatusHost()));
 
@@ -92,12 +93,12 @@ void QxrdDetectorPilatus::stopDetector()
   }
 }
 
-void QxrdDetectorPilatus::beginAcquisition(double exposure)
+void QxrdDetectorSettingsPilatus::beginAcquisition(double exposure)
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "beginAcquisition", Qt::BlockingQueuedConnection, Q_ARG(double, exposure));
   } else {
-    QxrdDetector::beginAcquisition(exposure);
+    QxrdDetectorSettings::beginAcquisition(exposure);
 
     if (qcepDebug(DEBUG_PILATUS)) {
       printMessage(tr("QxrdDetectorPilatus::beginAcquisition(%1)").arg(exposure));
@@ -109,25 +110,25 @@ void QxrdDetectorPilatus::beginAcquisition(double exposure)
   }
 }
 
-void QxrdDetectorPilatus::endAcquisition()
+void QxrdDetectorSettingsPilatus::endAcquisition()
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "endAcquisition", Qt::BlockingQueuedConnection);
   } else {
-    QxrdDetector::endAcquisition();
+    QxrdDetectorSettings::endAcquisition();
   }
 }
 
-void QxrdDetectorPilatus::shutdownAcquisition()
+void QxrdDetectorSettingsPilatus::shutdownAcquisition()
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "shutdownAcquisition", Qt::BlockingQueuedConnection);
   } else {
-    QxrdDetector::shutdownAcquisition();
+    QxrdDetectorSettings::shutdownAcquisition();
   }
 }
 
-void QxrdDetectorPilatus::executeCommand(QString cmd)
+void QxrdDetectorSettingsPilatus::executeCommand(QString cmd)
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "executeCommand", Qt::BlockingQueuedConnection, Q_ARG(QString, cmd));
@@ -136,7 +137,7 @@ void QxrdDetectorPilatus::executeCommand(QString cmd)
   }
 }
 
-void QxrdDetectorPilatus::readyRead()
+void QxrdDetectorSettingsPilatus::readyRead()
 {
   if (qcepDebug(DEBUG_PILATUS)) {
     printMessage("QxrdDetectorPilatus::readyRead");
@@ -179,7 +180,7 @@ void QxrdDetectorPilatus::readyRead()
   }
 }
 
-void QxrdDetectorPilatus::sendCommand(QString cmd)
+void QxrdDetectorSettingsPilatus::sendCommand(QString cmd)
 {
   THREAD_CHECK;
 
@@ -191,14 +192,14 @@ void QxrdDetectorPilatus::sendCommand(QString cmd)
   m_PilatusSocket.waitForBytesWritten();
 }
 
-void QxrdDetectorPilatus::imagePath(QString path)
+void QxrdDetectorSettingsPilatus::imagePath(QString path)
 {
   if (checkDetectorEnabled()) {
     sendCommand(tr("imgpath \"%1\"").arg(path));
   }
 }
 
-void QxrdDetectorPilatus::beginExposure(double exposure)
+void QxrdDetectorSettingsPilatus::beginExposure(double exposure)
 {
   int expMode = get_ExposureMode();
 
@@ -216,7 +217,7 @@ void QxrdDetectorPilatus::beginExposure(double exposure)
   }
 }
 
-void QxrdDetectorPilatus::expose()
+void QxrdDetectorSettingsPilatus::expose()
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -241,7 +242,7 @@ void QxrdDetectorPilatus::expose()
   }
 }
 
-void QxrdDetectorPilatus::beginFrame()
+void QxrdDetectorSettingsPilatus::beginFrame()
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "beginFrame", Qt::BlockingQueuedConnection);
@@ -250,13 +251,13 @@ void QxrdDetectorPilatus::beginFrame()
       printMessage("QxrdDetectorPilatus::beginFrame");
     }
 
-    QxrdDetector::beginFrame();
+    QxrdDetectorSettings::beginFrame();
 
     expose();
   }
 }
 
-void QxrdDetectorPilatus::interpretReply(QString reply)
+void QxrdDetectorSettingsPilatus::interpretReply(QString reply)
 {
   if (qcepDebug(DEBUG_PILATUS)) {
     printMessage(tr("QxrdDetectorPilatus::interpretReply(\"%1\")").arg(reply));
@@ -296,9 +297,9 @@ void QxrdDetectorPilatus::interpretReply(QString reply)
   }
 }
 
-void QxrdDetectorPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettingsPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::PilatusDetector);
+  QxrdDetectorSettings::pushDefaultsToProxy(proxy, QxrdDetectorThread::PilatusDetector);
 
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusHost",          "Camserver Host",    "s11id-pilatus");
@@ -315,9 +316,9 @@ void QxrdDetectorPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
   }
 }
 
-void QxrdDetectorPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettingsPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetector::pushPropertiesToProxy(proxy);
+  QxrdDetectorSettings::pushPropertiesToProxy(proxy);
 
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusHost",          "Camserver Host",    get_PilatusHost());
@@ -334,9 +335,9 @@ void QxrdDetectorPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
   }
 }
 
-void QxrdDetectorPilatus::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettingsPilatus::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetector::pullPropertiesfromProxy(proxy);
+  QxrdDetectorSettings::pullPropertiesfromProxy(proxy);
 
   if (proxy) {
     set_PilatusHost            (proxy->property("pilatusHost").toString());
@@ -352,7 +353,7 @@ void QxrdDetectorPilatus::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
   }
 }
 
-void QxrdDetectorPilatus::remoteConnect(QString sshCmd)
+void QxrdDetectorSettingsPilatus::remoteConnect(QString sshCmd)
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "remoteConnect", Q_ARG(QString, sshCmd));
@@ -363,7 +364,7 @@ void QxrdDetectorPilatus::remoteConnect(QString sshCmd)
   }
 }
 
-void QxrdDetectorPilatus::remoteCommand(QString cmd)
+void QxrdDetectorSettingsPilatus::remoteCommand(QString cmd)
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "remoteCommand", Q_ARG(QString, cmd));
@@ -374,7 +375,7 @@ void QxrdDetectorPilatus::remoteCommand(QString cmd)
   }
 }
 
-void QxrdDetectorPilatus::remoteDelete(QString file)
+void QxrdDetectorSettingsPilatus::remoteDelete(QString file)
 {
   QString cmd = tr("%1 -o ForwardX11=No %2@%3 rm %4/%5")
       .arg(get_PilatusSSH())
@@ -393,7 +394,7 @@ void QxrdDetectorPilatus::remoteDelete(QString file)
   }
 }
 
-void QxrdDetectorPilatus::remoteCopy(QString file)
+void QxrdDetectorSettingsPilatus::remoteCopy(QString file)
 {
   QxrdExperimentPtr  expt(m_Experiment);
 
@@ -423,7 +424,7 @@ void QxrdDetectorPilatus::remoteCopy(QString file)
   }
 }
 
-void QxrdDetectorPilatus::remoteTransfer(QString file)
+void QxrdDetectorSettingsPilatus::remoteTransfer(QString file)
 {
   // Transfer contents of a remote file to a local memory buffer:"
 
@@ -441,7 +442,7 @@ void QxrdDetectorPilatus::remoteTransfer(QString file)
   }
 }
 
-void QxrdDetectorPilatus::loadAndPush(QString f)
+void QxrdDetectorSettingsPilatus::loadAndPush(QString f)
 {
   QxrdExperimentPtr  expt(m_Experiment);
 

@@ -1,22 +1,25 @@
 #include "qxrddebug.h"
-#include "qxrddetectorperkinelmer.h"
+#include "qxrddetectorsettingsperkinelmer.h"
 #include "qxrdapplication.h"
-#include "qxrdperkinelmerplugininterface.h"
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
 #include "qxrddetectorproxy.h"
 
+#ifdef HAVE_PERKIN_ELMER
+#include "qxrdperkinelmerplugininterface.h"
 //static QxrdDetectorPerkinElmer *g_Detector = NULL;
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
+#endif
 
-QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QxrdExperimentWPtr    expt,
+QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer(QxrdExperimentWPtr    expt,
                                                  QxrdAcquisitionWPtr   acq,
                                                  int                   detNum) :
-  QxrdDetector(expt, acq, QxrdDetectorThread::PerkinElmerDetector, detNum),
+  QxrdDetectorSettings(expt, acq, QxrdDetectorThread::PerkinElmerDetector, detNum),
   m_Mutex(QMutex::Recursive),
   m_BufferSize(0),
+#ifdef HAVE_PERKIN_ELMER
   m_AcqDesc(NULL),
   m_StartupDelayed(0),
   m_PROMID(-1),
@@ -27,6 +30,7 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QxrdExperimentWPtr    expt,
   m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
   m_Counter(0),
   m_PerkinElmer(),
+#endif
   m_DetectorNumber (this, "detectorNumber",  0, "Perkin Elmer Detector Number"),
   m_DetectorSubType(this, "detectorSubType", 0, "Perkin Elmer Detector Subtype"),
   m_DetectorAddress(this, "detectorAddress", "", "Perkin Elmer Detector Address"),
@@ -38,30 +42,31 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QxrdExperimentWPtr    expt,
 #endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(%p)\n", this);
+    printf("QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer(%p)\n", this);
   }
 
   if (qcepDebug(DEBUG_PERKINELMER)) {
-    printMessage("QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer()");
+    printMessage("QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer()");
   }
 
 //  ::g_Detector = this;
 }
 
-QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer()
+QxrdDetectorSettingsPerkinElmer::~QxrdDetectorSettingsPerkinElmer()
 {
 #ifndef QT_NO_DEBUG
   printf("Deleting Perkin Elmer Detector\n");
 #endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer(%p)\n", this);
+    printf("QxrdDetectorSettingsPerkinElmer::~QxrdDetectorSettingsPerkinElmer(%p)\n", this);
   }
 
   if (qcepDebug(DEBUG_PERKINELMER)) {
-    printMessage("QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer()");
+    printMessage("QxrdDetectorSettingsPerkinElmer::~QxrdDetectorSettingsPerkinElmer()");
   }
 
+#ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
 
   if (plugin && m_AcqDesc) {
@@ -70,11 +75,12 @@ QxrdDetectorPerkinElmer::~QxrdDetectorPerkinElmer()
     plugin->Acquisition_Abort(m_AcqDesc);
     plugin->Acquisition_CloseAll();
   }
+#endif
 }
 
-void QxrdDetectorPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettingsPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::PerkinElmerDetector);
+  QxrdDetectorSettings::pushDefaultsToProxy(proxy, QxrdDetectorThread::PerkinElmerDetector);
 
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::PEDetNumProperty, "detectorNumber", "PE Detector Number", 0);
@@ -85,9 +91,9 @@ void QxrdDetectorPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
   }
 }
 
-void QxrdDetectorPerkinElmer::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettingsPerkinElmer::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetector::pushPropertiesToProxy(proxy);
+  QxrdDetectorSettings::pushPropertiesToProxy(proxy);
 
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::PEDetNumProperty, "detectorNumber", "PE Detector Number", get_DetectorNumber());
@@ -98,9 +104,9 @@ void QxrdDetectorPerkinElmer::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
   }
 }
 
-void QxrdDetectorPerkinElmer::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettingsPerkinElmer::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
-  QxrdDetector::pullPropertiesfromProxy(proxy);
+  QxrdDetectorSettings::pullPropertiesfromProxy(proxy);
 
   if (proxy) {
     set_DetectorNumber  (proxy->property("detectorNumber").toInt());
@@ -111,20 +117,21 @@ void QxrdDetectorPerkinElmer::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy
   }
 }
 
-int QxrdDetectorPerkinElmer::detectorSubType() const
+int QxrdDetectorSettingsPerkinElmer::detectorSubType() const
 {
   return get_DetectorSubType();
 }
 
-QString QxrdDetectorPerkinElmer::detectorAddress() const
+QString QxrdDetectorSettingsPerkinElmer::detectorAddress() const
 {
   return get_DetectorAddress();
 }
 
-QString QxrdDetectorPerkinElmer::acquisitionErrorString(int n)
+QString QxrdDetectorSettingsPerkinElmer::acquisitionErrorString(int n)
 {
   QString res = "No Error";
 
+#ifdef HAVE_PERKIN_ELMER
   switch (n) {
   case HIS_ALL_OK:
     res = "HIS_ALL_OK";
@@ -362,11 +369,12 @@ QString QxrdDetectorPerkinElmer::acquisitionErrorString(int n)
     res = "HIS_ERROR_NR_OF_BOARDS_CHANGED";
     break;
   }
+#endif
 
   return res;
 }
 
-void QxrdDetectorPerkinElmer::acquisitionError(const char *fn, int ln, int n)
+void QxrdDetectorSettingsPerkinElmer::acquisitionError(const char *fn, int ln, int n)
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -381,8 +389,9 @@ void QxrdDetectorPerkinElmer::acquisitionError(const char *fn, int ln, int n)
                   .arg(n).arg(acquisitionErrorString(n)).arg(ln).arg(fn));
 }
 
-bool QxrdDetectorPerkinElmer::checkPluginAvailable()
+bool QxrdDetectorSettingsPerkinElmer::checkPluginAvailable()
 {
+#ifdef HAVE_PERKIN_ELMER
   QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
 
   if (app && m_PerkinElmer == NULL) {
@@ -394,6 +403,9 @@ bool QxrdDetectorPerkinElmer::checkPluginAvailable()
   }
 
   return m_PerkinElmer;
+#else
+  return false;
+#endif
 }
 
 /*
@@ -422,8 +434,9 @@ bool QxrdDetectorPerkinElmer::checkPluginAvailable()
  XRD 1621 AN        14
  */
 
-void QxrdDetectorPerkinElmer::startDetector()
+void QxrdDetectorSettingsPerkinElmer::startDetector()
 {
+#ifdef HAVE_PERKIN_ELMER
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "startDetector"/*, Qt::BlockingQueuedConnection*/);
   } else {
@@ -431,7 +444,7 @@ void QxrdDetectorPerkinElmer::startDetector()
       printMessage(tr("QxrdAcquisitionPerkinElmer::start"));
     }
 
-    QxrdDetector::startDetector();
+    QxrdDetectorSettings::startDetector();
 
     if (checkDetectorEnabled() && checkPluginAvailable()) {
       THREAD_CHECK;
@@ -737,15 +750,17 @@ void QxrdDetectorPerkinElmer::startDetector()
       }
     }
   }
+#endif
 }
 
-void QxrdDetectorPerkinElmer::stopDetector()
+void QxrdDetectorSettingsPerkinElmer::stopDetector()
 {
   printMessage(tr("Stopping Perkin Elmer Detector %1").arg(get_DetectorName()));
 }
 
-void QxrdDetectorPerkinElmer::onExposureTimeChanged()
+void QxrdDetectorSettingsPerkinElmer::onExposureTimeChanged()
 {
+#ifdef HAVE_PERKIN_ELMER
   if (isEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
     QxrdAcquisitionPtr acq(m_Acquisition);
@@ -777,12 +792,13 @@ void QxrdDetectorPerkinElmer::onExposureTimeChanged()
 //      acq->set_ExposureTime(tmp/1.0e6);
     }
   }
+#endif
 }
 
-void QxrdDetectorPerkinElmer::onBinningModeChanged()
+void QxrdDetectorSettingsPerkinElmer::onBinningModeChanged()
 {
 //  return;
-
+#ifdef HAVE_PERKIN_ELMER
   if (isEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
     QxrdAcquisitionPtr acq(m_Acquisition);
@@ -849,10 +865,12 @@ void QxrdDetectorPerkinElmer::onBinningModeChanged()
       }
     }
   }
+#endif
 }
 
-void QxrdDetectorPerkinElmer::onCameraGainChanged()
+void QxrdDetectorSettingsPerkinElmer::onCameraGainChanged()
 {
+#ifdef HAVE_PERKIN_ELMER
   if (isEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
     QxrdAcquisitionPtr  acq(m_Acquisition);
@@ -879,10 +897,12 @@ void QxrdDetectorPerkinElmer::onCameraGainChanged()
       }
     }
   }
+#endif
 }
 
-void QxrdDetectorPerkinElmer::startupAcquisition()
+void QxrdDetectorSettingsPerkinElmer::startupAcquisition()
 {
+#ifdef HAVE_PERKIN_ELMER
   if (checkDetectorEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
 
@@ -898,14 +918,16 @@ void QxrdDetectorPerkinElmer::startupAcquisition()
       printMessage("Acquire");
     }
   }
+#endif
 }
 
-void QxrdDetectorPerkinElmer::beginAcquisition(double exposure)
+void QxrdDetectorSettingsPerkinElmer::beginAcquisition(double exposure)
 {
+#ifdef HAVE_PERKIN_ELMER
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "beginAcquisition", Qt::BlockingQueuedConnection, Q_ARG(double, exposure));
   } else {
-    QxrdDetector::beginAcquisition(exposure);
+    QxrdDetectorSettings::beginAcquisition(exposure);
 
     if (m_StartupDelayed) {
       if (qcepDebug(DEBUG_PERKINELMER)) {
@@ -928,23 +950,25 @@ void QxrdDetectorPerkinElmer::beginAcquisition(double exposure)
       plugin -> Acquisition_ResetFrameCnt(m_AcqDesc);
     }
   }
+#endif
 }
 
-void QxrdDetectorPerkinElmer::endAcquisition()
+void QxrdDetectorSettingsPerkinElmer::endAcquisition()
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "endAcquisition", Qt::BlockingQueuedConnection);
   } else {
-    QxrdDetector::endAcquisition();
+    QxrdDetectorSettings::endAcquisition();
   }
 }
 
-void QxrdDetectorPerkinElmer::shutdownAcquisition()
+void QxrdDetectorSettingsPerkinElmer::shutdownAcquisition()
 {
+#ifdef HAVE_PERKIN_ELMER
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "shutdownAcquisition", Qt::BlockingQueuedConnection);
   } else {
-    QxrdDetector::shutdownAcquisition();
+    QxrdDetectorSettings::shutdownAcquisition();
 
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
 
@@ -952,10 +976,12 @@ void QxrdDetectorPerkinElmer::shutdownAcquisition()
       plugin->Acquisition_Abort(m_AcqDesc);
     }
   }
+#endif
 }
 
-void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned int n2)
+void QxrdDetectorSettingsPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned int n2)
 {
+#ifdef HAVE_PERKIN_ELMER
   //  QTime tic;
   //  tic.start();
 
@@ -1067,16 +1093,17 @@ void QxrdDetectorPerkinElmer::onEndFrame(int counter, unsigned int n1, unsigned 
       enqueueAcquiredFrame(image);
     }
   }
+#endif
 }
 
-void QxrdDetectorPerkinElmer::acquisitionInitError(const char *fn, int ln, int n)
+void QxrdDetectorSettingsPerkinElmer::acquisitionInitError(const char *fn, int ln, int n)
 {
   acquisitionError(fn, ln, n);
 
   criticalMessage("Detector Initialization Failed");
 }
 
-void QxrdDetectorPerkinElmer::acquisitionNSensorsError(const char *fn, int ln, int n)
+void QxrdDetectorSettingsPerkinElmer::acquisitionNSensorsError(const char *fn, int ln, int n)
 {
   acquisitionError(fn, ln, n);
 
@@ -1161,8 +1188,9 @@ void QxrdDetectorPerkinElmer::acquisitionNSensorsError(const char *fn, int ln, i
 //  cb -> blockSignals(b);
 //}
 
-void QxrdDetectorPerkinElmer::onEndFrameCallback()
+void QxrdDetectorSettingsPerkinElmer::onEndFrameCallback()
 {
+#ifdef HAVE_PERKIN_ELMER
 //  QTime tic;
   //  tic.start();
   if (checkDetectorEnabled() && checkPluginAvailable()) {
@@ -1196,8 +1224,10 @@ void QxrdDetectorPerkinElmer::onEndFrameCallback()
       onEndFrame(counter, actualFrame, actSecFrame);
     }
   }
+#endif
 }
 
+#ifdef HAVE_PERKIN_ELMER
 static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 {
   QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
@@ -1210,7 +1240,7 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 
       plugin->Acquisition_GetAcqData(hAcqDesc, &object);
 
-      QxrdDetectorPerkinElmer *detector = reinterpret_cast<QxrdDetectorPerkinElmer*>(object);
+      QxrdDetectorSettingsPerkinElmer *detector = reinterpret_cast<QxrdDetectorSettingsPerkinElmer*>(object);
 
       if (detector && detector->isEnabled()) {
         detector->onEndFrameCallback();
@@ -1222,9 +1252,11 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 static void CALLBACK OnEndAcqCallback(HACQDESC /*hAcqDesc*/)
 {
 }
+#endif
 
-void QxrdDetectorPerkinElmer::dumpHeaderInfo()
+void QxrdDetectorSettingsPerkinElmer::dumpHeaderInfo()
 {
+#ifdef HAVE_PERKIN_ELMER
   printMessage(tr("Detector Header Info"));
   printMessage(tr("HeaderID %1  PROMID %2  Frame %3  Msec %4   Usec %5  Status %6")
                .arg(m_HwHeaderInfo.dwHeaderID)
@@ -1239,6 +1271,7 @@ void QxrdDetectorPerkinElmer::dumpHeaderInfo()
                .arg(m_HwHeaderInfoEx.wCommand2)
                .arg(m_HwHeaderInfoEx.wCommand3)
                .arg(m_HwHeaderInfoEx.wCommand4));
+#endif
 }
 
 

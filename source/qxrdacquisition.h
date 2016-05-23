@@ -20,7 +20,7 @@
 #include "qxrdacquisitiondialog-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdwindow-ptr.h"
-#include "qxrddetector-ptr.h"
+#include "qxrddetectorsettings-ptr.h"
 #include "qxrddetectorthread-ptr.h"
 #include "qxrddetectorproxy-ptr.h"
 #include "qxrddataprocessor-ptr.h"

@@ -1,6 +1,6 @@
 #include "qxrdacquisitionscalermodel.h"
 #include "qxrdacquisition.h"
-#include "qxrddetector.h"
+#include "qxrddetectorsettings.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrddetectorprocessor.h"
 #include "qxrdroicalculator.h"

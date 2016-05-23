@@ -8,7 +8,7 @@
 #include "qxrddetectorprocessor-ptr.h"
 #include "qxrdroicoordinateslistmodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrddetector-ptr.h"
+#include "qxrddetectorsettings-ptr.h"
 #include <QTimer>
 
 class QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::QxrdDetectorControlWindow

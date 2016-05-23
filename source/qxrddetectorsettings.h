@@ -1,5 +1,5 @@
-#ifndef QXRDDETECTOR_H
-#define QXRDDETECTOR_H
+#ifndef QXRDDETECTORSETTINGS_H
+#define QXRDDETECTORSETTINGS_H
 
 #include "qcepmacros.h"
 #include "qcepproperty.h"
@@ -9,7 +9,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrddetector-ptr.h"
+#include "qxrddetectorsettings-ptr.h"
 #include "qxrddetectorproxy-ptr.h"
 #include "qxrddetectorprocessor-ptr.h"
 #include "qxrddetectorcontrolwindow-ptr.h"
@@ -18,17 +18,17 @@
 #include "qcepimagequeue.h"
 #include "qxrdroicoordinates-ptr.h"
 
-class QxrdDetector : public QcepSerializableObject
+class QxrdDetectorSettings : public QcepSerializableObject
 {
   Q_OBJECT
 
 public:
-  explicit QxrdDetector(QxrdExperimentWPtr    expt,
+  explicit QxrdDetectorSettings(QxrdExperimentWPtr    expt,
                         QxrdAcquisitionWPtr   acq,
                         int                   detType,
                         int                   detNum);
   void initialize();
-  virtual ~QxrdDetector();
+  virtual ~QxrdDetectorSettings();
 
   QxrdExperimentWPtr experiment();
   QxrdAcquisitionWPtr acquisition();
@@ -125,4 +125,4 @@ public:
   QCEP_STRING_PROPERTY(Extension)
 };
 
-#endif // QXRDDETECTOR_H
+#endif // QXRDDETECTORSETTINGS_H

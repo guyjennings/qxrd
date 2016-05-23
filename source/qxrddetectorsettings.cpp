@@ -1,4 +1,4 @@
-#include "qxrddetector.h"
+#include "qxrddetectorsettings.h"
 #include "qxrddetectorthread.h"
 #include "qxrddetectorproxy.h"
 #include "qxrddebug.h"
@@ -11,7 +11,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdroicalculator.h"
 
-QxrdDetector::QxrdDetector(QxrdExperimentWPtr    expt,
+QxrdDetectorSettings::QxrdDetectorSettings(QxrdExperimentWPtr    expt,
                            QxrdAcquisitionWPtr   acq,
                            int                   detType,
                            int                   detNum) :
@@ -48,10 +48,10 @@ QxrdDetector::QxrdDetector(QxrdExperimentWPtr    expt,
   }
 }
 
-void QxrdDetector::initialize()
+void QxrdDetectorSettings::initialize()
 {
   connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
-          this,           &QxrdDetector::startOrStop);
+          this,           &QxrdDetectorSettings::startOrStop);
 
   QxrdExperimentPtr exper(m_Experiment);
 
@@ -60,7 +60,7 @@ void QxrdDetector::initialize()
         QxrdDetectorProcessorPtr(
           new QxrdDetectorProcessor(m_Experiment,
                                     exper->fileSaver(),
-                                    qSharedPointerDynamicCast<QxrdDetector>(sharedFromThis())));
+                                    qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis())));
   }
 
   QxrdAcquisitionPtr a(m_Acquisition);
@@ -71,7 +71,7 @@ void QxrdDetector::initialize()
   }
 }
 
-QxrdDetector::~QxrdDetector()
+QxrdDetectorSettings::~QxrdDetectorSettings()
 {
 #ifndef QT_DEBUG
   printf("Deleting detector\n");
@@ -91,22 +91,22 @@ QxrdDetector::~QxrdDetector()
   }
 }
 
-QxrdExperimentWPtr QxrdDetector::experiment()
+QxrdExperimentWPtr QxrdDetectorSettings::experiment()
 {
   return m_Experiment;
 }
 
-QxrdAcquisitionWPtr QxrdDetector::acquisition()
+QxrdAcquisitionWPtr QxrdDetectorSettings::acquisition()
 {
   return m_Acquisition;
 }
 
-QxrdDetectorProcessorPtr QxrdDetector::processor()
+QxrdDetectorProcessorPtr QxrdDetectorSettings::processor()
 {
   return m_Processor;
 }
 
-int QxrdDetector::roiCount()
+int QxrdDetectorSettings::roiCount()
 {
   int res = 0;
 
@@ -121,7 +121,7 @@ int QxrdDetector::roiCount()
   return res;
 }
 
-QxrdROICoordinatesPtr QxrdDetector::roi(int i)
+QxrdROICoordinatesPtr QxrdDetectorSettings::roi(int i)
 {
   QxrdROICoordinatesPtr res;
 
@@ -136,7 +136,7 @@ QxrdROICoordinatesPtr QxrdDetector::roi(int i)
   return res;
 }
 
-void QxrdDetector::readSettings(QSettings *settings, QString section)
+void QxrdDetectorSettings::readSettings(QSettings *settings, QString section)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -147,7 +147,7 @@ void QxrdDetector::readSettings(QSettings *settings, QString section)
   }
 }
 
-void QxrdDetector::writeSettings(QSettings *settings, QString section)
+void QxrdDetectorSettings::writeSettings(QSettings *settings, QString section)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -158,12 +158,12 @@ void QxrdDetector::writeSettings(QSettings *settings, QString section)
   }
 }
 
-bool QxrdDetector::isEnabled()
+bool QxrdDetectorSettings::isEnabled()
 {
   return get_Enabled();
 }
 
-void QxrdDetector::startOrStop(bool enabled)
+void QxrdDetectorSettings::startOrStop(bool enabled)
 {
   if (enabled) {
     startDetector();
@@ -172,7 +172,7 @@ void QxrdDetector::startOrStop(bool enabled)
   }
 }
 
-bool QxrdDetector::checkDetectorEnabled()
+bool QxrdDetectorSettings::checkDetectorEnabled()
 {
   if (isEnabled()) {
     return true;
@@ -182,44 +182,44 @@ bool QxrdDetector::checkDetectorEnabled()
   }
 }
 
-void QxrdDetector::startDetector()
+void QxrdDetectorSettings::startDetector()
 {
 }
 
-void QxrdDetector::stopDetector()
+void QxrdDetectorSettings::stopDetector()
 {
 }
 
-void QxrdDetector::onExposureTimeChanged()
+void QxrdDetectorSettings::onExposureTimeChanged()
 {
 }
 
-void QxrdDetector::beginAcquisition(double exposure)
+void QxrdDetectorSettings::beginAcquisition(double exposure)
 {
 }
 
-void QxrdDetector::endAcquisition()
+void QxrdDetectorSettings::endAcquisition()
 {
 }
 
-void QxrdDetector::shutdownAcquisition()
+void QxrdDetectorSettings::shutdownAcquisition()
 {
 }
 
-QScriptValue QxrdDetector::toScriptValue(QScriptEngine *engine, const QxrdDetectorWPtr &det)
+QScriptValue QxrdDetectorSettings::toScriptValue(QScriptEngine *engine, const QxrdDetectorWPtr &det)
 {
   return engine->newQObject(det.data());
 }
 
-void QxrdDetector::fromScriptValue(const QScriptValue &obj, QxrdDetectorWPtr &det)
+void QxrdDetectorSettings::fromScriptValue(const QScriptValue &obj, QxrdDetectorWPtr &det)
 {
   QObject *qobj = obj.toQObject();
 
   if (qobj) {
-    QxrdDetector *qdet = qobject_cast<QxrdDetector*>(qobj);
+    QxrdDetectorSettings *qdet = qobject_cast<QxrdDetectorSettings*>(qobj);
 
     if (qdet) {
-      QxrdDetectorPtr dp(qSharedPointerDynamicCast<QxrdDetector>(qdet->sharedFromThis()));
+      QxrdDetectorPtr dp(qSharedPointerDynamicCast<QxrdDetectorSettings>(qdet->sharedFromThis()));
 
       if (dp) {
         det = dp;
@@ -228,7 +228,7 @@ void QxrdDetector::fromScriptValue(const QScriptValue &obj, QxrdDetectorWPtr &de
   }
 }
 
-void QxrdDetector::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType)
+void QxrdDetectorSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType)
 {
   proxy->clearProperties();
 
@@ -241,7 +241,7 @@ void QxrdDetector::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType)
   }
 }
 
-void QxrdDetector::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettings::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
   proxy->clearProperties();
 
@@ -254,7 +254,7 @@ void QxrdDetector::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
   }
 }
 
-void QxrdDetector::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
   if (proxy) {
     set_Enabled(proxy->property("enabled").toBool());
@@ -264,7 +264,7 @@ void QxrdDetector::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
   }
 }
 
-void QxrdDetector::openControlWindow()
+void QxrdDetectorSettings::openControlWindow()
 {
   GUI_THREAD_CHECK;
 
@@ -273,7 +273,7 @@ void QxrdDetector::openControlWindow()
         QxrdDetectorControlWindowPtr(
           new QxrdDetectorControlWindow(m_Experiment,
                                         m_Acquisition,
-                                        qSharedPointerDynamicCast<QxrdDetector>(sharedFromThis()),
+                                        qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis()),
                                         m_Processor, NULL));
 
     QxrdDetectorProcessorPtr dp(m_Processor);
@@ -289,18 +289,18 @@ void QxrdDetector::openControlWindow()
   }
 }
 
-void QxrdDetector::enqueueAcquiredFrame(QcepImageDataBasePtr img)
+void QxrdDetectorSettings::enqueueAcquiredFrame(QcepImageDataBasePtr img)
 {
   m_AcquiredImages.enqueue(img);
 
   m_NAcquiredImages.release(1);
 }
 
-void QxrdDetector::beginFrame()
+void QxrdDetectorSettings::beginFrame()
 {
 }
 
-QcepImageDataBasePtr QxrdDetector::acquireFrame()
+QcepImageDataBasePtr QxrdDetectorSettings::acquireFrame()
 {
   QxrdAcquisitionPtr acq(m_Acquisition);
 
@@ -317,7 +317,7 @@ QcepImageDataBasePtr QxrdDetector::acquireFrame()
   return QcepImageDataBasePtr();
 }
 
-QcepImageDataBasePtr QxrdDetector::acquireFrameIfAvailable()
+QcepImageDataBasePtr QxrdDetectorSettings::acquireFrameIfAvailable()
 {
   QcepImageDataBasePtr res;
 
@@ -328,7 +328,7 @@ QcepImageDataBasePtr QxrdDetector::acquireFrameIfAvailable()
   return res;
 }
 
-QcepDoubleVector QxrdDetector::scalerCounts()
+QcepDoubleVector QxrdDetectorSettings::scalerCounts()
 {
   if (m_Processor) {
     return m_Processor->get_RoiCounts();
@@ -337,7 +337,7 @@ QcepDoubleVector QxrdDetector::scalerCounts()
   }
 }
 
-double QxrdDetector::scalerCounts(int chan)
+double QxrdDetectorSettings::scalerCounts(int chan)
 {
   if (m_Processor) {
     return m_Processor->get_RoiCounts().value(chan);

@@ -1,24 +1,26 @@
-#ifndef QXRDDETECTORPERKINELMER_H
-#define QXRDDETECTORPERKINELMER_H
+#ifndef QXRDDETECTORSETTINGSPERKINELMER_H
+#define QXRDDETECTORSETTINGSPERKINELMER_H
 
 #include <QMutex>
 #include <QDateTime>
 #include "qcepmacros.h"
-#include "qxrddetector.h"
-#include "qxrdperkinelmerplugininterface-ptr.h"
+#include "qxrddetectorsettings.h"
 
 #ifdef Q_OS_WIN32
 #include <windows.h>
 #endif
 
+#ifdef HAVE_PERKIN_ELMER
 #include "Acq.h"
+#include "qxrdperkinelmerplugininterface-ptr.h"
+#endif
 
-class QxrdDetectorPerkinElmer : public QxrdDetector
+class QxrdDetectorSettingsPerkinElmer : public QxrdDetectorSettings
 {
     Q_OBJECT
 public:
-  explicit QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
-  virtual ~QxrdDetectorPerkinElmer();
+  explicit QxrdDetectorSettingsPerkinElmer(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
+  virtual ~QxrdDetectorSettingsPerkinElmer();
 
   int detectorNumber() const;
   int detectorSubType() const;
@@ -66,6 +68,7 @@ private:
   QVector<quint16>       m_Buffer;
   QVector<double>        m_ReadoutTimes;
 
+#ifdef HAVE_PERKIN_ELMER
   HACQDESC               m_AcqDesc;
   int                    m_StartupDelayed;
 
@@ -82,6 +85,7 @@ private:
   CHwHeaderInfoEx        m_HwHeaderInfoEx;
 
   QxrdPerkinElmerPluginInterfaceWPtr m_PerkinElmer;
+#endif
 
 public:
   Q_PROPERTY(int detectorNumber READ get_DetectorNumber WRITE set_DetectorNumber)
@@ -100,4 +104,4 @@ public:
   QCEP_INTEGER_PROPERTY(DetectorBinning)
 };
 
-#endif // QXRDDETECTORPERKINELMER_H
+#endif // QXRDDETECTORSETTINGSPERKINELMER_H

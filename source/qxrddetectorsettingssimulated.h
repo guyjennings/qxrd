@@ -2,15 +2,15 @@
 #define QXRDDETECTORSIMULATED_H
 
 #include "qcepmacros.h"
-#include "qxrddetector.h"
+#include "qxrddetectorsettings.h"
 #include <QTimer>
 
-class QxrdDetectorSimulated : public QxrdDetector
+class QxrdDetectorSettingsSimulated : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorSimulated(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
-  virtual ~QxrdDetectorSimulated();
+  explicit QxrdDetectorSettingsSimulated(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
+  virtual ~QxrdDetectorSettingsSimulated();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);

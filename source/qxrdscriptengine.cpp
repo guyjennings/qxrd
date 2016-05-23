@@ -1863,8 +1863,8 @@ void QxrdScriptEngine::initialize()
 
   qRegisterMetaType<QxrdDetectorPtr>("QxrdDetectorWPtr");
   qScriptRegisterMetaType(this,
-                          QxrdDetector::toScriptValue,
-                          QxrdDetector::fromScriptValue);
+                          QxrdDetectorSettings::toScriptValue,
+                          QxrdDetectorSettings::fromScriptValue);
 
   qRegisterMetaType<QxrdDetectorProcessorPtr>("QxrdDetectorProcessorPtr");
   qScriptRegisterMetaType(this,

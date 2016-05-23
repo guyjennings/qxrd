@@ -11,7 +11,7 @@
 #include "qxrdapplication.h"
 #include "qxrdapplicationsettings.h"
 #include "qcepmutexlocker.h"
-#include "qxrddetector.h"
+#include "qxrddetectorsettings.h"
 #include "qxrdroitypedelegate.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,

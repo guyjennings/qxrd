@@ -4,8 +4,8 @@
 #include "qxrdthread.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
-#include "qxrddetector-ptr.h"
-#include "qxrddetector.h"
+#include "qxrddetectorsettings-ptr.h"
+#include "qxrddetectorsettings.h"
 
 class QxrdDetectorThread : public QxrdThread
 {

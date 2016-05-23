@@ -3,20 +3,11 @@
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
 
-#ifdef HAVE_PERKIN_ELMER
-#include "qxrddetectorperkinelmer.h"
-#endif
-
-//#ifdef HAVE_PILATUS
-#include "qxrddetectorpilatus.h"
-//#endif
-
-#ifdef HAVE_AREADETECTOR
-#include "qxrddetectorepicsarea.h"
-#endif
-
-#include "qxrddetectorfilewatcher.h"
-#include "qxrddetectorsimulated.h"
+#include "qxrddetectorsettingsperkinelmer.h"
+#include "qxrddetectorsettingspilatus.h"
+#include "qxrddetectorsettingsepicsarea.h"
+#include "qxrddetectorsettingsfilewatcher.h"
+#include "qxrddetectorsettingssimulated.h"
 
 #include <stdio.h>
 
@@ -214,41 +205,35 @@ void QxrdDetectorThread::run()
     switch(m_DetectorType) {
     case SimulatedDetector:
       setObjectName("simulatedDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorSettingsSimulated(m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber));
       break;
 
-#ifdef HAVE_PERKIN_ELMER
     case PerkinElmerDetector:
       setObjectName("perkinElmerDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorPerkinElmer(m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorSettingsPerkinElmer(m_Experiment,
                                                         m_Acquisition,
                                                         m_DetectorNumber));
       break;
-#endif
 
-      //#ifdef HAVE_PILATUS
     case PilatusDetector:
       setObjectName("pilatusDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorPilatus(m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorSettingsPilatus(m_Experiment,
                                                     m_Acquisition,
                                                     m_DetectorNumber));
       break;
-      //#endif
 
-#ifdef HAVE_AREADETECTOR
     case EpicsAreaDetector:
       setObjectName("epicsAreaDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorEpicsArea(m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorSettingsEpicsArea(m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber));
       break;
-#endif
 
     case FileWatcherDetector:
       setObjectName("fileWatcherDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorFileWatcher(m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorSettingsFileWatcher(m_Experiment,
                                                         m_Acquisition,
                                                         m_DetectorNumber));
       break;
@@ -256,7 +241,7 @@ void QxrdDetectorThread::run()
 
     if (det == NULL) {
       setObjectName("simulatedDetector");
-      det = QxrdDetectorPtr(new QxrdDetectorSimulated(m_Experiment,
+      det = QxrdDetectorPtr(new QxrdDetectorSettingsSimulated(m_Experiment,
                                                       m_Acquisition,
                                                       m_DetectorNumber));
     }
@@ -305,31 +290,31 @@ void QxrdDetectorThread::pushDefaultsToProxy(int detectorType,
   switch (detectorType) {
   case NoDetector:
   default:
-    QxrdDetector::pushDefaultsToProxy(proxy, QxrdDetectorThread::NoDetector);
+    QxrdDetectorSettings::pushDefaultsToProxy(proxy, QxrdDetectorThread::NoDetector);
     break;
 
   case SimulatedDetector:
-    QxrdDetectorSimulated::pushDefaultsToProxy(proxy);
+    QxrdDetectorSettingsSimulated::pushDefaultsToProxy(proxy);
     break;
 
 #ifdef HAVE_PERKIN_ELMER
   case PerkinElmerDetector:
-    QxrdDetectorPerkinElmer::pushDefaultsToProxy(proxy);
+    QxrdDetectorSettingsPerkinElmer::pushDefaultsToProxy(proxy);
     break;
 #endif
 
   case PilatusDetector:
-    QxrdDetectorPilatus::pushDefaultsToProxy(proxy);
+    QxrdDetectorSettingsPilatus::pushDefaultsToProxy(proxy);
     break;
 
 #ifdef HAVE_AREADETECTOR
   case EpicsAreaDetector:
-    QxrdDetectorEpicsArea::pushDefaultsToProxy(proxy);
+    QxrdDetectorSettingsEpicsArea::pushDefaultsToProxy(proxy);
     break;
 #endif
 
   case FileWatcherDetector:
-    QxrdDetectorFileWatcher::pushDefaultsToProxy(proxy);
+    QxrdDetectorSettingsFileWatcher::pushDefaultsToProxy(proxy);
     break;
   }
 }

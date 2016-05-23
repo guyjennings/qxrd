@@ -15,7 +15,7 @@
 #include <QMetaProperty>
 #include "qxrdprocessargs.h"
 #include "qxrddetectorproxy.h"
-#include "qxrddetector.h"
+#include "qxrddetectorsettings.h"
 #include "qxrddetectorthread.h"
 #include "qxrddetectorprocessor.h"
 #include "qxrdacquisitionparameterpack.h"
