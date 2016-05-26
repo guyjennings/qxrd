@@ -376,7 +376,12 @@ HEADERS += TODO.h \
     qxrddetectorsettingsepicsarea.h \
     qxrddetectordriver-ptr.h \
     qxrddetectordriverthread.h \
-    qxrddetectordriverthread-ptr.h
+    qxrddetectordriverthread-ptr.h \
+    qxrddetectorsettingspilatus-ptr.h \
+    qxrddetectorsettingsperkinelmer-ptr.h \
+    qxrddetectorsettingssimulated-ptr.h \
+    qxrddetectorsettingsfilewatcher-ptr.h \
+    qxrddetectorsettingsepicsarea-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
