@@ -117,6 +117,94 @@ void QxrdDetectorSettingsPerkinElmer::pullPropertiesfromProxy(QxrdDetectorProxyP
   }
 }
 
+QString QxrdDetectorSettingsPerkinElmer::detectorSubTypeNamePE(int detectorSubType)
+{
+  QString res = "unknown";
+
+  switch (detectorSubType) {
+  case PCI_SubType:
+    res = "PCI/PCIe Interface";
+    break;
+
+  case GBIF_IP_SubType:
+    res = "Gigabit Ethernet by IP Address";
+    break;
+
+  case GBIF_MAC_SubType:
+    res = "Gigabit Ethernet by MAC Address";
+    break;
+
+  case GBIF_Name_SubType:
+    res = "Gigabit Ethernet by device name";
+    break;
+
+  case GBIF_Scan_SubType:
+    res = "Gigabit Ethernet by Auto Scan";
+    break;
+  }
+
+  return res;
+}
+
+QStringList QxrdDetectorSettingsPerkinElmer::detectorSubTypeNamesPE()
+{
+  QStringList res;
+
+  res.append(detectorSubTypeNamePE(PCI_SubType));
+  res.append(detectorSubTypeNamePE(GBIF_IP_SubType));
+  res.append(detectorSubTypeNamePE(GBIF_MAC_SubType));
+  res.append(detectorSubTypeNamePE(GBIF_Name_SubType));
+  res.append(detectorSubTypeNamePE(GBIF_Scan_SubType));
+
+  return res;
+}
+
+QStringList QxrdDetectorSettingsPerkinElmer::gainModeNamesPE()
+{
+  QStringList res;
+
+  res.append("0.25 pF (High)");
+  res.append("0.5 pF");
+  res.append("1 pF");
+  res.append("2 pF");
+  res.append("4 pF");
+  res.append("8 pF (Low)");
+
+  return res;
+}
+
+QString QxrdDetectorSettingsPerkinElmer::binningModeNamePE(int binningMode)
+{
+  QString res = "Unkown Binning";
+
+  switch (binningMode) {
+  case Binning1x1:
+    res = "No Binning";
+    break;
+
+  case Binning2x2Average:
+    res = "2x2 Averaged Binning";
+    break;
+
+  case Binning2x2Summed:
+    res = "2x2 Summed Binning";
+    break;
+  }
+
+  return res;
+}
+
+QStringList QxrdDetectorSettingsPerkinElmer::binningModeNamesPE()
+{
+  QStringList res;
+
+  for (int i=0; i<BinningModeCount; i++) {
+    res.append(binningModeNamePE(i));
+  }
+
+  return res;
+}
+
 int QxrdDetectorSettingsPerkinElmer::detectorSubType() const
 {
   return get_DetectorSubType();
@@ -473,7 +561,7 @@ void QxrdDetectorSettingsPerkinElmer::startDetector()
 
       int subType = get_DetectorSubType();
 
-      if (subType == QxrdDetectorThread::PCI_SubType) {
+      if (subType == QxrdDetectorSettingsPerkinElmer::PCI_SubType) {
         printMessage("Initialising PCI/PCIe Perkin Elmer Detector");
 
         if (plugin) {
@@ -507,7 +595,7 @@ void QxrdDetectorSettingsPerkinElmer::startDetector()
             return;
           }
         }
-      } else if (subType == QxrdDetectorThread::GBIF_IP_SubType) {
+      } else if (subType == QxrdDetectorSettingsPerkinElmer::GBIF_IP_SubType) {
         printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at IP Address %1")
                      .arg(get_DetectorAddress()));
 
@@ -518,7 +606,7 @@ void QxrdDetectorSettingsPerkinElmer::startDetector()
           acquisitionInitError(__FILE__, __LINE__, nRet);
           return;
         }
-      } else if (subType == QxrdDetectorThread::GBIF_MAC_SubType) {
+      } else if (subType == QxrdDetectorSettingsPerkinElmer::GBIF_MAC_SubType) {
         printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at MAC address %1").arg(get_DetectorAddress()));
 
         if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
@@ -528,7 +616,7 @@ void QxrdDetectorSettingsPerkinElmer::startDetector()
           acquisitionInitError(__FILE__, __LINE__, nRet);
           return;
         }
-      } else if (subType == QxrdDetectorThread::GBIF_Name_SubType) {
+      } else if (subType == QxrdDetectorSettingsPerkinElmer::GBIF_Name_SubType) {
         printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at device name %1").arg(get_DetectorAddress()));
 
         if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
@@ -538,7 +626,7 @@ void QxrdDetectorSettingsPerkinElmer::startDetector()
           acquisitionInitError(__FILE__, __LINE__, nRet);
           return;
         }
-      } else if (subType == QxrdDetectorThread::GBIF_Scan_SubType) {
+      } else if (subType == QxrdDetectorSettingsPerkinElmer::GBIF_Scan_SubType) {
         printMessage("Searching for Perkin Elmer Detectors on the network");
 
         long nBoards=0;
@@ -808,15 +896,15 @@ void QxrdDetectorSettingsPerkinElmer::onBinningModeChanged()
         int newMode = 1;
 
         switch (get_DetectorBinning()) {
-        case QxrdDetectorThread::Binning1x1:
+        case QxrdDetectorSettingsPerkinElmer::Binning1x1:
           newMode = 1;
           break;
 
-        case QxrdDetectorThread::Binning2x2Average:
+        case QxrdDetectorSettingsPerkinElmer::Binning2x2Average:
           newMode = 2 + 256;
           break;
 
-        case QxrdDetectorThread::Binning2x2Summed:
+        case QxrdDetectorSettingsPerkinElmer::Binning2x2Summed:
           newMode = 2 + 512;
           break;
         }

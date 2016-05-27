@@ -30,31 +30,6 @@ private slots:
   void browseToFilename(int i);
 
 private:
-  typedef enum {
-    PCI_SubType,
-    GBIF_IP_SubType,
-    GBIF_MAC_SubType,
-    GBIF_Name_SubType,
-    GBIF_Scan_SubType
-  } DetectorSubType;
-
-  typedef enum {
-    Binning1x1,
-    Binning2x2Average,
-    Binning2x2Summed,
-    BinningModeCount
-  } BinningModePE;
-
-
-  static QString detectorSubTypeNamePE(int detectorSubType);
-  static QStringList detectorSubTypeNamesPE();
-
-  static QStringList gainModeNamesPE();
-
-  static QString     binningModeNamePE(int binningMode);
-  static QStringList binningModeNamesPE();
-
-private:
   QxrdDetectorProxyPtr m_Proxy;
   int                  m_CurrentRow;
   QVector<QWidget*>    m_Widgets;

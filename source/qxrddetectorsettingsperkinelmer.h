@@ -45,6 +45,31 @@ public slots:
 
   QString acquisitionErrorString(int n);
 
+public:
+  typedef enum {
+    PCI_SubType,
+    GBIF_IP_SubType,
+    GBIF_MAC_SubType,
+    GBIF_Name_SubType,
+    GBIF_Scan_SubType
+  } PEDetectorSubType;
+
+  typedef enum {
+    Binning1x1,
+    Binning2x2Average,
+    Binning2x2Summed,
+    BinningModeCount
+  } PEBinningMode;
+
+
+  static QString detectorSubTypeNamePE(int detectorSubType);
+  static QStringList detectorSubTypeNamesPE();
+
+  static QStringList gainModeNamesPE();
+
+  static QString     binningModeNamePE(int binningMode);
+  static QStringList binningModeNamesPE();
+
 protected:
   void beginAcquisition(double exposure);
   void endAcquisition();

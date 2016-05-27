@@ -17,6 +17,7 @@
 
 #include "qxrddetectorsettings.h"
 #include "qxrddetectordriverthread.h"
+#include "qxrddetectorsettingsperkinelmer.h"
 
 QxrdDetectorConfigurationDialog::QxrdDetectorConfigurationDialog(QxrdDetectorProxyPtr proxy, QWidget *parent) :
   QDialog(parent),
@@ -138,7 +139,7 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
   } else if (type == QxrdDetectorProxy::PESubTypeProperty) {
     QComboBox *cb = new QComboBox();
-    QStringList sl = detectorSubTypeNamesPE();
+    QStringList sl = QxrdDetectorSettingsPerkinElmer::detectorSubTypeNamesPE();
     cb -> addItems(sl);
     cb -> setCurrentIndex(value.toInt());
 
@@ -146,7 +147,7 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
   } else if (type == QxrdDetectorProxy::PEGainProperty) {
     QComboBox *cb = new QComboBox();
-    QStringList sl = gainModeNamesPE();
+    QStringList sl = QxrdDetectorSettingsPerkinElmer::gainModeNamesPE();
     cb -> addItems(sl);
     cb -> setCurrentIndex(value.toInt());
 
@@ -154,7 +155,7 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
   } else if (type == QxrdDetectorProxy::PEBinningProperty) {
     QComboBox *cb = new QComboBox();
-    QStringList sl = binningModeNamesPE();
+    QStringList sl = QxrdDetectorSettingsPerkinElmer::binningModeNamesPE();
     cb -> addItems(sl);
     cb -> setCurrentIndex(value.toInt());
 
@@ -270,93 +271,5 @@ void QxrdDetectorConfigurationDialog::browseToFilename(int i)
       le->setText(newPath);
     }
   }
-}
-
-QString QxrdDetectorConfigurationDialog::detectorSubTypeNamePE(int detectorSubType)
-{
-  QString res = "unknown";
-
-  switch (detectorSubType) {
-  case PCI_SubType:
-    res = "PCI/PCIe Interface";
-    break;
-
-  case GBIF_IP_SubType:
-    res = "Gigabit Ethernet by IP Address";
-    break;
-
-  case GBIF_MAC_SubType:
-    res = "Gigabit Ethernet by MAC Address";
-    break;
-
-  case GBIF_Name_SubType:
-    res = "Gigabit Ethernet by device name";
-    break;
-
-  case GBIF_Scan_SubType:
-    res = "Gigabit Ethernet by Auto Scan";
-    break;
-  }
-
-  return res;
-}
-
-QStringList QxrdDetectorConfigurationDialog::detectorSubTypeNamesPE()
-{
-  QStringList res;
-
-  res.append(detectorSubTypeNamePE(PCI_SubType));
-  res.append(detectorSubTypeNamePE(GBIF_IP_SubType));
-  res.append(detectorSubTypeNamePE(GBIF_MAC_SubType));
-  res.append(detectorSubTypeNamePE(GBIF_Name_SubType));
-  res.append(detectorSubTypeNamePE(GBIF_Scan_SubType));
-
-  return res;
-}
-
-QStringList QxrdDetectorConfigurationDialog::gainModeNamesPE()
-{
-  QStringList res;
-
-  res.append("0.25 pF (High)");
-  res.append("0.5 pF");
-  res.append("1 pF");
-  res.append("2 pF");
-  res.append("4 pF");
-  res.append("8 pF (Low)");
-
-  return res;
-}
-
-QString QxrdDetectorConfigurationDialog::binningModeNamePE(int binningMode)
-{
-  QString res = "Unkown Binning";
-
-  switch (binningMode) {
-  case Binning1x1:
-    res = "No Binning";
-    break;
-
-  case Binning2x2Average:
-    res = "2x2 Averaged Binning";
-    break;
-
-  case Binning2x2Summed:
-    res = "2x2 Summed Binning";
-    break;
-  }
-
-  return res;
-}
-
-QStringList QxrdDetectorConfigurationDialog::binningModeNamesPE()
-{
-  QStringList res;
-
-  for (int i=0; i<BinningModeCount; i++) {
-    res.append(binningModeNamePE(i));
-  }
-
-  return res;
 }
 
