@@ -304,6 +304,7 @@ QString QcepObject::toScriptLiteral(QVariant v)
 
 QVariant QcepObject::fromScriptLiteral(QString lit)
 {
+  return QVariant();
 }
 
 QVariant QcepObject::parseVariant(QString str)
