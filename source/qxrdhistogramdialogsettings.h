@@ -5,13 +5,14 @@
 #include "qcepproperty.h"
 #include "qcepserializableobject.h"
 #include "qxrdhistogramplotsettings-ptr.h"
+#include "qxrdhistogramdialogsettings-ptr.h"
 
 class QxrdHistogramDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdHistogramDialogSettings(QString name);
-  QxrdHistogramDialogSettings();
+  static QxrdHistogramDialogSettingsPtr newHistogramDialogSettings();
 
 public:
   virtual void addChildPtr(QcepSerializableObjectPtr child);

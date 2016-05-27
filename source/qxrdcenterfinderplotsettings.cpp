@@ -5,7 +5,9 @@ QxrdCenterFinderPlotSettings::QxrdCenterFinderPlotSettings(QString name) :
 {
 }
 
-QxrdCenterFinderPlotSettings::QxrdCenterFinderPlotSettings() :
-  QxrdCenterFinderPlotSettings("centeringPlot")
+QxrdCenterFinderPlotSettingsPtr QxrdCenterFinderPlotSettings::newCenterFinderPlotSettings()
 {
+  QxrdCenterFinderPlotSettingsPtr set(new QxrdCenterFinderPlotSettings("centeringPlot"));
+
+  return set;
 }

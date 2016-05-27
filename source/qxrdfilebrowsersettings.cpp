@@ -9,9 +9,11 @@ QxrdFileBrowserSettings::QxrdFileBrowserSettings(QString name) :
 {
 }
 
-QxrdFileBrowserSettings::QxrdFileBrowserSettings() :
-  QxrdFileBrowserSettings("fileBrowserSettings")
+QxrdFileBrowserSettingsPtr QxrdFileBrowserSettings::newFileBrowserSettings()
 {
+  QxrdFileBrowserSettingsPtr set(new QxrdFileBrowserSettings("fileBrowserSettings"));
+
+  return set;
 }
 
 QxrdInputFileBrowserSettings::QxrdInputFileBrowserSettings(QString name) :
@@ -19,9 +21,11 @@ QxrdInputFileBrowserSettings::QxrdInputFileBrowserSettings(QString name) :
 {
 }
 
-QxrdInputFileBrowserSettings::QxrdInputFileBrowserSettings() :
-  QxrdInputFileBrowserSettings("inputFileBrowserSettings")
+QxrdInputFileBrowserSettingsPtr QxrdInputFileBrowserSettings::newInputFileBrowserSettings()
 {
+  QxrdInputFileBrowserSettingsPtr set(new QxrdInputFileBrowserSettings("inputFileBrowserSettings"));
+
+  return set;
 }
 
 QxrdOutputFileBrowserSettings::QxrdOutputFileBrowserSettings(QString name) :
@@ -29,7 +33,9 @@ QxrdOutputFileBrowserSettings::QxrdOutputFileBrowserSettings(QString name) :
 {
 }
 
-QxrdOutputFileBrowserSettings::QxrdOutputFileBrowserSettings() :
-  QxrdOutputFileBrowserSettings("outputFileBrowserSettings")
+QxrdOutputFileBrowserSettingsPtr QxrdOutputFileBrowserSettings::newOutputFileBrowserSettings()
 {
+  QxrdOutputFileBrowserSettingsPtr set(new QxrdOutputFileBrowserSettings("outputFileBrowserSettings"));
+
+  return set;
 }

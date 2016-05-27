@@ -240,12 +240,11 @@ QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputs::channel(int cha
 
 void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 {
-  QxrdAcquisitionExtraInputsChannel *chan = 0;
+  QxrdAcquisitionExtraInputsChannelPtr chan =
+      QxrdAcquisitionExtraInputsChannel::newAcquisitionExtraInputsChannel(ch);
+  addChildPtr(chan);
 
-  addChildPtr(QxrdAcquisitionExtraInputsChannelPtr(
-                chan = new QxrdAcquisitionExtraInputsChannel(ch)));
-
-  connect(chan, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
+  connect(chan.data(), &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
 
   QcepObjectPtr p(parentPtr());
 

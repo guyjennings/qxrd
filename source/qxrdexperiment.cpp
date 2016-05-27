@@ -176,11 +176,11 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     splashMessage("Initializing Data Acquisition");
 
-    addChildPtr(QxrdAcquisitionPtr(new QxrdAcquisition()));
+    addChildPtr(QxrdAcquisition::newAcquisition());
+
     m_Acquisition -> initialize();
 
-    m_CalibrantLibrary = QxrdCalibrantLibraryPtr(
-          new QxrdCalibrantLibrary());
+    m_CalibrantLibrary = QxrdCalibrantLibrary::newCalibrantLibrary();
 
     m_CalibrantLibraryModel = QxrdCalibrantLibraryModelPtr(
           new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
@@ -231,7 +231,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 //    m_DatasetModel -> newColumn("group4/t", 1000);
 //    m_DatasetModel -> newColumn("group4/sdev", 1000);
 
-    addChildPtr(QxrdWindowSettingsPtr(new QxrdWindowSettings()));
+    addChildPtr(QxrdWindowSettings::newWindowSettings());
 
     splashMessage("Starting SPEC Server");
 

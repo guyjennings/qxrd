@@ -2,13 +2,14 @@
 #define QXRDHISTOGRAMPLOTSETTINGS_H
 
 #include "qcepplotsettings.h"
+#include "qxrdhistogramplotsettings-ptr.h"
 
 class QxrdHistogramPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdHistogramPlotSettings(QString name);
-   QxrdHistogramPlotSettings();
+  static QxrdHistogramPlotSettingsPtr newHistogramPlotSettings();
 
 signals:
   

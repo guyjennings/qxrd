@@ -7,13 +7,14 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qxrdacquisitionextrainputschannel-ptr.h"
 
 class QxrdAcquisitionExtraInputsChannel : public QcepSerializableObject
 {
   Q_OBJECT
 public:
-  QxrdAcquisitionExtraInputsChannel(int chnum);
   Q_INVOKABLE QxrdAcquisitionExtraInputsChannel(QString name);
+  static QxrdAcquisitionExtraInputsChannelPtr newAcquisitionExtraInputsChannel(int chnum);
 
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);

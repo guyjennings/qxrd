@@ -4,13 +4,14 @@
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qxrddistortioncorrectiondialogsettings-ptr.h"
 
 class QxrdDistortionCorrectionDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdDistortionCorrectionDialogSettings(QString name);
-  QxrdDistortionCorrectionDialogSettings();
+  static QxrdDistortionCorrectionDialogSettingsPtr newDistortionCorrectionDialogSettings();
 };
 
 Q_DECLARE_METATYPE(QxrdDistortionCorrectionDialogSettings*)

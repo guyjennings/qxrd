@@ -53,7 +53,7 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     m_Integrator(),
     m_ROICalculator(),
     m_ControlWindow(),
-    m_ImagePlotSettings(new QxrdImagePlotSettings())
+    m_ImagePlotSettings(QxrdImagePlotSettings::newImagePlotSettings())
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorProcessor::QxrdDetectorProcessor(%p)\n", this);
@@ -61,7 +61,7 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
 
   m_CenterFinder  = QxrdCenterFinder::newCenterFinder();
   m_Integrator    = QxrdIntegrator::newIntegrator();
-  m_ROICalculator = QxrdROICalculatorPtr(new QxrdROICalculator());
+  m_ROICalculator = QxrdROICalculator::newROICalculator();
 
   connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onMaskPathChanged);
   connect(prop_DarkImagePath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onDarkImagePathChanged);

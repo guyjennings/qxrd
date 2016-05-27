@@ -8,10 +8,13 @@ QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QString name) :
 {
 }
 
-QxrdHistogramDialogSettings::QxrdHistogramDialogSettings() :
-  QxrdHistogramDialogSettings("histDialogSettings")
+QxrdHistogramDialogSettingsPtr QxrdHistogramDialogSettings::newHistogramDialogSettings()
 {
-  addChildPtr(QxrdHistogramPlotSettingsPtr(new QxrdHistogramPlotSettings()));
+  QxrdHistogramDialogSettingsPtr set(new QxrdHistogramDialogSettings("histDialogSettings"));
+
+  set->addChildPtr(QxrdHistogramPlotSettings::newHistogramPlotSettings());
+
+  return set;
 }
 
 void QxrdHistogramDialogSettings::addChildPtr(QcepSerializableObjectPtr child)

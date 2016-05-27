@@ -48,6 +48,7 @@ QxrdAcquisitionWPtr QxrdSynchronizedAcquisition::acquisition()
 {
   if (parentPtr()==NULL) {
     printMessage("QxrdSynchronizedAcquisition Parent == NULL");
+    return QxrdAcquisitionWPtr();
   } else {
     return qSharedPointerDynamicCast<QxrdAcquisition>(parentPtr());
   }

@@ -5,7 +5,9 @@ QxrdSlicePlotSettings::QxrdSlicePlotSettings(QString name) :
 {
 }
 
-QxrdSlicePlotSettings::QxrdSlicePlotSettings()
-  : QxrdSlicePlotSettings("slicePlot")
+QxrdSlicePlotSettingsPtr QxrdSlicePlotSettings::newSlicePlotSettings()
 {
+  QxrdSlicePlotSettingsPtr set(new QxrdSlicePlotSettings("slicePlot"));
+
+  return set;
 }

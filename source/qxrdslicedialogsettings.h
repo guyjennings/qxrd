@@ -5,13 +5,14 @@
 #include "qcepproperty.h"
 #include "qxrdsliceplotsettings-ptr.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qxrdslicedialogsettings-ptr.h"
 
 class QxrdSliceDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdSliceDialogSettings(QString name);
-  QxrdSliceDialogSettings();
+  static QxrdSliceDialogSettingsPtr newSliceDialogSettings();
   
   virtual void addChildPtr(QcepSerializableObjectPtr child);
 

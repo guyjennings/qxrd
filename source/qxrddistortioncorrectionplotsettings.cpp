@@ -5,7 +5,9 @@ QxrdDistortionCorrectionPlotSettings::QxrdDistortionCorrectionPlotSettings(QStri
 {
 }
 
-QxrdDistortionCorrectionPlotSettings::QxrdDistortionCorrectionPlotSettings() :
-  QxrdDistortionCorrectionPlotSettings("distortionCorrectionPlot")
+QxrdDistortionCorrectionPlotSettingsPtr QxrdDistortionCorrectionPlotSettings::newDistortionCorrectionPlotSettings()
 {
+  QxrdDistortionCorrectionPlotSettingsPtr set(new QxrdDistortionCorrectionPlotSettings("distortionCorrectionPlot"));
+
+  return set;
 }

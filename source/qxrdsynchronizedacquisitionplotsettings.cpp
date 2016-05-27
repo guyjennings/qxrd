@@ -5,7 +5,9 @@ QxrdSynchronizedAcquisitionPlotSettings::QxrdSynchronizedAcquisitionPlotSettings
 {
 }
 
-QxrdSynchronizedAcquisitionPlotSettings::QxrdSynchronizedAcquisitionPlotSettings() :
-  QxrdSynchronizedAcquisitionPlotSettings("syncAcqPlot")
+QxrdSynchronizedAcquisitionPlotSettingsPtr QxrdSynchronizedAcquisitionPlotSettings::newSynchronizedAcquisitionPlotSettings()
 {
+  QxrdSynchronizedAcquisitionPlotSettingsPtr set(new QxrdSynchronizedAcquisitionPlotSettings("syncAcqPlot"));
+
+  return set;
 }

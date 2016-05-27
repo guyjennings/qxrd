@@ -38,8 +38,9 @@ class QxrdAcquisition : public QxrdAcquisitionInterface
 
 public:
   Q_INVOKABLE QxrdAcquisition(QString name);
-  QxrdAcquisition();
   ~QxrdAcquisition();
+
+  static QxrdAcquisitionPtr newAcquisition();
 
   virtual void addChildPtr(QcepSerializableObjectPtr child);
   virtual void removeChildPtr(QcepSerializableObjectPtr child);
@@ -101,6 +102,7 @@ public:
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
   QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
 
+  void setAcquisitionScalerModel(QxrdAcquisitionScalerModelPtr model);
   QxrdAcquisitionScalerModelPtr acquisitionScalerModel() const;
 
 protected:

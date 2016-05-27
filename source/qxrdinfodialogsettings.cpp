@@ -7,7 +7,9 @@ QxrdInfoDialogSettings::QxrdInfoDialogSettings(QString name) :
 {
 }
 
-QxrdInfoDialogSettings::QxrdInfoDialogSettings() :
-  QxrdInfoDialogSettings("infoDialogSettings")
+QxrdInfoDialogSettingsPtr QxrdInfoDialogSettings::newInfoDialogSettings()
 {
+  QxrdInfoDialogSettingsPtr set(new QxrdInfoDialogSettings("infoDialogSettings"));
+
+  return set;
 }

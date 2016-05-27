@@ -5,7 +5,9 @@ QxrdHistogramPlotSettings::QxrdHistogramPlotSettings(QString name) :
 {
 }
 
-QxrdHistogramPlotSettings::QxrdHistogramPlotSettings() :
-  QxrdHistogramPlotSettings("histogramPlot")
+QxrdHistogramPlotSettingsPtr QxrdHistogramPlotSettings::newHistogramPlotSettings()
 {
+  QxrdHistogramPlotSettingsPtr set(new QxrdHistogramPlotSettings("histogramPlot"));
+
+  return set;
 }

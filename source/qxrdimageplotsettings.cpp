@@ -26,7 +26,9 @@ QxrdImagePlotSettings::QxrdImagePlotSettings(QString name) :
 {
 }
 
-QxrdImagePlotSettings::QxrdImagePlotSettings() :
-  QxrdImagePlotSettings("imagePlotSettings")
+QxrdImagePlotSettingsPtr QxrdImagePlotSettings::newImagePlotSettings()
 {
+  QxrdImagePlotSettingsPtr set(new QxrdImagePlotSettings("imagePlotSettings"));
+
+  return set;
 }
