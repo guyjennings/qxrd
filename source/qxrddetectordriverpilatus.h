@@ -15,11 +15,13 @@ public:
                             QxrdDetectorSettingsPilatusPtr pilatus,
                             QxrdExperimentPtr expt,
                             QxrdAcquisitionPtr acq);
+  virtual ~QxrdDetectorDriverPilatus();
 
 public slots:
   bool startDetectorDriver();
   bool stopDetectorDriver();
 
+  bool changeExposureTime(double exposure);
   bool beginAcquisition(double exposure);
   bool endAcquisition();
   bool shutdownAcquisition();

@@ -444,10 +444,10 @@ bool QxrdAcquisition::sanityCheckAcquireDark()
   return res;
 }
 
-void QxrdAcquisition::onExposureTimeChanged()
+void QxrdAcquisition::onExposureTimeChanged(double expos)
 {
   foreach (QxrdDetectorSettingsPtr det, m_Detectors) {
-    det->onExposureTimeChanged();
+    det->changeExposureTime(expos);
   }
 }
 

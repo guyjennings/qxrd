@@ -13,6 +13,15 @@ public:
                               QxrdDetectorSettingsEpicsAreaPtr det,
                               QxrdExperimentPtr expt,
                               QxrdAcquisitionPtr acq);
+  virtual ~QxrdDetectorDriverEpicsArea();
+
+public slots:
+  virtual bool startDetectorDriver();
+  virtual bool stopDetectorDriver();
+  virtual bool changeExposureTime(double exposure);
+  virtual bool beginAcquisition(double exposure);
+  virtual bool endAcquisition();
+  virtual bool shutdownAcquisition();
 
 private:
   QxrdDetectorSettingsEpicsAreaWPtr m_EpicsArea;

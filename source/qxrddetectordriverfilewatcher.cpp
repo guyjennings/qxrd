@@ -9,4 +9,45 @@ QxrdDetectorDriverFileWatcher::QxrdDetectorDriverFileWatcher(
   QxrdDetectorDriver(name, watcher, expt, acq),
   m_FileWatcher(watcher)
 {
+#ifndef QT_NODEBUG
+  printf("File Watcher Driver \"%s\" Constructed (Non-Implemented)\n", qPrintable(name));
+#endif
 }
+
+QxrdDetectorDriverFileWatcher::~QxrdDetectorDriverFileWatcher()
+{
+#ifndef QT_NODEBUG
+  printf("File Watcher Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
+#endif
+}
+
+bool QxrdDetectorDriverFileWatcher::startDetectorDriver()
+{
+  return false;
+}
+
+bool QxrdDetectorDriverFileWatcher::stopDetectorDriver()
+{
+  return false;
+}
+
+bool QxrdDetectorDriverFileWatcher::changeExposureTime(double exposure)
+{
+  return false;
+}
+
+bool QxrdDetectorDriverFileWatcher::beginAcquisition(double exposure)
+{
+  return false;
+}
+
+bool QxrdDetectorDriverFileWatcher::endAcquisition()
+{
+  return false;
+}
+
+bool QxrdDetectorDriverFileWatcher::shutdownAcquisition()
+{
+  return false;
+}
+

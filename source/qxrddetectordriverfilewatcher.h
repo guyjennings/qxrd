@@ -13,6 +13,15 @@ public:
                                 QxrdDetectorSettingsFileWatcherPtr watcher,
                                 QxrdExperimentPtr expt,
                                 QxrdAcquisitionPtr acq);
+  virtual ~QxrdDetectorDriverFileWatcher();
+
+public slots:
+  virtual bool startDetectorDriver();
+  virtual bool stopDetectorDriver();
+  virtual bool changeExposureTime(double exposure);
+  virtual bool beginAcquisition(double exposure);
+  virtual bool endAcquisition();
+  virtual bool shutdownAcquisition();
 
 private:
   QxrdDetectorSettingsFileWatcherWPtr m_FileWatcher;

@@ -6,6 +6,7 @@
 #include "qxrdacquisition-ptr.h"
 #include "qxrddetectordriver-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
+#include "qxrddetectordriverthread-ptr.h"
 
 class QxrdDetectorDriverThread : public QxrdThread
 {
@@ -13,6 +14,8 @@ class QxrdDetectorDriverThread : public QxrdThread
 public:
   explicit QxrdDetectorDriverThread(QxrdDetectorSettingsWPtr det);
   virtual ~QxrdDetectorDriverThread();
+
+  static QxrdDetectorDriverThreadPtr newDetectorDriverThread(QxrdDetectorSettingsWPtr det);
 
   void setDetectorDriver(QxrdDetectorDriverPtr detDriver);
   QxrdDetectorDriverWPtr detectorDriver() const;
@@ -22,6 +25,13 @@ public:
 signals:
 
 public slots:
+  bool startDetectorDriver();
+  bool stopDetectorDriver();
+
+  bool changeExposureTime(double expos);
+  bool beginAcquisition(double expos);
+  bool endAcquisition();
+  bool shutdownAcquisition();
 
 protected:
   void run();

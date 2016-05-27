@@ -23,6 +23,16 @@ QxrdDetectorDriverPilatus::QxrdDetectorDriverPilatus(
   m_ExposureFrameCount(-1),
   m_Remote(new QxrdDetectorPilatusRemote())
 {
+#ifndef QT_NODEBUG
+  printf("Pilatus Detector Driver \"%s\" Constructed\n", qPrintable(name));
+#endif
+}
+
+QxrdDetectorDriverPilatus::~QxrdDetectorDriverPilatus()
+{
+#ifndef QT_NODEBUG
+  printf("Pilatus Detector Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
+#endif
 }
 
 bool QxrdDetectorDriverPilatus::startDetectorDriver()
@@ -68,6 +78,13 @@ bool QxrdDetectorDriverPilatus::stopDetectorDriver()
 
     m_PilatusSocket.close();
   }
+
+  return true;
+}
+
+bool QxrdDetectorDriverPilatus::changeExposureTime(double exposure)
+{
+  THREAD_CHECK;
 
   return true;
 }

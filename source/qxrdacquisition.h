@@ -66,7 +66,7 @@ public slots:
   bool sanityCheckAcquire();
   bool sanityCheckAcquireDark();
 
-  virtual void onExposureTimeChanged();
+  virtual void onExposureTimeChanged(double expos);
 
   void appendDetector(int detType);
   void appendDetectorProxy(QxrdDetectorProxyPtr proxy);

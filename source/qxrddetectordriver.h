@@ -19,6 +19,7 @@ public:
 public slots:
   virtual bool startDetectorDriver() = 0;
   virtual bool stopDetectorDriver() = 0;
+  virtual bool changeExposureTime(double exposure) = 0;
   virtual bool beginAcquisition(double exposure) = 0;
   virtual bool endAcquisition() = 0;
   virtual bool shutdownAcquisition() = 0;

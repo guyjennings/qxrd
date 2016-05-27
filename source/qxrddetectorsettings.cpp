@@ -74,6 +74,12 @@ void QxrdDetectorSettings::initialize()
     connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
             a.data(), &QxrdAcquisition::detectorStateChanged);
   }
+
+  m_DetectorDriver =
+      QxrdDetectorDriverThread::newDetectorDriverThread(
+        qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis()));
+
+  m_DetectorDriver -> start();
 }
 
 QxrdDetectorSettings::~QxrdDetectorSettings()
@@ -238,28 +244,58 @@ bool QxrdDetectorSettings::checkDetectorEnabled()
   }
 }
 
-void QxrdDetectorSettings::startDetector()
+bool QxrdDetectorSettings::startDetector()
 {
+  if (m_DetectorDriver) {
+    return m_DetectorDriver->startDetectorDriver();
+  } else {
+    return false;
+  }
 }
 
-void QxrdDetectorSettings::stopDetector()
+bool QxrdDetectorSettings::stopDetector()
 {
+  if (m_DetectorDriver) {
+    return m_DetectorDriver->stopDetectorDriver();
+  } else {
+    return false;
+  }
 }
 
-void QxrdDetectorSettings::onExposureTimeChanged()
+bool QxrdDetectorSettings::changeExposureTime(double expos)
 {
+  if (m_DetectorDriver) {
+    return m_DetectorDriver->changeExposureTime(expos);
+  } else {
+    return false;
+  }
 }
 
-void QxrdDetectorSettings::beginAcquisition(double exposure)
+bool QxrdDetectorSettings::beginAcquisition(double exposure)
 {
+  if (m_DetectorDriver) {
+    return m_DetectorDriver->beginAcquisition(exposure);
+  } else {
+    return false;
+  }
 }
 
-void QxrdDetectorSettings::endAcquisition()
+bool QxrdDetectorSettings::endAcquisition()
 {
+  if (m_DetectorDriver) {
+    return m_DetectorDriver->endAcquisition();
+  } else {
+    return false;
+  }
 }
 
-void QxrdDetectorSettings::shutdownAcquisition()
+bool QxrdDetectorSettings::shutdownAcquisition()
 {
+  if (m_DetectorDriver) {
+    return m_DetectorDriver->shutdownAcquisition();
+  } else {
+    return false;
+  }
 }
 
 QScriptValue QxrdDetectorSettings::toScriptValue(QScriptEngine *engine, const QxrdDetectorSettingsWPtr &det)

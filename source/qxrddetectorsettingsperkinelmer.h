@@ -6,15 +6,6 @@
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
 
-#ifdef Q_OS_WIN32
-#include <windows.h>
-#endif
-
-#ifdef HAVE_PERKIN_ELMER
-#include "Acq.h"
-#include "qxrdperkinelmerplugininterface-ptr.h"
-#endif
-
 class QxrdDetectorSettingsPerkinElmer : public QxrdDetectorSettings
 {
     Q_OBJECT
@@ -22,28 +13,9 @@ public:
   explicit QxrdDetectorSettingsPerkinElmer(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
   virtual ~QxrdDetectorSettingsPerkinElmer();
 
-  int detectorNumber() const;
-  int detectorSubType() const;
-  QString detectorAddress() const;
-
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
-
-public slots:
-  void onExposureTimeChanged();
-  void onBinningModeChanged();
-  void onCameraGainChanged();
-
-public slots:
-  void startDetector();
-  void stopDetector();
-  void onEndFrame(int counter, unsigned int n1, unsigned int n2);
-  void onEndFrameCallback();
-
-  void dumpHeaderInfo();
-
-  QString acquisitionErrorString(int n);
 
 public:
   typedef enum {
@@ -61,7 +33,6 @@ public:
     BinningModeCount
   } PEBinningMode;
 
-
   static QString detectorSubTypeNamePE(int detectorSubType);
   static QStringList detectorSubTypeNamesPE();
 
@@ -69,48 +40,6 @@ public:
 
   static QString     binningModeNamePE(int binningMode);
   static QStringList binningModeNamesPE();
-
-protected:
-  void beginAcquisition(double exposure);
-  void endAcquisition();
-  void shutdownAcquisition();
-
-private:
-  void acquisitionError(const char *fn, int ln, int n);
-
-  void startupAcquisition();
-//  void setupCameraGainMenu(QComboBox *cb, int initialGain);
-//  void setupCameraBinningModeMenu(QComboBox *cb, int initialBinning);
-  bool checkPluginAvailable();
-
-  void acquisitionInitError(const char *fn, int ln, int n);
-  void acquisitionNSensorsError(const char *fn, int ln, int n);
-
-private:
-  mutable QMutex         m_Mutex;
-  int                    m_BufferSize;
-  int                    m_BufferIndex;
-  QVector<quint16>       m_Buffer;
-  QVector<double>        m_ReadoutTimes;
-
-#ifdef HAVE_PERKIN_ELMER
-  HACQDESC               m_AcqDesc;
-  int                    m_StartupDelayed;
-
-  int                    m_PROMID;
-  int                    m_HeaderID;
-  int                    m_CameraType;
-  QString                m_CameraModel;
-  int                    m_CurrentGain;
-  int                    m_SyncMode;
-
-  QAtomicInt             m_Counter;
-
-  CHwHeaderInfo          m_HwHeaderInfo;
-  CHwHeaderInfoEx        m_HwHeaderInfoEx;
-
-  QxrdPerkinElmerPluginInterfaceWPtr m_PerkinElmer;
-#endif
 
 public:
   Q_PROPERTY(int detectorNumber READ get_DetectorNumber WRITE set_DetectorNumber)
