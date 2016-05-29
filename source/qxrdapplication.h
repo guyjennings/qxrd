@@ -9,6 +9,7 @@
 #include "qxrdresponsetimer.h"
 #include "qxrdexperiment.h"
 #include "qxrdexperiment-ptr.h"
+#include "qxrdexperimentthread-ptr.h"
 #include "qxrdwelcomewindow-ptr.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdnidaqplugininterface-ptr.h"
@@ -66,11 +67,11 @@ public slots:
 
   void activateExperiment(QString path);
   void openExperiment(QString path);
-  void closeExperiment(QxrdExperimentWPtr exp);
+  void closeExperiment(QxrdExperimentWPtr expw);
 
-  void openedExperiment(QxrdExperimentWPtr exp);
-  void closedExperiment(QxrdExperimentWPtr exp);
-  QList<QxrdExperimentPtr> &experiments();
+  void openedExperiment(QxrdExperimentThreadWPtr expwthr);
+  void closedExperiment(QxrdExperimentThreadWPtr expwthr);
+  QList<QxrdExperimentWPtr> &experiments();
 
   QxrdExperimentPtr experiment(int i);
 
@@ -130,8 +131,8 @@ private:
 private:
   QxrdApplicationSettingsPtr      m_ApplicationSettings;
 
-//  QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
-  QList<QxrdExperimentPtr>        m_Experiments;
+  QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
+  QList<QxrdExperimentWPtr>       m_Experiments;
 
   QTimer                          m_SplashTimer;
   QxrdSplashScreenPtr             m_Splash;

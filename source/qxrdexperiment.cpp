@@ -4,6 +4,7 @@
 #include "qcepmacros.h"
 #include "qcepallocator.h"
 #include "qxrdexperiment.h"
+#include "qxrdexperimentthread.h"
 #include "qxrdapplication.h"
 #include "qxrdapplicationsettings.h"
 #include "qxrddataprocessorthread.h"
@@ -142,6 +143,14 @@ QxrdExperiment::~QxrdExperiment()
       set->prop_ExperimentCount()->incValue(-1);
     }
   }
+}
+
+QxrdExperimentThreadPtr QxrdExperiment::experimentThread() const
+{
+  QxrdExperimentThread* t =
+      qobject_cast<QxrdExperimentThread*>(thread());
+
+  return QxrdExperimentThreadPtr(t);
 }
 
 void QxrdExperiment::initialize(QSettings *settings)

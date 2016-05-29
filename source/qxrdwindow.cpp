@@ -826,7 +826,7 @@ void QxrdWindow::populateExperimentsMenu()
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
-    QList<QxrdExperimentPtr> exps = app->experiments();
+    QList<QxrdExperimentWPtr> exps = app->experiments();
 
     foreach (QxrdExperimentPtr exp, exps) {
       if (exp) {

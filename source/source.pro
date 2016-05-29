@@ -381,7 +381,9 @@ HEADERS += TODO.h \
     qxrddetectorsettingsperkinelmer-ptr.h \
     qxrddetectorsettingssimulated-ptr.h \
     qxrddetectorsettingsfilewatcher-ptr.h \
-    qxrddetectorsettingsepicsarea-ptr.h
+    qxrddetectorsettingsepicsarea-ptr.h \
+    qxrdexperimentthread.h \
+    qxrdexperimentthread-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -560,7 +562,8 @@ SOURCES += qxrd.cpp \
     qxrddetectordriverfilewatcher.cpp \
     qxrddetectordriverepicsarea.cpp \
     qxrddetectorsettingsepicsarea.cpp \
-    qxrddetectordriverthread.cpp
+    qxrddetectordriverthread.cpp \
+    qxrdexperimentthread.cpp
 
 OTHER_FILES += testImage.js
 
