@@ -4,13 +4,14 @@
 #include <QObject>
 #include "qcepproperty.h"
 #include "qcepplotsettings.h"
+#include "qxrdimageplotsettings-ptr.h"
 
 class QxrdImagePlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdImagePlotSettings(QString name);
-  QxrdImagePlotSettings();
+  static QxrdImagePlotSettingsPtr newImagePlotSettings();
 
 public:
   Q_PROPERTY(double displayMinimumPctle     READ get_DisplayMinimumPctle WRITE set_DisplayMinimumPctle)

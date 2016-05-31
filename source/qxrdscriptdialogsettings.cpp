@@ -7,7 +7,9 @@ QxrdScriptDialogSettings::QxrdScriptDialogSettings(QString name) :
 {
 }
 
-QxrdScriptDialogSettings::QxrdScriptDialogSettings() :
-  QxrdScriptDialogSettings("scriptDialogSettings")
+QxrdScriptDialogSettingsPtr QxrdScriptDialogSettings::newScriptDialogSettings()
 {
+  QxrdScriptDialogSettingsPtr set(new QxrdScriptDialogSettings("scriptDialogSettings"));
+
+  return set;
 }

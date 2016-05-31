@@ -5,7 +5,9 @@ QxrdIntegratorPlotSettings::QxrdIntegratorPlotSettings(QString name) :
 {
 }
 
-QxrdIntegratorPlotSettings::QxrdIntegratorPlotSettings() :
-  QxrdIntegratorPlotSettings("integratorPlot")
+QxrdIntegratorPlotSettingsPtr QxrdIntegratorPlotSettings::newIntegratorPlotSettings()
 {
+  QxrdIntegratorPlotSettingsPtr set(new QxrdIntegratorPlotSettings("integratorPlot"));
+
+  return set;
 }

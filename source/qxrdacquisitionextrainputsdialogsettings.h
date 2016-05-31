@@ -4,13 +4,14 @@
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrdacquisitionextrainputsplotsettings-ptr.h"
+#include "qxrdacquisitionextrainputsdialogsettings-ptr.h"
 
 class QxrdAcquisitionExtraInputsDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdAcquisitionExtraInputsDialogSettings(QString name);
-  QxrdAcquisitionExtraInputsDialogSettings();
+  static QxrdAcquisitionExtraInputsDialogSettingsPtr newAcquisitionExtraInputsDialogSettings();
   
 public:
   virtual void addChildPtr(QcepSerializableObjectPtr child);

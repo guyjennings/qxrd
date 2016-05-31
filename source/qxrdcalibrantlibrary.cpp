@@ -18,9 +18,11 @@ QxrdCalibrantLibrary::QxrdCalibrantLibrary(QString name)
   }
 }
 
-QxrdCalibrantLibrary::QxrdCalibrantLibrary()
-  : QxrdCalibrantLibrary("calibrantLibrary")
+QxrdCalibrantLibraryPtr QxrdCalibrantLibrary::newCalibrantLibrary()
 {
+  QxrdCalibrantLibraryPtr lib(new QxrdCalibrantLibrary("calibrantLibrary"));
+
+  return lib;
 }
 
 QxrdCalibrantLibrary::~QxrdCalibrantLibrary()

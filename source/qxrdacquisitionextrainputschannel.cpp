@@ -4,22 +4,13 @@
 #include "qxrdnidaqplugininterface.h"
 #include "qcepsettingssaver.h"
 
-QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(int chnum) :
-  QxrdAcquisitionExtraInputsChannel(tr("extraChannel")/*.arg(chnum)*/)
+QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputsChannel::newAcquisitionExtraInputsChannel(int chnum)
 {
-  set_ChannelNumber(chnum);
+  QxrdAcquisitionExtraInputsChannelPtr chan(new QxrdAcquisitionExtraInputsChannel(tr("extraChannel")/*.arg(chnum)*/));
 
-  connect(prop_ChannelName(), &QcepStringProperty::valueChanged,
-          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
+  chan -> set_ChannelNumber(chnum);
 
-  connect(prop_Min(),         &QcepDoubleProperty::valueChanged,
-          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
-
-  connect(prop_Max(),         &QcepDoubleProperty::valueChanged,
-          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
-
-  connect(prop_Enabled(),     &QcepBoolProperty::valueChanged,
-          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
+  return chan;
 }
 
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(QString name) :
@@ -50,12 +41,25 @@ QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(QString nam
 #ifndef QT_NO_DEBUG
   printf("Constructing acquisition extra inputs channel\n");
 #endif
+
+  connect(prop_ChannelName(), &QcepStringProperty::valueChanged,
+          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
+
+  connect(prop_Min(),         &QcepDoubleProperty::valueChanged,
+          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
+
+  connect(prop_Max(),         &QcepDoubleProperty::valueChanged,
+          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
+
+  connect(prop_Enabled(),     &QcepBoolProperty::valueChanged,
+          this, &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded);
 }
 
 QxrdAcquisitionExtraInputsWPtr QxrdAcquisitionExtraInputsChannel::extraInputs()
 {
   if (parentPtr() == NULL) {
     printMessage("QxrdAcquisitionExtraInputsChannel Parent == NULL");
+    return QxrdAcquisitionExtraInputsPtr();
   } else {
     return qSharedPointerDynamicCast<QxrdAcquisitionExtraInputs>(parentPtr());
   }

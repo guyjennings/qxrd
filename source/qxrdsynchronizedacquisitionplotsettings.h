@@ -2,13 +2,14 @@
 #define QXRDSYNCHRONIZEDACQUISITIONPLOTSETTINGS_H
 
 #include "qcepplotsettings.h"
+#include "qxrdsynchronizedacquisitionplotsettings-ptr.h"
 
 class QxrdSynchronizedAcquisitionPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdSynchronizedAcquisitionPlotSettings(QString name);
-  QxrdSynchronizedAcquisitionPlotSettings();
+  static QxrdSynchronizedAcquisitionPlotSettingsPtr newSynchronizedAcquisitionPlotSettings();
 
 signals:
 

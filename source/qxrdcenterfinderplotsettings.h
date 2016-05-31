@@ -3,13 +3,14 @@
 
 #include <QObject>
 #include "qcepplotsettings.h"
+#include "qxrdcenterfinderplotsettings-ptr.h"
 
 class QxrdCenterFinderPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdCenterFinderPlotSettings(QString name);
-  QxrdCenterFinderPlotSettings();
+  static QxrdCenterFinderPlotSettingsPtr newCenterFinderPlotSettings();
 
 signals:
   

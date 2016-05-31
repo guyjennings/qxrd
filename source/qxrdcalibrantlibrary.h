@@ -15,8 +15,8 @@ class QxrdCalibrantLibrary : public QcepSerializableObject
 
 public:
   Q_INVOKABLE QxrdCalibrantLibrary(QString name);
-  QxrdCalibrantLibrary();
   virtual ~QxrdCalibrantLibrary();
+  static QxrdCalibrantLibraryPtr newCalibrantLibrary();
 
   virtual void addChildPtr(QcepSerializableObjectPtr child);
 

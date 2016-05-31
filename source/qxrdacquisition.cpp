@@ -64,40 +64,36 @@ QxrdAcquisition::QxrdAcquisition(QString name)
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisition::QxrdAcquisition(%p)\n", this);
   }
-}
 
-
-QxrdAcquisition::QxrdAcquisition() :
-  QxrdAcquisition("acquisition")
-{
   connect(prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_SummedExposures(), &QcepIntProperty::valueChanged,  this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_DarkSummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
+  connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::onExposureTimeChanged);
 
-//  m_FileIndex.setDebug(1);
-
-  if (qcepDebug(DEBUG_APP)) {
-    printMessage("QxrdAcquisition::QxrdAcquisition");
-  }
-
-  addChildPtr(QxrdSynchronizedAcquisition::newSynchronizedAcquisition());
-
-  addChildPtr(QxrdAcquisitionExtraInputs::newAcquisitionExtraInputs());
-
-
-  connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
-          this, &QxrdAcquisition::onExposureTimeChanged);
-
-//  connect(&m_Watcher, &QFutureWatcherBase::finished, this, &QxrdAcquisition::onAcquireComplete);
   connect(&m_IdleTimer, &QTimer::timeout, this, &QxrdAcquisition::onIdleTimeout);
 
   m_IdleTimer.start(1000);
+}
 
-  QxrdAcquisitionPtr myself = qSharedPointerDynamicCast<QxrdAcquisition>(sharedFromThis());
 
-  m_ScalerModel = QxrdAcquisitionScalerModelPtr(
-        new QxrdAcquisitionScalerModel(myself));
+QxrdAcquisitionPtr QxrdAcquisition::newAcquisition()
+{
+  QxrdAcquisitionPtr acq(new QxrdAcquisition("acquisition"));
+
+  if (qcepDebug(DEBUG_APP)) {
+    acq->printMessage("QxrdAcquisition::QxrdAcquisition");
+  }
+
+  acq->addChildPtr(QxrdSynchronizedAcquisition::newSynchronizedAcquisition());
+
+  acq->addChildPtr(QxrdAcquisitionExtraInputs::newAcquisitionExtraInputs());
+
+  acq->setAcquisitionScalerModel(
+        QxrdAcquisitionScalerModelPtr(
+          new QxrdAcquisitionScalerModel(acq)));
+
+  return acq;
 }
 
 void QxrdAcquisition::addChildPtr(QcepSerializableObjectPtr child)
@@ -170,6 +166,11 @@ QxrdDataProcessorWPtr QxrdAcquisition::dataProcessor() const
   } else {
     return QxrdDataProcessorWPtr();
   }
+}
+
+void QxrdAcquisition::setAcquisitionScalerModel(QxrdAcquisitionScalerModelPtr model)
+{
+  m_ScalerModel = model;
 }
 
 QxrdAcquisitionScalerModelPtr QxrdAcquisition::acquisitionScalerModel() const

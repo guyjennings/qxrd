@@ -4,13 +4,14 @@
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qxrdscriptdialogsettings-ptr.h"
 
 class QxrdScriptDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdScriptDialogSettings(QString name);
-  QxrdScriptDialogSettings();
+  static QxrdScriptDialogSettingsPtr newScriptDialogSettings();
 };
 
 Q_DECLARE_METATYPE(QxrdScriptDialogSettings*)

@@ -42,6 +42,7 @@
 #include "qcepdataset-ptr.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qxrddetectorcontrolwindow-ptr.h"
+#include "qxrdexperimentthread-ptr.h"
 
 class QxrdExperiment : public QcepExperiment
 {
@@ -65,6 +66,7 @@ public:
 
   void setExperimentApplication(QxrdApplicationWPtr app);
 
+  QxrdExperimentThreadPtr experimentThread() const;
   QxrdAcquisitionWPtr acquisition() const;
   QxrdWindowPtr window();
   QxrdDataProcessorWPtr dataProcessor() const;

@@ -691,7 +691,7 @@ DONE("2016-04-06", "2016-04-08",
 TODO("2016-04-08", "",
      "Make scatter plot windows work with columns in data groups as well as column scans");
 
-TODO("2016-04-08", "",
+DONE("2016-04-08", "2016-05-29",
      "Rationalize and simplify the interfaces to QcepAllocator");
 
 TODO("2016-04-08", "",
@@ -699,5 +699,17 @@ TODO("2016-04-08", "",
 
 TODO("2016-04-12", "",
      "Re-implement QcepDataArray to use chunked format");
+
+TODO("2016-05-28", "",
+     "Reinstate QxrdExperimentThread");
+
+TODO("2016-05-29", "",
+     "Reuse existing data object paths when inserting data objects");
+
+TODO("2016-05-29", "",
+     "Run ring tracing code in background thread");
+
+TODO("2016-05-29", "",
+     "Renumber detectors when appropriate");
 
 #endif // TODO_H

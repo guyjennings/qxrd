@@ -15,13 +15,14 @@
 #include "qxrdacquisitionextrainputsdialogsettings-ptr.h"
 #include "qxrddistortioncorrectiondialogsettings-ptr.h"
 #include "qxrddistortioncorrectionplotsettings-ptr.h"
+#include "qxrdwindowsettings-ptr.h"
 
 class QxrdWindowSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdWindowSettings(QString name);
-  QxrdWindowSettings();
+  static QxrdWindowSettingsPtr newWindowSettings();
 
   virtual void addChildPtr(QcepSerializableObjectPtr child);
 

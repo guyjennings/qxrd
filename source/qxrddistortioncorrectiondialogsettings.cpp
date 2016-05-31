@@ -6,7 +6,9 @@ QxrdDistortionCorrectionDialogSettings::QxrdDistortionCorrectionDialogSettings(Q
 {
 }
 
-QxrdDistortionCorrectionDialogSettings::QxrdDistortionCorrectionDialogSettings() :
-  QxrdDistortionCorrectionDialogSettings("distortionCorrectionDialogSettings")
+QxrdDistortionCorrectionDialogSettingsPtr QxrdDistortionCorrectionDialogSettings::newDistortionCorrectionDialogSettings()
 {
+  QxrdDistortionCorrectionDialogSettingsPtr set(new QxrdDistortionCorrectionDialogSettings("distortionCorrectionDialogSettings"));
+
+  return set;
 }

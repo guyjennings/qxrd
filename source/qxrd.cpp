@@ -93,7 +93,10 @@ int main(int argc, char *argv[])
   if (nObjAlloc != nObjDeleted) {
     int i=0;
     foreach(QcepObject* obj, QcepObject::allocatedObjectsSet()) {
-      printf("%d : %s\n", i++, qPrintable(obj->objectName()));
+      printf("%d : %s : %s\n",
+             i++,
+             qPrintable(obj->objectName()),
+             qPrintable(obj->className()));
     }
   }
 #endif

@@ -25,22 +25,25 @@ QxrdWindowSettings::QxrdWindowSettings(QString name) :
 {
 }
 
-QxrdWindowSettings::QxrdWindowSettings() :
-  QxrdWindowSettings("windowSettings")
+QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
 {
-  addChildPtr(QxrdImagePlotSettingsPtr(new QxrdImagePlotSettings()));
-  addChildPtr(QxrdCenterFinderPlotSettingsPtr(new QxrdCenterFinderPlotSettings()));
-  addChildPtr(QxrdIntegratorPlotSettingsPtr(new QxrdIntegratorPlotSettings()));
-  addChildPtr(QxrdInputFileBrowserSettingsPtr(new QxrdInputFileBrowserSettings()));
-  addChildPtr(QxrdOutputFileBrowserSettingsPtr(new QxrdOutputFileBrowserSettings()));
-  addChildPtr(QxrdHistogramDialogSettingsPtr(new QxrdHistogramDialogSettings()));
-  addChildPtr(QxrdSliceDialogSettingsPtr(new QxrdSliceDialogSettings()));
-  addChildPtr(QxrdInfoDialogSettingsPtr(new QxrdInfoDialogSettings()));
-  addChildPtr(QxrdScriptDialogSettingsPtr(new QxrdScriptDialogSettings()));
-  addChildPtr(QxrdSynchronizedAcquisitionDialogSettingsPtr(new QxrdSynchronizedAcquisitionDialogSettings()));
-  addChildPtr(QxrdAcquisitionExtraInputsDialogSettingsPtr(new QxrdAcquisitionExtraInputsDialogSettings()));
-  addChildPtr(QxrdDistortionCorrectionDialogSettingsPtr(new QxrdDistortionCorrectionDialogSettings()));
-  addChildPtr(QxrdDistortionCorrectionPlotSettingsPtr(new QxrdDistortionCorrectionPlotSettings()));
+  QxrdWindowSettingsPtr set(new QxrdWindowSettings("windowSettings"));
+
+  set -> addChildPtr(QxrdImagePlotSettings::newImagePlotSettings());
+  set -> addChildPtr(QxrdCenterFinderPlotSettings::newCenterFinderPlotSettings());
+  set -> addChildPtr(QxrdIntegratorPlotSettings::newIntegratorPlotSettings());
+  set -> addChildPtr(QxrdInputFileBrowserSettings::newInputFileBrowserSettings());
+  set -> addChildPtr(QxrdOutputFileBrowserSettings::newOutputFileBrowserSettings());
+  set -> addChildPtr(QxrdHistogramDialogSettings::newHistogramDialogSettings());
+  set -> addChildPtr(QxrdSliceDialogSettings::newSliceDialogSettings());
+  set -> addChildPtr(QxrdInfoDialogSettings::newInfoDialogSettings());
+  set -> addChildPtr(QxrdScriptDialogSettings::newScriptDialogSettings());
+  set -> addChildPtr(QxrdSynchronizedAcquisitionDialogSettings::newSynchronizedAcquisitionDialogSettings());
+  set -> addChildPtr(QxrdAcquisitionExtraInputsDialogSettings::newAcquisitionExtraInputsDialogSettings());
+  set -> addChildPtr(QxrdDistortionCorrectionDialogSettings::newDistortionCorrectionDialogSettings());
+  set -> addChildPtr(QxrdDistortionCorrectionPlotSettings::newDistortionCorrectionPlotSettings());
+
+  return set;
 }
 
 void QxrdWindowSettings::addChildPtr(QcepSerializableObjectPtr child)

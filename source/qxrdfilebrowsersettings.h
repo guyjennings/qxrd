@@ -4,13 +4,14 @@
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
+#include "qxrdfilebrowsersettings-ptr.h"
 
 class QxrdFileBrowserSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdFileBrowserSettings(QString name);
-  QxrdFileBrowserSettings();
+  static QxrdFileBrowserSettingsPtr newFileBrowserSettings();
 
 public:
   Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter)
@@ -31,7 +32,7 @@ class QxrdInputFileBrowserSettings : public QxrdFileBrowserSettings
 
 public:
   Q_INVOKABLE QxrdInputFileBrowserSettings(QString name);
-  QxrdInputFileBrowserSettings();
+  static QxrdInputFileBrowserSettingsPtr newInputFileBrowserSettings();
 };
 
 Q_DECLARE_METATYPE(QxrdInputFileBrowserSettings*)
@@ -42,7 +43,7 @@ class QxrdOutputFileBrowserSettings : public QxrdFileBrowserSettings
 
 public:
   Q_INVOKABLE QxrdOutputFileBrowserSettings(QString name);
-  QxrdOutputFileBrowserSettings();
+  static QxrdOutputFileBrowserSettingsPtr newOutputFileBrowserSettings();
 };
 
 Q_DECLARE_METATYPE(QxrdOutputFileBrowserSettings*)

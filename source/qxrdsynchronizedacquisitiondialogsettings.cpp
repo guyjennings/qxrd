@@ -7,11 +7,13 @@ QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSett
 {
 }
 
-QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings() :
-  QxrdSynchronizedAcquisitionDialogSettings("syncDialog")
+QxrdSynchronizedAcquisitionDialogSettingsPtr QxrdSynchronizedAcquisitionDialogSettings::newSynchronizedAcquisitionDialogSettings()
 {
-  addChildPtr(QxrdSynchronizedAcquisitionPlotSettingsPtr(
-                new QxrdSynchronizedAcquisitionPlotSettings()));
+  QxrdSynchronizedAcquisitionDialogSettingsPtr set(new QxrdSynchronizedAcquisitionDialogSettings("syncDialog"));
+
+  set -> addChildPtr(QxrdSynchronizedAcquisitionPlotSettings::newSynchronizedAcquisitionPlotSettings());
+
+  return set;
 }
 
 void QxrdSynchronizedAcquisitionDialogSettings::addChildPtr(QcepSerializableObjectPtr child)

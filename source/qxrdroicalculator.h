@@ -20,8 +20,8 @@ class QxrdROICalculator : public QcepObject
 
 public:
   Q_INVOKABLE QxrdROICalculator(QString name);
-  QxrdROICalculator();
   virtual ~QxrdROICalculator();
+  static QxrdROICalculatorPtr newROICalculator();
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICalculatorPtr &proc);
   static void fromScriptValue(const QScriptValue &obj, QxrdROICalculatorPtr &proc);

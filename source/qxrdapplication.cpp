@@ -3,6 +3,7 @@
 #include "qxrddebug.h"
 #include "qxrdapplication.h"
 #include "qxrdapplication-ptr.h"
+#include "qxrdexperimentthread.h"
 #include "qxrdwelcomewindow.h"
 #include "qxrdwindow.h"
 #include "qxrdserverthread.h"
@@ -819,11 +820,12 @@ void QxrdApplication::writeDefaultSettings()
 
 void QxrdApplication::createNewExperiment()
 {
-  QxrdExperimentPtr exp =
-      QxrdExperiment::newExperiment("", qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()));
+  QxrdExperimentThreadPtr expthr =
+      QxrdExperimentThread::newExperimentThread(
+        "", qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()));
 
-  if (exp) {
-    openedExperiment(exp);
+  if (expthr) {
+    openedExperiment(expthr);
 
     closeWelcomeWindow();
   }
@@ -846,26 +848,31 @@ void QxrdApplication::openExperiment(QString path)
   if (path.length() > 0) {
     QxrdExperimentSettings settings(path);
 
-    QxrdExperimentPtr exp =
-        QxrdExperiment::newExperiment(path, qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()));
+    QxrdExperimentThreadPtr expthr =
+        QxrdExperimentThread::newExperimentThread(
+          path, qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()));
 
-    exp->initialize(&settings);
+    if (expthr) {
+      expthr->experiment()->initialize(&settings);
+    }
 
     printMessage("");
     printMessage(tr("===== Open Experiment %1").arg(path));
 
-    openedExperiment(exp);
+    openedExperiment(expthr);
   }
 }
 
-void QxrdApplication::closeExperiment(QxrdExperimentWPtr exp)
+void QxrdApplication::closeExperiment(QxrdExperimentWPtr expw)
 {
   if (qcepDebug(DEBUG_APP)) {
-    printf("QxrdApplication::closeExperiment(%p)\n", exp.data());
+    printf("QxrdApplication::closeExperiment(%p)\n", expw.data());
   }
 
+  QxrdExperimentPtr exp(expw);
+
   if (exp) {
-    closedExperiment(exp);
+    closedExperiment(exp->experimentThread());
   }
 }
 
@@ -933,37 +940,47 @@ void QxrdApplication::openRecentExperiment(QString path)
   }
 }
 
-void QxrdApplication::openedExperiment(QxrdExperimentWPtr exp)
+void QxrdApplication::openedExperiment(QxrdExperimentThreadWPtr expwthr)
 {
-  QxrdExperimentPtr expt(exp);
+  QxrdExperimentThreadPtr exptthr(expwthr);
 
-  if (expt) {
-    QString path = expt->experimentFilePath();
-    m_ApplicationSettings -> set_CurrentExperiment(path);
-    appendRecentExperiment(path);
+  if (exptthr) {
+    QxrdExperimentPtr expt(exptthr->experiment());
 
-    m_Experiments.append(expt);
+    if (expt) {
+      QString path = expt->experimentFilePath();
+      m_ApplicationSettings -> set_CurrentExperiment(path);
+      appendRecentExperiment(path);
 
-    printMessage("");
-    printMessage("New experiment loaded");
-    printMessage("");
+      m_ExperimentThreads.append(exptthr);
+      m_Experiments.append(expt);
 
-    closeWelcomeWindow();
+      printMessage("");
+      printMessage("New experiment loaded");
+      printMessage("");
+
+      closeWelcomeWindow();
 
     expt->openWindows();
+    }
   }
 }
 
-void QxrdApplication::closedExperiment(QxrdExperimentWPtr exp)
+void QxrdApplication::closedExperiment(QxrdExperimentThreadWPtr expwthr)
 {
-  QxrdExperimentPtr expt(exp);
+  QxrdExperimentThreadPtr exptthr(expwthr);
 
-  if (expt) {
-    m_Experiments.removeAll(expt);
+  if (exptthr) {
+    QxrdExperimentPtr expt(exptthr->experiment());
+
+    if (expt) {
+      m_Experiments.removeAll(expt);
+      m_ExperimentThreads.removeAll(exptthr);
+    }
   }
 }
 
-QList<QxrdExperimentPtr> &QxrdApplication::experiments()
+QList<QxrdExperimentWPtr> &QxrdApplication::experiments()
 {
   return m_Experiments;
 }

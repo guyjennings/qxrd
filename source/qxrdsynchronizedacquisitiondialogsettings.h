@@ -5,13 +5,14 @@
 #include "qcepproperty.h"
 #include "qcepserializableobject.h"
 #include "qxrdsynchronizedacquisitionplotsettings-ptr.h"
+#include "qxrdsynchronizedacquisitiondialogsettings-ptr.h"
 
 class QxrdSynchronizedAcquisitionDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdSynchronizedAcquisitionDialogSettings(QString name);
-  QxrdSynchronizedAcquisitionDialogSettings();
+  static QxrdSynchronizedAcquisitionDialogSettingsPtr newSynchronizedAcquisitionDialogSettings();
 
 public:
   virtual void addChildPtr(QcepSerializableObjectPtr child);

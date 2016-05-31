@@ -9,10 +9,13 @@ QxrdSliceDialogSettings::QxrdSliceDialogSettings(QString name) :
 {
 }
 
-QxrdSliceDialogSettings::QxrdSliceDialogSettings()
-  : QxrdSliceDialogSettings("sliceDialogSettings")
+QxrdSliceDialogSettingsPtr QxrdSliceDialogSettings::newSliceDialogSettings()
 {
-  addChildPtr(QxrdSlicePlotSettingsPtr(new QxrdSlicePlotSettings()));
+  QxrdSliceDialogSettingsPtr set(new QxrdSliceDialogSettings("sliceDialogSettings"));
+
+  set -> addChildPtr(QxrdSlicePlotSettings::newSlicePlotSettings());
+
+  return set;
 }
 
 void QxrdSliceDialogSettings::addChildPtr(QcepSerializableObjectPtr child)

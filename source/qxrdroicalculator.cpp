@@ -21,9 +21,11 @@ QxrdROICalculator::QxrdROICalculator(QString name)
   }
 }
 
-QxrdROICalculator::QxrdROICalculator() :
-  QxrdROICalculator("roiCalculator")
+QxrdROICalculatorPtr QxrdROICalculator::newROICalculator()
 {
+  QxrdROICalculatorPtr calc(new QxrdROICalculator("roiCalculator"));
+
+  return calc;
 }
 
 QxrdROICalculator::~QxrdROICalculator()
