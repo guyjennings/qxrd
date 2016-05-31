@@ -23,6 +23,7 @@ public slots:
   bool beginAcquisition(double exposure);
   bool endAcquisition();
   bool shutdownAcquisition();
+  void beginFrame();
 
 private slots:
   void onTimerTimeout();

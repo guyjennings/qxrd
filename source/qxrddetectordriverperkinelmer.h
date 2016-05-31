@@ -31,6 +31,7 @@ public slots:
   bool changeExposureTime(double exposure);
   bool beginAcquisition(double exposure);
   bool endAcquisition();
+  void beginFrame();
   bool shutdownAcquisition();
 
   void onBinningModeChanged();

@@ -23,6 +23,7 @@ public slots:
   virtual bool beginAcquisition(double exposure) = 0;
   virtual bool endAcquisition() = 0;
   virtual bool shutdownAcquisition() = 0;
+  virtual void beginFrame() = 0;
 
 protected:
   QxrdDetectorSettingsWPtr m_Detector;

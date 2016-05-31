@@ -924,6 +924,10 @@ bool QxrdDetectorDriverPerkinElmer::endAcquisition()
 #endif
 }
 
+void QxrdDetectorDriverPerkinElmer::beginFrame()
+{
+}
+
 bool QxrdDetectorDriverPerkinElmer::shutdownAcquisition()
 {
   THREAD_CHECK;

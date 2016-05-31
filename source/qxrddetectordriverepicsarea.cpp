@@ -50,3 +50,6 @@ bool QxrdDetectorDriverEpicsArea::shutdownAcquisition()
   return false;
 }
 
+void QxrdDetectorDriverEpicsArea::beginFrame()
+{
+}

@@ -22,6 +22,7 @@ public slots:
   virtual bool beginAcquisition(double exposure);
   virtual bool endAcquisition();
   virtual bool shutdownAcquisition();
+  virtual void beginFrame();
 
 private:
   QxrdDetectorSettingsEpicsAreaWPtr m_EpicsArea;

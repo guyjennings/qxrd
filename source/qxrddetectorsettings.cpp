@@ -280,6 +280,13 @@ bool QxrdDetectorSettings::beginAcquisition(double exposure)
   }
 }
 
+void QxrdDetectorSettings::beginFrame()
+{
+  if (m_DetectorDriver) {
+    m_DetectorDriver->beginFrame();
+  }
+}
+
 bool QxrdDetectorSettings::endAcquisition()
 {
   if (m_DetectorDriver) {
@@ -412,10 +419,6 @@ void QxrdDetectorSettings::enqueueAcquiredFrame(QcepImageDataBasePtr img)
   m_AcquiredImages.enqueue(img);
 
   m_NAcquiredImages.release(1);
-}
-
-void QxrdDetectorSettings::beginFrame()
-{
 }
 
 QcepImageDataBasePtr QxrdDetectorSettings::acquireFrame()

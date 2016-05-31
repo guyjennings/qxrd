@@ -97,7 +97,7 @@ bool QxrdDetectorDriverPilatus::beginAcquisition(double exposure)
 
   if (pil) {
     if (qcepDebug(DEBUG_PILATUS)) {
-      printMessage(tr("QxrdDetectorPilatus::beginAcquisition(%1)").arg(exposure));
+      printMessage(tr("QxrdDetectorDriverPilatus::beginAcquisition(%1)").arg(exposure));
     }
 
     imagePath(pil->get_PilatusDataDirectory());
@@ -130,7 +130,7 @@ void QxrdDetectorDriverPilatus::executeCommand(QString cmd)
 void QxrdDetectorDriverPilatus::readyRead()
 {
   if (qcepDebug(DEBUG_PILATUS)) {
-    printMessage("QxrdDetectorPilatus::readyRead");
+    printMessage("QxrdDetectorDriverPilatus::readyRead");
 
     printMessage(tr("%1 bytes available").arg(m_PilatusSocket.bytesAvailable()));
   }
@@ -175,7 +175,7 @@ void QxrdDetectorDriverPilatus::sendCommand(QString cmd)
   THREAD_CHECK;
 
   if (qcepDebug(DEBUG_PILATUS)) {
-    printMessage(tr("QxrdDetectorPilatus::sendCommand(\"%1\")").arg(cmd));
+    printMessage(tr("QxrdDetectorDriverPilatus::sendCommand(\"%1\")").arg(cmd));
   }
 
   m_PilatusSocket.write(qPrintable(cmd+"\n"));

@@ -180,6 +180,13 @@ bool QxrdDetectorDriverThread::endAcquisition()
   }
 }
 
+void QxrdDetectorDriverThread::beginFrame()
+{
+  if (m_DetectorDriver) {
+    QMetaObject::invokeMethod(m_DetectorDriver.data(), "beginFrame");
+  }
+}
+
 bool QxrdDetectorDriverThread::shutdownAcquisition()
 {
   if (m_DetectorDriver) {

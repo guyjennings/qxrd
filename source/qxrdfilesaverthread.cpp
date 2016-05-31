@@ -16,8 +16,10 @@ QxrdFileSaverThread::QxrdFileSaverThread(QcepObjectWPtr parent)
   }
 
   qRegisterMetaType<QcepDoubleImageDataPtr>("QcepDoubleImageDataPtr");
-  qRegisterMetaType<QcepUInt32ImageDataPtr>("QcepInt32ImageDataPtr");
-  qRegisterMetaType<QcepUInt16ImageDataPtr>("QcepInt16ImageDataPtr");
+  qRegisterMetaType<QcepInt32ImageDataPtr>("QcepInt32ImageDataPtr");
+  qRegisterMetaType<QcepInt16ImageDataPtr>("QcepInt16ImageDataPtr");
+  qRegisterMetaType<QcepUInt32ImageDataPtr>("QcepUInt32ImageDataPtr");
+  qRegisterMetaType<QcepUInt16ImageDataPtr>("QcepUInt16ImageDataPtr");
   qRegisterMetaType<QcepMaskDataPtr>("QcepMaskDataPtr");
   qRegisterMetaType<QcepIntegratedDataPtr>("QcepIntegratedDataPtr");
   qRegisterMetaType<FILE*>("FILE*");

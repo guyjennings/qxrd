@@ -87,6 +87,10 @@ bool QxrdDetectorDriverSimulated::beginAcquisition(double exposure)
   return true;
 }
 
+void QxrdDetectorDriverSimulated::beginFrame()
+{
+}
+
 bool QxrdDetectorDriverSimulated::endAcquisition()
 {
   THREAD_CHECK;

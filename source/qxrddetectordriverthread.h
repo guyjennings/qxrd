@@ -33,6 +33,8 @@ public slots:
   bool endAcquisition();
   bool shutdownAcquisition();
 
+  void beginFrame();
+
 protected:
   void run();
 

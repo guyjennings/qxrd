@@ -51,3 +51,6 @@ bool QxrdDetectorDriverFileWatcher::shutdownAcquisition()
   return false;
 }
 
+void QxrdDetectorDriverFileWatcher::beginFrame()
+{
+}
