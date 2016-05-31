@@ -709,4 +709,7 @@ TODO("2016-05-29", "",
 TODO("2016-05-29", "",
      "Run ring tracing code in background thread");
 
+TODO("2016-05-29", "",
+     "Renumber detectors when appropriate");
+
 #endif // TODO_H
