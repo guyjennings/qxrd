@@ -47,6 +47,12 @@ QVariant QxrdHelpBrowser::loadResource(int type, const QUrl &name)
 //            printf("QxrdHelpBrowser::loadResource res.length = %d\n", res.count());
 
             return res;
+          } else if (name.path() == "/help/objecthelp") {
+            quint64 addr = name.query().toULongLong();
+            QObject    *qobj  = reinterpret_cast<QObject*>(addr);
+            QcepObject *qcobj = qobject_cast<QcepObject*>(qobj);
+
+            return engine->helpText(qcobj);
           } else if (name.path() == "/help/macrocounter") {
             QByteArray res = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
                              "<html>\n"
