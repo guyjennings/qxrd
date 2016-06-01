@@ -700,7 +700,7 @@ TODO("2016-04-08", "",
 TODO("2016-04-12", "",
      "Re-implement QcepDataArray to use chunked format");
 
-TODO("2016-05-28", "",
+DONE("2016-05-28", "2016-06-01",
      "Reinstate QxrdExperimentThread");
 
 TODO("2016-05-29", "",
@@ -711,5 +711,8 @@ TODO("2016-05-29", "",
 
 TODO("2016-05-29", "",
      "Renumber detectors when appropriate");
+
+TODO("2016-06-01", "",
+     "Reinstate experiment autosaver");
 
 #endif // TODO_H
