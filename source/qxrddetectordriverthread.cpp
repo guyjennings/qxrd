@@ -104,6 +104,8 @@ void QxrdDetectorDriverThread::run()
     }
   }
 
+  det = QxrdDetectorSettingsPtr();
+
   int rc = exec();
 
   if (m_DetectorDriver) {

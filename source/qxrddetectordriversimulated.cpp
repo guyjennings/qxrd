@@ -52,7 +52,9 @@ bool QxrdDetectorDriverSimulated::stopDetectorDriver()
 
   QxrdDetectorSettingsPtr det(m_Detector);
 
-  printMessage(tr("Stopping simulated detector \"%1\"").arg(det->get_DetectorName()));
+  if (det) {
+    printMessage(tr("Stopping simulated detector \"%1\"").arg(det->get_DetectorName()));
+  }
 
   m_Timer.stop();
 
