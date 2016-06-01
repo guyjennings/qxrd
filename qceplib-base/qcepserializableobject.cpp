@@ -18,6 +18,8 @@ void QcepSerializableObject::printLine(QString line) const
 
   if (parent) {
     parent->printLine(line);
+  } else {
+    QcepObject::printLine(line);
   }
 }
 
@@ -28,8 +30,7 @@ void QcepSerializableObject::printMessage(QString msg, QDateTime dt) const
   if (parent) {
     parent->printMessage(msg, dt);
   } else {
-    printf("MESSAGE: %s %s\n",
-           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+    QcepObject::printMessage(msg, dt);
   }
 }
 
@@ -40,8 +41,7 @@ void QcepSerializableObject::criticalMessage(QString msg, QDateTime dt) const
   if (parent) {
     parent->criticalMessage(msg, dt);
   } else {
-    printf("MESSAGE: %s %s\n",
-           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+    QcepObject::criticalMessage(msg, dt);
   }
 }
 
@@ -52,8 +52,7 @@ void QcepSerializableObject::statusMessage(QString msg, QDateTime dt) const
   if (parent) {
     parent->statusMessage(msg, dt);
   } else {
-    printf("MESSAGE: %s %s\n",
-           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+    QcepObject::statusMessage(msg, dt);
   }
 }
 
