@@ -715,4 +715,7 @@ TODO("2016-05-29", "",
 TODO("2016-06-01", "",
      "Reinstate experiment autosaver");
 
+TODO("2016-06-02", "",
+     "Allow rotation of ROIs, allow polygonal ROIs");
+
 #endif // TODO_H
