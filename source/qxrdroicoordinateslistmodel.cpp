@@ -26,9 +26,10 @@ void QxrdROICoordinatesListModel::readSettings(QSettings *settings, QString sect
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
-    int roiType = settings->value("roiType", 0).toInt();
+    int roiOuterType = settings->value("roiOuterType", 0).toInt();
+    int roiInnerType = settings->value("roiInnerType", 0).toInt();
 
-    QxrdROICoordinatesPtr roi = newROI(roiType);
+    QxrdROICoordinatesPtr roi = newROI(roiOuterType, roiInnerType);
 
     if (roi) {
       roi->readSettings(settings, "");
@@ -123,8 +124,10 @@ QVariant QxrdROICoordinatesListModel::data(const QModelIndex &index, int role) c
         return c->get_XGradient();
       } else if (col == YGradientCol) {
         return c->get_YGradient();
-      } else if (col == TypeCol) {
-        return c->get_RoiTypeName();
+      } else if (col == OuterTypeCol) {
+        return c->get_RoiOuterTypeName();
+      } else if (col == InnerTypeCol) {
+        return c->get_RoiInnerTypeName();
       } else if (col == CenterXCol) {
         return c->get_Coords().center().x();
       } else if (col == CenterYCol) {
@@ -133,10 +136,10 @@ QVariant QxrdROICoordinatesListModel::data(const QModelIndex &index, int role) c
         return c->get_Coords().width();
       } else if (col == HeightCol) {
         return c->get_Coords().height();
-      } else if (col == Width2Col) {
-        return c->get_Width2();
-      } else if (col == Height2Col) {
-        return c->get_Height2();
+//      } else if (col == Width2Col) {
+//        return c->get_Width2();
+//      } else if (col == Height2Col) {
+//        return c->get_Height2();
       }
     }
   }
@@ -166,8 +169,10 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
         return "XGrad";
       } else if (section == YGradientCol) {
         return "YGrad";
-      } else if (section == TypeCol) {
-        return "Type";
+      } else if (section == OuterTypeCol) {
+        return "Bkgd Type";
+      } else if (section == InnerTypeCol) {
+        return "Peak Type";
       } else if (section == CenterXCol) {
         return "CenterX";
       } else if (section == CenterYCol) {
@@ -176,10 +181,10 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
         return "Width";
       } else if (section == HeightCol) {
         return "Height";
-      } else if (section == Width2Col) {
-        return "Wd 2";
-      } else if (section == Height2Col) {
-        return "Ht 2";
+//      } else if (section == Width2Col) {
+//        return "Wd 2";
+//      } else if (section == Height2Col) {
+//        return "Ht 2";
       }
     } else if (role == Qt::TextAlignmentRole) {
       return Qt::AlignHCenter;
@@ -194,13 +199,14 @@ Qt::ItemFlags QxrdROICoordinatesListModel::flags(const QModelIndex &index) const
   int row = index.row();
   int col = index.column();
 
-  if (col == TypeCol ||
+  if (col == OuterTypeCol ||
+      col == InnerTypeCol ||
       col == CenterXCol ||
       col == CenterYCol ||
       col == WidthCol ||
-      col == HeightCol ||
+      col == HeightCol/* ||
       col == Width2Col ||
-      col == Height2Col) {
+      col == Height2Col*/) {
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
   } else {
     return QAbstractListModel::flags(index);
@@ -232,8 +238,10 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
         c->set_XGradient(value.toDouble());
       } else if (col == YGradientCol) {
         c->set_YGradient(value.toDouble());
-      } else if (col == TypeCol) {
-        c->selectNamedROIType(value.toString());
+      } else if (col == OuterTypeCol) {
+        c->selectNamedROIOuterType(value.toString());
+      } else if (col == InnerTypeCol) {
+        c->selectNamedROIInnerType(value.toString());
       } else if (col == CenterXCol) {
         c->setCenterX(value.toDouble());
       } else if (col == CenterYCol) {
@@ -242,10 +250,10 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
         c->setWidth(value.toDouble());
       } else if (col == HeightCol) {
         c->setHeight(value.toDouble());
-      } else if (col == Width2Col) {
-        c->setWidth2(value.toDouble());
-      } else if (col == Height2Col) {
-        c->setHeight2(value.toDouble());
+//      } else if (col == Width2Col) {
+//        c->setWidth2(value.toDouble());
+//      } else if (col == Height2Col) {
+//        c->setHeight2(value.toDouble());
       } else {
         return false;
       }
@@ -260,9 +268,9 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
   return false;
 }
 
-QxrdROICoordinatesPtr QxrdROICoordinatesListModel::newROI(int roiType)
+QxrdROICoordinatesPtr QxrdROICoordinatesListModel::newROI(int roiOuterType, int roiInnerType)
 {
-  QxrdROICoordinates *coord = new QxrdROICoordinates(roiType);
+  QxrdROICoordinates *coord = new QxrdROICoordinates(roiOuterType, roiInnerType);
 
   coord->moveToThread(thread());
 

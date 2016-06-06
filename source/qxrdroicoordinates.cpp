@@ -2,18 +2,22 @@
 #include "qxrdexperiment.h"
 #include <QtMath>
 #include <QMatrix4x4>
+#include "qxrdroishape.h"
 
-QxrdROICoordinates::QxrdROICoordinates(int                   roiType,
+QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
+                                       int                   roiInnerType,
                                        double                left,
                                        double                top,
                                        double                right,
                                        double                bottom)
   : QcepSerializableObject("coords"),
-    m_RoiType(this, "roiType", roiType, "ROI Type"),
-    m_RoiTypeName(this, "roiTypeName", roiTypeName(roiType), "ROI Type Name"),
+    m_RoiOuterType(this, "roiOuterType", roiOuterType, "ROI Outer Type"),
+    m_RoiInnerType(this, "roiInnerType", roiInnerType, "ROI Inner Type"),
+    m_RoiOuterTypeName(this, "roiOuterTypeName", QxrdROIShape::roiTypeName(roiOuterType), "ROI Outer Type Name"),
+    m_RoiInnerTypeName(this, "roiInnerTypeName", QxrdROIShape::roiTypeName(roiInnerType), "ROI Inner Type Name"),
     m_Coords(this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords"),
-    m_Width2(this, "width2", 0, "Width of inner region"),
-    m_Height2(this, "height2", 0, "Height of inner region"),
+//    m_Width2(this, "width2", 0, "Width of inner region"),
+//    m_Height2(this, "height2", 0, "Height of inner region"),
     m_Sum(this, "sum", 0, "ROI Pixel Sum"),
     m_Average(this, "average", 0, "ROI Pixel Average"),
     m_Minimum(this, "minimum", 0, "ROI Pixel Minimum"),
@@ -47,272 +51,166 @@ void QxrdROICoordinates::fromScriptValue(const QScriptValue &obj, QxrdROICoordin
   }
 }
 
-QString QxrdROICoordinates::roiTypeName(int roiType)
+int QxrdROICoordinates::roiTypeID(int outerType, int innerType)
 {
-  if (roiType == Rectangle) {
-    return "Rectangle";
-  } else if (roiType == Ellipse) {
-    return "Ellipse";
-  } else if (roiType == RectangleInRectangle) {
-    return "Rectangle inside Rectangle";
-  } else if (roiType == EllipseInRectangle) {
-    return "Ellipse inside Rectangle";
-  } else if (roiType == RectangleInEllipse) {
-    return "Rectangle inside Ellipse";
-  } else if (roiType == EllipseInEllipse) {
-    return "Ellipse inside Ellipse";
-  }
-
-  return "";
+  return (outerType & 15) + ((innerType & 15)<<4);
 }
 
-void QxrdROICoordinates::selectNamedROIType(QString nm)
+QString QxrdROICoordinates::roiTypeName(int outerType, int innerType)
 {
-  for (int i=0; i<roiTypeCount(); i++) {
-    if (roiTypeName(i) == nm) {
-      set_RoiType(i);
-      set_RoiTypeName(nm);
+  if (outerType == QxrdROIShape::NoShape) {
+    return QxrdROIShape::roiTypeName(innerType);
+  } else {
+    return QxrdROIShape::roiTypeName(innerType) + " in " + QxrdROIShape::roiTypeName(outerType);
+  }
+}
+
+int QxrdROICoordinates::roiOuterType(int roiTypeID)
+{
+  return roiTypeID & 15;
+}
+
+int QxrdROICoordinates::roiInnerType(int roiTypeID)
+{
+  return (roiTypeID>>4) & 15;
+}
+
+QxrdROICoordinatesPtr QxrdROICoordinates::newROICoordinates(int roiTypeID)
+{
+  int outerType = roiOuterType(roiTypeID);
+  int innerType = roiInnerType(roiTypeID);
+
+  QxrdROICoordinatesPtr res = QxrdROICoordinatesPtr(
+        new QxrdROICoordinates(outerType, innerType));
+
+  return res;
+}
+
+void QxrdROICoordinates::selectNamedROIOuterType(QString nm)
+{
+  for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
+    if (QxrdROIShape::roiTypeName(i) == nm) {
+      set_RoiOuterType(i);
+      set_RoiOuterTypeName(nm);
       emit roiChanged();
       return;
     }
   }
 }
 
-int QxrdROICoordinates::roiTypeCount()
+void QxrdROICoordinates::selectNamedROIInnerType(QString nm)
 {
-  return ROITypeCount;
+  for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
+    if (QxrdROIShape::roiTypeName(i) == nm) {
+      set_RoiInnerType(i);
+      set_RoiInnerTypeName(nm);
+      emit roiChanged();
+      return;
+    }
+  }
 }
 
-double QxrdROICoordinates::left() const
-{
-  return get_Coords().left();
-}
+//double QxrdROICoordinates::width2() const
+//{
+//  return get_Width2();
+//}
 
-double QxrdROICoordinates::top() const
-{
-  return get_Coords().top();
-}
+//double QxrdROICoordinates::height2() const
+//{
+//  return get_Height2();
+//}
 
-double QxrdROICoordinates::right() const
-{
-  return get_Coords().right();
-}
+//QSizeF QxrdROICoordinates::size2() const
+//{
+//  return QSizeF(get_Width2(), get_Height2());
+//}
 
-double QxrdROICoordinates::bottom() const
-{
-  return get_Coords().bottom();
-}
+//double QxrdROICoordinates::left2() const
+//{
+//  return center().x() - width2()/2.0;
+//}
 
-double QxrdROICoordinates::width() const
-{
-  return get_Coords().width();
-}
+//double QxrdROICoordinates::right2() const
+//{
+//  return center().x() + width2()/2.0;
+//}
 
-double QxrdROICoordinates::height() const
-{
-  return get_Coords().height();
-}
+//double QxrdROICoordinates::top2() const
+//{
+//  return center().y() - height2()/2.0;
+//}
 
-QPointF QxrdROICoordinates::center() const
-{
-  return get_Coords().center();
-}
+//double QxrdROICoordinates::bottom2() const
+//{
+//  return center().y() + height2()/2.0;
+//}
 
-QSizeF QxrdROICoordinates::size() const
-{
-  return get_Coords().size();
-}
+//void QxrdROICoordinates::setSize2(QSizeF s)
+//{
+//  set_Width2(s.width());
+//  set_Height2(s.height());
 
-double QxrdROICoordinates::width2() const
-{
-  return get_Width2();
-}
+//  emit roiChanged();
+//}
 
-double QxrdROICoordinates::height2() const
-{
-  return get_Height2();
-}
+//void QxrdROICoordinates::setSize2(double w, double h)
+//{
+//  setSize2(QSizeF(w,h));
+//}
 
-QSizeF QxrdROICoordinates::size2() const
-{
-  return QSizeF(get_Width2(), get_Height2());
-}
+//void QxrdROICoordinates::setWidth2(double w)
+//{
+//  set_Width2(w);
 
-double QxrdROICoordinates::left2() const
-{
-  return center().x() - width2()/2.0;
-}
+//  emit roiChanged();
+//}
 
-double QxrdROICoordinates::right2() const
-{
-  return center().x() + width2()/2.0;
-}
+//void QxrdROICoordinates::setHeight2(double w)
+//{
+//  set_Height2(w);
 
-double QxrdROICoordinates::top2() const
-{
-  return center().y() - height2()/2.0;
-}
-
-double QxrdROICoordinates::bottom2() const
-{
-  return center().y() + height2()/2.0;
-}
-
-void QxrdROICoordinates::setLeft(double l)
-{
-  QRectF c = get_Coords();
-
-  c.setLeft(l);
-
-  set_Coords(c);
-
-  emit roiChanged();
-}
-
-void QxrdROICoordinates::setTop(double t)
-{
-  QRectF c = get_Coords();
-
-  c.setTop(t);
-
-  set_Coords(c);
-
-  emit roiChanged();
-}
-
-void QxrdROICoordinates::setRight(double r)
-{
-  QRectF c = get_Coords();
-
-  c.setRight(r);
-
-  set_Coords(c);
-
-  emit roiChanged();
-}
-
-void QxrdROICoordinates::setBottom(double b)
-{
-  QRectF c = get_Coords();
-
-  c.setBottom(b);
-
-  set_Coords(c);
-
-  emit roiChanged();
-}
+//  emit roiChanged();
+//}
 
 void QxrdROICoordinates::setCenter(QPointF c)
 {
-  QRectF crd = get_Coords();
+  if (m_OuterShape) {
+    m_OuterShape->setCenter(c);
+  }
 
-  crd.moveCenter(c);
-
-  set_Coords(crd);
-
-  emit roiChanged();
-}
-
-void QxrdROICoordinates::setCenter(double cx, double cy)
-{
-  setCenter(QPointF(cx, cy));
-}
-
-void QxrdROICoordinates::setSize(QSizeF s)
-{
-  QRectF c = get_Coords();
-  QPointF cen = c.center();
-
-  c.setSize(s);
-  c.moveCenter(cen);
-
-  set_Coords(c);
-
-  emit roiChanged();
-}
-
-void QxrdROICoordinates::setSize(double w, double h)
-{
-  setSize(QSizeF(w,h));
+  if (m_InnerShape) {
+    m_InnerShape->setCenter(c);
+  }
 }
 
 void QxrdROICoordinates::setCenterX(double cx)
 {
-  QRectF  c = get_Coords();
-  QPointF cen = c.center();
+  if (m_OuterShape) {
+    m_OuterShape->setCenterX(cx);
+  }
 
-  cen.setX(cx);
-  c.moveCenter(cen);
-
-  set_Coords(c);
-
-  emit roiChanged();
+  if (m_InnerShape) {
+    m_InnerShape->setCenterX(cx);
+  }
 }
 
 void QxrdROICoordinates::setCenterY(double cy)
 {
-  QRectF  c = get_Coords();
-  QPointF cen = c.center();
+  if (m_OuterShape) {
+    m_OuterShape->setCenterY(cy);
+  }
 
-  cen.setY(cy);
-  c.moveCenter(cen);
-
-  set_Coords(c);
-
-  emit roiChanged();
+  if (m_InnerShape) {
+    m_InnerShape->setCenterY(cy);
+  }
 }
 
 void QxrdROICoordinates::setWidth(double w)
 {
-  QRectF c = get_Coords();
-  QPointF cen = c.center();
-
-  c.setWidth(w);
-  c.moveCenter(cen);
-
-  set_Coords(c);
-
-  emit roiChanged();
 }
 
 void QxrdROICoordinates::setHeight(double h)
 {
-  QRectF c = get_Coords();
-  QPointF cen = c.center();
-
-  c.setHeight(h);
-  c.moveCenter(cen);
-
-  set_Coords(c);
-
-  emit roiChanged();
-}
-
-void QxrdROICoordinates::setSize2(QSizeF s)
-{
-  set_Width2(s.width());
-  set_Height2(s.height());
-
-  emit roiChanged();
-}
-
-void QxrdROICoordinates::setSize2(double w, double h)
-{
-  setSize2(QSizeF(w,h));
-}
-
-void QxrdROICoordinates::setWidth2(double w)
-{
-  set_Width2(w);
-
-  emit roiChanged();
-}
-
-void QxrdROICoordinates::setHeight2(double w)
-{
-  set_Height2(w);
-
-  emit roiChanged();
 }
 
 QVector<QPointF> QxrdROICoordinates::markerCoords()
@@ -320,8 +218,8 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
   QVector<QPointF> res;
   QRectF c = get_Coords();
 
-  switch (get_RoiType()) {
-  case Rectangle:
+  switch (get_RoiOuterType()) {
+  case QxrdROIShape::RectangleShape:
   default:
     {
       res.append(c.topLeft());
@@ -332,7 +230,7 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
     }
     break;
 
-  case Ellipse:
+  case QxrdROIShape::EllipseShape:
     {
       double a=c.width()/2.0;
       double b=c.height()/2.0;
@@ -348,108 +246,108 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
     }
     break;
 
-  case RectangleInRectangle:
-    {
-      QRectF pkr;
-      pkr.setSize(size2());
-      pkr.moveCenter(c.center());
+//  case RectangleInRectangle:
+//    {
+//      QRectF pkr;
+//      pkr.setSize(size2());
+//      pkr.moveCenter(c.center());
 
-      res.append(c.topLeft());
-      res.append(c.bottomLeft());
-      res.append(c.bottomRight());
-      res.append(c.topRight());
-      res.append(c.topLeft());
+//      res.append(c.topLeft());
+//      res.append(c.bottomLeft());
+//      res.append(c.bottomRight());
+//      res.append(c.topRight());
+//      res.append(c.topLeft());
 
-      res.append(QPointF(qQNaN(), qQNaN()));
+//      res.append(QPointF(qQNaN(), qQNaN()));
 
-      res.append(pkr.topLeft());
-      res.append(pkr.bottomLeft());
-      res.append(pkr.bottomRight());
-      res.append(pkr.topRight());
-      res.append(pkr.topLeft());
-    }
-    break;
+//      res.append(pkr.topLeft());
+//      res.append(pkr.bottomLeft());
+//      res.append(pkr.bottomRight());
+//      res.append(pkr.topRight());
+//      res.append(pkr.topLeft());
+//    }
+//    break;
 
-  case RectangleInEllipse:
-    {
-      QRectF pkr;
-      pkr.setSize(size2());
-      pkr.moveCenter(c.center());
+//  case RectangleInEllipse:
+//    {
+//      QRectF pkr;
+//      pkr.setSize(size2());
+//      pkr.moveCenter(c.center());
 
-      double a=c.width()/2.0;
-      double b=c.height()/2.0;
-      QPointF cen = c.center();
+//      double a=c.width()/2.0;
+//      double b=c.height()/2.0;
+//      QPointF cen = c.center();
 
-      for (int i=0; i<=16; i++) {
-        double theta = M_PI*i/8.0;
-        double x = cen.x() + a*cos(theta);
-        double y = cen.y() + b*sin(theta);
+//      for (int i=0; i<=16; i++) {
+//        double theta = M_PI*i/8.0;
+//        double x = cen.x() + a*cos(theta);
+//        double y = cen.y() + b*sin(theta);
 
-        res.append(QPointF(x,y));
-      }
+//        res.append(QPointF(x,y));
+//      }
 
-      res.append(QPointF(qQNaN(), qQNaN()));
+//      res.append(QPointF(qQNaN(), qQNaN()));
 
-      res.append(pkr.topLeft());
-      res.append(pkr.bottomLeft());
-      res.append(pkr.bottomRight());
-      res.append(pkr.topRight());
-      res.append(pkr.topLeft());
-    }
-    break;
+//      res.append(pkr.topLeft());
+//      res.append(pkr.bottomLeft());
+//      res.append(pkr.bottomRight());
+//      res.append(pkr.topRight());
+//      res.append(pkr.topLeft());
+//    }
+//    break;
 
-  case EllipseInRectangle:
-    {
-      res.append(c.topLeft());
-      res.append(c.bottomLeft());
-      res.append(c.bottomRight());
-      res.append(c.topRight());
-      res.append(c.topLeft());
+//  case EllipseInRectangle:
+//    {
+//      res.append(c.topLeft());
+//      res.append(c.bottomLeft());
+//      res.append(c.bottomRight());
+//      res.append(c.topRight());
+//      res.append(c.topLeft());
 
-      res.append(QPointF(qQNaN(), qQNaN()));
+//      res.append(QPointF(qQNaN(), qQNaN()));
 
-      double a2=width2()/2.0;
-      double b2=height2()/2.0;
-      QPointF cen = center();
+//      double a2=width2()/2.0;
+//      double b2=height2()/2.0;
+//      QPointF cen = center();
 
-      for (int i=0; i<=16; i++) {
-        double theta = M_PI*i/8.0;
-        double x = cen.x() + a2*cos(theta);
-        double y = cen.y() + b2*sin(theta);
+//      for (int i=0; i<=16; i++) {
+//        double theta = M_PI*i/8.0;
+//        double x = cen.x() + a2*cos(theta);
+//        double y = cen.y() + b2*sin(theta);
 
-        res.append(QPointF(x,y));
-      }
-    }
-    break;
+//        res.append(QPointF(x,y));
+//      }
+//    }
+//    break;
 
-  case EllipseInEllipse:
-    {
-      double a=c.width()/2.0;
-      double b=c.height()/2.0;
-      QPointF cen = c.center();
+//  case EllipseInEllipse:
+//    {
+//      double a=c.width()/2.0;
+//      double b=c.height()/2.0;
+//      QPointF cen = c.center();
 
-      for (int i=0; i<=16; i++) {
-        double theta = M_PI*i/8.0;
-        double x = cen.x() + a*cos(theta);
-        double y = cen.y() + b*sin(theta);
+//      for (int i=0; i<=16; i++) {
+//        double theta = M_PI*i/8.0;
+//        double x = cen.x() + a*cos(theta);
+//        double y = cen.y() + b*sin(theta);
 
-        res.append(QPointF(x,y));
-      }
+//        res.append(QPointF(x,y));
+//      }
 
-      res.append(QPointF(qQNaN(), qQNaN()));
+//      res.append(QPointF(qQNaN(), qQNaN()));
 
-      double a2=width2()/2.0;
-      double b2=height2()/2.0;
+//      double a2=width2()/2.0;
+//      double b2=height2()/2.0;
 
-      for (int i=0; i<=16; i++) {
-        double theta = M_PI*i/8.0;
-        double x = cen.x() + a2*cos(theta);
-        double y = cen.y() + b2*sin(theta);
+//      for (int i=0; i<=16; i++) {
+//        double theta = M_PI*i/8.0;
+//        double x = cen.x() + a2*cos(theta);
+//        double y = cen.y() + b2*sin(theta);
 
-        res.append(QPointF(x,y));
-      }
-    }
-    break;
+//        res.append(QPointF(x,y));
+//      }
+//    }
+//    break;
   }
 
   return res;
@@ -475,27 +373,22 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
   int outerBounds = NoBounds;
   int innerBounds = NoBounds;
 
-  switch (get_RoiType()) {
-  case Rectangle:
+  switch (get_RoiOuterType()) {
+  case QxrdROIShape::RectangleShape:
     outerBounds = RectangleBounds;
     break;
-  case Ellipse:
+
+  case QxrdROIShape::EllipseShape:
     outerBounds = EllipseBounds;
     break;
-  case RectangleInRectangle:
-    outerBounds = RectangleBounds;
+  }
+
+  switch (get_RoiInnerType()) {
+  case QxrdROIShape::RectangleShape:
     innerBounds = RectangleBounds;
     break;
-  case RectangleInEllipse:
-    outerBounds = EllipseBounds;
-    innerBounds = RectangleBounds;
-    break;
-  case EllipseInRectangle:
-    outerBounds = RectangleBounds;
-    innerBounds = EllipseBounds;
-    break;
-  case EllipseInEllipse:
-    outerBounds = EllipseBounds;
+
+  case QxrdROIShape::EllipseShape:
     innerBounds = EllipseBounds;
     break;
   }
@@ -523,22 +416,22 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
   double grady = 0;
 
   if (img) {
-    int tp = qRound(top());
-    int bt = qRound(bottom());
-    int lf = qRound(left());
-    int rt = qRound(right());
+    int tp = qRound(m_OuterShape->top());
+    int bt = qRound(m_OuterShape->bottom());
+    int lf = qRound(m_OuterShape->left());
+    int rt = qRound(m_OuterShape->right());
 
-    int tp2 = qRound(top2());
-    int bt2 = qRound(bottom2());
-    int lf2 = qRound(left2());
-    int rt2 = qRound(right2());
+    int tp2 = qRound(m_InnerShape->top());
+    int bt2 = qRound(m_InnerShape->bottom());
+    int lf2 = qRound(m_InnerShape->left());
+    int rt2 = qRound(m_InnerShape->right());
 
-    double cx = center().x();
-    double cy = center().y();
-    double a  = width()/2.0;
-    double b  = height()/2.0;
-    double a2 = width2()/2.0;
-    double b2 = height2()/2.0;
+    double cx = m_OuterShape->center().x();
+    double cy = m_OuterShape->center().y();
+    double a  = m_OuterShape->width()/2.0;
+    double b  = m_OuterShape->height()/2.0;
+    double a2 = m_InnerShape->width()/2.0;
+    double b2 = m_InnerShape->height()/2.0;
 
     for (int row=tp; row<=bt; row++) {
       double dy = row - cy;

@@ -65,13 +65,14 @@ public:
     BackgroundCol,
     XGradientCol,
     YGradientCol,
-    TypeCol,
+    OuterTypeCol,
+    InnerTypeCol,
     CenterXCol,
     CenterYCol,
     WidthCol,
     HeightCol,
-    Width2Col,
-    Height2Col,
+//    Width2Col,
+//    Height2Col,
     ColCount
   };
 
@@ -82,7 +83,7 @@ public slots:
   void onROIsChanged();
 
 private:
-  QxrdROICoordinatesPtr newROI(int roiType);
+  QxrdROICoordinatesPtr newROI(int roiOuterType, int roiInnerType);
 
 private:
   QMutex                         m_Mutex;

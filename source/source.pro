@@ -383,7 +383,12 @@ HEADERS += TODO.h \
     qxrddetectorsettingsfilewatcher-ptr.h \
     qxrddetectorsettingsepicsarea-ptr.h \
     qxrdexperimentthread.h \
-    qxrdexperimentthread-ptr.h
+    qxrdexperimentthread-ptr.h \
+    qxrdroishape.h \
+    qxrdroirectangle.h \
+    qxrdroiellipse.h \
+    qxrdroipolygon.h \
+    qxrdroishape-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -563,7 +568,11 @@ SOURCES += qxrd.cpp \
     qxrddetectordriverepicsarea.cpp \
     qxrddetectorsettingsepicsarea.cpp \
     qxrddetectordriverthread.cpp \
-    qxrdexperimentthread.cpp
+    qxrdexperimentthread.cpp \
+    qxrdroishape.cpp \
+    qxrdroirectangle.cpp \
+    qxrdroiellipse.cpp \
+    qxrdroipolygon.cpp
 
 OTHER_FILES += testImage.js
 

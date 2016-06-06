@@ -13,6 +13,7 @@
 #include "qcepmutexlocker.h"
 #include "qxrddetectorsettings.h"
 #include "qxrdroitypedelegate.h"
+#include "qxrdroishape.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,
                                                      QxrdAcquisitionWPtr       acq,
@@ -85,7 +86,8 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        e
     if (calc) {
       m_ROIModel = calc->roiModel();
 
-      m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::TypeCol, new QxrdROITypeDelegate());
+      m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::OuterTypeCol, new QxrdROITypeDelegate());
+      m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::InnerTypeCol, new QxrdROITypeDelegate());
       m_ROIWidget->setModel(m_ROIModel.data());
 
       connect(m_NewROI,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doAppendROI);
@@ -211,20 +213,23 @@ void QxrdDetectorControlWindow::doAppendROI()
   if (roiModel) {
     QMenu menu;
 
-    for (int i=0; i<QxrdROICoordinates::roiTypeCount(); i++) {
-      QAction *a = new QAction(QxrdROICoordinates::roiTypeName(i), &menu);
-      a->setData(i);
+    for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
+      for (int j=1; j<QxrdROIShape::roiTypeCount(); j++) {
+        int t = QxrdROICoordinates::roiTypeID(i,j);
+        QAction *a = new QAction(QxrdROICoordinates::roiTypeName(i,j), &menu);
+        a->setData(t);
 
-      menu.addAction(a);
+        menu.addAction(a);
+      }
     }
 
     QAction *choice = menu.exec(QCursor::pos());
 
     if (choice) {
-      int roiType = choice->data().toInt();
+      int roiTypeID = choice->data().toInt();
 
       QxrdROICoordinatesPtr roi =
-          QxrdROICoordinatesPtr(new QxrdROICoordinates(roiType));
+          QxrdROICoordinates::newROICoordinates(roiTypeID);
 
       roiModel->append(roi);
     }
