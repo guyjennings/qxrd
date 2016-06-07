@@ -3,6 +3,7 @@
 #include <QtMath>
 #include <QMatrix4x4>
 #include "qxrdroishape.h"
+#include "qcepmutexlocker.h"
 
 QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
                                        int                   roiInnerType,
@@ -25,12 +26,45 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
     m_NPixels(this, "nPixels", 0, "ROI N Pixels"),
     m_Background(this, "background", 0, "ROI Background"),
     m_XGradient(this, "xGradient", 0, "ROI X Gradient"),
-    m_YGradient(this, "yGradient", 0, "ROI Y Gradient")
+    m_YGradient(this, "yGradient", 0, "ROI Y Gradient"),
+    m_Mutex(QMutex::Recursive)
 {
+  m_OuterShape = QxrdROIShape::newROIShape(roiOuterType);
+  m_InnerShape = QxrdROIShape::newROIShape(roiInnerType);
 }
 
 QxrdROICoordinates::~QxrdROICoordinates()
 {
+}
+
+void QxrdROICoordinates::writeSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepSerializableObject::writeSettings(settings, section);
+
+  if (m_OuterShape) {
+    m_OuterShape->writeSettings(settings, section+"/outer");
+  }
+
+  if (m_InnerShape) {
+    m_InnerShape->writeSettings(settings, section+"/inner");
+  }
+}
+
+void QxrdROICoordinates::readSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepSerializableObject::readSettings(settings, section);
+
+  if (m_OuterShape) {
+    m_OuterShape->readSettings(settings, section+"/outer");
+  }
+
+  if (m_InnerShape) {
+    m_InnerShape->readSettings(settings, section+"/inner");
+  }
 }
 
 QScriptValue QxrdROICoordinates::toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesPtr &coords)
@@ -84,6 +118,16 @@ QxrdROICoordinatesPtr QxrdROICoordinates::newROICoordinates(int roiTypeID)
         new QxrdROICoordinates(outerType, innerType));
 
   return res;
+}
+
+QxrdROIShapePtr QxrdROICoordinates::outer() const
+{
+  return m_OuterShape;
+}
+
+QxrdROIShapePtr QxrdROICoordinates::inner() const
+{
+  return m_InnerShape;
 }
 
 void QxrdROICoordinates::selectNamedROIOuterType(QString nm)

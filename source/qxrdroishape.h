@@ -33,6 +33,9 @@ public:
   static int             roiTypeCount();
   static QString         roiTypeName(int roiType);
 
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROIShapePtr &shape);
+  static void fromScriptValue(const QScriptValue &obj, QxrdROIShapePtr &shape);
+
   double left() const;
   double top() const;
   double right() const;

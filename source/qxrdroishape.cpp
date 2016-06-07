@@ -2,6 +2,7 @@
 #include "qxrdroirectangle.h"
 #include "qxrdroiellipse.h"
 #include "qxrdroipolygon.h"
+#include <QScriptEngine>
 
 QxrdROIShape::QxrdROIShape(int shapeType, double left, double top, double right, double bottom)
   : QcepSerializableObject("shape"),
@@ -51,6 +52,24 @@ QString QxrdROIShape::roiTypeName(int roiType)
   }
 
   return "";
+}
+
+QScriptValue QxrdROIShape::toScriptValue(QScriptEngine *engine, const QxrdROIShapePtr &shape)
+{
+  return engine->newQObject(shape.data());
+}
+
+void QxrdROIShape::fromScriptValue(const QScriptValue &obj, QxrdROIShapePtr &shape)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QxrdROIShape *qshape = qobject_cast<QxrdROIShape*>(qobj);
+
+    if (qshape) {
+      shape = QxrdROIShapePtr(qshape);
+    }
+  }
 }
 
 int QxrdROIShape::roiTypeCount()

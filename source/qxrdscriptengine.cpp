@@ -30,6 +30,7 @@
 #include "qcepdatasetmodel.h"
 #include "qxrddetectorprocessor.h"
 #include "qxrdroicalculator.h"
+#include "qxrdroishape.h"
 #include "qxrdroicoordinates.h"
 #include "qxrdroicoordinateslistmodel.h"
 #include "qcepdataexportparameters.h"
@@ -1748,7 +1749,11 @@ QCEP_DOC_FUNCTION(
 
 void QxrdScriptEngine::initialize()
 {
-  qScriptRegisterMetaType(this, QxrdScriptEngine::QPointFToScriptValue, QxrdScriptEngine::QPointFFromScriptValue);
+  qScriptRegisterMetaType(this, QxrdScriptEngine::QPointFToScriptValue,
+                          QxrdScriptEngine::QPointFFromScriptValue);
+
+  qScriptRegisterMetaType(this, QxrdScriptEngine::QRectFToScriptValue,
+                          QxrdScriptEngine::QRectFFromScriptValue);
 
   qRegisterMetaType< QVector<int> >("QVector<int>");
   qRegisterMetaType< QVector<bool> >("QVector<bool>");
@@ -1770,6 +1775,8 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterSequenceMetaType< QVector<double> >(this);
   qScriptRegisterSequenceMetaType< QVector<QString> >(this);
   //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
+
+  qScriptRegisterSequenceMetaType< QcepPolygon >(this);
 
 //  qScriptRegisterMetaType(this,
 //                          QxrdPowderPointProperty::toScriptValue,
@@ -1895,6 +1902,11 @@ void QxrdScriptEngine::initialize()
   qScriptRegisterMetaType(this,
                           QxrdROICalculator::toScriptValue,
                           QxrdROICalculator::fromScriptValue);
+
+  qRegisterMetaType<QxrdROIShapePtr>("QxrdROIShapePtr");
+  qScriptRegisterMetaType(this,
+                          QxrdROIShape::toScriptValue,
+                          QxrdROIShape::fromScriptValue);
 
   qRegisterMetaType<QxrdROICoordinatesPtr>("QxrdROICoordinatesPtr");
   qScriptRegisterMetaType(this,
@@ -2096,18 +2108,38 @@ void QxrdScriptEngine::dumpLocks()
 
 QScriptValue QxrdScriptEngine::QPointFToScriptValue(QScriptEngine *engine, const QPointF &in)
 {
-  QScriptValue obj = engine->newArray(2);
+  QScriptValue obj = engine->newObject();
 
-  obj.setProperty(0, in.x());
-  obj.setProperty(1, in.y());
+  obj.setProperty("x", in.x());
+  obj.setProperty("y", in.y());
 
   return obj;
 }
 
 void         QxrdScriptEngine::QPointFFromScriptValue(const QScriptValue &object, QPointF &pt)
 {
-  pt.setX(object.property(0).toNumber());
-  pt.setY(object.property(1).toNumber());
+  pt.setX(object.property("x").toNumber());
+  pt.setY(object.property("y").toNumber());
+}
+
+QScriptValue QxrdScriptEngine::QRectFToScriptValue(QScriptEngine *engine, const QRectF &in)
+{
+  QScriptValue obj = engine->newObject();
+
+  obj.setProperty("l", in.left());
+  obj.setProperty("t", in.top());
+  obj.setProperty("r", in.right());
+  obj.setProperty("b", in.bottom());
+
+  return obj;
+}
+
+void QxrdScriptEngine::QRectFFromScriptValue(const QScriptValue &object, QRectF &pt)
+{
+  pt.setLeft(object.property("l").toNumber());
+  pt.setTop(object.property("t").toNumber());
+  pt.setRight(object.property("r").toNumber());
+  pt.setBottom(object.property("b").toNumber());
 }
 
 void QxrdScriptEngine::openScriptOutput(const QString& fileName)

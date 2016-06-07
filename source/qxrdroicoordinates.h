@@ -12,6 +12,7 @@
 #include "qxrdroishape-ptr.h"
 
 #include <QScriptEngine>
+#include <QMutex>
 
 class QxrdROICoordinates : public QcepSerializableObject
 {
@@ -39,6 +40,9 @@ public:
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesPtr &coords);
   static void fromScriptValue(const QScriptValue &obj, QxrdROICoordinatesPtr &coords);
+
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
   enum {
     SumOutput,
@@ -76,6 +80,9 @@ public slots:
 
   void selectNamedROIOuterType(QString nm);
   void selectNamedROIInnerType(QString nm);
+
+  QxrdROIShapePtr inner() const;
+  QxrdROIShapePtr outer() const;
 
 //  double left() const;
 //  double top() const;
@@ -125,9 +132,6 @@ private:
 //  void recalculateRectangleInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
 //  void recalculateEllipseInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
 
-  QxrdROIShapePtr m_OuterShape;
-  QxrdROIShapePtr m_InnerShape;
-
 public:
   Q_PROPERTY(int roiOuterType READ get_RoiOuterType WRITE set_RoiOuterType)
   QCEP_INTEGER_PROPERTY(RoiOuterType)
@@ -176,6 +180,11 @@ public:
 
   Q_PROPERTY(double yGradient READ get_YGradient WRITE set_YGradient STORED false)
   QCEP_DOUBLE_PROPERTY(YGradient)
+
+private:
+  QMutex          m_Mutex;
+  QxrdROIShapePtr m_OuterShape;
+  QxrdROIShapePtr m_InnerShape;
 };
 
 #endif // QXRDROICOORDINATES_H

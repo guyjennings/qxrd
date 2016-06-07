@@ -11,8 +11,20 @@ public:
   QxrdROIPolygon(QPolygonF poly);
   QxrdROIPolygon();
 
+public slots:
+  void clear();
+  void append(double x, double y);
+  void append(QPointF pt);
+
+  void setPoint(int n, QPointF val);
+
+  int count();
+  QPointF point(int n);
+  double  x(int n);
+  double  y(int n);
+
 public:
-  Q_PROPERTY(QPolygonF poly READ get_Poly WRITE set_Poly)
+  Q_PROPERTY(QcepPolygon poly READ get_Poly WRITE set_Poly)
   QCEP_POLYGON_PROPERTY(Poly)
 };
 

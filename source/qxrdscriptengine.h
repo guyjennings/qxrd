@@ -117,6 +117,9 @@ private:
   static QScriptValue QPointFToScriptValue(QScriptEngine *engine, const QPointF &in);
   static void         QPointFFromScriptValue(const QScriptValue &object, QPointF &pt);
 
+  static QScriptValue QRectFToScriptValue(QScriptEngine *engine, const QRectF &in);
+  static void         QRectFFromScriptValue(const QScriptValue &object, QRectF &pt);
+
 private:
   mutable QMutex         m_Mutex;
   QxrdApplicationWPtr    m_Application;
