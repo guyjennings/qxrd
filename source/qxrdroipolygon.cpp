@@ -74,3 +74,19 @@ int QxrdROIPolygon::count()
 {
   return get_Poly().size();
 }
+
+int QxrdROIPolygon::markerCount()
+{
+  return get_Poly().count() + 1;
+}
+
+QPointF QxrdROIPolygon::markerPoint(int n)
+{
+  QcepPolygon p = get_Poly();
+
+  if (n >= 0 && n < p.count()) {
+    return p.value(n);
+  } else {
+    return p.value(0);
+  }
+}

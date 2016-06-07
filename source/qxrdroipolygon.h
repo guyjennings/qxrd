@@ -23,6 +23,9 @@ public slots:
   double  x(int n);
   double  y(int n);
 
+  virtual int markerCount();
+  virtual QPointF markerPoint(int n);
+
 public:
   Q_PROPERTY(QcepPolygon poly READ get_Poly WRITE set_Poly)
   QCEP_POLYGON_PROPERTY(Poly)

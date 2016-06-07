@@ -129,13 +129,13 @@ QVariant QxrdROICoordinatesListModel::data(const QModelIndex &index, int role) c
       } else if (col == InnerTypeCol) {
         return c->get_RoiInnerTypeName();
       } else if (col == CenterXCol) {
-        return c->get_Coords().center().x();
+        return c->get_Center().x();
       } else if (col == CenterYCol) {
-        return c->get_Coords().center().y();
-      } else if (col == WidthCol) {
-        return c->get_Coords().width();
-      } else if (col == HeightCol) {
-        return c->get_Coords().height();
+        return c->get_Center().y();
+//      } else if (col == WidthCol) {
+//        return c->get_Coords().width();
+//      } else if (col == HeightCol) {
+//        return c->get_Coords().height();
 //      } else if (col == Width2Col) {
 //        return c->get_Width2();
 //      } else if (col == Height2Col) {
@@ -177,10 +177,10 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
         return "CenterX";
       } else if (section == CenterYCol) {
         return "CenterY";
-      } else if (section == WidthCol) {
-        return "Width";
-      } else if (section == HeightCol) {
-        return "Height";
+//      } else if (section == WidthCol) {
+//        return "Width";
+//      } else if (section == HeightCol) {
+//        return "Height";
 //      } else if (section == Width2Col) {
 //        return "Wd 2";
 //      } else if (section == Height2Col) {
@@ -202,9 +202,9 @@ Qt::ItemFlags QxrdROICoordinatesListModel::flags(const QModelIndex &index) const
   if (col == OuterTypeCol ||
       col == InnerTypeCol ||
       col == CenterXCol ||
-      col == CenterYCol ||
+      col == CenterYCol/* ||
       col == WidthCol ||
-      col == HeightCol/* ||
+      col == HeightCol ||
       col == Width2Col ||
       col == Height2Col*/) {
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
@@ -246,10 +246,10 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
         c->setCenterX(value.toDouble());
       } else if (col == CenterYCol) {
         c->setCenterY(value.toDouble());
-      } else if (col == WidthCol) {
-        c->setWidth(value.toDouble());
-      } else if (col == HeightCol) {
-        c->setHeight(value.toDouble());
+//      } else if (col == WidthCol) {
+//        c->setWidth(value.toDouble());
+//      } else if (col == HeightCol) {
+//        c->setHeight(value.toDouble());
 //      } else if (col == Width2Col) {
 //        c->setWidth2(value.toDouble());
 //      } else if (col == Height2Col) {

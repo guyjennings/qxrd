@@ -69,8 +69,8 @@ public:
     InnerTypeCol,
     CenterXCol,
     CenterYCol,
-    WidthCol,
-    HeightCol,
+//    WidthCol,
+//    HeightCol,
 //    Width2Col,
 //    Height2Col,
     ColCount

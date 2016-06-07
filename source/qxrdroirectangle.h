@@ -15,6 +15,8 @@ public:
   QxrdROIRectangle();
 
 public:
+  virtual int markerCount();
+  virtual QPointF markerPoint(int n);
 };
 
 #endif // QXRDROIRECTANGLE_H

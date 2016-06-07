@@ -388,7 +388,8 @@ HEADERS += TODO.h \
     qxrdroirectangle.h \
     qxrdroiellipse.h \
     qxrdroipolygon.h \
-    qxrdroishape-ptr.h
+    qxrdroishape-ptr.h \
+    qxrdroirasterdata.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -572,7 +573,8 @@ SOURCES += qxrd.cpp \
     qxrdroishape.cpp \
     qxrdroirectangle.cpp \
     qxrdroiellipse.cpp \
-    qxrdroipolygon.cpp
+    qxrdroipolygon.cpp \
+    qxrdroirasterdata.cpp
 
 OTHER_FILES += testImage.js
 

@@ -19,12 +19,7 @@ class QxrdROICoordinates : public QcepSerializableObject
   Q_OBJECT
 
 public:
-  QxrdROICoordinates(int                   roiOuterType,
-                     int                   roiInnerType,
-                     double                left=0,
-                     double                top=0,
-                     double                right=0,
-                     double                bottom=0);
+  QxrdROICoordinates(int roiOuterType, int roiInnerType);
   virtual ~QxrdROICoordinates();
 
   static int     roiTypeID(int outerType, int innerType);
@@ -84,22 +79,18 @@ public slots:
   QxrdROIShapePtr inner() const;
   QxrdROIShapePtr outer() const;
 
+  void outerChanged();
+  void innerChanged();
+
 //  double left() const;
 //  double top() const;
 //  double right() const;
 //  double bottom() const;
 //  double width() const;
 //  double height() const;
-//  double width2() const;
-//  double height2() const;
-//  double left2() const;
-//  double right2() const;
-//  double top2() const;
-//  double bottom2() const;
 
 //  QPointF center() const;
 //  QSizeF size() const;
-//  QSizeF size2() const;
 
 //  void setLeft(double l);
 //  void setTop(double t);
@@ -110,19 +101,16 @@ public slots:
 //  void setCenter(double cx, double cy);
 //  void setSize(QSizeF s);
 //  void setSize(double w, double h);
-//  void setSize2(QSizeF s);
-//  void setSize2(double w, double h);
 
   void setCenterX(double cx);
   void setCenterY(double cy);
-  void setWidth(double w);
-  void setHeight(double h);
-//  void setWidth2(double w);
-//  void setHeight2(double h);
+//  void setWidth(double w);
+//  void setHeight(double h);
 
   QVector<QPointF> markerCoords();
 
 private:
+  void updateBounds();
   void recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis);
 
 //  void recalculateRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
@@ -145,17 +133,11 @@ public:
   Q_PROPERTY(QString roiInnerTypeName READ get_RoiInnerTypeName WRITE set_RoiInnerTypeName STORED false)
   QCEP_STRING_PROPERTY(RoiInnerTypeName)
 
-  Q_PROPERTY(QRectF coords READ get_Coords WRITE set_Coords STORED false)
-  QCEP_DOUBLE_RECT_PROPERTY(Coords)
+  Q_PROPERTY(QPointF center READ get_Center WRITE set_Center)
+  QCEP_DOUBLE_POINT_PROPERTY(Center)
 
-//  Q_PROPERTY(double width2 READ get_Width2 WRITE set_Width2)
-//  QCEP_DOUBLE_PROPERTY(Width2)
-
-//  Q_PROPERTY(double height2 READ get_Height2 WRITE set_Height2)
-//  QCEP_DOUBLE_PROPERTY(Height2)
-
-//  Q_PROPERTY(double value READ get_Value WRITE set_Value STORED false)
-//  QCEP_DOUBLE_PROPERTY(Value)
+  Q_PROPERTY(double  rotation READ get_Rotation WRITE set_Rotation)
+  QCEP_DOUBLE_PROPERTY(Rotation)
 
   Q_PROPERTY(double sum READ get_Sum WRITE set_Sum STORED false)
   QCEP_DOUBLE_PROPERTY(Sum)
@@ -185,6 +167,9 @@ private:
   QMutex          m_Mutex;
   QxrdROIShapePtr m_OuterShape;
   QxrdROIShapePtr m_InnerShape;
+
+  QImage          m_OuterImage;
+  QImage          m_InnerImage;
 };
 
 #endif // QXRDROICOORDINATES_H

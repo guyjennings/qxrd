@@ -13,6 +13,9 @@ public:
                  double right,
                  double bottom);
   QxrdROIEllipse();
+
+  virtual int markerCount();
+  virtual QPointF markerPoint(int n);
 };
 
 #endif // QXRDROIELLIPSE_H

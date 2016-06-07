@@ -60,6 +60,9 @@ public:
   void setWidth(double w);
   void setHeight(double h);
 
+  virtual int markerCount() = 0;
+  virtual QPointF markerPoint(int n) = 0;
+
 public:
   Q_PROPERTY(int shapeType READ get_ShapeType WRITE set_ShapeType)
   QCEP_INTEGER_PROPERTY(ShapeType)

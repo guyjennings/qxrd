@@ -6,19 +6,14 @@
 #include "qcepmutexlocker.h"
 
 QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
-                                       int                   roiInnerType,
-                                       double                left,
-                                       double                top,
-                                       double                right,
-                                       double                bottom)
+                                       int                   roiInnerType)
   : QcepSerializableObject("coords"),
     m_RoiOuterType(this, "roiOuterType", roiOuterType, "ROI Outer Type"),
     m_RoiInnerType(this, "roiInnerType", roiInnerType, "ROI Inner Type"),
     m_RoiOuterTypeName(this, "roiOuterTypeName", QxrdROIShape::roiTypeName(roiOuterType), "ROI Outer Type Name"),
     m_RoiInnerTypeName(this, "roiInnerTypeName", QxrdROIShape::roiTypeName(roiInnerType), "ROI Inner Type Name"),
-    m_Coords(this, "coords", QRectF(left, top, right-left, bottom-top), "ROI Coords"),
-//    m_Width2(this, "width2", 0, "Width of inner region"),
-//    m_Height2(this, "height2", 0, "Height of inner region"),
+    m_Center(this, "center", QPointF(0, 0), "ROI Center"),
+    m_Rotation(this, "rotation", 0, "ROI Rotation"),
     m_Sum(this, "sum", 0, "ROI Pixel Sum"),
     m_Average(this, "average", 0, "ROI Pixel Average"),
     m_Minimum(this, "minimum", 0, "ROI Pixel Minimum"),
@@ -31,6 +26,12 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
 {
   m_OuterShape = QxrdROIShape::newROIShape(roiOuterType);
   m_InnerShape = QxrdROIShape::newROIShape(roiInnerType);
+
+  connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::outerChanged);
+  connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::innerChanged);
+
+  outerChanged();
+  innerChanged();
 }
 
 QxrdROICoordinates::~QxrdROICoordinates()
@@ -65,6 +66,9 @@ void QxrdROICoordinates::readSettings(QSettings *settings, QString section)
   if (m_InnerShape) {
     m_InnerShape->readSettings(settings, section+"/inner");
   }
+
+  outerChanged();
+  innerChanged();
 }
 
 QScriptValue QxrdROICoordinates::toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesPtr &coords)
@@ -154,244 +158,81 @@ void QxrdROICoordinates::selectNamedROIInnerType(QString nm)
   }
 }
 
-//double QxrdROICoordinates::width2() const
-//{
-//  return get_Width2();
-//}
+void QxrdROICoordinates::updateBounds()
+{
+//  if (m_OuterShape) {
+//    QRectF r = m_OuterShape->get_Coords();
 
-//double QxrdROICoordinates::height2() const
-//{
-//  return get_Height2();
-//}
+//    if (m_InnerShape) {
+//      QRectF r1 = m_InnerShape->get_Coords();
 
-//QSizeF QxrdROICoordinates::size2() const
-//{
-//  return QSizeF(get_Width2(), get_Height2());
-//}
+//      set_Coords(r | r1);
+//    } else {
+//      set_Coords(r);
+//    }
+//  } else if (m_InnerShape) {
+//    set_Coords(m_InnerShape->get_Coords());
+//  }
+}
 
-//double QxrdROICoordinates::left2() const
-//{
-//  return center().x() - width2()/2.0;
-//}
+void QxrdROICoordinates::outerChanged()
+{
+  updateBounds();
 
-//double QxrdROICoordinates::right2() const
-//{
-//  return center().x() + width2()/2.0;
-//}
+  emit roiChanged();
+}
 
-//double QxrdROICoordinates::top2() const
-//{
-//  return center().y() - height2()/2.0;
-//}
+void QxrdROICoordinates::innerChanged()
+{
+  updateBounds();
 
-//double QxrdROICoordinates::bottom2() const
-//{
-//  return center().y() + height2()/2.0;
-//}
-
-//void QxrdROICoordinates::setSize2(QSizeF s)
-//{
-//  set_Width2(s.width());
-//  set_Height2(s.height());
-
-//  emit roiChanged();
-//}
-
-//void QxrdROICoordinates::setSize2(double w, double h)
-//{
-//  setSize2(QSizeF(w,h));
-//}
-
-//void QxrdROICoordinates::setWidth2(double w)
-//{
-//  set_Width2(w);
-
-//  emit roiChanged();
-//}
-
-//void QxrdROICoordinates::setHeight2(double w)
-//{
-//  set_Height2(w);
-
-//  emit roiChanged();
-//}
+  emit roiChanged();
+}
 
 void QxrdROICoordinates::setCenter(QPointF c)
 {
-  if (m_OuterShape) {
-    m_OuterShape->setCenter(c);
-  }
-
-  if (m_InnerShape) {
-    m_InnerShape->setCenter(c);
-  }
+  set_Center(c);
 }
 
 void QxrdROICoordinates::setCenterX(double cx)
 {
-  if (m_OuterShape) {
-    m_OuterShape->setCenterX(cx);
-  }
+  QPointF c = get_Center();
 
-  if (m_InnerShape) {
-    m_InnerShape->setCenterX(cx);
-  }
+  c.setX(cx);
+
+  set_Center(c);
 }
 
 void QxrdROICoordinates::setCenterY(double cy)
 {
-  if (m_OuterShape) {
-    m_OuterShape->setCenterY(cy);
-  }
+  QPointF c = get_Center();
 
-  if (m_InnerShape) {
-    m_InnerShape->setCenterY(cy);
-  }
-}
+  c.setY(cy);
 
-void QxrdROICoordinates::setWidth(double w)
-{
-}
-
-void QxrdROICoordinates::setHeight(double h)
-{
+  set_Center(c);
 }
 
 QVector<QPointF> QxrdROICoordinates::markerCoords()
 {
   QVector<QPointF> res;
-  QRectF c = get_Coords();
+  QPointF c = get_Center();
 
-  switch (get_RoiOuterType()) {
-  case QxrdROIShape::RectangleShape:
-  default:
-    {
-      res.append(c.topLeft());
-      res.append(c.bottomLeft());
-      res.append(c.bottomRight());
-      res.append(c.topRight());
-      res.append(c.topLeft());
+  res.append(c);
+
+  if (m_OuterShape) {
+    res.append(QPointF(qQNaN(), qQNaN()));
+
+    for (int i=0; i<m_OuterShape->markerCount(); i++) {
+      res.append(c + m_OuterShape->markerPoint(i));
     }
-    break;
+  }
 
-  case QxrdROIShape::EllipseShape:
-    {
-      double a=c.width()/2.0;
-      double b=c.height()/2.0;
-      QPointF cen = c.center();
+  if (m_InnerShape) {
+    res.append(QPointF(qQNaN(), qQNaN()));
 
-      for (int i=0; i<=16; i++) {
-        double theta = M_PI*i/8.0;
-        double x = cen.x() + a*cos(theta);
-        double y = cen.y() + b*sin(theta);
-
-        res.append(QPointF(x,y));
-      }
+    for (int i=0; i<m_InnerShape->markerCount(); i++) {
+      res.append(c + m_InnerShape->markerPoint(i));
     }
-    break;
-
-//  case RectangleInRectangle:
-//    {
-//      QRectF pkr;
-//      pkr.setSize(size2());
-//      pkr.moveCenter(c.center());
-
-//      res.append(c.topLeft());
-//      res.append(c.bottomLeft());
-//      res.append(c.bottomRight());
-//      res.append(c.topRight());
-//      res.append(c.topLeft());
-
-//      res.append(QPointF(qQNaN(), qQNaN()));
-
-//      res.append(pkr.topLeft());
-//      res.append(pkr.bottomLeft());
-//      res.append(pkr.bottomRight());
-//      res.append(pkr.topRight());
-//      res.append(pkr.topLeft());
-//    }
-//    break;
-
-//  case RectangleInEllipse:
-//    {
-//      QRectF pkr;
-//      pkr.setSize(size2());
-//      pkr.moveCenter(c.center());
-
-//      double a=c.width()/2.0;
-//      double b=c.height()/2.0;
-//      QPointF cen = c.center();
-
-//      for (int i=0; i<=16; i++) {
-//        double theta = M_PI*i/8.0;
-//        double x = cen.x() + a*cos(theta);
-//        double y = cen.y() + b*sin(theta);
-
-//        res.append(QPointF(x,y));
-//      }
-
-//      res.append(QPointF(qQNaN(), qQNaN()));
-
-//      res.append(pkr.topLeft());
-//      res.append(pkr.bottomLeft());
-//      res.append(pkr.bottomRight());
-//      res.append(pkr.topRight());
-//      res.append(pkr.topLeft());
-//    }
-//    break;
-
-//  case EllipseInRectangle:
-//    {
-//      res.append(c.topLeft());
-//      res.append(c.bottomLeft());
-//      res.append(c.bottomRight());
-//      res.append(c.topRight());
-//      res.append(c.topLeft());
-
-//      res.append(QPointF(qQNaN(), qQNaN()));
-
-//      double a2=width2()/2.0;
-//      double b2=height2()/2.0;
-//      QPointF cen = center();
-
-//      for (int i=0; i<=16; i++) {
-//        double theta = M_PI*i/8.0;
-//        double x = cen.x() + a2*cos(theta);
-//        double y = cen.y() + b2*sin(theta);
-
-//        res.append(QPointF(x,y));
-//      }
-//    }
-//    break;
-
-//  case EllipseInEllipse:
-//    {
-//      double a=c.width()/2.0;
-//      double b=c.height()/2.0;
-//      QPointF cen = c.center();
-
-//      for (int i=0; i<=16; i++) {
-//        double theta = M_PI*i/8.0;
-//        double x = cen.x() + a*cos(theta);
-//        double y = cen.y() + b*sin(theta);
-
-//        res.append(QPointF(x,y));
-//      }
-
-//      res.append(QPointF(qQNaN(), qQNaN()));
-
-//      double a2=width2()/2.0;
-//      double b2=height2()/2.0;
-
-//      for (int i=0; i<=16; i++) {
-//        double theta = M_PI*i/8.0;
-//        double x = cen.x() + a2*cos(theta);
-//        double y = cen.y() + b2*sin(theta);
-
-//        res.append(QPointF(x,y));
-//      }
-//    }
-//    break;
   }
 
   return res;
