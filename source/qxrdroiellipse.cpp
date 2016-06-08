@@ -31,3 +31,15 @@ QPointF QxrdROIEllipse::markerPoint(int n)
 
   return QPointF(x,y);
 }
+
+QRectF QxrdROIEllipse::boundingRect()
+{
+  return get_Coords();
+}
+
+bool QxrdROIEllipse::pointInShape(QPointF pt)
+{
+  printf("Need QxrdROIEllipse::pointInShape\n");
+
+  return get_Coords().contains(pt);
+}

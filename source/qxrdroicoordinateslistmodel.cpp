@@ -389,6 +389,9 @@ void QxrdROICoordinatesListModel::onROIsChanged()
 
 void QxrdROICoordinatesListModel::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
+  QTime tic;
+  tic.start();
+
   for (int i=0; i<m_ROICoordinates.count(); i++) {
     QxrdROICoordinatesPtr r = m_ROICoordinates.value(i);
 
@@ -398,6 +401,8 @@ void QxrdROICoordinatesListModel::recalculate(QcepImageDataBasePtr img, QcepMask
   }
 
   emit dataChanged(index(0,SumCol), index(m_ROICoordinates.count(),NPixelsCol));
+
+  printf("ROI Calculation in %d msec\n",tic.elapsed());
 }
 
 void QxrdROICoordinatesListModel::visualizeBackground(int n, QcepImageDataBasePtr img, QcepMaskDataPtr mask)

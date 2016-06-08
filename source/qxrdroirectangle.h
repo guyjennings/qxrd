@@ -17,6 +17,8 @@ public:
 public:
   virtual int markerCount();
   virtual QPointF markerPoint(int n);
+  virtual QRectF boundingRect();
+  virtual bool pointInShape(QPointF pt);
 };
 
 #endif // QXRDROIRECTANGLE_H

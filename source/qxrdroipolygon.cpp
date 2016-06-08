@@ -90,3 +90,15 @@ QPointF QxrdROIPolygon::markerPoint(int n)
     return p.value(0);
   }
 }
+
+QRectF QxrdROIPolygon::boundingRect()
+{
+  return get_Coords();
+}
+
+bool QxrdROIPolygon::pointInShape(QPointF pt)
+{
+  QPolygonF p(get_Poly());
+
+  return p.containsPoint(pt, Qt::WindingFill);
+}

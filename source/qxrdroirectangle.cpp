@@ -43,3 +43,13 @@ QPointF QxrdROIRectangle::markerPoint(int n)
 
   return res;
 }
+
+QRectF QxrdROIRectangle::boundingRect()
+{
+  return get_Coords();
+}
+
+bool QxrdROIRectangle::pointInShape(QPointF pt)
+{
+  return get_Coords().contains(pt);
+}

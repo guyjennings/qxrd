@@ -62,6 +62,8 @@ public:
 
   virtual int markerCount() = 0;
   virtual QPointF markerPoint(int n) = 0;
+  virtual QRectF boundingRect() = 0;
+  virtual bool pointInShape(QPointF pt) = 0;
 
 public:
   Q_PROPERTY(int shapeType READ get_ShapeType WRITE set_ShapeType)
