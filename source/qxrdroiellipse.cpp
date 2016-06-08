@@ -7,8 +7,8 @@ QxrdROIEllipse::QxrdROIEllipse(double left, double top, double right, double bot
 {
 }
 
-QxrdROIEllipse::QxrdROIEllipse()
-  : QxrdROIShape(EllipseShape, 0, 0, 50, 50)
+QxrdROIEllipse::QxrdROIEllipse(double scale)
+  : QxrdROIShape(EllipseShape, -50*scale, -50*scale, 50*scale, 50*scale)
 {
 }
 

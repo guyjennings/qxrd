@@ -132,6 +132,8 @@ QVariant QxrdROICoordinatesListModel::data(const QModelIndex &index, int role) c
         return c->get_Center().x();
       } else if (col == CenterYCol) {
         return c->get_Center().y();
+      } else if (col == RotationCol) {
+        return c->get_Rotation();
 //      } else if (col == WidthCol) {
 //        return c->get_Coords().width();
 //      } else if (col == HeightCol) {
@@ -170,13 +172,15 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
       } else if (section == YGradientCol) {
         return "YGrad";
       } else if (section == OuterTypeCol) {
-        return "Bkgd Type";
+        return "Bkgd Shape";
       } else if (section == InnerTypeCol) {
-        return "Peak Type";
+        return "Peak Shape";
       } else if (section == CenterXCol) {
         return "CenterX";
       } else if (section == CenterYCol) {
         return "CenterY";
+      } else if (section == RotationCol) {
+        return "Rotation";
 //      } else if (section == WidthCol) {
 //        return "Width";
 //      } else if (section == HeightCol) {
@@ -202,7 +206,8 @@ Qt::ItemFlags QxrdROICoordinatesListModel::flags(const QModelIndex &index) const
   if (col == OuterTypeCol ||
       col == InnerTypeCol ||
       col == CenterXCol ||
-      col == CenterYCol/* ||
+      col == CenterYCol ||
+      col == RotationCol /* ||
       col == WidthCol ||
       col == HeightCol ||
       col == Width2Col ||
@@ -246,6 +251,8 @@ bool QxrdROICoordinatesListModel::setData(const QModelIndex &index, const QVaria
         c->setCenterX(value.toDouble());
       } else if (col == CenterYCol) {
         c->setCenterY(value.toDouble());
+      } else if (col == RotationCol) {
+        c->setRotation(value.toDouble());
 //      } else if (col == WidthCol) {
 //        c->setWidth(value.toDouble());
 //      } else if (col == HeightCol) {

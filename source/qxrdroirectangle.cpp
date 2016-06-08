@@ -9,8 +9,8 @@ QxrdROIRectangle::QxrdROIRectangle(double left,
 
 }
 
-QxrdROIRectangle::QxrdROIRectangle()
-  : QxrdROIShape(RectangleShape, 0,0, 50, 50)
+QxrdROIRectangle::QxrdROIRectangle(double scale)
+  : QxrdROIShape(RectangleShape, -scale*50,-scale*50, scale*50, scale*50)
 {
 }
 

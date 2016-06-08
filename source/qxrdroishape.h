@@ -29,7 +29,7 @@ signals:
   void roiChanged();
 
 public:
-  static QxrdROIShapePtr newROIShape(int shapeType);
+  static QxrdROIShapePtr newROIShape(int shapeType, double scale);
   static int             roiTypeCount();
   static QString         roiTypeName(int roiType);
 

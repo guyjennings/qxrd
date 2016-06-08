@@ -45,6 +45,7 @@ public:
     MinimumOutput,
     MaximumOutput,
     NPixelsOutput,
+    NBackgroundOutput,
     BackgroundOutput,
     XGradientOutput,
     YGradientOutput,
@@ -85,6 +86,7 @@ public slots:
   void setCenter(QPointF c);
   void setCenterX(double cx);
   void setCenterY(double cy);
+  void setRotation(double r);
 
   QVector<QPointF> markerCoords();
 
@@ -125,6 +127,9 @@ public:
 
   Q_PROPERTY(double nPixels READ get_NPixels WRITE set_NPixels STORED false)
   QCEP_DOUBLE_PROPERTY(NPixels)
+
+  Q_PROPERTY(double nBackground READ get_NBackground WRITE set_NBackground STORED false)
+  QCEP_DOUBLE_PROPERTY(NBackground)
 
   Q_PROPERTY(double background READ get_Background WRITE set_Background STORED false)
   QCEP_DOUBLE_PROPERTY(Background)

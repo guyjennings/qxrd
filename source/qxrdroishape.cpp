@@ -18,21 +18,21 @@ QxrdROIShape::QxrdROIShape(int    shapeType, QRectF boundingBox)
 {
 }
 
-QxrdROIShapePtr QxrdROIShape::newROIShape(int shapeType)
+QxrdROIShapePtr QxrdROIShape::newROIShape(int shapeType, double scale)
 {
   QxrdROIShapePtr res;
 
   switch (shapeType) {
   case RectangleShape:
-    res = QxrdROIShapePtr(new QxrdROIRectangle());
+    res = QxrdROIShapePtr(new QxrdROIRectangle(scale));
     break;
 
   case EllipseShape:
-    res = QxrdROIShapePtr(new QxrdROIEllipse());
+    res = QxrdROIShapePtr(new QxrdROIEllipse(scale));
     break;
 
   case PolygonShape:
-    res = QxrdROIShapePtr(new QxrdROIPolygon());
+    res = QxrdROIShapePtr(new QxrdROIPolygon(scale));
     break;
   }
 

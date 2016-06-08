@@ -6,10 +6,17 @@ QxrdROIPolygon::QxrdROIPolygon(QPolygonF poly)
 {
 }
 
-QxrdROIPolygon::QxrdROIPolygon()
+QxrdROIPolygon::QxrdROIPolygon(double scale)
   : QxrdROIShape(PolygonShape, QRectF()),
     m_Poly(this, "poly", QPolygonF(), "ROI Polygon Shape")
 {
+  m_Poly.appendValue(QPointF(-50,0)*scale);
+  m_Poly.appendValue(QPointF(-40,50)*scale);
+  m_Poly.appendValue(QPointF( 40,50)*scale);
+  m_Poly.appendValue(QPointF( 50,0)*scale);
+  m_Poly.appendValue(QPointF( 40,-50)*scale);
+  m_Poly.appendValue(QPointF(-40,-50)*scale);
+  m_Poly.appendValue(QPointF(-50,0)*scale);
 }
 
 void QxrdROIPolygon::clear()
@@ -93,12 +100,20 @@ QPointF QxrdROIPolygon::markerPoint(int n)
 
 QRectF QxrdROIPolygon::boundingRect()
 {
-  return get_Coords();
+  QcepPolygon qp = get_Poly();
+
+  QPolygonF  p(qp);
+
+  return p.boundingRect();
 }
 
 bool QxrdROIPolygon::pointInShape(QPointF pt)
 {
-  QPolygonF p(get_Poly());
+  QcepPolygon qp = get_Poly();
 
-  return p.containsPoint(pt, Qt::WindingFill);
+  QPolygonF p(qp);
+
+  bool isIn = p.containsPoint(pt, Qt::WindingFill);
+
+  return isIn;
 }

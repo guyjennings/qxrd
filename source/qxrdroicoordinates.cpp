@@ -19,13 +19,14 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
     m_Minimum(this, "minimum", 0, "ROI Pixel Minimum"),
     m_Maximum(this, "maximum", 0, "ROI Pixel Maximum"),
     m_NPixels(this, "nPixels", 0, "ROI N Pixels"),
+    m_NBackground(this, "nBackground", 0, "ROI N Bkgd Pixels"),
     m_Background(this, "background", 0, "ROI Background"),
     m_XGradient(this, "xGradient", 0, "ROI X Gradient"),
     m_YGradient(this, "yGradient", 0, "ROI Y Gradient"),
     m_Mutex(QMutex::Recursive)
 {
-  m_OuterShape = QxrdROIShape::newROIShape(roiOuterType);
-  m_InnerShape = QxrdROIShape::newROIShape(roiInnerType);
+  m_OuterShape = QxrdROIShape::newROIShape(roiOuterType, 1.0);
+  m_InnerShape = QxrdROIShape::newROIShape(roiInnerType, 0.25);
 
   connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::outerChanged);
   connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::innerChanged);
@@ -212,6 +213,11 @@ void QxrdROICoordinates::setCenterY(double cy)
   set_Center(c);
 }
 
+void QxrdROICoordinates::setRotation(double r)
+{
+  set_Rotation(r);
+}
+
 QVector<QPointF> QxrdROICoordinates::markerCoords()
 {
   QVector<QPointF> res;
@@ -259,9 +265,18 @@ void QxrdROICoordinates::visualizePeak(QcepImageDataBasePtr img, QcepMaskDataPtr
 
 void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis)
 {
+#ifndef QT_NO_DEBUG
+  printf("Recalculate ROI, inner: %s, outer: %s\n",
+         qPrintable(get_RoiInnerTypeName()),
+         qPrintable(get_RoiOuterTypeName()));
+#endif
+
   QTime tic;
 
   tic.start();
+
+  int nouter = 0;
+  int ninner = 0;
 
   if (m_InnerShape && m_OuterShape && img) {
     QPointF c = get_Center();
@@ -284,6 +299,7 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
     double cy = c.y();
 
     int first = true;
+
     double min = 0;
     double max = 0;
     double sum = 0;
@@ -316,7 +332,9 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
 
           if (m_InnerShape->pointInShape(p)) {
             // Peak point, skip for now...
+            ninner += 1;
           } else if (m_OuterShape->pointInShape(p)) {
+            nouter += 1;
             // Background point...
             double val = img->getImageData(col, row);
 
@@ -406,6 +424,7 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
 
     set_Sum(sum);
     set_NPixels(npx);
+    set_NBackground(nouter);
     set_Minimum(min);
     set_Maximum(max);
 
@@ -420,7 +439,10 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
     set_YGradient(grady);
   }
 
+#ifndef QT_NO_DEBUG
   printMessage(tr("ROI Calculation took %1 msec").arg(tic.elapsed()));
+  printMessage(tr("Inner #%1, Outer #%2").arg(ninner).arg(nouter));
+#endif
 }
 
 //void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis)
@@ -661,6 +683,7 @@ QVector<double> QxrdROICoordinates::values() const
   res.append(get_Minimum());
   res.append(get_Maximum());
   res.append(get_NPixels());
+  res.append(get_NBackground());
   res.append(get_Background());
   res.append(get_XGradient());
   res.append(get_YGradient());
@@ -692,6 +715,9 @@ QString QxrdROICoordinates::outputName(int opt)
     break;
   case NPixelsOutput:
     res = "# Pixels";
+    break;
+  case NBackgroundOutput:
+    res = "# Bkgd Px";
     break;
   case BackgroundOutput:
     res = "Background";

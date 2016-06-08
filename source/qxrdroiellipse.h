@@ -12,7 +12,7 @@ public:
                  double top,
                  double right,
                  double bottom);
-  QxrdROIEllipse();
+  QxrdROIEllipse(double scale);
 
   virtual int markerCount();
   virtual QPointF markerPoint(int n);

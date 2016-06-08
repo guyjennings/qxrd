@@ -9,7 +9,7 @@ class QxrdROIPolygon : public QxrdROIShape
 
 public:
   QxrdROIPolygon(QPolygonF poly);
-  QxrdROIPolygon();
+  QxrdROIPolygon(double scale);
 
 public slots:
   void clear();

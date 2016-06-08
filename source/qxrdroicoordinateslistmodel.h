@@ -69,6 +69,7 @@ public:
     InnerTypeCol,
     CenterXCol,
     CenterYCol,
+    RotationCol,
 //    WidthCol,
 //    HeightCol,
 //    Width2Col,

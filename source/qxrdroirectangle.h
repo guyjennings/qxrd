@@ -12,7 +12,7 @@ public:
                    double top,
                    double right,
                    double bottom);
-  QxrdROIRectangle();
+  QxrdROIRectangle(double scale);
 
 public:
   virtual int markerCount();
