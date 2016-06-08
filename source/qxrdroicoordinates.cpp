@@ -216,6 +216,10 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
 {
   QVector<QPointF> res;
   QPointF c = get_Center();
+  double  r = get_Rotation();
+  QMatrix m;
+
+  m.rotate(r);
 
   res.append(c);
 
@@ -223,7 +227,7 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
     res.append(QPointF(qQNaN(), qQNaN()));
 
     for (int i=0; i<m_OuterShape->markerCount(); i++) {
-      res.append(c + m_OuterShape->markerPoint(i));
+      res.append(c + m.map(m_OuterShape->markerPoint(i)));
     }
   }
 
@@ -231,7 +235,7 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
     res.append(QPointF(qQNaN(), qQNaN()));
 
     for (int i=0; i<m_InnerShape->markerCount(); i++) {
-      res.append(c + m_InnerShape->markerPoint(i));
+      res.append(c + m.map(m_InnerShape->markerPoint(i)));
     }
   }
 

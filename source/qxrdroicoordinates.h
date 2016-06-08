@@ -82,43 +82,15 @@ public slots:
   void outerChanged();
   void innerChanged();
 
-//  double left() const;
-//  double top() const;
-//  double right() const;
-//  double bottom() const;
-//  double width() const;
-//  double height() const;
-
-//  QPointF center() const;
-//  QSizeF size() const;
-
-//  void setLeft(double l);
-//  void setTop(double t);
-//  void setRight(double r);
-//  void setBottom(double b);
-
   void setCenter(QPointF c);
-//  void setCenter(double cx, double cy);
-//  void setSize(QSizeF s);
-//  void setSize(double w, double h);
-
   void setCenterX(double cx);
   void setCenterY(double cy);
-//  void setWidth(double w);
-//  void setHeight(double h);
 
   QVector<QPointF> markerCoords();
 
 private:
   void updateBounds();
   void recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis);
-
-//  void recalculateRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
-//  void recalculateEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
-//  void recalculateRectangleInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
-//  void recalculateEllipseInRectangle(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
-//  void recalculateRectangleInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
-//  void recalculateEllipseInEllipse(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
 
 public:
   Q_PROPERTY(int roiOuterType READ get_RoiOuterType WRITE set_RoiOuterType)
