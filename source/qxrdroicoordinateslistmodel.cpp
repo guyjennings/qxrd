@@ -368,6 +368,47 @@ void QxrdROICoordinatesListModel::moveROICenter(int i, double x, double y)
   }
 }
 
+void QxrdROICoordinatesListModel::moveROIRelative(int i, double dx, double dy)
+{
+  QxrdROICoordinatesPtr roi = this->roi(i);
+
+  if (roi) {
+    QPointF cen = roi->get_Center() + QPointF(dx, dy);
+
+    roi->setCenter(cen);
+
+    emit dataChanged(index(i,0), index(i,ColCount));
+  }
+}
+
+void QxrdROICoordinatesListModel::rotateROIByMouse(int i, QPointF p1, QPointF p2)
+{
+  QxrdROICoordinatesPtr roi = this->roi(i);
+
+  if (roi) {
+    QPointF p0 = roi->get_Center();
+
+    QLineF l1(p0, p1), l2(p0, p2);
+
+    double a1 = l1.angle();
+    double a2 = l2.angle();
+    double da = a1 - a2;
+    double na = roi->get_Rotation() + da;
+
+    while (na > 180) {
+      na -= 360;
+    }
+
+    while (na < -180) {
+      na += 360;
+    }
+
+    roi->set_Rotation(na);
+
+    emit dataChanged(index(i,0), index(i,ColCount));
+  }
+}
+
 void QxrdROICoordinatesListModel::onROIChanged()
 {
 //  printf("QxrdROICoordinatesListModel::onROIChanged()\n");

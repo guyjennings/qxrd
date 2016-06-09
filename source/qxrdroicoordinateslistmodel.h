@@ -44,7 +44,9 @@ public:
 
   void editROI(int row);
 
-  void moveROICenter(int row, double x, double y);
+  void moveROICenter(int i, double x, double y);
+  void moveROIRelative(int i, double dx, double dy);
+  void rotateROIByMouse(int i, QPointF p1, QPointF p2);
 
   QxrdROICoordinatesWPtr roi(int row) const;
   void setRoi(int row, QxrdROICoordinatesPtr c);

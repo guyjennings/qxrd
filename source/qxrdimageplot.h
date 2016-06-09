@@ -122,6 +122,12 @@ public:
   void setROIModel(QxrdROICoordinatesListModelWPtr model);
   void setROISelection(QItemSelectionModel *select);
 
+  void roiMouseSelected(const QVector<QPointF> &p);
+  void roiMouseAdded(const QVector<QPointF> &p);
+  void roiMouseRemoved(const QPointF &pt);
+  void roiMouseRotated(const QVector<QPointF> &p);
+  void roiMouseResized(const QVector<QPointF> &p);
+
 private:
   void replotImage();
   void setImage(QxrdRasterData *data);
@@ -133,7 +139,6 @@ private:
   void changedColorMap();
   void setTrackerPen(const QPen &pen);
 
-  void disablePickers();
 
   void clearROIDisplay();
   void updateROIDisplay();
@@ -142,6 +147,7 @@ private:
                           const QItemSelection &deselected);
 
 protected:
+  virtual void disablePickers();
   void selectROILabel(int i, bool on);
   void moveSelectedROICenter(double x, double y);
 

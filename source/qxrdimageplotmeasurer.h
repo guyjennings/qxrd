@@ -11,7 +11,7 @@ class QxrdImagePlotMeasurer : public QcepPlotMeasurer
 public:
   QxrdImagePlotMeasurer(QWidget *canvas, QxrdImagePlot *plot);
 
-private:
+protected:
   QxrdImagePlot *m_Plot;
 };
 

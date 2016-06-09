@@ -805,14 +805,37 @@ QxrdMaskRasterData* QxrdImagePlot::maskRaster()
 
 void QxrdImagePlot::disablePickers()
 {
-  m_Zoomer             -> setEnabled(false);
-  m_CenterFinderPicker -> setEnabled(false);
-  m_Slicer             -> setEnabled(false);
-  m_Measurer           -> setEnabled(false);
-  m_HistogramSelector  -> setEnabled(false);
-  m_Circles            -> setEnabled(false);
-  m_Polygons           -> setEnabled(false);
-  m_PowderPointPicker  -> setEnabled(false);
+  if (m_Zoomer) {
+    m_Zoomer             -> setEnabled(false);
+  }
+
+  if (m_CenterFinderPicker) {
+    m_CenterFinderPicker -> setEnabled(false);
+  }
+
+  if (m_Slicer) {
+    m_Slicer             -> setEnabled(false);
+  }
+
+  if (m_Measurer) {
+    m_Measurer           -> setEnabled(false);
+  }
+
+  if (m_HistogramSelector) {
+    m_HistogramSelector  -> setEnabled(false);
+  }
+
+  if (m_Circles) {
+    m_Circles            -> setEnabled(false);
+  }
+
+  if (m_Polygons) {
+    m_Polygons           -> setEnabled(false);
+  }
+
+  if (m_PowderPointPicker) {
+    m_PowderPointPicker  -> setEnabled(false);
+  }
 
   enableContextMenu();
 
@@ -823,56 +846,72 @@ void QxrdImagePlot::enableZooming()
 {
   disablePickers();
 
-  m_Zoomer       -> setEnabled(true);
+  if (m_Zoomer) {
+    m_Zoomer       -> setEnabled(true);
+  }
 }
 
 void QxrdImagePlot::enableCentering()
 {
   disablePickers();
 
-  m_CenterFinderPicker -> setEnabled(true);
+  if (m_CenterFinderPicker) {
+    m_CenterFinderPicker -> setEnabled(true);
+  }
 }
 
 void QxrdImagePlot::enableSlicing()
 {
   disablePickers();
 
-  m_Slicer   -> setEnabled(true);
+  if (m_Slicer) {
+    m_Slicer   -> setEnabled(true);
+  }
 }
 
 void QxrdImagePlot::enableMeasuring()
 {
   disablePickers();
 
-  m_Measurer -> setEnabled(true);
+  if (m_Measurer) {
+    m_Measurer -> setEnabled(true);
+  }
 }
 
 void QxrdImagePlot::enableHistograms()
 {
   disablePickers();
 
-  m_HistogramSelector -> setEnabled(true);
+  if (m_HistogramSelector) {
+    m_HistogramSelector -> setEnabled(true);
+  }
 }
 
 void QxrdImagePlot::enableMaskCircles()
 {
   disablePickers();
 
-  m_Circles  -> setEnabled(true);
+  if (m_Circles) {
+    m_Circles  -> setEnabled(true);
+  }
 }
 
 void QxrdImagePlot::enableMaskPolygons()
 {
   disablePickers();
 
-  m_Polygons -> setEnabled(true);
+  if (m_Polygons) {
+    m_Polygons -> setEnabled(true);
+  }
 }
 
 void QxrdImagePlot::enablePowderPoints()
 {
   disablePickers();
 
-  m_PowderPointPicker -> setEnabled(true);
+  if (m_PowderPointPicker) {
+    m_PowderPointPicker -> setEnabled(true);
+  }
 
 //  displayPowderMarkers();
 }
@@ -1390,4 +1429,57 @@ void QxrdImagePlot::moveSelectedROICenter(double x, double y)
       }
     }
   }
+}
+
+void QxrdImagePlot::roiMouseSelected(const QVector<QPointF> &p)
+{
+  if (p.count() == 2) {
+    QPointF del = p.value(1) - p.value(0);
+
+    if ((del.x() == 0) && (del.y() == 0)) {
+      // Selection click...
+    } else {
+      // Move click...
+      QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+      if (roiModel && m_ROISelection) {
+        int n = roiModel->roiCount();
+
+        for (int i=0; i<n; i++) {
+          if (m_ROISelection->rowIntersectsSelection(i,QModelIndex())) {
+            roiModel->moveROIRelative(i, del.x(), del.y());
+          }
+        }
+      }
+    }
+  }
+}
+
+void QxrdImagePlot::roiMouseAdded(const QVector<QPointF> &p)
+{
+}
+
+void QxrdImagePlot::roiMouseRemoved(const QPointF &pt)
+{
+}
+
+void QxrdImagePlot::roiMouseRotated(const QVector<QPointF> &p)
+{
+  if (p.count() == 2) {
+    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+    if (roiModel && m_ROISelection) {
+      int n = roiModel->roiCount();
+
+      for (int i=0; i<n; i++) {
+        if (m_ROISelection->rowIntersectsSelection(i,QModelIndex())) {
+          roiModel->rotateROIByMouse(i, p.value(0), p.value(1));
+        }
+      }
+    }
+  }
+}
+
+void QxrdImagePlot::roiMouseResized(const QVector<QPointF> &p)
+{
 }

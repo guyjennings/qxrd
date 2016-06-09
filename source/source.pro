@@ -389,7 +389,10 @@ HEADERS += TODO.h \
     qxrdroiellipse.h \
     qxrdroipolygon.h \
     qxrdroishape-ptr.h \
-    qxrdroirasterdata.h
+    qxrdroirasterdata.h \
+    qxrdroipicker.h \
+    qxrdroipicker-ptr.h \
+    qxrddetectorimageplot-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -574,7 +577,8 @@ SOURCES += qxrd.cpp \
     qxrdroirectangle.cpp \
     qxrdroiellipse.cpp \
     qxrdroipolygon.cpp \
-    qxrdroirasterdata.cpp
+    qxrdroirasterdata.cpp \
+    qxrdroipicker.cpp
 
 OTHER_FILES += testImage.js
 

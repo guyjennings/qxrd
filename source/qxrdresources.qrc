@@ -105,5 +105,10 @@
         <file>images/lock-16x16.png</file>
         <file>qxrd_macrocounter.mac</file>
         <file>help/qxrdspecmacro.html</file>
+        <file>images/edit-node.png</file>
+        <file>images/format-add-node.png</file>
+        <file>images/format-remove-node.png</file>
+        <file>images/object-rotate-left.png</file>
+        <file>images/transform-scale.png</file>
     </qresource>
 </RCC>

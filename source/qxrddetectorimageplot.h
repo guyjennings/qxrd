@@ -2,6 +2,7 @@
 #define QXRDDETECTORIMAGEPLOT_H
 
 #include "qxrdimageplot.h"
+#include "qxrdroipicker-ptr.h"
 
 class QxrdDetectorImagePlot : public QxrdImagePlot
 {
@@ -13,9 +14,25 @@ public:
 
   void contextMenuEvent(QContextMenuEvent *event);
 
+  void enableROISelect();
+  void enableROIAddNode();
+  void enableROIRemoveNode();
+  void enableROIRotate();
+  void enableROIResize();
+
+protected:
+  void disablePickers();
+
 signals:
 
 public slots:
+
+private:
+  QxrdROISelector   *m_ROISelector;
+  QxrdROIAddNode    *m_ROIAddNode;
+  QxrdROIRemoveNode *m_ROIRemoveNode;
+  QxrdROIRotator    *m_ROIRotator;
+  QxrdROIResizer    *m_ROIResizer;
 };
 
 #endif // QXRDDETECTORIMAGEPLOT_H
