@@ -146,6 +146,8 @@ private:
   void updateROISelection(const QItemSelection &selected,
                           const QItemSelection &deselected);
 
+  QPointF scaledDelta(double dx, double dy);
+
 protected:
   virtual void disablePickers();
   void selectROILabel(int i, bool on);

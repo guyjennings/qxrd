@@ -1433,16 +1433,21 @@ void QxrdImagePlot::moveSelectedROICenter(double x, double y)
 
 void QxrdImagePlot::roiMouseSelected(const QVector<QPointF> &p)
 {
-  if (p.count() == 2) {
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+  if (roiModel && p.count() == 2) {
     QPointF del = p.value(1) - p.value(0);
 
     if ((del.x() == 0) && (del.y() == 0)) {
-      // Selection click...
+      int roiId, inOut, roiType, roiPtIndex;
+
+      if (roiModel->identifyROIPointByMouse(p.value(0),  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
+        printf("Select ROI %d:%d\n", roiId, inOut);
+      }
     } else {
       // Move click...
-      QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-      if (roiModel && m_ROISelection) {
+      if (m_ROISelection) {
         int n = roiModel->roiCount();
 
         for (int i=0; i<n; i++) {
@@ -1457,10 +1462,28 @@ void QxrdImagePlot::roiMouseSelected(const QVector<QPointF> &p)
 
 void QxrdImagePlot::roiMouseAdded(const QVector<QPointF> &p)
 {
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+  if (roiModel && p.count() == 2) {
+    int roiId, inOut, roiType, roiPtIndex;
+
+    if (roiModel->identifyROIPointByMouse(p.value(0),  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
+      printf("Add ROI Pt %d:%d Pt: %d\n", roiId, inOut, roiPtIndex);
+    }
+  }
 }
 
 void QxrdImagePlot::roiMouseRemoved(const QPointF &pt)
 {
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+  if (roiModel) {
+    int roiId, inOut, roiType, roiPtIndex;
+
+    if (roiModel->identifyROIPointByMouse(pt,  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
+      printf("Move ROI %d:%d Pt: %d\n", roiId, inOut, roiPtIndex);
+    }
+  }
 }
 
 void QxrdImagePlot::roiMouseRotated(const QVector<QPointF> &p)
@@ -1482,4 +1505,24 @@ void QxrdImagePlot::roiMouseRotated(const QVector<QPointF> &p)
 
 void QxrdImagePlot::roiMouseResized(const QVector<QPointF> &p)
 {
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+  if (roiModel && p.count() == 2) {
+    int roiId, inOut, roiType, roiPtIndex;
+
+    if (roiModel->identifyROIPointByMouse(p.value(0),  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
+      printf("Resize ROI %d:%d\n", roiId, inOut);
+    }
+  }
+}
+
+QPointF QxrdImagePlot::scaledDelta(double dx, double dy)
+{
+  QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
+  QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
+
+  double tdx = xMap.transform(dx) - xMap.transform(0);
+  double tdy = yMap.transform(dy) - yMap.transform(0);
+
+  return QPointF(tdx, tdy);
 }

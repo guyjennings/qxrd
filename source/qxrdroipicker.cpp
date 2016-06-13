@@ -50,7 +50,7 @@ QxrdROISelector::QxrdROISelector(QWidget *canvas, QxrdImagePlot *plot) :
 {
   setTrackerMode(QwtPicker::AlwaysOn);
   setStateMachine(new QwtPickerDragLineMachine());
-  setRubberBand(QwtPicker::CrossRubberBand);
+  setRubberBand(QwtPicker::PolygonRubberBand);
 
   connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
           m_Plot, &QxrdImagePlot::roiMouseSelected);
@@ -61,7 +61,7 @@ QxrdROIAddNode::QxrdROIAddNode(QWidget *canvas, QxrdImagePlot *plot) :
 {
   setTrackerMode(QwtPicker::AlwaysOn);
   setStateMachine(new QwtPickerDragLineMachine());
-  setRubberBand(QwtPicker::CrossRubberBand);
+  setRubberBand(QwtPicker::PolygonRubberBand);
 
   connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
           m_Plot, &QxrdImagePlot::roiMouseAdded);
@@ -83,7 +83,7 @@ QxrdROIRotator::QxrdROIRotator(QWidget *canvas, QxrdImagePlot *plot) :
 {
   setTrackerMode(QwtPicker::AlwaysOn);
   setStateMachine(new QwtPickerDragLineMachine());
-  setRubberBand(QwtPicker::CrossRubberBand);
+  setRubberBand(QwtPicker::PolygonRubberBand);
 
   connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
           m_Plot, &QxrdImagePlot::roiMouseRotated);
@@ -94,7 +94,7 @@ QxrdROIResizer::QxrdROIResizer(QWidget *canvas, QxrdImagePlot *plot) :
 {
   setTrackerMode(QwtPicker::AlwaysOn);
   setStateMachine(new QwtPickerDragLineMachine());
-  setRubberBand(QwtPicker::CrossRubberBand);
+  setRubberBand(QwtPicker::PolygonRubberBand);
 
   connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
           m_Plot, &QxrdImagePlot::roiMouseResized);

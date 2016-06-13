@@ -2,6 +2,7 @@
 #include "qxrdroicoordinates.h"
 #include "qcepmutexlocker.h"
 #include <stdio.h>
+#include "qxrdroishape.h"
 
 QxrdROICoordinatesListModel::QxrdROICoordinatesListModel()
   : QAbstractListModel(),
@@ -407,6 +408,60 @@ void QxrdROICoordinatesListModel::rotateROIByMouse(int i, QPointF p1, QPointF p2
 
     emit dataChanged(index(i,0), index(i,ColCount));
   }
+}
+
+bool QxrdROICoordinatesListModel::identifyROIPointByMouse(QPointF pt, QPointF delta,
+                                                          int &roiId, int &innerOuter, int &roiType, int &roiPtIndex)
+{
+  for (int i=0; i<m_ROICoordinates.count(); i++) {
+    QxrdROICoordinatesPtr roi = m_ROICoordinates.value(i);
+
+    if (roi) {
+      QPointF cen = roi->get_Center();
+      double  rot = roi->get_Rotation();
+      QMatrix m;
+      m.rotate(-rot);
+
+      QPointF p0 = m.map(pt - cen);
+
+      QxrdROIShapePtr outer = roi->outer();
+      QxrdROIShapePtr inner = roi->inner();
+
+      int type1, type2, index1, index2;
+
+      QPointF p1, p2;
+
+      outer->findNearest(p0, delta, type1, index1, p1);
+      inner->findNearest(p0, delta, type2, index2, p2);
+
+      double d1 = QxrdROIShape::normedDistance(p1 - pt, delta);
+      double d2 = QxrdROIShape::normedDistance(p2 - pt, delta);
+
+      if (type1 == QxrdROIShape::MatchedPoint && type2 == QxrdROIShape::MatchedPoint) { // Both match points - take nearest
+        if (d1 < d2) {
+          roiId = i; roiType = type1; roiPtIndex = index1; innerOuter = 1;
+        } else {
+          roiId = i; roiType = type2; roiPtIndex = index2; innerOuter = 2;
+        }
+      } else if (type1 == QxrdROIShape::MatchedPoint) { // Match point takes precedence...
+        roiId = i; roiType = type1; roiPtIndex = index1; innerOuter = 1;
+      } else if (type2 == QxrdROIShape::MatchedPoint) { // Match point takes precedence...
+        roiId = i; roiType = type2; roiPtIndex = index2; innerOuter = 2;
+      } else if (type1 == QxrdROIShape::MatchedLine && type2 == QxrdROIShape::MatchedLine) { // Both match lines - take nearest
+        if (d1 < d2) {
+          roiId = i; roiType = type1; roiPtIndex = index1; innerOuter = 1;
+        } else {
+          roiId = i; roiType = type2; roiPtIndex = index2; innerOuter = 2;
+        }
+      } else if (type1 == QxrdROIShape::MatchedLine) {
+        roiId = i; roiType = type1; roiPtIndex = index1; innerOuter = 1;
+      } else if (type2 == QxrdROIShape::MatchedLine) {
+        roiId = i; roiType = type2; roiPtIndex = index2; innerOuter = 2;
+      }
+    }
+  }
+
+  return true;
 }
 
 void QxrdROICoordinatesListModel::onROIChanged()

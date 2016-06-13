@@ -65,6 +65,18 @@ public:
   virtual QRectF boundingRect() = 0;
   virtual bool pointInShape(QPointF pt) = 0;
 
+  static double normedDistance(QPointF pt, QPointF delta);
+  static double normedDistanceToPoint(QPointF p1, QPointF p2, QPointF delta);
+  static double normedDistanceToLine(QPointF pt, QPointF p1, QPointF p2, QPointF delta, QPointF &nearpt);
+
+  enum {
+    MatchedNone,
+    MatchedPoint,
+    MatchedLine
+  };
+
+  bool findNearest(QPointF pt, QPointF delta, int &type, int &index, QPointF &ptn);
+
 public:
   Q_PROPERTY(int shapeType READ get_ShapeType WRITE set_ShapeType)
   QCEP_INTEGER_PROPERTY(ShapeType)
