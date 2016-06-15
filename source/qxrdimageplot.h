@@ -33,7 +33,8 @@ class QxrdImagePlot : public QcepPlot
 
 public:
   QxrdImagePlot(QWidget *parent = 0);
-  void init(QxrdImagePlotSettingsWPtr settings);
+  void init(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent);
+  virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
 
 signals:
   void slicePolygon(QVector<QPointF> poly);
@@ -119,8 +120,12 @@ public:
   void contextMenuEvent(QContextMenuEvent *event);
 
   void enableROIDisplay(bool enable);
+
   void setROIModel(QxrdROICoordinatesListModelWPtr model);
   void setROISelection(QItemSelectionModel *select);
+
+  QxrdROICoordinatesListModelWPtr roiModel();
+  QItemSelectionModel            *roiSelection();
 
   void roiMouseSelected(const QVector<QPointF> &p);
   void roiMouseAdded(const QVector<QPointF> &p);
@@ -167,6 +172,7 @@ protected:
   QxrdImagePlotSettingsWPtr  m_ImagePlotSettings;
 
 private:
+  QcepObjectWPtr             m_Parent;
   QwtPlotRescaler           *m_Rescaler;
   QxrdPlotSlicer            *m_Slicer;
   QxrdImagePlotMeasurer     *m_Measurer;

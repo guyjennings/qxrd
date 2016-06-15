@@ -64,9 +64,11 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 {
 }
 
-void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
+void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent)
 {
   QcepPlot::init(settings);
+
+  m_Parent = parent;
 
   m_ImagePlotSettings = settings;
 
@@ -163,6 +165,15 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   enableZooming();
 
   onImageScaleChanged();
+}
+
+void QxrdImagePlot::printMessage(QString msg, QDateTime dt) const
+{
+  QcepObjectPtr parent(m_Parent);
+
+  if (parent) {
+    parent->printMessage(msg, dt);
+  }
 }
 
 void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
@@ -1240,6 +1251,11 @@ void QxrdImagePlot::setROIModel(QxrdROICoordinatesListModelWPtr model)
   }
 }
 
+QxrdROICoordinatesListModelWPtr QxrdImagePlot::roiModel()
+{
+  return m_ROIModel;
+}
+
 void QxrdImagePlot::setROISelection(QItemSelectionModel *select)
 {
   m_ROISelection = select;
@@ -1250,6 +1266,11 @@ void QxrdImagePlot::setROISelection(QItemSelectionModel *select)
     connect(m_ROISelection, &QItemSelectionModel::selectionChanged,
             this, &QxrdImagePlot::updateROISelection);
   }
+}
+
+QItemSelectionModel* QxrdImagePlot::roiSelection()
+{
+  return m_ROISelection;
 }
 
 void QxrdImagePlot::clearROIDisplay()

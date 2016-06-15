@@ -204,7 +204,7 @@ void QxrdWindow::initialize()
   }
 
   if (set) {
-    m_ImagePlot        -> init(set->imagePlotSettings());
+    m_ImagePlot        -> init(set->imagePlotSettings(), expt);
     m_CenterFinderPlot -> init(set->centerFinderPlotSettings());
     m_IntegratorPlot   -> init(set->integratorPlotSettings());
     m_DistortionCorrectionDialog -> init(set->distortionCorrectionDialogSettings());

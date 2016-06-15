@@ -102,7 +102,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        e
       m_ROIWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     }
 
-    m_DetectorImage->init(dp->imagePlotSettings());
+    m_DetectorImage->init(dp->imagePlotSettings(), expt);
 
     m_DetectorImage->setROIModel(m_ROIModel);
     m_DetectorImage->setROISelection(m_ROIWidget->selectionModel());

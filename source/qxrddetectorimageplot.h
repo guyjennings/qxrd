@@ -10,7 +10,7 @@ class QxrdDetectorImagePlot : public QxrdImagePlot
 
 public:
   QxrdDetectorImagePlot(QWidget *parent=0);
-  void init(QxrdImagePlotSettingsWPtr settings);
+  void init(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent);
 
   void contextMenuEvent(QContextMenuEvent *event);
 
