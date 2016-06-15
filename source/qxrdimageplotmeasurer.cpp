@@ -16,3 +16,8 @@ QxrdImagePlotMeasurer::QxrdImagePlotMeasurer(QWidget *canvas, QxrdImagePlot *plo
   setStateMachine(new QwtPickerPolygonMachine());
   setRubberBand(QwtPicker::PolygonRubberBand);
 }
+
+QxrdImagePlot* QxrdImagePlotMeasurer::imagePlot() const
+{
+  return m_Plot;
+}

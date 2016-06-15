@@ -11,6 +11,8 @@ class QxrdImagePlotMeasurer : public QcepPlotMeasurer
 public:
   QxrdImagePlotMeasurer(QWidget *canvas, QxrdImagePlot *plot);
 
+  QxrdImagePlot *imagePlot() const;
+
 protected:
   QxrdImagePlot *m_Plot;
 };
