@@ -9,17 +9,37 @@ class QxrdROIPicker : public QxrdImagePlotMeasurer
   Q_OBJECT
 
 public:
-  QxrdROIPicker(QWidget *canvas, QxrdImagePlot *plot);
+  QxrdROIPicker(QWidget *canvas, QxrdImagePlot *plot,
+                bool useSelectedOnly,
+                bool canSelectEdges);
 
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
-//public slots:
-//  void pickerActivated(bool active);
-//  void selectedPoint(const QPointF &pt);
-//  void selectedRect(const QRectF &r);
-//  void selectedPoly(const QVector<QPointF> &r);
-//  void appendedPoint(const QPointF &pt);
-//  void movedPoint(const QPointF &pt);
+
 protected:
+  void begin();
+  void move(const QPoint &pt);
+  void append(const QPoint &pt);
+  bool end(bool ok = true);
+
+protected:
+  enum {
+    UseAllROIs = 0,
+    UseSelectedROIs = 1
+  };
+
+  enum {
+    SelectPointsOnly = 0,
+    CanSelectEdges   = 1
+  };
+
+  int m_UseSelectedROIsOnly;
+  int m_CanSelectEdges;
+  int m_SelectedROI;
+  int m_SelectedShape;
+  int m_SelectedPoint;
+  int m_SelectedEdge;
+
+  QPolygon m_SelectedPoints;
 };
 
 class QxrdROISelector : public QxrdROIPicker
@@ -38,18 +58,6 @@ public:
   QxrdROIAddNode(QWidget *canvas, QxrdImagePlot *plot);
 
   QPolygon adjustedPoints(const QPolygon &poly) const;
-
-  void begin();
-  void move(const QPoint &pt);
-  void append(const QPoint &pt);
-  bool end(bool ok = true);
-
-private:
-  QPolygon m_SelectedPoints;
-  int m_SelectedROI;
-  int m_SelectedShape;
-  int m_SelectedPoint;
-  int m_SelectedEdge;
 };
 
 class QxrdROIRemoveNode : public QxrdROIPicker

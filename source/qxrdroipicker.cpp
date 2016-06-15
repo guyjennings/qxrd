@@ -7,8 +7,15 @@
 #include "qxrdroishape.h"
 #include <QMessageBox>
 
-QxrdROIPicker::QxrdROIPicker(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdImagePlotMeasurer(canvas, plot)
+QxrdROIPicker::QxrdROIPicker(QWidget *canvas, QxrdImagePlot *plot, bool useSelectedOnly, bool canSelectEdges) :
+  QxrdImagePlotMeasurer(canvas, plot),
+  m_UseSelectedROIsOnly(useSelectedOnly),
+  m_CanSelectEdges(canSelectEdges),
+  m_SelectedROI(-1),
+  m_SelectedShape(-1),
+  m_SelectedPoint(-1),
+  m_SelectedEdge(-1),
+  m_SelectedPoints()
 {
   setEnabled(false);
 }
@@ -22,46 +29,9 @@ void QxrdROIPicker::printMessage(QString msg, QDateTime dt) const
   }
 }
 
-QxrdROISelector::QxrdROISelector(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot)
+void QxrdROIPicker::begin()
 {
-  setTrackerMode(QwtPicker::AlwaysOn);
-  setStateMachine(new QwtPickerDragLineMachine());
-  setRubberBand(QwtPicker::PolygonRubberBand);
-
-  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
-          m_Plot, &QxrdImagePlot::roiMouseSelected);
-}
-
-QxrdROIAddNode::QxrdROIAddNode(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot),
-  m_SelectedPoints()
-{
-  setTrackerMode(QwtPicker::AlwaysOn);
-  setStateMachine(new QwtPickerDragLineMachine());
-  setRubberBand(QwtPicker::PolygonRubberBand);
-
-  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
-          m_Plot, &QxrdImagePlot::roiMouseAdded);
-}
-
-QPolygon QxrdROIAddNode::adjustedPoints(const QPolygon &poly) const
-{
-//  printMessage("QxrdROIAddNode::adjustedPoints(");
-
-//  for (int i=0; i<poly.count(); i++) {
-//    QPoint pt = poly.value(i);
-//    printMessage(tr(" %1: [%2,%3]").arg(i).arg(pt.x()).arg(pt.y()));
-//  }
-
-//  printMessage(")");
-
-  return QxrdROIPicker::adjustedPoints(poly);
-}
-
-void QxrdROIAddNode::begin()
-{
-//  printMessage("QxrdROIAddNode::begin");
+//  printMessage("QxrdROIPicker::begin");
 
   m_SelectedPoints = QPolygon();
   m_SelectedROI    = -1;
@@ -72,9 +42,9 @@ void QxrdROIAddNode::begin()
   QwtPicker::begin();
 }
 
-void QxrdROIAddNode::append(const QPoint &pt)
+void QxrdROIPicker::append(const QPoint &pt)
 {
-//  printMessage(tr("QxrdROIAddNode::append(%1,%2)").arg(pt.x()).arg(pt.y()));
+//  printMessage(tr("QxrdROIPicker::append(%1,%2)").arg(pt.x()).arg(pt.y()));
 
   QxrdImagePlot *imgPlot = imagePlot();
 
@@ -94,7 +64,7 @@ void QxrdROIAddNode::append(const QPoint &pt)
 
       if (m_SelectedPoints.count() == 1) { // First point is added twice - trigger on second append...
         for (int i=0; i<nRois; i++) {
-          if (roiSelect->rowIntersectsSelection(i, QModelIndex())) {
+          if ((!m_UseSelectedROIsOnly) || roiSelect->rowIntersectsSelection(i, QModelIndex())) {
             nSel += 1;
             QxrdROICoordinatesPtr roi = roiModel->roi(i);
 
@@ -144,60 +114,67 @@ void QxrdROIAddNode::append(const QPoint &pt)
                   }
                 }
               }
+            }
+          }
+        }
 
-              if (minDistance > 10) { // Now look at polygon edges...
-                if (roi) {
-                  if (roi->get_RoiInnerType() == QxrdROIShape::PolygonShape) {
-                    nPolys += 1;
-                    QxrdROIShapePtr innerShape = roi->inner();
+        if (m_CanSelectEdges && (minDistance > 10)) { // Now look at polygon edges...
+          for (int i=0; i<nRois; i++) {
+            if ((!m_UseSelectedROIsOnly) || roiSelect->rowIntersectsSelection(i, QModelIndex())) {
+              nSel += 1;
+              QxrdROICoordinatesPtr roi = roiModel->roi(i);
 
-                    if (innerShape) {
-                      for (int j=1; j<innerShape->markerCount(); j++) {
-                        QLineF  lnf(roi->transform(innerShape->markerPoint(j-1)),
-                                    roi->transform(innerShape->markerPoint(j)));
+              if (roi) {
+                if (roi->get_RoiInnerType() == QxrdROIShape::PolygonShape) {
+                  nPolys += 1;
+                  QxrdROIShapePtr innerShape = roi->inner();
 
-                        for (double t=0.1; t<1; t += 0.1) {
-                          QPointF ptf = lnf.pointAt(t);
-                          QPoint  ptfi = transform(ptf);
-                          int     dx   = ptfi.x() - pt.x();
-                          int     dy   = ptfi.y() - pt.y();
+                  if (innerShape) {
+                    for (int j=1; j<innerShape->markerCount(); j++) {
+                      QLineF  lnf(roi->transform(innerShape->markerPoint(j-1)),
+                                  roi->transform(innerShape->markerPoint(j)));
 
-                          double  dist = sqrt(dx*dx + dy*dy);
+                      for (double t=0.1; t<=0.9; t += 0.1) {
+                        QPointF ptf = lnf.pointAt(t);
+                        QPoint  ptfi = transform(ptf);
+                        int     dx   = ptfi.x() - pt.x();
+                        int     dy   = ptfi.y() - pt.y();
 
-                          if (dist < minDistance) {
-                            minDistance = dist;
-                            minDistROI  = i;
-                            minDistROIShape = QxrdROICoordinates::InnerShape;
-                            minDistROIEdge = j-1;
-                          }
+                        double  dist = sqrt(dx*dx + dy*dy);
+
+                        if (dist < minDistance) {
+                          minDistance = dist;
+                          minDistROI  = i;
+                          minDistROIShape = QxrdROICoordinates::InnerShape;
+                          minDistROIEdge = j-1;
                         }
                       }
                     }
                   }
+                }
 
-                  if (roi->get_RoiOuterType() == QxrdROIShape::PolygonShape) {
-                    nPolys += 1;
-                    QxrdROIShapePtr outerShape = roi->outer();
+                if (roi->get_RoiOuterType() == QxrdROIShape::PolygonShape) {
+                  nPolys += 1;
+                  QxrdROIShapePtr outerShape = roi->outer();
 
-                    if (outerShape) {
-                      for (int j=1; j<outerShape->markerCount(); j++) {
-                        QLineF lnf(roi->transform(outerShape->markerPoint(j-1)),
-                                   roi->transform(outerShape->markerPoint(j)));
+                  if (outerShape) {
+                    for (int j=1; j<outerShape->markerCount(); j++) {
+                      QLineF lnf(roi->transform(outerShape->markerPoint(j-1)),
+                                 roi->transform(outerShape->markerPoint(j)));
 
-                        for (double t=0.1; t<1; t += 0.1) {
-                          QPointF ptf = lnf.pointAt(t);
-                          QPoint  ptfi = transform(ptf);
-                          int     dx   = ptfi.x() - pt.x();
-                          int     dy   = ptfi.y() - pt.y();
+                      for (double t=0.1; t<=0.9; t += 0.1) {
+                        QPointF ptf = lnf.pointAt(t);
+                        QPoint  ptfi = transform(ptf);
+                        int     dx   = ptfi.x() - pt.x();
+                        int     dy   = ptfi.y() - pt.y();
 
-                          double  dist = sqrt(dx*dx + dy*dy);
+                        double  dist = sqrt(dx*dx + dy*dy);
 
-                          if (dist < minDistance) {
-                            minDistance = dist;
-                            minDistROI  = i;
-                            minDistROIShape = QxrdROICoordinates::OuterShape;
-                            minDistROIEdge = j-1;
-                          }
+                        if (dist < minDistance) {
+                          minDistance = dist;
+                          minDistROI  = i;
+                          minDistROIShape = QxrdROICoordinates::OuterShape;
+                          minDistROIEdge = j-1;
                         }
                       }
                     }
@@ -209,10 +186,10 @@ void QxrdROIAddNode::append(const QPoint &pt)
         }
 
         if (minDistance > 20) {
-          if (nSel == 0) {
+          if (m_UseSelectedROIsOnly && nSel == 0) {
             QMessageBox::warning(imgPlot, "No Selected ROIs", "No ROIs were selected");
           } else if (nPolys == 0) {
-            QMessageBox::warning(imgPlot, "No Polygonal ROIs", "No selected ROI had a polygon shape");
+            QMessageBox::warning(imgPlot, "No Polygonal ROIs", "No ROI had a polygon shape");
           } else {
             QMessageBox::warning(imgPlot, "Not Close", "No ROI corners near click point");
           }
@@ -235,9 +212,9 @@ void QxrdROIAddNode::append(const QPoint &pt)
   QwtPlotPicker::append(pt);
 }
 
-void QxrdROIAddNode::move(const QPoint &pt)
+void QxrdROIPicker::move(const QPoint &pt)
 {
-//  printMessage(tr("QxrdROIAddNode::move(%1,%2)").arg(pt.x()).arg(pt.y()));
+//  printMessage(tr("QxrdROIPicker::move(%1,%2)").arg(pt.x()).arg(pt.y()));
 
   int idx = m_SelectedPoints.count() - 1;
 
@@ -248,9 +225,9 @@ void QxrdROIAddNode::move(const QPoint &pt)
   QwtPlotPicker::move(pt);
 }
 
-bool QxrdROIAddNode::end(bool ok)
+bool QxrdROIPicker::end(bool ok)
 {
-//  printMessage(tr("QxrdROIAddNode::end(%1)").arg(ok));
+//  printMessage(tr("QxrdROIPicker::end(%1)").arg(ok));
 
 //  for (int i=0; i<m_SelectedPoints.count(); i++) {
 //    QPoint p = m_SelectedPoints[i];
@@ -261,8 +238,44 @@ bool QxrdROIAddNode::end(bool ok)
   return QwtPlotPicker::end(ok);
 }
 
+QxrdROISelector::QxrdROISelector(QWidget *canvas, QxrdImagePlot *plot) :
+  QxrdROIPicker(canvas, plot, UseAllROIs, CanSelectEdges)
+{
+  setTrackerMode(QwtPicker::AlwaysOn);
+  setStateMachine(new QwtPickerDragLineMachine());
+  setRubberBand(QwtPicker::PolygonRubberBand);
+
+  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
+          m_Plot, &QxrdImagePlot::roiMouseSelected);
+}
+
+QxrdROIAddNode::QxrdROIAddNode(QWidget *canvas, QxrdImagePlot *plot) :
+  QxrdROIPicker(canvas, plot, UseSelectedROIs, CanSelectEdges)
+{
+  setTrackerMode(QwtPicker::AlwaysOn);
+  setStateMachine(new QwtPickerDragLineMachine());
+  setRubberBand(QwtPicker::PolygonRubberBand);
+
+  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
+          m_Plot, &QxrdImagePlot::roiMouseAdded);
+}
+
+QPolygon QxrdROIAddNode::adjustedPoints(const QPolygon &poly) const
+{
+//  printMessage("QxrdROIAddNode::adjustedPoints(");
+
+//  for (int i=0; i<poly.count(); i++) {
+//    QPoint pt = poly.value(i);
+//    printMessage(tr(" %1: [%2,%3]").arg(i).arg(pt.x()).arg(pt.y()));
+//  }
+
+//  printMessage(")");
+
+  return QxrdROIPicker::adjustedPoints(poly);
+}
+
 QxrdROIRemoveNode::QxrdROIRemoveNode(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot)
+  QxrdROIPicker(canvas, plot, UseSelectedROIs, SelectPointsOnly)
 {
   setTrackerMode(QwtPicker::AlwaysOn);
   setStateMachine(new QwtPickerClickPointMachine());
@@ -273,7 +286,7 @@ QxrdROIRemoveNode::QxrdROIRemoveNode(QWidget *canvas, QxrdImagePlot *plot) :
 }
 
 QxrdROIRotator::QxrdROIRotator(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot)
+  QxrdROIPicker(canvas, plot, UseSelectedROIs, SelectPointsOnly)
 {
   setTrackerMode(QwtPicker::AlwaysOn);
   setStateMachine(new QwtPickerDragLineMachine());
@@ -284,7 +297,7 @@ QxrdROIRotator::QxrdROIRotator(QWidget *canvas, QxrdImagePlot *plot) :
 }
 
 QxrdROIResizer::QxrdROIResizer(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot)
+  QxrdROIPicker(canvas, plot, UseSelectedROIs, SelectPointsOnly)
 {
   setTrackerMode(QwtPicker::AlwaysOn);
   setStateMachine(new QwtPickerDragLineMachine());
