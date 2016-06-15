@@ -64,6 +64,11 @@ public:
     VisualizePeak
   };
 
+  enum {
+    InnerShape,
+    OuterShape
+  };
+
 signals:
   void roiChanged();
 
@@ -89,6 +94,9 @@ public slots:
   void setRotation(double r);
 
   QVector<QPointF> markerCoords();
+
+  QPointF transform( const QPointF & pt) const;
+  QPointF invTransform( const QPointF & pt) const;
 
 private:
   void updateBounds();

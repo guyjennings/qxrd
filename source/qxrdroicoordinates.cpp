@@ -218,6 +218,33 @@ void QxrdROICoordinates::setRotation(double r)
   set_Rotation(r);
 }
 
+QPointF QxrdROICoordinates::transform(const QPointF &pt) const
+{
+  QPointF res;
+  QPointF c = get_Center();
+  double  r = get_Rotation();
+  QMatrix m;
+  m.rotate(r);
+
+  res = c + m.map(pt);
+
+  return res;
+}
+
+QPointF QxrdROICoordinates::invTransform(const QPointF &pt) const
+{
+  QPointF res;
+
+  QPointF c = get_Center();
+  double  r = get_Rotation();
+  QMatrix m;
+  m.rotate(-r);
+
+  res = m.map(pt - c);
+
+  return res;
+}
+
 QVector<QPointF> QxrdROICoordinates::markerCoords()
 {
   QVector<QPointF> res;
