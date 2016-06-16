@@ -39,6 +39,9 @@ public:
   void readSettings(QSettings *settings, QString section);
   void writeSettings(QSettings *settings, QString section);
 
+  bool pointInInner(QPointF pt);
+  bool pointInOuter(QPointF pt);
+
   enum {
     SumOutput,
     AverageOutput,

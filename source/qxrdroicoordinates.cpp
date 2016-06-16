@@ -290,6 +290,32 @@ void QxrdROICoordinates::visualizePeak(QcepImageDataBasePtr img, QcepMaskDataPtr
   recalculatePrivate(img, mask, VisualizePeak);
 }
 
+bool QxrdROICoordinates::pointInOuter(QPointF pt)
+{
+  QxrdROIShapePtr sh = outer();
+
+  if (sh) {
+    QPointF ptf = invTransform(pt);
+
+    return sh->pointInShape(ptf);
+  } else {
+    return false;
+  }
+}
+
+bool QxrdROICoordinates::pointInInner(QPointF pt)
+{
+  QxrdROIShapePtr sh = inner();
+
+  if (sh) {
+    QPointF ptf = invTransform(pt);
+
+    return sh->pointInShape(ptf);
+  } else {
+    return false;
+  }
+}
+
 void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis)
 {
 #ifndef QT_NO_DEBUG
