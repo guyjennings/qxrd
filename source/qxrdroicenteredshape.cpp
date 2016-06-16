@@ -24,3 +24,15 @@ void QxrdROICenteredShape::scale(double kx, double ky)
   set_HalfHeight(get_HalfWidth()*kx);
   set_HalfHeight(get_HalfHeight()*ky);
 }
+
+void QxrdROICenteredShape::deleteROIPoint(int n)
+{
+}
+
+void QxrdROICenteredShape::changeROIPoint(int n, QPointF pt)
+{
+}
+
+void QxrdROICenteredShape::insertROIPoint(int n, QPointF pt)
+{
+}

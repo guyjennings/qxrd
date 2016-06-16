@@ -430,6 +430,13 @@ void QxrdROICoordinatesListModel::deleteROIPoint(int i,
                                                  int innerOuter,
                                                  int n)
 {
+  QxrdROICoordinatesPtr roi = this->roi(i);
+
+  if (roi) {
+    roi->deleteROIPoint(innerOuter, n);
+
+    emit dataChanged(index(i,0), index(i,ColCount));
+  }
 }
 
 void QxrdROICoordinatesListModel::changeROIPoint(int i,
@@ -437,6 +444,13 @@ void QxrdROICoordinatesListModel::changeROIPoint(int i,
                                                  int n,
                                                  QPointF pt)
 {
+  QxrdROICoordinatesPtr roi = this->roi(i);
+
+  if (roi) {
+    roi->changeROIPoint(innerOuter, n, pt);
+
+    emit dataChanged(index(i,0), index(i,ColCount));
+  }
 }
 
 void QxrdROICoordinatesListModel::insertROIPoint(int i,
@@ -444,6 +458,13 @@ void QxrdROICoordinatesListModel::insertROIPoint(int i,
                                                  int n,
                                                  QPointF pt)
 {
+  QxrdROICoordinatesPtr roi = this->roi(i);
+
+  if (roi) {
+    roi->insertROIPoint(innerOuter, n, pt);
+
+    emit dataChanged(index(i,0), index(i,ColCount));
+  }
 }
 
 //bool QxrdROICoordinatesListModel::identifyROIPointByMouse(QPointF pt, QPointF delta,

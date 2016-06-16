@@ -42,6 +42,9 @@ public:
   virtual bool pointInShape(QPointF pt) = 0;
   virtual QPolygonF dragOutline() = 0;
   virtual void scale(double kx, double ky) = 0;
+  virtual void deleteROIPoint(int n) = 0;
+  virtual void changeROIPoint(int n, QPointF pt) = 0;
+  virtual void insertROIPoint(int n, QPointF pt) = 0;
 
   static double normedDistance(QPointF pt, QPointF delta);
   static double normedDistanceToPoint(QPointF p1, QPointF p2, QPointF delta);

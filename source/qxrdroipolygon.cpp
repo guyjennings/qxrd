@@ -137,3 +137,30 @@ void QxrdROIPolygon::scale(double kx, double ky)
 
   set_Poly(res);
 }
+
+void QxrdROIPolygon::deleteROIPoint(int n)
+{
+  QcepPolygon qp = get_Poly();
+
+  qp.remove(n);
+
+  set_Poly(qp);
+}
+
+void QxrdROIPolygon::changeROIPoint(int n, QPointF pt)
+{
+  QcepPolygon qp = get_Poly();
+
+  qp[n] = pt;
+
+  set_Poly(qp);
+}
+
+void QxrdROIPolygon::insertROIPoint(int n, QPointF pt)
+{
+  QcepPolygon qp = get_Poly();
+
+  qp.insert(n+1, pt);
+
+  set_Poly(qp);
+}

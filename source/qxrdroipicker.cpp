@@ -391,12 +391,67 @@ QxrdROIAddNode::QxrdROIAddNode(QWidget *canvas, QxrdImagePlot *plot) :
 void QxrdROIAddNode::move(const QPoint &pt)
 {
   QxrdROIPicker::move(pt);
+
+  QxrdImagePlot* imgPlot = imagePlot();
+
+  if (imgPlot) {
+    QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
+    QItemSelectionModel           *selMod = imgPlot->roiSelection();
+
+    if (roiMod &&
+        selMod &&
+        m_SelectedROI >= 0 &&
+        m_SelectedPoints.count() == 2) {
+      QxrdROICoordinatesPtr roi = roiMod->roi(m_SelectedROI);
+
+      if (roi) {
+        QPolygonF fb;
+        if (m_SelectedShape == QxrdROICoordinates::InnerShape) {
+          fb = roi->innerOutline();
+        } else {
+          fb = roi->outerOutline();
+        }
+
+        if (m_SelectedEdge == -1) { // Moving an existing point...
+          fb[m_SelectedPoint] = invTransform(m_SelectedPoints.value(1));
+        } else {
+          fb.insert(m_SelectedEdge+1, invTransform(m_SelectedPoints.value(1)));
+        }
+
+        m_RubberBand = QPolygon();
+
+        for (int i=0; i<fb.count(); i++) {
+          m_RubberBand.append(transform(fb.value(i)));
+        }
+      }
+    }
+  }
 }
 
 bool QxrdROIAddNode::end(bool ok)
 {
   if (ok) {
     printMessage(tr("Add node to ROI %1:%2").arg(m_SelectedROI).arg(m_SelectedShape));
+
+    QxrdImagePlot* imgPlot = imagePlot();
+
+    if (imgPlot) {
+      QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
+      QItemSelectionModel           *selMod = imgPlot->roiSelection();
+
+      if (roiMod &&
+          selMod &&
+          m_SelectedROI >= 0 &&
+          m_SelectedPoints.count() == 2) {
+        QPointF ptf = invTransform(m_SelectedPoints.value(1));
+
+        if (m_SelectedEdge == -1) {
+          roiMod->changeROIPoint(m_SelectedROI, m_SelectedShape, m_SelectedPoint, ptf);
+        } else {
+          roiMod->insertROIPoint(m_SelectedROI, m_SelectedShape, m_SelectedEdge, ptf);
+        }
+      }
+    }
   }
 
   return QxrdROIPicker::end(ok);
@@ -423,6 +478,20 @@ bool QxrdROIRemoveNode::end(bool ok)
 {
   if (ok) {
     printMessage(tr("Remove node %1 of ROI %2").arg(m_SelectedPoint).arg(m_SelectedROI));
+    QxrdImagePlot* imgPlot = imagePlot();
+
+    if (imgPlot) {
+      QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
+      QItemSelectionModel           *selMod = imgPlot->roiSelection();
+
+      if (roiMod &&
+          selMod &&
+          m_SelectedROI >= 0 &&
+          m_SelectedShape >= 0 &&
+          m_SelectedPoint >= 0) {
+        roiMod->deleteROIPoint(m_SelectedROI, m_SelectedShape, m_SelectedPoint);
+      }
+    }
   }
 
   return QxrdROIPicker::end(ok);

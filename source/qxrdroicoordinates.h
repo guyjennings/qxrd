@@ -97,6 +97,9 @@ public slots:
   void setRotation(double r);
 
   void scale(double kx, double ky);
+  void deleteROIPoint(int innerOuter, int n);
+  void changeROIPoint(int innerOuter, int n, QPointF pt);
+  void insertROIPoint(int innerOuter, int n, QPointF pt);
 
   QVector<QPointF> markerCoords();
   QPolygonF dragOutline();

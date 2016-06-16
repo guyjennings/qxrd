@@ -12,6 +12,9 @@ public:
 
   virtual QRectF boundingRect();
   virtual void scale(double kx, double ky);
+  virtual void deleteROIPoint(int n);
+  virtual void changeROIPoint(int n, QPointF pt);
+  virtual void insertROIPoint(int n, QPointF pt);
 
 public:
   Q_PROPERTY(double halfWidth READ get_HalfWidth WRITE set_HalfWidth)

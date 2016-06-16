@@ -352,6 +352,33 @@ void QxrdROICoordinates::scale(double kx, double ky)
   }
 }
 
+void QxrdROICoordinates::deleteROIPoint(int innerOuter, int n)
+{
+  if (innerOuter == InnerShape && m_InnerShape) {
+    m_InnerShape->deleteROIPoint(n);
+  } else if (m_OuterShape) {
+    m_OuterShape->deleteROIPoint(n);
+  }
+}
+
+void QxrdROICoordinates::changeROIPoint(int innerOuter, int n, QPointF pt)
+{
+  if (innerOuter == InnerShape && m_InnerShape) {
+    m_InnerShape->changeROIPoint(n, invTransform(pt));
+  } else if (m_OuterShape) {
+    m_OuterShape->changeROIPoint(n, invTransform(pt));
+  }
+}
+
+void QxrdROICoordinates::insertROIPoint(int innerOuter, int n, QPointF pt)
+{
+  if (innerOuter == InnerShape && m_InnerShape) {
+    m_InnerShape->insertROIPoint(n, invTransform(pt));
+  } else if (m_OuterShape) {
+    m_OuterShape->insertROIPoint(n, invTransform(pt));
+  }
+}
+
 void QxrdROICoordinates::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
   recalculatePrivate(img, mask, VisualizeNone);

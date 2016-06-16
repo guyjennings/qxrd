@@ -30,6 +30,10 @@ public slots:
   virtual QPolygonF dragOutline();
   virtual void scale(double kx, double ky);
 
+  virtual void deleteROIPoint(int n);
+  virtual void changeROIPoint(int n, QPointF pt);
+  virtual void insertROIPoint(int n, QPointF pt);
+
 public:
   Q_PROPERTY(QcepPolygon poly READ get_Poly WRITE set_Poly)
   QCEP_POLYGON_PROPERTY(Poly)
