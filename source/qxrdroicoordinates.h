@@ -96,7 +96,14 @@ public slots:
   void setCenterY(double cy);
   void setRotation(double r);
 
+  void scale(double kx, double ky);
+
   QVector<QPointF> markerCoords();
+  QPolygonF dragOutline();
+  QPolygonF rotatedDragOutline(double r);
+
+  QPolygonF innerOutline();
+  QPolygonF outerOutline();
 
   QPointF transform( const QPointF & pt) const;
   QPointF invTransform( const QPointF & pt) const;

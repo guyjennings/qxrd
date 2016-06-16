@@ -11,6 +11,7 @@ public:
                        double halfHeight);
 
   virtual QRectF boundingRect();
+  virtual void scale(double kx, double ky);
 
 public:
   Q_PROPERTY(double halfWidth READ get_HalfWidth WRITE set_HalfWidth)

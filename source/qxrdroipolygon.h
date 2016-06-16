@@ -27,6 +27,8 @@ public slots:
   virtual QPointF markerPoint(int n);
   virtual QRectF boundingRect();
   virtual bool pointInShape(QPointF pt);
+  virtual QPolygonF dragOutline();
+  virtual void scale(double kx, double ky);
 
 public:
   Q_PROPERTY(QcepPolygon poly READ get_Poly WRITE set_Poly)

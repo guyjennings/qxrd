@@ -29,6 +29,15 @@ QPointF QxrdROIEllipse::markerPoint(int n)
   return QPointF(x,y);
 }
 
+QPolygonF QxrdROIEllipse::dragOutline()
+{
+  QPolygonF res;
+
+  for (int i=0; i<=nPts; i++) {
+    res.append(markerPoint(i));
+  }
+}
+
 bool QxrdROIEllipse::pointInShape(QPointF pt)
 {
   printf("Need QxrdROIEllipse::pointInShape\n");

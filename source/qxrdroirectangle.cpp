@@ -44,6 +44,13 @@ QPointF QxrdROIRectangle::markerPoint(int n)
   return res;
 }
 
+QPolygonF QxrdROIRectangle::dragOutline()
+{
+  QPolygonF res(boundingRect());
+
+  return res;
+}
+
 bool QxrdROIRectangle::pointInShape(QPointF pt)
 {
   return boundingRect().contains(pt);

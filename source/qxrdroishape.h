@@ -40,6 +40,8 @@ public:
   virtual QPointF markerPoint(int n) = 0;
   virtual QRectF boundingRect() = 0;
   virtual bool pointInShape(QPointF pt) = 0;
+  virtual QPolygonF dragOutline() = 0;
+  virtual void scale(double kx, double ky) = 0;
 
   static double normedDistance(QPointF pt, QPointF delta);
   static double normedDistanceToPoint(QPointF p1, QPointF p2, QPointF delta);

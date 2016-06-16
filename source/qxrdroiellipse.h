@@ -15,6 +15,7 @@ public:
   virtual int markerCount();
   virtual QPointF markerPoint(int n);
   virtual bool pointInShape(QPointF pt);
+  virtual QPolygonF dragOutline();
 };
 
 #endif // QXRDROIELLIPSE_H

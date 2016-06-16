@@ -127,11 +127,11 @@ public:
   QxrdROICoordinatesListModelWPtr roiModel();
   QItemSelectionModel            *roiSelection();
 
-  void roiMouseSelected(const QVector<QPointF> &p);
-  void roiMouseAdded(const QVector<QPointF> &p);
-  void roiMouseRemoved(const QPointF &pt);
-  void roiMouseRotated(const QVector<QPointF> &p);
-  void roiMouseResized(const QVector<QPointF> &p);
+//  void roiMouseSelected(const QVector<QPointF> &p);
+//  void roiMouseAdded(const QVector<QPointF> &p);
+//  void roiMouseRemoved(const QPointF &pt);
+//  void roiMouseRotated(const QVector<QPointF> &p);
+//  void roiMouseResized(const QVector<QPointF> &p);
 
 private:
   void replotImage();

@@ -1452,90 +1452,90 @@ void QxrdImagePlot::moveSelectedROICenter(double x, double y)
   }
 }
 
-void QxrdImagePlot::roiMouseSelected(const QVector<QPointF> &p)
-{
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+//void QxrdImagePlot::roiMouseSelected(const QVector<QPointF> &p)
+//{
+//  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-  if (roiModel && p.count() == 2) {
-    QPointF del = p.value(1) - p.value(0);
+//  if (roiModel && p.count() == 2) {
+//    QPointF del = p.value(1) - p.value(0);
 
-    if ((del.x() == 0) && (del.y() == 0)) {
-      int roiId, inOut, roiType, roiPtIndex;
+//    if ((del.x() == 0) && (del.y() == 0)) {
+//      int roiId, inOut, roiType, roiPtIndex;
 
-      if (roiModel->identifyROIPointByMouse(p.value(0),  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
-        printf("Select ROI %d:%d\n", roiId, inOut);
-      }
-    } else {
-      // Move click...
+//      if (roiModel->identifyROIPointByMouse(p.value(0),  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
+//        printf("Select ROI %d:%d\n", roiId, inOut);
+//      }
+//    } else {
+//      // Move click...
 
-      if (m_ROISelection) {
-        int n = roiModel->roiCount();
+//      if (m_ROISelection) {
+//        int n = roiModel->roiCount();
 
-        for (int i=0; i<n; i++) {
-          if (m_ROISelection->rowIntersectsSelection(i,QModelIndex())) {
-            roiModel->moveROIRelative(i, del.x(), del.y());
-          }
-        }
-      }
-    }
-  }
-}
+//        for (int i=0; i<n; i++) {
+//          if (m_ROISelection->rowIntersectsSelection(i,QModelIndex())) {
+//            roiModel->moveROIRelative(i, del.x(), del.y());
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
 
-void QxrdImagePlot::roiMouseAdded(const QVector<QPointF> &p)
-{
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+//void QxrdImagePlot::roiMouseAdded(const QVector<QPointF> &p)
+//{
+//  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-  if (roiModel && p.count() == 2) {
-    int roiId, inOut, roiType, roiPtIndex;
+//  if (roiModel && p.count() == 2) {
+//    int roiId, inOut, roiType, roiPtIndex;
 
-    if (roiModel->identifyROIPointByMouse(p.value(0),  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
-      printf("Add ROI Pt %d:%d Pt: %d\n", roiId, inOut, roiPtIndex);
-    }
-  }
-}
+//    if (roiModel->identifyROIPointByMouse(p.value(0),  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
+//      printf("Add ROI Pt %d:%d Pt: %d\n", roiId, inOut, roiPtIndex);
+//    }
+//  }
+//}
 
-void QxrdImagePlot::roiMouseRemoved(const QPointF &pt)
-{
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+//void QxrdImagePlot::roiMouseRemoved(const QPointF &pt)
+//{
+//  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-  if (roiModel) {
-    int roiId, inOut, roiType, roiPtIndex;
+//  if (roiModel) {
+//    int roiId, inOut, roiType, roiPtIndex;
 
-    if (roiModel->identifyROIPointByMouse(pt,  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
-      printf("Move ROI %d:%d Pt: %d\n", roiId, inOut, roiPtIndex);
-    }
-  }
-}
+//    if (roiModel->identifyROIPointByMouse(pt,  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
+//      printf("Move ROI %d:%d Pt: %d\n", roiId, inOut, roiPtIndex);
+//    }
+//  }
+//}
 
-void QxrdImagePlot::roiMouseRotated(const QVector<QPointF> &p)
-{
-  if (p.count() == 2) {
-    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+//void QxrdImagePlot::roiMouseRotated(const QVector<QPointF> &p)
+//{
+//  if (p.count() == 2) {
+//    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-    if (roiModel && m_ROISelection) {
-      int n = roiModel->roiCount();
+//    if (roiModel && m_ROISelection) {
+//      int n = roiModel->roiCount();
 
-      for (int i=0; i<n; i++) {
-        if (m_ROISelection->rowIntersectsSelection(i,QModelIndex())) {
-          roiModel->rotateROIByMouse(i, p.value(0), p.value(1));
-        }
-      }
-    }
-  }
-}
+//      for (int i=0; i<n; i++) {
+//        if (m_ROISelection->rowIntersectsSelection(i,QModelIndex())) {
+//          roiModel->rotateROIByMouse(i, p.value(0), p.value(1));
+//        }
+//      }
+//    }
+//  }
+//}
 
-void QxrdImagePlot::roiMouseResized(const QVector<QPointF> &p)
-{
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+//void QxrdImagePlot::roiMouseResized(const QVector<QPointF> &p)
+//{
+//  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-  if (roiModel && p.count() == 2) {
-    int roiId, inOut, roiType, roiPtIndex;
+//  if (roiModel && p.count() == 2) {
+//    int roiId, inOut, roiType, roiPtIndex;
 
-    if (roiModel->identifyROIPointByMouse(p.value(0),  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
-      printf("Resize ROI %d:%d\n", roiId, inOut);
-    }
-  }
-}
+//    if (roiModel->identifyROIPointByMouse(p.value(0),  scaledDelta(5,5), roiId, inOut, roiType, roiPtIndex)) {
+//      printf("Resize ROI %d:%d\n", roiId, inOut);
+//    }
+//  }
+//}
 
 QPointF QxrdImagePlot::scaledDelta(double dx, double dy)
 {

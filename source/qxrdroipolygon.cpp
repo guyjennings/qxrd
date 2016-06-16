@@ -98,6 +98,11 @@ QPointF QxrdROIPolygon::markerPoint(int n)
   }
 }
 
+QPolygonF QxrdROIPolygon::dragOutline()
+{
+  return get_Poly();
+}
+
 QRectF QxrdROIPolygon::boundingRect()
 {
   QcepPolygon qp = get_Poly();
@@ -116,4 +121,19 @@ bool QxrdROIPolygon::pointInShape(QPointF pt)
   bool isIn = p.containsPoint(pt, Qt::WindingFill);
 
   return isIn;
+}
+
+void QxrdROIPolygon::scale(double kx, double ky)
+{
+  QcepPolygon qp = get_Poly();
+
+  QcepPolygon res = QcepPolygon();
+
+  for (int i=0; i<qp.count(); i++) {
+    QPointF pt = qp.value(i);
+
+    res.append(QPointF(pt.x()*kx, pt.y()*ky));
+  }
+
+  set_Poly(res);
 }

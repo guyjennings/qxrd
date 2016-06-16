@@ -275,6 +275,83 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
   return res;
 }
 
+QPolygonF QxrdROICoordinates::dragOutline()
+{
+  double  r = get_Rotation();
+
+  return rotatedDragOutline(r);
+}
+
+QPolygonF QxrdROICoordinates::rotatedDragOutline(double r)
+{
+  QPolygonF res;
+  QPointF c = get_Center();
+  QMatrix m;
+
+  m.rotate(r);
+
+  if (m_OuterShape) {
+    QPolygonF s = m_OuterShape->dragOutline();
+
+    for (int i=0; i<s.count(); i++) {
+      res.append(c + m.map(s.value(i)));
+    }
+  }
+
+  return res;
+}
+
+QPolygonF QxrdROICoordinates::innerOutline()
+{
+  QPolygonF res;
+  QPointF c = get_Center();
+  double  r = get_Rotation();
+  QMatrix m;
+
+  m.rotate(r);
+
+  if (m_InnerShape) {
+    QPolygonF s = m_InnerShape->dragOutline();
+
+    for (int i=0; i<s.count(); i++) {
+      res.append(c + m.map(s.value(i)));
+    }
+  }
+
+  return res;
+}
+
+QPolygonF QxrdROICoordinates::outerOutline()
+{
+  QPolygonF res;
+  QPointF c = get_Center();
+  double  r = get_Rotation();
+  QMatrix m;
+
+  m.rotate(r);
+
+  if (m_OuterShape) {
+    QPolygonF s = m_OuterShape->dragOutline();
+
+    for (int i=0; i<s.count(); i++) {
+      res.append(c + m.map(s.value(i)));
+    }
+  }
+
+  return res;
+}
+
+void QxrdROICoordinates::scale(double kx, double ky)
+{
+  if (m_OuterShape) {
+    m_OuterShape->scale(kx, ky);
+  }
+
+  if (m_InnerShape) {
+    m_InnerShape->scale(kx, ky);
+  }
+}
+
 void QxrdROICoordinates::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
   recalculatePrivate(img, mask, VisualizeNone);
