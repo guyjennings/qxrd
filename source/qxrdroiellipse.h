@@ -1,22 +1,19 @@
 #ifndef QXRDROIELLIPSE_H
 #define QXRDROIELLIPSE_H
 
-#include "qxrdroishape.h"
+#include "qxrdroicenteredshape.h"
 
-class QxrdROIEllipse : public QxrdROIShape
+class QxrdROIEllipse : public QxrdROICenteredShape
 {
   Q_OBJECT
 
 public:
-  QxrdROIEllipse(double left,
-                 double top,
-                 double right,
-                 double bottom);
+  QxrdROIEllipse(double halfWidth,
+                 double halfHeight);
   QxrdROIEllipse(double scale);
 
   virtual int markerCount();
   virtual QPointF markerPoint(int n);
-  virtual QRectF boundingRect();
   virtual bool pointInShape(QPointF pt);
 };
 

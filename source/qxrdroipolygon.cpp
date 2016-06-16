@@ -1,13 +1,13 @@
 #include "qxrdroipolygon.h"
 
 QxrdROIPolygon::QxrdROIPolygon(QPolygonF poly)
-  : QxrdROIShape(PolygonShape, poly.boundingRect()),
+  : QxrdROIShape(PolygonShape),
     m_Poly(this, "poly", poly, "ROI Polygon Shape")
 {
 }
 
 QxrdROIPolygon::QxrdROIPolygon(double scale)
-  : QxrdROIShape(PolygonShape, QRectF()),
+  : QxrdROIShape(PolygonShape),
     m_Poly(this, "poly", QPolygonF(), "ROI Polygon Shape")
 {
   m_Poly.appendValue(QPointF(-50,0)*scale);
@@ -23,7 +23,7 @@ void QxrdROIPolygon::clear()
 {
   m_Poly.clear();
 
-  set_Coords(QRectF());
+//  set_Coords(QRectF());
 
   emit roiChanged();
 }
@@ -40,7 +40,7 @@ void QxrdROIPolygon::append(QPointF pt)
 
   QPolygonF pf(p);
 
-  set_Coords(pf.boundingRect());
+//  set_Coords(pf.boundingRect());
   set_Poly(p);
 
   emit roiChanged();
@@ -56,7 +56,7 @@ void QxrdROIPolygon::setPoint(int n, QPointF val)
 
   QPolygonF pf(p);
 
-  set_Coords(pf.boundingRect());
+//  set_Coords(pf.boundingRect());
   set_Poly(p);
 
   emit roiChanged();
