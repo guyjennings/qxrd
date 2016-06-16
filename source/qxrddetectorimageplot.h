@@ -20,6 +20,8 @@ public:
   void enableROIRotate();
   void enableROIResize();
 
+  void classifyROIPoint(double x, double y);
+
 protected:
   void disablePickers();
 

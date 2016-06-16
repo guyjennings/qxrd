@@ -2,6 +2,9 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 #include "qxrdroipicker.h"
+#include "qxrdroicoordinates.h"
+#include "qxrdroicoordinateslistmodel.h"
+#include <QItemSelectionModel>
 
 QxrdDetectorImagePlot::QxrdDetectorImagePlot(QWidget *parent)
   : QxrdImagePlot(parent),
@@ -94,6 +97,28 @@ void QxrdDetectorImagePlot::enableROIResize()
   }
 }
 
+void QxrdDetectorImagePlot::classifyROIPoint(double x, double y)
+{
+  QxrdROICoordinatesListModelPtr roiMod = roiModel();
+  QItemSelectionModel           *roiSel = roiSelection();
+  QPointF pt(x,y);
+
+  if (roiMod && roiSel) {
+    int nRois = roiMod->rowCount(QModelIndex());
+
+    for (int i=0; i<nRois; i++) {
+      QxrdROICoordinatesPtr roi = roiMod->roi(i);
+
+      bool isSelected = roiSel -> rowIntersectsSelection(i, QModelIndex());
+      bool inInner    = roi -> pointInInner(pt);
+      bool inOuter    = roi -> pointInOuter(pt);
+
+      printMessage(tr("ROI %1, Sel %2, inInner %3, inOuter %4")
+                   .arg(i).arg(isSelected).arg(inInner).arg(inOuter));
+    }
+  }
+}
+
 void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
 {
   QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
@@ -126,6 +151,8 @@ void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
     shRoi->setCheckable(true);
     shRoi->setChecked(set->get_DisplayROI());
     QAction *mvRoi  = plotMenu.addAction(tr("Move selected ROI centers to (%1,%2)").arg(x).arg(y));
+    QAction *classify = plotMenu.addAction(tr("Classify ROI Point at (%1,%2").arg(x).arg(y));
+
     plotMenu.addSeparator();
 
     QAction *zap    = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
@@ -144,6 +171,8 @@ void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
       toggleShowROI();
     } else if (action == mvRoi) {
       moveSelectedROICenter(x,y);
+    } else if (action == classify) {
+      classifyROIPoint(x,y);
     } else if (action == zap) {
       zapPixel(qRound(x), qRound(y));
     }
