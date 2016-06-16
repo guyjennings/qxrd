@@ -116,6 +116,10 @@ public:
 
   void move(const QPoint &pt);
   bool end(bool ok = true);
+
+private:
+  double m_ScaledX;
+  double m_ScaledY;
 };
 
 #endif // QXRDROIPICKER_H

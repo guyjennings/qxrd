@@ -46,15 +46,12 @@ public:
 
   void moveROICenter(int i, double x, double y);
   void moveROIRelative(int i, double dx, double dy);
-//  void rotateROIByMouse(int i, QPointF p1, QPointF p2);
   void setRotation(int i, double r);
   void scaleROI(int i, double kx, double ky);
 
   void deleteROIPoint(int i, int innerOuter, int n);
   void changeROIPoint(int i, int innerOuter, int n, QPointF pt);
   void insertROIPoint(int i, int innerOuter, int n, QPointF pt);
-
-//  bool identifyROIPointByMouse(QPointF pt, QPointF delta, int &roiId, int &innerOuter, int &roiType, int &roiPtIndex);
 
   QxrdROICoordinatesWPtr roi(int row) const;
   void setRoi(int row, QxrdROICoordinatesPtr c);

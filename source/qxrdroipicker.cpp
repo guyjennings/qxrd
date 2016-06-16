@@ -609,11 +609,13 @@ bool QxrdROIRotator::end(bool ok)
 QxrdROIResizer::QxrdROIResizer(QWidget *canvas, QxrdImagePlot *plot) :
   QxrdROIPicker(canvas, plot,
                 UseSelectedROIs,
-                SelectPointsOnly,
+                CanSelectEdges,
                 UseAnyShape,
                 SecondAppend,
                 qInf(),
-                10.0)
+                10.0),
+  m_ScaledX(1.0),
+  m_ScaledY(1.0)
 {
   setTrackerMode(QwtPicker::AlwaysOn);
   setStateMachine(new QwtPickerDragLineMachine());
@@ -626,12 +628,73 @@ QxrdROIResizer::QxrdROIResizer(QWidget *canvas, QxrdImagePlot *plot) :
 void QxrdROIResizer::move(const QPoint &pt)
 {
   QxrdROIPicker::move(pt);
+
+  QxrdImagePlot* imgPlot = imagePlot();
+
+  if (imgPlot) {
+    QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
+    QItemSelectionModel           *selMod = imgPlot->roiSelection();
+
+    if (roiMod &&
+        selMod &&
+        m_SelectedROI >= 0 &&
+        m_SelectedPoints.count() == 2) {
+      QxrdROICoordinatesPtr roi = roiMod->roi(m_SelectedROI);
+
+      if (roi) {
+        QPointF ptf1 = invTransform(m_SelectedPoints.value(0));
+        QPointF ptf2 = invTransform(m_SelectedPoints.value(1));
+
+        QPointF p1 = roi->invTransform(ptf1);
+        QPointF p2 = roi->invTransform(ptf2);
+
+        double kx = 1;
+        double ky = 1;
+
+        double rxy = fabs(p1.x()/p1.y());
+        double ryx = 1/rxy;
+
+        if (rxy > 0.25) {
+          kx = p2.x()/p1.x();
+        }
+
+        if (ryx > 0.25) {
+          ky = p2.y()/p1.y();
+        }
+
+        QPolygonF fb = roi->scaledDragOutline(kx, ky);
+
+        m_RubberBand = QPolygon();
+
+        for (int i=0; i<fb.count(); i++) {
+          m_RubberBand.append(transform(fb.value(i)));
+        }
+
+        m_ScaledX = kx;
+        m_ScaledY = ky;
+      }
+    }
+  }
 }
 
 bool QxrdROIResizer::end(bool ok)
 {
   if (ok) {
     printMessage(tr("Resize ROI %1").arg(m_SelectedROI));
+    QxrdImagePlot* imgPlot = imagePlot();
+
+    if (imgPlot) {
+      QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
+      QItemSelectionModel           *selMod = imgPlot->roiSelection();
+
+      if (roiMod &&
+          selMod &&
+          m_SelectedROI >= 0 &&
+          m_SelectedPoints.count() == 2) {
+
+        roiMod->scaleROI(m_SelectedROI, m_ScaledX, m_ScaledY);
+      }
+    }
   }
 
   return QxrdROIPicker::end(ok);

@@ -5,6 +5,8 @@
 
 class QxrdROICenteredShape : public QxrdROIShape
 {
+  Q_OBJECT
+
 public:
   QxrdROICenteredShape(int shapeType,
                        double halfWidth,

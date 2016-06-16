@@ -96,7 +96,7 @@ public slots:
   void setCenterY(double cy);
   void setRotation(double r);
 
-  void scale(double kx, double ky);
+  void scaleROI(double kx, double ky);
   void deleteROIPoint(int innerOuter, int n);
   void changeROIPoint(int innerOuter, int n, QPointF pt);
   void insertROIPoint(int innerOuter, int n, QPointF pt);
@@ -104,9 +104,12 @@ public slots:
   QVector<QPointF> markerCoords();
   QPolygonF dragOutline();
   QPolygonF rotatedDragOutline(double r);
+  QPolygonF scaledDragOutline(double kx, double ky);
 
   QPolygonF innerOutline();
   QPolygonF outerOutline();
+  QPolygonF scaledInnerOutline(double kx, double ky);
+  QPolygonF scaledOuterOutline(double kx, double ky);
 
   QPointF transform( const QPointF & pt) const;
   QPointF invTransform( const QPointF & pt) const;

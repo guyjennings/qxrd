@@ -21,7 +21,7 @@ QRectF QxrdROICenteredShape::boundingRect()
 
 void QxrdROICenteredShape::scale(double kx, double ky)
 {
-  set_HalfHeight(get_HalfWidth()*kx);
+  set_HalfWidth(get_HalfWidth()*kx);
   set_HalfHeight(get_HalfHeight()*ky);
 }
 

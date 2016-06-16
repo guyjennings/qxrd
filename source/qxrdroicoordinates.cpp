@@ -341,7 +341,56 @@ QPolygonF QxrdROICoordinates::outerOutline()
   return res;
 }
 
-void QxrdROICoordinates::scale(double kx, double ky)
+QPolygonF QxrdROICoordinates::scaledInnerOutline(double kx, double ky)
+{
+  QPolygonF res;
+  QPointF c = get_Center();
+  double  r = get_Rotation();
+  QMatrix m;
+
+  m.rotate(r);
+
+  if (m_InnerShape) {
+    QPolygonF s = m_InnerShape->dragOutline();
+
+    for (int i=0; i<s.count(); i++) {
+      QPointF p = s.value(i);
+
+      res.append(c + m.map(QPointF(p.x()*kx, p.y()*ky)));
+    }
+  }
+
+  return res;
+}
+
+QPolygonF QxrdROICoordinates::scaledOuterOutline(double kx, double ky)
+{
+  QPolygonF res;
+  QPointF c = get_Center();
+  double  r = get_Rotation();
+  QMatrix m;
+
+  m.rotate(r);
+
+  if (m_OuterShape) {
+    QPolygonF s = m_OuterShape->dragOutline();
+
+    for (int i=0; i<s.count(); i++) {
+      QPointF p = s.value(i);
+
+      res.append(c + m.map(QPointF(p.x()*kx, p.y()*ky)));
+    }
+  }
+
+  return res;
+}
+
+QPolygonF QxrdROICoordinates::scaledDragOutline(double kx, double ky)
+{
+  return scaledOuterOutline(kx, ky);
+}
+
+void QxrdROICoordinates::scaleROI(double kx, double ky)
 {
   if (m_OuterShape) {
     m_OuterShape->scale(kx, ky);
