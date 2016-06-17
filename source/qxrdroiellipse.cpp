@@ -40,7 +40,13 @@ QPolygonF QxrdROIEllipse::dragOutline()
 
 bool QxrdROIEllipse::pointInShape(QPointF pt)
 {
-  printf("Need QxrdROIEllipse::pointInShape\n");
+  double a=get_HalfWidth();
+  double b=get_HalfHeight();
 
-  return boundingRect().contains(pt);
+  double x=pt.x()/a;
+  double y=pt.y()/b;
+
+  double r= sqrt(x*x+y*y);
+
+  return (r <= 1.0);
 }
