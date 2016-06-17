@@ -432,6 +432,7 @@ void QxrdExperiment::removeChildPtr(QcepSerializableObjectPtr child)
 
 void QxrdExperiment::registerMetaTypes()
 {
+  qRegisterMetaType< QList<QwtLegendData> >("QList<QwtLegendData>");
   qRegisterMetaType<QxrdExperiment*>("QxrdExperiment*");
   qRegisterMetaType<QxrdAcquisition*>("QxrdAcquisition*");
   qRegisterMetaType<QxrdAcquisitionExtraInputs*>("QxrdAcquisitionExtraInputs*");
