@@ -3,6 +3,7 @@
 #include "qcepmutexlocker.h"
 #include <stdio.h>
 #include "qxrdroishape.h"
+#include "qtconcurrentrun.h"
 
 QxrdROICoordinatesListModel::QxrdROICoordinatesListModel()
   : QAbstractListModel(),
@@ -477,12 +478,22 @@ void QxrdROICoordinatesListModel::recalculate(QcepImageDataBasePtr img, QcepMask
   QTime tic;
   tic.start();
 
+  QVector<  QFuture<void> > res;
+
   for (int i=0; i<m_ROICoordinates.count(); i++) {
     QxrdROICoordinatesPtr r = m_ROICoordinates.value(i);
 
     if (r) {
-      r->recalculate(img, mask);
+//      r->recalculate(img, mask);
+
+      res.append(
+            QtConcurrent::run(r.data(),
+                              &QxrdROICoordinates::recalculate, img, mask));
     }
+  }
+
+  for (int i=0; i<res.count(); i++) {
+    res.value(i).waitForFinished();
   }
 
   emit dataChanged(index(0,SumCol), index(m_ROICoordinates.count(),YGradientCol));
