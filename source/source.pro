@@ -393,7 +393,9 @@ HEADERS += TODO.h \
     qxrdroipicker.h \
     qxrdroipicker-ptr.h \
     qxrddetectorimageplot-ptr.h \
-    qxrdroicenteredshape.h
+    qxrdroicenteredshape.h \
+    qxrdroicache.h \
+    qxrdroicache-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -580,7 +582,8 @@ SOURCES += qxrd.cpp \
     qxrdroipolygon.cpp \
     qxrdroirasterdata.cpp \
     qxrdroipicker.cpp \
-    qxrdroicenteredshape.cpp
+    qxrdroicenteredshape.cpp \
+    qxrdroicache.cpp
 
 OTHER_FILES += testImage.js
 
