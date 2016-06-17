@@ -4,6 +4,8 @@
 #include <QMatrix4x4>
 #include "qxrdroishape.h"
 #include "qcepmutexlocker.h"
+#include "qcepproperty.h"
+#include "qxrdroicache.h"
 
 QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
                                        int                   roiInnerType)
@@ -14,6 +16,7 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
     m_RoiInnerTypeName(this, "roiInnerTypeName", QxrdROIShape::roiTypeName(roiInnerType), "ROI Inner Type Name"),
     m_Center(this, "center", QPointF(0, 0), "ROI Center"),
     m_Rotation(this, "rotation", 0, "ROI Rotation"),
+    m_Changed(this, "changed", true, "ROI Has been changed?"),
     m_Sum(this, "sum", 0, "ROI Pixel Sum"),
     m_Average(this, "average", 0, "ROI Pixel Average"),
     m_Minimum(this, "minimum", 0, "ROI Pixel Minimum"),
@@ -23,16 +26,21 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
     m_Background(this, "background", 0, "ROI Background"),
     m_XGradient(this, "xGradient", 0, "ROI X Gradient"),
     m_YGradient(this, "yGradient", 0, "ROI Y Gradient"),
-    m_Mutex(QMutex::Recursive)
+    m_Mutex(QMutex::Recursive),
+    m_OuterShape(QxrdROIShape::newROIShape(roiOuterType, 1.0)),
+    m_InnerShape(QxrdROIShape::newROIShape(roiInnerType, 0.25)),
+    m_Cache(new QxrdROICache()),
+    m_Bounds(QRect()),
+    m_InnerBounds(QRect()),
+    m_OuterBounds(QRect())
 {
-  m_OuterShape = QxrdROIShape::newROIShape(roiOuterType, 1.0);
-  m_InnerShape = QxrdROIShape::newROIShape(roiInnerType, 0.25);
+  connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
+  connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
 
-  connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::outerChanged);
-  connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::innerChanged);
+  connect(prop_Center(), &QcepDoublePointProperty::valueChanged, this, &QxrdROICoordinates::changed);
+  connect(prop_Rotation(), &QcepDoubleProperty::valueChanged, this, &QxrdROICoordinates::changed);
 
-  outerChanged();
-  innerChanged();
+  changed();
 }
 
 QxrdROICoordinates::~QxrdROICoordinates()
@@ -68,8 +76,7 @@ void QxrdROICoordinates::readSettings(QSettings *settings, QString section)
     m_InnerShape->readSettings(settings, section+"/inner");
   }
 
-  outerChanged();
-  innerChanged();
+  changed();
 }
 
 QScriptValue QxrdROICoordinates::toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesPtr &coords)
@@ -159,33 +166,9 @@ void QxrdROICoordinates::selectNamedROIInnerType(QString nm)
   }
 }
 
-void QxrdROICoordinates::updateBounds()
+void QxrdROICoordinates::changed()
 {
-//  if (m_OuterShape) {
-//    QRectF r = m_OuterShape->get_Coords();
-
-//    if (m_InnerShape) {
-//      QRectF r1 = m_InnerShape->get_Coords();
-
-//      set_Coords(r | r1);
-//    } else {
-//      set_Coords(r);
-//    }
-//  } else if (m_InnerShape) {
-//    set_Coords(m_InnerShape->get_Coords());
-//  }
-}
-
-void QxrdROICoordinates::outerChanged()
-{
-  updateBounds();
-
-  emit roiChanged();
-}
-
-void QxrdROICoordinates::innerChanged()
-{
-  updateBounds();
+  set_Changed(true);
 
   emit roiChanged();
 }
@@ -486,23 +469,41 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
 
   if (m_InnerShape && m_OuterShape && img) {
     QPointF c = get_Center();
-    double  r = get_Rotation();
-    QMatrix m, mn;
-    m.rotate(r);
-    mn.rotate(-r);
+    double  cx = c.x();
+    double  cy = c.y();
 
-    QRectF innerBounds = m.mapRect(m_InnerShape->boundingRect()).translated(c);
-    QRectF outerBounds = m.mapRect(m_OuterShape->boundingRect()).translated(c);
+    if (get_Changed()) {
+      double  r = get_Rotation();
+      QMatrix m, mn;
+      m.rotate(r);
+      mn.rotate(-r);
 
-    QRectF bounds = innerBounds | outerBounds;
+      QRectF innerBounds = m.mapRect(m_InnerShape->boundingRect()).translated(c);
+      QRectF outerBounds = m.mapRect(m_OuterShape->boundingRect()).translated(c);
 
-    int tp = qRound(bounds.top());
-    int bt = qRound(bounds.bottom());
-    int lf = qRound(bounds.left());
-    int rt = qRound(bounds.right());
+      QRectF bounds = innerBounds | outerBounds;
 
-    double cx = c.x();
-    double cy = c.y();
+      m_Bounds = bounds.toRect();
+      m_InnerBounds = innerBounds.toRect();
+      m_OuterBounds = outerBounds.toRect();
+
+      m_Cache->redimension(m_Bounds);
+
+      int tp = m_Bounds.top();
+      int bt = m_Bounds.bottom();
+      int lf = m_Bounds.left();
+      int rt = m_Bounds.right();
+
+      for (int row=tp; row<=bt; row++) {
+        for (int col=lf; col<=rt; col++) {
+          QPointF p = mn.map(QPointF(col,row)-c);
+
+          m_Cache->setPoint(col,row,
+                            m_InnerShape->pointInShape(p),
+                            m_OuterShape->pointInShape(p));
+        }
+      }
+    }
 
     int first = true;
 
@@ -527,6 +528,11 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
     double gradx = 0;
     double grady = 0;
 
+    int tp = m_Bounds.top();
+    int bt = m_Bounds.bottom();
+    int lf = m_Bounds.left();
+    int rt = m_Bounds.right();
+
     for (int row=tp; row<=bt; row++) {
       double dy = row - cy;
 
@@ -534,12 +540,12 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
         double dx = col - cx;
 
         if (mask == NULL || mask->value(col, row)) {
-          QPointF p = mn.map(QPointF(col,row)-c);
+          int code = m_Cache->getPoint(col, row);
 
-          if (m_InnerShape->pointInShape(p)) {
+          if (QxrdROICache::innerPoint(code)) {
             // Peak point, skip for now...
             ninner += 1;
-          } else if (m_OuterShape->pointInShape(p)) {
+          } else if (QxrdROICache::outerPoint(code)) {
             nouter += 1;
             // Background point...
             double val = img->getImageData(col, row);
@@ -589,10 +595,10 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
       bkgd = sumvn/sumct;
     }
 
-    tp = qRound(innerBounds.top());
-    bt = qRound(innerBounds.bottom());
-    lf = qRound(innerBounds.left());
-    rt = qRound(innerBounds.right());
+    tp = m_InnerBounds.top();
+    bt = m_InnerBounds.bottom();
+    lf = m_InnerBounds.left();
+    rt = m_InnerBounds.right();
 
     for (int row=tp; row<=bt; row++) {
       double dy = row - cy;
@@ -601,9 +607,7 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
         double dx = col - cx;
 
         if (mask == NULL || mask->value(col, row)) {
-          QPointF p = mn.map(QPointF(col,row)-c);
-
-          if (m_InnerShape->pointInShape(p)) {
+          if (m_Cache->innerPoint(col, row)) {
             double val = img->getImageData(col, row);
 
             if (val == val) {
@@ -643,6 +647,8 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
     set_Background(bkgd);
     set_XGradient(gradx);
     set_YGradient(grady);
+
+    set_Changed(false);
   }
 
 #ifndef QT_NO_DEBUG
@@ -650,235 +656,6 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
   printMessage(tr("Inner #%1, Outer #%2").arg(ninner).arg(nouter));
 #endif
 }
-
-//void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis)
-//{
-//  int outerBounds = NoBounds;
-//  int innerBounds = NoBounds;
-
-//  switch (get_RoiOuterType()) {
-//  case QxrdROIShape::RectangleShape:
-//    outerBounds = RectangleBounds;
-//    break;
-
-//  case QxrdROIShape::EllipseShape:
-//    outerBounds = EllipseBounds;
-//    break;
-//  }
-
-//  switch (get_RoiInnerType()) {
-//  case QxrdROIShape::RectangleShape:
-//    innerBounds = RectangleBounds;
-//    break;
-
-//  case QxrdROIShape::EllipseShape:
-//    innerBounds = EllipseBounds;
-//    break;
-//  }
-
-//  int first = true;
-//  double min = 0;
-//  double max = 0;
-//  double sum = 0;
-//  double npx = 0;
-
-//  double sumvn = 0;
-//  double sumvx = 0;
-//  double sumvy = 0;
-
-//  double sumct = 0;
-//  double sumnn = 0;
-//  double sumnx = 0;
-//  double sumny = 0;
-//  double sumxy = 0;
-//  double sumxx = 0;
-//  double sumyy = 0;
-
-//  double bkgd = 0;
-//  double gradx = 0;
-//  double grady = 0;
-
-//  if (img) {
-//    int tp = qRound(m_OuterShape->top());
-//    int bt = qRound(m_OuterShape->bottom());
-//    int lf = qRound(m_OuterShape->left());
-//    int rt = qRound(m_OuterShape->right());
-
-//    int tp2 = qRound(m_InnerShape->top());
-//    int bt2 = qRound(m_InnerShape->bottom());
-//    int lf2 = qRound(m_InnerShape->left());
-//    int rt2 = qRound(m_InnerShape->right());
-
-//    double cx = m_OuterShape->center().x();
-//    double cy = m_OuterShape->center().y();
-//    double a  = m_OuterShape->width()/2.0;
-//    double b  = m_OuterShape->height()/2.0;
-//    double a2 = m_InnerShape->width()/2.0;
-//    double b2 = m_InnerShape->height()/2.0;
-
-//    for (int row=tp; row<=bt; row++) {
-
-//      if (outerBounds == EllipseBounds) {
-//        double xx = a*sqrt(1 - pow(dy/b,2));
-//        lf = qRound(cx - xx);
-//        rt = qRound(cx + xx);
-//      }
-
-//      for (int col=lf; col<=rt; col++) {
-//        double dx = col - cx;
-
-//        if (innerBounds == EllipseBounds) {
-//          double xx2 = a2*sqrt(1 - pow(dy/b2,2));
-//          if (xx2==xx2) {
-//            lf2 = qRound(cx - xx2);
-//            rt2 = qRound(cx + xx2);
-//          } else {
-//            lf2 = rt;
-//            rt2 = rt;
-//          }
-//        }
-
-//        if (innerBounds == NoBounds
-//            || (row <= tp2)
-//            || (row >= bt2)
-//            || (col <= lf2)
-//            || (col >= rt2)) {
-//          if (mask == NULL || mask->value(col, row)) {
-//            double val = img->getImageData(col, row);
-
-//            if (val == val) {
-//              sumct += 1;
-//              sumnn += 1;
-//              sumnx += dx;
-//              sumny += dy;
-//              sumxy += dx*dy;
-//              sumxx += dx*dx;
-//              sumyy += dy*dy;
-
-//              sumvn += val;
-//              sumvx += val*dx;
-//              sumvy += val*dy;
-
-//              if (innerBounds == NoBounds) {
-//                if (first) {
-//                  min = val;
-//                  max = val;
-//                  first = false;
-//                } else if (val > max) {
-//                  max = val;
-//                } else if (val < min) {
-//                  min = val;
-//                }
-//              }
-
-//              sum += val;
-//              npx += 1;
-
-//              if (vis == VisualizeBackground) {
-//                img->setImageData(col, row, 1000 - val);
-//              }
-//            }
-//          }
-//        }
-//      }
-//    }
-
-//    if (sumct > 5) {
-//      QMatrix4x4 m;
-
-//      m(0,0) = sumnn;
-//      m(1,0) = sumnx;
-//      m(0,1) = sumnx;
-//      m(2,0) = sumny;
-//      m(0,2) = sumny;
-//      m(1,1) = sumxx;
-//      m(2,1) = sumxy;
-//      m(1,2) = sumxy;
-//      m(2,2) = sumyy;
-
-//      bool invertible;
-
-//      QMatrix4x4 inv = m.inverted(&invertible);
-
-//      if (invertible) {
-//        bkgd   = inv(0,0)*sumvn + inv(0,1)*sumvx + inv(0,2)*sumvy;
-//        gradx  = inv(1,0)*sumvn + inv(1,1)*sumvx + inv(1,2)*sumvy;
-//        grady  = inv(2,0)*sumvn + inv(2,1)*sumvx + inv(2,2)*sumvy;
-//      } else {
-//        bkgd = sumvn/sumct;
-//      }
-//    } else if (sumct > 0) {
-//      bkgd = sumvn/sumct;
-//    }
-//    if (innerBounds != NoBounds) {
-//      first = true;
-//      min = 0;
-//      max = 0;
-//      sum = 0;
-//      npx = 0;
-
-//      for (int row=tp2; row<=bt2; row++) {
-//        double dy = row - cy;
-
-//        if (innerBounds == EllipseBounds) {
-//          double xx2 = a2*sqrt(1 - pow(dy/b2,2));
-//          if (xx2==xx2) {
-//            lf2 = qRound(cx - xx2);
-//            rt2 = qRound(cx + xx2);
-//          } else {
-//            lf2 = rt;
-//            rt2 = rt-1;
-//          }
-//        }
-
-//        for (int col=lf2; col<=rt2; col++) {
-//          if (mask == NULL || mask->value(col, row)) {
-//            double val = img->getImageData(col, row);
-
-//            if (val == val) {
-//              double dx = col - cx;
-//              double bk = bkgd + dx*gradx + dy*grady;
-//              double v  = val - bk;
-
-//              if (first) {
-//                min = v;
-//                max = v;
-//                first = false;
-//              } else if (v > max) {
-//                max = v;
-//              } else if (v < min) {
-//                min = v;
-//              }
-
-//              sum += v;
-//              npx += 1;
-
-//              if (vis == VisualizePeak) {
-//                img->setImageData(col, row, 1000 - val);
-//              }
-//            }
-//          }
-//        }
-//      }
-//    }
-//  }
-
-//  set_Sum(sum);
-
-//  set_NPixels(npx);
-//  set_Minimum(min);
-//  set_Maximum(max);
-
-//  if (npx > 0) {
-//    set_Average(sum/npx);
-//  } else {
-//    set_Average(0);
-//  }
-
-//  set_Background(bkgd);
-//  set_XGradient(gradx);
-//  set_YGradient(grady);
-//}
 
 QVector<double> QxrdROICoordinates::values() const
 {

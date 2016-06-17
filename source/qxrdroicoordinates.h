@@ -10,6 +10,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qxrdroishape-ptr.h"
+#include "qxrdroicache-ptr.h"
 
 #include <QScriptEngine>
 #include <QMutex>
@@ -88,8 +89,7 @@ public slots:
   QxrdROIShapePtr inner() const;
   QxrdROIShapePtr outer() const;
 
-  void outerChanged();
-  void innerChanged();
+  void changed();
 
   void setCenter(QPointF c);
   void setCenterX(double cx);
@@ -115,7 +115,9 @@ public slots:
   QPointF invTransform( const QPointF & pt) const;
 
 private:
-  void updateBounds();
+  bool innerPoint(QPointF pt) const;
+  bool outerPoint(QPointF pt) const;
+
   void recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis);
 
 public:
@@ -136,6 +138,9 @@ public:
 
   Q_PROPERTY(double  rotation READ get_Rotation WRITE set_Rotation)
   QCEP_DOUBLE_PROPERTY(Rotation)
+
+  Q_PROPERTY(int changed READ get_Changed WRITE set_Changed STORED false)
+  QCEP_INTEGER_PROPERTY(Changed)
 
   Q_PROPERTY(double sum READ get_Sum WRITE set_Sum STORED false)
   QCEP_DOUBLE_PROPERTY(Sum)
@@ -169,8 +174,10 @@ private:
   QxrdROIShapePtr m_OuterShape;
   QxrdROIShapePtr m_InnerShape;
 
-  QImage          m_OuterImage;
-  QImage          m_InnerImage;
+  QxrdROICachePtr m_Cache;
+  QRect           m_Bounds;
+  QRect           m_InnerBounds;
+  QRect           m_OuterBounds;
 };
 
 #endif // QXRDROICOORDINATES_H
