@@ -12,56 +12,12 @@ QcepSerializableObject::~QcepSerializableObject()
 {
 }
 
-void QcepSerializableObject::printLine(QString line) const
-{
-  QcepSerializableObjectPtr parent(m_Parent);
-
-  if (parent) {
-    parent->printLine(line);
-  } else {
-    QcepObject::printLine(line);
-  }
-}
-
-void QcepSerializableObject::printMessage(QString msg, QDateTime dt) const
-{
-  QcepSerializableObjectPtr parent(m_Parent);
-
-  if (parent) {
-    parent->printMessage(msg, dt);
-  } else {
-    QcepObject::printMessage(msg, dt);
-  }
-}
-
-void QcepSerializableObject::criticalMessage(QString msg, QDateTime dt) const
-{
-  QcepSerializableObjectPtr parent(m_Parent);
-
-  if (parent) {
-    parent->criticalMessage(msg, dt);
-  } else {
-    QcepObject::criticalMessage(msg, dt);
-  }
-}
-
-void QcepSerializableObject::statusMessage(QString msg, QDateTime dt) const
-{
-  QcepSerializableObjectPtr parent(m_Parent);
-
-  if (parent) {
-    parent->statusMessage(msg, dt);
-  } else {
-    QcepObject::statusMessage(msg, dt);
-  }
-}
-
 void QcepSerializableObject::propertyChanged(QcepProperty *prop)
 {
   if (prop == NULL || prop->isStored()) {
     QcepObject::propertyChanged(prop);
 
-    QcepSerializableObjectPtr parent(m_Parent);
+    QcepObjectPtr parent(parentPtr());
 
     if (parent) {
       parent->propertyChanged(prop);
@@ -124,7 +80,7 @@ int QcepSerializableObject::checkChildren(int verbose, int level) const
       printLine(tr("NULL child of %1").arg(get_Name()));
       ck = false;
     } else {
-      QcepSerializableObjectWPtr parent = child->parentPtr();
+      QcepObjectWPtr parent = child->parentPtr();
 
       if (parent != sharedFromThis()) {
         printLine(tr("parent of %1 is not %2")
@@ -139,11 +95,6 @@ int QcepSerializableObject::checkChildren(int verbose, int level) const
   }
 
   return ck;
-}
-
-QcepSerializableObjectWPtr QcepSerializableObject::parentPtr() const
-{
-  return m_Parent;
 }
 
 int QcepSerializableObject::childCount() const
@@ -343,29 +294,6 @@ void QcepSerializableObject::readObjectData(QcepFileFormatterPtr fmt)
 {
 }
 
-void QcepSerializableObject::setParentPtr(QcepSerializableObjectWPtr parent)
-{
-  m_Parent = parent;
-//  if (m_Parent != parent) {
-//    QcepObjectPtr oldParent(m_Parent);
-//    QcepObjectPtr newParent(parent);
-
-//    if (newParent) {
-//      m_Parent = newParent;
-//    } else {
-//      printMessage("Attempt to set parent to non-existing object");
-//    }
-
-//    if (oldParent) {
-//      oldParent->removeChildPtr(sharedFromThis());
-//    }
-
-//    if (newParent) {
-//      newParent->addChildPtr(sharedFromThis());
-//    }
-//  }
-}
-
 #ifndef QT_NO_DEBUG
 void QcepSerializableObject::checkPointerMatchCount(QcepSerializableObjectWPtr ptr)
 {
@@ -416,7 +344,7 @@ void QcepSerializableObject::removeChildPtr(QcepSerializableObjectPtr child)
 void QcepSerializableObject::dumpObjectTreePtr(int level)
 {
   const QMetaObject* metaObject = this->metaObject();
-  QcepSerializableObjectPtr parent(m_Parent);
+  QcepObjectPtr parent(parentPtr());
 
   printLine(tr("%1// %2: %3 constrs, parent %4")
             .arg("", level)

@@ -60,6 +60,21 @@ QcepObject::~QcepObject()
 #endif
 }
 
+void QcepObject::setParentPtr(QcepObjectWPtr parent)
+{
+  m_Parent = parent;
+}
+
+QcepObjectWPtr QcepObject::parentPtr()
+{
+  return m_Parent;
+}
+
+const QcepObjectWPtr QcepObject::parentPtr() const
+{
+  return m_Parent;
+}
+
 void QcepObject::propertyChanged(QcepProperty *prop)
 {
   if (prop == NULL || prop->isStored()) {
@@ -127,48 +142,72 @@ QString QcepObject::get_Type() const
 
 void QcepObject::printLine(QString line) const
 {
-  QcepObject *p = qobject_cast<QcepObject*>(parent());
+  QcepObjectPtr p(m_Parent);
 
   if (p) {
     p->printLine(line);
   } else {
-    printf("%s\n", qPrintable(line));
+    QcepObject *p = qobject_cast<QcepObject*>(parent());
+
+    if (p) {
+      p->printLine(line);
+    } else {
+      printf("%s\n", qPrintable(line));
+    }
   }
 }
 
 void QcepObject::printMessage(QString msg, QDateTime dt) const
 {
-  QcepObject *p = qobject_cast<QcepObject*>(parent());
+  QcepObjectPtr p(m_Parent);
 
   if (p) {
     p->printMessage(msg, dt);
   } else {
-    printf("MESSAGE: %s %s\n",
-           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+    QcepObject *p = qobject_cast<QcepObject*>(parent());
+
+    if (p) {
+      p->printMessage(msg, dt);
+    } else {
+      printf("MESSAGE: %s %s\n",
+             qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+    }
   }
 }
 
 void QcepObject::criticalMessage(QString msg, QDateTime dt) const
 {
-  QcepObject *p = qobject_cast<QcepObject*>(parent());
+  QcepObjectPtr p(m_Parent);
 
   if (p) {
     p->criticalMessage(msg, dt);
   } else {
-    printf("CRITICAL: %s %s\n",
-           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+    QcepObject *p = qobject_cast<QcepObject*>(parent());
+
+    if (p) {
+      p->criticalMessage(msg, dt);
+    } else {
+      printf("CRITICAL: %s %s\n",
+             qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+    }
   }
 }
 
 void QcepObject::statusMessage(QString msg, QDateTime dt) const
 {
-  QcepObject *p = qobject_cast<QcepObject*>(parent());
+  QcepObjectPtr p(parentPtr());
 
   if (p) {
     p->statusMessage(msg, dt);
   } else {
-    printf("STATUS: %s %s\n",
-           qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+    QcepObject *p = qobject_cast<QcepObject*>(parent());
+
+    if (p) {
+      p->statusMessage(msg, dt);
+    } else {
+      printf("STATUS: %s %s\n",
+             qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+    }
   }
 }
 

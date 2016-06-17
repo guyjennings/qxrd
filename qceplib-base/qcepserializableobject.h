@@ -22,8 +22,6 @@ public:
   virtual void readObjectData(QcepFileFormatterPtr fmt);
   virtual void writeObjectData(QcepFileFormatterPtr fmt);
 
-  void setParentPtr(QcepSerializableObjectWPtr parent);
-
   virtual void addChildPtr(QcepSerializableObjectPtr child);
   virtual void removeChildPtr(QcepSerializableObjectPtr child);
 
@@ -34,11 +32,6 @@ public:
   virtual void insertChildPtr(int atRow, QcepSerializableObjectPtr child);
 
 public slots:
-  virtual void printLine(QString line) const;
-  virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
-  virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-
   void dumpObjectTreePtr(int level=0);
 
   int childrenChanged() const;
@@ -48,7 +41,6 @@ public slots:
 
   int checkChildren(int verbose=0, int level=0) const;
 
-  QcepSerializableObjectWPtr parentPtr() const;
   QVector<QcepSerializableObjectPtr> childrenPtr() const;
   QcepSerializableObjectWPtr childPtr(int n) const;
 
@@ -95,7 +87,6 @@ protected:
   }
 
 private:
-  QcepSerializableObjectWPtr          m_Parent;
   QVector<QcepSerializableObjectPtr>  m_Children;
 
 #ifndef QT_NO_DEBUG

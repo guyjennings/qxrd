@@ -25,6 +25,10 @@ public:
   static QSet<QcepObject*> allocatedObjectsSet();
 #endif
 
+  void setParentPtr(QcepObjectWPtr parent);
+  QcepObjectWPtr parentPtr();
+  const QcepObjectWPtr parentPtr() const;
+
 signals:
 
 public slots:
@@ -69,6 +73,7 @@ private:
   QcepObjectNamer                     m_ObjectNamer;
   QAtomicInt                          m_ChangeCount;
   QAtomicPointer<QcepProperty>        m_LastChanged;
+  QcepObjectWPtr                      m_Parent;
 
 public:
   Q_PROPERTY(QString name READ get_Name WRITE set_Name STORED false)

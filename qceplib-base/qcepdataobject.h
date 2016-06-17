@@ -33,7 +33,8 @@ public slots:
   QString metaTypeName(int id) const;
   QString pathName() const;
   QcepDataGroupPtr rootItem();
-  virtual QcepDataGroupPtr parentItem() const;
+  virtual QcepDataGroupPtr parentItem();
+  virtual const QcepDataGroupPtr parentItem() const;
 
 public:
   typedef enum {

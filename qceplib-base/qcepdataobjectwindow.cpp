@@ -6,7 +6,22 @@ QcepDataObjectWindow::QcepDataObjectWindow(QWidget *parent) : QcepMainWindow(par
 
 }
 
+void QcepDataObjectWindow::printLine(QString line)
+{
+  printf("%s\n", qPrintable(line));
+}
+
 void QcepDataObjectWindow::printMessage(QString msg, QDateTime ts)
 {
-  printf("%s\n", qPrintable(msg));
+  printf("MESSAGE: %s\n", qPrintable(msg));
+}
+
+void QcepDataObjectWindow::criticalMessage(QString msg, QDateTime ts)
+{
+  printf("CRIT: %s\n", qPrintable(msg));
+}
+
+void QcepDataObjectWindow::statusMessage(QString msg, QDateTime ts)
+{
+  printf("STATUS: %s\n", qPrintable(msg));
 }

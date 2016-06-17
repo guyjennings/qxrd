@@ -255,7 +255,12 @@ QcepDataObjectPtr QcepDataObject::item(QString nm)
   return QcepDataObjectPtr();
 }
 
-QcepDataGroupPtr QcepDataObject::parentItem() const
+QcepDataGroupPtr QcepDataObject::parentItem()
+{
+  return qSharedPointerDynamicCast<QcepDataGroup>(parentPtr());
+}
+
+const QcepDataGroupPtr QcepDataObject::parentItem() const
 {
   return qSharedPointerDynamicCast<QcepDataGroup>(parentPtr());
 }
@@ -280,17 +285,12 @@ void QcepDataObject::setParentItem(QcepDataGroupWPtr parent)
 
 int QcepDataObject::indexInParent() const
 {
-  QcepDataObjectPtr p = parentItem();
+  QcepDataGroupPtr p = parentItem();
 
   if (p) {
-    QcepDataGroup *parentGroup =
-          qobject_cast<QcepDataGroup*>(p.data());
-
-    if (parentGroup) {
-      for (int i=0; i<parentGroup->childCount(); i++) {
-        if (parentGroup->item(i).data() == this) {
-          return i;
-        }
+    for (int i=0; i<p->childCount(); i++) {
+      if (p->item(i).data() == this) {
+        return i;
       }
     }
   }
