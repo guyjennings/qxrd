@@ -36,7 +36,7 @@ QxrdDetectorDriverPerkinElmer::QxrdDetectorDriverPerkinElmer(
 #endif
   m_PerkinElmer(perkinElmer)
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
 #ifdef HAVE_PERKIN_ELMER
   printf("Perkin Elmer Detector Driver \"%s\" Constructed\n", qPrintable(name));
 #else
@@ -47,7 +47,7 @@ QxrdDetectorDriverPerkinElmer::QxrdDetectorDriverPerkinElmer(
 
 QxrdDetectorDriverPerkinElmer::~QxrdDetectorDriverPerkinElmer()
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   printf("Perkin Elmer Detector Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
 #endif
 

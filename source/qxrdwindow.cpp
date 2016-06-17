@@ -109,7 +109,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_ImageDisplay(NULL),
     m_Highlighter(NULL)
 {
-#ifndef QT_DEBUG
+#ifndef QT_NO_DEBUG
   printf("Constructing main window\n");
 #endif
 
@@ -2324,48 +2324,3 @@ void QxrdWindow::plotPowderRingCenters()
     }
   }
 }
-
-//void QxrdWindow::doOpenAcquisitionWindow()
-//{
-//  GUI_THREAD_CHECK;
-
-//  QxrdExperimentPtr expt(m_Experiment);
-
-//  if (expt) {
-//    expt->openAcquisitionWindow();
-//  }
-//}
-
-//void QxrdWindow::doPolarTransform()
-//{
-//  GUI_THREAD_CHECK;
-
-//  QxrdExperimentPtr expt(m_Experiment);
-
-//  if (expt) {
-//    QxrdDataProcessorPtr proc(expt->dataProcessor());
-
-//    if (proc) {
-//      QxrdPolarTransformDialog transform(proc);
-
-//      transform.exec();
-//    }
-//  }
-//}
-
-//void QxrdWindow::doPolarNormalization()
-//{
-//  GUI_THREAD_CHECK;
-
-//  QxrdExperimentPtr expt(m_Experiment);
-
-//  if (expt) {
-//    QxrdDataProcessorPtr proc(expt->dataProcessor());
-
-//    if (proc) {
-//      QxrdPolarNormalizationDialog norm(proc);
-
-//      norm.exec();
-//    }
-//  }
-//}

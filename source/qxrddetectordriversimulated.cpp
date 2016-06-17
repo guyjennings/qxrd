@@ -13,7 +13,7 @@ QxrdDetectorDriverSimulated::QxrdDetectorDriverSimulated(
   QxrdDetectorDriver(name, sim, expt, acq),
   m_Simulated(sim)
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   printf("Simulated Detector Driver \"%s\" Constructed\n", qPrintable(name));
 #endif
 
@@ -22,7 +22,7 @@ QxrdDetectorDriverSimulated::QxrdDetectorDriverSimulated(
 
 QxrdDetectorDriverSimulated::~QxrdDetectorDriverSimulated()
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   printf("Simulated Detector Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
 #endif
 }

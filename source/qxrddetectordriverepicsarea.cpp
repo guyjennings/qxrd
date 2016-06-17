@@ -8,14 +8,14 @@ QxrdDetectorDriverEpicsArea::QxrdDetectorDriverEpicsArea(
     QxrdAcquisitionPtr acq) :
   QxrdDetectorDriver(name, det, expt, acq)
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   printf("Epics Area Detector Driver \"%s\" Constructed (Non-Implemented)\n", qPrintable(name));
 #endif
 }
 
 QxrdDetectorDriverEpicsArea::~QxrdDetectorDriverEpicsArea()
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   printf("Epics Area Detector Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
 #endif
 }

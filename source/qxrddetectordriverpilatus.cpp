@@ -23,14 +23,14 @@ QxrdDetectorDriverPilatus::QxrdDetectorDriverPilatus(
   m_ExposureFrameCount(-1),
   m_Remote(new QxrdDetectorPilatusRemote())
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   printf("Pilatus Detector Driver \"%s\" Constructed\n", qPrintable(name));
 #endif
 }
 
 QxrdDetectorDriverPilatus::~QxrdDetectorDriverPilatus()
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   printf("Pilatus Detector Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
 #endif
 }

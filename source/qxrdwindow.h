@@ -89,10 +89,6 @@ public slots:
   void doCorrelate();
   void doReflectVertically();
   void doReflectHorizontally();
-//  void doOpenAcquisitionWindow();
-
-//  void doPolarTransform();
-//  void doPolarNormalization();
 
   void updateTitle();
   void acquireStarted();

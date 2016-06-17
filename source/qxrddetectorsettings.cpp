@@ -38,12 +38,12 @@ QxrdDetectorSettings::QxrdDetectorSettings(QxrdExperimentWPtr    expt,
   m_VBinning(this, "vBinning", 0, "Vert Binning"),
   m_Extension(this, "extension", "tif", "File extension")
 {
-#ifndef QT_DEBUG
-  printf("Constructing detector\n");
+#ifndef QT_NO_DEBUG
+  printf("Constructing detector settings\n");
 #endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdDetector::QxrdDetector(%p)\n", this);
+    printf("QxrdDetectorSettings::QxrdDetectorSettings(%p)\n", this);
   }
 
   QxrdAcquisitionPtr acqs(m_Acquisition);
@@ -84,8 +84,8 @@ void QxrdDetectorSettings::initialize()
 
 QxrdDetectorSettings::~QxrdDetectorSettings()
 {
-#ifndef QT_DEBUG
-  printf("Deleting detector\n");
+#ifndef QT_NO_DEBUG
+  printf("Deleting detector settings\n");
 #endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {

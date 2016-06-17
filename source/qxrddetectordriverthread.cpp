@@ -22,7 +22,7 @@ QxrdDetectorDriverThread::QxrdDetectorDriverThread(QxrdDetectorSettingsWPtr det)
   m_Detector(det),
   m_DetectorDriver()
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   QxrdDetectorSettingsPtr d(m_Detector);
 
   if (d) {
@@ -41,7 +41,7 @@ QxrdDetectorDriverThread::QxrdDetectorDriverThread(QxrdDetectorSettingsWPtr det)
 
 QxrdDetectorDriverThread::~QxrdDetectorDriverThread()
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   printf("Detector driver thread destroyed\n");
 #endif
 
