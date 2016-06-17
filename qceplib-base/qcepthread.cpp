@@ -9,7 +9,7 @@ QcepThread::QcepThread(QcepObjectWPtr parent) :
 
 QcepThread::~QcepThread()
 {
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   if (isRunning()) {
     printf("QcepThread %s destroyed while still running\n",
            qPrintable(objectName()));

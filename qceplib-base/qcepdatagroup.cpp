@@ -50,7 +50,7 @@ void QcepDataGroup::readSettings(QSettings *settings, QString section)
 
   QcepDataObject::readSettings(settings, "");
 
-#ifndef QT_NODEBUG
+#ifndef QT_NO_DEBUG
   if (get_Type() != id) {
     printMessage(tr("Data object type ID changed from %1 to %2 on reading").arg(id).arg(get_Type()));
   }
