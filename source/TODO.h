@@ -715,7 +715,16 @@ TODO("2016-05-29", "",
 TODO("2016-06-01", "",
      "Reinstate experiment autosaver");
 
-TODO("2016-06-02", "",
+DONE("2016-06-02", "2016-06-17",
      "Allow rotation of ROIs, allow polygonal ROIs");
+
+TODO("2016-06-17", "",
+     "Make messages from detectors and detector processing appear in detector window");
+
+TODO("2016-06-17", "",
+     "Add acquisition interface to detector window");
+
+TODO("2016-06-17", "",
+     "Add command to acquire a single frame");
 
 #endif // TODO_H

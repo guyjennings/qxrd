@@ -187,12 +187,39 @@ void QxrdDetectorControlWindow::changeEvent(QEvent *e)
   }
 }
 
+void QxrdDetectorControlWindow::printLine(QString line)
+{
+  displayMessage(line);
+}
+
 void QxrdDetectorControlWindow::printMessage(QString msg, QDateTime ts)
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+
+      QThread::currentThread()->objectName()+": "+
+      msg.trimmed();
 
-  if (acq) {
-    acq->printMessage(msg, ts);
+  message = message.replace("\n", " : ");
+
+  displayMessage(message);
+}
+
+void QxrdDetectorControlWindow::criticalMessage(QString msg, QDateTime ts)
+{
+}
+
+void QxrdDetectorControlWindow::statusMessage(QString msg, QDateTime ts)
+{
+}
+
+void QxrdDetectorControlWindow::displayMessage(QString msg)
+{
+  if (QThread::currentThread()==thread()) {
+    m_Messages -> append(msg);
+  } else {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                           "displayMessage",
+                                           Qt::QueuedConnection,
+                                           Q_ARG(QString, msg)));
   }
 }
 

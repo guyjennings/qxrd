@@ -37,6 +37,11 @@ public:
                                              int                   detType,
                                              int                   detNum);
 
+  virtual void printLine(QString line);
+  virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime());
+  virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+
   static int detectorTypeCount();
   static QString detectorTypeName(int detectorType);
   static QStringList detectorTypeNames();

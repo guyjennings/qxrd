@@ -24,7 +24,12 @@ public:
   ~QxrdDetectorControlWindow();
 
 public slots:
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  virtual void printLine(QString line);
+  virtual void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+
+  virtual void displayMessage(QString msg);
 
 public:
   void displayNewData(QcepImageDataBasePtr img, QcepMaskDataPtr overflow);

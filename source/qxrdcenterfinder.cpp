@@ -126,7 +126,7 @@ QxrdCenterFinder::~QxrdCenterFinder()
 
 QxrdExperimentWPtr QxrdCenterFinder::experiment() const
 {
-  QcepSerializableObjectPtr p = parentPtr();
+  QcepObjectPtr p = parentPtr();
 
   while (p) {
     QxrdExperimentWPtr e = qSharedPointerDynamicCast<QxrdExperiment>(p);
