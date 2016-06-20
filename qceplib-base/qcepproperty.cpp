@@ -415,89 +415,89 @@ void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString s
   }
 }
 
-void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic)
-{
-  if (settings && object) {
-    int count = meta->propertyCount();
-    int offset = meta->propertyOffset();
+//void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic)
+//{
+//  if (settings && object) {
+//    int count = meta->propertyCount();
+//    int offset = meta->propertyOffset();
 
-    settings->beginGroup(groupName);
+//    settings->beginGroup(groupName);
 
-    for (int i=offset; i<count; i++) {
-      QMetaProperty metaproperty = meta->property(i);
+//    for (int i=offset; i<count; i++) {
+//      QMetaProperty metaproperty = meta->property(i);
 
-      if (metaproperty.isStored()) {
-        const char *name = metaproperty.name();
-        QVariant value = object -> property(name);
+//      if (metaproperty.isStored()) {
+//        const char *name = metaproperty.name();
+//        QVariant value = object -> property(name);
 
-        if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
-          QString msg = tr("Save %1/%2 = %3 [%4]")
-              .arg(groupName).arg(name)
-              .arg(value.toString()).arg(value.typeName());
+//        if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
+//          QString msg = tr("Save %1/%2 = %3 [%4]")
+//              .arg(groupName).arg(name)
+//              .arg(value.toString()).arg(value.typeName());
 
-          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                 Q_ARG(QString, msg),
-                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
-        }
+//          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+//                                                 Q_ARG(QString, msg),
+//                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
+//        }
 
-        setSettingsValue(settings, name, value);
-      }
-    }
+//        setSettingsValue(settings, name, value);
+//      }
+//    }
 
-    if (includeDynamic) {
-      QByteArray name;
+//    if (includeDynamic) {
+//      QByteArray name;
 
-      foreach (name, object->dynamicPropertyNames()) {
-        setSettingsValue(settings, name.data(), object->property(name.data()));
-      }
-    }
+//      foreach (name, object->dynamicPropertyNames()) {
+//        setSettingsValue(settings, name.data(), object->property(name.data()));
+//      }
+//    }
 
-    settings->endGroup();
-  }
-}
+//    settings->endGroup();
+//  }
+//}
 
-void QcepProperty::writeSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic)
-{
-  if (settings && object) {
-    const QMetaObject *meta = object->metaObject();
+//void QcepProperty::writeSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic)
+//{
+//  if (settings && object) {
+//    const QMetaObject *meta = object->metaObject();
 
-    int count = meta->propertyCount();
-    int offset = QObject::staticMetaObject.propertyOffset();
+//    int count = meta->propertyCount();
+//    int offset = QObject::staticMetaObject.propertyOffset();
 
-    settings->beginGroup(groupName);
+//    settings->beginGroup(groupName);
 
-    for (int i=offset; i<count; i++) {
-      QMetaProperty metaproperty = meta->property(i);
+//    for (int i=offset; i<count; i++) {
+//      QMetaProperty metaproperty = meta->property(i);
 
-      if (metaproperty.isStored()) {
-        const char *name = metaproperty.name();
-        QVariant value = object -> property(name);
+//      if (metaproperty.isStored()) {
+//        const char *name = metaproperty.name();
+//        QVariant value = object -> property(name);
 
-        if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
-          QString msg = tr("Save %1/%2 = %3 [%4]")
-              .arg(groupName).arg(name)
-              .arg(value.toString()).arg(value.typeName());
+//        if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
+//          QString msg = tr("Save %1/%2 = %3 [%4]")
+//              .arg(groupName).arg(name)
+//              .arg(value.toString()).arg(value.typeName());
 
-          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                 Q_ARG(QString, msg),
-                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
-        }
+//          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+//                                                 Q_ARG(QString, msg),
+//                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
+//        }
 
-        setSettingsValue(settings, name, value);
-      }
-    }
+//        setSettingsValue(settings, name, value);
+//      }
+//    }
 
-    if (includeDynamic) {
-      QByteArray name;
+//    if (includeDynamic) {
+//      QByteArray name;
 
-      foreach (name, object->dynamicPropertyNames()) {
-        setSettingsValue(settings, name.data(), object->property(name.data()));
-      }
-    }
+//      foreach (name, object->dynamicPropertyNames()) {
+//        setSettingsValue(settings, name.data(), object->property(name.data()));
+//      }
+//    }
 
-    settings->endGroup();
-  }
-}
+//    settings->endGroup();
+//  }
+//}
 
 void QcepProperty::readSettings(QObject *object, QSettings *settings, QString section)
 {
@@ -532,12 +532,18 @@ void QcepProperty::readSettings(QObject *object, QSettings *settings, QString se
             QString msg = tr("property %1 of %2 not stored").arg(key)
                 .arg(meta -> className());
 
-            INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                   Q_ARG(QString, msg),
-                                                   Q_ARG(QDateTime, QDateTime::currentDateTime())));
           }
         }
       } else {
+        if (object && qcepDebug(DEBUG_DYNPROPS)) {
+          QString msg = tr("Dyn Property %1 from group %2 of object %3 class %4")
+              .arg(key).arg(settings->group()).arg(object->objectName())
+              .arg(meta->className());
+          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+                                                 Q_ARG(QString, msg),
+                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
+        }
+
         object -> setProperty(qPrintable(key), settings->value(key));
       }
     }
@@ -546,117 +552,117 @@ void QcepProperty::readSettings(QObject *object, QSettings *settings, QString se
   }
 }
 
-void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic)
-{
-  if (settings && object) {
-    settings->beginGroup(groupName);
+//void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic)
+//{
+//  if (settings && object) {
+//    settings->beginGroup(groupName);
 
-    QStringList keys = settings->childKeys();
+//    QStringList keys = settings->childKeys();
 
-    foreach (QString key, keys) {
-      if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-        QString msg = tr("Load %1/%2 = %3 [%4]")
-            .arg(groupName).arg(key)
-            .arg(settings->value(key).toString())
-            .arg(settings->value(key).typeName());
+//    foreach (QString key, keys) {
+//      if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
+//        QString msg = tr("Load %1/%2 = %3 [%4]")
+//            .arg(groupName).arg(key)
+//            .arg(settings->value(key).toString())
+//            .arg(settings->value(key).typeName());
 
-        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                               Q_ARG(QString, msg),
-                                               Q_ARG(QDateTime, QDateTime::currentDateTime())));
-      }
+//        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+//                                               Q_ARG(QString, msg),
+//                                               Q_ARG(QDateTime, QDateTime::currentDateTime())));
+//      }
 
-      int metaindex = meta->indexOfProperty(qPrintable(key));
+//      int metaindex = meta->indexOfProperty(qPrintable(key));
 
-      if (metaindex == 0) { // objectName is ignored on reading
-      } else if (metaindex > 0) {
-        QMetaProperty metaproperty = meta->property(metaindex);
+//      if (metaindex == 0) { // objectName is ignored on reading
+//      } else if (metaindex > 0) {
+//        QMetaProperty metaproperty = meta->property(metaindex);
 
-        if (metaproperty.isStored()) {
-          object -> setProperty(qPrintable(key), settings->value(key));
-        } else {
-          if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-            QString msg = tr("property %1 of %2 not stored").arg(key)
-                .arg(meta -> className());
+//        if (metaproperty.isStored()) {
+//          object -> setProperty(qPrintable(key), settings->value(key));
+//        } else {
+//          if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
+//            QString msg = tr("property %1 of %2 not stored").arg(key)
+//                .arg(meta -> className());
 
-            INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                   Q_ARG(QString, msg),
-                                                   Q_ARG(QDateTime, QDateTime::currentDateTime())));
-          }
-        }
-      } else {
-        if (includeDynamic) {
-          object -> setProperty(qPrintable(key), settings->value(key));
-        } else if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-          QString msg = tr("property %1 of %2 does not exist")
-              .arg(key).arg(meta -> className());
+//            INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+//                                                   Q_ARG(QString, msg),
+//                                                   Q_ARG(QDateTime, QDateTime::currentDateTime())));
+//          }
+//        }
+//      } else {
+//        if (includeDynamic) {
+//          object -> setProperty(qPrintable(key), settings->value(key));
+//        } else if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
+//          QString msg = tr("property %1 of %2 does not exist")
+//              .arg(key).arg(meta -> className());
 
-          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                 Q_ARG(QString, msg),
-                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
-        }
-      }
-    }
+//          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+//                                                 Q_ARG(QString, msg),
+//                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
+//        }
+//      }
+//    }
 
-    settings->endGroup();
-  }
-}
+//    settings->endGroup();
+//  }
+//}
 
-void QcepProperty::readSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic)
-{
-  if (settings && object) {
-    const QMetaObject *meta = object->metaObject();
+//void QcepProperty::readSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic)
+//{
+//  if (settings && object) {
+//    const QMetaObject *meta = object->metaObject();
 
-    settings->beginGroup(groupName);
+//    settings->beginGroup(groupName);
 
-    QStringList keys = settings->childKeys();
+//    QStringList keys = settings->childKeys();
 
-    foreach (QString key, keys) {
-      if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-        QString msg = tr("Load %1/%2 = %3 [%4]")
-            .arg(groupName).arg(key)
-            .arg(settings->value(key).toString())
-            .arg(settings->value(key).typeName());
+//    foreach (QString key, keys) {
+//      if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
+//        QString msg = tr("Load %1/%2 = %3 [%4]")
+//            .arg(groupName).arg(key)
+//            .arg(settings->value(key).toString())
+//            .arg(settings->value(key).typeName());
 
-        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                               Q_ARG(QString, msg),
-                                               Q_ARG(QDateTime, QDateTime::currentDateTime())));
-      }
+//        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+//                                               Q_ARG(QString, msg),
+//                                               Q_ARG(QDateTime, QDateTime::currentDateTime())));
+//      }
 
-      int metaindex = meta->indexOfProperty(qPrintable(key));
+//      int metaindex = meta->indexOfProperty(qPrintable(key));
 
-      if (metaindex == 0) { // objectName is ignored on reading
-      } else if (metaindex > 0) {
-        QMetaProperty metaproperty = meta->property(metaindex);
+//      if (metaindex == 0) { // objectName is ignored on reading
+//      } else if (metaindex > 0) {
+//        QMetaProperty metaproperty = meta->property(metaindex);
 
-        if (metaproperty.isStored()) {
-          object -> setProperty(qPrintable(key), settings->value(key));
-        } else {
-          if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-            QString msg = tr("property %1 of %2 not stored").arg(key)
-                .arg(meta -> className());
+//        if (metaproperty.isStored()) {
+//          object -> setProperty(qPrintable(key), settings->value(key));
+//        } else {
+//          if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
+//            QString msg = tr("property %1 of %2 not stored").arg(key)
+//                .arg(meta -> className());
 
-            INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                   Q_ARG(QString, msg),
-                                                   Q_ARG(QDateTime, QDateTime::currentDateTime())));
-          }
-        }
-      } else {
-        if (includeDynamic) {
-          object -> setProperty(qPrintable(key), settings->value(key));
-        } else if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-          QString msg = tr("property %1 of %2 does not exist")
-              .arg(key).arg(meta -> className());
+//            INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+//                                                   Q_ARG(QString, msg),
+//                                                   Q_ARG(QDateTime, QDateTime::currentDateTime())));
+//          }
+//        }
+//      } else {
+//        if (includeDynamic) {
+//          object -> setProperty(qPrintable(key), settings->value(key));
+//        } else if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
+//          QString msg = tr("property %1 of %2 does not exist")
+//              .arg(key).arg(meta -> className());
 
-          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                 Q_ARG(QString, msg),
-                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
-        }
-      }
-    }
+//          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+//                                                 Q_ARG(QString, msg),
+//                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
+//        }
+//      }
+//    }
 
-    settings->endGroup();
-  }
-}
+//    settings->endGroup();
+//  }
+//}
 
 void QcepProperty::printMessage(QString msg, QDateTime ts)
 {
