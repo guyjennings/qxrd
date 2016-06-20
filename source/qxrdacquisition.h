@@ -83,6 +83,8 @@ public slots:
   double scalerValue(int i);
 
 public:
+  void openWindows();
+
   virtual void setupExposureMenu(QDoubleSpinBox *cb);
 
   void readSettings(QSettings *settings, QString section);

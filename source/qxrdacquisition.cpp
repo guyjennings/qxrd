@@ -261,6 +261,17 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
   settings->endArray();
 }
 
+void QxrdAcquisition::openWindows()
+{
+  for (int i=0; i<m_Detectors.count(); i++) {
+    QxrdDetectorSettingsPtr det = m_Detectors.value(i);
+
+    if (det) {
+      det->openWindow();
+    }
+  }
+}
+
 void QxrdAcquisition::readSettings(QSettings *settings, QString section)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);

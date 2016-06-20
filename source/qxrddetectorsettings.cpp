@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "qcepmutexlocker.h"
 #include "qxrddetectorcontrolwindow.h"
+#include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdexperiment.h"
 #include "qcepimagedata.h"
 #include "qxrdacquisition.h"
@@ -68,6 +69,10 @@ void QxrdDetectorSettings::initialize()
                                     exper->fileSaver(),
                                     qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis())));
   }
+
+  m_DetectorControlWindowSettings =
+      QxrdDetectorControlWindowSettings::newDetectorWindowSettings(
+        qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis()));
 
   QxrdAcquisitionPtr a(m_Acquisition);
 
@@ -229,6 +234,11 @@ QxrdDetectorProcessorPtr QxrdDetectorSettings::processor()
   return m_Processor;
 }
 
+QxrdDetectorControlWindowSettingsWPtr QxrdDetectorSettings::detectorControlWindowSettings()
+{
+  return m_DetectorControlWindowSettings;
+}
+
 int QxrdDetectorSettings::roiCount()
 {
   int res = 0;
@@ -268,6 +278,10 @@ void QxrdDetectorSettings::readSettings(QSettings *settings, QString section)
   if (m_Processor) {
     m_Processor->readSettings(settings, section+"/processor");
   }
+
+  if (m_DetectorControlWindowSettings) {
+    m_DetectorControlWindowSettings->readSettings(settings, section+"/windowSettings");
+  }
 }
 
 void QxrdDetectorSettings::writeSettings(QSettings *settings, QString section)
@@ -278,6 +292,14 @@ void QxrdDetectorSettings::writeSettings(QSettings *settings, QString section)
 
   if (m_Processor) {
     m_Processor->writeSettings(settings, section+"/processor");
+  }
+
+  if (m_DetectorControlWindow) {
+    m_DetectorControlWindow->captureSize();
+  }
+
+  if (m_DetectorControlWindowSettings) {
+    m_DetectorControlWindowSettings->writeSettings(settings, section+"/windowSettings");
   }
 }
 
@@ -450,6 +472,17 @@ void QxrdDetectorSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
   }
 }
 
+void QxrdDetectorSettings::openWindow()
+{
+  GUI_THREAD_CHECK;
+
+  QxrdDetectorControlWindowSettingsPtr set(detectorControlWindowSettings());
+
+  if (set && set->get_DetectorWindowOpen()) {
+    openControlWindow();
+  }
+}
+
 void QxrdDetectorSettings::openControlWindow()
 {
   GUI_THREAD_CHECK;
@@ -461,6 +494,21 @@ void QxrdDetectorSettings::openControlWindow()
                                         m_Acquisition,
                                         qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis()),
                                         m_Processor, NULL));
+
+    QxrdDetectorControlWindowSettingsPtr set(detectorControlWindowSettings());
+
+    if (set && m_DetectorControlWindow) {
+      QByteArray geometry = set->get_DetectorWindowGeometry();
+      QByteArray winstate = set->get_DetectorWindowState();
+
+      if (!m_DetectorControlWindow->restoreGeometry(geometry)) {
+        printf("Restore geometry failed\n");
+      }
+
+      if (!m_DetectorControlWindow->restoreState(winstate,0)) {
+        printf("Restore state failed\n");
+      }
+    }
 
     QxrdDetectorProcessorPtr dp(m_Processor);
 

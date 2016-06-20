@@ -13,6 +13,7 @@
 #include "qxrddetectorproxy-ptr.h"
 #include "qxrddetectorprocessor-ptr.h"
 #include "qxrddetectorcontrolwindow-ptr.h"
+#include "qxrddetectorcontrolwindowsettings-ptr.h"
 #include <QScriptEngine>
 #include <QSemaphore>
 #include "qcepimagequeue.h"
@@ -92,6 +93,7 @@ public slots:
   bool endAcquisition();
   bool shutdownAcquisition();
 
+  void openWindow();
   void openControlWindow();
 
   QxrdDetectorProcessorPtr processor();
@@ -107,13 +109,16 @@ public slots:
   QcepDoubleVector scalerCounts();
   double scalerCounts(int chan);
 
-protected:
-  QxrdExperimentWPtr          m_Experiment;
-  QxrdAcquisitionWPtr         m_Acquisition;
-  QxrdDetectorProcessorPtr    m_Processor;
-  QxrdDetectorControlWindowPtr m_DetectorControlWindow;
+  QxrdDetectorControlWindowSettingsWPtr detectorControlWindowSettings();
 
-  QxrdDetectorDriverThreadPtr m_DetectorDriver;
+protected:
+  QxrdExperimentWPtr                   m_Experiment;
+  QxrdAcquisitionWPtr                  m_Acquisition;
+  QxrdDetectorProcessorPtr             m_Processor;
+  QxrdDetectorControlWindowSettingsPtr m_DetectorControlWindowSettings;
+  QxrdDetectorControlWindowPtr         m_DetectorControlWindow;
+
+  QxrdDetectorDriverThreadPtr          m_DetectorDriver;
 
 private:
   QMutex                      m_Mutex;

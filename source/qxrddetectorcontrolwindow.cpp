@@ -14,6 +14,7 @@
 #include "qxrddetectorsettings.h"
 #include "qxrdroitypedelegate.h"
 #include "qxrdroishape.h"
+#include "qxrddetectorcontrolwindowsettings.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,
                                                      QxrdAcquisitionWPtr       acq,
@@ -185,6 +186,44 @@ void QxrdDetectorControlWindow::changeEvent(QEvent *e)
   default:
     break;
   }
+}
+
+void QxrdDetectorControlWindow::captureSize()
+{
+  QxrdDetectorControlWindowSettingsPtr set(detectorControlWindowSettings());
+
+  if (set) {
+    set->set_DetectorWindowOpen(isVisible());
+    set->set_DetectorWindowGeometry(saveGeometry());
+    set->set_DetectorWindowState(saveState(0));
+  }
+}
+
+void QxrdDetectorControlWindow::resizeEvent(QResizeEvent *ev)
+{
+  captureSize();
+
+  QxrdMainWindow::resizeEvent(ev);
+}
+
+void QxrdDetectorControlWindow::moveEvent(QMoveEvent *ev)
+{
+  captureSize();
+
+  QxrdMainWindow::moveEvent(ev);
+}
+
+QxrdDetectorControlWindowSettingsWPtr QxrdDetectorControlWindow::detectorControlWindowSettings()
+{
+  QxrdDetectorControlWindowSettingsWPtr res;
+
+  QxrdDetectorSettingsPtr det(m_Detector);
+
+  if (det) {
+    res = det->detectorControlWindowSettings();
+  }
+
+  return res;
 }
 
 void QxrdDetectorControlWindow::printLine(QString line)

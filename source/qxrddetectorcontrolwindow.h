@@ -9,6 +9,7 @@
 #include "qxrdroicoordinateslistmodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
+#include "qxrddetectorcontrolwindowsettings-ptr.h"
 #include <QTimer>
 
 class QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::QxrdDetectorControlWindow
@@ -34,6 +35,12 @@ public slots:
 public:
   void displayNewData(QcepImageDataBasePtr img, QcepMaskDataPtr overflow);
   void displayNewMask(QcepMaskDataPtr mask);
+
+  void captureSize();
+  void resizeEvent(QResizeEvent *);
+  void moveEvent(QMoveEvent *);
+
+  QxrdDetectorControlWindowSettingsWPtr detectorControlWindowSettings();
 
 protected:
   void changeEvent(QEvent *e);

@@ -513,6 +513,8 @@ void QxrdExperiment::openWindows()
 
         if (acq) {
           acq -> setWindow(m_Window);
+
+          acq->openWindows(); // Open detector control windows...
         }
 
         if (eng) {
@@ -985,6 +987,10 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
+
+    if (m_Window) {
+      m_Window->captureSize();
+    }
 
     m_WindowSettings -> writeSettings(settings, "window");
 
