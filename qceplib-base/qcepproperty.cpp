@@ -408,6 +408,15 @@ void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString s
     QByteArray name;
 
     foreach (name, object->dynamicPropertyNames()) {
+      if (qcepDebug(DEBUG_DYNPROPS)) {
+        QString msg = tr("Save dynamic property %1/%2")
+            .arg(section).arg(name.data());
+
+        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+                                               Q_ARG(QString, msg),
+                                               Q_ARG(QDateTime, QDateTime::currentDateTime())));
+      }
+
       setSettingsValue(settings, name.data(), object->property(name.data()));
     }
 
