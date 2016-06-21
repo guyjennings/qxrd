@@ -14,7 +14,6 @@
 #include "qcepimagedataformat.h"
 #include "qcepimagedataformatfactory.h"
 #include "qcepmutexlocker.h"
-#include "qcepsettingssaver.h"
 
 #include "tiffio.h"
 

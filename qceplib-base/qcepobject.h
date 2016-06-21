@@ -46,6 +46,7 @@ public slots:
 
   int isChanged() const;
   QString changedBy() const;
+  void setChanged(int ct);
 
 public:
   virtual void writeSettings(QSettings *set, QString section);

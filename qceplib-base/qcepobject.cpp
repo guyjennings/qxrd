@@ -99,6 +99,11 @@ QString QcepObject::changedBy() const
   }
 }
 
+void QcepObject::setChanged(int ct)
+{
+  m_ChangeCount.fetchAndStoreOrdered(0);
+}
+
 int QcepObject::allocatedObjects()
 {
   return s_ObjectAllocateCount.load();

@@ -1,7 +1,6 @@
 #include "qcepdataexportparameters.h"
 #include "qcepimagedata.h"
 #include "qcepdatacolumnscan.h"
-#include "qcepsettingssaver.h"
 
 QcepDataExportParameters::QcepDataExportParameters(QString  name) :
   QcepSerializableObject(name),

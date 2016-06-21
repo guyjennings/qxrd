@@ -1,7 +1,6 @@
 #include "qcepmatrix3x3property.h"
 #include "qcepmutexlocker.h"
 #include "qcepdebug.h"
-#include "qcepsettingssaver.h"
 #include "qcepserializableobject.h"
 
 QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSerializableObject *parent,

@@ -13,7 +13,6 @@
 
 #include "qcepdataobject.h"
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qcepexperiment-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qcepimagedata-ptr.h"

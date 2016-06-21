@@ -5,7 +5,6 @@
 #include <QDateTime>
 #include <QUndoStack>
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepdataexportparameters-ptr.h"
@@ -35,7 +34,7 @@ public:
   QUndoStack *undoStack();
 
 protected:
-  QcepSettingsSaverPtr            m_SettingsSaver;
+//  QcepSettingsSaverPtr            m_SettingsSaver;
 
   QUndoStack m_UndoStack;
 

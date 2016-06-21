@@ -1,5 +1,4 @@
 #include "qcepexperiment.h"
-#include "qcepsettingssaver.h"
 #include <QFileInfo>
 #include <QDir>
 #include "qcepdataexportparameters.h"
@@ -7,7 +6,7 @@
 
 QcepExperiment::QcepExperiment(QString path, QString name) :
   QcepSerializableObject(name),
-  m_SettingsSaver(new QcepSettingsSaver(this)),
+//  m_SettingsSaver(new QcepSettingsSaver(this)),
   m_ExperimentKind        (this, "experimentKind", -1, "Kind of Experiment"),
   m_ExperimentDirectory   (this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
   m_ExperimentFileName    (this, "experimentFileName", defaultExperimentFileName(path), "Experiment File"),

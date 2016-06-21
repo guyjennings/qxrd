@@ -3,7 +3,6 @@
 
 #include "qcepthread.h"
 #include "qcepapplication-ptr.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qcepallocator-ptr.h"
 
 class QcepAllocatorThread : public QcepThread
