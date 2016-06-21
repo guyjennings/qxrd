@@ -418,6 +418,8 @@ void QxrdROIAddNode::move(const QPoint &pt)
           fb.insert(m_SelectedEdge+1, invTransform(m_SelectedPoints.value(1)));
         }
 
+        fb.last() = fb.first();
+
         m_RubberBand = QPolygon();
 
         for (int i=0; i<fb.count(); i++) {

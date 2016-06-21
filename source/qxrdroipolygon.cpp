@@ -144,6 +144,8 @@ void QxrdROIPolygon::deleteROIPoint(int n)
 
   qp.remove(n);
 
+  qp.last() = qp.first();
+
   set_Poly(qp);
 }
 
@@ -153,6 +155,8 @@ void QxrdROIPolygon::changeROIPoint(int n, QPointF pt)
 
   qp[n] = pt;
 
+  qp.last() = qp.first();
+
   set_Poly(qp);
 }
 
@@ -161,6 +165,8 @@ void QxrdROIPolygon::insertROIPoint(int n, QPointF pt)
   QcepPolygon qp = get_Poly();
 
   qp.insert(n+1, pt);
+
+  qp.last() = qp.first();
 
   set_Poly(qp);
 }
