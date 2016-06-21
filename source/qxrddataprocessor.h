@@ -19,7 +19,6 @@
 #include "qcepintegrateddata.h"
 #include "qcepintegrateddata-ptr.h"
 #include "qxrdfilesaver-ptr.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdgeneratetestimage-ptr.h"
 #include "qxrdpolartransform-ptr.h"
 #include "qxrdpolartransform.h"

@@ -4,7 +4,6 @@
 #include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdfitparameter-ptr.h"
-#include "qcepsettingssaver-ptr.h"
 
 class QxrdFitParameter : public QcepDoubleProperty
 {

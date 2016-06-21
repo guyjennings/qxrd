@@ -6,8 +6,6 @@
 #include <QScriptEngine>
 #include <QThread>
 #include "qxrdapplication.h"
-#include "qcepsettingssaver-ptr.h"
-#include "qcepsettingssaver.h"
 #include "qcepexperiment.h"
 #include "qxrdexperiment.h"
 

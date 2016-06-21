@@ -28,7 +28,6 @@
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qcepallocator-ptr.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdprocessargs-ptr.h"
 #include "qxrdacquisitionscalermodel-ptr.h"
 

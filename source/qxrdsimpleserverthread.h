@@ -5,7 +5,6 @@
 #include "qxrdthread.h"
 #include "qxrdsimpleserver-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qcepsettingssaver-ptr.h"
 
 class QxrdSimpleServerThread : public QxrdThread
 {

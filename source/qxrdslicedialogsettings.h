@@ -4,7 +4,6 @@
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrdsliceplotsettings-ptr.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdslicedialogsettings-ptr.h"
 
 class QxrdSliceDialogSettings : public QcepSerializableObject

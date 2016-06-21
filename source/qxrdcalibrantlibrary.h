@@ -5,7 +5,6 @@
 #include "qcepserializableobject.h"
 #include "qxrdcalibrant-ptr.h"
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 

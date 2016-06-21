@@ -11,7 +11,6 @@
 #include "qxrdfilebrowserview.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qcepsettingssaver.h"
 #include "qcepdatasetmodel.h"
 #include "qxrdfilebrowsersettings.h"
 

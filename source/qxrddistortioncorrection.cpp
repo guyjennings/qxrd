@@ -1,6 +1,5 @@
 #include "qxrddistortioncorrection.h"
 #include "qcepmutexlocker.h"
-#include "qcepsettingssaver.h"
 #include "levmar.h"
 #include <qmath.h>
 #include <stdio.h>

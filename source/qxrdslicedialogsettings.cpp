@@ -1,5 +1,4 @@
 #include "qxrdslicedialogsettings.h"
-#include "qcepsettingssaver.h"
 #include "qcepmutexlocker.h"
 #include "qxrdsliceplotsettings.h"
 

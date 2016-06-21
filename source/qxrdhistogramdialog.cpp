@@ -1,7 +1,6 @@
 #include "qxrdhistogramdialog.h"
 #include "ui_qxrdhistogramdialog.h"
 #include <QSettings>
-#include "qcepsettingssaver.h"
 #include "qxrddebug.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdexperiment.h"

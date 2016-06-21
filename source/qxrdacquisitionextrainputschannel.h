@@ -6,7 +6,6 @@
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdacquisitionextrainputschannel-ptr.h"
 
 class QxrdAcquisitionExtraInputsChannel : public QcepSerializableObject

@@ -7,7 +7,6 @@
 #include "qxrddataprocessor.h"
 #include "qxrddetectorgeometry.h"
 #include "qcepallocator.h"
-#include "qcepsettingssaver.h"
 
 QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
   QcepSerializableObject(name),

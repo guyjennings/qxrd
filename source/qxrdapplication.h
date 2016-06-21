@@ -13,7 +13,6 @@
 #include "qxrdwelcomewindow-ptr.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdnidaqplugininterface-ptr.h"
-#include "qcepsettingssaver.h"
 #include "qxrdsplashscreen-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qxrdapplicationsettings-ptr.h"
@@ -86,6 +85,8 @@ public slots:
   void editGlobalPreferences();
   void debugChanged(qint64 newValue);
 
+  void onAutoSaveTimer();
+
   void readSettings();
   void writeSettings();
 
@@ -126,7 +127,8 @@ private:
 
 private:
   QcepObjectNamer      m_ObjectNamer;
-  QcepSettingsSaverPtr m_AppSaver;
+//  QcepSettingsSaverPtr m_AppSaver;
+  QTimer               m_AutoSaveTimer;
 
 private:
   QxrdApplicationSettingsPtr      m_ApplicationSettings;

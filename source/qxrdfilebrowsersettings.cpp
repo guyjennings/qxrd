@@ -1,5 +1,4 @@
 #include "qxrdfilebrowsersettings.h"
-#include "qcepsettingssaver.h"
 
 QxrdFileBrowserSettings::QxrdFileBrowserSettings(QString name) :
   QcepSerializableObject(name),

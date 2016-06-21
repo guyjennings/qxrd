@@ -2,7 +2,6 @@
 #include "qxrdacquisitionextrainputs.h"
 #include "qcepmutexlocker.h"
 #include "qxrdnidaqplugininterface.h"
-#include "qcepsettingssaver.h"
 
 QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputsChannel::newAcquisitionExtraInputsChannel(int chnum)
 {

@@ -1,7 +1,6 @@
 #include "qxrdinfodialog.h"
 #include "ui_qxrdinfodialog.h"
 #include "qcepproperty.h"
-#include "qcepsettingssaver.h"
 #include "qcepimagedata.h"
 #include "qxrddebug.h"
 #include "qxrdinfodialogsettings.h"

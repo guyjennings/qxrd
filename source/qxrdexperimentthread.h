@@ -5,17 +5,19 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdapplication-ptr.h"
+#include "qxrdexperimentsettings-ptr.h"
 
 class QxrdExperimentThread : public QxrdThread
 {
   Q_OBJECT
 
 public:
-  QxrdExperimentThread(QString path, QxrdApplicationWPtr parent);
+  QxrdExperimentThread(QString path, QxrdApplicationWPtr parent, QxrdExperimentSettingsPtr set);
   ~QxrdExperimentThread();
 
   static QxrdExperimentThreadPtr newExperimentThread(QString path,
-                                                     QxrdApplicationWPtr parent);
+                                                     QxrdApplicationWPtr parent,
+                                                     QxrdExperimentSettingsPtr set);
 
   void shutdown();
 
@@ -25,9 +27,10 @@ protected:
   void run();
 
 private:
-  QxrdExperimentPtr   m_Experiment;
-  QString             m_Path;
-  QxrdApplicationWPtr m_Parent;
+  QxrdExperimentPtr         m_Experiment;
+  QString                   m_Path;
+  QxrdApplicationWPtr       m_Parent;
+  QxrdExperimentSettingsPtr m_Settings;
 };
 
 #endif // QXRDEXPERIMENTTHREAD_H

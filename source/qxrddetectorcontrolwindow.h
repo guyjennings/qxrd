@@ -2,7 +2,6 @@
 #define QXRDDETECTORCONTROLWINDOW_H
 
 #include "qxrdmainwindow.h"
-#include "qcepsettingssaver-ptr.h"
 #include "ui_qxrddetectorcontrolwindow.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrddetectorprocessor-ptr.h"

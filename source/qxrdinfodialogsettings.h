@@ -3,7 +3,6 @@
 
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdinfodialogsettings-ptr.h"
 
 class QxrdInfoDialogSettings : public QcepSerializableObject

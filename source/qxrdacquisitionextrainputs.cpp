@@ -5,7 +5,6 @@
 #include "qcepmutexlocker.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qcepimagedata.h"
-#include "qcepsettingssaver.h"
 #include "qxrdacquisitionextrainputschannel.h"
 #include "qxrdacquisitionparameterpack.h"
 #include <QTimer>

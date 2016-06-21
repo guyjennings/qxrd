@@ -4,7 +4,6 @@
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 #include "qspecserver.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepserializableobject.h"
 

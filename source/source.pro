@@ -397,7 +397,8 @@ HEADERS += TODO.h \
     qxrdroicache.h \
     qxrdroicache-ptr.h \
     qxrddetectorcontrolwindowsettings.h \
-    qxrddetectorcontrolwindowsettings-ptr.h
+    qxrddetectorcontrolwindowsettings-ptr.h \
+    qxrdexperimentsettings-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \

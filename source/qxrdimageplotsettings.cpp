@@ -1,5 +1,4 @@
 #include "qxrdimageplotsettings.h"
-#include "qcepsettingssaver.h"
 
 QxrdImagePlotSettings::QxrdImagePlotSettings(QString name) :
   QcepPlotSettings(name),

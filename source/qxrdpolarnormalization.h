@@ -5,7 +5,6 @@
 
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepdatacolumnscan-ptr.h"

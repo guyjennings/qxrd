@@ -1,5 +1,4 @@
 #include "qxrdhistogramdialogsettings.h"
-#include "qcepsettingssaver.h"
 #include "qxrdhistogramplotsettings.h"
 
 QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QString name) :

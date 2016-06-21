@@ -10,6 +10,7 @@
 #include <QSharedPointer>
 #include <QScriptEngine>
 #include <QScriptEngineDebugger>
+#include <QTimer>
 #include "qcepexperiment.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -29,7 +30,6 @@
 #include "qxrdscriptengine-ptr.h"
 #include "qxrdscriptenginethread.h"
 #include "qxrdscriptenginethread-ptr.h"
-#include "qcepsettingssaver.h"
 #include "qxrddetectorsettings.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
@@ -43,6 +43,7 @@
 #include "qcepdatasetmodel-ptr.h"
 #include "qxrddetectorcontrolwindow-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
+#include "qxrdexperimentsettings-ptr.h"
 
 class QxrdExperiment : public QcepExperiment
 {
@@ -51,10 +52,12 @@ class QxrdExperiment : public QcepExperiment
 public:
   Q_INVOKABLE QxrdExperiment(QString name);
 
-  static QxrdExperimentPtr newExperiment(QString path = "", QxrdApplicationWPtr app =  QxrdApplicationWPtr());
+  static QxrdExperimentPtr newExperiment(QString path,
+                                         QxrdApplicationWPtr app,
+                                         QxrdExperimentSettingsPtr set);
 
   virtual ~QxrdExperiment();
-  void initialize(QSettings *settings);
+  void initialize(QxrdExperimentSettingsPtr settings);
 
   virtual void addChildPtr(QcepSerializableObjectPtr child);
   virtual void removeChildPtr(QcepSerializableObjectPtr child);
@@ -143,6 +146,8 @@ public slots:
 
 //  void openAcquisitionWindow();
 
+  void onAutoSaveTimer();
+
 private:
   void closeLogFile() const;
   void openLogFile() const;
@@ -189,6 +194,8 @@ private:
   FILE                           *m_ScanFile;
 
   QMutex                          m_ExperimentFileMutex;
+
+  QTimer                          m_AutoSaveTimer;
 
 public:  // Properties
   Q_PROPERTY(QString dataDirectory     READ get_DataDirectory WRITE set_DataDirectory)

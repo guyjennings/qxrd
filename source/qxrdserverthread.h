@@ -7,7 +7,6 @@
 
 #include "qxrdexperiment-ptr.h"
 #include "qxrdserver-ptr.h"
-#include "qcepsettingssaver-ptr.h"
 
 class QxrdServerThread : public QxrdThread
 {

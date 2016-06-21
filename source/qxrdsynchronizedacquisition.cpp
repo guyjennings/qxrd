@@ -3,7 +3,6 @@
 #include "qcepmutexlocker.h"
 #include "qxrdacquisition.h"
 #include "qwt_math.h"
-#include "qcepsettingssaver.h"
 #include "qxrdacquisitionparameterpack.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :

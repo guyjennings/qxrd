@@ -2,7 +2,6 @@
 #define QXRDROICOORDINATESLISTMODEL_H
 
 #include "qcepobject.h"
-#include "qcepsettingssaver-ptr.h"
 #include <QAbstractListModel>
 #include "qxrdroicoordinates-ptr.h"
 #include <QScriptEngine>

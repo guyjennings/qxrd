@@ -3,7 +3,6 @@
 
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrddistortioncorrectiondialogsettings-ptr.h"
 
 class QxrdDistortionCorrectionDialogSettings : public QcepSerializableObject

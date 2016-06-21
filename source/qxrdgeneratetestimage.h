@@ -10,7 +10,6 @@
 #include "qcepallocator-ptr.h"
 #include "qxrddetectorgeometry-ptr.h"
 #include "qxrddetectorgeometry.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdgeneratetestimage-ptr.h"
 
 class QxrdGenerateTestImage : public QcepSerializableObject

@@ -2,7 +2,6 @@
 #define QXRDDATAPROCESSORTHREAD_H
 
 #include "qxrdthread.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepallocator-ptr.h"
 #include "qxrdfilesaver-ptr.h"

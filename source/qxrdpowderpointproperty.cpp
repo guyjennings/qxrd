@@ -1,7 +1,6 @@
 #include "qxrdpowderpointproperty.h"
 #include "qcepmutexlocker.h"
 #include "qcepdebug.h"
-#include "qcepsettingssaver.h"
 #include <QScriptEngine>
 #include <stdio.h>
 #include "qcepserializableobject.h"

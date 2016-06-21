@@ -11,7 +11,6 @@
 #include "qcepintegrateddata-ptr.h"
 #include "qxrdintegratorcache.h"
 #include "qxrdintegratorcache-ptr.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qcepallocator-ptr.h"
 #include "qcepimagedata.h"

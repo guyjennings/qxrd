@@ -5,7 +5,6 @@
 #include "qcepproperty.h"
 #include "qcepserializableobject.h"
 
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdexperiment-ptr.h"

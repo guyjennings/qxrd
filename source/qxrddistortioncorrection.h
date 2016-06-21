@@ -7,7 +7,6 @@
 #include "qxrdexperiment-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepimagedata.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrddistortioncorrection-ptr.h"
 
 class QxrdDistortionCorrection : public QcepSerializableObject

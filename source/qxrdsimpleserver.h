@@ -8,7 +8,6 @@
 
 #include "qxrdexperiment-ptr.h"
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qcepserializableobject.h"
 
 class QxrdSimpleServer : public QcepSerializableObject

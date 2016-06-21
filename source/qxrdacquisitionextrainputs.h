@@ -3,7 +3,6 @@
 
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"

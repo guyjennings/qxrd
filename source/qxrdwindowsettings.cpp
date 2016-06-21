@@ -1,5 +1,4 @@
 #include "qxrdwindowsettings.h"
-#include "qcepsettingssaver.h"
 #include "qcepmutexlocker.h"
 #include "qxrdimageplotsettings.h"
 #include "qxrdcenterfinderplotsettings.h"

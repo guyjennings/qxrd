@@ -9,7 +9,6 @@
 #include <QSemaphore>
 
 //#include <QEnableSharedFromThis>
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qcepallocator-ptr.h"

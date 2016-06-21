@@ -25,7 +25,6 @@
 #include "qxrdexperimentsettings.h"
 #include <QFileDialog>
 #include "qxrdfilesaverthread.h"
-#include "qcepsettingssaver.h"
 #include "qxrdfilesaver.h"
 #include "qcepmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
@@ -34,8 +33,6 @@
 #include "qcepdatagroup.h"
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumn.h"
-#include "qcepsettingssaver.h"
-//#include "qxrddetectorcontrolwindow.h"
 #include "qcepfileformattertext.h"
 #include "qxrdacquisitionexecution.h"
 #include "qxrdacquisitionextrainputschannel.h"
@@ -103,13 +100,14 @@ QxrdExperiment::QxrdExperiment(QString name) :
   }
 }
 
-QxrdExperimentPtr QxrdExperiment::newExperiment(QString path, QxrdApplicationWPtr app)
+QxrdExperimentPtr QxrdExperiment::newExperiment(QString path, QxrdApplicationWPtr app, QxrdExperimentSettingsPtr set)
 {
   QxrdExperimentPtr expt(new QxrdExperiment("experiment"));
 
   if (expt) {
     expt->setExperimentFilePath(path);
     expt->setExperimentApplication(app);
+    expt->initialize(set);
   }
 
   return expt;
@@ -129,7 +127,8 @@ QxrdExperiment::~QxrdExperiment()
     printf("QxrdExperiment::~QxrdExperiment(%p)\n", this);
   }
 
-  m_SettingsSaver->performSave();
+  onAutoSaveTimer();
+//  m_SettingsSaver->performSave();
 
   closeScanFile();
   closeLogFile();
@@ -153,7 +152,7 @@ QxrdExperimentThreadPtr QxrdExperiment::experimentThread() const
   return QxrdExperimentThreadPtr(t);
 }
 
-void QxrdExperiment::initialize(QSettings *settings)
+void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 {
   QxrdApplicationPtr app(m_Application);
 
@@ -302,7 +301,7 @@ void QxrdExperiment::initialize(QSettings *settings)
 
     splashMessage("Loading Preferences");
 
-    readSettings(settings, "experiment");
+    readSettings(settings.data(), "experiment");
 
     splashMessage("Loading Background Images");
 
@@ -367,7 +366,11 @@ void QxrdExperiment::initialize(QSettings *settings)
     connect(prop_WorkCompleted(),   &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage);
     connect(prop_WorkTarget(),      &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage);
 
-    m_SettingsSaver->start();
+//    m_SettingsSaver->start();
+
+    connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdExperiment::onAutoSaveTimer);
+
+    m_AutoSaveTimer.start(5000);
   }
 }
 
@@ -976,6 +979,8 @@ void QxrdExperiment::writeSettings()
 
     writeSettings(&settings, "experiment");
   }
+
+  setChanged(0);
 }
 
 void QxrdExperiment::writeSettings(QSettings *settings, QString section)
@@ -1019,6 +1024,18 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 //      m_DatasetModel -> writeSettings(settings, "dataset");
 //      settings->endGroup();
 //    }
+  }
+}
+
+void QxrdExperiment::onAutoSaveTimer()
+{
+//  printMessage("Auto save experiment");
+
+//  if (m_Window) {
+//    m_Window->setChanged(isChanged());
+//  }
+  if (isChanged()) {
+    writeSettings();
   }
 }
 

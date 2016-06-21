@@ -2,7 +2,6 @@
 #include "ui_qxrdslicedialog.h"
 #include "qwt_plot_piecewise_curve.h"
 #include <QSettings>
-#include "qcepsettingssaver.h"
 #include "qxrddebug.h"
 #include "qxrdslicedialogsettings.h"
 #include "qxrdsliceplotsettings.h"

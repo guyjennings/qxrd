@@ -3,7 +3,6 @@
 
 #include "qcepmacros.h"
 #include "qcepserializableobject.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepproperty.h"
 #include "qxrdroicoordinates-ptr.h"

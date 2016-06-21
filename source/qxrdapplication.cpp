@@ -28,7 +28,6 @@
 #include "qxrdglobalsettings.h"
 #include "qxrdexperiment.h"
 #include "qxrdexperimentsettings.h"
-#include "qcepsettingssaver.h"
 #include "qxrdsplashscreen.h"
 #include "qxrdsplashscreen-ptr.h"
 #include "qcepmutexlocker.h"
@@ -89,8 +88,8 @@ void QxrdApplication::processEventCounter()
 QxrdApplication::QxrdApplication(int &argc, char **argv) :
   QcepApplication(argc, argv),
   m_ObjectNamer(this, "application"),
-  m_AppSaver(QcepSettingsSaverPtr(
-            new QcepSettingsSaver(this))),
+//  m_AppSaver(QcepSettingsSaverPtr(
+//            new QcepSettingsSaver(this))),
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
   m_NIDAQPluginInterface(NULL),
@@ -119,6 +118,10 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   QxrdDetectorControlWindowSettings::registerMetaTypes();
 
   setQuitOnLastWindowClosed(false);
+
+  connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdApplication::onAutoSaveTimer);
+
+  m_AutoSaveTimer.start(5000);
 }
 
 bool QxrdApplication::init(int &argc, char **argv)
@@ -247,7 +250,7 @@ bool QxrdApplication::init(int &argc, char **argv)
     }
   }
 
-  m_AppSaver->start();
+//  m_AppSaver->start();
 
   return true;
 }
@@ -258,7 +261,8 @@ QxrdApplication::~QxrdApplication()
   printf("Deleting application\n");
 #endif
 
-  m_AppSaver->performSave();
+//  m_AppSaver->performSave();
+  onAutoSaveTimer();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdApplication::~QxrdApplication(%p)\n", this);
@@ -304,6 +308,13 @@ void QxrdApplication::finish()
     if (expt) {
       expt->closeWindows();
     }
+  }
+}
+
+void QxrdApplication::onAutoSaveTimer()
+{
+  if (m_ApplicationSettings && m_ApplicationSettings->isChanged()) {
+    writeSettings();
   }
 }
 
@@ -588,6 +599,7 @@ void QxrdApplication::writeSettings()
 
   if (m_ApplicationSettings) {
     m_ApplicationSettings -> writeSettings(&settings, "application");
+    m_ApplicationSettings -> setChanged(0);
   }
 }
 
@@ -824,7 +836,7 @@ void QxrdApplication::createNewExperiment()
 {
   QxrdExperimentThreadPtr expthr =
       QxrdExperimentThread::newExperimentThread(
-        "", qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()));
+        "", qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()), QxrdExperimentSettingsPtr());
 
   if (expthr) {
     openedExperiment(expthr);
@@ -848,15 +860,13 @@ void QxrdApplication::chooseExistingExperiment()
 void QxrdApplication::openExperiment(QString path)
 {
   if (path.length() > 0) {
-    QxrdExperimentSettings settings(path);
+    QxrdExperimentSettingsPtr settings(new QxrdExperimentSettings(path));
 
     QxrdExperimentThreadPtr expthr =
         QxrdExperimentThread::newExperimentThread(
-          path, qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()));
-
-    if (expthr) {
-      expthr->experiment()->initialize(&settings);
-    }
+          path,
+          qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()),
+          settings);
 
     printMessage("");
     printMessage(tr("===== Open Experiment %1").arg(path));
@@ -963,7 +973,8 @@ void QxrdApplication::openedExperiment(QxrdExperimentThreadWPtr expwthr)
 
       closeWelcomeWindow();
 
-    expt->openWindows();
+      expt->openWindows();
+      expt->setChanged(0);
     }
   }
 }

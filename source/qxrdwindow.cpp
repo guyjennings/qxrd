@@ -769,19 +769,29 @@ QxrdWindow::~QxrdWindow()
 
 void QxrdWindow::updateTitle()
 {
+  QString title;
+
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    setWindowTitle(expt->experimentFilePath()+" - QXRD");
+    title = expt->experimentFilePath()+" - QXRD";
   } else {
-    setWindowTitle("QXRD");
+    title = "QXRD";
   }
 
   if (sizeof(void*) == 4) {
-    setWindowTitle(windowTitle()+" - 32 bit - v"+STR(QXRD_VERSION));
+    title.append(" - 32 bit - v");
   } else {
-    setWindowTitle(windowTitle()+" - 64 bit - v"+STR(QXRD_VERSION));
+    title.append(" - 64 bit - v");
   }
+
+  title.append(STR(QXRD_VERSION));
+
+  if (expt && expt->isChanged()) {
+    title.append(tr(" [%1]").arg(expt->isChanged()));
+  }
+
+  setWindowTitle(title);
 }
 
 void QxrdWindow::onAcquisitionInit()
@@ -1158,6 +1168,8 @@ void QxrdWindow::newMaskAvailable(QcepMaskDataPtr mask)
 
 void QxrdWindow::doTimerUpdate()
 {
+  updateTitle();
+
   allocatedMemoryChanged();
 
   captureSize();

@@ -5,7 +5,6 @@
 #include "qcepplot.h"
 #include "ui_qxrdslicedialog.h"
 #include "qcepimagedata.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qxrdslicedialogsettings-ptr.h"
 
 class QxrdSliceDialog : public QDockWidget, public Ui::QxrdSliceDialog
