@@ -45,6 +45,15 @@ void QxrdAcquisitionExecution::doAcquire()
   }
 }
 
+void QxrdAcquisitionExecution::doAcquireOnce()
+{
+  QxrdAcquisitionInterfacePtr acq(m_Acquisition);
+
+  if (acq) {
+    acq -> doAcquireOnce();
+  }
+}
+
 void QxrdAcquisitionExecution::doAcquireDark()
 {
   QxrdAcquisitionInterfacePtr acq(m_Acquisition);

@@ -31,6 +31,15 @@ public slots:
 
   virtual void displayMessage(QString msg);
 
+  void doAcquire();
+  void doAcquireOnce();
+  void doAcquireDark();
+  void doCancel();
+  void acquireStarted();
+  void acquireComplete();
+  void browseLogFile();
+  void browseScanFile();
+
 public:
   void displayNewData(QcepImageDataBasePtr img, QcepMaskDataPtr overflow);
   void displayNewMask(QcepMaskDataPtr mask);

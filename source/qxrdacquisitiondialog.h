@@ -28,6 +28,7 @@ protected:
 
 public slots:
   void doAcquire();
+  void doAcquireOnce();
   void doAcquireDark();
   void doCancel();
   void acquireStarted();

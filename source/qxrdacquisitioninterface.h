@@ -33,6 +33,7 @@ signals:
 
 public slots:
   void acquire();
+  void acquireOnce();
   void acquireDark();
   void cancel();
   void trigger();
@@ -40,6 +41,7 @@ public slots:
   int acquisitionStatus(double time);
 
   virtual void doAcquire    () = 0;
+  virtual void doAcquireOnce() = 0;
   virtual void doAcquireDark() = 0;
 
   virtual bool sanityCheckAcquire()     = 0;

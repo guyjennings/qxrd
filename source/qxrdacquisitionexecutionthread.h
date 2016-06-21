@@ -17,6 +17,7 @@ signals:
 
 public slots:
   void doAcquire();
+  void doAcquireOnce();
   void doAcquireDark();
 
 protected:

@@ -60,6 +60,7 @@ public slots:
   void shutdown();
 
   void doAcquire    ();
+  void doAcquireOnce();
   void doAcquireDark();
 
   bool sanityCheckCommon();
@@ -123,6 +124,7 @@ signals:
   void extraInputsChanged();
 
 private:
+  void executeAcquisition(QxrdAcquisitionParameterPackPtr parmsp);
   virtual void stopIdling();
   virtual void startIdling();
 

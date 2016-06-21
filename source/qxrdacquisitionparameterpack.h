@@ -19,6 +19,8 @@ public:
   int     skipBefore() { return m_SkipBefore; }
   int     skipBetween() { return m_SkipBetween; }
 
+  void    forceSingle();
+
 private:
   QString m_FileBase;
   double  m_Exposure;

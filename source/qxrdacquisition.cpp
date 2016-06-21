@@ -872,10 +872,28 @@ int QxrdAcquisition::cancelling()
   return res;
 }
 
+void QxrdAcquisition::doAcquireOnce()
+{
+  QxrdAcquisitionParameterPackPtr parmsp = acquisitionParameterPack();
+
+  if (parmsp) {
+    parmsp->forceSingle();
+
+    executeAcquisition(parmsp);
+  }
+}
+
 void QxrdAcquisition::doAcquire()
 {
   QxrdAcquisitionParameterPackPtr parmsp = acquisitionParameterPack();
 
+  if (parmsp) {
+    executeAcquisition(parmsp);
+  }
+}
+
+void QxrdAcquisition::executeAcquisition(QxrdAcquisitionParameterPackPtr parmsp)
+{
   if (parmsp) {
     QTime acqTimer;
     acqTimer.start();

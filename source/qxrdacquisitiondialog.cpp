@@ -23,6 +23,7 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
 
   if (acqp) {
     connect(m_ActionAcquire, &QAction::triggered, this, &QxrdAcquisitionDialog::doAcquire);
+    connect(m_ActionAcquireOnce, &QAction::triggered, this, &QxrdAcquisitionDialog::doAcquireOnce);
     connect(m_ActionCancel, &QAction::triggered, this, &QxrdAcquisitionDialog::doCancel);
     connect(m_ActionAcquireDark, &QAction::triggered, this, &QxrdAcquisitionDialog::doAcquireDark);
     connect(m_ActionTrigger, &QAction::triggered, acqp.data(), &QxrdAcquisition::trigger);
@@ -31,6 +32,7 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     connect(m_BrowseScanFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionDialog::browseScanFile);
 
     connect(m_AcquireButton, &QAbstractButton::clicked, m_ActionAcquire, &QAction::triggered);
+    connect(m_AcquireOnceButton, &QAbstractButton::clicked, m_ActionAcquireOnce, &QAction::triggered);
     connect(m_CancelButton, &QAbstractButton::clicked, m_ActionCancel, &QAction::triggered);
     connect(m_TriggerButton, &QAbstractButton::clicked, m_ActionTrigger, &QAction::triggered);
     connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered);
@@ -168,6 +170,15 @@ void QxrdAcquisitionDialog::doAcquire()
   }
 }
 
+void QxrdAcquisitionDialog::doAcquireOnce()
+{
+  QxrdAcquisitionPtr acqp(m_Acquisition);
+
+  if (acqp) {
+    acqp -> acquireOnce();
+  }
+}
+
 void QxrdAcquisitionDialog::doAcquireDark()
 {
   QxrdAcquisitionPtr acqp(m_Acquisition);
@@ -191,6 +202,9 @@ void QxrdAcquisitionDialog::acquisitionReady()
   m_AcquireButton -> setEnabled(true);
   m_ActionAcquire -> setEnabled(true);
 
+  m_AcquireOnceButton -> setEnabled(true);
+  m_ActionAcquireOnce -> setEnabled(true);
+
   m_TriggerButton -> setEnabled(false);
   m_ActionTrigger -> setEnabled(false);
 
@@ -208,6 +222,9 @@ void QxrdAcquisitionDialog::acquireStarted()
   if (acq) {
     m_AcquireButton -> setEnabled(false);
     m_ActionAcquire -> setEnabled(false);
+
+    m_AcquireOnceButton -> setEnabled(false);
+    m_ActionAcquireOnce -> setEnabled(false);
 
     if (acq -> get_PreTriggerFiles() > 0) {
       m_TriggerButton -> setEnabled(true);
@@ -229,6 +246,9 @@ void QxrdAcquisitionDialog::acquireComplete()
 {
   m_AcquireButton -> setEnabled(true);
   m_ActionAcquire -> setEnabled(true);
+
+  m_AcquireOnceButton -> setEnabled(true);
+  m_ActionAcquireOnce -> setEnabled(true);
 
   m_TriggerButton -> setEnabled(false);
   m_ActionTrigger -> setEnabled(false);

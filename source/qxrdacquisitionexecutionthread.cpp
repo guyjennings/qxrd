@@ -57,6 +57,13 @@ void QxrdAcquisitionExecutionThread::doAcquire()
   }
 }
 
+void QxrdAcquisitionExecutionThread::doAcquireOnce()
+{
+  if (m_AcquisitionExecution) {
+    QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquireOnce");
+  }
+}
+
 void QxrdAcquisitionExecutionThread::doAcquireDark()
 {
   if (m_AcquisitionExecution) {

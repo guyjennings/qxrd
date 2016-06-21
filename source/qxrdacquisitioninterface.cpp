@@ -65,6 +65,29 @@ void QxrdAcquisitionInterface::acquire()
   }
 }
 
+void QxrdAcquisitionInterface::acquireOnce()
+{
+  if (QThread::currentThread() != thread()) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "acquireOnce", Qt::BlockingQueuedConnection));
+  } else if (sanityCheckAcquire()) {
+    if (m_Acquiring.tryLock()) {
+      set_Cancelling(false);
+      set_Triggered(false);
+
+      statusMessage("Starting acquisition");
+      emit acquireStarted();
+
+      //      QtConcurrent::run(this, &QxrdAcquisitionInterface::doAcquire, acquisitionParameterPack());
+
+      if (m_ExecutionThread) {
+        m_ExecutionThread->doAcquireOnce();
+      }
+    } else {
+      statusMessage("Acquisition is already in progress");
+    }
+  }
+}
+
 void QxrdAcquisitionInterface::acquireDark()
 {
   if (QThread::currentThread() != thread()) {

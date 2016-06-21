@@ -15,6 +15,8 @@
 #include "qxrdroitypedelegate.h"
 #include "qxrdroishape.h"
 #include "qxrddetectorcontrolwindowsettings.h"
+#include "qxrdacquisition.h"
+#include "qxrdwindow.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,
                                                      QxrdAcquisitionWPtr       acq,
@@ -35,6 +37,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        e
   QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
   QxrdExperimentPtr expt(m_Experiment);
   QxrdDetectorSettingsPtr dt(m_Detector);
+  QxrdAcquisitionPtr acqp(m_Acquisition);
 
   if (dp) {
     dp->prop_DetectorDisplayMode()     -> linkTo(m_DetectorDisplayMode);
@@ -144,6 +147,13 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        e
       setSpacing(sp);
     }
 
+    expt  -> prop_ExperimentDirectory() -> linkTo(this -> m_ExperimentDirectory);
+    expt  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
+    expt  -> prop_DataDirectory() -> linkTo(this -> m_DataDirectory);
+    expt  -> prop_ScanFileName() -> linkTo(this -> m_ScanFileName);
+
+    connect(m_LogFileName, &QLineEdit::editingFinished, expt.data(), &QxrdExperiment::openNewLogFile);
+
     connect(expt->prop_FontSize(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setFontSize);
     connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setSpacing);
   }
@@ -154,6 +164,58 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        e
     connect(dt->prop_DetectorName(),     &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateWindowTitle);
 
     updateWindowTitle();
+  }
+
+  if (acqp) {
+    connect(m_ActionAcquire,     &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquire);
+    connect(m_ActionAcquireOnce, &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquireOnce);
+    connect(m_ActionCancel,      &QAction::triggered, this, &QxrdDetectorControlWindow::doCancel);
+    connect(m_ActionAcquireDark, &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquireDark);
+    connect(m_ActionTrigger,     &QAction::triggered, acqp.data(), &QxrdAcquisition::trigger);
+
+    connect(m_BrowseLogFileButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::browseLogFile);
+    connect(m_BrowseScanFileButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::browseScanFile);
+
+    connect(m_AcquireButton, &QAbstractButton::clicked, m_ActionAcquire, &QAction::triggered);
+    connect(m_AcquireOnceButton, &QAbstractButton::clicked, m_ActionAcquireOnce, &QAction::triggered);
+    connect(m_CancelButton, &QAbstractButton::clicked, m_ActionCancel, &QAction::triggered);
+    connect(m_TriggerButton, &QAbstractButton::clicked, m_ActionTrigger, &QAction::triggered);
+    connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered);
+
+    connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcquisition::clearDropped);
+
+    connect(acqp.data(), &QxrdAcquisition::acquireStarted, this, &QxrdDetectorControlWindow::acquireStarted);
+    connect(acqp.data(), &QxrdAcquisition::acquireComplete, this, &QxrdDetectorControlWindow::acquireComplete);
+
+    acqp -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
+    acqp -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
+    acqp -> prop_SkippedExposures() -> linkTo(this -> m_SkippedExposures);
+    acqp -> prop_SkippedExposuresAtStart() -> linkTo(this -> m_SkippedExposuresAtStart);
+    acqp -> prop_DarkSummedExposures() -> linkTo(this -> m_DarkSummedExposures);
+    acqp -> prop_FilePattern() -> linkTo(this -> m_FilePattern);
+    acqp -> prop_FileIndex() -> linkTo(this -> m_FileIndex);
+    acqp -> prop_PhasesInGroup() -> linkTo(this -> m_PhasesInGroup);
+    acqp -> prop_PreTriggerFiles() -> linkTo(this -> m_PreTriggerFiles);
+    acqp -> prop_PostTriggerFiles() -> linkTo(this -> m_PostTriggerFiles);
+    acqp -> prop_DroppedFrames() -> linkTo(this -> m_DroppedFrames);
+
+    acqp -> prop_UserComment1() -> linkTo(this -> m_UserComment1);
+    acqp -> prop_UserComment2() -> linkTo(this -> m_UserComment2);
+    acqp -> prop_UserComment3() -> linkTo(this -> m_UserComment3);
+    acqp -> prop_UserComment4() -> linkTo(this -> m_UserComment4);
+
+    acqp -> prop_LiveViewAtIdle() -> linkTo(this -> m_LiveViewAtIdle);
+    acqp -> prop_AcquisitionCancelsLiveView() -> linkTo(this -> m_AcquisitionCancelsLiveView);
+    acqp -> prop_RetryDropped() -> linkTo(this -> m_RetryDropped);
+  }
+
+  if (expt) {
+    QxrdWindowPtr wp(expt->window());
+
+    if (wp) {
+      connect(m_DetectorOptionsButton, &QAbstractButton::clicked, wp.data(), &QxrdWindow::doEditDetectorPreferences);
+      connect(m_AcquireOptionsButton, &QAbstractButton::clicked, wp.data(), &QxrdWindow::doEditPreferences);
+    }
   }
 }
 
@@ -594,5 +656,110 @@ void QxrdDetectorControlWindow::doVisualizePeak()
 
       displayNewData(dp->data(), QcepMaskDataPtr());
     }
+  }
+}
+
+void QxrdDetectorControlWindow::doAcquire()
+{
+  QxrdAcquisitionPtr acqp(m_Acquisition);
+
+  if (acqp) {
+    acqp -> acquire();
+  }
+}
+
+void QxrdDetectorControlWindow::doAcquireOnce()
+{
+  QxrdAcquisitionPtr acqp(m_Acquisition);
+
+  if (acqp) {
+    acqp -> acquireOnce();
+  }
+}
+
+void QxrdDetectorControlWindow::doCancel()
+{
+  QxrdAcquisitionPtr acqp(m_Acquisition);
+
+  if (acqp) {
+    acqp -> cancel();
+  }
+}
+
+void QxrdDetectorControlWindow::doAcquireDark()
+{
+  QxrdAcquisitionPtr acqp(m_Acquisition);
+
+  if (acqp) {
+    acqp -> acquireDark();
+  }
+}
+
+void QxrdDetectorControlWindow::acquireStarted()
+{
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    m_AcquireButton -> setEnabled(false);
+    m_ActionAcquire -> setEnabled(false);
+
+    m_AcquireOnceButton -> setEnabled(false);
+    m_ActionAcquireOnce -> setEnabled(false);
+
+    if (acq -> get_PreTriggerFiles() > 0) {
+      m_TriggerButton -> setEnabled(true);
+      m_ActionTrigger -> setEnabled(true);
+    } else {
+      m_TriggerButton -> setEnabled(false);
+      m_ActionTrigger -> setEnabled(false);
+    }
+
+    m_CancelButton -> setEnabled(true);
+    m_ActionCancel -> setEnabled(true);
+
+    m_DarkAcquireButton -> setEnabled(false);
+    m_ActionAcquireDark -> setEnabled(false);
+  }
+}
+
+void QxrdDetectorControlWindow::acquireComplete()
+{
+  m_AcquireButton -> setEnabled(true);
+  m_ActionAcquire -> setEnabled(true);
+
+  m_AcquireOnceButton -> setEnabled(true);
+  m_ActionAcquireOnce -> setEnabled(true);
+
+  m_TriggerButton -> setEnabled(false);
+  m_ActionTrigger -> setEnabled(false);
+
+  m_CancelButton -> setEnabled(false);
+  m_ActionCancel -> setEnabled(false);
+
+  m_DarkAcquireButton -> setEnabled(true);
+  m_ActionAcquireDark -> setEnabled(true);
+}
+
+void QxrdDetectorControlWindow::browseLogFile()
+{
+  QDir pwd(m_ExperimentDirectory->text());
+  QFileInfo initial(pwd, m_LogFileName->text());
+
+  QString file = QFileDialog::getSaveFileName(this, "Log File", initial.absoluteFilePath());
+
+  if (file != "") {
+    m_LogFileName->setText(pwd.relativeFilePath(file));
+  }
+}
+
+void QxrdDetectorControlWindow::browseScanFile()
+{
+  QDir pwd(m_ExperimentDirectory->text());
+  QFileInfo initial(pwd, m_ScanFileName->text());
+
+  QString file = QFileDialog::getSaveFileName(this, "Scan File", initial.absoluteFilePath());
+
+  if (file != "") {
+    m_ScanFileName->setText(pwd.relativeFilePath(file));
   }
 }
