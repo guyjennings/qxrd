@@ -1,4 +1,5 @@
 #include "qxrdroiellipse.h"
+#include <cmath>
 
 static const int nPts = 16;
 
@@ -36,6 +37,8 @@ QPolygonF QxrdROIEllipse::dragOutline()
   for (int i=0; i<=nPts; i++) {
     res.append(markerPoint(i));
   }
+
+  return res;
 }
 
 bool QxrdROIEllipse::pointInShape(QPointF pt)
