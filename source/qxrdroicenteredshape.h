@@ -8,7 +8,7 @@ class QxrdROICenteredShape : public QxrdROIShape
   Q_OBJECT
 
 public:
-  QxrdROICenteredShape(int shapeType,
+  QxrdROICenteredShape(ROIShapeType shapeType,
                        double halfWidth,
                        double halfHeight);
 

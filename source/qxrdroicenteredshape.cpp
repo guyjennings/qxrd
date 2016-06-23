@@ -1,6 +1,6 @@
 #include "qxrdroicenteredshape.h"
 
-QxrdROICenteredShape::QxrdROICenteredShape(int shapeType, double halfWidth, double halfHeight)
+QxrdROICenteredShape::QxrdROICenteredShape(ROIShapeType shapeType, double halfWidth, double halfHeight)
   : QxrdROIShape(shapeType),
     m_HalfWidth(this, "halfWidth", halfWidth, "Centered ROI Half Width"),
     m_HalfHeight(this, "halfHeight", halfHeight, "Centered ROI Half Height")

@@ -9,14 +9,6 @@ class QxrdROIShape : public QcepSerializableObject
   Q_OBJECT
 
 public:
-  QxrdROIShape(int shapeType/*,
-               double left,
-               double top,
-               double right,
-               double bottom*/);
-
-  QxrdROIShape(int    shapeType,
-               QRectF boundingBox);
   enum ROIShapeType {
     NoShape,
     RectangleShape,
@@ -27,6 +19,10 @@ public:
 
   Q_ENUM(ROIShapeType)
 
+  QxrdROIShape(ROIShapeType shapeType);
+
+  QxrdROIShape(int    shapeType,
+               QRectF boundingBox);
 signals:
   void roiChanged();
 

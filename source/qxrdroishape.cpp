@@ -4,7 +4,7 @@
 #include "qxrdroipolygon.h"
 #include <QScriptEngine>
 
-QxrdROIShape::QxrdROIShape(int shapeType)
+QxrdROIShape::QxrdROIShape(QxrdROIShape::ROIShapeType shapeType)
   : QcepSerializableObject("shape"),
     m_ShapeType(this, "shapeType", shapeType, "ROI Shape Type")
 {
