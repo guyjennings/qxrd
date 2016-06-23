@@ -19,6 +19,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
 CONFIG += qt
 
 QT += network \
+    qml \
     script \
     scripttools
 
@@ -398,7 +399,9 @@ HEADERS += TODO.h \
     qxrdroicache-ptr.h \
     qxrddetectorcontrolwindowsettings.h \
     qxrddetectorcontrolwindowsettings-ptr.h \
-    qxrdexperimentsettings-ptr.h
+    qxrdexperimentsettings-ptr.h \
+    qxrdjsengine.h \
+    qxrdjsengine-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -587,7 +590,8 @@ SOURCES += qxrd.cpp \
     qxrdroipicker.cpp \
     qxrdroicenteredshape.cpp \
     qxrdroicache.cpp \
-    qxrddetectorcontrolwindowsettings.cpp
+    qxrddetectorcontrolwindowsettings.cpp \
+    qxrdjsengine.cpp
 
 OTHER_FILES += testImage.js
 

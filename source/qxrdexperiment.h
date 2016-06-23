@@ -44,6 +44,7 @@
 #include "qxrddetectorcontrolwindow-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdexperimentsettings-ptr.h"
+#include "qxrdjsengine-ptr.h"
 
 class QxrdExperiment : public QcepExperiment
 {
@@ -94,6 +95,7 @@ public:
 
 //  QcepSettingsSaverPtr settingsSaver();
   QxrdScriptEngineWPtr scriptEngine();
+  QxrdJSEngineWPtr     jsEngine();
 
 public slots:
   void newLogFile(QString path);
@@ -101,6 +103,8 @@ public slots:
 
   void executeCommand(QString cmd);
   QString systemCommand(QString cmd);
+
+  QString executeJSCommand(QString cmd);
 
   QString defaultDataDirectory(QString path) const;
   QString defaultLogName(QString path) const;
@@ -184,6 +188,8 @@ private:
 //  QxrdScriptEngineWPtr            m_ScriptEngine;
   QxrdScriptEnginePtr             m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
+
+  QxrdJSEnginePtr                 m_JSEngine;
 
   QcepDatasetPtr                  m_Dataset;
   QcepDatasetModelPtr             m_DatasetModel;

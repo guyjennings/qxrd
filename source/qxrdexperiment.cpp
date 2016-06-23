@@ -46,6 +46,7 @@
 #include <QProcess>
 #include "qxrdwindowsettings.h"
 #include "qxrdgeneratetestimage.h"
+#include "qxrdjsengine.h"
 
 QxrdExperiment::QxrdExperiment(QString name) :
   QcepExperiment("", name),
@@ -63,6 +64,7 @@ QxrdExperiment::QxrdExperiment(QString name) :
   m_FileSaver(),
   m_ScriptEngine(),
   m_ScriptEngineDebugger(NULL),
+  m_JSEngine(),
   m_LogFile(NULL),
   m_ScanFile(NULL),
   m_ExperimentFileMutex(),
@@ -271,6 +273,11 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
           new QxrdScriptEngine(app, myself));
 
     m_ScriptEngine -> initialize();
+
+    m_JSEngine = QxrdJSEnginePtr(
+          new QxrdJSEngine(app, myself));
+
+    m_JSEngine -> initialize();
 
     QxrdServerPtr srv(m_Server);
     QxrdScriptEnginePtr eng(m_ScriptEngine);
@@ -524,6 +531,10 @@ void QxrdExperiment::openWindows()
           eng -> setWindow(m_Window);
         }
 
+        if (m_JSEngine) {
+          m_JSEngine -> setWindow(m_Window);
+        }
+
         m_Window -> onAcquisitionInit();
 
         if (eng) {
@@ -717,6 +728,18 @@ QxrdIntegratorWPtr QxrdExperiment::integrator() const
 QxrdScriptEngineWPtr QxrdExperiment::scriptEngine()
 {
   return m_ScriptEngine;
+}
+
+QxrdJSEngineWPtr QxrdExperiment::jsEngine()
+{
+  return m_JSEngine;
+}
+
+QString QxrdExperiment::executeJSCommand(QString cmd)
+{
+  QJSValue res = m_JSEngine->evaluate(cmd);
+
+  return res.toString();
 }
 
 void QxrdExperiment::executeCommand(QString cmd)
