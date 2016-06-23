@@ -66,6 +66,9 @@ private slots:
   void              evaluateScript(int src, QString cmd);
 
 private:
+  static QString convertHelper(QScriptValue result, int depth);
+
+private:
   static QScriptValue printFunc(QScriptContext *context, QScriptEngine *engine, void *u);
   static QScriptValue fopenFunc(QScriptContext *context, QScriptEngine *engine, void *u);
   static QScriptValue fdeleteFunc(QScriptContext *context, QScriptEngine *engine, void *u);

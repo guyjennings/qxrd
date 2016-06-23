@@ -186,7 +186,14 @@ void QxrdScriptEngine::loadScript(QString path)
 
 QString QxrdScriptEngine::convertToString(QScriptValue result)
 {
-  if (result.isError()) {
+  return QxrdScriptEngine::convertHelper(result, 0);
+}
+
+QString QxrdScriptEngine::convertHelper(QScriptValue result, int depth)
+{
+  if (depth >= 2) {
+    return "...";
+  } else if (result.isError()) {
     return "ERROR : "+result.property("error").toString();
   } else if (result.isArray()) {
     int len = result.property("length").toInteger();
@@ -194,7 +201,7 @@ QString QxrdScriptEngine::convertToString(QScriptValue result)
     QString s = "[";
 
     for (int i=0; i<len; i++) {
-      s += convertToString(result.property(tr("%1").arg(i)));
+      s += convertHelper(result.property(tr("%1").arg(i)), depth+1);
 
       if (i<len-1) {
         s += ", ";
@@ -214,7 +221,7 @@ QString QxrdScriptEngine::convertToString(QScriptValue result)
       it.next();
 
       s += it.name()+":";
-      s += convertToString(it.value());
+      s += convertHelper(it.value(), depth+1);
 
       if (it.hasNext()) {
         s += ", ";
