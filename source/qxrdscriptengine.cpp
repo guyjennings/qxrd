@@ -1654,6 +1654,38 @@ QScriptValue QxrdScriptEngine::roiFunc(QScriptContext *context, QScriptEngine *e
   return QScriptValue();
 }
 
+QScriptValue QxrdScriptEngine::roiFunc2(int n, int i)
+{
+  QxrdAcquisitionPtr acq(acquisition());
+
+  if (acq) {
+    QxrdDetectorSettingsPtr d = acq->detector(n);
+
+    if (d) {
+      return newQObject(d->roi(i).data());
+    }
+  }
+
+  return QScriptValue();
+}
+
+QxrdROICoordinatesPtr QxrdScriptEngine::roiFunc3(int n, int i)
+{
+  QxrdROICoordinatesPtr res;
+
+  QxrdAcquisitionPtr acq(acquisition());
+
+  if (acq) {
+    QxrdDetectorSettingsPtr d = acq->detector(n);
+
+    if (d) {
+      res = d->roi(i);
+    }
+  }
+
+  return res;
+}
+
 QCEP_DOC_OBJECT(
     "JSON",
     "Qt Built-in JSON Parser"
@@ -1784,6 +1816,7 @@ void QxrdScriptEngine::initialize()
   //  qScriptRegisterSequenceMetaType< QVector<QxrdRingFitParameters*> >(this);
 
   qScriptRegisterSequenceMetaType< QcepPolygon >(this);
+  qScriptRegisterSequenceMetaType< QPolygonF >(this);
 
 //  qScriptRegisterMetaType(this,
 //                          QxrdPowderPointProperty::toScriptValue,
@@ -1982,6 +2015,9 @@ void QxrdScriptEngine::initialize()
 
   globalObject().setProperty("detector", newFunction(detectorFunc, 1));
   globalObject().setProperty("roi", newFunction(roiFunc, 1));
+
+  globalObject().setProperty("roi2", newQObject(this).property("roiFunc2"));
+  globalObject().setProperty("roi3", newQObject(this).property("roiFunc3"));
 
 //  globalObject().setProperty("dataObject", newFunction(dataObjectFunc));
   globalObject().setProperty("newDataGroup", newFunction(newDataGroupFunc));
