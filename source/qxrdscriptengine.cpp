@@ -191,7 +191,7 @@ QString QxrdScriptEngine::convertToString(QScriptValue result)
 
 QString QxrdScriptEngine::convertHelper(QScriptValue result, int depth)
 {
-  if (depth >= 2) {
+  if (depth >= 4) {
     return "...";
   } else if (result.isError()) {
     return "ERROR : "+result.property("error").toString();

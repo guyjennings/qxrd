@@ -17,13 +17,15 @@ public:
 
   QxrdROIShape(int    shapeType,
                QRectF boundingBox);
-  enum {
+  enum ROIShapeType {
     NoShape,
     RectangleShape,
     EllipseShape,
     PolygonShape,
     ShapeTypeCount
   };
+
+  Q_ENUM(ROIShapeType)
 
 signals:
   void roiChanged();
