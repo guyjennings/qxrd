@@ -18,6 +18,7 @@ signals:
 
 public slots:
   void executeSelectedText();
+  void executeSelectedTextJS();
 
 private:
   QxrdExperimentWPtr           m_Experiment;

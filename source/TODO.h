@@ -727,4 +727,7 @@ TODO("2016-06-17", "",
 TODO("2016-06-17", "",
      "Add command to acquire a single frame");
 
+TODO("2016-06-24", "",
+     "Calculated ROI values not propagated back to acquisition object?");
+
 #endif // TODO_H

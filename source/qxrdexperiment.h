@@ -104,7 +104,7 @@ public slots:
   void executeCommand(QString cmd);
   QString systemCommand(QString cmd);
 
-  QString executeJSCommand(QString cmd);
+  void executeCommandJS(QString cmd);
 
   QString defaultDataDirectory(QString path) const;
   QString defaultLogName(QString path) const;
@@ -189,7 +189,7 @@ private:
   QxrdScriptEnginePtr             m_ScriptEngine;
   QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
-  QxrdJSEnginePtr                 m_JSEngine;
+  QxrdJSEnginePtr                 m_ScriptEngineJS;
 
   QcepDatasetPtr                  m_Dataset;
   QcepDatasetModelPtr             m_DatasetModel;

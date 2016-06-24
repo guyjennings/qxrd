@@ -967,16 +967,13 @@
              <string>Command</string>
             </property>
             <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="0" colspan="5">
-              <widget class="QTextEdit" name="m_ScriptEdit">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>1</verstretch>
-                </sizepolicy>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="m_CancelScriptButton">
+               <property name="enabled">
+                <bool>false</bool>
                </property>
-               <property name="toolTip">
-                <string>Enter script commands here</string>
+               <property name="text">
+                <string>Cancel Script</string>
                </property>
               </widget>
              </item>
@@ -993,27 +990,37 @@
                </property>
               </spacer>
              </item>
-             <item row="1" column="1">
-              <widget class="QPushButton" name="m_CancelScriptButton">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
+             <item row="1" column="2">
+              <widget class="QPushButton" name="m_ExecuteScriptButton">
                <property name="text">
-                <string>Cancel Script</string>
+                <string>Execute Command</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="3">
+             <item row="1" column="4">
               <widget class="QPushButton" name="m_LoadScriptButton">
                <property name="text">
                 <string>Load Script...</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="2">
-              <widget class="QPushButton" name="m_ExecuteScriptButton">
+             <item row="0" column="0" colspan="6">
+              <widget class="QTextEdit" name="m_ScriptEdit">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>1</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Enter script commands here</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QPushButton" name="m_ExecuteScriptJSButton">
                <property name="text">
-                <string>Execute Command</string>
+                <string>Execute JS Command</string>
                </property>
               </widget>
              </item>
@@ -1298,6 +1305,7 @@
      <string>Script</string>
     </property>
     <addaction name="m_ActionExecuteScript"/>
+    <addaction name="m_ActionExecuteScriptJS"/>
     <addaction name="m_ActionLoadScript"/>
    </widget>
    <widget class="QMenu" name="m_ExperimentsMenu">
@@ -2125,6 +2133,14 @@
   <action name="m_ActionReadObjectTreeFromText">
    <property name="text">
     <string>Read O&amp;bject Tree From Text...</string>
+   </property>
+  </action>
+  <action name="m_ActionExecuteScriptJS">
+   <property name="text">
+    <string>&amp;Execute Script JS</string>
+   </property>
+   <property name="toolTip">
+    <string>Execute JS Script</string>
    </property>
   </action>
  </widget>

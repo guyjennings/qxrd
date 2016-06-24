@@ -64,7 +64,7 @@ QxrdExperiment::QxrdExperiment(QString name) :
   m_FileSaver(),
   m_ScriptEngine(),
   m_ScriptEngineDebugger(NULL),
-  m_JSEngine(),
+  m_ScriptEngineJS(),
   m_LogFile(NULL),
   m_ScanFile(NULL),
   m_ExperimentFileMutex(),
@@ -274,10 +274,10 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     m_ScriptEngine -> initialize();
 
-    m_JSEngine = QxrdJSEnginePtr(
+    m_ScriptEngineJS = QxrdJSEnginePtr(
           new QxrdJSEngine(app, myself));
 
-    m_JSEngine -> initialize();
+    m_ScriptEngineJS -> initialize();
 
     QxrdServerPtr srv(m_Server);
     QxrdScriptEnginePtr eng(m_ScriptEngine);
@@ -531,8 +531,8 @@ void QxrdExperiment::openWindows()
           eng -> setWindow(m_Window);
         }
 
-        if (m_JSEngine) {
-          m_JSEngine -> setWindow(m_Window);
+        if (m_ScriptEngineJS) {
+          m_ScriptEngineJS -> setWindow(m_Window);
         }
 
         m_Window -> onAcquisitionInit();
@@ -543,6 +543,14 @@ void QxrdExperiment::openWindows()
 
           connect(eng.data(),   &QxrdScriptEngine::appResultAvailable,
                   m_Window.data(),   &QxrdWindow::finishedCommand);
+        }
+
+        if (m_ScriptEngineJS) {
+          connect(m_Window.data(), &QxrdWindow::executeCommandJS,
+                  m_ScriptEngineJS.data(), &QxrdJSEngine::evaluateAppCommandJS);
+
+          connect(m_ScriptEngineJS.data(), &QxrdJSEngine::appResultAvailableJS,
+                  m_Window.data(), &QxrdWindow::finishedCommandJS);
         }
 
         readInitialLogFile();
@@ -732,14 +740,14 @@ QxrdScriptEngineWPtr QxrdExperiment::scriptEngine()
 
 QxrdJSEngineWPtr QxrdExperiment::jsEngine()
 {
-  return m_JSEngine;
+  return m_ScriptEngineJS;
 }
 
-QString QxrdExperiment::executeJSCommand(QString cmd)
+void QxrdExperiment::executeCommandJS(QString cmd)
 {
-  QJSValue res = m_JSEngine->evaluate(cmd);
-
-  return res.toString();
+  if (m_ScriptEngineJS) {
+    m_ScriptEngineJS->evaluateAppCommandJS(cmd);
+  }
 }
 
 void QxrdExperiment::executeCommand(QString cmd)

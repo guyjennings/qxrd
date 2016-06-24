@@ -26,6 +26,8 @@ void QxrdScriptEditWidget::contextMenuEvent(QContextMenuEvent * event)
   }
 
   menu->addAction(tr("Evaluate %1").arg(sel), this, SLOT(executeSelectedText()));
+  menu->addAction(tr("JS Evaluate %1").arg(sel), this, SLOT(executeSelectedTextJS()));
+
   menu->exec(event->globalPos());
 
   delete menu;
@@ -45,3 +47,20 @@ void QxrdScriptEditWidget::executeSelectedText()
     expt->executeCommand(sel);
   }
 }
+
+void QxrdScriptEditWidget::executeSelectedTextJS()
+{
+  QString sel = textCursor().selectedText();
+
+  if (sel.length() == 0) {
+    sel = this->toPlainText();
+  }
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    expt->executeCommandJS(sel);
+  }
+}
+
+

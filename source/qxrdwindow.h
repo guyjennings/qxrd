@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <QPointer>
 #include <QScriptValue>
+#include <QJSValue>
 
 #include "ui_qxrdwindow.h"
 
@@ -99,7 +100,9 @@ public slots:
   void testWidget();
 
   void executeScript();
+  void executeScriptJS();
   void finishedCommand(QScriptValue result);
+  void finishedCommandJS(QJSValue result);
   void cancelScript();
   void doLoadScript();
   void loadScript(QString path);
@@ -124,6 +127,7 @@ public slots:
 
 signals:
   void executeCommand(QString cmd);
+  void executeCommandJS(QString cmd);
 
 private slots:
   void doUndo();

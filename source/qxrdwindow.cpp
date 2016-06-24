@@ -18,6 +18,7 @@
 #include "qxrdintegrator.h"
 #include "qcepplotzoomer.h"
 #include "qxrdscriptengine.h"
+#include "qxrdjsengine.h"
 #include "qxrdfilebrowser.h"
 #include "qxrdimagecalculator.h"
 #include "qcepmutexlocker.h"
@@ -314,8 +315,10 @@ void QxrdWindow::initialize()
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
   //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
 
+  connect(m_ExecuteScriptJSButton, &QAbstractButton::clicked, m_ActionExecuteScriptJS, &QAction::triggered);
   connect(m_ExecuteScriptButton, &QAbstractButton::clicked, m_ActionExecuteScript, &QAction::triggered);
   connect(m_ActionExecuteScript, &QAction::triggered, this, &QxrdWindow::executeScript);
+  connect(m_ActionExecuteScriptJS, &QAction::triggered, this, &QxrdWindow::executeScriptJS);
   connect(m_CancelScriptButton, &QAbstractButton::clicked, m_ActionCancelScript, &QAction::triggered);
   connect(m_ActionCancelScript, &QAction::triggered, this, &QxrdWindow::cancelScript);
   connect(m_LoadScriptButton, &QAbstractButton::clicked, m_ActionLoadScript, &QAction::triggered);
@@ -1879,6 +1882,18 @@ void QxrdWindow::executeScript()
   m_CancelScriptButton  -> setEnabled(true);
   m_ActionCancelScript  -> setEnabled(true);
   m_ExecuteScriptButton -> setEnabled(false);
+  m_ExecuteScriptJSButton -> setEnabled(false);
+  m_ActionExecuteScript -> setEnabled(false);
+}
+
+void QxrdWindow::executeScriptJS()
+{
+  emit executeCommandJS(m_ScriptEdit -> toPlainText());
+
+  m_CancelScriptButton  -> setEnabled(true);
+  m_ActionCancelScript  -> setEnabled(true);
+  m_ExecuteScriptButton -> setEnabled(false);
+  m_ExecuteScriptJSButton -> setEnabled(false);
   m_ActionExecuteScript -> setEnabled(false);
 }
 
@@ -1909,6 +1924,25 @@ void QxrdWindow::finishedCommand(QScriptValue result)
   m_CancelScriptButton  -> setEnabled(false);
   m_ActionCancelScript  -> setEnabled(false);
   m_ExecuteScriptButton -> setEnabled(true);
+  m_ExecuteScriptJSButton -> setEnabled(true);
+  m_ActionExecuteScript -> setEnabled(true);
+}
+
+void QxrdWindow::finishedCommandJS(QJSValue result)
+{
+  if (result.isError()) {
+    int line = result.property("lineNumber").toInt();
+
+    m_Messages -> append(tr("Error in line %1").arg(line));
+    m_Messages -> append(result.property("message").toString());
+  } else {
+    m_Messages -> append(QxrdJSEngine::convertToString(result));
+  }
+
+  m_CancelScriptButton  -> setEnabled(false);
+  m_ActionCancelScript  -> setEnabled(false);
+  m_ExecuteScriptButton -> setEnabled(true);
+  m_ExecuteScriptJSButton -> setEnabled(true);
   m_ActionExecuteScript -> setEnabled(true);
 }
 
