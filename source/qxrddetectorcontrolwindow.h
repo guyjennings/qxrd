@@ -21,7 +21,7 @@ public:
                                      QxrdDetectorSettingsWPtr          det,
                                      QxrdDetectorProcessorWPtr proc,
                                      QWidget                  *parent = 0);
-  ~QxrdDetectorControlWindow();
+  virtual ~QxrdDetectorControlWindow();
 
 public slots:
   virtual void printLine(QString line);
