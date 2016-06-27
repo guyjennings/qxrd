@@ -575,22 +575,9 @@ double QxrdJSEngine::timeStampFunc()
   return qQNaN();
 }
 
-QxrdDetectorSettings* QxrdJSEngine::detectorFunc(int n)
+QJSValue QxrdJSEngine::detectorFunc(int n)
 {
-  QxrdDetectorSettingsWPtr res;
-
-  QxrdAcquisitionPtr acq(acquisition());
-
-  if (acq) {
-    res = acq->detector(n);
-  }
-
-  return res.data();
-}
-
-QxrdROICoordinates*   QxrdJSEngine::roiFunc(int n, int m)
-{
-  QxrdROICoordinatesWPtr res;
+  QJSValue res;
 
   QxrdAcquisitionPtr acq(acquisition());
 
@@ -598,11 +585,36 @@ QxrdROICoordinates*   QxrdJSEngine::roiFunc(int n, int m)
     QxrdDetectorSettingsPtr det = acq->detector(n);
 
     if (det) {
-      res = det->roi(m);
+      res = newQObject(det.data());
+
+      setObjectOwnership(det.data(), CppOwnership);
     }
   }
 
-  return res.data();
+  return res;
+}
+
+QJSValue QxrdJSEngine::roiFunc(int n, int m)
+{
+  QJSValue res;
+
+  QxrdAcquisitionPtr acq(acquisition());
+
+  if (acq) {
+    QxrdDetectorSettingsPtr det = acq->detector(n);
+
+    if (det) {
+      QxrdROICoordinatesPtr roic = det->roi(m);
+
+      if (roic) {
+        res = newQObject(roic.data());
+
+        setObjectOwnership(roic.data(), CppOwnership);
+      }
+    }
+  }
+
+  return res;
 }
 
 QcepDataGroup*       QxrdJSEngine::newDataGroupFunc(QString name)

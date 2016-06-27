@@ -110,6 +110,7 @@ public slots:
   double scalerCounts(int chan);
 
   QxrdDetectorControlWindowSettingsWPtr detectorControlWindowSettings();
+  QxrdDetectorControlWindowWPtr         detectorControlWindow();
 
 protected:
   QxrdExperimentWPtr                   m_Experiment;

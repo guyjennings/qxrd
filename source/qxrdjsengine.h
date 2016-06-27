@@ -120,8 +120,8 @@ public slots:
 
   void mapUserFunctionFunc(QString func);
   double timeStampFunc();
-  QxrdDetectorSettings* detectorFunc(int n);
-  QxrdROICoordinates*   roiFunc(int n, int m);
+  QJSValue detectorFunc(int n);
+  QJSValue roiFunc(int n, int m);
 
   QcepDataGroup*       newDataGroupFunc(QString name);
   QcepDataArray*       newDataArrayFunc(QString name, int d1=0, int d2=0, int d3=0, int d4=0);

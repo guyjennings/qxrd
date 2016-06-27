@@ -239,6 +239,11 @@ QxrdDetectorControlWindowSettingsWPtr QxrdDetectorSettings::detectorControlWindo
   return m_DetectorControlWindowSettings;
 }
 
+QxrdDetectorControlWindowWPtr QxrdDetectorSettings::detectorControlWindow()
+{
+  return m_DetectorControlWindow;
+}
+
 int QxrdDetectorSettings::roiCount()
 {
   int res = 0;
