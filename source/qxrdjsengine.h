@@ -122,6 +122,7 @@ public slots:
   double timeStampFunc();
   QJSValue detectorFunc(int n);
   QJSValue roiFunc(int n, int m);
+  QJSValue calibrantFunc(int n);
 
   QcepDataGroup*       newDataGroupFunc(QString name);
   QcepDataArray*       newDataArrayFunc(QString name, int d1=0, int d2=0, int d3=0, int d4=0);

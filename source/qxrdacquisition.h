@@ -77,6 +77,7 @@ public slots:
   void openDetectorControlWindow(int i);
 
   QxrdDetectorSettingsWPtr      detector(int n);
+  QxrdDetectorSettings         *det(int n);
 
   QString currentFileBase(int detNum, QString extension="");
 

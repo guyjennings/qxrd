@@ -7,6 +7,15 @@
 #include "qxrddataprocessor.h"
 #include "qxrdroicoordinates.h"
 #include "qxrddetectorsettings.h"
+#include "qxrdacquisitionextrainputs.h"
+#include "qxrdserver.h"
+#include "qxrdsimpleserver.h"
+#include "qxrdcalibrantlibrary.h"
+#include "qxrdcalibrant.h"
+#include "qcepdatasetmodel.h"
+#include "qxrdgeneratetestimage.h"
+#include "qcepdataexportparameters.h"
+#include "qcepdataimportparameters.h"
 
 QxrdJSEngine::QxrdJSEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp) :
   m_Application(app),
@@ -37,6 +46,9 @@ void QxrdJSEngine::initialize()
 
   qmlRegisterType<QxrdROICoordinates>();
   qmlRegisterType<QxrdDetectorSettings>();
+//  qmlRegisterType<QxrdPowderPoint>();
+  qmlRegisterType<QxrdCalibrant>();
+//  qmlRegisterType<QxrdCalibrantPtr>();
 //  qmlRegisterType<QPointF>();
 //  qmlRegisterType<QRectF>();
 //  qmlRegisterType<QPolygonF>();
@@ -85,6 +97,7 @@ void QxrdJSEngine::initialize()
 
   setGlobalProperty("detector", newQObject(this).property("detectorFunc"));
   setGlobalProperty("roi", newQObject(this).property("roiFunc"));
+  setGlobalProperty("calibrant", newQObject(this).property("calibrantFunc"));
 
   setGlobalProperty("newDataGroup", newQObject(this).property("newDataGroupFunc"));
   setGlobalProperty("newDataArray", newQObject(this).property("newDataArrayFunc"));
@@ -98,6 +111,13 @@ void QxrdJSEngine::initialize()
   if (app) {
 //    QCEP_DOC_OBJECT("application", "The QXRD Application Object");
     setGlobalProperty("application", newQObject(app.data()));
+
+    QObject *plugin = dynamic_cast<QObject*>(app->nidaqPlugin().data());
+
+    if (plugin) {
+//      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
+      setGlobalProperty("nidaq", newQObject(plugin));
+    }
   }
 
   if (g_Allocator) {
@@ -114,6 +134,88 @@ void QxrdJSEngine::initialize()
 
     if (acq) {
       setGlobalProperty("acquisition", newQObject(acq.data()));
+    }
+
+    QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
+
+    if (sync) {
+//      QCEP_DOC_OBJECT("synchronization", "Synchronized Acquisition");
+      setGlobalProperty("synchronization", newQObject(sync.data()));
+    }
+
+    QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
+
+    if (extra) {
+//      QCEP_DOC_OBJECT("extraInputs", "Extra Inputs during Acquisition");
+      setGlobalProperty("extraInputs", newQObject(extra.data()));
+    }
+
+    QxrdSimpleServerPtr ssrv(expt->simpleServer());
+
+    if (ssrv) {
+//      QCEP_DOC_OBJECT("simpleServer", "Remote Control Text Based Socket Server");
+      setGlobalProperty("simpleServer", newQObject(ssrv.data()));
+    }
+
+    QxrdServerPtr srv(expt->specServer());
+
+    if (srv) {
+//      QCEP_DOC_OBJECT("specServer", "Remote Control Server for use with Spec");
+      setGlobalProperty("specServer", newQObject(srv.data()));
+    }
+
+    QxrdDataProcessorPtr dp(expt->dataProcessor());
+
+    if (dp) {
+//      QCEP_DOC_OBJECT("processor", "Control Data Processing Options");
+      setGlobalProperty("processor",       newQObject(dp.data()));
+
+//      QCEP_DOC_OBJECT("centering", "Beam Center and Detector Alignment Options");
+      setGlobalProperty("centering",       newQObject(dp->centerFinder().data()));
+
+//      QCEP_DOC_OBJECT("integrator", "Image Circular Integration Options");
+      setGlobalProperty("integrator",      newQObject(dp->integrator().data()));
+
+//      QCEP_DOC_OBJECT("polarTransform", "Polar Transform Options");
+      setGlobalProperty("polarTransform",      newQObject(dp->polarTransform().data()));
+
+//      QCEP_DOC_OBJECT("polarNormalization", "Polar Normalization Options");
+      setGlobalProperty("polarNormalization",      newQObject(dp->polarNormalization().data()));
+
+      QxrdGenerateTestImagePtr gti(dp->generateTestImage());
+
+      if (gti) {
+//        QCEP_DOC_OBJECT("testImage", "Object for generating test images");
+        setGlobalProperty("testImage",       newQObject(gti.data()));
+      }
+
+//      QCEP_DOC_OBJECT("distortion", "Detector distortion correction");
+      setGlobalProperty("distortion",     newQObject(dp->distortionCorrection().data()));
+    }
+
+    QxrdCalibrantLibraryPtr cals(expt->calibrantLibrary());
+
+    if (cals) {
+//      QCEP_DOC_OBJECT("calibrants", "Calibrant Library");
+      setGlobalProperty("calibrants", newQObject(cals.data()));
+    }
+
+    QcepDatasetModelPtr ds = expt->dataset();
+
+    if (ds) {
+      setGlobalProperty("dataset", newQObject(ds.data()));
+    }
+
+    QcepDataExportParametersPtr exp = expt->dataExportParameters();
+
+    if (exp) {
+      setGlobalProperty("exportParameters", newQObject(exp.data()));
+    }
+
+    QcepDataImportParametersPtr imp = expt->dataImportParameters();
+
+    if (imp) {
+      setGlobalProperty("importParameters", newQObject(imp.data()));
     }
   }
 }
@@ -157,6 +259,8 @@ QString QxrdJSEngine::convertHelper(QJSValue result, int depth)
     return "...";
   } else if (result.isError()) {
     return "ERROR : "+result.property("error").toString();
+  } else if (result.isCallable()) {
+    return result.toString();
   } else if (result.isArray()) {
     int len = result.property("length").toInt();
 
@@ -179,18 +283,30 @@ QString QxrdJSEngine::convertHelper(QJSValue result, int depth)
 
     QString s = "{";
 
+    if (depth == 0) s += "\n";
+
     while(it.hasNext()) {
       it.next();
+
+      if (depth == 0) s += "  ";
 
       s += it.name()+":";
       s += convertHelper(it.value(), depth+1);
 
       if (it.hasNext()) {
-        s += ", ";
+        if (depth == 0) {
+          s += ",\n";
+        } else {
+          s += ", ";
+        }
       }
     }
 
-    s += "}";
+    if (depth == 0) {
+      s += "\n}";
+    } else {
+      s += "}";
+    }
 
     return s;
 
@@ -610,6 +726,29 @@ QJSValue QxrdJSEngine::roiFunc(int n, int m)
         res = newQObject(roic.data());
 
         setObjectOwnership(roic.data(), CppOwnership);
+      }
+    }
+  }
+
+  return res;
+}
+
+QJSValue QxrdJSEngine::calibrantFunc(int n)
+{
+  QJSValue res;
+
+  QxrdExperimentPtr expt(m_Experiment);
+
+  if (expt) {
+    QxrdCalibrantLibraryPtr lib(expt->calibrantLibrary());
+
+    if (lib) {
+      QxrdCalibrantPtr cal(lib->calibrant(n));
+
+      if (cal) {
+        res = newQObject(cal.data());
+
+        setObjectOwnership(cal.data(), CppOwnership);
       }
     }
   }

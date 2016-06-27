@@ -217,18 +217,30 @@ QString QxrdScriptEngine::convertHelper(QScriptValue result, int depth)
 
     QString s = "{";
 
+    if (depth == 0) s += "\n";
+
     while(it.hasNext()) {
       it.next();
+
+      if (depth == 0) s += "  ";
 
       s += it.name()+":";
       s += convertHelper(it.value(), depth+1);
 
       if (it.hasNext()) {
-        s += ", ";
+        if (depth == 0) {
+          s += ",\n";
+        } else {
+          s += ", ";
+        }
       }
     }
 
-    s += "}";
+    if (depth == 0) {
+      s += "\n}";
+    } else {
+      s += "}";
+    }
 
     return s;
 

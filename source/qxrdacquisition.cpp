@@ -381,6 +381,11 @@ QxrdDetectorSettingsWPtr QxrdAcquisition::detector(int n)
   return m_Detectors.value(n);
 }
 
+QxrdDetectorSettings *QxrdAcquisition::det(int n)
+{
+  return m_Detectors.value(n).data();
+}
+
 void QxrdAcquisition::setWindow(QxrdWindowWPtr win)
 {
   m_Window = win;
