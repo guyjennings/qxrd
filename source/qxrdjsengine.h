@@ -57,7 +57,7 @@ public slots:
   void acquireCancelFunc();
   int  processStatusFunc(double tim=0);
 
-  QVector<qreal> acquireScalersFunc();
+  QJSValue acquireScalersFunc();
   double acquireScalersFunc(int i);
   void triggerFunc();
 

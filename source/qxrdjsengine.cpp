@@ -313,6 +313,8 @@ int  QxrdJSEngine::acquireStatusFunc(double tim)
   if (acq) {
     res = acq->acquisitionStatus(tim);
   }
+
+  return res;
 }
 
 void QxrdJSEngine::acquireCancelFunc()
@@ -337,14 +339,18 @@ int  QxrdJSEngine::processStatusFunc(double tim)
   return res;
 }
 
-QVector<qreal> QxrdJSEngine::acquireScalersFunc()
+QJSValue QxrdJSEngine::acquireScalersFunc()
 {
-  QVector<double> res;
+  QJSValue res = newArray();
 
   QxrdAcquisitionPtr acq(acquisition());
 
   if (acq) {
-    res = acq->get_ScalerValues();
+    QcepDoubleVector v = acq->get_ScalerValues();
+
+    for (int i=0; i<v.length(); i++) {
+      res.setProperty(i, v.value(i));
+    }
   }
 
   return res;
@@ -369,82 +375,102 @@ void QxrdJSEngine::triggerFunc()
 
 double QxrdJSEngine::exposureTimeFunc()
 {
+  return qQNaN();
 }
 
 double QxrdJSEngine::exposureTimeFunc(double t)
 {
+  return qQNaN();
 }
 
 int QxrdJSEngine::summedExposuresFunc()
 {
+  return -1;
 }
 
 int QxrdJSEngine::summedExposuresFunc(int n)
 {
+  return -1;
 }
 
 int QxrdJSEngine::skippedExposuresFunc()
 {
+  return -1;
 }
 
 int QxrdJSEngine::skippedExposuresFunc(int n)
 {
+  return -1;
 }
 
 int QxrdJSEngine::darkSummedExposuresFuncs()
 {
+  return -1;
 }
 
 int QxrdJSEngine::darkSummedExposuresFuncs(int n)
 {
+  return -1;
 }
 
 int QxrdJSEngine::phasesInGroupFunc()
 {
+  return -1;
 }
 
 int QxrdJSEngine::phasesInGroupFunc(int n)
 {
+  return -1;
 }
 
 int QxrdJSEngine::preTriggerFilesFunc()
 {
+  return -1;
 }
 
 int QxrdJSEngine::preTriggerFilesFunc(int n)
 {
+  return -1;
 }
 
 int QxrdJSEngine::postTriggerFilesFunc()
 {
+  return -1;
 }
 
 int QxrdJSEngine::postTriggerFilesFunc(int n)
 {
+  return -1;
 }
 
 QString QxrdJSEngine::filePatternFunc()
 {
+  return "";
 }
 
 QString QxrdJSEngine::filePatternFunc(QString patt)
 {
+  return "";
 }
 
 QString QxrdJSEngine::outputDirectoryFunc()
 {
+  return "";
 }
 
 QString QxrdJSEngine::outputDirectoryFunc(QString d)
 {
+  return "";
 }
 
 int QxrdJSEngine::fileIndexFunc()
 {
+  return -1;
 }
 
 int QxrdJSEngine::fileIndexFunc(int n)
 {
+  return -1;
 }
 
 void QxrdJSEngine::fopenFunc(QString fn)
@@ -471,26 +497,32 @@ void QxrdJSEngine::fcloseFunc()
 
 QcepDoubleImageData* QxrdJSEngine::dataFunc()
 {
+  return NULL;
 }
 
 QcepDoubleImageData* QxrdJSEngine::darkFunc()
 {
+  return NULL;
 }
 
 QcepMaskData*        QxrdJSEngine::maskFunc()
 {
+  return NULL;
 }
 
 QcepMaskData*        QxrdJSEngine::overflowFunc()
 {
+  return NULL;
 }
 
 QcepDoubleImageData* QxrdJSEngine::liveDataFunc()
 {
+  return NULL;
 }
 
 QString QxrdJSEngine::helpFunc(QString topic)
 {
+  return "";
 }
 
 void QxrdJSEngine::processFunc(QString fn, QVector<double> nm)
@@ -503,10 +535,12 @@ void QxrdJSEngine::setFileNormalizationFunc(QString fn, QVector<double> nm)
 
 QStringList QxrdJSEngine::matchFilesFunc(QString patt)
 {
+  return QStringList();
 }
 
 QxrdAcquisitionExtraInputsChannel* QxrdJSEngine::extraChannelFunc(int n)
 {
+  return NULL;
 }
 
 void QxrdJSEngine::mapUserFunctionFunc(QString func)
@@ -515,6 +549,7 @@ void QxrdJSEngine::mapUserFunctionFunc(QString func)
 
 double QxrdJSEngine::timeStampFunc()
 {
+  return qQNaN();
 }
 
 QxrdDetectorSettings* QxrdJSEngine::detectorFunc(int n)
@@ -549,24 +584,30 @@ QxrdROICoordinates*   QxrdJSEngine::roiFunc(int n, int m)
 
 QcepDataGroup*       QxrdJSEngine::newDataGroupFunc(QString name)
 {
+  return NULL;
 }
 
 QcepDataArray*       QxrdJSEngine::newDataArrayFunc(QString name, int d1, int d2, int d3, int d4)
 {
+  return NULL;
 }
 
 QcepDataColumn*      QxrdJSEngine::newDataColumnFunc(QString name, int npts)
 {
+  return NULL;
 }
 
 QcepDataColumnScan*  QxrdJSEngine::newDataColumnScanFunc(QString name, QStringList cols)
 {
+  return NULL;
 }
 
 QcepDoubleImageData* QxrdJSEngine::newDataImageFunc(QString name, int width, int height)
 {
+  return NULL;
 }
 
 QcepIntegratedData*  QxrdJSEngine::newIntegratedDataFunc(QString name, int size)
 {
+  return NULL;
 }
