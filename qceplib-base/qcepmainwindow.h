@@ -9,6 +9,8 @@ class QcepMainWindow : public QMainWindow
   Q_OBJECT
 public:
   explicit QcepMainWindow(QWidget *parent = 0);
+  virtual ~QcepMainWindow();
+
   void possiblyClose();
   bool wantToClose();
 
