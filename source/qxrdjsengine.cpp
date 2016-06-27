@@ -12,10 +12,25 @@ QxrdJSEngine::QxrdJSEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp) :
   m_Application(app),
   m_Experiment(exp)
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdJSEngine::QxrdJSEngine(%p)\n", this);
+  }
+}
+
+QxrdJSEngine::~QxrdJSEngine()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdJSEngine::~QxrdJSEngine(%p)\n", this);
+  }
+
+//  if (m_ScriptOutput) {
+//    fclose(m_ScriptOutput);
+//  }
 }
 
 void QxrdJSEngine::initialize()
 {
+
   installExtensions(QJSEngine::AllExtensions);
 
   qRegisterMetaType< QVector<qreal> >("QVector<qreal>");
@@ -27,83 +42,91 @@ void QxrdJSEngine::initialize()
 //  qmlRegisterType<QPolygonF>();
 //  qmlRegisterType<QVector<double> >();
 
-  globalObject().setProperty("global", globalObject());
-  globalObject().setProperty("scripting", newQObject(this));
+  setGlobalProperty("global", globalObject());
+  setGlobalProperty("scripting", newQObject(this));
 
-  globalObject().setProperty("acquire", newQObject(this).property("acquireFunc"));
-  globalObject().setProperty("acquireDark", newQObject(this).property("acquireDarkFunc"));
-  globalObject().setProperty("status", newQObject(this).property("statusFunc"));
-  globalObject().setProperty("acquireStatus", newQObject(this).property("acquireStatusFunc"));
-  globalObject().setProperty("processStatus", newQObject(this).property("processStatusFunc"));
-  globalObject().setProperty("acquireCancel", newQObject(this).property("acquireCancelFunc"));
-  globalObject().setProperty("acquireScalers", newQObject(this).property("acquireScalersFunc"));
-  globalObject().setProperty("trigger", newQObject(this).property("triggerFunc"));
-  globalObject().setProperty("exposureTime", newQObject(this).property("exposureTimeFunc"));
-  globalObject().setProperty("summedExposures", newQObject(this).property("summedExposuresFunc"));
-  globalObject().setProperty("skippedExposures", newQObject(this).property("skippedExposuresFunc"));
-  globalObject().setProperty("darkSummedExposures", newQObject(this).property("darkSummedExposuresFunc"));
-  globalObject().setProperty("phasesInGroup", newQObject(this).property("phasesInGroupFunc"));
-  globalObject().setProperty("preTriggerFiles", newQObject(this).property("preTriggerFilesFunc"));
-  globalObject().setProperty("postTriggerFiles", newQObject(this).property("postTriggerFilesFunc"));
-  globalObject().setProperty("filePattern", newQObject(this).property("filePatternFunc"));
-  globalObject().setProperty("outputDirectory", newQObject(this).property("outputDirectoryFunc"));
-  globalObject().setProperty("fileIndex", newQObject(this).property("fileIndexFunc"));
-  globalObject().setProperty("print", newQObject(this).property("printFunc"));
-  globalObject().setProperty("fopen", newQObject(this).property("fopenFunc"));
-  globalObject().setProperty("fdelete", newQObject(this).property("fdeleteFunc"));
-  globalObject().setProperty("fprint", newQObject(this).property("fprintFunc"));
-  globalObject().setProperty("fclose", newQObject(this).property("fcloseFunc"));
-  globalObject().setProperty("printMessage", newQObject(this).property("printFunc"));
-  globalObject().setProperty("data", newQObject(this).property("dataFunc"));
-  globalObject().setProperty("dark", newQObject(this).property("darkFunc"));
-  globalObject().setProperty("mask", newQObject(this).property("maskFunc"));
-  globalObject().setProperty("overflow", newQObject(this).property("overflowFunc"));
-  globalObject().setProperty("liveData", newQObject(this).property("liveDataFunc"));
-  globalObject().setProperty("help", newQObject(this).property("helpFunc"));
-  globalObject().setProperty("process", newQObject(this).property("processFunc"));
-  globalObject().setProperty("setFileNormalization", newQObject(this).property("setFileNormalizationFunc"));
-  globalObject().setProperty("matchFiles", newQObject(this).property("matchFilesFunc"));
-  globalObject().setProperty("extraChannel", newQObject(this).property("extraChannelFunc"));
-  globalObject().setProperty("mapUserFunction", newQObject(this).property("mapUserFunctionFunc"));
-  globalObject().setProperty("timeStamp", newQObject(this).property("timeStampFunc"));
+  setGlobalProperty("acquire", newQObject(this).property("acquireFunc"));
+  setGlobalProperty("acquireDark", newQObject(this).property("acquireDarkFunc"));
+  setGlobalProperty("status", newQObject(this).property("statusFunc"));
+  setGlobalProperty("acquireStatus", newQObject(this).property("acquireStatusFunc"));
+  setGlobalProperty("processStatus", newQObject(this).property("processStatusFunc"));
+  setGlobalProperty("acquireCancel", newQObject(this).property("acquireCancelFunc"));
+  setGlobalProperty("acquireScalers", newQObject(this).property("acquireScalersFunc"));
 
-  globalObject().setProperty("detector", newQObject(this).property("detectorFunc"));
-  globalObject().setProperty("roi", newQObject(this).property("roiFunc"));
+  setGlobalProperty("trigger", newQObject(this).property("triggerFunc"));
+  setGlobalProperty("exposureTime", newQObject(this).property("exposureTimeFunc"));
+  setGlobalProperty("summedExposures", newQObject(this).property("summedExposuresFunc"));
+  setGlobalProperty("skippedExposures", newQObject(this).property("skippedExposuresFunc"));
+  setGlobalProperty("darkSummedExposures", newQObject(this).property("darkSummedExposuresFunc"));
+  setGlobalProperty("phasesInGroup", newQObject(this).property("phasesInGroupFunc"));
+  setGlobalProperty("preTriggerFiles", newQObject(this).property("preTriggerFilesFunc"));
+  setGlobalProperty("postTriggerFiles", newQObject(this).property("postTriggerFilesFunc"));
+  setGlobalProperty("filePattern", newQObject(this).property("filePatternFunc"));
+  setGlobalProperty("outputDirectory", newQObject(this).property("outputDirectoryFunc"));
+  setGlobalProperty("fileIndex", newQObject(this).property("fileIndexFunc"));
+  setGlobalProperty("print", newQObject(this).property("printFunc"));
+  setGlobalProperty("fopen", newQObject(this).property("fopenFunc"));
+  setGlobalProperty("fdelete", newQObject(this).property("fdeleteFunc"));
+  setGlobalProperty("fprint", newQObject(this).property("fprintFunc"));
+  setGlobalProperty("fclose", newQObject(this).property("fcloseFunc"));
+  setGlobalProperty("printMessage", newQObject(this).property("printFunc"));
+  setGlobalProperty("data", newQObject(this).property("dataFunc"));
+  setGlobalProperty("dark", newQObject(this).property("darkFunc"));
+  setGlobalProperty("mask", newQObject(this).property("maskFunc"));
+  setGlobalProperty("overflow", newQObject(this).property("overflowFunc"));
+  setGlobalProperty("liveData", newQObject(this).property("liveDataFunc"));
+  setGlobalProperty("help", newQObject(this).property("helpFunc"));
+  setGlobalProperty("process", newQObject(this).property("processFunc"));
+  setGlobalProperty("setFileNormalization", newQObject(this).property("setFileNormalizationFunc"));
+  setGlobalProperty("matchFiles", newQObject(this).property("matchFilesFunc"));
+  setGlobalProperty("extraChannel", newQObject(this).property("extraChannelFunc"));
+  setGlobalProperty("mapUserFunction", newQObject(this).property("mapUserFunctionFunc"));
+  setGlobalProperty("timeStamp", newQObject(this).property("timeStampFunc"));
 
-  globalObject().setProperty("newDataGroup", newQObject(this).property("newDataGroupFunc"));
-  globalObject().setProperty("newDataArray", newQObject(this).property("newDataArrayFunc"));
-  globalObject().setProperty("newDataColumn", newQObject(this).property("newDataColumnFunc"));
-  globalObject().setProperty("newDataColumnScan", newQObject(this).property("newDataColumnScanFunc"));
-  globalObject().setProperty("newDataImage", newQObject(this).property("newDataImageFunc"));
-  globalObject().setProperty("newIntegratedData", newQObject(this).property("newIntegratedDataFunc"));
+  setGlobalProperty("detector", newQObject(this).property("detectorFunc"));
+  setGlobalProperty("roi", newQObject(this).property("roiFunc"));
+
+  setGlobalProperty("newDataGroup", newQObject(this).property("newDataGroupFunc"));
+  setGlobalProperty("newDataArray", newQObject(this).property("newDataArrayFunc"));
+  setGlobalProperty("newDataColumn", newQObject(this).property("newDataColumnFunc"));
+  setGlobalProperty("newDataColumnScan", newQObject(this).property("newDataColumnScanFunc"));
+  setGlobalProperty("newDataImage", newQObject(this).property("newDataImageFunc"));
+  setGlobalProperty("newIntegratedData", newQObject(this).property("newIntegratedDataFunc"));
 
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
 //    QCEP_DOC_OBJECT("application", "The QXRD Application Object");
-    globalObject().setProperty("application", newQObject(app.data()));
+    setGlobalProperty("application", newQObject(app.data()));
   }
 
   if (g_Allocator) {
 //    QCEP_DOC_OBJECT("allocator", "The QXRD Memory Allocator");
-    globalObject().setProperty("allocator", newQObject(g_Allocator));
+    setGlobalProperty("allocator", newQObject(g_Allocator));
   }
 
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    globalObject().setProperty("experiment", newQObject(expt.data()));
+    setGlobalProperty("experiment", newQObject(expt.data()));
 
     QxrdAcquisitionPtr acq(expt->acquisition());
 
     if (acq) {
-      globalObject().setProperty("acquisition", newQObject(acq.data()));
+      setGlobalProperty("acquisition", newQObject(acq.data()));
     }
   }
 }
 
 void QxrdJSEngine::setWindow(QxrdWindowWPtr win)
 {
+}
+
+void QxrdJSEngine::setGlobalProperty(QString name, QJSValue val, ObjectOwnership owner)
+{
+  globalObject().setProperty(name, val);
+
+  setObjectOwnership(val.toQObject(), owner);
 }
 
 void QxrdJSEngine::evaluateAppCommandJS(QString cmd)

@@ -26,6 +26,7 @@ class QxrdJSEngine : public QQmlEngine
 public:
   QxrdJSEngine(QxrdApplicationWPtr app,
                QxrdExperimentWPtr exp);
+  virtual ~QxrdJSEngine();
   void initialize();
   void setWindow(QxrdWindowWPtr win);
 
@@ -136,6 +137,8 @@ signals:
 
 private:
   static QString convertHelper(QJSValue result, int depth);
+
+  void setGlobalProperty(QString name, QJSValue val, ObjectOwnership owner = CppOwnership);
 
   QxrdAcquisitionWPtr   acquisition();
   QxrdDataProcessorWPtr dataProcessor();
