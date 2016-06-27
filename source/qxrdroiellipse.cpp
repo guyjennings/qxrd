@@ -1,5 +1,5 @@
 #include "qxrdroiellipse.h"
-#include <cmath>
+#include "qmath.h"
 
 static const int nPts = 16;
 

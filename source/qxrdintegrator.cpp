@@ -18,7 +18,7 @@
 
 #define _USE_MATH_DEFINES
 
-#include <cmath>
+#include "qmath.h"
 
 QxrdIntegrator::QxrdIntegrator(QString name)
   : QcepSerializableObject(name),

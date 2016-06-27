@@ -2,8 +2,7 @@
 
 #define _USE_MATH_DEFINES
 
-#include <cmath>
-
+#include "qmath.h"
 #include "qxrddataprocessor.h"
 #include "qxrddetectorgeometry.h"
 #include "qcepallocator.h"
