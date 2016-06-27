@@ -706,9 +706,21 @@ QScriptValue QxrdScriptEngine::acquireScalersFunc(QScriptContext *context, QScri
     QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
-      int i = context->argument(0).toInteger();
+      if (context->argumentCount() != 0) {
+        int i = context->argument(0).toInteger();
 
-      return QScriptValue(eng, acq->scalerValue(i));
+        return QScriptValue(eng, acq->scalerValue(i));
+      } else {
+        QScriptValue r = eng->newArray();
+
+        QcepDoubleVector v = acq->get_ScalerValues();
+
+        for(int i=0; i<v.length(); i++) {
+          r.setProperty(i, v.value(i));
+        }
+
+        return r;
+      }
     }
   }
 
