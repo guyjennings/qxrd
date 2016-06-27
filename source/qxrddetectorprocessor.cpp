@@ -238,15 +238,15 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
                                                  int nPhases,
                                                  bool trig)
 {
-  if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "processAcquiredImage",
-                              Q_ARG(QcepUInt32ImageDataPtr, image),
-                              Q_ARG(QcepMaskDataPtr, overflow),
-                              Q_ARG(int, fileIndex),
-                              Q_ARG(int, phase),
-                              Q_ARG(int, nPhases),
-                              Q_ARG(bool, trig));
-  } else {
+//  if (QThread::currentThread() != thread()) {
+//    QMetaObject::invokeMethod(this, "processAcquiredImage",
+//                              Q_ARG(QcepUInt32ImageDataPtr, image),
+//                              Q_ARG(QcepMaskDataPtr, overflow),
+//                              Q_ARG(int, fileIndex),
+//                              Q_ARG(int, phase),
+//                              Q_ARG(int, nPhases),
+//                              Q_ARG(bool, trig));
+//  } else {
     if (image) {
       m_Data     = image;
       m_Overflow = overflow;
@@ -361,7 +361,7 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
       //      }
       //    }
     }
-  }
+//  }
 }
 
 void QxrdDetectorProcessor::processDarkImage(QcepUInt32ImageDataPtr image,
