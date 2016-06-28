@@ -452,6 +452,11 @@ bool QxrdROICoordinates::pointInInner(QPointF pt)
   }
 }
 
+static int inRange(int minVal, int val, int maxVal)
+{
+  return qMin(qMax(minVal,val),maxVal);
+}
+
 void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis)
 {
 #ifndef QT_NO_DEBUG
@@ -528,10 +533,10 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
     double gradx = 0;
     double grady = 0;
 
-    int tp = m_Bounds.top();
-    int bt = m_Bounds.bottom();
-    int lf = m_Bounds.left();
-    int rt = m_Bounds.right();
+    int tp = inRange(0,m_Bounds.top(),img->get_Height()-1);
+    int bt = inRange(0,m_Bounds.bottom(),img->get_Height()-1);
+    int lf = inRange(0,m_Bounds.left(),img->get_Width()-1);
+    int rt = inRange(0,m_Bounds.right(),img->get_Width()-1);
 
     for (int row=tp; row<=bt; row++) {
       double dy = row - cy;
@@ -595,10 +600,10 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
       bkgd = sumvn/sumct;
     }
 
-    tp = m_InnerBounds.top();
-    bt = m_InnerBounds.bottom();
-    lf = m_InnerBounds.left();
-    rt = m_InnerBounds.right();
+    tp = inRange(0,m_InnerBounds.top(),img->get_Height()-1);
+    bt = inRange(0,m_InnerBounds.bottom(),img->get_Height()-1);
+    lf = inRange(0,m_InnerBounds.left(),img->get_Width()-1);
+    rt = inRange(0,m_InnerBounds.right(),img->get_Width()-1);
 
     for (int row=tp; row<=bt; row++) {
       double dy = row - cy;
