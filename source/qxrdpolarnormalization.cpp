@@ -7,6 +7,7 @@
 #include "qxrddataprocessor.h"
 #include <qmath.h>
 #include "qcepallocator.h"
+#include "qxrddebug.h"
 
 QxrdPolarNormalization::QxrdPolarNormalization(QString name) :
   QcepSerializableObject(name),
@@ -211,6 +212,10 @@ QcepDataObjectPtr QxrdPolarNormalization::transform(QcepDoubleImageDataPtr img)
 
     for (int i=0; i<nCols; i++) {
       w.append(QtConcurrent::run(this, &QxrdPolarNormalization::executeCol, integ, fit, img, i));
+
+      if (qcepDebug(DEBUG_NOPARALLEL)) {
+        w[i].waitForFinished();
+      }
     }
 
     for (int i=0; i<nCols; i++) {

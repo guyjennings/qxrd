@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "qxrdroishape.h"
 #include "qtconcurrentrun.h"
+#include "qxrddebug.h"
 
 QxrdROICoordinatesListModel::QxrdROICoordinatesListModel()
   : QAbstractListModel(),
@@ -484,13 +485,13 @@ void QxrdROICoordinatesListModel::recalculate(QcepImageDataBasePtr img, QcepMask
     QxrdROICoordinatesPtr r = m_ROICoordinates.value(i);
 
     if (r) {
-//      r->recalculate(img, mask);
-
       res.append(
             QtConcurrent::run(r.data(),
                               &QxrdROICoordinates::recalculate, img, mask));
 
-//      res.value(i).waitForFinished();
+      if (qcepDebug(DEBUG_NOPARALLEL)) {
+        res.value(i).waitForFinished();
+      }
     }
   }
 

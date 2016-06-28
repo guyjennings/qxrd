@@ -768,6 +768,10 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
 
               for (int i=0; i<m_ThreadCount; i++) {
                 res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep1, i, m_ThreadCount));
+
+                if (qcepDebug(DEBUG_NOPARALLEL)) {
+                  res[i].waitForFinished();
+                }
               }
 
               for (int i=0; i<m_ThreadCount; i++) {
@@ -819,6 +823,10 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
 
               for (int i=0; i<m_ThreadCount; i++) {
                 res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep2, i, m_ThreadCount));
+
+                if (qcepDebug(DEBUG_NOPARALLEL)) {
+                  res[i].waitForFinished();
+                }
               }
 
               for (int i=0; i<m_ThreadCount; i++) {
@@ -882,6 +890,10 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
             for (int i=0; i<m_ThreadCount; i++) {
               res.append(QtConcurrent::run(this, &QxrdIntegratorCache::partialIntegrationStep3,
                                            i, m_ThreadCount, dimg, mask, normalize));
+
+              if (qcepDebug(DEBUG_NOPARALLEL)) {
+                res[i].waitForFinished();
+              }
             }
 
             for (int i=0; i<m_ThreadCount; i++) {
