@@ -565,6 +565,53 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
 }
 
 QCEP_DOC_FUNCTION(
+    "acquireOnce",
+    "acquireOnce([filename [,exposure [,darkSummedExposures]]])",
+    "Start acquisition of a single image",
+    "<p>Arguments are optional and, if given, will replace the "
+    "corresponding value in the acquire dialog, if not given the "
+    "dialog values are used.</p>\n"
+    "<p>The following is a typical example of the use of this "
+    "command from spec:</p>\n"
+    "<code>\n"
+    "def PEexp1(filename, exposure, subframes) '{<br/>\n"
+    "&nbsp;&nbsp;remote_eval(PEHOST,"
+    "sprintf(\"acquireOnce(\\\"%s\\\",%g,%d)\",filename,exposure,subframes));<br/>\n"
+    "&nbsp;&nbsp;<br/> &nbsp;&nbsp;PEwait()<br/> }'<br/>\n"
+    "</code>\n"
+    )
+
+QScriptValue QxrdScriptEngine::acquireOnceFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdAcquisitionPtr acq(eng->acquisition());
+
+    if (!acq) return QScriptValue(engine, -1);
+
+    int nArgs = context->argumentCount();
+
+    switch (nArgs) {
+    default:
+    case 3:
+      acq -> set_SummedExposures(context -> argument(2).toUInt32());
+
+    case 2:
+      acq -> set_ExposureTime(context -> argument(1).toNumber());
+
+    case 1:
+      acq -> set_FilePattern(context -> argument(0).toString());
+
+    case 0:
+      acq -> acquireOnce();
+    }
+  }
+
+  return QScriptValue(engine, 1);
+}
+
+QCEP_DOC_FUNCTION(
     "status",
     "status([time])",
     "Test if acquisition and processing have finished",
@@ -2002,6 +2049,7 @@ void QxrdScriptEngine::initialize()
 
   globalObject().setProperty("acquire", newFunction(acquireFunc));
   globalObject().setProperty("acquireDark", newFunction(acquireDarkFunc));
+  globalObject().setProperty("acquireOnce", newFunction(acquireOnceFunc));
   globalObject().setProperty("status", newFunction(statusFunc));
   globalObject().setProperty("acquireStatus", newFunction(acquireStatusFunc));
   globalObject().setProperty("processStatus", newFunction(processStatusFunc, 1));

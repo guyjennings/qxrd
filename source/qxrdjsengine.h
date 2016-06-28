@@ -53,6 +53,10 @@ public slots:
                        double  tim=qQNaN(),
                        double  sum=qQNaN());
 
+  void acquireOnceFunc(QString fp=QString(),
+                       double  tim=qQNaN(),
+                       double  sum=qQNaN());
+
   int  statusFunc(double tim=0);
   int  acquireStatusFunc(double tim=0);
   void acquireCancelFunc();

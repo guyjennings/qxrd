@@ -59,6 +59,7 @@ void QxrdJSEngine::initialize()
 
   setGlobalProperty("acquire", newQObject(this).property("acquireFunc"));
   setGlobalProperty("acquireDark", newQObject(this).property("acquireDarkFunc"));
+  setGlobalProperty("acquireOnce", newQObject(this).property("acquireOnceFunc"));
   setGlobalProperty("status", newQObject(this).property("statusFunc"));
   setGlobalProperty("acquireStatus", newQObject(this).property("acquireStatusFunc"));
   setGlobalProperty("processStatus", newQObject(this).property("processStatusFunc"));
@@ -422,6 +423,31 @@ void QxrdJSEngine::acquireDarkFunc(QString fp,
     if (sum==sum) {
       acq->set_DarkSummedExposures(sum);
     }
+
+    acq->acquireDark();
+  }
+}
+
+void QxrdJSEngine::acquireOnceFunc(QString fp,
+                                   double  tim,
+                                   double  sum)
+{
+  QxrdAcquisitionPtr acq(acquisition());
+
+  if (acq) {
+    if (fp.length()) {
+      acq->set_FilePattern(fp);
+    }
+
+    if (tim==tim) {
+      acq->set_ExposureTime(tim);
+    }
+
+    if (sum==sum) {
+      acq->set_SummedExposures(sum);
+    }
+
+    acq->acquireOnce();
   }
 }
 

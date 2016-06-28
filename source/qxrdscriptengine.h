@@ -80,6 +80,7 @@ private:
   static QScriptValue fcloseFunc(QScriptContext *context, QScriptEngine *engine, void *u);
   static QScriptValue acquireFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue acquireDarkFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue acquireOnceFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue statusFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue acquireStatusFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue processStatusFunc(QScriptContext *context, QScriptEngine *engine);
