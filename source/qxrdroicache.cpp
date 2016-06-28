@@ -13,6 +13,7 @@ void QxrdROICache::redimension(QRect bounds)
   m_Bounds = bounds;
 
   m_Cache.resize(bounds.width()*bounds.height());
+  m_Cache.fill(0);
 }
 
 void QxrdROICache::setPoint(int c, int r, int inner, int outer)
