@@ -516,6 +516,7 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
     double max = 0;
     double sum = 0;
     double npx = 0;
+    int    nnan = 0;
 
     double sumvn = 0;
     double sumvx = 0;
@@ -600,10 +601,10 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
       bkgd = sumvn/sumct;
     }
 
-    tp = inRange(0,m_InnerBounds.top(),img->get_Height()-1);
-    bt = inRange(0,m_InnerBounds.bottom(),img->get_Height()-1);
-    lf = inRange(0,m_InnerBounds.left(),img->get_Width()-1);
-    rt = inRange(0,m_InnerBounds.right(),img->get_Width()-1);
+    tp = inRange(0,m_InnerBounds.top()-1,img->get_Height()-1);
+    bt = inRange(0,m_InnerBounds.bottom()+1,img->get_Height()-1);
+    lf = inRange(0,m_InnerBounds.left()-1,img->get_Width()-1);
+    rt = inRange(0,m_InnerBounds.right()+1,img->get_Width()-1);
 
     for (int row=tp; row<=bt; row++) {
       double dy = row - cy;
@@ -631,6 +632,8 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
 
               sum += v;
               npx += 1;
+            } else {
+              nnan += 1;
             }
           }
         }
