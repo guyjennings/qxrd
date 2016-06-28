@@ -489,6 +489,8 @@ void QxrdROICoordinatesListModel::recalculate(QcepImageDataBasePtr img, QcepMask
       res.append(
             QtConcurrent::run(r.data(),
                               &QxrdROICoordinates::recalculate, img, mask));
+
+//      res.value(i).waitForFinished();
     }
   }
 
