@@ -445,13 +445,15 @@ void QxrdDetectorControlWindow::doMoveROIUp()
 void QxrdDetectorControlWindow::updateImageDisplay()
 {
   if (m_NewDataAvailable.fetchAndStoreOrdered(0)) {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_UpdateMutex);
+    {
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_UpdateMutex);
 
-    m_DisplayedImage = m_NewImage;
-    m_NewImage       = QcepImageDataBasePtr();
+      m_DisplayedImage = m_NewImage;
+      m_NewImage       = QcepImageDataBasePtr();
 
-    m_DisplayedOverflow = m_NewOverflow;
-    m_DisplayedOverflow = QcepMaskDataPtr();
+      m_DisplayedOverflow = m_NewOverflow;
+      m_NewOverflow = QcepMaskDataPtr();
+    }
 
     QxrdDetectorProcessorPtr proc(m_Processor);
 
@@ -461,10 +463,12 @@ void QxrdDetectorControlWindow::updateImageDisplay()
       }
     }
   } else if (m_NewMaskAvailable.fetchAndStoreOrdered(0)) {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_UpdateMutex);
+    {
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_UpdateMutex);
 
-    m_DisplayedMask = m_NewMask;
-    m_NewMask       = QcepMaskDataPtr();
+      m_DisplayedMask = m_NewMask;
+      m_NewMask       = QcepMaskDataPtr();
+    }
 
     QxrdDetectorProcessorPtr proc(m_Processor);
 
