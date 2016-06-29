@@ -5,9 +5,6 @@ QxrdROICache::QxrdROICache() :
 {
 }
 
-static const int INNER_MASK = 1;
-static const int OUTER_MASK = 2;
-
 void QxrdROICache::redimension(QRect bounds)
 {
   m_Bounds = bounds;
@@ -22,8 +19,8 @@ void QxrdROICache::setPoint(int c, int r, int inner, int outer)
 
   if (offset >= 0) {
     int val = 0;
-    if (inner) val |= INNER_MASK;
-    if (outer) val |= OUTER_MASK;
+    if (inner) val |= InnerMask;
+    if (outer) val |= OuterMask;
 
     m_Cache[offset] = val;
   }
@@ -48,12 +45,12 @@ bool QxrdROICache::outerPoint(int c, int r)
 
 bool QxrdROICache::innerPoint(int v)
 {
-  return v & INNER_MASK;
+  return v & InnerMask;
 }
 
 bool QxrdROICache::outerPoint(int v)
 {
-  return v & OUTER_MASK;
+  return v & OuterMask;
 }
 
 int QxrdROICache::offsetOf(int c, int r)

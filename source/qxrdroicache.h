@@ -20,6 +20,11 @@ public:
   static bool innerPoint(int v);
   static bool outerPoint(int v);
 
+  enum {
+    InnerMask = 1,
+    OuterMask = 2
+  };
+
 private:
   int offsetOf(int c, int r);
 
