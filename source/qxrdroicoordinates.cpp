@@ -418,12 +418,38 @@ void QxrdROICoordinates::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr m
 
 void QxrdROICoordinates::visualizeBackground(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
-  recalculatePrivate(img, mask, VisualizeBackground);
+  int tp = m_Bounds.top();
+  int bt = m_Bounds.bottom();
+  int lf = m_Bounds.left();
+  int rt = m_Bounds.right();
+
+  if (img) {
+    img->clear();
+
+    for (int row=tp; row<=bt; row++) {
+      for (int col=lf; col<=rt; col++) {
+        img->setImageData(col, row, m_Cache->getPoint(col, row) == QxrdROICache::OuterMask);
+      }
+    }
+  }
 }
 
 void QxrdROICoordinates::visualizePeak(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
-  recalculatePrivate(img, mask, VisualizePeak);
+  int tp = m_Bounds.top();
+  int bt = m_Bounds.bottom();
+  int lf = m_Bounds.left();
+  int rt = m_Bounds.right();
+
+  if (img) {
+    img->clear();
+
+    for (int row=tp; row<=bt; row++) {
+      for (int col=lf; col<=rt; col++) {
+        img->setImageData(col, row, m_Cache->innerPoint(col, row));
+      }
+    }
+  }
 }
 
 bool QxrdROICoordinates::pointInOuter(QPointF pt)
