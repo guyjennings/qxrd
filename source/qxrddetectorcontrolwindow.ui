@@ -305,7 +305,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_5">
         <attribute name="title">
@@ -1647,6 +1647,9 @@ Script Function: acquire([fileName
            </item>
            <item>
             <widget class="QPushButton" name="m_RecalculateButton">
+             <property name="toolTip">
+              <string>Recalculate ROI Values</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -1658,6 +1661,9 @@ Script Function: acquire([fileName
            </item>
            <item>
             <widget class="QPushButton" name="m_VisualizeROIBackground">
+             <property name="toolTip">
+              <string>Visualize ROI Background</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -1669,6 +1675,9 @@ Script Function: acquire([fileName
            </item>
            <item>
             <widget class="QPushButton" name="m_VisualizeROIPeak">
+             <property name="toolTip">
+              <string>Visualize ROI Peak</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -1680,6 +1689,9 @@ Script Function: acquire([fileName
            </item>
            <item>
             <widget class="QPushButton" name="m_MoveROIUp">
+             <property name="toolTip">
+              <string>Move ROI Up</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -1691,6 +1703,9 @@ Script Function: acquire([fileName
            </item>
            <item>
             <widget class="QPushButton" name="m_MoveROIDown">
+             <property name="toolTip">
+              <string>Mocve ROI Down</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -1702,6 +1717,9 @@ Script Function: acquire([fileName
            </item>
            <item>
             <widget class="QPushButton" name="m_DeleteROI">
+             <property name="toolTip">
+              <string>Delete Selected ROI(s)</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -1713,6 +1731,9 @@ Script Function: acquire([fileName
            </item>
            <item>
             <widget class="QPushButton" name="m_NewROI">
+             <property name="toolTip">
+              <string>Append New ROI</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -1846,7 +1867,7 @@ Script Function: acquire([fileName
      <normaloff>:/images/go-next.png</normaloff>:/images/go-next.png</iconset>
    </property>
    <property name="text">
-    <string>Trigger Acquisition</string>
+    <string>&amp;Trigger Acquisition</string>
    </property>
    <property name="toolTip">
     <string>Trigger Acquisition</string>
@@ -1861,7 +1882,7 @@ Script Function: acquire([fileName
      <normaloff>:/images/process-stop.png</normaloff>:/images/process-stop.png</iconset>
    </property>
    <property name="text">
-    <string>Cancel Acquisition</string>
+    <string>&amp;Cancel Acquisition</string>
    </property>
    <property name="toolTip">
     <string>Cancel Current Acquisition Operation</string>
@@ -1876,7 +1897,7 @@ Script Function: acquire([fileName
      <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
    </property>
    <property name="text">
-    <string>Acquire Dark</string>
+    <string>Acquire &amp;Dark</string>
    </property>
    <property name="toolTip">
     <string>Acquire Dark Image</string>
@@ -1891,7 +1912,7 @@ Script Function: acquire([fileName
      <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
    </property>
    <property name="text">
-    <string>Acquire</string>
+    <string>&amp;Acquire</string>
    </property>
    <property name="shortcut">
     <string>Alt+A</string>
@@ -1903,7 +1924,7 @@ Script Function: acquire([fileName
      <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
    </property>
    <property name="text">
-    <string>Acquire Once</string>
+    <string>Acquire &amp;Once</string>
    </property>
    <property name="toolTip">
     <string>Acquire Once</string>
