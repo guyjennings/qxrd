@@ -374,6 +374,12 @@ void QxrdJSEngine::acquireFunc(QString fp,
                                double  pre,
                                double  nph)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdAcquisitionPtr acq(acquisition());
 
   if (acq) {
@@ -402,6 +408,10 @@ void QxrdJSEngine::acquireFunc(QString fp,
     }
 
     acq->acquire();
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("acquire call took %1 msec").arg(tick.elapsed()));
+    }
   }
 }
 
@@ -409,6 +419,12 @@ void QxrdJSEngine::acquireDarkFunc(QString fp,
                                    double  tim,
                                    double  sum)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdAcquisitionPtr acq(acquisition());
 
   if (acq) {
@@ -425,6 +441,10 @@ void QxrdJSEngine::acquireDarkFunc(QString fp,
     }
 
     acq->acquireDark();
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("acquireDark call took %1 msec").arg(tick.elapsed()));
+    }
   }
 }
 
@@ -432,6 +452,12 @@ void QxrdJSEngine::acquireOnceFunc(QString fp,
                                    double  tim,
                                    double  sum)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdAcquisitionPtr acq(acquisition());
 
   if (acq) {
@@ -448,11 +474,21 @@ void QxrdJSEngine::acquireOnceFunc(QString fp,
     }
 
     acq->acquireOnce();
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("acquireOnce call took %1 msec").arg(tick.elapsed()));
+    }
   }
 }
 
 int  QxrdJSEngine::statusFunc(double tim)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   int res = -1;
 
   QxrdAcquisitionPtr acq(acquisition());
@@ -464,6 +500,10 @@ int  QxrdJSEngine::statusFunc(double tim)
     if (res == 1) {
       res = proc->status(tim);
     }
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("status call took %1 msec").arg(tick.elapsed()));
+    }
   }
 
   return res;
@@ -471,12 +511,22 @@ int  QxrdJSEngine::statusFunc(double tim)
 
 int  QxrdJSEngine::acquireStatusFunc(double tim)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   int res = -1;
 
   QxrdAcquisitionPtr acq(acquisition());
 
   if (acq) {
     res = acq->acquisitionStatus(tim);
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("acquireStatus call took %1 msec").arg(tick.elapsed()));
+    }
   }
 
   return res;
@@ -484,21 +534,41 @@ int  QxrdJSEngine::acquireStatusFunc(double tim)
 
 void QxrdJSEngine::acquireCancelFunc()
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdAcquisitionPtr acq(acquisition());
 
   if (acq) {
     acq->cancel();
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("acquireCancel call took %1 msec").arg(tick.elapsed()));
+    }
   }
 }
 
 int  QxrdJSEngine::processStatusFunc(double tim)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   int res = -1;
 
   QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     res = proc->status(tim);
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      proc->printMessage(tr("processStatus call took %1 msec").arg(tick.elapsed()));
+    }
   }
 
   return res;
@@ -506,6 +576,12 @@ int  QxrdJSEngine::processStatusFunc(double tim)
 
 QJSValue QxrdJSEngine::acquireScalersFunc()
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QJSValue res = newArray();
 
   QxrdAcquisitionPtr acq(acquisition());
@@ -516,6 +592,10 @@ QJSValue QxrdJSEngine::acquireScalersFunc()
     for (int i=0; i<v.length(); i++) {
       res.setProperty(i, v.value(i));
     }
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("acquireScalers() call took %1 msec").arg(tick.elapsed()));
+    }
   }
 
   return res;
@@ -523,12 +603,22 @@ QJSValue QxrdJSEngine::acquireScalersFunc()
 
 double QxrdJSEngine::acquireScalersFunc(int i)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   double res;
 
   QxrdAcquisitionPtr acq(acquisition());
 
   if (acq) {
     res = acq->scalerValue(i);
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("acquireScalers(%1) call took %2 msec").arg(i).arg(tick.elapsed()));
+    }
   }
 
   return res;

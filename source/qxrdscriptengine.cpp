@@ -471,6 +471,12 @@ QCEP_DOC_FUNCTION(
 
 QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngine *engine)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
@@ -512,6 +518,10 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
     case 0:
       acq->acquire();
     }
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("acquire call took %1 msec").arg(tick.elapsed()));
+    }
   }
 
   return QScriptValue(engine, 1);
@@ -536,6 +546,12 @@ QCEP_DOC_FUNCTION(
 
 QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptEngine *engine)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
@@ -558,6 +574,10 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
 
     case 0:
       acq -> acquireDark();
+    }
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("acquireDark call took %1 msec").arg(tick.elapsed()));
     }
   }
 
@@ -583,6 +603,12 @@ QCEP_DOC_FUNCTION(
 
 QScriptValue QxrdScriptEngine::acquireOnceFunc(QScriptContext *context, QScriptEngine *engine)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
@@ -605,6 +631,10 @@ QScriptValue QxrdScriptEngine::acquireOnceFunc(QScriptContext *context, QScriptE
 
     case 0:
       acq -> acquireOnce();
+    }
+
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("acquireOnce call took %1 msec").arg(tick.elapsed()));
     }
   }
 
@@ -640,6 +670,12 @@ QCEP_DOC_FUNCTION(
 
 QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine *engine)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
@@ -661,6 +697,10 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
       status = proc -> status(time);
     }
 
+    if (qcepDebug(DEBUG_ACQUIRETIME)) {
+      acq->printMessage(tr("status call took %1 msec").arg(tick.elapsed()));
+    }
+
     return QScriptValue(engine, status);
   } else {
     return QScriptValue(engine, -1);
@@ -679,22 +719,33 @@ QCEP_DOC_FUNCTION(
 
 QScriptValue QxrdScriptEngine::acquireStatusFunc(QScriptContext *context, QScriptEngine *engine)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+  QScriptValue res;
 
   if (eng) {
     QxrdAcquisitionPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() == 0) {
-        return QScriptValue(engine, acq -> acquisitionStatus(0));
+        res = QScriptValue(engine, acq -> acquisitionStatus(0));
       } else {
         double time = context->argument(0).toNumber();
-        return QScriptValue(engine, acq -> acquisitionStatus(time));
+        res = QScriptValue(engine, acq -> acquisitionStatus(time));
+      }
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        acq->printMessage(tr("acquireStatus() call took %1 msec").arg(tick.elapsed()));
       }
     }
   }
 
-  return QScriptValue(engine, -1);
+  return res;
 }
 
 QCEP_DOC_FUNCTION(
@@ -709,22 +760,34 @@ QCEP_DOC_FUNCTION(
 
 QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScriptEngine *engine)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  QScriptValue res(engine, -1);
 
   if (eng) {
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
       if (context->argumentCount() == 0) {
-        return QScriptValue(engine, proc -> status(0));
+        res = QScriptValue(engine, proc -> status(0));
       } else {
         double time = context->argument(0).toNumber();
-        return QScriptValue(engine, proc -> status(time));
+        res = QScriptValue(engine, proc -> status(time));
+      }
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        proc->printMessage(tr("processStatus call took %1 msec").arg(tick.elapsed()));
       }
     }
   }
 
-  return QScriptValue(engine, -1);
+  return res;
 }
 
 QCEP_DOC_FUNCTION(
@@ -736,6 +799,12 @@ QCEP_DOC_FUNCTION(
 
 QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
@@ -743,6 +812,10 @@ QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, Q
 
     if (acq) {
       acq -> cancel();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        acq->printMessage(tr("acquireCancel call took %1 msec").arg(tick.elapsed()));
+      }
 
       return QScriptValue(engine, 1);
     }
@@ -759,6 +832,12 @@ QCEP_DOC_FUNCTION(
 
 QScriptValue QxrdScriptEngine::acquireScalersFunc(QScriptContext *context, QScriptEngine *engine)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
@@ -768,6 +847,10 @@ QScriptValue QxrdScriptEngine::acquireScalersFunc(QScriptContext *context, QScri
       if (context->argumentCount() != 0) {
         int i = context->argument(0).toInteger();
 
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          acq->printMessage(tr("acquireScalers(%1) call took %2 msec").arg(i).arg(tick.elapsed()));
+        }
+
         return QScriptValue(eng, acq->scalerValue(i));
       } else {
         QScriptValue r = eng->newArray();
@@ -776,6 +859,10 @@ QScriptValue QxrdScriptEngine::acquireScalersFunc(QScriptContext *context, QScri
 
         for(int i=0; i<v.length(); i++) {
           r.setProperty(i, v.value(i));
+        }
+
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          acq->printMessage(tr("acquireScalers() call took %1 msec").arg(tick.elapsed()));
         }
 
         return r;
@@ -798,6 +885,12 @@ QCEP_DOC_FUNCTION(
 
 QScriptValue QxrdScriptEngine::triggerFunc(QScriptContext * /*context*/, QScriptEngine *engine)
 {
+  QTime tick;
+
+  if (qcepDebug(DEBUG_ACQUIRETIME)) {
+    tick.start();
+  }
+
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
@@ -805,6 +898,10 @@ QScriptValue QxrdScriptEngine::triggerFunc(QScriptContext * /*context*/, QScript
 
     if (acq) {
       acq -> trigger();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        acq->printMessage(tr("trigger call took %1 msec").arg(tick.elapsed()));
+      }
 
       return QScriptValue(engine, 1);
     }
