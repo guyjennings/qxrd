@@ -396,12 +396,12 @@ void QxrdROICoordinatesListModel::setRotation(int i, double r)
 }
 
 void QxrdROICoordinatesListModel::scaleROI
-  (int i, double kx, double ky)
+  (int i, int innerOuter, double kx, double ky)
 {
   QxrdROICoordinatesPtr roi = this->roi(i);
 
   if (roi) {
-    roi->scaleROI(kx, ky);
+    roi->scaleROI(innerOuter, kx, ky);
 
     emit dataChanged(index(i,0), index(i,ColCount));
   }

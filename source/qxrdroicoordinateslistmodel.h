@@ -46,7 +46,7 @@ public:
   void moveROICenter(int i, double x, double y);
   void moveROIRelative(int i, double dx, double dy);
   void setRotation(int i, double r);
-  void scaleROI(int i, double kx, double ky);
+  void scaleROI(int i, int innerOuter, double kx, double ky);
 
   void deleteROIPoint(int i, int innerOuter, int n);
   void changeROIPoint(int i, int innerOuter, int n, QPointF pt);

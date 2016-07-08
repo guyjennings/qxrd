@@ -664,7 +664,12 @@ void QxrdROIResizer::move(const QPoint &pt)
           ky = p2.y()/p1.y();
         }
 
-        QPolygonF fb = roi->scaledDragOutline(kx, ky);
+        QPolygonF fb;
+        if (m_SelectedShape == QxrdROICoordinates::InnerShape) {
+          fb = roi->scaledInnerOutline(kx, ky);
+        } else {
+          fb = roi->scaledOuterOutline(kx, ky);
+        }
 
         m_RubberBand = QPolygon();
 
@@ -694,7 +699,7 @@ bool QxrdROIResizer::end(bool ok)
           m_SelectedROI >= 0 &&
           m_SelectedPoints.count() == 2) {
 
-        roiMod->scaleROI(m_SelectedROI, m_ScaledX, m_ScaledY);
+        roiMod->scaleROI(m_SelectedROI, m_SelectedShape, m_ScaledX, m_ScaledY);
       }
     }
   }

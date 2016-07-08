@@ -95,7 +95,7 @@ public slots:
   void setCenterY(double cy);
   void setRotation(double r);
 
-  void scaleROI(double kx, double ky);
+  void scaleROI(int innerOuter, double kx, double ky);
   void deleteROIPoint(int innerOuter, int n);
   void changeROIPoint(int innerOuter, int n, QPointF pt);
   void insertROIPoint(int innerOuter, int n, QPointF pt);

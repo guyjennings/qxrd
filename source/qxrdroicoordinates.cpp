@@ -373,13 +373,13 @@ QPolygonF QxrdROICoordinates::scaledDragOutline(double kx, double ky)
   return scaledOuterOutline(kx, ky);
 }
 
-void QxrdROICoordinates::scaleROI(double kx, double ky)
+void QxrdROICoordinates::scaleROI(int innerOuter, double kx, double ky)
 {
-  if (m_OuterShape) {
+  if (m_OuterShape && innerOuter == OuterShape) {
     m_OuterShape->scale(kx, ky);
   }
 
-  if (m_InnerShape) {
+  if (m_InnerShape && innerOuter == InnerShape) {
     m_InnerShape->scale(kx, ky);
   }
 }
