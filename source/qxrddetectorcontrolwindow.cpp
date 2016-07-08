@@ -621,10 +621,11 @@ void QxrdDetectorControlWindow::doClearGainCorrection()
 
 void QxrdDetectorControlWindow::doEditROI()
 {
+  QxrdDetectorSettingsPtr  dt(m_Detector);
   QxrdDetectorProcessorPtr dp(m_Processor);
   QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 
-  if (dp) {
+  if (dt && dp) {
     QVector<int> rois = selectedROIs();
 
     if (rois.count() != 1) {
@@ -633,6 +634,10 @@ void QxrdDetectorControlWindow::doEditROI()
       QxrdROICoordinatesPtr roi = roiModel->roi(rois.first());
 
       QxrdROIEditorDialog editor(roi, this);
+
+      editor.setWindowTitle(tr("Edit ROI %2 of Detector %1")
+                            .arg(dt->get_DetectorNumber())
+                            .arg(rois.first()));
 
       if (editor.exec() == QDialog::Accepted) {
         roiModel->setRoi(rois.first(), editor.roi());
