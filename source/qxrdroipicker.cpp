@@ -6,6 +6,7 @@
 #include "qxrdroicoordinates.h"
 #include "qxrdroishape.h"
 #include <QMessageBox>
+#include "qxrddebug.h"
 
 QxrdROIPicker::QxrdROIPicker(QWidget *canvas,
                              QxrdImagePlot *plot,
@@ -240,10 +241,12 @@ void QxrdROIPicker::append(const QPoint &pt)
           reset();
           return;
         } else {
-          printMessage(tr("Selected ROI %1:%2, pt %3, edge %4, dist %5")
-                       .arg(minDistROI).arg(minDistROIShape)
-                       .arg(minDistROIPoint).arg(minDistROIEdge)
-                       .arg(minDistance));
+          if (qcepDebug(DEBUG_ROI)) {
+            printMessage(tr("Selected ROI %1:%2, pt %3, edge %4, dist %5")
+                         .arg(minDistROI).arg(minDistROIShape)
+                         .arg(minDistROIPoint).arg(minDistROIEdge)
+                         .arg(minDistance));
+          }
 
           m_SelectedROI   = minDistROI;
           m_SelectedShape = minDistROIShape;
@@ -340,7 +343,9 @@ void QxrdROISelector::move(const QPoint &pt)
 bool QxrdROISelector::end(bool ok)
 {
   if (ok) {
-    printMessage(tr("Select ROI %1").arg(m_SelectedROI));
+    if (qcepDebug(DEBUG_ROI)) {
+      printMessage(tr("Select ROI %1").arg(m_SelectedROI));
+    }
 
     QxrdImagePlot* imgPlot = imagePlot();
 
@@ -433,7 +438,9 @@ void QxrdROIAddNode::move(const QPoint &pt)
 bool QxrdROIAddNode::end(bool ok)
 {
   if (ok) {
-    printMessage(tr("Add node to ROI %1:%2").arg(m_SelectedROI).arg(m_SelectedShape));
+    if (qcepDebug(DEBUG_ROI)) {
+      printMessage(tr("Add node to ROI %1:%2").arg(m_SelectedROI).arg(m_SelectedShape));
+    }
 
     QxrdImagePlot* imgPlot = imagePlot();
 
@@ -479,7 +486,10 @@ QxrdROIRemoveNode::QxrdROIRemoveNode(QWidget *canvas, QxrdImagePlot *plot) :
 bool QxrdROIRemoveNode::end(bool ok)
 {
   if (ok) {
-    printMessage(tr("Remove node %1 of ROI %2").arg(m_SelectedPoint).arg(m_SelectedROI));
+    if (qcepDebug(DEBUG_ROI)) {
+      printMessage(tr("Remove node %1 of ROI %2").arg(m_SelectedPoint).arg(m_SelectedROI));
+    }
+
     QxrdImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
@@ -566,7 +576,9 @@ void QxrdROIRotator::move(const QPoint &pt)
 bool QxrdROIRotator::end(bool ok)
 {
   if (ok) {
-    printMessage(tr("Rotate ROI %1").arg(m_SelectedROI));
+    if (qcepDebug(DEBUG_ROI)) {
+      printMessage(tr("Rotate ROI %1").arg(m_SelectedROI));
+    }
 
     QxrdImagePlot* imgPlot = imagePlot();
 
@@ -687,7 +699,10 @@ void QxrdROIResizer::move(const QPoint &pt)
 bool QxrdROIResizer::end(bool ok)
 {
   if (ok) {
-    printMessage(tr("Resize ROI %1").arg(m_SelectedROI));
+    if (qcepDebug(DEBUG_ROI)) {
+      printMessage(tr("Resize ROI %1").arg(m_SelectedROI));
+    }
+
     QxrdImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {

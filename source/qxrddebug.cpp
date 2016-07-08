@@ -25,4 +25,5 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_HISTOGRAM,    "Debug Histogramming");
   setMessage(DEBUG_CALIBRANT,    "Powder Calibrant Calculations");
   setMessage(DEBUG_PILATUS,      "Pilatus Detector Acquisition");
+  setMessage(DEBUG_ROI,          "Debug ROI Operations");
 }
