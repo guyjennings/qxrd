@@ -206,8 +206,8 @@ Qt::ItemFlags QxrdROICoordinatesListModel::flags(const QModelIndex &index) const
   int row = index.row();
   int col = index.column();
 
-  if (col == OuterTypeCol ||
-      col == InnerTypeCol ||
+  if (/*col == OuterTypeCol ||
+      col == InnerTypeCol || */
       col == CenterXCol ||
       col == CenterYCol ||
       col == RotationCol /* ||

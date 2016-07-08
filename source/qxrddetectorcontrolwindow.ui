@@ -62,7 +62,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
+              <iconset>
                <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
              </property>
              <property name="iconSize">
@@ -91,7 +91,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
+              <iconset>
                <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
              </property>
              <property name="iconSize">
@@ -114,7 +114,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/format-add-node.png</normaloff>:/images/format-add-node.png</iconset>
              </property>
              <property name="iconSize">
@@ -146,7 +146,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/edit-node.png</normaloff>:/images/edit-node.png</iconset>
              </property>
              <property name="iconSize">
@@ -175,7 +175,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="submodules/qceplib/qceplib-base/qcepresources.qrc">
+              <iconset>
                <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
              </property>
              <property name="iconSize">
@@ -198,7 +198,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/format-remove-node.png</normaloff>:/images/format-remove-node.png</iconset>
              </property>
              <property name="iconSize">
@@ -230,7 +230,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/object-rotate-left.png</normaloff>:/images/object-rotate-left.png</iconset>
              </property>
              <property name="iconSize">
@@ -262,7 +262,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/transform-scale.png</normaloff>:/images/transform-scale.png</iconset>
              </property>
              <property name="iconSize">
@@ -1646,6 +1646,20 @@ Script Function: acquire([fileName
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="m_EditROIButton">
+             <property name="toolTip">
+              <string>Edit ROI Values...</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>:/images/preferences.png</normaloff>:/images/preferences.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="m_RecalculateButton">
              <property name="toolTip">
               <string>Recalculate ROI Values</string>
@@ -1654,7 +1668,7 @@ Script Function: acquire([fileName
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
              </property>
             </widget>
@@ -1668,7 +1682,7 @@ Script Function: acquire([fileName
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/mask_invert.png</normaloff>:/images/mask_invert.png</iconset>
              </property>
             </widget>
@@ -1682,7 +1696,7 @@ Script Function: acquire([fileName
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/mask_polygon.png</normaloff>:/images/mask_polygon.png</iconset>
              </property>
             </widget>
@@ -1696,7 +1710,7 @@ Script Function: acquire([fileName
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/go-up.png</normaloff>:/images/go-up.png</iconset>
              </property>
             </widget>
@@ -1710,7 +1724,7 @@ Script Function: acquire([fileName
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/go-down.png</normaloff>:/images/go-down.png</iconset>
              </property>
             </widget>
@@ -1724,7 +1738,7 @@ Script Function: acquire([fileName
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
              </property>
             </widget>
@@ -1738,7 +1752,7 @@ Script Function: acquire([fileName
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
              </property>
             </widget>
@@ -1863,7 +1877,7 @@ Script Function: acquire([fileName
   </action>
   <action name="m_ActionTrigger">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/go-next.png</normaloff>:/images/go-next.png</iconset>
    </property>
    <property name="text">
@@ -1878,7 +1892,7 @@ Script Function: acquire([fileName
   </action>
   <action name="m_ActionCancel">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/process-stop.png</normaloff>:/images/process-stop.png</iconset>
    </property>
    <property name="text">
@@ -1893,7 +1907,7 @@ Script Function: acquire([fileName
   </action>
   <action name="m_ActionAcquireDark">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
    </property>
    <property name="text">
@@ -1908,7 +1922,7 @@ Script Function: acquire([fileName
   </action>
   <action name="m_ActionAcquire">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
    </property>
    <property name="text">
@@ -1920,7 +1934,7 @@ Script Function: acquire([fileName
   </action>
   <action name="m_ActionAcquireOnce">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset>
      <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
    </property>
    <property name="text">
@@ -1944,9 +1958,6 @@ Script Function: acquire([fileName
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="submodules/qceplib/qceplib-base/qcepresources.qrc"/>
-  <include location="qxrdresources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

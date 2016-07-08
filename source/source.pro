@@ -401,7 +401,11 @@ HEADERS += TODO.h \
     qxrddetectorcontrolwindowsettings-ptr.h \
     qxrdexperimentsettings-ptr.h \
     qxrdjsengine.h \
-    qxrdjsengine-ptr.h
+    qxrdjsengine-ptr.h \
+    qxrdroieditordialog.h \
+    qxrdpolygonpointsmodel.h \
+    qxrdroipolygon-ptr.h \
+    qxrdroicenteredshape-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -591,7 +595,9 @@ SOURCES += qxrd.cpp \
     qxrdroicenteredshape.cpp \
     qxrdroicache.cpp \
     qxrddetectorcontrolwindowsettings.cpp \
-    qxrdjsengine.cpp
+    qxrdjsengine.cpp \
+    qxrdroieditordialog.cpp \
+    qxrdpolygonpointsmodel.cpp
 
 OTHER_FILES += testImage.js
 
@@ -625,7 +631,8 @@ FORMS += qxrdwindow.ui \
     qxrdpolartransformdialog.ui \
     qxrdpolarnormalizationdialog.ui \
     qxrdcalibrantpropertiesdialog.ui \
-    qxrdintegratorparmsdialog.ui
+    qxrdintegratorparmsdialog.ui \
+    qxrdroieditordialog.ui
 
 macx:
 else:unix:LIBS += -ltiff

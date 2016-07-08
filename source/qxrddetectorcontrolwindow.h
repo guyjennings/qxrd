@@ -77,6 +77,7 @@ private slots:
   void doBrowseGainCorrection();
   void doClearGainCorrection();
 
+  void doEditROI();
   void doRecalculate();
   void doVisualizeBackground();
   void doVisualizePeak();

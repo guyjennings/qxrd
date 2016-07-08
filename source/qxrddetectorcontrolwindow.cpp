@@ -17,6 +17,7 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdacquisition.h"
 #include "qxrdwindow.h"
+#include "qxrdroieditordialog.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,
                                                      QxrdAcquisitionWPtr       acq,
@@ -90,8 +91,8 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        e
     if (calc) {
       m_ROIModel = calc->roiModel();
 
-      m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::OuterTypeCol, new QxrdROITypeDelegate());
-      m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::InnerTypeCol, new QxrdROITypeDelegate());
+//      m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::OuterTypeCol, new QxrdROITypeDelegate());
+//      m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::InnerTypeCol, new QxrdROITypeDelegate());
       m_ROIWidget->setModel(m_ROIModel.data());
 
       connect(m_NewROI,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doAppendROI);
@@ -99,6 +100,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        e
       connect(m_MoveROIDown, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doMoveROIDown);
       connect(m_MoveROIUp,   &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doMoveROIUp);
 
+      connect(m_EditROIButton,          &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doEditROI);
       connect(m_RecalculateButton,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doRecalculate);
       connect(m_VisualizeROIBackground, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doVisualizeBackground);
       connect(m_VisualizeROIPeak,       &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doVisualizePeak);
@@ -613,6 +615,28 @@ void QxrdDetectorControlWindow::doClearGainCorrection()
 
     if (res == QMessageBox::Ok) {
       dp->set_GainMapPath("");
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::doEditROI()
+{
+  QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+
+  if (dp) {
+    QVector<int> rois = selectedROIs();
+
+    if (rois.count() != 1) {
+      QMessageBox::information(this, "Edit ROI", "Select one ROI to edit", QMessageBox::Ok);
+    } else if (roiModel) {
+      QxrdROICoordinatesPtr roi = roiModel->roi(rois.first());
+
+      QxrdROIEditorDialog editor(roi, this);
+
+      if (editor.exec() == QDialog::Accepted) {
+        roiModel->setRoi(rois.first(), editor.roi());
+      }
     }
   }
 }
