@@ -19,6 +19,10 @@ public slots:
 public:
   QxrdROICoordinatesWPtr roi();
 
+private slots:
+  void newInnerType(int n);
+  void newOuterType(int n);
+
 private:
   QxrdROICoordinatesWPtr m_ROI;
 };

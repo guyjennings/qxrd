@@ -54,6 +54,7 @@ QxrdROIEditorDialog::QxrdROIEditorDialog(QxrdROICoordinatesWPtr roi, QWidget *pa
     m_InnerWidth->setEnabled(innerc);
     m_InnerHeight->setEnabled(innerc);
     m_InnerPolygon->setEnabled(innerp);
+    m_InnerPolygon->setModel(new QxrdPolygonPointsModel(QPolygonF()));
 
     if (innerc) {
       m_InnerWidth->setValue(innerc->get_HalfWidth());
@@ -71,6 +72,7 @@ QxrdROIEditorDialog::QxrdROIEditorDialog(QxrdROICoordinatesWPtr roi, QWidget *pa
     m_OuterWidth->setEnabled(outerc);
     m_OuterHeight->setEnabled(outerc);
     m_OuterPolygon->setEnabled(outerp);
+    m_OuterPolygon->setModel(new QxrdPolygonPointsModel(QPolygonF()));
 
     if (outerc) {
       m_OuterWidth->setValue(outerc->get_HalfWidth());
@@ -80,6 +82,9 @@ QxrdROIEditorDialog::QxrdROIEditorDialog(QxrdROICoordinatesWPtr roi, QWidget *pa
     } else {
     }
   }
+
+  connect(m_InnerType, (void (QComboBox::*)(int)) &QComboBox::currentIndexChanged, this, &QxrdROIEditorDialog::newInnerType);
+  connect(m_OuterType, (void (QComboBox::*)(int)) &QComboBox::currentIndexChanged, this, &QxrdROIEditorDialog::newOuterType);
 }
 
 QxrdROIEditorDialog::~QxrdROIEditorDialog()
@@ -89,6 +94,20 @@ QxrdROIEditorDialog::~QxrdROIEditorDialog()
 QxrdROICoordinatesWPtr QxrdROIEditorDialog::roi()
 {
   return m_ROI;
+}
+
+void QxrdROIEditorDialog::newInnerType(int n)
+{
+  m_InnerWidth->setEnabled(n == QxrdROIShape::RectangleShape || n == QxrdROIShape::EllipseShape);
+  m_InnerHeight->setEnabled(n == QxrdROIShape::RectangleShape || n == QxrdROIShape::EllipseShape);
+  m_InnerPolygon->setEnabled(n == QxrdROIShape::PolygonShape);
+}
+
+void QxrdROIEditorDialog::newOuterType(int n)
+{
+  m_OuterWidth->setEnabled(n == QxrdROIShape::RectangleShape || n == QxrdROIShape::EllipseShape);
+  m_OuterHeight->setEnabled(n == QxrdROIShape::RectangleShape || n == QxrdROIShape::EllipseShape);
+  m_OuterPolygon->setEnabled(n == QxrdROIShape::PolygonShape);
 }
 
 void QxrdROIEditorDialog::accept()
