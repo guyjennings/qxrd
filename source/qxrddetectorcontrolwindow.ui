@@ -256,7 +256,7 @@
               <bool>true</bool>
              </property>
              <property name="toolTip">
-              <string>Rotate ROIs</string>
+              <string>Resize ROIs</string>
              </property>
              <property name="text">
               <string>...</string>
