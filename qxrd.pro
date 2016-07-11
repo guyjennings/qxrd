@@ -39,7 +39,7 @@ tarball.commands += \
 
 tarball.commands += \
         rm -rf $${TARGET}-$${VERSION}/Samples/ && \
-        rm -rf $${TARGET}-$${VERSION}/source/submodules/qceplib/qceplib-{szip,zlib,hdf5,nexus} &&
+        rm -rf $${TARGET}-$${VERSION}/source/submodules/qceplib/qceplib-nexus &&
 
 tarball.commands += \
   tar -czf $${TARGET}-$${VERSION}.tar.gz $${TARGET}-$${VERSION} ; rm -rf $${TARGET}-$${VERSION}
