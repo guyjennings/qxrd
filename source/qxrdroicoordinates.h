@@ -52,6 +52,8 @@ public:
     BackgroundOutput,
     XGradientOutput,
     YGradientOutput,
+    InnerSum,
+    OuterSum,
     OutputCount
   };
 
@@ -167,6 +169,12 @@ public:
 
   Q_PROPERTY(double yGradient READ get_YGradient WRITE set_YGradient STORED false)
   QCEP_DOUBLE_PROPERTY(YGradient)
+
+  Q_PROPERTY(double innerSum READ get_InnerSum WRITE set_InnerSum STORED false)
+  QCEP_DOUBLE_PROPERTY(InnerSum)
+
+  Q_PROPERTY(double outerSum READ get_OuterSum WRITE set_OuterSum STORED false)
+  QCEP_DOUBLE_PROPERTY(OuterSum)
 
 private:
   QMutex          m_Mutex;

@@ -26,6 +26,8 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
     m_Background(this, "background", 0, "ROI Background"),
     m_XGradient(this, "xGradient", 0, "ROI X Gradient"),
     m_YGradient(this, "yGradient", 0, "ROI Y Gradient"),
+    m_InnerSum(this, "innerSum", 0, "Inner ROI Pixel Sum"),
+    m_OuterSum(this, "outerSum", 0, "Outer ROI Pixel Sum"),
     m_Mutex(QMutex::Recursive),
     m_OuterShape(QxrdROIShape::newROIShape(roiOuterType, 1.0)),
     m_InnerShape(QxrdROIShape::newROIShape(roiInnerType, 0.25)),
@@ -565,6 +567,9 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
     int lf = inRange(0,m_Bounds.left(),img->get_Width()-1);
     int rt = inRange(0,m_Bounds.right(),img->get_Width()-1);
 
+    double insum = 0;
+    double outsum = 0;
+
     for (int row=tp; row<=bt; row++) {
       double dy = row - cy;
 
@@ -574,15 +579,23 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
         if (mask == NULL || mask->value(col, row)) {
           int code = m_Cache->getPoint(col, row);
 
+          double val = img->getImageData(col, row);
+
           if (QxrdROICache::innerPoint(code)) {
             // Peak point, skip for now...
             ninner += 1;
+
+            if (val == val) {
+              insum += val;
+            }
+
           } else if (QxrdROICache::outerPoint(code)) {
             nouter += 1;
             // Background point...
-            double val = img->getImageData(col, row);
 
             if (val == val) {
+              outsum += val;
+
               sumct += 1;
               sumnn += 1;
               sumnx += dx;
@@ -682,6 +695,9 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
     set_XGradient(gradx);
     set_YGradient(grady);
 
+    set_InnerSum(insum);
+    set_OuterSum(outsum);
+
     set_Changed(false);
   }
 
@@ -704,6 +720,8 @@ QVector<double> QxrdROICoordinates::values() const
   res.append(get_Background());
   res.append(get_XGradient());
   res.append(get_YGradient());
+  res.append(get_InnerSum());
+  res.append(get_OuterSum());
 
   return res;
 }
@@ -744,6 +762,12 @@ QString QxrdROICoordinates::outputName(int opt)
     break;
   case YGradientOutput:
     res = "Y Gradient";
+    break;
+  case InnerSum:
+    res = "Inner Sum";
+    break;
+  case OuterSum:
+    res = "Outer Sum";
     break;
   }
 
