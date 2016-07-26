@@ -31,6 +31,9 @@ QxrdROIPicker::QxrdROIPicker(QWidget *canvas,
   m_RubberBand()
 {
   setEnabled(false);
+
+  setTrackerPen(QPen(Qt::red));
+  setRubberBandPen(QPen(Qt::red));
 }
 
 void QxrdROIPicker::printMessage(QString msg, QDateTime dt) const
