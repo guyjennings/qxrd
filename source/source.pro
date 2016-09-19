@@ -705,7 +705,7 @@ win32 {
     win32-msvc2013 {
       greaterThan(QT_MINOR_VERSION, 6) {
       } else {
-        greaterThen(QT_MINOR_VERSION, 4) {
+        greaterThan(QT_MINOR_VERSION, 4) {
           libs += icudt54 icuin54 icuuc54
         } else {
           libs += icudt53 icuin53 icuuc53
