@@ -1193,7 +1193,8 @@ void QxrdDetectorDriverPerkinElmer::onEndFrameCallback()
 
       //    printf("m_Counter.fetchAndAddOrdered took %d msec\n", tic.restart());
 
-      onEndFrame(counter, actualFrame, actSecFrame);
+      QMetaObject::invokeMethod(this, "onEndFrame", Q_ARG(int, counter), Q_ARG(uint, actualFrame), Q_ARG(uint, actSecFrame));
+//      onEndFrame(counter, actualFrame, actSecFrame);
     }
   }
 #endif
