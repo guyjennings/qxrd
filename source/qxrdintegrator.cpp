@@ -43,7 +43,6 @@ QxrdIntegrator::QxrdIntegrator(QString name)
     m_SelfNormalization(this, "selfNormalization", false, "Normalize result based on average value within specified range"),
     m_SelfNormalizationMinimum(this, "selfNormalizationMinimum", 0, "Self Normalization Range Minimum"),
     m_SelfNormalizationMaximum(this, "selfNormalizationMaximum", 0, "Self Normalization Range Maximum"),
-    m_Experiment(),
     m_CenterFinder(),
     m_IntegratorCache()
 {
@@ -101,9 +100,8 @@ QxrdIntegrator::~QxrdIntegrator()
   }
 }
 
-void QxrdIntegrator::initialize(QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw)
+void QxrdIntegrator::initialize(QxrdCenterFinderWPtr cfw)
 {
-  m_Experiment = exp;
   m_CenterFinder = cfw;
 
   QxrdCenterFinderPtr cf(m_CenterFinder);
@@ -113,24 +111,52 @@ void QxrdIntegrator::initialize(QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw
   }
 }
 
-QxrdDataProcessorWPtr QxrdIntegrator::dataProcessor() const
+QxrdDataProcessorPtr QxrdIntegrator::dataProcessor() const
 {
-  return qSharedPointerDynamicCast<QxrdDataProcessor>(parentPtr());
+  QxrdDataProcessorPtr proc;
+
+  QcepObjectPtr p = parentPtr();
+
+  while (p) {
+    proc = qSharedPointerDynamicCast<QxrdDataProcessor>(p);
+
+    if (proc) {
+      return proc;
+    }
+
+    p = p -> parentPtr();
+  }
+
+  printMessage("QxrdDataProcessor of QxrdExperiment not found");
+
+  return QxrdDataProcessorPtr();
 }
 
-QxrdExperimentWPtr QxrdIntegrator::experiment() const
+QxrdExperimentPtr QxrdIntegrator::experiment() const
 {
-  return m_Experiment;
+  QxrdExperimentPtr expt;
+
+  QcepObjectPtr p = parentPtr();
+
+  while (p) {
+    expt = qSharedPointerDynamicCast<QxrdExperiment>(p);
+
+    if (expt) {
+      return expt;
+    }
+
+    p = p -> parentPtr();
+  }
+
+  printMessage("QxrdExperiment of QxrdIntegrator not found");
+
+  return QxrdExperimentPtr();
 }
 
 void QxrdIntegrator::onIntegrationParametersChanged()
 {
   if (qcepDebug(DEBUG_INTEGRATOR)) {
-    QxrdExperimentPtr expt(m_Experiment);
-
-    if (expt) {
-      expt->printMessage("Integration parameters changed");
-    }
+    printMessage("Integration parameters changed");
   }
 
   m_IntegratorCache = QxrdIntegratorCachePtr();
@@ -156,12 +182,8 @@ QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepDoubleImageDataPtr 
   QcepIntegratedDataPtr integ;
 
   if (qcepDebug(DEBUG_INTEGRATOR)) {
-    QxrdExperimentPtr expt(m_Experiment);
-
-    if (expt) {
-      expt->printMessage(tr("QxrdIntegrator::performIntegration(\"%1\")")
+    printMessage(tr("QxrdIntegrator::performIntegration(\"%1\")")
                          .arg(dimg->get_FileName()));
-    }
   }
 
   QThread::currentThread()->setObjectName("performIntegration");
@@ -173,8 +195,7 @@ QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepDoubleImageDataPtr 
       dimg->get_Height() != cache->get_NRows()) {
 
     cache = QxrdIntegratorCachePtr(
-          new QxrdIntegratorCache(m_Experiment,
-                                  qSharedPointerDynamicCast<QxrdIntegrator>(sharedFromThis()),
+          new QxrdIntegratorCache(qSharedPointerDynamicCast<QxrdIntegrator>(sharedFromThis()),
                                   QxrdPolarTransformWPtr(),
                                   m_CenterFinder));
 
@@ -283,11 +304,7 @@ QcepIntegratedDataPtr QxrdIntegrator::sliceLine(QcepDoubleImageDataPtr image,
   }
 
   catch (...) {
-    QxrdExperimentPtr expt(m_Experiment);
-
-    if (expt) {
-      expt->printMessage("QxrdIntegrator::sliceLine failed");
-    }
+    printMessage("QxrdIntegrator::sliceLine failed");
   }
 
   return QcepIntegratedDataPtr();
@@ -348,11 +365,7 @@ QcepIntegratedDataPtr QxrdIntegrator::slicePolygon(QcepDoubleImageDataPtr image,
         //    emit newIntegrationAvailable(image->get_Name(),xs,ys);
       }
     } else {
-      QxrdExperimentPtr expt(m_Experiment);
-
-      if (expt) {
-        expt->printMessage("QxrdIntegrator::slicePolygon failed");
-      }
+      printMessage("QxrdIntegrator::slicePolygon failed");
     }
   }
 
@@ -439,7 +452,7 @@ void QxrdIntegrator::appendIntegration(QString resPath, QcepIntegratedDataPtr in
 
 void QxrdIntegrator::appendIntegration(QString resPath, QcepDoubleImageDataPtr dimg, QcepMaskDataPtr mask)
 {
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QcepDatasetModelPtr ds = expt->dataset();
@@ -484,7 +497,7 @@ void QxrdIntegrator::appendIntegration(QcepDoubleImageDataPtr res, QcepIntegrate
 
 void QxrdIntegrator::clearAccumulator(QString resPath)
 {
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QcepDatasetModelPtr ds = expt->dataset();
@@ -505,7 +518,7 @@ void QxrdIntegrator::clearAccumulator(QString resPath)
 
 void QxrdIntegrator::prepareAccumulator(QString resPath, int nImages)
 {
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QcepDatasetModelPtr ds = expt->dataset();
@@ -526,7 +539,7 @@ void QxrdIntegrator::completeAccumulator(QString path)
 
 void QxrdIntegrator::saveAccumulator(QString resPath, QString &fileName, QString filter)
 {
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(experiment());
 
   if (expt) {
     QcepDatasetModelPtr ds = expt->dataset();

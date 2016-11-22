@@ -103,7 +103,7 @@ QcepDataObjectPtr QxrdPolarTransform::transform(QcepDoubleImageDataPtr img, Qcep
     if (proc && cf) {
       QxrdIntegratorCachePtr integCache =
           QxrdIntegratorCachePtr(new QxrdIntegratorCache(
-                                   expt, integ,
+                                   integ,
                                    qSharedPointerDynamicCast<QxrdPolarTransform>(sharedFromThis()),
                                    cf));
 

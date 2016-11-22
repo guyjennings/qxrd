@@ -63,6 +63,12 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
   m_Integrator    = QxrdIntegrator::newIntegrator();
   m_ROICalculator = QxrdROICalculator::newROICalculator();
 
+  if (m_CenterFinder) {
+    if (m_Integrator) {
+      m_Integrator->initialize(m_CenterFinder);
+    }
+  }
+
   connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onMaskPathChanged);
   connect(prop_DarkImagePath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onDarkImagePathChanged);
   connect(prop_BadPixelsPath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onBadPixelsPathChanged);

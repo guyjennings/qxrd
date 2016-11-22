@@ -164,12 +164,19 @@ void QxrdDataProcessor::addChildPtr(QcepSerializableObjectPtr child)
 {
   QcepDataProcessorBase::addChildPtr(child);
 
-  if (checkPointer<QxrdCenterFinder>(child, m_CenterFinder)) {}
-  else if (checkPointer<QxrdIntegrator>(child, m_Integrator)) {}
-  else if (checkPointer<QxrdPolarTransform>(child, m_PolarTransform)) {}
-  else if (checkPointer<QxrdPolarNormalization>(child, m_PolarNormalization)) {}
-  else if (checkPointer<QxrdGenerateTestImage>(child, m_GenerateTestImage)) {}
-  else if (checkPointer<QxrdDistortionCorrection>(child, m_DistortionCorrection)) {}
+  if (checkPointer<QxrdCenterFinder>(child, m_CenterFinder)) {
+
+  } else if (checkPointer<QxrdIntegrator>(child, m_Integrator)) {
+    m_Integrator->initialize(m_CenterFinder);
+  } else if (checkPointer<QxrdPolarTransform>(child, m_PolarTransform)) {
+
+  } else if (checkPointer<QxrdPolarNormalization>(child, m_PolarNormalization)) {
+
+  } else if (checkPointer<QxrdGenerateTestImage>(child, m_GenerateTestImage)) {
+
+  } else if (checkPointer<QxrdDistortionCorrection>(child, m_DistortionCorrection)) {
+
+  }
 }
 
 void QxrdDataProcessor::removeChildPtr(QcepSerializableObjectPtr child)

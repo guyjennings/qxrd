@@ -71,8 +71,7 @@ QxrdCenterFinder::QxrdCenterFinder(QString name)
     m_FittedWidthMax(this, "fittedWidthMax", 3.0, "Maximum acceptable fitted width (pixels)"),
     m_FittedHeightMinRatio(this, "fittedHeightMinRatio", 0.25, "Minimum acceptable peak height ratio"),
     m_FittedPositionMaxDistance(this, "fittedPositionMaxDistance", 2.0, "Maximum acceptable fitted position shift (pixels)"),
-    m_FitPowderPointPosition(this, "fitPowderPointPosition", true, "Fit to nearby peak when adding powder points individually")/*,
-    m_Experiment()*/
+    m_FitPowderPointPosition(this, "fitPowderPointPosition", true, "Fit to nearby peak when adding powder points individually")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing center finder\n");

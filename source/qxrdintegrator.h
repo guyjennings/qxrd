@@ -28,7 +28,7 @@ public:
   static QxrdIntegratorPtr newIntegrator();
   virtual ~QxrdIntegrator();
 
-  void initialize(QxrdExperimentWPtr exp, QxrdCenterFinderWPtr cfw);
+  void initialize(QxrdCenterFinderWPtr cfw);
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)
@@ -95,8 +95,8 @@ public:
   QCEP_DOUBLE_PROPERTY(SelfNormalizationMaximum)
 
 public:
-  QxrdDataProcessorWPtr dataProcessor() const;
-  QxrdExperimentWPtr experiment() const;
+  QxrdDataProcessorPtr  dataProcessor() const;
+  QxrdExperimentPtr     experiment()    const;
 
   enum {
     RadialIntegrateTTH, RadialIntegrateQ, RadialIntegrateR, RadialIntegrateNone

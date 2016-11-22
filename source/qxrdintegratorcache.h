@@ -22,8 +22,7 @@ class QxrdIntegratorCache : public QObject
 {
   Q_OBJECT
 public:
-  QxrdIntegratorCache(QxrdExperimentWPtr exp,
-                      QxrdIntegratorWPtr integ,
+  QxrdIntegratorCache(QxrdIntegratorWPtr integ,
                       QxrdPolarTransformWPtr xform,
                       QxrdCenterFinderWPtr cf);
   virtual ~QxrdIntegratorCache();
@@ -133,7 +132,6 @@ private:
   QcepDoubleImageDataPtr m_CachedPolarValues;
   QVector<double>        m_Integral;
   QVector<double>        m_SumValue;
-  QxrdExperimentWPtr     m_Experiment;
   QxrdIntegratorWPtr     m_Integrator;
   QxrdPolarTransformWPtr m_PolarTransform;
   QxrdCenterFinderWPtr   m_CenterFinder;

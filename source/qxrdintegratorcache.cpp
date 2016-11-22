@@ -25,8 +25,7 @@
 #include <QtConcurrentRun>
 
 QxrdIntegratorCache::QxrdIntegratorCache
-  (QxrdExperimentWPtr exp,
-   QxrdIntegratorWPtr integ,
+  (QxrdIntegratorWPtr integ,
    QxrdPolarTransformWPtr xform,
    QxrdCenterFinderWPtr cf) :
   QObject(),
@@ -74,7 +73,6 @@ QxrdIntegratorCache::QxrdIntegratorCache
   m_CacheFillLevel(-1),
   m_CacheFullLevel(-1),
   m_HasChi(false),
-  m_Experiment(exp),
   m_Integrator(integ),
   m_PolarTransform(xform),
   m_CenterFinder(cf)
@@ -405,9 +403,9 @@ QString QxrdIntegratorCache::YUnits() const
 
 void QxrdIntegratorCache::partialIntegrationStep1(int i, int n)
 {
-  int strideSize = m_NRows / m_ThreadCount;
+  int strideSize = m_NRows / n;
 
-  while (strideSize*m_ThreadCount < m_NRows) {
+  while (strideSize*n < m_NRows) {
     strideSize++;
   }
 
@@ -525,9 +523,9 @@ void QxrdIntegratorCache::partialIntegrationStep1(int i, int n)
 
 void QxrdIntegratorCache::partialIntegrationStep2(int i, int n)
 {
-  int strideSize = m_NRows / m_ThreadCount;
+  int strideSize = m_NRows / n;
 
-  while (strideSize*m_ThreadCount < m_NRows) {
+  while (strideSize*n < m_NRows) {
     strideSize++;
   }
 
@@ -593,9 +591,9 @@ void QxrdIntegratorCache::partialIntegrationStep3(
     QcepMaskDataPtr mask,
     int normalize)
 {
-  int strideSize = m_NRows / m_ThreadCount;
+  int strideSize = m_NRows / n;
 
-  while (strideSize*m_ThreadCount < m_NRows) {
+  while (strideSize*n < m_NRows) {
     strideSize++;
   }
 
@@ -672,11 +670,11 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
   QTime tic;
   tic.start();
 
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdIntegratorPtr integ(m_Integrator);
 
-  if (expt) {
+  if (integ) {
     if (qcepDebug(DEBUG_INTEGRATOR)) {
-      expt->printMessage(tr("QxrdIntegratorCache::performIntegration"));
+      integ->printMessage(tr("QxrdIntegratorCache::performIntegration"));
     }
 
     m_Integral.resize(0);
@@ -703,7 +701,7 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
 
         if (m_CacheFillLevel.testAndSetOrdered(-1,0)) {
           if (qcepDebug(DEBUG_INTEGRATOR)) {
-            expt->printMessage(tr("QxrdIntegratorCache::performIntegration - fill cache"));
+            integ->printMessage(tr("QxrdIntegratorCache::performIntegration - fill cache"));
           }
 
           // Allocate new cache and fill it...
@@ -748,7 +746,7 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
             }
 
             if (m_EnableUserGeometry || m_EnableUserAbsorption) {
-              expt->printMessage(tr("Threaded integration disabled because of user supplied functions"));
+              integ->printMessage(tr("Threaded integration disabled because of user supplied functions"));
 
               m_ThreadCount = 1;
 
@@ -761,7 +759,7 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
             // Step one fills m_CachedRadialValues ( & m_CachedPolarValues if 2D)
             // and sets m_RMin, m_RMax (& m_CMin and m_CMax) to range of values
 
-            if (m_ThreadCount == 1) {
+            if (qcepDebug(DEBUG_NOPARALLEL)) {
               partialIntegrationStep1(0, 1);
             } else {
               QVector< QFuture<void> > res;
@@ -810,13 +808,13 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
             }
 
             if (qcepDebug(DEBUG_INTEGRATOR)) {
-              expt->printMessage(tr("1st stage complete after %1 msec").arg(tic.elapsed()));
+              integ->printMessage(tr("1st stage complete after %1 msec").arg(tic.elapsed()));
             }
 
             // Step two calculates the bin numbers and stores them in m_CachedRadialBinNumbers
             // and m_CachedPolarBinNumbers
 
-            if (m_ThreadCount == 1) {
+            if (qcepDebug(DEBUG_NOPARALLEL)) {
               partialIntegrationStep2(0, 1);
             } else {
               QVector< QFuture<void> > res;
@@ -841,7 +839,7 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
             }
 
             if (qcepDebug(DEBUG_INTEGRATOR)) {
-              expt->printMessage(tr("2nd stage complete after %1 msec").arg(tic.elapsed()));
+              integ->printMessage(tr("2nd stage complete after %1 msec").arg(tic.elapsed()));
             }
 
             m_CacheFillLevel.fetchAndStoreOrdered(m_NPix);
@@ -852,13 +850,13 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
           }
 
           if (qcepDebug(DEBUG_INTEGRATOR)) {
-            expt->printMessage(tr("QxrdIntegratorCache::performIntegration - cache finished"));
+            integ->printMessage(tr("QxrdIntegratorCache::performIntegration - cache finished"));
           }
         }
 
         while (m_CacheFillLevel.fetchAndAddOrdered(0) < m_CacheFullLevel.fetchAndAddOrdered(0)) {
           if (qcepDebug(DEBUG_INTEGRATOR)) {
-            expt->printMessage(tr("QxrdIntegratorCache::performIntegration - waiting for cache [%1,%2]")
+            integ->printMessage(tr("QxrdIntegratorCache::performIntegration - waiting for cache [%1,%2]")
                                .arg(m_CacheFillLevel.fetchAndAddOrdered(0))
                                .arg(m_CacheFullLevel.fetchAndAddOrdered(0)));
           }
@@ -867,22 +865,22 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
         }
 
         if (m_CacheFillLevel.fetchAndAddOrdered(0) != m_CacheFullLevel.fetchAndAddOrdered(0)) {
-          expt->printMessage(tr("QxrdIntegratorCache::performIntegration - anomalous cache [%1,%2]")
+          integ->printMessage(tr("QxrdIntegratorCache::performIntegration - anomalous cache [%1,%2]")
                              .arg(m_CacheFillLevel.fetchAndAddOrdered(0))
                              .arg(m_CacheFullLevel.fetchAndAddOrdered(0)));
         } else {
           if (qcepDebug(DEBUG_INTEGRATOR)) {
-            expt->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
+            integ->printMessage(tr("QxrdIntegratorCache::performIntegration - use cache"));
           }
 
           m_Integral.resize(m_ResultSize);
           m_SumValue.resize(m_ResultSize);
 
-          expt->printMessage(tr("QxrdIntegratorCache storage required for step 3 = %1 x %2 = %3")
+          integ->printMessage(tr("QxrdIntegratorCache storage required for step 3 = %1 x %2 = %3")
                              .arg(m_ThreadCount).arg(m_ResultSize*2*sizeof(double))
                              .arg(m_ThreadCount*m_ResultSize*2*sizeof(double)));
 
-          if (m_ThreadCount == 1) {
+          if (qcepDebug(DEBUG_NOPARALLEL)) {
             partialIntegrationStep3(0, 1, dimg, mask, normalize);
           } else {
             QVector< QFuture<void> > res;
@@ -902,7 +900,7 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
           }
 
           if (qcepDebug(DEBUG_INTEGRATOR)) {
-            expt->printMessage(tr("Stage 3 complete after %1 msec").arg(tic.elapsed()));
+            integ->printMessage(tr("Stage 3 complete after %1 msec").arg(tic.elapsed()));
           }
 
           double scalingFactor = m_ScalingFactor;
@@ -996,11 +994,11 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
           }
         }
 
-        expt->printMessage(tr("Integration of %1 took %2 msec")
+        integ->printMessage(tr("Integration of %1 took %2 msec")
                            .arg(dimg->get_Name())
                            .arg(tic.restart()));
       } else {
-        expt->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));
+        integ->printMessage(tr("QxrdIntegratorCache::performIntegration - integration failed"));
       }
     }
 
@@ -1009,46 +1007,50 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
 
 void QxrdIntegratorCache::grabScriptEngine()
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdIntegratorPtr integ(m_Integrator);
 
-  if (exp) {
-    QxrdScriptEnginePtr engine = exp->scriptEngine();
+  if (integ) {
+    QxrdExperimentPtr exp(integ->experiment());
 
-    if (engine) {
-      engine->lock();
+    if (exp) {
+      QxrdScriptEnginePtr engine = exp->scriptEngine();
 
-      m_UserGeometryFunctionValue = QScriptValue();
-      m_UserAbsorptionFunctionValue = QScriptValue();
+      if (engine) {
+        engine->lock();
 
-      if (m_EnableUserGeometry) {
-        engine->evaluate(m_UserGeometryScript);
+        m_UserGeometryFunctionValue = QScriptValue();
+        m_UserAbsorptionFunctionValue = QScriptValue();
 
-        m_UserGeometryFunctionValue = engine->evaluate(m_UserGeometryFunction);
+        if (m_EnableUserGeometry) {
+          engine->evaluate(m_UserGeometryScript);
 
-        if (!m_UserGeometryFunctionValue.isFunction()) {
-          m_UserGeometryFunctionValue = engine->globalObject().property(m_UserGeometryFunctionValue.toString());
+          m_UserGeometryFunctionValue = engine->evaluate(m_UserGeometryFunction);
+
+          if (!m_UserGeometryFunctionValue.isFunction()) {
+            m_UserGeometryFunctionValue = engine->globalObject().property(m_UserGeometryFunctionValue.toString());
+          }
+
+          if (m_UserGeometryFunctionValue.isFunction()) {
+            exp->printMessage(tr("Using User Geometry Function %1").arg(m_UserGeometryFunctionValue.toString()));
+          } else {
+            exp->printMessage(tr("User Geometry Function %1 is not a function").arg(m_UserGeometryFunctionValue.toString()));
+          }
         }
 
-        if (m_UserGeometryFunctionValue.isFunction()) {
-          exp->printMessage(tr("Using User Geometry Function %1").arg(m_UserGeometryFunctionValue.toString()));
-        } else {
-          exp->printMessage(tr("User Geometry Function %1 is not a function").arg(m_UserGeometryFunctionValue.toString()));
-        }
-      }
+        if (m_EnableUserAbsorption) {
+          engine->evaluate(m_UserAbsorptionScript);
 
-      if (m_EnableUserAbsorption) {
-        engine->evaluate(m_UserAbsorptionScript);
+          m_UserAbsorptionFunctionValue = engine->evaluate(m_UserAbsorptionFunction);
 
-        m_UserAbsorptionFunctionValue = engine->evaluate(m_UserAbsorptionFunction);
+          if (!m_UserAbsorptionFunctionValue.isFunction()) {
+            m_UserAbsorptionFunctionValue = engine->globalObject().property(m_UserAbsorptionFunctionValue.toString());
+          }
 
-        if (!m_UserAbsorptionFunctionValue.isFunction()) {
-          m_UserAbsorptionFunctionValue = engine->globalObject().property(m_UserAbsorptionFunctionValue.toString());
-        }
-
-        if (m_UserAbsorptionFunctionValue.isFunction()) {
-          exp->printMessage(tr("Using User Absorption Function %1").arg(m_UserAbsorptionFunctionValue.toString()));
-        } else {
-          exp->printMessage(tr("User Absorption Function %1 is not a function").arg(m_UserAbsorptionFunctionValue.toString()));
+          if (m_UserAbsorptionFunctionValue.isFunction()) {
+            exp->printMessage(tr("Using User Absorption Function %1").arg(m_UserAbsorptionFunctionValue.toString()));
+          } else {
+            exp->printMessage(tr("User Absorption Function %1 is not a function").arg(m_UserAbsorptionFunctionValue.toString()));
+          }
         }
       }
     }
@@ -1057,23 +1059,27 @@ void QxrdIntegratorCache::grabScriptEngine()
 
 void QxrdIntegratorCache::releaseScriptEngine()
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdIntegratorPtr integ(m_Integrator);
 
-  m_UserGeometryFunctionValue = QScriptValue();
-  m_UserAbsorptionFunctionValue = QScriptValue();
+  if (integ) {
+    QxrdExperimentPtr exp(integ->experiment());
 
-  if (exp) {
-    QxrdScriptEnginePtr engine = exp->scriptEngine();
+    m_UserGeometryFunctionValue = QScriptValue();
+    m_UserAbsorptionFunctionValue = QScriptValue();
 
-    if (engine) {
-      engine->unlock();
+    if (exp) {
+      QxrdScriptEnginePtr engine = exp->scriptEngine();
 
-      if (m_EnableUserGeometry) {
-        exp->printMessage(tr("User Geometry Function Completed"));
-      }
+      if (engine) {
+        engine->unlock();
 
-      if (m_EnableUserAbsorption) {
-        exp->printMessage(tr("User Absorption Function Completed"));
+        if (m_EnableUserGeometry) {
+          exp->printMessage(tr("User Geometry Function Completed"));
+        }
+
+        if (m_EnableUserAbsorption) {
+          exp->printMessage(tr("User Absorption Function Completed"));
+        }
       }
     }
   }

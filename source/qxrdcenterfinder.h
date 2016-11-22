@@ -258,7 +258,6 @@ public:
 
 private:
   mutable QMutex             m_Mutex;
-//  QxrdExperimentWPtr         m_Experiment;
   QcepDoubleImageDataPtr     m_Data;
   int                        m_CenterFitRingNumber;
 };
