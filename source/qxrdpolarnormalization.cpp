@@ -75,7 +75,7 @@ QxrdPolarNormalizationPtr QxrdPolarNormalization::newPolarNormalization()
 //      QcepDataColumnPtr xc = cols->appendColumn(img->get_HLabel());
 //      QcepDataColumnPtr av = cols->appendColumn("avg");
 //      QcepDataColumnPtr am = cols->appendColumn("amp");
-//      QcepDataColumnPtr rt = cols->appendColumn("amp/avg");
+//      QcepDataColumnPtr rt = cols->appendColumn("amp|avg");
 
 //      xc->set_ColumnType(QcepDataColumn::XValueColumn);
 //      av->set_ColumnType(QcepDataColumn::WeightColumn);
@@ -176,7 +176,7 @@ QcepDataObjectPtr QxrdPolarNormalization::transform(QcepDoubleImageDataPtr img)
       QcepDataColumnPtr xc = integ->appendColumn(img->get_HLabel());
       QcepDataColumnPtr av = integ->appendColumn("avg");
       QcepDataColumnPtr am = integ->appendColumn("amp");
-      QcepDataColumnPtr rt = integ->appendColumn("amp/avg");
+      QcepDataColumnPtr rt = integ->appendColumn("amp|avg");
 
       xc->set_ColumnType(QcepDataColumn::XValueColumn);
       av->set_ColumnType(QcepDataColumn::WeightColumn);
