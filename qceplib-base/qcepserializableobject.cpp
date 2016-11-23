@@ -113,7 +113,7 @@ QcepSerializableObjectWPtr QcepSerializableObject::childPtr(int n) const
   }
 }
 
-QVector<QcepSerializableObjectWPtr> QcepSerializableObject::childrenPtr() const
+QVector<QcepSerializableObjectPtr> QcepSerializableObject::childrenPtr() const
 {
 //  QVector<QcepObjectWPtr> res;
 

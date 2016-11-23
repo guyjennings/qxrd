@@ -41,7 +41,7 @@ public slots:
 
   int checkChildren(int verbose=0, int level=0) const;
 
-  QVector<QcepSerializableObjectWPtr> childrenPtr() const;
+  QVector<QcepSerializableObjectPtr> childrenPtr() const;
   QcepSerializableObjectWPtr childPtr(int n) const;
 
 protected:
@@ -87,7 +87,7 @@ protected:
   }
 
 private:
-  QVector<QcepSerializableObjectWPtr>  m_Children;
+  QVector<QcepSerializableObjectPtr>  m_Children;
 
 #ifndef QT_NO_DEBUG
   int                                 m_PointerMatchCount;
