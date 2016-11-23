@@ -21,7 +21,8 @@ CONFIG += qt
 QT += network \
     qml \
     script \
-    scripttools
+    scripttools \
+    testlib
 
 unix {
     message(Version = $${VERSION})
@@ -405,7 +406,8 @@ HEADERS += TODO.h \
     qxrdroieditordialog.h \
     qxrdpolygonpointsmodel.h \
     qxrdroipolygon-ptr.h \
-    qxrdroicenteredshape-ptr.h
+    qxrdroicenteredshape-ptr.h \
+    modeltest.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -597,7 +599,8 @@ SOURCES += qxrd.cpp \
     qxrddetectorcontrolwindowsettings.cpp \
     qxrdjsengine.cpp \
     qxrdroieditordialog.cpp \
-    qxrdpolygonpointsmodel.cpp
+    qxrdpolygonpointsmodel.cpp \
+    modeltest.cpp
 
 OTHER_FILES += testImage.js
 

@@ -47,6 +47,7 @@
 #include "qxrdwindowsettings.h"
 #include "qxrdgeneratetestimage.h"
 #include "qxrdjsengine.h"
+#include "modeltest.h"
 
 QxrdExperiment::QxrdExperiment(QString name) :
   QcepExperiment("", name),
@@ -224,22 +225,26 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
     m_DatasetModel = QcepDatasetModelPtr(
           new QcepDatasetModel(myself, m_DataProcessor, m_Dataset));
 
-//    m_DatasetModel -> newGroup("group1");
-//    m_DatasetModel -> newGroup("group2");
-//    m_DatasetModel -> newGroup("group3");
+    m_ModelTest = new ModelTest(m_DatasetModel.data());
 
-//    QStringList cols;
-//    cols << "x" << "y" << "z" << "v" << "sdev";
+    m_DatasetModel -> newGroup("/group1");
+    m_DatasetModel -> newGroup("/group2");
+    m_DatasetModel -> newGroup("/group3");
+    m_DatasetModel -> newGroup("/group1/group1.1");
+    m_DatasetModel -> newGroup("/group1/group1.2");
 
-//    m_DatasetModel -> newColumnScan("group1/scan1", cols, 1000);
-//    m_DatasetModel -> newColumnScan("group2/scan2", cols, 1000);
-//    m_DatasetModel -> newColumnScan("group3/scan3", cols, 1000);
+    QStringList cols;
+    cols << "x" << "y" << "z" << "v" << "sdev";
 
-//    m_DatasetModel -> newColumn("group4/x", 1000);
-//    m_DatasetModel -> newColumn("group4/y", 1000);
-//    m_DatasetModel -> newColumn("group4/z", 1000);
-//    m_DatasetModel -> newColumn("group4/t", 1000);
-//    m_DatasetModel -> newColumn("group4/sdev", 1000);
+    m_DatasetModel -> newColumnScan("/group1/scan1", cols, 1000);
+    m_DatasetModel -> newColumnScan("/group2/scan2", cols, 1000);
+    m_DatasetModel -> newColumnScan("/group3/scan3", cols, 1000);
+
+    m_DatasetModel -> newColumn("/group4/x", 1000);
+    m_DatasetModel -> newColumn("/group4/y", 1000);
+    m_DatasetModel -> newColumn("/group4/z", 1000);
+    m_DatasetModel -> newColumn("/group4/t", 1000);
+    m_DatasetModel -> newColumn("/group4/sdev", 1000);
 
     addChildPtr(QxrdWindowSettings::newWindowSettings());
 

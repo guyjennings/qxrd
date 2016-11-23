@@ -45,6 +45,7 @@
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdexperimentsettings-ptr.h"
 #include "qxrdjsengine-ptr.h"
+#include "modeltest.h"
 
 class QxrdExperiment : public QcepExperiment
 {
@@ -202,6 +203,8 @@ private:
   QMutex                          m_ExperimentFileMutex;
 
   QTimer                          m_AutoSaveTimer;
+
+  ModelTest                      *m_ModelTest;
 
 public:  // Properties
   Q_PROPERTY(QString dataDirectory     READ get_DataDirectory WRITE set_DataDirectory)
