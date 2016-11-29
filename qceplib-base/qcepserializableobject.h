@@ -42,7 +42,7 @@ public slots:
   int checkChildren(int verbose=0, int level=0) const;
 
   QVector<QcepSerializableObjectPtr> childrenPtr() const;
-  QcepSerializableObjectWPtr childPtr(int n) const;
+  QcepSerializableObjectPtr childPtr(int n) const;
 
 protected:
 

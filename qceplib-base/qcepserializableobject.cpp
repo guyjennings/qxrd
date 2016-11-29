@@ -102,7 +102,7 @@ int QcepSerializableObject::childCount() const
   return m_Children.count();
 }
 
-QcepSerializableObjectWPtr QcepSerializableObject::childPtr(int n) const
+QcepSerializableObjectPtr QcepSerializableObject::childPtr(int n) const
 {
   QcepSerializableObjectPtr p = m_Children.value(n);
 

@@ -84,7 +84,9 @@ QString QcepDataGroup::description() const
 
 QcepDataObjectPtr QcepDataGroup::item(int n)
 {
-  return qSharedPointerDynamicCast<QcepDataObject>(childPtr(n));
+  QcepSerializableObjectPtr ch = childPtr(n);
+  QcepDataObjectPtr         res = qSharedPointerDynamicCast<QcepDataObject>(ch);
+  return res;
 }
 
 QcepDataObjectPtr QcepDataGroup::item(QString nm)
@@ -98,7 +100,7 @@ QcepDataObjectPtr QcepDataGroup::item(QString nm)
   } else if (info.fileName() == nm) {
     int n = childCount();
     for(int i=0; i<n; i++) {
-      QcepDataObjectPtr p = item(n);
+      QcepDataObjectPtr p = item(i);
 
       if (p && (p->get_Name() == nm)) {
         return p;
