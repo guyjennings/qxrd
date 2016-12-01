@@ -9,6 +9,9 @@ QcepDataColumnScan::QcepDataColumnScan(QString name, QStringList cols, int sz) :
   QcepDataGroup(name),
   m_NumPoints(this, "numPoints", sz, "Number of points in scan")
 {
+  foreach (QString col, cols) {
+    appendColumn(col);
+  }
 }
 
 void QcepDataColumnScan::writeSettings(QSettings *settings, QString section)
@@ -75,7 +78,7 @@ int QcepDataColumnScan::rowCount() const
 
 QcepDataColumnPtr QcepDataColumnScan::appendColumn(QString title)
 {
-  QcepDataColumnPtr col = QcepAllocator::newColumn(title, 0, QcepAllocator::NullIfNotAvailable);
+  QcepDataColumnPtr col = QcepAllocator::newColumn(title, get_NumPoints(), QcepAllocator::NullIfNotAvailable);
 
   if (col) {
     append(col);

@@ -928,12 +928,16 @@ QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, QStringList
     } else if (scan) {
       printMessage(tr("Column Scan %1 already exists").arg(path));
     } else {
-      QcepDataColumnScanPtr scan = QcepAllocator::newColumnScan(objectName(path), cols, nRows, QcepAllocator::NullIfNotAvailable);
+      QcepDataColumnScanPtr scan = QcepAllocator::newColumnScan(objectName(path), QStringList(), nRows, QcepAllocator::NullIfNotAvailable);
 
       if (scan) {
         beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()/*+1*/);
         sgr -> append(scan);
         endInsertRows();
+
+        foreach (QString col, cols) {
+          newColumn(index(scan), col, nRows);
+        }
 
         return scan;
       }
@@ -954,12 +958,16 @@ QcepDataColumnScanPtr       QcepDatasetModel::newColumnScan(const QModelIndex &i
 
   if (grp && ds) {
     QcepDataColumnScanPtr ns =
-        QcepAllocator::newColumnScan(name, cols, nRows, QcepAllocator::NullIfNotAvailable);
+        QcepAllocator::newColumnScan(name, QStringList(), nRows, QcepAllocator::NullIfNotAvailable);
 
     if (ns) {
       beginInsertRows(index, grp->rowCount(), grp->rowCount()/*+1*/);
       grp->append(ns);
       endInsertRows();
+
+      foreach (QString col, cols) {
+        newColumn(QcepDatasetModel::index(ns), col, nRows);
+      }
 
       res = ns;
     }
