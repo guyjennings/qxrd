@@ -14,6 +14,7 @@
 #include <QScriptValue>
 #include "qxrdpowderpointproperty.h"
 #include "qxrdcenterfinder-ptr.h"
+#include "qxrdfittedrings-ptr.h"
 
 class QxrdCenterFinder : public QxrdDetectorGeometry
 {
@@ -255,6 +256,8 @@ public:
   QcepDoubleImageDataPtr newData();
 
   static QString levmarFailureReason(int n);
+
+  void setFittedRings(QxrdFittedRingsPtr rings);
 
 private:
   mutable QMutex             m_Mutex;

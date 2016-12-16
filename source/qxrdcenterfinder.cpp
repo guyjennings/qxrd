@@ -21,6 +21,8 @@
 #include "qcepdatasetmodel.h"
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdexperiment.h"
+#include "qxrdfittedrings.h"
+#include "qxrdfittedrings-ptr.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -444,24 +446,47 @@ void QxrdCenterFinder::fitPowderEllipses()
     fitDone.waitForFinished();
   }
 
-  QxrdPowderPointVector pts;
+  QxrdFittedRingsPtr pts(QxrdFittedRings::newFittedRings("rings"));
 
-  for (int i=0; i<nrings; i++) {
-    QxrdFitterRingEllipse &r = fits[i];
+  if (pts) {
+    for (int i=0; i<nrings; i++) {
+      QxrdFitterRingEllipse &r = fits[i];
 
-    if (qcepDebug(DEBUG_FITTING) || get_PeakFitDebug()) {
-      printMessage(tr("Fitted Ring %1: x: %2, y: %3, a: %4, b: %5, rot: %6, rzn: %7")
-                   .arg(i).arg(r.fittedX()).arg(r.fittedY())
-                   .arg(r.fittedA()).arg(r.fittedB()).arg(r.fittedRot())
-                   .arg(r.reasonString()));
+      if (qcepDebug(DEBUG_FITTING) || get_PeakFitDebug()) {
+        printMessage(tr("Fitted Ring %1: x: %2, y: %3, a: %4, b: %5, rot: %6, rzn: %7")
+                     .arg(i).arg(r.fittedX()).arg(r.fittedY())
+                     .arg(r.fittedA()).arg(r.fittedB()).arg(r.fittedRot())
+                     .arg(r.reasonString()));
+      }
+
+      if (r.reason() == QxrdFitter::Successful) {
+        pts->append(i,
+                    r.fittedX(),
+                    r.fittedY(),
+                    r.fittedA(),
+                    r.fittedB(), r.fittedRot());
+      }
     }
 
-    if (r.reason() == QxrdFitter::Successful) {
-      pts.append(QxrdPowderPoint(i, 0, 0, r.fittedX(), r.fittedY(), r.fittedA(), r.fittedB(), r.fittedRot()));
+    setFittedRings(pts);
+  }
+}
+
+void QxrdCenterFinder::setFittedRings(QxrdFittedRingsPtr rings)
+{
+  if (rings) {
+    int nr = rings->rowCount();
+
+    for (int i=0; i<nr; i++) {
+      printMessage(tr("Ring:%1 x:%2 y:%3: a:%4 b:%5 rot:%6")
+                   .arg(rings->n(i))
+                   .arg(rings->x(i))
+                   .arg(rings->y(i))
+                   .arg(rings->a(i))
+                   .arg(rings->b(i))
+                   .arg(rings->rot(i)));
     }
   }
-
-  set_FittedRings(pts);
 }
 
 void QxrdCenterFinder::adjustEnergy(int n)

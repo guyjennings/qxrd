@@ -407,7 +407,9 @@ HEADERS += TODO.h \
     qxrdpolygonpointsmodel.h \
     qxrdroipolygon-ptr.h \
     qxrdroicenteredshape-ptr.h \
-    modeltest.h
+    modeltest.h \
+    qxrdfittedrings.h \
+    qxrdfittedrings-ptr.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -600,7 +602,8 @@ SOURCES += qxrd.cpp \
     qxrdjsengine.cpp \
     qxrdroieditordialog.cpp \
     qxrdpolygonpointsmodel.cpp \
-    modeltest.cpp
+    modeltest.cpp \
+    qxrdfittedrings.cpp
 
 OTHER_FILES += testImage.js
 
