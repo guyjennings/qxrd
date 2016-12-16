@@ -227,24 +227,24 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     m_ModelTest = new ModelTest(m_DatasetModel.data());
 
-    m_DatasetModel -> newGroup("/group1");
-    m_DatasetModel -> newGroup("/group2");
-    m_DatasetModel -> newGroup("/group3");
-    m_DatasetModel -> newGroup("/group1/group1.1");
-    m_DatasetModel -> newGroup("/group1/group1.2");
+//    m_DatasetModel -> newGroup("/group1");
+//    m_DatasetModel -> newGroup("/group2");
+//    m_DatasetModel -> newGroup("/group3");
+//    m_DatasetModel -> newGroup("/group1/group1.1");
+//    m_DatasetModel -> newGroup("/group1/group1.2");
 
-    QStringList cols;
-    cols << "x" << "y" << "z" << "v" << "sdev";
+//    QStringList cols;
+//    cols << "x" << "y" << "z" << "v" << "sdev";
 
-    m_DatasetModel -> newColumnScan("/group1/scan1", cols, 1000);
-    m_DatasetModel -> newColumnScan("/group2/scan2", cols, 1000);
-    m_DatasetModel -> newColumnScan("/group3/scan3", cols, 1000);
+//    m_DatasetModel -> newColumnScan("/group1/scan1", cols, 1000);
+//    m_DatasetModel -> newColumnScan("/group2/scan2", cols, 1000);
+//    m_DatasetModel -> newColumnScan("/group3/scan3", cols, 1000);
 
-    m_DatasetModel -> newColumn("/group4/x", 1000);
-    m_DatasetModel -> newColumn("/group4/y", 1000);
-    m_DatasetModel -> newColumn("/group4/z", 1000);
-    m_DatasetModel -> newColumn("/group4/t", 1000);
-    m_DatasetModel -> newColumn("/group4/sdev", 1000);
+//    m_DatasetModel -> newColumn("/group4/x", 1000);
+//    m_DatasetModel -> newColumn("/group4/y", 1000);
+//    m_DatasetModel -> newColumn("/group4/z", 1000);
+//    m_DatasetModel -> newColumn("/group4/t", 1000);
+//    m_DatasetModel -> newColumn("/group4/sdev", 1000);
 
     addChildPtr(QxrdWindowSettings::newWindowSettings());
 
@@ -989,6 +989,12 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
 //      m_DatasetModel->readSettings(settings, "dataset");
 //      settings->endGroup();
 //    }
+
+    if (m_Dataset) {
+      settings->beginGroup("dataset");
+      m_Dataset->readSettings(settings, "dataset");
+      settings->endGroup();
+    }
   }
 }
 
@@ -1060,6 +1066,12 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 //      m_DatasetModel -> writeSettings(settings, "dataset");
 //      settings->endGroup();
 //    }
+
+    if (m_Dataset) {
+      settings->beginGroup("dataset");
+      m_Dataset -> writeSettings(settings, "dataset");
+      settings->endGroup();
+    }
   }
 }
 

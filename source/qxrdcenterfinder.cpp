@@ -486,6 +486,17 @@ void QxrdCenterFinder::setFittedRings(QxrdFittedRingsPtr rings)
                    .arg(rings->b(i))
                    .arg(rings->rot(i)));
     }
+
+    QxrdExperimentPtr expt(experiment());
+
+    if (expt) {
+      QcepDatasetModelPtr data = expt->dataset();
+
+      if (data) {
+        data->remove("rings");
+        data->append("rings", rings);
+      }
+    }
   }
 }
 
