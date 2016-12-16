@@ -81,7 +81,7 @@ public:
 private slots:
   void onMemorySizeChanged(qint64 newMB);
 
-private:
+public:
   QMutex *mutex();
 
 protected:
@@ -94,7 +94,7 @@ protected:
 //private slots:
 //  void allocatorHeartbeat();
 
-private:
+public:
   int waitTillAvailable(AllocationStrategy strat, qint64 size);
 
 private:
