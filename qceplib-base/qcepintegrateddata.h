@@ -3,7 +3,7 @@
 
 #include "qcepproperty.h"
 #include "qcepdataobject.h"
-#include "qcepimagedata-ptr.h"
+//#include "qcepimagedata-ptr.h"
 #include "qcepintegrateddata-ptr.h"
 
 class QcepIntegratedData : public QcepDataObject

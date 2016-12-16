@@ -220,6 +220,7 @@ void QcepObject::writeSettings(QSettings *set, QString section)
 {
   if (set) {
     set->setValue("name", get_Name());
+    set->setValue("class", className());
   }
 
   QcepProperty::writeSettings(this, set, section);
