@@ -386,6 +386,14 @@ void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString s
     for (int i=offset; i<count; i++) {
       QMetaProperty metaproperty = meta->property(i);
 
+//      if (qcepDebug(DEBUG_PROPERTIES)) {
+//        QString msg = tr("group = %1").arg(settings->group());
+
+//        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+//                                               Q_ARG(QString, msg),
+//                                               Q_ARG(QDateTime, QDateTime::currentDateTime())));
+//      }
+
       if (metaproperty.isStored()) {
         const char *name = metaproperty.name();
         QVariant value = object -> property(name);
