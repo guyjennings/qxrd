@@ -14,18 +14,18 @@ QcepDataColumnScan::QcepDataColumnScan(QString name, QStringList cols, int sz) :
   }
 }
 
-void QcepDataColumnScan::writeSettings(QSettings *settings, QString section)
+void QcepDataColumnScan::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepDataGroup::writeSettings(settings, section);
+  QcepDataGroup::writeSettings(settings);
 }
 
-void QcepDataColumnScan::readSettings(QSettings *settings, QString section)
+void QcepDataColumnScan::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepDataGroup::readSettings(settings, section);
+  QcepDataGroup::readSettings(settings);
 }
 
 QString QcepDataColumnScan::description() const

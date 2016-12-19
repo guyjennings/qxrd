@@ -54,18 +54,18 @@ QcepDataObject::~QcepDataObject()
   s_ObjectDeleteCount.fetchAndAddOrdered(1);
 }
 
-void QcepDataObject::writeSettings(QSettings *settings, QString section)
+void QcepDataObject::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 }
 
-void QcepDataObject::readSettings(QSettings *settings, QString section)
+void QcepDataObject::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 }
 
 QString QcepDataObject::mimeType()

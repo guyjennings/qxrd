@@ -216,31 +216,31 @@ void QcepObject::statusMessage(QString msg, QDateTime dt) const
   }
 }
 
-void QcepObject::writeSettings(QSettings *set, QString section)
+void QcepObject::writeSettings(QSettings *set)
 {
   if (set) {
     set->setValue("name", get_Name());
     set->setValue("class", className());
   }
 
-  QcepProperty::writeSettings(this, set, section);
+  QcepProperty::writeSettings(this, set);
 
   m_ChangeCount.fetchAndStoreOrdered(0);
   m_LastChanged.store(NULL);
 }
 
-void QcepObject::readSettings(QSettings *set, QString section)
+void QcepObject::readSettings(QSettings *set)
 {
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "readObjectSettings", Qt::BlockingQueuedConnection, Q_ARG(QSettings*, set), Q_ARG(QString, section)));
+    INVOKE_CHECK(QMetaObject::invokeMethod(this, "readObjectSettings", Qt::BlockingQueuedConnection, Q_ARG(QSettings*, set)));
   } else {
-    readObjectSettings(set, section);
+    readObjectSettings(set);
   }
 }
 
-void QcepObject::readObjectSettings(QSettings *set, QString section)
+void QcepObject::readObjectSettings(QSettings *set)
 {
-  QcepProperty::readSettings(this, set, section);
+  QcepProperty::readSettings(this, set);
 }
 
 QString QcepObject::addSlashes(QString str)

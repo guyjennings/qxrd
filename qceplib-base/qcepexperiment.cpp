@@ -108,32 +108,40 @@ QcepDataImportParametersWPtr QcepExperiment::dataImportParameters()
   return m_DataImportParameters;
 }
 
-void QcepExperiment::readSettings(QSettings *settings, QString section)
+void QcepExperiment::readSettings(QSettings *settings)
 {
   if (settings) {
-    QcepObject::readSettings(settings, section);
+    QcepObject::readSettings(settings);
 
     if (m_DataExportParameters) {
-      m_DataExportParameters -> readSettings(settings, "exportParameters");
+      settings->beginGroup("exportParameters");
+      m_DataExportParameters -> readSettings(settings);
+      settings->endGroup();
     }
 
     if (m_DataImportParameters) {
-      m_DataImportParameters -> readSettings(settings, "importParameters");
+      settings->beginGroup("importParameters");
+      m_DataImportParameters -> readSettings(settings);
+      settings->endGroup();
     }
   }
 }
 
-void QcepExperiment::writeSettings(QSettings *settings, QString section)
+void QcepExperiment::writeSettings(QSettings *settings)
 {
   if (settings) {
-    QcepObject::writeSettings(settings, section);
+    QcepObject::writeSettings(settings);
 
     if (m_DataExportParameters) {
-      m_DataExportParameters -> writeSettings(settings, "exportParameters");
+      settings->beginGroup("exportParameters");
+      m_DataExportParameters -> writeSettings(settings);
+      settings->endGroup();
     }
 
     if (m_DataImportParameters) {
-      m_DataImportParameters -> writeSettings(settings, "importParameters");
+      settings->beginGroup("importParameters");
+      m_DataImportParameters -> writeSettings(settings);
+      settings->endGroup();
     }
   }
 }

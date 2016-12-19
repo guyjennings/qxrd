@@ -192,7 +192,9 @@ void QcepImageDataBase::loadMetaData()
 
     QSettings settings(get_FileName()+".metadata", QSettings::IniFormat);
 
-    QcepProperty::readSettings(this, &settings, "metadata");
+    settings.beginGroup("metadata");
+    QcepProperty::readSettings(this, &settings);
+    settings.endGroup();
 
     if (settings.contains("metadata/qxrdVersion")) {
       set_Creator("QXRD");
@@ -222,7 +224,9 @@ void QcepImageDataBase::saveMetaData(QString name)
 
     QSettings settings(name+".metadata", QSettings::IniFormat);
 
-    QcepProperty::writeSettings(this, &settings, "metadata");
+    settings.beginGroup("metadata");
+    QcepProperty::writeSettings(this, &settings);
+    settings.endGroup();
 
     settings.beginWriteArray("normalization");
     QcepDoubleList norm = get_Normalization();

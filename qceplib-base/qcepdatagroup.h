@@ -19,8 +19,8 @@ class QcepDataGroup : public QcepDataObject
 public:
   Q_INVOKABLE QcepDataGroup(QString name);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 public slots:
   virtual QString description() const;

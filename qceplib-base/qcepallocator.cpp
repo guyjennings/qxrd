@@ -81,18 +81,18 @@ void QcepAllocator::onMemorySizeChanged(qint64 newMB)
   changedAvailableBytes(newMB*MegaBytes);
 }
 
-void QcepAllocator::writeSettings(QSettings *settings, QString section)
+void QcepAllocator::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 }
 
-void QcepAllocator::readSettings(QSettings *settings, QString section)
+void QcepAllocator::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 
   if (get_TotalBufferSizeMB32() > 100000000) {
     set_TotalBufferSizeMB32(get_TotalBufferSizeMB32()/MegaBytes);

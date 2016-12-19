@@ -16,8 +16,8 @@ public:
   QcepDataObject(QString name, qint64 byteSize);
   virtual ~QcepDataObject();
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   static QString mimeType();
 

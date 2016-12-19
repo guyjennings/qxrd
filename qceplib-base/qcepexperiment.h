@@ -38,8 +38,8 @@ protected:
 
   QUndoStack m_UndoStack;
 
-  virtual void readSettings(QSettings *settings, QString section);
-  virtual void writeSettings(QSettings *settings, QString section);
+  virtual void readSettings(QSettings *settings);
+  virtual void writeSettings(QSettings *settings);
 
 private:
   QcepDataExportParametersPtr    m_DataExportParameters;

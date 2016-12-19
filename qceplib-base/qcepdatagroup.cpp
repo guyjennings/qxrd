@@ -16,11 +16,11 @@ QcepDataGroup::QcepDataGroup(QString name) :
 {
 }
 
-void QcepDataGroup::writeSettings(QSettings *settings, QString section)
+void QcepDataGroup::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepDataObject::writeSettings(settings, "");
+  QcepDataObject::writeSettings(settings);
 
   if (settings) {
     settings->beginWriteArray("items");
@@ -34,7 +34,7 @@ void QcepDataGroup::writeSettings(QSettings *settings, QString section)
           qSharedPointerDynamicCast<QcepDataObject>(childPtr(i));
 
       if (p) {
-        p-> writeSettings(settings, "");
+        p-> writeSettings(settings);
       }
     }
 
@@ -42,13 +42,13 @@ void QcepDataGroup::writeSettings(QSettings *settings, QString section)
   }
 }
 
-void QcepDataGroup::readSettings(QSettings *settings, QString section)
+void QcepDataGroup::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QString id = get_Type();
 
-  QcepDataObject::readSettings(settings, "");
+  QcepDataObject::readSettings(settings);
 
 #ifndef QT_NO_DEBUG
   if (get_Type() != id) {
@@ -69,7 +69,7 @@ void QcepDataGroup::readSettings(QSettings *settings, QString section)
 
       if (obj) {
         addChildPtr(obj);
-        obj -> readSettings(settings, "");
+        obj -> readSettings(settings);
       }
     }
 

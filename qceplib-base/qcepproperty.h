@@ -55,8 +55,8 @@ public:
   int isStored() const;
 
   static void setSettingsValue(QSettings *settings, QString name, QVariant value);
-  static void writeSettings(QObject *object, QSettings *settings, QString section);
-  static void readSettings(QObject *object, QSettings *settings, QString section);
+  static void writeSettings(QObject *object, QSettings *settings);
+  static void readSettings(QObject *object, QSettings *settings);
 
   static void registerCustomSaver(QString typeName, CustomSettingsSaver *saver);
 

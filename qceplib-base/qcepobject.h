@@ -42,15 +42,15 @@ public slots:
   QString toScriptLiteral(QVariant v);
   QVariant fromScriptLiteral(QString lit);
 
-  void readObjectSettings(QSettings *set, QString section);
+  void readObjectSettings(QSettings *set);
 
   int isChanged() const;
   QString changedBy() const;
   void setChanged(int ct);
 
 public:
-  virtual void writeSettings(QSettings *set, QString section);
-  virtual void readSettings(QSettings *set, QString section);
+  virtual void writeSettings(QSettings *set);
+  virtual void readSettings(QSettings *set);
 
   QString get_Name() const;
   void    set_Name(QString name);

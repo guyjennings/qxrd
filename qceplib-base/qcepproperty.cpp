@@ -374,20 +374,21 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
   }
 }
 
-void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString section)
+void QcepProperty::writeSettings(QObject *object, QSettings *settings)
 {
   if (settings && object) {
     const QMetaObject *meta = object->metaObject();
     int count  = meta->propertyCount();
     int offset = QObject::staticMetaObject.propertyCount();
 
-    settings->beginGroup(section);
+    settings->beginGroup("properties");
 
     for (int i=offset; i<count; i++) {
       QMetaProperty metaproperty = meta->property(i);
 
 //      if (qcepDebug(DEBUG_PROPERTIES)) {
-//        QString msg = tr("group = %1").arg(settings->group());
+//        QString msg = tr("group = %2")
+//            .arg(settings->group());
 
 //        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
 //                                               Q_ARG(QString, msg),
@@ -399,9 +400,10 @@ void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString s
         QVariant value = object -> property(name);
 
         if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
-          QString msg = tr("Save %1/%2 = %3 [%4]")
-              .arg(section).arg(name)
-              .arg(value.toString()).arg(value.typeName());
+          QString msg = tr("Save %2 = %3 [%4]")
+              .arg(name)
+              .arg(value.toString())
+              .arg(value.typeName());
 
           INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
                                                  Q_ARG(QString, msg),
@@ -416,8 +418,8 @@ void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString s
 
     foreach (name, object->dynamicPropertyNames()) {
       if (qcepDebug(DEBUG_DYNPROPS)) {
-        QString msg = tr("Save dynamic property %1/%2")
-            .arg(section).arg(name.data());
+        QString msg = tr("Save dynamic property %2")
+            .arg(name.data());
 
         INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
                                                Q_ARG(QString, msg),
@@ -431,18 +433,18 @@ void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString s
   }
 }
 
-void QcepProperty::readSettings(QObject *object, QSettings *settings, QString section)
+void QcepProperty::readSettings(QObject *object, QSettings *settings)
 {
   if (settings && object) {
     const QMetaObject *meta = object->metaObject();
-    settings->beginGroup(section);
+    settings->beginGroup("properties");
 
     QStringList keys = settings->childKeys();
 
     foreach (QString key, keys) {
       if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-        QString msg = tr("Load %1/%2 = %3 [%4]")
-            .arg(section).arg(key)
+        QString msg = tr("Load %2 = %3 [%4]")
+            .arg(key)
             .arg(settings->value(key).toString())
             .arg(settings->value(key).typeName());
 

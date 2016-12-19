@@ -27,8 +27,8 @@ public:
   QcepAllocator(QString name);
   virtual ~QcepAllocator();
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 public:
 

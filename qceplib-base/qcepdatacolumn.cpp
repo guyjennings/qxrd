@@ -20,11 +20,11 @@ QcepDataColumn::~QcepDataColumn()
   QcepAllocator::deallocate(m_NPoints*sizeof(double));
 }
 
-void QcepDataColumn::writeSettings(QSettings *settings, QString section)
+void QcepDataColumn::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepDataObject::writeSettings(settings, section);
+  QcepDataObject::writeSettings(settings);
 
   if (settings) {
     settings->beginWriteArray("d");
@@ -38,11 +38,11 @@ void QcepDataColumn::writeSettings(QSettings *settings, QString section)
   }
 }
 
-void QcepDataColumn::readSettings(QSettings *settings, QString section)
+void QcepDataColumn::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepDataObject::readSettings(settings, section);
+  QcepDataObject::readSettings(settings);
 
   if (settings) {
     int n = settings->beginReadArray("d");
