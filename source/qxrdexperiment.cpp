@@ -313,7 +313,9 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     splashMessage("Loading Preferences");
 
-    readSettings(settings.data(), "experiment");
+//    settings->beginGroup("experiment");
+    readSettings(settings.data());
+//    settings->endGroup();
 
     splashMessage("Loading Background Images");
 
@@ -588,11 +590,10 @@ void QxrdExperiment::criticalMessage(QString msg, QDateTime ts) const
   QxrdWindowPtr      win(m_Window);
 
   if (win) {
+    displayPushedMessages();
     win->displayCriticalMessage(msg);
   } else if (app) {
-    app->criticalMessage(msg);
-  } else {
-    printf("%s\n", qPrintable(msg));
+    pushMessage(msg);
   }
 }
 
@@ -602,11 +603,10 @@ void QxrdExperiment::statusMessage(QString msg, QDateTime ts) const
   QxrdWindowPtr      win(m_Window);
 
   if (win) {
+    displayPushedMessages();
     win->displayStatusMessage(msg);
-  } else if (app) {
-    app->statusMessage(msg);
   } else {
-    printf("%s\n", qPrintable(msg));
+    pushMessage(msg);
   }
 }
 
@@ -629,11 +629,11 @@ void QxrdExperiment::printMessage(QString msg, QDateTime ts) const
     QxrdWindowPtr win = m_Window;
 
     if (win) {
+      displayPushedMessages();
+
       win->displayMessage(message);
-//    } else if (m_Application) {
-//      m_Application->printMessage(message);
-//    } else {
-//      printf("%s\n", qPrintable(message));
+    } else {
+      pushMessage(message);
     }
   }
 }
@@ -647,8 +647,30 @@ void QxrdExperiment::printLine(QString msg) const
   QxrdWindowPtr win = m_Window;
 
   if (win) {
+    displayPushedMessages();
+
     win->displayMessage(msg);
+  } else {
+    pushMessage(msg);
   }
+}
+
+void QxrdExperiment::displayPushedMessages() const
+{
+  QxrdWindowPtr win = m_Window;
+
+  if (win) {
+    foreach (QString m, m_PushedMessages) {
+      win->displayMessage(m);
+    }
+
+    m_PushedMessages.clear();
+  }
+}
+
+void QxrdExperiment::pushMessage(QString msg) const
+{
+  m_PushedMessages.append(msg);
 }
 
 QxrdWindowPtr QxrdExperiment::window()
@@ -930,30 +952,40 @@ void QxrdExperiment::readSettings()
   if (docPath.length()>0) {
     QSettings settings(docPath, QSettings::IniFormat);
 
-    readSettings(&settings, "experiment");
+//    settings.beginGroup("experiment");
+    readSettings(&settings);
+//    settings.endGroup();
   } else {
     QxrdExperimentSettings settings;
 
-    readSettings(&settings, "experiment");
+//    settings.beginGroup("experiment");
+    readSettings(&settings);
+//    settings.endGroup();
   }
 }
 
-void QxrdExperiment::readSettings(QSettings *settings, QString section)
+void QxrdExperiment::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (settings) {
-    QcepExperiment::readSettings(settings, section);
+    QcepExperiment::readSettings(settings);
 
     QxrdAcquisitionPtr acq(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
-    m_WindowSettings -> readSettings(settings, "window");
+    if (m_WindowSettings) {
+      settings->beginGroup("window");
+      m_WindowSettings -> readSettings(settings);
+      settings->endGroup();
+    }
 
     if (acq) {
-      acq -> readSettings(settings, "acquisition");
+      settings->beginGroup("acquisition");
+      acq -> readSettings(settings);
+      settings->endGroup();
     }
 
     if (settings->contains("experiment/detectorType")) {
@@ -969,19 +1001,27 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
     }
 
     if (proc) {
-      proc -> readSettings(settings, "processor");
+      settings->beginGroup("processor");
+      proc -> readSettings(settings);
+      settings->endGroup();
     }
 
     if (m_CalibrantLibrary) {
-      m_CalibrantLibrary->readSettings(settings, "calibrantLibrary");
+      settings->beginGroup("calibrantLibrary");
+      m_CalibrantLibrary->readSettings(settings);
+      settings->endGroup();
     }
 
     if (srv) {
-      srv  -> readSettings(settings, "specserver");
+      settings->beginGroup("specserver");
+      srv  -> readSettings(settings);
+      settings->endGroup();
     }
 
     if (ssrv) {
-      ssrv -> readSettings(settings, "simpleserver");
+      settings->beginGroup("simpleserver");
+      ssrv -> readSettings(settings);
+      settings->endGroup();
     }
 
 //    if (m_DatasetModel) {
@@ -992,7 +1032,7 @@ void QxrdExperiment::readSettings(QSettings *settings, QString section)
 
     if (m_Dataset) {
       settings->beginGroup("dataset");
-      m_Dataset->readSettings(settings, "dataset");
+      m_Dataset->readSettings(settings);
       settings->endGroup();
     }
   }
@@ -1010,7 +1050,9 @@ void QxrdExperiment::writeSettings()
     {
       QSettings settings(docPath+".new", QSettings::IniFormat);
 
-      writeSettings(&settings, "experiment");
+//      settings.beginGroup("experiment");
+      writeSettings(&settings);
+//      settings.endGroup();
     }
 
     QFile::remove(docPath+".bak");
@@ -1019,16 +1061,18 @@ void QxrdExperiment::writeSettings()
   } else {
     QxrdExperimentSettings settings;
 
-    writeSettings(&settings, "experiment");
+//    settings.beginGroup("experiment");
+    writeSettings(&settings);
+//    settings.endGroup();
   }
 
   setChanged(0);
 }
 
-void QxrdExperiment::writeSettings(QSettings *settings, QString section)
+void QxrdExperiment::writeSettings(QSettings *settings)
 {
   if (settings) {
-    QcepExperiment::writeSettings(settings, section);
+    QcepExperiment::writeSettings(settings);
 
     QxrdAcquisitionPtr acq(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
@@ -1039,26 +1083,40 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
       m_Window->captureSize();
     }
 
-    m_WindowSettings -> writeSettings(settings, "window");
+    if (m_WindowSettings) {
+      settings->beginGroup("window");
+      m_WindowSettings -> writeSettings(settings);
+      settings->endGroup();
+    }
 
     if (acq) {
-      acq -> writeSettings(settings, "acquisition");
+      settings->beginGroup("acquisition");
+      acq -> writeSettings(settings);
+      settings->endGroup();
     }
 
     if (proc) {
-      proc -> writeSettings(settings, "processor");
+      settings->beginGroup("processor");
+      proc -> writeSettings(settings);
+      settings->endGroup();
     }
 
     if (m_CalibrantLibrary) {
-      m_CalibrantLibrary->writeSettings(settings, "calibrantLibrary");
+      settings->beginGroup("calibrantLibrary");
+      m_CalibrantLibrary->writeSettings(settings);
+      settings->endGroup();
     }
 
     if (srv) {
-      srv  -> writeSettings(settings, "specserver");
+      settings->beginGroup("specserver");
+      srv  -> writeSettings(settings);
+      settings->endGroup();
     }
 
     if (ssrv) {
-      ssrv -> writeSettings(settings, "simpleserver");
+      settings->beginGroup("simpleserver");
+      ssrv -> writeSettings(settings);
+      settings->endGroup();
     }
 
 //    if (m_DatasetModel) {
@@ -1069,7 +1127,7 @@ void QxrdExperiment::writeSettings(QSettings *settings, QString section)
 
     if (m_Dataset) {
       settings->beginGroup("dataset");
-      m_Dataset -> writeSettings(settings, "dataset");
+      m_Dataset -> writeSettings(settings);
       settings->endGroup();
     }
   }
@@ -1161,7 +1219,9 @@ void QxrdExperiment::saveExperimentAs(QString path)
 
   setExperimentFilePath(path);
 
-  writeSettings(&settings, "experiment");
+//  settings.beginGroup("experiment");
+  writeSettings(&settings);
+//  settings.endGroup();
 }
 
 void QxrdExperiment::saveExperimentAsText(QString filePath)
@@ -1181,7 +1241,9 @@ void QxrdExperiment::saveExperimentCopyAs(QString path)
 
   QxrdExperimentSettings settings(path);
 
-  writeSettings(&settings, "experiment");
+//  settings.beginGroup("experiment");
+  writeSettings(&settings);
+//  settings.endGroup();
 
 //  QxrdExperiment *exp = new QxrdExperiment(path, m_Application, &settings);
 

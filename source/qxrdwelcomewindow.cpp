@@ -147,28 +147,28 @@ bool QxrdWelcomeWindow::wantToClose()
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
-void QxrdWelcomeWindow::readSettings(QSettings *settings, QString section)
+void QxrdWelcomeWindow::readSettings(QSettings *settings)
 {
   if (settings) {
-    QByteArray geometry = settings->value(section+"-geometry").toByteArray();
-    QByteArray winstate = settings->value(section+"-state").toByteArray();
+    QByteArray geometry = settings->value("geometry").toByteArray();
+    QByteArray winstate = settings->value("state").toByteArray();
 
     if (!geometry.isEmpty() && !winstate.isEmpty()) {
       restoreGeometry(geometry);
       restoreState(winstate,1);
     }
 
-    QcepProperty::readSettings(this, settings, section);
+    QcepProperty::readSettings(this, settings);
   }
 }
 
-void QxrdWelcomeWindow::writeSettings(QSettings *settings, QString section)
+void QxrdWelcomeWindow::writeSettings(QSettings *settings)
 {
   if (settings) {
-    settings->setValue(section+"-geometry", saveGeometry());
-    settings->setValue(section+"-state", saveState(1));
+    settings->setValue("geometry", saveGeometry());
+    settings->setValue("state", saveState(1));
 
-    QcepProperty::writeSettings(this, settings, section);
+    QcepProperty::writeSettings(this, settings);
   }
 }
 

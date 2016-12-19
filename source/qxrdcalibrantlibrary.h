@@ -25,8 +25,8 @@ public slots:
   QxrdCalibrantWPtr calibrant(int n);
 
 public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   void removeCalibrant();
   void appendCalibrant(QxrdCalibrantPtr cal = QxrdCalibrantPtr());

@@ -60,25 +60,29 @@ QcepAllocatorWPtr QxrdApplicationSettings::allocator() const
   return m_Allocator;
 }
 
-void QxrdApplicationSettings::readSettings(QSettings *settings, QString section)
+void QxrdApplicationSettings::readSettings(QSettings *settings)
 {
-  QcepProperty::readSettings(this, settings, section);
+  QcepProperty::readSettings(this, settings);
 
   QcepAllocatorPtr alloc(m_Allocator);
 
   if (alloc) {
-    alloc->readSettings(settings, "allocator");
+    settings->beginGroup("allocator");
+    alloc->readSettings(settings);
+    settings->endGroup();
   }
 }
 
-void QxrdApplicationSettings::writeSettings(QSettings *settings, QString section)
+void QxrdApplicationSettings::writeSettings(QSettings *settings)
 {
-  QcepProperty::writeSettings(this, settings, section);
+  QcepProperty::writeSettings(this, settings);
 
   QcepAllocatorPtr alloc(m_Allocator);
 
   if (alloc) {
-    alloc->writeSettings(settings, "allocator");
+    settings->beginGroup("allocator");
+    alloc->writeSettings(settings);
+    settings->endGroup();
   }
 }
 

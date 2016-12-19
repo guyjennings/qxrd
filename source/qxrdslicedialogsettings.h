@@ -20,8 +20,8 @@ public:
   QCEP_POLYGON_PROPERTY(SlicePolygon)
 
 public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   QxrdSlicePlotSettingsWPtr slicePlotSettings();
 

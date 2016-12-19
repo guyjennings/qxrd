@@ -57,25 +57,29 @@ void QxrdROICalculator::fromScriptValue(const QScriptValue &obj, QxrdROICalculat
   }
 }
 
-void QxrdROICalculator::readSettings(QSettings *settings, QString section)
+void QxrdROICalculator::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 
   if (m_ROICoordinatesModel) {
-    m_ROICoordinatesModel->readSettings(settings, section+"/coords");
+    settings->beginGroup("coords");
+    m_ROICoordinatesModel->readSettings(settings);
+    settings->endGroup();
   }
 }
 
-void QxrdROICalculator::writeSettings(QSettings *settings, QString section)
+void QxrdROICalculator::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 
   if (m_ROICoordinatesModel) {
-    m_ROICoordinatesModel->writeSettings(settings, section+"/coords");
+    settings->beginGroup("coords");
+    m_ROICoordinatesModel->writeSettings(settings);
+    settings->endGroup();
   }
 }
 

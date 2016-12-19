@@ -31,16 +31,16 @@ QxrdSimpleServer::~QxrdSimpleServer()
   stopServer();
 }
 
-void QxrdSimpleServer::readSettings(QSettings *settings, QString section)
+void QxrdSimpleServer::readSettings(QSettings *settings)
 {
-  QcepProperty::readSettings(this, settings, section);
+  QcepProperty::readSettings(this, settings);
 
   runModeChanged();
 }
 
-void QxrdSimpleServer::writeSettings(QSettings *settings, QString section)
+void QxrdSimpleServer::writeSettings(QSettings *settings)
 {
-  QcepProperty::writeSettings(this, settings, section);
+  QcepProperty::writeSettings(this, settings);
 }
 
 void QxrdSimpleServer::runModeChanged()

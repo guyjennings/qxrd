@@ -417,8 +417,8 @@ public:
 
   void loadDefaultImages();
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   void setAcquisition(QxrdAcquisitionWPtr acq);
   void setWindow(QxrdWindowWPtr win);

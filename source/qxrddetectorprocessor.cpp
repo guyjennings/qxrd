@@ -87,49 +87,65 @@ void QxrdDetectorProcessor::setControlWindow(QxrdDetectorControlWindowWPtr ctrl)
   m_ControlWindow = ctrl;
 }
 
-void QxrdDetectorProcessor::readSettings(QSettings *settings, QString section)
+void QxrdDetectorProcessor::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 
   if (m_CenterFinder) {
-    m_CenterFinder->readSettings(settings, section+"/centerFinder");
+    settings->beginGroup("centerFinder");
+    m_CenterFinder->readSettings(settings);
+    settings->endGroup();
   }
 
   if (m_Integrator) {
-    m_Integrator->readSettings(settings, section+"/integrator");
+    settings->beginGroup("integrator");
+    m_Integrator->readSettings(settings);
+    settings->endGroup();
   }
 
   if (m_ROICalculator) {
-    m_ROICalculator->readSettings(settings, section+"/roiCalculator");
+    settings->beginGroup("roiCalculator");
+    m_ROICalculator->readSettings(settings);
+    settings->endGroup();
   }
 
   if (m_ImagePlotSettings) {
-    m_ImagePlotSettings->readSettings(settings, section+"/imagePlotSettings");
+    settings->beginGroup("imagePlotSettings");
+    m_ImagePlotSettings->readSettings(settings);
+    settings->endGroup();
   }
 }
 
-void QxrdDetectorProcessor::writeSettings(QSettings *settings, QString section)
+void QxrdDetectorProcessor::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 
   if (m_CenterFinder) {
-    m_CenterFinder->writeSettings(settings, section+"/centerFinder");
+    settings->beginGroup("centerFinder");
+    m_CenterFinder->writeSettings(settings);
+    settings->endGroup();
   }
 
   if (m_Integrator) {
-    m_Integrator->writeSettings(settings, section+"/integrator");
+    settings->beginGroup("integrator");
+    m_Integrator->writeSettings(settings);
+    settings->endGroup();
   }
 
   if (m_ROICalculator) {
-    m_ROICalculator->writeSettings(settings, section+"/roiCalculator");
+    settings->beginGroup("roiCalculator");
+    m_ROICalculator->writeSettings(settings);
+    settings->endGroup();
   }
 
   if (m_ImagePlotSettings) {
-    m_ImagePlotSettings->writeSettings(settings, section+"/imagePlotSettings");
+    settings->beginGroup("imagePlotSettings");
+    m_ImagePlotSettings->writeSettings(settings);
+    settings->endGroup();
   }
 }
 

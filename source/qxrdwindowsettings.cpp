@@ -86,52 +86,131 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdDistortionCorrectionPlotSettings*>("QxrdDistortionCorrectionPlotSettings*");
 }
 
-void QxrdWindowSettings::readSettings(QSettings *settings, QString section)
+void QxrdWindowSettings::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (settings) {
-    QcepProperty::readSettings(this, settings, section);
+    QcepProperty::readSettings(this, settings);
 
-    m_ImagePlotSettings->readSettings(settings, section+"/plot");
-    m_CenterFinderPlotSettings->readSettings(settings, section+"/centerFinderPlot");
-    m_IntegratorPlotSettings->readSettings(settings, section+"/integratorPlot");
-    m_InputFileBrowserSettings->readSettings(settings, section+"/inputFileBrowser");
-    m_OutputFileBrowserSettings->readSettings(settings, section+"/outputFileBrowser");
-    m_HistogramDialogSettings->readSettings(settings, section+"/histogramDialog");
-    m_SliceDialogSettings->readSettings(settings, section+"/sliceDialog");
-    m_InfoDialogSettings->readSettings(settings, section+"/imageInfoDialog");
-    m_ScriptDialogSettings->readSettings(settings, section+"/scriptDialog");
-    m_SynchronizedAcquisitionDialogSettings->readSettings(settings, section+"/syncAcqDialog");
-    m_AcquisitionExtraInputsDialogSettings->readSettings(settings, section+"/extraInputsDialog");
-    m_DistortionCorrectionDialogSettings->readSettings(settings, section+"/distortionCorrectionDialog");
-    m_DistortionCorrectionPlotSettings->readSettings(settings, section+"/distortionCorrectionPlot");
+    settings->beginGroup("plot");
+    m_ImagePlotSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("centerFinderPlot");
+    m_CenterFinderPlotSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("integratorPlot");
+    m_IntegratorPlotSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("inputFileBrowser");
+    m_InputFileBrowserSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("outputFileBrowser");
+    m_OutputFileBrowserSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("histogramDialog");
+    m_HistogramDialogSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("sliceDialog");
+    m_SliceDialogSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("imageInfoDialog");
+    m_InfoDialogSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("scriptDialog");
+    m_ScriptDialogSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("syncAcqDialog");
+    m_SynchronizedAcquisitionDialogSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("extraInputsDialog");
+    m_AcquisitionExtraInputsDialogSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("distortionCorrectionDialog");
+    m_DistortionCorrectionDialogSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("distortionCorrectionPlot");
+    m_DistortionCorrectionPlotSettings->readSettings(settings);
+    settings->endGroup();
   }
 }
 
-void QxrdWindowSettings::writeSettings(QSettings *settings, QString section)
+void QxrdWindowSettings::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   //    printf("QxrdWindow::writeSettings\n");
 
   if (settings) {
-    QcepProperty::writeSettings(this, settings, section);
+    QcepProperty::writeSettings(this, settings);
 
-    m_ImagePlotSettings->writeSettings(settings, section+"/plot");
-    m_CenterFinderPlotSettings->writeSettings(settings, section+"/centerFinderPlot");
-    m_IntegratorPlotSettings->writeSettings(settings, section+"/integratorPlot");
-    m_InputFileBrowserSettings->writeSettings(settings, section+"/inputFileBrowser");
-    m_OutputFileBrowserSettings->writeSettings(settings, section+"/outputFileBrowser");
-    m_HistogramDialogSettings->writeSettings(settings, section+"/histogramDialog");
-    m_SliceDialogSettings->writeSettings(settings, section+"/sliceDialog");
-    m_InfoDialogSettings->writeSettings(settings, section+"/imageInfoDialog");
-    m_ScriptDialogSettings->writeSettings(settings, section+"/scriptDialog");
-    m_AcquisitionExtraInputsDialogSettings->writeSettings(settings, section+"/extraInputsDialog");
-    m_SynchronizedAcquisitionDialogSettings->writeSettings(settings, section+"/syncAcqDialog");
-    m_AcquisitionExtraInputsDialogSettings->writeSettings(settings, section+"/extraInputsDialog");
-    m_DistortionCorrectionDialogSettings->writeSettings(settings, section+"/distortionCorrectionDialog");
-    m_DistortionCorrectionPlotSettings->writeSettings(settings, section+"/distortionCorrectionPlot");
+    settings->beginGroup("plot");
+    m_ImagePlotSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("centerFinderPlot");
+    m_CenterFinderPlotSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("integratorPlot");
+    m_IntegratorPlotSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("inputFileBrowser");
+    m_InputFileBrowserSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("outputFileBrowser");
+    m_OutputFileBrowserSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("histogramDialog");
+    m_HistogramDialogSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("sliceDialog");
+    m_SliceDialogSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("imageInfoDialog");
+    m_InfoDialogSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("scriptDialog");
+    m_ScriptDialogSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("extraInputsDialog");
+    m_AcquisitionExtraInputsDialogSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("syncAcqDialog");
+    m_SynchronizedAcquisitionDialogSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("extraInputsDialog");
+    m_AcquisitionExtraInputsDialogSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("distortionCorrectionDialog");
+    m_DistortionCorrectionDialogSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("distortionCorrectionPlot");
+    m_DistortionCorrectionPlotSettings->writeSettings(settings);
+    settings->endGroup();
   }
 }
 

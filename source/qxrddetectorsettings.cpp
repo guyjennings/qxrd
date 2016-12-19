@@ -274,29 +274,35 @@ QxrdROICoordinatesPtr QxrdDetectorSettings::roi(int i)
   return res;
 }
 
-void QxrdDetectorSettings::readSettings(QSettings *settings, QString section)
+void QxrdDetectorSettings::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 
   if (m_Processor) {
-    m_Processor->readSettings(settings, section+"/processor");
+    settings->beginGroup("processor");
+    m_Processor->readSettings(settings);
+    settings->endGroup();
   }
 
   if (m_DetectorControlWindowSettings) {
-    m_DetectorControlWindowSettings->readSettings(settings, section+"/windowSettings");
+    settings->beginGroup("windowSettings");
+    m_DetectorControlWindowSettings->readSettings(settings);
+    settings->endGroup();
   }
 }
 
-void QxrdDetectorSettings::writeSettings(QSettings *settings, QString section)
+void QxrdDetectorSettings::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 
   if (m_Processor) {
-    m_Processor->writeSettings(settings, section+"/processor");
+    settings->beginGroup("processor");
+    m_Processor->writeSettings(settings);
+    settings->endGroup();
   }
 
   if (m_DetectorControlWindow) {
@@ -304,7 +310,9 @@ void QxrdDetectorSettings::writeSettings(QSettings *settings, QString section)
   }
 
   if (m_DetectorControlWindowSettings) {
-    m_DetectorControlWindowSettings->writeSettings(settings, section+"/windowSettings");
+    settings->beginGroup("windowSettings");
+    m_DetectorControlWindowSettings->writeSettings(settings);
+    settings->endGroup();
   }
 }
 

@@ -16,13 +16,13 @@ QxrdROICoordinatesListModel::~QxrdROICoordinatesListModel()
 {
 }
 
-void QxrdROICoordinatesListModel::readSettings(QSettings *settings, QString section)
+void QxrdROICoordinatesListModel::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   beginResetModel();
 
-  int n = settings->beginReadArray(section+"/roi");
+  int n = settings->beginReadArray("roi");
 
   m_ROICoordinates.resize(0);
 
@@ -35,7 +35,8 @@ void QxrdROICoordinatesListModel::readSettings(QSettings *settings, QString sect
     QxrdROICoordinatesPtr roi = newROI(roiOuterType, roiInnerType);
 
     if (roi) {
-      roi->readSettings(settings, "");
+      roi->readSettings(settings);
+
       m_ROICoordinates.append(roi);
 
       connect(roi.data(), &QxrdROICoordinates::roiChanged,
@@ -48,11 +49,11 @@ void QxrdROICoordinatesListModel::readSettings(QSettings *settings, QString sect
   endResetModel();
 }
 
-void QxrdROICoordinatesListModel::writeSettings(QSettings *settings, QString section)
+void QxrdROICoordinatesListModel::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  settings->beginWriteArray(section+"/roi");
+  settings->beginWriteArray("roi");
 
   for (int i=0; i<m_ROICoordinates.count(); i++) {
     settings->setArrayIndex(i);
@@ -60,7 +61,7 @@ void QxrdROICoordinatesListModel::writeSettings(QSettings *settings, QString sec
     QxrdROICoordinatesPtr roi = m_ROICoordinates.value(i);
 
     if (roi) {
-      roi->writeSettings(settings, "");
+      roi->writeSettings(settings);
     }
   }
 

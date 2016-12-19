@@ -175,18 +175,18 @@ QcepDoubleImageDataPtr QxrdCenterFinder::newData()
   return QcepDoubleImageDataPtr();
 }
 
-void QxrdCenterFinder::writeSettings(QSettings *settings, QString section)
+void QxrdCenterFinder::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QxrdDetectorGeometry::writeSettings(settings, section);
+  QxrdDetectorGeometry::writeSettings(settings);
 }
 
-void QxrdCenterFinder::readSettings(QSettings *settings, QString section)
+void QxrdCenterFinder::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QxrdDetectorGeometry::readSettings(settings, section);
+  QxrdDetectorGeometry::readSettings(settings);
 }
 
 void QxrdCenterFinder::onCenterChanged(QPointF pt)

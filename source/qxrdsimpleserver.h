@@ -27,8 +27,8 @@ public:
   void startServer(QHostAddress addr, int port);
   void stopServer();
 
-  virtual void readSettings(QSettings *settings, QString section);
-  virtual void writeSettings(QSettings *settings, QString section);
+  virtual void readSettings(QSettings *settings);
+  virtual void writeSettings(QSettings *settings);
 
 public slots:
   void runModeChanged();

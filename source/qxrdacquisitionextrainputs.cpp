@@ -108,13 +108,13 @@ QxrdNIDAQPluginInterfacePtr QxrdAcquisitionExtraInputs::nidaqPlugin() const
   return m_NIDAQPlugin;
 }
 
-void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString section)
+void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 
-  int n = settings->beginReadArray(section+"/channels");
+  int n = settings->beginReadArray("channels");
 
   while (m_Channels.count() > n) {
     removeChannel();
@@ -130,7 +130,7 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString secti
     QxrdAcquisitionExtraInputsChannelPtr chan = channel(i);
 
     if (chan) {
-      chan->readSettings(settings, "");
+      chan->readSettings(settings);
     }
   }
 
@@ -139,13 +139,13 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings, QString secti
   initiate();
 }
 
-void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString section)
+void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 
-  settings->beginWriteArray(section+"/channels");
+  settings->beginWriteArray("channels");
 
   int n = m_Channels.count();
 
@@ -154,7 +154,7 @@ void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings, QString sect
     QxrdAcquisitionExtraInputsChannelPtr chan = channel(i);
 
     if (chan) {
-      chan->writeSettings(settings, "");
+      chan->writeSettings(settings);
     }
   }
 

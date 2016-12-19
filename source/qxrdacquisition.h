@@ -88,8 +88,8 @@ public:
 
   virtual void setupExposureMenu(QDoubleSpinBox *cb);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   void copyDynamicProperties(QObject *dest);
 

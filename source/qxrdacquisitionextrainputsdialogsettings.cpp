@@ -24,22 +24,26 @@ void QxrdAcquisitionExtraInputsDialogSettings::addChildPtr(QcepSerializableObjec
   if (checkPointer<QxrdAcquisitionExtraInputsPlotSettings>(child, m_AcquisitionExtraInputsPlotSettings)) {}
 }
 
-void QxrdAcquisitionExtraInputsDialogSettings::readSettings(QSettings *settings, QString section)
+void QxrdAcquisitionExtraInputsDialogSettings::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, settings, section);
+  QcepProperty::readSettings(this, settings);
 
-  m_AcquisitionExtraInputsPlotSettings->readSettings(settings, section+"/plot");
+  settings->beginGroup("plot");
+  m_AcquisitionExtraInputsPlotSettings->readSettings(settings);
+  settings->endGroup();
 }
 
-void QxrdAcquisitionExtraInputsDialogSettings::writeSettings(QSettings *settings, QString section)
+void QxrdAcquisitionExtraInputsDialogSettings::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, settings, section);
+  QcepProperty::writeSettings(this, settings);
 
-  m_AcquisitionExtraInputsPlotSettings->writeSettings(settings, section+"/plot");
+  settings->beginGroup("plot");
+  m_AcquisitionExtraInputsPlotSettings->writeSettings(settings);
+  settings->endGroup();
 }
 
 QxrdAcquisitionExtraInputsPlotSettingsWPtr QxrdAcquisitionExtraInputsDialogSettings::plotSettings() const

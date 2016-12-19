@@ -24,8 +24,8 @@ public:
   bool wantToClose();
   void closeEvent (QCloseEvent * event);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 public slots:
   void displayMessage(QString msg);

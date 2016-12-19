@@ -23,18 +23,22 @@ void QxrdHistogramDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
   if (checkPointer<QxrdHistogramPlotSettings>(child, m_HistogramPlotSettings)) {}
 }
 
-void QxrdHistogramDialogSettings::readSettings(QSettings *settings, QString section)
+void QxrdHistogramDialogSettings::readSettings(QSettings *settings)
 {
-  QcepProperty::readSettings(this, settings, section);
+  QcepProperty::readSettings(this, settings);
 
-  m_HistogramPlotSettings->readSettings(settings, section+"/plot");
+  settings->beginGroup("plot");
+  m_HistogramPlotSettings->readSettings(settings);
+  settings->endGroup();
 }
 
-void QxrdHistogramDialogSettings::writeSettings(QSettings *settings, QString section)
+void QxrdHistogramDialogSettings::writeSettings(QSettings *settings)
 {
-  QcepProperty::writeSettings(this, settings, section);
+  QcepProperty::writeSettings(this, settings);
 
-  m_HistogramPlotSettings->writeSettings(settings, section+"/plot");
+  settings->beginGroup("plot");
+  m_HistogramPlotSettings->writeSettings(settings);
+  settings->endGroup();
 }
 
 QxrdHistogramPlotSettingsWPtr QxrdHistogramDialogSettings::histogramPlotSettings()

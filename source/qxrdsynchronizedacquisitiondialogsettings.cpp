@@ -23,22 +23,26 @@ void QxrdSynchronizedAcquisitionDialogSettings::addChildPtr(QcepSerializableObje
   if (checkPointer<QxrdSynchronizedAcquisitionPlotSettings>(child, m_SynchronizedAcquisitionPlotSettings)) {}
 }
 
-void QxrdSynchronizedAcquisitionDialogSettings::readSettings(QSettings *settings, QString section)
+void QxrdSynchronizedAcquisitionDialogSettings::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 
-  m_SynchronizedAcquisitionPlotSettings->readSettings(settings, section+"/plot");
+  settings->beginGroup("plot");
+  m_SynchronizedAcquisitionPlotSettings->readSettings(settings);
+  settings->endGroup();
 }
 
-void QxrdSynchronizedAcquisitionDialogSettings::writeSettings(QSettings *settings, QString section)
+void QxrdSynchronizedAcquisitionDialogSettings::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 
-  m_SynchronizedAcquisitionPlotSettings->writeSettings(settings, section+"/plot");
+  settings->beginGroup("plot");
+  m_SynchronizedAcquisitionPlotSettings->writeSettings(settings);
+  settings->endGroup();
 }
 
 QxrdSynchronizedAcquisitionPlotSettingsWPtr QxrdSynchronizedAcquisitionDialogSettings::synchronizedAcquisitionPlotSettings()

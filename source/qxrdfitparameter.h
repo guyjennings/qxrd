@@ -21,8 +21,8 @@ public:
   void setFitted(bool fit);
   void setLimited(bool lim);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 private:
   double  m_LowerLimit;

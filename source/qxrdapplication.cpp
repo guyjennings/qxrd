@@ -510,6 +510,8 @@ void QxrdApplication::warningMessage(QString msg, QDateTime /*ts*/)
 {
   if (experiment(0)) {
     INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "warningMessage", Qt::BlockingQueuedConnection, Q_ARG(QString, msg)));
+  } else {
+    printf("%s\n", qPrintable(msg));
   }
 }
 
@@ -527,6 +529,8 @@ void QxrdApplication::printMessage(QString msg, QDateTime ts)
 
     if (experiment(0)) {
       INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "printMessage", Qt::QueuedConnection, Q_ARG(QString, msg)));
+    } else {
+      printf("%s\n", qPrintable(msg));
     }
   }
 }
@@ -543,6 +547,8 @@ void QxrdApplication::statusMessage(QString msg, QDateTime ts)
 
     if (experiment(0)) {
       INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "statusMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+    } else {
+      printf("%s\n", qPrintable(message));
     }
   }
 }
@@ -557,6 +563,19 @@ void QxrdApplication::criticalMessage(QString msg, QDateTime ts)
 
   if (experiment(0)) {
     INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "criticalMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
+  } else {
+    printf("%s\n", qPrintable(message));
+  }
+}
+
+void QxrdApplication::printLine(QString msg)
+{
+  logMessage(msg);
+
+  if (experiment(0)) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "printLine", Qt::QueuedConnection, Q_ARG(QString, msg)));
+  } else {
+    printf("%s\n", qPrintable(msg));
   }
 }
 
@@ -587,7 +606,9 @@ void QxrdApplication::readSettings()
   QxrdGlobalSettings settings(this);
 
   if (m_ApplicationSettings) {
-    m_ApplicationSettings -> readSettings(&settings, "application");
+    settings.beginGroup("application");
+    m_ApplicationSettings -> readSettings(&settings);
+    settings.endGroup();
   }
 }
 
@@ -598,7 +619,9 @@ void QxrdApplication::writeSettings()
   QxrdGlobalSettings settings(this);
 
   if (m_ApplicationSettings) {
-    m_ApplicationSettings -> writeSettings(&settings, "application");
+    settings.beginGroup("application");
+    m_ApplicationSettings -> writeSettings(&settings);
+    settings.endGroup();
     m_ApplicationSettings -> setChanged(0);
   }
 }
@@ -618,7 +641,9 @@ void QxrdApplication::loadPreferences(QString path)
   QxrdGlobalSettings settings(path, QSettings::IniFormat);
 
   if (m_ApplicationSettings) {
-    m_ApplicationSettings -> readSettings(&settings, "application");
+    settings.beginGroup("application");
+    m_ApplicationSettings -> readSettings(&settings);
+    settings.endGroup();
   }
 }
 
@@ -640,7 +665,9 @@ void QxrdApplication::savePreferences(QString path)
     QxrdGlobalSettings settings(path+".new", QSettings::IniFormat);
 
     if (m_ApplicationSettings) {
-      m_ApplicationSettings -> writeSettings(&settings, "application");
+      settings.beginGroup("application");
+      m_ApplicationSettings -> writeSettings(&settings);
+      settings.endGroup();
     }
   }
 

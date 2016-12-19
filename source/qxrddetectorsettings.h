@@ -58,8 +58,8 @@ public:
 
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   void enqueueAcquiredFrame(QcepImageDataBasePtr img);
 

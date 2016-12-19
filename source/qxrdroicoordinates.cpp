@@ -49,33 +49,41 @@ QxrdROICoordinates::~QxrdROICoordinates()
 {
 }
 
-void QxrdROICoordinates::writeSettings(QSettings *settings, QString section)
+void QxrdROICoordinates::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepSerializableObject::writeSettings(settings, section);
+  QcepSerializableObject::writeSettings(settings);
 
   if (m_OuterShape) {
-    m_OuterShape->writeSettings(settings, section+"/outer");
+    settings->beginGroup("outer");
+    m_OuterShape->writeSettings(settings);
+    settings->endGroup();
   }
 
   if (m_InnerShape) {
-    m_InnerShape->writeSettings(settings, section+"/inner");
+    settings->beginGroup("inner");
+    m_InnerShape->writeSettings(settings);
+    settings->endGroup();
   }
 }
 
-void QxrdROICoordinates::readSettings(QSettings *settings, QString section)
+void QxrdROICoordinates::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepSerializableObject::readSettings(settings, section);
+  QcepSerializableObject::readSettings(settings);
 
   if (m_OuterShape) {
-    m_OuterShape->readSettings(settings, section+"/outer");
+    settings->beginGroup("outer");
+    m_OuterShape->readSettings(settings);
+    settings->endGroup();
   }
 
   if (m_InnerShape) {
-    m_InnerShape->readSettings(settings, section+"/inner");
+    settings->beginGroup("inner");
+    m_InnerShape->readSettings(settings);
+    settings->endGroup();
   }
 
   changed();

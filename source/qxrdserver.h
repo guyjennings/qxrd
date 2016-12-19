@@ -16,8 +16,8 @@ public:
   void initialize(QcepObjectWPtr parent);
   virtual ~QxrdServer();
 
-  virtual void readSettings(QSettings *settings, QString section);
-  virtual void writeSettings(QSettings *settings, QString section);
+  virtual void readSettings(QSettings *settings);
+  virtual void writeSettings(QSettings *settings);
 
 signals:
   void executeCommand(QString cmd);

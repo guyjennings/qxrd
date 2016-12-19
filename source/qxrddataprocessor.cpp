@@ -267,30 +267,58 @@ void QxrdDataProcessor::setWindow(QxrdWindowWPtr win)
 //  return m_Saver;
 //}
 
-void QxrdDataProcessor::writeSettings(QSettings *settings, QString section)
+void QxrdDataProcessor::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 
-  m_CenterFinder -> writeSettings(settings, section+"/centerfinder");
-  m_Integrator   -> writeSettings(settings, section+"/integrator");
-  m_PolarTransform -> writeSettings(settings, section+"/polarTransform");
-  m_PolarNormalization -> writeSettings(settings, section+"/polarNormalization");
-  m_DistortionCorrection -> writeSettings(settings, section+"/distortion");
+  settings->beginGroup("centerfinder");
+  m_CenterFinder -> writeSettings(settings);
+  settings->endGroup();
+
+  settings->beginGroup("integrator");
+  m_Integrator   -> writeSettings(settings);
+  settings->endGroup();
+
+  settings->beginGroup("polarTransform");
+  m_PolarTransform -> writeSettings(settings);
+  settings->endGroup();
+
+  settings->beginGroup("polarNormalization");
+  m_PolarNormalization -> writeSettings(settings);
+  settings->endGroup();
+
+  settings->beginGroup("distortion");
+  m_DistortionCorrection -> writeSettings(settings);
+  settings->endGroup();
 }
 
-void QxrdDataProcessor::readSettings(QSettings *settings, QString section)
+void QxrdDataProcessor::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 
-  m_CenterFinder -> readSettings(settings, section+"/centerfinder");
-  m_Integrator   -> readSettings(settings, section+"/integrator");
-  m_PolarTransform -> readSettings(settings, section+"/polarTransform");
-  m_PolarNormalization -> readSettings(settings, section+"/polarNormalization");
-  m_DistortionCorrection -> readSettings(settings, section+"/distortion");
+  settings->beginGroup("centerfinder");
+  m_CenterFinder -> readSettings(settings);
+  settings->endGroup();
+
+  settings->beginGroup("integrator");
+  m_Integrator   -> readSettings(settings);
+  settings->endGroup();
+
+  settings->beginGroup("polarTransform");
+  m_PolarTransform -> readSettings(settings);
+  settings->endGroup();
+
+  settings->beginGroup("polarNormalization");
+  m_PolarNormalization -> readSettings(settings);
+  settings->endGroup();
+
+  settings->beginGroup("distortion");
+  m_DistortionCorrection -> readSettings(settings);
+  settings->endGroup();
 }
 
 QString QxrdDataProcessor::existingOutputDirectory(QString dir, QString subdir) const

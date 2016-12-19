@@ -4,7 +4,7 @@
 #include "qxrdexperiment.h"
 
 QxrdExperimentSettings::QxrdExperimentSettings(QxrdExperiment *parent)
-  : QSettings("cep.xor.aps.anl.gov","qxrd-2",NULL),
+  : QSettings("cep.xor.aps.anl.gov","qxrd-3",NULL),
     m_Experiment(parent)
 {
   if (qcepDebug(DEBUG_PREFS)) {

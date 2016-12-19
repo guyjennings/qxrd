@@ -36,8 +36,8 @@ public:
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesPtr &coords);
   static void fromScriptValue(const QScriptValue &obj, QxrdROICoordinatesPtr &coords);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   bool pointInInner(QPointF pt);
   bool pointInOuter(QPointF pt);

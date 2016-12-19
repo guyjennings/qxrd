@@ -18,8 +18,8 @@ public:
 
   QcepAllocatorWPtr allocator() const;
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 private:
   QcepAllocatorPtr                m_Allocator;

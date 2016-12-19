@@ -15,8 +15,8 @@ public:
   Q_INVOKABLE QxrdAcquisitionExtraInputsChannel(QString name);
   static QxrdAcquisitionExtraInputsChannelPtr newAcquisitionExtraInputsChannel(int chnum);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 signals:
   void reinitiateNeeded();

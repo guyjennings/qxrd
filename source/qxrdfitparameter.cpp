@@ -50,10 +50,10 @@ void QxrdFitParameter::setLimited(bool lim)
   m_IsLimited = lim;
 }
 
-void QxrdFitParameter::writeSettings(QSettings *settings, QString section)
+void QxrdFitParameter::writeSettings(QSettings *settings)
 {
   if (settings) {
-    settings->beginGroup(section+"/"+name());
+    settings->beginGroup("fitParm");
 
     settings->setValue("value",value());
     settings->setValue("lower",m_LowerLimit);
@@ -65,10 +65,10 @@ void QxrdFitParameter::writeSettings(QSettings *settings, QString section)
   }
 }
 
-void QxrdFitParameter::readSettings(QSettings *settings, QString section)
+void QxrdFitParameter::readSettings(QSettings *settings)
 {
   if (settings) {
-    settings->beginGroup(section+"/"+name());
+    settings->beginGroup("fitParm");
 
     if (settings->contains("value")) setValue(settings->value("value").toDouble());
     if (settings->contains("lower")) m_LowerLimit = settings->value("lower").toDouble();

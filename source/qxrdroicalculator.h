@@ -25,8 +25,8 @@ public:
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICalculatorPtr &proc);
   static void fromScriptValue(const QScriptValue &obj, QxrdROICalculatorPtr &proc);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 signals:
 

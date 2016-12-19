@@ -232,21 +232,25 @@ void QxrdAcquisition::copyDynamicProperties(QObject *dest)
   }
 }
 
-void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
+void QxrdAcquisition::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 
   if (m_SynchronizedAcquisition) {
-    m_SynchronizedAcquisition->writeSettings(settings, section+"/sync");
+    settings->beginGroup("sync");
+    m_SynchronizedAcquisition->writeSettings(settings);
+    settings->endGroup();
   }
 
   if (m_AcquisitionExtraInputs) {
-    m_AcquisitionExtraInputs->writeSettings(settings, section+"/extrainputs");
+    settings->beginGroup("extrainputs");
+    m_AcquisitionExtraInputs->writeSettings(settings);
+    settings->endGroup();
   }
 
-  settings->beginWriteArray(section+"/detectors");
+  settings->beginWriteArray("detectors");
 
   for (int i=0; i<m_Detectors.count(); i++) {
     settings->setArrayIndex(i);
@@ -254,7 +258,7 @@ void QxrdAcquisition::writeSettings(QSettings *settings, QString section)
     QxrdDetectorSettingsPtr det = m_Detectors.value(i);
 
     if (det) {
-      det->writeSettings(settings, "");
+      det->writeSettings(settings);
     }
   }
 
@@ -272,21 +276,25 @@ void QxrdAcquisition::openWindows()
   }
 }
 
-void QxrdAcquisition::readSettings(QSettings *settings, QString section)
+void QxrdAcquisition::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 
   if (m_SynchronizedAcquisition) {
-    m_SynchronizedAcquisition->readSettings(settings, section+"/sync");
+    settings->beginGroup("sync");
+    m_SynchronizedAcquisition->readSettings(settings);
+    settings->endGroup();
   }
 
   if (m_AcquisitionExtraInputs) {
-    m_AcquisitionExtraInputs->readSettings(settings, section+"/extrainputs");
+    settings->beginGroup("extrainputs");
+    m_AcquisitionExtraInputs->readSettings(settings);
+    settings->endGroup();
   }
 
-  int n = settings->beginReadArray(section+"/detectors");
+  int n = settings->beginReadArray("detectors");
 
   m_Detectors.resize(n);
 
@@ -300,7 +308,7 @@ void QxrdAcquisition::readSettings(QSettings *settings, QString section)
 
     if (det) {
       //          det->initialize();
-      det->readSettings(settings, "");
+      det->readSettings(settings);
 
       m_Detectors[i]       = det;
 

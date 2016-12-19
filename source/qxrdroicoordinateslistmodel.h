@@ -19,8 +19,8 @@ public:
   QxrdROICoordinatesListModel();
   virtual ~QxrdROICoordinatesListModel();
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesListModelPtr &coords);
   static void fromScriptValue(const QScriptValue &obj, QxrdROICoordinatesListModelPtr &coords);

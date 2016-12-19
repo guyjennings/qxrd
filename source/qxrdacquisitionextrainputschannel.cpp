@@ -64,18 +64,18 @@ QxrdAcquisitionExtraInputsWPtr QxrdAcquisitionExtraInputsChannel::extraInputs()
   }
 }
 
-void QxrdAcquisitionExtraInputsChannel::readSettings(QSettings *settings, QString section)
+void QxrdAcquisitionExtraInputsChannel::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 }
 
-void QxrdAcquisitionExtraInputsChannel::writeSettings(QSettings *settings, QString section)
+void QxrdAcquisitionExtraInputsChannel::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 }
 
 QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()

@@ -36,8 +36,8 @@ public:
   QCEP_BYTE_ARRAY_PROPERTY(WindowState)
 
 public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   QxrdImagePlotSettingsWPtr                    imagePlotSettings();
   QxrdCenterFinderPlotSettingsWPtr             centerFinderPlotSettings();

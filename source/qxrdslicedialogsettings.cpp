@@ -24,22 +24,26 @@ void QxrdSliceDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
   if (checkPointer<QxrdSlicePlotSettings>(child, m_SlicePlotSettings)) {}
 }
 
-void QxrdSliceDialogSettings::readSettings(QSettings *settings, QString section)
+void QxrdSliceDialogSettings::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, settings, section);
+  QcepProperty::readSettings(this, settings);
 
-  m_SlicePlotSettings->readSettings(settings, section+"/plot");
+  settings->beginGroup("plot");
+  m_SlicePlotSettings->readSettings(settings);
+  settings->endGroup();
 }
 
-void QxrdSliceDialogSettings::writeSettings(QSettings *settings, QString section)
+void QxrdSliceDialogSettings::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, settings, section);
+  QcepProperty::writeSettings(this, settings);
 
-  m_SlicePlotSettings->writeSettings(settings, section+"/plot");
+  settings->beginGroup("plot");
+  m_SlicePlotSettings->writeSettings(settings);
+  settings->endGroup();
 }
 
 QxrdSlicePlotSettingsWPtr QxrdSliceDialogSettings::slicePlotSettings()

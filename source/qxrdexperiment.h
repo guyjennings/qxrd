@@ -123,8 +123,8 @@ public slots:
   void readSettings();
   void writeSettings();
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   void logMessage(QString msg) const;
   void splashMessage(QString msg);
@@ -159,6 +159,9 @@ private:
   void readInitialLogFile();
 
   void closeScanFile();
+
+  void displayPushedMessages() const;
+  void pushMessage(QString msg) const;
 
 public:
   void openScanFile();
@@ -205,6 +208,8 @@ private:
   QTimer                          m_AutoSaveTimer;
 
   ModelTest                      *m_ModelTest;
+
+  mutable QStringList             m_PushedMessages;
 
 public:  // Properties
   Q_PROPERTY(QString dataDirectory     READ get_DataDirectory WRITE set_DataDirectory)

@@ -4,7 +4,7 @@
 #include "qxrdapplication.h"
 
 QxrdGlobalSettings::QxrdGlobalSettings(QxrdApplication *app)
-  : QSettings("cep.xray.aps.anl.gov","qxrd-3",NULL),
+  : QSettings("cep.xray.aps.anl.gov","qxrd-global-4",NULL),
     m_Application(app)
 {
   if (qcepDebug(DEBUG_PREFS)) {

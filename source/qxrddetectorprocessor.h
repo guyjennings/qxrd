@@ -60,8 +60,8 @@ public slots:
   QcepMaskDataPtr        overflow();
 
 public:
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorProcessorPtr &proc);
   static void fromScriptValue(const QScriptValue &obj, QxrdDetectorProcessorPtr &proc);

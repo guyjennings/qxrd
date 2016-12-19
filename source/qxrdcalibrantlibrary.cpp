@@ -37,15 +37,15 @@ void QxrdCalibrantLibrary::addChildPtr(QcepSerializableObjectPtr child)
   printMessage("Need to write QxrdCalibrantLibrary::addChildPtr");
 }
 
-void QxrdCalibrantLibrary::readSettings(QSettings *settings, QString section)
+void QxrdCalibrantLibrary::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 
   int nstd = numberStandardCalibrants();
 
-  int ns   = settings->beginReadArray(section+"/stdcalibrants");
+  int ns   = settings->beginReadArray("stdcalibrants");
 
   for (int i=0; i<ns; i++) {
     settings->setArrayIndex(i);
@@ -57,7 +57,7 @@ void QxrdCalibrantLibrary::readSettings(QSettings *settings, QString section)
 
   settings->endArray();
 
-  int nc   = settings->beginReadArray(section+"/calibrants");
+  int nc   = settings->beginReadArray("calibrants");
 
   while (m_Calibrants.count() > (nc + nstd)) {
     removeCalibrant();
@@ -70,21 +70,21 @@ void QxrdCalibrantLibrary::readSettings(QSettings *settings, QString section)
   for (int i=0; i<nc; i++) {
     settings->setArrayIndex(i);
 
-    m_Calibrants[i+nstd]->readSettings(settings, "");
+    m_Calibrants[i+nstd]->readSettings(settings);
   }
 
   settings->endArray();
 }
 
-void QxrdCalibrantLibrary::writeSettings(QSettings *settings, QString section)
+void QxrdCalibrantLibrary::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 
   int nstd = numberStandardCalibrants();
 
-  settings->beginWriteArray(section+"/stdcalibrants");
+  settings->beginWriteArray("stdcalibrants");
 
   for (int i=0; i<nstd; i++) {
     settings->setArrayIndex(i);
@@ -95,11 +95,11 @@ void QxrdCalibrantLibrary::writeSettings(QSettings *settings, QString section)
 
   int n = m_Calibrants.count() - nstd;
 
-  settings->beginWriteArray(section+"/calibrants");
+  settings->beginWriteArray("calibrants");
 
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
-    m_Calibrants[i+nstd]->writeSettings(settings, "");
+    m_Calibrants[i+nstd]->writeSettings(settings);
   }
 
   settings->endArray();
