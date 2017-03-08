@@ -194,12 +194,13 @@ void QcepImageDataBase::loadMetaData()
 
     settings.beginGroup("metadata");
     QcepProperty::readSettings(this, &settings);
-    settings.endGroup();
 
-    if (settings.contains("metadata/qxrdVersion")) {
+    if (settings.contains("qxrdVersion")) {
       set_Creator("QXRD");
-      set_Version(settings.value("metadata/qxrdVersion").toString());
+      set_Version(settings.value("qxrdVersion").toString());
     }
+
+    settings.endGroup();
   }
 //
 //  printf("QcepImageDataBase::loadMetaData for file %s took %d msec\n",  qPrintable(get_FileName()), tic.elapsed());
