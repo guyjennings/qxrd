@@ -301,7 +301,9 @@ void QxrdAcquisition::readSettings(QSettings *settings)
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
+    settings->beginGroup("properties");
     int detType = settings->value("detectorType", 0).toInt();
+    settings->endGroup();
 
     QxrdDetectorSettingsPtr det = QxrdDetectorSettings::newDetector(
           experiment(), myself(), detType, i);

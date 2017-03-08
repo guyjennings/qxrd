@@ -988,8 +988,9 @@ void QxrdExperiment::readSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (settings->contains("experiment/detectorType")) {
-      int detType = settings->value("experiment/detectorType", -1).toInt();
+    settings->beginGroup("experiment");
+    if (settings->contains("detectorType")) {
+      int detType = settings->value("detectorType", -1).toInt();
 
       if (detType == QxrdDetectorSettings::PerkinElmerDetector) {
         if (acq) {
@@ -999,6 +1000,7 @@ void QxrdExperiment::readSettings(QSettings *settings)
         }
       }
     }
+    settings->endGroup();
 
     if (proc) {
       settings->beginGroup("processor");
