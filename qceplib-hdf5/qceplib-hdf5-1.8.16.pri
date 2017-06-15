@@ -5,7 +5,8 @@ linux-g++-32:QMAKE_TARGET.arch = x86
 linux-g++-64:QMAKE_TARGET.arch = x86_64
 macx-*-32:QMAKE_TARGET.arch = x86
 
-HDF5BASE = $${PWD}/hdf5-1.8.16/src/
+HDF5BASE    = $${PWD}/hdf5-1.8.16/src/
+HDF5CPPBASE = $${PWD}/hdf5-1.8.16/c++/src/
 
 macx {
   HDF5CONF = $${PWD}/hdf5-config/macx/
@@ -27,10 +28,10 @@ macx {
   }
   DEFINES += _LARGEFILE_SOURCE
   DEFINES += _LARGEFILE64_SOURCE
-  LIBS += -ldl
+  LIBS += -ldl -lz
 }
 
-INCLUDEPATH += $${HDF5BASE} $${HDF5CONF}
+INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDFCPPBASE}
 
   HEADERS += \
     $${HDF5CONF}/H5config.h \
@@ -393,3 +394,69 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF}
     $${HDF5BASE}/H5system.c \
     $${HDF5BASE}/H5timer.c \
     $${HDF5BASE}/H5trace.c
+
+HEADERS += \
+    $${HDF5CPPBASE}/H5AbstractDs.h \
+    $${HDF5CPPBASE}/H5Alltypes.h \
+    $${HDF5CPPBASE}/H5ArrayType.h \
+    $${HDF5CPPBASE}/H5AtomType.h \
+    $${HDF5CPPBASE}/H5Attribute.h \
+    $${HDF5CPPBASE}/H5Classes.h \
+    $${HDF5CPPBASE}/H5CommonFG.h \
+    $${HDF5CPPBASE}/H5CompType.h \
+    $${HDF5CPPBASE}/H5CppDoc.h \
+    $${HDF5CPPBASE}/H5Cpp.h \
+    $${HDF5CPPBASE}/H5DataSet.h \
+    $${HDF5CPPBASE}/H5DataSpace.h \
+    $${HDF5CPPBASE}/H5DataType.h \
+    $${HDF5CPPBASE}/H5DcreatProp.h \
+    $${HDF5CPPBASE}/H5DxferProp.h \
+    $${HDF5CPPBASE}/H5EnumType.h \
+    $${HDF5CPPBASE}/H5Exception.h \
+    $${HDF5CPPBASE}/H5FaccProp.h \
+    $${HDF5CPPBASE}/H5FcreatProp.h \
+    $${HDF5CPPBASE}/H5File.h \
+    $${HDF5CPPBASE}/H5FloatType.h \
+    $${HDF5CPPBASE}/H5Group.h \
+    $${HDF5CPPBASE}/H5IdComponent.h \
+    $${HDF5CPPBASE}/H5Include.h \
+    $${HDF5CPPBASE}/H5IntType.h \
+    $${HDF5CPPBASE}/H5Library.h \
+    $${HDF5CPPBASE}/H5Location.h \
+    $${HDF5CPPBASE}/H5Object.h \
+    $${HDF5CPPBASE}/H5OcreatProp.h \
+    $${HDF5CPPBASE}/H5PredType.h \
+    $${HDF5CPPBASE}/H5PropList.h \
+    $${HDF5CPPBASE}/H5StrType.h \
+    $${HDF5CPPBASE}/H5VarLenType.h
+
+SOURCES += \
+    $${HDF5CPPBASE}/H5AbstractDs.cpp \
+    $${HDF5CPPBASE}/H5ArrayType.cpp \
+    $${HDF5CPPBASE}/H5AtomType.cpp \
+    $${HDF5CPPBASE}/H5Attribute.cpp \
+    $${HDF5CPPBASE}/H5CommonFG.cpp \
+    $${HDF5CPPBASE}/H5CompType.cpp \
+    $${HDF5CPPBASE}/H5DataSet.cpp \
+    $${HDF5CPPBASE}/H5DataSpace.cpp \
+    $${HDF5CPPBASE}/H5DataType.cpp \
+    $${HDF5CPPBASE}/H5DcreatProp.cpp \
+    $${HDF5CPPBASE}/H5DxferProp.cpp \
+    $${HDF5CPPBASE}/H5EnumType.cpp \
+    $${HDF5CPPBASE}/H5Exception.cpp \
+    $${HDF5CPPBASE}/H5FaccProp.cpp \
+    $${HDF5CPPBASE}/H5FcreatProp.cpp \
+    $${HDF5CPPBASE}/H5File.cpp \
+    $${HDF5CPPBASE}/H5FloatType.cpp \
+    $${HDF5CPPBASE}/H5Group.cpp \
+    $${HDF5CPPBASE}/H5IdComponent.cpp \
+    $${HDF5CPPBASE}/H5IntType.cpp \
+    $${HDF5CPPBASE}/H5Library.cpp \
+    $${HDF5CPPBASE}/H5Location.cpp \
+    $${HDF5CPPBASE}/H5Object.cpp \
+    $${HDF5CPPBASE}/H5OcreatProp.cpp \
+    $${HDF5CPPBASE}/H5PredType.cpp \
+    $${HDF5CPPBASE}/H5PropList.cpp \
+    $${HDF5CPPBASE}/H5StrType.cpp \
+    $${HDF5CPPBASE}/H5VarLenType.cpp
+
