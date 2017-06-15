@@ -31,7 +31,7 @@ macx {
   LIBS += -ldl -lz
 }
 
-INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDFCPPBASE}
+INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
 
   HEADERS += \
     $${HDF5CONF}/H5config.h \
