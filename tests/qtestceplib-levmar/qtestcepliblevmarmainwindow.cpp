@@ -106,7 +106,7 @@ void QtestceplibLevMarMainWindow::doLoadImage()
         this, "Read Image from...", defPath);
 
   if (theFile.length()) {
-    QcepDoubleImageData *img = new QcepDoubleImageData(QcepObjectWPtr(), "image", 1024,1024, 0);
+    QcepDoubleImageData *img = new QcepDoubleImageData("image", 1024,1024, 0);
 
     if (img->readImage(theFile)) {
       img->loadMetaData();

@@ -7,7 +7,7 @@ class QTestImageData : public QcepDoubleImageData
 {
   Q_OBJECT
 public:
-  explicit QTestImageData(QcepObjectWPtr parent, QString name, int width, int height, double def=0);
+  explicit QTestImageData(QString name, int width, int height, double def=0);
 
   bool writeImage(QString fileName);
 

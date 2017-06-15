@@ -1,7 +1,7 @@
 #include "qtestceplibspecserverdocument.h"
 
 QtestceplibSpecServerDocument::QtestceplibSpecServerDocument() :
-  QcepObject("testSpecServer", QcepObjectWPtr()),
+  QcepObject("testSpecServer"),
   m_IntProp(this, "intProp", 42, "Integer Property"),
   m_DblProp(this, "dblProp", 42.0, "Double Property"),
   m_StrProp(this, "strProp", "42", "String Property"),

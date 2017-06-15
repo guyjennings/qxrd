@@ -114,7 +114,7 @@ void QtestceplibMainWindow::doNewImage()
     m_ImageData = NULL;
   }
 
-  m_ImageData = new QTestImageData(QcepObjectWPtr(), "testImage", 1024,1024, 0);
+  m_ImageData = new QTestImageData("testImage", 1024,1024, 0);
 
   printMessage("New image created");
 }
@@ -125,7 +125,7 @@ void QtestceplibMainWindow::doLoadImage()
         this, "Read Image from...", defPath);
 
   if (theFile.length()) {
-    QTestImageData *img = new QTestImageData(QcepObjectWPtr(), "testImage", 1024,1024, 0);
+    QTestImageData *img = new QTestImageData("testImage", 1024,1024, 0);
 
     if (img->readImage(theFile)) {
       img->loadMetaData();

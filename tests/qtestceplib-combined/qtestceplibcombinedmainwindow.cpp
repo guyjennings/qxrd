@@ -133,7 +133,7 @@ void QtestceplibCombinedMainWindow::doLoadImage()
         this, "Read Image from...", defPath);
 
   if (theFile.length()) {
-    QcepDoubleImageData *img = new QcepDoubleImageData(QcepObjectWPtr(), "image", 1024,1024, 0);
+    QcepDoubleImageData *img = new QcepDoubleImageData("image", 1024,1024, 0);
 
     if (img->readImage(theFile)) {
       img->loadMetaData();
@@ -154,7 +154,7 @@ void QtestceplibCombinedMainWindow::doLoadTIFFImage()
   if (theFile.length()) {
     QcepImageDataFormatTiff<double> fmt("tiff");
 
-    QcepDoubleImageData *img = new QcepDoubleImageData(QcepObjectWPtr(), "image", 1024,1024, 0);
+    QcepDoubleImageData *img = new QcepDoubleImageData("image", 1024,1024, 0);
 
     fmt.loadFile(theFile, img);
   }
@@ -168,7 +168,7 @@ void QtestceplibCombinedMainWindow::doLoadCBFImage()
   if (theFile.length()) {
     QcepImageDataFormatCBF<double> fmt("cbf");
 
-    QcepDoubleImageData *img = new QcepDoubleImageData(QcepObjectWPtr(), "image", 1024,1024, 0);
+    QcepDoubleImageData *img = new QcepDoubleImageData("image", 1024,1024, 0);
 
     fmt.loadFile(theFile, img);
   }

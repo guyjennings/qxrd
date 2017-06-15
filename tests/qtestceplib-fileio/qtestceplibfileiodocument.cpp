@@ -1,10 +1,11 @@
 #include "qtestceplibfileiodocument.h"
 #include "qcepimagedata.h"
+#include "qcepimagedata-ptr.h"
 #include "qcepdatagroup.h"
 #include "qcepdatacolumnscan.h"
 
 QtestceplibFileIODocument::QtestceplibFileIODocument() :
-  QcepObject("testFileIO", QcepObjectWPtr()),
+  QcepObject("testFileIO"),
   m_IntProp(this, "intProp", 42, "Integer Property"),
   m_DblProp(this, "dblProp", 42.0, "Double Property"),
   m_StrProp(this, "strProp", "42", "String Property"),
@@ -22,17 +23,20 @@ QtestceplibFileIODocument::QtestceplibFileIODocument() :
 
 void QtestceplibFileIODocument::init()
 {
-  addChildPtr(new QcepDoubleImageData(QcepObjectWPtr(), "image1", 50, 50, 0));
-  addChildPtr(new QcepUInt16ImageData(QcepObjectWPtr(), "image2", 100, 100, 0));
-  QcepDataGroup *g1 = new QcepDataGroup(QcepObjectWPtr(), "group1");
-  addChildPtr(g1);
-  QcepDataGroup *g2 = new QcepDataGroup(QcepObjectWPtr(), "group2");
-  g1->addChildPtr(g2);
-  QStringList cols;
+  QcepDoubleImageDataPtr image1(new QcepDoubleImageData("image1", 50, 50, 0));
+  QcepUInt16ImageDataPtr image2(new QcepUInt16ImageData("image2", 100, 100, 0));
+  QcepDataGroupPtr       g1(new QcepDataGroup("group1"));
+  QcepDataGroupPtr       g2(new QcepDataGroup("group2"));
 
+  addChildPtr(image1);
+  addChildPtr(image2);
+  addChildPtr(g1);
+  g1->addChildPtr(g2);
+
+  QStringList cols;
   cols<<"x"<<"y"<<"z";
 
-  QcepDataColumnScan *s1 = new QcepDataColumnScan(QcepObjectWPtr(), "scan", cols, 100);
+  QcepDataColumnScanPtr s1(new QcepDataColumnScan("scan", cols, 100));
 
   g2->addChildPtr(s1);
 }

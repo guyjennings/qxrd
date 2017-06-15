@@ -5,6 +5,7 @@
 #include "qcepimagedata.h"
 #include "hdf5.h"
 #include "qtestceplibhdf5document.h"
+#include "H5Cpp.h"
 
 QtestceplibHdf5MainWindow::QtestceplibHdf5MainWindow(QtestceplibHdf5Document *doc, QWidget *parent) :
   QMainWindow(parent),
@@ -22,6 +23,12 @@ QtestceplibHdf5MainWindow::QtestceplibHdf5MainWindow(QtestceplibHdf5Document *do
 
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
   ui->m_FileMenu->addAction(tr("HDF5 Version %1").arg(STR(QCEPLIB_HDF5_VERSION)));
+
+  unsigned major, minor, release;
+
+  H5::H5Library::getLibVersion(major, minor, release);
+
+  ui->m_FileMenu->addAction(tr("HDF5 C++ Version %1.%2.%3").arg(major).arg(minor).arg(release));
 }
 
 QtestceplibHdf5MainWindow::~QtestceplibHdf5MainWindow()
@@ -108,7 +115,7 @@ void QtestceplibHdf5MainWindow::doLoadImage()
         this, "Read Image from...", defPath);
 
   if (theFile.length()) {
-    QcepDoubleImageData *img = new QcepDoubleImageData(QcepObjectWPtr(), "image", 1024,1024, 0);
+    QcepDoubleImageData *img = new QcepDoubleImageData("image", 1024,1024, 0);
 
     if (img->readImage(theFile)) {
       img->loadMetaData();

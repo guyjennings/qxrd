@@ -111,7 +111,7 @@ void QtestceplibMar345MainWindow::doLoadImage()
         this, "Read Image from...", defPath);
 
   if (theFile.length()) {
-    QcepDoubleImageData *img = new QcepDoubleImageData(QcepObjectWPtr(), "testMar345", 1024,1024, 0);
+    QcepDoubleImageData *img = new QcepDoubleImageData("testMar345", 1024,1024, 0);
 
     if (img->readImage(theFile)) {
       img->loadMetaData();
