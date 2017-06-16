@@ -5,8 +5,8 @@ linux-g++-32:QMAKE_TARGET.arch = x86
 linux-g++-64:QMAKE_TARGET.arch = x86_64
 macx-*-32:QMAKE_TARGET.arch = x86
 
-HDF5BASE    = $${PWD}/hdf5-1.8.16/src/
-HDF5CPPBASE = $${PWD}/hdf5-1.8.16/c++/src/
+HDF5BASE    = $${PWD}/hdf5-$${QCEPLIB_HDF5_VERSION}/src/
+HDF5CPPBASE = $${PWD}/hdf5-$${QCEPLIB_HDF5_VERSION}/c++/src/
 
 macx {
   HDF5CONF = $${PWD}/hdf5-config/macx/
