@@ -1,26 +1,16 @@
 #include "qtestceplibmainwindow.h"
+#include "qtestceplibdocument.h"
 #include "ui_qtestceplibmainwindow.h"
 #include <QFileDialog>
 #include "qcepmutexlocker.h"
 #include "qtestimagedata.h"
 
-QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
+QtestceplibMainWindow::QtestceplibMainWindow(QtestceplibDocument *doc, QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::QtestceplibMainWindow),
+  m_Document(doc),
   m_Mutex(QMutex::Recursive),
-  m_ImageData(NULL),
-  m_IntProp(QcepSettingsSaverWPtr(), this, "intProp", 42, "Integer Property"),
-  m_DblProp(QcepSettingsSaverWPtr(), this, "dblProp", 42.0, "Double Property"),
-  m_StrProp(QcepSettingsSaverWPtr(), this, "strProp", "42", "String Property"),
-  m_SListProp(QcepSettingsSaverWPtr(), this, "sListProp", QcepStringList(), "String List Property"),
-  m_Vec3dPropA(QcepSettingsSaverWPtr(), this, "vec3dPropA", QcepVector3D(1,2,3), "Vector 3D Property A"),
-  m_Vec3dPropB(QcepSettingsSaverWPtr(), this, "vec3dPropB", 1,2,3, "Vector 3D Property B"),
-  m_Mat3x3PropA(QcepSettingsSaverWPtr(), this, "mat3x3PropA", QcepMatrix3x3(), "Matrix 3x3 Property A"),
-  m_Mat3x3PropB(QcepSettingsSaverWPtr(), this, "mat3x3PropB",
-                1, 0, 0,
-                0, 1, 0,
-                0, 0, 1,
-                "Matrix 3x3 Property B")
+  m_ImageData(NULL)
 {
   ui->setupUi(this);
 
@@ -32,7 +22,9 @@ QtestceplibMainWindow::QtestceplibMainWindow(QWidget *parent) :
 
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
 
-  prop_StrProp()->linkTo(ui->m_TextEdit);
+  if (m_Document) {
+    m_Document->prop_StrProp()->linkTo(ui->m_TextEdit);
+  }
 }
 
 QtestceplibMainWindow::~QtestceplibMainWindow()
@@ -96,13 +88,22 @@ void QtestceplibMainWindow::readSettings(QSettings *settings)
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::readSettings(this, "qtestceplib", settings);
+
+  if (m_Document) {
+    m_Document->readSettings(settings, "document");
+  }
 }
+
 
 void QtestceplibMainWindow::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QcepProperty::writeSettings(this, "qtestceplib", settings);
+
+  if (m_Document) {
+    m_Document->writeSettings(settings, "document");
+  }
 }
 
 void QtestceplibMainWindow::doNewImage()
@@ -113,7 +114,7 @@ void QtestceplibMainWindow::doNewImage()
     m_ImageData = NULL;
   }
 
-  m_ImageData = new QTestImageData(QcepSettingsSaverWPtr(), 1024,1024);
+  m_ImageData = new QTestImageData("testImage", 1024,1024, 0);
 
   printMessage("New image created");
 }
@@ -124,7 +125,7 @@ void QtestceplibMainWindow::doLoadImage()
         this, "Read Image from...", defPath);
 
   if (theFile.length()) {
-    QTestImageData *img = new QTestImageData(QcepSettingsSaverWPtr(), 1024,1024);
+    QTestImageData *img = new QTestImageData("testImage", 1024,1024, 0);
 
     if (img->readImage(theFile)) {
       img->loadMetaData();

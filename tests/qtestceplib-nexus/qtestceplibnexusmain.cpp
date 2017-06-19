@@ -1,4 +1,5 @@
 #include "qtestceplibnexusmainwindow.h"
+#include "qtestceplibnexusdocument.h"
 #include <QApplication>
 #include "qcepproperty.h"
 #include "qcepvector3dproperty.h"
@@ -16,7 +17,9 @@ int main(int argc, char *argv[])
   QcepVector3DProperty::registerMetaTypes();
   QcepMatrix3x3Property::registerMetaTypes();
 
-  w = new QtestceplibNexusMainWindow();
+  QtestceplibNexusDocument *doc = new QtestceplibNexusDocument();
+
+  w = new QtestceplibNexusMainWindow(doc);
   w -> show();
 
   return a.exec();

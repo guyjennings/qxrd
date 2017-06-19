@@ -2,15 +2,17 @@ TEMPLATE = app
 TARGET   = qtestceplib-qwt
 DESTDIR  = ../bin/
 
-include(../../qceplib-base.pri)
 include(../../qceplib-qwt.pri)
+include(../../qceplib-base.pri)
 
 HEADERS += \
-    qtestceplibqwtmainwindow.h
+    qtestceplibqwtmainwindow.h \
+    qtestceplibqwtdocument.h
 
 SOURCES += \
     qtestceplibqwtmain.cpp \
-    qtestceplibqwtmainwindow.cpp
+    qtestceplibqwtmainwindow.cpp \
+    qtestceplibqwtdocument.cpp
 
 FORMS += \
     qtestceplibqwtmainwindow.ui

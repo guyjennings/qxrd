@@ -14,7 +14,7 @@
 #include <QDateTime>
 #include <QTcpSocket>
 
-#include "qcepexperiment-ptr.h"
+#include "qcepobject-ptr.h"
 
 /**
   QSpecServer implements a remote control interface to the
@@ -26,12 +26,15 @@ class QSpecServer : public QTcpServer
   Q_OBJECT
 
 public:
-  QSpecServer(QcepExperimentWPtr doc, QString name);
+  QSpecServer(QString name);
+  void initialize(QcepObjectWPtr owner);
+
   virtual ~QSpecServer();
 
 public:
-  void startServer(QHostAddress a, int p=-1);
+  void startServer(QHostAddress a, int pmin=-1, int pmax=-1);
   void stopServer();
+  int  port();
 
 public slots:
   void openNewConnection();
@@ -44,6 +47,7 @@ public slots:
   void finishedCommand(QScriptValue result);
 
 private:
+  void reportServerAddress();
   int readPacketData();
   int interpretPacket();
   qint32 swapInt32(qint32 val);
@@ -77,9 +81,11 @@ protected:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 private:
-  QcepExperimentWPtr   m_Experiment;
+  QcepObjectWPtr       m_Owner;
   QString              m_ServerName;
   QTcpSocket          *m_Socket;
+  QHostAddress         m_Address;
+  int                  m_Port;
   int                  m_SwapBytes;
   struct svr_head      m_Packet;
   QByteArray           m_Data;

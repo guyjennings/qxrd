@@ -1,17 +1,17 @@
 #include "qcepvector3dproperty.h"
 #include "qcepmutexlocker.h"
 #include "qcepdebug.h"
-#include "qcepsettingssaver.h"
+#include "qcepobject.h"
 
-QcepVector3DProperty::QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, QcepVector3D value, QString toolTip) :
-  QcepProperty(saver, parent, name, toolTip),
+QcepVector3DProperty::QcepVector3DProperty(QcepObject *parent, const char *name, QcepVector3D value, QString toolTip) :
+  QcepProperty(parent, name, toolTip),
   m_Default(value),
   m_Value(value)
 {
 }
 
-QcepVector3DProperty::QcepVector3DProperty(QcepSettingsSaverWPtr saver, QObject *parent, const char *name, double x, double y, double z, QString toolTip) :
-  QcepProperty(saver, parent, name, toolTip),
+QcepVector3DProperty::QcepVector3DProperty(QcepObject *parent, const char *name, double x, double y, double z, QString toolTip) :
+  QcepProperty(parent, name, toolTip),
   m_Default(x,y,z),
   m_Value(x,y,z)
 {
@@ -61,10 +61,8 @@ void QcepVector3DProperty::incValue(QcepVector3D step)
 
   m_Value += step;
 
-  QcepSettingsSaverPtr saver(m_Saver);
-
-  if (saver) {
-    saver->changed(this);
+  if (m_Parent) {
+    m_Parent->propertyChanged(this);
   }
 
   emit valueChanged(m_Value, incIndex(1));
@@ -96,10 +94,8 @@ void QcepVector3DProperty::setValue(QcepVector3D val)
 
     m_Value = val;
 
-    QcepSettingsSaverPtr saver(m_Saver);
-
-    if (saver) {
-      saver->changed(this);
+    if (m_Parent) {
+      m_Parent->propertyChanged(this);
     }
 
     emit valueChanged(m_Value, incIndex(1));

@@ -60,3 +60,4 @@ template class QcepImageDataFormatFactory<short>;
 template class QcepImageDataFormatFactory<unsigned int>;
 template class QcepImageDataFormatFactory<int>;
 template class QcepImageDataFormatFactory<double>;
+template class QcepImageDataFormatFactory<float>;

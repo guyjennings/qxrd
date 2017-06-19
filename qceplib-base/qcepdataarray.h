@@ -11,23 +11,24 @@ class QcepDataArray : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepDataArray(QcepSettingsSaverWPtr saver,
-                QString name,
-                QVector<int> dims);
-  typedef QcepDataObject inherited;
-
-  static QcepDataArrayPtr newDataArray(QcepSettingsSaverWPtr saver,
-                                       QString name,
-                                       QVector<int> dims);
+  QcepDataArray(QString name,
+                QVector<int> dims = QVector<int>());
+  virtual ~QcepDataArray();
 
   static QScriptValue toArrayScriptValue(QScriptEngine *engine, const QcepDataArrayPtr &data);
   static void fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayPtr &data);
+
+  void readSettings(QSettings *settings, QString section);
+  void writeSettings(QSettings *settings, QString section);
 
 public slots:
   virtual QString description() const;
 
   QVector<int>    dimensions();
   QVector<double> vectorData();
+
+private:
+  int arrayCount(QVector<int> dims);
 
 private:
   QVector<int>    m_Dimensions;

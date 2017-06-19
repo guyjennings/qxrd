@@ -8,4 +8,4 @@ class QcepSettingsSaver;
 typedef QSharedPointer<QcepSettingsSaver> QcepSettingsSaverPtr;
 typedef QWeakPointer<QcepSettingsSaver> QcepSettingsSaverWPtr;
 
-#endif // QXRDSETTINGSSAVER_PTR_H
+#endif // QCEPSETTINGSSAVER_PTR_H

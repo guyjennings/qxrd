@@ -2,14 +2,135 @@
 #include <QScriptEngine>
 #include "qcepdatagroup.h"
 #include <stdio.h>
+#include "qcepapplication.h"
+#include "qcepmutexlocker.h"
+#include <QAtomicInteger>
+#include <QFileInfo>
+#include <QDir>
 
-QcepDataObject::QcepDataObject(QcepSettingsSaverWPtr saver, QString name) :
-  QcepObject(name, NULL),
-  m_Saver(saver),
-  m_Type(saver, this, "type", "object", "Data object type")/*,
-  m_Description(saver, this, "description", "", "Data object description")*/
+static QAtomicInt s_ObjectAllocateCount(0);
+static QAtomicInt s_ObjectDeleteCount(0);
+
+QcepDataObject::QcepDataObject(QString name, qint64 byteSize) :
+  QcepObject(name),
+//  m_Saver(saver),
+  m_Mutex(QMutex::Recursive),
+  m_ByteSize   (this, "size", byteSize, "Object Size"),
+  m_Creator    (this, "creator", "Unknown", "QXRD Version Number"),
+  m_Version    (this, "version", "Unknown", "QXRD Version Number"),
+  m_QtVersion  (this, "qtVersion", QT_VERSION_STR, "QT Version Number"),
+  m_Description(this, "description", "", "Object Description"),
+  m_FileName   (this, "fileName", "", "File Name of Image"),
+  m_ObjectSaved(this, "objectSaved",0, "Object is Saved?"),
+  m_Index      (this, "index", 0, "Object Index Number")
 {
-  set_Type("object");
+  s_ObjectAllocateCount.fetchAndAddOrdered(1);
+
+  if (name.contains("/")) {
+    printMessage(tr("object %1 name contains \"/\"").arg(name));
+  }
+
+  if (g_Application) {
+    g_Application->setDefaultObjectData(this);
+  }
+}
+
+//QcepDataObject::QcepDataObject() :
+//  QcepObject(),
+//  m_ByteSize   (this, "size", byteSize, "Object Size"),
+//  m_Creator    (this, "creator", "Unknown", "QXRD Version Number"),
+//  m_Version    (this, "version", "Unknown", "QXRD Version Number"),
+//  m_QtVersion  (this, "qtVersion", QT_VERSION_STR, "QT Version Number"),
+//  m_Description(this, "description", "", "Object Description"),
+//  m_FileName   (this, "fileName", "", "File Name of Image"),
+//  m_ObjectSaved(this, "objectSaved",0, "Object is Saved?"),
+//  m_Index      (this, "index", 0, "Object Index Number")
+//{
+//  s_ObjectAllocateCount.fetchAndAddOrdered(1);
+//}
+
+QcepDataObject::~QcepDataObject()
+{
+  s_ObjectDeleteCount.fetchAndAddOrdered(1);
+}
+
+void QcepDataObject::writeSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepObject::writeSettings(settings, section);
+}
+
+void QcepDataObject::readSettings(QSettings *settings, QString section)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QcepObject::readSettings(settings, section);
+}
+
+QString QcepDataObject::mimeType()
+{
+  return "application/x-qcepdataobject";
+}
+
+QString QcepDataObject::fileFormatAny()
+{
+  return "Any file (*)";
+}
+
+QString QcepDataObject::fileFormatHDF5()
+{
+  return "HDF5 file (*.h5)";
+}
+
+QString QcepDataObject::fileFormatNexus()
+{
+  return "Nexus file (*.nxs)";
+}
+
+QString QcepDataObject::fileFormatTIFF()
+{
+  return "TIFF (*.tif, *.tiff)";
+}
+
+QString QcepDataObject::fileFormatTabDelimited()
+{
+  return "Tab delimited (*.txt, *.dat)";
+}
+
+QString QcepDataObject::fileFormatTransposedTabDelimited()
+{
+  return "Transposed Tab delimited (*.txt, *.dat)";
+}
+
+QString QcepDataObject::fileFormatCSV()
+{
+  return "CSV (*.csv)";
+}
+
+QString QcepDataObject::fileFormatTransposedCSV()
+{
+  return "Transposed CSV (*.csv)";
+}
+
+QString QcepDataObject::fileFormatSpec()
+{
+  return "Spec Data File (*)";
+}
+
+QString QcepDataObject::fileFormatCIF()
+{
+  return "CIF File (*.cif,*)";
+}
+
+int QcepDataObject::allocatedObjects()
+{
+  return s_ObjectAllocateCount.load();
+}
+
+int QcepDataObject::deletedObjects()
+{
+  return s_ObjectDeleteCount.load();
 }
 
 QString QcepDataObject::description() const
@@ -19,23 +140,68 @@ QString QcepDataObject::description() const
 
 QString QcepDataObject::pathName() const
 {
+  QString suffix="";
+
+  if (qobject_cast<const QcepDataGroup*>(this)) {
+    suffix = "/";
+  }
+
   if (parentItem()) {
-    return parentItem()->pathName()+"/"+get_Name();
+    return parentItem()->pathName()+get_Name()+suffix;
   } else {
-    return get_Name();
+    return "/";
   }
 }
 
-QcepDataObjectPtr QcepDataObject::newDataObject(QcepSettingsSaverWPtr saver, QString name)
+void QcepDataObject::mkPath(QString filePath)
 {
-  QcepDataObjectPtr res(new QcepDataObject(saver, name));
+  QFileInfo f(filePath);
+  QDir dir = f.dir();
 
-  return res;
+  if (!dir.exists()) {
+    dir.mkpath(dir.absolutePath());
+  }
 }
 
-QcepSettingsSaverWPtr QcepDataObject::saver()
+void QcepDataObject::setNameAndSuffix(QString oldName, QString newSuffix)
 {
-  return m_Saver;
+  QFileInfo f(oldName);
+
+  set_Name(f.completeBaseName()+"."+newSuffix);
+}
+
+QString QcepDataObject::uniqueFileName(QString name)
+{
+  QFileInfo f(name);
+
+  if (f.exists()) {
+    QDir dir = f.dir();
+    QString base = f.baseName();
+    QString suff = f.completeSuffix();
+
+//    QxrdAcquisitionPtr acq(acquisition());
+
+    int width = 5;
+
+//    if (acq) {
+//      width = acq->get_FileOverflowWidth();
+//    }
+
+    for (int i=1; ; i++) {
+      QString newname = dir.filePath(base+QString().sprintf("-%0*d.",width,i)+suff);
+      QFileInfo f(newname);
+
+      if (!f.exists()) {
+        return newname;
+      }
+    }
+  } else {
+    return name;
+  }
+}
+
+void QcepDataObject::saveData(QString &name, QString filter, Overwrite canOverwrite)
+{
 }
 
 QScriptValue QcepDataObject::toScriptValue(QScriptEngine *engine, const QcepDataObjectPtr &data)
@@ -51,18 +217,30 @@ void QcepDataObject::fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr 
     QcepDataObject *qdobj = qobject_cast<QcepDataObject*>(qobj);
 
     if (qdobj) {
-      QcepDataObjectPtr p = qdobj->sharedFromThis();
+      QcepObjectPtr p = qdobj->sharedFromThis();
 
       if (p) {
-        data = p;
-      } else {
-        printf("QcepDataObject::fromScriptValue returns NULL\n");
+        QcepDataObjectPtr dp = qSharedPointerDynamicCast<QcepDataObject>(p);
+
+        if (dp) {
+          data = dp;
+        }
       }
     }
   }
 }
 
-int QcepDataObject::count() const
+int QcepDataObject::childCount() const
+{
+  return 0;
+}
+
+int QcepDataObject::rowCount() const
+{
+  return 0;
+}
+
+int QcepDataObject::columnCount() const
 {
   return 0;
 }
@@ -89,9 +267,9 @@ QcepDataGroupPtr QcepDataObject::rootItem()
   if (parent) {
     return parent->rootItem();
   } else {
-    QcepDataObjectPtr obj = sharedFromThis();
+    QcepObjectPtr obj = sharedFromThis();
 
-    return qSharedPointerCast<QcepDataGroup>(obj);
+    return qSharedPointerDynamicCast<QcepDataGroup>(obj);
   }
 }
 
@@ -109,7 +287,7 @@ int QcepDataObject::indexInParent() const
           qobject_cast<QcepDataGroup*>(parent.data());
 
     if (parentGroup) {
-      for (int i=0; i<parentGroup->count(); i++) {
+      for (int i=0; i<parentGroup->childCount(); i++) {
         if (parentGroup->item(i).data() == this) {
           return i;
         }
@@ -118,11 +296,6 @@ int QcepDataObject::indexInParent() const
   }
 
   return 0;
-}
-
-int QcepDataObject::columnCount() const
-{
-  return 3;
 }
 
 QVariant QcepDataObject::columnData(int col) const
@@ -139,4 +312,9 @@ QVariant QcepDataObject::columnData(int col) const
 QString QcepDataObject::metaTypeName(int id) const
 {
   return QMetaType::typeName(id);
+}
+
+QString QcepDataObject::fileFormatFilterString()
+{
+  return "Text (*.txt)";
 }

@@ -1,5 +1,6 @@
 #include "qcepdebug.h"
 #include "qcepmacros.h"
+#include "qcepobject.h"
 #include "qcepsettingssaver.h"
 #include "qcepproperty.h"
 #include <stdio.h>
@@ -32,6 +33,9 @@ void QcepSettingsSaver::start()
   } else {
     m_Timer.setSingleShot(false);
 
+    m_ChangeCount.fetchAndStoreOrdered(0);
+    m_LastChanged.fetchAndStoreOrdered(0);
+
     m_Timer.start(m_SaveDelay);
   }
 }
@@ -45,6 +49,11 @@ void QcepSettingsSaver::performSave()
 
     if (qcepDebug(DEBUG_PREFS)) {
       printMessage(tr("Settings Saver saving %1 updates").arg(nupdates));
+      QcepProperty *p = m_LastChanged.fetchAndStoreOrdered(NULL);
+
+      if (p) {
+        printMessage(tr("Last property changed %1").arg(p->name()));
+      }
     }
 
     QTime tic;
@@ -58,9 +67,10 @@ void QcepSettingsSaver::performSave()
   }
 }
 
-void QcepSettingsSaver::changed(QcepProperty * /*prop*/)
+void QcepSettingsSaver::propertyChanged(QcepProperty * prop)
 {
   m_ChangeCount.fetchAndAddOrdered(1);
+  m_LastChanged.store(prop);
 }
 
 void QcepSettingsSaver::printMessage(QString msg, QDateTime ts)

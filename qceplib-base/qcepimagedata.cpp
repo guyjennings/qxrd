@@ -1,69 +1,68 @@
 #include "qcepdebug.h"
 #include "qcepdataobject.h"
 #include "qcepimagedata.h"
-//#include "qxrdapplication.h"
-//#include <tiffio.h>
+#include "qcepmaskdata.h"
+#include "qcepallocator.h"
 
 #include <QSettings>
 #include <QFileInfo>
+#include <QDir>
+#include <QScriptEngine>
 #include <typeinfo>
+#include <QMetaProperty>
 
 #include "qcepimagedataformat.h"
 #include "qcepimagedataformatfactory.h"
 #include "qcepmutexlocker.h"
 #include "qcepsettingssaver.h"
-//#include "qxrdexperiment.h"
-//#include "qxrdcenterfinder.h"
-//#include "qxrdintegrator.h"
+
+#include "tiffio.h"
 
 QAtomicInt allocCount = 0;
 
-QcepImageDataBase::QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height)
-  : QcepDataObject(saver, tr("image")),
-    m_Width(saver, this, "width", width, "Image Width"),
-    m_Height(saver, this, "height", height, "Image Height"),
-    m_QxrdVersion(saver, this,"qxrdVersion", "Unknown", "QXRD Version Number"),
-    m_QtVersion(saver, this,"qtVersion", "Unknown", "QT Version Number"),
-    m_DataType(saver, this, "dataType", UndefinedData, "Data Type of Image"),
-    m_FileBase(saver, this, "fileBase", "", "File Base of Image"),
-    m_FileName(saver, this, "fileName", "", "File Name of Image"),
-    m_Title(saver, this, "title", "", "Title of Image"),
-    m_ReadoutMode(saver, this, "readoutMode", 0, "Image Readout Mode"),
-    m_ExposureTime(saver, this, "exposureTime", 0, "Image Exposure Time"),
-    m_SummedExposures(saver, this, "summedExposures", 0, "Summed Exposures in Image"),
-    m_ImageSequenceNumber(saver, this, "imageSequenceNumber", -1, "Image Sequence Number"),
-    m_ImageNumber(saver, this, "imageNumber", 0, "Image Number"),
-    m_PhaseNumber(saver, this, "phaseNumber", -1, "Image Phase Number"),
-    m_NPhases(saver, this, "nPhases", -1, "Number of Image Phases"),
-    m_DateTime(saver, this, "dateTime", QDateTime::currentDateTime(), "Image Creation Date and Time"),
-    m_TimeStamp(saver, this, "timeStamp", secondsSinceEpoch(), "Image creation time (secs after UNIX epoch)"),
-    m_HBinning(saver, this, "hBinning", 1, "Image Horizontal Binning Factor"),
-    m_VBinning(saver, this, "vBinning", 1, "Image Vertical Binning Factor"),
-    m_CameraGain(saver, this, "cameraGain", 0, "Image Detector Gain"),
-    m_Triggered(saver, this, "triggered", 0, "Triggered Flag"),
-    m_UserComment1(saver, this,"userComment1","", "User Comment 1"),
-    m_UserComment2(saver, this,"userComment2","", "User Comment 2"),
-    m_UserComment3(saver, this,"userComment3","", "User Comment 3"),
-    m_UserComment4(saver, this,"userComment4","", "User Comment 4"),
-    m_ImageSaved(saver, this,"imageSaved",0, "Image is Saved?"),
-    m_Normalization(saver, this, "normalization", QcepDoubleList(), "Normalization Values"),
-    m_ExtraInputs(saver, this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
-    m_Used(saver, this, "used", true, "Image Used?"),
+QcepImageDataBase::QcepImageDataBase(QString name, int width, int height, int size)
+  : QcepDataObject(name, size),
+    m_Width(this, "width", width, "Image Width"),
+    m_Height(this, "height", height, "Image Height"),
+    m_HStart(this, "hStart", 0.0, "H Start Coord"),
+    m_HStep(this, "hStep", 1.0, "H Step"),
+    m_VStart(this, "vStart", 0.0, "V Start Coord"),
+    m_VStep(this, "vStep", 1.0, "V Step"),
+    m_HLabel(this, "hLabel", "X", "H Label"),
+    m_HUnits(this, "hUnits", "pix", "H Units"),
+    m_VLabel(this, "vLabel", "Y", "V Label"),
+    m_VUnits(this, "vUnits", "pix", "V Units"),
+    m_DataType(this, "dataType", UndefinedData, "Data Type of Image"),
+    m_FileBase(this, "fileBase", "", "File Base of Image"),
+//    m_Title(saver, this, "title", "", "Title of Image"),
+    m_ReadoutMode(this, "readoutMode", 0, "Image Readout Mode"),
+    m_ExposureTime(this, "exposureTime", 0, "Image Exposure Time"),
+    m_SummedExposures(this, "summedExposures", 0, "Summed Exposures in Image"),
+    m_ImageSequenceNumber(this, "imageSequenceNumber", -1, "Image Sequence Number"),
+    m_ImageNumber(this, "imageNumber", 0, "Image Number"),
+    m_PhaseNumber(this, "phaseNumber", -1, "Image Phase Number"),
+    m_NPhases(this, "nPhases", -1, "Number of Image Phases"),
+    m_DateTime(this, "dateTime", QDateTime::currentDateTime(), "Image Creation Date and Time"),
+    m_TimeStamp(this, "timeStamp", secondsSinceEpoch(), "Image creation time (secs after UNIX epoch)"),
+    m_HBinning(this, "hBinning", 1, "Image Horizontal Binning Factor"),
+    m_VBinning(this, "vBinning", 1, "Image Vertical Binning Factor"),
+    m_CameraGain(this, "cameraGain", 0, "Image Detector Gain"),
+    m_Triggered(this, "triggered", 0, "Triggered Flag"),
+    m_UserComment1(this,"userComment1","", "User Comment 1"),
+    m_UserComment2(this,"userComment2","", "User Comment 2"),
+    m_UserComment3(this,"userComment3","", "User Comment 3"),
+    m_UserComment4(this,"userComment4","", "User Comment 4"),
+    m_Normalization(this, "normalization", QcepDoubleList(), "Normalization Values"),
+    m_ExtraInputs(this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
+    m_Used(this, "used", true, "Image Used?"),
     m_ImageCounter(allocCount.fetchAndAddOrdered(1)),
-    m_Mutex(QMutex::Recursive),
-    m_Saver(saver)
+    m_Mutex(QMutex::Recursive)
 {
-  set_Type("Image");
-
   if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
     printf("QcepImageDataBase::QcepImageDataBase(%p)\n", this);
-//    QcepSettingsSaverPtr s(m_Saver);
-
-//    if (s) {
-//      s->printMessage(tr("QcepImageDataBase::QcepImageDataBase %1[%2]")
-//                      .HEXARG(this).arg(m_ImageCounter));
-//    }
   }
+
+  QcepAllocator::allocate(size);
 }
 
 QcepImageDataBase::~QcepImageDataBase()
@@ -78,23 +77,12 @@ QcepImageDataBase::~QcepImageDataBase()
 //    }
   }
 
-  //  allocCount--;
+  QcepAllocator::deallocate(get_ByteSize());
 }
 
 QString QcepImageDataBase::description() const
 {
   return tr("[%1 x %2] elements").arg(get_Width()).arg(get_Height());
-}
-
-void QcepImageDataBase::printMessage(QString msg, QDateTime ts) const
-{
-  QcepSettingsSaverPtr s(m_Saver);
-
-  if (s) {
-    s->printMessage(msg, ts);
-  } else {
-    printf("%s\n", qPrintable(msg));
-  }
 }
 
 double QcepImageDataBase::secondsSinceEpoch()
@@ -117,13 +105,13 @@ QMutex *QcepImageDataBase::mutex()
 
 void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 {
-  dest -> set_Type(get_Type());
-  dest -> set_QxrdVersion(get_QxrdVersion());
+  dest -> set_Creator(get_Creator());
+  dest -> set_Version(get_Version());
   dest -> set_QtVersion(get_QtVersion());
   dest -> set_DataType(get_DataType());
   dest -> set_FileBase(get_FileBase());
   dest -> set_FileName(get_FileName());
-  dest -> set_Title(get_Title());
+  dest -> set_Name(get_Name()+" copy");
   dest -> set_ReadoutMode(get_ReadoutMode());
   dest -> set_ExposureTime(get_ExposureTime());
   dest -> set_SummedExposures(get_SummedExposures());
@@ -140,7 +128,7 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
   dest -> set_UserComment2(get_UserComment2());
   dest -> set_UserComment3(get_UserComment3());
   dest -> set_UserComment4(get_UserComment4());
-  dest -> set_ImageSaved(get_ImageSaved());
+  dest -> set_ObjectSaved(get_ObjectSaved());
   dest -> set_Normalization(get_Normalization());
   dest -> set_ExtraInputs(get_ExtraInputs());
   dest -> set_Used(get_Used());
@@ -154,13 +142,13 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
 
 void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src)
 {
-  set_Type(src -> get_Type());
-  set_QxrdVersion(src -> get_QxrdVersion());
+  set_Creator(src -> get_Creator());
+  set_Version(src -> get_Version());
   set_QtVersion(src->get_QtVersion());
   set_DataType(src -> get_DataType());
   set_FileBase(src -> get_FileBase());
   set_FileName(src -> get_FileName());
-  set_Title(src -> get_Title());
+  set_Name(src -> get_Name()+" copy");
   set_ReadoutMode(src -> get_ReadoutMode());
   set_ExposureTime(src -> get_ExposureTime());
   set_SummedExposures(src -> get_SummedExposures());
@@ -177,7 +165,7 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   set_UserComment2(src -> get_UserComment2());
   set_UserComment3(src -> get_UserComment3());
   set_UserComment4(src -> get_UserComment4());
-  set_ImageSaved(src -> get_ImageSaved());
+  set_ObjectSaved(src -> get_ObjectSaved());
   set_Normalization(src -> get_Normalization());
   set_ExtraInputs(src -> get_ExtraInputs());
   set_Used(src -> get_Used());
@@ -197,11 +185,20 @@ void QcepImageDataBase::loadMetaData()
   tic.start();
 
   {
+    set_Creator("Unknown");
+    set_Version("Unknown");
+    set_QtVersion("Unknown");
+
     QcepMutexLocker lock(__FILE__, __LINE__, mutex());
 
     QSettings settings(get_FileName()+".metadata", QSettings::IniFormat);
 
     QcepProperty::readSettings(this, &settings, "metadata");
+
+    if (settings.contains("metadata/qxrdVersion")) {
+      set_Creator("QXRD");
+      set_Version(settings.value("metadata/qxrdVersion").toString());
+    }
   }
 //
 //  printf("QcepImageDataBase::loadMetaData for file %s took %d msec\n",  qPrintable(get_FileName()), tic.elapsed());
@@ -236,22 +233,6 @@ void QcepImageDataBase::saveMetaData(QString name)
       settings.setValue("val",norm[i]);
     }
     settings.endArray();
-
-//    QxrdExperimentPtr exper(expt);
-
-//    if (exper) {
-//      QxrdCenterFinderPtr cf = exper->centerFinder();
-
-//      if (cf) {
-//        cf->writeSettings(&settings, "centerfinder");
-//      }
-
-//      QxrdIntegratorPtr integ = exper->integrator();
-
-//      if (integ) {
-//        integ->writeSettings(&settings, "integrator");
-//      }
-//    }
   }
 //
 //  printf("QcepImageDataBase::saveMetaData for file %s took %d msec\n",  qPrintable(name), tic.elapsed());
@@ -260,7 +241,7 @@ void QcepImageDataBase::saveMetaData(QString name)
 void QcepImageDataBase::setDefaultFileName(QString path)
 {
   set_FileName(path);
-  set_Title(QFileInfo(path).fileName());
+  set_Name(QFileInfo(path).fileName());
 }
 
 QString QcepImageDataBase::get_DataTypeName() const
@@ -293,14 +274,34 @@ QString QcepImageDataBase::get_DataTypeName() const
   }
 }
 
+QString QcepImageDataBase::fileFormatFilterString()
+{
+  return fileFormatTIFF() + ";;" +
+      fileFormatTabDelimited() + ";;" +
+      fileFormatTransposedTabDelimited() + ";;" +
+      fileFormatCSV() + ";;" +
+      fileFormatTransposedCSV();
+}
+
+double QcepImageDataBase::hValue(int n) const
+{
+  return get_HStart() + n*get_HStep();
+}
+
+double QcepImageDataBase::vValue(int n) const
+{
+  return get_VStart() + n*get_VStep();
+}
+
 template <typename T>
-QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def)
-  : QcepImageDataBase(saver, width, height),
-//    m_Image(width*height, def),
+QcepImageData<T>::QcepImageData(QString name, int width, int height, T def)
+  : QcepImageDataBase(name, width, height, width*height*sizeof(T)),
     m_Image(width*height),
     m_MinValue(0),
     m_MaxValue(0),
-    m_Default(def)
+    m_Default(def),
+    m_Mask(NULL),
+    m_Overflow(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printMessage(tr("QcepImageData<%1>::QcepImageData %2")
@@ -378,8 +379,14 @@ double QcepImageData<T>::getImageData(int x, int y) const
   return this->value(x,y);
 }
 
+//template <typename T>
+//void QcepImageData<T>::fill(T val)
+//{
+//  m_Image.fill(val);
+//}
+
 template <typename T>
-void QcepImageData<T>::fill(T val)
+void QcepImageData<T>::fill(double val)
 {
   m_Image.fill(val);
 }
@@ -391,28 +398,6 @@ void QcepImageData<T>::setImageData(int x, int y, double v)
     m_Image[(get_Height()-y-1)*get_Width()+x] = v;
   }
 }
-
-//template <typename T>
-//template <typename T2>
-//void QcepImageData<T>::copyImage(QSharedPointer< QcepImageData<T2> > dest)
-//{
-//  if (dest) {
-//    int ncols = this -> get_Width();
-//    int nrows = this -> get_Height();
-//    int npix = ncols*nrows;
-//
-//    dest -> resize(ncols, nrows);
-//
-//    this -> copyProperties(dest);
-//
-//    T *srcp = this -> data();
-//    T2 *destp = dest -> data();
-//
-//    for (int i=0; i<npix; i++) {
-//      *destp++ = *srcp++;
-//    }
-//  }
-//}
 
 template <typename T>
 void QcepImageData<T>::setValue(int x, int y, T val)
@@ -454,17 +439,17 @@ void QcepImageData<T>::divideValue(int x, int y, T val)
   }
 }
 
-template <typename T>
-T QcepImageData<T>::minValue() const
-{
-  return m_MinValue;
-}
+//template <typename T>
+//T QcepImageData<T>::minValue() const
+//{
+//  return m_MinValue;
+//}
 
-template <typename T>
-T QcepImageData<T>::maxValue() const
-{
-  return m_MaxValue;
-}
+//template <typename T>
+//T QcepImageData<T>::maxValue() const
+//{
+//  return m_MaxValue;
+//}
 
 template <typename T>
 void QcepImageData<T>::calculateRange()
@@ -541,10 +526,31 @@ void QcepImageData<T>::dumpPixels(int x0, int y0, int x1, int y1)
 template <typename T>
 void QcepImageData<T>::resize(int width, int height)
 {
+  QcepImageData<T> temp(get_Name(), get_Width(), get_Height(), 0);
+
+  int oldwidth = get_Width();
+  int oldheight= get_Height();
+
+  for (int y=0; y<oldheight; y++) {
+    for (int x=0; x<oldwidth; x++) {
+      temp.setValue(x, y, value(x,y));
+    }
+  }
+
   set_Width(width);
   set_Height(height);
 
   m_Image.resize(width*height);
+
+  for (int y=0; y<height; y++) {
+    for (int x=0; x<width; x++) {
+      setValue(x, y, temp.value(x,y));
+    }
+  }
+
+  set_ByteSize(width*height*sizeof(T));
+
+  QcepAllocator::allocate((width*height - oldwidth*oldheight)*sizeof(T));
 }
 
 template <typename T>
@@ -577,10 +583,10 @@ bool QcepImageData<T>::readImage(QString path)
     if (res) {
       QString fileBase = QFileInfo(path).fileName();
 
+      set_Name(fileBase);
       set_FileBase(fileBase);
-      set_Title(fileBase);
       set_FileName(path);
-      set_ImageSaved(true);
+      set_ObjectSaved(true);
     }
 
     return res;
@@ -610,8 +616,8 @@ void QcepImageData<T>::subtractDark(const QSharedPointer< QcepImageData<T2> > da
     return;
   }
 
-  //    if (!(image->get_DataType() == QxrdDoubleImageData::Raw16Data ||
-  //          image->get_DataType() == QxrdDoubleImageData::Raw32Data)) {
+  //    if (!(image->get_DataType() == QcepDoubleImageData::Raw16Data ||
+  //          image->get_DataType() == QcepDoubleImageData::Raw32Data)) {
   //      printMessage("Acquired data is not a raw image, skipping background subtraction");
   //      return;
   //    }
@@ -650,14 +656,1228 @@ void QcepImageData<T>::subtractDark(const QSharedPointer< QcepImageData<T2> > da
   this -> set_DataType(SubtractedData);
 }
 
-template class QcepImageData<unsigned short>;
-template class QcepImageData<short>;
-template class QcepImageData<unsigned int>;
-template class QcepImageData<int>;
-template class QcepImageData<double>;
+template <typename T>
+QString QcepImageData<T>::rawFileName()
+{
+  QFileInfo info(QcepImageData<T>::get_FileName());
 
-template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<unsigned short> > dark);
-template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<short> > dark);
-template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<unsigned int> > dark);
-template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<int> > dark);
+  QString name = info.dir().filePath(info.completeBaseName()+".raw.tif");
+
+  return name;
+}
+
+template <typename T>
+template <typename T2>
+void QcepImageData<T>::copyImage(QSharedPointer< QcepImageData<T2> > dest)
+{
+  if (dest) {
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
+    int npix = ncols*nrows;
+
+    dest -> resize(ncols, nrows);
+
+    this -> copyProperties(dest.data());
+
+    T *srcp = this -> data();
+    T2 *destp = dest -> data();
+
+    for (int i=0; i<npix; i++) {
+      *destp++ = *srcp++;
+    }
+  }
+}
+
+template <typename T>
+template <typename T2>
+void QcepImageData<T>::copyFrom(QSharedPointer< QcepImageData<T2> > img)
+{
+  if (img) {
+    int ncols = img -> get_Width();
+    int nrows = img -> get_Height();
+    int npix = ncols*nrows;
+
+    this -> resize(ncols, nrows);
+
+    this -> copyPropertiesFrom(img);
+
+    T2 *srcp  = img -> data();
+    T  *destp = this -> data();
+
+    for (int i=0; i<npix; i++) {
+      *destp++ = *srcp++;
+    }
+  }
+}
+
+template <typename T>
+template <typename T2>
+void QcepImageData<T>::accumulateImage(QSharedPointer< QcepImageData<T2> > image)
+{
+  if (image) {
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
+
+    this->prop_SummedExposures()->incValue(image->get_SummedExposures());
+
+    if (ncols == image->get_Width() && nrows == image->get_Height()) {
+      int npix = ncols*nrows;
+
+      T *srcp = this -> data();
+      T2 *destp = image -> data();
+
+      for (int i=0; i<npix; i++) {
+        *srcp++ += *destp++;
+      }
+    } else {
+      for (int row=0; row<nrows; row++) {
+        for (int col=0; col<ncols; col++) {
+          this -> addValue(col, row, image->value(col, row));
+        }
+      }
+
+      QcepDoubleList norm  = this->get_Normalization();
+      QcepDoubleList extra = this->get_ExtraInputs();
+
+      QcepDoubleList norm2 = image->get_Normalization();
+      QcepDoubleList extra2= image->get_ExtraInputs();
+
+      for (int i=0; i<norm.count(); i++) {
+        norm[i] += norm2.value(i);
+      }
+
+      for (int i=0; i<extra.count(); i++) {
+        extra[i] += extra2.value(i);
+      }
+
+      this->set_Normalization(norm);
+      this->set_ExtraInputs(extra);
+    }
+  }
+}
+
+template <typename T>
+template <typename T2>
+void QcepImageData<T>::add(QSharedPointer< QcepImageData<T2> > image)
+{
+  if (image) {
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
+
+    this->prop_SummedExposures()->incValue(image->get_SummedExposures());
+
+    if (ncols == image->get_Width() && nrows == image->get_Height()) {
+      int npix = ncols*nrows;
+
+      T *srcp = this -> data();
+      T2 *destp = image -> data();
+
+      for (int i=0; i<npix; i++) {
+        *srcp++ += *destp++;
+      }
+    } else {
+      for (int row=0; row<nrows; row++) {
+        for (int col=0; col<ncols; col++) {
+          this -> addValue(col, row, image->value(col, row));
+        }
+      }
+    }
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::add(double val)
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int npix = ncols*nrows;
+
+  T *srcp = this -> data();
+
+  for (int i=0; i<npix; i++) {
+    *srcp++ += val;
+  }
+}
+
+template <typename T>
+template <typename T2>
+void QcepImageData<T>::subtract(QSharedPointer< QcepImageData<T2> > image)
+{
+  if (image) {
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
+
+    this->prop_SummedExposures()->incValue(image->get_SummedExposures());
+
+    if (ncols == image->get_Width() && nrows == image->get_Height()) {
+      int npix = ncols*nrows;
+
+      T *srcp = this -> data();
+      T2 *destp = image -> data();
+
+      for (int i=0; i<npix; i++) {
+        *srcp++ -= *destp++;
+      }
+    } else {
+      for (int row=0; row<nrows; row++) {
+        for (int col=0; col<ncols; col++) {
+          this -> subtractValue(col, row, image->value(col, row));
+        }
+      }
+    }
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::subtract(double val)
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int npix = ncols*nrows;
+
+  T *srcp = this -> data();
+
+  for (int i=0; i<npix; i++) {
+    *srcp++ -= val;
+  }
+}
+
+template <typename T>
+template <typename T2>
+void QcepImageData<T>::multiply(QSharedPointer< QcepImageData<T2> > image)
+{
+  if (image) {
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
+
+    this->prop_SummedExposures()->incValue(image->get_SummedExposures());
+
+    if (ncols == image->get_Width() && nrows == image->get_Height()) {
+      int npix = ncols*nrows;
+
+      T *srcp = this -> data();
+      T2 *destp = image -> data();
+
+      for (int i=0; i<npix; i++) {
+        *srcp++ *= *destp++;
+      }
+    } else {
+      for (int row=0; row<nrows; row++) {
+        for (int col=0; col<ncols; col++) {
+          this -> multiplyValue(col, row, image->value(col, row));
+        }
+      }
+    }
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::multiply(double val)
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int npix = ncols*nrows;
+
+  T *srcp = this -> data();
+
+  for (int i=0; i<npix; i++) {
+    *srcp++ *= val;
+  }
+}
+
+template <typename T>
+template <typename T2>
+void QcepImageData<T>::divide(QSharedPointer< QcepImageData<T2> > image)
+{
+  if (image) {
+    int ncols = this -> get_Width();
+    int nrows = this -> get_Height();
+
+    this->prop_SummedExposures()->incValue(image->get_SummedExposures());
+
+    if (ncols == image->get_Width() && nrows == image->get_Height()) {
+      int npix = ncols*nrows;
+
+      T *srcp = this -> data();
+      T2 *destp = image -> data();
+
+      for (int i=0; i<npix; i++) {
+        *srcp++ /= *destp++;
+      }
+    } else {
+      for (int row=0; row<nrows; row++) {
+        for (int col=0; col<ncols; col++) {
+          this -> divideValue(col, row, image->value(col, row));
+        }
+      }
+    }
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::divide(double val)
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int npix = ncols*nrows;
+
+  T *srcp = this -> data();
+
+  for (int i=0; i<npix; i++) {
+    *srcp++ /= val;
+  }
+}
+
+template <typename T>
+double QcepImageData<T>::correlate(QSharedPointer<QcepImageData<T> > image, int dx, int dy, int mx, int my)
+{
+  double sum=0;
+
+  if (image) {
+    int wd = this->get_Width();
+    int ht = this->get_Height();
+
+    for (int y=my; y<ht-my; y++) {
+      for (int x=mx; x<wd-mx; x++) {
+        sum += this->value(x,y)*image->value(x+dx,y+dy);
+      }
+    }
+  }
+
+  return sum;
+}
+
+template <typename T>
+void QcepImageData<T>::shiftImage(QSharedPointer<QcepImageData<T> > image, double dx, double dy)
+{
+  if (image) {
+    int wd = this->get_Width();
+    int ht = this->get_Height();
+
+    for (int y=0; y<ht; y++) {
+      for (int x=0; x<wd; x++) {
+        this->setValue(x,y, image->value(x+dx,y+dy));
+      }
+    }
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::setMask(QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
+{
+  m_Mask     = mask;
+  m_Overflow = overflow;
+}
+
+template <typename T>
+QcepMaskDataPtr QcepImageData<T>::mask() const
+{
+  return m_Mask;
+}
+
+template <typename T>
+QcepMaskDataPtr QcepImageData<T>::overflow() const
+{
+  return m_Overflow;
+}
+
+template <typename T>
+double QcepImageData<T>::minValue() const
+{
+  return findMin();
+}
+
+template <typename T>
+double QcepImageData<T>::maxValue() const
+{
+  return findMax();
+}
+
+template <typename T>
+T QcepImageData<T>::findMin() const
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int first = true;
+  T minv = 0;
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col,row)) {
+        T val = this->value(col, row);
+
+        if (val == val) { // Skip NaNs
+          if (first) {
+            minv = val;
+            first = false;
+          } else if (val < minv){
+            minv = val;
+          }
+        }
+      }
+    }
+  }
+
+  return minv;
+}
+
+template <typename T>
+T QcepImageData<T>::findMax() const
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int first = true;
+  T maxv = 0;
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col,row)) {
+        T val = this -> value(col, row);
+
+        if (val == val) {
+          if (first) {
+            maxv = val;
+            first = false;
+          } else if (val > maxv){
+            maxv = val;
+          }
+        }
+      }
+    }
+  }
+
+  return maxv;
+}
+
+template <typename T>
+double QcepImageData<T>::findAverage() const
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  double npix = 0;
+  double sum = 0;
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col,row)) {
+        double val = this -> value(col, row);
+
+        if (val==val) {
+          npix += 1;
+          sum += val;
+        }
+      }
+    }
+  }
+
+  if (npix <= 0) {
+    return 0;
+  } else {
+    return sum/npix;
+  }
+}
+
+template <typename T>
+QPointF QcepImageData<T>::percentileRange(double lowpct, double highpct)
+{
+  const int histSize = 65536;
+  QVector<int> histogramVec(histSize+1);
+  histogramVec.fill(0.0);
+  int *histogram = histogramVec.data();
+
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+
+  double minVal = minValue();
+  double maxVal = maxValue();
+
+  double histStep = (maxVal - minVal + 2)/histSize;
+  int nAbove = 0, nBelow = 0, nTotal = 0;
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        double val = value(col, row);
+
+        if (val==val) {
+          double bin = (val - minVal)/histStep;
+
+          if (bin < 0) {
+            nBelow += 1;
+          } else if (bin >= histSize) {
+            nAbove += 1;
+          } else {
+            histogram[(int) bin] += 1;
+          }
+
+          nTotal += 1;
+        }
+      }
+    }
+  }
+
+  double lowCount = ((double) nTotal) * lowpct / 100.0;
+  double highCount = ((double) nTotal) * highpct / 100.0;
+  double count = nBelow;
+
+  QPointF res(0,0);
+
+  for (int i=0; i<histSize; i++) {
+    double binVal = minVal + i*histStep;
+
+    count += histogram[i];
+
+    if (count < lowCount) {
+      res.setX(binVal);
+    }
+
+    if (count < highCount) {
+      res.setY(binVal);
+    }
+  }
+
+  if (res.y() <= res.x()) {
+    res.setY(res.x() + 1);
+  }
+
+  return res;
+}
+
+template <typename T>
+void QcepImageData<T>::correctBadBackgroundSubtraction(QcepDoubleImageDataPtr dark, int nImgExposures, int nDarkExposures)
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+
+  double badRatio = ((double) this->get_SummedExposures())/((double) dark->get_SummedExposures());
+  double goodRatio = ((double) nImgExposures)/((double) nDarkExposures);
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      double darkValue = dark->value(col,row);
+      double imgValue  = this->value(col,row);
+
+      imgValue += darkValue*badRatio;
+      imgValue -= darkValue*goodRatio;
+
+      this->setValue(col, row, imgValue);
+    }
+  }
+
+  this->set_SummedExposures(nImgExposures);
+}
+
+template <typename T>
+QScriptValue QcepImageData<T>::toScriptValue(QScriptEngine *engine, const QSharedPointer< QcepImageData<T> > &data)
+{
+  return engine->newQObject(data.data());
+}
+
+template <typename T>
+void QcepImageData<T>::fromScriptValue(const QScriptValue &obj, QSharedPointer<QcepImageData<T> > &data)
+{
+  QObject *qobj = obj.toQObject();
+
+  if (qobj) {
+    QcepDataObject *qdobj = qobject_cast<QcepDataObject*>(qobj);
+
+    if (qdobj) {
+      QcepObjectPtr p = qdobj->sharedFromThis();
+
+      if (p) {
+        QSharedPointer<QcepImageData<T> > cs = qSharedPointerDynamicCast< QcepImageData<T> >(p);
+
+        if (cs) {
+          data = cs;
+        }
+      }
+    }
+  }
+}
+
+#define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
+
+template <>
+void QcepImageData<double>::saveTIFFData(QString name)
+{
+#ifdef HAVE_TIFF
+  int nrows = get_Height();
+  int ncols = get_Width();
+
+  TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  int res = 1;
+
+  if (tif) {
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(get_FileName())));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+
+    QVector<float> buffvec(ncols);
+    float* buffer = buffvec.data();
+
+    for (int y=0; y<nrows; y++) {
+      for (int x=0; x<ncols; x++) {
+        buffer[x] = value(x,y);
+      }
+
+      TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+    }
+
+    TIFFClose(tif);
+
+    set_FileName(name);
+    set_ObjectSaved(true);
+
+    saveMetaData();
+  }
+#else
+  printMessage("Unable to save TIFF data, TIFF support not configured");
+#endif
+}
+
+template <typename T>
+void QcepImageData<T>::saveTIFFData(QString name)
+{
+#ifdef HAVE_TIFF
+  int nrows = get_Height();
+  int ncols = get_Width();
+
+  TIFF* tif = TIFFOpen(qPrintable(name),"w");
+  int res = 1;
+
+  if (tif) {
+    int nsum = get_SummedExposures();
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+
+    if (nsum == 0) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8));
+    } else if (nsum == 1) {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
+    } else {
+      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+    }
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
+
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(get_FileName())));
+    TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+
+    if (nsum == 0) {
+      QVector<quint8> buffvec(ncols);
+      quint8* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+    } else if (nsum == 1) {
+      QVector<quint16> buffvec(ncols);
+      quint16* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+    } else {
+      QVector<quint32> buffvec(ncols);
+      quint32* buffer = buffvec.data();
+
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          buffer[x] = value(x,y);
+        }
+
+        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+      }
+    }
+
+    TIFFClose(tif);
+
+    set_FileName(name);
+    set_ObjectSaved(true);
+
+    saveMetaData();
+  }
+#else
+  printMessage("Unable to save TIFF data, TIFF support not configured");
+#endif
+}
+
+void QcepImageDataBase::saveTextData(QString name, QString sep, bool transp)
+{
+  FILE *f = fopen(qPrintable(name), "w+");
+
+  if (f) {
+    const QMetaObject *meta = metaObject();
+
+    int count = meta->propertyCount();
+    int offset = QObject::staticMetaObject.propertyOffset();
+
+    for (int i=offset; i<count; i++) {
+      QMetaProperty metaproperty = meta->property(i);
+      const char *name = metaproperty.name();
+      QVariant value = property(name);
+
+      fprintf(f, "#%s = %s\n", name, qPrintable(value.toString()));
+    }
+
+    foreach (QByteArray name, dynamicPropertyNames()) {
+      QVariant value = property(name);
+
+      fprintf(f, "#%s = %s\n", name.data(), qPrintable(value.toString()));
+    }
+
+    int nrows = get_Height();
+    int ncols = get_Width();
+
+    if (transp == false) {
+      for (int y=0; y<nrows; y++) {
+        for (int x=0; x<ncols; x++) {
+          if (x == 0) {
+            fprintf(f, "%g", getImageData(x,y));
+          } else {
+            fprintf(f, "%s%g", qPrintable(sep), getImageData(x,y));
+          }
+        }
+        fprintf(f, "\n");
+      }
+    } else { // Transposed
+      for (int y=0; y<ncols; y++) {
+        for (int x=0; x<nrows; x++) {
+          if (x == 0) {
+            fprintf(f, "%g", getImageData(y,x));
+          } else {
+            fprintf(f, "%s%g", qPrintable(sep), getImageData(y,x));
+          }
+        }
+        fprintf(f, "\n");
+      }
+    }
+
+    fclose(f);
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::saveData(QString &name, QString filter, Overwrite canOverwrite)
+{
+  mkPath(name);
+
+  if (canOverwrite == NoOverwrite) {
+    name = uniqueFileName(name);
+  }
+
+  if (filter == fileFormatTIFF()) {
+    saveTIFFData(name);
+  } else if (filter == fileFormatTabDelimited()) {
+    saveTextData(name, "\t", false);
+  } else if (filter == fileFormatTransposedTabDelimited()) {
+    saveTextData(name, "\t", true);
+  } else if (filter == fileFormatCSV()) {
+    saveTextData(name, ", ", false);
+  } else if (filter == fileFormatTransposedCSV()) {
+    saveTextData(name, ", ", true);
+  }
+}
+
+template <typename T>
+double QcepImageData<T>::sumInRectangle(QRectF rect)
+{
+  int l = qRound(rect.left());
+  int t = qRound(rect.top());
+  int r = qRound(rect.right());
+  int b = qRound(rect.bottom());
+
+  if (l > r) {
+    l = qRound(rect.right());
+    r = qRound(rect.left());
+  }
+
+  if (b > t) {
+    b = qRound(rect.top());
+    t = qRound(rect.bottom());
+  }
+
+  int np = 0;
+  double sum = 0;
+
+  for (int row=b; row<=t; row++) {
+    for (int col=l; col<=r; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          np++;
+          sum += val;
+        }
+      }
+    }
+  }
+
+  return sum;
+}
+
+template <typename T>
+double QcepImageData<T>::averageInRectangle(QRectF rect)
+{
+  int l = qRound(rect.left());
+  int t = qRound(rect.top());
+  int r = qRound(rect.right());
+  int b = qRound(rect.bottom());
+
+  if (l > r) {
+    l = qRound(rect.right());
+    r = qRound(rect.left());
+  }
+
+  if (b > t) {
+    b = qRound(rect.top());
+    t = qRound(rect.bottom());
+  }
+
+  int np = 0;
+  double sum = 0;
+
+  for (int row=b; row<=t; row++) {
+    for (int col=l; col<=r; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          np++;
+          sum += val;
+        }
+      }
+    }
+  }
+
+  return sum/np;
+}
+
+template <typename T>
+double QcepImageData<T>::minInRectangle(QRectF rect)
+{
+  int l = qRound(rect.left());
+  int t = qRound(rect.top());
+  int r = qRound(rect.right());
+  int b = qRound(rect.bottom());
+
+  if (l > r) {
+    l = qRound(rect.right());
+    r = qRound(rect.left());
+  }
+
+  if (b > t) {
+    b = qRound(rect.top());
+    t = qRound(rect.bottom());
+  }
+
+  int first  = true;
+  double min = 0;
+
+  for (int row=b; row<=t; row++) {
+    for (int col=l; col<=r; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          if (first) {
+            min = val;
+            first = false;
+          } else if (val < min) {
+            min = val;
+          }
+        }
+      }
+    }
+  }
+
+  return min;
+}
+
+template <typename T>
+double QcepImageData<T>::maxInRectangle(QRectF rect)
+{
+  int l = qRound(rect.left());
+  int t = qRound(rect.top());
+  int r = qRound(rect.right());
+  int b = qRound(rect.bottom());
+
+  if (l > r) {
+    l = qRound(rect.right());
+    r = qRound(rect.left());
+  }
+
+  if (b > t) {
+    b = qRound(rect.top());
+    t = qRound(rect.bottom());
+  }
+
+  int first  = true;
+  double max = 0;
+
+  for (int row=b; row<=t; row++) {
+    for (int col=l; col<=r; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          if (first) {
+            max = val;
+            first = false;
+          } else if (val > max) {
+            max = val;
+          }
+        }
+      }
+    }
+  }
+
+  return max;
+}
+
+template <typename T>
+double QcepImageData<T>::sumInEllipse(QRectF rect)
+{
+  QPointF c = rect.center();
+  double  a = rect.width()/2;
+  double  b = rect.height()/2;
+
+  int bt = qRound(rect.bottom());
+  int tp = qRound(rect.top());
+
+  int np = 0;
+  double sum = 0;
+
+  for (int row=tp; row<=bt; row++) {
+    double y=row - c.y();
+    double xx = a*sqrt(1 - pow(y/b,2));
+    int x1 = qRound(c.x() - xx);
+    int x2 = qRound(c.x() + xx);
+
+    for (int col=x1; col<=x2; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          np++;
+          sum += val;
+        }
+      }
+    }
+  }
+
+  return sum;
+}
+
+template <typename T>
+double QcepImageData<T>::averageInEllipse(QRectF rect)
+{
+  QPointF c = rect.center();
+  double  a = rect.width()/2;
+  double  b = rect.height()/2;
+
+  int bt = qRound(rect.bottom());
+  int tp = qRound(rect.top());
+
+  int np = 0;
+  double sum = 0;
+
+  for (int row=tp; row<=bt; row++) {
+    double y=row - c.y();
+    double xx = a*sqrt(1 - pow(y/b,2));
+    int x1 = qRound(c.x() - xx);
+    int x2 = qRound(c.x() + xx);
+
+    for (int col=x1; col<=x2; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          np++;
+          sum += val;
+        }
+      }
+    }
+  }
+
+  return sum/np;
+}
+
+template <typename T>
+double QcepImageData<T>::minInEllipse(QRectF rect)
+{
+  QPointF c = rect.center();
+  double  a = rect.width()/2;
+  double  b = rect.height()/2;
+
+  int bt = qRound(rect.bottom());
+  int tp = qRound(rect.top());
+
+  int first = true;
+  double min = 0;
+
+  for (int row=tp; row<=bt; row++) {
+    double y=row - c.y();
+    double xx = a*sqrt(1 - pow(y/b,2));
+    int x1 = qRound(c.x() - xx);
+    int x2 = qRound(c.x() + xx);
+
+    for (int col=x1; col<=x2; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          if (first) {
+            min = val;
+            first = false;
+          } else if (val < min) {
+            min = val;
+          }
+        }
+      }
+    }
+  }
+
+  return min;
+}
+
+template <typename T>
+double QcepImageData<T>::maxInEllipse(QRectF rect)
+{
+  QPointF c = rect.center();
+  double  a = rect.width()/2;
+  double  b = rect.height()/2;
+
+  int bt = qRound(rect.bottom());
+  int tp = qRound(rect.top());
+
+  int first = true;
+  double max = 0;
+
+  for (int row=tp; row<=bt; row++) {
+    double y=row - c.y();
+    double xx = a*sqrt(1 - pow(y/b,2));
+    int x1 = qRound(c.x() - xx);
+    int x2 = qRound(c.x() + xx);
+
+    for (int col=x1; col<=x2; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        T val = value(col, row);
+
+        if (val==val) {
+          if (first) {
+            max = val;
+            first = false;
+          } else if (val > max) {
+            max = val;
+          }
+        }
+      }
+    }
+  }
+
+  return max;
+}
+
+template <typename T>
+double QcepImageData<T>::sumInPeak(QRectF rect)
+{
+  QPointF c = rect.center();
+  double  w = rect.width()/2;
+  double  h = rect.height()/2;
+
+  int bt = qRound(rect.bottom());
+  int tp = qRound(rect.top());
+  int lf = qRound(rect.left());
+  int rt = qRound(rect.right());
+
+  int ptp = qRound(c.y() - h/2);
+  int pbt = qRound(c.y() + h/2);
+  int plf = qRound(c.x() - w/2);
+  int prt = qRound(c.x() + w/2);
+
+  int    np    = 0;
+  double sum   = 0;
+  int    npk   = 0;
+  double sumpk = 0;
+
+  for (int row=tp; row<=bt; row++) {
+    for (int col=lf; col<=rt; col++) {
+      if (m_Mask == NULL || m_Mask->value(col,row)) {
+        T val = value(col,row);
+
+        if (val == val) {
+          if (ptp <= row && row <= pbt && plf <= col && col <= prt) {
+            npk++;
+            sumpk += val;
+          } else {
+            np++;
+            sum += val;
+          }
+        }
+      }
+    }
+  }
+
+  if (np > 0 && npk > 0) {
+    double avbk = sum/np;
+    double avpk = sumpk/npk;
+
+    return (avpk-avbk)*npk;
+  } else {
+    return 0;
+  }
+}
+
+QcepInt16ImageData::QcepInt16ImageData(QString name,
+                                       int width,
+                                       int height,
+                                       qint16 def) :
+  QcepImageData<qint16>(name, width, height, def)
+{
+}
+
+QcepUInt16ImageData::QcepUInt16ImageData(QString name,
+                                         int width,
+                                         int height,
+                                         quint16 def) :
+  QcepImageData<quint16>(name, width, height, def)
+{
+}
+
+QcepUInt32ImageData::QcepUInt32ImageData(QString name,
+                                         int width,
+                                         int height,
+                                         quint32 def) :
+  QcepImageData<quint32>(name, width, height, def)
+{
+}
+
+QcepInt32ImageData::QcepInt32ImageData(QString name,
+                                       int width,
+                                       int height,
+                                       qint32 def) :
+  QcepImageData<qint32>(name, width, height, def)
+{
+}
+
+QcepFloatImageData::QcepFloatImageData(QString name,
+                                       int width,
+                                       int height,
+                                       float def) :
+  QcepImageData<float>(name, width, height, def)
+{
+}
+
+QcepDoubleImageData::QcepDoubleImageData(QString name,
+                                         int width,
+                                         int height,
+                                         double def)  :
+  QcepImageData<double>(name, width, height, def)
+{
+}
+
+void QcepDoubleImageData::add(QcepDoubleImageDataPtr img)
+{
+  QcepImageData<double>::add<double>(img);
+}
+
+void QcepDoubleImageData::add(double val)
+{
+  QcepImageData<double>::add(val);
+}
+
+void QcepDoubleImageData::subtract(QcepDoubleImageDataPtr img)
+{
+  QcepImageData<double>::subtract<double>(img);
+}
+
+void QcepDoubleImageData::subtract(double val)
+{
+  QcepImageData<double>::subtract(val);
+}
+
+void QcepDoubleImageData::multiply(QcepDoubleImageDataPtr img)
+{
+  QcepImageData<double>::multiply<double>(img);
+}
+
+void QcepDoubleImageData::multiply(double val)
+{
+  QcepImageData<double>::multiply(val);
+}
+
+void QcepDoubleImageData::divide(QcepDoubleImageDataPtr img)
+{
+  QcepImageData<double>::divide<double>(img);
+}
+
+void QcepDoubleImageData::divide(double val)
+{
+  QcepImageData<double>::divide(val);
+}
+
+void QcepDoubleImageData::copyFrom(QcepDoubleImageDataPtr img)
+{
+  QcepImageData<double>::copyFrom<double>(img);
+}
+
+void QcepDoubleImageData::copyFrom(QcepUInt16ImageDataPtr img)
+{
+  QcepImageData<double>::copyFrom<quint16>(img);
+}
+
+void QcepDoubleImageData::copyFrom(QcepUInt32ImageDataPtr img)
+{
+  QcepImageData<double>::copyFrom<quint32>(img);
+}
+
+void QcepDoubleImageData::accumulateImage(QcepDoubleImageDataPtr img)
+{
+  QcepImageData<double>::accumulateImage<double>(img);
+}
+
+template class QcepImageData<quint16>;
+template class QcepImageData<qint16>;
+template class QcepImageData<quint32>;
+template class QcepImageData<qint32>;
+template class QcepImageData<double>;
+template class QcepImageData<float>;
+
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<quint16> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<qint16> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<quint32> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<qint32> > dark);
 template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<double> > dark);
+template void QcepImageData<double>::subtractDark(const QSharedPointer< QcepImageData<float> > dark);
+
+template void QcepImageData<double>::copyFrom<quint32>(QSharedPointer<QcepImageData<quint32> >);
+template void QcepImageData<double>::copyFrom<quint16>(QSharedPointer<QcepImageData<quint16> >);
+template void QcepImageData<double>::copyFrom<double>(QSharedPointer<QcepImageData<double> >);
+//template void QcepImageData<quint32>::copyFrom<quint32>(QSharedPointer<QcepImageData<quint32> >);
+
+template void QcepImageData<double>::accumulateImage<double>(QSharedPointer<QcepImageData<double> >);
+
+template void QcepImageData<double>::add<double>(QSharedPointer<QcepImageData<double> >);
+template void QcepImageData<double>::subtract<double>(QSharedPointer<QcepImageData<double> >);
+template void QcepImageData<double>::multiply<double>(QSharedPointer<QcepImageData<double> >);
+template void QcepImageData<double>::divide<double>(QSharedPointer<QcepImageData<double> >);

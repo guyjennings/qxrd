@@ -8,12 +8,14 @@ include(../../qceplib-base.pri)
 
 HEADERS += \
     qtestceplibmainwindow.h \
-    qtestimagedata.h
+    qtestimagedata.h \
+    qtestceplibdocument.h
 
 SOURCES += \
     qtestceplibmain.cpp \
     qtestceplibmainwindow.cpp \
-    qtestimagedata.cpp
+    qtestimagedata.cpp \
+    qtestceplibdocument.cpp
 
 FORMS += \
     qtestceplibmainwindow.ui

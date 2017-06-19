@@ -13,9 +13,14 @@ QcepDebugDictionary::QcepDebugDictionary() :
   setMessage(DEBUG_PREFS,      "Settings/Prefs Operations");
   setMessage(DEBUG_DISPLAY,    "Display Operations");
   setMessage(DEBUG_CONSTRUCTORS, "Object Constructors/Destructors");
+  setMessage(DEBUG_ALLOCATOR,    "Memory Allocation");
+  setMessage(DEBUG_THREADS,      "Thread Initialization");
+  setMessage(DEBUG_QUEUES,       "Queue Operations");
   setMessage(DEBUG_IMAGE_CONSTRUCTORS, "Image Object Constructors/Destructors");
   setMessage(DEBUG_LOCKING,    "Debug Mutex Lock Operations");
   setMessage(DEBUG_SERVER,       "Server Commands");
+  setMessage(DEBUG_IMPORT,       "Data Import Operations");
+  setMessage(DEBUG_EXPORT,       "Data Export Operations");
   setMessage(DEBUG_DATABROWSER,  "Data Browser Operations");
   setMessage(DEBUG_DRAGDROP,     "Drag and Drop Operations");
 }

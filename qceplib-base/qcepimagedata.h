@@ -8,13 +8,15 @@
 #include <QSharedPointer>
 #include <QFileInfo>
 #include <QDateTime>
-#include <math.h>
+#include <qmath.h>
 #include <stdio.h>
 
 #include "qcepdataobject.h"
 #include "qcepproperty.h"
 #include "qcepsettingssaver-ptr.h"
-//#include "qxrdexperiment-ptr.h"
+#include "qcepexperiment-ptr.h"
+#include "qcepmaskdata-ptr.h"
+#include "qcepimagedata-ptr.h"
 
 typedef struct tiff TIFF;
 
@@ -23,7 +25,10 @@ class QcepImageDataBase : public QcepDataObject
   Q_OBJECT
 
 public:
-  QcepImageDataBase(QcepSettingsSaverWPtr saver, int width, int height);
+  QcepImageDataBase(QString name,
+                    int width,
+                    int height,
+                    int size);
   virtual ~QcepImageDataBase();
 
   Q_PROPERTY(int width READ get_Width WRITE set_Width)
@@ -32,11 +37,29 @@ public:
   Q_PROPERTY(int height READ get_Height WRITE set_Height)
   QCEP_INTEGER_PROPERTY(Height)
 
-  Q_PROPERTY(QString qxrdVersion READ get_QxrdVersion WRITE set_QxrdVersion)
-  QCEP_STRING_PROPERTY(QxrdVersion)
+  Q_PROPERTY(double hStart READ get_HStart WRITE set_HStart)
+  QCEP_DOUBLE_PROPERTY(HStart)
 
-  Q_PROPERTY(QString qtVersion READ get_QtVersion WRITE set_QtVersion)
-  QCEP_STRING_PROPERTY(QtVersion)
+  Q_PROPERTY(double hStep READ get_HStep WRITE set_HStep)
+  QCEP_DOUBLE_PROPERTY(HStep)
+
+  Q_PROPERTY(double vStart READ get_VStart WRITE set_VStart)
+  QCEP_DOUBLE_PROPERTY(VStart)
+
+  Q_PROPERTY(double vStep READ get_VStep WRITE set_VStep)
+  QCEP_DOUBLE_PROPERTY(VStep)
+
+  Q_PROPERTY(QString hLabel READ get_HLabel WRITE set_HLabel)
+  QCEP_STRING_PROPERTY(HLabel)
+
+  Q_PROPERTY(QString hUnits READ get_HUnits WRITE set_HUnits)
+  QCEP_STRING_PROPERTY(HUnits)
+
+  Q_PROPERTY(QString vLabel READ get_VLabel WRITE set_VLabel)
+  QCEP_STRING_PROPERTY(VLabel)
+
+  Q_PROPERTY(QString vUnits READ get_VUnits WRITE set_VUnits)
+  QCEP_STRING_PROPERTY(VUnits)
 
   Q_PROPERTY(int dataType READ get_DataType WRITE set_DataType)
   QCEP_INTEGER_PROPERTY(DataType)
@@ -46,11 +69,8 @@ public:
   Q_PROPERTY(QString fileBase READ get_FileBase WRITE set_FileBase)
   QCEP_STRING_PROPERTY(FileBase)
 
-  Q_PROPERTY(QString fileName READ get_FileName WRITE set_FileName)
-  QCEP_STRING_PROPERTY(FileName)
-
-  Q_PROPERTY(QString title READ get_Title WRITE set_Title)
-  QCEP_STRING_PROPERTY(Title)
+//  Q_PROPERTY(QString title READ get_Title WRITE set_Title)
+//  QCEP_STRING_PROPERTY(Title)
 
   Q_PROPERTY(int readoutMode READ get_ReadoutMode WRITE set_ReadoutMode)
   QCEP_INTEGER_PROPERTY(ReadoutMode)
@@ -106,9 +126,6 @@ public:
   Q_PROPERTY(QString userComment4 READ get_UserComment4 WRITE set_UserComment4)
   QCEP_STRING_PROPERTY(UserComment4)
 
-  Q_PROPERTY(int imageSaved READ get_ImageSaved WRITE set_ImageSaved)
-  QCEP_INTEGER_PROPERTY(ImageSaved)
-
   Q_PROPERTY(QcepDoubleList normalization READ get_Normalization WRITE set_Normalization)
   QCEP_DOUBLE_LIST_PROPERTY(Normalization)
 
@@ -120,11 +137,32 @@ public:
 
 public slots:
   virtual QString description() const;
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   virtual double getImageData(int x, int y) const = 0;
   virtual QVector<double> getImageData(int x0, int y0, int x1, int y1) const = 0;
   virtual void setImageData(int x, int y, double v) = 0;
+
+  virtual void clear() = 0;
+  virtual void resize(int width, int height) = 0;
+  virtual void fill(double val) = 0;
+
+  virtual double minValue() const = 0;
+  virtual double maxValue() const = 0;
+
+  virtual QPointF percentileRange(double lowpct, double highpct) = 0;
+
+  virtual double sumInRectangle(QRectF rect) = 0;
+  virtual double averageInRectangle(QRectF rect) = 0;
+  virtual double maxInRectangle(QRectF rect) = 0;
+  virtual double minInRectangle(QRectF rect) = 0;
+  virtual double sumInEllipse(QRectF rect) = 0;
+  virtual double averageInEllipse(QRectF rect) = 0;
+  virtual double minInEllipse(QRectF rect) = 0;
+  virtual double maxInEllipse(QRectF rect) = 0;
+  virtual double sumInPeak(QRectF rect) = 0;
+
+  double hValue(int n) const;
+  double vValue(int n) const;
 
 public:
 //  int get_Width() const
@@ -163,8 +201,11 @@ public:
   void loadMetaData();
   void saveMetaData();
   void saveMetaData(QString name);
+  void saveTextData(QString name, QString sep, bool transp=false);
 
   void setDefaultFileName(QString path);
+
+  virtual QString fileFormatFilterString();
 
   static double secondsSinceEpoch();
 
@@ -188,31 +229,52 @@ protected:
 
 private:
   mutable QMutex m_Mutex;
-
-protected:
-  QcepSettingsSaverWPtr m_Saver;
 };
 
 template <typename T>
     class QcepImageData : public QcepImageDataBase
 {
 public:
-  QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def=0);
+  QcepImageData(QString name,
+                int width,
+                int height,
+                T def);
   virtual ~QcepImageData();
 
 public:
+//  static int imageTypeID();
+
   bool readImage(QString filename);
+
+//  void readSettings(QSettings *settings, QString section);
+//  void writeSettings(QSettings *settings, QString section);
 
   void resize(int width, int height);
   void clear();
+  void fill(double val);
 
   double getImageData(int x, int y) const;
   QVector<double> getImageData(int x0, int y0, int x1, int y1) const;
   void setImageData(int x, int y, double v);
 
-//  template <typename T2>
-//  void copyImage(QSharedPointer< QcepImageData<T2> > dest);
+  virtual void saveData(QString &name, QString filter, Overwrite canOverwrite=NoOverwrite);
+  void saveTIFFData(QString name);
 
+  double minValue() const;
+  double maxValue() const;
+  QPointF percentileRange(double lowpct, double highpct);
+
+  double sumInRectangle(QRectF rect);
+  double averageInRectangle(QRectF rect);
+  double minInRectangle(QRectF rect);
+  double maxInRectangle(QRectF rect);
+  double sumInEllipse(QRectF rect);
+  double averageInEllipse(QRectF rect);
+  double minInEllipse(QRectF rect);
+  double maxInEllipse(QRectF rect);
+  double sumInPeak(QRectF rect);
+
+public:
   template <typename T2>
   void subtractDark(const QSharedPointer< QcepImageData<T2> > dark);
 
@@ -221,29 +283,171 @@ public:
 
   void dumpPixels(int x0, int y0, int x1, int y1);
 
+  T* data();
+
+public:
   T value(int x, int y) const;
   T value(double x, double y) const;
-
-  T minValue() const;
-  T maxValue() const;
-
-  T* data();
 
   void setValue(int x, int y, T val);
   void addValue(int x, int y, T val);
   void subtractValue(int x, int y, T val);
   void multiplyValue(int x, int y, T val);
   void divideValue(int x, int y, T val);
-  void fill(T val);
+//  void fill(T val);
 
   T defaultValue() const;
   void setDefaultValue(T def);
+
+  QString rawFileName();
+
+  template <typename T2>
+  void copyImage(QSharedPointer< QcepImageData<T2> > dest);
+
+  template <typename T2>
+      void copyFrom(const QSharedPointer< QcepImageData<T2> > img);
+
+  template <typename T2>
+  void accumulateImage(QSharedPointer< QcepImageData<T2> > image);
+
+  template <typename T2>
+  void add(QSharedPointer< QcepImageData<T2> > image);
+  void add(double val);
+
+  template <typename T2>
+  void subtract(QSharedPointer< QcepImageData<T2> > image);
+  void subtract(double val);
+
+  template <typename T2>
+  void multiply(QSharedPointer< QcepImageData<T2> > image);
+  void multiply(double val);
+
+  template <typename T2>
+  void divide(QSharedPointer< QcepImageData<T2> > image);
+  void divide(double val);
+
+  void setMask(QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepMaskDataPtr mask() const;
+  QcepMaskDataPtr overflow() const;
+
+  double correlate(QSharedPointer< QcepImageData<T> > image, int dx, int dy, int mx, int my);
+
+  void shiftImage(QSharedPointer< QcepImageData<T> > image, double dx, double dy);
+
+  T findMin() const;
+  T findMax() const;
+  double findAverage() const;
+
+  void correctBadBackgroundSubtraction(QcepDoubleImageDataPtr dark, int nImgExposures, int nDarkExposures);
+
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QSharedPointer< QcepImageData<T> > &data);
+  static void fromScriptValue(const QScriptValue &obj, QSharedPointer< QcepImageData<T> > &data);
+
 
 protected:
   QVector<T> m_Image;
   T m_MinValue;
   T m_MaxValue;
   T m_Default;
+
+  QcepMaskDataPtr            m_Mask;
+  QcepMaskDataPtr            m_Overflow;
 };
+
+class QcepDoubleImageData : public QcepImageData<double> {
+  Q_OBJECT
+
+public:
+  Q_INVOKABLE QcepDoubleImageData(
+      QString name,
+      int width,
+      int height,
+      double def);
+
+  void add     (QcepDoubleImageDataPtr img);
+  void add     (double val);
+
+  void subtract(QcepDoubleImageDataPtr img);
+  void subtract(double val);
+
+  void multiply(QcepDoubleImageDataPtr img);
+  void multiply(double val);
+
+  void divide  (QcepDoubleImageDataPtr img);
+  void divide  (double val);
+
+  void copyFrom(QcepUInt16ImageDataPtr img);
+  void copyFrom(QcepUInt32ImageDataPtr img);
+  void copyFrom(QcepDoubleImageDataPtr img);
+
+  void accumulateImage(QcepDoubleImageDataPtr img);
+};
+
+Q_DECLARE_METATYPE(QcepDoubleImageData*)
+
+class QcepFloatImageData : public QcepImageData<float> {
+  Q_OBJECT
+
+public:
+  Q_INVOKABLE QcepFloatImageData(
+      QString name,
+      int width,
+      int height,
+      float def);
+};
+
+Q_DECLARE_METATYPE(QcepFloatImageData*)
+
+class QcepUInt16ImageData : public QcepImageData<quint16> {
+  Q_OBJECT
+
+public:
+  Q_INVOKABLE QcepUInt16ImageData(
+      QString name,
+      int width,
+      int height,
+      quint16 def);
+};
+
+Q_DECLARE_METATYPE(QcepUInt16ImageData*)
+
+class QcepInt16ImageData : public QcepImageData<qint16> {
+  Q_OBJECT
+
+public:
+  Q_INVOKABLE QcepInt16ImageData(
+      QString name,
+      int width,
+      int height,
+      qint16 def);
+};
+
+Q_DECLARE_METATYPE(QcepInt16ImageData*)
+
+class QcepUInt32ImageData : public QcepImageData<quint32> {
+  Q_OBJECT
+
+public:
+  Q_INVOKABLE QcepUInt32ImageData(
+      QString name,
+      int width,
+      int height,
+      quint32 def);
+};
+
+Q_DECLARE_METATYPE(QcepUInt32ImageData*)
+
+class QcepInt32ImageData : public QcepImageData<qint32> {
+  Q_OBJECT
+
+public:
+  Q_INVOKABLE QcepInt32ImageData(
+      QString name,
+      int width,
+      int height,
+      qint32 def);
+};
+
+Q_DECLARE_METATYPE(QcepInt32ImageData*)
 
 #endif

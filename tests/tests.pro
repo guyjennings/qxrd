@@ -10,5 +10,7 @@ SUBDIRS = \
     qtestceplib-qwt \
     qtestceplib-specserver \
     qtestceplib-tiff \
-    qtestceplib-levmar
+    qtestceplib-levmar \
+    qtestceplib-fileio
+
 
