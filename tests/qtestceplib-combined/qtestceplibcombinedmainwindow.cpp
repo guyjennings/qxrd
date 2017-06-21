@@ -47,7 +47,7 @@ QtestceplibCombinedMainWindow::QtestceplibCombinedMainWindow
   ui->m_FileMenu->addAction(tr("NeXus Version %1").arg(STR(QCEPLIB_NEXUS_VERSION)));
   ui->m_FileMenu->addAction(tr("QWT Version %1").arg(STR(QCEPLIB_QWT_VERSION)));
   ui->m_FileMenu->addAction(tr("SpecServer Version %1").arg(STR(QCEPLIB_SPECSERVER_VERSION)));
-  ui->m_FileMenu->addAction(tr("TIFF Version %1").arg(STR(QCEPLIB_TIFF_VERSION)));
+  ui->m_FileMenu->addAction(tr("TIFF Version %1").arg(qcepTIFFVersion()));
 }
 
 QtestceplibCombinedMainWindow::~QtestceplibCombinedMainWindow()

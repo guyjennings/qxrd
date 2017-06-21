@@ -9,6 +9,19 @@ void qceptiff_warningHandler(const char * /*module*/, const char * /*fmt*/, va_l
 {
 }
 
+QString qcepTIFFVersion()
+{
+  QString vers(TIFFGetVersion()), res;
+
+  QRegExp patt("^.*Version ([\\d\\.]*).*$");
+
+  if (patt.exactMatch(vers)) {
+    res = patt.cap(1);
+  }
+
+  return res;
+}
+
 template <typename T>
 QcepImageDataFormatTiff<T>::QcepImageDataFormatTiff(QString name)
   : QcepImageDataFormat<T>(name)
