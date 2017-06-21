@@ -16,7 +16,9 @@
 #include "qcepmutexlocker.h"
 #include "qcepsettingssaver.h"
 
+#ifdef HAVE_TIFF
 #include "tiffio.h"
+#endif
 
 QAtomicInt allocCount = 0;
 

@@ -18,6 +18,7 @@ QtestceplibLevMarMainWindow::QtestceplibLevMarMainWindow(QtestceplibLevMarDocume
   connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
   connect(ui->m_ActionTestLevMar, SIGNAL(triggered()), this, SLOT(doTestLevMar()));
 
+  ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
   ui->m_FileMenu->addAction(tr("LevMar Version %1").arg(STR(QCEPLIB_LEVMAR_VERSION)));
 }

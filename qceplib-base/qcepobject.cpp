@@ -686,6 +686,7 @@ QString QcepObject::toScriptLiteral(QVariant v)
 
 QVariant QcepObject::fromScriptLiteral(QString lit)
 {
+  return QVariant();
 }
 
 QScriptValue QcepObject::toScriptValue(QScriptEngine *engine, const QcepObjectPtr &data)

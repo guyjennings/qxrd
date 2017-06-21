@@ -21,6 +21,7 @@ QtestceplibHdf5MainWindow::QtestceplibHdf5MainWindow(QtestceplibHdf5Document *do
   connect(ui->m_ActionTestHDF, SIGNAL(triggered()), this, SLOT(doTestHDF5Library()));
   connect(ui->m_ActionTestHDFSlab, SIGNAL(triggered()), this, SLOT(doTestHDF5SlabOutput()));
 
+  ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
   ui->m_FileMenu->addAction(tr("HDF5 Version %1").arg(STR(QCEPLIB_HDF5_VERSION)));
 

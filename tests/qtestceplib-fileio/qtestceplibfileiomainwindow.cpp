@@ -28,6 +28,7 @@ QtestceplibFileIOMainWindow::QtestceplibFileIOMainWindow(QtestceplibFileIODocume
   connect(ui->m_ActionReadDataObjects, SIGNAL(triggered(bool)), this, SLOT(doReadDataObjects()));
   connect(ui->m_ActionWriteDataObjects, SIGNAL(triggered(bool)), this, SLOT(doWriteDataObjects()));
 
+  ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
   ui->m_FileMenu->addAction(tr("TIFF Version %1").arg(STR(QCEPLIB_TIFF_VERSION)));
 }
