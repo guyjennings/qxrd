@@ -20,6 +20,7 @@ QtestceplibMainWindow::QtestceplibMainWindow(QtestceplibDocument *doc, QWidget *
   connect(ui->m_ActionNewImage, SIGNAL(triggered()), this, SLOT(doNewImage()));
   connect(ui->m_ActionSaveImage, SIGNAL(triggered()), this, SLOT(doSaveImage()));
 
+  ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
 
   if (m_Document) {

@@ -17,6 +17,7 @@ QtestceplibQwtMainWindow::QtestceplibQwtMainWindow(QtestceplibQwtDocument *doc, 
   connect(ui->m_ActionWriteSettings, SIGNAL(triggered()), this, SLOT(doWriteSettings()));
   connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
 
+  ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
   ui->m_FileMenu->addAction(tr("QWT Version %1").arg(STR(QCEPLIB_QWT_VERSION)));
 }

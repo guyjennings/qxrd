@@ -24,6 +24,7 @@ QtestceplibTiffMainWindow::QtestceplibTiffMainWindow(QtestceplibTiffDocument *do
   connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
   connect(ui->m_ActionLoadTIFFImage, SIGNAL(triggered()), this, SLOT(doLoadTIFFImage()));
 
+  ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
   ui->m_FileMenu->addAction(tr("TIFF Version %1").arg(STR(QCEPLIB_TIFF_VERSION)));
 }
