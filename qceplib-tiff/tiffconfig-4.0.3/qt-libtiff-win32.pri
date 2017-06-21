@@ -1,8 +1,6 @@
-message(libtiff PWD = $${PWD})
-
-macx {
+win32 {
   TIFFBASE = $${PWD}/../tiff-4.0.3/libtiff/
-  TIFFCONF = $${PWD}/../tiffconfig/macx/
+  TIFFCONF = $${PWD}/../tiffconfig-$${QCEPLIB_TIFF_VERSION}/win32/
 
   INCLUDEPATH += $${TIFFBASE} $${TIFFCONF}
 
@@ -42,7 +40,7 @@ macx {
         $${TIFFBASE}/tif_ojpeg.c \
         $${TIFFBASE}/tif_open.c \
         $${TIFFBASE}/tif_packbits.c \
-#        $${TIFFBASE}/tif_pixarlog.c \
+        $${TIFFBASE}/tif_pixarlog.c \
         $${TIFFBASE}/tif_predict.c \
         $${TIFFBASE}/tif_print.c \
         $${TIFFBASE}/tif_read.c \
@@ -52,7 +50,7 @@ macx {
         $${TIFFBASE}/tif_tile.c \
         $${TIFFBASE}/tif_version.c \
         $${TIFFBASE}/tif_warning.c \
-        $${TIFFBASE}/tif_unix.c \
+        $${TIFFBASE}/tif_win32.c \
         $${TIFFBASE}/tif_write.c \
-#        $${TIFFBASE}/tif_zip.c
+        $${TIFFBASE}/tif_zip.c
 }
