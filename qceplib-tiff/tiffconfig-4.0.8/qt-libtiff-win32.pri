@@ -1,6 +1,6 @@
 win32 {
   TIFFBASE = $${PWD}/../tiff-4.0.3/libtiff/
-  TIFFCONF = $${PWD}/../tiffconfig/win32/
+  TIFFCONF = $${PWD}/../tiffconfig-$${QCEPLIB_TIFF_VERSION}/win32/
 
   INCLUDEPATH += $${TIFFBASE} $${TIFFCONF}
 
