@@ -421,7 +421,7 @@ Win32WarningHandler(const char* module, const char* fmt, va_list ap)
 	sprintf(szTitle, szTitleText, szTmpModule);
 	szTmp = szTitle + (strlen(szTitle)+2)*sizeof(char);
 	vsnprintf(szTmp, nBufSize-(strlen(szTitle)+2)*sizeof(char), fmt, ap);
-	MessageBoxA(GetFocus(), szTmp, szTitle, MB_OK | MB_ICONINFORMATION);
+//	MessageBoxA(GetFocus(), szTmp, szTitle, MB_OK | MB_ICONINFORMATION);
 	LocalFree(szTitle);
 
 	return;
@@ -452,7 +452,7 @@ Win32ErrorHandler(const char* module, const char* fmt, va_list ap)
 	sprintf(szTitle, szTitleText, szTmpModule);
 	szTmp = szTitle + (strlen(szTitle)+2)*sizeof(char);
 	vsnprintf(szTmp, nBufSize-(strlen(szTitle)+2)*sizeof(char), fmt, ap);
-	MessageBoxA(GetFocus(), szTmp, szTitle, MB_OK | MB_ICONEXCLAMATION);
+//      MessageBoxA(GetFocus(), szTmp, szTitle, MB_OK | MB_ICONEXCLAMATION);
 	LocalFree(szTitle);
 	return;
 #else
