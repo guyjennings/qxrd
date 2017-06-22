@@ -3,13 +3,13 @@ message(qceplib-cbf PWD = $${PWD} QCEPLIB_CBF_VERSION = $${QCEPLIB_CBF_VERSION})
 INCLUDEPATH += $${PWD}
 
 macx {
-  CBFBASE = $${PWD}/CBFlib-0.9.3.3/src/
-  CBFINCL = $${PWD}/CBFlib-0.9.3.3/include/
+  CBFBASE = $${PWD}/CBFlib-$${QCEPLIB_CBF_VERSION}/src/
+  CBFINCL = $${PWD}/CBFlib-$${QCEPLIB_CBF_VERSION}/include/
 
   DEFINES += CBF_NO_REGEX
 } else:win32 {
-  CBFBASE = $${PWD}/CBFlib-0.9.3.3/src/
-  CBFINCL = $${PWD}/CBFlib-0.9.3.3/include/
+  CBFBASE = $${PWD}/CBFlib-$${QCEPLIB_CBF_VERSION}/src/
+  CBFINCL = $${PWD}/CBFlib-$${QCEPLIB_CBF_VERSION}/include/
 
   contains(QMAKE_TARGET.arch, x86_64) {
     message(64 bit build)
