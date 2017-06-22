@@ -266,6 +266,7 @@ extern "C" {
  
  */
     
+#define MAX_RANK   3
 #define MAX_SRCLEN 132
     
 #define CBF_GET_COLUMN_VALUE(cbf, colname, scratch_value, result_value) \
@@ -474,7 +475,7 @@ extern "C" {
         while (cbf_find_nextrow (cbf, array_id) == 0) {
             
             int i, index;
-            const char * direction[rank];
+            const char * direction[MAX_RANK];
             
             cbf_failnez (cbf_find_column      (cbf, "index"))
             cbf_failnez (cbf_get_integervalue (cbf, &index))
@@ -889,7 +890,7 @@ extern "C" {
         
         {
             
-            double psizes[rank];
+            double psizes[MAX_RANK];
             
             if (!cbf_get_array_section_pixel_sizes(cbf,array_id,rank,psizes)) {
                 

@@ -2142,9 +2142,9 @@ extern "C" {
                 
                 index = elsize*(fastlow +indexmid*dimfast+indexslow*dimfast*dimmid);
                 
-                memmove(tdst,src+index,(1+fasthigh-fastlow)*elsize);
+                memmove(tdst,(char*) src+index,(1+fasthigh-fastlow)*elsize);
                 
-                tdst += (1+fasthigh-fastlow)*elsize;
+                (char*) tdst += (1+fasthigh-fastlow)*elsize;
                 
             }
         }

@@ -260,12 +260,16 @@ extern "C" {
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include <unistd.h>
 #include <fcntl.h>
 #ifdef _WIN32
+  #include <io.h>
+  #include <sys/stat.h>
+  #include <sys/types.h>
   #include <direct.h>
   #define MKDIR(x) _mkdir(x)
+  #define PATH_MAX 4096
 #else
+  #include <unistd.h>
   #include <errno.h>
   #include <sys/stat.h>
   #include <sys/types.h>
@@ -706,7 +710,7 @@ extern "C" {
         if ((cbf_tmp_dir = getenv("CBF_TMP_DIR"))
             && (cbf_tmp_dir_len=cbf_convert_env(NULL,cbf_tmp_dir,0)) > 0) {
             
-            char cbf_tmp_dir_conv[cbf_tmp_dir_len+39];
+            char cbf_tmp_dir_conv[/*cbf_tmp_dir_len*/PATH_MAX+39];
             
             cbf_tmp_dir_len = cbf_convert_env(cbf_tmp_dir_conv,cbf_tmp_dir,cbf_tmp_dir_len+1);
             
@@ -716,7 +720,7 @@ extern "C" {
             
         } else if ((cbf_tmp_dir_len=cbf_convert_env(NULL,CBF_TMP_DIR,0)) > 0) {
 
-            char cbf_tmp_dir_conv[cbf_tmp_dir_len+39];
+            char cbf_tmp_dir_conv[/*cbf_tmp_dir_len*/PATH_MAX+39];
             
             cbf_tmp_dir_len = cbf_convert_env(cbf_tmp_dir_conv,CBF_TMP_DIR,cbf_tmp_dir_len+1);
             
