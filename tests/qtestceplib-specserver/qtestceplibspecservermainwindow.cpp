@@ -18,7 +18,7 @@ QtestceplibSpecServerMainWindow::QtestceplibSpecServerMainWindow(QtestceplibSpec
   connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
 
   ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
-  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
+  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(qceplibVersion()));
   ui->m_FileMenu->addAction(tr("SpecServer Version %1").arg(STR(QCEPLIB_SPECSERVER_VERSION)));
 }
 

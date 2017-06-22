@@ -88,7 +88,8 @@ SOURCES += \
     $$PWD/qcepfileformatter.cpp \
     $$PWD/qcepfileformattertext.cpp \
     $$PWD/qcepfileformatterhdf.cpp \
-    $$PWD/qcepfileformatternexus.cpp
+    $$PWD/qcepfileformatternexus.cpp \
+    $$PWD/qcepmacros.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -114,6 +115,7 @@ contains (DEFINES, HAVE_QWT) {
 
 
 HEADERS += \
+  $${PWD}/qcepmacros.h \
   $${PWD}/qcepdebug.h \
   $${PWD}/qcepproperty.h \
   $${PWD}/qcepproperty-ptr.h \

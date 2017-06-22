@@ -6,6 +6,7 @@
 #include "hdf5.h"
 #include "qtestceplibhdf5document.h"
 #include "H5Cpp.h"
+#include "zlib.h"
 
 QtestceplibHdf5MainWindow::QtestceplibHdf5MainWindow(QtestceplibHdf5Document *doc, QWidget *parent) :
   QMainWindow(parent),
@@ -22,8 +23,9 @@ QtestceplibHdf5MainWindow::QtestceplibHdf5MainWindow(QtestceplibHdf5Document *do
   connect(ui->m_ActionTestHDFSlab, SIGNAL(triggered()), this, SLOT(doTestHDF5SlabOutput()));
 
   ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
-  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
-  ui->m_FileMenu->addAction(tr("HDF5 Version %1").arg(STR(QCEPLIB_HDF5_VERSION)));
+  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(qceplibVersion()));
+  ui->m_FileMenu->addAction(tr("ZLIB Version %1").arg(zlibVersion()));
+  ui->m_FileMenu->addAction(tr("HDF5 Version %1").arg(qcepH5Version()));
 
   unsigned major, minor, release;
 

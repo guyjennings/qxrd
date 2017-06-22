@@ -6,6 +6,7 @@
 #include "qcepimagedata.h"
 #include "qtestceplibcbfdocument.h"
 #include "cbf.h"
+#include "zlib.h"
 
 static QcepImageDataFormatCBF<double> dblcbf("dblcbf");
 
@@ -24,7 +25,8 @@ QtestceplibCbfMainWindow::QtestceplibCbfMainWindow(QtestceplibCbfDocument *doc, 
   connect(ui->m_ActionTestCBF, SIGNAL(triggered()), this, SLOT(doTestCBFLibrary()));
 
   ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
-  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
+  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(qceplibVersion()));
+  ui->m_FileMenu->addAction(tr("ZLIB Version %1").arg(zlibVersion()));
   ui->m_FileMenu->addAction(tr("CBF Version %1").arg(STR(QCEPLIB_CBF_VERSION)));
 }
 

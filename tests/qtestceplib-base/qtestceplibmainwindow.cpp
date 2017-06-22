@@ -21,7 +21,7 @@ QtestceplibMainWindow::QtestceplibMainWindow(QtestceplibDocument *doc, QWidget *
   connect(ui->m_ActionSaveImage, SIGNAL(triggered()), this, SLOT(doSaveImage()));
 
   ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
-  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
+  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(qceplibVersion()));
 
   if (m_Document) {
     m_Document->prop_StrProp()->linkTo(ui->m_TextEdit);

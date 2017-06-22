@@ -40,4 +40,7 @@ Q_DECLARE_METATYPE(QcepPolygon)
 Q_DECLARE_METATYPE(QPointF)
 Q_DECLARE_METATYPE(QRectF)
 
+extern const char* qceplibVersion();
+extern const char* qcepH5Version();
+
 #endif // QCEPMACROS_H

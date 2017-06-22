@@ -20,7 +20,8 @@ DEFINES += HAVE_CONFIG_H=1
 DEFINES += HAVE_HDF5
 
 HEADERS += \
-    $${NEXUSCONF}/nxconfig.h
+    $${NEXUSCONF}/nxconfig.h \
+    $${NEXUSHDR}/napi.h
 
 SOURCES += \
     $${NEXUSSRC}/napi5.c \

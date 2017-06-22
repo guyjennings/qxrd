@@ -6,6 +6,7 @@
 #include "hdf5.h"
 #include "qtestceplibnexusdocument.h"
 #include "napi.h"
+#include "zlib.h"
 
 QtestceplibNexusMainWindow::QtestceplibNexusMainWindow(QtestceplibNexusDocument *doc, QWidget *parent) :
   QMainWindow(parent),
@@ -23,9 +24,10 @@ QtestceplibNexusMainWindow::QtestceplibNexusMainWindow(QtestceplibNexusDocument 
   connect(ui->m_ActionTestNexus, SIGNAL(triggered()), this, SLOT(doTestNexusLibrary()));
 
   ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
-  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(STR(QCEPLIB_VERSION)));
-  ui->m_FileMenu->addAction(tr("HDF5 Version %1").arg(STR(QCEPLIB_HDF5_VERSION)));
-  ui->m_FileMenu->addAction(tr("NeXus Version %1").arg(STR(QCEPLIB_NEXUS_VERSION)));
+  ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(qceplibVersion()));
+  ui->m_FileMenu->addAction(tr("ZLIB Version %1").arg(zlibVersion()));
+  ui->m_FileMenu->addAction(tr("HDF5 Version %1").arg(qcepH5Version()));
+  ui->m_FileMenu->addAction(tr("NeXus Version %1").arg(NXgetversion()));
 }
 
 QtestceplibNexusMainWindow::~QtestceplibNexusMainWindow()
