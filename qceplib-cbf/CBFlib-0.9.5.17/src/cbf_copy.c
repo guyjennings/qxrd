@@ -2113,7 +2113,7 @@ extern "C" {
         
         size_t indexmid, indexslow, index;
         
-        void * tdst;
+        char * tdst;
         
         /* Is the element size valid? */
         
@@ -2144,7 +2144,7 @@ extern "C" {
                 
                 memmove(tdst,(char*) src+index,(1+fasthigh-fastlow)*elsize);
                 
-                (char*) tdst += (1+fasthigh-fastlow)*elsize;
+                tdst += (1+fasthigh-fastlow)*elsize;
                 
             }
         }
