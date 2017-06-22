@@ -57,6 +57,7 @@ class QcepImageDataFormat : public QcepImageDataFormatBase
 {
  public:
   QcepImageDataFormat(QString fmtname);
+  virtual ~QcepImageDataFormat();
 
   virtual QcepImageDataFormat<T>* canLoadFile(QString path) = 0;
   virtual QcepImageDataFormat<T>* canSaveFile(QString path) = 0;

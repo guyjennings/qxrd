@@ -46,6 +46,12 @@ QcepImageDataFormat<T>::QcepImageDataFormat(QString fmtname)
   QcepImageDataFormatFactory<T>::factory()->insert(this);
 }
 
+template <typename T>
+QcepImageDataFormat<T>::~QcepImageDataFormat()
+{
+  QcepImageDataFormatFactory<T>::factory()->remove(this);
+}
+
 template class QcepImageDataFormat<unsigned short>;
 template class QcepImageDataFormat<short>;
 template class QcepImageDataFormat<unsigned int>;

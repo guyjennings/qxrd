@@ -37,6 +37,12 @@ void QcepImageDataFormatFactory<T>::insert(QcepImageDataFormat<T> *fmt)
 }
 
 template <typename T>
+void QcepImageDataFormatFactory<T>::remove(QcepImageDataFormat<T> *fmt)
+{
+  m_Formats.removeAll(fmt);
+}
+
+template <typename T>
 QcepImageDataFormat<T>* QcepImageDataFormatFactory<T>::canLoad(QString path)
 {
   QcepImageDataFormat<T> *fmt;

@@ -22,6 +22,7 @@ class QcepImageDataFormatFactory
   ~QcepImageDataFormatFactory();
 
   void insert(QcepImageDataFormat<T> *f);
+  void remove(QcepImageDataFormat<T> *f);
   QcepImageDataFormat<T>* canLoad(QString path);
 
  private:
