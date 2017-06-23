@@ -9,22 +9,22 @@ HDF5BASE    = $${PWD}/hdf5-$${QCEPLIB_HDF5_VERSION}/src/
 HDF5CPPBASE = $${PWD}/hdf5-$${QCEPLIB_HDF5_VERSION}/c++/src/
 
 macx {
-  HDF5CONF = $${PWD}/hdf5-config/macx/
+  HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/macx/
 } else:win32 {
   contains(QMAKE_TARGET.arch, x86_64) {
     message(64 bit build)
-    HDF5CONF = $${PWD}/hdf5-config/win64/
+    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/win64/
   } else {
     message(32 bit build)
-    HDF5CONF = $${PWD}/hdf5-config/win32/
+    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/win32/
   }
 } else:unix {
   contains(QMAKE_TARGET.arch, x86_64) {
     message(64 bit build)
-    HDF5CONF = $${PWD}/hdf5-config/lin64/
+    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/lin64/
   } else {
     message(32 bit build)
-    HDF5CONF = $${PWD}/hdf5-config/lin32/
+    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/lin32/
   }
   DEFINES += _LARGEFILE_SOURCE
   DEFINES += _LARGEFILE64_SOURCE
@@ -155,6 +155,9 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5.c \
     $${HDF5BASE}/H5A.c \
     $${HDF5BASE}/H5AC.c \
+    $${HDF5BASE}/H5ACdbg.c \
+    $${HDF5BASE}/H5AClog.c \
+    $${HDF5BASE}/H5ACproxy_entry.c \
     $${HDF5BASE}/H5Abtree2.c \
     $${HDF5BASE}/H5Adense.c \
     $${HDF5BASE}/H5Adeprec.c \
@@ -166,33 +169,70 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5B2dbg.c \
     $${HDF5BASE}/H5B2hdr.c \
     $${HDF5BASE}/H5B2int.c \
+    $${HDF5BASE}/H5B2internal.c \
+    $${HDF5BASE}/H5B2leaf.c \
     $${HDF5BASE}/H5B2stat.c \
     $${HDF5BASE}/H5B2test.c \
     $${HDF5BASE}/H5Bcache.c \
     $${HDF5BASE}/H5Bdbg.c \
     $${HDF5BASE}/H5C.c \
+    $${HDF5BASE}/H5Cdbg.c \
+    $${HDF5BASE}/H5Cepoch.c \
+    $${HDF5BASE}/H5Cimage.c \
+    $${HDF5BASE}/H5Clog.c \
+    $${HDF5BASE}/H5Cprefetched.c \
+    $${HDF5BASE}/H5Cquery.c \
     $${HDF5BASE}/H5CS.c \
+    $${HDF5BASE}/H5Ctag.c \
+    $${HDF5BASE}/H5Ctest.c \
     $${HDF5BASE}/H5D.c \
     $${HDF5BASE}/H5Dbtree.c \
+    $${HDF5BASE}/H5Dbtree2.c \
     $${HDF5BASE}/H5Dchunk.c \
     $${HDF5BASE}/H5Dcompact.c \
     $${HDF5BASE}/H5Dcontig.c \
     $${HDF5BASE}/H5Ddbg.c \
     $${HDF5BASE}/H5Ddeprec.c \
+    $${HDF5BASE}/H5Dearray.c \
     $${HDF5BASE}/H5Defl.c \
+    $${HDF5BASE}/H5Dfarray.c \
     $${HDF5BASE}/H5Dfill.c \
     $${HDF5BASE}/H5Dint.c \
     $${HDF5BASE}/H5Dio.c \
     $${HDF5BASE}/H5Dlayout.c \
     $${HDF5BASE}/H5Dmpio.c \
+    $${HDF5BASE}/H5Dnone.c \
     $${HDF5BASE}/H5Doh.c \
     $${HDF5BASE}/H5Dscatgath.c \
     $${HDF5BASE}/H5Dselect.c \
+    $${HDF5BASE}/H5Dsingle.c \
     $${HDF5BASE}/H5Dtest.c \
+    $${HDF5BASE}/H5Dvirtual.c \
     $${HDF5BASE}/H5E.c \
+    $${HDF5BASE}/H5EA.c \
+    $${HDF5BASE}/H5EAcache.c \
+    $${HDF5BASE}/H5EAdbg.c \
+    $${HDF5BASE}/H5EAdblkpage.c \
+    $${HDF5BASE}/H5EAdblock.c \
+    $${HDF5BASE}/H5EAhdr.c \
+    $${HDF5BASE}/H5EAiblock.c \
+    $${HDF5BASE}/H5EAint.c \
+    $${HDF5BASE}/H5EAsblock.c \
+    $${HDF5BASE}/H5EAstat.c \
+    $${HDF5BASE}/H5EAtest.c \
     $${HDF5BASE}/H5Edeprec.c \
     $${HDF5BASE}/H5Eint.c \
     $${HDF5BASE}/H5F.c \
+    $${HDF5BASE}/H5FA.c \
+    $${HDF5BASE}/H5FAcache.c \
+    $${HDF5BASE}/H5FAdbg.c \
+    $${HDF5BASE}/H5FAdblkpage.c \
+    $${HDF5BASE}/H5FAdblock.c \
+    $${HDF5BASE}/H5FAhdr.c \
+    $${HDF5BASE}/H5FAint.c \
+    $${HDF5BASE}/H5FAstat.c \
+    $${HDF5BASE}/H5FAtest.c \
+    $${HDF5BASE}/H5Fdeprec.c \
     $${HDF5BASE}/H5FD.c \
     $${HDF5BASE}/H5FDcore.c \
     $${HDF5BASE}/H5FDdirect.c \
@@ -201,7 +241,6 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5FDlog.c \
     $${HDF5BASE}/H5FDmpi.c \
     $${HDF5BASE}/H5FDmpio.c \
-#    $${HDF5BASE}/H5FDmpiposix.c \
     $${HDF5BASE}/H5FDmulti.c \
     $${HDF5BASE}/H5FDsec2.c \
     $${HDF5BASE}/H5FDspace.c \
@@ -212,6 +251,7 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5FS.c \
     $${HDF5BASE}/H5FScache.c \
     $${HDF5BASE}/H5FSdbg.c \
+    $${HDF5BASE}/H5FSint.c \
     $${HDF5BASE}/H5FSsection.c \
     $${HDF5BASE}/H5FSstat.c \
     $${HDF5BASE}/H5FStest.c \
@@ -226,6 +266,7 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5Fmpi.c \
     $${HDF5BASE}/H5Fquery.c \
     $${HDF5BASE}/H5Fsfile.c \
+    $${HDF5BASE}/H5Fspace.c \
     $${HDF5BASE}/H5Fsuper.c \
     $${HDF5BASE}/H5Fsuper_cache.c \
     $${HDF5BASE}/H5Ftest.c \
@@ -270,7 +311,9 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5HL.c \
     $${HDF5BASE}/H5HLcache.c \
     $${HDF5BASE}/H5HLdbg.c \
+    $${HDF5BASE}/H5HLdblk.c \
     $${HDF5BASE}/H5HLint.c \
+    $${HDF5BASE}/H5HLprfx.c \
     $${HDF5BASE}/H5HP.c \
     $${HDF5BASE}/H5I.c \
     $${HDF5BASE}/H5Itest.c \
@@ -291,6 +334,7 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5Obogus.c \
     $${HDF5BASE}/H5Obtreek.c \
     $${HDF5BASE}/H5Ocache.c \
+    $${HDF5BASE}/H5Ocache_image.c \
     $${HDF5BASE}/H5Ochunk.c \
     $${HDF5BASE}/H5Ocont.c \
     $${HDF5BASE}/H5Ocopy.c \
@@ -299,6 +343,8 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5Odtype.c \
     $${HDF5BASE}/H5Oefl.c \
     $${HDF5BASE}/H5Ofill.c \
+    $${HDF5BASE}/H5Oflush.c \
+    $${HDF5BASE}/H5Ofsinfo.c \
     $${HDF5BASE}/H5Oginfo.c \
     $${HDF5BASE}/H5Olayout.c \
     $${HDF5BASE}/H5Olinfo.c \
@@ -316,12 +362,14 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5Otest.c \
     $${HDF5BASE}/H5Ounknown.c \
     $${HDF5BASE}/H5P.c \
+    $${HDF5BASE}/H5PB.c \
     $${HDF5BASE}/H5PL.c \
     $${HDF5BASE}/H5Pacpl.c \
     $${HDF5BASE}/H5Pdapl.c \
     $${HDF5BASE}/H5Pdcpl.c \
     $${HDF5BASE}/H5Pdeprec.c \
     $${HDF5BASE}/H5Pdxpl.c \
+    $${HDF5BASE}/H5Pencdec.c \
     $${HDF5BASE}/H5Pfapl.c \
     $${HDF5BASE}/H5Pfcpl.c \
     $${HDF5BASE}/H5Pfmpl.c \
@@ -334,7 +382,6 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5Pstrcpl.c \
     $${HDF5BASE}/H5Ptest.c \
     $${HDF5BASE}/H5R.c \
-#    $${HDF5BASE}/H5RC.c \
     $${HDF5BASE}/H5RS.c \
     $${HDF5BASE}/H5Rdeprec.c \
     $${HDF5BASE}/H5S.c \
@@ -377,6 +424,7 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5Tstrpad.c \
     $${HDF5BASE}/H5Tvisit.c \
     $${HDF5BASE}/H5Tvlen.c \
+    $${HDF5BASE}/H5UC.c \
     $${HDF5BASE}/H5VM.c \
     $${HDF5BASE}/H5WB.c \
     $${HDF5BASE}/H5Z.c \
@@ -389,8 +437,6 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/H5Ztrans.c \
     $${HDF5BASE}/H5checksum.c \
     $${HDF5BASE}/H5dbg.c \
-#    $${HDF5BASE}/H5detect.c \
-#    $${HDF5BASE}/H5make_libsettings.c \
     $${HDF5BASE}/H5system.c \
     $${HDF5BASE}/H5timer.c \
     $${HDF5BASE}/H5trace.c

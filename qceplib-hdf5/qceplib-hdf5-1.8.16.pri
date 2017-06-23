@@ -9,22 +9,22 @@ HDF5BASE    = $${PWD}/hdf5-$${QCEPLIB_HDF5_VERSION}/src/
 HDF5CPPBASE = $${PWD}/hdf5-$${QCEPLIB_HDF5_VERSION}/c++/src/
 
 macx {
-  HDF5CONF = $${PWD}/hdf5-config/macx/
+  HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/macx/
 } else:win32 {
   contains(QMAKE_TARGET.arch, x86_64) {
     message(64 bit build)
-    HDF5CONF = $${PWD}/hdf5-config/win64/
+    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/win64/
   } else {
     message(32 bit build)
-    HDF5CONF = $${PWD}/hdf5-config/win32/
+    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/win32/
   }
 } else:unix {
   contains(QMAKE_TARGET.arch, x86_64) {
     message(64 bit build)
-    HDF5CONF = $${PWD}/hdf5-config/lin64/
+    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/lin64/
   } else {
     message(32 bit build)
-    HDF5CONF = $${PWD}/hdf5-config/lin32/
+    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/lin32/
   }
   DEFINES += _LARGEFILE_SOURCE
   DEFINES += _LARGEFILE64_SOURCE

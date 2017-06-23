@@ -1,0 +1,69 @@
+      SUMMARY OF THE HDF5 CONFIGURATION
+      =================================
+
+General Information:
+-------------------
+                   HDF5 Version: 1.8.11
+                  Configured on: 
+                  Configured by: NMake Makefiles
+                 Configure mode: CMAKE 2.8.11.2
+                    Host system: Windows-6.1
+              Uname information: Windows
+                       Byte sex: little-endian
+                      Libraries: 
+             Installation point: C:/Program Files (x86)/HDF5
+
+Compiling Options:
+------------------
+               Compilation Mode: Debug
+                     C Compiler: C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/bin/cl.exe
+                         CFLAGS:  /DWIN32 /D_WINDOWS /W3
+                      H5_CFLAGS: 
+                      AM_CFLAGS: 
+                       CPPFLAGS:  /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+                    H5_CPPFLAGS: 
+                    AM_CPPFLAGS: 
+               Shared Libraries: NO
+               Static Libraries: YES
+  Statically Linked Executables: OFF
+                        LDFLAGS:  /machine:X86 
+                     AM_LDFLAGS: 
+                Extra libraries: 
+                       Archiver: 
+                         Ranlib: 
+              Debugged Packages: 
+                    API Tracing: ON
+
+Languages:
+----------
+                        Fortran: OFF
+               Fortran Compiler: 
+          Fortran 2003 Compiler: 
+                  Fortran Flags: 
+               H5 Fortran Flags: 
+               AM Fortran Flags: 
+                            C++: OFF
+                   C++ Compiler: C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/bin/cl.exe
+                      C++ Flags:  /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+                   H5 C++ Flags: 
+                   AM C++ Flags: 
+
+Features:
+---------
+                  Parallel HDF5: OFF
+             High Level library: OFF
+                   Threadsafety: OFF
+            Default API Mapping: v18
+ With Deprecated Public Symbols: ON
+         I/O filters (external): 
+         I/O filters (internal):  SHUFFLE FLETCHER32 NBIT SCALEOFFSET
+                            MPE: 
+                     Direct VFD: 
+                        dmalloc: 
+Clear file buffers before write: ON
+           Using memory checker: OFF
+         Function Stack Tracing: OFF
+                           GPFS: OFF
+      Strict File Format Checks: OFF
+   Optimization Instrumentation: 
+       Large File Support (LFS): 
