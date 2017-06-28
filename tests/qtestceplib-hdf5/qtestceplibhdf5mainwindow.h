@@ -36,6 +36,8 @@ public slots:
 
   void doTestHDF5Library();
   void doTestHDF5SlabOutput();
+  void doIterateHDF5File();
+  void doIterateHDF5File2();
 
   void printMessage(QString msg);
 
