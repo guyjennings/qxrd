@@ -13,8 +13,8 @@ public:
   Q_INVOKABLE QcepDataColumnScan(QString name,
       QStringList cols = QStringList(), int sz=0);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 public slots:
   virtual QString description() const;

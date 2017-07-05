@@ -4,6 +4,7 @@
 #include "qcepmacros.h"
 
 #include "qcepobject-ptr.h"
+#include "qcepserializableobject-ptr.h"
 #include <QVariant>
 #include <QMutex>
 #include <QVector>
@@ -29,7 +30,7 @@ typedef void (CustomSettingsSaver)(const QVariant &val, QSettings *settings, QSt
 class QcepProperty : public QObject {
   Q_OBJECT
 public:
-  QcepProperty(QcepObject *parent, const char *name, QString toolTip);
+  QcepProperty(QcepSerializableObject *parent, const char *name, QString toolTip);
 
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime());
 
@@ -54,19 +55,14 @@ public:
   int isStored() const;
 
   static void setSettingsValue(QSettings *settings, QString name, QVariant value);
-  static void writeSettings(QObject *object, QSettings *settings, QString section);
-  static void readSettings(QObject *object, QSettings *settings, QString section);
-  static void writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic = false);
-  static void readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic = false);
-  static void writeSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic = false);
-  static void readSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic = false);
-//  static void dumpMetaData(const QMetaObject *meta);
+  static void writeSettings(QObject *object, QSettings *settings);
+  static void readSettings(QObject *object, QSettings *settings);
 
   static void registerCustomSaver(QString typeName, CustomSettingsSaver *saver);
 
 protected:
   mutable QMutex           m_Mutex;
-  QcepObject              *m_Parent;
+  QcepSerializableObject  *m_Parent;
 
 private:
   int                      m_Debug;
@@ -81,7 +77,7 @@ private:
 class QcepDoubleProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleProperty(QcepObject *parent, const char *name, double value, QString toolTip);
+  QcepDoubleProperty(QcepSerializableObject *parent, const char *name, double value, QString toolTip);
 
   double value() const;
   double defaultValue() const;
@@ -129,7 +125,7 @@ private:
 class QcepIntProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepIntProperty(QcepObject *parent, const char *name, int value, QString toolTip);
+  QcepIntProperty(QcepSerializableObject *parent, const char *name, int value, QString toolTip);
 
   int value() const;
   int defaultValue() const;
@@ -197,7 +193,7 @@ private:
 class QcepBoolProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepBoolProperty(QcepObject *parent, const char *name, bool value, QString toolTip);
+  QcepBoolProperty(QcepSerializableObject *parent, const char *name, bool value, QString toolTip);
 
   bool value() const;
   bool defaultValue() const;
@@ -241,7 +237,7 @@ private:
 class QcepStringProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringProperty(QcepObject *parent, const char *name, QString value, QString toolTip);
+  QcepStringProperty(QcepSerializableObject *parent, const char *name, QString value, QString toolTip);
 
   QString value() const;
   QString defaultValue() const;
@@ -326,7 +322,7 @@ private:
 class QcepDateTimeProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDateTimeProperty(QcepObject *parent, const char *name, QDateTime value, QString toolTip);
+  QcepDateTimeProperty(QcepSerializableObject *parent, const char *name, QDateTime value, QString toolTip);
 
   QDateTime value() const;
   QDateTime defaultValue() const;
@@ -349,7 +345,7 @@ private:
 class QcepDoubleListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleListProperty(QcepObject *parent, const char *name, QcepDoubleList value, QString toolTip);
+  QcepDoubleListProperty(QcepSerializableObject *parent, const char *name, QcepDoubleList value, QString toolTip);
 
   QcepDoubleList value() const;
   QcepDoubleList defaultValue() const;
@@ -375,7 +371,7 @@ private:
 class QcepDoubleVectorProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleVectorProperty(QcepObject *parent, const char *name, QcepDoubleVector value, QString toolTip);
+  QcepDoubleVectorProperty(QcepSerializableObject *parent, const char *name, QcepDoubleVector value, QString toolTip);
 
   QcepDoubleVector value() const;
   QcepDoubleVector defaultValue() const;
@@ -401,7 +397,7 @@ private:
 class QcepIntListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepIntListProperty(QcepObject *parent, const char *name, QcepIntList value, QString toolTip);
+  QcepIntListProperty(QcepSerializableObject *parent, const char *name, QcepIntList value, QString toolTip);
 
   QcepIntList value() const;
   QcepIntList defaultValue() const;
@@ -427,7 +423,7 @@ private:
 class QcepIntVectorProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepIntVectorProperty(QcepObject *parent, const char *name, QcepIntVector value, QString toolTip);
+  QcepIntVectorProperty(QcepSerializableObject *parent, const char *name, QcepIntVector value, QString toolTip);
 
   QcepIntVector value() const;
   QcepIntVector defaultValue() const;
@@ -453,7 +449,7 @@ private:
 class QcepStringListProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepStringListProperty(QcepObject *parent, const char *name, QStringList value, QString toolTip);
+  QcepStringListProperty(QcepSerializableObject *parent, const char *name, QStringList value, QString toolTip);
 
   QStringList value() const;
   QStringList defaultValue() const;
@@ -478,7 +474,7 @@ private:
 class QcepByteArrayProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepByteArrayProperty(QcepObject *parent, const char *name, QByteArray value, QString toolTip);
+  QcepByteArrayProperty(QcepSerializableObject *parent, const char *name, QByteArray value, QString toolTip);
 
   QByteArray value() const;
   QByteArray defaultValue() const;
@@ -502,7 +498,7 @@ private:
 class QcepDoublePointProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoublePointProperty(QcepObject *parent, const char *name, QPointF value, QString toolTip);
+  QcepDoublePointProperty(QcepSerializableObject *parent, const char *name, QPointF value, QString toolTip);
 
   QPointF value() const;
   QPointF defaultValue() const;
@@ -551,7 +547,7 @@ private:
 class QcepDoubleRectProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepDoubleRectProperty(QcepObject *parent, const char *name, QRectF value, QString toolTip);
+  QcepDoubleRectProperty(QcepSerializableObject *parent, const char *name, QRectF value, QString toolTip);
 
   QRectF value() const;
   QRectF defaultValue() const;
@@ -573,7 +569,7 @@ private:
 class QcepPolygonProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QcepPolygonProperty(QcepObject *parent, const char *name, QcepPolygon value, QString toolTip);
+  QcepPolygonProperty(QcepSerializableObject *parent, const char *name, QcepPolygon value, QString toolTip);
 
   QcepPolygon value() const;
   QcepPolygon defaultValue() const;
@@ -597,7 +593,7 @@ private:
 class QcepInt64Property : public QcepProperty {
   Q_OBJECT
 public:
-  QcepInt64Property(QcepObject *parent, const char *name, qint64 value, QString toolTip);
+  QcepInt64Property(QcepSerializableObject *parent, const char *name, qint64 value, QString toolTip);
 
   qint64 value() const;
   qint64 defaultValue() const;

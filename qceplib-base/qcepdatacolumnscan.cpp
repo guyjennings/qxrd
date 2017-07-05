@@ -9,20 +9,23 @@ QcepDataColumnScan::QcepDataColumnScan(QString name, QStringList cols, int sz) :
   QcepDataGroup(name),
   m_NumPoints(this, "numPoints", sz, "Number of points in scan")
 {
+  foreach (QString col, cols) {
+    appendColumn(col);
+  }
 }
 
-void QcepDataColumnScan::writeSettings(QSettings *settings, QString section)
+void QcepDataColumnScan::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepDataGroup::writeSettings(settings, section);
+  QcepDataGroup::writeSettings(settings);
 }
 
-void QcepDataColumnScan::readSettings(QSettings *settings, QString section)
+void QcepDataColumnScan::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepDataGroup::readSettings(settings, section);
+  QcepDataGroup::readSettings(settings);
 }
 
 QString QcepDataColumnScan::description() const
@@ -75,7 +78,7 @@ int QcepDataColumnScan::rowCount() const
 
 QcepDataColumnPtr QcepDataColumnScan::appendColumn(QString title)
 {
-  QcepDataColumnPtr col = QcepAllocator::newColumn(title, 0, QcepAllocator::NullIfNotAvailable);
+  QcepDataColumnPtr col = QcepAllocator::newColumn(title, get_NumPoints(), QcepAllocator::NullIfNotAvailable);
 
   if (col) {
     append(col);

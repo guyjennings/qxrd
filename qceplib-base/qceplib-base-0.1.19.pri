@@ -26,7 +26,6 @@ SOURCES += \
   $${PWD}/qcepplotmarkerlistproperty.cpp \
   $${PWD}/qcepmutexlocker.cpp \
   $${PWD}/qcepdocumentationdictionary.cpp \
-  $${PWD}/qcepsettingssaver.cpp \
   $${PWD}/qcepimagedata.cpp \
   $${PWD}/qcepimagequeue.cpp \
   $${PWD}/qcepimagedataformatfactory.cpp \
@@ -69,27 +68,27 @@ SOURCES += \
   $${PWD}/qcepdataobjectspreadsheetwindow.cpp \
   $${PWD}/qcepscriptengine.cpp \
   $${PWD}/qcepdataobjectwindow.cpp \
-  $$PWD/qcepmainwindow.cpp \
-  $$PWD/qcepscatterplotgraphmodel.cpp \
-  $$PWD/qcepdatasetselectiondialog.cpp \
-  $$PWD/qcepdataprocessorbase.cpp \
-  $$PWD/qcepdataimportcommand.cpp \
-  $$PWD/qcepdataexportcommand.cpp \
-  $$PWD/qcepdataimportdialog.cpp \
-  $$PWD/qcepdataexportdialog.cpp \
-  $$PWD/qcepdataimportparameters.cpp \
-  $$PWD/qcepdataexportparameters.cpp \
-  $$PWD/qcepfileimporter.cpp \
-  $$PWD/qcepfileimportertext.cpp \
-  $$PWD/qcepfileimportertiff.cpp \
-  $$PWD/qcepfileimporterhdf.cpp \
-  $$PWD/qcepfileimportermultiple.cpp \
-  $$PWD/qcepapplicationsettings.cpp \
-    $$PWD/qcepfileformatter.cpp \
-    $$PWD/qcepfileformattertext.cpp \
-    $$PWD/qcepfileformatterhdf.cpp \
-    $$PWD/qcepfileformatternexus.cpp \
-    $$PWD/qcepmacros.cpp
+  $${PWD}/qcepmainwindow.cpp \
+  $${PWD}/qcepscatterplotgraphmodel.cpp \
+  $${PWD}/qcepdatasetselectiondialog.cpp \
+  $${PWD}/qcepdataprocessorbase.cpp \
+  $${PWD}/qcepdataimportcommand.cpp \
+  $${PWD}/qcepdataexportcommand.cpp \
+  $${PWD}/qcepdataimportdialog.cpp \
+  $${PWD}/qcepdataexportdialog.cpp \
+  $${PWD}/qcepdataimportparameters.cpp \
+  $${PWD}/qcepdataexportparameters.cpp \
+  $${PWD}/qcepfileimporter.cpp \
+  $${PWD}/qcepfileimportertext.cpp \
+  $${PWD}/qcepfileimportertiff.cpp \
+  $${PWD}/qcepfileimporterhdf.cpp \
+  $${PWD}/qcepfileimportermultiple.cpp \
+  $${PWD}/qcepapplicationsettings.cpp \
+    $${PWD}/qcepfileformatter.cpp \
+    $${PWD}/qcepfileformattertext.cpp \
+    $${PWD}/qcepfileformatterhdf.cpp \
+    $${PWD}/qcepfileformatternexus.cpp \
+    $${PWD}/qcepserializableobject.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -126,8 +125,6 @@ HEADERS += \
   $${PWD}/qcepplotmarkerlistproperty.h \
   $${PWD}/qcepmutexlocker.h \
   $${PWD}/qcepdocumentationdictionary.h \
-  $${PWD}/qcepsettingssaver.h \
-  $${PWD}/qcepsettingssaver-ptr.h \
   $${PWD}/qcepimagedata.h \
   $${PWD}/qcepimagedata-ptr.h \
   $${PWD}/qcepimagequeue.h \
@@ -188,36 +185,38 @@ HEADERS += \
   $${PWD}/qcepscriptengine.h \
   $${PWD}/qcepscriptengine-ptr.h \
   $${PWD}/qcepdataobjectwindow.h \
-  $$PWD/qcepmainwindow.h \
-  $$PWD/qcepmainwindow-ptr.h \
-  $$PWD/qcepscatterplotgraphmodel.h \
-  $$PWD/qcepscatterplotgraphmodel-ptr.h \
-  $$PWD/qcepdatasetselectiondialog.h \
-  $$PWD/qcepdataprocessorbase.h \
-  $$PWD/qcepdataprocessorbase-ptr.h \
-  $$PWD/qcepdataimportcommand.h \
-  $$PWD/qcepdataexportcommand.h \
-  $$PWD/qcepdataimportdialog.h \
-  $$PWD/qcepdataexportdialog.h \
-  $$PWD/qcepdataimportparameters.h \
-  $$PWD/qcepdataexportparameters.h \
-  $$PWD/qcepdataexportparameters-ptr.h \
-  $$PWD/qcepdataexportcommand-ptr.h \
-  $$PWD/qcepdataimportparameters-ptr.h \
-  $$PWD/qcepdataimportcommand-ptr.h \
-  $$PWD/qcepfileimporter.h \
-  $$PWD/qcepfileimportertext.h \
-  $$PWD/qcepfileimportertiff.h \
-  $$PWD/qcepfileimporterhdf.h \
-  $$PWD/qcepfileimporter-ptr.h \
-  $$PWD/qcepfileimportermultiple.h \
-  $$PWD/qcepapplicationsettings.h \
-  $$PWD/qcepapplicationsettings-ptr.h \
-    $$PWD/qcepfileformatter.h \
-    $$PWD/qcepfileformatter-ptr.h \
-    $$PWD/qcepfileformattertext.h \
-    $$PWD/qcepfileformatterhdf.h \
-    $$PWD/qcepfileformatternexus.h
+  $${PWD}/qcepmainwindow.h \
+  $${PWD}/qcepmainwindow-ptr.h \
+  $${PWD}/qcepscatterplotgraphmodel.h \
+  $${PWD}/qcepscatterplotgraphmodel-ptr.h \
+  $${PWD}/qcepdatasetselectiondialog.h \
+  $${PWD}/qcepdataprocessorbase.h \
+  $${PWD}/qcepdataprocessorbase-ptr.h \
+  $${PWD}/qcepdataimportcommand.h \
+  $${PWD}/qcepdataexportcommand.h \
+  $${PWD}/qcepdataimportdialog.h \
+  $${PWD}/qcepdataexportdialog.h \
+  $${PWD}/qcepdataimportparameters.h \
+  $${PWD}/qcepdataexportparameters.h \
+  $${PWD}/qcepdataexportparameters-ptr.h \
+  $${PWD}/qcepdataexportcommand-ptr.h \
+  $${PWD}/qcepdataimportparameters-ptr.h \
+  $${PWD}/qcepdataimportcommand-ptr.h \
+  $${PWD}/qcepfileimporter.h \
+  $${PWD}/qcepfileimportertext.h \
+  $${PWD}/qcepfileimportertiff.h \
+  $${PWD}/qcepfileimporterhdf.h \
+  $${PWD}/qcepfileimporter-ptr.h \
+  $${PWD}/qcepfileimportermultiple.h \
+  $${PWD}/qcepapplicationsettings.h \
+  $${PWD}/qcepapplicationsettings-ptr.h \
+    $${PWD}/qcepfileformatter.h \
+    $${PWD}/qcepfileformatter-ptr.h \
+    $${PWD}/qcepfileformattertext.h \
+    $${PWD}/qcepfileformatterhdf.h \
+    $${PWD}/qcepfileformatternexus.h \
+    $${PWD}/qcepserializableobject.h \
+    $${PWD}/qcepserializableobject-ptr.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \
@@ -253,9 +252,9 @@ FORMS += \
   $${PWD}/qcepnewdataarraydialog.ui \
   $${PWD}/qcepdataobjectpropertieswindow.ui \
   $${PWD}/qcepdataobjectspreadsheetwindow.ui \
-  $$PWD/qcepdatasetselectiondialog.ui \
-  $$PWD/qcepdataimportdialog.ui \
-  $$PWD/qcepdataexportdialog.ui
+  $${PWD}/qcepdatasetselectiondialog.ui \
+  $${PWD}/qcepdataimportdialog.ui \
+  $${PWD}/qcepdataexportdialog.ui
 
 contains(DEFINES, HAVE_QWT) {
  FORMS += \

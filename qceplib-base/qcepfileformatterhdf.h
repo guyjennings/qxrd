@@ -32,9 +32,9 @@ public:
   virtual void beginReadFile();
   virtual void endReadFile();
 
-  virtual QcepObjectPtr nextObject();
+  virtual QcepSerializableObjectPtr nextObject();
 
-  virtual void beginReadObject(QcepObjectPtr obj);
+  virtual void beginReadObject(QcepSerializableObjectPtr obj);
   virtual void endReadObject();
 
   virtual bool beginReadProperties();
@@ -43,7 +43,7 @@ public:
   virtual void endReadProperties();
 
   virtual bool beginReadChildren();
-  virtual QcepObjectPtr nextChild();
+  virtual QcepSerializableObjectPtr nextChild();
   virtual void endReadChildren();
 
   virtual bool beginReadData();

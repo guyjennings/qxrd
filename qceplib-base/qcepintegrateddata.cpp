@@ -1,5 +1,4 @@
 #include "qcepintegrateddata.h"
-#include "qcepsettingssaver.h"
 #include "qcepallocator.h"
 #include <QScriptEngine>
 

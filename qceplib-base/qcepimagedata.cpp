@@ -14,7 +14,6 @@
 #include "qcepimagedataformat.h"
 #include "qcepimagedataformatfactory.h"
 #include "qcepmutexlocker.h"
-#include "qcepsettingssaver.h"
 
 #ifdef HAVE_TIFF
 #include "tiffio.h"
@@ -195,12 +194,15 @@ void QcepImageDataBase::loadMetaData()
 
     QSettings settings(get_FileName()+".metadata", QSettings::IniFormat);
 
-    QcepProperty::readSettings(this, &settings, "metadata");
+    settings.beginGroup("metadata");
+    QcepProperty::readSettings(this, &settings);
 
-    if (settings.contains("metadata/qxrdVersion")) {
+    if (settings.contains("qxrdVersion")) {
       set_Creator("QXRD");
-      set_Version(settings.value("metadata/qxrdVersion").toString());
+      set_Version(settings.value("qxrdVersion").toString());
     }
+
+    settings.endGroup();
   }
 //
 //  printf("QcepImageDataBase::loadMetaData for file %s took %d msec\n",  qPrintable(get_FileName()), tic.elapsed());
@@ -225,7 +227,9 @@ void QcepImageDataBase::saveMetaData(QString name)
 
     QSettings settings(name+".metadata", QSettings::IniFormat);
 
-    QcepProperty::writeSettings(this, &settings, "metadata");
+    settings.beginGroup("metadata");
+    QcepProperty::writeSettings(this, &settings);
+    settings.endGroup();
 
     settings.beginWriteArray("normalization");
     QcepDoubleList norm = get_Normalization();

@@ -1,7 +1,6 @@
 #include "qcepdebug.h"
 #include "qcepproperty.h"
 #include "qcepobject.h"
-#include "qcepsettingssaver.h"
 #include "qcepdocumentationdictionary.h"
 #include "qcepmutexlocker.h"
 #include "qceppropertyvalue.h"
@@ -22,7 +21,7 @@
 
 QMap<QString, CustomSettingsSaver*> QcepProperty::m_CustomSavers;
 
-QcepProperty::QcepProperty(QcepObject *parent, const char *name, QString toolTip)
+QcepProperty::QcepProperty(QcepSerializableObject *parent, const char *name, QString toolTip)
   : QObject(),
     m_Mutex(QMutex::Recursive),
     m_Parent(parent),
@@ -375,26 +374,36 @@ void QcepProperty::setSettingsValue(QSettings *settings, QString name, QVariant 
   }
 }
 
-void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString section)
+void QcepProperty::writeSettings(QObject *object, QSettings *settings)
 {
   if (settings && object) {
     const QMetaObject *meta = object->metaObject();
     int count  = meta->propertyCount();
     int offset = QObject::staticMetaObject.propertyCount();
 
-    settings->beginGroup(section);
+    settings->beginGroup("properties");
 
     for (int i=offset; i<count; i++) {
       QMetaProperty metaproperty = meta->property(i);
+
+//      if (qcepDebug(DEBUG_PROPERTIES)) {
+//        QString msg = tr("group = %2")
+//            .arg(settings->group());
+
+//        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+//                                               Q_ARG(QString, msg),
+//                                               Q_ARG(QDateTime, QDateTime::currentDateTime())));
+//      }
 
       if (metaproperty.isStored()) {
         const char *name = metaproperty.name();
         QVariant value = object -> property(name);
 
         if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
-          QString msg = tr("Save %1/%2 = %3 [%4]")
-              .arg(section).arg(name)
-              .arg(value.toString()).arg(value.typeName());
+          QString msg = tr("Save %2 = %3 [%4]")
+              .arg(name)
+              .arg(value.toString())
+              .arg(value.typeName());
 
           INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
                                                  Q_ARG(QString, msg),
@@ -408,6 +417,15 @@ void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString s
     QByteArray name;
 
     foreach (name, object->dynamicPropertyNames()) {
+      if (qcepDebug(DEBUG_DYNPROPS)) {
+        QString msg = tr("Save dynamic property %2")
+            .arg(name.data());
+
+        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+                                               Q_ARG(QString, msg),
+                                               Q_ARG(QDateTime, QDateTime::currentDateTime())));
+      }
+
       setSettingsValue(settings, name.data(), object->property(name.data()));
     }
 
@@ -415,102 +433,18 @@ void QcepProperty::writeSettings(QObject *object, QSettings *settings, QString s
   }
 }
 
-void QcepProperty::writeSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic)
-{
-  if (settings && object) {
-    int count = meta->propertyCount();
-    int offset = meta->propertyOffset();
-
-    settings->beginGroup(groupName);
-
-    for (int i=offset; i<count; i++) {
-      QMetaProperty metaproperty = meta->property(i);
-
-      if (metaproperty.isStored()) {
-        const char *name = metaproperty.name();
-        QVariant value = object -> property(name);
-
-        if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
-          QString msg = tr("Save %1/%2 = %3 [%4]")
-              .arg(groupName).arg(name)
-              .arg(value.toString()).arg(value.typeName());
-
-          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                 Q_ARG(QString, msg),
-                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
-        }
-
-        setSettingsValue(settings, name, value);
-      }
-    }
-
-    if (includeDynamic) {
-      QByteArray name;
-
-      foreach (name, object->dynamicPropertyNames()) {
-        setSettingsValue(settings, name.data(), object->property(name.data()));
-      }
-    }
-
-    settings->endGroup();
-  }
-}
-
-void QcepProperty::writeSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic)
+void QcepProperty::readSettings(QObject *object, QSettings *settings)
 {
   if (settings && object) {
     const QMetaObject *meta = object->metaObject();
-
-    int count = meta->propertyCount();
-    int offset = QObject::staticMetaObject.propertyOffset();
-
-    settings->beginGroup(groupName);
-
-    for (int i=offset; i<count; i++) {
-      QMetaProperty metaproperty = meta->property(i);
-
-      if (metaproperty.isStored()) {
-        const char *name = metaproperty.name();
-        QVariant value = object -> property(name);
-
-        if (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES)) {
-          QString msg = tr("Save %1/%2 = %3 [%4]")
-              .arg(groupName).arg(name)
-              .arg(value.toString()).arg(value.typeName());
-
-          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                 Q_ARG(QString, msg),
-                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
-        }
-
-        setSettingsValue(settings, name, value);
-      }
-    }
-
-    if (includeDynamic) {
-      QByteArray name;
-
-      foreach (name, object->dynamicPropertyNames()) {
-        setSettingsValue(settings, name.data(), object->property(name.data()));
-      }
-    }
-
-    settings->endGroup();
-  }
-}
-
-void QcepProperty::readSettings(QObject *object, QSettings *settings, QString section)
-{
-  if (settings && object) {
-    const QMetaObject *meta = object->metaObject();
-    settings->beginGroup(section);
+    settings->beginGroup("properties");
 
     QStringList keys = settings->childKeys();
 
     foreach (QString key, keys) {
       if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-        QString msg = tr("Load %1/%2 = %3 [%4]")
-            .arg(section).arg(key)
+        QString msg = tr("Load %2 = %3 [%4]")
+            .arg(key)
             .arg(settings->value(key).toString())
             .arg(settings->value(key).typeName());
 
@@ -532,125 +466,19 @@ void QcepProperty::readSettings(QObject *object, QSettings *settings, QString se
             QString msg = tr("property %1 of %2 not stored").arg(key)
                 .arg(meta -> className());
 
-            INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                   Q_ARG(QString, msg),
-                                                   Q_ARG(QDateTime, QDateTime::currentDateTime())));
           }
         }
       } else {
+        if (object && qcepDebug(DEBUG_DYNPROPS)) {
+          QString msg = tr("Dyn Property %1 from group %2 of object %3 class %4")
+              .arg(key).arg(settings->group()).arg(object->objectName())
+              .arg(meta->className());
+          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
+                                                 Q_ARG(QString, msg),
+                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
+        }
+
         object -> setProperty(qPrintable(key), settings->value(key));
-      }
-    }
-
-    settings->endGroup();
-  }
-}
-
-void QcepProperty::readSettings(QObject *object, const QMetaObject *meta, QString groupName, QSettings *settings, bool includeDynamic)
-{
-  if (settings && object) {
-    settings->beginGroup(groupName);
-
-    QStringList keys = settings->childKeys();
-
-    foreach (QString key, keys) {
-      if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-        QString msg = tr("Load %1/%2 = %3 [%4]")
-            .arg(groupName).arg(key)
-            .arg(settings->value(key).toString())
-            .arg(settings->value(key).typeName());
-
-        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                               Q_ARG(QString, msg),
-                                               Q_ARG(QDateTime, QDateTime::currentDateTime())));
-      }
-
-      int metaindex = meta->indexOfProperty(qPrintable(key));
-
-      if (metaindex == 0) { // objectName is ignored on reading
-      } else if (metaindex > 0) {
-        QMetaProperty metaproperty = meta->property(metaindex);
-
-        if (metaproperty.isStored()) {
-          object -> setProperty(qPrintable(key), settings->value(key));
-        } else {
-          if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-            QString msg = tr("property %1 of %2 not stored").arg(key)
-                .arg(meta -> className());
-
-            INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                   Q_ARG(QString, msg),
-                                                   Q_ARG(QDateTime, QDateTime::currentDateTime())));
-          }
-        }
-      } else {
-        if (includeDynamic) {
-          object -> setProperty(qPrintable(key), settings->value(key));
-        } else if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-          QString msg = tr("property %1 of %2 does not exist")
-              .arg(key).arg(meta -> className());
-
-          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                 Q_ARG(QString, msg),
-                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
-        }
-      }
-    }
-
-    settings->endGroup();
-  }
-}
-
-void QcepProperty::readSettings(QObject *object, QString groupName, QSettings *settings, bool includeDynamic)
-{
-  if (settings && object) {
-    const QMetaObject *meta = object->metaObject();
-
-    settings->beginGroup(groupName);
-
-    QStringList keys = settings->childKeys();
-
-    foreach (QString key, keys) {
-      if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-        QString msg = tr("Load %1/%2 = %3 [%4]")
-            .arg(groupName).arg(key)
-            .arg(settings->value(key).toString())
-            .arg(settings->value(key).typeName());
-
-        INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                               Q_ARG(QString, msg),
-                                               Q_ARG(QDateTime, QDateTime::currentDateTime())));
-      }
-
-      int metaindex = meta->indexOfProperty(qPrintable(key));
-
-      if (metaindex == 0) { // objectName is ignored on reading
-      } else if (metaindex > 0) {
-        QMetaProperty metaproperty = meta->property(metaindex);
-
-        if (metaproperty.isStored()) {
-          object -> setProperty(qPrintable(key), settings->value(key));
-        } else {
-          if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-            QString msg = tr("property %1 of %2 not stored").arg(key)
-                .arg(meta -> className());
-
-            INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                   Q_ARG(QString, msg),
-                                                   Q_ARG(QDateTime, QDateTime::currentDateTime())));
-          }
-        }
-      } else {
-        if (includeDynamic) {
-          object -> setProperty(qPrintable(key), settings->value(key));
-        } else if (object && (qcepDebug(DEBUG_PREFS) || qcepDebug(DEBUG_PROPERTIES))) {
-          QString msg = tr("property %1 of %2 does not exist")
-              .arg(key).arg(meta -> className());
-
-          INVOKE_CHECK(QMetaObject::invokeMethod(object, "printMessage",
-                                                 Q_ARG(QString, msg),
-                                                 Q_ARG(QDateTime, QDateTime::currentDateTime())));
-        }
       }
     }
 
@@ -667,30 +495,12 @@ void QcepProperty::printMessage(QString msg, QDateTime ts)
   }
 }
 
-//void QcepProperty::dumpMetaData(const QMetaObject *meta)
-//{
-//  while (meta && g_Application) {
-//    g_Application -> printMessage(
-//          tr("MetaData for class %1").arg(meta -> className()));
-//    g_Application -> printMessage(
-//          tr(" superClass = %1").HEXARG((void*) meta -> superClass()));
-//    g_Application -> printMessage(
-//          tr(" methodCount = %1, methodOffset = %2")
-//          .arg(meta->methodCount()).arg(meta->methodOffset()));
-//    g_Application -> printMessage(
-//          tr(" propertyCount = %1, propertyOffset = %2")
-//          .arg(meta->propertyCount()).arg(meta->propertyOffset()));
-
-//    meta = meta->superClass();
-//  }
-//}
-
 void QcepProperty::registerCustomSaver(QString typeName, CustomSettingsSaver *saver)
 {
   m_CustomSavers[typeName] = saver;
 }
 
-QcepDoubleProperty::QcepDoubleProperty(QcepObject *parent, const char *name, double value, QString toolTip)
+QcepDoubleProperty::QcepDoubleProperty(QcepSerializableObject *parent, const char *name, double value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -890,7 +700,7 @@ void QcepDoublePropertyDoubleSpinBoxHelper::setValue(double value)
   emit valueChanged(value, m_Property->incIndex(1));
 }
 
-QcepIntProperty::QcepIntProperty(QcepObject *parent, const char *name, int value, QString toolTip)
+QcepIntProperty::QcepIntProperty(QcepSerializableObject *parent, const char *name, int value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1146,7 +956,7 @@ void QcepIntPropertyComboBoxHelper::setCurrentIndex(int value)
   emit currentIndexChanged(value, m_Property->incIndex(1));
 }
 
-QcepBoolProperty::QcepBoolProperty(QcepObject *parent, const char *name, bool value, QString toolTip)
+QcepBoolProperty::QcepBoolProperty(QcepSerializableObject *parent, const char *name, bool value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1300,7 +1110,7 @@ void QcepBoolPropertyButtonHelper::setChecked(bool value)
   emit toggled(value, m_Property->incIndex(1));
 }
 
-QcepStringProperty::QcepStringProperty(QcepObject *parent, const char *name, QString value, QString toolTip)
+QcepStringProperty::QcepStringProperty(QcepSerializableObject *parent, const char *name, QString value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1596,7 +1406,7 @@ void QcepStringPropertyComboBoxHelper::setCurrentIndex(int current)
   emit valueChanged(value, m_Property->incIndex(1));
 }
 
-QcepDateTimeProperty::QcepDateTimeProperty(QcepObject *parent, const char *name, QDateTime value, QString toolTip)
+QcepDateTimeProperty::QcepDateTimeProperty(QcepSerializableObject *parent, const char *name, QDateTime value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1672,7 +1482,7 @@ void QcepDateTimeProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepDoubleListProperty::QcepDoubleListProperty(QcepObject *parent, const char *name, QcepDoubleList value, QString toolTip)
+QcepDoubleListProperty::QcepDoubleListProperty(QcepSerializableObject *parent, const char *name, QcepDoubleList value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1803,7 +1613,7 @@ void QcepDoubleListProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepDoubleVectorProperty::QcepDoubleVectorProperty(QcepObject *parent, const char *name, QcepDoubleVector value, QString toolTip)
+QcepDoubleVectorProperty::QcepDoubleVectorProperty(QcepSerializableObject *parent, const char *name, QcepDoubleVector value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -1934,7 +1744,7 @@ void QcepDoubleVectorProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepIntListProperty::QcepIntListProperty(QcepObject *parent, const char *name, QcepIntList value, QString toolTip)
+QcepIntListProperty::QcepIntListProperty(QcepSerializableObject *parent, const char *name, QcepIntList value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2065,7 +1875,7 @@ void QcepIntListProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepIntVectorProperty::QcepIntVectorProperty(QcepObject *parent, const char *name, QcepIntVector value, QString toolTip)
+QcepIntVectorProperty::QcepIntVectorProperty(QcepSerializableObject *parent, const char *name, QcepIntVector value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2196,7 +2006,7 @@ void QcepIntVectorProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepStringListProperty::QcepStringListProperty(QcepObject *parent, const char *name, QStringList value, QString toolTip)
+QcepStringListProperty::QcepStringListProperty(QcepSerializableObject *parent, const char *name, QStringList value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2307,7 +2117,7 @@ void QcepStringListProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepByteArrayProperty::QcepByteArrayProperty(QcepObject *parent, const char *name, QByteArray value, QString toolTip)
+QcepByteArrayProperty::QcepByteArrayProperty(QcepSerializableObject *parent, const char *name, QByteArray value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2408,7 +2218,7 @@ void QcepByteArrayProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepDoublePointProperty::QcepDoublePointProperty(QcepObject *parent, const char *name, QPointF value, QString toolTip)
+QcepDoublePointProperty::QcepDoublePointProperty(QcepSerializableObject *parent, const char *name, QPointF value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2601,7 +2411,7 @@ void QcepDoublePointPropertyDoubleSpinBoxHelper::setValue(double value)
   emit subValueChanged(m_Axis, value, m_Property->incIndex(1));
 }
 
-QcepDoubleRectProperty::QcepDoubleRectProperty(QcepObject *parent, const char *name, QRectF value, QString toolTip)
+QcepDoubleRectProperty::QcepDoubleRectProperty(QcepSerializableObject *parent, const char *name, QRectF value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2677,7 +2487,7 @@ void QcepDoubleRectProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepPolygonProperty::QcepPolygonProperty(QcepObject *parent, const char *name, QcepPolygon value, QString toolTip)
+QcepPolygonProperty::QcepPolygonProperty(QcepSerializableObject *parent, const char *name, QcepPolygon value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)
@@ -2768,7 +2578,7 @@ void QcepPolygonProperty::resetValue()
   setValue(defaultValue());
 }
 
-QcepInt64Property::QcepInt64Property(QcepObject *parent, const char *name, qint64 value, QString toolTip)
+QcepInt64Property::QcepInt64Property(QcepSerializableObject *parent, const char *name, qint64 value, QString toolTip)
   : QcepProperty(parent, name, toolTip),
     m_Default(value),
     m_Value(value)

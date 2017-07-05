@@ -2,7 +2,7 @@
 #define QCEPALLOCATOR_H
 
 #include "qcepmacros.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 
 #include <QMutex>
 #include <QTimer>
@@ -19,7 +19,7 @@
 
 extern QcepAllocator *g_Allocator;
 
-class QcepAllocator : public QcepObject, public QEnableSharedFromThis<QcepAllocator>
+class QcepAllocator : public QcepSerializableObject
 {
   Q_OBJECT
 
@@ -27,8 +27,8 @@ public:
   QcepAllocator(QString name);
   virtual ~QcepAllocator();
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 public:
 
@@ -81,7 +81,7 @@ public:
 private slots:
   void onMemorySizeChanged(qint64 newMB);
 
-private:
+public:
   QMutex *mutex();
 
 protected:
@@ -94,7 +94,7 @@ protected:
 //private slots:
 //  void allocatorHeartbeat();
 
-private:
+public:
   int waitTillAvailable(AllocationStrategy strat, qint64 size);
 
 private:

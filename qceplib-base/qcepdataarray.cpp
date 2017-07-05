@@ -25,7 +25,7 @@ void QcepDataArray::writeSettings(QSettings *settings, QString section)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepDataObject::writeSettings(settings, section);
+  QcepDataObject::writeSettings(settings);
 
   if (settings) {
     settings->beginWriteArray("dims");

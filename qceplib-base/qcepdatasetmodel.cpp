@@ -26,21 +26,21 @@ QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBas
   connect(m_Dataset.data(), SIGNAL(dataObjectChanged()), this, SLOT(onDataObjectChanged()));
 }
 
-void QcepDatasetModel::readSettings(QSettings *settings, QString section)
+void QcepDatasetModel::readSettings(QSettings *settings)
 {
   QcepDatasetPtr ds(m_Dataset);
 
   if (ds) {
-    ds->readSettings(settings, section);
+    ds->readSettings(settings);
   }
 }
 
-void QcepDatasetModel::writeSettings(QSettings *settings, QString section)
+void QcepDatasetModel::writeSettings(QSettings *settings)
 {
   QcepDatasetPtr ds(m_Dataset);
 
   if (ds) {
-    ds->writeSettings(settings, section);
+    ds->writeSettings(settings);
   }
 }
 
@@ -51,6 +51,11 @@ void QcepDatasetModel::printMessage(QString msg, QDateTime dt) const
   if (expt) {
     expt->printMessage(msg, dt);
   }
+}
+
+void QcepDatasetModel::setDataset(QcepDatasetPtr ds)
+{
+  printMessage("Need to write QcepDatasetModel::setDataset");
 }
 
 QcepExperimentWPtr QcepDatasetModel::experiment()
@@ -682,13 +687,13 @@ QcepDataGroupPtr       QcepDatasetModel::newGroup(QString path)
       QcepDataGroupPtr sgr = newGroup(groupName(path));
 
       if (sgr && ds) {
-        QcepDataGroupPtr par = sgr->parentItem();
+//        QcepDataGroupPtr par = sgr->parentItem();
 
         QcepDataGroupPtr ng =
             QcepAllocator::newGroup(objectName(path));
 
         if (ng) {
-          beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
+          beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()/*+1*/);
 
           sgr->append(ng);
 
@@ -713,7 +718,7 @@ QcepDataGroupPtr       QcepDatasetModel::newGroup(const QModelIndex &index, QStr
     QcepDataGroupPtr ng = QcepAllocator::newGroup(name);
 
     if (ng) {
-      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()/*+1*/);
       grp->append(ng);
       endInsertRows();
 
@@ -769,7 +774,7 @@ QcepDataArrayPtr       QcepDatasetModel::newArray(QString path, QVector<int> dim
           QcepAllocator::newArray(objectName(path), dims, QcepAllocator::NullIfNotAvailable);
 
       if (arr) {
-        beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
+        beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()/*+1*/);
         sgr -> append(arr);
         endInsertRows();
 
@@ -792,7 +797,7 @@ QcepDataArrayPtr       QcepDatasetModel::newArray(const QModelIndex &index, QStr
         QcepAllocator::newArray(name, dims, QcepAllocator::NullIfNotAvailable);
 
     if (na) {
-      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()/*+1*/);
       grp->append(na);
       endInsertRows();
 
@@ -848,7 +853,7 @@ QcepDataColumnPtr      QcepDatasetModel::newColumn(QString path, int nRows)
           = QcepAllocator::newColumn(objectName(path), nRows, QcepAllocator::NullIfNotAvailable);
 
       if (col) {
-        beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
+        beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()/*+1*/);
         sgr -> append(col);
         endInsertRows();
 
@@ -871,7 +876,7 @@ QcepDataColumnPtr       QcepDatasetModel::newColumn(const QModelIndex &index, QS
         QcepAllocator::newColumn(name, nRows, QcepAllocator::NullIfNotAvailable);
 
     if (nc) {
-      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()/*+1*/);
       grp->append(nc);
       endInsertRows();
 
@@ -923,12 +928,16 @@ QcepDataColumnScanPtr  QcepDatasetModel::newColumnScan(QString path, QStringList
     } else if (scan) {
       printMessage(tr("Column Scan %1 already exists").arg(path));
     } else {
-      QcepDataColumnScanPtr scan = QcepAllocator::newColumnScan(objectName(path), cols, nRows, QcepAllocator::NullIfNotAvailable);
+      QcepDataColumnScanPtr scan = QcepAllocator::newColumnScan(objectName(path), QStringList(), nRows, QcepAllocator::NullIfNotAvailable);
 
       if (scan) {
-        beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
+        beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()/*+1*/);
         sgr -> append(scan);
         endInsertRows();
+
+        foreach (QString col, cols) {
+          newColumn(index(scan), col, nRows);
+        }
 
         return scan;
       }
@@ -949,12 +958,16 @@ QcepDataColumnScanPtr       QcepDatasetModel::newColumnScan(const QModelIndex &i
 
   if (grp && ds) {
     QcepDataColumnScanPtr ns =
-        QcepAllocator::newColumnScan(name, cols, nRows, QcepAllocator::NullIfNotAvailable);
+        QcepAllocator::newColumnScan(name, QStringList(), nRows, QcepAllocator::NullIfNotAvailable);
 
     if (ns) {
-      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()/*+1*/);
       grp->append(ns);
       endInsertRows();
+
+      foreach (QString col, cols) {
+        newColumn(QcepDatasetModel::index(ns), col, nRows);
+      }
 
       res = ns;
     }
@@ -1008,7 +1021,7 @@ QcepDoubleImageDataPtr QcepDatasetModel::newImage(QString path, int width, int h
           = QcepAllocator::newDoubleImage(objectName(path), width, height, QcepAllocator::NullIfNotAvailable);
 
       if (img) {
-        beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
+        beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()/*+1*/);
         sgr -> append(img);
         endInsertRows();
 
@@ -1031,7 +1044,7 @@ QcepDoubleImageDataPtr QcepDatasetModel::newImage(const QModelIndex &index, QStr
         QcepAllocator::newDoubleImage(name, width, height, QcepAllocator::NullIfNotAvailable);
 
     if (ni) {
-      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()/*+1*/);
       grp->append(ni);
       endInsertRows();
 
@@ -1087,7 +1100,7 @@ QcepIntegratedDataPtr QcepDatasetModel::newIntegratedData(QString path, int sz)
           QcepAllocator::newIntegratedData(objectName(path), sz, QcepAllocator::NullIfNotAvailable);
 
       if (dat) {
-        beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()+1);
+        beginInsertRows(index(sgr), sgr->rowCount(), sgr->rowCount()/*+1*/);
         sgr -> append(dat);
         endInsertRows();
 
@@ -1110,7 +1123,7 @@ QcepIntegratedDataPtr QcepDatasetModel::newIntegratedData(const QModelIndex &ind
         QcepAllocator::newIntegratedData(name, sz, QcepAllocator::NullIfNotAvailable);
 
     if (ni) {
-      beginInsertRows(index, grp->rowCount(), grp->rowCount()+1);
+      beginInsertRows(index, grp->rowCount(), grp->rowCount()/*+1*/);
       grp->append(ni);
       endInsertRows();
 
@@ -1126,7 +1139,7 @@ void QcepDatasetModel::insertGroup(int atRow, QString name)
   QcepDatasetPtr ds(m_Dataset);
 
   if (ds) {
-    beginInsertRows(QModelIndex(), atRow, atRow+1);
+    beginInsertRows(QModelIndex(), atRow, atRow/*+1*/);
 
     ds->insert(atRow, QcepAllocator::newGroup(name));
 
@@ -1146,7 +1159,7 @@ QModelIndex QcepDatasetModel::append(const QModelIndex &idx, QcepDataObjectPtr o
 
       if (dset) {
         int rc = rowCount(idx);
-        beginInsertRows(idx, rc, rc+1);
+        beginInsertRows(idx, rc, rc/*+1*/);
         dset->append(obj);
         endInsertRows();
 
@@ -1156,7 +1169,7 @@ QModelIndex QcepDatasetModel::append(const QModelIndex &idx, QcepDataObjectPtr o
       ds->printMessage("Containing object is not a container");
     } else {
       int rc = gr->rowCount();
-      beginInsertRows(index(gr), rc, rc+1);
+      beginInsertRows(index(gr), rc, rc/*+1*/);
       gr->append(obj);
       endInsertRows();
 
@@ -1184,7 +1197,7 @@ QModelIndex QcepDatasetModel::append(QString path, QcepDataObjectPtr obj)
       ds->printMessage(tr("%1 exists already").arg(path));
     } else {
       int rc = sgr->rowCount();
-      beginInsertRows(index(sgr), rc, rc+1);
+      beginInsertRows(index(sgr), rc, rc/*+1*/);
       sgr->append(obj);
       endInsertRows();
 

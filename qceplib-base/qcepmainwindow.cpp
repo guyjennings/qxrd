@@ -11,9 +11,11 @@
 
 QcepMainWindow::QcepMainWindow(QWidget *parent) : QMainWindow(parent)
 {
-
 }
 
+QcepMainWindow::~QcepMainWindow()
+{
+}
 
 void QcepMainWindow::possiblyClose()
 {

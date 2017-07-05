@@ -1,16 +1,22 @@
 #include "qcepvector3dproperty.h"
 #include "qcepmutexlocker.h"
 #include "qcepdebug.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 
-QcepVector3DProperty::QcepVector3DProperty(QcepObject *parent, const char *name, QcepVector3D value, QString toolTip) :
+QcepVector3DProperty::QcepVector3DProperty(QcepSerializableObject *parent,
+                                           const char *name,
+                                           QcepVector3D value,
+                                           QString toolTip) :
   QcepProperty(parent, name, toolTip),
   m_Default(value),
   m_Value(value)
 {
 }
 
-QcepVector3DProperty::QcepVector3DProperty(QcepObject *parent, const char *name, double x, double y, double z, QString toolTip) :
+QcepVector3DProperty::QcepVector3DProperty(QcepSerializableObject *parent,
+                                           const char *name,
+                                           double x, double y, double z,
+                                           QString toolTip) :
   QcepProperty(parent, name, toolTip),
   m_Default(x,y,z),
   m_Value(x,y,z)

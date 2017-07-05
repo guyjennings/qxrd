@@ -8,7 +8,6 @@
 #include "qcepexperiment-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepdataobjectgraphcontroller-ptr.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qcepproperty.h"
 #include "qwt_plot_curve.h"
 

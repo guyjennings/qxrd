@@ -2,15 +2,15 @@
 #define QCEPDATAEXPORTPARAMETERS_H
 
 #include "qcepmacros.h"
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 
-class QcepDataExportParameters : public QcepObject
+class QcepDataExportParameters : public QcepSerializableObject
 {
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QcepDataExportParameters(QString name = "");
+  Q_INVOKABLE QcepDataExportParameters(QString name);
 
   QString fileFormatFilterString();
 

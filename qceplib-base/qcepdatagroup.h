@@ -19,8 +19,8 @@ class QcepDataGroup : public QcepDataObject
 public:
   Q_INVOKABLE QcepDataGroup(QString name);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 public slots:
   virtual QString description() const;
@@ -46,7 +46,7 @@ public slots:
   QcepIntegratedDataPtr  integratedData(QString path);
   QcepIntegratedDataPtr  integratedData(int n);
 
-  int                childCount() const;
+//  int                childCount() const;
 
   void clear();
   void insert(int atRow, QcepDataObjectPtr obj);
@@ -68,8 +68,8 @@ public slots:
   QcepDataGroupPtr containingGroup(QString path);
   QcepDataObjectPtr referencedObject(QString path);
 
-private:
-  QVector<QcepDataObjectPtr> m_Objects;
+//private:
+//  QVector<QcepDataObjectPtr> m_Objects;
 };
 
 Q_DECLARE_METATYPE(QcepDataGroup*)

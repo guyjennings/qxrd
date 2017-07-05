@@ -1,10 +1,10 @@
 #ifndef QCEPAPPLICATIONSETTINGS_H
 #define QCEPAPPLICATIONSETTINGS_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepapplication-ptr.h"
 
-class QcepApplicationSettings : public QcepObject
+class QcepApplicationSettings : public QcepSerializableObject
 {
   Q_OBJECT
 

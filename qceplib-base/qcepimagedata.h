@@ -13,7 +13,6 @@
 
 #include "qcepdataobject.h"
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qcepexperiment-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qcepimagedata-ptr.h"
@@ -360,9 +359,9 @@ class QcepDoubleImageData : public QcepImageData<double> {
 public:
   Q_INVOKABLE QcepDoubleImageData(
       QString name,
-      int width,
-      int height,
-      double def);
+      int width = 0,
+      int height = 0,
+      double def = 0);
 
   void add     (QcepDoubleImageDataPtr img);
   void add     (double val);
@@ -391,9 +390,9 @@ class QcepFloatImageData : public QcepImageData<float> {
 public:
   Q_INVOKABLE QcepFloatImageData(
       QString name,
-      int width,
-      int height,
-      float def);
+      int width = 0,
+      int height = 0,
+      float def = 0);
 };
 
 Q_DECLARE_METATYPE(QcepFloatImageData*)
@@ -404,9 +403,9 @@ class QcepUInt16ImageData : public QcepImageData<quint16> {
 public:
   Q_INVOKABLE QcepUInt16ImageData(
       QString name,
-      int width,
-      int height,
-      quint16 def);
+      int width = 0,
+      int height = 0,
+      quint16 def = 0);
 };
 
 Q_DECLARE_METATYPE(QcepUInt16ImageData*)
@@ -417,9 +416,9 @@ class QcepInt16ImageData : public QcepImageData<qint16> {
 public:
   Q_INVOKABLE QcepInt16ImageData(
       QString name,
-      int width,
-      int height,
-      qint16 def);
+      int width = 0,
+      int height = 0,
+      qint16 def = 0);
 };
 
 Q_DECLARE_METATYPE(QcepInt16ImageData*)
@@ -430,9 +429,9 @@ class QcepUInt32ImageData : public QcepImageData<quint32> {
 public:
   Q_INVOKABLE QcepUInt32ImageData(
       QString name,
-      int width,
-      int height,
-      quint32 def);
+      int width = 0,
+      int height = 0,
+      quint32 def = 0);
 };
 
 Q_DECLARE_METATYPE(QcepUInt32ImageData*)
@@ -443,9 +442,9 @@ class QcepInt32ImageData : public QcepImageData<qint32> {
 public:
   Q_INVOKABLE QcepInt32ImageData(
       QString name,
-      int width,
-      int height,
-      qint32 def);
+      int width = 0,
+      int height = 0,
+      qint32 def = 0);
 };
 
 Q_DECLARE_METATYPE(QcepInt32ImageData*)

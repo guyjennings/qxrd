@@ -1,4 +1,6 @@
 #include "qcepfileformattertext.h"
+#include "qcepserializableobject.h"
+#include "qcepdebug.h"
 
 QcepFileFormatterText::QcepFileFormatterText(QString filePath) :
   QcepFileFormatter(filePath),
@@ -37,7 +39,19 @@ void QcepFileFormatterText::writeVariant(QVariant val)
 
 void QcepFileFormatterText::beginWriteObject(QString objectName, QString className)
 {
-  printMessage(tr("%1%2:%3 {").arg("", m_OutputIndent).arg(objectName).arg(className));
+  if (objectName.length() == 0) {
+    objectName = "unnamed";
+  }
+
+  int typeId = QMetaType::type(qPrintable(className+"*"));
+
+  if (typeId == QMetaType::UnknownType) {
+    className = "<<unknown>>";
+  }
+
+  if (qcepDebug(DEBUG_EXPORT)) {
+    printMessage(tr("%1%2:%3 {").arg("", m_OutputIndent).arg(objectName).arg(className));
+  }
 
   writeIndent();
   writeToken(objectName);
@@ -54,7 +68,9 @@ void QcepFileFormatterText::endWriteObject()
   m_ObjectPath.takeLast();
   m_OutputIndent--;
 
-  printMessage(tr("%1}").arg("", m_OutputIndent));
+  if (qcepDebug(DEBUG_EXPORT)) {
+    printMessage(tr("%1}").arg("", m_OutputIndent));
+  }
 
   writeIndent();
   writeToken("}\n");
@@ -62,7 +78,9 @@ void QcepFileFormatterText::endWriteObject()
 
 void QcepFileFormatterText::writeComment(QString cmt)
 {
-  printMessage(tr("%1// %2").arg("", m_OutputIndent).arg(cmt));
+  if (qcepDebug(DEBUG_EXPORT)) {
+    printMessage(tr("%1// %2").arg("", m_OutputIndent).arg(cmt));
+  }
 
   writeIndent();
   writeToken("// ");
@@ -72,7 +90,9 @@ void QcepFileFormatterText::writeComment(QString cmt)
 
 void QcepFileFormatterText::beginWriteProperties()
 {
-  printMessage(tr("%1properties {").arg("", m_OutputIndent));
+  if (qcepDebug(DEBUG_EXPORT)) {
+    printMessage(tr("%1properties {").arg("", m_OutputIndent));
+  }
 
   writeIndent();
   writeToken("properties {\n");
@@ -82,7 +102,9 @@ void QcepFileFormatterText::beginWriteProperties()
 
 void QcepFileFormatterText::writeProperty(QString name, QVariant val)
 {
-  printMessage(tr("%1%2 = %3").arg("",m_OutputIndent).arg(name).arg(toScriptLiteral(val)));
+  if (qcepDebug(DEBUG_EXPORT)) {
+    printMessage(tr("%1%2 = %3").arg("",m_OutputIndent).arg(name).arg(toScriptLiteral(val)));
+  }
 
   writeIndent();
   writeToken(name);
@@ -95,7 +117,9 @@ void QcepFileFormatterText::endWriteProperties()
 {
   m_OutputIndent--;
 
-  printMessage(tr("%1}").arg("", m_OutputIndent));
+  if (qcepDebug(DEBUG_EXPORT)) {
+    printMessage(tr("%1}").arg("", m_OutputIndent));
+  }
 
   writeIndent();
   writeToken("}\n");
@@ -103,7 +127,9 @@ void QcepFileFormatterText::endWriteProperties()
 
 void QcepFileFormatterText::beginWriteChildren()
 {
-  printMessage(tr("%1children {").arg("", m_OutputIndent));
+  if (qcepDebug(DEBUG_EXPORT)) {
+    printMessage(tr("%1children {").arg("", m_OutputIndent));
+  }
 
   writeIndent();
   writeToken("children {\n");
@@ -115,7 +141,9 @@ void QcepFileFormatterText::endWriteChildren()
 {
   m_OutputIndent--;
 
-  printMessage(tr("%1}").arg("", m_OutputIndent));
+  if (qcepDebug(DEBUG_EXPORT)) {
+    printMessage(tr("%1}").arg("", m_OutputIndent));
+  }
 
   writeIndent();
   writeToken("}\n");
@@ -123,7 +151,9 @@ void QcepFileFormatterText::endWriteChildren()
 
 void QcepFileFormatterText::beginWriteData()
 {
-  printMessage(tr("%1data {").arg("", m_OutputIndent));
+  if (qcepDebug(DEBUG_EXPORT)) {
+    printMessage(tr("%1data {").arg("", m_OutputIndent));
+  }
 
   writeIndent();
   writeToken("data {\n");
@@ -135,7 +165,9 @@ void QcepFileFormatterText::endWriteData()
 {
   m_OutputIndent--;
 
-  printMessage(tr("%1}").arg("", m_OutputIndent));
+  if (qcepDebug(DEBUG_EXPORT)) {
+    printMessage(tr("%1}").arg("", m_OutputIndent));
+  }
 
   writeIndent();
   writeToken("}\n");
@@ -204,7 +236,9 @@ QcepFileFormatterText::TokenType QcepFileFormatterText::nextToken(QString &token
     res = operatorToken(token);
   }
 
-  printMessage(tr("Token %1 = \"%2\"").arg(res).arg(token));
+  if (qcepDebug(DEBUG_IMPORT)) {
+    printMessage(tr("Token %1 = \"%2\"").arg(res).arg(token));
+  }
 
   return res;
 }
@@ -351,7 +385,7 @@ void QcepFileFormatterText::closeForReading()
   fclose(m_File);
 }
 
-QcepObjectPtr QcepFileFormatterText::nextObject()
+QcepSerializableObjectPtr QcepFileFormatterText::nextObject()
 {
   QString s1, s2, s3, s4;
   int     i1, i2, i3, i4;
@@ -361,13 +395,12 @@ QcepObjectPtr QcepFileFormatterText::nextObject()
   i3 = nextToken(s3);
   i4 = nextToken(s4);
 
-  QcepObjectPtr obj;
+  QcepSerializableObjectPtr obj;
 
   if (i1 == Identifier && s2 == ":" && i3 == Identifier && s4 == "{") {
-    obj = QcepObject::construct(s3);
+    obj = construct(s1,s3);
 
     if (obj) {
-      obj->set_Name(s1);
       obj->readObject(qSharedPointerDynamicCast<QcepFileFormatter>(sharedFromThis()));
     } else {
       printMessage(tr("Failed to construct %1:%2").arg(s1).arg(s3));
@@ -377,7 +410,7 @@ QcepObjectPtr QcepFileFormatterText::nextObject()
   return obj;
 }
 
-void QcepFileFormatterText::beginReadObject(QcepObjectPtr obj)
+void QcepFileFormatterText::beginReadObject(QcepSerializableObjectPtr obj)
 {
   nextToken();
 }
@@ -424,12 +457,16 @@ QVariant QcepFileFormatterText::nextPropertyValue()
 
     if (m_TokenType == Number) {
       res = QVariant(m_Token.toDouble());
+    } else if (m_TokenType == Identifier) {
+      if (m_Token == "true") {
+        res = QVariant(true);
+      } else if (m_Token == "false") {
+        res = QVariant(false);
+      }
     } else if (m_TokenType == String) {
-      printMessage("Need to parse string literal to string value");
-      res = QVariant(m_Token);
+      res = QVariant(removeSlashes(m_Token));
     } else if (m_TokenType == Variant) {
-      printMessage("Need to parse token to QVariant");
-      res = m_Token;
+      res = parseVariant(m_Token);
     } else {
       printMessage(tr("nextPropertyValue : unexpected token %1").arg(m_Token));
     }
@@ -466,7 +503,7 @@ bool QcepFileFormatterText::beginReadChildren()
   return res;
 }
 
-QcepObjectPtr QcepFileFormatterText::nextChild()
+QcepSerializableObjectPtr QcepFileFormatterText::nextChild()
 {
   return nextObject();
 }

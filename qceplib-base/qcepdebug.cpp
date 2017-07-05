@@ -9,6 +9,7 @@ QcepDebugDictionary::QcepDebugDictionary() :
   setMessage(DEBUG_NOMESSAGES, "Disable All Debug Messages");
   setMessage(DEBUG_APP,        "Application startup and shutdown");
   setMessage(DEBUG_PROPERTIES, "Properties");
+  setMessage(DEBUG_DYNPROPS,   "Dynamic Properties");
   setMessage(DEBUG_WINDOW,     "Window Operations");
   setMessage(DEBUG_PREFS,      "Settings/Prefs Operations");
   setMessage(DEBUG_DISPLAY,    "Display Operations");

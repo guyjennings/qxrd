@@ -2,13 +2,13 @@
 #define QCEPDATAOBJECT_H
 
 #include <QObject>
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepdatagroup-ptr.h"
 #include <QScriptValue>
 #include "qcepproperty.h"
 
-class QcepDataObject : public QcepObject
+class QcepDataObject : public QcepSerializableObject
 {
   Q_OBJECT
 
@@ -16,8 +16,8 @@ public:
   QcepDataObject(QString name, qint64 byteSize);
   virtual ~QcepDataObject();
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   static QString mimeType();
 
@@ -33,7 +33,8 @@ public slots:
   QString metaTypeName(int id) const;
   QString pathName() const;
   QcepDataGroupPtr rootItem();
-  virtual QcepDataGroupPtr parentItem() const;
+  virtual QcepDataGroupPtr parentItem();
+  virtual const QcepDataGroupPtr parentItem() const;
 
 public:
   typedef enum {
@@ -41,7 +42,7 @@ public:
     CanOverwrite
   } Overwrite;
 
-  virtual int childCount() const;
+//  virtual int childCount() const;
   virtual QcepDataObjectPtr item(int n);
   virtual QcepDataObjectPtr item(QString nm);
   virtual void setParentItem(QcepDataGroupWPtr parent);
@@ -74,7 +75,7 @@ protected:
   QString uniqueFileName(QString name);
 
 private:
-  QcepDataGroupWPtr     m_Parent;
+//  QcepDataGroupWPtr     m_Parent;
 //  QcepSettingsSaverWPtr m_Saver;
 
 protected:

@@ -3,7 +3,7 @@
 #include <qwt_plot.h>
 
 QcepPlotSettings::QcepPlotSettings(QString name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
   m_XMouse        (this,"xMouse",0, "X Position of Mouse"),
   m_YMouse        (this,"yMouse",0, "Y Position of Mouse"),
   m_LegendPosition(this, "legendPosition", QwtPlot::RightLegend, "Plot Legend Position"),
@@ -13,4 +13,3 @@ QcepPlotSettings::QcepPlotSettings(QString name) :
   m_Y2AxisLog     (this,"y2AxisLog",0, "Logarithmic 2nd Y Axis?")
 {
 }
-

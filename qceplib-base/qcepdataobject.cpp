@@ -12,7 +12,7 @@ static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
 
 QcepDataObject::QcepDataObject(QString name, qint64 byteSize) :
-  QcepObject(name),
+  QcepSerializableObject(name),
 //  m_Saver(saver),
   m_Mutex(QMutex::Recursive),
   m_ByteSize   (this, "size", byteSize, "Object Size"),
@@ -54,18 +54,18 @@ QcepDataObject::~QcepDataObject()
   s_ObjectDeleteCount.fetchAndAddOrdered(1);
 }
 
-void QcepDataObject::writeSettings(QSettings *settings, QString section)
+void QcepDataObject::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings, section);
+  QcepObject::writeSettings(settings);
 }
 
-void QcepDataObject::readSettings(QSettings *settings, QString section)
+void QcepDataObject::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings, section);
+  QcepObject::readSettings(settings);
 }
 
 QString QcepDataObject::mimeType()
@@ -230,10 +230,10 @@ void QcepDataObject::fromScriptValue(const QScriptValue &obj, QcepDataObjectPtr 
   }
 }
 
-int QcepDataObject::childCount() const
-{
-  return 0;
-}
+//int QcepDataObject::childCount() const
+//{
+//  return 0;
+//}
 
 int QcepDataObject::rowCount() const
 {
@@ -255,17 +255,22 @@ QcepDataObjectPtr QcepDataObject::item(QString nm)
   return QcepDataObjectPtr();
 }
 
-QcepDataGroupPtr QcepDataObject::parentItem() const
+QcepDataGroupPtr QcepDataObject::parentItem()
 {
-  return m_Parent;
+  return qSharedPointerDynamicCast<QcepDataGroup>(parentPtr());
+}
+
+const QcepDataGroupPtr QcepDataObject::parentItem() const
+{
+  return qSharedPointerDynamicCast<QcepDataGroup>(parentPtr());
 }
 
 QcepDataGroupPtr QcepDataObject::rootItem()
 {
-  QcepDataGroupPtr parent(m_Parent);
+  QcepDataGroupPtr p = parentItem();
 
-  if (parent) {
-    return parent->rootItem();
+  if (p) {
+    return p->rootItem();
   } else {
     QcepObjectPtr obj = sharedFromThis();
 
@@ -275,22 +280,17 @@ QcepDataGroupPtr QcepDataObject::rootItem()
 
 void QcepDataObject::setParentItem(QcepDataGroupWPtr parent)
 {
-  m_Parent = parent;
+  setParentPtr(parent);
 }
 
 int QcepDataObject::indexInParent() const
 {
-  QcepDataObjectPtr parent = m_Parent;
+  QcepDataGroupPtr p = parentItem();
 
-  if (parent) {
-    QcepDataGroup *parentGroup =
-          qobject_cast<QcepDataGroup*>(parent.data());
-
-    if (parentGroup) {
-      for (int i=0; i<parentGroup->childCount(); i++) {
-        if (parentGroup->item(i).data() == this) {
-          return i;
-        }
+  if (p) {
+    for (int i=0; i<p->childCount(); i++) {
+      if (p->item(i).data() == this) {
+        return i;
       }
     }
   }

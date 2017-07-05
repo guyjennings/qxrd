@@ -1,24 +1,23 @@
 #ifndef QCEPEXPERIMENT_H
 #define QCEPEXPERIMENT_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include <QDateTime>
 #include <QUndoStack>
 #include "qcepproperty.h"
-#include "qcepsettingssaver-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepdataexportparameters-ptr.h"
 #include "qcepdataimportparameters-ptr.h"
 
-class QcepExperiment : public QcepObject
+class QcepExperiment : public QcepSerializableObject
 {
   Q_OBJECT
 public:
   explicit QcepExperiment(QString path, QString name);
-  virtual void initialize(QSettings *settings);
+  void initialize();
 
-  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepSerializableObjectPtr child);
 
 signals:
 
@@ -35,12 +34,12 @@ public:
   QUndoStack *undoStack();
 
 protected:
-  QcepSettingsSaverPtr            m_SettingsSaver;
+//  QcepSettingsSaverPtr            m_SettingsSaver;
 
   QUndoStack m_UndoStack;
 
-  virtual void readSettings(QSettings *settings, QString section);
-  virtual void writeSettings(QSettings *settings, QString section);
+  virtual void readSettings(QSettings *settings);
+  virtual void writeSettings(QSettings *settings);
 
 private:
   QcepDataExportParametersPtr    m_DataExportParameters;

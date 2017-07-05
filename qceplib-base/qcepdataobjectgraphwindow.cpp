@@ -2,7 +2,6 @@
 #include "qcepproperty.h"
 #include "qcepexperiment.h"
 #include "qcepdataobject.h"
-#include "qcepsettingssaver.h"
 
 #include <QCloseEvent>
 #include <QMessageBox>

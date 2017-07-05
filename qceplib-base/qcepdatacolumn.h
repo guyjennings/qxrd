@@ -39,8 +39,8 @@ public:
 
   virtual ~QcepDataColumn();
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 public:
   Q_PROPERTY(int columnType READ get_ColumnType WRITE set_ColumnType)

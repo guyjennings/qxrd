@@ -1,4 +1,4 @@
-#ifdef HAVE_NEXUS
+//#ifdef HAVE_NEXUS
 
 #include "qcepfileformatternexus.h"
 
@@ -64,12 +64,12 @@ void QcepFileFormatterNexus::endReadFile()
 {
 }
 
-QcepObjectPtr QcepFileFormatterNexus::nextObject()
+QcepSerializableObjectPtr QcepFileFormatterNexus::nextObject()
 {
-  return QcepObjectPtr();
+  return QcepSerializableObjectPtr();
 }
 
-void QcepFileFormatterNexus::beginReadObject(QcepObjectPtr obj)
+void QcepFileFormatterNexus::beginReadObject(QcepSerializableObjectPtr obj)
 {
 }
 
@@ -101,9 +101,9 @@ bool QcepFileFormatterNexus::beginReadChildren()
   return false;
 }
 
-QcepObjectPtr QcepFileFormatterNexus::nextChild()
+QcepSerializableObjectPtr QcepFileFormatterNexus::nextChild()
 {
-  return QcepObjectPtr();
+  return QcepSerializableObjectPtr();
 }
 
 void QcepFileFormatterNexus::endReadChildren()
@@ -119,4 +119,4 @@ void QcepFileFormatterNexus::endReadData()
 {
 }
 
-#endif
+//#endif

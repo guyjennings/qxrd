@@ -9,7 +9,6 @@
 #include "qcepobject-ptr.h"
 #include <QVector>
 #include "qcepproperty.h"
-#include "qcepfileformatter-ptr.h"
 #include <QScriptValue>
 
 class QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
@@ -26,13 +25,9 @@ public:
   static QSet<QcepObject*> allocatedObjectsSet();
 #endif
 
-  static QcepObjectPtr readDataObject(QcepFileFormatterPtr fmt);
-
-  void readObject(QcepFileFormatterPtr fmt);
-  void writeObject(QcepFileFormatterPtr fmt);
-
-  virtual void readObjectData(QcepFileFormatterPtr fmt);
-  virtual void writeObjectData(QcepFileFormatterPtr fmt);
+  void setParentPtr(QcepObjectWPtr parent);
+  QcepObjectWPtr parentPtr();
+  const QcepObjectWPtr parentPtr() const;
 
 signals:
 
@@ -47,60 +42,39 @@ public slots:
   QString toScriptLiteral(QVariant v);
   QVariant fromScriptLiteral(QString lit);
 
-  void readObjectSettings(QSettings *set, QString section);
-
-  void dumpObjectTreePtr(int level=0);
-
-  int childCount() const;
+  void readObjectSettings(QSettings *set);
 
   int isChanged() const;
   QString changedBy() const;
-
-  int childrenChanged() const;
-  QString childrenChangedBy() const;
-
-  int checkChildren(int verbose=0, int level=0) const;
-
-  void setParentPtr(QcepObjectWPtr parent);
-  QcepObjectWPtr parentPtr() const;
-  QVector<QcepObjectPtr> childrenPtr() const;
-  QcepObjectWPtr childPtr(int n) const;
-
-  QcepObjectPtr construct(QString className);
+  void setChanged(int ct);
 
 public:
-  virtual void writeSettings(QSettings *set, QString section);
-  virtual void readSettings(QSettings *set, QString section);
+  virtual void writeSettings(QSettings *set);
+  virtual void readSettings(QSettings *set);
 
   QString get_Name() const;
   void    set_Name(QString name);
+
+  QString className() const;
 
   QString get_Type() const;
 //  void    set_Type(QString name);
 
   static QString addSlashes(QString str);
+  static QString removeSlashes(QString str);
 
-  virtual void addChildPtr(QcepObjectPtr child);
-  virtual void removeChildPtr(QcepObjectPtr child);
+  QVariant parseVariant(QString str);
 
-  void propertyChanged(QcepProperty *prop);
+  virtual void propertyChanged(QcepProperty *prop);
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QcepObjectPtr &data);
   static void fromScriptValue(const QScriptValue &obj, QcepObjectPtr &data);
 
-protected:
-  template <typename T>
-  bool checkPointer(QcepObjectWPtr ptr, QSharedPointer<T>& field);
-
-  template <typename T>
-  bool checkPointer(QcepObjectWPtr ptr, QWeakPointer<T>& field);
-
 private:
-  QcepObjectWPtr                      m_Parent;
-  QVector<QcepObjectPtr>              m_Children;
   QcepObjectNamer                     m_ObjectNamer;
   QAtomicInt                          m_ChangeCount;
   QAtomicPointer<QcepProperty>        m_LastChanged;
+  QcepObjectWPtr                      m_Parent;
 
 public:
   Q_PROPERTY(QString name READ get_Name WRITE set_Name STORED false)

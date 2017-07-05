@@ -3,7 +3,7 @@
 
 #include "qcepfileformatter.h"
 
-#ifdef HAVE_NEXUS
+//#ifdef HAVE_NEXUS
 
 class QcepFileFormatterNexus : public QcepFileFormatter
 {
@@ -32,9 +32,9 @@ public:
   virtual void beginReadFile();
   virtual void endReadFile();
 
-  virtual QcepObjectPtr nextObject();
+  virtual QcepSerializableObjectPtr nextObject();
 
-  virtual void beginReadObject(QcepObjectPtr obj);
+  virtual void beginReadObject(QcepSerializableObjectPtr obj);
   virtual void endReadObject();
 
   virtual bool beginReadProperties();
@@ -43,13 +43,13 @@ public:
   virtual void endReadProperties();
 
   virtual bool beginReadChildren();
-  virtual QcepObjectPtr nextChild();
+  virtual QcepSerializableObjectPtr nextChild();
   virtual void endReadChildren();
 
   virtual bool beginReadData();
   virtual void endReadData();
 };
 
-#endif // HAVE_NEXUS
+//#endif // HAVE_NEXUS
 
 #endif // QCEPFILEFORMATTERNEXUS_H

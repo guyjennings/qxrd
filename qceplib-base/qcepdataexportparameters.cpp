@@ -1,10 +1,9 @@
 #include "qcepdataexportparameters.h"
 #include "qcepimagedata.h"
 #include "qcepdatacolumnscan.h"
-#include "qcepsettingssaver.h"
 
 QcepDataExportParameters::QcepDataExportParameters(QString  name) :
-  QcepObject(name),
+  QcepSerializableObject(name),
   m_OutputFormat  (this, "outputFormat", 0, "File format for data export"),
   m_FileName      (this, "fileName", "", "Last exported file name"),
   m_SelectedFilter(this, "selectedFilter", "", "Last export filter")
