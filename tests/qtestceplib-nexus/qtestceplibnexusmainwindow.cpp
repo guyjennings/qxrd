@@ -90,10 +90,10 @@ void QtestceplibNexusMainWindow::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, "qtestceplib", settings);
+  QcepProperty::readSettings(this, settings);
 
   if (m_Document) {
-    m_Document->readSettings(settings, "document");
+    m_Document->readSettings(settings);
   }
 }
 
@@ -101,10 +101,10 @@ void QtestceplibNexusMainWindow::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, "qtestceplib", settings);
+  QcepProperty::writeSettings(this, settings);
 
   if (m_Document) {
-    m_Document->writeSettings(settings, "document");
+    m_Document->writeSettings(settings);
   }
 }
 

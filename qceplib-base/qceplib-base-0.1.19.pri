@@ -17,6 +17,7 @@ contains (DEFINES,HAVE_QWT) {
 INCLUDEPATH += $${PWD}
 
 SOURCES += \
+  $${PWD}/qcepmacros.cpp \
   $${PWD}/qcepdebug.cpp \
   $${PWD}/qcepproperty.cpp \
   $${PWD}/qcepvector3dproperty.cpp \

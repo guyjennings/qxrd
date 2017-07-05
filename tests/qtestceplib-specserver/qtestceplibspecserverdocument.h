@@ -1,12 +1,12 @@
 #ifndef QTESTCEPLIBSPECSERVERDOCUMENT_H
 #define QTESTCEPLIBSPECSERVERDOCUMENT_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepvector3dproperty.h"
 #include "qcepmatrix3x3property.h"
 
-class QtestceplibSpecServerDocument : public QcepObject
+class QtestceplibSpecServerDocument : public QcepSerializableObject
 {
   Q_OBJECT
 

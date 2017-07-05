@@ -93,10 +93,10 @@ void QtestceplibFileIOMainWindow::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, "qtestceplib", settings);
+  QcepProperty::readSettings(this, settings);
 
   if (m_Document) {
-    m_Document->readSettings(settings, "document");
+    m_Document->readSettings(settings);
   }
 }
 
@@ -104,10 +104,10 @@ void QtestceplibFileIOMainWindow::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, "qtestceplib", settings);
+  QcepProperty::writeSettings(this, settings);
 
   if (m_Document) {
-    m_Document->writeSettings(settings, "document");
+    m_Document->writeSettings(settings);
   }
 }
 
@@ -174,7 +174,7 @@ void QtestceplibFileIOMainWindow::readDataObjects(QString filePath)
 
   QcepFileFormatterPtr fmt = QcepFileFormatter::defaultFormatter(filePath, exten);
 
-  QcepObjectPtr obj = QcepObject::readDataObject(fmt);
+  QcepObjectPtr obj = QcepSerializableObject::readDataObject(fmt);
 }
 
 void QtestceplibFileIOMainWindow::writeDataObjects(QString filePath)

@@ -1,12 +1,12 @@
 #ifndef QTESTCEPLIBLEVMARDOCUMENT_H
 #define QTESTCEPLIBLEVMARDOCUMENT_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepvector3dproperty.h"
 #include "qcepmatrix3x3property.h"
 
-class QtestceplibLevMarDocument : public QcepObject
+class QtestceplibLevMarDocument : public QcepSerializableObject
 {
   Q_OBJECT
 

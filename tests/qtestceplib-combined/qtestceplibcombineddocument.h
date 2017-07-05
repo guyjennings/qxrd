@@ -1,12 +1,12 @@
 #ifndef QTESTCEPLIBCOMBINEDDOCUMENT_H
 #define QTESTCEPLIBCOMBINEDDOCUMENT_H
 
-#include "qcepobject.h"
+#include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qcepvector3dproperty.h"
 #include "qcepmatrix3x3property.h"
 
-class QtestceplibCombinedDocument : public QcepObject
+class QtestceplibCombinedDocument : public QcepSerializableObject
 {
   Q_OBJECT
 
