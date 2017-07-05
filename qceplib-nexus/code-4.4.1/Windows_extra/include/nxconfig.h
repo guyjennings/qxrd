@@ -171,8 +171,7 @@
 
 /* Define to the type of a signed integer type of width exactly 64 bits if
    such a type exists and the standard includes do not define it. */
-//typedef INT64 int64_t;
-#define int64_t INT64
+#define int64_t __int64
 
 /* Define to the type of a signed integer type of width exactly 8 bits if such
    a type exists and the standard includes do not define it. */
@@ -194,8 +193,7 @@
 
 /* Define to the type of an unsigned integer type of width exactly 64 bits if
    such a type exists and the standard includes do not define it. */
-//typedef UINT64 uint64_t;
-#define uint64_t UINT64
+#define uint64_t unsigned __int64
 
 /* Define to the type of an unsigned integer type of width exactly 8 bits if
    such a type exists and the standard includes do not define it. */

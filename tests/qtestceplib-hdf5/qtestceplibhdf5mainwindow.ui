@@ -30,17 +30,18 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
     <property name="title">
-     <string>File</string>
+     <string>Fi&amp;le</string>
     </property>
     <addaction name="m_ActionReadSettings"/>
     <addaction name="m_ActionWriteSettings"/>
     <addaction name="m_ActionLoadImage"/>
     <addaction name="m_ActionTestHDF"/>
+    <addaction name="m_ActionIterateHDF"/>
     <addaction name="m_ActionTestHDFSlab"/>
    </widget>
    <addaction name="m_FileMenu"/>
@@ -48,7 +49,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="m_ActionReadSettings">
    <property name="text">
-    <string>Read Settings...</string>
+    <string>&amp;Read Settings...</string>
    </property>
    <property name="toolTip">
     <string>Read Settings</string>
@@ -56,7 +57,7 @@
   </action>
   <action name="m_ActionWriteSettings">
    <property name="text">
-    <string>Write Settings...</string>
+    <string>&amp;Write Settings...</string>
    </property>
    <property name="toolTip">
     <string>Write Settings</string>
@@ -64,17 +65,22 @@
   </action>
   <action name="m_ActionTestHDF">
    <property name="text">
-    <string>Test HDF Library</string>
+    <string>&amp;Test HDF Library</string>
    </property>
   </action>
   <action name="m_ActionTestHDFSlab">
    <property name="text">
-    <string>Test HDF Slab Output</string>
+    <string>Test &amp;HDF Slab Output</string>
    </property>
   </action>
   <action name="m_ActionLoadImage">
    <property name="text">
-    <string>Load Image...</string>
+    <string>&amp;Load Image...</string>
+   </property>
+  </action>
+  <action name="m_ActionIterateHDF">
+   <property name="text">
+    <string>List objects in HDF5 File...</string>
    </property>
   </action>
  </widget>

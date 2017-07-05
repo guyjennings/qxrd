@@ -2,13 +2,13 @@ TEMPLATE = app
 TARGET   = qtestceplib-hdf5
 DESTDIR  = ../bin/
 
-CONFIG += qceplib-hdf5
+CONFIG += qceplib-base qceplib-szip qceplib-zlib qceplib-hdf5 qceplib-qwt
 
 include(../../qceplib-base.pri)
-include(../../qceplib-qwt.pri)
 include(../../qceplib-szip.pri)
 include(../../qceplib-zlib.pri)
 include(../../qceplib-hdf5.pri)
+include(../../qceplib-qwt.pri)
 
 HEADERS += \
     qtestceplibhdf5mainwindow.h \

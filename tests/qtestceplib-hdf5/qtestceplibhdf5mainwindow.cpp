@@ -20,7 +20,9 @@ QtestceplibHdf5MainWindow::QtestceplibHdf5MainWindow(QtestceplibHdf5Document *do
   connect(ui->m_ActionWriteSettings, SIGNAL(triggered()), this, SLOT(doWriteSettings()));
   connect(ui->m_ActionLoadImage, SIGNAL(triggered()), this, SLOT(doLoadImage()));
   connect(ui->m_ActionTestHDF, SIGNAL(triggered()), this, SLOT(doTestHDF5Library()));
+  connect(ui->m_ActionIterateHDF, SIGNAL(triggered()), this, SLOT(doIterateHDF5File()));
   connect(ui->m_ActionTestHDFSlab, SIGNAL(triggered()), this, SLOT(doTestHDF5SlabOutput()));
+  connect(ui->m_FileMenu->addAction("Iterate over objects in HDF file..."), SIGNAL(triggered()), this, SLOT(doIterateHDF5File2()));
 
   ui->m_FileMenu->addAction(tr("QT Version %1").arg(qVersion()));
   ui->m_FileMenu->addAction(tr("QCEPLIB Version %1").arg(qceplibVersion()));
@@ -137,12 +139,16 @@ void QtestceplibHdf5MainWindow::doTestHDF5Library()
         this, "Read HDF5 File...", defHDFPath);
 
   if (theFile.length()) {
-    hid_t file, data;
+    if (H5Fis_hdf5(qPrintable(theFile))) {
+      hid_t file, data;
 
-    file = H5Fopen(qPrintable(theFile), H5F_ACC_RDONLY, H5P_DEFAULT);
-    H5Fclose(file);
+      file = H5Fopen(qPrintable(theFile), H5F_ACC_RDONLY, H5P_DEFAULT);
+      H5Fclose(file);
 
-    defHDFPath=theFile;
+      defHDFPath=theFile;
+    } else {
+      printMessage(tr("File %1 is not an HDF5 file").arg(theFile));
+    }
   }
 }
 
@@ -218,3 +224,502 @@ void QtestceplibHdf5MainWindow::doTestHDF5SlabOutput()
   }
 }
 
+class QtestHDF5Command {
+public:
+  QtestHDF5Command(QtestceplibHdf5MainWindow *win);
+
+  static herr_t staticPrintOneError(unsigned n,
+                                    const H5E_error2_t *err_desc,
+                                    void *data);
+  herr_t printOneError(unsigned n,
+                       const H5E_error2_t *err_desc);
+
+  void printMessage(QString msg);
+  void printError();
+
+  QString linkTarget(hid_t             loc_id,
+                     const char       *name,
+                     const H5L_info_t *info);
+
+  QString softLinkTarget(hid_t         loc_id,
+                         const char   *name,
+                         const H5L_info_t *info);
+
+  QString externalLinkTarget(hid_t       loc_id,
+                             const char *name,
+                             const H5L_info_t *info);
+
+protected:
+  QtestceplibHdf5MainWindow   *m_Window;
+};
+
+QtestHDF5Command::QtestHDF5Command(QtestceplibHdf5MainWindow *win)
+  : m_Window(win)
+{
+}
+
+
+void QtestHDF5Command::printMessage(QString msg)
+{
+  if (m_Window) {
+    m_Window -> printMessage(msg);
+  }
+}
+
+void QtestHDF5Command::printError()
+{
+  H5Ewalk(H5E_DEFAULT, H5E_WALK_UPWARD, QtestHDF5Command::staticPrintOneError, (void*) this);
+}
+
+herr_t QtestHDF5Command::staticPrintOneError(unsigned n, const H5E_error2_t *err_desc, void *data)
+{
+  QtestHDF5Command *iter = reinterpret_cast<QtestHDF5Command*>(data);
+
+  if (iter) {
+    return iter->printOneError(n, err_desc);
+  } else {
+    return -1;
+  }
+}
+
+herr_t QtestHDF5Command::printOneError(unsigned n, const H5E_error2_t *err_desc)
+{
+  if (err_desc) {
+    printMessage(QObject::tr("%1: %2 line %3 in %4: %5")
+                 .arg(n)
+                 .arg(err_desc->file_name)
+                 .arg(err_desc->line)
+                 .arg(err_desc->func_name)
+                 .arg(err_desc->desc));
+  }
+}
+
+QString QtestHDF5Command::linkTarget(hid_t       loc_id,
+                                     const char *name,
+                                     const H5L_info_t *info)
+{
+  QString res = "<invalid>";
+
+  if (info) {
+    switch (info->type) {
+    case H5L_TYPE_SOFT:
+      res = softLinkTarget(loc_id, name, info);
+      break;
+
+    case H5L_TYPE_EXTERNAL:
+      res = externalLinkTarget(loc_id, name, info);
+      break;
+    }
+  }
+
+  return res;
+}
+
+QString QtestHDF5Command::softLinkTarget(hid_t       loc_id,
+                                         const char *name,
+                                         const H5L_info_t *info)
+{
+  QString res = "<invalid>";
+
+  if (info && info->type == H5L_TYPE_SOFT) {
+    QByteArray buff(info->u.val_size, '*');
+
+    herr_t s = H5Lget_val(loc_id, name, buff.data(), buff.size(), H5P_DEFAULT);
+
+    if (s == 0) {
+      res = buff;
+    } else {
+      printError();
+    }
+  }
+
+  return res;
+}
+
+QString QtestHDF5Command::externalLinkTarget(hid_t loc_id,
+                                             const char *name,
+                                             const H5L_info_t *info)
+{
+  QString res = "<invalid>";
+
+  if (info && info->type == H5L_TYPE_EXTERNAL) {
+    QByteArray buff(info->u.val_size, '*');
+
+    herr_t s = H5Lget_val(loc_id, name, buff.data(), buff.size(), H5P_DEFAULT);
+
+    if (s == 0) {
+      const char *file, *data;
+      unsigned flags;
+
+      herr_t s = H5Lunpack_elink_val(buff.data(), buff.size(), &flags, &file, &data);
+
+      if (s == 0) {
+        res = QObject::tr("%1#%2").arg(file).arg(data);
+      }
+    } else {
+      printError();
+    }
+  }
+
+  return res;
+}
+
+class QtestHDF5Iterator : public QtestHDF5Command {
+public:
+  QtestHDF5Iterator(QtestceplibHdf5MainWindow *win,
+                    hid_t                      file,
+                    int                        level,
+                    QtestHDF5Iterator         *parent,
+                    haddr_t                    addr);
+
+  int visitAll();
+  int visitAll(const char *inGroup);
+
+  int group_check(haddr_t target_addr);
+
+  static herr_t staticVisitOne(
+      hid_t             loc_id,
+      const char       *name,
+      const H5L_info_t *info,
+      void             *data);
+
+  herr_t visitOne(
+      hid_t             loc_id,
+      const char       *name,
+      const H5L_info_t *info);
+
+  static herr_t staticOneAttribute(hid_t id,
+                                   const char *name,
+                                   const H5A_info_t *ainfo,
+                                   void *data);
+
+  herr_t oneAttribute(hid_t id,
+                      const char *name,
+                      const H5A_info_t *ainfo);
+
+protected:
+  hid_t                        m_File;
+  int                          m_Level;
+  QtestHDF5Iterator           *m_Parent;
+  haddr_t                      m_Address;
+};
+
+QtestHDF5Iterator::QtestHDF5Iterator(
+    QtestceplibHdf5MainWindow *win,
+    hid_t                      file,
+    int                        level,
+    QtestHDF5Iterator         *parent,
+    haddr_t                    addr) :
+  QtestHDF5Command(win),
+  m_File(file),
+  m_Level(level),
+  m_Parent(parent),
+  m_Address(addr)
+{
+}
+
+int QtestHDF5Iterator::visitAll()
+{
+  printMessage(QObject::tr("QtestHDFIterator::visitAll(): Begin"));
+
+  herr_t status = H5Literate(m_File,
+                             H5_INDEX_NAME,
+                             H5_ITER_NATIVE,
+                             NULL,
+                             QtestHDF5Iterator::staticVisitOne,
+                             (void*) this);
+
+  if (status) {
+    printMessage(QObject::tr("QtestHDFIterator::visitAll(): Error %1").arg(status));
+    printError();
+  } else {
+    printMessage(QObject::tr("QtestHDFIterator::visitAll(): Success"));
+  }
+
+  return status;
+}
+
+int QtestHDF5Iterator::visitAll(const char *name)
+{
+  printMessage(QObject::tr("QtestHDFIterator::visitAll(%1): Begin").arg(name));
+
+  herr_t status = H5Literate_by_name(m_File,
+                                     name,
+                                     H5_INDEX_NAME,
+                                     H5_ITER_NATIVE,
+                                     NULL,
+                                     QtestHDF5Iterator::staticVisitOne,
+                                     (void*) this,
+                                     H5P_DEFAULT);
+
+  if (status) {
+    printMessage(QObject::tr("QtestHDFIterator::visitAll(%1): Error %2").arg(name).arg(status));
+    printError();
+  } else {
+    printMessage(QObject::tr("QtestHDFIterator::visitAll(%1): Success").arg(name));
+  }
+
+  return status;
+}
+
+herr_t QtestHDF5Iterator::staticVisitOne(hid_t loc_id, const char *name, const H5L_info_t *info, void *data)
+{
+  QtestHDF5Iterator *iter = reinterpret_cast<QtestHDF5Iterator*>(data);
+
+  if (iter) {
+    return iter->visitOne(loc_id, name, info);
+  } else {
+    return -1;
+  }
+}
+
+herr_t QtestHDF5Iterator::visitOne(hid_t loc_id, const char *name, const H5L_info_t *info)
+{
+  herr_t      status,
+              return_val = 0;
+  H5O_info_t  infobuf;
+  unsigned    spaces = 2*(m_Level+1);
+
+  status = H5Oget_info_by_name(loc_id, name, &infobuf, H5P_DEFAULT);
+
+  herr_t      status2;
+  H5L_info_t  linkInfo;
+
+  status2 = H5Lget_info(loc_id, name, &linkInfo, H5P_DEFAULT);
+
+//  switch (linkInfo.type) {
+//  case H5L_TYPE_HARD:
+//    printMessage(QObject::tr("%1Hard Link").arg(" ",spaces));
+//    break;
+
+//  case H5L_TYPE_SOFT:
+//    printMessage(QObject::tr("%1Soft Link").arg(" ",spaces));
+//    break;
+
+//  case H5L_TYPE_EXTERNAL:
+//    printMessage(QObject::tr("%1External Link").arg(" ",spaces));
+//    break;
+
+//  default:
+//    printMessage(QObject::tr("%1Other: %2").arg(" ",spaces).arg(linkInfo.type));
+//  }
+
+  switch (infobuf.type) {
+  case H5O_TYPE_GROUP:
+    if (linkInfo.type == H5L_TYPE_HARD) {
+      printMessage(QObject::tr("%1Group: %2 {").arg(' ',spaces).arg(name));
+
+      if (group_check(infobuf.addr)) {
+        printMessage(QObject::tr("%1  Warning: Loop Detected!").arg(' ',spaces));
+      } else {
+        QtestHDF5Iterator inGroup(m_Window, loc_id, m_Level+1, this, infobuf.addr);
+
+        inGroup.visitAll(name);
+      }
+
+      printMessage(QObject::tr("%1}").arg(' ',spaces));
+    } else {
+      printMessage(QObject::tr("%1Link: %2").arg(' ',spaces).arg(name));
+    }
+    break;
+
+  case H5O_TYPE_DATASET:
+    printMessage(QObject::tr("%1Dataset: %2").arg(' ',spaces).arg(name));
+    break;
+
+  case H5O_TYPE_NAMED_DATATYPE:
+    printMessage(QObject::tr("%1Datatype: %2").arg(' ',spaces).arg(name));
+    break;
+
+  default:
+    printMessage(QObject::tr("%1Unknown: %2 (type %3)").arg(' ',spaces).arg(name).arg(infobuf.type));
+    break;
+  }
+
+  herr_t status3;
+  hsize_t sz;
+
+  status3 = H5Aiterate(loc_id, H5_INDEX_NAME, H5_ITER_INC, &sz, QtestHDF5Iterator::staticOneAttribute, this);
+
+  return return_val;
+}
+
+int QtestHDF5Iterator::group_check(haddr_t target_addr)
+{
+  if (m_Address == target_addr) {
+    return 1;
+  } else if (m_Level == 0) {
+    return 0;
+  } else {
+    return m_Parent->group_check(target_addr);
+  }
+}
+
+herr_t QtestHDF5Iterator::staticOneAttribute(hid_t id, const char *name, const H5A_info_t *ainfo, void *data)
+{
+  QtestHDF5Iterator *iter = reinterpret_cast<QtestHDF5Iterator*>(data);
+
+  if (iter) {
+    return iter->oneAttribute(id, name, ainfo);
+  } else {
+    return -1;
+  }
+}
+
+herr_t QtestHDF5Iterator::oneAttribute(hid_t id, const char *name, const H5A_info_t *ainfo)
+{
+  unsigned    spaces = 2*(m_Level+1);
+
+  printMessage(QObject::tr("%1  Attr: %2").arg(' ', spaces).arg(name));
+}
+
+void QtestceplibHdf5MainWindow::doIterateHDF5File()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+        this, "Read HDF5 File...", defHDFPath);
+
+  if (theFile.length()) {
+    if (H5Fis_hdf5(qPrintable(theFile))) {
+      hid_t         file;
+      herr_t        status;
+      H5O_info_t    infobuf;
+
+      file = H5Fopen(qPrintable(theFile), H5F_ACC_RDONLY, H5P_DEFAULT);
+      status = H5Oget_info(file, &infobuf);
+
+      QtestHDF5Iterator iter(this, file, 0, NULL, infobuf.addr);
+
+      printMessage(tr("Iterating over %1").arg(theFile));
+      iter.visitAll();
+      printMessage(tr("Done"));
+
+      defHDFPath = theFile;
+    } else {
+      printMessage(tr("File %1 is not an HDF5 file").arg(theFile));
+    }
+  }
+}
+
+class QtestHDF5Iterator2 : public QtestHDF5Command {
+public:
+  QtestHDF5Iterator2(QtestceplibHdf5MainWindow *win,
+                    hid_t                      file,
+                    int                        level,
+                    QtestHDF5Iterator2         *parent,
+                    haddr_t                    addr);
+
+  herr_t visitAll();
+
+  static herr_t staticVisitOne(hid_t             loc_id,
+      const char       *name,
+      const H5L_info_t *info,
+      void             *data);
+
+  herr_t visitOne(
+      hid_t             loc_id,
+      const char       *name,
+      const H5L_info_t *info);
+
+protected:
+  hid_t                        m_File;
+  int                          m_Level;
+  QtestHDF5Iterator2          *m_Parent;
+  haddr_t                      m_Address;
+};
+
+QtestHDF5Iterator2::QtestHDF5Iterator2(
+    QtestceplibHdf5MainWindow *win,
+    hid_t                      file,
+    int                        level,
+    QtestHDF5Iterator2        *parent,
+    haddr_t                    addr) :
+  QtestHDF5Command(win),
+  m_File(file),
+  m_Level(level),
+  m_Parent(parent),
+  m_Address(addr)
+{
+}
+
+herr_t QtestHDF5Iterator2::visitAll()
+{
+  printMessage(QObject::tr("QtestHDFIterator2::visitAll(): Begin"));
+
+  herr_t status = H5Lvisit(m_File,
+                             H5_INDEX_NAME,
+                             H5_ITER_NATIVE,
+                             QtestHDF5Iterator2::staticVisitOne,
+                             (void*) this);
+
+  if (status) {
+    printMessage(QObject::tr("QtestHDFIterator2::visitAll(): Error %1").arg(status));
+    printError();
+  } else {
+    printMessage(QObject::tr("QtestHDFIterator2::visitAll(): Success"));
+  }
+
+  return status;
+}
+
+herr_t QtestHDF5Iterator2::staticVisitOne(hid_t loc_id, const char *name, const H5L_info_t *info, void *data)
+{
+  QtestHDF5Iterator2 *iter = reinterpret_cast<QtestHDF5Iterator2*>(data);
+
+  if (iter) {
+    return iter->visitOne(loc_id, name, info);
+  } else {
+    return -1;
+  }
+}
+
+herr_t QtestHDF5Iterator2::visitOne(hid_t loc_id, const char *name, const H5L_info_t *info)
+{
+  if (info) {
+    switch (info->type) {
+    case H5L_TYPE_HARD:
+      printMessage(QObject::tr("Hard: %1").arg(name));
+      break;
+
+    case H5L_TYPE_SOFT:
+      printMessage(QObject::tr("Soft: %1 -> %2").arg(name).arg(softLinkTarget(loc_id, name, info)));
+      break;
+
+    case H5L_TYPE_EXTERNAL:
+      printMessage(QObject::tr("Ext: %1 -> %2").arg(name).arg(externalLinkTarget(loc_id, name, info)));
+      break;
+
+    default:
+      printMessage(QObject::tr("Other: %1").arg(name));
+      break;
+    }
+  }
+
+  return 0;
+}
+
+void QtestceplibHdf5MainWindow::doIterateHDF5File2()
+{
+  QString theFile = QFileDialog::getOpenFileName(
+        this, "Read HDF5 File...", defHDFPath);
+
+  if (theFile.length()) {
+    if (H5Fis_hdf5(qPrintable(theFile))) {
+      hid_t         file;
+      herr_t        status;
+      H5O_info_t    infobuf;
+
+      file = H5Fopen(qPrintable(theFile), H5F_ACC_RDONLY, H5P_DEFAULT);
+      status = H5Oget_info(file, &infobuf);
+
+      QtestHDF5Iterator2 iter(this, file, 0, NULL, infobuf.addr);
+
+      printMessage(tr("Iterating over %1").arg(theFile));
+      iter.visitAll();
+      printMessage(tr("Done"));
+
+      defHDFPath = theFile;
+    } else {
+      printMessage(tr("File %1 is not an HDF5 file").arg(theFile));
+    }
+  }
+}

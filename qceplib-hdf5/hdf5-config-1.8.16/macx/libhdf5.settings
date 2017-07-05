@@ -1,0 +1,62 @@
+	    SUMMARY OF THE HDF5 CONFIGURATION
+	    =================================
+
+General Information:
+-------------------
+		   HDF5 Version: 1.8.11
+		  Configured on: Tue Oct  8 15:21:19 CDT 2013
+		  Configured by: jennings@jenningsx.xray.aps.anl.gov
+		 Configure mode: production
+		    Host system: i386-apple-darwin12.5.0
+	      Uname information: Darwin jenningsx.xray.aps.anl.gov 12.5.0 Darwin Kernel Version 12.5.0: Sun Sep 29 13:33:47 PDT 2013; root:xnu-2050.48.12~1/RELEASE_X86_64 x86_64
+		       Byte sex: little-endian
+		      Libraries: static, shared
+	     Installation point: /Users/jennings/development/qceplib/qceplib-code/hdf5-1.8.11/hdf5
+
+Compiling Options:
+------------------
+               Compilation Mode: production
+                     C Compiler: /usr/bin/clang ( Apple LLVM version 5.0 )
+                         CFLAGS: -I/sw/include
+                      H5_CFLAGS:  
+                      AM_CFLAGS: 
+                       CPPFLAGS: -I/sw/include
+                    H5_CPPFLAGS:   -DNDEBUG -UH5_DEBUG_API
+                    AM_CPPFLAGS: 
+               Shared C Library: yes
+               Static C Library: yes
+  Statically Linked Executables: no
+                        LDFLAGS: -L/sw/lib
+                     H5_LDFLAGS: 
+                     AM_LDFLAGS: 
+ 	 	Extra libraries:  -lz -ldl -lm 
+ 		       Archiver: ar
+ 		 	 Ranlib: ranlib
+ 	      Debugged Packages: 
+		    API Tracing: no
+
+Languages:
+----------
+                        Fortran: no
+
+                            C++: no
+
+Features:
+---------
+                  Parallel HDF5: no
+             High Level library: yes
+                   Threadsafety: no
+            Default API Mapping: v18
+ With Deprecated Public Symbols: yes
+         I/O filters (external): deflate(zlib)
+         I/O filters (internal): shuffle,fletcher32,nbit,scaleoffset
+                            MPE: no
+                     Direct VFD: no
+                        dmalloc: no
+Clear file buffers before write: yes
+           Using memory checker: no
+         Function Stack Tracing: no
+                           GPFS: no
+      Strict File Format Checks: no
+   Optimization Instrumentation: no
+       Large File Support (LFS): yes
