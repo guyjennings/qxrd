@@ -91,6 +91,9 @@ public slots:
   void doReflectVertically();
   void doReflectHorizontally();
 
+  void doNewTestImageGenerator();
+  void doNewTestScanGenerator();
+
   void updateTitle();
   void acquireStarted();
   void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);

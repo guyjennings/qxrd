@@ -409,7 +409,24 @@ HEADERS += TODO.h \
     qxrdroicenteredshape-ptr.h \
     modeltest.h \
     qxrdfittedrings.h \
-    qxrdfittedrings-ptr.h
+    qxrdfittedrings-ptr.h \
+    qxrdtestimagegenerator.h \
+    qxrdtestimagegeneratorwindow.h \
+    qxrdtestscangeneratorwindow.h \
+    qxrdtestimagegeneratorthread.h \
+    qxrdtestimagegenerator-ptr.h \
+    qxrdtestscangenerator-ptr.h \
+    qxrdtestscangeneratorthread-ptr.h \
+    qxrdtestimagegeneratorthread-ptr.h \
+    qxrdtestscangenerator.h \
+    qxrdtestscangeneratorthread.h \
+    qxrdtestscanwindow.h \
+    qxrdtestscanwindowdatavis.h \
+    qxrdtestimagewindow.h \
+    qxrdtestimagewindowqwt.h \
+    qxrdtestimagewindowdatavis.h \
+    qxrdtestscanwindowqwt.h \
+    qxrdtestgenerator.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -603,7 +620,20 @@ SOURCES += qxrd.cpp \
     qxrdroieditordialog.cpp \
     qxrdpolygonpointsmodel.cpp \
     modeltest.cpp \
-    qxrdfittedrings.cpp
+    qxrdfittedrings.cpp \
+    qxrdtestimagegenerator.cpp \
+    qxrdtestimagegeneratorwindow.cpp \
+    qxrdtestscangeneratorwindow.cpp \
+    qxrdtestimagegeneratorthread.cpp \
+    qxrdtestscangenerator.cpp \
+    qxrdtestscangeneratorthread.cpp \
+    qxrdtestscanwindowqwt.cpp \
+    qxrdtestscanwindow.cpp \
+    qxrdtestscanwindowdatavis.cpp \
+    qxrdtestimagewindow.cpp \
+    qxrdtestimagewindowdatavis.cpp \
+    qxrdtestimagewindowqwt.cpp \
+    qxrdtestgenerator.cpp
 
 OTHER_FILES += testImage.js
 
@@ -638,7 +668,13 @@ FORMS += qxrdwindow.ui \
     qxrdpolarnormalizationdialog.ui \
     qxrdcalibrantpropertiesdialog.ui \
     qxrdintegratorparmsdialog.ui \
-    qxrdroieditordialog.ui
+    qxrdroieditordialog.ui \
+    qxrdtestimagegeneratorwindow.ui \
+    qxrdtestscangeneratorwindow.ui \
+    qxrdtestscanwindowdatavis.ui \
+    qxrdtestimagewindowqwt.ui \
+    qxrdtestscanwindowqwt.ui \
+    qxrdtestimagewindowdatavis.ui
 
 macx:
 else:unix:LIBS += -ltiff
