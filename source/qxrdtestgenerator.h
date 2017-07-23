@@ -9,6 +9,8 @@
 
 class QxrdTestGenerator : public QcepSerializableObject
 {
+  Q_OBJECT
+
 public:
   QxrdTestGenerator(QString name);
 
@@ -21,6 +23,10 @@ public slots:
 
 protected slots:
   virtual void generateTest() = 0;
+
+public:
+  Q_PROPERTY(int testIndex READ get_TestIndex WRITE set_TestIndex STORED false)
+  QCEP_INTEGER_PROPERTY(TestIndex)
 
 private:
   QTimer m_Timer;

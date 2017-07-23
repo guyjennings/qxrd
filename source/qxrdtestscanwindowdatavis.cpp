@@ -1,5 +1,6 @@
 #include "qxrdtestscanwindowdatavis.h"
 #include "ui_qxrdtestscandataviswindow.h"
+#include "qxrddebug.h"
 
 QxrdTestScanWindowDataVis::QxrdTestScanWindowDataVis(QWidget *parent) :
   QxrdTestScanWindow(parent)
@@ -14,5 +15,5 @@ QxrdTestScanWindowDataVis::~QxrdTestScanWindowDataVis()
 
 void QxrdTestScanWindowDataVis::onNewScanAvailable(QcepDataColumnScanPtr data)
 {
-  m_Messages->append("New Scan Received");
+  m_Messages->append(tr("New Scan Received : %1").HEXARG(data.data()));
 }

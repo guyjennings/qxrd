@@ -1,7 +1,8 @@
 #include "qxrdtestgenerator.h"
 
 QxrdTestGenerator::QxrdTestGenerator(QString name)
-  : QcepSerializableObject(name)
+  : QcepSerializableObject(name),
+    m_TestIndex(this, "testIndex", 0, "Test Data Index")
 {
   connect(&m_Timer, &QTimer::timeout, this, &QxrdTestGenerator::generateTest);
 }

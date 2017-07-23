@@ -55,16 +55,20 @@ QxrdTestImageGeneratorWindow::~QxrdTestImageGeneratorWindow()
 {
 }
 
+static int s_ImageWindowCount = 0;
+
 void QxrdTestImageGeneratorWindow::doNewQWTWindow()
 {
   auto win = new QxrdTestImageWindowQwt();
 
   QxrdTestImageGeneratorPtr gen(m_Generator);
 
-  if (gen) {
+  if (gen && win) {
     connect(gen.data(), &QxrdTestImageGenerator::newImageAvailable,
             win,        &QxrdTestImageWindowQwt::onNewImageAvailable);
   }
+
+  win->setWindowTitle(tr("Test Image Generator QWT Window %1").arg(s_ImageWindowCount++));
 
   win->show();
 }
@@ -75,10 +79,12 @@ void QxrdTestImageGeneratorWindow::doNewDataVisWindow()
 
   QxrdTestImageGeneratorPtr gen(m_Generator);
 
-  if (gen) {
+  if (gen && win) {
     connect(gen.data(), &QxrdTestImageGenerator::newImageAvailable,
             win,        &QxrdTestImageWindowDataVis::onNewImageAvailable);
   }
+
+  win->setWindowTitle(tr("Test Image Generator Data Vis Window %1").arg(s_ImageWindowCount++));
 
   win->show();
 }

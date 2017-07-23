@@ -55,16 +55,20 @@ QxrdTestScanGeneratorWindow::~QxrdTestScanGeneratorWindow()
 {
 }
 
+static int s_ScanWindowCount = 0;
+
 void QxrdTestScanGeneratorWindow::doNewQWTWindow()
 {
   auto win = new QxrdTestScanWindowQwt();
 
   QxrdTestScanGeneratorPtr gen(m_Generator);
 
-  if (gen) {
+  if (gen && win) {
     connect(gen.data(), &QxrdTestScanGenerator::newScanAvailable,
             win,        &QxrdTestScanWindowQwt::onNewScanAvailable);
   }
+
+  win->setWindowTitle(tr("Test Scan Generator QWT Window %1").arg(s_ScanWindowCount++));
 
   win->show();
 }
@@ -75,10 +79,12 @@ void QxrdTestScanGeneratorWindow::doNewDataVisWindow()
 
   QxrdTestScanGeneratorPtr gen(m_Generator);
 
-  if (gen) {
+  if (gen && win) {
     connect(gen.data(), &QxrdTestScanGenerator::newScanAvailable,
             win,        &QxrdTestScanWindowDataVis::onNewScanAvailable);
   }
+
+  win->setWindowTitle(tr("Test Scan Generator Data Vis Window %1").arg(s_ScanWindowCount++));
 
   win->show();
 }
