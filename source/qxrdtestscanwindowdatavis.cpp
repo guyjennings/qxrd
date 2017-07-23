@@ -1,6 +1,6 @@
 #include "qxrdtestscanwindowdatavis.h"
-#include "ui_qxrdtestscandataviswindow.h"
-#include "qxrddebug.h"
+#include "qcepdebug.h"
+#include "qcepdatacolumnscan.h"
 
 QxrdTestScanWindowDataVis::QxrdTestScanWindowDataVis(QWidget *parent) :
   QxrdTestScanWindow(parent)

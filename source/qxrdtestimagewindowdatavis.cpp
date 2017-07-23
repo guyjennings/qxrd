@@ -1,7 +1,5 @@
 #include "qxrdtestimagewindowdatavis.h"
-#include "ui_qxrdtestimagedataviswindow.h"
-#include "qxrdthread.h"
-#include "qxrddebug.h"
+#include "qcepdebug.h"
 #include "qcepimagedata.h"
 
 QxrdTestImageWindowDataVis::QxrdTestImageWindowDataVis(QWidget *parent) :

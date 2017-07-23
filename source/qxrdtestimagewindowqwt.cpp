@@ -1,5 +1,4 @@
 #include "qxrdtestimagewindowqwt.h"
-#include "ui_qxrdtestimageqwtwindow.h"
 #include "qxrddebug.h"
 #include "qcepimagedata.h"
 

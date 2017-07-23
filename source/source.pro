@@ -14,7 +14,7 @@ macx {
   ICON = images/qxrd-icon.icns
 }
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent datavisualization charts
 
 CONFIG += qt
 
@@ -426,7 +426,11 @@ HEADERS += TODO.h \
     qxrdtestimagewindowqwt.h \
     qxrdtestimagewindowdatavis.h \
     qxrdtestscanwindowqwt.h \
-    qxrdtestgenerator.h
+    qxrdtestgenerator.h \
+    qxrdtestimageplotqwt.h \
+    qxrdtestimageplotdatavis.h \
+    qxrdtestscanplotdatavis.h \
+    qxrdtestscanplotqwt.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -633,7 +637,11 @@ SOURCES += qxrd.cpp \
     qxrdtestimagewindow.cpp \
     qxrdtestimagewindowdatavis.cpp \
     qxrdtestimagewindowqwt.cpp \
-    qxrdtestgenerator.cpp
+    qxrdtestgenerator.cpp \
+    qxrdtestimageplotqwt.cpp \
+    qxrdtestimageplotdatavis.cpp \
+    qxrdtestscanplotdatavis.cpp \
+    qxrdtestscanplotqwt.cpp
 
 OTHER_FILES += testImage.js
 

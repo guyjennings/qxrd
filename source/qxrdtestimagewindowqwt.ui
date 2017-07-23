@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>472</width>
+    <height>789</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,13 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QTextBrowser" name="m_Messages"/>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QxrdImagePlot" name="m_Graph" native="true"/>
+      <widget class="QTextBrowser" name="m_Messages"/>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -25,13 +31,20 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>472</width>
      <height>21</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QxrdImagePlot</class>
+   <extends>QWidget</extends>
+   <header>qxrdimageplot.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

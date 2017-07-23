@@ -4,7 +4,8 @@
 #include "qxrdtestimagewindow.h"
 #include "ui_qxrdtestimagewindowdatavis.h"
 
-class QxrdTestImageWindowDataVis : public QxrdTestImageWindow, public Ui::QxrdTestImageWindowDataVis
+class QxrdTestImageWindowDataVis : public QxrdTestImageWindow,
+                                   public Ui::QxrdTestImageWindowDataVis
 {
   Q_OBJECT
 

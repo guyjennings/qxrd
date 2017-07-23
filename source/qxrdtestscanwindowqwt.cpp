@@ -1,5 +1,4 @@
 #include "qxrdtestscanwindowqwt.h"
-#include "ui_qxrdtestscanqwtwindow.h"
 #include "qxrddebug.h"
 
 QxrdTestScanWindowQwt::QxrdTestScanWindowQwt(QWidget *parent) :
