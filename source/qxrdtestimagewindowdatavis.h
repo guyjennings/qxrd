@@ -3,6 +3,7 @@
 
 #include "qxrdtestimagewindow.h"
 #include "ui_qxrdtestimagewindowdatavis.h"
+#include "qxrdtestimageplotdatavishelper-ptr.h"
 
 class QxrdTestImageWindowDataVis : public QxrdTestImageWindow,
                                    public Ui::QxrdTestImageWindowDataVis
@@ -13,8 +14,7 @@ public:
   explicit QxrdTestImageWindowDataVis(QWidget *parent = 0);
   ~QxrdTestImageWindowDataVis();
 
-public slots:
-  virtual void onNewImageAvailable(QcepDoubleImageDataPtr data);
+  QxrdTestImagePlotDataVisHelperPtr helper();
 
 private:
 };

@@ -12,7 +12,7 @@ QxrdTestScanWindowQwt::~QxrdTestScanWindowQwt()
 {
 }
 
-void QxrdTestScanWindowQwt::onNewScanAvailable(QcepDataColumnScanPtr data)
+QxrdTestScanPlotQwtHelperPtr QxrdTestScanWindowQwt::helper()
 {
-  m_Messages->append(tr("New Scan Received : %1").HEXARG(data.data()));
+  return m_Graph->helper();
 }

@@ -6,6 +6,9 @@
 #include "qxrdtestimagewindowqwt.h"
 #include "qxrdtestimagewindowdatavis.h"
 
+#include "qxrdtestimageplotqwthelper.h"
+#include "qxrdtestimageplotdatavishelper.h"
+
 QxrdTestImageGeneratorWindow::QxrdTestImageGeneratorWindow(QxrdExperimentWPtr doc, QWidget *parent) :
   QMainWindow(parent)
 {
@@ -64,8 +67,12 @@ void QxrdTestImageGeneratorWindow::doNewQWTWindow()
   QxrdTestImageGeneratorPtr gen(m_Generator);
 
   if (gen && win) {
-    connect(gen.data(), &QxrdTestImageGenerator::newImageAvailable,
-            win,        &QxrdTestImageWindowQwt::onNewImageAvailable);
+    auto helper = win->helper();
+
+    if (helper) {
+      connect(gen.data(),  &QxrdTestImageGenerator::newImageAvailable,
+              helper.data(), &QxrdTestImagePlotQwtHelper::onNewImageAvailable);
+    }
   }
 
   win->setWindowTitle(tr("Test Image Generator QWT Window %1").arg(s_ImageWindowCount++));
@@ -80,8 +87,12 @@ void QxrdTestImageGeneratorWindow::doNewDataVisWindow()
   QxrdTestImageGeneratorPtr gen(m_Generator);
 
   if (gen && win) {
-    connect(gen.data(), &QxrdTestImageGenerator::newImageAvailable,
-            win,        &QxrdTestImageWindowDataVis::onNewImageAvailable);
+    auto helper = win->helper();
+
+    if (helper) {
+      connect(gen.data(),    &QxrdTestImageGenerator::newImageAvailable,
+              helper.data(), &QxrdTestImagePlotDataVisHelper::onNewImageAvailable);
+    }
   }
 
   win->setWindowTitle(tr("Test Image Generator Data Vis Window %1").arg(s_ImageWindowCount++));

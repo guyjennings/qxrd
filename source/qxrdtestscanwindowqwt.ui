@@ -20,7 +20,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QcepPlot" name="m_Graph" native="true"/>
+      <widget class="QxrdTestScanPlotQwt" name="m_Graph" native="true"/>
       <widget class="QTextBrowser" name="m_Messages"/>
      </widget>
     </item>
@@ -32,7 +32,7 @@
      <x>0</x>
      <y>0</y>
      <width>651</width>
-     <height>21</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>
@@ -40,9 +40,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QcepPlot</class>
+   <class>QxrdTestScanPlotQwt</class>
    <extends>QWidget</extends>
-   <header>qcepplot.h</header>
+   <header>qxrdtestscanplotqwt.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -6,6 +6,9 @@
 #include "qxrdtestscanwindowqwt.h"
 #include "qxrdtestscanwindowdatavis.h"
 
+#include "qxrdtestscanplotdatavishelper.h"
+#include "qxrdtestscanplotqwthelper.h"
+
 QxrdTestScanGeneratorWindow::QxrdTestScanGeneratorWindow(QxrdExperimentWPtr doc, QWidget *parent) :
   QMainWindow(parent)
 {
@@ -64,8 +67,12 @@ void QxrdTestScanGeneratorWindow::doNewQWTWindow()
   QxrdTestScanGeneratorPtr gen(m_Generator);
 
   if (gen && win) {
-    connect(gen.data(), &QxrdTestScanGenerator::newScanAvailable,
-            win,        &QxrdTestScanWindowQwt::onNewScanAvailable);
+    auto helper = win->helper();
+
+    if (helper) {
+      connect(gen.data(),    &QxrdTestScanGenerator::newScanAvailable,
+              helper.data(), &QxrdTestScanPlotQwtHelper::onNewScanAvailable);
+    }
   }
 
   win->setWindowTitle(tr("Test Scan Generator QWT Window %1").arg(s_ScanWindowCount++));
@@ -80,8 +87,12 @@ void QxrdTestScanGeneratorWindow::doNewDataVisWindow()
   QxrdTestScanGeneratorPtr gen(m_Generator);
 
   if (gen && win) {
-    connect(gen.data(), &QxrdTestScanGenerator::newScanAvailable,
-            win,        &QxrdTestScanWindowDataVis::onNewScanAvailable);
+    auto helper = win->helper();
+
+    if (helper) {
+      connect(gen.data(),    &QxrdTestScanGenerator::newScanAvailable,
+              helper.data(), &QxrdTestScanPlotDataVisHelper::onNewScanAvailable);
+    }
   }
 
   win->setWindowTitle(tr("Test Scan Generator Data Vis Window %1").arg(s_ScanWindowCount++));

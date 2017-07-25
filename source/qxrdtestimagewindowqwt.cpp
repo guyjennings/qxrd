@@ -13,13 +13,7 @@ QxrdTestImageWindowQwt::~QxrdTestImageWindowQwt()
 {
 }
 
-void QxrdTestImageWindowQwt::onNewImageAvailable(QcepDoubleImageDataPtr data)
+QxrdTestImagePlotQwtHelperPtr QxrdTestImageWindowQwt::helper()
 {
-  int ind = -1;
-
-  if (data) {
-    ind = data->get_ImageNumber();
-  }
-
-  m_Messages->append(tr("New Image Received : Index %1 : Addr %2").arg(ind).HEXARG(data.data()));
+  return m_Graph->helper();
 }

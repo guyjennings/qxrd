@@ -12,7 +12,7 @@ public:
   explicit QxrdTestImageWindow(QWidget *parent = nullptr);
 
 public slots:
-  virtual void onNewImageAvailable(QcepDoubleImageDataPtr data) = 0;
+//  virtual void onNewImageAvailable(QcepDoubleImageDataPtr data) = 0;
 };
 
 #endif // QXRDTESTIMAGEWINDOW_H

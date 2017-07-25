@@ -10,9 +10,6 @@ class QxrdTestScanWindow : public QMainWindow
 
 public:
   explicit QxrdTestScanWindow(QWidget *parent = 0);
-
-public slots:
-  virtual void onNewScanAvailable(QcepDataColumnScanPtr data) = 0;
 };
 
 #endif // QXRDTESTSCANWINDOW_H

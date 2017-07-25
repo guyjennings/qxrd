@@ -1,0 +1,11 @@
+#ifndef QXRDTESTIMAGEPLOTDATAVISHELPERPTR_H
+#define QXRDTESTIMAGEPLOTDATAVISHELPERPTR_H
+
+#include <QSharedPointer>
+
+class QxrdTestImagePlotDataVisHelper;
+
+typedef QSharedPointer<QxrdTestImagePlotDataVisHelper> QxrdTestImagePlotDataVisHelperPtr;
+typedef QWeakPointer<QxrdTestImagePlotDataVisHelper>   QxrdTestImagePlotDataVisHelperWPtr;
+
+#endif // QXRDTESTIMAGEPLOTDATAVISHELPERPTR_H

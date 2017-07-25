@@ -430,7 +430,16 @@ HEADERS += TODO.h \
     qxrdtestimageplotqwt.h \
     qxrdtestimageplotdatavis.h \
     qxrdtestscanplotdatavis.h \
-    qxrdtestscanplotqwt.h
+    qxrdtestscanplotqwt.h \
+    qxrdtestscanplotdatavishelper.h \
+    qxrdtestscanplotqwthelper.h \
+    qxrdtestimageplotdatavishelper.h \
+    qxrdtestimageplotqwthelper.h \
+    qxrdtestscanplotdatavishelper-ptr.h \
+    qxrdtestscanplotqwthelper-ptr.h \
+    qxrdtestimageplotdatavishelper-ptr.h \
+    qxrdtestimageplotqwthelper-ptr.h \
+    qxrdtestthread.h
 
 SOURCES += qxrd.cpp \
     qxrdapplication.cpp \
@@ -641,7 +650,12 @@ SOURCES += qxrd.cpp \
     qxrdtestimageplotqwt.cpp \
     qxrdtestimageplotdatavis.cpp \
     qxrdtestscanplotdatavis.cpp \
-    qxrdtestscanplotqwt.cpp
+    qxrdtestscanplotqwt.cpp \
+    qxrdtestscanplotdatavishelper.cpp \
+    qxrdtestscanplotqwthelper.cpp \
+    qxrdtestimageplotdatavishelper.cpp \
+    qxrdtestimageplotqwthelper.cpp \
+    qxrdtestthread.cpp
 
 OTHER_FILES += testImage.js
 

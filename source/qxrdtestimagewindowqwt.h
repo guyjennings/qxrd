@@ -3,6 +3,7 @@
 
 #include "qxrdtestimagewindow.h"
 #include "ui_qxrdtestimagewindowqwt.h"
+#include "qxrdtestimageplotqwthelper-ptr.h"
 
 class QxrdTestImageWindowQwt : public QxrdTestImageWindow, public Ui::QxrdTestImageWindowQwt
 {
@@ -12,8 +13,7 @@ public:
   explicit QxrdTestImageWindowQwt(QWidget *parent = 0);
   ~QxrdTestImageWindowQwt();
 
-public slots:
-  virtual void onNewImageAvailable(QcepDoubleImageDataPtr data);
+  QxrdTestImagePlotQwtHelperPtr helper();
 
 private:
 };

@@ -3,6 +3,7 @@
 
 #include "qxrdtestscanwindow.h"
 #include "ui_qxrdtestscanwindowdatavis.h"
+#include "qxrdtestscanplotdatavishelper-ptr.h"
 
 class QxrdTestScanWindowDataVis : public QxrdTestScanWindow, public Ui::QxrdTestScanWindowDataVis
 {
@@ -12,8 +13,8 @@ public:
   explicit QxrdTestScanWindowDataVis(QWidget *parent = 0);
   ~QxrdTestScanWindowDataVis();
 
-public slots:
-  void onNewScanAvailable(QcepDataColumnScanPtr data);
+public:
+  QxrdTestScanPlotDataVisHelperPtr helper();
 
 private:
 };
