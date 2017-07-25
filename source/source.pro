@@ -708,7 +708,8 @@ win32 {
       }
     }
 
-    win32-msvc2013 {
+    win32-msvc2017 {
+    } else:win32-msvc2013 {
       greaterThan(QT_MINOR_VERSION, 6) {
       } else {
         greaterThan(QT_MINOR_VERSION, 4) {
