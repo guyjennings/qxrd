@@ -15,4 +15,6 @@ void QxrdTestImagePlotQwtHelper::onNewImageAvailable(QcepDoubleImageDataPtr data
   }
 
 //  m_Messages->append(tr("New Image Received : Index %1 : Addr %2").arg(ind).HEXARG(data.data()));
+
+  emit newPlotSpectrogramAvailable(data);
 }

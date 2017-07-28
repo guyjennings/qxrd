@@ -16,6 +16,7 @@ public:
   QxrdTestImagePlotQwtHelperPtr helper();
 
 private:
+  QxrdImagePlotSettingsPtr m_GraphSettings;
 };
 
 #endif // QXRDTESTIMAGEWINDOWQWT_H

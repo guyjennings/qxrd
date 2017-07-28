@@ -10,13 +10,16 @@ QxrdTestImagePlotDataVis::QxrdTestImagePlotDataVis(QWidget *parent)
 {
   QGridLayout *layout = new QGridLayout(this);
 
-  Q3DSurface  *surface = new Q3DSurface();
-  QWidget     *container = QWidget::createWindowContainer(surface);
+  m_SurfaceGraph = new Q3DSurface();
+
+  QWidget     *container = QWidget::createWindowContainer(m_SurfaceGraph);
 
   layout->addWidget(container, 0, 0, 1, 1);
 
   m_HelperThread = QSharedPointer<QxrdTestThread<QxrdTestImagePlotDataVisHelper> > (
         new QxrdTestThread<QxrdTestImagePlotDataVisHelper>(QcepObjectWPtr()));
+
+  m_HelperThread -> start();
 
   m_Helper = m_HelperThread->object();
 
@@ -33,4 +36,15 @@ QxrdTestImagePlotDataVisHelperPtr QxrdTestImagePlotDataVis::helper()
 
 void QxrdTestImagePlotDataVis::onNewSurfaceSeries(QSurface3DSeriesPtr surface)
 {
+  if (m_Surface) {
+    m_SurfaceGraph->removeSeries(m_Surface.data());
+  }
+
+  m_Surface = surface;
+
+  m_SurfaceGraph->axisX()->setRange(0, 2048);
+  m_SurfaceGraph->axisY()->setRange(0, 255);
+  m_SurfaceGraph->axisZ()->setRange(0, 2048);
+
+  m_SurfaceGraph->addSeries(m_Surface.data());
 }

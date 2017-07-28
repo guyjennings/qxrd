@@ -19,7 +19,7 @@ public slots:
   virtual void onNewImageAvailable(QcepDoubleImageDataPtr data);
 
 signals:
-  void newPlotSpectrogramAvailable(QwtPlotSpectrogramPtr);
+  void newPlotSpectrogramAvailable(QcepDoubleImageDataPtr data);
 };
 
 Q_DECLARE_METATYPE(QwtPlotSpectrogramPtr)

@@ -16,7 +16,7 @@ public:
   QxrdTestImagePlotQwtHelperPtr helper();
 
 public slots:
-  void onNewPlotSpectrogramAvailable(QwtPlotSpectrogramPtr img);
+  void onNewPlotSpectrogramAvailable(QcepDoubleImageDataPtr img);
 
 private:
   QSharedPointer<QxrdTestThread<QxrdTestImagePlotQwtHelper> > m_HelperThread;

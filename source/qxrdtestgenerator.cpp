@@ -1,4 +1,5 @@
 #include "qxrdtestgenerator.h"
+#include "qxrdtestimageplotdatavishelper.h"
 
 QxrdTestGenerator::QxrdTestGenerator(QString name)
   : QcepSerializableObject(name),
@@ -31,4 +32,9 @@ void QxrdTestGenerator::generateOne()
 {
   m_Timer.stop();
   generateTest();
+}
+
+void QxrdTestGenerator::registerMetaTypes()
+{
+  qRegisterMetaType<QSurface3DSeriesPtr>("QSurface3DSeriesPtr");
 }

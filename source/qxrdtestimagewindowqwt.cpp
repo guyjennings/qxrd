@@ -7,6 +7,11 @@ QxrdTestImageWindowQwt::QxrdTestImageWindowQwt(QWidget *parent) :
 {
   setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
+
+  m_GraphSettings = QxrdImagePlotSettingsPtr(
+        new QxrdImagePlotSettings("settings"));
+
+  m_Graph->init(m_GraphSettings, QcepObjectPtr());
 }
 
 QxrdTestImageWindowQwt::~QxrdTestImageWindowQwt()

@@ -14,6 +14,8 @@ class QxrdTestGenerator : public QcepSerializableObject
 public:
   QxrdTestGenerator(QString name);
 
+  static void registerMetaTypes();
+
 public slots:
   void repRateZero();
   void repRate10Hz();

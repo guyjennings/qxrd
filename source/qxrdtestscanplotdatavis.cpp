@@ -7,6 +7,8 @@ QxrdTestScanPlotDataVis::QxrdTestScanPlotDataVis(QWidget *parent) : QtCharts::QC
   m_HelperThread = QSharedPointer<QxrdTestThread<QxrdTestScanPlotDataVisHelper> > (
         new QxrdTestThread<QxrdTestScanPlotDataVisHelper>(QcepObjectWPtr()));
 
+  m_HelperThread -> start();
+
   m_Helper = m_HelperThread->object();
 
   if (m_Helper) {
