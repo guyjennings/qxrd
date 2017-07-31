@@ -19,7 +19,8 @@ void QxrdTestImageGenerator::generateTest()
 
   prop_TestIndex()->incValue(1);
 
-  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage("newData", 2048, 2048, QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(tr("newData-%1").arg(ind),
+                                                             2048, 2048, QcepAllocator::NullIfNotAvailable);
 
   if (img) {
     img->set_ImageNumber(ind);
