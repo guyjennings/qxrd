@@ -1,5 +1,8 @@
 #include "qxrdtestgenerator.h"
 #include "qxrdtestimageplotdatavishelper.h"
+#include "qxrdtestimageplotqwthelper.h"
+#include "qxrdtestscanplotdatavishelper.h"
+#include "qxrdtestscanplotqwthelper.h"
 
 QxrdTestGenerator::QxrdTestGenerator(QString name)
   : QcepSerializableObject(name),
@@ -37,4 +40,5 @@ void QxrdTestGenerator::generateOne()
 void QxrdTestGenerator::registerMetaTypes()
 {
   qRegisterMetaType<QSurface3DSeriesPtr>("QSurface3DSeriesPtr");
+  qRegisterMetaType<QwtPlotCurvePtr>("QwtPlotCurvePtr");
 }
