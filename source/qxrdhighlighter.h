@@ -3,6 +3,7 @@
 
 #include <QSyntaxHighlighter>
 
+#include <QString>
 #include <QHash>
 #include <QTextCharFormat>
 #include <QTextDocument>
