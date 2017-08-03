@@ -2,6 +2,7 @@
 #include "qcepallocator.h"
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumn.h"
+#include <qmath.h>
 
 QxrdTestScanGenerator::QxrdTestScanGenerator(QString name)
   : QxrdTestGenerator(name)
