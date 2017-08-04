@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "qcepexperiment.h"
 #include "qcepdataobjectgraphwindow.h"
+#include "qcepdataobjectsurfaceplotwindow.h"
 #include "qcepdataobjectpropertieswindow.h"
 #include "qcepdataobjectspreadsheetwindow.h"
 #include "qcepdatacolumnscan.h"
@@ -143,6 +144,7 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     menu.addSeparator();
 
     QAction *og = menu.addAction(tr("Open %1 in graph window").arg(names));
+    QAction *sp = menu.addAction(tr("Open %1 in surface plot window").arg(names));
     QAction *os = menu.addAction(tr("Open %1 in spreadsheet window").arg(names));
     QAction *op = menu.addAction(tr("Open %1 in properties window").arg(names));
 
@@ -184,6 +186,7 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     sv->setEnabled(true);
     og->setEnabled(nSel >= 1);
     os->setEnabled(nSel >= 1);
+    sp->setEnabled(nSel >= 1);
     op->setEnabled(nSel >= 1);
     dl->setEnabled(nSel >= 1);
 
@@ -236,6 +239,8 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
       saveData(indexes);
     } else if (action == og) {
       openGraph(indexes);
+    } else if (action == sp) {
+      surfacePlot(indexes);
     } else if (action == os) {
       openSpreadsheet(indexes);
     } else if (action == op) {
@@ -271,6 +276,25 @@ void QcepDatasetBrowserView::openGraph(const QModelIndexList &idx)
         QcepDataObjectGraphWindow *gw = new QcepDataObjectGraphWindow(expt, obj);
 
         gw->show();
+      }
+    }
+  }
+}
+
+void QcepDatasetBrowserView::surfacePlot(const QModelIndexList &idx)
+{
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      QcepDataObjectPtr obj = model -> item(idx.value(i));
+
+      QcepExperimentPtr expt(m_Experiment);
+
+      if (obj && expt) {
+        QcepDataObjectSurfacePlotWindow *sp = new QcepDataObjectSurfacePlotWindow(expt, obj);
+
+        sp->show();
       }
     }
   }
