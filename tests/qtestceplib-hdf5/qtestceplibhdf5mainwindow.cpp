@@ -292,6 +292,8 @@ herr_t QtestHDF5Command::printOneError(unsigned n, const H5E_error2_t *err_desc)
                  .arg(err_desc->func_name)
                  .arg(err_desc->desc));
   }
+
+  return 0;
 }
 
 QString QtestHDF5Command::linkTarget(hid_t       loc_id,
@@ -571,6 +573,8 @@ herr_t QtestHDF5Iterator::oneAttribute(hid_t id, const char *name, const H5A_inf
   unsigned    spaces = 2*(m_Level+1);
 
   printMessage(QObject::tr("%1  Attr: %2").arg(' ', spaces).arg(name));
+
+  return 0;
 }
 
 void QtestceplibHdf5MainWindow::doIterateHDF5File()
