@@ -4,8 +4,6 @@
 #include "qcepdataobjectwindow.h"
 #include "ui_qcepdataobjectsurfaceplotwindow.h"
 #include "qcepexperiment-ptr.h"
-#include "qcepdataobject-ptr.h"
-#include <QtDataVisualization>
 #include "qcepimagedata-ptr.h"
 
 class QcepDataObjectSurfacePlotWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectSurfacePlotWindow
@@ -19,17 +17,13 @@ public:
 
   virtual ~QcepDataObjectSurfacePlotWindow();
 
+  void closeEvent (QCloseEvent * event);
+  bool wantToClose();
+
 signals:
 
 public slots:
   void onNewImageAvailable(QcepDoubleImageDataPtr img);
-
-private:
-  QcepExperimentWPtr                            m_Experiment;
-  QcepDataObjectWPtr                            m_Object;
-
-  QtDataVisualization::Q3DSurface              *m_SurfaceGraph;
-  QtDataVisualization::QSurface3DSeries        *m_Surface;
 };
 
 #endif // QCEPDATAOBJECTSURFACEPLOTWINDOW_H

@@ -90,7 +90,8 @@ SOURCES += \
     $${PWD}/qcepfileformatterhdf.cpp \
     $${PWD}/qcepfileformatternexus.cpp \
     $${PWD}/qcepserializableobject.cpp \
-    $$PWD/qcepdataobjectsurfaceplotwindow.cpp
+    $$PWD/qcepdataobjectsurfaceplotwindow.cpp \
+    $$PWD/qcepdataobjectsurfaceplotwidget.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -219,7 +220,8 @@ HEADERS += \
     $${PWD}/qcepfileformatternexus.h \
     $${PWD}/qcepserializableobject.h \
     $${PWD}/qcepserializableobject-ptr.h \
-    $$PWD/qcepdataobjectsurfaceplotwindow.h
+    $$PWD/qcepdataobjectsurfaceplotwindow.h \
+    $$PWD/qcepdataobjectsurfaceplotwidget.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \
@@ -258,7 +260,8 @@ FORMS += \
   $${PWD}/qcepdatasetselectiondialog.ui \
   $${PWD}/qcepdataimportdialog.ui \
   $${PWD}/qcepdataexportdialog.ui \
-    $$PWD/qcepdataobjectsurfaceplotwindow.ui
+    $$PWD/qcepdataobjectsurfaceplotwindow.ui \
+    $$PWD/qcepdataobjectsurfaceplotwidget.ui
 
 contains(DEFINES, HAVE_QWT) {
  FORMS += \
