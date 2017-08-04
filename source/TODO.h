@@ -730,4 +730,10 @@ TODO("2016-06-17", "",
 TODO("2016-06-24", "",
      "Calculated ROI values not propagated back to acquisition object?");
 
+TODO("2017-08-04", "",
+     "Overflow pixels are not shown in live view");
+
+TODO("2017-08-04", "",
+     "Work needed on surface plotting");
+
 #endif // TODO_H
