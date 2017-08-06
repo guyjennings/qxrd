@@ -23,6 +23,7 @@ QcepDataObjectSurfacePlotWidget::QcepDataObjectSurfacePlotWidget(QWidget *parent
   QGridLayout *layout = new QGridLayout(m_SurfacePlot);
 
   m_SurfaceGraph = new Q3DSurface();
+  m_SurfaceGraph -> setShadowQuality(Q3DSurface::ShadowQualityNone);
 
   QWidget *container = QWidget::createWindowContainer(m_SurfaceGraph);
 
@@ -156,16 +157,19 @@ void QcepDataObjectSurfacePlotWidget::onReplotWanted()
     QSurface3DSeries *series = new QSurface3DSeries(p);
 
     series->setDrawMode(QSurface3DSeries::DrawSurface);
-    series->setFlatShadingEnabled(true);
+    series->setFlatShadingEnabled(false);
 
-    QLinearGradient gr;
-    gr.setColorAt(0.0, Qt::black);
-    gr.setColorAt(0.33, Qt::blue);
-    gr.setColorAt(0.67, Qt::red);
-    gr.setColorAt(1.0, Qt::yellow);
+    QLinearGradient gr/*(m_MinPlottedVal, m_MinPlottedVal,
+                       m_MaxPlottedVal, m_MaxPlottedVal)*/;
+
+    setColorMap(gr);
+//    gr.setColorAt(0.0, Qt::black);
+//    gr.setColorAt(0.33, Qt::blue);
+//    gr.setColorAt(0.67, Qt::red);
+//    gr.setColorAt(1.0, Qt::yellow);
 
     series -> setBaseGradient(gr);
-    series -> setColorStyle(Q3DTheme::ColorStyleObjectGradient);
+    series -> setColorStyle(Q3DTheme::ColorStyleRangeGradient);
 
     if (m_Surface) {
       m_SurfaceGraph->removeSeries(m_Surface);
@@ -180,6 +184,95 @@ void QcepDataObjectSurfacePlotWidget::onReplotWanted()
 
     m_SurfaceGraph->addSeries(m_Surface);
   }
+}
+
+void QcepDataObjectSurfacePlotWidget::setColorMap(QLinearGradient &map)
+{
+  switch (get_ColorMap()) {
+  case 0:
+    setGrayscale(map);
+    break;
+
+  case 1:
+    setInverseGrayscale(map);
+    break;
+
+  case 2:
+    setFire(map);
+    break;
+
+  case 3:
+    setIce(map);
+    break;
+
+  case 4:
+    setEarthTones(map);
+    break;
+
+  case 5:
+    setSpectrum(map);
+    break;
+
+  case 6:
+    setBandedSpectrum(map);
+    break;
+
+  default:
+    setGrayscale(map);
+  }
+}
+
+void QcepDataObjectSurfacePlotWidget::setGrayscale(QLinearGradient &map)
+{
+  map.setColorAt(0.0, Qt::black);
+  map.setColorAt(1.0, Qt::white);
+}
+
+void QcepDataObjectSurfacePlotWidget::setInverseGrayscale(QLinearGradient &map)
+{
+  map.setColorAt(0.0, Qt::white);
+  map.setColorAt(1.0, Qt::black);
+}
+
+void QcepDataObjectSurfacePlotWidget::setFire(QLinearGradient &map)
+{
+  map.setColorAt(0.0, Qt::black);
+  map.setColorAt(0.25, Qt::red);
+  map.setColorAt(0.75, Qt::yellow);
+  map.setColorAt(1.0, Qt::white);
+}
+
+void QcepDataObjectSurfacePlotWidget::setIce(QLinearGradient &map)
+{
+  map.setColorAt(0.0, Qt::black);
+  map.setColorAt(0.25, Qt::blue);
+  map.setColorAt(0.75, Qt::cyan);
+  map.setColorAt(1.0, Qt::white);
+}
+
+void QcepDataObjectSurfacePlotWidget::setEarthTones(QLinearGradient &map)
+{
+  map.setColorAt(0.0, Qt::black);
+  map.setColorAt(0.15, Qt::blue);
+  map.setColorAt(0.25, Qt::gray);
+  map.setColorAt(0.35, Qt::green);
+  map.setColorAt(0.5, Qt::darkYellow);
+  map.setColorAt(0.85, Qt::darkMagenta);
+  map.setColorAt(1.0, Qt::white);
+}
+
+void QcepDataObjectSurfacePlotWidget::setSpectrum(QLinearGradient &map)
+{
+  map.setColorAt(0.0, Qt::red);
+  map.setColorAt(0.2, Qt::blue);
+  map.setColorAt(0.4, Qt::cyan);
+  map.setColorAt(0.6, Qt::green);
+  map.setColorAt(0.8, Qt::yellow);
+  map.setColorAt(1.0, Qt::red);
+}
+
+void QcepDataObjectSurfacePlotWidget::setBandedSpectrum(QLinearGradient &map)
+{
 }
 
 void QcepDataObjectSurfacePlotWidget::onColorMapChanged(int newMap)

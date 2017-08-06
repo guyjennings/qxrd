@@ -27,6 +27,16 @@ public slots:
   double percentileValue(double pctl);
 
 private:
+  void setColorMap(QLinearGradient &map);
+  void setGrayscale(QLinearGradient &map);
+  void setInverseGrayscale(QLinearGradient &map);
+  void setSpectrum(QLinearGradient &map);
+  void setFire(QLinearGradient &map);
+  void setEarthTones(QLinearGradient &map);
+  void setIce(QLinearGradient &map);
+  void setBandedSpectrum(QLinearGradient &map);
+
+private:
   QcepDoubleImageDataPtr                        m_Image;
 
   QtDataVisualization::Q3DSurface              *m_SurfaceGraph;
