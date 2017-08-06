@@ -97,7 +97,7 @@ QcepDataObjectSpreadsheetWindow::QcepDataObjectSpreadsheetWindow(QcepExperimentW
     }
   }
 
-  m_TableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+//  m_TableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
   if (m_Model) {
     m_TableView->setModel(m_Model.data());
