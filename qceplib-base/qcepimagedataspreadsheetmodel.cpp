@@ -48,3 +48,13 @@ QVariant QcepImageDataSpreadsheetModel::data(const QModelIndex &index, int role)
   return res;
 }
 
+QVariant QcepImageDataSpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+  if (orientation==Qt::Horizontal && role==Qt::DisplayRole) {
+    return tr("C%1").arg(section);
+  } else if (orientation==Qt::Vertical && role==Qt::DisplayRole) {
+    return tr("R%1").arg(section);
+  }
+
+  return QVariant();
+}
