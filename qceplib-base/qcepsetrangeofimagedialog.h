@@ -20,6 +20,10 @@ public:
 protected:
   void changeEvent(QEvent *e);
 
+private slots:
+  void onRangeChoiceChanged(int newChoice);
+  void onOutputChoiceChanged(int newChoice);
+
 private:
   QcepDatasetModelPtr           m_Model;
   QModelIndex                   m_Index;
