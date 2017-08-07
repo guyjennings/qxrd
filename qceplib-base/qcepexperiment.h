@@ -9,6 +9,9 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepdataexportparameters-ptr.h"
 #include "qcepdataimportparameters-ptr.h"
+#include "qcepsetrangeofimagecommand-ptr.h"
+#include "qcepsetdatavaluerangecommand-ptr.h"
+#include "qcepfixupgainmapcommand-ptr.h"
 
 class QcepExperiment : public QcepSerializableObject
 {
@@ -30,6 +33,10 @@ public slots:
   QcepDataExportParametersWPtr dataExportParameters();
   QcepDataImportParametersWPtr dataImportParameters();
 
+  QcepSetDataValueRangeCommandWPtr setDataValueRangeCommand();
+  QcepSetRangeOfImageCommandWPtr   setRangeOfImageCommand();
+  QcepFixupGainMapCommandWPtr      fixupGainMapCommand();
+
 public:
   QUndoStack *undoStack();
 
@@ -42,8 +49,11 @@ protected:
   virtual void writeSettings(QSettings *settings);
 
 private:
-  QcepDataExportParametersPtr    m_DataExportParameters;
-  QcepDataImportParametersPtr    m_DataImportParameters;
+  QcepDataExportParametersPtr     m_DataExportParameters;
+  QcepDataImportParametersPtr     m_DataImportParameters;
+  QcepSetDataValueRangeCommandPtr m_SetDataValueRangeCommand;
+  QcepSetRangeOfImageCommandPtr   m_SetRangeOfImageCommand;
+  QcepFixupGainMapCommandPtr      m_FixupGainMapCommand;
 
 public:
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)

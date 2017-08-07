@@ -91,7 +91,13 @@ SOURCES += \
     $${PWD}/qcepfileformatternexus.cpp \
     $${PWD}/qcepserializableobject.cpp \
     $$PWD/qcepdataobjectsurfaceplotwindow.cpp \
-    $$PWD/qcepdataobjectsurfaceplotwidget.cpp
+    $$PWD/qcepdataobjectsurfaceplotwidget.cpp \
+    $$PWD/qcepsetrangeofimagedialog.cpp \
+    $$PWD/qcepsetdatavaluerangedialog.cpp \
+    $$PWD/qcepfixupgainmapdialog.cpp \
+    $$PWD/qcepfixupgainmapcommand.cpp \
+    $$PWD/qcepsetdatavaluerangecommand.cpp \
+    $$PWD/qcepsetrangeofimagecommand.cpp
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -221,7 +227,16 @@ HEADERS += \
     $${PWD}/qcepserializableobject.h \
     $${PWD}/qcepserializableobject-ptr.h \
     $$PWD/qcepdataobjectsurfaceplotwindow.h \
-    $$PWD/qcepdataobjectsurfaceplotwidget.h
+    $$PWD/qcepdataobjectsurfaceplotwidget.h \
+    $$PWD/qcepsetrangeofimagedialog.h \
+    $$PWD/qcepsetdatavaluerangedialog.h \
+    $$PWD/qcepfixupgainmapdialog.h \
+    $$PWD/qcepfixupgainmapcommand.h \
+    $$PWD/qcepsetdatavaluerangecommand.h \
+    $$PWD/qcepsetrangeofimagecommand.h \
+    $$PWD/qcepsetrangeofimagecommand-ptr.h \
+    $$PWD/qcepsetdatavaluerangecommand-ptr.h \
+    $$PWD/qcepfixupgainmapcommand-ptr.h
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \
@@ -261,7 +276,10 @@ FORMS += \
   $${PWD}/qcepdataimportdialog.ui \
   $${PWD}/qcepdataexportdialog.ui \
     $$PWD/qcepdataobjectsurfaceplotwindow.ui \
-    $$PWD/qcepdataobjectsurfaceplotwidget.ui
+    $$PWD/qcepdataobjectsurfaceplotwidget.ui \
+    $$PWD/qcepsetrangeofimagedialog.ui \
+    $$PWD/qcepsetdatavaluerangedialog.ui \
+    $$PWD/qcepfixupgainmapdialog.ui
 
 contains(DEFINES, HAVE_QWT) {
  FORMS += \

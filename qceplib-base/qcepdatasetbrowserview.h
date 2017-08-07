@@ -36,6 +36,9 @@ private slots:
   void polarTransformParameters(const QModelIndexList &idx);
   void polarIntegrateData(const QModelIndexList &idx);
   void polarIntegrateParameters(const QModelIndexList &idx);
+  void setRangeOfImage(const QModelIndexList &idx);
+  void setDataValueRange(const QModelIndexList &idx);
+  void fixupGainMap(const QModelIndexList &idx);
   void readData(const QModelIndexList &idx);
   void saveData(const QModelIndexList &idx);
   void openGraph(const QModelIndexList &idx);

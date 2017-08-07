@@ -27,6 +27,9 @@
 #include "qcepdataimportparameters.h"
 #include "qcepdataexportparameters.h"
 #include "qcepdebug.h"
+#include "qcepsetdatavaluerangedialog.h"
+#include "qcepsetrangeofimagedialog.h"
+#include "qcepfixupgainmapdialog.h"
 
 QcepDatasetBrowserView::QcepDatasetBrowserView(QWidget *parent)
   : QTreeView(parent)
@@ -163,6 +166,9 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     QAction *polp = ops->addAction(tr("Polar Transform %1 Parameters...").arg(names));
     QAction *pli = ops->addAction(tr("Polar Integrate %1").arg(names));
     QAction *plip = ops->addAction(tr("Polar Integrate %1 Parameters...").arg(names));
+    QAction *setr = ops->addAction(tr("Set ranges of %1 to constant...").arg(names));
+    QAction *setv = ops->addAction(tr("Set points in %1 value range...").arg(names));
+    QAction *gain = ops->addAction(tr("Fixup Gain Map...").arg(names));
 
     menu.addSeparator();
 
@@ -179,6 +185,10 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     sub->setEnabled(nSel == 1 && (scn || col || img));
     mul->setEnabled(nSel == 1 && (scn || col || img));
     div->setEnabled(nSel == 1 && (scn || col || img));
+
+    setr->setEnabled(nSel == 1 && img);
+    setv->setEnabled(nSel == 1 && img);
+    gain->setEnabled(nSel == 1 && img);
 
     ntg->setEnabled(nSel >= 1);
 
@@ -233,6 +243,12 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
       polarIntegrateData(indexes);
     } else if (action == plip) {
       polarIntegrateParameters(indexes);
+    } else if (action == setr) {
+      setRangeOfImage(indexes);
+    } else if (action == setv) {
+      setDataValueRange(indexes);
+    } else if (action == gain) {
+      fixupGainMap(indexes);
     } else if (action == rd) {
       readData(indexes);
     } else if (action == sv) {
@@ -615,4 +631,25 @@ void QcepDatasetBrowserView::polarIntegrateParameters(const QModelIndexList &idx
       }
     }
   }
+}
+
+void QcepDatasetBrowserView::setRangeOfImage(const QModelIndexList &idx)
+{
+  QcepSetRangeOfImageDialog dlog(m_DatasetModel, idx.value(0));
+
+  dlog.exec();
+}
+
+void QcepDatasetBrowserView::setDataValueRange(const QModelIndexList &idx)
+{
+  QcepSetDataValueRangeDialog dlog(m_DatasetModel, idx.value(0));
+
+  dlog.exec();
+}
+
+void QcepDatasetBrowserView::fixupGainMap(const QModelIndexList &idx)
+{
+  QcepFixupGainMapDialog dlog(m_DatasetModel, idx.value(0));
+
+  dlog.exec();
 }

@@ -3,6 +3,9 @@
 #include <QDir>
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
+#include "qcepsetdatavaluerangecommand.h"
+#include "qcepsetrangeofimagecommand.h"
+#include "qcepfixupgainmapcommand.h"
 
 QcepExperiment::QcepExperiment(QString path, QString name) :
   QcepSerializableObject(name),
@@ -37,6 +40,15 @@ void QcepExperiment::initialize()
 
   addChildPtr(QcepDataImportParametersPtr(
                 new QcepDataImportParameters("importParameters")));
+
+  addChildPtr(QcepSetDataValueRangeCommandPtr(
+                new QcepSetDataValueRangeCommand()));
+
+  addChildPtr(QcepSetRangeOfImageCommandPtr(
+                new QcepSetRangeOfImageCommand()));
+
+  addChildPtr(QcepFixupGainMapCommandPtr(
+                new QcepFixupGainMapCommand()));
 }
 
 void QcepExperiment::addChildPtr(QcepSerializableObjectPtr child)
@@ -45,6 +57,9 @@ void QcepExperiment::addChildPtr(QcepSerializableObjectPtr child)
 
   if (checkPointer<QcepDataExportParameters>(child, m_DataExportParameters)) {}
   else if (checkPointer<QcepDataImportParameters>(child, m_DataImportParameters)) {}
+  else if (checkPointer<QcepSetDataValueRangeCommand>(child, m_SetDataValueRangeCommand)) {}
+  else if (checkPointer<QcepSetRangeOfImageCommand>(child, m_SetRangeOfImageCommand)) {}
+  else if (checkPointer<QcepFixupGainMapCommand>(child, m_FixupGainMapCommand)) {}
 }
 
 QString QcepExperiment::defaultExperimentDirectory(QString path) const
@@ -108,6 +123,21 @@ QcepDataImportParametersWPtr QcepExperiment::dataImportParameters()
   return m_DataImportParameters;
 }
 
+QcepSetDataValueRangeCommandWPtr QcepExperiment::setDataValueRangeCommand()
+{
+  return m_SetDataValueRangeCommand;
+}
+
+QcepSetRangeOfImageCommandWPtr QcepExperiment::setRangeOfImageCommand()
+{
+  return m_SetRangeOfImageCommand;
+}
+
+QcepFixupGainMapCommandWPtr QcepExperiment::fixupGainMapCommand()
+{
+  return m_FixupGainMapCommand;
+}
+
 void QcepExperiment::readSettings(QSettings *settings)
 {
   if (settings) {
@@ -122,6 +152,24 @@ void QcepExperiment::readSettings(QSettings *settings)
     if (m_DataImportParameters) {
       settings->beginGroup("importParameters");
       m_DataImportParameters -> readSettings(settings);
+      settings->endGroup();
+    }
+
+    if (m_SetDataValueRangeCommand) {
+      settings->beginGroup("setDataValueRange");
+      m_SetDataValueRangeCommand -> readSettings(settings);
+      settings->endGroup();
+    }
+
+    if (m_SetRangeOfImageCommand) {
+      settings->beginGroup("setRangeOfImage");
+      m_SetRangeOfImageCommand -> readSettings(settings);
+      settings->endGroup();
+    }
+
+    if (m_FixupGainMapCommand) {
+      settings->beginGroup("fixupGainMap");
+      m_FixupGainMapCommand -> readSettings(settings);
       settings->endGroup();
     }
   }
@@ -141,6 +189,24 @@ void QcepExperiment::writeSettings(QSettings *settings)
     if (m_DataImportParameters) {
       settings->beginGroup("importParameters");
       m_DataImportParameters -> writeSettings(settings);
+      settings->endGroup();
+    }
+
+    if (m_SetDataValueRangeCommand) {
+      settings->beginGroup("setDataValueRange");
+      m_SetDataValueRangeCommand -> writeSettings(settings);
+      settings->endGroup();
+    }
+
+    if (m_SetRangeOfImageCommand) {
+      settings->beginGroup("setRangeOfImage");
+      m_SetRangeOfImageCommand -> writeSettings(settings);
+      settings->endGroup();
+    }
+
+    if (m_FixupGainMapCommand) {
+      settings->beginGroup("fixupGainMap");
+      m_FixupGainMapCommand -> writeSettings(settings);
       settings->endGroup();
     }
   }
