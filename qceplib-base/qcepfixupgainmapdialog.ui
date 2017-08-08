@@ -6,14 +6,38 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>553</width>
-    <height>428</height>
+    <width>654</width>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Fixup Gain Map...</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="7" column="0" colspan="2">
+    <widget class="QCheckBox" name="m_GenerateParaboloid">
+     <property name="text">
+      <string>Generate elliptical paraboloid intermediate image</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QCheckBox" name="m_GenerateParaboloidDiff">
+     <property name="text">
+      <string>Generate diff of elliptical paraboloid intermediate image and orig data</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QDoubleSpinBox" name="m_AverageWidth"/>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QCheckBox" name="m_GenerateAveragedDiff">
+     <property name="text">
+      <string>Generate diff of averaged intermediate image and orig data</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -21,85 +45,19 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Type of region </string>
+      <string>Averaging Width</string>
      </property>
     </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QComboBox" name="m_RegionType"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Region Coordinate Style</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QComboBox" name="m_RegionCoordinateStyle"/>
    </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="m_RegionLabelX1">
+    <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>Minimum of intensity range</string>
+      <string>Averaging Height</string>
      </property>
     </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QDoubleSpinBox" name="m_RegionX1"/>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="m_RegionLabelY1">
-     <property name="text">
-      <string>Maximum of intensity range</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QDoubleSpinBox" name="m_RegionY1"/>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="m_RegionLabelX2">
-     <property name="text">
-      <string>Maximum of intensity range</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QDoubleSpinBox" name="m_RegionX2"/>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="m_RegionLabelY2">
-     <property name="text">
-      <string>Maximum of intensity range</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <widget class="QDoubleSpinBox" name="m_RegionY2"/>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Replacement Value</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1">
-    <widget class="QComboBox" name="m_OutputChoice"/>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Replacement Value</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1">
-    <widget class="QDoubleSpinBox" name="m_NewValue"/>
    </item>
    <item row="9" column="0" colspan="2">
     <spacer name="verticalSpacer">
@@ -128,6 +86,30 @@
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QCheckBox" name="m_FitParaboloid">
+     <property name="text">
+      <string>Fit with elliptical paraboloid</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QDoubleSpinBox" name="m_AverageHeight"/>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QCheckBox" name="m_AverageSubTiles">
+     <property name="text">
+      <string>Fit to averaged sub-tiles</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QCheckBox" name="m_GenerateAveragedImage">
+     <property name="text">
+      <string>Generate averaged intermediate image</string>
      </property>
     </widget>
    </item>
