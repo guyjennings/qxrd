@@ -97,14 +97,15 @@ void QcepImageSliceGraphController::updateDisplay()
             QwtPlotCurve *curve = NULL;
 
             if (st == en) {
-              curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("%1 = %2")
+              curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("%1 = %2 %3")
                                                 .arg(data->get_VLabel())
                                                 .arg(vStart+st*vStep)
                                                 .arg(data->get_VUnits()));
             } else {
               curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("%1 = %2 to %3 %4")
                                                 .arg(data->get_VLabel())
-                                                .arg(vStart+st*vStep).arg(vStart+en*vStep)
+                                                .arg(vStart+st*vStep)
+                                                .arg(vStart+en*vStep)
                                                 .arg(data->get_VUnits()));
             }
 
@@ -175,7 +176,8 @@ void QcepImageSliceGraphController::updateDisplay()
             } else {
               curve = new QwtPlotPiecewiseCurve(m_Window->m_ImagePlot, tr("%1 = %2 to %3 %4")
                                                 .arg(data->get_HLabel())
-                                                .arg(hStart+st*hStep).arg(hStart+en*hStep)
+                                                .arg(hStart+st*hStep)
+                                                .arg(hStart+en*hStep)
                                                 .arg(data->get_HUnits()));
             }
 
