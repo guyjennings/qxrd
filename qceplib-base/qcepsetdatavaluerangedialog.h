@@ -20,6 +20,11 @@ public:
 protected:
   void changeEvent(QEvent *e);
 
+private slots:
+  void onRegionTypeChanged(int newChoice);
+  void onRegionCoordinateStyleChanged(int newChoice);
+  void onOutputChoiceChanged(int newChoice);
+
 private:
   QcepDatasetModelPtr             m_Model;
   QModelIndex                     m_Index;

@@ -41,6 +41,8 @@ QcepDoubleImageDataPtr QcepSetRangeOfImageCommand::exec(QcepDoubleImageDataPtr i
 
     res->copyFrom(img);
 
+    emit progressMade(20);
+
     int rangeChoice = get_RangeChoice();
 
     double newValue;
@@ -70,7 +72,7 @@ QcepDoubleImageDataPtr QcepSetRangeOfImageCommand::exec(QcepDoubleImageDataPtr i
     int nCols = res->get_Width();
 
     for (int r=0; r<nRows; r++) {
-      int pct = r*90/nRows;
+      int pct = r*80/nRows;
 
       emit progressMade(10+int(pct));
 

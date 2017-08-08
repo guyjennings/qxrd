@@ -168,7 +168,7 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     QAction *plip = ops->addAction(tr("Polar Integrate %1 Parameters...").arg(names));
     QAction *setv = ops->addAction(tr("Set regions of %1 to constant...").arg(names));
     QAction *setr = ops->addAction(tr("Set points in %1 value range...").arg(names));
-    QAction *gain = ops->addAction(tr("Fixup Gain Map...").arg(names));
+    QAction *gain = ops->addAction(tr("Fixup Gain Map %1...").arg(names));
 
     menu.addSeparator();
 
