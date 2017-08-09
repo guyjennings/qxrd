@@ -40,6 +40,8 @@ public slots:
   void browseLogFile();
   void browseScanFile();
 
+  void onChangeROICreateType(int newType);
+
 public:
   void displayNewData(QcepImageDataBasePtr img, QcepMaskDataPtr overflow);
   void displayNewMask(QcepMaskDataPtr mask);

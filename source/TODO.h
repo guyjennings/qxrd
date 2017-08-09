@@ -736,4 +736,13 @@ TODO("2017-08-04", "",
 TODO("2017-08-04", "",
      "Work needed on surface plotting");
 
+TODO("2017-08-09", "",
+     "ROI Coordinates not properly saved");
+
+TODO("2017-08-09", "",
+     "ROI Editor Dialog doesnt update changes");
+
+TODO("2017-08-09", "",
+     "An easier way of adding ROIs via mouse commands would be nice");
+
 #endif // TODO_H

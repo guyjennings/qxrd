@@ -45,7 +45,7 @@ public:
   virtual void insertROIPoint(int n, QPointF pt) = 0;
 
 public:
-  Q_PROPERTY(int shapeType READ get_ShapeType WRITE set_ShapeType)
+  Q_PROPERTY(int shapeType READ get_ShapeType WRITE set_ShapeType STORED false)
   QCEP_INTEGER_PROPERTY(ShapeType)
 };
 

@@ -7,6 +7,7 @@
 #include "qxrdroishape.h"
 #include <QMessageBox>
 #include "qxrddebug.h"
+#include "qxrddetectorimageplot.h"
 
 QxrdROIPicker::QxrdROIPicker(QWidget *canvas,
                              QxrdImagePlot *plot,
@@ -288,6 +289,121 @@ bool QxrdROIPicker::end(bool ok)
 
 //    printMessage(tr(" %1: [%2,%3]").arg(i).arg(p.x()).arg(p.y()));
 //  }
+
+  return QwtPlotPicker::end(ok);
+}
+
+QxrdROICreator::QxrdROICreator(QWidget *canvas, QxrdImagePlot *plot) :
+  QxrdROIPicker(canvas, plot,
+                UseAllROIs,
+                CanSelectEdges,
+                UseAnyShape,
+                SecondAppend,
+                qInf(),
+                10.0),
+  m_CreatedType(-1)
+{
+  setCreatedType(QxrdDetectorImagePlot::NewRectROI);
+  setTrackerMode(QwtPicker::AlwaysOn);
+  setStateMachine(new QwtPickerDragLineMachine());
+  setRubberBand(QwtPicker::PolygonRubberBand);
+}
+
+void QxrdROICreator::setCreatedType(int newType)
+{
+  m_CreatedType = newType;
+  m_CreatedTypeID = QxrdROICoordinates::roiTypeID(QxrdROICoordinates::NoBounds,
+                                                  QxrdROICoordinates::NoBounds);
+
+  switch (newType) {
+  case QxrdDetectorImagePlot::NewRectROI:
+    m_CreatedTypeID = QxrdROICoordinates::roiTypeID(QxrdROICoordinates::NoBounds,
+                                                    QxrdROICoordinates::RectangleBounds);
+    break;
+  case QxrdDetectorImagePlot::NewEllipseROI:
+    m_CreatedTypeID = QxrdROICoordinates::roiTypeID(QxrdROICoordinates::NoBounds,
+                                                    QxrdROICoordinates::EllipseBounds);
+    break;
+  case QxrdDetectorImagePlot::NewRectDonutROI:
+    m_CreatedTypeID = QxrdROICoordinates::roiTypeID(QxrdROICoordinates::RectangleBounds,
+                                                    QxrdROICoordinates::RectangleBounds);
+    break;
+  case QxrdDetectorImagePlot::NewEllipseDonutROI:
+    m_CreatedTypeID = QxrdROICoordinates::roiTypeID(QxrdROICoordinates::EllipseBounds,
+                                                    QxrdROICoordinates::EllipseBounds);
+    break;
+  }
+}
+
+void QxrdROICreator::begin()
+{
+  QxrdROIPicker::begin();
+
+  m_NewROI = QxrdROICoordinates::newROICoordinates(m_CreatedTypeID);
+}
+
+void QxrdROICreator::move(const QPoint &pt)
+{
+  QxrdROIPicker::move(pt);
+
+  QxrdImagePlot *imgPlot = imagePlot();
+
+  if (imgPlot) {
+    if (m_SelectedPoints.count() == 2) {
+      QPointF p1 = invTransform(m_SelectedPoints.value(0));
+      QPointF p2 = invTransform(m_SelectedPoints.value(1));
+
+      double sx = qAbs(p2.x() - p1.x())/12.5;
+      double sy = qAbs(p2.y() - p1.y())/12.5;
+
+      m_NewROI->setCenter(p1);
+
+
+//      QPointF ptf1 = invTransform(m_SelectedPoints.value(0));
+//      QPointF ptf2 = invTransform(m_SelectedPoints.value(1));
+
+//      QPointF p1 = roi->invTransform(ptf1);
+//      QPointF p2 = roi->invTransform(ptf2);
+
+      QPolygonF fb = m_NewROI->scaledInnerOutline(sx, sy);
+
+      m_RubberBand = QPolygon();
+
+      for (int i=0; i<fb.count(); i++) {
+        m_RubberBand.append(transform(fb.value(i)));
+      }
+    }
+  }
+}
+
+void QxrdROICreator::append(const QPoint &pt)
+{
+  printMessage(tr("QxrdROICreator::append(QPoint(%1,%2))").arg(pt.x()).arg(pt.y()));
+
+  m_SelectedPoints.append(pt);
+
+  QwtPlotPicker::append(pt);
+}
+
+bool QxrdROICreator::end(bool ok)
+{
+  QxrdImagePlot *imgPlot = imagePlot();
+
+  if (imgPlot) {
+    if (m_SelectedPoints.count() == 2) {
+      QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
+
+      QPointF p1 = invTransform(m_SelectedPoints.value(0));
+      QPointF p2 = invTransform(m_SelectedPoints.value(1));
+
+      double sx = qAbs(p2.x() - p1.x())/12.5;
+      double sy = qAbs(p2.y() - p1.y())/12.5;
+
+      m_NewROI->scaleROI(sx, sy);
+
+      roiMod->append(m_NewROI);
+    }
+  }
 
   return QwtPlotPicker::end(ok);
 }

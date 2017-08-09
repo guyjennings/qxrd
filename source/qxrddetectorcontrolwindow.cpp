@@ -117,10 +117,12 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        e
     connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_DetectorImage, &QcepPlot::zoomOut);
     connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdImagePlot::autoScale);
 
+    connect(m_ROICreateButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROICreate);
     connect(m_ROISelectButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROISelect);
     connect(m_ROIAddNodeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIAddNode);
     connect(m_ROIRemoveNodeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIRemoveNode);
 
+    connect(m_DetectorImage,   &QxrdDetectorImagePlot::changeROICreateType, this, &QxrdDetectorControlWindow::onChangeROICreateType);
     connect(m_ROIRotateButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIRotate);
     connect(m_ROIResizeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIResize);
   }
@@ -794,5 +796,26 @@ void QxrdDetectorControlWindow::browseScanFile()
 
   if (file != "") {
     m_ScanFileName->setText(pwd.relativeFilePath(file));
+  }
+}
+
+void QxrdDetectorControlWindow::onChangeROICreateType(int newType)
+{
+  switch (newType) {
+  case QxrdDetectorImagePlot::NewRectROI:
+    m_ROICreateButton->setIcon(QIcon(":/images/draw-rectangle.png"));
+    break;
+
+  case QxrdDetectorImagePlot::NewEllipseROI:
+    m_ROICreateButton->setIcon(QIcon(":/images/draw-ellipse.png"));
+    break;
+
+  case QxrdDetectorImagePlot::NewRectDonutROI:
+    m_ROICreateButton->setIcon(QIcon(":/images/draw-rectangle-donut.png"));
+    break;
+
+  case QxrdDetectorImagePlot::NewEllipseDonutROI:
+    m_ROICreateButton->setIcon(QIcon(":/images/draw-donut.png"));
+    break;
   }
 }

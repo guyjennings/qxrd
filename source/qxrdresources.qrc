@@ -110,5 +110,10 @@
         <file>images/format-remove-node.png</file>
         <file>images/object-rotate-left.png</file>
         <file>images/transform-scale.png</file>
+        <file>images/draw-donut.png</file>
+        <file>images/draw-ellipse.png</file>
+        <file>images/draw-polyline.png</file>
+        <file>images/draw-rectangle.png</file>
+        <file>images/draw-rectangle-donut.png</file>
     </qresource>
 </RCC>

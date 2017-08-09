@@ -8,6 +8,7 @@
 
 QxrdDetectorImagePlot::QxrdDetectorImagePlot(QWidget *parent)
   : QxrdImagePlot(parent),
+    m_ROICreator(NULL),
     m_ROISelector(NULL),
     m_ROIAddNode(NULL),
     m_ROIRemoveNode(NULL),
@@ -20,6 +21,7 @@ void QxrdDetectorImagePlot::init(QxrdImagePlotSettingsWPtr settings, QcepObjectW
 {
   QxrdImagePlot::init(settings, parent);
 
+  m_ROICreator    = new QxrdROICreator(canvas(), this);
   m_ROISelector   = new QxrdROISelector(canvas(), this);
   m_ROIAddNode    = new QxrdROIAddNode(canvas(), this);
   m_ROIRemoveNode = new QxrdROIRemoveNode(canvas(), this);
@@ -30,6 +32,10 @@ void QxrdDetectorImagePlot::init(QxrdImagePlotSettingsWPtr settings, QcepObjectW
 void QxrdDetectorImagePlot::disablePickers()
 {
   QxrdImagePlot::disablePickers();
+
+  if (m_ROICreator) {
+    m_ROICreator    -> setEnabled(false);
+  }
 
   if (m_ROISelector) {
     m_ROISelector   -> setEnabled(false);
@@ -49,6 +55,35 @@ void QxrdDetectorImagePlot::disablePickers()
 
   if (m_ROIResizer) {
     m_ROIResizer -> setEnabled(false);
+  }
+}
+
+void QxrdDetectorImagePlot::enableROICreate()
+{
+  disablePickers();
+
+  if (m_ROICreator) {
+    m_ROICreator -> setEnabled(true);
+
+    QMenu *popUp = new QMenu(this);
+
+    for (int i=0; i<newROITypeCount(); i++) {
+      QAction *act = new QAction(newROITypeName(i), popUp);
+
+      act->setData(i);
+
+      popUp->addAction(act);
+    }
+
+    QAction *act = popUp->exec(QCursor::pos());
+
+    if (act) {
+      int newType = act->data().toInt();
+
+      emit changeROICreateType(newType);
+
+      m_ROICreator -> setCreatedType(newType);
+    }
   }
 }
 
@@ -177,4 +212,34 @@ void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
       zapPixel(qRound(x), qRound(y));
     }
   }
+}
+
+int QxrdDetectorImagePlot::newROITypeCount()
+{
+  return LastNewROIType;
+}
+
+QString QxrdDetectorImagePlot::newROITypeName(int i)
+{
+  QString res = "Unknown ROI Type";
+
+  switch (i) {
+  case NewRectROI:
+    res = "Rectangular ROI";
+    break;
+
+  case NewEllipseROI:
+    res = "Elliptical ROI";
+    break;
+
+  case NewRectDonutROI:
+    res = "Rectangle in Rectangle ROI";
+    break;
+
+  case NewEllipseDonutROI:
+    res = "Ellipse in Ellipse ROI";
+    break;
+  }
+
+  return res;
 }

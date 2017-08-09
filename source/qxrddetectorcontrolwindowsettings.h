@@ -30,6 +30,9 @@ public:
 
   Q_PROPERTY(QByteArray detectorWindowState READ get_DetectorWindowState WRITE set_DetectorWindowState)
   QCEP_BYTE_ARRAY_PROPERTY(DetectorWindowState)
+
+  Q_PROPERTY(int detectorWindowNewROIType READ get_DetectorWindowNewROIType WRITE set_DetectorWindowNewROIType)
+  QCEP_INTEGER_PROPERTY(DetectorWindowNewROIType)
 };
 
 #endif // QXRDDETECTORCONTROLWINDOWSETTINGS_H

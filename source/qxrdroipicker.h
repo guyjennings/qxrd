@@ -3,6 +3,7 @@
 
 #include "qxrdimageplotmeasurer.h"
 #include <QDateTime>
+#include "qxrdroicoordinates-ptr.h"
 
 class QxrdROIPicker : public QxrdImagePlotMeasurer
 {
@@ -62,6 +63,26 @@ protected:
 
   QPolygon m_SelectedPoints;
   QPolygon m_RubberBand;
+};
+
+class QxrdROICreator : public QxrdROIPicker
+{
+  Q_OBJECT
+
+public:
+  QxrdROICreator(QWidget *canvas, QxrdImagePlot *plot);
+
+  void begin();
+  void move(const QPoint &pt);
+  void append(const QPoint &pt);
+  bool end(bool ok = true);
+
+  void setCreatedType(int newType);
+
+private:
+  int                   m_CreatedType;
+  int                   m_CreatedTypeID;
+  QxrdROICoordinatesPtr m_NewROI;
 };
 
 class QxrdROISelector : public QxrdROIPicker
