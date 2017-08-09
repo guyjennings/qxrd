@@ -74,6 +74,9 @@ void QxrdROICoordinates::readSettings(QSettings *settings)
 
   QcepSerializableObject::readSettings(settings);
 
+  m_InnerShape = QxrdROIShape::newROIShape(get_RoiInnerType(), 0.25);
+  m_OuterShape = QxrdROIShape::newROIShape(get_RoiOuterType(), 1.00);
+
   if (m_OuterShape) {
     settings->beginGroup("outer");
     m_OuterShape->readSettings(settings);
@@ -392,6 +395,12 @@ void QxrdROICoordinates::scaleROI(int innerOuter, double kx, double ky)
   if (m_InnerShape && innerOuter == InnerShape) {
     m_InnerShape->scale(kx, ky);
   }
+}
+
+void QxrdROICoordinates::scaleROI(double kx, double ky)
+{
+  scaleROI(OuterShape, kx, ky);
+  scaleROI(InnerShape, kx, ky);
 }
 
 void QxrdROICoordinates::deleteROIPoint(int innerOuter, int n)
