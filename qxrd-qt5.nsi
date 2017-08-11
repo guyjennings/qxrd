@@ -76,6 +76,7 @@ Section "Extract qxrd"
                  "DisplayName" "QXRD ${VERSION} ${PREFIXSTR} -- Data Acquisition for Perkin-Elmer XRD Detectors"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QXRD ${VERSION} ${PREFIXSTR}" \
                  "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+  ExecWait "$INSTDIR\vcredist*.exe /install /quiet /norestart"
 SectionEnd
 
 Section "Uninstall"

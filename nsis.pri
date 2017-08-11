@@ -55,8 +55,8 @@ win32-g++ {
 win32-msvc* {
   QMAKE_EXTRA_TARGETS += vcredist_x86 vcredist_x64
 
-  vcredist_x86.commands = $(COPY_FILE) \"$${PWD_WIN}\\vcredist_vs2013_x86.exe\" \"$${OUT_PWD_WIN}\\.\"
-  vcredist_x64.commands = $(COPY_FILE) \"$${PWD_WIN}\\vcredist_vs2013_x64.exe\" \"$${OUT_PWD_WIN}\\.\"
+  vcredist_x86.commands = $(COPY_FILE) \"$${PWD_WIN}\\vcredist_vs2017_x86.exe\" \"$${OUT_PWD_WIN}\\.\"
+  vcredist_x64.commands = $(COPY_FILE) \"$${PWD_WIN}\\vcredist_vs2017_x64.exe\" \"$${OUT_PWD_WIN}\\.\"
 
   exists("c:/Program Files/NSIS/makensis.exe") {
     NSIS = "\"c:\\Program Files\\NSIS\\makensis.exe\"" /V4

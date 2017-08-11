@@ -735,6 +735,10 @@ win32 {
     CONFIG(debug, debug|release) {
       libs =  Qt5Cored \
               Qt5Networkd \
+              Qt5Chartsd \
+              Qt5DataVisualizationd \
+              Qt5Qmld \
+              Qt5Testd \
               Qt5Guid \
               Qt5Scriptd \
               Qt5Widgetsd \
@@ -751,6 +755,10 @@ win32 {
     } else {
       libs =  Qt5Core \
               Qt5Network \
+              Qt5Charts \
+              Qt5DataVisualization \
+              Qt5Qml \
+              Qt5Test \
               Qt5Gui \
               Qt5Script \
               Qt5Widgets \
