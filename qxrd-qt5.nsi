@@ -87,6 +87,7 @@ Section "Uninstall"
   RMDir  "$INSTDIR\plugins"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\qxrd.exe"
+  Delete "$INSTDIR\vcredist*.exe"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
   Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Uninstall.lnk"
