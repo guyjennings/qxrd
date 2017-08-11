@@ -12,8 +12,8 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
   : QcepSerializableObject("coords"),
     m_RoiOuterType(this, "roiOuterType", roiOuterType, "ROI Outer Type"),
     m_RoiInnerType(this, "roiInnerType", roiInnerType, "ROI Inner Type"),
-    m_RoiOuterTypeName(this, "roiOuterTypeName", QxrdROIShape::roiTypeName(roiOuterType), "ROI Outer Type Name"),
-    m_RoiInnerTypeName(this, "roiInnerTypeName", QxrdROIShape::roiTypeName(roiInnerType), "ROI Inner Type Name"),
+//    m_RoiOuterTypeName(this, "roiOuterTypeName", QxrdROIShape::roiTypeName(roiOuterType), "ROI Outer Type Name"),
+//    m_RoiInnerTypeName(this, "roiInnerTypeName", QxrdROIShape::roiTypeName(roiInnerType), "ROI Inner Type Name"),
     m_Center(this, "center", QPointF(0, 0), "ROI Center"),
     m_Rotation(this, "rotation", 0, "ROI Rotation"),
     m_Changed(this, "changed", true, "ROI Has been changed?"),
@@ -43,6 +43,50 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
   connect(prop_Rotation(), &QcepDoubleProperty::valueChanged, this, &QxrdROICoordinates::changed);
 
   changed();
+}
+
+int QxrdROICoordinates::innerType()
+{
+  return get_RoiInnerType();
+}
+
+QString QxrdROICoordinates::innerTypeName()
+{
+  return QxrdROIShape::roiTypeName(get_RoiInnerType());
+}
+
+void QxrdROICoordinates::changeInnerType(int t)
+{
+  if (get_RoiInnerType() != t) {
+    set_RoiInnerType(t);
+
+    m_InnerShape = QxrdROIShape::newROIShape(t, 0.25);
+    connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
+
+    changed();
+  }
+}
+
+int QxrdROICoordinates::outerType()
+{
+  return get_RoiOuterType();
+}
+
+QString QxrdROICoordinates::outerTypeName()
+{
+  return QxrdROIShape::roiTypeName(get_RoiOuterType());
+}
+
+void QxrdROICoordinates::changeOuterType(int t)
+{
+  if (get_RoiOuterType() != t) {
+    set_RoiOuterType(t);
+
+    m_OuterShape = QxrdROIShape::newROIShape(t, 1.0);
+    connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
+
+    changed();
+  }
 }
 
 QxrdROICoordinates::~QxrdROICoordinates()
@@ -160,7 +204,6 @@ void QxrdROICoordinates::selectNamedROIOuterType(QString nm)
   for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
     if (QxrdROIShape::roiTypeName(i) == nm) {
       set_RoiOuterType(i);
-      set_RoiOuterTypeName(nm);
       emit roiChanged();
       return;
     }
@@ -172,7 +215,6 @@ void QxrdROICoordinates::selectNamedROIInnerType(QString nm)
   for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
     if (QxrdROIShape::roiTypeName(i) == nm) {
       set_RoiInnerType(i);
-      set_RoiInnerTypeName(nm);
       emit roiChanged();
       return;
     }
@@ -512,8 +554,8 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
 {
 #ifndef QT_NO_DEBUG
   printf("Recalculate ROI, inner: %s, outer: %s\n",
-         qPrintable(get_RoiInnerTypeName()),
-         qPrintable(get_RoiOuterTypeName()));
+         qPrintable(innerTypeName()),
+         qPrintable(outerTypeName()));
 #endif
 
   QTime tic;

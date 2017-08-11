@@ -90,6 +90,15 @@ public slots:
   QxrdROIShapePtr inner() const;
   QxrdROIShapePtr outer() const;
 
+  int innerType();
+  int outerType();
+
+  QString innerTypeName();
+  QString outerTypeName();
+
+  void changeInnerType(int t);
+  void changeOuterType(int t);
+
   void changed();
 
   void setCenter(QPointF c);
@@ -129,11 +138,11 @@ public:
   Q_PROPERTY(int roiInnerType READ get_RoiInnerType WRITE set_RoiInnerType)
   QCEP_INTEGER_PROPERTY(RoiInnerType)
 
-  Q_PROPERTY(QString roiOuterTypeName READ get_RoiOuterTypeName WRITE set_RoiOuterTypeName STORED false)
-  QCEP_STRING_PROPERTY(RoiOuterTypeName)
+//  Q_PROPERTY(QString roiOuterTypeName READ get_RoiOuterTypeName WRITE set_RoiOuterTypeName STORED false)
+//  QCEP_STRING_PROPERTY(RoiOuterTypeName)
 
-  Q_PROPERTY(QString roiInnerTypeName READ get_RoiInnerTypeName WRITE set_RoiInnerTypeName STORED false)
-  QCEP_STRING_PROPERTY(RoiInnerTypeName)
+//  Q_PROPERTY(QString roiInnerTypeName READ get_RoiInnerTypeName WRITE set_RoiInnerTypeName STORED false)
+//  QCEP_STRING_PROPERTY(RoiInnerTypeName)
 
   Q_PROPERTY(QPointF center READ get_Center WRITE set_Center)
   QCEP_DOUBLE_POINT_PROPERTY(Center)

@@ -23,6 +23,11 @@ private slots:
   void newInnerType(int n);
   void newOuterType(int n);
 
+  void innerAddPoint();
+  void innerDelPoint();
+  void outerAddPoint();
+  void outerDelPoint();
+
 private:
   QxrdROICoordinatesWPtr m_ROI;
 };

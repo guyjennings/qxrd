@@ -129,9 +129,9 @@ QVariant QxrdROICoordinatesListModel::data(const QModelIndex &index, int role) c
       } else if (col == YGradientCol) {
         return c->get_YGradient();
       } else if (col == OuterTypeCol) {
-        return c->get_RoiOuterTypeName();
+        return c->outerTypeName();
       } else if (col == InnerTypeCol) {
-        return c->get_RoiInnerTypeName();
+        return c->innerTypeName();
       } else if (col == CenterXCol) {
         return c->get_Center().x();
       } else if (col == CenterYCol) {

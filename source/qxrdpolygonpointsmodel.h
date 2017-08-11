@@ -5,6 +5,8 @@
 #include "qxrdroipolygon-ptr.h"
 #include <QPolygonF>
 
+class QItemSelectionModel;
+
 class QxrdPolygonPointsModel : public QAbstractTableModel
 {
   Q_OBJECT
@@ -22,6 +24,11 @@ public:
   bool setData(const QModelIndex &index, const QVariant &value, int role);
 
   Qt::ItemFlags flags(const QModelIndex &index) const;
+
+  QPointF polygonPoint(int i);
+
+  void addPoint(QItemSelectionModel *sel);
+  void delPoint(QItemSelectionModel *sel);
 
   enum {
     NumCol,

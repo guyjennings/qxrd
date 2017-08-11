@@ -1,5 +1,6 @@
 #include "qxrdpolygonpointsmodel.h"
 #include <QtMath>
+#include <QItemSelectionModel>
 
 QxrdPolygonPointsModel::QxrdPolygonPointsModel(QPolygonF poly, QObject *parent)
   : QAbstractTableModel(parent),
@@ -12,7 +13,7 @@ int QxrdPolygonPointsModel::rowCount(const QModelIndex &parent) const
 //  if (!parent.isValid())
 //    return 0;
 
-  return m_Polygon.count()+1;
+  return m_Polygon.count();
 }
 
 int QxrdPolygonPointsModel::columnCount(const QModelIndex &parent) const
@@ -131,5 +132,45 @@ void QxrdPolygonPointsModel::setPoly(int n, int col, double v)
     }
 
     endInsertRows();
+  }
+}
+
+QPointF QxrdPolygonPointsModel::polygonPoint(int i)
+{
+  return m_Polygon.value(i);
+}
+
+void QxrdPolygonPointsModel::addPoint(QItemSelectionModel *sel)
+{
+  if (sel) {
+    int nDone = 0;
+    for (int i=m_Polygon.count(); i>=0; i--) {
+      if (sel->rowIntersectsSelection(i, QModelIndex())) {
+        nDone++;
+
+        beginInsertRows(QModelIndex(), i+1, i+1);
+        m_Polygon.insert(i+1, QPointF(qQNaN(), qQNaN()));
+        endInsertRows();
+      }
+    }
+
+    if (nDone == 0) {
+      beginInsertRows(QModelIndex(), m_Polygon.count(), m_Polygon.count());
+      m_Polygon.append(QPointF(qQNaN(), qQNaN()));
+      endInsertRows();
+    }
+  }
+}
+
+void QxrdPolygonPointsModel::delPoint(QItemSelectionModel *sel)
+{
+  if (sel) {
+    for (int i=m_Polygon.count(); i>=0; i--) {
+      if (sel->rowIntersectsSelection(i, QModelIndex())) {
+        beginRemoveRows(QModelIndex(), i,i);
+        m_Polygon.remove(i);
+        endRemoveRows();
+      }
+    }
   }
 }
