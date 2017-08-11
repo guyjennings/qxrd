@@ -292,6 +292,12 @@ QPolygonF QxrdROICoordinates::rotatedDragOutline(double r)
     for (int i=0; i<s.count(); i++) {
       res.append(c + m.map(s.value(i)));
     }
+  } else if (m_InnerShape) {
+    QPolygonF s = m_InnerShape->dragOutline();
+
+    for (int i=0; i<s.count(); i++) {
+      res.append(c + m.map(s.value(i)));
+    }
   }
 
   return res;
