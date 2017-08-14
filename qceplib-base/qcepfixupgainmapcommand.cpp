@@ -1,6 +1,7 @@
 #include "qcepfixupgainmapcommand.h"
 #include "qcepallocator.h"
 #include "qcepimagedata.h"
+#include "levmar.h"
 
 QcepFixupGainMapCommand::QcepFixupGainMapCommand()
   : QcepSerializableObject("fixupGainMapCommand"),
@@ -224,8 +225,68 @@ QcepDoubleImageDataPtr QcepFixupGainMapCommand::generateAveragedDiff(QcepDoubleI
   return res;
 }
 
+static void staticFitParaboloid(double *parm, double *xv, int m, int n, void *adata)
+{
+  QcepDoubleImageData *data = (QcepDoubleImageData*) adata;
+
+  if (data) {
+    int nCols = data->get_Width();
+    int nRows = data->get_Height();
+
+    if (m != 5) {
+
+    } else {
+      double off = parm[0];
+      double cx  = parm[1];
+      double cy  = parm[2];
+      double wd  = parm[3];
+      double ht  = parm[4];
+
+      int i=0;
+
+      for (int y=0; y<nRows; y++) {
+        double dy = (y-cy)/ht;
+
+        for (int x=0; x<nCols; x++) {
+          double dx = (x-cx)/wd;
+          double v = off + dx*dx + dy*dy;
+
+          double imgd = data->getImageData(x,y);
+
+          if (qIsFinite(imgd)) {
+            xv[i++] = v - imgd;
+          } else {
+            xv[i++] = 0;
+          }
+        }
+      }
+    }
+  }
+}
+
 void QcepFixupGainMapCommand::fitParaboloid(QcepDoubleImageDataPtr img)
 {
+  double parms[5];
+  double info[LM_INFO_SZ];
+
+  parms[0] = get_FittedOffset();
+  parms[1] = get_FittedCenterX();
+  parms[2] = get_FittedCenterY();
+  parms[3] = get_FittedWidth();
+  parms[4] = get_FittedHeight();
+
+  int nPoints = img->get_Height() * img->get_Width();
+
+  int niter = dlevmar_dif(::staticFitParaboloid,
+                      parms, NULL, 5, nPoints, 100, NULL, info, NULL, NULL, img.data());
+
+  if (niter > 0) {
+     set_FittedOffset(parms[0]);
+     set_FittedCenterX(parms[1]);
+     set_FittedCenterY(parms[2]);
+     set_FittedWidth(parms[3]);
+     set_FittedHeight(parms[4]);
+  }
 }
 
 QcepDoubleImageDataPtr QcepFixupGainMapCommand::generateParaboloid(QcepDoubleImageDataPtr img)
