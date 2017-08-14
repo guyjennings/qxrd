@@ -103,9 +103,17 @@ void QcepDataObjectSurfacePlotWidget::onNewImageAvailable(QcepDoubleImageDataPtr
     double *imageData = img->data();
     double *pcntlData = m_ImagePercentiles.data();
 
+    int j=0;
+
     for (int i=0; i<size; i++) {
-      pcntlData[i] = imageData[i];
+      double v = imageData[i];
+
+      if (qIsFinite(v)) {
+        pcntlData[j++] = v;
+      }
     }
+
+    m_ImagePercentiles.resize(j);
 
     std::sort(m_ImagePercentiles.begin(),
               m_ImagePercentiles.end());
