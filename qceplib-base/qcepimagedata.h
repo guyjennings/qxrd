@@ -147,6 +147,7 @@ public slots:
 
   virtual double minValue() const = 0;
   virtual double maxValue() const = 0;
+  virtual double averageValue() const = 0;
 
   virtual QPointF percentileRange(double lowpct, double highpct) = 0;
 
@@ -261,6 +262,7 @@ public:
 
   double minValue() const;
   double maxValue() const;
+  double averageValue() const;
   QPointF percentileRange(double lowpct, double highpct);
 
   double sumInRectangle(QRectF rect);

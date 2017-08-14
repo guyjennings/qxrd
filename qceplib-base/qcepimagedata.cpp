@@ -1000,6 +1000,12 @@ double QcepImageData<T>::maxValue() const
 }
 
 template <typename T>
+double QcepImageData<T>::averageValue() const
+{
+  return findAverage();
+}
+
+template <typename T>
 T QcepImageData<T>::findMin() const
 {
   int ncols = this -> get_Width();
