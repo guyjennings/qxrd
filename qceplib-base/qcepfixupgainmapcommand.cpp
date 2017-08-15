@@ -13,11 +13,11 @@ QcepFixupGainMapCommand::QcepFixupGainMapCommand()
     m_FitParaboloid(this, "fitParaboloid", false, "Fit elliptical paraboloid"),
     m_GenerateParaboloid(this, "generateParaboloid", false, "Generate fitted paraboloid image"),
     m_GenerateParaboloidDiff(this, "generateParaboloidDiff", false, "Generate diff paraboloid and orig data"),
-    m_FittedOffset(this, "fittedOffset", 0.0, "Fit Offset"),
-    m_FittedCenterX(this, "fittedCenterX", 0.0, "Fit Center X"),
-    m_FittedCenterY(this, "fittedCenterY", 0.0, "Fit Center Y"),
-    m_FittedWidth(this, "fittedWidth", 0.0, "Fit Width"),
-    m_FittedHeight(this, "fittedHeight", 0.0, "Fit Height")
+    m_FittedOffset(this, "fittedOffset", 65000, "Fit Offset"),
+    m_FittedCenterX(this, "fittedCenterX", 1024, "Fit Center X"),
+    m_FittedCenterY(this, "fittedCenterY", 1024, "Fit Center Y"),
+    m_FittedWidth(this, "fittedWidth", 10.0, "Fit Width"),
+    m_FittedHeight(this, "fittedHeight", 10.0, "Fit Height")
 {
 }
 
