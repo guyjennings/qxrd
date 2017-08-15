@@ -126,6 +126,8 @@ public slots:
   void                   concatenateData(const QModelIndex &dest, const QModelIndex &src);
   void                   concatenateData(const QModelIndex &dest, double val);
 
+  void                   dupData(const QModelIndex &index);
+
   void                   addData(const QModelIndex &dest, const QModelIndexList &src);
   void                   addData(const QModelIndex &dest, const QModelIndex &src);
   void                   addData(const QModelIndex &dest, double val);

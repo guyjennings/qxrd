@@ -1760,6 +1760,136 @@ double QcepImageData<T>::sumInPeak(QRectF rect)
   }
 }
 
+template <typename T>
+void QcepImageData<T>::setRegionTo(int regionType, int coordStyle, double x1, double y1, double x2, double y2, double val)
+{
+  int nRows = get_Height();
+  int nCols = get_Width();
+
+  double lf, tp, rt, bt;
+
+  switch (coordStyle) {
+  case 0:  //LTRB
+    lf = qMin(x1,x2);
+    rt = qMax(x1,x2);
+    tp = qMin(y1,y2);
+    bt = qMax(y1,y2);
+    break;
+
+  case 1:  //CxCyWdHt
+    lf = x1-qAbs(x2);
+    rt = x1+qAbs(x2);
+    tp = y1-qAbs(y2);
+    bt = y1+qAbs(y2);
+    break;
+
+  case 2:  //BlBtBrBb
+    lf = x1;
+    rt = nCols-x2;
+    tp = y2;
+    bt = nRows-y2;
+    break;
+  }
+
+  double cx = (lf + rt)/2.0;
+  double cy = (tp + bt)/2.0;
+  double a  = (rt - lf)/2.0;
+  double b  = (bt - tp)/2.0;
+
+  for (int r=0; r<nRows; r++) {
+//    int pct = r*80/nRows;
+
+//    emit progressMade(pct);
+
+    switch (regionType) {
+    case 0: // Inside Rectangle
+      for (int c=0; c<nCols; c++) {
+        if (r >= tp && r <= bt && c >= lf && c <= rt) {
+          setImageData(r,c,val);
+        }
+      }
+      break;
+
+    case 1: // Outside Rectangle
+      for (int c=0; c<nCols; c++) {
+        if (!(r >= tp && r <= bt && c >= lf && c <= rt)) {
+          setImageData(r,c,val);
+        }
+      }
+      break;
+
+    case 2: // Inside Ellipse
+      {
+        double y = r - cy;
+        double xx = a*sqrt(1 - pow(y/b,2));
+
+        for (int c=0; c<nCols; c++) {
+          if (xx == xx && c >= cx-xx && c <= cx+xx) {
+            setImageData(r,c,val);
+          }
+        }
+      }
+      break;
+
+    case 3: // Outside Ellipse
+      {
+        double y = r - cy;
+        double xx = a*sqrt(1 - pow(y/b,2));
+
+        for (int c=0; c<nCols; c++) {
+          if (xx != xx || c < cx-xx || c > cx+xx) {
+            setImageData(r,c,val);
+          }
+        }
+      }
+      break;
+    }
+  }
+}
+
+template <typename T>
+void QcepImageData<T>::setValueRangeTo(int rangeChoice, double min, double max, double newValue)
+{
+  int nRows = get_Height();
+  int nCols = get_Width();
+
+  for (int r=0; r<nRows; r++) {
+//    int pct = r*80/nRows;
+
+//    emit progressMade(10+int(pct));
+
+    for (int c=0; c<nCols; c++) {
+      double v = getImageData(c, r);
+
+      switch (rangeChoice) {
+      case 0:
+        if (v < min || v > max) {
+          setImageData(c, r, newValue);
+        }
+        break;
+
+      case 1:
+        if (v >= min && v <= max) {
+          setImageData(c, r, newValue);
+        }
+        break;
+
+      case 2:
+        if (v > max) {
+          setImageData(c, r, newValue);
+        }
+        break;
+
+      case 3:
+        if (v < min) {
+          setImageData(c, r, newValue);
+        }
+        break;
+      }
+    }
+  }
+}
+
 QcepInt16ImageData::QcepInt16ImageData(QString name,
                                        int width,
                                        int height,
@@ -1866,6 +1996,17 @@ void QcepDoubleImageData::copyFrom(QcepUInt32ImageDataPtr img)
 void QcepDoubleImageData::accumulateImage(QcepDoubleImageDataPtr img)
 {
   QcepImageData<double>::accumulateImage<double>(img);
+}
+
+QcepDoubleImageDataPtr QcepDoubleImageData::duplicate()
+{
+  QcepDoubleImageDataPtr dup = QcepAllocator::newDoubleImage("dup",
+                                                             get_Width(), get_Height(), QcepAllocator::AlwaysAllocate);
+  copyImage<double>(dup);
+
+  dup->set_Name(tr("%1.dup").arg(get_Name()));
+
+  return dup;
 }
 
 template class QcepImageData<quint16>;

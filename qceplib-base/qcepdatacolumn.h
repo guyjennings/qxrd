@@ -80,6 +80,8 @@ public slots:
   virtual void divide(double val);
   virtual void concat(double val);
 
+  QcepDataColumnPtr duplicate();
+
 public:
   static QScriptValue toColumnScriptValue(QScriptEngine *engine, const QcepDataColumnPtr &data);
   static void fromColumnScriptValue(const QScriptValue &obj, QcepDataColumnPtr &data);

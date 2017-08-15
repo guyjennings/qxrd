@@ -26,6 +26,7 @@ private slots:
   void newImage(const QModelIndexList &idx);
   void newArray(const QModelIndexList &idx);
   void concatenateData(const QModelIndex &idx);
+  void duplicateData(const QModelIndexList &idx);
   void addData(const QModelIndex &idx);
   void subtractData(const QModelIndex &idx);
   void multiplyData(const QModelIndex &idx);
@@ -41,6 +42,7 @@ private slots:
   void fixupGainMap(const QModelIndexList &idx);
   void readData(const QModelIndexList &idx);
   void saveData(const QModelIndexList &idx);
+  void plotImage(const QModelIndex &idx);
   void openGraph(const QModelIndexList &idx);
   void surfacePlot(const QModelIndexList &idx);
   void openSpreadsheet(const QModelIndexList &idx);

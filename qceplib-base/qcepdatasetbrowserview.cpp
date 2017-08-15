@@ -146,16 +146,18 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
 
     menu.addSeparator();
 
-    QAction *og = menu.addAction(tr("Open %1 in graph window").arg(names));
-    QAction *sp = menu.addAction(tr("Open %1 in surface plot window").arg(names));
-    QAction *os = menu.addAction(tr("Open %1 in spreadsheet window").arg(names));
-    QAction *op = menu.addAction(tr("Open %1 in properties window").arg(names));
+    QAction *pt = menu.addAction(tr("Display %1 in image graph").arg(name));
+    QAction *og = menu.addAction(tr("Open %1 in new graph window").arg(names));
+    QAction *sp = menu.addAction(tr("Open %1 in new surface plot window").arg(names));
+    QAction *os = menu.addAction(tr("Open %1 in new spreadsheet window").arg(names));
+    QAction *op = menu.addAction(tr("Open %1 in new properties window").arg(names));
 
     menu.addSeparator();
 
     QMenu   *ops = menu.addMenu(tr("Operations on %1 ...").arg(name));
 
     QAction *cat = ops->addAction(tr("Concatenate to %1...").arg(name));
+    QAction *dup = ops->addAction(tr("Duplicate %1").arg(names));
     QAction *add = ops->addAction(tr("Add to %1...").arg(name));
     QAction *sub = ops->addAction(tr("Subtract from %1...").arg(name));
     QAction *mul = ops->addAction(tr("Multiply %1 by...").arg(name));
@@ -174,6 +176,7 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
 
     QAction *dl = menu.addAction(tr("Delete %1").arg(names));
 
+    pt->setEnabled(nSel == 1 && img);
     ng->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
     nc->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL || psc != NULL)));
     ns->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
@@ -181,6 +184,7 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     na->setEnabled(nSel == 0 || (nSel == 1 && (grp != NULL && scn == NULL)));
 
     cat->setEnabled(nSel == 1 && scn);
+    dup->setEnabled(nSel >= 1);
     add->setEnabled(nSel == 1 && (scn || col || img));
     sub->setEnabled(nSel == 1 && (scn || col || img));
     mul->setEnabled(nSel == 1 && (scn || col || img));
@@ -223,6 +227,8 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
       newArray(indexes);
     } else if (action == cat) {
       concatenateData(indexes.value(0));
+    } else if (action == dup) {
+      duplicateData(indexes);
     } else if (action == add) {
       addData(indexes.value(0));
     } else if (action == sub) {
@@ -253,6 +259,8 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
       readData(indexes);
     } else if (action == sv) {
       saveData(indexes);
+    } else if (action == pt) {
+      plotImage(indexes.value(0));
     } else if (action == og) {
       openGraph(indexes);
     } else if (action == sp) {
@@ -269,12 +277,17 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
 
 void QcepDatasetBrowserView::onDoubleClicked(QModelIndex idx)
 {
-  if (qcepDebug(DEBUG_DATABROWSER)) {
-    QcepExperimentPtr expt(m_Experiment);
+}
 
-    if (expt) {
-      expt->printMessage(tr("QcepDatasetBrowserView::onDoubleClicked([%1,%2])").arg(idx.row()).arg(idx.column()));
-    }
+void QcepDatasetBrowserView::plotImage(const QModelIndex &idx)
+{
+  QcepDatasetModelPtr model(m_DatasetModel);
+  QcepExperimentPtr expt(m_Experiment);
+
+  if (model && expt) {
+    QcepDoubleImageDataPtr img = model->image(idx);
+
+    expt -> plotImage(img);
   }
 }
 
@@ -557,6 +570,17 @@ void QcepDatasetBrowserView::divideData(const QModelIndex &idx)
       } else {
         model->divideData(idx, dlg.selectedIndexes());
       }
+    }
+  }
+}
+
+void QcepDatasetBrowserView::duplicateData(const QModelIndexList &idx)
+{
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      model->dupData(idx.value(i));
     }
   }
 }

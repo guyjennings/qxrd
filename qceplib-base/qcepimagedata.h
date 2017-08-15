@@ -145,6 +145,8 @@ public slots:
   virtual void resize(int width, int height) = 0;
   virtual void fill(double val) = 0;
 
+  virtual void saveTIFFData(QString name) = 0;
+
   virtual double minValue() const = 0;
   virtual double maxValue() const = 0;
   virtual double averageValue() const = 0;
@@ -160,6 +162,11 @@ public slots:
   virtual double minInEllipse(QRectF rect) = 0;
   virtual double maxInEllipse(QRectF rect) = 0;
   virtual double sumInPeak(QRectF rect) = 0;
+  virtual void setRegionTo(int regionType,
+                          int coordStyle,
+                          double x1, double y1,
+                          double x2, double y2, double val) = 0;
+  virtual void setValueRangeTo(int rangeChoice, double minval, double maxval, double val) = 0;
 
   double hValue(int n) const;
   double vValue(int n) const;
@@ -275,6 +282,9 @@ public:
   double maxInEllipse(QRectF rect);
   double sumInPeak(QRectF rect);
 
+  void setRegionTo(int regionType, int coordStyle, double x1, double y1, double x2, double y2, double val);
+  void setValueRangeTo(int rangeChoice, double min, double max, double newValue);
+
 public:
   template <typename T2>
   void subtractDark(const QSharedPointer< QcepImageData<T2> > dark);
@@ -382,6 +392,8 @@ public:
   void copyFrom(QcepDoubleImageDataPtr img);
 
   void accumulateImage(QcepDoubleImageDataPtr img);
+
+  QcepDoubleImageDataPtr duplicate();
 };
 
 Q_DECLARE_METATYPE(QcepDoubleImageData*)

@@ -343,3 +343,18 @@ void QcepDataColumn::concat(double val)
     emit dataObjectChanged();
   }
 }
+
+QcepDataColumnPtr QcepDataColumn::duplicate()
+{
+  QcepDataColumnPtr dup = QcepAllocator::newColumn(tr("%1.dup").arg(get_Name()), rowCount(), QcepAllocator::AlwaysAllocate);
+
+  dup -> set_ColumnType(get_ColumnType());
+  dup -> set_Column1(get_Column1());
+  dup -> set_Column2(get_Column2());
+
+  for (int i=0; i<count(); i++) {
+    dup -> setValue(i, value(i));
+  }
+
+  return dup;
+}

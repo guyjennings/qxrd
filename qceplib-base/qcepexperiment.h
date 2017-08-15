@@ -37,6 +37,8 @@ public slots:
   QcepSetRangeOfImageCommandWPtr   setRangeOfImageCommand();
   QcepFixupGainMapCommandWPtr      fixupGainMapCommand();
 
+  virtual void plotImage(QcepDoubleImageDataPtr img) = 0;
+
 public:
   QUndoStack *undoStack();
 

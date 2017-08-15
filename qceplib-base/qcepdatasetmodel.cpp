@@ -1277,6 +1277,29 @@ void QcepDatasetModel::concatenateData(const QModelIndex &dest, double val)
   }
 }
 
+void QcepDatasetModel::dupData(const QModelIndex &index)
+{
+  QcepDataColumnPtr col = column(index);
+
+  if (col) {
+    QcepDataColumnPtr dup = col->duplicate();
+
+    QModelIndex p = parent(index);
+
+    append(p, dup);
+  } else {
+    QcepDoubleImageDataPtr img = image(index);
+
+    if (img) {
+      QcepDoubleImageDataPtr dup = img->duplicate();
+
+      QModelIndex p = parent(index);
+
+      append(p, dup);
+    }
+  }
+}
+
 void QcepDatasetModel::addData(const QModelIndex &dest, const QModelIndexList &src)
 {
   for (int i=0; i<src.count(); i++) {
