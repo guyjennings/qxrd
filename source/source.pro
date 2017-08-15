@@ -92,7 +92,7 @@ DISTFILES += qxrd.dox \
     help/qxrdspecmacro.html \
     qxrd_tests.mac
 
-CONFIG += qceplib-qwt qceplib-hdf5
+CONFIG += qceplib-qwt qceplib-hdf5 qceplib-tiff
 
 #CONFIG += qceplib-nexus
 

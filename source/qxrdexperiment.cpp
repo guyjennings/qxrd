@@ -1284,6 +1284,13 @@ void QxrdExperiment::finishedWork(int amt)
   prop_WorkTarget()->incValue(-amt);
 }
 
+void QxrdExperiment::plotImage(QcepDoubleImageDataPtr img)
+{
+  if (m_Window) {
+    m_Window->newDataAvailable(img, QcepMaskDataPtr());
+  }
+}
+
 void QxrdExperiment::dump()
 {
   printf("About to dump\n");

@@ -143,6 +143,8 @@ public slots:
   void finishedWork(int amt);
   void updateCompletionPercentage(int, int);
 
+  void plotImage(QcepDoubleImageDataPtr img);
+
   void dump();
   QColor pickColor(QColor start=QColor(Qt::white));
 

@@ -35,6 +35,7 @@
 #include "qxrdroicoordinateslistmodel.h"
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
+#include "qcepfixupgainmapcommand.h"
 #include <QThread>
 #include <QDir>
 #include <QScriptValueIterator>
@@ -2232,6 +2233,13 @@ void QxrdScriptEngine::initialize()
         QCEP_DOC_OBJECT("extraInputs", "Extra Inputs during Acquisition");
         globalObject().setProperty("extraInputs", newQObject(extra.data()));
       }
+    }
+
+    QcepFixupGainMapCommandPtr fixup(expt->fixupGainMapCommand());
+
+    if (fixup) {
+      QCEP_DOC_OBJECT("fixupGainMap", "Operations to fixup gain maps");
+      globalObject().setProperty("fixupGainMap", newQObject(fixup.data()));
     }
 
 //    QxrdAcquisitionPtr sacq(expt->singleAcquisition());
