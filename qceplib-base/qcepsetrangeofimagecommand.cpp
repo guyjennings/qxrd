@@ -103,6 +103,17 @@ QcepDoubleImageDataPtr QcepSetRangeOfImageCommand::exec(QcepDoubleImageDataPtr i
             res->setImageData(c, r, newValue);
           }
           break;
+
+        case 4:
+          if (qIsInf(v)) {
+            res->setImageData(c, r, newValue);
+          }
+          break;
+
+        case 5:
+          if (qIsNaN(v)) {
+            res->setImageData(c, r, newValue);
+          }
         }
       }
     }

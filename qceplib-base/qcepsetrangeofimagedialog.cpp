@@ -25,6 +25,8 @@ QcepSetRangeOfImageDialog::QcepSetRangeOfImageDialog(QcepDatasetModelPtr model, 
     m_RangeChoice->addItem("INSIDE:  val>=min && val<=max");
     m_RangeChoice->addItem("ABOVE:   val>max");
     m_RangeChoice->addItem("BELOW:   val<min");
+    m_RangeChoice->addItem("INFINITE:val==+/-INF");
+    m_RangeChoice->addItem("NaN:     isNaN(val)");
 
     m_RangeChoice->setCurrentIndex(m_Command->get_RangeChoice());
 
@@ -85,6 +87,16 @@ void QcepSetRangeOfImageDialog::onRangeChoiceChanged(int newChoice)
 
   case 3: // BELOW
     m_Minimum->setEnabled(true);
+    m_Maximum->setEnabled(false);
+    break;
+
+  case 4: // INF
+    m_Minimum->setEnabled(false);
+    m_Maximum->setEnabled(false);
+    break;
+
+  case 5: // NaN
+    m_Minimum->setEnabled(false);
     m_Maximum->setEnabled(false);
     break;
   }

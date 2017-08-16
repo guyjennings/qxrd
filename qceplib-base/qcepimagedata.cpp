@@ -1885,6 +1885,17 @@ void QcepImageData<T>::setValueRangeTo(int rangeChoice, double min, double max, 
           setImageData(c, r, newValue);
         }
         break;
+
+      case 4:
+        if (qIsInf(v)) {
+          setImageData(c, r, newValue);
+        }
+        break;
+
+      case 5:
+        if (qIsNaN(v)) {
+          setImageData(c, r, newValue);
+        }
       }
     }
   }
