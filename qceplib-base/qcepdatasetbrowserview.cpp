@@ -162,6 +162,8 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     QAction *sub = ops->addAction(tr("Subtract from %1...").arg(name));
     QAction *mul = ops->addAction(tr("Multiply %1 by...").arg(name));
     QAction *div = ops->addAction(tr("Divide %1 by...").arg(name));
+    QAction *dh  = ops->addAction(tr("Horizontal Difference %1").arg(names));
+    QAction *dv  = ops->addAction(tr("Vertical Difference %1").arg(names));
     QAction *ntg = ops->addAction(tr("Circular Integrate %1").arg(names));
     QAction *ntgp = ops->addAction(tr("Circular Integrate %1 Parameters...").arg(names));
     QAction *pol = ops->addAction(tr("Polar Transform %1").arg(names));
@@ -171,6 +173,7 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     QAction *setv = ops->addAction(tr("Set regions of %1 to constant...").arg(names));
     QAction *setr = ops->addAction(tr("Set points in %1 value range...").arg(names));
     QAction *gain = ops->addAction(tr("Fixup Gain Map %1...").arg(names));
+    QAction *fixp = ops->addAction(tr("Fixup PE Detector Panel Gains on %1").arg(name));
 
     menu.addSeparator();
 
@@ -190,9 +193,13 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     mul->setEnabled(nSel == 1 && (scn || col || img));
     div->setEnabled(nSel == 1 && (scn || col || img));
 
+    dh->setEnabled(nSel >= 1 && img);
+    dv->setEnabled(nSel >= 1 && img);
+
     setr->setEnabled(nSel == 1 && img);
     setv->setEnabled(nSel == 1 && img);
     gain->setEnabled(nSel == 1 && img);
+    fixp->setEnabled(nSel == 1 && img);
 
     ntg->setEnabled(nSel >= 1);
 
@@ -237,6 +244,10 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
       multiplyData(indexes.value(0));
     } else if (action == div) {
       divideData(indexes.value(0));
+    } else if (action == dh) {
+      differentiateH(indexes);
+    } else if (action == dv) {
+      differentiateV(indexes);
     } else if (action == ntg) {
       integrateData(indexes);
     } else if (action == ntgp) {
@@ -255,6 +266,8 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
       setDataValueRange(indexes);
     } else if (action == gain) {
       fixupGainMap(indexes);
+    } else if (action == fixp) {
+      fixupDetectorPanelGains(index);
     } else if (action == rd) {
       readData(indexes);
     } else if (action == sv) {
@@ -585,6 +598,28 @@ void QcepDatasetBrowserView::duplicateData(const QModelIndexList &idx)
   }
 }
 
+void QcepDatasetBrowserView::differentiateH(const QModelIndexList &idx)
+{
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      model->differentiateH(idx.value(i));
+    }
+  }
+}
+
+void QcepDatasetBrowserView::differentiateV(const QModelIndexList &idx)
+{
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    for (int i=0; i<idx.count(); i++) {
+      model->differentiateV(idx.value(i));
+    }
+  }
+}
+
 void QcepDatasetBrowserView::integrateData(const QModelIndexList &idx)
 {
   QcepDatasetModelPtr model(m_DatasetModel);
@@ -676,4 +711,13 @@ void QcepDatasetBrowserView::fixupGainMap(const QModelIndexList &idx)
   QcepFixupGainMapDialog dlog(m_DatasetModel, idx.value(0));
 
   dlog.exec();
+}
+
+void QcepDatasetBrowserView::fixupDetectorPanelGains(const QModelIndex &idx)
+{
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    model->fixupDetectorPanelGains(idx);
+  }
 }

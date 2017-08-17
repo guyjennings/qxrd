@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <QFileInfo>
 #include <QDir>
+#include "qcepfixupdetectorpanelgains.h"
 
 QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBaseWPtr proc, QcepDatasetPtr ds) :
   m_Experiment(expt),
@@ -1300,6 +1301,32 @@ void QcepDatasetModel::dupData(const QModelIndex &index)
   }
 }
 
+void QcepDatasetModel::differentiateH(const QModelIndex &index)
+{
+  QcepDoubleImageDataPtr img = image(index);
+
+  if (img) {
+    QcepDoubleImageDataPtr dup = img->differentiateH();
+
+    QModelIndex p = parent(index);
+
+    append(p, dup);
+  }
+}
+
+void QcepDatasetModel::differentiateV(const QModelIndex &index)
+{
+  QcepDoubleImageDataPtr img = image(index);
+
+  if (img) {
+    QcepDoubleImageDataPtr dup = img->differentiateV();
+
+    QModelIndex p = parent(index);
+
+    append(p, dup);
+  }
+}
+
 void QcepDatasetModel::addData(const QModelIndex &dest, const QModelIndexList &src)
 {
   for (int i=0; i<src.count(); i++) {
@@ -1460,6 +1487,19 @@ void QcepDatasetModel::integrate(const QModelIndex &src)
       res->setNameAndSuffix(img->get_Name(), "integ");
 
       append(parent(src), res);
+    }
+  }
+}
+
+void QcepDatasetModel::fixupDetectorPanelGains(const QModelIndex &index)
+{
+  QcepDoubleImageDataPtr img = image(index);
+
+  if (img) {
+    QcepDoubleImageDataPtr res = QcepFixupDetectorPanelGains::exec(img);
+
+    if (res) {
+      append(parent(index), res);
     }
   }
 }

@@ -134,7 +134,7 @@ public:
   Q_PROPERTY(bool used READ get_Used WRITE set_Used)
   QCEP_BOOLEAN_PROPERTY(Used)
 
-public slots:
+public:
   virtual QString description() const;
 
   virtual double getImageData(int x, int y) const = 0;
@@ -375,6 +375,7 @@ public:
       int height = 0,
       double def = 0);
 
+public:
   void add     (QcepDoubleImageDataPtr img);
   void add     (double val);
 
@@ -394,6 +395,9 @@ public:
   void accumulateImage(QcepDoubleImageDataPtr img);
 
   QcepDoubleImageDataPtr duplicate();
+
+  QcepDoubleImageDataPtr differentiateH();
+  QcepDoubleImageDataPtr differentiateV();
 };
 
 Q_DECLARE_METATYPE(QcepDoubleImageData*)

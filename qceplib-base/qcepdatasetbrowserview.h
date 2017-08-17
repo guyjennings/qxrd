@@ -27,6 +27,8 @@ private slots:
   void newArray(const QModelIndexList &idx);
   void concatenateData(const QModelIndex &idx);
   void duplicateData(const QModelIndexList &idx);
+  void differentiateH(const QModelIndexList &idx);
+  void differentiateV(const QModelIndexList &idx);
   void addData(const QModelIndex &idx);
   void subtractData(const QModelIndex &idx);
   void multiplyData(const QModelIndex &idx);
@@ -40,6 +42,7 @@ private slots:
   void setRangeOfImage(const QModelIndexList &idx);
   void setDataValueRange(const QModelIndexList &idx);
   void fixupGainMap(const QModelIndexList &idx);
+  void fixupDetectorPanelGains(const QModelIndex &idx);
   void readData(const QModelIndexList &idx);
   void saveData(const QModelIndexList &idx);
   void plotImage(const QModelIndex &idx);

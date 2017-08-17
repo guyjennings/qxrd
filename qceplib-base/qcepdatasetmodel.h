@@ -127,6 +127,8 @@ public slots:
   void                   concatenateData(const QModelIndex &dest, double val);
 
   void                   dupData(const QModelIndex &index);
+  void                   differentiateH(const QModelIndex &index);
+  void                   differentiateV(const QModelIndex &index);
 
   void                   addData(const QModelIndex &dest, const QModelIndexList &src);
   void                   addData(const QModelIndex &dest, const QModelIndex &src);
@@ -151,6 +153,8 @@ public slots:
   bool                   integrateParameters();
   bool                   polarTransformParameters();
   bool                   polarIntegrateParameters();
+
+  void                   fixupDetectorPanelGains(const QModelIndex &index);
 
   void insertGroup(int atRow, QString name);
 

@@ -2020,6 +2020,50 @@ QcepDoubleImageDataPtr QcepDoubleImageData::duplicate()
   return dup;
 }
 
+QcepDoubleImageDataPtr QcepDoubleImageData::differentiateH()
+{
+  QcepDoubleImageDataPtr dup = QcepAllocator::newDoubleImage("dup",
+                                                             get_Width(), get_Height(), QcepAllocator::AlwaysAllocate);
+  copyImage<double>(dup);
+
+  dup->set_Name(tr("%1.dh").arg(get_Name()));
+
+  int nRows = dup->get_Height();
+  int nCols = dup->get_Width();
+
+  for (int y=0; y<nRows; y++) {
+    for (int x=0; x<nCols; x++) {
+      double diff = getImageData(x, y) - getImageData(x-1, y);
+
+      dup->setImageData(x, y, diff);
+    }
+  }
+
+  return dup;
+}
+
+QcepDoubleImageDataPtr QcepDoubleImageData::differentiateV()
+{
+  QcepDoubleImageDataPtr dup = QcepAllocator::newDoubleImage("dup",
+                                                             get_Width(), get_Height(), QcepAllocator::AlwaysAllocate);
+  copyImage<double>(dup);
+
+  dup->set_Name(tr("%1.dv").arg(get_Name()));
+
+  int nRows = dup->get_Height();
+  int nCols = dup->get_Width();
+
+  for (int y=0; y<nRows; y++) {
+    for (int x=0; x<nCols; x++) {
+      double diff = getImageData(x, y) - getImageData(x, y-1);
+
+      dup->setImageData(x, y, diff);
+    }
+  }
+
+  return dup;
+}
+
 template class QcepImageData<quint16>;
 template class QcepImageData<qint16>;
 template class QcepImageData<quint32>;
