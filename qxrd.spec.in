@@ -15,10 +15,12 @@ Obsoletes:      qxrd
 BuildRequires:  desktop-file-utils
 #BuildRequires:  qt4, qt4-x11 qt4-devel
 BuildRequires:  qt5-qtbase-devel, qt5-qtscript-devel, qt5-qtwebkit-devel, qt5-qtsvg-devel
+BuildRequires:  qt5-qtcharts-devel, qt5-qtdatavis3d-devel
 BuildRequires:  libtiff-devel, CBFlib-devel
 #BuildRequires:  hdf5-devel
 #Requires:       qt4, qt4-x11, libtiff, CBFlib
 Requires:       qt5-qtbase, qt5-qtscript, qt5-qtwebkit, qt5-qtsvg
+Requires:       qt5-qtcharts, qt5-qtdatavis3d
 #Requires:       hdf5
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
