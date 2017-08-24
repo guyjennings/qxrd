@@ -155,6 +155,9 @@ public slots:
   bool                   polarIntegrateParameters();
 
   void                   fixupDetectorPanelGains(const QModelIndex &index);
+  void                   scanDetectorPanelGains(const QModelIndex &index);
+  void                   hEdges(const QModelIndex &index);
+  void                   vEdges(const QModelIndex &index);
 
   void insertGroup(int atRow, QString name);
 

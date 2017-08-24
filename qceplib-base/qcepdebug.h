@@ -24,7 +24,8 @@ enum {
   DEBUG_EXPORT,
   DEBUG_DATABROWSER,
   DEBUG_DRAGDROP,
-  LAST_CEP_DEBUG           = DEBUG_DRAGDROP
+  DEBUG_PANEL_SHOW,
+  LAST_CEP_DEBUG           = DEBUG_PANEL_SHOW
 };
 
 class QcepDebugDictionary : public QObject {

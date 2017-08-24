@@ -43,6 +43,9 @@ private slots:
   void setDataValueRange(const QModelIndexList &idx);
   void fixupGainMap(const QModelIndexList &idx);
   void fixupDetectorPanelGains(const QModelIndex &idx);
+  void scanDetectorPanelGains(const QModelIndex &idx);
+  void vEdges(const QModelIndex &idx);
+  void hEdges(const QModelIndex &idx);
   void readData(const QModelIndexList &idx);
   void saveData(const QModelIndexList &idx);
   void plotImage(const QModelIndex &idx);

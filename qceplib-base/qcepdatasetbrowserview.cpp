@@ -174,6 +174,9 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     QAction *setr = ops->addAction(tr("Set points in %1 value range...").arg(names));
     QAction *gain = ops->addAction(tr("Fixup Gain Map %1...").arg(names));
     QAction *fixp = ops->addAction(tr("Fixup PE Detector Panel Gains on %1").arg(name));
+    QAction *scnp = ops->addAction(tr("Scan PE Detector Panel Gain on %1...").arg(name));
+    QAction *vdge = ops->addAction(tr("Find Vertical Edges in %1").arg(name));
+    QAction *hdge = ops->addAction(tr("Find Horizontal Edges in %1").arg(name));
 
     menu.addSeparator();
 
@@ -200,6 +203,9 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     setv->setEnabled(nSel == 1 && img);
     gain->setEnabled(nSel == 1 && img);
     fixp->setEnabled(nSel == 1 && img);
+    scnp->setEnabled(nSel == 1 && img);
+    vdge->setEnabled(nSel == 1 && img);
+    hdge->setEnabled(nSel == 1 && img);
 
     ntg->setEnabled(nSel >= 1);
 
@@ -268,6 +274,12 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
       fixupGainMap(indexes);
     } else if (action == fixp) {
       fixupDetectorPanelGains(index);
+    } else if (action == scnp) {
+      scanDetectorPanelGains(index);
+    } else if (action == vdge) {
+      vEdges(index);
+    } else if (action == hdge) {
+      hEdges(index);
     } else if (action == rd) {
       readData(indexes);
     } else if (action == sv) {
@@ -719,5 +731,32 @@ void QcepDatasetBrowserView::fixupDetectorPanelGains(const QModelIndex &idx)
 
   if (model) {
     model->fixupDetectorPanelGains(idx);
+  }
+}
+
+void QcepDatasetBrowserView::scanDetectorPanelGains(const QModelIndex &idx)
+{
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    model->scanDetectorPanelGains(idx);
+  }
+}
+
+void QcepDatasetBrowserView::hEdges(const QModelIndex &idx)
+{
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    model->hEdges(idx);
+  }
+}
+
+void QcepDatasetBrowserView::vEdges(const QModelIndex &idx)
+{
+  QcepDatasetModelPtr model(m_DatasetModel);
+
+  if (model) {
+    model->vEdges(idx);
   }
 }

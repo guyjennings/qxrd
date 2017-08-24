@@ -11,6 +11,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include "qcepfixupdetectorpanelgains.h"
+#include "qcepscandetectorpanelgains.h"
 
 QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBaseWPtr proc, QcepDatasetPtr ds) :
   m_Experiment(expt),
@@ -1497,6 +1498,45 @@ void QcepDatasetModel::fixupDetectorPanelGains(const QModelIndex &index)
 
   if (img) {
     QcepDoubleImageDataPtr res = QcepFixupDetectorPanelGains::exec(img);
+
+    if (res) {
+      append(parent(index), res);
+    }
+  }
+}
+
+void QcepDatasetModel::scanDetectorPanelGains(const QModelIndex &index)
+{
+  QcepDoubleImageDataPtr img = image(index);
+
+  if (img) {
+    QcepDataColumnScanPtr res = QcepScanDetectorPanelGains::exec(img);
+
+    if (res) {
+      append(parent(index), res);
+    }
+  }
+}
+
+void QcepDatasetModel::hEdges(const QModelIndex &index)
+{
+  QcepDoubleImageDataPtr img = image(index);
+
+  if (img) {
+    QcepDoubleImageDataPtr res = QcepScanDetectorPanelGains::hEdges(img);
+
+    if (res) {
+      append(parent(index), res);
+    }
+  }
+}
+
+void QcepDatasetModel::vEdges(const QModelIndex &index)
+{
+  QcepDoubleImageDataPtr img = image(index);
+
+  if (img) {
+    QcepDoubleImageDataPtr res = QcepScanDetectorPanelGains::vEdges(img);
 
     if (res) {
       append(parent(index), res);
