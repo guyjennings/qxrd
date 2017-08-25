@@ -375,7 +375,7 @@ public:
       int height = 0,
       double def = 0);
 
-public:
+public slots:
   void add     (QcepDoubleImageDataPtr img);
   void add     (double val);
 
