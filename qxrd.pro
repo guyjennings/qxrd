@@ -4,7 +4,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 TEMPLATE = subdirs
 
-SUBDIRS = plugins source
+SUBDIRS = libraries plugins source
 
 #SUBDIRS = plugins
 

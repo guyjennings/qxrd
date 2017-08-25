@@ -54,6 +54,10 @@ void QxrdJSEngine::initialize()
 //  qmlRegisterType<QPolygonF>();
 //  qmlRegisterType<QVector<double> >();
 
+  qmlRegisterType<QcepDoubleImageData>();
+//  qmlRegisterType<QcepDoubleImageDataPtr>();
+//  qmlRegisterType<QcepDoubleImageDataWPtr>();
+
   setGlobalProperty("global", globalObject());
   setGlobalProperty("scripting", newQObject(this));
 
@@ -752,27 +756,57 @@ void QxrdJSEngine::fcloseFunc()
 
 QcepDoubleImageData* QxrdJSEngine::dataFunc()
 {
-  return NULL;
+  QxrdDataProcessorPtr proc(dataProcessor());
+
+  if (proc) {
+    return proc->data().data();
+  } else {
+    return NULL;
+  }
 }
 
 QcepDoubleImageData* QxrdJSEngine::darkFunc()
 {
-  return NULL;
+  QxrdDataProcessorPtr proc(dataProcessor());
+
+  if (proc) {
+    return proc->darkImage().data();
+  } else {
+    return NULL;
+  }
 }
 
 QcepMaskData*        QxrdJSEngine::maskFunc()
 {
-  return NULL;
+  QxrdDataProcessorPtr proc(dataProcessor());
+
+  if (proc) {
+    return proc->mask().data();
+  } else {
+    return NULL;
+  }
 }
 
 QcepMaskData*        QxrdJSEngine::overflowFunc()
 {
-  return NULL;
+  QxrdDataProcessorPtr proc(dataProcessor());
+
+  if (proc) {
+    return proc->overflow().data();
+  } else {
+    return NULL;
+  }
 }
 
 QcepDoubleImageData* QxrdJSEngine::liveDataFunc()
 {
-  return NULL;
+  QxrdDataProcessorPtr proc(dataProcessor());
+
+  if (proc) {
+    return proc->liveData().data();
+  } else {
+    return NULL;
+  }
 }
 
 QString QxrdJSEngine::helpFunc(QString topic)
