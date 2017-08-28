@@ -1,6 +1,7 @@
 #ifndef QSPECREMOTE_H
 #define QSPECREMOTE_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include <QString>
 #include <QTcpSocket>
@@ -8,7 +9,7 @@
 
 struct svr_head;
 
-class QSpecRemote : public QObject
+class QCEP_EXPORT QSpecRemote : public QObject
 {
   Q_OBJECT
 

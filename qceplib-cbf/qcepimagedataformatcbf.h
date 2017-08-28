@@ -1,11 +1,12 @@
 #ifndef QCEPIMAGEDATAFORMATCBF_H
 #define QCEPIMAGEDATAFORMATCBF_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepimagedataformat.h"
 
 template <typename T>
-class QcepImageDataFormatCBF : public QcepImageDataFormat<T>
+class QCEP_EXPORT QcepImageDataFormatCBF : public QcepImageDataFormat<T>
 {
 public:
   explicit QcepImageDataFormatCBF(QString name);

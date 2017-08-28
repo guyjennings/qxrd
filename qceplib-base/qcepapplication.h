@@ -17,6 +17,6 @@ public:
   virtual void setDefaultObjectData(QcepDataObject *obj) = 0;
 };
 
-extern QcepApplication *g_Application;
+extern QCEP_EXPORT QcepApplication *g_Application;
 
 #endif // QCEPAPPLICATION_H

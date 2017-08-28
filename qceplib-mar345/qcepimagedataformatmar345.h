@@ -1,6 +1,7 @@
 #ifndef QCEPIMAGEDATAFORMATMAR345_H
 #define QCEPIMAGEDATAFORMATMAR345_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepimagedataformat.h"
@@ -8,7 +9,7 @@
 #include <QFileInfo>
 
 template <typename T>
-class QcepImageDataFormatMar345 : public QcepImageDataFormat<T>
+class QCEP_EXPORT QcepImageDataFormatMar345 : public QcepImageDataFormat<T>
 {
  public:
   QcepImageDataFormatMar345(QString name);

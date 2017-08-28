@@ -53,9 +53,9 @@ public:
 
   short* mask();
 
-  template <typename T> void setMaskRange(QSharedPointer< QcepImageData<T> > image,  T min, T max, bool inRange, bool setTo);
-  template <typename T> void showMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max);
-  template <typename T> void hideMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max);
+  template <typename T> QCEP_EXPORT void setMaskRange(QSharedPointer< QcepImageData<T> > image,  T min, T max, bool inRange, bool setTo);
+  template <typename T> QCEP_EXPORT void showMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max);
+  template <typename T> QCEP_EXPORT void hideMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max);
 
 private:
   enum {

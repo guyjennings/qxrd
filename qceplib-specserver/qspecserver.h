@@ -1,6 +1,7 @@
 #ifndef QSPECSERVER_H
 #define QSPECSERVER_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 
 #include <QTcpServer>
@@ -21,7 +22,7 @@
   'SPEC' data acquisition program.
   */
 
-class QSpecServer : public QTcpServer
+class QCEP_EXPORT QSpecServer : public QTcpServer
 {
   Q_OBJECT
 

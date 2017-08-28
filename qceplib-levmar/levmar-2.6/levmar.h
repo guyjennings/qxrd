@@ -57,6 +57,13 @@
 
 /****************** End of configuration options, no changes necessary beyond this point ******************/
 
+#include <QtCore/qglobal.h>
+
+#ifdef LEVMAR_MAKEDLL
+#  define LEVMAR_EXPORT Q_DECL_EXPORT
+#else
+#  define LEVMAR_EXPORT Q_DECL_IMPORT
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -103,100 +110,100 @@ extern "C" {
 #ifdef LM_DBL_PREC
 /* double precision LM, with & without Jacobian */
 /* unconstrained minimization */
-extern int dlevmar_der(
+extern LEVMAR_EXPORT int dlevmar_der(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       void (*jacf)(double *p, double *j, int m, int n, void *adata),
       double *p, double *x, int m, int n, int itmax, double *opts,
       double *info, double *work, double *covar, void *adata);
 
-extern int dlevmar_dif(
+extern LEVMAR_EXPORT int dlevmar_dif(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       double *p, double *x, int m, int n, int itmax, double *opts,
       double *info, double *work, double *covar, void *adata);
 
 /* box-constrained minimization */
-extern int dlevmar_bc_der(
+extern LEVMAR_EXPORT int dlevmar_bc_der(
        void (*func)(double *p, double *hx, int m, int n, void *adata),
        void (*jacf)(double *p, double *j, int m, int n, void *adata),  
        double *p, double *x, int m, int n, double *lb, double *ub, double *dscl,
        int itmax, double *opts, double *info, double *work, double *covar, void *adata);
 
-extern int dlevmar_bc_dif(
+extern LEVMAR_EXPORT int dlevmar_bc_dif(
        void (*func)(double *p, double *hx, int m, int n, void *adata),
        double *p, double *x, int m, int n, double *lb, double *ub, double *dscl,
        int itmax, double *opts, double *info, double *work, double *covar, void *adata);
 
 #ifdef HAVE_LAPACK
 /* linear equation constrained minimization */
-extern int dlevmar_lec_der(
+extern LEVMAR_EXPORT int dlevmar_lec_der(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       void (*jacf)(double *p, double *j, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *A, double *b, int k,
       int itmax, double *opts, double *info, double *work, double *covar, void *adata);
 
-extern int dlevmar_lec_dif(
+extern LEVMAR_EXPORT int dlevmar_lec_dif(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *A, double *b, int k,
       int itmax, double *opts, double *info, double *work, double *covar, void *adata);
 
 /* box & linear equation constrained minimization */
-extern int dlevmar_blec_der(
+extern LEVMAR_EXPORT int dlevmar_blec_der(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       void (*jacf)(double *p, double *j, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *lb, double *ub, double *A, double *b, int k, double *wghts,
       int itmax, double *opts, double *info, double *work, double *covar, void *adata);
 
-extern int dlevmar_blec_dif(
+extern LEVMAR_EXPORT int dlevmar_blec_dif(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *lb, double *ub, double *A, double *b, int k, double *wghts,
       int itmax, double *opts, double *info, double *work, double *covar, void *adata);
 
 /* box, linear equations & inequalities constrained minimization */
-extern int dlevmar_bleic_der(
+extern LEVMAR_EXPORT int dlevmar_bleic_der(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       void (*jacf)(double *p, double *j, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *lb, double *ub,
       double *A, double *b, int k1, double *C, double *d, int k2,
       int itmax, double *opts, double *info, double *work, double *covar, void *adata);
 
-extern int dlevmar_bleic_dif(
+extern LEVMAR_EXPORT int dlevmar_bleic_dif(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *lb, double *ub, 
       double *A, double *b, int k1, double *C, double *d, int k2,
       int itmax, double *opts, double *info, double *work, double *covar, void *adata);
 
 /* box & linear inequality constraints */
-extern int dlevmar_blic_der(
+extern LEVMAR_EXPORT int dlevmar_blic_der(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       void (*jacf)(double *p, double *j, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *lb, double *ub, double *C, double *d, int k2,
       int itmax, double opts[4], double info[LM_INFO_SZ], double *work, double *covar, void *adata);
 
-extern int dlevmar_blic_dif(
+extern LEVMAR_EXPORT int dlevmar_blic_dif(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *lb, double *ub, double *C, double *d, int k2,
       int itmax, double opts[5], double info[LM_INFO_SZ], double *work, double *covar, void *adata);
 
 /* linear equation & inequality constraints */
-extern int dlevmar_leic_der(
+extern LEVMAR_EXPORT int dlevmar_leic_der(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       void (*jacf)(double *p, double *j, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *A, double *b, int k1, double *C, double *d, int k2,
       int itmax, double opts[4], double info[LM_INFO_SZ], double *work, double *covar, void *adata);
 
-extern int dlevmar_leic_dif(
+extern LEVMAR_EXPORT int dlevmar_leic_dif(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *A, double *b, int k1, double *C, double *d, int k2,
       int itmax, double opts[5], double info[LM_INFO_SZ], double *work, double *covar, void *adata);
 
 /* linear inequality constraints */
-extern int dlevmar_lic_der(
+extern LEVMAR_EXPORT int dlevmar_lic_der(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       void (*jacf)(double *p, double *j, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *C, double *d, int k2,
       int itmax, double opts[4], double info[LM_INFO_SZ], double *work, double *covar, void *adata);
 
-extern int dlevmar_lic_dif(
+extern LEVMAR_EXPORT int dlevmar_lic_dif(
       void (*func)(double *p, double *hx, int m, int n, void *adata),
       double *p, double *x, int m, int n, double *C, double *d, int k2,
       int itmax, double opts[5], double info[LM_INFO_SZ], double *work, double *covar, void *adata);
@@ -208,100 +215,100 @@ extern int dlevmar_lic_dif(
 #ifdef LM_SNGL_PREC
 /* single precision LM, with & without Jacobian */
 /* unconstrained minimization */
-extern int slevmar_der(
+extern LEVMAR_EXPORT int slevmar_der(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       void (*jacf)(float *p, float *j, int m, int n, void *adata),
       float *p, float *x, int m, int n, int itmax, float *opts,
       float *info, float *work, float *covar, void *adata);
 
-extern int slevmar_dif(
+extern LEVMAR_EXPORT int slevmar_dif(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       float *p, float *x, int m, int n, int itmax, float *opts,
       float *info, float *work, float *covar, void *adata);
 
 /* box-constrained minimization */
-extern int slevmar_bc_der(
+extern LEVMAR_EXPORT int slevmar_bc_der(
        void (*func)(float *p, float *hx, int m, int n, void *adata),
        void (*jacf)(float *p, float *j, int m, int n, void *adata),  
        float *p, float *x, int m, int n, float *lb, float *ub, float *dscl,
        int itmax, float *opts, float *info, float *work, float *covar, void *adata);
 
-extern int slevmar_bc_dif(
+extern LEVMAR_EXPORT int slevmar_bc_dif(
        void (*func)(float *p, float *hx, int m, int n, void *adata),
        float *p, float *x, int m, int n, float *lb, float *ub, float *dscl,
        int itmax, float *opts, float *info, float *work, float *covar, void *adata);
 
 #ifdef HAVE_LAPACK
 /* linear equation constrained minimization */
-extern int slevmar_lec_der(
+extern LEVMAR_EXPORT int slevmar_lec_der(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       void (*jacf)(float *p, float *j, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *A, float *b, int k,
       int itmax, float *opts, float *info, float *work, float *covar, void *adata);
 
-extern int slevmar_lec_dif(
+extern LEVMAR_EXPORT int slevmar_lec_dif(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *A, float *b, int k,
       int itmax, float *opts, float *info, float *work, float *covar, void *adata);
 
 /* box & linear equation constrained minimization */
-extern int slevmar_blec_der(
+extern LEVMAR_EXPORT int slevmar_blec_der(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       void (*jacf)(float *p, float *j, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *lb, float *ub, float *A, float *b, int k, float *wghts,
       int itmax, float *opts, float *info, float *work, float *covar, void *adata);
 
-extern int slevmar_blec_dif(
+extern LEVMAR_EXPORT int slevmar_blec_dif(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *lb, float *ub, float *A, float *b, int k, float *wghts,
       int itmax, float *opts, float *info, float *work, float *covar, void *adata);
 
 /* box, linear equations & inequalities constrained minimization */
-extern int slevmar_bleic_der(
+extern LEVMAR_EXPORT int slevmar_bleic_der(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       void (*jacf)(float *p, float *j, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *lb, float *ub,
       float *A, float *b, int k1, float *C, float *d, int k2,
       int itmax, float *opts, float *info, float *work, float *covar, void *adata);
 
-extern int slevmar_bleic_dif(
+extern LEVMAR_EXPORT int slevmar_bleic_dif(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *lb, float *ub,
       float *A, float *b, int k1, float *C, float *d, int k2,
       int itmax, float *opts, float *info, float *work, float *covar, void *adata);
 
 /* box & linear inequality constraints */
-extern int slevmar_blic_der(
+extern LEVMAR_EXPORT int slevmar_blic_der(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       void (*jacf)(float *p, float *j, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *lb, float *ub, float *C, float *d, int k2,
       int itmax, float opts[4], float info[LM_INFO_SZ], float *work, float *covar, void *adata);
 
-extern int slevmar_blic_dif(
+extern LEVMAR_EXPORT int slevmar_blic_dif(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *lb, float *ub, float *C, float *d, int k2,
       int itmax, float opts[5], float info[LM_INFO_SZ], float *work, float *covar, void *adata);
 
 /* linear equality & inequality constraints */
-extern int slevmar_leic_der(
+extern LEVMAR_EXPORT int slevmar_leic_der(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       void (*jacf)(float *p, float *j, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *A, float *b, int k1, float *C, float *d, int k2,
       int itmax, float opts[4], float info[LM_INFO_SZ], float *work, float *covar, void *adata);
 
-extern int slevmar_leic_dif(
+extern LEVMAR_EXPORT int slevmar_leic_dif(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *A, float *b, int k1, float *C, float *d, int k2,
       int itmax, float opts[5], float info[LM_INFO_SZ], float *work, float *covar, void *adata);
 
 /* linear inequality constraints */
-extern int slevmar_lic_der(
+extern LEVMAR_EXPORT int slevmar_lic_der(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       void (*jacf)(float *p, float *j, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *C, float *d, int k2,
       int itmax, float opts[4], float info[LM_INFO_SZ], float *work, float *covar, void *adata);
 
-extern int slevmar_lic_dif(
+extern LEVMAR_EXPORT int slevmar_lic_dif(
       void (*func)(float *p, float *hx, int m, int n, void *adata),
       float *p, float *x, int m, int n, float *C, float *d, int k2,
       int itmax, float opts[5], float info[LM_INFO_SZ], float *work, float *covar, void *adata);
@@ -354,14 +361,14 @@ extern void levmar_PLASMA_setnbcores(int cores);
 
 /* Jacobian verification, double & single precision */
 #ifdef LM_DBL_PREC
-extern void dlevmar_chkjac(
+extern LEVMAR_EXPORT void dlevmar_chkjac(
     void (*func)(double *p, double *hx, int m, int n, void *adata),
     void (*jacf)(double *p, double *j, int m, int n, void *adata),
     double *p, int m, int n, void *adata, double *err);
 #endif /* LM_DBL_PREC */
 
 #ifdef LM_SNGL_PREC
-extern void slevmar_chkjac(
+extern LEVMAR_EXPORT void slevmar_chkjac(
     void (*func)(float *p, float *hx, int m, int n, void *adata),
     void (*jacf)(float *p, float *j, int m, int n, void *adata),
     float *p, int m, int n, void *adata, float *err);
@@ -371,23 +378,23 @@ extern void slevmar_chkjac(
  *                Pearson's correlation coefficient for best-fit parameters
  */
 #ifdef LM_DBL_PREC
-extern double dlevmar_stddev( double *covar, int m, int i);
-extern double dlevmar_corcoef(double *covar, int m, int i, int j);
-extern double dlevmar_R2(void (*func)(double *p, double *hx, int m, int n, void *adata), double *p, double *x, int m, int n, void *adata);
+extern LEVMAR_EXPORT double dlevmar_stddev( double *covar, int m, int i);
+extern LEVMAR_EXPORT double dlevmar_corcoef(double *covar, int m, int i, int j);
+extern LEVMAR_EXPORT double dlevmar_R2(void (*func)(double *p, double *hx, int m, int n, void *adata), double *p, double *x, int m, int n, void *adata);
 
 #endif /* LM_DBL_PREC */
 
 #ifdef LM_SNGL_PREC
-extern float slevmar_stddev( float *covar, int m, int i);
-extern float slevmar_corcoef(float *covar, int m, int i, int j);
-extern float slevmar_R2(void (*func)(float *p, float *hx, int m, int n, void *adata), float *p, float *x, int m, int n, void *adata);
+extern LEVMAR_EXPORT float slevmar_stddev( float *covar, int m, int i);
+extern LEVMAR_EXPORT float slevmar_corcoef(float *covar, int m, int i, int j);
+extern LEVMAR_EXPORT float slevmar_R2(void (*func)(float *p, float *hx, int m, int n, void *adata), float *p, float *x, int m, int n, void *adata);
 
-extern void slevmar_locscale(
+extern LEVMAR_EXPORT void slevmar_locscale(
         void (*func)(float *p, float *hx, int m, int n, void *adata),
         float *p, float *x, int m, int n, void *adata,
         int howto, float locscl[2], float **residptr);
 
-extern int slevmar_outlid(float *r, int n, float thresh, float ls[2], char *outlmap);
+extern LEVMAR_EXPORT int slevmar_outlid(float *r, int n, float thresh, float ls[2], char *outlmap);
 
 #endif /* LM_SNGL_PREC */
 

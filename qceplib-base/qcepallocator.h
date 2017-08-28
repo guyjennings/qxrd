@@ -18,7 +18,7 @@
 #include "qcepdatacolumn-ptr.h"
 #include "qcepdataset-ptr.h"
 
-extern QcepAllocator *g_Allocator;
+extern QCEP_EXPORT QcepAllocator *g_Allocator;
 
 class QCEP_EXPORT QcepAllocator : public QcepSerializableObject
 {

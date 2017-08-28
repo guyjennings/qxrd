@@ -13,6 +13,6 @@ public:
   QcepApplicationSettings(QcepApplicationWPtr app);
 };
 
-extern QcepApplicationSettings *g_ApplicationSettings;
+extern QCEP_EXPORT QcepApplicationSettings *g_ApplicationSettings;
 
 #endif // QCEPAPPLICATIONSETTINGS_H
