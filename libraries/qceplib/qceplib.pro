@@ -30,6 +30,18 @@ HEADERS += qceplib.h\
 
 CONFIG += qceplib-qwt qceplib-hdf5 qceplib-tiff
 
+DEFINES += QWT_MAKEDLL
+DEFINES += CBF_MAKEDLL
+DEFINES += TIFF_MAKEDLL
+DEFINES += MAR345_MAKEDLL
+DEFINES += LEVMAR_MAKEDLL
+DEFINES += SZIP_MAKEDLL
+DEFINES += ZLIB_MAKEDLL
+DEFINES += HDF5_MAKEDLL
+DEFINES += SPECSERVER_MAKEDLL
+
+DEFINES += H5_BUILT_AS_DYNAMIC_LIB
+
 include(../../source/submodules/qceplib/qceplib-qwt.pri)
 include(../../source/submodules/qceplib/qceplib-base.pri)
 include(../../source/submodules/qceplib/qceplib-mar345.pri)

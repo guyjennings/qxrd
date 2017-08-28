@@ -96,33 +96,21 @@ CONFIG += qceplib-qwt qceplib-hdf5 qceplib-tiff
 
 #CONFIG += qceplib-nexus
 
-#include(submodules/qceplib/qceplib-qwt.pri)
-#include(submodules/qceplib/qceplib-base.pri)
-#include(submodules/qceplib/qceplib-mar345.pri)
-#include(submodules/qceplib/qceplib-cbf.pri)
-#include(submodules/qceplib/qceplib-tiff.pri)
-#include(submodules/qceplib/qceplib-levmar.pri)
-#include(submodules/qceplib/qceplib-szip.pri)
-#include(submodules/qceplib/qceplib-zlib.pri)
-#include(submodules/qceplib/qceplib-hdf5.pri)
+include(submodules/qceplib/qceplib-qwt-include.pri)
+include(submodules/qceplib/qceplib-base-include.pri)
+include(submodules/qceplib/qceplib-mar345-include.pri)
+include(submodules/qceplib/qceplib-cbf-include.pri)
+include(submodules/qceplib/qceplib-tiff-include.pri)
+include(submodules/qceplib/qceplib-levmar-include.pri)
+include(submodules/qceplib/qceplib-szip-include.pri)
+include(submodules/qceplib/qceplib-zlib-include.pri)
+include(submodules/qceplib/qceplib-hdf5-include.pri)
+include(submodules/qceplib/qceplib-specserver-include.pri)
 ##include(submodules/qceplib/qceplib-nexus.pri)
 
 #macx {
 #}
 
-#include(submodules/qceplib/qceplib-specserver.pri)
-
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-base
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-qwt/qwt-6.1.3/src/
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-mar345
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-cbf
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-tiff
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-levmar
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-szip
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-zlib
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-hdf5
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-nexus
-INCLUDEPATH += $$PWD/submodules/qceplib/qceplib-specserver
 
 HEADERS += TODO.h \
     qxrdapplication.h \
