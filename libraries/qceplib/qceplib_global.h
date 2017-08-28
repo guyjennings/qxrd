@@ -4,9 +4,9 @@
 #include <QtCore/qglobal.h>
 
 #if defined(QCEPLIB_LIBRARY)
-#  define QCEPLIBSHARED_EXPORT Q_DECL_EXPORT
+#  define QCEP_EXPORT Q_DECL_EXPORT
 #else
-#  define QCEPLIBSHARED_EXPORT Q_DECL_IMPORT
+#  define QCEP_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif // QCEPLIB_GLOBAL_H

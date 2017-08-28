@@ -3,7 +3,7 @@
 
 #include "qceplib_global.h"
 
-class QCEPLIBSHARED_EXPORT Qceplib
+class QCEP_EXPORT Qceplib
 {
 
 public:
