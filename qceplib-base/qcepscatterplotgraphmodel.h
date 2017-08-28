@@ -1,10 +1,11 @@
 #ifndef QCEPSCATTERPLOTGRAPHMODEL_H
 #define QCEPSCATTERPLOTGRAPHMODEL_H
 
+#include "qceplib_global.h"
 #include <QAbstractTableModel>
 #include "qcepdataobject-ptr.h"
 
-class QcepScatterPlotGraphModel : public QAbstractTableModel
+class QCEP_EXPORT QcepScatterPlotGraphModel : public QAbstractTableModel
 {
   Q_OBJECT
 

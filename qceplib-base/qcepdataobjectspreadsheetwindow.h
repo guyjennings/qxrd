@@ -1,6 +1,7 @@
 #ifndef QCEPDATAOBJECTSPREADSHEETWINDOW_H
 #define QCEPDATAOBJECTSPREADSHEETWINDOW_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include <QWidget>
 #include "ui_qcepdataobjectspreadsheetwindow.h"
@@ -9,7 +10,7 @@
 #include "qcepdataobject-ptr.h"
 #include "qcepspreadsheetmodel.h"
 
-class QcepDataObjectSpreadsheetWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectSpreadsheetWindow
+class QCEP_EXPORT QcepDataObjectSpreadsheetWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectSpreadsheetWindow
 {
   Q_OBJECT
 public:

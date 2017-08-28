@@ -1,9 +1,10 @@
 #ifndef QCEPDATAOBJECTWINDOW_H
 #define QCEPDATAOBJECTWINDOW_H
 
+#include "qceplib_global.h"
 #include "qcepmainwindow.h"
 
-class QcepDataObjectWindow : public QcepMainWindow
+class QCEP_EXPORT QcepDataObjectWindow : public QcepMainWindow
 {
   Q_OBJECT
 public:

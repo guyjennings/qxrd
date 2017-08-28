@@ -1,11 +1,12 @@
 #ifndef QCEPTHREAD_H
 #define QCEPTHREAD_H
 
+#include "qceplib_global.h"
 #include <QThread>
 #include <QMutex>
 #include "qcepobject-ptr.h"
 
-class QcepThread : public QThread
+class QCEP_EXPORT QcepThread : public QThread
 {
   Q_OBJECT
 

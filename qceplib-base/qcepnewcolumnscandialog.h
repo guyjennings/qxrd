@@ -1,12 +1,13 @@
 #ifndef QCEPNEWCOLUMNSCANDIALOG_H
 #define QCEPNEWCOLUMNSCANDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepnewcolumnscandialog.h"
 
 #include "qcepdatasetmodel-ptr.h"
 
-class QcepNewColumnScanDialog : public QDialog, public Ui::QcepNewColumnScanDialog
+class QCEP_EXPORT QcepNewColumnScanDialog : public QDialog, public Ui::QcepNewColumnScanDialog
 {
   Q_OBJECT
 

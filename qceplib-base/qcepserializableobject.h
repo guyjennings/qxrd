@@ -1,11 +1,12 @@
 #ifndef QCEPSERIALIZABLEOBJECT_H
 #define QCEPSERIALIZABLEOBJECT_H
 
+#include "qceplib_global.h"
 #include "qcepobject.h"
 #include "qcepserializableobject-ptr.h"
 #include "qcepfileformatter-ptr.h"
 
-class QcepSerializableObject : public QcepObject
+class QCEP_EXPORT QcepSerializableObject : public QcepObject
 {
   Q_OBJECT
 

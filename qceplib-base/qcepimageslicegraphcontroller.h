@@ -1,9 +1,10 @@
 #ifndef QCEPIMAGESLICEGRAPHCONTROLLER_H
 #define QCEPIMAGESLICEGRAPHCONTROLLER_H
 
+#include "qceplib_global.h"
 #include "qcepdataobjectgraphcontroller.h"
 
-class QcepImageSliceGraphController : public QcepDataObjectGraphController
+class QCEP_EXPORT QcepImageSliceGraphController : public QcepDataObjectGraphController
 {
   Q_OBJECT
 

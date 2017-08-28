@@ -1,10 +1,11 @@
 #ifndef QCEPVECTOR3DPROPERTY_H
 #define QCEPVECTOR3DPROPERTY_H
 
+#include "qceplib_global.h"
 #include "qcepproperty.h"
 #include "qcepvector3d.h"
 
-class QcepVector3DProperty : public QcepProperty
+class QCEP_EXPORT QcepVector3DProperty : public QcepProperty
 {
   Q_OBJECT
 public:

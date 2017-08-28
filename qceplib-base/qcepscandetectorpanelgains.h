@@ -1,11 +1,12 @@
 #ifndef QCEPSCANDETECTORPANELGAINS_H
 #define QCEPSCANDETECTORPANELGAINS_H
 
+#include "qceplib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepimagedata-ptr.h"
 
-class QcepScanDetectorPanelGains : public QcepSerializableObject
+class QCEP_EXPORT QcepScanDetectorPanelGains : public QcepSerializableObject
 {
 public:
   QcepScanDetectorPanelGains();

@@ -1,13 +1,14 @@
 #ifndef QCEPFIXUPGAINMAPDIALOG_H
 #define QCEPFIXUPGAINMAPDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepfixupgainmapdialog.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepexperiment-ptr.h"
 #include "qcepfixupgainmapcommand-ptr.h"
 
-class QcepFixupGainMapDialog : public QDialog, public Ui::QcepFixupGainMapDialog
+class QCEP_EXPORT QcepFixupGainMapDialog : public QDialog, public Ui::QcepFixupGainMapDialog
 {
   Q_OBJECT
 

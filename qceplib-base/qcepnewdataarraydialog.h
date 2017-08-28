@@ -1,12 +1,13 @@
 #ifndef QCEPNEWDATAARRAYDIALOG_H
 #define QCEPNEWDATAARRAYDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepnewdataarraydialog.h"
 
 #include "qcepdatasetmodel-ptr.h"
 
-class QcepNewDataArrayDialog : public QDialog, public Ui::QcepNewDataArrayDialog
+class QCEP_EXPORT QcepNewDataArrayDialog : public QDialog, public Ui::QcepNewDataArrayDialog
 {
   Q_OBJECT
 

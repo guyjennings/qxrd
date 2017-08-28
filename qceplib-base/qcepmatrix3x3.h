@@ -1,11 +1,12 @@
 #ifndef QCEPMATRIX3X3_H
 #define QCEPMATRIX3X3_H
 
+#include "qceplib_global.h"
 #include <QMatrix3x3>
 #include <QMetaType>
 #include "qceppropertyvalue.h"
 
-class QcepMatrix3x3 : public QcepPropertyValue, public QMatrix3x3
+class QCEP_EXPORT QcepMatrix3x3 : public QcepPropertyValue, public QMatrix3x3
 {
 public:
   void setSettingsValue(QSettings *settings, QString name);

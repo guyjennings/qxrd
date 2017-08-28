@@ -1,6 +1,7 @@
 #ifndef QCEPDATAOBJECTSURFACEPLOTWIDGET_H
 #define QCEPDATAOBJECTSURFACEPLOTWIDGET_H
 
+#include "qceplib_global.h"
 #include <QWidget>
 #include "ui_qcepdataobjectsurfaceplotwidget.h"
 #include "qcepproperty.h"
@@ -8,7 +9,7 @@
 #include <QtDataVisualization>
 #include "qcepimagedata-ptr.h"
 
-class QcepDataObjectSurfacePlotWidget : public QWidget, public Ui::QcepDataObjectSurfacePlotWidget
+class QCEP_EXPORT QcepDataObjectSurfacePlotWidget : public QWidget, public Ui::QcepDataObjectSurfacePlotWidget
 {
   Q_OBJECT
 public:

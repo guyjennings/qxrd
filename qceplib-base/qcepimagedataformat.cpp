@@ -57,3 +57,4 @@ template class QcepImageDataFormat<short>;
 template class QcepImageDataFormat<unsigned int>;
 template class QcepImageDataFormat<int>;
 template class QcepImageDataFormat<double>;
+template class QcepImageDataFormat<float>;

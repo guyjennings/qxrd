@@ -1,6 +1,7 @@
 #ifndef QCEPIMAGEQUEUE_H
 #define QCEPIMAGEQUEUE_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepimagedata.h"
@@ -10,7 +11,7 @@
 #include <QSharedPointer>
 
 template <typename T>
-class QcepImageQueue : QObject
+class QCEP_EXPORT QcepImageQueue : QObject
 {
 public:
   QcepImageQueue(QString name);

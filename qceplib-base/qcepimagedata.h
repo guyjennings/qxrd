@@ -1,6 +1,7 @@
 #ifndef QCEPIMAGEDATA_H
 #define QCEPIMAGEDATA_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include <QMutex>
 #include <QString>
@@ -19,7 +20,7 @@
 
 typedef struct tiff TIFF;
 
-class QcepImageDataBase : public QcepDataObject
+class QCEP_EXPORT QcepImageDataBase : public QcepDataObject
 {
   Q_OBJECT
 
@@ -239,7 +240,7 @@ private:
 };
 
 template <typename T>
-    class QcepImageData : public QcepImageDataBase
+    class QCEP_EXPORT QcepImageData : public QcepImageDataBase
 {
 public:
   QcepImageData(QString name,
@@ -365,7 +366,7 @@ protected:
   QcepMaskDataPtr            m_Overflow;
 };
 
-class QcepDoubleImageData : public QcepImageData<double> {
+class QCEP_EXPORT QcepDoubleImageData : public QcepImageData<double> {
   Q_OBJECT
 
 public:
@@ -402,7 +403,7 @@ public slots:
 
 Q_DECLARE_METATYPE(QcepDoubleImageData*)
 
-class QcepFloatImageData : public QcepImageData<float> {
+class QCEP_EXPORT QcepFloatImageData : public QcepImageData<float> {
   Q_OBJECT
 
 public:
@@ -415,7 +416,7 @@ public:
 
 Q_DECLARE_METATYPE(QcepFloatImageData*)
 
-class QcepUInt16ImageData : public QcepImageData<quint16> {
+class QCEP_EXPORT QcepUInt16ImageData : public QcepImageData<quint16> {
   Q_OBJECT
 
 public:
@@ -428,7 +429,7 @@ public:
 
 Q_DECLARE_METATYPE(QcepUInt16ImageData*)
 
-class QcepInt16ImageData : public QcepImageData<qint16> {
+class QCEP_EXPORT QcepInt16ImageData : public QcepImageData<qint16> {
   Q_OBJECT
 
 public:
@@ -441,7 +442,7 @@ public:
 
 Q_DECLARE_METATYPE(QcepInt16ImageData*)
 
-class QcepUInt32ImageData : public QcepImageData<quint32> {
+class QCEP_EXPORT QcepUInt32ImageData : public QcepImageData<quint32> {
   Q_OBJECT
 
 public:
@@ -454,7 +455,7 @@ public:
 
 Q_DECLARE_METATYPE(QcepUInt32ImageData*)
 
-class QcepInt32ImageData : public QcepImageData<qint32> {
+class QCEP_EXPORT QcepInt32ImageData : public QcepImageData<qint32> {
   Q_OBJECT
 
 public:

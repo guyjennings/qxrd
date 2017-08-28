@@ -1,11 +1,12 @@
 #ifndef QCEPMUTEXLOCKER_H
 #define QCEPMUTEXLOCKER_H
 
+#include "qceplib_global.h"
 #include <QMutexLocker>
 #include <QTime>
 #include "qcepmacros.h"
 
-class QcepMutexLocker : public QMutexLocker
+class QCEP_EXPORT QcepMutexLocker : public QMutexLocker
 {
 public:
   QcepMutexLocker(const char *file, int line, QMutex * mutex);

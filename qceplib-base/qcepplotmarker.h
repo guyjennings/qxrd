@@ -1,7 +1,9 @@
 #ifndef QCEPPLOTMARKER_H
 #define QCEPPLOTMARKER_H
 
-class QcepPlotMarker
+#include "qceplib_global.h"
+
+class QCEP_EXPORT QcepPlotMarker
 {
 public:
   QcepPlotMarker();

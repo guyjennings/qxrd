@@ -1,11 +1,12 @@
 #ifndef QCEPIMAGEDATASPREADSHEETMODEL_H
 #define QCEPIMAGEDATASPREADSHEETMODEL_H
 
+#include "qceplib_global.h"
 #include "qcepimagedata.h"
 
 #include "qcepspreadsheetmodel.h"
 
-class QcepImageDataSpreadsheetModel : public QcepSpreadsheetModel
+class QCEP_EXPORT QcepImageDataSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
   QcepImageDataSpreadsheetModel(QWeakPointer< QcepImageDataBase > img);

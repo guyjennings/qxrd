@@ -1,12 +1,13 @@
 #ifndef QCEPNEWDATAGROUPDIALOG_H
 #define QCEPNEWDATAGROUPDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepnewdatagroupdialog.h"
 
 #include "qcepdatasetmodel-ptr.h"
 
-class QcepNewDataGroupDialog : public QDialog, public Ui::QcepNewDataGroupDialog
+class QCEP_EXPORT QcepNewDataGroupDialog : public QDialog, public Ui::QcepNewDataGroupDialog
 {
   Q_OBJECT
 

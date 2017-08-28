@@ -1,10 +1,11 @@
 #ifndef QCEPMATRIX3X3PROPERTY_H
 #define QCEPMATRIX3X3PROPERTY_H
 
+#include "qceplib_global.h"
 #include "qcepproperty.h"
 #include "qcepmatrix3x3.h"
 
-class QcepMatrix3x3Property : public QcepProperty
+class QCEP_EXPORT QcepMatrix3x3Property : public QcepProperty
 {
   Q_OBJECT
 public:

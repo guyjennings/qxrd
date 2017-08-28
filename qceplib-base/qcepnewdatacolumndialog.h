@@ -1,12 +1,13 @@
 #ifndef QCEPNEWDATACOLUMNDIALOG_H
 #define QCEPNEWDATACOLUMNDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepnewdatacolumndialog.h"
 
 #include "qcepdatasetmodel-ptr.h"
 
-class QcepNewDataColumnDialog : public QDialog, public Ui::QcepNewDataColumnDialog
+class QCEP_EXPORT QcepNewDataColumnDialog : public QDialog, public Ui::QcepNewDataColumnDialog
 {
   Q_OBJECT
 

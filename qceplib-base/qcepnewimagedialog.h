@@ -1,12 +1,13 @@
 #ifndef QCEPNEWIMAGEDIALOG_H
 #define QCEPNEWIMAGEDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepnewimagedialog.h"
 
 #include "qcepdatasetmodel-ptr.h"
 
-class QcepNewImageDialog : public QDialog, public Ui::QcepNewImageDialog
+class QCEP_EXPORT QcepNewImageDialog : public QDialog, public Ui::QcepNewImageDialog
 {
   Q_OBJECT
 

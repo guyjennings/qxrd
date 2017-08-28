@@ -1,6 +1,7 @@
 #ifndef QCEPPLOT_H
 #define QCEPPLOT_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include <QWidget>
 #include <qwt_plot.h>
@@ -12,7 +13,7 @@
 #include "qcepplotsettings-ptr.h"
 #include "qcepplotmeasurer-ptr.h"
 
-class QcepPlot : public QwtPlot
+class QCEP_EXPORT QcepPlot : public QwtPlot
 {
   Q_OBJECT
 

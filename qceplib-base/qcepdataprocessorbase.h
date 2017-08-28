@@ -1,13 +1,14 @@
 #ifndef QCEPDATAPROCESSORBASE_H
 #define QCEPDATAPROCESSORBASE_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 #include "qcepserializableobject.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepimagedata-ptr.h"
 
-class QcepDataProcessorBase : public QcepSerializableObject
+class QCEP_EXPORT QcepDataProcessorBase : public QcepSerializableObject
 {
   Q_OBJECT
 

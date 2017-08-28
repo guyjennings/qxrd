@@ -1,11 +1,12 @@
 #ifndef QCEPFILEFORMATTER_H
 #define QCEPFILEFORMATTER_H
 
+#include "qceplib_global.h"
 #include "qcepobject.h"
 #include "qcepserializableobject-ptr.h"
 #include "qcepfileformatter-ptr.h"
 
-class QcepFileFormatter : public QcepObject
+class QCEP_EXPORT QcepFileFormatter : public QcepObject
 {
 public:
   QcepFileFormatter(QString filePath);

@@ -1,10 +1,11 @@
 #ifndef QCEPDATAARRAYSPREADSHEETMODEL_H
 #define QCEPDATAARRAYSPREADSHEETMODEL_H
 
+#include "qceplib_global.h"
 #include "qcepdataarray-ptr.h"
 #include "qcepspreadsheetmodel.h"
 
-class QcepDataArraySpreadsheetModel : public QcepSpreadsheetModel
+class QCEP_EXPORT QcepDataArraySpreadsheetModel : public QcepSpreadsheetModel
 {
   Q_OBJECT
 

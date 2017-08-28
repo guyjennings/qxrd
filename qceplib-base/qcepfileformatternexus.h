@@ -1,11 +1,12 @@
 #ifndef QCEPFILEFORMATTERNEXUS_H
 #define QCEPFILEFORMATTERNEXUS_H
 
+#include "qceplib_global.h"
 #include "qcepfileformatter.h"
 
 //#ifdef HAVE_NEXUS
 
-class QcepFileFormatterNexus : public QcepFileFormatter
+class QCEP_EXPORT QcepFileFormatterNexus : public QcepFileFormatter
 {
 public:
   QcepFileFormatterNexus(QString filePath);

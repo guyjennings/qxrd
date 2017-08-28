@@ -1,9 +1,10 @@
 #ifndef QCEPIMAGEHISTOGRAMGRAPHCONTROLLER_H
 #define QCEPIMAGEHISTOGRAMGRAPHCONTROLLER_H
 
+#include "qceplib_global.h"
 #include "qcepdataobjectgraphcontroller.h"
 
-class QcepImageHistogramGraphController : public QcepDataObjectGraphController
+class QCEP_EXPORT QcepImageHistogramGraphController : public QcepDataObjectGraphController
 {
   Q_OBJECT
 

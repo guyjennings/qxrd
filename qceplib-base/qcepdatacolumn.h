@@ -1,6 +1,7 @@
 #ifndef QCEPDATACOLUMN_H
 #define QCEPDATACOLUMN_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include <QObject>
 #include <QVector>
@@ -17,7 +18,7 @@
 
 typedef QString (*QcepDataColumnFormatter)(double);
 
-class QcepDataColumn : public QcepDataObject
+class QCEP_EXPORT QcepDataColumn : public QcepDataObject
 {
   Q_OBJECT
 

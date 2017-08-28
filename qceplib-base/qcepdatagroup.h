@@ -1,6 +1,7 @@
 #ifndef QCEPDATAGROUP_H
 #define QCEPDATAGROUP_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include <QVector>
 #include "qcepdataobject.h"
@@ -12,7 +13,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepintegrateddata-ptr.h"
 
-class QcepDataGroup : public QcepDataObject
+class QCEP_EXPORT QcepDataGroup : public QcepDataObject
 {
   Q_OBJECT
 

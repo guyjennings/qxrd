@@ -1,6 +1,7 @@
 #ifndef QCEPDEBUG_H
 #define QCEPDEBUG_H
 
+#include "qceplib_global.h"
 #include <QStringList>
 #include <QMap>
 #include <QSharedPointer>
@@ -28,7 +29,7 @@ enum {
   LAST_CEP_DEBUG           = DEBUG_PANEL_SHOW
 };
 
-class QcepDebugDictionary : public QObject {
+class QCEP_EXPORT QcepDebugDictionary : public QObject {
 public:
   QcepDebugDictionary();
 
@@ -47,9 +48,9 @@ private:
   QMap<int, QString> m_Messages;
 };
 
-extern qint64 qcepDebug(int cond);
+extern QCEP_EXPORT qint64 qcepDebug(int cond);
 
-extern QSharedPointer<QcepDebugDictionary> g_DebugLevel;
+extern QCEP_EXPORT QSharedPointer<QcepDebugDictionary> g_DebugLevel;
 
 #define HEXARG(a) arg(QcepDebugDictionary::hexArg(a))
 

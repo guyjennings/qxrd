@@ -1,12 +1,13 @@
 #ifndef QCEPDATASETBROWSERVIEW_H
 #define QCEPDATASETBROWSERVIEW_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include <QTreeView>
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepexperiment-ptr.h"
 
-class QcepDatasetBrowserView : public QTreeView
+class QCEP_EXPORT QcepDatasetBrowserView : public QTreeView
 {
   Q_OBJECT
 

@@ -1,10 +1,11 @@
 #ifndef QCEPPROPERTYVALUE_H
 #define QCEPPROPERTYVALUE_H
 
+#include "qceplib_global.h"
 #include <QMetaType>
 #include <QSettings>
 
-class QcepPropertyValue
+class QCEP_EXPORT QcepPropertyValue
 {
 public:
   explicit QcepPropertyValue(QObject *parent = 0);

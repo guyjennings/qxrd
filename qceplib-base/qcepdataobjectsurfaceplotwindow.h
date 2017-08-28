@@ -1,12 +1,13 @@
 #ifndef QCEPDATAOBJECTSURFACEPLOTWINDOW_H
 #define QCEPDATAOBJECTSURFACEPLOTWINDOW_H
 
+#include "qceplib_global.h"
 #include "qcepdataobjectwindow.h"
 #include "ui_qcepdataobjectsurfaceplotwindow.h"
 #include "qcepexperiment-ptr.h"
 #include "qcepimagedata-ptr.h"
 
-class QcepDataObjectSurfacePlotWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectSurfacePlotWindow
+class QCEP_EXPORT QcepDataObjectSurfacePlotWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectSurfacePlotWindow
 {
   Q_OBJECT
 public:

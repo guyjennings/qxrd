@@ -1,11 +1,12 @@
 #ifndef QCEPDATACOLUMNSCAN_H
 #define QCEPDATACOLUMNSCAN_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include "qcepdatagroup.h"
 #include "qcepdatacolumnscan-ptr.h"
 
-class QcepDataColumnScan : public QcepDataGroup
+class QCEP_EXPORT QcepDataColumnScan : public QcepDataGroup
 {
   Q_OBJECT
 

@@ -1,6 +1,7 @@
 #ifndef QCEPDATAEXPORTCOMMAND_H
 #define QCEPDATAEXPORTCOMMAND_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include "qcepdatasetmodel-ptr.h"
@@ -8,7 +9,7 @@
 #include "qcepexperiment-ptr.h"
 #include <QModelIndexList>
 
-class QcepDataExportCommand : public QcepObject
+class QCEP_EXPORT QcepDataExportCommand : public QcepObject
 {
   Q_OBJECT
 

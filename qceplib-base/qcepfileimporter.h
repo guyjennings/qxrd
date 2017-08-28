@@ -1,13 +1,14 @@
 #ifndef QCEPFILEIMPORTER_H
 #define QCEPFILEIMPORTER_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepfileimporter-ptr.h"
 #include <QModelIndexList>
 
-class QcepFileImporter : public QcepObject
+class QCEP_EXPORT QcepFileImporter : public QcepObject
 {
   Q_OBJECT
 

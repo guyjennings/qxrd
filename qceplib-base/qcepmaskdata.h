@@ -1,10 +1,11 @@
 #ifndef QCEPMASKDATA_H
 #define QCEPMASKDATA_H
 
+#include "qceplib_global.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata-ptr.h"
 
-class QcepMaskData : public QcepImageData<short>
+class QCEP_EXPORT QcepMaskData : public QcepImageData<short>
 {
   Q_OBJECT
 

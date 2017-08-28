@@ -1,10 +1,11 @@
 #ifndef QCEPSCRIPTENGINE_H
 #define QCEPSCRIPTENGINE_H
 
+#include "qceplib_global.h"
 #include <QScriptEngine>
 #include "qcepobject-ptr.h"
 
-class QcepScriptEngine : public QScriptEngine
+class QCEP_EXPORT QcepScriptEngine : public QScriptEngine
 {
 public:
   QcepScriptEngine(QObject *parent = 0);

@@ -1,10 +1,11 @@
 #ifndef QCEPDATAGROUPSPREADSHEETMODEL_H
 #define QCEPDATAGROUPSPREADSHEETMODEL_H
 
+#include "qceplib_global.h"
 #include "qcepdatagroup-ptr.h"
 #include "qcepspreadsheetmodel.h"
 
-class QcepDataGroupSpreadsheetModel : public QcepSpreadsheetModel
+class QCEP_EXPORT QcepDataGroupSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
   QcepDataGroupSpreadsheetModel(QcepDataGroupWPtr group);

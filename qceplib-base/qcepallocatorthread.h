@@ -1,11 +1,12 @@
 #ifndef QCEPALLOCATORTHREAD_H
 #define QCEPALLOCATORTHREAD_H
 
+#include "qceplib_global.h"
 #include "qcepthread.h"
 #include "qcepapplication-ptr.h"
 #include "qcepallocator-ptr.h"
 
-class QcepAllocatorThread : public QcepThread
+class QCEP_EXPORT QcepAllocatorThread : public QcepThread
 {
   Q_OBJECT
 

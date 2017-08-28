@@ -1,6 +1,7 @@
 #ifndef QCEPDATAOBJECTGRAPHWINDOW_H
 #define QCEPDATAOBJECTGRAPHWINDOW_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include <QWidget>
 #include "ui_qcepdataobjectgraphwindow.h"
@@ -11,7 +12,7 @@
 #include "qcepproperty.h"
 #include "qwt_plot_curve.h"
 
-class QcepDataObjectGraphWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectGraphWindow
+class QCEP_EXPORT QcepDataObjectGraphWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectGraphWindow
 {
   Q_OBJECT
 public:

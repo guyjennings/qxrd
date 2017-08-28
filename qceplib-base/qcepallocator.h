@@ -1,6 +1,7 @@
 #ifndef QCEPALLOCATOR_H
 #define QCEPALLOCATOR_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepserializableobject.h"
 
@@ -19,7 +20,7 @@
 
 extern QcepAllocator *g_Allocator;
 
-class QcepAllocator : public QcepSerializableObject
+class QCEP_EXPORT QcepAllocator : public QcepSerializableObject
 {
   Q_OBJECT
 

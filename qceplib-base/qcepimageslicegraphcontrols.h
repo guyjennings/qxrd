@@ -1,10 +1,11 @@
 #ifndef QCEPIMAGESLICEGRAPHCONTROLS_H
 #define QCEPIMAGESLICEGRAPHCONTROLS_H
 
+#include "qceplib_global.h"
 #include "qcepgraphcontrolswidget.h"
 #include "ui_qcepimageslicegraphcontrols.h"
 
-class QcepImageSliceGraphControls : public QcepGraphControlsWidget, public Ui::QcepImageSliceGraphControls
+class QCEP_EXPORT QcepImageSliceGraphControls : public QcepGraphControlsWidget, public Ui::QcepImageSliceGraphControls
 {
   Q_OBJECT
 

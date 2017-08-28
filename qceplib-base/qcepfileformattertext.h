@@ -1,12 +1,13 @@
 #ifndef QCEPFILEFORMATTERTEXT_H
 #define QCEPFILEFORMATTERTEXT_H
 
+#include "qceplib_global.h"
 #include "qcepfileformatter.h"
 #include <QFile>
 #include <QTextStream>
 #include <stdio.h>
 
-class QcepFileFormatterText : public QcepFileFormatter
+class QCEP_EXPORT QcepFileFormatterText : public QcepFileFormatter
 {
 public:
   QcepFileFormatterText(QString filePath);

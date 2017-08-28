@@ -1,6 +1,7 @@
 #ifndef QCEPOBJECT_H
 #define QCEPOBJECT_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include <QSettings>
 #include "qcepobjectnamer.h"
@@ -11,7 +12,7 @@
 #include "qcepproperty.h"
 #include <QScriptValue>
 
-class QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
+class QCEP_EXPORT QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
 {
   Q_OBJECT
 public:

@@ -1,6 +1,7 @@
 #ifndef QCEPFILEIMPORTERHDF_H
 #define QCEPFILEIMPORTERHDF_H
 
+#include "qceplib_global.h"
 #include "qcepfileimporter.h"
 
 #ifdef HAVE_HDF5
@@ -11,7 +12,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepdataarray-ptr.h"
 
-class QcepFileImporterHDF : public QcepFileImporter
+class QCEP_EXPORT QcepFileImporterHDF : public QcepFileImporter
 {
   Q_OBJECT
 

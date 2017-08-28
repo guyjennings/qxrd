@@ -1,10 +1,11 @@
 #ifndef QCEPDATAOBJECTPROPERTIESMODEL_H
 #define QCEPDATAOBJECTPROPERTIESMODEL_H
 
+#include "qceplib_global.h"
 #include "qcepdataobject-ptr.h"
 #include "qceppropertiesmodel.h"
 
-class QcepDataObjectPropertiesModel : public QcepPropertiesModel
+class QCEP_EXPORT QcepDataObjectPropertiesModel : public QcepPropertiesModel
 {
 public:
   QcepDataObjectPropertiesModel(QcepDataObjectWPtr obj);

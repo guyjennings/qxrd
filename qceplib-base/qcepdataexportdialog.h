@@ -1,6 +1,7 @@
 #ifndef QCEPDATAEXPORTDIALOG_H
 #define QCEPDATAEXPORTDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepdataexportdialog.h"
 #include "qcepdatasetmodel-ptr.h"
@@ -8,7 +9,7 @@
 #include "qcepexperiment-ptr.h"
 #include <QModelIndexList>
 
-class QcepDataExportDialog : public QDialog, public Ui::QcepDataExportDialog
+class QCEP_EXPORT QcepDataExportDialog : public QDialog, public Ui::QcepDataExportDialog
 {
   Q_OBJECT
 

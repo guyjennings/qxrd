@@ -1,12 +1,13 @@
 #ifndef QCEPDATAOBJECTGRAPHCONTROLLER_H
 #define QCEPDATAOBJECTGRAPHCONTROLLER_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include "qcepdataobject-ptr.h"
 
 class QcepDataObjectGraphWindow;
 
-class QcepDataObjectGraphController : public QObject
+class QCEP_EXPORT QcepDataObjectGraphController : public QObject
 {
   Q_OBJECT
 public:

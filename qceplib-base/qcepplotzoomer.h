@@ -1,10 +1,11 @@
 #ifndef QCEPPLOTZOOMER_H
 #define QCEPPLOTZOOMER_H
 
+#include "qceplib_global.h"
 #include <qwt_plot_zoomer.h>
 #include "qcepplot.h"
 
-class QcepPlotZoomer : public QwtPlotZoomer
+class QCEP_EXPORT QcepPlotZoomer : public QwtPlotZoomer
 {
   Q_OBJECT
 

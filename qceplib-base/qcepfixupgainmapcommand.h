@@ -1,11 +1,12 @@
 #ifndef QCEPFIXUPGAINMAPCOMMAND_H
 #define QCEPFIXUPGAINMAPCOMMAND_H
 
+#include "qceplib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepdataobject-ptr.h"
 
-class QcepFixupGainMapCommand : public QcepSerializableObject
+class QCEP_EXPORT QcepFixupGainMapCommand : public QcepSerializableObject
 {
   Q_OBJECT
 

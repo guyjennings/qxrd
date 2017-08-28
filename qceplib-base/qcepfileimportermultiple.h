@@ -1,10 +1,11 @@
 #ifndef QCEPFILEIMPORTERMULTIPLE_H
 #define QCEPFILEIMPORTERMULTIPLE_H
 
+#include "qceplib_global.h"
 #include "qcepfileimporter.h"
 #include <QVector>
 
-class QcepFileImporterMultiple : public QcepFileImporter
+class QCEP_EXPORT QcepFileImporterMultiple : public QcepFileImporter
 {
   Q_OBJECT
 

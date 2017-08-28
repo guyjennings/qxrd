@@ -1,12 +1,13 @@
 #ifndef QCEPDATAARRAY_H
 #define QCEPDATAARRAY_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include "qcepdataobject.h"
 #include "qcepdataarray-ptr.h"
 #include <QVector>
 
-class QcepDataArray : public QcepDataObject
+class QCEP_EXPORT QcepDataArray : public QcepDataObject
 {
   Q_OBJECT
 

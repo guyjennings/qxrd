@@ -1,10 +1,11 @@
 #ifndef QCEPDATASET_H
 #define QCEPDATASET_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include "qcepdatagroup.h"
 
-class QcepDataset : public QcepDataGroup
+class QCEP_EXPORT QcepDataset : public QcepDataGroup
 {
   Q_OBJECT
 

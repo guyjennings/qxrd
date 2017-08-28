@@ -1,12 +1,13 @@
 #ifndef QCEPDATASETSELECTIONDIALOG_H
 #define QCEPDATASETSELECTIONDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepdatasetselectiondialog.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepdataobject-ptr.h"
 
-class QcepDatasetSelectionDialog : public QDialog, public Ui::QcepDatasetSelectionDialog
+class QCEP_EXPORT QcepDatasetSelectionDialog : public QDialog, public Ui::QcepDatasetSelectionDialog
 {
   Q_OBJECT
 

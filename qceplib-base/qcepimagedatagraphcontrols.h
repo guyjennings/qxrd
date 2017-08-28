@@ -1,11 +1,12 @@
 #ifndef QCEPIMAGEDATAGRAPHCONTROLS_H
 #define QCEPIMAGEDATAGRAPHCONTROLS_H
 
+#include "qceplib_global.h"
 #include "qcepgraphcontrolswidget.h"
 #include "ui_qcepimagedatagraphcontrols.h"
 #include "qcepimagedata.h"
 
-class QcepImageDataGraphControls : public QcepGraphControlsWidget, public Ui::QcepImageDataGraphControls
+class QCEP_EXPORT QcepImageDataGraphControls : public QcepGraphControlsWidget, public Ui::QcepImageDataGraphControls
 {
   Q_OBJECT
 

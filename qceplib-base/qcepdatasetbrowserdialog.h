@@ -1,12 +1,13 @@
 #ifndef QCEPDATASETBROWSERDIALOG_H
 #define QCEPDATASETBROWSERDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDockWidget>
 #include "ui_qcepdatasetbrowserdialog.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepexperiment-ptr.h"
 
-class QcepDatasetBrowserDialog : public QDockWidget, public Ui::QcepDatasetBrowserDialog
+class QCEP_EXPORT QcepDatasetBrowserDialog : public QDockWidget, public Ui::QcepDatasetBrowserDialog
 {
   Q_OBJECT
 

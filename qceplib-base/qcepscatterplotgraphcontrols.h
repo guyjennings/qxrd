@@ -1,11 +1,12 @@
 #ifndef QCEPSCATTERPLOTGRAPHCONTROLS_H
 #define QCEPSCATTERPLOTGRAPHCONTROLS_H
 
+#include "qceplib_global.h"
 #include "qcepgraphcontrolswidget.h"
 #include "ui_qcepscatterplotgraphcontrols.h"
 #include "qcepscatterplotgraphmodel-ptr.h"
 
-class QcepScatterPlotGraphControls : public QcepGraphControlsWidget, public Ui::QcepScatterPlotGraphControls
+class QCEP_EXPORT QcepScatterPlotGraphControls : public QcepGraphControlsWidget, public Ui::QcepScatterPlotGraphControls
 {
   Q_OBJECT
 

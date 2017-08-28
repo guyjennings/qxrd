@@ -1,6 +1,7 @@
 #ifndef QCEPDATAOBJECTPROPERTIESWINDOW_H
 #define QCEPDATAOBJECTPROPERTIESWINDOW_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include <QWidget>
 #include "ui_qcepdataobjectpropertieswindow.h"
@@ -9,7 +10,7 @@
 #include "qcepdataobject-ptr.h"
 #include "qceppropertiesmodel.h"
 
-class QcepDataObjectPropertiesWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectPropertiesWindow
+class QCEP_EXPORT QcepDataObjectPropertiesWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectPropertiesWindow
 {
   Q_OBJECT
 public:

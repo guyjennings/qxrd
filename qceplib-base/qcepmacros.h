@@ -1,6 +1,7 @@
 #ifndef QCEPMACROS_H
 #define QCEPMACROS_H
 
+#include "qceplib_global.h"
 #include <QVector>
 #include <QList>
 #include <QMetaType>
@@ -40,7 +41,7 @@ Q_DECLARE_METATYPE(QcepPolygon)
 Q_DECLARE_METATYPE(QPointF)
 Q_DECLARE_METATYPE(QRectF)
 
-extern const char* qceplibVersion();
-extern const char* qcepH5Version();
+extern QCEP_EXPORT const char* qceplibVersion();
+extern QCEP_EXPORT const char* qcepH5Version();
 
 #endif // QCEPMACROS_H

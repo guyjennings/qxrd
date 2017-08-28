@@ -1,12 +1,13 @@
 #ifndef QCEPGRAPHCONTROLSWIDGET_H
 #define QCEPGRAPHCONTROLSWIDGET_H
 
+#include "qceplib_global.h"
 #include <QWidget>
 #include "qcepdataobject-ptr.h"
 
 class QcepDataObjectGraphWindow;
 
-class QcepGraphControlsWidget : public QWidget
+class QCEP_EXPORT QcepGraphControlsWidget : public QWidget
 {
   Q_OBJECT
 public:

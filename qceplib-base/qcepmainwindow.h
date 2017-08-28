@@ -1,10 +1,11 @@
 #ifndef QCEPMAINWINDOW_H
 #define QCEPMAINWINDOW_H
 
+#include "qceplib_global.h"
 #include <QMainWindow>
 #include <QDateTime>
 
-class QcepMainWindow : public QMainWindow
+class QCEP_EXPORT QcepMainWindow : public QMainWindow
 {
   Q_OBJECT
 public:

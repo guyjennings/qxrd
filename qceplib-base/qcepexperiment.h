@@ -1,6 +1,7 @@
 #ifndef QCEPEXPERIMENT_H
 #define QCEPEXPERIMENT_H
 
+#include "qceplib_global.h"
 #include "qcepserializableobject.h"
 #include <QDateTime>
 #include <QUndoStack>
@@ -13,7 +14,7 @@
 #include "qcepsetdatavaluerangecommand-ptr.h"
 #include "qcepfixupgainmapcommand-ptr.h"
 
-class QcepExperiment : public QcepSerializableObject
+class QCEP_EXPORT QcepExperiment : public QcepSerializableObject
 {
   Q_OBJECT
 public:

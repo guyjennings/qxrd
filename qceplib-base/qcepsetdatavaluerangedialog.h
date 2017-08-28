@@ -1,13 +1,14 @@
 #ifndef QCEPSETDATAVALUERANGEDIALOG_H
 #define QCEPSETDATAVALUERANGEDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepsetdatavaluerangedialog.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepexperiment-ptr.h"
 #include "qcepsetdatavaluerangecommand-ptr.h"
 
-class QcepSetDataValueRangeDialog : public QDialog, public Ui::QcepSetDataValueRangeDialog
+class QCEP_EXPORT QcepSetDataValueRangeDialog : public QDialog, public Ui::QcepSetDataValueRangeDialog
 {
   Q_OBJECT
 

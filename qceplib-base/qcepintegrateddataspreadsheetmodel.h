@@ -1,10 +1,11 @@
 #ifndef QCEPINTEGRATEDDATASPREADSHEETMODEL_H
 #define QCEPINTEGRATEDDATASPREADSHEETMODEL_H
 
+#include "qceplib_global.h"
 #include "qcepintegrateddata-ptr.h"
 #include "qcepspreadsheetmodel.h"
 
-class QcepIntegratedDataSpreadsheetModel : public QcepSpreadsheetModel
+class QCEP_EXPORT QcepIntegratedDataSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
   QcepIntegratedDataSpreadsheetModel(QcepIntegratedDataWPtr integ);

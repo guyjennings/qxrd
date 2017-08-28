@@ -1,9 +1,10 @@
 #ifndef QCEPSPREADSHEETMODEL_H
 #define QCEPSPREADSHEETMODEL_H
 
+#include "qceplib_global.h"
 #include <QAbstractTableModel>
 
-class QcepSpreadsheetModel : public QAbstractTableModel
+class QCEP_EXPORT QcepSpreadsheetModel : public QAbstractTableModel
 {
   Q_OBJECT
 

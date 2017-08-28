@@ -1,11 +1,12 @@
 #ifndef QCEPSCATTERPLOTGRAPHCONTROLLER_H
 #define QCEPSCATTERPLOTGRAPHCONTROLLER_H
 
+#include "qceplib_global.h"
 #include "qcepdataobjectgraphcontroller.h"
 #include "qcepscatterplotgraphmodel-ptr.h"
 #include "qcepdatacolumn-ptr.h"
 
-class QcepScatterPlotGraphController : public QcepDataObjectGraphController
+class QCEP_EXPORT QcepScatterPlotGraphController : public QcepDataObjectGraphController
 {
   Q_OBJECT
 

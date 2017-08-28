@@ -1,6 +1,7 @@
 #ifndef QCEPDATASETMODEL_H
 #define QCEPDATASETMODEL_H
 
+#include "qceplib_global.h"
 #include <QAbstractItemModel>
 #include "qcepdataset-ptr.h"
 #include "qcepdataset.h"
@@ -20,7 +21,7 @@
 #include "qcepintegrateddata.h"
 #include "qcepdataprocessorbase-ptr.h"
 
-class QcepDatasetModel : public QAbstractItemModel
+class QCEP_EXPORT QcepDatasetModel : public QAbstractItemModel
 {
   Q_OBJECT
 

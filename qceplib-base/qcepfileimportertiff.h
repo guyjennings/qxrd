@@ -1,9 +1,10 @@
 #ifndef QCEPFILEIMPORTERTIFF_H
 #define QCEPFILEIMPORTERTIFF_H
 
+#include "qceplib_global.h"
 #include "qcepfileimporter.h"
 
-class QcepFileImporterTIFF : public QcepFileImporter
+class QCEP_EXPORT QcepFileImporterTIFF : public QcepFileImporter
 {
   Q_OBJECT
 

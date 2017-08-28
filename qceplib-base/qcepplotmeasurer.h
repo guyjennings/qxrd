@@ -1,11 +1,12 @@
 #ifndef QCEPPLOTMEASURER_H
 #define QCEPPLOTMEASURER_H
 
+#include "qceplib_global.h"
 #include <qwt_plot_picker.h>
 
 #include "qcepplot-ptr.h"
 
-class QcepPlotMeasurer : public QwtPlotPicker
+class QCEP_EXPORT QcepPlotMeasurer : public QwtPlotPicker
 {
   Q_OBJECT
 

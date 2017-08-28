@@ -1,6 +1,7 @@
 #ifndef QCEPIMAGEDATAFORMAT_H
 #define QCEPIMAGEDATAFORMAT_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 
 #include <QObject>
@@ -8,7 +9,7 @@
 
 #include "qcepimagedata-ptr.h"
 
-class QcepImageDataFormatBase
+class QCEP_EXPORT QcepImageDataFormatBase
 {
  public:
   QcepImageDataFormatBase(QString name)
@@ -53,7 +54,7 @@ private:
 };
 
 template <typename T>
-class QcepImageDataFormat : public QcepImageDataFormatBase
+class QCEP_EXPORT QcepImageDataFormat : public QcepImageDataFormatBase
 {
  public:
   QcepImageDataFormat(QString fmtname);

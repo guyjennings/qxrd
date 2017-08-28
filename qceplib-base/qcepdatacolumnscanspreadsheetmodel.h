@@ -1,10 +1,11 @@
 #ifndef QCEPDATACOLUMNSCANSPREADSHEETMODEL_H
 #define QCEPDATACOLUMNSCANSPREADSHEETMODEL_H
 
+#include "qceplib_global.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepspreadsheetmodel.h"
 
-class QcepDataColumnScanSpreadsheetModel : public QcepSpreadsheetModel
+class QCEP_EXPORT QcepDataColumnScanSpreadsheetModel : public QcepSpreadsheetModel
 {
 public:
   QcepDataColumnScanSpreadsheetModel(QcepDataColumnScanWPtr scan);

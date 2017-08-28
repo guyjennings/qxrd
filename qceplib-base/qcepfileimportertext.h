@@ -1,11 +1,12 @@
 #ifndef QCEPFILEIMPORTERTEXT_H
 #define QCEPFILEIMPORTERTEXT_H
 
+#include "qceplib_global.h"
 #include "qcepfileimporter.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include <QFile>
 
-class QcepFileImporterText : public QcepFileImporter
+class QCEP_EXPORT QcepFileImporterText : public QcepFileImporter
 {
   Q_OBJECT
 

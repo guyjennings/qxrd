@@ -1,13 +1,14 @@
 #ifndef QCEPINTEGRATEDDATAQUEUE_H
 #define QCEPINTEGRATEDDATAQUEUE_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include <QReadWriteLock>
 #include <QQueue>
 #include <QSharedPointer>
 #include "qcepintegrateddata-ptr.h"
 
-class QcepIntegratedDataQueue : public QObject
+class QCEP_EXPORT QcepIntegratedDataQueue : public QObject
 {
   Q_OBJECT
 

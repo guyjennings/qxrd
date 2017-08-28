@@ -1,12 +1,13 @@
 #ifndef QCEPAPPLICATION_H
 #define QCEPAPPLICATION_H
 
+#include "qceplib_global.h"
 #include <QApplication>
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 #include "qcepdataobject-ptr.h"
 
-class QcepApplication : public QApplication, public QEnableSharedFromThis<QcepApplication>
+class QCEP_EXPORT QcepApplication : public QApplication, public QEnableSharedFromThis<QcepApplication>
 {
 public:
   QcepApplication(int &argc, char **argv);

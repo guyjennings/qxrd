@@ -1,6 +1,7 @@
 #ifndef QCEPPROPERTY_H
 #define QCEPPROPERTY_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepobject-ptr.h"
@@ -27,7 +28,7 @@
 
 typedef void (CustomSettingsSaver)(const QVariant &val, QSettings *settings, QString name);
 
-class QcepProperty : public QObject {
+class QCEP_EXPORT QcepProperty : public QObject {
   Q_OBJECT
 public:
   QcepProperty(QcepSerializableObject *parent, const char *name, QString toolTip);
@@ -74,7 +75,7 @@ private:
   static QMap<QString, CustomSettingsSaver*> m_CustomSavers;
 };
 
-class QcepDoubleProperty : public QcepProperty {
+class QCEP_EXPORT QcepDoubleProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepDoubleProperty(QcepSerializableObject *parent, const char *name, double value, QString toolTip);
@@ -103,7 +104,7 @@ private:
   double m_Value;
 };
 
-class QcepDoublePropertyDoubleSpinBoxHelper : public QObject {
+class QCEP_EXPORT QcepDoublePropertyDoubleSpinBoxHelper : public QObject {
   Q_OBJECT
 
 public:
@@ -122,7 +123,7 @@ private:
   QcepDoubleProperty *m_Property;
 };
 
-class QcepIntProperty : public QcepProperty {
+class QCEP_EXPORT QcepIntProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepIntProperty(QcepSerializableObject *parent, const char *name, int value, QString toolTip);
@@ -152,7 +153,7 @@ private:
   QAtomicInt  m_Value;
 };
 
-class QcepIntPropertySpinBoxHelper : public QObject {
+class QCEP_EXPORT QcepIntPropertySpinBoxHelper : public QObject {
   Q_OBJECT
 
 public:
@@ -171,7 +172,7 @@ private:
   QcepIntProperty *m_Property;
 };
 
-class QcepIntPropertyComboBoxHelper : public QObject {
+class QCEP_EXPORT QcepIntPropertyComboBoxHelper : public QObject {
   Q_OBJECT
 
 public:
@@ -190,7 +191,7 @@ private:
   QcepIntProperty *m_Property;
 };
 
-class QcepBoolProperty : public QcepProperty {
+class QCEP_EXPORT QcepBoolProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepBoolProperty(QcepSerializableObject *parent, const char *name, bool value, QString toolTip);
@@ -215,7 +216,7 @@ private:
   QAtomicInt   m_Value;
 };
 
-class QcepBoolPropertyButtonHelper : public QObject {
+class QCEP_EXPORT QcepBoolPropertyButtonHelper : public QObject {
   Q_OBJECT
 
 public:
@@ -234,7 +235,7 @@ private:
   QcepBoolProperty *m_Property;
 };
 
-class QcepStringProperty : public QcepProperty {
+class QCEP_EXPORT QcepStringProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepStringProperty(QcepSerializableObject *parent, const char *name, QString value, QString toolTip);
@@ -262,7 +263,7 @@ private:
   QString m_Value;
 };
 
-class QcepStringPropertyComboBoxHelper : public QObject {
+class QCEP_EXPORT QcepStringPropertyComboBoxHelper : public QObject {
   Q_OBJECT
 
 public:
@@ -281,7 +282,7 @@ private:
   QcepStringProperty *m_Property;
 };
 
-class QcepStringPropertyLineEditHelper : public QObject {
+class QCEP_EXPORT QcepStringPropertyLineEditHelper : public QObject {
   Q_OBJECT
 
 public:
@@ -300,7 +301,7 @@ private:
   QcepStringProperty *m_Property;
 };
 
-class QcepStringPropertyTextEditHelper : public QObject {
+class QCEP_EXPORT QcepStringPropertyTextEditHelper : public QObject {
   Q_OBJECT
 
 public:
@@ -319,7 +320,7 @@ private:
   QcepStringProperty *m_Property;
 };
 
-class QcepDateTimeProperty : public QcepProperty {
+class QCEP_EXPORT QcepDateTimeProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepDateTimeProperty(QcepSerializableObject *parent, const char *name, QDateTime value, QString toolTip);
@@ -342,7 +343,7 @@ private:
 };
 
 
-class QcepDoubleListProperty : public QcepProperty {
+class QCEP_EXPORT QcepDoubleListProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepDoubleListProperty(QcepSerializableObject *parent, const char *name, QcepDoubleList value, QString toolTip);
@@ -368,7 +369,7 @@ private:
   QcepDoubleList m_Value;
 };
 
-class QcepDoubleVectorProperty : public QcepProperty {
+class QCEP_EXPORT QcepDoubleVectorProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepDoubleVectorProperty(QcepSerializableObject *parent, const char *name, QcepDoubleVector value, QString toolTip);
@@ -394,7 +395,7 @@ private:
   QcepDoubleVector m_Value;
 };
 
-class QcepIntListProperty : public QcepProperty {
+class QCEP_EXPORT QcepIntListProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepIntListProperty(QcepSerializableObject *parent, const char *name, QcepIntList value, QString toolTip);
@@ -420,7 +421,7 @@ private:
   QcepIntList m_Value;
 };
 
-class QcepIntVectorProperty : public QcepProperty {
+class QCEP_EXPORT QcepIntVectorProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepIntVectorProperty(QcepSerializableObject *parent, const char *name, QcepIntVector value, QString toolTip);
@@ -446,7 +447,7 @@ private:
   QcepIntVector m_Value;
 };
 
-class QcepStringListProperty : public QcepProperty {
+class QCEP_EXPORT QcepStringListProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepStringListProperty(QcepSerializableObject *parent, const char *name, QStringList value, QString toolTip);
@@ -471,7 +472,7 @@ private:
   QStringList m_Value;
 };
 
-class QcepByteArrayProperty : public QcepProperty {
+class QCEP_EXPORT QcepByteArrayProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepByteArrayProperty(QcepSerializableObject *parent, const char *name, QByteArray value, QString toolTip);
@@ -495,7 +496,7 @@ private:
   QByteArray m_Value;
 };
 
-class QcepDoublePointProperty : public QcepProperty {
+class QCEP_EXPORT QcepDoublePointProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepDoublePointProperty(QcepSerializableObject *parent, const char *name, QPointF value, QString toolTip);
@@ -524,7 +525,7 @@ private:
   QPointF m_Value;
 };
 
-class QcepDoublePointPropertyDoubleSpinBoxHelper : public QObject {
+class QCEP_EXPORT QcepDoublePointPropertyDoubleSpinBoxHelper : public QObject {
   Q_OBJECT
 
 public:
@@ -544,7 +545,7 @@ private:
   int                         m_Axis;
 };
 
-class QcepDoubleRectProperty : public QcepProperty {
+class QCEP_EXPORT QcepDoubleRectProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepDoubleRectProperty(QcepSerializableObject *parent, const char *name, QRectF value, QString toolTip);
@@ -566,7 +567,7 @@ private:
   QRectF m_Value;
 };
 
-class QcepPolygonProperty : public QcepProperty {
+class QCEP_EXPORT QcepPolygonProperty : public QcepProperty {
   Q_OBJECT
 public:
   QcepPolygonProperty(QcepSerializableObject *parent, const char *name, QcepPolygon value, QString toolTip);
@@ -590,7 +591,7 @@ private:
   QcepPolygon m_Value;
 };
 
-class QcepInt64Property : public QcepProperty {
+class QCEP_EXPORT QcepInt64Property : public QcepProperty {
   Q_OBJECT
 public:
   QcepInt64Property(QcepSerializableObject *parent, const char *name, qint64 value, QString toolTip);

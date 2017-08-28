@@ -1,13 +1,14 @@
 #ifndef QCEPSETRANGEOFIMAGEDIALOG_H
 #define QCEPSETRANGEOFIMAGEDIALOG_H
 
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepsetrangeofimagedialog.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepexperiment-ptr.h"
 #include "qcepsetrangeofimagecommand-ptr.h"
 
-class QcepSetRangeOfImageDialog : public QDialog, public Ui::QcepSetRangeOfImageDialog
+class QCEP_EXPORT QcepSetRangeOfImageDialog : public QDialog, public Ui::QcepSetRangeOfImageDialog
 {
   Q_OBJECT
 

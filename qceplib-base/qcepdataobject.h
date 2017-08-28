@@ -1,6 +1,7 @@
 #ifndef QCEPDATAOBJECT_H
 #define QCEPDATAOBJECT_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include "qcepserializableobject.h"
 #include "qcepdataobject-ptr.h"
@@ -8,7 +9,7 @@
 #include <QScriptValue>
 #include "qcepproperty.h"
 
-class QcepDataObject : public QcepSerializableObject
+class QCEP_EXPORT QcepDataObject : public QcepSerializableObject
 {
   Q_OBJECT
 

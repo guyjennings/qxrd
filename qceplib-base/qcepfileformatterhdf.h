@@ -1,11 +1,12 @@
 #ifndef QCEPFILEFORMATTERHDF_H
 #define QCEPFILEFORMATTERHDF_H
 
+#include "qceplib_global.h"
 #include "qcepfileformatter.h"
 
 #ifdef HAVE_HDF5
 
-class QcepFileFormatterHDF : public QcepFileFormatter
+class QCEP_EXPORT QcepFileFormatterHDF : public QcepFileFormatter
 {
 public:
   QcepFileFormatterHDF(QString filePath);

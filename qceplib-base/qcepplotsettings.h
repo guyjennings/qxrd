@@ -1,10 +1,11 @@
 #ifndef QCEPPLOTSETTINGS_H
 #define QCEPPLOTSETTINGS_H
 
+#include "qceplib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
 
-class QcepPlotSettings : public QcepSerializableObject
+class QCEP_EXPORT QcepPlotSettings : public QcepSerializableObject
 {
   Q_OBJECT
 

@@ -1,22 +1,23 @@
 #ifndef QCEPDOCUMENTATIONDICTIONARY_H
 #define QCEPDOCUMENTATIONDICTIONARY_H
 
+#include "qceplib_global.h"
 #include <QString>
 #include <QHash>
 
-class QcepDocumentationForObject
+class QCEP_EXPORT QcepDocumentationForObject
 {
 public:
   QcepDocumentationForObject(QString objectName, QString objectDoc);
 };
 
-class QcepLongDocumentationForObject
+class QCEP_EXPORT QcepLongDocumentationForObject
 {
 public:
   QcepLongDocumentationForObject(QString objectName, QString longDoc);
 };
 
-class QcepDocumentationForFunction : public QcepDocumentationForObject
+class QCEP_EXPORT QcepDocumentationForFunction : public QcepDocumentationForObject
 {
 public:
   QcepDocumentationForFunction(QString functionName,
@@ -25,7 +26,7 @@ public:
                                QString functionLogDoc);
 };
 
-class QcepDocumentationDictionary
+class QCEP_EXPORT QcepDocumentationDictionary
 {
 public:
   QcepDocumentationDictionary();
@@ -56,7 +57,7 @@ private:
   QHash<QString,QString> m_LongDocs;
 };
 
-extern QcepDocumentationDictionary *gDocumentationDirectory;
+extern QCEP_EXPORT QcepDocumentationDictionary *gDocumentationDirectory;
 
 #define _TOKENPASTE(x, y) x ## y
 #define TOKENPASTE(x, y) _TOKENPASTE(x, y)

@@ -1,6 +1,7 @@
 #ifndef QCEPIMAGEDATAFORMATFACTORY_H
 #define QCEPIMAGEDATAFORMATFACTORY_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 
 #include <QObject>
@@ -9,7 +10,7 @@
 #include "qcepimagedataformat-ptr.h"
 
 template <typename T>
-class QcepImageDataFormatFactory
+class QCEP_EXPORT QcepImageDataFormatFactory
 {
  private:
   static bool s_Created;

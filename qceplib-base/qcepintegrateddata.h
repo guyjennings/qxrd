@@ -1,12 +1,13 @@
 #ifndef QCEPINTEGRATEDDATA_H
 #define QCEPINTEGRATEDDATA_H
 
+#include "qceplib_global.h"
 #include "qcepproperty.h"
 #include "qcepdataobject.h"
 //#include "qcepimagedata-ptr.h"
 #include "qcepintegrateddata-ptr.h"
 
-class QcepIntegratedData : public QcepDataObject
+class QCEP_EXPORT QcepIntegratedData : public QcepDataObject
 {
   Q_OBJECT
 

@@ -1,9 +1,10 @@
 #ifndef QCEPPROPERTIESMODEL_H
 #define QCEPPROPERTIESMODEL_H
 
+#include "qceplib_global.h"
 #include <QAbstractTableModel>
 
-class QcepPropertiesModel : public QAbstractTableModel
+class QCEP_EXPORT QcepPropertiesModel : public QAbstractTableModel
 {
   Q_OBJECT
 
