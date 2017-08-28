@@ -1,39 +1,8 @@
 message(qceplib-hdf5 PWD = $${PWD} QCEPLIB_HDF5_VERSION = $${QCEPLIB_HDF5_VERSION})
 
-linux-g++:QMAKE_TARGET.arch = $$QMAKE_HOST.arch
-linux-g++-32:QMAKE_TARGET.arch = x86
-linux-g++-64:QMAKE_TARGET.arch = x86_64
-macx-*-32:QMAKE_TARGET.arch = x86
+include(qceplib-hdf5-include-$${QCEPLIB_HDF5_VERSION}.pri)
 
-HDF5BASE    = $${PWD}/hdf5-$${QCEPLIB_HDF5_VERSION}/src/
-HDF5CPPBASE = $${PWD}/hdf5-$${QCEPLIB_HDF5_VERSION}/c++/src/
-
-macx {
-  HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/macx/
-} else:win32 {
-  contains(QMAKE_TARGET.arch, x86_64) {
-    message(64 bit build)
-    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/win64/
-  } else {
-    message(32 bit build)
-    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/win32/
-  }
-} else:unix {
-  contains(QMAKE_TARGET.arch, x86_64) {
-    message(64 bit build)
-    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/lin64/
-  } else {
-    message(32 bit build)
-    HDF5CONF = $${PWD}/hdf5-config-$${QCEPLIB_HDF5_VERSION}/lin32/
-  }
-  DEFINES += _LARGEFILE_SOURCE
-  DEFINES += _LARGEFILE64_SOURCE
-  LIBS += -ldl -lz
-}
-
-INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
-
-  HEADERS += \
+HEADERS += \
     $${HDF5CONF}/H5config.h \
     $${HDF5CONF}/H5pubconf.h \
     $${HDF5BASE}/H5ACpkg.h \
@@ -149,7 +118,7 @@ INCLUDEPATH += $${HDF5BASE} $${HDF5CONF} $${HDF5CPPBASE}
     $${HDF5BASE}/hdf5.h
 
 
-  SOURCES += \
+SOURCES += \
     $${HDF5CONF}/H5lib_settings.c \
     $${HDF5CONF}/H5Tinit.c \
     $${HDF5BASE}/H5.c \

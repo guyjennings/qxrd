@@ -1,0 +1,5 @@
+QCEPLIB_QWT_VERSION = "6.1.3"
+
+DEFINES += HAVE_QWT QCEPLIB_QWT_VERSION=\"$${QCEPLIB_QWT_VERSION}\"
+
+include(qceplib-qwt/qceplib-qwt-include-$${QCEPLIB_QWT_VERSION}.pri)

@@ -1,6 +1,6 @@
 message(qceplib-mar345 PWD = $${PWD} QCEPLIB_MAR345_VERSION = $${QCEPLIB_MAR345_VERSION})
 
-INCLUDEPATH += $${PWD}
+include(qceplib-mar345-include-$${QCEPLIB_MAR345_VERSION}.pri)
 
 SOURCES += \
   $${PWD}/qcepimagedataformatmar345.cpp

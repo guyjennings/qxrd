@@ -1,6 +1,6 @@
 message(qceplib-levmar PWD = $${PWD} QCEPLIB_LEVMAR_VERSION = $${QCEPLIB_LEVMAR_VERSION})
 
-INCLUDEPATH += $${PWD}/levmar-2.6
+include(qceplib-levmar-include-$${QCEPLIB_LEVMAR_VERSION}.pri)
 
 SOURCES += \
   $${PWD}/levmar-2.6/Axb.c  \

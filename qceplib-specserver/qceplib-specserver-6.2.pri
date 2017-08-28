@@ -1,8 +1,6 @@
 message(qceplib-specserver PWD = $${PWD} QCEPLIB_SPECSERVER_VERSION = $${QCEPLIB_SPECSERVER_VERSION})
 
-QT += network script
-
-INCLUDEPATH += $${PWD}
+include(qceplib-specserver-include-$${QCEPLIB_SPECSERVER_VERSION}.pri)
 
 SOURCES += \
   $${PWD}/qspecserver.cpp \

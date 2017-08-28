@@ -8,13 +8,16 @@ CONFIG += qt
 
 QT += script
 
+include(qceplib-base-include-$${CEPLIB_VERSION}.pri)
+
 contains (DEFINES,HAVE_QWT) {
  message(qceplib-base wants qwt)
+ include(../qceplib-qwt-include.pri)
 } else {
  message(qceplib-base no qwt)
 }
 
-INCLUDEPATH += $${PWD}
+include(../qceplib-tiff-include.pri)
 
 SOURCES += \
   $${PWD}/qcepmacros.cpp \

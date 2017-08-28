@@ -1,9 +1,6 @@
+include(qt-libtiff-win32-include.pri)
+
 win32 {
-  TIFFBASE = $${PWD}/../tiff-$${QCEPLIB_TIFF_VERSION}/libtiff/
-  TIFFCONF = $${PWD}/../tiffconfig-$${QCEPLIB_TIFF_VERSION}/win32/
-
-  INCLUDEPATH += $${TIFFBASE} $${TIFFCONF}
-
   HEADERS += \
         $${TIFFCONF}/tif_config.h \
         $${TIFFCONF}/tiffconf.h \

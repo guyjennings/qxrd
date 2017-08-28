@@ -1,0 +1,5 @@
+QCEPLIB_HDF5_VERSION = "1.10.1"
+
+DEFINES += QCEPLIB_HDF5_VERSION=\"$${QCEPLIB_HDF5_VERSION}\"
+
+include(qceplib-hdf5/qceplib-hdf5-include-$${QCEPLIB_HDF5_VERSION}.pri)

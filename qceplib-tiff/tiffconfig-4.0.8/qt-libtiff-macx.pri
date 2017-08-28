@@ -1,11 +1,8 @@
 message(libtiff PWD = $${PWD})
 
+include(qt-libtiff-macx-include.pri)
+
 macx {
-  TIFFBASE = $${PWD}/../tiff-$${QCEPLIB_TIFF_VERSION}/libtiff/
-  TIFFCONF = $${PWD}/../tiffconfig-$${QCEPLIB_TIFF_VERSION}/macx/
-
-  INCLUDEPATH += $${TIFFBASE} $${TIFFCONF}
-
   HEADERS += \
         $${TIFFCONF}/tif_config.h \
         $${TIFFCONF}/tiffconf.h \

@@ -1,0 +1,5 @@
+QCEPLIB_SPECSERVER_VERSION = "6.2"
+
+DEFINES += QCEPLIB_SPECSERVER_VERSION=\"$${QCEPLIB_SPECSERVER_VERSION}\"
+
+include(qceplib-specserver/qceplib-specserver-include-$${QCEPLIB_SPECSERVER_VERSION}.pri)

@@ -1,5 +1,2 @@
-QCEPLIB_MAR345_VERSION = "1.0"
-
-DEFINES += QCEPLIB_MAR345_VERSION=\"$${QCEPLIB_MAR345_VERSION}\"
-
+include(qceplib-mar345-include.pri)
 include(qceplib-mar345/qceplib-mar345-$${QCEPLIB_MAR345_VERSION}.pri)
