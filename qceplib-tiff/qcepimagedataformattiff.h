@@ -32,5 +32,17 @@ private:
 extern QCEP_EXPORT void qceptiff_warningHandler(const char *module, const char *fmt, va_list ap);
 extern QCEP_EXPORT QString qcepTIFFVersion();
 
+extern QCEP_EXPORT TIFFErrorHandler qcepTIFFSetErrorHandler(TIFFErrorHandler handler);
+extern QCEP_EXPORT TIFFErrorHandlerExt qcepTIFFSetErrorHandlerExt(TIFFErrorHandlerExt handler);
+extern QCEP_EXPORT TIFFErrorHandler qcepTIFFSetWarningHandler(TIFFErrorHandler handler);
+extern QCEP_EXPORT TIFFErrorHandlerExt qcepTIFFSetWarningHandlerExt(TIFFErrorHandlerExt handler);
+
+extern QCEP_EXPORT TIFF* qcepTIFFOpen(const char *name, const char *mode);
+extern QCEP_EXPORT void  qcepTIFFClose(TIFF* tif);
+extern QCEP_EXPORT int   qcepTIFFSetField(TIFF* tif, uint32 tag, int ival);
+extern QCEP_EXPORT int   qcepTIFFSetField(TIFF* tif, uint32 tag, double dval);
+extern QCEP_EXPORT int   qcepTIFFSetField(TIFF* tif, uint32 tag, const char* sval);
+extern QCEP_EXPORT int   qcepTIFFWriteScanline(TIFF* tif, void* buf, uint32 row, uint16 sample);
+
 #endif /* QCEPIMAGEDATAFORMATTIFF_H */
 

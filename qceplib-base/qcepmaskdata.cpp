@@ -320,15 +320,14 @@ QSize QcepMaskData::thumbnailImageSize() const
   return QSize(ThumbnailWidth, ThumbnailHeight);
 }
 
-template <typename T>
-void QcepMaskData::setMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max, bool inRange, bool setTo)
+void QcepMaskData::setMaskRange(QcepDoubleImageDataPtr image, double min, double max, bool inRange, bool setTo)
 {
   int nRows = image -> get_Height();
   int nCols = image -> get_Width();
 
   for (int y=0; y<nRows; y++) {
     for (int x=0; x<nCols; x++) {
-      T v = image -> value(x,y);
+      double v = image -> value(x,y);
 
       if (((v >= min) && (v < max)) == inRange) {
         setValue(x,y,setTo);
@@ -337,17 +336,12 @@ void QcepMaskData::setMaskRange(QSharedPointer< QcepImageData<T> > image, T min,
   }
 }
 
-template <typename T>
-void QcepMaskData::hideMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max)
+void QcepMaskData::hideMaskRange(QcepDoubleImageDataPtr image, double min, double max)
 {
-  setMaskRange<T>(image, min, max, true, false);
+  setMaskRange(image, min, max, true, false);
 }
 
-template <typename T>
-void QcepMaskData::showMaskRange(QSharedPointer< QcepImageData<T> > image, T min, T max)
+void QcepMaskData::showMaskRange(QcepDoubleImageDataPtr image, double min, double max)
 {
-  setMaskRange<T>(image, min, max, true, true);
+  setMaskRange(image, min, max, true, true);
 }
-
-template void QcepMaskData::hideMaskRange<double>(QSharedPointer<QcepImageData<double> >, double, double);
-template void QcepMaskData::showMaskRange<double>(QSharedPointer<QcepImageData<double> >, double, double);

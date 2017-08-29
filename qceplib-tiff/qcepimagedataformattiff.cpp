@@ -299,3 +299,53 @@ template class QcepImageDataFormatTiff<short>;
 template class QcepImageDataFormatTiff<unsigned int>;
 template class QcepImageDataFormatTiff<int>;
 template class QcepImageDataFormatTiff<double>;
+
+TIFFErrorHandler qcepTIFFSetErrorHandler(TIFFErrorHandler handler)
+{
+  return TIFFSetErrorHandler(handler);
+}
+
+TIFFErrorHandlerExt qcepTIFFSetErrorHandlerExt(TIFFErrorHandlerExt handler)
+{
+  return TIFFSetErrorHandlerExt(handler);
+}
+
+TIFFErrorHandler qcepTIFFSetWarningHandler(TIFFErrorHandler handler)
+{
+  return TIFFSetWarningHandler(handler);
+}
+
+TIFFErrorHandlerExt qcepTIFFSetWarningHandlerExt(TIFFErrorHandlerExt handler)
+{
+  return TIFFSetWarningHandlerExt(handler);
+}
+
+TIFF* qcepTIFFOpen(const char *name, const char *mode)
+{
+  return TIFFOpen(name, mode);
+}
+
+void  qcepTIFFClose(TIFF* tif)
+{
+  TIFFClose(tif);
+}
+
+int   qcepTIFFSetField(TIFF* tif, uint32 tag, int ival)
+{
+  return TIFFSetField(tif, tag, ival);
+}
+
+int   qcepTIFFSetField(TIFF* tif, uint32 tag, double dval)
+{
+  return TIFFSetField(tif, tag, dval);
+}
+
+int   qcepTIFFSetField(TIFF* tif, uint32 tag, const char* sval)
+{
+  return TIFFSetField(tif, tag, sval);
+}
+
+int   qcepTIFFWriteScanline(TIFF* tif, void* buf, uint32 row, uint16 sample)
+{
+  return TIFFWriteScanline(tif, buf, row, sample);
+}
