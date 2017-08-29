@@ -8,7 +8,7 @@ CONFIG += plugin
 
 DESTDIR = ../../plugins/
 
-INCLUDEPATH += ../../source/
+INCLUDEPATH += ../../libraries/qxrdlib/
 
 HEADERS += \
     qxrdcudaprocessorplugin.h

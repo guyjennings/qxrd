@@ -6,7 +6,7 @@ CONFIG += plugin
 
 DESTDIR = ../../plugins/
 
-INCLUDEPATH += ../../source/ ../../source/submodules/qceplib/qceplib-base
+INCLUDEPATH += ../../libraries/qxrdlib/ ../../source/submodules/qceplib/qceplib-base
 
 contains(DEFINES,HAVE_NIDAQ) {
   INCLUDEPATH += "$${NIDAQ_HEADER}"

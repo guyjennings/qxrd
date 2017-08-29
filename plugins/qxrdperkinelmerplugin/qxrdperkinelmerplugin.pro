@@ -6,7 +6,7 @@ CONFIG += plugin
 
 DESTDIR = ../../plugins/
 
-INCLUDEPATH += ../../source/
+INCLUDEPATH += ../../libraries/qxrdlib/
 INCLUDEPATH += $$PE_SDK/
 
 LIBS += $${PE_SDK}/XISL.lib
