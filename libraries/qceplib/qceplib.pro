@@ -6,9 +6,14 @@
 
 QT       += widgets qml network script concurrent datavisualization charts
 
-TARGET = qceplib
+win32:CONFIG(debug, debug|release) {
+  TARGET = qceplibd
+} else {
+  TARGET = qceplib
+}
+
 TEMPLATE = lib
-DESTDIR  = ../../libs/
+DESTDIR  = ../../
 
 DEFINES += QCEPLIB_LIBRARY
 
@@ -40,7 +45,7 @@ DEFINES += ZLIB_MAKEDLL
 DEFINES += HDF5_MAKEDLL
 DEFINES += SPECSERVER_MAKEDLL
 
-DEFINES += H5_BUILT_AS_DYNAMIC_LIB
+#DEFINES += H5_BUILT_AS_DYNAMIC_LIB
 
 include(../../source/submodules/qceplib/qceplib-qwt.pri)
 include(../../source/submodules/qceplib/qceplib-base.pri)

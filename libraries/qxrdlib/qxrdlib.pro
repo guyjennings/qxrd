@@ -6,9 +6,14 @@
 
 QT       += widgets qml network script
 
-TARGET = qxrdlib
+win32:CONFIG(debug, debug|release) {
+  TARGET = qxrdlibd
+} else {
+  TARGET = qxrdlib
+}
+
 TEMPLATE = lib
-DESTDIR = ../../libs/
+DESTDIR = ../../
 
 DEFINES += QXRDLIB_LIBRARY
 

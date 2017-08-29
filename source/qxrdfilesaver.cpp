@@ -9,7 +9,7 @@
 #include "qxrdexperiment.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegrator.h"
-
+#include "qcepimagedataformattiff.h"
 #include <QDir>
 
 #include "tiffio.h"
@@ -213,20 +213,20 @@ void QxrdFileSaver::saveDoubleDataPrivate(QString name, QcepDoubleImageDataPtr i
       name = uniqueFileName(name);
     }
 
-    TIFF* tif = TIFFOpen(qPrintable(name),"w");
+    TIFF* tif = qcepTIFFOpen(qPrintable(name),"w");
     int res = 1;
 
     if (tif) {
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP));
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
 
       QVector<float> buffvec(ncols);
       float* buffer = buffvec.data();
@@ -236,10 +236,10 @@ void QxrdFileSaver::saveDoubleDataPrivate(QString name, QcepDoubleImageDataPtr i
           buffer[x] = image->value(x,y);
         }
 
-        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+        TIFFCHECK(qcepTIFFWriteScanline(tif, buffer, y, 0));
       }
 
-      TIFFClose(tif);
+      qcepTIFFClose(tif);
 
       image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);
@@ -325,21 +325,21 @@ void QxrdFileSaver::saveMaskDataPrivate(QString name, QcepMaskDataPtr image, int
       name = uniqueFileName(name);
     }
 
-    TIFF* tif = TIFFOpen(qPrintable(name),"w");
+    TIFF* tif = qcepTIFFOpen(qPrintable(name),"w");
     int res = 1;
 
     if (tif) {
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
 
       QVector<quint8> buffvec(ncols);
       quint8* buffer = buffvec.data();
@@ -349,10 +349,10 @@ void QxrdFileSaver::saveMaskDataPrivate(QString name, QcepMaskDataPtr image, int
           buffer[x] = image->value(x,y);
         }
 
-        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+        TIFFCHECK(qcepTIFFWriteScanline(tif, buffer, y, 0));
       }
 
-      TIFFClose(tif);
+      qcepTIFFClose(tif);
 
       image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);
@@ -408,30 +408,30 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepUInt32ImageDataPtr im
       g_Application->printMessage(tr("Starting to save %1, fileIndex = %2").arg(name).arg(image->get_ImageNumber()));
     }
 
-    TIFF* tif = TIFFOpen(qPrintable(name),"w");
+    TIFF* tif = qcepTIFFOpen(qPrintable(name),"w");
     int res = 1;
 
     if (tif) {
       int nsum = image->get_SummedExposures();
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
 
       if (nsum == 0) {
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8));
+        TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8));
       } else if (nsum == 1) {
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
+        TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
       } else {
-        TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
+        TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 32));
       }
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
 
       if (nsum == 0) {
         QVector<quint8> buffvec(ncols);
@@ -442,7 +442,7 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepUInt32ImageDataPtr im
             buffer[x] = image->value(x,y);
           }
 
-          TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+          TIFFCHECK(qcepTIFFWriteScanline(tif, buffer, y, 0));
         }
       } else if (nsum == 1) {
         QVector<quint16> buffvec(ncols);
@@ -453,7 +453,7 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepUInt32ImageDataPtr im
             buffer[x] = image->value(x,y);
           }
 
-          TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+          TIFFCHECK(qcepTIFFWriteScanline(tif, buffer, y, 0));
         }
       } else {
         QVector<quint32> buffvec(ncols);
@@ -464,11 +464,11 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepUInt32ImageDataPtr im
             buffer[x] = image->value(x,y);
           }
 
-          TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+          TIFFCHECK(qcepTIFFWriteScanline(tif, buffer, y, 0));
         }
       }
 
-      TIFFClose(tif);
+      qcepTIFFClose(tif);
 
       image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);
@@ -537,21 +537,21 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString name, QcepUInt16ImageDataPtr im
       name = uniqueFileName(name);
     }
 
-    TIFF* tif = TIFFOpen(qPrintable(name),"w");
+    TIFF* tif = qcepTIFFOpen(qPrintable(name),"w");
     int res = 1;
 
     if (tif) {
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_IMAGEWIDTH, ncols));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_IMAGELENGTH, nrows));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1));
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 16));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_UINT));
 
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
-      TIFFCHECK(TIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_DOCUMENTNAME, qPrintable(image->get_FileName())));
+      TIFFCHECK(qcepTIFFSetField(tif, TIFFTAG_DATETIME,     qPrintable(image->get_DateTime().toString("yyyy:MM:dd hh:mm:ss"))));
 
       QVector<quint16> buffvec(ncols);
       quint16* buffer = buffvec.data();
@@ -561,10 +561,10 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString name, QcepUInt16ImageDataPtr im
           buffer[x] = image->value(x,y);
         }
 
-        TIFFCHECK(TIFFWriteScanline(tif, buffer, y, 0));
+        TIFFCHECK(qcepTIFFWriteScanline(tif, buffer, y, 0));
       }
 
-      TIFFClose(tif);
+      qcepTIFFClose(tif);
 
       image -> set_FileBase(QFileInfo(name).fileName());
       image -> set_FileName(name);

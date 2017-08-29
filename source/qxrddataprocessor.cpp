@@ -1170,7 +1170,7 @@ void QxrdDataProcessor::hideMaskRangeStack(int pos)
   double max = get_MaskMaximumValue();
 
   if (m_Data && p >= 0) {
-    m_Masks[p] -> hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
+    m_Masks[p] -> hideMaskRange(m_Data, min, max);
 
     m_Masks.changed();
 
@@ -1186,7 +1186,7 @@ void QxrdDataProcessor::showMaskRangeStack(int pos)
   double max = get_MaskMaximumValue();
 
   if (m_Data && p >= 0) {
-    m_Masks[p] -> showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
+    m_Masks[p] -> showMaskRange(m_Data, min, max);
 
     m_Masks.changed();
 
@@ -1726,7 +1726,7 @@ void QxrdDataProcessor::showMaskRange(double min, double max)
   createMaskIfNeeded();
 
   if (m_Data && mask()) {
-    mask() -> showMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
+    mask() -> showMaskRange(m_Data, min, max);
 
     newMask();
   }
@@ -1768,7 +1768,7 @@ void QxrdDataProcessor::hideMaskRange(double min, double max)
 
 
   if (m_Data && mask()) {
-    mask() -> hideMaskRange(QSharedPointer< QcepImageData<double> >(m_Data), min, max);
+    mask() -> hideMaskRange(m_Data, min, max);
 
     newMask();
   }

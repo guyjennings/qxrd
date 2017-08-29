@@ -918,9 +918,12 @@ never {
    }
 }
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../libs/ -lqceplib
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../libs/ -lqceplibd
-else:unix: LIBS += -L$$OUT_PWD/../libs/ -lqceplib
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ -lqceplib
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ -lqceplibd
+else:unix: LIBS += -L$$OUT_PWD/../ -lqceplib
 
 INCLUDEPATH += $$PWD/../libraries/qceplib
 DEPENDPATH += $$PWD/../libraries/qceplib
+
+INCLUDEPATH += $$OUT_PWD/../libraries/qceplib
+DEPENDPATH  += $$OUT_PWD/../libraries/qceplib

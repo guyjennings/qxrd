@@ -37,6 +37,7 @@
 #include "qxrdwindowsettings.h"
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdtestgenerator.h"
+#include "qcepimagedataformattiff.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -794,10 +795,10 @@ static void qxrdTIFFErrorHandler(const char* module, const char* fmt, va_list ap
 
 void QxrdApplication::setupTiffHandlers()
 {
-  TIFFSetErrorHandler      (&qxrdTIFFErrorHandler);
-  TIFFSetErrorHandlerExt   (NULL);
-  TIFFSetWarningHandler    (&qxrdTIFFWarningHandler);
-  TIFFSetWarningHandlerExt (NULL);
+  qcepTIFFSetErrorHandler      (&qxrdTIFFErrorHandler);
+  qcepTIFFSetErrorHandlerExt   (NULL);
+  qcepTIFFSetWarningHandler    (&qxrdTIFFWarningHandler);
+  qcepTIFFSetWarningHandlerExt (NULL);
 }
 
 void QxrdApplication::tiffWarning(const char *module, const char *msg)
