@@ -128,6 +128,7 @@ contains (DEFINES, HAVE_QWT) {
 
 
 HEADERS += \
+  $${PWD}/qceplib_global.h \
   $${PWD}/qcepmacros.h \
   $${PWD}/qcepdebug.h \
   $${PWD}/qcepproperty.h \
