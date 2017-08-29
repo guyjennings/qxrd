@@ -1,10 +1,11 @@
 #ifndef QXRDDETECTORDRIVERFILEWATCHER_H
 #define QXRDDETECTORDRIVERFILEWATCHER_H
 
+#include "qxrdlib_global.h"
 #include "qxrddetectordriver.h"
 #include "qxrddetectorsettingsfilewatcher-ptr.h"
 
-class QxrdDetectorDriverFileWatcher : public QxrdDetectorDriver
+class QXRD_EXPORT QxrdDetectorDriverFileWatcher : public QxrdDetectorDriver
 {
   Q_OBJECT
 

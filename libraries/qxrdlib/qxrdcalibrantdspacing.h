@@ -1,13 +1,14 @@
 #ifndef QXRDCALIBRANTDSPACING_H
 #define QXRDCALIBRANTDSPACING_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include <QSettings>
 #include <QScriptValue>
 #include <QScriptEngine>
 #include "qcepproperty.h"
 
-class QxrdCalibrantDSpacing
+class QXRD_EXPORT QxrdCalibrantDSpacing
 {
 public:
   QxrdCalibrantDSpacing(int calIndex, int h, int k, int l, int n, double d, double tth);
@@ -59,8 +60,8 @@ Q_DECLARE_METATYPE(QxrdCalibrantDSpacing)
 
 #ifndef QT_NO_DATASTREAM
 
-extern QDataStream &operator<<(QDataStream &stream, const QxrdCalibrantDSpacing &pt);
-extern QDataStream &operator>>(QDataStream &stream, QxrdCalibrantDSpacing &pt);
+extern QXRD_EXPORT QDataStream &operator<<(QDataStream &stream, const QxrdCalibrantDSpacing &pt);
+extern QXRD_EXPORT QDataStream &operator>>(QDataStream &stream, QxrdCalibrantDSpacing &pt);
 
 #endif
 

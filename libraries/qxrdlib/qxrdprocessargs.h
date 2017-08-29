@@ -1,11 +1,12 @@
 #ifndef QXRDPROCESSARGS_H
 #define QXRDPROCESSARGS_H
 
+#include "qxrdlib_global.h"
 #include <QString>
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
-class QxrdProcessArgs {
+class QXRD_EXPORT QxrdProcessArgs {
 public:
   QxrdProcessArgs(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow)
     : m_FilePattern(filePattern),

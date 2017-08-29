@@ -1,12 +1,13 @@
 #ifndef QXRDDETECTORDRIVERPILATUS_H
 #define QXRDDETECTORDRIVERPILATUS_H
 
+#include "qxrdlib_global.h"
 #include "qxrddetectordriver.h"
 #include <QTcpSocket>
 #include "qxrddetectorpilatusremote-ptr.h"
 #include "qxrddetectorsettingspilatus-ptr.h"
 
-class QxrdDetectorDriverPilatus : public QxrdDetectorDriver
+class QXRD_EXPORT QxrdDetectorDriverPilatus : public QxrdDetectorDriver
 {
   Q_OBJECT
 

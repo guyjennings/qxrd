@@ -1,11 +1,12 @@
 #ifndef QXRDFITPARAMETER_H
 #define QXRDFITPARAMETER_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdfitparameter-ptr.h"
 
-class QxrdFitParameter : public QcepDoubleProperty
+class QXRD_EXPORT QxrdFitParameter : public QcepDoubleProperty
 {
   Q_OBJECT
 public:

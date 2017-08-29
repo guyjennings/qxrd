@@ -1,6 +1,7 @@
 #ifndef QXRDCENTERFINDER_H
 #define QXRDCENTERFINDER_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include <QObject>
@@ -16,7 +17,7 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdfittedrings-ptr.h"
 
-class QxrdCenterFinder : public QxrdDetectorGeometry
+class QXRD_EXPORT QxrdCenterFinder : public QxrdDetectorGeometry
 {
   Q_OBJECT
 

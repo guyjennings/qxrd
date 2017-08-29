@@ -1,13 +1,14 @@
 #ifndef QXRDTESTGENERATOR_H
 #define QXRDTESTGENERATOR_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 #include "qcepserializableobject.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include <QTimer>
 
-class QxrdTestGenerator : public QcepSerializableObject
+class QXRD_EXPORT QxrdTestGenerator : public QcepSerializableObject
 {
   Q_OBJECT
 

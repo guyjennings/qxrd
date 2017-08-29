@@ -1,12 +1,13 @@
 #ifndef QXRDMASKRASTERDATA_H
 #define QXRDMASKRASTERDATA_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include <qwt_raster_data.h>
 #include "qcepmaskdata.h"
 
-class QxrdMaskRasterData : public QwtRasterData
+class QXRD_EXPORT QxrdMaskRasterData : public QwtRasterData
 {
 public:
   QxrdMaskRasterData(QcepMaskDataPtr mask = QcepMaskDataPtr(), int interp = 0);

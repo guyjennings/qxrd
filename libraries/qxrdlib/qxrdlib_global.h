@@ -4,9 +4,9 @@
 #include <QtCore/qglobal.h>
 
 #if defined(QXRDLIB_LIBRARY)
-#  define QXRDLIBSHARED_EXPORT Q_DECL_EXPORT
+#  define QXRD_EXPORT Q_DECL_EXPORT
 #else
-#  define QXRDLIBSHARED_EXPORT Q_DECL_IMPORT
+#  define QXRD_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif // QXRDLIB_GLOBAL_H

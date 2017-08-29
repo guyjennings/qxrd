@@ -1,11 +1,12 @@
 #ifndef QIMGIMAGEDATAFORMATHIS_H
 #define QIMGIMAGEDATAFORMATHIS_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepimagedataformat.h"
 #include "qcepimagedata-ptr.h"
 
-class QxrdImageDataFormatHis : public QcepImageDataFormat<double>
+class QXRD_EXPORT QxrdImageDataFormatHis : public QcepImageDataFormat<double>
 {
  public:
   QxrdImageDataFormatHis(QString name = "his");

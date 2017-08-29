@@ -1,9 +1,10 @@
 #ifndef QXRDROICACHE_H
 #define QXRDROICACHE_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 
-class QxrdROICache : public QcepObject
+class QXRD_EXPORT QxrdROICache : public QcepObject
 {
   Q_OBJECT
 

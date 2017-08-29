@@ -1,11 +1,12 @@
 #ifndef QXRDTESTSCANWINDOWDATAVIS_H
 #define QXRDTESTSCANWINDOWDATAVIS_H
 
+#include "qxrdlib_global.h"
 #include "qxrdtestscanwindow.h"
 #include "ui_qxrdtestscanwindowdatavis.h"
 #include "qxrdtestscanplotdatavishelper-ptr.h"
 
-class QxrdTestScanWindowDataVis : public QxrdTestScanWindow, public Ui::QxrdTestScanWindowDataVis
+class QXRD_EXPORT QxrdTestScanWindowDataVis : public QxrdTestScanWindow, public Ui::QxrdTestScanWindowDataVis
 {
   Q_OBJECT
 

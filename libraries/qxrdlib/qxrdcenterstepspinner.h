@@ -1,10 +1,11 @@
 #ifndef QXRDCENTERSTEPSPINNER_H
 #define QXRDCENTERSTEPSPINNER_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include <QDoubleSpinBox>
 
-class QxrdCenterStepSpinner : public QDoubleSpinBox
+class QXRD_EXPORT QxrdCenterStepSpinner : public QDoubleSpinBox
 {
   Q_OBJECT
 public:

@@ -1,6 +1,7 @@
 #ifndef QXRDACQUISITION_H
 #define QXRDACQUISITION_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qxrdacquisitioninterface.h"
 
@@ -31,7 +32,7 @@
 #include "qxrdprocessargs-ptr.h"
 #include "qxrdacquisitionscalermodel-ptr.h"
 
-class QxrdAcquisition : public QxrdAcquisitionInterface
+class QXRD_EXPORT QxrdAcquisition : public QxrdAcquisitionInterface
 {
   Q_OBJECT
 

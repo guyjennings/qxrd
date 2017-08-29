@@ -1,12 +1,13 @@
 #ifndef QXRDTESTIMAGEGENERATORTHREAD_H
 #define QXRDTESTIMAGEGENERATORTHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qxrdthread.h"
 #include "qxrdtestimagegenerator-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
-class QxrdTestImageGeneratorThread : public QxrdThread
+class QXRD_EXPORT QxrdTestImageGeneratorThread : public QxrdThread
 {
   Q_OBJECT
 

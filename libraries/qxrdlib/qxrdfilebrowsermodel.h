@@ -1,6 +1,7 @@
 #ifndef QXRDFILEBROWSERMODEL_H
 #define QXRDFILEBROWSERMODEL_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include <QAbstractTableModel>
 #include <QVector>
@@ -14,7 +15,7 @@
 #include "qxrdfilebrowsermodelupdater-ptr.h"
 #include "qxrdfilebrowsermodel-ptr.h"
 
-class QxrdFileBrowserModel : public QAbstractTableModel, public QEnableSharedFromThis<QxrdFileBrowserModel>
+class QXRD_EXPORT QxrdFileBrowserModel : public QAbstractTableModel, public QEnableSharedFromThis<QxrdFileBrowserModel>
 {
   Q_OBJECT
 

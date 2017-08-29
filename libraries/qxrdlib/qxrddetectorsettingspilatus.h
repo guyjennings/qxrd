@@ -1,10 +1,11 @@
 #ifndef QXRDDETECTORSETTINGSPILATUS_H
 #define QXRDDETECTORSETTINGSPILATUS_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
 
-class QxrdDetectorSettingsPilatus : public QxrdDetectorSettings
+class QXRD_EXPORT QxrdDetectorSettingsPilatus : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:

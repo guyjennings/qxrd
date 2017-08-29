@@ -1,11 +1,12 @@
 #ifndef QXRDCALIBRANTPROPERTIESDIALOG_H
 #define QXRDCALIBRANTPROPERTIESDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDialog>
 #include "ui_qxrdcalibrantpropertiesdialog.h"
 #include "qxrdcalibrant-ptr.h"
 
-class QxrdCalibrantPropertiesDialog : public QDialog, public Ui::QxrdCalibrantPropertiesDialog
+class QXRD_EXPORT QxrdCalibrantPropertiesDialog : public QDialog, public Ui::QxrdCalibrantPropertiesDialog
 {
   Q_OBJECT
 

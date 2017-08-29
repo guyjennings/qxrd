@@ -1,6 +1,7 @@
 #ifndef QXRDROICOORDINATESLISTMODEL_H
 #define QXRDROICOORDINATESLISTMODEL_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include <QAbstractListModel>
 #include "qxrdroicoordinates-ptr.h"
@@ -11,7 +12,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
-class QxrdROICoordinatesListModel : public QAbstractListModel
+class QXRD_EXPORT QxrdROICoordinatesListModel : public QAbstractListModel
 {
   Q_OBJECT
 

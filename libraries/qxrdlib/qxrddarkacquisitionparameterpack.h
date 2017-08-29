@@ -1,9 +1,10 @@
 #ifndef QXRDDARKACQUISITIONPARAMETERPACK_H
 #define QXRDDARKACQUISITIONPARAMETERPACK_H
 
+#include "qxrdlib_global.h"
 #include <QString>
 
-class QxrdDarkAcquisitionParameterPack
+class QXRD_EXPORT QxrdDarkAcquisitionParameterPack
 {
 public:
   QxrdDarkAcquisitionParameterPack(QString fileBase, double exposure, int nsummed, int skipBefore)

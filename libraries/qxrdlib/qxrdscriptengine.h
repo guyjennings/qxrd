@@ -1,6 +1,7 @@
 #ifndef QXRDSCRIPTENGINE_H
 #define QXRDSCRIPTENGINE_H
 
+#include "qxrdlib_global.h"
 #include <QObject>
 #include <QScriptValue>
 #include <QDateTime>
@@ -17,7 +18,7 @@
 #include "qxrdwindow-ptr.h"
 #include "qxrdroicoordinates-ptr.h"
 
-class QxrdScriptEngine : public QcepScriptEngine
+class QXRD_EXPORT QxrdScriptEngine : public QcepScriptEngine
 {
   Q_OBJECT
 

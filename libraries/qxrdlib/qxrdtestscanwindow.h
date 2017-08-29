@@ -1,10 +1,11 @@
 #ifndef QXRDTESTSCANWINDOW_H
 #define QXRDTESTSCANWINDOW_H
 
+#include "qxrdlib_global.h"
 #include <QMainWindow>
 #include "qcepdatacolumnscan-ptr.h"
 
-class QxrdTestScanWindow : public QMainWindow
+class QXRD_EXPORT QxrdTestScanWindow : public QMainWindow
 {
   Q_OBJECT
 

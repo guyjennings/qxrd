@@ -1,12 +1,13 @@
 #ifndef QXRDEXPERIMENTSETTINGS_H
 #define QXRDEXPERIMENTSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include <QSettings>
 #include "qxrdexperiment-ptr.h"
 
-class QxrdExperimentSettings : public QSettings
+class QXRD_EXPORT QxrdExperimentSettings : public QSettings
 {
   Q_OBJECT
 

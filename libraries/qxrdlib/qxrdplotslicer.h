@@ -1,9 +1,10 @@
 #ifndef QXRDPLOTSLICER_H
 #define QXRDPLOTSLICER_H
 
+#include "qxrdlib_global.h"
 #include "qxrdimageplotmeasurer.h"
 
-class QxrdPlotSlicer : public QxrdImagePlotMeasurer
+class QXRD_EXPORT QxrdPlotSlicer : public QxrdImagePlotMeasurer
 {
 public:
   QxrdPlotSlicer(QWidget *canvas, QxrdImagePlot *plot);

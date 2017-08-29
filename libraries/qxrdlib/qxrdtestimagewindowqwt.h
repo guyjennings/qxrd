@@ -1,11 +1,12 @@
 #ifndef QXRDTESTIMAGEWINDOWQWT_H
 #define QXRDTESTIMAGEWINDOWQWT_H
 
+#include "qxrdlib_global.h"
 #include "qxrdtestimagewindow.h"
 #include "ui_qxrdtestimagewindowqwt.h"
 #include "qxrdtestimageplotqwthelper-ptr.h"
 
-class QxrdTestImageWindowQwt : public QxrdTestImageWindow, public Ui::QxrdTestImageWindowQwt
+class QXRD_EXPORT QxrdTestImageWindowQwt : public QxrdTestImageWindow, public Ui::QxrdTestImageWindowQwt
 {
   Q_OBJECT
 

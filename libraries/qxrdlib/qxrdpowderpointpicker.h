@@ -1,9 +1,10 @@
 #ifndef QXRDPOWDERPOINTPICKER_H
 #define QXRDPOWDERPOINTPICKER_H
 
+#include "qxrdlib_global.h"
 #include "qxrdimageplotmeasurer.h"
 
-class QxrdPowderPointPicker : public QxrdImagePlotMeasurer
+class QXRD_EXPORT QxrdPowderPointPicker : public QxrdImagePlotMeasurer
 {
 public:
   QxrdPowderPointPicker(QxrdImagePlot *plot);

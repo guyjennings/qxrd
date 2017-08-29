@@ -1,10 +1,11 @@
 #ifndef QXRDACQUISITIONSCALERMODEL_H
 #define QXRDACQUISITIONSCALERMODEL_H
 
+#include "qxrdlib_global.h"
 #include <QAbstractListModel>
 #include "qxrdacquisition-ptr.h"
 
-class QxrdAcquisitionScalerModel : public QAbstractListModel
+class QXRD_EXPORT QxrdAcquisitionScalerModel : public QAbstractListModel
 {
   Q_OBJECT
 

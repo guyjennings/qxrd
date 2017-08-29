@@ -1,10 +1,11 @@
 #ifndef QXRDDETECTORPLUGININTERFACE_H
 #define QXRDDETECTORPLUGININTERFACE_H
 
+#include "qxrdlib_global.h"
 #include <QtPlugin>
 #include "qxrdnamedplugininterface.h"
 
-class QxrdDetectorPluginInterface : public QxrdNamedPluginInterface
+class QXRD_EXPORT QxrdDetectorPluginInterface : public QxrdNamedPluginInterface
 {
 public:
   virtual ~QxrdDetectorPluginInterface() {}

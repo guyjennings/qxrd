@@ -1,12 +1,13 @@
 #ifndef QXRDTESTIMAGEPLOTQWT_H
 #define QXRDTESTIMAGEPLOTQWT_H
 
+#include "qxrdlib_global.h"
 #include "qxrdimageplot.h"
 #include "qxrdtestimageplotqwthelper-ptr.h"
 #include "qxrdtestimageplotqwthelper.h"
 #include "qxrdtestthread.h"
 
-class QxrdTestImagePlotQwt : public QxrdImagePlot
+class QXRD_EXPORT QxrdTestImagePlotQwt : public QxrdImagePlot
 {
   Q_OBJECT
 

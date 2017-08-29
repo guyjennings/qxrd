@@ -1,9 +1,10 @@
 #ifndef QXRDNAMEDPLUGININTERFACE_H
 #define QXRDNAMEDPLUGININTERFACE_H
 
+#include "qxrdlib_global.h"
 #include <QtPlugin>
 
-class QxrdNamedPluginInterface
+class QXRD_EXPORT QxrdNamedPluginInterface
 {
 public:
   virtual ~QxrdNamedPluginInterface() {}

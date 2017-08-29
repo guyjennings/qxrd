@@ -1,13 +1,14 @@
 #ifndef QXRDFILESAVERTHREAD_H
 #define QXRDFILESAVERTHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qxrdthread.h"
 #include "qcepallocator-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 
-class QxrdFileSaverThread : public QxrdThread
+class QXRD_EXPORT QxrdFileSaverThread : public QxrdThread
 {
   Q_OBJECT
 

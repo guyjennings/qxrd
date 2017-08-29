@@ -1,9 +1,10 @@
 #ifndef QXRDROITYPEDELEGATE_H
 #define QXRDROITYPEDELEGATE_H
 
+#include "qxrdlib_global.h"
 #include <QStyledItemDelegate>
 
-class QxrdROITypeDelegate : public QStyledItemDelegate
+class QXRD_EXPORT QxrdROITypeDelegate : public QStyledItemDelegate
 {
   Q_OBJECT
 

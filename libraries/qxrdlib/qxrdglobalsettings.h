@@ -1,12 +1,13 @@
 #ifndef QXRDGLOBALSETTINGS_H
 #define QXRDGLOBALSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include <QSettings>
 #include "qxrdapplication-ptr.h"
 
-class QxrdGlobalSettings : public QSettings
+class QXRD_EXPORT QxrdGlobalSettings : public QSettings
 {
   Q_OBJECT
 

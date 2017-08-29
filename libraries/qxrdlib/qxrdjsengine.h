@@ -1,6 +1,7 @@
 #ifndef QXRDJSENGINE_H
 #define QXRDJSENGINE_H
 
+#include "qxrdlib_global.h"
 #include <QtQml>
 #include <QStringList>
 #include "qxrdapplication-ptr.h"
@@ -19,7 +20,7 @@
 #include "qcepdatagroup-ptr.h"
 #include "qcepintegrateddata-ptr.h"
 
-class QxrdJSEngine : public QQmlEngine
+class QXRD_EXPORT QxrdJSEngine : public QQmlEngine
 {
   Q_OBJECT
 

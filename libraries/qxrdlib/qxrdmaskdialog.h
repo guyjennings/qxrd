@@ -1,6 +1,7 @@
 #ifndef QXRDMASKDIALOG_H
 #define QXRDMASKDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrdmaskdialog.h"
 
@@ -8,7 +9,7 @@
 #include "qxrdmaskstackmodel-ptr.h"
 #include "qxrdmaskstack-ptr.h"
 
-class QxrdMaskDialog : public QDockWidget, public Ui::QxrdMaskDialog
+class QXRD_EXPORT QxrdMaskDialog : public QDockWidget, public Ui::QxrdMaskDialog
 {
   Q_OBJECT
 

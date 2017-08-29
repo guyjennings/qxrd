@@ -1,12 +1,13 @@
 #ifndef QXRDINTEGRATORPARMSDIALOG_H
 #define QXRDINTEGRATORPARMSDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDialog>
 #include "ui_qxrdintegratorparmsdialog.h"
 
 #include "qxrddataprocessor-ptr.h"
 
-class QxrdIntegratorParmsDialog : public QDialog, public Ui::QxrdIntegratorParmsDialog
+class QXRD_EXPORT QxrdIntegratorParmsDialog : public QDialog, public Ui::QxrdIntegratorParmsDialog
 {
   Q_OBJECT
 

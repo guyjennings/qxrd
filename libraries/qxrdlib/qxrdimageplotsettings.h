@@ -1,12 +1,13 @@
 #ifndef QXRDIMAGEPLOTSETTINGS_H
 #define QXRDIMAGEPLOTSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include <QObject>
 #include "qcepproperty.h"
 #include "qcepplotsettings.h"
 #include "qxrdimageplotsettings-ptr.h"
 
-class QxrdImagePlotSettings : public QcepPlotSettings
+class QXRD_EXPORT QxrdImagePlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

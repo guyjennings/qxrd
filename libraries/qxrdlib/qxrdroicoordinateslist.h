@@ -1,9 +1,10 @@
 #ifndef QXRDROICOORDINATESLIST_H
 #define QXRDROICOORDINATESLIST_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 
-class QxrdROICoordinatesList : public QcepObject
+class QXRD_EXPORT QxrdROICoordinatesList : public QcepObject
 {
 public:
   Q_INVOKABLE QxrdROICoordinatesList(QString name);

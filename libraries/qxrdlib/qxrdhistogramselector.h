@@ -1,9 +1,10 @@
 #ifndef QXRDHISTOGRAMSELECTOR_H
 #define QXRDHISTOGRAMSELECTOR_H
 
+#include "qxrdlib_global.h"
 #include "qcepplotmeasurer.h"
 
-class QxrdHistogramSelector : public QcepPlotMeasurer
+class QXRD_EXPORT QxrdHistogramSelector : public QcepPlotMeasurer
 {
     Q_OBJECT
 public:

@@ -1,9 +1,10 @@
 #ifndef QXRDROICENTEREDSHAPE_H
 #define QXRDROICENTEREDSHAPE_H
 
+#include "qxrdlib_global.h"
 #include "qxrdroishape.h"
 
-class QxrdROICenteredShape : public QxrdROIShape
+class QXRD_EXPORT QxrdROICenteredShape : public QxrdROIShape
 {
   Q_OBJECT
 

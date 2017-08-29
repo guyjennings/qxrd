@@ -1,12 +1,13 @@
 #ifndef QXRDNIDAQPLUGININTERFACE_H
 #define QXRDNIDAQPLUGININTERFACE_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include <QtPlugin>
 #include <QSharedPointer>
 #include "qxrdnamedplugininterface.h"
 
-class QxrdNIDAQPluginInterface : public QxrdNamedPluginInterface
+class QXRD_EXPORT QxrdNIDAQPluginInterface : public QxrdNamedPluginInterface
 {
 public:
   virtual ~QxrdNIDAQPluginInterface() {}

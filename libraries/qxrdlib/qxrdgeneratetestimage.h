@@ -1,6 +1,7 @@
 #ifndef QXRDGENERATETESTIMAGE_H
 #define QXRDGENERATETESTIMAGE_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepserializableobject.h"
@@ -12,7 +13,7 @@
 #include "qxrddetectorgeometry.h"
 #include "qxrdgeneratetestimage-ptr.h"
 
-class QxrdGenerateTestImage : public QcepSerializableObject
+class QXRD_EXPORT QxrdGenerateTestImage : public QcepSerializableObject
 {
   Q_OBJECT
 public:

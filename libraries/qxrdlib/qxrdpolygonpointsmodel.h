@@ -1,13 +1,14 @@
 #ifndef QXRDPOLYGONPOINTSMODEL_H
 #define QXRDPOLYGONPOINTSMODEL_H
 
+#include "qxrdlib_global.h"
 #include <QAbstractTableModel>
 #include "qxrdroipolygon-ptr.h"
 #include <QPolygonF>
 
 class QItemSelectionModel;
 
-class QxrdPolygonPointsModel : public QAbstractTableModel
+class QXRD_EXPORT QxrdPolygonPointsModel : public QAbstractTableModel
 {
   Q_OBJECT
 

@@ -1,10 +1,11 @@
 #ifndef QXRDSYNCHRONIZEDACQUISITIONPLOTSETTINGS_H
 #define QXRDSYNCHRONIZEDACQUISITIONPLOTSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepplotsettings.h"
 #include "qxrdsynchronizedacquisitionplotsettings-ptr.h"
 
-class QxrdSynchronizedAcquisitionPlotSettings : public QcepPlotSettings
+class QXRD_EXPORT QxrdSynchronizedAcquisitionPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

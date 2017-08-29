@@ -1,12 +1,13 @@
 #ifndef QXRDDETECTORCONTROLWINDOWSETTINGS_H
 #define QXRDDETECTORCONTROLWINDOWSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrddetectorcontrolwindowsettings-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 
-class QxrdDetectorControlWindowSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdDetectorControlWindowSettings : public QcepSerializableObject
 {
   Q_OBJECT
 

@@ -1,9 +1,10 @@
 #ifndef QXRDTODOLISTITEM_H
 #define QXRDTODOLISTITEM_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 
-class QxrdToDoListItem : public QObject
+class QXRD_EXPORT QxrdToDoListItem : public QObject
 {
 public:
   QxrdToDoListItem(QObject *parent, int id, bool active, QString d1, QString d2, QString s);

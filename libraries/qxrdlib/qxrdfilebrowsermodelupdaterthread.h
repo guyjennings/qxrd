@@ -1,11 +1,12 @@
 #ifndef QXRDFILEBROWSERMODELUPDATERTHREAD_H
 #define QXRDFILEBROWSERMODELUPDATERTHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qxrdthread.h"
 #include "qxrdfilebrowsermodelupdater-ptr.h"
 #include "qxrdfilebrowsermodel-ptr.h"
 
-class QxrdFileBrowserModelUpdaterThread : public QxrdThread
+class QXRD_EXPORT QxrdFileBrowserModelUpdaterThread : public QxrdThread
 {
   Q_OBJECT
 public:

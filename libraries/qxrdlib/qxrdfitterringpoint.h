@@ -1,9 +1,10 @@
 #ifndef QXRDFITTERRINGPOINT_H
 #define QXRDFITTERRINGPOINT_H
 
+#include "qxrdlib_global.h"
 #include "qxrdfitterpeakorring.h"
 
-class QxrdFitterRingPoint : public QxrdFitterPeakOrRing
+class QXRD_EXPORT QxrdFitterRingPoint : public QxrdFitterPeakOrRing
 {
 public:
   QxrdFitterRingPoint(QxrdCenterFinder* cf, int index, double x0, double y0, double pkht, double bkgd);

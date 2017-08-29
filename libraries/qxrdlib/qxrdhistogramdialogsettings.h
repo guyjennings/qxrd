@@ -1,13 +1,14 @@
 #ifndef QXRDHISTOGRAMDIALOGSETTINGS_H
 #define QXRDHISTOGRAMDIALOGSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include <QObject>
 #include "qcepproperty.h"
 #include "qcepserializableobject.h"
 #include "qxrdhistogramplotsettings-ptr.h"
 #include "qxrdhistogramdialogsettings-ptr.h"
 
-class QxrdHistogramDialogSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdHistogramDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:

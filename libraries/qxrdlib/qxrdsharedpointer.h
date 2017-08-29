@@ -1,8 +1,10 @@
 #ifndef QXRDSHAREDPOINTER_H
 #define QXRDSHAREDPOINTER_H
 
+#include "qxrdlib_global.h"
+
 template <class T>
-class QxrdSharedPointer
+class QXRD_EXPORT QxrdSharedPointer
 {
 public:
     QxrdSharedPointer();

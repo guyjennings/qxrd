@@ -1,10 +1,11 @@
 #ifndef QXRDPROCESSORINTERFACE_H
 #define QXRDPROCESSORINTERFACE_H
 
+#include "qxrdlib_global.h"
 #include <QtPlugin>
 #include "qxrdnamedplugininterface.h"
 
-class QxrdProcessorInterface : public QxrdNamedPluginInterface
+class QXRD_EXPORT QxrdProcessorInterface : public QxrdNamedPluginInterface
 {
 public:
   virtual ~QxrdProcessorInterface() {}

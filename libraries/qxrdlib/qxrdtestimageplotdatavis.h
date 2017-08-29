@@ -1,13 +1,14 @@
 #ifndef QXRDTESTIMAGEPLOTDATAVIS_H
 #define QXRDTESTIMAGEPLOTDATAVIS_H
 
+#include "qxrdlib_global.h"
 #include <QWidget>
 #include "qxrdtestimageplotdatavishelper-ptr.h"
 #include "qxrdtestimageplotdatavishelper.h"
 #include "qxrdtestthread.h"
 #include "QtDataVisualization"
 
-class QxrdTestImagePlotDataVis : public QWidget
+class QXRD_EXPORT QxrdTestImagePlotDataVis : public QWidget
 {
   Q_OBJECT
 

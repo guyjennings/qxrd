@@ -1,13 +1,14 @@
 #ifndef QXRDDISTORTIONCORRECTIONDIALOG_H
 #define QXRDDISTORTIONCORRECTIONDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "qxrddistortioncorrection-ptr.h"
 #include "ui_qxrddistortioncorrectiondialog.h"
 #include "qxrddistortioncorrectiondialogsettings-ptr.h"
 #include "qxrdwindow-ptr.h"
 
-class QxrdDistortionCorrectionDialog : public QDockWidget, public Ui::QxrdDistortionCorrectionDialog
+class QXRD_EXPORT QxrdDistortionCorrectionDialog : public QDockWidget, public Ui::QxrdDistortionCorrectionDialog
 {
   Q_OBJECT
 

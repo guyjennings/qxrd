@@ -1,11 +1,12 @@
 #ifndef QXRDACQUISITIONEXECUTIONTHREAD_H
 #define QXRDACQUISITIONEXECUTIONTHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qxrdthread.h"
 #include "qxrdacquisitioninterface-ptr.h"
 #include "qxrdacquisitionexecution-ptr.h"
 
-class QxrdAcquisitionExecutionThread : public QxrdThread
+class QXRD_EXPORT QxrdAcquisitionExecutionThread : public QxrdThread
 {
 public:
   QxrdAcquisitionExecutionThread(QxrdAcquisitionInterfaceWPtr acq);

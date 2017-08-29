@@ -1,13 +1,14 @@
 #ifndef QXRDSYNCHRONIZEDACQUISITIONDIALOGSETTINGS_H
 #define QXRDSYNCHRONIZEDACQUISITIONDIALOGSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include <QObject>
 #include "qcepproperty.h"
 #include "qcepserializableobject.h"
 #include "qxrdsynchronizedacquisitionplotsettings-ptr.h"
 #include "qxrdsynchronizedacquisitiondialogsettings-ptr.h"
 
-class QxrdSynchronizedAcquisitionDialogSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdSynchronizedAcquisitionDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:

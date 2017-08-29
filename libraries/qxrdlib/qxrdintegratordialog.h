@@ -1,6 +1,7 @@
 #ifndef QXRDINTEGRATORDIALOG_H
 #define QXRDINTEGRATORDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrdintegratordialog.h"
 
@@ -8,7 +9,7 @@
 #include "qxrduserscriptdialog.h"
 #include <QPointer>
 
-class QxrdIntegratorDialog : public QDockWidget, public Ui::QxrdIntegratorDialog
+class QXRD_EXPORT QxrdIntegratorDialog : public QDockWidget, public Ui::QxrdIntegratorDialog
 {
   Q_OBJECT
 

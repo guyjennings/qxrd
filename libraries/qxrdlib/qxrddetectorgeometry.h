@@ -1,11 +1,12 @@
 #ifndef QXRDDETECTORGEOMETRY_H
 #define QXRDDETECTORGEOMETRY_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepserializableobject.h"
 
-class QxrdDetectorGeometry : public QcepSerializableObject
+class QXRD_EXPORT QxrdDetectorGeometry : public QcepSerializableObject
 {
   Q_OBJECT
 public:

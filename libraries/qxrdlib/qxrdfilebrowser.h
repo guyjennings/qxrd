@@ -1,6 +1,7 @@
 #ifndef QXRDFILEBROWSER_H
 #define QXRDFILEBROWSER_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include <QDockWidget>
@@ -12,7 +13,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdfilebrowsersettings-ptr.h"
 
-class QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
+class QXRD_EXPORT QxrdFileBrowser : public QDockWidget, public Ui::QxrdFileBrowser
 {
   Q_OBJECT
 
@@ -69,7 +70,7 @@ private:
   QStringList                  m_DirectoryStack;
 };
 
-class QxrdInputFileBrowser : public QxrdFileBrowser
+class QXRD_EXPORT QxrdInputFileBrowser : public QxrdFileBrowser
 {
   Q_OBJECT
 
@@ -77,7 +78,7 @@ public:
   QxrdInputFileBrowser(QxrdFileBrowserSettingsWPtr settings, QxrdExperimentWPtr experiment, QxrdDataProcessorWPtr processor, QWidget *parent);
 };
 
-class QxrdOutputFileBrowser : public QxrdFileBrowser
+class QXRD_EXPORT QxrdOutputFileBrowser : public QxrdFileBrowser
 {
   Q_OBJECT
 

@@ -1,6 +1,7 @@
 #ifndef QXRDUSERSCRIPTDIALOG_H
 #define QXRDUSERSCRIPTDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDialog>
 #include <QAbstractButton>
 #include "qxrdexperiment-ptr.h"
@@ -9,7 +10,7 @@ namespace Ui {
 class QxrdUserScriptDialog;
 }
 
-class QxrdUserScriptDialog : public QDialog
+class QXRD_EXPORT QxrdUserScriptDialog : public QDialog
 {
   Q_OBJECT
   

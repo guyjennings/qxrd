@@ -1,6 +1,7 @@
 #ifndef QXRDCALIBRANTDIALOG_H
 #define QXRDCALIBRANTDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrdcalibrantdialog.h"
 #include "qxrdcalibrantlibrary-ptr.h"
@@ -12,7 +13,7 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
-class QxrdCalibrantDialog : public QDockWidget, public Ui::QxrdCalibrantDialog
+class QXRD_EXPORT QxrdCalibrantDialog : public QDockWidget, public Ui::QxrdCalibrantDialog
 {
   Q_OBJECT
 

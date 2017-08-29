@@ -1,6 +1,7 @@
 #ifndef QXRDPOLARTRANSFORM_H
 #define QXRDPOLARTRANSFORM_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepserializableobject.h"
@@ -15,7 +16,7 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrdpolartransform-ptr.h"
 
-class QxrdPolarTransform : public QcepSerializableObject
+class QXRD_EXPORT QxrdPolarTransform : public QcepSerializableObject
 {
   Q_OBJECT
 

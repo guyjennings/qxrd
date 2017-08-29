@@ -1,9 +1,10 @@
 #ifndef QXRDCENTERFINDERPICKER_H
 #define QXRDCENTERFINDERPICKER_H
 
+#include "qxrdlib_global.h"
 #include "qxrdimageplotmeasurer.h"
 
-class QxrdCenterFinderPicker : public QxrdImagePlotMeasurer
+class QXRD_EXPORT QxrdCenterFinderPicker : public QxrdImagePlotMeasurer
 {
 public:
   QxrdCenterFinderPicker(QxrdImagePlot *plot);

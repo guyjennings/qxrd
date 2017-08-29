@@ -1,6 +1,7 @@
 #ifndef QXRDDATAPROCESSOR_H
 #define QXRDDATAPROCESSOR_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepobject.h"
@@ -38,7 +39,7 @@
 #include "qxrdresultserializer.h"
 #include "qxrddataprocessor-ptr.h"
 
-class QxrdDataProcessor : public QcepDataProcessorBase
+class QXRD_EXPORT QxrdDataProcessor : public QcepDataProcessorBase
 {
   Q_OBJECT
 

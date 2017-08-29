@@ -1,6 +1,7 @@
 #ifndef QXRDHIGHLIGHTER_H
 #define QXRDHIGHLIGHTER_H
 
+#include "qxrdlib_global.h"
 #include <QSyntaxHighlighter>
 
 #include <QString>
@@ -8,7 +9,7 @@
 #include <QTextCharFormat>
 #include <QTextDocument>
 
-class QxrdHighlighter : public QSyntaxHighlighter
+class QXRD_EXPORT QxrdHighlighter : public QSyntaxHighlighter
 {
   Q_OBJECT
 

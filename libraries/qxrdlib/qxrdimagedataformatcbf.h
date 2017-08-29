@@ -1,11 +1,12 @@
 #ifndef QXRDIMAGEDATAFORMATCBF_H
 #define QXRDIMAGEDATAFORMATCBF_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepimagedataformatcbf.h"
 
-class QxrdImageDataFormatCBF : public QcepImageDataFormatCBF<double>
+class QXRD_EXPORT QxrdImageDataFormatCBF : public QcepImageDataFormatCBF<double>
 {
 public:
   QxrdImageDataFormatCBF(QString name="cbf");

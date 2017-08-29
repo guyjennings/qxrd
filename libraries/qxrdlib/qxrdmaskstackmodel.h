@@ -1,10 +1,11 @@
 #ifndef QXRDMASKSTACKMODEL_H
 #define QXRDMASKSTACKMODEL_H
 
+#include "qxrdlib_global.h"
 #include <QAbstractListModel>
 #include "qxrdmaskstack-ptr.h"
 
-class QxrdMaskStackModel : public QAbstractTableModel
+class QXRD_EXPORT QxrdMaskStackModel : public QAbstractTableModel
 {
   Q_OBJECT
 

@@ -1,6 +1,7 @@
 #ifndef QXRDACQUISITIONDIALOG_H
 #define QXRDACQUISITIONDIALOG_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "ui_qxrdacquisitiondialog.h"
 #include "qxrdexperiment-ptr.h"
@@ -8,7 +9,7 @@
 #include "qxrdacquisition-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 
-class QxrdAcquisitionDialog : public QDockWidget, public Ui::QxrdAcquisitionDialog {
+class QXRD_EXPORT QxrdAcquisitionDialog : public QDockWidget, public Ui::QxrdAcquisitionDialog {
   Q_OBJECT
 public:
   QxrdAcquisitionDialog(QxrdExperimentWPtr doc,

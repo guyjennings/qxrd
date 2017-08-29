@@ -1,6 +1,7 @@
 #ifndef QXRDEXPERIMENTPREFERENCESDIALOG_H
 #define QXRDEXPERIMENTPREFERENCESDIALOG_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include <QDialog>
@@ -13,7 +14,7 @@
 #include "qxrddetectorproxy-ptr.h"
 #include "qxrddetectorproxylistmodel-ptr.h"
 
-class QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
+class QXRD_EXPORT QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
   Q_OBJECT
 public:
   QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent = 0, int initialPage = -1);

@@ -1,11 +1,12 @@
 #ifndef QXRDTESTSCANPLOTDATAVIS_H
 #define QXRDTESTSCANPLOTDATAVIS_H
 
+#include "qxrdlib_global.h"
 #include <QtCharts>
 #include "qxrdtestscanplotdatavishelper-ptr.h"
 #include "qxrdtestthread.h"
 
-class QxrdTestScanPlotDataVis : public QtCharts::QChartView
+class QXRD_EXPORT QxrdTestScanPlotDataVis : public QtCharts::QChartView
 {
   Q_OBJECT
 

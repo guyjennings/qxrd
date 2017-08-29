@@ -1,12 +1,13 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTSPLOT_H
 #define QXRDACQUISITIONEXTRAINPUTSPLOT_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepplot.h"
 #include "qwt_plot_curve.h"
 
-class QxrdAcquisitionExtraInputsPlot : public QcepPlot
+class QXRD_EXPORT QxrdAcquisitionExtraInputsPlot : public QcepPlot
 {
   Q_OBJECT
 public:

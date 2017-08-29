@@ -1,6 +1,7 @@
 #ifndef QXRDWINDOWSETTINGS_H
 #define QXRDWINDOWSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrdimageplotsettings-ptr.h"
@@ -17,7 +18,7 @@
 #include "qxrddistortioncorrectionplotsettings-ptr.h"
 #include "qxrdwindowsettings-ptr.h"
 
-class QxrdWindowSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdWindowSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:

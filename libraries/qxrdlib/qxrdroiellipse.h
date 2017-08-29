@@ -1,9 +1,10 @@
 #ifndef QXRDROIELLIPSE_H
 #define QXRDROIELLIPSE_H
 
+#include "qxrdlib_global.h"
 #include "qxrdroicenteredshape.h"
 
-class QxrdROIEllipse : public QxrdROICenteredShape
+class QXRD_EXPORT QxrdROIEllipse : public QxrdROICenteredShape
 {
   Q_OBJECT
 

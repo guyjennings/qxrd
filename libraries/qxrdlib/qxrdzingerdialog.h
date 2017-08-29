@@ -1,12 +1,13 @@
 #ifndef QXRDZINGERDIALOG_H
 #define QXRDZINGERDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDialog>
 #include "ui_qxrdzingerdialog.h"
 
 #include "qxrddataprocessor-ptr.h"
 
-class QxrdZingerDialog : public QDialog, public Ui::QxrdZingerDialog
+class QXRD_EXPORT QxrdZingerDialog : public QDialog, public Ui::QxrdZingerDialog
 {
   Q_OBJECT
 

@@ -1,13 +1,14 @@
 #ifndef QXRDMASKSTACK_H
 #define QXRDMASKSTACK_H
 
+#include "qxrdlib_global.h"
 #include <QStack>
 #include <QModelIndexList>
 
 #include "qcepmaskdata-ptr.h"
 #include "qcepimagedata-ptr.h"
 
-class QxrdMaskStack : public QObject, public QStack<QcepMaskDataPtr>
+class QXRD_EXPORT QxrdMaskStack : public QObject, public QStack<QcepMaskDataPtr>
 {
   Q_OBJECT
 

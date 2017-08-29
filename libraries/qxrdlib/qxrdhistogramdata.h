@@ -1,10 +1,11 @@
 #ifndef QXRDHISTOGRAMDATA_H
 #define QXRDHISTOGRAMDATA_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 
-class QxrdHistogramData : public QcepObject
+class QXRD_EXPORT QxrdHistogramData : public QcepObject
 {
   Q_OBJECT
 public:

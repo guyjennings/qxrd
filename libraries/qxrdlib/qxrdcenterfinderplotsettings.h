@@ -1,11 +1,12 @@
 #ifndef QXRDCENTERFINDERPLOTSETTINGS_H
 #define QXRDCENTERFINDERPLOTSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include <QObject>
 #include "qcepplotsettings.h"
 #include "qxrdcenterfinderplotsettings-ptr.h"
 
-class QxrdCenterFinderPlotSettings : public QcepPlotSettings
+class QXRD_EXPORT QxrdCenterFinderPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

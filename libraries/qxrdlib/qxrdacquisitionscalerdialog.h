@@ -1,13 +1,14 @@
 #ifndef QXRDACQUISITIONSCALERDIALOG_H
 #define QXRDACQUISITIONSCALERDIALOG_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "ui_qxrdacquisitionscalerdialog.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdacquisitionscalermodel-ptr.h"
 #include <QDockWidget>
 
-class QxrdAcquisitionScalerDialog : public QDockWidget, public Ui::QxrdAcquisitionScalerDialog
+class QXRD_EXPORT QxrdAcquisitionScalerDialog : public QDockWidget, public Ui::QxrdAcquisitionScalerDialog
 {
   Q_OBJECT
 

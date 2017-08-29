@@ -1,6 +1,7 @@
 #ifndef QXRDHISTOGRAMDIALOG_H
 #define QXRDHISTOGRAMDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrdhistogramdialog.h"
 #include "qcepimagedata.h"
@@ -10,7 +11,7 @@
 #include "qxrdhistogramdialogsettings-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
-class QxrdHistogramDialog : public QDockWidget, public Ui::QxrdHistogramDialog
+class QXRD_EXPORT QxrdHistogramDialog : public QDockWidget, public Ui::QxrdHistogramDialog
 {
   Q_OBJECT
 

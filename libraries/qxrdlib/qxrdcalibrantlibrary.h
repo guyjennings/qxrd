@@ -1,6 +1,7 @@
 #ifndef QXRDCALIBRANTLIBRARY_H
 #define QXRDCALIBRANTLIBRARY_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepserializableobject.h"
 #include "qxrdcalibrant-ptr.h"
@@ -8,7 +9,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 
-class QxrdCalibrantLibrary : public QcepSerializableObject
+class QXRD_EXPORT QxrdCalibrantLibrary : public QcepSerializableObject
 {
   Q_OBJECT
 

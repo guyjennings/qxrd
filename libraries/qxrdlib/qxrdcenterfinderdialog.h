@@ -1,11 +1,12 @@
 #ifndef QXRDCENTERFINDERDIALOG_H
 #define QXRDCENTERFINDERDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrdcenterfinderdialog.h"
 #include "qxrdcenterfinder-ptr.h"
 
-class QxrdCenterFinderDialog : public QDockWidget, public Ui::QxrdCenterFinderDialog
+class QXRD_EXPORT QxrdCenterFinderDialog : public QDockWidget, public Ui::QxrdCenterFinderDialog
 {
   Q_OBJECT
 

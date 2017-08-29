@@ -1,6 +1,7 @@
 #ifndef QXRDWELCOMEWINDOW_H
 #define QXRDWELCOMEWINDOW_H
 
+#include "qxrdlib_global.h"
 #include <QMainWindow>
 #include <QSignalMapper>
 #include <QSettings>
@@ -10,7 +11,7 @@
 
 #include "qxrdapplication-ptr.h"
 
-class QxrdWelcomeWindow : public QMainWindow
+class QXRD_EXPORT QxrdWelcomeWindow : public QMainWindow
 {
   Q_OBJECT
 

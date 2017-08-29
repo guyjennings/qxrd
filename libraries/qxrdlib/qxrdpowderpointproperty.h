@@ -1,11 +1,12 @@
 #ifndef QXRDPOWDERPOINTPROPERTY_H
 #define QXRDPOWDERPOINTPROPERTY_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject-ptr.h"
 #include "qcepproperty.h"
 #include "qxrdpowderpoint.h"
 
-class QxrdPowderPointProperty : public QcepProperty
+class QXRD_EXPORT QxrdPowderPointProperty : public QcepProperty
 {
   Q_OBJECT
 public:
@@ -49,7 +50,7 @@ private:
   QxrdPowderPoint m_Value;
 };
 
-class QxrdPowderPointPropertySpinBoxHelper : public QObject {
+class QXRD_EXPORT QxrdPowderPointPropertySpinBoxHelper : public QObject {
   Q_OBJECT
 
 public:
@@ -69,7 +70,7 @@ private:
   int                         m_Axis;
 };
 
-class QxrdPowderPointPropertyDoubleSpinBoxHelper : public QObject {
+class QXRD_EXPORT QxrdPowderPointPropertyDoubleSpinBoxHelper : public QObject {
   Q_OBJECT
 
 public:
@@ -89,7 +90,7 @@ private:
   int                         m_Axis;
 };
 
-class QxrdPowderPointVectorProperty : public QcepProperty {
+class QXRD_EXPORT QxrdPowderPointVectorProperty : public QcepProperty {
   Q_OBJECT
 public:
   QxrdPowderPointVectorProperty(QcepSerializableObject *parent,

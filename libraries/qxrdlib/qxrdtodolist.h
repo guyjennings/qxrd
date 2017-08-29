@@ -1,11 +1,12 @@
 #ifndef QXRDTODOLIST_H
 #define QXRDTODOLIST_H
 
+#include "qxrdlib_global.h"
 #include <QAbstractListModel>
 #include "qxrdtodolistitem-ptr.h"
 #include "qcepobject-ptr.h"
 
-class QxrdToDoList : public QAbstractListModel
+class QXRD_EXPORT QxrdToDoList : public QAbstractListModel
 {
   Q_OBJECT
 

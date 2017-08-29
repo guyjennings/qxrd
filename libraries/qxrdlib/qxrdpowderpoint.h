@@ -1,12 +1,13 @@
 #ifndef QXRDPOWDERPOINT_H
 #define QXRDPOWDERPOINT_H
 
+#include "qxrdlib_global.h"
 #include <QSettings>
 #include <QString>
 #include <QScriptable>
 #include <QVector>
 
-class QxrdPowderPoint
+class QXRD_EXPORT QxrdPowderPoint
 {
 public:
   QxrdPowderPoint(int n1, int n2, int n3, double x, double y, double r1, double r2, double az);
@@ -61,12 +62,12 @@ Q_DECLARE_METATYPE(QxrdPowderPoint)
 
 #ifndef QT_NO_DATASTREAM
 
-extern QDataStream &operator<<(QDataStream &stream, const QxrdPowderPoint &pt);
-extern QDataStream &operator>>(QDataStream &stream, QxrdPowderPoint &pt);
+extern QXRD_EXPORT QDataStream &operator<<(QDataStream &stream, const QxrdPowderPoint &pt);
+extern QXRD_EXPORT QDataStream &operator>>(QDataStream &stream, QxrdPowderPoint &pt);
 
 #endif
 
-class QxrdPowderPointVector : public QVector<QxrdPowderPoint>
+class QXRD_EXPORT QxrdPowderPointVector : public QVector<QxrdPowderPoint>
 {
 public:
 

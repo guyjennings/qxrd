@@ -1,9 +1,10 @@
 #ifndef QXRDSPLASHSCREEN_H
 #define QXRDSPLASHSCREEN_H
 
+#include "qxrdlib_global.h"
 #include <QSplashScreen>
 
-class QxrdSplashScreen : public QSplashScreen
+class QXRD_EXPORT QxrdSplashScreen : public QSplashScreen
 {
   Q_OBJECT
 public:

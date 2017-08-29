@@ -1,13 +1,14 @@
 #ifndef QXRDCALIBRANTDSPACINGS_H
 #define QXRDCALIBRANTDSPACINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include <QVector>
 #include "qxrdcalibrantdspacing.h"
 #include <QSettings>
 #include "qcepproperty.h"
 
-class QxrdCalibrantDSpacings : public QVector<QxrdCalibrantDSpacing>
+class QXRD_EXPORT QxrdCalibrantDSpacings : public QVector<QxrdCalibrantDSpacing>
 {
 public:
   void setSettingsValue(QSettings *settings, QString name);

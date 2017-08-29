@@ -1,13 +1,14 @@
 #ifndef QXRDSERVER_H
 #define QXRDSERVER_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 #include "qspecserver.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepserializableobject.h"
 
-class QxrdServer : public QcepSerializableObject
+class QXRD_EXPORT QxrdServer : public QcepSerializableObject
 {
   Q_OBJECT
 

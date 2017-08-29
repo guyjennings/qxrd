@@ -1,12 +1,13 @@
 #ifndef QXRDTESTSCANPLOTQWT_H
 #define QXRDTESTSCANPLOTQWT_H
 
+#include "qxrdlib_global.h"
 #include "qcepplot.h"
 #include "qxrdtestscanplotqwthelper-ptr.h"
 #include "qxrdtestscanplotqwthelper.h"
 #include "qxrdtestthread.h"
 
-class QxrdTestScanPlotQwt : public QcepPlot
+class QXRD_EXPORT QxrdTestScanPlotQwt : public QcepPlot
 {
   Q_OBJECT
 

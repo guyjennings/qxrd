@@ -1,10 +1,11 @@
 #ifndef QXRDPLOTVECTORFIELDDATA_H
 #define QXRDPLOTVECTORFIELDDATA_H
 
+#include "qxrdlib_global.h"
 #include "qwt_series_data.h"
 #include "qxrdpoint4d.h"
 
-class QxrdPlotVectorFieldData :
+class QXRD_EXPORT QxrdPlotVectorFieldData :
     public QwtArraySeriesData<QxrdPoint4D>
 {
 public:

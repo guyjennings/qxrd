@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 
-class QXRDLIBSHARED_EXPORT Qxrdlib
+class QXRD_EXPORT Qxrdlib
 {
 
 public:

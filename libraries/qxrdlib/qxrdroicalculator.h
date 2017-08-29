@@ -1,6 +1,7 @@
 #ifndef QXRDROICALCULATOR_H
 #define QXRDROICALCULATOR_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include "qcepproperty.h"
@@ -13,7 +14,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
-class QxrdROICalculator : public QcepObject
+class QXRD_EXPORT QxrdROICalculator : public QcepObject
 {
   Q_OBJECT
 

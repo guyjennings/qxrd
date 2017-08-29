@@ -1,13 +1,14 @@
 #ifndef QXRDINFODIALOG_H
 #define QXRDINFODIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrdinfodialog.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qxrdinfodialogsettings-ptr.h"
 
-class QxrdInfoDialog : public QDockWidget, public Ui::QxrdInfoDialog
+class QXRD_EXPORT QxrdInfoDialog : public QDockWidget, public Ui::QxrdInfoDialog
 {
   Q_OBJECT
 

@@ -1,11 +1,12 @@
 #ifndef QXRDINTEGRATORPLOTSETTINGS_H
 #define QXRDINTEGRATORPLOTSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include <QObject>
 #include "qcepplotsettings.h"
 #include "qxrdintegratorplotsettings-ptr.h"
 
-class QxrdIntegratorPlotSettings : public QcepPlotSettings
+class QXRD_EXPORT QxrdIntegratorPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

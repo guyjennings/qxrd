@@ -1,6 +1,7 @@
 #ifndef QXRDCENTERFINDERPLOT_H
 #define QXRDCENTERFINDERPLOT_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepobjectnamer.h"
 #include "qcepplot.h"
@@ -13,7 +14,7 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdwindow-ptr.h"
 
-class QxrdCenterFinderPlot : public QcepPlot
+class QXRD_EXPORT QxrdCenterFinderPlot : public QcepPlot
 {
   Q_OBJECT
 

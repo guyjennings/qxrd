@@ -1,10 +1,11 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTSPLOTSETTINGS_H
 #define QXRDACQUISITIONEXTRAINPUTSPLOTSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepplotsettings.h"
 #include "qxrdacquisitionextrainputsplotsettings-ptr.h"
 
-class QxrdAcquisitionExtraInputsPlotSettings : public QcepPlotSettings
+class QXRD_EXPORT QxrdAcquisitionExtraInputsPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

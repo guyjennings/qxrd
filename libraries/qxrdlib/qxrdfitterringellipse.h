@@ -1,9 +1,10 @@
 #ifndef QXRDFITTERRINGELLIPSE_H
 #define QXRDFITTERRINGELLIPSE_H
 
+#include "qxrdlib_global.h"
 #include "qxrdfitter.h"
 
-class QxrdFitterRingEllipse : public QxrdFitter
+class QXRD_EXPORT QxrdFitterRingEllipse : public QxrdFitter
 {
 public:
   QxrdFitterRingEllipse(QxrdCenterFinder *cf, int ringIndex, double x0, double y0);

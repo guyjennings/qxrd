@@ -1,10 +1,11 @@
 #ifndef QXRDDISPLAYDIALOG_H
 #define QXRDDISPLAYDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrddisplaydialog.h"
 
-class QxrdDisplayDialog : public QDockWidget, public Ui::QxrdDisplayDialog
+class QXRD_EXPORT QxrdDisplayDialog : public QDockWidget, public Ui::QxrdDisplayDialog
 {
     Q_OBJECT
 

@@ -1,11 +1,12 @@
 #ifndef QXRDRESPONSETIMER_H
 #define QXRDRESPONSETIMER_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include <QTimer>
 #include <QTime>
 
-class QxrdResponseTimer : public QObject
+class QXRD_EXPORT QxrdResponseTimer : public QObject
 {
     Q_OBJECT
 public:

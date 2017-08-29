@@ -1,6 +1,7 @@
 #ifndef QXRDDATAPROCESSORTHREAD_H
 #define QXRDDATAPROCESSORTHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qxrdthread.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepallocator-ptr.h"
@@ -9,7 +10,7 @@
 #include "qxrddataprocessor-ptr.h"
 #include <QSettings>
 
-class QxrdDataProcessorThread : public QxrdThread
+class QXRD_EXPORT QxrdDataProcessorThread : public QxrdThread
 {
   Q_OBJECT
 

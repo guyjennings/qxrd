@@ -1,11 +1,12 @@
 #ifndef QXRDROIPICKER_H
 #define QXRDROIPICKER_H
 
+#include "qxrdlib_global.h"
 #include "qxrdimageplotmeasurer.h"
 #include <QDateTime>
 #include "qxrdroicoordinates-ptr.h"
 
-class QxrdROIPicker : public QxrdImagePlotMeasurer
+class QXRD_EXPORT QxrdROIPicker : public QxrdImagePlotMeasurer
 {
   Q_OBJECT
 

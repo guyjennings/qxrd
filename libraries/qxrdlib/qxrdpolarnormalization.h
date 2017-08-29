@@ -1,6 +1,7 @@
 #ifndef QXRDPOLARNORMALIZATION_H
 #define QXRDPOLARNORMALIZATION_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepserializableobject.h"
@@ -11,7 +12,7 @@
 #include "qcepdataobject-ptr.h"
 #include "qxrdpolarnormalization-ptr.h"
 
-class QxrdPolarNormalization : public QcepSerializableObject
+class QXRD_EXPORT QxrdPolarNormalization : public QcepSerializableObject
 {
   Q_OBJECT
 

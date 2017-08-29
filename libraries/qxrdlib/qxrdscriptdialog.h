@@ -1,12 +1,13 @@
 #ifndef QXRDSCRIPTDIALOG_H
 #define QXRDSCRIPTDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrdscriptdialog.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdscriptdialogsettings-ptr.h"
 
-class QxrdScriptDialog : public QDockWidget, public Ui::QxrdScriptDialog
+class QXRD_EXPORT QxrdScriptDialog : public QDockWidget, public Ui::QxrdScriptDialog
 {
   Q_OBJECT
 

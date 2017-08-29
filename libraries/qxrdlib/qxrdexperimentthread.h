@@ -1,13 +1,14 @@
 #ifndef QXRDEXPERIMENTTHREAD_H
 #define QXRDEXPERIMENTTHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qxrdthread.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperimentsettings-ptr.h"
 
-class QxrdExperimentThread : public QxrdThread
+class QXRD_EXPORT QxrdExperimentThread : public QxrdThread
 {
   Q_OBJECT
 

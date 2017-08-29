@@ -1,6 +1,7 @@
 #ifndef QXRDDISTORTIONCORRECTIONPLOT_H
 #define QXRDDISTORTIONCORRECTIONPLOT_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepplot.h"
 #include "qcepobjectnamer.h"
@@ -10,7 +11,7 @@
 #include "qxrddistortioncorrection-ptr.h"
 #include "qxrdwindow-ptr.h"
 
-class QxrdDistortionCorrectionPlot : public QcepPlot
+class QXRD_EXPORT QxrdDistortionCorrectionPlot : public QcepPlot
 {
   Q_OBJECT
 public:

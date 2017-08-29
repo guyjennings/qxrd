@@ -1,6 +1,7 @@
 #ifndef QXRDTESTIMAGEPLOTDATAVISHELPER_H
 #define QXRDTESTIMAGEPLOTDATAVISHELPER_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepimagedata.h"
@@ -8,7 +9,7 @@
 
 typedef QSharedPointer<QtDataVisualization::QSurface3DSeries> QSurface3DSeriesPtr;
 
-class QxrdTestImagePlotDataVisHelper : public QcepSerializableObject
+class QXRD_EXPORT QxrdTestImagePlotDataVisHelper : public QcepSerializableObject
 {
   Q_OBJECT
 

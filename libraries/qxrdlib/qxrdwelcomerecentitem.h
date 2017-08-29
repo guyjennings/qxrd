@@ -1,10 +1,11 @@
 #ifndef QXRDWELCOMERECENTITEM_H
 #define QXRDWELCOMERECENTITEM_H
 
+#include "qxrdlib_global.h"
 #include <QCommandLinkButton>
 #include "ui_qxrdwelcomerecentitem.h"
 
-class QxrdWelcomeRecentItem : public QCommandLinkButton
+class QXRD_EXPORT QxrdWelcomeRecentItem : public QCommandLinkButton
 {
     Q_OBJECT
 

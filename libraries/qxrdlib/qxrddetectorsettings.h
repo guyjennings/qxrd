@@ -1,6 +1,7 @@
 #ifndef QXRDDETECTORSETTINGS_H
 #define QXRDDETECTORSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 #include "qcepserializableobject.h"
@@ -20,7 +21,7 @@
 #include "qxrdroicoordinates-ptr.h"
 #include "qxrddetectordriverthread-ptr.h"
 
-class QxrdDetectorSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdDetectorSettings : public QcepSerializableObject
 {
   Q_OBJECT
 

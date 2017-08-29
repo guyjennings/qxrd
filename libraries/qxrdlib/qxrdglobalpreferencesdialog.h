@@ -1,12 +1,13 @@
 #ifndef QXRDGLOBALPREFERENCESDIALOG_H
 #define QXRDGLOBALPREFERENCESDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDialog>
 #include <QCheckBox>
 #include "ui_qxrdglobalpreferencesdialog.h"
 #include "qxrdapplicationsettings-ptr.h"
 
-class QxrdGlobalPreferencesDialog : public QDialog, public Ui::QxrdGlobalPreferencesDialog
+class QXRD_EXPORT QxrdGlobalPreferencesDialog : public QDialog, public Ui::QxrdGlobalPreferencesDialog
 {
   Q_OBJECT
 

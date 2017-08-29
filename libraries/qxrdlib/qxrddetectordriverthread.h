@@ -1,6 +1,7 @@
 #ifndef QXRDDETECTORDRIVERTHREAD_H
 #define QXRDDETECTORDRIVERTHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qxrdthread.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
@@ -8,7 +9,7 @@
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrddetectordriverthread-ptr.h"
 
-class QxrdDetectorDriverThread : public QxrdThread
+class QXRD_EXPORT QxrdDetectorDriverThread : public QxrdThread
 {
   Q_OBJECT
 public:

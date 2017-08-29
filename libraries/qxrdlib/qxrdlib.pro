@@ -36,7 +36,7 @@ DEFINES += QXRD_VERSION=\"$$VERSION\"
 
 !isEmpty(QXRD_PLUGIN_PATH):DEFINES += QXRD_PLUGIN_PATH=\"$$QXRD_PLUGIN_PATH\"
 
-SOURCES += qxrdlib.cpp\
+SOURCES += qxrdlib.cpp \
     qxrdapplication.cpp \
     qxrdglobalsettings.cpp \
     qxrdexperimentsettings.cpp \

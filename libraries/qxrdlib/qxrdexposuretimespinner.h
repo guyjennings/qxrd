@@ -1,11 +1,12 @@
 #ifndef QXRDEXPOSURETIMESPINNER_H
 #define QXRDEXPOSURETIMESPINNER_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include <QDoubleSpinBox>
 #include <QVector>
 
-class QxrdExposureTimeSpinner : public QDoubleSpinBox
+class QXRD_EXPORT QxrdExposureTimeSpinner : public QDoubleSpinBox
 {
   Q_OBJECT
 public:

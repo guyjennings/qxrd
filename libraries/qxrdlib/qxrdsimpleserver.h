@@ -1,6 +1,7 @@
 #ifndef QXRDSIMPLESERVER_H
 #define QXRDSIMPLESERVER_H
 
+#include "qxrdlib_global.h"
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QScriptValue>
@@ -10,7 +11,7 @@
 #include "qcepproperty.h"
 #include "qcepserializableobject.h"
 
-class QxrdSimpleServer : public QcepSerializableObject
+class QXRD_EXPORT QxrdSimpleServer : public QcepSerializableObject
 {
   Q_OBJECT
 public:

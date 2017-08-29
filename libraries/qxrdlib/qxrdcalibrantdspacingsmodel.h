@@ -1,12 +1,13 @@
 #ifndef QXRDCALIBRANTDSPACINGSMODEL_H
 #define QXRDCALIBRANTDSPACINGSMODEL_H
 
+#include "qxrdlib_global.h"
 #include <QAbstractTableModel>
 #include "qxrdcalibrantlibrary-ptr.h"
 #include "qxrdcalibrant.h"
 #include "qxrdcalibrantdspacings-ptr.h"
 
-class QxrdCalibrantDSpacingsModel : public QAbstractTableModel
+class QXRD_EXPORT QxrdCalibrantDSpacingsModel : public QAbstractTableModel
 {
   Q_OBJECT
 

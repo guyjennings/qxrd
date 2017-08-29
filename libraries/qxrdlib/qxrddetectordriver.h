@@ -1,12 +1,13 @@
 #ifndef QXRDDETECTORDRIVER_H
 #define QXRDDETECTORDRIVER_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 
-class QxrdDetectorDriver : public QcepObject
+class QXRD_EXPORT QxrdDetectorDriver : public QcepObject
 {
   Q_OBJECT
 

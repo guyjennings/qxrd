@@ -1,6 +1,7 @@
 #ifndef QXRDFILEBROWSERMODELUPDATER_H
 #define QXRDFILEBROWSERMODELUPDATER_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include <QFileSystemWatcher>
 #include <QTimer>
@@ -10,7 +11,7 @@
 #include "qxrdfilebrowsermodel-ptr.h"
 #include "qxrdfilebrowsermodel.h"
 
-class QxrdFileBrowserModelUpdater : public QcepObject
+class QXRD_EXPORT QxrdFileBrowserModelUpdater : public QcepObject
 {
     Q_OBJECT
 public:

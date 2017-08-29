@@ -1,10 +1,11 @@
 #ifndef QXRDHISTOGRAMPLOTSETTINGS_H
 #define QXRDHISTOGRAMPLOTSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepplotsettings.h"
 #include "qxrdhistogramplotsettings-ptr.h"
 
-class QxrdHistogramPlotSettings : public QcepPlotSettings
+class QXRD_EXPORT QxrdHistogramPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

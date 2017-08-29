@@ -1,9 +1,10 @@
 #ifndef QXRDFITTER_H
 #define QXRDFITTER_H
 
+#include "qxrdlib_global.h"
 #include "qxrdcenterfinder-ptr.h"
 
-class QxrdFitter
+class QXRD_EXPORT QxrdFitter
 {
 public:
   QxrdFitter(QxrdCenterFinder* cf);

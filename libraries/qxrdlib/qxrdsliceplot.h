@@ -1,10 +1,11 @@
 #ifndef QXRDSLICEPLOT_H
 #define QXRDSLICEPLOT_H
 
+#include "qxrdlib_global.h"
 #include "qcepplot.h"
 #include "qcepplotsettings-ptr.h"
 
-class QxrdSlicePlot : public QcepPlot
+class QXRD_EXPORT QxrdSlicePlot : public QcepPlot
 {
   Q_OBJECT
 public:

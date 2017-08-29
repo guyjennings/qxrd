@@ -1,11 +1,12 @@
 #ifndef QXRDDETECTORPILATUSREMOTE_H
 #define QXRDDETECTORPILATUSREMOTE_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include <QProcess>
 
-class QxrdDetectorPilatusRemote : public QcepObject
+class QXRD_EXPORT QxrdDetectorPilatusRemote : public QcepObject
 {
   Q_OBJECT
 

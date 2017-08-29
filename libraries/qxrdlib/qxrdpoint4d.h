@@ -1,7 +1,9 @@
 #ifndef QXRDPOINT4D_H
 #define QXRDPOINT4D_H
 
-class QxrdPoint4D
+#include "qxrdlib_global.h"
+
+class QXRD_EXPORT QxrdPoint4D
 {
 public:
   QxrdPoint4D();

@@ -1,12 +1,13 @@
 #ifndef QXRDPOLARTRANSFORMDIALOG_H
 #define QXRDPOLARTRANSFORMDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDialog>
 #include "ui_qxrdpolartransformdialog.h"
 
 #include "qxrddataprocessor-ptr.h"
 
-class QxrdPolarTransformDialog : public QDialog, public Ui::QxrdPolarTransformDialog
+class QXRD_EXPORT QxrdPolarTransformDialog : public QDialog, public Ui::QxrdPolarTransformDialog
 {
   Q_OBJECT
 

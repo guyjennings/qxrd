@@ -1,10 +1,11 @@
 #ifndef QXRDDETECTORDRIVEREPICSAREA_H
 #define QXRDDETECTORDRIVEREPICSAREA_H
 
+#include "qxrdlib_global.h"
 #include "qxrddetectordriver.h"
 #include "qxrddetectorsettingsepicsarea-ptr.h"
 
-class QxrdDetectorDriverEpicsArea : public QxrdDetectorDriver
+class QXRD_EXPORT QxrdDetectorDriverEpicsArea : public QxrdDetectorDriver
 {
   Q_OBJECT
 

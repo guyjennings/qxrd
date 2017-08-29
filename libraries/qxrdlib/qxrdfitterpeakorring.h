@@ -1,9 +1,10 @@
 #ifndef QXRDFITTERPEAKORRING_H
 #define QXRDFITTERPEAKORRING_H
 
+#include "qxrdlib_global.h"
 #include "qxrdfitter.h"
 
-class QxrdFitterPeakOrRing : public QxrdFitter
+class QXRD_EXPORT QxrdFitterPeakOrRing : public QxrdFitter
 {
 public:
   QxrdFitterPeakOrRing(QxrdCenterFinder* cf, int index, double x0, double y0, double pkht, double bkgd);

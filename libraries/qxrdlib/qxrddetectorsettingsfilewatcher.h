@@ -1,10 +1,11 @@
 #ifndef QXRDDETECTORSETTINGSFILEWATCHER_H
 #define QXRDDETECTORSETTINGSFILEWATCHER_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
 
-class QxrdDetectorSettingsFileWatcher : public QxrdDetectorSettings
+class QXRD_EXPORT QxrdDetectorSettingsFileWatcher : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:

@@ -1,10 +1,11 @@
 #ifndef QXRDDETECTORIMAGEPLOT_H
 #define QXRDDETECTORIMAGEPLOT_H
 
+#include "qxrdlib_global.h"
 #include "qxrdimageplot.h"
 #include "qxrdroipicker-ptr.h"
 
-class QxrdDetectorImagePlot : public QxrdImagePlot
+class QXRD_EXPORT QxrdDetectorImagePlot : public QxrdImagePlot
 {
   Q_OBJECT
 

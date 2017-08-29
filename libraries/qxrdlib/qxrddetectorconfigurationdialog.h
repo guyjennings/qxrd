@@ -1,11 +1,12 @@
 #ifndef QXRDDETECTORCONFIGURATIONDIALOG_H
 #define QXRDDETECTORCONFIGURATIONDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDialog>
 #include "ui_qxrddetectorconfigurationdialog.h"
 #include "qxrddetectorproxy-ptr.h"
 
-class QxrdDetectorConfigurationDialog : public QDialog, public Ui::QxrdDetectorConfigurationDialog
+class QXRD_EXPORT QxrdDetectorConfigurationDialog : public QDialog, public Ui::QxrdDetectorConfigurationDialog
 {
   Q_OBJECT
 

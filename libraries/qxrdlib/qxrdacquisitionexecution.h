@@ -1,10 +1,11 @@
 #ifndef QXRDACQUISITIONEXECUTION_H
 #define QXRDACQUISITIONEXECUTION_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include "qxrdacquisitioninterface-ptr.h"
 
-class QxrdAcquisitionExecution : public QcepObject
+class QXRD_EXPORT QxrdAcquisitionExecution : public QcepObject
 {
   Q_OBJECT
 

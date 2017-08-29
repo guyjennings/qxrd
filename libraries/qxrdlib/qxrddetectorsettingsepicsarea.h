@@ -1,9 +1,10 @@
 #ifndef QXRDDETECTORSETTINGSEPICSAREA_H
 #define QXRDDETECTORSETTINGSEPICSAREA_H
 
+#include "qxrdlib_global.h"
 #include "qxrddetectorsettings.h"
 
-class QxrdDetectorSettingsEpicsArea : public QxrdDetectorSettings
+class QXRD_EXPORT QxrdDetectorSettingsEpicsArea : public QxrdDetectorSettings
 {
   Q_OBJECT
 

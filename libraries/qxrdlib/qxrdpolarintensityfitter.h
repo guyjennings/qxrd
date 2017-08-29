@@ -1,10 +1,11 @@
 #ifndef QXRDPOLARINTENSITYFITTER_H
 #define QXRDPOLARINTENSITYFITTER_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepimagedata-ptr.h"
 
-class QxrdPolarIntensityFitter
+class QXRD_EXPORT QxrdPolarIntensityFitter
 {
 public:
   QxrdPolarIntensityFitter(QcepDoubleImageDataPtr data, int colNum);

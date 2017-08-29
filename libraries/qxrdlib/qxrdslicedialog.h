@@ -1,13 +1,14 @@
 #ifndef QXRDSLICEDIALOG_H
 #define QXRDSLICEDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "qcepplot.h"
 #include "ui_qxrdslicedialog.h"
 #include "qcepimagedata.h"
 #include "qxrdslicedialogsettings-ptr.h"
 
-class QxrdSliceDialog : public QDockWidget, public Ui::QxrdSliceDialog
+class QXRD_EXPORT QxrdSliceDialog : public QDockWidget, public Ui::QxrdSliceDialog
 {
   Q_OBJECT
 

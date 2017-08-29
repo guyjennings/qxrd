@@ -1,6 +1,7 @@
 #ifndef QXRDSYNCHRONIZEDACQUISITION_H
 #define QXRDSYNCHRONIZEDACQUISITION_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include <QVector>
 #include <QMutex>
@@ -12,7 +13,7 @@
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 
-class QxrdSynchronizedAcquisition : public QcepSerializableObject
+class QXRD_EXPORT QxrdSynchronizedAcquisition : public QcepSerializableObject
 {
   Q_OBJECT
 public:

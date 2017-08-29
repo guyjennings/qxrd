@@ -1,11 +1,12 @@
 #ifndef QXRDDISTORTIONCORRECTIONPLOTSETTINGS_H
 #define QXRDDISTORTIONCORRECTIONPLOTSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include <QObject>
 #include "qcepplotsettings.h"
 #include "qxrddistortioncorrectionplotsettings-ptr.h"
 
-class QxrdDistortionCorrectionPlotSettings : public QcepPlotSettings
+class QXRD_EXPORT QxrdDistortionCorrectionPlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 public:

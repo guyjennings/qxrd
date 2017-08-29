@@ -1,13 +1,14 @@
 #ifndef QXRDSCRIPTENGINETHREAD_H
 #define QXRDSCRIPTENGINETHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qxrdthread.h"
 #include <QDateTime>
 #include "qxrdscriptengine-ptr.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
-class QxrdScriptEngineThread : public QxrdThread
+class QXRD_EXPORT QxrdScriptEngineThread : public QxrdThread
 {
   Q_OBJECT
 

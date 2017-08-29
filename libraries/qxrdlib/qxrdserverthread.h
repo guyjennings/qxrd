@@ -1,6 +1,7 @@
 #ifndef QXRDSERVERTHREAD_H
 #define QXRDSERVERTHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qxrdthread.h"
@@ -8,7 +9,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdserver-ptr.h"
 
-class QxrdServerThread : public QxrdThread
+class QXRD_EXPORT QxrdServerThread : public QxrdThread
 {
   Q_OBJECT
 

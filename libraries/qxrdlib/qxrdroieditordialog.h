@@ -1,11 +1,12 @@
 #ifndef QXRDROIEDITORDIALOG_H
 #define QXRDROIEDITORDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDialog>
 #include "qxrdroicoordinates-ptr.h"
 #include "ui_qxrdroieditordialog.h"
 
-class QxrdROIEditorDialog : public QDialog, public Ui::QxrdROIEditorDialog
+class QXRD_EXPORT QxrdROIEditorDialog : public QDialog, public Ui::QxrdROIEditorDialog
 {
   Q_OBJECT
 

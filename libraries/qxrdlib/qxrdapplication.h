@@ -1,6 +1,7 @@
 #ifndef QXRDAPPLICATION_H
 #define QXRDAPPLICATION_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 
@@ -21,7 +22,7 @@
 #include "qxrdperkinelmerplugininterface-ptr.h"
 #endif
 
-class QxrdApplication : public QcepApplication
+class QXRD_EXPORT QxrdApplication : public QcepApplication
 {
   Q_OBJECT
 

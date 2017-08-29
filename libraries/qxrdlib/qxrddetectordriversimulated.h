@@ -1,11 +1,12 @@
 #ifndef QXRDDETECTORDRIVERSIMULATED_H
 #define QXRDDETECTORDRIVERSIMULATED_H
 
+#include "qxrdlib_global.h"
 #include "qxrddetectordriver.h"
 #include "qxrddetectorsettingssimulated-ptr.h"
 #include <QTimer>
 
-class QxrdDetectorDriverSimulated : public QxrdDetectorDriver
+class QXRD_EXPORT QxrdDetectorDriverSimulated : public QxrdDetectorDriver
 {
   Q_OBJECT
 

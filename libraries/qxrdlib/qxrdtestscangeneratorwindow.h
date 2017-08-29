@@ -1,13 +1,14 @@
 #ifndef QXRDTESTSCANGENERATORWINDOW_H
 #define QXRDTESTSCANGENERATORWINDOW_H
 
+#include "qxrdlib_global.h"
 #include <QMainWindow>
 #include "qxrdtestscangeneratorthread-ptr.h"
 #include "qxrdtestscangenerator-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "ui_qxrdtestimagegeneratorwindow.h"
 
-class QxrdTestScanGeneratorWindow : public QMainWindow, public Ui::QxrdTestImageGeneratorWindow
+class QXRD_EXPORT QxrdTestScanGeneratorWindow : public QMainWindow, public Ui::QxrdTestImageGeneratorWindow
 {
   Q_OBJECT
 

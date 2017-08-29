@@ -1,13 +1,14 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTSDIALOG_H
 #define QXRDACQUISITIONEXTRAINPUTSDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "qxrdacquisition.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "ui_qxrdacquisitionextrainputsdialog.h"
 #include "qxrdacquisitionextrainputsdialogsettings-ptr.h"
 
-class QxrdAcquisitionExtraInputsDialog : public QDockWidget, public Ui::QxrdAcquisitionExtraInputsDialog
+class QXRD_EXPORT QxrdAcquisitionExtraInputsDialog : public QDockWidget, public Ui::QxrdAcquisitionExtraInputsDialog
 {
   Q_OBJECT
   

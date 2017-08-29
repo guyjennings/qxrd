@@ -1,9 +1,10 @@
 #ifndef QXRDACQUISITIONPARAMETERPACK_H
 #define QXRDACQUISITIONPARAMETERPACK_H
 
+#include "qxrdlib_global.h"
 #include <QString>
 
-class QxrdAcquisitionParameterPack
+class QXRD_EXPORT QxrdAcquisitionParameterPack
 {
 public:
   QxrdAcquisitionParameterPack(QString fileBase, double exposure, int nsummed, int preTrigger, int postTrigger, int nphases, int skipBefore, int skipBetween)

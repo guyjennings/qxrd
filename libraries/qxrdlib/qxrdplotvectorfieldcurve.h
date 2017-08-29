@@ -1,10 +1,11 @@
 #ifndef QXRDPLOTVECTORFIELDCURVE_H
 #define QXRDPLOTVECTORFIELDCURVE_H
 
+#include "qxrdlib_global.h"
 #include "qwt_plot_seriesitem.h"
 #include "qxrdplotvectorfielddata.h"
 
-class QxrdPlotVectorFieldCurve :
+class QXRD_EXPORT QxrdPlotVectorFieldCurve :
     public QwtPlotSeriesItem, QwtSeriesStore<QxrdPoint4D>
 {
 public:

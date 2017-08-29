@@ -1,6 +1,7 @@
 #ifndef QXRDINTEGRATORCACHE_H
 #define QXRDINTEGRATORCACHE_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include <QObject>
@@ -18,7 +19,7 @@
 #include "qxrdscriptengine-ptr.h"
 #include <QScriptValue>
 
-class QxrdIntegratorCache : public QObject
+class QXRD_EXPORT QxrdIntegratorCache : public QObject
 {
   Q_OBJECT
 public:

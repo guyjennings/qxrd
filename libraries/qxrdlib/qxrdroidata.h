@@ -1,10 +1,11 @@
 #ifndef QXRDROIDATA_H
 #define QXRDROIDATA_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 
-class QxrdROIData : public QcepObject
+class QXRD_EXPORT QxrdROIData : public QcepObject
 {
 Q_OBJECT
 public:

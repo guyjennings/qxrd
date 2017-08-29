@@ -1,7 +1,9 @@
 #ifndef QXRDPLANEFITTER_H
 #define QXRDPLANEFITTER_H
 
-class QxrdPlaneFitter
+#include "qxrdlib_global.h"
+
+class QXRD_EXPORT QxrdPlaneFitter
 {
 public:
   QxrdPlaneFitter();

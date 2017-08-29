@@ -1,11 +1,12 @@
 #ifndef QXRDSCRIPTEDITWIDGET_H
 #define QXRDSCRIPTEDITWIDGET_H
 
+#include "qxrdlib_global.h"
 #include <QTextEdit>
 #include "qxrdhighlighter.h"
 #include "qxrdexperiment-ptr.h"
 
-class QxrdScriptEditWidget : public QTextEdit
+class QXRD_EXPORT QxrdScriptEditWidget : public QTextEdit
 {
   Q_OBJECT
 public:

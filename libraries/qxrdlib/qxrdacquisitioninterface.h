@@ -1,6 +1,7 @@
 #ifndef QXRDACQUISITIONINTERFACE_H
 #define QXRDACQUISITIONINTERFACE_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
@@ -16,7 +17,7 @@
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 
-class QxrdAcquisitionInterface : public QcepSerializableObject
+class QXRD_EXPORT QxrdAcquisitionInterface : public QcepSerializableObject
 {
   Q_OBJECT
 

@@ -1,10 +1,11 @@
 #ifndef QXRDTHREAD_H
 #define QXRDTHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qcepthread.h"
 #include "qcepobject-ptr.h"
 
-class QxrdThread : public QcepThread
+class QXRD_EXPORT QxrdThread : public QcepThread
 {
   Q_OBJECT
 

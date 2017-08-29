@@ -1,11 +1,12 @@
 #ifndef QXRDTESTSCANGENERATOR_H
 #define QXRDTESTSCANGENERATOR_H
 
+#include "qxrdlib_global.h"
 #include "qxrdtestgenerator.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepdatacolumnscan.h"
 
-class QxrdTestScanGenerator : public QxrdTestGenerator
+class QXRD_EXPORT QxrdTestScanGenerator : public QxrdTestGenerator
 {
   Q_OBJECT
 

@@ -1,12 +1,13 @@
 #ifndef QXRDDETECTORSETTINGSPERKINELMER_H
 #define QXRDDETECTORSETTINGSPERKINELMER_H
 
+#include "qxrdlib_global.h"
 #include <QMutex>
 #include <QDateTime>
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
 
-class QxrdDetectorSettingsPerkinElmer : public QxrdDetectorSettings
+class QXRD_EXPORT QxrdDetectorSettingsPerkinElmer : public QxrdDetectorSettings
 {
     Q_OBJECT
 public:

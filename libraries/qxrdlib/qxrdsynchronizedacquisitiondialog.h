@@ -1,13 +1,14 @@
 #ifndef QXRDSYNCHRONIZEDACQUISITIONDIALOG_H
 #define QXRDSYNCHRONIZEDACQUISITIONDIALOG_H
 
+#include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrdsynchronizedacquisitiondialog.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdsynchronizedacquisitiondialogsettings-ptr.h"
 
-class QxrdSynchronizedAcquisitionDialog : public QDockWidget, public Ui::QxrdSynchronizedAcquisitionDialog
+class QXRD_EXPORT QxrdSynchronizedAcquisitionDialog : public QDockWidget, public Ui::QxrdSynchronizedAcquisitionDialog
 {
   Q_OBJECT
 

@@ -1,9 +1,10 @@
 #ifndef QXRDROIPOLYGON_H
 #define QXRDROIPOLYGON_H
 
+#include "qxrdlib_global.h"
 #include "qxrdroishape.h"
 
-class QxrdROIPolygon : public QxrdROIShape
+class QXRD_EXPORT QxrdROIPolygon : public QxrdROIShape
 {
   Q_OBJECT
 

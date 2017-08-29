@@ -1,12 +1,13 @@
 #ifndef QXRDSIMPLESERVERTHREAD_H
 #define QXRDSIMPLESERVERTHREAD_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qxrdthread.h"
 #include "qxrdsimpleserver-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
-class QxrdSimpleServerThread : public QxrdThread
+class QXRD_EXPORT QxrdSimpleServerThread : public QxrdThread
 {
   Q_OBJECT
 public:

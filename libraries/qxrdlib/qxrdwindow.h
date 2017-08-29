@@ -1,6 +1,7 @@
 #ifndef QXRDWINDOW_H
 #define QXRDWINDOW_H
 
+#include "qxrdlib_global.h"
 #include <QMainWindow>
 #include <QProgressBar>
 #include <QTimer>
@@ -38,7 +39,7 @@
 #include "qxrdwindowsettings-ptr.h"
 #include "qcepobjectnamer.h"
 
-class QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow, public QEnableSharedFromThis<QxrdWindow>
+class QXRD_EXPORT QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow, public QEnableSharedFromThis<QxrdWindow>
 {
   Q_OBJECT
 

@@ -1,9 +1,10 @@
 #ifndef QXRDFILEBROWSERVIEW_H
 #define QXRDFILEBROWSERVIEW_H
 
+#include "qxrdlib_global.h"
 #include <QTableView>
 
-class QxrdFileBrowserView : public QTableView
+class QXRD_EXPORT QxrdFileBrowserView : public QTableView
 {
   Q_OBJECT
 public:

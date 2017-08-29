@@ -1,9 +1,10 @@
 #ifndef QXRDFITTERRINGCIRCLE_H
 #define QXRDFITTERRINGCIRCLE_H
 
+#include "qxrdlib_global.h"
 #include "qxrdfitter.h"
 
-class QxrdFitterRingCircle : public QxrdFitter
+class QXRD_EXPORT QxrdFitterRingCircle : public QxrdFitter
 {
 public:
   QxrdFitterRingCircle(QxrdCenterFinder *cf, int ringIndex, double x0, double y0);

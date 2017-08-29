@@ -1,6 +1,7 @@
 #ifndef QXRDDEBUG_H
 #define QXRDDEBUG_H
 
+#include "qxrdlib_global.h"
 #include "qcepdebug.h"
 
 enum {
@@ -28,7 +29,7 @@ enum {
   DEBUG_ROI
 };
 
-class QxrdDebugDictionary : public QcepDebugDictionary {
+class QXRD_EXPORT QxrdDebugDictionary : public QcepDebugDictionary {
 public:
   QxrdDebugDictionary();
 };

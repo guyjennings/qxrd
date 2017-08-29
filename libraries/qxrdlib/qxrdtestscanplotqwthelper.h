@@ -1,6 +1,7 @@
 #ifndef QXRDTESTSCANPLOTQWTHELPER_H
 #define QXRDTESTSCANPLOTQWTHELPER_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepdatacolumnscan.h"
@@ -8,7 +9,7 @@
 
 typedef QSharedPointer<QwtPlotCurve> QwtPlotCurvePtr;
 
-class QxrdTestScanPlotQwtHelper : public QcepSerializableObject
+class QXRD_EXPORT QxrdTestScanPlotQwtHelper : public QcepSerializableObject
 {
   Q_OBJECT
 

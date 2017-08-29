@@ -1,6 +1,7 @@
 #ifndef QXRDDETECTORCONTROLWINDOW_H
 #define QXRDDETECTORCONTROLWINDOW_H
 
+#include "qxrdlib_global.h"
 #include "qxrdmainwindow.h"
 #include "ui_qxrddetectorcontrolwindow.h"
 #include "qxrdacquisition-ptr.h"
@@ -11,7 +12,7 @@
 #include "qxrddetectorcontrolwindowsettings-ptr.h"
 #include <QTimer>
 
-class QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::QxrdDetectorControlWindow
+class QXRD_EXPORT QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::QxrdDetectorControlWindow
 {
   Q_OBJECT
 

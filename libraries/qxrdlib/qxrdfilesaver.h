@@ -1,6 +1,7 @@
 #ifndef QXRDFILESAVER_H
 #define QXRDFILESAVER_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepobject.h"
@@ -21,7 +22,7 @@
 #include "qcepintegrateddata-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
-class QxrdFileSaver : public QcepObject
+class QXRD_EXPORT QxrdFileSaver : public QcepObject
 {
   Q_OBJECT
 

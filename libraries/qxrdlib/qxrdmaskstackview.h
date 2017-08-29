@@ -1,12 +1,13 @@
 #ifndef QXRDMASKSTACKVIEW_H
 #define QXRDMASKSTACKVIEW_H
 
+#include "qxrdlib_global.h"
 #include <QTableView>
 #include "qxrdmaskstack-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdmaskdialog-ptr.h"
 
-class QxrdMaskStackView : public QTableView
+class QXRD_EXPORT QxrdMaskStackView : public QTableView
 {
   Q_OBJECT
 public:

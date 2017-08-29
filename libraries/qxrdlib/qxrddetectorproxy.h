@@ -1,13 +1,14 @@
 #ifndef QXRDDETECTORPROXY_H
 #define QXRDDETECTORPROXY_H
 
+#include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include <QVector>
 #include "qxrddetectorconfigurationdialog.h"
 
-class QxrdDetectorProxy : public QcepObject
+class QXRD_EXPORT QxrdDetectorProxy : public QcepObject
 {
   Q_OBJECT
 

@@ -1,11 +1,12 @@
 #ifndef QXRDDETECTORSIMULATED_H
 #define QXRDDETECTORSIMULATED_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
 #include <QTimer>
 
-class QxrdDetectorSettingsSimulated : public QxrdDetectorSettings
+class QXRD_EXPORT QxrdDetectorSettingsSimulated : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:

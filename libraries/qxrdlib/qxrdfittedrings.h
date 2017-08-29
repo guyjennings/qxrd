@@ -1,10 +1,11 @@
 #ifndef QXRDFITTEDRINGS_H
 #define QXRDFITTEDRINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepdatacolumnscan.h"
 #include "qxrdfittedrings-ptr.h"
 
-class QxrdFittedRings : public QcepDataColumnScan
+class QXRD_EXPORT QxrdFittedRings : public QcepDataColumnScan
 {
   Q_OBJECT
 

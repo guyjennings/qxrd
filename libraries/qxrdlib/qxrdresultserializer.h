@@ -1,6 +1,7 @@
 #ifndef QXRDRESULTSERIALIZER_H
 #define QXRDRESULTSERIALIZER_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 #include "qcepobject.h"
@@ -10,7 +11,7 @@
 #include <QQueue>
 #include <QFutureWatcher>
 
-class QxrdResultSerializerBase : public QcepObject
+class QXRD_EXPORT QxrdResultSerializerBase : public QcepObject
 {
   Q_OBJECT
 public:
@@ -25,7 +26,7 @@ protected:
 };
 
 template <typename T>
-class QxrdResultSerializer : public QxrdResultSerializerBase
+class QXRD_EXPORT QxrdResultSerializer : public QxrdResultSerializerBase
 {
 public:
   explicit QxrdResultSerializer(QcepIntProperty *ctr, QcepObjectWPtr parent);

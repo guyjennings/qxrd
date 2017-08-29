@@ -1,6 +1,7 @@
 #ifndef QXRDDETECTORDRIVERPERKINELMER_H
 #define QXRDDETECTORDRIVERPERKINELMER_H
 
+#include "qxrdlib_global.h"
 #include "qxrddetectordriver.h"
 #include "qxrddetectorsettingsperkinelmer-ptr.h"
 
@@ -13,7 +14,7 @@
 #include "qxrdperkinelmerplugininterface-ptr.h"
 #endif
 
-class QxrdDetectorDriverPerkinElmer : public QxrdDetectorDriver
+class QXRD_EXPORT QxrdDetectorDriverPerkinElmer : public QxrdDetectorDriver
 {
   Q_OBJECT
 

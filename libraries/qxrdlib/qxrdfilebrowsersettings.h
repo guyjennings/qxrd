@@ -1,11 +1,12 @@
 #ifndef QXRDFILEBROWSERSETTINGS_H
 #define QXRDFILEBROWSERSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrdfilebrowsersettings-ptr.h"
 
-class QxrdFileBrowserSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdFileBrowserSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:

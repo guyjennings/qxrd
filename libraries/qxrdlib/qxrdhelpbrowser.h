@@ -1,10 +1,11 @@
 #ifndef QXRDHELPBROWSER_H
 #define QXRDHELPBROWSER_H
 
+#include "qxrdlib_global.h"
 #include <QTextBrowser>
 #include "qxrdexperiment-ptr.h"
 
-class QxrdHelpBrowser : public QTextBrowser
+class QXRD_EXPORT QxrdHelpBrowser : public QTextBrowser
 {
   Q_OBJECT
 public:

@@ -1,10 +1,11 @@
 #ifndef QXRDTESTSCANPLOTDATAVISHELPER_H
 #define QXRDTESTSCANPLOTDATAVISHELPER_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepdatacolumnscan-ptr.h"
 
-class QxrdTestScanPlotDataVisHelper : public QcepSerializableObject
+class QXRD_EXPORT QxrdTestScanPlotDataVisHelper : public QcepSerializableObject
 {
   Q_OBJECT
 

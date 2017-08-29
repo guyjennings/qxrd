@@ -1,6 +1,7 @@
 #ifndef QXRDINTEGRATORPLOT_H
 #define QXRDINTEGRATORPLOT_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepplot.h"
 #include "qcepintegrateddata-ptr.h"
@@ -8,7 +9,7 @@
 #include "qxrddataprocessor.h"
 #include "qxrdintegrator.h"
 
-class QxrdIntegratorPlot : public QcepPlot
+class QXRD_EXPORT QxrdIntegratorPlot : public QcepPlot
 {
   Q_OBJECT
 

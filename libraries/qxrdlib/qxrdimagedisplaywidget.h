@@ -1,6 +1,7 @@
 #ifndef QXRDIMAGEDISPLAYWIDGET_H
 #define QXRDIMAGEDISPLAYWIDGET_H
 
+#include "qxrdlib_global.h"
 #include <QWidget>
 #include <QTabWidget>
 #include <QVector>
@@ -12,7 +13,7 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrdapplication-ptr.h"
 
-class QxrdImageDisplayWidget : public QWidget
+class QXRD_EXPORT QxrdImageDisplayWidget : public QWidget
 {
   Q_OBJECT
 

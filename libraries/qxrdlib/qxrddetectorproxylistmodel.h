@@ -1,10 +1,11 @@
 #ifndef QXRDDETECTORPROXYLISTMODEL_H
 #define QXRDDETECTORPROXYLISTMODEL_H
 
+#include "qxrdlib_global.h"
 #include <QAbstractListModel>
 #include "qxrddetectorproxy-ptr.h"
 
-class QxrdDetectorProxyListModel : public QAbstractListModel
+class QXRD_EXPORT QxrdDetectorProxyListModel : public QAbstractListModel
 {
   Q_OBJECT
 

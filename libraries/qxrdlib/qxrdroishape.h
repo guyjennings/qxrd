@@ -1,10 +1,11 @@
 #ifndef QXRDROISHAPE_H
 #define QXRDROISHAPE_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qxrdroishape-ptr.h"
 
-class QxrdROIShape : public QcepSerializableObject
+class QXRD_EXPORT QxrdROIShape : public QcepSerializableObject
 {
   Q_OBJECT
 

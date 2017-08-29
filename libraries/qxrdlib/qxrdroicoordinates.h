@@ -1,6 +1,7 @@
 #ifndef QXRDROICOORDINATES_H
 #define QXRDROICOORDINATES_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepserializableobject.h"
 #include "qxrdexperiment-ptr.h"
@@ -14,7 +15,7 @@
 #include <QScriptEngine>
 #include <QMutex>
 
-class QxrdROICoordinates : public QcepSerializableObject
+class QXRD_EXPORT QxrdROICoordinates : public QcepSerializableObject
 {
   Q_OBJECT
 

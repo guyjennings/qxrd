@@ -1,6 +1,7 @@
 #ifndef QXRDIMAGEPLOT_H
 #define QXRDIMAGEPLOT_H
 
+#include "qxrdlib_global.h"
 #include "qcepplot.h"
 
 #include <qwt_color_map.h>
@@ -27,7 +28,7 @@
 #include "qxrdroicoordinateslistmodel-ptr.h"
 #include <QItemSelectionModel>
 
-class QxrdImagePlot : public QcepPlot
+class QXRD_EXPORT QxrdImagePlot : public QcepPlot
 {
   Q_OBJECT
 

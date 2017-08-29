@@ -1,11 +1,12 @@
 #ifndef QXRDTESTIMAGEGENERATOR_H
 #define QXRDTESTIMAGEGENERATOR_H
 
+#include "qxrdlib_global.h"
 #include "qxrdtestgenerator.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepimagedata.h"
 
-class QxrdTestImageGenerator : public QxrdTestGenerator
+class QXRD_EXPORT QxrdTestImageGenerator : public QxrdTestGenerator
 {
   Q_OBJECT
 

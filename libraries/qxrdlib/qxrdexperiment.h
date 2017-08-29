@@ -3,6 +3,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 
@@ -47,7 +48,7 @@
 #include "qxrdjsengine-ptr.h"
 #include "modeltest.h"
 
-class QxrdExperiment : public QcepExperiment
+class QXRD_EXPORT QxrdExperiment : public QcepExperiment
 {
   Q_OBJECT
 

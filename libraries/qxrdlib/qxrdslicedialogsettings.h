@@ -1,12 +1,13 @@
 #ifndef QXRDSLICEDIALOGSETTINGS_H
 #define QXRDSLICEDIALOGSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepproperty.h"
 #include "qxrdsliceplotsettings-ptr.h"
 #include "qxrdslicedialogsettings-ptr.h"
 
-class QxrdSliceDialogSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdSliceDialogSettings : public QcepSerializableObject
 {
   Q_OBJECT
 public:

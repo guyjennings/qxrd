@@ -1,11 +1,12 @@
 #ifndef QXRDAPPLICATIONSETTINGS_H
 #define QXRDAPPLICATIONSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepapplicationsettings.h"
 #include "qxrdapplication-ptr.h"
 #include "qcepallocator-ptr.h"
 
-class QxrdApplicationSettings : public QcepApplicationSettings
+class QXRD_EXPORT QxrdApplicationSettings : public QcepApplicationSettings
 {
   Q_OBJECT
 

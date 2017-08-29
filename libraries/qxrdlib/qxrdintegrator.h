@@ -1,6 +1,7 @@
 #ifndef QXRDINTEGRATOR_H
 #define QXRDINTEGRATOR_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include "qcepserializableobject.h"
@@ -19,7 +20,7 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 
-class QxrdIntegrator : public QcepSerializableObject
+class QXRD_EXPORT QxrdIntegrator : public QcepSerializableObject
 {
   Q_OBJECT
 

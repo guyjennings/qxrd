@@ -1,13 +1,14 @@
 #ifndef QXRDRASTERDATA_H
 #define QXRDRASTERDATA_H
 
+#include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include <qwt_raster_data.h>
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
 
-class QxrdRasterData : public QwtRasterData
+class QXRD_EXPORT QxrdRasterData : public QwtRasterData
 {
 public:
   QxrdRasterData(QcepImageDataBasePtr img = QcepImageDataBasePtr(),

@@ -1,6 +1,7 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTSCHANNEL_H
 #define QXRDACQUISITIONEXTRAINPUTSCHANNEL_H
 
+#include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
@@ -8,7 +9,7 @@
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdacquisitionextrainputschannel-ptr.h"
 
-class QxrdAcquisitionExtraInputsChannel : public QcepSerializableObject
+class QXRD_EXPORT QxrdAcquisitionExtraInputsChannel : public QcepSerializableObject
 {
   Q_OBJECT
 public:
