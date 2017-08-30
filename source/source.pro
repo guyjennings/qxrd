@@ -109,14 +109,6 @@ else:win32 {
     INCLUDEPATH += .
 }
 
-contains(DEFINES,HAVE_PERKIN_ELMER) {
-  SOURCES += \
-             qxrdperkinelmerplugininterface.cpp
-  HEADERS += \
-             qxrdperkinelmerplugininterface.h \
-             qxrdperkinelmerplugininterface-ptr.h
-}
-
 OTHER_FILES += qxrd.rc \
     qxrd.nsi \
     qxrd-qt5.nsi \

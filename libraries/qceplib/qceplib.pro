@@ -6,6 +6,8 @@
 
 QT       += widgets qml network script concurrent datavisualization charts
 
+win32:CONFIG   += skip_target_version_ext
+
 win32:CONFIG(debug, debug|release) {
   TARGET = qceplibd
 } else {

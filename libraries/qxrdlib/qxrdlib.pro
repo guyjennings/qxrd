@@ -8,6 +8,9 @@ include("../../qxrd.version.pri")
 include("../../qxrd.platform.pri")
 
 QT       += widgets qml network script scripttools concurrent datavisualization charts
+QT       += testlib
+
+win32:CONFIG   += skip_target_version_ext
 
 win32:CONFIG(debug, debug|release) {
   TARGET = qxrdlibd
@@ -644,6 +647,14 @@ DISTFILES += \
     help/*.html \
     help/images/*.*
 
+contains(DEFINES,HAVE_PERKIN_ELMER) {
+  SOURCES += \
+             qxrdperkinelmerplugininterface.cpp
+  HEADERS += \
+             qxrdperkinelmerplugininterface.h \
+             qxrdperkinelmerplugininterface-ptr.h
+}
+
 unix {
     target.path = /usr/lib
     INSTALLS += target
@@ -661,3 +672,7 @@ include(../../source/submodules/qceplib/qceplib-hdf5-include.pri)
 include(../../source/submodules/qceplib/qceplib-specserver-include.pri)
 
 INCLUDEPATH += $${OUT_PWD}/../qceplib/
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../ -lqceplib
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../ -lqceplibd
+else:unix: LIBS += -L$$OUT_PWD/../../ -lqceplib
