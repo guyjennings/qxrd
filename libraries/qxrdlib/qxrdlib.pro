@@ -10,7 +10,7 @@ include("../../qxrd.platform.pri")
 QT       += widgets qml network script scripttools concurrent datavisualization charts
 QT       += testlib
 
-win32:CONFIG   += skip_target_version_ext
+qin32:CONFIG   += skip_target_version_ext
 
 win32:CONFIG(debug, debug|release) {
   TARGET = qxrdlibd

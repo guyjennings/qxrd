@@ -86,3 +86,5 @@ win32 {
     }
   }
 }
+
+!isEmpty(QXRD_PLUGIN_PATH):DEFINES += QXRD_PLUGIN_PATH=\"$$QXRD_PLUGIN_PATH\"

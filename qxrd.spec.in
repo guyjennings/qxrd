@@ -1,4 +1,4 @@
-Name:		qxrd-qt5
+Name:		qxrd
 Version:
 Release:        1%{?dist}
 Summary:        qxrd - a readout and control program for perkin elmer x ray detector
@@ -13,15 +13,12 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Obsoletes:      qxrd
 
 BuildRequires:  desktop-file-utils
-#BuildRequires:  qt4, qt4-x11 qt4-devel
 BuildRequires:  qt5-qtbase-devel, qt5-qtscript-devel, qt5-qtwebkit-devel, qt5-qtsvg-devel
 BuildRequires:  qt5-qtcharts-devel, qt5-qtdatavis3d-devel
 BuildRequires:  libtiff-devel, CBFlib-devel
-#BuildRequires:  hdf5-devel
-#Requires:       qt4, qt4-x11, libtiff, CBFlib
+BuildRequires:  patchelf
 Requires:       qt5-qtbase, qt5-qtscript, qt5-qtwebkit, qt5-qtsvg
 Requires:       qt5-qtcharts, qt5-qtdatavis3d
-#Requires:       hdf5
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 
@@ -33,8 +30,6 @@ qxrd is a readout and control program for perkin elmer x ray detector
 %setup -n qxrd-%{version}
 
 %build
-#/usr/bin/qmake-qt4 %{name}.pro -recursive "QXRD_PLUGINS_DIR=%{_libdir}/%{name}-%{version}"
-#/usr/bin/qmake-qt5 %{name}.pro -recursive "QXRD_PLUGINS_DIR=%{_libdir}/%{name}-%{version}"
 /usr/bin/qmake-qt5 qxrd.pro -recursive "QXRD_PLUGINS_DIR=%{_libdir}/qxrd-%{version}"
 make clean
 make %{?_smp_mflags}
@@ -43,8 +38,6 @@ make %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
-#mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}
-#mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/qxrd-%{version}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/qxrd-%{version}/plugins/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/
@@ -53,13 +46,17 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/
 
 install qxrd $RPM_BUILD_ROOT%{_bindir}
+install libqceplib.so.1 $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/
+install libqxrdlib.so.0 $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/
 #install plugins/*.so  $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
 install plugins/*.so  $RPM_BUILD_ROOT%{_libdir}/qxrd-%{version}/plugins/
 
-cp source/images/qxrd-icon-32x32.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/qxrd-icon.png
-cp source/images/qxrd-icon-64x64.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps/qxrd-icon.png
-cp source/images/qxrd-icon-128x128.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/qxrd-icon.png
-cp source/images/qxrd-icon-256x256.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/qxrd-icon.png
+patchelf --set-rpath %{_libdir}/qxrd-%{version} $RPM_BUILD_ROOT%{_bindir}/qxrd
+
+cp libraries/qxrdlib/images/qxrd-icon-32x32.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/qxrd-icon.png
+cp libraries/qxrdlib/images/qxrd-icon-64x64.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps/qxrd-icon.png
+cp libraries/qxrdlib/images/qxrd-icon-128x128.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/qxrd-icon.png
+cp libraries/qxrdlib/images/qxrd-icon-256x256.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/qxrd-icon.png
 
 desktop-file-install --vendor=bessrc \
         --dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -85,6 +82,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 #%{_bindir}/%{name}
 #%{_libdir}/%{name}-%{version}/plugins/*.so
 %{_bindir}/qxrd
+%{_libdir}/qxrd-%{version}/*.so*
 %{_libdir}/qxrd-%{version}/plugins/*.so
 #%{_datadir}/applications/*%{name}.desktop
 %{_datadir}/applications/*qxrd.desktop

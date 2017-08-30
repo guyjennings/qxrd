@@ -14,3 +14,5 @@ contains(DEFINES,HAVE_NIDAQ) {
   message("HAVE_NIDAQ")
   SUBDIRS += qxrdnidaqplugin
 }
+
+CONFIG += ordered

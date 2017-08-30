@@ -375,10 +375,11 @@ void QxrdApplication::loadPlugins()
 
 #ifdef QXRD_PLUGIN_PATH
   pluginsDirList.append(QDir(xstr(QXRD_PLUGIN_PATH)));
-#endif
+#else
   QDir pluginsDir = QDir(qApp->applicationDirPath());
   pluginsDir.cd("plugins");
   pluginsDirList.append(pluginsDir);
+#endif
 
   foreach (QDir pluginsDir, pluginsDirList) {
     if (qcepDebug(DEBUG_PLUGINS)) {
