@@ -745,4 +745,7 @@ TODO("2017-08-09", "",
 TODO("2017-08-09", "",
      "An easier way of adding ROIs via mouse commands would be nice");
 
+TODO("2017-09-01", "",
+     "Problems loading and/or saving windows state in experiments");
+
 #endif // TODO_H
