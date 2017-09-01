@@ -253,10 +253,25 @@ SOURCES += qxrdlib.cpp \
     qxrdtestscanplotqwthelper.cpp \
     qxrdtestimageplotdatavishelper.cpp \
     qxrdtestimageplotqwthelper.cpp \
-    qxrdtestthread.cpp
+    qxrdtestthread.cpp \
+    commands/00generic/qxrdcommand.cpp \
+    commands/00generic/qxrdapplicationcommand.cpp \
+    commands/00generic/qxrdexperimentcommand.cpp \
+    commands/00generic/qxrdgraphcommand.cpp \
+    commands/00generic/qxrddatasetcommand.cpp \
+    commands/specremote/qxrdspecremotecommand.cpp
 
 HEADERS += qxrdlib.h\
-        qxrdlib_global.h
+        qxrdlib_global.h \
+    commands/00generic/qxrdcommand.h \
+    commands/00generic/qxrdapplicationcommand.h \
+    commands/00generic/qxrdexperimentcommand.h \
+    commands/00generic/qxrdgraphcommand.h \
+    commands/00generic/qxrddatasetcommand.h \
+    commands/specremote/qxrdspecremotecommand.h
+
+INCLUDEPATH += commands/00generic/
+INCLUDEPATH += commands/specremote/
 
 HEADERS += TODO.h \
     qxrdapplication.h \

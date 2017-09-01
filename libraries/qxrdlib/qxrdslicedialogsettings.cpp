@@ -28,7 +28,7 @@ void QxrdSliceDialogSettings::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::readSettings(this, settings);
+  QcepSerializableObject::readSettings(settings);
 
   settings->beginGroup("plot");
   m_SlicePlotSettings->readSettings(settings);
@@ -39,7 +39,7 @@ void QxrdSliceDialogSettings::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepProperty::writeSettings(this, settings);
+  QcepSerializableObject::writeSettings(settings);
 
   settings->beginGroup("plot");
   m_SlicePlotSettings->writeSettings(settings);

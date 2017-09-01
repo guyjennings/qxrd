@@ -33,14 +33,14 @@ QxrdSimpleServer::~QxrdSimpleServer()
 
 void QxrdSimpleServer::readSettings(QSettings *settings)
 {
-  QcepProperty::readSettings(this, settings);
+  QcepSerializableObject::readSettings(settings);
 
   runModeChanged();
 }
 
 void QxrdSimpleServer::writeSettings(QSettings *settings)
 {
-  QcepProperty::writeSettings(this, settings);
+  QcepSerializableObject::writeSettings(settings);
 }
 
 void QxrdSimpleServer::runModeChanged()

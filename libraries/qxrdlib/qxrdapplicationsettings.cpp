@@ -62,7 +62,7 @@ QcepAllocatorWPtr QxrdApplicationSettings::allocator() const
 
 void QxrdApplicationSettings::readSettings(QSettings *settings)
 {
-  QcepProperty::readSettings(this, settings);
+  QcepApplicationSettings::readSettings(settings);
 
   QcepAllocatorPtr alloc(m_Allocator);
 
@@ -75,7 +75,7 @@ void QxrdApplicationSettings::readSettings(QSettings *settings)
 
 void QxrdApplicationSettings::writeSettings(QSettings *settings)
 {
-  QcepProperty::writeSettings(this, settings);
+  QcepApplicationSettings::writeSettings(settings);
 
   QcepAllocatorPtr alloc(m_Allocator);
 

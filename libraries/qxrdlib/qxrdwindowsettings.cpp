@@ -91,7 +91,7 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (settings) {
-    QcepProperty::readSettings(this, settings);
+    QcepSerializableObject::readSettings(settings);
 
     settings->beginGroup("plot");
     m_ImagePlotSettings->readSettings(settings);
@@ -154,7 +154,7 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
   //    printf("QxrdWindow::writeSettings\n");
 
   if (settings) {
-    QcepProperty::writeSettings(this, settings);
+    QcepSerializableObject::writeSettings(settings);
 
     settings->beginGroup("plot");
     m_ImagePlotSettings->writeSettings(settings);

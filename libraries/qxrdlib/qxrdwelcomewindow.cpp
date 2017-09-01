@@ -158,7 +158,9 @@ void QxrdWelcomeWindow::readSettings(QSettings *settings)
       restoreState(winstate,1);
     }
 
+    settings->beginGroup("properties");
     QcepProperty::readSettings(this, settings);
+    settings->endGroup();
   }
 }
 
@@ -168,7 +170,9 @@ void QxrdWelcomeWindow::writeSettings(QSettings *settings)
     settings->setValue("geometry", saveGeometry());
     settings->setValue("state", saveState(1));
 
+    settings->beginGroup("properties");
     QcepProperty::writeSettings(this, settings);
+    settings->endGroup();
   }
 }
 

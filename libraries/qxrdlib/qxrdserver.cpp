@@ -40,14 +40,14 @@ QxrdServer::~QxrdServer()
 
 void QxrdServer::readSettings(QSettings *settings)
 {
-  QcepProperty::readSettings(this, settings);
+  QcepSerializableObject::readSettings(settings);
 
   runModeChanged();
 }
 
 void QxrdServer::writeSettings(QSettings *settings)
 {
-  QcepProperty::writeSettings(this, settings);
+  QcepSerializableObject::writeSettings(settings);
 }
 
 void QxrdServer::runModeChanged()

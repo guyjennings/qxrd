@@ -25,7 +25,7 @@ void QxrdHistogramDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
 
 void QxrdHistogramDialogSettings::readSettings(QSettings *settings)
 {
-  QcepProperty::readSettings(this, settings);
+  QcepSerializableObject::readSettings(settings);
 
   settings->beginGroup("plot");
   m_HistogramPlotSettings->readSettings(settings);
@@ -34,7 +34,7 @@ void QxrdHistogramDialogSettings::readSettings(QSettings *settings)
 
 void QxrdHistogramDialogSettings::writeSettings(QSettings *settings)
 {
-  QcepProperty::writeSettings(this, settings);
+  QcepSerializableObject::writeSettings(settings);
 
   settings->beginGroup("plot");
   m_HistogramPlotSettings->writeSettings(settings);
