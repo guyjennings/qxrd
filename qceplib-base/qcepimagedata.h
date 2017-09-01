@@ -135,7 +135,7 @@ public:
   Q_PROPERTY(bool used READ get_Used WRITE set_Used)
   QCEP_BOOLEAN_PROPERTY(Used)
 
-public:
+public slots:
   virtual QString description() const;
 
   virtual double getImageData(int x, int y) const = 0;
@@ -168,6 +168,9 @@ public:
                           double x1, double y1,
                           double x2, double y2, double val) = 0;
   virtual void setValueRangeTo(int rangeChoice, double minval, double maxval, double val) = 0;
+
+  virtual int pixelsInRange(double min, double max) = 0;
+  virtual int overflowCount(double ovf) = 0;
 
   double hValue(int n) const;
   double vValue(int n) const;
@@ -285,6 +288,8 @@ public:
 
   void setRegionTo(int regionType, int coordStyle, double x1, double y1, double x2, double y2, double val);
   void setValueRangeTo(int rangeChoice, double min, double max, double newValue);
+  int  pixelsInRange(double min, double max);
+  int  overflowCount(double ovf);
 
 public:
   template <typename T2>

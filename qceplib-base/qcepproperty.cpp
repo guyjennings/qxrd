@@ -437,7 +437,7 @@ void QcepProperty::readSettings(QObject *object, QSettings *settings)
 {
   if (settings && object) {
     const QMetaObject *meta = object->metaObject();
-    settings->beginGroup("properties");
+//    settings->beginGroup("properties");
 
     QStringList keys = settings->childKeys();
 
@@ -482,7 +482,7 @@ void QcepProperty::readSettings(QObject *object, QSettings *settings)
       }
     }
 
-    settings->endGroup();
+//    settings->endGroup();
   }
 }
 

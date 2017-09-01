@@ -1761,6 +1761,56 @@ double QcepImageData<T>::sumInPeak(QRectF rect)
 }
 
 template <typename T>
+int QcepImageData<T>::pixelsInRange(double min, double max)
+{
+  int nRows = get_Height();
+  int nCols = get_Width();
+  int nPix  = 0;
+
+  for (int row=0; row<nRows; row++) {
+    for (int col=0; col<nCols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        double val = value(col,row);
+
+        if (val == val) {
+          if (val >= min && val <= max) {
+            nPix += 1;
+          }
+        }
+      }
+    }
+  }
+
+  return nPix;
+}
+
+template <typename T>
+int QcepImageData<T>::overflowCount(double ovf)
+{
+  double ovfval = ovf*get_SummedExposures();
+
+  int nRows = get_Height();
+  int nCols = get_Width();
+  int nPix  = 0;
+
+  for (int row=0; row<nRows; row++) {
+    for (int col=0; col<nCols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        double val = value(col,row);
+
+        if (val == val) {
+          if (val >= ovfval) {
+            nPix += 1;
+          }
+        }
+      }
+    }
+  }
+
+  return nPix;
+}
+
+template <typename T>
 void QcepImageData<T>::setRegionTo(int regionType, int coordStyle, double x1, double y1, double x2, double y2, double val)
 {
   int nRows = get_Height();

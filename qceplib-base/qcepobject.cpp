@@ -223,7 +223,9 @@ void QcepObject::writeSettings(QSettings *set)
     set->setValue("class", className());
   }
 
+  set->beginGroup("properties");
   QcepProperty::writeSettings(this, set);
+  set->endGroup();
 
   m_ChangeCount.fetchAndStoreOrdered(0);
   m_LastChanged.store(NULL);
@@ -240,7 +242,9 @@ void QcepObject::readSettings(QSettings *set)
 
 void QcepObject::readObjectSettings(QSettings *set)
 {
+  set->beginGroup("properties");
   QcepProperty::readSettings(this, set);
+  set->endGroup();
 }
 
 QString QcepObject::addSlashes(QString str)
