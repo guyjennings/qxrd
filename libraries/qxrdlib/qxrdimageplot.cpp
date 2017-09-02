@@ -24,6 +24,7 @@
 #include <QContextMenuEvent>
 #include "qxrdroicoordinateslistmodel.h"
 #include "qxrdroicoordinates.h"
+#include "qxrdroieditordialog.h"
 
 #include "qwt_plot_piecewise_curve.h"
 
@@ -1447,6 +1448,44 @@ void QxrdImagePlot::moveSelectedROICenter(double x, double y)
     for (int i=0; i<n; i++) {
       if (m_ROISelection->rowIntersectsSelection(i,QModelIndex())) {
         roiModel->moveROICenter(i, x, y);
+      }
+    }
+  }
+}
+
+void QxrdImagePlot::editSelectedROI(double x, double y)
+{
+  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QPointF pt(x,y);
+
+  if (roiModel) {
+    int nearest = -1;
+    double nearestDistance = qInf();
+
+    int n = roiModel->roiCount();
+
+    for (int i=0; i<n; i++) {
+      QxrdROICoordinatesPtr roi = roiModel->roi(i);
+
+      if (roi) {
+        double dist = roi->nearestDistance(pt);
+
+        if (dist < nearestDistance) {
+          nearestDistance = dist;
+          nearest = i;
+        }
+      }
+    }
+
+    if (nearest >= 0) {
+      QxrdROICoordinatesPtr roi = roiModel->roi(nearest);
+
+      QxrdROIEditorDialog editor(roi, this);
+
+      editor.setWindowTitle(tr("Edit ROI %1").arg(nearest));
+
+      if (editor.exec() == QDialog::Accepted) {
+        roiModel->setRoi(nearest, editor.roi());
       }
     }
   }

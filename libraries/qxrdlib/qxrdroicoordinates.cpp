@@ -313,6 +313,24 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
   return res;
 }
 
+double QxrdROICoordinates::nearestDistance(QPointF pt)
+{
+  QVector<QPointF> markers = markerCoords();
+  double nearest = qInf();
+
+  for (int i=0; i<markers.count(); i++) {
+    QPointF d = pt-markers.value(i);
+
+    double dist = sqrt(d.x()*d.x() + d.y()*d.y());
+
+    if (dist < nearest) {
+      nearest = dist;
+    }
+  }
+
+  return nearest;
+}
+
 QPolygonF QxrdROICoordinates::dragOutline()
 {
   double  r = get_Rotation();

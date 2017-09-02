@@ -158,6 +158,7 @@ protected:
   virtual void disablePickers();
   void selectROILabel(int i, bool on);
   void moveSelectedROICenter(double x, double y);
+  void editSelectedROI(double x, double y);
 
 public:
   enum {

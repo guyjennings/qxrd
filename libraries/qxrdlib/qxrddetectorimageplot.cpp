@@ -185,7 +185,9 @@ void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
     QAction *shRoi  = plotMenu.addAction("Show ROI Outlines?");
     shRoi->setCheckable(true);
     shRoi->setChecked(set->get_DisplayROI());
-    QAction *mvRoi  = plotMenu.addAction(tr("Move selected ROI centers to (%1,%2)").arg(x).arg(y));
+
+    QAction *editRoi  = plotMenu.addAction(tr("Edit selected ROI"));
+    QAction *mvRoi    = plotMenu.addAction(tr("Move selected ROI centers to (%1,%2)").arg(x).arg(y));
     QAction *classify = plotMenu.addAction(tr("Classify ROI Point at (%1,%2").arg(x).arg(y));
 
     plotMenu.addSeparator();
@@ -204,6 +206,8 @@ void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
       toggleShowMask();
     } else if (action == shRoi) {
       toggleShowROI();
+    } else if (action == editRoi) {
+      editSelectedROI(x,y);
     } else if (action == mvRoi) {
       moveSelectedROICenter(x,y);
     } else if (action == classify) {

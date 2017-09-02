@@ -43,6 +43,8 @@ public:
   bool pointInInner(QPointF pt);
   bool pointInOuter(QPointF pt);
 
+  double nearestDistance(QPointF pt);
+
   enum {
     SumOutput,
     AverageOutput,
