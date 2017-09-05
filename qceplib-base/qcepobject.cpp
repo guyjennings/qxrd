@@ -75,6 +75,143 @@ const QcepObjectWPtr QcepObject::parentPtr() const
   return m_Parent;
 }
 
+int QcepObject::childCount() const
+{
+  return m_Children.count();
+}
+
+QcepObjectPtr QcepObject::childPtr(int n) const
+{
+  QcepObjectPtr p = m_Children.value(n);
+
+  if (p) {
+    return p;
+  } else {
+    return QcepObjectPtr();
+  }
+}
+
+
+#ifndef QT_NO_DEBUG
+void QcepObject::checkPointerMatchCount(QcepObjectWPtr ptr)
+{
+  QcepObjectPtr p(ptr);
+
+  if (p) {
+    if (m_PointerMatchCount > 0) {
+      printMessage(tr("%1:%2 matches multiple times").arg(p->get_Name()).arg(p->className()));
+    }
+    m_PointerMatchCount++;
+  }
+}
+#endif
+
+
+int QcepObject::checkChildren(int verbose, int level) const
+{
+  int ck = true;
+
+  if (verbose) {
+    const QMetaObject *meta = metaObject();
+
+    printLine(tr("%1Checking %2 : %3 children : class %4")
+              .arg("",level*2)
+              .arg(get_Name())
+              .arg(childCount())
+              .arg(meta->className()));
+  }
+
+  for(int i=0; i<childCount(); i++) {
+    QcepObjectPtr child = childPtr(i);
+
+    if (child == NULL) {
+      printLine(tr("NULL child of %1").arg(get_Name()));
+      ck = false;
+    } else {
+      QcepObjectWPtr parent = child->parentPtr();
+
+      if (parent != sharedFromThis()) {
+        printLine(tr("parent of %1 is not %2")
+                     .arg(child->get_Name())
+                     .arg(get_Name()));
+      }
+
+      if (!child->checkChildren(verbose, level+1)) {
+        ck = false;
+      }
+    }
+  }
+
+  return ck;
+}
+
+void QcepObject::addChildPtr(QcepObjectPtr child)
+{
+  QcepObjectWPtr myself = sharedFromThis();
+
+  if (m_Children.contains(child)) {
+    printMessage("Added same child more than once");
+  } else {
+    m_Children.append(child);
+  }
+
+  if (child) {
+    child->setParentPtr(myself);
+  }
+//  if (sharedFromThis()) {
+//  } else {
+//    printMessage("Adding child when sharedFromThis() == NULL");
+//  }
+
+#ifndef QT_NO_DEBUG
+  m_PointerMatchCount = 0;
+#endif
+}
+
+void QcepObject::removeChildPtr(QcepObjectPtr child)
+{
+  if (m_Children.contains(child)) {
+    m_Children.removeAll(child);
+  } else {
+    printMessage("Removing object which is not a child");
+  }
+}
+
+void QcepObject::clearChildren()
+{
+  int n = childCount();
+
+  for (int i=n-1; i>=0; i--) {
+    removeChildPtr(childPtr(i));
+  }
+}
+
+void QcepObject::prependChildPtr(QcepObjectPtr child)
+{
+  addChildPtr(child);
+
+  int n = childCount();
+
+  for (int i=n-2; i>=0; i--) {
+    m_Children[i+1] = m_Children[i];
+  }
+
+  m_Children[0] = child;
+}
+
+void QcepObject::insertChildPtr(int atRow, QcepObjectPtr child)
+{
+  addChildPtr(child);
+
+  int n = childCount();
+
+  for (int i=n-2; i>=atRow; i--) {
+    m_Children[i+1] = m_Children[i];
+  }
+
+  m_Children[atRow] = child;
+}
+
 void QcepObject::propertyChanged(QcepProperty *prop)
 {
   if (prop == NULL || prop->isStored()) {
@@ -245,6 +382,97 @@ void QcepObject::readObjectSettings(QSettings *set)
   set->beginGroup("properties");
   QcepProperty::readSettings(this, set);
   set->endGroup();
+}
+
+QcepObjectPtr QcepObject::readObject(QSettings *set)
+{
+  QcepObjectPtr res;
+
+  if (set) {
+    QStringList keys  = set->childKeys();
+    QStringList allk  = set->allKeys();
+
+    QString className = set->value("class", "").toString();
+    QString name      = set->value("name",  "").toString();
+
+    if (className.length() && name.length()) {
+      res = construct(name, className);
+
+      if (res) {
+        int nChildren = set -> beginReadArray("children");
+
+        for (int i=0; i<nChildren; i++) {
+          set->setArrayIndex(i);
+
+          QcepObjectPtr child = readObject(set);
+
+          if (child) {
+            res->addChildPtr(child);
+          }
+        }
+
+        set->endArray();
+
+        res -> readSettings(set);
+      }
+    }
+  }
+
+  return res;
+}
+
+QcepObjectPtr QcepObject::construct(QString name, QString className)
+{
+  QcepObjectPtr res;
+
+  int typeId = QMetaType::type(qPrintable(className+"*"));
+
+  if (typeId == QMetaType::UnknownType) {
+    printf("Type %s* is unknown\n", qPrintable(className));
+  } else {
+    const QMetaObject *metaObj = QMetaType::metaObjectForType(typeId);
+
+    if (metaObj == NULL) {
+      printf("Metaobject is NULL\n");
+    } else {
+      QObject *obj = metaObj->newInstance(Q_ARG(QString, name));
+
+      if (obj == NULL) {
+        printf("qObject == NULL\n");
+      } else {
+        QcepObject *qcepobj = qobject_cast<QcepObject*>(obj);
+
+        if (qcepobj == NULL) {
+          printf("QcepObject == NULL\n");
+        } else {
+          res = QcepObjectPtr(qcepobj);
+        }
+      }
+    }
+  }
+
+  return res;
+}
+
+void QcepObject::writeObject(QSettings *set)
+{
+  writeSettings(set);
+
+  int nChildren = childCount();
+
+  set->beginWriteArray("children", nChildren);
+
+  for (int i=0; i<nChildren; i++) {
+    set->setArrayIndex(i);
+
+    QcepObjectPtr child = childPtr(i);
+
+    if (child) {
+      child->writeObject(set);
+    }
+  }
+
+  set->endArray();
 }
 
 QString QcepObject::addSlashes(QString str)

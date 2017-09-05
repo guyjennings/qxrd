@@ -205,14 +205,12 @@ QString QcepScriptEngine::documentationText(QcepObject *qobj)
       res.append(tableFooter());
     }
 
-    QcepSerializableObject *sobj = qobject_cast<QcepSerializableObject*>(qobj);
-
-    if (sobj && (sobj->childCount() > 0)) {
+    if (qobj && (qobj->childCount() > 0)) {
       res.append(tr("<h3>%1 Children</h3>\n").arg(itemName));
       res.append(tableHeader());
 
-      for (int i=0; i<sobj->childCount(); i++) {
-        QcepSerializableObjectPtr obj = sobj->childPtr(i);
+      for (int i=0; i<qobj->childCount(); i++) {
+        QcepObjectPtr obj = qobj->childPtr(i);
 
         if (obj) {
           if ((i%2)) {
@@ -418,14 +416,15 @@ QString QcepScriptEngine::documentationText(QString item)
         res.append(tableFooter());
       }
 
-      QcepSerializableObject *sobj = qobject_cast<QcepSerializableObject*>(qobj);
+      QcepObject *qcobj =
+          qobject_cast<QcepObject*>(qobj);
 
-      if (sobj && (sobj->childCount() > 0)) {
+      if (qcobj && (qcobj->childCount() > 0)) {
         res.append(tr("<h3>%1 Children</h3>\n").arg(itemName));
         res.append(tableHeader());
 
-        for (int i=0; i<sobj->childCount(); i++) {
-          QcepSerializableObjectPtr obj = sobj->childPtr(i);
+        for (int i=0; i<qcobj->childCount(); i++) {
+          QcepObjectPtr obj = qcobj->childPtr(i);
 
           if (obj) {
             if ((i%2)) {

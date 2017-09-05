@@ -30,7 +30,10 @@ int QcepSerializableObject::childrenChanged() const
   if (isChanged()) {
     return true;
   } else {
-    foreach(QcepSerializableObjectPtr child, m_Children) {
+    for(int i=0; i<childCount(); i++) {
+      QcepSerializableObjectPtr child =
+          qSharedPointerDynamicCast<QcepSerializableObject>(childPtr(i));
+
       if(child) {
         int chg = child->childrenChanged();
 
@@ -47,7 +50,10 @@ QString QcepSerializableObject::childrenChangedBy() const
   if (isChanged()) {
     return changedBy();
   } else {
-    foreach(QcepSerializableObjectPtr child, m_Children) {
+    for(int i=0; i<childCount(); i++) {
+      QcepSerializableObjectPtr child =
+          qSharedPointerDynamicCast<QcepSerializableObject>(childPtr(i));
+
       if (child) {
         int chg = child->childrenChanged();
 
@@ -60,73 +66,20 @@ QString QcepSerializableObject::childrenChangedBy() const
 
   return "NULL";
 }
+//QVector<QcepSerializableObjectPtr> QcepSerializableObject::childrenPtr() const
+//{
+////  QVector<QcepObjectWPtr> res;
 
-int QcepSerializableObject::checkChildren(int verbose, int level) const
-{
-  int ck = true;
+////  foreach (QcepObject* child, m_Children) {
+////    if (child) {
+////      res.append(child->sharedFromThis());
+////    } else {
+////      res.append(QcepObjectWPtr());
+////    }
+////  }
 
-  if (verbose) {
-    const QMetaObject *meta = metaObject();
-
-    printLine(tr("%1Checking %2 : %3 children : class %4")
-              .arg("",level*2)
-              .arg(get_Name())
-              .arg(childCount())
-              .arg(meta->className()));
-  }
-
-  foreach(QcepSerializableObjectPtr child, m_Children) {
-    if (child == NULL) {
-      printLine(tr("NULL child of %1").arg(get_Name()));
-      ck = false;
-    } else {
-      QcepObjectWPtr parent = child->parentPtr();
-
-      if (parent != sharedFromThis()) {
-        printLine(tr("parent of %1 is not %2")
-                     .arg(child->get_Name())
-                     .arg(get_Name()));
-      }
-
-      if (!child->checkChildren(verbose, level+1)) {
-        ck = false;
-      }
-    }
-  }
-
-  return ck;
-}
-
-int QcepSerializableObject::childCount() const
-{
-  return m_Children.count();
-}
-
-QcepSerializableObjectPtr QcepSerializableObject::childPtr(int n) const
-{
-  QcepSerializableObjectPtr p = m_Children.value(n);
-
-  if (p) {
-    return p;
-  } else {
-    return QcepSerializableObjectWPtr();
-  }
-}
-
-QVector<QcepSerializableObjectPtr> QcepSerializableObject::childrenPtr() const
-{
-//  QVector<QcepObjectWPtr> res;
-
-//  foreach (QcepObject* child, m_Children) {
-//    if (child) {
-//      res.append(child->sharedFromThis());
-//    } else {
-//      res.append(QcepObjectWPtr());
-//    }
-//  }
-
-  return m_Children;
-}
+//  return m_Children;
+//}
 
 QcepSerializableObjectPtr QcepSerializableObject::readDataObject(QcepFileFormatterPtr fmt)
 {
@@ -191,8 +144,8 @@ void QcepSerializableObject::writeObject(QcepFileFormatterPtr fmt)
 
   int nChildren = 0;
 
-  for (int i=0; i<m_Children.count(); i++) {
-    QcepObjectPtr obj = m_Children.value(i);
+  for (int i=0; i<childCount(); i++) {
+    QcepObjectPtr obj = childPtr(i);
 
     if (obj) {
       nChildren++;
@@ -202,8 +155,8 @@ void QcepSerializableObject::writeObject(QcepFileFormatterPtr fmt)
   if (nChildren > 0) {
     fmt->beginWriteChildren();
 
-    for (int i=0; i<m_Children.count(); i++) {
-      QcepSerializableObjectPtr obj = m_Children.value(i);
+    for (int i=0; i<childCount(); i++) {
+      QcepSerializableObjectPtr obj = qSharedPointerDynamicCast<QcepSerializableObject>(childPtr(i));
 
       if (obj) {
         obj->writeObject(fmt);
@@ -294,53 +247,6 @@ void QcepSerializableObject::readObjectData(QcepFileFormatterPtr fmt)
 {
 }
 
-#ifndef QT_NO_DEBUG
-void QcepSerializableObject::checkPointerMatchCount(QcepSerializableObjectWPtr ptr)
-{
-  QcepObjectPtr p(ptr);
-
-  if (p) {
-    if (m_PointerMatchCount > 0) {
-      printMessage(tr("%1:%2 matches multiple times").arg(p->get_Name()).arg(p->className()));
-    }
-    m_PointerMatchCount++;
-  }
-}
-#endif
-
-void QcepSerializableObject::addChildPtr(QcepSerializableObjectPtr child)
-{
-  QcepSerializableObjectWPtr myself =
-      qSharedPointerDynamicCast<QcepSerializableObject>(sharedFromThis());
-
-  if (m_Children.contains(child)) {
-    printMessage("Added same child more than once");
-  } else {
-    m_Children.append(child);
-  }
-
-  if (child) {
-    child->setParentPtr(myself);
-  }
-//  if (sharedFromThis()) {
-//  } else {
-//    printMessage("Adding child when sharedFromThis() == NULL");
-//  }
-
-#ifndef QT_NO_DEBUG
-  m_PointerMatchCount = 0;
-#endif
-}
-
-void QcepSerializableObject::removeChildPtr(QcepSerializableObjectPtr child)
-{
-  if (m_Children.contains(child)) {
-    m_Children.removeAll(child);
-  } else {
-    printMessage("Removing object which is not a child");
-  }
-}
-
 void QcepSerializableObject::dumpObjectTreePtr(int level)
 {
   const QMetaObject* metaObject = this->metaObject();
@@ -386,8 +292,10 @@ void QcepSerializableObject::dumpObjectTreePtr(int level)
 
   int nDumpedChildren = 0;
 
-  for (int i=0; i<m_Children.count(); i++) {
-    QcepSerializableObjectPtr obj = m_Children.value(i);
+  for (int i=0; i<childCount(); i++) {
+    QcepSerializableObjectPtr obj =
+        qSharedPointerDynamicCast<QcepSerializableObject>(childPtr(i));
+
     if (obj) {
       if (nDumped == 0) {
         printLine(tr("%1%2 {")
@@ -415,39 +323,4 @@ void QcepSerializableObject::dumpObjectTreePtr(int level)
   } else {
     printLine(tr("%1// %2").arg("",level).arg(metaObject->className()));
   }
-}
-
-void QcepSerializableObject::clearChildren()
-{
-  int n = childCount();
-
-  for (int i=n-1; i>=0; i--) {
-    removeChildPtr(childPtr(i));
-  }
-}
-
-void QcepSerializableObject::prependChildPtr(QcepSerializableObjectPtr child)
-{
-  addChildPtr(child);
-
-  int n = childCount();
-
-  for (int i=n-2; i>=0; i--) {
-    m_Children[i+1] = m_Children[i];
-  }
-
-  m_Children[0] = child;
-}
-
-void QcepSerializableObject::insertChildPtr(int atRow, QcepSerializableObjectPtr child)
-{
-  addChildPtr(child);
-
-  int n = childCount();
-
-  for (int i=n-2; i>=atRow; i--) {
-    m_Children[i+1] = m_Children[i];
-  }
-
-  m_Children[atRow] = child;
 }

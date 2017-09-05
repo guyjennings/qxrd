@@ -49,7 +49,22 @@ public slots:
   QString changedBy() const;
   void setChanged(int ct);
 
+  int childCount() const;
+  QcepObjectPtr childPtr(int n) const;
+
+  virtual void addChildPtr(QcepObjectPtr child);
+  virtual void removeChildPtr(QcepObjectPtr child);
+  virtual void clearChildren();
+  virtual void prependChildPtr(QcepObjectPtr child);
+  virtual void insertChildPtr(int atRow, QcepObjectPtr child);
+
+  int checkChildren(int verbose=0, int level=0) const;
+
 public:
+  static QcepObjectPtr readObject(QSettings *set);
+  static QcepObjectPtr construct(QString name, QString className);
+
+  virtual void writeObject(QSettings *set);
   virtual void writeSettings(QSettings *set);
   virtual void readSettings(QSettings *set);
 
@@ -76,6 +91,53 @@ private:
   QAtomicInt                          m_ChangeCount;
   QAtomicPointer<QcepProperty>        m_LastChanged;
   QcepObjectWPtr                      m_Parent;
+  QVector<QcepObjectPtr>              m_Children;
+
+protected:
+
+#ifndef QT_NO_DEBUG
+  void checkPointerMatchCount(QcepObjectWPtr ptr);
+#endif
+
+  template <typename T>
+  inline bool checkPointer(QcepObjectWPtr ptr, QSharedPointer<T>& field)
+  {
+    QSharedPointer<T> fp = qSharedPointerDynamicCast<T>(ptr);
+
+    if (fp) {
+      field = fp;
+#ifdef QT_NO_DEBUG
+      return true;
+#else
+      checkPointerMatchCount(ptr);
+      return false;
+#endif
+    } else {
+      return false;
+    }
+  }
+
+  template <typename T>
+  inline bool checkPointer(QcepObjectWPtr ptr, QWeakPointer<T>& field)
+  {
+    QWeakPointer<T> fp = qSharedPointerDynamicCast<T>(ptr);
+
+    if (fp) {
+      field = fp;
+#ifdef QT_NO_DEBUG
+      return true;
+#else
+      checkPointerMatchCount(ptr);
+      return false;
+#endif
+    } else {
+      return false;
+    }
+  }
+
+#ifndef QT_NO_DEBUG
+  int                                 m_PointerMatchCount;
+#endif
 
 public:
   Q_PROPERTY(QString name READ get_Name WRITE set_Name STORED false)

@@ -84,8 +84,8 @@ QString QcepDataGroup::description() const
 
 QcepDataObjectPtr QcepDataGroup::item(int n)
 {
-  QcepSerializableObjectPtr ch = childPtr(n);
-  QcepDataObjectPtr         res = qSharedPointerDynamicCast<QcepDataObject>(ch);
+  QcepObjectPtr      ch  = childPtr(n);
+  QcepDataObjectPtr  res = qSharedPointerDynamicCast<QcepDataObject>(ch);
   return res;
 }
 
