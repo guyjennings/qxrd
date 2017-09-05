@@ -121,6 +121,8 @@ public slots:
   void saveExperimentCopyAs(QString path);
   void saveExperimentAs(QString path);
 
+  void saveExperiment2(QString path);
+
   void readSettings();
   void writeSettings();
 

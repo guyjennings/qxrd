@@ -906,6 +906,29 @@ void QxrdApplication::openExperiment(QString path)
   }
 }
 
+void QxrdApplication::openExperiment2(QString path)
+{
+  if (path.length() > 0) {
+    QxrdExperimentSettingsPtr settings(new QxrdExperimentSettings(path));
+
+    if (settings) {
+      QcepObjectPtr newObj = QcepObject::readObject(settings.data());
+
+      if (newObj) {
+        QxrdExperimentPtr newExpt = qSharedPointerDynamicCast<QxrdExperiment>(newObj);
+
+        if (newExpt) {
+          printMessage(tr("Opened new experiment %1").arg(path));
+
+          QxrdExperimentSettingsPtr newSettings(new QxrdExperimentSettings(path+".new2"));
+
+          newExpt->writeSettings(newSettings.data());
+        }
+      }
+    }
+  }
+}
+
 void QxrdApplication::closeExperiment(QxrdExperimentWPtr expw)
 {
   if (qcepDebug(DEBUG_APP)) {
