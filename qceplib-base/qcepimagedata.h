@@ -124,6 +124,16 @@ public slots:
   virtual QVector<double> getImageData(int x0, int y0, int x1, int y1) const = 0;
   virtual void setImageData(int x, int y, double v) = 0;
 
+  virtual int pixelsInRange(double min, double max) = 0;
+
+  virtual double minValue() = 0;
+  virtual double maxValue() = 0;
+
+  virtual double findMin() const;
+  virtual double findMax() const;
+
+  virtual int overflowCount(double level) const;
+
 public:
 //  int get_Width() const
 //  {
@@ -208,6 +218,8 @@ public:
   QVector<double> getImageData(int x0, int y0, int x1, int y1) const;
   void setImageData(int x, int y, double v);
 
+  int pixelsInRange(double min, double max);
+
 //  template <typename T2>
 //  void copyImage(QSharedPointer< QcepImageData<T2> > dest);
 
@@ -222,8 +234,8 @@ public:
   T value(int x, int y) const;
   T value(double x, double y) const;
 
-  T minValue() const;
-  T maxValue() const;
+  double minValue();
+  double maxValue();
 
   T* data();
 

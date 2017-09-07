@@ -283,6 +283,77 @@ QString QcepImageDataBase::get_DataTypeName() const
   }
 }
 
+double QcepImageDataBase::findMin() const
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int first = true;
+  double minv = 0;
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      double val = this->getImageData(col, row);
+
+      if (first) {
+        minv = val;
+        first = false;
+      } else if (val < minv){
+        minv = val;
+      }
+    }
+  }
+
+  return minv;
+}
+
+double QcepImageDataBase::findMax() const
+{
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+  int first = true;
+  double maxv = 0;
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      double val = this->getImageData(col, row);
+
+      if (first) {
+        maxv = val;
+        first = false;
+      } else if (val > maxv){
+        maxv = val;
+      }
+    }
+  }
+
+  return maxv;
+}
+
+int QcepImageDataBase::overflowCount(double level) const
+{
+  double ovlev = level;
+  int nPix = 0;
+
+  if (get_SummedExposures() > 1) {
+    ovlev *= get_SummedExposures();
+  }
+
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      double val = this->getImageData(col, row);
+
+      if (val > ovlev) {
+        nPix++;
+      }
+    }
+  }
+
+  return nPix;
+}
+
 template <typename T>
 QcepImageData<T>::QcepImageData(QcepSettingsSaverWPtr saver, int width, int height, T def)
   : QcepImageDataBase(saver, width, height),
@@ -382,6 +453,28 @@ void QcepImageData<T>::setImageData(int x, int y, double v)
   }
 }
 
+template <typename T>
+int QcepImageData<T>::pixelsInRange(double min, double max)
+{
+  int nRows = get_Height();
+  int nCols = get_Width();
+  int nPix = 0;
+
+  for (int row=0; row<nRows; row++) {
+    for (int col=0; col<nCols; col++) {
+      double val = value(col, row);
+
+      if (val == val) {
+        if (val >= min && val <= max) {
+          nPix += 1;
+        }
+      }
+    }
+  }
+
+  return nPix;
+}
+
 //template <typename T>
 //template <typename T2>
 //void QcepImageData<T>::copyImage(QSharedPointer< QcepImageData<T2> > dest)
@@ -445,14 +538,18 @@ void QcepImageData<T>::divideValue(int x, int y, T val)
 }
 
 template <typename T>
-T QcepImageData<T>::minValue() const
+double QcepImageData<T>::minValue()
 {
+  calculateRange();
+
   return m_MinValue;
 }
 
 template <typename T>
-T QcepImageData<T>::maxValue() const
+double QcepImageData<T>::maxValue()
 {
+  calculateRange();
+
   return m_MaxValue;
 }
 
