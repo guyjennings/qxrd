@@ -419,14 +419,14 @@ QxrdMaskDataPtr QxrdImageData<T>::overflow() const
 template <typename T>
 int QxrdImageData<T>::pixelsInRange(double min, double max)
 {
-  int nRows = get_Height();
-  int nCols = get_Width();
+  int nRows = this->get_Height();
+  int nCols = this->get_Width();
   int nPix = 0;
 
   for (int row=0; row<nRows; row++) {
     for (int col=0; col<nCols; col++) {
       if (m_Mask == NULL || m_Mask->value(col, row)) {
-        double val = value(col, row);
+        double val = this->value(col, row);
 
         if (val == val) {
           if (val >= min && val <= max) {
@@ -445,18 +445,18 @@ int QxrdImageData<T>::overflowCount(double level) const
 {
   double ovlev = level;
 
-  if (get_SummedExposures() > 1) {
-    ovlev *= get_SummedExposures();
+  if (this->get_SummedExposures() > 1) {
+    ovlev *= this->get_SummedExposures();
   }
 
-  int nRows = get_Height();
-  int nCols = get_Width();
+  int nRows = this->get_Height();
+  int nCols = this->get_Width();
   int nPix = 0;
 
   for (int row=0; row<nRows; row++) {
     for (int col=0; col<nCols; col++) {
       if (m_Mask == NULL || m_Mask->value(col, row)) {
-        double val = value(col, row);
+        double val = this->value(col, row);
 
         if (val == val) {
           if (val >= ovlev) {
@@ -554,8 +554,8 @@ void QxrdImageData<T>::calculateRange()
 //  int total = m_Image.count();
   int first = true;
 
-  m_MinValue = 0;
-  m_MaxValue = 0;
+  double minV = 0;
+  double maxV = 0;
 
   int ncols = this -> get_Width();
   int nrows = this -> get_Height();
@@ -567,18 +567,21 @@ void QxrdImageData<T>::calculateRange()
 
         if (val==val) {
           if (first) {
-            m_MaxValue = val;
-            m_MinValue = val;
+            minV = val;
+            maxV = val;
             first = false;
-          } else if (val > m_MaxValue) {
-            m_MaxValue = val;
-          } else if (val < m_MinValue) {
-            m_MinValue = val;
+          } else if (val > maxV) {
+            maxV = val;
+          } else if (val < minV) {
+            minV = val;
           }
         }
       }
     }
   }
+
+  this->m_MinValue = minV;
+  this->m_MaxValue = maxV;
 }
 
 template <typename T>
@@ -586,7 +589,7 @@ double QxrdImageData<T>::minValue()
 {
   calculateRange();
 
-  return m_MinValue;
+  return this->m_MinValue;
 }
 
 template <typename T>
@@ -594,7 +597,7 @@ double QxrdImageData<T>::maxValue()
 {
   calculateRange();
 
-  return m_MaxValue;
+  return this->m_MaxValue;
 }
 
 template <typename T>
