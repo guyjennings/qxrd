@@ -508,16 +508,22 @@ OTHER_FILES += qxrd.rc \
     qxrd.nsi \
     qxrd-qt5.nsi \
     qxrd-cuda.pri \
-    HeaderTemplates.txt
+    HeaderTemplates.txt \
+    vcredist_vs2013_x86.exe \
+    vcredist_vs2013_x64.exe \
+    vcredist_vs2017_x86.exe \
+    vcredist_vs2017_x64.exe
 
 win32 {
 # Copy QT Libraries into app directory
   LIBDIR = $$[QT_INSTALL_BINS]
   LIBDIR_WIN = $${replace(LIBDIR, /, \\)}
+  PWD_WIN    = $${replace(PWD, /, \\)}
   LIBDIR_MINGW = $${replace(LIBDIR, \\\\, /)}
 
   message(Libdir: $${LIBDIR})
   message(Libdir_win: $${LIBDIR_WIN})
+  message(Pwd_win: $${PWD_WIN})
   message(Libdir_mingw: $${LIBDIR_MINGW})
   message($${replace(LIBDIR, \\\\, /)})
 
@@ -558,7 +564,8 @@ win32 {
       }
     }
 
-    win32-msvc2013 {
+    win32-msvc2017 {
+    } else:win32-msvc2013 {
       libs += icudt52 icuin52 icuuc52
     } else:win32-msvc* {
       libs += icudt51 icuin51 icuuc51
@@ -579,9 +586,9 @@ win32 {
     qtplatform.target   = ../platforms/$${platform}.dll
     qtplatform.depends  = qtplatformdir $${LIBDIR}/../plugins/platforms/$${platform}.dll
     win32-g++ {
-      qtplatform.commands += $(COPY_FILE) $${LIBDIR_MINGW}/../plugins/platforms/$${platform}.dll ../platforms/$${platform}.dll
+      qtplatform.commands += $(COPY_FILE) $${LIBDIR_MINGW}/../plugins/platforms/$${platform}.dll ../platforms/$${platform}.dll &
     } else {
-      qtplatform.commands += $(COPY_FILE) /Y $${LIBDIR_WIN}\\..\\plugins\\platforms\\$${platform}.dll ..\\platforms\\$${platform}.dll
+      qtplatform.commands += $(COPY_FILE) /Y $${LIBDIR_WIN}\\..\\plugins\\platforms\\$${platform}.dll ..\\platforms\\$${platform}.dll &
     }
 
     qtlibs.depends += qtplatform
@@ -598,6 +605,34 @@ win32 {
 
     QMAKE_CLEAN += ../platforms/*
     QMAKE_CLEAN += ../platforms
+
+    win32-msvc2017* {
+      message(MSVC 2017 VCRedist)
+
+      QMAKE_EXTRA_TARGETS += vcredist
+
+      if (contains(QMAKE_HOST.arch, x86_64)) {
+        vcredist.depends  += $${PWD}/../vcredist_vs2017_x64.exe
+        vcredist.commands += $(COPY_FILE) $${PWD_WIN}\\..\\vcredist_vs2017_x64.exe .. &
+      } else {
+        vcredist.depends  += $${PWD}/../vcredist_vs2017_x86.exe
+        vcredist.commands += $(COPY_FILE) $${PWD_WIN}\\..\\vcredist_vs2017_x86.exe .. &
+      }
+    }
+
+    win32-msvc2013* {
+      message(MSVC 2013 VCRedist)
+
+      QMAKE_EXTRA_TARGETS += vcredist
+
+      if (contains(QMAKE_HOST.arch, x86_64)) {
+        vcredist.depends  += $${PWD}/../vcredist_vs2013_x64.exe
+        vcredist.commands += $(COPY_FILE) $${PWD_WIN}\\..\\vcredist_vs2013_x64.exe .. &
+      } else {
+        vcredist.depends  += $${PWD}/../vcredist_vs2013_x86.exe
+        vcredist.commands += $(COPY_FILE) $${PWD_WIN}\\..\\vcredist_vs2013_x86.exe .. &
+      }
+    }
   }
 
   isEqual(QT_MAJOR_VERSION, 4) {
@@ -628,9 +663,10 @@ win32 {
   QMAKE_CLEAN += ../plugins
 
   PRE_TARGETDEPS  += qtlibs
+  PRE_TARGETDEPS  += vcredist
 }
 
-TARGET.depends += qtlibs
+TARGET.depends += qtlibs vcredist
 
 win32 { # Make NSIS installer...
     OUT_PWD_WIN = $${replace(OUT_PWD, /, \\)}

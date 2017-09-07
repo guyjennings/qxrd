@@ -48,6 +48,7 @@ Section "Extract qxrd"
   SetShellVarContext all
   SetOutPath "$INSTDIR"
   File "${APPDIR}\qxrd.exe"
+  File "${APPDIR}\vcredist*.exe"
   File "${APPDIR}\*.dll"
 
   SetOutPath "$INSTDIR\plugins"
@@ -75,6 +76,7 @@ Section "Extract qxrd"
                  "DisplayName" "QXRD ${VERSION} ${PREFIXSTR} -- Data Acquisition for Perkin-Elmer XRD Detectors"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QXRD ${VERSION} ${PREFIXSTR}" \
                  "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+  ExecWait "$INSTDIR\vcredist*.exe /install /quiet /norestart"
 SectionEnd
 
 Section "Uninstall"
@@ -85,6 +87,7 @@ Section "Uninstall"
   RMDir  "$INSTDIR\plugins"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\qxrd.exe"
+  Delete "$INSTDIR\vcredist*.exe"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
   Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Uninstall.lnk"
