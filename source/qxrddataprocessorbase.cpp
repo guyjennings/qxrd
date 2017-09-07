@@ -1865,6 +1865,16 @@ QxrdExperimentPtr QxrdDataProcessorBase::experiment() const
   return m_Experiment;
 }
 
+QxrdAcquisitionPtr QxrdDataProcessorBase::acquisition() const
+{
+  if (m_Acquisition == NULL) {
+    printMessage("Problem: QxrdDataProcessorBase::acquisition == NULL");
+  }
+
+  return m_Acquisition;
+}
+
+
 QxrdCenterFinderPtr QxrdDataProcessorBase::centerFinder() const
 {
   if (m_CenterFinder == NULL) {

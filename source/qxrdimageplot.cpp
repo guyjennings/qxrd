@@ -10,7 +10,9 @@
 #include "qxrdmaskpicker.h"
 #include "qxrdhistogramselector.h"
 #include "qxrdapplication.h"
-
+#include "qxrdallocator.h"
+#include "qxrddataprocessor.h"
+#include "qxrdacquisition.h"
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_marker.h>
 #include <qwt_legend.h>
@@ -639,6 +641,26 @@ void QxrdImagePlot::setOverflows(QxrdMaskRasterData *overflow)
   replot();
 }
 
+void QxrdImagePlot::setAutoOverflow()
+{
+  QxrdDataProcessorPtr proc(m_DataProcessor);
+
+  if (m_Data && proc) {
+    int w = m_Data->get_Width();
+    int h = m_Data->get_Height();
+
+    QxrdAcquisitionPtr acq = proc->acquisition();
+
+    if (acq) {
+      double ovfLevel = acq->get_OverflowLevel();
+
+      m_Overflow = QxrdAllocator::newMask(g_Application->allocator(), QxrdAllocator::AlwaysAllocate, w, h, 0);
+
+      m_Data->markOverflows(m_Overflow, ovfLevel);
+    }
+  }
+}
+
 void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
 {
   QTime tic;
@@ -659,11 +681,13 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
     QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
 
     if (overflow == NULL) {
+      setAutoOverflow();
       setImage(data);
     } else {
-      setOverflows(new QxrdMaskRasterData(overflow));
       setImage(data);
     }
+
+    setOverflows(new QxrdMaskRasterData(m_Overflow));
 
     if (image) {
       setTitle(image -> get_Title());

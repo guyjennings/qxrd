@@ -471,6 +471,35 @@ int QxrdImageData<T>::overflowCount(double level) const
 }
 
 template <typename T>
+void QxrdImageData<T>::markOverflows(QxrdMaskDataPtr overflow, double level)
+{
+  if (overflow) {
+    double ovlev = level;
+
+    if (this->get_SummedExposures() > 1) {
+      ovlev *= this->get_SummedExposures();
+    }
+
+    int nRows = this->get_Height();
+    int nCols = this->get_Width();
+
+    for (int row=0; row<nRows; row++) {
+      for (int col=0; col<nCols; col++) {
+        if (m_Mask == NULL || m_Mask->value(col, row)) {
+          double val = this->value(col, row);
+
+          if (val == val) {
+            if (val >= ovlev) {
+              overflow->setValue(col, row, 1);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+template <typename T>
 double QxrdImageData<T>::findMin() const
 {
   int ncols = this -> get_Width();

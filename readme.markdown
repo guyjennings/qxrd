@@ -1,7 +1,11 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
-## v0.11.10.1 - Sept 7 2017
+## v0.11.10.2 - Sep 7 2017
+Display of overflowing pixels should now work for loaded images and live view images as well
+as acquired images
+
+## v0.11.10.1 - Sep 7 2017
 Added pixelsInRange, overflowPixels, minValue, maxValue functions to image data objects
 
 ## v0.11.7 - Oct 10 2014

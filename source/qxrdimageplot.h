@@ -115,7 +115,7 @@ private:
   void setImage(QxrdRasterData *data);
   void setMask(QxrdMaskRasterData *data);
   void setOverflows(QxrdMaskRasterData *overflow);
-
+  void setAutoOverflow();
   void colorMapStart(QColor startColor, QColor endColor);
   void colorMapRange(double value1, QColor color1, double value2, QColor color2);
   void changedColorMap();

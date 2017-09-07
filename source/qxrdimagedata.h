@@ -52,6 +52,8 @@ public:
   int pixelsInRange(double min, double max);
   int overflowCount(double level) const;
 
+  void markOverflows(QxrdMaskDataPtr overflow, double level);
+
   double correlate(QSharedPointer< QxrdImageData<T> > image, int dx, int dy, int mx, int my);
 
   void shiftImage(QSharedPointer< QxrdImageData<T> > image, double dx, double dy);
