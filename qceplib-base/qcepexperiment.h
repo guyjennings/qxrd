@@ -21,7 +21,7 @@ public:
   explicit QcepExperiment(QString path, QString name);
   void initialize();
 
-  virtual void addChildPtr(QcepSerializableObjectPtr child);
+  virtual void addChildPtr(QcepObjectPtr child);
 
 signals:
 

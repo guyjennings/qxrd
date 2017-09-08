@@ -51,7 +51,7 @@ void QcepExperiment::initialize()
                 new QcepFixupGainMapCommand()));
 }
 
-void QcepExperiment::addChildPtr(QcepSerializableObjectPtr child)
+void QcepExperiment::addChildPtr(QcepObjectPtr child)
 {
   QcepSerializableObject::addChildPtr(child);
 
