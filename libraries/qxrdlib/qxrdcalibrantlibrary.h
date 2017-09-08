@@ -18,7 +18,7 @@ public:
   virtual ~QxrdCalibrantLibrary();
   static QxrdCalibrantLibraryPtr newCalibrantLibrary();
 
-  virtual void addChildPtr(QcepSerializableObjectPtr child);
+  virtual void addChildPtr(QcepObjectPtr child);
 
 public slots:
   int count();

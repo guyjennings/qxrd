@@ -17,7 +17,7 @@ QxrdAcquisitionExtraInputsDialogSettingsPtr QxrdAcquisitionExtraInputsDialogSett
   return set;
 }
 
-void QxrdAcquisitionExtraInputsDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
+void QxrdAcquisitionExtraInputsDialogSettings::addChildPtr(QcepObjectPtr child)
 {
   QcepSerializableObject::addChildPtr(child);
 
@@ -30,9 +30,11 @@ void QxrdAcquisitionExtraInputsDialogSettings::readSettings(QSettings *settings)
 
   QcepSerializableObject::readSettings(settings);
 
-  settings->beginGroup("plot");
-  m_AcquisitionExtraInputsPlotSettings->readSettings(settings);
-  settings->endGroup();
+  if (m_AcquisitionExtraInputsPlotSettings) {
+    settings->beginGroup("plot");
+    m_AcquisitionExtraInputsPlotSettings->readSettings(settings);
+    settings->endGroup();
+  }
 }
 
 void QxrdAcquisitionExtraInputsDialogSettings::writeSettings(QSettings *settings)
@@ -41,9 +43,11 @@ void QxrdAcquisitionExtraInputsDialogSettings::writeSettings(QSettings *settings
 
   QcepSerializableObject::writeSettings(settings);
 
-  settings->beginGroup("plot");
-  m_AcquisitionExtraInputsPlotSettings->writeSettings(settings);
-  settings->endGroup();
+  if (m_AcquisitionExtraInputsPlotSettings) {
+    settings->beginGroup("plot");
+    m_AcquisitionExtraInputsPlotSettings->writeSettings(settings);
+    settings->endGroup();
+  }
 }
 
 QxrdAcquisitionExtraInputsPlotSettingsWPtr QxrdAcquisitionExtraInputsDialogSettings::plotSettings() const

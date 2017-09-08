@@ -16,7 +16,7 @@ public:
   static QxrdSynchronizedAcquisitionDialogSettingsPtr newSynchronizedAcquisitionDialogSettings();
 
 public:
-  virtual void addChildPtr(QcepSerializableObjectPtr child);
+  virtual void addChildPtr(QcepObjectPtr child);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

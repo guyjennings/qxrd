@@ -14,7 +14,7 @@ public:
   Q_INVOKABLE QxrdSliceDialogSettings(QString name);
   static QxrdSliceDialogSettingsPtr newSliceDialogSettings();
   
-  virtual void addChildPtr(QcepSerializableObjectPtr child);
+  virtual void addChildPtr(QcepObjectPtr child);
 
 public:
   Q_PROPERTY(QcepPolygon slicePolygon READ get_SlicePolygon WRITE set_SlicePolygon)

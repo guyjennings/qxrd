@@ -96,7 +96,7 @@ QxrdAcquisitionPtr QxrdAcquisition::newAcquisition()
   return acq;
 }
 
-void QxrdAcquisition::addChildPtr(QcepSerializableObjectPtr child)
+void QxrdAcquisition::addChildPtr(QcepObjectPtr child)
 {
   QxrdAcquisitionInterface::addChildPtr(child);
 
@@ -107,7 +107,7 @@ void QxrdAcquisition::addChildPtr(QcepSerializableObjectPtr child)
   }
 }
 
-void QxrdAcquisition::removeChildPtr(QcepSerializableObjectPtr child)
+void QxrdAcquisition::removeChildPtr(QcepObjectPtr child)
 {
   printMessage("Need to implement QxrdAcquisition::removeChildPtr");
 

@@ -16,7 +16,7 @@ QxrdHistogramDialogSettingsPtr QxrdHistogramDialogSettings::newHistogramDialogSe
   return set;
 }
 
-void QxrdHistogramDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
+void QxrdHistogramDialogSettings::addChildPtr(QcepObjectPtr child)
 {
   QcepSerializableObject::addChildPtr(child);
 
@@ -27,18 +27,22 @@ void QxrdHistogramDialogSettings::readSettings(QSettings *settings)
 {
   QcepSerializableObject::readSettings(settings);
 
-  settings->beginGroup("plot");
-  m_HistogramPlotSettings->readSettings(settings);
-  settings->endGroup();
+  if (m_HistogramPlotSettings) {
+    settings->beginGroup("plot");
+    m_HistogramPlotSettings->readSettings(settings);
+    settings->endGroup();
+  }
 }
 
 void QxrdHistogramDialogSettings::writeSettings(QSettings *settings)
 {
   QcepSerializableObject::writeSettings(settings);
 
-  settings->beginGroup("plot");
-  m_HistogramPlotSettings->writeSettings(settings);
-  settings->endGroup();
+  if (m_HistogramPlotSettings) {
+    settings->beginGroup("plot");
+    m_HistogramPlotSettings->writeSettings(settings);
+    settings->endGroup();
+  }
 }
 
 QxrdHistogramPlotSettingsWPtr QxrdHistogramDialogSettings::histogramPlotSettings()

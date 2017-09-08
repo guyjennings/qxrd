@@ -388,7 +388,7 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
   }
 }
 
-void QxrdExperiment::addChildPtr(QcepSerializableObjectPtr child)
+void QxrdExperiment::addChildPtr(QcepObjectPtr child)
 {
   QcepExperiment::addChildPtr(child);
 
@@ -440,7 +440,7 @@ void QxrdExperiment::addChildPtr(QcepSerializableObjectPtr child)
   }
 }
 
-void QxrdExperiment::removeChildPtr(QcepSerializableObjectPtr child)
+void QxrdExperiment::removeChildPtr(QcepObjectPtr child)
 {
   printMessage("Need to write QxrdExperiment::removeChildPtr");
 

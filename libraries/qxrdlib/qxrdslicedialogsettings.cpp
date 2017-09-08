@@ -17,7 +17,7 @@ QxrdSliceDialogSettingsPtr QxrdSliceDialogSettings::newSliceDialogSettings()
   return set;
 }
 
-void QxrdSliceDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
+void QxrdSliceDialogSettings::addChildPtr(QcepObjectPtr child)
 {
   QcepSerializableObject::addChildPtr(child);
 
@@ -30,9 +30,11 @@ void QxrdSliceDialogSettings::readSettings(QSettings *settings)
 
   QcepSerializableObject::readSettings(settings);
 
-  settings->beginGroup("plot");
-  m_SlicePlotSettings->readSettings(settings);
-  settings->endGroup();
+  if (m_SlicePlotSettings) {
+    settings->beginGroup("plot");
+    m_SlicePlotSettings->readSettings(settings);
+    settings->endGroup();
+  }
 }
 
 void QxrdSliceDialogSettings::writeSettings(QSettings *settings)
@@ -41,9 +43,11 @@ void QxrdSliceDialogSettings::writeSettings(QSettings *settings)
 
   QcepSerializableObject::writeSettings(settings);
 
-  settings->beginGroup("plot");
-  m_SlicePlotSettings->writeSettings(settings);
-  settings->endGroup();
+  if (m_SlicePlotSettings) {
+    settings->beginGroup("plot");
+    m_SlicePlotSettings->writeSettings(settings);
+    settings->endGroup();
+  }
 }
 
 QxrdSlicePlotSettingsWPtr QxrdSliceDialogSettings::slicePlotSettings()

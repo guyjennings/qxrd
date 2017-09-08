@@ -160,7 +160,7 @@ QxrdDataProcessorPtr QxrdDataProcessor::newDataProcessor()
   return proc;
 }
 
-void QxrdDataProcessor::addChildPtr(QcepSerializableObjectPtr child)
+void QxrdDataProcessor::addChildPtr(QcepObjectPtr child)
 {
   QcepDataProcessorBase::addChildPtr(child);
 
@@ -179,7 +179,7 @@ void QxrdDataProcessor::addChildPtr(QcepSerializableObjectPtr child)
   }
 }
 
-void QxrdDataProcessor::removeChildPtr(QcepSerializableObjectPtr child)
+void QxrdDataProcessor::removeChildPtr(QcepObjectPtr child)
 {
   printMessage("Need to write QxrdDataProcessorBase::removeChildPtr");
 }
@@ -273,25 +273,35 @@ void QxrdDataProcessor::writeSettings(QSettings *settings)
 
   QcepObject::writeSettings(settings);
 
-  settings->beginGroup("centerfinder");
-  m_CenterFinder -> writeSettings(settings);
-  settings->endGroup();
+  if (m_CenterFinder) {
+    settings->beginGroup("centerfinder");
+    m_CenterFinder -> writeSettings(settings);
+    settings->endGroup();
+  }
 
-  settings->beginGroup("integrator");
-  m_Integrator   -> writeSettings(settings);
-  settings->endGroup();
+  if (m_Integrator) {
+    settings->beginGroup("integrator");
+    m_Integrator   -> writeSettings(settings);
+    settings->endGroup();
+  }
 
-  settings->beginGroup("polarTransform");
-  m_PolarTransform -> writeSettings(settings);
-  settings->endGroup();
+  if (m_PolarTransform) {
+    settings->beginGroup("polarTransform");
+    m_PolarTransform -> writeSettings(settings);
+    settings->endGroup();
+  }
 
-  settings->beginGroup("polarNormalization");
-  m_PolarNormalization -> writeSettings(settings);
-  settings->endGroup();
+  if (m_PolarNormalization) {
+    settings->beginGroup("polarNormalization");
+    m_PolarNormalization -> writeSettings(settings);
+    settings->endGroup();
+  }
 
-  settings->beginGroup("distortion");
-  m_DistortionCorrection -> writeSettings(settings);
-  settings->endGroup();
+  if (m_DistortionCorrection) {
+    settings->beginGroup("distortion");
+    m_DistortionCorrection -> writeSettings(settings);
+    settings->endGroup();
+  }
 }
 
 void QxrdDataProcessor::readSettings(QSettings *settings)
@@ -300,25 +310,35 @@ void QxrdDataProcessor::readSettings(QSettings *settings)
 
   QcepObject::readSettings(settings);
 
-  settings->beginGroup("centerfinder");
-  m_CenterFinder -> readSettings(settings);
-  settings->endGroup();
+  if (m_CenterFinder) {
+    settings->beginGroup("centerfinder");
+    m_CenterFinder -> readSettings(settings);
+    settings->endGroup();
+  }
 
-  settings->beginGroup("integrator");
-  m_Integrator   -> readSettings(settings);
-  settings->endGroup();
+  if (m_Integrator) {
+    settings->beginGroup("integrator");
+    m_Integrator   -> readSettings(settings);
+    settings->endGroup();
+  }
 
-  settings->beginGroup("polarTransform");
-  m_PolarTransform -> readSettings(settings);
-  settings->endGroup();
+  if (m_PolarTransform) {
+    settings->beginGroup("polarTransform");
+    m_PolarTransform -> readSettings(settings);
+    settings->endGroup();
+  }
 
-  settings->beginGroup("polarNormalization");
-  m_PolarNormalization -> readSettings(settings);
-  settings->endGroup();
+  if (m_PolarNormalization) {
+    settings->beginGroup("polarNormalization");
+    m_PolarNormalization -> readSettings(settings);
+    settings->endGroup();
+  }
 
-  settings->beginGroup("distortion");
-  m_DistortionCorrection -> readSettings(settings);
-  settings->endGroup();
+  if (m_DistortionCorrection) {
+    settings->beginGroup("distortion");
+    m_DistortionCorrection -> readSettings(settings);
+    settings->endGroup();
+  }
 }
 
 QString QxrdDataProcessor::existingOutputDirectory(QString dir, QString subdir) const

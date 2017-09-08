@@ -50,7 +50,7 @@ QxrdAcquisitionExtraInputsPtr QxrdAcquisitionExtraInputs::newAcquisitionExtraInp
   return xtra;
 }
 
-void QxrdAcquisitionExtraInputs::addChildPtr(QcepSerializableObjectPtr child)
+void QxrdAcquisitionExtraInputs::addChildPtr(QcepObjectPtr child)
 {
   QcepSerializableObject::addChildPtr(child);
 
@@ -65,7 +65,7 @@ void QxrdAcquisitionExtraInputs::addChildPtr(QcepSerializableObjectPtr child)
   }
 }
 
-void QxrdAcquisitionExtraInputs::removeChildPtr(QcepSerializableObjectPtr child)
+void QxrdAcquisitionExtraInputs::removeChildPtr(QcepObjectPtr child)
 {
   QxrdAcquisitionExtraInputsChannelPtr chan = qSharedPointerDynamicCast<QxrdAcquisitionExtraInputsChannel>(child);
 

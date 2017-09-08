@@ -20,7 +20,7 @@ QxrdDetectorControlWindowSettingsPtr QxrdDetectorControlWindowSettings::newDetec
   return res;
 }
 
-void QxrdDetectorControlWindowSettings::addChildPtr(QcepSerializableObjectPtr child)
+void QxrdDetectorControlWindowSettings::addChildPtr(QcepObjectPtr child)
 {
   QcepSerializableObject::addChildPtr(child);
 }

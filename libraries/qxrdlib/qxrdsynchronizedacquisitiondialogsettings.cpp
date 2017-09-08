@@ -16,7 +16,7 @@ QxrdSynchronizedAcquisitionDialogSettingsPtr QxrdSynchronizedAcquisitionDialogSe
   return set;
 }
 
-void QxrdSynchronizedAcquisitionDialogSettings::addChildPtr(QcepSerializableObjectPtr child)
+void QxrdSynchronizedAcquisitionDialogSettings::addChildPtr(QcepObjectPtr child)
 {
   QcepSerializableObject::addChildPtr(child);
 
@@ -29,9 +29,11 @@ void QxrdSynchronizedAcquisitionDialogSettings::readSettings(QSettings *settings
 
   QcepObject::readSettings(settings);
 
-  settings->beginGroup("plot");
-  m_SynchronizedAcquisitionPlotSettings->readSettings(settings);
-  settings->endGroup();
+  if (m_SynchronizedAcquisitionPlotSettings) {
+    settings->beginGroup("plot");
+    m_SynchronizedAcquisitionPlotSettings->readSettings(settings);
+    settings->endGroup();
+  }
 }
 
 void QxrdSynchronizedAcquisitionDialogSettings::writeSettings(QSettings *settings)
@@ -40,9 +42,11 @@ void QxrdSynchronizedAcquisitionDialogSettings::writeSettings(QSettings *setting
 
   QcepObject::writeSettings(settings);
 
-  settings->beginGroup("plot");
-  m_SynchronizedAcquisitionPlotSettings->writeSettings(settings);
-  settings->endGroup();
+  if (m_SynchronizedAcquisitionPlotSettings) {
+    settings->beginGroup("plot");
+    m_SynchronizedAcquisitionPlotSettings->writeSettings(settings);
+    settings->endGroup();
+  }
 }
 
 QxrdSynchronizedAcquisitionPlotSettingsWPtr QxrdSynchronizedAcquisitionDialogSettings::synchronizedAcquisitionPlotSettings()

@@ -15,7 +15,7 @@ public:
   Q_INVOKABLE QxrdDetectorControlWindowSettings(QxrdDetectorSettingsWPtr det);
   static QxrdDetectorControlWindowSettingsPtr newDetectorWindowSettings(QxrdDetectorSettingsWPtr det);
 
-  virtual void addChildPtr(QcepSerializableObjectPtr child);
+  virtual void addChildPtr(QcepObjectPtr child);
 
   static void registerMetaTypes();
 

@@ -45,7 +45,7 @@ QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
   return set;
 }
 
-void QxrdWindowSettings::addChildPtr(QcepSerializableObjectPtr child)
+void QxrdWindowSettings::addChildPtr(QcepObjectPtr child)
 {
   QcepSerializableObject::addChildPtr(child);
 
@@ -93,57 +93,83 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
   if (settings) {
     QcepSerializableObject::readSettings(settings);
 
-    settings->beginGroup("plot");
-    m_ImagePlotSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_ImagePlotSettings) {
+      settings->beginGroup("plot");
+      m_ImagePlotSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("centerFinderPlot");
-    m_CenterFinderPlotSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_CenterFinderPlotSettings) {
+      settings->beginGroup("centerFinderPlot");
+      m_CenterFinderPlotSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("integratorPlot");
-    m_IntegratorPlotSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_IntegratorPlotSettings) {
+      settings->beginGroup("integratorPlot");
+      m_IntegratorPlotSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("inputFileBrowser");
-    m_InputFileBrowserSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_InputFileBrowserSettings) {
+      settings->beginGroup("inputFileBrowser");
+      m_InputFileBrowserSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("outputFileBrowser");
-    m_OutputFileBrowserSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_OutputFileBrowserSettings) {
+      settings->beginGroup("outputFileBrowser");
+      m_OutputFileBrowserSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("histogramDialog");
-    m_HistogramDialogSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_HistogramDialogSettings) {
+      settings->beginGroup("histogramDialog");
+      m_HistogramDialogSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("sliceDialog");
-    m_SliceDialogSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_SliceDialogSettings) {
+      settings->beginGroup("sliceDialog");
+      m_SliceDialogSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("imageInfoDialog");
-    m_InfoDialogSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_InfoDialogSettings) {
+      settings->beginGroup("imageInfoDialog");
+      m_InfoDialogSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("scriptDialog");
-    m_ScriptDialogSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_ScriptDialogSettings) {
+      settings->beginGroup("scriptDialog");
+      m_ScriptDialogSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("syncAcqDialog");
-    m_SynchronizedAcquisitionDialogSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_SynchronizedAcquisitionDialogSettings) {
+      settings->beginGroup("syncAcqDialog");
+      m_SynchronizedAcquisitionDialogSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("extraInputsDialog");
-    m_AcquisitionExtraInputsDialogSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_AcquisitionExtraInputsDialogSettings) {
+      settings->beginGroup("extraInputsDialog");
+      m_AcquisitionExtraInputsDialogSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("distortionCorrectionDialog");
-    m_DistortionCorrectionDialogSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_DistortionCorrectionDialogSettings) {
+      settings->beginGroup("distortionCorrectionDialog");
+      m_DistortionCorrectionDialogSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("distortionCorrectionPlot");
-    m_DistortionCorrectionPlotSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_DistortionCorrectionPlotSettings) {
+      settings->beginGroup("distortionCorrectionPlot");
+      m_DistortionCorrectionPlotSettings->readSettings(settings);
+      settings->endGroup();
+    }
   }
 }
 
@@ -156,61 +182,89 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
   if (settings) {
     QcepSerializableObject::writeSettings(settings);
 
-    settings->beginGroup("plot");
-    m_ImagePlotSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_ImagePlotSettings) {
+      settings->beginGroup("plot");
+      m_ImagePlotSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("centerFinderPlot");
-    m_CenterFinderPlotSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_CenterFinderPlotSettings) {
+      settings->beginGroup("centerFinderPlot");
+      m_CenterFinderPlotSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("integratorPlot");
-    m_IntegratorPlotSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_IntegratorPlotSettings) {
+      settings->beginGroup("integratorPlot");
+      m_IntegratorPlotSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("inputFileBrowser");
-    m_InputFileBrowserSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_InputFileBrowserSettings) {
+      settings->beginGroup("inputFileBrowser");
+      m_InputFileBrowserSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("outputFileBrowser");
-    m_OutputFileBrowserSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_OutputFileBrowserSettings) {
+      settings->beginGroup("outputFileBrowser");
+      m_OutputFileBrowserSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("histogramDialog");
-    m_HistogramDialogSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_HistogramDialogSettings) {
+      settings->beginGroup("histogramDialog");
+      m_HistogramDialogSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("sliceDialog");
-    m_SliceDialogSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_SliceDialogSettings) {
+      settings->beginGroup("sliceDialog");
+      m_SliceDialogSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("imageInfoDialog");
-    m_InfoDialogSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_InfoDialogSettings) {
+      settings->beginGroup("imageInfoDialog");
+      m_InfoDialogSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("scriptDialog");
-    m_ScriptDialogSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_SliceDialogSettings) {
+      settings->beginGroup("scriptDialog");
+      m_ScriptDialogSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("extraInputsDialog");
-    m_AcquisitionExtraInputsDialogSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_AcquisitionExtraInputsDialogSettings) {
+      settings->beginGroup("extraInputsDialog");
+      m_AcquisitionExtraInputsDialogSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("syncAcqDialog");
-    m_SynchronizedAcquisitionDialogSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_SynchronizedAcquisitionDialogSettings) {
+      settings->beginGroup("syncAcqDialog");
+      m_SynchronizedAcquisitionDialogSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("extraInputsDialog");
-    m_AcquisitionExtraInputsDialogSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_AcquisitionExtraInputsDialogSettings) {
+      settings->beginGroup("extraInputsDialog");
+      m_AcquisitionExtraInputsDialogSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("distortionCorrectionDialog");
-    m_DistortionCorrectionDialogSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_DistortionCorrectionDialogSettings) {
+      settings->beginGroup("distortionCorrectionDialog");
+      m_DistortionCorrectionDialogSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("distortionCorrectionPlot");
-    m_DistortionCorrectionPlotSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_DistortionCorrectionPlotSettings) {
+      settings->beginGroup("distortionCorrectionPlot");
+      m_DistortionCorrectionPlotSettings->writeSettings(settings);
+      settings->endGroup();
+    }
   }
 }
 
