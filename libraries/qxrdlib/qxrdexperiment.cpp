@@ -70,6 +70,7 @@ QxrdExperiment::QxrdExperiment(QString name) :
   m_ScanFile(NULL),
   m_ExperimentFileMutex(),
 
+  m_QxrdVersion(this, "qxrdVersion", STR(QXRD_VERSION), "Qxrd Version"),
   m_DataDirectory(this, "dataDirectory", defaultDataDirectory(""), "Saved Data Directory"),
   m_LogFileName(this, "logFileName", defaultLogName(""), "Log File Name"),
   m_ScanFileName(this, "scanFileName", defaultScanName(""), "Scan File Name"),
@@ -1036,6 +1037,10 @@ void QxrdExperiment::readSettings(QSettings *settings)
       settings->beginGroup("dataset");
       m_Dataset->readSettings(settings);
       settings->endGroup();
+    }
+
+    if (get_QxrdVersion() != STR(QXRD_VERSION)) {
+      set_QxrdVersion(STR(QXRD_VERSION));
     }
   }
 }

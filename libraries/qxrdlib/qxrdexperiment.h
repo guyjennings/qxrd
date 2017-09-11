@@ -217,6 +217,9 @@ private:
   mutable QStringList             m_PushedMessages;
 
 public:  // Properties
+  Q_PROPERTY(QString qxrdVersion       READ get_QxrdVersion   WRITE set_QxrdVersion)
+  QCEP_STRING_PROPERTY(QxrdVersion)
+
   Q_PROPERTY(QString dataDirectory     READ get_DataDirectory WRITE set_DataDirectory)
   QCEP_STRING_PROPERTY(DataDirectory)
 

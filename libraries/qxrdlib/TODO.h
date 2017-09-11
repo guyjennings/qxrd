@@ -748,4 +748,7 @@ TODO("2017-08-09", "",
 TODO("2017-09-01", "",
      "Problems loading and/or saving windows state in experiments");
 
+TODO("2017-09-11", "",
+     "Need to optimize QxrdImagePlot::updateROIDisplay to reduce unneeded replots");
+
 #endif // TODO_H

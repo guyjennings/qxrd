@@ -1440,16 +1440,30 @@ void QxrdAcquisition::startIdling()
 void QxrdAcquisition::onIdleTimeout()
 {
   if (m_Idling.fetchAndAddOrdered(0)) {
+    QTime tic;
+    tic.start();
+
     for (int i=0; i<get_DetectorCount(); i++) {
       QxrdDetectorSettingsPtr det = detector(i);
 
       if (det && det->isEnabled()) {
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Det %1 is enabled after %2 msec").arg(i).arg(tic.restart()));
+        }
+
         QcepImageDataBasePtr res = det -> acquireFrameIfAvailable();
+        if (qcepDebug(DEBUG_ACQUIRETIME)) {
+          printMessage(tr("Tried to acquire frame from det %1 after %2 msec").arg(i).arg(tic.restart()));
+        }
 
         QxrdDetectorProcessorPtr proc = det->processor();
 
         if (proc) {
           proc->processIdleImage(res);
+
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("Processed idle frame from det %1 after %2 msec").arg(i).arg(tic.restart()));
+          }
         }
       }
     }
