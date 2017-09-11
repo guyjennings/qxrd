@@ -357,7 +357,7 @@ void QxrdROICoordinatesListModel::setRoi(int row, QxrdROICoordinatesPtr c)
   if (row >= 0 && row < m_ROICoordinates.count()) {
     m_ROICoordinates[row] = c;
 
-    emit dataChanged(index(row,0), index(row,ColCount));
+    emit dataChanged(index(row,0), index(row,ColCount-1));
   }
 }
 
@@ -368,7 +368,7 @@ void QxrdROICoordinatesListModel::moveROICenter(int i, double x, double y)
   if (roi) {
     roi->setCenter(QPointF(x,y));
 
-    emit dataChanged(index(i,0), index(i,ColCount));
+    emit dataChanged(index(i,0), index(i,ColCount-1));
   }
 }
 
@@ -381,7 +381,7 @@ void QxrdROICoordinatesListModel::moveROIRelative(int i, double dx, double dy)
 
     roi->setCenter(cen);
 
-    emit dataChanged(index(i,0), index(i,ColCount));
+    emit dataChanged(index(i,0), index(i,ColCount-1));
   }
 }
 
@@ -392,7 +392,7 @@ void QxrdROICoordinatesListModel::setRotation(int i, double r)
   if (roi) {
     roi->set_Rotation(r);
 
-    emit dataChanged(index(i,0), index(i,ColCount));
+    emit dataChanged(index(i,0), index(i,ColCount-1));
   }
 }
 
@@ -404,7 +404,7 @@ void QxrdROICoordinatesListModel::scaleROI
   if (roi) {
     roi->scaleROI(innerOuter, kx, ky);
 
-    emit dataChanged(index(i,0), index(i,ColCount));
+    emit dataChanged(index(i,0), index(i,ColCount-1));
   }
 }
 
@@ -417,7 +417,7 @@ void QxrdROICoordinatesListModel::deleteROIPoint(int i,
   if (roi) {
     roi->deleteROIPoint(innerOuter, n);
 
-    emit dataChanged(index(i,0), index(i,ColCount));
+    emit dataChanged(index(i,0), index(i,ColCount-1));
   }
 }
 
@@ -431,7 +431,7 @@ void QxrdROICoordinatesListModel::changeROIPoint(int i,
   if (roi) {
     roi->changeROIPoint(innerOuter, n, pt);
 
-    emit dataChanged(index(i,0), index(i,ColCount));
+    emit dataChanged(index(i,0), index(i,ColCount-1));
   }
 }
 
@@ -445,7 +445,7 @@ void QxrdROICoordinatesListModel::insertROIPoint(int i,
   if (roi) {
     roi->insertROIPoint(innerOuter, n, pt);
 
-    emit dataChanged(index(i,0), index(i,ColCount));
+    emit dataChanged(index(i,0), index(i,ColCount-1));
   }
 }
 
@@ -464,7 +464,7 @@ void QxrdROICoordinatesListModel::onROIChanged()
       if (r && r.data() == c) {
 //        printf("ROI %d changed\n", i);
 
-        emit dataChanged(index(i,0), index(i,columnCount(QModelIndex())));
+        emit dataChanged(index(i,0), index(i,columnCount(QModelIndex())-1));
       }
     }
   }
@@ -472,7 +472,7 @@ void QxrdROICoordinatesListModel::onROIChanged()
 
 void QxrdROICoordinatesListModel::onROIsChanged()
 {
-  emit dataChanged(index(0,0), index(rowCount(QModelIndex()), columnCount(QModelIndex())));
+  emit dataChanged(index(0,0), index(rowCount(QModelIndex()), columnCount(QModelIndex())-1));
 }
 
 void QxrdROICoordinatesListModel::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
@@ -502,8 +502,9 @@ void QxrdROICoordinatesListModel::recalculate(QcepImageDataBasePtr img, QcepMask
 
   QVector<int> roles;
   roles.append(Qt::DisplayRole);
+  roles.append(Qt::EditRole);
 
-  emit dataChanged(index(0,SumCol), index(m_ROICoordinates.count(),YGradientCol), roles);
+  emit dataChanged(index(0,SumCol), index(m_ROICoordinates.count()-1,YGradientCol), roles);
 
   printf("ROI Calculation in %d msec\n",tic.elapsed());
 }

@@ -1245,10 +1245,10 @@ void QxrdImagePlot::setROIModel(QxrdROICoordinatesListModelWPtr model)
 
   if (roiModel) {
     connect(roiModel.data(), &QAbstractItemModel::modelReset,    this, &QxrdImagePlot::updateROIDisplay);
-    connect(roiModel.data(), &QAbstractItemModel::dataChanged,   this, &QxrdImagePlot::updateROIDisplay);
-    connect(roiModel.data(), &QAbstractItemModel::rowsInserted,  this, &QxrdImagePlot::updateROIDisplay);
-    connect(roiModel.data(), &QAbstractItemModel::rowsMoved,     this, &QxrdImagePlot::updateROIDisplay);
-    connect(roiModel.data(), &QAbstractItemModel::rowsRemoved,   this, &QxrdImagePlot::updateROIDisplay);
+    connect(roiModel.data(), &QAbstractItemModel::dataChanged,   this, &QxrdImagePlot::roiDataChanged);
+    connect(roiModel.data(), &QAbstractItemModel::rowsInserted,  this, &QxrdImagePlot::roiRowsInserted);
+    connect(roiModel.data(), &QAbstractItemModel::rowsMoved,     this, &QxrdImagePlot::roiRowsMoved);
+    connect(roiModel.data(), &QAbstractItemModel::rowsRemoved,   this, &QxrdImagePlot::roiRowsRemoved);
   }
 }
 
@@ -1345,6 +1345,39 @@ void QxrdImagePlot::updateROIDisplay()
   }
 
   replot();
+}
+
+void QxrdImagePlot::roiDataChanged(const QModelIndex &topLeft,
+                                   const QModelIndex &bottomRight,
+                                   const QVector<int> &roles)
+{
+  int t = topLeft.row();
+  int l = topLeft.column();
+  int b = bottomRight.row();
+  int r = bottomRight.column();
+
+//  printMessage(tr("roiDataChanged t:%1 l:%2 b:%3 r:%4 n:%5")
+//               .arg(t).arg(l).arg(b).arg(r).arg(roles.count()));
+
+  if (r >= QxrdROICoordinatesListModel::OuterTypeCol) {
+    updateROIDisplay();
+  }
+}
+
+void QxrdImagePlot::roiRowsInserted(const QModelIndex &parent, int first, int last)
+{
+  updateROIDisplay();
+}
+
+void QxrdImagePlot::roiRowsMoved(const QModelIndex &parent, int start, int end,
+                                 const QModelIndex &destination, int row)
+{
+  updateROIDisplay();
+}
+
+void QxrdImagePlot::roiRowsRemoved(const QModelIndex &parent, int first, int last)
+{
+  updateROIDisplay();
 }
 
 void QxrdImagePlot::onLegendChecked(const QVariant &itemInfo, bool on, int index)

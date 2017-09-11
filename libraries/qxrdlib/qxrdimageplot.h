@@ -152,6 +152,17 @@ private:
   void updateROISelection(const QItemSelection &selected,
                           const QItemSelection &deselected);
 
+  void roiDataChanged (const QModelIndex &topLeft,
+                       const QModelIndex &bottomRight,
+                       const QVector<int> &roles = QVector<int> ());
+
+  void roiRowsInserted(const QModelIndex &parent, int first, int last);
+
+  void roiRowsMoved   (const QModelIndex &parent, int start, int end,
+                       const QModelIndex &destination, int row);
+
+  void roiRowsRemoved (const QModelIndex &parent, int first, int last);
+
   QPointF scaledDelta(double dx, double dy);
 
 protected:
