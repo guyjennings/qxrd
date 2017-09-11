@@ -549,7 +549,7 @@ QcepImageDataBasePtr QxrdDetectorSettings::acquireFrame()
 
   if (acq) {
     while (1) {
-      if (m_NAcquiredImages.tryAcquire(1, 100)) {
+      if (m_NAcquiredImages.tryAcquire(1, 1000)) {
         return m_AcquiredImages.dequeue();
       } else if (acq->get_Cancelling()) {
         return QcepImageDataBasePtr();
