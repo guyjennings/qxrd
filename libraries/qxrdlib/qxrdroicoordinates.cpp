@@ -583,205 +583,307 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
   int nouter = 0;
   int ninner = 0;
 
-  if (m_InnerShape && m_OuterShape && img) {
-    QPointF c = get_Center();
-    double  cx = c.x();
-    double  cy = c.y();
+  if (m_InnerShape && img) {
+    if (m_OuterShape) {
+      QPointF c = get_Center();
+      double  cx = c.x();
+      double  cy = c.y();
 
-    if (get_Changed()) {
-      double  r = get_Rotation();
-      QMatrix m, mn;
-      m.rotate(r);
-      mn.rotate(-r);
+      if (get_Changed()) {
+        double  r = get_Rotation();
+        QMatrix m, mn;
+        m.rotate(r);
+        mn.rotate(-r);
 
-      QRectF innerBounds = m.mapRect(m_InnerShape->boundingRect()).translated(c);
-      QRectF outerBounds = m.mapRect(m_OuterShape->boundingRect()).translated(c);
+        QRectF innerBounds = m.mapRect(m_InnerShape->boundingRect()).translated(c);
+        QRectF outerBounds = m.mapRect(m_OuterShape->boundingRect()).translated(c);
 
-      QRectF bounds = innerBounds | outerBounds;
+        QRectF bounds = innerBounds | outerBounds;
 
-      m_Bounds = bounds.toRect();
-      m_InnerBounds = innerBounds.toRect();
-      m_OuterBounds = outerBounds.toRect();
+        m_Bounds = bounds.toRect();
+        m_InnerBounds = innerBounds.toRect();
+        m_OuterBounds = outerBounds.toRect();
 
-      m_Cache->redimension(m_Bounds);
+        m_Cache->redimension(m_Bounds);
 
-      int tp = m_Bounds.top();
-      int bt = m_Bounds.bottom();
-      int lf = m_Bounds.left();
-      int rt = m_Bounds.right();
+        int tp = m_Bounds.top();
+        int bt = m_Bounds.bottom();
+        int lf = m_Bounds.left();
+        int rt = m_Bounds.right();
+
+        for (int row=tp; row<=bt; row++) {
+          for (int col=lf; col<=rt; col++) {
+            QPointF p = mn.map(QPointF(col,row)-c);
+
+            m_Cache->setPoint(col,row,
+                              m_InnerShape->pointInShape(p),
+                              m_OuterShape->pointInShape(p));
+          }
+        }
+      }
+
+      int first = true;
+
+      double min = 0;
+      double max = 0;
+      double sum = 0;
+      double npx = 0;
+      int    nnan = 0;
+
+      double sumvn = 0;
+      double sumvx = 0;
+      double sumvy = 0;
+
+      double sumct = 0;
+      double sumnn = 0;
+      double sumnx = 0;
+      double sumny = 0;
+      double sumxy = 0;
+      double sumxx = 0;
+      double sumyy = 0;
+
+      double bkgd = 0;
+      double gradx = 0;
+      double grady = 0;
+
+      int tp = inRange(0,m_Bounds.top(),img->get_Height()-1);
+      int bt = inRange(0,m_Bounds.bottom(),img->get_Height()-1);
+      int lf = inRange(0,m_Bounds.left(),img->get_Width()-1);
+      int rt = inRange(0,m_Bounds.right(),img->get_Width()-1);
+
+      double insum = 0;
+      double outsum = 0;
+
+      for (int row=tp; row<=bt; row++) {
+        double dy = row - cy;
+
+        for (int col=lf; col<=rt; col++) {
+          double dx = col - cx;
+
+          if (mask == NULL || mask->value(col, row)) {
+            int code = m_Cache->getPoint(col, row);
+
+            double val = img->getImageData(col, row);
+
+            if (QxrdROICache::innerPoint(code)) {
+              // Peak point, skip for now...
+              ninner += 1;
+
+              if (val == val) {
+                insum += val;
+              }
+
+            } else if (QxrdROICache::outerPoint(code)) {
+              nouter += 1;
+              // Background point...
+
+              if (val == val) {
+                outsum += val;
+
+                sumct += 1;
+                sumnn += 1;
+                sumnx += dx;
+                sumny += dy;
+                sumxy += dx*dy;
+                sumxx += dx*dx;
+                sumyy += dy*dy;
+
+                sumvn += val;
+                sumvx += val*dx;
+                sumvy += val*dy;
+              }
+            }
+          }
+        }
+      }
+
+      if (sumct > 5) {
+        QMatrix4x4 m;
+        m(0,0) = sumnn;
+        m(1,0) = sumnx;
+        m(0,1) = sumnx;
+        m(2,0) = sumny;
+        m(0,2) = sumny;
+        m(1,1) = sumxx;
+        m(2,1) = sumxy;
+        m(1,2) = sumxy;
+        m(2,2) = sumyy;
+
+        bool invertible;
+
+        QMatrix4x4 inv = m.inverted(&invertible);
+
+        if (invertible) {
+          bkgd   = inv(0,0)*sumvn + inv(0,1)*sumvx + inv(0,2)*sumvy;
+          gradx  = inv(1,0)*sumvn + inv(1,1)*sumvx + inv(1,2)*sumvy;
+          grady  = inv(2,0)*sumvn + inv(2,1)*sumvx + inv(2,2)*sumvy;
+        } else {
+          bkgd = sumvn/sumct;
+        }
+      } else if (sumct > 0) {
+        bkgd = sumvn/sumct;
+      }
+
+      tp = inRange(0,m_InnerBounds.top()-1,img->get_Height()-1);
+      bt = inRange(0,m_InnerBounds.bottom()+1,img->get_Height()-1);
+      lf = inRange(0,m_InnerBounds.left()-1,img->get_Width()-1);
+      rt = inRange(0,m_InnerBounds.right()+1,img->get_Width()-1);
+
+      for (int row=tp; row<=bt; row++) {
+        double dy = row - cy;
+
+        for (int col=lf; col<=rt; col++) {
+          double dx = col - cx;
+
+          if (mask == NULL || mask->value(col, row)) {
+            if (m_Cache->innerPoint(col, row)) {
+              double val = img->getImageData(col, row);
+
+              if (val == val) {
+                double bk = bkgd + dx*gradx + dy*grady;
+                double v  = val - bk;
+
+                if (first) {
+                  min = v;
+                  max = v;
+                  first = false;
+                } else if (v > max) {
+                  max = v;
+                } else if (v < min) {
+                  min = v;
+                }
+
+                sum += v;
+                npx += 1;
+              } else {
+                nnan += 1;
+              }
+            }
+          }
+        }
+      }
+
+      set_Sum(sum);
+      set_NPixels(npx);
+      set_NBackground(nouter);
+      set_Minimum(min);
+      set_Maximum(max);
+
+      if (npx > 0) {
+        set_Average(sum/npx);
+      } else {
+        set_Average(0);
+      }
+
+      set_Background(bkgd);
+      set_XGradient(gradx);
+      set_YGradient(grady);
+
+      set_InnerSum(insum);
+      set_OuterSum(outsum);
+
+      set_Changed(false);
+    } else { // Only an inner shape - no background fitting...
+      QPointF c = get_Center();
+      double  cx = c.x();
+      double  cy = c.y();
+
+      if (get_Changed()) {
+        double  r = get_Rotation();
+        QMatrix m, mn;
+        m.rotate(r);
+        mn.rotate(-r);
+
+        QRectF bounds = m.mapRect(m_InnerShape->boundingRect()).translated(c);
+
+        m_Bounds = bounds.toRect();
+
+        m_Cache->redimension(m_Bounds);
+
+        int tp = m_Bounds.top();
+        int bt = m_Bounds.bottom();
+        int lf = m_Bounds.left();
+        int rt = m_Bounds.right();
+
+        for (int row=tp; row<=bt; row++) {
+          for (int col=lf; col<=rt; col++) {
+            QPointF p = mn.map(QPointF(col,row)-c);
+
+            m_Cache->setPoint(col,row,
+                              m_InnerShape->pointInShape(p),
+                              false);
+          }
+        }
+      }
+
+      int first = true;
+
+      double min = 0;
+      double max = 0;
+      double sum = 0;
+      double npx = 0;
+      int    nnan = 0;
+
+      int tp = inRange(0,m_Bounds.top(),img->get_Height()-1);
+      int bt = inRange(0,m_Bounds.bottom(),img->get_Height()-1);
+      int lf = inRange(0,m_Bounds.left(),img->get_Width()-1);
+      int rt = inRange(0,m_Bounds.right(),img->get_Width()-1);
+
+      double insum = 0;
 
       for (int row=tp; row<=bt; row++) {
         for (int col=lf; col<=rt; col++) {
-          QPointF p = mn.map(QPointF(col,row)-c);
+          if (mask == NULL || mask->value(col, row)) {
+            int code = m_Cache->getPoint(col, row);
 
-          m_Cache->setPoint(col,row,
-                            m_InnerShape->pointInShape(p),
-                            m_OuterShape->pointInShape(p));
-        }
-      }
-    }
-
-    int first = true;
-
-    double min = 0;
-    double max = 0;
-    double sum = 0;
-    double npx = 0;
-    int    nnan = 0;
-
-    double sumvn = 0;
-    double sumvx = 0;
-    double sumvy = 0;
-
-    double sumct = 0;
-    double sumnn = 0;
-    double sumnx = 0;
-    double sumny = 0;
-    double sumxy = 0;
-    double sumxx = 0;
-    double sumyy = 0;
-
-    double bkgd = 0;
-    double gradx = 0;
-    double grady = 0;
-
-    int tp = inRange(0,m_Bounds.top(),img->get_Height()-1);
-    int bt = inRange(0,m_Bounds.bottom(),img->get_Height()-1);
-    int lf = inRange(0,m_Bounds.left(),img->get_Width()-1);
-    int rt = inRange(0,m_Bounds.right(),img->get_Width()-1);
-
-    double insum = 0;
-    double outsum = 0;
-
-    for (int row=tp; row<=bt; row++) {
-      double dy = row - cy;
-
-      for (int col=lf; col<=rt; col++) {
-        double dx = col - cx;
-
-        if (mask == NULL || mask->value(col, row)) {
-          int code = m_Cache->getPoint(col, row);
-
-          double val = img->getImageData(col, row);
-
-          if (QxrdROICache::innerPoint(code)) {
-            // Peak point, skip for now...
-            ninner += 1;
-
-            if (val == val) {
-              insum += val;
-            }
-
-          } else if (QxrdROICache::outerPoint(code)) {
-            nouter += 1;
-            // Background point...
-
-            if (val == val) {
-              outsum += val;
-
-              sumct += 1;
-              sumnn += 1;
-              sumnx += dx;
-              sumny += dy;
-              sumxy += dx*dy;
-              sumxx += dx*dx;
-              sumyy += dy*dy;
-
-              sumvn += val;
-              sumvx += val*dx;
-              sumvy += val*dy;
-            }
-          }
-        }
-      }
-    }
-
-    if (sumct > 5) {
-      QMatrix4x4 m;
-      m(0,0) = sumnn;
-      m(1,0) = sumnx;
-      m(0,1) = sumnx;
-      m(2,0) = sumny;
-      m(0,2) = sumny;
-      m(1,1) = sumxx;
-      m(2,1) = sumxy;
-      m(1,2) = sumxy;
-      m(2,2) = sumyy;
-
-      bool invertible;
-
-      QMatrix4x4 inv = m.inverted(&invertible);
-
-      if (invertible) {
-        bkgd   = inv(0,0)*sumvn + inv(0,1)*sumvx + inv(0,2)*sumvy;
-        gradx  = inv(1,0)*sumvn + inv(1,1)*sumvx + inv(1,2)*sumvy;
-        grady  = inv(2,0)*sumvn + inv(2,1)*sumvx + inv(2,2)*sumvy;
-      } else {
-        bkgd = sumvn/sumct;
-      }
-    } else if (sumct > 0) {
-      bkgd = sumvn/sumct;
-    }
-
-    tp = inRange(0,m_InnerBounds.top()-1,img->get_Height()-1);
-    bt = inRange(0,m_InnerBounds.bottom()+1,img->get_Height()-1);
-    lf = inRange(0,m_InnerBounds.left()-1,img->get_Width()-1);
-    rt = inRange(0,m_InnerBounds.right()+1,img->get_Width()-1);
-
-    for (int row=tp; row<=bt; row++) {
-      double dy = row - cy;
-
-      for (int col=lf; col<=rt; col++) {
-        double dx = col - cx;
-
-        if (mask == NULL || mask->value(col, row)) {
-          if (m_Cache->innerPoint(col, row)) {
             double val = img->getImageData(col, row);
 
-            if (val == val) {
-              double bk = bkgd + dx*gradx + dy*grady;
-              double v  = val - bk;
+            if (QxrdROICache::innerPoint(code)) {
+              ninner += 1;
 
-              if (first) {
-                min = v;
-                max = v;
-                first = false;
-              } else if (v > max) {
-                max = v;
-              } else if (v < min) {
-                min = v;
+              if (val == val) {
+                insum += val;
+                sum += val;
+                npx += 1;
+
+                if (first) {
+                  min = val;
+                  max = val;
+                  first = false;
+                } else if (val > max) {
+                  max = val;
+                } else if (val < min) {
+                  min = val;
+                }
+              } else {
+                nnan += 1;
               }
-
-              sum += v;
-              npx += 1;
-            } else {
-              nnan += 1;
             }
           }
         }
       }
+
+      set_Sum(sum);
+      set_NPixels(npx);
+      set_NBackground(nouter);
+      set_Minimum(min);
+      set_Maximum(max);
+
+      if (npx > 0) {
+        set_Average(sum/npx);
+      } else {
+        set_Average(0);
+      }
+
+      set_Background(0);
+      set_XGradient(0);
+      set_YGradient(0);
+
+      set_InnerSum(insum);
+      set_OuterSum(0);
+
+      set_Changed(false);
     }
-
-    set_Sum(sum);
-    set_NPixels(npx);
-    set_NBackground(nouter);
-    set_Minimum(min);
-    set_Maximum(max);
-
-    if (npx > 0) {
-      set_Average(sum/npx);
-    } else {
-      set_Average(0);
-    }
-
-    set_Background(bkgd);
-    set_XGradient(gradx);
-    set_YGradient(grady);
-
-    set_InnerSum(insum);
-    set_OuterSum(outsum);
-
-    set_Changed(false);
   }
 
 #ifndef QT_NO_DEBUG
