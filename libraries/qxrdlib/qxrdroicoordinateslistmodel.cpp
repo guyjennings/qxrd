@@ -500,7 +500,10 @@ void QxrdROICoordinatesListModel::recalculate(QcepImageDataBasePtr img, QcepMask
     res.value(i).waitForFinished();
   }
 
-  emit dataChanged(index(0,SumCol), index(m_ROICoordinates.count(),YGradientCol));
+  QVector<int> roles;
+  roles.append(Qt::DisplayRole);
+
+  emit dataChanged(index(0,SumCol), index(m_ROICoordinates.count(),YGradientCol), roles);
 
   printf("ROI Calculation in %d msec\n",tic.elapsed());
 }
