@@ -636,7 +636,7 @@ int QxrdNIDAQPlugin::readContinuousInput()
   if (m_ContinuousAITask) {
     DAQmxErrChk(DAQmxGetReadAvailSampPerChan(m_ContinuousAITask, &avail));
 
-    printMessage(tr("%1 samples available").arg(avail));
+//    printMessage(tr("%1 samples available").arg(avail));
 
     if (avail < m_NContinuousSamples) {
       return -1;

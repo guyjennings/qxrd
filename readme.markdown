@@ -1,6 +1,9 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.10.3 - Sep 22 2017
+Eliminated intrusive debug messages from NIDAQ plugin
+
 ## v0.11.10.2 - Sep 7 2017
 Display of overflowing pixels should now work for loaded images and live view images as well
 as acquired images
