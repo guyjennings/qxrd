@@ -57,6 +57,8 @@ QcepImageDataBase::QcepImageDataBase(QString name, int width, int height, int si
     m_ExtraInputs(this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
     m_Used(this, "used", true, "Image Used?"),
     m_ImageCounter(allocCount.fetchAndAddOrdered(1)),
+    m_Mask(NULL),
+    m_Overflow(NULL),
     m_Mutex(QMutex::Recursive)
 {
   if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
@@ -299,15 +301,41 @@ double QcepImageDataBase::vValue(int n) const
   return get_VStart() + n*get_VStep();
 }
 
+void QcepImageDataBase::markOverflows(QcepMaskDataPtr overflow, double level)
+{
+  if (overflow) {
+    double ovlev = level;
+
+    if (this->get_SummedExposures() > 1) {
+      ovlev *= this->get_SummedExposures();
+    }
+
+    int nRows = this->get_Height();
+    int nCols = this->get_Width();
+
+    for (int row=0; row<nRows; row++) {
+      for (int col=0; col<nCols; col++) {
+        if (m_Mask == NULL || m_Mask->value(col, row)) {
+          double val = this->getImageData(col, row);
+
+          if (val == val) {
+            if (val >= ovlev) {
+              overflow->setValue(col, row, 1);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 template <typename T>
 QcepImageData<T>::QcepImageData(QString name, int width, int height, T def)
   : QcepImageDataBase(name, width, height, width*height*sizeof(T)),
     m_Image(width*height),
     m_MinValue(0),
     m_MaxValue(0),
-    m_Default(def),
-    m_Mask(NULL),
-    m_Overflow(NULL)
+    m_Default(def)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printMessage(tr("QcepImageData<%1>::QcepImageData %2")

@@ -168,6 +168,7 @@ public slots:
                           double x1, double y1,
                           double x2, double y2, double val) = 0;
   virtual void setValueRangeTo(int rangeChoice, double minval, double maxval, double val) = 0;
+  void markOverflows(QcepMaskDataPtr overflow, double level);
 
   virtual int pixelsInRange(double min, double max) = 0;
   virtual int overflowCount(double ovf) = 0;
@@ -237,6 +238,9 @@ protected:
   int m_ImageCounter;
 //  int m_Width;
 //  int m_Height;
+
+  QcepMaskDataPtr            m_Mask;
+  QcepMaskDataPtr            m_Overflow;
 
 private:
   mutable QMutex m_Mutex;
@@ -366,9 +370,6 @@ protected:
   T m_MinValue;
   T m_MaxValue;
   T m_Default;
-
-  QcepMaskDataPtr            m_Mask;
-  QcepMaskDataPtr            m_Overflow;
 };
 
 class QCEP_EXPORT QcepDoubleImageData : public QcepImageData<double> {
