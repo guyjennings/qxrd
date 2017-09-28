@@ -6,6 +6,9 @@ Versions after v0.11.10 contain major changes to the code and are not recommende
 production use - this is especially true of the detector interface code, which has undergone
 many changes.
 
+## v0.13.2 - Sep 28 2017
+Merged v0.11.10.3 changes into main branch
+
 ## v0.11.16 - Mar 15 2016
 Added 'adjust energy' and 'adjust distance' commands
 Reworked calibrant library code
@@ -26,6 +29,16 @@ Preliminary spec macro counter support
 ## v0.11.12 - Jul 22 2015
 Implement a tree of data objects - with browser etc.
 Implement library of powder calibrants
+
+## v0.11.10.3 - Sep 22 2017
+Eliminated intrusive debug messages from NIDAQ plugin
+
+## v0.11.10.2 - Sep 7 2017
+Display of overflowing pixels should now work for loaded images and live view images as well
+as acquired images
+
+## v0.11.10.1 - Sep 7 2017
+Added pixelsInRange, overflowPixels, minValue, maxValue functions to image data objects
 
 ## v0.11.10 - Apr 01 2015
 Output synchronization waveform available for nPhases==1 as well

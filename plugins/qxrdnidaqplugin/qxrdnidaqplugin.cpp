@@ -575,7 +575,7 @@ int QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
 
   m_NContinuousSamples = m_SampleRate*(m_ExposureTime + m_AcquireDelay + 0.1);
 
-  bufferSize = m_NContinuousSamples+(2.0*m_SampleRate);
+  bufferSize = m_NContinuousSamples+(10.0*m_SampleRate);
 
   printMessage(tr("Buffer size %1").arg(bufferSize));
 
@@ -635,6 +635,8 @@ int QxrdNIDAQPlugin::readContinuousInput()
 
   if (m_ContinuousAITask) {
     DAQmxErrChk(DAQmxGetReadAvailSampPerChan(m_ContinuousAITask, &avail));
+
+//    printMessage(tr("%1 samples available").arg(avail));
 
     if (avail < m_NContinuousSamples) {
       return -1;
