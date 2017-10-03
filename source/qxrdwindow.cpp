@@ -1197,6 +1197,9 @@ void QxrdWindow::newMaskAvailable(QxrdMaskDataPtr mask)
 
 void QxrdWindow::newData()
 {
+  QTime t;
+  t.start();
+
   captureSize();
 
   //  QxrdMutexLocker lock(__FILE__, __LINE__, &m_NewDataMutex);
@@ -1211,23 +1214,57 @@ void QxrdWindow::newData()
     m_Overflow = m_NewOverflow;
     m_NewOverflow = QxrdMaskDataPtr(NULL);
 
+    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+      g_Application->printMessage(tr("QxrdWindow::newData new data after %1 msec").arg(t.elapsed()));
+    }
+
     m_ImagePlot        -> onProcessedImageAvailable(m_Data, m_Overflow);
+
+    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+      g_Application->printMessage(tr("QxrdWindow::newData imagePlot after %1 msec").arg(t.elapsed()));
+    }
+
     m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
+
+    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+      g_Application->printMessage(tr("QxrdWindow::newData centerFinder after %1 msec").arg(t.elapsed()));
+    }
 
     if (m_ImageDisplay) {
       m_ImageDisplay -> updateImage(m_Data, m_Overflow);
+
+      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+        g_Application->printMessage(tr("QxrdWindow::newData imageDisplay after %1 msec").arg(t.elapsed()));
+      }
     }
 
     if (m_SliceDialog) {
       m_SliceDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+
+      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+        g_Application->printMessage(tr("QxrdWindow::newData sliceDialog after %1 msec").arg(t.elapsed()));
+      }
     }
 
     if (m_HistogramDialog) {
       m_HistogramDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+
+      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+        g_Application->printMessage(tr("QxrdWindow::newData histogramDialog after %1 msec").arg(t.elapsed()));
+      }
     }
 
     if (m_ImageInfoDialog) {
       m_ImageInfoDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+
+      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+        g_Application->printMessage(tr("QxrdWindow::newData imageInfoDialog after %1 msec").arg(t.elapsed()));
+      }
+    }
+
+
+    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+      g_Application->printMessage(tr("QxrdWindow::newData took %1 msec").arg(t.elapsed()));
     }
   }
 }
