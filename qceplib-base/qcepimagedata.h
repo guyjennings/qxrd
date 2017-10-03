@@ -117,6 +117,12 @@ public:
   Q_PROPERTY(bool used READ get_Used WRITE set_Used)
   QCEP_BOOLEAN_PROPERTY(Used)
 
+  Q_PROPERTY(double minValue READ get_MinValue WRITE set_MinValue)
+  QCEP_DOUBLE_PROPERTY(MinValue)
+
+  Q_PROPERTY(double maxValue READ get_MaxValue WRITE set_MaxValue)
+  QCEP_DOUBLE_PROPERTY(MaxValue)
+
 public slots:
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
@@ -125,12 +131,6 @@ public slots:
   virtual void setImageData(int x, int y, double v) = 0;
 
   virtual int pixelsInRange(double min, double max) = 0;
-
-  virtual double minValue() = 0;
-  virtual double maxValue() = 0;
-
-  virtual double findMin() const;
-  virtual double findMax() const;
 
   virtual int overflowCount(double level) const;
 
@@ -234,9 +234,6 @@ public:
   T value(int x, int y) const;
   T value(double x, double y) const;
 
-  double minValue();
-  double maxValue();
-
   T* data();
 
   void setValue(int x, int y, T val);
@@ -251,8 +248,8 @@ public:
 
 protected:
   QVector<T> m_Image;
-  T m_MinValue;
-  T m_MaxValue;
+//  T m_MinValue;
+//  T m_MaxValue;
   T m_Default;
 };
 
