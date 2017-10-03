@@ -99,14 +99,17 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
 
   m_DataImage = new QwtPlotSpectrogram();
   m_DataImage -> attach(this);
+  m_DataImage -> setRenderThreadCount(0);
 
   m_MaskImage = new QwtPlotSpectrogram();
   m_MaskImage -> setAlpha(set && set->get_MaskShown() ? m_MaskAlpha : 0);
   m_MaskImage -> attach(this);
+  m_MaskImage -> setRenderThreadCount(0);
 
   m_OverflowImage = new QwtPlotSpectrogram();
   m_OverflowImage -> setAlpha(set && set->get_OverflowShown() ? m_OverflowAlpha : 0);
   m_OverflowImage -> attach(this);
+  m_OverflowImage -> setRenderThreadCount(0);
 
   m_CenterFinderPicker = new QxrdCenterFinderPicker(this);
 
@@ -290,8 +293,8 @@ void QxrdImagePlot::replotImage()
 {
   m_DataImage -> setData(m_DataRaster);
 
-  m_DataImage -> invalidateCache();
-  m_DataImage -> itemChanged();
+//  m_DataImage -> invalidateCache();
+//  m_DataImage -> itemChanged();
 
   if (m_FirstTime) {
     autoScale();
@@ -529,8 +532,8 @@ void QxrdImagePlot::changeImageShown(bool shown)
 
     if (m_DataImage) {
       m_DataImage -> setAlpha(set->get_ImageShown() ? 255 : 0);
-      m_DataImage -> invalidateCache();
-      m_DataImage -> itemChanged();
+//      m_DataImage -> invalidateCache();
+//      m_DataImage -> itemChanged();
 
       replotImage();
     }
@@ -555,8 +558,8 @@ void QxrdImagePlot::changeMaskShown(bool shown)
 
     if (m_MaskImage) {
       m_MaskImage -> setAlpha(set->get_MaskShown() ? m_MaskAlpha : 0);
-      m_MaskImage -> invalidateCache();
-      m_MaskImage -> itemChanged();
+//      m_MaskImage -> invalidateCache();
+//      m_MaskImage -> itemChanged();
 
       replotImage();
     }
@@ -581,8 +584,8 @@ void QxrdImagePlot::changeOverflowShown(bool shown)
 
     if (m_OverflowImage) {
       m_OverflowImage -> setAlpha(set->get_OverflowShown() ? m_OverflowAlpha : 0);
-      m_OverflowImage -> invalidateCache();
-      m_OverflowImage -> itemChanged();
+//      m_OverflowImage -> invalidateCache();
+//      m_OverflowImage -> itemChanged();
 
       replotImage();
     }
@@ -592,31 +595,47 @@ void QxrdImagePlot::changeOverflowShown(bool shown)
 void QxrdImagePlot::changedColorMap()
 {
   m_DataImage -> setColorMap(m_ColorMap);
-  m_DataImage -> invalidateCache();
-  m_DataImage -> itemChanged();
+//  m_DataImage -> invalidateCache();
+//  m_DataImage -> itemChanged();
 
   m_MaskImage   -> setColorMap(m_MaskColorMap);
-  m_MaskImage   -> invalidateCache();
-  m_MaskImage   -> itemChanged();
+//  m_MaskImage   -> invalidateCache();
+//  m_MaskImage   -> itemChanged();
 
   m_OverflowImage   -> setColorMap(m_OverflowColorMap);
-  m_OverflowImage   -> invalidateCache();
-  m_OverflowImage   -> itemChanged();
+//  m_OverflowImage   -> invalidateCache();
+//  m_OverflowImage   -> itemChanged();
 
   replotImage();
 }
 
 void QxrdImagePlot::setImage(QxrdRasterData *data)
 {
+  QTime t;
+  t.start();
+
   m_DataRaster = data;
 
   m_DataImage -> setData(data);
-  m_DataImage -> invalidateCache();
-  m_DataImage -> itemChanged();
+
+  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+    g_Application->printMessage(tr("QxrdImagePlot::setImage setData after %1 msec").arg(t.elapsed()));
+  }
+
+//  m_DataImage -> invalidateCache();
+//  m_DataImage -> itemChanged();
 
   recalculateDisplayedRange();
 
+  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+    g_Application->printMessage(tr("QxrdImagePlot::setImage recalculate after %1 msec").arg(t.elapsed()));
+  }
+
   onImageScaleChanged();
+
+  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+    g_Application->printMessage(tr("QxrdImagePlot::setImage scaleChanged after %1 msec").arg(t.elapsed()));
+  }
 }
 
 void QxrdImagePlot::setMask(QxrdMaskRasterData *mask)
@@ -624,8 +643,8 @@ void QxrdImagePlot::setMask(QxrdMaskRasterData *mask)
   m_MaskRaster = mask;
 
   m_MaskImage -> setData(mask);
-  m_MaskImage -> invalidateCache();
-  m_MaskImage -> itemChanged();
+//  m_MaskImage -> invalidateCache();
+//  m_MaskImage -> itemChanged();
 
   replot();
 }
@@ -635,14 +654,17 @@ void QxrdImagePlot::setOverflows(QxrdMaskRasterData *overflow)
   m_OverflowRaster = overflow;
 
   m_OverflowImage -> setData(overflow);
-  m_OverflowImage -> invalidateCache();
-  m_OverflowImage -> itemChanged();
+//  m_OverflowImage -> invalidateCache();
+//  m_OverflowImage -> itemChanged();
 
   replot();
 }
 
 void QxrdImagePlot::setAutoOverflow()
 {
+  QTime t;
+  t.start();
+
   QxrdDataProcessorPtr proc(m_DataProcessor);
 
   if (m_Data && proc) {
@@ -658,6 +680,11 @@ void QxrdImagePlot::setAutoOverflow()
 
       m_Data->markOverflows(m_Overflow, ovfLevel);
     }
+  }
+
+
+  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+    g_Application->printMessage(tr("QxrdImageplot::setAutoOverflow took %1 msec").arg(t.elapsed()));
   }
 }
 
@@ -680,6 +707,10 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
 
     QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
 
+    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+      g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable new raster after %1 msec").arg(tic.elapsed()));
+    }
+
     if (overflow == NULL) {
       setAutoOverflow();
       setImage(data);
@@ -687,7 +718,16 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
       setImage(data);
     }
 
+
+    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+      g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable set image after %1 msec").arg(tic.elapsed()));
+    }
+
     setOverflows(new QxrdMaskRasterData(m_Overflow));
+
+    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+      g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable set overflows after %1 msec").arg(tic.elapsed()));
+    }
 
     if (image) {
       setTitle(image -> get_Title());
@@ -696,10 +736,14 @@ void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxrd
     }
 
     replotImage();
+
+    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+      g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable replot image after %1 msec").arg(tic.elapsed()));
+    }
   }
 
   if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-    g_Application->printMessage(tr("plot image took %1 msec").arg(tic.elapsed()));
+    g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable took %1 msec").arg(tic.elapsed()));
   }
 }
 
@@ -860,12 +904,12 @@ void QxrdImagePlot::enablePowderPoints()
 
 void QxrdImagePlot::replot()
 {
-  //  QTime tic;
-  //  tic.start();
+//    QTime tic;
+//    tic.start();
 
   QxrdPlot::replot();
 
-  //  g_Application->printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
+//    g_Application->printMessage(tr("QxrdImagePlot::replot took %1 msec").arg(tic.restart()));
 }
 
 QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
