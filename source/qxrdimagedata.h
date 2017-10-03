@@ -64,8 +64,8 @@ public:
 
   void calculateRange();
 
-  double minValue();
-  double maxValue();
+//  double minValue();
+//  double maxValue();
 
   int allocatedMemoryMB();
 

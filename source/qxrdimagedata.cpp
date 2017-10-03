@@ -579,12 +579,14 @@ double QxrdImageData<T>::findAverage() const
 template <typename T>
 void QxrdImageData<T>::calculateRange()
 {
-//  T *img = m_Image.data();
-//  int total = m_Image.count();
+  QTime t;
+  t.start();
+
+//  QcepImageData<T>::calculateRange();
   int first = true;
 
-  double minV = 0;
-  double maxV = 0;
+  T minV = 0;
+  T maxV = 0;
 
   int ncols = this -> get_Width();
   int nrows = this -> get_Height();
@@ -609,25 +611,31 @@ void QxrdImageData<T>::calculateRange()
     }
   }
 
-  this->m_MinValue = minV;
-  this->m_MaxValue = maxV;
+  QcepImageDataBase::set_MinValue(minV);
+  QcepImageDataBase::set_MaxValue(maxV);
+
+  g_Application->printMessage(QcepImageDataBase::tr("calculate range took %1 msec").arg(t.elapsed()));
+
+  if (QThread::currentThread() == g_Application->thread()) {
+    g_Application->printMessage(QcepImageDataBase::tr("calculate range called in gui thread"));
+  }
 }
 
-template <typename T>
-double QxrdImageData<T>::minValue()
-{
-  calculateRange();
+//template <typename T>
+//double QxrdImageData<T>::minValue()
+//{
+////  calculateRange();
 
-  return this->m_MinValue;
-}
+//  return this->m_MinValue;
+//}
 
-template <typename T>
-double QxrdImageData<T>::maxValue()
-{
-  calculateRange();
+//template <typename T>
+//double QxrdImageData<T>::maxValue()
+//{
+////  calculateRange();
 
-  return this->m_MaxValue;
-}
+//  return this->m_MaxValue;
+//}
 
 template <typename T>
 int QxrdImageData<T>::allocatedMemoryMB()
