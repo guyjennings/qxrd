@@ -28,7 +28,7 @@ void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxr
   m_InfoText->clear();
 
   if (image) {
-    image->calculateRange();
+//    image->calculateRange();
 
     m_InfoText->append(tr("Information about %1").arg(image->get_Title()));
     m_InfoText->append(tr("Saved in %1").arg(image->get_FileName()));
@@ -41,7 +41,7 @@ void QxrdInfoDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, Qxr
     m_InfoText->append(tr("Acquired with Qt Version %1").arg(image->get_QtVersion()));
     m_InfoText->append(tr("Data type %1 (%2)").arg(image->get_DataType()).arg(image->get_DataTypeName()));
     m_InfoText->append(tr("Dimensions %1 x %2").arg(image->get_Width()).arg(image->get_Height()));
-    m_InfoText->append(tr("Minimum Value %1, Maximum Value %2").arg(image->minValue()).arg(image->maxValue()));
+    m_InfoText->append(tr("Minimum Value %1, Maximum Value %2").arg(image->get_MinValue()).arg(image->get_MaxValue()));
 
     m_InfoText->append(tr("Detector gain setting %1").arg(image->get_CameraGain()));
     m_InfoText->append(tr("Exposure Time %1 sec").arg(image->get_ExposureTime()));
