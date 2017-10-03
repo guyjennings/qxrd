@@ -536,6 +536,8 @@ void QxrdAcquisition::processImage(QString filePattern, int fileIndex, int phase
     image -> set_Triggered(trig);
     image -> set_Normalization(get_Normalization());
 
+    image -> calculateRange();
+
     copyDynamicProperties(image.data());
 
     if (nPhases == 0) {
