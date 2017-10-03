@@ -139,7 +139,8 @@ HEADERS += \
     qxrdfitterringcircle.h \
     qxrdfitterringellipse.h \
     triangulate.h \
-    qxrdplanefitter.h
+    qxrdplanefitter.h \
+    qwt_plot_piecewise_curve-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \

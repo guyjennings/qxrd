@@ -6,6 +6,7 @@
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
+#include <QtConcurrentRun>
 
 QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings,
                                          QxrdExperimentWPtr expt,
@@ -14,6 +15,8 @@ QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr setting
   m_Experiment(expt),
   m_HistogramDialogSettings(settings)
 {
+  qRegisterMetaType<QwtPlotPiecewiseCurvePtr>("QwtPlotPiecewiseCurvePtr");
+
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdHistogramDialog::QxrdHistogramDialog(%p)\n", this);
   }
@@ -25,6 +28,10 @@ QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr setting
   if (set) {
     m_HistogramPlot->init(set->histogramPlotSettings());
   }
+
+  connect(this, &QxrdHistogramDialog::newHistogramCurves,
+          this, &QxrdHistogramDialog::onNewHistogramCurves,
+          Qt::QueuedConnection);
 }
 
 QxrdHistogramDialog::~QxrdHistogramDialog()
@@ -38,7 +45,7 @@ void QxrdHistogramDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image
 {
   m_Image = image;
 
-  recalculateHistogram();
+  QtConcurrent::run(this, &QxrdHistogramDialog::recalculateHistogram);
 }
 
 void QxrdHistogramDialog::histogramSelectionChanged(QRectF rect)
@@ -48,13 +55,13 @@ void QxrdHistogramDialog::histogramSelectionChanged(QRectF rect)
   if (set) {
     set->set_HistogramRect(rect);
 
-    recalculateHistogram();
+    QtConcurrent::run(this, &QxrdHistogramDialog::recalculateHistogram);
   }
 }
 
 void QxrdHistogramDialog::updateHistogramNeeded()
 {
-  recalculateHistogram();
+  QtConcurrent::run(this, &QxrdHistogramDialog::recalculateHistogram);
 }
 
 void QxrdHistogramDialog::recalculateHistogram()
@@ -132,30 +139,50 @@ void QxrdHistogramDialog::recalculateHistogram()
         }
       }
 
-      m_HistogramPlot->detachItems();
 
-      QwtPlotPiecewiseCurve *pc0 = new QwtPlotPiecewiseCurve(m_HistogramPlot, "Entire Image");
+      QwtPlotPiecewiseCurvePtr pc0 =
+          QwtPlotPiecewiseCurvePtr(new QwtPlotPiecewiseCurve(m_HistogramPlot, "Entire Image"));
 
       pc0->setSamples(x0, h0);
       pc0->setPen(QPen(Qt::red));
 
-      pc0->attach(m_HistogramPlot);
+//      pc0->attach(m_HistogramPlot);
 
-      QwtPlotPiecewiseCurve *pc1 = new QwtPlotPiecewiseCurve(m_HistogramPlot,
+      QwtPlotPiecewiseCurvePtr pc1 =
+          QwtPlotPiecewiseCurvePtr(new QwtPlotPiecewiseCurve(m_HistogramPlot,
                                                              tr("[%1,%2]-[%3,%4]")
                                                              .arg(rect.left()).arg(rect.bottom())
-                                                             .arg(rect.right()).arg(rect.top()));
+                                                             .arg(rect.right()).arg(rect.top())));
 
       pc1->setSamples(x0, h1);
       pc1->setPen(QPen(Qt::darkRed));
 
-      pc1->attach(m_HistogramPlot);
+//      pc1->attach(m_HistogramPlot);
 
-      m_HistogramPlot->replot();
 
       if (qcepDebug(DEBUG_HISTOGRAM)) {
         expt -> printMessage(tr("Histogram of data took %1 msec").arg(tic.elapsed()));
       }
+
+      emit newHistogramCurves(pc0, pc1);
     }
   }
+}
+
+void QxrdHistogramDialog::onNewHistogramCurves(QwtPlotPiecewiseCurvePtr totalCurve, QwtPlotPiecewiseCurvePtr selectCurve)
+{
+  m_TotalCurve = totalCurve;
+  m_SelectCurve = selectCurve;
+
+  m_HistogramPlot->detachItems();
+
+  if (m_TotalCurve) {
+    m_TotalCurve->attach(m_HistogramPlot);
+  }
+
+  if (m_SelectCurve) {
+    m_SelectCurve->attach(m_HistogramPlot);
+  }
+
+  m_HistogramPlot->replot();
 }
