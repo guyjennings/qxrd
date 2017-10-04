@@ -17,6 +17,8 @@
 #include "qxrdplotmeasurer.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdapplication.h"
+#include <QtConcurrentRun>
+#include "qxrdplotcurvevector.h"
 
 QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   : QxrdPlot(parent),
@@ -26,6 +28,11 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
     m_CenterFinder(),
     m_FirstTime(true)
 {
+  qRegisterMetaType<QxrdPlotCurveVectorPtr>("QxrdPlotCurveVectorPtr");
+
+  connect(this, &QxrdCenterFinderPlot::newCenterFinderCurves,
+          this, &QxrdCenterFinderPlot::onNewCenterFinderCurves,
+          Qt::QueuedConnection);
 }
 
 void QxrdCenterFinderPlot::init(QxrdPlotSettingsWPtr settings)
@@ -65,77 +72,66 @@ void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)
 
 void QxrdCenterFinderPlot::onParameterChanged()
 {
-  QxrdCenterFinderPtr cf(m_CenterFinder);
-
-  if (cf) {
-    onCenterChanged(cf -> get_CenterX(), cf -> get_CenterY());
-  }
+  QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
-void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr /*image*/)
+void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image)
 {
-  QxrdCenterFinderPtr cf(m_CenterFinder);
+  m_Image = image;
 
-  if (cf) {
-    onCenterChanged(cf -> get_CenterX(), cf -> get_CenterY());
-  }
+  QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
-void QxrdCenterFinderPlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr /*image*/, QxrdMaskDataPtr /*mask*/)
+void QxrdCenterFinderPlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
 {
-  QxrdCenterFinderPtr cf(m_CenterFinder);
+  m_Image = image;
+  m_Mask  = mask;
 
-  if (cf) {
-    onCenterChanged(cf -> get_CenterX(), cf -> get_CenterY());
-  }
+  QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
 void QxrdCenterFinderPlot::onCenterXChanged(double cx)
 {
-  QxrdCenterFinderPtr cf(m_CenterFinder);
-
-  if (cf) {
-    onCenterChanged(cx, cf -> get_CenterY());
-  }
+  QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
 void QxrdCenterFinderPlot::onCenterYChanged(double cy)
 {
-  QxrdCenterFinderPtr cf(m_CenterFinder);
-
-  if (cf) {
-    onCenterChanged(cf -> get_CenterX(), cy);
-  }
+  QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
 void QxrdCenterFinderPlot::onCenterChanged(QPointF c)
 {
-  onCenterChanged(c.x(), c.y());
+  QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
 void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 {
-  QxrdWindow *wp = m_Window;
+  QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
+}
+
+void QxrdCenterFinderPlot::updateCenterFinderPlot()
+{
+  QxrdPlotCurveVectorPtr res =
+      QxrdPlotCurveVectorPtr(new QxrdPlotCurveVector());
+
   QxrdCenterFinderPtr cf(m_CenterFinder);
-
-  if (wp && cf) {
+  if (cf) {
     try {
-      QxrdDoubleImageDataPtr img = wp -> data();
-      QxrdMaskDataPtr mask = wp -> mask();
-
-      if (img /* && mask*/) {
-        int width =img->get_Width();
-        int height=img->get_Height();
+      if (m_Image /* && m_Mask*/) {
+        int width =m_Image->get_Width();
+        int height=m_Image->get_Height();
 
         int len = (int) sqrt((double)(width*width+height*height));
 
-        detachItems(QwtPlotItem::Rtti_PlotCurve);
-        detachItems(QwtPlotItem::Rtti_PlotMarker);
-
         QPen pen;
 
+        double plx = cf->get_DetectorXPixelSize();
+        double ply = cf->get_DetectorYPixelSize();
+
+        double cx  = cf->get_CenterX(), cy = cf->get_CenterY();
         for (double ang=0; ang<2*M_PI; ang+=M_PI/36) {
-          double x = cx, y = cy;
+          double x  = cx, y = cy;
           double dx = cos(ang);
           double dy = sin(ang);
           int nn=0;
@@ -144,8 +140,6 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
           if (distance <= 0) distance = 1000;
 
-          double plx = cf->get_DetectorXPixelSize();
-          double ply = cf->get_DetectorYPixelSize();
 
           m_XData.resize(len);
           m_YData.resize(len);
@@ -165,12 +159,12 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
               int iy = (int)qRound(y);
 
               if (ix >= 0 && iy >= 0 && ix < width && iy < height) {
-                double v = img->value(x,y);
+                double v = m_Image->value(x,y);
 
                 bool mv = true;
 
-                if (mask) {
-                  mv = mask->maskValue(ix,iy);
+                if (m_Mask) {
+                  mv = m_Mask->maskValue(ix,iy);
                 }
 
                 if (mv) {
@@ -196,12 +190,12 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
               int iy = (int)qRound(y);
 
               if (ix >= 0 && iy >= 0 && ix < width && iy < height) {
-                double v = img->value(x,y);
+                double v = m_Image->value(x,y);
 
                 bool mv = true;
 
-                if (mask) {
-                  mv = mask->maskValue(ix,iy);
+                if (m_Mask) {
+                  mv = m_Mask->maskValue(ix,iy);
                 }
 
                 if (mv) {
@@ -222,7 +216,7 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
           double angdeg = 180*(ang)/M_PI;
 
-          QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(this,QString("%1").arg(180*(ang)/M_PI));
+          QwtPlotPiecewiseCurve *pc = new QwtPlotPiecewiseCurve(this,QString("%1").arg(180*(ang)/M_PI));
 
           pc->setSamples(m_XData, m_YData);
           //    pc->setStyle(QwtPlotCurve::Dots);
@@ -236,26 +230,11 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
           pc->setSymbol(s);
           pc->setPen(pen);
-          pc->attach(this);
+
+          res->append(pc);
         }
 
-        QString title = QString("Center:%1:").arg(img->get_Title());
-        title += QString("(%1,%2):").arg(cx).arg(cy);
-
-        setTitle(title);
-
-        setAxisTitle(xBottom, "2Theta (deg)");
-
-        if (m_Zoomer && m_Zoomer -> zoomRectIndex() == 0) {
-          m_Zoomer -> setZoomBase();
-        }
-
-        if (m_FirstTime) {
-          autoScale();
-          m_FirstTime = false;
-        } else {
-          replot();
-        }
+        emit newCenterFinderCurves(res);
       }
     }
 
@@ -264,5 +243,49 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
         g_Application->printMessage("QxrdCenterFinderPlot::onCenterChanged failed");
       }
     }
+  }
+}
+
+void QxrdCenterFinderPlot::onNewCenterFinderCurves(QxrdPlotCurveVectorPtr curves)
+{
+  if (g_Application && curves) {
+    g_Application->printMessage(tr("QxrdCenterFinderPlot::onNewCenterFinderCurves added %1 curves")
+                                .arg(curves->count()));
+  }
+
+  m_Curves = curves;
+
+  detachItems();
+
+  if (m_Curves) {
+    for (int i=0; i<m_Curves->count(); i++) {
+      QwtPlotPiecewiseCurve *c = m_Curves->value(i);
+
+      if (c) {
+        c -> attach(this);
+      }
+    }
+  }
+
+  QxrdCenterFinderPtr cf(m_CenterFinder);
+
+  if (m_Image && cf) {
+    QString title = QString("Center:%1:").arg(m_Image->get_Title());
+    title += QString("(%1,%2):").arg(cf->get_CenterX()).arg(cf->get_CenterY());
+
+    setTitle(title);
+  }
+
+  setAxisTitle(xBottom, "2Theta (deg)");
+
+  if (m_Zoomer && m_Zoomer -> zoomRectIndex() == 0) {
+    m_Zoomer -> setZoomBase();
+  }
+
+  if (m_FirstTime) {
+    autoScale();
+    m_FirstTime = false;
+  } else {
+    replot();
   }
 }

@@ -140,7 +140,9 @@ HEADERS += \
     qxrdfitterringellipse.h \
     triangulate.h \
     qxrdplanefitter.h \
-    qwt_plot_piecewise_curve-ptr.h
+    qwt_plot_piecewise_curve-ptr.h \
+    qxrdplotcurvevector.h \
+    qxrdplotcurvevector-ptr.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -175,7 +177,8 @@ SOURCES += \
     qxrdfitterpeakorring.cpp \
     qxrdfitterringcircle.cpp \
     qxrdfitterringellipse.cpp \
-    qxrdplanefitter.cpp
+    qxrdplanefitter.cpp \
+    qxrdplotcurvevector.cpp
 
 OTHER_FILES += testImage.js
 
