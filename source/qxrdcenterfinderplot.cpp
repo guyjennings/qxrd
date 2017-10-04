@@ -116,11 +116,15 @@ void QxrdCenterFinderPlot::updateCenterFinderPlot()
       QxrdPlotCurveVectorPtr(new QxrdPlotCurveVector());
 
   QxrdCenterFinderPtr cf(m_CenterFinder);
+
+  QxrdDoubleImageDataPtr image = m_Image;
+  QxrdMaskDataPtr        mask  = m_Mask;
+
   if (cf) {
     try {
-      if (m_Image /* && m_Mask*/) {
-        int width =m_Image->get_Width();
-        int height=m_Image->get_Height();
+      if (image /* && m_Mask*/) {
+        int width =image->get_Width();
+        int height=image->get_Height();
 
         int len = (int) sqrt((double)(width*width+height*height));
 
@@ -140,9 +144,8 @@ void QxrdCenterFinderPlot::updateCenterFinderPlot()
 
           if (distance <= 0) distance = 1000;
 
-
-          m_XData.resize(len);
-          m_YData.resize(len);
+          QVector<double> xData(len);
+          QVector<double> yData(len);
 
           if (cf->get_ImplementTilt()) {
             double rot = cf->get_TiltPlaneRotation()*M_PI/180.0;
@@ -159,17 +162,17 @@ void QxrdCenterFinderPlot::updateCenterFinderPlot()
               int iy = (int)qRound(y);
 
               if (ix >= 0 && iy >= 0 && ix < width && iy < height) {
-                double v = m_Image->value(x,y);
+                double v = image->value(x,y);
 
                 bool mv = true;
 
-                if (m_Mask) {
-                  mv = m_Mask->maskValue(ix,iy);
+                if (mask) {
+                  mv = mask->maskValue(ix,iy);
                 }
 
                 if (mv) {
-                  m_XData[nn] = twoTheta;
-                  m_YData[nn] = v;
+                  xData[nn] = twoTheta;
+                  yData[nn] = v;
 
                   nn++;
                 }
@@ -190,17 +193,17 @@ void QxrdCenterFinderPlot::updateCenterFinderPlot()
               int iy = (int)qRound(y);
 
               if (ix >= 0 && iy >= 0 && ix < width && iy < height) {
-                double v = m_Image->value(x,y);
+                double v = image->value(x,y);
 
                 bool mv = true;
 
-                if (m_Mask) {
-                  mv = m_Mask->maskValue(ix,iy);
+                if (mask) {
+                  mv = mask->maskValue(ix,iy);
                 }
 
                 if (mv) {
-                  m_XData[nn] = twoTheta;
-                  m_YData[nn] = v;
+                  xData[nn] = twoTheta;
+                  yData[nn] = v;
 
                   nn++;
                 }
@@ -211,14 +214,14 @@ void QxrdCenterFinderPlot::updateCenterFinderPlot()
             }
           }
 
-          m_XData.resize(nn);
-          m_YData.resize(nn);
+          xData.resize(nn);
+          yData.resize(nn);
 
           double angdeg = 180*(ang)/M_PI;
 
           QwtPlotPiecewiseCurve *pc = new QwtPlotPiecewiseCurve(this,QString("%1").arg(180*(ang)/M_PI));
 
-          pc->setSamples(m_XData, m_YData);
+          pc->setSamples(xData, yData);
           //    pc->setStyle(QwtPlotCurve::Dots);
           pen.setColor(QColor::fromHsv((int) angdeg, 255, 255));
 

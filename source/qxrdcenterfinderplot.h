@@ -42,7 +42,7 @@ private slots:
 
 private:
   QcepObjectNamer        m_ObjectNamer;
-  QVector<double>        m_XData, m_YData;
+//  QVector<double>        m_XData, m_YData;
   QxrdWindow            *m_Window;
   QxrdDataProcessorWPtr  m_DataProcessor;
   QxrdCenterFinderWPtr   m_CenterFinder;
