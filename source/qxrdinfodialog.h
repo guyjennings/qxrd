@@ -15,7 +15,7 @@ public:
   explicit QxrdInfoDialog(QxrdInfoDialogSettingsWPtr settings, QWidget *parent);
   virtual ~QxrdInfoDialog();
 
-  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
+  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image);
 
 private:
   QxrdInfoDialogSettingsWPtr m_InfoDialogSettings;

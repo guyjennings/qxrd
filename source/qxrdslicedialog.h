@@ -16,7 +16,7 @@ public:
   explicit QxrdSliceDialog(QxrdSliceDialogSettingsWPtr settings, QWidget *parent);
   virtual ~QxrdSliceDialog();
 
-  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
+  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image);
 
 public slots:
   void slicePolygon(QVector<QPointF> poly);

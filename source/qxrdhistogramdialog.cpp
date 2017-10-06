@@ -41,7 +41,7 @@ QxrdHistogramDialog::~QxrdHistogramDialog()
   }
 }
 
-void QxrdHistogramDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr /*overflow*/)
+void QxrdHistogramDialog::onProcessedImageAvailable(QxrdDoubleImageDataPtr image)
 {
   m_Image = image;
 

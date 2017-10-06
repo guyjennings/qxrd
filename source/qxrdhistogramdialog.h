@@ -21,7 +21,7 @@ public:
                                QWidget *parent);
   virtual ~QxrdHistogramDialog();
 
-  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
+  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image);
 
 signals:
   void newHistogramCurves(QwtPlotPiecewiseCurvePtr totalCurve,
