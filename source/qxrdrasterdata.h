@@ -19,26 +19,8 @@ public:
 
 public:
   double value(double x, double y) const;
-  QxrdRasterData* copy() const;
   QwtInterval range() const;
   void setDisplayedRange(double min, double max);
-
-  double minValue();
-  double maxValue();
-
-  void setInterpolate(int interp);
-  int interpolate();
-
-  QwtInterval percentileRange(double lowpct, double highpct);
-
-  int width() const;
-  int height() const;
-
-  const QxrdDoubleImageDataPtr data() const { return m_Data; }
-  const QxrdMaskDataPtr mask() const { return m_Mask; }
-  int interp() const          { return m_Interpolate; }
-
-  QPointF optimizePeakPosition(QPointF pt) const;
 
 private:
   QxrdDoubleImageDataPtr m_Data;

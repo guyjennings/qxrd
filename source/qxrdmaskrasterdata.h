@@ -9,22 +9,13 @@
 class QxrdMaskRasterData : public QwtRasterData
 {
 public:
-  QxrdMaskRasterData(QxrdMaskDataPtr mask = QxrdMaskDataPtr(), int interp = 0);
+  QxrdMaskRasterData(QxrdMaskDataPtr mask);
 
 public:
   double value(double x, double y) const;
-  QwtInterval range() const;
-
-  QxrdMaskRasterData* copy() const;
-
-  short int *data() const;
-
-  const QxrdMaskDataPtr mask() const { return m_Mask; }
-  int interp() const                 { return m_Interpolate; }
 
 private:
   QxrdMaskDataPtr  m_Mask;
-  int              m_Interpolate;
 };
 
 #endif
