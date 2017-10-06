@@ -88,9 +88,9 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_Progress(NULL),
     m_AllocationStatus(NULL),
     m_Data(NULL),
-    m_Overflow(NULL),
+//    m_Overflow(NULL),
     m_NewData(NULL),
-    m_NewOverflow(NULL),
+//    m_NewOverflow(NULL),
     m_NewDataAvailable(false),
     m_Mask(NULL),
     m_NewMask(NULL),
@@ -1175,8 +1175,6 @@ void QxrdWindow::newDataAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr 
   QxrdMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   m_NewData = image;
-  m_NewOverflow = overflow;
-
   m_NewDataAvailable.fetchAndAddOrdered(1);
 
   //  INVOKE_CHECK(QMetaObject::invokeMethod(this, "newData", Qt::QueuedConnection));
@@ -1211,14 +1209,11 @@ void QxrdWindow::newData()
     m_Data = m_NewData;
     m_NewData = QxrdDoubleImageDataPtr(NULL);
 
-    m_Overflow = m_NewOverflow;
-    m_NewOverflow = QxrdMaskDataPtr(NULL);
-
     if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
       g_Application->printMessage(tr("QxrdWindow::newData new data after %1 msec").arg(t.elapsed()));
     }
 
-    m_ImagePlot        -> onProcessedImageAvailable(m_Data, m_Overflow);
+    m_ImagePlot        -> onProcessedImageAvailable(m_Data);
 
     if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
       g_Application->printMessage(tr("QxrdWindow::newData imagePlot after %1 msec").arg(t.elapsed()));
@@ -1231,7 +1226,7 @@ void QxrdWindow::newData()
     }
 
     if (m_ImageDisplay) {
-      m_ImageDisplay -> updateImage(m_Data, m_Overflow);
+      m_ImageDisplay -> updateImage(m_Data);
 
       if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
         g_Application->printMessage(tr("QxrdWindow::newData imageDisplay after %1 msec").arg(t.elapsed()));
@@ -1239,7 +1234,7 @@ void QxrdWindow::newData()
     }
 
     if (m_SliceDialog) {
-      m_SliceDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+      m_SliceDialog -> onProcessedImageAvailable(m_Data);
 
       if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
         g_Application->printMessage(tr("QxrdWindow::newData sliceDialog after %1 msec").arg(t.elapsed()));
@@ -1247,7 +1242,7 @@ void QxrdWindow::newData()
     }
 
     if (m_HistogramDialog) {
-      m_HistogramDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+      m_HistogramDialog -> onProcessedImageAvailable(m_Data);
 
       if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
         g_Application->printMessage(tr("QxrdWindow::newData histogramDialog after %1 msec").arg(t.elapsed()));
@@ -1255,7 +1250,7 @@ void QxrdWindow::newData()
     }
 
     if (m_ImageInfoDialog) {
-      m_ImageInfoDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+      m_ImageInfoDialog -> onProcessedImageAvailable(m_Data);
 
       if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
         g_Application->printMessage(tr("QxrdWindow::newData imageInfoDialog after %1 msec").arg(t.elapsed()));
@@ -1281,8 +1276,8 @@ void QxrdWindow::newMask()
     m_NewMask = QxrdMaskDataPtr(NULL);
     m_NewMaskAvailable.fetchAndStoreOrdered(0);
 
-    m_ImagePlot        -> onMaskedImageAvailable(m_Data, m_Mask);
-    m_CenterFinderPlot -> onMaskedImageAvailable(m_Data, m_Mask);
+    m_ImagePlot        -> onMaskedImageAvailable(m_Mask);
+    m_CenterFinderPlot -> onMaskedImageAvailable(m_Mask);
 
     if (m_ImageDisplay) {
       m_ImageDisplay->updateImage(QxrdDoubleImageDataPtr(), QxrdMaskDataPtr(), m_Mask);

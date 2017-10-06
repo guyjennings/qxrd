@@ -194,9 +194,7 @@ private:
   QTimer                                 m_UpdateTimer;
 
   QxrdDoubleImageDataPtr                 m_Data;
-  QxrdMaskDataPtr                        m_Overflow;
   QxrdDoubleImageDataPtr                 m_NewData;
-  QxrdMaskDataPtr                        m_NewOverflow;
   QAtomicInt                             m_NewDataAvailable;
 
   QxrdMaskDataPtr                        m_Mask;
