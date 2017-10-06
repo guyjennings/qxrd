@@ -23,6 +23,8 @@
 #include "qxrdimageplotsettings.h"
 #include "qcepobjectnamer.h"
 #include "qxrdpowderpointpicker.h"
+#include "qwt_plot_spectrogram-ptr.h"
+#include "qxrdplotcurvevector-ptr.h"
 
 class QxrdImagePlot : public QxrdPlot
 {
@@ -45,6 +47,7 @@ public slots:
   void recalculateDisplayedRange();
   void setAutoRange();
 
+  void setColorMap(int n);
   void setGrayscale();
   void setInverseGrayscale();
   void setEarthTones();
@@ -53,7 +56,6 @@ public slots:
   void setIce();
 
   void redoColorMap();
-  void setColorMap(int index);
 
   void toggleShowImage();
   void toggleShowMask();
@@ -66,8 +68,8 @@ public slots:
   void onInterpolateChanged(bool interp);
   void onMaintainAspectChanged(bool interp);
 
-  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow);
-  void onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
+  void onProcessedImageAvailable(QxrdDoubleImageDataPtr image);
+  void onMaskedImageAvailable(QxrdMaskDataPtr mask);
   void onDarkImageAvailable(QxrdDoubleImageDataPtr image);
   void onCenterXChanged(double cx);
   void onCenterYChanged(double cy);
@@ -84,22 +86,27 @@ public slots:
   void enableMaskPolygons();
   void enablePowderPoints();
 
-  void clearPowderMarkers();
-  void displayPowderMarkers();
 
   void enableContextMenu();
   void disableContextMenu();
 
   void zapPixel(int x, int y);
 
+signals:
+  void newPlotSpectrograms(QwtPlotSpectrogramPtr image,
+                           QwtPlotSpectrogramPtr mask,
+                           QwtPlotSpectrogramPtr overflow,
+                           QxrdPlotCurveVectorPtr powderCurves);
+
+private slots:
+  void updateImagePlot();
+  void onNewPlotSpectrograms(QwtPlotSpectrogramPtr image,
+                             QwtPlotSpectrogramPtr mask,
+                             QwtPlotSpectrogramPtr overflow,
+                             QxrdPlotCurveVectorPtr powderCurves);
+
 public:
   QxrdImagePlotSettingsWPtr imagePlotSettings();
-
-  const QxrdRasterData* raster() const;
-  QxrdRasterData* raster();
-
-  const QxrdMaskRasterData* maskRaster() const;
-  QxrdMaskRasterData* maskRaster();
 
   QxrdDataProcessorWPtr processor() const;
   void setProcessor(QxrdDataProcessorWPtr proc);
@@ -112,16 +119,25 @@ public:
 
 private:
   void replotImage();
-  void setImage(QxrdRasterData *data);
-  void setMask(QxrdMaskRasterData *data);
-  void setOverflows(QxrdMaskRasterData *overflow);
-  void setAutoOverflow();
-  void colorMapStart(QColor startColor, QColor endColor);
-  void colorMapRange(double value1, QColor color1, double value2, QColor color2);
-  void changedColorMap();
+  void calculateDisplayedRange();
+  void colorMapStart(QwtLinearColorMap *map, QColor startColor, QColor endColor);
+  void colorMapRange(QwtLinearColorMap *map, double value1, QColor color1, double value2, QColor color2);
   void setTrackerPen(const QPen &pen);
+  void displayPowderMarkers(QxrdPlotCurveVectorPtr &curves);
+
+  void setGrayscaleMap(QwtLinearColorMap *map);
+  void setInverseGrayscaleMap(QwtLinearColorMap *map);
+  void setEarthTonesMap(QwtLinearColorMap *map);
+  void setSpectrumMap(QwtLinearColorMap *map);
+  void setFireMap(QwtLinearColorMap *map);
+  void setIceMap(QwtLinearColorMap *map);
 
   void disablePickers();
+
+  double overflowLevel();
+
+  QwtColorMap *newImageColorMap();
+  QPen         markerPen();
 
 public:
   enum {
@@ -137,43 +153,37 @@ private:
   QxrdPlotSlicer            *m_Slicer;
   QxrdImagePlotMeasurer     *m_Measurer;
   QxrdHistogramSelector     *m_HistogramSelector;
-//  QwtLegendPtr               m_Legend;
 
   QxrdDoubleImageDataPtr     m_Data;
   QxrdMaskDataPtr            m_Mask;
-  QxrdMaskDataPtr            m_Overflow;
-
-  QxrdRasterData            *m_DataRaster;
-  QxrdMaskRasterData        *m_MaskRaster;
-  QxrdMaskRasterData        *m_OverflowRaster;
-
-  QwtPlotSpectrogram        *m_DataImage;
-  QwtPlotSpectrogram        *m_MaskImage;
-  QwtPlotSpectrogram        *m_OverflowImage;
-//  QxrdPlotImagePtr           m_PlotImage;
-  QwtLinearColorMap         *m_ColorMap;
-
-  QxrdMaskColorMap          *m_MaskColorMap;
-  int                        m_MaskAlpha;
-
-  QxrdMaskColorMap          *m_OverflowColorMap;
-  int                        m_OverflowAlpha;
 
   QxrdDataProcessorWPtr      m_DataProcessor;
 
   QxrdCenterFinderPicker    *m_CenterFinderPicker;
-  QwtPlotMarker             *m_CenterMarker;
 
   QxrdMaskPicker            *m_Circles;
   QxrdMaskPicker            *m_Polygons;
 
   QxrdPowderPointPicker     *m_PowderPointPicker;
-  QVector<QwtPlotCurve*>     m_PowderPointCurves;
 
-//  QPen                       m_Pen;
   bool                       m_FirstTime;
+  QwtPlotSpectrogramPtr      m_DataSpectrogram;
+  QwtPlotSpectrogramPtr      m_MaskSpectrogram;
+  QwtPlotSpectrogramPtr      m_OverflowSpectrogram;
+  QxrdPlotCurveVectorPtr     m_PowderPointCurves;
+
+  QPen                       m_Pen;
 
   bool                       m_ContextMenuEnabled;
+
+  double                     m_MinDisplayedValue;
+  double                     m_MaxDisplayedValue;
+
+  double                     m_CenterX;
+  double                     m_CenterY;
+
+  QAtomicInt                 m_UpdateCount;
+  QMutex                     m_UpdateMutex;
 };
 
 #endif

@@ -1,6 +1,8 @@
 #include "qxrddebug.h"
 #include "qxrdimageplot.h"
 #include "qxrdrasterdata.h"
+#include "qxrdmaskrasterdata.h"
+#include "qxrdoverflowrasterdata.h"
 #include "qxrdplotzoomer.h"
 #include "qxrdplotslicer.h"
 #include "qxrdimageplotmeasurer.h"
@@ -23,6 +25,10 @@
 #include <QTime>
 #include <QMenu>
 #include <QContextMenuEvent>
+#include <QtConcurrentRun>
+#include "qxrdplotcurvevector.h"
+#include "qwt_plot_piecewise_curve.h"
+#include "qcepmutexlocker.h"
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QxrdPlot(parent),
@@ -34,27 +40,21 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_HistogramSelector(NULL),
     m_Data(NULL),
     m_Mask(NULL),
-    m_Overflow(NULL),
-    m_DataRaster(NULL),
-    m_MaskRaster(NULL),
-    m_OverflowRaster(NULL),
-    m_DataImage(NULL),
-    m_MaskImage(NULL),
-    m_OverflowImage(NULL),
-    m_ColorMap(new QwtLinearColorMap(Qt::black, Qt::white)),
-    m_MaskColorMap(new QxrdMaskColorMap(Qt::red, QColor(0,0,0,0))),
-    m_MaskAlpha(80),
-    m_OverflowColorMap(new QxrdMaskColorMap(QColor(0,0,0,0), Qt::green)),
-    m_OverflowAlpha(256),
     m_DataProcessor(),
     m_CenterFinderPicker(NULL),
-    m_CenterMarker(NULL),
     m_Circles(NULL),
     m_Polygons(NULL),
     m_PowderPointPicker(NULL),
     m_FirstTime(true),
-    m_ContextMenuEnabled(true)
+    m_ContextMenuEnabled(true),
+    m_MinDisplayedValue(0),
+    m_MaxDisplayedValue(100)
 {
+  qRegisterMetaType<QwtPlotSpectrogramPtr>("QwtPlotSpectrogramPtr");
+
+  connect(this, &QxrdImagePlot::newPlotSpectrograms,
+          this, &QxrdImagePlot::onNewPlotSpectrograms,
+          Qt::QueuedConnection);
 }
 
 void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
@@ -97,25 +97,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);
 
-  m_DataImage = new QwtPlotSpectrogram();
-  m_DataImage -> attach(this);
-  m_DataImage -> setRenderThreadCount(0);
-
-  m_MaskImage = new QwtPlotSpectrogram();
-  m_MaskImage -> setAlpha(set && set->get_MaskShown() ? m_MaskAlpha : 0);
-  m_MaskImage -> attach(this);
-  m_MaskImage -> setRenderThreadCount(0);
-
-  m_OverflowImage = new QwtPlotSpectrogram();
-  m_OverflowImage -> setAlpha(set && set->get_OverflowShown() ? m_OverflowAlpha : 0);
-  m_OverflowImage -> attach(this);
-  m_OverflowImage -> setRenderThreadCount(0);
-
   m_CenterFinderPicker = new QxrdCenterFinderPicker(this);
-
-  m_CenterMarker = new QwtPlotMarker();
-  m_CenterMarker -> setLineStyle(QwtPlotMarker::Cross);
-  m_CenterMarker -> attach(this);
 
   m_Circles = new QxrdCircularMaskPicker(canvas(), this);
   m_Circles -> setEnabled(false);
@@ -127,7 +109,6 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
   m_PowderPointPicker -> setEnabled(false);
 
   set100Range();
-  setGrayscale();
 
   if (set) {
     connect(m_Zoomer, SIGNAL(zoomed(QRectF)), this, SLOT(onImageScaleChanged()));
@@ -143,7 +124,7 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
     connect(set->prop_DisplayScalingMode(), SIGNAL(valueChanged(int,int)), this, SLOT(recalculateDisplayedRange()));
     connect(set->prop_InterpolatePixels(), SIGNAL(valueChanged(bool,int)), this, SLOT(onInterpolateChanged(bool)));
     connect(set->prop_MaintainAspectRatio(), SIGNAL(valueChanged(bool,int)), this, SLOT(onMaintainAspectChanged(bool)));
-    connect(set->prop_DisplayColorMap(), SIGNAL(valueChanged(int,int)), this, SLOT(setColorMap(int)));
+    connect(set->prop_DisplayColorMap(), SIGNAL(valueChanged(int,int)), this, SLOT(redoColorMap()));
     connect(set->prop_DisplayLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(redoColorMap()));
 
     changeImageShown(set->get_ImageShown());
@@ -152,7 +133,6 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings)
     recalculateDisplayedRange();
     onInterpolateChanged(set->get_InterpolatePixels());
     onMaintainAspectChanged(set->get_MaintainAspectRatio());
-    setColorMap(set->get_DisplayColorMap());
     redoColorMap();
   }
 
@@ -261,58 +241,47 @@ void QxrdImagePlot::set100Range()
 
 void QxrdImagePlot::recalculateDisplayedRange()
 {
+  replotImage();
+}
+
+void QxrdImagePlot::calculateDisplayedRange()
+{
+  QxrdDoubleImageDataPtr   data = m_Data;
   QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
-  if (set && m_DataRaster) {
+  if (set && data) {
     double mindis, maxdis;
 
     if (set->get_DisplayScalingMode() == PercentageMode) {
-      double minv = m_DataRaster->minValue();
-      double maxv = m_DataRaster->maxValue();
+      double minv = data->get_MinValue();
+      double maxv = data->get_MaxValue();
       double del = maxv-minv;
 
       mindis = minv+del*set->get_DisplayMinimumPct()/100.0;
       maxdis = minv+del*set->get_DisplayMaximumPct()/100.0;
     } else if (set->get_DisplayScalingMode() == PercentileMode) {
-      QwtInterval range = m_DataRaster->percentileRange(set->get_DisplayMinimumPctle(), set->get_DisplayMaximumPctle());
+      QcepInterval range = data->percentileRange(set->get_DisplayMinimumPctle(), set->get_DisplayMaximumPctle());
 
-      mindis = range.minValue();
-      maxdis = range.maxValue();
+      mindis = range.minValue;
+      maxdis = range.maxValue;
     } else {
       mindis = set->get_DisplayMinimumVal();
       maxdis = set->get_DisplayMaximumVal();
     }
 
-    m_DataRaster->setDisplayedRange(mindis, maxdis);
+    m_MinDisplayedValue = mindis;
+    m_MaxDisplayedValue = maxdis;
 
-    replotImage();
   }
 }
 
 void QxrdImagePlot::replotImage()
 {
-  m_DataImage -> setData(m_DataRaster);
-
-//  m_DataImage -> invalidateCache();
-//  m_DataImage -> itemChanged();
-
-  if (m_FirstTime) {
-    autoScale();
-    m_FirstTime = false;
-  } else {
-    replot();
-  }
+  QtConcurrent::run(this, &QxrdImagePlot::updateImagePlot);
 }
 
 void QxrdImagePlot::onInterpolateChanged(bool interp)
 {
-  //  printf("QxrdImagePlot::onInterpolateChanged(%d)\n", interp);
-
-  if (m_DataRaster) {
-    m_DataRaster->setInterpolate(interp);
-
-  }
-
   replotImage();
 }
 
@@ -327,6 +296,50 @@ void QxrdImagePlot::onMaintainAspectChanged(bool interp)
   onImageScaleChanged();
 
   replotImage();
+}
+
+void QxrdImagePlot::setColorMap(int n)
+{
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+
+  if (set) {
+    set -> set_DisplayColorMap(n);
+  }
+}
+
+void QxrdImagePlot::setGrayscale()
+{
+  setColorMap(0);
+}
+
+void QxrdImagePlot::setInverseGrayscale()
+{
+  setColorMap(1);
+}
+
+void QxrdImagePlot::setEarthTones()
+{
+  setColorMap(2);
+}
+
+void QxrdImagePlot::setSpectrum()
+{
+  setColorMap(3);
+}
+
+void QxrdImagePlot::setFire()
+{
+  setColorMap(4);
+}
+
+void QxrdImagePlot::setIce()
+{
+  setColorMap(5);
+}
+
+QPen QxrdImagePlot::markerPen()
+{
+  return m_Pen;
 }
 
 void QxrdImagePlot::setTrackerPen(const QPen &pen)
@@ -348,30 +361,15 @@ void QxrdImagePlot::setTrackerPen(const QPen &pen)
   m_PowderPointPicker   -> setTrackerPen(pen);
   m_PowderPointPicker   -> setRubberBandPen(pen);
 
-  if (m_CenterMarker) {
-    m_CenterMarker -> setLinePen(pen);
-  }
-
-  m_MaskColorMap->setColorInterval(pen.color(), QColor(0,0,0,0));
-
-//  foreach (QwtPlotMarker *m, m_PowderPointMarkers) {
-//    const QwtSymbol *oldsym = m->symbol();
-
-//    QwtSymbol *sym = new QwtSymbol(oldsym->style(),oldsym->brush(),oldsym->pen(),oldsym->size());
-
-//    sym->setPen(pen);
-//    sym->setBrush(QBrush(pen.color()));
-
-//    m->setSymbol(sym);
-//  }
+  m_Pen = pen;
 }
 
-void QxrdImagePlot::colorMapStart(QColor startColor, QColor endColor)
+void QxrdImagePlot::colorMapStart(QwtLinearColorMap* map, QColor startColor, QColor endColor)
 {
-  m_ColorMap->setColorInterval(startColor, endColor);
+  map->setColorInterval(startColor, endColor);
 }
 
-void QxrdImagePlot::colorMapRange(double value1, QColor color1, double value2, QColor color2)
+void QxrdImagePlot::colorMapRange(QwtLinearColorMap *map, double value1, QColor color1, double value2, QColor color2)
 {
   QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
@@ -392,126 +390,119 @@ void QxrdImagePlot::colorMapRange(double value1, QColor color1, double value2, Q
 
       QColor col = QColor::fromRgbF(r1 + (r2-r1)*interp, g1 + (g2 - g1)*interp, b1 + (b2 - b1)*interp);
 
-      m_ColorMap->addColorStop(val, col);
+      map->addColorStop(val, col);
     }
   } else {
-    m_ColorMap->addColorStop(value1, color1);
+    map->addColorStop(value1, color1);
   }
 }
 
-void QxrdImagePlot::setGrayscale()
+QwtColorMap *QxrdImagePlot::newImageColorMap()
 {
-  colorMapStart(Qt::black, Qt::white);
-  colorMapRange(0.0, Qt::black, 1.0, Qt::white);
+  QwtLinearColorMap *map =
+      new QwtLinearColorMap(Qt::black, Qt::white);
 
-  setTrackerPen(QPen(Qt::red));
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
-  changedColorMap();
+  if (map && set) {
+    switch (set->get_DisplayColorMap()) {
+    case 0:
+      setGrayscaleMap(map);
+      break;
+
+    case 1:
+      setInverseGrayscaleMap(map);
+      break;
+
+    case 2:
+      setEarthTonesMap(map);
+      break;
+
+    case 3:
+      setSpectrumMap(map);
+      break;
+
+    case 4:
+      setFireMap(map);
+      break;
+
+    case 5:
+      setIceMap(map);
+      break;
+    }
+  }
+
+  return map;
 }
 
-void QxrdImagePlot::setInverseGrayscale()
+void QxrdImagePlot::setGrayscaleMap(QwtLinearColorMap *map)
 {
-  colorMapStart(Qt::white, Qt::black);
-  colorMapRange(0.0, Qt::white, 1.0, Qt::black);
+  colorMapStart(map, Qt::black, Qt::white);
+  colorMapRange(map, 0.0, Qt::black, 1.0, Qt::white);
 
   setTrackerPen(QPen(Qt::red));
-
-  changedColorMap();
 }
 
-void QxrdImagePlot::setEarthTones()
+void QxrdImagePlot::setInverseGrayscaleMap(QwtLinearColorMap *map)
 {
-  colorMapStart(Qt::black, Qt::white);
-
-  colorMapRange(0.0, Qt::black, 0.15, Qt::blue);
-  colorMapRange(0.15, Qt::blue, 0.25, Qt::gray);
-  colorMapRange(0.25, Qt::gray, 0.35, Qt::green);
-  colorMapRange(0.35, Qt::green, 0.5, Qt::darkYellow);
-  colorMapRange(0.5, Qt::darkYellow, 0.85, Qt::darkMagenta);
-  colorMapRange(0.85, Qt::darkMagenta, 1.0, Qt::white);
+  colorMapStart(map, Qt::white, Qt::black);
+  colorMapRange(map, 0.0, Qt::white, 1.0, Qt::black);
 
   setTrackerPen(QPen(Qt::red));
-
-  changedColorMap();
 }
 
-void QxrdImagePlot::setSpectrum()
+void QxrdImagePlot::setEarthTonesMap(QwtLinearColorMap *map)
 {
-  colorMapStart(Qt::magenta, Qt::red);
+  colorMapStart(map, Qt::black, Qt::white);
 
-  colorMapRange(0.0, Qt::magenta,0.2, Qt::blue);
-  colorMapRange(0.2, Qt::blue,   0.4, Qt::cyan);
-  colorMapRange(0.4, Qt::cyan,   0.6, Qt::green);
-  colorMapRange(0.6, Qt::green,  0.8, Qt::yellow);
-  colorMapRange(0.8, Qt::yellow, 1.0, Qt::red);
+  colorMapRange(map, 0.0, Qt::black, 0.15, Qt::blue);
+  colorMapRange(map, 0.15, Qt::blue, 0.25, Qt::gray);
+  colorMapRange(map, 0.25, Qt::gray, 0.35, Qt::green);
+  colorMapRange(map, 0.35, Qt::green, 0.5, Qt::darkYellow);
+  colorMapRange(map, 0.5, Qt::darkYellow, 0.85, Qt::darkMagenta);
+  colorMapRange(map, 0.85, Qt::darkMagenta, 1.0, Qt::white);
+
+  setTrackerPen(QPen(Qt::red));
+}
+
+void QxrdImagePlot::setSpectrumMap(QwtLinearColorMap *map)
+{
+  colorMapStart(map, Qt::magenta, Qt::red);
+
+  colorMapRange(map, 0.0, Qt::magenta,0.2, Qt::blue);
+  colorMapRange(map, 0.2, Qt::blue,   0.4, Qt::cyan);
+  colorMapRange(map, 0.4, Qt::cyan,   0.6, Qt::green);
+  colorMapRange(map, 0.6, Qt::green,  0.8, Qt::yellow);
+  colorMapRange(map, 0.8, Qt::yellow, 1.0, Qt::red);
 
   setTrackerPen(QPen(Qt::black));
-
-  changedColorMap();
 }
 
-void QxrdImagePlot::setFire()
+void QxrdImagePlot::setFireMap(QwtLinearColorMap *map)
 {
-  colorMapStart(Qt::black, Qt::white);
+  colorMapStart(map, Qt::black, Qt::white);
 
-  colorMapRange(0.0,  Qt::black,  0.25, Qt::red);
-  colorMapRange(0.25, Qt::red,    0.75, Qt::yellow);
-  colorMapRange(0.75, Qt::yellow, 1.0,  Qt::white);
+  colorMapRange(map, 0.0,  Qt::black,  0.25, Qt::red);
+  colorMapRange(map, 0.25, Qt::red,    0.75, Qt::yellow);
+  colorMapRange(map, 0.75, Qt::yellow, 1.0,  Qt::white);
 
   setTrackerPen(QPen(Qt::blue));
-
-  changedColorMap();
 }
 
-void QxrdImagePlot::setIce()
+void QxrdImagePlot::setIceMap(QwtLinearColorMap *map)
 {
-  colorMapStart(Qt::black, Qt::white);
+  colorMapStart(map, Qt::black, Qt::white);
 
-  colorMapRange(0.0,  Qt::black, 0.25, Qt::blue);
-  colorMapRange(0.25, Qt::blue,  0.75, Qt::cyan);
-  colorMapRange(0.75, Qt::cyan,  1.0,  Qt::white);
+  colorMapRange(map, 0.0,  Qt::black, 0.25, Qt::blue);
+  colorMapRange(map, 0.25, Qt::blue,  0.75, Qt::cyan);
+  colorMapRange(map, 0.75, Qt::cyan,  1.0,  Qt::white);
 
   setTrackerPen(QPen(Qt::red));
-
-  changedColorMap();
 }
 
 void QxrdImagePlot::redoColorMap()
 {
-  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
-
-  if (set) {
-    setColorMap(set->get_DisplayColorMap());
-  }
-}
-
-void QxrdImagePlot::setColorMap(int n)
-{
-  switch(n) {
-  case 0:
-    setGrayscale();
-    break;
-
-  case 1:
-    setInverseGrayscale();
-    break;
-
-  case 2:
-    setEarthTones();
-    break;
-
-  case 3:
-    setSpectrum();
-    break;
-
-  case 4:
-    setFire();
-    break;
-
-  case 5:
-    setIce();
-    break;
-  }
+  replotImage();
 }
 
 void QxrdImagePlot::toggleShowImage()
@@ -530,13 +521,7 @@ void QxrdImagePlot::changeImageShown(bool shown)
   if (set) {
     set->set_ImageShown(shown);
 
-    if (m_DataImage) {
-      m_DataImage -> setAlpha(set->get_ImageShown() ? 255 : 0);
-//      m_DataImage -> invalidateCache();
-//      m_DataImage -> itemChanged();
-
-      replotImage();
-    }
+    replotImage();
   }
 }
 
@@ -556,13 +541,7 @@ void QxrdImagePlot::changeMaskShown(bool shown)
   if (set) {
     set->set_MaskShown(shown);
 
-    if (m_MaskImage) {
-      m_MaskImage -> setAlpha(set->get_MaskShown() ? m_MaskAlpha : 0);
-//      m_MaskImage -> invalidateCache();
-//      m_MaskImage -> itemChanged();
-
-      replotImage();
-    }
+    replotImage();
   }
 }
 
@@ -582,199 +561,192 @@ void QxrdImagePlot::changeOverflowShown(bool shown)
   if (set) {
     set->set_OverflowShown(shown);
 
-    if (m_OverflowImage) {
-      m_OverflowImage -> setAlpha(set->get_OverflowShown() ? m_OverflowAlpha : 0);
-//      m_OverflowImage -> invalidateCache();
-//      m_OverflowImage -> itemChanged();
-
-      replotImage();
-    }
+    replotImage();
   }
 }
 
-void QxrdImagePlot::changedColorMap()
+double QxrdImagePlot::overflowLevel()
 {
-  m_DataImage -> setColorMap(m_ColorMap);
-//  m_DataImage -> invalidateCache();
-//  m_DataImage -> itemChanged();
+  double res = 60000;
 
-  m_MaskImage   -> setColorMap(m_MaskColorMap);
-//  m_MaskImage   -> invalidateCache();
-//  m_MaskImage   -> itemChanged();
+  QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  m_OverflowImage   -> setColorMap(m_OverflowColorMap);
-//  m_OverflowImage   -> invalidateCache();
-//  m_OverflowImage   -> itemChanged();
+  if (proc) {
+    QxrdAcquisitionPtr acq = proc->acquisition();
+
+    if (acq) {
+      res = acq->get_OverflowLevel();
+    }
+  }
+
+  return res;
+}
+
+void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image)
+{
+  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+    g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable starting %1")
+                                .arg(image?image->get_Title():"NULL"));
+  }
+
+  m_Data     = image;
 
   replotImage();
 }
 
-void QxrdImagePlot::setImage(QxrdRasterData *data)
+void QxrdImagePlot::updateImagePlot()
 {
-  QTime t;
-  t.start();
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_UpdateMutex);
 
-  m_DataRaster = data;
+  int c = m_UpdateCount.fetchAndAddOrdered(1);
 
-  m_DataImage -> setData(data);
+  QxrdDoubleImageDataPtr image    = m_Data;
+  QxrdMaskDataPtr        mask     = m_Mask;
 
-  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-    g_Application->printMessage(tr("QxrdImagePlot::setImage setData after %1 msec").arg(t.elapsed()));
+  if (g_Application && (qcepDebug(DEBUG_DISPLAY) || (c > 0))) {
+    g_Application->printMessage(tr("QxrdImagePlot::updateImagePlot starting %1 depth %2")
+                                .arg(image?image->get_Title():"NULL").arg(c));
   }
 
-//  m_DataImage -> invalidateCache();
-//  m_DataImage -> itemChanged();
-
-  recalculateDisplayedRange();
-
-  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-    g_Application->printMessage(tr("QxrdImagePlot::setImage recalculate after %1 msec").arg(t.elapsed()));
-  }
-
-  onImageScaleChanged();
-
-  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-    g_Application->printMessage(tr("QxrdImagePlot::setImage scaleChanged after %1 msec").arg(t.elapsed()));
-  }
-}
-
-void QxrdImagePlot::setMask(QxrdMaskRasterData *mask)
-{
-  m_MaskRaster = mask;
-
-  m_MaskImage -> setData(mask);
-//  m_MaskImage -> invalidateCache();
-//  m_MaskImage -> itemChanged();
-
-  replot();
-}
-
-void QxrdImagePlot::setOverflows(QxrdMaskRasterData *overflow)
-{
-  m_OverflowRaster = overflow;
-
-  m_OverflowImage -> setData(overflow);
-//  m_OverflowImage -> invalidateCache();
-//  m_OverflowImage -> itemChanged();
-
-  replot();
-}
-
-void QxrdImagePlot::setAutoOverflow()
-{
-  QTime t;
-  t.start();
-
-  QxrdDataProcessorPtr proc(m_DataProcessor);
-
-  if (m_Data && proc) {
-    int w = m_Data->get_Width();
-    int h = m_Data->get_Height();
-
-    QxrdAcquisitionPtr acq = proc->acquisition();
-
-    if (acq) {
-      double ovfLevel = acq->get_OverflowLevel();
-
-      m_Overflow = QxrdAllocator::newMask(g_Application->allocator(), QxrdAllocator::AlwaysAllocate, w, h, 0);
-
-      m_Data->markOverflows(m_Overflow, ovfLevel);
-    }
-  }
-
-
-  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-    g_Application->printMessage(tr("QxrdImageplot::setAutoOverflow took %1 msec").arg(t.elapsed()));
-  }
-}
-
-void QxrdImagePlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr overflow)
-{
   QTime tic;
   tic.start();
 
   QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
+  calculateDisplayedRange();
+
   if (set) {
-    m_Data = image;
-    m_Overflow = overflow;
+    QwtPlotSpectrogramPtr dataSpectrogram;
 
-    if (!image ||
-        image->get_Width() != m_DataRaster->width() ||
-        image->get_Height() != m_DataRaster->height()) {
-      m_FirstTime = true;
+    if (set->get_ImageShown()) {
+      dataSpectrogram =
+          QwtPlotSpectrogramPtr(
+            new QwtPlotSpectrogram("image"));
+
+      dataSpectrogram -> setRenderThreadCount(0);
+      dataSpectrogram -> setColorMap(newImageColorMap());
+
+      QxrdRasterData     *dataRaster = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
+
+      dataRaster -> setDisplayedRange(m_MinDisplayedValue, m_MaxDisplayedValue);
+
+      dataSpectrogram -> setData(dataRaster);
     }
 
-    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
+    QwtPlotSpectrogramPtr maskSpectrogram;
+
+    if (set->get_MaskShown()) {
+      maskSpectrogram =
+        QwtPlotSpectrogramPtr(
+          new QwtPlotSpectrogram("mask"));
+
+      maskSpectrogram -> setAlpha(80);
+      maskSpectrogram -> setRenderThreadCount(0);
+      maskSpectrogram -> setColorMap(new QxrdMaskColorMap(Qt::red, QColor(0,0,0,0)));
+
+      QxrdMaskRasterData *maskRaster = new QxrdMaskRasterData(mask);
+
+      maskSpectrogram -> setData(maskRaster);
+    }
+
+    QwtPlotSpectrogramPtr overflowSpectrogram;
+
+    if (set->get_OverflowShown()) {
+      overflowSpectrogram =
+        QwtPlotSpectrogramPtr(
+          new QwtPlotSpectrogram("overflow"));
+
+      overflowSpectrogram -> setAlpha(256);
+      overflowSpectrogram -> setRenderThreadCount(0);
+      overflowSpectrogram -> setColorMap(new QxrdMaskColorMap(QColor(0,0,0,0), Qt::green));
+
+      QxrdOverflowRasterData *overflowRaster =
+          new QxrdOverflowRasterData(image, overflowLevel());
+
+      overflowSpectrogram -> setData(overflowRaster);
+    }
+
+    QxrdPlotCurveVectorPtr powderCurves =
+        QxrdPlotCurveVectorPtr(
+          new QxrdPlotCurveVector());
+
+    displayPowderMarkers(powderCurves);
+
+    emit newPlotSpectrograms(dataSpectrogram,
+                             maskSpectrogram,
+                             overflowSpectrogram,
+                             powderCurves);
 
     if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-      g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable new raster after %1 msec").arg(tic.elapsed()));
-    }
-
-    if (overflow == NULL) {
-      setAutoOverflow();
-      setImage(data);
-    } else {
-      setImage(data);
-    }
-
-
-    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-      g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable set image after %1 msec").arg(tic.elapsed()));
-    }
-
-    setOverflows(new QxrdMaskRasterData(m_Overflow));
-
-    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-      g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable set overflows after %1 msec").arg(tic.elapsed()));
-    }
-
-    if (image) {
-      setTitle(image -> get_Title());
-    } else {
-      setTitle("");
-    }
-
-    replotImage();
-
-    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-      g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable replot image after %1 msec").arg(tic.elapsed()));
+      g_Application->printMessage(tr("QxrdImagePlot::updateImagePlot finished %1 after %2 msec depth %3")
+                                  .arg(image?image->get_Title():"NULL").arg(tic.elapsed()).arg(c));
     }
   }
 
-  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-    g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable took %1 msec").arg(tic.elapsed()));
-  }
+  m_UpdateCount.fetchAndSubOrdered(1);
 }
 
-void QxrdImagePlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
+void QxrdImagePlot::onNewPlotSpectrograms(QwtPlotSpectrogramPtr  image,
+                                          QwtPlotSpectrogramPtr  mask,
+                                          QwtPlotSpectrogramPtr  overflow,
+                                          QxrdPlotCurveVectorPtr powderCurves)
 {
-  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+  m_DataSpectrogram     = image;
+  m_MaskSpectrogram     = mask;
+  m_OverflowSpectrogram = overflow;
+  m_PowderPointCurves   = powderCurves;
 
-  if (set) {
-    m_Data = image;
-    m_Mask = mask;
+  detachItems();
 
-    if (!image ||
-        image->get_Width() != m_DataRaster->width() ||
-        image->get_Height() != m_DataRaster->height()) {
-      m_FirstTime = true;
-    }
-
-    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels(), QxrdMaskDataPtr(NULL));
-    QxrdMaskRasterData *msk = new QxrdMaskRasterData(mask, false);
-
-    setImage(data);
-    setMask(msk);
-
-    if (image) {
-      setTitle(image -> get_Title());
-    } else {
-      setTitle("");
-    }
-
-    replotImage();
+  if (m_DataSpectrogram) {
+    m_DataSpectrogram -> attach(this);
   }
+
+  if (m_MaskSpectrogram) {
+    m_MaskSpectrogram -> attach(this);
+  }
+
+  if (m_OverflowSpectrogram) {
+    m_OverflowSpectrogram -> attach(this);
+  }
+
+  QwtPlotMarker *centerMarker = new QwtPlotMarker();
+  centerMarker -> setLineStyle(QwtPlotMarker::Cross);
+  centerMarker -> setValue(m_CenterX, m_CenterY);
+  centerMarker -> setLinePen(markerPen());
+
+  centerMarker -> attach(this);
+
+  if (m_PowderPointCurves) {
+    for (int i=0; i<m_PowderPointCurves->count(); i++) {
+      QwtPlotPiecewiseCurve *c = m_PowderPointCurves->value(i);
+
+      if (c) {
+        c -> attach(this);
+      }
+    }
+  }
+
+  if (m_Data) {
+    setTitle(m_Data->get_Title());
+  } else {
+    setTitle("");
+  }
+
+  if (m_Data && m_FirstTime) {
+    autoScale();
+
+    m_FirstTime = false;
+  }
+
+  replot();
+}
+
+void QxrdImagePlot::onMaskedImageAvailable(QxrdMaskDataPtr mask)
+{
+  m_Mask = mask;
+
+  replotImage();
 }
 
 void QxrdImagePlot::onDarkImageAvailable(QxrdDoubleImageDataPtr /*image*/)
@@ -783,20 +755,24 @@ void QxrdImagePlot::onDarkImageAvailable(QxrdDoubleImageDataPtr /*image*/)
 
 void QxrdImagePlot::onCenterXChanged(double cx)
 {
-  m_CenterMarker -> setXValue(cx);
-  replot();
+  m_CenterX = cx;
+
+  replotImage();
 }
 
 void QxrdImagePlot::onCenterYChanged(double cy)
 {
-  m_CenterMarker -> setYValue(cy);
-  replot();
+  m_CenterY = cy;
+
+  replotImage();
 }
 
 void QxrdImagePlot::onCenterChanged(QPointF c)
 {
-  m_CenterMarker -> setValue(c);
-  replot();
+  m_CenterX = c.x();
+  m_CenterY = c.y();
+
+  replotImage();
 }
 
 void QxrdImagePlot::onImageScaleChanged()
@@ -804,26 +780,6 @@ void QxrdImagePlot::onImageScaleChanged()
   if (m_Rescaler && m_Rescaler->isEnabled()) {
     m_Rescaler->rescale();
   }
-}
-
-const QxrdRasterData* QxrdImagePlot::raster() const
-{
-  return m_DataRaster;
-}
-
-QxrdRasterData* QxrdImagePlot::raster()
-{
-  return m_DataRaster;
-}
-
-const QxrdMaskRasterData* QxrdImagePlot::maskRaster() const
-{
-  return m_MaskRaster;
-}
-
-QxrdMaskRasterData* QxrdImagePlot::maskRaster()
-{
-  return m_MaskRaster;
 }
 
 void QxrdImagePlot::disablePickers()
@@ -838,8 +794,6 @@ void QxrdImagePlot::disablePickers()
   m_PowderPointPicker  -> setEnabled(false);
 
   enableContextMenu();
-
-  displayPowderMarkers();
 }
 
 void QxrdImagePlot::enableZooming()
@@ -914,7 +868,8 @@ void QxrdImagePlot::replot()
 
 QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
 {
-  const QxrdRasterData *ras = this->raster();
+  QxrdDoubleImageDataPtr image    = m_Data;
+  QxrdMaskDataPtr        mask     = m_Mask;
 
   QxrdDataProcessorPtr processor = this->processor();
   QxrdCenterFinderPtr centerFinder;
@@ -932,8 +887,8 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
     set->set_YMouse(pos.y());
   }
 
-  if (ras) {
-    double val = ras->value(pos.x(),pos.y());
+  if (image) {
+    double val = image->value(pos.x(),pos.y());
     res += tr(", %1").arg(val);
 
     if (set) {
@@ -941,12 +896,12 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
     }
   }
 
-  if (m_MaskRaster && m_MaskRaster->data()) {
-    double mask = m_MaskRaster->value(pos.x(),pos.y());
-    res += tr(", %1").arg(mask);
+  if (mask) {
+    double m = mask->value(pos.x(),pos.y());
+    res += tr(", %1").arg(m);
 
     if (set) {
-      set->set_MaskMouse(mask);
+      set->set_MaskMouse(m);
     }
   }
 
@@ -975,10 +930,10 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
     double chi = centerFinder->getChi(pos);
     res += tr(", Chi %1").arg(chi);
 
-    if (m_PowderPointPicker -> isEnabled()) {
-      QPointF rpt = ras->optimizePeakPosition(pos);
-      res += tr("\nPtx %1, Pty %2").arg(rpt.x()).arg(rpt.y());
-    }
+//    if (m_PowderPointPicker -> isEnabled()) {
+//      QPointF rpt = ras->optimizePeakPosition(pos);
+//      res += tr("\nPtx %1, Pty %2").arg(rpt.x()).arg(rpt.y());
+//    }
   }
 
   return res;
@@ -1123,15 +1078,11 @@ void QxrdImagePlot::zapPixel(int x, int y)
 
 void QxrdImagePlot::onMarkedPointsChanged()
 {
-  displayPowderMarkers();
-
-  replot();
+  replotImage();
 }
 
-void QxrdImagePlot::displayPowderMarkers()
+void QxrdImagePlot::displayPowderMarkers(QxrdPlotCurveVectorPtr &curves)
 {
-  clearPowderMarkers();
-
   QxrdDataProcessorPtr dp(m_DataProcessor);
 
   if (dp) {
@@ -1154,30 +1105,16 @@ void QxrdImagePlot::displayPowderMarkers()
         }
 
         if (x.count() > 0) {
-          QwtPlotCurve *pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+          QwtPlotPiecewiseCurve *pc = new QwtPlotPiecewiseCurve(this, tr("Ring %1").arg(r));
 
           setPlotCurveStyle(r, pc);
           pc -> setSamples(x, y);
           pc -> setStyle(QwtPlotCurve::NoCurve);
           pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
-          pc -> attach(this);
 
-          m_PowderPointCurves.append(pc);
+          curves -> append(pc);
         }
       }
-
-      replot();
     }
   }
 }
-
-void QxrdImagePlot::clearPowderMarkers()
-{
-  foreach(QwtPlotCurve *curve, m_PowderPointCurves) {
-    curve->detach();
-    delete curve;
-  }
-
-  m_PowderPointCurves.clear();
-}
-
