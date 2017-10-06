@@ -142,7 +142,9 @@ HEADERS += \
     qxrdplanefitter.h \
     qwt_plot_piecewise_curve-ptr.h \
     qxrdplotcurvevector.h \
-    qxrdplotcurvevector-ptr.h
+    qxrdplotcurvevector-ptr.h \
+    qwt_plot_spectrogram-ptr.h \
+    qxrdoverflowrasterdata.h
 
 SOURCES += \
     qxrddebug.cpp \
@@ -178,7 +180,8 @@ SOURCES += \
     qxrdfitterringcircle.cpp \
     qxrdfitterringellipse.cpp \
     qxrdplanefitter.cpp \
-    qxrdplotcurvevector.cpp
+    qxrdplotcurvevector.cpp \
+    qxrdoverflowrasterdata.cpp
 
 OTHER_FILES += testImage.js
 
