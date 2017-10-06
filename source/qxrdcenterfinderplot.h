@@ -31,7 +31,7 @@ public slots:
   void onCenterChanged(double cx, double cy);
   void onCenterChanged(QPointF c);
   void onProcessedImageAvailable(QxrdDoubleImageDataPtr image);
-  void onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask);
+  void onMaskedImageAvailable(QxrdMaskDataPtr mask);
 
 signals:
   void newCenterFinderCurves(QxrdPlotCurveVectorPtr curves);

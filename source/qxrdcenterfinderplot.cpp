@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdcenterfinderplot.h"
 #include "qxrdimagedata.h"
 #include "qxrdmaskdata.h"
@@ -82,9 +83,8 @@ void QxrdCenterFinderPlot::onProcessedImageAvailable(QxrdDoubleImageDataPtr imag
   QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
-void QxrdCenterFinderPlot::onMaskedImageAvailable(QxrdDoubleImageDataPtr image, QxrdMaskDataPtr mask)
+void QxrdCenterFinderPlot::onMaskedImageAvailable(QxrdMaskDataPtr mask)
 {
-  m_Image = image;
   m_Mask  = mask;
 
   QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
@@ -112,6 +112,13 @@ void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
 
 void QxrdCenterFinderPlot::updateCenterFinderPlot()
 {
+  if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+    QObject *obj = sender();
+    g_Application->printMessage(tr("QxrdCenterFinderPlot::updateCenterFinderPlot called by %1")
+                                .arg(obj?obj->objectName():"NULL"));
+  }
+
+
   QxrdPlotCurveVectorPtr res =
       QxrdPlotCurveVectorPtr(new QxrdPlotCurveVector());
 
@@ -251,7 +258,7 @@ void QxrdCenterFinderPlot::updateCenterFinderPlot()
 
 void QxrdCenterFinderPlot::onNewCenterFinderCurves(QxrdPlotCurveVectorPtr curves)
 {
-  if (g_Application && curves) {
+  if (g_Application && qcepDebug(DEBUG_DISPLAY) && curves ) {
     g_Application->printMessage(tr("QxrdCenterFinderPlot::onNewCenterFinderCurves added %1 curves")
                                 .arg(curves->count()));
   }
