@@ -6,8 +6,11 @@
 #include "ui_qcepdataobjectsurfaceplotwidget.h"
 #include "qcepproperty.h"
 #include "qcepdataobject-ptr.h"
-#include <QtDataVisualization>
 #include "qcepimagedata-ptr.h"
+
+#ifdef HAVE_DATAVIS
+#include <QtDataVisualization>
+#endif
 
 class QCEP_EXPORT QcepDataObjectSurfacePlotWidget : public QWidget, public Ui::QcepDataObjectSurfacePlotWidget
 {
@@ -40,8 +43,10 @@ private:
 private:
   QcepDoubleImageDataPtr                        m_Image;
 
+#ifdef HAVE_DATAVIS
   QtDataVisualization::Q3DSurface              *m_SurfaceGraph;
   QtDataVisualization::QSurface3DSeries        *m_Surface;
+#endif
 
   double                                        m_MinPlottedVal;
   double                                        m_MaxPlottedVal;

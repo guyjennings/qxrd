@@ -284,8 +284,6 @@ FORMS += \
   $${PWD}/qcepdatasetselectiondialog.ui \
   $${PWD}/qcepdataimportdialog.ui \
   $${PWD}/qcepdataexportdialog.ui \
-    $$PWD/qcepdataobjectsurfaceplotwindow.ui \
-    $$PWD/qcepdataobjectsurfaceplotwidget.ui \
     $$PWD/qcepsetrangeofimagedialog.ui \
     $$PWD/qcepsetdatavaluerangedialog.ui \
     $$PWD/qcepfixupgainmapdialog.ui
@@ -298,6 +296,12 @@ contains(DEFINES, HAVE_QWT) {
   $${PWD}/qcepimagedatagraphcontrols.ui \
   $${PWD}/qcepimagehistogramgraphcontrols.ui \
   $${PWD}/qcepimageslicegraphcontrols.ui
+}
+
+contains(DEFINES, HAVE_DATAVIS) {
+  FORMS += \
+    $$PWD/qcepdataobjectsurfaceplotwindow.ui \
+    $$PWD/qcepdataobjectsurfaceplotwidget.ui
 }
 
 RESOURCES += \

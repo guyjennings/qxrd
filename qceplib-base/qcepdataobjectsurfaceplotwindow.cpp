@@ -1,8 +1,11 @@
 #include "qcepdataobjectsurfaceplotwindow.h"
 #include <QMessageBox>
 #include "qcepimagedata.h"
+#include <QCloseEvent>
 
+#ifdef HAVE_DATAVIS
 using namespace QtDataVisualization;
+#endif
 
 QcepDataObjectSurfacePlotWindow::QcepDataObjectSurfacePlotWindow(
     QcepExperimentWPtr expt,

@@ -2,11 +2,15 @@
 #include <QGridLayout>
 #include "qcepimagedata.h"
 
+#ifdef HAVE_DATAVIS
 using namespace QtDataVisualization;
+#endif
 
 QcepDataObjectSurfacePlotWidget::QcepDataObjectSurfacePlotWidget(QWidget *parent)
   : QWidget(parent),
+#ifdef HAVE_DATAVIS
     m_Surface(NULL),
+#endif
     m_MinPlottedVal(0),
     m_MaxPlottedVal(256),
     m_ColorMap     (NULL, "colorMap",      0,     "Image Color Map Index"),
@@ -22,12 +26,14 @@ QcepDataObjectSurfacePlotWidget::QcepDataObjectSurfacePlotWidget(QWidget *parent
 
   QGridLayout *layout = new QGridLayout(m_SurfacePlot);
 
+#ifdef HAVE_DATAVIS
   m_SurfaceGraph = new Q3DSurface();
   m_SurfaceGraph -> setShadowQuality(Q3DSurface::ShadowQualityNone);
 
   QWidget *container = QWidget::createWindowContainer(m_SurfaceGraph);
 
   layout -> addWidget(container, 0,0, 1,1);
+#endif
 
   m_ColorMapMenu->addItem("Grayscale");
   m_ColorMapMenu->addItem("Inverted Grayscale");
@@ -73,7 +79,9 @@ QcepDataObjectSurfacePlotWidget::QcepDataObjectSurfacePlotWidget(QWidget *parent
 
 QcepDataObjectSurfacePlotWidget::~QcepDataObjectSurfacePlotWidget()
 {
+#ifdef HAVE_DATAVIS
   delete m_Surface;
+#endif
 }
 
 void QcepDataObjectSurfacePlotWidget::onNewImageAvailable(QcepDoubleImageDataPtr img)
@@ -139,6 +147,7 @@ double QcepDataObjectSurfacePlotWidget::scaledValue(double v)
 
 void QcepDataObjectSurfacePlotWidget::onReplotWanted()
 {
+#ifdef HAVE_DATAVIS
   if (m_Image) {
     onScalingModeChanged(get_ScalingMode());
 
@@ -192,6 +201,7 @@ void QcepDataObjectSurfacePlotWidget::onReplotWanted()
 
     m_SurfaceGraph->addSeries(m_Surface);
   }
+#endif
 }
 
 void QcepDataObjectSurfacePlotWidget::setColorMap(QLinearGradient &map)
