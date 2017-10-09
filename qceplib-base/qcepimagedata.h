@@ -135,6 +135,12 @@ public:
   Q_PROPERTY(bool used READ get_Used WRITE set_Used)
   QCEP_BOOLEAN_PROPERTY(Used)
 
+  Q_PROPERTY(double minValue READ get_MinValue WRITE set_MinValue)
+  QCEP_DOUBLE_PROPERTY(MinValue)
+
+  Q_PROPERTY(double maxValue READ get_MaxValue WRITE set_MaxValue)
+  QCEP_DOUBLE_PROPERTY(MaxValue)
+
 public slots:
   virtual QString description() const;
 
@@ -170,8 +176,8 @@ public slots:
   virtual void setValueRangeTo(int rangeChoice, double minval, double maxval, double val) = 0;
   void markOverflows(QcepMaskDataPtr overflow, double level);
 
-  virtual int pixelsInRange(double min, double max) = 0;
-  virtual int overflowCount(double ovf) = 0;
+  virtual int pixelsInRange(double min, double max);
+  virtual int overflowCount(double ovf) const;
 
   double hValue(int n) const;
   double vValue(int n) const;
@@ -292,8 +298,6 @@ public:
 
   void setRegionTo(int regionType, int coordStyle, double x1, double y1, double x2, double y2, double val);
   void setValueRangeTo(int rangeChoice, double min, double max, double newValue);
-  int  pixelsInRange(double min, double max);
-  int  overflowCount(double ovf);
 
 public:
   template <typename T2>
@@ -367,8 +371,8 @@ public:
 
 protected:
   QVector<T> m_Image;
-  T m_MinValue;
-  T m_MaxValue;
+//  T m_MinValue;
+//  T m_MaxValue;
   T m_Default;
 };
 

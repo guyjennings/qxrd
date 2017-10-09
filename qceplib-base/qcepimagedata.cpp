@@ -56,6 +56,8 @@ QcepImageDataBase::QcepImageDataBase(QString name, int width, int height, int si
     m_Normalization(this, "normalization", QcepDoubleList(), "Normalization Values"),
     m_ExtraInputs(this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
     m_Used(this, "used", true, "Image Used?"),
+    m_MinValue(this, "minValue", 0, "Minimum Value"),
+    m_MaxValue(this, "maxValue", 0, "Maximum Value"),
     m_ImageCounter(allocCount.fetchAndAddOrdered(1)),
     m_Mask(NULL),
     m_Overflow(NULL),
@@ -135,6 +137,8 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
   dest -> set_Normalization(get_Normalization());
   dest -> set_ExtraInputs(get_ExtraInputs());
   dest -> set_Used(get_Used());
+  dest -> set_MinValue(get_MinValue());
+  dest -> set_MaxValue(get_MaxValue());
 
   QByteArray name;
 
@@ -172,6 +176,8 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   set_Normalization(src -> get_Normalization());
   set_ExtraInputs(src -> get_ExtraInputs());
   set_Used(src -> get_Used());
+  set_MinValue(src -> get_MinValue());
+  set_MaxValue(src -> get_MaxValue());
 
   QByteArray name;
 
@@ -329,12 +335,37 @@ void QcepImageDataBase::markOverflows(QcepMaskDataPtr overflow, double level)
   }
 }
 
+int QcepImageDataBase::overflowCount(double level) const
+{
+  double ovlev = level;
+  int nPix = 0;
+
+  if (get_SummedExposures() > 1) {
+    ovlev *= get_SummedExposures();
+  }
+
+  int ncols = this -> get_Width();
+  int nrows = this -> get_Height();
+
+  for (int row=0; row<nrows; row++) {
+    for (int col=0; col<ncols; col++) {
+      double val = this->getImageData(col, row);
+
+      if (val > ovlev) {
+        nPix++;
+      }
+    }
+  }
+
+  return nPix;
+}
+
 template <typename T>
 QcepImageData<T>::QcepImageData(QString name, int width, int height, T def)
   : QcepImageDataBase(name, width, height, width*height*sizeof(T)),
     m_Image(width*height),
-    m_MinValue(0),
-    m_MaxValue(0),
+//    m_MinValue(0),
+//    m_MaxValue(0),
     m_Default(def)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -473,18 +504,6 @@ void QcepImageData<T>::divideValue(int x, int y, T val)
   }
 }
 
-//template <typename T>
-//T QcepImageData<T>::minValue() const
-//{
-//  return m_MinValue;
-//}
-
-//template <typename T>
-//T QcepImageData<T>::maxValue() const
-//{
-//  return m_MaxValue;
-//}
-
 template <typename T>
 void QcepImageData<T>::calculateRange()
 {
@@ -492,24 +511,27 @@ void QcepImageData<T>::calculateRange()
   int total = m_Image.count();
   int first = true;
 
-  m_MinValue = 0;
-  m_MaxValue = 0;
+  T minValue = 0;
+  T maxValue = 0;
 
   for (int i = 0; i<total; i++) {
     T val = img[i];
 
     if (val == val) { // NaN test...
       if (first) {
-        m_MaxValue = val;
-        m_MinValue = val;
+        maxValue = val;
+        minValue = val;
         first = false;
-      } else if (val > m_MaxValue) {
-        m_MaxValue = val;
-      } else if (val < m_MinValue) {
-        m_MinValue = val;
+      } else if (val > maxValue) {
+        maxValue = val;
+      } else if (val < minValue) {
+        minValue = val;
       }
     }
   }
+
+  set_MinValue(minValue);
+  set_MaxValue(maxValue);
 }
 
 template <typename T>
@@ -519,8 +541,8 @@ void QcepImageData<T>::calculateRangeInCircle()
 
   double cx = get_Width()/2, cy = get_Height()/2;
 
-  m_MinValue = 0;
-  m_MaxValue = 0;
+  T minValue = 0;
+  T maxValue = 0;
 
   for (int y=0; y<get_Height(); y++) {
     double dy = (((double)y)-cy)/cy;
@@ -533,17 +555,20 @@ void QcepImageData<T>::calculateRangeInCircle()
 
       if (val == val) { // NaN test...
         if (first) {
-          m_MinValue = val;
-          m_MaxValue = val;
+          minValue = val;
+          maxValue = val;
           first = false;
-        } else if (val > m_MaxValue) {
-          m_MaxValue = val;
-        } else if (val < m_MinValue) {
-          m_MinValue = val;
+        } else if (val > maxValue) {
+          maxValue = val;
+        } else if (val < minValue) {
+          minValue = val;
         }
       }
     }
   }
+
+  set_MinValue(minValue);
+  set_MaxValue(maxValue);
 }
 
 template <typename T>
@@ -1416,6 +1441,29 @@ void QcepImageDataBase::saveTextData(QString name, QString sep, bool transp)
   }
 }
 
+int QcepImageDataBase::pixelsInRange(double min, double max)
+{
+  int nRows = get_Height();
+  int nCols = get_Width();
+  int nPix  = 0;
+
+  for (int row=0; row<nRows; row++) {
+    for (int col=0; col<nCols; col++) {
+      if (m_Mask == NULL || m_Mask->value(col, row)) {
+        double val = getImageData(col,row);
+
+        if (val == val) {
+          if (val >= min && val <= max) {
+            nPix += 1;
+          }
+        }
+      }
+    }
+  }
+
+  return nPix;
+}
+
 template <typename T>
 void QcepImageData<T>::saveData(QString &name, QString filter, Overwrite canOverwrite)
 {
@@ -1786,56 +1834,6 @@ double QcepImageData<T>::sumInPeak(QRectF rect)
   } else {
     return 0;
   }
-}
-
-template <typename T>
-int QcepImageData<T>::pixelsInRange(double min, double max)
-{
-  int nRows = get_Height();
-  int nCols = get_Width();
-  int nPix  = 0;
-
-  for (int row=0; row<nRows; row++) {
-    for (int col=0; col<nCols; col++) {
-      if (m_Mask == NULL || m_Mask->value(col, row)) {
-        double val = value(col,row);
-
-        if (val == val) {
-          if (val >= min && val <= max) {
-            nPix += 1;
-          }
-        }
-      }
-    }
-  }
-
-  return nPix;
-}
-
-template <typename T>
-int QcepImageData<T>::overflowCount(double ovf)
-{
-  double ovfval = ovf*get_SummedExposures();
-
-  int nRows = get_Height();
-  int nCols = get_Width();
-  int nPix  = 0;
-
-  for (int row=0; row<nRows; row++) {
-    for (int col=0; col<nCols; col++) {
-      if (m_Mask == NULL || m_Mask->value(col, row)) {
-        double val = value(col,row);
-
-        if (val == val) {
-          if (val >= ovfval) {
-            nPix += 1;
-          }
-        }
-      }
-    }
-  }
-
-  return nPix;
 }
 
 template <typename T>

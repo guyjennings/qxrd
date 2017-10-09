@@ -269,6 +269,7 @@ contains (DEFINES, HAVE_QWT) {
   $${PWD}/qcepplotmeasurer-ptr.h \
   $${PWD}/qcepplotmeasurer.h \
   $${PWD}/qcepplotzoomer.h \
+  $${PWD}/qwt_plot_piecewise_curve-ptr.h \
   $${PWD}/qwt_plot_piecewise_curve.h
 }
 
