@@ -1,3 +1,5 @@
+#ifdef HAVE_DATAVIS
+
 #include "qxrdtestimageplotdatavishelper.h"
 #include "qcepimagedata.h"
 
@@ -54,3 +56,5 @@ void QxrdTestImagePlotDataVisHelper::onNewImageAvailable(QcepDoubleImageDataPtr 
     emit newSurfaceSeries(series);
   }
 }
+
+#endif // HAVE_DATAVIS

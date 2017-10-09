@@ -14,7 +14,7 @@ macx {
   ICON = ../libraries/qxrdlib/images/qxrd-icon.icns
 }
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent datavisualization charts
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
 
 CONFIG += qt
 

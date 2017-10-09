@@ -1,6 +1,8 @@
 #ifndef QXRDTESTIMAGEPLOTDATAVISHELPER_H
 #define QXRDTESTIMAGEPLOTDATAVISHELPER_H
 
+#ifdef HAVE_DATAVIS
+
 #include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepimagedata-ptr.h"
@@ -24,5 +26,7 @@ signals:
 };
 
 Q_DECLARE_METATYPE(QSurface3DSeriesPtr)
+
+#endif // HAVE_DATAVIS
 
 #endif // QXRDTESTIMAGEPLOTDATAVISHELPER_H

@@ -18,7 +18,10 @@ public:
 
 public slots:
   void doNewQWTWindow();
+
+#ifdef HAVE_DATAVIS
   void doNewDataVisWindow();
+#endif
 
 private:
   QxrdTestImageGeneratorThreadPtr m_Thread;

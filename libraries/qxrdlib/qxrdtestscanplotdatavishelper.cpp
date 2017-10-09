@@ -1,3 +1,5 @@
+#ifdef HAVE_DATAVIS
+
 #include "qxrdtestscanplotdatavishelper.h"
 
 QxrdTestScanPlotDataVisHelper::QxrdTestScanPlotDataVisHelper()
@@ -10,3 +12,5 @@ void QxrdTestScanPlotDataVisHelper::onNewScanAvailable(QcepDataColumnScanPtr dat
 {
 //  m_Messages->append(tr("New Scan Received : %1").HEXARG(data.data()));
 }
+
+#endif

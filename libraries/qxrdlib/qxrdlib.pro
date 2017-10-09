@@ -7,7 +7,7 @@
 include("../../qxrd.version.pri")
 include("../../qxrd.platform.pri")
 
-QT       += widgets qml network script scripttools concurrent datavisualization charts
+QT       += widgets qml network script scripttools concurrent
 QT       += testlib
 
 win32:CONFIG   += skip_target_version_ext
@@ -20,6 +20,24 @@ win32:CONFIG(debug, debug|release) {
 
 TEMPLATE = lib
 DESTDIR = ../../
+
+qtHaveModule(datavisualization):qtHaveModule(charts) {
+  message("QtDataVisualization and QtCharts available")
+
+    QT += datavisualization charts
+    DEFINES += HAVE_DATAVIS
+}
+
+packagesExist(QtNetwork) {
+  message("QtNetwork exists")
+}
+
+message("QT_MAJOR_VERSION == $${QT_MAJOR_VERSION}")
+message("QT_MINOR_VERSION == $${QT_MINOR_VERSION}")
+
+contains(DEFINES, HAVE_DATAVIS) {
+  message("HAVE_DATAVIS defined")
+}
 
 DEFINES += QXRDLIB_LIBRARY
 
@@ -640,10 +658,14 @@ FORMS += qxrdwindow.ui \
     qxrdroieditordialog.ui \
     qxrdtestimagegeneratorwindow.ui \
     qxrdtestscangeneratorwindow.ui \
-    qxrdtestscanwindowdatavis.ui \
     qxrdtestimagewindowqwt.ui \
-    qxrdtestscanwindowqwt.ui \
+    qxrdtestscanwindowqwt.ui
+
+contains(DEFINES, HAVE_DATAVIS) {
+  FORMS += \
+    qxrdtestscanwindowdatavis.ui \
     qxrdtestimagewindowdatavis.ui
+}
 
 OTHER_FILES += help/qxrdhelptext.html \
     help/qxrdhelpscript.html \

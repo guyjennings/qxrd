@@ -50,7 +50,12 @@ QxrdTestImageGeneratorWindow::QxrdTestImageGeneratorWindow(QxrdExperimentWPtr do
     connect(m_ActionGenerate10Sec,  &QAction::triggered, gen.data(), &QxrdTestImageGenerator::repRate10Sec);
 
     connect(m_ActionNewQWTWindow,     &QAction::triggered, this, &QxrdTestImageGeneratorWindow::doNewQWTWindow);
+
+#ifdef HAVE_DATAVIS
     connect(m_ActionNewDataVisWindow, &QAction::triggered, this, &QxrdTestImageGeneratorWindow::doNewDataVisWindow);
+#else
+    m_ActionNewDataVisWindow->setEnabled(false);
+#endif
   }
 }
 
@@ -80,6 +85,7 @@ void QxrdTestImageGeneratorWindow::doNewQWTWindow()
   win->show();
 }
 
+#ifdef HAVE_DATAVIS
 void QxrdTestImageGeneratorWindow::doNewDataVisWindow()
 {
   auto win = new QxrdTestImageWindowDataVis();
@@ -99,3 +105,4 @@ void QxrdTestImageGeneratorWindow::doNewDataVisWindow()
 
   win->show();
 }
+#endif

@@ -39,6 +39,9 @@ void QxrdTestGenerator::generateOne()
 
 void QxrdTestGenerator::registerMetaTypes()
 {
+#ifdef HAVE_DATAVIS
   qRegisterMetaType<QSurface3DSeriesPtr>("QSurface3DSeriesPtr");
+#endif
+
   qRegisterMetaType<QwtPlotCurvePtr>("QwtPlotCurvePtr");
 }

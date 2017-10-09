@@ -1,6 +1,8 @@
 #ifndef QXRDTESTSCANPLOTDATAVISHELPER_H
 #define QXRDTESTSCANPLOTDATAVISHELPER_H
 
+#ifdef HAVE_DATAVIS
+
 #include "qxrdlib_global.h"
 #include "qcepserializableobject.h"
 #include "qcepdatacolumnscan-ptr.h"
@@ -18,5 +20,7 @@ public slots:
 signals:
   void newChartCurveAvailable();
 };
+
+#endif
 
 #endif // QXRDTESTSCANPLOTDATAVISHELPER_H

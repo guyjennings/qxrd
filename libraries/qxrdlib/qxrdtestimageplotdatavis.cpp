@@ -1,3 +1,5 @@
+#ifdef HAVE_DATAVIS
+
 #include "qxrdtestimageplotdatavis.h"
 #include <QGridLayout>
 #include <QtDataVisualization>
@@ -48,3 +50,5 @@ void QxrdTestImagePlotDataVis::onNewSurfaceSeries(QSurface3DSeriesPtr surface)
 
   m_SurfaceGraph->addSeries(m_Surface.data());
 }
+
+#endif // HAVE_DATAVIS

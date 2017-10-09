@@ -1,3 +1,5 @@
+#ifdef HAVE_DATAVIS
+
 #include "qxrdtestscanwindowdatavis.h"
 #include "qcepdebug.h"
 #include "qcepdatacolumnscan.h"
@@ -17,3 +19,5 @@ QxrdTestScanPlotDataVisHelperPtr QxrdTestScanWindowDataVis::helper()
 {
   return m_Graph->helper();
 }
+
+#endif // DATAVIS

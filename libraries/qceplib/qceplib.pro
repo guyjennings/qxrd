@@ -4,7 +4,15 @@
 #
 #-------------------------------------------------
 
-QT       += widgets qml network script concurrent datavisualization charts
+QT       += widgets qml network script concurrent
+
+TEMPLATE = lib
+DESTDIR  = ../../
+
+qtHaveModule(datavisualization) {
+    QT += datavisualization
+    DEFINES += HAVE_DATAVIS
+}
 
 win32:CONFIG   += skip_target_version_ext
 
@@ -13,9 +21,6 @@ win32:CONFIG(debug, debug|release) {
 } else {
   TARGET = qceplib
 }
-
-TEMPLATE = lib
-DESTDIR  = ../../
 
 DEFINES += QCEPLIB_LIBRARY
 

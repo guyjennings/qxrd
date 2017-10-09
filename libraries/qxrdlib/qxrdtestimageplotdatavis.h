@@ -1,6 +1,8 @@
 #ifndef QXRDTESTIMAGEPLOTDATAVIS_H
 #define QXRDTESTIMAGEPLOTDATAVIS_H
 
+#ifdef HAVE_DATAVIS
+
 #include "qxrdlib_global.h"
 #include <QWidget>
 #include "qxrdtestimageplotdatavishelper-ptr.h"
@@ -28,5 +30,7 @@ private:
   QtDataVisualization::Q3DSurface                                *m_SurfaceGraph;
   QSurface3DSeriesPtr                                             m_Surface;
 };
+
+#endif // HAVE_DATAVIS
 
 #endif // QXRDTESTIMAGEPLOTDATAVIS_H

@@ -14,13 +14,16 @@ Obsoletes:      qxrd
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  qt5-qtbase-devel, qt5-qtscript-devel, qt5-qtwebkit-devel, qt5-qtsvg-devel
-BuildRequires:  qt5-qtcharts-devel, qt5-qtdatavis3d-devel
 BuildRequires:  libtiff-devel, CBFlib-devel
 BuildRequires:  patchelf
 Requires:       qt5-qtbase, qt5-qtscript, qt5-qtwebkit, qt5-qtsvg
-Requires:       qt5-qtcharts, qt5-qtdatavis3d
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
+
+%if 0%{?fedora} >= 27
+BuildRequires:  qt5-qtcharts-devel, qt5-qtdatavis3d-devel
+Requires:       qt5-qtcharts, qt5-qtdatavis3d
+%endif
 
 %description
 qxrd is a readout and control program for perkin elmer x ray detector

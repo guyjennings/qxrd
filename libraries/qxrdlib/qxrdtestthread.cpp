@@ -63,5 +63,8 @@ QSharedPointer<T> QxrdTestThread<T>::object()
 
 template class QxrdTestThread<QxrdTestImagePlotQwtHelper>;
 template class QxrdTestThread<QxrdTestScanPlotQwtHelper>;
+
+#ifdef HAVE_DATAVIS
 template class QxrdTestThread<QxrdTestImagePlotDataVisHelper>;
 template class QxrdTestThread<QxrdTestScanPlotDataVisHelper>;
+#endif // HAVE_DATAVIS

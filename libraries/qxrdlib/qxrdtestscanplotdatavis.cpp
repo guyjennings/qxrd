@@ -1,3 +1,5 @@
+#ifdef HAVE_DATAVIS
+
 #include "qxrdtestscanplotdatavis.h"
 #include "qxrdtestscanplotdatavishelper.h"
 #include <QGridLayout>
@@ -25,3 +27,5 @@ QxrdTestScanPlotDataVisHelperPtr QxrdTestScanPlotDataVis::helper()
 void QxrdTestScanPlotDataVis::onNewChartCurveAvailable()
 {
 }
+
+#endif // HAVE_DATAVIS

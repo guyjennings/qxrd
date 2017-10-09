@@ -4,10 +4,12 @@
 #include "qxrdexperiment.h"
 #include "qxrdtestscangenerator.h"
 #include "qxrdtestscanwindowqwt.h"
-#include "qxrdtestscanwindowdatavis.h"
-
-#include "qxrdtestscanplotdatavishelper.h"
 #include "qxrdtestscanplotqwthelper.h"
+
+#ifdef HAVE_DATAVIS
+#include "qxrdtestscanwindowdatavis.h"
+#include "qxrdtestscanplotdatavishelper.h"
+#endif
 
 QxrdTestScanGeneratorWindow::QxrdTestScanGeneratorWindow(QxrdExperimentWPtr doc, QWidget *parent) :
   QMainWindow(parent)
@@ -50,7 +52,12 @@ QxrdTestScanGeneratorWindow::QxrdTestScanGeneratorWindow(QxrdExperimentWPtr doc,
     connect(m_ActionGenerate10Sec,  &QAction::triggered, gen.data(), &QxrdTestScanGenerator::repRate10Sec);
 
     connect(m_ActionNewQWTWindow,     &QAction::triggered, this, &QxrdTestScanGeneratorWindow::doNewQWTWindow);
+
+#ifdef HAVE_DATAVIS
     connect(m_ActionNewDataVisWindow, &QAction::triggered, this, &QxrdTestScanGeneratorWindow::doNewDataVisWindow);
+#else
+    m_ActionNewDataVisWindow->setEnabled(false);
+#endif
   }
 }
 
@@ -80,6 +87,7 @@ void QxrdTestScanGeneratorWindow::doNewQWTWindow()
   win->show();
 }
 
+#ifdef HAVE_DATAVIS
 void QxrdTestScanGeneratorWindow::doNewDataVisWindow()
 {
   auto win = new QxrdTestScanWindowDataVis();
@@ -99,3 +107,4 @@ void QxrdTestScanGeneratorWindow::doNewDataVisWindow()
 
   win->show();
 }
+#endif

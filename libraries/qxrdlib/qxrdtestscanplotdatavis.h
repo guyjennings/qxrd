@@ -1,6 +1,8 @@
 #ifndef QXRDTESTSCANPLOTDATAVIS_H
 #define QXRDTESTSCANPLOTDATAVIS_H
 
+#ifdef HAVE_DATAVIS
+
 #include "qxrdlib_global.h"
 #include <QtCharts>
 #include "qxrdtestscanplotdatavishelper-ptr.h"
@@ -24,5 +26,8 @@ private:
   QSharedPointer<QxrdTestThread<QxrdTestScanPlotDataVisHelper> > m_HelperThread;
   QxrdTestScanPlotDataVisHelperPtr                               m_Helper;
 };
+
+
+#endif // HAVE_DATAVIS
 
 #endif // QXRDTESTSCANPLOTDATAVIS_H

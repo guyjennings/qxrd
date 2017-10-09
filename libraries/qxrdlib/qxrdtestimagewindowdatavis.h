@@ -1,6 +1,8 @@
 #ifndef QXRDTESTIMAGEWINDOWDATAVIS_H
 #define QXRDTESTIMAGEWINDOWDATAVIS_H
 
+#ifdef HAVE_DATAVIS
+
 #include "qxrdlib_global.h"
 #include "qxrdtestimagewindow.h"
 #include "ui_qxrdtestimagewindowdatavis.h"
@@ -19,5 +21,7 @@ public:
 
 private:
 };
+
+#endif // HAVE_DATAVIS
 
 #endif // QXRDTESTIMAGEWINDOWDATAVIS_H
