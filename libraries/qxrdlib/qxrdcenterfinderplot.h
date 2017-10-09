@@ -13,6 +13,7 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdwindow-ptr.h"
+#include "qxrdplotcurvevector-ptr.h"
 
 class QXRD_EXPORT QxrdCenterFinderPlot : public QcepPlot
 {
@@ -33,13 +34,22 @@ public slots:
   void onProcessedImageAvailable(QcepDoubleImageDataPtr image);
   void onMaskedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
 
+signals:
+  void newCenterFinderCurves(QxrdPlotCurveVectorPtr curves);
+
+private slots:
+  void updateCenterFinderPlot();
+  void onNewCenterFinderCurves(QxrdPlotCurveVectorPtr curves);
+
 private:
-  QcepObjectNamer       m_ObjectNamer;
-  QVector<double>       m_XData, m_YData;
-  QxrdWindow           *m_Window;
-  QxrdDataProcessorWPtr m_DataProcessor;
-  QxrdCenterFinderWPtr  m_CenterFinder;
-  bool                  m_FirstTime;
+  QcepObjectNamer        m_ObjectNamer;
+  QxrdWindow            *m_Window;
+  QxrdDataProcessorWPtr  m_DataProcessor;
+  QxrdCenterFinderWPtr   m_CenterFinder;
+  bool                   m_FirstTime;
+  QcepDoubleImageDataPtr m_Image;
+  QcepMaskDataPtr        m_Mask;
+  QxrdPlotCurveVectorPtr m_Curves;
 };
 
 #endif // QXRDCENTERFINDERPLOT_H

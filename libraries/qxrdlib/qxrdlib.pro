@@ -254,6 +254,7 @@ SOURCES += qxrdlib.cpp \
     qxrdtestimageplotdatavishelper.cpp \
     qxrdtestimageplotqwthelper.cpp \
     qxrdtestthread.cpp \
+    qxrdplotcurvevector.cpp \
     commands/00generic/qxrdcommand.cpp \
     commands/00generic/qxrdapplicationcommand.cpp \
     commands/00generic/qxrdexperimentcommand.cpp \
@@ -600,6 +601,8 @@ HEADERS += TODO.h \
     qxrdtestscanplotqwthelper-ptr.h \
     qxrdtestimageplotdatavishelper-ptr.h \
     qxrdtestimageplotqwthelper-ptr.h \
+    qxrdplotcurvevector-ptr.h \
+    qxrdplotcurvevector.h \
     qxrdtestthread.h
 
 

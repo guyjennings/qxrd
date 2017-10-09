@@ -261,7 +261,7 @@ void QxrdDetectorControlWindow::captureSize()
   if (set) {
     set->set_DetectorWindowOpen(isVisible());
     set->set_DetectorWindowGeometry(saveGeometry());
-    set->set_DetectorWindowState(saveState(0));
+    set->set_DetectorWindowState(saveState(QXRD_DETECTOR_WINDOW_STATE_VERSION));
   }
 }
 

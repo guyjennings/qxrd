@@ -39,6 +39,8 @@
 #include "qxrdwindowsettings-ptr.h"
 #include "qcepobjectnamer.h"
 
+#define QXRD_WINDOW_STATE_VERSION 3
+
 class QXRD_EXPORT QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow, public QEnableSharedFromThis<QxrdWindow>
 {
   Q_OBJECT

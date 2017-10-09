@@ -518,7 +518,7 @@ void QxrdDetectorSettings::openControlWindow()
         printf("Restore geometry failed\n");
       }
 
-      if (!m_DetectorControlWindow->restoreState(winstate,0)) {
+      if (!m_DetectorControlWindow->restoreState(winstate, QXRD_DETECTOR_WINDOW_STATE_VERSION)) {
         printf("Restore state failed\n");
       }
     }

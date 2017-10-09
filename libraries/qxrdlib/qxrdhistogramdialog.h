@@ -10,6 +10,7 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrdhistogramdialogsettings-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qwt_plot_piecewise_curve-ptr.h"
 
 class QXRD_EXPORT QxrdHistogramDialog : public QDockWidget, public Ui::QxrdHistogramDialog
 {
@@ -23,17 +24,25 @@ public:
 
   void onProcessedImageAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
 
+signals:
+  void newHistogramCurves(QwtPlotPiecewiseCurvePtr totalCurve,
+                          QwtPlotPiecewiseCurvePtr selectCurve);
 public slots:
   void histogramSelectionChanged(QRectF rect);
   void updateHistogramNeeded();
 
-private:
+  void onNewHistogramCurves(QwtPlotPiecewiseCurvePtr totalCurve,
+                          QwtPlotPiecewiseCurvePtr selectCurve);
+
+private slots:
   void recalculateHistogram();
 
 private:
   QxrdExperimentWPtr              m_Experiment;
   QxrdHistogramDialogSettingsWPtr m_HistogramDialogSettings;
   QcepDoubleImageDataPtr          m_Image;
+  QwtPlotPiecewiseCurvePtr        m_TotalCurve;
+  QwtPlotPiecewiseCurvePtr        m_SelectCurve;
 };
 
 #endif // QXRDHISTOGRAMDIALOG_H
