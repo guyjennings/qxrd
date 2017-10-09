@@ -6,6 +6,9 @@ Versions after v0.11.10 contain major changes to the code and are not recommende
 production use - this is especially true of the detector interface code, which has undergone
 many changes.
 
+## v0.13.3 - Oct 09 2017
+Merged v0.11.10.4 changes into main branch
+
 ## v0.13.2 - Sep 28 2017
 Merged v0.11.10.3 changes into main branch
 
