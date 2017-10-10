@@ -1,16 +1,15 @@
 #ifndef QCEPDATAOBJECTSURFACEPLOTWIDGET_H
 #define QCEPDATAOBJECTSURFACEPLOTWIDGET_H
 
+#ifdef HAVE_DATAVIS
+
 #include "qceplib_global.h"
 #include <QWidget>
 #include "ui_qcepdataobjectsurfaceplotwidget.h"
 #include "qcepproperty.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepimagedata-ptr.h"
-
-#ifdef HAVE_DATAVIS
 #include <QtDataVisualization>
-#endif
 
 class QCEP_EXPORT QcepDataObjectSurfacePlotWidget : public QWidget, public Ui::QcepDataObjectSurfacePlotWidget
 {
@@ -43,10 +42,8 @@ private:
 private:
   QcepDoubleImageDataPtr                        m_Image;
 
-#ifdef HAVE_DATAVIS
   QtDataVisualization::Q3DSurface              *m_SurfaceGraph;
   QtDataVisualization::QSurface3DSeries        *m_Surface;
-#endif
 
   double                                        m_MinPlottedVal;
   double                                        m_MaxPlottedVal;
@@ -80,5 +77,7 @@ public:
   Q_PROPERTY(double maximumVal READ get_MaximumVal WRITE set_MaximumVal)
   QCEP_DOUBLE_PROPERTY(MaximumVal)
 };
+
+#endif // HAVE_DATAVIS
 
 #endif // QCEPDATAOBJECTSURFACEPLOTWIDGET_H

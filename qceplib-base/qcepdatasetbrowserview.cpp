@@ -148,7 +148,11 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
 
     QAction *pt = menu.addAction(tr("Display %1 in image graph").arg(name));
     QAction *og = menu.addAction(tr("Open %1 in new graph window").arg(names));
+
+#ifdef HAVE_DATAVIS
     QAction *sp = menu.addAction(tr("Open %1 in new surface plot window").arg(names));
+#endif // HAVE_DATAVIS
+
     QAction *os = menu.addAction(tr("Open %1 in new spreadsheet window").arg(names));
     QAction *op = menu.addAction(tr("Open %1 in new properties window").arg(names));
 
@@ -213,7 +217,11 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
     sv->setEnabled(true);
     og->setEnabled(nSel >= 1);
     os->setEnabled(nSel >= 1);
+
+#ifdef HAVE_DATAVIS
     sp->setEnabled(nSel >= 1);
+#endif // HAVE_DATAVIS
+
     op->setEnabled(nSel >= 1);
     dl->setEnabled(nSel >= 1);
 
@@ -288,8 +296,10 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
       plotImage(indexes.value(0));
     } else if (action == og) {
       openGraph(indexes);
+#ifdef HAVE_DATAVIS
     } else if (action == sp) {
       surfacePlot(indexes);
+#endif // HAVE_DATAVIS
     } else if (action == os) {
       openSpreadsheet(indexes);
     } else if (action == op) {
@@ -335,6 +345,8 @@ void QcepDatasetBrowserView::openGraph(const QModelIndexList &idx)
   }
 }
 
+#ifdef HAVE_DATAVIS
+
 void QcepDatasetBrowserView::surfacePlot(const QModelIndexList &idx)
 {
   QcepDatasetModelPtr model(m_DatasetModel);
@@ -353,6 +365,8 @@ void QcepDatasetBrowserView::surfacePlot(const QModelIndexList &idx)
     }
   }
 }
+
+#endif // HAVE_DATAVIS
 
 void QcepDatasetBrowserView::openSpreadsheet(const QModelIndexList &idx)
 {

@@ -1,11 +1,11 @@
+#ifdef HAVE_DATAVIS
+
 #include "qcepdataobjectsurfaceplotwindow.h"
 #include <QMessageBox>
 #include "qcepimagedata.h"
 #include <QCloseEvent>
 
-#ifdef HAVE_DATAVIS
 using namespace QtDataVisualization;
-#endif
 
 QcepDataObjectSurfacePlotWindow::QcepDataObjectSurfacePlotWindow(
     QcepExperimentWPtr expt,
@@ -54,3 +54,5 @@ void QcepDataObjectSurfacePlotWindow::onNewImageAvailable(QcepDoubleImageDataPtr
     m_SurfacePlot->onNewImageAvailable(img);
   }
 }
+
+#endif

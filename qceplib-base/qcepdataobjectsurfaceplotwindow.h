@@ -1,6 +1,8 @@
 #ifndef QCEPDATAOBJECTSURFACEPLOTWINDOW_H
 #define QCEPDATAOBJECTSURFACEPLOTWINDOW_H
 
+#ifdef HAVE_DATAVIS
+
 #include "qceplib_global.h"
 #include "qcepdataobjectwindow.h"
 #include "ui_qcepdataobjectsurfaceplotwindow.h"
@@ -26,5 +28,7 @@ signals:
 public slots:
   void onNewImageAvailable(QcepDoubleImageDataPtr img);
 };
+
+#endif // HAVE_DATAVIS
 
 #endif // QCEPDATAOBJECTSURFACEPLOTWINDOW_H

@@ -93,8 +93,6 @@ SOURCES += \
     $${PWD}/qcepfileformatterhdf.cpp \
     $${PWD}/qcepfileformatternexus.cpp \
     $${PWD}/qcepserializableobject.cpp \
-    $$PWD/qcepdataobjectsurfaceplotwindow.cpp \
-    $$PWD/qcepdataobjectsurfaceplotwidget.cpp \
     $$PWD/qcepsetrangeofimagedialog.cpp \
     $$PWD/qcepsetdatavaluerangedialog.cpp \
     $$PWD/qcepfixupgainmapdialog.cpp \
@@ -103,6 +101,12 @@ SOURCES += \
     $$PWD/qcepsetrangeofimagecommand.cpp \
     $$PWD/qcepfixupdetectorpanelgains.cpp \
     $$PWD/qcepscandetectorpanelgains.cpp
+
+contains (DEFINES, HAVE_DATAVIS) {
+ SOURCES += \
+    $$PWD/qcepdataobjectsurfaceplotwindow.cpp \
+    $$PWD/qcepdataobjectsurfaceplotwidget.cpp
+}
 
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
@@ -232,8 +236,6 @@ HEADERS += \
     $${PWD}/qcepfileformatternexus.h \
     $${PWD}/qcepserializableobject.h \
     $${PWD}/qcepserializableobject-ptr.h \
-    $$PWD/qcepdataobjectsurfaceplotwindow.h \
-    $$PWD/qcepdataobjectsurfaceplotwidget.h \
     $$PWD/qcepsetrangeofimagedialog.h \
     $$PWD/qcepsetdatavaluerangedialog.h \
     $$PWD/qcepfixupgainmapdialog.h \
@@ -245,6 +247,12 @@ HEADERS += \
     $$PWD/qcepfixupgainmapcommand-ptr.h \
     $$PWD/qcepfixupdetectorpanelgains.h \
     $$PWD/qcepscandetectorpanelgains.h
+
+contains (DEFINES, HAVE_DATAVIS) {
+ HEADERS += \
+    $$PWD/qcepdataobjectsurfaceplotwindow.h \
+    $$PWD/qcepdataobjectsurfaceplotwidget.h
+}
 
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \

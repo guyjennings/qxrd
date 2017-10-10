@@ -51,7 +51,11 @@ private slots:
   void saveData(const QModelIndexList &idx);
   void plotImage(const QModelIndex &idx);
   void openGraph(const QModelIndexList &idx);
+
+#ifdef HAVE_DATAVIS
   void surfacePlot(const QModelIndexList &idx);
+#endif
+
   void openSpreadsheet(const QModelIndexList &idx);
   void openProperties(const QModelIndexList &idx);
   void deleteData(const QModelIndexList &idx);
