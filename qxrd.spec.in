@@ -20,7 +20,7 @@ Requires:       qt5-qtbase, qt5-qtscript, qt5-qtwebkit, qt5-qtsvg
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 
-%if 0%{?fedora} >= 27
+%if 0%{?fedora} >= 26
 BuildRequires:  qt5-qtcharts-devel, qt5-qtdatavis3d-devel
 Requires:       qt5-qtcharts, qt5-qtdatavis3d
 %endif

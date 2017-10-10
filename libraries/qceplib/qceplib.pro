@@ -9,10 +9,10 @@ QT       += widgets qml network script concurrent
 TEMPLATE = lib
 DESTDIR  = ../../
 
-qtHaveModule(datavisualization) {
-    QT += datavisualization
-    DEFINES += HAVE_DATAVIS
-}
+#qtHaveModule(datavisualization) {
+#    QT += datavisualization
+#    DEFINES += HAVE_DATAVIS
+#}
 
 win32:CONFIG   += skip_target_version_ext
 
