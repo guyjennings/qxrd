@@ -896,7 +896,7 @@ void QxrdDataProcessor::newMaskStack()
 {
 
   QcepMaskDataPtr m = QcepAllocator::newMask("mask",
-                                             newMaskWidth(), newMaskHeight(), 0,
+                                             newMaskWidth(), newMaskHeight(), 1,
                                              QcepAllocator::NullIfNotAvailable);
 
   if (m) {
@@ -914,7 +914,7 @@ void QxrdDataProcessor::pushMaskStack(QcepMaskDataPtr m)
 {
   if (m == NULL) {
     m =  QcepAllocator::newMask("mask",
-                                newMaskWidth(), newMaskHeight(), 0,
+                                newMaskWidth(), newMaskHeight(), 1,
                                 QcepAllocator::NullIfNotAvailable);
 
     if (mask()) {
