@@ -46,7 +46,6 @@
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdexperimentsettings-ptr.h"
 #include "qxrdjsengine-ptr.h"
-#include "modeltest.h"
 
 class QXRD_EXPORT QxrdExperiment : public QcepExperiment
 {
@@ -211,8 +210,6 @@ private:
   QMutex                          m_ExperimentFileMutex;
 
   QTimer                          m_AutoSaveTimer;
-
-  ModelTest                      *m_ModelTest;
 
   mutable QStringList             m_PushedMessages;
 

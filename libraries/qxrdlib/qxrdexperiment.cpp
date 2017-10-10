@@ -47,7 +47,6 @@
 #include "qxrdwindowsettings.h"
 #include "qxrdgeneratetestimage.h"
 #include "qxrdjsengine.h"
-#include "modeltest.h"
 
 QxrdExperiment::QxrdExperiment(QString name) :
   QcepExperiment("", name),
@@ -225,8 +224,6 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     m_DatasetModel = QcepDatasetModelPtr(
           new QcepDatasetModel(myself, m_DataProcessor, m_Dataset));
-
-    m_ModelTest = new ModelTest(m_DatasetModel.data());
 
 //    m_DatasetModel -> newGroup("/group1");
 //    m_DatasetModel -> newGroup("/group2");

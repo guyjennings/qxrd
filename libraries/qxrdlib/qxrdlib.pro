@@ -245,7 +245,6 @@ SOURCES += qxrdlib.cpp \
     qxrdjsengine.cpp \
     qxrdroieditordialog.cpp \
     qxrdpolygonpointsmodel.cpp \
-    modeltest.cpp \
     qxrdfittedrings.cpp \
     qxrdtestimagegenerator.cpp \
     qxrdtestimagegeneratorwindow.cpp \
@@ -579,7 +578,6 @@ HEADERS += TODO.h \
     qxrdpolygonpointsmodel.h \
     qxrdroipolygon-ptr.h \
     qxrdroicenteredshape-ptr.h \
-    modeltest.h \
     qxrdfittedrings.h \
     qxrdfittedrings-ptr.h \
     qxrdtestimagegenerator.h \
