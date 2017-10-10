@@ -216,16 +216,19 @@ void QcepMaskData::xorNotMask(QcepMaskDataPtr mask)
 
 void QcepMaskData::maskCircle(double cx, double cy, double r, bool val)
 {
-  for (int j=0; j<=r; j++) {
-    double dy = (((double)j)/r);
-    if (fabs(dy)<1.0) {
-      double dx = sqrt(1-dy*dy);
-      int x0 = (int) (cx - dx*r);
-      int x1 = (int) (cx + dx*r);
+  int x0 = qRound(cx-r);
+  int x1 = qRound(cx+r);
+  int y0 = qRound(cy-r);
+  int y1 = qRound(cy+r);
 
-      for (int i=x0; i<x1; i++) {
-        setMaskValue(i, (int)(cy+j), val);
-        setMaskValue(i, (int)(cy-j), val);
+  for (int y=y0; y<=y1; y++) {
+    for (int x=x0; x<=x1; x++) {
+      double dx = x-cx;
+      double dy = y-cy;
+      double r0 = sqrt(dx*dx + dy*dy);
+
+      if (r0 <= (r+1)) {
+        setMaskValue(x, y, val);
       }
     }
   }
