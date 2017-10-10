@@ -99,7 +99,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_HistogramDialog(NULL),
     m_ImageInfoDialog(NULL),
     m_ScriptDialog(NULL),
-    m_DistortionCorrectionDialog(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
     m_Data(NULL),
@@ -159,10 +158,8 @@ void QxrdWindow::initialize()
 
   if (proc) {
     m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
-    m_DistortionCorrectionDialog = new QxrdDistortionCorrectionDialog(proc->distortionCorrection(), sharedFromThis());
   } else {
     m_CenterFinderDialog = new QxrdCenterFinderDialog(QxrdCenterFinderWPtr());
-    m_DistortionCorrectionDialog = new QxrdDistortionCorrectionDialog(QxrdDistortionCorrectionWPtr(), sharedFromThis());
   }
 
   m_MaskDialog       = new QxrdMaskDialog(m_DataProcessor, this);
@@ -211,7 +208,6 @@ void QxrdWindow::initialize()
     m_ImagePlot        -> init(set->imagePlotSettings(), expt);
     m_CenterFinderPlot -> init(set->centerFinderPlotSettings());
     m_IntegratorPlot   -> init(set->integratorPlotSettings());
-    m_DistortionCorrectionDialog -> init(set->distortionCorrectionDialogSettings());
     m_DistortionCorrectionPlot -> init(set->distortionCorrectionPlotSettings());
   }
 
@@ -250,7 +246,6 @@ void QxrdWindow::initialize()
     tabifyDockWidget(m_CorrectionDialog, m_CalibrantDialog);
     tabifyDockWidget(m_CalibrantDialog, m_OutputFileBrowser);
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
-    tabifyDockWidget(m_HistogramDialog, m_DistortionCorrectionDialog);
   } else if (screenGeom.height() >= 1000) {
     splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
 
@@ -270,7 +265,6 @@ void QxrdWindow::initialize()
     tabifyDockWidget(m_CalibrantDialog, m_OutputFileBrowser);
     tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
-    tabifyDockWidget(m_IntegratorDialog, m_DistortionCorrectionDialog);
   } else {
     tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionScalerDialog);
     tabifyDockWidget(m_AcquisitionScalerDialog, m_AcquisitionExtraInputsDialog);
@@ -291,7 +285,6 @@ void QxrdWindow::initialize()
     tabifyDockWidget(m_SliceDialog, m_HistogramDialog);
     tabifyDockWidget(m_HistogramDialog, m_ImageInfoDialog);
     tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
-    tabifyDockWidget(m_ScriptDialog, m_DistortionCorrectionDialog);
 
     if (screenGeom.height() < 1000) {
       //      shrinkObject(this);
@@ -686,8 +679,6 @@ void QxrdWindow::initialize()
   m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_DisplayDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_DistortionCorrectionDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CalibrantDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_DatasetBrowserDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());

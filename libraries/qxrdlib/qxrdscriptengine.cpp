@@ -2289,9 +2289,6 @@ void QxrdScriptEngine::initialize()
         QCEP_DOC_OBJECT("testImage", "Object for generating test images");
         globalObject().setProperty("testImage",       newQObject(gti.data()));
       }
-
-      QCEP_DOC_OBJECT("distortion", "Detector distortion correction");
-      globalObject().setProperty("distortion",     newQObject(dp->distortionCorrection().data()));
     }
 
     QxrdCalibrantLibraryPtr cals(expt->calibrantLibrary());

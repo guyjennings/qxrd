@@ -154,7 +154,6 @@ QxrdDataProcessorPtr QxrdDataProcessor::newDataProcessor()
     proc->addChildPtr(QxrdPolarTransform::newPolarTransform());
     proc->addChildPtr(QxrdPolarNormalization::newPolarNormalization());
     proc->addChildPtr(QxrdGenerateTestImage::newGenerateTestImage());
-    proc->addChildPtr(QxrdDistortionCorrection::newDistortionCorrection());
   }
 
   return proc;
@@ -173,8 +172,6 @@ void QxrdDataProcessor::addChildPtr(QcepObjectPtr child)
   } else if (checkPointer<QxrdPolarNormalization>(child, m_PolarNormalization)) {
 
   } else if (checkPointer<QxrdGenerateTestImage>(child, m_GenerateTestImage)) {
-
-  } else if (checkPointer<QxrdDistortionCorrection>(child, m_DistortionCorrection)) {
 
   }
 }
@@ -296,12 +293,6 @@ void QxrdDataProcessor::writeSettings(QSettings *settings)
     m_PolarNormalization -> writeSettings(settings);
     settings->endGroup();
   }
-
-  if (m_DistortionCorrection) {
-    settings->beginGroup("distortion");
-    m_DistortionCorrection -> writeSettings(settings);
-    settings->endGroup();
-  }
 }
 
 void QxrdDataProcessor::readSettings(QSettings *settings)
@@ -331,12 +322,6 @@ void QxrdDataProcessor::readSettings(QSettings *settings)
   if (m_PolarNormalization) {
     settings->beginGroup("polarNormalization");
     m_PolarNormalization -> readSettings(settings);
-    settings->endGroup();
-  }
-
-  if (m_DistortionCorrection) {
-    settings->beginGroup("distortion");
-    m_DistortionCorrection -> readSettings(settings);
     settings->endGroup();
   }
 }
@@ -2062,15 +2047,6 @@ QxrdPolarNormalizationPtr QxrdDataProcessor::polarNormalization() const
   }
 
   return m_PolarNormalization;
-}
-
-QxrdDistortionCorrectionPtr QxrdDataProcessor::distortionCorrection() const
-{
-  if (m_DistortionCorrection == NULL) {
-    printMessage("Problem QxrdDataProcessorBase::distortion == NULL");
-  }
-
-  return m_DistortionCorrection;
 }
 
 void QxrdDataProcessor::newImage(int ncols, int nrows)

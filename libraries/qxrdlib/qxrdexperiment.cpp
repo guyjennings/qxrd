@@ -461,7 +461,6 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdCalibrantLibrary*>("QxrdCalibrantLibrary*");
   qRegisterMetaType<QxrdCenterFinder*>("QxrdCenterFinder*");
   qRegisterMetaType<QxrdDataProcessor*>("QxrdDataProcessor*");
-  qRegisterMetaType<QxrdDistortionCorrection*>("QxrdDistortionCorrection*");
   qRegisterMetaType<QxrdFileBrowserModelUpdater*>("QxrdFileBrowserModelUpdater*");
   qRegisterMetaType<QxrdFileSaver*>("QxrdFileSaver*");
   qRegisterMetaType<QxrdFitParameterPtr>("QxrdFitParameterPtr");

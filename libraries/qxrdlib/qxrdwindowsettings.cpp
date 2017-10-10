@@ -10,7 +10,6 @@
 #include "qxrdscriptdialogsettings.h"
 #include "qxrdsynchronizedacquisitiondialogsettings.h"
 #include "qxrdacquisitionextrainputsdialogsettings.h"
-#include "qxrddistortioncorrectiondialogsettings.h"
 #include "qxrddistortioncorrectionplotsettings.h"
 #include "qxrdsliceplotsettings.h"
 #include "qxrdsynchronizedacquisitionplotsettings.h"
@@ -39,7 +38,6 @@ QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
   set -> addChildPtr(QxrdScriptDialogSettings::newScriptDialogSettings());
   set -> addChildPtr(QxrdSynchronizedAcquisitionDialogSettings::newSynchronizedAcquisitionDialogSettings());
   set -> addChildPtr(QxrdAcquisitionExtraInputsDialogSettings::newAcquisitionExtraInputsDialogSettings());
-  set -> addChildPtr(QxrdDistortionCorrectionDialogSettings::newDistortionCorrectionDialogSettings());
   set -> addChildPtr(QxrdDistortionCorrectionPlotSettings::newDistortionCorrectionPlotSettings());
 
   return set;
@@ -59,7 +57,6 @@ void QxrdWindowSettings::addChildPtr(QcepObjectPtr child)
   else if (checkPointer<QxrdScriptDialogSettings>(child, m_ScriptDialogSettings)) {}
   else if (checkPointer<QxrdSynchronizedAcquisitionDialogSettings>(child, m_SynchronizedAcquisitionDialogSettings)) {}
   else if (checkPointer<QxrdAcquisitionExtraInputsDialogSettings>(child, m_AcquisitionExtraInputsDialogSettings)) {}
-  else if (checkPointer<QxrdDistortionCorrectionDialogSettings>(child, m_DistortionCorrectionDialogSettings)) {}
   else if (checkPointer<QxrdDistortionCorrectionPlotSettings>(child, m_DistortionCorrectionPlotSettings)) {}
   else if (checkPointer<QxrdImagePlotSettings>(child, m_ImagePlotSettings)) {}
 }
@@ -82,7 +79,6 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdSynchronizedAcquisitionPlotSettings*>("QxrdSynchronizedAcquisitionPlotSettings*");
   qRegisterMetaType<QxrdAcquisitionExtraInputsDialogSettings*>("QxrdAcquisitionExtraInputsDialogSettings*");
   qRegisterMetaType<QxrdAcquisitionExtraInputsPlotSettings*>("QxrdAcquisitionExtraInputsPlotSettings*");
-  qRegisterMetaType<QxrdDistortionCorrectionDialogSettings*>("QxrdDistortionCorrectionDialogSettings*");
   qRegisterMetaType<QxrdDistortionCorrectionPlotSettings*>("QxrdDistortionCorrectionPlotSettings*");
 }
 
@@ -156,12 +152,6 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
     if (m_AcquisitionExtraInputsDialogSettings) {
       settings->beginGroup("extraInputsDialog");
       m_AcquisitionExtraInputsDialogSettings->readSettings(settings);
-      settings->endGroup();
-    }
-
-    if (m_DistortionCorrectionDialogSettings) {
-      settings->beginGroup("distortionCorrectionDialog");
-      m_DistortionCorrectionDialogSettings->readSettings(settings);
       settings->endGroup();
     }
 
@@ -254,12 +244,6 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (m_DistortionCorrectionDialogSettings) {
-      settings->beginGroup("distortionCorrectionDialog");
-      m_DistortionCorrectionDialogSettings->writeSettings(settings);
-      settings->endGroup();
-    }
-
     if (m_DistortionCorrectionPlotSettings) {
       settings->beginGroup("distortionCorrectionPlot");
       m_DistortionCorrectionPlotSettings->writeSettings(settings);
@@ -321,11 +305,6 @@ QxrdSynchronizedAcquisitionDialogSettingsWPtr QxrdWindowSettings::synchronizedAc
 QxrdAcquisitionExtraInputsDialogSettingsWPtr QxrdWindowSettings::acquisitionExtraInputsDialogSettings()
 {
   return m_AcquisitionExtraInputsDialogSettings;
-}
-
-QxrdDistortionCorrectionDialogSettingsWPtr QxrdWindowSettings::distortionCorrectionDialogSettings()
-{
-  return m_DistortionCorrectionDialogSettings;
 }
 
 QxrdDistortionCorrectionPlotSettingsWPtr QxrdWindowSettings::distortionCorrectionPlotSettings()

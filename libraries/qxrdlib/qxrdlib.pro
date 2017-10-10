@@ -159,9 +159,6 @@ SOURCES += qxrdlib.cpp \
     qxrdsynchronizedacquisitiondialogsettings.cpp \
     qxrdsynchronizedacquisitionplotsettings.cpp \
     qxrdimagedataformatcbf.cpp \
-    qxrddistortioncorrection.cpp \
-    qxrddistortioncorrectiondialog.cpp \
-    qxrddistortioncorrectiondialogsettings.cpp \
     qxrddistortioncorrectionplot.cpp \
     qxrddistortioncorrectionplotsettings.cpp \
     qxrdplotvectorfieldcurve.cpp \
@@ -434,10 +431,6 @@ HEADERS += TODO.h \
     qxrdsynchronizedacquisitiondialogsettings.h \
     qxrdsynchronizedacquisitionplotsettings.h \
     qxrdimagedataformatcbf.h \
-    qxrddistortioncorrection.h \
-    qxrddistortioncorrection-ptr.h \
-    qxrddistortioncorrectiondialog.h \
-    qxrddistortioncorrectiondialogsettings.h \
     qxrddistortioncorrectionplot.h \
     qxrddistortioncorrectionplotsettings.h \
     qxrdplotvectorfieldcurve.h \
@@ -526,7 +519,6 @@ HEADERS += TODO.h \
     qxrdintegratorplotsettings.h \
     qxrdintegratorplotsettings-ptr.h \
     qxrddistortioncorrectionplotsettings-ptr.h \
-    qxrddistortioncorrectiondialogsettings-ptr.h \
     qxrdacquisitionextrainputsdialogsettings-ptr.h \
     qxrdacquisitionextrainputsplotsettings.h \
     qxrdacquisitionextrainputsplotsettings-ptr.h \
@@ -643,7 +635,6 @@ FORMS += qxrdwindow.ui \
     qxrdacquisitiondialog.ui \
     qxrdacquisitionextrainputsdialog.ui \
     qxrduserscriptdialog.ui \
-    qxrddistortioncorrectiondialog.ui \
     qxrdscriptdialog.ui \
     qxrdcalibrantdialog.ui \
     qxrddetectorproxywidget.ui \

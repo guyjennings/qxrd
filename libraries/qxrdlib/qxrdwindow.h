@@ -31,7 +31,6 @@
 #include "qxrdimagedisplaywidget.h"
 #include "qxrdhighlighter.h"
 #include "qxrdmaskdialog.h"
-#include "qxrddistortioncorrectiondialog.h"
 
 #include "qxrdexperiment-ptr.h"
 #include "qxrdsynchronizedacquisitiondialog-ptr.h"
@@ -204,7 +203,6 @@ private:
   QxrdHistogramDialog                   *m_HistogramDialog;
   QxrdInfoDialog                        *m_ImageInfoDialog;
   QxrdScriptDialog                      *m_ScriptDialog;
-  QxrdDistortionCorrectionDialog        *m_DistortionCorrectionDialog;
   QVector<double>                        m_Exposures;
   QProgressBar                          *m_Progress;
   QLabel                                *m_StatusMsg;

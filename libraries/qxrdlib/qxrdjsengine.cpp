@@ -193,9 +193,6 @@ void QxrdJSEngine::initialize()
 //        QCEP_DOC_OBJECT("testImage", "Object for generating test images");
         setGlobalProperty("testImage",       newQObject(gti.data()));
       }
-
-//      QCEP_DOC_OBJECT("distortion", "Detector distortion correction");
-      setGlobalProperty("distortion",     newQObject(dp->distortionCorrection().data()));
     }
 
     QxrdCalibrantLibraryPtr cals(expt->calibrantLibrary());

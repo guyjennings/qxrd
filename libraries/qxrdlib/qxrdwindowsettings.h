@@ -14,7 +14,6 @@
 #include "qxrdslicedialogsettings-ptr.h"
 #include "qxrdsynchronizedacquisitiondialogsettings-ptr.h"
 #include "qxrdacquisitionextrainputsdialogsettings-ptr.h"
-#include "qxrddistortioncorrectiondialogsettings-ptr.h"
 #include "qxrddistortioncorrectionplotsettings-ptr.h"
 #include "qxrdwindowsettings-ptr.h"
 
@@ -51,7 +50,6 @@ public:
   QxrdScriptDialogSettingsWPtr                 scriptDialogSettings();
   QxrdSynchronizedAcquisitionDialogSettingsWPtr synchronizedAcquisitionDialogSettings();
   QxrdAcquisitionExtraInputsDialogSettingsWPtr acquisitionExtraInputsDialogSettings();
-  QxrdDistortionCorrectionDialogSettingsWPtr   distortionCorrectionDialogSettings();
   QxrdDistortionCorrectionPlotSettingsWPtr     distortionCorrectionPlotSettings();
 signals:
   
@@ -70,7 +68,6 @@ private:
   QxrdScriptDialogSettingsPtr                  m_ScriptDialogSettings;
   QxrdSynchronizedAcquisitionDialogSettingsPtr m_SynchronizedAcquisitionDialogSettings;
   QxrdAcquisitionExtraInputsDialogSettingsPtr  m_AcquisitionExtraInputsDialogSettings;
-  QxrdDistortionCorrectionDialogSettingsPtr    m_DistortionCorrectionDialogSettings;
   QxrdDistortionCorrectionPlotSettingsPtr      m_DistortionCorrectionPlotSettings;
 };
 

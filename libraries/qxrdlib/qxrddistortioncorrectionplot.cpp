@@ -5,8 +5,6 @@ QxrdDistortionCorrectionPlot::QxrdDistortionCorrectionPlot(QWidget *parent) :
   QcepPlot(parent),
   m_ObjectNamer(this, "distortionCorrectionPlot"),
   m_Window(),
-  m_DataProcessor(),
-  m_DistortionCorrection(),
   m_FirstTime(true)
 {
 }
@@ -23,16 +21,4 @@ void QxrdDistortionCorrectionPlot::init(QcepPlotSettingsWPtr settings)
 void QxrdDistortionCorrectionPlot::setWindow(QxrdWindow *win)
 {
   m_Window = win;
-
-  QxrdWindow *wp = m_Window;
-
-  if (wp) {
-    m_DataProcessor = wp -> dataProcessor();
-  }
-
-  QxrdDataProcessorPtr dp(m_DataProcessor);
-
-  if (dp) {
-    m_DistortionCorrection = dp -> distortionCorrection();
-  }
 }

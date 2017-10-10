@@ -32,8 +32,6 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdwindow-ptr.h"
-#include "qxrddistortioncorrection-ptr.h"
-#include "qxrddistortioncorrection.h"
 #include "qxrdroidata-ptr.h"
 #include "qxrdhistogramdata-ptr.h"
 #include "qxrdresultserializer.h"
@@ -437,8 +435,6 @@ public:
 
   QxrdGenerateTestImageWPtr generateTestImage() const;
 
-  QxrdDistortionCorrectionPtr distortionCorrection() const;
-
   void newMask();
 
   void updateEstimatedTime(QcepDoubleProperty *prop, int msec);
@@ -552,8 +548,6 @@ protected:
   QxrdGenerateTestImagePtr m_GenerateTestImage;
 
   QcepIntegratedDataPtr m_OutputScan;
-
-  QxrdDistortionCorrectionPtr m_DistortionCorrection;
 };
 
 Q_DECLARE_METATYPE(QxrdDataProcessor*)
