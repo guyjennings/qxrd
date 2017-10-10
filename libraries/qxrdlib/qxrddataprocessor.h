@@ -338,11 +338,7 @@ public slots:
 
   void updateEstimatedProcessingTime();
 
-  void fileWriteTest(int dim, QString path);
   int status(double delay);
-
-  void doCalculateROI();
-  void doCalculateHistogram();
 
   void displayIntegratedData(QcepIntegratedDataPtr d);
   void writeOutputScan(QcepIntegratedDataPtr d);

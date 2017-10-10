@@ -449,12 +449,11 @@ void QxrdWindow::initialize()
     connect(m_ActionMaskCircles, &QAction::triggered, m_ImageMaskCirclesButton, &QAbstractButton::click);
     connect(m_ActionMaskPolygons, &QAction::triggered, m_ImageMaskPolygonsButton, &QAbstractButton::click);
 
-    connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateROI);
-    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateHistogram);
+//    connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateROI);
+//    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateHistogram);
   }
 
   connect(m_ActionTest, &QAction::triggered, this, &QxrdWindow::doTest);
-  connect(m_ActionCrashProgram, &QAction::triggered, this, &QxrdWindow::crashProgram);
 
   connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableZooming);
   connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_ImagePlot, &QcepPlot::zoomOut);
@@ -2190,17 +2189,6 @@ void QxrdWindow::integrationXUnitsChanged(int newXUnits)
   m_ActionIntegrateVsR   -> setChecked(newXUnits == QxrdIntegrator::RadialIntegrateR);
   m_ActionIntegrateVsQ   -> setChecked(newXUnits == QxrdIntegrator::RadialIntegrateQ);
   m_ActionIntegrateVsTTH -> setChecked(newXUnits == QxrdIntegrator::RadialIntegrateTTH);
-}
-
-void QxrdWindow::crashProgram()
-{
-  if (QMessageBox::question(this, tr("Really Crash?"),
-                            tr("Do you really want to crash the program?"),
-                            QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
-    int *j = NULL;
-
-    *j= 42;
-  }
 }
 
 void QxrdWindow::testWidget()

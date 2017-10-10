@@ -751,4 +751,7 @@ TODO("2017-09-01", "",
 TODO("2017-09-11", "",
      "Need to optimize QxrdImagePlot::updateROIDisplay to reduce unneeded replots");
 
+TODO("2017-10-10", "",
+     "Plot Powder Ring Centers command does not work, Plot Powder Ring 2 Theta subtract average does not work");
+
 #endif // TODO_H
