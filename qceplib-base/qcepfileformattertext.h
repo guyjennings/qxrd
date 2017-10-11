@@ -9,6 +9,8 @@
 
 class QCEP_EXPORT QcepFileFormatterText : public QcepFileFormatter
 {
+  Q_OBJECT
+
 public:
   QcepFileFormatterText(QString filePath);
 

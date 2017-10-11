@@ -30,6 +30,8 @@ enum {
 };
 
 class QCEP_EXPORT QcepDebugDictionary : public QObject {
+  Q_OBJECT
+
 public:
   QcepDebugDictionary();
 

@@ -7,6 +7,8 @@
 
 class QCEP_EXPORT QcepDataGroupSpreadsheetModel : public QcepSpreadsheetModel
 {
+  Q_OBJECT
+
 public:
   QcepDataGroupSpreadsheetModel(QcepDataGroupWPtr group);
 

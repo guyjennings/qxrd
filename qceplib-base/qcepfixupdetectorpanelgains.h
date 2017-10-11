@@ -7,6 +7,8 @@
 
 class QCEP_EXPORT QcepFixupDetectorPanelGains : public QcepSerializableObject
 {
+  Q_OBJECT
+
 public:
   QcepFixupDetectorPanelGains();
 

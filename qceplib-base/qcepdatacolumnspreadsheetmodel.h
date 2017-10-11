@@ -7,6 +7,8 @@
 
 class QCEP_EXPORT QcepDataColumnSpreadsheetModel : public QcepSpreadsheetModel
 {
+  Q_OBJECT
+
 public:
   QcepDataColumnSpreadsheetModel(QcepDataColumnWPtr col);
 

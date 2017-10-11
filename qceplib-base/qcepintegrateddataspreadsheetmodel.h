@@ -7,6 +7,8 @@
 
 class QCEP_EXPORT QcepIntegratedDataSpreadsheetModel : public QcepSpreadsheetModel
 {
+  Q_OBJECT
+
 public:
   QcepIntegratedDataSpreadsheetModel(QcepIntegratedDataWPtr integ);
 

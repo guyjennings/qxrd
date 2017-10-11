@@ -8,6 +8,8 @@
 
 class QCEP_EXPORT QcepFileFormatterNexus : public QcepFileFormatter
 {
+  Q_OBJECT
+
 public:
   QcepFileFormatterNexus(QString filePath);
 

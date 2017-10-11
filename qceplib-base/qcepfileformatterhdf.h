@@ -8,6 +8,8 @@
 
 class QCEP_EXPORT QcepFileFormatterHDF : public QcepFileFormatter
 {
+  Q_OBJECT
+
 public:
   QcepFileFormatterHDF(QString filePath);
 

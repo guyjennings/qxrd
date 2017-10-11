@@ -7,6 +7,8 @@
 
 class QCEP_EXPORT QcepDataObjectPropertiesModel : public QcepPropertiesModel
 {
+  Q_OBJECT
+
 public:
   QcepDataObjectPropertiesModel(QcepDataObjectWPtr obj);
 

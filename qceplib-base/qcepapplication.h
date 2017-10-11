@@ -9,6 +9,8 @@
 
 class QCEP_EXPORT QcepApplication : public QApplication, public QEnableSharedFromThis<QcepApplication>
 {
+  Q_OBJECT
+
 public:
   QcepApplication(int &argc, char **argv);
 

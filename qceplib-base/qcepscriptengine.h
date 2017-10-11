@@ -7,6 +7,8 @@
 
 class QCEP_EXPORT QcepScriptEngine : public QScriptEngine
 {
+  Q_OBJECT
+
 public:
   QcepScriptEngine(QObject *parent = 0);
 

@@ -8,6 +8,8 @@
 
 class QCEP_EXPORT QcepImageDataSpreadsheetModel : public QcepSpreadsheetModel
 {
+  Q_OBJECT
+
 public:
   QcepImageDataSpreadsheetModel(QWeakPointer< QcepImageDataBase > img);
 
