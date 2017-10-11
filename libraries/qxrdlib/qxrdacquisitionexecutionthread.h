@@ -8,6 +8,8 @@
 
 class QXRD_EXPORT QxrdAcquisitionExecutionThread : public QxrdThread
 {
+  Q_OBJECT
+
 public:
   QxrdAcquisitionExecutionThread(QxrdAcquisitionInterfaceWPtr acq);
   ~QxrdAcquisitionExecutionThread();

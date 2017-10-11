@@ -6,6 +6,8 @@
 
 class QXRD_EXPORT QxrdCenterFinderPicker : public QxrdImagePlotMeasurer
 {
+  Q_OBJECT
+
 public:
   QxrdCenterFinderPicker(QxrdImagePlot *plot);
 

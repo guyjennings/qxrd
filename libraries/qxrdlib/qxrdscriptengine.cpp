@@ -213,7 +213,7 @@ QString QxrdScriptEngine::convertHelper(QScriptValue result, int depth)
 
     return s;
 
-  } else if (result.isObject()) {
+  } else if (result.isObject() || result.isQObject()) {
     QScriptValueIterator it(result);
 
     QString s = "{";

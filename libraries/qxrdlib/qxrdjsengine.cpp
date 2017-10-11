@@ -54,7 +54,7 @@ void QxrdJSEngine::initialize()
 //  qmlRegisterType<QPolygonF>();
 //  qmlRegisterType<QVector<double> >();
 
-  qmlRegisterType<QcepDoubleImageData>();
+//  qmlRegisterType<QcepDoubleImageData>();
 //  qmlRegisterType<QcepDoubleImageDataPtr>();
 //  qmlRegisterType<QcepDoubleImageDataWPtr>();
 
@@ -280,12 +280,12 @@ QString QxrdJSEngine::convertHelper(QJSValue result, int depth)
 
     return s;
 
-  } else if (result.isObject()) {
-    QJSValueIterator it(result);
-
+  } else if (result.isObject() || result.isQObject()) {
     QString s = "{";
 
     if (depth == 0) s += "\n";
+
+    QJSValueIterator it(result);
 
     while(it.hasNext()) {
       it.next();
