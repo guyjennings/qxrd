@@ -680,6 +680,7 @@ void QxrdWindow::initialize()
   m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CalibrantDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_DatasetBrowserDialog -> toggleViewAction());
+  m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_IntegratorDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
