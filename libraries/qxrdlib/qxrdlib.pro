@@ -21,12 +21,12 @@ win32:CONFIG(debug, debug|release) {
 TEMPLATE = lib
 DESTDIR = ../../
 
-#qtHaveModule(datavisualization):qtHaveModule(charts) {
-#  message("QtDataVisualization and QtCharts available")
+qtHaveModule(datavisualization):qtHaveModule(charts) {
+  message("QtDataVisualization and QtCharts available")
 
-#    QT += datavisualization charts
-#    DEFINES += HAVE_DATAVIS
-#}
+    QT += datavisualization charts
+    DEFINES += HAVE_DATAVIS
+}
 
 packagesExist(QtNetwork) {
   message("QtNetwork exists")
