@@ -16,6 +16,8 @@ public:
   QxrdPilatusPlugin();
 
   QString name() const;
+
+  QxrdDetectorInterfacePtr createDetector(QString name);
 };
 
 #endif // QXRDPILATUSPLUGIN_H

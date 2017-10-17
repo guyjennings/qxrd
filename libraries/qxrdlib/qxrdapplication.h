@@ -14,6 +14,7 @@
 #include "qxrdwelcomewindow-ptr.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdnidaqplugininterface-ptr.h"
+#include "qxrddetectorplugininterface-ptr.h"
 #include "qxrdsplashscreen-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qxrdapplicationsettings-ptr.h"
@@ -116,6 +117,8 @@ public slots:
 
   virtual void setDefaultObjectData(QcepDataObject *obj);
 
+  QxrdDetectorPluginInterfacePtr detectorPlugin(int n);
+
 public:
   bool wantToQuit();
 
@@ -154,6 +157,8 @@ private:
   QTimer                          m_LockerTimer;
   QTime                           m_LastLockerTime;
   int                             m_LastLockerCount;
+
+  QVector<QxrdDetectorPluginInterfacePtr> m_DetectorPlugins;
 };
 
 #endif

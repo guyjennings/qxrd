@@ -6,6 +6,7 @@ CONFIG += plugin
 
 DESTDIR = ../../plugins/
 
+include("../../source/submodules/qceplib/qceplib-base-include.pri")
 INCLUDEPATH += ../../libraries/qxrdlib/
 
 SOURCES += \

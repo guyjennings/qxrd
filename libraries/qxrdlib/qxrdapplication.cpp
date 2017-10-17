@@ -59,6 +59,8 @@
 #include <QJsonObject>
 #endif
 
+static QList<QDir> pluginsDirList;
+
 int eventCounter;
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
@@ -208,6 +210,12 @@ bool QxrdApplication::init(int &argc, char **argv)
         if (i++ < argc) {
           m_ApplicationSettings -> prop_CmdList()->appendValue(tr("loadScript(\"%1\")").arg(argv[i]));
         }
+      } else if (strcmp(argv[i],"-p")==0) {
+        QDir appDir(qApp->applicationDirPath());
+
+        appDir.cd("plugins");
+
+        pluginsDirList.append(appDir);
       } else {
         m_ApplicationSettings -> prop_FileList()->appendValue(argv[i]);
       }
@@ -371,7 +379,6 @@ QxrdNIDAQPluginInterfacePtr QxrdApplication::nidaqPlugin()
 
 void QxrdApplication::loadPlugins()
 {
-  QList<QDir> pluginsDirList;
 
 #ifdef QXRD_PLUGIN_PATH
   pluginsDirList.append(QDir(xstr(QXRD_PLUGIN_PATH)));
@@ -419,6 +426,9 @@ void QxrdApplication::loadPlugins()
 
           if (detector) {
             pluginName = detector -> name();
+
+            m_DetectorPlugins.append(
+                  QxrdDetectorPluginInterfacePtr(detector));
           }
 
           QxrdProcessorInterface* processor = qobject_cast<QxrdProcessorInterface*>(plugin);
@@ -471,6 +481,11 @@ void QxrdApplication::loadPlugins()
       }
     }
   }
+}
+
+QxrdDetectorPluginInterfacePtr QxrdApplication::detectorPlugin(int n)
+{
+  return m_DetectorPlugins.value(n);
 }
 
 void QxrdApplication::splashMessage(QString msg)

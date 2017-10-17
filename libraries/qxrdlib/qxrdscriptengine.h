@@ -113,6 +113,7 @@ private:
   static QScriptValue timeStampFunc(QScriptContext *context, QScriptEngine *engine);
 
   static QScriptValue detectorFunc(QScriptContext *context, QScriptEngine *engine);
+  static QScriptValue detectorPluginFunc(QScriptContext *context, QScriptEngine *engine);
   static QScriptValue roiFunc(QScriptContext *context, QScriptEngine *engine);
 
 //  static QScriptValue dataObjectFunc(QScriptContext *context, QScriptEngine *engine);

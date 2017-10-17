@@ -274,7 +274,8 @@ SOURCES += qxrdlib.cpp \
     commands/00generic/qxrdexperimentcommand.cpp \
     commands/00generic/qxrdgraphcommand.cpp \
     commands/00generic/qxrddatasetcommand.cpp \
-    commands/specremote/qxrdspecremotecommand.cpp
+    commands/specremote/qxrdspecremotecommand.cpp \
+    qxrddetectorinterface.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -283,7 +284,10 @@ HEADERS += qxrdlib.h\
     commands/00generic/qxrdexperimentcommand.h \
     commands/00generic/qxrdgraphcommand.h \
     commands/00generic/qxrddatasetcommand.h \
-    commands/specremote/qxrdspecremotecommand.h
+    commands/specremote/qxrdspecremotecommand.h \
+    qxrddetectorinterface.h \
+    qxrddetectorinterface-ptr.h \
+    qxrddetectorplugininterface-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

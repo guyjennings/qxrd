@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "qxrddetectorplugininterface.h"
+#include <QTimer>
 
 class QxrdAreaDetectorPlugin : public QObject, public QxrdDetectorPluginInterface
 {
@@ -16,6 +17,8 @@ public:
     QxrdAreaDetectorPlugin();
 
     QString name() const;
+
+    QxrdDetectorInterfacePtr createDetector(QString name);
 };
 
 #endif // QXRDAREADETECTORPLUGIN_H

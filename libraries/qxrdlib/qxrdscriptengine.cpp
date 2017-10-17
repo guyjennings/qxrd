@@ -42,6 +42,8 @@
 #include <QMetaObject>
 #include <QMetaProperty>
 #include <QRegExp>
+#include "qxrddetectorplugininterface.h"
+#include "qxrddetectorinterface.h"
 
 QxrdScriptEngine::QxrdScriptEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp)
   : QcepScriptEngine(),
@@ -1795,6 +1797,37 @@ QScriptValue QxrdScriptEngine::detectorFunc(QScriptContext *context, QScriptEngi
 }
 
 QCEP_DOC_FUNCTION(
+    "detectorPlugin",
+    "detectorPlugin(n)",
+    "Returns a reference to the 'n'th detector plugin",
+    "")
+
+QScriptValue QxrdScriptEngine::detectorPluginFunc(QScriptContext *context, QScriptEngine *engine)
+{
+  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+
+  if (eng) {
+    QxrdApplicationPtr app(eng->application());
+
+    if (app) {
+      int n = context->argument(0).toInteger();
+
+      QxrdDetectorPluginInterfacePtr p = app->detectorPlugin(n);
+
+      if (p) {
+        QxrdDetectorInterfacePtr i = p->createDetector(tr("det-%1").arg(n));
+
+        if (i) {
+          return engine->newQObject(i.data());
+        }
+      }
+    }
+  }
+
+  return QScriptValue();
+}
+
+QCEP_DOC_FUNCTION(
     "roi",
     "roi(n,m)",
     "Returns a reference to the 'm'th ROI of the 'n'th detector",
@@ -2184,6 +2217,8 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("timeStamp", newFunction(timeStampFunc, 1));
 
   globalObject().setProperty("detector", newFunction(detectorFunc, 1));
+  globalObject().setProperty("detectorPlugin", newFunction(detectorPluginFunc, 1));
+
   globalObject().setProperty("roi", newFunction(roiFunc, 1));
 
   globalObject().setProperty("roi2", newQObject(this).property("roiFunc2"));
