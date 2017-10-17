@@ -610,7 +610,7 @@ double QxrdJSEngine::acquireScalersFunc(int i)
     tick.start();
   }
 
-  double res;
+  double res = 0;
 
   QxrdAcquisitionPtr acq(acquisition());
 
