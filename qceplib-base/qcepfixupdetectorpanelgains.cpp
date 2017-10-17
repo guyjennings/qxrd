@@ -15,7 +15,7 @@ static const int bwidth = 10;
 
 static double linearFit(double xvec[], double yvec[], int np, double xx)
 {
-  double sumn, sumx = 0, sumxx = 0, sumy = 0, sumxy = 0;
+  double sumn = 0, sumx = 0, sumxx = 0, sumy = 0, sumxy = 0;
 
   for (int i=0; i<np; i++) {
     double x = xvec[i];

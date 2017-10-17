@@ -45,7 +45,7 @@ QcepDoubleImageDataPtr QcepSetRangeOfImageCommand::exec(QcepDoubleImageDataPtr i
 
     int rangeChoice = get_RangeChoice();
 
-    double newValue;
+    double newValue=0;
 
     switch (get_OutputChoice()) {
     case 0:

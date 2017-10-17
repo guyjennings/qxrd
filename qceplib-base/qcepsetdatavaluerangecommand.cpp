@@ -50,7 +50,7 @@ QcepDoubleImageDataPtr QcepSetDataValueRangeCommand::exec(QcepDoubleImageDataPtr
 
     emit progressMade(20);
 
-    double newValue;
+    double newValue=0;
 
     int nRows = res->get_Height();
     int nCols = res->get_Width();
@@ -78,7 +78,7 @@ QcepDoubleImageDataPtr QcepSetDataValueRangeCommand::exec(QcepDoubleImageDataPtr
     double x2 = get_RegionX2();
     double y2 = get_RegionY2();
 
-    double lf, tp, rt, bt;
+    double lf=0, tp=0, rt=0, bt=0;
 
     switch (get_RegionCoordinateStyle()) {
     case 0:  //LTRB
