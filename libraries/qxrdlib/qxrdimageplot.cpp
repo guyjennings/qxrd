@@ -1071,7 +1071,7 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
     double chi = centerFinder->getChi(pos);
     res += tr(", Chi %1").arg(chi);
 
-    if (m_PowderPointPicker -> isEnabled()) {
+    if (ras && m_PowderPointPicker -> isEnabled()) {
       QPointF rpt = ras->optimizePeakPosition(pos);
       res += tr("\nPtx %1, Pty %2").arg(rpt.x()).arg(rpt.y());
     }
