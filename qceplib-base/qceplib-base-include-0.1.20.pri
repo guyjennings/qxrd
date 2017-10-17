@@ -15,4 +15,4 @@ contains (DEFINES,HAVE_QWT) {
 }
 
 INCLUDEPATH += $${PWD}
-DEPENDPATH  == $${PWD}
+DEPENDPATH  += $${PWD}
