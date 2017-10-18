@@ -38,7 +38,6 @@
 #include "qxrdacquisitionextrainputschannel.h"
 #include "qxrdfilebrowsermodelupdater.h"
 #include "qxrdacquisitionextrainputs.h"
-#include "qxrdfitparameter.h"
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
 #include <QHostInfo>
@@ -460,7 +459,6 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdDataProcessor*>("QxrdDataProcessor*");
   qRegisterMetaType<QxrdFileBrowserModelUpdater*>("QxrdFileBrowserModelUpdater*");
   qRegisterMetaType<QxrdFileSaver*>("QxrdFileSaver*");
-  qRegisterMetaType<QxrdFitParameterPtr>("QxrdFitParameterPtr");
   qRegisterMetaType<QxrdIntegrator*>("QxrdIntegrator*");
   qRegisterMetaType<QxrdDetectorGeometry*>("QxrdDetectorGeometry*");
   qRegisterMetaType<QxrdPolarNormalization*>("QxrdPolarNormalization*");

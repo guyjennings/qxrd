@@ -105,7 +105,6 @@ SOURCES += qxrdlib.cpp \
     qxrdnamedplugininterface.cpp \
     qxrddetectorgeometry.cpp \
     qxrdgeneratetestimage.cpp \
-    qxrdfitparameter.cpp \
     qxrdsimpleserver.cpp \
     qxrdsimpleserverthread.cpp \
     qxrdcenterstepspinner.cpp \
@@ -361,8 +360,6 @@ HEADERS += TODO.h \
     qxrddetectorgeometry-ptr.h \
     qxrdgeneratetestimage.h \
     qxrdgeneratetestimage-ptr.h \
-    qxrdfitparameter.h \
-    qxrdfitparameter-ptr.h \
     qxrdsimpleserver.h \
     qxrdsimpleserver-ptr.h \
     qxrdsimpleserverthread.h \
