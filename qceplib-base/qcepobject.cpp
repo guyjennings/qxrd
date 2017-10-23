@@ -371,7 +371,8 @@ void QcepObject::writeSettings(QSettings *set)
 void QcepObject::readSettings(QSettings *set)
 {
   if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "readObjectSettings", Qt::BlockingQueuedConnection, Q_ARG(QSettings*, set)));
+//    INVOKE_CHECK(QMetaObject::invokeMethod(this, "readObjectSettings", Qt::BlockingQueuedConnection, Q_ARG(QSettings*, set)));
+    readObjectSettings(set);
   } else {
     readObjectSettings(set);
   }
@@ -613,4 +614,46 @@ void QcepObject::fromScriptValue(const QScriptValue &obj, QcepObjectPtr &data)
       }
     }
   }
+}
+
+QString QcepObject::methodSignatures()
+{
+  QString res = "";
+
+  for (int i=0; i<methodCount(); i++) {
+    if (i > 0) res += ", ";
+    res += methodSignature(i);
+  }
+
+  return res;
+}
+
+QString QcepObject::methodSignature(int n)
+{
+  QString res = "";
+
+  const QMetaObject *meta = metaObject();
+
+  if (meta) {
+    QMetaMethod m = meta->method(n);
+
+    if (m.isValid()) {
+      res = m.methodSignature();
+    }
+  }
+
+  return res;
+}
+
+int QcepObject::methodCount()
+{
+  int res = -1;
+
+  const QMetaObject *meta = metaObject();
+
+  if (meta) {
+    res = meta->methodCount();
+  }
+
+  return res;
 }

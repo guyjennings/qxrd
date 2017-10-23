@@ -60,6 +60,10 @@ public slots:
 
   int checkChildren(int verbose=0, int level=0) const;
 
+  QString methodSignatures();
+  QString methodSignature(int n);
+  int     methodCount();
+
 public:
   static QcepObjectPtr readObject(QSettings *set);
   static QcepObjectPtr construct(QString name, QString className);

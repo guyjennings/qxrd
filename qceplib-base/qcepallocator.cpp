@@ -516,7 +516,9 @@ QcepDataObjectPtr QcepAllocator::newDataObject(QString id, QString name)
 {
   QcepDataObjectPtr res;
 
-  if (id == "QcepDataGroup") {
+  if (id == "QcepDataset") {
+    res = newDataset(name);
+  } else if (id == "QcepDataGroup") {
     res = newGroup(name);
   } else if (id == "QcepDataColumn") {
     res = newColumn(name, 0, QcepAllocator::NullIfNotAvailable);

@@ -63,7 +63,7 @@ void QcepDataGroup::readSettings(QSettings *settings)
       settings->setArrayIndex(i);
 
       QString name = settings->value("name").toString();
-      QString id = settings->value("type").toString();
+      QString id = settings->value("class").toString();
 
       QcepDataObjectPtr obj = QcepAllocator::newDataObject(id, name);
 
