@@ -12,9 +12,9 @@
 #include <QSplashScreen>
 #include "qcepdataobject.h"
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACX)
-#include <mcheck.h>
-#endif
+//#if defined(Q_OS_UNIX) && !defined(Q_OS_MACX)
+//#include <mcheck.h>
+//#endif
 
 /*!
 \mainpage QXRD - Readout and Analysis software for SAXS/PDF/Powder X-Ray measurements
@@ -27,9 +27,9 @@ remote-controlled via a socket interface, or directly from SPEC
 
 int main(int argc, char *argv[])
 {
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACX)
-  mtrace();
-#endif
+//#if defined(Q_OS_UNIX) && !defined(Q_OS_MACX)
+//  mtrace();
+//#endif
 
   g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(new QxrdDebugDictionary());
 
@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
   {
     QxrdApplicationPtr app = QxrdApplicationPtr(
           new QxrdApplication(argc, argv));
+//    QxrdApplication* app =
+//        new QxrdApplication(argc, argv);
 
     if (app->init(argc, argv)) {
       QxrdApplicationSettingsPtr set(app->settings());

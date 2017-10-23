@@ -255,6 +255,9 @@ public:  // Properties
 
   Q_PROPERTY(int spacing READ get_Spacing WRITE set_Spacing)
   QCEP_INTEGER_PROPERTY(Spacing)
+
+  Q_PROPERTY(int isReading READ get_IsReading WRITE set_IsReading STORED false)
+  QCEP_INTEGER_PROPERTY(IsReading)
 };
 
 Q_DECLARE_METATYPE(QxrdExperiment*)
