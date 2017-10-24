@@ -36,8 +36,13 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
     m_InnerBounds(QRect()),
     m_OuterBounds(QRect())
 {
-  connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
-  connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
+  if (m_OuterShape) {
+    connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
+  }
+
+  if (m_InnerShape) {
+    connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
+  }
 
   connect(prop_Center(), &QcepDoublePointProperty::valueChanged, this, &QxrdROICoordinates::changed);
   connect(prop_Rotation(), &QcepDoubleProperty::valueChanged, this, &QxrdROICoordinates::changed);

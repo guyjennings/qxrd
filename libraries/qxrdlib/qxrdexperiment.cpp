@@ -1196,6 +1196,7 @@ void QxrdExperiment::onAutoSaveTimer()
   if (!get_IsReading()) {
     if (isChanged()) {
       printMessage(tr("QxrdExperiment::onAutoSaveTimer saved because %1 changed").arg(changedBy()));
+      printf("QxrdExperiment::onAutoSaveTimer saved because %s changed\n", qPrintable(changedBy()));
 
       writeSettings();
     }
