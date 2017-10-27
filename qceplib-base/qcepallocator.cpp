@@ -49,11 +49,11 @@ QcepAllocator::QcepAllocator
 //  allocatorHeartbeat();
 
   if (sizeof(void*) == 4) {
-    set_AvailableBytes(get_TotalBufferSizeMB32()*MegaBytes);
+    set_AvailableBytes(qint64(get_TotalBufferSizeMB32())*qint64(MegaBytes));
     connect(prop_TotalBufferSizeMB32(), &QcepIntProperty::valueChanged,
             this, &QcepAllocator::onMemorySizeChanged);
   } else {
-    set_AvailableBytes(get_TotalBufferSizeMB64()*MegaBytes);
+    set_AvailableBytes(qint64(get_TotalBufferSizeMB64())*qint64(MegaBytes));
     connect(prop_TotalBufferSizeMB64(), &QcepIntProperty::valueChanged,
             this, &QcepAllocator::onMemorySizeChanged);
   }
@@ -78,7 +78,7 @@ QcepAllocator::~QcepAllocator()
 
 void QcepAllocator::onMemorySizeChanged(qint64 newMB)
 {
-  changedAvailableBytes(newMB*MegaBytes);
+  changedAvailableBytes(newMB*qint64(MegaBytes));
 }
 
 void QcepAllocator::writeSettings(QSettings *settings)
@@ -95,17 +95,17 @@ void QcepAllocator::readSettings(QSettings *settings)
   QcepObject::readSettings(settings);
 
   if (get_TotalBufferSizeMB32() > 100000000) {
-    set_TotalBufferSizeMB32(get_TotalBufferSizeMB32()/MegaBytes);
+    set_TotalBufferSizeMB32(qint64(get_TotalBufferSizeMB32())/qint64(MegaBytes));
   }
 
   if (get_TotalBufferSizeMB64() > 100000000) {
-    set_TotalBufferSizeMB64(get_TotalBufferSizeMB64()/MegaBytes);
+    set_TotalBufferSizeMB64(qint64(get_TotalBufferSizeMB64())/qint64(MegaBytes));
   }
 
   if (sizeof(void*) == 4) {
-    set_AvailableBytes(get_TotalBufferSizeMB32()*MegaBytes);
+    set_AvailableBytes(qint64(get_TotalBufferSizeMB32())*qint64(MegaBytes));
   } else {
-    set_AvailableBytes(get_TotalBufferSizeMB64()*MegaBytes);
+    set_AvailableBytes(qint64(get_TotalBufferSizeMB64())*qint64(MegaBytes));
   }
 }
 
@@ -135,7 +135,7 @@ int QcepAllocator::waitTillAvailable(AllocationStrategy strat, qint64 size)
   } else if (strat == QcepAllocator::NullIfNotAvailable) {
     return ((get_AllocatedBytes() + size) < get_AvailableBytes());
   } else if (strat == QcepAllocator::AllocateFromReserve) {
-    return ((get_AllocatedBytes() + size) < (get_AvailableBytes() + get_Reserve()*MegaBytes));
+    return ((get_AllocatedBytes() + size) < (get_AvailableBytes() + get_Reserve()*qint64(MegaBytes)));
   } else if (strat == QcepAllocator::AlwaysAllocate) {
     return true;
   } else {
@@ -464,7 +464,7 @@ qint64 QcepAllocator::arraySize(QVector<int> dims)
 
 qint64 QcepAllocator::allocatedMemoryMB()
 {
-  return allocatedMemory()/MegaBytes;
+  return allocatedMemory()/qint64(MegaBytes);
 }
 
 qint64 QcepAllocator::allocatedMemory()
@@ -478,7 +478,7 @@ qint64 QcepAllocator::allocatedMemory()
 
 qint64 QcepAllocator::availableMemoryMB()
 {
-  return availableMemory()/MegaBytes;
+  return availableMemory()/qint64(MegaBytes);
 }
 
 qint64 QcepAllocator::availableMemory()
