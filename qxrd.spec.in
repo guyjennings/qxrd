@@ -54,7 +54,10 @@ install libqxrdlib.so.0 $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/
 #install plugins/*.so  $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
 install plugins/*.so  $RPM_BUILD_ROOT%{_libdir}/qxrd-%{version}/plugins/
 
-patchelf --set-rpath %{_libdir}/qxrd-%{version} $RPM_BUILD_ROOT%{_bindir}/qxrd
+mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+echo "%{_libdir}/qxrd-%{version}" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/qxrd-%{version}.conf
+
+#patchelf --set-rpath %{_libdir}/qxrd-%{version} $RPM_BUILD_ROOT%{_bindir}/qxrd
 
 cp libraries/qxrdlib/images/qxrd-icon-32x32.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/qxrd-icon.png
 cp libraries/qxrdlib/images/qxrd-icon-64x64.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps/qxrd-icon.png
@@ -72,12 +75,13 @@ rm -rf $RPM_BUILD_ROOT
 update-desktop-database &> /dev/null || :
 touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+/sbin/ldconfig
 
 %postun
 update-desktop-database &> /dev/null || :
 touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
-
+/sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
@@ -87,6 +91,7 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %{_bindir}/qxrd
 %{_libdir}/qxrd-%{version}/*.so*
 %{_libdir}/qxrd-%{version}/plugins/*.so
+%config(noreplace) %{_sysconfdir}/ld.so.conf.d/qxrd-%{version}.conf
 #%{_datadir}/applications/*%{name}.desktop
 %{_datadir}/applications/*qxrd.desktop
 %{_datadir}/icons/hicolor/*/*/*
