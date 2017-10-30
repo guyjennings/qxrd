@@ -14,7 +14,8 @@ QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer(QxrdExperimentW
   m_DetectorSubType(this, "detectorSubType", 0, "Perkin Elmer Detector Subtype"),
   m_DetectorAddress(this, "detectorAddress", "", "Perkin Elmer Detector Address"),
   m_DetectorGain   (this, "detectorGain",    0, "Detector Gain"),
-  m_DetectorBinning(this, "detectorBinning", 0, "Detector Binning Mode")
+  m_DetectorBinning(this, "detectorBinning", 0, "Detector Binning Mode"),
+  m_DetectorTiming (this, "detectorTiming",  0, "Detector Timing Source")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing Perkin Elmer Detector\n");
@@ -56,6 +57,7 @@ void QxrdDetectorSettingsPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr p
     proxy->pushProperty(QxrdDetectorProxy::StringProperty,   "detectorAddress", "PE Detector Address", "");
     proxy->pushProperty(QxrdDetectorProxy::PEGainProperty,    "detectorGain", "PE Detector Gain", 0);
     proxy->pushProperty(QxrdDetectorProxy::PEBinningProperty, "detectorBinning", "PE Detector Binning", 0);
+    proxy->pushProperty(QxrdDetectorProxy::PETimingProperty, "detectorTiming", "PE Detector Timing", 0);
   }
 }
 
@@ -69,6 +71,7 @@ void QxrdDetectorSettingsPerkinElmer::pushPropertiesToProxy(QxrdDetectorProxyPtr
     proxy->pushProperty(QxrdDetectorProxy::StringProperty,   "detectorAddress", "PE Detector Address", get_DetectorAddress());
     proxy->pushProperty(QxrdDetectorProxy::PEGainProperty,    "detectorGain", "PE Detector Gain", get_DetectorGain());
     proxy->pushProperty(QxrdDetectorProxy::PEBinningProperty, "detectorBinning", "PE Detector Binning", get_DetectorBinning());
+    proxy->pushProperty(QxrdDetectorProxy::PETimingProperty, "detectorTiming", "PE Detector Timing", get_DetectorTiming());
   }
 }
 
@@ -82,6 +85,7 @@ void QxrdDetectorSettingsPerkinElmer::pullPropertiesfromProxy(QxrdDetectorProxyP
     set_DetectorAddress (proxy->property("detectorAddress").toString());
     set_DetectorGain    (proxy->property("detectorGain").toInt());
     set_DetectorBinning (proxy->property("detectorBinning").toInt());
+    set_DetectorTiming  (proxy->property("detectorTiming").toInt());
   }
 }
 
@@ -169,6 +173,16 @@ QStringList QxrdDetectorSettingsPerkinElmer::binningModeNamesPE()
   for (int i=0; i<BinningModeCount; i++) {
     res.append(binningModeNamePE(i));
   }
+
+  return res;
+}
+
+QStringList QxrdDetectorSettingsPerkinElmer::timingModeNamesPE()
+{
+  QStringList res;
+
+  res.append("Internal");
+  res.append("External");
 
   return res;
 }

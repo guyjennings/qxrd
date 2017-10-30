@@ -42,6 +42,8 @@ public:
   static QString     binningModeNamePE(int binningMode);
   static QStringList binningModeNamesPE();
 
+  static QStringList timingModeNamesPE();
+
 public:
   Q_PROPERTY(int detectorNumber READ get_DetectorNumber WRITE set_DetectorNumber)
   QCEP_INTEGER_PROPERTY(DetectorNumber)
@@ -57,6 +59,9 @@ public:
 
   Q_PROPERTY(int detectorBinning READ get_DetectorBinning WRITE set_DetectorBinning)
   QCEP_INTEGER_PROPERTY(DetectorBinning)
+
+  Q_PROPERTY(int detectorTiming READ get_DetectorTiming WRITE set_DetectorTiming)
+  QCEP_INTEGER_PROPERTY(DetectorTiming)
 };
 
 #endif // QXRDDETECTORSETTINGSPERKINELMER_H

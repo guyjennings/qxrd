@@ -31,6 +31,7 @@ QxrdDetectorDriverPerkinElmer::QxrdDetectorDriverPerkinElmer(
   m_CameraModel(""),
   m_CurrentGain(-1),
   m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
+  m_TimingSource(-1),
   m_Counter(0),
   m_PerkinElmerPlugin(),
 #endif
@@ -640,26 +641,9 @@ bool QxrdDetectorDriverPerkinElmer::startDetectorDriver()
       }
     }
 
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER"));
-    }
-
-    if (plugin && (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
-      if (plugin && (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING)) != HIS_ALL_OK) {
-        acquisitionError(__FILE__, __LINE__, nRet);
-        return false;
-      } else {
-        m_SyncMode = HIS_SYNCMODE_FREE_RUNNING;
-      }
-    } else {
-      m_SyncMode = HIS_SYNCMODE_INTERNAL_TIMER;
-    }
-
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
-    }
-
     if (acq) {
+      onTimingSourceChanged();
+
       onBinningModeChanged();
 
       onCameraGainChanged();
@@ -858,6 +842,64 @@ void QxrdDetectorDriverPerkinElmer::onCameraGainChanged()
   }
 #endif
 }
+
+#define INTERNAL_TIMING 0
+#define EXTERNAL_TIMING 1
+
+void QxrdDetectorDriverPerkinElmer::onTimingSourceChanged()
+{
+#ifdef HAVE_PERKIN_ELMER
+  QxrdDetectorSettingsPerkinElmerPtr det(m_PerkinElmer);
+
+  if (det && det -> isEnabled() && checkPluginAvailable()) {
+    QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmerPlugin);
+    QxrdAcquisitionPtr  acq(m_Acquisition);
+
+    if (acq && plugin) {
+      if (m_HeaderID >= 11) {
+        int newSource = det->get_DetectorTiming();
+
+        printMessage(tr("Timing source to %1").arg(newSource));
+
+        printMessage("Setting timing source");
+
+        int nRet;
+
+        if (m_TimingSource != det->get_DetectorTiming()) {
+          if (m_TimingSource == INTERNAL_TIMING) {
+            if (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER) != HIS_ALL_OK) {
+              if (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING) != HIS_ALL_OK) {
+                acquisitionError(__FILE__, __LINE__, nRet);
+                return;
+              } else {
+                m_SyncMode = HIS_SYNCMODE_FREE_RUNNING;
+              }
+            } else {
+              m_SyncMode = HIS_SYNCMODE_INTERNAL_TIMER;
+            }
+          } else if (m_TimingSource == EXTERNAL_TIMING) {
+            if (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_EXTERNAL_TRIGGER) != HIS_ALL_OK) {
+              acquisitionError(__FILE__, __LINE__, nRet);
+              return;
+            } else {
+              m_SyncMode = HIS_SYNCMODE_EXTERNAL_TRIGGER;
+            }
+          }
+
+          if (qcepDebug(DEBUG_PERKINELMER)) {
+            printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
+          }
+
+          m_TimingSource = det->get_DetectorTiming();
+        }
+
+        printMessage("Set timing source");
+      }
+    }
+  }
+#endif
+}
+
 
 void QxrdDetectorDriverPerkinElmer::startupAcquisition()
 {
