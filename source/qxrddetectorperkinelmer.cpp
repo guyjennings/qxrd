@@ -23,6 +23,7 @@ QxrdDetectorPerkinElmer::QxrdDetectorPerkinElmer(QxrdExperimentWPtr expt, QxrdAc
   m_CameraModel(""),
   m_CurrentGain(-1),
   m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
+  m_TimingSource(-1),
   m_Counter(0),
   m_PerkinElmer()
 {
@@ -856,11 +857,11 @@ void QxrdDetectorPerkinElmer::onTimingSourceChanged()
               m_SyncMode = HIS_SYNCMODE_INTERNAL_TIMER;
             }
           } else if (m_TimingSource == EXTERNAL_TIMING) {
-            if (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_EXTERNAL) != HIS_ALL_OK) {
+            if (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_EXTERNAL_TRIGGER) != HIS_ALL_OK) {
               acquisitionError(__FILE__, __LINE__, nRet);
               return;
             } else {
-              m_SyncMode = HIS_SYNCMODE_EXTERNAL;
+              m_SyncMode = HIS_SYNCMODE_EXTERNAL_TRIGGER;
             }
           }
 

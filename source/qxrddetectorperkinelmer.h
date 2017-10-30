@@ -78,6 +78,7 @@ private:
   QString                m_CameraModel;
   int                    m_CurrentGain;
   int                    m_SyncMode;
+  int                    m_TimingSource;
 
   QAtomicInt             m_Counter;
 
