@@ -39,6 +39,7 @@ QxrdAcquisition::QxrdAcquisition(QxrdSettingsSaverWPtr saver,
     m_DarkSummedExposures(saver, this,"darkSummedExposures",1, "Summed Exposures in Dark Image"),
     m_CameraGain(saver, this,"cameraGain",0, "Detector Gain"),
     m_BinningMode(saver, this,"binningMode",0, "Binning Mode"),
+    m_TimingSource(saver, this, "timingSource", 0, "Exposure Timing Source (0 = Internal, 1 = External"),
     m_FileBase(saver, this,"fileBase","", "File Base"),
     m_NRows(saver, this, "nRows", 2048, "Number of Rows"),
     m_NCols(saver, this, "nCols", 2048, "Number of Cols"),
@@ -102,6 +103,7 @@ void QxrdAcquisition::initialize(QxrdAcquisitionWPtr acq)
   connect(prop_ExposureTime(), SIGNAL(valueChanged(double,int)), this, SLOT(onExposureTimeChanged()));
   connect(prop_BinningMode(), SIGNAL(valueChanged(int,int)), this, SLOT(onBinningModeChanged()));
   connect(prop_CameraGain(), SIGNAL(valueChanged(int,int)), this, SLOT(onCameraGainChanged()));
+  connect(prop_TimingSource(), SIGNAL(valueChanged(int,int)), this, SLOT(onTimingSourceChanged()));
 
   if (alloc) {
     if (sizeof(void*) == 4) {
@@ -1160,6 +1162,14 @@ void QxrdAcquisition::onCameraGainChanged()
   }
 }
 
+void QxrdAcquisition::onTimingSourceChanged()
+{
+  QxrdDetectorPtr det(m_Detector);
+
+  if (det) {
+    det ->onTimingSourceChanged();
+  }
+}
 
 void QxrdAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
 {

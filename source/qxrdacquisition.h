@@ -137,6 +137,7 @@ public slots:
   void onExposureTimeChanged();
   void onBinningModeChanged();
   void onCameraGainChanged();
+  void onTimingSourceChanged();
 
   void onBufferSizeChanged(int newMB);
 
@@ -266,6 +267,9 @@ public:
 
   Q_PROPERTY(int     binningMode      READ get_BinningMode WRITE set_BinningMode)
   QCEP_INTEGER_PROPERTY(BinningMode)
+
+  Q_PROPERTY(int     timingSource     READ get_TimingSource WRITE set_TimingSource)
+  QCEP_INTEGER_PROPERTY(TimingSource)
 
   Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase)
   QCEP_STRING_PROPERTY(FileBase)

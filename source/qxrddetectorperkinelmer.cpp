@@ -677,22 +677,9 @@ void QxrdDetectorPerkinElmer::initialize()
       printMessage(tr("SetFrameSyncMode HIS_SYNCMODE_INTERNAL_TIMER"));
     }
 
-    if (plugin && (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER)) != HIS_ALL_OK) {
-      if (plugin && (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING)) != HIS_ALL_OK) {
-        acquisitionError(__FILE__, __LINE__, nRet);
-        return;
-      } else {
-        m_SyncMode = HIS_SYNCMODE_FREE_RUNNING;
-      }
-    } else {
-      m_SyncMode = HIS_SYNCMODE_INTERNAL_TIMER;
-    }
-
-    if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
-    }
-
     if (acq) {
+      onTimingSourceChanged();
+
       onCameraGainChanged();
 
       if (acq->get_ExposureTime() <= 0) {
@@ -832,6 +819,59 @@ void QxrdDetectorPerkinElmer::onCameraGainChanged()
         }
 
         printMessage("Set camera gain");
+      }
+    }
+  }
+}
+
+#define INTERNAL_TIMING 0
+#define EXTERNAL_TIMING 1
+
+void QxrdDetectorPerkinElmer::onTimingSourceChanged()
+{
+  if (checkPluginAvailable()) {
+    QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmer);
+    QxrdAcquisitionPtr  acq(m_Acquisition);
+
+    if (acq && plugin) {
+      if (m_HeaderID >= 11) {
+        int newSource = acq->get_TimingSource();
+
+        printMessage(tr("Timing source to %1").arg(newSource));
+
+        printMessage("Setting timing source");
+
+        int nRet;
+
+        if (m_TimingSource != acq->get_TimingSource()) {
+          if (m_TimingSource == INTERNAL_TIMING) {
+            if (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER) != HIS_ALL_OK) {
+              if (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING) != HIS_ALL_OK) {
+                acquisitionError(__FILE__, __LINE__, nRet);
+                return;
+              } else {
+                m_SyncMode = HIS_SYNCMODE_FREE_RUNNING;
+              }
+            } else {
+              m_SyncMode = HIS_SYNCMODE_INTERNAL_TIMER;
+            }
+          } else if (m_TimingSource == EXTERNAL_TIMING) {
+            if (nRet=plugin->Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_EXTERNAL) != HIS_ALL_OK) {
+              acquisitionError(__FILE__, __LINE__, nRet);
+              return;
+            } else {
+              m_SyncMode = HIS_SYNCMODE_EXTERNAL;
+            }
+          }
+
+          if (qcepDebug(DEBUG_PERKINELMER)) {
+            printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
+          }
+
+          m_TimingSource = acq->get_TimingSource();
+        }
+
+        printMessage("Set timing source");
       }
     }
   }

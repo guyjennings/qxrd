@@ -56,6 +56,10 @@ void QxrdDetector::onCameraGainChanged()
 {
 }
 
+void QxrdDetector::onTimingSourceChanged()
+{
+}
+
 void QxrdDetector::setupExposureMenu(QDoubleSpinBox * /*cb*/, double /*initialExposure*/)
 {
 }

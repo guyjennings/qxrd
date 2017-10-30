@@ -56,6 +56,7 @@ QxrdAcquisitionDialog::QxrdAcquisitionDialog(QxrdExperimentWPtr doc,
     acq -> prop_PostTriggerFiles() -> linkTo(this -> m_PostTriggerFiles);
     acq -> prop_CameraGain() -> linkTo(this -> m_CameraGain);
     acq -> prop_BinningMode() -> linkTo(this -> m_BinningMode);
+    acq -> prop_TimingSource() -> linkTo(this -> m_TimingSource);
     acq -> prop_DroppedFrames() -> linkTo(this -> m_DroppedFrames);
 
     acq -> prop_UserComment1() -> linkTo(this -> m_UserComment1);

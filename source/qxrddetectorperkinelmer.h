@@ -28,6 +28,7 @@ private slots:
   void onExposureTimeChanged();
   void onBinningModeChanged();
   void onCameraGainChanged();
+  void onTimingSourceChanged();
 
 public slots:
   void initialize();
