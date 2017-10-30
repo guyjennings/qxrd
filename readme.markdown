@@ -1,6 +1,10 @@
 # QXRD Change Log
 See also the [QXRD Git Log](http://qxrd.git.sourceforge.net/git/gitweb.cgi?p=qxrd/qxrd;a=shortlog)
 
+## v0.11.10.5 - Oct 30 2017
+Added external timing mode for Perkin Elmer detectors
+Improved accuracy of masking operation mouse coordinates
+
 ## v0.11.10.3 - Sep 22 2017
 Eliminated intrusive debug messages from NIDAQ plugin
 
