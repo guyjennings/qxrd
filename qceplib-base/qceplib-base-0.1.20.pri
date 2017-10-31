@@ -100,7 +100,8 @@ SOURCES += \
     $$PWD/qcepsetdatavaluerangecommand.cpp \
     $$PWD/qcepsetrangeofimagecommand.cpp \
     $$PWD/qcepfixupdetectorpanelgains.cpp \
-    $$PWD/qcepscandetectorpanelgains.cpp
+    $$PWD/qcepscandetectorpanelgains.cpp \
+    $$PWD/qcepmainwindowsettings.cpp
 
 contains (DEFINES, HAVE_DATAVIS) {
  SOURCES += \
@@ -246,7 +247,9 @@ HEADERS += \
     $$PWD/qcepsetdatavaluerangecommand-ptr.h \
     $$PWD/qcepfixupgainmapcommand-ptr.h \
     $$PWD/qcepfixupdetectorpanelgains.h \
-    $$PWD/qcepscandetectorpanelgains.h
+    $$PWD/qcepscandetectorpanelgains.h \
+    $$PWD/qcepmainwindowsettings.h \
+    $$PWD/qcepmainwindowsettings-ptr.h
 
 contains (DEFINES, HAVE_DATAVIS) {
  HEADERS += \

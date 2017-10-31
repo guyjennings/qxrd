@@ -6,6 +6,7 @@
 #include "qcepsetdatavaluerangecommand.h"
 #include "qcepsetrangeofimagecommand.h"
 #include "qcepfixupgainmapcommand.h"
+#include "qcepmainwindowsettings.h"
 
 QcepExperiment::QcepExperiment(QString path, QString name) :
   QcepSerializableObject(name),
@@ -172,6 +173,23 @@ void QcepExperiment::readSettings(QSettings *settings)
       m_FixupGainMapCommand -> readSettings(settings);
       settings->endGroup();
     }
+
+    int n = settings->beginReadArray("windowSettings");
+
+    for (int i=0; i<n; i++) {
+      settings->setArrayIndex(i);
+
+      QcepObjectPtr obj = QcepObject::readObject(settings);
+
+      addChildPtr(obj);
+
+      QcepMainWindowSettingsPtr set =
+          qSharedPointerDynamicCast<QcepMainWindowSettings>(obj);
+
+      if (set) {
+        m_WindowSettings.append(set);
+      }
+    }
   }
 }
 
@@ -209,5 +227,23 @@ void QcepExperiment::writeSettings(QSettings *settings)
       m_FixupGainMapCommand -> writeSettings(settings);
       settings->endGroup();
     }
+
+    settings->beginWriteArray("windowSettings");
+
+    for (int i=0; i<m_WindowSettings.count(); i++) {
+      settings->setArrayIndex(i);
+      QcepMainWindowSettingsPtr set = windowSettings(i);
+
+      if (set) {
+        set->writeSettings(settings);
+      }
+    }
+
+    settings->endArray();
   }
+}
+
+QcepMainWindowSettingsPtr QcepExperiment::windowSettings(int n)
+{
+  return m_WindowSettings.value(n);
 }
