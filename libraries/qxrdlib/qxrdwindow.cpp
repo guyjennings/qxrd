@@ -128,6 +128,8 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 
   setupUi(this);
 
+  setupMenus();
+
   setAttribute(Qt::WA_DeleteOnClose, false);
 }
 

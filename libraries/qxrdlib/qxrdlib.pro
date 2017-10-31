@@ -274,7 +274,28 @@ SOURCES += qxrdlib.cpp \
     commands/00generic/qxrdgraphcommand.cpp \
     commands/00generic/qxrddatasetcommand.cpp \
     commands/specremote/qxrdspecremotecommand.cpp \
-    qxrddetectorinterface.cpp
+    qxrddetectorinterface.cpp \
+    qxrdanalysiswindow.cpp \
+    qxrdcenteringwindow.cpp \
+    qxrdintegrationwindow.cpp \
+    qxrdmaskingwindow.cpp \
+    qxrdscriptingwindow.cpp \
+    qxrdanalysiswindowsettings.cpp \
+    qxrdacquisitionwindowsettings.cpp \
+    qxrdacquisitionwindow.cpp \
+    qxrdcalibrantwindow.cpp \
+    qxrdcalibrantwindowsettings.cpp \
+    qxrdcenteringwindowsettings.cpp \
+    qxrdhelpwindow.cpp \
+    qxrdhelpwindowsettings.cpp \
+    qxrdcalculatorwindow.cpp \
+    qxrdcalculatorwindowsettings.cpp \
+    qxrdinfowindowsettings.cpp \
+    qxrdinfowindow.cpp \
+    qxrdintegrationwindowsettings.cpp \
+    qxrdmaskingwindowsettings.cpp \
+    qxrdscriptingwindowsettings.cpp \
+    qxrdmainwindowsettings.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -286,7 +307,28 @@ HEADERS += qxrdlib.h\
     commands/specremote/qxrdspecremotecommand.h \
     qxrddetectorinterface.h \
     qxrddetectorinterface-ptr.h \
-    qxrddetectorplugininterface-ptr.h
+    qxrddetectorplugininterface-ptr.h \
+    qxrdanalysiswindow.h \
+    qxrdcenteringwindow.h \
+    qxrdintegrationwindow.h \
+    qxrdmaskingwindow.h \
+    qxrdscriptingwindow.h \
+    qxrdanalysiswindowsettings.h \
+    qxrdacquisitionwindowsettings.h \
+    qxrdacquisitionwindow.h \
+    qxrdcalibrantwindow.h \
+    qxrdcalibrantwindowsettings.h \
+    qxrdcenteringwindowsettings.h \
+    qxrdhelpwindow.h \
+    qxrdhelpwindowsettings.h \
+    qxrdcalculatorwindow.h \
+    qxrdcalculatorwindowsettings.h \
+    qxrdinfowindowsettings.h \
+    qxrdinfowindow.h \
+    qxrdintegrationwindowsettings.h \
+    qxrdmaskingwindowsettings.h \
+    qxrdscriptingwindowsettings.h \
+    qxrdmainwindowsettings.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -649,7 +691,17 @@ FORMS += qxrdwindow.ui \
     qxrdtestimagegeneratorwindow.ui \
     qxrdtestscangeneratorwindow.ui \
     qxrdtestimagewindowqwt.ui \
-    qxrdtestscanwindowqwt.ui
+    qxrdtestscanwindowqwt.ui \
+    qxrdanalysiswindow.ui \
+    qxrdcenteringwindow.ui \
+    qxrdintegrationwindow.ui \
+    qxrdmaskingwindow.ui \
+    qxrdscriptingwindow.ui \
+    qxrdacquisitionwindow.ui \
+    qxrdcalibrantwindow.ui \
+    qxrdhelpwindow.ui \
+    qxrdcalculatorwindow.ui \
+    qxrdinfowindow.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS += \
