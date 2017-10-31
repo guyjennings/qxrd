@@ -3,7 +3,11 @@ include("../qxrd.platform.pri")
 
 TEMPLATE = subdirs
 
-SUBDIRS =  qxrdpilatusplugin qxrdareadetectorplugin qxrdcudaprocessorplugin
+SUBDIRS =  \
+  qxrdpilatusplugin \
+  qxrdareadetectorplugin \
+  qxrdcudaprocessorplugin \
+  qxrdsimulateddetectorplugin
 
 contains(DEFINES,HAVE_PERKIN_ELMER) {
   message("HAVE_PERKIN_ELMER")
