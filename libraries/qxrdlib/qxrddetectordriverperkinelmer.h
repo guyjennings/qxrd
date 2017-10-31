@@ -37,6 +37,7 @@ public slots:
 
   void onBinningModeChanged();
   void onCameraGainChanged();
+  void onTimingSourceChanged();
 
 private slots:
   void onEndFrame(int counter, unsigned int n1, unsigned int n2);
@@ -76,6 +77,7 @@ private:
   QString                m_CameraModel;
   int                    m_CurrentGain;
   int                    m_SyncMode;
+  int                    m_TimingSource;
 
   QAtomicInt             m_Counter;
 

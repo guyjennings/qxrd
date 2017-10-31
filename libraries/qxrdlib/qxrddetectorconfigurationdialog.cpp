@@ -161,6 +161,14 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
     propertyEditor = cb;
 
+  } else if (type == QxrdDetectorProxy::PETimingProperty) {
+    QComboBox *cb = new QComboBox();
+    QStringList sl = QxrdDetectorSettingsPerkinElmer::timingModeNamesPE();
+    cb -> addItems(sl);
+    cb -> setCurrentIndex(value.toInt());
+
+    propertyEditor = cb;
+
   } else if (type == QxrdDetectorProxy::IntegerProperty) {
     QSpinBox *sb = new QSpinBox();
     sb -> setMinimum(-100000);

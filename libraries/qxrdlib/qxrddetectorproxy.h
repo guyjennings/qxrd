@@ -49,6 +49,7 @@ public:
     PESubTypeProperty,
     PEGainProperty,
     PEBinningProperty,
+    PETimingProperty,
     PilatusModeProperty
   } PropertyType;
 
