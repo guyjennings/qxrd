@@ -119,7 +119,7 @@ macx {
   dmg.commands += install_name_tool -id @rpath/ $${TARGET}.app/Contents/Frameworks/libqxrdlib.0.dylib &&
   dmg.commands += install_name_tool -change "libqceplib.1.dylib" "@rpath/libqceplib.1.dylib" $${TARGET}.app/Contents/MacOS/$${TARGET} &&
   dmg.commands += install_name_tool -change "libqceplib.1.dylib" "@rpath/libqceplib.1.dylib" $${TARGET}.app/Contents/Frameworks/libqxrdlib.0.dylib &&
-  dmg.commands += install_name_tool -change "libqxrdlib.0.dylib" "@rpath/libqceplib.0.dylib" $${TARGET}.app/Contents/MacOS/$${TARGET} &&
+  dmg.commands += install_name_tool -change "libqxrdlib.0.dylib" "@rpath/libqxrdlib.0.dylib" $${TARGET}.app/Contents/MacOS/$${TARGET} &&
   dmg.commands += rm -rf $${TARGET}-$${VERSION}.dmg &&
   dmg.commands += mv $${TARGET}.dmg $${TARGET}-$${VERSION}.dmg
 }
