@@ -190,6 +190,8 @@ void QcepExperiment::readSettings(QSettings *settings)
         m_WindowSettings.append(set);
       }
     }
+
+    settings->endArray();
   }
 }
 
