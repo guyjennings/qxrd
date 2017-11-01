@@ -9,7 +9,7 @@ class QXRD_EXPORT QxrdDetectorSettingsEpicsArea : public QxrdDetectorSettings
   Q_OBJECT
 
 public:
-  QxrdDetectorSettingsEpicsArea(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
+  QxrdDetectorSettingsEpicsArea(QxrdApplicationWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
   virtual ~QxrdDetectorSettingsEpicsArea();
 
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);

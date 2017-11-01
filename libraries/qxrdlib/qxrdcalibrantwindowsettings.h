@@ -6,7 +6,7 @@
 class QXRD_EXPORT QxrdCalibrantWindowSettings : public QxrdMainWindowSettings
 {
 public:
-  Q_INVOKABLE QxrdCalibrantWindowSettings(QString name);
+  Q_INVOKABLE QxrdCalibrantWindowSettings(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt);
 };
 
 #endif // QXRDCALIBRANTWINDOWSETTINGS_H

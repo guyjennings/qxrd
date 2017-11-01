@@ -10,7 +10,9 @@ class QXRD_EXPORT QxrdCenteringWindow : public QxrdMainWindow, public Ui::QxrdCe
   Q_OBJECT
 
 public:
-  explicit QxrdCenteringWindow(QWidget *parent = 0);
+  explicit QxrdCenteringWindow(QString name,
+                               QxrdApplicationPtr app,
+                               QxrdExperimentPtr expt);
   ~QxrdCenteringWindow();
 
 protected:

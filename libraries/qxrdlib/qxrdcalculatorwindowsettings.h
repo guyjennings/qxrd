@@ -6,7 +6,7 @@
 class QXRD_EXPORT QxrdCalculatorWindowSettings : public QxrdMainWindowSettings
 {
 public:
-  Q_INVOKABLE QxrdCalculatorWindowSettings(QString name);
+  Q_INVOKABLE QxrdCalculatorWindowSettings(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt);
 };
 
 #endif // QXRDCALCULATORWINDOWSETTINGS_H

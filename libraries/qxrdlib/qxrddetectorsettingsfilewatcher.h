@@ -9,7 +9,7 @@ class QXRD_EXPORT QxrdDetectorSettingsFileWatcher : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorSettingsFileWatcher(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
+  explicit QxrdDetectorSettingsFileWatcher(QxrdApplicationWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);

@@ -9,7 +9,8 @@ class QXRD_EXPORT QxrdDetectorSettingsPilatus : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorSettingsPilatus(QxrdExperimentWPtr expt,
+  explicit QxrdDetectorSettingsPilatus(QxrdApplicationWPtr app,
+                                       QxrdExperimentWPtr expt,
                                        QxrdAcquisitionWPtr acq,
                                        int detNum);
   virtual ~QxrdDetectorSettingsPilatus();

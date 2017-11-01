@@ -3,14 +3,16 @@
 
 #include "qcepdebug.h"
 #include "qxrdmainwindow.h"
-#include "ui_qxrdaquisitionwindow.h"
+#include "ui_qxrdacquisitionwindow.h"
 
-class QXRD_EXPORT QxrdAcquisitionWindow : public QxrdMainWindow, public Ui::QxrdAquisitionWindow
+class QXRD_EXPORT QxrdAcquisitionWindow : public QxrdMainWindow, public Ui::QxrdAcquisitionWindow
 {
   Q_OBJECT
 
 public:
-  explicit QxrdAcquisitionWindow(QWidget *parent = 0);
+  explicit QxrdAcquisitionWindow(QString name,
+                                 QxrdApplicationPtr app,
+                                 QxrdExperimentPtr expt);
   ~QxrdAcquisitionWindow();
 
 protected:

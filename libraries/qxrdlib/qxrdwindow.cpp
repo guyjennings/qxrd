@@ -73,7 +73,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
                        QxrdAcquisitionWPtr acqw,
                        QxrdDataProcessorWPtr procw,
                        QWidget *parent)
-  : QxrdMainWindow(parent),
+  : QxrdMainWindow("window", appl, docw),
     m_ObjectNamer(this, "window"),
     m_Mutex(QMutex::Recursive),
     m_WindowSettings(settings),

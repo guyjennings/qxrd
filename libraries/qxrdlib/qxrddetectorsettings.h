@@ -10,6 +10,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qxrdapplication-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrddetectorproxy-ptr.h"
 #include "qxrddetectorprocessor-ptr.h"
@@ -26,7 +27,8 @@ class QXRD_EXPORT QxrdDetectorSettings : public QcepSerializableObject
   Q_OBJECT
 
 public:
-  explicit QxrdDetectorSettings(QxrdExperimentWPtr    expt,
+  explicit QxrdDetectorSettings(QxrdApplicationWPtr   app,
+                                QxrdExperimentWPtr    expt,
                                 QxrdAcquisitionWPtr   acq,
                                 int                   detType,
                                 int                   detNum);
@@ -34,7 +36,8 @@ public:
   void initialize();
   virtual ~QxrdDetectorSettings();
 
-  static QxrdDetectorSettingsPtr newDetector(QxrdExperimentWPtr    expt,
+  static QxrdDetectorSettingsPtr newDetector(QxrdApplicationWPtr   app,
+                                             QxrdExperimentWPtr    expt,
                                              QxrdAcquisitionWPtr   acq,
                                              int                   detType,
                                              int                   detNum);
@@ -114,6 +117,7 @@ public slots:
   QxrdDetectorControlWindowWPtr         detectorControlWindow();
 
 protected:
+  QxrdApplicationWPtr                  m_Application;
   QxrdExperimentWPtr                   m_Experiment;
   QxrdAcquisitionWPtr                  m_Acquisition;
   QxrdDetectorProcessorPtr             m_Processor;

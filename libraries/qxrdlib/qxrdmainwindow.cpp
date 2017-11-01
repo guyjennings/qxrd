@@ -4,7 +4,11 @@
 #include <QMenu>
 #include <QMenuBar>
 
-QxrdMainWindow::QxrdMainWindow(QWidget *parent) : QcepMainWindow(parent)
+QxrdMainWindow::QxrdMainWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt)
+  : QcepMainWindow(),
+    m_Application(app),
+    m_Experiment(expt),
+    m_MainWindowsMenu(NULL)
 {
 
 }
@@ -14,7 +18,11 @@ void QxrdMainWindow::setupMenus()
   QMenuBar *mbar = menuBar();
 
   if (mbar) {
-    m_MainWindowsMenu = mbar->addMenu("Windows");
+    mbar->addSeparator();
+
+    m_MainWindowsMenu = new QMenu("xxx");
+
+    mbar->addMenu(m_MainWindowsMenu);
 
     connect(m_MainWindowsMenu,  &QMenu::aboutToShow,
             this, &QxrdMainWindow::populateWindowsMenu);

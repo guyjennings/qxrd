@@ -1,7 +1,9 @@
 #include "qxrdmaskingwindowsettings.h"
 
-QxrdMaskingWindowSettings::QxrdMaskingWindowSettings(QString name)
-  : QxrdMainWindowSettings(name)
+QxrdMaskingWindowSettings::QxrdMaskingWindowSettings(QString name,
+                                                     QxrdApplicationPtr app,
+                                                     QxrdExperimentPtr expt)
+  : QxrdMainWindowSettings(name, app, expt)
 {
 
 }

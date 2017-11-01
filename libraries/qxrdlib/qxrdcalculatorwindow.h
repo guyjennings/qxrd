@@ -10,7 +10,9 @@ class QXRD_EXPORT QxrdCalculatorWindow : public QxrdMainWindow, public Ui::QxrdC
   Q_OBJECT
 
 public:
-  explicit QxrdCalculatorWindow(QWidget *parent = 0);
+  explicit QxrdCalculatorWindow(QString name,
+                                QxrdApplicationPtr app,
+                                QxrdExperimentPtr expt);
   ~QxrdCalculatorWindow();
 
 protected:

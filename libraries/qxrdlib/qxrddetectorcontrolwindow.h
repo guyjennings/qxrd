@@ -8,6 +8,7 @@
 #include "qxrddetectorprocessor-ptr.h"
 #include "qxrdroicoordinateslistmodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qxrdapplication-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrddetectorcontrolwindowsettings-ptr.h"
 #include <QTimer>
@@ -19,7 +20,8 @@ class QXRD_EXPORT QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::
   Q_OBJECT
 
 public:
-  explicit QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,
+  explicit QxrdDetectorControlWindow(QxrdApplicationPtr       appl,
+                                     QxrdExperimentWPtr        exp,
                                      QxrdAcquisitionWPtr       acq,
                                      QxrdDetectorSettingsWPtr          det,
                                      QxrdDetectorProcessorWPtr proc,

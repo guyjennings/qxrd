@@ -6,7 +6,7 @@
 class QXRD_EXPORT QxrdIntegrationWindowSettings : public QxrdMainWindowSettings
 {
 public:
-  Q_INVOKABLE QxrdIntegrationWindowSettings(QString name);
+  Q_INVOKABLE QxrdIntegrationWindowSettings(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt);
 };
 
 #endif // QXRDINTEGRATIONWINDOWSETTINGS_H

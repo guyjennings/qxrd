@@ -7,10 +7,11 @@
 #include <stdio.h>
 #include <QPainter>
 
-QxrdDetectorSettingsSimulated::QxrdDetectorSettingsSimulated(QxrdExperimentWPtr    expt,
-                                             QxrdAcquisitionWPtr   acq,
-                                             int                   detNum) :
-  QxrdDetectorSettings(expt, acq, SimulatedDetector, detNum)
+QxrdDetectorSettingsSimulated::QxrdDetectorSettingsSimulated(QxrdApplicationWPtr app,
+                                                             QxrdExperimentWPtr    expt,
+                                                             QxrdAcquisitionWPtr   acq,
+                                                             int                   detNum) :
+  QxrdDetectorSettings(app, expt, acq, SimulatedDetector, detNum)
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing simulated detector\n");

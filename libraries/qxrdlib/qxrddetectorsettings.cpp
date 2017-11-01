@@ -18,11 +18,12 @@
 #include "qxrddetectorsettingssimulated.h"
 #include "qxrdexperiment.h"
 
-QxrdDetectorSettings::QxrdDetectorSettings(QxrdExperimentWPtr    expt,
+QxrdDetectorSettings::QxrdDetectorSettings(QxrdApplicationWPtr app, QxrdExperimentWPtr    expt,
                            QxrdAcquisitionWPtr   acq,
                            int                   detType,
                            int                   detNum) :
   QcepSerializableObject("detector"),
+  m_Application(app),
   m_Experiment(expt),
   m_Acquisition(acq),
   m_Processor(),
@@ -503,7 +504,8 @@ void QxrdDetectorSettings::openControlWindow()
   if (m_DetectorControlWindow == NULL) {
     m_DetectorControlWindow =
         QxrdDetectorControlWindowPtr(
-          new QxrdDetectorControlWindow(m_Experiment,
+          new QxrdDetectorControlWindow(m_Application,
+                                        m_Experiment,
                                         m_Acquisition,
                                         qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis()),
                                         m_Processor, NULL));
@@ -590,40 +592,44 @@ double QxrdDetectorSettings::scalerCounts(int chan)
 }
 
 QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(
-    QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detType, int detNum)
+    QxrdApplicationWPtr app,
+    QxrdExperimentWPtr expt,
+    QxrdAcquisitionWPtr acq,
+    int detType,
+    int detNum)
 {
   QxrdDetectorSettingsPtr det;
 
   switch (detType) {
   case SimulatedDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsSimulated(expt, acq, detNum));
+          new QxrdDetectorSettingsSimulated(app, expt, acq, detNum));
     break;
 
   case PerkinElmerDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsPerkinElmer(expt, acq, detNum));
+          new QxrdDetectorSettingsPerkinElmer(app, expt, acq, detNum));
     break;
 
   case PilatusDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsPilatus(expt, acq, detNum));
+          new QxrdDetectorSettingsPilatus(app, expt, acq, detNum));
     break;
 
   case EpicsAreaDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsEpicsArea(expt, acq, detNum));
+          new QxrdDetectorSettingsEpicsArea(app, expt, acq, detNum));
     break;
 
   case FileWatcherDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsFileWatcher(expt, acq, detNum));
+          new QxrdDetectorSettingsFileWatcher(app, expt, acq, detNum));
     break;
   }
 
   if (det == NULL) {
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsSimulated(expt, acq, detNum));
+          new QxrdDetectorSettingsSimulated(app, expt, acq, detNum));
   }
 
   if (det) {

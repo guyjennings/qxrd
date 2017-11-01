@@ -10,7 +10,9 @@ class QXRD_EXPORT QxrdScriptingWindow : public QxrdMainWindow, public Ui::QxrdSc
   Q_OBJECT
 
 public:
-  explicit QxrdScriptingWindow(QWidget *parent = 0);
+  explicit QxrdScriptingWindow(QString name,
+                               QxrdApplicationPtr app,
+                               QxrdExperimentPtr expt);
   ~QxrdScriptingWindow();
 
 protected:

@@ -1,7 +1,7 @@
 #include "qxrdcenteringwindow.h"
 
-QxrdCenteringWindow::QxrdCenteringWindow(QWidget *parent) :
-  QxrdMainWindow(parent)
+QxrdCenteringWindow::QxrdCenteringWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+  QxrdMainWindow(name, app, expt)
 {
   setupUi(this);
 

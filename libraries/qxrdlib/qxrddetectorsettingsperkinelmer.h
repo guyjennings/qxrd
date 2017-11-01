@@ -11,7 +11,7 @@ class QXRD_EXPORT QxrdDetectorSettingsPerkinElmer : public QxrdDetectorSettings
 {
     Q_OBJECT
 public:
-  explicit QxrdDetectorSettingsPerkinElmer(QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
+  explicit QxrdDetectorSettingsPerkinElmer(QxrdApplicationWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
   virtual ~QxrdDetectorSettingsPerkinElmer();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);

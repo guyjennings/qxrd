@@ -10,7 +10,9 @@ class QXRD_EXPORT QxrdHelpWindow : public QxrdMainWindow, public Ui::QxrdHelpWin
   Q_OBJECT
 
 public:
-  explicit QxrdHelpWindow(QWidget *parent = 0);
+  explicit QxrdHelpWindow(QString name,
+                          QxrdApplicationPtr app,
+                          QxrdExperimentPtr expt);
   ~QxrdHelpWindow();
 
 protected:

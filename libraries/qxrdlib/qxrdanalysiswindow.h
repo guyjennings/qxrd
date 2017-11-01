@@ -10,7 +10,9 @@ class QXRD_EXPORT QxrdAnalysisWindow : public QxrdMainWindow, public Ui::QxrdAna
   Q_OBJECT
 
 public:
-  explicit QxrdAnalysisWindow(QWidget *parent = 0);
+  explicit QxrdAnalysisWindow(QString name,
+                              QxrdApplicationPtr app,
+                              QxrdExperimentPtr expt);
   ~QxrdAnalysisWindow();
 
 protected:

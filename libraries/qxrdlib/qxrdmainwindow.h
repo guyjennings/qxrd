@@ -3,19 +3,26 @@
 
 #include "qxrdlib_global.h"
 #include "qcepmainwindow.h"
+#include "qxrdapplication-ptr.h"
+#include "qxrdexperiment-ptr.h"
 
 class QXRD_EXPORT QxrdMainWindow : public QcepMainWindow
 {
   Q_OBJECT
 public:
-  explicit QxrdMainWindow(QWidget *parent = 0);
+  explicit QxrdMainWindow(QString name,
+                          QxrdApplicationPtr app,
+                          QxrdExperimentPtr expt);
 
   virtual void setupMenus();
 
 public slots:
   void populateWindowsMenu();
 
-private:
+protected:
+  QxrdApplicationPtr m_Application;
+  QxrdExperimentPtr  m_Experiment;
+
   QMenu *m_MainWindowsMenu;
 };
 

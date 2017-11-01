@@ -1,7 +1,7 @@
 #include "qxrdscriptingwindow.h"
 
-QxrdScriptingWindow::QxrdScriptingWindow(QWidget *parent) :
-  QxrdMainWindow(parent)
+QxrdScriptingWindow::QxrdScriptingWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+  QxrdMainWindow(name, app, expt)
 {
   setupUi(this);
 

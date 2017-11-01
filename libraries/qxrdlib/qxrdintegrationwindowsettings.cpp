@@ -1,7 +1,9 @@
 #include "qxrdintegrationwindowsettings.h"
 
-QxrdIntegrationWindowSettings::QxrdIntegrationWindowSettings(QString name)
-  : QxrdMainWindowSettings(name)
+QxrdIntegrationWindowSettings::QxrdIntegrationWindowSettings(QString name,
+                                                             QxrdApplicationPtr app,
+                                                             QxrdExperimentPtr expt)
+  : QxrdMainWindowSettings(name, app, expt)
 {
 
 }

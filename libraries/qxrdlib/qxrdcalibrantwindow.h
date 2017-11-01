@@ -10,7 +10,9 @@ class QXRD_EXPORT QxrdCalibrantWindow : public QxrdMainWindow, public Ui::QxrdCa
   Q_OBJECT
 
 public:
-  explicit QxrdCalibrantWindow(QWidget *parent = 0);
+  explicit QxrdCalibrantWindow(QString name,
+                               QxrdApplicationPtr app,
+                               QxrdExperimentPtr expt);
   ~QxrdCalibrantWindow();
 
 protected:

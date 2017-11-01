@@ -1,7 +1,7 @@
 #include "qxrdmaskingwindow.h"
 
-QxrdMaskingWindow::QxrdMaskingWindow(QWidget *parent) :
-  QxrdMainWindow(parent)
+QxrdMaskingWindow::QxrdMaskingWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+  QxrdMainWindow(name, app, expt)
 {
   setupUi(this);
 

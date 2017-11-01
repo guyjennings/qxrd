@@ -10,7 +10,9 @@ class QXRD_EXPORT QxrdMaskingWindow : public QxrdMainWindow, public Ui::QxrdMask
   Q_OBJECT
 
 public:
-  explicit QxrdMaskingWindow(QWidget *parent = 0);
+  explicit QxrdMaskingWindow(QString name,
+                             QxrdApplicationPtr app,
+                             QxrdExperimentPtr expt);
   ~QxrdMaskingWindow();
 
 protected:

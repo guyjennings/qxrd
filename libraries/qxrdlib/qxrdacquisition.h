@@ -19,6 +19,7 @@
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitiondialog-ptr.h"
+#include "qxrdapplication-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
@@ -115,6 +116,7 @@ protected:
 
   void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
+  QxrdApplicationWPtr application() const;
   QxrdExperimentWPtr experiment() const;
   QxrdDataProcessorWPtr dataProcessor() const;
 

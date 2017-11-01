@@ -11,10 +11,11 @@
 #include "qxrdexperiment.h"
 #include "qxrddataprocessor.h"
 
-QxrdDetectorSettingsPilatus::QxrdDetectorSettingsPilatus(QxrdExperimentWPtr    expt,
-                                         QxrdAcquisitionWPtr   acq,
-                                         int                   detNum) :
-  QxrdDetectorSettings(expt, acq, PilatusDetector, detNum),
+QxrdDetectorSettingsPilatus::QxrdDetectorSettingsPilatus(QxrdApplicationWPtr   app,
+                                                         QxrdExperimentWPtr    expt,
+                                                         QxrdAcquisitionWPtr   acq,
+                                                         int                   detNum) :
+  QxrdDetectorSettings(app, expt, acq, PilatusDetector, detNum),
   m_PilatusHost            (this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
   m_PilatusPort            (this, "pilatusPort",          41234,         "Camserver Port Number"),
   m_PilatusUser            (this, "pilatusUser",          "det",         "Camserver User Name"),

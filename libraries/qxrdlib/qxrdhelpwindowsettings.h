@@ -6,7 +6,7 @@
 class QXRD_EXPORT QxrdHelpWindowSettings : public QxrdMainWindowSettings
 {
 public:
-  Q_INVOKABLE QxrdHelpWindowSettings(QString name);
+  Q_INVOKABLE QxrdHelpWindowSettings(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt);
 };
 
 #endif // QXRDHELPWINDOWSETTINGS_H

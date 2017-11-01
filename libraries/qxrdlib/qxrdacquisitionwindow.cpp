@@ -1,7 +1,7 @@
 #include "qxrdacquisitionwindow.h"
 
-QxrdAcquisitionWindow::QxrdAcquisitionWindow(QWidget *parent) :
-  QxrdMainWindow(parent)
+QxrdAcquisitionWindow::QxrdAcquisitionWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+  QxrdMainWindow(name, app, expt)
 {
   setupUi(this);
 

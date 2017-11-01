@@ -1,7 +1,7 @@
 #include "qxrdcalibrantwindow.h"
 
-QxrdCalibrantWindow::QxrdCalibrantWindow(QWidget *parent) :
-  QxrdMainWindow(parent)
+QxrdCalibrantWindow::QxrdCalibrantWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+  QxrdMainWindow(name, app, expt)
 {
   setupUi(this);
 

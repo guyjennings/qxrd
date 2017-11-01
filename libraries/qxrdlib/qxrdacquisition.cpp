@@ -157,6 +157,15 @@ QxrdExperimentWPtr QxrdAcquisition::experiment() const
   return expt;
 }
 
+QxrdApplicationWPtr QxrdAcquisition::application() const
+{
+  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+
+  QxrdApplicationWPtr appw = QxrdApplicationPtr(app);
+
+  return appw;
+}
+
 QxrdDataProcessorWPtr QxrdAcquisition::dataProcessor() const
 {
   QxrdExperimentPtr expt(experiment());
@@ -306,6 +315,7 @@ void QxrdAcquisition::readSettings(QSettings *settings)
     settings->endGroup();
 
     QxrdDetectorSettingsPtr det = QxrdDetectorSettings::newDetector(
+          application(),
           experiment(), myself(), detType, i);
 
     if (det) {
@@ -338,7 +348,7 @@ void QxrdAcquisition::appendDetector(int detType)
     int nDet = get_DetectorCount();
 
     QxrdDetectorSettingsPtr det =
-        QxrdDetectorSettings::newDetector(experiment(), myself(), detType, nDet);
+        QxrdDetectorSettings::newDetector(application(), experiment(), myself(), detType, nDet);
 
     if (det) {
       m_Detectors.append(det);
@@ -363,7 +373,7 @@ void QxrdAcquisition::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
         int detType = proxy->detectorType();
 
         detector = QxrdDetectorSettings::newDetector(
-              experiment(), myself(), detType, nDet);
+              application(), experiment(), myself(), detType, nDet);
       }
 
       m_Detectors.append(detector);

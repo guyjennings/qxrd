@@ -1,10 +1,11 @@
 #include "qxrddetectorsettingsfilewatcher.h"
 #include <stdio.h>
 
-QxrdDetectorSettingsFileWatcher::QxrdDetectorSettingsFileWatcher(QxrdExperimentWPtr    expt,
-                                                 QxrdAcquisitionWPtr   acq,
-                                                 int                   detNum) :
-  QxrdDetectorSettings(expt, acq, FileWatcherDetector, detNum)
+QxrdDetectorSettingsFileWatcher::QxrdDetectorSettingsFileWatcher(QxrdApplicationWPtr app,
+                                                                 QxrdExperimentWPtr    expt,
+                                                                 QxrdAcquisitionWPtr   acq,
+                                                                 int                   detNum) :
+  QxrdDetectorSettings(app, expt, acq, FileWatcherDetector, detNum)
 {
 }
 

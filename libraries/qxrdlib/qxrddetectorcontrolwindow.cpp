@@ -19,12 +19,13 @@
 #include "qxrdwindow.h"
 #include "qxrdroieditordialog.h"
 
-QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdExperimentWPtr        exp,
+QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
+                                                     QxrdExperimentWPtr        exp,
                                                      QxrdAcquisitionWPtr       acq,
                                                      QxrdDetectorSettingsWPtr          det,
                                                      QxrdDetectorProcessorWPtr proc,
                                                      QWidget                  *parent) :
-  QxrdMainWindow(parent),
+  QxrdMainWindow("detector", appl, exp),
   m_Experiment(exp),
   m_Acquisition(acq),
   m_Detector(det),
