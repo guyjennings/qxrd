@@ -8,6 +8,8 @@
 
 class QXRD_EXPORT QxrdMainWindowSettings : public QcepMainWindowSettings
 {
+  Q_OBJECT
+
 public:
   QxrdMainWindowSettings(QString name,
                          QxrdApplicationPtr app,
@@ -17,5 +19,7 @@ protected:
   QxrdApplicationPtr m_Application;
   QxrdExperimentPtr  m_Experiment;
 };
+
+Q_DECLARE_METATYPE(QxrdMainWindowSettings*)
 
 #endif // QXRDMAINWINDOWSETTINGS_H

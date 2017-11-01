@@ -47,6 +47,20 @@
 #include "qxrdgeneratetestimage.h"
 #include "qxrdjsengine.h"
 
+#include "qxrdacquisitionwindowsettings.h"
+#include "qxrdinfowindowsettings.h"
+#include "qxrdanalysiswindowsettings.h"
+#include "qxrdintegrationwindowsettings.h"
+#include "qxrdcalculatorwindowsettings.h"
+#include "qxrdmainwindowsettings.h"
+#include "qxrdcalibrantwindowsettings.h"
+#include "qxrdmaskingwindowsettings.h"
+#include "qxrdcenteringwindowsettings.h"
+#include "qxrdscriptingwindowsettings.h"
+#include "qxrddetectorcontrolwindowsettings.h"
+#include "qxrdwindowsettings.h"
+#include "qxrdhelpwindowsettings.h"
+
 QxrdExperiment::QxrdExperiment(QString name) :
   QcepExperiment("", name),
   m_Application(),
@@ -487,6 +501,18 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QcepDataExportParameters*>("QcepDataExportParameters*");
   qRegisterMetaType<QcepDataImportParameters*>("QcepDataImportParameters*");
   qRegisterMetaType<QxrdGenerateTestImage*>("QxrdGenerateTestImage*");
+  qRegisterMetaType<QxrdMainWindowSettings*>("QxrdMainWindowSettings*");
+  qRegisterMetaType<QxrdAcquisitionWindowSettings*>("QxrdAcquisitionWindowSettings*");
+  qRegisterMetaType<QxrdAnalysisWindowSettings*>("QxrdAnalysisWindowSettings*");
+  qRegisterMetaType<QxrdInfoWindowSettings*>("QxrdInfoWindowSettings*");
+  qRegisterMetaType<QxrdCalculatorWindowSettings*>("QxrdCalculatorWindowSettings*");
+  qRegisterMetaType<QxrdCalibrantWindowSettings*>("QxrdCalibrantWindowSettings*");
+  qRegisterMetaType<QxrdHelpWindowSettings*>("QxrdHelpWindowSettings*");
+  qRegisterMetaType<QxrdCenteringWindowSettings*>("QxrdCenteringWindowSettings*");
+  qRegisterMetaType<QxrdIntegrationWindowSettings*>("QxrdIntegrationWindowSettings*");
+  qRegisterMetaType<QxrdMaskingWindowSettings*>("QxrdMaskingWindowSettings*");
+  qRegisterMetaType<QxrdScriptingWindowSettings*>("QxrdScriptingWindowSettings*");
+  qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
 }
 
 void QxrdExperiment::setExperimentApplication(QxrdApplicationWPtr app)
@@ -667,6 +693,16 @@ void QxrdExperiment::displayPushedMessages() const
 void QxrdExperiment::pushMessage(QString msg) const
 {
   m_PushedMessages.append(msg);
+}
+
+QxrdApplicationWPtr QxrdExperiment::application() const
+{
+  return m_Application;
+}
+
+QxrdExperimentWPtr QxrdExperiment::experiment()
+{
+  return qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis());
 }
 
 QxrdWindowPtr QxrdExperiment::window()
@@ -1417,4 +1453,16 @@ void QxrdExperiment::readObjectTreeFromText(QString filePath)
   } else {
     printMessage("NULL");
   }
+}
+
+void QxrdExperiment::defaultWindowSettings()
+{
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdAcquisitionWindowSettings("acquisition", application(), experiment())));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdAnalysisWindowSettings("analysis", application(), experiment())));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdCalculatorWindowSettings("calculator", application(), experiment())));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdCalibrantWindowSettings("calibrant", application(), experiment())));
 }

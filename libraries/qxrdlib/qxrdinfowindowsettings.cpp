@@ -1,7 +1,7 @@
 #include "qxrdinfowindowsettings.h"
 
-QxrdInfoWindowSettings::QxrdInfoWindowSettings(QString name)
-  : QcepMainWindowSettings(name)
+QxrdInfoWindowSettings::QxrdInfoWindowSettings(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt)
+  : QxrdMainWindowSettings(name, app, expt)
 {
 
 }

@@ -71,7 +71,9 @@ public:
 
   void setExperimentApplication(QxrdApplicationWPtr app);
 
+  QxrdApplicationWPtr application() const;
   QxrdExperimentThreadPtr experimentThread() const;
+  QxrdExperimentWPtr experiment();
   QxrdAcquisitionWPtr acquisition() const;
   QxrdWindowPtr window();
   QxrdDataProcessorWPtr dataProcessor() const;
@@ -156,6 +158,8 @@ public slots:
 //  void openAcquisitionWindow();
 
   void onAutoSaveTimer();
+
+  void defaultWindowSettings();
 
 private:
   void closeLogFile() const;
