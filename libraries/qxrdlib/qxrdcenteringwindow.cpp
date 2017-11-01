@@ -1,6 +1,6 @@
 #include "qxrdcenteringwindow.h"
 
-QxrdCenteringWindow::QxrdCenteringWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+QxrdCenteringWindow::QxrdCenteringWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
   QxrdMainWindow(name, app, expt)
 {
   setupUi(this);

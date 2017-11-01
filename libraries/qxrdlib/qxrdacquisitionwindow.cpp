@@ -1,6 +1,6 @@
 #include "qxrdacquisitionwindow.h"
 
-QxrdAcquisitionWindow::QxrdAcquisitionWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+QxrdAcquisitionWindow::QxrdAcquisitionWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
   QxrdMainWindow(name, app, expt)
 {
   setupUi(this);

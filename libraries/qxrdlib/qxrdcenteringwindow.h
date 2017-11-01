@@ -11,8 +11,8 @@ class QXRD_EXPORT QxrdCenteringWindow : public QxrdMainWindow, public Ui::QxrdCe
 
 public:
   explicit QxrdCenteringWindow(QString name,
-                               QxrdApplicationPtr app,
-                               QxrdExperimentPtr expt);
+                               QxrdApplicationWPtr app,
+                               QxrdExperimentWPtr expt);
   ~QxrdCenteringWindow();
 
 protected:

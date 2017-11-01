@@ -1,6 +1,6 @@
 #include "qxrdintegrationwindow.h"
 
-QxrdIntegrationWindow::QxrdIntegrationWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+QxrdIntegrationWindow::QxrdIntegrationWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
   QxrdMainWindow(name, app, expt)
 {
   setupUi(this);

@@ -1,6 +1,6 @@
 #include "qxrdcalculatorwindow.h"
 
-QxrdCalculatorWindow::QxrdCalculatorWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+QxrdCalculatorWindow::QxrdCalculatorWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
   QxrdMainWindow(name, app, expt)
 {
   setupUi(this);

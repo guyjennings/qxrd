@@ -11,8 +11,8 @@ class QXRD_EXPORT QxrdAcquisitionWindow : public QxrdMainWindow, public Ui::Qxrd
 
 public:
   explicit QxrdAcquisitionWindow(QString name,
-                                 QxrdApplicationPtr app,
-                                 QxrdExperimentPtr expt);
+                                 QxrdApplicationWPtr app,
+                                 QxrdExperimentWPtr expt);
   ~QxrdAcquisitionWindow();
 
 protected:

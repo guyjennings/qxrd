@@ -1,6 +1,6 @@
 #include "qxrdinfowindow.h"
 
-QxrdInfoWindow::QxrdInfoWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+QxrdInfoWindow::QxrdInfoWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
   QxrdMainWindow(name, app, expt)
 {
   setupUi(this);

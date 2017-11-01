@@ -11,8 +11,8 @@ class QXRD_EXPORT QxrdMainWindow : public QcepMainWindow
   Q_OBJECT
 public:
   explicit QxrdMainWindow(QString name,
-                          QxrdApplicationPtr app,
-                          QxrdExperimentPtr expt);
+                          QxrdApplicationWPtr app,
+                          QxrdExperimentWPtr expt);
 
   virtual void setupMenus();
 
@@ -23,12 +23,13 @@ public:
 
 public slots:
   void populateWindowsMenu();
+  void newWindow();
 
 protected:
-  QxrdApplicationPtr m_Application;
-  QxrdExperimentPtr  m_Experiment;
-
-  QMenu *m_MainWindowsMenu;
+  QString             m_Name;
+  QxrdApplicationWPtr m_Application;
+  QxrdExperimentWPtr  m_Experiment;
+  QMenu              *m_MainWindowsMenu;
 };
 
 #endif // QXRDMAINWINDOW_H

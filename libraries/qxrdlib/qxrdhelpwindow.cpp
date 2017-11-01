@@ -1,7 +1,7 @@
 #include "qxrdhelpwindow.h"
 #include "ui_qxrdhelpwindow.h"
 
-QxrdHelpWindow::QxrdHelpWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+QxrdHelpWindow::QxrdHelpWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
   QxrdMainWindow(name, app, expt)
 {
   setupUi(this);

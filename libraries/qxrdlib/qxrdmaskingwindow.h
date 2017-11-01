@@ -11,8 +11,8 @@ class QXRD_EXPORT QxrdMaskingWindow : public QxrdMainWindow, public Ui::QxrdMask
 
 public:
   explicit QxrdMaskingWindow(QString name,
-                             QxrdApplicationPtr app,
-                             QxrdExperimentPtr expt);
+                             QxrdApplicationWPtr app,
+                             QxrdExperimentWPtr expt);
   ~QxrdMaskingWindow();
 
 protected:

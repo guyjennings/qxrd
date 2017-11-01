@@ -328,7 +328,9 @@ HEADERS += qxrdlib.h\
     qxrdintegrationwindowsettings.h \
     qxrdmaskingwindowsettings.h \
     qxrdscriptingwindowsettings.h \
-    qxrdmainwindowsettings.h
+    qxrdmainwindowsettings.h \
+    qxrdmainwindowsettings-ptr.h \
+    qxrdmainwindow-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

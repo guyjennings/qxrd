@@ -11,8 +11,8 @@ class QXRD_EXPORT QxrdCalibrantWindow : public QxrdMainWindow, public Ui::QxrdCa
 
 public:
   explicit QxrdCalibrantWindow(QString name,
-                               QxrdApplicationPtr app,
-                               QxrdExperimentPtr expt);
+                               QxrdApplicationWPtr app,
+                               QxrdExperimentWPtr expt);
   ~QxrdCalibrantWindow();
 
 protected:

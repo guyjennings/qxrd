@@ -11,8 +11,8 @@ class QXRD_EXPORT QxrdScriptingWindow : public QxrdMainWindow, public Ui::QxrdSc
 
 public:
   explicit QxrdScriptingWindow(QString name,
-                               QxrdApplicationPtr app,
-                               QxrdExperimentPtr expt);
+                               QxrdApplicationWPtr app,
+                               QxrdExperimentWPtr expt);
   ~QxrdScriptingWindow();
 
 protected:

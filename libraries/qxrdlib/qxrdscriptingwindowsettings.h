@@ -8,7 +8,9 @@ class QXRD_EXPORT QxrdScriptingWindowSettings : public QxrdMainWindowSettings
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdScriptingWindowSettings(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt);
+  Q_INVOKABLE QxrdScriptingWindowSettings(QString name);
+
+  QxrdMainWindowPtr newWindow();
 };
 
 Q_DECLARE_METATYPE(QxrdScriptingWindowSettings*)

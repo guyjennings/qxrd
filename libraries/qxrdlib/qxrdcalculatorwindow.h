@@ -11,8 +11,8 @@ class QXRD_EXPORT QxrdCalculatorWindow : public QxrdMainWindow, public Ui::QxrdC
 
 public:
   explicit QxrdCalculatorWindow(QString name,
-                                QxrdApplicationPtr app,
-                                QxrdExperimentPtr expt);
+                                QxrdApplicationWPtr app,
+                                QxrdExperimentWPtr expt);
   ~QxrdCalculatorWindow();
 
 protected:

@@ -1,6 +1,6 @@
 #include "qxrdanalysiswindow.h"
 
-QxrdAnalysisWindow::QxrdAnalysisWindow(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt) :
+QxrdAnalysisWindow::QxrdAnalysisWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
   QxrdMainWindow(name, app, expt)
 {
   setupUi(this);

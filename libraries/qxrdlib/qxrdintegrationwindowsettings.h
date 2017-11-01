@@ -8,7 +8,9 @@ class QXRD_EXPORT QxrdIntegrationWindowSettings : public QxrdMainWindowSettings
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdIntegrationWindowSettings(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt);
+  Q_INVOKABLE QxrdIntegrationWindowSettings(QString name);
+
+  QxrdMainWindowPtr newWindow();
 };
 
 Q_DECLARE_METATYPE(QxrdIntegrationWindowSettings*)

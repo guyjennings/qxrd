@@ -47,6 +47,7 @@
 #include "qxrdgeneratetestimage.h"
 #include "qxrdjsengine.h"
 
+#include "qxrdmainwindowsettings-ptr.h"
 #include "qxrdacquisitionwindowsettings.h"
 #include "qxrdinfowindowsettings.h"
 #include "qxrdanalysiswindowsettings.h"
@@ -1093,6 +1094,15 @@ void QxrdExperiment::readSettings(QSettings *settings)
     if (get_QxrdVersion() != STR(QXRD_VERSION)) {
       set_QxrdVersion(STR(QXRD_VERSION));
     }
+
+    for (int i=0; i<windowSettingsCount(); i++) {
+      QxrdMainWindowSettingsPtr set =
+          qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(i));
+
+      if (set) {
+        set->initialize(application(), experiment());
+      }
+    }
   }
 
   //  if (qcepDebug(DEBUG_PREFS)) {
@@ -1458,11 +1468,21 @@ void QxrdExperiment::readObjectTreeFromText(QString filePath)
 void QxrdExperiment::defaultWindowSettings()
 {
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAcquisitionWindowSettings("acquisition", application(), experiment())));
+                         new QxrdAcquisitionWindowSettings("acquisition")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAnalysisWindowSettings("analysis", application(), experiment())));
+                         new QxrdAnalysisWindowSettings("analysis")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCalculatorWindowSettings("calculator", application(), experiment())));
+                         new QxrdCalculatorWindowSettings("calculator")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCalibrantWindowSettings("calibrant", application(), experiment())));
+                         new QxrdCalibrantWindowSettings("calibrant")));
+
+  for (int i=0; i<4; i++) {
+    QxrdMainWindowSettingsPtr set =
+        qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(i));
+
+
+    if (set) {
+      set -> initialize(application(), experiment());
+    }
+  }
 }

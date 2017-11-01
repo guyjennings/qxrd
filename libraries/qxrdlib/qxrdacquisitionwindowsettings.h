@@ -8,8 +8,9 @@ class QXRD_EXPORT QxrdAcquisitionWindowSettings : public QxrdMainWindowSettings
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdAcquisitionWindowSettings(QString name, QxrdApplicationPtr app, QxrdExperimentPtr expt);
+  Q_INVOKABLE QxrdAcquisitionWindowSettings(QString name);
 
+  QxrdMainWindowPtr newWindow();
 };
 
 Q_DECLARE_METATYPE(QxrdAcquisitionWindowSettings*)
