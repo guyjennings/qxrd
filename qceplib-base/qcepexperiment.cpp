@@ -245,6 +245,11 @@ void QcepExperiment::writeSettings(QSettings *settings)
   }
 }
 
+int QcepExperiment::windowSettingsCount()
+{
+  return m_WindowSettings.count();
+}
+
 QcepMainWindowSettingsPtr QcepExperiment::windowSettings(int n)
 {
   return m_WindowSettings.value(n);

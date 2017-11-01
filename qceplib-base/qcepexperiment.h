@@ -46,6 +46,7 @@ public:
 
   void appendWindowSettings(QcepMainWindowSettingsPtr settings);
   QcepMainWindowSettingsPtr windowSettings(int n);
+  int windowSettingsCount();
 
 protected:
 //  QcepSettingsSaverPtr            m_SettingsSaver;
