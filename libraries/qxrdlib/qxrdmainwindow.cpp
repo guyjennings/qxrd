@@ -37,3 +37,19 @@ void QxrdMainWindow::populateWindowsMenu()
                              &QxrdAcquisitionWindow::newWindow*/);
   }
 }
+
+void QxrdMainWindow::printLine(QString line)
+{
+}
+
+void QxrdMainWindow::printMessage(QString msg, QDateTime ts)
+{
+}
+
+void QxrdMainWindow::criticalMessage(QString msg, QDateTime ts)
+{
+}
+
+void QxrdMainWindow::statusMessage(QString msg, QDateTime ts)
+{
+}

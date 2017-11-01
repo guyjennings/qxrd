@@ -1144,7 +1144,7 @@
      <x>0</x>
      <y>0</y>
      <width>921</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -1314,8 +1314,25 @@
     </property>
     <addaction name="m_ActionPlaceholder"/>
    </widget>
+   <widget class="QMenu" name="m_WindowMenu">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <widget class="QMenu" name="menuNew">
+     <property name="title">
+      <string>New</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="m_ActionNewAcquireWindow"/>
+    <addaction name="m_ActionNewAnalysisWindow"/>
+    <addaction name="m_ActionNewCalibrantWindow"/>
+    <addaction name="separator"/>
+    <addaction name="menuNew"/>
+   </widget>
    <addaction name="m_FileMenu"/>
    <addaction name="m_EditMenu"/>
+   <addaction name="m_WindowMenu"/>
    <addaction name="m_DetectorsMenu"/>
    <addaction name="m_OperationsMenu"/>
    <addaction name="m_CalibrationMenu"/>
@@ -2136,6 +2153,27 @@
   <action name="m_ActionNewTestScanGenerator">
    <property name="text">
     <string>New Test &amp;Scan Generator</string>
+   </property>
+  </action>
+  <action name="m_ActionNewAcquireWindow">
+   <property name="text">
+    <string>New Acquire Window</string>
+   </property>
+  </action>
+  <action name="m_ActionNewAnalysisWindow">
+   <property name="text">
+    <string>New Analysis Window</string>
+   </property>
+   <property name="toolTip">
+    <string>New Analysis Window</string>
+   </property>
+  </action>
+  <action name="m_ActionNewCalibrantWindow">
+   <property name="text">
+    <string>New Calibrant Window</string>
+   </property>
+   <property name="toolTip">
+    <string>New Calibrant Window</string>
    </property>
   </action>
  </widget>

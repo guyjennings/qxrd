@@ -16,6 +16,11 @@ public:
 
   virtual void setupMenus();
 
+  void printLine(QString line);
+  void printMessage(QString msg, QDateTime ts);
+  void criticalMessage(QString msg, QDateTime ts);
+  void statusMessage(QString msg, QDateTime ts);
+
 public slots:
   void populateWindowsMenu();
 

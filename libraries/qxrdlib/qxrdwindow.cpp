@@ -769,6 +769,20 @@ QxrdWindow::~QxrdWindow()
   }
 }
 
+void QxrdWindow::setupMenus()
+{
+  QxrdMainWindow::setupMenus();
+
+  connect(m_ActionNewAcquireWindow, &QAction::triggered,
+          this, &QxrdWindow::newAcquireWindow);
+
+  connect(m_ActionNewAnalysisWindow, &QAction::triggered,
+          this, &QxrdWindow::newAnalysisWindow);
+
+  connect(m_ActionNewCalibrantWindow, &QAction::triggered,
+          this, &QxrdWindow::newCalibrantWindow);
+}
+
 void QxrdWindow::updateTitle()
 {
   QString title;
@@ -827,6 +841,11 @@ void QxrdWindow::setupRecentExperimentsMenu(QAction *action)
   action->setMenu(m_RecentExperimentsMenu);
 
   connect(m_RecentExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateRecentExperimentsMenu);
+}
+
+void QxrdWindow::populateWindowMenu()
+{
+  printMessage("populate window menu");
 }
 
 void QxrdWindow::populateExperimentsMenu()
@@ -2427,4 +2446,34 @@ void QxrdWindow::doNewTestScanGenerator()
 
   win -> setWindowTitle(tr("Test Scan Generator %1").arg(s_TestScanCount++));
   win -> show();
+}
+
+#include "qxrdacquisitionwindow.h"
+
+void QxrdWindow::newAcquireWindow()
+{
+  QxrdAcquisitionWindow *acq =
+      new QxrdAcquisitionWindow("Acquisition", m_Application, m_Experiment);
+
+  acq->show();
+}
+
+#include "qxrdanalysiswindow.h"
+
+void QxrdWindow::newAnalysisWindow()
+{
+  QxrdAnalysisWindow *an =
+      new QxrdAnalysisWindow("Analysis", m_Application, m_Experiment);
+
+  an->show();
+}
+
+#include "qxrdcalibrantwindow.h"
+
+void QxrdWindow::newCalibrantWindow()
+{
+  QxrdCalibrantWindow *cal =
+      new QxrdCalibrantWindow("Calibrant", m_Application, m_Experiment);
+
+  cal->show();
 }

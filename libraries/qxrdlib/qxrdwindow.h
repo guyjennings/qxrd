@@ -53,6 +53,7 @@ public:
              QWidget *parent);
   virtual ~QxrdWindow();
   void initialize();
+  void setupMenus();
 
   void onAcquisitionInit();
 
@@ -147,6 +148,7 @@ private slots:
   void integrationXUnitsChanged(int newXUnits);
   void onMessageWindowLinesChanged(int newVal);
   void onUpdateIntervalMsecChanged(int newVal);
+  void populateWindowMenu();
   void populateExperimentsMenu();
   void populateEditMenu();
   void populateRecentExperimentsMenu();
@@ -155,6 +157,10 @@ private slots:
   void plotPowderRingRadii();
   void plotPowderRingTwoTheta();
   void plotPowderRingCenters();
+
+  void newAcquireWindow();
+  void newAnalysisWindow();
+  void newCalibrantWindow();
 
 public:
   void closeEvent (QCloseEvent * event);
