@@ -162,6 +162,7 @@ public slots:
   void defaultWindowSettings();
 
 private:
+
   void closeLogFile() const;
   void openLogFile() const;
   void readInitialLogFile();

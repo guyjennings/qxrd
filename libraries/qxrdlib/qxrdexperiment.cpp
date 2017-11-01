@@ -1095,14 +1095,7 @@ void QxrdExperiment::readSettings(QSettings *settings)
       set_QxrdVersion(STR(QXRD_VERSION));
     }
 
-    for (int i=0; i<windowSettingsCount(); i++) {
-      QxrdMainWindowSettingsPtr set =
-          qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(i));
-
-      if (set) {
-        set->initialize(application(), experiment());
-      }
-    }
+    defaultWindowSettings();
   }
 
   //  if (qcepDebug(DEBUG_PREFS)) {
@@ -1468,18 +1461,29 @@ void QxrdExperiment::readObjectTreeFromText(QString filePath)
 void QxrdExperiment::defaultWindowSettings()
 {
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAcquisitionWindowSettings("acquisition")));
+                         new QxrdAcquisitionWindowSettings("Acquisition")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAnalysisWindowSettings("analysis")));
+                         new QxrdAnalysisWindowSettings("Analysis")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCalculatorWindowSettings("calculator")));
+                         new QxrdCalculatorWindowSettings("Calculator")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCalibrantWindowSettings("calibrant")));
+                         new QxrdCalibrantWindowSettings("Calibrant")));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdCenteringWindowSettings("Centering")));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdHelpWindowSettings("Help")));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdInfoWindowSettings("Info")));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdIntegrationWindowSettings("Integration")));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdMaskingWindowSettings("Masking")));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdScriptingWindowSettings("Scripting")));
 
-  for (int i=0; i<4; i++) {
+  for (int i=0; i<windowSettingsCount(); i++) {
     QxrdMainWindowSettingsPtr set =
         qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(i));
-
 
     if (set) {
       set -> initialize(application(), experiment());

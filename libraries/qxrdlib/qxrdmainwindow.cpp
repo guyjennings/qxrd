@@ -107,6 +107,8 @@ void QxrdMainWindow::newWindow()
 
       if (win) {
         win->show();
+        win->raise();
+        win->activateWindow();
       }
     }
   }
