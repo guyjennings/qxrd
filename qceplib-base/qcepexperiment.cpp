@@ -249,3 +249,8 @@ QcepMainWindowSettingsPtr QcepExperiment::windowSettings(int n)
 {
   return m_WindowSettings.value(n);
 }
+
+void QcepExperiment::appendWindowSettings(QcepMainWindowSettingsPtr settings)
+{
+  m_WindowSettings.append(settings);
+}

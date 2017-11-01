@@ -44,6 +44,7 @@ public slots:
 public:
   QUndoStack *undoStack();
 
+  void appendWindowSettings(QcepMainWindowSettingsPtr settings);
   QcepMainWindowSettingsPtr windowSettings(int n);
 
 protected:
