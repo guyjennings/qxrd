@@ -257,5 +257,15 @@ QcepMainWindowSettingsPtr QcepExperiment::windowSettings(int n)
 
 void QcepExperiment::appendWindowSettings(QcepMainWindowSettingsPtr settings)
 {
-  m_WindowSettings.append(settings);
+  if (settings) {
+    for (int i=0; i<windowSettingsCount(); i++) {
+      QcepMainWindowSettingsPtr set = windowSettings(i);
+
+      if (set && set->className() == settings->className()) {
+        return;
+      }
+    }
+
+    m_WindowSettings.append(settings);
+  }
 }
