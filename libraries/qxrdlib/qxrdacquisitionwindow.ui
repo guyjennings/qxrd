@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -37,12 +37,18 @@
     <property name="title">
      <string>Window</string>
     </property>
+    <addaction name="actionWindows"/>
    </widget>
    <addaction name="m_FileMenu"/>
    <addaction name="m_EditMenu"/>
    <addaction name="m_WindowMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionWindows">
+   <property name="text">
+    <string>Windows</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
