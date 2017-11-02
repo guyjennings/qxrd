@@ -288,27 +288,27 @@ void QxrdWindow::initialize()
     tabifyDockWidget(m_HistogramDialog, m_ImageInfoDialog);
     tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
 
-    if (screenGeom.height() < 1000) {
-      //      shrinkObject(this);
-      shrinkPanels(6,1);
-    }
+//    if (screenGeom.height() < 1000) {
+//      //      shrinkObject(this);
+//      shrinkPanels(6,1);
+//    }
   }
 
-  if (expt) {
-    int fs = expt->get_FontSize();
-    int sp = expt->get_Spacing();
+//  if (expt) {
+//    int fs = expt->get_FontSize();
+//    int sp = expt->get_Spacing();
 
-    if (fs > 0) {
-      setFontSize(fs);
-    }
+//    if (fs > 0) {
+//      setFontSize(fs);
+//    }
 
-    if (sp >= 0) {
-      setSpacing(sp);
-    }
+//    if (sp >= 0) {
+//      setSpacing(sp);
+//    }
 
-    connect(expt->prop_FontSize(), &QcepIntProperty::valueChanged, this, &QxrdWindow::setFontSize);
-    connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdWindow::setSpacing);
-  }
+//    connect(expt->prop_FontSize(), &QcepIntProperty::valueChanged, this, &QxrdWindow::setFontSize);
+//    connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdWindow::setSpacing);
+//  }
 
   //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
   //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
