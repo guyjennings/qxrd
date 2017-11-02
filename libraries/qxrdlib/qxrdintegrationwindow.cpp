@@ -5,7 +5,7 @@ QxrdIntegrationWindow::QxrdIntegrationWindow(QString name, QxrdApplicationWPtr a
 {
   setupUi(this);
 
-  setupMenus();
+  setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 }
 
 QxrdIntegrationWindow::~QxrdIntegrationWindow()

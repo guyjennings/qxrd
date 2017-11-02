@@ -23,6 +23,24 @@
      <height>24</height>
     </rect>
    </property>
+   <widget class="QMenu" name="m_FileMenu">
+    <property name="title">
+     <string>Fi&amp;le</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="m_EditMenu">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="m_WindowMenu">
+    <property name="title">
+     <string>Window</string>
+    </property>
+   </widget>
+   <addaction name="m_FileMenu"/>
+   <addaction name="m_EditMenu"/>
+   <addaction name="m_WindowMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

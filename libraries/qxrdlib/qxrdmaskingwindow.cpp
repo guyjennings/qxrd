@@ -5,7 +5,7 @@ QxrdMaskingWindow::QxrdMaskingWindow(QString name, QxrdApplicationWPtr app, Qxrd
 {
   setupUi(this);
 
-  setupMenus();
+  setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 }
 
 QxrdMaskingWindow::~QxrdMaskingWindow()

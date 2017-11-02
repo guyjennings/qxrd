@@ -5,7 +5,7 @@ QxrdCenteringWindow::QxrdCenteringWindow(QString name, QxrdApplicationWPtr app, 
 {
   setupUi(this);
 
-  setupMenus();
+  setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 }
 
 QxrdCenteringWindow::~QxrdCenteringWindow()

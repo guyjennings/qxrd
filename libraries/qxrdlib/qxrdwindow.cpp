@@ -771,16 +771,7 @@ QxrdWindow::~QxrdWindow()
 
 void QxrdWindow::setupMenus()
 {
-  QxrdMainWindow::setupMenus();
-
-  connect(m_ActionNewAcquireWindow, &QAction::triggered,
-          this, &QxrdWindow::newAcquireWindow);
-
-  connect(m_ActionNewAnalysisWindow, &QAction::triggered,
-          this, &QxrdWindow::newAnalysisWindow);
-
-  connect(m_ActionNewCalibrantWindow, &QAction::triggered,
-          this, &QxrdWindow::newCalibrantWindow);
+  QxrdMainWindow::setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 }
 
 void QxrdWindow::updateTitle()

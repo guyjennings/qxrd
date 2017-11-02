@@ -14,7 +14,7 @@ public:
                           QxrdApplicationWPtr app,
                           QxrdExperimentWPtr expt);
 
-  virtual void setupMenus();
+  virtual void setupMenus(QMenu *file, QMenu *edit, QMenu *window);
 
   void printLine(QString line);
   void printMessage(QString msg, QDateTime ts);
@@ -29,7 +29,9 @@ protected:
   QString             m_Name;
   QxrdApplicationWPtr m_Application;
   QxrdExperimentWPtr  m_Experiment;
-  QMenu              *m_MainWindowsMenu;
+  QMenu              *m_FileMenuP;
+  QMenu              *m_EditMenuP;
+  QMenu              *m_WindowMenuP;
 };
 
 #endif // QXRDMAINWINDOW_H

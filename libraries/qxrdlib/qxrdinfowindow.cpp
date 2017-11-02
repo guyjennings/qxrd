@@ -5,7 +5,7 @@ QxrdInfoWindow::QxrdInfoWindow(QString name, QxrdApplicationWPtr app, QxrdExperi
 {
   setupUi(this);
 
-  setupMenus();
+  setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 }
 
 QxrdInfoWindow::~QxrdInfoWindow()

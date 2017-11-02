@@ -5,7 +5,7 @@ QxrdCalculatorWindow::QxrdCalculatorWindow(QString name, QxrdApplicationWPtr app
 {
   setupUi(this);
 
-  setupMenus();
+  setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 }
 
 QxrdCalculatorWindow::~QxrdCalculatorWindow()

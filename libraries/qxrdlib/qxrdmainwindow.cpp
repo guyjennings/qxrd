@@ -12,12 +12,18 @@ QxrdMainWindow::QxrdMainWindow(QString name, QxrdApplicationWPtr app, QxrdExperi
     m_Name(name),
     m_Application(app),
     m_Experiment(expt),
-    m_MainWindowsMenu(NULL)
+    m_FileMenuP(NULL),
+    m_EditMenuP(NULL),
+    m_WindowMenuP(NULL)
 {
 }
 
-void QxrdMainWindow::setupMenus()
+void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
 {
+  m_FileMenuP = file;
+  m_EditMenuP = edit;
+  m_WindowMenuP = window;
+
   QxrdExperimentPtr exper(m_Experiment);
   QString title;
 
@@ -40,17 +46,10 @@ void QxrdMainWindow::setupMenus()
 
   setWindowTitle(title);
 
-  QMenuBar *mbar = menuBar();
-
-  if (mbar) {
-    mbar->addSeparator();
-
-    m_MainWindowsMenu = new QMenu("xxx");
-
-    mbar->addMenu(m_MainWindowsMenu);
-
-    connect(m_MainWindowsMenu,  &QMenu::aboutToShow,
+  if (m_WindowMenuP) {
+    connect(m_WindowMenuP,  &QMenu::aboutToShow,
             this, &QxrdMainWindow::populateWindowsMenu);
+
   }
 }
 
@@ -58,8 +57,8 @@ void QxrdMainWindow::populateWindowsMenu()
 {
   QxrdExperimentPtr expt(m_Experiment);
 
-  if (expt && m_MainWindowsMenu) {
-    m_MainWindowsMenu->clear();
+  if (expt && m_WindowMenuP) {
+    m_WindowMenuP->clear();
 
     for (int i=0; i<expt->windowSettingsCount(); i++) {
       QxrdMainWindowSettingsPtr set =
@@ -70,10 +69,10 @@ void QxrdMainWindow::populateWindowsMenu()
         QAction *act = NULL;
 
         if (win) {
-          act = m_MainWindowsMenu ->
+          act = m_WindowMenuP ->
               addAction(tr("Show %1 Window").arg(set->get_Name()), this, &QxrdMainWindow::newWindow);
         } else {
-          act = m_MainWindowsMenu ->
+          act = m_WindowMenuP ->
               addAction(tr("New %1 Window").arg(set->get_Name()), this, &QxrdMainWindow::newWindow);
         }
 

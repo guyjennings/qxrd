@@ -5,7 +5,7 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QString name, QxrdApplicationWPtr a
 {
   setupUi(this);
 
-  setupMenus();
+  setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 }
 
 QxrdAcquisitionWindow::~QxrdAcquisitionWindow()

@@ -5,7 +5,7 @@ QxrdAnalysisWindow::QxrdAnalysisWindow(QString name, QxrdApplicationWPtr app, Qx
 {
   setupUi(this);
 
-  setupMenus();
+  setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 }
 
 QxrdAnalysisWindow::~QxrdAnalysisWindow()
