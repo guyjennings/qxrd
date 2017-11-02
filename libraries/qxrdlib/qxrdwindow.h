@@ -58,11 +58,8 @@ public:
   void onAcquisitionInit();
 
 public slots:
-  void saveExperimentCopy();
-  void saveExperimentAs();
   void doSaveExperimentAsText();
   void doReadObjectTreeFromText();
-  void doEditPreferences();
   void doEditDetectorPreferences();
   void doSaveData();
   void doLoadData();
@@ -149,9 +146,7 @@ private slots:
   void onMessageWindowLinesChanged(int newVal);
   void onUpdateIntervalMsecChanged(int newVal);
   void populateWindowMenu();
-  void populateExperimentsMenu();
   void populateEditMenu();
-  void populateRecentExperimentsMenu();
   void populateConfigureDetectorMenu();
   void populateDetectorControlWindowsMenu();
   void plotPowderRingRadii();
@@ -178,9 +173,6 @@ public:
   void captureSize();
   void resizeEvent(QResizeEvent *);
   void moveEvent(QMoveEvent *);
-
-private:
-  void setupRecentExperimentsMenu(QAction *action);
 
 private:
   QcepObjectNamer                        m_ObjectNamer;

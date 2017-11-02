@@ -24,6 +24,7 @@
 #include "qcepmutexlocker.h"
 #include "qcepallocator.h"
 #include "qxrdimagedisplaywidget.h"
+#include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdsynchronizedacquisitiondialog.h"
 #include "qxrdcorrectiondialog.h"
 #include "qxrdslicedialog.h"
@@ -31,7 +32,6 @@
 #include "qxrdinfodialog.h"
 #include "qxrdscriptdialog.h"
 #include "qxrdhighlighter.h"
-#include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisitionextrainputsdialog.h"
 #include "qxrdacquisitionscalerdialog.h"
 #include "qxrdtodolist.h"
@@ -323,34 +323,17 @@ void QxrdWindow::initialize()
   connect(m_ActionLoadScript, &QAction::triggered, this, &QxrdWindow::doLoadScript);
 
   connect(m_ActionAutoScale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::autoScale);
-  connect(m_ActionExperimentPreferences, &QAction::triggered, this, &QxrdWindow::doEditPreferences);
 
   if (app) {
-    connect(m_ActionQuit, &QAction::triggered, app.data(), &QxrdApplication::possiblyQuit);
-    connect(m_ActionGlobalPreferences, &QAction::triggered, app.data(), &QxrdApplication::editGlobalPreferences);
     connect(m_ActionLoadPreferences, &QAction::triggered, app.data(), &QxrdApplication::doLoadPreferences);
     connect(m_ActionSavePreferences, &QAction::triggered, app.data(), &QxrdApplication::doSavePreferences);
-
-    connect(m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdApplication::createNewExperiment);
-    connect(m_ActionOpenExperiment, &QAction::triggered, app.data(), &QxrdApplication::chooseExistingExperiment);
-    connect(m_ActionCloseExperiment, &QAction::triggered, this, &QWidget::close);
   }
 
-  if (expt) {
-    connect(m_ActionSaveExperiment, &QAction::triggered, expt.data(), &QxrdExperiment::saveExperiment);
-//    connect(m_ActionOpenDetectorControlWindow, &QAction::triggered, this, &QxrdWindow::doOpenAcquisitionWindow);
-  }
-
-  connect(m_ActionSaveExperimentAs, &QAction::triggered, this, &QxrdWindow::saveExperimentAs);
-  connect(m_ActionSaveExperimentCopy, &QAction::triggered, this, &QxrdWindow::saveExperimentCopy);
   connect(m_ActionSaveExperimentAsText, &QAction::triggered, this, &QxrdWindow::doSaveExperimentAsText);
 
   connect(m_ActionReadObjectTreeFromText, &QAction::triggered, this, &QxrdWindow::doReadObjectTreeFromText);
 
   m_ExperimentsMenu->menuAction()->setMenuRole(QAction::NoRole);
-
-  connect(m_ExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateExperimentsMenu);
-  setupRecentExperimentsMenu(m_ActionRecentExperiments);
 
   connect(m_EditMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateEditMenu);
   connect(m_ActionUndo, &QAction::triggered, this, &QxrdWindow::doUndo);
@@ -825,75 +808,9 @@ void QxrdWindow::closeEvent ( QCloseEvent * event )
   }
 }
 
-void QxrdWindow::setupRecentExperimentsMenu(QAction *action)
-{
-  m_RecentExperimentsMenu = new QMenu(this);
-
-  action->setMenu(m_RecentExperimentsMenu);
-
-  connect(m_RecentExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateRecentExperimentsMenu);
-}
-
 void QxrdWindow::populateWindowMenu()
 {
   printMessage("populate window menu");
-}
-
-void QxrdWindow::populateExperimentsMenu()
-{
-  //  printMessage("Populating recent experiments menu");
-
-  m_ExperimentsMenu->clear();
-
-  QxrdApplicationPtr app(m_Application);
-
-  if (app) {
-    QList<QxrdExperimentWPtr> exps = app->experiments();
-
-    foreach (QxrdExperimentPtr exp, exps) {
-      if (exp) {
-        QString path = exp->experimentFilePath();
-
-        QAction *action = new QAction(path, m_ExperimentsMenu);
-        QSignalMapper *mapper = new QSignalMapper(action);
-        connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
-        mapper->setMapping(action, path);
-
-        connect(mapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, app.data(), &QxrdApplication::activateExperiment);
-
-        m_ExperimentsMenu -> addAction(action);
-      }
-    }
-  }
-}
-
-void QxrdWindow::populateRecentExperimentsMenu()
-{
-  //  printMessage("Populating recent experiments menu");
-
-  m_RecentExperimentsMenu->clear();
-
-  QxrdApplicationPtr app(m_Application);
-
-  if (app) {
-    QxrdApplicationSettingsPtr set(app->settings());
-
-    if (set) {
-      QStringList recent = set->get_RecentExperiments();
-
-      foreach (QString exp, recent) {
-        QAction *action = new QAction(exp, m_RecentExperimentsMenu);
-        QSignalMapper *mapper = new QSignalMapper(action);
-        connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
-        mapper->setMapping(action, exp);
-
-        connect(mapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, app.data(),
-                &QxrdApplication::openRecentExperiment);
-
-        m_RecentExperimentsMenu -> addAction(action);
-      }
-    }
-  }
 }
 
 void QxrdWindow::populateConfigureDetectorMenu()
@@ -1277,15 +1194,6 @@ void QxrdWindow::newMask()
   }
 }
 
-void QxrdWindow::doEditPreferences()
-{
-  GUI_THREAD_CHECK;
-
-  QxrdExperimentPreferencesDialog prefs(m_Experiment, NULL, 1);
-
-  prefs.exec();
-}
-
 void QxrdWindow::doEditDetectorPreferences()
 {
   GUI_THREAD_CHECK;
@@ -1293,34 +1201,6 @@ void QxrdWindow::doEditDetectorPreferences()
   QxrdExperimentPreferencesDialog prefs(m_Experiment, NULL, 0);
 
   prefs.exec();
-}
-
-void QxrdWindow::saveExperimentAs()
-{
-  GUI_THREAD_CHECK;
-
-  QxrdExperimentPtr expt(m_Experiment);
-  QxrdApplicationPtr app(m_Application);
-
-  if (app && expt) {
-    QString path = expt->experimentFilePath();
-    QString name = expt->defaultExperimentName(path);
-    QString dirp = expt->defaultExperimentDirectory(path);
-
-    QDir dir(expt->get_ExperimentDirectory());
-
-    QString newPath = dir.filePath(name+"-copy.qxrdp");
-
-    QString newChoice = QFileDialog::getSaveFileName(NULL,
-                                                     "Save Experiment As",
-                                                     newPath,
-                                                     "QXRD Experiments (*.qxrdp)");
-
-    if (newChoice.length()>0) {
-      expt->saveExperimentAs(newChoice);
-      app->appendRecentExperiment(newChoice);
-    }
-  }
 }
 
 void QxrdWindow::doSaveExperimentAsText()
@@ -1345,34 +1225,6 @@ void QxrdWindow::doSaveExperimentAsText()
 
     if (newChoice.length() > 0) {
       expt->saveExperimentAsText(newChoice);
-    }
-  }
-}
-
-void QxrdWindow::saveExperimentCopy()
-{
-  GUI_THREAD_CHECK;
-
-  QxrdExperimentPtr expt(m_Experiment);
-  QxrdApplicationPtr app(m_Application);
-
-  if (app && expt) {
-    QString path = expt->experimentFilePath();
-    QString name = expt->defaultExperimentName(path);
-    QString dirp = expt->defaultExperimentDirectory(path);
-
-    QDir dir(expt->get_ExperimentDirectory());
-
-    QString newPath = dir.filePath(name+"-copy.qxrdp");
-
-    QString newChoice = QFileDialog::getSaveFileName(NULL,
-                                                     "Save Experiment Copy",
-                                                     newPath,
-                                                     "QXRD Experiments (*.qxrdp)");
-
-    if (newChoice.length()>0) {
-      expt->saveExperimentCopyAs(newChoice);
-      app->appendRecentExperiment(newChoice);
     }
   }
 }

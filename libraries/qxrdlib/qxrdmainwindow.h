@@ -22,8 +22,14 @@ public:
   void statusMessage(QString msg, QDateTime ts);
 
 public slots:
-  void populateWindowsMenu();
   void newWindow();
+  void saveExperimentCopy();
+  void saveExperimentAs();
+  void doEditPreferences();
+
+private slots:
+  void populateWindowsMenu();
+  void populateRecentExperimentsMenu();
 
 protected:
   QString             m_Name;
@@ -32,6 +38,20 @@ protected:
   QMenu              *m_FileMenuP;
   QMenu              *m_EditMenuP;
   QMenu              *m_WindowMenuP;
+  QMenu              *m_RecentExperimentsMenu;
+
+  QAction            *m_ActionNewExperiment;
+  QAction            *m_ActionRecentExperiments;
+  QAction            *m_ActionOpenExperiment;
+  QAction            *m_ActionCloseExperiment;
+
+  QAction            *m_ActionSaveExperiment;
+  QAction            *m_ActionSaveExperimentAs;
+  QAction            *m_ActionSaveExperimentCopy;
+
+  QAction            *m_ActionGlobalPreferences;
+  QAction            *m_ActionExperimentPreferences;
+  QAction            *m_ActionQuit;
 };
 
 #endif // QXRDMAINWINDOW_H
