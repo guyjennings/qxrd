@@ -64,6 +64,9 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
 
         connect(xtra.data(), &QxrdAcquisitionExtraInputs::newDataAvailable,
                 this, &QxrdAcquisitionExtraInputsDialog::updateWaveforms);
+
+        connect(xtra.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
+                this, &QxrdAcquisitionExtraInputsDialog::updateUi);
       }
     }
   }

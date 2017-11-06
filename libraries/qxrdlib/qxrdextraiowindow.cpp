@@ -12,7 +12,8 @@
 #include <QMessageBox>
 
 QxrdExtraIOWindow::QxrdExtraIOWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
-  QxrdMainWindow(name, app, expt)
+  QxrdMainWindow(name, app, expt),
+  m_ChannelsInRows(0)
 {
   setupUi(this);
 
@@ -151,6 +152,11 @@ QxrdExtraIOWindow::QxrdExtraIOWindow(QString name, QxrdApplicationWPtr app, Qxrd
 
           connect(xtra.data(), &QxrdAcquisitionExtraInputs::newDataAvailable,
                   this, &QxrdExtraIOWindow::updateWaveforms);
+
+          connect(xtra.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
+                  this, &QxrdExtraIOWindow::updateUi);
+
+          updateUi();
         }
       }
     }
