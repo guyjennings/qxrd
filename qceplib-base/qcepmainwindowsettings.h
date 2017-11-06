@@ -1,10 +1,11 @@
 #ifndef QCEPMAINWINDOWSETTINGS_H
 #define QCEPMAINWINDOWSETTINGS_H
 
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepserializableobject.h"
 
-class QcepMainWindowSettings : public QcepSerializableObject
+class QCEP_EXPORT QcepMainWindowSettings : public QcepSerializableObject
 {
   Q_OBJECT
 
