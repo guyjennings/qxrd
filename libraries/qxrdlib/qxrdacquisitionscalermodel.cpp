@@ -20,6 +20,13 @@ QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcquisitionWPtr acq)
 
     connect(acqr->prop_ScalerValues(), &QcepDoubleVectorProperty::valueChanged,
             this,                      &QxrdAcquisitionScalerModel::forceFullUpdate);
+
+    QxrdAcquisitionExtraInputsPtr xtra(acqr->acquisitionExtraInputs());
+
+    if (xtra) {
+      connect(xtra.data(),   &QxrdAcquisitionExtraInputs::channelCountChanged,
+              this,          &QxrdAcquisitionScalerModel::forceFullUpdate);
+    }
   }
 }
 
