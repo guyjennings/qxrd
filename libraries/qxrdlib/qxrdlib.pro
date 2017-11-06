@@ -295,7 +295,9 @@ SOURCES += qxrdlib.cpp \
     qxrdintegrationwindowsettings.cpp \
     qxrdmaskingwindowsettings.cpp \
     qxrdscriptingwindowsettings.cpp \
-    qxrdmainwindowsettings.cpp
+    qxrdmainwindowsettings.cpp \
+    qxrdextraiowindowsettings.cpp \
+    qxrdextraiowindow.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -330,7 +332,9 @@ HEADERS += qxrdlib.h\
     qxrdscriptingwindowsettings.h \
     qxrdmainwindowsettings.h \
     qxrdmainwindowsettings-ptr.h \
-    qxrdmainwindow-ptr.h
+    qxrdmainwindow-ptr.h \
+    qxrdextraiowindowsettings.h \
+    qxrdextraiowindow.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -703,7 +707,8 @@ FORMS += qxrdwindow.ui \
     qxrdcalibrantwindow.ui \
     qxrdhelpwindow.ui \
     qxrdcalculatorwindow.ui \
-    qxrdinfowindow.ui
+    qxrdinfowindow.ui \
+    qxrdextraiowindow.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS += \

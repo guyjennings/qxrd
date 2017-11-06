@@ -49,6 +49,7 @@
 
 #include "qxrdmainwindowsettings-ptr.h"
 #include "qxrdacquisitionwindowsettings.h"
+#include "qxrdextraiowindowsettings.h"
 #include "qxrdinfowindowsettings.h"
 #include "qxrdanalysiswindowsettings.h"
 #include "qxrdintegrationwindowsettings.h"
@@ -505,6 +506,7 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdMainWindowSettings*>("QxrdMainWindowSettings*");
   qRegisterMetaType<QxrdAcquisitionWindowSettings*>("QxrdAcquisitionWindowSettings*");
   qRegisterMetaType<QxrdAnalysisWindowSettings*>("QxrdAnalysisWindowSettings*");
+  qRegisterMetaType<QxrdExtraIOWindowSettings*>("QxrdExtraIOWindowSettings*");
   qRegisterMetaType<QxrdInfoWindowSettings*>("QxrdInfoWindowSettings*");
   qRegisterMetaType<QxrdCalculatorWindowSettings*>("QxrdCalculatorWindowSettings*");
   qRegisterMetaType<QxrdCalibrantWindowSettings*>("QxrdCalibrantWindowSettings*");
@@ -1470,6 +1472,8 @@ void QxrdExperiment::defaultWindowSettings()
                          new QxrdCalibrantWindowSettings("Calibrant")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdCenteringWindowSettings("Centering")));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdExtraIOWindowSettings("Extra IO")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdHelpWindowSettings("Help")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
