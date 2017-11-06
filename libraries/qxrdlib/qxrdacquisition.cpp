@@ -161,7 +161,8 @@ QxrdApplicationWPtr QxrdAcquisition::application() const
 {
   QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
 
-  QxrdApplicationWPtr appw = QxrdApplicationPtr(app);
+  QxrdApplicationWPtr appw =
+      qSharedPointerDynamicCast<QxrdApplication>(app->sharedFromThis());
 
   return appw;
 }
