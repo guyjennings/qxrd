@@ -135,11 +135,11 @@ public:
   Q_PROPERTY(bool used READ get_Used WRITE set_Used)
   QCEP_BOOLEAN_PROPERTY(Used)
 
-  Q_PROPERTY(double minValue READ get_MinValue WRITE set_MinValue)
-  QCEP_DOUBLE_PROPERTY(MinValue)
+  Q_PROPERTY(double minimumValue READ get_MinimumValue WRITE set_MinimumValue)
+  QCEP_DOUBLE_PROPERTY(MinimumValue)
 
-  Q_PROPERTY(double maxValue READ get_MaxValue WRITE set_MaxValue)
-  QCEP_DOUBLE_PROPERTY(MaxValue)
+  Q_PROPERTY(double maximumValue READ get_MaximumValue WRITE set_MaximumValue)
+  QCEP_DOUBLE_PROPERTY(MaximumValue)
 
 public slots:
   virtual QString description() const;

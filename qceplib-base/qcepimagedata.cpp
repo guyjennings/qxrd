@@ -56,8 +56,8 @@ QcepImageDataBase::QcepImageDataBase(QString name, int width, int height, int si
     m_Normalization(this, "normalization", QcepDoubleList(), "Normalization Values"),
     m_ExtraInputs(this, "extraInputs", QcepDoubleList(), "Extra Input Values"),
     m_Used(this, "used", true, "Image Used?"),
-    m_MinValue(this, "minValue", 0, "Minimum Value"),
-    m_MaxValue(this, "maxValue", 0, "Maximum Value"),
+    m_MinimumValue(this, "minValue", 0, "Minimum Value"),
+    m_MaximumValue(this, "maxValue", 0, "Maximum Value"),
     m_ImageCounter(allocCount.fetchAndAddOrdered(1)),
     m_Mask(NULL),
     m_Overflow(NULL),
@@ -137,8 +137,8 @@ void QcepImageDataBase::copyProperties(QcepImageDataBase *dest)
   dest -> set_Normalization(get_Normalization());
   dest -> set_ExtraInputs(get_ExtraInputs());
   dest -> set_Used(get_Used());
-  dest -> set_MinValue(get_MinValue());
-  dest -> set_MaxValue(get_MaxValue());
+  dest -> set_MinimumValue(get_MinimumValue());
+  dest -> set_MaximumValue(get_MaximumValue());
 
   QByteArray name;
 
@@ -176,8 +176,8 @@ void QcepImageDataBase::copyPropertiesFrom(QSharedPointer<QcepImageDataBase> src
   set_Normalization(src -> get_Normalization());
   set_ExtraInputs(src -> get_ExtraInputs());
   set_Used(src -> get_Used());
-  set_MinValue(src -> get_MinValue());
-  set_MaxValue(src -> get_MaxValue());
+  set_MinimumValue(src -> get_MinimumValue());
+  set_MaximumValue(src -> get_MaximumValue());
 
   QByteArray name;
 
@@ -530,8 +530,8 @@ void QcepImageData<T>::calculateRange()
     }
   }
 
-  set_MinValue(minValue);
-  set_MaxValue(maxValue);
+  set_MinimumValue(minValue);
+  set_MaximumValue(maxValue);
 }
 
 template <typename T>
@@ -567,8 +567,8 @@ void QcepImageData<T>::calculateRangeInCircle()
     }
   }
 
-  set_MinValue(minValue);
-  set_MaxValue(maxValue);
+  set_MinimumValue(minValue);
+  set_MaximumValue(maxValue);
 }
 
 template <typename T>
