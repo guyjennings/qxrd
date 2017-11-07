@@ -115,7 +115,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
       int iSamples = (int) nSamples;
       double divide = iSamples * (0.5 + symm/2.0);
       double divideBy2 = divide/2;
-      int shift = (int)((double) phase*iSamples/360.0 + nphases) % iSamples;
+      int shift = (int)((double) phase*iSamples/360.0 /*+ nphases*/) % iSamples;
 
       QVector<double> outputTimes(iSamples+1);
       QVector<double> outputVoltage(iSamples+1);
