@@ -64,9 +64,11 @@ public:
 
   void calculateRange();
 
-//  double minValue();
-//  double maxValue();
+public slots:
+  double minValue();
+  double maxValue();
 
+public:
   int allocatedMemoryMB();
 
   void correctBadBackgroundSubtraction(QxrdDoubleImageDataPtr dark, int nImgExposures, int nDarkExposures);

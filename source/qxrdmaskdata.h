@@ -48,6 +48,9 @@ public slots:
   QImage thumbnailImage() const;
   QSize  thumbnailImageSize() const;
 
+  double minValue();
+  double maxValue();
+
 public:
   void copyMaskTo(QxrdMaskDataPtr dest);
 

@@ -611,8 +611,8 @@ void QxrdImageData<T>::calculateRange()
     }
   }
 
-  QcepImageDataBase::set_MinValue(minV);
-  QcepImageDataBase::set_MaxValue(maxV);
+  QcepImageDataBase::set_MinimumValue(minV);
+  QcepImageDataBase::set_MaximumValue(maxV);
 
   g_Application->printMessage(QcepImageDataBase::tr("calculate range took %1 msec").arg(t.elapsed()));
 
@@ -621,21 +621,21 @@ void QxrdImageData<T>::calculateRange()
   }
 }
 
-//template <typename T>
-//double QxrdImageData<T>::minValue()
-//{
-////  calculateRange();
+template <typename T>
+double QxrdImageData<T>::minValue()
+{
+//  calculateRange();
 
-//  return this->m_MinValue;
-//}
+  return findMin();
+}
 
-//template <typename T>
-//double QxrdImageData<T>::maxValue()
-//{
-////  calculateRange();
+template <typename T>
+double QxrdImageData<T>::maxValue()
+{
+//  calculateRange();
 
-//  return this->m_MaxValue;
-//}
+  return findMax();
+}
 
 template <typename T>
 int QxrdImageData<T>::allocatedMemoryMB()

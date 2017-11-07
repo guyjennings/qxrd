@@ -253,8 +253,8 @@ void QxrdImagePlot::calculateDisplayedRange()
     double mindis, maxdis;
 
     if (set->get_DisplayScalingMode() == PercentageMode) {
-      double minv = data->get_MinValue();
-      double maxv = data->get_MaxValue();
+      double minv = data->get_MinimumValue();
+      double maxv = data->get_MaximumValue();
       double del = maxv-minv;
 
       mindis = minv+del*set->get_DisplayMinimumPct()/100.0;

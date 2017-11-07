@@ -50,6 +50,16 @@ void QxrdMaskData::setMaskValue(int x, int y, bool mval)
   }
 }
 
+double QxrdMaskData::minValue()
+{
+  return 0;
+}
+
+double QxrdMaskData::maxValue()
+{
+  return 1;
+}
+
 void QxrdMaskData::setCircularMask()
 {
   double cx = get_Width()/2, cy = get_Height()/2;
