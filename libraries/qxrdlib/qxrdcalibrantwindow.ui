@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QSplitter" name="splitter">
+     <widget class="QSplitter" name="m_Splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -64,7 +64,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -79,7 +79,7 @@
    </widget>
    <widget class="QMenu" name="m_WindowMenu">
     <property name="title">
-     <string>Window</string>
+     <string>W&amp;indow</string>
     </property>
     <addaction name="actionWindow"/>
    </widget>
@@ -90,7 +90,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionWindow">
    <property name="text">
-    <string>Window</string>
+    <string>&amp;Window</string>
    </property>
   </action>
  </widget>

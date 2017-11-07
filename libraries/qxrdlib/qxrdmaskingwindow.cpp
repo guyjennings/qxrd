@@ -6,6 +6,10 @@ QxrdMaskingWindow::QxrdMaskingWindow(QString name, QxrdApplicationWPtr app, Qxrd
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
+
+  m_Splitter->setStretchFactor(0, 1);
+  m_Splitter->setStretchFactor(1, 5);
+  m_Splitter->setStretchFactor(2, 1);
 }
 
 QxrdMaskingWindow::~QxrdMaskingWindow()

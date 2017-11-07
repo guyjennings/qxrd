@@ -6,6 +6,9 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QString name, QxrdApplicationWPtr a
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
+
+  m_Splitter->setStretchFactor(0, 1);
+  m_Splitter->setStretchFactor(1, 5);
 }
 
 QxrdAcquisitionWindow::~QxrdAcquisitionWindow()

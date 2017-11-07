@@ -6,21 +6,1222 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1244</width>
+    <height>850</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QSplitter" name="m_Splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="m_FilesTab">
+        <attribute name="title">
+         <string>Files</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="0" colspan="2">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QToolButton" name="m_PrevDirectoryButton">
+             <property name="toolTip">
+              <string>Return to previous directory</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/go-left.png</normaloff>:/images/go-left.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="m_UpDirectoryButton">
+             <property name="toolTip">
+              <string>Change directory up one level</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/go-up.png</normaloff>:/images/go-up.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="m_ChangeDirectoryButton">
+             <property name="toolTip">
+              <string>Select a new directory</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="m_HomeDirectoryButton">
+             <property name="toolTip">
+              <string>Change to home directory</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/go-home.png</normaloff>:/images/go-home.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="m_AcquisitionDirectoryButton">
+             <property name="toolTip">
+              <string>Change to acquisition output directory</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/system-run.png</normaloff>:/images/system-run.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="m_RefreshButton">
+             <property name="toolTip">
+              <string>Refresh directory listing</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qxrdresources.qrc">
+               <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>77</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="QComboBox" name="m_RootDirectoryCombo"/>
+         </item>
+         <item row="2" column="0" colspan="2">
+          <widget class="QxrdFileBrowserView" name="m_FileBrowser">
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectRows</enum>
+           </property>
+           <property name="showGrid">
+            <bool>false</bool>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+          </widget>
+         </item>
+         <item row="3" column="0" colspan="2">
+          <widget class="QComboBox" name="m_FilterChoices">
+           <item>
+            <property name="text">
+             <string>Image Files (*.tif)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Processed Files (*nnnnn.tif)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Raw Image Files (*.raw.tif)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Dark Image Files (*.dark.tif)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Integrated Data Files (*.avg)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Metadata Files (*.metadata)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>All Files (*)</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="4" column="0" colspan="2">
+          <widget class="QLineEdit" name="m_FileSelector">
+           <property name="toolTip">
+            <string>File filter</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QPushButton" name="m_OpenButton">
+           <property name="toolTip">
+            <string>Open selected files</string>
+           </property>
+           <property name="text">
+            <string>Open</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QPushButton" name="m_ProcessButton">
+           <property name="toolTip">
+            <string>Process selected files</string>
+           </property>
+           <property name="text">
+            <string>Process</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QPushButton" name="m_AccumulateButton">
+           <property name="toolTip">
+            <string>Accumulate (sum) selected files</string>
+           </property>
+           <property name="text">
+            <string>Accumulate</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QPushButton" name="m_IntegrateButton">
+           <property name="toolTip">
+            <string>Integrate selected files</string>
+           </property>
+           <property name="text">
+            <string>Integrate</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="m_DataItemsTab">
+        <attribute name="title">
+         <string>Data Items</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QcepDatasetBrowserView" name="m_DatasetBrowserView">
+           <property name="acceptDrops">
+            <bool>true</bool>
+           </property>
+           <property name="dragEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="dragDropOverwriteMode">
+            <bool>false</bool>
+           </property>
+           <property name="dragDropMode">
+            <enum>QAbstractItemView::DragDrop</enum>
+           </property>
+           <property name="defaultDropAction">
+            <enum>Qt::TargetMoveAction</enum>
+           </property>
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::ExtendedSelection</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="m_ScalersTab">
+        <attribute name="title">
+         <string>Scalers</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <widget class="QTableView" name="m_AcquisitionScalerView"/>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QTabWidget" name="tabWidget_2">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="m_AcquisitionTab">
+        <attribute name="title">
+         <string>Acquisition</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <widget class="QStackedWidget" name="m_AcquisitionDialogAspects">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="m_DetectorPage">
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="14" column="3">
+              <widget class="QSpinBox" name="m_SkippedExposures">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Number of exposures to skip between each saved image
+Script Property: &quot;acquisition.skippedExposures&quot;
+Script Function: skippedExposures()</string>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>9999999</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="22" column="0" colspan="4">
+              <widget class="Line" name="line_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="3">
+              <widget class="QPushButton" name="m_AcquireOptionsButton">
+               <property name="toolTip">
+                <string>Acquisition options, such as
+Location(s) where data files are saved
+</string>
+               </property>
+               <property name="text">
+                <string>More Options...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="0">
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string>Comment2:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="16" column="0">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>Post Trigger</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="16" column="1">
+              <widget class="QSpinBox" name="m_PostTriggerFiles">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Total number of file groups in synchronized acquisition,
+total number of images in 'conventional' acquisition
+Script: &quot;acquisition.postTriggerFiles&quot;
+Script Function: postTriggerFiles()</string>
+               </property>
+               <property name="specialValueText">
+                <string/>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>9999999</number>
+               </property>
+               <property name="value">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="17" column="0">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>File Index:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_16">
+               <property name="text">
+                <string>Data Directory:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="10" column="1" colspan="3">
+              <widget class="QLineEdit" name="m_UserComment3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>User Comment 3 (saved in data files)
+Script Property: &quot;acquisition.userComment3&quot;
+</string>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="3">
+              <widget class="QLabel" name="m_DroppedFrames">
+               <property name="toolTip">
+                <string>Count of dropped frames</string>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string> Acquired File Pattern:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="11" column="1" colspan="3">
+              <widget class="QLineEdit" name="m_UserComment4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>User Comment 4 (saved in data files)
+Script Property: &quot;acquisition.userComment4&quot;
+</string>
+               </property>
+              </widget>
+             </item>
+             <item row="15" column="1">
+              <widget class="QSpinBox" name="m_PreTriggerFiles">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Total number of pre trigger file groups in synchronized acquisition,
+total number of pre trigger files in 'conventional' acquisition
+Script: &quot;acquisition.preTriggerFiles&quot;
+Script Function: preTriggerFiles()</string>
+               </property>
+               <property name="specialValueText">
+                <string/>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>9999999</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1" colspan="3">
+              <widget class="QLineEdit" name="m_FilePattern">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Base File Name Pattern
+Script Property: &quot;acquisition.filePattern&quot;
+Script Function: filePattern()
+Files: &lt;pattern&gt;-&lt;nnnnn&gt;-&lt;ppp&gt;.tif
+Dark: &lt;pattern&gt;-&lt;nnnnn&gt;.dark.tif
+Raw: &lt;pattern&gt;-&lt;nnnnn&gt;-&lt;ppp&gt;.raw.tif</string>
+               </property>
+              </widget>
+             </item>
+             <item row="15" column="0">
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>Pre Trigger</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="16" column="3">
+              <widget class="QLabel" name="m_AverageDisplay">
+               <property name="toolTip">
+                <string>Average value of acquired frames</string>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="2">
+              <widget class="QPushButton" name="m_TriggerButton">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Trigger acquisition
+Script Function: trigger()</string>
+               </property>
+               <property name="text">
+                <string>Trigger</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="label_27">
+               <property name="text">
+                <string>Integrated Scans File:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="0">
+              <widget class="QLabel" name="label_28">
+               <property name="text">
+                <string>File Saving Backlog</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="2">
+              <widget class="QLabel" name="label_24">
+               <property name="text">
+                <string>Skipped at start:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="3">
+              <widget class="QSpinBox" name="m_SkippedExposuresAtStart">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Number of exposures to skip before each acquisition sequence
+Script Property: &quot;acquisition.skippedExposuresAtStart&quot;</string>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>9999999</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1" colspan="2">
+              <widget class="QLineEdit" name="m_LogFileName">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Name of log file 
+(relative to experiment directory)
+</string>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="1">
+              <widget class="QCheckBox" name="m_AcquisitionCancelsLiveView">
+               <property name="text">
+                <string>Acquisition Cancels Live View</string>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="1">
+              <widget class="QLabel" name="m_CorrectionBacklog">
+               <property name="toolTip">
+                <string>Number of frames still to be corrected</string>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QPushButton" name="m_DetectorOptionsButton">
+               <property name="toolTip">
+                <string>Acquisition options, such as
+Location(s) where data files are saved
+</string>
+               </property>
+               <property name="text">
+                <string>Detector Options...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="1" colspan="3">
+              <widget class="QLineEdit" name="m_UserComment2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>User Comment 2 (saved in data files)
+Script Property: &quot;acquisition.userComment2&quot;
+</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1" colspan="2">
+              <widget class="QLineEdit" name="m_ScanFileName">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Name of integrated scans file
+(relative to data directory)</string>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="12" column="0" colspan="4">
+              <widget class="Line" name="line_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="2">
+              <widget class="QLabel" name="label_23">
+               <property name="text">
+                <string>Dropped Frames</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="0">
+              <widget class="QPushButton" name="m_CancelButton">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="toolTip">
+                <string>Cancel an acquisition
+Script Function: acquireCancel()</string>
+               </property>
+               <property name="text">
+                <string>Cancel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="0">
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>Comment1:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="26" column="0" colspan="4">
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>88</width>
+                 <height>147</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="11" column="0">
+              <widget class="QLabel" name="label_15">
+               <property name="text">
+                <string>Comment4:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QPushButton" name="m_BrowseLogFileButton">
+               <property name="toolTip">
+                <string>Select New Log File...</string>
+               </property>
+               <property name="text">
+                <string>Browse...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1" colspan="2">
+              <widget class="QLineEdit" name="m_ExperimentDirectory">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>The directory where the experiment file is saved
+Can only be changed by saving a new experiment</string>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="0">
+              <widget class="QCheckBox" name="m_LiveViewAtIdle">
+               <property name="text">
+                <string>Live View at Idle</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="1" colspan="3">
+              <widget class="QLineEdit" name="m_UserComment1">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>User Comment 1 (saved in data files)
+Script Property: &quot;acquisition.userComment1&quot;
+</string>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="1">
+              <widget class="QxrdExposureTimeSpinner" name="m_ExposureTime">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Exposure time for each acquired image
+Script Property: &quot;acquisition.exposureTime&quot;
+Script Function: exposureTime()</string>
+               </property>
+               <property name="accelerated">
+                <bool>false</bool>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="decimals">
+                <number>5</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="3">
+              <widget class="QPushButton" name="m_ClearDroppedButton">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Clear dropped frames counter</string>
+               </property>
+               <property name="text">
+                <string>Clear Dropped</string>
+               </property>
+              </widget>
+             </item>
+             <item row="10" column="0">
+              <widget class="QLabel" name="label_14">
+               <property name="text">
+                <string>Comment3:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="15" column="2">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Phases in Group:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="2" colspan="2">
+              <widget class="QCheckBox" name="m_RetryDropped">
+               <property name="text">
+                <string>Retry Dropped Frames Automatically</string>
+               </property>
+              </widget>
+             </item>
+             <item row="17" column="2">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Dark Summed:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0" colspan="4">
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="1">
+              <widget class="QPushButton" name="m_AcquireButton">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Do regular acquisition
+Script Function: acquire([fileName
+                                       [,exposure
+                                       [,summed
+                                       [,postTrigger
+                                       [,preTrigger
+                                       [,nPhases]]]]]])
+</string>
+               </property>
+               <property name="text">
+                <string>Acquire</string>
+               </property>
+              </widget>
+             </item>
+             <item row="15" column="3">
+              <widget class="QSpinBox" name="m_PhasesInGroup">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Total number of phases in each file group for synchronized acquisition
+Set to 1 to acquire individual images,
+Script: &quot;acquisition.phasesInGroup&quot;
+Script Function: phasesInGroup()</string>
+               </property>
+               <property name="specialValueText">
+                <string/>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>9999999</number>
+               </property>
+               <property name="value">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Exposure Time:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_22">
+               <property name="text">
+                <string>Log File:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="25" column="1">
+              <widget class="QLabel" name="m_IntegrationBacklog">
+               <property name="toolTip">
+                <string>Number of frames still to be integrated</string>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="14" column="1">
+              <widget class="QSpinBox" name="m_SummedExposures">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Number of exposures to sum for each saved image
+Script Property: &quot;acquisition.summedExposures&quot;
+Script Function: summedExposures()</string>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>9999999</number>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="3">
+              <widget class="QPushButton" name="m_BrowseScanFileButton">
+               <property name="toolTip">
+                <string>Select New Scan File...</string>
+               </property>
+               <property name="text">
+                <string>Browse...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="17" column="1">
+              <widget class="QSpinBox" name="m_FileIndex">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Index number, substituted into file names, and incremented with each image
+Script Property: acquisition.fileIndex
+Script Function: fileindex()</string>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="maximum">
+                <number>99999999</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Experiment Directory:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="3">
+              <widget class="QPushButton" name="m_DarkAcquireButton">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Do Dark Acquisition
+Script Function: acquireDark([fileName[,exposures[,summed]]])</string>
+               </property>
+               <property name="text">
+                <string>Dark</string>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="0">
+              <widget class="QLabel" name="label_25">
+               <property name="text">
+                <string>Correction Backlog</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="14" column="2">
+              <widget class="QLabel" name="label_13">
+               <property name="text">
+                <string>Skipped:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="17" column="3">
+              <widget class="QSpinBox" name="m_DarkSummedExposures">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Number of exposures to sum for dark image
+Script Property: acquisition.darkSummedExposures
+Script Function: darkSummedExposures()</string>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>9999999</number>
+               </property>
+              </widget>
+             </item>
+             <item row="25" column="0">
+              <widget class="QLabel" name="label_26">
+               <property name="text">
+                <string>Integration Backlog</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1" colspan="2">
+              <widget class="QLineEdit" name="m_DataDirectory">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>The directory where data files will be saved
+(relative to the experiment directory)
+</string>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="14" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Summed:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="16" column="2">
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>Avg. Value</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="1">
+              <widget class="QLabel" name="m_SaverBacklog">
+               <property name="toolTip">
+                <string>Number of frames still to be corrected</string>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="21" column="1">
+              <widget class="QPushButton" name="m_AcquireOnceButton">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Do regular acquisition
+Script Function: acquire([fileName
+                                       [,exposure
+                                       [,summed
+                                       [,postTrigger
+                                       [,preTrigger
+                                       [,nPhases]]]]]])
+</string>
+               </property>
+               <property name="text">
+                <string>Acquire Once</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="m_WatcherPage"/>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="m_DetectorsTab">
+        <attribute name="title">
+         <string>Detectors</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0">
+          <widget class="QTableView" name="m_AcquisitionDetectorListView"/>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>22</height>
+     <width>1244</width>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -35,21 +1236,120 @@
    </widget>
    <widget class="QMenu" name="m_WindowMenu">
     <property name="title">
-     <string>Window</string>
+     <string>W&amp;indow</string>
     </property>
     <addaction name="actionWindows"/>
+   </widget>
+   <widget class="QMenu" name="m_AcquireMenu">
+    <property name="title">
+     <string>Ac&amp;quire</string>
+    </property>
+    <addaction name="m_ActionAcquire"/>
+    <addaction name="m_ActionAcquireOnce"/>
+    <addaction name="m_ActionAcquireDark"/>
+    <addaction name="m_ActionTrigger"/>
+    <addaction name="m_ActionCancel"/>
    </widget>
    <addaction name="m_FileMenu"/>
    <addaction name="m_EditMenu"/>
    <addaction name="m_WindowMenu"/>
+   <addaction name="m_AcquireMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionWindows">
    <property name="text">
-    <string>Windows</string>
+    <string>&amp;Windows</string>
+   </property>
+  </action>
+  <action name="m_ActionTrigger">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/go-next.png</normaloff>:/images/go-next.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Trigger Acquisition</string>
+   </property>
+   <property name="toolTip">
+    <string>Trigger Acquisition</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+T</string>
+   </property>
+  </action>
+  <action name="m_ActionCancel">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/process-stop.png</normaloff>:/images/process-stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Cancel Acquisition</string>
+   </property>
+   <property name="toolTip">
+    <string>Cancel Current Acquisition Operation</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+X</string>
+   </property>
+  </action>
+  <action name="m_ActionAcquireDark">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Acquire &amp;Dark</string>
+   </property>
+   <property name="toolTip">
+    <string>Acquire Dark Image</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Shift+A</string>
+   </property>
+  </action>
+  <action name="m_ActionAcquire">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Acquire</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+A</string>
+   </property>
+  </action>
+  <action name="m_ActionAcquireOnce">
+   <property name="icon">
+    <iconset resource="qxrdresources.qrc">
+     <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Acquire &amp;Once</string>
+   </property>
+   <property name="toolTip">
+    <string>Acquire Once</string>
    </property>
   </action>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>QxrdExposureTimeSpinner</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>qxrdexposuretimespinner.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QxrdFileBrowserView</class>
+   <extends>QTableView</extends>
+   <header>qxrdfilebrowserview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QcepDatasetBrowserView</class>
+   <extends>QTreeView</extends>
+   <header>qcepdatasetbrowserview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="qxrdresources.qrc"/>
+ </resources>
  <connections/>
 </ui>

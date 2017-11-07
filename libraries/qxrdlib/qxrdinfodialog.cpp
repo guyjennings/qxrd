@@ -50,7 +50,7 @@ void QxrdInfoDialog::onProcessedImageAvailable(QcepDoubleImageDataPtr image, Qce
                        .arg(image->get_HStart()).arg(image->get_HStep())
                        .arg(image->get_VStart()).arg(image->get_VStep()));
 
-    m_InfoText->append(tr("Minimum Value %1, Maximum Value %2").arg(image->get_MinValue()).arg(image->get_MaxValue()));
+    m_InfoText->append(tr("Minimum Value %1, Maximum Value %2").arg(image->get_MinimumValue()).arg(image->get_MaximumValue()));
 
     m_InfoText->append(tr("Detector gain setting %1").arg(image->get_CameraGain()));
     m_InfoText->append(tr("Exposure Time %1 sec").arg(image->get_ExposureTime()));
