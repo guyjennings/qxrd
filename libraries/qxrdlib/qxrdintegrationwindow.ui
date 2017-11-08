@@ -20,7 +20,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTabWidget" name="tabWidget_2">
+      <widget class="QTabWidget" name="m_Left">
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -133,25 +133,6 @@
          <item row="1" column="0" colspan="2">
           <widget class="QComboBox" name="m_RootDirectoryCombo"/>
          </item>
-         <item row="2" column="0" colspan="2">
-          <widget class="QxrdFileBrowserView" name="m_FileBrowser">
-           <property name="alternatingRowColors">
-            <bool>true</bool>
-           </property>
-           <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectRows</enum>
-           </property>
-           <property name="showGrid">
-            <bool>false</bool>
-           </property>
-           <property name="sortingEnabled">
-            <bool>true</bool>
-           </property>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-          </widget>
-         </item>
          <item row="3" column="0" colspan="2">
           <widget class="QComboBox" name="m_FilterChoices">
            <item>
@@ -238,6 +219,25 @@
            </property>
           </widget>
          </item>
+         <item row="2" column="0" colspan="2">
+          <widget class="QxrdFileBrowserView" name="m_FileBrowser">
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectRows</enum>
+           </property>
+           <property name="showGrid">
+            <bool>false</bool>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="tab_4">
@@ -273,7 +273,7 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QTabWidget" name="tabWidget">
+      <widget class="QTabWidget" name="m_Middle">
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -303,9 +303,9 @@
         </widget>
        </widget>
       </widget>
-      <widget class="QTabWidget" name="tabWidget_3">
+      <widget class="QTabWidget" name="m_Right">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab_5">
         <attribute name="title">

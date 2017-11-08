@@ -20,7 +20,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTabWidget" name="tabWidget">
+      <widget class="QTabWidget" name="m_Left">
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -273,7 +273,7 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QTabWidget" name="tabWidget_2">
+      <widget class="QTabWidget" name="m_Middle">
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -288,7 +288,7 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QTabWidget" name="tabWidget_3">
+      <widget class="QTabWidget" name="m_Right">
        <property name="currentIndex">
         <number>0</number>
        </property>
