@@ -4,19 +4,23 @@
 #include "qcepmacros.h"
 #include "qxrdmainwindow.h"
 #include "ui_qxrdscriptingwindow.h"
+#include "qxrdscriptingwindowsettings-ptr.h"
 
 class QXRD_EXPORT QxrdScriptingWindow : public QxrdMainWindow, public Ui::QxrdScriptingWindow
 {
   Q_OBJECT
 
 public:
-  explicit QxrdScriptingWindow(QString name,
+  explicit QxrdScriptingWindow(QxrdScriptingWindowSettingsWPtr set,
+                               QString name,
                                QxrdApplicationWPtr app,
                                QxrdExperimentWPtr expt);
   ~QxrdScriptingWindow();
 
 protected:
   void changeEvent(QEvent *e);
+
+  QxrdScriptingWindowSettingsWPtr m_ScriptingWindowSettings;
 };
 
 #endif // QXRDSCRIPTINGWINDOW_H

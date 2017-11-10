@@ -8,13 +8,15 @@
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdacquisitionextrainputschannel-ptr.h"
+#include "qxrdextraiowindowsettings-ptr.h"
 
 class QXRD_EXPORT QxrdExtraIOWindow : public QxrdMainWindow, public Ui::QxrdExtraIOWindow
 {
   Q_OBJECT
 
 public:
-  explicit QxrdExtraIOWindow(QString name,
+  explicit QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
+                             QString name,
                              QxrdApplicationWPtr app,
                              QxrdExperimentWPtr expt);
   ~QxrdExtraIOWindow();
@@ -37,6 +39,7 @@ private slots:
   void updateWaveforms();
 
 private:
+  QxrdExtraIOWindowSettingsWPtr   m_ExtraIOWindowSettings;
   QxrdAcquisitionWPtr             m_Acquisition;
   QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
   QxrdAcquisitionExtraInputsWPtr m_AcquisitionExtraInputs;

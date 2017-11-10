@@ -9,9 +9,11 @@ QxrdHelpWindowSettings::QxrdHelpWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdHelpWindowSettings::newWindow()
 {
+  QxrdHelpWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdHelpWindowSettings>(sharedFromThis());
+
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdHelpWindow("Help", m_Application, m_Experiment));
+        new QxrdHelpWindow(myself, "Help", m_Application, m_Experiment));
 
   return m_Window;
 }

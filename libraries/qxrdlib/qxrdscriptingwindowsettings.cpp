@@ -1,5 +1,6 @@
 #include "qxrdscriptingwindowsettings.h"
 #include "qxrdscriptingwindow.h"
+#include "qxrdscriptingwindowsettings.h"
 
 QxrdScriptingWindowSettings::QxrdScriptingWindowSettings(QString name)
   : QxrdMainWindowSettings(name)
@@ -9,9 +10,11 @@ QxrdScriptingWindowSettings::QxrdScriptingWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdScriptingWindowSettings::newWindow()
 {
+  QxrdScriptingWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdScriptingWindowSettings>(sharedFromThis());
+
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdScriptingWindow("Scripting", m_Application, m_Experiment));
+        new QxrdScriptingWindow(myself, "Scripting", m_Application, m_Experiment));
 
   return m_Window;
 }

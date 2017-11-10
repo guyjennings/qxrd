@@ -9,9 +9,11 @@ QxrdCalculatorWindowSettings::QxrdCalculatorWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdCalculatorWindowSettings::newWindow()
 {
+  QxrdCalculatorWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdCalculatorWindowSettings>(sharedFromThis());
+
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdCalculatorWindow("Calculator", m_Application, m_Experiment));
+        new QxrdCalculatorWindow(myself, "Calculator", m_Application, m_Experiment));
 
   return m_Window;
 }

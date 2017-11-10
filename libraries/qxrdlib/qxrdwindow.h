@@ -153,10 +153,6 @@ private slots:
   void plotPowderRingTwoTheta();
   void plotPowderRingCenters();
 
-  void newAcquireWindow();
-  void newAnalysisWindow();
-  void newCalibrantWindow();
-
 public:
   void closeEvent (QCloseEvent * event);
 

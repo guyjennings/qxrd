@@ -8,9 +8,11 @@ QxrdCalibrantWindowSettings::QxrdCalibrantWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdCalibrantWindowSettings::newWindow()
 {
+  QxrdCalibrantWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdCalibrantWindowSettings>(sharedFromThis());
+
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdCalibrantWindow("Calibrant", m_Application, m_Experiment));
+        new QxrdCalibrantWindow(myself, "Calibrant", m_Application, m_Experiment));
 
   return m_Window;
 }

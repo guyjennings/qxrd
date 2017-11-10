@@ -300,7 +300,8 @@ SOURCES += qxrdlib.cpp \
     qxrdextraiowindow.cpp \
     qxrdcenteringplotwidget.cpp \
     qxrdimageplotwidget.cpp \
-    qxrdintegratedplotwidget.cpp
+    qxrdintegratedplotwidget.cpp \
+    qxrdfilebrowserwidget.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -340,7 +341,18 @@ HEADERS += qxrdlib.h\
     qxrdextraiowindow.h \
     qxrdcenteringplotwidget.h \
     qxrdimageplotwidget.h \
-    qxrdintegratedplotwidget.h
+    qxrdintegratedplotwidget.h \
+    qxrdfilebrowserwidget.h \
+    qxrdacquisitionwindowsettings-ptr.h \
+    qxrdanalysiswindowsettings-ptr.h \
+    qxrdcalculatorwindowsettings-ptr.h \
+    qxrdcalibrantwindowsettings-ptr.h \
+    qxrdcenteringwindowsettings-ptr.h \
+    qxrdextraiowindowsettings-ptr.h \
+    qxrdhelpwindowsettings-ptr.h \
+    qxrdintegrationwindowsettings-ptr.h \
+    qxrdmaskingwindowsettings-ptr.h \
+    qxrdscriptingwindowsettings-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -717,7 +729,8 @@ FORMS += qxrdwindow.ui \
     qxrdextraiowindow.ui \
     qxrdcenteringplotwidget.ui \
     qxrdimageplotwidget.ui \
-    qxrdintegratedplotwidget.ui
+    qxrdintegratedplotwidget.ui \
+    qxrdfilebrowserwidget.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS += \

@@ -2290,33 +2290,3 @@ void QxrdWindow::doNewTestScanGenerator()
   win -> setWindowTitle(tr("Test Scan Generator %1").arg(s_TestScanCount++));
   win -> show();
 }
-
-#include "qxrdacquisitionwindow.h"
-
-void QxrdWindow::newAcquireWindow()
-{
-  QxrdAcquisitionWindow *acq =
-      new QxrdAcquisitionWindow("Acquisition", m_Application, m_Experiment);
-
-  acq->show();
-}
-
-#include "qxrdanalysiswindow.h"
-
-void QxrdWindow::newAnalysisWindow()
-{
-  QxrdAnalysisWindow *an =
-      new QxrdAnalysisWindow("Analysis", m_Application, m_Experiment);
-
-  an->show();
-}
-
-#include "qxrdcalibrantwindow.h"
-
-void QxrdWindow::newCalibrantWindow()
-{
-  QxrdCalibrantWindow *cal =
-      new QxrdCalibrantWindow("Calibrant", m_Application, m_Experiment);
-
-  cal->show();
-}

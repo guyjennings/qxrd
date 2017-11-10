@@ -9,8 +9,9 @@
 #include "qxrdcenterfinder.h"
 #include <QClipboard>
 
-QxrdCalibrantWindow::QxrdCalibrantWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
-  QxrdMainWindow(name, app, expt)
+QxrdCalibrantWindow::QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set, QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
+  QxrdMainWindow(name, app, expt),
+  m_CalibrantWindowSettings(set)
 {
   setupUi(this);
 

@@ -3,8 +3,9 @@
 #include "qxrdtodolist.h"
 #include <QSortFilterProxyModel>
 
-QxrdHelpWindow::QxrdHelpWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
-  QxrdMainWindow(name, app, expt)
+QxrdHelpWindow::QxrdHelpWindow(QxrdHelpWindowSettingsWPtr set, QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
+  QxrdMainWindow(name, app, expt),
+  m_HelpWindowSettings(set)
 {
   setupUi(this);
 

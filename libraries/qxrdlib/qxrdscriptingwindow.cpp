@@ -1,7 +1,8 @@
 #include "qxrdscriptingwindow.h"
 
-QxrdScriptingWindow::QxrdScriptingWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
-  QxrdMainWindow(name, app, expt)
+QxrdScriptingWindow::QxrdScriptingWindow(QxrdScriptingWindowSettingsWPtr set, QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
+  QxrdMainWindow(name, app, expt),
+  m_ScriptingWindowSettings(set)
 {
   setupUi(this);
 

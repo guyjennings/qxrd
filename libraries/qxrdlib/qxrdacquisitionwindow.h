@@ -4,19 +4,23 @@
 #include "qcepdebug.h"
 #include "qxrdmainwindow.h"
 #include "ui_qxrdacquisitionwindow.h"
+#include "qxrdacquisitionwindowsettings-ptr.h"
 
 class QXRD_EXPORT QxrdAcquisitionWindow : public QxrdMainWindow, public Ui::QxrdAcquisitionWindow
 {
   Q_OBJECT
 
 public:
-  explicit QxrdAcquisitionWindow(QString name,
+  explicit QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr set,
+                                 QString name,
                                  QxrdApplicationWPtr app,
                                  QxrdExperimentWPtr expt);
   ~QxrdAcquisitionWindow();
 
 protected:
   void changeEvent(QEvent *e);
+
+  QxrdAcquisitionWindowSettingsWPtr m_AcquisitionWindowSettings;
 };
 
 #endif // QXRDACQUISITIONWINDOW_H

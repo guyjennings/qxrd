@@ -29,214 +29,8 @@
          <string>Files</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0" colspan="2">
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QToolButton" name="m_PrevDirectoryButton">
-             <property name="toolTip">
-              <string>Return to previous directory</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/go-left.png</normaloff>:/images/go-left.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="m_UpDirectoryButton">
-             <property name="toolTip">
-              <string>Change directory up one level</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/go-up.png</normaloff>:/images/go-up.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="m_ChangeDirectoryButton">
-             <property name="toolTip">
-              <string>Select a new directory</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/fileopen.png</normaloff>:/images/fileopen.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="m_HomeDirectoryButton">
-             <property name="toolTip">
-              <string>Change to home directory</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/go-home.png</normaloff>:/images/go-home.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="m_AcquisitionDirectoryButton">
-             <property name="toolTip">
-              <string>Change to acquisition output directory</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/system-run.png</normaloff>:/images/system-run.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="m_RefreshButton">
-             <property name="toolTip">
-              <string>Refresh directory listing</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>77</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item row="1" column="0" colspan="2">
-          <widget class="QComboBox" name="m_RootDirectoryCombo"/>
-         </item>
-         <item row="2" column="0" colspan="2">
-          <widget class="QxrdFileBrowserView" name="m_FileBrowser">
-           <property name="alternatingRowColors">
-            <bool>true</bool>
-           </property>
-           <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectRows</enum>
-           </property>
-           <property name="showGrid">
-            <bool>false</bool>
-           </property>
-           <property name="sortingEnabled">
-            <bool>true</bool>
-           </property>
-           <attribute name="verticalHeaderVisible">
-            <bool>false</bool>
-           </attribute>
-          </widget>
-         </item>
-         <item row="3" column="0" colspan="2">
-          <widget class="QComboBox" name="m_FilterChoices">
-           <item>
-            <property name="text">
-             <string>Image Files (*.tif)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Processed Files (*nnnnn.tif)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Raw Image Files (*.raw.tif)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Dark Image Files (*.dark.tif)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Integrated Data Files (*.avg)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Metadata Files (*.metadata)</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>All Files (*)</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="4" column="0" colspan="2">
-          <widget class="QLineEdit" name="m_FileSelector">
-           <property name="toolTip">
-            <string>File filter</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QPushButton" name="m_OpenButton">
-           <property name="toolTip">
-            <string>Open selected files</string>
-           </property>
-           <property name="text">
-            <string>Open</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QPushButton" name="m_ProcessButton">
-           <property name="toolTip">
-            <string>Process selected files</string>
-           </property>
-           <property name="text">
-            <string>Process</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QPushButton" name="m_AccumulateButton">
-           <property name="toolTip">
-            <string>Accumulate (sum) selected files</string>
-           </property>
-           <property name="text">
-            <string>Accumulate</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QPushButton" name="m_IntegrateButton">
-           <property name="toolTip">
-            <string>Integrate selected files</string>
-           </property>
-           <property name="text">
-            <string>Integrate</string>
-           </property>
-          </widget>
+         <item row="0" column="0">
+          <widget class="QxrdFileBrowserWidget" name="m_FileBrowserWidget" native="true"/>
          </item>
         </layout>
        </widget>
@@ -1333,19 +1127,20 @@ Script Function: acquire([fileName
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QxrdExposureTimeSpinner</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>qxrdexposuretimespinner.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QxrdFileBrowserView</class>
-   <extends>QTableView</extends>
-   <header>qxrdfilebrowserview.h</header>
-  </customwidget>
-  <customwidget>
    <class>QcepDatasetBrowserView</class>
    <extends>QTreeView</extends>
    <header>qcepdatasetbrowserview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QxrdFileBrowserWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdfilebrowserwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QxrdExposureTimeSpinner</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>qxrdexposuretimespinner.h</header>
   </customwidget>
  </customwidgets>
  <resources>

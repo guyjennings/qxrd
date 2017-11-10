@@ -10,13 +10,15 @@
 #include "qxrdcalibrantdspacings-ptr.h"
 #include "qxrdcalibrantdspacingsmodel-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
+#include "qxrdcalibrantwindowsettings-ptr.h"
 
 class QXRD_EXPORT QxrdCalibrantWindow : public QxrdMainWindow, public Ui::QxrdCalibrantWindow
 {
   Q_OBJECT
 
 public:
-  explicit QxrdCalibrantWindow(QString name,
+  explicit QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set,
+                               QString name,
                                QxrdApplicationWPtr app,
                                QxrdExperimentWPtr expt);
   ~QxrdCalibrantWindow();
@@ -40,6 +42,7 @@ protected:
   void changeEvent(QEvent *e);
 
 private:
+  QxrdCalibrantWindowSettingsWPtr m_CalibrantWindowSettings;
   QxrdCenterFinderWPtr            m_CenterFinder;
   QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
   QxrdCalibrantLibraryModelPtr    m_CalibrantLibraryModel;

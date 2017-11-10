@@ -11,8 +11,12 @@
 #include <QCheckBox>
 #include <QMessageBox>
 
-QxrdExtraIOWindow::QxrdExtraIOWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt) :
+QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
+                                     QString name,
+                                     QxrdApplicationWPtr app,
+                                     QxrdExperimentWPtr expt) :
   QxrdMainWindow(name, app, expt),
+  m_ExtraIOWindowSettings(set),
   m_ChannelsInRows(0)
 {
   setupUi(this);

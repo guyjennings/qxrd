@@ -133,7 +133,7 @@
      <x>0</x>
      <y>0</y>
      <width>946</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -148,7 +148,7 @@
    </widget>
    <widget class="QMenu" name="m_WindowMenu">
     <property name="title">
-     <string>Window</string>
+     <string>W&amp;indow</string>
     </property>
     <addaction name="actionWindow"/>
    </widget>
@@ -159,7 +159,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionWindow">
    <property name="text">
-    <string>Window</string>
+    <string>&amp;Window</string>
    </property>
   </action>
  </widget>
