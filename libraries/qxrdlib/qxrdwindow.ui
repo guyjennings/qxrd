@@ -1185,6 +1185,7 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <addaction name="actionPlaceholder"/>
    </widget>
    <widget class="QMenu" name="m_DetectorsMenu">
     <property name="title">
@@ -1308,12 +1309,6 @@
     <addaction name="m_ActionExecuteScriptJS"/>
     <addaction name="m_ActionLoadScript"/>
    </widget>
-   <widget class="QMenu" name="m_ExperimentsMenu">
-    <property name="title">
-     <string>E&amp;xperiments</string>
-    </property>
-    <addaction name="m_ActionPlaceholder"/>
-   </widget>
    <widget class="QMenu" name="m_WindowMenu">
     <property name="title">
      <string>Window</string>
@@ -1329,7 +1324,6 @@
    <addaction name="m_OperationsMenu"/>
    <addaction name="m_CalibrationMenu"/>
    <addaction name="m_DisplayMenu"/>
-   <addaction name="m_ExperimentsMenu"/>
    <addaction name="m_WindowsMenu"/>
    <addaction name="m_ScriptMenu"/>
    <addaction name="m_HelpMenu"/>
@@ -2084,41 +2078,6 @@
     <enum>QAction::NoRole</enum>
    </property>
   </action>
-  <action name="m_ActionUndo">
-   <property name="text">
-    <string>Undo</string>
-   </property>
-  </action>
-  <action name="m_ActionRedo">
-   <property name="text">
-    <string>Redo</string>
-   </property>
-  </action>
-  <action name="m_ActionCut">
-   <property name="text">
-    <string>Cut</string>
-   </property>
-  </action>
-  <action name="m_ActionCopy">
-   <property name="text">
-    <string>Copy</string>
-   </property>
-  </action>
-  <action name="m_ActionPaste">
-   <property name="text">
-    <string>Paste</string>
-   </property>
-  </action>
-  <action name="m_ActionDelete">
-   <property name="text">
-    <string>Delete</string>
-   </property>
-  </action>
-  <action name="m_ActionSelectAll">
-   <property name="text">
-    <string>Select All</string>
-   </property>
-  </action>
   <action name="m_ActionSaveExperimentAsText">
    <property name="text">
     <string>Save E&amp;xperiment as Text...</string>
@@ -2171,6 +2130,11 @@
   <action name="actiontest_window">
    <property name="text">
     <string>test window</string>
+   </property>
+  </action>
+  <action name="actionPlaceholder">
+   <property name="text">
+    <string>Placeholder</string>
    </property>
   </action>
  </widget>
