@@ -81,24 +81,24 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_Experiment(docw),
     m_Acquisition(acqw),
     m_DataProcessor(procw),
-    m_AcquisitionDialog(NULL),
-    m_AcquisitionScalerDialog(NULL),
-    m_AcquisitionExtraInputsDialog(NULL),
-    m_SynchronizedAcquisitionDialog(NULL),
+//    m_AcquisitionDialog(NULL),
+//    m_AcquisitionScalerDialog(NULL),
+//    m_AcquisitionExtraInputsDialog(NULL),
+//    m_SynchronizedAcquisitionDialog(NULL),
     m_DisplayDialog(NULL),
-    m_CenterFinderDialog(NULL),
-    m_MaskDialog(NULL),
+//    m_CenterFinderDialog(NULL),
+//    m_MaskDialog(NULL),
     m_CorrectionDialog(NULL),
-    m_IntegratorDialog(NULL),
-    m_CalibrantDialog(NULL),
-    m_DatasetBrowserDialog(NULL),
-    m_Calculator(NULL),
-    m_InputFileBrowser(NULL),
-    m_OutputFileBrowser(NULL),
-    m_SliceDialog(NULL),
-    m_HistogramDialog(NULL),
-    m_ImageInfoDialog(NULL),
-    m_ScriptDialog(NULL),
+//    m_IntegratorDialog(NULL),
+//    m_CalibrantDialog(NULL),
+//    m_DatasetBrowserDialog(NULL),
+//    m_Calculator(NULL),
+//    m_InputFileBrowser(NULL),
+//    m_OutputFileBrowser(NULL),
+//    m_SliceDialog(NULL),
+//    m_HistogramDialog(NULL),
+//    m_ImageInfoDialog(NULL),
+//    m_ScriptDialog(NULL),
     m_Progress(NULL),
     m_AllocationStatus(NULL),
     m_Data(NULL),
@@ -128,7 +128,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 
   setupUi(this);
 
-  setupMenus();
+  setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 
   setAttribute(Qt::WA_DeleteOnClose, false);
 }
@@ -146,65 +146,65 @@ void QxrdWindow::initialize()
   QxrdAcquisitionPtr acq(m_Acquisition);
   QxrdDataProcessorPtr proc(m_DataProcessor);
 
-  m_AcquisitionDialog = new QxrdAcquisitionDialog(m_Experiment,
-                                                  sharedFromThis(),
-                                                  m_Acquisition,
-                                                  m_DataProcessor,
-                                                  this);
+//  m_AcquisitionDialog = new QxrdAcquisitionDialog(m_Experiment,
+//                                                  sharedFromThis(),
+//                                                  m_Acquisition,
+//                                                  m_DataProcessor,
+//                                                  this);
 
-  m_AcquisitionScalerDialog = new QxrdAcquisitionScalerDialog(m_Acquisition, this);
-  m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(set->synchronizedAcquisitionDialogSettings(), this, m_Acquisition);
-  m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
+//  m_AcquisitionScalerDialog = new QxrdAcquisitionScalerDialog(m_Acquisition, this);
+//  m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(set->synchronizedAcquisitionDialogSettings(), this, m_Acquisition);
+//  m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
 
   m_DisplayDialog      = new QxrdDisplayDialog(this);
 
-  if (proc) {
-    m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
-  } else {
-    m_CenterFinderDialog = new QxrdCenterFinderDialog(QxrdCenterFinderWPtr());
-  }
+//  if (proc) {
+//    m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
+//  } else {
+//    m_CenterFinderDialog = new QxrdCenterFinderDialog(QxrdCenterFinderWPtr());
+//  }
 
-  m_MaskDialog       = new QxrdMaskDialog(m_DataProcessor, this);
+//  m_MaskDialog       = new QxrdMaskDialog(m_DataProcessor, this);
 
   m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
 
-  if (proc) {
-    m_IntegratorDialog   = new QxrdIntegratorDialog(proc -> integrator());
-  } else {
-    m_IntegratorDialog   = new QxrdIntegratorDialog(QxrdIntegratorWPtr());
-  }
+//  if (proc) {
+//    m_IntegratorDialog   = new QxrdIntegratorDialog(proc -> integrator());
+//  } else {
+//    m_IntegratorDialog   = new QxrdIntegratorDialog(QxrdIntegratorWPtr());
+//  }
 
-  if (expt) {
-    QxrdCalibrantLibraryPtr cal(expt->calibrantLibrary());
+//  if (expt) {
+//    QxrdCalibrantLibraryPtr cal(expt->calibrantLibrary());
 
-    if (cal && proc) {
-      m_CalibrantDialog = new QxrdCalibrantDialog(expt, proc -> centerFinder());
-    } else {
-      m_CalibrantDialog = new QxrdCalibrantDialog(expt, QxrdCenterFinderWPtr());
-    }
-  }
+//    if (cal && proc) {
+//      m_CalibrantDialog = new QxrdCalibrantDialog(expt, proc -> centerFinder());
+//    } else {
+//      m_CalibrantDialog = new QxrdCalibrantDialog(expt, QxrdCenterFinderWPtr());
+//    }
+//  }
 
-  if (expt) {
-    QcepDatasetModelPtr ds = expt->dataset();
+//  if (expt) {
+//    QcepDatasetModelPtr ds = expt->dataset();
 
-    if (ds) {
-      m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(expt, ds, this);
-    } else {
-      m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(expt, QcepDatasetModelWPtr(), this);
-    }
-  }
+//    if (ds) {
+//      m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(expt, ds, this);
+//    } else {
+//      m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(expt, QcepDatasetModelWPtr(), this);
+//    }
+//  }
 
-  if (expt && set) {
-    m_InputFileBrowser   = new QxrdInputFileBrowser(set->inputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
-    m_OutputFileBrowser  = new QxrdOutputFileBrowser(set->outputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
-    m_ScriptDialog       = new QxrdScriptDialog(set->scriptDialogSettings(), m_Experiment, this);
-  }
+//  if (expt && set) {
+//    m_InputFileBrowser   = new QxrdInputFileBrowser(set->inputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
+//    m_OutputFileBrowser  = new QxrdOutputFileBrowser(set->outputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
+//    m_ScriptDialog       = new QxrdScriptDialog(set->scriptDialogSettings(), m_Experiment, this);
+//  }
 
-  if (set) {
-    m_SliceDialog        = new QxrdSliceDialog(set->sliceDialogSettings(), this);
-    m_HistogramDialog    = new QxrdHistogramDialog(set->histogramDialogSettings(), m_Experiment, this);
-    m_ImageInfoDialog    = new QxrdInfoDialog(set->infoDialogSettings(), this);
-  }
+//  if (set) {
+//    m_SliceDialog        = new QxrdSliceDialog(set->sliceDialogSettings(), this);
+//    m_HistogramDialog    = new QxrdHistogramDialog(set->histogramDialogSettings(), m_Experiment, this);
+//    m_ImageInfoDialog    = new QxrdInfoDialog(set->infoDialogSettings(), this);
+//  }
 
   if (set) {
     m_ImagePlot        -> init(set->imagePlotSettings(), expt);
@@ -221,72 +221,72 @@ void QxrdWindow::initialize()
   //         screenGeom.left(), screenGeom.top(),
   //         screenGeom.right(), screenGeom.bottom());
 
-  if (m_AcquisitionDialog) {
-    addDockWidget(Qt::RightDockWidgetArea, m_AcquisitionDialog);
-  }
+//  if (m_AcquisitionDialog) {
+//    addDockWidget(Qt::RightDockWidgetArea, m_AcquisitionDialog);
+//  }
 
-  if (m_InputFileBrowser) {
-    addDockWidget(Qt::LeftDockWidgetArea, m_InputFileBrowser);
-  }
+//  if (m_InputFileBrowser) {
+//    addDockWidget(Qt::LeftDockWidgetArea, m_InputFileBrowser);
+//  }
 
   if (screenGeom.height() >= 1280) {
-    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
-    splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
+//    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
+//    splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
 
-    tabifyDockWidget(m_InputFileBrowser, m_DatasetBrowserDialog);
+//    tabifyDockWidget(m_InputFileBrowser, /*m_DatasetBrowserDialog);
 
-    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionScalerDialog);
-    tabifyDockWidget(m_AcquisitionScalerDialog, m_AcquisitionExtraInputsDialog);
-    tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
-    tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
-    tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
-    tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
-    tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
+//    tabifyDockWidget(m_AcquisitionDialog, *//*m_AcquisitionScalerDialog);
+//    tabifyDockWidget(m_AcquisitionScalerDialog, *//*m_AcquisitionExtraInputsDialog);
+//    tabifyDockWidget(m_AcquisitionExtraInputsDialog, *//*m_SynchronizedAcquisitionDialog);
+//    tabifyDockWidget(m_SynchronizedAcquisitionDialog, */m_DisplayDialog);
+//    tabifyDockWidget(m_DisplayDialog, /*m_SliceDialog);
+//    tabifyDockWidget(m_SliceDialog, *//*m_ImageInfoDialog);
+//    tabifyDockWidget(m_ImageInfoDialog,*/ m_ScriptDialog);
 
-    tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
-    tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
-    tabifyDockWidget(m_CorrectionDialog, m_CalibrantDialog);
-    tabifyDockWidget(m_CalibrantDialog, m_OutputFileBrowser);
-    tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
+//    tabifyDockWidget(m_CenterFinderDialog, /*m_MaskDialog);
+//    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
+//    tabifyDockWidget(m_CorrectionDialog, /*m_CalibrantDialog);
+//    tabifyDockWidget(m_CalibrantDialog, *//*m_OutputFileBrowser);
+//    tabifyDockWidget(m_OutputFileBrowser, */m_HistogramDialog);
   } else if (screenGeom.height() >= 1000) {
-    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
+//    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
 
-    tabifyDockWidget(m_InputFileBrowser, m_DatasetBrowserDialog);
+//    tabifyDockWidget(m_InputFileBrowser, /*m_DatasetBrowserDialog);
 
-    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionScalerDialog);
-    tabifyDockWidget(m_AcquisitionScalerDialog, m_AcquisitionExtraInputsDialog);
-    tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
-    tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
-    tabifyDockWidget(m_DisplayDialog, m_SliceDialog);
-    tabifyDockWidget(m_SliceDialog, m_ImageInfoDialog);
-    tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
+//    tabifyDockWidget(m_AcquisitionDialog, *//*m_AcquisitionScalerDialog);
+//    tabifyDockWidget(m_AcquisitionScalerDialog, *//*m_AcquisitionExtraInputsDialog);
+//    tabifyDockWidget(m_AcquisitionExtraInputsDialog, *//*m_SynchronizedAcquisitionDialog);
+//    tabifyDockWidget(m_SynchronizedAcquisitionDialog, */m_DisplayDialog);
+//    tabifyDockWidget(m_DisplayDialog, /*m_SliceDialog);
+//    tabifyDockWidget(m_SliceDialog, *//*m_ImageInfoDialog);
+//    tabifyDockWidget(m_ImageInfoDialog,*/ m_ScriptDialog);
 
-    tabifyDockWidget(m_CenterFinderDialog, m_MaskDialog);
-    tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
-    tabifyDockWidget(m_CorrectionDialog, m_CalibrantDialog);
-    tabifyDockWidget(m_CalibrantDialog, m_OutputFileBrowser);
-    tabifyDockWidget(m_OutputFileBrowser, m_HistogramDialog);
-    tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
+//    tabifyDockWidget(m_CenterFinderDialog, /*m_MaskDialog);
+//    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
+//    tabifyDockWidget(m_CorrectionDialog, /*m_CalibrantDialog);
+//    tabifyDockWidget(m_CalibrantDialog, *//*m_OutputFileBrowser);
+//    tabifyDockWidget(m_OutputFileBrowser, */m_HistogramDialog);
+//    tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
   } else {
-    tabifyDockWidget(m_AcquisitionDialog, m_AcquisitionScalerDialog);
-    tabifyDockWidget(m_AcquisitionScalerDialog, m_AcquisitionExtraInputsDialog);
-    tabifyDockWidget(m_AcquisitionExtraInputsDialog, m_SynchronizedAcquisitionDialog);
-    tabifyDockWidget(m_CenterFinderDialog, m_IntegratorDialog);
+//    tabifyDockWidget(m_AcquisitionDialog, /*m_AcquisitionScalerDialog);
+//    tabifyDockWidget(m_AcquisitionScalerDialog, *//*m_AcquisitionExtraInputsDialog);
+//    tabifyDockWidget(m_AcquisitionExtraInputsDialog, *//*m_SynchronizedAcquisitionDialog);
+//    tabifyDockWidget(m_CenterFinderDialog, *//*m_IntegratorDialog);
 
-    tabifyDockWidget(m_InputFileBrowser, m_DatasetBrowserDialog);
+//    tabifyDockWidget(m_IntegratorDialog,*/ /*m_SynchronizedAcquisitionDialog);
+//    tabifyDockWidget(m_SynchronizedAcquisitionDialog, */m_DisplayDialog);
 
-    tabifyDockWidget(m_IntegratorDialog, m_SynchronizedAcquisitionDialog);
-    tabifyDockWidget(m_SynchronizedAcquisitionDialog, m_DisplayDialog);
+//    tabifyDockWidget(m_InputFileBrowser, m_DatasetBrowserDialog);
 
-    tabifyDockWidget(m_DisplayDialog, m_MaskDialog);
-    tabifyDockWidget(m_MaskDialog, m_CorrectionDialog);
-    tabifyDockWidget(m_CorrectionDialog, m_CalibrantDialog);
-    tabifyDockWidget(m_CalibrantDialog, m_OutputFileBrowser);
+    tabifyDockWidget(m_DisplayDialog, /*m_MaskDialog);
+    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
+//    tabifyDockWidget(m_CorrectionDialog, /*m_CalibrantDialog);
+//    tabifyDockWidget(m_CalibrantDialog, *//*m_OutputFileBrowser);
 
-    tabifyDockWidget(m_OutputFileBrowser, m_SliceDialog);
-    tabifyDockWidget(m_SliceDialog, m_HistogramDialog);
-    tabifyDockWidget(m_HistogramDialog, m_ImageInfoDialog);
-    tabifyDockWidget(m_ImageInfoDialog, m_ScriptDialog);
+//    tabifyDockWidget(m_OutputFileBrowser, *//*m_SliceDialog);
+//    tabifyDockWidget(m_SliceDialog, *//*m_HistogramDialog);
+//    tabifyDockWidget(m_HistogramDialog, *//*m_ImageInfoDialog);
+//    tabifyDockWidget(m_ImageInfoDialog,*/ m_ScriptDialog);
 
 //    if (screenGeom.height() < 1000) {
 //      //      shrinkObject(this);
@@ -333,16 +333,7 @@ void QxrdWindow::initialize()
 
   connect(m_ActionReadObjectTreeFromText, &QAction::triggered, this, &QxrdWindow::doReadObjectTreeFromText);
 
-  m_ExperimentsMenu->menuAction()->setMenuRole(QAction::NoRole);
-
-  connect(m_EditMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateEditMenu);
-  connect(m_ActionUndo, &QAction::triggered, this, &QxrdWindow::doUndo);
-  connect(m_ActionRedo, &QAction::triggered, this, &QxrdWindow::doRedo);
-  connect(m_ActionCut, &QAction::triggered, this, &QxrdWindow::doCut);
-  connect(m_ActionCopy, &QAction::triggered, this, &QxrdWindow::doCopy);
-  connect(m_ActionPaste, &QAction::triggered, this, &QxrdWindow::doPaste);
-  connect(m_ActionDelete, &QAction::triggered, this, &QxrdWindow::doDelete);
-  connect(m_ActionSelectAll, &QAction::triggered, this, &QxrdWindow::doSelectAll);
+//  m_ExperimentsMenu->menuAction()->setMenuRole(QAction::NoRole);
 
   connect(m_ConfigureDetectorMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateConfigureDetectorMenu);
   m_ConfigureDetectorMenu->menuAction()->setMenuRole(QAction::NoRole);
@@ -395,10 +386,10 @@ void QxrdWindow::initialize()
   connect(m_ActionIce, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setIce);
 
   connect(m_ActionRefineCenterTilt, &QAction::triggered, this, &QxrdWindow::doRefineCenterTilt);
-  connect(m_ActionMoveCenterUp, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveUp);
-  connect(m_ActionMoveCenterDown, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveDown);
-  connect(m_ActionMoveCenterLeft, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveLeft);
-  connect(m_ActionMoveCenterRight, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveRight);
+//  connect(m_ActionMoveCenterUp, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveUp);
+//  connect(m_ActionMoveCenterDown, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveDown);
+//  connect(m_ActionMoveCenterLeft, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveLeft);
+//  connect(m_ActionMoveCenterRight, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveRight);
 
   connect(m_ActionNewTestImageGenerator, &QAction::triggered, this, &QxrdWindow::doNewTestImageGenerator);
   connect(m_ActionNewTestScanGenerator, &QAction::triggered, this, &QxrdWindow::doNewTestScanGenerator);
@@ -417,9 +408,9 @@ void QxrdWindow::initialize()
   connect(m_ActionPlotPowderRingTwoTheta, &QAction::triggered, this, &QxrdWindow::plotPowderRingTwoTheta);
   connect(m_ActionPlotPowderRingCenters, &QAction::triggered, this, &QxrdWindow::plotPowderRingCenters);
 
-  m_AcquisitionDialog->setupDetectorsMenu(m_DetectorsMenu);
+//  m_AcquisitionDialog->setupDetectorsMenu(m_DetectorsMenu);
 
-  m_AcquisitionDialog->acquisitionReady();
+//  m_AcquisitionDialog->acquisitionReady();
 
   connect(m_ActionShowImage, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowImage);
   connect(m_ActionShowMask, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowMask);
@@ -492,21 +483,21 @@ void QxrdWindow::initialize()
             proc.data(), &QxrdDataProcessor::integrateSaveAndDisplay);
   }
 
-  connect(m_ActionIntegrateInputImages, &QAction::triggered,
-          m_InputFileBrowser, &QxrdFileBrowser::doIntegrate);
+//  connect(m_ActionIntegrateInputImages, &QAction::triggered,
+//          m_InputFileBrowser, &QxrdFileBrowser::doIntegrate);
 
 //  connect(m_ActionPolarTransform, &QAction::triggered, this, &QxrdWindow::doPolarTransform);
 //  connect(m_ActionPolarNormalization, &QAction::triggered, this, &QxrdWindow::doPolarNormalization);
 
-  connect(m_IntegratorDialog -> m_ClearGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
-  connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
+//  connect(m_IntegratorDialog -> m_ClearGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
+//  connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
   connect(m_ActionClearIntegratedData, &QAction::triggered, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
   connect(m_ActionClearSelectedIntegratedData, &QAction::triggered, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
 
   connect(m_ActionSaveCachedGeometry, &QAction::triggered, this, &QxrdWindow::doSaveCachedGeometry);
   connect(m_ActionSaveCachedIntensity, &QAction::triggered, this, &QxrdWindow::doSaveCachedIntensity);
 
-  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
+//  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
 
   if (proc) {
     connect(proc->integrator()->prop_IntegrationXUnits(), &QcepIntProperty::valueChanged,
@@ -572,8 +563,8 @@ void QxrdWindow::initialize()
     acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
     acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
 
-    connect(acq->prop_OverflowLevel(), &QcepIntProperty::valueChanged,
-            m_HistogramDialog, &QxrdHistogramDialog::updateHistogramNeeded);
+//    connect(acq->prop_OverflowLevel(), &QcepIntProperty::valueChanged,
+//            m_HistogramDialog, &QxrdHistogramDialog::updateHistogramNeeded);
   }
 
   if (expt) {
@@ -655,23 +646,23 @@ void QxrdWindow::initialize()
             m_IntegratorPlot, &QxrdIntegratorPlot::onNewIntegrationAvailable);
   }
 
-  m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_AcquisitionScalerDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_AcquisitionExtraInputsDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_OutputFileBrowser -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_AcquisitionScalerDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_AcquisitionExtraInputsDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_OutputFileBrowser -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_DisplayDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_CalibrantDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_DatasetBrowserDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_CalibrantDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_DatasetBrowserDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
   m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_IntegratorDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_HistogramDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_ImageInfoDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_ScriptDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_IntegratorDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_HistogramDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_ImageInfoDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_ScriptDialog -> toggleViewAction());
 
   m_Highlighter = new QxrdHighlighter(m_ScriptEdit->document());
 
@@ -692,11 +683,11 @@ void QxrdWindow::initialize()
   m_ToDoList->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   m_ToDoList->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-  connect(m_ImagePlot, &QxrdImagePlot::slicePolygon,
-          m_SliceDialog, &QxrdSliceDialog::slicePolygon);
+//  connect(m_ImagePlot, &QxrdImagePlot::slicePolygon,
+//          m_SliceDialog, &QxrdSliceDialog::slicePolygon);
 
-  connect(m_ImagePlot, &QxrdImagePlot::selectHistogram,
-          m_HistogramDialog, &QxrdHistogramDialog::histogramSelectionChanged);
+//  connect(m_ImagePlot, &QxrdImagePlot::selectHistogram,
+//          m_HistogramDialog, &QxrdHistogramDialog::histogramSelectionChanged);
 
   if (app) {
     QxrdApplicationSettingsPtr appset(app->settings());
@@ -752,10 +743,10 @@ QxrdWindow::~QxrdWindow()
   }
 }
 
-void QxrdWindow::setupMenus()
-{
-  QxrdMainWindow::setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
-}
+//void QxrdWindow::setupMenus()
+//{
+//  QxrdMainWindow::setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
+//}
 
 void QxrdWindow::updateTitle()
 {
@@ -786,7 +777,7 @@ void QxrdWindow::updateTitle()
 
 void QxrdWindow::onAcquisitionInit()
 {
-  m_AcquisitionDialog->onAcquisitionInit();
+//  m_AcquisitionDialog->onAcquisitionInit();
 }
 
 void QxrdWindow::enableTiltRefinement(bool enable)
@@ -808,10 +799,10 @@ void QxrdWindow::closeEvent ( QCloseEvent * event )
   }
 }
 
-void QxrdWindow::populateWindowMenu()
-{
-  printMessage("populate window menu");
-}
+//void QxrdWindow::populateWindowMenu()
+//{
+//  printMessage("populate window menu");
+//}
 
 void QxrdWindow::populateConfigureDetectorMenu()
 {
@@ -1142,29 +1133,29 @@ void QxrdWindow::doTimerUpdate()
       }
     }
 
-    if (m_SliceDialog) {
-      m_SliceDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+//    if (m_SliceDialog) {
+//      m_SliceDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
 
-      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-        g_Application->printMessage(tr("QxrdWindow::newData sliceDialog after %1 msec").arg(t.elapsed()));
-      }
-    }
+//      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+//        g_Application->printMessage(tr("QxrdWindow::newData sliceDialog after %1 msec").arg(t.elapsed()));
+//      }
+//    }
 
-    if (m_HistogramDialog) {
-      m_HistogramDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+//    if (m_HistogramDialog) {
+//      m_HistogramDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
 
-      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-        g_Application->printMessage(tr("QxrdWindow::newData histogramDialog after %1 msec").arg(t.elapsed()));
-      }
-    }
+//      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+//        g_Application->printMessage(tr("QxrdWindow::newData histogramDialog after %1 msec").arg(t.elapsed()));
+//      }
+//    }
 
-    if (m_ImageInfoDialog) {
-      m_ImageInfoDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
+//    if (m_ImageInfoDialog) {
+//      m_ImageInfoDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
 
-      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-        g_Application->printMessage(tr("QxrdWindow::newData imageInfoDialog after %1 msec").arg(t.elapsed()));
-      }
-    }
+//      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+//        g_Application->printMessage(tr("QxrdWindow::newData imageInfoDialog after %1 msec").arg(t.elapsed()));
+//      }
+//    }
 
 
     if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
@@ -1250,227 +1241,6 @@ void QxrdWindow::doReadObjectTreeFromText()
 
     if (theFile.length()) {
       expt->readObjectTreeFromText(theFile);
-    }
-  }
-}
-
-void QxrdWindow::populateEditMenu()
-{
-  QcepExperimentPtr expt(m_Experiment);
-
-  m_EditMenu -> clear();
-
-  if (expt) {
-    QAction *undoAction = NULL, *redoAction = NULL;
-
-    QWidget* focusWidget = QApplication::focusWidget();
-
-    if (focusWidget) {
-      printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
-
-      QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
-      QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
-      QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
-      QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
-      QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
-
-      if (txed || lned || ispn || dspn || cbox) {
-        undoAction = m_ActionUndo;
-        redoAction = m_ActionRedo;
-      }
-    }
-
-    if (undoAction == NULL) {
-      undoAction = expt->undoStack()->createUndoAction(this);
-    }
-
-    if (redoAction == NULL) {
-      redoAction = expt->undoStack()->createRedoAction(this);
-    }
-
-    m_EditMenu->addAction(undoAction);
-    m_EditMenu->addAction(redoAction);
-    m_EditMenu->addSeparator();
-    m_EditMenu->addAction(m_ActionCut);
-    m_EditMenu->addAction(m_ActionCopy);
-    m_EditMenu->addAction(m_ActionPaste);
-    m_EditMenu->addAction(m_ActionDelete);
-    m_EditMenu->addSeparator();
-    m_EditMenu->addAction(m_ActionSelectAll);
-  }
-}
-
-void QxrdWindow::doUndo()
-{
-  QWidget* focusWidget = QApplication::focusWidget();
-
-  if (focusWidget) {
-    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
-
-    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
-    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
-    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
-    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
-    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
-
-    if (txed) {
-      txed->undo();
-    } else if (lned) {
-      lned->undo();
-    } else if (ispn) {
-    } else if (dspn) {
-    } else if (cbox) {
-    }
-  }
-}
-
-void QxrdWindow::doRedo()
-{
-  QWidget* focusWidget = QApplication::focusWidget();
-
-  if (focusWidget) {
-    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
-
-    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
-    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
-    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
-    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
-    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
-
-    if (txed) {
-      txed->redo();
-    } else if (lned) {
-      lned->redo();
-    } else if (ispn) {
-    } else if (dspn) {
-    } else if (cbox) {
-    }
-  }
-}
-
-void QxrdWindow::doCut()
-{
-  QWidget* focusWidget = QApplication::focusWidget();
-
-  if (focusWidget) {
-    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
-
-    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
-    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
-    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
-    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
-    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
-
-    if (txed) {
-      txed->cut();
-    } else if (lned) {
-      lned->cut();
-    } else if (ispn) {
-    } else if (dspn) {
-    } else if (cbox) {
-    }
-  }
-}
-
-void QxrdWindow::doCopy()
-{
-  QWidget* focusWidget = QApplication::focusWidget();
-
-  if (focusWidget) {
-    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
-
-    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
-    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
-    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
-    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
-    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
-
-    if (txed) {
-      txed->copy();
-    } else if (lned) {
-      lned->copy();
-    } else if (ispn) {
-    } else if (dspn) {
-    } else if (cbox) {
-    }
-  }
-}
-
-void QxrdWindow::doPaste()
-{
-  QWidget* focusWidget = QApplication::focusWidget();
-
-  if (focusWidget) {
-    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
-
-    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
-    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
-    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
-    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
-    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
-
-    if (txed) {
-      txed->paste();
-    } else if (lned) {
-      lned->paste();
-    } else if (ispn) {
-    } else if (dspn) {
-    } else if (cbox) {
-    }
-  }
-}
-
-void QxrdWindow::doDelete()
-{
-  QWidget* focusWidget = QApplication::focusWidget();
-
-  if (focusWidget) {
-    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
-
-    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
-    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
-    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
-    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
-    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
-
-    if (txed) {
-      if (txed->textCursor().hasSelection()) {
-        txed->textCursor().deleteChar();
-      }
-    } else if (lned) {
-      if (lned->selectedText().length()) {
-        lned->del();
-      }
-    } else if (ispn) {
-    } else if (dspn) {
-    } else if (cbox) {
-    }
-  }
-}
-
-void QxrdWindow::doSelectAll()
-{
-  QWidget* focusWidget = QApplication::focusWidget();
-
-  if (focusWidget) {
-    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
-
-    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
-    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
-    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
-    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
-    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
-    QAbstractItemView *itmv = qobject_cast<QAbstractItemView*>(focusWidget);
-
-    if (txed) {
-      txed->selectAll();
-    } else if (lned) {
-      lned->selectAll();
-    } else if (ispn) {
-    } else if (dspn) {
-    } else if (cbox) {
-    } else if (itmv) {
-      itmv->selectAll();
     }
   }
 }

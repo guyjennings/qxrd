@@ -53,7 +53,7 @@ public:
              QWidget *parent);
   virtual ~QxrdWindow();
   void initialize();
-  void setupMenus();
+//  void setupMenus();
 
   void onAcquisitionInit();
 
@@ -132,21 +132,13 @@ signals:
   void executeCommandJS(QString cmd);
 
 private slots:
-  void doUndo();
-  void doRedo();
-  void doCut();
-  void doCopy();
-  void doPaste();
-  void doDelete();
-  void doSelectAll();
   void doTimerUpdate();
   void newMask();
   void allocatedMemoryChanged();
   void integrationXUnitsChanged(int newXUnits);
   void onMessageWindowLinesChanged(int newVal);
   void onUpdateIntervalMsecChanged(int newVal);
-  void populateWindowMenu();
-  void populateEditMenu();
+//  void populateWindowMenu();
   void populateConfigureDetectorMenu();
   void populateDetectorControlWindowsMenu();
   void plotPowderRingRadii();
@@ -178,24 +170,24 @@ private:
   QxrdExperimentWPtr                     m_Experiment;
   QxrdAcquisitionWPtr                    m_Acquisition;
   QxrdDataProcessorWPtr                  m_DataProcessor;
-  QxrdAcquisitionDialog                 *m_AcquisitionDialog;
-  QxrdAcquisitionScalerDialog           *m_AcquisitionScalerDialog;
-  QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
-  QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
+//  QxrdAcquisitionDialog                 *m_AcquisitionDialog;
+//  QxrdAcquisitionScalerDialog           *m_AcquisitionScalerDialog;
+//  QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
+//  QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
   QxrdDisplayDialog                     *m_DisplayDialog;
-  QxrdCenterFinderDialog                *m_CenterFinderDialog;
-  QxrdMaskDialog                        *m_MaskDialog;
+//  QxrdCenterFinderDialog                *m_CenterFinderDialog;
+//  QxrdMaskDialog                        *m_MaskDialog;
   QxrdCorrectionDialog                  *m_CorrectionDialog;
-  QxrdCalibrantDialog                   *m_CalibrantDialog;
-  QcepDatasetBrowserDialog              *m_DatasetBrowserDialog;
-  QxrdIntegratorDialog                  *m_IntegratorDialog;
-  QxrdImageCalculator                   *m_Calculator;
-  QxrdInputFileBrowser                  *m_InputFileBrowser;
-  QxrdOutputFileBrowser                 *m_OutputFileBrowser;
-  QxrdSliceDialog                       *m_SliceDialog;
-  QxrdHistogramDialog                   *m_HistogramDialog;
-  QxrdInfoDialog                        *m_ImageInfoDialog;
-  QxrdScriptDialog                      *m_ScriptDialog;
+//  QxrdCalibrantDialog                   *m_CalibrantDialog;
+//  QcepDatasetBrowserDialog              *m_DatasetBrowserDialog;
+//  QxrdIntegratorDialog                  *m_IntegratorDialog;
+//  QxrdImageCalculator                   *m_Calculator;
+//  QxrdInputFileBrowser                  *m_InputFileBrowser;
+//  QxrdOutputFileBrowser                 *m_OutputFileBrowser;
+//  QxrdSliceDialog                       *m_SliceDialog;
+//  QxrdHistogramDialog                   *m_HistogramDialog;
+//  QxrdInfoDialog                        *m_ImageInfoDialog;
+//  QxrdScriptDialog                      *m_ScriptDialog;
   QVector<double>                        m_Exposures;
   QProgressBar                          *m_Progress;
   QLabel                                *m_StatusMsg;

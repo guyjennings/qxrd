@@ -28,8 +28,17 @@ public slots:
   void doEditPreferences();
 
 private slots:
+  void populateEditMenu();
   void populateWindowsMenu();
   void populateRecentExperimentsMenu();
+
+  void doUndo();
+  void doRedo();
+  void doCut();
+  void doCopy();
+  void doPaste();
+  void doDelete();
+  void doSelectAll();
 
 protected:
   QString             m_Name;
@@ -52,6 +61,14 @@ protected:
   QAction            *m_ActionGlobalPreferences;
   QAction            *m_ActionExperimentPreferences;
   QAction            *m_ActionQuit;
+
+  QAction            *m_ActionUndo;
+  QAction            *m_ActionRedo;
+  QAction            *m_ActionCut;
+  QAction            *m_ActionCopy;
+  QAction            *m_ActionPaste;
+  QAction            *m_ActionDelete;
+  QAction            *m_ActionSelectAll;
 };
 
 #endif // QXRDMAINWINDOW_H
