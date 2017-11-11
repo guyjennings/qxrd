@@ -42,8 +42,8 @@ public:
   QxrdImagePlotSettingsWPtr                    imagePlotSettings();
   QxrdCenterFinderPlotSettingsWPtr             centerFinderPlotSettings();
   QxrdIntegratorPlotSettingsWPtr               integratorPlotSettings();
-  QxrdInputFileBrowserSettingsWPtr             inputFileBrowserSettings();
-  QxrdOutputFileBrowserSettingsWPtr            outputFileBrowserSettings();
+  QxrdFileBrowserSettingsWPtr                  fileBrowserSettings();
+//  QxrdOutputFileBrowserSettingsWPtr            outputFileBrowserSettings();
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
   QxrdSliceDialogSettingsWPtr                  sliceDialogSettings();
   QxrdInfoDialogSettingsWPtr                   infoDialogSettings();
@@ -60,8 +60,8 @@ private:
   QxrdImagePlotSettingsPtr                     m_ImagePlotSettings;
   QxrdCenterFinderPlotSettingsPtr              m_CenterFinderPlotSettings;
   QxrdIntegratorPlotSettingsPtr                m_IntegratorPlotSettings;
-  QxrdInputFileBrowserSettingsPtr              m_InputFileBrowserSettings;
-  QxrdOutputFileBrowserSettingsPtr             m_OutputFileBrowserSettings;
+  QxrdFileBrowserSettingsPtr                   m_FileBrowserSettings;
+//  QxrdOutputFileBrowserSettingsPtr             m_OutputFileBrowserSettings;
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;
   QxrdSliceDialogSettingsPtr                   m_SliceDialogSettings;
   QxrdInfoDialogSettingsPtr                    m_InfoDialogSettings;

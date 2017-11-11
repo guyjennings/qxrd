@@ -130,6 +130,28 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 
+  m_Splitter->setStretchFactor(0, 1);
+  m_Splitter->setStretchFactor(1, 5);
+  m_Splitter->setStretchFactor(2, 1);
+
+  m_DatasetBrowserView -> setExperiment(m_Experiment);
+
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    QcepDatasetModelPtr model(exp->dataset());
+
+    m_DatasetBrowserView -> setDatasetModel(model);
+
+    QxrdDataProcessorPtr proc(exp->dataProcessor());
+
+    QxrdWindowSettingsPtr settings(m_WindowSettings);
+
+    if (settings) {
+      m_FileBrowserWidget -> init(settings->fileBrowserSettings(), exp, proc);
+    }
+  }
+
   setAttribute(Qt::WA_DeleteOnClose, false);
 }
 

@@ -6,21 +6,68 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>921</width>
-    <height>722</height>
+    <width>1044</width>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>QXRD Readout Software</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_21">
+   <layout class="QGridLayout" name="gridLayout_8">
     <item row="0" column="0">
-     <widget class="QSplitter" name="splitter_2">
+     <widget class="QSplitter" name="m_Splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTabWidget" name="m_DistortionCorrectionPage">
+      <widget class="QTabWidget" name="m_LeftTabs">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="m_FilesTab">
+        <attribute name="title">
+         <string>Files</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QxrdFileBrowserWidget" name="m_FileBrowserWidget" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="m_DataItemsTab">
+        <attribute name="title">
+         <string>Data Items</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0">
+          <widget class="QcepDatasetBrowserView" name="m_DatasetBrowserView">
+           <property name="acceptDrops">
+            <bool>true</bool>
+           </property>
+           <property name="dragEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="dragDropOverwriteMode">
+            <bool>false</bool>
+           </property>
+           <property name="dragDropMode">
+            <enum>QAbstractItemView::DragDrop</enum>
+           </property>
+           <property name="defaultDropAction">
+            <enum>Qt::TargetMoveAction</enum>
+           </property>
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::ExtendedSelection</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QTabWidget" name="m_CentralTabs">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>3</horstretch>
@@ -28,7 +75,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>6</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -973,7 +1020,7 @@
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Cancel Script</string>
+                <string>Cancel</string>
                </property>
               </widget>
              </item>
@@ -993,14 +1040,14 @@
              <item row="1" column="2">
               <widget class="QPushButton" name="m_ExecuteScriptButton">
                <property name="text">
-                <string>Execute Command</string>
+                <string>Exec</string>
                </property>
               </widget>
              </item>
              <item row="1" column="4">
               <widget class="QPushButton" name="m_LoadScriptButton">
                <property name="text">
-                <string>Load Script...</string>
+                <string>Load...</string>
                </property>
               </widget>
              </item>
@@ -1020,7 +1067,7 @@
              <item row="1" column="3">
               <widget class="QPushButton" name="m_ExecuteScriptJSButton">
                <property name="text">
-                <string>Execute JS Command</string>
+                <string>Exec JS</string>
                </property>
               </widget>
              </item>
@@ -1134,6 +1181,18 @@
         </layout>
        </widget>
       </widget>
+      <widget class="QTabWidget" name="m_RightTabs">
+       <widget class="QWidget" name="tab_10">
+        <attribute name="title">
+         <string>Tab 1</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="tab_11">
+        <attribute name="title">
+         <string>Tab 2</string>
+        </attribute>
+       </widget>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -1143,7 +1202,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>921</width>
+     <width>1044</width>
      <height>22</height>
     </rect>
    </property>
@@ -2165,9 +2224,20 @@
    <header>qxrddistortioncorrectionplot.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>QcepDatasetBrowserView</class>
+   <extends>QTreeView</extends>
+   <header>qcepdatasetbrowserview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QxrdFileBrowserWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdfilebrowserwidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>m_DistortionCorrectionPage</tabstop>
+  <tabstop>m_CentralTabs</tabstop>
   <tabstop>m_ImageZoomInButton</tabstop>
   <tabstop>m_ImageZoomOutButton</tabstop>
   <tabstop>m_ImageZoomAllButton</tabstop>

@@ -30,8 +30,8 @@ QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
   set -> addChildPtr(QxrdImagePlotSettings::newImagePlotSettings());
   set -> addChildPtr(QxrdCenterFinderPlotSettings::newCenterFinderPlotSettings());
   set -> addChildPtr(QxrdIntegratorPlotSettings::newIntegratorPlotSettings());
-  set -> addChildPtr(QxrdInputFileBrowserSettings::newInputFileBrowserSettings());
-  set -> addChildPtr(QxrdOutputFileBrowserSettings::newOutputFileBrowserSettings());
+  set -> addChildPtr(QxrdFileBrowserSettings::newFileBrowserSettings());
+//  set -> addChildPtr(QxrdOutputFileBrowserSettings::newOutputFileBrowserSettings());
   set -> addChildPtr(QxrdHistogramDialogSettings::newHistogramDialogSettings());
   set -> addChildPtr(QxrdSliceDialogSettings::newSliceDialogSettings());
   set -> addChildPtr(QxrdInfoDialogSettings::newInfoDialogSettings());
@@ -49,8 +49,8 @@ void QxrdWindowSettings::addChildPtr(QcepObjectPtr child)
 
   if (checkPointer<QxrdCenterFinderPlotSettings>(child, m_CenterFinderPlotSettings)) {}
   else if (checkPointer<QxrdIntegratorPlotSettings>(child, m_IntegratorPlotSettings)) {}
-  else if (checkPointer<QxrdInputFileBrowserSettings>(child,m_InputFileBrowserSettings)) {}
-  else if (checkPointer<QxrdOutputFileBrowserSettings>(child, m_OutputFileBrowserSettings)) {}
+  else if (checkPointer<QxrdFileBrowserSettings>(child,m_FileBrowserSettings)) {}
+//  else if (checkPointer<QxrdOutputFileBrowserSettings>(child, m_OutputFileBrowserSettings)) {}
   else if (checkPointer<QxrdHistogramDialogSettings>(child, m_HistogramDialogSettings)) {}
   else if (checkPointer<QxrdSliceDialogSettings>(child, m_SliceDialogSettings)) {}
   else if (checkPointer<QxrdInfoDialogSettings>(child, m_InfoDialogSettings)) {}
@@ -67,8 +67,8 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdImagePlotSettings*>("QxrdImagePlotSettings*");
   qRegisterMetaType<QxrdCenterFinderPlotSettings*>("QxrdCenterFinderPlotSettings*");
   qRegisterMetaType<QxrdIntegratorPlotSettings*>("QxrdIntegratorPlotSettings*");
-  qRegisterMetaType<QxrdInputFileBrowserSettings*>("QxrdInputFileBrowserSettings*");
-  qRegisterMetaType<QxrdOutputFileBrowserSettings*>("QxrdOutputFileBrowserSettings*");
+  qRegisterMetaType<QxrdFileBrowserSettings*>("QxrdFileBrowserSettings*");
+//  qRegisterMetaType<QxrdOutputFileBrowserSettings*>("QxrdOutputFileBrowserSettings*");
   qRegisterMetaType<QxrdHistogramDialogSettings*>("QxrdHistogramDialogSettings*");
   qRegisterMetaType<QxrdHistogramPlotSettings*>("QxrdHistogramPlotSettings*");
   qRegisterMetaType<QxrdSliceDialogSettings*>("QxrdSliceDialogSettings*");
@@ -107,17 +107,17 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (m_InputFileBrowserSettings) {
-      settings->beginGroup("inputFileBrowser");
-      m_InputFileBrowserSettings->readSettings(settings);
+    if (m_FileBrowserSettings) {
+      settings->beginGroup("browser");
+      m_FileBrowserSettings->readSettings(settings);
       settings->endGroup();
     }
 
-    if (m_OutputFileBrowserSettings) {
-      settings->beginGroup("outputFileBrowser");
-      m_OutputFileBrowserSettings->readSettings(settings);
-      settings->endGroup();
-    }
+//    if (m_OutputFileBrowserSettings) {
+//      settings->beginGroup("outputFileBrowser");
+//      m_OutputFileBrowserSettings->readSettings(settings);
+//      settings->endGroup();
+//    }
 
     if (m_HistogramDialogSettings) {
       settings->beginGroup("histogramDialog");
@@ -190,17 +190,17 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (m_InputFileBrowserSettings) {
-      settings->beginGroup("inputFileBrowser");
-      m_InputFileBrowserSettings->writeSettings(settings);
+    if (m_FileBrowserSettings) {
+      settings->beginGroup("browser");
+      m_FileBrowserSettings->writeSettings(settings);
       settings->endGroup();
     }
 
-    if (m_OutputFileBrowserSettings) {
-      settings->beginGroup("outputFileBrowser");
-      m_OutputFileBrowserSettings->writeSettings(settings);
-      settings->endGroup();
-    }
+//    if (m_OutputFileBrowserSettings) {
+//      settings->beginGroup("outputFileBrowser");
+//      m_OutputFileBrowserSettings->writeSettings(settings);
+//      settings->endGroup();
+//    }
 
     if (m_HistogramDialogSettings) {
       settings->beginGroup("histogramDialog");
@@ -267,15 +267,15 @@ QxrdIntegratorPlotSettingsWPtr QxrdWindowSettings::integratorPlotSettings()
   return m_IntegratorPlotSettings;
 }
 
-QxrdInputFileBrowserSettingsWPtr QxrdWindowSettings::inputFileBrowserSettings()
+QxrdFileBrowserSettingsWPtr QxrdWindowSettings::fileBrowserSettings()
 {
-  return m_InputFileBrowserSettings;
+  return m_FileBrowserSettings;
 }
 
-QxrdOutputFileBrowserSettingsWPtr QxrdWindowSettings::outputFileBrowserSettings()
-{
-  return m_OutputFileBrowserSettings;
-}
+//QxrdOutputFileBrowserSettingsWPtr QxrdWindowSettings::outputFileBrowserSettings()
+//{
+//  return m_OutputFileBrowserSettings;
+//}
 
 QxrdSliceDialogSettingsWPtr QxrdWindowSettings::sliceDialogSettings()
 {
