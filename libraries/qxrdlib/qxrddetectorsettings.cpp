@@ -109,7 +109,7 @@ QxrdDetectorSettings::~QxrdDetectorSettings()
   }
 }
 
-void QxrdDetectorSettings::printLine(QString line)
+void QxrdDetectorSettings::printLine(QString line) const
 {
   if (m_DetectorControlWindow) {
     m_DetectorControlWindow->printLine(line);
@@ -124,7 +124,7 @@ void QxrdDetectorSettings::printLine(QString line)
   }
 }
 
-void QxrdDetectorSettings::printMessage(QString msg, QDateTime dt)
+void QxrdDetectorSettings::printMessage(QString msg, QDateTime dt) const
 {
   if (m_DetectorControlWindow) {
     m_DetectorControlWindow->printMessage(msg, dt);
@@ -139,7 +139,7 @@ void QxrdDetectorSettings::printMessage(QString msg, QDateTime dt)
   }
 }
 
-void QxrdDetectorSettings::criticalMessage(QString msg, QDateTime ts)
+void QxrdDetectorSettings::criticalMessage(QString msg, QDateTime ts) const
 {
   if (m_DetectorControlWindow) {
     m_DetectorControlWindow->criticalMessage(msg, ts);
@@ -154,7 +154,7 @@ void QxrdDetectorSettings::criticalMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdDetectorSettings::statusMessage(QString msg, QDateTime ts)
+void QxrdDetectorSettings::statusMessage(QString msg, QDateTime ts) const
 {
   if (m_DetectorControlWindow) {
     m_DetectorControlWindow->statusMessage(msg, ts);
