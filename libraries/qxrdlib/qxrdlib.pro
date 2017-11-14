@@ -301,7 +301,19 @@ SOURCES += qxrdlib.cpp \
     qxrdcenteringplotwidget.cpp \
     qxrdimageplotwidget.cpp \
     qxrdintegratedplotwidget.cpp \
-    qxrdfilebrowserwidget.cpp
+    qxrdfilebrowserwidget.cpp \
+    qxrdplotwidget.cpp \
+    qxrdplotcommand.cpp \
+    qxrdzoomincommand.cpp \
+    qxrdzoomoutcommand.cpp \
+    qxrdzoomallcommand.cpp \
+    qxrdmaskcirclescommand.cpp \
+    qxrdmaskpolygonscommand.cpp \
+    qxrdsetcentercommand.cpp \
+    qxrdpowderpointscommand.cpp \
+    qxrdslicecommand.cpp \
+    qxrdmeasurecommand.cpp \
+    qxrdhistogramcommand.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -352,7 +364,20 @@ HEADERS += qxrdlib.h\
     qxrdhelpwindowsettings-ptr.h \
     qxrdintegrationwindowsettings-ptr.h \
     qxrdmaskingwindowsettings-ptr.h \
-    qxrdscriptingwindowsettings-ptr.h
+    qxrdscriptingwindowsettings-ptr.h \
+    qxrdplotwidget.h \
+    qxrdplotcommand.h \
+    qxrdzoomincommand.h \
+    qxrdzoomoutcommand.h \
+    qxrdzoomallcommand.h \
+    qxrdmaskcirclescommand.h \
+    qxrdmaskpolygonscommand.h \
+    qxrdsetcentercommand.h \
+    qxrdpowderpointscommand.h \
+    qxrdslicecommand.h \
+    qxrdmeasurecommand.h \
+    qxrdhistogramcommand.h \
+    qxrdplotcommand-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -727,10 +752,8 @@ FORMS += qxrdwindow.ui \
     qxrdcalculatorwindow.ui \
     qxrdinfowindow.ui \
     qxrdextraiowindow.ui \
-    qxrdcenteringplotwidget.ui \
-    qxrdimageplotwidget.ui \
-    qxrdintegratedplotwidget.ui \
-    qxrdfilebrowserwidget.ui
+    qxrdfilebrowserwidget.ui \
+    qxrdplotwidget.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS += \

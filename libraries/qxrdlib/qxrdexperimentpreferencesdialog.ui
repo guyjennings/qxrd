@@ -27,7 +27,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="m_PreferencesPanes">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab_4">
       <attribute name="title">
@@ -60,7 +60,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/go-up.png</normaloff>:/images/go-up.png</iconset>
              </property>
             </widget>
@@ -74,7 +74,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/go-down.png</normaloff>:/images/go-down.png</iconset>
              </property>
             </widget>
@@ -88,7 +88,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset>
                <normaloff>:/images/preferences.png</normaloff>:/images/preferences.png</iconset>
              </property>
             </widget>
@@ -628,9 +628,7 @@ Change only by saving a new experiment</string>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="qxrdresources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

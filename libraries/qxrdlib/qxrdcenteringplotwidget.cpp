@@ -1,26 +1,19 @@
 #include "qxrdcenteringplotwidget.h"
-#include "ui_qxrdcenteringplotwidget.h"
+#include "qxrdzoomincommand.h"
+#include "qxrdzoomoutcommand.h"
+#include "qxrdzoomallcommand.h"
+#include "qxrdsetcentercommand.h"
 
 QxrdCenteringPlotWidget::QxrdCenteringPlotWidget(QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::QxrdCenteringPlotWidget)
+  QxrdPlotWidget(parent)
 {
-  ui->setupUi(this);
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomInCommand("Zoom In")));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomOutCommand("Zoom Out")));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomAllCommand("Zoom All")));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center")));
+  addPlotCommandSpacer();
 }
 
 QxrdCenteringPlotWidget::~QxrdCenteringPlotWidget()
 {
-  delete ui;
-}
-
-void QxrdCenteringPlotWidget::changeEvent(QEvent *e)
-{
-  QWidget::changeEvent(e);
-  switch (e->type()) {
-  case QEvent::LanguageChange:
-    ui->retranslateUi(this);
-    break;
-  default:
-    break;
-  }
 }
