@@ -5,7 +5,7 @@
 #include <QObject>
 #include "qxrdimageplot.h"
 
-class QxrdPlotContextMenuCommand : public QxrdPlotCommand
+class QXRD_EXPORT QxrdPlotContextMenuCommand : public QxrdPlotCommand
 {
 public:
   QxrdPlotContextMenuCommand(QString name, QxrdImagePlot *plot);

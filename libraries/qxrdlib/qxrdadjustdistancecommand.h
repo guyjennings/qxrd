@@ -4,7 +4,7 @@
 #include "qxrdplotcontextmenucommand.h"
 #include "qxrdimageplot-ptr.h"
 
-class QxrdAdjustDistanceCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdAdjustDistanceCommand : public QxrdPlotContextMenuCommand
 {
 public:
   QxrdAdjustDistanceCommand(QString name, QxrdImagePlot* plot);

@@ -3,7 +3,7 @@
 
 #include "qxrdplotcontextmenucommand.h"
 
-class QxrdDelPointCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdDelPointCommand : public QxrdPlotContextMenuCommand
 {
 public:
   QxrdDelPointCommand(QString name, QxrdImagePlot* plot);

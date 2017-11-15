@@ -3,8 +3,9 @@
 
 #include "qwt_plot_piecewise_curve-ptr.h"
 #include <QVector>
+#include "qxrdlib_global.h"
 
-class QxrdPlotCurveVector : public QVector<QwtPlotPiecewiseCurve*>
+class QXRD_EXPORT QxrdPlotCurveVector : public QVector<QwtPlotPiecewiseCurve*>
 {
 public:
   QxrdPlotCurveVector();

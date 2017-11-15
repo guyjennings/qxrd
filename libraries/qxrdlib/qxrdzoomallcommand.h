@@ -3,7 +3,7 @@
 
 #include "qxrdplotbuttoncommand.h"
 
-class QxrdZoomAllCommand : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdZoomAllCommand : public QxrdPlotButtonCommand
 {
 public:
   QxrdZoomAllCommand(QString name, QxrdImagePlot *plot);

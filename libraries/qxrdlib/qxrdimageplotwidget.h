@@ -3,7 +3,7 @@
 
 #include "qxrdplotwidget.h"
 
-class QxrdImagePlotWidget : public QxrdPlotWidget
+class QXRD_EXPORT QxrdImagePlotWidget : public QxrdPlotWidget
 {
   Q_OBJECT
 

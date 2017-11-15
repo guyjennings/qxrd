@@ -3,7 +3,7 @@
 
 #include "qxrdplotbuttoncommand.h"
 
-class QxrdSliceCommand : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdSliceCommand : public QxrdPlotButtonCommand
 {
 public:
   QxrdSliceCommand(QString name, QxrdImagePlot *plot);

@@ -3,7 +3,7 @@
 
 #include "qxrdplotcontextmenucommand.h"
 
-class QxrdDisableRingCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdDisableRingCommand : public QxrdPlotContextMenuCommand
 {
 public:
   QxrdDisableRingCommand(QString name, QxrdImagePlot* plot);

@@ -3,7 +3,7 @@
 
 #include "qxrdplotcontextmenucommand.h"
 
-class QxrdPrintPlotCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdPrintPlotCommand : public QxrdPlotContextMenuCommand
 {
 public:
   QxrdPrintPlotCommand(QString name, QxrdImagePlot *plot);

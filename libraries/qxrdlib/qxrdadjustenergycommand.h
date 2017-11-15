@@ -3,7 +3,7 @@
 
 #include "qxrdplotcontextmenucommand.h"
 
-class QxrdAdjustEnergyCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdAdjustEnergyCommand : public QxrdPlotContextMenuCommand
 {
 public:
   QxrdAdjustEnergyCommand(QString name, QxrdImagePlot* plot);

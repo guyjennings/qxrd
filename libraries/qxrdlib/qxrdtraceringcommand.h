@@ -3,7 +3,7 @@
 
 #include "qxrdplotcontextmenucommand.h"
 
-class QxrdTraceRingCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdTraceRingCommand : public QxrdPlotContextMenuCommand
 {
 public:
   QxrdTraceRingCommand(QString name, QxrdImagePlot *plot);

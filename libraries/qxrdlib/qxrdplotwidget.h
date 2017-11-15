@@ -5,7 +5,7 @@
 #include "ui_qxrdplotwidget.h"
 #include "qxrdplotcommand-ptr.h"
 
-class QxrdPlotWidget : public QWidget, public Ui::QxrdPlotWidget
+class QXRD_EXPORT QxrdPlotWidget : public QWidget, public Ui::QxrdPlotWidget
 {
   Q_OBJECT
 

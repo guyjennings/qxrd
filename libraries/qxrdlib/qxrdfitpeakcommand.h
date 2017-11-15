@@ -3,7 +3,7 @@
 
 #include "qxrdplotcontextmenucommand.h"
 
-class QxrdFitPeakCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdFitPeakCommand : public QxrdPlotContextMenuCommand
 {
 public:
   QxrdFitPeakCommand(QString name, QxrdImagePlot *plot);

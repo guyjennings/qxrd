@@ -3,7 +3,7 @@
 
 #include "qxrdplotcontextmenucommand.h"
 
-class QxrdFitEllipseCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdFitEllipseCommand : public QxrdPlotContextMenuCommand
 {
 public:
   QxrdFitEllipseCommand(QString name, QxrdImagePlot* plot);

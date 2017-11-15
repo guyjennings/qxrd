@@ -3,8 +3,9 @@
 
 #include "qcepserializableobject.h"
 #include "qxrdimageplot-ptr.h"
+#include "qxrdlib_global.h"
 
-class QxrdPlotCommand : public QcepSerializableObject
+class QXRD_EXPORT QxrdPlotCommand : public QcepSerializableObject
 {
 public:
   QxrdPlotCommand(QString name, QxrdImagePlot* plot);

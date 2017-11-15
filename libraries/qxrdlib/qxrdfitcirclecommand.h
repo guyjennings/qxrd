@@ -3,7 +3,7 @@
 
 #include "qxrdplotcommand.h"
 
-class QxrdFitCircleCommand : public QxrdPlotCommand
+class QXRD_EXPORT QxrdFitCircleCommand : public QxrdPlotCommand
 {
 public:
   QxrdFitCircleCommand(QString name, QxrdImagePlot *plot);

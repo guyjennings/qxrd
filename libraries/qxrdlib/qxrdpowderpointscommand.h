@@ -3,7 +3,7 @@
 
 #include "qxrdplotbuttoncommand.h"
 
-class QxrdPowderPointsCommand : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdPowderPointsCommand : public QxrdPlotButtonCommand
 {
 public:
   QxrdPowderPointsCommand(QString name, QxrdImagePlot *plot);

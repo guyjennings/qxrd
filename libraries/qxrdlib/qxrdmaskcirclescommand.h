@@ -3,7 +3,7 @@
 
 #include "qxrdplotbuttoncommand.h"
 
-class QxrdMaskCirclesCommand : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdMaskCirclesCommand : public QxrdPlotButtonCommand
 {
 public:
   QxrdMaskCirclesCommand(QString name, QxrdImagePlot *plot);
