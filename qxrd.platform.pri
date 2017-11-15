@@ -7,10 +7,12 @@ macx{
     QXRDSUFFIX = -linux64
     QXRDSUFFIXSTR = "linux 64"
     QXRD_PLUGIN_PATH = /usr/lib64/qxrd-$${VERSION}/plugins
+    QMAKE_LFLAGS += -Wl,-z,defs
   } else {
     QXRDSUFFIX = -linux32
     QXRDSUFFIXSTR = "linux 32"
     QXRD_PLUGIN_PATH = /usr/lib/qxrd-$${VERSION}/plugins
+    QMAKE_LFLAGS += -Wl,-z,defs
   }
 }
 
