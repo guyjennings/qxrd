@@ -30,9 +30,7 @@
     <number>2</number>
    </property>
    <item row="0" column="0" rowspan="2">
-    <widget class="QWidget" name="m_PlotTools" native="true">
-     <layout class="QGridLayout" name="gridLayout"/>
-    </widget>
+    <widget class="QWidget" name="m_PlotTools" native="true"/>
    </item>
    <item row="0" column="1">
     <widget class="QxrdImagePlot" name="m_Plot" native="true">

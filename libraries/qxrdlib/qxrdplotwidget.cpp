@@ -9,7 +9,9 @@ QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
 {
   setupUi(this);
 
-  QGridLayout *layout = new QGridLayout();
+  QLayout     *oldLayout = layout();
+
+  QGridLayout *layout = new QGridLayout(m_PlotTools);
 
   layout -> setContentsMargins(0,0,0,0);
   layout -> setSpacing(2);
