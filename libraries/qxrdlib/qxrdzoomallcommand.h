@@ -1,12 +1,12 @@
 #ifndef QXRDZOOMALLCOMMAND_H
 #define QXRDZOOMALLCOMMAND_H
 
-#include "qxrdplotcommand.h"
+#include "qxrdplotbuttoncommand.h"
 
-class QxrdZoomAllCommand : public QxrdPlotCommand
+class QxrdZoomAllCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdZoomAllCommand(QString name);
+  QxrdZoomAllCommand(QString name, QxrdImagePlot *plot);
 
   QToolButton *toolButton();
 };

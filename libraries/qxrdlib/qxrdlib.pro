@@ -313,7 +313,30 @@ SOURCES += qxrdlib.cpp \
     qxrdpowderpointscommand.cpp \
     qxrdslicecommand.cpp \
     qxrdmeasurecommand.cpp \
-    qxrdhistogramcommand.cpp
+    qxrdhistogramcommand.cpp \
+    qxrdfitcirclecommand.cpp \
+    qxrdfitellipsecommand.cpp \
+    qxrdfitellipsescommand.cpp \
+    qxrdadjustenergycommand.cpp \
+    qxrdadjustdistancecommand.cpp \
+    qxrdadjustfitcommand.cpp \
+    qxrdaddpointcommand.cpp \
+    qxrddelpointcommand.cpp \
+    qxrddelringcommand.cpp \
+    qxrddelallpointscommand.cpp \
+    qxrddisableringcommand.cpp \
+    qxrdenableringcommand.cpp \
+    qxrdnormalizeringscommand.cpp \
+    qxrdfitpeakcommand.cpp \
+    qxrdfitringpointcommand.cpp \
+    qxrdtraceringcommand.cpp \
+    qxrdmissingringcommand.cpp \
+    qxrdzappixelcommand.cpp \
+    qxrdplotbuttoncommand.cpp \
+    qxrdplotcontextmenucommand.cpp \
+    qxrdcontextseparatorcommand.cpp \
+    qxrdautoscalecommand.cpp \
+    qxrdprintplotcommand.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -377,7 +400,30 @@ HEADERS += qxrdlib.h\
     qxrdslicecommand.h \
     qxrdmeasurecommand.h \
     qxrdhistogramcommand.h \
-    qxrdplotcommand-ptr.h
+    qxrdplotcommand-ptr.h \
+    qxrdfitcirclecommand.h \
+    qxrdfitellipsecommand.h \
+    qxrdfitellipsescommand.h \
+    qxrdadjustenergycommand.h \
+    qxrdadjustdistancecommand.h \
+    qxrdadjustfitcommand.h \
+    qxrdaddpointcommand.h \
+    qxrddelpointcommand.h \
+    qxrddelringcommand.h \
+    qxrddelallpointscommand.h \
+    qxrddisableringcommand.h \
+    qxrdenableringcommand.h \
+    qxrdnormalizeringscommand.h \
+    qxrdfitpeakcommand.h \
+    qxrdfitringpointcommand.h \
+    qxrdtraceringcommand.h \
+    qxrdmissingringcommand.h \
+    qxrdzappixelcommand.h \
+    qxrdplotbuttoncommand.h \
+    qxrdplotcontextmenucommand.h \
+    qxrdcontextseparatorcommand.h \
+    qxrdautoscalecommand.h \
+    qxrdprintplotcommand.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

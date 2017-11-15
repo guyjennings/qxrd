@@ -1,12 +1,12 @@
 #ifndef QXRDSLICECOMMAND_H
 #define QXRDSLICECOMMAND_H
 
-#include "qxrdplotcommand.h"
+#include "qxrdplotbuttoncommand.h"
 
-class QxrdSliceCommand : public QxrdPlotCommand
+class QxrdSliceCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdSliceCommand(QString name);
+  QxrdSliceCommand(QString name, QxrdImagePlot *plot);
 
   QToolButton *toolButton();
 };

@@ -1,12 +1,12 @@
 #ifndef QXRDMEASURECOMMAND_H
 #define QXRDMEASURECOMMAND_H
 
-#include "qxrdplotcommand.h"
+#include "qxrdplotbuttoncommand.h"
 
-class QxrdMeasureCommand : public QxrdPlotCommand
+class QxrdMeasureCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdMeasureCommand(QString name);
+  QxrdMeasureCommand(QString name, QxrdImagePlot *plot);
 
   QToolButton *toolButton();
 };

@@ -1,12 +1,12 @@
 #ifndef QXRDPOWDERPOINTSCOMMAND_H
 #define QXRDPOWDERPOINTSCOMMAND_H
 
-#include "qxrdplotcommand.h"
+#include "qxrdplotbuttoncommand.h"
 
-class QxrdPowderPointsCommand : public QxrdPlotCommand
+class QxrdPowderPointsCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdPowderPointsCommand(QString name);
+  QxrdPowderPointsCommand(QString name, QxrdImagePlot *plot);
 
   QToolButton *toolButton();
 };

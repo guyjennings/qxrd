@@ -2,13 +2,19 @@
 #define QXRDPLOTCOMMAND_H
 
 #include "qcepserializableobject.h"
+#include "qxrdimageplot-ptr.h"
 
 class QxrdPlotCommand : public QcepSerializableObject
 {
 public:
-  QxrdPlotCommand(QString name);
+  QxrdPlotCommand(QString name, QxrdImagePlot* plot);
 
   virtual QToolButton *toolButton() = 0;
+  virtual QAction     *contextMenuAction(const QPoint &pos) = 0;
+  virtual bool         contextMenuSeparator() = 0;
+
+protected:
+  QxrdImagePlot *m_Plot;
 };
 
 #endif // QXRDPLOTCOMMAND_H

@@ -1,12 +1,12 @@
 #ifndef QXRDMASKPOLYGONSCOMMAND_H
 #define QXRDMASKPOLYGONSCOMMAND_H
 
-#include "qxrdplotcommand.h"
+#include "qxrdplotbuttoncommand.h"
 
-class QxrdMaskPolygonsCommand : public QxrdPlotCommand
+class QxrdMaskPolygonsCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdMaskPolygonsCommand(QString name);
+  QxrdMaskPolygonsCommand(QString name, QxrdImagePlot *plot);
 
   QToolButton *toolButton();
 };

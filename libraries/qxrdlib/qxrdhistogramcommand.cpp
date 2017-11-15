@@ -1,8 +1,8 @@
 #include "qxrdhistogramcommand.h"
 #include <QToolButton>
 
-QxrdHistogramCommand::QxrdHistogramCommand(QString name)
-  : QxrdPlotCommand(name)
+QxrdHistogramCommand::QxrdHistogramCommand(QString name, QxrdImagePlot *plot)
+  : QxrdPlotButtonCommand(name, plot)
 {
 
 }

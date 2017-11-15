@@ -1,8 +1,8 @@
 #include "qxrdpowderpointscommand.h"
 #include <QToolButton>
 
-QxrdPowderPointsCommand::QxrdPowderPointsCommand(QString name)
-  : QxrdPlotCommand(name)
+QxrdPowderPointsCommand::QxrdPowderPointsCommand(QString name, QxrdImagePlot *plot)
+  : QxrdPlotButtonCommand(name, plot)
 {
 
 }

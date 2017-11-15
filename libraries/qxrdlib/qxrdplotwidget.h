@@ -16,6 +16,9 @@ public:
   void addPlotCommand(QxrdPlotCommandPtr cmd);
   void addPlotCommandSpacer();
 
+private slots:
+  void contextMenu(const QPoint &pos);
+
 private:
   QVector<QxrdPlotCommandPtr> m_PlotCommands;
 };

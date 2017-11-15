@@ -1,12 +1,12 @@
 #ifndef QXRDMASKCIRCLESCOMMAND_H
 #define QXRDMASKCIRCLESCOMMAND_H
 
-#include "qxrdplotcommand.h"
+#include "qxrdplotbuttoncommand.h"
 
-class QxrdMaskCirclesCommand : public QxrdPlotCommand
+class QxrdMaskCirclesCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdMaskCirclesCommand(QString name);
+  QxrdMaskCirclesCommand(QString name, QxrdImagePlot *plot);
 
   QToolButton *toolButton();
 };

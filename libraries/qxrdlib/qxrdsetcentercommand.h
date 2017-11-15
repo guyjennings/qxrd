@@ -1,12 +1,12 @@
 #ifndef QXRDSETCENTERCOMMAND_H
 #define QXRDSETCENTERCOMMAND_H
 
-#include "qxrdplotcommand.h"
+#include "qxrdplotbuttoncommand.h"
 
-class QxrdSetCenterCommand : public QxrdPlotCommand
+class QxrdSetCenterCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdSetCenterCommand(QString name);
+  QxrdSetCenterCommand(QString name, QxrdImagePlot *plot);
 
   QToolButton *toolButton();
 };

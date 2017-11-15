@@ -1,8 +1,9 @@
 #include "qxrdzoomincommand.h"
 #include <QToolButton>
+#include "qxrdimageplot.h"
 
-QxrdZoomInCommand::QxrdZoomInCommand(QString name)
-  : QxrdPlotCommand(name)
+QxrdZoomInCommand::QxrdZoomInCommand(QString name, QxrdImagePlot *plot)
+  : QxrdPlotButtonCommand(name, plot)
 {
 
 }
@@ -21,6 +22,8 @@ QToolButton* QxrdZoomInCommand::toolButton()
   res->setChecked(true);
   res->setAutoExclusive(true);
   res->setToolTip(tr("Zoom In"));
+
+  connect(res, &QToolButton::clicked, m_Plot, &QxrdImagePlot::zoomIn);
 
   return res;
 }

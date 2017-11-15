@@ -1,8 +1,8 @@
 #include "qxrdsetcentercommand.h"
 #include <QToolButton>
 
-QxrdSetCenterCommand::QxrdSetCenterCommand(QString name)
-  : QxrdPlotCommand(name)
+QxrdSetCenterCommand::QxrdSetCenterCommand(QString name, QxrdImagePlot *plot)
+  : QxrdPlotButtonCommand(name, plot)
 {
 
 }

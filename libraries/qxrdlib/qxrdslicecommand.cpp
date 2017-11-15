@@ -1,8 +1,8 @@
 #include "qxrdslicecommand.h"
 #include <QToolButton>
 
-QxrdSliceCommand::QxrdSliceCommand(QString name)
-  : QxrdPlotCommand(name)
+QxrdSliceCommand::QxrdSliceCommand(QString name, QxrdImagePlot *plot)
+  : QxrdPlotButtonCommand(name, plot)
 {
 
 }

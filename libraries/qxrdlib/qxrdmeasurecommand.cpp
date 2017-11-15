@@ -1,8 +1,8 @@
 #include "qxrdmeasurecommand.h"
 #include <QToolButton>
 
-QxrdMeasureCommand::QxrdMeasureCommand(QString name)
-  : QxrdPlotCommand(name)
+QxrdMeasureCommand::QxrdMeasureCommand(QString name, QxrdImagePlot *plot)
+  : QxrdPlotButtonCommand(name, plot)
 {
 
 }

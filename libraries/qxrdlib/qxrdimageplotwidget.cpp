@@ -13,16 +13,16 @@
 QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent) :
   QxrdPlotWidget(parent)
 {
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomInCommand("Zoom In")));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomOutCommand("Zoom Out")));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomAllCommand("Zoom All")));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskCirclesCommand("Mask Circles")));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskPolygonsCommand("Mask Polygons")));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center")));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdPowderPointsCommand("Powder Points")));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdSliceCommand("Slice")));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdMeasureCommand("Measure")));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdHistogramCommand("Histogram")));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomInCommand("Zoom In", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomOutCommand("Zoom Out", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomAllCommand("Zoom All", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskCirclesCommand("Mask Circles", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskPolygonsCommand("Mask Polygons", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPowderPointsCommand("Powder Points", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdSliceCommand("Slice", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdMeasureCommand("Measure", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdHistogramCommand("Histogram", m_Plot)));
   addPlotCommandSpacer();
 }
 

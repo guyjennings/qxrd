@@ -1,12 +1,12 @@
 #ifndef QXRDHISTOGRAMCOMMAND_H
 #define QXRDHISTOGRAMCOMMAND_H
 
-#include "qxrdplotcommand.h"
+#include "qxrdplotbuttoncommand.h"
 
-class QxrdHistogramCommand : public QxrdPlotCommand
+class QxrdHistogramCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdHistogramCommand(QString name);
+  QxrdHistogramCommand(QString name, QxrdImagePlot *plot);
 
   QToolButton *toolButton();
 };
