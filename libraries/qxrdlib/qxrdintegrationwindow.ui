@@ -102,8 +102,15 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout">
          <item row="2" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
+          <layout class="QGridLayout" name="gridLayout_8">
+           <item row="0" column="1">
+            <widget class="QPushButton" name="m_IntegrateButton">
+             <property name="text">
+              <string>Integrate</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
             <widget class="QPushButton" name="m_ClearGraphButton">
              <property name="toolTip">
               <string>Clear all curves from integrated data graph</string>
@@ -113,14 +120,7 @@
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QPushButton" name="m_IntegrateButton">
-             <property name="text">
-              <string>Integrate</string>
-             </property>
-            </widget>
-           </item>
-           <item>
+           <item row="1" column="0">
             <widget class="QPushButton" name="m_ClearSelectedGraphButton">
              <property name="toolTip">
               <string>Clear selected curves from integrated data graph
@@ -131,7 +131,7 @@
              </property>
             </widget>
            </item>
-           <item>
+           <item row="1" column="1">
             <widget class="QPushButton" name="m_IntegrateOptionsButton">
              <property name="toolTip">
               <string>More intergration options</string>
@@ -552,7 +552,7 @@ intensity *=
              </item>
              <item>
               <property name="text">
-               <string>A function of x,y displacement from beam center</string>
+               <string>A function of dx,dy from center</string>
               </property>
              </item>
              <item>
@@ -666,9 +666,9 @@ intensity *=
    <header>qcepdatasetbrowserview.h</header>
   </customwidget>
   <customwidget>
-   <class>QxrdFileBrowserWidget</class>
+   <class>QxrdImagePlotWidget</class>
    <extends>QWidget</extends>
-   <header>qxrdfilebrowserwidget.h</header>
+   <header>qxrdimageplotwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -677,15 +677,15 @@ intensity *=
    <header>qxrdcenterstepspinner.h</header>
   </customwidget>
   <customwidget>
-   <class>QxrdImagePlotWidget</class>
-   <extends>QWidget</extends>
-   <header>qxrdimageplotwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>QxrdIntegratedPlotWidget</class>
    <extends>QWidget</extends>
    <header>qxrdintegratedplotwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QxrdFileBrowserWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdfilebrowserwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
