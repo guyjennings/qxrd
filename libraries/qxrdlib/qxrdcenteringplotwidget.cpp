@@ -3,6 +3,7 @@
 #include "qxrdzoomoutcommand.h"
 #include "qxrdzoomallcommand.h"
 #include "qxrdsetcentercommand.h"
+#include "qxrdcontextseparatorcommand.h"
 #include "qxrdimageplot.h"
 
 QxrdCenteringPlotWidget::QxrdCenteringPlotWidget(QWidget *parent) :
@@ -13,6 +14,8 @@ QxrdCenteringPlotWidget::QxrdCenteringPlotWidget(QWidget *parent) :
   addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomAllCommand("Zoom All", this)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this)));
   addPlotCommandSpacer();
+
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdContextSeparatorCommand("Separator", this)));
 }
 
 QxrdCenteringPlotWidget::~QxrdCenteringPlotWidget()

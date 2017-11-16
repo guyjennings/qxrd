@@ -13,7 +13,7 @@ public:
 
   virtual QToolButton *toolButton() = 0;
   virtual QAction     *contextMenuAction(const QPoint &pos) = 0;
-  virtual bool         contextMenuSeparator() = 0;
+//  virtual bool         contextMenuSeparator() = 0;
 
   virtual void         enable();
   virtual void         disable();

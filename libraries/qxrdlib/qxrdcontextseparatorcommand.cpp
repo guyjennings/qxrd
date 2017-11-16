@@ -1,4 +1,5 @@
 #include "qxrdcontextseparatorcommand.h"
+#include <QAction>
 
 QxrdContextSeparatorCommand::QxrdContextSeparatorCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
@@ -8,10 +9,14 @@ QxrdContextSeparatorCommand::QxrdContextSeparatorCommand(QString name, QxrdPlotW
 
 QAction* QxrdContextSeparatorCommand::contextMenuAction(const QPoint &pos)
 {
-  return NULL;
+  QAction *res = newContextAction("", m_Plot, NULL);
+
+  res -> setSeparator(true);
+
+  return res;
 }
 
-bool QxrdContextSeparatorCommand::contextMenuSeparator()
-{
-  return true;
-}
+//bool QxrdContextSeparatorCommand::contextMenuSeparator()
+//{
+//  return true;
+//}

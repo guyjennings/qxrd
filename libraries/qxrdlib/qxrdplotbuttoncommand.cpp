@@ -11,7 +11,7 @@ QAction* QxrdPlotButtonCommand::contextMenuAction(const QPoint &pos)
   return NULL;
 }
 
-bool QxrdPlotButtonCommand::contextMenuSeparator()
-{
-  return false;
-}
+//bool QxrdPlotButtonCommand::contextMenuSeparator()
+//{
+//  return false;
+//}

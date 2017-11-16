@@ -73,8 +73,8 @@ void QxrdPlotWidget::contextMenu(const QPoint &pos)
 
       if (act) {
         plotMenu.addAction(act);
-      } else if (cmd->contextMenuSeparator()) {
-        plotMenu.addSeparator();
+//      } else if (cmd->contextMenuSeparator()) {
+//        plotMenu.addSeparator();
       }
     }
   }

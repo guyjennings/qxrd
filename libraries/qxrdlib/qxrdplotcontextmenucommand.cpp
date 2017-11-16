@@ -14,16 +14,18 @@ QToolButton* QxrdPlotContextMenuCommand::toolButton()
   return NULL;
 }
 
-bool QxrdPlotContextMenuCommand::contextMenuSeparator()
-{
-  return false;
-}
+//bool QxrdPlotContextMenuCommand::contextMenuSeparator()
+//{
+//  return false;
+//}
 
 QAction* QxrdPlotContextMenuCommand::newContextAction(QString s, QxrdImagePlot *t, void (QxrdImagePlot::*sl)())
 {
   QAction* res = new QAction(s);
 
-  connect (res, &QAction::triggered, t, sl);
+  if (res && t && sl) {
+    connect (res, &QAction::triggered, t, sl);
+  }
 
   return res;
 }
