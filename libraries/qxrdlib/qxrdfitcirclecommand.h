@@ -1,14 +1,14 @@
 #ifndef QXRDFITCIRCLECOMMAND_H
 #define QXRDFITCIRCLECOMMAND_H
 
-#include "qxrdplotcommand.h"
+#include "qxrdplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdFitCircleCommand : public QxrdPlotCommand
+class QXRD_EXPORT QxrdFitCircleCommand : public QxrdPlotContextMenuCommand
 {
 public:
   QxrdFitCircleCommand(QString name, QxrdPlotWidget *plot);
 
-  QToolButton *toolButton();
+  QAction *contextMenuAction(const QPoint &pos);
 };
 
 #endif // QXRDFITCIRCLECOMMAND_H

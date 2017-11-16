@@ -9,7 +9,6 @@ public:
   QxrdContextSeparatorCommand(QString name, QxrdPlotWidget *plot);
 
   QAction *contextMenuAction(const QPoint &pos);
-//  bool     contextMenuSeparator();
 };
 
 #endif // QXRDCONTEXTSEPARATORCOMMAND_H

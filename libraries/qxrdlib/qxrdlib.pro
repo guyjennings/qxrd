@@ -338,7 +338,10 @@ SOURCES += qxrdlib.cpp \
     qxrdplotcontextmenucommand.cpp \
     qxrdcontextseparatorcommand.cpp \
     qxrdautoscalecommand.cpp \
-    qxrdprintplotcommand.cpp
+    qxrdprintplotcommand.cpp \
+    qxrddisplaysubmenucommand.cpp \
+    qxrdplotpreferencescommand.cpp \
+    qxrdprocessor.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -427,7 +430,10 @@ HEADERS += qxrdlib.h\
     qxrdautoscalecommand.h \
     qxrdprintplotcommand.h \
     qxrdimageplotwidget-ptr.h \
-    qxrdplotwidget-ptr.h
+    qxrdplotwidget-ptr.h \
+    qxrddisplaysubmenucommand.h \
+    qxrdplotpreferencescommand.h \
+    qxrdprocessor.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

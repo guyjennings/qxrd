@@ -9,7 +9,6 @@ public:
   QxrdPlotButtonCommand(QString name, QxrdPlotWidget *plot);
 
   QAction *contextMenuAction(const QPoint &pos);
-//  bool     contextMenuSeparator();
 };
 
 #endif // QXRDPLOTBUTTONCOMMAND_H

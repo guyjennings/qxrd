@@ -300,8 +300,8 @@ void QxrdWindow::initialize()
 
 //    tabifyDockWidget(m_InputFileBrowser, m_DatasetBrowserDialog);
 
-    tabifyDockWidget(m_DisplayDialog, /*m_MaskDialog);
-    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
+//    tabifyDockWidget(m_DisplayDialog, /*m_MaskDialog);
+//    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
 //    tabifyDockWidget(m_CorrectionDialog, /*m_CalibrantDialog);
 //    tabifyDockWidget(m_CalibrantDialog, *//*m_OutputFileBrowser);
 

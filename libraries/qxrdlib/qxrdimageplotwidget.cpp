@@ -9,6 +9,7 @@
 #include "qxrdslicecommand.h"
 #include "qxrdmeasurecommand.h"
 #include "qxrdhistogramcommand.h"
+#include "qxrddisplaysubmenucommand.h"
 
 QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent) :
   QxrdPlotWidget(parent)
@@ -24,6 +25,8 @@ QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent) :
   addPlotCommand(QxrdPlotCommandPtr(new QxrdMeasureCommand("Measure", this)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdHistogramCommand("Histogram", this)));
   addPlotCommandSpacer();
+
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdDisplaySubmenuCommand("Display", this)));
 }
 
 QxrdImagePlotWidget::~QxrdImagePlotWidget()

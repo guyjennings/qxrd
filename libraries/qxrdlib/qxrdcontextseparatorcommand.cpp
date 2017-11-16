@@ -15,8 +15,3 @@ QAction* QxrdContextSeparatorCommand::contextMenuAction(const QPoint &pos)
 
   return res;
 }
-
-//bool QxrdContextSeparatorCommand::contextMenuSeparator()
-//{
-//  return true;
-//}

@@ -27,7 +27,7 @@
 #include "qxrdroicoordinateslistmodel.h"
 #include "qxrdroicoordinates.h"
 #include "qxrdroieditordialog.h"
-
+#include <QMessageBox>
 #include "qwt_plot_piecewise_curve.h"
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
@@ -307,6 +307,30 @@ void QxrdImagePlot::recalculateDisplayedRange()
   }
 }
 
+void QxrdImagePlot::changeScalingMode(int n)
+{
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+
+  if (set) {
+    set->set_DisplayScalingMode(n);
+  }
+}
+
+void QxrdImagePlot::setPercentageScaling()
+{
+  changeScalingMode(PercentageMode);
+}
+
+void QxrdImagePlot::setPercentileScaling()
+{
+  changeScalingMode(PercentileMode);
+}
+
+void QxrdImagePlot::setAbsoluteScaling()
+{
+  changeScalingMode(AbsoluteMode);
+}
+
 void QxrdImagePlot::replotImage()
 {
   m_DataImage -> setData(m_DataRaster);
@@ -417,7 +441,7 @@ void QxrdImagePlot::colorMapRange(double value1, QColor color1, double value2, Q
   }
 }
 
-void QxrdImagePlot::setGrayscale()
+void QxrdImagePlot::mapGrayscale()
 {
   colorMapStart(Qt::black, Qt::white);
   colorMapRange(0.0, Qt::black, 1.0, Qt::white);
@@ -427,7 +451,7 @@ void QxrdImagePlot::setGrayscale()
   changedColorMap();
 }
 
-void QxrdImagePlot::setInverseGrayscale()
+void QxrdImagePlot::mapInverseGrayscale()
 {
   colorMapStart(Qt::white, Qt::black);
   colorMapRange(0.0, Qt::white, 1.0, Qt::black);
@@ -437,7 +461,7 @@ void QxrdImagePlot::setInverseGrayscale()
   changedColorMap();
 }
 
-void QxrdImagePlot::setEarthTones()
+void QxrdImagePlot::mapEarthTones()
 {
   colorMapStart(Qt::black, Qt::white);
 
@@ -453,7 +477,7 @@ void QxrdImagePlot::setEarthTones()
   changedColorMap();
 }
 
-void QxrdImagePlot::setSpectrum()
+void QxrdImagePlot::mapSpectrum()
 {
   colorMapStart(Qt::magenta, Qt::red);
 
@@ -468,7 +492,7 @@ void QxrdImagePlot::setSpectrum()
   changedColorMap();
 }
 
-void QxrdImagePlot::setFire()
+void QxrdImagePlot::mapFire()
 {
   colorMapStart(Qt::black, Qt::white);
 
@@ -481,7 +505,7 @@ void QxrdImagePlot::setFire()
   changedColorMap();
 }
 
-void QxrdImagePlot::setIce()
+void QxrdImagePlot::mapIce()
 {
   colorMapStart(Qt::black, Qt::white);
 
@@ -506,30 +530,69 @@ void QxrdImagePlot::redoColorMap()
 void QxrdImagePlot::setColorMap(int n)
 {
   switch(n) {
-  case 0:
-    setGrayscale();
+  case GrayscaleMap:
+    mapGrayscale();
     break;
 
-  case 1:
-    setInverseGrayscale();
+  case InverseGrayscaleMap:
+    mapInverseGrayscale();
     break;
 
-  case 2:
-    setEarthTones();
+  case EarthTonesMap:
+    mapEarthTones();
     break;
 
-  case 3:
-    setSpectrum();
+  case SpectrumMap:
+    mapSpectrum();
     break;
 
-  case 4:
-    setFire();
+  case FireMap:
+    mapFire();
     break;
 
-  case 5:
-    setIce();
+  case IceMap:
+    mapIce();
     break;
   }
+}
+
+void QxrdImagePlot::changeColorMap(int n)
+{
+  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+
+  if (set) {
+    set->set_DisplayColorMap(n);
+  }
+}
+
+void QxrdImagePlot::setGrayscale()
+{
+  changeColorMap(GrayscaleMap);
+}
+
+void QxrdImagePlot::setInverseGrayscale()
+{
+  changeColorMap(InverseGrayscaleMap);
+}
+
+void QxrdImagePlot::setEarthTones()
+{
+  changeColorMap(EarthTonesMap);
+}
+
+void QxrdImagePlot::setSpectrum()
+{
+  changeColorMap(SpectrumMap);
+}
+
+void QxrdImagePlot::setFire()
+{
+  changeColorMap(FireMap);
+}
+
+void QxrdImagePlot::setIce()
+{
+  changeColorMap(IceMap);
 }
 
 void QxrdImagePlot::toggleShowImage()
@@ -1686,4 +1749,9 @@ QPointF QxrdImagePlot::scaledDelta(double dx, double dy)
   double tdy = yMap.transform(dy) - yMap.transform(0);
 
   return QPointF(tdx, tdy);
+}
+
+void QxrdImagePlot::editPreferences()
+{
+  QMessageBox::information(this, "Edit Plot Preferences", "Edit Prefs");
 }

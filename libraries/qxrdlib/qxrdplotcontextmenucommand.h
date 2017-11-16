@@ -12,7 +12,6 @@ public:
 
   QToolButton *toolButton();
   QAction* contextMenuAction(const QPoint &pos) = 0;
-//  bool     contextMenuSeparator();
 
 protected:
   QAction* newContextAction(QString s, QxrdImagePlot *t, void (QxrdImagePlot::*sl)());

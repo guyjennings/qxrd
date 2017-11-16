@@ -11,7 +11,7 @@
 //#include <QStack>
 
 #include "qcepproperty.h"
-#include "qcepdataprocessorbase.h"
+#include "qxrdprocessor.h"
 #include "qcepimagequeue.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
@@ -37,7 +37,7 @@
 #include "qxrdresultserializer.h"
 #include "qxrddataprocessor-ptr.h"
 
-class QXRD_EXPORT QxrdDataProcessor : public QcepDataProcessorBase
+class QXRD_EXPORT QxrdDataProcessor : public QxrdProcessor
 {
   Q_OBJECT
 

@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
-#include "qcepserializableobject.h"
+#include "qxrdprocessor.h"
 
 #include "qxrdacquisition-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
@@ -21,7 +21,7 @@
 #include "qxrdimageplotsettings-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 
-class QXRD_EXPORT QxrdDetectorProcessor : public QcepSerializableObject
+class QXRD_EXPORT QxrdDetectorProcessor : public QxrdProcessor
 {
     Q_OBJECT
 
@@ -59,6 +59,14 @@ public slots:
   QcepDoubleImageDataPtr gainCorrection();
   QcepMaskDataPtr        mask();
   QcepMaskDataPtr        overflow();
+
+  QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img);
+  QcepDataObjectPtr polarTransform(QcepDoubleImageDataPtr img);
+  QcepDataObjectPtr polarIntegrate(QcepDoubleImageDataPtr img);
+
+  bool integrateParameters();
+  bool polarTransformParameters();
+  bool polarIntegrateParameters();
 
 public:
   void readSettings(QSettings *settings);

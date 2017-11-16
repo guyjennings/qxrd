@@ -28,7 +28,7 @@
 #include <QDirIterator>
 
 QxrdDataProcessor::QxrdDataProcessor(QString name) :
-  QcepDataProcessorBase(name),
+  QxrdProcessor(name),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),
   m_FileName(this, "fileName","", "Current File Name"),
   m_DataPath(this,"dataPath", "", "Data Path"),
@@ -161,7 +161,7 @@ QxrdDataProcessorPtr QxrdDataProcessor::newDataProcessor()
 
 void QxrdDataProcessor::addChildPtr(QcepObjectPtr child)
 {
-  QcepDataProcessorBase::addChildPtr(child);
+  QxrdProcessor::addChildPtr(child);
 
   if (checkPointer<QxrdCenterFinder>(child, m_CenterFinder)) {
 

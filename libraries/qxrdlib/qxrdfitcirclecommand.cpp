@@ -1,11 +1,11 @@
 #include "qxrdfitcirclecommand.h"
 
 QxrdFitCircleCommand::QxrdFitCircleCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotCommand(name, plot)
+  : QxrdPlotContextMenuCommand(name, plot)
 {
 }
 
-QToolButton* QxrdFitCircleCommand::toolButton()
+QAction* QxrdFitCircleCommand::contextMenuAction(const QPoint &pos)
 {
-  return NULL;
+  return newContextAction("Fit Circle from Points on Ring %1", NULL, NULL);
 }

@@ -100,6 +100,12 @@ public slots:
 
   void zapPixel(int x, int y);
 
+  void setPercentageScaling();
+  void setPercentileScaling();
+  void setAbsoluteScaling();
+
+  void editPreferences();
+
   virtual void onLegendChecked(const QVariant &itemInfo, bool on, int index);
 
 public:
@@ -136,6 +142,8 @@ public:
 
 private:
   void replotImage();
+  void changeScalingMode(int n);
+
   void setImage(QxrdRasterData *data);
   void setMask(QxrdMaskRasterData *data);
   void setOverflows(QxrdMaskRasterData *overflow);
@@ -145,6 +153,13 @@ private:
   void changedColorMap();
   void setTrackerPen(const QPen &pen);
 
+  void mapGrayscale();
+  void mapInverseGrayscale();
+  void mapEarthTones();
+  void mapSpectrum();
+  void mapFire();
+  void mapIce();
+  void changeColorMap(int n);
 
   void clearROIDisplay();
   void updateROIDisplay();
@@ -176,6 +191,15 @@ public:
     PercentageMode,
     PercentileMode,
     AbsoluteMode
+  };
+
+  enum {
+    GrayscaleMap,
+    InverseGrayscaleMap,
+    EarthTonesMap,
+    SpectrumMap,
+    FireMap,
+    IceMap
   };
 
 private:

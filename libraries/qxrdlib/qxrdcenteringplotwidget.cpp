@@ -4,6 +4,7 @@
 #include "qxrdzoomallcommand.h"
 #include "qxrdsetcentercommand.h"
 #include "qxrdcontextseparatorcommand.h"
+#include "qxrdenableringcommand.h"
 #include "qxrdimageplot.h"
 
 QxrdCenteringPlotWidget::QxrdCenteringPlotWidget(QWidget *parent) :
@@ -16,6 +17,7 @@ QxrdCenteringPlotWidget::QxrdCenteringPlotWidget(QWidget *parent) :
   addPlotCommandSpacer();
 
   addPlotCommand(QxrdPlotCommandPtr(new QxrdContextSeparatorCommand("Separator", this)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdEnableRingCommand("Enable Ring", this)));
 }
 
 QxrdCenteringPlotWidget::~QxrdCenteringPlotWidget()

@@ -6,6 +6,7 @@
 #include <QMenu>
 #include "qxrdautoscalecommand.h"
 #include "qxrdprintplotcommand.h"
+#include "qxrdplotpreferencescommand.h"
 
 QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
   QWidget(parent)
@@ -26,6 +27,7 @@ QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
   connect(m_Plot, &QWidget::customContextMenuRequested,
           this,   &QxrdPlotWidget::contextMenu);
 
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPlotPreferencesCommand("Plot Preferences...", this)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdAutoScaleCommand("Auto Scale", this)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotCommand("Print Graph...", this)));
 }
@@ -73,8 +75,6 @@ void QxrdPlotWidget::contextMenu(const QPoint &pos)
 
       if (act) {
         plotMenu.addAction(act);
-//      } else if (cmd->contextMenuSeparator()) {
-//        plotMenu.addSeparator();
       }
     }
   }

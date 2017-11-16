@@ -15,7 +15,7 @@
 QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     QxrdFileSaverWPtr     fsav,
     QxrdDetectorSettingsWPtr      det)
-  : QcepSerializableObject("acquisitionProcessor"),
+  : QxrdProcessor("acquisitionProcessor"),
     m_DetectorDisplayMode(this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
     m_PerformDarkSubtraction(this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
     m_SaveRawImages(this, "saveRawImages", true, "Save Raw Images?"),
@@ -802,4 +802,34 @@ void QxrdDetectorProcessor::onGainMapPathChanged(QString newPath)
   } else {
     printMessage(tr("Load Gain Map from %1").arg(newPath));
   }
+}
+
+QcepDataObjectPtr QxrdDetectorProcessor::integrate(QcepDoubleImageDataPtr img)
+{
+  return QcepDataObjectPtr();
+}
+
+QcepDataObjectPtr QxrdDetectorProcessor::polarTransform(QcepDoubleImageDataPtr img)
+{
+  return QcepDataObjectPtr();
+}
+
+QcepDataObjectPtr QxrdDetectorProcessor::polarIntegrate(QcepDoubleImageDataPtr img)
+{
+  return QcepDataObjectPtr();
+}
+
+bool QxrdDetectorProcessor::integrateParameters()
+{
+  return false;
+}
+
+bool QxrdDetectorProcessor::polarTransformParameters()
+{
+  return false;
+}
+
+bool QxrdDetectorProcessor::polarIntegrateParameters()
+{
+  return false;
 }
