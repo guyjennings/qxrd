@@ -6,7 +6,7 @@
 class QXRD_EXPORT QxrdFitPeakCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdFitPeakCommand(QString name, QxrdImagePlot *plot);
+  QxrdFitPeakCommand(QString name, QxrdPlotWidget *plot);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

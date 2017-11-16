@@ -2,7 +2,7 @@
 #include <QToolButton>
 #include "qxrdimageplot.h"
 
-QxrdZoomAllCommand::QxrdZoomAllCommand(QString name, QxrdImagePlot *plot)
+QxrdZoomAllCommand::QxrdZoomAllCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotButtonCommand(name, plot)
 {
 

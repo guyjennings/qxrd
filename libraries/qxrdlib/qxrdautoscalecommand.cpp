@@ -2,7 +2,7 @@
 #include "qxrdimageplot.h"
 #include <QObject>
 
-QxrdAutoScaleCommand::QxrdAutoScaleCommand(QString name, QxrdImagePlot *plot)
+QxrdAutoScaleCommand::QxrdAutoScaleCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

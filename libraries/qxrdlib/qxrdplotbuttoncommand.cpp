@@ -1,6 +1,6 @@
 #include "qxrdplotbuttoncommand.h"
 
-QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString name, QxrdImagePlot *plot)
+QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotCommand(name, plot)
 {
 

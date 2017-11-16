@@ -1,6 +1,6 @@
 #include "qxrdmissingringcommand.h"
 
-QxrdMissingRingCommand::QxrdMissingRingCommand(QString name, QxrdImagePlot *plot)
+QxrdMissingRingCommand::QxrdMissingRingCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

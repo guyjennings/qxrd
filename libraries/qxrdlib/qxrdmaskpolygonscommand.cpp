@@ -1,7 +1,7 @@
 #include "qxrdmaskpolygonscommand.h"
 #include <QToolButton>
 
-QxrdMaskPolygonsCommand::QxrdMaskPolygonsCommand(QString name, QxrdImagePlot *plot)
+QxrdMaskPolygonsCommand::QxrdMaskPolygonsCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotButtonCommand(name, plot)
 {
 

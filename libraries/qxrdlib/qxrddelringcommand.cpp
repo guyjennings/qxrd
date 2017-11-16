@@ -1,7 +1,7 @@
 #include "qxrddelringcommand.h"
 #include "qxrdimageplot.h"
 
-QxrdDelRingCommand::QxrdDelRingCommand(QString name, QxrdImagePlot *plot)
+QxrdDelRingCommand::QxrdDelRingCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

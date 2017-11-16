@@ -1,6 +1,6 @@
 #include "qxrdadjustfitcommand.h"
 
-QxrdAdjustFitCommand::QxrdAdjustFitCommand(QString name, QxrdImagePlot *plot)
+QxrdAdjustFitCommand::QxrdAdjustFitCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

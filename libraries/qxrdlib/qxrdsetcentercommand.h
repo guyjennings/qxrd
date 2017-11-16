@@ -6,7 +6,7 @@
 class QXRD_EXPORT QxrdSetCenterCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdSetCenterCommand(QString name, QxrdImagePlot *plot);
+  QxrdSetCenterCommand(QString name, QxrdPlotWidget *plot);
 
   QToolButton *toolButton();
 };

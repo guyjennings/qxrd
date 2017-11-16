@@ -1,7 +1,7 @@
 #include "qxrdfitringpointcommand.h"
 #include "qxrdimageplot.h"
 
-QxrdFitRingPointCommand::QxrdFitRingPointCommand(QString name, QxrdImagePlot *plot)
+QxrdFitRingPointCommand::QxrdFitRingPointCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

@@ -26,8 +26,8 @@ QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
   connect(m_Plot, &QWidget::customContextMenuRequested,
           this,   &QxrdPlotWidget::contextMenu);
 
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdAutoScaleCommand("Auto Scale", m_Plot)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotCommand("Print Graph...", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdAutoScaleCommand("Auto Scale", this)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotCommand("Print Graph...", this)));
 }
 
 QxrdPlotWidget::~QxrdPlotWidget()
@@ -80,4 +80,13 @@ void QxrdPlotWidget::contextMenu(const QPoint &pos)
   }
 
   plotMenu.exec(mapToGlobal(pos));
+}
+
+void QxrdPlotWidget::disableCommands()
+{
+  foreach (QxrdPlotCommandPtr cmd, m_PlotCommands) {
+    if (cmd) {
+      cmd->disable();
+    }
+  }
 }

@@ -1,7 +1,7 @@
 #include "qxrdmaskcirclescommand.h"
 #include <QToolButton>
 
-QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QString name, QxrdImagePlot *plot)
+QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotButtonCommand(name, plot)
 {
 

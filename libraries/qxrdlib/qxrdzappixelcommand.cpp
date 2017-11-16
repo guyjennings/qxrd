@@ -1,6 +1,6 @@
 #include "qxrdzappixelcommand.h"
 
-QxrdZapPixelCommand::QxrdZapPixelCommand(QString name, QxrdImagePlot *plot)
+QxrdZapPixelCommand::QxrdZapPixelCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

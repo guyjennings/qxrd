@@ -1,7 +1,7 @@
 #include "qxrdadjustenergycommand.h"
 #include "qxrdimageplot.h"
 
-QxrdAdjustEnergyCommand::QxrdAdjustEnergyCommand(QString name, QxrdImagePlot *plot)
+QxrdAdjustEnergyCommand::QxrdAdjustEnergyCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

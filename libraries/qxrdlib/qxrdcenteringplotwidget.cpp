@@ -8,10 +8,10 @@
 QxrdCenteringPlotWidget::QxrdCenteringPlotWidget(QWidget *parent) :
   QxrdPlotWidget(parent)
 {
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomInCommand("Zoom In", m_Plot)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomOutCommand("Zoom Out", m_Plot)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomAllCommand("Zoom All", m_Plot)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", m_Plot)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomInCommand("Zoom In", this)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomOutCommand("Zoom Out", this)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomAllCommand("Zoom All", this)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this)));
   addPlotCommandSpacer();
 }
 

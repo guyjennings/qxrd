@@ -7,7 +7,7 @@
 class QXRD_EXPORT QxrdAdjustDistanceCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdAdjustDistanceCommand(QString name, QxrdImagePlot* plot);
+  QxrdAdjustDistanceCommand(QString name, QxrdPlotWidget *plot);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

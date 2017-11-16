@@ -16,6 +16,8 @@ public:
   void addPlotCommand(QxrdPlotCommandPtr cmd);
   void addPlotCommandSpacer();
 
+  void disableCommands();
+
 private slots:
   void contextMenu(const QPoint &pos);
 

@@ -6,7 +6,7 @@
 class QXRD_EXPORT QxrdPlotButtonCommand : public QxrdPlotCommand
 {
 public:
-  QxrdPlotButtonCommand(QString name, QxrdImagePlot *plot);
+  QxrdPlotButtonCommand(QString name, QxrdPlotWidget *plot);
 
   QAction *contextMenuAction(const QPoint &pos);
   bool     contextMenuSeparator();

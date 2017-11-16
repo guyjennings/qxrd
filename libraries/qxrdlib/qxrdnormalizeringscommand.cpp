@@ -1,6 +1,6 @@
 #include "qxrdnormalizeringscommand.h"
 
-QxrdNormalizeRingsCommand::QxrdNormalizeRingsCommand(QString name, QxrdImagePlot *plot)
+QxrdNormalizeRingsCommand::QxrdNormalizeRingsCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

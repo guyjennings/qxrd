@@ -1,6 +1,6 @@
 #include "qxrdfitpeakcommand.h"
 
-QxrdFitPeakCommand::QxrdFitPeakCommand(QString name, QxrdImagePlot *plot)
+QxrdFitPeakCommand::QxrdFitPeakCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

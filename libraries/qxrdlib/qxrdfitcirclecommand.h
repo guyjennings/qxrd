@@ -6,7 +6,7 @@
 class QXRD_EXPORT QxrdFitCircleCommand : public QxrdPlotCommand
 {
 public:
-  QxrdFitCircleCommand(QString name, QxrdImagePlot *plot);
+  QxrdFitCircleCommand(QString name, QxrdPlotWidget *plot);
 
   QToolButton *toolButton();
 };

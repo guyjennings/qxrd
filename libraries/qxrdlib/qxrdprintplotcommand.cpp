@@ -1,7 +1,7 @@
 #include "qxrdprintplotcommand.h"
 #include "qxrdimageplot.h"
 
-QxrdPrintPlotCommand::QxrdPrintPlotCommand(QString name, QxrdImagePlot *plot)
+QxrdPrintPlotCommand::QxrdPrintPlotCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

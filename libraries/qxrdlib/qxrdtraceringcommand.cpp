@@ -1,6 +1,6 @@
 #include "qxrdtraceringcommand.h"
 
-QxrdTraceRingCommand::QxrdTraceRingCommand(QString name, QxrdImagePlot *plot)
+QxrdTraceRingCommand::QxrdTraceRingCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

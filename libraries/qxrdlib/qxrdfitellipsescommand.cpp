@@ -1,6 +1,6 @@
 #include "qxrdfitellipsescommand.h"
 
-QxrdFitEllipsesCommand::QxrdFitEllipsesCommand(QString name, QxrdImagePlot *plot)
+QxrdFitEllipsesCommand::QxrdFitEllipsesCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 

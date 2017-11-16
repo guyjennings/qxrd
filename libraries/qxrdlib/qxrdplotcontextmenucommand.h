@@ -8,7 +8,7 @@
 class QXRD_EXPORT QxrdPlotContextMenuCommand : public QxrdPlotCommand
 {
 public:
-  QxrdPlotContextMenuCommand(QString name, QxrdImagePlot *plot);
+  QxrdPlotContextMenuCommand(QString name, QxrdPlotWidget *plot);
 
   QToolButton *toolButton();
   QAction* contextMenuAction(const QPoint &pos) = 0;

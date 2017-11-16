@@ -6,7 +6,7 @@
 class QXRD_EXPORT QxrdPrintPlotCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdPrintPlotCommand(QString name, QxrdImagePlot *plot);
+  QxrdPrintPlotCommand(QString name, QxrdPlotWidget *plot);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

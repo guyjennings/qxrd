@@ -423,7 +423,9 @@ HEADERS += qxrdlib.h\
     qxrdplotcontextmenucommand.h \
     qxrdcontextseparatorcommand.h \
     qxrdautoscalecommand.h \
-    qxrdprintplotcommand.h
+    qxrdprintplotcommand.h \
+    qxrdimageplotwidget-ptr.h \
+    qxrdplotwidget-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

@@ -6,7 +6,7 @@
 class QXRD_EXPORT QxrdMaskCirclesCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdMaskCirclesCommand(QString name, QxrdImagePlot *plot);
+  QxrdMaskCirclesCommand(QString name, QxrdPlotWidget *plot);
 
   QToolButton *toolButton();
 };

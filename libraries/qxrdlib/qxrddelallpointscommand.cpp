@@ -1,6 +1,6 @@
 #include "qxrddelallpointscommand.h"
 
-QxrdDelAllPointsCommand::QxrdDelAllPointsCommand(QString name, QxrdImagePlot *plot)
+QxrdDelAllPointsCommand::QxrdDelAllPointsCommand(QString name, QxrdPlotWidget *plot)
   : QxrdPlotContextMenuCommand(name, plot)
 {
 
