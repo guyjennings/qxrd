@@ -16,6 +16,7 @@
 #include "qxrddetectorsettingsperkinelmer.h"
 #include "qxrddetectorsettingspilatus.h"
 #include "qxrddetectorsettingssimulated.h"
+#include "qxrddetectorsettingsdexela.h"
 #include "qxrdexperiment.h"
 
 QxrdDetectorSettings::QxrdDetectorSettings(QxrdApplicationWPtr app, QxrdExperimentWPtr    expt,
@@ -171,7 +172,7 @@ void QxrdDetectorSettings::statusMessage(QString msg, QDateTime ts) const
 
 int QxrdDetectorSettings::detectorTypeCount()
 {
-  return 6;
+  return 7;
 }
 
 QString QxrdDetectorSettings::detectorTypeName(int detectorType)
@@ -201,6 +202,10 @@ QString QxrdDetectorSettings::detectorTypeName(int detectorType)
   case FileWatcherDetector:
     res = "File Watcher";
     break;
+
+  case DexelaDetector:
+    res = "Dexela Detector";
+    break;
   }
 
   return res;
@@ -216,6 +221,7 @@ QStringList QxrdDetectorSettings::detectorTypeNames()
   res.append(detectorTypeName(PilatusDetector));
   res.append(detectorTypeName(EpicsAreaDetector));
   res.append(detectorTypeName(FileWatcherDetector));
+  res.append(detectorTypeName(DexelaDetector));
 
   return res;
 }
@@ -459,6 +465,10 @@ void QxrdDetectorSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int d
     case FileWatcherDetector:
       QxrdDetectorSettingsFileWatcher::pushDefaultsToProxy(proxy);
       break;
+
+    case DexelaDetector:
+      QxrdDetectorSettingsDexela::pushDefaultsToProxy(proxy);
+      break;
     }
   }
 }
@@ -624,6 +634,11 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(
   case FileWatcherDetector:
     det = QxrdDetectorSettingsPtr(
           new QxrdDetectorSettingsFileWatcher(app, expt, acq, detNum));
+    break;
+
+  case DexelaDetector:
+    det = QxrdDetectorSettingsPtr(
+          new QxrdDetectorSettingsDexela(app, expt, acq, detNum));
     break;
   }
 

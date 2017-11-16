@@ -10,6 +10,8 @@
 #include "qxrddetectorsettingsfilewatcher.h"
 #include "qxrddetectordriverperkinelmer.h"
 #include "qxrddetectorsettingsperkinelmer.h"
+#include "qxrddetectordriverdexela.h"
+#include "qxrddetectorsettingsdexela.h"
 #include "qxrddetectordriverpilatus.h"
 #include "qxrddetectorsettingspilatus.h"
 #include "qxrddetectordriversimulated.h"
@@ -99,6 +101,13 @@ void QxrdDetectorDriverThread::run()
       m_DetectorDriver = QxrdDetectorDriverPtr(
             new QxrdDetectorDriverFileWatcher(name,
                                               qSharedPointerDynamicCast<QxrdDetectorSettingsFileWatcher>(det),
+                                              expt, acq));
+      break;
+
+    case QxrdDetectorSettings::DexelaDetector:
+      m_DetectorDriver = QxrdDetectorDriverPtr(
+            new QxrdDetectorDriverDexela(name,
+                                              qSharedPointerDynamicCast<QxrdDetectorSettingsDexela>(det),
                                               expt, acq));
       break;
     }

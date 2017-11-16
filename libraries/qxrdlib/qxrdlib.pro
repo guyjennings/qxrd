@@ -222,14 +222,16 @@ SOURCES += qxrdlib.cpp \
     qxrddetectorsettingspilatus.cpp \
     qxrddetectorsettingsperkinelmer.cpp \
     qxrddetectorsettingssimulated.cpp \
+    qxrddetectorsettingsdexela.cpp \
     qxrddetectorsettingsfilewatcher.cpp \
+    qxrddetectorsettingsepicsarea.cpp \
     qxrddetectordriver.cpp \
     qxrddetectordriversimulated.cpp \
     qxrddetectordriverperkinelmer.cpp \
     qxrddetectordriverpilatus.cpp \
     qxrddetectordriverfilewatcher.cpp \
     qxrddetectordriverepicsarea.cpp \
-    qxrddetectorsettingsepicsarea.cpp \
+    qxrddetectordriverdexela.cpp \
     qxrddetectordriverthread.cpp \
     qxrdexperimentthread.cpp \
     qxrdroishape.cpp \
@@ -678,11 +680,13 @@ HEADERS += TODO.h \
     qxrddetectorsettingssimulated.h \
     qxrddetectorsettingspilatus.h \
     qxrddetectorsettingsperkinelmer.h \
+    qxrddetectorsettingsdexela.h \
     qxrddetectorsettings.h \
     qxrddetectorsettings-ptr.h \
     qxrddetectordriver.h \
     qxrddetectordriversimulated.h \
     qxrddetectordriverperkinelmer.h \
+    qxrddetectordriverdexela.h \
     qxrddetectordriverpilatus.h \
     qxrddetectordriverfilewatcher.h \
     qxrddetectordriverepicsarea.h \
@@ -692,6 +696,7 @@ HEADERS += TODO.h \
     qxrddetectordriverthread-ptr.h \
     qxrddetectorsettingspilatus-ptr.h \
     qxrddetectorsettingsperkinelmer-ptr.h \
+    qxrddetectorsettingsdexela-ptr.h \
     qxrddetectorsettingssimulated-ptr.h \
     qxrddetectorsettingsfilewatcher-ptr.h \
     qxrddetectorsettingsepicsarea-ptr.h \

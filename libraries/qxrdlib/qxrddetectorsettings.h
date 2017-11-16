@@ -73,7 +73,8 @@ public:
     PerkinElmerDetector,
     PilatusDetector,
     EpicsAreaDetector,
-    FileWatcherDetector
+    FileWatcherDetector,
+    DexelaDetector
   } DetectorType;
 
   enum {
