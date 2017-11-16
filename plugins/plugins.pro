@@ -7,7 +7,8 @@ SUBDIRS =  \
   qxrdpilatusplugin \
   qxrdareadetectorplugin \
   qxrdcudaprocessorplugin \
-  qxrdsimulateddetectorplugin
+  qxrdsimulateddetectorplugin \
+  qxrddexeladetectorplugin
 
 contains(DEFINES,HAVE_PERKIN_ELMER) {
   message("HAVE_PERKIN_ELMER")
