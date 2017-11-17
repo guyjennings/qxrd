@@ -69,7 +69,7 @@
       </widget>
       <widget class="QTabWidget" name="m_Middle">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -77,7 +77,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
-          <widget class="QxrdImagePlotWidget" name="widget" native="true"/>
+          <widget class="QxrdImagePlotWidget" name="m_ImagePlotWidget" native="true"/>
          </item>
         </layout>
        </widget>
@@ -87,7 +87,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_7">
          <item row="0" column="0">
-          <widget class="QxrdIntegratedPlotWidget" name="widget_2" native="true"/>
+          <widget class="QxrdIntegratedPlotWidget" name="m_IntegratedPlotWigdget" native="true"/>
          </item>
         </layout>
        </widget>
@@ -629,7 +629,7 @@ intensity *=
      <x>0</x>
      <y>0</y>
      <width>1487</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -666,15 +666,15 @@ intensity *=
    <header>qcepdatasetbrowserview.h</header>
   </customwidget>
   <customwidget>
+   <class>QxrdCenterStepSpinner</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>qxrdcenterstepspinner.h</header>
+  </customwidget>
+  <customwidget>
    <class>QxrdImagePlotWidget</class>
    <extends>QWidget</extends>
    <header>qxrdimageplotwidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QxrdCenterStepSpinner</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>qxrdcenterstepspinner.h</header>
   </customwidget>
   <customwidget>
    <class>QxrdIntegratedPlotWidget</class>

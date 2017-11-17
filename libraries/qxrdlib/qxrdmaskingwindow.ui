@@ -77,7 +77,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
-          <widget class="QxrdImagePlotWidget" name="widget" native="true"/>
+          <widget class="QxrdImagePlotWidget" name="m_ImagePlotWidget" native="true"/>
          </item>
         </layout>
        </widget>
@@ -782,7 +782,7 @@ If unselected, image pixels are masked out</string>
      <x>0</x>
      <y>0</y>
      <width>1298</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -825,15 +825,15 @@ If unselected, image pixels are masked out</string>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QxrdMaskStackView</class>
-   <extends>QTableView</extends>
-   <header>qxrdmaskstackview.h</header>
-  </customwidget>
-  <customwidget>
    <class>QxrdFileBrowserWidget</class>
    <extends>QWidget</extends>
    <header>qxrdfilebrowserwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QxrdMaskStackView</class>
+   <extends>QTableView</extends>
+   <header>qxrdmaskstackview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

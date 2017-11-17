@@ -23,7 +23,8 @@ QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 
-  m_WaveformPlot->init(QxrdSynchronizedAcquisitionPlotSettingsWPtr());
+  //TODO: reinit waveform plot widget
+//  m_WaveformPlot->init(QxrdSynchronizedAcquisitionPlotSettingsWPtr());
 
   QxrdExperimentPtr exp(m_Experiment);
 
@@ -119,7 +120,8 @@ QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
     connect(m_TestReadout, &QAbstractButton::clicked, this, &QxrdExtraIOWindow::initiateReadout);
 
     if (exp && acq) {
-      m_AcquisitionWaveforms -> init(QxrdAcquisitionExtraInputsPlotSettingsWPtr());
+      //TODO: re-init
+//      m_AcquisitionWaveforms -> init(QxrdAcquisitionExtraInputsPlotSettingsWPtr());
 
       m_AcquisitionExtraInputs = acq->acquisitionExtraInputs();
 
@@ -216,19 +218,20 @@ void QxrdExtraIOWindow::waveformChanged()
     if (parms) {
       sync->prepareForAcquisition(parms);
 
-      m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
-      m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+      //TODO: rewrite
+//      m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+//      m_WaveformPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
 
-      if (sync -> get_SyncAcquisitionMode() && (parms->nphases() >= 1)) {
-        QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_WaveformPlot, "Output Waveform");
+//      if (sync -> get_SyncAcquisitionMode() && (parms->nphases() >= 1)) {
+//        QwtPlotCurve *pc = new QwtPlotPiecewiseCurve(m_WaveformPlot, "Output Waveform");
 
-        pc->setSamples(sync->outputTimes(), sync->outputVoltage());
+//        pc->setSamples(sync->outputTimes(), sync->outputVoltage());
 
-        pc->attach(m_WaveformPlot);
-      }
+//        pc->attach(m_WaveformPlot);
+//      }
 
-      m_WaveformPlot->updateZoomer();
-      m_WaveformPlot->replot();
+//      m_WaveformPlot->updateZoomer();
+//      m_WaveformPlot->replot();
 
       sync->finishedAcquisition();
     }
@@ -533,27 +536,28 @@ void QxrdExtraIOWindow::initiateReadout()
 
 void QxrdExtraIOWindow::updateWaveforms()
 {
-  QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+  //TODO: reimplement
+//  QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
-  if (xtra) {
-    int nchan = xtra->channels().count();
+//  if (xtra) {
+//    int nchan = xtra->channels().count();
 
-    m_AcquisitionWaveforms->setNChannels(nchan);
+//    m_AcquisitionWaveforms->setNChannels(nchan);
 
-    for (int i=0; i<nchan; i++) {
-      QxrdAcquisitionExtraInputsChannelPtr chanp(xtra->channel(i));
+//    for (int i=0; i<nchan; i++) {
+//      QxrdAcquisitionExtraInputsChannelPtr chanp(xtra->channel(i));
 
-      if (chanp && chanp->get_Enabled() && chanp->get_Plotted()) {
-        m_AcquisitionWaveforms->plotChannel(i,
-                                            chanp->startIndex(),
-                                            chanp->endIndex(),
-                                            xtra->readXChannel(),
-                                            xtra->readChannel(i));
-      } else {
-        m_AcquisitionWaveforms->plotChannel(i, 0, 0, QcepDoubleVector(), QcepDoubleVector());
-      }
-    }
+//      if (chanp && chanp->get_Enabled() && chanp->get_Plotted()) {
+//        m_AcquisitionWaveforms->plotChannel(i,
+//                                            chanp->startIndex(),
+//                                            chanp->endIndex(),
+//                                            xtra->readXChannel(),
+//                                            xtra->readChannel(i));
+//      } else {
+//        m_AcquisitionWaveforms->plotChannel(i, 0, 0, QcepDoubleVector(), QcepDoubleVector());
+//      }
+//    }
 
-    m_AcquisitionWaveforms->replot();
-  }
+//    m_AcquisitionWaveforms->replot();
+//  }
 }

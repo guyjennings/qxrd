@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1044</width>
-    <height>520</height>
+    <width>1131</width>
+    <height>602</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -82,443 +82,20 @@
          <string>Image</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="1">
-          <widget class="QSplitter" name="splitter">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <widget class="QxrdImagePlot" name="m_ImagePlot" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>2</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </widget>
-         </item>
          <item row="0" column="0">
-          <widget class="QWidget" name="widget" native="true">
-           <layout class="QGridLayout" name="gridLayout_10">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="1">
-             <widget class="QToolButton" name="m_ImageZoomInButton">
-              <property name="toolTip">
-               <string>Zoom In</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QToolButton" name="m_ImageZoomOutButton">
-              <property name="toolTip">
-               <string>Zoom Out</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="12" column="1">
-             <spacer name="verticalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="2" column="1">
-             <widget class="QToolButton" name="m_ImageZoomAllButton">
-              <property name="toolTip">
-               <string>Auto Scale</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QToolButton" name="m_ImageSetCenterButton">
-              <property name="toolTip">
-               <string>Set Beam Center</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/ringfinder.png</normaloff>:/images/ringfinder.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="7" column="1">
-             <widget class="QToolButton" name="m_ImageSliceButton">
-              <property name="toolTip">
-               <string>Slice Image Path</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/slice.png</normaloff>:/images/slice.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="10" column="1">
-             <widget class="QToolButton" name="m_ImageMeasureButton">
-              <property name="toolTip">
-               <string>Measure Distances on Image</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-              <property name="autoRaise">
-               <bool>false</bool>
-              </property>
-              <property name="arrowType">
-               <enum>Qt::NoArrow</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QToolButton" name="m_ImageMaskCirclesButton">
-              <property name="toolTip">
-               <string>Circular Mask Regions</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/mask_circles.png</normaloff>:/images/mask_circles.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QToolButton" name="m_ImageMaskPolygonsButton">
-              <property name="toolTip">
-               <string>Polygon Mask Regions</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/mask_polygon.png</normaloff>:/images/mask_polygon.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="11" column="1">
-             <widget class="QToolButton" name="m_ImageHistogramButton">
-              <property name="toolTip">
-               <string>Display Histogram of Image Region</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/histogram.png</normaloff>:/images/histogram.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-              <property name="autoRaise">
-               <bool>false</bool>
-              </property>
-              <property name="arrowType">
-               <enum>Qt::NoArrow</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QToolButton" name="m_ImagePowderPointsButton">
-              <property name="toolTip">
-               <string>Set Points on Powder Rings</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/powder_point.png</normaloff>:/images/powder_point.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QWidget" name="widget_4" native="true">
-           <layout class="QGridLayout" name="gridLayout_16">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="horizontalSpacing">
-             <number>10</number>
-            </property>
-            <property name="verticalSpacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="11">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>R:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="6">
-             <widget class="QLabel" name="m_ValMouse">
-              <property name="text">
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="3">
-             <widget class="QLabel" name="m_YMouse">
-              <property name="text">
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Y:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="7">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>TTH:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="8">
-             <widget class="QLabel" name="m_TTHMouse">
-              <property name="text">
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="13">
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="0" column="9">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>Q:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="10">
-             <widget class="QLabel" name="m_QMouse">
-              <property name="text">
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>X:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="m_XMouse">
-              <property name="text">
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="5">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>V:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="12">
-             <widget class="QLabel" name="m_RMouse">
-              <property name="text">
-               <string>0</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <widget class="QxrdImagePlotWidget" name="m_ImagePlot" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>2</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
           </widget>
          </item>
         </layout>
@@ -529,142 +106,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_7">
          <item row="0" column="0">
-          <widget class="QWidget" name="widget_2" native="true">
-           <layout class="QGridLayout" name="gridLayout_11">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="1">
-             <widget class="QToolButton" name="m_CenteringZoomInButton">
-              <property name="toolTip">
-               <string>Zoom In</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QToolButton" name="m_CenteringZoomOutButton">
-              <property name="toolTip">
-               <string>Zoom Out</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <spacer name="verticalSpacer_5">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="2" column="1">
-             <widget class="QToolButton" name="m_CenteringZoomAllButton">
-              <property name="toolTip">
-               <string>Auto Scale</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QToolButton" name="m_CenteringMeasureButton">
-              <property name="toolTip">
-               <string>Measure Distances</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-              <property name="autoRaise">
-               <bool>false</bool>
-              </property>
-              <property name="arrowType">
-               <enum>Qt::NoArrow</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QxrdCenterFinderPlot" name="m_CenterFinderPlot" native="true">
+          <widget class="QxrdCenteringPlotWidget" name="m_CenterFinderPlot" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>1</horstretch>
@@ -681,142 +123,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_9">
          <item row="0" column="0">
-          <widget class="QWidget" name="widget_3" native="true">
-           <layout class="QGridLayout" name="gridLayout_12">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
-             <number>2</number>
-            </property>
-            <property name="spacing">
-             <number>2</number>
-            </property>
-            <item row="0" column="1">
-             <widget class="QToolButton" name="m_IntegratorZoomInButton">
-              <property name="toolTip">
-               <string>Zoom In</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QToolButton" name="m_IntegratorZoomOutButton">
-              <property name="toolTip">
-               <string>Zoom Out</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <spacer name="verticalSpacer_6">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="2" column="1">
-             <widget class="QToolButton" name="m_IntegratorZoomAllButton">
-              <property name="toolTip">
-               <string>Auto Scale</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QToolButton" name="m_IntegratorMeasureButton">
-              <property name="toolTip">
-               <string>Measure Distances</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
-              <property name="autoExclusive">
-               <bool>true</bool>
-              </property>
-              <property name="autoRaise">
-               <bool>false</bool>
-              </property>
-              <property name="arrowType">
-               <enum>Qt::NoArrow</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QxrdIntegratorPlot" name="m_IntegratorPlot" native="true">
+          <widget class="QxrdIntegratedPlotWidget" name="m_IntegratorPlot" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>1</horstretch>
@@ -832,37 +139,8 @@
          <string>Distortion</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QToolButton" name="m_DistortionCorrectionZoomInButton">
-           <property name="toolTip">
-            <string>Zoom In</string>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qxrdresources.qrc">
-             <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>24</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-           <property name="autoExclusive">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1" rowspan="5">
-          <widget class="QxrdDistortionCorrectionPlot" name="m_DistortionCorrectionPlot" native="true">
+         <item row="0" column="0" rowspan="2">
+          <widget class="QxrdDistortionPlotWidget" name="m_DistortionCorrectionPlot" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>1</horstretch>
@@ -870,91 +148,6 @@
             </sizepolicy>
            </property>
           </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QToolButton" name="m_DistortionCorrectionZoomOutButton">
-           <property name="toolTip">
-            <string>Zoom Out</string>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qxrdresources.qrc">
-             <normaloff>:/images/zoom-out.png</normaloff>:/images/zoom-out.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>24</width>
-             <height>24</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QToolButton" name="m_DistortionCorrectionZoomAllButton">
-           <property name="toolTip">
-            <string>Auto Scale</string>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qxrdresources.qrc">
-             <normaloff>:/images/zoom-all.png</normaloff>:/images/zoom-all.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>24</width>
-             <height>24</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QToolButton" name="m_DistortionCorrectionMeasureButton">
-           <property name="toolTip">
-            <string>Measure Distances</string>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-           <property name="icon">
-            <iconset resource="qxrdresources.qrc">
-             <normaloff>:/images/measure.png</normaloff>:/images/measure.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>24</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="autoExclusive">
-            <bool>true</bool>
-           </property>
-           <property name="autoRaise">
-            <bool>false</bool>
-           </property>
-           <property name="arrowType">
-            <enum>Qt::NoArrow</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <spacer name="verticalSpacer_7">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>421</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </widget>
@@ -1202,7 +395,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1044</width>
+     <width>1131</width>
      <height>24</height>
     </rect>
    </property>
@@ -2198,25 +1391,28 @@
    <header>qcepdatasetbrowserview.h</header>
   </customwidget>
   <customwidget>
+   <class>QxrdImagePlotWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdimageplotwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QxrdIntegratedPlotWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdintegratedplotwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>QxrdFileBrowserWidget</class>
    <extends>QWidget</extends>
    <header>qxrdfilebrowserwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QxrdImagePlot</class>
+   <class>QxrdCenteringPlotWidget</class>
    <extends>QWidget</extends>
-   <header>qxrdimageplot.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QxrdCenterFinderPlot</class>
-   <extends>QWidget</extends>
-   <header>qxrdcenterfinderplot.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QxrdIntegratorPlot</class>
-   <extends>QWidget</extends>
-   <header>qxrdintegratorplot.h</header>
+   <header>qxrdcenteringplotwidget.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QxrdHelpBrowser</class>
@@ -2224,33 +1420,17 @@
    <header>qxrdhelpbrowser.h</header>
   </customwidget>
   <customwidget>
-   <class>QxrdDistortionCorrectionPlot</class>
+   <class>QxrdDistortionPlotWidget</class>
    <extends>QWidget</extends>
-   <header>qxrddistortioncorrectionplot.h</header>
+   <header>qxrddistortionplotwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>m_CentralTabs</tabstop>
-  <tabstop>m_ImageZoomInButton</tabstop>
-  <tabstop>m_ImageZoomOutButton</tabstop>
-  <tabstop>m_ImageZoomAllButton</tabstop>
-  <tabstop>m_ImageMaskCirclesButton</tabstop>
-  <tabstop>m_ImageMaskPolygonsButton</tabstop>
-  <tabstop>m_ImageSetCenterButton</tabstop>
-  <tabstop>m_ImageSliceButton</tabstop>
-  <tabstop>m_ImageMeasureButton</tabstop>
-  <tabstop>m_IntegratorZoomOutButton</tabstop>
-  <tabstop>m_IntegratorZoomAllButton</tabstop>
   <tabstop>m_CancelScriptButton</tabstop>
   <tabstop>m_Messages</tabstop>
-  <tabstop>m_IntegratorMeasureButton</tabstop>
-  <tabstop>m_CenteringZoomInButton</tabstop>
-  <tabstop>m_CenteringMeasureButton</tabstop>
-  <tabstop>m_CenteringZoomAllButton</tabstop>
   <tabstop>m_ScriptEdit</tabstop>
-  <tabstop>m_CenteringZoomOutButton</tabstop>
-  <tabstop>m_IntegratorZoomInButton</tabstop>
  </tabstops>
  <resources>
   <include location="qxrdresources.qrc"/>

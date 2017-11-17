@@ -229,10 +229,11 @@ void QxrdWindow::initialize()
 //  }
 
   if (set) {
-    m_ImagePlot        -> init(set->imagePlotSettings(), expt);
-    m_CenterFinderPlot -> init(set->centerFinderPlotSettings());
-    m_IntegratorPlot   -> init(set->integratorPlotSettings());
-    m_DistortionCorrectionPlot -> init(set->distortionCorrectionPlotSettings());
+    //TODO: re-init
+//    m_ImagePlot        -> init(set->imagePlotSettings(), expt);
+//    m_CenterFinderPlot -> init(set->centerFinderPlotSettings());
+//    m_IntegratorPlot   -> init(set->integratorPlotSettings());
+//    m_DistortionCorrectionPlot -> init(set->distortionCorrectionPlotSettings());
   }
 
   QDesktopWidget *dw = QApplication::desktop();
@@ -344,7 +345,7 @@ void QxrdWindow::initialize()
   connect(m_LoadScriptButton, &QAbstractButton::clicked, m_ActionLoadScript, &QAction::triggered);
   connect(m_ActionLoadScript, &QAction::triggered, this, &QxrdWindow::doLoadScript);
 
-  connect(m_ActionAutoScale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::autoScale);
+//  connect(m_ActionAutoScale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::autoScale);
 
   if (app) {
     connect(m_ActionLoadPreferences, &QAction::triggered, app.data(), &QxrdApplication::doLoadPreferences);
@@ -376,7 +377,7 @@ void QxrdWindow::initialize()
   connect(m_ActionSaveGainMap, &QAction::triggered, this, &QxrdWindow::doSaveGainMap);
   connect(m_ActionClearGainMap, &QAction::triggered, this, &QxrdWindow::doClearGainMap);
 
-  connect(m_ActionPrintImage, &QAction::triggered, m_ImagePlot, &QcepPlot::printGraph);
+//  connect(m_ActionPrintImage, &QAction::triggered, m_ImagePlot, &QcepPlot::printGraph);
 
   connect(m_ActionAccumulateImages, &QAction::triggered, this, &QxrdWindow::doAccumulateImages);
   connect(m_ActionAddImage, &QAction::triggered, this, &QxrdWindow::doAddImages);
@@ -395,17 +396,17 @@ void QxrdWindow::initialize()
 //  connect(m_DisplayDialog -> m_Display_10pct, &QAbstractButton::clicked, m_Action010Range, &QAction::triggered);
 //  connect(m_DisplayDialog -> m_Display_100pct, &QAbstractButton::clicked, m_Action100Range, &QAction::triggered);
 
-  connect(m_Action005Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set005Range);
-  connect(m_Action010Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set010Range);
-  connect(m_Action100Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set100Range);
-  connect(m_ActionAutoRange, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setAutoRange);
+//  connect(m_Action005Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set005Range);
+//  connect(m_Action010Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set010Range);
+//  connect(m_Action100Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set100Range);
+//  connect(m_ActionAutoRange, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setAutoRange);
 
-  connect(m_ActionGrayscale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setGrayscale);
-  connect(m_ActionInverseGrayscale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setInverseGrayscale);
-  connect(m_ActionEarthTones, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setEarthTones);
-  connect(m_ActionSpectrum, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setSpectrum);
-  connect(m_ActionFire, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setFire);
-  connect(m_ActionIce, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setIce);
+//  connect(m_ActionGrayscale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setGrayscale);
+//  connect(m_ActionInverseGrayscale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setInverseGrayscale);
+//  connect(m_ActionEarthTones, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setEarthTones);
+//  connect(m_ActionSpectrum, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setSpectrum);
+//  connect(m_ActionFire, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setFire);
+//  connect(m_ActionIce, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setIce);
 
   connect(m_ActionRefineCenterTilt, &QAction::triggered, this, &QxrdWindow::doRefineCenterTilt);
 //  connect(m_ActionMoveCenterUp, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveUp);
@@ -434,9 +435,10 @@ void QxrdWindow::initialize()
 
 //  m_AcquisitionDialog->acquisitionReady();
 
-  connect(m_ActionShowImage, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowImage);
-  connect(m_ActionShowMask, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowMask);
-  connect(m_ActionShowOverflow, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowOverflow);
+  //TODO: re-implement
+//  connect(m_ActionShowImage, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowImage);
+//  connect(m_ActionShowMask, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowMask);
+//  connect(m_ActionShowOverflow, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowOverflow);
 
   if (proc) {
     connect(m_ActionShowMaskRange, &QAction::triggered, proc.data(), (void (QxrdDataProcessor::*)()) &QxrdDataProcessor::showMaskRange);
@@ -444,8 +446,8 @@ void QxrdWindow::initialize()
     connect(m_ActionShowMaskAll, &QAction::triggered, proc.data(), &QxrdDataProcessor::showMaskAll);
     connect(m_ActionHideMaskAll, &QAction::triggered, proc.data(), &QxrdDataProcessor::hideMaskAll);
     connect(m_ActionInvertMask, &QAction::triggered, proc.data(), &QxrdDataProcessor::invertMask);
-    connect(m_ActionMaskCircles, &QAction::triggered, m_ImageMaskCirclesButton, &QAbstractButton::click);
-    connect(m_ActionMaskPolygons, &QAction::triggered, m_ImageMaskPolygonsButton, &QAbstractButton::click);
+//    connect(m_ActionMaskCircles, &QAction::triggered, m_ImageMaskCirclesButton, &QAbstractButton::click);
+//    connect(m_ActionMaskPolygons, &QAction::triggered, m_ImageMaskPolygonsButton, &QAbstractButton::click);
 
 //    connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateROI);
 //    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateHistogram);
@@ -453,31 +455,31 @@ void QxrdWindow::initialize()
 
   connect(m_ActionTest, &QAction::triggered, this, &QxrdWindow::doTest);
 
-  connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableZooming);
-  connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_ImagePlot, &QcepPlot::zoomOut);
-  connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::autoScale);
-  connect(m_ImageSetCenterButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableCentering);
-  connect(m_ImageSliceButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableSlicing);
-  connect(m_ImageMeasureButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMeasuring);
-  connect(m_ImageHistogramButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableHistograms);
-  connect(m_ImageMaskCirclesButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMaskCircles);
-  connect(m_ImageMaskPolygonsButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMaskPolygons);
-  connect(m_ImagePowderPointsButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enablePowderPoints);
+//  connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableZooming);
+//  connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_ImagePlot, &QcepPlot::zoomOut);
+//  connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::autoScale);
+//  connect(m_ImageSetCenterButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableCentering);
+//  connect(m_ImageSliceButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableSlicing);
+//  connect(m_ImageMeasureButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMeasuring);
+//  connect(m_ImageHistogramButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableHistograms);
+//  connect(m_ImageMaskCirclesButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMaskCircles);
+//  connect(m_ImageMaskPolygonsButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMaskPolygons);
+//  connect(m_ImagePowderPointsButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enablePowderPoints);
 
-  connect(m_CenteringZoomInButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::enableZooming);
-  connect(m_CenteringZoomOutButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::zoomOut);
-  connect(m_CenteringZoomAllButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::autoScale);
-  connect(m_CenteringMeasureButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::enableMeasuring);
+//  connect(m_CenteringZoomInButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::enableZooming);
+//  connect(m_CenteringZoomOutButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::zoomOut);
+//  connect(m_CenteringZoomAllButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::autoScale);
+//  connect(m_CenteringMeasureButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::enableMeasuring);
 
-  connect(m_IntegratorZoomInButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::enableZooming);
-  connect(m_IntegratorZoomOutButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::zoomOut);
-  connect(m_IntegratorZoomAllButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::autoScale);
-  connect(m_IntegratorMeasureButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::enableMeasuring);
+//  connect(m_IntegratorZoomInButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::enableZooming);
+//  connect(m_IntegratorZoomOutButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::zoomOut);
+//  connect(m_IntegratorZoomAllButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::autoScale);
+//  connect(m_IntegratorMeasureButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::enableMeasuring);
 
-  connect(m_DistortionCorrectionZoomInButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::enableZooming);
-  connect(m_DistortionCorrectionZoomOutButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::zoomOut);
-  connect(m_DistortionCorrectionZoomAllButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::autoScale);
-  connect(m_DistortionCorrectionMeasureButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::enableMeasuring);
+//  connect(m_DistortionCorrectionZoomInButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::enableZooming);
+//  connect(m_DistortionCorrectionZoomOutButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::zoomOut);
+//  connect(m_DistortionCorrectionZoomAllButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::autoScale);
+//  connect(m_DistortionCorrectionMeasureButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::enableMeasuring);
 
 //  connect(m_DisplayDialog -> m_DisplayOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
 //  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
@@ -513,8 +515,9 @@ void QxrdWindow::initialize()
 
 //  connect(m_IntegratorDialog -> m_ClearGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
 //  connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
-  connect(m_ActionClearIntegratedData, &QAction::triggered, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
-  connect(m_ActionClearSelectedIntegratedData, &QAction::triggered, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
+  //TODO: replace?
+  //  connect(m_ActionClearIntegratedData, &QAction::triggered, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
+//  connect(m_ActionClearSelectedIntegratedData, &QAction::triggered, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
 
   connect(m_ActionSaveCachedGeometry, &QAction::triggered, this, &QxrdWindow::doSaveCachedGeometry);
   connect(m_ActionSaveCachedIntensity, &QAction::triggered, this, &QxrdWindow::doSaveCachedIntensity);
@@ -531,18 +534,19 @@ void QxrdWindow::initialize()
     connect(m_ActionIntegrateVsTTH, &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsTTH);
   }
 
-  if (set) {
-    QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
+  //TODO: reimplement
+//  if (set) {
+//    QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
 
-    if (ps) {
-      ps->prop_XMouse()->linkTo(m_XMouse);
-      ps->prop_YMouse()->linkTo(m_YMouse);
-      ps->prop_ValMouse()->linkTo(m_ValMouse);
-      ps->prop_TTHMouse()->linkTo(m_TTHMouse);
-      ps->prop_QMouse()->linkTo(m_QMouse);
-      ps->prop_RMouse()->linkTo(m_RMouse);
-    }
-  }
+//    if (ps) {
+//      ps->prop_XMouse()->linkTo(m_XMouse);
+//      ps->prop_YMouse()->linkTo(m_YMouse);
+//      ps->prop_ValMouse()->linkTo(m_ValMouse);
+//      ps->prop_TTHMouse()->linkTo(m_TTHMouse);
+//      ps->prop_QMouse()->linkTo(m_QMouse);
+//      ps->prop_RMouse()->linkTo(m_RMouse);
+//    }
+//  }
 
   m_StatusMsg = new QLabel(NULL);
   m_StatusMsg -> setMinimumWidth(200);
@@ -646,27 +650,29 @@ void QxrdWindow::initialize()
 //    }
 //  }
 
-  m_ImagePlot -> setProcessor(m_DataProcessor);
-  m_DistortionCorrectionPlot -> setWindow(this);
-  m_CenterFinderPlot -> setWindow(this);
-  m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
+  //TODO: re-init
+//  m_ImagePlot -> setProcessor(m_DataProcessor);
+//  m_DistortionCorrectionPlot -> setWindow(this);
+//  m_CenterFinderPlot -> setWindow(this);
+//  m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
 
-  if (proc) {
-    connect(proc -> centerFinder() -> prop_CenterX(), &QcepDoubleProperty::valueChanged,
-            m_ImagePlot, &QxrdImagePlot::onCenterXChanged);
+  //TODO: re-connect data flows
+//  if (proc) {
+//    connect(proc -> centerFinder() -> prop_CenterX(), &QcepDoubleProperty::valueChanged,
+//            m_ImagePlot, &QxrdImagePlot::onCenterXChanged);
 
-    connect(proc -> centerFinder() -> prop_CenterY(), &QcepDoubleProperty::valueChanged,
-            m_ImagePlot, &QxrdImagePlot::onCenterYChanged);
+//    connect(proc -> centerFinder() -> prop_CenterY(), &QcepDoubleProperty::valueChanged,
+//            m_ImagePlot, &QxrdImagePlot::onCenterYChanged);
 
-    connect(proc -> centerFinder() -> prop_CenterX(), &QcepDoubleProperty::valueChanged,
-            m_CenterFinderPlot, &QxrdCenterFinderPlot::onCenterXChanged);
+//    connect(proc -> centerFinder() -> prop_CenterX(), &QcepDoubleProperty::valueChanged,
+//            m_CenterFinderPlot, &QxrdCenterFinderPlot::onCenterXChanged);
 
-    connect(proc -> centerFinder() -> prop_CenterY(), &QcepDoubleProperty::valueChanged,
-            m_CenterFinderPlot, &QxrdCenterFinderPlot::onCenterYChanged);
+//    connect(proc -> centerFinder() -> prop_CenterY(), &QcepDoubleProperty::valueChanged,
+//            m_CenterFinderPlot, &QxrdCenterFinderPlot::onCenterYChanged);
 
-    connect(proc.data(), &QxrdDataProcessor::newIntegrationAvailable,
-            m_IntegratorPlot, &QxrdIntegratorPlot::onNewIntegrationAvailable);
-  }
+//    connect(proc.data(), &QxrdDataProcessor::newIntegrationAvailable,
+//            m_IntegratorPlot, &QxrdIntegratorPlot::onNewIntegrationAvailable);
+//  }
 
 //  m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_AcquisitionScalerDialog -> toggleViewAction());
@@ -1135,17 +1141,18 @@ void QxrdWindow::doTimerUpdate()
       g_Application->printMessage(tr("QxrdWindow::newData new data after %1 msec").arg(t.elapsed()));
     }
 
-    m_ImagePlot        -> onProcessedImageAvailable(m_Data, m_Overflow);
+    //TODO: re-connect data flow
+//    m_ImagePlot        -> onProcessedImageAvailable(m_Data, m_Overflow);
 
-    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-      g_Application->printMessage(tr("QxrdWindow::newData imagePlot after %1 msec").arg(t.elapsed()));
-    }
+//    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+//      g_Application->printMessage(tr("QxrdWindow::newData imagePlot after %1 msec").arg(t.elapsed()));
+//    }
 
-    m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
+//    m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
 
-    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-      g_Application->printMessage(tr("QxrdWindow::newData centerFinder after %1 msec").arg(t.elapsed()));
-    }
+//    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+//      g_Application->printMessage(tr("QxrdWindow::newData centerFinder after %1 msec").arg(t.elapsed()));
+//    }
 
 //    if (m_ImageDisplay) {
 //      m_ImageDisplay -> updateImage(m_Data, m_Overflow);
@@ -1198,8 +1205,9 @@ void QxrdWindow::newMask()
     m_NewMask = QcepMaskDataPtr(NULL);
     m_NewMaskAvailable.fetchAndStoreOrdered(0);
 
-    m_ImagePlot        -> onMaskedImageAvailable(m_Data, m_Mask);
-    m_CenterFinderPlot -> onMaskedImageAvailable(m_Data, m_Mask);
+    //TODO: reconnect data flow
+//    m_ImagePlot        -> onMaskedImageAvailable(m_Data, m_Mask);
+//    m_CenterFinderPlot -> onMaskedImageAvailable(m_Data, m_Mask);
 
 //    if (m_ImageDisplay) {
 //      m_ImageDisplay->updateImage(QcepDoubleImageDataPtr(), QcepMaskDataPtr(), m_Mask);
@@ -1883,185 +1891,188 @@ void QxrdWindow::onUpdateIntervalMsecChanged(int newVal)
 
 void QxrdWindow::plotPowderRingRadii()
 {
-  QxrdExperimentPtr   expt(m_Experiment);
+  //TODO: re-implement
+//  QxrdExperimentPtr   expt(m_Experiment);
 
-  if (expt) {
-    QxrdCenterFinderPtr cf(expt->centerFinder());
+//  if (expt) {
+//    QxrdCenterFinderPtr cf(expt->centerFinder());
 
-    if (cf) {
-      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
-      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+//    if (cf) {
+//      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+//      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
 
-      int nrgs = cf->countPowderRings();
-      int npts = cf->countPowderRingPoints();
+//      int nrgs = cf->countPowderRings();
+//      int npts = cf->countPowderRingPoints();
 
-      for (int r=0; r<nrgs; r++) {
-        QVector<double> x, y;
+//      for (int r=0; r<nrgs; r++) {
+//        QVector<double> x, y;
 
-        for (int i=0; i<npts; i++) {
-          QxrdPowderPoint pt = cf->powderRingPoint(i);
+//        for (int i=0; i<npts; i++) {
+//          QxrdPowderPoint pt = cf->powderRingPoint(i);
 
-          if (pt.n1() == r && pt.n2() == 0) {
-            x.append(cf->getChi(pt.x(), pt.y()));
-            y.append(cf->getR  (pt.x(), pt.y()));
-          }
-        }
-
-        if (cf->get_SubtractRingAverages()) {
-          double sum = 0;
-          int n = y.count();
-          for (int i=0; i<n; i++) {
-            sum += y[i];
-          }
-
-          double avg = sum/(double)n - cf->get_RingAverageDisplacement()*r;
-          for (int i=0; i<n; i++) {
-            y[i] -= avg;
-          }
-//        } else {
-//          double d = cf->get_RingAverageDisplacement()*r;
-//          int n=y.count();
-//          for (int i=0; i<n; i++) {
-//            y[i] += d;
+//          if (pt.n1() == r && pt.n2() == 0) {
+//            x.append(cf->getChi(pt.x(), pt.y()));
+//            y.append(cf->getR  (pt.x(), pt.y()));
 //          }
-        }
+//        }
 
-        if (x.count() > 0) {
-          QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
-
-          m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
-
-          pc -> setSamples(x, y);
-
-          pc -> setStyle(QwtPlotCurve::NoCurve);
-          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
-
-          pc -> attach(m_DistortionCorrectionPlot);
-        }
-      }
-
-//      m_DistortionCorrectionPlot->autoScale();
-      m_DistortionCorrectionPlot->replot();
-    }
-  }
-}
-
-void QxrdWindow::plotPowderRingTwoTheta()
-{
-  QxrdExperimentPtr   expt(m_Experiment);
-
-  if (expt) {
-    QxrdCenterFinderPtr cf(expt->centerFinder());
-
-    if (cf) {
-//      cf->updateCalibrantDSpacings();
-
-      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
-      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
-
-      int nrgs = cf->countPowderRings();
-      int npts = cf->countPowderRingPoints();
-
-      for (int r=0; r<nrgs; r++) {
-        QVector<double> x, y;
-
-        for (int i=0; i<npts; i++) {
-          QxrdPowderPoint pt = cf->powderRingPoint(i);
-
-          if (pt.n1() == r && pt.n2() == 0) {
-            x.append(cf->getChi(pt.x(), pt.y()));
-            y.append(cf->getTTH(pt.x(), pt.y()));
-          }
-        }
-
-        double avg=0;
-
-        double calTTH = cf->calibrantTTH(r);
-
-        if (cf->get_SubtractRingAverages()) {
-          int n = y.count();
-          //          double sum = 0;
+//        if (cf->get_SubtractRingAverages()) {
+//          double sum = 0;
+//          int n = y.count();
 //          for (int i=0; i<n; i++) {
 //            sum += y[i];
 //          }
 
-          avg = calTTH - cf->get_RingAverageDisplacement()*r;
-          for (int i=0; i<n; i++) {
-            y[i] -= avg;
-          }
-//        } else {
-//          double d = cf->get_RingAverageDisplacement()*r;
-//          int n=y.count();
+//          double avg = sum/(double)n - cf->get_RingAverageDisplacement()*r;
 //          for (int i=0; i<n; i++) {
-//            y[i] += d;
+//            y[i] -= avg;
 //          }
-        }
+////        } else {
+////          double d = cf->get_RingAverageDisplacement()*r;
+////          int n=y.count();
+////          for (int i=0; i<n; i++) {
+////            y[i] += d;
+////          }
+//        }
 
-        if (x.count() >= 0) {
-          QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+//        if (x.count() > 0) {
+//          QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
 
-          m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
+//          m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
 
-          pc -> setSamples(x, y);
+//          pc -> setSamples(x, y);
 
-          pc -> setStyle(QwtPlotCurve::NoCurve);
-          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+//          pc -> setStyle(QwtPlotCurve::NoCurve);
+//          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
 
-          pc -> attach(m_DistortionCorrectionPlot);
+//          pc -> attach(m_DistortionCorrectionPlot);
+//        }
+//      }
 
-          if (calTTH > 0) {
-            QwtPlotCurve* tth = new QwtPlotCurve(tr("Cal %1").arg(r));
-            QVector<double> x1,y1;
-            x1.append(0); y1.append(calTTH - avg);
-            x1.append(360); y1.append(calTTH - avg);
-            m_DistortionCorrectionPlot->setPlotCurveStyle(r, tth);
-            tth -> setSamples(x1,y1);
-            tth -> setSymbol(NULL);
-            tth -> attach(m_DistortionCorrectionPlot);
-          }
-        }
-      }
+////      m_DistortionCorrectionPlot->autoScale();
+//      m_DistortionCorrectionPlot->replot();
+//    }
+//  }
+}
 
-//      m_DistortionCorrectionPlot->autoScale();
-      m_DistortionCorrectionPlot->replot();
-    }
-  }
+void QxrdWindow::plotPowderRingTwoTheta()
+{
+  //TODO: reimplement
+//  QxrdExperimentPtr   expt(m_Experiment);
+
+//  if (expt) {
+//    QxrdCenterFinderPtr cf(expt->centerFinder());
+
+//    if (cf) {
+////      cf->updateCalibrantDSpacings();
+
+//      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+//      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+
+//      int nrgs = cf->countPowderRings();
+//      int npts = cf->countPowderRingPoints();
+
+//      for (int r=0; r<nrgs; r++) {
+//        QVector<double> x, y;
+
+//        for (int i=0; i<npts; i++) {
+//          QxrdPowderPoint pt = cf->powderRingPoint(i);
+
+//          if (pt.n1() == r && pt.n2() == 0) {
+//            x.append(cf->getChi(pt.x(), pt.y()));
+//            y.append(cf->getTTH(pt.x(), pt.y()));
+//          }
+//        }
+
+//        double avg=0;
+
+//        double calTTH = cf->calibrantTTH(r);
+
+//        if (cf->get_SubtractRingAverages()) {
+//          int n = y.count();
+//          //          double sum = 0;
+////          for (int i=0; i<n; i++) {
+////            sum += y[i];
+////          }
+
+//          avg = calTTH - cf->get_RingAverageDisplacement()*r;
+//          for (int i=0; i<n; i++) {
+//            y[i] -= avg;
+//          }
+////        } else {
+////          double d = cf->get_RingAverageDisplacement()*r;
+////          int n=y.count();
+////          for (int i=0; i<n; i++) {
+////            y[i] += d;
+////          }
+//        }
+
+//        if (x.count() >= 0) {
+//          QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+
+//          m_DistortionCorrectionPlot->setPlotCurveStyle(r, pc);
+
+//          pc -> setSamples(x, y);
+
+//          pc -> setStyle(QwtPlotCurve::NoCurve);
+//          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+
+//          pc -> attach(m_DistortionCorrectionPlot);
+
+//          if (calTTH > 0) {
+//            QwtPlotCurve* tth = new QwtPlotCurve(tr("Cal %1").arg(r));
+//            QVector<double> x1,y1;
+//            x1.append(0); y1.append(calTTH - avg);
+//            x1.append(360); y1.append(calTTH - avg);
+//            m_DistortionCorrectionPlot->setPlotCurveStyle(r, tth);
+//            tth -> setSamples(x1,y1);
+//            tth -> setSymbol(NULL);
+//            tth -> attach(m_DistortionCorrectionPlot);
+//          }
+//        }
+//      }
+
+////      m_DistortionCorrectionPlot->autoScale();
+//      m_DistortionCorrectionPlot->replot();
+//    }
+//  }
 }
 
 void QxrdWindow::plotPowderRingCenters()
 {
-  QxrdExperimentPtr   expt(m_Experiment);
+  //TODO: reimplement
+//  QxrdExperimentPtr   expt(m_Experiment);
 
-  if (expt) {
-    QxrdCenterFinderPtr cf(expt->centerFinder());
+//  if (expt) {
+//    QxrdCenterFinderPtr cf(expt->centerFinder());
 
-    if (cf) {
-      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
-      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
+//    if (cf) {
+//      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
+//      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotMarker);
 
-      QxrdPowderPointVector pts = cf->get_FittedRings();
-      int npts = pts.count();
+//      QxrdPowderPointVector pts = cf->get_FittedRings();
+//      int npts = pts.count();
 
-      QVector<double> x, y;
+//      QVector<double> x, y;
 
-      for (int i=0; i<npts; i++) {
-        QxrdPowderPoint &pt = pts[i];
-        x.append(pt.x());
-        y.append(pt.y());
-      }
+//      for (int i=0; i<npts; i++) {
+//        QxrdPowderPoint &pt = pts[i];
+//        x.append(pt.x());
+//        y.append(pt.y());
+//      }
 
-      QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring Centers"));
+//      QwtPlotCurve* pc = new QwtPlotCurve(tr("Ring Centers"));
 
-      m_DistortionCorrectionPlot->setPlotCurveStyle(0, pc);
+//      m_DistortionCorrectionPlot->setPlotCurveStyle(0, pc);
 
-      pc -> setSamples(x, y);
+//      pc -> setSamples(x, y);
 
-      pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
-      pc -> attach(m_DistortionCorrectionPlot);
+//      pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+//      pc -> attach(m_DistortionCorrectionPlot);
 
-      m_DistortionCorrectionPlot->replot();
-    }
-  }
+//      m_DistortionCorrectionPlot->replot();
+//    }
+//  }
 }
 
 static int s_TestImageCount = 0;

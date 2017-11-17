@@ -109,23 +109,25 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
       m_ROIWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     }
 
-    m_DetectorImage->init(dp->imagePlotSettings(), expt);
+    //TODO: Initialise
 
-    m_DetectorImage->setROIModel(m_ROIModel);
-    m_DetectorImage->setROISelection(m_ROIWidget->selectionModel());
+//    m_DetectorImage->init(dp->imagePlotSettings(), expt);
 
-    connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableZooming);
-    connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_DetectorImage, &QcepPlot::zoomOut);
-    connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdImagePlot::autoScale);
+//    m_DetectorImage->setROIModel(m_ROIModel);
+//    m_DetectorImage->setROISelection(m_ROIWidget->selectionModel());
 
-    connect(m_ROICreateButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROICreate);
-    connect(m_ROISelectButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROISelect);
-    connect(m_ROIAddNodeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIAddNode);
-    connect(m_ROIRemoveNodeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIRemoveNode);
+//    connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableZooming);
+//    connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_DetectorImage, &QcepPlot::zoomOut);
+//    connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdImagePlot::autoScale);
 
-    connect(m_DetectorImage,   &QxrdDetectorImagePlot::changeROICreateType, this, &QxrdDetectorControlWindow::onChangeROICreateType);
-    connect(m_ROIRotateButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIRotate);
-    connect(m_ROIResizeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIResize);
+//    connect(m_ROICreateButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROICreate);
+//    connect(m_ROISelectButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROISelect);
+//    connect(m_ROIAddNodeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIAddNode);
+//    connect(m_ROIRemoveNodeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIRemoveNode);
+
+//    connect(m_DetectorImage,   &QxrdDetectorImagePlot::changeROICreateType, this, &QxrdDetectorControlWindow::onChangeROICreateType);
+//    connect(m_ROIRotateButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIRotate);
+//    connect(m_ROIResizeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIResize);
   }
 
   if (app) {
@@ -449,6 +451,8 @@ void QxrdDetectorControlWindow::doMoveROIUp()
 
 void QxrdDetectorControlWindow::updateImageDisplay()
 {
+  //TODO: re-connect detector frame signals to widgets...
+
   if (m_NewDataAvailable.fetchAndStoreOrdered(0)) {
     {
       QcepMutexLocker lock(__FILE__, __LINE__, &m_UpdateMutex);
@@ -464,7 +468,7 @@ void QxrdDetectorControlWindow::updateImageDisplay()
 
     if (proc) {
       if (proc->get_DetectorDisplayMode() == QxrdDetectorProcessor::ImageDisplayMode) {
-        m_DetectorImage->onProcessedImageAvailable(m_DisplayedImage, m_DisplayedOverflow);
+//        m_DetectorImage->onProcessedImageAvailable(m_DisplayedImage, m_DisplayedOverflow);
       }
     }
   } else if (m_NewMaskAvailable.fetchAndStoreOrdered(0)) {
@@ -479,7 +483,7 @@ void QxrdDetectorControlWindow::updateImageDisplay()
 
     if (proc) {
       if (proc->get_DetectorDisplayMode() == QxrdDetectorProcessor::ImageDisplayMode) {
-        m_DetectorImage->onMaskedImageAvailable(m_DisplayedImage, m_DisplayedMask);
+//        m_DetectorImage->onMaskedImageAvailable(m_DisplayedImage, m_DisplayedMask);
       }
     }
   }
@@ -511,7 +515,8 @@ void QxrdDetectorControlWindow::displayNewMask(QcepMaskDataPtr mask)
 
 void QxrdDetectorControlWindow::updateROIDisplay(bool show)
 {
-  m_DetectorImage -> enableROIDisplay(show);
+  //TODO: re-enable ROI display
+//  m_DetectorImage -> enableROIDisplay(show);
 }
 
 void QxrdDetectorControlWindow::doBrowseMask()
@@ -802,21 +807,22 @@ void QxrdDetectorControlWindow::browseScanFile()
 
 void QxrdDetectorControlWindow::onChangeROICreateType(int newType)
 {
-  switch (newType) {
-  case QxrdDetectorImagePlot::NewRectROI:
-    m_ROICreateButton->setIcon(QIcon(":/images/draw-rectangle.png"));
-    break;
+  //TODO: reimplement
+//  switch (newType) {
+//  case QxrdDetectorImagePlot::NewRectROI:
+//    m_ROICreateButton->setIcon(QIcon(":/images/draw-rectangle.png"));
+//    break;
 
-  case QxrdDetectorImagePlot::NewEllipseROI:
-    m_ROICreateButton->setIcon(QIcon(":/images/draw-ellipse.png"));
-    break;
+//  case QxrdDetectorImagePlot::NewEllipseROI:
+//    m_ROICreateButton->setIcon(QIcon(":/images/draw-ellipse.png"));
+//    break;
 
-  case QxrdDetectorImagePlot::NewRectDonutROI:
-    m_ROICreateButton->setIcon(QIcon(":/images/draw-rectangle-donut.png"));
-    break;
+//  case QxrdDetectorImagePlot::NewRectDonutROI:
+//    m_ROICreateButton->setIcon(QIcon(":/images/draw-rectangle-donut.png"));
+//    break;
 
-  case QxrdDetectorImagePlot::NewEllipseDonutROI:
-    m_ROICreateButton->setIcon(QIcon(":/images/draw-donut.png"));
-    break;
-  }
+//  case QxrdDetectorImagePlot::NewEllipseDonutROI:
+//    m_ROICreateButton->setIcon(QIcon(":/images/draw-donut.png"));
+//    break;
+//  }
 }
