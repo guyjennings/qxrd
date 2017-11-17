@@ -85,7 +85,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 //    m_AcquisitionScalerDialog(NULL),
 //    m_AcquisitionExtraInputsDialog(NULL),
 //    m_SynchronizedAcquisitionDialog(NULL),
-    m_DisplayDialog(NULL),
+//    m_DisplayDialog(NULL),
 //    m_CenterFinderDialog(NULL),
 //    m_MaskDialog(NULL),
 //    m_CorrectionDialog(NULL),
@@ -178,7 +178,7 @@ void QxrdWindow::initialize()
 //  m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(set->synchronizedAcquisitionDialogSettings(), this, m_Acquisition);
 //  m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
 
-  m_DisplayDialog      = new QxrdDisplayDialog(this);
+//  m_DisplayDialog      = new QxrdDisplayDialog(this);
 
 //  if (proc) {
 //    m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
@@ -390,10 +390,10 @@ void QxrdWindow::initialize()
   connect(m_ActionReflectHorizontally, &QAction::triggered, this, &QxrdWindow::doReflectHorizontally);
   connect(m_ActionReflectVertically, &QAction::triggered, this, &QxrdWindow::doReflectVertically);
 
-  connect(m_DisplayDialog -> m_AutoRange, &QAbstractButton::clicked, m_ActionAutoRange, &QAction::triggered);
-  connect(m_DisplayDialog -> m_Display_5pct, &QAbstractButton::clicked, m_Action005Range, &QAction::triggered);
-  connect(m_DisplayDialog -> m_Display_10pct, &QAbstractButton::clicked, m_Action010Range, &QAction::triggered);
-  connect(m_DisplayDialog -> m_Display_100pct, &QAbstractButton::clicked, m_Action100Range, &QAction::triggered);
+//  connect(m_DisplayDialog -> m_AutoRange, &QAbstractButton::clicked, m_ActionAutoRange, &QAction::triggered);
+//  connect(m_DisplayDialog -> m_Display_5pct, &QAbstractButton::clicked, m_Action005Range, &QAction::triggered);
+//  connect(m_DisplayDialog -> m_Display_10pct, &QAbstractButton::clicked, m_Action010Range, &QAction::triggered);
+//  connect(m_DisplayDialog -> m_Display_100pct, &QAbstractButton::clicked, m_Action100Range, &QAction::triggered);
 
   connect(m_Action005Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set005Range);
   connect(m_Action010Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set010Range);
@@ -479,7 +479,7 @@ void QxrdWindow::initialize()
   connect(m_DistortionCorrectionZoomAllButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::autoScale);
   connect(m_DistortionCorrectionMeasureButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::enableMeasuring);
 
-  connect(m_DisplayDialog -> m_DisplayOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
+//  connect(m_DisplayDialog -> m_DisplayOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
 //  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
 
   if (app) {
@@ -581,7 +581,7 @@ void QxrdWindow::initialize()
     connect(acq.data(), &QxrdAcquisition::acquireComplete,
             this,       &QxrdWindow::acquireComplete);
 
-    acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
+//    acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
 //    acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
 //    acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
 
@@ -618,33 +618,33 @@ void QxrdWindow::initialize()
 //    proc -> prop_EstimatedProcessingTime() -> linkTo(m_CorrectionDialog->m_EstimatedProcessingTime);
 //  }
 
-  if (set) {
-    QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
+//  if (set) {
+//    QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
 
-    if (ps) {
-      ps -> prop_DisplayMinimumPct() -> linkTo(m_DisplayDialog->m_DisplayMinimumPct);
-      ps -> prop_DisplayMaximumPct() -> linkTo(m_DisplayDialog->m_DisplayMaximumPct);
-      ps -> prop_DisplayMinimumVal() -> linkTo(m_DisplayDialog->m_DisplayMinimumVal);
-      ps -> prop_DisplayMaximumVal() -> linkTo(m_DisplayDialog->m_DisplayMaximumVal);
-      ps -> prop_DisplayMinimumPctle() -> linkTo(m_DisplayDialog->m_DisplayMinimumPctle);
-      ps -> prop_DisplayMaximumPctle() -> linkTo(m_DisplayDialog->m_DisplayMaximumPctle);
+//    if (ps) {
+//      ps -> prop_DisplayMinimumPct() -> linkTo(m_DisplayDialog->m_DisplayMinimumPct);
+//      ps -> prop_DisplayMaximumPct() -> linkTo(m_DisplayDialog->m_DisplayMaximumPct);
+//      ps -> prop_DisplayMinimumVal() -> linkTo(m_DisplayDialog->m_DisplayMinimumVal);
+//      ps -> prop_DisplayMaximumVal() -> linkTo(m_DisplayDialog->m_DisplayMaximumVal);
+//      ps -> prop_DisplayMinimumPctle() -> linkTo(m_DisplayDialog->m_DisplayMinimumPctle);
+//      ps -> prop_DisplayMaximumPctle() -> linkTo(m_DisplayDialog->m_DisplayMaximumPctle);
 
-      ps -> prop_DisplayLog() -> linkTo(m_DisplayDialog->m_DisplayImageLog);
-      ps -> prop_DisplayScalingMode() -> linkTo(m_DisplayDialog->m_DisplayScalingMode);
+//      ps -> prop_DisplayLog() -> linkTo(m_DisplayDialog->m_DisplayImageLog);
+//      ps -> prop_DisplayScalingMode() -> linkTo(m_DisplayDialog->m_DisplayScalingMode);
 
-      connect(ps -> prop_DisplayScalingMode(), &QcepIntProperty::valueChanged, m_DisplayDialog->m_DisplayParmsStack, &QStackedWidget::setCurrentIndex);
-      m_DisplayDialog->m_DisplayParmsStack->setCurrentIndex(ps->get_DisplayScalingMode());
+//      connect(ps -> prop_DisplayScalingMode(), &QcepIntProperty::valueChanged, m_DisplayDialog->m_DisplayParmsStack, &QStackedWidget::setCurrentIndex);
+//      m_DisplayDialog->m_DisplayParmsStack->setCurrentIndex(ps->get_DisplayScalingMode());
 
-      ps -> prop_DisplayColorMap() -> linkTo(m_DisplayDialog->m_DisplayColorMap);
+//      ps -> prop_DisplayColorMap() -> linkTo(m_DisplayDialog->m_DisplayColorMap);
 
-      ps -> prop_ImageShown() -> linkTo(m_DisplayDialog->m_DisplayImage);
-      ps -> prop_MaskShown() -> linkTo(m_DisplayDialog->m_DisplayMask);
-      ps -> prop_OverflowShown() -> linkTo(m_DisplayDialog->m_DisplayOverflow);
-      ps -> prop_InterpolatePixels() -> linkTo(m_DisplayDialog->m_InterpolatePixels);
-      ps -> prop_MaintainAspectRatio() -> linkTo(m_DisplayDialog->m_MaintainAspectRatio);
+//      ps -> prop_ImageShown() -> linkTo(m_DisplayDialog->m_DisplayImage);
+//      ps -> prop_MaskShown() -> linkTo(m_DisplayDialog->m_DisplayMask);
+//      ps -> prop_OverflowShown() -> linkTo(m_DisplayDialog->m_DisplayOverflow);
+//      ps -> prop_InterpolatePixels() -> linkTo(m_DisplayDialog->m_InterpolatePixels);
+//      ps -> prop_MaintainAspectRatio() -> linkTo(m_DisplayDialog->m_MaintainAspectRatio);
 
-    }
-  }
+//    }
+//  }
 
   m_ImagePlot -> setProcessor(m_DataProcessor);
   m_DistortionCorrectionPlot -> setWindow(this);
@@ -674,7 +674,7 @@ void QxrdWindow::initialize()
 //  m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_OutputFileBrowser -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_DisplayDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_DisplayDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_CalibrantDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_DatasetBrowserDialog -> toggleViewAction());

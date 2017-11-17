@@ -174,7 +174,7 @@ private:
 //  QxrdAcquisitionScalerDialog           *m_AcquisitionScalerDialog;
 //  QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
 //  QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
-  QxrdDisplayDialog                     *m_DisplayDialog;
+//  QxrdDisplayDialog                     *m_DisplayDialog;
 //  QxrdCenterFinderDialog                *m_CenterFinderDialog;
 //  QxrdMaskDialog                        *m_MaskDialog;
 //  QxrdCorrectionDialog                  *m_CorrectionDialog;
