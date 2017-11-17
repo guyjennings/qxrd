@@ -205,7 +205,7 @@ private:
   QcepMaskDataPtr                        m_NewMask;
   QAtomicInt                             m_NewMaskAvailable;
 
-  QxrdImageDisplayWidget                *m_ImageDisplay;
+//  QxrdImageDisplayWidget                *m_ImageDisplay;
   QxrdHighlighter                       *m_Highlighter;
 
   QString                                m_ScriptPath;

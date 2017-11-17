@@ -109,7 +109,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_Mask(NULL),
     m_NewMask(NULL),
     m_NewMaskAvailable(false),
-    m_ImageDisplay(NULL),
+//    m_ImageDisplay(NULL),
     m_Highlighter(NULL)
 {
 #ifndef QT_NO_DEBUG
@@ -1147,13 +1147,13 @@ void QxrdWindow::doTimerUpdate()
       g_Application->printMessage(tr("QxrdWindow::newData centerFinder after %1 msec").arg(t.elapsed()));
     }
 
-    if (m_ImageDisplay) {
-      m_ImageDisplay -> updateImage(m_Data, m_Overflow);
+//    if (m_ImageDisplay) {
+//      m_ImageDisplay -> updateImage(m_Data, m_Overflow);
 
-      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-        g_Application->printMessage(tr("QxrdWindow::newData imageDisplay after %1 msec").arg(t.elapsed()));
-      }
-    }
+//      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
+//        g_Application->printMessage(tr("QxrdWindow::newData imageDisplay after %1 msec").arg(t.elapsed()));
+//      }
+//    }
 
 //    if (m_SliceDialog) {
 //      m_SliceDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
@@ -1201,9 +1201,9 @@ void QxrdWindow::newMask()
     m_ImagePlot        -> onMaskedImageAvailable(m_Data, m_Mask);
     m_CenterFinderPlot -> onMaskedImageAvailable(m_Data, m_Mask);
 
-    if (m_ImageDisplay) {
-      m_ImageDisplay->updateImage(QcepDoubleImageDataPtr(), QcepMaskDataPtr(), m_Mask);
-    }
+//    if (m_ImageDisplay) {
+//      m_ImageDisplay->updateImage(QcepDoubleImageDataPtr(), QcepMaskDataPtr(), m_Mask);
+//    }
   }
 }
 
