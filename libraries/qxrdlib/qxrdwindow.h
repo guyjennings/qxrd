@@ -177,7 +177,7 @@ private:
   QxrdDisplayDialog                     *m_DisplayDialog;
 //  QxrdCenterFinderDialog                *m_CenterFinderDialog;
 //  QxrdMaskDialog                        *m_MaskDialog;
-  QxrdCorrectionDialog                  *m_CorrectionDialog;
+//  QxrdCorrectionDialog                  *m_CorrectionDialog;
 //  QxrdCalibrantDialog                   *m_CalibrantDialog;
 //  QcepDatasetBrowserDialog              *m_DatasetBrowserDialog;
 //  QxrdIntegratorDialog                  *m_IntegratorDialog;

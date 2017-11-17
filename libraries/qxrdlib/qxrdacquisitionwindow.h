@@ -17,6 +17,9 @@ public:
                                  QxrdExperimentWPtr expt);
   ~QxrdAcquisitionWindow();
 
+private slots:
+  void doEditCorrection();
+
 protected:
   void changeEvent(QEvent *e);
 

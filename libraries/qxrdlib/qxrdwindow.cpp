@@ -88,7 +88,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_DisplayDialog(NULL),
 //    m_CenterFinderDialog(NULL),
 //    m_MaskDialog(NULL),
-    m_CorrectionDialog(NULL),
+//    m_CorrectionDialog(NULL),
 //    m_IntegratorDialog(NULL),
 //    m_CalibrantDialog(NULL),
 //    m_DatasetBrowserDialog(NULL),
@@ -188,7 +188,7 @@ void QxrdWindow::initialize()
 
 //  m_MaskDialog       = new QxrdMaskDialog(m_DataProcessor, this);
 
-  m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
+//  m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
 
 //  if (proc) {
 //    m_IntegratorDialog   = new QxrdIntegratorDialog(proc -> integrator());
@@ -480,7 +480,7 @@ void QxrdWindow::initialize()
   connect(m_DistortionCorrectionMeasureButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::enableMeasuring);
 
   connect(m_DisplayDialog -> m_DisplayOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
-  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
+//  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
 
   if (app) {
     connect(m_ActionAboutQXRD, &QAction::triggered, app.data(), &QxrdApplication::doAboutQxrd);
@@ -582,8 +582,8 @@ void QxrdWindow::initialize()
             this,       &QxrdWindow::acquireComplete);
 
     acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
-    acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
-    acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
+//    acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
+//    acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
 
 //    connect(acq->prop_OverflowLevel(), &QcepIntProperty::valueChanged,
 //            m_HistogramDialog, &QxrdHistogramDialog::updateHistogramNeeded);
@@ -593,30 +593,30 @@ void QxrdWindow::initialize()
     expt -> prop_CompletionPercentage() -> linkTo(m_Progress);
   }
 
-  if (proc) {
-    proc -> prop_PerformDarkSubtraction() -> linkTo(m_CorrectionDialog->m_PerformDark);
-    proc -> prop_PerformDarkSubtractionTime() -> linkTo(m_CorrectionDialog->m_PerformDarkTime);
-    proc -> prop_SaveRawImages() -> linkTo(m_CorrectionDialog->m_SaveRaw);
-    proc -> prop_SaveDarkImages() -> linkTo(m_CorrectionDialog->m_SaveDark);
-    proc -> prop_PerformBadPixels() -> linkTo(m_CorrectionDialog->m_PerformBadPixels);
-    proc -> prop_PerformBadPixelsTime() -> linkTo(m_CorrectionDialog->m_PerformBadPixelsTime);
-    proc -> prop_PerformGainCorrection() -> linkTo(m_CorrectionDialog->m_PerformGainCorrection);
-    proc -> prop_PerformGainCorrectionTime() -> linkTo(m_CorrectionDialog->m_PerformGainCorrectionTime);
-    proc -> prop_SaveSubtracted() -> linkTo(m_CorrectionDialog->m_SaveSubtracted);
-    proc -> prop_SaveSubtractedTime() -> linkTo(m_CorrectionDialog->m_SaveSubtractedTime);
-    proc -> prop_SaveAsText() -> linkTo(m_CorrectionDialog->m_SaveAsText);
-    proc -> prop_SaveAsTextTime() -> linkTo(m_CorrectionDialog->m_SaveAsTextTime);
-    proc -> prop_PerformIntegration() -> linkTo(m_CorrectionDialog->m_PerformIntegration);
-    proc -> prop_PerformIntegrationTime() -> linkTo(m_CorrectionDialog->m_PerformIntegrationTime);
-    proc -> prop_DisplayIntegratedData() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedData);
-    proc -> prop_DisplayIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedDataTime);
-    proc -> prop_SaveIntegratedData() -> linkTo(m_CorrectionDialog->m_SaveIntegratedData);
-    proc -> prop_SaveIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_SaveIntegratedDataTime);
-    proc -> prop_SaveIntegratedInSeparateFiles() -> linkTo(m_CorrectionDialog->m_SaveIntegratedInSeparateFiles);
-    proc -> prop_AccumulateIntegrated2D() ->linkTo(m_CorrectionDialog->m_AccumulateIntegrated2D);
-    proc -> prop_AccumulateIntegratedName() -> linkTo(m_CorrectionDialog->m_AccumulateIntegratedName);
-    proc -> prop_EstimatedProcessingTime() -> linkTo(m_CorrectionDialog->m_EstimatedProcessingTime);
-  }
+//  if (proc) {
+//    proc -> prop_PerformDarkSubtraction() -> linkTo(m_CorrectionDialog->m_PerformDark);
+//    proc -> prop_PerformDarkSubtractionTime() -> linkTo(m_CorrectionDialog->m_PerformDarkTime);
+//    proc -> prop_SaveRawImages() -> linkTo(m_CorrectionDialog->m_SaveRaw);
+//    proc -> prop_SaveDarkImages() -> linkTo(m_CorrectionDialog->m_SaveDark);
+//    proc -> prop_PerformBadPixels() -> linkTo(m_CorrectionDialog->m_PerformBadPixels);
+//    proc -> prop_PerformBadPixelsTime() -> linkTo(m_CorrectionDialog->m_PerformBadPixelsTime);
+//    proc -> prop_PerformGainCorrection() -> linkTo(m_CorrectionDialog->m_PerformGainCorrection);
+//    proc -> prop_PerformGainCorrectionTime() -> linkTo(m_CorrectionDialog->m_PerformGainCorrectionTime);
+//    proc -> prop_SaveSubtracted() -> linkTo(m_CorrectionDialog->m_SaveSubtracted);
+//    proc -> prop_SaveSubtractedTime() -> linkTo(m_CorrectionDialog->m_SaveSubtractedTime);
+//    proc -> prop_SaveAsText() -> linkTo(m_CorrectionDialog->m_SaveAsText);
+//    proc -> prop_SaveAsTextTime() -> linkTo(m_CorrectionDialog->m_SaveAsTextTime);
+//    proc -> prop_PerformIntegration() -> linkTo(m_CorrectionDialog->m_PerformIntegration);
+//    proc -> prop_PerformIntegrationTime() -> linkTo(m_CorrectionDialog->m_PerformIntegrationTime);
+//    proc -> prop_DisplayIntegratedData() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedData);
+//    proc -> prop_DisplayIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedDataTime);
+//    proc -> prop_SaveIntegratedData() -> linkTo(m_CorrectionDialog->m_SaveIntegratedData);
+//    proc -> prop_SaveIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_SaveIntegratedDataTime);
+//    proc -> prop_SaveIntegratedInSeparateFiles() -> linkTo(m_CorrectionDialog->m_SaveIntegratedInSeparateFiles);
+//    proc -> prop_AccumulateIntegrated2D() ->linkTo(m_CorrectionDialog->m_AccumulateIntegrated2D);
+//    proc -> prop_AccumulateIntegratedName() -> linkTo(m_CorrectionDialog->m_AccumulateIntegratedName);
+//    proc -> prop_EstimatedProcessingTime() -> linkTo(m_CorrectionDialog->m_EstimatedProcessingTime);
+//  }
 
   if (set) {
     QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
@@ -679,7 +679,7 @@ void QxrdWindow::initialize()
 //  m_WindowsMenu -> addAction(m_CalibrantDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_DatasetBrowserDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
-  m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());
+//  m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_IntegratorDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_HistogramDialog -> toggleViewAction());

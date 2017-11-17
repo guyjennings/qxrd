@@ -1,6 +1,7 @@
 #include "qxrdacquisitionwindow.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisitionwindowsettings.h"
+#include "qxrdcorrectiondialog.h"
 
 QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr set,
                                              QString name,
@@ -33,6 +34,9 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
       m_FileBrowserWidget -> init(settings->fileBrowserSettings(), exp, proc);
     }
   }
+
+  connect(m_AcquireOptionsButton, &QPushButton::clicked,
+          this, &QxrdAcquisitionWindow::doEditCorrection);
 }
 
 QxrdAcquisitionWindow::~QxrdAcquisitionWindow()
@@ -48,5 +52,22 @@ void QxrdAcquisitionWindow::changeEvent(QEvent *e)
     break;
   default:
     break;
+  }
+}
+
+void QxrdAcquisitionWindow::doEditCorrection()
+{
+  QxrdExperimentPtr exp(m_Experiment);
+
+  if (exp) {
+    QxrdAcquisitionPtr   acq  = exp->acquisition();
+    QxrdDataProcessorPtr proc = exp->dataProcessor();
+
+    if (acq && proc) {
+      QxrdCorrectionDialog* editCorrection =
+          new QxrdCorrectionDialog(this, acq, proc);
+
+      editCorrection->exec();
+    }
   }
 }
