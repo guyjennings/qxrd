@@ -341,7 +341,13 @@ SOURCES += qxrdlib.cpp \
     qxrdprintplotcommand.cpp \
     qxrddisplaysubmenucommand.cpp \
     qxrdplotpreferencescommand.cpp \
-    qxrdprocessor.cpp
+    qxrdprocessor.cpp \
+    qxrddistortionplotwidget.cpp \
+    qxrdextrainputsplotwidget.cpp \
+    qxrdextraoutputsplotwidget.cpp \
+    qxrdhistogramplotwidget.cpp \
+    qxrdsliceplotwidget.cpp \
+    qxrddetectorplotwidget.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -433,7 +439,14 @@ HEADERS += qxrdlib.h\
     qxrdplotwidget-ptr.h \
     qxrddisplaysubmenucommand.h \
     qxrdplotpreferencescommand.h \
-    qxrdprocessor.h
+    qxrdprocessor.h \
+    qxrddisplaydialog-ptr.h \
+    qxrddistortionplotwidget.h \
+    qxrdextrainputsplotwidget.h \
+    qxrdextraoutputsplotwidget.h \
+    qxrdhistogramplotwidget.h \
+    qxrdsliceplotwidget.h \
+    qxrddetectorplotwidget.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

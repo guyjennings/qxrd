@@ -545,6 +545,7 @@ void QxrdDetectorSettings::openControlWindow()
   if (m_DetectorControlWindow) {
     m_DetectorControlWindow->show();
     m_DetectorControlWindow->raise();
+    m_DetectorControlWindow->activateWindow();
   }
 }
 

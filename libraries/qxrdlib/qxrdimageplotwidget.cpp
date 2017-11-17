@@ -10,6 +10,7 @@
 #include "qxrdmeasurecommand.h"
 #include "qxrdhistogramcommand.h"
 #include "qxrddisplaysubmenucommand.h"
+#include "qxrdimageplot.h"
 
 QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent) :
   QxrdPlotWidget(parent)
@@ -31,4 +32,15 @@ QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent) :
 
 QxrdImagePlotWidget::~QxrdImagePlotWidget()
 {
+}
+
+QxrdImagePlotSettingsWPtr QxrdImagePlotWidget::imagePlotSettings()
+{
+  QxrdImagePlotSettingsWPtr res;
+
+  if (m_Plot) {
+    res = m_Plot->imagePlotSettings();
+  }
+
+  return res;
 }

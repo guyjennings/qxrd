@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>QxrdHistogramDialog</class>
- <widget class="QDockWidget" name="QxrdHistogramDialog">
+ <widget class="QDialog" name="QxrdHistogramDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -16,16 +16,16 @@
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QxrdHistogramPlot" name="m_HistogramPlot" native="true"/>
+     <widget class="QxrdHistogramPlotWidget" name="m_PlotWidget" native="true"/>
     </item>
    </layout>
   </widget>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QxrdHistogramPlot</class>
+   <class>QxrdHistogramPlotWidget</class>
    <extends>QWidget</extends>
-   <header>qxrdhistogramplot.h</header>
+   <header>qxrdhistogramplotwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

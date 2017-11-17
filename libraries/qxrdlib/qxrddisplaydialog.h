@@ -9,7 +9,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 
-class QXRD_EXPORT QxrdDisplayDialog : public QDockWidget, public Ui::QxrdDisplayDialog
+class QXRD_EXPORT QxrdDisplayDialog : public QDialog, public Ui::QxrdDisplayDialog
 {
   Q_OBJECT
 

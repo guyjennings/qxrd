@@ -12,7 +12,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qwt_plot_piecewise_curve-ptr.h"
 
-class QXRD_EXPORT QxrdHistogramDialog : public QDockWidget, public Ui::QxrdHistogramDialog
+class QXRD_EXPORT QxrdHistogramDialog : public QDialog, public Ui::QxrdHistogramDialog
 {
   Q_OBJECT
 
@@ -43,6 +43,7 @@ private:
   QcepDoubleImageDataPtr          m_Image;
   QwtPlotPiecewiseCurvePtr        m_TotalCurve;
   QwtPlotPiecewiseCurvePtr        m_SelectCurve;
+  QxrdImagePlot                  *m_Plot;
 };
 
 #endif // QXRDHISTOGRAMDIALOG_H

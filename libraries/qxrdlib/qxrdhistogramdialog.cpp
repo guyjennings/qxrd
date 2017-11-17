@@ -8,13 +8,15 @@
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdhistogramplotsettings.h"
 #include <QtConcurrentRun>
+#include "qxrdimageplot.h"
 
 QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings,
                                          QxrdExperimentWPtr expt,
                                          QWidget *parent) :
-  QDockWidget(parent),
+  QDialog(parent),
   m_Experiment(expt),
-  m_HistogramDialogSettings(settings)
+  m_HistogramDialogSettings(settings),
+  m_Plot(NULL)
 {
   qRegisterMetaType<QwtPlotPiecewiseCurvePtr>("QwtPlotPiecewiseCurvePtr");
 
@@ -24,11 +26,15 @@ QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr setting
 
   setupUi(this);
 
+  if (m_PlotWidget) {
+    m_Plot = m_PlotWidget->m_Plot;
+  }
+
   QxrdHistogramDialogSettingsPtr set(m_HistogramDialogSettings);
 
-  if (set) {
-    m_HistogramPlot->init(set->histogramPlotSettings());
-  }
+//  if (set) {
+//    m_Plot->init(set->histogramPlotSettings());
+//  }
 
   connect(this, &QxrdHistogramDialog::newHistogramCurves,
           this, &QxrdHistogramDialog::onNewHistogramCurves,
@@ -142,7 +148,7 @@ void QxrdHistogramDialog::recalculateHistogram()
 
 
       QwtPlotPiecewiseCurvePtr pc0 =
-          QwtPlotPiecewiseCurvePtr(new QwtPlotPiecewiseCurve(m_HistogramPlot, "Entire Image"));
+          QwtPlotPiecewiseCurvePtr(new QwtPlotPiecewiseCurve(m_Plot, "Entire Image"));
 
       pc0->setSamples(x0, h0);
       pc0->setPen(QPen(Qt::red));
@@ -150,7 +156,7 @@ void QxrdHistogramDialog::recalculateHistogram()
 //      pc0->attach(m_HistogramPlot);
 
       QwtPlotPiecewiseCurvePtr pc1 =
-          QwtPlotPiecewiseCurvePtr(new QwtPlotPiecewiseCurve(m_HistogramPlot,
+          QwtPlotPiecewiseCurvePtr(new QwtPlotPiecewiseCurve(m_Plot,
                                                              tr("[%1,%2]-[%3,%4]")
                                                              .arg(rect.left()).arg(rect.bottom())
                                                              .arg(rect.right()).arg(rect.top())));
@@ -175,15 +181,15 @@ void QxrdHistogramDialog::onNewHistogramCurves(QwtPlotPiecewiseCurvePtr totalCur
   m_TotalCurve = totalCurve;
   m_SelectCurve = selectCurve;
 
-  m_HistogramPlot->detachItems();
+  m_Plot->detachItems();
 
   if (m_TotalCurve) {
-    m_TotalCurve->attach(m_HistogramPlot);
+    m_TotalCurve->attach(m_Plot);
   }
 
   if (m_SelectCurve) {
-    m_SelectCurve->attach(m_HistogramPlot);
+    m_SelectCurve->attach(m_Plot);
   }
 
-  m_HistogramPlot->replot();
+  m_Plot->replot();
 }

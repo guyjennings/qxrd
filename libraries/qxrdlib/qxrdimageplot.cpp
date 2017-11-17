@@ -27,8 +27,8 @@
 #include "qxrdroicoordinateslistmodel.h"
 #include "qxrdroicoordinates.h"
 #include "qxrdroieditordialog.h"
-#include <QMessageBox>
 #include "qwt_plot_piecewise_curve.h"
+#include "qxrddisplaydialog.h"
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QcepPlot(parent),
@@ -1753,5 +1753,18 @@ QPointF QxrdImagePlot::scaledDelta(double dx, double dy)
 
 void QxrdImagePlot::editPreferences()
 {
-  QMessageBox::information(this, "Edit Plot Preferences", "Edit Prefs");
+  if (!m_Preferences) {
+    m_Preferences = QxrdDisplayDialogPtr(
+          new QxrdDisplayDialog(NULL,
+                                QxrdExperimentWPtr(),
+                                QxrdAcquisitionWPtr(),
+                                QxrdMainWindowWPtr(),
+                                QxrdImagePlotWidgetWPtr()));
+  }
+
+  if (m_Preferences) {
+    m_Preferences->show();
+    m_Preferences->raise();
+    m_Preferences->activateWindow();
+  }
 }

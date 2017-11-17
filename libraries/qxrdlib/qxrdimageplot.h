@@ -27,6 +27,7 @@
 #include "qxrdpowderpointpicker.h"
 #include "qxrdroicoordinateslistmodel-ptr.h"
 #include <QItemSelectionModel>
+#include "qxrddisplaydialog-ptr.h"
 
 class QXRD_EXPORT QxrdImagePlot : public QcepPlot
 {
@@ -254,6 +255,8 @@ private:
   QxrdROICoordinatesListModelWPtr m_ROIModel;
   QItemSelectionModel           *m_ROISelection;
   QVector<QwtPlotCurve*>         m_ROICurves;
+
+  QxrdDisplayDialogPtr       m_Preferences;
 };
 
 #endif
