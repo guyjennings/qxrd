@@ -13,6 +13,7 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
+//TODO: remove
 class QXRD_EXPORT QxrdCalibrantDialog : public QDockWidget, public Ui::QxrdCalibrantDialog
 {
   Q_OBJECT

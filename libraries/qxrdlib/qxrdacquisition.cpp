@@ -3,7 +3,7 @@
 #include "qcepmutexlocker.h"
 #include "qxrddataprocessor.h"
 #include "qcepallocator.h"
-#include "qxrdacquisitiondialog.h"
+//#include "qxrdacquisitiondialog.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdwindow.h"
@@ -54,7 +54,6 @@ QxrdAcquisition::QxrdAcquisition(QString name)
     m_SynchronizedAcquisition(NULL),
     m_AcquisitionExtraInputs(NULL),
     m_Window(),
-    m_ControlPanel(NULL),
     m_Idling(1)
 {
 #ifndef QT_NO_DEBUG
@@ -837,23 +836,6 @@ void QxrdAcquisition::processDarkImage(QString filePattern, QString extent, int 
   //  printf("processDarkImage(""%s"",%d,img,ovf)\n", qPrintable(filePattern), fileIndex);
 
   processImage(filePattern, extent, fileIndex, -1, 0, true, image, overflow);
-}
-
-QxrdAcquisitionDialogPtr QxrdAcquisition::controlPanel(QxrdWindowWPtr win)
-{
-  if (win) {
-    m_Window = win;
-
-    m_ControlPanel = new QxrdAcquisitionDialog(experiment(),
-                                               m_Window,
-                                               myself(),
-                                               dataProcessor(),
-                                               m_Window.data());
-
-    return m_ControlPanel;
-  } else {
-    return NULL;
-  }
 }
 
 void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)

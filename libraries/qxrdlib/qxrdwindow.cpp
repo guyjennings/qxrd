@@ -3,7 +3,6 @@
 #include "qxrdwindowsettings.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qxrdacquisitiondialog.h"
 #include "qxrddisplaydialog.h"
 #include "qxrdacquisition.h"
 #include "qxrdimageplot.h"
@@ -81,7 +80,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_Experiment(docw),
     m_Acquisition(acqw),
     m_DataProcessor(procw),
-//    m_AcquisitionDialog(NULL),
 //    m_AcquisitionScalerDialog(NULL),
 //    m_AcquisitionExtraInputsDialog(NULL),
 //    m_SynchronizedAcquisitionDialog(NULL),

@@ -83,7 +83,6 @@ SOURCES += qxrdlib.cpp \
     qxrdserver.cpp \
     qxrdserverthread.cpp \
     qxrdacquisition.cpp \
-    qxrdacquisitiondialog.cpp \
     qxrdplotslicer.cpp \
     qxrdscriptengine.cpp \
     qxrdscriptenginethread.cpp \
@@ -490,7 +489,6 @@ HEADERS += TODO.h \
     qxrdserverthread-ptr.h \
     qxrdacquisition.h \
     qxrdacquisition-ptr.h \
-    qxrdacquisitiondialog.h \
     qxrdplotslicer.h \
     qxrdplotslicer-ptr.h \
     qxrdscriptengine.h \
@@ -584,7 +582,6 @@ HEADERS += TODO.h \
     triangulate.h \
     qxrddebug.h \
     qxrdacquisitionextrainputsplot.h \
-    qxrdacquisitiondialog-ptr.h \
     qxrdacquisitionextrainputsdialogsettings.h \
     qxrdhelpbrowser.h \
     qxrduserscriptdialog.h \

@@ -18,7 +18,6 @@
 #include "qxrdrasterdata.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
-#include "qxrdacquisitiondialog-ptr.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdwindow-ptr.h"
@@ -95,11 +94,8 @@ public:
 
   void copyDynamicProperties(QObject *dest);
 
-  int currentPhase(int frameNumber);
-
   void indicateDroppedFrame(int n);
-  virtual QxrdAcquisitionDialogPtr controlPanel(QxrdWindowWPtr win);
-  QcepAllocatorWPtr allocator() const;
+//  virtual QxrdAcquisitionDialogPtr controlPanel(QxrdWindowWPtr win);
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
   QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
@@ -111,9 +107,6 @@ public:
   QxrdAcquisitionScalerModelPtr acquisitionScalerModel() const;
 
 protected:
-  void acquisition(int isDark);
-  void copyParameters(int isDark);
-
   void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
   QxrdApplicationWPtr application() const;
@@ -227,7 +220,7 @@ private:
 
   QxrdWindowWPtr                   m_Window;
 
-  QxrdAcquisitionDialogPtr         m_ControlPanel;
+//  QxrdAcquisitionDialogPtr         m_ControlPanel;
 
   QTimer                           m_IdleTimer;
   QAtomicInt                       m_Idling;

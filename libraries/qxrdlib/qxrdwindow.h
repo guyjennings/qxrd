@@ -13,7 +13,6 @@
 
 #include "qxrdmainwindow.h"
 #include "qxrdscriptengine.h"
-#include "qxrdacquisitiondialog.h"
 #include "qxrdacquisitionscalerdialog-ptr.h"
 #include "qxrddisplaydialog.h"
 #include "qxrdcenterfinderdialog.h"
@@ -170,7 +169,6 @@ private:
   QxrdExperimentWPtr                     m_Experiment;
   QxrdAcquisitionWPtr                    m_Acquisition;
   QxrdDataProcessorWPtr                  m_DataProcessor;
-//  QxrdAcquisitionDialog                 *m_AcquisitionDialog;
 //  QxrdAcquisitionScalerDialog           *m_AcquisitionScalerDialog;
 //  QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
 //  QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;

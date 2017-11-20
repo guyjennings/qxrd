@@ -1755,6 +1755,7 @@ void QxrdImagePlot::editPreferences()
 {
   if (!m_Preferences) {
     m_Preferences = QxrdDisplayDialogPtr(
+          //TODO: Pass args
           new QxrdDisplayDialog(NULL,
                                 QxrdExperimentWPtr(),
                                 QxrdAcquisitionWPtr(),
