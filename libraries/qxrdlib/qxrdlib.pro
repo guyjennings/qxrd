@@ -791,7 +791,6 @@ FORMS += qxrdwindow.ui \
     qxrdwelcomewindow.ui \
     qxrdglobalpreferencesdialog.ui \
     qxrdwelcomerecentitem.ui \
-    qxrdacquisitiondialog.ui \
     qxrdacquisitionextrainputsdialog.ui \
     qxrduserscriptdialog.ui \
     qxrdscriptdialog.ui \
