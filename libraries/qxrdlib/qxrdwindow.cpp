@@ -434,8 +434,6 @@ void QxrdWindow::initialize()
 //    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateHistogram);
   }
 
-  connect(m_ActionTest, &QAction::triggered, this, &QxrdWindow::doTest);
-
 //  connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableZooming);
 //  connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_ImagePlot, &QcepPlot::zoomOut);
 //  connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::autoScale);
@@ -1545,12 +1543,6 @@ void QxrdWindow::doSaveCachedIntensity()
       proc -> saveCachedIntensity(theFile);
     }
   }
-}
-
-void QxrdWindow::doTest()
-{
-
-  //  m_Data -> setCircularMask();
 }
 
 void QxrdWindow::executeScript()

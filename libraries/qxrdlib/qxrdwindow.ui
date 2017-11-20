@@ -396,7 +396,7 @@
      <x>0</x>
      <y>0</y>
      <width>1131</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -688,15 +688,6 @@
    </property>
    <property name="text">
     <string>Import Data...</string>
-   </property>
-  </action>
-  <action name="m_ActionTest">
-   <property name="icon">
-    <iconset resource="qxrdresources.qrc">
-     <normaloff>:/images/zoom-in.png</normaloff>:/images/zoom-in.png</iconset>
-   </property>
-   <property name="text">
-    <string>Test</string>
    </property>
   </action>
   <action name="m_ActionShowImage">
@@ -1386,6 +1377,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QxrdHelpBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header>qxrdhelpbrowser.h</header>
+  </customwidget>
+  <customwidget>
    <class>QcepDatasetBrowserView</class>
    <extends>QTreeView</extends>
    <header>qcepdatasetbrowserview.h</header>
@@ -1403,21 +1399,16 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QxrdFileBrowserWidget</class>
-   <extends>QWidget</extends>
-   <header>qxrdfilebrowserwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>QxrdCenteringPlotWidget</class>
    <extends>QWidget</extends>
    <header>qxrdcenteringplotwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QxrdHelpBrowser</class>
-   <extends>QTextBrowser</extends>
-   <header>qxrdhelpbrowser.h</header>
+   <class>QxrdFileBrowserWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdfilebrowserwidget.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QxrdDistortionPlotWidget</class>

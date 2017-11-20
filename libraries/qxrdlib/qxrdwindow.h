@@ -105,8 +105,6 @@ public slots:
   void doLoadScript();
   void loadScript(QString path);
 
-  void doTest();
-
   QString timeStamp() const;
   void warningMessage(QString msg);
   void displayMessage(QString msg);
