@@ -176,7 +176,6 @@ SOURCES += qxrdlib.cpp \
     qxrdplanefitter.cpp \
     qxrdcalibrant.cpp \
     qxrdcalibrantlibrary.cpp \
-    qxrdcalibrantdialog.cpp \
     qxrdcalibrantlibrarymodel.cpp \
     qxrdcalibrantdspacingsmodel.cpp \
     qxrdimageplotzoomer.cpp \
@@ -610,7 +609,6 @@ HEADERS += TODO.h \
     qxrdcalibrant-ptr.h \
     qxrdcalibrantlibrary.h \
     qxrdcalibrantlibrary-ptr.h \
-    qxrdcalibrantdialog.h \
     qxrdcalibrantlibrarymodel.h \
     qxrdcalibrantlibrarymodel-ptr.h \
     qxrdcalibrantdspacingsmodel.h \
@@ -794,7 +792,6 @@ FORMS += qxrdwindow.ui \
     qxrdacquisitionextrainputsdialog.ui \
     qxrduserscriptdialog.ui \
     qxrdscriptdialog.ui \
-    qxrdcalibrantdialog.ui \
     qxrddetectorproxywidget.ui \
     qxrddetectorconfigurationdialog.ui \
     qxrddetectorcontrolwindow.ui \

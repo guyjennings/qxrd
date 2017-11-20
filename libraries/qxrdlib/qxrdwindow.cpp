@@ -88,7 +88,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 //    m_MaskDialog(NULL),
 //    m_CorrectionDialog(NULL),
 //    m_IntegratorDialog(NULL),
-//    m_CalibrantDialog(NULL),
 //    m_DatasetBrowserDialog(NULL),
 //    m_Calculator(NULL),
 //    m_InputFileBrowser(NULL),
@@ -195,16 +194,6 @@ void QxrdWindow::initialize()
 //  }
 
 //  if (expt) {
-//    QxrdCalibrantLibraryPtr cal(expt->calibrantLibrary());
-
-//    if (cal && proc) {
-//      m_CalibrantDialog = new QxrdCalibrantDialog(expt, proc -> centerFinder());
-//    } else {
-//      m_CalibrantDialog = new QxrdCalibrantDialog(expt, QxrdCenterFinderWPtr());
-//    }
-//  }
-
-//  if (expt) {
 //    QcepDatasetModelPtr ds = expt->dataset();
 
 //    if (ds) {
@@ -266,8 +255,6 @@ void QxrdWindow::initialize()
 
 //    tabifyDockWidget(m_CenterFinderDialog, /*m_MaskDialog);
 //    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
-//    tabifyDockWidget(m_CorrectionDialog, /*m_CalibrantDialog);
-//    tabifyDockWidget(m_CalibrantDialog, *//*m_OutputFileBrowser);
 //    tabifyDockWidget(m_OutputFileBrowser, */m_HistogramDialog);
   } else if (screenGeom.height() >= 1000) {
 //    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
@@ -284,8 +271,6 @@ void QxrdWindow::initialize()
 
 //    tabifyDockWidget(m_CenterFinderDialog, /*m_MaskDialog);
 //    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
-//    tabifyDockWidget(m_CorrectionDialog, /*m_CalibrantDialog);
-//    tabifyDockWidget(m_CalibrantDialog, *//*m_OutputFileBrowser);
 //    tabifyDockWidget(m_OutputFileBrowser, */m_HistogramDialog);
 //    tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
   } else {
@@ -301,8 +286,6 @@ void QxrdWindow::initialize()
 
 //    tabifyDockWidget(m_DisplayDialog, /*m_MaskDialog);
 //    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
-//    tabifyDockWidget(m_CorrectionDialog, /*m_CalibrantDialog);
-//    tabifyDockWidget(m_CalibrantDialog, *//*m_OutputFileBrowser);
 
 //    tabifyDockWidget(m_OutputFileBrowser, *//*m_SliceDialog);
 //    tabifyDockWidget(m_SliceDialog, *//*m_HistogramDialog);
@@ -680,7 +663,6 @@ void QxrdWindow::initialize()
 //  m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_DisplayDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_CalibrantDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_DatasetBrowserDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
 //  m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());

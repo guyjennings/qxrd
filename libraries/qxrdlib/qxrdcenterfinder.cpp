@@ -23,6 +23,7 @@
 #include "qxrdexperiment.h"
 #include "qxrdfittedrings.h"
 #include "qxrdfittedrings-ptr.h"
+#include "qxrdcalibrantdspacings.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER

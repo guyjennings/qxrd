@@ -19,7 +19,6 @@
 #include "qxrdcorrectiondialog.h"
 #include "qxrdintegratordialog.h"
 #include "qxrdintegratorplot.h"
-#include "qxrdcalibrantdialog.h"
 #include "qcepdatasetbrowserdialog.h"
 #include "qxrdimagecalculator.h"
 #include "qxrdfilebrowser.h"
@@ -176,7 +175,6 @@ private:
 //  QxrdCenterFinderDialog                *m_CenterFinderDialog;
 //  QxrdMaskDialog                        *m_MaskDialog;
 //  QxrdCorrectionDialog                  *m_CorrectionDialog;
-//  QxrdCalibrantDialog                   *m_CalibrantDialog;
 //  QcepDatasetBrowserDialog              *m_DatasetBrowserDialog;
 //  QxrdIntegratorDialog                  *m_IntegratorDialog;
 //  QxrdImageCalculator                   *m_Calculator;
