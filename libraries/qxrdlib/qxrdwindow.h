@@ -97,8 +97,6 @@ public slots:
   void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
   void acquireComplete();
 
-  void testWidget();
-
   void executeScript();
   void executeScriptJS();
   void finishedCommand(QScriptValue result);

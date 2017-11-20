@@ -1836,29 +1836,6 @@ void QxrdWindow::integrationXUnitsChanged(int newXUnits)
   m_ActionIntegrateVsTTH -> setChecked(newXUnits == QxrdIntegrator::RadialIntegrateTTH);
 }
 
-void QxrdWindow::testWidget()
-{
-  if (QThread::currentThread() != thread()) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this, "testWidget", Qt::BlockingQueuedConnection));
-  } else {
-    QDockWidget *dockWidget = new QDockWidget("Test", this);
-    QWidget     *contents   = new QMainWindow(dockWidget);
-    QMenuBar    *menuBar    = new QMenuBar(contents);
-
-    QMenu *test1Menu = menuBar->addMenu("Test1");
-    QMenu *test2Menu = menuBar->addMenu("Test2");
-
-    test1Menu->addAction("Cmd1");
-    test1Menu->addAction("Cmd2");
-    test2Menu->addAction("Cmd3");
-    test2Menu->addAction("Cmd4");
-
-    addDockWidget(Qt::RightDockWidgetArea, dockWidget);
-
-    contents->show();
-  }
-}
-
 void QxrdWindow::onMessageWindowLinesChanged(int newVal)
 {
   m_Messages -> document() -> setMaximumBlockCount(newVal);
