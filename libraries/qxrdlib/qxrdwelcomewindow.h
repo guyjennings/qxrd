@@ -11,7 +11,7 @@
 
 #include "qxrdapplication-ptr.h"
 
-class QXRD_EXPORT QxrdWelcomeWindow : public QMainWindow
+class QXRD_EXPORT QxrdWelcomeWindow : public QMainWindow, public Ui::QxrdWelcomeWindow
 {
   Q_OBJECT
 
@@ -43,7 +43,6 @@ private:
   void setupRecentExperimentsMenu(QAction *action);
 
 private:
-  Ui::QxrdWelcomeWindow *ui;
   QxrdApplicationWPtr    m_Application;
   int                    m_InsertRow;
   QSignalMapper          m_SignalMapper;

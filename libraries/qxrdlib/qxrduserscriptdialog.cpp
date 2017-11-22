@@ -4,24 +4,22 @@
 
 QxrdUserScriptDialog::QxrdUserScriptDialog(QString title, QxrdExperimentWPtr experiment, QString editable, QString def, QWidget *parent) :
   QDialog(parent),
-  m_Experiment(experiment),
-  ui(new Ui::QxrdUserScriptDialog)
+  m_Experiment(experiment)
 {
-  ui->setupUi(this);
+  setupUi(this);
 
   m_Default = def;
 
   setWindowTitle(title);
 
-  ui->m_ScriptEditor->setText(editable);
-  ui->m_ScriptEditor->setExperiment(m_Experiment);
+  m_ScriptEditor->setText(editable);
+  m_ScriptEditor->setExperiment(m_Experiment);
 
-  connect(ui->m_ButtonBar, &QDialogButtonBox::clicked, this, &QxrdUserScriptDialog::onButtonClicked);
+  connect(m_ButtonBar, &QDialogButtonBox::clicked, this, &QxrdUserScriptDialog::onButtonClicked);
 }
 
 QxrdUserScriptDialog::~QxrdUserScriptDialog()
 {
-  delete ui;
 }
 
 void QxrdUserScriptDialog::changeEvent(QEvent *e)
@@ -29,7 +27,7 @@ void QxrdUserScriptDialog::changeEvent(QEvent *e)
   QDialog::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
-    ui->retranslateUi(this);
+    retranslateUi(this);
     break;
   default:
     break;
@@ -38,16 +36,16 @@ void QxrdUserScriptDialog::changeEvent(QEvent *e)
 
 QString QxrdUserScriptDialog::userScript()
 {
-  return ui->m_ScriptEditor->toPlainText();
+  return m_ScriptEditor->toPlainText();
 }
 
 void QxrdUserScriptDialog::onButtonClicked(QAbstractButton* button)
 {
-  QDialogButtonBox::ButtonRole role = ui->m_ButtonBar->buttonRole(button);
+  QDialogButtonBox::ButtonRole role = m_ButtonBar->buttonRole(button);
 
 //  printf("Button %p, role %d\n", button, role);
 
   if (role == QDialogButtonBox::ResetRole) {
-    ui->m_ScriptEditor->setText(m_Default);
+    m_ScriptEditor->setText(m_Default);
   }
 }

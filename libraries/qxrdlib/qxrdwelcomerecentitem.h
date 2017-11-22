@@ -5,7 +5,7 @@
 #include <QCommandLinkButton>
 #include "ui_qxrdwelcomerecentitem.h"
 
-class QXRD_EXPORT QxrdWelcomeRecentItem : public QCommandLinkButton
+class QXRD_EXPORT QxrdWelcomeRecentItem : public QCommandLinkButton, public Ui::QxrdWelcomeRecentItem
 {
     Q_OBJECT
 
@@ -15,9 +15,6 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
-
-private:
-    Ui::QxrdWelcomeRecentItem *ui;
 };
 
 #endif // QXRDWELCOMERECENTITEM_H

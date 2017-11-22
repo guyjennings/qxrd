@@ -2,15 +2,13 @@
 #include "ui_qxrdwelcomerecentitem.h"
 
 QxrdWelcomeRecentItem::QxrdWelcomeRecentItem(QWidget *parent) :
-    QCommandLinkButton(parent),
-    ui(new Ui::QxrdWelcomeRecentItem)
+    QCommandLinkButton(parent)
 {
-    ui->setupUi(this);
+    setupUi(this);
 }
 
 QxrdWelcomeRecentItem::~QxrdWelcomeRecentItem()
 {
-    delete ui;
 }
 
 void QxrdWelcomeRecentItem::changeEvent(QEvent *e)
@@ -18,7 +16,7 @@ void QxrdWelcomeRecentItem::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        retranslateUi(this);
         break;
     default:
         break;

@@ -9,7 +9,6 @@
 
 QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplicationWPtr appw) :
   QMainWindow(NULL),
-  ui(new Ui::QxrdWelcomeWindow),
   m_Application(appw),
   m_InsertRow(5),
   m_SignalMapper(NULL),
@@ -18,7 +17,7 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplicationWPtr appw) :
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
-    ui->setupUi(this);
+    setupUi(this);
 
     m_StatusMsg = new QLabel(NULL);
     m_StatusMsg -> setMinimumWidth(500);
@@ -29,13 +28,13 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplicationWPtr appw) :
 
     connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdWelcomeWindow::clearStatusMessage);
 
-    connect(ui->m_ActionEditApplicationPreferences, &QAction::triggered, app.data(), &QxrdApplication::editGlobalPreferences);
-    connect(ui->m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdApplication::createNewExperiment);
-    connect(ui->m_ActionOpenExperiment, &QAction::triggered, app.data(), &QxrdApplication::chooseExistingExperiment);
-    connect(ui->m_ActionExitApplication, &QAction::triggered, app.data(), &QxrdApplication::possiblyQuit);
+    connect(m_ActionEditApplicationPreferences, &QAction::triggered, app.data(), &QxrdApplication::editGlobalPreferences);
+    connect(m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdApplication::createNewExperiment);
+    connect(m_ActionOpenExperiment, &QAction::triggered, app.data(), &QxrdApplication::chooseExistingExperiment);
+    connect(m_ActionExitApplication, &QAction::triggered, app.data(), &QxrdApplication::possiblyQuit);
 
-    connect(ui->m_NewExperiment, &QAbstractButton::clicked, ui->m_ActionNewExperiment, &QAction::trigger);
-    connect(ui->m_OpenExistingExperiment, &QAbstractButton::clicked, ui->m_ActionOpenExperiment, &QAction::trigger);
+    connect(m_NewExperiment, &QAbstractButton::clicked, m_ActionNewExperiment, &QAction::trigger);
+    connect(m_OpenExistingExperiment, &QAbstractButton::clicked, m_ActionOpenExperiment, &QAction::trigger);
 
     connect(&m_SignalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped,
             app.data(), &QxrdApplication::openRecentExperiment);
@@ -50,13 +49,12 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplicationWPtr appw) :
       }
     }
 
-    setupRecentExperimentsMenu(ui->m_ActionOpenRecentExperiment);
+    setupRecentExperimentsMenu(m_ActionOpenRecentExperiment);
   }
 }
 
 QxrdWelcomeWindow::~QxrdWelcomeWindow()
 {
-  delete ui;
 }
 
 void QxrdWelcomeWindow::changeEvent(QEvent *e)
@@ -64,7 +62,7 @@ void QxrdWelcomeWindow::changeEvent(QEvent *e)
   QMainWindow::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
-    ui->retranslateUi(this);
+    retranslateUi(this);
     break;
   default:
     break;
@@ -113,7 +111,7 @@ void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 
   item->setText(title);
 
-  ui->m_GridLayout->addWidget(item, m_InsertRow++, 0, 1, 2);
+  m_GridLayout->addWidget(item, m_InsertRow++, 0, 1, 2);
 
   connect(item, &QAbstractButton::clicked, &m_SignalMapper, (void (QSignalMapper::*) ()) &QSignalMapper::map);
 

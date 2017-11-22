@@ -5,12 +5,9 @@
 #include <QDialog>
 #include <QAbstractButton>
 #include "qxrdexperiment-ptr.h"
+#include "ui_qxrduserscriptdialog.h"
 
-namespace Ui {
-class QxrdUserScriptDialog;
-}
-
-class QXRD_EXPORT QxrdUserScriptDialog : public QDialog
+class QXRD_EXPORT QxrdUserScriptDialog : public QDialog, public Ui::QxrdUserScriptDialog
 {
   Q_OBJECT
   
@@ -32,7 +29,6 @@ protected:
   
 private:
   QxrdExperimentWPtr m_Experiment;
-  Ui::QxrdUserScriptDialog *ui;
   QString m_Default;
 };
 
