@@ -21,6 +21,7 @@
 #include "qxrdimageplotsettings-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 
+//TODO: eliminate
 class QXRD_EXPORT QxrdDetectorProcessor : public QxrdProcessor
 {
     Q_OBJECT

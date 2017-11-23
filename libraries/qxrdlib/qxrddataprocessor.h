@@ -37,6 +37,7 @@
 #include "qxrdresultserializer.h"
 #include "qxrddataprocessor-ptr.h"
 
+//TODO: eliminate
 class QXRD_EXPORT QxrdDataProcessor : public QxrdProcessor
 {
   Q_OBJECT
