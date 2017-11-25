@@ -19,7 +19,7 @@ QToolButton* QxrdMaskPolygonsCommand::toolButton()
   res->setIconSize(QSize(24,24));
   res->setCheckable(true);
   res->setAutoExclusive(true);
-  res->setToolTip(tr("Mask Circles"));
+  res->setToolTip(tr("Mask Polygons"));
 
   return res;
 }
