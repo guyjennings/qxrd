@@ -199,10 +199,10 @@ QFileInfo QxrdFileBrowserModel::fileInfo(const QModelIndex &index) const
     if (nf >= m_FileList.count()) {
       info = QFileInfo(tr("... %1 additional files not displayed...").arg(m_TrueSize-m_Limit));
     } else {
-      info = m_FileList.at(nf);
+      info = m_FileList.value(nf);
     }
   } else {
-    info = m_DirList.at(n);
+    info = m_DirList.value(n);
   }
 
   return info;
