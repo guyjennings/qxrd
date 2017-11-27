@@ -133,148 +133,76 @@ win32 {
 
   QMAKE_EXTRA_TARGETS += qtlibs
 
-  isEqual(QT_MAJOR_VERSION, 5) {
-    CONFIG(debug, debug|release) {
-      libs =  Qt5Cored \
-              Qt5Networkd \
-              Qt5Chartsd \
-              Qt5DataVisualizationd \
-              Qt5Qmld \
-              Qt5Testd \
-              Qt5Guid \
-              Qt5Scriptd \
-              Qt5Widgetsd \
-              Qt5Svgd \
-              Qt5OpenGLd \
-              Qt5PrintSupportd \
-              Qt5Concurrentd
+  CONFIG(debug, debug|release) {
+    libs =  Qt5Cored \
+            Qt5Networkd \
+            Qt5Chartsd \
+            Qt5DataVisualizationd \
+            Qt5Qmld \
+            Qt5Testd \
+            Qt5Guid \
+            Qt5Scriptd \
+            Qt5Widgetsd \
+            Qt5Svgd \
+            Qt5OpenGLd \
+            Qt5PrintSupportd \
+            Qt5Concurrentd
 
-      platform = qwindowsd
+    platform = qwindowsd
 
-      win32-msvc* {
-        libs += libEGLd libGLESv2d
-      }
-    } else {
-      libs =  Qt5Core \
-              Qt5Network \
-              Qt5Charts \
-              Qt5DataVisualization \
-              Qt5Qml \
-              Qt5Test \
-              Qt5Gui \
-              Qt5Script \
-              Qt5Widgets \
-              Qt5Svg \
-              Qt5OpenGL \
-              Qt5PrintSupport \
-              Qt5Concurrent
+    libs += libEGLd libGLESv2d
+  } else {
+    libs =  Qt5Core \
+            Qt5Network \
+            Qt5Charts \
+            Qt5DataVisualization \
+            Qt5Qml \
+            Qt5Test \
+            Qt5Gui \
+            Qt5Script \
+            Qt5Widgets \
+            Qt5Svg \
+            Qt5OpenGL \
+            Qt5PrintSupport \
+            Qt5Concurrent
 
-      platform = qwindows
+    platform = qwindows
 
-      win32-msvc* {
-        libs += libEGL libGLESv2
-      }
-    }
-
-    win32-msvc2017 {
-    } else:win32-msvc2013 {
-      greaterThan(QT_MINOR_VERSION, 6) {
-      } else {
-        greaterThan(QT_MINOR_VERSION, 4) {
-          libs += icudt54 icuin54 icuuc54
-        } else {
-          libs += icudt53 icuin53 icuuc53
-        }
-      }
-    } else:win32-msvc* {
-      libs += icudt51 icuin51 icuuc51
-    } else:win32-g++ {
-      libs += libgcc_s_dw2-1 libwinpthread-1 libstdc++-6 icudt52 icuin52 icuuc52
-    }
-
-    QMAKE_EXTRA_TARGETS += qtplatformdir
-    qtplatformdir.target = ../platforms
-
-    win32-msvc* {
-      qtplatformdir.commands = if not exist ..\\platforms $(MKDIR) ..\\platforms
-    } else:win32-g++ {
-      qtplatformdir.commands = $(MKDIR) -p ../platforms
-    }
-
-    QMAKE_EXTRA_TARGETS += qtplatform
-    qtplatform.target   = ../platforms/$${platform}.dll
-    qtplatform.depends  = qtplatformdir $${LIBDIR}/../plugins/platforms/$${platform}.dll
-    win32-g++ {
-      qtplatform.commands += $(COPY_FILE) $${LIBDIR_MINGW}/../plugins/platforms/$${platform}.dll ../platforms/$${platform}.dll &
-    } else {
-      qtplatform.commands += $(COPY_FILE) /Y $${LIBDIR_WIN}\\..\\plugins\\platforms\\$${platform}.dll ..\\platforms\\$${platform}.dll &
-    }
-
-    qtlibs.depends += qtplatform
-
-    for(lib, libs) {
-      !build_pass:message(Target $${lib})
-      qtlibs.depends     += $${LIBDIR}/$${lib}.dll
-      win32-g++ {
-        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_MINGW}/$${lib}.dll ../$${lib}.dll &
-      } else {
-        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
-      }
-    }
-
-    QMAKE_CLEAN += ../platforms/*
-    QMAKE_CLEAN += ../platforms
-
-    win32-msvc2017* {
-      message(MSVC 2017 VCRedist)
-
-      QMAKE_EXTRA_TARGETS += vcredist
-
-      if (contains(QMAKE_HOST.arch, x86_64)) {
-        vcredist.depends  += $${PWD}/../vcredist_vs2017_x64.exe
-        vcredist.commands += $(COPY_FILE) $${PWD_WIN}\\..\\vcredist_vs2017_x64.exe .. &
-      } else {
-        vcredist.depends  += $${PWD}/../vcredist_vs2017_x86.exe
-        vcredist.commands += $(COPY_FILE) $${PWD_WIN}\\..\\vcredist_vs2017_x86.exe .. &
-      }
-    }
-
-    win32-msvc2013* {
-      message(MSVC 2013 VCRedist)
-
-      QMAKE_EXTRA_TARGETS += vcredist
-
-      if (contains(QMAKE_HOST.arch, x86_64)) {
-        vcredist.depends  += $${PWD}/../vcredist_vs2013_x64.exe
-        vcredist.commands += $(COPY_FILE) $${PWD_WIN}\\..\\vcredist_vs2013_x64.exe .. &
-      } else {
-        vcredist.depends  += $${PWD}/../vcredist_vs2013_x86.exe
-        vcredist.commands += $(COPY_FILE) $${PWD_WIN}\\..\\vcredist_vs2013_x86.exe .. &
-      }
-    }
+    libs += libEGL libGLESv2
   }
 
-  isEqual(QT_MAJOR_VERSION, 4) {
-    CONFIG(debug, debug|release) {
-      libs = QtCored4 QtNetworkd4 QtGuid4 QtScriptd4 QtOpenGLd4 QtSvgd4
-    } else {
-      libs = QtCore4 QtNetwork4 QtGui4 QtScript4 QtOpenGL4 QtSvg4
-    }
+  QMAKE_EXTRA_TARGETS += qtplatformdir
+  qtplatformdir.target = ../platforms
+  qtplatformdir.commands = if not exist ..\\platforms $(MKDIR) ..\\platforms
 
-    win32-g++ {
-      libs += libgcc_s_dw2-1 libwinpthread-1 libstdc++-6
-    }
+  QMAKE_EXTRA_TARGETS += qtplatform
+  qtplatform.target   = ../platforms/$${platform}.dll
+  qtplatform.depends  = qtplatformdir $${LIBDIR}/../plugins/platforms/$${platform}.dll
+  qtplatform.commands += $(COPY_FILE) /Y $${LIBDIR_WIN}\\..\\plugins\\platforms\\$${platform}.dll ..\\platforms\\$${platform}.dll &
 
-    for(lib, libs) {
-      !build_pass:message(Target $${lib})
+  qtlibs.depends += qtplatform
 
-      qtlibs.depends     += $${LIBDIR}/$${lib}.dll
-      win32-g++ {
-        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_MINGW}/$${lib}.dll ../$${lib}.dll &
-      } else {
-        qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
-      }
-    }
+  for(lib, libs) {
+    !build_pass:message(Target $${lib})
+    qtlibs.depends     += $${LIBDIR}/$${lib}.dll
+    qtlibs.commands    += $(COPY_FILE) $${LIBDIR_WIN}\\$${lib}.dll ..\\$${lib}.dll &
+  }
+
+  QMAKE_CLEAN += ../platforms/*
+  QMAKE_CLEAN += ../platforms
+
+  message(Looking for vcredist)
+
+  message(MSVC 2017 VCRedist)
+
+  QMAKE_EXTRA_TARGETS += vcredist
+
+  if (contains(QMAKE_HOST.arch, x86_64)) {
+    vcredist.depends  += $${PWD}/../vcredist_vs2017_x64.exe
+    vcredist.commands += $(COPY_FILE) $${PWD_WIN}\\..\\vcredist_vs2017_x64.exe .. &
+  } else {
+    vcredist.depends  += $${PWD}/../vcredist_vs2017_x86.exe
+    vcredist.commands += $(COPY_FILE) $${PWD_WIN}\\..\\vcredist_vs2017_x86.exe .. &
   }
 
   QMAKE_CLEAN += ../*.dll
