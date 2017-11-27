@@ -190,7 +190,6 @@ SOURCES += qxrdlib.cpp \
     qxrddetectorcontrolwindow.cpp \
     qxrddetectorprocessor.cpp \
     qxrdroicalculator.cpp \
-    qxrdacquisitioninterface.cpp \
     qxrdacquisitionexecutionthread.cpp \
     qxrdacquisitionexecution.cpp \
     qxrdtodolist.cpp \
@@ -633,8 +632,6 @@ HEADERS += TODO.h \
     qxrddetectorprocessor-ptr.h \
     qxrdroicalculator.h \
     qxrdroicalculator-ptr.h \
-    qxrdacquisitioninterface.h \
-    qxrdacquisitioninterface-ptr.h \
     qxrdacquisitionexecutionthread.h \
     qxrdacquisitionexecutionthread-ptr.h \
     qxrdacquisitionexecution.h \

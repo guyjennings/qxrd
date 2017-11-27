@@ -3,17 +3,17 @@
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
-#include "qxrdacquisitioninterface-ptr.h"
+#include "qxrdacquisition-ptr.h"
 
 class QXRD_EXPORT QxrdAcquisitionExecution : public QcepObject
 {
   Q_OBJECT
 
 public:
-  explicit QxrdAcquisitionExecution(QxrdAcquisitionInterfaceWPtr acq);
+  explicit QxrdAcquisitionExecution(QxrdAcquisitionWPtr acq);
   virtual ~QxrdAcquisitionExecution();
 
-  void setAcquisition(QxrdAcquisitionInterfaceWPtr acq);
+  void setAcquisition(QxrdAcquisitionWPtr acq);
 
 signals:
 
@@ -23,7 +23,7 @@ public slots:
   void doAcquireDark();
 
 private:
-  QxrdAcquisitionInterfaceWPtr m_Acquisition;
+  QxrdAcquisitionPtr m_Acquisition;
 };
 
 #endif // QXRDACQUISITIONEXECUTION_H

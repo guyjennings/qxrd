@@ -78,7 +78,7 @@ QxrdExperiment::QxrdExperiment(QString name) :
   m_FileSaverThread(NULL),
   m_FileSaver(),
   m_ScriptEngine(),
-  m_ScriptEngineDebugger(NULL),
+//  m_ScriptEngineDebugger(NULL),
   m_ScriptEngineJS(),
   m_LogFile(NULL),
   m_ScanFile(NULL),

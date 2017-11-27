@@ -1,11 +1,11 @@
 #include "qxrddebug.h"
 #include "qxrdacquisitionexecutionthread.h"
-#include "qxrdacquisitioninterface.h"
+#include "qxrdacquisition.h"
 #include "qxrdacquisitionexecution.h"
 #include <stdio.h>
 #include "qcepmutexlocker.h"
 
-QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcquisitionInterfaceWPtr acq)
+QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcquisitionWPtr acq)
   : QxrdThread(acq),
     m_Acquisition(acq)
 {

@@ -10,7 +10,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QScriptEngine>
-#include <QScriptEngineDebugger>
+//#include <QScriptEngineDebugger>
 #include <QTimer>
 #include "qcepexperiment.h"
 #include "qxrdapplication-ptr.h"
@@ -200,7 +200,7 @@ private:
 //  QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
 //  QxrdScriptEngineWPtr            m_ScriptEngine;
   QxrdScriptEnginePtr             m_ScriptEngine;
-  QScriptEngineDebugger          *m_ScriptEngineDebugger;
+//  QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
   QxrdJSEnginePtr                 m_ScriptEngineJS;
 
