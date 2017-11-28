@@ -8,7 +8,7 @@ class QXRD_EXPORT QxrdAdjustEnergyCommand : public QxrdPlotContextMenuCommand
 public:
   QxrdAdjustEnergyCommand(QString name, QxrdPlotWidget *plot);
 
-  QAction *contextMenuAction();
+  QAction *contextMenuAction(const QPoint &pos);
 };
 
 #endif // QXRDADJUSTENERGYCOMMAND_H

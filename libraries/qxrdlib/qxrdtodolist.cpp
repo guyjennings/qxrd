@@ -14,12 +14,12 @@ QxrdToDoList::QxrdToDoList(QObject *parent)
 #include "TODO.h"
 }
 
-int QxrdToDoList::rowCount(const QModelIndex &parent) const
+int QxrdToDoList::rowCount(const QModelIndex & /*parent*/) const
 {
   return m_Items.count();
 }
 
-int QxrdToDoList::columnCount(const QModelIndex &parent) const
+int QxrdToDoList::columnCount(const QModelIndex & /*parent*/) const
 {
   return 5;
 }

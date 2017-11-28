@@ -6,7 +6,7 @@ QxrdDelAllPointsCommand::QxrdDelAllPointsCommand(QString name, QxrdPlotWidget *p
 
 }
 
-QAction* QxrdDelAllPointsCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdDelAllPointsCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Delete all Rings", NULL, NULL);
 }

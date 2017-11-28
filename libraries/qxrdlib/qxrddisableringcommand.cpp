@@ -7,7 +7,7 @@ QxrdDisableRingCommand::QxrdDisableRingCommand(QString name, QxrdPlotWidget *plo
 
 }
 
-QAction* QxrdDisableRingCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdDisableRingCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Disable Ring %1", NULL, NULL);
 }

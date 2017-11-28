@@ -609,7 +609,7 @@ void QxrdExperiment::splashMessage(QString msg)
   }
 }
 
-void QxrdExperiment::criticalMessage(QString msg, QDateTime ts) const
+void QxrdExperiment::criticalMessage(QString msg, QDateTime /*ts*/) const
 {
   QxrdApplicationPtr app(m_Application);
   QxrdWindowPtr      win(m_Window);
@@ -622,7 +622,7 @@ void QxrdExperiment::criticalMessage(QString msg, QDateTime ts) const
   }
 }
 
-void QxrdExperiment::statusMessage(QString msg, QDateTime ts) const
+void QxrdExperiment::statusMessage(QString msg, QDateTime /*ts*/) const
 {
   QxrdApplicationPtr app(m_Application);
   QxrdWindowPtr      win(m_Window);

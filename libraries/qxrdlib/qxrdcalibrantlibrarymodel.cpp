@@ -13,7 +13,7 @@ QxrdCalibrantLibraryModel::~QxrdCalibrantLibraryModel()
 
 }
 
-void QxrdCalibrantLibraryModel::setCalibrantLibrary(QxrdCalibrantLibraryWPtr cal)
+void QxrdCalibrantLibraryModel::setCalibrantLibrary(QxrdCalibrantLibraryWPtr /*cal*/)
 {
   printf("Need to write QxrdCalibrantLibraryModel::setCalibrantLibrary");
 }

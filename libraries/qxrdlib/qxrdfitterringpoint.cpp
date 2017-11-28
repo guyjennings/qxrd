@@ -21,6 +21,10 @@ QxrdFitterRingPoint::QxrdFitterRingPoint() :
 {
 }
 
+QxrdFitterRingPoint::~QxrdFitterRingPoint()
+{
+}
+
 void QxrdFitterRingPoint::staticEvaluate(double *p, double *hx, int m, int n, void *adata)
 {
   QxrdFitterRingPoint *rf = (QxrdFitterRingPoint*) adata;

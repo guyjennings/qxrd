@@ -8,7 +8,7 @@ QxrdPolygonPointsModel::QxrdPolygonPointsModel(QPolygonF poly, QObject *parent)
 {
 }
 
-int QxrdPolygonPointsModel::rowCount(const QModelIndex &parent) const
+int QxrdPolygonPointsModel::rowCount(const QModelIndex & /*parent*/) const
 {
 //  if (!parent.isValid())
 //    return 0;
@@ -16,7 +16,7 @@ int QxrdPolygonPointsModel::rowCount(const QModelIndex &parent) const
   return m_Polygon.count();
 }
 
-int QxrdPolygonPointsModel::columnCount(const QModelIndex &parent) const
+int QxrdPolygonPointsModel::columnCount(const QModelIndex & /*parent*/) const
 {
 //  if (!parent.isValid())
 //    return 0;
@@ -30,7 +30,7 @@ QVariant QxrdPolygonPointsModel::data(const QModelIndex &index, int role) const
     return QVariant();
 
   int row = index.row();
-  int col = index.column();
+//  int col = index.column();
 
   if (role == Qt::DisplayRole || role == Qt::EditRole) {
     switch (index.column()) {

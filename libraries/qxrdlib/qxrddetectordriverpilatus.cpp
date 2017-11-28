@@ -82,7 +82,7 @@ bool QxrdDetectorDriverPilatus::stopDetectorDriver()
   return true;
 }
 
-bool QxrdDetectorDriverPilatus::changeExposureTime(double exposure)
+bool QxrdDetectorDriverPilatus::changeExposureTime(double /*exposure*/)
 {
   THREAD_CHECK;
 

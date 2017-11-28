@@ -69,7 +69,7 @@ void QxrdROITypeDelegate::setModelData(QWidget *editor, QAbstractItemModel *mode
   }
 }
 
-void QxrdROITypeDelegate::typeChanged(int newType)
+void QxrdROITypeDelegate::typeChanged(int /*newType*/)
 {
   QComboBox *cb = qobject_cast<QComboBox*>(sender());
 

@@ -30,7 +30,7 @@ QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcquisitionWPtr acq)
   }
 }
 
-int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
+int QxrdAcquisitionScalerModel::rowCount(const QModelIndex & /*parent*/) const
 {
   int nRows = 2;
 
@@ -66,7 +66,7 @@ int QxrdAcquisitionScalerModel::rowCount(const QModelIndex &parent) const
   return nRows;
 }
 
-int QxrdAcquisitionScalerModel::columnCount(const QModelIndex &parent) const
+int QxrdAcquisitionScalerModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return ColCount;
 }

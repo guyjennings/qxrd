@@ -8,7 +8,7 @@ QxrdTestScanPlotDataVisHelper::QxrdTestScanPlotDataVisHelper()
 
 }
 
-void QxrdTestScanPlotDataVisHelper::onNewScanAvailable(QcepDataColumnScanPtr data)
+void QxrdTestScanPlotDataVisHelper::onNewScanAvailable(QcepDataColumnScanPtr /*data*/)
 {
 //  m_Messages->append(tr("New Scan Received : %1").HEXARG(data.data()));
 }

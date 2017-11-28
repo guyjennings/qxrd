@@ -10,6 +10,8 @@ public:
   QxrdFitterRingEllipse(QxrdCenterFinder *cf, int ringIndex, double x0, double y0);
   QxrdFitterRingEllipse();
 
+  virtual ~QxrdFitterRingEllipse();
+
   int fit();
 
   int      ringIndex() const { return m_RingIndex; }

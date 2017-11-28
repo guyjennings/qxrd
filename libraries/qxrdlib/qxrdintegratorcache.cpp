@@ -606,7 +606,7 @@ void QxrdIntegratorCache::partialIntegrationStep3(
 
   int noversample = m_Oversample;
   double oversampleStep = 1.0/m_Oversample;
-  double halfOversampleStep = oversampleStep/2.0;
+//  double halfOversampleStep = oversampleStep/2.0;
 
   QVector<double> integral(m_ResultSize), sumValue(m_ResultSize);
 
@@ -681,7 +681,7 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
     m_SumValue.resize(0);
 
     if (dimg) {
-        int noversample = m_Oversample;
+//        int noversample = m_Oversample;
         double oversampleStep = 1.0/m_Oversample;
         double halfOversampleStep = oversampleStep/2.0;
 

@@ -1650,7 +1650,8 @@ void QxrdAcquisition::propertyList()
   }
 }
 
-void QxrdAcquisition::setupExposureMenu(QDoubleSpinBox *cb)
+//TODO: still needed?
+void QxrdAcquisition::setupExposureMenu(QDoubleSpinBox * /*cb*/)
 {
 }
 

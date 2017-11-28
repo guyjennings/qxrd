@@ -6,7 +6,7 @@ QxrdEnableRingCommand::QxrdEnableRingCommand(QString name, QxrdPlotWidget *plot)
 
 }
 
-QAction* QxrdEnableRingCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdEnableRingCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Enable Ring %1", NULL, NULL);
 }

@@ -10,6 +10,8 @@ public:
   QxrdFitterRingPoint(QxrdCenterFinder* cf, int index, double x0, double y0, double pkht, double bkgd);
   QxrdFitterRingPoint();
 
+  virtual ~QxrdFitterRingPoint();
+
   int fit();
 
 private:

@@ -37,7 +37,7 @@ QxrdDetectorSettingsSimulated::~QxrdDetectorSettingsSimulated()
   }
 }
 
-void QxrdDetectorSettingsSimulated::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettingsSimulated::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
 {
 //  QxrdDetectorSettings::pushDefaultsToProxy(proxy, SimulatedDetector);
 

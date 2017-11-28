@@ -31,12 +31,12 @@ bool QxrdDetectorDriverFileWatcher::stopDetectorDriver()
   return false;
 }
 
-bool QxrdDetectorDriverFileWatcher::changeExposureTime(double exposure)
+bool QxrdDetectorDriverFileWatcher::changeExposureTime(double /*exposure*/)
 {
   return false;
 }
 
-bool QxrdDetectorDriverFileWatcher::beginAcquisition(double exposure)
+bool QxrdDetectorDriverFileWatcher::beginAcquisition(double /*exposure*/)
 {
   return false;
 }

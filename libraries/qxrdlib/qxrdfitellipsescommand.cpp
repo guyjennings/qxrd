@@ -6,7 +6,7 @@ QxrdFitEllipsesCommand::QxrdFitEllipsesCommand(QString name, QxrdPlotWidget *plo
 
 }
 
-QAction* QxrdFitEllipsesCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdFitEllipsesCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Fit Ellipses to all powder rings", NULL, NULL);
 }

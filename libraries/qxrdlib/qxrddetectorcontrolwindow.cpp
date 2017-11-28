@@ -24,7 +24,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
                                                      QxrdAcquisitionWPtr       acq,
                                                      QxrdDetectorSettingsWPtr          det,
                                                      QxrdDetectorProcessorWPtr proc,
-                                                     QWidget                  *parent) :
+                                                     QWidget                  */*parent*/) :
   QxrdMainWindow("detector", appl, exp),
   m_Experiment(exp),
   m_Acquisition(acq),
@@ -311,11 +311,11 @@ void QxrdDetectorControlWindow::printMessage(QString msg, QDateTime ts)
   displayMessage(message);
 }
 
-void QxrdDetectorControlWindow::criticalMessage(QString msg, QDateTime ts)
+void QxrdDetectorControlWindow::criticalMessage(QString /*msg*/, QDateTime /*ts*/)
 {
 }
 
-void QxrdDetectorControlWindow::statusMessage(QString msg, QDateTime ts)
+void QxrdDetectorControlWindow::statusMessage(QString /*msg*/, QDateTime /*ts*/)
 {
 }
 
@@ -513,7 +513,7 @@ void QxrdDetectorControlWindow::displayNewMask(QcepMaskDataPtr mask)
   m_NewMaskAvailable.fetchAndStoreOrdered(1);
 }
 
-void QxrdDetectorControlWindow::updateROIDisplay(bool show)
+void QxrdDetectorControlWindow::updateROIDisplay(bool /*show*/)
 {
   //TODO: re-enable ROI display
 //  m_DetectorImage -> enableROIDisplay(show);
@@ -805,7 +805,7 @@ void QxrdDetectorControlWindow::browseScanFile()
   }
 }
 
-void QxrdDetectorControlWindow::onChangeROICreateType(int newType)
+void QxrdDetectorControlWindow::onChangeROICreateType(int /*newType*/)
 {
   //TODO: reimplement
 //  switch (newType) {

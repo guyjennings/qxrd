@@ -12,7 +12,7 @@ QxrdCalibrantDSpacingsModel::~QxrdCalibrantDSpacingsModel()
 
 }
 
-void QxrdCalibrantDSpacingsModel::setCalibrantDSpacings(QxrdCalibrantDSpacingsWPtr dsp)
+void QxrdCalibrantDSpacingsModel::setCalibrantDSpacings(QxrdCalibrantDSpacingsWPtr /*dsp*/)
 {
   printf("Need to write QxrdCalibrantDSpacingsModel::setCalibrantDSpacings\n");
 }
@@ -149,7 +149,7 @@ QVariant QxrdCalibrantDSpacingsModel::data (const QModelIndex & index, int role)
   return QVariant();
 }
 
-void QxrdCalibrantDSpacingsModel::everythingChanged(int nrows)
+void QxrdCalibrantDSpacingsModel::everythingChanged(int /*nrows*/)
 {
 //  emit dataChanged(QModelIndex(), QModelIndex());
   beginResetModel();

@@ -222,7 +222,7 @@ void QxrdJSEngine::initialize()
   }
 }
 
-void QxrdJSEngine::setWindow(QxrdWindowWPtr win)
+void QxrdJSEngine::setWindow(QxrdWindowWPtr /*win*/)
 {
 }
 
@@ -634,7 +634,7 @@ double QxrdJSEngine::exposureTimeFunc()
   return qQNaN();
 }
 
-double QxrdJSEngine::exposureTimeFunc(double t)
+double QxrdJSEngine::exposureTimeFunc(double /*t*/)
 {
   return qQNaN();
 }
@@ -644,7 +644,7 @@ int QxrdJSEngine::summedExposuresFunc()
   return -1;
 }
 
-int QxrdJSEngine::summedExposuresFunc(int n)
+int QxrdJSEngine::summedExposuresFunc(int /*n*/)
 {
   return -1;
 }
@@ -654,7 +654,7 @@ int QxrdJSEngine::skippedExposuresFunc()
   return -1;
 }
 
-int QxrdJSEngine::skippedExposuresFunc(int n)
+int QxrdJSEngine::skippedExposuresFunc(int /*n*/)
 {
   return -1;
 }
@@ -664,7 +664,7 @@ int QxrdJSEngine::darkSummedExposuresFuncs()
   return -1;
 }
 
-int QxrdJSEngine::darkSummedExposuresFuncs(int n)
+int QxrdJSEngine::darkSummedExposuresFuncs(int /*n*/)
 {
   return -1;
 }
@@ -674,7 +674,7 @@ int QxrdJSEngine::phasesInGroupFunc()
   return -1;
 }
 
-int QxrdJSEngine::phasesInGroupFunc(int n)
+int QxrdJSEngine::phasesInGroupFunc(int /*n*/)
 {
   return -1;
 }
@@ -684,7 +684,7 @@ int QxrdJSEngine::preTriggerFilesFunc()
   return -1;
 }
 
-int QxrdJSEngine::preTriggerFilesFunc(int n)
+int QxrdJSEngine::preTriggerFilesFunc(int /*n*/)
 {
   return -1;
 }
@@ -694,7 +694,7 @@ int QxrdJSEngine::postTriggerFilesFunc()
   return -1;
 }
 
-int QxrdJSEngine::postTriggerFilesFunc(int n)
+int QxrdJSEngine::postTriggerFilesFunc(int /*n*/)
 {
   return -1;
 }
@@ -704,7 +704,7 @@ QString QxrdJSEngine::filePatternFunc()
   return "";
 }
 
-QString QxrdJSEngine::filePatternFunc(QString patt)
+QString QxrdJSEngine::filePatternFunc(QString /*patt*/)
 {
   return "";
 }
@@ -714,7 +714,7 @@ QString QxrdJSEngine::outputDirectoryFunc()
   return "";
 }
 
-QString QxrdJSEngine::outputDirectoryFunc(QString d)
+QString QxrdJSEngine::outputDirectoryFunc(QString /*d*/)
 {
   return "";
 }
@@ -724,26 +724,26 @@ int QxrdJSEngine::fileIndexFunc()
   return -1;
 }
 
-int QxrdJSEngine::fileIndexFunc(int n)
+int QxrdJSEngine::fileIndexFunc(int /*n*/)
 {
   return -1;
 }
 
-void QxrdJSEngine::fopenFunc(QString fn)
+void QxrdJSEngine::fopenFunc(QString /*fn*/)
 {
 }
 
-void QxrdJSEngine::fdeleteFunc(QString p)
+void QxrdJSEngine::fdeleteFunc(QString /*p*/)
 {
 }
 
-void QxrdJSEngine::fprintFunc(QVariant v1,
-                              QVariant v2,
-                              QVariant v3,
-                              QVariant v4,
-                              QVariant v5,
-                              QVariant v6,
-                              QVariant v7)
+void QxrdJSEngine::fprintFunc(QVariant /*v1*/,
+                              QVariant /*v2*/,
+                              QVariant /*v3*/,
+                              QVariant /*v4*/,
+                              QVariant /*v5*/,
+                              QVariant /*v6*/,
+                              QVariant /*v7*/)
 {
 }
 
@@ -806,30 +806,30 @@ QcepDoubleImageData* QxrdJSEngine::liveDataFunc()
   }
 }
 
-QString QxrdJSEngine::helpFunc(QString topic)
+QString QxrdJSEngine::helpFunc(QString /*topic*/)
 {
   return "";
 }
 
-void QxrdJSEngine::processFunc(QString fn, QVector<double> nm)
+void QxrdJSEngine::processFunc(QString /*fn*/, QVector<double> /*nm*/)
 {
 }
 
-void QxrdJSEngine::setFileNormalizationFunc(QString fn, QVector<double> nm)
+void QxrdJSEngine::setFileNormalizationFunc(QString /*fn*/, QVector<double> /*nm*/)
 {
 }
 
-QStringList QxrdJSEngine::matchFilesFunc(QString patt)
+QStringList QxrdJSEngine::matchFilesFunc(QString /*patt*/)
 {
   return QStringList();
 }
 
-QxrdAcquisitionExtraInputsChannel* QxrdJSEngine::extraChannelFunc(int n)
+QxrdAcquisitionExtraInputsChannel* QxrdJSEngine::extraChannelFunc(int /*n*/)
 {
   return NULL;
 }
 
-void QxrdJSEngine::mapUserFunctionFunc(QString func)
+void QxrdJSEngine::mapUserFunctionFunc(QString /*func*/)
 {
 }
 
@@ -903,32 +903,32 @@ QJSValue QxrdJSEngine::calibrantFunc(int n)
   return res;
 }
 
-QcepDataGroup*       QxrdJSEngine::newDataGroupFunc(QString name)
+QcepDataGroup*       QxrdJSEngine::newDataGroupFunc(QString /*name*/)
 {
   return NULL;
 }
 
-QcepDataArray*       QxrdJSEngine::newDataArrayFunc(QString name, int d1, int d2, int d3, int d4)
+QcepDataArray*       QxrdJSEngine::newDataArrayFunc(QString /*name*/, int /*d1*/, int /*d2*/, int /*d3*/, int /*d4*/)
 {
   return NULL;
 }
 
-QcepDataColumn*      QxrdJSEngine::newDataColumnFunc(QString name, int npts)
+QcepDataColumn*      QxrdJSEngine::newDataColumnFunc(QString /*name*/, int /*npts*/)
 {
   return NULL;
 }
 
-QcepDataColumnScan*  QxrdJSEngine::newDataColumnScanFunc(QString name, QStringList cols)
+QcepDataColumnScan*  QxrdJSEngine::newDataColumnScanFunc(QString /*name*/, QStringList /*cols*/)
 {
   return NULL;
 }
 
-QcepDoubleImageData* QxrdJSEngine::newDataImageFunc(QString name, int width, int height)
+QcepDoubleImageData* QxrdJSEngine::newDataImageFunc(QString /*name*/, int /*width*/, int /*height*/)
 {
   return NULL;
 }
 
-QcepIntegratedData*  QxrdJSEngine::newIntegratedDataFunc(QString name, int size)
+QcepIntegratedData*  QxrdJSEngine::newIntegratedDataFunc(QString /*name*/, int /*size*/)
 {
   return NULL;
 }

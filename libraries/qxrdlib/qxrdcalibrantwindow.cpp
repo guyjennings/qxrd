@@ -157,7 +157,7 @@ void QxrdCalibrantWindow::calibrantTableContextMenu(const QPoint &pos)
 
 void QxrdCalibrantWindow::calibrantDSpacingsContextMenu(const QPoint &pos)
 {
-  QModelIndex index  = m_CalibrantDSpacingsView->indexAt(pos);
+//  QModelIndex index  = m_CalibrantDSpacingsView->indexAt(pos);
   QMenu      *menu   = new QMenu(this);
   QAction    *copy   = menu->addAction("Copy");
   QAction    *chosen = menu->exec(m_CalibrantDSpacingsView->viewport()->mapToGlobal(pos));
@@ -227,7 +227,7 @@ void QxrdCalibrantWindow::doCopyFromTable(QTableView *table)
   }
 }
 
-void QxrdCalibrantWindow::onCalibrantClick(const QModelIndex &item)
+void QxrdCalibrantWindow::onCalibrantClick(const QModelIndex & /*item*/)
 {
 //  printf("Single click [%d,%d]\n", item.column(), item.row());
 }

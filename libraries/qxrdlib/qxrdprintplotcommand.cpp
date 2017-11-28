@@ -7,7 +7,7 @@ QxrdPrintPlotCommand::QxrdPrintPlotCommand(QString name, QxrdPlotWidget *plot)
 
 }
 
-QAction* QxrdPrintPlotCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdPrintPlotCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Print Graph...",
                           m_Plot, &QxrdImagePlot::printGraph);

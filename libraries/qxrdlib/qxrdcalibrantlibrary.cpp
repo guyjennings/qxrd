@@ -32,7 +32,7 @@ QxrdCalibrantLibrary::~QxrdCalibrantLibrary()
 #endif
 }
 
-void QxrdCalibrantLibrary::addChildPtr(QcepObjectPtr child)
+void QxrdCalibrantLibrary::addChildPtr(QcepObjectPtr /*child*/)
 {
   printMessage("Need to write QxrdCalibrantLibrary::addChildPtr");
 }

@@ -176,7 +176,7 @@ void QxrdDataProcessor::addChildPtr(QcepObjectPtr child)
   }
 }
 
-void QxrdDataProcessor::removeChildPtr(QcepObjectPtr child)
+void QxrdDataProcessor::removeChildPtr(QcepObjectPtr /*child*/)
 {
   printMessage("Need to write QxrdDataProcessorBase::removeChildPtr");
 }

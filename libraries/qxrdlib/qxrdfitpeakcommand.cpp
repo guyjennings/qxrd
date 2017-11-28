@@ -6,7 +6,7 @@ QxrdFitPeakCommand::QxrdFitPeakCommand(QString name, QxrdPlotWidget *plot)
 
 }
 
-QAction* QxrdFitPeakCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdFitPeakCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Fit Diffracted Peak near (%1,%2) [%3,%4]", NULL, NULL);
 }

@@ -506,7 +506,7 @@ void QxrdROICoordinates::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr m
   recalculatePrivate(img, mask, VisualizeNone);
 }
 
-void QxrdROICoordinates::visualizeBackground(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+void QxrdROICoordinates::visualizeBackground(QcepImageDataBasePtr img, QcepMaskDataPtr /*mask*/)
 {
   int tp = m_Bounds.top();
   int bt = m_Bounds.bottom();
@@ -524,7 +524,7 @@ void QxrdROICoordinates::visualizeBackground(QcepImageDataBasePtr img, QcepMaskD
   }
 }
 
-void QxrdROICoordinates::visualizePeak(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+void QxrdROICoordinates::visualizePeak(QcepImageDataBasePtr img, QcepMaskDataPtr /*mask*/)
 {
   int tp = m_Bounds.top();
   int bt = m_Bounds.bottom();
@@ -573,7 +573,7 @@ static int inRange(int minVal, int val, int maxVal)
   return qMin(qMax(minVal,val),maxVal);
 }
 
-void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int vis)
+void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int /*vis*/)
 {
 #ifndef QT_NO_DEBUG
   printf("Recalculate ROI, inner: %s, outer: %s\n",
@@ -790,8 +790,8 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
       set_Changed(false);
     } else { // Only an inner shape - no background fitting...
       QPointF c = get_Center();
-      double  cx = c.x();
-      double  cy = c.y();
+//      double  cx = c.x();
+//      double  cy = c.y();
 
       if (get_Changed()) {
         double  r = get_Rotation();

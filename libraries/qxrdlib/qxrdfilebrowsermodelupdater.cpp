@@ -23,7 +23,7 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QString name) :
   }
 }
 
-void QxrdFileBrowserModelUpdater::initialize(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr parent)
+void QxrdFileBrowserModelUpdater::initialize(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr /*parent*/)
 {
   setBrowserModel(browser);
 }

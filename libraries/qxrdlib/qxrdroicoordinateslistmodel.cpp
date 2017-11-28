@@ -91,12 +91,12 @@ int QxrdROICoordinatesListModel::roiCount() const
   return m_ROICoordinates.count();
 }
 
-int QxrdROICoordinatesListModel::rowCount(const QModelIndex &parent) const
+int QxrdROICoordinatesListModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return m_ROICoordinates.count();
 }
 
-int QxrdROICoordinatesListModel::columnCount(const QModelIndex &parent) const
+int QxrdROICoordinatesListModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return ColCount;
 }
@@ -204,7 +204,7 @@ QVariant QxrdROICoordinatesListModel::headerData(int section, Qt::Orientation or
 
 Qt::ItemFlags QxrdROICoordinatesListModel::flags(const QModelIndex &index) const
 {
-  int row = index.row();
+//  int row = index.row();
   int col = index.column();
 
   if (/*col == OuterTypeCol ||
@@ -343,7 +343,8 @@ void QxrdROICoordinatesListModel::moveROIUp(int row)
   }
 }
 
-void QxrdROICoordinatesListModel::editROI(int row)
+//TODO: implement
+void QxrdROICoordinatesListModel::editROI(int /*row*/)
 {
 }
 

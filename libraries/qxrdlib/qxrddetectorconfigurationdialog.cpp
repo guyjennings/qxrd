@@ -64,7 +64,7 @@ void QxrdDetectorConfigurationDialog::accept()
 }
 
 void QxrdDetectorConfigurationDialog::appendProperty(int type,
-                                                     QString name,
+                                                     QString /*name*/,
                                                      QString description,
                                                      QVariant value)
 {

@@ -1480,11 +1480,11 @@ void QxrdImagePlot::updateROIDisplay()
 
 void QxrdImagePlot::roiDataChanged(const QModelIndex &topLeft,
                                    const QModelIndex &bottomRight,
-                                   const QVector<int> &roles)
+                                   const QVector<int> & /*roles*/)
 {
-  int t = topLeft.row();
-  int l = topLeft.column();
-  int b = bottomRight.row();
+//  int t = topLeft.row();
+//  int l = topLeft.column();
+//  int b = bottomRight.row();
   int r = bottomRight.column();
 
 //  printMessage(tr("roiDataChanged t:%1 l:%2 b:%3 r:%4 n:%5")
@@ -1495,18 +1495,18 @@ void QxrdImagePlot::roiDataChanged(const QModelIndex &topLeft,
   }
 }
 
-void QxrdImagePlot::roiRowsInserted(const QModelIndex &parent, int first, int last)
+void QxrdImagePlot::roiRowsInserted(const QModelIndex & /*parent*/, int /*first*/, int /*last*/)
 {
   updateROIDisplay();
 }
 
-void QxrdImagePlot::roiRowsMoved(const QModelIndex &parent, int start, int end,
-                                 const QModelIndex &destination, int row)
+void QxrdImagePlot::roiRowsMoved(const QModelIndex & /*parent*/, int /*start*/, int /*end*/,
+                                 const QModelIndex & /*destination*/, int /*row*/)
 {
   updateROIDisplay();
 }
 
-void QxrdImagePlot::roiRowsRemoved(const QModelIndex &parent, int first, int last)
+void QxrdImagePlot::roiRowsRemoved(const QModelIndex & /*parent*/, int /*first*/, int /*last*/)
 {
   updateROIDisplay();
 }
@@ -1583,8 +1583,8 @@ void QxrdImagePlot::selectROILabel(int i, bool on)
 }
 
 void QxrdImagePlot::updateROISelection(
-    const QItemSelection &selected,
-    const QItemSelection &deselected)
+    const QItemSelection & /*selected*/,
+    const QItemSelection & /*deselected*/)
 {
   QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
 

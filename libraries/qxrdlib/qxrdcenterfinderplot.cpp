@@ -90,22 +90,22 @@ void QxrdCenterFinderPlot::onMaskedImageAvailable(QcepDoubleImageDataPtr image, 
   QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
-void QxrdCenterFinderPlot::onCenterXChanged(double cx)
+void QxrdCenterFinderPlot::onCenterXChanged(double /*cx*/)
 {
   QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
-void QxrdCenterFinderPlot::onCenterYChanged(double cy)
+void QxrdCenterFinderPlot::onCenterYChanged(double /*cy*/)
 {
   QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
-void QxrdCenterFinderPlot::onCenterChanged(QPointF c)
+void QxrdCenterFinderPlot::onCenterChanged(QPointF /*c*/)
 {
   QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }
 
-void QxrdCenterFinderPlot::onCenterChanged(double cx, double cy)
+void QxrdCenterFinderPlot::onCenterChanged(double /*cx*/, double /*cy*/)
 {
   QtConcurrent::run(this, &QxrdCenterFinderPlot::updateCenterFinderPlot);
 }

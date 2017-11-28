@@ -6,7 +6,7 @@ QxrdROIRasterData::QxrdROIRasterData(QxrdROICoordinatesWPtr roi)
 {
 }
 
-double QxrdROIRasterData::value(double x, double y) const
+double QxrdROIRasterData::value(double /*x*/, double /*y*/) const
 {
   return 0;
 }

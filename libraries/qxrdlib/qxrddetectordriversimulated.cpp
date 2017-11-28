@@ -80,7 +80,7 @@ bool QxrdDetectorDriverSimulated::changeExposureTime(double expos)
   return false;
 }
 
-bool QxrdDetectorDriverSimulated::beginAcquisition(double exposure)
+bool QxrdDetectorDriverSimulated::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
 

@@ -30,12 +30,12 @@ bool QxrdDetectorDriverEpicsArea::stopDetectorDriver()
   return false;
 }
 
-bool QxrdDetectorDriverEpicsArea::changeExposureTime(double exposure)
+bool QxrdDetectorDriverEpicsArea::changeExposureTime(double /*exposure*/)
 {
   return false;
 }
 
-bool QxrdDetectorDriverEpicsArea::beginAcquisition(double exposure)
+bool QxrdDetectorDriverEpicsArea::beginAcquisition(double /*exposure*/)
 {
   return false;
 }

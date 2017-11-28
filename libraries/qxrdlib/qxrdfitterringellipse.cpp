@@ -37,6 +37,10 @@ QxrdFitterRingEllipse::QxrdFitterRingEllipse() :
 {
 }
 
+QxrdFitterRingEllipse::~QxrdFitterRingEllipse()
+{
+}
+
 void QxrdFitterRingEllipse::staticEvaluate(double *p, double *hx, int m, int n, void *adata)
 {
   QxrdFitterRingEllipse *rf = (QxrdFitterRingEllipse*) adata;

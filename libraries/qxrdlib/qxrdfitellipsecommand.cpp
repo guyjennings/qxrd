@@ -6,7 +6,7 @@ QxrdFitEllipseCommand::QxrdFitEllipseCommand(QString name, QxrdPlotWidget *plot)
 
 }
 
-QAction* QxrdFitEllipseCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdFitEllipseCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Fit Ellipse from Points on Ring %1", NULL, NULL);
 }

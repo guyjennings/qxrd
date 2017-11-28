@@ -804,17 +804,20 @@ void QxrdDetectorProcessor::onGainMapPathChanged(QString newPath)
   }
 }
 
-QcepDataObjectPtr QxrdDetectorProcessor::integrate(QcepDoubleImageDataPtr img)
+//TODO: implement
+QcepDataObjectPtr QxrdDetectorProcessor::integrate(QcepDoubleImageDataPtr /*img*/)
 {
   return QcepDataObjectPtr();
 }
 
-QcepDataObjectPtr QxrdDetectorProcessor::polarTransform(QcepDoubleImageDataPtr img)
+//TODO: implement
+QcepDataObjectPtr QxrdDetectorProcessor::polarTransform(QcepDoubleImageDataPtr /*img*/)
 {
   return QcepDataObjectPtr();
 }
 
-QcepDataObjectPtr QxrdDetectorProcessor::polarIntegrate(QcepDoubleImageDataPtr img)
+//TODO: implement
+QcepDataObjectPtr QxrdDetectorProcessor::polarIntegrate(QcepDoubleImageDataPtr /*img*/)
 {
   return QcepDataObjectPtr();
 }

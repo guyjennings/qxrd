@@ -6,7 +6,7 @@ QxrdNormalizeRingsCommand::QxrdNormalizeRingsCommand(QString name, QxrdPlotWidge
 
 }
 
-QAction* QxrdNormalizeRingsCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdNormalizeRingsCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Normalize Powder Rings", NULL, NULL);
 }

@@ -6,7 +6,7 @@ QxrdAddPointCommand::QxrdAddPointCommand(QString name, QxrdPlotWidget* plot)
 
 }
 
-QAction* QxrdAddPointCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdAddPointCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Add point at (%1,%2)", NULL, NULL);
 }

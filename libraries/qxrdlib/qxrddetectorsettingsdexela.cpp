@@ -37,7 +37,7 @@ QxrdDetectorSettingsDexela::~QxrdDetectorSettingsDexela()
   }
 }
 
-void QxrdDetectorSettingsDexela::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettingsDexela::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
 {
 //  QxrdDetectorSettings::pushDefaultsToProxy(proxy, DexelaDetector);
 

@@ -6,7 +6,7 @@ QxrdDisplaySubmenuCommand::QxrdDisplaySubmenuCommand(QString name, QxrdPlotWidge
 {
 }
 
-QAction* QxrdDisplaySubmenuCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdDisplaySubmenuCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   QAction *displaySubmenu = newContextAction("Display", NULL, NULL);
 

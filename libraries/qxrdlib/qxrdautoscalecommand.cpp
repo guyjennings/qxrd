@@ -8,7 +8,7 @@ QxrdAutoScaleCommand::QxrdAutoScaleCommand(QString name, QxrdPlotWidget *plot)
 
 }
 
-QAction* QxrdAutoScaleCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdAutoScaleCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   //TODO: fix crash...
 

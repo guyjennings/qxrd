@@ -9,7 +9,7 @@ QxrdDetectorSettingsFileWatcher::QxrdDetectorSettingsFileWatcher(QxrdApplication
 {
 }
 
-void QxrdDetectorSettingsFileWatcher::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettingsFileWatcher::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
 {
 //  QxrdDetectorSettings::pushDefaultsToProxy(proxy, FileWatcherDetector);
 

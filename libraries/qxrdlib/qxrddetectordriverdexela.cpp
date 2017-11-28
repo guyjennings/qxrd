@@ -80,7 +80,7 @@ bool QxrdDetectorDriverDexela::changeExposureTime(double expos)
   return false;
 }
 
-bool QxrdDetectorDriverDexela::beginAcquisition(double exposure)
+bool QxrdDetectorDriverDexela::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
 

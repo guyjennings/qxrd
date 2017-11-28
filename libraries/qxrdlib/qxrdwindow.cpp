@@ -71,7 +71,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
                        QxrdExperimentWPtr docw,
                        QxrdAcquisitionWPtr acqw,
                        QxrdDataProcessorWPtr procw,
-                       QWidget *parent)
+                       QWidget * /*parent*/)  //TODO: needed?
   : QxrdMainWindow("window", appl, docw),
     m_ObjectNamer(this, "window"),
     m_Mutex(QMutex::Recursive),
@@ -890,12 +890,12 @@ void QxrdWindow::printLine(QString line)
   displayMessage(line);
 }
 
-void QxrdWindow::criticalMessage(QString msg, QDateTime ts)
+void QxrdWindow::criticalMessage(QString msg, QDateTime /*ts*/)
 {
   displayCriticalMessage(msg);
 }
 
-void QxrdWindow::statusMessage(QString msg, QDateTime ts)
+void QxrdWindow::statusMessage(QString /*msg*/, QDateTime /*ts*/)
 {
 }
 

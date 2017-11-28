@@ -7,7 +7,7 @@ QxrdFitRingPointCommand::QxrdFitRingPointCommand(QString name, QxrdPlotWidget *p
 
 }
 
-QAction* QxrdFitRingPointCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdFitRingPointCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Fit Point on Diffracted Ring near (%1,%2) [%3,%4]",
                           m_Plot, NULL);

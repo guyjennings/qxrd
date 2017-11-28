@@ -474,7 +474,7 @@ void QxrdExperimentPreferencesDialog::appendDetectorProxy(QxrdDetectorProxyPtr p
 
 void QxrdExperimentPreferencesDialog::detectorDoubleClicked(const QModelIndex& item)
 {
-  int row = item.row();
+//  int row = item.row();
   int col = item.column();
 
   if (col == 0 || col == 2) {

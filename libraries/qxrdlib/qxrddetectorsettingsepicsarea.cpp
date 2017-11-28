@@ -12,6 +12,6 @@ QxrdDetectorSettingsEpicsArea::~QxrdDetectorSettingsEpicsArea()
 {
 }
 
-void QxrdDetectorSettingsEpicsArea::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDetectorSettingsEpicsArea::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
 {
 }

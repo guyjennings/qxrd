@@ -7,7 +7,7 @@ QxrdContextSeparatorCommand::QxrdContextSeparatorCommand(QString name, QxrdPlotW
 
 }
 
-QAction* QxrdContextSeparatorCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdContextSeparatorCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   QAction *res = newContextAction("", m_Plot, NULL);
 

@@ -5,12 +5,12 @@ QxrdDetectorProxyListModel::QxrdDetectorProxyListModel()
 {
 }
 
-int QxrdDetectorProxyListModel::rowCount(const QModelIndex &parent) const
+int QxrdDetectorProxyListModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return m_DetectorProxies.count();
 }
 
-int QxrdDetectorProxyListModel::columnCount(const QModelIndex &parent) const
+int QxrdDetectorProxyListModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 4;
 }
@@ -108,7 +108,7 @@ bool QxrdDetectorProxyListModel::setData(const QModelIndex &index, const QVarian
 
 Qt::ItemFlags QxrdDetectorProxyListModel::flags(const QModelIndex &index) const
 {
-  int row = index.row();
+//  int row = index.row();
   int col = index.column();
 
   if (col == 1) {

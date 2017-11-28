@@ -7,7 +7,7 @@ QxrdAdjustEnergyCommand::QxrdAdjustEnergyCommand(QString name, QxrdPlotWidget *p
 
 }
 
-QAction* QxrdAdjustEnergyCommand::contextMenuAction()
+QAction* QxrdAdjustEnergyCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Adjust Energy to match Calibrant Ring %1", m_Plot, NULL);
 }

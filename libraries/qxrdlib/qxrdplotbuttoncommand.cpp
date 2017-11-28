@@ -6,7 +6,7 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString name, QxrdPlotWidget *plot)
 
 }
 
-QAction* QxrdPlotButtonCommand::contextMenuAction(const QPoint &pos)
+QAction* QxrdPlotButtonCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return NULL;
 }
