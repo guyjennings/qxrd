@@ -1336,7 +1336,7 @@ void QxrdExperiment::saveExperimentAsText(QString filePath)
 
   fmt -> beginWriteFile();
 
-  writeObject(fmt);
+  writeObjectFmt(fmt);
 
   fmt -> endWriteFile();
 }

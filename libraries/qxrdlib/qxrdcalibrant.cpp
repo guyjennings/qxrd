@@ -241,7 +241,7 @@ QxrdCalibrantDSpacings QxrdCalibrant::dSpacingsHexagonal(double energy)
     }
   }
 
-  qSort(pts.begin(), pts.end(), lessThan);
+  std::sort(pts.begin(), pts.end(), lessThan);
 
   return pts;
 }

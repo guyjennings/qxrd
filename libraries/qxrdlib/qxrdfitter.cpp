@@ -46,6 +46,9 @@ QString QxrdFitter::reasonString(FitResult reason)
   case BadHeight:
     res = "Bad Height";
     break;
+
+  default:
+    break;
   }
 
   return res;

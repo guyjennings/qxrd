@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     printf("%d data objects deleted\n",   nDataDeleted);
     printf("%d data objects leaked\n",    nDataAlloc - nDataDeleted);
 
-    printf("%Ld bytes still allocated\n", allocated);
+    printf("%lld bytes still allocated\n", allocated);
   }
 
 #ifndef QT_NO_DEBUG

@@ -481,7 +481,7 @@ void QxrdIntegrator::appendIntegration(QcepDoubleImageDataPtr res, QcepDoubleIma
 void QxrdIntegrator::appendIntegration(QcepDoubleImageDataPtr res, QcepIntegratedDataPtr integ)
 {
   if (res && integ) {
-    int width = res->get_Width();
+//    int width = res->get_Width();
     int ht    = res->get_Height();
     int npts  = integ->size();
 
@@ -516,7 +516,7 @@ void QxrdIntegrator::clearAccumulator(QString resPath)
   }
 }
 
-void QxrdIntegrator::prepareAccumulator(QString resPath, int nImages)
+void QxrdIntegrator::prepareAccumulator(QString resPath, int /*nImages*/)
 {
   QxrdExperimentPtr expt(experiment());
 
@@ -533,7 +533,7 @@ void QxrdIntegrator::prepareAccumulator(QString resPath, int nImages)
   }
 }
 
-void QxrdIntegrator::completeAccumulator(QString path)
+void QxrdIntegrator::completeAccumulator(QString /*path*/)
 {
 }
 

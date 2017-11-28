@@ -260,36 +260,36 @@ void QxrdFileBrowserModelUpdater::updateContents()
     Qt::SortOrder order  = model->sortOrder();
 
     try {
-      qStableSort(m_Directories.begin(), m_Directories.end(),
+      std::stable_sort(m_Directories.begin(), m_Directories.end(),
                   fileNameLessThan);
 
       switch(column) {
       case 0:
         if (order == Qt::AscendingOrder) {
-          qStableSort(m_Files.begin(), m_Files.end(),
+          std::stable_sort(m_Files.begin(), m_Files.end(),
                       fileNameLessThan);
         } else {
-          qStableSort(m_Files.begin(), m_Files.end(),
+          std::stable_sort(m_Files.begin(), m_Files.end(),
                       fileNameGreaterThan);
         }
         break;
 
       case 1:
         if (order == Qt::AscendingOrder) {
-          qStableSort(m_Files.begin(), m_Files.end(),
+          std::stable_sort(m_Files.begin(), m_Files.end(),
                       fileSizeLessThan);
         } else {
-          qStableSort(m_Files.begin(), m_Files.end(),
+          std::stable_sort(m_Files.begin(), m_Files.end(),
                       fileSizeGreaterThan);
         }
         break;
 
       case 2:
         if (order == Qt::AscendingOrder) {
-          qStableSort(m_Files.begin(), m_Files.end(),
+          std::stable_sort(m_Files.begin(), m_Files.end(),
                       fileDateLessThan);
         } else {
-          qStableSort(m_Files.begin(), m_Files.end(),
+          std::stable_sort(m_Files.begin(), m_Files.end(),
                       fileDateGreaterThan);
         }
         break;

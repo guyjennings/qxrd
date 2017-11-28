@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 
 #define FALSE 0
 #define TRUE  1
@@ -13,6 +14,10 @@ typedef struct {
 typedef struct {
    double x,y,z;
 } XYZ;
+
+int CircumCircle(double xp,double yp,
+   double x1,double y1,double x2,double y2,double x3,double y3,
+   double *xc,double *yc,double *rsqr);
 
 /*
    Triangulation subroutine
