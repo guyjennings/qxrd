@@ -19,8 +19,8 @@ public:
   static QScriptValue toArrayScriptValue(QScriptEngine *engine, const QcepDataArrayPtr &data);
   static void fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayPtr &data);
 
-  void readSettings(QSettings *settings, QString section);
-  void writeSettings(QSettings *settings, QString section);
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 public slots:
   virtual QString description() const;

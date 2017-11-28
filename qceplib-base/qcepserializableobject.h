@@ -17,8 +17,8 @@ public:
 
   static QcepSerializableObjectPtr readDataObject(QcepFileFormatterPtr fmt);
 
-  void readObject(QcepFileFormatterPtr fmt);
-  void writeObject(QcepFileFormatterPtr fmt);
+  void readObjectFmt(QcepFileFormatterPtr fmt);
+  void writeObjectFmt(QcepFileFormatterPtr fmt);
 
   virtual void readObjectData(QcepFileFormatterPtr fmt);
   virtual void writeObjectData(QcepFileFormatterPtr fmt);

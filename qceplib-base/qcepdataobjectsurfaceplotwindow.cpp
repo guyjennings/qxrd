@@ -8,7 +8,7 @@
 using namespace QtDataVisualization;
 
 QcepDataObjectSurfacePlotWindow::QcepDataObjectSurfacePlotWindow(
-    QcepExperimentWPtr expt,
+    QcepExperimentWPtr /*expt*/,
     QcepDataObjectWPtr obj,
     QWidget *parent)
   : QcepDataObjectWindow(parent)

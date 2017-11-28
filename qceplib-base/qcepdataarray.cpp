@@ -21,7 +21,7 @@ QcepDataArray::~QcepDataArray()
   QcepAllocator::deallocate(get_ByteSize());
 }
 
-void QcepDataArray::writeSettings(QSettings *settings, QString section)
+void QcepDataArray::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -39,7 +39,7 @@ void QcepDataArray::writeSettings(QSettings *settings, QString section)
   }
 }
 
-void QcepDataArray::readSettings(QSettings *settings, QString section)
+void QcepDataArray::readSettings(QSettings *settings)
 {
 }
 

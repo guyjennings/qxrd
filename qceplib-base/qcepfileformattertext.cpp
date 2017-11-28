@@ -401,7 +401,7 @@ QcepSerializableObjectPtr QcepFileFormatterText::nextObject()
     obj = construct(s1,s3);
 
     if (obj) {
-      obj->readObject(qSharedPointerDynamicCast<QcepFileFormatter>(sharedFromThis()));
+      obj->readObjectFmt(qSharedPointerDynamicCast<QcepFileFormatter>(sharedFromThis()));
     } else {
       printMessage(tr("Failed to construct %1:%2").arg(s1).arg(s3));
     }

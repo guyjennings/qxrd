@@ -1475,13 +1475,13 @@ encode_scanline()
                                 while (s < end)
                                     {
                                     value = *s++ & 1;
-                                    value = (value << 1) | *s++ & 1;
-                                    value = (value << 1) | *s++ & 1;
-                                    value = (value << 1) | *s++ & 1;
-                                    value = (value << 1) | *s++ & 1;
-                                    value = (value << 1) | *s++ & 1;
-                                    value = (value << 1) | *s++ & 1;
-                                    value = (value << 1) | *s++ & 1;
+                                    value = (value << 1) | (*s++ & 1);
+                                    value = (value << 1) | (*s++ & 1);
+                                    value = (value << 1) | (*s++ & 1);
+                                    value = (value << 1) | (*s++ & 1);
+                                    value = (value << 1) | (*s++ & 1);
+                                    value = (value << 1) | (*s++ & 1);
+                                    value = (value << 1) | (*s++ & 1);
                                     pack1(value, 8);
                                     }
                                 }
@@ -1489,7 +1489,7 @@ encode_scanline()
                                 while (s < end)
                                     {
                                     value = *s++ & 1;
-                                    value = (value << 1) | *s++ & 1;
+                                    value = (value << 1) | (*s++ & 1);
                                     pack1(value, 2);
                                     }
                             break;
@@ -1516,13 +1516,13 @@ encode_scanline()
                                 while (s < end)
                                     {
                                     value = *s++ & 3;
-                                    value = (value << 2) | *s++ & 3;
-                                    value = (value << 2) | *s++ & 3;
-                                    value = (value << 2) | *s++ & 3;
-                                    value = (value << 2) | *s++ & 3;
-                                    value = (value << 2) | *s++ & 3;
-                                    value = (value << 2) | *s++ & 3;
-                                    value = (value << 2) | *s++ & 3;
+                                    value = (value << 2) | (*s++ & 3);
+                                    value = (value << 2) | (*s++ & 3);
+                                    value = (value << 2) | (*s++ & 3);
+                                    value = (value << 2) | (*s++ & 3);
+                                    value = (value << 2) | (*s++ & 3);
+                                    value = (value << 2) | (*s++ & 3);
+                                    value = (value << 2) | (*s++ & 3);
                                     pack1(value, 16);
                                     }
                                 }
@@ -1530,7 +1530,7 @@ encode_scanline()
                                 while (s < end)
                                     {
                                     value = *s++ & 3;
-                                    value = (value << 2) | *s++ & 3;
+                                    value = (value << 2) | (*s++ & 3);
                                     pack1(value, 4);
                                     }
                             break;
@@ -1557,15 +1557,15 @@ encode_scanline()
                                 while (s < end)
                                     {
                                     value = *s++ & 7;
-                                    value = (value << 3) | *s++ & 7;
-                                    value = (value << 3) | *s++ & 7;
-                                    value = (value << 3) | *s++ & 7;
-                                    value = (value << 3) | *s++ & 7;
+                                    value = (value << 3) | (*s++ & 7);
+                                    value = (value << 3) | (*s++ & 7);
+                                    value = (value << 3) | (*s++ & 7);
+                                    value = (value << 3) | (*s++ & 7);
                                     pack1(value, 15);
 
                                     value = *s++ & 7;
-                                    value = (value << 3) | *s++ & 7;
-                                    value = (value << 3) | *s++ & 7;
+                                    value = (value << 3) | (*s++ & 7);
+                                    value = (value << 3) | (*s++ & 7);
                                     pack1(value, 9);
                                     }
                                 }
@@ -1573,7 +1573,7 @@ encode_scanline()
                                 while (s < end)
                                     {
                                     value = *s++ & 7;
-                                    value = (value << 3) | *s++ & 7;
+                                    value = (value << 3) | (*s++ & 7);
                                     pack1(value, 6);
                                     }
                             break;
@@ -1600,15 +1600,15 @@ encode_scanline()
                                 while (s < end)
                                     {
                                     value = *s++ & 0xf;
-                                    value = (value << 4) | *s++ & 0xf;
-                                    value = (value << 4) | *s++ & 0xf;
-                                    value = (value << 4) | *s++ & 0xf;
+                                    value = (value << 4) | (*s++ & 0xf);
+                                    value = (value << 4) | (*s++ & 0xf);
+                                    value = (value << 4) | (*s++ & 0xf);
                                     pack1(value, 16);
 
                                     value = *s++ & 0xf;
-                                    value = (value << 4) | *s++ & 0xf;
-                                    value = (value << 4) | *s++ & 0xf;
-                                    value = (value << 4) | *s++ & 0xf;
+                                    value = (value << 4) | (*s++ & 0xf);
+                                    value = (value << 4) | (*s++ & 0xf);
+                                    value = (value << 4) | (*s++ & 0xf);
                                     pack1(value, 16);
                                     }
                                 }
@@ -1616,7 +1616,7 @@ encode_scanline()
                                 while (s < end)
                                     {
                                     value = *s++ & 0xf;
-                                    value = (value << 4) | *s++ & 0xf;
+                                    value = (value << 4) | (*s++ & 0xf);
                                     pack1(value, 8);
                                     }
                             break;
@@ -1643,17 +1643,17 @@ encode_scanline()
                                 while (s < end)
                                     {
                                     value = *s++ & 0x1f;
-                                    value = (value << 5) | *s++ & 0x1f;
-                                    value = (value << 5) | *s++ & 0x1f;
+                                    value = (value << 5) | (*s++ & 0x1f);
+                                    value = (value << 5) | (*s++ & 0x1f);
                                     pack1(value, 15);
 
                                     value = *s++ & 0x1f;
-                                    value = (value << 5) | *s++ & 0x1f;
-                                    value = (value << 5) | *s++ & 0x1f;
+                                    value = (value << 5) | (*s++ & 0x1f);
+                                    value = (value << 5) | (*s++ & 0x1f);
                                     pack1(value, 15);
 
                                     value = *s++ & 0x1f;
-                                    value = (value << 5) | *s++ & 0x1f;
+                                    value = (value << 5) | (*s++ & 0x1f);
                                     pack1(value, 10);
                                     }
                                 }
@@ -1661,7 +1661,7 @@ encode_scanline()
                                 while (s < end)
                                     {
                                     value = *s++ & 0x1f;
-                                    value = (value << 5) | *s++ & 0x1f;
+                                    value = (value << 5) | (*s++ & 0x1f);
                                     pack1(value, 10);
                                     }
                             break;
@@ -1686,7 +1686,7 @@ encode_scanline()
                             while (s < end)
                                 {
                                 value = *s++ & 0x3f;
-                                value = (value << 6) | *s++ & 0x3f;
+                                value = (value << 6) | (*s++ & 0x3f);
                                 pack1(value, 12);
                                 }
                             break;
@@ -1703,7 +1703,7 @@ encode_scanline()
                             while (s < end)
                                 {
                                 value = *s++ & 0x7f;
-                                value = (value << 7) | *s++ & 0x7f;
+                                value = (value << 7) | (*s++ & 0x7f);
                                 pack1(value, 14);
                                 }
                             break;
@@ -1720,7 +1720,7 @@ encode_scanline()
                             while (s < end)
                                 {
                                 value = *s++ & 0xff;
-                                value = (value << 8) | *s++ & 0xff;
+                                value = (value << 8) | (*s++ & 0xff);
                                 pack1(value, 16);
                                 }
                             break;
@@ -4974,13 +4974,13 @@ rice_decode()
                                 while (s < end)
                                     {
                                     *(s+0) = (*(s+0) << 1) | (data_word >> 31);
-                                    *(s+1) = (*(s+1) << 1) | (data_word >> 30) & 1;
-                                    *(s+2) = (*(s+2) << 1) | (data_word >> 29) & 1;
-                                    *(s+3) = (*(s+3) << 1) | (data_word >> 28) & 1;
-                                    *(s+4) = (*(s+4) << 1) | (data_word >> 27) & 1;
-                                    *(s+5) = (*(s+5) << 1) | (data_word >> 26) & 1;
-                                    *(s+6) = (*(s+6) << 1) | (data_word >> 25) & 1;
-                                    *(s+7) = (*(s+7) << 1) | (data_word >> 24) & 1;
+                                    *(s+1) = (*(s+1) << 1) | ((data_word >> 30) & 1);
+                                    *(s+2) = (*(s+2) << 1) | ((data_word >> 29) & 1);
+                                    *(s+3) = (*(s+3) << 1) | ((data_word >> 28) & 1);
+                                    *(s+4) = (*(s+4) << 1) | ((data_word >> 27) & 1);
+                                    *(s+5) = (*(s+5) << 1) | ((data_word >> 26) & 1);
+                                    *(s+6) = (*(s+6) << 1) | ((data_word >> 25) & 1);
+                                    *(s+7) = (*(s+7) << 1) | ((data_word >> 24) & 1);
                                     s += 8;
                                     data_word <<= 8;
                                     data_bits -= 8;
@@ -4995,14 +4995,14 @@ rice_decode()
                             case 2:
                                 while (s < end)
                                     {
-                                    *(s+0) = (*(s+0) << 2) | (data_word >> 30) & 3;
-                                    *(s+1) = (*(s+1) << 2) | (data_word >> 28) & 3;
-                                    *(s+2) = (*(s+2) << 2) | (data_word >> 26) & 3;
-                                    *(s+3) = (*(s+3) << 2) | (data_word >> 24) & 3;
-                                    *(s+4) = (*(s+4) << 2) | (data_word >> 22) & 3;
-                                    *(s+5) = (*(s+5) << 2) | (data_word >> 20) & 3;
-                                    *(s+6) = (*(s+6) << 2) | (data_word >> 18) & 3;
-                                    *(s+7) = (*(s+7) << 2) | (data_word >> 16) & 3;
+                                    *(s+0) = (*(s+0) << 2) | ((data_word >> 30) & 3);
+                                    *(s+1) = (*(s+1) << 2) | ((data_word >> 28) & 3);
+                                    *(s+2) = (*(s+2) << 2) | ((data_word >> 26) & 3);
+                                    *(s+3) = (*(s+3) << 2) | ((data_word >> 24) & 3);
+                                    *(s+4) = (*(s+4) << 2) | ((data_word >> 22) & 3);
+                                    *(s+5) = (*(s+5) << 2) | ((data_word >> 20) & 3);
+                                    *(s+6) = (*(s+6) << 2) | ((data_word >> 18) & 3);
+                                    *(s+7) = (*(s+7) << 2) | ((data_word >> 16) & 3);
                                     s += 8;
                                     data_word <<= 16;
                                     data_bits -= 16;
@@ -5014,11 +5014,11 @@ rice_decode()
                             case 3:
                                 while (s < end)
                                     {
-                                    *(s+0) = (*(s+0) << 3) | (data_word >> 29) & 7;
-                                    *(s+1) = (*(s+1) << 3) | (data_word >> 26) & 7;
-                                    *(s+2) = (*(s+2) << 3) | (data_word >> 23) & 7;
-                                    *(s+3) = (*(s+3) << 3) | (data_word >> 20) & 7;
-                                    *(s+4) = (*(s+4) << 3) | (data_word >> 17) & 7;
+                                    *(s+0) = (*(s+0) << 3) | ((data_word >> 29) & 7);
+                                    *(s+1) = (*(s+1) << 3) | ((data_word >> 26) & 7);
+                                    *(s+2) = (*(s+2) << 3) | ((data_word >> 23) & 7);
+                                    *(s+3) = (*(s+3) << 3) | ((data_word >> 20) & 7);
+                                    *(s+4) = (*(s+4) << 3) | ((data_word >> 17) & 7);
                                     s += 5;
                                     data_word <<= 15;
                                     data_bits -= 15;
@@ -5028,9 +5028,9 @@ rice_decode()
                                         data_bits += 16;
                                         }
 
-                                    *(s+0) = (*(s+0) << 3) | (data_word >> 29) & 7;
-                                    *(s+1) = (*(s+1) << 3) | (data_word >> 26) & 7;
-                                    *(s+2) = (*(s+2) << 3) | (data_word >> 23) & 7;
+                                    *(s+0) = (*(s+0) << 3) | ((data_word >> 29) & 7);
+                                    *(s+1) = (*(s+1) << 3) | ((data_word >> 26) & 7);
+                                    *(s+2) = (*(s+2) << 3) | ((data_word >> 23) & 7);
                                     s += 3;
                                     data_word <<= 9;
                                     data_bits -= 9;
@@ -5045,20 +5045,20 @@ rice_decode()
                             case 4:
                                 while (s < end)
                                     {
-                                    *(s+0) = (*(s+0) << 4) | (data_word >> 28) & 0xf;
-                                    *(s+1) = (*(s+1) << 4) | (data_word >> 24) & 0xf;
-                                    *(s+2) = (*(s+2) << 4) | (data_word >> 20) & 0xf;
-                                    *(s+3) = (*(s+3) << 4) | (data_word >> 16) & 0xf;
+                                    *(s+0) = (*(s+0) << 4) | ((data_word >> 28) & 0xf);
+                                    *(s+1) = (*(s+1) << 4) | ((data_word >> 24) & 0xf);
+                                    *(s+2) = (*(s+2) << 4) | ((data_word >> 20) & 0xf);
+                                    *(s+3) = (*(s+3) << 4) | ((data_word >> 16) & 0xf);
                                     s += 4;
                                     data_word <<= 16;
                                     data_bits -= 16;
                                     data_word |= *input_ptr++ << (16 - data_bits);
                                     data_bits += 16;
 
-                                    *(s+0) = (*(s+0) << 4) | (data_word >> 28) & 0xf;
-                                    *(s+1) = (*(s+1) << 4) | (data_word >> 24) & 0xf;
-                                    *(s+2) = (*(s+2) << 4) | (data_word >> 20) & 0xf;
-                                    *(s+3) = (*(s+3) << 4) | (data_word >> 16) & 0xf;
+                                    *(s+0) = (*(s+0) << 4) | ((data_word >> 28) & 0xf);
+                                    *(s+1) = (*(s+1) << 4) | ((data_word >> 24) & 0xf);
+                                    *(s+2) = (*(s+2) << 4) | ((data_word >> 20) & 0xf);
+                                    *(s+3) = (*(s+3) << 4) | ((data_word >> 16) & 0xf);
                                     s += 4;
                                     data_word <<= 16;
                                     data_bits -= 16;
@@ -5070,9 +5070,9 @@ rice_decode()
                             case 5:
                                 while (s < end)
                                     {
-                                    *(s+0) = (*(s+0) << 5) | (data_word >> 27) & 0x1f;
-                                    *(s+1) = (*(s+1) << 5) | (data_word >> 22) & 0x1f;
-                                    *(s+2) = (*(s+2) << 5) | (data_word >> 17) & 0x1f;
+                                    *(s+0) = (*(s+0) << 5) | ((data_word >> 27) & 0x1f);
+                                    *(s+1) = (*(s+1) << 5) | ((data_word >> 22) & 0x1f);
+                                    *(s+2) = (*(s+2) << 5) | ((data_word >> 17) & 0x1f);
                                     s += 3;
                                     data_word <<= 15;
                                     data_bits -= 15;
@@ -5082,9 +5082,9 @@ rice_decode()
                                         data_bits += 16;
                                         }
 
-                                    *(s+0) = (*(s+0) << 5) | (data_word >> 27) & 0x1f;
-                                    *(s+1) = (*(s+1) << 5) | (data_word >> 22) & 0x1f;
-                                    *(s+2) = (*(s+2) << 5) | (data_word >> 17) & 0x1f;
+                                    *(s+0) = (*(s+0) << 5) | ((data_word >> 27) & 0x1f);
+                                    *(s+1) = (*(s+1) << 5) | ((data_word >> 22) & 0x1f);
+                                    *(s+2) = (*(s+2) << 5) | ((data_word >> 17) & 0x1f);
                                     s += 3;
                                     data_word <<= 15;
                                     data_bits -= 15;
@@ -5094,8 +5094,8 @@ rice_decode()
                                         data_bits += 16;
                                         }
 
-                                    *(s+0) = (*(s+0) << 5) | (data_word >> 27) & 0x1f;
-                                    *(s+1) = (*(s+1) << 5) | (data_word >> 22) & 0x1f;
+                                    *(s+0) = (*(s+0) << 5) | ((data_word >> 27) & 0x1f);
+                                    *(s+1) = (*(s+1) << 5) | ((data_word >> 22) & 0x1f);
                                     s += 2;
                                     data_word <<= 10;
                                     data_bits -= 10;
@@ -5110,8 +5110,8 @@ rice_decode()
                             case 6:
                                 while (s < end)
                                     {
-                                    *(s+0) = (*(s+0) << 6) | (data_word >> 26) & 0x3f;
-                                    *(s+1) = (*(s+1) << 6) | (data_word >> 20) & 0x3f;
+                                    *(s+0) = (*(s+0) << 6) | ((data_word >> 26) & 0x3f);
+                                    *(s+1) = (*(s+1) << 6) | ((data_word >> 20) & 0x3f);
                                     s += 2;
                                     data_word <<= 12;
                                     data_bits -= 12;
@@ -5121,8 +5121,8 @@ rice_decode()
                                         data_bits += 16;
                                         }
 
-                                    *(s+0) = (*(s+0) << 6) | (data_word >> 26) & 0x3f;
-                                    *(s+1) = (*(s+1) << 6) | (data_word >> 20) & 0x3f;
+                                    *(s+0) = (*(s+0) << 6) | ((data_word >> 26) & 0x3f);
+                                    *(s+1) = (*(s+1) << 6) | ((data_word >> 20) & 0x3f);
                                     s += 2;
                                     data_word <<= 12;
                                     data_bits -= 12;
@@ -5132,8 +5132,8 @@ rice_decode()
                                         data_bits += 16;
                                         }
 
-                                    *(s+0) = (*(s+0) << 6) | (data_word >> 26) & 0x3f;
-                                    *(s+1) = (*(s+1) << 6) | (data_word >> 20) & 0x3f;
+                                    *(s+0) = (*(s+0) << 6) | ((data_word >> 26) & 0x3f);
+                                    *(s+1) = (*(s+1) << 6) | ((data_word >> 20) & 0x3f);
                                     s += 2;
                                     data_word <<= 12;
                                     data_bits -= 12;
@@ -5143,8 +5143,8 @@ rice_decode()
                                         data_bits += 16;
                                         }
 
-                                    *(s+0) = (*(s+0) << 6) | (data_word >> 26) & 0x3f;
-                                    *(s+1) = (*(s+1) << 6) | (data_word >> 20) & 0x3f;
+                                    *(s+0) = (*(s+0) << 6) | ((data_word >> 26) & 0x3f);
+                                    *(s+1) = (*(s+1) << 6) | ((data_word >> 20) & 0x3f);
                                     s += 2;
                                     data_word <<= 12;
                                     data_bits -= 12;
@@ -5159,8 +5159,8 @@ rice_decode()
                             case 7:
                                 while (s < end)
                                     {
-                                    *(s+0) = (*(s+0) << 7) | (data_word >> 25) & 0x7f;
-                                    *(s+1) = (*(s+1) << 7) | (data_word >> 18) & 0x7f;
+                                    *(s+0) = (*(s+0) << 7) | ((data_word >> 25) & 0x7f);
+                                    *(s+1) = (*(s+1) << 7) | ((data_word >> 18) & 0x7f);
                                     s += 2;
                                     data_word <<= 14;
                                     data_bits -= 14;
@@ -5170,8 +5170,8 @@ rice_decode()
                                         data_bits += 16;
                                         }
 
-                                    *(s+0) = (*(s+0) << 7) | (data_word >> 25) & 0x7f;
-                                    *(s+1) = (*(s+1) << 7) | (data_word >> 18) & 0x7f;
+                                    *(s+0) = (*(s+0) << 7) | ((data_word >> 25) & 0x7f);
+                                    *(s+1) = (*(s+1) << 7) | ((data_word >> 18) & 0x7f);
                                     s += 2;
                                     data_word <<= 14;
                                     data_bits -= 14;
@@ -5181,8 +5181,8 @@ rice_decode()
                                         data_bits += 16;
                                         }
 
-                                    *(s+0) = (*(s+0) << 7) | (data_word >> 25) & 0x7f;
-                                    *(s+1) = (*(s+1) << 7) | (data_word >> 18) & 0x7f;
+                                    *(s+0) = (*(s+0) << 7) | ((data_word >> 25) & 0x7f);
+                                    *(s+1) = (*(s+1) << 7) | ((data_word >> 18) & 0x7f);
                                     s += 2;
                                     data_word <<= 14;
                                     data_bits -= 14;
@@ -5192,8 +5192,8 @@ rice_decode()
                                         data_bits += 16;
                                         }
 
-                                    *(s+0) = (*(s+0) << 7) | (data_word >> 25) & 0x7f;
-                                    *(s+1) = (*(s+1) << 7) | (data_word >> 18) & 0x7f;
+                                    *(s+0) = (*(s+0) << 7) | ((data_word >> 25) & 0x7f);
+                                    *(s+1) = (*(s+1) << 7) | ((data_word >> 18) & 0x7f);
                                     s += 2;
                                     data_word <<= 14;
                                     data_bits -= 14;
@@ -5208,32 +5208,32 @@ rice_decode()
                             case 8:
                                 while (s < end)
                                     {
-                                    *(s+0) = (*(s+0) << 8) | (data_word >> 24) & 0xff;
-                                    *(s+1) = (*(s+1) << 8) | (data_word >> 16) & 0xff;
+                                    *(s+0) = (*(s+0) << 8) | ((data_word >> 24) & 0xff);
+                                    *(s+1) = (*(s+1) << 8) | ((data_word >> 16) & 0xff);
                                     s += 2;
                                     data_word <<= 16;
                                     data_bits -= 16;
                                     data_word |= *input_ptr++ << (16 - data_bits);
                                     data_bits += 16;
 
-                                    *(s+0) = (*(s+0) << 8) | (data_word >> 24) & 0xff;
-                                    *(s+1) = (*(s+1) << 8) | (data_word >> 16) & 0xff;
+                                    *(s+0) = (*(s+0) << 8) | ((data_word >> 24) & 0xff);
+                                    *(s+1) = (*(s+1) << 8) | ((data_word >> 16) & 0xff);
                                     s += 2;
                                     data_word <<= 16;
                                     data_bits -= 16;
                                     data_word |= *input_ptr++ << (16 - data_bits);
                                     data_bits += 16;
 
-                                    *(s+0) = (*(s+0) << 8) | (data_word >> 24) & 0xff;
-                                    *(s+1) = (*(s+1) << 8) | (data_word >> 16) & 0xff;
+                                    *(s+0) = (*(s+0) << 8) | ((data_word >> 24) & 0xff);
+                                    *(s+1) = (*(s+1) << 8) | ((data_word >> 16) & 0xff);
                                     s += 2;
                                     data_word <<= 16;
                                     data_bits -= 16;
                                     data_word |= *input_ptr++ << (16 - data_bits);
                                     data_bits += 16;
 
-                                    *(s+0) = (*(s+0) << 8) | (data_word >> 24) & 0xff;
-                                    *(s+1) = (*(s+1) << 8) | (data_word >> 16) & 0xff;
+                                    *(s+0) = (*(s+0) << 8) | ((data_word >> 24) & 0xff);
+                                    *(s+1) = (*(s+1) << 8) | ((data_word >> 16) & 0xff);
                                     s += 2;
                                     data_word <<= 16;
                                     data_bits -= 16;

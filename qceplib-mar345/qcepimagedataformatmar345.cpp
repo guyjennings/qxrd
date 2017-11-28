@@ -93,7 +93,7 @@ const long setbits[33] = {0x00000000L, 0x00000001L, 0x00000003L, 0x00000007L,
 static void
 swaplong(char *data, int nbytes)
 {
-  register int i, t1, t2, t3, t4;
+  int i, t1, t2, t3, t4;
 
   for(i=nbytes/4;i--;) {
     t1 = data[i*4+3];

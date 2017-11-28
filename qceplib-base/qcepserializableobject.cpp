@@ -90,7 +90,7 @@ QcepSerializableObjectPtr QcepSerializableObject::readDataObject(QcepFileFormatt
   }
 }
 
-void QcepSerializableObject::writeObject(QcepFileFormatterPtr fmt)
+void QcepSerializableObject::writeObjectFmt(QcepFileFormatterPtr fmt)
 {
   const QMetaObject* metaObject = this->metaObject();
 //  QcepObjectPtr parent(m_Parent);
@@ -159,7 +159,7 @@ void QcepSerializableObject::writeObject(QcepFileFormatterPtr fmt)
       QcepSerializableObjectPtr obj = qSharedPointerDynamicCast<QcepSerializableObject>(childPtr(i));
 
       if (obj) {
-        obj->writeObject(fmt);
+        obj->writeObjectFmt(fmt);
       }
     }
 
@@ -173,7 +173,7 @@ void QcepSerializableObject::writeObject(QcepFileFormatterPtr fmt)
   fmt->endWriteObject();
 }
 
-void QcepSerializableObject::readObject(QcepFileFormatterPtr fmt)
+void QcepSerializableObject::readObjectFmt(QcepFileFormatterPtr fmt)
 {
   QcepSerializableObjectWPtr myself =
       qSharedPointerDynamicCast<QcepSerializableObject>(sharedFromThis());
