@@ -310,7 +310,7 @@ void QcepDatasetBrowserView::onCustomContextMenuRequested(QPoint pt)
   }
 }
 
-void QcepDatasetBrowserView::onDoubleClicked(QModelIndex idx)
+void QcepDatasetBrowserView::onDoubleClicked(QModelIndex /*idx*/)
 {
 }
 
