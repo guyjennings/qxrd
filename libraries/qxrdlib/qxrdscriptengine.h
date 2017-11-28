@@ -18,6 +18,7 @@
 #include "qxrdwindow-ptr.h"
 #include "qxrdroicoordinates-ptr.h"
 
+//TODO: replace by QxrdJSEngine
 class QXRD_EXPORT QxrdScriptEngine : public QcepScriptEngine
 {
   Q_OBJECT
