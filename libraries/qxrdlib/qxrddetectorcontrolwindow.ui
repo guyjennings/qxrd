@@ -1588,7 +1588,7 @@ Script Function: acquire([fileName
      <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
+   <widget class="QMenu" name="m_FileMenu">
     <property name="title">
      <string>Fi&amp;le</string>
     </property>
@@ -1596,7 +1596,7 @@ Script Function: acquire([fileName
     <addaction name="m_ActionLoadDarkImage"/>
     <addaction name="m_ActionLoadMask"/>
    </widget>
-   <widget class="QMenu" name="menuAcquire">
+   <widget class="QMenu" name="m_AcquireMenu">
     <property name="title">
      <string>Ac&amp;quire</string>
     </property>
@@ -1606,8 +1606,20 @@ Script Function: acquire([fileName
     <addaction name="m_ActionTrigger"/>
     <addaction name="m_ActionCancel"/>
    </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuAcquire"/>
+   <widget class="QMenu" name="m_EditMenu">
+    <property name="title">
+     <string>Ed&amp;it</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="m_WindowMenu">
+    <property name="title">
+     <string>Window</string>
+    </property>
+   </widget>
+   <addaction name="m_FileMenu"/>
+   <addaction name="m_EditMenu"/>
+   <addaction name="m_WindowMenu"/>
+   <addaction name="m_AcquireMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="m_ActionLoadData">

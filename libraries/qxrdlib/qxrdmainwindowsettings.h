@@ -16,14 +16,25 @@ public:
 
   virtual void initialize(QxrdApplicationWPtr app, QxrdExperimentWPtr expt);
 
+  void openWindow();
   virtual QxrdMainWindowPtr newWindow() = 0;
 
   QxrdMainWindowPtr  window();
+
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 protected:
   QxrdApplicationWPtr m_Application;
   QxrdExperimentWPtr  m_Experiment;
   QxrdMainWindowPtr   m_Window;
+
+public:
+  Q_PROPERTY(int windowOpen READ get_WindowOpen WRITE set_WindowOpen)
+  QCEP_INTEGER_PROPERTY(WindowOpen)
+
+  Q_PROPERTY(QRectF windowRect READ get_WindowRect WRITE set_WindowRect)
+  QCEP_DOUBLE_RECT_PROPERTY(WindowRect)
 };
 
 Q_DECLARE_METATYPE(QxrdMainWindowSettings*)

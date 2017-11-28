@@ -33,6 +33,8 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
 {
   setupUi(this);
 
+  setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
+
   setAttribute(Qt::WA_DeleteOnClose, false);
 
   QxrdDetectorProcessorPtr dp(m_Processor);

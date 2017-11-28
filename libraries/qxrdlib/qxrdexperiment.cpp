@@ -591,6 +591,15 @@ void QxrdExperiment::openWindows()
           m_Window -> show();
         }
       }
+
+      for (int i=0; i<windowSettingsCount(); i++) {
+        QcepMainWindowSettingsPtr set =
+            windowSettings(i);
+
+        if (set) {
+          set->openWindow();
+        }
+      }
     }
   }
 }
