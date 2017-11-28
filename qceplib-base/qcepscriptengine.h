@@ -5,6 +5,7 @@
 #include <QScriptEngine>
 #include "qcepobject-ptr.h"
 
+//TODO: re-implement help stuff in QxrdJSEngine
 class QCEP_EXPORT QcepScriptEngine : public QScriptEngine
 {
   Q_OBJECT
