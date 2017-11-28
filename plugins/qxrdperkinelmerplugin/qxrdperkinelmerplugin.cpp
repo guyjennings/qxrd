@@ -186,9 +186,4 @@ UINT QxrdPerkinElmerPlugin::Acquisition_GbIF_GetDeviceCnt(
   return ::Acquisition_GbIF_GetDeviceCnt(plNrOfboards);
 }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#else
-Q_EXPORT_PLUGIN2(qxrdperkinelmerplugin, QxrdPerkinElmerPlugin)
-#endif
-
 #endif // HAVE_PERKIN_ELMER

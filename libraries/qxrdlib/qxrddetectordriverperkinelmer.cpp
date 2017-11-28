@@ -1032,11 +1032,7 @@ void QxrdDetectorDriverPerkinElmer::onEndFrame(int counter, unsigned int n1, uns
       //    return;
       //  }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
       int counter1 = m_Counter.load();
-#else
-      int counter1 = m_Counter;
-#endif
 
       if ((counter1 - counter) > 5) {
         printMessage(tr("%1 frames behind [%2,%3], skipping")
@@ -1215,11 +1211,7 @@ void QxrdDetectorDriverPerkinElmer::onEndFrameCallback()
       QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
 
       if (sync) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
         sync->acquiredFrameAvailable(m_Counter.load());
-#else
-        sync->acquiredFrameAvailable(m_Counter);
-#endif
       }
 
       //  printf("syncAcq->acquiredFrameAvailable took %d msec\n", tic.restart());

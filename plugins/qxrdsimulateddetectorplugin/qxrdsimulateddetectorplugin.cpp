@@ -17,8 +17,3 @@ QxrdDetectorInterfacePtr QxrdSimulatedDetectorPlugin::createDetector(QString nam
 
   return res;
 }
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#else
-Q_EXPORT_PLUGIN2(qxrdsimulateddetectorplugin, QxrdSimulatedDetectorPlugin)
-#endif

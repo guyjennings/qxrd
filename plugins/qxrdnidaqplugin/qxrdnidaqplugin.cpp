@@ -1,9 +1,7 @@
 #include "qxrdnidaqplugin.h"
 #include "NIDAQmx.h"
 #include <QVector>
-#if QT_VERSION >= 0x040700
 #include <QElapsedTimer>
-#endif
 #include <stdio.h>
 #include <QMutexLocker>
 #include <QStringList>
@@ -897,9 +895,3 @@ Error:
 
   return res;
 }
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#else
-Q_EXPORT_PLUGIN2(qxrdnidaqplugin, QxrdNIDAQPlugin)
-#endif
-

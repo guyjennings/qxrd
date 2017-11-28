@@ -44,17 +44,10 @@ QxrdCalibrantWindow::QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set, QS
   m_CalibrantTableView->horizontalHeader()->setStretchLastSection(true);
   m_CalibrantDSpacingsView->horizontalHeader()->setStretchLastSection(true);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   m_CalibrantTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   m_CalibrantTableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   m_CalibrantDSpacingsView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   m_CalibrantDSpacingsView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-#else
-  m_CalibrantTableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-  m_CalibrantTableView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-  m_CalibrantDSpacingsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-  m_CalibrantDSpacingsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-#endif
 
   connect(m_CalibrantTableView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantWindow::calibrantTableContextMenu);
   connect(m_CalibrantDSpacingsView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantWindow::calibrantDSpacingsContextMenu);

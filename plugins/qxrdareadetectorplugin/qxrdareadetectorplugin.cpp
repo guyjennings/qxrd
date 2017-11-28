@@ -17,8 +17,3 @@ QxrdDetectorInterfacePtr QxrdAreaDetectorPlugin::createDetector(QString name)
 
   return res;
 }
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-#else
-Q_EXPORT_PLUGIN2(qxrdareadetectorplugin, QxrdAreaDetectorPlugin)
-#endif

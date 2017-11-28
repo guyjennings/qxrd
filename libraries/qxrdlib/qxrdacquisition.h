@@ -10,10 +10,7 @@
 #include <QAtomicInt>
 #include <QTimer>
 #include <QWaitCondition>
-
-#if QT_VERSION >= 0x040700
 #include <QElapsedTimer>
-#endif
 
 #include "qxrdrasterdata.h"
 #include "qxrdnidaqplugininterface-ptr.h"

@@ -54,31 +54,11 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QCoreApplication>
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5,0,0))
 #include <QJsonObject>
-#endif
 
 static QList<QDir> pluginsDirList;
 
 int eventCounter;
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-QCoreApplication::EventFilter oldEventFilter;
-
-static bool myEventFilter(void *message, long *result)
-{
-  eventCounter++;
-
-  if (oldEventFilter) {
-    return oldEventFilter(message, result);
-  } else {
-    return false;
-  }
-}
-
-QTimer eventCounterTimer;
-#endif
 
 void QxrdApplication::processEventCounter()
 {
@@ -403,7 +383,6 @@ void QxrdApplication::loadPlugins()
       if (QLibrary::isLibrary(fullPath)) {
         QPluginLoader loader(fullPath);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,0,0))
         QJsonObject meta = loader.metaData();
 
         if (qcepDebug(DEBUG_PLUGINS)) {
@@ -412,7 +391,6 @@ void QxrdApplication::loadPlugins()
             printf("Key %s = %s\n", qPrintable(key), qPrintable(meta.value(key).toString()));
           }
         }
-#endif
 
         QObject *plugin = loader.instance();
         if (plugin) {

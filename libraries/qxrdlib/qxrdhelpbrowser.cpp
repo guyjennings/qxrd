@@ -39,11 +39,7 @@ QVariant QxrdHelpBrowser::loadResource(int type, const QUrl &name)
         if (name.scheme() == "qrc") {
           if (name.path() == "/help/autohelp") {
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
             QByteArray res = engine->helpText(name.query());
-#else
-            QByteArray res = engine->helpText(name.encodedQuery());
-#endif
 //            printf("QxrdHelpBrowser::loadResource res.length = %d\n", res.count());
 
             return res;
