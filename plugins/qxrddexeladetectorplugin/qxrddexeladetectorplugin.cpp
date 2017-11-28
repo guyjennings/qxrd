@@ -1,5 +1,6 @@
 #include "qxrddexeladetectorplugin.h"
 #include "qxrddetectorinterface.h"
+#include "qxrddexeladetectordriver.h"
 
 QxrdDexelaDetectorPlugin::QxrdDexelaDetectorPlugin()
 {
@@ -10,10 +11,13 @@ QString QxrdDexelaDetectorPlugin::name() const
   return "Dexela Detector Plugin";
 }
 
-QxrdDetectorInterfacePtr QxrdDexelaDetectorPlugin::createDetector(QString name)
+QxrdDetectorDriverPtr QxrdDexelaDetectorPlugin::createDetector(QString name,
+                                                               QxrdDetectorSettingsPtr det,
+                                                               QxrdExperimentPtr expt,
+                                                               QxrdAcquisitionPtr acq)
 {
-  static QxrdDetectorInterfacePtr res =
-      QxrdDetectorInterfacePtr(new QxrdDetectorInterface(name));
+  QxrdDetectorDriverPtr res =
+      QxrdDetectorDriverPtr(new QxrdDexelaDetectorDriver(name, det, expt, acq));
 
   return res;
 }

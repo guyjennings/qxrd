@@ -1,5 +1,6 @@
 #include "qxrdpilatusplugin.h"
 #include "qxrddetectorinterface.h"
+#include "qxrdpilatusdriver.h"
 
 QxrdPilatusPlugin::QxrdPilatusPlugin()
 {
@@ -10,10 +11,13 @@ QString QxrdPilatusPlugin::name() const
   return "Pilatus Detector";
 }
 
-QxrdDetectorInterfacePtr QxrdPilatusPlugin::createDetector(QString name)
+QxrdDetectorDriverPtr QxrdPilatusPlugin::createDetector(QString name,
+                                                        QxrdDetectorSettingsPtr det,
+                                                        QxrdExperimentPtr expt,
+                                                        QxrdAcquisitionPtr acq)
 {
-  static QxrdDetectorInterfacePtr res =
-      QxrdDetectorInterfacePtr(new QxrdDetectorInterface(name));
+  QxrdDetectorDriverPtr res =
+      QxrdDetectorDriverPtr(new QxrdPilatusDriver(name, det, expt, acq));
 
   return res;
 }

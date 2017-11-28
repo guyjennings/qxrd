@@ -10,10 +10,12 @@ include("../../source/submodules/qceplib/qceplib-base-include.pri")
 INCLUDEPATH += ../../libraries/qxrdlib/
 
 HEADERS += \
-    qxrdpilatusplugin.h
+    qxrdpilatusplugin.h \
+    qxrdpilatusdriver.h
 
 SOURCES += \
-    qxrdpilatusplugin.cpp
+    qxrdpilatusplugin.cpp \
+    qxrdpilatusdriver.cpp
 
 OTHER_FILES += \
     pilatus.json

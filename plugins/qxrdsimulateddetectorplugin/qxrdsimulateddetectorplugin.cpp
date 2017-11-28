@@ -1,5 +1,6 @@
 #include "qxrdsimulateddetectorplugin.h"
 #include "qxrddetectorinterface.h"
+#include "qxrdsimulateddetectordriver.h"
 
 QxrdSimulatedDetectorPlugin::QxrdSimulatedDetectorPlugin()
 {
@@ -10,10 +11,13 @@ QString QxrdSimulatedDetectorPlugin::name() const
   return "Simulated Detector Plugin";
 }
 
-QxrdDetectorInterfacePtr QxrdSimulatedDetectorPlugin::createDetector(QString name)
+QxrdDetectorDriverPtr QxrdSimulatedDetectorPlugin::createDetector(QString name,
+                                                                  QxrdDetectorSettingsPtr det,
+                                                                  QxrdExperimentPtr expt,
+                                                                  QxrdAcquisitionPtr acq)
 {
-  static QxrdDetectorInterfacePtr res =
-      QxrdDetectorInterfacePtr(new QxrdDetectorInterface(name));
+  QxrdDetectorDriverPtr res =
+      QxrdDetectorDriverPtr(new QxrdSimulatedDetectorDriver(name, det, expt, acq));
 
   return res;
 }

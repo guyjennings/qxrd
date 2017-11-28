@@ -12,7 +12,10 @@
 #include <QWaitCondition>
 #include <QElapsedTimer>
 
-#include "qxrdrasterdata.h"
+#include "qcepserializableobject.h"
+//#include "qxrdrasterdata.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdapplication-ptr.h"
@@ -22,13 +25,16 @@
 //#include "qxrddetectorthread-ptr.h"
 #include "qxrddetectorproxy-ptr.h"
 #include "qxrddataprocessor-ptr.h"
-#include "qxrdsynchronizedacquisition.h"
+//#include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qcepallocator-ptr.h"
 #include "qxrdprocessargs-ptr.h"
 #include "qxrdacquisitionscalermodel-ptr.h"
 #include "qxrdacquisitionexecutionthread-ptr.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrdacquisitionparameterpack-ptr.h"
+#include "qxrddarkacquisitionparameterpack-ptr.h"
 
 class QXRD_EXPORT QxrdAcquisition : public QcepSerializableObject
 {

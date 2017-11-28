@@ -15,7 +15,10 @@ public:
 
   QString name() const;
 
-  QxrdDetectorInterfacePtr createDetector(QString name);
+  QxrdDetectorDriverPtr createDetector(QString name,
+                                       QxrdDetectorSettingsPtr det,
+                                       QxrdExperimentPtr expt,
+                                       QxrdAcquisitionPtr acq);
 };
 
 #endif // QXRDPILATUSPLUGIN_H

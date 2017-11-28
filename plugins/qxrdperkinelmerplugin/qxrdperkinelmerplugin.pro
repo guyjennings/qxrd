@@ -12,10 +12,12 @@ INCLUDEPATH += $$PE_SDK/
 LIBS += $${PE_SDK}/XISL.lib
 
 HEADERS += \
-    qxrdperkinelmerplugin.h
+    qxrdperkinelmerplugin.h \
+    qxrdperkinelmerdriver.h
 
 SOURCES += \
-    qxrdperkinelmerplugin.cpp
+    qxrdperkinelmerplugin.cpp \
+    qxrdperkinelmerdriver.cpp
 
 OTHER_FILES += \
     pe.json

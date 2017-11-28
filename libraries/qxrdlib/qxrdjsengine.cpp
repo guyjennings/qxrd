@@ -16,6 +16,7 @@
 #include "qxrdgeneratetestimage.h"
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
+#include "qxrdsynchronizedacquisition.h"
 
 QxrdJSEngine::QxrdJSEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp) :
   m_Application(app),

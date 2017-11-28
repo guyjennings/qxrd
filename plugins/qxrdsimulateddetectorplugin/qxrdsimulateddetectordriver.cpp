@@ -1,34 +1,20 @@
-#include "qxrddetectordriverdexela.h"
-#include "qxrddetectorsettingsdexela.h"
+#include "qxrdsimulateddetectordriver.h"
 #include "qxrdacquisition.h"
-#include "qcepallocator.h"
-#include <QImage>
-#include <QPainter>
+#include "qxrdexperiment.h"
 #include "qxrdsynchronizedacquisition.h"
+#include "qcepallocator.h"
+#include <QPainter>
 
-QxrdDetectorDriverDexela::QxrdDetectorDriverDexela(
-    QString name,
-    QxrdDetectorSettingsDexelaPtr sim,
-    QxrdExperimentPtr expt,
-    QxrdAcquisitionPtr acq) :
-  QxrdDetectorDriver(name, sim, expt, acq),
-  m_Dexela(sim)
+QxrdSimulatedDetectorDriver::QxrdSimulatedDetectorDriver(QString name,
+                                                         QxrdDetectorSettingsPtr det,
+                                                         QxrdExperimentPtr expt,
+                                                         QxrdAcquisitionPtr acq)
+  : QxrdDetectorDriver(name, det, expt, acq)
 {
-#ifndef QT_NO_DEBUG
-  printf("Dexela Detector Driver \"%s\" Constructed\n", qPrintable(name));
-#endif
 
-  connect(&m_Timer, &QTimer::timeout, this, &QxrdDetectorDriverDexela::onTimerTimeout);
 }
 
-QxrdDetectorDriverDexela::~QxrdDetectorDriverDexela()
-{
-#ifndef QT_NO_DEBUG
-  printf("Dexela Detector Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
-#endif
-}
-
-bool QxrdDetectorDriverDexela::startDetectorDriver()
+bool QxrdSimulatedDetectorDriver::startDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -36,7 +22,7 @@ bool QxrdDetectorDriverDexela::startDetectorDriver()
   QxrdAcquisitionPtr      acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
-    printMessage(tr("Starting Dexela detector \"%1\"").arg(det->get_DetectorName()));
+    printMessage(tr("Starting Pilatus detector \"%1\"").arg(det->get_DetectorName()));
 
     det -> set_NRows(2048);
     det -> set_NCols(2048);
@@ -47,14 +33,14 @@ bool QxrdDetectorDriverDexela::startDetectorDriver()
   }
 }
 
-bool QxrdDetectorDriverDexela::stopDetectorDriver()
+bool QxrdSimulatedDetectorDriver::stopDetectorDriver()
 {
   THREAD_CHECK;
 
   QxrdDetectorSettingsPtr det(m_Detector);
 
   if (det) {
-    printMessage(tr("Stopping Dexela detector \"%1\"").arg(det->get_DetectorName()));
+    printMessage(tr("Stopping Pilatus detector \"%1\"").arg(det->get_DetectorName()));
   }
 
   m_Timer.stop();
@@ -64,7 +50,7 @@ bool QxrdDetectorDriverDexela::stopDetectorDriver()
 
 static int g_FrameCounter = 0;
 
-bool QxrdDetectorDriverDexela::changeExposureTime(double expos)
+bool QxrdSimulatedDetectorDriver::changeExposureTime(double expos)
 {
   THREAD_CHECK;
 
@@ -81,7 +67,7 @@ bool QxrdDetectorDriverDexela::changeExposureTime(double expos)
   return false;
 }
 
-bool QxrdDetectorDriverDexela::beginAcquisition(double /*exposure*/)
+bool QxrdSimulatedDetectorDriver::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
 
@@ -90,18 +76,18 @@ bool QxrdDetectorDriverDexela::beginAcquisition(double /*exposure*/)
   return true;
 }
 
-void QxrdDetectorDriverDexela::beginFrame()
+void QxrdSimulatedDetectorDriver::beginFrame()
 {
 }
 
-bool QxrdDetectorDriverDexela::endAcquisition()
+bool QxrdSimulatedDetectorDriver::endAcquisition()
 {
   THREAD_CHECK;
 
   return true;
 }
 
-bool QxrdDetectorDriverDexela::shutdownAcquisition()
+bool QxrdSimulatedDetectorDriver::shutdownAcquisition()
 {
   THREAD_CHECK;
 
@@ -110,7 +96,7 @@ bool QxrdDetectorDriverDexela::shutdownAcquisition()
   return true;
 }
 
-void QxrdDetectorDriverDexela::onTimerTimeout()
+void QxrdSimulatedDetectorDriver::onTimerTimeout()
 {
   QxrdDetectorSettingsPtr det(m_Detector);
   QxrdAcquisitionPtr      acq(m_Acquisition);

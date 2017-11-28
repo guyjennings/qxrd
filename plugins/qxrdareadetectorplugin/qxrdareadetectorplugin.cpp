@@ -1,5 +1,6 @@
 #include "qxrdareadetectorplugin.h"
 #include "qxrddetectorinterface.h"
+#include "qxrdareadetectordriver.h"
 
 QxrdAreaDetectorPlugin::QxrdAreaDetectorPlugin()
 {
@@ -10,10 +11,13 @@ QString QxrdAreaDetectorPlugin::name() const
   return "EPICS Area Detector Plugin";
 }
 
-QxrdDetectorInterfacePtr QxrdAreaDetectorPlugin::createDetector(QString name)
+QxrdDetectorDriverPtr QxrdAreaDetectorPlugin::createDetector(QString name,
+                                                             QxrdDetectorSettingsPtr det,
+                                                             QxrdExperimentPtr expt,
+                                                             QxrdAcquisitionPtr acq)
 {
-  static QxrdDetectorInterfacePtr res =
-      QxrdDetectorInterfacePtr(new QxrdDetectorInterface(name));
+  QxrdDetectorDriverPtr res =
+      QxrdDetectorDriverPtr(new QxrdAreaDetectorDriver(name, det, expt, acq));
 
   return res;
 }

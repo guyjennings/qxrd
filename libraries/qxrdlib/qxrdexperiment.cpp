@@ -38,6 +38,7 @@
 #include "qxrdacquisitionextrainputschannel.h"
 #include "qxrdfilebrowsermodelupdater.h"
 #include "qxrdacquisitionextrainputs.h"
+#include "qxrdsynchronizedacquisition.h"
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
 #include <QHostInfo>

@@ -4,6 +4,7 @@
 #include "qcepallocator.h"
 #include <QImage>
 #include <QPainter>
+#include "qxrdsynchronizedacquisition.h"
 
 QxrdDetectorDriverSimulated::QxrdDetectorDriverSimulated(
     QString name,

@@ -10,10 +10,12 @@ include("../../source/submodules/qceplib/qceplib-base-include.pri")
 INCLUDEPATH += ../../libraries/qxrdlib/
 
 SOURCES += \
-    qxrdareadetectorplugin.cpp
+    qxrdareadetectorplugin.cpp \
+    qxrdareadetectordriver.cpp
 
 HEADERS += \
-    qxrdareadetectorplugin.h
+    qxrdareadetectorplugin.h \
+    qxrdareadetectordriver.h
 
 OTHER_FILES += \
     areaDetector.json

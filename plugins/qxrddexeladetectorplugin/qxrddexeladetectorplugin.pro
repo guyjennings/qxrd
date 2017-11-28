@@ -10,10 +10,12 @@ include("../../source/submodules/qceplib/qceplib-base-include.pri")
 INCLUDEPATH += ../../libraries/qxrdlib/
 
 SOURCES += \
-    qxrddexeladetectorplugin.cpp
+    qxrddexeladetectorplugin.cpp \
+    qxrddexeladetectordriver.cpp
 
 HEADERS += \
-    qxrddexeladetectorplugin.h
+    qxrddexeladetectorplugin.h \
+    qxrddexeladetectordriver.h
 
 OTHER_FILES += \
     dexelaDetector.json

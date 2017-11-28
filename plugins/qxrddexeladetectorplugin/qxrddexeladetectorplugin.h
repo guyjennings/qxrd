@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include "qxrddetectorplugininterface.h"
-#include <QTimer>
 
 class QxrdDexelaDetectorPlugin : public QObject, public QxrdDetectorPluginInterface
 {
@@ -16,7 +15,10 @@ public:
 
     QString name() const;
 
-    QxrdDetectorInterfacePtr createDetector(QString name);
+    QxrdDetectorDriverPtr createDetector(QString name,
+                                         QxrdDetectorSettingsPtr det,
+                                         QxrdExperimentPtr expt,
+                                         QxrdAcquisitionPtr acq);
 };
 
 #endif // QXRDDEXELADETECTORPLUGIN_H
