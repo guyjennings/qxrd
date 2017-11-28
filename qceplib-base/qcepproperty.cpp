@@ -709,20 +709,12 @@ QcepIntProperty::QcepIntProperty(QcepSerializableObject *parent, const char *nam
 
 int QcepIntProperty::value() const
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   return m_Value.load();
-#else
-  return m_Value;
-#endif
 }
 
 int QcepIntProperty::defaultValue() const
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   return m_Default.load();
-#else
-  return m_Default;
-#endif
 }
 
 void QcepIntProperty::setValue(int val, int index)
@@ -744,11 +736,8 @@ void QcepIntProperty::setValue(int val)
                  .arg(name()).arg(val));
   }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   int curVal = m_Value.load();
-#else
-  int curVal = m_Value;
-#endif
+
   if (val != curVal) {
     if (debug()) {
       printMessage(tr("%1: QcepIntProperty::setValue(int %2) [%3]")
@@ -965,20 +954,12 @@ QcepBoolProperty::QcepBoolProperty(QcepSerializableObject *parent, const char *n
 
 bool QcepBoolProperty::value() const
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   return m_Value.load();
-#else
-  return m_Value;
-#endif
 }
 
 bool QcepBoolProperty::defaultValue() const
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   return m_Default.load();
-#else
-  return m_Default;
-#endif
 }
 
 void QcepBoolProperty::setValue(bool val, int index)
@@ -1000,11 +981,7 @@ void QcepBoolProperty::setValue(bool val)
                  .arg(name()).arg(val));
   }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   int curVal = m_Value.load();
-#else
-  int curVal = m_Value;
-#endif
 
   if ((int) val != curVal) {
     if (debug()) {
@@ -1038,11 +1015,7 @@ void QcepBoolProperty::resetValue()
 
 void QcepBoolProperty::toggle()
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   setValue(!m_Value.load());
-#else
-  setValue(!m_Value);
-#endif
 }
 
 void QcepBoolProperty::linkTo(QAbstractButton *button)

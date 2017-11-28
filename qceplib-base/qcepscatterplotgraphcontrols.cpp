@@ -14,11 +14,7 @@ QcepScatterPlotGraphControls::QcepScatterPlotGraphControls(QcepDataObjectGraphWi
 
   m_ScatterColumns -> setModel(m_Model.data());
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   m_ScatterColumns -> horizontalHeader() -> setSectionResizeMode(QHeaderView::ResizeToContents);
-#else
-  m_ScatterColumns -> horizontalHeader() -> setResizeMode(QHeaderView::ResizeToContents);
-#endif
 
 //  connect(m_ScatterColumns->selectionModel(), &QItemSelectionModel::selectionChanged,
 //          this, &QcepScatterPlotGraphControls::onSelectionChanged);

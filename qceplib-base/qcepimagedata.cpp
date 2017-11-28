@@ -92,15 +92,7 @@ QString QcepImageDataBase::description() const
 
 double QcepImageDataBase::secondsSinceEpoch()
 {
-#if QT_VERSION >= 0x040700
   return QDateTime::currentMSecsSinceEpoch()/1000.0;
-#else
-  QDateTime dt = QDateTime::currentDateTime();
-  time_t dt_t = dt.toTime_t();
-  int msec = dt.time().msec();
-
-  return ((double) dt_t) + msec/1000.0;
-#endif
 }
 
 QMutex *QcepImageDataBase::mutex()
