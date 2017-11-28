@@ -604,7 +604,7 @@ void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  if (qcepDebug(DEBUG_PROPERTIES || debug())) {
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     printMessage(tr("%1: QcepDoubleProperty::linkTo(QDoubleSpinBox *%2)")
                  .arg(name()).HEXARG(spinBox));
   }
@@ -1006,7 +1006,7 @@ void QcepBoolProperty::setDefaultValue(bool val)
 
 void QcepBoolProperty::resetValue()
 {
-  if (qcepDebug(DEBUG_PROPERTIES || debug())) {
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     printMessage(tr("%1: QcepBoolProperty::resetValue").arg(name()));
   }
 
@@ -1020,7 +1020,7 @@ void QcepBoolProperty::toggle()
 
 void QcepBoolProperty::linkTo(QAbstractButton *button)
 {
-  if (qcepDebug(DEBUG_PROPERTIES || debug())) {
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     printMessage(tr("%1: QcepBoolProperty::linkTo(QAbstractButton *%2)")
                  .arg(name()).HEXARG(button));
   }
@@ -1159,7 +1159,7 @@ void QcepStringProperty::resetValue()
 
 void QcepStringProperty::linkTo(QComboBox *comboBox)
 {
-  if (qcepDebug(DEBUG_PROPERTIES || debug())) {
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     printMessage(tr("%1: QcepStringProperty::linkTo(QComboBox *%2)")
                  .arg(name()).HEXARG(comboBox));
   }
@@ -1182,7 +1182,7 @@ void QcepStringProperty::linkTo(QComboBox *comboBox)
 
 void QcepStringProperty::linkTo(QLineEdit *lineEdit)
 {
-  if (qcepDebug(DEBUG_PROPERTIES || debug())) {
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     printMessage(tr("%1: QcepStringProperty::linkTo(QLineEdit *%2)")
                  .arg(name()).HEXARG(lineEdit));
   }
@@ -1221,7 +1221,7 @@ void QcepStringProperty::linkTo(QLCDNumber *number)
 
 void QcepStringProperty::linkTo(QTextEdit *textEdit)
 {
-  if (qcepDebug(DEBUG_PROPERTIES || debug())) {
+  if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
     printMessage(tr("%1: QcepStringProperty::linkTo(QTextEdit *%2)")
                  .arg(name()).HEXARG(textEdit));
   }
