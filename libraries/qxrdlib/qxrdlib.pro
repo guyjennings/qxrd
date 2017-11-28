@@ -91,7 +91,6 @@ SOURCES += qxrdlib.cpp \
     qxrdimageplotmeasurer.cpp \
     qxrdfilebrowser.cpp \
     qxrdimagecalculator.cpp \
-    qxrdmutexlocker.cpp \
     qxrdexperimentpreferencesdialog.cpp \
     qxrdsharedpointer.cpp \
     qxrdresultserializer.cpp \
