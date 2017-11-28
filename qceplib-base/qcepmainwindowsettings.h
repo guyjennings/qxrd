@@ -11,6 +11,8 @@ class QCEP_EXPORT QcepMainWindowSettings : public QcepSerializableObject
 
 public:
   QcepMainWindowSettings(QString name);
+
+  virtual void openWindow() = 0;
 };
 
 Q_DECLARE_METATYPE(QcepMainWindowSettings*)
