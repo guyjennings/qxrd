@@ -239,11 +239,11 @@ void QcepSerializableObject::readObjectFmt(QcepFileFormatterPtr fmt)
   fmt->endReadObject();
 }
 
-void QcepSerializableObject::writeObjectData(QcepFileFormatterPtr fmt)
+void QcepSerializableObject::writeObjectData(QcepFileFormatterPtr /*fmt*/)
 {
 }
 
-void QcepSerializableObject::readObjectData(QcepFileFormatterPtr fmt)
+void QcepSerializableObject::readObjectData(QcepFileFormatterPtr /*fmt*/)
 {
 }
 

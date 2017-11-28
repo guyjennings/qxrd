@@ -13,7 +13,7 @@ QcepScatterPlotGraphModel::QcepScatterPlotGraphModel(QcepDataObjectWPtr object) 
 }
 
 int QcepScatterPlotGraphModel::rowCount(
-    const QModelIndex &parent) const
+    const QModelIndex & /*parent*/) const
 {
   int res = 0;
 
@@ -37,7 +37,7 @@ int QcepScatterPlotGraphModel::rowCount(
 }
 
 int QcepScatterPlotGraphModel::columnCount(
-    const QModelIndex &parent) const
+    const QModelIndex & /*parent*/) const
 {
   return 4;
 }
@@ -134,7 +134,7 @@ void QcepScatterPlotGraphModel::toggle(const QModelIndex &index)
   int r = index.row();
   int c = index.column();
   int nr = rowCount(QModelIndex());
-  int nc = columnCount(QModelIndex());
+//  int nc = columnCount(QModelIndex());
 
   if (r >= 0 && r < nr) {
     if (c == 1) { // 'X' column:

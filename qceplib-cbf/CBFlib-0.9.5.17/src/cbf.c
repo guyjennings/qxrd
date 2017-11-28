@@ -8649,7 +8649,7 @@ int cbf_check_type_contents (const char *type, const char *value){
 
   /* Regex Match function */
   
-int cbf_match(const char *string, char *pattern) { 
+int cbf_match(const char * string, char * pattern) {
     
 #if defined(CBF_NO_REGEX)
     

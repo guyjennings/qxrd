@@ -16,11 +16,11 @@ void QcepFileFormatterNexus::endWriteFile()
 {
 }
 
-void QcepFileFormatterNexus::writeComment(QString cmt)
+void QcepFileFormatterNexus::writeComment(QString /*cmt*/)
 {
 }
 
-void QcepFileFormatterNexus::beginWriteObject(QString objectName, QString className)
+void QcepFileFormatterNexus::beginWriteObject(QString /*objectName*/, QString /*className*/)
 {
 }
 
@@ -32,7 +32,7 @@ void QcepFileFormatterNexus::beginWriteProperties()
 {
 }
 
-void QcepFileFormatterNexus::writeProperty(QString name, QVariant val)
+void QcepFileFormatterNexus::writeProperty(QString /*name*/, QVariant /*val*/)
 {
 }
 
@@ -69,7 +69,7 @@ QcepSerializableObjectPtr QcepFileFormatterNexus::nextObject()
   return QcepSerializableObjectPtr();
 }
 
-void QcepFileFormatterNexus::beginReadObject(QcepSerializableObjectPtr obj)
+void QcepFileFormatterNexus::beginReadObject(QcepSerializableObjectPtr /*obj*/)
 {
 }
 

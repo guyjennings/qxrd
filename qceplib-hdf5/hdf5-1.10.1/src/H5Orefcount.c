@@ -218,7 +218,7 @@ static size_t
 H5O_refcount_size(const H5F_t H5_ATTR_UNUSED *f, hbool_t H5_ATTR_UNUSED disable_shared,
     const void H5_ATTR_UNUSED *_mesg)
 {
-    size_t ret_value;   /* Return value */
+    size_t ret_value = false;   /* Return value */
 
     FUNC_ENTER_NOAPI_NOINIT_NOERR
 

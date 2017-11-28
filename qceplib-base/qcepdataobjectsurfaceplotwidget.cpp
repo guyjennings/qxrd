@@ -281,11 +281,11 @@ void QcepDataObjectSurfacePlotWidget::setSpectrum(QLinearGradient &map)
   map.setColorAt(1.0, Qt::red);
 }
 
-void QcepDataObjectSurfacePlotWidget::setBandedSpectrum(QLinearGradient &map)
+void QcepDataObjectSurfacePlotWidget::setBandedSpectrum(QLinearGradient & /*map*/)
 {
 }
 
-void QcepDataObjectSurfacePlotWidget::onColorMapChanged(int newMap)
+void QcepDataObjectSurfacePlotWidget::onColorMapChanged(int /*newMap*/)
 {
 }
 

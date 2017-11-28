@@ -55,7 +55,7 @@ void QcepFileImporterHDF::scanGroup(QModelIndex dest, hid_t gid, int level)
   hsize_t nobj;
   herr_t err = H5Gget_num_objs(gid, &nobj);
 
-  for (int i=0; i<nobj; i++) {
+  for (hsize_t i=0; i<nobj; i++) {
     len = H5Gget_objname_by_idx(gid, i, memb_name, MAX_NAME);
     int otype = H5Gget_objtype_by_idx(gid, i);
 
@@ -151,7 +151,7 @@ void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
 #endif
 
 #ifdef HAVE_HDF5
-void QcepFileImporterHDF::scanLink(QModelIndex dest, hid_t gid, char *name)
+void QcepFileImporterHDF::scanLink(QModelIndex /*dest*/, hid_t gid, char *name)
 {
   herr_t status;
   char target[MAX_NAME];
@@ -194,7 +194,7 @@ void QcepFileImporterHDF::readImageData(QcepDoubleImageDataPtr img, hid_t dsid)
 #endif
 
 #ifdef HAVE_HDF5
-void QcepFileImporterHDF::readArrayData(QcepDataArrayPtr arr, hid_t dsid)
+void QcepFileImporterHDF::readArrayData(QcepDataArrayPtr /*arr*/, hid_t /*dsid*/)
 {
   m_Model->printMessage("QcepFileImporterHDF::readArrayData not yet implemented");
 }

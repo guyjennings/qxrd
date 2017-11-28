@@ -12,7 +12,7 @@ QcepScanDetectorPanelGains::QcepScanDetectorPanelGains()
 
 static const int nh = 16;
 static const int nv = 2;  // 16 panes across x 2 panes high
-static const int magic = nh/2;
+//static const int magic = nh/2;
 static const int bwidth = 10;
 
 static double linearFit(double xvec[], double yvec[], int np, double xx)

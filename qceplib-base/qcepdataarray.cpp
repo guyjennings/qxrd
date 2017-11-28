@@ -39,7 +39,7 @@ void QcepDataArray::writeSettings(QSettings *settings)
   }
 }
 
-void QcepDataArray::readSettings(QSettings *settings)
+void QcepDataArray::readSettings(QSettings * /*settings*/)
 {
 }
 

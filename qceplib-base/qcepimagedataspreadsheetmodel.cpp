@@ -8,7 +8,7 @@ QcepImageDataSpreadsheetModel::QcepImageDataSpreadsheetModel
 
 }
 
-int QcepImageDataSpreadsheetModel::rowCount(const QModelIndex &parent) const
+int QcepImageDataSpreadsheetModel::rowCount(const QModelIndex & /*parent*/) const
 {
   QSharedPointer<QcepImageDataBase> img(m_Image);
 
@@ -19,7 +19,7 @@ int QcepImageDataSpreadsheetModel::rowCount(const QModelIndex &parent) const
   }
 }
 
-int QcepImageDataSpreadsheetModel::columnCount(const QModelIndex &parent) const
+int QcepImageDataSpreadsheetModel::columnCount(const QModelIndex & /*parent*/) const
 {
   QSharedPointer<QcepImageDataBase> img(m_Image);
 

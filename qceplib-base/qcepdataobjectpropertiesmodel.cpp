@@ -9,12 +9,12 @@ QcepDataObjectPropertiesModel::QcepDataObjectPropertiesModel(QcepDataObjectWPtr 
 
 }
 
-int QcepDataObjectPropertiesModel::rowCount(const QModelIndex &parent) const
+int QcepDataObjectPropertiesModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return 2 + propertyCount() + dynamicPropertyCount();
 }
 
-int QcepDataObjectPropertiesModel::columnCount(const QModelIndex &parent) const
+int QcepDataObjectPropertiesModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 2;
 }
@@ -23,7 +23,7 @@ QVariant QcepDataObjectPropertiesModel::data(const QModelIndex &index, int role)
 {
   QVariant res = QVariant();
   int pc = propertyCount();
-  int dpc = dynamicPropertyCount();
+//  int dpc = dynamicPropertyCount();
   QcepDataObjectPtr obj(m_Object);
 
   if (role == Qt::DisplayRole) {
@@ -82,7 +82,7 @@ QVariant QcepDataObjectPropertiesModel::headerData(int section, Qt::Orientation 
       }
     } else if (orientation == Qt::Vertical) {
       int pc = propertyCount();
-      int dpc = dynamicPropertyCount();
+//      int dpc = dynamicPropertyCount();
 
       if (section == 0) {
 

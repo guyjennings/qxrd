@@ -230,7 +230,7 @@ void QcepDataColumnScan::subtract(QcepDataColumnScanPtr scan)
 {
   if (checkCompatibility(scan)) {
     int nCols = columnCount();
-    int nRows = rowCount();
+//    int nRows = rowCount();
 
     for (int i=0; i<nCols; i++) {
       QcepDataColumnPtr c = column(i);

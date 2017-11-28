@@ -6,7 +6,7 @@
 #include "qcepmutexlocker.h"
 #include <stdio.h>
 
-QcepAllocatorThread::QcepAllocatorThread(QcepApplicationWPtr app)
+QcepAllocatorThread::QcepAllocatorThread(QcepApplicationWPtr /*app*/)
   : QcepThread(QcepObjectWPtr()),
     m_Allocator(NULL)
 {

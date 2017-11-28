@@ -7,7 +7,7 @@ QcepDataGroupSpreadsheetModel::QcepDataGroupSpreadsheetModel(QcepDataGroupWPtr g
 
 }
 
-int QcepDataGroupSpreadsheetModel::rowCount(const QModelIndex &parent) const
+int QcepDataGroupSpreadsheetModel::rowCount(const QModelIndex & /*parent*/) const
 {
   QcepDataGroupPtr grp(m_Group);
 
@@ -18,7 +18,7 @@ int QcepDataGroupSpreadsheetModel::rowCount(const QModelIndex &parent) const
   }
 }
 
-int QcepDataGroupSpreadsheetModel::columnCount(const QModelIndex &parent) const
+int QcepDataGroupSpreadsheetModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 3;
 }

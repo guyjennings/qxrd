@@ -698,8 +698,8 @@ done:
 herr_t
 H5AC_evict(H5F_t *f, hid_t dxpl_id)
 {
-    hbool_t log_enabled;             /* TRUE if logging was set up */
-    hbool_t curr_logging;            /* TRUE if currently logging */
+    hbool_t log_enabled = false;             /* TRUE if logging was set up */
+    hbool_t curr_logging = false;            /* TRUE if currently logging */
     herr_t ret_value = SUCCEED;      /* Return value */
 
     FUNC_ENTER_NOAPI(FAIL)
@@ -750,8 +750,8 @@ H5AC_expunge_entry(H5F_t *f, hid_t dxpl_id, const H5AC_class_t *type,
     char                trace[128] = "";
     FILE *              trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;              /* TRUE if logging was set up */
-    hbool_t curr_logging;             /* TRUE if currently logging */
+    hbool_t log_enabled = false;              /* TRUE if logging was set up */
+    hbool_t curr_logging = false;             /* TRUE if currently logging */
     herr_t  ret_value = SUCCEED;      /* Return value */
 
     FUNC_ENTER_NOAPI(FAIL)
@@ -826,8 +826,8 @@ H5AC_flush(H5F_t *f, hid_t dxpl_id)
     char 	  trace[128] = "";
     FILE *	  trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;              /* TRUE if logging was set up */
-    hbool_t curr_logging;             /* TRUE if currently logging */
+    hbool_t log_enabled = false;              /* TRUE if logging was set up */
+    hbool_t curr_logging = false;             /* TRUE if currently logging */
     herr_t ret_value = SUCCEED;      /* Return value */
 
     FUNC_ENTER_NOAPI(FAIL)
@@ -1011,8 +1011,8 @@ H5AC_insert_entry(H5F_t *f, hid_t dxpl_id, const H5AC_class_t *type, haddr_t add
     size_t              trace_entry_size = 0;
     FILE *        	trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;             /* TRUE if logging was set up */
-    hbool_t curr_logging;            /* TRUE if currently logging */
+    hbool_t log_enabled = false;             /* TRUE if logging was set up */
+    hbool_t curr_logging = false;            /* TRUE if currently logging */
     herr_t ret_value = SUCCEED;      /* Return value */
 
     FUNC_ENTER_NOAPI(FAIL)
@@ -1148,8 +1148,8 @@ H5AC_mark_entry_dirty(void *thing)
     char          	trace[128] = "";
     FILE *        	trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;              /* TRUE if logging was set up */
-    hbool_t curr_logging;             /* TRUE if currently logging */
+    hbool_t log_enabled = false;              /* TRUE if logging was set up */
+    hbool_t curr_logging = false;             /* TRUE if currently logging */
     H5AC_info_t *entry_ptr = NULL;    /* Pointer to the cache entry */
     H5C_t *cache_ptr = NULL;          /* Pointer to the entry's associated metadata cache */
     herr_t ret_value = SUCCEED;       /* Return value */
@@ -1226,8 +1226,8 @@ H5AC_mark_entry_clean(void *thing)
     char          	trace[128] = "";
     FILE *        	trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;              /* TRUE if logging was set up */
-    hbool_t curr_logging;             /* TRUE if currently logging */
+    hbool_t log_enabled = false;              /* TRUE if logging was set up */
+    hbool_t curr_logging = false;             /* TRUE if currently logging */
     H5AC_info_t *entry_ptr = NULL;    /* Pointer to the cache entry */
     H5C_t *cache_ptr = NULL;          /* Pointer to the entry's associated metadata cache */
     herr_t ret_value = SUCCEED;       /* Return value */
@@ -1304,8 +1304,8 @@ H5AC_mark_entry_unserialized(void *thing)
     char          	trace[128] = "";
     FILE *        	trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;              /* TRUE if logging was set up */
-    hbool_t curr_logging;             /* TRUE if currently logging */
+    hbool_t log_enabled = false;              /* TRUE if logging was set up */
+    hbool_t curr_logging = false;             /* TRUE if currently logging */
     H5AC_info_t *entry_ptr = NULL;    /* Pointer to the cache entry */
     H5C_t *cache_ptr = NULL;          /* Pointer to the entry's associated metadata cache */
     herr_t ret_value = SUCCEED;       /* Return value */
@@ -1370,8 +1370,8 @@ H5AC_mark_entry_serialized(void *thing)
     char          	trace[128] = "";
     FILE *        	trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;              /* TRUE if logging was set up */
-    hbool_t curr_logging;             /* TRUE if currently logging */
+    hbool_t log_enabled = false;              /* TRUE if logging was set up */
+    hbool_t curr_logging = false;             /* TRUE if currently logging */
     H5AC_info_t *entry_ptr = NULL;    /* Pointer to the cache entry */
     H5C_t *cache_ptr = NULL;          /* Pointer to the entry's associated metadata cache */
     herr_t ret_value = SUCCEED;       /* Return value */
@@ -1445,8 +1445,8 @@ H5_ATTR_UNUSED
 #ifdef H5_HAVE_PARALLEL
     H5AC_aux_t        *aux_ptr;
 #endif /* H5_HAVE_PARALLEL */
-    hbool_t log_enabled;           /* TRUE if logging was set up */
-    hbool_t curr_logging;          /* TRUE if currently logging */
+    hbool_t log_enabled = false;           /* TRUE if logging was set up */
+    hbool_t curr_logging = false;          /* TRUE if currently logging */
     herr_t ret_value = SUCCEED;    /* Return value */
 
     FUNC_ENTER_NOAPI(FAIL)
@@ -1525,8 +1525,8 @@ H5AC_pin_protected_entry(void *thing)
     char        trace[128] = "";
     FILE *      trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;                /* TRUE if logging was set up */
-    hbool_t curr_logging;               /* TRUE if currently logging */
+    hbool_t log_enabled = false;                /* TRUE if logging was set up */
+    hbool_t curr_logging = false;               /* TRUE if currently logging */
     H5AC_info_t *entry_ptr = NULL;      /* Pointer to the cache entry */
     H5C_t *cache_ptr = NULL;            /* Pointer to the entry's associated metadata cache */
     herr_t      ret_value = SUCCEED;    /* Return value */
@@ -1630,8 +1630,8 @@ H5AC_create_flush_dependency(void * parent_thing, void * child_thing)
     char        trace[128] = "";
     FILE *      trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;                /* TRUE if logging was set up */
-    hbool_t curr_logging;               /* TRUE if currently logging */
+    hbool_t log_enabled = false;                /* TRUE if logging was set up */
+    hbool_t curr_logging = false;               /* TRUE if currently logging */
     H5AC_info_t *entry_ptr = NULL;      /* Pointer to the cache entry */
     H5C_t *cache_ptr = NULL;            /* Pointer to the entry's associated metadata cache */
     herr_t      ret_value = SUCCEED;    /* Return value */
@@ -1710,8 +1710,8 @@ H5AC_protect(H5F_t *f, hid_t dxpl_id, const H5AC_class_t *type, haddr_t addr,
     FILE *              trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
     void *              thing = NULL;           /* Pointer to native data structure for entry */
-    hbool_t             log_enabled;            /* TRUE if logging was set up */
-    hbool_t             curr_logging;           /* TRUE if currently logging */
+    hbool_t             log_enabled = false;            /* TRUE if logging was set up */
+    hbool_t             curr_logging = false;           /* TRUE if currently logging */
     void *              ret_value = NULL;       /* Return value */
 
     FUNC_ENTER_NOAPI(NULL)
@@ -1808,8 +1808,8 @@ H5AC_resize_entry(void *thing, size_t new_size)
     char          	trace[128] = "";
     FILE *        	trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;              /* TRUE if logging was set up */
-    hbool_t curr_logging;             /* TRUE if currently logging */
+    hbool_t log_enabled = false;              /* TRUE if logging was set up */
+    hbool_t curr_logging = false;             /* TRUE if currently logging */
     H5AC_info_t *entry_ptr = NULL;    /* Pointer to the cache entry */
     H5C_t *cache_ptr = NULL;          /* Pointer to the entry's associated metadata cache */
     herr_t ret_value = SUCCEED;       /* Return value */
@@ -1888,8 +1888,8 @@ H5AC_unpin_entry(void *thing)
     char                trace[128] = "";
     FILE *              trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;              /* TRUE if logging was set up */
-    hbool_t curr_logging;             /* TRUE if currently logging */
+    hbool_t log_enabled = false;              /* TRUE if logging was set up */
+    hbool_t curr_logging = false;             /* TRUE if currently logging */
     H5AC_info_t *entry_ptr = NULL;    /* Pointer to the cache entry */
     H5C_t *cache_ptr = NULL;          /* Pointer to the entry's associated metadata cache */
     herr_t      ret_value = SUCCEED;    /* Return value */
@@ -1954,8 +1954,8 @@ H5AC_destroy_flush_dependency(void * parent_thing, void * child_thing)
     char                trace[128] = "";
     FILE *              trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;                /* TRUE if logging was set up */
-    hbool_t curr_logging;               /* TRUE if currently logging */
+    hbool_t log_enabled = false;                /* TRUE if logging was set up */
+    hbool_t curr_logging = false;               /* TRUE if currently logging */
     H5AC_info_t *entry_ptr = NULL;      /* Pointer to the cache entry */
     H5C_t *cache_ptr = NULL;            /* Pointer to the entry's associated metadata cache */
     herr_t      ret_value = SUCCEED;    /* Return value */
@@ -2051,8 +2051,8 @@ H5AC_unprotect(H5F_t *f, hid_t dxpl_id, const H5AC_class_t *type, haddr_t addr,
 #ifdef H5_HAVE_PARALLEL
     H5AC_aux_t        * aux_ptr = NULL;
 #endif /* H5_HAVE_PARALLEL */
-    hbool_t log_enabled;              /* TRUE if logging was set up */
-    hbool_t curr_logging;             /* TRUE if currently logging */
+    hbool_t log_enabled = false;              /* TRUE if logging was set up */
+    hbool_t curr_logging = false;             /* TRUE if currently logging */
     herr_t              ret_value=SUCCEED;      /* Return value */
 
     FUNC_ENTER_NOAPI(FAIL)
@@ -2333,8 +2333,8 @@ H5AC_set_cache_auto_resize_config(H5AC_t *cache_ptr, H5AC_cache_config_t *config
     H5AC_cache_config_t trace_config = H5AC__DEFAULT_CACHE_CONFIG;
     FILE *              trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;                /* TRUE if logging was set up */
-    hbool_t curr_logging;               /* TRUE if currently logging */
+    hbool_t log_enabled = false;                /* TRUE if logging was set up */
+    hbool_t curr_logging = false;               /* TRUE if currently logging */
     H5C_auto_size_ctl_t internal_config;
     herr_t  ret_value = SUCCEED;      	/* Return value */
 
@@ -3267,8 +3267,8 @@ H5AC_remove_entry(void *_entry)
     char                trace[128] = "";
     FILE *              trace_file_ptr = NULL;
 #endif /* H5AC__TRACE_FILE_ENABLED */
-    hbool_t log_enabled;                /* TRUE if logging was set up */
-    hbool_t curr_logging;               /* TRUE if currently logging */
+    hbool_t log_enabled = false;                /* TRUE if logging was set up */
+    hbool_t curr_logging = false;               /* TRUE if currently logging */
     herr_t ret_value = SUCCEED;         /* Return value */
 
     FUNC_ENTER_NOAPI(FAIL)

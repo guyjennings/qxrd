@@ -11814,7 +11814,7 @@ _cbf_pilatusAxis2nexusAxisAttrs(h4data,units,depends_on,exsisItem,cmp)
 
             hsize_t memtype = 0;
 
-            char * attribtextbuffer;
+            char * attribtextbuffer = NULL;
 
             cbf_h5reportneg(attribid = H5Aopen(hid, attribname, H5P_DEFAULT),CBF_H5ERROR,errorcode);
 

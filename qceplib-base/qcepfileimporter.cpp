@@ -72,7 +72,7 @@ static bool isTIFF(QString path)
 #endif
 }
 
-static bool isText(QString path)
+static bool isText(QString /*path*/)
 {
   return true;
 }

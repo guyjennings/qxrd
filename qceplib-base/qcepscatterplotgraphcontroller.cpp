@@ -47,7 +47,7 @@ void QcepScatterPlotGraphController::activate()
 }
 
 void QcepScatterPlotGraphController::onPlotDataChanged(
-    const QModelIndex &topLeft, const QModelIndex &bottomRight)
+    const QModelIndex & /*topLeft*/, const QModelIndex & /*bottomRight*/)
 {
 //  QcepExperimentPtr exp(m_Window->experiment());
 

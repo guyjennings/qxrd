@@ -79,8 +79,8 @@ QcepImageDataFormat<T>* QcepImageDataFormatCBF<T>::loadFile(QString path, QcepIm
             if (status == 0) {
               img->resize(dim1, dim2);
 
-              for (int y=0; y<dim2; y++) {
-                for (int x=0; x<dim1; x++) {
+              for (size_t y=0; y<dim2; y++) {
+                for (size_t x=0; x<dim1; x++) {
                   img->setValue(x,y,array[y*dim1+x]);
                 }
               }
@@ -99,7 +99,7 @@ QcepImageDataFormat<T>* QcepImageDataFormatCBF<T>::loadFile(QString path, QcepIm
 }
 
 template <typename T>
-QcepImageDataFormat<T>* QcepImageDataFormatCBF<T>::saveFile(QString path, QcepImageData<T> *img, int canOverwrite)
+QcepImageDataFormat<T>* QcepImageDataFormatCBF<T>::saveFile(QString /*path*/, QcepImageData<T> * /*img*/, int /*canOverwrite*/)
 {
   return NULL;
 }

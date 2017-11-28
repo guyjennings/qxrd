@@ -9,7 +9,7 @@ QcepDataColumnScanSpreadsheetModel::QcepDataColumnScanSpreadsheetModel
 
 }
 
-int QcepDataColumnScanSpreadsheetModel::rowCount(const QModelIndex &parent) const
+int QcepDataColumnScanSpreadsheetModel::rowCount(const QModelIndex & /*parent*/) const
 {
   QcepDataColumnScanPtr scan(m_Scan);
 
@@ -20,7 +20,7 @@ int QcepDataColumnScanSpreadsheetModel::rowCount(const QModelIndex &parent) cons
   }
 }
 
-int QcepDataColumnScanSpreadsheetModel::columnCount(const QModelIndex &parent) const
+int QcepDataColumnScanSpreadsheetModel::columnCount(const QModelIndex & /*parent*/) const
 {
   QcepDataColumnScanPtr scan(m_Scan);
 

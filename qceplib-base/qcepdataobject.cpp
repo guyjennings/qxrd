@@ -200,7 +200,7 @@ QString QcepDataObject::uniqueFileName(QString name)
   }
 }
 
-void QcepDataObject::saveData(QString &name, QString filter, Overwrite canOverwrite)
+void QcepDataObject::saveData(QString & /*name*/, QString /*filter*/, Overwrite /*canOverwrite*/)
 {
 }
 
@@ -245,12 +245,12 @@ int QcepDataObject::columnCount() const
   return 0;
 }
 
-QcepDataObjectPtr QcepDataObject::item(int n)
+QcepDataObjectPtr QcepDataObject::item(int /*n*/)
 {
   return QcepDataObjectPtr();
 }
 
-QcepDataObjectPtr QcepDataObject::item(QString nm)
+QcepDataObjectPtr QcepDataObject::item(QString /*nm*/)
 {
   return QcepDataObjectPtr();
 }

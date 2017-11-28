@@ -69,11 +69,11 @@ void QcepFileImporterText::processLine(QString aLine)
   }
 }
 
-void QcepFileImporterText::processFile(QString aLine)
+void QcepFileImporterText::processFile(QString /*aLine*/)
 {
 }
 
-void QcepFileImporterText::processEpoch(QString aLine)
+void QcepFileImporterText::processEpoch(QString /*aLine*/)
 {
 }
 
@@ -97,7 +97,7 @@ void QcepFileImporterText::processScan(QString aLine)
   }
 }
 
-void QcepFileImporterText::processDate(QString aLine)
+void QcepFileImporterText::processDate(QString /*aLine*/)
 {
 }
 
@@ -124,15 +124,15 @@ void QcepFileImporterText::processColumnNames(QString aLine)
   }
 }
 
-void QcepFileImporterText::processCountTime(QString aLine)
+void QcepFileImporterText::processCountTime(QString /*aLine*/)
 {
 }
 
-void QcepFileImporterText::processComment(QString aLine)
+void QcepFileImporterText::processComment(QString /*aLine*/)
 {
 }
 
-void QcepFileImporterText::processHeaderLine(QString aLine)
+void QcepFileImporterText::processHeaderLine(QString /*aLine*/)
 {
 }
 

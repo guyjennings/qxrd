@@ -8,7 +8,7 @@ QcepIntegratedDataSpreadsheetModel::QcepIntegratedDataSpreadsheetModel
 
 }
 
-int QcepIntegratedDataSpreadsheetModel::rowCount(const QModelIndex &parent) const
+int QcepIntegratedDataSpreadsheetModel::rowCount(const QModelIndex & /*parent*/) const
 {
   QcepIntegratedDataPtr integ(m_Integrated);
 
@@ -19,7 +19,7 @@ int QcepIntegratedDataSpreadsheetModel::rowCount(const QModelIndex &parent) cons
   }
 }
 
-int QcepIntegratedDataSpreadsheetModel::columnCount(const QModelIndex &parent) const
+int QcepIntegratedDataSpreadsheetModel::columnCount(const QModelIndex & /*parent*/) const
 {
   return 2;
 }

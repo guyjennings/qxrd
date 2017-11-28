@@ -58,9 +58,11 @@ static double moduleGain(double *parms, int i, int j)
   } else {
     printf("moduleGain(%d,%d) overflow [%d]", i,j,n);
   }
+
+  return qQNaN();
 }
 
-static void staticFitPanelGains(double *parm, double *xv, int nparm, int nxv, void *adata)
+static void staticFitPanelGains(double *parm, double *xv, int /*nparm*/, int nxv, void *adata)
 {
   printf ("Module Gains\n");
   for (int j=0; j<nv; j++) {
@@ -151,7 +153,7 @@ static void staticFitPanelGains(double *parm, double *xv, int nparm, int nxv, vo
       printf("ix (%d) != nxv (%d)", ix, nxv);
     }
 
-    double sumsq;
+    double sumsq = 0;
 
     for (int i=0; i<ix; i++) {
       sumsq += pow(xv[i],2);

@@ -16,11 +16,11 @@ void QcepFileFormatterHDF::endWriteFile()
 {
 }
 
-void QcepFileFormatterHDF::writeComment(QString cmt)
+void QcepFileFormatterHDF::writeComment(QString /*cmt*/)
 {
 }
 
-void QcepFileFormatterHDF::beginWriteObject(QString objectName, QString className)
+void QcepFileFormatterHDF::beginWriteObject(QString /*objectName*/, QString /*className*/)
 {
 }
 
@@ -32,7 +32,7 @@ void QcepFileFormatterHDF::beginWriteProperties()
 {
 }
 
-void QcepFileFormatterHDF::writeProperty(QString name, QVariant val)
+void QcepFileFormatterHDF::writeProperty(QString /*name*/, QVariant /*val*/)
 {
 }
 
@@ -69,7 +69,7 @@ QcepSerializableObjectPtr QcepFileFormatterHDF::nextObject()
   return QcepSerializableObjectPtr();
 }
 
-void QcepFileFormatterHDF::beginReadObject(QcepSerializableObjectPtr obj)
+void QcepFileFormatterHDF::beginReadObject(QcepSerializableObjectPtr /*obj*/)
 {
 }
 

@@ -8,7 +8,7 @@ QcepDataArraySpreadsheetModel::QcepDataArraySpreadsheetModel
 
 }
 
-int QcepDataArraySpreadsheetModel::rowCount(const QModelIndex &parent) const
+int QcepDataArraySpreadsheetModel::rowCount(const QModelIndex & /*parent*/) const
 {
   QcepDataArrayPtr array(m_Array);
 
@@ -21,7 +21,7 @@ int QcepDataArraySpreadsheetModel::rowCount(const QModelIndex &parent) const
   }
 }
 
-int QcepDataArraySpreadsheetModel::columnCount(const QModelIndex &parent) const
+int QcepDataArraySpreadsheetModel::columnCount(const QModelIndex & /*parent*/) const
 {
   QcepDataArrayPtr array(m_Array);
 
@@ -34,7 +34,7 @@ int QcepDataArraySpreadsheetModel::columnCount(const QModelIndex &parent) const
   }
 }
 
-QVariant QcepDataArraySpreadsheetModel::data(const QModelIndex &index, int role) const
+QVariant QcepDataArraySpreadsheetModel::data(const QModelIndex & /*index*/, int /*role*/) const
 {
   return QVariant();
 }

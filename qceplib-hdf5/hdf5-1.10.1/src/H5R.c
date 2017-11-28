@@ -654,7 +654,7 @@ H5R_get_region(H5F_t *file, hid_t dxpl_id, const void *_ref)
     const uint8_t *p;           /* Pointer to OID to store */
     H5HG_t hobjid;              /* Heap object ID */
     uint8_t *buf = NULL;        /* Buffer to store serialized selection in */
-    H5S_t *ret_value;
+    H5S_t *ret_value = NULL;
 
     FUNC_ENTER_NOAPI_NOINIT
 

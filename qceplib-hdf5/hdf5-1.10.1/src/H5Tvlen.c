@@ -800,7 +800,7 @@ static htri_t
 H5T_vlen_disk_isnull(const H5F_t *f, void *_vl)
 {
     uint8_t *vl = (uint8_t *)_vl; /* Pointer to the disk VL information */
-    haddr_t addr;               /* Sequence's heap address */
+    haddr_t addr = 0;               /* Sequence's heap address */
 
     FUNC_ENTER_NOAPI_NOINIT_NOERR
 

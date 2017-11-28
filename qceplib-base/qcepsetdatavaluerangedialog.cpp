@@ -79,7 +79,7 @@ void QcepSetDataValueRangeDialog::changeEvent(QEvent *e)
   }
 }
 
-void QcepSetDataValueRangeDialog::onRegionTypeChanged(int newChoice)
+void QcepSetDataValueRangeDialog::onRegionTypeChanged(int /*newChoice*/)
 {
 }
 

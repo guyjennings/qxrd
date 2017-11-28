@@ -410,7 +410,7 @@ QcepSerializableObjectPtr QcepFileFormatterText::nextObject()
   return obj;
 }
 
-void QcepFileFormatterText::beginReadObject(QcepSerializableObjectPtr obj)
+void QcepFileFormatterText::beginReadObject(QcepSerializableObjectPtr /*obj*/)
 {
   nextToken();
 }

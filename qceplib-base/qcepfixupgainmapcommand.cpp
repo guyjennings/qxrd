@@ -225,7 +225,7 @@ QcepDoubleImageDataPtr QcepFixupGainMapCommand::generateAveragedDiff(QcepDoubleI
   return res;
 }
 
-static void staticFitParaboloid(double *parm, double *xv, int m, int n, void *adata)
+static void staticFitParaboloid(double *parm, double *xv, int m, int /*n*/, void *adata)
 {
   QcepDoubleImageData *data = (QcepDoubleImageData*) adata;
 

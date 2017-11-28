@@ -236,7 +236,7 @@ QString QcepObject::changedBy() const
   }
 }
 
-void QcepObject::setChanged(int ct)
+void QcepObject::setChanged(int /*ct*/)
 {
   m_ChangeCount.fetchAndStoreOrdered(0);
 }
@@ -534,11 +534,11 @@ QString QcepObject::settingsScript()
 
 QString QcepObject::toScriptLiteral(QVariant v)
 {
-  if (v.type() == QMetaType::QString) {
+  if (v.type() == QVariant::Type(QMetaType::QString)) {
     return "\"" + addSlashes(v.toString()) + "\"";
   }
 
-  else if (v.type() == QMetaType::QStringList) {
+  else if (v.type() == QVariant::Type(QMetaType::QStringList)) {
     QStringList l = v.toStringList();
     QString res = "@QStringList(";
     for(int i=0; i<l.length(); i++) {
@@ -551,21 +551,21 @@ QString QcepObject::toScriptLiteral(QVariant v)
     return res;
   }
 
-  else if (v.type() == QMetaType::QPointF) {
+  else if (v.type() == QVariant::Type(QMetaType::QPointF)) {
     QPointF p = v.toPointF();
     return tr("@QPointF(%1,%2)").arg(p.x()).arg(p.y());
   }
 
-  else if (v.type() == QMetaType::QByteArray) {
+  else if (v.type() == QVariant::Type(QMetaType::QByteArray)) {
     QByteArray comp = qCompress(v.toByteArray());
     return tr("@QByteArray(\"%1\")").arg(QString(comp.toBase64()));
   }
 
-  else if (v.type() == QMetaType::QDateTime) {
+  else if (v.type() == QVariant::Type(QMetaType::QDateTime)) {
     return tr("@QDateTime(\"%1\")").arg(v.toString());
   }
 
-  else if (v.type() == QMetaType::QDate) {
+  else if (v.type() == QVariant::Type(QMetaType::QDate)) {
     return tr("@QDate(\"%1\")").arg(v.toString());
   }
 
@@ -580,7 +580,7 @@ QString QcepObject::toScriptLiteral(QVariant v)
   }
 }
 
-QVariant QcepObject::fromScriptLiteral(QString lit)
+QVariant QcepObject::fromScriptLiteral(QString /*lit*/)
 {
   return QVariant();
 }

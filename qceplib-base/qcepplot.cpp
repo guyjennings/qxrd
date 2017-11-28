@@ -270,14 +270,14 @@ void QcepPlot::enableMeasuring()
   m_Measurer -> setEnabled(true);
 }
 
-void QcepPlot::onLegendClicked(const QVariant &itemInfo, int index)
+void QcepPlot::onLegendClicked(const QVariant & /*itemInfo*/, int /*index*/)
 {
 //  if (g_Application) {
 //    g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1,%2)").arg(itemInfo.toString()).arg(index));
 //  }
 }
 
-void QcepPlot::onLegendChecked(const QVariant &itemInfo, bool on, int index)
+void QcepPlot::onLegendChecked(const QVariant &itemInfo, bool on, int /*index*/)
 {
 //  if (g_Application) {
 //    g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2,%3)").arg(itemInfo.toString()).arg(on).arg(index));

@@ -55,7 +55,7 @@ void QcepDatasetModel::printMessage(QString msg, QDateTime dt) const
   }
 }
 
-void QcepDatasetModel::setDataset(QcepDatasetPtr ds)
+void QcepDatasetModel::setDataset(QcepDatasetPtr /*ds*/)
 {
   printMessage("Need to write QcepDatasetModel::setDataset");
 }
