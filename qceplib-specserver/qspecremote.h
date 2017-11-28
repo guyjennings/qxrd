@@ -19,7 +19,7 @@ public:
   int close();
   int abort();
 
-  int connectToHost (const QString &host, const QString &portname=QString::null);
+  int connectToHost (const QString &host, const QString &portname=QString());
   int sendHello();
   QVariant getProperty(const QString &prop);
   void     watchProperty(const QString &prop);
