@@ -6,6 +6,7 @@
 #include "qxrddetectorsettingsdexela-ptr.h"
 #include <QTimer>
 
+//TODO: move to plugin
 class QXRD_EXPORT QxrdDetectorDriverDexela : public QxrdDetectorDriver
 {
   Q_OBJECT

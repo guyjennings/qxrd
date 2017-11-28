@@ -6,6 +6,7 @@
 #include "qxrddetectorsettingssimulated-ptr.h"
 #include <QTimer>
 
+//TODO: move to plugin
 class QXRD_EXPORT QxrdDetectorDriverSimulated : public QxrdDetectorDriver
 {
   Q_OBJECT

@@ -9,6 +9,7 @@
 #include <QPointer>
 #include "qxrdintegrationwindowsettings-ptr.h"
 
+//TODO: implement
 class QXRD_EXPORT QxrdIntegrationWindow : public QxrdMainWindow, public Ui::QxrdIntegrationWindow
 {
   Q_OBJECT

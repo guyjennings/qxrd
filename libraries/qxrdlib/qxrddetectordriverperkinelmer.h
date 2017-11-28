@@ -14,6 +14,7 @@
 #include "qxrdperkinelmerplugininterface-ptr.h"
 #endif
 
+//TODO: move to plugin
 class QXRD_EXPORT QxrdDetectorDriverPerkinElmer : public QxrdDetectorDriver
 {
   Q_OBJECT

@@ -20,6 +20,7 @@
 #include "qcepdatagroup-ptr.h"
 #include "qcepintegrateddata-ptr.h"
 
+//TODO: replace QxrdScriptEngine with QxrdJSEngine
 class QXRD_EXPORT QxrdJSEngine : public QQmlEngine
 {
   Q_OBJECT

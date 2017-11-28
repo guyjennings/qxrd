@@ -5,6 +5,7 @@
 #include "qxrdmainwindow.h"
 #include "ui_qxrdanalysiswindow.h"
 
+//TODO: implement
 class QXRD_EXPORT QxrdAnalysisWindow : public QxrdMainWindow, public Ui::QxrdAnalysisWindow
 {
   Q_OBJECT

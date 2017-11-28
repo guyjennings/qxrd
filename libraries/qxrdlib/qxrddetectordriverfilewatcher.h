@@ -5,6 +5,7 @@
 #include "qxrddetectordriver.h"
 #include "qxrddetectorsettingsfilewatcher-ptr.h"
 
+//TODO: move to plugin
 class QXRD_EXPORT QxrdDetectorDriverFileWatcher : public QxrdDetectorDriver
 {
   Q_OBJECT

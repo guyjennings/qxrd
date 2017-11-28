@@ -7,6 +7,7 @@
 #include "qxrddetectorpilatusremote-ptr.h"
 #include "qxrddetectorsettingspilatus-ptr.h"
 
+//TODO: move to plugin
 class QXRD_EXPORT QxrdDetectorDriverPilatus : public QxrdDetectorDriver
 {
   Q_OBJECT

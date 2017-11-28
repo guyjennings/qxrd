@@ -12,6 +12,7 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdcalibrantwindowsettings-ptr.h"
 
+//TODO: implement
 class QXRD_EXPORT QxrdCalibrantWindow : public QxrdMainWindow, public Ui::QxrdCalibrantWindow
 {
   Q_OBJECT

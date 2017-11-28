@@ -6,6 +6,7 @@
 #include "ui_qxrdmaskingwindow.h"
 #include "qxrdmaskingwindowsettings-ptr.h"
 
+//TODO: implement
 class QXRD_EXPORT QxrdMaskingWindow : public QxrdMainWindow, public Ui::QxrdMaskingWindow
 {
   Q_OBJECT

@@ -756,7 +756,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QcepUInt32ImageDataPtr image, Qcep
 {
   if (image && accum && overflow) {
     long nPixels = image->get_Height()*image->get_Width();
-    int ovflwlvl = get_OverflowLevel();
+    quint32 ovflwlvl = get_OverflowLevel();
     quint32* src = image->data();
     quint32* dst = accum->data();
     short int* ovf = overflow->data();

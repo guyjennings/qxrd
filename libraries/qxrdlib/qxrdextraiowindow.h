@@ -10,6 +10,7 @@
 #include "qxrdacquisitionextrainputschannel-ptr.h"
 #include "qxrdextraiowindowsettings-ptr.h"
 
+//TODO: implement
 class QXRD_EXPORT QxrdExtraIOWindow : public QxrdMainWindow, public Ui::QxrdExtraIOWindow
 {
   Q_OBJECT

@@ -512,12 +512,6 @@ private:
   QxrdHistogramDataPtr   calculateHistogram(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
 
 private:
-  QxrdResultSerializer<QcepDoubleImageDataPtr>  m_CorrectedImages;
-  QxrdResultSerializer<QcepIntegratedDataPtr>   m_IntegratedData;
-  QxrdResultSerializer<QxrdROIDataPtr>          m_ROIData;
-  QxrdResultSerializer<QxrdHistogramDataPtr>    m_HistogramData;
-
-private:
   mutable QMutex         m_Mutex;
 
 protected:
@@ -545,6 +539,12 @@ protected:
   QxrdGenerateTestImagePtr m_GenerateTestImage;
 
   QcepIntegratedDataPtr m_OutputScan;
+
+private:
+  QxrdResultSerializer<QcepDoubleImageDataPtr>  m_CorrectedImages;
+  QxrdResultSerializer<QcepIntegratedDataPtr>   m_IntegratedData;
+  QxrdResultSerializer<QxrdROIDataPtr>          m_ROIData;
+  QxrdResultSerializer<QxrdHistogramDataPtr>    m_HistogramData;
 };
 
 Q_DECLARE_METATYPE(QxrdDataProcessor*)

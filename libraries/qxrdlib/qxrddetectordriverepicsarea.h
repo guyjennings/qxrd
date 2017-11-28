@@ -5,6 +5,7 @@
 #include "qxrddetectordriver.h"
 #include "qxrddetectorsettingsepicsarea-ptr.h"
 
+//TODO: move to plugin
 class QXRD_EXPORT QxrdDetectorDriverEpicsArea : public QxrdDetectorDriver
 {
   Q_OBJECT

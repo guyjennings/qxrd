@@ -21,6 +21,7 @@
 
 #include "Acq.h"
 
+//TODO: move to plugin
 class QxrdPerkinElmerPluginInterface : public QxrdNamedPluginInterface {
 public:
 //  virtual ~QxrdPerkinElmerPluginInterface();

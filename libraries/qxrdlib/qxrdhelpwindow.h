@@ -6,6 +6,7 @@
 #include "ui_qxrdhelpwindow.h"
 #include "qxrdhelpwindowsettings-ptr.h"
 
+//TODO: implement
 class QXRD_EXPORT QxrdHelpWindow : public QxrdMainWindow, public Ui::QxrdHelpWindow
 {
   Q_OBJECT

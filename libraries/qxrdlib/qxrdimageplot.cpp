@@ -1478,8 +1478,8 @@ void QxrdImagePlot::updateROIDisplay()
   replot();
 }
 
-void QxrdImagePlot::roiDataChanged(const QModelIndex &topLeft,
-                                   const QModelIndex &bottomRight,
+void QxrdImagePlot::roiDataChanged(const QModelIndex & /*topLeft*/,
+                                   const QModelIndex & bottomRight,
                                    const QVector<int> & /*roles*/)
 {
 //  int t = topLeft.row();

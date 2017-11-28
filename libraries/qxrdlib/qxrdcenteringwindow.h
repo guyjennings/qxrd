@@ -6,6 +6,7 @@
 #include "ui_qxrdcenteringwindow.h"
 #include "qxrdcenteringwindowsettings-ptr.h"
 
+//TODO: implement
 class QXRD_EXPORT QxrdCenteringWindow : public QxrdMainWindow, public Ui::QxrdCenteringWindow
 {
   Q_OBJECT

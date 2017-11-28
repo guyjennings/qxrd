@@ -8,6 +8,7 @@
 #include <QVector>
 #include "qxrddetectorconfigurationdialog.h"
 
+//TODO: replace by class-defined dialogs
 class QXRD_EXPORT QxrdDetectorProxy : public QcepObject
 {
   Q_OBJECT

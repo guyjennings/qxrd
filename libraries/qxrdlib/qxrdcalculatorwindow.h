@@ -6,6 +6,7 @@
 #include "ui_qxrdcalculatorwindow.h"
 #include "qxrdcalculatorwindowsettings-ptr.h"
 
+//TODO: implement
 class QXRD_EXPORT QxrdCalculatorWindow : public QxrdMainWindow, public Ui::QxrdCalculatorWindow
 {
   Q_OBJECT

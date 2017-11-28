@@ -6,6 +6,7 @@
 #include "ui_qxrdscriptingwindow.h"
 #include "qxrdscriptingwindowsettings-ptr.h"
 
+//TODO: implement
 class QXRD_EXPORT QxrdScriptingWindow : public QxrdMainWindow, public Ui::QxrdScriptingWindow
 {
   Q_OBJECT

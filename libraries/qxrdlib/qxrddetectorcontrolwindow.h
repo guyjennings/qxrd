@@ -15,6 +15,7 @@
 
 #define QXRD_DETECTOR_WINDOW_STATE_VERSION 0
 
+//TODO: implement
 class QXRD_EXPORT QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::QxrdDetectorControlWindow
 {
   Q_OBJECT

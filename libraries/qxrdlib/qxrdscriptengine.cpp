@@ -497,30 +497,31 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
       acq -> set_PreTriggerFiles(0);
     }
 
-    switch (nArgs) {
-    default:
-
-    case 6:
+    if (nArgs >= 6) {
       acq -> set_PhasesInGroup(context -> argument(5).toUInt32());
-
-    case 5:
-      acq -> set_PreTriggerFiles(context -> argument(4).toUInt32());
-
-    case 4:
-      acq -> set_PostTriggerFiles(context -> argument(3).toUInt32());
-
-    case 3:
-      acq -> set_SummedExposures(context -> argument(2).toUInt32());
-
-    case 2:
-      acq -> set_ExposureTime(context -> argument(1).toNumber());
-
-    case 1:
-      acq -> set_FilePattern(context -> argument(0).toString());
-
-    case 0:
-      acq->acquire();
     }
+
+    if (nArgs >= 5) {
+      acq -> set_PreTriggerFiles(context -> argument(4).toUInt32());
+    }
+
+    if (nArgs >= 4) {
+      acq -> set_PostTriggerFiles(context -> argument(3).toUInt32());
+    }
+
+    if (nArgs >= 3) {
+      acq -> set_SummedExposures(context -> argument(2).toUInt32());
+    }
+
+    if (nArgs >= 2) {
+      acq -> set_ExposureTime(context -> argument(1).toNumber());
+    }
+
+    if (nArgs >= 1) {
+      acq -> set_FilePattern(context -> argument(0).toString());
+    }
+
+    acq->acquire();
 
     if (qcepDebug(DEBUG_ACQUIRETIME)) {
       acq->printMessage(tr("acquire call took %1 msec").arg(tick.elapsed()));
@@ -564,20 +565,19 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
 
     int nArgs = context->argumentCount();
 
-    switch (nArgs) {
-    default:
-    case 3:
+    if (nArgs >= 3) {
       acq -> set_DarkSummedExposures(context -> argument(2).toUInt32());
-
-    case 2:
-      acq -> set_ExposureTime(context -> argument(1).toNumber());
-
-    case 1:
-      acq -> set_FilePattern(context -> argument(0).toString());
-
-    case 0:
-      acq -> acquireDark();
     }
+
+    if (nArgs >= 2) {
+      acq -> set_ExposureTime(context -> argument(1).toNumber());
+    }
+
+    if (nArgs >= 1) {
+      acq -> set_FilePattern(context -> argument(0).toString());
+    }
+
+    acq -> acquireDark();
 
     if (qcepDebug(DEBUG_ACQUIRETIME)) {
       acq->printMessage(tr("acquireDark call took %1 msec").arg(tick.elapsed()));
@@ -621,20 +621,19 @@ QScriptValue QxrdScriptEngine::acquireOnceFunc(QScriptContext *context, QScriptE
 
     int nArgs = context->argumentCount();
 
-    switch (nArgs) {
-    default:
-    case 3:
+    if (nArgs >= 3) {
       acq -> set_SummedExposures(context -> argument(2).toUInt32());
-
-    case 2:
-      acq -> set_ExposureTime(context -> argument(1).toNumber());
-
-    case 1:
-      acq -> set_FilePattern(context -> argument(0).toString());
-
-    case 0:
-      acq -> acquireOnce();
     }
+
+    if (nArgs >= 2) {
+      acq -> set_ExposureTime(context -> argument(1).toNumber());
+    }
+
+    if (nArgs >= 1) {
+      acq -> set_FilePattern(context -> argument(0).toString());
+    }
+
+    acq -> acquireOnce();
 
     if (qcepDebug(DEBUG_ACQUIRETIME)) {
       acq->printMessage(tr("acquireOnce call took %1 msec").arg(tick.elapsed()));

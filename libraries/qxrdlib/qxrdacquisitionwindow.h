@@ -6,6 +6,7 @@
 #include "ui_qxrdacquisitionwindow.h"
 #include "qxrdacquisitionwindowsettings-ptr.h"
 
+//TODO: implement
 class QXRD_EXPORT QxrdAcquisitionWindow : public QxrdMainWindow, public Ui::QxrdAcquisitionWindow
 {
   Q_OBJECT

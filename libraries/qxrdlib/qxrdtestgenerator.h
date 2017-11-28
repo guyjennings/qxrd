@@ -8,6 +8,7 @@
 #include "qcepdatacolumnscan-ptr.h"
 #include <QTimer>
 
+//TODO: eliminate?
 class QXRD_EXPORT QxrdTestGenerator : public QcepSerializableObject
 {
   Q_OBJECT
