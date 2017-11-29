@@ -77,7 +77,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
 //            new QcepSettingsSaver(this))),
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
-  m_NIDAQPluginInterface(NULL),
+  m_NIDAQPlugin(NULL),
   #ifdef HAVE_PERKIN_ELMER
   m_PerkinElmerPluginInterface(NULL),
   #endif
@@ -115,6 +115,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
 
 bool QxrdApplication::init(int &argc, char **argv)
 {
+
   connect(this, &QCoreApplication::aboutToQuit, this, &QxrdApplication::finish);
 
   connect(&m_SplashTimer, &QTimer::timeout, this, &QxrdApplication::hideSplash);
@@ -355,7 +356,7 @@ QxrdPerkinElmerPluginInterfacePtr QxrdApplication::perkinElmerPlugin()
 
 QxrdNIDAQPluginInterfacePtr QxrdApplication::nidaqPlugin()
 {
-  return m_NIDAQPluginInterface;
+  return m_NIDAQPlugin;
 }
 
 #define xstr(s) str(s)
@@ -398,12 +399,37 @@ void QxrdApplication::loadPlugins()
         }
 
         QObject *plugin = loader.instance();
+        QString className = meta.value("className").toString();
 
         if (m_PluginInfo) {
           m_PluginInfo->appendEntry(fileName,
-                                    meta.value("className").toString(),
+                                    className,
                                     (plugin != NULL),
                                     (quint64) plugin);
+        }
+
+        if (className == "QxrdAreaDetectorPlugin") {
+          m_AreaDetectorPlugin =
+              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+        } else if (className == "QxrdCudaProcessorPlugin") {
+          m_CudaPlugin =
+              QxrdProcessorInterfacePtr(qobject_cast<QxrdProcessorInterface*>(plugin));
+        } else if (className == "QxrdDexelaDetectorPlugin") {
+          m_DexelaDetectorPlugin =
+              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+        } else if (className == "QxrdNIDAQPlugin") {
+          m_NIDAQPlugin =
+              QxrdNIDAQPluginInterfacePtr(qobject_cast<QxrdNIDAQPluginInterface*>(plugin));
+        } else if (className == "QxrdPerkinElmerPlugin") {
+          m_PerkinElmerDetectorPlugin =
+              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+        } else if (className == "QxrdPilatusPlugin") {
+          m_PilatusDetectorPlugin =
+              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+        } else if (className == "QxrdSimulatedDetectorPlugin") {
+          m_SimulatedDetectorPlugin =
+              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+        } else {
         }
 
         if (plugin) {
@@ -443,8 +469,8 @@ void QxrdApplication::loadPlugins()
           if (nidaq) {
             pluginName = nidaq -> name();
 
-            m_NIDAQPluginInterface = QxrdNIDAQPluginInterfacePtr(nidaq);
-            m_NIDAQPluginInterface -> setErrorOutput(this);
+            m_NIDAQPlugin = QxrdNIDAQPluginInterfacePtr(nidaq);
+            m_NIDAQPlugin -> setErrorOutput(this);
           }
 
           splashMessage(tr("Loaded plugin \"%1\"").arg(pluginName));

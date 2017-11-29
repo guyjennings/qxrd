@@ -445,7 +445,8 @@ HEADERS += qxrdlib.h\
     qxrdsliceplotwidget.h \
     qxrddetectorplotwidget.h \
     qxrdplugininfomodel.h \
-    qxrdplugininfomodel-ptr.h
+    qxrdplugininfomodel-ptr.h \
+    qxrdprocessorinterface-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

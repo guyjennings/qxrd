@@ -3,17 +3,28 @@
 
 QxrdPluginInfoModel::QxrdPluginInfoModel()
 {
+  m_ClassNames.resize(LastPlugin);
+  m_Loaded.resize(LastPlugin);
+  m_Addresses.resize(LastPlugin);
+  m_Paths.resize(LastPlugin);
 
+  m_ClassNames.replace(AreaDetectorPlugin,        "QxrdAreaDetectorPlugin");
+  m_ClassNames.replace(CudaPlugin,                "QxrdCudaProcessorPlugin");
+  m_ClassNames.replace(DexelaDetectorPlugin,      "QxrdDexelaDetectorPlugin");
+  m_ClassNames.replace(NIDAQPlugin,               "QxrdNIDAQPlugin");
+  m_ClassNames.replace(PerkinElmerDetectorPlugin, "QxrdPerkinElmerPlugin");
+  m_ClassNames.replace(PilatusDetectorPlugin,     "QxrdPilatusPlugin");
+  m_ClassNames.replace(SimulatedDetectorPlugin,   "QxrdSimulatedDetectorPlugin");
 }
 
 int QxrdPluginInfoModel::rowCount(const QModelIndex &parent) const
 {
-  return m_Paths.count();
+  return LastPlugin;
 }
 
 int QxrdPluginInfoModel::columnCount(const QModelIndex &parent) const
 {
-  return 5;
+  return LastColumn;
 }
 
 QVariant QxrdPluginInfoModel::data(const QModelIndex &index, int role) const
@@ -23,34 +34,40 @@ QVariant QxrdPluginInfoModel::data(const QModelIndex &index, int role) const
 
   if (role == Qt::DisplayRole) {
     switch (c) {
-    case 0:
+    case IndexColumn:
       return r;
       break;
 
-    case 1:
+    case FileNameColumn:
       return m_Paths.value(r);
       break;
 
-    case 2:
+    case ClassNameColumn:
       return m_ClassNames.value(r);
       break;
 
-//    case 4:
-//      break;
-
-    case 4:
-      return tr("0x%1").arg(m_Addresses.value(r),2*sizeof(void*), 16, QChar('0'));
+    case AddressColumn:
+      if (m_Addresses.value(r)) {
+        return tr("0x%1").arg(m_Addresses.value(r),2*sizeof(void*), 16, QChar('0'));
+      } else {
+        return "- N/A -";
+      }
       break;
     }
   }
 
   if (role == Qt::DecorationRole) {
-    if (c == 3) {
+    if (c == LoadedColumn) {
       if (m_Loaded.value(r)) {
         return QIcon(":/images/button_ok.png");
       }
     }
   }
+
+//  if (role == Qt::TextAlignmentRole) {
+//    return Qt::AlignCenter;
+//  }
+
   return QVariant();
 }
 
@@ -59,23 +76,23 @@ QVariant QxrdPluginInfoModel::headerData(int section, Qt::Orientation orientatio
   if (role == Qt::DisplayRole) {
     if (orientation == Qt::Horizontal) {
       switch (section) {
-      case 0:
+      case IndexColumn:
         return "#";
         break;
 
-      case 1:
+      case FileNameColumn:
         return "File";
         break;
 
-      case 2:
+      case ClassNameColumn:
         return "Class";
         break;
 
-      case 3:
+      case LoadedColumn:
         return "LD?";
         break;
 
-      case 4:
+      case AddressColumn:
         return "Address";
         break;
       }
@@ -95,8 +112,28 @@ void QxrdPluginInfoModel::appendEntry(QString path,
                                       int     loaded,
                                       quint64 address)
 {
-  m_Paths.append(path);
-  m_ClassNames.append(className);
-  m_Loaded.append(loaded);
-  m_Addresses.append(address);
+  int index = -1;
+
+  if (className == "QxrdAreaDetectorPlugin") {
+    index = AreaDetectorPlugin;
+  } else if (className == "QxrdCudaProcessorPlugin") {
+    index = CudaPlugin;
+  } else if (className == "QxrdDexelaDetectorPlugin") {
+    index = DexelaDetectorPlugin;
+  } else if (className == "QxrdNIDAQPlugin") {
+    index = NIDAQPlugin;
+  } else if (className == "QxrdPerkinElmerPlugin") {
+    index = PerkinElmerDetectorPlugin;
+  } else if (className == "QxrdPilatusPlugin") {
+    index = PilatusDetectorPlugin;
+  } else if (className == "QxrdSimulatedDetectorPlugin") {
+    index = SimulatedDetectorPlugin;
+  }
+
+  if (index >= 0) {
+    m_Paths.replace(index, path);
+    m_ClassNames.replace(index, className);
+    m_Loaded.replace(index, loaded);
+    m_Addresses.replace(index, address);
+  }
 }

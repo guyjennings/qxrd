@@ -20,13 +20,33 @@ public:
 
   Qt::ItemFlags flags(const QModelIndex &index) const override;
 
+  enum {
+    NIDAQPlugin,
+    CudaPlugin,
+    SimulatedDetectorPlugin,
+    PerkinElmerDetectorPlugin,
+    DexelaDetectorPlugin,
+    PilatusDetectorPlugin,
+    AreaDetectorPlugin,
+    LastPlugin
+  };
+
+  enum {
+    IndexColumn,
+    LoadedColumn,
+    ClassNameColumn,
+    AddressColumn,
+    FileNameColumn,
+    LastColumn
+  };
+
   void appendEntry(QString path, QString className, int loaded, quint64 address);
 
 private:
-  QStringList      m_Paths;
-  QStringList      m_ClassNames;
-  QVector<int>     m_Loaded;
-  QVector<quint64> m_Addresses;
+  QVector<QString>    m_Paths;
+  QVector<QString>    m_ClassNames;
+  QVector<int>        m_Loaded;
+  QVector<quint64>    m_Addresses;
 };
 
 #endif // QXRDPLUGININFOMODEL_H
