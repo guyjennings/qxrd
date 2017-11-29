@@ -377,6 +377,7 @@ void QxrdApplication::loadPlugins()
       QString fullPath = pluginsDir.absoluteFilePath(fileName);
 
       if (qcepDebug(DEBUG_PLUGINS)) {
+        printf("-------------------------------------\n");
         printf("Looking for plugin in file %s\n", qPrintable(fullPath));
       }
 
