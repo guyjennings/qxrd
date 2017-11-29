@@ -10,6 +10,8 @@ SUBDIRS =  \
   qxrdsimulateddetectorplugin \
   qxrddexeladetectorplugin
 
+message(DEFINES == $$DEFINES)
+
 contains(DEFINES,HAVE_PERKIN_ELMER) {
   message("HAVE_PERKIN_ELMER")
   SUBDIRS += qxrdperkinelmerplugin

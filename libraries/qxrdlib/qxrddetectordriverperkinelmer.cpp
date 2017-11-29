@@ -6,6 +6,7 @@
 #include "qxrdexperiment.h"
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
+#include "qxrdsynchronizedacquisition.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -298,9 +299,11 @@ QString QxrdDetectorDriverPerkinElmer::acquisitionErrorString(int n)
     res = "HIS_ERROR_HEADER_TIMEOUT";
     break;
 
+#ifdef HIS_ERROR_NO_PING_ACK
   case HIS_ERROR_NO_PING_ACK:
     res = "HIS_ERROR_NO_PING_ACK";
     break;
+#endif
 
   case HIS_ERROR_NR_OF_BOARDS_CHANGED:
     res = "HIS_ERROR_NR_OF_BOARDS_CHANGED";
