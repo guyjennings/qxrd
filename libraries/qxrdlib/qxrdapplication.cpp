@@ -38,6 +38,7 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdtestgenerator.h"
 #include "qcepimagedataformattiff.h"
+#include "qxrdplugininfomodel.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface.h"
@@ -107,6 +108,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdApplication::onAutoSaveTimer);
 
   m_AutoSaveTimer.start(5000);
+
+  m_PluginInfo =
+      QxrdPluginInfoModelPtr(new QxrdPluginInfoModel());
 }
 
 bool QxrdApplication::init(int &argc, char **argv)
@@ -394,6 +398,14 @@ void QxrdApplication::loadPlugins()
         }
 
         QObject *plugin = loader.instance();
+
+        if (m_PluginInfo) {
+          m_PluginInfo->appendEntry(fileName,
+                                    meta.value("className").toString(),
+                                    (plugin != NULL),
+                                    (quint64) plugin);
+        }
+
         if (plugin) {
           if (qcepDebug(DEBUG_PLUGINS)) {
             printf("Loaded plugin from %s : type %s\n", qPrintable(fullPath), qPrintable(plugin->metaObject()->className()));
@@ -752,7 +764,7 @@ void QxrdApplication::doOpenURL(QString url)
 
 void QxrdApplication::editGlobalPreferences()
 {
-  QxrdGlobalPreferencesDialog prefs(m_ApplicationSettings);
+  QxrdGlobalPreferencesDialog prefs(m_ApplicationSettings, m_PluginInfo);
 
   prefs.exec();
 }
@@ -1083,4 +1095,9 @@ void QxrdApplication::lockerTimerElapsed()
   if (rate>10000) {
     printMessage(tr("Locker rate %1 locks/sec").arg(/*get_LockerRate()*/rate));
   }
+}
+
+QxrdPluginInfoModelWPtr QxrdApplication::pluginInfo()
+{
+  return m_PluginInfo;
 }

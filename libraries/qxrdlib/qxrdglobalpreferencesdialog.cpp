@@ -4,10 +4,12 @@
 #include "qxrdapplicationsettings.h"
 #include "qcepallocator.h"
 #include <stdio.h>
+#include "qxrdplugininfomodel.h"
 
-QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplicationSettingsWPtr set) :
+QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplicationSettingsWPtr set, QxrdPluginInfoModelWPtr plugins) :
   QDialog(NULL),
-  m_ApplicationSettings(set)
+  m_ApplicationSettings(set),
+  m_PluginInfo(plugins)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(%p)\n", this);
@@ -35,6 +37,11 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplicationSettings
 
   m_MessageWindowLines -> setValue(m_ApplicationSettings->get_MessageWindowLines());
   m_UpdateIntervalMsec -> setValue(m_ApplicationSettings->get_UpdateIntervalMsec());
+
+  if (m_PluginInfo) {
+    m_PluginInfoTable->setModel(m_PluginInfo.data());
+    m_PluginInfoTable->resizeColumnsToContents();
+  }
 
   setupDebugWidgets(debugLevel);
 }

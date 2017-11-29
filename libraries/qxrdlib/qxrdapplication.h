@@ -18,6 +18,7 @@
 #include "qxrdsplashscreen-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qxrdapplicationsettings-ptr.h"
+#include "qxrdplugininfomodel-ptr.h"
 
 #ifdef HAVE_PERKIN_ELMER
 #include "qxrdperkinelmerplugininterface-ptr.h"
@@ -119,6 +120,8 @@ public slots:
 
   QxrdDetectorPluginInterfacePtr detectorPlugin(int n);
 
+  QxrdPluginInfoModelWPtr pluginInfo();
+
 public:
   bool wantToQuit();
 
@@ -159,6 +162,8 @@ private:
   int                             m_LastLockerCount;
 
   QVector<QxrdDetectorPluginInterfacePtr> m_DetectorPlugins;
+
+  QxrdPluginInfoModelPtr          m_PluginInfo;
 };
 
 #endif

@@ -343,7 +343,8 @@ SOURCES += qxrdlib.cpp \
     qxrdextraoutputsplotwidget.cpp \
     qxrdhistogramplotwidget.cpp \
     qxrdsliceplotwidget.cpp \
-    qxrddetectorplotwidget.cpp
+    qxrddetectorplotwidget.cpp \
+    qxrdplugininfomodel.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -442,7 +443,9 @@ HEADERS += qxrdlib.h\
     qxrdextraoutputsplotwidget.h \
     qxrdhistogramplotwidget.h \
     qxrdsliceplotwidget.h \
-    qxrddetectorplotwidget.h
+    qxrddetectorplotwidget.h \
+    qxrdplugininfomodel.h \
+    qxrdplugininfomodel-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

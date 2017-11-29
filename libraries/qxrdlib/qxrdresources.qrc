@@ -115,5 +115,6 @@
         <file>images/draw-polyline.png</file>
         <file>images/draw-rectangle.png</file>
         <file>images/draw-rectangle-donut.png</file>
+        <file>images/button_ok.png</file>
     </qresource>
 </RCC>

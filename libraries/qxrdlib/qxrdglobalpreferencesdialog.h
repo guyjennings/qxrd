@@ -6,13 +6,15 @@
 #include <QCheckBox>
 #include "ui_qxrdglobalpreferencesdialog.h"
 #include "qxrdapplicationsettings-ptr.h"
+#include "qxrdplugininfomodel-ptr.h"
 
 class QXRD_EXPORT QxrdGlobalPreferencesDialog : public QDialog, public Ui::QxrdGlobalPreferencesDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdGlobalPreferencesDialog(QxrdApplicationSettingsWPtr set);
+  explicit QxrdGlobalPreferencesDialog(QxrdApplicationSettingsWPtr set,
+                                       QxrdPluginInfoModelWPtr plugins);
   ~QxrdGlobalPreferencesDialog();
 
 public slots:
@@ -27,6 +29,7 @@ private:
 
 private:
   QxrdApplicationSettingsPtr       m_ApplicationSettings;
+  QxrdPluginInfoModelPtr           m_PluginInfo;
   QVector<QCheckBox*>              m_DebugWidgetList;
 };
 
