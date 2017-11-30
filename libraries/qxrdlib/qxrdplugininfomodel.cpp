@@ -7,6 +7,7 @@ QxrdPluginInfoModel::QxrdPluginInfoModel()
   m_Loaded.resize(LastPlugin);
   m_Addresses.resize(LastPlugin);
   m_Paths.resize(LastPlugin);
+  m_Files.resize(LastPlugin);
 
   m_ClassNames.replace(AreaDetectorPlugin,        "QxrdAreaDetectorPlugin");
   m_ClassNames.replace(CudaPlugin,                "QxrdCudaProcessorPlugin");
@@ -39,7 +40,7 @@ QVariant QxrdPluginInfoModel::data(const QModelIndex &index, int role) const
       break;
 
     case FileNameColumn:
-      return m_Paths.value(r);
+      return m_Files.value(r);
       break;
 
     case ClassNameColumn:
@@ -64,9 +65,27 @@ QVariant QxrdPluginInfoModel::data(const QModelIndex &index, int role) const
     }
   }
 
-//  if (role == Qt::TextAlignmentRole) {
-//    return Qt::AlignCenter;
-//  }
+  if (role == Qt::ToolTipRole) {
+    if (m_Addresses.value(r)) {
+      return tr("%1 plugin loaded at 0x%2\nFrom %3")
+          .arg(m_ClassNames.value(r))
+          .arg(m_Addresses.value(r),2*sizeof(void*), 16, QChar('0'))
+          .arg(m_Paths.value(r));
+    } else if (m_Paths.value(r).length()) {
+      return tr("%1 plugin not loaded\nFrom %2")
+          .arg(m_ClassNames.value(r))
+          .arg(m_Paths.value(r));
+    } else {
+      return tr("%1 plugin not loaded")
+          .arg(m_ClassNames.value(r));
+    }
+  }
+
+  if (role == Qt::TextAlignmentRole) {
+    if (c == AddressColumn) {
+      return Qt::AlignCenter;
+    }
+  }
 
   return QVariant();
 }
@@ -108,6 +127,7 @@ Qt::ItemFlags QxrdPluginInfoModel::flags(const QModelIndex &index) const
 }
 
 void QxrdPluginInfoModel::appendEntry(QString path,
+                                      QString file,
                                       QString className,
                                       int     loaded,
                                       quint64 address)
@@ -132,6 +152,7 @@ void QxrdPluginInfoModel::appendEntry(QString path,
 
   if (index >= 0) {
     m_Paths.replace(index, path);
+    m_Files.replace(index, file);
     m_ClassNames.replace(index, className);
     m_Loaded.replace(index, loaded);
     m_Addresses.replace(index, address);

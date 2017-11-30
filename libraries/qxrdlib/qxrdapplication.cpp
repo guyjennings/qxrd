@@ -402,7 +402,8 @@ void QxrdApplication::loadPlugins()
         QString className = meta.value("className").toString();
 
         if (m_PluginInfo) {
-          m_PluginInfo->appendEntry(fileName,
+          m_PluginInfo->appendEntry(fullPath,
+                                    fileName,
                                     className,
                                     (plugin != NULL),
                                     (quint64) plugin);

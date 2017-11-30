@@ -40,10 +40,11 @@ public:
     LastColumn
   };
 
-  void appendEntry(QString path, QString className, int loaded, quint64 address);
+  void appendEntry(QString path, QString file, QString className, int loaded, quint64 address);
 
 private:
   QVector<QString>    m_Paths;
+  QVector<QString>    m_Files;
   QVector<QString>    m_ClassNames;
   QVector<int>        m_Loaded;
   QVector<quint64>    m_Addresses;
