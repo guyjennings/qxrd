@@ -40,7 +40,7 @@ public:
     LastColumn
   };
 
-  void appendEntry(QString path, QString file, QString className, int loaded, quint64 address);
+  void appendEntry(QString path, QString file, QString className, int loaded, quint64 address, QString errorString);
 
 private:
   QVector<QString>    m_Paths;
@@ -48,6 +48,7 @@ private:
   QVector<QString>    m_ClassNames;
   QVector<int>        m_Loaded;
   QVector<quint64>    m_Addresses;
+  QVector<QString>    m_ErrorStrings;
 };
 
 #endif // QXRDPLUGININFOMODEL_H
