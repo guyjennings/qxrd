@@ -59,6 +59,10 @@ int main(int argc, char *argv[])
         while(1) {}
       }
     }
+
+//    delete app;
+
+    app = QxrdApplicationPtr();
   }
 
   if (qcepDebug(DEBUG_APP)) {
