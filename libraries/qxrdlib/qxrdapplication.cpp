@@ -400,13 +400,7 @@ void QxrdApplication::loadPlugins()
 
         QObject *plugin = loader.instance();
         QString className = meta.value("className").toString();
-
-        if (m_PluginInfo) {
-          m_PluginInfo->appendEntry(fileName,
-                                    className,
-                                    (plugin != NULL),
-                                    (quint64) plugin);
-        }
+        QString errorString = "";
 
         if (className == "QxrdAreaDetectorPlugin") {
           m_AreaDetectorPlugin =
@@ -483,6 +477,8 @@ void QxrdApplication::loadPlugins()
             printf("Failed to load plugin from %s : %s\n", qPrintable(fileName), qPrintable(loader.errorString()));
           }
 
+          errorString = loader.errorString();
+
           if (QLibrary::isLibrary(pluginsDir.absoluteFilePath(fileName))) {
             QString msg = tr("Failed to load plugin %1 : %2")
                 .arg(pluginsDir.absoluteFilePath(fileName))
@@ -491,6 +487,17 @@ void QxrdApplication::loadPlugins()
             printMessage(msg);
           }
         }
+
+
+        if (m_PluginInfo) {
+          m_PluginInfo->appendEntry(fullPath,
+                                    fileName,
+                                    className,
+                                    (plugin != NULL),
+                                    (quint64) plugin,
+                                    errorString);
+        }
+
       } else {
         if (qcepDebug(DEBUG_PLUGINS)) {
           printf("File %s is not a library\n", qPrintable(fileName));

@@ -7,6 +7,8 @@ QxrdPluginInfoModel::QxrdPluginInfoModel()
   m_Loaded.resize(LastPlugin);
   m_Addresses.resize(LastPlugin);
   m_Paths.resize(LastPlugin);
+  m_Files.resize(LastPlugin);
+  m_ErrorStrings.resize(LastPlugin);
 
   m_ClassNames.replace(AreaDetectorPlugin,        "QxrdAreaDetectorPlugin");
   m_ClassNames.replace(CudaPlugin,                "QxrdCudaProcessorPlugin");
@@ -39,7 +41,7 @@ QVariant QxrdPluginInfoModel::data(const QModelIndex &index, int role) const
       break;
 
     case FileNameColumn:
-      return m_Paths.value(r);
+      return m_Files.value(r);
       break;
 
     case ClassNameColumn:
@@ -64,9 +66,31 @@ QVariant QxrdPluginInfoModel::data(const QModelIndex &index, int role) const
     }
   }
 
-//  if (role == Qt::TextAlignmentRole) {
-//    return Qt::AlignCenter;
-//  }
+  if (role == Qt::ToolTipRole) {
+    QString msg = tr("%1 plugin").arg(m_ClassNames.value(r));
+
+    if (m_Addresses.value(r)) {
+      msg.append(tr(" loaded at 0x%1").arg(m_Addresses.value(r),2*sizeof(void*), 16, QChar('0')));
+    } else {
+      msg.append(" not loaded");
+    }
+
+    if (m_Paths.value(r).length()) {
+      msg.append(tr("\nFrom %1").arg(m_Paths.value(r)));
+    }
+
+    if (m_ErrorStrings.value(r).length()) {
+      msg.append(tr("\nBecause: %1").arg(m_ErrorStrings.value(r)));
+    }
+
+    return msg;
+  }
+
+  if (role == Qt::TextAlignmentRole) {
+    if (c == AddressColumn) {
+      return Qt::AlignCenter;
+    }
+  }
 
   return QVariant();
 }
@@ -108,9 +132,11 @@ Qt::ItemFlags QxrdPluginInfoModel::flags(const QModelIndex &index) const
 }
 
 void QxrdPluginInfoModel::appendEntry(QString path,
+                                      QString file,
                                       QString className,
                                       int     loaded,
-                                      quint64 address)
+                                      quint64 address,
+                                      QString errorString)
 {
   int index = -1;
 
@@ -132,8 +158,10 @@ void QxrdPluginInfoModel::appendEntry(QString path,
 
   if (index >= 0) {
     m_Paths.replace(index, path);
+    m_Files.replace(index, file);
     m_ClassNames.replace(index, className);
     m_Loaded.replace(index, loaded);
     m_Addresses.replace(index, address);
+    m_ErrorStrings.replace(index, errorString);
   }
 }
