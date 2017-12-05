@@ -401,6 +401,7 @@ void QxrdApplication::loadPlugins()
         QObject *plugin = loader.instance();
         QString className = meta.value("className").toString();
         QString errorString = "";
+        QString pluginName = "";
 
         if (className == "QxrdAreaDetectorPlugin") {
           m_AreaDetectorPlugin =
@@ -431,7 +432,6 @@ void QxrdApplication::loadPlugins()
             printf("Loaded plugin from %s : type %s\n", qPrintable(fullPath), qPrintable(plugin->metaObject()->className()));
           }
 
-          QString pluginName = "";
 
           QxrdDetectorPluginInterface* detector = qobject_cast<QxrdDetectorPluginInterface*>(plugin);
 
@@ -458,12 +458,9 @@ void QxrdApplication::loadPlugins()
           }
 #endif
 
-          QxrdNIDAQPluginInterface *nidaq = qobject_cast<QxrdNIDAQPluginInterface*>(plugin);
+          if (m_NIDAQPlugin) {
+            pluginName = m_NIDAQPlugin -> name();
 
-          if (nidaq) {
-            pluginName = nidaq -> name();
-
-            m_NIDAQPlugin = QxrdNIDAQPluginInterfacePtr(nidaq);
             m_NIDAQPlugin -> setErrorOutput(this);
           }
 
