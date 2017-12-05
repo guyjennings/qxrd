@@ -3,7 +3,7 @@
 #include "levmar.h"
 
 QcepFixupDetectorPanelGains::QcepFixupDetectorPanelGains()
-  : QcepSerializableObject("fixupDetectorPanelGains")
+  : QcepObject("fixupDetectorPanelGains")
 {
 
 }

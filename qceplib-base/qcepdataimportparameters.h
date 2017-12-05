@@ -3,10 +3,10 @@
 
 #include "qceplib_global.h"
 #include "qcepmacros.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepproperty.h"
 
-class QCEP_EXPORT QcepDataImportParameters : public QcepSerializableObject
+class QCEP_EXPORT QcepDataImportParameters : public QcepObject
 {
   Q_OBJECT
 

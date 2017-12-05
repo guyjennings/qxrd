@@ -1,9 +1,9 @@
 #include "qcepmatrix3x3property.h"
 #include "qcepmutexlocker.h"
 #include "qcepdebug.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 
-QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSerializableObject *parent,
+QcepMatrix3x3Property::QcepMatrix3x3Property(QcepObject *parent,
                                              const char *name,
                                              QcepMatrix3x3 value,
                                              QString toolTip) :
@@ -13,7 +13,7 @@ QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSerializableObject *parent,
 {
 }
 
-QcepMatrix3x3Property::QcepMatrix3x3Property(QcepSerializableObject *parent,
+QcepMatrix3x3Property::QcepMatrix3x3Property(QcepObject *parent,
                                              const char *name,
                                              double r0c0, double r0c1, double r0c2,
                                              double r1c0, double r1c1, double r1c2,

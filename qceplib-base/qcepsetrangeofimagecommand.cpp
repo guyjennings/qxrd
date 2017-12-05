@@ -3,7 +3,7 @@
 #include "qcepimagedata.h"
 
 QcepSetRangeOfImageCommand::QcepSetRangeOfImageCommand()
-  : QcepSerializableObject("setRangeOfImageCommand"),
+  : QcepObject("setRangeOfImageCommand"),
     m_RangeChoice(this, "rangeChoice", 0, "Range Choices\n"
                                           "0=outside both\n"
                                           "1=inside both\n"

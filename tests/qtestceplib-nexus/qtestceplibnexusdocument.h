@@ -1,12 +1,12 @@
 #ifndef QTESTCEPLIBNEXUSDOCUMENT_H
 #define QTESTCEPLIBNEXUSDOCUMENT_H
 
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qcepvector3dproperty.h"
 #include "qcepmatrix3x3property.h"
 
-class QtestceplibNexusDocument : public QcepSerializableObject
+class QtestceplibNexusDocument : public QcepObject
 {
 public:
   QtestceplibNexusDocument();

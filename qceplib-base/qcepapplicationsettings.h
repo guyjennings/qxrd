@@ -2,10 +2,10 @@
 #define QCEPAPPLICATIONSETTINGS_H
 
 #include "qceplib_global.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepapplication-ptr.h"
 
-class QCEP_EXPORT QcepApplicationSettings : public QcepSerializableObject
+class QCEP_EXPORT QcepApplicationSettings : public QcepObject
 {
   Q_OBJECT
 

@@ -9,7 +9,7 @@
 #include "qcepmainwindowsettings.h"
 
 QcepExperiment::QcepExperiment(QString path, QString name) :
-  QcepSerializableObject(name),
+  QcepObject(name),
 //  m_SettingsSaver(new QcepSettingsSaver(this)),
   m_ExperimentKind        (this, "experimentKind", -1, "Kind of Experiment"),
   m_ExperimentDirectory   (this, "experimentDirectory", defaultExperimentDirectory(path), "Experiment Directory"),
@@ -54,7 +54,7 @@ void QcepExperiment::initialize()
 
 void QcepExperiment::addChildPtr(QcepObjectPtr child)
 {
-  QcepSerializableObject::addChildPtr(child);
+  QcepObject::addChildPtr(child);
 
   if (checkPointer<QcepDataExportParameters>(child, m_DataExportParameters)) {}
   else if (checkPointer<QcepDataImportParameters>(child, m_DataImportParameters)) {}

@@ -2,10 +2,10 @@
 #define QCEPFIXUPDETECTORPANELGAINS_H
 
 #include "qceplib_global.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepimagedata-ptr.h"
 
-class QCEP_EXPORT QcepFixupDetectorPanelGains : public QcepSerializableObject
+class QCEP_EXPORT QcepFixupDetectorPanelGains : public QcepObject
 {
   Q_OBJECT
 

@@ -15,7 +15,7 @@ QcepAllocator *g_Allocator = NULL;
 
 QcepAllocator::QcepAllocator
 (QString name)
-  : QcepSerializableObject(name),
+  : QcepObject(name),
     m_Mutex(QMutex::Recursive),
 //    m_AllocatedMemoryMB(0),
     m_TotalBufferSizeMB32 (this,"totalBufferSizeMB32", 800, "Maximum Image Memory in 32 bit system (MB)"),

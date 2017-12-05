@@ -92,7 +92,6 @@ SOURCES += \
     $${PWD}/qcepfileformattertext.cpp \
     $${PWD}/qcepfileformatterhdf.cpp \
     $${PWD}/qcepfileformatternexus.cpp \
-    $${PWD}/qcepserializableobject.cpp \
     $$PWD/qcepsetrangeofimagedialog.cpp \
     $$PWD/qcepsetdatavaluerangedialog.cpp \
     $$PWD/qcepfixupgainmapdialog.cpp \
@@ -235,8 +234,6 @@ HEADERS += \
     $${PWD}/qcepfileformattertext.h \
     $${PWD}/qcepfileformatterhdf.h \
     $${PWD}/qcepfileformatternexus.h \
-    $${PWD}/qcepserializableobject.h \
-    $${PWD}/qcepserializableobject-ptr.h \
     $$PWD/qcepsetrangeofimagedialog.h \
     $$PWD/qcepsetdatavaluerangedialog.h \
     $$PWD/qcepfixupgainmapdialog.h \

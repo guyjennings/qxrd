@@ -3,9 +3,9 @@
 
 #include "qceplib_global.h"
 #include "qcepmacros.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 
-class QCEP_EXPORT QcepMainWindowSettings : public QcepSerializableObject
+class QCEP_EXPORT QcepMainWindowSettings : public QcepObject
 {
   Q_OBJECT
 

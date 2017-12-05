@@ -2,7 +2,6 @@
 #include "qcepfileformatterhdf.h"
 #include "qcepfileformatternexus.h"
 #include "qcepfileformattertext.h"
-#include "qcepserializableobject.h"
 #include "qcepmacros.h"
 #include "qcepdebug.h"
 
@@ -33,9 +32,9 @@ QcepFileFormatterPtr QcepFileFormatter::defaultFormatter(QString filePath, QStri
   return QcepFileFormatterPtr(new QcepFileFormatterText(filePath));
 }
 
-QcepSerializableObjectPtr QcepFileFormatter::construct(QString name, QString className)
+QcepObjectPtr QcepFileFormatter::construct(QString name, QString className)
 {
-  QcepSerializableObjectPtr res;
+  QcepObjectPtr res;
 
   int typeId = QMetaType::type(qPrintable(className+"*"));
 
@@ -52,12 +51,12 @@ QcepSerializableObjectPtr QcepFileFormatter::construct(QString name, QString cla
       if (qobj == NULL) {
         printMessage(tr("qObject == NULL"));
       } else {
-        QcepSerializableObject *qcobj = qobject_cast<QcepSerializableObject*>(qobj);
+        QcepObject* qcobj = qobject_cast<QcepObject*>(qobj);
 
         if (qcobj == NULL) {
-          printMessage(tr("QcepSerializableObject == NULL"));
+          printMessage(tr("QcepObject == NULL"));
         } else {
-          res= QcepSerializableObjectPtr(qcobj);
+          res= QcepObjectPtr(qcobj);
         }
       }
     }

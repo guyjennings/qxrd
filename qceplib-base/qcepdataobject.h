@@ -3,13 +3,13 @@
 
 #include "qceplib_global.h"
 #include <QObject>
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepdatagroup-ptr.h"
 #include <QScriptValue>
 #include "qcepproperty.h"
 
-class QCEP_EXPORT QcepDataObject : public QcepSerializableObject
+class QCEP_EXPORT QcepDataObject : public QcepObject
 {
   Q_OBJECT
 

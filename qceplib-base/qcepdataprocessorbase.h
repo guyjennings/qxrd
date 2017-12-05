@@ -4,11 +4,11 @@
 #include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepimagedata-ptr.h"
 
-class QCEP_EXPORT QcepDataProcessorBase : public QcepSerializableObject
+class QCEP_EXPORT QcepDataProcessorBase : public QcepObject
 {
   Q_OBJECT
 

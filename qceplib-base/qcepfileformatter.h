@@ -3,7 +3,7 @@
 
 #include "qceplib_global.h"
 #include "qcepobject.h"
-#include "qcepserializableobject-ptr.h"
+#include "qcepobject-ptr.h"
 #include "qcepfileformatter-ptr.h"
 
 class QCEP_EXPORT QcepFileFormatter : public QcepObject
@@ -37,9 +37,9 @@ public:
   virtual void beginReadFile() = 0;
   virtual void endReadFile() = 0;
 
-  virtual QcepSerializableObjectPtr nextObject() = 0;
+  virtual QcepObjectPtr nextObject() = 0;
 
-  virtual void beginReadObject(QcepSerializableObjectPtr obj) = 0;
+  virtual void beginReadObject(QcepObjectPtr obj) = 0;
   virtual void endReadObject() = 0;
 
   virtual bool beginReadProperties() = 0;
@@ -48,13 +48,13 @@ public:
   virtual void endReadProperties() = 0;
 
   virtual bool beginReadChildren() = 0;
-  virtual QcepSerializableObjectPtr nextChild() = 0;
+  virtual QcepObjectPtr nextChild() = 0;
   virtual void endReadChildren() = 0;
 
   virtual bool beginReadData() = 0;
   virtual void endReadData() = 0;
 
-  virtual QcepSerializableObjectPtr construct(QString name, QString className);
+  virtual QcepObjectPtr construct(QString name, QString className);
 
 protected:
   QString     m_FilePath;

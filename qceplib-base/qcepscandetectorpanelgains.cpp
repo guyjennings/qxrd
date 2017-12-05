@@ -5,7 +5,7 @@
 #include "qcepdebug.h"
 
 QcepScanDetectorPanelGains::QcepScanDetectorPanelGains()
-  : QcepSerializableObject("scanDetectorPanelGains")
+  : QcepObject("scanDetectorPanelGains")
 {
 
 }

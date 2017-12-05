@@ -2,10 +2,10 @@
 #define QCEPSETDATAVALUERANGECOMMAND_H
 
 #include "qceplib_global.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepimagedata-ptr.h"
 
-class QCEP_EXPORT QcepSetDataValueRangeCommand : public QcepSerializableObject
+class QCEP_EXPORT QcepSetDataValueRangeCommand : public QcepObject
 {
   Q_OBJECT
 

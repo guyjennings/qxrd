@@ -9,11 +9,11 @@ class QCEP_EXPORT QcepMatrix3x3Property : public QcepProperty
 {
   Q_OBJECT
 public:
-  explicit QcepMatrix3x3Property(QcepSerializableObject *parent,
+  explicit QcepMatrix3x3Property(QcepObject *parent,
                                  const char *name,
                                  QcepMatrix3x3 value,
                                  QString toolTip);
-  explicit QcepMatrix3x3Property(QcepSerializableObject *parent,
+  explicit QcepMatrix3x3Property(QcepObject *parent,
                                  const char *name,
                                  double r0c0, double r0c1, double r0c2,
                                  double r1c0, double r1c1, double r1c2,

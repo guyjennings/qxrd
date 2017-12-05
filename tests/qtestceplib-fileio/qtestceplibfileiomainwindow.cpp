@@ -174,7 +174,7 @@ void QtestceplibFileIOMainWindow::readDataObjects(QString filePath)
 
   QcepFileFormatterPtr fmt = QcepFileFormatter::defaultFormatter(filePath, exten);
 
-  QcepObjectPtr obj = QcepSerializableObject::readDataObject(fmt);
+  QcepObjectPtr obj = QcepObject::readDataObject(fmt);
 }
 
 void QtestceplibFileIOMainWindow::writeDataObjects(QString filePath)

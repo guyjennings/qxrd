@@ -64,12 +64,12 @@ void QcepFileFormatterNexus::endReadFile()
 {
 }
 
-QcepSerializableObjectPtr QcepFileFormatterNexus::nextObject()
+QcepObjectPtr QcepFileFormatterNexus::nextObject()
 {
-  return QcepSerializableObjectPtr();
+  return QcepObjectPtr();
 }
 
-void QcepFileFormatterNexus::beginReadObject(QcepSerializableObjectPtr /*obj*/)
+void QcepFileFormatterNexus::beginReadObject(QcepObjectPtr /*obj*/)
 {
 }
 
@@ -101,9 +101,9 @@ bool QcepFileFormatterNexus::beginReadChildren()
   return false;
 }
 
-QcepSerializableObjectPtr QcepFileFormatterNexus::nextChild()
+QcepObjectPtr QcepFileFormatterNexus::nextChild()
 {
-  return QcepSerializableObjectPtr();
+  return QcepObjectPtr();
 }
 
 void QcepFileFormatterNexus::endReadChildren()

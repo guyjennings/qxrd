@@ -11,6 +11,7 @@
 #include <QVector>
 #include "qcepproperty.h"
 #include <QScriptValue>
+#include "qcepfileformatter-ptr.h"
 
 class QCEP_EXPORT QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
 {
@@ -60,6 +61,11 @@ public slots:
 
   int checkChildren(int verbose=0, int level=0) const;
 
+  void dumpObjectTreePtr(int level=0);
+
+  int childrenChanged() const;
+  QString childrenChangedBy() const;
+
   QString methodSignatures();
   QString methodSignature(int n);
   int     methodCount();
@@ -89,6 +95,14 @@ public:
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QcepObjectPtr &data);
   static void fromScriptValue(const QScriptValue &obj, QcepObjectPtr &data);
+
+  static QcepObjectPtr readDataObject(QcepFileFormatterPtr fmt);
+
+  void readObjectFmt(QcepFileFormatterPtr fmt);
+  void writeObjectFmt(QcepFileFormatterPtr fmt);
+
+  virtual void readObjectData(QcepFileFormatterPtr fmt);
+  virtual void writeObjectData(QcepFileFormatterPtr fmt);
 
 private:
   QcepObjectNamer                     m_ObjectNamer;

@@ -1,9 +1,9 @@
 #include "qcepvector3dproperty.h"
 #include "qcepmutexlocker.h"
 #include "qcepdebug.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 
-QcepVector3DProperty::QcepVector3DProperty(QcepSerializableObject *parent,
+QcepVector3DProperty::QcepVector3DProperty(QcepObject *parent,
                                            const char *name,
                                            QcepVector3D value,
                                            QString toolTip) :
@@ -13,7 +13,7 @@ QcepVector3DProperty::QcepVector3DProperty(QcepSerializableObject *parent,
 {
 }
 
-QcepVector3DProperty::QcepVector3DProperty(QcepSerializableObject *parent,
+QcepVector3DProperty::QcepVector3DProperty(QcepObject *parent,
                                            const char *name,
                                            double x, double y, double z,
                                            QString toolTip) :

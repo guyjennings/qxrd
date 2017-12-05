@@ -2,7 +2,7 @@
 #include "qcepdocumentationdictionary.h"
 #include <QMetaProperty>
 #include <QScriptValueIterator>
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 
 QcepScriptEngine::QcepScriptEngine(QObject *parent) :
   QScriptEngine(parent)

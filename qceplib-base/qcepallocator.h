@@ -3,7 +3,7 @@
 
 #include "qceplib_global.h"
 #include "qcepmacros.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 
 #include <QMutex>
 #include <QTimer>
@@ -20,7 +20,7 @@
 
 extern QCEP_EXPORT QcepAllocator *g_Allocator;
 
-class QCEP_EXPORT QcepAllocator : public QcepSerializableObject
+class QCEP_EXPORT QcepAllocator : public QcepObject
 {
   Q_OBJECT
 

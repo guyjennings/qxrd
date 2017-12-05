@@ -2,7 +2,7 @@
 #define QCEPEXPERIMENT_H
 
 #include "qceplib_global.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include <QDateTime>
 #include <QUndoStack>
 #include "qcepproperty.h"
@@ -15,7 +15,7 @@
 #include "qcepfixupgainmapcommand-ptr.h"
 #include "qcepmainwindowsettings-ptr.h"
 
-class QCEP_EXPORT QcepExperiment : public QcepSerializableObject
+class QCEP_EXPORT QcepExperiment : public QcepObject
 {
   Q_OBJECT
 public:

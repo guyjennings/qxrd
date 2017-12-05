@@ -7,6 +7,7 @@
 #include <QThread>
 #include "qcepfileformatter.h"
 #include <QScriptEngine>
+#include "qcepdebug.h"
 
 static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
@@ -212,11 +213,58 @@ void QcepObject::insertChildPtr(int atRow, QcepObjectPtr child)
   m_Children[atRow] = child;
 }
 
+
+int QcepObject::childrenChanged() const
+{
+  if (isChanged()) {
+    return true;
+  } else {
+    for(int i=0; i<childCount(); i++) {
+      QcepObjectPtr child = childPtr(i);
+
+      if(child) {
+        int chg = child->childrenChanged();
+
+        if (chg) return chg;
+      }
+    }
+  }
+
+  return 0;
+}
+
+QString QcepObject::childrenChangedBy() const
+{
+  if (isChanged()) {
+    return changedBy();
+  } else {
+    for(int i=0; i<childCount(); i++) {
+      QcepObjectPtr child = childPtr(i);
+
+      if (child) {
+        int chg = child->childrenChanged();
+
+        if (chg) {
+          return child->changedBy();
+        }
+      }
+    }
+  }
+
+  return "NULL";
+}
+
 void QcepObject::propertyChanged(QcepProperty *prop)
 {
   if (prop == NULL || prop->isStored()) {
     m_ChangeCount.fetchAndAddOrdered(1);
     m_LastChanged.store(prop);
+
+    QcepObjectPtr parent(parentPtr());
+
+    if (parent) {
+      parent->propertyChanged(prop);
+    }
   }
 }
 
@@ -657,3 +705,246 @@ int QcepObject::methodCount()
 
   return res;
 }
+
+void QcepObject::dumpObjectTreePtr(int level)
+{
+  const QMetaObject* metaObject = this->metaObject();
+  QcepObjectPtr parent(parentPtr());
+
+  printLine(tr("%1// %2: %3 constrs, parent %4")
+            .arg("", level)
+            .arg(metaObject->className())
+            .arg(metaObject->constructorCount())
+            .arg(parent ? parent->get_Type() : "NULL"));
+
+  int nDumped = 0;
+
+  int nDumpedProperties = 0;
+
+  for (int i=1; i < metaObject->propertyCount(); i++) {
+    QMetaProperty prop = metaObject->property(i);
+
+    if (prop.isStored()) {
+      if (nDumped == 0) {
+        printLine(tr("%1%2 {")
+                  .arg("",level)
+                  .arg(get_Type()));
+      }
+
+      if (nDumpedProperties == 0) {
+        printLine(tr("%1properties{").arg("",level+1));
+      }
+
+      nDumped++;
+      nDumpedProperties++;
+
+      printLine(tr("%1%2 = %3")
+                .arg("",level+2)
+                .arg(prop.name())
+                .arg(toScriptLiteral(this->property(prop.name()))));
+    }
+  }
+
+  if (nDumped > 0) {
+    printLine(tr("%1}").arg("",level+1));
+  }
+
+  int nDumpedChildren = 0;
+
+  for (int i=0; i<childCount(); i++) {
+    QcepObjectPtr obj = childPtr(i);
+
+    if (obj) {
+      if (nDumped == 0) {
+        printLine(tr("%1%2 {")
+                  .arg("",level)
+                  .arg(get_Type()));
+      }
+
+      if (nDumpedChildren == 0) {
+        printLine(tr("%1children{").arg("",level+1));
+      }
+
+      nDumped++;
+      nDumpedChildren++;
+
+      obj->dumpObjectTreePtr(level+2);
+    }
+  }
+
+  if (nDumpedChildren > 0) {
+    printLine(tr("%1}").arg("",level+1));
+  }
+
+  if (nDumped > 0) {
+    printLine(tr("%1}").arg("",level));
+  } else {
+    printLine(tr("%1// %2").arg("",level).arg(metaObject->className()));
+  }
+}
+
+QcepObjectPtr QcepObject::readDataObject(QcepFileFormatterPtr fmt)
+{
+  if (fmt) {
+    return fmt->nextObject();
+  } else {
+    return QcepObjectPtr();
+  }
+}
+
+void QcepObject::writeObjectFmt(QcepFileFormatterPtr fmt)
+{
+  const QMetaObject* metaObject = this->metaObject();
+//  QcepObjectPtr parent(m_Parent);
+
+  fmt->beginWriteObject(get_Name(), metaObject->className());
+
+  int typeId = QMetaType::type(qPrintable(className()+"*"));
+
+  if (typeId == QMetaType::UnknownType) {
+    fmt -> writeComment("Has unknown type");
+  }
+
+  if (metaObject->constructorCount() == 0) {
+    fmt -> writeComment("Has no invokable constructors");
+  }
+
+  int count = metaObject->propertyCount();
+  int offset = QObject::staticMetaObject.propertyCount();
+  int nProperties = 0;
+
+  for (int i=offset; i<count; i++) {
+    QMetaProperty metaProperty = metaObject->property(i);
+
+    if (metaProperty.isStored()) {
+      nProperties++;
+    }
+  }
+
+  nProperties += dynamicPropertyNames().length();
+
+  if (nProperties > 0) {
+    fmt->beginWriteProperties();
+
+    for (int i=offset; i<count; i++) {
+      QMetaProperty metaProperty = metaObject->property(i);
+
+      if (metaProperty.isStored()) {
+        const char *name = metaProperty.name();
+        QVariant value   = property(name);
+
+        fmt->writeProperty(name, value);
+      }
+    }
+
+    foreach (QByteArray name, dynamicPropertyNames()) {
+      fmt->writeProperty(name.data(), property(name.data()));
+    }
+
+    fmt->endWriteProperties();
+  }
+
+  int nChildren = 0;
+
+  for (int i=0; i<childCount(); i++) {
+    QcepObjectPtr obj = childPtr(i);
+
+    if (obj) {
+      nChildren++;
+    }
+  }
+
+  if (nChildren > 0) {
+    fmt->beginWriteChildren();
+
+    for (int i=0; i<childCount(); i++) {
+      QcepObjectPtr obj = childPtr(i);
+
+      if (obj) {
+        obj->writeObjectFmt(fmt);
+      }
+    }
+
+    fmt->endWriteChildren();
+  }
+
+  fmt->beginWriteData();
+  writeObjectData(fmt);
+  fmt->endWriteData();
+
+  fmt->endWriteObject();
+}
+
+void QcepObject::readObjectFmt(QcepFileFormatterPtr fmt)
+{
+  QcepObjectWPtr myself = sharedFromThis();
+
+  if (qcepDebug(DEBUG_IMPORT)) {
+    fmt->printMessage("QcepObject::readObject");
+  }
+
+  fmt->beginReadObject(myself);
+
+  if (fmt->beginReadProperties()) {
+    QString propName;
+    QVariant propVal;
+
+    do {
+      if (qcepDebug(DEBUG_IMPORT)) {
+        fmt->printMessage("QcepObject::readObject : read property");
+      }
+
+      propName = fmt->nextPropertyName();
+
+      if (propName.length() > 0) {
+        propVal = fmt->nextPropertyValue();
+        setProperty(qPrintable(propName), propVal);
+
+        if (qcepDebug(DEBUG_IMPORT)) {
+          fmt->printMessage(tr("Set property %1 to %2").arg(propName).arg(propVal.toString()));
+        }
+      }
+    } while (propName.length()>0);
+
+    fmt->endReadProperties();
+  }
+
+  if (fmt->beginReadChildren()) {
+    QcepObjectPtr child;
+
+    do {
+      if (qcepDebug(DEBUG_IMPORT)) {
+        fmt->printMessage("QcepObject::readObject : read child");
+      }
+
+      child = fmt->nextChild();
+
+      if (child) {
+        addChildPtr(child);
+      }
+    } while (child);
+
+    fmt->endReadChildren();
+  }
+
+  if (fmt->beginReadData()) {
+    if (qcepDebug(DEBUG_IMPORT)) {
+      fmt->printMessage("QcepObject::readObject : read data");
+    }
+
+    readObjectData(fmt);
+
+    fmt->endReadData();
+  }
+
+  fmt->endReadObject();
+}
+
+void QcepObject::writeObjectData(QcepFileFormatterPtr /*fmt*/)
+{
+}
+
+void QcepObject::readObjectData(QcepFileFormatterPtr /*fmt*/)
+{
+}
+
