@@ -13,6 +13,7 @@ public:
   QcepMainWindowSettings(QString name);
 
   virtual void openWindow() = 0;
+  virtual void closeWindow() = 0;
 };
 
 Q_DECLARE_METATYPE(QcepMainWindowSettings*)
