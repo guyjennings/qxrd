@@ -258,6 +258,8 @@ QxrdApplication::~QxrdApplication()
 #endif
 
 //  m_AppSaver->performSave();
+
+  finish();
   onAutoSaveTimer();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {

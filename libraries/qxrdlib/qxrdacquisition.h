@@ -100,6 +100,7 @@ public slots:
 
 public:
   void openWindows();
+  void closeWindows();
 
   virtual void setupExposureMenu(QDoubleSpinBox *cb);
 

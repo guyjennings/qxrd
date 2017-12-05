@@ -427,11 +427,26 @@ void QxrdAcquisition::writeSettings(QSettings *settings)
 
 void QxrdAcquisition::openWindows()
 {
+  GUI_THREAD_CHECK;
+
   for (int i=0; i<m_Detectors.count(); i++) {
     QxrdDetectorSettingsPtr det = m_Detectors.value(i);
 
     if (det) {
       det->openWindow();
+    }
+  }
+}
+
+void QxrdAcquisition::closeWindows()
+{
+  GUI_THREAD_CHECK;
+
+  for (int i=0; i<m_Detectors.count(); i++) {
+    QxrdDetectorSettingsPtr det = m_Detectors.value(i);
+
+    if (det) {
+      det->closeWindow();
     }
   }
 }

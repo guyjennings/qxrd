@@ -607,7 +607,24 @@ void QxrdExperiment::openWindows()
 
 void QxrdExperiment::closeWindows()
 {
+  GUI_THREAD_CHECK;
+
   m_Window = QxrdWindowPtr();
+
+  for (int i=0; i<windowSettingsCount(); i++) {
+    QcepMainWindowSettingsPtr set =
+        windowSettings(i);
+
+    if (set) {
+      set->closeWindow();
+    }
+  }
+
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    acq->closeWindows();
+  }
 }
 
 void QxrdExperiment::splashMessage(QString msg)

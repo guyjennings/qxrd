@@ -549,6 +549,25 @@ void QxrdDetectorSettings::openControlWindow()
   }
 }
 
+void QxrdDetectorSettings::closeWindow()
+{
+  GUI_THREAD_CHECK;
+
+  QxrdDetectorControlWindowSettingsPtr set(detectorControlWindowSettings());
+
+  if (set) {
+    set->set_DetectorWindowOpen(m_DetectorControlWindow != NULL);
+
+    if (m_DetectorControlWindow) {
+      QRect geom = m_DetectorControlWindow->geometry();
+
+      set->set_DetectorWindowRect(geom);
+
+      m_DetectorControlWindow = QxrdDetectorControlWindowPtr();
+    }
+  }
+}
+
 void QxrdDetectorSettings::enqueueAcquiredFrame(QcepImageDataBasePtr img)
 {
   m_AcquiredImages.enqueue(img);

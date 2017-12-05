@@ -100,6 +100,7 @@ public slots:
 
   void openWindow();
   void openControlWindow();
+  void closeWindow();
 
   QxrdDetectorProcessorPtr processor();
   void startOrStop(bool enabled);

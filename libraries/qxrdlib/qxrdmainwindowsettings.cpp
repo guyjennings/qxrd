@@ -36,6 +36,19 @@ void QxrdMainWindowSettings::openWindow()
   }
 }
 
+void QxrdMainWindowSettings::closeWindow()
+{
+  set_WindowOpen(m_Window != NULL);
+
+  if (m_Window) {
+    QRect geom = m_Window->geometry();
+
+    set_WindowRect(geom);
+
+    m_Window = QxrdMainWindowPtr();
+  }
+}
+
 void QxrdMainWindowSettings::readSettings(QSettings *settings)
 {
   QcepMainWindowSettings::readSettings(settings);

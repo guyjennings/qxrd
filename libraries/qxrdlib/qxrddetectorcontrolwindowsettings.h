@@ -34,6 +34,9 @@ public:
 
   Q_PROPERTY(int detectorWindowNewROIType READ get_DetectorWindowNewROIType WRITE set_DetectorWindowNewROIType)
   QCEP_INTEGER_PROPERTY(DetectorWindowNewROIType)
+
+  Q_PROPERTY(QRectF detectorWindowRect READ get_DetectorWindowRect WRITE set_DetectorWindowRect)
+  QCEP_DOUBLE_RECT_PROPERTY(DetectorWindowRect)
 };
 
 #endif // QXRDDETECTORCONTROLWINDOWSETTINGS_H

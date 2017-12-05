@@ -17,6 +17,7 @@ public:
   virtual void initialize(QxrdApplicationWPtr app, QxrdExperimentWPtr expt);
 
   void openWindow();
+  void closeWindow();
   virtual QxrdMainWindowPtr newWindow() = 0;
 
   QxrdMainWindowPtr  window();

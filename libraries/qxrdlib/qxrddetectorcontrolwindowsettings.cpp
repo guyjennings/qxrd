@@ -7,7 +7,8 @@ QxrdDetectorControlWindowSettings::QxrdDetectorControlWindowSettings(QxrdDetecto
     m_DetectorWindowOpen(this, "detectorWindowOpen", 0, "Detector Window Open?"),
     m_DetectorWindowGeometry(this, "detectorWindowGeometry", QByteArray(), "Detector Window Geometry"),
     m_DetectorWindowState(this, "detectorWindowState", QByteArray(), "Detector Window State"),
-    m_DetectorWindowNewROIType(this, "detectorWindowNewROIType", QxrdDetectorImagePlot::NewRectROI, "Detector Window New ROI Type")
+    m_DetectorWindowNewROIType(this, "detectorWindowNewROIType", QxrdDetectorImagePlot::NewRectROI, "Detector Window New ROI Type"),
+    m_DetectorWindowRect(this, "detectorWindowRect", QRectF(), "Window Geometry")
 {
 }
 
