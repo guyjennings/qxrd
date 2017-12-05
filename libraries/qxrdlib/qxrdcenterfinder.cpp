@@ -110,7 +110,7 @@ QxrdCenterFinder::~QxrdCenterFinder()
 #endif
 }
 
-//void QxrdCenterFinder::addChildPtr(QcepSerializableObjectPtr child)
+//void QxrdCenterFinder::addChildPtr(QcepObjectPtr child)
 //{
 //  QxrdDetectorGeometry::addChildPtr(child);
 
@@ -121,7 +121,7 @@ QxrdCenterFinder::~QxrdCenterFinder()
 //  }
 //}
 
-//void QxrdCenterFinder::removeChildPtr(QcepSerializableObjectPtr child)
+//void QxrdCenterFinder::removeChildPtr(QcepObjectPtr child)
 //{
 //  printMessage("Need to write QxrdCenterFinder::removeChildPtr");
 //}

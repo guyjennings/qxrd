@@ -1,7 +1,7 @@
 #include "qxrdtestimageplotqwthelper.h"
 
 QxrdTestImagePlotQwtHelper::QxrdTestImagePlotQwtHelper()
-  : QcepSerializableObject("imagePlotHelper")
+  : QcepObject("imagePlotHelper")
 {
 
 }

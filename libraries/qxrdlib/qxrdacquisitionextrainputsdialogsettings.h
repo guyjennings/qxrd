@@ -2,12 +2,12 @@
 #define QXRDACQUISITIONEXTRAINPUTSDIALOGSETTINGS_H
 
 #include "qxrdlib_global.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdacquisitionextrainputsplotsettings-ptr.h"
 #include "qxrdacquisitionextrainputsdialogsettings-ptr.h"
 
-class QXRD_EXPORT QxrdAcquisitionExtraInputsDialogSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdAcquisitionExtraInputsDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:

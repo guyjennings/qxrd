@@ -21,7 +21,7 @@
 #include "qmath.h"
 
 QxrdIntegrator::QxrdIntegrator(QString name)
-  : QcepSerializableObject(name),
+  : QcepObject(name),
     m_Oversample(this, "oversample", 1, "Oversampling for Integration"),
     m_IntegrationStep(this, "integrationStep", 0.01, "Integration Step Size"),
     m_IntegrationNSteps(this, "integrationNSteps", 0, "Integration Number of Steps"),

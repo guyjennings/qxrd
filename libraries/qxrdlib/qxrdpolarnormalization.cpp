@@ -10,7 +10,7 @@
 #include "qxrddebug.h"
 
 QxrdPolarNormalization::QxrdPolarNormalization(QString name) :
-  QcepSerializableObject(name),
+  QcepObject(name),
   m_OutputType(this, "outputType", IntegratedOutput, "Output Type (0=Integ, 1=Fit, 2=Deltas"),
   m_SelfNormalize(this, "selfNormalize", false, "Self-Normalize integrated curves"),
   m_SelfNormalizeMin(this, "selfNormalizeMin", 0, "Self-Normalize Range Minimum"),

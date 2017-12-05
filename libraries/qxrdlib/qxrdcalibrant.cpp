@@ -7,7 +7,7 @@
 #include <qmath.h>
 
 QxrdCalibrant::QxrdCalibrant(QString name)
-  : QcepSerializableObject(name),
+  : QcepObject(name),
     m_IsUsed(this, "isUsed", 0, "Is Calibrant used?"),
     m_Index(this, "index", 0, "Calibrant Index"),
     m_Flags(this, "flags", 0, "Calibrant flags"),

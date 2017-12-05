@@ -3,7 +3,7 @@
 #include "qxrdtestscanplotdatavishelper.h"
 
 QxrdTestScanPlotDataVisHelper::QxrdTestScanPlotDataVisHelper()
-  : QcepSerializableObject("scanPlotHelper")
+  : QcepObject("scanPlotHelper")
 {
 
 }

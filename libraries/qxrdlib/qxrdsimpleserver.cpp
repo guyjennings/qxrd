@@ -8,7 +8,7 @@
 #include <QScriptValueIterator>
 
 QxrdSimpleServer::QxrdSimpleServer(QString name) :
-  QcepSerializableObject(name),
+  QcepObject(name),
   m_RunSimpleServer(this,"runSimpleServer", 1, "Run Simple Socket Server?"),
   m_SimpleServerPort(this,"simpleServerPort", 1234, "Port for Simple Socket Server")
 {
@@ -33,14 +33,14 @@ QxrdSimpleServer::~QxrdSimpleServer()
 
 void QxrdSimpleServer::readSettings(QSettings *settings)
 {
-  QcepSerializableObject::readSettings(settings);
+  QcepObject::readSettings(settings);
 
   runModeChanged();
 }
 
 void QxrdSimpleServer::writeSettings(QSettings *settings)
 {
-  QcepSerializableObject::writeSettings(settings);
+  QcepObject::writeSettings(settings);
 }
 
 void QxrdSimpleServer::runModeChanged()

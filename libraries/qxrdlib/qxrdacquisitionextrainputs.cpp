@@ -10,7 +10,7 @@
 #include <QTimer>
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QString name) :
-  QcepSerializableObject(name),
+  QcepObject(name),
   m_Enabled(this, "enabled", 0, "Extra Inputs Enabled?"),
   m_Skipping(this, "skipping", 0, "Skipping initial readout?"),
   m_SampleRate(this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
@@ -52,7 +52,7 @@ QxrdAcquisitionExtraInputsPtr QxrdAcquisitionExtraInputs::newAcquisitionExtraInp
 
 void QxrdAcquisitionExtraInputs::addChildPtr(QcepObjectPtr child)
 {
-  QcepSerializableObject::addChildPtr(child);
+  QcepObject::addChildPtr(child);
 
   QxrdAcquisitionExtraInputsChannelPtr chan = qSharedPointerDynamicCast<QxrdAcquisitionExtraInputsChannel>(child);
 
@@ -73,7 +73,7 @@ void QxrdAcquisitionExtraInputs::removeChildPtr(QcepObjectPtr child)
     m_Channels.removeAll(chan);
   }
 
-  QcepSerializableObject::removeChildPtr(child);
+  QcepObject::removeChildPtr(child);
 }
 
 QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()

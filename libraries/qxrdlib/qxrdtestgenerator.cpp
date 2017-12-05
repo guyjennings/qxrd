@@ -5,7 +5,7 @@
 #include "qxrdtestscanplotqwthelper.h"
 
 QxrdTestGenerator::QxrdTestGenerator(QString name)
-  : QcepSerializableObject(name),
+  : QcepObject(name),
     m_TestIndex(this, "testIndex", 0, "Test Data Index")
 {
   connect(&m_Timer, &QTimer::timeout, this, &QxrdTestGenerator::generateTest);

@@ -2,7 +2,7 @@
 #define QXRDACQUISITIONEXTRAINPUTS_H
 
 #include "qxrdlib_global.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
@@ -16,7 +16,7 @@
 #include <QMutex>
 #include "qxrdacquisitionparameterpack-ptr.h"
 
-class QXRD_EXPORT QxrdAcquisitionExtraInputs : public QcepSerializableObject
+class QXRD_EXPORT QxrdAcquisitionExtraInputs : public QcepObject
 {
   Q_OBJECT
 public:

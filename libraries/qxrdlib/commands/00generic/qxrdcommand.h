@@ -2,9 +2,9 @@
 #define QXRDCOMMAND_H
 
 #include <QObject>
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 
-class QxrdCommand : public QcepSerializableObject
+class QxrdCommand : public QcepObject
 {
 public:
   QxrdCommand(QString name);

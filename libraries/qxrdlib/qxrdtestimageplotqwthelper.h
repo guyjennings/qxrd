@@ -2,14 +2,14 @@
 #define QXRDTESTIMAGEPLOTQWTHELPER_H
 
 #include "qxrdlib_global.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepimagedata.h"
 #include <qwt_plot_spectrogram.h>
 
 typedef QSharedPointer<QwtPlotSpectrogram> QwtPlotSpectrogramPtr;
 
-class QXRD_EXPORT QxrdTestImagePlotQwtHelper : public QcepSerializableObject
+class QXRD_EXPORT QxrdTestImagePlotQwtHelper : public QcepObject
 {
   Q_OBJECT
 

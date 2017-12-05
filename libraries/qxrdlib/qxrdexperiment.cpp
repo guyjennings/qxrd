@@ -1459,7 +1459,7 @@ void QxrdExperiment::readObjectTreeFromText(QString filePath)
 
   fmt -> beginReadFile();
 
-  QcepSerializableObjectPtr obj = QcepSerializableObject::readDataObject(fmt);
+  QcepObjectPtr obj = QcepObject::readDataObject(fmt);
 
   fmt -> endReadFile();
 

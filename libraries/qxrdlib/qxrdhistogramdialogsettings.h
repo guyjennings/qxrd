@@ -4,11 +4,11 @@
 #include "qxrdlib_global.h"
 #include <QObject>
 #include "qcepproperty.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qxrdhistogramplotsettings-ptr.h"
 #include "qxrdhistogramdialogsettings-ptr.h"
 
-class QXRD_EXPORT QxrdHistogramDialogSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdHistogramDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:

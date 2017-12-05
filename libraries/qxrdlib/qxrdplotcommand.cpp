@@ -2,7 +2,7 @@
 #include "qxrdimageplotwidget.h"
 
 QxrdPlotCommand::QxrdPlotCommand(QString name, QxrdPlotWidget *plot)
-  : QcepSerializableObject(name),
+  : QcepObject(name),
     m_PlotWidget(plot),
     m_Plot((plot?plot->m_Plot:NULL))
 {

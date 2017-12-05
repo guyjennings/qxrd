@@ -3,7 +3,7 @@
 #include "qxrdsynchronizedacquisitionplotsettings.h"
 
 QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings(QString name) :
-  QcepSerializableObject(name)
+  QcepObject(name)
 {
 }
 
@@ -18,7 +18,7 @@ QxrdSynchronizedAcquisitionDialogSettingsPtr QxrdSynchronizedAcquisitionDialogSe
 
 void QxrdSynchronizedAcquisitionDialogSettings::addChildPtr(QcepObjectPtr child)
 {
-  QcepSerializableObject::addChildPtr(child);
+  QcepObject::addChildPtr(child);
 
   if (checkPointer<QxrdSynchronizedAcquisitionPlotSettings>(child, m_SynchronizedAcquisitionPlotSettings)) {}
 }

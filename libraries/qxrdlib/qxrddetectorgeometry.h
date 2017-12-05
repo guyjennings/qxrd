@@ -4,9 +4,9 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 
-class QXRD_EXPORT QxrdDetectorGeometry : public QcepSerializableObject
+class QXRD_EXPORT QxrdDetectorGeometry : public QcepObject
 {
   Q_OBJECT
 public:

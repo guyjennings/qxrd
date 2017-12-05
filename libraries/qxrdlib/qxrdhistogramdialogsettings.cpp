@@ -2,7 +2,7 @@
 #include "qxrdhistogramplotsettings.h"
 
 QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QString name) :
-  QcepSerializableObject(name),
+  QcepObject(name),
   m_HistogramRect(this, "histogramRect", QRectF(), "Histogram Selection Rectangle")
 {
 }
@@ -18,14 +18,14 @@ QxrdHistogramDialogSettingsPtr QxrdHistogramDialogSettings::newHistogramDialogSe
 
 void QxrdHistogramDialogSettings::addChildPtr(QcepObjectPtr child)
 {
-  QcepSerializableObject::addChildPtr(child);
+  QcepObject::addChildPtr(child);
 
   if (checkPointer<QxrdHistogramPlotSettings>(child, m_HistogramPlotSettings)) {}
 }
 
 void QxrdHistogramDialogSettings::readSettings(QSettings *settings)
 {
-  QcepSerializableObject::readSettings(settings);
+  QcepObject::readSettings(settings);
 
   if (m_HistogramPlotSettings) {
     settings->beginGroup("plot");
@@ -36,7 +36,7 @@ void QxrdHistogramDialogSettings::readSettings(QSettings *settings)
 
 void QxrdHistogramDialogSettings::writeSettings(QSettings *settings)
 {
-  QcepSerializableObject::writeSettings(settings);
+  QcepObject::writeSettings(settings);
 
   if (m_HistogramPlotSettings) {
     settings->beginGroup("plot");

@@ -8,7 +8,7 @@
 #include "qcepallocator.h"
 
 QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
-  QcepSerializableObject(name),
+  QcepObject(name),
   m_Processor(),
   m_Geometry(new QxrdDetectorGeometry("testGeometry")),
   m_NRows(this, "nRows", 2048, "Number of Rows"),

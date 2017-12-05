@@ -6,7 +6,7 @@
 using namespace QtDataVisualization;
 
 QxrdTestImagePlotDataVisHelper::QxrdTestImagePlotDataVisHelper()
-  : QcepSerializableObject("imagePlotHelper")
+  : QcepObject("imagePlotHelper")
 {
 
 }

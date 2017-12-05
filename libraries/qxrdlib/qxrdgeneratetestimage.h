@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 
 #include "qcepproperty.h"
 #include "qxrddataprocessor-ptr.h"
@@ -13,7 +13,7 @@
 #include "qxrddetectorgeometry.h"
 #include "qxrdgeneratetestimage-ptr.h"
 
-class QXRD_EXPORT QxrdGenerateTestImage : public QcepSerializableObject
+class QXRD_EXPORT QxrdGenerateTestImage : public QcepObject
 {
   Q_OBJECT
 public:

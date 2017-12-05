@@ -6,9 +6,9 @@
 #include "qcepproperty.h"
 #include "qspecserver.h"
 #include "qxrdexperiment-ptr.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 
-class QXRD_EXPORT QxrdServer : public QcepSerializableObject
+class QXRD_EXPORT QxrdServer : public QcepObject
 {
   Q_OBJECT
 

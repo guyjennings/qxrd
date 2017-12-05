@@ -3,13 +3,13 @@
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qxrdcalibrant-ptr.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdcalibrantlibrary-ptr.h"
 
-class QXRD_EXPORT QxrdCalibrantLibrary : public QcepSerializableObject
+class QXRD_EXPORT QxrdCalibrantLibrary : public QcepObject
 {
   Q_OBJECT
 

@@ -23,7 +23,7 @@ QxrdDetectorSettings::QxrdDetectorSettings(QxrdApplicationWPtr app, QxrdExperime
                            QxrdAcquisitionWPtr   acq,
                            int                   detType,
                            int                   detNum) :
-  QcepSerializableObject("detector"),
+  QcepObject("detector"),
   m_Application(app),
   m_Experiment(expt),
   m_Acquisition(acq),

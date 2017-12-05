@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepproperty.h"
 
 #include "qxrdexperiment-ptr.h"
@@ -20,7 +20,7 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 
-class QXRD_EXPORT QxrdIntegrator : public QcepSerializableObject
+class QXRD_EXPORT QxrdIntegrator : public QcepObject
 {
   Q_OBJECT
 

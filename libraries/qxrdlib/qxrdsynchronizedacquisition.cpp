@@ -6,7 +6,7 @@
 #include "qxrdacquisitionparameterpack.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
-  QcepSerializableObject(name),
+  QcepObject(name),
   m_SyncAcquisitionMode(this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
   m_SyncAcquisitionWaveform(this,"syncAcquisitionWaveform", 0,
                             "Synchronized Acquisition Waveform (0 = Square, 1 = Sine, 2 = Triangle, 3 = Sawtooth, 4 = Bipolar Triangle)"),

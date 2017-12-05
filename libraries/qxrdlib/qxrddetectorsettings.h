@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include <QDoubleSpinBox>
 #include <QComboBox>
 #include "qcepimagedata-ptr.h"
@@ -22,7 +22,7 @@
 #include "qxrdroicoordinates-ptr.h"
 #include "qxrddetectordriverthread-ptr.h"
 
-class QXRD_EXPORT QxrdDetectorSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdDetectorSettings : public QcepObject
 {
   Q_OBJECT
 

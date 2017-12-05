@@ -4,14 +4,14 @@
 #ifdef HAVE_DATAVIS
 
 #include "qxrdlib_global.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepimagedata.h"
 #include <QtDataVisualization>
 
 typedef QSharedPointer<QtDataVisualization::QSurface3DSeries> QSurface3DSeriesPtr;
 
-class QXRD_EXPORT QxrdTestImagePlotDataVisHelper : public QcepSerializableObject
+class QXRD_EXPORT QxrdTestImagePlotDataVisHelper : public QcepObject
 {
   Q_OBJECT
 

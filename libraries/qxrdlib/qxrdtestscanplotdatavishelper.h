@@ -4,10 +4,10 @@
 #ifdef HAVE_DATAVIS
 
 #include "qxrdlib_global.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepdatacolumnscan-ptr.h"
 
-class QXRD_EXPORT QxrdTestScanPlotDataVisHelper : public QcepSerializableObject
+class QXRD_EXPORT QxrdTestScanPlotDataVisHelper : public QcepObject
 {
   Q_OBJECT
 

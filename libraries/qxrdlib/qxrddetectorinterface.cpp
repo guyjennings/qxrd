@@ -2,7 +2,7 @@
 #include "qcepallocator.h"
 
 QxrdDetectorInterface::QxrdDetectorInterface(QString name)
-  : QcepSerializableObject(name)
+  : QcepObject(name)
 {
 }
 

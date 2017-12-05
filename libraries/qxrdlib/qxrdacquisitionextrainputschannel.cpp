@@ -13,7 +13,7 @@ QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputsChannel::newAcqui
 }
 
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(QString name) :
-  QcepSerializableObject(name),
+  QcepObject(name),
   m_ChannelNumber(this, "channelNumber", -1, "Extra Input Channel Number"),
   m_Enabled(this, "enabled", 1, "Enabled?"),
   m_Plotted(this, "plotted", 1, "Plotted?"),

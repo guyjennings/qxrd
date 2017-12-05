@@ -2,7 +2,7 @@
 #include "qcepmutexlocker.h"
 
 QxrdInfoDialogSettings::QxrdInfoDialogSettings(QString name) :
-  QcepSerializableObject(name)
+  QcepObject(name)
 {
 }
 

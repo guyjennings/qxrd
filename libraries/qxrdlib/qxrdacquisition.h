@@ -12,7 +12,7 @@
 #include <QWaitCondition>
 #include <QElapsedTimer>
 
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 //#include "qxrdrasterdata.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
@@ -36,7 +36,7 @@
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 
-class QXRD_EXPORT QxrdAcquisition : public QcepSerializableObject
+class QXRD_EXPORT QxrdAcquisition : public QcepObject
 {
   Q_OBJECT
 

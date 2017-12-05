@@ -2,7 +2,7 @@
 #define QXRDPOWDERPOINTPROPERTY_H
 
 #include "qxrdlib_global.h"
-#include "qcepserializableobject-ptr.h"
+#include "qcepobject-ptr.h"
 #include "qcepproperty.h"
 #include "qxrdpowderpoint.h"
 
@@ -10,12 +10,12 @@ class QXRD_EXPORT QxrdPowderPointProperty : public QcepProperty
 {
   Q_OBJECT
 public:
-  explicit QxrdPowderPointProperty(QcepSerializableObject *parent,
+  explicit QxrdPowderPointProperty(QcepObject *parent,
                                    const char *name,
                                    QxrdPowderPoint value,
                                    QString toolTip);
 
-  explicit QxrdPowderPointProperty(QcepSerializableObject *parent,
+  explicit QxrdPowderPointProperty(QcepObject *parent,
                                    const char *name,
                                    int n1, int n2, int n3,
                                    double x, double y, double r1, double r2, double az,
@@ -93,7 +93,7 @@ private:
 class QXRD_EXPORT QxrdPowderPointVectorProperty : public QcepProperty {
   Q_OBJECT
 public:
-  QxrdPowderPointVectorProperty(QcepSerializableObject *parent,
+  QxrdPowderPointVectorProperty(QcepObject *parent,
                                 const char *name,
                                 QxrdPowderPointVector value,
                                 QString toolTip);

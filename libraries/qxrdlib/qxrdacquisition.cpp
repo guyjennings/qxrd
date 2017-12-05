@@ -25,7 +25,7 @@
 #include "qxrdacquisitionexecutionthread.h"
 
 QxrdAcquisition::QxrdAcquisition(QString name)
-  : QcepSerializableObject(name),
+  : QcepObject(name),
     m_ExecutionThread(),
     m_Cancelling(this, "cancelling", 0, "Cancel Acquisition?"),
     m_Triggered(this, "triggered", 0, "Trigger Acquisition"),
@@ -122,7 +122,7 @@ void QxrdAcquisition::initialize()
 
 void QxrdAcquisition::addChildPtr(QcepObjectPtr child)
 {
-  QcepSerializableObject::addChildPtr(child);
+  QcepObject::addChildPtr(child);
 
   if (checkPointer<QxrdSynchronizedAcquisition>(child, m_SynchronizedAcquisition)) {}
   if (checkPointer<QxrdAcquisitionExtraInputs>(child, m_AcquisitionExtraInputs)) {
@@ -135,7 +135,7 @@ void QxrdAcquisition::removeChildPtr(QcepObjectPtr child)
 {
   printMessage("Need to implement QxrdAcquisition::removeChildPtr");
 
-  QcepSerializableObject::removeChildPtr(child);
+  QcepObject::removeChildPtr(child);
 }
 
 QxrdAcquisition::~QxrdAcquisition()

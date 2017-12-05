@@ -17,7 +17,7 @@
 #include "qxrdhistogramplotsettings.h"
 
 QxrdWindowSettings::QxrdWindowSettings(QString name) :
-  QcepSerializableObject(name),
+  QcepObject(name),
   m_WindowGeometry(this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(this, "windowState", QByteArray(), "Window State Settings")
 {
@@ -45,7 +45,7 @@ QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
 
 void QxrdWindowSettings::addChildPtr(QcepObjectPtr child)
 {
-  QcepSerializableObject::addChildPtr(child);
+  QcepObject::addChildPtr(child);
 
   if (checkPointer<QxrdCenterFinderPlotSettings>(child, m_CenterFinderPlotSettings)) {}
   else if (checkPointer<QxrdIntegratorPlotSettings>(child, m_IntegratorPlotSettings)) {}
@@ -87,7 +87,7 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (settings) {
-    QcepSerializableObject::readSettings(settings);
+    QcepObject::readSettings(settings);
 
     if (m_ImagePlotSettings) {
       settings->beginGroup("plot");
@@ -170,7 +170,7 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
   //    printf("QxrdWindow::writeSettings\n");
 
   if (settings) {
-    QcepSerializableObject::writeSettings(settings);
+    QcepObject::writeSettings(settings);
 
     if (m_ImagePlotSettings) {
       settings->beginGroup("plot");

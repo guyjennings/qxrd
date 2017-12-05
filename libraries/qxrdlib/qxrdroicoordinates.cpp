@@ -9,7 +9,7 @@
 
 QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
                                        int                   roiInnerType)
-  : QcepSerializableObject("coords"),
+  : QcepObject("coords"),
     m_RoiOuterType(this, "roiOuterType", roiOuterType, "ROI Outer Type"),
     m_RoiInnerType(this, "roiInnerType", roiInnerType, "ROI Inner Type"),
 //    m_RoiOuterTypeName(this, "roiOuterTypeName", QxrdROIShape::roiTypeName(roiOuterType), "ROI Outer Type Name"),
@@ -102,7 +102,7 @@ void QxrdROICoordinates::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepSerializableObject::writeSettings(settings);
+  QcepObject::writeSettings(settings);
 
   if (m_OuterShape) {
     settings->beginGroup("outer");
@@ -121,7 +121,7 @@ void QxrdROICoordinates::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepSerializableObject::readSettings(settings);
+  QcepObject::readSettings(settings);
 
   m_InnerShape = QxrdROIShape::newROIShape(get_RoiInnerType(), 0.25);
   m_OuterShape = QxrdROIShape::newROIShape(get_RoiOuterType(), 1.00);

@@ -2,11 +2,11 @@
 #define QXRDSCRIPTDIALOGSETTINGS_H
 
 #include "qxrdlib_global.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdscriptdialogsettings-ptr.h"
 
-class QXRD_EXPORT QxrdScriptDialogSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdScriptDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:

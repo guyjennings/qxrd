@@ -4,11 +4,11 @@
 #include "qxrdlib_global.h"
 #include <QObject>
 #include "qcepproperty.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qxrdsynchronizedacquisitionplotsettings-ptr.h"
 #include "qxrdsynchronizedacquisitiondialogsettings-ptr.h"
 
-class QXRD_EXPORT QxrdSynchronizedAcquisitionDialogSettings : public QcepSerializableObject
+class QXRD_EXPORT QxrdSynchronizedAcquisitionDialogSettings : public QcepObject
 {
   Q_OBJECT
 public:

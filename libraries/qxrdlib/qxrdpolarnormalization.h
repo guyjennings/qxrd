@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepimagedata-ptr.h"
@@ -12,7 +12,7 @@
 #include "qcepdataobject-ptr.h"
 #include "qxrdpolarnormalization-ptr.h"
 
-class QXRD_EXPORT QxrdPolarNormalization : public QcepSerializableObject
+class QXRD_EXPORT QxrdPolarNormalization : public QcepObject
 {
   Q_OBJECT
 

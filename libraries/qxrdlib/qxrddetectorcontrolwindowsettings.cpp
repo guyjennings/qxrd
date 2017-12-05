@@ -2,7 +2,7 @@
 #include "qxrddetectorimageplot.h"
 
 QxrdDetectorControlWindowSettings::QxrdDetectorControlWindowSettings(QxrdDetectorSettingsWPtr det)
-  : QcepSerializableObject("detectorWindowSettings"),
+  : QcepObject("detectorWindowSettings"),
     m_DetectorSettings(det),
     m_DetectorWindowOpen(this, "detectorWindowOpen", 0, "Detector Window Open?"),
     m_DetectorWindowGeometry(this, "detectorWindowGeometry", QByteArray(), "Detector Window Geometry"),
@@ -22,7 +22,7 @@ QxrdDetectorControlWindowSettingsPtr QxrdDetectorControlWindowSettings::newDetec
 
 void QxrdDetectorControlWindowSettings::addChildPtr(QcepObjectPtr child)
 {
-  QcepSerializableObject::addChildPtr(child);
+  QcepObject::addChildPtr(child);
 }
 
 void QxrdDetectorControlWindowSettings::registerMetaTypes()

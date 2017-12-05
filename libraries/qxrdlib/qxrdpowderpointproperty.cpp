@@ -3,9 +3,9 @@
 #include "qcepdebug.h"
 #include <QScriptEngine>
 #include <stdio.h>
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 
-QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSerializableObject *parent,
+QxrdPowderPointProperty::QxrdPowderPointProperty(QcepObject *parent,
                                                  const char *name,
                                                  QxrdPowderPoint value,
                                                  QString toolTip) :
@@ -15,7 +15,7 @@ QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSerializableObject *parent,
 {
 }
 
-QxrdPowderPointProperty::QxrdPowderPointProperty(QcepSerializableObject *parent,
+QxrdPowderPointProperty::QxrdPowderPointProperty(QcepObject *parent,
                                                  const char *name,
                                                  int n1, int n2, int n3,
                                                  double x, double y, double r1, double r2, double az,
@@ -450,7 +450,7 @@ void QxrdPowderPointPropertyDoubleSpinBoxHelper::setValue(double value)
   emit subValueChanged(m_Axis, value, m_Property->incIndex(1));
 }
 
-QxrdPowderPointVectorProperty::QxrdPowderPointVectorProperty(QcepSerializableObject *parent,
+QxrdPowderPointVectorProperty::QxrdPowderPointVectorProperty(QcepObject *parent,
                                                              const char *name,
                                                              QxrdPowderPointVector value,
                                                              QString toolTip)

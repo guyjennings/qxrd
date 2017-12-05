@@ -5,7 +5,7 @@
 #include <QScriptEngine>
 
 QxrdROIShape::QxrdROIShape(QxrdROIShape::ROIShapeType shapeType)
-  : QcepSerializableObject("shape"),
+  : QcepObject("shape"),
     m_ShapeType(this, "shapeType", shapeType, "ROI Shape Type")
 {
 }

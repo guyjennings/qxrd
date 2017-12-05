@@ -4,12 +4,12 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include <QTimer>
 
 //TODO: eliminate?
-class QXRD_EXPORT QxrdTestGenerator : public QcepSerializableObject
+class QXRD_EXPORT QxrdTestGenerator : public QcepObject
 {
   Q_OBJECT
 

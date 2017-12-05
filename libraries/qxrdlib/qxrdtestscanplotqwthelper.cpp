@@ -3,7 +3,7 @@
 #include "qcepdatacolumn.h"
 
 QxrdTestScanPlotQwtHelper::QxrdTestScanPlotQwtHelper()
-  : QcepSerializableObject("scanPlotHelper")
+  : QcepObject("scanPlotHelper")
 {
 
 }

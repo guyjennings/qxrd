@@ -3,14 +3,14 @@
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
-#include "qcepserializableobject.h"
+#include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdcalibrant-ptr.h"
 #include "qxrdcalibrantdspacing.h"
 #include "qxrdcalibrantdspacings.h"
 #include <qscriptengine.h>
 
-class QXRD_EXPORT QxrdCalibrant : public QcepSerializableObject
+class QXRD_EXPORT QxrdCalibrant : public QcepObject
 {
   Q_OBJECT
 
