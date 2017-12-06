@@ -6,9 +6,9 @@
 #include <QPainter>
 
 QxrdDexelaDetectorDriver::QxrdDexelaDetectorDriver(QString name,
-                                                   QxrdDetectorSettingsPtr det,
-                                                   QxrdExperimentPtr expt,
-                                                   QxrdAcquisitionPtr acq)
+                                                   QxrdDetectorSettingsWPtr det,
+                                                   QxrdExperimentWPtr expt,
+                                                   QxrdAcquisitionWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq)
 {
 

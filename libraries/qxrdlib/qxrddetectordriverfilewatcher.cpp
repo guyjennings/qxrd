@@ -1,11 +1,10 @@
 #include "qxrddetectordriverfilewatcher.h"
 #include "qxrddetectorsettingsfilewatcher.h"
 
-QxrdDetectorDriverFileWatcher::QxrdDetectorDriverFileWatcher(
-    QString name,
-    QxrdDetectorSettingsFileWatcherPtr watcher,
-    QxrdExperimentPtr expt,
-    QxrdAcquisitionPtr acq) :
+QxrdDetectorDriverFileWatcher::QxrdDetectorDriverFileWatcher(QString name,
+    QxrdDetectorSettingsFileWatcherWPtr watcher,
+    QxrdExperimentWPtr expt,
+    QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, watcher, expt, acq),
   m_FileWatcher(watcher)
 {

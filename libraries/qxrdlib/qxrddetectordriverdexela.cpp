@@ -6,11 +6,10 @@
 #include <QPainter>
 #include "qxrdsynchronizedacquisition.h"
 
-QxrdDetectorDriverDexela::QxrdDetectorDriverDexela(
-    QString name,
-    QxrdDetectorSettingsDexelaPtr sim,
-    QxrdExperimentPtr expt,
-    QxrdAcquisitionPtr acq) :
+QxrdDetectorDriverDexela::QxrdDetectorDriverDexela(QString name,
+    QxrdDetectorSettingsDexelaWPtr sim,
+    QxrdExperimentWPtr expt,
+    QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, sim, expt, acq),
   m_Dexela(sim)
 {

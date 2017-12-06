@@ -23,7 +23,7 @@ public slots:
   void doAcquireDark();
 
 private:
-  QxrdAcquisitionPtr m_Acquisition;
+  QxrdAcquisitionWPtr m_Acquisition;
 };
 
 #endif // QXRDACQUISITIONEXECUTION_H

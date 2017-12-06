@@ -13,9 +13,9 @@ class QXRD_EXPORT QxrdDetectorDriver : public QcepObject
 
 public:
   QxrdDetectorDriver(QString name,
-                     QxrdDetectorSettingsPtr det,
-                     QxrdExperimentPtr expt,
-                     QxrdAcquisitionPtr acq);
+                     QxrdDetectorSettingsWPtr det,
+                     QxrdExperimentWPtr expt,
+                     QxrdAcquisitionWPtr acq);
 
 public slots:
   virtual bool startDetectorDriver() = 0;

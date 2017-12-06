@@ -15,11 +15,10 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
 static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 #endif
 
-QxrdDetectorDriverPerkinElmer::QxrdDetectorDriverPerkinElmer(
-    QString name,
-    QxrdDetectorSettingsPerkinElmerPtr perkinElmer,
-    QxrdExperimentPtr expt,
-    QxrdAcquisitionPtr acq) :
+QxrdDetectorDriverPerkinElmer::QxrdDetectorDriverPerkinElmer(QString name,
+    QxrdDetectorSettingsPerkinElmerWPtr perkinElmer,
+    QxrdExperimentWPtr expt,
+    QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, perkinElmer, expt, acq),
 #ifdef HAVE_PERKIN_ELMER
   m_Mutex(QMutex::Recursive),

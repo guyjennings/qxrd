@@ -10,11 +10,10 @@
 #include "qxrddataprocessor.h"
 #include "qcepallocator.h"
 
-QxrdDetectorDriverPilatus::QxrdDetectorDriverPilatus(
-    QString name,
-    QxrdDetectorSettingsPilatusPtr pilatus,
-    QxrdExperimentPtr expt,
-    QxrdAcquisitionPtr acq) :
+QxrdDetectorDriverPilatus::QxrdDetectorDriverPilatus(QString name,
+    QxrdDetectorSettingsPilatusWPtr pilatus,
+    QxrdExperimentWPtr expt,
+    QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, pilatus, expt, acq),
   m_Pilatus(pilatus),
   m_PilatusSocket(),

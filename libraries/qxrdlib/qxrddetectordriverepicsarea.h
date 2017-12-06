@@ -12,9 +12,9 @@ class QXRD_EXPORT QxrdDetectorDriverEpicsArea : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverEpicsArea(QString name,
-                              QxrdDetectorSettingsEpicsAreaPtr det,
-                              QxrdExperimentPtr expt,
-                              QxrdAcquisitionPtr acq);
+                              QxrdDetectorSettingsEpicsAreaWPtr det,
+                              QxrdExperimentWPtr expt,
+                              QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverEpicsArea();
 
 public slots:

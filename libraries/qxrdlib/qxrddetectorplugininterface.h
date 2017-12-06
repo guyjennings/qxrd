@@ -15,9 +15,9 @@ public:
   virtual ~QxrdDetectorPluginInterface() {}
 
   virtual QxrdDetectorDriverPtr createDetector(QString name,
-                                               QxrdDetectorSettingsPtr det,
-                                               QxrdExperimentPtr expt,
-                                               QxrdAcquisitionPtr acq) = 0;
+                                               QxrdDetectorSettingsWPtr det,
+                                               QxrdExperimentWPtr expt,
+                                               QxrdAcquisitionWPtr acq) = 0;
 };
 
 #define DetectorPluginInterface_iid "gov.anl.aps.cep.Qxrd.DetectorInterface/2.0"

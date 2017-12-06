@@ -14,9 +14,9 @@ class QXRD_EXPORT QxrdDetectorDriverPilatus : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverPilatus(QString name,
-                            QxrdDetectorSettingsPilatusPtr pilatus,
-                            QxrdExperimentPtr expt,
-                            QxrdAcquisitionPtr acq);
+                            QxrdDetectorSettingsPilatusWPtr pilatus,
+                            QxrdExperimentWPtr expt,
+                            QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverPilatus();
 
 public slots:

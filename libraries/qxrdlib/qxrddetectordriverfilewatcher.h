@@ -12,9 +12,9 @@ class QXRD_EXPORT QxrdDetectorDriverFileWatcher : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverFileWatcher(QString name,
-                                QxrdDetectorSettingsFileWatcherPtr watcher,
-                                QxrdExperimentPtr expt,
-                                QxrdAcquisitionPtr acq);
+                                QxrdDetectorSettingsFileWatcherWPtr watcher,
+                                QxrdExperimentWPtr expt,
+                                QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverFileWatcher();
 
 public slots:

@@ -1,11 +1,10 @@
 #include "qxrddetectordriverepicsarea.h"
 #include "qxrddetectorsettingsepicsarea.h"
 
-QxrdDetectorDriverEpicsArea::QxrdDetectorDriverEpicsArea(
-    QString name,
-    QxrdDetectorSettingsEpicsAreaPtr det,
-    QxrdExperimentPtr expt,
-    QxrdAcquisitionPtr acq) :
+QxrdDetectorDriverEpicsArea::QxrdDetectorDriverEpicsArea(QString name,
+    QxrdDetectorSettingsEpicsAreaWPtr det,
+    QxrdExperimentWPtr expt,
+    QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, det, expt, acq)
 {
 #ifndef QT_NO_DEBUG

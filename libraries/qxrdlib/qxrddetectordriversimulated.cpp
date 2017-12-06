@@ -6,11 +6,10 @@
 #include <QPainter>
 #include "qxrdsynchronizedacquisition.h"
 
-QxrdDetectorDriverSimulated::QxrdDetectorDriverSimulated(
-    QString name,
-    QxrdDetectorSettingsSimulatedPtr sim,
-    QxrdExperimentPtr expt,
-    QxrdAcquisitionPtr acq) :
+QxrdDetectorDriverSimulated::QxrdDetectorDriverSimulated(QString name,
+    QxrdDetectorSettingsSimulatedWPtr sim,
+    QxrdExperimentWPtr expt,
+    QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, sim, expt, acq),
   m_Simulated(sim)
 {

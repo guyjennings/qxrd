@@ -9,9 +9,9 @@ class QxrdPerkinElmerDriver : public QxrdDetectorDriver
 
 public:
   QxrdPerkinElmerDriver(QString name,
-                        QxrdDetectorSettingsPtr det,
-                        QxrdExperimentPtr expt,
-                        QxrdAcquisitionPtr acq);
+                        QxrdDetectorSettingsWPtr det,
+                        QxrdExperimentWPtr expt,
+                        QxrdAcquisitionWPtr acq);
 };
 
 #endif // QXRDPERKINELMERDRIVER_H

@@ -293,18 +293,20 @@ void QxrdApplication::finish()
 
   GUI_THREAD_CHECK;
 
-  writeSettings();
-
-//  foreach(QxrdExperimentThreadPtr t, m_ExperimentThreads) {
-//    t->quit();
-//    t->wait();
-//  }
-
-  while(m_Experiments.count()) {
-    QxrdExperimentPtr expt = m_Experiments.takeFirst();
-
+  foreach(QxrdExperimentPtr expt, m_Experiments) {
     if (expt) {
       expt->closeWindows();
+    }
+  }
+
+  writeSettings();
+
+  while (!m_ExperimentThreads.isEmpty()) {
+    QxrdExperimentThreadPtr t = m_ExperimentThreads.takeFirst();
+
+    if (t) {
+      t->quit();
+      t->wait();
     }
   }
 }

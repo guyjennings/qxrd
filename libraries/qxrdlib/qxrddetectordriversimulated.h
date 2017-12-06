@@ -13,9 +13,9 @@ class QXRD_EXPORT QxrdDetectorDriverSimulated : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverSimulated(QString name,
-                              QxrdDetectorSettingsSimulatedPtr sim,
-                              QxrdExperimentPtr expt,
-                              QxrdAcquisitionPtr acq);
+                              QxrdDetectorSettingsSimulatedWPtr sim,
+                              QxrdExperimentWPtr expt,
+                              QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverSimulated();
 
 public slots:

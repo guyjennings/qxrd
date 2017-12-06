@@ -13,9 +13,9 @@ class QXRD_EXPORT QxrdDetectorDriverDexela : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverDexela(QString name,
-                              QxrdDetectorSettingsDexelaPtr sim,
-                              QxrdExperimentPtr expt,
-                              QxrdAcquisitionPtr acq);
+                              QxrdDetectorSettingsDexelaWPtr sim,
+                              QxrdExperimentWPtr expt,
+                              QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverDexela();
 
 public slots:

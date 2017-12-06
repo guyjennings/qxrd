@@ -12,9 +12,9 @@ QString QxrdDexelaDetectorPlugin::name() const
 }
 
 QxrdDetectorDriverPtr QxrdDexelaDetectorPlugin::createDetector(QString name,
-                                                               QxrdDetectorSettingsPtr det,
-                                                               QxrdExperimentPtr expt,
-                                                               QxrdAcquisitionPtr acq)
+                                                               QxrdDetectorSettingsWPtr det,
+                                                               QxrdExperimentWPtr expt,
+                                                               QxrdAcquisitionWPtr acq)
 {
   QxrdDetectorDriverPtr res =
       QxrdDetectorDriverPtr(new QxrdDexelaDetectorDriver(name, det, expt, acq));

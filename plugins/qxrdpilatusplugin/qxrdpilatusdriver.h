@@ -11,9 +11,9 @@ class QxrdPilatusDriver : public QxrdDetectorDriver
 
 public:
   QxrdPilatusDriver(QString name,
-                    QxrdDetectorSettingsPtr det,
-                    QxrdExperimentPtr expt,
-                    QxrdAcquisitionPtr acq);
+                    QxrdDetectorSettingsWPtr det,
+                    QxrdExperimentWPtr expt,
+                    QxrdAcquisitionWPtr acq);
 
 public slots:
   virtual bool startDetectorDriver();

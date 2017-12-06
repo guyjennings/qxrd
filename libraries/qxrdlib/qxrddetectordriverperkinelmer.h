@@ -21,9 +21,9 @@ class QXRD_EXPORT QxrdDetectorDriverPerkinElmer : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverPerkinElmer(QString name,
-                                QxrdDetectorSettingsPerkinElmerPtr perkinElmer,
-                                QxrdExperimentPtr expt,
-                                QxrdAcquisitionPtr acq);
+                                QxrdDetectorSettingsPerkinElmerWPtr perkinElmer,
+                                QxrdExperimentWPtr expt,
+                                QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverPerkinElmer();
 
 public slots:

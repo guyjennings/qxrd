@@ -1,9 +1,9 @@
 #include "qxrddetectordriver.h"
 
 QxrdDetectorDriver::QxrdDetectorDriver(QString name,
-                                       QxrdDetectorSettingsPtr det,
-                                       QxrdExperimentPtr expt,
-                                       QxrdAcquisitionPtr acq) :
+                                       QxrdDetectorSettingsWPtr det,
+                                       QxrdExperimentWPtr expt,
+                                       QxrdAcquisitionWPtr acq) :
   QcepObject(name),
   m_Detector(det),
   m_Experiment(expt),
