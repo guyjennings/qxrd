@@ -125,7 +125,7 @@ public slots:
 
   virtual void setDefaultObjectData(QcepDataObject *obj);
 
-  QxrdDetectorPluginInterfacePtr detectorPlugin(int n);
+//  QxrdDetectorPluginInterfacePtr detectorPlugin(int n);
 
   QxrdPluginInfoModelWPtr pluginInfo();
 
@@ -176,7 +176,7 @@ private:
   QTime                           m_LastLockerTime;
   int                             m_LastLockerCount;
 
-  QVector<QxrdDetectorPluginInterfacePtr> m_DetectorPlugins;
+//  QVector<QxrdDetectorPluginInterfacePtr> m_DetectorPlugins;
 
   QxrdPluginInfoModelPtr          m_PluginInfo;
 };

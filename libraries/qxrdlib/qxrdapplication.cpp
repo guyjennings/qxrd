@@ -442,8 +442,8 @@ void QxrdApplication::loadPlugins()
           if (detector) {
             pluginName = detector -> name();
 
-            m_DetectorPlugins.append(
-                  QxrdDetectorPluginInterfacePtr(detector));
+//            m_DetectorPlugins.append(
+//                  QxrdDetectorPluginInterfacePtr(detector));
           }
 
           QxrdProcessorInterface* processor = qobject_cast<QxrdProcessorInterface*>(plugin);
@@ -508,10 +508,10 @@ void QxrdApplication::loadPlugins()
   }
 }
 
-QxrdDetectorPluginInterfacePtr QxrdApplication::detectorPlugin(int n)
-{
-  return m_DetectorPlugins.value(n);
-}
+//QxrdDetectorPluginInterfacePtr QxrdApplication::detectorPlugin(int n)
+//{
+//  return m_DetectorPlugins.value(n);
+//}
 
 void QxrdApplication::splashMessage(QString msg)
 {
