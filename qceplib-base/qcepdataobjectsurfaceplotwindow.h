@@ -26,7 +26,7 @@ public:
 signals:
 
 public slots:
-  void onNewImageAvailable(QcepDoubleImageDataPtr img);
+  void onNewImageAvailable(QcepDoubleImageDataWPtr img);
 };
 
 #endif // HAVE_DATAVIS

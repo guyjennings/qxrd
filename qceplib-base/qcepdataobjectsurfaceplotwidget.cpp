@@ -78,13 +78,15 @@ QcepDataObjectSurfacePlotWidget::~QcepDataObjectSurfacePlotWidget()
   delete m_Surface;
 }
 
-void QcepDataObjectSurfacePlotWidget::onNewImageAvailable(QcepDoubleImageDataPtr img)
+void QcepDataObjectSurfacePlotWidget::onNewImageAvailable(QcepDoubleImageDataWPtr img)
 {
-  if (img) {
+  QcepDoubleImageDataPtr imgp(img);
+
+  if (imgp) {
     m_Image = img;
 
-    m_ImageMinValue = img->minValue();
-    m_ImageMaxValue = img->maxValue();
+    m_ImageMinValue = imgp->minValue();
+    m_ImageMaxValue = imgp->maxValue();
 
     double range = m_ImageMaxValue - m_ImageMinValue;
     double step=0.1;
@@ -98,11 +100,11 @@ void QcepDataObjectSurfacePlotWidget::onNewImageAvailable(QcepDoubleImageDataPtr
     m_MinimumValCtrl->setSingleStep(step);
     m_MaximumValCtrl->setSingleStep(step);
 
-    int size = img->get_Width() * img->get_Height();
+    int size = imgp->get_Width() * imgp->get_Height();
 
     m_ImagePercentiles.resize(size);
 
-    double *imageData = img->data();
+    double *imageData = imgp->data();
     double *pcntlData = m_ImagePercentiles.data();
 
     int j=0;
@@ -141,19 +143,21 @@ double QcepDataObjectSurfacePlotWidget::scaledValue(double v)
 
 void QcepDataObjectSurfacePlotWidget::onReplotWanted()
 {
-  if (m_Image) {
+  QcepDoubleImageDataPtr img(m_Image);
+
+  if (img) {
     onScalingModeChanged(get_ScalingMode());
 
     QSurfaceDataArray *d = new QSurfaceDataArray();
 
-    int wd = m_Image->get_Width();
-    int ht = m_Image->get_Height();
+    int wd = img->get_Width();
+    int ht = img->get_Height();
 
     for (int j=0; j<ht; j++) {
       QSurfaceDataRow *r = new QSurfaceDataRow(wd);
 
       for (int i=0; i<wd; i++) {
-        (*r)[i].setPosition(QVector3D(i, scaledValue(m_Image->getImageData(i,j)), j));
+        (*r)[i].setPosition(QVector3D(i, scaledValue(img->getImageData(i,j)), j));
       }
 
       d->append(r);

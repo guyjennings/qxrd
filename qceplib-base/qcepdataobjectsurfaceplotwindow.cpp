@@ -17,7 +17,7 @@ QcepDataObjectSurfacePlotWindow::QcepDataObjectSurfacePlotWindow(
 
   setAttribute(Qt::WA_DeleteOnClose);
 
-  QcepDoubleImageDataPtr img = qSharedPointerDynamicCast<QcepDoubleImageData>(obj);
+  QcepDoubleImageDataWPtr img = qSharedPointerDynamicCast<QcepDoubleImageData>(obj);
 
   onNewImageAvailable(img);
 }
@@ -46,12 +46,14 @@ bool QcepDataObjectSurfacePlotWindow::wantToClose()
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
-void QcepDataObjectSurfacePlotWindow::onNewImageAvailable(QcepDoubleImageDataPtr img)
+void QcepDataObjectSurfacePlotWindow::onNewImageAvailable(QcepDoubleImageDataWPtr img)
 {
-  if (img) {
-    setWindowTitle(tr("Surface Plot : %1").arg(img->get_Name()));
+  QcepDoubleImageDataPtr imgp(img);
 
-    m_SurfacePlot->onNewImageAvailable(img);
+  if (imgp) {
+    setWindowTitle(tr("Surface Plot : %1").arg(imgp->get_Name()));
+
+    m_SurfacePlot->onNewImageAvailable(imgp);
   }
 }
 

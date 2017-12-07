@@ -21,7 +21,7 @@ public:
 signals:
 
 public slots:
-  void onNewImageAvailable(QcepDoubleImageDataPtr img);
+  void onNewImageAvailable(QcepDoubleImageDataWPtr img);
   void onColorMapChanged(int newMap);
   void onScalingModeChanged(int newMode);
   void onReplotWanted();
@@ -40,7 +40,7 @@ private:
   void setBandedSpectrum(QLinearGradient &map);
 
 private:
-  QcepDoubleImageDataPtr                        m_Image;
+  QcepDoubleImageDataWPtr                       m_Image;
 
   QtDataVisualization::Q3DSurface              *m_SurfaceGraph;
   QtDataVisualization::QSurface3DSeries        *m_Surface;
