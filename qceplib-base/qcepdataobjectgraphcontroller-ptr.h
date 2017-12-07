@@ -1,12 +1,9 @@
 #ifndef QCEPDATAOBJECTGRAPHCONTROLLERPTR_H
 #define QCEPDATAOBJECTGRAPHCONTROLLERPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepDataObjectGraphController;
-
-typedef QSharedPointer<QcepDataObjectGraphController> QcepDataObjectGraphControllerPtr;
-typedef QWeakPointer<QcepDataObjectGraphController>   QcepDataObjectGraphControllerWPtr;
+QCEP_SHAREDPOINTER(QcepDataObjectGraphController)
 
 #endif // QCEPDATAOBJECTGRAPHCONTROLLERPTR_H
 

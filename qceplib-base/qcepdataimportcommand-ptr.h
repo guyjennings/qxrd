@@ -1,11 +1,8 @@
 #ifndef QCEPDATAIMPORTCOMMANDPTR_H
 #define QCEPDATAIMPORTCOMMANDPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepDataImportCommand;
-
-typedef QSharedPointer<QcepDataImportCommand> QcepDataImportCommandPtr;
-typedef QWeakPointer<QcepDataImportCommand>   QcepDataImportCommandWPtr;
+QCEP_SHAREDPOINTER(QcepDataImportCommand)
 
 #endif // QCEPDATAIMPORTCOMMANDPTR_H

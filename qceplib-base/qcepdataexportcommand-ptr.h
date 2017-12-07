@@ -1,11 +1,8 @@
 #ifndef QCEPDATAEXPORTCOMMANDPTR_H
 #define QCEPDATAEXPORTCOMMANDPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepDataExportCommand;
-
-typedef QSharedPointer<QcepDataExportCommand> QcepDataExportCommandPtr;
-typedef QWeakPointer<QcepDataExportCommand>   QcepDataExportCommandWPtr;
+QCEP_SHAREDPOINTER(QcepDataExportCommand)
 
 #endif // QCEPDATAEXPORTCOMMANDPTR_H

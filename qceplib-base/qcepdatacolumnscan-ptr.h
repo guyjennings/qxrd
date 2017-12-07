@@ -1,11 +1,9 @@
 #ifndef QCEPDATACOLUMNSCANPTR_H
 #define QCEPDATACOLUMNSCANPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepDataColumnScan;
-typedef QSharedPointer<QcepDataColumnScan> QcepDataColumnScanPtr;
-typedef QWeakPointer<QcepDataColumnScan> QcepDataColumnScanWPtr;
+QCEP_SHAREDPOINTER(QcepDataColumnScan)
 
 #endif // QCEPDATACOLUMNSCANPTR_H
 

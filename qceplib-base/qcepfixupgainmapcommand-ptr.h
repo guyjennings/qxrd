@@ -1,11 +1,8 @@
 #ifndef QCEPFIXUPGAINMAPCOMMANDPTR_H
 #define QCEPFIXUPGAINMAPCOMMANDPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepFixupGainMapCommand;
-
-typedef QSharedPointer<QcepFixupGainMapCommand> QcepFixupGainMapCommandPtr;
-typedef QWeakPointer<QcepFixupGainMapCommand>   QcepFixupGainMapCommandWPtr;
+QCEP_SHAREDPOINTER(QcepFixupGainMapCommand)
 
 #endif // QCEPFIXUPGAINMAPCOMMANDPTR_H

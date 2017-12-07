@@ -1,12 +1,9 @@
 #ifndef QCEPPLOTSETTINGSPTR_H
 #define QCEPPLOTSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepPlotSettings;
-
-typedef QSharedPointer<QcepPlotSettings> QcepPlotSettingsPtr;
-typedef QWeakPointer<QcepPlotSettings>   QcepPlotSettingsWPtr;
+QCEP_SHAREDPOINTER(QcepPlotSettings)
 
 #endif // QCEPPLOTSETTINGSPTR_H
 

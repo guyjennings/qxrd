@@ -16,3 +16,6 @@ contains (DEFINES,HAVE_QWT) {
 
 INCLUDEPATH += $${PWD}
 DEPENDPATH  += $${PWD}
+
+HEADERS += \
+    $$PWD/qcepsharedpointer.h

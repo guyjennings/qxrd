@@ -5,7 +5,6 @@
 #include <QObject>
 #include <QReadWriteLock>
 #include <QQueue>
-#include <QSharedPointer>
 #include "qcepintegrateddata-ptr.h"
 
 class QCEP_EXPORT QcepIntegratedDataQueue : public QObject

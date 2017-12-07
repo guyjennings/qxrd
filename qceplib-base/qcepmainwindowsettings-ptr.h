@@ -1,11 +1,8 @@
 #ifndef QCEPMAINWINDOWSETTINGSPTR_H
 #define QCEPMAINWINDOWSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepMainWindowSettings;
-
-typedef QSharedPointer<QcepMainWindowSettings> QcepMainWindowSettingsPtr;
-typedef QWeakPointer<QcepMainWindowSettings>   QcepMainWindowSettingsWPtr;
+QCEP_SHAREDPOINTER(QcepMainWindowSettings)
 
 #endif // QCEPMAINWINDOWSETTINGSPTR_H

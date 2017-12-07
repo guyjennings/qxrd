@@ -1,11 +1,8 @@
 #ifndef QWT_PLOT_PIECEWISE_CURVEPTR_H
 #define QWT_PLOT_PIECEWISE_CURVEPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QwtPlotPiecewiseCurve;
-
-typedef QSharedPointer<QwtPlotPiecewiseCurve> QwtPlotPiecewiseCurvePtr;
-typedef QWeakPointer<QwtPlotPiecewiseCurve>   QwtPlotPiecewiseCurveWPtr;
+QCEP_SHAREDPOINTER(QwtPlotPiecewiseCurve)
 
 #endif // QWT_PLOT_PIECEWISE_CURVEPTR_H

@@ -1,11 +1,9 @@
 #ifndef QCEPDATASETPTR_H
 #define QCEPDATASETPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepDataset;
-typedef QSharedPointer<QcepDataset> QcepDatasetPtr;
-typedef QWeakPointer<QcepDataset> QcepDatasetWPtr;
+QCEP_SHAREDPOINTER(QcepDataset)
 
 #endif // QCEPDATASETPTR_H
 

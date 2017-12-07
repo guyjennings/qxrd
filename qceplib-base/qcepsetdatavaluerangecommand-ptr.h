@@ -1,11 +1,8 @@
 #ifndef QCEPSETDATAVALUERANGECOMMANDPTR_H
 #define QCEPSETDATAVALUERANGECOMMANDPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepSetDataValueRangeCommand;
-
-typedef QSharedPointer<QcepSetDataValueRangeCommand> QcepSetDataValueRangeCommandPtr;
-typedef QWeakPointer<QcepSetDataValueRangeCommand>   QcepSetDataValueRangeCommandWPtr;
+QCEP_SHAREDPOINTER(QcepSetDataValueRangeCommand)
 
 #endif // QCEPSETDATAVALUERANGECOMMANDPTR_H

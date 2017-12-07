@@ -1,12 +1,9 @@
 #ifndef QCEPSCRIPTENGINEPTR_H
 #define QCEPSCRIPTENGINEPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepScriptEngine;
-
-typedef QSharedPointer<QcepScriptEngine> QcepScriptEnginePtr;
-typedef QWeakPointer<QcepScriptEngine>   QcepScriptEngineWPtr;
+QCEP_SHAREDPOINTER(QcepScriptEngine)
 
 #endif // QCEPSCRIPTENGINEPTR_H
 

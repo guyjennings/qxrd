@@ -1,12 +1,9 @@
 #ifndef QCEPINTEGRATEDDATAPTR_H
 #define QCEPINTEGRATEDDATAPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepIntegratedData;
-
-typedef QSharedPointer<QcepIntegratedData>     QcepIntegratedDataPtr;
-typedef QWeakPointer<QcepIntegratedData>       QcepIntegratedDataWPtr;
+QCEP_SHAREDPOINTER(QcepIntegratedData)
 
 #endif // QCEPINTEGRATEDDATAPTR_H
 

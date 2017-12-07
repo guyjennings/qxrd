@@ -1,11 +1,8 @@
 #ifndef QCEPAPPLICATIONSETTINGSPTR_H
 #define QCEPAPPLICATIONSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepApplicationSettings;
-
-typedef QSharedPointer<QcepApplicationSettings> QcepApplicationSettingsPtr;
-typedef QWeakPointer<QcepApplicationSettings>   QcepApplicationSettingsWPtr;
+QCEP_SHAREDPOINTER(QcepApplicationSettings)
 
 #endif // QCEPAPPLICATIONSETTINGSPTR_H

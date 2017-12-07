@@ -1,12 +1,9 @@
 #ifndef QCEPAPPLICATIONPTR_H
 #define QCEPAPPLICATIONPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepApplication;
-
-typedef QSharedPointer<QcepApplication> QcepApplicationPtr;
-typedef QWeakPointer<QcepApplication>   QcepApplicationWPtr;
+QCEP_SHAREDPOINTER(QcepApplication)
 
 #endif // QCEPAPPLICATIONPTR_H
 

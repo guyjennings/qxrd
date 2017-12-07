@@ -1,11 +1,8 @@
 #ifndef QCEPFILEIMPORTERPTR_H
 #define QCEPFILEIMPORTERPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepFileImporter;
-
-typedef QSharedPointer<QcepFileImporter> QcepFileImporterPtr;
-typedef QWeakPointer<QcepFileImporter>   QcepFileImporterWPtr;
+QCEP_SHAREDPOINTER(QcepFileImporter)
 
 #endif // QCEPFILEIMPORTERPTR_H

@@ -1,11 +1,8 @@
 #ifndef QCEPSCATTERPLOTGRAPHMODELPTR_H
 #define QCEPSCATTERPLOTGRAPHMODELPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepScatterPlotGraphModel;
-
-typedef QSharedPointer<QcepScatterPlotGraphModel> QcepScatterPlotGraphModelPtr;
-typedef QWeakPointer<QcepScatterPlotGraphModel>   QcepScatterPlotGraphModelWPtr;
+QCEP_SHAREDPOINTER(QcepScatterPlotGraphModel)
 
 #endif // QCEPSCATTERPLOTGRAPHMODELPTR_H

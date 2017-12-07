@@ -1,12 +1,9 @@
 #ifndef QCEPMASKDATAPTR_H
 #define QCEPMASKDATAPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepMaskData;
-
-typedef QSharedPointer<QcepMaskData> QcepMaskDataPtr;
-typedef QWeakPointer<QcepMaskData> QcepMaskDataWPtr;
+QCEP_SHAREDPOINTER(QcepMaskData)
 
 #endif // QCEPMASKDATAPTR_H
 

@@ -1,12 +1,9 @@
 #ifndef QCEPMAINWINDOWPTR_H
 #define QCEPMAINWINDOWPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepMainWindow;
-
-typedef QSharedPointer<QcepMainWindow> QcepMainWindowPtr;
-typedef QWeakPointer<QcepMainWindow>   QcepMainWindowWPtr;
+QCEP_SHAREDPOINTER(QcepMainWindow)
 
 #endif // QCEPMAINWINDOWPTR_H
 

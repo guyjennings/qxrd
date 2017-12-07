@@ -1,11 +1,9 @@
 #ifndef QCEPDATAGROUPPTR_H
 #define QCEPDATAGROUPPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepDataGroup;
-typedef QSharedPointer<QcepDataGroup> QcepDataGroupPtr;
-typedef QWeakPointer<QcepDataGroup> QcepDataGroupWPtr;
+QCEP_SHAREDPOINTER(QcepDataGroup)
 
 #endif // QCEPDATAGROUPPTR_H
 

@@ -1,11 +1,8 @@
 #ifndef QCEPFILEFORMATTERPTR_H
 #define QCEPFILEFORMATTERPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepFileFormatter;
-
-typedef QSharedPointer<QcepFileFormatter> QcepFileFormatterPtr;
-typedef QWeakPointer<QcepFileFormatter>   QcepFileFormatterWPtr;
+QCEP_SHAREDPOINTER(QcepFileFormatter)
 
 #endif // QCEPFILEFORMATTERPTR_H

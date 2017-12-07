@@ -1,11 +1,8 @@
 #ifndef QCEPDATAIMPORTPARAMETERSPTR_H
 #define QCEPDATAIMPORTPARAMETERSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepDataImportParameters;
-
-typedef QSharedPointer<QcepDataImportParameters> QcepDataImportParametersPtr;
-typedef QWeakPointer<QcepDataImportParameters>   QcepDataImportParametersWPtr;
+QCEP_SHAREDPOINTER(QcepDataImportParameters)
 
 #endif // QCEPDATAIMPORTPARAMETERSPTR_H

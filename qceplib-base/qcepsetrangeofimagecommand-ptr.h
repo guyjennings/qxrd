@@ -1,11 +1,8 @@
 #ifndef QCEPSETRANGEOFIMAGECOMMANDPTR_H
 #define QCEPSETRANGEOFIMAGECOMMANDPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QcepSetRangeOfImageCommand;
-
-typedef QSharedPointer<QcepSetRangeOfImageCommand> QcepSetRangeOfImageCommandPtr;
-typedef QWeakPointer<QcepSetRangeOfImageCommand>   QcepSetRangeOfImageCommandWPtr;
+QCEP_SHAREDPOINTER(QcepSetRangeOfImageCommand)
 
 #endif // QCEPSETRANGEOFIMAGECOMMANDPTR_H
