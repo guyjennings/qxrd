@@ -1,11 +1,8 @@
 #ifndef QXRDROIPOLYGONPTR_H
 #define QXRDROIPOLYGONPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdROIPolygon;
-
-typedef QSharedPointer<QxrdROIPolygon> QxrdROIPolygonPtr;
-typedef QWeakPointer<QxrdROIPolygon>   QxrdROIPolygonWPtr;
+QCEP_SHAREDPOINTER(QxrdROIPolygon)
 
 #endif // QXRDROIPOLYGONPTR_H

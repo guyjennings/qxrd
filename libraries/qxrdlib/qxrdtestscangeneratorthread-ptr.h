@@ -1,11 +1,8 @@
 #ifndef QXRDTESTSCANGENERATORTHREADPTR_H
 #define QXRDTESTSCANGENERATORTHREADPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdTestScanGeneratorThread;
-
-typedef QSharedPointer<QxrdTestScanGeneratorThread> QxrdTestScanGeneratorThreadPtr;
-typedef QWeakPointer<QxrdTestScanGeneratorThread>   QxrdTestScanGeneratorThreadWPtr;
+QCEP_SHAREDPOINTER(QxrdTestScanGeneratorThread)
 
 #endif // QXRDTESTSCANGENERATORTHREADPTR_H

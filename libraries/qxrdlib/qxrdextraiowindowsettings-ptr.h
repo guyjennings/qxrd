@@ -1,11 +1,8 @@
 #ifndef QXRDEXTRAIOWINDOWSETTINGSPTR_H
 #define QXRDEXTRAIOWINDOWSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdExtraIOWindowSettings;
-
-typedef QSharedPointer<QxrdExtraIOWindowSettings> QxrdExtraIOWindowSettingsPtr;
-typedef QWeakPointer<QxrdExtraIOWindowSettings>   QxrdExtraIOWindowSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdExtraIOWindowSettings)
 
 #endif // QXRDEXTRAIOWINDOWSETTINGSPTR_H

@@ -1,11 +1,8 @@
 #ifndef QXRDDETECTORSETTINGSPILATUSPTR_H
 #define QXRDDETECTORSETTINGSPILATUSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorSettingsPilatus;
-
-typedef QSharedPointer<QxrdDetectorSettingsPilatus> QxrdDetectorSettingsPilatusPtr;
-typedef QWeakPointer<QxrdDetectorSettingsPilatus>   QxrdDetectorSettingsPilatusWPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorSettingsPilatus)
 
 #endif // QXRDDETECTORSETTINGSPILATUSPTR_H

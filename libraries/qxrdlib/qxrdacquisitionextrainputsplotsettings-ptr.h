@@ -1,11 +1,8 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTSPLOTSETTINGSPTR_H
 #define QXRDACQUISITIONEXTRAINPUTSPLOTSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdAcquisitionExtraInputsPlotSettings;
-
-typedef QSharedPointer<QxrdAcquisitionExtraInputsPlotSettings> QxrdAcquisitionExtraInputsPlotSettingsPtr;
-typedef QWeakPointer<QxrdAcquisitionExtraInputsPlotSettings>   QxrdAcquisitionExtraInputsPlotSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdAcquisitionExtraInputsPlotSettings)
 
 #endif // QXRDACQUISITIONEXTRAINPUTSPLOTSETTINGSPTR_H

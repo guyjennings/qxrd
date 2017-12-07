@@ -1,11 +1,8 @@
 #ifndef QXRDTESTIMAGEGENERATORPTR_H
 #define QXRDTESTIMAGEGENERATORPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdTestImageGenerator;
-
-typedef QSharedPointer<QxrdTestImageGenerator> QxrdTestImageGeneratorPtr;
-typedef QWeakPointer<QxrdTestImageGenerator>   QxrdTestImageGeneratorWPtr;
+QCEP_SHAREDPOINTER(QxrdTestImageGenerator)
 
 #endif // QXRDTESTIMAGEGENERATORPTR_H

@@ -1,11 +1,8 @@
 #ifndef QXRDJSENGINEPTR_H
 #define QXRDJSENGINEPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdJSEngine;
-
-typedef QSharedPointer<QxrdJSEngine> QxrdJSEnginePtr;
-typedef QWeakPointer<QxrdJSEngine>   QxrdJSEngineWPtr;
+QCEP_SHAREDPOINTER(QxrdJSEngine)
 
 #endif // QXRDJSENGINEPTR_H

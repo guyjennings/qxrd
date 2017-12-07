@@ -1,11 +1,8 @@
 #ifndef QXRDROISHAPEPTR_H
 #define QXRDROISHAPEPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdROIShape;
-
-typedef QSharedPointer<QxrdROIShape> QxrdROIShapePtr;
-typedef QWeakPointer<QxrdROIShape>   QxrdROIShapeWPtr;
+QCEP_SHAREDPOINTER(QxrdROIShape)
 
 #endif // QXRDROISHAPEPTR_H

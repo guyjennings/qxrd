@@ -1,12 +1,9 @@
 #ifndef QXRDDETECTORPROXYLISTMODELPTR_H
 #define QXRDDETECTORPROXYLISTMODELPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorProxyListModel;
-
-typedef QSharedPointer<QxrdDetectorProxyListModel> QxrdDetectorProxyListModelPtr;
-typedef QWeakPointer<QxrdDetectorProxyListModel>   QxrdDetectorProxyListModelWPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorProxyListModel)
 
 #endif // QXRDDETECTORPROXYLISTMODELPTR_H
 

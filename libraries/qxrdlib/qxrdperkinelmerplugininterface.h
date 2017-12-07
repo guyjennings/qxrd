@@ -5,7 +5,6 @@
 #include "qxrdnamedplugininterface.h"
 
 #include <Windows.h>
-#include <QSharedPointer>
 
 #ifdef WIN64
 #if WIN64

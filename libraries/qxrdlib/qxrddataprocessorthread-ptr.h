@@ -1,10 +1,8 @@
 #ifndef QXRDDATAPROCESSORTHREAD_PTR_H
 #define QXRDDATAPROCESSORTHREAD_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDataProcessorThread;
-
-typedef QSharedPointer<QxrdDataProcessorThread> QxrdDataProcessorThreadPtr;
+QCEP_SHAREDPOINTER(QxrdDataProcessorThread)
 
 #endif // QXRDDATAPROCESSORTHREAD_PTR_H

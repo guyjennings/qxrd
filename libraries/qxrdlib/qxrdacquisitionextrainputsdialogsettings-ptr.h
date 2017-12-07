@@ -1,11 +1,8 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTSDIALOGSETTINGSPTR_H
 #define QXRDACQUISITIONEXTRAINPUTSDIALOGSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdAcquisitionExtraInputsDialogSettings;
-
-typedef QSharedPointer<QxrdAcquisitionExtraInputsDialogSettings> QxrdAcquisitionExtraInputsDialogSettingsPtr;
-typedef QWeakPointer<QxrdAcquisitionExtraInputsDialogSettings>   QxrdAcquisitionExtraInputsDialogSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdAcquisitionExtraInputsDialogSettings)
 
 #endif // QXRDACQUISITIONEXTRAINPUTSDIALOGSETTINGSPTR_H

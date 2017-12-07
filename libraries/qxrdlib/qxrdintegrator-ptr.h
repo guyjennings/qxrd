@@ -1,11 +1,8 @@
 #ifndef QXRDINTEGRATOR_PTR_H
 #define QXRDINTEGRATOR_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdIntegrator;
-
-typedef QSharedPointer<QxrdIntegrator> QxrdIntegratorPtr;
-typedef QWeakPointer<QxrdIntegrator> QxrdIntegratorWPtr;
+QCEP_SHAREDPOINTER(QxrdIntegrator)
 
 #endif // QXRDINTEGRATOR_PTR_H

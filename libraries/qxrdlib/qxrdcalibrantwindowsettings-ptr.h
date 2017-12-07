@@ -1,11 +1,8 @@
 #ifndef QXRDCALIBRANTWINDOWSETTINGSPTR_H
 #define QXRDCALIBRANTWINDOWSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdCalibrantWindowSettings;
-
-typedef QSharedPointer<QxrdCalibrantWindowSettings> QxrdCalibrantWindowSettingsPtr;
-typedef QWeakPointer<QxrdCalibrantWindowSettings>   QxrdCalibrantWindowSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdCalibrantWindowSettings)
 
 #endif // QXRDCALIBRANTWINDOWSETTINGSPTR_H

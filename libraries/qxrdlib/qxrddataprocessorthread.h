@@ -30,6 +30,4 @@ private:
   QxrdDataProcessorPtr    m_DataProcessor;
 };
 
-typedef QSharedPointer<QxrdDataProcessorThread> QxrdDataProcessorThreadPtr;
-
 #endif // QXRDDATAPROCESSORTHREAD_H

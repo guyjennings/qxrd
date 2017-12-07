@@ -1,11 +1,8 @@
 #ifndef QXRDSLICEPLOTSETTINGSPTR_H
 #define QXRDSLICEPLOTSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdSlicePlotSettings;
-
-typedef QSharedPointer<QxrdSlicePlotSettings> QxrdSlicePlotSettingsPtr;
-typedef QWeakPointer<QxrdSlicePlotSettings>   QxrdSlicePlotSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdSlicePlotSettings)
 
 #endif // QXRDSLICEPLOTSETTINGSPTR_H

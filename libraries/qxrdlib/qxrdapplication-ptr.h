@@ -1,11 +1,8 @@
 #ifndef QXRDAPPLICATION_PTR_H
 #define QXRDAPPLICATION_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdApplication;
-
-typedef QSharedPointer<QxrdApplication> QxrdApplicationPtr;
-typedef QWeakPointer<QxrdApplication>   QxrdApplicationWPtr;
+QCEP_SHAREDPOINTER(QxrdApplication)
 
 #endif

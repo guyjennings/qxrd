@@ -1,11 +1,8 @@
 #ifndef QXRDMASKINGWINDOWSETTINGSPTR_H
 #define QXRDMASKINGWINDOWSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdMaskingWindowSettings;
-
-typedef QSharedPointer<QxrdMaskingWindowSettings> QxrdMaskingWindowSettingsPtr;
-typedef QWeakPointer<QxrdMaskingWindowSettings>   QxrdMaskingWindowSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdMaskingWindowSettings)
 
 #endif // QXRDMASKINGWINDOWSETTINGSPTR_H

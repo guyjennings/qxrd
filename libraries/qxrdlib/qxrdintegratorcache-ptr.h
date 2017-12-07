@@ -1,10 +1,8 @@
 #ifndef QXRDINTEGRATORCACHE_PTR_H
 #define QXRDINTEGRATORCACHE_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdIntegratorCache;
-
-typedef QSharedPointer<QxrdIntegratorCache> QxrdIntegratorCachePtr;
+QCEP_SHAREDPOINTER(QxrdIntegratorCache)
 
 #endif // QXRDINTEGRATORCACHE_H

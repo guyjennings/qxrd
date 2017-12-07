@@ -1,11 +1,8 @@
 #ifndef QXRDHISTOGRAMDIALOGSETTINGSPTR_H
 #define QXRDHISTOGRAMDIALOGSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdHistogramDialogSettings;
-
-typedef QSharedPointer<QxrdHistogramDialogSettings> QxrdHistogramDialogSettingsPtr;
-typedef QWeakPointer<QxrdHistogramDialogSettings>   QxrdHistogramDialogSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdHistogramDialogSettings)
 
 #endif // QXRDHISTOGRAMDIALOGSETTINGSPTR_H

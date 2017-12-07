@@ -1,11 +1,8 @@
 #ifndef QXRDDATAPROCESSOR_PTR_H
 #define QXRDDATAPROCESSOR_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDataProcessor;
-
-typedef QSharedPointer<QxrdDataProcessor> QxrdDataProcessorPtr;
-typedef QWeakPointer<QxrdDataProcessor> QxrdDataProcessorWPtr;
+QCEP_SHAREDPOINTER(QxrdDataProcessor)
 
 #endif

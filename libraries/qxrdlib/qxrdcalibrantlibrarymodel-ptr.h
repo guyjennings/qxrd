@@ -1,12 +1,9 @@
 #ifndef QXRDCALIBRANTLIBRARYMODELPTR_H
 #define QXRDCALIBRANTLIBRARYMODELPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdCalibrantLibraryModel;
-
-typedef QSharedPointer<QxrdCalibrantLibraryModel> QxrdCalibrantLibraryModelPtr;
-typedef QWeakPointer<QxrdCalibrantLibraryModel> QxrdCalibrantLibraryModelWPtr;
+QCEP_SHAREDPOINTER(QxrdCalibrantLibraryModel)
 
 #endif // QXRDCALIBRANTLIBRARYMODELPTR_H
 

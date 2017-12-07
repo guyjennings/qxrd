@@ -1,11 +1,8 @@
 #ifndef QXRDPLOTCURVEVECTORPTR_H
 #define QXRDPLOTCURVEVECTORPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdPlotCurveVector;
-
-typedef QSharedPointer<QxrdPlotCurveVector> QxrdPlotCurveVectorPtr;
-typedef QWeakPointer<QxrdPlotCurveVector>   QxrdPlotCurveVectorWPtr;
+QCEP_SHAREDPOINTER(QxrdPlotCurveVector)
 
 #endif // QXRDPLOTCURVEVECTORPTR_H

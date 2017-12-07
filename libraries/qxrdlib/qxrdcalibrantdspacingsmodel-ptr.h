@@ -1,12 +1,9 @@
 #ifndef QXRDCALIBRANTDSPACINGSMODELPTR_H
 #define QXRDCALIBRANTDSPACINGSMODELPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdCalibrantDSpacingsModel;
-
-typedef QSharedPointer<QxrdCalibrantDSpacingsModel> QxrdCalibrantDSpacingsModelPtr;
-typedef QWeakPointer<QxrdCalibrantDSpacingsModel> QxrdCalibrantDSpacingsModelWPtr;
+QCEP_SHAREDPOINTER(QxrdCalibrantDSpacingsModel)
 
 #endif // QXRDCALIBRANTDSPACINGSMODELPTR_H
 

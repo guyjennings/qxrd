@@ -1,11 +1,8 @@
 #ifndef QXRDPOLARNORMALIZATIONPTR_H
 #define QXRDPOLARNORMALIZATIONPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdPolarNormalization;
-
-typedef QSharedPointer<QxrdPolarNormalization> QxrdPolarNormalizationPtr;
-typedef QWeakPointer<QxrdPolarNormalization>   QxrdPolarNormalizationWPtr;
+QCEP_SHAREDPOINTER(QxrdPolarNormalization)
 
 #endif // QXRDPOLARNORMALIZATIONPTR_H

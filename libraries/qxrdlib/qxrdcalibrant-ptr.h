@@ -1,12 +1,9 @@
 #ifndef QXRDCALIBRANTPTR_H
 #define QXRDCALIBRANTPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdCalibrant;
-
-typedef QSharedPointer<QxrdCalibrant> QxrdCalibrantPtr;
-typedef QWeakPointer<QxrdCalibrant>   QxrdCalibrantWPtr;
+QCEP_SHAREDPOINTER(QxrdCalibrant)
 
 #endif // QXRDCALIBRANTPTR_H
 

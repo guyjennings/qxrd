@@ -1,12 +1,9 @@
 #ifndef QXRDACQUISITIONSCALERDIALOGPTR_H
 #define QXRDACQUISITIONSCALERDIALOGPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdAcquisitionScalerDialog;
-
-typedef QSharedPointer<QxrdAcquisitionScalerDialog> QxrdAcquisitionScalerDialogPtr;
-typedef QWeakPointer<QxrdAcquisitionScalerDialog>   QxrdAcquisitionScalerDialogWPtr;
+QCEP_SHAREDPOINTER(QxrdAcquisitionScalerDialog)
 
 #endif // QXRDACQUISITIONSCALERDIALOGPTR_H
 

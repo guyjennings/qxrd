@@ -1,11 +1,8 @@
 #ifndef QXRDTESTSCANPLOTQWTHELPERPTR_H
 #define QXRDTESTSCANPLOTQWTHELPERPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdTestScanPlotQwtHelper;
-
-typedef QSharedPointer<QxrdTestScanPlotQwtHelper> QxrdTestScanPlotQwtHelperPtr;
-typedef QWeakPointer<QxrdTestScanPlotQwtHelper>   QxrdTestScanPlotQwtHelperWPtr;
+QCEP_SHAREDPOINTER(QxrdTestScanPlotQwtHelper)
 
 #endif // QXRDTESTSCANPLOTQWTHELPERPTR_H

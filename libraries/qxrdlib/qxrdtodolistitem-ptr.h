@@ -1,12 +1,9 @@
 #ifndef QXRDTODOLISTITEMPTR_H
 #define QXRDTODOLISTITEMPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdToDoListItem;
-
-typedef QSharedPointer<QxrdToDoListItem> QxrdToDoListItemPtr;
-typedef QWeakPointer<QxrdToDoListItem>   QxrdToDoListItemWPtr;
+QCEP_SHAREDPOINTER(QxrdToDoListItem)
 
 #endif // QXRDTODOLISTITEMPTR_H
 

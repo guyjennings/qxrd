@@ -78,7 +78,4 @@ public:
 
 Q_DECLARE_METATYPE(QxrdImagePlotSettings*)
 
-typedef QSharedPointer<QxrdImagePlotSettings> QxrdImagePlotSettingsPtr;
-typedef QWeakPointer<QxrdImagePlotSettings>   QxrdImagePlotSettingsWPtr;
-
 #endif // QXRDIMAGEPLOTSETTINGS_H

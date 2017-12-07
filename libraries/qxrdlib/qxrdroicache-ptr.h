@@ -1,11 +1,8 @@
 #ifndef QXRDROICACHEPTR_H
 #define QXRDROICACHEPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdROICache;
-
-typedef QSharedPointer<QxrdROICache> QxrdROICachePtr;
-typedef QWeakPointer<QxrdROICache>   QxrdROICacheWPtr;
+QCEP_SHAREDPOINTER(QxrdROICache)
 
 #endif // QXRDROICACHEPTR_H

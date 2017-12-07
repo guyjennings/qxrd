@@ -1,11 +1,8 @@
 #ifndef QXRDDISTORTIONCORRECTIONPLOTSETTINGSPTR_H
 #define QXRDDISTORTIONCORRECTIONPLOTSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDistortionCorrectionPlotSettings;
-
-typedef QSharedPointer<QxrdDistortionCorrectionPlotSettings> QxrdDistortionCorrectionPlotSettingsPtr;
-typedef QWeakPointer<QxrdDistortionCorrectionPlotSettings>   QxrdDistortionCorrectionPlotSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdDistortionCorrectionPlotSettings)
 
 #endif // QXRDDISTORTIONCORRECTIONPLOTSETTINGSPTR_H

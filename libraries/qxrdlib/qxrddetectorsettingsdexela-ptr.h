@@ -1,11 +1,8 @@
 #ifndef QXRDDETECTORSETTINGSDEXELAPTR_H
 #define QXRDDETECTORSETTINGSDEXELAPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorSettingsDexela;
-
-typedef QSharedPointer<QxrdDetectorSettingsDexela> QxrdDetectorSettingsDexelaPtr;
-typedef QWeakPointer<QxrdDetectorSettingsDexela>   QxrdDetectorSettingsDexelaWPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorSettingsDexela)
 
 #endif // QXRDDETECTORSETTINGSDEXELAPTR_H

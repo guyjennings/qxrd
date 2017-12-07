@@ -80,7 +80,4 @@ private:
 
 Q_DECLARE_METATYPE(QxrdFileSaver*)
 
-typedef QSharedPointer<QxrdFileSaver> QxrdFileSaverPtr;
-typedef QWeakPointer<QxrdFileSaver> QxrdFileSaverWPtr;
-
 #endif

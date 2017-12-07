@@ -1,11 +1,8 @@
 #ifndef QXRDCENTERFINDERPLOTSETTINGSPTR_H
 #define QXRDCENTERFINDERPLOTSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdCenterFinderPlotSettings;
-
-typedef QSharedPointer<QxrdCenterFinderPlotSettings> QxrdCenterFinderPlotSettingsPtr;
-typedef QWeakPointer<QxrdCenterFinderPlotSettings>   QxrdCenterFinderPlotSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdCenterFinderPlotSettings)
 
 #endif // QXRDCENTERFINDERPLOTSETTINGSPTR_H

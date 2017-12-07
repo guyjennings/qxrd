@@ -1,10 +1,8 @@
 #ifndef QXRDDETECTORGEOMETRY_PTR_H
 #define QXRDDETECTORGEOMETRY_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorGeometry;
-
-typedef QSharedPointer<QxrdDetectorGeometry> QxrdDetectorGeometryPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorGeometry)
 
 #endif // QXRDDETECTORGEOMETRY_PTR_H

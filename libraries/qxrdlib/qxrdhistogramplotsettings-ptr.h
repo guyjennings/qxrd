@@ -1,11 +1,8 @@
 #ifndef QXRDHISTOGRAMPLOTSETTINGSPTR_H
 #define QXRDHISTOGRAMPLOTSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdHistogramPlotSettings;
-
-typedef QSharedPointer<QxrdHistogramPlotSettings> QxrdHistogramPlotSettingsPtr;
-typedef QWeakPointer<QxrdHistogramPlotSettings>   QxrdHistogramPlotSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdHistogramPlotSettings)
 
 #endif // QXRDHISTOGRAMPLOTSETTINGSPTR_H

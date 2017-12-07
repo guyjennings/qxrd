@@ -1,11 +1,8 @@
 #ifndef QXRDDETECTORCONTROLWINDOWSETTINGSPTR_H
 #define QXRDDETECTORCONTROLWINDOWSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorControlWindowSettings;
-
-typedef QSharedPointer<QxrdDetectorControlWindowSettings> QxrdDetectorControlWindowSettingsPtr;
-typedef QWeakPointer<QxrdDetectorControlWindowSettings>   QxrdDetectorControlWindowSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorControlWindowSettings)
 
 #endif // QXRDDETECTORCONTROLWINDOWSETTINGSPTR_H

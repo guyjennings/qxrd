@@ -1,11 +1,8 @@
 #ifndef QXRDCALCULATORWINDOWSETTINGSPTR_H
 #define QXRDCALCULATORWINDOWSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdCalculatorWindowSettings;
-
-typedef QSharedPointer<QxrdCalculatorWindowSettings> QxrdCalculatorWindowSettingsPtr;
-typedef QWeakPointer<QxrdCalculatorWindowSettings>   QxrdCalculatorWindowSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdCalculatorWindowSettings)
 
 #endif // QXRDCALCULATORWINDOWSETTINGSPTR_H

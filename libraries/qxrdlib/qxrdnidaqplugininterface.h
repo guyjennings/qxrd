@@ -4,7 +4,6 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include <QtPlugin>
-#include <QSharedPointer>
 #include "qxrdnamedplugininterface.h"
 
 class QXRD_EXPORT QxrdNIDAQPluginInterface : public QxrdNamedPluginInterface

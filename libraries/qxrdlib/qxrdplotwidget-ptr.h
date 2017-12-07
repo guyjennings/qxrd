@@ -1,11 +1,8 @@
 #ifndef QXRDPLOTWIDGETPTR_H
 #define QXRDPLOTWIDGETPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdPlotWidget;
-
-typedef QSharedPointer<QxrdPlotWidget> QxrdPlotWidgetPtr;
-typedef QWeakPointer<QxrdPlotWidget>   QxrdPlotWidgetWPtr;
+QCEP_SHAREDPOINTER(QxrdPlotWidget)
 
 #endif // QXRDPLOTWIDGETPTR_H

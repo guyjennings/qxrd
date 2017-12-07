@@ -1,11 +1,8 @@
 #ifndef QXRDSCRIPTDIALOGSETTINGSPTR_H
 #define QXRDSCRIPTDIALOGSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdScriptDialogSettings;
-
-typedef QSharedPointer<QxrdScriptDialogSettings> QxrdScriptDialogSettingsPtr;
-typedef QWeakPointer<QxrdScriptDialogSettings>   QxrdScriptDialogSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdScriptDialogSettings)
 
 #endif // QXRDSCRIPTDIALOGSETTINGSPTR_H

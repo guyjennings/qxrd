@@ -3,12 +3,9 @@
 
 #ifdef HAVE_DATAVIS
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdTestScanPlotDataVisHelper;
-
-typedef QSharedPointer<QxrdTestScanPlotDataVisHelper> QxrdTestScanPlotDataVisHelperPtr;
-typedef QWeakPointer<QxrdTestScanPlotDataVisHelper>   QxrdTestScanPlotDataVisHelperWPtr;
+QCEP_SHAREDPOINTER(QxrdTestScanPlotDataVisHelper)
 
 #endif
 

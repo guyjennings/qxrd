@@ -1,11 +1,8 @@
 #ifndef QXRDDISPLAYDIALOGPTR_H
 #define QXRDDISPLAYDIALOGPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDisplayDialog;
-
-typedef QSharedPointer<QxrdDisplayDialog> QxrdDisplayDialogPtr;
-typedef QWeakPointer<QxrdDisplayDialog>   QxrdDisplayDialogWPtr;
+QCEP_SHAREDPOINTER(QxrdDisplayDialog)
 
 #endif // QXRDDISPLAYDIALOGPTR_H

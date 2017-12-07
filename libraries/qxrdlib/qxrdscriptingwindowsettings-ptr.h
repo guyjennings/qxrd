@@ -1,11 +1,8 @@
 #ifndef QXRDSCRIPTINGWINDOWSETTINGSPTR_H
 #define QXRDSCRIPTINGWINDOWSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdScriptingWindowSettings;
-
-typedef QSharedPointer<QxrdScriptingWindowSettings> QxrdScriptingWindowSettingsPtr;
-typedef QWeakPointer<QxrdScriptingWindowSettings>   QxrdScriptingWindowSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdScriptingWindowSettings)
 
 #endif // QXRDSCRIPTINGWINDOWSETTINGSPTR_H

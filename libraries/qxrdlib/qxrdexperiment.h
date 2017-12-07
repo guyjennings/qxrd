@@ -8,7 +8,6 @@
 #include "qcepproperty.h"
 
 #include <QObject>
-#include <QSharedPointer>
 #include <QScriptEngine>
 //#include <QScriptEngineDebugger>
 #include <QTimer>

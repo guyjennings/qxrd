@@ -1,11 +1,8 @@
 #ifndef QXRDSERVERTHREAD_PTR_H
 #define QXRDSERVERTHREAD_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdServerThread;
-
-typedef QSharedPointer<QxrdServerThread> QxrdServerThreadPtr;
-typedef QWeakPointer<QxrdServerThread>   QxrdServerThreadWPtr;
+QCEP_SHAREDPOINTER(QxrdServerThread)
 
 #endif // QXRDSERVERTHREAD_PTR_H

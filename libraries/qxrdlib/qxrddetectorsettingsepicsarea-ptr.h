@@ -1,11 +1,8 @@
 #ifndef QXRDDETECTORSETTINGSEPICSAREAPTR_H
 #define QXRDDETECTORSETTINGSEPICSAREAPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorSettingsEpicsArea;
-
-typedef QSharedPointer<QxrdDetectorSettingsEpicsArea> QxrdDetectorSettingsEpicsAreaPtr;
-typedef QWeakPointer<QxrdDetectorSettingsEpicsArea>   QxrdDetectorSettingsEpicsAreaWPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorSettingsEpicsArea)
 
 #endif // QXRDDETECTORSETTINGSEPICSAREAPTR_H

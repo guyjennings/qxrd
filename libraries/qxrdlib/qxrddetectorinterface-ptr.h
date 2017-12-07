@@ -1,11 +1,8 @@
 #ifndef QXRDDETECTORINTERFACEPTR_H
 #define QXRDDETECTORINTERFACEPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorInterface;
-
-typedef QSharedPointer<QxrdDetectorInterface> QxrdDetectorInterfacePtr;
-typedef QWeakPointer<QxrdDetectorInterface>   QxrdDetectorInterfaceWPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorInterface)
 
 #endif // QXRDDETECTORINTERFACEPTR_H

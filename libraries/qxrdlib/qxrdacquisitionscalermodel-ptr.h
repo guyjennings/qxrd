@@ -1,12 +1,9 @@
 #ifndef QXRDACQUISITIONSCALERMODELPTR_H
 #define QXRDACQUISITIONSCALERMODELPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdAcquisitionScalerModel;
-
-typedef QSharedPointer<QxrdAcquisitionScalerModel> QxrdAcquisitionScalerModelPtr;
-typedef QWeakPointer<QxrdAcquisitionScalerModel>   QxrdAcquisitionScalerModelWPtr;
+QCEP_SHAREDPOINTER(QxrdAcquisitionScalerModel)
 
 #endif // QXRDACQUISITIONSCALERMODELPTR_H
 

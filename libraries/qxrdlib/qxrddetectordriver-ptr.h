@@ -1,11 +1,8 @@
 #ifndef QXRDDETECTORDRIVERPTR_H
 #define QXRDDETECTORDRIVERPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorDriver;
-
-typedef QSharedPointer<QxrdDetectorDriver> QxrdDetectorDriverPtr;
-typedef QWeakPointer<QxrdDetectorDriver>   QxrdDetectorDriverWPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorDriver)
 
 #endif // QXRDDETECTORDRIVERPTR_H

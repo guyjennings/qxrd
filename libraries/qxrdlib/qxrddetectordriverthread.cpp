@@ -119,6 +119,7 @@ void QxrdDetectorDriverThread::run()
 
   if (m_DetectorDriver) {
     m_DetectorDriver -> stopDetectorDriver();
+    m_DetectorDriver = QxrdDetectorDriverPtr();
   }
 
   m_Detector = QxrdDetectorSettingsPtr();

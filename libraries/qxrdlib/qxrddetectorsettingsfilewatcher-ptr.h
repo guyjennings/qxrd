@@ -1,11 +1,8 @@
 #ifndef QXRDDETECTORSETTINGSFILEWATCHERPTR_H
 #define QXRDDETECTORSETTINGSFILEWATCHERPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorSettingsFileWatcher;
-
-typedef QSharedPointer<QxrdDetectorSettingsFileWatcher> QxrdDetectorSettingsFileWatcherPtr;
-typedef QWeakPointer<QxrdDetectorSettingsFileWatcher>   QxrdDetectorSettingsFileWatcherWPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorSettingsFileWatcher)
 
 #endif // QXRDDETECTORSETTINGSFILEWATCHERPTR_H

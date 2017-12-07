@@ -1,11 +1,8 @@
 #ifndef QXRDIMAGEPLOTWIDGETPTR_H
 #define QXRDIMAGEPLOTWIDGETPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdImagePlotWidget;
-
-typedef QSharedPointer<QxrdImagePlotWidget> QxrdImagePlotWidgetPtr;
-typedef QWeakPointer<QxrdImagePlotWidget>   QxrdImagePlotWidgetWPtr;
+QCEP_SHAREDPOINTER(QxrdImagePlotWidget)
 
 #endif // QXRDIMAGEPLOTWIDGETPTR_H

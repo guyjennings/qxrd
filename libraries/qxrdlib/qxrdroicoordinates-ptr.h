@@ -1,12 +1,9 @@
 #ifndef QXRDROICOORDINATESPTR_H
 #define QXRDROICOORDINATESPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdROICoordinates;
-
-typedef QSharedPointer<QxrdROICoordinates> QxrdROICoordinatesPtr;
-typedef QWeakPointer<QxrdROICoordinates>   QxrdROICoordinatesWPtr;
+QCEP_SHAREDPOINTER(QxrdROICoordinates)
 
 #endif // QXRDROICOORDINATESPTR_H
 

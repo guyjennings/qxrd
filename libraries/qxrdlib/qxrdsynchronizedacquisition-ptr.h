@@ -1,11 +1,8 @@
 #ifndef QXRDSYNCHRONIZEDACQUISITION_PTR_H
 #define QXRDSYNCHRONIZEDACQUISITION_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdSynchronizedAcquisition;
-
-typedef QSharedPointer<QxrdSynchronizedAcquisition> QxrdSynchronizedAcquisitionPtr;
-typedef QWeakPointer<QxrdSynchronizedAcquisition> QxrdSynchronizedAcquisitionWPtr;
+QCEP_SHAREDPOINTER(QxrdSynchronizedAcquisition)
 
 #endif // QXRDSYNCHRONIZEDACQUISITION_H

@@ -1,10 +1,8 @@
 #ifndef QXRDFITTEDRINGSPTR_H
 #define QXRDFITTEDRINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdFittedRings;
-typedef QSharedPointer<QxrdFittedRings> QxrdFittedRingsPtr;
-typedef QWeakPointer<QxrdFittedRings>   QxrdFittedRingsWPtr;
+QCEP_SHAREDPOINTER(QxrdFittedRings)
 
 #endif // QXRDFITTEDRINGSPTR_H

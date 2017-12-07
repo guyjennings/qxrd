@@ -1,11 +1,8 @@
 #ifndef QXRDACQUISITIONWINDOWSETTINGSPTR_H
 #define QXRDACQUISITIONWINDOWSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdAcquisitionWindowSettings;
-
-typedef QSharedPointer<QxrdAcquisitionWindowSettings> QxrdAcquisitionWindowSettingsPtr;
-typedef QWeakPointer<QxrdAcquisitionWindowSettings>   QxrdAcquisitionWindowSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdAcquisitionWindowSettings)
 
 #endif // QXRDACQUISITIONWINDOWSETTINGSPTR_H

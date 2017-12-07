@@ -1,12 +1,9 @@
 #ifndef QXRDACQUISITIONEXECUTIONTHREADPTR_H
 #define QXRDACQUISITIONEXECUTIONTHREADPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdAcquisitionExecutionThread;
-
-typedef QSharedPointer<QxrdAcquisitionExecutionThread>  QxrdAcquisitionExecutionThreadPtr;
-typedef QWeakPointer<QxrdAcquisitionExecutionThread>    QxrdAcquisitionExecutionThreadWPtr;
+QCEP_SHAREDPOINTER(QxrdAcquisitionExecutionThread)
 
 #endif // QXRDACQUISITIONEXECUTIONTHREADPTR_H
 

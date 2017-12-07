@@ -1,12 +1,9 @@
 #ifndef QXRDROICALCULATORPTR_H
 #define QXRDROICALCULATORPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdROICalculator;
-
-typedef QSharedPointer<QxrdROICalculator> QxrdROICalculatorPtr;
-typedef QWeakPointer<QxrdROICalculator>   QxrdROICalculatorWPtr;
+QCEP_SHAREDPOINTER(QxrdROICalculator)
 
 #endif // QXRDROICALCULATORPTR_H
 

@@ -1,11 +1,8 @@
 #ifndef QXRDPERKINELMERPLUGININTERFACE_PTR_H
 #define QXRDPERKINELMERPLUGININTERFACE_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdPerkinElmerPluginInterface;
-
-typedef QSharedPointer<QxrdPerkinElmerPluginInterface> QxrdPerkinElmerPluginInterfacePtr;
-typedef QWeakPointer<QxrdPerkinElmerPluginInterface> QxrdPerkinElmerPluginInterfaceWPtr;
+QCEP_SHAREDPOINTER(QxrdPerkinElmerPluginInterface)
 
 #endif // QXRDPERKINELMERPLUGININTERFACE_PTR_H

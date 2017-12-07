@@ -1,11 +1,8 @@
 #ifndef QXRDACQUISITIONEXTRAINPUTS_PTR_H
 #define QXRDACQUISITIONEXTRAINPUTS_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdAcquisitionExtraInputs;
-
-typedef QSharedPointer<QxrdAcquisitionExtraInputs> QxrdAcquisitionExtraInputsPtr;
-typedef QWeakPointer<QxrdAcquisitionExtraInputs> QxrdAcquisitionExtraInputsWPtr;
+QCEP_SHAREDPOINTER(QxrdAcquisitionExtraInputs)
 
 #endif // QXRDACQUISITIONEXTRAINPUTS_PTR_H

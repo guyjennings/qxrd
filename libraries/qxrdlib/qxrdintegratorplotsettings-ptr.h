@@ -1,11 +1,8 @@
 #ifndef QXRDINTEGRATORPLOTSETTINGSPTR_H
 #define QXRDINTEGRATORPLOTSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdIntegratorPlotSettings;
-
-typedef QSharedPointer<QxrdIntegratorPlotSettings> QxrdIntegratorPlotSettingsPtr;
-typedef QWeakPointer<QxrdIntegratorPlotSettings>   QxrdIntegratorPlotSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdIntegratorPlotSettings)
 
 #endif // QCEPINTEGRATORPLOTSETTINGSPTR_H

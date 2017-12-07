@@ -1,9 +1,9 @@
 #ifndef QXRDPROCESSARGSPTR_H
 #define QXRDPROCESSARGSPTR_H
 
-class QxrdProcessArgs;
-typedef QSharedPointer<QxrdProcessArgs> QxrdProcessArgsPtr;
-typedef QWeakPointer<QxrdProcessArgs> QxrdProcessArgsWPtr;
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdProcessArgs)
 
 #endif // QXRDPROCESSARGSPTR_H
 

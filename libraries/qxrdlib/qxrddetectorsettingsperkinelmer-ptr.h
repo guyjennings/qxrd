@@ -1,11 +1,8 @@
 #ifndef QXRDDETECTORSETTINGSPERKINELMERPTR_H
 #define QXRDDETECTORSETTINGSPERKINELMERPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorSettingsPerkinElmer;
-
-typedef QSharedPointer<QxrdDetectorSettingsPerkinElmer> QxrdDetectorSettingsPerkinElmerPtr;
-typedef QWeakPointer<QxrdDetectorSettingsPerkinElmer>   QxrdDetectorSettingsPerkinElmerWPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorSettingsPerkinElmer)
 
 #endif // QXRDDETECTORSETTINGSPERKINELMERPTR_H

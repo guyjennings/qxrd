@@ -1,11 +1,8 @@
 #ifndef QXRDEXPERIMENTTHREADPTR_H
 #define QXRDEXPERIMENTTHREADPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdExperimentThread;
-
-typedef QSharedPointer<QxrdExperimentThread> QxrdExperimentThreadPtr;
-typedef QWeakPointer<QxrdExperimentThread>   QxrdExperimentThreadWPtr;
+QCEP_SHAREDPOINTER(QxrdExperimentThread)
 
 #endif // QXRDEXPERIMENTTHREADPTR_H

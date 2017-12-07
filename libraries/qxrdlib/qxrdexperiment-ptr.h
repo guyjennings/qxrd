@@ -1,10 +1,8 @@
 #ifndef QXRDEXPERIMENT_PTR_H
 #define QXRDEXPERIMENT_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdExperiment;
-typedef QSharedPointer<QxrdExperiment> QxrdExperimentPtr;
-typedef QWeakPointer<QxrdExperiment> QxrdExperimentWPtr;
+QCEP_SHAREDPOINTER(QxrdExperiment)
 
 #endif // QXRDEXPERIMENT_PTR_H

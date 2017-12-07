@@ -1,10 +1,8 @@
 #ifndef QXRDROIDATA_PTR_H
 #define QXRDROIDATA_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdROIData;
-
-typedef QSharedPointer<QxrdROIData> QxrdROIDataPtr;
+QCEP_SHAREDPOINTER(QxrdROIData)
 
 #endif // QXRDROIDATA_PTR_H

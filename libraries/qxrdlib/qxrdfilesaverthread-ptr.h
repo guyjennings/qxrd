@@ -1,10 +1,8 @@
 #ifndef QXRDFILESAVERTHREAD_PTR_H
 #define QXRDFILESAVERTHREAD_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdFileSaverThread;
-
-typedef QSharedPointer<QxrdFileSaverThread> QxrdFileSaverThreadPtr;
+QCEP_SHAREDPOINTER(QxrdFileSaverThread)
 
 #endif // QXRDFILESAVERTHREAD_PTR_H

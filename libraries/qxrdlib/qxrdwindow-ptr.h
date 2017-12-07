@@ -1,14 +1,8 @@
 #ifndef QXRDWINDOW_PTR_H
 #define QXRDWINDOW_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdWindow;
-
-typedef QSharedPointer<QxrdWindow> QxrdWindowPtr;
-typedef QWeakPointer<QxrdWindow>   QxrdWindowWPtr;
-
-//typedef QxrdWindow *QxrdWindowPtr;
-//typedef QxrdWindow *QxrdWindowWPtr;
+QCEP_SHAREDPOINTER(QxrdWindow)
 
 #endif

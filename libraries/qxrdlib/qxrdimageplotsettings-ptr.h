@@ -1,12 +1,9 @@
 #ifndef QXRDIMAGEPLOTSETTINGSPTR_H
 #define QXRDIMAGEPLOTSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdImagePlotSettings;
-
-typedef QSharedPointer<QxrdImagePlotSettings> QxrdImagePlotSettingsPtr;
-typedef QWeakPointer<QxrdImagePlotSettings>   QxrdImagePlotSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdImagePlotSettings)
 
 #endif // QXRDIMAGEPLOTSETTINGSPTR_H
 

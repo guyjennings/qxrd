@@ -1,11 +1,8 @@
 #ifndef QXRDSYNCHRONIZEDACQUISITIONPLOTSETTINGSPTR_H
 #define QXRDSYNCHRONIZEDACQUISITIONPLOTSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdSynchronizedAcquisitionPlotSettings;
-
-typedef QSharedPointer<QxrdSynchronizedAcquisitionPlotSettings> QxrdSynchronizedAcquisitionPlotSettingsPtr;
-typedef QWeakPointer<QxrdSynchronizedAcquisitionPlotSettings>   QxrdSynchronizedAcquisitionPlotSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdSynchronizedAcquisitionPlotSettings)
 
 #endif // QXRDSYNCHRONIZEDACQUISITIONPLOTSETTINGSPTR_H

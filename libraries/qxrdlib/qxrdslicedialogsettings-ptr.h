@@ -1,11 +1,8 @@
 #ifndef QXRDSLICEDIALOGSETTINGSPTR_H
 #define QXRDSLICEDIALOGSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdSliceDialogSettings;
-
-typedef QSharedPointer<QxrdSliceDialogSettings> QxrdSliceDialogSettingsPtr;
-typedef QWeakPointer<QxrdSliceDialogSettings>   QxrdSliceDialogSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdSliceDialogSettings)
 
 #endif // QXRDSLICEDIALOGSETTINGSPTR_H

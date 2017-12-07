@@ -1,11 +1,8 @@
 #ifndef QXRDPLUGININFOMODELPTR_H
 #define QXRDPLUGININFOMODELPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdPluginInfoModel;
-
-typedef QSharedPointer<QxrdPluginInfoModel> QxrdPluginInfoModelPtr;
-typedef QWeakPointer<QxrdPluginInfoModel>   QxrdPluginInfoModelWPtr;
+QCEP_SHAREDPOINTER(QxrdPluginInfoModel)
 
 #endif // QXRDPLUGININFOMODELPTR_H

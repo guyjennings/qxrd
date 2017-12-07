@@ -1,11 +1,8 @@
 #ifndef QXRDINFODIALOGSETTINGSPTR_H
 #define QXRDINFODIALOGSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdInfoDialogSettings;
-
-typedef QSharedPointer<QxrdInfoDialogSettings> QxrdInfoDialogSettingsPtr;
-typedef QWeakPointer<QxrdInfoDialogSettings>   QxrdInfoDialogSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdInfoDialogSettings)
 
 #endif // QXRDINFODIALOGSETTINGSPTR_H

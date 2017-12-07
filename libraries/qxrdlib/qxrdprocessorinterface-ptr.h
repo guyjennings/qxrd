@@ -1,10 +1,8 @@
 #ifndef QXRDPROCESSORINTERFACEPTR_H
 #define QXRDPROCESSORINTERFACEPTR_H
 
-#include <QSharedPointer>
-class QxrdProcessorInterface;
+#include "qcepsharedpointer.h"
 
-typedef QSharedPointer<QxrdProcessorInterface> QxrdProcessorInterfacePtr;
-typedef QWeakPointer<QxrdProcessorInterface>   QxrdProcessorInterfaceWPtr;
+QCEP_SHAREDPOINTER(QxrdProcessorInterface)
 
 #endif // QXRDPROCESSORINTERFACEPTR_H

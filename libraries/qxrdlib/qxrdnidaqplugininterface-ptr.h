@@ -1,11 +1,8 @@
 #ifndef QXRDNIDAQPLUGININTERFACE_PTR_H
 #define QXRDNIDAQPLUGININTERFACE_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdNIDAQPluginInterface;
-
-typedef QSharedPointer<QxrdNIDAQPluginInterface> QxrdNIDAQPluginInterfacePtr;
-typedef QWeakPointer<QxrdNIDAQPluginInterface> QxrdNIDAQPluginInterfaceWPtr;
+QCEP_SHAREDPOINTER(QxrdNIDAQPluginInterface)
 
 #endif // QXRDNIDAQPLUGININTERFACE_H

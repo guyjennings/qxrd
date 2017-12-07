@@ -1,10 +1,8 @@
 #ifndef QXRDSPLASHSCREEN_PTR_H
 #define QXRDSPLASHSCREEN_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdSplashScreen;
-
-typedef QSharedPointer<QxrdSplashScreen> QxrdSplashScreenPtr;
+QCEP_SHAREDPOINTER(QxrdSplashScreen)
 
 #endif // QXRDSPLASHSCREEN_PTR_H

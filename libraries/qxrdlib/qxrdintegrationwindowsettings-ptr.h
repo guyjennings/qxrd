@@ -1,11 +1,8 @@
 #ifndef QXRDINTEGRATIONWINDOWSETTINGSPTR_H
 #define QXRDINTEGRATIONWINDOWSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdIntegrationWindowSettings;
-
-typedef QSharedPointer<QxrdIntegrationWindowSettings> QxrdIntegrationWindowSettingsPtr;
-typedef QWeakPointer<QxrdIntegrationWindowSettings>   QxrdIntegrationWindowSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdIntegrationWindowSettings)
 
 #endif // QXRDINTEGRATIONWINDOWSETTINGSPTR_H

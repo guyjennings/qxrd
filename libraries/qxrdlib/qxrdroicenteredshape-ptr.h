@@ -1,11 +1,8 @@
 #ifndef QXRDROICENTEREDSHAPEPTR_H
 #define QXRDROICENTEREDSHAPEPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdROICenteredShape;
-
-typedef QSharedPointer<QxrdROICenteredShape> QxrdROICenteredShapePtr;
-typedef QWeakPointer<QxrdROICenteredShape>   QxrdROICenteredShapeWPtr;
+QCEP_SHAREDPOINTER(QxrdROICenteredShape)
 
 #endif // QXRDROICENTEREDSHAPEPTR_H

@@ -1,11 +1,8 @@
 #ifndef QXRDCENTERINGWINDOWSETTINGSPTR_H
 #define QXRDCENTERINGWINDOWSETTINGSPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdCenteringWindowSettings;
-
-typedef QSharedPointer<QxrdCenteringWindowSettings> QxrdCenteringWindowSettingsPtr;
-typedef QWeakPointer<QxrdCenteringWindowSettings>   QxrdCenteringWindowSettingsWPtr;
+QCEP_SHAREDPOINTER(QxrdCenteringWindowSettings)
 
 #endif // QXRDCENTERINGWINDOWSETTINGSPTR_H

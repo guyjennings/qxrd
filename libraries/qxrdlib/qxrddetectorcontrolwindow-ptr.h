@@ -1,12 +1,9 @@
 #ifndef QXRDDETECTORCONTROLWINDOWPTR_H
 #define QXRDDETECTORCONTROLWINDOWPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdDetectorControlWindow;
-
-typedef QSharedPointer<QxrdDetectorControlWindow>  QxrdDetectorControlWindowPtr;
-typedef QWeakPointer<QxrdDetectorControlWindow>    QxrdDetectorControlWindowWPtr;
+QCEP_SHAREDPOINTER(QxrdDetectorControlWindow)
 
 #endif // QXRDDETECTORCONTROLWINDOWPTR_H
 

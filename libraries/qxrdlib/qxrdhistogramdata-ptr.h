@@ -1,10 +1,8 @@
 #ifndef QXRDHISTOGRAMDATA_PTR_H
 #define QXRDHISTOGRAMDATA_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdHistogramData;
-
-typedef QSharedPointer<QxrdHistogramData> QxrdHistogramDataPtr;
+QCEP_SHAREDPOINTER(QxrdHistogramData)
 
 #endif // QXRDHISTOGRAMDATA_PTR_H

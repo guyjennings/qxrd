@@ -1,11 +1,8 @@
 #ifndef QXRDSCRIPTENGINE_PTR_H
 #define QXRDSCRIPTENGINE_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdScriptEngine;
-
-typedef QSharedPointer<QxrdScriptEngine> QxrdScriptEnginePtr;
-typedef QWeakPointer<QxrdScriptEngine>   QxrdScriptEngineWPtr;
+QCEP_SHAREDPOINTER(QxrdScriptEngine)
 
 #endif // QXRDSCRIPTENGINE_PTR_H

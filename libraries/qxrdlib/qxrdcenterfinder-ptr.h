@@ -1,11 +1,8 @@
 #ifndef QXRDCENTERFINDER_PTR_H
 #define QXRDCENTERFINDER_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdCenterFinder;
-
-typedef QSharedPointer<QxrdCenterFinder> QxrdCenterFinderPtr;
-typedef QWeakPointer<QxrdCenterFinder> QxrdCenterFinderWPtr;
+QCEP_SHAREDPOINTER(QxrdCenterFinder)
 
 #endif // QXRDCENTERFINDER_PTR_H

@@ -1,10 +1,8 @@
 #ifndef QXRDRASTERDATA_PTR_H
 #define QXRDRASTERDATA_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdRasterData;
-
-typedef QSharedPointer<QxrdRasterData> QxrdRasterDataPtr;
+QCEP_SHAREDPOINTER(QxrdRasterData)
 
 #endif

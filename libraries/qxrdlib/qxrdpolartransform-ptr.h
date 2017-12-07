@@ -1,11 +1,8 @@
 #ifndef QXRDPOLARTRANSFORMPTR_H
 #define QXRDPOLARTRANSFORMPTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdPolarTransform;
-
-typedef QSharedPointer<QxrdPolarTransform> QxrdPolarTransformPtr;
-typedef QWeakPointer<QxrdPolarTransform>   QxrdPolarTransformWPtr;
+QCEP_SHAREDPOINTER(QxrdPolarTransform)
 
 #endif // QXRDPOLARTRANSFORMPTR_H
