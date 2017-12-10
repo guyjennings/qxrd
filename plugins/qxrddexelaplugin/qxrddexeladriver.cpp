@@ -1,20 +1,30 @@
-#include "qxrddexeladetectordriver.h"
+#include "qxrddexeladriver.h"
+#include "qxrddexelasettings.h"
 #include "qxrdacquisition.h"
 #include "qxrdexperiment.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
 #include <QPainter>
 
-QxrdDexelaDetectorDriver::QxrdDexelaDetectorDriver(QString name,
-                                                   QxrdDetectorSettingsWPtr det,
+QxrdDexelaDriver::QxrdDexelaDriver(QString name,
+                                                   QxrdDexelaSettingsWPtr det,
                                                    QxrdExperimentWPtr expt,
                                                    QxrdAcquisitionWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq)
 {
-
+#ifndef QT_NO_DEBUG
+  printf("Dexela Driver \"%s\" Constructed\n", qPrintable(name));
+#endif
 }
 
-bool QxrdDexelaDetectorDriver::startDetectorDriver()
+QxrdDexelaDriver::~QxrdDexelaDriver()
+{
+#ifndef QT_NO_DEBUG
+  printf("Dexela Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
+#endif
+}
+
+bool QxrdDexelaDriver::startDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -33,7 +43,7 @@ bool QxrdDexelaDetectorDriver::startDetectorDriver()
   }
 }
 
-bool QxrdDexelaDetectorDriver::stopDetectorDriver()
+bool QxrdDexelaDriver::stopDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -50,7 +60,7 @@ bool QxrdDexelaDetectorDriver::stopDetectorDriver()
 
 static int g_FrameCounter = 0;
 
-bool QxrdDexelaDetectorDriver::changeExposureTime(double expos)
+bool QxrdDexelaDriver::changeExposureTime(double expos)
 {
   THREAD_CHECK;
 
@@ -67,7 +77,7 @@ bool QxrdDexelaDetectorDriver::changeExposureTime(double expos)
   return false;
 }
 
-bool QxrdDexelaDetectorDriver::beginAcquisition(double /*exposure*/)
+bool QxrdDexelaDriver::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
 
@@ -76,18 +86,18 @@ bool QxrdDexelaDetectorDriver::beginAcquisition(double /*exposure*/)
   return true;
 }
 
-void QxrdDexelaDetectorDriver::beginFrame()
+void QxrdDexelaDriver::beginFrame()
 {
 }
 
-bool QxrdDexelaDetectorDriver::endAcquisition()
+bool QxrdDexelaDriver::endAcquisition()
 {
   THREAD_CHECK;
 
   return true;
 }
 
-bool QxrdDexelaDetectorDriver::shutdownAcquisition()
+bool QxrdDexelaDriver::shutdownAcquisition()
 {
   THREAD_CHECK;
 
@@ -96,7 +106,7 @@ bool QxrdDexelaDetectorDriver::shutdownAcquisition()
   return true;
 }
 
-void QxrdDexelaDetectorDriver::onTimerTimeout()
+void QxrdDexelaDriver::onTimerTimeout()
 {
   QxrdDetectorSettingsPtr det(m_Detector);
   QxrdAcquisitionPtr      acq(m_Acquisition);

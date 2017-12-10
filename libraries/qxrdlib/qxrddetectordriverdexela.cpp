@@ -1,5 +1,5 @@
 #include "qxrddetectordriverdexela.h"
-#include "qxrddetectorsettingsdexela.h"
+#include "qxrddexelasettings.h"
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
 #include <QImage>
@@ -7,7 +7,7 @@
 #include "qxrdsynchronizedacquisition.h"
 
 QxrdDetectorDriverDexela::QxrdDetectorDriverDexela(QString name,
-    QxrdDetectorSettingsDexelaWPtr sim,
+    QxrdDexelaSettingsWPtr sim,
     QxrdExperimentWPtr expt,
     QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, sim, expt, acq),

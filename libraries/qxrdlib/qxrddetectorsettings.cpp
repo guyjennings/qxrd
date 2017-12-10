@@ -16,7 +16,7 @@
 #include "qxrddetectorsettingsperkinelmer.h"
 #include "qxrddetectorsettingspilatus.h"
 #include "qxrddetectorsettingssimulated.h"
-#include "qxrddetectorsettingsdexela.h"
+#include "qxrddexelasettings.h"
 #include "qxrdexperiment.h"
 
 QxrdDetectorSettings::QxrdDetectorSettings(QxrdApplicationWPtr app, QxrdExperimentWPtr    expt,
@@ -467,7 +467,7 @@ void QxrdDetectorSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int d
       break;
 
     case DexelaDetector:
-      QxrdDetectorSettingsDexela::pushDefaultsToProxy(proxy);
+      QxrdDexelaSettings::pushDefaultsToProxy(proxy);
       break;
     }
   }
@@ -658,7 +658,7 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(
 
   case DexelaDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsDexela(app, expt, acq, detNum));
+          new QxrdDexelaSettings(app, expt, acq, detNum));
     break;
   }
 

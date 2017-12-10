@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qxrddetectordriver.h"
-#include "qxrddetectorsettingsdexela-ptr.h"
+#include "qxrddexelasettings-ptr.h"
 #include <QTimer>
 
 //TODO: move to plugin
@@ -13,7 +13,7 @@ class QXRD_EXPORT QxrdDetectorDriverDexela : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverDexela(QString name,
-                              QxrdDetectorSettingsDexelaWPtr sim,
+                              QxrdDexelaSettingsWPtr sim,
                               QxrdExperimentWPtr expt,
                               QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverDexela();
@@ -31,7 +31,7 @@ private slots:
   void onTimerTimeout();
 
 private:
-  QxrdDetectorSettingsDexelaWPtr m_Dexela;
+  QxrdDexelaSettingsWPtr m_Dexela;
   QTimer m_Timer;
 };
 

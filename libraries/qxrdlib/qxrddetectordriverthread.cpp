@@ -11,7 +11,7 @@
 #include "qxrddetectordriverperkinelmer.h"
 #include "qxrddetectorsettingsperkinelmer.h"
 #include "qxrddetectordriverdexela.h"
-#include "qxrddetectorsettingsdexela.h"
+#include "qxrddexelasettings.h"
 #include "qxrddetectordriverpilatus.h"
 #include "qxrddetectorsettingspilatus.h"
 #include "qxrddetectordriversimulated.h"
@@ -107,7 +107,7 @@ void QxrdDetectorDriverThread::run()
     case QxrdDetectorSettings::DexelaDetector:
       m_DetectorDriver = QxrdDetectorDriverPtr(
             new QxrdDetectorDriverDexela(name,
-                                              qSharedPointerDynamicCast<QxrdDetectorSettingsDexela>(det),
+                                              qSharedPointerDynamicCast<QxrdDexelaSettings>(det),
                                               expt, acq));
       break;
     }

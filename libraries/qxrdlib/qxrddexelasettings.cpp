@@ -1,4 +1,4 @@
-#include "qxrddetectorsettingsdexela.h"
+#include "qxrddexelasettings.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <QPainter>
 
-QxrdDetectorSettingsDexela::QxrdDetectorSettingsDexela(QxrdApplicationWPtr app,
+QxrdDexelaSettings::QxrdDexelaSettings(QxrdApplicationWPtr app,
                                                              QxrdExperimentWPtr    expt,
                                                              QxrdAcquisitionWPtr   acq,
                                                              int                   detNum) :
@@ -22,7 +22,7 @@ QxrdDetectorSettingsDexela::QxrdDetectorSettingsDexela(QxrdApplicationWPtr app,
   }
 }
 
-QxrdDetectorSettingsDexela::~QxrdDetectorSettingsDexela()
+QxrdDexelaSettings::~QxrdDexelaSettings()
 {
 #ifndef QT_NO_DEBUG
   printf("Deleting Dexela detector\n");
@@ -37,21 +37,21 @@ QxrdDetectorSettingsDexela::~QxrdDetectorSettingsDexela()
   }
 }
 
-void QxrdDetectorSettingsDexela::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
+void QxrdDexelaSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
 {
 //  QxrdDetectorSettings::pushDefaultsToProxy(proxy, DexelaDetector);
 
 //  printf("Need to implement QxrdDetectorDexela::pushDefaultsToProxy\n");
 }
 
-void QxrdDetectorSettingsDexela::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDexelaSettings::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetectorSettings::pushPropertiesToProxy(proxy);
 
 //  printf("Need to implement QxrdDetectorDexela::pushPropertiesToProxy\n");
 }
 
-void QxrdDetectorSettingsDexela::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+void QxrdDexelaSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetectorSettings::pullPropertiesfromProxy(proxy);
 

@@ -1,19 +1,20 @@
-#ifndef QXRDDEXELADETECTORDRIVER_H
-#define QXRDDEXELADETECTORDRIVER_H
+#ifndef QXRDDEXELADRIVER_H
+#define QXRDDEXELADRIVER_H
 
 #include "qxrddetectordriver.h"
-#include "qxrddetectorsettingsdexela-ptr.h"
+#include "qxrddexelasettings-ptr.h"
 #include <QTimer>
 
-class QxrdDexelaDetectorDriver : public QxrdDetectorDriver
+class QxrdDexelaDriver : public QxrdDetectorDriver
 {
   Q_OBJECT
 
 public:
-  QxrdDexelaDetectorDriver(QString name,
-                           QxrdDetectorSettingsWPtr det,
+  QxrdDexelaDriver(QString name,
+                           QxrdDexelaSettingsWPtr det,
                            QxrdExperimentWPtr expt,
                            QxrdAcquisitionWPtr acq);
+  virtual ~QxrdDexelaDriver();
 
 public slots:
   virtual bool startDetectorDriver();
@@ -28,7 +29,7 @@ private slots:
   void onTimerTimeout();
 
 private:
-  QxrdDetectorSettingsDexelaWPtr m_Dexela;
+  QxrdDexelaSettingsWPtr m_Dexela;
   QTimer m_Timer;
 };
 

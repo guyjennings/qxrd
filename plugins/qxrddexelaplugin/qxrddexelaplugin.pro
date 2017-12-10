@@ -10,15 +10,15 @@ include("../../source/submodules/qceplib/qceplib-base-include.pri")
 INCLUDEPATH += ../../libraries/qxrdlib/
 
 SOURCES += \
-    qxrddexeladetectorplugin.cpp \
-    qxrddexeladetectordriver.cpp
+    qxrddexeladriver.cpp \
+    qxrddexelaplugin.cpp
 
 HEADERS += \
-    qxrddexeladetectorplugin.h \
-    qxrddexeladetectordriver.h
+    qxrddexeladriver.h \
+    qxrddexelaplugin.h
 
 OTHER_FILES += \
-    dexelaDetector.json
+    dexela.json
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../ -lqceplib
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../ -lqceplibd

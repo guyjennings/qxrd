@@ -160,7 +160,7 @@ private:
   QxrdProcessorInterfacePtr       m_CudaPlugin;
   QxrdDetectorPluginInterfacePtr  m_SimulatedDetectorPlugin;
   QxrdDetectorPluginInterfacePtr  m_PerkinElmerDetectorPlugin;
-  QxrdDetectorPluginInterfacePtr  m_DexelaDetectorPlugin;
+  QxrdDetectorPluginInterfacePtr  m_DexelaPlugin;
   QxrdDetectorPluginInterfacePtr  m_PilatusDetectorPlugin;
   QxrdDetectorPluginInterfacePtr  m_AreaDetectorPlugin;
 

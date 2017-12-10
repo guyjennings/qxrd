@@ -413,8 +413,8 @@ void QxrdApplication::loadPlugins()
         } else if (className == "QxrdCudaProcessorPlugin") {
           m_CudaPlugin =
               QxrdProcessorInterfacePtr(qobject_cast<QxrdProcessorInterface*>(plugin));
-        } else if (className == "QxrdDexelaDetectorPlugin") {
-          m_DexelaDetectorPlugin =
+        } else if (className == "QxrdDexelaPlugin") {
+          m_DexelaPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
         } else if (className == "QxrdNIDAQPlugin") {
           m_NIDAQPlugin =
