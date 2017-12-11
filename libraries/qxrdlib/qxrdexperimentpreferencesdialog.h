@@ -11,8 +11,8 @@
 #include "ui_qxrdexperimentpreferencesdialog.h"
 
 #include "qxrdexperiment-ptr.h"
-#include "qxrddetectorproxy-ptr.h"
-#include "qxrddetectorproxylistmodel-ptr.h"
+#include "qxrddetectorsettings-ptr.h"
+#include "qxrddetectorlistmodel-ptr.h"
 
 //TODO: detector edition dialog doesnt work any more
 class QXRD_EXPORT QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
@@ -49,11 +49,11 @@ private:
   QString experimentDirectory();
   QString dataDirectory();
 
-  void appendDetectorProxy(QxrdDetectorProxyPtr proxy);
+  void appendDetectorProxy(QxrdDetectorSettingsPtr proxy);
 
 private:
-  QxrdExperimentWPtr            m_Experiment;
-  QxrdDetectorProxyListModelPtr m_DetectorProxyModel;
+  QxrdExperimentWPtr       m_Experiment;
+  QxrdDetectorListModelPtr m_DetectorsModel;
 };
 
 #endif // QXRDEXPERIMENTPREFERENCESDIALOG_H

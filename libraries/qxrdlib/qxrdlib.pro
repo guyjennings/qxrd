@@ -184,7 +184,6 @@ SOURCES += qxrdlib.cpp \
     qxrdprocessargs.cpp \
     qxrddetectorproxy.cpp \
     qxrddetectorproxywidget.cpp \
-    qxrddetectorproxylistmodel.cpp \
     qxrddetectorconfigurationdialog.cpp \
     qxrddetectorcontrolwindow.cpp \
     qxrddetectorprocessor.cpp \
@@ -344,7 +343,8 @@ SOURCES += qxrdlib.cpp \
     qxrdsliceplotwidget.cpp \
     qxrddetectorplotwidget.cpp \
     qxrdplugininfomodel.cpp \
-    qxrddexelasettings.cpp
+    qxrddexelasettings.cpp \
+    qxrddetectorlistmodel.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -448,7 +448,9 @@ HEADERS += qxrdlib.h\
     qxrdplugininfomodel-ptr.h \
     qxrdprocessorinterface-ptr.h \
     qxrddexelasettings.h \
-    qxrddexelasettings-ptr.h
+    qxrddexelasettings-ptr.h \
+    qxrddetectorlistmodel-ptr.h \
+    qxrddetectorlistmodel.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -628,8 +630,6 @@ HEADERS += TODO.h \
     qxrddetectorproxy.h \
     qxrddetectorproxy-ptr.h \
     qxrddetectorproxywidget.h \
-    qxrddetectorproxylistmodel.h \
-    qxrddetectorproxylistmodel-ptr.h \
     qxrddetectorconfigurationdialog.h \
     qxrddetectorcontrolwindow.h \
     qxrddetectorcontrolwindow-ptr.h \

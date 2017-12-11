@@ -679,3 +679,18 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QxrdApplicationWPtr ap
 
   return det;
 }
+
+void QxrdDetectorSettings::configureDetector()
+{
+  printf("QxrdDetectorSettings::configureDetector is not implemented\n");
+}
+
+void QxrdDetectorSettings::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdDetectorSettingsSimulated*>("QxrdDetectorSettingsSimulated*");
+  qRegisterMetaType<QxrdDetectorSettingsPerkinElmer*>("QxrdDetectorSettingsPerkinElmer*");
+  qRegisterMetaType<QxrdDetectorSettingsPilatus*>("QxrdDetectorSettingsPilatus*");
+  qRegisterMetaType<QxrdDetectorSettingsEpicsArea*>("QxrdDetectorSettingsEpicsArea*");
+  qRegisterMetaType<QxrdDetectorSettingsFileWatcher*>("QxrdDetectorSettingsFileWatcher*");
+  qRegisterMetaType<QxrdDexelaSettings*>("QxrdDexelaSettings*");
+}

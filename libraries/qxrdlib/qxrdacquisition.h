@@ -23,7 +23,7 @@
 #include "qxrdwindow-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 //#include "qxrddetectorthread-ptr.h"
-#include "qxrddetectorproxy-ptr.h"
+//#include "qxrddetectorproxy-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 //#include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
@@ -85,7 +85,7 @@ public slots:
   virtual void onExposureTimeChanged(double expos);
 
   void appendDetector(int detType);
-  void appendDetectorProxy(QxrdDetectorProxyPtr proxy);
+  void appendDetector(QxrdDetectorSettingsPtr proxy);
   void clearDetectors();
 
   void configureDetector(int i);

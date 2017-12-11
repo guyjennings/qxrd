@@ -1,16 +1,16 @@
-#ifndef QXRDDETECTORPROXYLISTMODEL_H
-#define QXRDDETECTORPROXYLISTMODEL_H
+#ifndef QXRDDETECTORLISTMODEL_H
+#define QXRDDETECTORLISTMODEL_H
 
 #include "qxrdlib_global.h"
 #include <QAbstractListModel>
-#include "qxrddetectorproxy-ptr.h"
+#include "qxrddetectorsettings-ptr.h"
 
-class QXRD_EXPORT QxrdDetectorProxyListModel : public QAbstractListModel
+class QXRD_EXPORT QxrdDetectorListModel : public QAbstractListModel
 {
   Q_OBJECT
 
 public:
-  QxrdDetectorProxyListModel();
+  QxrdDetectorListModel();
 
   int rowCount(const QModelIndex &parent) const;
   int columnCount(const QModelIndex &parent) const;
@@ -22,7 +22,7 @@ public:
 
   bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-  void append(QxrdDetectorProxyPtr proxy);
+  void append(QxrdDetectorSettingsPtr det);
   void removeDetector(int row);
 
   void moveDetectorDown(int row);
@@ -30,13 +30,13 @@ public:
 
   void configureDetector(int row);
 
-  QxrdDetectorProxyPtr detectorProxy(int i);
+  QxrdDetectorSettingsPtr detector(int i);
 
 private:
   void renumberDetectors();
 
 private:
-  QVector<QxrdDetectorProxyPtr> m_DetectorProxies;
+  QVector<QxrdDetectorSettingsPtr> m_Detectors;
 };
 
-#endif // QXRDDETECTORPROXYLISTMODEL_H
+#endif // QXRDDETECTORLISTMODEL_H

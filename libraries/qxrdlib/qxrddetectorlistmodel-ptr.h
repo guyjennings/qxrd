@@ -1,0 +1,9 @@
+#ifndef QXRDDETECTORLISTMODELPTR_H
+#define QXRDDETECTORLISTMODELPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdDetectorListModel)
+
+#endif // QXRDDETECTORLISTMODELPTR_H
+

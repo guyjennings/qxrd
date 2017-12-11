@@ -102,6 +102,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   QxrdWindowSettings::registerMetaTypes();
   QxrdDetectorControlWindowSettings::registerMetaTypes();
   QxrdTestGenerator::registerMetaTypes();
+  QxrdDetectorSettings::registerMetaTypes();
 
   setQuitOnLastWindowClosed(false);
 

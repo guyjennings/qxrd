@@ -43,6 +43,8 @@ public:
                                              int                   detType,
                                              int                   detNum);
 
+  static void registerMetaTypes();
+
   virtual void printLine(QString line) const;
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
   virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
@@ -118,6 +120,8 @@ public slots:
 
   QxrdDetectorControlWindowSettingsWPtr detectorControlWindowSettings();
   QxrdDetectorControlWindowWPtr         detectorControlWindow();
+
+  virtual void configureDetector();
 
 protected:
   QxrdApplicationWPtr                  m_Application;

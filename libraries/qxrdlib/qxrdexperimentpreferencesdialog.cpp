@@ -11,9 +11,9 @@
 #include <QFileDialog>
 #include <QGridLayout>
 #include "qcepdebug.h"
-#include "qxrddetectorproxy.h"
+#include "qxrddetectorsettings.h"
 #include "qxrddetectorproxywidget.h"
-#include "qxrddetectorproxylistmodel.h"
+#include "qxrddetectorlistmodel.h"
 
 #include <QMenu>
 
@@ -60,21 +60,19 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
       simpleServerPort = ssrv -> get_SimpleServerPort();
     }
 
-    m_DetectorProxyModel =
-        QxrdDetectorProxyListModelPtr(new QxrdDetectorProxyListModel());
+    m_DetectorsModel =
+        QxrdDetectorListModelPtr(new QxrdDetectorListModel());
 
     if (acq) {
       for (int i=0; i<acq->get_DetectorCount(); i++) {
-        QxrdDetectorProxyPtr proxy =
-            QxrdDetectorProxyPtr(new QxrdDetectorProxy(
-                                   acq->detector(i), acq));
+        QxrdDetectorSettingsPtr det = acq->detector(i);
 
-        appendDetectorProxy(proxy);
+        m_DetectorsModel -> append(det);
       }
     }
 
     m_DetectorsList->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    m_DetectorsList->setModel(m_DetectorProxyModel.data());
+    m_DetectorsList->setModel(m_DetectorsModel.data());
 
     connect(m_AddDetector,      &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::addDetector);
     connect(m_RemoveDetector,   &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::removeDetector);
@@ -308,12 +306,12 @@ void QxrdExperimentPreferencesDialog::accept()
       acq  -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
       acq  -> set_DetectorNumberWidth(m_DetectorNumberWidth -> value());
 
-      int nDets = m_DetectorProxyModel->rowCount(QModelIndex());
+      int nDets = m_DetectorsModel->rowCount(QModelIndex());
 
       acq->clearDetectors();
 
       for (int i = 0; i<nDets; i++) {
-        acq->appendDetectorProxy(m_DetectorProxyModel->detectorProxy(i));
+        acq->appendDetector(m_DetectorsModel->detector(i));
       }
     }
 
@@ -345,11 +343,12 @@ void QxrdExperimentPreferencesDialog::addDetector()
 
       if (choice) {
         int type = choice->data().toInt();
+        QxrdApplicationWPtr app = expt->application();
 
-        QxrdDetectorProxyPtr proxy =
-            QxrdDetectorProxyPtr(new QxrdDetectorProxy(type, acq));
+        QxrdDetectorSettingsPtr det =
+            QxrdDetectorSettings::newDetector(app, expt, acq, type, -1);
 
-        appendDetectorProxy(proxy);
+        appendDetectorProxy(det);
       }
     }
   }
@@ -357,7 +356,7 @@ void QxrdExperimentPreferencesDialog::addDetector()
 
 void QxrdExperimentPreferencesDialog::removeDetector()
 {
-  int detCount = m_DetectorProxyModel->rowCount(QModelIndex());
+  int detCount = m_DetectorsModel->rowCount(QModelIndex());
 
   QItemSelectionModel *selected = m_DetectorsList->selectionModel();
   QVector<int> selectedRows;
@@ -394,14 +393,14 @@ void QxrdExperimentPreferencesDialog::removeDetector()
   if (res == QMessageBox::Ok) {
     for (int i=selectedRows.count()-1; i>=0; i--) {
 //      printf("Want to remove row %d\n", selectedRows.value(i));
-      m_DetectorProxyModel->removeDetector(selectedRows.value(i));
+      m_DetectorsModel->removeDetector(selectedRows.value(i));
     }
   }
 }
 
 void QxrdExperimentPreferencesDialog::moveDetectorDown()
 {
-  int detCount = m_DetectorProxyModel->rowCount(QModelIndex());
+  int detCount = m_DetectorsModel->rowCount(QModelIndex());
 
   QItemSelectionModel *selected = m_DetectorsList->selectionModel();
   QVector<int> selectedRows;
@@ -415,13 +414,13 @@ void QxrdExperimentPreferencesDialog::moveDetectorDown()
   if (selectedRows.count() != 1) {
     QMessageBox::information(this, "Only move one", "Must have a single detector selected before moving it", QMessageBox::Ok);
   } else {
-    m_DetectorProxyModel->moveDetectorDown(selectedRows.first());
+    m_DetectorsModel->moveDetectorDown(selectedRows.first());
   }
 }
 
 void QxrdExperimentPreferencesDialog::moveDetectorUp()
 {
-  int detCount = m_DetectorProxyModel->rowCount(QModelIndex());
+  int detCount = m_DetectorsModel->rowCount(QModelIndex());
 
   QItemSelectionModel *selected = m_DetectorsList->selectionModel();
   QVector<int> selectedRows;
@@ -435,13 +434,13 @@ void QxrdExperimentPreferencesDialog::moveDetectorUp()
   if (selectedRows.count() != 1) {
     QMessageBox::information(this, "Only move one", "Must have a single detector selected before moving it", QMessageBox::Ok);
   } else {
-    m_DetectorProxyModel->moveDetectorUp(selectedRows.first());
+    m_DetectorsModel->moveDetectorUp(selectedRows.first());
   }
 }
 
 void QxrdExperimentPreferencesDialog::configureDetector()
 {
-  int detCount = m_DetectorProxyModel->rowCount(QModelIndex());
+  int detCount = m_DetectorsModel->rowCount(QModelIndex());
 
   QItemSelectionModel *selected = m_DetectorsList->selectionModel();
   QVector<int> selectedRows;
@@ -455,7 +454,7 @@ void QxrdExperimentPreferencesDialog::configureDetector()
   if (selectedRows.count() != 1) {
     QMessageBox::information(this, "Only configure one", "Must have a single detector selected before configuring it", QMessageBox::Ok);
   } else {
-    QxrdDetectorProxyPtr proxy = m_DetectorProxyModel->detectorProxy(selectedRows.first());
+    QxrdDetectorSettingsPtr proxy = m_DetectorsModel->detector(selectedRows.first());
 
     if (proxy) {
       proxy->configureDetector();
@@ -463,12 +462,10 @@ void QxrdExperimentPreferencesDialog::configureDetector()
   }
 }
 
-void QxrdExperimentPreferencesDialog::appendDetectorProxy(QxrdDetectorProxyPtr proxy)
+void QxrdExperimentPreferencesDialog::appendDetectorProxy(QxrdDetectorSettingsPtr proxy)
 {
   if (proxy) {
-    proxy->initialize();
-
-    m_DetectorProxyModel->append(proxy);
+    m_DetectorsModel->append(proxy);
   }
 }
 
@@ -478,7 +475,7 @@ void QxrdExperimentPreferencesDialog::detectorDoubleClicked(const QModelIndex& i
   int col = item.column();
 
   if (col == 0 || col == 2) {
-    QxrdDetectorProxyPtr proxy = m_DetectorProxyModel->detectorProxy(item.row());
+    QxrdDetectorSettingsPtr proxy = m_DetectorsModel->detector(item.row());
 
     if (proxy) {
       proxy->configureDetector();
