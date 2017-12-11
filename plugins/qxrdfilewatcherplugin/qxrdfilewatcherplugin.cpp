@@ -17,7 +17,7 @@ QxrdDetectorDriverPtr QxrdFileWatcherPlugin::createDetector(QString name,
                                                             QxrdAcquisitionWPtr acq)
 {
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdSimulatedDetectorDriver(name, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdFileWatcherDriver(name, det, expt, acq));
 
   return res;
 }
