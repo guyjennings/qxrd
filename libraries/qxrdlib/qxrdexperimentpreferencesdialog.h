@@ -14,6 +14,7 @@
 #include "qxrddetectorproxy-ptr.h"
 #include "qxrddetectorproxylistmodel-ptr.h"
 
+//TODO: detector edition dialog doesnt work any more
 class QXRD_EXPORT QxrdExperimentPreferencesDialog : public QDialog, public Ui::QxrdExperimentPreferencesDialog {
   Q_OBJECT
 public:

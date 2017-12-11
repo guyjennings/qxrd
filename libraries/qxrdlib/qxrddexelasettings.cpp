@@ -7,11 +7,8 @@
 #include <stdio.h>
 #include <QPainter>
 
-QxrdDexelaSettings::QxrdDexelaSettings(QxrdApplicationWPtr app,
-                                                             QxrdExperimentWPtr    expt,
-                                                             QxrdAcquisitionWPtr   acq,
-                                                             int                   detNum) :
-  QxrdDetectorSettings(app, expt, acq, DexelaDetector, detNum)
+QxrdDexelaSettings::QxrdDexelaSettings(QString name) :
+  QxrdDetectorSettings(name, DexelaDetector)
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing dexela detector\n");

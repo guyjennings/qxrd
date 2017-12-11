@@ -6,11 +6,8 @@
 #include "qcepmutexlocker.h"
 #include "qxrddetectorproxy.h"
 
-QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer(QxrdApplicationWPtr app,
-                                                                 QxrdExperimentWPtr    expt,
-                                                                 QxrdAcquisitionWPtr   acq,
-                                                                 int                   detNum) :
-  QxrdDetectorSettings(app, expt, acq, PerkinElmerDetector, detNum),
+QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer(QString name) :
+  QxrdDetectorSettings(name, PerkinElmerDetector),
   m_DetectorNumber (this, "detectorNumber",  0, "Perkin Elmer Detector Number"),
   m_DetectorSubType(this, "detectorSubType", 0, "Perkin Elmer Detector Subtype"),
   m_DetectorAddress(this, "detectorAddress", "", "Perkin Elmer Detector Address"),

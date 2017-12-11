@@ -10,7 +10,7 @@ class QXRD_EXPORT QxrdDexelaSettings : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdDexelaSettings(QxrdApplicationWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
+  Q_INVOKABLE QxrdDexelaSettings(QString name);
   virtual ~QxrdDexelaSettings();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
@@ -19,5 +19,7 @@ public:
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 
 };
+
+Q_DECLARE_METATYPE(QxrdDexelaSettings*)
 
 #endif // QXRDDEXELASETTINGS_H

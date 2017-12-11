@@ -47,7 +47,9 @@ public:
   QxrdDetectorPluginInterfacePtr dexelaDetectorPlugin();
   QxrdDetectorPluginInterfacePtr pilatusDetectorPlugin();
   QxrdDetectorPluginInterfacePtr areaDetectorPlugin();
+  QxrdDetectorPluginInterfacePtr fileWatcherPlugin();
   QxrdProcessorInterfacePtr      cudaProcessorPlugin();
+  QxrdDetectorPluginInterfaceWPtr detectorPlugin(int detType);
 
   void tiffWarning(const char* module, const char *msg);
   void tiffError(const char* module, const char *msg);
@@ -125,7 +127,6 @@ public slots:
 
   virtual void setDefaultObjectData(QcepDataObject *obj);
 
-//  QxrdDetectorPluginInterfacePtr detectorPlugin(int n);
 
   QxrdPluginInfoModelWPtr pluginInfo();
 
@@ -163,6 +164,7 @@ private:
   QxrdDetectorPluginInterfacePtr  m_DexelaPlugin;
   QxrdDetectorPluginInterfacePtr  m_PilatusDetectorPlugin;
   QxrdDetectorPluginInterfacePtr  m_AreaDetectorPlugin;
+  QxrdDetectorPluginInterfacePtr  m_FileWatcherPlugin;
 
 #ifdef HAVE_PERKIN_ELMER
   QxrdPerkinElmerPluginInterfacePtr m_PerkinElmerPluginInterface;

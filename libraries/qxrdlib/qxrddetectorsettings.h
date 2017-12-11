@@ -21,21 +21,22 @@
 #include "qcepimagequeue.h"
 #include "qxrdroicoordinates-ptr.h"
 #include "qxrddetectordriverthread-ptr.h"
+#include "qxrddetectorplugininterface-ptr.h"
 
 class QXRD_EXPORT QxrdDetectorSettings : public QcepObject
 {
   Q_OBJECT
 
 public:
-  explicit QxrdDetectorSettings(QxrdApplicationWPtr   app,
-                                QxrdExperimentWPtr    expt,
-                                QxrdAcquisitionWPtr   acq,
-                                int                   detType,
-                                int                   detNum);
+  QxrdDetectorSettings(QString name, int detType);
 
-  void initialize();
+  void initialize(QxrdApplicationWPtr   app,
+                  QxrdExperimentWPtr    expt,
+                  QxrdAcquisitionWPtr   acq,
+                  int                   detNum);
   virtual ~QxrdDetectorSettings();
 
+  //TODO: rename to newDetectorSettings
   static QxrdDetectorSettingsPtr newDetector(QxrdApplicationWPtr   app,
                                              QxrdExperimentWPtr    expt,
                                              QxrdAcquisitionWPtr   acq,
@@ -126,6 +127,7 @@ protected:
   QxrdDetectorControlWindowSettingsPtr m_DetectorControlWindowSettings;
   QxrdDetectorControlWindowPtr         m_DetectorControlWindow;
 
+  QxrdDetectorPluginInterfaceWPtr      m_DetectorPlugin;
   QxrdDetectorDriverThreadPtr          m_DetectorDriver;
 
 private:

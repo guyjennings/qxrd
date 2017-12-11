@@ -8,6 +8,7 @@ SUBDIRS =  \
   qxrdareadetectorplugin \
   qxrdcudaprocessorplugin \
   qxrdsimulateddetectorplugin \
+  qxrdfilewatcherplugin \
   qxrddexelaplugin
 
 message(DEFINES == $$DEFINES)

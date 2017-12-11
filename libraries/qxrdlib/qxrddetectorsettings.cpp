@@ -19,19 +19,16 @@
 #include "qxrddexelasettings.h"
 #include "qxrdexperiment.h"
 
-QxrdDetectorSettings::QxrdDetectorSettings(QxrdApplicationWPtr app, QxrdExperimentWPtr    expt,
-                           QxrdAcquisitionWPtr   acq,
-                           int                   detType,
-                           int                   detNum) :
-  QcepObject("detector"),
-  m_Application(app),
-  m_Experiment(expt),
-  m_Acquisition(acq),
+QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
+  QcepObject(name),
+  m_Application(),
+  m_Experiment(),
+  m_Acquisition(),
   m_Processor(),
   m_DetectorControlWindow(NULL),
   m_NAcquiredImages(),
   m_AcquiredImages("acquired"),
-  m_DetectorNumber(this, "detectorNumber", detNum, "Detector Number"),
+  m_DetectorNumber(this, "detectorNumber", -1, "Detector Number"),
   m_DetectorType(this, "detectorType", detType, "Detector Type"),
   m_DetectorTypeName(this, "detectorTypeName", detectorTypeName(detType), "Detector Type Name"),
   m_Enabled(this, "enabled", true, "Is Detector Enabled?"),
@@ -57,8 +54,18 @@ QxrdDetectorSettings::QxrdDetectorSettings(QxrdApplicationWPtr app, QxrdExperime
   }
 }
 
-void QxrdDetectorSettings::initialize()
+void QxrdDetectorSettings::initialize(QxrdApplicationWPtr   app,
+                                      QxrdExperimentWPtr    expt,
+                                      QxrdAcquisitionWPtr   acq,
+                                      int                   detNum)
 {
+  m_Application = app;
+  m_Experiment  = expt;
+  m_Acquisition = acq;
+
+  set_DetectorNumber(detNum);
+
+
   connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
           this,           &QxrdDetectorSettings::startOrStop);
 
@@ -621,54 +628,53 @@ double QxrdDetectorSettings::scalerCounts(int chan)
   }
 }
 
-QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(
-    QxrdApplicationWPtr app,
-    QxrdExperimentWPtr expt,
-    QxrdAcquisitionWPtr acq,
-    int detType,
-    int detNum)
+QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QxrdApplicationWPtr app,
+                                                          QxrdExperimentWPtr expt,
+                                                          QxrdAcquisitionWPtr acq,
+                                                          int detType,
+                                                          int detNum)
 {
   QxrdDetectorSettingsPtr det;
 
   switch (detType) {
   case SimulatedDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsSimulated(app, expt, acq, detNum));
+          new QxrdDetectorSettingsSimulated(tr("simulated-%1").arg(detNum)));
     break;
 
   case PerkinElmerDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsPerkinElmer(app, expt, acq, detNum));
+          new QxrdDetectorSettingsPerkinElmer(tr("perkinElmer-%1").arg(detNum)));
     break;
 
   case PilatusDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsPilatus(app, expt, acq, detNum));
+          new QxrdDetectorSettingsPilatus(tr("pilatus-%1").arg(detNum)));
     break;
 
   case EpicsAreaDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsEpicsArea(app, expt, acq, detNum));
+          new QxrdDetectorSettingsEpicsArea(tr("epicsArea-%1").arg(detNum)));
     break;
 
   case FileWatcherDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsFileWatcher(app, expt, acq, detNum));
+          new QxrdDetectorSettingsFileWatcher(tr("fileWatcher-%1").arg(detNum)));
     break;
 
   case DexelaDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDexelaSettings(app, expt, acq, detNum));
+          new QxrdDexelaSettings(tr("dexela-%1").arg(detNum)));
     break;
   }
 
   if (det == NULL) {
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsSimulated(app, expt, acq, detNum));
+          new QxrdDetectorSettingsSimulated(tr("simulated-%1").arg(detNum)));
   }
 
   if (det) {
-    det -> initialize();
+    det -> initialize(app, expt, acq, detNum);
   }
 
   return det;

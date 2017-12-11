@@ -7,11 +7,13 @@
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
 
+//TODO: rename to QxrdPerkinElmerSettings
+
 class QXRD_EXPORT QxrdDetectorSettingsPerkinElmer : public QxrdDetectorSettings
 {
     Q_OBJECT
 public:
-  explicit QxrdDetectorSettingsPerkinElmer(QxrdApplicationWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
+  Q_INVOKABLE QxrdDetectorSettingsPerkinElmer(QString name);
   virtual ~QxrdDetectorSettingsPerkinElmer();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
@@ -63,5 +65,7 @@ public:
   Q_PROPERTY(int detectorTiming READ get_DetectorTiming WRITE set_DetectorTiming)
   QCEP_INTEGER_PROPERTY(DetectorTiming)
 };
+
+Q_DECLARE_METATYPE(QxrdDetectorSettingsPerkinElmer*)
 
 #endif // QXRDDETECTORSETTINGSPERKINELMER_H

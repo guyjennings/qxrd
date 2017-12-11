@@ -5,14 +5,13 @@
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
 
+//TODO: rename to QxrdPilatusSettings
+
 class QXRD_EXPORT QxrdDetectorSettingsPilatus : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorSettingsPilatus(QxrdApplicationWPtr app,
-                                       QxrdExperimentWPtr expt,
-                                       QxrdAcquisitionWPtr acq,
-                                       int detNum);
+  Q_INVOKABLE QxrdDetectorSettingsPilatus(QString name);
   virtual ~QxrdDetectorSettingsPilatus();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
@@ -56,5 +55,7 @@ public:
   Q_PROPERTY(QString pilatusExtension READ get_PilatusExtension WRITE set_PilatusExtension)
   QCEP_STRING_PROPERTY(PilatusExtension)
 };
+
+Q_DECLARE_METATYPE(QxrdDetectorSettingsPilatus*)
 
 #endif // QXRDDETECTORPILATUS_H

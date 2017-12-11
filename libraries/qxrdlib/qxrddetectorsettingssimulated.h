@@ -6,11 +6,13 @@
 #include "qxrddetectorsettings.h"
 #include <QTimer>
 
+//TODO: rename to QxrdSimulatedSettings
+
 class QXRD_EXPORT QxrdDetectorSettingsSimulated : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorSettingsSimulated(QxrdApplicationWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acq, int detNum);
+  Q_INVOKABLE QxrdDetectorSettingsSimulated(QString name);
   virtual ~QxrdDetectorSettingsSimulated();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
@@ -19,5 +21,7 @@ public:
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 
 };
+
+Q_DECLARE_METATYPE(QxrdDetectorSettingsSimulated*)
 
 #endif // QXRDDETECTORSIMULATED_H

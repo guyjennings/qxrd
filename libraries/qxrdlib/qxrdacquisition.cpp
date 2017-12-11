@@ -471,26 +471,22 @@ void QxrdAcquisition::readSettings(QSettings *settings)
 
   int n = settings->beginReadArray("detectors");
 
-  m_Detectors.resize(n);
+//  m_Detectors.resize(n);
 
   //TODO: re-write to use readObject rather than pre-reading detector type
 
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
-    settings->beginGroup("properties");
-    int detType = settings->value("detectorType", 0).toInt();
-    settings->endGroup();
+    QcepObjectPtr obj = QcepObject::readObject(settings);
 
-    QxrdDetectorSettingsPtr det = QxrdDetectorSettings::newDetector(
-          application(),
-          experiment(), myself(), detType, i);
+    addChildPtr(obj);
+
+    QxrdDetectorSettingsPtr det =
+        qSharedPointerDynamicCast<QxrdDetectorSettings>(obj);
 
     if (det) {
-      //          det->initialize();
-      det->readSettings(settings);
-
-      m_Detectors[i]       = det;
+      m_Detectors.append(det);
 
       QxrdApplicationSettings *set = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
 
@@ -500,6 +496,28 @@ void QxrdAcquisition::readSettings(QSettings *settings)
 
       det->startOrStop(det->isEnabled());
     }
+//    settings->beginGroup("properties");
+//    int detType = settings->value("detectorType", 0).toInt();
+//    settings->endGroup();
+
+//    QxrdDetectorSettingsPtr det = QxrdDetectorSettings::newDetector(
+//          application(),
+//          experiment(), myself(), detType, i);
+
+//    if (det) {
+//      //          det->initialize();
+//      det->readSettings(settings);
+
+//      m_Detectors[i]       = det;
+
+//      QxrdApplicationSettings *set = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
+
+//      if (set && set->get_StartDetectors() == 0) {
+//        det->set_Enabled(false);
+//      }
+
+//      det->startOrStop(det->isEnabled());
+//    }
   }
 
 //  set_DetectorCount(m_Detectors.count());

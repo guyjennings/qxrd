@@ -428,6 +428,9 @@ void QxrdApplication::loadPlugins()
         } else if (className == "QxrdSimulatedDetectorPlugin") {
           m_SimulatedDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+        } else if (className == "QxrdFileWatcherPlugin") {
+          m_FileWatcherPlugin =
+              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
         } else {
         }
 
@@ -508,10 +511,38 @@ void QxrdApplication::loadPlugins()
   }
 }
 
-//QxrdDetectorPluginInterfacePtr QxrdApplication::detectorPlugin(int n)
-//{
-//  return m_DetectorPlugins.value(n);
-//}
+QxrdDetectorPluginInterfaceWPtr QxrdApplication::detectorPlugin(int detType)
+{
+  QxrdDetectorPluginInterfaceWPtr res;
+
+  switch (detType) {
+  case QxrdDetectorSettings::SimulatedDetector:
+    res = m_SimulatedDetectorPlugin;
+    break;
+
+  case QxrdDetectorSettings::PerkinElmerDetector:
+    res = m_PerkinElmerDetectorPlugin;
+    break;
+
+  case QxrdDetectorSettings::PilatusDetector:
+    res = m_PilatusDetectorPlugin;
+    break;
+
+  case QxrdDetectorSettings::EpicsAreaDetector:
+    res = m_AreaDetectorPlugin;
+    break;
+
+  case QxrdDetectorSettings::FileWatcherDetector:
+    res = m_FileWatcherPlugin;
+    break;
+
+  case QxrdDetectorSettings::DexelaDetector:
+    res = m_DexelaPlugin;
+    break;
+  }
+
+  return res;
+}
 
 void QxrdApplication::splashMessage(QString msg)
 {
