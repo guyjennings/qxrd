@@ -1,6 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrddetectordriverperkinelmer.h"
-#include "qxrddetectorsettingsperkinelmer.h"
+#include "qxrdperkinelmersettings.h"
 #include "qxrdacquisition.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
@@ -16,7 +16,7 @@ static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 #endif
 
 QxrdDetectorDriverPerkinElmer::QxrdDetectorDriverPerkinElmer(QString name,
-    QxrdDetectorSettingsPerkinElmerWPtr perkinElmer,
+    QxrdPerkinElmerSettingsWPtr perkinElmer,
     QxrdExperimentWPtr expt,
     QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, perkinElmer, expt, acq),

@@ -3,7 +3,7 @@
 #include "qxrdareadetectordialog-ptr.h"
 
 QxrdAreaDetectorSettings::QxrdAreaDetectorSettings(QString name) :
-  QxrdDetectorSettings(name, EpicsAreaDetector)
+  QxrdDetectorSettings(name, AreaDetector)
 {
 }
 

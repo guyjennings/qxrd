@@ -9,7 +9,7 @@
 #include "qxrddetectordriverfilewatcher.h"
 #include "qxrdfilewatchersettings.h"
 #include "qxrddetectordriverperkinelmer.h"
-#include "qxrddetectorsettingsperkinelmer.h"
+#include "qxrdperkinelmersettings.h"
 #include "qxrddetectordriverdexela.h"
 #include "qxrddexelasettings.h"
 #include "qxrddetectordriverpilatus.h"

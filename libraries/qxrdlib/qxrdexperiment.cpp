@@ -1074,7 +1074,7 @@ void QxrdExperiment::readSettings(QSettings *settings)
     if (settings->contains("detectorType")) {
       int detType = settings->value("detectorType", -1).toInt();
 
-      if (detType == QxrdDetectorSettings::PerkinElmerDetector) {
+      if (detType == QxrdDetectorSettings::PerkinElmer) {
         if (acq) {
           if (acq->get_DetectorCount() == 0) {
             acq->appendDetector(detType);

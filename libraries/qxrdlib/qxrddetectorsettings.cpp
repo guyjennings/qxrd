@@ -13,7 +13,7 @@
 #include "qxrdroicalculator.h"
 #include "qxrdareadetectorsettings.h"
 #include "qxrdfilewatchersettings.h"
-#include "qxrddetectorsettingsperkinelmer.h"
+#include "qxrdperkinelmersettings.h"
 #include "qxrdpilatussettings.h"
 #include "qxrdsimulatedsettings.h"
 #include "qxrddexelasettings.h"
@@ -198,27 +198,27 @@ QString QxrdDetectorSettings::detectorTypeName(int detectorType)
     res = "No Detector";
     break;
 
-  case SimulatedDetector:
+  case Simulated:
     res = "Simulated Detector";
     break;
 
-  case PerkinElmerDetector:
+  case PerkinElmer:
     res = "Perkin Elmer Detector";
     break;
 
-  case PilatusDetector:
+  case Pilatus:
     res = "Pilatus Detector";
     break;
 
-  case EpicsAreaDetector:
+  case AreaDetector:
     res = "Epics Area Detector";
     break;
 
-  case FileWatcherDetector:
+  case FileWatcher:
     res = "File Watcher";
     break;
 
-  case DexelaDetector:
+  case Dexela:
     res = "Dexela Detector";
     break;
   }
@@ -231,12 +231,12 @@ QStringList QxrdDetectorSettings::detectorTypeNames()
   QStringList res;
 
   res.append(detectorTypeName(NoDetector));
-  res.append(detectorTypeName(SimulatedDetector));
-  res.append(detectorTypeName(PerkinElmerDetector));
-  res.append(detectorTypeName(PilatusDetector));
-  res.append(detectorTypeName(EpicsAreaDetector));
-  res.append(detectorTypeName(FileWatcherDetector));
-  res.append(detectorTypeName(DexelaDetector));
+  res.append(detectorTypeName(Simulated));
+  res.append(detectorTypeName(PerkinElmer));
+  res.append(detectorTypeName(Pilatus));
+  res.append(detectorTypeName(AreaDetector));
+  res.append(detectorTypeName(FileWatcher));
+  res.append(detectorTypeName(Dexela));
 
   return res;
 }
@@ -461,27 +461,27 @@ void QxrdDetectorSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int d
     default:
       break;
 
-    case SimulatedDetector:
+    case Simulated:
       QxrdSimulatedSettings::pushDefaultsToProxy(proxy);
       break;
 
-    case PerkinElmerDetector:
-      QxrdDetectorSettingsPerkinElmer::pushDefaultsToProxy(proxy);
+    case PerkinElmer:
+      QxrdPerkinElmerSettings::pushDefaultsToProxy(proxy);
       break;
 
-    case PilatusDetector:
+    case Pilatus:
       QxrdPilatusSettings::pushDefaultsToProxy(proxy);
       break;
 
-    case EpicsAreaDetector:
+    case AreaDetector:
       QxrdAreaDetectorSettings::pushDefaultsToProxy(proxy);
       break;
 
-    case FileWatcherDetector:
+    case FileWatcher:
       QxrdFileWatcherSettings::pushDefaultsToProxy(proxy);
       break;
 
-    case DexelaDetector:
+    case Dexela:
       QxrdDexelaSettings::pushDefaultsToProxy(proxy);
       break;
     }
@@ -645,32 +645,32 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QxrdApplicationWPtr ap
   QxrdDetectorSettingsPtr det;
 
   switch (detType) {
-  case SimulatedDetector:
+  case Simulated:
     det = QxrdDetectorSettingsPtr(
           new QxrdSimulatedSettings(tr("simulated-%1").arg(detNum)));
     break;
 
-  case PerkinElmerDetector:
+  case PerkinElmer:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsPerkinElmer(tr("perkinElmer-%1").arg(detNum)));
+          new QxrdPerkinElmerSettings(tr("perkinElmer-%1").arg(detNum)));
     break;
 
-  case PilatusDetector:
+  case Pilatus:
     det = QxrdDetectorSettingsPtr(
           new QxrdPilatusSettings(tr("pilatus-%1").arg(detNum)));
     break;
 
-  case EpicsAreaDetector:
+  case AreaDetector:
     det = QxrdDetectorSettingsPtr(
           new QxrdAreaDetectorSettings(tr("epicsArea-%1").arg(detNum)));
     break;
 
-  case FileWatcherDetector:
+  case FileWatcher:
     det = QxrdDetectorSettingsPtr(
           new QxrdFileWatcherSettings(tr("fileWatcher-%1").arg(detNum)));
     break;
 
-  case DexelaDetector:
+  case Dexela:
     det = QxrdDetectorSettingsPtr(
           new QxrdDexelaSettings(tr("dexela-%1").arg(detNum)));
     break;
@@ -713,7 +713,7 @@ QxrdDetectorDriverPtr QxrdDetectorSettings::createDetector(
 void QxrdDetectorSettings::registerMetaTypes()
 {
   qRegisterMetaType<QxrdSimulatedSettings*>("QxrdSimulatedSettings*");
-  qRegisterMetaType<QxrdDetectorSettingsPerkinElmer*>("QxrdDetectorSettingsPerkinElmer*");
+  qRegisterMetaType<QxrdPerkinElmerSettings*>("QxrdPerkinElmerSettings*");
   qRegisterMetaType<QxrdPilatusSettings*>("QxrdPilatusSettings*");
   qRegisterMetaType<QxrdAreaDetectorSettings*>("QxrdAreaDetectorSettings*");
   qRegisterMetaType<QxrdFileWatcherSettings*>("QxrdFileWatcherSettings*");

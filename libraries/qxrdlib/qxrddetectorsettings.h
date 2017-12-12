@@ -73,12 +73,12 @@ public:
 
   typedef enum {
     NoDetector,
-    SimulatedDetector,
-    PerkinElmerDetector,
-    PilatusDetector,
-    EpicsAreaDetector,
-    FileWatcherDetector,
-    DexelaDetector
+    Simulated,
+    PerkinElmer,
+    Pilatus,
+    AreaDetector,
+    FileWatcher,
+    Dexela
   } DetectorType;
 
   enum {

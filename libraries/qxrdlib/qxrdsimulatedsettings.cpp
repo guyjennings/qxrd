@@ -8,7 +8,7 @@
 #include <QPainter>
 
 QxrdSimulatedSettings::QxrdSimulatedSettings(QString name) :
-  QxrdDetectorSettings(name, SimulatedDetector)
+  QxrdDetectorSettings(name, Simulated)
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing simulated detector\n");

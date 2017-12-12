@@ -14,7 +14,7 @@
 #include "qxrdpilatusdialog-ptr.h"
 
 QxrdPilatusSettings::QxrdPilatusSettings(QString name) :
-  QxrdDetectorSettings(name, PilatusDetector),
+  QxrdDetectorSettings(name, Pilatus),
   m_PilatusHost            (this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
   m_PilatusPort            (this, "pilatusPort",          41234,         "Camserver Port Number"),
   m_PilatusUser            (this, "pilatusUser",          "det",         "Camserver User Name"),

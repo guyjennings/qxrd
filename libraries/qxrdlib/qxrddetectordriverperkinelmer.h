@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qxrddetectordriver.h"
-#include "qxrddetectorsettingsperkinelmer-ptr.h"
+#include "qxrdperkinelmersettings-ptr.h"
 
 #ifdef Q_OS_WIN32
 #include <windows.h>
@@ -21,7 +21,7 @@ class QXRD_EXPORT QxrdDetectorDriverPerkinElmer : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverPerkinElmer(QString name,
-                                QxrdDetectorSettingsPerkinElmerWPtr perkinElmer,
+                                QxrdPerkinElmerSettingsWPtr perkinElmer,
                                 QxrdExperimentWPtr expt,
                                 QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverPerkinElmer();
@@ -89,7 +89,7 @@ private:
 #endif
 
 private:
-  QxrdDetectorSettingsPerkinElmerWPtr m_PerkinElmer;
+  QxrdPerkinElmerSettingsWPtr m_PerkinElmer;
 };
 
 #endif // QXRDDETECTORDRIVERPERKINELMER_H

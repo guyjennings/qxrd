@@ -17,7 +17,7 @@
 
 #include "qxrddetectorsettings.h"
 #include "qxrddetectordriverthread.h"
-#include "qxrddetectorsettingsperkinelmer.h"
+#include "qxrdperkinelmersettings.h"
 
 QxrdDetectorConfigurationDialog::QxrdDetectorConfigurationDialog(QxrdDetectorProxyPtr proxy, QWidget *parent) :
   QDialog(parent),
@@ -139,7 +139,7 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
   } else if (type == QxrdDetectorProxy::PESubTypeProperty) {
     QComboBox *cb = new QComboBox();
-    QStringList sl = QxrdDetectorSettingsPerkinElmer::detectorSubTypeNamesPE();
+    QStringList sl = QxrdPerkinElmerSettings::detectorSubTypeNamesPE();
     cb -> addItems(sl);
     cb -> setCurrentIndex(value.toInt());
 
@@ -147,7 +147,7 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
   } else if (type == QxrdDetectorProxy::PEGainProperty) {
     QComboBox *cb = new QComboBox();
-    QStringList sl = QxrdDetectorSettingsPerkinElmer::gainModeNamesPE();
+    QStringList sl = QxrdPerkinElmerSettings::gainModeNamesPE();
     cb -> addItems(sl);
     cb -> setCurrentIndex(value.toInt());
 
@@ -155,7 +155,7 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
   } else if (type == QxrdDetectorProxy::PEBinningProperty) {
     QComboBox *cb = new QComboBox();
-    QStringList sl = QxrdDetectorSettingsPerkinElmer::binningModeNamesPE();
+    QStringList sl = QxrdPerkinElmerSettings::binningModeNamesPE();
     cb -> addItems(sl);
     cb -> setCurrentIndex(value.toInt());
 
@@ -163,7 +163,7 @@ void QxrdDetectorConfigurationDialog::appendProperty(int type,
 
   } else if (type == QxrdDetectorProxy::PETimingProperty) {
     QComboBox *cb = new QComboBox();
-    QStringList sl = QxrdDetectorSettingsPerkinElmer::timingModeNamesPE();
+    QStringList sl = QxrdPerkinElmerSettings::timingModeNamesPE();
     cb -> addItems(sl);
     cb -> setCurrentIndex(value.toInt());
 

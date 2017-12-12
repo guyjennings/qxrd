@@ -4,7 +4,7 @@
 #include "qxrdfilewatcherdialog-ptr.h"
 
 QxrdFileWatcherSettings::QxrdFileWatcherSettings(QString name) :
-  QxrdDetectorSettings(name, FileWatcherDetector)
+  QxrdDetectorSettings(name, FileWatcher)
 {
 }
 

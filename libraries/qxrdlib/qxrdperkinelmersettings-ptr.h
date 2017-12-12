@@ -1,0 +1,8 @@
+#ifndef QXRDPERKINELMERSETTINGSPTR_H
+#define QXRDPERKINELMERSETTINGSPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdPerkinElmerSettings)
+
+#endif // QXRDPERKINELMERSETTINGSPTR_H

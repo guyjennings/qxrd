@@ -1,5 +1,5 @@
 #include "qxrddebug.h"
-#include "qxrddetectorsettingsperkinelmer.h"
+#include "qxrdperkinelmersettings.h"
 #include "qxrdapplication.h"
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
@@ -8,8 +8,8 @@
 #include "qxrdperkinelmerdialog.h"
 #include "qxrdperkinelmerdialog-ptr.h"
 
-QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer(QString name) :
-  QxrdDetectorSettings(name, PerkinElmerDetector),
+QxrdPerkinElmerSettings::QxrdPerkinElmerSettings(QString name) :
+  QxrdDetectorSettings(name, PerkinElmer),
   m_DetectorNumber (this, "detectorNumber",  0, "Perkin Elmer Detector Number"),
   m_DetectorSubType(this, "detectorSubType", 0, "Perkin Elmer Detector Subtype"),
   m_DetectorAddress(this, "detectorAddress", "", "Perkin Elmer Detector Address"),
@@ -22,32 +22,32 @@ QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer(QString name) :
 #endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer(%p)\n", this);
+    printf("QxrdPerkinElmerSettings::QxrdPerkinElmerSettings(%p)\n", this);
   }
 
   if (qcepDebug(DEBUG_PERKINELMER)) {
-    printMessage("QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer()");
+    printMessage("QxrdPerkinElmerSettings::QxrdPerkinElmerSettings()");
   }
 
 //  ::g_Detector = this;
 }
 
-QxrdDetectorSettingsPerkinElmer::~QxrdDetectorSettingsPerkinElmer()
+QxrdPerkinElmerSettings::~QxrdPerkinElmerSettings()
 {
 #ifndef QT_NO_DEBUG
   printf("Deleting Perkin Elmer Detector\n");
 #endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdDetectorSettingsPerkinElmer::~QxrdDetectorSettingsPerkinElmer(%p)\n", this);
+    printf("QxrdPerkinElmerSettings::~QxrdDetectorSettingsPerkinElmer(%p)\n", this);
   }
 
   if (qcepDebug(DEBUG_PERKINELMER)) {
-    printMessage("QxrdDetectorSettingsPerkinElmer::~QxrdDetectorSettingsPerkinElmer()");
+    printMessage("QxrdPerkinElmerSettings::~QxrdDetectorSettingsPerkinElmer()");
   }
 }
 
-void QxrdDetectorSettingsPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdPerkinElmerSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
 //  QxrdDetectorSettings::pushDefaultsToProxy(proxy, PerkinElmerDetector);
 
@@ -61,7 +61,7 @@ void QxrdDetectorSettingsPerkinElmer::pushDefaultsToProxy(QxrdDetectorProxyPtr p
   }
 }
 
-void QxrdDetectorSettingsPerkinElmer::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdPerkinElmerSettings::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetectorSettings::pushPropertiesToProxy(proxy);
 
@@ -75,7 +75,7 @@ void QxrdDetectorSettingsPerkinElmer::pushPropertiesToProxy(QxrdDetectorProxyPtr
   }
 }
 
-void QxrdDetectorSettingsPerkinElmer::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+void QxrdPerkinElmerSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetectorSettings::pullPropertiesfromProxy(proxy);
 
@@ -89,7 +89,7 @@ void QxrdDetectorSettingsPerkinElmer::pullPropertiesfromProxy(QxrdDetectorProxyP
   }
 }
 
-QString QxrdDetectorSettingsPerkinElmer::detectorSubTypeNamePE(int detectorSubType)
+QString QxrdPerkinElmerSettings::detectorSubTypeNamePE(int detectorSubType)
 {
   QString res = "unknown";
 
@@ -118,7 +118,7 @@ QString QxrdDetectorSettingsPerkinElmer::detectorSubTypeNamePE(int detectorSubTy
   return res;
 }
 
-QStringList QxrdDetectorSettingsPerkinElmer::detectorSubTypeNamesPE()
+QStringList QxrdPerkinElmerSettings::detectorSubTypeNamesPE()
 {
   QStringList res;
 
@@ -131,7 +131,7 @@ QStringList QxrdDetectorSettingsPerkinElmer::detectorSubTypeNamesPE()
   return res;
 }
 
-QStringList QxrdDetectorSettingsPerkinElmer::gainModeNamesPE()
+QStringList QxrdPerkinElmerSettings::gainModeNamesPE()
 {
   QStringList res;
 
@@ -145,9 +145,9 @@ QStringList QxrdDetectorSettingsPerkinElmer::gainModeNamesPE()
   return res;
 }
 
-QString QxrdDetectorSettingsPerkinElmer::binningModeNamePE(int binningMode)
+QString QxrdPerkinElmerSettings::binningModeNamePE(int binningMode)
 {
-  QString res = "Unkown Binning";
+  QString res = "Unknown Binning";
 
   switch (binningMode) {
   case Binning1x1:
@@ -166,7 +166,7 @@ QString QxrdDetectorSettingsPerkinElmer::binningModeNamePE(int binningMode)
   return res;
 }
 
-QStringList QxrdDetectorSettingsPerkinElmer::binningModeNamesPE()
+QStringList QxrdPerkinElmerSettings::binningModeNamesPE()
 {
   QStringList res;
 
@@ -177,7 +177,7 @@ QStringList QxrdDetectorSettingsPerkinElmer::binningModeNamesPE()
   return res;
 }
 
-QStringList QxrdDetectorSettingsPerkinElmer::timingModeNamesPE()
+QStringList QxrdPerkinElmerSettings::timingModeNamesPE()
 {
   QStringList res;
 
@@ -187,7 +187,7 @@ QStringList QxrdDetectorSettingsPerkinElmer::timingModeNamesPE()
   return res;
 }
 
-void QxrdDetectorSettingsPerkinElmer::configureDetector()
+void QxrdPerkinElmerSettings::configureDetector()
 {
   QxrdPerkinElmerDialogPtr dlog =
       QxrdPerkinElmerDialogPtr(

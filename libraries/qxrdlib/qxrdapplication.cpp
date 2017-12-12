@@ -517,27 +517,27 @@ QxrdDetectorPluginInterfaceWPtr QxrdApplication::detectorPlugin(int detType)
   QxrdDetectorPluginInterfaceWPtr res;
 
   switch (detType) {
-  case QxrdDetectorSettings::SimulatedDetector:
+  case QxrdDetectorSettings::Simulated:
     res = m_SimulatedDetectorPlugin;
     break;
 
-  case QxrdDetectorSettings::PerkinElmerDetector:
+  case QxrdDetectorSettings::PerkinElmer:
     res = m_PerkinElmerDetectorPlugin;
     break;
 
-  case QxrdDetectorSettings::PilatusDetector:
+  case QxrdDetectorSettings::Pilatus:
     res = m_PilatusDetectorPlugin;
     break;
 
-  case QxrdDetectorSettings::EpicsAreaDetector:
+  case QxrdDetectorSettings::AreaDetector:
     res = m_AreaDetectorPlugin;
     break;
 
-  case QxrdDetectorSettings::FileWatcherDetector:
+  case QxrdDetectorSettings::FileWatcher:
     res = m_FileWatcherPlugin;
     break;
 
-  case QxrdDetectorSettings::DexelaDetector:
+  case QxrdDetectorSettings::Dexela:
     res = m_DexelaPlugin;
     break;
   }

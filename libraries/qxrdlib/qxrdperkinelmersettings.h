@@ -1,5 +1,5 @@
-#ifndef QXRDDETECTORSETTINGSPERKINELMER_H
-#define QXRDDETECTORSETTINGSPERKINELMER_H
+#ifndef QXRDPERKINELMERSETTINGS_H
+#define QXRDPERKINELMERSETTINGS_H
 
 #include "qxrdlib_global.h"
 #include <QMutex>
@@ -9,12 +9,12 @@
 
 //TODO: rename to QxrdPerkinElmerSettings
 
-class QXRD_EXPORT QxrdDetectorSettingsPerkinElmer : public QxrdDetectorSettings
+class QXRD_EXPORT QxrdPerkinElmerSettings : public QxrdDetectorSettings
 {
     Q_OBJECT
 public:
-  Q_INVOKABLE QxrdDetectorSettingsPerkinElmer(QString name);
-  virtual ~QxrdDetectorSettingsPerkinElmer();
+  Q_INVOKABLE QxrdPerkinElmerSettings(QString name);
+  virtual ~QxrdPerkinElmerSettings();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
@@ -68,6 +68,6 @@ public:
   QCEP_INTEGER_PROPERTY(DetectorTiming)
 };
 
-Q_DECLARE_METATYPE(QxrdDetectorSettingsPerkinElmer*)
+Q_DECLARE_METATYPE(QxrdPerkinElmerSettings*)
 
-#endif // QXRDDETECTORSETTINGSPERKINELMER_H
+#endif // QXRDPERKINELMERSETTINGS_H
