@@ -215,12 +215,8 @@ SOURCES += qxrdlib.cpp \
     qxrdroicoordinateslist.cpp \
     qxrddetectorsettings.cpp \
     qxrddetectordriver.cpp \
-    qxrddetectordriversimulated.cpp \
     qxrddetectordriverperkinelmer.cpp \
     qxrddetectordriverpilatus.cpp \
-    qxrddetectordriverfilewatcher.cpp \
-    qxrddetectordriverepicsarea.cpp \
-    qxrddetectordriverdexela.cpp \
     qxrddetectordriverthread.cpp \
     qxrdexperimentthread.cpp \
     qxrdroishape.cpp \
@@ -725,12 +721,8 @@ HEADERS += TODO.h \
     qxrddetectorsettings.h \
     qxrddetectorsettings-ptr.h \
     qxrddetectordriver.h \
-    qxrddetectordriversimulated.h \
     qxrddetectordriverperkinelmer.h \
-    qxrddetectordriverdexela.h \
     qxrddetectordriverpilatus.h \
-    qxrddetectordriverfilewatcher.h \
-    qxrddetectordriverepicsarea.h \
     qxrddetectordriver-ptr.h \
     qxrddetectordriverthread.h \
     qxrddetectordriverthread-ptr.h \
