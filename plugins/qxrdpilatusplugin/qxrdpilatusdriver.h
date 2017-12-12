@@ -2,7 +2,7 @@
 #define QXRDPILATUSDRIVER_H
 
 #include "qxrddetectordriver.h"
-#include "qxrddetectorsettingspilatus-ptr.h"
+#include "qxrdpilatussettings-ptr.h"
 #include <QTimer>
 
 class QxrdPilatusDriver : public QxrdDetectorDriver
@@ -28,7 +28,7 @@ private slots:
   void onTimerTimeout();
 
 private:
-  QxrdDetectorSettingsPilatusWPtr m_Pilatus;
+  QxrdPilatusSettingsWPtr m_Pilatus;
   QTimer m_Timer;
 };
 

@@ -5,7 +5,7 @@
 #include "qxrddetectordriver.h"
 #include <QTcpSocket>
 #include "qxrddetectorpilatusremote-ptr.h"
-#include "qxrddetectorsettingspilatus-ptr.h"
+#include "qxrdpilatussettings-ptr.h"
 
 //TODO: move to plugin
 class QXRD_EXPORT QxrdDetectorDriverPilatus : public QxrdDetectorDriver
@@ -14,7 +14,7 @@ class QXRD_EXPORT QxrdDetectorDriverPilatus : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverPilatus(QString name,
-                            QxrdDetectorSettingsPilatusWPtr pilatus,
+                            QxrdPilatusSettingsWPtr pilatus,
                             QxrdExperimentWPtr expt,
                             QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverPilatus();
@@ -60,7 +60,7 @@ private:
   void loadAndPush(QString f);
 
 private:
-  QxrdDetectorSettingsPilatusWPtr m_Pilatus;
+  QxrdPilatusSettingsWPtr m_Pilatus;
 
   QTcpSocket m_PilatusSocket;
   QString    m_PilatusReply;

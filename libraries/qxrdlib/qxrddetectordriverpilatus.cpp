@@ -1,7 +1,7 @@
 #include "qxrddetectordriverpilatus.h"
 #include "qxrdthread.h"
 #include "qcepmacros.h"
-#include "qxrddetectorsettingspilatus.h"
+#include "qxrdpilatussettings.h"
 #include "qxrddebug.h"
 #include "qxrdacquisition.h"
 #include "qxrddetectorpilatusremote.h"
@@ -11,7 +11,7 @@
 #include "qcepallocator.h"
 
 QxrdDetectorDriverPilatus::QxrdDetectorDriverPilatus(QString name,
-    QxrdDetectorSettingsPilatusWPtr pilatus,
+    QxrdPilatusSettingsWPtr pilatus,
     QxrdExperimentWPtr expt,
     QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, pilatus, expt, acq),
@@ -38,7 +38,7 @@ bool QxrdDetectorDriverPilatus::startDetectorDriver()
 {
   THREAD_CHECK;
 
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr pil(m_Pilatus);
 
   if (pil) {
     printMessage(tr("Starting Pilatus Detector at %1:%2")
@@ -69,7 +69,7 @@ bool QxrdDetectorDriverPilatus::stopDetectorDriver()
 {
   THREAD_CHECK;
 
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr pil(m_Pilatus);
 
   if (pil) {
     printMessage(tr("Stopping Pilatus Detector at %1").arg(
@@ -92,7 +92,7 @@ bool QxrdDetectorDriverPilatus::beginAcquisition(double exposure)
 {
   THREAD_CHECK;
 
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr pil(m_Pilatus);
 
   if (pil) {
     if (qcepDebug(DEBUG_PILATUS)) {
@@ -183,7 +183,7 @@ void QxrdDetectorDriverPilatus::sendCommand(QString cmd)
 
 void QxrdDetectorDriverPilatus::imagePath(QString path)
 {
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr pil(m_Pilatus);
 
   if (pil) {
     if (pil->checkDetectorEnabled()) {
@@ -194,7 +194,7 @@ void QxrdDetectorDriverPilatus::imagePath(QString path)
 
 void QxrdDetectorDriverPilatus::beginExposure(double exposure)
 {
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr pil(m_Pilatus);
 
   if (pil) {
     int expMode = pil->get_ExposureMode();
@@ -216,8 +216,8 @@ void QxrdDetectorDriverPilatus::beginExposure(double exposure)
 
 void QxrdDetectorDriverPilatus::expose()
 {
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
-  QxrdAcquisitionPtr             acq(m_Acquisition);
+  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdAcquisitionPtr     acq(m_Acquisition);
 
   if (pil && acq) {
     m_CurrentFile = acq->currentFileBase(pil->get_DetectorNumber(),
@@ -252,7 +252,7 @@ void QxrdDetectorDriverPilatus::beginFrame()
 
 void QxrdDetectorDriverPilatus::interpretReply(QString reply)
 {
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr pil(m_Pilatus);
 
   if (pil) {
     if (qcepDebug(DEBUG_PILATUS)) {
@@ -310,7 +310,7 @@ void QxrdDetectorDriverPilatus::remoteCommand(QString cmd)
 
 void QxrdDetectorDriverPilatus::remoteDelete(QString file)
 {
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr pil(m_Pilatus);
 
   if (pil) {
     QString cmd = tr("%1 -o ForwardX11=No %2@%3 rm %4/%5")
@@ -333,8 +333,8 @@ void QxrdDetectorDriverPilatus::remoteDelete(QString file)
 
 void QxrdDetectorDriverPilatus::remoteCopy(QString file)
 {
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
-  QxrdExperimentPtr              expt(m_Experiment);
+  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdExperimentPtr      expt(m_Experiment);
 
   if (pil && expt) {
     QxrdDataProcessorPtr proc = expt->dataProcessor();
@@ -366,8 +366,8 @@ void QxrdDetectorDriverPilatus::remoteTransfer(QString file)
 {
   // Transfer contents of a remote file to a local memory buffer:"
 
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
-  QxrdExperimentPtr              expt(m_Experiment);
+  QxrdPilatusSettingsWPtr pil(m_Pilatus);
+  QxrdExperimentPtr       expt(m_Experiment);
 
   if (pil && expt) {
     QxrdDataProcessorPtr proc = expt->dataProcessor();
@@ -383,8 +383,8 @@ void QxrdDetectorDriverPilatus::remoteTransfer(QString file)
 
 void QxrdDetectorDriverPilatus::loadAndPush(QString f)
 {
-  QxrdDetectorSettingsPilatusPtr pil(m_Pilatus);
-  QxrdExperimentPtr              expt(m_Experiment);
+  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdExperimentPtr      expt(m_Experiment);
 
   if (pil && expt) {
     QxrdDataProcessorPtr proc = expt->dataProcessor();

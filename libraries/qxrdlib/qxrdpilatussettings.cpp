@@ -1,4 +1,4 @@
-#include "qxrddetectorsettingspilatus.h"
+#include "qxrdpilatussettings.h"
 #include "qcepproperty.h"
 #include "qxrddebug.h"
 #include "qxrdacquisition.h"
@@ -11,7 +11,7 @@
 #include "qxrdexperiment.h"
 #include "qxrddataprocessor.h"
 
-QxrdDetectorSettingsPilatus::QxrdDetectorSettingsPilatus(QString name) :
+QxrdPilatusSettings::QxrdPilatusSettings(QString name) :
   QxrdDetectorSettings(name, PilatusDetector),
   m_PilatusHost            (this, "pilatusHost",          "s11id-pilatus", "Host Address of Computer running Camserver"),
   m_PilatusPort            (this, "pilatusPort",          41234,         "Camserver Port Number"),
@@ -34,7 +34,7 @@ QxrdDetectorSettingsPilatus::QxrdDetectorSettingsPilatus(QString name) :
   }
 }
 
-QxrdDetectorSettingsPilatus::~QxrdDetectorSettingsPilatus()
+QxrdPilatusSettings::~QxrdPilatusSettings()
 {
 #ifndef QT_NO_DEBUG
   printf("Deleting Pilatus detector\n");
@@ -45,7 +45,7 @@ QxrdDetectorSettingsPilatus::~QxrdDetectorSettingsPilatus()
   }
 }
 
-void QxrdDetectorSettingsPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdPilatusSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy)
 {
   if (proxy) {
     proxy->pushProperty(QxrdDetectorProxy::StringProperty, "pilatusHost",          "Camserver Host",    "s11id-pilatus");
@@ -62,7 +62,7 @@ void QxrdDetectorSettingsPilatus::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy
   }
 }
 
-void QxrdDetectorSettingsPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdPilatusSettings::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetectorSettings::pushPropertiesToProxy(proxy);
 
@@ -81,7 +81,7 @@ void QxrdDetectorSettingsPilatus::pushPropertiesToProxy(QxrdDetectorProxyPtr pro
   }
 }
 
-void QxrdDetectorSettingsPilatus::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+void QxrdPilatusSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetectorSettings::pullPropertiesfromProxy(proxy);
 

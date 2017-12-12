@@ -13,7 +13,7 @@
 #include "qxrddetectordriverdexela.h"
 #include "qxrddexelasettings.h"
 #include "qxrddetectordriverpilatus.h"
-#include "qxrddetectorsettingspilatus.h"
+#include "qxrdpilatussettings.h"
 #include "qxrddetectordriversimulated.h"
 #include "qxrddetectorsettingssimulated.h"
 
@@ -86,7 +86,7 @@ void QxrdDetectorDriverThread::run()
     case QxrdDetectorSettings::PilatusDetector:
       m_DetectorDriver = QxrdDetectorDriverPtr(
             new QxrdDetectorDriverPilatus(name,
-                                          qSharedPointerDynamicCast<QxrdDetectorSettingsPilatus>(det),
+                                          qSharedPointerDynamicCast<QxrdPilatusSettings>(det),
                                           expt, acq));
       break;
 

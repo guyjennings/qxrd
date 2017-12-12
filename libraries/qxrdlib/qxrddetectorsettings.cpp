@@ -14,7 +14,7 @@
 #include "qxrddetectorsettingsepicsarea.h"
 #include "qxrdfilewatchersettings.h"
 #include "qxrddetectorsettingsperkinelmer.h"
-#include "qxrddetectorsettingspilatus.h"
+#include "qxrdpilatussettings.h"
 #include "qxrddetectorsettingssimulated.h"
 #include "qxrddexelasettings.h"
 #include "qxrdexperiment.h"
@@ -462,7 +462,7 @@ void QxrdDetectorSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int d
       break;
 
     case PilatusDetector:
-      QxrdDetectorSettingsPilatus::pushDefaultsToProxy(proxy);
+      QxrdPilatusSettings::pushDefaultsToProxy(proxy);
       break;
 
     case EpicsAreaDetector:
@@ -649,7 +649,7 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QxrdApplicationWPtr ap
 
   case PilatusDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsPilatus(tr("pilatus-%1").arg(detNum)));
+          new QxrdPilatusSettings(tr("pilatus-%1").arg(detNum)));
     break;
 
   case EpicsAreaDetector:
@@ -689,7 +689,7 @@ void QxrdDetectorSettings::registerMetaTypes()
 {
   qRegisterMetaType<QxrdDetectorSettingsSimulated*>("QxrdDetectorSettingsSimulated*");
   qRegisterMetaType<QxrdDetectorSettingsPerkinElmer*>("QxrdDetectorSettingsPerkinElmer*");
-  qRegisterMetaType<QxrdDetectorSettingsPilatus*>("QxrdDetectorSettingsPilatus*");
+  qRegisterMetaType<QxrdPilatusSettings*>("QxrdPilatusSettings*");
   qRegisterMetaType<QxrdDetectorSettingsEpicsArea*>("QxrdDetectorSettingsEpicsArea*");
   qRegisterMetaType<QxrdFileWatcherSettings*>("QxrdFileWatcherSettings*");
   qRegisterMetaType<QxrdDexelaSettings*>("QxrdDexelaSettings*");

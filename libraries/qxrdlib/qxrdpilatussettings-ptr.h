@@ -1,0 +1,8 @@
+#ifndef QXRDPILATUSSETTINGSPTR_H
+#define QXRDPILATUSSETTINGSPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdPilatusSettings)
+
+#endif // QXRDPILATUSSETTINGSPTR_H

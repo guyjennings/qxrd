@@ -1,5 +1,5 @@
-#ifndef QXRDDETECTORSETTINGSPILATUS_H
-#define QXRDDETECTORSETTINGSPILATUS_H
+#ifndef QXRDPILATUSSETTINGS_H
+#define QXRDPILATUSSETTINGS_H
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
@@ -7,12 +7,12 @@
 
 //TODO: rename to QxrdPilatusSettings
 
-class QXRD_EXPORT QxrdDetectorSettingsPilatus : public QxrdDetectorSettings
+class QXRD_EXPORT QxrdPilatusSettings : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:
-  Q_INVOKABLE QxrdDetectorSettingsPilatus(QString name);
-  virtual ~QxrdDetectorSettingsPilatus();
+  Q_INVOKABLE QxrdPilatusSettings(QString name);
+  virtual ~QxrdPilatusSettings();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
@@ -56,6 +56,6 @@ public:
   QCEP_STRING_PROPERTY(PilatusExtension)
 };
 
-Q_DECLARE_METATYPE(QxrdDetectorSettingsPilatus*)
+Q_DECLARE_METATYPE(QxrdPilatusSettings*)
 
-#endif // QXRDDETECTORPILATUS_H
+#endif // QXRDPILATUSSETTINGS_H
