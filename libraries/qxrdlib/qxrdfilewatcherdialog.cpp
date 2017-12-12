@@ -1,14 +1,14 @@
 #include "qxrdfilewatcherdialog.h"
-#include "ui_qxrdfilewatcherdialog.h"
 
-QxrdFileWatcherDialog::QxrdFileWatcherDialog(QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::QxrdFileWatcherDialog)
+QxrdFileWatcherDialog::QxrdFileWatcherDialog(
+    QxrdFileWatcherSettingsPtr set, QWidget *parent) :
+  QxrdDetectorDialog(parent),
+  m_Settings(set)
 {
-  ui->setupUi(this);
+  setupUi(this);
 }
 
-QxrdFileWatcherDialog::~QxrdFileWatcherDialog()
+void QxrdFileWatcherDialog::accept()
 {
-  delete ui;
+  QxrdDetectorDialog::accept();
 }

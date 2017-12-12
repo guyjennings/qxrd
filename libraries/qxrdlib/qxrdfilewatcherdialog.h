@@ -4,22 +4,24 @@
 //TODO: recast to multiple inheritance
 //TODO: make smart pointer
 
-#include <QDialog>
+#include "qxrdlib_global.h"
+#include "qxrddetectordialog.h"
+#include "ui_qxrdfilewatcherdialog.h"
+#include "qxrdfilewatchersettings-ptr.h"
 
-namespace Ui {
-class QxrdFileWatcherDialog;
-}
-
-class QxrdFileWatcherDialog : public QDialog
+class QXRD_EXPORT QxrdFileWatcherDialog : public QxrdDetectorDialog, public Ui::QxrdFileWatcherDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdFileWatcherDialog(QWidget *parent = 0);
-  ~QxrdFileWatcherDialog();
+  explicit QxrdFileWatcherDialog(
+      QxrdFileWatcherSettingsPtr set,
+      QWidget *parent = 0);
+
+  void accept();
 
 private:
-  Ui::QxrdFileWatcherDialog *ui;
+  QxrdFileWatcherSettingsPtr m_Settings;
 };
 
 #endif // QXRDFILEWATCHERDIALOG_H

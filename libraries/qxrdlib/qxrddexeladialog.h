@@ -4,22 +4,24 @@
 //TODO: recast to multiple inheritance
 //TODO: make smart pointer
 
-#include <QDialog>
+#include "qxrdlib_global.h"
+#include "qxrddetectordialog.h"
+#include "ui_qxrddexeladialog.h"
+#include "qxrddexelasettings-ptr.h"
 
-namespace Ui {
-class QxrdDexelaDialog;
-}
-
-class QxrdDexelaDialog : public QDialog
+class QXRD_EXPORT QxrdDexelaDialog : public QxrdDetectorDialog, public Ui::QxrdDexelaDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdDexelaDialog(QWidget *parent = 0);
-  ~QxrdDexelaDialog();
+  explicit QxrdDexelaDialog(
+      QxrdDexelaSettingsPtr set,
+      QWidget *parent = 0);
+
+  void accept();
 
 private:
-  Ui::QxrdDexelaDialog *ui;
+  QxrdDexelaSettingsPtr m_Settings;
 };
 
 #endif // QXRDDEXELADIALOG_H

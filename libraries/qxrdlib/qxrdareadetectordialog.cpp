@@ -1,14 +1,15 @@
 #include "qxrdareadetectordialog.h"
-#include "ui_qxrdareadetectordialog.h"
+#include "qxrdareadetectorsettings.h"
 
-QxrdAreaDetectorDialog::QxrdAreaDetectorDialog(QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::QxrdAreaDetectorDialog)
+QxrdAreaDetectorDialog::QxrdAreaDetectorDialog(
+    QxrdAreaDetectorSettingsPtr set, QWidget *parent) :
+  QxrdDetectorDialog(parent),
+  m_Settings(set)
 {
-  ui->setupUi(this);
+  setupUi(this);
 }
 
-QxrdAreaDetectorDialog::~QxrdAreaDetectorDialog()
+void QxrdAreaDetectorDialog::accept()
 {
-  delete ui;
+  QxrdDetectorDialog::accept();
 }

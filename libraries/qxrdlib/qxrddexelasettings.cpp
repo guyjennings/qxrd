@@ -1,4 +1,5 @@
 #include "qxrddexelasettings.h"
+#include "qxrddexelasettings-ptr.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
@@ -8,6 +9,7 @@
 
 #include <stdio.h>
 #include <QPainter>
+#include <QThread>
 
 QxrdDexelaSettings::QxrdDexelaSettings(QString name) :
   QxrdDetectorSettings(name, Dexela)
@@ -59,9 +61,14 @@ void QxrdDexelaSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 
 void QxrdDexelaSettings::configureDetector()
 {
+  GUI_THREAD_CHECK;
+
+  QxrdDexelaSettingsPtr myself =
+      qSharedPointerDynamicCast<QxrdDexelaSettings>(sharedFromThis());
+
   QxrdDexelaDialogPtr dlg =
       QxrdDexelaDialogPtr(
-        new QxrdDexelaDialog());
+        new QxrdDexelaDialog(myself));
 
   if (dlg) {
     dlg->exec();

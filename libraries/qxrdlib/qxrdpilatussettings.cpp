@@ -1,4 +1,5 @@
 #include "qxrdpilatussettings.h"
+#include "qxrdpilatussettings-ptr.h"
 #include "qcepproperty.h"
 #include "qxrddebug.h"
 #include "qxrdacquisition.h"
@@ -103,9 +104,14 @@ void QxrdPilatusSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 
 void QxrdPilatusSettings::configureDetector()
 {
+  GUI_THREAD_CHECK;
+
+  QxrdPilatusSettingsPtr myself =
+      qSharedPointerDynamicCast<QxrdPilatusSettings>(sharedFromThis());
+
   QxrdPilatusDialogPtr dlog =
       QxrdPilatusDialogPtr(
-        new QxrdPilatusDialog());
+        new QxrdPilatusDialog(myself));
 
   if (dlog) {
     dlog->exec();

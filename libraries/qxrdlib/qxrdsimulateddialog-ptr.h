@@ -1,0 +1,8 @@
+#ifndef QXRDSIMULATEDDIALOGPTR_H
+#define QXRDSIMULATEDDIALOGPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdSimulatedDialog)
+
+#endif // QXRDSIMULATEDDIALOGPTR_H

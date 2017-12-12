@@ -479,7 +479,8 @@ HEADERS += qxrdlib.h\
     qxrdareadetectorsettings.h \
     qxrdareadetectorsettings-ptr.h \
     qxrdperkinelmersettings.h \
-    qxrdperkinelmersettings-ptr.h
+    qxrdperkinelmersettings-ptr.h \
+    qxrdsimulateddialog-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

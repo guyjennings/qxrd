@@ -1,13 +1,16 @@
 #ifndef QXRDDETECTORDIALOG_H
 #define QXRDDETECTORDIALOG_H
 
-#include <QWidget>
+#include "qxrdlib_global.h"
+#include <QDialog>
 
-class QxrdDetectorDialog : public QObject
+class QXRD_EXPORT QxrdDetectorDialog : public QDialog
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorDialog(QObject *parent = nullptr);
+  explicit QxrdDetectorDialog(QWidget *parent = nullptr);
+
+  void accept();
 
 signals:
 

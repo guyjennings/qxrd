@@ -1,6 +1,10 @@
 #include "qxrddetectordialog.h"
 
-QxrdDetectorDialog::QxrdDetectorDialog(QObject *parent) : QObject(parent)
+QxrdDetectorDialog::QxrdDetectorDialog(QWidget *parent) : QDialog(parent)
 {
+}
 
+void QxrdDetectorDialog::accept()
+{
+  QDialog::accept();
 }

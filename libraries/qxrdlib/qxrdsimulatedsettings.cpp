@@ -1,9 +1,11 @@
 #include "qxrdsimulatedsettings.h"
+#include "qxrdsimulatedsettings-ptr.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
 #include "qxrddebug.h"
 #include "qxrdsimulateddialog.h"
+#include "qxrdsimulateddialog-ptr.h"
 #include <stdio.h>
 #include <QPainter>
 
@@ -57,8 +59,14 @@ void QxrdSimulatedSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 
 void QxrdSimulatedSettings::configureDetector()
 {
-  QxrdSimulatedDialog *dlog =
-      new QxrdSimulatedDialog();
+  GUI_THREAD_CHECK;
+
+  QxrdSimulatedSettingsPtr myself =
+      qSharedPointerDynamicCast<QxrdSimulatedSettings>(sharedFromThis());
+
+  QxrdSimulatedDialogPtr dlog =
+      QxrdSimulatedDialogPtr(
+        new QxrdSimulatedDialog(myself));
 
   if (dlog) {
     dlog->exec();

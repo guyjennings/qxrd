@@ -1,14 +1,14 @@
 #include "qxrddexeladialog.h"
-#include "ui_qxrddexeladialog.h"
 
-QxrdDexelaDialog::QxrdDexelaDialog(QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::QxrdDexelaDialog)
+QxrdDexelaDialog::QxrdDexelaDialog(
+    QxrdDexelaSettingsPtr set, QWidget *parent) :
+  QxrdDetectorDialog(parent),
+  m_Settings(set)
 {
-  ui->setupUi(this);
+  setupUi(this);
 }
 
-QxrdDexelaDialog::~QxrdDexelaDialog()
+void QxrdDexelaDialog::accept()
 {
-  delete ui;
+  QxrdDetectorDialog::accept();
 }

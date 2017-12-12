@@ -24,6 +24,8 @@
 #include "qxrddetectorplugininterface-ptr.h"
 #include "qxrddetectordriver-ptr.h"
 
+//TODO: Attach detector output to processor
+
 class QXRD_EXPORT QxrdDetectorSettings : public QcepObject
 {
   Q_OBJECT

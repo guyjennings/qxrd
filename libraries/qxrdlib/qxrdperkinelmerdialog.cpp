@@ -1,14 +1,14 @@
 #include "qxrdperkinelmerdialog.h"
-#include "ui_qxrdperkinelmerdialog.h"
 
-QxrdPerkinElmerDialog::QxrdPerkinElmerDialog(QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::QxrdPerkinElmerDialog)
+QxrdPerkinElmerDialog::QxrdPerkinElmerDialog(
+    QxrdPerkinElmerSettingsPtr set, QWidget *parent) :
+  QxrdDetectorDialog(parent),
+  m_Settings(set)
 {
-  ui->setupUi(this);
+  setupUi(this);
 }
 
-QxrdPerkinElmerDialog::~QxrdPerkinElmerDialog()
+void QxrdPerkinElmerDialog::accept()
 {
-  delete ui;
+  QxrdDetectorDialog::accept();
 }

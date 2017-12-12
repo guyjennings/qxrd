@@ -1,14 +1,14 @@
 #include "qxrdsimulateddialog.h"
-#include "ui_qxrdsimulateddialog.h"
 
-QxrdSimulatedDialog::QxrdSimulatedDialog(QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::QxrdSimulatedDialog)
+QxrdSimulatedDialog::QxrdSimulatedDialog(
+    QxrdSimulatedSettingsPtr set, QWidget *parent) :
+  QxrdDetectorDialog(parent),
+  m_Settings(set)
 {
-  ui->setupUi(this);
+  setupUi(this);
 }
 
-QxrdSimulatedDialog::~QxrdSimulatedDialog()
+void QxrdSimulatedDialog::accept()
 {
-  delete ui;
+  QxrdDetectorDialog::accept();
 }

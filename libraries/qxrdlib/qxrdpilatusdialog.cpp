@@ -1,14 +1,14 @@
 #include "qxrdpilatusdialog.h"
-#include "ui_qxrdpilatusdialog.h"
 
-QxrdPilatusDialog::QxrdPilatusDialog(QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::QxrdPilatusDialog)
+QxrdPilatusDialog::QxrdPilatusDialog(
+    QxrdPilatusSettingsPtr set, QWidget *parent) :
+  QxrdDetectorDialog(parent),
+  m_Settings(set)
 {
-  ui->setupUi(this);
+  setupUi(this);
 }
 
-QxrdPilatusDialog::~QxrdPilatusDialog()
+void QxrdPilatusDialog::accept()
 {
-  delete ui;
+  QxrdDetectorDialog::accept();
 }

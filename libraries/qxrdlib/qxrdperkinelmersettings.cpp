@@ -1,5 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdperkinelmersettings.h"
+#include "qxrdperkinelmersettings-ptr.h"
 #include "qxrdapplication.h"
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
@@ -189,9 +190,14 @@ QStringList QxrdPerkinElmerSettings::timingModeNamesPE()
 
 void QxrdPerkinElmerSettings::configureDetector()
 {
+  GUI_THREAD_CHECK;
+
+  QxrdPerkinElmerSettingsPtr myself =
+      qSharedPointerDynamicCast<QxrdPerkinElmerSettings>(sharedFromThis());
+
   QxrdPerkinElmerDialogPtr dlog =
       QxrdPerkinElmerDialogPtr(
-        new QxrdPerkinElmerDialog());
+        new QxrdPerkinElmerDialog(myself));
 
   if (dlog) {
     dlog->exec();
