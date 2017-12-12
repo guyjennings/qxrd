@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qxrddetectordriver.h"
-#include "qxrddetectorsettingssimulated-ptr.h"
+#include "qxrdsimulatedsettings-ptr.h"
 #include <QTimer>
 
 //TODO: move to plugin
@@ -13,7 +13,7 @@ class QXRD_EXPORT QxrdDetectorDriverSimulated : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverSimulated(QString name,
-                              QxrdDetectorSettingsSimulatedWPtr sim,
+                              QxrdSimulatedSettingsWPtr sim,
                               QxrdExperimentWPtr expt,
                               QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverSimulated();
@@ -31,7 +31,7 @@ private slots:
   void onTimerTimeout();
 
 private:
-  QxrdDetectorSettingsSimulatedWPtr m_Simulated;
+  QxrdSimulatedSettingsWPtr m_Simulated;
   QTimer m_Timer;
 };
 

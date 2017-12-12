@@ -7,7 +7,7 @@ SUBDIRS =  \
   qxrdpilatusplugin \
   qxrdareadetectorplugin \
   qxrdcudaprocessorplugin \
-  qxrdsimulateddetectorplugin \
+  qxrdsimulatedplugin \
   qxrdfilewatcherplugin \
   qxrddexelaplugin
 

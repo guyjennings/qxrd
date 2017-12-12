@@ -1,4 +1,4 @@
-#include "qxrddetectorsettingssimulated.h"
+#include "qxrdsimulatedsettings.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <QPainter>
 
-QxrdDetectorSettingsSimulated::QxrdDetectorSettingsSimulated(QString name) :
+QxrdSimulatedSettings::QxrdSimulatedSettings(QString name) :
   QxrdDetectorSettings(name, SimulatedDetector)
 {
 #ifndef QT_NO_DEBUG
@@ -19,7 +19,7 @@ QxrdDetectorSettingsSimulated::QxrdDetectorSettingsSimulated(QString name) :
   }
 }
 
-QxrdDetectorSettingsSimulated::~QxrdDetectorSettingsSimulated()
+QxrdSimulatedSettings::~QxrdSimulatedSettings()
 {
 #ifndef QT_NO_DEBUG
   printf("Deleting simulated detector\n");
@@ -34,21 +34,21 @@ QxrdDetectorSettingsSimulated::~QxrdDetectorSettingsSimulated()
   }
 }
 
-void QxrdDetectorSettingsSimulated::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
+void QxrdSimulatedSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
 {
 //  QxrdDetectorSettings::pushDefaultsToProxy(proxy, SimulatedDetector);
 
 //  printf("Need to implement QxrdDetectorSimulated::pushDefaultsToProxy\n");
 }
 
-void QxrdDetectorSettingsSimulated::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
+void QxrdSimulatedSettings::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetectorSettings::pushPropertiesToProxy(proxy);
 
 //  printf("Need to implement QxrdDetectorSimulated::pushPropertiesToProxy\n");
 }
 
-void QxrdDetectorSettingsSimulated::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
+void QxrdSimulatedSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 {
   QxrdDetectorSettings::pullPropertiesfromProxy(proxy);
 

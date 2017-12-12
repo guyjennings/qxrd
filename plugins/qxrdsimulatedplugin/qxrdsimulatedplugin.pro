@@ -10,15 +10,15 @@ include("../../source/submodules/qceplib/qceplib-base-include.pri")
 INCLUDEPATH += ../../libraries/qxrdlib/
 
 SOURCES += \
-    qxrdsimulateddetectorplugin.cpp \
-    qxrdsimulateddetectordriver.cpp
+    qxrdsimulateddriver.cpp \
+    qxrdsimulatedplugin.cpp
 
 HEADERS += \
-    qxrdsimulateddetectorplugin.h \
-    qxrdsimulateddetectordriver.h
+    qxrdsimulateddriver.h \
+    qxrdsimulatedplugin.h
 
 OTHER_FILES += \
-    simulatedDetector.json
+    simulated.json
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../ -lqceplib
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../ -lqceplibd

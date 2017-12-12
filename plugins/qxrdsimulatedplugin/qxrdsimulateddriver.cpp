@@ -1,20 +1,22 @@
-#include "qxrdsimulateddetectordriver.h"
+#include "qxrdsimulateddriver.h"
 #include "qxrdacquisition.h"
 #include "qxrdexperiment.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
 #include <QPainter>
+#include "qxrdsimulatedsettings.h"
 
-QxrdSimulatedDetectorDriver::QxrdSimulatedDetectorDriver(QString name,
-                                                         QxrdDetectorSettingsWPtr det,
-                                                         QxrdExperimentWPtr expt,
-                                                         QxrdAcquisitionWPtr acq)
-  : QxrdDetectorDriver(name, det, expt, acq)
+QxrdSimulatedDriver::QxrdSimulatedDriver(QString name,
+                                         QxrdDetectorSettingsWPtr det,
+                                         QxrdExperimentWPtr expt,
+                                         QxrdAcquisitionWPtr acq)
+  : QxrdDetectorDriver(name, det, expt, acq),
+    m_Simulated()
 {
-
+  m_Simulated = qSharedPointerDynamicCast<QxrdSimulatedSettings>(det);
 }
 
-bool QxrdSimulatedDetectorDriver::startDetectorDriver()
+bool QxrdSimulatedDriver::startDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -33,7 +35,7 @@ bool QxrdSimulatedDetectorDriver::startDetectorDriver()
   }
 }
 
-bool QxrdSimulatedDetectorDriver::stopDetectorDriver()
+bool QxrdSimulatedDriver::stopDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -50,7 +52,7 @@ bool QxrdSimulatedDetectorDriver::stopDetectorDriver()
 
 static int g_FrameCounter = 0;
 
-bool QxrdSimulatedDetectorDriver::changeExposureTime(double expos)
+bool QxrdSimulatedDriver::changeExposureTime(double expos)
 {
   THREAD_CHECK;
 
@@ -67,7 +69,7 @@ bool QxrdSimulatedDetectorDriver::changeExposureTime(double expos)
   return false;
 }
 
-bool QxrdSimulatedDetectorDriver::beginAcquisition(double /*exposure*/)
+bool QxrdSimulatedDriver::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
 
@@ -76,18 +78,18 @@ bool QxrdSimulatedDetectorDriver::beginAcquisition(double /*exposure*/)
   return true;
 }
 
-void QxrdSimulatedDetectorDriver::beginFrame()
+void QxrdSimulatedDriver::beginFrame()
 {
 }
 
-bool QxrdSimulatedDetectorDriver::endAcquisition()
+bool QxrdSimulatedDriver::endAcquisition()
 {
   THREAD_CHECK;
 
   return true;
 }
 
-bool QxrdSimulatedDetectorDriver::shutdownAcquisition()
+bool QxrdSimulatedDriver::shutdownAcquisition()
 {
   THREAD_CHECK;
 
@@ -96,7 +98,7 @@ bool QxrdSimulatedDetectorDriver::shutdownAcquisition()
   return true;
 }
 
-void QxrdSimulatedDetectorDriver::onTimerTimeout()
+void QxrdSimulatedDriver::onTimerTimeout()
 {
   QxrdDetectorSettingsPtr det(m_Detector);
   QxrdAcquisitionPtr      acq(m_Acquisition);

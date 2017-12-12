@@ -15,7 +15,8 @@
 #include "qxrddetectordriverpilatus.h"
 #include "qxrdpilatussettings.h"
 #include "qxrddetectordriversimulated.h"
-#include "qxrddetectorsettingssimulated.h"
+#include "qxrdsimulatedsettings.h"
+#include "qxrddetectorplugininterface.h"
 
 #include <stdio.h>
 
@@ -68,49 +69,7 @@ void QxrdDetectorDriverThread::run()
     QxrdExperimentPtr expt(det->experiment());
     QxrdAcquisitionPtr acq(det->acquisition());
 
-    switch (det->get_DetectorType()) {
-    case QxrdDetectorSettings::SimulatedDetector:
-      m_DetectorDriver = QxrdDetectorDriverPtr(
-            new QxrdDetectorDriverSimulated(name,
-                                            qSharedPointerDynamicCast<QxrdDetectorSettingsSimulated>(det),
-                                            expt, acq));
-      break;
-
-    case QxrdDetectorSettings::PerkinElmerDetector:
-      m_DetectorDriver = QxrdDetectorDriverPtr(
-            new QxrdDetectorDriverPerkinElmer(name,
-                                              qSharedPointerDynamicCast<QxrdDetectorSettingsPerkinElmer>(det),
-                                              expt, acq));
-      break;
-
-    case QxrdDetectorSettings::PilatusDetector:
-      m_DetectorDriver = QxrdDetectorDriverPtr(
-            new QxrdDetectorDriverPilatus(name,
-                                          qSharedPointerDynamicCast<QxrdPilatusSettings>(det),
-                                          expt, acq));
-      break;
-
-    case QxrdDetectorSettings::EpicsAreaDetector:
-      m_DetectorDriver = QxrdDetectorDriverPtr(
-            new QxrdDetectorDriverEpicsArea(name,
-                                            qSharedPointerDynamicCast<QxrdDetectorSettingsEpicsArea>(det),
-                                            expt, acq));
-      break;
-
-    case QxrdDetectorSettings::FileWatcherDetector:
-      m_DetectorDriver = QxrdDetectorDriverPtr(
-            new QxrdDetectorDriverFileWatcher(name,
-                                              qSharedPointerDynamicCast<QxrdFileWatcherSettings>(det),
-                                              expt, acq));
-      break;
-
-    case QxrdDetectorSettings::DexelaDetector:
-      m_DetectorDriver = QxrdDetectorDriverPtr(
-            new QxrdDetectorDriverDexela(name,
-                                              qSharedPointerDynamicCast<QxrdDexelaSettings>(det),
-                                              expt, acq));
-      break;
-    }
+    m_DetectorDriver = det->createDetector(name, det, expt, acq);
   }
 
   det = QxrdDetectorSettingsPtr();

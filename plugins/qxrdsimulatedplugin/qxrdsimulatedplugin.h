@@ -1,18 +1,17 @@
-#ifndef QXRDSIMULATEDDETECTORPLUGIN_H
-#define QXRDSIMULATEDDETECTORPLUGIN_H
+#ifndef QXRDSIMULATEDPLUGIN_H
+#define QXRDSIMULATEDPLUGIN_H
 
 #include <QObject>
 #include "qxrddetectorplugininterface.h"
-#include <QTimer>
 
-class QxrdSimulatedDetectorPlugin : public QObject, public QxrdDetectorPluginInterface
+class QxrdSimulatedPlugin : public QObject, public QxrdDetectorPluginInterface
 {
   Q_OBJECT
-  Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "simulatedDetector.json")
+  Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "simulated.json")
   Q_INTERFACES(QxrdDetectorPluginInterface)
 
 public:
-    QxrdSimulatedDetectorPlugin();
+    QxrdSimulatedPlugin();
 
     QString name() const;
 
@@ -22,4 +21,4 @@ public:
                                          QxrdAcquisitionWPtr acq);
 };
 
-#endif // QXRDSIMULATEDDETECTORPLUGIN_H
+#endif // QXRDSIMULATEDPLUGIN_H

@@ -4,14 +4,16 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
 #include <QPainter>
+#include "qxrdfilewatchersettings.h"
 
 QxrdFileWatcherDriver::QxrdFileWatcherDriver(QString name,
                                                          QxrdDetectorSettingsWPtr det,
                                                          QxrdExperimentWPtr expt,
                                                          QxrdAcquisitionWPtr acq)
-  : QxrdDetectorDriver(name, det, expt, acq)
+  : QxrdDetectorDriver(name, det, expt, acq),
+    m_FileWatcher()
 {
-
+  m_FileWatcher = qSharedPointerDynamicCast<QxrdFileWatcherSettings>(det);
 }
 
 bool QxrdFileWatcherDriver::startDetectorDriver()

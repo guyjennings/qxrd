@@ -1,5 +1,5 @@
 #include "qxrddetectordriversimulated.h"
-#include "qxrddetectorsettingssimulated.h"
+#include "qxrdsimulatedsettings.h"
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
 #include <QImage>
@@ -7,7 +7,7 @@
 #include "qxrdsynchronizedacquisition.h"
 
 QxrdDetectorDriverSimulated::QxrdDetectorDriverSimulated(QString name,
-    QxrdDetectorSettingsSimulatedWPtr sim,
+    QxrdSimulatedSettingsWPtr sim,
     QxrdExperimentWPtr expt,
     QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, sim, expt, acq),

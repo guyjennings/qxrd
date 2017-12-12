@@ -4,14 +4,16 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
 #include <QPainter>
+#include "qxrdpilatussettings.h"
 
 QxrdPilatusDriver::QxrdPilatusDriver(QString name,
                                      QxrdDetectorSettingsWPtr det,
                                      QxrdExperimentWPtr expt,
                                      QxrdAcquisitionWPtr acq)
-  : QxrdDetectorDriver(name, det, expt, acq)
+  : QxrdDetectorDriver(name, det, expt, acq),
+    m_Pilatus()
 {
-
+  m_Pilatus = qSharedPointerDynamicCast<QxrdPilatusSettings>(det);
 }
 
 bool QxrdPilatusDriver::startDetectorDriver()

@@ -1,5 +1,5 @@
-#ifndef QXRDDETECTORSIMULATED_H
-#define QXRDDETECTORSIMULATED_H
+#ifndef QXRDSIMULATEDSETTINGS_H
+#define QXRDSIMULATEDSETTINGS_H
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
@@ -8,12 +8,12 @@
 
 //TODO: rename to QxrdSimulatedSettings
 
-class QXRD_EXPORT QxrdDetectorSettingsSimulated : public QxrdDetectorSettings
+class QXRD_EXPORT QxrdSimulatedSettings : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:
-  Q_INVOKABLE QxrdDetectorSettingsSimulated(QString name);
-  virtual ~QxrdDetectorSettingsSimulated();
+  Q_INVOKABLE QxrdSimulatedSettings(QString name);
+  virtual ~QxrdSimulatedSettings();
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
@@ -22,6 +22,6 @@ public:
 
 };
 
-Q_DECLARE_METATYPE(QxrdDetectorSettingsSimulated*)
+Q_DECLARE_METATYPE(QxrdSimulatedSettings*)
 
-#endif // QXRDDETECTORSIMULATED_H
+#endif // QXRDSIMULATEDSETTINGS_H

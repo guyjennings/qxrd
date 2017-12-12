@@ -22,6 +22,7 @@
 #include "qxrdroicoordinates-ptr.h"
 #include "qxrddetectordriverthread-ptr.h"
 #include "qxrddetectorplugininterface-ptr.h"
+#include "qxrddetectordriver-ptr.h"
 
 class QXRD_EXPORT QxrdDetectorSettings : public QcepObject
 {
@@ -120,6 +121,11 @@ public slots:
 
   QxrdDetectorControlWindowSettingsWPtr detectorControlWindowSettings();
   QxrdDetectorControlWindowWPtr         detectorControlWindow();
+
+  QxrdDetectorDriverPtr createDetector(QString name,
+                                       QxrdDetectorSettingsWPtr det,
+                                       QxrdExperimentWPtr expt,
+                                       QxrdAcquisitionWPtr acq);
 
   virtual void configureDetector();
 

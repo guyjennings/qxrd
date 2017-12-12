@@ -15,9 +15,11 @@
 #include "qxrdfilewatchersettings.h"
 #include "qxrddetectorsettingsperkinelmer.h"
 #include "qxrdpilatussettings.h"
-#include "qxrddetectorsettingssimulated.h"
+#include "qxrdsimulatedsettings.h"
 #include "qxrddexelasettings.h"
 #include "qxrdexperiment.h"
+#include "qxrdapplication.h"
+#include "qxrddetectorplugininterface.h"
 
 QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   QcepObject(name),
@@ -65,6 +67,12 @@ void QxrdDetectorSettings::initialize(QxrdApplicationWPtr   app,
 
   set_DetectorNumber(detNum);
 
+  QxrdApplicationPtr appp(m_Application);
+
+  if (appp) {
+    m_DetectorPlugin =
+        appp->detectorPlugin(get_DetectorType());
+  }
 
   connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
           this,           &QxrdDetectorSettings::startOrStop);
@@ -454,7 +462,7 @@ void QxrdDetectorSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int d
       break;
 
     case SimulatedDetector:
-      QxrdDetectorSettingsSimulated::pushDefaultsToProxy(proxy);
+      QxrdSimulatedSettings::pushDefaultsToProxy(proxy);
       break;
 
     case PerkinElmerDetector:
@@ -639,7 +647,7 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QxrdApplicationWPtr ap
   switch (detType) {
   case SimulatedDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsSimulated(tr("simulated-%1").arg(detNum)));
+          new QxrdSimulatedSettings(tr("simulated-%1").arg(detNum)));
     break;
 
   case PerkinElmerDetector:
@@ -670,7 +678,7 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QxrdApplicationWPtr ap
 
   if (det == NULL) {
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsSimulated(tr("simulated-%1").arg(detNum)));
+          new QxrdSimulatedSettings(tr("simulated-%1").arg(detNum)));
   }
 
   if (det) {
@@ -685,9 +693,26 @@ void QxrdDetectorSettings::configureDetector()
   printf("QxrdDetectorSettings::configureDetector is not implemented\n");
 }
 
+QxrdDetectorDriverPtr QxrdDetectorSettings::createDetector(
+    QString name,
+    QxrdDetectorSettingsWPtr det,
+    QxrdExperimentWPtr expt,
+    QxrdAcquisitionWPtr acq)
+{
+  QxrdDetectorDriverPtr res;
+
+  QxrdDetectorPluginInterfacePtr plugin(m_DetectorPlugin);
+
+  if (plugin) {
+    res = plugin->createDetector(name, det, expt, acq);
+  }
+
+  return res;
+}
+
 void QxrdDetectorSettings::registerMetaTypes()
 {
-  qRegisterMetaType<QxrdDetectorSettingsSimulated*>("QxrdDetectorSettingsSimulated*");
+  qRegisterMetaType<QxrdSimulatedSettings*>("QxrdSimulatedSettings*");
   qRegisterMetaType<QxrdDetectorSettingsPerkinElmer*>("QxrdDetectorSettingsPerkinElmer*");
   qRegisterMetaType<QxrdPilatusSettings*>("QxrdPilatusSettings*");
   qRegisterMetaType<QxrdDetectorSettingsEpicsArea*>("QxrdDetectorSettingsEpicsArea*");
