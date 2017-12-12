@@ -87,6 +87,13 @@ public:
   void linkTo(QProgressBar *progress);
   void linkTo(QLCDNumber *number);
 
+  void copyTo(QDoubleSpinBox *spinBox);
+  void copyTo(QLabel *label);
+  void copyTo(QProgressBar *progress);
+  void copyTo(QLCDNumber *number);
+
+  void copyFrom(QDoubleSpinBox *spinBox);
+
 public slots:
   void setValue(double val, int index);
   void setValue(double val);
@@ -135,6 +142,15 @@ public:
   void linkTo(QLabel *label);
   void linkTo(QProgressBar *progress);
   void linkTo(QLCDNumber *number);
+
+  void copyTo(QSpinBox *spinBox);
+  void copyTo(QComboBox *comboBox);
+  void copyTo(QLabel *label);
+  void copyTo(QProgressBar *progress);
+  void copyTo(QLCDNumber *number);
+
+  void copyFrom(QSpinBox *spinBox);
+  void copyFrom(QComboBox *comboBox);
 
 public slots:
   void setValue(int val, int index);
@@ -199,6 +215,8 @@ public:
   bool defaultValue() const;
 
   void linkTo(QAbstractButton *button);
+  void copyTo(QAbstractButton *button);
+  void copyFrom(QAbstractButton *button);
 
 public slots:
   void setValue(bool val, int index);
@@ -246,7 +264,17 @@ public:
   void linkTo(QLineEdit *lineEdit);
   void linkTo(QLabel    *label);
   void linkTo(QLCDNumber *number);
-  void linkTo(QTextEdit *number);
+  void linkTo(QTextEdit *textEdit);
+
+  void copyTo(QComboBox *comboBox);
+  void copyTo(QLineEdit *lineEdit);
+  void copyTo(QLabel    *label);
+  void copyTo(QLCDNumber *number);
+  void copyTo(QTextEdit *textEdit);
+
+  void copyFrom(QComboBox *comboBox);
+  void copyFrom(QLineEdit *lineEdit);
+  void copyFrom(QTextEdit *textEdit);
 
 public slots:
   void setValue(QString val, int index);
@@ -506,6 +534,12 @@ public:
 
   void linkTo(QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox);
   void linkTo(int axis, QDoubleSpinBox *spinBox);
+
+  void copyTo(QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox);
+  void copyTo(int axis, QDoubleSpinBox *spinBox);
+
+  void copyFrom(QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox);
+  void copyFrom(int axis, QDoubleSpinBox *spinBox);
 
 public slots:
   void setValue(QPointF val, int index);

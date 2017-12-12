@@ -600,6 +600,23 @@ void QcepDoubleProperty::resetValue()
   setValue(defaultValue());
 }
 
+void QcepDoubleProperty::copyTo(QDoubleSpinBox *spinBox)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  spinBox -> setValue(value());
+  spinBox -> setKeyboardTracking(false);
+
+  setWidgetToolTip(spinBox);
+}
+
+void QcepDoubleProperty::copyFrom(QDoubleSpinBox *spinBox)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  setValue(spinBox->value());
+}
+
 void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -615,42 +632,62 @@ void QcepDoubleProperty::linkTo(QDoubleSpinBox *spinBox)
   helper->moveToThread(spinBox->thread());
   helper->connect();
 
-  spinBox -> setValue(value());
-  spinBox -> setKeyboardTracking(false);
-
-  setWidgetToolTip(spinBox);
+  copyTo(spinBox);
 
   connect(this,   SIGNAL(valueChanged(double, int)), helper, SLOT(setValue(double, int)));
   connect(helper, SIGNAL(valueChanged(double, int)), this,   SLOT(setValue(double, int)));
 }
 
-void QcepDoubleProperty::linkTo(QLabel *label)
+void QcepDoubleProperty::copyTo(QLabel *label)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   label -> setText(tr("%1").arg(value()));
 
   setWidgetToolTip(label);
+}
+
+void QcepDoubleProperty::linkTo(QLabel *label)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  copyTo(label);
 
   connect(this, SIGNAL(stringValueChanged(QString)), label, SLOT(setText(QString)));
+}
+
+void QcepDoubleProperty::copyTo(QProgressBar *progress)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  setValue(value());
+
+  setWidgetToolTip(progress);
 }
 
 void QcepDoubleProperty::linkTo(QProgressBar *progress)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  setWidgetToolTip(progress);
+  copyTo(progress);
 
   connect(this, SIGNAL(valueChanged(double,int)), progress, SLOT(setValue(int)));
 }
 
-void QcepDoubleProperty::linkTo(QLCDNumber *number)
+void QcepDoubleProperty::copyTo(QLCDNumber *number)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   number -> display(value());
 
   setWidgetToolTip(number);
+}
+
+void QcepDoubleProperty::linkTo(QLCDNumber *number)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  copyTo(number);
 
   connect(this, SIGNAL(valueChanged(double,int)), number, SLOT(display(double)));
 }
@@ -788,6 +825,19 @@ void QcepIntProperty::resetValue()
   setValue(defaultValue());
 }
 
+void QcepIntProperty::copyTo(QSpinBox *spinBox)
+{
+  spinBox -> setValue(value());
+  spinBox -> setKeyboardTracking(false);
+
+  setWidgetToolTip(spinBox);
+}
+
+void QcepIntProperty::copyFrom(QSpinBox *spinBox)
+{
+  setValue(spinBox->value());
+}
+
 void QcepIntProperty::linkTo(QSpinBox *spinBox)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
@@ -801,13 +851,22 @@ void QcepIntProperty::linkTo(QSpinBox *spinBox)
   helper->moveToThread(spinBox->thread());
   helper->connect();
 
-  spinBox -> setValue(value());
-  spinBox -> setKeyboardTracking(false);
-
-  setWidgetToolTip(spinBox);
+  copyTo(spinBox);
 
   connect(this,   SIGNAL(valueChanged(int, int)), helper, SLOT(setValue(int, int)));
   connect(helper, SIGNAL(valueChanged(int, int)), this,   SLOT(setValue(int, int)));
+}
+
+void QcepIntProperty::copyTo(QComboBox *comboBox)
+{
+  comboBox -> setCurrentIndex(value());
+
+  setWidgetToolTip(comboBox);
+}
+
+void QcepIntProperty::copyFrom(QComboBox *comboBox)
+{
+  setValue(comboBox->currentIndex());
 }
 
 void QcepIntProperty::linkTo(QComboBox *comboBox)
@@ -823,37 +882,49 @@ void QcepIntProperty::linkTo(QComboBox *comboBox)
   helper->moveToThread(comboBox->thread());
   helper->connect();
 
-  comboBox -> setCurrentIndex(value());
-
-  setWidgetToolTip(comboBox);
+  copyTo(comboBox);
 
   connect(this,   SIGNAL(valueChanged(int, int)),        helper, SLOT(setCurrentIndex(int, int)));
   connect(helper, SIGNAL(currentIndexChanged(int, int)), this,   SLOT(setValue(int, int)));
 }
 
-void QcepIntProperty::linkTo(QLabel *label)
+void QcepIntProperty::copyTo(QLabel *label)
 {
-  {
-    label -> setText(tr("%1").arg(value()));
+  label -> setText(tr("%1").arg(value()));
 
-    setWidgetToolTip(label);
-
-    connect(this, SIGNAL(stringValueChanged(QString)), label, SLOT(setText(QString)));
-  }
+  setWidgetToolTip(label);
 }
 
+void QcepIntProperty::linkTo(QLabel *label)
+{
+  copyTo(label);
+
+  connect(this, SIGNAL(stringValueChanged(QString)), label, SLOT(setText(QString)));
+}
+
+void QcepIntProperty::copyTo(QProgressBar *progress)
+{
+  progress -> setValue(value());
+
+  setWidgetToolTip(progress);
+}
 void QcepIntProperty::linkTo(QProgressBar *progress)
 {
-  setWidgetToolTip(progress);
+  copyTo(progress);
 
   connect(this, SIGNAL(valueChanged(int,int)), progress, SLOT(setValue(int)));
 }
 
-void QcepIntProperty::linkTo(QLCDNumber *number)
+void QcepIntProperty::copyTo(QLCDNumber *number)
 {
   number -> display(value());
 
   setWidgetToolTip(number);
+}
+
+void QcepIntProperty::linkTo(QLCDNumber *number)
+{
+  copyTo(number);
 
   connect(this, SIGNAL(valueChanged(int,int)), number, SLOT(display(int)));
 }
@@ -1018,6 +1089,18 @@ void QcepBoolProperty::toggle()
   setValue(!m_Value.load());
 }
 
+void QcepBoolProperty::copyTo(QAbstractButton *button)
+{
+  button -> setChecked(value());
+
+  setWidgetToolTip(button);
+}
+
+void QcepBoolProperty::copyFrom(QAbstractButton *button)
+{
+  setValue(button->isChecked());
+}
+
 void QcepBoolProperty::linkTo(QAbstractButton *button)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
@@ -1031,9 +1114,7 @@ void QcepBoolProperty::linkTo(QAbstractButton *button)
   helper->moveToThread(button->thread());
   helper->connect();
 
-  button -> setChecked(value());
-
-  setWidgetToolTip(button);
+  copyTo(button);
 
   connect(this,   SIGNAL(valueChanged(bool, int)), helper, SLOT(setChecked(bool, int)));
   connect(helper, SIGNAL(toggled(bool, int)),      this,   SLOT(setValue(bool, int)));
@@ -1157,6 +1238,20 @@ void QcepStringProperty::resetValue()
   setValue(defaultValue());
 }
 
+void QcepStringProperty::copyTo(QComboBox *comboBox)
+{
+  int index = comboBox->findData(value());
+
+  comboBox -> setCurrentIndex(index);
+
+  setWidgetToolTip(comboBox);
+}
+
+void QcepStringProperty::copyFrom(QComboBox *comboBox)
+{
+  setValue(comboBox->currentText());
+}
+
 void QcepStringProperty::linkTo(QComboBox *comboBox)
 {
   if (qcepDebug(DEBUG_PROPERTIES) || debug()) {
@@ -1170,14 +1265,22 @@ void QcepStringProperty::linkTo(QComboBox *comboBox)
   helper -> moveToThread(comboBox->thread());
   helper -> connect();
 
-  int index = comboBox->findData(value());
-
-  comboBox -> setCurrentIndex(index);
-
-  setWidgetToolTip(comboBox);
+  copyTo(comboBox);
 
   connect(this,   SIGNAL(valueChanged(QString, int)), helper, SLOT(setValue(QString, int)));
   connect(helper, SIGNAL(valueChanged(QString,int)),   this,   SLOT(setValue(QString, int)));
+}
+
+void QcepStringProperty::copyTo(QLineEdit *lineEdit)
+{
+  lineEdit -> setText(value());
+
+  setWidgetToolTip(lineEdit);
+}
+
+void QcepStringProperty::copyFrom(QLineEdit *lineEdit)
+{
+  setValue(lineEdit->text());
 }
 
 void QcepStringProperty::linkTo(QLineEdit *lineEdit)
@@ -1193,30 +1296,50 @@ void QcepStringProperty::linkTo(QLineEdit *lineEdit)
   helper -> moveToThread(lineEdit->thread());
   helper -> connect();
 
-  lineEdit -> setText(value());
-
-  setWidgetToolTip(lineEdit);
+  copyTo(lineEdit);
 
   connect(this,   SIGNAL(valueChanged(QString, int)), helper, SLOT(setText(QString, int)));
   connect(helper, SIGNAL(textEdited(QString, int)),   this,   SLOT(setValue(QString, int)));
 }
 
-void QcepStringProperty::linkTo(QLabel *label)
+void QcepStringProperty::copyTo(QLabel *label)
 {
   label -> setText(value());
 
   setWidgetToolTip(label);
+}
+
+void QcepStringProperty::linkTo(QLabel *label)
+{
+  copyTo(label);
 
   connect(this, SIGNAL(valueChanged(QString,int)), label, SLOT(setText(QString)));
 }
 
-void QcepStringProperty::linkTo(QLCDNumber *number)
+void QcepStringProperty::copyTo(QLCDNumber *number)
 {
   number -> display(value());
 
   setWidgetToolTip(number);
+}
+
+void QcepStringProperty::linkTo(QLCDNumber *number)
+{
+  copyTo(number);
 
   connect(this, SIGNAL(valueChanged(QString,int)), number, SLOT(display(QString)));
+}
+
+void QcepStringProperty::copyTo(QTextEdit *textEdit)
+{
+  textEdit -> setText(value());
+
+  setWidgetToolTip(textEdit);
+}
+
+void QcepStringProperty::copyFrom(QTextEdit *textEdit)
+{
+  setValue(textEdit->toPlainText());
 }
 
 void QcepStringProperty::linkTo(QTextEdit *textEdit)
@@ -1232,9 +1355,7 @@ void QcepStringProperty::linkTo(QTextEdit *textEdit)
   helper -> moveToThread(textEdit->thread());
   helper -> connect();
 
-  textEdit -> setText(value());
-
-  setWidgetToolTip(textEdit);
+  copyTo(textEdit);
 
   connect(this,   SIGNAL(valueChanged(QString, int)), helper, SLOT(setText(QString, int)));
   connect(helper, SIGNAL(textEdited(QString, int)),   this,   SLOT(setValue(QString, int)));
@@ -2322,6 +2443,28 @@ void QcepDoublePointProperty::resetValue()
   setValue(defaultValue());
 }
 
+void QcepDoublePointProperty::copyTo(QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox)
+{
+  if (xSpinBox) {
+    copyTo(0, xSpinBox);
+  }
+
+  if (ySpinBox) {
+    copyTo(1, ySpinBox);
+  }
+}
+
+void QcepDoublePointProperty::copyFrom(QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox)
+{
+  if (xSpinBox) {
+    copyFrom(0, xSpinBox);
+  }
+
+  if (ySpinBox) {
+    copyFrom(1, ySpinBox);
+  }
+}
+
 void QcepDoublePointProperty::linkTo(QDoubleSpinBox *xSpinBox, QDoubleSpinBox *ySpinBox)
 {
   if (xSpinBox) {
@@ -2331,6 +2474,23 @@ void QcepDoublePointProperty::linkTo(QDoubleSpinBox *xSpinBox, QDoubleSpinBox *y
   if (ySpinBox) {
     linkTo(1, ySpinBox);
   }
+}
+
+void QcepDoublePointProperty::copyTo(int axis, QDoubleSpinBox *spinBox)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  spinBox -> setValue(subValue(axis));
+  spinBox -> setKeyboardTracking(false);
+
+  setWidgetToolTip(spinBox);
+}
+
+void QcepDoublePointProperty::copyFrom(int axis, QDoubleSpinBox *spinBox)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  setSubValue(axis, spinBox->value());
 }
 
 void QcepDoublePointProperty::linkTo(int axis, QDoubleSpinBox *spinBox)
@@ -2343,10 +2503,7 @@ void QcepDoublePointProperty::linkTo(int axis, QDoubleSpinBox *spinBox)
   helper->moveToThread(spinBox->thread());
   helper->connect();
 
-  spinBox -> setValue(subValue(axis));
-  spinBox -> setKeyboardTracking(false);
-
-  setWidgetToolTip(spinBox);
+  copyTo(axis, spinBox);
 
   connect(this, SIGNAL(subValueChanged(int,double,int)), helper, SLOT(setSubValue(int,double,int)));
   connect(helper, SIGNAL(subValueChanged(int,double,int)), this, SLOT(setSubValue(int,double,int)));
