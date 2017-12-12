@@ -2,7 +2,7 @@
 #define QXRDAREADETECTORDRIVER_H
 
 #include "qxrddetectordriver.h"
-#include "qxrddetectorsettingsepicsarea-ptr.h"
+#include "qxrdareadetectorsettings-ptr.h"
 #include <QTimer>
 
 class QxrdAreaDetectorDriver : public QxrdDetectorDriver
@@ -28,7 +28,7 @@ private slots:
   void onTimerTimeout();
 
 private:
-  QxrdDetectorSettingsEpicsAreaWPtr m_AreaDetector;
+  QxrdAreaDetectorSettingsWPtr m_AreaDetector;
   QTimer m_Timer;
 };
 

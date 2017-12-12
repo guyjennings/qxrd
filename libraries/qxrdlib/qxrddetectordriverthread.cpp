@@ -5,7 +5,7 @@
 #include "qcepmutexlocker.h"
 #include "qxrddetectordriver.h"
 #include "qxrddetectordriverepicsarea.h"
-#include "qxrddetectorsettingsepicsarea.h"
+#include "qxrdareadetectorsettings.h"
 #include "qxrddetectordriverfilewatcher.h"
 #include "qxrdfilewatchersettings.h"
 #include "qxrddetectordriverperkinelmer.h"

@@ -4,14 +4,16 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
 #include <QPainter>
+#include "qxrdareadetectorsettings.h"
 
 QxrdAreaDetectorDriver::QxrdAreaDetectorDriver(QString name,
                                                QxrdDetectorSettingsWPtr det,
                                                QxrdExperimentWPtr expt,
                                                QxrdAcquisitionWPtr acq)
-  : QxrdDetectorDriver(name, det, expt, acq)
+  : QxrdDetectorDriver(name, det, expt, acq),
+    m_AreaDetector()
 {
-
+  m_AreaDetector = qSharedPointerDynamicCast<QxrdAreaDetectorSettings>(det);
 }
 
 bool QxrdAreaDetectorDriver::startDetectorDriver()

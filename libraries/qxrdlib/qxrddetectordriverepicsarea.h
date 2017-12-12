@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qxrddetectordriver.h"
-#include "qxrddetectorsettingsepicsarea-ptr.h"
+#include "qxrdareadetectorsettings-ptr.h"
 
 //TODO: move to plugin
 class QXRD_EXPORT QxrdDetectorDriverEpicsArea : public QxrdDetectorDriver
@@ -12,7 +12,7 @@ class QXRD_EXPORT QxrdDetectorDriverEpicsArea : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverEpicsArea(QString name,
-                              QxrdDetectorSettingsEpicsAreaWPtr det,
+                              QxrdAreaDetectorSettingsWPtr det,
                               QxrdExperimentWPtr expt,
                               QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverEpicsArea();
@@ -27,7 +27,7 @@ public slots:
   virtual void beginFrame();
 
 private:
-  QxrdDetectorSettingsEpicsAreaWPtr m_EpicsArea;
+  QxrdAreaDetectorSettingsWPtr m_EpicsArea;
 };
 
 #endif // QXRDDETECTORDRIVEREPICSAREA_H

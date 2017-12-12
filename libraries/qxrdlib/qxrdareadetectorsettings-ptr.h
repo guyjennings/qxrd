@@ -1,0 +1,8 @@
+#ifndef QXRDAREADETECTORSETTINGSPTR_H
+#define QXRDAREADETECTORSETTINGSPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdAreaDetectorSettings)
+
+#endif // QXRDAREADETECTORSETTINGSPTR_H

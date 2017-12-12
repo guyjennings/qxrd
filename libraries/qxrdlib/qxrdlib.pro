@@ -215,7 +215,6 @@ SOURCES += qxrdlib.cpp \
     qxrdroicoordinateslist.cpp \
     qxrddetectorsettings.cpp \
     qxrddetectorsettingsperkinelmer.cpp \
-    qxrddetectorsettingsepicsarea.cpp \
     qxrddetectordriver.cpp \
     qxrddetectordriversimulated.cpp \
     qxrddetectordriverperkinelmer.cpp \
@@ -351,7 +350,8 @@ SOURCES += qxrdlib.cpp \
     qxrdpilatusdialog.cpp \
     qxrdareadetectordialog.cpp \
     qxrdfilewatcherdialog.cpp \
-    qxrddexeladialog.cpp
+    qxrddexeladialog.cpp \
+    qxrdareadetectorsettings.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -475,7 +475,9 @@ HEADERS += qxrdlib.h\
     qxrddexeladialog-ptr.h \
     qxrdfilewatcherdialog-ptr.h \
     qxrdperkinelmerdialog-ptr.h \
-    qxrdpilatusdialog-ptr.h
+    qxrdpilatusdialog-ptr.h \
+    qxrdareadetectorsettings.h \
+    qxrdareadetectorsettings-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -727,12 +729,10 @@ HEADERS += TODO.h \
     qxrddetectordriverpilatus.h \
     qxrddetectordriverfilewatcher.h \
     qxrddetectordriverepicsarea.h \
-    qxrddetectorsettingsepicsarea.h \
     qxrddetectordriver-ptr.h \
     qxrddetectordriverthread.h \
     qxrddetectordriverthread-ptr.h \
     qxrddetectorsettingsperkinelmer-ptr.h \
-    qxrddetectorsettingsepicsarea-ptr.h \
     qxrdexperimentthread.h \
     qxrdexperimentthread-ptr.h \
     qxrdroishape.h \

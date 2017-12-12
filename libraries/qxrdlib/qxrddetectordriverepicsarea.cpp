@@ -1,8 +1,8 @@
 #include "qxrddetectordriverepicsarea.h"
-#include "qxrddetectorsettingsepicsarea.h"
+#include "qxrdareadetectorsettings.h"
 
 QxrdDetectorDriverEpicsArea::QxrdDetectorDriverEpicsArea(QString name,
-    QxrdDetectorSettingsEpicsAreaWPtr det,
+    QxrdAreaDetectorSettingsWPtr det,
     QxrdExperimentWPtr expt,
     QxrdAcquisitionWPtr acq) :
   QxrdDetectorDriver(name, det, expt, acq)
