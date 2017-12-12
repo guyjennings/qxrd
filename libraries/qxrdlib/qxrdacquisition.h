@@ -84,9 +84,10 @@ public slots:
 
   virtual void onExposureTimeChanged(double expos);
 
-  void appendDetector(int detType);
-  void appendDetector(QxrdDetectorSettingsPtr proxy);
+  QxrdDetectorSettingsPtr newDetector(int detType);
+  void appendDetector(QxrdDetectorSettingsPtr det);
   void clearDetectors();
+  int get_DetectorCount();
 
   void configureDetector(int i);
   void openDetectorControlWindow(int i);

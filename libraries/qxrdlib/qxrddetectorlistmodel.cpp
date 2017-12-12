@@ -24,8 +24,7 @@ QVariant QxrdDetectorListModel::data(const QModelIndex &index, int role) const
   if (p) {
     if (role == Qt::EditRole || role == Qt::DisplayRole) {
       if (col == 0) {
-//        return row;
-        return p->get_DetectorNumber();
+        return row;
       } else if (col == 2) {
         return p->get_DetectorTypeName();
       } else if (col == 3) {
@@ -127,8 +126,6 @@ void QxrdDetectorListModel::append(QxrdDetectorSettingsPtr det)
   m_Detectors.append(det);
 
   endInsertRows();
-
-  renumberDetectors();
 }
 
 QxrdDetectorSettingsPtr QxrdDetectorListModel::detector(int i)
@@ -143,8 +140,6 @@ void QxrdDetectorListModel::removeDetector(int row)
   m_Detectors.remove(row);
 
   endRemoveRows();
-
-  renumberDetectors();
 }
 
 void QxrdDetectorListModel::moveDetectorDown(int row)
@@ -161,8 +156,6 @@ void QxrdDetectorListModel::moveDetectorDown(int row)
     m_Detectors[row+1] = p1;
 
     endMoveRows();
-
-    renumberDetectors();
   }
 }
 
@@ -180,8 +173,6 @@ void QxrdDetectorListModel::moveDetectorUp(int row)
     m_Detectors[row] = p1;
 
     endMoveRows();
-
-    renumberDetectors();
   }
 }
 
@@ -191,16 +182,5 @@ void QxrdDetectorListModel::configureDetector(int row)
 
   if (p) {
     p->configureDetector();
-  }
-}
-
-void QxrdDetectorListModel::renumberDetectors()
-{
-  for (int i=0; i<m_Detectors.count(); i++) {
-    QxrdDetectorSettingsPtr p = m_Detectors.value(i);
-
-    if (p) {
-      p->set_DetectorNumber(i);
-    }
   }
 }

@@ -345,10 +345,16 @@ void QxrdExperimentPreferencesDialog::addDetector()
         int type = choice->data().toInt();
         QxrdApplicationWPtr app = expt->application();
 
-        QxrdDetectorSettingsPtr det =
-            QxrdDetectorSettings::newDetector(app, expt, acq, type, -1);
+//        QxrdDetectorSettingsPtr det =
+//            QxrdDetectorSettings::newDetector(app, expt, acq, type, -1);
 
-        appendDetectorProxy(det);
+//        appendDetectorProxy(det);
+
+        if (acq) {
+          QxrdDetectorSettingsPtr det = acq->newDetector(type);
+
+          m_DetectorsModel->append(det);
+        }
       }
     }
   }

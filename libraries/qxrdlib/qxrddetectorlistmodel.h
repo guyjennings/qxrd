@@ -33,9 +33,6 @@ public:
   QxrdDetectorSettingsPtr detector(int i);
 
 private:
-  void renumberDetectors();
-
-private:
   QVector<QxrdDetectorSettingsPtr> m_Detectors;
 };
 

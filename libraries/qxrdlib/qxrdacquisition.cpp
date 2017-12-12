@@ -503,35 +503,35 @@ void QxrdAcquisition::readSettings(QSettings *settings)
   settings->endArray();
 }
 
-void QxrdAcquisition::appendDetector(int detType)
+QxrdDetectorSettingsPtr QxrdAcquisition::newDetector(int detType)
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "appendDetector", Qt::BlockingQueuedConnection,
+    QxrdDetectorSettingsPtr res;
+    QMetaObject::invokeMethod(this, "newDetector", Qt::BlockingQueuedConnection,
+                              Q_RETURN_ARG(QxrdDetectorSettingsPtr, res),
                               Q_ARG(int, detType));
+
+    return res;
   } else {
     int nDet = get_DetectorCount();
 
     QxrdDetectorSettingsPtr det =
         QxrdDetectorSettings::newDetector(application(), experiment(), myself(), detType, nDet);
 
-    if (det) {
-      m_Detectors.append(det);
-
-      set_DetectorCount(m_Detectors.count());
-    }
+    return det;
   }
 }
 
-void QxrdAcquisition::appendDetector(QxrdDetectorSettingsPtr proxy)
+void QxrdAcquisition::appendDetector(QxrdDetectorSettingsPtr det)
 {
   if (QThread::currentThread() != thread()) {
     QMetaObject::invokeMethod(this, "appendDetector", Qt::BlockingQueuedConnection,
-                              Q_ARG(QxrdDetectorSettingsPtr, proxy));
+                              Q_ARG(QxrdDetectorSettingsPtr, det));
   } else {
-    if (proxy) {
-      m_Detectors.append(proxy);
+    if (det) {
+      det -> set_DetectorNumber(m_Detectors.count());
 
-      proxy->moveToThread(thread());
+      m_Detectors.append(det);
 
       set_DetectorCount(m_Detectors.count());
     }
@@ -545,7 +545,7 @@ void QxrdAcquisition::clearDetectors()
   } else {
     m_Detectors.resize(0);
 
-//    set_DetectorCount(0);
+    set_DetectorCount(0);
   }
 }
 

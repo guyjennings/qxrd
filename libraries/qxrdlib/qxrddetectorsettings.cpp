@@ -20,6 +20,7 @@
 #include "qxrdexperiment.h"
 #include "qxrdapplication.h"
 #include "qxrddetectorplugininterface.h"
+#include <QThread>
 
 QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   QcepObject(name),
@@ -49,11 +50,11 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
     printf("QxrdDetectorSettings::QxrdDetectorSettings(%p)\n", this);
   }
 
-  QxrdAcquisitionPtr acqs(m_Acquisition);
+//  QxrdAcquisitionPtr acqs(m_Acquisition);
 
-  if (acqs) {
-    acqs->prop_DetectorCount()->incValue(1);
-  }
+//  if (acqs) {
+//    acqs->prop_DetectorCount()->incValue(1);
+//  }
 }
 
 void QxrdDetectorSettings::initialize(QxrdApplicationWPtr   app,
@@ -61,6 +62,8 @@ void QxrdDetectorSettings::initialize(QxrdApplicationWPtr   app,
                                       QxrdAcquisitionWPtr   acq,
                                       int                   detNum)
 {
+  THREAD_CHECK;
+
   m_Application = app;
   m_Experiment  = expt;
   m_Acquisition = acq;
@@ -118,11 +121,11 @@ QxrdDetectorSettings::~QxrdDetectorSettings()
 //  if (m_DetectorControlWindow) {
 //    m_DetectorControlWindow->deleteLater();
 //  }
-  QxrdAcquisitionPtr acq(m_Acquisition);
+//  QxrdAcquisitionPtr acq(m_Acquisition);
 
-  if (acq) {
-    acq->prop_DetectorCount()->incValue(-1);
-  }
+//  if (acq) {
+//    acq->prop_DetectorCount()->incValue(-1);
+//  }
 }
 
 void QxrdDetectorSettings::printLine(QString line) const
