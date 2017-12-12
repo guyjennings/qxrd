@@ -20,6 +20,7 @@ public:
 
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 
+  void configureDetector();
 };
 
 Q_DECLARE_METATYPE(QxrdSimulatedSettings*)

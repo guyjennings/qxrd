@@ -344,7 +344,14 @@ SOURCES += qxrdlib.cpp \
     qxrddetectorlistmodel.cpp \
     qxrdfilewatchersettings.cpp \
     qxrdpilatussettings.cpp \
-    qxrdsimulatedsettings.cpp
+    qxrdsimulatedsettings.cpp \
+    qxrddetectordialog.cpp \
+    qxrdsimulateddialog.cpp \
+    qxrdperkinelmerdialog.cpp \
+    qxrdpilatusdialog.cpp \
+    qxrdareadetectordialog.cpp \
+    qxrdfilewatcherdialog.cpp \
+    qxrddexeladialog.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -456,7 +463,19 @@ HEADERS += qxrdlib.h\
     qxrdpilatussettings.h \
     qxrdpilatussettings-ptr.h \
     qxrdsimulatedsettings.h \
-    qxrdsimulatedsettings-ptr.h
+    qxrdsimulatedsettings-ptr.h \
+    qxrddetectordialog.h \
+    qxrdsimulateddialog.h \
+    qxrdperkinelmerdialog.h \
+    qxrdpilatusdialog.h \
+    qxrdareadetectordialog.h \
+    qxrdfilewatcherdialog.h \
+    qxrddexeladialog.h \
+    qxrdareadetectordialog-ptr.h \
+    qxrddexeladialog-ptr.h \
+    qxrdfilewatcherdialog-ptr.h \
+    qxrdperkinelmerdialog-ptr.h \
+    qxrdpilatusdialog-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -818,7 +837,13 @@ FORMS += qxrdwindow.ui \
     qxrdinfowindow.ui \
     qxrdextraiowindow.ui \
     qxrdfilebrowserwidget.ui \
-    qxrdplotwidget.ui
+    qxrdplotwidget.ui \
+    qxrdsimulateddialog.ui \
+    qxrdperkinelmerdialog.ui \
+    qxrdpilatusdialog.ui \
+    qxrdareadetectordialog.ui \
+    qxrdfilewatcherdialog.ui \
+    qxrddexeladialog.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS += \

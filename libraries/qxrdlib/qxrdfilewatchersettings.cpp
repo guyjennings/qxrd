@@ -1,5 +1,7 @@
 #include "qxrdfilewatchersettings.h"
 #include <stdio.h>
+#include "qxrdfilewatcherdialog.h"
+#include "qxrdfilewatcherdialog-ptr.h"
 
 QxrdFileWatcherSettings::QxrdFileWatcherSettings(QString name) :
   QxrdDetectorSettings(name, FileWatcherDetector)
@@ -27,3 +29,13 @@ void QxrdFileWatcherSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy
   printf("Need to implement QxrdFileWatcherSettings::pullPropertiesfromProxy\n");
 }
 
+void QxrdFileWatcherSettings::configureDetector()
+{
+  QxrdFileWatcherDialogPtr dlg =
+      QxrdFileWatcherDialogPtr(
+        new QxrdFileWatcherDialog());
+
+  if (dlg) {
+    dlg->exec();
+  }
+}

@@ -10,6 +10,8 @@
 #include "qxrddetectorpilatusremote.h"
 #include "qxrdexperiment.h"
 #include "qxrddataprocessor.h"
+#include "qxrdpilatusdialog.h"
+#include "qxrdpilatusdialog-ptr.h"
 
 QxrdPilatusSettings::QxrdPilatusSettings(QString name) :
   QxrdDetectorSettings(name, PilatusDetector),
@@ -96,5 +98,16 @@ void QxrdPilatusSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
     set_PilatusExtension       (proxy->property("pilatusExtension").toString());
     set_ExposureMode           (proxy->property("exposureMode").toInt());
     set_EnableFrequency        (proxy->property("enableFrequency").toDouble());
+  }
+}
+
+void QxrdPilatusSettings::configureDetector()
+{
+  QxrdPilatusDialogPtr dlog =
+      QxrdPilatusDialogPtr(
+        new QxrdPilatusDialog());
+
+  if (dlog) {
+    dlog->exec();
   }
 }

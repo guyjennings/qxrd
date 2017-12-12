@@ -5,6 +5,8 @@
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
 #include "qxrddetectorproxy.h"
+#include "qxrdperkinelmerdialog.h"
+#include "qxrdperkinelmerdialog-ptr.h"
 
 QxrdDetectorSettingsPerkinElmer::QxrdDetectorSettingsPerkinElmer(QString name) :
   QxrdDetectorSettings(name, PerkinElmerDetector),
@@ -183,4 +185,15 @@ QStringList QxrdDetectorSettingsPerkinElmer::timingModeNamesPE()
   res.append("External");
 
   return res;
+}
+
+void QxrdDetectorSettingsPerkinElmer::configureDetector()
+{
+  QxrdPerkinElmerDialogPtr dlog =
+      QxrdPerkinElmerDialogPtr(
+        new QxrdPerkinElmerDialog());
+
+  if (dlog) {
+    dlog->exec();
+  }
 }

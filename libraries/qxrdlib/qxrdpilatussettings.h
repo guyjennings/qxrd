@@ -19,6 +19,7 @@ public:
 
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 
+  void configureDetector();
 signals:
 
 public:

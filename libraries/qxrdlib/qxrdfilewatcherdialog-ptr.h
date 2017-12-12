@@ -1,0 +1,8 @@
+#ifndef QXRDFILEWATCHERDIALOGPTR_H
+#define QXRDFILEWATCHERDIALOGPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdFileWatcherDialog)
+
+#endif // QXRDFILEWATCHERDIALOGPTR_H

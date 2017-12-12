@@ -20,6 +20,8 @@ public:
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
   static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
 
+  void configureDetector();
+
 public:
   typedef enum {
     PCI_SubType,

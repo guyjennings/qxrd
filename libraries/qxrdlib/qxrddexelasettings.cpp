@@ -3,6 +3,8 @@
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
 #include "qxrddebug.h"
+#include "qxrddexeladialog.h"
+#include "qxrddexeladialog-ptr.h"
 
 #include <stdio.h>
 #include <QPainter>
@@ -55,3 +57,13 @@ void QxrdDexelaSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 //  printf("Need to implement QxrdDetectorDexela::pullPropertiesfromProxy\n");
 }
 
+void QxrdDexelaSettings::configureDetector()
+{
+  QxrdDexelaDialogPtr dlg =
+      QxrdDexelaDialogPtr(
+        new QxrdDexelaDialog());
+
+  if (dlg) {
+    dlg->exec();
+  }
+}

@@ -3,7 +3,7 @@
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
 #include "qxrddebug.h"
-
+#include "qxrdsimulateddialog.h"
 #include <stdio.h>
 #include <QPainter>
 
@@ -55,3 +55,12 @@ void QxrdSimulatedSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
 //  printf("Need to implement QxrdDetectorSimulated::pullPropertiesfromProxy\n");
 }
 
+void QxrdSimulatedSettings::configureDetector()
+{
+  QxrdSimulatedDialog *dlog =
+      new QxrdSimulatedDialog();
+
+  if (dlog) {
+    dlog->exec();
+  }
+}
