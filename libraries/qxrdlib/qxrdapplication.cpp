@@ -426,7 +426,7 @@ void QxrdApplication::loadPlugins()
         } else if (className == "QxrdPilatusPlugin") {
           m_PilatusDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
-        } else if (className == "QxrdSimulatedDetectorPlugin") {
+        } else if (className == "QxrdSimulatedPlugin") {
           m_SimulatedDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
         } else if (className == "QxrdFileWatcherPlugin") {

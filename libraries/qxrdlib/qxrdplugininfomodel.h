@@ -23,10 +23,10 @@ public:
   enum {
     NIDAQPlugin,
     CudaPlugin,
-    SimulatedDetectorPlugin,
-    PerkinElmerDetectorPlugin,
-    DexelaDetectorPlugin,
-    PilatusDetectorPlugin,
+    SimulatedPlugin,
+    PerkinElmerPlugin,
+    DexelaPlugin,
+    PilatusPlugin,
     AreaDetectorPlugin,
     LastPlugin
   };
