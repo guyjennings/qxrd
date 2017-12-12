@@ -7,7 +7,7 @@
 #include "qxrddetectordriverepicsarea.h"
 #include "qxrddetectorsettingsepicsarea.h"
 #include "qxrddetectordriverfilewatcher.h"
-#include "qxrddetectorsettingsfilewatcher.h"
+#include "qxrdfilewatchersettings.h"
 #include "qxrddetectordriverperkinelmer.h"
 #include "qxrddetectorsettingsperkinelmer.h"
 #include "qxrddetectordriverdexela.h"
@@ -100,7 +100,7 @@ void QxrdDetectorDriverThread::run()
     case QxrdDetectorSettings::FileWatcherDetector:
       m_DetectorDriver = QxrdDetectorDriverPtr(
             new QxrdDetectorDriverFileWatcher(name,
-                                              qSharedPointerDynamicCast<QxrdDetectorSettingsFileWatcher>(det),
+                                              qSharedPointerDynamicCast<QxrdFileWatcherSettings>(det),
                                               expt, acq));
       break;
 

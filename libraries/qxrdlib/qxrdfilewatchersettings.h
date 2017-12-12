@@ -1,5 +1,5 @@
-#ifndef QXRDDETECTORSETTINGSFILEWATCHER_H
-#define QXRDDETECTORSETTINGSFILEWATCHER_H
+#ifndef QXRDFILEWATCHERSETTINGS_H
+#define QXRDFILEWATCHERSETTINGS_H
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
@@ -7,11 +7,11 @@
 
 //TODO: rename to QxrdFileWatcherSettings
 
-class QXRD_EXPORT QxrdDetectorSettingsFileWatcher : public QxrdDetectorSettings
+class QXRD_EXPORT QxrdFileWatcherSettings : public QxrdDetectorSettings
 {
   Q_OBJECT
 public:
-  Q_INVOKABLE QxrdDetectorSettingsFileWatcher(QString name);
+  Q_INVOKABLE QxrdFileWatcherSettings(QString name);
 
   void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
   void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
@@ -23,6 +23,6 @@ public slots:
   
 };
 
-Q_DECLARE_METATYPE(QxrdDetectorSettingsFileWatcher*)
+Q_DECLARE_METATYPE(QxrdFileWatcherSettings*)
 
-#endif // QXRDDETECTORSETTINGSFILEWATCHER_H
+#endif // QXRDFILEWATCHERSETTINGS_H

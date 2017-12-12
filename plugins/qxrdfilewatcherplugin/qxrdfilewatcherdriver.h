@@ -2,7 +2,7 @@
 #define QXRDFILEWATCHERDRIVER_H
 
 #include "qxrddetectordriver.h"
-#include "qxrddetectorsettingsfilewatcher-ptr.h"
+#include "qxrdfilewatchersettings-ptr.h"
 #include <QTimer>
 
 class QxrdFileWatcherDriver : public QxrdDetectorDriver
@@ -28,7 +28,7 @@ private slots:
   void onTimerTimeout();
 
 private:
-  QxrdDetectorSettingsFileWatcherWPtr m_FileWatcher;
+  QxrdFileWatcherSettingsWPtr m_FileWatcher;
   QTimer m_Timer;
 };
 

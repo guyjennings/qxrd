@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qxrddetectordriver.h"
-#include "qxrddetectorsettingsfilewatcher-ptr.h"
+#include "qxrdfilewatchersettings-ptr.h"
 
 //TODO: move to plugin
 class QXRD_EXPORT QxrdDetectorDriverFileWatcher : public QxrdDetectorDriver
@@ -12,7 +12,7 @@ class QXRD_EXPORT QxrdDetectorDriverFileWatcher : public QxrdDetectorDriver
 
 public:
   QxrdDetectorDriverFileWatcher(QString name,
-                                QxrdDetectorSettingsFileWatcherWPtr watcher,
+                                QxrdFileWatcherSettingsWPtr watcher,
                                 QxrdExperimentWPtr expt,
                                 QxrdAcquisitionWPtr acq);
   virtual ~QxrdDetectorDriverFileWatcher();
@@ -27,7 +27,7 @@ public slots:
   virtual void beginFrame();
 
 private:
-  QxrdDetectorSettingsFileWatcherWPtr m_FileWatcher;
+  QxrdFileWatcherSettingsWPtr m_FileWatcher;
 };
 
 #endif // QXRDDETECTORDRIVERFILEWATCHER_H

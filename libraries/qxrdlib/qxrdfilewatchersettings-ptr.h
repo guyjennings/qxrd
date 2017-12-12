@@ -1,0 +1,8 @@
+#ifndef QXRDFILEWATCHERSETTINGSPTR_H
+#define QXRDFILEWATCHERSETTINGSPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdFileWatcherSettings)
+
+#endif // QXRDFILEWATCHERSETTINGSPTR_H

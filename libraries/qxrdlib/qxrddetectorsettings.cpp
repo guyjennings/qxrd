@@ -12,7 +12,7 @@
 #include "qxrdacquisition.h"
 #include "qxrdroicalculator.h"
 #include "qxrddetectorsettingsepicsarea.h"
-#include "qxrddetectorsettingsfilewatcher.h"
+#include "qxrdfilewatchersettings.h"
 #include "qxrddetectorsettingsperkinelmer.h"
 #include "qxrddetectorsettingspilatus.h"
 #include "qxrddetectorsettingssimulated.h"
@@ -470,7 +470,7 @@ void QxrdDetectorSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int d
       break;
 
     case FileWatcherDetector:
-      QxrdDetectorSettingsFileWatcher::pushDefaultsToProxy(proxy);
+      QxrdFileWatcherSettings::pushDefaultsToProxy(proxy);
       break;
 
     case DexelaDetector:
@@ -659,7 +659,7 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QxrdApplicationWPtr ap
 
   case FileWatcherDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDetectorSettingsFileWatcher(tr("fileWatcher-%1").arg(detNum)));
+          new QxrdFileWatcherSettings(tr("fileWatcher-%1").arg(detNum)));
     break;
 
   case DexelaDetector:
@@ -691,6 +691,6 @@ void QxrdDetectorSettings::registerMetaTypes()
   qRegisterMetaType<QxrdDetectorSettingsPerkinElmer*>("QxrdDetectorSettingsPerkinElmer*");
   qRegisterMetaType<QxrdDetectorSettingsPilatus*>("QxrdDetectorSettingsPilatus*");
   qRegisterMetaType<QxrdDetectorSettingsEpicsArea*>("QxrdDetectorSettingsEpicsArea*");
-  qRegisterMetaType<QxrdDetectorSettingsFileWatcher*>("QxrdDetectorSettingsFileWatcher*");
+  qRegisterMetaType<QxrdFileWatcherSettings*>("QxrdFileWatcherSettings*");
   qRegisterMetaType<QxrdDexelaSettings*>("QxrdDexelaSettings*");
 }
