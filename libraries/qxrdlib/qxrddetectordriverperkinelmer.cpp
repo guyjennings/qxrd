@@ -384,7 +384,7 @@ bool QxrdDetectorDriverPerkinElmer::startDetectorDriver()
   //    QxrdDetectorSettings::startDetector();
 
 #ifdef HAVE_PERKIN_ELMER
-  QxrdDetectorSettingsPerkinElmerPtr det(m_PerkinElmer);
+  QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> checkDetectorEnabled() && checkPluginAvailable()) {
     int nRet = HIS_ALL_OK;
@@ -411,7 +411,7 @@ bool QxrdDetectorDriverPerkinElmer::startDetectorDriver()
 
     int subType = det -> get_DetectorSubType();
 
-    if (subType == QxrdDetectorSettingsPerkinElmer::PCI_SubType) {
+    if (subType == QxrdPerkinElmerSettings::PCI_SubType) {
       printMessage("Initialising PCI/PCIe Perkin Elmer Detector");
 
       if (plugin) {
@@ -445,7 +445,7 @@ bool QxrdDetectorDriverPerkinElmer::startDetectorDriver()
           return false;
         }
       }
-    } else if (subType == QxrdDetectorSettingsPerkinElmer::GBIF_IP_SubType) {
+    } else if (subType == QxrdPerkinElmerSettings::GBIF_IP_SubType) {
       printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at IP Address %1")
                    .arg(det -> get_DetectorAddress()));
 
@@ -457,7 +457,7 @@ bool QxrdDetectorDriverPerkinElmer::startDetectorDriver()
         acquisitionInitError(__FILE__, __LINE__, nRet);
         return false;
       }
-    } else if (subType == QxrdDetectorSettingsPerkinElmer::GBIF_MAC_SubType) {
+    } else if (subType == QxrdPerkinElmerSettings::GBIF_MAC_SubType) {
       printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at MAC address %1").arg(det -> get_DetectorAddress()));
 
       if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
@@ -468,7 +468,7 @@ bool QxrdDetectorDriverPerkinElmer::startDetectorDriver()
         acquisitionInitError(__FILE__, __LINE__, nRet);
         return false;
       }
-    } else if (subType == QxrdDetectorSettingsPerkinElmer::GBIF_Name_SubType) {
+    } else if (subType == QxrdPerkinElmerSettings::GBIF_Name_SubType) {
       printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at device name %1").arg(det -> get_DetectorAddress()));
 
       if (plugin && (nRet = plugin->Acquisition_GbIF_Init(&m_AcqDesc, 0, bEnableIRQ,
@@ -479,7 +479,7 @@ bool QxrdDetectorDriverPerkinElmer::startDetectorDriver()
         acquisitionInitError(__FILE__, __LINE__, nRet);
         return false;
       }
-    } else if (subType == QxrdDetectorSettingsPerkinElmer::GBIF_Scan_SubType) {
+    } else if (subType == QxrdPerkinElmerSettings::GBIF_Scan_SubType) {
       printMessage("Searching for Perkin Elmer Detectors on the network");
 
       long nBoards=0;
@@ -683,7 +683,7 @@ bool QxrdDetectorDriverPerkinElmer::startDetectorDriver()
 bool QxrdDetectorDriverPerkinElmer::stopDetectorDriver()
 {
 #ifdef HAVE_PERKIN_ELMER
-  QxrdDetectorSettingsPerkinElmerPtr det(m_PerkinElmer);
+  QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det) {
     printMessage(tr("Stopping Perkin Elmer Detector %1").arg(det -> get_DetectorName()));
@@ -697,7 +697,7 @@ bool QxrdDetectorDriverPerkinElmer::stopDetectorDriver()
 bool QxrdDetectorDriverPerkinElmer::changeExposureTime(double expos)
 {
 #ifdef HAVE_PERKIN_ELMER
-  QxrdDetectorSettingsPerkinElmerPtr det(m_PerkinElmer);
+  QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmerPlugin);
@@ -740,7 +740,7 @@ void QxrdDetectorDriverPerkinElmer::onBinningModeChanged()
 {
 //  return;
 #ifdef HAVE_PERKIN_ELMER
-  QxrdDetectorSettingsPerkinElmerPtr det(m_PerkinElmer);
+  QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmerPlugin);
@@ -751,15 +751,15 @@ void QxrdDetectorDriverPerkinElmer::onBinningModeChanged()
         int newMode = 1;
 
         switch (det -> get_DetectorBinning()) {
-        case QxrdDetectorSettingsPerkinElmer::Binning1x1:
+        case QxrdPerkinElmerSettings::Binning1x1:
           newMode = 1;
           break;
 
-        case QxrdDetectorSettingsPerkinElmer::Binning2x2Average:
+        case QxrdPerkinElmerSettings::Binning2x2Average:
           newMode = 2 + 256;
           break;
 
-        case QxrdDetectorSettingsPerkinElmer::Binning2x2Summed:
+        case QxrdPerkinElmerSettings::Binning2x2Summed:
           newMode = 2 + 512;
           break;
         }
@@ -814,7 +814,7 @@ void QxrdDetectorDriverPerkinElmer::onBinningModeChanged()
 void QxrdDetectorDriverPerkinElmer::onCameraGainChanged()
 {
 #ifdef HAVE_PERKIN_ELMER
-  QxrdDetectorSettingsPerkinElmerPtr det(m_PerkinElmer);
+  QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmerPlugin);
@@ -851,7 +851,7 @@ void QxrdDetectorDriverPerkinElmer::onCameraGainChanged()
 void QxrdDetectorDriverPerkinElmer::onTimingSourceChanged()
 {
 #ifdef HAVE_PERKIN_ELMER
-  QxrdDetectorSettingsPerkinElmerPtr det(m_PerkinElmer);
+  QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmerPlugin);
@@ -906,7 +906,7 @@ void QxrdDetectorDriverPerkinElmer::onTimingSourceChanged()
 void QxrdDetectorDriverPerkinElmer::startupAcquisition()
 {
 #ifdef HAVE_PERKIN_ELMER
-  QxrdDetectorSettingsPerkinElmerPtr det(m_PerkinElmer);
+  QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> checkDetectorEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmerPlugin);
@@ -996,7 +996,7 @@ void QxrdDetectorDriverPerkinElmer::onEndFrame(int counter, unsigned int n1, uns
   //  QTime tic;
   //  tic.start();
 
-  QxrdDetectorSettingsPerkinElmerPtr det(m_PerkinElmer);
+  QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> checkDetectorEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmerPlugin);
@@ -1203,7 +1203,7 @@ void QxrdDetectorDriverPerkinElmer::onEndFrameCallback()
 //  QTime tic;
   //  tic.start();
 
-  QxrdDetectorSettingsPerkinElmerPtr det(m_PerkinElmer);
+  QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> checkDetectorEnabled() && checkPluginAvailable()) {
     QxrdPerkinElmerPluginInterfacePtr plugin(m_PerkinElmerPlugin);
