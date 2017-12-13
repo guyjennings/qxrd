@@ -12,7 +12,6 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
-#include "qxrddetectorproxy-ptr.h"
 #include "qxrddetectorprocessor-ptr.h"
 #include "qxrddetectorcontrolwindow-ptr.h"
 #include "qxrddetectorcontrolwindowsettings-ptr.h"
@@ -35,16 +34,14 @@ public:
 
   void initialize(QxrdApplicationWPtr   app,
                   QxrdExperimentWPtr    expt,
-                  QxrdAcquisitionWPtr   acq,
-                  int                   detNum);
+                  QxrdAcquisitionWPtr   acq);
   virtual ~QxrdDetectorSettings();
 
   //TODO: rename to newDetectorSettings
   static QxrdDetectorSettingsPtr newDetector(QxrdApplicationWPtr   app,
                                              QxrdExperimentWPtr    expt,
                                              QxrdAcquisitionWPtr   acq,
-                                             int                   detType,
-                                             int                   detNum);
+                                             int                   detType);
 
   static void registerMetaTypes();
 
@@ -62,11 +59,6 @@ public:
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorSettingsWPtr &det);
   static void fromScriptValue(const QScriptValue &obj, QxrdDetectorSettingsWPtr &det);
-
-  virtual void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
-  virtual void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
-
-  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

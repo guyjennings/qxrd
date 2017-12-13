@@ -13,10 +13,6 @@ QxrdAreaDetectorSettings::~QxrdAreaDetectorSettings()
 {
 }
 
-void QxrdAreaDetectorSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
-{
-}
-
 void QxrdAreaDetectorSettings::configureDetector()
 {
   GUI_THREAD_CHECK;

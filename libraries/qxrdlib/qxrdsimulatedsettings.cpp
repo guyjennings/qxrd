@@ -36,27 +36,6 @@ QxrdSimulatedSettings::~QxrdSimulatedSettings()
   }
 }
 
-void QxrdSimulatedSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
-{
-//  QxrdDetectorSettings::pushDefaultsToProxy(proxy, SimulatedDetector);
-
-//  printf("Need to implement QxrdDetectorSimulated::pushDefaultsToProxy\n");
-}
-
-void QxrdSimulatedSettings::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
-{
-  QxrdDetectorSettings::pushPropertiesToProxy(proxy);
-
-//  printf("Need to implement QxrdDetectorSimulated::pushPropertiesToProxy\n");
-}
-
-void QxrdSimulatedSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
-{
-  QxrdDetectorSettings::pullPropertiesfromProxy(proxy);
-
-//  printf("Need to implement QxrdDetectorSimulated::pullPropertiesfromProxy\n");
-}
-
 void QxrdSimulatedSettings::configureDetector()
 {
   GUI_THREAD_CHECK;

@@ -13,10 +13,6 @@ class QXRD_EXPORT QxrdFileWatcherSettings : public QxrdDetectorSettings
 public:
   Q_INVOKABLE QxrdFileWatcherSettings(QString name);
 
-  void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
-  void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
-  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
-
   void configureDetector();
 signals:
   

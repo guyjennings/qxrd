@@ -14,11 +14,6 @@ public:
   Q_INVOKABLE QxrdPilatusSettings(QString name);
   virtual ~QxrdPilatusSettings();
 
-  void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
-  void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
-
-  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
-
   void configureDetector();
 signals:
 

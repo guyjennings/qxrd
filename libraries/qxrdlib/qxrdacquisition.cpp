@@ -14,7 +14,6 @@
 #include <QDir>
 #include <QMetaProperty>
 #include "qxrdprocessargs.h"
-//#include "qxrddetectorproxy.h"
 #include "qxrddetectorsettings.h"
 //#include "qxrddetectorthread.h"
 #include "qxrddetectorprocessor.h"
@@ -515,10 +514,8 @@ QxrdDetectorSettingsPtr QxrdAcquisition::newDetector(int detType)
 
     return res;
   } else {
-    int nDet = get_DetectorCount();
-
     QxrdDetectorSettingsPtr det =
-        QxrdDetectorSettings::newDetector(application(), experiment(), myself(), detType, nDet);
+        QxrdDetectorSettings::newDetector(application(), experiment(), myself(), detType);
 
     return det;
   }
@@ -652,11 +649,6 @@ void QxrdAcquisition::configureDetector(int i)
   if (det) {
     det->configureDetector();
   }
-//  QxrdDetectorProxyPtr proxy(new QxrdDetectorProxy(detector(i), myself()));
-
-//  if (proxy && proxy->configureDetector()) {
-//    det->pullPropertiesfromProxy(proxy);
-//  }
 }
 
 void QxrdAcquisition::openDetectorControlWindow(int i)

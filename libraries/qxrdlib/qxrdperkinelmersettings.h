@@ -16,10 +16,6 @@ public:
   Q_INVOKABLE QxrdPerkinElmerSettings(QString name);
   virtual ~QxrdPerkinElmerSettings();
 
-  void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
-  void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
-  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
-
   void configureDetector();
 
 public:
@@ -49,8 +45,8 @@ public:
   static QStringList timingModeNamesPE();
 
 public:
-  Q_PROPERTY(int detectorNumber READ get_DetectorNumber WRITE set_DetectorNumber)
-  QCEP_INTEGER_PROPERTY(DetectorNumber)
+  Q_PROPERTY(int detectorIndex READ get_DetectorIndex WRITE set_DetectorIndex)
+  QCEP_INTEGER_PROPERTY(DetectorIndex)
 
   Q_PROPERTY(int detectorSubType READ get_DetectorSubType WRITE set_DetectorSubType)
   QCEP_INTEGER_PROPERTY(DetectorSubType)

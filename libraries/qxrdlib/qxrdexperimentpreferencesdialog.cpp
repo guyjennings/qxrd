@@ -12,7 +12,6 @@
 #include <QGridLayout>
 #include "qcepdebug.h"
 #include "qxrddetectorsettings.h"
-#include "qxrddetectorproxywidget.h"
 #include "qxrddetectorlistmodel.h"
 
 #include <QMenu>
@@ -345,11 +344,6 @@ void QxrdExperimentPreferencesDialog::addDetector()
         int type = choice->data().toInt();
         QxrdApplicationWPtr app = expt->application();
 
-//        QxrdDetectorSettingsPtr det =
-//            QxrdDetectorSettings::newDetector(app, expt, acq, type, -1);
-
-//        appendDetectorProxy(det);
-
         if (acq) {
           QxrdDetectorSettingsPtr det = acq->newDetector(type);
 
@@ -468,12 +462,12 @@ void QxrdExperimentPreferencesDialog::configureDetector()
   }
 }
 
-void QxrdExperimentPreferencesDialog::appendDetectorProxy(QxrdDetectorSettingsPtr proxy)
-{
-  if (proxy) {
-    m_DetectorsModel->append(proxy);
-  }
-}
+//void QxrdExperimentPreferencesDialog::appendDetector(QxrdDetectorSettingsPtr det)
+//{
+//  if (det) {
+//    m_DetectorsModel->append(det);
+//  }
+//}
 
 void QxrdExperimentPreferencesDialog::detectorDoubleClicked(const QModelIndex& item)
 {

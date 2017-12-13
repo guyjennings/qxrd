@@ -14,8 +14,6 @@ public:
   Q_INVOKABLE QxrdAreaDetectorSettings(QString name);
   virtual ~QxrdAreaDetectorSettings();
 
-  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
-
   void configureDetector();
 };
 

@@ -49,7 +49,7 @@ private:
   QString experimentDirectory();
   QString dataDirectory();
 
-  void appendDetectorProxy(QxrdDetectorSettingsPtr proxy);
+//  void appendDetector(QxrdDetectorSettingsPtr det);
 
 private:
   QxrdExperimentWPtr       m_Experiment;

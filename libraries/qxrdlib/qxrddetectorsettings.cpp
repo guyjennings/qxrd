@@ -1,6 +1,5 @@
 #include "qxrddetectorsettings.h"
 #include "qxrddetectordriverthread.h"
-#include "qxrddetectorproxy.h"
 #include "qxrddebug.h"
 #include "qxrddetectorprocessor.h"
 #include <stdio.h>
@@ -49,26 +48,17 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorSettings::QxrdDetectorSettings(%p)\n", this);
   }
-
-//  QxrdAcquisitionPtr acqs(m_Acquisition);
-
-//  if (acqs) {
-//    acqs->prop_DetectorCount()->incValue(1);
-//  }
 }
 
 void QxrdDetectorSettings::initialize(QxrdApplicationWPtr   app,
                                       QxrdExperimentWPtr    expt,
-                                      QxrdAcquisitionWPtr   acq,
-                                      int                   detNum)
+                                      QxrdAcquisitionWPtr   acq)
 {
   THREAD_CHECK;
 
   m_Application = app;
   m_Experiment  = expt;
   m_Acquisition = acq;
-
-  set_DetectorNumber(detNum);
 
   QxrdApplicationPtr appp(m_Application);
 
@@ -117,15 +107,6 @@ QxrdDetectorSettings::~QxrdDetectorSettings()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetector::~QxrdDetector(%p)\n", this);
   }
-
-//  if (m_DetectorControlWindow) {
-//    m_DetectorControlWindow->deleteLater();
-//  }
-//  QxrdAcquisitionPtr acq(m_Acquisition);
-
-//  if (acq) {
-//    acq->prop_DetectorCount()->incValue(-1);
-//  }
 }
 
 void QxrdDetectorSettings::printLine(QString line) const
@@ -448,72 +429,6 @@ void QxrdDetectorSettings::fromScriptValue(const QScriptValue &obj, QxrdDetector
   }
 }
 
-void QxrdDetectorSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr proxy, int detType)
-{
-  proxy->clearProperties();
-
-  if (proxy) {
-    proxy->pushProperty(QxrdDetectorProxy::DetectorNumberProperty, "detectorNumber", "Detector Number",  -1);
-    proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty,   "detectorType",   "Detector Type",     detType);
-    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,        "enabled",        "Detector Enabled?", false);
-    proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "detectorName",   "Detector Name",     "A " + detectorTypeName(detType));
-    //    proxy->pushProperty(QxrdDetectorProxy::ExtensionProperty,      "extension",      "File extension",    "tif");
-
-    switch (detType) {
-    case NoDetector:
-    default:
-      break;
-
-    case Simulated:
-      QxrdSimulatedSettings::pushDefaultsToProxy(proxy);
-      break;
-
-    case PerkinElmer:
-      QxrdPerkinElmerSettings::pushDefaultsToProxy(proxy);
-      break;
-
-    case Pilatus:
-      QxrdPilatusSettings::pushDefaultsToProxy(proxy);
-      break;
-
-    case AreaDetector:
-      QxrdAreaDetectorSettings::pushDefaultsToProxy(proxy);
-      break;
-
-    case FileWatcher:
-      QxrdFileWatcherSettings::pushDefaultsToProxy(proxy);
-      break;
-
-    case Dexela:
-      QxrdDexelaSettings::pushDefaultsToProxy(proxy);
-      break;
-    }
-  }
-}
-
-void QxrdDetectorSettings::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
-{
-  proxy->clearProperties();
-
-  if (proxy) {
-    proxy->pushProperty(QxrdDetectorProxy::DetectorNumberProperty, "detectorNumber", "Detector Number",   get_DetectorNumber());
-    proxy->pushProperty(QxrdDetectorProxy::DetectorTypeProperty,   "detectorType",   "Detector Type",     get_DetectorType());
-    proxy->pushProperty(QxrdDetectorProxy::BooleanProperty,        "enabled",        "Detector Enabled?", get_Enabled());
-    proxy->pushProperty(QxrdDetectorProxy::StringProperty,         "detectorName",   "Detector Name",     get_DetectorName());
-//    proxy->pushProperty(QxrdDetectorProxy::ExtensionProperty,      "extension",      "File extension",    get_Extension());
-  }
-}
-
-void QxrdDetectorSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
-{
-  if (proxy) {
-    set_Enabled(proxy->property("enabled").toBool());
-    set_DetectorNumber(proxy->property("detectorNumber").toInt());
-    set_DetectorName(proxy->property("detectorName").toString());
-//    set_Extension(proxy->property("extension").toString());
-  }
-}
-
 void QxrdDetectorSettings::openWindow()
 {
   GUI_THREAD_CHECK;
@@ -642,50 +557,49 @@ double QxrdDetectorSettings::scalerCounts(int chan)
 QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QxrdApplicationWPtr app,
                                                           QxrdExperimentWPtr expt,
                                                           QxrdAcquisitionWPtr acq,
-                                                          int detType,
-                                                          int detNum)
+                                                          int detType)
 {
   QxrdDetectorSettingsPtr det;
 
   switch (detType) {
   case Simulated:
     det = QxrdDetectorSettingsPtr(
-          new QxrdSimulatedSettings(tr("simulated-%1").arg(detNum)));
+          new QxrdSimulatedSettings("simulated"));
     break;
 
   case PerkinElmer:
     det = QxrdDetectorSettingsPtr(
-          new QxrdPerkinElmerSettings(tr("perkinElmer-%1").arg(detNum)));
+          new QxrdPerkinElmerSettings("perkinElmer"));
     break;
 
   case Pilatus:
     det = QxrdDetectorSettingsPtr(
-          new QxrdPilatusSettings(tr("pilatus-%1").arg(detNum)));
+          new QxrdPilatusSettings("pilatus"));
     break;
 
   case AreaDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdAreaDetectorSettings(tr("epicsArea-%1").arg(detNum)));
+          new QxrdAreaDetectorSettings("epicsArea"));
     break;
 
   case FileWatcher:
     det = QxrdDetectorSettingsPtr(
-          new QxrdFileWatcherSettings(tr("fileWatcher-%1").arg(detNum)));
+          new QxrdFileWatcherSettings("fileWatcher"));
     break;
 
   case Dexela:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDexelaSettings(tr("dexela-%1").arg(detNum)));
+          new QxrdDexelaSettings("dexela"));
     break;
   }
 
   if (det == NULL) {
     det = QxrdDetectorSettingsPtr(
-          new QxrdSimulatedSettings(tr("simulated-%1").arg(detNum)));
+          new QxrdSimulatedSettings("simulated"));
   }
 
   if (det) {
-    det -> initialize(app, expt, acq, detNum);
+    det -> initialize(app, expt, acq);
   }
 
   return det;

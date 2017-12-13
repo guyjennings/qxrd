@@ -182,9 +182,6 @@ SOURCES += qxrdlib.cpp \
     qxrdacquisitionparameterpack.cpp \
     qxrddarkacquisitionparameterpack.cpp \
     qxrdprocessargs.cpp \
-    qxrddetectorproxy.cpp \
-    qxrddetectorproxywidget.cpp \
-    qxrddetectorconfigurationdialog.cpp \
     qxrddetectorcontrolwindow.cpp \
     qxrddetectorprocessor.cpp \
     qxrdroicalculator.cpp \
@@ -653,10 +650,6 @@ HEADERS += TODO.h \
     qxrddarkacquisitionparameterpack-ptr.h \
     qxrdprocessargs.h \
     qxrdprocessargs-ptr.h \
-    qxrddetectorproxy.h \
-    qxrddetectorproxy-ptr.h \
-    qxrddetectorproxywidget.h \
-    qxrddetectorconfigurationdialog.h \
     qxrddetectorcontrolwindow.h \
     qxrddetectorcontrolwindow-ptr.h \
     qxrddetectorprocessor.h \
@@ -804,8 +797,6 @@ FORMS += qxrdwindow.ui \
     qxrdacquisitionextrainputsdialog.ui \
     qxrduserscriptdialog.ui \
     qxrdscriptdialog.ui \
-    qxrddetectorproxywidget.ui \
-    qxrddetectorconfigurationdialog.ui \
     qxrddetectorcontrolwindow.ui \
     qxrdacquisitionscalerdialog.ui \
     qxrdzingerdialog.ui \

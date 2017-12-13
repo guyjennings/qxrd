@@ -23,7 +23,6 @@
 #include "qxrdwindow-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 //#include "qxrddetectorthread-ptr.h"
-//#include "qxrddetectorproxy-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 //#include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"

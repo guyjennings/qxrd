@@ -13,11 +13,6 @@ public:
   Q_INVOKABLE QxrdDexelaSettings(QString name);
   virtual ~QxrdDexelaSettings();
 
-  void pushPropertiesToProxy(QxrdDetectorProxyPtr proxy);
-  void pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy);
-
-  static void pushDefaultsToProxy(QxrdDetectorProxyPtr proxy);
-
   void configureDetector();
 };
 

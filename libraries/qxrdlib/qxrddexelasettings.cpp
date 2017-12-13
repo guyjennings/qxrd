@@ -38,27 +38,6 @@ QxrdDexelaSettings::~QxrdDexelaSettings()
   }
 }
 
-void QxrdDexelaSettings::pushDefaultsToProxy(QxrdDetectorProxyPtr /*proxy*/)
-{
-//  QxrdDetectorSettings::pushDefaultsToProxy(proxy, DexelaDetector);
-
-//  printf("Need to implement QxrdDetectorDexela::pushDefaultsToProxy\n");
-}
-
-void QxrdDexelaSettings::pushPropertiesToProxy(QxrdDetectorProxyPtr proxy)
-{
-  QxrdDetectorSettings::pushPropertiesToProxy(proxy);
-
-//  printf("Need to implement QxrdDetectorDexela::pushPropertiesToProxy\n");
-}
-
-void QxrdDexelaSettings::pullPropertiesfromProxy(QxrdDetectorProxyPtr proxy)
-{
-  QxrdDetectorSettings::pullPropertiesfromProxy(proxy);
-
-//  printf("Need to implement QxrdDetectorDexela::pullPropertiesfromProxy\n");
-}
-
 void QxrdDexelaSettings::configureDetector()
 {
   GUI_THREAD_CHECK;
