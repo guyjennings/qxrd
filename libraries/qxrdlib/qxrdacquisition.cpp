@@ -486,6 +486,8 @@ void QxrdAcquisition::readSettings(QSettings *settings)
         qSharedPointerDynamicCast<QxrdDetectorSettings>(obj);
 
     if (det) {
+      det->set_DetectorNumber(m_Detectors.count());
+
       m_Detectors.append(det);
 
       QxrdApplicationSettings *set = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
