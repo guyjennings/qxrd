@@ -7,7 +7,6 @@
 #include <QFile>
 #include "qcepimagedata.h"
 #include "qcepallocator.h"
-#include "qxrddetectorpilatusremote.h"
 #include "qxrdexperiment.h"
 #include "qxrddataprocessor.h"
 #include "qxrdpilatusdialog.h"

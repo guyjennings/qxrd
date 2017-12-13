@@ -190,7 +190,6 @@ SOURCES += qxrdlib.cpp \
     qxrdtodolist.cpp \
     qxrdtodolistitem.cpp \
     qxrdroicoordinates.cpp \
-    qxrddetectorpilatusremote.cpp \
     qxrdroicoordinateslistmodel.cpp \
     qxrddetectorimageplot.cpp \
     qxrdroitypedelegate.cpp \
@@ -213,7 +212,6 @@ SOURCES += qxrdlib.cpp \
     qxrddetectorsettings.cpp \
     qxrddetectordriver.cpp \
     qxrddetectordriverperkinelmer.cpp \
-    qxrddetectordriverpilatus.cpp \
     qxrddetectordriverthread.cpp \
     qxrdexperimentthread.cpp \
     qxrdroishape.cpp \
@@ -665,8 +663,6 @@ HEADERS += TODO.h \
     qxrdtodolistitem-ptr.h \
     qxrdroicoordinates.h \
     qxrdroicoordinates-ptr.h \
-    qxrddetectorpilatusremote.h \
-    qxrddetectorpilatusremote-ptr.h \
     qxrdroicoordinateslistmodel.h \
     qxrdroicoordinateslistmodel-ptr.h \
     qxrdimageplotsettings-ptr.h \
@@ -715,7 +711,6 @@ HEADERS += TODO.h \
     qxrddetectorsettings-ptr.h \
     qxrddetectordriver.h \
     qxrddetectordriverperkinelmer.h \
-    qxrddetectordriverpilatus.h \
     qxrddetectordriver-ptr.h \
     qxrddetectordriverthread.h \
     qxrddetectordriverthread-ptr.h \

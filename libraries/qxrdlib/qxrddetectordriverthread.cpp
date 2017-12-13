@@ -4,14 +4,7 @@
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
 #include "qxrddetectordriver.h"
-#include "qxrdareadetectorsettings.h"
-#include "qxrdfilewatchersettings.h"
 #include "qxrddetectordriverperkinelmer.h"
-#include "qxrdperkinelmersettings.h"
-#include "qxrddexelasettings.h"
-#include "qxrddetectordriverpilatus.h"
-#include "qxrdpilatussettings.h"
-#include "qxrdsimulatedsettings.h"
 #include "qxrddetectorplugininterface.h"
 
 #include <stdio.h>

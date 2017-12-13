@@ -1,17 +1,17 @@
-#include "qxrddetectorpilatusremote.h"
+#include "qxrdpilatusremote.h"
 #include "qxrddebug.h"
 #include <QCryptographicHash>
 
-QxrdDetectorPilatusRemote::QxrdDetectorPilatusRemote()
+QxrdPilatusRemote::QxrdPilatusRemote()
   : QcepObject("pilatusRemote"),
     m_FileTransferSize(0)
 {
   printMessage("Constructed Pilatus Remote Object");
 
-  connect(&m_Process, &QProcess::readyRead, this, &QxrdDetectorPilatusRemote::onReadyRead);
+  connect(&m_Process, &QProcess::readyRead, this, &QxrdPilatusRemote::onReadyRead);
 }
 
-void QxrdDetectorPilatusRemote::connectToRemote(QString sshCmd)
+void QxrdPilatusRemote::connectToRemote(QString sshCmd)
 {
   printMessage(tr("Connect to %1").arg(sshCmd));
 
@@ -19,14 +19,14 @@ void QxrdDetectorPilatusRemote::connectToRemote(QString sshCmd)
   m_Process.start(sshCmd);
 }
 
-void QxrdDetectorPilatusRemote::executeRemote(QString cmd)
+void QxrdPilatusRemote::executeRemote(QString cmd)
 {
   printMessage(tr("Exceute %1").arg(cmd));
 
   m_Process.write(qPrintable(cmd+"\n"));
 }
 
-void QxrdDetectorPilatusRemote::onReadyRead()
+void QxrdPilatusRemote::onReadyRead()
 {
   printMessage(tr("Remote On ready read (%1 bytes available)").arg(m_Process.bytesAvailable()));
 
@@ -68,9 +68,9 @@ void QxrdDetectorPilatusRemote::onReadyRead()
   }
 }
 
-void QxrdDetectorPilatusRemote::interpretLine(QString line)
+void QxrdPilatusRemote::interpretLine(QString line)
 {
-  printMessage(tr("QxrdDetectorPilatusRemote::interpretLine(\"%1\")").arg(line));
+  printMessage(tr("QxrdPilatusRemote::interpretLine(\"%1\")").arg(line));
 
   if (line.startsWith("transfer:")) {
     QStringList fields = line.split(QRegExp("\\s+"));

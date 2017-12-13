@@ -6,12 +6,12 @@
 #include "qcepobject.h"
 #include <QProcess>
 
-class QXRD_EXPORT QxrdDetectorPilatusRemote : public QcepObject
+class QXRD_EXPORT QxrdPilatusRemote : public QcepObject
 {
   Q_OBJECT
 
 public:
-  QxrdDetectorPilatusRemote();
+  QxrdPilatusRemote();
 
 signals:
 

@@ -1,6 +1,8 @@
 include("../../qxrd.version.pri")
 include("../../qxrd.platform.pri")
 
+QT += network
+
 TEMPLATE = lib
 CONFIG += plugin
 
@@ -11,10 +13,13 @@ INCLUDEPATH += ../../libraries/qxrdlib/
 
 HEADERS += \
     qxrdpilatusplugin.h \
+    qxrdpilatusremote.h \
+    qxrdpilatusremote-ptr.h \
     qxrdpilatusdriver.h
 
 SOURCES += \
     qxrdpilatusplugin.cpp \
+    qxrdpilatusremote.cpp \
     qxrdpilatusdriver.cpp
 
 OTHER_FILES += \

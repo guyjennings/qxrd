@@ -1,9 +1,0 @@
-#ifndef QXRDDETECTORPILATUSREMOTEPTR_H
-#define QXRDDETECTORPILATUSREMOTEPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdDetectorPilatusRemote)
-
-#endif // QXRDDETECTORPILATUSREMOTEPTR_H
-
