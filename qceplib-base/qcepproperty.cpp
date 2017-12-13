@@ -1240,7 +1240,7 @@ void QcepStringProperty::resetValue()
 
 void QcepStringProperty::copyTo(QComboBox *comboBox)
 {
-  int index = comboBox->findData(value());
+  int index = comboBox->findText(value());
 
   comboBox -> setCurrentIndex(index);
 
