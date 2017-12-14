@@ -24,7 +24,8 @@ public:
     GBIF_IP_SubType,
     GBIF_MAC_SubType,
     GBIF_Name_SubType,
-    GBIF_Scan_SubType
+    GBIF_Scan_SubType,
+    DetectorSubTypeCount
   } PEDetectorSubType;
 
   typedef enum {

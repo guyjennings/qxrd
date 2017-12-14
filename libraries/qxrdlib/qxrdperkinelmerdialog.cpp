@@ -18,6 +18,33 @@ QxrdPerkinElmerDialog::QxrdPerkinElmerDialog(
     m_Settings->prop_DetectorName()     -> copyTo(m_DetectorName);
     m_Settings->prop_DetectorTypeName() -> copyTo(m_DetectorType);
 
+    for (int i=0; i<10; i++) {
+      m_DetectorIndex->addItem(tr("%1").arg(i));
+    }
+
+    for (int i=0; i<QxrdPerkinElmerSettings::DetectorSubTypeCount; i++) {
+      QString typ = QxrdPerkinElmerSettings::detectorSubTypeNamePE(i);
+      m_DetectorSubType->addItem(typ);
+    }
+
+    QStringList bins = QxrdPerkinElmerSettings::binningModeNamesPE();
+
+    foreach (QString bin, bins) {
+      m_DetectorBinning->addItem(bin);
+    }
+
+    QStringList gains = QxrdPerkinElmerSettings::gainModeNamesPE();
+
+    foreach (QString gain, gains) {
+      m_DetectorGain->addItem(gain);
+    }
+
+    QStringList modes = QxrdPerkinElmerSettings::timingModeNamesPE();
+
+    foreach (QString mode, modes) {
+      m_DetectorTiming->addItem(mode);
+    }
+
     m_Settings->prop_DetectorIndex()    -> copyTo(m_DetectorIndex);
     m_Settings->prop_DetectorSubType()  -> copyTo(m_DetectorSubType);
     m_Settings->prop_DetectorAddress()  -> copyTo(m_DetectorAddress);
