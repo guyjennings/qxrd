@@ -1,12 +1,12 @@
-#ifndef QXRDDETECTORPILATUSREMOTE_H
-#define QXRDDETECTORPILATUSREMOTE_H
+#ifndef QXRDPILATUSREMOTE_H
+#define QXRDPILATUSREMOTE_H
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include <QProcess>
 
-class QXRD_EXPORT QxrdPilatusRemote : public QcepObject
+class QxrdPilatusRemote : public QcepObject
 {
   Q_OBJECT
 
@@ -30,4 +30,4 @@ private:
   QByteArray m_TransferredFile;
 };
 
-#endif // QXRDDETECTORPILATUSREMOTE_H
+#endif // QXRDPILATUSREMOTE_H
