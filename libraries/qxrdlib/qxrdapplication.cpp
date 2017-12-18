@@ -40,9 +40,9 @@
 #include "qcepimagedataformattiff.h"
 #include "qxrdplugininfomodel.h"
 
-#ifdef HAVE_PERKIN_ELMER
-#include "qxrdperkinelmerplugininterface.h"
-#endif
+//#ifdef HAVE_PERKIN_ELMER
+//#include "qxrdperkinelmerplugininterface.h"
+//#endif
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -78,9 +78,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
   m_NIDAQPlugin(NULL),
-  #ifdef HAVE_PERKIN_ELMER
-  m_PerkinElmerPluginInterface(NULL),
-  #endif
+//  #ifdef HAVE_PERKIN_ELMER
+//  m_PerkinElmerPluginInterface(NULL),
+//  #endif
   m_ResponseTimer(NULL),
   m_SettingsMutex(),
   m_LastLockerCount(0)
@@ -350,14 +350,14 @@ void QxrdApplication::closeWelcomeWindow()
 //  return g_Application;
 //}
 
-#ifdef HAVE_PERKIN_ELMER
+//#ifdef HAVE_PERKIN_ELMER
 
-QxrdPerkinElmerPluginInterfacePtr QxrdApplication::perkinElmerPlugin()
-{
-  return m_PerkinElmerPluginInterface;
-}
+//QxrdPerkinElmerPluginInterfacePtr QxrdApplication::perkinElmerPlugin()
+//{
+//  return m_PerkinElmerPluginInterface;
+//}
 
-#endif
+//#endif
 
 QxrdNIDAQPluginInterfacePtr QxrdApplication::nidaqPlugin()
 {
@@ -456,15 +456,15 @@ void QxrdApplication::loadPlugins()
             pluginName = processor -> name();
           }
 
-#ifdef HAVE_PERKIN_ELMER
-          QxrdPerkinElmerPluginInterface *perkinElmer = qobject_cast<QxrdPerkinElmerPluginInterface*>(plugin);
+//#ifdef HAVE_PERKIN_ELMER
+//          QxrdPerkinElmerPluginInterface *perkinElmer = qobject_cast<QxrdPerkinElmerPluginInterface*>(plugin);
 
-          if (perkinElmer) {
-            pluginName = perkinElmer -> name();
+//          if (perkinElmer) {
+//            pluginName = perkinElmer -> name();
 
-            m_PerkinElmerPluginInterface = QxrdPerkinElmerPluginInterfacePtr(perkinElmer);
-          }
-#endif
+//            m_PerkinElmerPluginInterface = QxrdPerkinElmerPluginInterfacePtr(perkinElmer);
+//          }
+//#endif
 
           if (m_NIDAQPlugin) {
             pluginName = m_NIDAQPlugin -> name();

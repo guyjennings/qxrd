@@ -19,7 +19,7 @@ public:
                         QxrdDetectorSettingsWPtr det,
                         QxrdExperimentWPtr expt,
                         QxrdAcquisitionWPtr acq);
-  virtual ~QxrdDetectorDriverPerkinElmer();
+  virtual ~QxrdPerkinElmerDriver();
 
 public slots:
   bool startDetectorDriver();

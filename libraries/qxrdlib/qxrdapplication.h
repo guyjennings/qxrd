@@ -21,9 +21,9 @@
 #include "qxrdplugininfomodel-ptr.h"
 #include "qxrdprocessorinterface-ptr.h"
 
-#ifdef HAVE_PERKIN_ELMER
-#include "qxrdperkinelmerplugininterface-ptr.h"
-#endif
+//#ifdef HAVE_PERKIN_ELMER
+//#include "qxrdperkinelmerplugininterface-ptr.h"
+//#endif
 
 class QXRD_EXPORT QxrdApplication : public QcepApplication
 {
@@ -35,9 +35,9 @@ public:
 
   bool init(int &argc, char **argv);
 
-#ifdef HAVE_PERKIN_ELMER
-  QxrdPerkinElmerPluginInterfacePtr perkinElmerPlugin();
-#endif
+//#ifdef HAVE_PERKIN_ELMER
+//  QxrdPerkinElmerPluginInterfacePtr perkinElmerPlugin();
+//#endif
 
   void loadPlugins();
 
@@ -166,9 +166,9 @@ private:
   QxrdDetectorPluginInterfacePtr  m_AreaDetectorPlugin;
   QxrdDetectorPluginInterfacePtr  m_FileWatcherPlugin;
 
-#ifdef HAVE_PERKIN_ELMER
-  QxrdPerkinElmerPluginInterfacePtr m_PerkinElmerPluginInterface;
-#endif
+//#ifdef HAVE_PERKIN_ELMER
+//  QxrdPerkinElmerPluginInterfacePtr m_PerkinElmerPluginInterface;
+//#endif
 
   QxrdResponseTimer              *m_ResponseTimer;
 

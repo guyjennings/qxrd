@@ -211,7 +211,6 @@ SOURCES += qxrdlib.cpp \
     qxrdroicoordinateslist.cpp \
     qxrddetectorsettings.cpp \
     qxrddetectordriver.cpp \
-    qxrddetectordriverperkinelmer.cpp \
     qxrddetectordriverthread.cpp \
     qxrdexperimentthread.cpp \
     qxrdroishape.cpp \
@@ -710,7 +709,6 @@ HEADERS += TODO.h \
     qxrddetectorsettings.h \
     qxrddetectorsettings-ptr.h \
     qxrddetectordriver.h \
-    qxrddetectordriverperkinelmer.h \
     qxrddetectordriver-ptr.h \
     qxrddetectordriverthread.h \
     qxrddetectordriverthread-ptr.h \

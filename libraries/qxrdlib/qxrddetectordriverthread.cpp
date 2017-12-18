@@ -4,7 +4,7 @@
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
 #include "qxrddetectordriver.h"
-#include "qxrddetectordriverperkinelmer.h"
+//#include "qxrddetectordriverperkinelmer.h"
 #include "qxrddetectorplugininterface.h"
 
 #include <stdio.h>

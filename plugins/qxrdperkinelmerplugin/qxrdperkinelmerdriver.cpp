@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdperkinelmerdriver.h"
 #include "qxrdperkinelmersettings.h"
 #include "qxrdacquisition.h"
@@ -6,6 +7,21 @@
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
 #include "qxrdsynchronizedacquisition.h"
+
+#ifdef WIN64
+#if WIN64
+#define __X64
+#endif
+#endif
+
+#ifdef __X64
+#define ACQDATATYPE void*
+#else
+#define ACQDATATYPE DWORD
+#endif
+
+static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc);
+static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 
 QxrdPerkinElmerDriver::QxrdPerkinElmerDriver(QString name,
                                              QxrdDetectorSettingsWPtr det,
@@ -24,7 +40,7 @@ QxrdPerkinElmerDriver::QxrdPerkinElmerDriver(QString name,
   m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
   m_TimingSource(-1),
   m_Counter(0),
-  m_PerkinElmer(perkinElmer)
+  m_PerkinElmer(qSharedPointerDynamicCast<QxrdPerkinElmerSettings>(det))
 {
 #ifndef QT_NO_DEBUG
   printf("Perkin Elmer Detector Driver \"%s\" Constructed\n", qPrintable(name));
@@ -386,9 +402,7 @@ bool QxrdPerkinElmerDriver::startDetectorDriver()
     if (subType == QxrdPerkinElmerSettings::PCI_SubType) {
       printMessage("Initialising PCI/PCIe Perkin Elmer Detector");
 
-      if (plugin) {
-        nRet = plugin->Acquisition_EnumSensors(&nSensors, bEnableIRQ, FALSE);
-      }
+      nRet = Acquisition_EnumSensors(&nSensors, bEnableIRQ, FALSE);
 
       if (qcepDebug(DEBUG_PERKINELMER)) {
         printMessage(tr("Acquisition_EnumSensors = %1").arg(nRet));
@@ -412,7 +426,7 @@ bool QxrdPerkinElmerDriver::startDetectorDriver()
       }
 
       for (int i=1; i<=(det -> get_DetectorNumber() ? det -> get_DetectorNumber() : 1); i++) {
-        if (plugin && (nRet = plugin->Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
+        if ((nRet = Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
           acquisitionNSensorsError(__FILE__, __LINE__, nRet);
           return false;
         }
@@ -1174,7 +1188,7 @@ static void CALLBACK OnEndFrameCallback(HACQDESC hAcqDesc)
 
       Acquisition_GetAcqData(hAcqDesc, &object);
 
-      QxrdDetectorDriverPerkinElmer *detector = reinterpret_cast<QxrdDetectorDriverPerkinElmer*>(object);
+      QxrdPerkinElmerDriver *detector = reinterpret_cast<QxrdPerkinElmerDriver*>(object);
 
       if (detector /*&& detector->isEnabled()*/) {
         detector->onEndFrameCallback();

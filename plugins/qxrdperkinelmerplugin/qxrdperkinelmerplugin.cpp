@@ -1,6 +1,6 @@
-#ifdef HAVE_PERKIN_ELMER
-
 #include "qxrdperkinelmerplugin.h"
+#include "qxrddetectorinterface.h"
+#include "qxrdperkinelmerdriver.h"
 
 QxrdPerkinElmerPlugin::QxrdPerkinElmerPlugin()
 {
@@ -11,179 +11,13 @@ QString QxrdPerkinElmerPlugin::name() const
   return "Perkin Elmer XRD Detector";
 }
 
-UINT QxrdPerkinElmerPlugin::Acquisition_SetCallbacksAndMessages(
-    HACQDESC pAcqDesc, HWND hWnd, UINT dwErrorMsg,
-    UINT dwLoosingFramesMsg, void (CALLBACK *lpfnEndFrameCallback)(HACQDESC),
-    void (CALLBACK *lpfnEndAcqCallback)(HACQDESC))
+QxrdDetectorDriverPtr QxrdPerkinElmerPlugin::createDetector(QString name,
+                                                            QxrdDetectorSettingsWPtr det,
+                                                            QxrdExperimentWPtr expt,
+                                                            QxrdAcquisitionWPtr acq)
 {
-  return ::Acquisition_SetCallbacksAndMessages(pAcqDesc, hWnd, dwErrorMsg,
-                                              dwLoosingFramesMsg, lpfnEndFrameCallback,
-                                              lpfnEndAcqCallback);
-}
+  QxrdDetectorDriverPtr res =
+      QxrdDetectorDriverPtr(new QxrdPerkinElmerDriver(name, det, expt, acq));
 
-UINT QxrdPerkinElmerPlugin::Acquisition_EnumSensors(
-    UINT *pdwNumSensors, BOOL bEnableIRQ, BOOL bAlwaysOpen)
-{
-  return ::Acquisition_EnumSensors(pdwNumSensors, bEnableIRQ, bAlwaysOpen);
+  return res;
 }
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GetNextSensor(
-    ACQDESCPOS *Pos, HACQDESC *phAcqDesc)
-{
-  return ::Acquisition_GetNextSensor(Pos, phAcqDesc);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_SetAcqData(
-    HACQDESC hAcqDesc, ACQDATATYPE AcqData)
-{
-  return ::Acquisition_SetAcqData(hAcqDesc, AcqData);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GetAcqData(
-    HACQDESC hAcqDesc, ACQDATATYPE *AcqData)
-{
-  return ::Acquisition_GetAcqData(hAcqDesc, AcqData);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GetCommChannel(
-    HACQDESC pAcqDesc, UINT *pdwChannelType, int *pnChannelNr)
-{
-  return ::Acquisition_GetCommChannel(pAcqDesc, pdwChannelType, pnChannelNr);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_Close(HACQDESC hAcqDesc)
-{
-  return ::Acquisition_Close(hAcqDesc);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_CloseAll()
-{
-  return ::Acquisition_CloseAll();
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_DefineDestBuffers(
-    HACQDESC pAcqDesc, unsigned short *pProcessedData,
-    UINT nFrames, UINT nRows, UINT nColumns)
-{
-  return ::Acquisition_DefineDestBuffers(pAcqDesc, pProcessedData,
-                                         nFrames, nRows, nColumns);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_Abort(HACQDESC hAcqDesc)
-{
-  return ::Acquisition_Abort(hAcqDesc);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_Acquire_Image(
-    HACQDESC pAcqDesc, UINT dwFrames, UINT dwSkipFrms,
-    UINT dwOpt, unsigned short *pwOffsetData,
-    DWORD *pdwGainData, DWORD *pdwPxlCorrList)
-{
-  return ::Acquisition_Acquire_Image(pAcqDesc, dwFrames, dwSkipFrms,
-                                     dwOpt, pwOffsetData,
-                                     pdwGainData, pdwPxlCorrList);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GetConfiguration(
-    HACQDESC hAcqDesc, UINT *dwFrames, UINT *dwRows, UINT *dwColumns, UINT *dwDataType,
-    UINT *dwSortFlags, BOOL *bIRQEnabled, DWORD *dwAcqType, DWORD *dwSystemID,
-    DWORD *dwSyncMode, DWORD *dwHwAccess)
-{
-  return ::Acquisition_GetConfiguration(hAcqDesc, dwFrames, dwRows, dwColumns, dwDataType,
-                                        dwSortFlags, bIRQEnabled, dwAcqType, dwSystemID,
-                                        dwSyncMode, dwHwAccess);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GetIntTimes(
-    HACQDESC hAcqDesc, double *dblIntTime, int *nIntTimes)
-{
-  return ::Acquisition_GetIntTimes(hAcqDesc, dblIntTime, nIntTimes);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GetActFrame(
-    HACQDESC hAcqDesc, DWORD *dwActAcqFrame, DWORD *dwActSecBuffFrame)
-{
-  return ::Acquisition_GetActFrame(hAcqDesc, dwActAcqFrame, dwActSecBuffFrame);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_ResetFrameCnt(HACQDESC hAcqDesc)
-{
-  return ::Acquisition_ResetFrameCnt(hAcqDesc);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GetHwHeaderInfo(
-    HACQDESC hAcqDesc, CHwHeaderInfo *pInfo)
-{
-  return ::Acquisition_GetHwHeaderInfo(hAcqDesc, pInfo);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_SetFrameSyncMode(
-    HACQDESC hAcqDesc, DWORD dwMode)
-{
-  return ::Acquisition_SetFrameSyncMode(hAcqDesc, dwMode);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_SetTimerSync(
-    HACQDESC hAcqDesc, DWORD *dwCycleTime)
-{
-  return ::Acquisition_SetTimerSync(hAcqDesc, dwCycleTime);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_SetCameraGain(
-    HACQDESC hAcqDesc, WORD wMode)
-{
-  return ::Acquisition_SetCameraGain(hAcqDesc, wMode);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_SetCameraBinningMode(
-    HACQDESC hAcqDesc, WORD wMode)
-{
-  return ::Acquisition_SetCameraBinningMode(hAcqDesc, wMode);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GetCameraBinningMode(
-    HACQDESC hAcqDesc, WORD* wMode)
-{
-  return ::Acquisition_GetCameraBinningMode(hAcqDesc, wMode);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GetLatestFrameHeader(
-    HACQDESC hAcqDesc, CHwHeaderInfo *pInfo, CHwHeaderInfoEx *pInfoEx)
-{
-  return ::Acquisition_GetLatestFrameHeader(hAcqDesc, pInfo, pInfoEx);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GetHwHeaderInfoEx(
-    HACQDESC hAcqDesc, CHwHeaderInfo *pInfo, CHwHeaderInfoEx *pInfoEx)
-{
-  return ::Acquisition_GetHwHeaderInfoEx(hAcqDesc, pInfo, pInfoEx);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GbIF_Init(
-    HACQDESC *phAcqDesc, int nChannelNr, BOOL bEnableIRQ, UINT uiRows, UINT uiColumns,
-    BOOL bSelfInit, BOOL bAlwaysOpen, long lInitType, GBIF_STRING_DATATYPE* cAddress)
-{
-  return ::Acquisition_GbIF_Init(phAcqDesc, nChannelNr, bEnableIRQ,
-                                 uiRows, uiColumns, bSelfInit, bAlwaysOpen,
-                                 lInitType, cAddress);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GbIF_GetDeviceList(
-    GBIF_DEVICE_PARAM* pGBIF_DEVICE_PARAM, int nDeviceCnt)
-{
-  return ::Acquisition_GbIF_GetDeviceList(pGBIF_DEVICE_PARAM, nDeviceCnt);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GbIF_GetDevice(
-    GBIF_STRING_DATATYPE* ucAddress, DWORD dwAddressType, GBIF_DEVICE_PARAM* pDevice)
-{
-  return ::Acquisition_GbIF_GetDevice(ucAddress, dwAddressType, pDevice);
-}
-
-UINT QxrdPerkinElmerPlugin::Acquisition_GbIF_GetDeviceCnt(
-    long* plNrOfboards)
-{
-  return ::Acquisition_GbIF_GetDeviceCnt(plNrOfboards);
-}
-
-#endif // HAVE_PERKIN_ELMER
