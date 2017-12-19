@@ -2,9 +2,17 @@
 #include "qxrddetectorinterface.h"
 #include "qxrddexeladriver.h"
 #include "qxrddexelasettings.h"
+#include "BusScanner.h"
 
 QxrdDexelaPlugin::QxrdDexelaPlugin()
 {
+  BusScanner scanner;
+
+  int nDevs = scanner.EnumerateDevices();
+
+  for (int i=0; i<nDevs; i++) {
+    DevInfo info = scanner.GetDevice(i);
+  }
 }
 
 QString QxrdDexelaPlugin::name() const

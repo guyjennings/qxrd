@@ -5,6 +5,9 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
 #include <QPainter>
+#include "BusScanner.h"
+#include "DexelaDetector.h"
+#include "DexImage.h"
 
 QxrdDexelaDriver::QxrdDexelaDriver(QString name,
                                                    QxrdDexelaSettingsWPtr det,
