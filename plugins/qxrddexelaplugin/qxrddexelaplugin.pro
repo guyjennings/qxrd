@@ -35,15 +35,15 @@ HEADERS += \
     qxrddexeladriver.h \
     qxrddexelaplugin.h
 
-#contains(QMAKE_HOST.arch,x86_64) {
-#    LIBS += -L$$PWD/dexelaLibs/windows_x64/
+contains(QMAKE_HOST.arch,x86_64) {
+    LIBS += -L$$PWD/dexelaLibs/windows_x64/ -lBusScanner
 #} else {
 #    LIBS += -L$$PWD/dexelaLibs/win32_x86/   -lBusScanner -lDexelaException -lDexelaDetector -lDexImage
-#}
+}
 
 OTHER_FILES += \
-#    dexelaLibs/windows_x64/*.lib \
-#    dexelaLibs/win32_x86/*.lib \
+    dexelaLibs/windows_x64/*.lib \
+    dexelaLibs/win32_x86/*.lib \
     dexela.json
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../ -lqceplib
