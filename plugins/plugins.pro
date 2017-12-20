@@ -8,14 +8,18 @@ SUBDIRS =  \
   qxrdareadetectorplugin \
   qxrdcudaprocessorplugin \
   qxrdsimulatedplugin \
-  qxrdfilewatcherplugin \
-  qxrddexelaplugin
+  qxrdfilewatcherplugin
 
 message(DEFINES == $$DEFINES)
 
 contains(DEFINES,HAVE_PERKIN_ELMER) {
   message("HAVE_PERKIN_ELMER")
   SUBDIRS += qxrdperkinelmerplugin
+}
+
+contains(DEFINES,HAVE_DEXELA) {
+  message("HAVE_DEXELA")
+  SUBDIRS += qxrddexelaplugin
 }
 
 contains(DEFINES,HAVE_NIDAQ) {
