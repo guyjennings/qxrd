@@ -22,6 +22,7 @@
 #include "qxrdscriptengine.h"
 #include "qxrdglobalpreferencesdialog.h"
 #include "qcepproperty.h"
+#include "qxrdnamedplugininterface.h"
 #include "qxrddetectorplugininterface.h"
 #include "qxrdprocessorinterface.h"
 #include "qxrdnidaqplugininterface.h"
@@ -436,40 +437,14 @@ void QxrdApplication::loadPlugins()
         }
 
         if (plugin) {
+          QxrdNamedPluginInterface* namedPlugin = qobject_cast<QxrdNamedPluginInterface*>(plugin);
+
+          if (namedPlugin) {
+            pluginName = namedPlugin->name();
+          }
+
           if (qcepDebug(DEBUG_PLUGINS)) {
-            printf("Loaded plugin from %s : type %s\n", qPrintable(fullPath), qPrintable(plugin->metaObject()->className()));
-          }
-
-
-          QxrdDetectorPluginInterface* detector = qobject_cast<QxrdDetectorPluginInterface*>(plugin);
-
-          if (detector) {
-            pluginName = detector -> name();
-
-//            m_DetectorPlugins.append(
-//                  QxrdDetectorPluginInterfacePtr(detector));
-          }
-
-          QxrdProcessorInterface* processor = qobject_cast<QxrdProcessorInterface*>(plugin);
-
-          if (processor) {
-            pluginName = processor -> name();
-          }
-
-//#ifdef HAVE_PERKIN_ELMER
-//          QxrdPerkinElmerPluginInterface *perkinElmer = qobject_cast<QxrdPerkinElmerPluginInterface*>(plugin);
-
-//          if (perkinElmer) {
-//            pluginName = perkinElmer -> name();
-
-//            m_PerkinElmerPluginInterface = QxrdPerkinElmerPluginInterfacePtr(perkinElmer);
-//          }
-//#endif
-
-          if (m_NIDAQPlugin) {
-            pluginName = m_NIDAQPlugin -> name();
-
-            m_NIDAQPlugin -> setErrorOutput(this);
+            printf("Loaded plugin %s from %s : type %s\n", qPrintable(pluginName), qPrintable(fullPath), qPrintable(plugin->metaObject()->className()));
           }
 
           splashMessage(tr("Loaded plugin \"%1\"").arg(pluginName));

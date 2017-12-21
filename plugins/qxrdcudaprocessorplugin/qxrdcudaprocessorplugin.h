@@ -8,7 +8,7 @@ class QxrdCudaProcessorPlugin : public QObject, public QxrdProcessorInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID QxrdProcessorInterface_iid FILE "cuda.json")
-  Q_INTERFACES(QxrdProcessorInterface)
+  Q_INTERFACES(QxrdNamedPluginInterface QxrdProcessorInterface)
 
 public:
     QxrdCudaProcessorPlugin();

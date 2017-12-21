@@ -14,7 +14,7 @@ class QxrdNIDAQPlugin : public QObject, public QxrdNIDAQPluginInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID QxrdNIDAQPluginInterface_iid FILE "nidaq.json")
-  Q_INTERFACES(QxrdNIDAQPluginInterface)
+  Q_INTERFACES(QxrdNamedPluginInterface QxrdNIDAQPluginInterface)
 
 public:
   QxrdNIDAQPlugin();

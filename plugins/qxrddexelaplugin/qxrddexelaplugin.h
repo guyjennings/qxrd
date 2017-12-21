@@ -8,7 +8,7 @@ class QxrdDexelaPlugin : public QObject, public QxrdDetectorPluginInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "dexela.json")
-  Q_INTERFACES(QxrdDetectorPluginInterface)
+  Q_INTERFACES(QxrdNamedPluginInterface QxrdDetectorPluginInterface)
 
 public:
     QxrdDexelaPlugin();

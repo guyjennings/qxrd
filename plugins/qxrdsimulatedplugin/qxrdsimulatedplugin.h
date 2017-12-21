@@ -8,7 +8,7 @@ class QxrdSimulatedPlugin : public QObject, public QxrdDetectorPluginInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "simulated.json")
-  Q_INTERFACES(QxrdDetectorPluginInterface)
+  Q_INTERFACES(QxrdNamedPluginInterface QxrdDetectorPluginInterface)
 
 public:
     QxrdSimulatedPlugin();
