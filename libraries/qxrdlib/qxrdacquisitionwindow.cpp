@@ -53,8 +53,8 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
       }
     }
 
-    m_AcquisitionDetectorListView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    m_AcquisitionDetectorListView->setModel(m_DetectorsModel.data());
+    m_AcquisitionDetectorTreeView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_AcquisitionDetectorTreeView->setModel(m_DetectorsModel.data());
 
     exp  -> prop_ExperimentDirectory() -> linkTo(this -> m_ExperimentDirectory);
     exp  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
