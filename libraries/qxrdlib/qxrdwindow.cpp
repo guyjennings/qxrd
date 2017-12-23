@@ -1193,15 +1193,6 @@ void QxrdWindow::newMask()
   }
 }
 
-void QxrdWindow::doEditDetectorPreferences()
-{
-  GUI_THREAD_CHECK;
-
-  QxrdExperimentPreferencesDialog prefs(m_Experiment, NULL, 0);
-
-  prefs.exec();
-}
-
 void QxrdWindow::doSaveExperimentAsText()
 {
   GUI_THREAD_CHECK;

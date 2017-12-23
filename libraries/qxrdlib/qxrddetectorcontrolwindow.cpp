@@ -220,14 +220,8 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
     acqp -> prop_RetryDropped() -> linkTo(this -> m_RetryDropped);
   }
 
-  if (expt) {
-    QxrdWindowPtr wp(expt->window());
-
-    if (wp) {
-      connect(m_DetectorOptionsButton, &QAbstractButton::clicked, wp.data(), &QxrdWindow::doEditDetectorPreferences);
-      connect(m_AcquireOptionsButton, &QAbstractButton::clicked, wp.data(), &QxrdWindow::doEditPreferences);
-    }
-  }
+  connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences);
+  connect(m_AcquireOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditPreferences);
 }
 
 QxrdDetectorControlWindow::~QxrdDetectorControlWindow()

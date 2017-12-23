@@ -26,6 +26,7 @@ public slots:
   void saveExperimentCopy();
   void saveExperimentAs();
   void doEditPreferences();
+  void doEditDetectorPreferences();
 
 private slots:
   void populateEditMenu();
