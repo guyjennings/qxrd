@@ -491,6 +491,8 @@ void QxrdAcquisition::readSettings(QSettings *settings)
 
       QxrdApplicationSettings *set = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
 
+      det->initialize(application(), experiment(), myself());
+
       if (set && set->get_StartDetectors() == 0) {
         det->set_Enabled(false);
       }
