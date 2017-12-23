@@ -24,7 +24,7 @@ bool QxrdAreaDetectorDriver::startDetectorDriver()
   QxrdAcquisitionPtr      acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
-    printMessage(tr("Starting Pilatus detector \"%1\"").arg(det->get_DetectorName()));
+    printMessage(tr("Starting Area Detector \"%1\"").arg(det->get_DetectorName()));
 
     det -> set_NRows(2048);
     det -> set_NCols(2048);
@@ -42,7 +42,7 @@ bool QxrdAreaDetectorDriver::stopDetectorDriver()
   QxrdDetectorSettingsPtr det(m_Detector);
 
   if (det) {
-    printMessage(tr("Stopping Pilatus detector \"%1\"").arg(det->get_DetectorName()));
+    printMessage(tr("Stopping Area Detector \"%1\"").arg(det->get_DetectorName()));
   }
 
   m_Timer.stop();
@@ -116,7 +116,7 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
     int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
     int frame = g_FrameCounter % 8;
 
-    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(tr("simdet-%1").arg(frame),
+    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(tr("areadet-%1").arg(frame),
                                                                 nCols, nRows,
                                                                 QcepAllocator::AllocateFromReserve);
 
@@ -173,6 +173,8 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
         }
       }
     }
+
+    printMessage("enqueue acquired frame");
 
     det->enqueueAcquiredFrame(image);
 

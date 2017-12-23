@@ -24,7 +24,7 @@ bool QxrdSimulatedDriver::startDetectorDriver()
   QxrdAcquisitionPtr      acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
-    printMessage(tr("Starting Pilatus detector \"%1\"").arg(det->get_DetectorName()));
+    printMessage(tr("Starting Simulated Detector \"%1\"").arg(det->get_DetectorName()));
 
     det -> set_NRows(2048);
     det -> set_NCols(2048);
@@ -42,7 +42,7 @@ bool QxrdSimulatedDriver::stopDetectorDriver()
   QxrdDetectorSettingsPtr det(m_Detector);
 
   if (det) {
-    printMessage(tr("Stopping Pilatus detector \"%1\"").arg(det->get_DetectorName()));
+    printMessage(tr("Stopping Simulated Detector \"%1\"").arg(det->get_DetectorName()));
   }
 
   m_Timer.stop();
@@ -173,6 +173,8 @@ void QxrdSimulatedDriver::onTimerTimeout()
         }
       }
     }
+
+    printMessage("enqueue acquired frame");
 
     det->enqueueAcquiredFrame(image);
 

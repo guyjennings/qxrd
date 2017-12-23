@@ -185,6 +185,8 @@ void QxrdDexelaDriver::onTimerTimeout()
       }
     }
 
+    printMessage("enqueue acquired frame");
+
     det->enqueueAcquiredFrame(image);
 
     g_FrameCounter++;

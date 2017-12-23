@@ -1045,6 +1045,8 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
         image->set_ImageNumber(n1);
       }
 
+      printMessage("enqueue acquired frame");
+
       det -> enqueueAcquiredFrame(image);
     }
   }

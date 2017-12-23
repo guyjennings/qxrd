@@ -31,6 +31,8 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
   m_Detector(det),
   m_Processor(proc)
 {
+  GUI_THREAD_CHECK;
+
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
