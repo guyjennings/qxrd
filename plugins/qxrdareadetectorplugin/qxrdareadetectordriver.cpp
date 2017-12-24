@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdareadetectordriver.h"
 #include "qxrdacquisition.h"
 #include "qxrdexperiment.h"
@@ -11,9 +12,20 @@ QxrdAreaDetectorDriver::QxrdAreaDetectorDriver(QString name,
                                                QxrdExperimentWPtr expt,
                                                QxrdAcquisitionWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
-    m_AreaDetector()
+    m_AreaDetector(qSharedPointerDynamicCast<QxrdAreaDetectorSettings>(det))
 {
-  m_AreaDetector = qSharedPointerDynamicCast<QxrdAreaDetectorSettings>(det);
+#ifndef QT_NO_DEBUG
+  printf("Area Detector Driver \"%s\" Constructed\n", qPrintable(name));
+#endif
+
+  connect(&m_Timer, &QTimer::timeout, this, &QxrdAreaDetectorDriver::onTimerTimeout);
+}
+
+QxrdAreaDetectorDriver::~QxrdAreaDetectorDriver()
+{
+#ifndef QT_NO_DEBUG
+  printf("Area Detector Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
+#endif
 }
 
 bool QxrdAreaDetectorDriver::startDetectorDriver()
@@ -174,7 +186,9 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
       }
     }
 
-    printMessage("enqueue acquired frame");
+    if (qcepDebug(DEBUG_AREADETECTOR)) {
+      printMessage("enqueue area detector acquired frame");
+    }
 
     det->enqueueAcquiredFrame(image);
 

@@ -14,13 +14,15 @@ QxrdPilatusDriver::QxrdPilatusDriver(QString name,
                                      QxrdExperimentWPtr expt,
                                      QxrdAcquisitionWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
-    m_Pilatus(),
+    m_Pilatus(qSharedPointerDynamicCast<QxrdPilatusSettings>(det)),
     m_PilatusSocket(),
     m_ExposureTime(-1),
     m_ExposuresPerFrame(-1),
     m_ExposureFrameCount(-1)
 {
-  m_Pilatus = qSharedPointerDynamicCast<QxrdPilatusSettings>(det);
+#ifndef QT_NO_DEBUG
+  printf("Pilatus Detector Driver \"%s\" Constructed\n", qPrintable(name));
+#endif
 }
 
 QxrdPilatusDriver::~QxrdPilatusDriver()

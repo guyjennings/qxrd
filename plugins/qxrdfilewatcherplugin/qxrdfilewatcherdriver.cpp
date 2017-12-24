@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdfilewatcherdriver.h"
 #include "qxrdacquisition.h"
 #include "qxrdexperiment.h"
@@ -11,9 +12,20 @@ QxrdFileWatcherDriver::QxrdFileWatcherDriver(QString name,
                                                          QxrdExperimentWPtr expt,
                                                          QxrdAcquisitionWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
-    m_FileWatcher()
+    m_FileWatcher(qSharedPointerDynamicCast<QxrdFileWatcherSettings>(det))
 {
-  m_FileWatcher = qSharedPointerDynamicCast<QxrdFileWatcherSettings>(det);
+#ifndef QT_NO_DEBUG
+  printf("File Watcher Driver \"%s\" Constructed\n", qPrintable(name));
+#endif
+
+  connect(&m_Timer, &QTimer::timeout, this, &QxrdFileWatcherDriver::onTimerTimeout);
+}
+
+QxrdFileWatcherDriver::~QxrdFileWatcherDriver()
+{
+#ifndef QT_NO_DEBUG
+  printf("File Watcher Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
+#endif
 }
 
 bool QxrdFileWatcherDriver::startDetectorDriver()
@@ -174,7 +186,9 @@ void QxrdFileWatcherDriver::onTimerTimeout()
       }
     }
 
-    printMessage("enqueue acquired frame");
+    if (qcepDebug(DEBUG_FILEWATCHER)) {
+      printMessage("enqueue file watcher acquired frame");
+    }
 
     det->enqueueAcquiredFrame(image);
 
