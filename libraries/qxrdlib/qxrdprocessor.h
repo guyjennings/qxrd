@@ -10,6 +10,8 @@
 //TODO: separate processing steps into sub-objects
 class QXRD_EXPORT QxrdProcessor : public QcepDataProcessorBase
 {
+  Q_OBJECT
+
 public:
   QxrdProcessor(QString name);
 

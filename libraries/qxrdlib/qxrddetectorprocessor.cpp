@@ -11,6 +11,7 @@
 #include <QDir>
 #include "qxrdfilesaver.h"
 #include "qcepallocator.h"
+#include "qcepimagedata.h"
 
 QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     QxrdFileSaverWPtr     fsav,
@@ -327,6 +328,13 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
         if (qcepDebug(DEBUG_ACQUIRETIME)) {
           printMessage(tr("Gain correction took %1 msec").arg(gainTime));
         }
+      }
+
+      QcepDoubleImageDataPtr dimg =
+          qSharedPointerCast<QcepDoubleImageData>(img);
+
+      if (dimg) {
+        emit processedImageAvailable(dimg);
       }
 
       if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
