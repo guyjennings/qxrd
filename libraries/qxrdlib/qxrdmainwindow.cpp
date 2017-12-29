@@ -10,7 +10,6 @@
 #include <QMenuBar>
 #include <QDir>
 #include <QFileDialog>
-#include <QSignalMapper>
 #include "qxrdapplicationsettings.h"
 
 QxrdMainWindow::QxrdMainWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt)
@@ -233,12 +232,8 @@ void QxrdMainWindow::populateRecentExperimentsMenu()
 
       foreach (QString exp, recent) {
         QAction *action = new QAction(exp, m_RecentExperimentsMenu);
-        QSignalMapper *mapper = new QSignalMapper(action);
-        connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
-        mapper->setMapping(action, exp);
 
-        connect(mapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped, app.data(),
-                &QxrdApplication::openRecentExperiment);
+        connect(action, &QAction::triggered, [=] {app->openRecentExperiment(exp);});
 
         m_RecentExperimentsMenu -> addAction(action);
       }

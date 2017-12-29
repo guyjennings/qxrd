@@ -53,7 +53,6 @@
 #include <QPen>
 #include <QFile>
 #include <QCheckBox>
-#include <QSignalMapper>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QCloseEvent>
@@ -832,13 +831,7 @@ void QxrdWindow::populateConfigureDetectorMenu()
       action->setCheckable(true);
       action->setChecked(enabled);
 
-      QSignalMapper *mapper = new QSignalMapper(action);
-
-      connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
-      mapper->setMapping(action,i);
-
-      connect(mapper, (void (QSignalMapper::*)(int)) &QSignalMapper::mapped,
-              acq.data(), &QxrdAcquisition::configureDetector, Qt::DirectConnection);
+      connect(action, &QAction::triggered, [=] {acq->configureDetector(i);});
 
       m_ConfigureDetectorMenu->addAction(action);
     }
@@ -867,13 +860,7 @@ void QxrdWindow::populateDetectorControlWindowsMenu()
       action->setCheckable(true);
       action->setChecked(enabled);
 
-      QSignalMapper *mapper = new QSignalMapper(action);
-
-      connect(action, &QAction::triggered, mapper, (void (QSignalMapper::*)()) &QSignalMapper::map);
-      mapper->setMapping(action,i);
-
-      connect(mapper, (void (QSignalMapper::*)(int)) &QSignalMapper::mapped,
-              acq.data(), &QxrdAcquisition::openDetectorControlWindow, Qt::DirectConnection);
+      connect(action, &QAction::triggered, [=] {acq->openDetectorControlWindow(i);});
 
       m_DetectorControlWindowsMenu->addAction(action);
     }

@@ -11,7 +11,6 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplicationWPtr appw) :
   QMainWindow(NULL),
   m_Application(appw),
   m_InsertRow(5),
-  m_SignalMapper(NULL),
   m_RecentExperimentsMenu(NULL)
 {
   QxrdApplicationPtr app(m_Application);
@@ -35,9 +34,6 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplicationWPtr appw) :
 
     connect(m_NewExperiment, &QAbstractButton::clicked, m_ActionNewExperiment, &QAction::trigger);
     connect(m_OpenExistingExperiment, &QAbstractButton::clicked, m_ActionOpenExperiment, &QAction::trigger);
-
-    connect(&m_SignalMapper, (void (QSignalMapper::*)(const QString&)) &QSignalMapper::mapped,
-            app.data(), &QxrdApplication::openRecentExperiment);
 
     QxrdApplicationSettingsPtr settings(app->settings());
 
@@ -93,11 +89,9 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
       QStringList recent = settings->get_RecentExperiments();
 
       foreach (QString exp, recent) {
-        //    printf("Recent experiment: %s\n", qPrintable(exp));
-
         QAction *action = new QAction(exp, m_RecentExperimentsMenu);
-        connect(action, &QAction::triggered, &m_SignalMapper, (void (QSignalMapper::*) ()) &QSignalMapper::map);
-        m_SignalMapper.setMapping(action, exp);
+
+        connect(action, &QAction::triggered, [=] {app->openRecentExperiment(exp);});
 
         m_RecentExperimentsMenu -> addAction(action);
       }
@@ -107,15 +101,17 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
 
 void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 {
-  QxrdWelcomeRecentItem *item = new QxrdWelcomeRecentItem(NULL);
+  QxrdApplicationPtr app(m_Application);
 
-  item->setText(title);
+  if (app) {
+    QxrdWelcomeRecentItem *item = new QxrdWelcomeRecentItem(NULL);
 
-  m_GridLayout->addWidget(item, m_InsertRow++, 0, 1, 2);
+    item->setText(title);
 
-  connect(item, &QAbstractButton::clicked, &m_SignalMapper, (void (QSignalMapper::*) ()) &QSignalMapper::map);
+    m_GridLayout->addWidget(item, m_InsertRow++, 0, 1, 2);
 
-  m_SignalMapper.setMapping(item, title);
+    connect(item, &QAbstractButton::clicked, [=] {app->openRecentExperiment(title);});
+  }
 }
 
 void QxrdWelcomeWindow::closeEvent ( QCloseEvent * event )

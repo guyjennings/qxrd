@@ -3,7 +3,6 @@
 
 #include "qxrdlib_global.h"
 #include <QMainWindow>
-#include <QSignalMapper>
 #include <QSettings>
 #include <QLabel>
 #include <QTimer>
@@ -45,7 +44,6 @@ private:
 private:
   QxrdApplicationWPtr    m_Application;
   int                    m_InsertRow;
-  QSignalMapper          m_SignalMapper;
   QLabel                *m_StatusMsg;
   QTimer                 m_StatusTimer;
 
