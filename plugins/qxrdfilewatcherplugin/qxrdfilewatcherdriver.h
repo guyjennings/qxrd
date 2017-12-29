@@ -14,6 +14,7 @@ public:
                         QxrdDetectorSettingsWPtr det,
                         QxrdExperimentWPtr expt,
                         QxrdAcquisitionWPtr acq);
+  virtual ~QxrdFileWatcherDriver();
 
 public slots:
   virtual bool startDetectorDriver();

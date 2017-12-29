@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrddexeladriver.h"
 #include "qxrddexelasettings.h"
 #include "qxrdacquisition.h"
@@ -13,11 +14,14 @@ QxrdDexelaDriver::QxrdDexelaDriver(QString name,
                                                    QxrdDexelaSettingsWPtr det,
                                                    QxrdExperimentWPtr expt,
                                                    QxrdAcquisitionWPtr acq)
-  : QxrdDetectorDriver(name, det, expt, acq)
+  : QxrdDetectorDriver(name, det, expt, acq),
+    m_Dexela(qSharedPointerDynamicCast<QxrdDexelaSettings>(det))
 {
 #ifndef QT_NO_DEBUG
   printf("Dexela Driver \"%s\" Constructed\n", qPrintable(name));
 #endif
+
+  connect(&m_Timer, &QTimer::timeout, this, &QxrdDexelaDriver::onTimerTimeout);
 }
 
 QxrdDexelaDriver::~QxrdDexelaDriver()
@@ -185,7 +189,9 @@ void QxrdDexelaDriver::onTimerTimeout()
       }
     }
 
-    printMessage("enqueue acquired frame");
+    if (qcepDebug(DEBUG_DEXELA)) {
+      printMessage("enqueue dexela acquired frame");
+    }
 
     det->enqueueAcquiredFrame(image);
 

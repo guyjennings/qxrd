@@ -25,5 +25,9 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_HISTOGRAM,    "Debug Histogramming");
   setMessage(DEBUG_CALIBRANT,    "Powder Calibrant Calculations");
   setMessage(DEBUG_PILATUS,      "Pilatus Detector Acquisition");
+  setMessage(DEBUG_DEXELA,       "Dexela Detector Acquisition");
+  setMessage(DEBUG_AREADETECTOR, "Area Detector Acquisition");
+  setMessage(DEBUG_SIMULATED,    "Simulated Detector Acquisition");
+  setMessage(DEBUG_FILEWATCHER,  "File Watcher Acquisition");
   setMessage(DEBUG_ROI,          "Debug ROI Operations");
 }

@@ -1,3 +1,4 @@
+#include "qxrddebug.h"
 #include "qxrdsimulateddriver.h"
 #include "qxrdacquisition.h"
 #include "qxrdexperiment.h"
@@ -11,9 +12,20 @@ QxrdSimulatedDriver::QxrdSimulatedDriver(QString name,
                                          QxrdExperimentWPtr expt,
                                          QxrdAcquisitionWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
-    m_Simulated()
+    m_Simulated(qSharedPointerDynamicCast<QxrdSimulatedSettings>(det))
 {
-  m_Simulated = qSharedPointerDynamicCast<QxrdSimulatedSettings>(det);
+#ifndef QT_NO_DEBUG
+  printf("Simulated Driver \"%s\" Constructed\n", qPrintable(name));
+#endif
+
+  connect(&m_Timer, &QTimer::timeout, this, &QxrdSimulatedDriver::onTimerTimeout);
+}
+
+QxrdSimulatedDriver::~QxrdSimulatedDriver()
+{
+#ifndef QT_NO_DEBUG
+  printf("Simulated Driver \"%s\" Destroyed\n", qPrintable(get_Name()));
+#endif
 }
 
 bool QxrdSimulatedDriver::startDetectorDriver()
@@ -174,7 +186,9 @@ void QxrdSimulatedDriver::onTimerTimeout()
       }
     }
 
-    printMessage("enqueue acquired frame");
+    if (qcepDebug(DEBUG_SIMULATED)) {
+      printMessage("enqueue simulated detector acquired frame");
+    }
 
     det->enqueueAcquiredFrame(image);
 

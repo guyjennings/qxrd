@@ -14,6 +14,7 @@ public:
                       QxrdDetectorSettingsWPtr det,
                       QxrdExperimentWPtr expt,
                       QxrdAcquisitionWPtr acq);
+  virtual ~QxrdSimulatedDriver();
 
 public slots:
   virtual bool startDetectorDriver();
