@@ -27,6 +27,8 @@ QcepPlot::QcepPlot(QWidget *parent)
   for (int i=0; i<QwtPlot::axisCnt; i++) {
     m_IsLog[i] = 0;
   }
+
+  setCanvasBackground(QColor(Qt::green));
 }
 
 QcepPlot::~QcepPlot()
