@@ -16,6 +16,10 @@
 #include "qxrdacquisitionextrainputsdialogsettings-ptr.h"
 #include "qxrddistortioncorrectionplotsettings-ptr.h"
 #include "qxrdwindowsettings-ptr.h"
+#include "qxrdimageplotwidgetsettings-ptr.h"
+#include "qxrdcenteringplotwidgetsettings-ptr.h"
+#include "qxrdintegratedplotwidgetsettings-ptr.h"
+#include "qxrddistortionplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QxrdWindowSettings : public QcepObject
 {
@@ -51,6 +55,12 @@ public:
   QxrdSynchronizedAcquisitionDialogSettingsWPtr synchronizedAcquisitionDialogSettings();
   QxrdAcquisitionExtraInputsDialogSettingsWPtr acquisitionExtraInputsDialogSettings();
   QxrdDistortionCorrectionPlotSettingsWPtr     distortionCorrectionPlotSettings();
+
+  QxrdImagePlotWidgetSettingsPtr               imagePlotWidgetSettings();
+  QxrdCenteringPlotWidgetSettingsPtr           centeringPlotWidgetSettings();
+  QxrdIntegratedPlotWidgetSettingsPtr          integratedPlotWidgetSettings();
+  QxrdDistortionPlotWidgetSettingsPtr          distortionPlotWidgetSettings();
+
 signals:
   
 public slots:
@@ -69,6 +79,10 @@ private:
   QxrdSynchronizedAcquisitionDialogSettingsPtr m_SynchronizedAcquisitionDialogSettings;
   QxrdAcquisitionExtraInputsDialogSettingsPtr  m_AcquisitionExtraInputsDialogSettings;
   QxrdDistortionCorrectionPlotSettingsPtr      m_DistortionCorrectionPlotSettings;
+  QxrdImagePlotWidgetSettingsPtr               m_ImagePlotWidgetSettings;
+  QxrdCenteringPlotWidgetSettingsPtr           m_CenteringPlotWidgetSettings;
+  QxrdIntegratedPlotWidgetSettingsPtr          m_IntegratedPlotWidgetSettings;
+  QxrdDistortionPlotWidgetSettingsPtr          m_DistortionPlotWidgetSettings;
 };
 
 Q_DECLARE_METATYPE(QxrdWindowSettings*)

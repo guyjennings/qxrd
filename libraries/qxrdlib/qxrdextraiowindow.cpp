@@ -10,6 +10,7 @@
 #include "qxrdacquisitionextrainputs.h"
 #include <QCheckBox>
 #include <QMessageBox>
+#include "qxrdextraiowindowsettings.h"
 
 QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
                                      QString name,
@@ -166,6 +167,13 @@ QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
         }
       }
     }
+  }
+
+  QxrdExtraIOWindowSettingsPtr settings(m_ExtraIOWindowSettings);
+
+  if (settings) {
+    m_AcquisitionWaveforms -> initialize(settings->extraInputsPlotWidgetSettings());
+    m_WaveformPlot         -> initialize(settings->extraOutputsPlotWidgetSettings());
   }
 }
 

@@ -31,7 +31,8 @@ QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
     QxrdMaskingWindowSettingsPtr settings(m_MaskingWindowSettings);
 
     if (settings) {
-      m_FileBrowserWidget -> init(settings->fileBrowserSettings(), exp, proc);
+      m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
+      m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings());
     }
   }
 }

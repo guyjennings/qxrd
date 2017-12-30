@@ -87,7 +87,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_9">
          <item row="0" column="0">
-          <widget class="QxrdCenteringPlotWidget" name="widget_2" native="true"/>
+          <widget class="QxrdCenteringPlotWidget" name="m_CenteringPlotWidget" native="true"/>
          </item>
         </layout>
        </widget>
@@ -97,7 +97,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_10">
          <item row="0" column="0">
-          <widget class="QxrdIntegratedPlotWidget" name="widget_3" native="true"/>
+          <widget class="QxrdIntegratedPlotWidget" name="m_IntegratedPlotWidget" native="true"/>
          </item>
         </layout>
        </widget>

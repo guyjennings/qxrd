@@ -7,15 +7,16 @@
 #include "qxrdacquisition.h"
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdhistogramplotsettings.h"
+#include "qxrdhistogramplotwidgetsettings.h"
 #include <QtConcurrentRun>
 #include "qxrdimageplot.h"
 
-QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings,
+QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr set,
                                          QxrdExperimentWPtr expt,
                                          QWidget *parent) :
   QDialog(parent),
   m_Experiment(expt),
-  m_HistogramDialogSettings(settings),
+  m_HistogramDialogSettings(set),
   m_Plot(NULL)
 {
   qRegisterMetaType<QwtPlotPiecewiseCurvePtr>("QwtPlotPiecewiseCurvePtr");
@@ -30,7 +31,7 @@ QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr setting
     m_Plot = m_PlotWidget->m_Plot;
   }
 
-  QxrdHistogramDialogSettingsPtr set(m_HistogramDialogSettings);
+//  QxrdHistogramDialogSettingsPtr set(m_HistogramDialogSettings);
 
 //  if (set) {
 //    m_Plot->init(set->histogramPlotSettings());
@@ -39,6 +40,12 @@ QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr setting
   connect(this, &QxrdHistogramDialog::newHistogramCurves,
           this, &QxrdHistogramDialog::onNewHistogramCurves,
           Qt::QueuedConnection);
+
+  QxrdHistogramDialogSettingsPtr settings(m_HistogramDialogSettings);
+
+  if (settings) {
+    m_PlotWidget -> initialize(settings->histogramPlotWidgetSettings());
+  }
 }
 
 QxrdHistogramDialog::~QxrdHistogramDialog()

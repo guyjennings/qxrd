@@ -56,6 +56,8 @@ void QxrdDetectorSettings::initialize(QxrdApplicationWPtr   app,
 {
   THREAD_CHECK;
 
+  printf("QxrdDetectorSettings::initialize(%p)\n", this);
+
   m_Application = app;
   m_Experiment  = expt;
   m_Acquisition = acq;

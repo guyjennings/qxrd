@@ -113,6 +113,9 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
       m_ROIWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     }
 
+    connect(dp.data(),       &QxrdDetectorProcessor::processedImageAvailable,
+            m_DetectorImage, &QxrdDetectorPlotWidget::onProcessedImageAvailable);
+
     //TODO: Initialise
 
 //    m_DetectorImage->init(dp->imagePlotSettings(), expt);
@@ -222,6 +225,12 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
 
   connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences);
   connect(m_AcquireOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditPreferences);
+
+  QxrdDetectorControlWindowSettingsPtr set(detectorControlWindowSettings());
+
+  if (set) {
+    m_DetectorImage -> initialize(set->detectorPlotWidgetSettings());
+  }
 }
 
 QxrdDetectorControlWindow::~QxrdDetectorControlWindow()

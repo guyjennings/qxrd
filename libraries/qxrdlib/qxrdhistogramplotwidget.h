@@ -2,6 +2,7 @@
 #define QXRDHISTOGRAMPLOTWIDGET_H
 
 #include "qxrdplotwidget.h"
+#include "qxrdhistogramplotwidgetsettings-ptr.h"
 
 class QxrdHistogramPlotWidget : public QxrdPlotWidget
 {
@@ -9,6 +10,8 @@ class QxrdHistogramPlotWidget : public QxrdPlotWidget
 
 public:
   explicit QxrdHistogramPlotWidget(QWidget *parent);
+
+  void initialize(QxrdHistogramPlotWidgetSettingsWPtr settings);
 };
 
 #endif // QXRDHISTOGRAMPLOTWIDGET_H

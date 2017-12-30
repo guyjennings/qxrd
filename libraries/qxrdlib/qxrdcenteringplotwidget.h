@@ -2,6 +2,7 @@
 #define QXRDCENTERINGPLOTWIDGET_H
 
 #include "qxrdplotwidget.h"
+#include "qxrdcenteringplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QxrdCenteringPlotWidget : public QxrdPlotWidget
 {
@@ -10,6 +11,8 @@ class QXRD_EXPORT QxrdCenteringPlotWidget : public QxrdPlotWidget
 public:
   explicit QxrdCenteringPlotWidget(QWidget *parent = 0);
   ~QxrdCenteringPlotWidget();
+
+  void initialize(QxrdCenteringPlotWidgetSettingsWPtr settings);
 };
 
 #endif // QXRDCENTERINGPLOTWIDGET_H

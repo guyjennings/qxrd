@@ -6,6 +6,7 @@
 #include "qxrdcontextseparatorcommand.h"
 #include "qxrdenableringcommand.h"
 #include "qxrdimageplot.h"
+#include "qxrdcenteringplotwidgetsettings.h"
 
 QxrdCenteringPlotWidget::QxrdCenteringPlotWidget(QWidget *parent) :
   QxrdPlotWidget(parent)
@@ -22,4 +23,9 @@ QxrdCenteringPlotWidget::QxrdCenteringPlotWidget(QWidget *parent) :
 
 QxrdCenteringPlotWidget::~QxrdCenteringPlotWidget()
 {
+}
+
+void QxrdCenteringPlotWidget::initialize(QxrdCenteringPlotWidgetSettingsWPtr settings)
+{
+  QxrdPlotWidget::initialize(settings);
 }

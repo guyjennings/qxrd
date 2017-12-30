@@ -3,6 +3,7 @@
 
 #include "qxrdplotwidget.h"
 #include "qxrdimageplotsettings-ptr.h"
+#include "qxrdimageplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QxrdImagePlotWidget : public QxrdPlotWidget
 {
@@ -11,6 +12,8 @@ class QXRD_EXPORT QxrdImagePlotWidget : public QxrdPlotWidget
 public:
   explicit QxrdImagePlotWidget(QWidget *parent = 0);
   ~QxrdImagePlotWidget();
+
+  void initialize(QxrdImagePlotWidgetSettingsWPtr settings);
 
   QxrdImagePlotSettingsWPtr imagePlotSettings();
 };

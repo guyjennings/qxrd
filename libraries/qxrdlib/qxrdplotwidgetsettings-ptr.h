@@ -1,0 +1,8 @@
+#ifndef QXRDPLOTWIDGETSETTINGSPTR_H
+#define QXRDPLOTWIDGETSETTINGSPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdPlotWidgetSettings)
+
+#endif // QXRDPLOTWIDGETSETTINGSPTR_H

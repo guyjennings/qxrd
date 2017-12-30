@@ -6,6 +6,7 @@
 #include "qcepproperty.h"
 #include "qxrddetectorcontrolwindowsettings-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
+#include "qxrddetectorplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QxrdDetectorControlWindowSettings : public QcepObject
 {
@@ -17,10 +18,16 @@ public:
 
   virtual void addChildPtr(QcepObjectPtr child);
 
+  void writeSettings(QSettings *set);
+  void readSettings(QSettings *set);
+
   static void registerMetaTypes();
 
+  QxrdDetectorPlotWidgetSettingsPtr detectorPlotWidgetSettings();
+
 private:
-  QxrdDetectorSettingsWPtr m_DetectorSettings;
+  QxrdDetectorSettingsWPtr          m_DetectorSettings;
+  QxrdDetectorPlotWidgetSettingsPtr m_DetectorPlotWidgetSettings;
 
 public:
   Q_PROPERTY(int detectorWindowOpen READ get_DetectorWindowOpen WRITE set_DetectorWindowOpen)

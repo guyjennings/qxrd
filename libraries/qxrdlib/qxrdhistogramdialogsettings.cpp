@@ -1,9 +1,11 @@
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdhistogramplotsettings.h"
+#include "qxrdhistogramplotwidgetsettings.h"
 
 QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QString name) :
   QcepObject(name),
-  m_HistogramRect(this, "histogramRect", QRectF(), "Histogram Selection Rectangle")
+  m_HistogramRect(this, "histogramRect", QRectF(), "Histogram Selection Rectangle"),
+  m_HistogramPlotWidgetSettings(new QxrdHistogramPlotWidgetSettings(name))
 {
 }
 
@@ -32,6 +34,12 @@ void QxrdHistogramDialogSettings::readSettings(QSettings *settings)
     m_HistogramPlotSettings->readSettings(settings);
     settings->endGroup();
   }
+
+  if (m_HistogramPlotWidgetSettings) {
+    settings->beginGroup("plotWidget");
+    m_HistogramPlotWidgetSettings->readSettings(settings);
+    settings->endGroup();
+  }
 }
 
 void QxrdHistogramDialogSettings::writeSettings(QSettings *settings)
@@ -43,9 +51,20 @@ void QxrdHistogramDialogSettings::writeSettings(QSettings *settings)
     m_HistogramPlotSettings->writeSettings(settings);
     settings->endGroup();
   }
+
+  if (m_HistogramPlotWidgetSettings) {
+    settings->beginGroup("plotWidget");
+    m_HistogramPlotWidgetSettings->writeSettings(settings);
+    settings->endGroup();
+  }
 }
 
 QxrdHistogramPlotSettingsWPtr QxrdHistogramDialogSettings::histogramPlotSettings()
 {
   return m_HistogramPlotSettings;
+}
+
+QxrdHistogramPlotWidgetSettingsPtr QxrdHistogramDialogSettings::histogramPlotWidgetSettings()
+{
+  return m_HistogramPlotWidgetSettings;
 }

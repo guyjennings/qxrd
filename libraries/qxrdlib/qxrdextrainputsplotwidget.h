@@ -2,6 +2,7 @@
 #define QXRDEXTRAINPUTSPLOTWIDGET_H
 
 #include "qxrdplotwidget.h"
+#include "qxrdextrainputsplotwidgetsettings-ptr.h"
 
 class QxrdExtraInputsPlotWidget : public QxrdPlotWidget
 {
@@ -9,6 +10,8 @@ class QxrdExtraInputsPlotWidget : public QxrdPlotWidget
 
 public:
   explicit QxrdExtraInputsPlotWidget(QWidget *parent);
+
+  void initialize(QxrdExtraInputsPlotWidgetSettingsWPtr settings);
 };
 
 #endif // QXRDEXTRAINPUTSPLOTWIDGET_H

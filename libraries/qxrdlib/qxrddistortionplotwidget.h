@@ -2,6 +2,7 @@
 #define QXRDDISTORTIONPLOTWIDGET_H
 
 #include "qxrdplotwidget.h"
+#include "qxrddistortionplotwidgetsettings-ptr.h"
 
 class QxrdDistortionPlotWidget : public QxrdPlotWidget
 {
@@ -9,6 +10,8 @@ class QxrdDistortionPlotWidget : public QxrdPlotWidget
 
 public:
   explicit QxrdDistortionPlotWidget(QWidget *parent = 0);
+
+  void initialize(QxrdDistortionPlotWidgetSettingsWPtr settings);
 };
 
 #endif // QXRDDISTORTIONPLOTWIDGET_H

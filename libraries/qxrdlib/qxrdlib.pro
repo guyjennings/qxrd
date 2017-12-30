@@ -341,7 +341,17 @@ SOURCES += qxrdlib.cpp \
     qxrdfilewatcherdialog.cpp \
     qxrddexeladialog.cpp \
     qxrdareadetectorsettings.cpp \
-    qxrdperkinelmersettings.cpp
+    qxrdperkinelmersettings.cpp \
+    qxrdimageplotwidgetsettings.cpp \
+    qxrdplotwidgetsettings.cpp \
+    qxrdintegratedplotwidgetsettings.cpp \
+    qxrdcenteringplotwidgetsettings.cpp \
+    qxrddetectorplotwidgetsettings.cpp \
+    qxrdextrainputsplotwidgetsettings.cpp \
+    qxrdextraoutputsplotwidgetsettings.cpp \
+    qxrdhistogramplotwidgetsettings.cpp \
+    qxrddistortionplotwidgetsettings.cpp \
+    qxrdsliceplotwidgetsettings.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -470,7 +480,27 @@ HEADERS += qxrdlib.h\
     qxrdareadetectorsettings-ptr.h \
     qxrdperkinelmersettings.h \
     qxrdperkinelmersettings-ptr.h \
-    qxrdsimulateddialog-ptr.h
+    qxrdsimulateddialog-ptr.h \
+    qxrdimageplotwidgetsettings.h \
+    qxrdimageplotwidgetsettings-ptr.h \
+    qxrdplotwidgetsettings.h \
+    qxrdplotwidgetsettings-ptr.h \
+    qxrdcenteringplotwidgetsettings-ptr.h \
+    qxrdintegratedplotwidgetsettings.h \
+    qxrdintegratedplotwidgetsettings-ptr.h \
+    qxrdcenteringplotwidgetsettings.h \
+    qxrddetectorplotwidgetsettings.h \
+    qxrddetectorplotwidgetsettings-ptr.h \
+    qxrdextrainputsplotwidgetsettings.h \
+    qxrdextrainputsplotwidgetsettings-ptr.h \
+    qxrdextraoutputsplotwidgetsettings.h \
+    qxrdextraoutputsplotwidgetsettings-ptr.h \
+    qxrdhistogramplotwidgetsettings.h \
+    qxrdhistogramplotwidgetsettings-ptr.h \
+    qxrddistortionplotwidgetsettings.h \
+    qxrddistortionplotwidgetsettings-ptr.h \
+    qxrdsliceplotwidgetsettings.h \
+    qxrdsliceplotwidgetsettings-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

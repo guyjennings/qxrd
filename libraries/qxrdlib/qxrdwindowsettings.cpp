@@ -15,11 +15,19 @@
 #include "qxrdsynchronizedacquisitionplotsettings.h"
 #include "qxrdacquisitionextrainputsplotsettings.h"
 #include "qxrdhistogramplotsettings.h"
+#include "qxrdimageplotwidgetsettings.h"
+#include "qxrdcenteringplotwidgetsettings.h"
+#include "qxrdintegratedplotwidgetsettings.h"
+#include "qxrddistortionplotwidgetsettings.h"
 
 QxrdWindowSettings::QxrdWindowSettings(QString name) :
   QcepObject(name),
   m_WindowGeometry(this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
-  m_WindowState(this, "windowState", QByteArray(), "Window State Settings")
+  m_WindowState(this, "windowState", QByteArray(), "Window State Settings"),
+  m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name)),
+  m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name)),
+  m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name)),
+  m_DistortionPlotWidgetSettings(new QxrdDistortionPlotWidgetSettings(name))
 {
 }
 
@@ -160,6 +168,22 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
       m_DistortionCorrectionPlotSettings->readSettings(settings);
       settings->endGroup();
     }
+
+    settings->beginGroup("imagePlotWidget");
+    m_ImagePlotWidgetSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("centeringPlotWidget");
+    m_CenteringPlotWidgetSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("integratedPlotWidget");
+    m_IntegratedPlotWidgetSettings->readSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("distortionPlotWidget");
+    m_DistortionPlotWidgetSettings->readSettings(settings);
+    settings->endGroup();
   }
 }
 
@@ -249,6 +273,22 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
       m_DistortionCorrectionPlotSettings->writeSettings(settings);
       settings->endGroup();
     }
+
+    settings->beginGroup("imagePlotWidget");
+    m_ImagePlotWidgetSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("centeringPlotWidget");
+    m_CenteringPlotWidgetSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("integratedPlotWidget");
+    m_IntegratedPlotWidgetSettings->writeSettings(settings);
+    settings->endGroup();
+
+    settings->beginGroup("distortionPlotWidget");
+    m_DistortionPlotWidgetSettings->writeSettings(settings);
+    settings->endGroup();
   }
 }
 
@@ -310,4 +350,24 @@ QxrdAcquisitionExtraInputsDialogSettingsWPtr QxrdWindowSettings::acquisitionExtr
 QxrdDistortionCorrectionPlotSettingsWPtr QxrdWindowSettings::distortionCorrectionPlotSettings()
 {
   return m_DistortionCorrectionPlotSettings;
+}
+
+QxrdImagePlotWidgetSettingsPtr QxrdWindowSettings::imagePlotWidgetSettings()
+{
+  return m_ImagePlotWidgetSettings;
+}
+
+QxrdCenteringPlotWidgetSettingsPtr QxrdWindowSettings::centeringPlotWidgetSettings()
+{
+  return m_CenteringPlotWidgetSettings;
+}
+
+QxrdDistortionPlotWidgetSettingsPtr QxrdWindowSettings::distortionPlotWidgetSettings()
+{
+  return m_DistortionPlotWidgetSettings;
+}
+
+QxrdIntegratedPlotWidgetSettingsPtr QxrdWindowSettings::integratedPlotWidgetSettings()
+{
+  return m_IntegratedPlotWidgetSettings;
 }

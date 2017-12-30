@@ -31,7 +31,10 @@ QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
     QxrdCenteringWindowSettingsPtr settings(m_CenteringWindowSettings);
 
     if (settings) {
-      m_FileBrowserWidget -> init(settings->fileBrowserSettings(), exp, proc);
+      m_FileBrowserWidget    -> initialize(settings->fileBrowserSettings(), exp, proc);
+      m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings());
+      m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings());
+      m_IntegratedPlotWidget -> initialize(settings->integratedPlotWidgetSettings());
     }
   }
 }

@@ -17,7 +17,7 @@ class QXRD_EXPORT QxrdHistogramDialog : public QDialog, public Ui::QxrdHistogram
   Q_OBJECT
 
 public:
-  explicit QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr settings,
+  explicit QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr set,
                                QxrdExperimentWPtr expt,
                                QWidget *parent);
   virtual ~QxrdHistogramDialog();
@@ -37,13 +37,16 @@ public slots:
 private slots:
   void recalculateHistogram();
 
+public:
+
 private:
-  QxrdExperimentWPtr              m_Experiment;
-  QxrdHistogramDialogSettingsWPtr m_HistogramDialogSettings;
-  QcepDoubleImageDataPtr          m_Image;
-  QwtPlotPiecewiseCurvePtr        m_TotalCurve;
-  QwtPlotPiecewiseCurvePtr        m_SelectCurve;
-  QxrdImagePlot                  *m_Plot;
+  QxrdExperimentWPtr                 m_Experiment;
+  QxrdHistogramDialogSettingsWPtr    m_HistogramDialogSettings;
+
+  QcepDoubleImageDataPtr             m_Image;
+  QwtPlotPiecewiseCurvePtr           m_TotalCurve;
+  QwtPlotPiecewiseCurvePtr           m_SelectCurve;
+  QxrdImagePlot                     *m_Plot;
 };
 
 #endif // QXRDHISTOGRAMDIALOG_H

@@ -2,6 +2,7 @@
 #define QXRDDETECTORPLOTWIDGET_H
 
 #include "qxrdplotwidget.h"
+#include "qxrddetectorplotwidgetsettings-ptr.h"
 
 class QxrdDetectorPlotWidget : public QxrdPlotWidget
 {
@@ -9,6 +10,8 @@ class QxrdDetectorPlotWidget : public QxrdPlotWidget
 
 public:
   explicit QxrdDetectorPlotWidget(QWidget *parent);
+
+  void initialize(QxrdDetectorPlotWidgetSettingsWPtr settings);
 };
 
 #endif // QXRDDETECTORPLOTWIDGET_H

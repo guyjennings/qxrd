@@ -27,6 +27,10 @@ QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
   connect(m_Plot, &QWidget::customContextMenuRequested,
           this,   &QxrdPlotWidget::contextMenu);
 
+  connect(&m_Timer, &QTimer::timeout, this, &QxrdPlotWidget::updateDisplayedImage);
+
+  m_Timer.start(1000);
+
   addPlotCommand(QxrdPlotCommandPtr(new QxrdPlotPreferencesCommand("Plot Preferences...", this)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdAutoScaleCommand("Auto Scale", this)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotCommand("Print Graph...", this)));
@@ -34,6 +38,11 @@ QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
 
 QxrdPlotWidget::~QxrdPlotWidget()
 {
+}
+
+void QxrdPlotWidget::initialize(QxrdPlotWidgetSettingsWPtr settings)
+{
+  m_Plot -> setCanvasBackground(QBrush(Qt::cyan));
 }
 
 void QxrdPlotWidget::addPlotCommand(QxrdPlotCommandPtr cmd)
@@ -88,5 +97,20 @@ void QxrdPlotWidget::disableCommands()
     if (cmd) {
       cmd->disable();
     }
+  }
+}
+
+void QxrdPlotWidget::onProcessedImageAvailable(QcepDoubleImageDataPtr img)
+{
+  m_NewImageData = img;
+}
+
+void QxrdPlotWidget::updateDisplayedImage()
+{
+  if (m_NewImageData) {
+    m_ImageData = m_NewImageData;
+    m_NewImageData = QcepDoubleImageDataPtr();
+
+    m_Plot->onProcessedImageAvailable(m_ImageData, QcepMaskDataPtr());
   }
 }

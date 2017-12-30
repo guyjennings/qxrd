@@ -2,6 +2,7 @@
 #define QXRDINTEGRATEDPLOTWIDGET_H
 
 #include "qxrdplotwidget.h"
+#include "qxrdintegratedplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QxrdIntegratedPlotWidget : public QxrdPlotWidget
 {
@@ -10,6 +11,8 @@ class QXRD_EXPORT QxrdIntegratedPlotWidget : public QxrdPlotWidget
 public:
   explicit QxrdIntegratedPlotWidget(QWidget *parent = 0);
   ~QxrdIntegratedPlotWidget();
+
+  void initialize(QxrdIntegratedPlotWidgetSettingsWPtr settings);
 };
 
 #endif // QXRDINTEGRATEDPLOTWIDGET_H

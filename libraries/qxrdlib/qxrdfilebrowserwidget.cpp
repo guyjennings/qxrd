@@ -31,7 +31,7 @@ void QxrdFileBrowserWidget::changeEvent(QEvent *e)
   }
 }
 
-void QxrdFileBrowserWidget::init(QxrdFileBrowserSettingsWPtr settings,
+void QxrdFileBrowserWidget::initialize(QxrdFileBrowserSettingsWPtr settings,
                                  QxrdExperimentWPtr          experiment,
                                  QxrdDataProcessorWPtr       processor)
 {

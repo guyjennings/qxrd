@@ -35,7 +35,7 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
     QxrdAcquisitionWindowSettingsPtr settings(m_AcquisitionWindowSettings);
 
     if (settings) {
-      m_FileBrowserWidget -> init(settings->fileBrowserSettings(), exp, proc);
+      m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
     }
 
     m_DetectorsModel =

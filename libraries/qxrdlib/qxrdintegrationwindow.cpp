@@ -81,7 +81,9 @@ QxrdIntegrationWindow::QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr s
     QxrdIntegrationWindowSettingsPtr settings(m_IntegrationWindowSettings);
 
     if (settings) {
-      m_FileBrowserWidget -> init(settings->fileBrowserSettings(), exp, proc);
+      m_FileBrowserWidget     -> initialize(settings->fileBrowserSettings(), exp, proc);
+      m_ImagePlotWidget       -> initialize(settings->imagePlotWidgetSettings());
+      m_IntegratedPlotWigdget -> initialize(settings->integratedPlotWidgetSettings());
     }
   }
 }
