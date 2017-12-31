@@ -13,6 +13,7 @@
 #include "qxrdzoomincommand.h"
 #include "qxrdzoomoutcommand.h"
 #include "qxrdzoomallcommand.h"
+#include "qxrddisplaysubmenucommand.h"
 #include "qcepplotzoomer.h"
 #include <qwt_symbol.h>
 #include <qwt_picker_machine.h>
@@ -64,6 +65,7 @@ void QxrdPlotWidget::initialize(QxrdPlotWidgetSettingsWPtr settings)
 
   addPlotCommand(QxrdPlotCommandPtr(new QxrdAutoScaleCommand("Auto Scale", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotCommand("Print Graph...", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdDisplaySubmenuCommand("Display", this, settings)));
 
   QWidget* canvas = m_Plot -> canvas();
 

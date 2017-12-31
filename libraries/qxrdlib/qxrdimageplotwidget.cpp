@@ -34,8 +34,6 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings)
   addPlotCommand(QxrdPlotCommandPtr(new QxrdMeasureCommand("Measure", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdHistogramCommand("Histogram", this, settings)));
   addPlotCommandSpacer();
-
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdDisplaySubmenuCommand("Display", this, settings)));
 }
 
 QxrdImagePlotSettingsWPtr QxrdImagePlotWidget::imagePlotSettings()
