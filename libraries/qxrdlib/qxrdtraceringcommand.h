@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdTraceRingCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdTraceRingCommand(QString name, QxrdPlotWidget *plot);
+  QxrdTraceRingCommand(QString                    name,
+                       QxrdPlotWidget            *plot,
+                       QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

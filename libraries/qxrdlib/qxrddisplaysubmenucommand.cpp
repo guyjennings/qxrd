@@ -1,8 +1,8 @@
 #include "qxrddisplaysubmenucommand.h"
 #include <QMenu>
 
-QxrdDisplaySubmenuCommand::QxrdDisplaySubmenuCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotContextMenuCommand(name, plot)
+QxrdDisplaySubmenuCommand::QxrdDisplaySubmenuCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand(name, plot, set)
 {
 }
 

@@ -1,7 +1,7 @@
 #include "qxrdfitcirclecommand.h"
 
-QxrdFitCircleCommand::QxrdFitCircleCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotContextMenuCommand(name, plot)
+QxrdFitCircleCommand::QxrdFitCircleCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand(name, plot, set)
 {
 }
 

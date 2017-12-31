@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdDelPointCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdDelPointCommand(QString name, QxrdPlotWidget *plot);
+  QxrdDelPointCommand(QString                    name,
+                      QxrdPlotWidget            *plot,
+                      QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

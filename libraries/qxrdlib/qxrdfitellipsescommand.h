@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdFitEllipsesCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdFitEllipsesCommand(QString name, QxrdPlotWidget *plot);
+  QxrdFitEllipsesCommand(QString                    name,
+                         QxrdPlotWidget            *plot,
+                         QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

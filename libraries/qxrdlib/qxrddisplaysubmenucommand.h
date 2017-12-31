@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdDisplaySubmenuCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdDisplaySubmenuCommand(QString name, QxrdPlotWidget *plot);
+  QxrdDisplaySubmenuCommand(QString                    name,
+                            QxrdPlotWidget            *plot,
+                            QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

@@ -1,7 +1,7 @@
 #include "qxrdadjustdistancecommand.h"
 
-QxrdAdjustDistanceCommand::QxrdAdjustDistanceCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotContextMenuCommand(name, plot)
+QxrdAdjustDistanceCommand::QxrdAdjustDistanceCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand(name, plot, set)
 {
 }
 

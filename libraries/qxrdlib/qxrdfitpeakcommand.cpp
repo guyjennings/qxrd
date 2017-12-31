@@ -1,7 +1,7 @@
 #include "qxrdfitpeakcommand.h"
 
-QxrdFitPeakCommand::QxrdFitPeakCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotContextMenuCommand(name, plot)
+QxrdFitPeakCommand::QxrdFitPeakCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand(name, plot, set)
 {
 
 }

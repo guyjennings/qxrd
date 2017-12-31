@@ -500,7 +500,8 @@ HEADERS += qxrdlib.h\
     qxrddistortionplotwidgetsettings.h \
     qxrddistortionplotwidgetsettings-ptr.h \
     qxrdsliceplotwidgetsettings.h \
-    qxrdsliceplotwidgetsettings-ptr.h
+    qxrdsliceplotwidgetsettings-ptr.h \
+    qxrdzoomincommand-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

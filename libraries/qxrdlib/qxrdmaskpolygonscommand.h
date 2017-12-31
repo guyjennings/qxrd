@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdMaskPolygonsCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdMaskPolygonsCommand(QString name, QxrdPlotWidget *plot);
+  QxrdMaskPolygonsCommand(QString                    name,
+                          QxrdPlotWidget            *plot,
+                          QxrdPlotWidgetSettingsWPtr set);
 
   QToolButton *toolButton();
 };

@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdZoomAllCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdZoomAllCommand(QString name, QxrdPlotWidget *plot);
+  QxrdZoomAllCommand(QString                    name,
+                     QxrdPlotWidget            *plot,
+                     QxrdPlotWidgetSettingsWPtr set);
 
   QToolButton *toolButton();
 };

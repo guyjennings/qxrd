@@ -7,7 +7,9 @@
 class QXRD_EXPORT QxrdHistogramCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdHistogramCommand(QString name, QxrdPlotWidget *plot);
+  QxrdHistogramCommand(QString                    name,
+                       QxrdPlotWidget            *plot,
+                       QxrdPlotWidgetSettingsWPtr set);
 
   QToolButton *toolButton();
 

@@ -1,8 +1,8 @@
 #include "qxrdprintplotcommand.h"
 #include "qxrdimageplot.h"
 
-QxrdPrintPlotCommand::QxrdPrintPlotCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotContextMenuCommand(name, plot)
+QxrdPrintPlotCommand::QxrdPrintPlotCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand(name, plot, set)
 {
 
 }
@@ -10,5 +10,5 @@ QxrdPrintPlotCommand::QxrdPrintPlotCommand(QString name, QxrdPlotWidget *plot)
 QAction* QxrdPrintPlotCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   return newContextAction("Print Graph...",
-                          m_Plot, &QxrdImagePlot::printGraph);
+                          m_PlotWidget, &QxrdPlotWidget::printGraph);
 }

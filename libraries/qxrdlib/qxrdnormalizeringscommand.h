@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdNormalizeRingsCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdNormalizeRingsCommand(QString name, QxrdPlotWidget *plot);
+  QxrdNormalizeRingsCommand(QString                    name,
+                            QxrdPlotWidget            *plot,
+                            QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

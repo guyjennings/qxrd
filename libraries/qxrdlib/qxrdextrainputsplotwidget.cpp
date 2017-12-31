@@ -9,4 +9,6 @@ QxrdExtraInputsPlotWidget::QxrdExtraInputsPlotWidget(QWidget *parent)
 void QxrdExtraInputsPlotWidget::initialize(QxrdExtraInputsPlotWidgetSettingsWPtr settings)
 {
   QxrdPlotWidget::initialize(settings);
+
+  addPlotCommandSpacer();
 }

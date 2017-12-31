@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdContextSeparatorCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdContextSeparatorCommand(QString name, QxrdPlotWidget *plot);
+  QxrdContextSeparatorCommand(QString                    name,
+                              QxrdPlotWidget            *plot,
+                              QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

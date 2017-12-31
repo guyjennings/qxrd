@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdPlotPreferencesCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdPlotPreferencesCommand(QString name, QxrdPlotWidget *plot);
+  QxrdPlotPreferencesCommand(QString                    name,
+                             QxrdPlotWidget            *plot,
+                             QxrdPlotWidgetSettingsWPtr set);
 
   QToolButton *toolButton();
 };

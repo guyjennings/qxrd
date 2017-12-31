@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdMeasureCommand : public QxrdPlotButtonCommand
 {
 public:
-  QxrdMeasureCommand(QString name, QxrdPlotWidget *plot);
+  QxrdMeasureCommand(QString                    name,
+                     QxrdPlotWidget            *plot,
+                     QxrdPlotWidgetSettingsWPtr set);
 
   QToolButton *toolButton();
 };

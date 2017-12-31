@@ -10,4 +10,6 @@ QxrdDetectorPlotWidget::QxrdDetectorPlotWidget(QWidget *parent)
 void QxrdDetectorPlotWidget::initialize(QxrdDetectorPlotWidgetSettingsWPtr settings)
 {
   QxrdPlotWidget::initialize(settings);
+
+  addPlotCommandSpacer();
 }

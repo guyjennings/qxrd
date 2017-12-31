@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdMissingRingCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdMissingRingCommand(QString name, QxrdPlotWidget *plot);
+  QxrdMissingRingCommand(QString                    name,
+                         QxrdPlotWidget            *plot,
+                         QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

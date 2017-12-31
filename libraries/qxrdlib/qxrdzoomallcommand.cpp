@@ -1,9 +1,9 @@
 #include "qxrdzoomallcommand.h"
 #include <QToolButton>
-#include "qxrdimageplot.h"
+#include "qxrdplotwidget.h"
 
-QxrdZoomAllCommand::QxrdZoomAllCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotButtonCommand(name, plot)
+QxrdZoomAllCommand::QxrdZoomAllCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotButtonCommand(name, plot, set)
 {
 
 }
@@ -20,7 +20,7 @@ QToolButton* QxrdZoomAllCommand::toolButton()
   res->setIconSize(QSize(24,24));
   res->setToolTip(tr("Auto Scale"));
 
-  connect(res, &QToolButton::clicked, m_Plot, &QxrdImagePlot::autoScale);
+  connect(res, &QToolButton::clicked, m_PlotWidget, &QxrdPlotWidget::zoomAll);
 
   return res;
 }

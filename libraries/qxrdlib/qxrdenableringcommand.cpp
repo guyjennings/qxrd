@@ -1,7 +1,7 @@
 #include "qxrdenableringcommand.h"
 
-QxrdEnableRingCommand::QxrdEnableRingCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotContextMenuCommand(name, plot)
+QxrdEnableRingCommand::QxrdEnableRingCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand(name, plot, set)
 {
 
 }

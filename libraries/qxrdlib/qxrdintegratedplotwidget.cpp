@@ -13,4 +13,6 @@ QxrdIntegratedPlotWidget::~QxrdIntegratedPlotWidget()
 void QxrdIntegratedPlotWidget::initialize(QxrdIntegratedPlotWidgetSettingsWPtr settings)
 {
   QxrdPlotWidget::initialize(settings);
+
+  addPlotCommandSpacer();
 }

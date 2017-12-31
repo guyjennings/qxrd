@@ -1,9 +1,9 @@
 #include "qxrdzoomoutcommand.h"
 #include <QToolButton>
-#include "qxrdimageplot.h"
+#include "qxrdplotwidget.h"
 
-QxrdZoomOutCommand::QxrdZoomOutCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotButtonCommand(name, plot)
+QxrdZoomOutCommand::QxrdZoomOutCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotButtonCommand(name, plot, set)
 {
 
 }
@@ -20,7 +20,7 @@ QToolButton* QxrdZoomOutCommand::toolButton()
   res->setIconSize(QSize(24,24));
   res->setToolTip(tr("Zoom Out"));
 
-  connect(res, &QToolButton::clicked, m_Plot, &QxrdImagePlot::zoomOut);
+  connect(res, &QToolButton::clicked, m_PlotWidget, &QxrdPlotWidget::zoomOut);
 
   return res;
 }

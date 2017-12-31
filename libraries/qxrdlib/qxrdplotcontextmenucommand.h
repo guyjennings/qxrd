@@ -3,18 +3,20 @@
 
 #include "qxrdplotcommand.h"
 #include <QObject>
-#include "qxrdimageplot.h"
+#include "qxrdplotwidget.h"
 
 class QXRD_EXPORT QxrdPlotContextMenuCommand : public QxrdPlotCommand
 {
 public:
-  QxrdPlotContextMenuCommand(QString name, QxrdPlotWidget *plot);
+  QxrdPlotContextMenuCommand(QString                    name,
+                             QxrdPlotWidget            *plot,
+                             QxrdPlotWidgetSettingsWPtr set);
 
   QToolButton *toolButton();
   QAction* contextMenuAction(const QPoint &pos) = 0;
 
 protected:
-  QAction* newContextAction(QString s, QxrdImagePlot *t, void (QxrdImagePlot::*sl)());
+  QAction* newContextAction(QString s, QxrdPlotWidget *t, void (QxrdPlotWidget::*sl)());
 };
 
 #endif // QXRDPLOTCONTEXTMENUCOMMAND_H

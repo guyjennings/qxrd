@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdAdjustFitCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdAdjustFitCommand(QString name, QxrdPlotWidget *plot);
+  QxrdAdjustFitCommand(QString                    name,
+                       QxrdPlotWidget            *plot,
+                       QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

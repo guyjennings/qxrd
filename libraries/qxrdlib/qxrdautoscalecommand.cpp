@@ -1,9 +1,9 @@
 #include "qxrdautoscalecommand.h"
-#include "qxrdimageplot.h"
+#include "qxrdplotwidget.h"
 #include <QObject>
 
-QxrdAutoScaleCommand::QxrdAutoScaleCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotContextMenuCommand(name, plot)
+QxrdAutoScaleCommand::QxrdAutoScaleCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand(name, plot, set)
 {
 
 }
@@ -12,5 +12,5 @@ QAction* QxrdAutoScaleCommand::contextMenuAction(const QPoint & /*pos*/)
 {
   //TODO: fix crash...
 
-  return newContextAction("Autoscale", m_Plot, &QxrdImagePlot::autoScale);
+  return newContextAction("Autoscale", m_PlotWidget, &QxrdPlotWidget::zoomAll);
 }

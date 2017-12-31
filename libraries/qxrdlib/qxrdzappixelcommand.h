@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdZapPixelCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdZapPixelCommand(QString name, QxrdPlotWidget *plot);
+  QxrdZapPixelCommand(QString                    name,
+                      QxrdPlotWidget            *plot,
+                      QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

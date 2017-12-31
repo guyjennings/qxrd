@@ -1,10 +1,11 @@
 #include "qxrdplotcommand.h"
 #include "qxrdimageplotwidget.h"
 
-QxrdPlotCommand::QxrdPlotCommand(QString name, QxrdPlotWidget *plot)
+QxrdPlotCommand::QxrdPlotCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
   : QcepObject(name),
     m_PlotWidget(plot),
-    m_Plot((plot?plot->m_Plot:NULL))
+    m_Plot((plot?plot->m_Plot:NULL)),
+    m_Settings(set)
 {
 }
 

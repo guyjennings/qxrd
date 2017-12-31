@@ -1,7 +1,7 @@
 #include "qxrdfitellipsescommand.h"
 
-QxrdFitEllipsesCommand::QxrdFitEllipsesCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotContextMenuCommand(name, plot)
+QxrdFitEllipsesCommand::QxrdFitEllipsesCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand(name, plot, set)
 {
 
 }

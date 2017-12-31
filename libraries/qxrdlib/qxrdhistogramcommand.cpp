@@ -3,8 +3,8 @@
 #include "qxrdhistogramselector.h"
 #include "qxrdimageplot.h"
 
-QxrdHistogramCommand::QxrdHistogramCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotButtonCommand(name, plot),
+QxrdHistogramCommand::QxrdHistogramCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotButtonCommand(name, plot, set),
     m_HistogramSelector(NULL)
 {
   m_HistogramSelector = new QxrdHistogramSelector(m_Plot->canvas(), m_Plot);

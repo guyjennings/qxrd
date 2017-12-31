@@ -3,8 +3,8 @@
 #include <QObject>
 #include "qxrdimageplot.h"
 
-QxrdPlotContextMenuCommand::QxrdPlotContextMenuCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotCommand(name, plot)
+QxrdPlotContextMenuCommand::QxrdPlotContextMenuCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotCommand(name, plot, set)
 {
 
 }
@@ -14,7 +14,7 @@ QToolButton* QxrdPlotContextMenuCommand::toolButton()
   return NULL;
 }
 
-QAction* QxrdPlotContextMenuCommand::newContextAction(QString s, QxrdImagePlot *t, void (QxrdImagePlot::*sl)())
+QAction* QxrdPlotContextMenuCommand::newContextAction(QString s, QxrdPlotWidget *t, void (QxrdPlotWidget::*sl)())
 {
   QAction* res = new QAction(s);
 

@@ -9,4 +9,6 @@ QxrdDistortionPlotWidget::QxrdDistortionPlotWidget(QWidget *parent)
 void QxrdDistortionPlotWidget::initialize(QxrdDistortionPlotWidgetSettingsWPtr settings)
 {
   QxrdPlotWidget::initialize(settings);
+
+  addPlotCommandSpacer();
 }

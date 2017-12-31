@@ -2,8 +2,8 @@
 #include <QToolButton>
 #include "qxrdimageplot.h"
 
-QxrdPlotPreferencesCommand::QxrdPlotPreferencesCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotButtonCommand(name, plot)
+QxrdPlotPreferencesCommand::QxrdPlotPreferencesCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotButtonCommand(name, plot, set)
 {
 
 }

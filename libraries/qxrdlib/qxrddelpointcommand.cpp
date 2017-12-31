@@ -1,7 +1,7 @@
 #include "qxrddelpointcommand.h"
 
-QxrdDelPointCommand::QxrdDelPointCommand(QString name, QxrdPlotWidget *plot)
-  : QxrdPlotContextMenuCommand(name, plot)
+QxrdDelPointCommand::QxrdDelPointCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand(name, plot, set)
 {
 
 }

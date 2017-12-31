@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdFitCircleCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdFitCircleCommand(QString name, QxrdPlotWidget *plot);
+  QxrdFitCircleCommand(QString                    name,
+                       QxrdPlotWidget            *plot,
+                       QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

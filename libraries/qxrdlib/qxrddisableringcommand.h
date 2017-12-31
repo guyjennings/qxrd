@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdDisableRingCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdDisableRingCommand(QString name, QxrdPlotWidget *plot);
+  QxrdDisableRingCommand(QString                    name,
+                         QxrdPlotWidget            *plot,
+                         QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

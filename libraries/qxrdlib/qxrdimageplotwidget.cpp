@@ -16,19 +16,6 @@
 QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent) :
   QxrdPlotWidget(parent)
 {
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomInCommand("Zoom In", this)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomOutCommand("Zoom Out", this)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomAllCommand("Zoom All", this)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskCirclesCommand("Mask Circles", this)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskPolygonsCommand("Mask Polygons", this)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdPowderPointsCommand("Powder Points", this)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdSliceCommand("Slice", this)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdMeasureCommand("Measure", this)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdHistogramCommand("Histogram", this)));
-  addPlotCommandSpacer();
-
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdDisplaySubmenuCommand("Display", this)));
 }
 
 QxrdImagePlotWidget::~QxrdImagePlotWidget()
@@ -38,6 +25,17 @@ QxrdImagePlotWidget::~QxrdImagePlotWidget()
 void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings)
 {
   QxrdPlotWidget::initialize(settings);
+
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskCirclesCommand("Mask Circles", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskPolygonsCommand("Mask Polygons", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPowderPointsCommand("Powder Points", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdSliceCommand("Slice", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdMeasureCommand("Measure", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdHistogramCommand("Histogram", this, settings)));
+  addPlotCommandSpacer();
+
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdDisplaySubmenuCommand("Display", this, settings)));
 }
 
 QxrdImagePlotSettingsWPtr QxrdImagePlotWidget::imagePlotSettings()

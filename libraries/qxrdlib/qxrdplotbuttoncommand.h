@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdPlotButtonCommand : public QxrdPlotCommand
 {
 public:
-  QxrdPlotButtonCommand(QString name, QxrdPlotWidget *plot);
+  QxrdPlotButtonCommand(QString                    name,
+                        QxrdPlotWidget            *plot,
+                        QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

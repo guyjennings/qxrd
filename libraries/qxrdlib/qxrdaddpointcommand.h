@@ -6,7 +6,9 @@
 class QXRD_EXPORT QxrdAddPointCommand : public QxrdPlotContextMenuCommand
 {
 public:
-  QxrdAddPointCommand(QString name, QxrdPlotWidget *plot);
+  QxrdAddPointCommand(QString                    name,
+                      QxrdPlotWidget            *plot,
+                      QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };
