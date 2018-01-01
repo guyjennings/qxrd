@@ -6,30 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>542</width>
-    <height>494</height>
+    <width>603</width>
+    <height>498</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Image Display Options...</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="2" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="1">
+      <widget class="QCheckBox" name="m_Y2AxisVis">
+       <property name="toolTip">
+        <string>2nd Y axis visible?</string>
+       </property>
+       <property name="text">
+        <string>2nd Y Axis Visible</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0">
       <widget class="QCheckBox" name="m_XAxisVis">
        <property name="toolTip">
-        <string>Gives a smoother display when zoomed in</string>
+        <string>X axis visible?</string>
        </property>
        <property name="text">
         <string>X Axis Visible</string>
@@ -37,16 +37,110 @@
       </widget>
      </item>
      <item row="8" column="0">
-      <widget class="QCheckBox" name="m_DisplayImageLog">
+      <widget class="QCheckBox" name="m_DisplayROI">
        <property name="toolTip">
-        <string>Logarithmic Intensity Scaling</string>
+        <string>Display ROI Borders</string>
        </property>
        <property name="text">
-        <string>Log Scaling</string>
+        <string>Display ROIs</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="0" colspan="2">
+     <item row="2" column="1">
+      <widget class="QCheckBox" name="m_YAxisLog">
+       <property name="toolTip">
+        <string>Log Y axis?</string>
+       </property>
+       <property name="text">
+        <string>Y Axis Log</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="m_X2AxisVis">
+       <property name="toolTip">
+        <string>2nd X axis visible?</string>
+       </property>
+       <property name="text">
+        <string>2nd X Axis Visible</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="m_X2AxisLog">
+       <property name="toolTip">
+        <string>Log 2nd X axis?</string>
+       </property>
+       <property name="text">
+        <string>2nd X Axis Log</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QCheckBox" name="m_YAxisVis">
+       <property name="toolTip">
+        <string>Y axis visible?</string>
+       </property>
+       <property name="text">
+        <string>Y Axis Visible</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="m_XAxisLog">
+       <property name="toolTip">
+        <string>Log X axis?</string>
+       </property>
+       <property name="text">
+        <string>X Axis Log</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QCheckBox" name="m_DisplayImage">
+       <property name="toolTip">
+        <string>Display image data</string>
+       </property>
+       <property name="text">
+        <string>Display Image</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QCheckBox" name="m_Y2AxisLog">
+       <property name="toolTip">
+        <string>Log 2nd Y axis?</string>
+       </property>
+       <property name="text">
+        <string>2nd Y Axis Log</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>Plot Legend Position:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QCheckBox" name="m_DisplayOverflow">
+       <property name="toolTip">
+        <string>Display Overflow</string>
+       </property>
+       <property name="text">
+        <string>Display Overflow</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Color Map</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="0" colspan="2">
       <widget class="QStackedWidget" name="m_DisplayParmsStack">
        <property name="currentIndex">
         <number>2</number>
@@ -65,6 +159,9 @@
          </item>
          <item row="2" column="1" colspan="2">
           <widget class="QDoubleSpinBox" name="m_DisplayMinimumPct">
+           <property name="toolTip">
+            <string>Min percentage</string>
+           </property>
            <property name="keyboardTracking">
             <bool>false</bool>
            </property>
@@ -91,6 +188,9 @@
          </item>
          <item row="3" column="1" colspan="2">
           <widget class="QDoubleSpinBox" name="m_DisplayMaximumPct">
+           <property name="toolTip">
+            <string>Max percentage</string>
+           </property>
            <property name="keyboardTracking">
             <bool>false</bool>
            </property>
@@ -143,53 +243,21 @@
        </widget>
        <widget class="QWidget" name="page_3">
         <layout class="QGridLayout" name="gridLayout_18">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_25">
+         <item row="2" column="2">
+          <widget class="QPushButton" name="m_Display_99pctle">
            <property name="text">
-            <string>Min (Percentile):</string>
+            <string>99% Percentile</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QDoubleSpinBox" name="m_DisplayMinimumPctle">
-           <property name="keyboardTracking">
-            <bool>false</bool>
-           </property>
-           <property name="suffix">
-            <string> %</string>
-           </property>
-           <property name="minimum">
-            <double>-20.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>120.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_26">
+         <item row="2" column="1">
+          <widget class="QPushButton" name="m_Display_95pctle">
            <property name="text">
-            <string>Max (Percentile):</string>
+            <string>95% Percentile</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QDoubleSpinBox" name="m_DisplayMaximumPctle">
-           <property name="keyboardTracking">
-            <bool>false</bool>
-           </property>
-           <property name="suffix">
-            <string> %</string>
-           </property>
-           <property name="minimum">
-            <double>-20.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>120.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0" colspan="2">
+         <item row="3" column="1" colspan="2">
           <spacer name="verticalSpacer_9">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -202,12 +270,74 @@
            </property>
           </spacer>
          </item>
+         <item row="2" column="0">
+          <widget class="QPushButton" name="m_Display_90pctle">
+           <property name="text">
+            <string>90% Percentile</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_26">
+           <property name="text">
+            <string>Max (Percentile):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_25">
+           <property name="text">
+            <string>Min (Percentile):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="2">
+          <widget class="QDoubleSpinBox" name="m_DisplayMinimumPctle">
+           <property name="toolTip">
+            <string>Min percentile</string>
+           </property>
+           <property name="keyboardTracking">
+            <bool>false</bool>
+           </property>
+           <property name="suffix">
+            <string> %</string>
+           </property>
+           <property name="minimum">
+            <double>-20.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>120.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="2">
+          <widget class="QDoubleSpinBox" name="m_DisplayMaximumPctle">
+           <property name="toolTip">
+            <string>Max percentile</string>
+           </property>
+           <property name="keyboardTracking">
+            <bool>false</bool>
+           </property>
+           <property name="suffix">
+            <string> %</string>
+           </property>
+           <property name="minimum">
+            <double>-20.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>120.000000000000000</double>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="page_2">
         <layout class="QGridLayout" name="gridLayout_19">
          <item row="1" column="1">
           <widget class="QDoubleSpinBox" name="m_DisplayMaximumVal">
+           <property name="toolTip">
+            <string>Max value</string>
+           </property>
            <property name="keyboardTracking">
             <bool>false</bool>
            </property>
@@ -253,6 +383,9 @@
          </item>
          <item row="0" column="1">
           <widget class="QDoubleSpinBox" name="m_DisplayMinimumVal">
+           <property name="toolTip">
+            <string>Min value</string>
+           </property>
            <property name="keyboardTracking">
             <bool>false</bool>
            </property>
@@ -282,16 +415,6 @@
          </item>
         </layout>
        </widget>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QCheckBox" name="m_InterpolatePixels">
-       <property name="toolTip">
-        <string>Gives a smoother display when zoomed in</string>
-       </property>
-       <property name="text">
-        <string>Interpolate Pixel Values</string>
-       </property>
       </widget>
      </item>
      <item row="6" column="1">
@@ -331,38 +454,6 @@
        </item>
       </widget>
      </item>
-     <item row="10" column="0" colspan="2">
-      <widget class="QComboBox" name="m_DisplayScalingMode">
-       <property name="toolTip">
-        <string>Image display intensity scaling mode</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>Display based on percentages of data range</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Display based on percentiles of pixel counts</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Display based on abs. values</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="QCheckBox" name="m_DisplayOverflow">
-       <property name="toolTip">
-        <string>Display Overflow</string>
-       </property>
-       <property name="text">
-        <string>Display Overflow</string>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="1">
       <widget class="QCheckBox" name="m_MaintainAspectRatio">
        <property name="toolTip">
@@ -373,69 +464,11 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
-      <widget class="QCheckBox" name="m_DisplayImage">
-       <property name="toolTip">
-        <string>Display image data</string>
-       </property>
-       <property name="text">
-        <string>Display Image</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="1">
-      <widget class="QSpinBox" name="m_OverflowLevel">
-       <property name="toolTip">
-        <string>overflow (saturation) level (0..65535)</string>
-       </property>
-       <property name="maximum">
-        <number>65536</number>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QCheckBox" name="m_DisplayMask">
-       <property name="toolTip">
-        <string>Display Mask</string>
-       </property>
-       <property name="text">
-        <string>Display Mask</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>Color Map</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QLabel" name="label_9">
-       <property name="text">
-        <string>Overflow Level:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_10">
-       <property name="text">
-        <string>Plot Legend Position:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QCheckBox" name="m_Y2AxisLog">
-       <property name="toolTip">
-        <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
-       </property>
-       <property name="text">
-        <string>2nd Y Axis Log</string>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="1">
       <widget class="QComboBox" name="m_LegendPosition">
+       <property name="toolTip">
+        <string>Plot Legend Position</string>
+       </property>
        <item>
         <property name="text">
          <string>Left</string>
@@ -458,67 +491,86 @@
        </item>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QCheckBox" name="m_X2AxisVis">
+     <item row="5" column="0">
+      <widget class="QCheckBox" name="m_InterpolatePixels">
        <property name="toolTip">
         <string>Gives a smoother display when zoomed in</string>
        </property>
        <property name="text">
-        <string>2nd X Axis Visible</string>
+        <string>Interpolate Pixel Values</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QCheckBox" name="m_XAxisLog">
+     <item row="7" column="1">
+      <widget class="QCheckBox" name="m_DisplayMask">
        <property name="toolTip">
-        <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
+        <string>Display Mask</string>
        </property>
        <property name="text">
-        <string>X Axis Log</string>
+        <string>Display Mask</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QCheckBox" name="m_YAxisVis">
-       <property name="toolTip">
-        <string>Gives a smoother display when zoomed in</string>
-       </property>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_9">
        <property name="text">
-        <string>Y Axis Visible</string>
+        <string>Overflow Level:</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QCheckBox" name="m_Y2AxisVis">
+     <item row="9" column="1">
+      <widget class="QSpinBox" name="m_OverflowLevel">
        <property name="toolTip">
-        <string>Gives a smoother display when zoomed in</string>
+        <string>overflow (saturation) level (0..65535)</string>
        </property>
-       <property name="text">
-        <string>2nd Y Axis Visible</string>
+       <property name="maximum">
+        <number>65536</number>
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QCheckBox" name="m_X2AxisLog">
+     <item row="10" column="0">
+      <widget class="QCheckBox" name="m_DisplayImageLog">
        <property name="toolTip">
-        <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
+        <string>Logarithmic Intensity Scaling</string>
        </property>
        <property name="text">
-        <string>2nd X Axis Log</string>
+        <string>Log Scaling</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QCheckBox" name="m_YAxisLog">
+     <item row="11" column="0" colspan="2">
+      <widget class="QComboBox" name="m_DisplayScalingMode">
        <property name="toolTip">
-        <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
+        <string>Image display intensity scaling mode</string>
        </property>
-       <property name="text">
-        <string>Y Axis Log</string>
-       </property>
+       <item>
+        <property name="text">
+         <string>Display based on percentages of data range</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Display based on percentiles of pixel counts</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Display based on abs. values</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

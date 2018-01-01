@@ -21,6 +21,10 @@ protected:
   void changeEvent(QEvent *e);
 
 private:
+  void setMaxPct(double v);
+  void setMaxPctle(double v);
+
+private:
   QxrdImagePlotWidgetSettingsWPtr m_Settings;
 };
 
