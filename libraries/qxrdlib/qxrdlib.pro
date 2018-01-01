@@ -106,7 +106,6 @@ SOURCES += qxrdlib.cpp \
     qxrdsimpleserver.cpp \
     qxrdsimpleserverthread.cpp \
     qxrdcenterstepspinner.cpp \
-    qxrdimagedisplaywidget.cpp \
     qxrdmaskdialog.cpp \
     qxrdmaskstackmodel.cpp \
     qxrdmaskstack.cpp \
@@ -582,7 +581,6 @@ HEADERS += TODO.h \
     qxrdsimpleserverthread.h \
     qxrdsimpleserverthread-ptr.h \
     qxrdcenterstepspinner.h \
-    qxrdimagedisplaywidget.h \
     qxrdmaskdialog.h \
     qxrdmaskdialog-ptr.h \
     qxrdmaskstackmodel.h \

@@ -26,7 +26,6 @@
 #include "qxrdhistogramdialog.h"
 #include "qxrdinfodialog.h"
 #include "qxrdscriptdialog.h"
-#include "qxrdimagedisplaywidget.h"
 #include "qxrdhighlighter.h"
 #include "qxrdmaskdialog.h"
 
@@ -196,7 +195,6 @@ private:
   QcepMaskDataPtr                        m_NewMask;
   QAtomicInt                             m_NewMaskAvailable;
 
-//  QxrdImageDisplayWidget                *m_ImageDisplay;
   QxrdHighlighter                       *m_Highlighter;
 
   QString                                m_ScriptPath;

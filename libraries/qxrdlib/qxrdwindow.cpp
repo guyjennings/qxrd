@@ -22,7 +22,6 @@
 #include "qxrdimagecalculator.h"
 #include "qcepmutexlocker.h"
 #include "qcepallocator.h"
-#include "qxrdimagedisplaywidget.h"
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdsynchronizedacquisitiondialog.h"
 #include "qxrdcorrectiondialog.h"
