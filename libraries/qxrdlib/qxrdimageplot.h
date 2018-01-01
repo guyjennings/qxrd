@@ -27,7 +27,7 @@
 #include "qxrdpowderpointpicker.h"
 #include "qxrdroicoordinateslistmodel-ptr.h"
 #include <QItemSelectionModel>
-#include "qxrddisplaydialog-ptr.h"
+#include "qxrdplotwidgetdialog-ptr.h"
 
 class QXRD_EXPORT QxrdImagePlot : public QcepPlot
 {

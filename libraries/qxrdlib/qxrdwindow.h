@@ -14,7 +14,7 @@
 #include "qxrdmainwindow.h"
 #include "qxrdscriptengine.h"
 #include "qxrdacquisitionscalerdialog-ptr.h"
-#include "qxrddisplaydialog.h"
+#include "qxrdplotwidgetdialog.h"
 #include "qxrdcenterfinderdialog.h"
 #include "qxrdcorrectiondialog.h"
 #include "qxrdintegratordialog.h"
@@ -165,7 +165,6 @@ private:
 //  QxrdAcquisitionScalerDialog           *m_AcquisitionScalerDialog;
 //  QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
 //  QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
-//  QxrdDisplayDialog                     *m_DisplayDialog;
 //  QxrdCenterFinderDialog                *m_CenterFinderDialog;
 //  QxrdMaskDialog                        *m_MaskDialog;
 //  QxrdCorrectionDialog                  *m_CorrectionDialog;

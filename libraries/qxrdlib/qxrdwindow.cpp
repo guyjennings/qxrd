@@ -3,7 +3,7 @@
 #include "qxrdwindowsettings.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qxrddisplaydialog.h"
+#include "qxrdplotwidgetdialog.h"
 #include "qxrdacquisition.h"
 #include "qxrdimageplot.h"
 #include "qcepimagedata.h"
@@ -81,7 +81,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 //    m_AcquisitionScalerDialog(NULL),
 //    m_AcquisitionExtraInputsDialog(NULL),
 //    m_SynchronizedAcquisitionDialog(NULL),
-//    m_DisplayDialog(NULL),
 //    m_CenterFinderDialog(NULL),
 //    m_MaskDialog(NULL),
 //    m_CorrectionDialog(NULL),
@@ -176,8 +175,6 @@ void QxrdWindow::initialize()
 //  m_AcquisitionScalerDialog = new QxrdAcquisitionScalerDialog(m_Acquisition, this);
 //  m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(set->synchronizedAcquisitionDialogSettings(), this, m_Acquisition);
 //  m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
-
-//  m_DisplayDialog      = new QxrdDisplayDialog(this);
 
 //  if (proc) {
 //    m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());

@@ -21,7 +21,7 @@
 #include <qwt_picker_machine.h>
 #include <qwt_scale_engine.h>
 #include <qwt_plot_renderer.h>
-#include "qxrddisplaydialog.h"
+#include "qxrdplotwidgetdialog.h"
 
 QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
   QWidget(parent)
@@ -108,20 +108,28 @@ void QxrdPlotWidget::initialize(QxrdPlotWidgetSettingsWPtr settings)
   QxrdPlotWidgetSettingsPtr set(m_Settings);
 
   if (set) {
-    connect(set->prop_XAxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setXAxisLog(bool)));
-    connect(set->prop_YAxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setYAxisLog(bool)));
-    connect(set->prop_X2AxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setX2AxisLog(bool)));
-    connect(set->prop_Y2AxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setY2AxisLog(bool)));
-    connect(set->prop_LegendPosition(), SIGNAL(valueChanged(int,int)), this, SLOT(setLegendPosition(int)));
+    connect(set->prop_XAxisVis(),  &QcepBoolProperty::valueChanged, [=](bool vis) {setAxisVis(QwtPlot::xBottom, vis);});
+    connect(set->prop_YAxisVis(),  &QcepBoolProperty::valueChanged, [=](bool vis) {setAxisVis(QwtPlot::yLeft,   vis);});
+    connect(set->prop_X2AxisVis(), &QcepBoolProperty::valueChanged, [=](bool vis) {setAxisVis(QwtPlot::xTop,    vis);});
+    connect(set->prop_Y2AxisVis(), &QcepBoolProperty::valueChanged, [=](bool vis) {setAxisVis(QwtPlot::yRight,  vis);});
+    connect(set->prop_XAxisLog(),  &QcepBoolProperty::valueChanged, [=](bool log) {setAxisLog(QwtPlot::xBottom, log);});
+    connect(set->prop_YAxisLog(),  &QcepBoolProperty::valueChanged, [=](bool log) {setAxisLog(QwtPlot::yLeft,   log);});
+    connect(set->prop_X2AxisLog(), &QcepBoolProperty::valueChanged, [=](bool log) {setAxisLog(QwtPlot::xTop,    log);});
+    connect(set->prop_Y2AxisLog(), &QcepBoolProperty::valueChanged, [=](bool log) {setAxisLog(QwtPlot::yRight,  log);});
+    connect(set->prop_LegendPosition(), &QcepIntProperty::valueChanged, [=](int pos) {setLegendPosition(pos);});
 
-    setXAxisLog(set->get_XAxisLog());
-    setYAxisLog(set->get_YAxisLog());
-    setX2AxisLog(set->get_X2AxisLog());
-    setY2AxisLog(set->get_Y2AxisLog());
+    setAxisVis(QwtPlot::xBottom, set->get_XAxisVis());
+    setAxisVis(QwtPlot::yLeft,   set->get_YAxisVis());
+    setAxisVis(QwtPlot::xTop,    set->get_X2AxisVis());
+    setAxisVis(QwtPlot::yRight,  set->get_Y2AxisVis());
+    setAxisLog(QwtPlot::xBottom, set->get_XAxisLog());
+    setAxisLog(QwtPlot::yLeft,   set->get_YAxisLog());
+    setAxisLog(QwtPlot::xTop,    set->get_X2AxisLog());
+    setAxisLog(QwtPlot::yRight,  set->get_Y2AxisLog());
     setLegendPosition(set->get_LegendPosition());
 
-    connect(m_Legend, SIGNAL(clicked(const QVariant &,int)),      this, SLOT(onLegendClicked(const QVariant&, int)));
-    connect(m_Legend, SIGNAL(checked(const QVariant &,bool,int)), this, SLOT(onLegendChecked(const QVariant&, bool, int)));
+    connect(m_Legend, &QwtLegend::clicked, this, &QxrdPlotWidget::onLegendClicked);
+    connect(m_Legend, &QwtLegend::checked, this, &QxrdPlotWidget::onLegendChecked);
   }
 }
 
@@ -312,27 +320,14 @@ void QxrdPlotWidget::onLegendChecked(const QVariant &itemInfo, bool on, int /*in
   }
 }
 
-void QxrdPlotWidget::setXAxisLog(bool isLog)
+void QxrdPlotWidget::setAxisVis(int axis, bool isVis)
 {
-  setLogAxis(QwtPlot::xBottom, isLog);
+  if (axis >= 0 && axis < QwtPlot::axisCnt) {
+    m_Plot -> enableAxis(axis, isVis);
+  }
 }
 
-void QxrdPlotWidget::setYAxisLog(bool isLog)
-{
-  setLogAxis(QwtPlot::yLeft, isLog);
-}
-
-void QxrdPlotWidget::setX2AxisLog(bool isLog)
-{
-  setLogAxis(QwtPlot::xTop, isLog);
-}
-
-void QxrdPlotWidget::setY2AxisLog(bool isLog)
-{
-  setLogAxis(QwtPlot::yRight, isLog);
-}
-
-void QxrdPlotWidget::setLogAxis(int axis, int isLog)
+void QxrdPlotWidget::setAxisLog(int axis, bool isLog)
 {
   if (axis >= 0 && axis < QwtPlot::axisCnt) {
     m_IsLog[axis] = isLog;
@@ -349,13 +344,9 @@ void QxrdPlotWidget::setLogAxis(int axis, int isLog)
 
 void QxrdPlotWidget::editPreferences()
 {
-  QxrdDisplayDialogPtr prefs =
-      QxrdDisplayDialogPtr(
-        new QxrdDisplayDialog(NULL,
-                              QxrdExperimentWPtr(),
-                              QxrdAcquisitionWPtr(),
-                              QxrdMainWindowWPtr(),
-                              QxrdImagePlotWidgetWPtr()));
+  QxrdPlotWidgetDialogPtr prefs =
+      QxrdPlotWidgetDialogPtr(
+        new QxrdPlotWidgetDialog(NULL, m_Settings));
 
   if (prefs) {
     prefs -> exec();

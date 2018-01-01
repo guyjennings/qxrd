@@ -112,7 +112,6 @@ SOURCES += qxrdlib.cpp \
     qxrdmaskstackview.cpp \
     qxrdsynchronizedacquisition.cpp \
     qxrdsynchronizedacquisitiondialog.cpp \
-    qxrddisplaydialog.cpp \
     qxrdcorrectiondialog.cpp \
     qxrdfilebrowsermodel.cpp \
     qxrdfilebrowserview.cpp \
@@ -340,6 +339,7 @@ SOURCES += qxrdlib.cpp \
     qxrdareadetectorsettings.cpp \
     qxrdperkinelmersettings.cpp \
     qxrdimageplotwidgetsettings.cpp \
+    qxrdimageplotwidgetdialog.cpp \
     qxrdplotwidgetsettings.cpp \
     qxrdintegratedplotwidgetsettings.cpp \
     qxrdcenteringplotwidgetsettings.cpp \
@@ -352,7 +352,8 @@ SOURCES += qxrdlib.cpp \
     qxrdplotpreferencesbutton.cpp \
     qxrdaxissubmenucommand.cpp \
     qxrdscalingsubmenucommand.cpp \
-    qxrdcolormapsubmenucommand.cpp
+    qxrdcolormapsubmenucommand.cpp \
+    qxrdplotwidgetdialog.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -444,7 +445,6 @@ HEADERS += qxrdlib.h\
     qxrdplotwidget-ptr.h \
     qxrdplotpreferencescommand.h \
     qxrdprocessor.h \
-    qxrddisplaydialog-ptr.h \
     qxrddistortionplotwidget.h \
     qxrdextrainputsplotwidget.h \
     qxrdextraoutputsplotwidget.h \
@@ -503,7 +503,11 @@ HEADERS += qxrdlib.h\
     qxrdplotpreferencesbutton.h \
     qxrdaxissubmenucommand.h \
     qxrdscalingsubmenucommand.h \
-    qxrdcolormapsubmenucommand.h
+    qxrdcolormapsubmenucommand.h \
+    qxrdplotwidgetdialog.h \
+    qxrdplotwidgetdialog-ptr.h \
+    qxrdimageplotwidgetdialog.h \
+    qxrdimageplotwidgetdialog-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -592,7 +596,6 @@ HEADERS += TODO.h \
     qxrdsynchronizedacquisition-ptr.h \
     qxrdsynchronizedacquisitiondialog.h \
     qxrdsynchronizedacquisitiondialog-ptr.h \
-    qxrddisplaydialog.h \
     qxrdcorrectiondialog.h \
     qxrdfilebrowsermodel.h \
     qxrdfilebrowsermodel-ptr.h \
@@ -811,7 +814,6 @@ FORMS += qxrdwindow.ui \
     qxrdexperimentpreferencesdialog.ui \
     qxrdmaskdialog.ui \
     qxrdsynchronizedacquisitiondialog.ui \
-    qxrddisplaydialog.ui \
     qxrdcorrectiondialog.ui \
     qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \
@@ -852,7 +854,9 @@ FORMS += qxrdwindow.ui \
     qxrdpilatusdialog.ui \
     qxrdareadetectordialog.ui \
     qxrdfilewatcherdialog.ui \
-    qxrddexeladialog.ui
+    qxrddexeladialog.ui \
+    qxrdplotwidgetdialog.ui \
+    qxrdimageplotwidgetdialog.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS += \

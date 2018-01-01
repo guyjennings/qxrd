@@ -13,6 +13,8 @@
 #include "qxrdimageplotwidgetsettings.h"
 #include "qxrdscalingsubmenucommand.h"
 #include "qxrdcolormapsubmenucommand.h"
+#include "qxrdimageplotwidgetdialog-ptr.h"
+#include "qxrdimageplotwidgetdialog.h"
 
 QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent) :
   QxrdPlotWidget(parent)
@@ -27,6 +29,8 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings)
 {
   QxrdPlotWidget::initialize(settings);
 
+  m_ImageSettings = settings;
+
   addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskCirclesCommand("Mask Circles", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskPolygonsCommand("Mask Polygons", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this, settings)));
@@ -38,4 +42,15 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings)
 
   addPlotCommand(QxrdPlotCommandPtr(new QxrdScalingSubmenuCommand("Display", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdColorMapSubmenuCommand("Display", this, settings)));
+}
+
+void QxrdImagePlotWidget::editPreferences()
+{
+  QxrdImagePlotWidgetDialogPtr prefs =
+      QxrdImagePlotWidgetDialogPtr(
+        new QxrdImagePlotWidgetDialog(NULL, m_ImageSettings));
+
+  if (prefs) {
+    prefs -> exec();
+  }
 }

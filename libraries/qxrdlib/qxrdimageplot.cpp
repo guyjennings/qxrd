@@ -28,7 +28,7 @@
 #include "qxrdroicoordinates.h"
 #include "qxrdroieditordialog.h"
 #include "qwt_plot_piecewise_curve.h"
-#include "qxrddisplaydialog.h"
+#include "qxrdplotwidgetdialog.h"
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QcepPlot(parent),

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QxrdPlotWidgetDialog</class>
+ <widget class="QDialog" name="QxrdPlotWidgetDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>451</width>
+    <height>255</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Display Options...</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="1" column="0">
+    <spacer name="verticalSpacer_7">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>88</width>
+       <height>58</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="m_XAxisVis">
+       <property name="toolTip">
+        <string>Gives a smoother display when zoomed in</string>
+       </property>
+       <property name="text">
+        <string>X Axis Visible</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QCheckBox" name="m_YAxisVis">
+       <property name="toolTip">
+        <string>Gives a smoother display when zoomed in</string>
+       </property>
+       <property name="text">
+        <string>Y Axis Visible</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="m_X2AxisVis">
+       <property name="toolTip">
+        <string>Gives a smoother display when zoomed in</string>
+       </property>
+       <property name="text">
+        <string>2nd X Axis Visible</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QCheckBox" name="m_X2AxisLog">
+       <property name="toolTip">
+        <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
+       </property>
+       <property name="text">
+        <string>2nd X Axis Log</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="m_XAxisLog">
+       <property name="toolTip">
+        <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
+       </property>
+       <property name="text">
+        <string>X Axis Log</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QCheckBox" name="m_YAxisLog">
+       <property name="toolTip">
+        <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
+       </property>
+       <property name="text">
+        <string>Y Axis Log</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="m_Y2AxisVis">
+       <property name="toolTip">
+        <string>Gives a smoother display when zoomed in</string>
+       </property>
+       <property name="text">
+        <string>2nd Y Axis Visible</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QCheckBox" name="m_Y2AxisLog">
+       <property name="toolTip">
+        <string>Try to maintain the aspect ratio of the image as it is zoomed and resized</string>
+       </property>
+       <property name="text">
+        <string>2nd Y Axis Log</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>Plot Legend Position:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="m_LegendPosition">
+       <item>
+        <property name="text">
+         <string>Left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Bottom</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Top</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>QxrdPlotWidgetDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>246</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>349</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>QxrdPlotWidgetDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>178</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>283</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

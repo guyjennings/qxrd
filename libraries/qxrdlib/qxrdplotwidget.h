@@ -30,7 +30,7 @@ public slots:
   void zoomAll();
   void printGraph();
 
-  void editPreferences();
+  virtual void editPreferences();
 
 private slots:
   void contextMenu(const QPoint &pos);
@@ -41,14 +41,9 @@ private slots:
   virtual void onLegendClicked(const QVariant &itemInfo, int index);
   virtual void onLegendChecked(const QVariant &itemInfo, bool on, int index);
 
-  void setXAxisLog(bool isLog);
-  void setYAxisLog(bool isLog);
-  void setX2AxisLog(bool isLog);
-  void setY2AxisLog(bool isLog);
-
 private:
-  void setLogAxis(int axis, int isLog);
-  int logAxis(int axis);
+  void setAxisVis(int axis, bool isVis);
+  void setAxisLog(int axis, bool isLog);
 
 protected:
   QxrdPlotWidgetSettingsWPtr  m_Settings;

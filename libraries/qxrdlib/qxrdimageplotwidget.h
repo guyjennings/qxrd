@@ -13,6 +13,11 @@ public:
   ~QxrdImagePlotWidget();
 
   void initialize(QxrdImagePlotWidgetSettingsWPtr settings);
+
+  void editPreferences();
+
+private:
+  QxrdImagePlotWidgetSettingsWPtr m_ImageSettings;
 };
 
 #endif // QXRDIMAGEPLOTWIDGET_H
