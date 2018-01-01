@@ -1750,22 +1750,3 @@ QPointF QxrdImagePlot::scaledDelta(double dx, double dy)
 
   return QPointF(tdx, tdy);
 }
-
-void QxrdImagePlot::editPreferences()
-{
-  if (!m_Preferences) {
-    m_Preferences = QxrdDisplayDialogPtr(
-          //TODO: Pass args
-          new QxrdDisplayDialog(NULL,
-                                QxrdExperimentWPtr(),
-                                QxrdAcquisitionWPtr(),
-                                QxrdMainWindowWPtr(),
-                                QxrdImagePlotWidgetWPtr()));
-  }
-
-  if (m_Preferences) {
-    m_Preferences->show();
-    m_Preferences->raise();
-    m_Preferences->activateWindow();
-  }
-}

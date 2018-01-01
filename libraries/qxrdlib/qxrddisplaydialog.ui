@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>434</width>
-    <height>462</height>
+    <width>447</width>
+    <height>463</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -406,8 +406,51 @@
      </item>
     </layout>
    </item>
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>QxrdDisplayDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>246</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>349</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>QxrdDisplayDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>178</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>437</x>
+     <y>283</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

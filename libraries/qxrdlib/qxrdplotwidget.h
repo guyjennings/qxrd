@@ -30,6 +30,8 @@ public slots:
   void zoomAll();
   void printGraph();
 
+  void editPreferences();
+
 private slots:
   void contextMenu(const QPoint &pos);
   void updateDisplayedImage();

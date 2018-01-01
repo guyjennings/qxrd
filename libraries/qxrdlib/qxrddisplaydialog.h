@@ -21,6 +21,8 @@ public:
                              QxrdImagePlotWidgetWPtr plotp);
   ~QxrdDisplayDialog();
 
+  void accept();
+
 protected:
   void changeEvent(QEvent *e);
 

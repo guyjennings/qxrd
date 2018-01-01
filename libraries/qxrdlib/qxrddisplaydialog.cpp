@@ -92,3 +92,8 @@ void QxrdDisplayDialog::changeEvent(QEvent *e)
         break;
     }
 }
+
+void QxrdDisplayDialog::accept()
+{
+  QDialog::accept();
+}

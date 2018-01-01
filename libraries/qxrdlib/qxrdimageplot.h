@@ -105,8 +105,6 @@ public slots:
   void setPercentileScaling();
   void setAbsoluteScaling();
 
-  void editPreferences();
-
   virtual void onLegendChecked(const QVariant &itemInfo, bool on, int index);
 
 public:
@@ -255,8 +253,6 @@ private:
   QxrdROICoordinatesListModelWPtr m_ROIModel;
   QItemSelectionModel           *m_ROISelection;
   QVector<QwtPlotCurve*>         m_ROICurves;
-
-  QxrdDisplayDialogPtr       m_Preferences;
 };
 
 #endif

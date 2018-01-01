@@ -9,7 +9,9 @@
 #include <QPrintDialog>
 #include "qxrdautoscalecommand.h"
 #include "qxrdprintplotcommand.h"
+#include "qxrdprintplotbutton.h"
 #include "qxrdplotpreferencescommand.h"
+#include "qxrdplotpreferencesbutton.h"
 #include "qxrdzoomincommand.h"
 #include "qxrdzoomoutcommand.h"
 #include "qxrdzoomallcommand.h"
@@ -19,6 +21,7 @@
 #include <qwt_picker_machine.h>
 #include <qwt_scale_engine.h>
 #include <qwt_plot_renderer.h>
+#include "qxrddisplaydialog.h"
 
 QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
   QWidget(parent)
@@ -61,10 +64,12 @@ void QxrdPlotWidget::initialize(QxrdPlotWidgetSettingsWPtr settings)
   addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomInCommand("Zoom In", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomOutCommand("Zoom Out", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomAllCommand("Zoom All", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdPlotPreferencesCommand("Plot Preferences...", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotButton("Print Graph...", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPlotPreferencesButton("Plot Preferences...", this, settings)));
 
   addPlotCommand(QxrdPlotCommandPtr(new QxrdAutoScaleCommand("Auto Scale", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotCommand("Print Graph...", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPlotPreferencesCommand("Plot Preferences...", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdDisplaySubmenuCommand("Display", this, settings)));
 
   QWidget* canvas = m_Plot -> canvas();
@@ -339,5 +344,20 @@ void QxrdPlotWidget::setLogAxis(int axis, int isLog)
     }
 
     m_Plot -> replot();
+  }
+}
+
+void QxrdPlotWidget::editPreferences()
+{
+  QxrdDisplayDialogPtr prefs =
+      QxrdDisplayDialogPtr(
+        new QxrdDisplayDialog(NULL,
+                              QxrdExperimentWPtr(),
+                              QxrdAcquisitionWPtr(),
+                              QxrdMainWindowWPtr(),
+                              QxrdImagePlotWidgetWPtr()));
+
+  if (prefs) {
+    prefs -> exec();
   }
 }

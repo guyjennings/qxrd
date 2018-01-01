@@ -1,16 +1,16 @@
 #ifndef QXRDPLOTPREFERENCESCOMMAND_H
 #define QXRDPLOTPREFERENCESCOMMAND_H
 
-#include "qxrdplotbuttoncommand.h"
+#include "qxrdplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdPlotPreferencesCommand : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdPlotPreferencesCommand : public QxrdPlotContextMenuCommand
 {
 public:
   QxrdPlotPreferencesCommand(QString                    name,
                              QxrdPlotWidget            *plot,
                              QxrdPlotWidgetSettingsWPtr set);
 
-  QToolButton *toolButton();
+  QAction *contextMenuAction(const QPoint &pos);
 };
 
 #endif // QXRDPLOTPREFERENCESCOMMAND_H

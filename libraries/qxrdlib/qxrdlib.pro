@@ -351,7 +351,9 @@ SOURCES += qxrdlib.cpp \
     qxrdextraoutputsplotwidgetsettings.cpp \
     qxrdhistogramplotwidgetsettings.cpp \
     qxrddistortionplotwidgetsettings.cpp \
-    qxrdsliceplotwidgetsettings.cpp
+    qxrdsliceplotwidgetsettings.cpp \
+    qxrdprintplotbutton.cpp \
+    qxrdplotpreferencesbutton.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -501,7 +503,9 @@ HEADERS += qxrdlib.h\
     qxrddistortionplotwidgetsettings-ptr.h \
     qxrdsliceplotwidgetsettings.h \
     qxrdsliceplotwidgetsettings-ptr.h \
-    qxrdzoomincommand-ptr.h
+    qxrdzoomincommand-ptr.h \
+    qxrdprintplotbutton.h \
+    qxrdplotpreferencesbutton.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
