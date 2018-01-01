@@ -114,7 +114,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
     }
 
     connect(dp.data(),       &QxrdDetectorProcessor::processedImageAvailable,
-            m_DetectorImage, &QxrdDetectorPlotWidget::onProcessedImageAvailable);
+            m_DetectorImage, &QxrdImagePlotWidget::onProcessedImageAvailable);
 
     //TODO: Initialise
 
@@ -229,7 +229,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
   QxrdDetectorControlWindowSettingsPtr set(detectorControlWindowSettings());
 
   if (set) {
-    m_DetectorImage -> initialize(set->detectorPlotWidgetSettings());
+    m_DetectorImage -> initialize(set->imagePlotWidgetSettings());
   }
 }
 

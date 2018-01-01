@@ -318,7 +318,6 @@ SOURCES += qxrdlib.cpp \
     qxrdcontextseparatorcommand.cpp \
     qxrdautoscalecommand.cpp \
     qxrdprintplotcommand.cpp \
-    qxrddisplaysubmenucommand.cpp \
     qxrdplotpreferencescommand.cpp \
     qxrdprocessor.cpp \
     qxrddistortionplotwidget.cpp \
@@ -326,7 +325,6 @@ SOURCES += qxrdlib.cpp \
     qxrdextraoutputsplotwidget.cpp \
     qxrdhistogramplotwidget.cpp \
     qxrdsliceplotwidget.cpp \
-    qxrddetectorplotwidget.cpp \
     qxrdplugininfomodel.cpp \
     qxrddexelasettings.cpp \
     qxrddetectorlistmodel.cpp \
@@ -346,14 +344,16 @@ SOURCES += qxrdlib.cpp \
     qxrdplotwidgetsettings.cpp \
     qxrdintegratedplotwidgetsettings.cpp \
     qxrdcenteringplotwidgetsettings.cpp \
-    qxrddetectorplotwidgetsettings.cpp \
     qxrdextrainputsplotwidgetsettings.cpp \
     qxrdextraoutputsplotwidgetsettings.cpp \
     qxrdhistogramplotwidgetsettings.cpp \
     qxrddistortionplotwidgetsettings.cpp \
     qxrdsliceplotwidgetsettings.cpp \
     qxrdprintplotbutton.cpp \
-    qxrdplotpreferencesbutton.cpp
+    qxrdplotpreferencesbutton.cpp \
+    qxrdaxissubmenucommand.cpp \
+    qxrdscalingsubmenucommand.cpp \
+    qxrdcolormapsubmenucommand.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -443,7 +443,6 @@ HEADERS += qxrdlib.h\
     qxrdprintplotcommand.h \
     qxrdimageplotwidget-ptr.h \
     qxrdplotwidget-ptr.h \
-    qxrddisplaysubmenucommand.h \
     qxrdplotpreferencescommand.h \
     qxrdprocessor.h \
     qxrddisplaydialog-ptr.h \
@@ -452,7 +451,6 @@ HEADERS += qxrdlib.h\
     qxrdextraoutputsplotwidget.h \
     qxrdhistogramplotwidget.h \
     qxrdsliceplotwidget.h \
-    qxrddetectorplotwidget.h \
     qxrdplugininfomodel.h \
     qxrdplugininfomodel-ptr.h \
     qxrdprocessorinterface-ptr.h \
@@ -491,8 +489,6 @@ HEADERS += qxrdlib.h\
     qxrdintegratedplotwidgetsettings.h \
     qxrdintegratedplotwidgetsettings-ptr.h \
     qxrdcenteringplotwidgetsettings.h \
-    qxrddetectorplotwidgetsettings.h \
-    qxrddetectorplotwidgetsettings-ptr.h \
     qxrdextrainputsplotwidgetsettings.h \
     qxrdextrainputsplotwidgetsettings-ptr.h \
     qxrdextraoutputsplotwidgetsettings.h \
@@ -505,7 +501,10 @@ HEADERS += qxrdlib.h\
     qxrdsliceplotwidgetsettings-ptr.h \
     qxrdzoomincommand-ptr.h \
     qxrdprintplotbutton.h \
-    qxrdplotpreferencesbutton.h
+    qxrdplotpreferencesbutton.h \
+    qxrdaxissubmenucommand.h \
+    qxrdscalingsubmenucommand.h \
+    qxrdcolormapsubmenucommand.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

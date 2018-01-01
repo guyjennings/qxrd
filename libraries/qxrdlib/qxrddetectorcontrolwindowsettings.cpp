@@ -1,11 +1,11 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrddetectorimageplot.h"
-#include "qxrddetectorplotwidgetsettings.h"
+#include "qxrdimageplotwidgetsettings.h"
 
 QxrdDetectorControlWindowSettings::QxrdDetectorControlWindowSettings(QxrdDetectorSettingsWPtr det)
   : QcepObject("detectorWindowSettings"),
     m_DetectorSettings(det),
-    m_DetectorPlotWidgetSettings(new QxrdDetectorPlotWidgetSettings("detectorPlotWidget")),
+    m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings("detectorPlotWidget")),
     m_DetectorWindowOpen(this, "detectorWindowOpen", 0, "Detector Window Open?"),
     m_DetectorWindowGeometry(this, "detectorWindowGeometry", QByteArray(), "Detector Window Geometry"),
     m_DetectorWindowState(this, "detectorWindowState", QByteArray(), "Detector Window State"),
@@ -23,9 +23,9 @@ QxrdDetectorControlWindowSettingsPtr QxrdDetectorControlWindowSettings::newDetec
   return res;
 }
 
-QxrdDetectorPlotWidgetSettingsPtr QxrdDetectorControlWindowSettings::detectorPlotWidgetSettings()
+QxrdImagePlotWidgetSettingsPtr QxrdDetectorControlWindowSettings::imagePlotWidgetSettings()
 {
-  return m_DetectorPlotWidgetSettings;
+  return m_ImagePlotWidgetSettings;
 }
 
 void QxrdDetectorControlWindowSettings::addChildPtr(QcepObjectPtr child)
@@ -43,7 +43,7 @@ void QxrdDetectorControlWindowSettings::readSettings(QSettings *set)
   QcepObject::readSettings(set);
 
   set->beginGroup("detectorPlot");
-  m_DetectorPlotWidgetSettings->readSettings(set);
+  m_ImagePlotWidgetSettings->readSettings(set);
   set->endGroup();
 }
 
@@ -52,6 +52,6 @@ void QxrdDetectorControlWindowSettings::writeSettings(QSettings *set)
   QcepObject::writeSettings(set);
 
   set->beginGroup("detectorPlot");
-  m_DetectorPlotWidgetSettings->writeSettings(set);
+  m_ImagePlotWidgetSettings->writeSettings(set);
   set->endGroup();
 }

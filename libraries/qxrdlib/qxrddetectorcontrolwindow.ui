@@ -30,7 +30,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
-          <widget class="QxrdDetectorPlotWidget" name="m_DetectorImage" native="true">
+          <widget class="QxrdImagePlotWidget" name="m_DetectorImage" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -1714,9 +1714,9 @@ Script Function: acquire([fileName
    <header>qxrdexposuretimespinner.h</header>
   </customwidget>
   <customwidget>
-   <class>QxrdDetectorPlotWidget</class>
+   <class>QxrdImagePlotWidget</class>
    <extends>QWidget</extends>
-   <header>qxrddetectorplotwidget.h</header>
+   <header>qxrdimageplotwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

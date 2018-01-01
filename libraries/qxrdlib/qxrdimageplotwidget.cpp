@@ -9,9 +9,10 @@
 #include "qxrdslicecommand.h"
 #include "qxrdmeasurecommand.h"
 #include "qxrdhistogramcommand.h"
-#include "qxrddisplaysubmenucommand.h"
 #include "qxrdimageplot.h"
 #include "qxrdimageplotwidgetsettings.h"
+#include "qxrdscalingsubmenucommand.h"
+#include "qxrdcolormapsubmenucommand.h"
 
 QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent) :
   QxrdPlotWidget(parent)
@@ -34,15 +35,7 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings)
   addPlotCommand(QxrdPlotCommandPtr(new QxrdMeasureCommand("Measure", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdHistogramCommand("Histogram", this, settings)));
   addPlotCommandSpacer();
-}
 
-QxrdImagePlotSettingsWPtr QxrdImagePlotWidget::imagePlotSettings()
-{
-  QxrdImagePlotSettingsWPtr res;
-
-  if (m_Plot) {
-    res = m_Plot->imagePlotSettings();
-  }
-
-  return res;
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdScalingSubmenuCommand("Display", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdColorMapSubmenuCommand("Display", this, settings)));
 }
