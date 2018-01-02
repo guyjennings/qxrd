@@ -7,6 +7,8 @@
 QxrdMaskRasterData::QxrdMaskRasterData(QcepMaskDataPtr mask, int interp)
   : QwtRasterData(),
     m_Mask(mask),
+    m_NRows((mask ? mask->get_Height(): 0)),
+    m_NCols((mask ? mask->get_Width() : 0)),
     m_Interpolate(interp)
 {
   if (g_Application && qcepDebug(DEBUG_IMAGES)) {
@@ -57,4 +59,14 @@ short int *QxrdMaskRasterData::data() const
 QwtInterval QxrdMaskRasterData::range() const
 {
   return QwtInterval(0.0, 3.0);
+}
+
+int QxrdMaskRasterData::width() const
+{
+  return m_NCols;
+}
+
+int QxrdMaskRasterData::height() const
+{
+  return m_NRows;
 }

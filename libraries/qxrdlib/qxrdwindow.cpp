@@ -224,7 +224,7 @@ void QxrdWindow::initialize()
 
   QDesktopWidget *dw = QApplication::desktop();
   //  int screenNum = dw->screenNumber(this);
-  QRect screenGeom = dw->screenGeometry(this);
+//  QRect screenGeom = dw->screenGeometry(this);
 
   //  printf("Screen number %d Geom: %d,%d-%d,%d\n", screenNum,
   //         screenGeom.left(), screenGeom.top(),
@@ -238,7 +238,7 @@ void QxrdWindow::initialize()
 //    addDockWidget(Qt::LeftDockWidgetArea, m_InputFileBrowser);
 //  }
 
-  if (screenGeom.height() >= 1280) {
+//  if (screenGeom.height() >= 1280) {
 //    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
 //    splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
 
@@ -255,7 +255,7 @@ void QxrdWindow::initialize()
 //    tabifyDockWidget(m_CenterFinderDialog, /*m_MaskDialog);
 //    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
 //    tabifyDockWidget(m_OutputFileBrowser, */m_HistogramDialog);
-  } else if (screenGeom.height() >= 1000) {
+//  } else if (screenGeom.height() >= 1000) {
 //    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
 
 //    tabifyDockWidget(m_InputFileBrowser, /*m_DatasetBrowserDialog);
@@ -272,7 +272,7 @@ void QxrdWindow::initialize()
 //    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
 //    tabifyDockWidget(m_OutputFileBrowser, */m_HistogramDialog);
 //    tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
-  } else {
+//  } else {
 //    tabifyDockWidget(m_AcquisitionDialog, /*m_AcquisitionScalerDialog);
 //    tabifyDockWidget(m_AcquisitionScalerDialog, *//*m_AcquisitionExtraInputsDialog);
 //    tabifyDockWidget(m_AcquisitionExtraInputsDialog, *//*m_SynchronizedAcquisitionDialog);
@@ -295,7 +295,7 @@ void QxrdWindow::initialize()
 //      //      shrinkObject(this);
 //      shrinkPanels(6,1);
 //    }
-  }
+//  }
 
 //  if (expt) {
 //    int fs = expt->get_FontSize();

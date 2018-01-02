@@ -47,6 +47,9 @@ public:
   Q_PROPERTY(bool overflowShown  READ get_OverflowShown WRITE set_OverflowShown)
   QCEP_BOOLEAN_PROPERTY(OverflowShown)
 
+  Q_PROPERTY(double overflowLevel  READ get_OverflowLevel WRITE set_OverflowLevel)
+  QCEP_BOOLEAN_PROPERTY(OverflowLevel)
+
   Q_PROPERTY(bool interpolatePixels        READ get_InterpolatePixels WRITE set_InterpolatePixels)
   QCEP_BOOLEAN_PROPERTY(InterpolatePixels)
 

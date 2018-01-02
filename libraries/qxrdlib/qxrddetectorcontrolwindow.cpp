@@ -114,7 +114,10 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
     }
 
     connect(dp.data(),       &QxrdDetectorProcessor::processedImageAvailable,
-            m_DetectorImage, &QxrdImagePlotWidget::onProcessedImageAvailable);
+            m_DetectorImage, &QxrdImagePlotWidget::newImage);
+
+    connect(dp.data(),       &QxrdDetectorProcessor::maskAvailable,
+            m_DetectorImage, &QxrdImagePlotWidget::newMask);
 
     //TODO: Initialise
 

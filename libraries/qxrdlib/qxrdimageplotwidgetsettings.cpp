@@ -14,6 +14,7 @@ QxrdImagePlotWidgetSettings::QxrdImagePlotWidgetSettings(QString name)
    m_ImageShown(this, "imageShown", 1, "Image Shown?"),
    m_MaskShown(this, "maskShown", 0, "Mask Shown?"),
    m_OverflowShown(this, "overflowShown", 0, "Overflow Shown?"),
+   m_OverflowLevel(this, "overflowLevel", 50000, "Overflow Level"),
    m_InterpolatePixels(this, "interpolatePixels", 1, "Interpolated Pixel Display?"),
    m_MaintainAspectRatio(this, "maintainAspectRatio", 1, "Maintain Equal Scaling in X and Y"),
    m_DisplayROI(this, "displayROI", 1, "Display ROI Outlines"),

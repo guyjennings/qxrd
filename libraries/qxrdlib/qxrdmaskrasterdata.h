@@ -10,7 +10,8 @@
 class QXRD_EXPORT QxrdMaskRasterData : public QwtRasterData
 {
 public:
-  QxrdMaskRasterData(QcepMaskDataPtr mask = QcepMaskDataPtr(), int interp = 0);
+  QxrdMaskRasterData(QcepMaskDataPtr mask,
+                     int interp);
 
 public:
   double value(double x, double y) const;
@@ -18,11 +19,16 @@ public:
 
   short int *data() const;
 
+  int width() const;
+  int height() const;
+
   const QcepMaskDataPtr mask() const { return m_Mask; }
   int interp() const                 { return m_Interpolate; }
 
 private:
   QcepMaskDataPtr  m_Mask;
+  int              m_NRows;
+  int              m_NCols;
   int              m_Interpolate;
 };
 

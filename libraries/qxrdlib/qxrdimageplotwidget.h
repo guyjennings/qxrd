@@ -3,6 +3,10 @@
 
 #include "qxrdplotwidget.h"
 #include "qxrdimageplotwidgetsettings-ptr.h"
+#include "qxrdrasterdata-ptr.h"
+#include "qxrdmaskrasterdata-ptr.h"
+#include "qxrdoverflowrasterdata-ptr.h"
+#include "qwt_plot_spectrogram-ptr.h"
 
 class QXRD_EXPORT QxrdImagePlotWidget : public QxrdPlotWidget
 {
@@ -15,6 +19,34 @@ public:
   void initialize(QxrdImagePlotWidgetSettingsWPtr settings);
 
   void editPreferences();
+
+public slots:
+  void newImage(QcepDoubleImageDataPtr img);
+  void newMask (QcepMaskDataPtr        msk);
+
+  void replotImage();
+  void replotMask();
+
+private slots:
+  void updateImage();
+  void updateMask();
+
+protected:
+  QTimer                      m_ImageTimer;
+
+  QcepDoubleImageDataPtr      m_NewImageData;
+  QcepDoubleImageDataPtr      m_ImageData;
+
+  QcepMaskDataPtr             m_NewMaskData;
+  QcepMaskDataPtr             m_MaskData;
+
+  QxrdRasterDataPtr           m_ImageRaster;
+  QxrdMaskRasterDataPtr       m_MaskRaster;
+  QxrdOverflowRasterDataPtr   m_OverflowRaster;
+
+  QwtPlotSpectrogramPtr       m_ImageSpectrogram;
+  QwtPlotSpectrogramPtr       m_MaskSpectrogram;
+  QwtPlotSpectrogramPtr       m_OverflowSpectrogram;
 
 private:
   QxrdImagePlotWidgetSettingsWPtr m_ImageSettings;

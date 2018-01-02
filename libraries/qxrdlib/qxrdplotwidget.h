@@ -23,8 +23,6 @@ public:
   void disableCommands();
 
 public slots:
-  void onProcessedImageAvailable(QcepDoubleImageDataPtr img);
-
   void zoomIn();
   void zoomOut();
   void zoomAll();
@@ -34,7 +32,6 @@ public slots:
 
 private slots:
   void contextMenu(const QPoint &pos);
-  void updateDisplayedImage();
 
   void setLegendPosition(int legendPosition);
 
@@ -47,11 +44,7 @@ private:
 
 protected:
   QxrdPlotWidgetSettingsWPtr  m_Settings;
-  QTimer                      m_Timer;
   QVector<QxrdPlotCommandPtr> m_PlotCommands;
-
-  QcepDoubleImageDataPtr      m_NewImageData;
-  QcepDoubleImageDataPtr      m_ImageData;
 
   QwtLegend                  *m_Legend;
   QwtPlotZoomer              *m_Zoomer;

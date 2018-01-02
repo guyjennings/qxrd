@@ -45,10 +45,6 @@ QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
 
   connect(m_Plot, &QWidget::customContextMenuRequested,
           this,   &QxrdPlotWidget::contextMenu);
-
-  connect(&m_Timer, &QTimer::timeout, this, &QxrdPlotWidget::updateDisplayedImage);
-
-  m_Timer.start(1000);
 }
 
 QxrdPlotWidget::~QxrdPlotWidget()
@@ -185,21 +181,6 @@ void QxrdPlotWidget::disableCommands()
     if (cmd) {
       cmd->disable();
     }
-  }
-}
-
-void QxrdPlotWidget::onProcessedImageAvailable(QcepDoubleImageDataPtr img)
-{
-  m_NewImageData = img;
-}
-
-void QxrdPlotWidget::updateDisplayedImage()
-{
-  if (m_NewImageData) {
-    m_ImageData = m_NewImageData;
-    m_NewImageData = QcepDoubleImageDataPtr();
-
-    m_Plot->onProcessedImageAvailable(m_ImageData, QcepMaskDataPtr());
   }
 }
 

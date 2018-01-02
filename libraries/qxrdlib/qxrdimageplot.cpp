@@ -843,7 +843,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QcepImageDataBasePtr image, QcepMa
       g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable set image after %1 msec").arg(tic.elapsed()));
     }
 
-    setOverflows(new QxrdMaskRasterData(m_Overflow));
+    setOverflows(new QxrdMaskRasterData(m_Overflow, 0));
 
     if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
       g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable set overflows after %1 msec").arg(tic.elapsed()));
