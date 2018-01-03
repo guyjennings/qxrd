@@ -561,8 +561,8 @@ void QxrdWindow::initialize()
   if (acq) {
     connect(acq.data(), &QxrdAcquisition::acquireStarted,
             this,       &QxrdWindow::acquireStarted);
-    connect(acq.data(), SIGNAL(acquiredFrame(QString,int,int,int,int,int,int)),
-            this,       SLOT(acquiredFrame(QString,int,int,int,int,int,int)));
+    connect(acq.data(), &QxrdAcquisition::acquiredFrame,
+            this,       &QxrdWindow::acquiredFrame);
     connect(acq.data(), &QxrdAcquisition::acquireComplete,
             this,       &QxrdWindow::acquireComplete);
 

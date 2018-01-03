@@ -208,7 +208,7 @@ void QxrdAcquisitionExtraInputs::initiate()
       set_ExposureTime(acq->get_ExposureTime());
 
       QTimer::singleShot(1000*(get_AcquireDelay() + acq->get_ExposureTime() + 1.0),
-                         this, SLOT(timerDone()));
+                         this, &QxrdAcquisitionExtraInputs::timerDone);
 
       set_Enabled(true);
     }
