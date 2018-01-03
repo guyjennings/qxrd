@@ -17,16 +17,17 @@ QcepImageDataGraphControls::QcepImageDataGraphControls(QcepDataObjectGraphWindow
     m_Window->prop_MinimumVal()  -> linkTo(m_MinimumVal);
     m_Window->prop_MaximumVal()  -> linkTo(m_MaximumVal);
 
-    connect(m_ScalingMode, SIGNAL(currentIndexChanged(int)), m_ParmsStack, SLOT(setCurrentIndex(int)));
+    connect(m_ScalingMode, (void (QComboBox::*)(int)) &QComboBox::currentIndexChanged,
+            m_ParmsStack,  &QStackedWidget::setCurrentIndex);
 
-    connect(m_Window->prop_ColorMap(),      SIGNAL(valueChanged(int,int)),    m_Window, SLOT(updateDisplay()));
-    connect(m_Window->prop_ScalingMode(),   SIGNAL(valueChanged(int,int)),    m_Window, SLOT(updateDisplay()));
-    connect(m_Window->prop_MinimumPct(),    SIGNAL(valueChanged(double,int)), m_Window, SLOT(updateDisplay()));
-    connect(m_Window->prop_MaximumPct(),    SIGNAL(valueChanged(double,int)), m_Window, SLOT(updateDisplay()));
-    connect(m_Window->prop_MinimumPctle(),  SIGNAL(valueChanged(double,int)), m_Window, SLOT(updateDisplay()));
-    connect(m_Window->prop_MaximumPctle(),  SIGNAL(valueChanged(double,int)), m_Window, SLOT(updateDisplay()));
-    connect(m_Window->prop_MinimumVal(),    SIGNAL(valueChanged(double,int)), m_Window, SLOT(updateDisplay()));
-    connect(m_Window->prop_MaximumVal(),    SIGNAL(valueChanged(double,int)), m_Window, SLOT(updateDisplay()));
+    connect(m_Window->prop_ColorMap(),      &QcepIntProperty::valueChanged,    m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+    connect(m_Window->prop_ScalingMode(),   &QcepIntProperty::valueChanged,    m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+    connect(m_Window->prop_MinimumPct(),    &QcepDoubleProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+    connect(m_Window->prop_MaximumPct(),    &QcepDoubleProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+    connect(m_Window->prop_MinimumPctle(),  &QcepDoubleProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+    connect(m_Window->prop_MaximumPctle(),  &QcepDoubleProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+    connect(m_Window->prop_MinimumVal(),    &QcepDoubleProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+    connect(m_Window->prop_MaximumVal(),    &QcepDoubleProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
   }
 }
 

@@ -18,24 +18,23 @@ void QSpecRemote::init()
   m_SpecSocket = new QTcpSocket(this);
   m_Packet     = new svr_head;
 
-  connect(m_SpecSocket, SIGNAL(hostFound()), this, SLOT(hostFound()));
-  connect(m_SpecSocket, SIGNAL(connected()), this, SLOT(connected()));
-  connect(m_SpecSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+  connect(m_SpecSocket, &QAbstractSocket::hostFound, this, &QSpecRemote::hostFound);
+  connect(m_SpecSocket, &QAbstractSocket::connected, this, &QSpecRemote::connected);
+  connect(m_SpecSocket, &QAbstractSocket::disconnected, this, &QSpecRemote::disconnected);
 
   connectReadyRead();
-//  connect(m_SpecSocket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
-//  connect(m_SpecSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-//          this, SLOT(error(QAbstractSocket::SocketError)));
+//  connect(m_SpecSocket, &QIODevice::bytesWritten, this, &QSpecRemote::bytesWritten);
+//  connect(m_SpecSocket, &QAbstractSocket::error,  this, &QSpecRemote::error);
 }
 
 void QSpecRemote::connectReadyRead()
 {
-  connect(m_SpecSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+  connect(m_SpecSocket, &QIODevice::readyRead, this, &QSpecRemote::readyRead);
 }
 
 void QSpecRemote::disconnectReadyRead()
 {
-  disconnect(m_SpecSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+  disconnect(m_SpecSocket, &QIODevice::readyRead, this, &QSpecRemote::readyRead);
 }
 
 int QSpecRemote::close()

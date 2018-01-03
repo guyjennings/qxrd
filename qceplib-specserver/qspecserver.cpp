@@ -25,7 +25,7 @@ QSpecServer::QSpecServer(QString name)
   init_svr_head(&m_Packet);
   init_svr_head(&m_Reply);
 
-  connect(this, SIGNAL(newConnection()), this, SLOT(openNewConnection()));
+  connect(this, &QTcpServer::newConnection, this, &QSpecServer::openNewConnection);
 }
 
 void QSpecServer::initialize(QcepObjectWPtr owner)
@@ -163,8 +163,7 @@ QSpecServer::openNewConnection()
     printMessage(tr("LowDelayOption = %1").arg(m_Socket->socketOption(QAbstractSocket::LowDelayOption).toString()));
   }
 
-  connect(m_Socket, SIGNAL(readyRead()),
-      this,     SLOT(clientRead()));
+  connect(m_Socket, &QIODevice::readyRead, this, &QSpecServer::clientRead);
 
   if (qcepDebug(DEBUG_SERVER)) {
     printMessage(QString("New connection from %1")

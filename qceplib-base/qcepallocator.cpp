@@ -42,12 +42,6 @@ QcepAllocator::QcepAllocator
     g_Application->printMessage(tr("allocator %1 constructed").HEXARG(this));
   };
 
-//  connect(&m_Timer, SIGNAL(timeout()), this, SLOT(allocatorHeartbeat()));
-
-//  m_Timer.start(100);
-
-//  allocatorHeartbeat();
-
   if (sizeof(void*) == 4) {
     set_AvailableBytes(qint64(get_TotalBufferSizeMB32())*qint64(MegaBytes));
     connect(prop_TotalBufferSizeMB32(), &QcepIntProperty::valueChanged,

@@ -95,20 +95,20 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(QcepExperimentWPtr expt, Qc
 
   setGraphMode(DefaultPlot);
 
-  connect(m_PlotModeSelector, SIGNAL(currentIndexChanged(int)),
-          this, SLOT(changeGraphMode(int)));
+  connect(m_PlotModeSelector, (void (QComboBox::*)(int)) &QComboBox::currentIndexChanged,
+          this, &QcepDataObjectGraphWindow::changeGraphMode);
 
-  connect(m_ImageZoomInButton, SIGNAL(clicked(bool)), m_ImagePlot, SLOT(enableZooming()));
-  connect(m_ImageZoomOutButton, SIGNAL(clicked(bool)), m_ImagePlot, SLOT(zoomOut()));
-  connect(m_ImageZoomAllButton, SIGNAL(clicked(bool)), m_ImagePlot, SLOT(autoScale()));
-  connect(m_ImageMeasureButton, SIGNAL(clicked(bool)), m_ImagePlot, SLOT(enableMeasuring()));
+  connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_ImagePlot, &QcepPlot::enableZooming);
+  connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_ImagePlot, &QcepPlot::zoomOut);
+  connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_ImagePlot, &QcepPlot::autoScale);
+  connect(m_ImageMeasureButton, &QAbstractButton::clicked, m_ImagePlot, &QcepPlot::enableMeasuring);
 
   m_ImagePlot->enableZooming();
 
   setAttribute(Qt::WA_DeleteOnClose, true);
 
   if (objp) {
-    connect(objp.data(), SIGNAL(dataObjectChanged()), this, SLOT(updateDisplay()));
+    connect(objp.data(), &QcepDataObject::dataObjectChanged, this, &QcepDataObjectGraphWindow::updateDisplay);
 
     updateDisplay();
   }

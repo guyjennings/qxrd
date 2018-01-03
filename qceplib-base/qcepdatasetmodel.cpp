@@ -25,7 +25,7 @@ QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBas
 
   qRegisterMetaType< QVector<int> >("QVector<int>");
 
-  connect(m_Dataset.data(), SIGNAL(dataObjectChanged()), this, SLOT(onDataObjectChanged()));
+  connect(m_Dataset.data(), &QcepDataObject::dataObjectChanged, this, &QcepDatasetModel::onDataObjectChanged);
 }
 
 void QcepDatasetModel::readSettings(QSettings *settings)

@@ -77,10 +77,10 @@ void QcepPlot::init(QcepPlotSettingsWPtr settings)
   QcepPlotSettingsPtr set(m_PlotSettings);
 
   if (set) {
-    connect(set->prop_XAxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setXAxisLog(bool)));
-    connect(set->prop_YAxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setYAxisLog(bool)));
-    connect(set->prop_X2AxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setX2AxisLog(bool)));
-    connect(set->prop_Y2AxisLog(), SIGNAL(valueChanged(bool,int)), this, SLOT(setY2AxisLog(bool)));
+    connect(set->prop_XAxisLog(), &QcepBoolProperty::valueChanged, this, &QcepPlot::setXAxisLog);
+    connect(set->prop_YAxisLog(), &QcepBoolProperty::valueChanged, this, &QcepPlot::setYAxisLog);
+    connect(set->prop_X2AxisLog(), &QcepBoolProperty::valueChanged, this, &QcepPlot::setX2AxisLog);
+    connect(set->prop_Y2AxisLog(), &QcepBoolProperty::valueChanged, this, &QcepPlot::setY2AxisLog);
 
     setXAxisLog(set->get_XAxisLog());
     setYAxisLog(set->get_YAxisLog());
@@ -97,8 +97,8 @@ void QcepPlot::init(QcepPlotSettingsWPtr settings)
   }
 
   if (m_Legend) {
-    connect(m_Legend, SIGNAL(clicked(const QVariant &,int)),      this, SLOT(onLegendClicked(const QVariant&, int)));
-    connect(m_Legend, SIGNAL(checked(const QVariant &,bool,int)), this, SLOT(onLegendChecked(const QVariant&, bool, int)));
+    connect(m_Legend, &QwtLegend::clicked,      this, &QcepPlot::onLegendClicked);
+    connect(m_Legend, &QwtLegend::checked, this, &QcepPlot::onLegendChecked);
   }
 }
 

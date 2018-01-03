@@ -11,7 +11,7 @@ class QCEP_EXPORT QcepPropertiesModel : public QAbstractTableModel
 public:
   QcepPropertiesModel();
 
-private slots:
+public slots:
   void onDataObjectChanged();
 };
 

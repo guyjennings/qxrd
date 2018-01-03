@@ -95,7 +95,7 @@ public:
   void copyFrom(QDoubleSpinBox *spinBox);
 
 public slots:
-  void setValue(double val, int index);
+  void setValue2(double val, int index);
   void setValue(double val);
   void incValue(double step);
   void setDefaultValue(double val);
@@ -118,7 +118,7 @@ public:
   void connect();
 
 public slots:
-  void setValue(double value, int index);
+  void setValue2(double value, int index);
   void setValue(double value);
 
 signals:
@@ -153,7 +153,7 @@ public:
   void copyFrom(QComboBox *comboBox);
 
 public slots:
-  void setValue(int val, int index);
+  void setValue2(int val, int index);
   void setValue(int val);
   void incValue(int step);
   void setDefaultValue(int val);
@@ -176,7 +176,7 @@ public:
   void connect();
 
 public slots:
-  void setValue(int value, int index);
+  void setValue2(int value, int index);
   void setValue(int value);
 
 signals:
@@ -195,7 +195,7 @@ public:
   void connect();
 
 public slots:
-  void setCurrentIndex(int value, int index);
+  void setCurrentIndex2(int value, int index);
   void setCurrentIndex(int value);
 
 signals:
@@ -219,7 +219,7 @@ public:
   void copyFrom(QAbstractButton *button);
 
 public slots:
-  void setValue(bool val, int index);
+  void setValue2(bool val, int index);
   void setValue(bool val);
   void setDefaultValue(bool val);
   void resetValue();
@@ -241,7 +241,7 @@ public:
   void connect();
 
 public slots:
-  void setChecked(bool value, int index);
+  void setChecked2(bool value, int index);
   void setChecked(bool value);
 
 signals:
@@ -277,7 +277,7 @@ public:
   void copyFrom(QTextEdit *textEdit);
 
 public slots:
-  void setValue(QString val, int index);
+  void setValue2(QString val, int index);
   void setValue(QString val);
   void setDefaultValue(QString val);
   void resetValue();
@@ -317,7 +317,7 @@ public:
   void connect();
 
 public slots:
-  void setText(QString value, int index);
+  void setText2(QString value, int index);
   void setText(QString value);
 
 signals:
@@ -336,7 +336,7 @@ public:
   void connect();
 
 public slots:
-  void setText(QString value, int index);
+  void setText2(QString value, int index);
   void setText();
 
 signals:
@@ -542,11 +542,11 @@ public:
   void copyFrom(int axis, QDoubleSpinBox *spinBox);
 
 public slots:
-  void setValue(QPointF val, int index);
+  void setValue2(QPointF val, int index);
   void setValue(QPointF val);
   void setDefaultValue(QPointF val);
   void resetValue();
-  void setSubValue(int axis, double value, int index);
+  void setSubValue3(int axis, double value, int index);
   void setSubValue(int axis, double value);
 
 signals:

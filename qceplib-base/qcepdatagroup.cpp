@@ -286,7 +286,7 @@ void QcepDataGroup::append(QcepDataObjectPtr obj)
   if (obj) {
     addChildPtr(obj);
 
-    connect(obj.data(), SIGNAL(dataObjectChanged()), this, SIGNAL(dataObjectChanged()));
+    connect(obj.data(), &QcepDataObject::dataObjectChanged, this, &QcepDataObject::dataObjectChanged);
 
     emit dataObjectChanged();
   }

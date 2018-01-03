@@ -104,7 +104,7 @@ QcepDataObjectSpreadsheetWindow::QcepDataObjectSpreadsheetWindow(QcepExperimentW
   }
 
   if (objp && m_Model) {
-    connect(objp.data(), SIGNAL(dataObjectChanged()), m_Model.data(), SLOT(onDataObjectChanged()));
+    connect(objp.data(), &QcepDataObject::dataObjectChanged, m_Model.data(), &QcepSpreadsheetModel::onDataObjectChanged);
   }
 
   setAttribute(Qt::WA_DeleteOnClose, true);

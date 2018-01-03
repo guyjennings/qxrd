@@ -11,7 +11,7 @@ class QCEP_EXPORT QcepSpreadsheetModel : public QAbstractTableModel
 public:
   QcepSpreadsheetModel();
 
-private slots:
+public slots:
   void onDataObjectChanged();
 };
 

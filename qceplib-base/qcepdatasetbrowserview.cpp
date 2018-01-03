@@ -34,8 +34,8 @@
 QcepDatasetBrowserView::QcepDatasetBrowserView(QWidget *parent)
   : QTreeView(parent)
 {
-  connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onCustomContextMenuRequested(QPoint)));
-  connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClicked(QModelIndex)));
+  connect(this, &QWidget::customContextMenuRequested, this, &QcepDatasetBrowserView::onCustomContextMenuRequested);
+  connect(this, &QAbstractItemView::doubleClicked, this, &QcepDatasetBrowserView::onDoubleClicked);
 
   setContextMenuPolicy(Qt::CustomContextMenu);
   header() -> setSectionResizeMode(QHeaderView::Stretch);

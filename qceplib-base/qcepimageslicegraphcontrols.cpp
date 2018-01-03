@@ -29,10 +29,10 @@ QcepImageSliceGraphControls::QcepImageSliceGraphControls(QcepDataObjectGraphWind
       m_Window->prop_SliceHSkipped() -> linkTo(m_SliceSkipped);
       m_Window->prop_SliceHRepeats() -> linkTo(m_SliceRepeats);
 
-//      connect(m_Window->prop_SliceHStart(), SIGNAL(valueChanged(int,int)), m_Window, SLOT(updateDisplay()));
-//      connect(m_Window->prop_SliceHSummed(), SIGNAL(valueChanged(int,int)), m_Window, SLOT(updateDisplay()));
-//      connect(m_Window->prop_SliceHSkipped(), SIGNAL(valueChanged(int,int)), m_Window, SLOT(updateDisplay()));
-//      connect(m_Window->prop_SliceHRepeats(), SIGNAL(valueChanged(int,int)), m_Window, SLOT(updateDisplay()));
+//      connect(m_Window->prop_SliceHStart(), &QcepIntProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+//      connect(m_Window->prop_SliceHSummed(), &QcepIntProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+//      connect(m_Window->prop_SliceHSkipped(), &QcepIntProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+//      connect(m_Window->prop_SliceHRepeats(), &QcepIntProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
     } else if (m_Mode == QcepDataObjectGraphWindow::VerticalSlice) {
       m_SliceStart   -> setMaximum(10000 /*nCols*/);
       m_SliceSummed  -> setMaximum(10000 /*nCols*/);
@@ -44,13 +44,13 @@ QcepImageSliceGraphControls::QcepImageSliceGraphControls(QcepDataObjectGraphWind
       m_Window->prop_SliceVSkipped() -> linkTo(m_SliceSkipped);
       m_Window->prop_SliceVRepeats() -> linkTo(m_SliceRepeats);
 
-//      connect(m_Window->prop_SliceVStart(), SIGNAL(valueChanged(int,int)), m_Window, SLOT(updateDisplay()));
-//      connect(m_Window->prop_SliceVSummed(), SIGNAL(valueChanged(int,int)), m_Window, SLOT(updateDisplay()));
-//      connect(m_Window->prop_SliceVSkipped(), SIGNAL(valueChanged(int,int)), m_Window, SLOT(updateDisplay()));
-//      connect(m_Window->prop_SliceVRepeats(), SIGNAL(valueChanged(int,int)), m_Window, SLOT(updateDisplay()));
+//      connect(m_Window->prop_SliceVStart(), &QcepIntProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+//      connect(m_Window->prop_SliceVSummed(), &QcepIntProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+//      connect(m_Window->prop_SliceVSkipped(), &QcepIntProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
+//      connect(m_Window->prop_SliceVRepeats(), &QcepIntProperty::valueChanged, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
     }
 
-    connect(m_ReplotButton, SIGNAL(clicked(bool)), m_Window, SLOT(updateDisplay()));
+    connect(m_ReplotButton, &QAbstractButton::clicked, m_Window, &QcepDataObjectGraphWindow::updateDisplay);
   }
 }
 
