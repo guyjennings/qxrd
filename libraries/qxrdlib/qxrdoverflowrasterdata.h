@@ -10,28 +10,25 @@
 class QXRD_EXPORT QxrdOverflowRasterData : public QwtRasterData
 {
 public:
-  QxrdOverflowRasterData(QcepImageDataBasePtr img,
-                         int interp,
+  QxrdOverflowRasterData(QcepImageDataBaseWPtr img,
                          double level);
 
 public:
   double value(double x, double y) const;
-  QwtInterval range() const;
 
-//  short int *data() const;
+  void setImage(QcepImageDataBaseWPtr img);
 
   int width() const;
   int height() const;
 
-//  const QcepImageDataBasePtr data() const { return m_Data; }
-  int interp() const          { return m_Interpolate; }
+private:
+  void setIntervals();
 
 private:
-  QcepImageDataBasePtr   m_Data;
+  QcepImageDataBaseWPtr  m_ImageData;
   int                    m_NRows;
   int                    m_NCols;
   double                 m_OverflowLevel;
-  int                    m_Interpolate;
 };
 
 #endif // QXRDOVERFLOWRASTERDATA_H

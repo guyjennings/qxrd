@@ -40,13 +40,13 @@ protected:
   QcepMaskDataPtr             m_NewMaskData;
   QcepMaskDataPtr             m_MaskData;
 
-  QxrdRasterDataPtr           m_ImageRaster;
-  QxrdMaskRasterDataPtr       m_MaskRaster;
-  QxrdOverflowRasterDataPtr   m_OverflowRaster;
+  QxrdRasterData             *m_ImageRaster;
+  QxrdMaskRasterData         *m_MaskRaster;
+  QxrdOverflowRasterData     *m_OverflowRaster;
 
-  QwtPlotSpectrogramPtr       m_ImageSpectrogram;
-  QwtPlotSpectrogramPtr       m_MaskSpectrogram;
-  QwtPlotSpectrogramPtr       m_OverflowSpectrogram;
+  QwtPlotSpectrogram         *m_ImageSpectrogram;
+  QwtPlotSpectrogram         *m_MaskSpectrogram;
+  QwtPlotSpectrogram         *m_OverflowSpectrogram;
 
 private:
   QxrdImagePlotWidgetSettingsWPtr m_ImageSettings;

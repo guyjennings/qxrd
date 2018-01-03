@@ -104,21 +104,38 @@ void QxrdImagePlotWidget::replotImage()
 
   if (set) {
     if (m_ImageData) {
-      if (m_ImageRaster == NULL ||
-          m_ImageData->get_Width()  != m_ImageRaster->width() ||
-          m_ImageData->get_Height() != m_ImageRaster->height()) {
-
+      if (m_ImageRaster == NULL) {
         m_ImageRaster =
-            QxrdRasterDataPtr(
-              new QxrdRasterData(m_ImageData,
-                                 set->get_InterpolatePixels()));
-
-        m_OverflowRaster =
-            QxrdOverflowRasterDataPtr(
-              new QxrdOverflowRasterData(m_ImageData,
-                                         set->get_InterpolatePixels(),
-                                         set->get_OverflowLevel()));
+            new QxrdRasterData(m_ImageData,
+                               set->get_InterpolatePixels());
+      } else {
+        m_ImageRaster -> setImage(m_ImageData);
       }
+
+      if (m_OverflowRaster == NULL) {
+        m_OverflowRaster =
+            new QxrdOverflowRasterData(m_ImageData,
+                                       set->get_OverflowLevel());
+      }
+
+      if (m_ImageSpectrogram == NULL) {
+        m_ImageSpectrogram = new QwtPlotSpectrogram();
+
+        m_ImageSpectrogram -> attach(m_Plot);
+        m_ImageSpectrogram -> setRenderThreadCount(0);
+      }
+
+      m_ImageSpectrogram -> setData(m_ImageRaster/*.data()*/);
+
+      if (m_OverflowSpectrogram == NULL) {
+        m_OverflowSpectrogram = new QwtPlotSpectrogram();
+
+        m_OverflowSpectrogram -> attach(m_Plot);
+        m_OverflowSpectrogram -> setAlpha(256);
+        m_OverflowSpectrogram -> setRenderThreadCount(0);
+      }
+
+      m_OverflowSpectrogram -> setData(m_OverflowRaster);
     }
   }
 }
@@ -130,9 +147,23 @@ void QxrdImagePlotWidget::replotMask()
         m_MaskData->get_Width()  != m_MaskRaster->width() ||
         m_MaskData->get_Height() != m_MaskRaster->height()) {
 
-      m_MaskRaster =
-          QxrdMaskRasterDataPtr(
-            new QxrdMaskRasterData(m_MaskData, 0));
+      if(m_MaskRaster == NULL) {
+        m_MaskRaster =
+            new QxrdMaskRasterData(m_MaskData);
+      } else {
+        m_MaskRaster -> setMask(m_MaskData);
+      }
+
+      if (m_MaskSpectrogram == NULL) {
+        m_MaskSpectrogram =
+            new QwtPlotSpectrogram();
+
+        m_MaskSpectrogram -> attach(m_Plot);
+        m_MaskSpectrogram -> setAlpha(80);
+        m_MaskSpectrogram -> setRenderThreadCount(0);
+      }
+
+      m_MaskSpectrogram -> setData(m_MaskRaster);
     }
   }
 }

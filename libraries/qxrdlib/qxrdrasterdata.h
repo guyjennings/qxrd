@@ -11,9 +11,7 @@
 class QXRD_EXPORT QxrdRasterData : public QwtRasterData
 {
 public:
-  QxrdRasterData(QcepImageDataBasePtr img = QcepImageDataBasePtr(),
-                 int interp = 1,
-                 QwtInterval range = QwtInterval(0,40000));
+  QxrdRasterData(QcepImageDataBaseWPtr img, int interp);
 
 public:
   double value(double x, double y) const;
@@ -23,6 +21,8 @@ public:
   double minValue();
   double maxValue();
 
+  void setImage(QcepImageDataBasePtr img);
+
   void setInterpolate(int interp);
   int interpolate();
 
@@ -31,13 +31,13 @@ public:
   int width() const;
   int height() const;
 
-  const QcepImageDataBasePtr data() const { return m_Data; }
-  int interp() const          { return m_Interpolate; }
-
   QPointF optimizePeakPosition(QPointF pt) const;
 
 private:
-  QcepImageDataBasePtr   m_Data;
+  void setIntervals();
+
+private:
+  QcepImageDataBaseWPtr  m_ImageData;
   int                    m_NRows;
   int                    m_NCols;
   QwtInterval            m_Range;

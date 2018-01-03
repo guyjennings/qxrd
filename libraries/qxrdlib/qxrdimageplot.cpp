@@ -843,7 +843,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QcepImageDataBasePtr image, QcepMa
       g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable set image after %1 msec").arg(tic.elapsed()));
     }
 
-    setOverflows(new QxrdMaskRasterData(m_Overflow, 0));
+    setOverflows(new QxrdMaskRasterData(m_Overflow));
 
     if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
       g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable set overflows after %1 msec").arg(tic.elapsed()));
@@ -882,7 +882,7 @@ void QxrdImagePlot::onMaskedImageAvailable(QcepImageDataBasePtr image, QcepMaskD
     }
 
     QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels());
-    QxrdMaskRasterData *msk = new QxrdMaskRasterData(mask, false);
+    QxrdMaskRasterData *msk = new QxrdMaskRasterData(mask);
 
     setImage(data);
     setMask(msk);
@@ -1100,7 +1100,7 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
     }
   }
 
-  if (m_MaskRaster && m_MaskRaster->data()) {
+  if (m_MaskRaster/* && m_MaskRaster->data()*/) {
     double mask = m_MaskRaster->value(pos.x(),pos.y());
     res += tr(", %1").arg(mask);
 

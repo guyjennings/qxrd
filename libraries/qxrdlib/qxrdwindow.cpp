@@ -503,6 +503,9 @@ void QxrdWindow::initialize()
 //  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
 
   if (proc) {
+    connect(proc.data(), &QxrdProcessor::processedImageAvailable,
+            m_ImagePlot, &QxrdImagePlotWidget::newImage);
+
     connect(proc->integrator()->prop_IntegrationXUnits(), &QcepIntProperty::valueChanged,
             this, &QxrdWindow::integrationXUnitsChanged);
     integrationXUnitsChanged(proc->integrator()->get_IntegrationXUnits());

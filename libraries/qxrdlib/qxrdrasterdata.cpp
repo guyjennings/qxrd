@@ -3,12 +3,10 @@
 #include "qxrdapplication.h"
 #include <QString>
 
-QxrdRasterData::QxrdRasterData(QcepImageDataBasePtr img, int interp, QwtInterval range)
+QxrdRasterData::QxrdRasterData(QcepImageDataBaseWPtr img, int interp)
   : QwtRasterData(),
-    m_Data(img),
-    m_NRows((img ? img->get_Height(): 0)),
-    m_NCols((img ? img->get_Width() : 0)),
-    m_Range(range),
+    m_ImageData(img),
+    m_Range(QwtInterval(0,40000)),
     m_Interpolate(interp)
 {
   if (qcepDebug(DEBUG_IMAGES)) {
@@ -18,9 +16,24 @@ QxrdRasterData::QxrdRasterData(QcepImageDataBasePtr img, int interp, QwtInterval
     }
   }
 
+  setIntervals();
+}
+
+void QxrdRasterData::setIntervals()
+{
+  QcepImageDataBasePtr data(m_ImageData);
+
+  if (data) {
+    m_NRows = data->get_Height();
+    m_NCols = data->get_Width();
+  } else {
+    m_NRows = 0;
+    m_NCols = 0;
+  }
+
   setInterval(Qt::XAxis, QwtInterval(0.0, m_NCols));
   setInterval(Qt::YAxis, QwtInterval(0.0, m_NRows));
-  setInterval(Qt::ZAxis, range);
+  setInterval(Qt::ZAxis, m_Range);
 }
 
 void QxrdRasterData::setInterpolate(int interp)
@@ -37,7 +50,9 @@ int QxrdRasterData::interpolate()
 
 double QxrdRasterData::value(double x, double y) const
 {
-  if (m_Data) {
+  QcepImageDataBasePtr data(m_ImageData);
+
+  if (data) {
     if (x < 0 || x > m_NCols) return 0;
     if (y < 0 || y > m_NRows) return 0;
 
@@ -45,10 +60,10 @@ double QxrdRasterData::value(double x, double y) const
       int ix = ((int) x), iy = ((int) y);
       double dx = x-ix, dy = y-iy;
 
-      double f00 = m_Data->getImageData((ix)   , (iy));
-      double f10 = m_Data->getImageData((ix+1) , (iy));
-      double f01 = m_Data->getImageData((ix)   , (iy+1));
-      double f11 = m_Data->getImageData((ix+1) , (iy+1));
+      double f00 = data->getImageData((ix)   , (iy));
+      double f10 = data->getImageData((ix+1) , (iy));
+      double f01 = data->getImageData((ix)   , (iy+1));
+      double f11 = data->getImageData((ix+1) , (iy+1));
 
       double f0 = f00*(1-dx)+f10*dx;
       double f1 = f01*(1-dx)+f11*dx;
@@ -57,7 +72,7 @@ double QxrdRasterData::value(double x, double y) const
 
       return f;
     } else {
-      return m_Data->getImageData(((int) qRound(x)) , ((int) qRound(y)));
+      return data->getImageData(((int) qRound(x)) , ((int) qRound(y)));
     }
   } else {
     return 0;
@@ -76,10 +91,19 @@ void QxrdRasterData::setDisplayedRange(double min, double max)
   setInterval(Qt::ZAxis, m_Range);
 }
 
+void QxrdRasterData::setImage(QcepImageDataBasePtr img)
+{
+  m_ImageData = img;
+
+  setIntervals();
+}
+
 double QxrdRasterData::minValue()
 {
-  if (m_Data) {
-    return m_Data->minValue();
+  QcepImageDataBasePtr data(m_ImageData);
+
+  if (data) {
+    return data->minValue();
   } else {
     return 0;
   }
@@ -87,8 +111,10 @@ double QxrdRasterData::minValue()
 
 double QxrdRasterData::maxValue()
 {
-  if (m_Data) {
-    return m_Data->maxValue();
+  QcepImageDataBasePtr data(m_ImageData);
+
+  if (data) {
+    return data->maxValue();
   } else {
     return 0;
   }
@@ -97,9 +123,10 @@ double QxrdRasterData::maxValue()
 QwtInterval QxrdRasterData::percentileRange(double lowpct, double highpct)
 {
   QwtInterval res;
+  QcepImageDataBasePtr data(m_ImageData);
 
-  if (m_Data) {
-    QPointF r = m_Data->percentileRange(lowpct, highpct);
+  if (data) {
+    QPointF r = data->percentileRange(lowpct, highpct);
 
     res.setMinValue(r.x());
     res.setMaxValue(r.y());

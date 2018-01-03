@@ -426,6 +426,10 @@ void QxrdDataProcessor::newData(QcepDoubleImageDataPtr image, QcepMaskDataPtr ov
 
   QxrdWindowPtr w = m_Window;
 
+  if (m_Data) {
+    emit processedImageAvailable(m_Data);
+  }
+
   if (w) {
     w -> newDataAvailable(m_Data, overflow);
   }
