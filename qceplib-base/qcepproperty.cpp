@@ -913,6 +913,7 @@ void QcepIntProperty::copyTo(QProgressBar *progress)
 
   setWidgetToolTip(progress);
 }
+
 void QcepIntProperty::linkTo(QProgressBar *progress)
 {
   copyTo(progress);
