@@ -21,7 +21,7 @@ QxrdMainWindowPtr QxrdCenteringWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdCenteringWindow(myself, "Centering", m_Application, m_Experiment));
+        new QxrdCenteringWindow(myself, "Centering", m_Application, m_Experiment, m_Acquisition, m_Processor));
 
   return m_Window;
 }

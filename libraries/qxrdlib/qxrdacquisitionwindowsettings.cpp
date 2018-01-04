@@ -14,7 +14,7 @@ QxrdMainWindowPtr QxrdAcquisitionWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdAcquisitionWindow(myself, "Acquisition", m_Application, m_Experiment));
+        new QxrdAcquisitionWindow(myself, "Acquisition", m_Application, m_Experiment, m_Acquisition, m_Processor));
 
   return m_Window;
 }

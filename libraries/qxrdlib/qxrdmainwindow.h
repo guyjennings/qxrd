@@ -5,6 +5,12 @@
 #include "qcepmainwindow.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrdprocessor-ptr.h"
+#include <QLabel>
+#include <QProgressBar>
+#include <QTimer>
+#include <QStatusBar>
 
 class QXRD_EXPORT QxrdMainWindow : public QcepMainWindow
 {
@@ -12,7 +18,9 @@ class QXRD_EXPORT QxrdMainWindow : public QcepMainWindow
 public:
   explicit QxrdMainWindow(QString name,
                           QxrdApplicationWPtr app,
-                          QxrdExperimentWPtr expt);
+                          QxrdExperimentWPtr expt,
+                          QxrdAcquisitionWPtr acqw,
+                          QxrdProcessorWPtr procw);
 
   virtual void setupMenus(QMenu *file, QMenu *edit, QMenu *window);
 
@@ -28,6 +36,8 @@ public slots:
   void doEditPreferences();
   void doEditDetectorPreferences();
 
+  void displayStatusMessage(QString msg);
+
 private slots:
   void populateEditMenu();
   void populateWindowsMenu();
@@ -41,10 +51,30 @@ private slots:
   void doDelete();
   void doSelectAll();
 
+private:
+  void doTimerUpdate();
+  void clearStatusMessage();
+  void updateTitle();
+  void onUpdateIntervalMsecChanged(int newVal);
+  void allocatedMemoryChanged();
+
+  void acquireStarted();
+  void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
+  void acquireComplete();
+
 protected:
   QString             m_Name;
   QxrdApplicationWPtr m_Application;
   QxrdExperimentWPtr  m_Experiment;
+  QxrdAcquisitionWPtr m_Acquisition;
+  QxrdProcessorWPtr   m_DataProcessor; //TODO: rename m_Processor
+
+  QLabel             *m_StatusMsg;
+  QProgressBar       *m_Progress;
+  QProgressBar       *m_AllocationStatus;
+  QTimer              m_StatusTimer;
+  QTimer              m_UpdateTimer;
+
   QMenu              *m_FileMenuP;
   QMenu              *m_EditMenuP;
   QMenu              *m_WindowMenuP;

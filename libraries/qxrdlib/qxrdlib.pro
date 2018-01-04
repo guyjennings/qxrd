@@ -511,7 +511,8 @@ HEADERS += qxrdlib.h\
     qxrdimageplotwidgetdialog-ptr.h \
     qwt_plot_spectrogram-ptr.h \
     qxrdoverflowrasterdata.h \
-    qxrdoverflowrasterdata-ptr.h
+    qxrdoverflowrasterdata-ptr.h \
+    qxrdprocessor-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

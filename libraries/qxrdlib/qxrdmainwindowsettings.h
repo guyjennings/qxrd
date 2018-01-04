@@ -3,9 +3,11 @@
 
 #include "qxrdlib_global.h"
 #include "qcepmainwindowsettings.h"
+#include "qxrdmainwindow-ptr.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdmainwindow-ptr.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrdprocessor-ptr.h"
 
 class QXRD_EXPORT QxrdMainWindowSettings : public QcepMainWindowSettings
 {
@@ -14,7 +16,10 @@ class QXRD_EXPORT QxrdMainWindowSettings : public QcepMainWindowSettings
 public:
   QxrdMainWindowSettings(QString name);
 
-  virtual void initialize(QxrdApplicationWPtr app, QxrdExperimentWPtr expt);
+  virtual void initialize(QxrdApplicationWPtr app,
+                          QxrdExperimentWPtr expt,
+                          QxrdAcquisitionWPtr acqw,
+                          QxrdProcessorWPtr procw);
 
   void openWindow();
   void closeWindow();
@@ -26,9 +31,11 @@ public:
   void writeSettings(QSettings *settings);
 
 protected:
+  QxrdMainWindowPtr   m_Window;
   QxrdApplicationWPtr m_Application;
   QxrdExperimentWPtr  m_Experiment;
-  QxrdMainWindowPtr   m_Window;
+  QxrdAcquisitionWPtr m_Acquisition;
+  QxrdProcessorWPtr   m_Processor;
 
 public:
   Q_PROPERTY(int windowOpen READ get_WindowOpen WRITE set_WindowOpen)

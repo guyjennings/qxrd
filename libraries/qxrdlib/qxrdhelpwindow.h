@@ -15,7 +15,9 @@ public:
   explicit QxrdHelpWindow(QxrdHelpWindowSettingsWPtr set,
                           QString name,
                           QxrdApplicationWPtr app,
-                          QxrdExperimentWPtr expt);
+                          QxrdExperimentWPtr expt,
+                          QxrdAcquisitionWPtr acqw,
+                          QxrdProcessorWPtr procw);
   ~QxrdHelpWindow();
 
 protected:

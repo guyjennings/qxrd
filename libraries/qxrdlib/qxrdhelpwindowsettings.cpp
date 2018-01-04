@@ -13,7 +13,7 @@ QxrdMainWindowPtr QxrdHelpWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdHelpWindow(myself, "Help", m_Application, m_Experiment));
+        new QxrdHelpWindow(myself, "Help", m_Application, m_Experiment, m_Acquisition, m_Processor));
 
   return m_Window;
 }

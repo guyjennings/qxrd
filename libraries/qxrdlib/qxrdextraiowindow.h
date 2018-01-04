@@ -19,7 +19,9 @@ public:
   explicit QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
                              QString name,
                              QxrdApplicationWPtr app,
-                             QxrdExperimentWPtr expt);
+                             QxrdExperimentWPtr expt,
+                             QxrdAcquisitionWPtr acqw,
+                             QxrdProcessorWPtr procw);
   ~QxrdExtraIOWindow();
 
 protected:

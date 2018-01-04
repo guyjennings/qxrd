@@ -68,16 +68,15 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
                        QxrdApplicationWPtr appl,
                        QxrdExperimentWPtr docw,
                        QxrdAcquisitionWPtr acqw,
-                       QxrdDataProcessorWPtr procw,
-                       QWidget * /*parent*/)  //TODO: needed?
-  : QxrdMainWindow("window", appl, docw),
+                       QxrdDataProcessorWPtr procw)
+  : QxrdMainWindow("window", appl, docw, acqw, procw),
     m_ObjectNamer(this, "window"),
     m_Mutex(QMutex::Recursive),
     m_WindowSettings(settings),
-    m_Application(appl),
-    m_Experiment(docw),
-    m_Acquisition(acqw),
-    m_DataProcessor(procw),
+//    m_Application(appl),
+//    m_Experiment(docw),
+//    m_Acquisition(acqw),
+//    m_DataProcessor(procw),
 //    m_AcquisitionScalerDialog(NULL),
 //    m_AcquisitionExtraInputsDialog(NULL),
 //    m_SynchronizedAcquisitionDialog(NULL),
@@ -93,8 +92,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 //    m_HistogramDialog(NULL),
 //    m_ImageInfoDialog(NULL),
 //    m_ScriptDialog(NULL),
-    m_Progress(NULL),
-    m_AllocationStatus(NULL),
+//    m_AllocationStatus(NULL),
     m_Data(NULL),
     m_Overflow(NULL),
     m_NewData(NULL),
@@ -159,12 +157,9 @@ void QxrdWindow::initialize()
   QxrdExperimentPtr expt(m_Experiment);
   QxrdWindowSettingsPtr set(m_WindowSettings);
 
-  updateTitle();
-
-  setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
 
   QxrdAcquisitionPtr acq(m_Acquisition);
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
 //  m_AcquisitionDialog = new QxrdAcquisitionDialog(m_Experiment,
 //                                                  sharedFromThis(),
@@ -222,7 +217,7 @@ void QxrdWindow::initialize()
 //    m_DistortionCorrectionPlot -> init(set->distortionCorrectionPlotSettings());
   }
 
-  QDesktopWidget *dw = QApplication::desktop();
+//  QDesktopWidget *dw = QApplication::desktop();
   //  int screenNum = dw->screenNumber(this);
 //  QRect screenGeom = dw->screenGeometry(this);
 
@@ -476,7 +471,6 @@ void QxrdWindow::initialize()
 
   m_HelpBrowser->init(m_Experiment);
 
-  connect(&m_UpdateTimer, &QTimer::timeout, this, &QxrdWindow::doTimerUpdate);
 
   connect(m_ActionIntegrate, &QAction::triggered, this, &QxrdWindow::doIntegrateSequence);
 
@@ -529,54 +523,29 @@ void QxrdWindow::initialize()
 //    }
 //  }
 
-  m_StatusMsg = new QLabel(NULL);
-  m_StatusMsg -> setMinimumWidth(200);
-  m_StatusMsg -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  m_StatusMsg -> setToolTip(tr("Status Messages"));
-
-  statusBar() -> addPermanentWidget(m_StatusMsg);
-
-  m_Progress = new QProgressBar(NULL);
-  m_Progress -> setMinimumWidth(150);
-  m_Progress -> setMinimum(0);
-  m_Progress -> setMaximum(100);
-  m_Progress -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  m_Progress -> setToolTip(tr("Acquisition progress"));
-
-  statusBar() -> addPermanentWidget(m_Progress);
-
-  m_AllocationStatus = new QProgressBar(NULL);
-  m_AllocationStatus -> setMinimumWidth(100);
-  m_AllocationStatus -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  m_AllocationStatus -> setFormat("%v/%m");
-  m_AllocationStatus -> setTextVisible(true);
-  m_AllocationStatus -> setToolTip(tr("Memory usage"));
-
-  statusBar() -> addPermanentWidget(m_AllocationStatus);
 
 //  if (app && m_Acquisition == NULL) {
 //    app->criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
 //  }
 
-  if (acq) {
-    connect(acq.data(), &QxrdAcquisition::acquireStarted,
-            this,       &QxrdWindow::acquireStarted);
-    connect(acq.data(), &QxrdAcquisition::acquiredFrame,
-            this,       &QxrdWindow::acquiredFrame);
-    connect(acq.data(), &QxrdAcquisition::acquireComplete,
-            this,       &QxrdWindow::acquireComplete);
+//  if (acq) {
+//    connect(acq.data(), &QxrdAcquisition::acquireStarted,
+//            this,       &QxrdWindow::acquireStarted);
+//    connect(acq.data(), &QxrdAcquisition::acquiredFrame,
+//            this,       &QxrdWindow::acquiredFrame);
+//    connect(acq.data(), &QxrdAcquisition::acquireComplete,
+//            this,       &QxrdWindow::acquireComplete);
 
-//    acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
-//    acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
-//    acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
+////    acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
+////    acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
+////    acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
 
-//    connect(acq->prop_OverflowLevel(), &QcepIntProperty::valueChanged,
-//            m_HistogramDialog, &QxrdHistogramDialog::updateHistogramNeeded);
-  }
+////    connect(acq->prop_OverflowLevel(), &QcepIntProperty::valueChanged,
+////            m_HistogramDialog, &QxrdHistogramDialog::updateHistogramNeeded);
+//  }
 
-  if (expt) {
-    expt -> prop_CompletionPercentage() -> linkTo(m_Progress);
-  }
+//  if (expt) {
+//  }
 
 //  if (proc) {
 //    proc -> prop_PerformDarkSubtraction() -> linkTo(m_CorrectionDialog->m_PerformDark);
@@ -704,7 +673,6 @@ void QxrdWindow::initialize()
       m_Messages -> document() -> setMaximumBlockCount(appset->get_MessageWindowLines());
 
       connect(appset->prop_MessageWindowLines(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onMessageWindowLinesChanged);
-      connect(appset->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onUpdateIntervalMsecChanged);
 
 #ifdef QT_NO_DEBUG
       m_ActionRefineCenterTilt->setEnabled(false);
@@ -726,8 +694,6 @@ void QxrdWindow::initialize()
           expt->set_DefaultLayout(0);
         }
       }
-
-      m_UpdateTimer.start(appset->get_UpdateIntervalMsec());
     }
   }
 
@@ -756,32 +722,32 @@ QxrdWindow::~QxrdWindow()
 //  QxrdMainWindow::setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 //}
 
-void QxrdWindow::updateTitle()
-{
-  QString title;
+//void QxrdWindow::updateTitle()
+//{
+//  QString title;
 
-  QxrdExperimentPtr expt(m_Experiment);
+//  QxrdExperimentPtr expt(m_Experiment);
 
-  if (expt) {
-    title = expt->experimentFilePath()+" - QXRD";
-  } else {
-    title = "QXRD";
-  }
+//  if (expt) {
+//    title = expt->experimentFilePath()+" - QXRD";
+//  } else {
+//    title = "QXRD";
+//  }
 
-  if (sizeof(void*) == 4) {
-    title.append(" - 32 bit - v");
-  } else {
-    title.append(" - 64 bit - v");
-  }
+//  if (sizeof(void*) == 4) {
+//    title.append(" - 32 bit - v");
+//  } else {
+//    title.append(" - 64 bit - v");
+//  }
 
-  title.append(STR(QXRD_VERSION));
+//  title.append(STR(QXRD_VERSION));
 
-  if (expt && expt->isChanged()) {
-    title.append(tr(" [%1]").arg(expt->isChanged()));
-  }
+//  if (expt && expt->isChanged()) {
+//    title.append(tr(" [%1]").arg(expt->isChanged()));
+//  }
 
-  setWindowTitle(title);
-}
+//  setWindowTitle(title);
+//}
 
 void QxrdWindow::onAcquisitionInit()
 {
@@ -960,54 +926,54 @@ void QxrdWindow::displayCriticalMessage(QString msg)
   }
 }
 
-void QxrdWindow::acquireStarted()
-{
-}
+//void QxrdWindow::acquireStarted()
+//{
+//}
 
-void QxrdWindow::acquireComplete()
-{
-  THREAD_CHECK;
+//void QxrdWindow::acquireComplete()
+//{
+//  THREAD_CHECK;
 
-  m_Progress -> reset();
-}
+//  m_Progress -> reset();
+//}
 
-void QxrdWindow::acquiredFrame(
-    QString fileName, int iphase, int nphases, int isum, int nsum, int igroup, int ngroup)
-{
-  printMessage(tr("QxrdWindow::acquiredFrame(\"%1\",%2,%3,%4,%5,%6,%7)")
-               .arg(fileName)
-               .arg(iphase).arg(nphases)
-               .arg(isum).arg(nsum)
-               .arg(igroup).arg(ngroup));
-  //   printf("\n",
-  // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
+//void QxrdWindow::acquiredFrame(
+//    QString fileName, int iphase, int nphases, int isum, int nsum, int igroup, int ngroup)
+//{
+//  printMessage(tr("QxrdWindow::acquiredFrame(\"%1\",%2,%3,%4,%5,%6,%7)")
+//               .arg(fileName)
+//               .arg(iphase).arg(nphases)
+//               .arg(isum).arg(nsum)
+//               .arg(igroup).arg(ngroup));
+//  //   printf("\n",
+//  // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
 
-  int totalFrames = (nphases*nsum*ngroup <= 0 ? 1 : nphases*nsum*ngroup);
-  int thisFrame   = igroup*nphases*nsum + isum*nphases + iphase + 1;
+//  int totalFrames = (nphases*nsum*ngroup <= 0 ? 1 : nphases*nsum*ngroup);
+//  int thisFrame   = igroup*nphases*nsum + isum*nphases + iphase + 1;
 
-  printMessage(tr("Frame %1 of %2").arg(thisFrame).arg(totalFrames));
+//  printMessage(tr("Frame %1 of %2").arg(thisFrame).arg(totalFrames));
 
-  //  printf("%d %% progress\n", thisFrame*100/totalFrames);
+//  //  printf("%d %% progress\n", thisFrame*100/totalFrames);
 
-  QxrdExperimentPtr expt(m_Experiment);
+//  QxrdExperimentPtr expt(m_Experiment);
 
-  if (expt) {
-    if (nphases <= 1) {
-      expt->statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
-                          .arg(fileName)
-                          .arg(isum+1).arg(nsum)
-                          .arg(igroup+1).arg(ngroup));
-    } else {
-      expt->statusMessage(tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
-                          .arg(fileName)
-                          .arg(iphase+1).arg(nphases)
-                          .arg(isum+1).arg(nsum)
-                          .arg(igroup+1).arg(ngroup));
-    }
-  }
+//  if (expt) {
+//    if (nphases <= 1) {
+//      expt->statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
+//                          .arg(fileName)
+//                          .arg(isum+1).arg(nsum)
+//                          .arg(igroup+1).arg(ngroup));
+//    } else {
+//      expt->statusMessage(tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
+//                          .arg(fileName)
+//                          .arg(iphase+1).arg(nphases)
+//                          .arg(isum+1).arg(nsum)
+//                          .arg(igroup+1).arg(ngroup));
+//    }
+//  }
 
-  m_Progress -> setValue(thisFrame*100/totalFrames);
-}
+//  m_Progress -> setValue(thisFrame*100/totalFrames);
+//}
 
 void QxrdWindow::captureSize()
 {
@@ -1031,27 +997,6 @@ void QxrdWindow::moveEvent(QMoveEvent *ev)
   captureSize();
 
   QMainWindow::moveEvent(ev);
-}
-
-void QxrdWindow::displayStatusMessage(QString msg)
-{
-  if (QThread::currentThread()==thread()) {
-    m_StatusMsg -> setText(msg);
-
-    //  printMessage(msg);
-
-    m_StatusTimer.start(5000);
-  } else {
-    INVOKE_CHECK(QMetaObject::invokeMethod(this,
-                                           "displayStatusMessage",
-                                           Qt::QueuedConnection,
-                                           Q_ARG(QString, msg)));
-  }
-}
-
-void QxrdWindow::clearStatusMessage()
-{
-  m_StatusMsg -> setText("");
 }
 
 void QxrdWindow::newDataAvailable(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow)
@@ -1084,9 +1029,9 @@ void QxrdWindow::newMaskAvailable(QcepMaskDataPtr mask)
 
 void QxrdWindow::doTimerUpdate()
 {
-  updateTitle();
+//  updateTitle();
 
-  allocatedMemoryChanged();
+//  allocatedMemoryChanged();
 
   QTime t;
   t.start();
@@ -1238,7 +1183,7 @@ void QxrdWindow::doSaveData()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     if (proc->data() == NULL) {
@@ -1258,7 +1203,7 @@ void QxrdWindow::doLoadData()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1274,7 +1219,7 @@ void QxrdWindow::doSaveDark()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     if (proc->darkImage() == NULL) {
@@ -1294,7 +1239,7 @@ void QxrdWindow::doLoadDark()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1310,7 +1255,7 @@ void QxrdWindow::doClearDark()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     if (proc->darkImage() == NULL) {
@@ -1328,7 +1273,7 @@ void QxrdWindow::doSaveMask()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     if (proc->mask() == NULL) {
@@ -1348,7 +1293,7 @@ void QxrdWindow::doLoadMask()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1364,7 +1309,7 @@ void QxrdWindow::doClearMask()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     if (proc->mask() == NULL) {
@@ -1382,7 +1327,7 @@ void QxrdWindow::doSaveBadPixels()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     if (proc->badPixels() == NULL) {
@@ -1402,7 +1347,7 @@ void QxrdWindow::doLoadBadPixels()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1418,7 +1363,7 @@ void QxrdWindow::doClearBadPixels()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     if (proc->badPixels() == NULL) {
@@ -1436,7 +1381,7 @@ void QxrdWindow::doSaveGainMap()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     if (proc->gainMap() == NULL) {
@@ -1456,7 +1401,7 @@ void QxrdWindow::doLoadGainMap()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1472,7 +1417,7 @@ void QxrdWindow::doClearGainMap()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     if (proc->gainMap() == NULL) {
@@ -1490,7 +1435,7 @@ void QxrdWindow::doSaveCachedGeometry()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QxrdIntegratorPtr integ(proc->integrator());
@@ -1510,7 +1455,7 @@ void QxrdWindow::doSaveCachedIntensity()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QxrdIntegratorPtr integ(proc->integrator());
@@ -1599,7 +1544,7 @@ void QxrdWindow::finishedCommandJS(QJSValue result)
 
 void QxrdWindow::doLoadScript()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1629,7 +1574,7 @@ void QxrdWindow::loadScript(QString path)
 
 QxrdDataProcessorWPtr QxrdWindow::dataProcessor() const
 {
-  return m_DataProcessor;
+  return qSharedPointerDynamicCast<QxrdDataProcessor>(m_DataProcessor);
 }
 
 QxrdAcquisitionWPtr QxrdWindow::acquisition() const
@@ -1647,22 +1592,13 @@ QcepMaskDataPtr QxrdWindow::mask()
   return m_Mask;
 }
 
-void QxrdWindow::allocatedMemoryChanged()
-{
-  int alloc = QcepAllocator::allocatedMemoryMB();
-  int avail = QcepAllocator::availableMemoryMB();
-
-  m_AllocationStatus -> setMaximum(avail);
-  m_AllocationStatus -> setValue(alloc);
-}
-
 void QxrdWindow::doRefineCenterTilt()
 {
 }
 
 void QxrdWindow::doAccumulateImages()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
@@ -1675,7 +1611,7 @@ void QxrdWindow::doAccumulateImages()
 
 void QxrdWindow::doAddImages()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
@@ -1688,7 +1624,7 @@ void QxrdWindow::doAddImages()
 
 void QxrdWindow::doSubtractImages()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
@@ -1701,7 +1637,7 @@ void QxrdWindow::doSubtractImages()
 
 void QxrdWindow::doReflectHorizontally()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "reflectHorizontally");
@@ -1710,7 +1646,7 @@ void QxrdWindow::doReflectHorizontally()
 
 void QxrdWindow::doReflectVertically()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "reflectVertically");
@@ -1719,7 +1655,7 @@ void QxrdWindow::doReflectVertically()
 
 void QxrdWindow::doProjectAlongX()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
@@ -1733,7 +1669,7 @@ void QxrdWindow::doProjectAlongX()
 
 void QxrdWindow::doProjectAlongY()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
@@ -1747,7 +1683,7 @@ void QxrdWindow::doProjectAlongY()
 
 void QxrdWindow::doProjectAlongZ()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
@@ -1761,7 +1697,7 @@ void QxrdWindow::doProjectAlongZ()
 
 void QxrdWindow::doCorrelate()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
@@ -1774,7 +1710,7 @@ void QxrdWindow::doCorrelate()
 
 void QxrdWindow::doIntegrateSequence()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
@@ -1789,7 +1725,7 @@ void QxrdWindow::doIntegrateSequence()
 
 void QxrdWindow::doProcessSequence()
 {
-  QxrdDataProcessorPtr proc(m_DataProcessor);
+  QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
@@ -1812,11 +1748,6 @@ void QxrdWindow::integrationXUnitsChanged(int newXUnits)
 void QxrdWindow::onMessageWindowLinesChanged(int newVal)
 {
   m_Messages -> document() -> setMaximumBlockCount(newVal);
-}
-
-void QxrdWindow::onUpdateIntervalMsecChanged(int newVal)
-{
-  m_UpdateTimer.setInterval(newVal);
 }
 
 void QxrdWindow::plotPowderRingRadii()

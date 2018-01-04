@@ -5,8 +5,8 @@
 QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
                                      QString name,
                                      QxrdApplicationWPtr app,
-                                     QxrdExperimentWPtr expt) :
-  QxrdMainWindow(name, app, expt),
+                                     QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw) :
+  QxrdMainWindow(name, app, expt, acqw, procw),
   m_MaskingWindowSettings(set)
 {
   setupUi(this);

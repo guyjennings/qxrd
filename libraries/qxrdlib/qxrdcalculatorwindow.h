@@ -15,7 +15,9 @@ public:
   explicit QxrdCalculatorWindow(QxrdCalculatorWindowSettingsWPtr set,
                                 QString name,
                                 QxrdApplicationWPtr app,
-                                QxrdExperimentWPtr expt);
+                                QxrdExperimentWPtr expt,
+                                QxrdAcquisitionWPtr acqw,
+                                QxrdProcessorWPtr procw);
   ~QxrdCalculatorWindow();
 
 protected:

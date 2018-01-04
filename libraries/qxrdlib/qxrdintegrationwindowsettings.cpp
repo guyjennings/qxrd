@@ -19,7 +19,7 @@ QxrdMainWindowPtr QxrdIntegrationWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdIntegrationWindow(myself, "Integration", m_Application, m_Experiment));
+        new QxrdIntegrationWindow(myself, "Integration", m_Application, m_Experiment, m_Acquisition, m_Processor));
 
   return m_Window;
 }

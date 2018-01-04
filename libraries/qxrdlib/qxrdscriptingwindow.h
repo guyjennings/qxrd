@@ -15,7 +15,9 @@ public:
   explicit QxrdScriptingWindow(QxrdScriptingWindowSettingsWPtr set,
                                QString name,
                                QxrdApplicationWPtr app,
-                               QxrdExperimentWPtr expt);
+                               QxrdExperimentWPtr expt,
+                               QxrdAcquisitionWPtr acqw,
+                               QxrdProcessorWPtr procw);
   ~QxrdScriptingWindow();
 
 protected:

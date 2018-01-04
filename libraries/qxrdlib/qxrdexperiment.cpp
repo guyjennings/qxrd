@@ -539,9 +539,8 @@ void QxrdExperiment::openWindows()
                            m_Application,
                            qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()),
                            m_Acquisition,
-                           m_DataProcessor,
-                           NULL),
-            &QObject::deleteLater);
+                           m_DataProcessor),
+            &QObject::deleteLater); //TODO: is deleteLater necessary?
 
       QxrdDataProcessorPtr proc(m_DataProcessor);
       QxrdAcquisitionPtr acq(m_Acquisition);
@@ -1303,11 +1302,11 @@ void QxrdExperiment::setExperimentFilePath(QString path)
   set_LogFileName(defaultLogName(path));
   set_ScanFileName(defaultScanName(path));
 
-  QxrdWindowPtr win = m_Window;
+//  QxrdWindowPtr win = m_Window;
 
-  if (win) {
-    win -> updateTitle();
-  }
+//  if (win) {
+//    win -> updateTitle();
+//  }
 
   if (qcepDebug(DEBUG_PREFS)) {
     printMessage(tr("setExperimentFilePath %1").arg(path));
@@ -1519,7 +1518,7 @@ void QxrdExperiment::defaultWindowSettings()
         qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(i));
 
     if (set) {
-      set -> initialize(application(), experiment());
+      set -> initialize(application(), experiment(), acquisition(), dataProcessor());
     }
   }
 }

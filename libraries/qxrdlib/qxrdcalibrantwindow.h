@@ -21,7 +21,9 @@ public:
   explicit QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set,
                                QString name,
                                QxrdApplicationWPtr app,
-                               QxrdExperimentWPtr expt);
+                               QxrdExperimentWPtr expt,
+                               QxrdAcquisitionWPtr acqw,
+                               QxrdProcessorWPtr procw);
   ~QxrdCalibrantWindow();
 
 public slots:

@@ -15,7 +15,9 @@ public:
   explicit QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
                              QString name,
                              QxrdApplicationWPtr app,
-                             QxrdExperimentWPtr expt);
+                             QxrdExperimentWPtr expt,
+                             QxrdAcquisitionWPtr acqw,
+                             QxrdProcessorWPtr procw);
   ~QxrdMaskingWindow();
 
 protected:

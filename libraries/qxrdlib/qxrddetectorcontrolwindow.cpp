@@ -25,7 +25,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
                                                      QxrdDetectorSettingsWPtr          det,
                                                      QxrdDetectorProcessorWPtr proc,
                                                      QWidget                  * /*parent*/) :
-  QxrdMainWindow("detector", appl, exp),
+  QxrdMainWindow("detector", appl, exp, acq, proc),
   m_Experiment(exp),
   m_Acquisition(acq),
   m_Detector(det),

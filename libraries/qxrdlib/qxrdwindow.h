@@ -46,8 +46,7 @@ public:
              QxrdApplicationWPtr appl,
              QxrdExperimentWPtr docw,
              QxrdAcquisitionWPtr acqw,
-             QxrdDataProcessorWPtr procw,
-             QWidget *parent);
+             QxrdDataProcessorWPtr procw);
   virtual ~QxrdWindow();
   void initialize();
 //  void setupMenus();
@@ -90,10 +89,10 @@ public slots:
   void doNewTestImageGenerator();
   void doNewTestScanGenerator();
 
-  void updateTitle();
-  void acquireStarted();
-  void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
-  void acquireComplete();
+//  void updateTitle();
+//  void acquireStarted();
+//  void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
+//  void acquireComplete();
 
   void executeScript();
   void executeScriptJS();
@@ -106,7 +105,6 @@ public slots:
   QString timeStamp() const;
   void warningMessage(QString msg);
   void displayMessage(QString msg);
-  void displayStatusMessage(QString msg);
   void displayCriticalMessage(QString msg);
   void initialLogEntry(QString aline);
   virtual void printLine(QString line);
@@ -115,7 +113,6 @@ public slots:
   virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 //  void selectOutputDirectory();
-  void clearStatusMessage();
 
   void enableTiltRefinement(bool enable);
 
@@ -126,10 +123,8 @@ signals:
 private slots:
   void doTimerUpdate();
   void newMask();
-  void allocatedMemoryChanged();
   void integrationXUnitsChanged(int newXUnits);
   void onMessageWindowLinesChanged(int newVal);
-  void onUpdateIntervalMsecChanged(int newVal);
 //  void populateWindowMenu();
   void populateConfigureDetectorMenu();
   void populateDetectorControlWindowsMenu();
@@ -158,10 +153,10 @@ private:
   QcepObjectNamer                        m_ObjectNamer;
   mutable QMutex                         m_Mutex;
   QxrdWindowSettingsWPtr                 m_WindowSettings;
-  QxrdApplicationWPtr                    m_Application;
-  QxrdExperimentWPtr                     m_Experiment;
-  QxrdAcquisitionWPtr                    m_Acquisition;
-  QxrdDataProcessorWPtr                  m_DataProcessor;
+//  QxrdApplicationWPtr                    m_Application;
+//  QxrdExperimentWPtr                     m_Experiment;
+//  QxrdAcquisitionWPtr                    m_Acquisition;
+//  QxrdDataProcessorWPtr                  m_DataProcessor;
 //  QxrdAcquisitionScalerDialog           *m_AcquisitionScalerDialog;
 //  QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
 //  QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
@@ -178,11 +173,6 @@ private:
 //  QxrdInfoDialog                        *m_ImageInfoDialog;
 //  QxrdScriptDialog                      *m_ScriptDialog;
   QVector<double>                        m_Exposures;
-  QProgressBar                          *m_Progress;
-  QLabel                                *m_StatusMsg;
-  QProgressBar                          *m_AllocationStatus;
-  QTimer                                 m_StatusTimer;
-  QTimer                                 m_UpdateTimer;
 
   QcepDoubleImageDataPtr                 m_Data;
   QcepMaskDataPtr                        m_Overflow;

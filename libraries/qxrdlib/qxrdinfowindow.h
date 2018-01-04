@@ -12,7 +12,9 @@ class QXRD_EXPORT QxrdInfoWindow : public QxrdMainWindow, public Ui::QxrdInfoWin
 public:
   explicit QxrdInfoWindow(QString name,
                           QxrdApplicationWPtr app,
-                          QxrdExperimentWPtr expt);
+                          QxrdExperimentWPtr expt,
+                          QxrdAcquisitionWPtr acqw,
+                          QxrdProcessorWPtr procw);
   ~QxrdInfoWindow();
 
 protected:

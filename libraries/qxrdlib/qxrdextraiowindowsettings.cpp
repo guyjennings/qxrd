@@ -17,7 +17,7 @@ QxrdMainWindowPtr QxrdExtraIOWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdExtraIOWindow(myself, "Extra I/O", m_Application, m_Experiment));
+        new QxrdExtraIOWindow(myself, "Extra I/O", m_Application, m_Experiment, m_Acquisition, m_Processor));
 
   return m_Window;
 }

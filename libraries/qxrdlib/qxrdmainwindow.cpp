@@ -3,6 +3,7 @@
 #include "qxrdmainwindow.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
+#include "qxrdacquisition.h"
 #include "qxrdmainwindowsettings-ptr.h"
 #include "qxrdmainwindowsettings.h"
 #include "qxrdexperimentpreferencesdialog.h"
@@ -11,12 +12,16 @@
 #include <QDir>
 #include <QFileDialog>
 #include "qxrdapplicationsettings.h"
+#include "qcepallocator.h"
 
-QxrdMainWindow::QxrdMainWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt)
+QxrdMainWindow::QxrdMainWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw)
   : QcepMainWindow(),
     m_Name(name),
     m_Application(app),
     m_Experiment(expt),
+    m_Acquisition(acqw),
+    m_DataProcessor(procw),
+    m_Progress(NULL),
     m_FileMenuP(NULL),
     m_EditMenuP(NULL),
     m_WindowMenuP(NULL)
@@ -25,32 +30,54 @@ QxrdMainWindow::QxrdMainWindow(QString name, QxrdApplicationWPtr app, QxrdExperi
 
 void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
 {
+  m_StatusMsg = new QLabel(NULL);
+  m_StatusMsg -> setMinimumWidth(200);
+  m_StatusMsg -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  m_StatusMsg -> setToolTip(tr("Status Messages"));
+
+  statusBar() -> addPermanentWidget(m_StatusMsg);
+
+  m_Progress = new QProgressBar(NULL);
+  m_Progress -> setMinimumWidth(150);
+  m_Progress -> setMinimum(0);
+  m_Progress -> setMaximum(100);
+  m_Progress -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  m_Progress -> setToolTip(tr("Acquisition progress"));
+
+  statusBar() -> addPermanentWidget(m_Progress);
+
+  m_AllocationStatus = new QProgressBar(NULL);
+  m_AllocationStatus -> setMinimumWidth(100);
+  m_AllocationStatus -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  m_AllocationStatus -> setFormat("%v/%m");
+  m_AllocationStatus -> setTextVisible(true);
+  m_AllocationStatus -> setToolTip(tr("Memory usage"));
+
+  statusBar() -> addPermanentWidget(m_AllocationStatus);
+
   m_FileMenuP = file;
   m_EditMenuP = edit;
   m_WindowMenuP = window;
 
   QxrdApplicationPtr app(m_Application);
   QxrdExperimentPtr exper(m_Experiment);
-  QString title;
 
-  title = m_Name;
+  if (app) {
+    QxrdApplicationSettingsPtr appset(app->settings());
 
-  if (exper) {
-    title.append(" - ");
-    title.append(exper->experimentFilePath());
+    if (appset) {
+      connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdMainWindow::clearStatusMessage);
+      connect(&m_UpdateTimer, &QTimer::timeout, this, &QxrdMainWindow::doTimerUpdate);
+
+      m_UpdateTimer.start(appset->get_UpdateIntervalMsec());
+
+      connect(appset->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged, this, &QxrdMainWindow::onUpdateIntervalMsecChanged);
+    }
   }
 
-  title.append(" - QXRD");
+  updateTitle();
 
-  if (sizeof(void*) == 4) {
-    title.append(" - 32 bit - v");
-  } else {
-    title.append(" - 64 bit - v");
-  }
-
-  title.append(STR(QXRD_VERSION));
-
-  setWindowTitle(title);
+  setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
 
   if (m_FileMenuP && app && exper) {
     m_FileMenuP->clear();
@@ -137,6 +164,51 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
             this, &QxrdMainWindow::populateWindowsMenu);
 
   }
+
+  QxrdAcquisitionPtr acq(m_Acquisition);
+
+  if (acq) {
+    connect(acq.data(), &QxrdAcquisition::acquireStarted,
+            this,       &QxrdMainWindow::acquireStarted);
+
+    connect(acq.data(), &QxrdAcquisition::acquiredFrame,
+            this,       &QxrdMainWindow::acquiredFrame);
+
+    connect(acq.data(), &QxrdAcquisition::acquireComplete,
+            this,       &QxrdMainWindow::acquireComplete);
+  }
+}
+
+void QxrdMainWindow::updateTitle()
+{
+  QxrdExperimentPtr exper(m_Experiment);
+
+  QString title;
+
+  title = m_Name;
+
+  if (exper) {
+    title.append(" - ");
+    title.append(exper->experimentFilePath());
+
+    exper -> prop_CompletionPercentage() -> linkTo(m_Progress);
+  }
+
+  title.append(" - QXRD");
+
+  if (sizeof(void*) == 4) {
+    title.append(" - 32 bit - v");
+  } else {
+    title.append(" - 64 bit - v");
+  }
+
+  title.append(STR(QXRD_VERSION));
+
+  if (exper && exper->isChanged()) {
+    title.append(tr(" [%1]").arg(exper->isChanged()));
+  }
+
+  setWindowTitle(title);
 }
 
 void QxrdMainWindow::populateEditMenu()
@@ -284,6 +356,81 @@ void QxrdMainWindow::criticalMessage(QString /*msg*/, QDateTime /*ts*/)
 
 void QxrdMainWindow::statusMessage(QString /*msg*/, QDateTime /*ts*/)
 {
+}
+
+void QxrdMainWindow::allocatedMemoryChanged()
+{
+  int alloc = QcepAllocator::allocatedMemoryMB();
+  int avail = QcepAllocator::availableMemoryMB();
+
+  m_AllocationStatus -> setMaximum(avail);
+  m_AllocationStatus -> setValue(alloc);
+}
+
+void QxrdMainWindow::doTimerUpdate()
+{
+  updateTitle();
+
+  allocatedMemoryChanged();
+}
+
+void QxrdMainWindow::displayStatusMessage(QString msg)
+{
+  if (QThread::currentThread()==thread()) {
+    m_StatusMsg -> setText(msg);
+
+    //  printMessage(msg);
+
+    m_StatusTimer.start(5000);
+  } else {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                           "displayStatusMessage",
+                                           Qt::QueuedConnection,
+                                           Q_ARG(QString, msg)));
+  }
+}
+
+void QxrdMainWindow::onUpdateIntervalMsecChanged(int newVal)
+{
+  m_UpdateTimer.setInterval(newVal);
+}
+
+void QxrdMainWindow::clearStatusMessage()
+{
+  m_StatusMsg -> setText("");
+}
+
+void QxrdMainWindow::acquireStarted()
+{
+}
+
+void QxrdMainWindow::acquireComplete()
+{
+  THREAD_CHECK;
+
+  m_Progress -> reset();
+}
+
+void QxrdMainWindow::acquiredFrame(
+    QString fileName, int iphase, int nphases, int isum, int nsum, int igroup, int ngroup)
+{
+  int totalFrames = (nphases*nsum*ngroup <= 0 ? 1 : nphases*nsum*ngroup);
+  int thisFrame   = igroup*nphases*nsum + isum*nphases + iphase + 1;
+
+  if (nphases <= 1) {
+    displayStatusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
+                         .arg(fileName)
+                         .arg(isum+1).arg(nsum)
+                         .arg(igroup+1).arg(ngroup));
+  } else {
+    displayStatusMessage(tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
+                         .arg(fileName)
+                         .arg(iphase+1).arg(nphases)
+                         .arg(isum+1).arg(nsum)
+                         .arg(igroup+1).arg(ngroup));
+  }
+
+  m_Progress -> setValue(thisFrame*100/totalFrames);
 }
 
 void QxrdMainWindow::doEditPreferences()

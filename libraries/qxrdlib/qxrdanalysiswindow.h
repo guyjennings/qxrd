@@ -13,7 +13,9 @@ class QXRD_EXPORT QxrdAnalysisWindow : public QxrdMainWindow, public Ui::QxrdAna
 public:
   explicit QxrdAnalysisWindow(QString name,
                               QxrdApplicationWPtr app,
-                              QxrdExperimentWPtr expt);
+                              QxrdExperimentWPtr expt,
+                              QxrdAcquisitionWPtr acqw,
+                              QxrdProcessorWPtr procw);
   ~QxrdAnalysisWindow();
 
 protected:
