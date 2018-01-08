@@ -58,6 +58,25 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings)
 
   addPlotCommand(QxrdPlotCommandPtr(new QxrdScalingSubmenuCommand("Display", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdColorMapSubmenuCommand("Display", this, settings)));
+
+  QxrdImagePlotWidgetSettingsPtr set(m_ImageSettings);
+
+  if (set) {
+    connect(set->prop_DisplayColorMap(),     &QcepIntProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_DisplayLog(),          &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_DisplayScalingMode(),  &QcepIntProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_DisplayMaximumPct(),   &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_DisplayMaximumPct(),   &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_DisplayMaximumPctle(), &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_DisplayMaximumPctle(), &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_DisplayMaximumVal(),   &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_DisplayMaximumVal(),   &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_ImageShown(),          &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_MaskShown(),           &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_OverflowShown(),       &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_OverflowLevel(),       &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_InterpolatePixels(),   &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+  }
 }
 
 void QxrdImagePlotWidget::editPreferences()
