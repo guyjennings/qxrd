@@ -55,7 +55,8 @@ void QxrdPlotWidget::initialize(QxrdPlotWidgetSettingsWPtr settings)
 {
   m_Settings = settings;
 
-  m_Plot -> setCanvasBackground(QBrush(Qt::cyan));
+  //  m_Plot -> setCanvasBackground(QBrush(Qt::cyan));
+  m_Plot -> setCanvasBackground(QBrush(Qt::white));
 
   addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomInCommand("Zoom In", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomOutCommand("Zoom Out", this, settings)));

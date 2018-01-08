@@ -3,23 +3,25 @@
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
-
+#include "qxrdimageplotwidgetsettings-ptr.h"
 #include <qwt_color_map.h>
 
 class QXRD_EXPORT QxrdMaskColorMap : public QwtLinearColorMap
 {
- public:
-  QxrdMaskColorMap(const QColor &deselcol, const QColor &selcol);
-  QxrdMaskColorMap();
+public:
+  QxrdMaskColorMap(QxrdImagePlotWidgetSettingsWPtr set,
+                   const QColor &deselcol, const QColor &selcol);
+//  QxrdMaskColorMap();
 
-//  QxrdMaskColorMap* copy() const;
+  //  QxrdMaskColorMap* copy() const;
 
   QRgb rgb(const QwtInterval &inter, double value) const;
   unsigned char colorIndex(const QwtInterval &inter, double value) const;
 
- private:
-  QRgb  m_DeselectedColor;
-  QRgb  m_SelectedColor;
+private:
+  QxrdImagePlotWidgetSettingsWPtr m_Settings;
+  QRgb                            m_DeselectedColor;
+  QRgb                            m_SelectedColor;
 };
 
 #endif

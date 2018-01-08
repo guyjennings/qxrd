@@ -1,18 +1,21 @@
 #include "qxrdmaskcolormap.h"
 
-QxrdMaskColorMap::QxrdMaskColorMap(const QColor &deselcol, const QColor &selcol)
+QxrdMaskColorMap::QxrdMaskColorMap(
+    QxrdImagePlotWidgetSettingsWPtr set,
+    const QColor &deselcol, const QColor &selcol)
   : QwtLinearColorMap(QwtColorMap::RGB),
-  m_DeselectedColor(deselcol.rgba()),
-  m_SelectedColor(selcol.rgba())
+    m_Settings(set),
+    m_DeselectedColor(deselcol.rgba()),
+    m_SelectedColor(selcol.rgba())
 {
 }
 
-QxrdMaskColorMap::QxrdMaskColorMap()
-  : QwtLinearColorMap(QwtColorMap::RGB),
-  m_DeselectedColor(qRgba(255,0,0,255)),
-  m_SelectedColor(qRgba(255,0,0,0))
-{
-}
+//QxrdMaskColorMap::QxrdMaskColorMap()
+//  : QwtLinearColorMap(QwtColorMap::RGB),
+//  m_DeselectedColor(qRgba(255,0,0,255)),
+//  m_SelectedColor(qRgba(255,0,0,0))
+//{
+//}
 
 //QxrdMaskColorMap* QxrdMaskColorMap::copy() const
 //{

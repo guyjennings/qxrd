@@ -1,6 +1,12 @@
 #include "qxrdcolormap.h"
 
-QxrdColorMap::QxrdColorMap()
+QxrdColorMap::QxrdColorMap(QxrdImagePlotWidgetSettingsWPtr set)
+  : QwtLinearColorMap(),
+    m_Settings(set)
 {
+}
 
+QxrdImagePlotWidgetSettingsWPtr QxrdColorMap::settings()
+{
+  return m_Settings;
 }

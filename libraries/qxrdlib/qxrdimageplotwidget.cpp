@@ -183,9 +183,17 @@ void QxrdImagePlotWidget::updateColorMap()
   if (set) {
     int mapIndex = set->get_DisplayColorMap();
 
-    m_ImageSpectrogram    -> setColorMap(QxrdColorMapLibrary::newImageColorMap(mapIndex));
-    m_OverflowSpectrogram -> setColorMap(QxrdColorMapLibrary::newOverflowColorMap(mapIndex));
-    m_MaskSpectrogram     -> setColorMap(QxrdColorMapLibrary::newMaskColorMap(mapIndex));
+    if (m_ImageSpectrogram) {
+      m_ImageSpectrogram    -> setColorMap(QxrdColorMapLibrary::newImageColorMap(mapIndex, set));
+    }
+
+    if (m_OverflowSpectrogram) {
+      m_OverflowSpectrogram -> setColorMap(QxrdColorMapLibrary::newOverflowColorMap(mapIndex, set));
+    }
+
+    if (m_MaskSpectrogram) {
+      m_MaskSpectrogram     -> setColorMap(QxrdColorMapLibrary::newMaskColorMap(mapIndex, set));
+    }
   }
 
   replotGraph();
