@@ -354,7 +354,9 @@ SOURCES += qxrdlib.cpp \
     qxrdscalingsubmenucommand.cpp \
     qxrdcolormapsubmenucommand.cpp \
     qxrdplotwidgetdialog.cpp \
-    qxrdoverflowrasterdata.cpp
+    qxrdoverflowrasterdata.cpp \
+    qxrdcolormaplibrary.cpp \
+    qxrdcolormap.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -512,7 +514,11 @@ HEADERS += qxrdlib.h\
     qwt_plot_spectrogram-ptr.h \
     qxrdoverflowrasterdata.h \
     qxrdoverflowrasterdata-ptr.h \
-    qxrdprocessor-ptr.h
+    qxrdprocessor-ptr.h \
+    qxrdcolormaplibrary.h \
+    qxrdcolormaplibrary-ptr.h \
+    qxrdcolormap.h \
+    qxrdcolormap-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

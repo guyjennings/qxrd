@@ -350,10 +350,10 @@ void QxrdImagePlot::onInterpolateChanged(bool interp)
 {
   //  printf("QxrdImagePlot::onInterpolateChanged(%d)\n", interp);
 
-  if (m_DataRaster) {
-    m_DataRaster->setInterpolate(interp);
+//  if (m_DataRaster) {
+//    m_DataRaster->setInterpolate(interp);
 
-  }
+//  }
 
   replotImage();
 }
@@ -825,7 +825,9 @@ void QxrdImagePlot::onProcessedImageAvailable(QcepImageDataBasePtr image, QcepMa
       m_FirstTime = true;
     }
 
-    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels());
+    QxrdRasterData *data = new QxrdRasterData(image,
+                                              QxrdImagePlotWidgetSettingsWPtr()
+                                              /*set->get_InterpolatePixels()*/);
 
     if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
       g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable new raster after %1 msec").arg(tic.elapsed()));
@@ -843,7 +845,7 @@ void QxrdImagePlot::onProcessedImageAvailable(QcepImageDataBasePtr image, QcepMa
       g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable set image after %1 msec").arg(tic.elapsed()));
     }
 
-    setOverflows(new QxrdMaskRasterData(m_Overflow));
+    setOverflows(new QxrdMaskRasterData(m_Overflow, QxrdImagePlotWidgetSettingsWPtr()));
 
     if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
       g_Application->printMessage(tr("QxrdImagePlot::onProcessedImageAvailable set overflows after %1 msec").arg(tic.elapsed()));
@@ -881,8 +883,10 @@ void QxrdImagePlot::onMaskedImageAvailable(QcepImageDataBasePtr image, QcepMaskD
       m_FirstTime = true;
     }
 
-    QxrdRasterData *data = new QxrdRasterData(image, set->get_InterpolatePixels());
-    QxrdMaskRasterData *msk = new QxrdMaskRasterData(mask);
+    QxrdRasterData *data = new QxrdRasterData(image,
+                                              QxrdImagePlotWidgetSettingsWPtr()
+                                              /*set->get_InterpolatePixels()*/);
+    QxrdMaskRasterData *msk = new QxrdMaskRasterData(mask, QxrdImagePlotWidgetSettingsWPtr());
 
     setImage(data);
     setMask(msk);

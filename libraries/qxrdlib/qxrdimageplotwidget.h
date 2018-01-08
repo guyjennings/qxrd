@@ -28,8 +28,10 @@ public slots:
   void replotMask();
 
 private slots:
+  void updateColorMap();
   void updateImage();
   void updateMask();
+  void replotGraph();
 
 protected:
   QTimer                      m_ImageTimer;

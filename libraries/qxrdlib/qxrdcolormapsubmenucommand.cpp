@@ -1,6 +1,8 @@
 #include "qxrdcolormapsubmenucommand.h"
 #include "qxrdplotwidgetsettings.h"
 #include <QMenu>
+#include "qxrdcolormaplibrary.h"
+#include "qxrdimageplotwidgetsettings.h"
 
 QxrdColorMapSubmenuCommand::QxrdColorMapSubmenuCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
   : QxrdPlotContextMenuCommand(name, plot, set)
@@ -13,16 +15,13 @@ QAction* QxrdColorMapSubmenuCommand::contextMenuAction(const QPoint & /*pos*/)
 
   QMenu *colorMaps = new QMenu("Color Maps");
 
-  colorMaps -> addAction("Grayscale",          m_Plot, &QxrdImagePlot::setGrayscale);
-  colorMaps -> addAction("Inverse Grayscale",  m_Plot, &QxrdImagePlot::setInverseGrayscale);
-  colorMaps -> addAction("Earth Tones",        m_Plot, &QxrdImagePlot::setEarthTones);
-  colorMaps -> addAction("Spectrum",           m_Plot, &QxrdImagePlot::setSpectrum);
-  colorMaps -> addAction("Fire",               m_Plot, &QxrdImagePlot::setFire);
-  colorMaps -> addAction("Ice",                m_Plot, &QxrdImagePlot::setIce);
-
-  QxrdPlotWidgetSettingsPtr set(m_Settings);
+  QxrdImagePlotWidgetSettingsPtr set(qSharedPointerDynamicCast<QxrdImagePlotWidgetSettings>(m_Settings));
 
   if (set) {
+    for (int i=0; i<QxrdColorMapLibrary::colorMapCount(); i++) {
+      colorMaps -> addAction(QxrdColorMapLibrary::colorMapName(i),
+                             [=]() { set->set_DisplayColorMap(i); });
+    }
   }
 
   colorMap ->setMenu(colorMaps);

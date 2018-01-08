@@ -2,17 +2,19 @@
 #include "qxrdrasterdata.h"
 #include "qxrdapplication.h"
 #include <QString>
+#include "qxrdimageplotwidgetsettings.h"
 
-QxrdRasterData::QxrdRasterData(QcepImageDataBaseWPtr img, int interp)
+QxrdRasterData::QxrdRasterData(QcepImageDataBaseWPtr           img,
+                               QxrdImagePlotWidgetSettingsWPtr set)
   : QwtRasterData(),
     m_ImageData(img),
-    m_Range(QwtInterval(0,40000)),
-    m_Interpolate(interp)
+    m_Settings(set),
+    m_Range(QwtInterval(0,40000))
 {
   if (qcepDebug(DEBUG_IMAGES)) {
     if (g_Application) {
       g_Application->printMessage(QObject::tr("QxrdRasterData::QxrdRasterData(%1,%2) [%3]")
-                        .HEXARG(img.data()).arg(interp).HEXARG(this));
+                        .HEXARG(img.data()).HEXARG(set.data()).HEXARG(this));
     }
   }
 
@@ -36,27 +38,16 @@ void QxrdRasterData::setIntervals()
   setInterval(Qt::ZAxis, m_Range);
 }
 
-void QxrdRasterData::setInterpolate(int interp)
-{
-//  printf("%p->QxrdRasterData::setInterpolate(%d)\n", this, interp);
-
-  m_Interpolate = interp;
-}
-
-int QxrdRasterData::interpolate()
-{
-  return m_Interpolate;
-}
-
 double QxrdRasterData::value(double x, double y) const
 {
   QcepImageDataBasePtr data(m_ImageData);
+  QxrdImagePlotWidgetSettingsPtr set(m_Settings);
 
   if (data) {
     if (x < 0 || x > m_NCols) return 0;
     if (y < 0 || y > m_NRows) return 0;
 
-    if (m_Interpolate) {
+    if (set && set->get_InterpolatePixels()) {
       int ix = ((int) x), iy = ((int) y);
       double dx = x-ix, dy = y-iy;
 

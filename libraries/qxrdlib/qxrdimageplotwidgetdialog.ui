@@ -422,36 +422,6 @@
        <property name="toolTip">
         <string>Choose the color map for image display</string>
        </property>
-       <item>
-        <property name="text">
-         <string>Grayscale</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Inverted grayscale</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Earth</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Spectrum</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Fire</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Ice</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="5" column="1">

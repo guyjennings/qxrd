@@ -6,12 +6,13 @@
 
 #include <qwt_raster_data.h>
 #include "qcepimagedata.h"
+#include "qxrdimageplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QxrdOverflowRasterData : public QwtRasterData
 {
 public:
-  QxrdOverflowRasterData(QcepImageDataBaseWPtr img,
-                         double level);
+  QxrdOverflowRasterData(QcepImageDataBaseWPtr           img,
+                         QxrdImagePlotWidgetSettingsWPtr set);
 
 public:
   double value(double x, double y) const;
@@ -25,10 +26,10 @@ private:
   void setIntervals();
 
 private:
-  QcepImageDataBaseWPtr  m_ImageData;
-  int                    m_NRows;
-  int                    m_NCols;
-  double                 m_OverflowLevel;
+  QcepImageDataBaseWPtr           m_ImageData;
+  QxrdImagePlotWidgetSettingsWPtr m_Settings;
+  int                             m_NRows;
+  int                             m_NCols;
 };
 
 #endif // QXRDOVERFLOWRASTERDATA_H

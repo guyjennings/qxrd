@@ -18,6 +18,9 @@
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
 #include "qxrdoverflowrasterdata.h"
+#include "qxrdcolormaplibrary.h"
+#include "qxrdcolormap.h"
+#include "qxrdmaskcolormap.h"
 
 QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent)
   : QxrdPlotWidget(parent),
@@ -107,7 +110,7 @@ void QxrdImagePlotWidget::replotImage()
       if (m_ImageRaster == NULL) {
         m_ImageRaster =
             new QxrdRasterData(m_ImageData,
-                               set->get_InterpolatePixels());
+                               m_ImageSettings);
       } else {
         m_ImageRaster -> setImage(m_ImageData);
       }
@@ -115,7 +118,7 @@ void QxrdImagePlotWidget::replotImage()
       if (m_OverflowRaster == NULL) {
         m_OverflowRaster =
             new QxrdOverflowRasterData(m_ImageData,
-                                       set->get_OverflowLevel());
+                                       m_ImageSettings);
       }
 
       if (m_ImageSpectrogram == NULL) {
@@ -138,6 +141,8 @@ void QxrdImagePlotWidget::replotImage()
       m_OverflowSpectrogram -> setData(m_OverflowRaster);
     }
   }
+
+  updateColorMap();
 }
 
 void QxrdImagePlotWidget::replotMask()
@@ -149,7 +154,8 @@ void QxrdImagePlotWidget::replotMask()
 
       if(m_MaskRaster == NULL) {
         m_MaskRaster =
-            new QxrdMaskRasterData(m_MaskData);
+            new QxrdMaskRasterData(m_MaskData,
+                                   m_ImageSettings);
       } else {
         m_MaskRaster -> setMask(m_MaskData);
       }
@@ -166,4 +172,26 @@ void QxrdImagePlotWidget::replotMask()
       m_MaskSpectrogram -> setData(m_MaskRaster);
     }
   }
+
+  updateColorMap();
+}
+
+void QxrdImagePlotWidget::updateColorMap()
+{
+  QxrdImagePlotWidgetSettingsPtr set(m_ImageSettings);
+
+  if (set) {
+    int mapIndex = set->get_DisplayColorMap();
+
+    m_ImageSpectrogram    -> setColorMap(QxrdColorMapLibrary::newImageColorMap(mapIndex));
+    m_OverflowSpectrogram -> setColorMap(QxrdColorMapLibrary::newOverflowColorMap(mapIndex));
+    m_MaskSpectrogram     -> setColorMap(QxrdColorMapLibrary::newMaskColorMap(mapIndex));
+  }
+
+  replotGraph();
+}
+
+void QxrdImagePlotWidget::replotGraph()
+{
+  m_Plot->replot();
 }

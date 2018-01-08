@@ -8,6 +8,7 @@
 #include "qxrdimageplotwidget.h"
 #include "qxrdimageplotwidgetsettings.h"
 #include <QComboBox>
+#include "qxrdcolormaplibrary.h"
 
 QxrdImagePlotWidgetDialog::QxrdImagePlotWidgetDialog(QWidget *parent,
                                      QxrdImagePlotWidgetSettingsWPtr settings) :
@@ -55,6 +56,10 @@ QxrdImagePlotWidgetDialog::QxrdImagePlotWidgetDialog(QWidget *parent,
             m_DisplayParmsStack,  &QStackedWidget::setCurrentIndex);
 
     m_DisplayParmsStack->setCurrentIndex(set->get_DisplayScalingMode());
+
+    for (int i=0; i<QxrdColorMapLibrary::colorMapCount(); i++) {
+      m_DisplayColorMap->addItem(QxrdColorMapLibrary::colorMapName(i));
+    }
 
     set->prop_DisplayColorMap()     -> copyTo(m_DisplayColorMap);
 

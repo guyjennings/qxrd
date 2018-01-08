@@ -3,14 +3,17 @@
 
 #include "qxrdrasterdata.h"
 #include "qxrdapplication.h"
+#include "qxrdimageplotwidgetsettings.h"
 
-QxrdMaskRasterData::QxrdMaskRasterData(QcepMaskDataWPtr mask)
+QxrdMaskRasterData::QxrdMaskRasterData(QcepMaskDataWPtr                mask,
+                                       QxrdImagePlotWidgetSettingsWPtr set)
   : QwtRasterData(),
-    m_MaskData(mask)
+    m_MaskData(mask),
+    m_Settings(set)
 {
   if (g_Application && qcepDebug(DEBUG_IMAGES)) {
-    g_Application->printMessage(QObject::tr("QxrdMaskRasterData::QxrdMaskRasterData(%1) [%2]")
-                                .HEXARG(mask.data()).HEXARG(this));
+    g_Application->printMessage(QObject::tr("QxrdMaskRasterData::QxrdMaskRasterData(%1,%2) [%3]")
+                                .HEXARG(mask.data()).HEXARG(set.data()).HEXARG(this));
   }
 
   setIntervals();

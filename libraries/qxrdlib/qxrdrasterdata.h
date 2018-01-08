@@ -7,11 +7,13 @@
 #include <qwt_raster_data.h>
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
+#include "qxrdimageplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QxrdRasterData : public QwtRasterData
 {
 public:
-  QxrdRasterData(QcepImageDataBaseWPtr img, int interp);
+  QxrdRasterData(QcepImageDataBaseWPtr           img,
+                 QxrdImagePlotWidgetSettingsWPtr set);
 
 public:
   double value(double x, double y) const;
@@ -22,9 +24,6 @@ public:
   double maxValue();
 
   void setImage(QcepImageDataBasePtr img);
-
-  void setInterpolate(int interp);
-  int interpolate();
 
   QwtInterval percentileRange(double lowpct, double highpct);
 
@@ -37,11 +36,11 @@ private:
   void setIntervals();
 
 private:
-  QcepImageDataBaseWPtr  m_ImageData;
-  int                    m_NRows;
-  int                    m_NCols;
-  QwtInterval            m_Range;
-  int                    m_Interpolate;
+  QcepImageDataBaseWPtr           m_ImageData;
+  QxrdImagePlotWidgetSettingsWPtr m_Settings;
+  int                             m_NRows;
+  int                             m_NCols;
+  QwtInterval                     m_Range;
 };
 
 #endif

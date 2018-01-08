@@ -1,16 +1,17 @@
 #include "qxrddebug.h"
 #include "qxrdoverflowrasterdata.h"
 #include "qxrdapplication.h"
+#include "qxrdimageplotwidgetsettings.h"
 
-QxrdOverflowRasterData::QxrdOverflowRasterData(QcepImageDataBaseWPtr data,
-                                               double level)
+QxrdOverflowRasterData::QxrdOverflowRasterData(QcepImageDataBaseWPtr           img,
+                                               QxrdImagePlotWidgetSettingsWPtr set)
   : QwtRasterData(),
-    m_ImageData(data),
-    m_OverflowLevel(level)
+    m_ImageData(img),
+    m_Settings(set)
 {
   if (g_Application && qcepDebug(DEBUG_IMAGES)) {
-    g_Application->printMessage(QObject::tr("QxrdMaskRasterData::QxrdMaskRasterData(%1) [%2]")
-                                .HEXARG(data.data()).HEXARG(this));
+    g_Application->printMessage(QObject::tr("QxrdMaskRasterData::QxrdMaskRasterData(%1,%2) [%3]")
+                                .HEXARG(img.data()).HEXARG(set.data()).HEXARG(this));
   }
 
   setIntervals();
