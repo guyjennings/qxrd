@@ -43,6 +43,9 @@ private:
   void setAxisLog(int axis, bool isLog);
 
 protected:
+  void updateTrackerPen(int mapIndex);
+
+protected:
   QxrdPlotWidgetSettingsWPtr  m_Settings;
   QVector<QxrdPlotCommandPtr> m_PlotCommands;
 

@@ -22,6 +22,7 @@
 #include <qwt_scale_engine.h>
 #include <qwt_plot_renderer.h>
 #include "qxrdplotwidgetdialog.h"
+#include "qxrdcolormaplibrary.h"
 
 QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
   QWidget(parent)
@@ -322,6 +323,14 @@ void QxrdPlotWidget::setAxisLog(int axis, bool isLog)
 
     m_Plot -> replot();
   }
+}
+
+void QxrdPlotWidget::updateTrackerPen(int mapIndex)
+{
+  QPen pen = QxrdColorMapLibrary::trackerPen(mapIndex);
+
+  m_Zoomer->setTrackerPen(pen);
+  m_Zoomer->setRubberBandPen(pen);
 }
 
 void QxrdPlotWidget::editPreferences()

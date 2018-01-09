@@ -20,6 +20,7 @@ public:
   static QxrdColorMap* newImageColorMap(int n, QxrdImagePlotWidgetSettingsWPtr set);
   static QxrdMaskColorMap* newOverflowColorMap(int n, QxrdImagePlotWidgetSettingsWPtr set);
   static QxrdMaskColorMap* newMaskColorMap(int n, QxrdImagePlotWidgetSettingsWPtr set);
+  static QPen trackerPen(int n);
 
 private:
   static void colorMapStart(QxrdColorMap *map,

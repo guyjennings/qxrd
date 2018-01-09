@@ -168,6 +168,43 @@ QxrdMaskColorMap* QxrdColorMapLibrary::newMaskColorMap(int n, QxrdImagePlotWidge
   return res;
 }
 
+QPen QxrdColorMapLibrary::trackerPen(int n)
+{
+  QPen res;
+
+  switch (n) {
+  case GrayscaleMap:
+    res = QColor(Qt::red);
+    break;
+
+  case InverseGrayscaleMap:
+    res = QColor(Qt::red);
+    break;
+
+  case EarthTonesMap:
+    res = QColor(Qt::red);
+    break;
+
+  case SpectrumMap:
+    res = QColor(Qt::black);
+    break;
+
+  case FireMap:
+    res = QColor(Qt::blue);
+    break;
+
+  case IceMap:
+    res = QColor(Qt::red);
+    break;
+
+  default:
+    res = QColor(Qt::red);
+    break;
+  }
+
+  return res;
+}
+
 void QxrdColorMapLibrary::colorMapStart(QxrdColorMap* map,
                                         QColor startColor,
                                         QColor endColor)

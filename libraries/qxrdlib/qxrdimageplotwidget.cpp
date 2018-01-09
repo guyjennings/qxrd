@@ -213,6 +213,8 @@ void QxrdImagePlotWidget::updateColorMap()
     if (m_MaskSpectrogram) {
       m_MaskSpectrogram     -> setColorMap(QxrdColorMapLibrary::newMaskColorMap(mapIndex, set));
     }
+
+    updateTrackerPen(mapIndex);
   }
 
   replotGraph();

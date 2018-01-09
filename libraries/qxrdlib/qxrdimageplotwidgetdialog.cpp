@@ -153,8 +153,6 @@ void QxrdImagePlotWidgetDialog::changeEvent(QEvent *e)
 
 void QxrdImagePlotWidgetDialog::accept()
 {
-  QDialog::accept();
-
   QxrdImagePlotWidgetSettingsPtr set(m_Settings);
 
   if (set) {
@@ -188,4 +186,6 @@ void QxrdImagePlotWidgetDialog::accept()
     set->prop_DisplayROI()          -> copyFrom(m_DisplayROI);
     set->prop_DisplayLog()          -> copyFrom(m_DisplayImageLog);
   }
+
+  QDialog::accept();
 }

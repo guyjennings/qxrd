@@ -19,8 +19,13 @@ QAction* QxrdColorMapSubmenuCommand::contextMenuAction(const QPoint & /*pos*/)
 
   if (set) {
     for (int i=0; i<QxrdColorMapLibrary::colorMapCount(); i++) {
-      colorMaps -> addAction(QxrdColorMapLibrary::colorMapName(i),
-                             [=]() { set->set_DisplayColorMap(i); });
+      QAction *act = colorMaps -> addAction(QxrdColorMapLibrary::colorMapName(i),
+                                            [=]() { set->set_DisplayColorMap(i); });
+
+      if (i == set->get_DisplayColorMap()) {
+        act->setCheckable(true);
+        act->setChecked(true);
+      }
     }
   }
 
