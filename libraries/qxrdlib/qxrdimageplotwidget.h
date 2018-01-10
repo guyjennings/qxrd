@@ -50,6 +50,8 @@ protected:
   QwtPlotSpectrogram         *m_MaskSpectrogram;
   QwtPlotSpectrogram         *m_OverflowSpectrogram;
 
+  QwtPlotRescaler            *m_PlotRescaler;
+
 private:
   QxrdImagePlotWidgetSettingsWPtr m_ImageSettings;
 };

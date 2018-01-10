@@ -25,6 +25,6 @@ QxrdTestImagePlotQwtHelperPtr QxrdTestImagePlotQwt::helper()
 
 void QxrdTestImagePlotQwt::onNewPlotSpectrogramAvailable(QcepDoubleImageDataPtr img)
 {
-  onProcessedImageAvailable(img, QcepMaskDataPtr());
+//  onProcessedImageAvailable(img, QcepMaskDataPtr());
 }
 

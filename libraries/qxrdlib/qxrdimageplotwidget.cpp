@@ -29,7 +29,8 @@ QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent)
     m_OverflowRaster(),
     m_ImageSpectrogram(),
     m_MaskSpectrogram(),
-    m_OverflowSpectrogram()
+    m_OverflowSpectrogram(),
+    m_PlotRescaler(NULL)
 {
   connect(&m_ImageTimer, &QTimer::timeout, this, &QxrdImagePlotWidget::updateImage);
   connect(&m_ImageTimer, &QTimer::timeout, this, &QxrdImagePlotWidget::updateMask);
@@ -76,6 +77,11 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings)
     connect(set->prop_OverflowShown(),       &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
     connect(set->prop_OverflowLevel(),       &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
     connect(set->prop_InterpolatePixels(),   &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_MaintainAspectRatio(), &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+
+    m_PlotRescaler = new QwtPlotRescaler(m_Plot->canvas(), QwtPlot::yLeft, QwtPlotRescaler::Expanding);
+    m_PlotRescaler -> setEnabled(set->prop_MaintainAspectRatio());
+    m_PlotRescaler -> setExpandingDirection(QwtPlotRescaler::ExpandBoth);
   }
 }
 
@@ -159,6 +165,8 @@ void QxrdImagePlotWidget::replotImage()
 
     m_OverflowSpectrogram -> setData(m_OverflowRaster);
     m_OverflowSpectrogram -> setVisible(set->get_OverflowShown());
+
+    m_PlotRescaler -> setEnabled(set->get_MaintainAspectRatio());
   }
 
   updateColorMap();

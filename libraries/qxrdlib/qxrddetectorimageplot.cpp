@@ -174,13 +174,13 @@ void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
     QAction *auSc   = plotMenu.addAction("Autoscale");
     QAction *prGr   = plotMenu.addAction("Print Graph...");
 
-    QAction *lgSc   = plotMenu.addAction("Log Intensity Scale?");
-    lgSc->setCheckable(true);
-    lgSc->setChecked(set->get_DisplayLog());
+//    QAction *lgSc   = plotMenu.addAction("Log Intensity Scale?");
+//    lgSc->setCheckable(true);
+//    lgSc->setChecked(set->get_DisplayLog());
 
-    QAction *shMk   = plotMenu.addAction("Show Mask?");
-    shMk->setCheckable(true);
-    shMk->setChecked(set->get_MaskShown());
+//    QAction *shMk   = plotMenu.addAction("Show Mask?");
+//    shMk->setCheckable(true);
+//    shMk->setChecked(set->get_MaskShown());
 
     QAction *shRoi  = plotMenu.addAction("Show ROI Outlines?");
     shRoi->setCheckable(true);
@@ -200,10 +200,10 @@ void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
       autoScale();
     } else if (action == prGr) {
       printGraph();
-    } else if (action == lgSc) {
-      toggleLogDisplay();
-    } else if (action == shMk) {
-      toggleShowMask();
+//    } else if (action == lgSc) {
+//      toggleLogDisplay();
+//    } else if (action == shMk) {
+//      toggleShowMask();
     } else if (action == shRoi) {
       toggleShowROI();
     } else if (action == editRoi) {

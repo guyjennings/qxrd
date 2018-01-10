@@ -11,8 +11,8 @@ public:
 
 //  virtual QwtText trackerTextF(const QPointF &pos) const;
 
-private:
-  QxrdImagePlot *m_Plot;
+//private:
+//  QxrdImagePlot *m_Plot;
 };
 
 #endif // QXRDPLOTSLICER_H

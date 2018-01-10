@@ -50,34 +50,34 @@ public slots:
   void recalculateDisplayedRange();
   void setAutoRange();
 
-  void setGrayscale();
-  void setInverseGrayscale();
-  void setEarthTones();
-  void setSpectrum();
-  void setFire();
-  void setIce();
+//  void setGrayscale();
+//  void setInverseGrayscale();
+//  void setEarthTones();
+//  void setSpectrum();
+//  void setFire();
+//  void setIce();
 
-  void redoColorMap();
-  void setColorMap(int index);
+//  void redoColorMap();
+//  void setColorMap(int index);
 
-  void toggleShowImage();
-  void toggleShowMask();
-  void toggleShowOverflow();
+//  void toggleShowImage();
+//  void toggleShowMask();
+//  void toggleShowOverflow();
   void toggleShowROI();
-  void toggleLogDisplay();
+//  void toggleLogDisplay();
 
-  void changeImageShown(bool shown);
-  void changeMaskShown(bool shown);
-  void changeOverflowShown(bool shown);
+//  void changeImageShown(bool shown);
+//  void changeMaskShown(bool shown);
+//  void changeOverflowShown(bool shown);
   void changeROIShown(bool shown);
-  void changeLogDisplay(bool isLog);
+//  void changeLogDisplay(bool isLog);
 
-  void onInterpolateChanged(bool interp);
-  void onMaintainAspectChanged(bool interp);
+//  void onInterpolateChanged(bool interp);
+//  void onMaintainAspectChanged(bool interp);
 
-  void onProcessedImageAvailable(QcepImageDataBasePtr image, QcepMaskDataPtr overflow);
-  void onMaskedImageAvailable(QcepImageDataBasePtr image, QcepMaskDataPtr mask);
-  void onDarkImageAvailable(QcepImageDataBasePtr image);
+//  void onProcessedImageAvailable(QcepImageDataBasePtr image, QcepMaskDataPtr overflow);
+//  void onMaskedImageAvailable(QcepImageDataBasePtr image, QcepMaskDataPtr mask);
+//  void onDarkImageAvailable(QcepImageDataBasePtr image);
   void onCenterXChanged(double cx);
   void onCenterYChanged(double cy);
   void onCenterChanged(QPointF c);
@@ -108,7 +108,7 @@ public slots:
   virtual void onLegendChecked(const QVariant &itemInfo, bool on, int index);
 
 public:
-  QxrdImagePlotSettingsWPtr imagePlotSettings();
+//  QxrdImagePlotSettingsWPtr imagePlotSettings();
 
   const QxrdRasterData* raster() const;
   QxrdRasterData* raster();
@@ -143,22 +143,22 @@ private:
   void replotImage();
   void changeScalingMode(int n);
 
-  void setImage(QxrdRasterData *data);
-  void setMask(QxrdMaskRasterData *data);
-  void setOverflows(QxrdMaskRasterData *overflow);
-  void setAutoOverflow();
-  void colorMapStart(QColor startColor, QColor endColor);
-  void colorMapRange(double value1, QColor color1, double value2, QColor color2);
-  void changedColorMap();
-  void setTrackerPen(const QPen &pen);
+//  void setImage(QxrdRasterData *data);
+//  void setMask(QxrdMaskRasterData *data);
+//  void setOverflows(QxrdMaskRasterData *overflow);
+//  void setAutoOverflow();
+//  void colorMapStart(QColor startColor, QColor endColor);
+//  void colorMapRange(double value1, QColor color1, double value2, QColor color2);
+//  void changedColorMap();
+//  void setTrackerPen(const QPen &pen);
 
-  void mapGrayscale();
-  void mapInverseGrayscale();
-  void mapEarthTones();
-  void mapSpectrum();
-  void mapFire();
-  void mapIce();
-  void changeColorMap(int n);
+//  void mapGrayscale();
+//  void mapInverseGrayscale();
+//  void mapEarthTones();
+//  void mapSpectrum();
+//  void mapFire();
+//  void mapIce();
+//  void changeColorMap(int n);
 
   void clearROIDisplay();
   void updateROIDisplay();
@@ -192,14 +192,14 @@ public:
     AbsoluteMode
   };
 
-  enum {
-    GrayscaleMap,
-    InverseGrayscaleMap,
-    EarthTonesMap,
-    SpectrumMap,
-    FireMap,
-    IceMap
-  };
+//  enum {
+//    GrayscaleMap,
+//    InverseGrayscaleMap,
+//    EarthTonesMap,
+//    SpectrumMap,
+//    FireMap,
+//    IceMap
+//  };
 
 private:
   QcepObjectNamer            m_ObjectNamer;
