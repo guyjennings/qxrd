@@ -124,41 +124,41 @@ void QxrdImagePlotWidget::replotImage()
 {
   QxrdImagePlotWidgetSettingsPtr set(m_ImageSettings);
 
-  if (set) {
-    if (m_ImageData) {
-      if (m_ImageRaster == NULL) {
-        m_ImageRaster =
-            new QxrdRasterData(m_ImageData,
-                               m_ImageSettings);
-      } else {
-        m_ImageRaster -> setImage(m_ImageData);
-      }
-
-      if (m_OverflowRaster == NULL) {
-        m_OverflowRaster =
-            new QxrdOverflowRasterData(m_ImageData,
-                                       m_ImageSettings);
-      }
-
-      if (m_ImageSpectrogram == NULL) {
-        m_ImageSpectrogram = new QwtPlotSpectrogram();
-
-        m_ImageSpectrogram -> attach(m_Plot);
-        m_ImageSpectrogram -> setRenderThreadCount(0);
-      }
-
-      m_ImageSpectrogram -> setData(m_ImageRaster/*.data()*/);
-
-      if (m_OverflowSpectrogram == NULL) {
-        m_OverflowSpectrogram = new QwtPlotSpectrogram();
-
-        m_OverflowSpectrogram -> attach(m_Plot);
-        m_OverflowSpectrogram -> setAlpha(256);
-        m_OverflowSpectrogram -> setRenderThreadCount(0);
-      }
-
-      m_OverflowSpectrogram -> setData(m_OverflowRaster);
+  if (set && m_ImageData) {
+    if (m_ImageRaster == NULL) {
+      m_ImageRaster =
+          new QxrdRasterData(m_ImageData,
+                             m_ImageSettings);
+    } else {
+      m_ImageRaster -> setImage(m_ImageData);
     }
+
+    if (m_OverflowRaster == NULL) {
+      m_OverflowRaster =
+          new QxrdOverflowRasterData(m_ImageData,
+                                     m_ImageSettings);
+    }
+
+    if (m_ImageSpectrogram == NULL) {
+      m_ImageSpectrogram = new QwtPlotSpectrogram();
+
+      m_ImageSpectrogram -> attach(m_Plot);
+      m_ImageSpectrogram -> setRenderThreadCount(0);
+    }
+
+    m_ImageSpectrogram -> setData(m_ImageRaster/*.data()*/);
+    m_ImageSpectrogram -> setVisible(set->get_ImageShown());
+
+    if (m_OverflowSpectrogram == NULL) {
+      m_OverflowSpectrogram = new QwtPlotSpectrogram();
+
+      m_OverflowSpectrogram -> attach(m_Plot);
+      m_OverflowSpectrogram -> setAlpha(256);
+      m_OverflowSpectrogram -> setRenderThreadCount(0);
+    }
+
+    m_OverflowSpectrogram -> setData(m_OverflowRaster);
+    m_OverflowSpectrogram -> setVisible(set->get_OverflowShown());
   }
 
   updateColorMap();
@@ -166,30 +166,28 @@ void QxrdImagePlotWidget::replotImage()
 
 void QxrdImagePlotWidget::replotMask()
 {
-  if (m_MaskData) {
-    if (m_MaskRaster == NULL ||
-        m_MaskData->get_Width()  != m_MaskRaster->width() ||
-        m_MaskData->get_Height() != m_MaskRaster->height()) {
+  QxrdImagePlotWidgetSettingsPtr set(m_ImageSettings);
 
-      if(m_MaskRaster == NULL) {
-        m_MaskRaster =
-            new QxrdMaskRasterData(m_MaskData,
-                                   m_ImageSettings);
-      } else {
-        m_MaskRaster -> setMask(m_MaskData);
-      }
-
-      if (m_MaskSpectrogram == NULL) {
-        m_MaskSpectrogram =
-            new QwtPlotSpectrogram();
-
-        m_MaskSpectrogram -> attach(m_Plot);
-        m_MaskSpectrogram -> setAlpha(80);
-        m_MaskSpectrogram -> setRenderThreadCount(0);
-      }
-
-      m_MaskSpectrogram -> setData(m_MaskRaster);
+  if (set && m_MaskData) {
+    if(m_MaskRaster == NULL) {
+      m_MaskRaster =
+          new QxrdMaskRasterData(m_MaskData,
+                                 m_ImageSettings);
+    } else {
+      m_MaskRaster -> setMask(m_MaskData);
     }
+
+    if (m_MaskSpectrogram == NULL) {
+      m_MaskSpectrogram =
+          new QwtPlotSpectrogram();
+
+      m_MaskSpectrogram -> attach(m_Plot);
+      m_MaskSpectrogram -> setAlpha(80);
+      m_MaskSpectrogram -> setRenderThreadCount(0);
+    }
+
+    m_MaskSpectrogram -> setData(m_MaskRaster);
+    m_MaskSpectrogram -> setVisible(set->get_MaskShown());
   }
 
   updateColorMap();
