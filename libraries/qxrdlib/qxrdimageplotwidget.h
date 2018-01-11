@@ -20,6 +20,12 @@ public:
 
   void editPreferences();
 
+  enum {
+    PercentageScaling,
+    PercentileScaling,
+    AbsoluteScaling
+  };
+
 public slots:
   void newImage(QcepDoubleImageDataPtr img);
   void newMask (QcepMaskDataPtr        msk);

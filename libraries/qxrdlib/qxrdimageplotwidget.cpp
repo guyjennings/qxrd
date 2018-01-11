@@ -167,6 +167,32 @@ void QxrdImagePlotWidget::replotImage()
     m_OverflowSpectrogram -> setVisible(set->get_OverflowShown());
 
     m_PlotRescaler -> setEnabled(set->get_MaintainAspectRatio());
+
+    double mindis, maxdis, minv, maxv, del;
+
+    switch (set->get_DisplayScalingMode()) {
+    case PercentageScaling:
+      minv = m_ImageData->minValue();
+      maxv = m_ImageData->maxValue();
+      del  = maxv - minv;
+
+      mindis = minv+del*set->get_DisplayMinimumPct()/100.0;
+      maxdis = minv+del*set->get_DisplayMaximumPct()/100.0;
+      break;
+
+    case PercentileScaling:
+      mindis = m_ImageData->percentileValue(set->get_DisplayMinimumPctle());
+      maxdis = m_ImageData->percentileValue(set->get_DisplayMaximumPctle());
+      break;
+
+    default:
+    case AbsoluteScaling:
+      mindis = set->get_DisplayMinimumVal();
+      maxdis = set->get_DisplayMaximumVal();
+      break;
+    }
+
+    m_ImageRaster->setDisplayedRange(mindis, maxdis);
   }
 
   updateColorMap();

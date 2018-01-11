@@ -1,8 +1,9 @@
 #include "qxrdscalingsubmenucommand.h"
-#include "qxrdplotwidgetsettings.h"
+#include "qxrdimageplotwidget.h"
+#include "qxrdimageplotwidgetsettings.h"
 #include <QMenu>
 
-QxrdScalingSubmenuCommand::QxrdScalingSubmenuCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+QxrdScalingSubmenuCommand::QxrdScalingSubmenuCommand(QString name, QxrdImagePlotWidget *plot, QxrdImagePlotWidgetSettingsWPtr set)
   : QxrdPlotContextMenuCommand(name, plot, set)
 {
 }
@@ -20,4 +21,13 @@ QAction* QxrdScalingSubmenuCommand::contextMenuAction(const QPoint & /*pos*/)
   scalingMode ->setMenu(scalingModes);
 
   return scalingMode;
+}
+
+void QxrdScalingSubmenuCommand::setDisplayScalingMode(int n)
+{
+  QxrdImagePlotWidgetSettingsPtr set(qSharedPointerDynamicCast<QxrdImagePlotWidgetSettings>(m_Settings));
+
+  if (set) {
+    set->set_DisplayScalingMode(n);
+  }
 }

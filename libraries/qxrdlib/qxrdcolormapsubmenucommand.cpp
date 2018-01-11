@@ -1,10 +1,10 @@
 #include "qxrdcolormapsubmenucommand.h"
-#include "qxrdplotwidgetsettings.h"
 #include <QMenu>
 #include "qxrdcolormaplibrary.h"
+#include "qxrdimageplotwidget.h"
 #include "qxrdimageplotwidgetsettings.h"
 
-QxrdColorMapSubmenuCommand::QxrdColorMapSubmenuCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+QxrdColorMapSubmenuCommand::QxrdColorMapSubmenuCommand(QString name, QxrdImagePlotWidget *plot, QxrdImagePlotWidgetSettingsWPtr set)
   : QxrdPlotContextMenuCommand(name, plot, set)
 {
 }
@@ -20,7 +20,7 @@ QAction* QxrdColorMapSubmenuCommand::contextMenuAction(const QPoint & /*pos*/)
   if (set) {
     for (int i=0; i<QxrdColorMapLibrary::colorMapCount(); i++) {
       QAction *act = colorMaps -> addAction(QxrdColorMapLibrary::colorMapName(i),
-                                            [=]() { set->set_DisplayColorMap(i); });
+                                            [=]() { setDisplayColorMap(i); });
 
       if (i == set->get_DisplayColorMap()) {
         act->setCheckable(true);
@@ -32,4 +32,13 @@ QAction* QxrdColorMapSubmenuCommand::contextMenuAction(const QPoint & /*pos*/)
   colorMap ->setMenu(colorMaps);
 
   return colorMap;
+}
+
+void QxrdColorMapSubmenuCommand::setDisplayColorMap(int n)
+{
+  QxrdImagePlotWidgetSettingsPtr set(qSharedPointerDynamicCast<QxrdImagePlotWidgetSettings>(m_Settings));
+
+  if (set) {
+    set -> set_DisplayColorMap(n);
+  }
 }
