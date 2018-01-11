@@ -556,34 +556,33 @@ bool QxrdPerkinElmerDriver::startDetectorDriver()
       printMessage(tr("Acquisition_GetCameraBinningMode mode = %1").arg(binningMode));
     }
 
-    CHwHeaderInfo hwHeaderInfo;
-
-    if ((nRet=Acquisition_GetHwHeaderInfo(m_AcqDesc, &hwHeaderInfo)) != HIS_ALL_OK) {
+    if ((nRet=Acquisition_GetHwHeaderInfo(m_AcqDesc, &m_HwHeaderInfo)) != HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
       return false;
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
-      printMessage(tr("Prom ID %1, Header ID %2").arg(hwHeaderInfo.dwPROMID).arg(hwHeaderInfo.dwHeaderID));
+      printMessage(tr("Prom ID %1, Header ID %2")
+                   .arg(m_HwHeaderInfo.dwPROMID).arg(m_HwHeaderInfo.dwHeaderID));
     }
 
-    m_PROMID = hwHeaderInfo.dwPROMID;
-    m_HeaderID = hwHeaderInfo.dwHeaderID;
+    m_PROMID   = m_HwHeaderInfo.dwPROMID;
+    m_HeaderID = m_HwHeaderInfo.dwHeaderID;
 
-    if (hwHeaderInfo.dwHeaderID >= 14) {
-      CHwHeaderInfoEx hdrx;
-
-      if ((nRet = Acquisition_GetHwHeaderInfoEx(m_AcqDesc, &hwHeaderInfo, &hdrx)) != HIS_ALL_OK) {
+    if (m_HwHeaderInfo.dwHeaderID >= 14) {
+      if ((nRet = Acquisition_GetHwHeaderInfoEx(m_AcqDesc,
+                                                &m_HwHeaderInfo,
+                                                &m_HwHeaderInfoEx)) != HIS_ALL_OK) {
         acquisitionError(__FILE__, __LINE__, nRet);
         return false;
       }
 
       if (qcepDebug(DEBUG_PERKINELMER)) {
-        printMessage(tr("Camera Type %1").arg(hdrx.wCameratype));
-        printMessage(tr("Binning Mode %1").arg(hdrx.wBinningMode));
+        printMessage(tr("Camera Type %1").arg(m_HwHeaderInfoEx.wCameratype));
+        printMessage(tr("Binning Mode %1").arg(m_HwHeaderInfoEx.wBinningMode));
       }
 
-      m_CameraType = hdrx.wCameratype;
+      m_CameraType = m_HwHeaderInfoEx.wCameratype;
     }
 
     int nReadoutTimes = 8;
@@ -834,8 +833,8 @@ void QxrdPerkinElmerDriver::onTimingSourceChanged()
 
         int nRet;
 
-        if (m_TimingSource != det->get_DetectorTiming()) {
-          if (m_TimingSource == INTERNAL_TIMING) {
+        if (m_TimingSource != newSource) {
+          if (newSource == INTERNAL_TIMING) {
             if (nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_INTERNAL_TIMER) != HIS_ALL_OK) {
               if (nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_FREE_RUNNING) != HIS_ALL_OK) {
                 acquisitionError(__FILE__, __LINE__, nRet);
@@ -846,7 +845,7 @@ void QxrdPerkinElmerDriver::onTimingSourceChanged()
             } else {
               m_SyncMode = HIS_SYNCMODE_INTERNAL_TIMER;
             }
-          } else if (m_TimingSource == EXTERNAL_TIMING) {
+          } else if (newSource == EXTERNAL_TIMING) {
             if (nRet=Acquisition_SetFrameSyncMode(m_AcqDesc, HIS_SYNCMODE_EXTERNAL_TRIGGER) != HIS_ALL_OK) {
               acquisitionError(__FILE__, __LINE__, nRet);
               return;
@@ -859,7 +858,7 @@ void QxrdPerkinElmerDriver::onTimingSourceChanged()
             printMessage(tr("Sync Mode = %1").arg(m_SyncMode));
           }
 
-          m_TimingSource = det->get_DetectorTiming();
+          m_TimingSource = newSource;
         }
 
         printMessage("Set timing source");
@@ -1045,7 +1044,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
         image->set_ImageNumber(n1);
       }
 
-      if (qcepDebug(DEBUG_PERKINELMER)) {
+      if (qcepDebug(DEBUG_PERKINELMERIDLING)) {
         printMessage("enqueue perkin elmer acquired frame");
       }
 
