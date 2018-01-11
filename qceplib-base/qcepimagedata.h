@@ -154,11 +154,12 @@ public slots:
 
   virtual void saveTIFFData(QString name) = 0;
 
-  virtual double minValue() const = 0;
-  virtual double maxValue() const = 0;
-  virtual double averageValue() const = 0;
+  virtual double minValue() = 0;
+  virtual double maxValue() = 0;
+  virtual double averageValue() = 0;
 
   virtual QPointF percentileRange(double lowpct, double highpct) = 0;
+  virtual double percentileValue(double pct) = 0;
 
   virtual double sumInRectangle(QRectF rect) = 0;
   virtual double averageInRectangle(QRectF rect) = 0;
@@ -248,6 +249,20 @@ protected:
   QcepMaskDataPtr            m_Mask;
   QcepMaskDataPtr            m_Overflow;
 
+  bool   m_MinMaxUpdate;
+  double m_MinValue;
+  double m_MaxValue;
+
+  bool   m_AverageUpdate;
+  double m_AverageValue;
+
+  bool         m_PercentileUpdate;
+  QVector<int> m_PercentileHistogram;
+  int          m_PercentileSize;
+  int          m_PercentileBelow;
+  int          m_PercentileCount;
+  int          m_PercentileAbove;
+
 private:
   mutable QMutex m_Mutex;
 };
@@ -281,10 +296,11 @@ public:
   virtual void saveData(QString &name, QString filter, Overwrite canOverwrite=NoOverwrite);
   void saveTIFFData(QString name);
 
-  double minValue() const;
-  double maxValue() const;
-  double averageValue() const;
+  double minValue();
+  double maxValue();
+  double averageValue();
   QPointF percentileRange(double lowpct, double highpct);
+  double percentileValue(double pct);
 
   double sumInRectangle(QRectF rect);
   double averageInRectangle(QRectF rect);
@@ -359,15 +375,19 @@ public:
 
   void shiftImage(QSharedPointer< QcepImageData<T> > image, double dx, double dy);
 
-  T findMin() const;
-  T findMax() const;
-  double findAverage() const;
+//  T findMin() const;
+//  T findMax() const;
+//  void findAverage() const;
 
   void correctBadBackgroundSubtraction(QcepDoubleImageDataPtr dark, int nImgExposures, int nDarkExposures);
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QSharedPointer< QcepImageData<T> > &data);
   static void fromScriptValue(const QScriptValue &obj, QSharedPointer< QcepImageData<T> > &data);
 
+private:
+  void findMinMax();
+  void findAverage();
+  void findPercentiles();
 
 protected:
   QVector<T> m_Image;

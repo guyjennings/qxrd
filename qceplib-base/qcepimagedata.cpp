@@ -61,6 +61,12 @@ QcepImageDataBase::QcepImageDataBase(QString name, int width, int height, int si
     m_ImageCounter(allocCount.fetchAndAddOrdered(1)),
     m_Mask(NULL),
     m_Overflow(NULL),
+    m_MinMaxUpdate(false),
+    m_MinValue(0),
+    m_MaxValue(0),
+    m_AverageUpdate(false),
+    m_AverageValue(0),
+    m_PercentileUpdate(false),
     m_Mutex(QMutex::Recursive)
 {
   if (qcepDebug(DEBUG_IMAGE_CONSTRUCTORS)) {
@@ -1033,30 +1039,46 @@ QcepMaskDataPtr QcepImageData<T>::overflow() const
 }
 
 template <typename T>
-double QcepImageData<T>::minValue() const
+double QcepImageData<T>::minValue()
 {
-  return findMin();
+  if (m_MinMaxUpdate == false) {
+    findMinMax();
+    m_MinMaxUpdate = true;
+  }
+
+  return m_MinValue;
 }
 
 template <typename T>
-double QcepImageData<T>::maxValue() const
+double QcepImageData<T>::maxValue()
 {
-  return findMax();
+  if (m_MinMaxUpdate == false) {
+    findMinMax();
+    m_MinMaxUpdate = true;
+  }
+
+  return m_MaxValue;
 }
 
 template <typename T>
-double QcepImageData<T>::averageValue() const
+double QcepImageData<T>::averageValue()
 {
-  return findAverage();
+  if (m_AverageUpdate == false) {
+    findAverage();
+    m_AverageUpdate = true;
+  }
+
+  return m_AverageValue;
 }
 
 template <typename T>
-T QcepImageData<T>::findMin() const
+void QcepImageData<T>::findMinMax()
 {
   int ncols = this -> get_Width();
   int nrows = this -> get_Height();
   int first = true;
   T minv = 0;
+  T maxv = 0;
 
   for (int row=0; row<nrows; row++) {
     for (int col=0; col<ncols; col++) {
@@ -1066,36 +1088,11 @@ T QcepImageData<T>::findMin() const
         if (val == val) { // Skip NaNs
           if (first) {
             minv = val;
+            maxv = val;
             first = false;
-          } else if (val < minv){
+          } else if (val < minv) {
             minv = val;
-          }
-        }
-      }
-    }
-  }
-
-  return minv;
-}
-
-template <typename T>
-T QcepImageData<T>::findMax() const
-{
-  int ncols = this -> get_Width();
-  int nrows = this -> get_Height();
-  int first = true;
-  T maxv = 0;
-
-  for (int row=0; row<nrows; row++) {
-    for (int col=0; col<ncols; col++) {
-      if (m_Mask == NULL || m_Mask->value(col,row)) {
-        T val = this -> value(col, row);
-
-        if (val == val) {
-          if (first) {
-            maxv = val;
-            first = false;
-          } else if (val > maxv){
+          } else if (val > maxv) {
             maxv = val;
           }
         }
@@ -1103,11 +1100,12 @@ T QcepImageData<T>::findMax() const
     }
   }
 
-  return maxv;
+  m_MinValue = minv;
+  m_MaxValue = maxv;
 }
 
 template <typename T>
-double QcepImageData<T>::findAverage() const
+void QcepImageData<T>::findAverage()
 {
   int ncols = this -> get_Width();
   int nrows = this -> get_Height();
@@ -1128,19 +1126,20 @@ double QcepImageData<T>::findAverage() const
   }
 
   if (npix <= 0) {
-    return 0;
+    m_AverageValue = 0;
   } else {
-    return sum/npix;
+    m_AverageValue = sum/npix;
   }
 }
 
 template <typename T>
-QPointF QcepImageData<T>::percentileRange(double lowpct, double highpct)
+void QcepImageData<T>::findPercentiles()
 {
-  const int histSize = 65536;
-  QVector<int> histogramVec(histSize+1);
-  histogramVec.fill(0.0);
-  int *histogram = histogramVec.data();
+  m_PercentileSize = 65536;
+  m_PercentileHistogram.resize(m_PercentileSize);
+  m_PercentileHistogram.fill(0);
+
+  int *histogram = m_PercentileHistogram.data();
 
   int ncols = this -> get_Width();
   int nrows = this -> get_Height();
@@ -1148,8 +1147,10 @@ QPointF QcepImageData<T>::percentileRange(double lowpct, double highpct)
   double minVal = minValue();
   double maxVal = maxValue();
 
-  double histStep = (maxVal - minVal + 2)/histSize;
-  int nAbove = 0, nBelow = 0, nTotal = 0;
+  double histStep = (maxVal - minVal + 2)/m_PercentileSize;
+  m_PercentileBelow = 0;
+  m_PercentileCount = 0;
+  m_PercentileAbove = 0;
 
   for (int row=0; row<nrows; row++) {
     for (int col=0; col<ncols; col++) {
@@ -1160,41 +1161,99 @@ QPointF QcepImageData<T>::percentileRange(double lowpct, double highpct)
           double bin = (val - minVal)/histStep;
 
           if (bin < 0) {
-            nBelow += 1;
-          } else if (bin >= histSize) {
-            nAbove += 1;
+            m_PercentileBelow += 1;
+          } else if (bin >= m_PercentileSize) {
+            m_PercentileAbove += 1;
           } else {
             histogram[(int) bin] += 1;
           }
 
-          nTotal += 1;
+          m_PercentileCount += 1;
         }
       }
     }
   }
+}
 
-  double lowCount = ((double) nTotal) * lowpct / 100.0;
-  double highCount = ((double) nTotal) * highpct / 100.0;
-  double count = nBelow;
+template <typename T>
+QPointF QcepImageData<T>::percentileRange(double lowpct, double highpct)
+{
+//  const int histSize = 65536;
+//  QVector<int> histogramVec(histSize+1);
+//  histogramVec.fill(0.0);
+//  int *histogram = histogramVec.data();
 
-  QPointF res(0,0);
+//  int ncols = this -> get_Width();
+//  int nrows = this -> get_Height();
 
-  for (int i=0; i<histSize; i++) {
-    double binVal = minVal + i*histStep;
+//  double minVal = minValue();
+//  double maxVal = maxValue();
 
-    count += histogram[i];
+//  double histStep = (maxVal - minVal + 2)/histSize;
+//  int nAbove = 0, nBelow = 0, nTotal = 0;
 
-    if (count < lowCount) {
-      res.setX(binVal);
-    }
+//  for (int row=0; row<nrows; row++) {
+//    for (int col=0; col<ncols; col++) {
+//      if (m_Mask == NULL || m_Mask->value(col, row)) {
+//        double val = value(col, row);
 
-    if (count < highCount) {
-      res.setY(binVal);
-    }
-  }
+//        if (val==val) {
+//          double bin = (val - minVal)/histStep;
+
+//          if (bin < 0) {
+//            nBelow += 1;
+//          } else if (bin >= histSize) {
+//            nAbove += 1;
+//          } else {
+//            histogram[(int) bin] += 1;
+//          }
+
+//          nTotal += 1;
+//        }
+//      }
+//    }
+//  }
+
+  QPointF res(percentileValue(lowpct), percentileValue(highpct));
 
   if (res.y() <= res.x()) {
     res.setY(res.x() + 1);
+  }
+
+  return res;
+}
+
+template <typename T>
+double QcepImageData<T>::percentileValue(double pct)
+{
+  if (m_PercentileUpdate == false) {
+    findPercentiles();
+
+    m_PercentileUpdate = true;
+  }
+
+  double minVal = minValue();
+  double maxVal = maxValue();
+  double target = ((double) m_PercentileCount) * pct / 100.0;
+  double count  = m_PercentileBelow;
+  double res    = minVal;
+  int*   histo  = m_PercentileHistogram.data();
+  double histStep = (maxVal - minVal + 2)/m_PercentileSize;
+
+  for (int i=0; i<m_PercentileSize; i++) {
+    double binVal = minVal + i*histStep;
+
+    int n = histo[i];
+
+    if (n) {
+      count += n;
+
+      if (count < target) {
+        res = binVal;
+      } else {
+        break;
+      }
+    }
   }
 
   return res;
