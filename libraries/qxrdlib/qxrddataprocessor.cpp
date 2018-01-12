@@ -533,6 +533,10 @@ void QxrdDataProcessor::newGainMapImage(QcepDoubleImageDataPtr image)
 
 void QxrdDataProcessor::newMask()
 {
+  if (mask()) {
+    emit maskAvailable(mask());
+  }
+
   QxrdWindowPtr w = m_Window;
 
   if (w) {

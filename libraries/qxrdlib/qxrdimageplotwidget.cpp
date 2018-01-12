@@ -73,7 +73,7 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings)
     connect(set->prop_DisplayMaximumVal(),   &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
     connect(set->prop_DisplayMaximumVal(),   &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
     connect(set->prop_ImageShown(),          &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
-    connect(set->prop_MaskShown(),           &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
+    connect(set->prop_MaskShown(),           &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotMask);
     connect(set->prop_OverflowShown(),       &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
     connect(set->prop_OverflowLevel(),       &QcepDoubleProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);
     connect(set->prop_InterpolatePixels(),   &QcepBoolProperty::valueChanged, this, &QxrdImagePlotWidget::replotImage);

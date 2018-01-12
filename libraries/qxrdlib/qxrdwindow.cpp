@@ -500,6 +500,9 @@ void QxrdWindow::initialize()
     connect(proc.data(), &QxrdProcessor::processedImageAvailable,
             m_ImagePlot, &QxrdImagePlotWidget::newImage);
 
+    connect(proc.data(), &QxrdProcessor::maskAvailable,
+            m_ImagePlot, &QxrdImagePlotWidget::newMask);
+
     connect(proc->integrator()->prop_IntegrationXUnits(), &QcepIntProperty::valueChanged,
             this, &QxrdWindow::integrationXUnitsChanged);
     integrationXUnitsChanged(proc->integrator()->get_IntegrationXUnits());
