@@ -189,7 +189,7 @@ void QxrdDexelaDriver::onTimerTimeout()
       }
     }
 
-    if (qcepDebug(DEBUG_DEXELA)) {
+    if (qcepDebug(DEBUG_DETECTORIDLING)) {
       printMessage("enqueue dexela acquired frame");
     }
 

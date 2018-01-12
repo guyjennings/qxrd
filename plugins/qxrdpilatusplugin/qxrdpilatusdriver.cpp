@@ -495,7 +495,9 @@ void QxrdPilatusDriver::loadAndPush(QString f)
         printMessage(tr("Read %1 successfully").arg(dest));
       }
 
-      printMessage("enqueue acquired frame");
+      if (qcepDebug(DEBUG_DETECTORIDLING)) {
+        printMessage("enqueue pilatus acquired frame");
+      }
 
       pil->enqueueAcquiredFrame(data);
     }

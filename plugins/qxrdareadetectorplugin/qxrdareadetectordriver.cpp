@@ -186,7 +186,7 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
       }
     }
 
-    if (qcepDebug(DEBUG_AREADETECTOR)) {
+    if (qcepDebug(DEBUG_DETECTORIDLING)) {
       printMessage("enqueue area detector acquired frame");
     }
 

@@ -954,7 +954,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
 
       //    printf("allocator took %d msec\n", tic.restart());
 
-      if (qcepDebug(DEBUG_PERKINELMERIDLING)) {
+      if (qcepDebug(DEBUG_DETECTORIDLING)) {
         printMessage(tr("QxrdDetectorPerkinElmer::onEndFrame(%1,%2,%3)")
                      .arg(counter).arg(n1).arg(n2));
       }
@@ -988,7 +988,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
       }
 
       if (((actSecFrame-1)%m_BufferSize) != m_BufferIndex) {
-        if (qcepDebug(DEBUG_PERKINELMERIDLING)) {
+        if (qcepDebug(DEBUG_DETECTORIDLING)) {
           printMessage(tr("actSecFrame %1, m_BufferIndex %2")
                        .arg(actSecFrame).arg(m_BufferIndex));
         }
@@ -1014,7 +1014,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
 
       //  set_Average(avg/npixels);
 
-      if (qcepDebug(DEBUG_PERKINELMERIDLING)) {
+      if (qcepDebug(DEBUG_DETECTORIDLING)) {
         printMessage(tr("Frame checksum 0x%1, avg %2\n")
                      .arg(cksum,8,16,QChar('0')).arg(avg/npixels));
 
@@ -1044,7 +1044,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
         image->set_ImageNumber(n1);
       }
 
-      if (qcepDebug(DEBUG_PERKINELMERIDLING)) {
+      if (qcepDebug(DEBUG_DETECTORIDLING)) {
         printMessage("enqueue perkin elmer acquired frame");
       }
 

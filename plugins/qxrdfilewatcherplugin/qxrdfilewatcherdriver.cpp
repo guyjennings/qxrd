@@ -186,7 +186,7 @@ void QxrdFileWatcherDriver::onTimerTimeout()
       }
     }
 
-    if (qcepDebug(DEBUG_FILEWATCHER)) {
+    if (qcepDebug(DEBUG_DETECTORIDLING)) {
       printMessage("enqueue file watcher acquired frame");
     }
 

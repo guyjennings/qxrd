@@ -9,8 +9,6 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_FILES,        "File Operations");
   setMessage(DEBUG_PERFORM,      "Performance Measurement");
   setMessage(DEBUG_IMAGES,       "Image Operations");
-  setMessage(DEBUG_PERKINELMER,  "Perkin Elmer Acquisition");
-  setMessage(DEBUG_PERKINELMERIDLING, "Perkin Elmer Idle Messages");
   setMessage(DEBUG_EXITWAIT,     "Halt at exit");
   setMessage(DEBUG_DELAY_ACQ,    "Delay Acquisition Startup");
   setMessage(DEBUG_BROWSER,      "File Browser Operations");
@@ -24,6 +22,8 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_NOPARALLEL,   "Serialize Various Algorithms");
   setMessage(DEBUG_HISTOGRAM,    "Debug Histogramming");
   setMessage(DEBUG_CALIBRANT,    "Powder Calibrant Calculations");
+  setMessage(DEBUG_DETECTORIDLING, "Perkin Elmer Idle Messages");
+  setMessage(DEBUG_PERKINELMER,  "Perkin Elmer Acquisition");
   setMessage(DEBUG_PILATUS,      "Pilatus Detector Acquisition");
   setMessage(DEBUG_DEXELA,       "Dexela Detector Acquisition");
   setMessage(DEBUG_AREADETECTOR, "Area Detector Acquisition");

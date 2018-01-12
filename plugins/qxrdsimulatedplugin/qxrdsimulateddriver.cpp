@@ -186,7 +186,7 @@ void QxrdSimulatedDriver::onTimerTimeout()
       }
     }
 
-    if (qcepDebug(DEBUG_SIMULATED)) {
+    if (qcepDebug(DEBUG_DETECTORIDLING)) {
       printMessage("enqueue simulated detector acquired frame");
     }
 
