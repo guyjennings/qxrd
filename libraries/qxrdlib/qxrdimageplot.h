@@ -44,10 +44,10 @@ signals:
 
 public slots:
   void autoScale();
-  void set005Range();
-  void set010Range();
-  void set100Range();
-  void recalculateDisplayedRange();
+//  void set005Range();
+//  void set010Range();
+//  void set100Range();
+//  void recalculateDisplayedRange();
   void setAutoRange();
 
 //  void setGrayscale();
@@ -82,7 +82,7 @@ public slots:
   void onCenterYChanged(double cy);
   void onCenterChanged(QPointF c);
   void onMarkedPointsChanged();
-  void onImageScaleChanged();
+//  void onImageScaleChanged();
 
   void enableZooming();
   void enableCentering();
@@ -101,9 +101,9 @@ public slots:
 
   void zapPixel(int x, int y);
 
-  void setPercentageScaling();
-  void setPercentileScaling();
-  void setAbsoluteScaling();
+//  void setPercentageScaling();
+//  void setPercentileScaling();
+//  void setAbsoluteScaling();
 
   virtual void onLegendChecked(const QVariant &itemInfo, bool on, int index);
 
@@ -113,13 +113,13 @@ public:
   const QxrdRasterData* raster() const;
   QxrdRasterData* raster();
 
-  const QxrdMaskRasterData* maskRaster() const;
-  QxrdMaskRasterData* maskRaster();
+//  const QxrdMaskRasterData* maskRaster() const;
+//  QxrdMaskRasterData* maskRaster();
 
   QxrdDataProcessorWPtr processor() const;
   void setProcessor(QxrdDataProcessorWPtr proc);
 
-  void replot();
+//  void replot();
 
   virtual QwtText trackerTextF(const QPointF &pos);
 
@@ -140,8 +140,8 @@ public:
 //  void roiMouseResized(const QVector<QPointF> &p);
 
 private:
-  void replotImage();
-  void changeScalingMode(int n);
+//  void replotImage();
+//  void changeScalingMode(int n);
 
 //  void setImage(QxrdRasterData *data);
 //  void setMask(QxrdMaskRasterData *data);
@@ -177,7 +177,7 @@ private:
 
   void roiRowsRemoved (const QModelIndex &parent, int first, int last);
 
-  QPointF scaledDelta(double dx, double dy);
+//  QPointF scaledDelta(double dx, double dy);
 
 protected:
   virtual void disablePickers();
@@ -185,12 +185,12 @@ protected:
   void moveSelectedROICenter(double x, double y);
   void editSelectedROI(double x, double y);
 
-public:
-  enum {
-    PercentageMode,
-    PercentileMode,
-    AbsoluteMode
-  };
+//public:
+//  enum {
+//    PercentageMode,
+//    PercentileMode,
+//    AbsoluteMode
+//  };
 
 //  enum {
 //    GrayscaleMap,
@@ -209,7 +209,7 @@ protected:
 
 private:
   QcepObjectWPtr             m_Parent;
-  QwtPlotRescaler           *m_Rescaler;
+//  QwtPlotRescaler           *m_Rescaler;
   QxrdPlotSlicer            *m_Slicer;
   QxrdImagePlotMeasurer     *m_Measurer;
   QxrdHistogramSelector     *m_HistogramSelector;
@@ -221,18 +221,18 @@ private:
 
   QxrdRasterData            *m_DataRaster;
   QxrdMaskRasterData        *m_MaskRaster;
-  QxrdMaskRasterData        *m_OverflowRaster;
+//  QxrdMaskRasterData        *m_OverflowRaster;
 
-  QwtPlotSpectrogram        *m_DataImage;
-  QwtPlotSpectrogram        *m_MaskImage;
-  QwtPlotSpectrogram        *m_OverflowImage;
-  QwtLinearColorMap         *m_ColorMap;
+//  QwtPlotSpectrogram        *m_DataImage;
+//  QwtPlotSpectrogram        *m_MaskImage;
+//  QwtPlotSpectrogram        *m_OverflowImage;
+//  QwtLinearColorMap         *m_ColorMap;
 
-  QxrdMaskColorMap          *m_MaskColorMap;
-  int                        m_MaskAlpha;
+//  QxrdMaskColorMap          *m_MaskColorMap;
+//  int                        m_MaskAlpha;
 
-  QxrdMaskColorMap          *m_OverflowColorMap;
-  int                        m_OverflowAlpha;
+//  QxrdMaskColorMap          *m_OverflowColorMap;
+//  int                        m_OverflowAlpha;
 
   QxrdDataProcessorWPtr      m_DataProcessor;
 
