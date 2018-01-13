@@ -21,10 +21,13 @@ public:
   void editPreferences();
 
   enum {
-    PercentageScaling,
-    PercentileScaling,
-    AbsoluteScaling
+    PercentageScalingMode,
+    PercentileScalingMode,
+    AbsoluteScalingMode,
+    LastScalingMode
   };
+
+  static QString scalingModeName(int n);
 
 public slots:
   void newImage(QcepDoubleImageDataPtr img);

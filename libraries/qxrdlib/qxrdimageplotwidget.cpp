@@ -96,6 +96,26 @@ void QxrdImagePlotWidget::editPreferences()
   }
 }
 
+QString QxrdImagePlotWidget::scalingModeName(int n)
+{
+  QString res = "";
+
+  switch (n) {
+  case PercentageScalingMode:
+    res = "Percentage Scaling";
+    break;
+
+  case PercentileScalingMode:
+    res = "Percentile Scaling";
+    break;
+
+  case AbsoluteScalingMode:
+    res = "Absolute Scaling";
+    break;
+  }
+
+  return res;
+}
 void QxrdImagePlotWidget::newImage(QcepDoubleImageDataPtr img)
 {
   m_NewImageData = img;
@@ -171,7 +191,7 @@ void QxrdImagePlotWidget::replotImage()
     double mindis, maxdis, minv, maxv, del;
 
     switch (set->get_DisplayScalingMode()) {
-    case PercentageScaling:
+    case PercentageScalingMode:
       minv = m_ImageData->minValue();
       maxv = m_ImageData->maxValue();
       del  = maxv - minv;
@@ -180,13 +200,13 @@ void QxrdImagePlotWidget::replotImage()
       maxdis = minv+del*set->get_DisplayMaximumPct()/100.0;
       break;
 
-    case PercentileScaling:
+    case PercentileScalingMode:
       mindis = m_ImageData->percentileValue(set->get_DisplayMinimumPctle());
       maxdis = m_ImageData->percentileValue(set->get_DisplayMaximumPctle());
       break;
 
     default:
-    case AbsoluteScaling:
+    case AbsoluteScalingMode:
       mindis = set->get_DisplayMinimumVal();
       maxdis = set->get_DisplayMaximumVal();
       break;

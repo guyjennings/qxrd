@@ -14,9 +14,29 @@ QAction* QxrdScalingSubmenuCommand::contextMenuAction(const QPoint & /*pos*/)
 
   QMenu   *scalingModes = new QMenu("Scaling Mode");
 
-  scalingModes -> addAction("Percentage Scaling", m_Plot, &QxrdImagePlot::setPercentageScaling);
-  scalingModes -> addAction("Percentile Scaling", m_Plot, &QxrdImagePlot::setPercentileScaling);
-  scalingModes -> addAction("Absolute Scaling",   m_Plot, &QxrdImagePlot::setAbsoluteScaling);
+  QxrdImagePlotWidgetSettingsPtr set(qSharedPointerDynamicCast<QxrdImagePlotWidgetSettings>(m_Settings));
+
+  if (set) {
+    for (int i=0; i<QxrdImagePlotWidget::LastScalingMode; i++) {
+      QAction *act =
+          scalingModes->addAction(QxrdImagePlotWidget::scalingModeName(i),
+                                  [=]() { setDisplayScalingMode(i);});
+
+      if (i == set->get_DisplayScalingMode()) {
+        act->setCheckable(true);
+        act->setChecked(true);
+      }
+    }
+  }
+
+//  scalingModes -> addAction("Percentage Scaling",
+//                            [=]() { setDisplayScalingMode(QxrdImagePlotWidget::PercentageScaling); });
+
+//  scalingModes -> addAction("Percentile Scaling",
+//                            [=]() { setDisplayScalingMode(QxrdImagePlotWidget::PercentileScaling); });
+
+//  scalingModes -> addAction("Absolute Scaling",
+//                            [=]() { setDisplayScalingMode(QxrdImagePlotWidget::AbsoluteScaling); });
 
   scalingMode ->setMenu(scalingModes);
 
