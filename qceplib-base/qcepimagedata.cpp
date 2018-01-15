@@ -442,6 +442,12 @@ double QcepImageData<T>::getImageData(int x, int y) const
   return this->value(x,y);
 }
 
+template <typename T>
+double QcepImageData<T>::getImageData(double x, double y) const
+{
+  return this->value(x,y);
+}
+
 //template <typename T>
 //void QcepImageData<T>::fill(T val)
 //{

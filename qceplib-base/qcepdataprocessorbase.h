@@ -16,13 +16,13 @@ public:
   QcepDataProcessorBase(QString name);
 
 public slots:
-  virtual QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img) = 0;
-  virtual QcepDataObjectPtr polarTransform(QcepDoubleImageDataPtr img) = 0;
-  virtual QcepDataObjectPtr polarIntegrate(QcepDoubleImageDataPtr img) = 0;
+//  virtual QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img) = 0;
+//  virtual QcepDataObjectPtr polarTransform(QcepDoubleImageDataPtr img) = 0;
+//  virtual QcepDataObjectPtr polarIntegrate(QcepDoubleImageDataPtr img) = 0;
 
-  virtual bool integrateParameters() = 0;
-  virtual bool polarTransformParameters() = 0;
-  virtual bool polarIntegrateParameters() = 0;
+//  virtual bool integrateParameters() = 0;
+//  virtual bool polarTransformParameters() = 0;
+//  virtual bool polarIntegrateParameters() = 0;
 };
 
 #endif // QCEPDATAPROCESSORBASE_H

@@ -1476,20 +1476,21 @@ void QcepDatasetModel::divideData(const QModelIndex &dest, double val)
   }
 }
 
+//TODO: reimplement in qxrd level class
 void QcepDatasetModel::integrate(const QModelIndex &src)
 {
-  QcepDoubleImageDataPtr   img = image(src);
-  QcepDataProcessorBasePtr proc(m_Processor);
+//  QcepDoubleImageDataPtr   img = image(src);
+//  QcepDataProcessorBasePtr proc(m_Processor);
 
-  if (img && proc) {
-    QcepDataObjectPtr res = proc->integrate(img);
+//  if (img && proc) {
+//    QcepDataObjectPtr res = proc->integrate(img);
 
-    if (res) {
-      res->setNameAndSuffix(img->get_Name(), "integ");
+//    if (res) {
+//      res->setNameAndSuffix(img->get_Name(), "integ");
 
-      append(parent(src), res);
-    }
-  }
+//      append(parent(src), res);
+//    }
+//  }
 }
 
 void QcepDatasetModel::fixupDetectorPanelGains(const QModelIndex &index)
@@ -1544,70 +1545,75 @@ void QcepDatasetModel::vEdges(const QModelIndex &index)
   }
 }
 
+//TODO: reimplement in qxrd level class
 void QcepDatasetModel::polarTransform(const QModelIndex &src)
 {
-  QcepDoubleImageDataPtr   img = image(src);
-  QcepDataProcessorBasePtr proc(m_Processor);
+//  QcepDoubleImageDataPtr   img = image(src);
+//  QcepDataProcessorBasePtr proc(m_Processor);
 
-  if (img && proc) {
-    QcepDataObjectPtr res = proc->polarTransform(img);
+//  if (img && proc) {
+//    QcepDataObjectPtr res = proc->polarTransform(img);
 
-    if (res) {
-      res->setNameAndSuffix(img->get_Name(), "xform");
+//    if (res) {
+//      res->setNameAndSuffix(img->get_Name(), "xform");
 
-      append(parent(src), res);
-    }
-  }
+//      append(parent(src), res);
+//    }
+//  }
 }
 
+//TODO: reimplement in qxrd level class
 void QcepDatasetModel::polarIntegrate(const QModelIndex &src)
 {
-  QcepDoubleImageDataPtr   img = image(src);
-  QcepDataProcessorBasePtr proc(m_Processor);
+//  QcepDoubleImageDataPtr   img = image(src);
+//  QcepDataProcessorBasePtr proc(m_Processor);
 
-  if (img && proc) {
-    QcepDataObjectPtr res = proc->polarIntegrate(img);
+//  if (img && proc) {
+//    QcepDataObjectPtr res = proc->polarIntegrate(img);
 
-    if (res) {
-      res->setNameAndSuffix(img->get_Name(), "pinteg");
+//    if (res) {
+//      res->setNameAndSuffix(img->get_Name(), "pinteg");
 
-      append(parent(src), res);
-    }
-  }
+//      append(parent(src), res);
+//    }
+//  }
 }
 
+//TODO: reimplement in qxrd level class
 bool QcepDatasetModel::integrateParameters()
 {
   bool res = false;
-  QcepDataProcessorBasePtr proc(m_Processor);
+//  QcepDataProcessorBasePtr proc(m_Processor);
 
-  if (proc) {
-    res = proc->integrateParameters();
-  }
+//  if (proc) {
+//    res = proc->integrateParameters();
+//  }
 
   return res;
 }
 
+//TODO: reimplement in qxrd level class
 bool QcepDatasetModel::polarTransformParameters()
 {
   bool res = false;
-  QcepDataProcessorBasePtr proc(m_Processor);
+//  QcepDataProcessorBasePtr proc(m_Processor);
 
-  if (proc) {
-    res = proc->polarTransformParameters();
-  }
+//  if (proc) {
+//    res = proc->polarTransformParameters();
+//  }
 
   return res;
 }
 
+//TODO: reimplement in qxrd level class
 bool QcepDatasetModel::polarIntegrateParameters()
 {
   bool res = false;
-  QcepDataProcessorBasePtr proc(m_Processor);
+//  QcepDataProcessorBasePtr proc(m_Processor);
 
-  if (proc) {
-    res = proc->polarIntegrateParameters();
-  }
+//  if (proc) {
+//    res = proc->polarIntegrateParameters();
+//  }
 
   return res;
 }

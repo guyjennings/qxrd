@@ -53,9 +53,9 @@ public:
 
   short* mask();
 
-  void setMaskRange(QcepDoubleImageDataPtr image,  double min, double max, bool inRange, bool setTo);
-  void showMaskRange(QcepDoubleImageDataPtr image, double min, double max);
-  void hideMaskRange(QcepDoubleImageDataPtr image, double min, double max);
+  void setMaskRange(QcepImageDataBasePtr image,  double min, double max, bool inRange, bool setTo);
+  void showMaskRange(QcepImageDataBasePtr image, double min, double max);
+  void hideMaskRange(QcepImageDataBasePtr image, double min, double max);
 
 private:
   enum {

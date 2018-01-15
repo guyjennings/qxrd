@@ -145,6 +145,7 @@ public slots:
   virtual QString description() const;
 
   virtual double getImageData(int x, int y) const = 0;
+  virtual double getImageData(double x, double y) const = 0;
   virtual QVector<double> getImageData(int x0, int y0, int x1, int y1) const = 0;
   virtual void setImageData(int x, int y, double v) = 0;
 
@@ -290,6 +291,7 @@ public:
   void fill(double val);
 
   double getImageData(int x, int y) const;
+  double getImageData(double x, double y) const;
   QVector<double> getImageData(int x0, int y0, int x1, int y1) const;
   void setImageData(int x, int y, double v);
 

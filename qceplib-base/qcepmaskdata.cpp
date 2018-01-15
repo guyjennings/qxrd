@@ -323,14 +323,14 @@ QSize QcepMaskData::thumbnailImageSize() const
   return QSize(ThumbnailWidth, ThumbnailHeight);
 }
 
-void QcepMaskData::setMaskRange(QcepDoubleImageDataPtr image, double min, double max, bool inRange, bool setTo)
+void QcepMaskData::setMaskRange(QcepImageDataBasePtr image, double min, double max, bool inRange, bool setTo)
 {
   int nRows = image -> get_Height();
   int nCols = image -> get_Width();
 
   for (int y=0; y<nRows; y++) {
     for (int x=0; x<nCols; x++) {
-      double v = image -> value(x,y);
+      double v = image -> getImageData(x,y);
 
       if (((v >= min) && (v < max)) == inRange) {
         setValue(x,y,setTo);
@@ -339,12 +339,12 @@ void QcepMaskData::setMaskRange(QcepDoubleImageDataPtr image, double min, double
   }
 }
 
-void QcepMaskData::hideMaskRange(QcepDoubleImageDataPtr image, double min, double max)
+void QcepMaskData::hideMaskRange(QcepImageDataBasePtr image, double min, double max)
 {
   setMaskRange(image, min, max, true, false);
 }
 
-void QcepMaskData::showMaskRange(QcepDoubleImageDataPtr image, double min, double max)
+void QcepMaskData::showMaskRange(QcepImageDataBasePtr image, double min, double max)
 {
   setMaskRange(image, min, max, true, true);
 }
