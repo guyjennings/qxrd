@@ -179,7 +179,6 @@ SOURCES += qxrdlib.cpp \
     qxrdmainwindow.cpp \
     qxrdacquisitionparameterpack.cpp \
     qxrddarkacquisitionparameterpack.cpp \
-    qxrdprocessargs.cpp \
     qxrddetectorcontrolwindow.cpp \
     qxrddetectorprocessor.cpp \
     qxrdroicalculator.cpp \
@@ -694,8 +693,6 @@ HEADERS += TODO.h \
     qxrdacquisitionparameterpack-ptr.h \
     qxrddarkacquisitionparameterpack.h \
     qxrddarkacquisitionparameterpack-ptr.h \
-    qxrdprocessargs.h \
-    qxrdprocessargs-ptr.h \
     qxrddetectorcontrolwindow.h \
     qxrddetectorcontrolwindow-ptr.h \
     qxrddetectorprocessor.h \

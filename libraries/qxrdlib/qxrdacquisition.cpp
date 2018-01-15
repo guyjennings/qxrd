@@ -13,7 +13,6 @@
 #include <QtConcurrentRun>
 #include <QDir>
 #include <QMetaProperty>
-//#include "qxrdprocessargs.h"
 #include "qxrddetectorsettings.h"
 //#include "qxrddetectorthread.h"
 #include "qxrddetectorprocessor.h"

@@ -9,6 +9,7 @@
 #include "qcepimagedata-ptr.h"
 
 //TODO: fix shared pointer leaks
+//TODO: hide exposed QStack interface
 class QXRD_EXPORT QxrdMaskStack : public QcepObject, public QStack<QcepMaskDataPtr>
 {
   Q_OBJECT
