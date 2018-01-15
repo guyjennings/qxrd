@@ -549,9 +549,9 @@ void QxrdExperiment::openWindows()
       if (m_Window) {
         m_Window -> initialize();
 
-        if (proc) {
-          proc -> setWindow(m_Window);
-        }
+//        if (proc) {
+//          proc -> setWindow(m_Window);
+//        }
 
         if (acq) {
           acq -> setWindow(m_Window);

@@ -127,7 +127,10 @@ protected:
   QxrdApplicationWPtr                  m_Application;
   QxrdExperimentWPtr                   m_Experiment;
   QxrdAcquisitionWPtr                  m_Acquisition;
+
+  //TODO: should be in detector thread?
   QxrdDetectorProcessorPtr             m_Processor;
+
   QxrdDetectorControlWindowSettingsPtr m_DetectorControlWindowSettings;
   QxrdDetectorControlWindowPtr         m_DetectorControlWindow;
 

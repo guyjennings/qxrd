@@ -156,7 +156,7 @@ void QxrdGenerateTestImage::generateImage()
     QxrdDataProcessorPtr proc(m_Processor);
 
     if (proc) {
-      proc -> newData(img, QcepMaskDataPtr());
+      proc -> newData(img);
     }
   }
 }
@@ -203,7 +203,7 @@ void QxrdGenerateTestImage::generateTTHImage()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    proc -> newData(img, QcepMaskDataPtr());
+    proc -> newData(img);
   }
   }
 }
@@ -250,7 +250,7 @@ void QxrdGenerateTestImage::generateChiImage()
     QxrdDataProcessorPtr proc(m_Processor);
 
     if (proc) {
-      proc -> newData(img, QcepMaskDataPtr());
+      proc -> newData(img);
     }
   }
 }

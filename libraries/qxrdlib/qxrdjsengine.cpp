@@ -752,7 +752,7 @@ void QxrdJSEngine::fcloseFunc()
 {
 }
 
-QcepDoubleImageData* QxrdJSEngine::dataFunc()
+QcepImageDataBase* QxrdJSEngine::dataFunc()
 {
   QxrdDataProcessorPtr proc(dataProcessor());
 
@@ -768,7 +768,7 @@ QcepDoubleImageData* QxrdJSEngine::darkFunc()
   QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
-    return proc->darkImage().data();
+    return proc->dark().data();
   } else {
     return NULL;
   }

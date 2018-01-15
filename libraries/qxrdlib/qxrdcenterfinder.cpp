@@ -1683,7 +1683,7 @@ void QxrdCenterFinder::calculateCalibration()
       }
 
       printMessage(tr("%1 duplicated points, %2 unset pixels").arg(ndup).arg(nunset));
-      proc->newData(res, QcepMaskDataPtr());
+      proc->newData(res);
     }
   }
 }

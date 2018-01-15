@@ -497,7 +497,7 @@ void QxrdWindow::initialize()
 //  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
 
   if (proc) {
-    connect(proc.data(), &QxrdProcessor::processedImageAvailable,
+    connect(proc.data(), &QxrdProcessor::dataAvailable,
             m_ImagePlot, &QxrdImagePlotWidget::newImage);
 
     connect(proc.data(), &QxrdProcessor::maskAvailable,
@@ -1196,7 +1196,11 @@ void QxrdWindow::doSaveData()
             this, "Save Data in", proc -> get_DataPath());
 
       if (theFile.length()) {
-        proc->saveData(theFile, QxrdDataProcessor::CanOverwrite);
+        QMetaObject::invokeMethod(proc.data(),
+                                  "saveData",
+                                  Qt::BlockingQueuedConnection,
+                                  Q_ARG(QString, theFile),
+                                  Q_ARG(int, QxrdDataProcessor::CanOverwrite));
       }
     }
   }
@@ -1213,7 +1217,10 @@ void QxrdWindow::doLoadData()
           this, "Load Data from...", proc -> get_DataPath());
 
     if (theFile.length()) {
-      proc->loadData(theFile);
+      QMetaObject::invokeMethod(proc.data(),
+                                "loadData",
+                                Qt::BlockingQueuedConnection,
+                                Q_ARG(QString, theFile));
     }
   }
 }
@@ -1225,7 +1232,7 @@ void QxrdWindow::doSaveDark()
   QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
-    if (proc->darkImage() == NULL) {
+    if (proc->dark() == NULL) {
       warningMessage("No dark image available to save");
     } else {
       QString theFile = QFileDialog::getSaveFileName(
@@ -1261,7 +1268,7 @@ void QxrdWindow::doClearDark()
   QxrdDataProcessorPtr proc(dataProcessor());
 
   if (proc) {
-    if (proc->darkImage() == NULL) {
+    if (proc->dark() == NULL) {
       warningMessage("No dark image available to clear");
     } else {
       if (QMessageBox::question(this, "Clear Dark Image?", "Do you really want to clear the dark image?",

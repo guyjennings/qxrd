@@ -6,6 +6,7 @@
 #include "qcepproperty.h"
 #include "qxrdprocessor.h"
 
+#include "qcepdataobject-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -48,18 +49,18 @@ public slots:
                             int nPhases,
                             bool trig);
 
-  void processDarkImage(QcepUInt32ImageDataPtr image,
+  void processDarkImage(QcepDoubleImageDataPtr image,
                         QcepMaskDataPtr overflow,
                         int fileIndex);
 
   void processIdleImage(QcepImageDataBasePtr image);
 
-  QcepImageDataBasePtr   data();
-  QcepUInt32ImageDataPtr  dark();
-  QcepDoubleImageDataPtr badPixels();
-  QcepDoubleImageDataPtr gainCorrection();
-  QcepMaskDataPtr        mask();
-  QcepMaskDataPtr        overflow();
+//  QcepImageDataBasePtr   data();
+//  QcepUInt32ImageDataPtr  dark();
+//  QcepDoubleImageDataPtr badPixels();
+//  QcepDoubleImageDataPtr gainCorrection();
+//  QcepMaskDataPtr        mask();
+//  QcepMaskDataPtr        overflow();
 
   QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img);
   QcepDataObjectPtr polarTransform(QcepDoubleImageDataPtr img);
@@ -141,8 +142,8 @@ public:
   Q_PROPERTY(bool saveSubtracted READ get_SaveSubtracted WRITE set_SaveSubtracted)
   QCEP_BOOLEAN_PROPERTY(SaveSubtracted)
 
-  Q_PROPERTY(QString darkImagePath   READ get_DarkImagePath WRITE set_DarkImagePath)
-  QCEP_STRING_PROPERTY(DarkImagePath)
+//  Q_PROPERTY(QString darkImagePath   READ get_DarkImagePath WRITE set_DarkImagePath)
+//  QCEP_STRING_PROPERTY(DarkImagePath)
 
   Q_PROPERTY(QString rawDataSubdir READ get_RawDataSubdir WRITE set_RawDataSubdir)
   QCEP_STRING_PROPERTY(RawDataSubdir)
@@ -150,17 +151,17 @@ public:
   Q_PROPERTY(QString darkDataSubdir READ get_DarkDataSubdir WRITE set_DarkDataSubdir)
   QCEP_STRING_PROPERTY(DarkDataSubdir)
 
-  Q_PROPERTY(QString badPixelsPath   READ get_BadPixelsPath WRITE set_BadPixelsPath)
-  QCEP_STRING_PROPERTY(BadPixelsPath)
+//  Q_PROPERTY(QString badPixelsPath   READ get_BadPixelsPath WRITE set_BadPixelsPath)
+//  QCEP_STRING_PROPERTY(BadPixelsPath)
 
-  Q_PROPERTY(QString gainMapPath     READ get_GainMapPath WRITE set_GainMapPath)
-  QCEP_STRING_PROPERTY(GainMapPath)
+//  Q_PROPERTY(QString gainMapPath     READ get_GainMapPath WRITE set_GainMapPath)
+//  QCEP_STRING_PROPERTY(GainMapPath)
 
   Q_PROPERTY(QString subtractedSubdir READ get_SubtractedSubdir WRITE set_SubtractedSubdir)
   QCEP_STRING_PROPERTY(SubtractedSubdir)
 
-  Q_PROPERTY(QString maskPath     READ get_MaskPath WRITE set_MaskPath)
-  QCEP_STRING_PROPERTY(MaskPath)
+//  Q_PROPERTY(QString maskPath     READ get_MaskPath WRITE set_MaskPath)
+//  QCEP_STRING_PROPERTY(MaskPath)
 
 
   Q_PROPERTY(bool performIntegration READ get_PerformIntegration WRITE set_PerformIntegration)
@@ -211,13 +212,13 @@ private:
 
   QxrdImagePlotSettingsPtr m_ImagePlotSettings;
 
-  QcepImageDataBasePtr   m_Data;
-  QcepUInt32ImageDataPtr  m_DarkImage;
-  QcepDoubleImageDataPtr m_BadPixels;
-  QcepDoubleImageDataPtr m_GainMap;
-  QcepDoubleImageDataPtr m_LiveData;
-  QcepMaskDataPtr        m_Mask;
-  QcepMaskDataPtr        m_Overflow;
+//  QcepImageDataBasePtr   m_Data;
+//  QcepUInt32ImageDataPtr  m_DarkImage;
+//  QcepDoubleImageDataPtr m_BadPixels;
+//  QcepDoubleImageDataPtr m_GainMap;
+//  QcepDoubleImageDataPtr m_LiveData;
+//  QcepMaskDataPtr        m_Mask;
+//  QcepMaskDataPtr        m_Overflow;
 };
 
-#endif // QXRDACQUISITIONPROCESSOR_H
+#endif // QXRDDETECTORPROCESSOR_H

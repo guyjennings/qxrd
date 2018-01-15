@@ -50,7 +50,7 @@ private:
 
 private:
   QxrdDataProcessorWPtr  m_Processor;
-  QxrdMaskStackWPtr      m_Masks;
+  QxrdMaskStackWPtr      m_Mask;
   QxrdMaskStackModelPtr  m_MaskStackModel;
 };
 

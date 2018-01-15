@@ -12,6 +12,8 @@
 #include "qxrdfilesaver.h"
 #include "qcepallocator.h"
 #include "qcepimagedata.h"
+#include "qcepmaskdata.h"
+#include "qxrdmaskstack.h"
 
 QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     QxrdFileSaverWPtr     fsav,
@@ -24,13 +26,13 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     m_PerformBadPixels(this, "performBadPixels", true, "Perform Bad Pixel Correction?"),
     m_PerformGainCorrection(this, "performGainCorrection", true, "Perform Gain Correction?"),
     m_SaveSubtracted(this, "saveSubtracted", true, "Save Dark Subtracted Data?"),
-    m_DarkImagePath(this, "darkImagePath", "", "Dark Images Path"),
+//    m_DarkImagePath(this, "darkImagePath", "", "Dark Images Path"),
     m_RawDataSubdir(this, "rawDataSubdir", "", "Raw Data Subdirectory"),
     m_DarkDataSubdir(this, "darkDataSubdir", "", "Dark Data Subdirectory"),
-    m_BadPixelsPath(this, "badPixelsPath", "", "Bad Pixels Path"),
-    m_GainMapPath(this, "gainMapPath", "", "Gain Map Path"),
+//    m_BadPixelsPath(this, "badPixelsPath", "", "Bad Pixels Path"),
+//    m_GainMapPath(this, "gainMapPath", "", "Gain Map Path"),
     m_SubtractedSubdir(this, "subtractedSubdir", "", "Subtracted Data Subdirectory"),
-    m_MaskPath(this, "maskPath", "", "Mask Path"),
+//    m_MaskPath(this, "maskPath", "", "Mask Path"),
 
     m_PerformIntegration(this, "performIntegration", true, "Perform Circular Integration?"),
     m_DisplayIntegratedData(this, "displayIntegratedData", true, "Display Integrated Data?"),
@@ -183,35 +185,35 @@ QxrdROICalculatorPtr QxrdDetectorProcessor::roiCalculator()
   return m_ROICalculator;
 }
 
-QcepImageDataBasePtr QxrdDetectorProcessor::data()
-{
-  return m_Data;
-}
+//QcepImageDataBasePtr QxrdDetectorProcessor::data()
+//{
+//  return m_Data;
+//}
 
-QcepUInt32ImageDataPtr  QxrdDetectorProcessor::dark()
-{
-  return m_DarkImage;
-}
+//QcepUInt32ImageDataPtr  QxrdDetectorProcessor::dark()
+//{
+//  return m_DarkImage;
+//}
 
-QcepDoubleImageDataPtr QxrdDetectorProcessor::badPixels()
-{
-  return m_BadPixels;
-}
+//QcepDoubleImageDataPtr QxrdDetectorProcessor::badPixels()
+//{
+//  return m_BadPixels;
+//}
 
-QcepDoubleImageDataPtr QxrdDetectorProcessor::gainCorrection()
-{
-  return m_GainMap;
-}
+//QcepDoubleImageDataPtr QxrdDetectorProcessor::gainCorrection()
+//{
+//  return m_GainMap;
+//}
 
-QcepMaskDataPtr        QxrdDetectorProcessor::mask()
-{
-  return m_Mask;
-}
+//QcepMaskDataPtr        QxrdDetectorProcessor::mask()
+//{
+//  return m_Mask;
+//}
 
-QcepMaskDataPtr        QxrdDetectorProcessor::overflow()
-{
-  return m_Overflow;
-}
+//QcepMaskDataPtr        QxrdDetectorProcessor::overflow()
+//{
+//  return m_Overflow;
+//}
 
 void QxrdDetectorProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image,
                                                        int fileIndex,
@@ -261,249 +263,233 @@ void QxrdDetectorProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
                                                  int nPhases,
                                                  bool trig)
 {
-//  if (QThread::currentThread() != thread()) {
-//    QMetaObject::invokeMethod(this, "processAcquiredImage",
-//                              Q_ARG(QcepUInt32ImageDataPtr, image),
-//                              Q_ARG(QcepMaskDataPtr, overflow),
-//                              Q_ARG(int, fileIndex),
-//                              Q_ARG(int, phase),
-//                              Q_ARG(int, nPhases),
-//                              Q_ARG(bool, trig));
-//  } else {
-    if (image) {
-      m_Data     = image;
-      m_Overflow = overflow;
+  THREAD_CHECK;
 
-      QcepDoubleVector scalers;
+  if (image) {
+    m_Data     = image;
+    m_Overflow = overflow;
 
-      QcepImageDataBasePtr img = image;
+    QcepDoubleVector scalers;
 
-      if (qcepDebug(DEBUG_ACQUIRE)) {
-        printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...)")
-                     .arg(img->get_FileName()));
-      }
+    QcepImageDataBasePtr img = image;
 
-      QTime tic;
-      tic.start();
-
-      setAcquiredImageProperties(img, fileIndex, phase, nPhases, trig);
-
-      QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
-
-      if (get_SaveRawImages()) {
-        doSaveRawImage(img, overflow);
-
-        int saveTime = tic.restart();
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Save took %1 msec").arg(saveTime));
-        }
-      }
-
-      if (img && get_PerformDarkSubtraction()) {
-        img = doDarkSubtraction(img);
-
-        int subTime = tic.restart();
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Subtraction took %1 msec").arg(subTime));
-        }
-      }
-
-      if (img && get_PerformBadPixels()) {
-        img = doBadPixels(img);
-
-        int pxlTime = tic.restart();
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
-        }
-      }
-
-      if (img && get_PerformGainCorrection()) {
-        img = doGainCorrection(img);
-
-        int gainTime = tic.restart();
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Gain correction took %1 msec").arg(gainTime));
-        }
-      }
-
-      QcepDoubleImageDataPtr dimg =
-          qSharedPointerCast<QcepDoubleImageData>(img);
-
-      if (dimg) {
-        emit processedImageAvailable(dimg);
-      }
-
-      if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
-        ctrl->displayNewData(img, overflow);
-
-        int displayTime = tic.restart();
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Display took %1 msec").arg(displayTime));
-        }
-      }
-
-      if (img && get_CalculateROICounts()) {
-        const QcepDoubleVector s = doCalculateROICounts(img);
-
-        scalers += s;
-
-        set_RoiCounts(scalers);
-
-        int roiTime = tic.restart();
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
-        }
-      }
-
-      if (img && get_SaveSubtracted()) {
-        doSaveSubtractedImage(img, overflow);
-
-        int saveTime = tic.restart();
-
-        if (qcepDebug(DEBUG_ACQUIRETIME)) {
-          printMessage(tr("Save Subtracted took %1 msec").arg(saveTime));
-        }
-      }
-
-      //    if (get_PerformIntegration()) {
-      //      integ = doPerformIntegration(img);
-
-      //      if (ctrl && get_DisplayIntegratedData()) {
-      //        ctrl->displayIntegratedData(integ);
-      //      }
-
-      //      if (get_SaveIntegratedData()) {
-      //        doSaveIntegratedData(integ);
-      //      }
-
-      //      if (get_SaveIntegratedDataSeparate()) {
-      //        doSaveIntegratedDataSeparate(integ);
-      //      }
-
-      //      if (get_AccumulateIntegrated2D()) {
-      //        doAccumulateIntegrated2D(integ);
-      //      }
-      //    }
+    if (qcepDebug(DEBUG_ACQUIRE)) {
+      printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...)")
+                   .arg(img->get_FileName()));
     }
-//  }
+
+    QTime tic;
+    tic.start();
+
+    setAcquiredImageProperties(img, fileIndex, phase, nPhases, trig);
+
+    QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+
+    if (get_SaveRawImages()) {
+      doSaveRawImage(img, overflow);
+
+      int saveTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Save took %1 msec").arg(saveTime));
+      }
+    }
+
+    if (img && get_PerformDarkSubtraction()) {
+      img = doDarkSubtraction(img);
+
+      int subTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Subtraction took %1 msec").arg(subTime));
+      }
+    }
+
+    if (img && get_PerformBadPixels()) {
+      img = doBadPixels(img);
+
+      int pxlTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
+      }
+    }
+
+    if (img && get_PerformGainCorrection()) {
+      img = doGainCorrection(img);
+
+      int gainTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Gain correction took %1 msec").arg(gainTime));
+      }
+    }
+
+    QcepDoubleImageDataPtr dimg =
+        qSharedPointerCast<QcepDoubleImageData>(img);
+
+    if (dimg) {
+      emit dataAvailable(dimg);
+    }
+
+    if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+      ctrl->displayNewData(img, overflow);
+
+      int displayTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Display took %1 msec").arg(displayTime));
+      }
+    }
+
+    if (img && get_CalculateROICounts()) {
+      const QcepDoubleVector s = doCalculateROICounts(img);
+
+      scalers += s;
+
+      set_RoiCounts(scalers);
+
+      int roiTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
+      }
+    }
+
+    if (img && get_SaveSubtracted()) {
+      doSaveSubtractedImage(img, overflow);
+
+      int saveTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Save Subtracted took %1 msec").arg(saveTime));
+      }
+    }
+
+    //    if (get_PerformIntegration()) {
+    //      integ = doPerformIntegration(img);
+
+    //      if (ctrl && get_DisplayIntegratedData()) {
+    //        ctrl->displayIntegratedData(integ);
+    //      }
+
+    //      if (get_SaveIntegratedData()) {
+    //        doSaveIntegratedData(integ);
+    //      }
+
+    //      if (get_SaveIntegratedDataSeparate()) {
+    //        doSaveIntegratedDataSeparate(integ);
+    //      }
+
+    //      if (get_AccumulateIntegrated2D()) {
+    //        doAccumulateIntegrated2D(integ);
+    //      }
+    //    }
+  }
 }
 
-void QxrdDetectorProcessor::processDarkImage(QcepUInt32ImageDataPtr image,
+void QxrdDetectorProcessor::processDarkImage(QcepDoubleImageDataPtr image,
                                              QcepMaskDataPtr overflow,
                                              int fileIndex)
 {
-  if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "processDarkImage",
-                              Q_ARG(QcepUInt32ImageDataPtr, image),
-                              Q_ARG(QcepMaskDataPtr, overflow),
-                              Q_ARG(int, fileIndex));
-  } else {
-    if (image) {
-      if (qcepDebug(DEBUG_ACQUIRE)) {
-        printMessage(tr("QxrdDetectorProcessor::processDarkImage(\"%1\",...)")
-                     .arg(image->get_FileName()));
-      }
+  THREAD_CHECK;
 
-      setAcquiredImageProperties(image, fileIndex, -1, 0, true);
-
-      if (get_SaveDarkImages()) {
-        doSaveDarkImage(image, overflow);
-
-        set_DarkImagePath(image->get_FileName());
-      }
-
-      m_DarkImage = image;
+  if (image) {
+    if (qcepDebug(DEBUG_ACQUIRE)) {
+      printMessage(tr("QxrdDetectorProcessor::processDarkImage(\"%1\",...)")
+                   .arg(image->get_FileName()));
     }
+
+    setAcquiredImageProperties(image, fileIndex, -1, 0, true);
+
+    if (get_SaveDarkImages()) {
+      doSaveDarkImage(image, overflow);
+
+      set_DarkImagePath(image->get_FileName());
+    }
+
+    m_Dark = image;
   }
 }
 
 void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
 {
-  if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "processIdleImage",
-                              Q_ARG(QcepImageDataBasePtr, image));
-  } else {
-    if (image) {
-      QxrdExperimentPtr expt(m_Experiment);
+  THREAD_CHECK;
 
-      if (expt) {
-        QxrdAcquisitionPtr acq(expt->acquisition());
+  if (image) {
+    QxrdExperimentPtr expt(m_Experiment);
 
-        if (acq && acq->get_LiveViewAtIdle()) {
-          QcepDoubleVector scalers;
+    if (expt) {
+      QxrdAcquisitionPtr acq(expt->acquisition());
 
-          QcepImageDataBasePtr img = image;
+      if (acq && acq->get_LiveViewAtIdle()) {
+        QcepDoubleVector scalers;
 
-          if (qcepDebug(DEBUG_ACQUIRE)) {
-            printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\")")
-                         .arg(image->get_FileName()));
+        QcepImageDataBasePtr img = image;
+
+        if (qcepDebug(DEBUG_ACQUIRE)) {
+          printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\")")
+                       .arg(image->get_FileName()));
+        }
+
+        QTime tic;
+        tic.start();
+
+        setAcquiredImageProperties(img, -1, -1, 0, true);
+
+        QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+
+        if (img && get_PerformDarkSubtraction()) {
+          img = doDarkSubtraction(img);
+
+          int subTime = tic.restart();
+
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("Subtraction took %1 msec").arg(subTime));
           }
+        }
 
-          QTime tic;
-          tic.start();
+        if (img && get_PerformBadPixels()) {
+          img = doBadPixels(img);
 
-          setAcquiredImageProperties(img, -1, -1, 0, true);
+          int pxlTime = tic.restart();
 
-          QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
-
-          if (img && get_PerformDarkSubtraction()) {
-            img = doDarkSubtraction(img);
-
-            int subTime = tic.restart();
-
-            if (qcepDebug(DEBUG_ACQUIRETIME)) {
-              printMessage(tr("Subtraction took %1 msec").arg(subTime));
-            }
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
           }
+        }
 
-          if (img && get_PerformBadPixels()) {
-            img = doBadPixels(img);
+        if (img && get_PerformGainCorrection()) {
+          img = doGainCorrection(img);
 
-            int pxlTime = tic.restart();
+          int gainTime = tic.restart();
 
-            if (qcepDebug(DEBUG_ACQUIRETIME)) {
-              printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
-            }
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("Gain correction took %1 msec").arg(gainTime));
           }
+        }
 
-          if (img && get_PerformGainCorrection()) {
-            img = doGainCorrection(img);
+        if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+          ctrl->displayNewData(img, QcepMaskDataWPtr());
 
-            int gainTime = tic.restart();
+          int displayTime = tic.restart();
 
-            if (qcepDebug(DEBUG_ACQUIRETIME)) {
-              printMessage(tr("Gain correction took %1 msec").arg(gainTime));
-            }
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("Display took %1 msec").arg(displayTime));
           }
+        }
 
-          if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
-            ctrl->displayNewData(img, QcepMaskDataWPtr());
+        if (img && get_CalculateROICounts()) {
+          const QcepDoubleVector s = doCalculateROICounts(img);
 
-            int displayTime = tic.restart();
+          scalers += s;
 
-            if (qcepDebug(DEBUG_ACQUIRETIME)) {
-              printMessage(tr("Display took %1 msec").arg(displayTime));
-            }
-          }
+          set_RoiCounts(scalers);
 
-          if (img && get_CalculateROICounts()) {
-            const QcepDoubleVector s = doCalculateROICounts(img);
+          int roiTime = tic.restart();
 
-            scalers += s;
-
-            set_RoiCounts(scalers);
-
-            int roiTime = tic.restart();
-
-            if (qcepDebug(DEBUG_ACQUIRETIME)) {
-              printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
-            }
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
           }
         }
       }
@@ -518,8 +504,8 @@ QxrdImagePlotSettingsWPtr QxrdDetectorProcessor::imagePlotSettings()
 
 QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBasePtr img)
 {
-  QcepUInt32ImageDataPtr dark = m_DarkImage;
-  QcepImageDataBasePtr res = img;
+  QcepDoubleImageDataPtr dark = m_Dark;
+  QcepImageDataBasePtr   res  = img;
 
   if (img && dark) {
     if (img->get_ExposureTime() != dark->get_ExposureTime()) {
@@ -558,8 +544,8 @@ QcepImageDataBasePtr QxrdDetectorProcessor::doDarkSubtraction(QcepImageDataBaseP
 
       double sumraw = 0, sumdark = 0;
 
-      double  *resptr = result->data();
-      quint32 *drkptr = dark->data();
+      double *resptr = result->data();
+      double *drkptr = dark->data();
 
       QcepUInt16ImageDataPtr i16 = qSharedPointerDynamicCast<QcepUInt16ImageData>(img);
 
@@ -635,7 +621,7 @@ QcepDoubleVector QxrdDetectorProcessor::doCalculateROICounts(QcepImageDataBasePt
   QcepDoubleVector res;
 
   if (img && m_ROICalculator) {
-    res = m_ROICalculator->values(img, m_Mask);
+    res = m_ROICalculator->values(img, mask());
   }
 
   if (qcepDebug(DEBUG_ACQUIRE)) {
@@ -753,19 +739,19 @@ void QxrdDetectorProcessor::onMaskPathChanged(QString newPath)
 {
   if (newPath.length() == 0) {
     printMessage("Clear Mask");
-    m_Mask = QcepMaskDataPtr();
+    m_Mask->clear();
   } else {
     printMessage(tr("Load mask from %1").arg(newPath));
 
-    QcepMaskDataPtr mask = QcepAllocator::newMask(newPath, 0,0, 0, QcepAllocator::NullIfNotAvailable);
+    QcepMaskDataPtr m = QcepAllocator::newMask(newPath, 0,0, 0, QcepAllocator::NullIfNotAvailable);
 
-    if (mask && mask->readImage(newPath)) {
-      m_Mask = mask;
+    if (m && m->readImage(newPath)) {
+      m_Mask->push_front(m);
 
       QxrdDetectorControlWindowPtr ctl(m_ControlWindow);
 
       if (ctl) {
-        ctl->displayNewMask(m_Mask);
+        ctl->displayNewMask(m);
       }
     }
   }
@@ -775,14 +761,14 @@ void QxrdDetectorProcessor::onDarkImagePathChanged(QString newPath)
 {
   if (newPath.length() == 0) {
     printMessage("Clear Dark Image");
-    m_DarkImage = QcepUInt32ImageDataPtr();
+    m_Dark = QcepDoubleImageDataPtr();
   } else {
     printMessage(tr("Load Dark Image from %1").arg(newPath));
 
-    QcepUInt32ImageDataPtr dark = QcepAllocator::newInt32Image("dark", 0,0, QcepAllocator::NullIfNotAvailable);
+    QcepDoubleImageDataPtr dark = QcepAllocator::newDoubleImage("dark", 0,0, QcepAllocator::NullIfNotAvailable);
 
     if (dark && dark -> readImage(newPath)) {
-      m_DarkImage = dark;
+      m_Dark = dark;
     }
   }
 }

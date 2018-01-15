@@ -1238,7 +1238,7 @@ QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEng
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
     if (proc) {
-      return engine -> newQObject(proc -> darkImage().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
+      return engine -> newQObject(proc -> dark().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
     }
   }
 
@@ -1534,7 +1534,7 @@ QScriptValue QxrdScriptEngine::mapUserFunctionFunc(QScriptContext *context, QScr
   if (eng) {
     QxrdDataProcessorPtr proc(eng->dataProcessor());
 
-    QcepDoubleImageDataPtr d = proc->data();
+    QcepImageDataBasePtr d = proc->data();
 
     if (d) {
       int ht = d->get_Height();
@@ -1550,11 +1550,11 @@ QScriptValue QxrdScriptEngine::mapUserFunctionFunc(QScriptContext *context, QScr
         if (func.isFunction()) {
           for (int i=0; i<wd; i++) {
             for (int j=0; j<ht; j++) {
-              d->setValue(i,j, func.call(QScriptValue(), QScriptValueList() << i << j).toNumber());
+              d->setImageData(i,j, func.call(QScriptValue(), QScriptValueList() << i << j).toNumber());
             }
           }
 
-          proc->newData(d, QcepMaskDataPtr());
+          proc->newData(d);
         }
       }
     }

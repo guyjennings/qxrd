@@ -28,7 +28,7 @@
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qcepallocator-ptr.h"
-#include "qxrdprocessargs-ptr.h"
+//#include "qxrdprocessargs-ptr.h"
 #include "qxrdacquisitionscalermodel-ptr.h"
 #include "qxrdacquisitionexecutionthread-ptr.h"
 #include "qxrdacquisition-ptr.h"
@@ -142,14 +142,20 @@ private:
   virtual void stopIdling();
   virtual void startIdling();
 
+//  template <typename TIMG, typename TACC>
+//  void accumulateAcquiredImage(QSharedPointer< QcepImageData<TIMG> > image,
+//                               QSharedPointer< QcepImageData<TACC> > accum,
+//                               QcepMaskDataPtr overflow);
+
   void accumulateAcquiredImage(QcepUInt16ImageDataPtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
   void accumulateAcquiredImage(QcepUInt32ImageDataPtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
-  void accumulateAcquiredImage(QcepImageDataBasePtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr accum, QcepMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr accum, QcepMaskDataPtr overflow);
 
-  void processImage(const QxrdProcessArgs &args);
-  void processImage        (QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
-  void processAcquiredImage(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
-  void processDarkImage    (QString filePattern, QString extent, int fileIndex,                                    QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+//  void processImage(const QxrdProcessArgs &args);
+//  void processImage        (QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+//  void processAcquiredImage(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
+//  void processDarkImage    (QString filePattern, QString extent, int fileIndex,                                    QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
 
   int cancelling();
 

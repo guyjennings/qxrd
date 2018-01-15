@@ -113,7 +113,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
       m_ROIWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     }
 
-    connect(dp.data(),       &QxrdDetectorProcessor::processedImageAvailable,
+    connect(dp.data(),       &QxrdDetectorProcessor::dataAvailable,
             m_DetectorImage, &QxrdImagePlotWidget::newImage);
 
     connect(dp.data(),       &QxrdDetectorProcessor::maskAvailable,

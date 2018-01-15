@@ -109,7 +109,7 @@ public slots:
                   QVariant v7=QVariant());
   void fcloseFunc();
 
-  QcepDoubleImageData *dataFunc();
+  QcepImageDataBase*   dataFunc();
   QcepDoubleImageData* darkFunc();
   QcepMaskData*        maskFunc();
   QcepMaskData*        overflowFunc();

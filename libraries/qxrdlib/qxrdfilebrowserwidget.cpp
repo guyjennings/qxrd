@@ -264,10 +264,12 @@ void QxrdFileBrowserWidget::doOpen()
     QxrdDataProcessorPtr proc(m_Processor);
 
     if (proc) {
+      QxrdDataProcessor *p = proc.data();
+
       foreach(index, rows) {
         if (!m_Model->isDir(index)) {
           //    printf("Open: %s\n", qPrintable(m_Model->filePath(index)));
-          proc->loadData(m_Model->filePath(index));
+          QMetaObject::invokeMethod(p, [=]() { p->loadData(m_Model->filePath(index)); });
         }
       }
     }
@@ -283,10 +285,12 @@ void QxrdFileBrowserWidget::doOpenDark()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
+    QxrdDataProcessor *p = proc.data();
+
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
       if (!m_Model->isDir(index)) {
-        proc->loadDark(m_Model->filePath(index));
+        QMetaObject::invokeMethod(p, [=]() { p->loadDark(m_Model->filePath(index));});
       }
     }
   }
@@ -301,10 +305,12 @@ void QxrdFileBrowserWidget::doOpenMask()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
+    QxrdDataProcessor *p = proc.data();
+
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
       if (!m_Model->isDir(index)) {
-        proc->loadMask(m_Model->filePath(index));
+        QMetaObject::invokeMethod(p, [=]() { p->loadMask(m_Model->filePath(index));});
       }
     }
   }
@@ -319,10 +325,12 @@ void QxrdFileBrowserWidget::doOpenGainMap()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
+    QxrdDataProcessor *p = proc.data();
+
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
       if (!m_Model->isDir(index)) {
-        proc->loadGainMap(m_Model->filePath(index));
+        QMetaObject::invokeMethod(p, [=]() { p->loadGainMap(m_Model->filePath(index));});
       }
     }
   }
@@ -337,10 +345,12 @@ void QxrdFileBrowserWidget::doProcess()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
+    QxrdDataProcessor *p = proc.data();
+
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
       if (!m_Model->isDir(index)) {
-        proc->processData(m_Model->filePath(index));
+        QMetaObject::invokeMethod(p, [=]() { p->processData(m_Model->filePath(index));});
       }
     }
   }
@@ -355,10 +365,12 @@ void QxrdFileBrowserWidget::doIntegrate()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
+    QxrdDataProcessor *p = proc.data();
+
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
       if (!m_Model->isDir(index)) {
-        proc->integrateData(m_Model->filePath(index));
+        QMetaObject::invokeMethod(p, [=]() {p->integrateData(m_Model->filePath(index));});
       }
     }
   }
@@ -380,7 +392,9 @@ void QxrdFileBrowserWidget::doSumImages()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "sumImages", Q_ARG(QStringList, paths));
+    QxrdDataProcessor *p = proc.data();
+
+    QMetaObject::invokeMethod(p, [=]() { p->sumImages(paths);});
   }
 }
 
@@ -389,7 +403,9 @@ void QxrdFileBrowserWidget::doClearAccumulator()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "clearAccumulator");
+    QxrdDataProcessor *p = proc.data();
+
+    QMetaObject::invokeMethod(p, &QxrdDataProcessor::clearAccumulator);
   }
 }
 
@@ -409,7 +425,9 @@ void QxrdFileBrowserWidget::doIntegrateAndAccumulate()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "integrateAndAccumulate", Q_ARG(QStringList, paths));
+    QxrdDataProcessor *p = proc.data();
+
+    QMetaObject::invokeMethod(p, [=]() { p->integrateAndAccumulate(paths);});
   }
 }
 
@@ -478,7 +496,9 @@ void QxrdFileBrowserWidget::doAdd()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "addImages", Q_ARG(QStringList, paths));
+    QxrdDataProcessor *p = proc.data();
+
+    QMetaObject::invokeMethod(p, [=]() { p->addImages(paths); });
   }
 }
 
@@ -498,7 +518,9 @@ void QxrdFileBrowserWidget::doSubtract()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "subtractImages", Q_ARG(QStringList, paths));
+    QxrdDataProcessor *p = proc.data();
+
+    QMetaObject::invokeMethod(p, [=]() { p->subtractImages(paths); });
   }
 }
 
@@ -518,7 +540,9 @@ void QxrdFileBrowserWidget::doProjectX()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, paths), Q_ARG(int, 1), Q_ARG(int, 0), Q_ARG(int, 0));
+    QxrdDataProcessor *p = proc.data();
+
+    QMetaObject::invokeMethod(p, [=]() { p->projectImages(paths, 1, 0, 0); });
   }
 }
 
@@ -538,7 +562,9 @@ void QxrdFileBrowserWidget::doProjectY()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, paths), Q_ARG(int, 0), Q_ARG(int, 1), Q_ARG(int, 0));
+    QxrdDataProcessor *p = proc.data();
+
+    QMetaObject::invokeMethod(p, [=]() { p->projectImages(paths, 0, 1, 0); });
   }
 }
 
@@ -558,7 +584,9 @@ void QxrdFileBrowserWidget::doProjectZ()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, paths), Q_ARG(int, 0), Q_ARG(int, 0), Q_ARG(int, 1));
+    QxrdDataProcessor *p = proc.data();
+
+    QMetaObject::invokeMethod(p, [=]() { p->projectImages(paths, 0, 0, 1); });
   }
 }
 
@@ -578,7 +606,9 @@ void QxrdFileBrowserWidget::doCorrelate()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "correlateImages", Q_ARG(QStringList, paths));
+    QxrdDataProcessor *p = proc.data();
+
+    QMetaObject::invokeMethod(p, [=]() { p->correlateImages(paths); });
   }
 }
 
@@ -598,7 +628,9 @@ void QxrdFileBrowserWidget::doEvaluate(QString filePath)
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(exp.data(), "evaluateScriptFile", Q_ARG(QString, filePath)));
+    QxrdExperiment *expp = exp.data();
+
+    INVOKE_CHECK(QMetaObject::invokeMethod(expp, [=]() { expp->evaluateScriptFile(filePath); }));
   }
 }
 

@@ -54,7 +54,7 @@ void QxrdMaskStackView::contextMenuEvent(QContextMenuEvent *event)
       QxrdDataProcessorPtr dp(m_Processor);
 
       if (dp) {
-        dp->newMaskStack();
+        dp->newEmptyMask();
       }
     } else if (action == enbMask) {
       m_MaskStack->enableMasks(selected);
