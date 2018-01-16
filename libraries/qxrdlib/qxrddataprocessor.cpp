@@ -236,7 +236,7 @@ void QxrdDataProcessor::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings);
+  QxrdProcessor::writeSettings(settings);
 
   if (m_CenterFinder) {
     settings->beginGroup("centerfinder");
@@ -267,7 +267,7 @@ void QxrdDataProcessor::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings);
+  QxrdProcessor::readSettings(settings);
 
   if (m_CenterFinder) {
     settings->beginGroup("centerfinder");
@@ -1192,7 +1192,7 @@ void QxrdDataProcessor::findZingers()
 //  } else if (get_ZingerMask() == ZingerDataMask && m_Data) {
 //    mask = m_Data->mask();
   } else if (masks) {
-    mask = masks->value(get_ZingerMask());
+    mask = masks->mask(get_ZingerMask());
   }
 
   int wid = m_Data->get_Width();

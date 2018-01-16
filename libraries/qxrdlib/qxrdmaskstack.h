@@ -10,11 +10,13 @@
 
 //TODO: fix shared pointer leaks
 //TODO: hide exposed QStack interface
-class QXRD_EXPORT QxrdMaskStack : public QcepObject, public QStack<QcepMaskDataPtr>
+class QXRD_EXPORT QxrdMaskStack : public QcepObject, private QStack<QcepMaskDataPtr>
 {
   Q_OBJECT
 
 public:
+  typedef QStack<QcepMaskDataPtr> inherited;
+
   Q_INVOKABLE QxrdMaskStack(QString name);
   virtual ~QxrdMaskStack();
 
@@ -23,6 +25,12 @@ public:
 
   void changed();
   static QString stackLevelName(int n);
+
+  void push(QcepMaskDataPtr m);
+  QcepMaskDataPtr pop();
+  QcepMaskDataPtr first();
+
+  bool isEmpty();
 
   QcepMaskDataPtr mask();
   QcepMaskDataPtr mask(int n);

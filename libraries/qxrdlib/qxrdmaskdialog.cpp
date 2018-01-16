@@ -90,10 +90,10 @@ int QxrdMaskDialog::maskStackSelectPopup()
     QxrdMaskStackPtr m = proc->maskStack();
 
     if (m) {
-      int nmasks = m->size();
+      int nmasks = m->maskCount();
 
       for (int i=0; i<nmasks; i++) {
-        QcepMaskDataPtr p = m->at(i);
+        QcepMaskDataPtr p = m->mask(i);
         if (p) {
           QString lvl = m->stackLevelName(i);
           actions.addAction(tr("%1: %2").arg(lvl).arg(p->get_Name()))->setData(i);

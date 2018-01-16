@@ -67,6 +67,34 @@ QString QxrdMaskStack::stackLevelName(int n)
   return tr("XYZTabcdefghijklmnopqrstuvwxyz").at(n);
 }
 
+void QxrdMaskStack::push(QcepMaskDataPtr m)
+{
+  inherited::push(m);
+
+  emit maskChanged();
+}
+
+QcepMaskDataPtr QxrdMaskStack::pop()
+{
+  QcepMaskDataPtr res = inherited::takeFirst();
+
+  emit maskChanged();
+
+  return res;
+}
+
+QcepMaskDataPtr QxrdMaskStack::first()
+{
+  QcepMaskDataPtr res = inherited::first();
+
+  return res;
+}
+
+bool QxrdMaskStack::isEmpty()
+{
+  return maskCount() == 0;
+}
+
 QcepMaskDataPtr QxrdMaskStack::mask()
 {
   return value(0);

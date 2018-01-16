@@ -18,13 +18,13 @@ QxrdZingerDialog::QxrdZingerDialog(QxrdDataProcessorWPtr procw, QWidget *parent)
     if (masks) {
       m_ZingerAlgorithm -> addItem("Default", 0);
 
-      int nmasks = masks->size();
+      int nmasks = masks->maskCount();
 
       m_ZingerMask -> addItem("No Mask", QxrdDataProcessor::ZingerNoMask);
       m_ZingerMask -> addItem("Mask from data", QxrdDataProcessor::ZingerDataMask);
 
       for (int i=0; i<nmasks; i++) {
-        QcepMaskDataPtr p = masks->at(i);
+        QcepMaskDataPtr p = masks->mask(i);
 
         if (p) {
           QString lvl = masks->stackLevelName(i);

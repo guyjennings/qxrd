@@ -1,11 +1,8 @@
 #ifndef QXRDMASKSTACK_PTR_H
 #define QXRDMASKSTACK_PTR_H
 
-#include <QSharedPointer>
+#include "qcepsharedpointer.h"
 
-class QxrdMaskStack;
-
-typedef QxrdMaskStack *QxrdMaskStackPtr;
-typedef QxrdMaskStack *QxrdMaskStackWPtr;
+QCEP_SHAREDPOINTER(QxrdMaskStack)
 
 #endif // QXRDMASKSTACK_PTR_H

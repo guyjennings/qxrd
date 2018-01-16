@@ -94,7 +94,7 @@ void QxrdDetectorProcessor::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::readSettings(settings);
+  QxrdProcessor::readSettings(settings);
 
   if (m_CenterFinder) {
     settings->beginGroup("centerFinder");
@@ -125,7 +125,7 @@ void QxrdDetectorProcessor::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QcepObject::writeSettings(settings);
+  QxrdProcessor::writeSettings(settings);
 
   if (m_CenterFinder) {
     settings->beginGroup("centerFinder");
@@ -739,14 +739,14 @@ void QxrdDetectorProcessor::onMaskPathChanged(QString newPath)
 {
   if (newPath.length() == 0) {
     printMessage("Clear Mask");
-    m_Mask->clear();
+    m_Mask->clearMaskStack();
   } else {
     printMessage(tr("Load mask from %1").arg(newPath));
 
     QcepMaskDataPtr m = QcepAllocator::newMask(newPath, 0,0, 0, QcepAllocator::NullIfNotAvailable);
 
     if (m && m->readImage(newPath)) {
-      m_Mask->push_front(m);
+      m_Mask->push(m);
 
       QxrdDetectorControlWindowPtr ctl(m_ControlWindow);
 

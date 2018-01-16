@@ -419,7 +419,7 @@ void QxrdProcessor::clearMask()
   THREAD_CHECK;
 
   if (m_Mask) {
-    m_Mask -> clear();
+    m_Mask -> clearMaskStack();
   }
 
   set_MaskPath("");
@@ -439,7 +439,7 @@ QcepMaskDataWPtr QxrdProcessor::mask() const
 void QxrdProcessor::newMask(QcepMaskDataWPtr mask)
 {
   if (m_Mask) {
-    m_Mask->push_front(mask);
+    m_Mask->push(mask);
 
     emit maskAvailable(mask);
   }
@@ -857,7 +857,7 @@ void QxrdProcessor::newEmptyMask()
                                              QcepAllocator::NullIfNotAvailable);
 
   if (m && m_Mask) {
-    m_Mask -> push_front(m);
+    m_Mask -> push(m);
 
     printMessage(tr("new mask, %1 on stack").arg(m_Mask -> maskCount()));
 
@@ -878,7 +878,7 @@ void QxrdProcessor::duplicateMask()
       m1->copyMaskTo(m);
     }
 
-    m_Mask -> push_front(m);
+    m_Mask -> push(m);
 
     printMessage(tr("dup mask, %1 on stack").arg(m_Mask -> maskCount()));
 

@@ -5,7 +5,8 @@
 QxrdMaskStackModel::QxrdMaskStackModel(QxrdMaskStackPtr masks) :
     m_MaskStack(masks)
 {
-  connect(masks, &QxrdMaskStack::maskChanged, this, &QxrdMaskStackModel::onMaskChanged);
+  connect(masks.data(), &QxrdMaskStack::maskChanged,
+          this,         &QxrdMaskStackModel::onMaskChanged);
 }
 
 int QxrdMaskStackModel::rowCount (const QModelIndex & parent) const
@@ -14,7 +15,7 @@ int QxrdMaskStackModel::rowCount (const QModelIndex & parent) const
     return 0;
   }
 
-  return m_MaskStack->count();
+  return m_MaskStack->maskCount();
 }
 
 int QxrdMaskStackModel::columnCount(const QModelIndex & parent) const
@@ -28,11 +29,11 @@ int QxrdMaskStackModel::columnCount(const QModelIndex & parent) const
 
 QVariant QxrdMaskStackModel::data (const QModelIndex & index, int role) const
 {
-  if (index.row() < 0 || index.row() >= m_MaskStack->count()) {
+  if (index.row() < 0 || index.row() >= m_MaskStack->maskCount()) {
     return QVariant();
   }
 
-  QcepMaskDataPtr p = m_MaskStack->at(index.row());
+  QcepMaskDataPtr p = m_MaskStack->mask(index.row());
 
   if (p) {
     int col = index.column();
@@ -125,8 +126,8 @@ bool QxrdMaskStackModel::setData ( const QModelIndex & index, const QVariant & v
 {
   if (columnCount() == 1) {
     if (index.column() == 0) {
-      if ((index.row() >= 0) && (index.row() < m_MaskStack->count())) {
-        QcepMaskDataPtr p = m_MaskStack->at(index.row());
+      if ((index.row() >= 0) && (index.row() < m_MaskStack->maskCount())) {
+        QcepMaskDataPtr p = m_MaskStack->mask(index.row());
 
         if ((role == Qt::EditRole || role == Qt::DisplayRole)) {
           if (p) {
@@ -150,8 +151,8 @@ bool QxrdMaskStackModel::setData ( const QModelIndex & index, const QVariant & v
       }
     }
   } else {
-    if ((index.row() >= 0) && (index.row() < m_MaskStack->count())) {
-      QcepMaskDataPtr p = m_MaskStack->at(index.row());
+    if ((index.row() >= 0) && (index.row() < m_MaskStack->maskCount())) {
+      QcepMaskDataPtr p = m_MaskStack->mask(index.row());
 
       if (index.column() == TitleColumn && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         if (p) {
