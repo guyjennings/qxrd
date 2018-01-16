@@ -11,7 +11,6 @@ QxrdPluginInfoModel::QxrdPluginInfoModel()
   m_ErrorStrings.resize(LastPlugin);
 
   m_ClassNames.replace(AreaDetectorPlugin,    "QxrdAreaDetectorPlugin");
-  m_ClassNames.replace(CudaPlugin,            "QxrdCudaProcessorPlugin");
   m_ClassNames.replace(DexelaPlugin,          "QxrdDexelaPlugin");
   m_ClassNames.replace(NIDAQPlugin,           "QxrdNIDAQPlugin");
   m_ClassNames.replace(PerkinElmerPlugin,     "QxrdPerkinElmerPlugin");
@@ -142,8 +141,6 @@ void QxrdPluginInfoModel::appendEntry(QString path,
 
   if (className == "QxrdAreaDetectorPlugin") {
     index = AreaDetectorPlugin;
-  } else if (className == "QxrdCudaProcessorPlugin") {
-    index = CudaPlugin;
   } else if (className == "QxrdDexelaPlugin") {
     index = DexelaPlugin;
   } else if (className == "QxrdNIDAQPlugin") {

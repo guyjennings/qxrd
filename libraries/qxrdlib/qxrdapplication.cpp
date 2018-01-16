@@ -24,7 +24,6 @@
 #include "qcepproperty.h"
 #include "qxrdnamedplugininterface.h"
 #include "qxrddetectorplugininterface.h"
-#include "qxrdprocessorinterface.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdglobalsettings.h"
 #include "qxrdexperiment.h"
@@ -40,10 +39,6 @@
 #include "qxrdtestgenerator.h"
 #include "qcepimagedataformattiff.h"
 #include "qxrdplugininfomodel.h"
-
-//#ifdef HAVE_PERKIN_ELMER
-//#include "qxrdperkinelmerplugininterface.h"
-//#endif
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -79,9 +74,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_Splash(NULL),
   m_WelcomeWindow(NULL),
   m_NIDAQPlugin(NULL),
-//  #ifdef HAVE_PERKIN_ELMER
-//  m_PerkinElmerPluginInterface(NULL),
-//  #endif
   m_ResponseTimer(NULL),
   m_SettingsMutex(),
   m_LastLockerCount(0)
@@ -341,25 +333,6 @@ void QxrdApplication::closeWelcomeWindow()
   }
 }
 
-//QWidget* QxrdApplication::window()
-//{
-//  return m_WelcomeWindow;
-//}
-
-//QxrdApplicationPtr QxrdApplication::application()
-//{
-//  return g_Application;
-//}
-
-//#ifdef HAVE_PERKIN_ELMER
-
-//QxrdPerkinElmerPluginInterfacePtr QxrdApplication::perkinElmerPlugin()
-//{
-//  return m_PerkinElmerPluginInterface;
-//}
-
-//#endif
-
 QxrdNIDAQPluginInterfacePtr QxrdApplication::nidaqPlugin()
 {
   return m_NIDAQPlugin;
@@ -412,9 +385,6 @@ void QxrdApplication::loadPlugins()
         if (className == "QxrdAreaDetectorPlugin") {
           m_AreaDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
-        } else if (className == "QxrdCudaProcessorPlugin") {
-          m_CudaPlugin =
-              QxrdProcessorInterfacePtr(qobject_cast<QxrdProcessorInterface*>(plugin));
         } else if (className == "QxrdDexelaPlugin") {
           m_DexelaPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));

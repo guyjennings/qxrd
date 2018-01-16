@@ -111,7 +111,6 @@ else:win32 {
 OTHER_FILES += qxrd.rc \
     qxrd.nsi \
     qxrd-qt5.nsi \
-    qxrd-cuda.pri \
     HeaderTemplates.txt \
     vcredist_vs2013_x86.exe \
     vcredist_vs2013_x64.exe \

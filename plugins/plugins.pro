@@ -6,7 +6,6 @@ TEMPLATE = subdirs
 SUBDIRS =  \
   qxrdpilatusplugin \
   qxrdareadetectorplugin \
-  qxrdcudaprocessorplugin \
   qxrdsimulatedplugin \
   qxrdfilewatcherplugin
 

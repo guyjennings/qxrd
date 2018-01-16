@@ -11,6 +11,8 @@
 #include "qcepproperty.h"
 #include "qcepobject.h"
 
+//TODO: need separate settings class for experiment thread...
+
 class QXRD_EXPORT QxrdSimpleServer : public QcepObject
 {
   Q_OBJECT

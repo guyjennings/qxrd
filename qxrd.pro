@@ -59,7 +59,6 @@ dox.commands = ( cat $${PWD}/Doxyfile ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/qxrdareadetectorplugin/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/qxrdperkinelmerplugin/" ; \
-                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdcudaprocessorplugin/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/qxrdpilatusplugin/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/qxrdnidaqplugin/" ; \
                  echo "IMAGE_PATH+= \"$${PWD}\"/images \"$${PWD}\"/source/images" ; \

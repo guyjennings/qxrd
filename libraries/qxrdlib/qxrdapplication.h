@@ -19,11 +19,6 @@
 #include "qcepdataobject-ptr.h"
 #include "qxrdapplicationsettings-ptr.h"
 #include "qxrdplugininfomodel-ptr.h"
-#include "qxrdprocessorinterface-ptr.h"
-
-//#ifdef HAVE_PERKIN_ELMER
-//#include "qxrdperkinelmerplugininterface-ptr.h"
-//#endif
 
 class QXRD_EXPORT QxrdApplication : public QcepApplication
 {
@@ -35,10 +30,6 @@ public:
 
   bool init(int &argc, char **argv);
 
-//#ifdef HAVE_PERKIN_ELMER
-//  QxrdPerkinElmerPluginInterfacePtr perkinElmerPlugin();
-//#endif
-
   void loadPlugins();
 
   QxrdNIDAQPluginInterfacePtr    nidaqPlugin();
@@ -48,7 +39,6 @@ public:
   QxrdDetectorPluginInterfacePtr pilatusDetectorPlugin();
   QxrdDetectorPluginInterfacePtr areaDetectorPlugin();
   QxrdDetectorPluginInterfacePtr fileWatcherPlugin();
-  QxrdProcessorInterfacePtr      cudaProcessorPlugin();
   QxrdDetectorPluginInterfaceWPtr detectorPlugin(int detType);
 
   void tiffWarning(const char* module, const char *msg);
@@ -158,17 +148,12 @@ private:
 
   QxrdWelcomeWindowPtr            m_WelcomeWindow;
   QxrdNIDAQPluginInterfacePtr     m_NIDAQPlugin;
-  QxrdProcessorInterfacePtr       m_CudaPlugin;
   QxrdDetectorPluginInterfacePtr  m_SimulatedDetectorPlugin;
   QxrdDetectorPluginInterfacePtr  m_PerkinElmerDetectorPlugin;
   QxrdDetectorPluginInterfacePtr  m_DexelaPlugin;
   QxrdDetectorPluginInterfacePtr  m_PilatusDetectorPlugin;
   QxrdDetectorPluginInterfacePtr  m_AreaDetectorPlugin;
   QxrdDetectorPluginInterfacePtr  m_FileWatcherPlugin;
-
-//#ifdef HAVE_PERKIN_ELMER
-//  QxrdPerkinElmerPluginInterfacePtr m_PerkinElmerPluginInterface;
-//#endif
 
   QxrdResponseTimer              *m_ResponseTimer;
 

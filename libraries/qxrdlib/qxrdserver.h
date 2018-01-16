@@ -8,6 +8,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qcepobject.h"
 
+//TODO: need separate settings class for experiment thread
 class QXRD_EXPORT QxrdServer : public QcepObject
 {
   Q_OBJECT

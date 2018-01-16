@@ -12,6 +12,8 @@
 
 //TODO: merge QxrdDataProcessor and QxrdDetectorProcessor into QxrdProcessor
 //TODO: separate processing steps into sub-objects
+//TODO: need separate settings class for experiment thread
+
 class QXRD_EXPORT QxrdProcessor : public QcepDataProcessorBase
 {
   Q_OBJECT

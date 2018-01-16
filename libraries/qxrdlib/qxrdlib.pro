@@ -99,7 +99,6 @@ SOURCES += qxrdlib.cpp \
     qxrdexposuretimespinner.cpp \
     qxrddetectorplugininterface.cpp \
     qxrdnidaqplugininterface.cpp \
-    qxrdprocessorinterface.cpp \
     qxrdnamedplugininterface.cpp \
     qxrddetectorgeometry.cpp \
     qxrdgeneratetestimage.cpp \
@@ -455,7 +454,6 @@ HEADERS += qxrdlib.h\
     qxrdsliceplotwidget.h \
     qxrdplugininfomodel.h \
     qxrdplugininfomodel-ptr.h \
-    qxrdprocessorinterface-ptr.h \
     qxrddexelasettings.h \
     qxrddexelasettings-ptr.h \
     qxrddetectorlistmodel-ptr.h \
@@ -587,7 +585,6 @@ HEADERS += TODO.h \
     qxrddetectorplugininterface.h \
     qxrdnidaqplugininterface.h \
     qxrdnidaqplugininterface-ptr.h \
-    qxrdprocessorinterface.h \
     qxrdnamedplugininterface.h \
     qxrddetectorgeometry.h \
     qxrddetectorgeometry-ptr.h \

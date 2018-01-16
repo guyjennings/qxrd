@@ -22,7 +22,6 @@ public:
 
   enum {
     NIDAQPlugin,
-    CudaPlugin,
     SimulatedPlugin,
     PerkinElmerPlugin,
     DexelaPlugin,
