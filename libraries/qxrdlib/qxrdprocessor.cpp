@@ -18,7 +18,7 @@
 #include <QPainter>
 
 QxrdProcessor::QxrdProcessor(QString name) :
-  QcepDataProcessorBase(name),
+  QcepObject(name),
   m_DataPath(this,"dataPath", "", "Data Path"),
   m_DarkImagePath(this, "darkImagePath", "", "Dark Images Path"),
   m_BadPixelsPath(this, "badPixelsPath", "", "Bad Pixels Path"),
@@ -72,7 +72,7 @@ QxrdFileSaverWPtr QxrdProcessor::fileSaver() const
 
 void QxrdProcessor::readSettings(QSettings *settings)
 {
-  QcepDataProcessorBase::readSettings(settings);
+  QcepObject::readSettings(settings);
 
   if (m_Mask) {
     settings->beginGroup("maskStack");
@@ -105,7 +105,7 @@ void QxrdProcessor::readSettings(QSettings *settings)
 
 void QxrdProcessor::writeSettings(QSettings *settings)
 {
-  QcepDataProcessorBase::writeSettings(settings);
+  QcepObject::writeSettings(settings);
 
   if (m_Mask) {
     settings->beginGroup("maskStack");

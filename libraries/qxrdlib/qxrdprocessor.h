@@ -2,7 +2,7 @@
 #define QXRDPROCESSOR_H
 
 #include "qxrdlib_global.h"
-#include "qcepdataprocessorbase.h"
+#include "qcepobject.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qxrdprocessorstep-ptr.h"
@@ -14,7 +14,7 @@
 //TODO: separate processing steps into sub-objects
 //TODO: need separate settings class for experiment thread
 
-class QXRD_EXPORT QxrdProcessor : public QcepDataProcessorBase
+class QXRD_EXPORT QxrdProcessor : public QcepObject
 {
   Q_OBJECT
 

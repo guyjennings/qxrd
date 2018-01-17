@@ -240,7 +240,7 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
     addChildPtr(QcepAllocator::newDataset("dataset"));
 
     m_DatasetModel = QcepDatasetModelPtr(
-          new QcepDatasetModel(myself, m_DataProcessor, m_Dataset));
+          new QcepDatasetModel(myself, m_Dataset));
 
 //    m_DatasetModel -> newGroup("/group1");
 //    m_DatasetModel -> newGroup("/group2");
