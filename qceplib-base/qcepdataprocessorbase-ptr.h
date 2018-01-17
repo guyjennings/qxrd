@@ -1,8 +1,0 @@
-#ifndef QCEPDATAPROCESSORBASEPTR_H
-#define QCEPDATAPROCESSORBASEPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QcepDataProcessorBase)
-
-#endif // QCEPDATAPROCESSORBASEPTR_H

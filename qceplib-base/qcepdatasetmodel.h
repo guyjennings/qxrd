@@ -19,7 +19,6 @@
 #include "qcepimagedata.h"
 #include "qcepintegrateddata-ptr.h"
 #include "qcepintegrateddata.h"
-#include "qcepdataprocessorbase-ptr.h"
 
 class QCEP_EXPORT QcepDatasetModel : public QAbstractItemModel
 {
@@ -27,7 +26,6 @@ class QCEP_EXPORT QcepDatasetModel : public QAbstractItemModel
 
 public:
   QcepDatasetModel(QcepExperimentWPtr expt,
-                   QcepDataProcessorBaseWPtr proc = QcepDataProcessorBaseWPtr(),
                    QcepDatasetPtr ds = QcepDatasetPtr());
 
   void setDataset(QcepDatasetPtr ds);
@@ -68,7 +66,6 @@ public slots:
 //  bool removeColumns(int col, int count, const QModelIndex &parent);
 
   QcepExperimentWPtr        experiment();
-  QcepDataProcessorBaseWPtr processor();
 
 public slots:
   QcepDataObjectPtr      item(const QModelIndex &index);
@@ -175,7 +172,6 @@ private:
 
 private:
   QcepExperimentWPtr        m_Experiment;
-  QcepDataProcessorBaseWPtr m_Processor;
   QcepDatasetPtr            m_Dataset;
 };
 

@@ -4,7 +4,6 @@
 #include "qcepexperiment.h"
 #include "qcepdataset.h"
 #include "qcepdebug.h"
-#include "qcepdataprocessorbase.h"
 #include "qcepallocator.h"
 #include <QMimeData>
 #include <stdio.h>
@@ -13,9 +12,8 @@
 #include "qcepfixupdetectorpanelgains.h"
 #include "qcepscandetectorpanelgains.h"
 
-QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDataProcessorBaseWPtr proc, QcepDatasetPtr ds) :
+QcepDatasetModel::QcepDatasetModel(QcepExperimentWPtr expt, QcepDatasetPtr ds) :
   m_Experiment(expt),
-  m_Processor(proc),
   m_Dataset(ds)
 {
   if (m_Dataset == NULL) {
@@ -63,11 +61,6 @@ void QcepDatasetModel::setDataset(QcepDatasetPtr /*ds*/)
 QcepExperimentWPtr QcepDatasetModel::experiment()
 {
   return m_Experiment;
-}
-
-QcepDataProcessorBaseWPtr QcepDatasetModel::processor()
-{
-  return m_Processor;
 }
 
 QcepDataObjectPtr QcepDatasetModel::indexedObject(const QModelIndex &index) const

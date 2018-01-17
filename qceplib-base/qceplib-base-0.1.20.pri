@@ -75,7 +75,6 @@ SOURCES += \
   $${PWD}/qcepmainwindow.cpp \
   $${PWD}/qcepscatterplotgraphmodel.cpp \
   $${PWD}/qcepdatasetselectiondialog.cpp \
-  $${PWD}/qcepdataprocessorbase.cpp \
   $${PWD}/qcepdataimportcommand.cpp \
   $${PWD}/qcepdataexportcommand.cpp \
   $${PWD}/qcepdataimportdialog.cpp \
@@ -134,6 +133,7 @@ contains (DEFINES, HAVE_QWT) {
 HEADERS += \
   $${PWD}/qceplib_global.h \
   $${PWD}/qcepmacros.h \
+  $${PWD}/qcepsharedpointer.h \
   $${PWD}/qcepdebug.h \
   $${PWD}/qcepproperty.h \
   $${PWD}/qcepproperty-ptr.h \
@@ -209,8 +209,6 @@ HEADERS += \
   $${PWD}/qcepscatterplotgraphmodel.h \
   $${PWD}/qcepscatterplotgraphmodel-ptr.h \
   $${PWD}/qcepdatasetselectiondialog.h \
-  $${PWD}/qcepdataprocessorbase.h \
-  $${PWD}/qcepdataprocessorbase-ptr.h \
   $${PWD}/qcepdataimportcommand.h \
   $${PWD}/qcepdataexportcommand.h \
   $${PWD}/qcepdataimportdialog.h \
