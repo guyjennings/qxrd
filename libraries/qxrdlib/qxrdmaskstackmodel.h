@@ -10,10 +10,10 @@ class QXRD_EXPORT QxrdMaskStackModel : public QAbstractTableModel
   Q_OBJECT
 
 public:
-  QxrdMaskStackModel(QxrdMaskStackPtr masks);
+  QxrdMaskStackModel(QxrdMaskStackWPtr masks);
 
-  QxrdMaskStackPtr maskStack();
-  void setMaskStack(QxrdMaskStackPtr masks);
+  QxrdMaskStackWPtr maskStack();
+  void setMaskStack(QxrdMaskStackWPtr masks);
 
   virtual QVariant	   data ( const QModelIndex & index, int role ) const;
   virtual QVariant         headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
@@ -36,7 +36,7 @@ public slots:
   void onMaskChanged();
 
 private:
-  QxrdMaskStackPtr m_MaskStack;
+  QxrdMaskStackWPtr m_MaskStack;
 };
 
 #endif // QXRDMASKSTACKMODEL_H

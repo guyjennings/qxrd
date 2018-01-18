@@ -2,7 +2,7 @@
 #include "qxrdmaskstack.h"
 #include "qcepmaskdata.h"
 
-QxrdMaskStackModel::QxrdMaskStackModel(QxrdMaskStackPtr masks) :
+QxrdMaskStackModel::QxrdMaskStackModel(QxrdMaskStackWPtr masks) :
     m_MaskStack(masks)
 {
   connect(masks.data(), &QxrdMaskStack::maskChanged,
@@ -11,11 +11,17 @@ QxrdMaskStackModel::QxrdMaskStackModel(QxrdMaskStackPtr masks) :
 
 int QxrdMaskStackModel::rowCount (const QModelIndex & parent) const
 {
-  if (parent.isValid()) {
-    return 0;
+  int res = 0;
+
+  if (!parent.isValid()) {
+    QxrdMaskStackPtr m(m_MaskStack);
+
+    if (m) {
+      res = m->maskCount();
+    }
   }
 
-  return m_MaskStack->maskCount();
+  return res;
 }
 
 int QxrdMaskStackModel::columnCount(const QModelIndex & parent) const
@@ -27,46 +33,56 @@ int QxrdMaskStackModel::columnCount(const QModelIndex & parent) const
   return NumColumns;
 }
 
+static int thumbnailCount = 0;
+
 QVariant QxrdMaskStackModel::data (const QModelIndex & index, int role) const
 {
-  if (index.row() < 0 || index.row() >= m_MaskStack->maskCount()) {
+  if (index.row() < 0 || index.row() >= rowCount()) {
     return QVariant();
   }
 
-  QcepMaskDataPtr p = m_MaskStack->mask(index.row());
+  QxrdMaskStackPtr m(m_MaskStack);
 
-  if (p) {
-    int col = index.column();
+  if (m) {
+    QcepMaskDataPtr p = m->mask(index.row());
 
-    if (columnCount()==1) {
-      if (col == 0) {
-        if (role == Qt::DecorationRole) {
-          return p->thumbnailImage();
-        } else if (role == Qt::CheckStateRole) {
-          return (p->get_Used()?Qt::Checked:Qt::Unchecked);
-        } else if (role == Qt::DisplayRole || role == Qt::EditRole) {
-          //        return tr("%1 : %2").arg(m_MaskStack->stackLevelName(index.row())).arg(p->get_Name());
-          return p->get_Name();
+    if (p) {
+      int col = index.column();
+
+      if (columnCount()==1) {
+        if (col == 0) {
+          if (role == Qt::DecorationRole) {
+//            printf("%d: Get mask thumbnail\n", thumbnailCount++);
+            //TODO: implement thumbnail image cacheing...
+            return p->thumbnailImage();
+          } else if (role == Qt::CheckStateRole) {
+            return (p->get_Used()?Qt::Checked:Qt::Unchecked);
+          } else if (role == Qt::DisplayRole || role == Qt::EditRole) {
+            //        return tr("%1 : %2").arg(m_MaskStack->stackLevelName(index.row())).arg(p->get_Name());
+            return p->get_Name();
+          }
         }
-      }
-    } else {
-      if (col == ThumbnailColumn) {
-        if (role == Qt::DecorationRole) {
-          return p->thumbnailImage();
-        } else if (role == Qt::SizeHintRole) {
-          return p->thumbnailImageSize();
-        }
-      } else if (col == VisibilityColumn) {
-        if (role == Qt::CheckStateRole) {
-          return (p->get_Used()?Qt::Checked:Qt::Unchecked);
-        } else if (role == Qt::SizeHintRole) {
-          return 30;
-        }
-      } else if (col == TitleColumn) {
-        if (role == Qt::DisplayRole || role == Qt::EditRole) {
-          return p->get_Name();
-        } else if (role==Qt::SizeHintRole) {
-          return 120;
+      } else {
+        if (col == ThumbnailColumn) {
+          if (role == Qt::DecorationRole) {
+//            printf("%d: Get mask thumbnail\n", thumbnailCount++);
+            //TODO: implement thumbnail image cacheing...
+            return p->thumbnailImage();
+          } else if (role == Qt::SizeHintRole) {
+            return p->thumbnailImageSize();
+          }
+        } else if (col == VisibilityColumn) {
+          if (role == Qt::CheckStateRole) {
+            return (p->get_Used()?Qt::Checked:Qt::Unchecked);
+          } else if (role == Qt::SizeHintRole) {
+            return 30;
+          }
+        } else if (col == TitleColumn) {
+          if (role == Qt::DisplayRole || role == Qt::EditRole) {
+            return p->get_Name();
+          } else if (role==Qt::SizeHintRole) {
+            return 120;
+          }
         }
       }
     }
@@ -126,10 +142,42 @@ bool QxrdMaskStackModel::setData ( const QModelIndex & index, const QVariant & v
 {
   if (columnCount() == 1) {
     if (index.column() == 0) {
-      if ((index.row() >= 0) && (index.row() < m_MaskStack->maskCount())) {
-        QcepMaskDataPtr p = m_MaskStack->mask(index.row());
+      if ((index.row() >= 0) && (index.row() < rowCount())) {
+        QxrdMaskStackPtr m(m_MaskStack);
 
-        if ((role == Qt::EditRole || role == Qt::DisplayRole)) {
+        if (m) {
+          QcepMaskDataPtr p = m->mask(index.row());
+
+          if ((role == Qt::EditRole || role == Qt::DisplayRole)) {
+            if (p) {
+              p->set_Name(value.toString());
+            }
+
+            emit dataChanged(index, index);
+
+            return true;
+          }
+
+          if (role == Qt::CheckStateRole) {
+            if (p) {
+              p->set_Used(!(p->get_Used()));
+            }
+
+            emit dataChanged(index, index);
+
+            return true;
+          }
+        }
+      }
+    }
+  } else {
+    if ((index.row() >= 0) && (index.row() < rowCount())) {
+      QxrdMaskStackPtr m(m_MaskStack);
+
+      if (m) {
+        QcepMaskDataPtr p = m->mask(index.row());
+
+        if (index.column() == TitleColumn && (role == Qt::EditRole || role == Qt::DisplayRole)) {
           if (p) {
             p->set_Name(value.toString());
           }
@@ -139,7 +187,7 @@ bool QxrdMaskStackModel::setData ( const QModelIndex & index, const QVariant & v
           return true;
         }
 
-        if (role == Qt::CheckStateRole) {
+        if (index.column() == VisibilityColumn && (role == Qt::CheckStateRole)) {
           if (p) {
             p->set_Used(!(p->get_Used()));
           }
@@ -148,30 +196,6 @@ bool QxrdMaskStackModel::setData ( const QModelIndex & index, const QVariant & v
 
           return true;
         }
-      }
-    }
-  } else {
-    if ((index.row() >= 0) && (index.row() < m_MaskStack->maskCount())) {
-      QcepMaskDataPtr p = m_MaskStack->mask(index.row());
-
-      if (index.column() == TitleColumn && (role == Qt::EditRole || role == Qt::DisplayRole)) {
-        if (p) {
-          p->set_Name(value.toString());
-        }
-
-        emit dataChanged(index, index);
-
-        return true;
-      }
-
-      if (index.column() == VisibilityColumn && (role == Qt::CheckStateRole)) {
-        if (p) {
-          p->set_Used(!(p->get_Used()));
-        }
-
-        emit dataChanged(index, index);
-
-        return true;
       }
     }
   }
@@ -188,12 +212,12 @@ Qt::DropActions QxrdMaskStackModel::supportedDropActions () const
   return QAbstractItemModel::supportedDropActions() | Qt::MoveAction;
 }
 
-QxrdMaskStackPtr QxrdMaskStackModel::maskStack()
+QxrdMaskStackWPtr QxrdMaskStackModel::maskStack()
 {
   return m_MaskStack;
 }
 
-void QxrdMaskStackModel::setMaskStack(QxrdMaskStackPtr masks)
+void QxrdMaskStackModel::setMaskStack(QxrdMaskStackWPtr masks)
 {
   emit beginResetModel();
 

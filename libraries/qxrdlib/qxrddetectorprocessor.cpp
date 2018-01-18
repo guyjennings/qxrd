@@ -739,14 +739,14 @@ void QxrdDetectorProcessor::onMaskPathChanged(QString newPath)
 {
   if (newPath.length() == 0) {
     printMessage("Clear Mask");
-    m_Mask->clearMaskStack();
+    m_MaskStack->clearMaskStack();
   } else {
     printMessage(tr("Load mask from %1").arg(newPath));
 
     QcepMaskDataPtr m = QcepAllocator::newMask(newPath, 0,0, 0, QcepAllocator::NullIfNotAvailable);
 
     if (m && m->readImage(newPath)) {
-      m_Mask->push(m);
+      m_MaskStack->push(m);
 
       QxrdDetectorControlWindowPtr ctl(m_ControlWindow);
 

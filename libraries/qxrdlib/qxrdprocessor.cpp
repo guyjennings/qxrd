@@ -37,7 +37,7 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_BadPixels(NULL),
   m_GainMap(NULL)
 {
-  m_Mask = QxrdMaskStackPtr(
+  m_MaskStack = QxrdMaskStackPtr(
         new QxrdMaskStack("maskStack"));
 }
 
@@ -74,9 +74,9 @@ void QxrdProcessor::readSettings(QSettings *settings)
 {
   QcepObject::readSettings(settings);
 
-  if (m_Mask) {
+  if (m_MaskStack) {
     settings->beginGroup("maskStack");
-    m_Mask -> readSettings(settings);
+    m_MaskStack -> readSettings(settings);
     settings->endGroup();
   }
 
@@ -107,9 +107,9 @@ void QxrdProcessor::writeSettings(QSettings *settings)
 {
   QcepObject::writeSettings(settings);
 
-  if (m_Mask) {
+  if (m_MaskStack) {
     settings->beginGroup("maskStack");
-    m_Mask->writeSettings(settings);
+    m_MaskStack->writeSettings(settings);
     settings->endGroup();
   }
 
@@ -401,10 +401,10 @@ void QxrdProcessor::saveMask(QString name, int canOverwrite)
 {
   THREAD_CHECK;
 
-  if (m_Mask) {
+  if (m_MaskStack) {
     QString path = filePathInDataDirectory(name);
 
-    QcepMaskDataPtr m(m_Mask->first());
+    QcepMaskDataPtr m(m_MaskStack->first());
 
     if (m) {
       saveNamedMaskData(path, m, canOverwrite);
@@ -418,8 +418,8 @@ void QxrdProcessor::clearMask()
 {
   THREAD_CHECK;
 
-  if (m_Mask) {
-    m_Mask -> clearMaskStack();
+  if (m_MaskStack) {
+    m_MaskStack -> clearMaskStack();
   }
 
   set_MaskPath("");
@@ -429,8 +429,8 @@ QcepMaskDataWPtr QxrdProcessor::mask() const
 {
   QcepMaskDataWPtr res;
 
-  if (m_Mask) {
-    res = m_Mask->first();
+  if (m_MaskStack) {
+    res = m_MaskStack->first();
   }
 
   return res;
@@ -438,8 +438,8 @@ QcepMaskDataWPtr QxrdProcessor::mask() const
 
 void QxrdProcessor::newMask(QcepMaskDataWPtr mask)
 {
-  if (m_Mask) {
-    m_Mask->push(mask);
+  if (m_MaskStack) {
+    m_MaskStack->push(mask);
 
     emit maskAvailable(mask);
   }
@@ -591,6 +591,7 @@ void QxrdProcessor::newOverflow(QcepMaskDataWPtr ovf)
   emit overflowAvailable(ovf);
 }
 
+//TODO: don't load things that would be loaded by readSettings
 void QxrdProcessor::loadDefaultImages()
 {
   QString fileName = get_MaskPath();
@@ -849,6 +850,11 @@ int QxrdProcessor::newMaskHeight() const
   return h;
 }
 
+QxrdMaskStackWPtr QxrdProcessor::maskStack() const
+{
+  return m_MaskStack;
+}
+
 void QxrdProcessor::newEmptyMask()
 {
 
@@ -856,10 +862,10 @@ void QxrdProcessor::newEmptyMask()
                                              newMaskWidth(), newMaskHeight(), 1,
                                              QcepAllocator::NullIfNotAvailable);
 
-  if (m && m_Mask) {
-    m_Mask -> push(m);
+  if (m && m_MaskStack) {
+    m_MaskStack -> push(m);
 
-    printMessage(tr("new mask, %1 on stack").arg(m_Mask -> maskCount()));
+    printMessage(tr("new mask, %1 on stack").arg(m_MaskStack -> maskCount()));
 
     newMask(m);
   }
@@ -871,16 +877,16 @@ void QxrdProcessor::duplicateMask()
                                               newMaskWidth(), newMaskHeight(), 1,
                                               QcepAllocator::NullIfNotAvailable);
 
-  if (m_Mask) {
+  if (m_MaskStack) {
     QcepMaskDataPtr m1 = mask();
 
     if (m1) {
       m1->copyMaskTo(m);
     }
 
-    m_Mask -> push(m);
+    m_MaskStack -> push(m);
 
-    printMessage(tr("dup mask, %1 on stack").arg(m_Mask -> maskCount()));
+    printMessage(tr("dup mask, %1 on stack").arg(m_MaskStack -> maskCount()));
 
     newMask(m);
   }
@@ -1035,11 +1041,11 @@ void QxrdProcessor::maskPolygon(QVector<QPointF> poly)
 
 void QxrdProcessor::createMaskIfNeeded()
 {
-  if (m_Mask == NULL) {
-    m_Mask = QxrdMaskStackPtr(new QxrdMaskStack("maskStack"));
+  if (m_MaskStack == NULL) {
+    m_MaskStack = QxrdMaskStackPtr(new QxrdMaskStack("maskStack"));
   }
 
-  if (m_Mask && m_Mask -> isEmpty()) {
+  if (m_MaskStack && m_MaskStack -> isEmpty()) {
     newEmptyMask();
   }
 }

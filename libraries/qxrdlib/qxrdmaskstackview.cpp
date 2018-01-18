@@ -4,12 +4,14 @@
 #include <QContextMenuEvent>
 #include "qxrdmaskdialog.h"
 #include "qxrdmaskstack.h"
+#include "qxrdmaskstackmodel.h"
 #include "qxrddataprocessor.h"
 
 QxrdMaskStackView::QxrdMaskStackView(QWidget *parent) :
   QTableView(parent),
   m_Dialog(NULL),
   m_MaskStack(NULL),
+  m_MaskStackModel(NULL),
   m_Processor()
 {
 }
@@ -19,12 +21,21 @@ void QxrdMaskStackView::setMaskDialog(QxrdMaskDialog *dlg)
   m_Dialog = dlg;
 }
 
-void QxrdMaskStackView::setMaskStack(QxrdMaskStackPtr stk)
+void QxrdMaskStackView::setMaskStack(QxrdMaskStackWPtr stk)
 {
   m_MaskStack = stk;
+
+  QxrdMaskStackPtr maskStack(m_MaskStack);
+
+  if (maskStack) {
+    m_MaskStackModel = QxrdMaskStackModelPtr(
+          new QxrdMaskStackModel(m_MaskStack));
+
+    setModel(m_MaskStackModel.data());
+  }
 }
 
-void QxrdMaskStackView::setProcessor(QxrdDataProcessorWPtr proc)
+void QxrdMaskStackView::setProcessor(QxrdProcessorWPtr proc)
 {
   m_Processor = proc;
 }
@@ -33,43 +44,48 @@ void QxrdMaskStackView::contextMenuEvent(QContextMenuEvent *event)
 {
   QMenu menu(NULL, NULL);
 
-  QAction *newMask = menu.addAction("New Mask Layer");
-  QAction *enbMask = menu.addAction("Enable Mask Layer(s)");
-  QAction *dsbMask = menu.addAction("Disable Mask Layer(s)");
-  QAction *delMask = menu.addAction("Delete Mask Layer(s)");
-  QAction *andMask = menu.addAction("AND Mask Layers");
-  QAction *orMask  = menu.addAction("OR Mask Layers");
-  QAction *thrMask = menu.addAction("Threshold Mask...");
-
-//  xLog->setCheckable(true);
-//  yLog->setCheckable(true);
-//  xLog->setChecked(get_XAxisLog());
-//  yLog->setChecked(get_YAxisLog());
-
-  QAction *action = menu.exec(event->globalPos());
   QModelIndexList selected = selectedIndexes();
+  QxrdMaskStack  *maskStack = m_MaskStack.data();
+  QxrdProcessor  *proc      = m_Processor.data();
 
-  if (m_Dialog) {
-    if (action == newMask) {
-      QxrdDataProcessorPtr dp(m_Processor);
-
-      if (dp) {
-        dp->newEmptyMask();
-      }
-    } else if (action == enbMask) {
-      m_MaskStack->enableMasks(selected);
-    } else if (action == dsbMask) {
-      m_MaskStack->disableMasks(selected);
-    } else if (action == delMask) {
-      m_MaskStack->deleteMasks(selected);
-    } else if (action == andMask) {
-      m_MaskStack->andMasks(selected);
-    } else if (action == orMask) {
-      m_MaskStack->orMasks(selected);
-    } else if (action == thrMask) {
-//      m_MaskStack->thresholdMasks(selected);
-    }
+  if (proc) {
+    menu.addAction("New Mask Layer",
+                   [=]() {proc->newEmptyMask();});
+  } else {
+    menu.addAction("New Mask Layer") -> setEnabled(false);
   }
+
+  if (maskStack) {
+    menu.addAction("Enable Mask Layer(s)",
+                   [=]() {maskStack->enableMasks(selected);});
+
+    menu.addAction("Disable Mask Layer(s)",
+                   [=]() {maskStack->disableMasks(selected);});
+
+    menu.addAction("Delete Mask Layer(s)",
+                   [=]() {maskStack->deleteMasks(selected);});
+
+    menu.addAction("AND Mask Layers",
+                   [=]() {maskStack->andMasks(selected);});
+
+    menu.addAction("OR Mask Layers",
+                   [=]() {maskStack->orMasks(selected);});
+  } else {
+    menu.addAction("Enable Mask Layer(s)") -> setEnabled(false);
+
+    menu.addAction("Disable Mask Layer(s)") -> setEnabled(false);
+
+    menu.addAction("Delete Mask Layer(s)") -> setEnabled(false);
+
+    menu.addAction("AND Mask Layers") -> setEnabled(false);
+
+    menu.addAction("OR Mask Layers") -> setEnabled(false);
+  }
+
+  //TODO: reimplement
+  menu.addAction("Threshold Mask...") -> setEnabled(false);
+
+  menu.exec(event->globalPos());
 
   event->accept();
 }

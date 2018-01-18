@@ -396,7 +396,7 @@ public:
 
 //  void createMaskIfNeeded();
 
-  QxrdMaskStackPtr       maskStack();
+//  QxrdMaskStackPtr       maskStack();
   QxrdCenterFinderPtr    centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
   QxrdPolarTransformPtr  polarTransform() const;

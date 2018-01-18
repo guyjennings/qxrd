@@ -1,11 +1,15 @@
 #include "qxrdmaskingwindow.h"
 #include "qxrdexperiment.h"
 #include "qxrdmaskingwindowsettings.h"
+#include "qxrdprocessor.h"
+#include "qxrdmaskstack.h"
 
 QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
                                      QString name,
                                      QxrdApplicationWPtr app,
-                                     QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw) :
+                                     QxrdExperimentWPtr expt,
+                                     QxrdAcquisitionWPtr acqw,
+                                     QxrdProcessorWPtr procw) :
   QxrdMainWindow(name, app, expt, acqw, procw),
   m_MaskingWindowSettings(set)
 {
@@ -34,6 +38,21 @@ QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
       m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
       m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings());
     }
+  }
+
+  QxrdProcessorPtr proc(m_DataProcessor);
+
+  if (proc) {
+    connect(proc.data(), &QxrdProcessor::dataAvailable,
+            m_ImagePlotWidget, &QxrdImagePlotWidget::newImage);
+
+    connect(proc.data(), &QxrdProcessor::maskAvailable,
+            m_ImagePlotWidget, &QxrdImagePlotWidget::newMask);
+
+    QxrdMaskStackPtr maskStack(proc->maskStack());
+
+    m_MaskStackView -> setMaskStack(maskStack);
+    m_MaskStackView -> setProcessor(proc);
   }
 }
 

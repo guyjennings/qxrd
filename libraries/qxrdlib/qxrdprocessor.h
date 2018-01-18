@@ -82,6 +82,8 @@ public:
 
   void loadDefaultImages();
 
+  QxrdMaskStackWPtr maskStack() const;
+
   void newEmptyMask();
   void duplicateMask();
 
@@ -174,7 +176,7 @@ protected:
     QcepDoubleImageDataPtr m_LiveData;
     QcepMaskDataPtr        m_Overflow;
 
-    QxrdMaskStackPtr       m_Mask;
+    QxrdMaskStackPtr       m_MaskStack;
 
     QVector<QxrdProcessorStepPtr> m_ProcessorSteps;
 };

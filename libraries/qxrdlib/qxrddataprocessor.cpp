@@ -461,10 +461,10 @@ void QxrdDataProcessor::saveCachedIntensity(QString name)
   }
 }
 
-QxrdMaskStackPtr QxrdDataProcessor::maskStack()
-{
-  return m_Mask;
-}
+//QxrdMaskStackPtr QxrdDataProcessor::maskStack()
+//{
+//  return m_Mask;
+//}
 
 //int QxrdDataProcessor::maskStackSize()
 //{
@@ -1247,7 +1247,7 @@ void QxrdDataProcessor::findZingers()
       }
     }
 
-    m_Mask -> push(dest);
+    m_MaskStack -> push(dest);
   }
 }
 
