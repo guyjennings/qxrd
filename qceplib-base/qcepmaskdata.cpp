@@ -1,8 +1,10 @@
 #include "qcepmaskdata.h"
 #include "qcepallocator.h"
+#include <QPainter>
 
 QcepMaskData::QcepMaskData(QString name, int width, int height, int def)
-  : QcepImageData<short>(name, width, height, def)
+  : QcepImageData<short>(name, width, height, def),
+    m_ThumbnailCached(false)
 {
 }
 
@@ -26,6 +28,7 @@ void QcepMaskData::copyMaskTo(QcepMaskDataPtr dest)
     }
   }
 
+  dest -> thumbnailInvalid();
   dest -> set_Name(get_Name()+" copy");
 //
 //  setMask(from -> m_Mask);
@@ -68,16 +71,52 @@ void QcepMaskData::setCircularMask()
       setMaskValue(x,y,0);
     }
   }
+
+  thumbnailInvalid();
+}
+
+void QcepMaskData::maskPolygon(QVector<QPointF> poly,
+                               bool newVal)
+{
+  int nRows = get_Height();
+  int nCols = get_Width();
+
+  QImage polyImage(nCols, nRows, QImage::Format_RGB32);
+  QPainter polyPainter(&polyImage);
+  QPolygonF polygon;
+
+  foreach(QPointF pt, poly) {
+    polygon.append(pt);
+  }
+
+  polyPainter.setPen(Qt::white);
+  polyPainter.fillRect(0,0,nCols,nRows,Qt::black);
+  polyPainter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
+  polyPainter.drawPolygon(poly);
+
+  for (int j=0; j<nRows; j++) {
+    for (int i=0; i<nCols; i++) {
+      if (qGray(polyImage.pixel(i,j))) {
+        setMaskValue(i, j, newVal);
+      }
+    }
+  }
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::hideMaskAll()
 {
   m_Image.fill(0);
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::showMaskAll()
 {
   m_Image.fill(1);
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::invertMask()
@@ -88,6 +127,8 @@ void QcepMaskData::invertMask()
   for (int i=0; i<total; i++) {
     m_Image[i] = !m_Image[i];
   }
+
+  thumbnailInvalid();
 }
 
 QcepMaskDataPtr QcepMaskData::copyMask()
@@ -120,6 +161,8 @@ void QcepMaskData::growMask()
       setMaskValue(i,j, res);
     }
   }
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::shrinkMask()
@@ -140,6 +183,8 @@ void QcepMaskData::shrinkMask()
       setMaskValue(i,j, res);
     }
   }
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::andMask(QcepMaskDataPtr mask)
@@ -152,6 +197,8 @@ void QcepMaskData::andMask(QcepMaskDataPtr mask)
       setMaskValue(i,j, maskValue(i,j) & mask->maskValue(i,j));
     }
   }
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::orMask(QcepMaskDataPtr mask)
@@ -164,6 +211,8 @@ void QcepMaskData::orMask(QcepMaskDataPtr mask)
       setMaskValue(i,j, maskValue(i,j) | mask->maskValue(i,j));
     }
   }
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::xorMask(QcepMaskDataPtr mask)
@@ -176,6 +225,8 @@ void QcepMaskData::xorMask(QcepMaskDataPtr mask)
       setMaskValue(i,j, maskValue(i,j) ^ mask->maskValue(i,j));
     }
   }
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::andNotMask(QcepMaskDataPtr mask)
@@ -188,6 +239,8 @@ void QcepMaskData::andNotMask(QcepMaskDataPtr mask)
       setMaskValue(i,j, maskValue(i,j) & !mask->maskValue(i,j));
     }
   }
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::orNotMask(QcepMaskDataPtr mask)
@@ -200,6 +253,8 @@ void QcepMaskData::orNotMask(QcepMaskDataPtr mask)
       setMaskValue(i,j, maskValue(i,j) | !mask->maskValue(i,j));
     }
   }
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::xorNotMask(QcepMaskDataPtr mask)
@@ -212,6 +267,8 @@ void QcepMaskData::xorNotMask(QcepMaskDataPtr mask)
       setMaskValue(i,j, maskValue(i,j) ^ !mask->maskValue(i,j));
     }
   }
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::maskCircle(double cx, double cy, double r, bool val)
@@ -232,6 +289,8 @@ void QcepMaskData::maskCircle(double cx, double cy, double r, bool val)
       }
     }
   }
+
+  thumbnailInvalid();
 }
 
 QString QcepMaskData::summary()
@@ -283,7 +342,23 @@ int  QcepMaskData::countOverflowPixels() const
   return countUnmaskedPixels();
 }
 
-QImage QcepMaskData::thumbnailImage() const
+QImage QcepMaskData::thumbnailImage()
+{
+  if (m_ThumbnailCached) {
+    return m_ThumbnailImage;
+  } else {
+    cachedThumbnail();
+
+    return m_ThumbnailImage;
+  }
+}
+
+void QcepMaskData::thumbnailInvalid()
+{
+  m_ThumbnailCached = false;
+}
+
+void QcepMaskData::cachedThumbnail()
 {
   int height    = get_Height();
   int width     = get_Width();
@@ -315,7 +390,8 @@ QImage QcepMaskData::thumbnailImage() const
     }
   }
 
-  return res;
+  m_ThumbnailImage  = res;
+  m_ThumbnailCached = true;
 }
 
 QSize QcepMaskData::thumbnailImageSize() const
@@ -337,6 +413,8 @@ void QcepMaskData::setMaskRange(QcepImageDataBasePtr image, double min, double m
       }
     }
   }
+
+  thumbnailInvalid();
 }
 
 void QcepMaskData::hideMaskRange(QcepImageDataBasePtr image, double min, double max)

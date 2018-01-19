@@ -18,7 +18,6 @@ public:
 
 public slots:
   bool maskValue(int x, int y) const;
-  void setMaskValue(int x, int y, bool mval);
 
   QcepMaskDataPtr copyMask();
 
@@ -38,6 +37,7 @@ public slots:
   void xorNotMask(QcepMaskDataPtr mask);
 
   void maskCircle(double cx, double cy, double r, bool val);
+  void maskPolygon(QVector<QPointF> poly, bool newVal);
 
   int countMaskedPixels() const;
   int countUnmaskedPixels() const;
@@ -45,8 +45,17 @@ public slots:
 
   QString summary();
 
-  QImage thumbnailImage() const;
+  QImage thumbnailImage();
   QSize  thumbnailImageSize() const;
+  void   thumbnailInvalid();
+
+private:
+  void setMaskValue(int x, int y, bool mval);
+
+  bool   m_ThumbnailCached;
+  QImage m_ThumbnailImage;
+
+  void   cachedThumbnail();
 
 public:
   void copyMaskTo(QcepMaskDataPtr dest);
