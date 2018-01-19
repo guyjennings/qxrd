@@ -11,6 +11,7 @@
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdfilesaver.h"
 #include "qxrdmaskstack.h"
+#include "qxrdzingerfinder.h"
 
 #include <QFileInfo>
 #include <QThread>
@@ -35,10 +36,15 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_Data(QcepAllocator::newDoubleImage("data", 2048, 2048, QcepAllocator::WaitTillAvailable)),
   m_Dark(NULL),
   m_BadPixels(NULL),
-  m_GainMap(NULL)
+  m_GainMap(NULL),
+  m_MaskStack(),
+  m_ZingerFinder()
 {
   m_MaskStack = QxrdMaskStackPtr(
         new QxrdMaskStack("maskStack"));
+
+  m_ZingerFinder = QxrdZingerFinderPtr(
+        new QxrdZingerFinder("zingerFinder"));
 }
 
 QxrdProcessor::~QxrdProcessor()
@@ -80,6 +86,12 @@ void QxrdProcessor::readSettings(QSettings *settings)
     settings->endGroup();
   }
 
+  if (m_ZingerFinder) {
+    settings->beginGroup("zingerFinder");
+    m_ZingerFinder -> readSettings(settings);
+    settings->endGroup();
+  }
+
   int n = settings->beginReadArray("processorSteps");
 
   for (int i=0; i<n; i++) {
@@ -110,6 +122,12 @@ void QxrdProcessor::writeSettings(QSettings *settings)
   if (m_MaskStack) {
     settings->beginGroup("maskStack");
     m_MaskStack->writeSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_ZingerFinder) {
+    settings->beginGroup("zingerFinder");
+    m_ZingerFinder -> writeSettings(settings);
     settings->endGroup();
   }
 
@@ -1010,32 +1028,32 @@ void QxrdProcessor::maskPolygon(QVector<QPointF> poly)
 
   if (m) {
     //  printf("QxrdDataProcessorBase::maskPolygon(%d points ...)\n", poly.size());
+    bool newVal = get_MaskSetPixels();
+    m -> maskPolygon(poly, newVal);
+//    int nRows = m -> get_Height();
+//    int nCols = m -> get_Width();
 
-    int nRows = m -> get_Height();
-    int nCols = m -> get_Width();
+//    QImage polyImage(nCols, nRows, QImage::Format_RGB32);
+//    QPainter polyPainter(&polyImage);
+//    QPolygonF polygon;
 
-    QImage polyImage(nCols, nRows, QImage::Format_RGB32);
-    QPainter polyPainter(&polyImage);
-    QPolygonF polygon;
+//    foreach(QPointF pt, poly) {
+//      polygon.append(pt);
+//    }
 
-    foreach(QPointF pt, poly) {
-      polygon.append(pt);
-    }
+//    polyPainter.setPen(Qt::white);
+//    polyPainter.fillRect(0,0,nCols,nRows,Qt::black);
+//    polyPainter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
+//    polyPainter.drawPolygon(poly);
 
-    polyPainter.setPen(Qt::white);
-    polyPainter.fillRect(0,0,nCols,nRows,Qt::black);
-    polyPainter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
-    polyPainter.drawPolygon(poly);
 
-    bool newval = get_MaskSetPixels();
-
-    for (int j=0; j<nRows; j++) {
-      for (int i=0; i<nCols; i++) {
-        if (qGray(polyImage.pixel(i,j))) {
-          m -> setMaskValue(i, j, newval);
-        }
-      }
-    }
+//    for (int j=0; j<nRows; j++) {
+//      for (int i=0; i<nCols; i++) {
+//        if (qGray(polyImage.pixel(i,j))) {
+//          m -> setMaskValue(i, j, newval);
+//        }
+//      }
+//    }
   }
 }
 
@@ -1050,3 +1068,7 @@ void QxrdProcessor::createMaskIfNeeded()
   }
 }
 
+QxrdZingerFinderWPtr QxrdProcessor::zingerFinder() const
+{
+  return m_ZingerFinder;
+}

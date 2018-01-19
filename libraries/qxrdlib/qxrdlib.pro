@@ -355,7 +355,8 @@ SOURCES += qxrdlib.cpp \
     qxrdoverflowrasterdata.cpp \
     qxrdcolormaplibrary.cpp \
     qxrdcolormap.cpp \
-    qxrdprocessorstep.cpp
+    qxrdprocessorstep.cpp \
+    qxrdzingerfinder.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -518,7 +519,9 @@ HEADERS += qxrdlib.h\
     qxrdcolormap.h \
     qxrdcolormap-ptr.h \
     qxrdprocessorstep.h \
-    qxrdprocessorstep-ptr.h
+    qxrdprocessorstep-ptr.h \
+    qxrdzingerfinder.h \
+    qxrdzingerfinder-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

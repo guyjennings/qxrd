@@ -67,7 +67,7 @@ protected:
   QxrdApplicationWPtr m_Application;
   QxrdExperimentWPtr  m_Experiment;
   QxrdAcquisitionWPtr m_Acquisition;
-  QxrdProcessorWPtr   m_DataProcessor; //TODO: rename m_Processor
+  QxrdProcessorWPtr   m_Processor;
 
   QLabel             *m_StatusMsg;
   QProgressBar       *m_Progress;

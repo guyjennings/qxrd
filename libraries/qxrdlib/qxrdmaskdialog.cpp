@@ -80,6 +80,7 @@ void QxrdMaskDialog::changeEvent(QEvent *e)
     break;
   }
 }
+
 int QxrdMaskDialog::maskStackSelectPopup()
 {
   QMenu actions;
@@ -193,7 +194,9 @@ void QxrdMaskDialog::doZingersMask()
   QxrdDataProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdZingerDialog dlg(proc);
+    QxrdZingerFinderWPtr zf = proc->zingerFinder();
+
+    QxrdZingerDialog dlg(proc, zf);
 
     dlg.exec();
   }

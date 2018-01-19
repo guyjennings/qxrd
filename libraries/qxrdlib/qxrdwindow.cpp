@@ -1584,7 +1584,7 @@ void QxrdWindow::loadScript(QString path)
 
 QxrdDataProcessorWPtr QxrdWindow::dataProcessor() const
 {
-  return qSharedPointerDynamicCast<QxrdDataProcessor>(m_DataProcessor);
+  return qSharedPointerDynamicCast<QxrdDataProcessor>(m_Processor);
 }
 
 QxrdAcquisitionWPtr QxrdWindow::acquisition() const

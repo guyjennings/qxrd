@@ -2,15 +2,19 @@
 #include "ui_qxrdzingerdialog.h"
 #include "qxrdmaskstack.h"
 #include "qxrdmaskstack-ptr.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
+#include "qxrdzingerfinder.h"
 
-QxrdZingerDialog::QxrdZingerDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
+QxrdZingerDialog::QxrdZingerDialog(QxrdProcessorWPtr procw,
+                                   QxrdZingerFinderWPtr zf,
+                                   QWidget *parent) :
   QDialog(parent),
-  m_Processor(procw)
+  m_Processor(procw),
+  m_ZingerFinder(zf)
 {
   setupUi(this);
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QxrdMaskStackPtr masks(proc->maskStack());
@@ -20,8 +24,8 @@ QxrdZingerDialog::QxrdZingerDialog(QxrdDataProcessorWPtr procw, QWidget *parent)
 
       int nmasks = masks->maskCount();
 
-      m_ZingerMask -> addItem("No Mask", QxrdDataProcessor::ZingerNoMask);
-      m_ZingerMask -> addItem("Mask from data", QxrdDataProcessor::ZingerDataMask);
+      m_ZingerMask -> addItem("No Mask", QxrdZingerFinder::ZingerNoMask);
+      m_ZingerMask -> addItem("Mask from data", QxrdZingerFinder::ZingerDataMask);
 
       for (int i=0; i<nmasks; i++) {
         QcepMaskDataPtr p = masks->mask(i);
@@ -34,19 +38,23 @@ QxrdZingerDialog::QxrdZingerDialog(QxrdDataProcessorWPtr procw, QWidget *parent)
         }
       }
 
-      m_ZingerDestination -> addItem("Top of stack", QxrdDataProcessor::ZingerTopStack);
+      m_ZingerDestination -> addItem("Top of stack", QxrdZingerFinder::ZingerTopStack);
 
-      int algIndex = m_ZingerAlgorithm   -> findData(proc->get_ZingerAlgorithm());
-      int mskIndex = m_ZingerMask        -> findData(proc->get_ZingerMask());
-      int dstIndex = m_ZingerDestination -> findData(proc->get_ZingerDestination());
+      QxrdZingerFinderPtr z(m_ZingerFinder);
 
-      m_ZingerAlgorithm   -> setCurrentIndex(algIndex);
-      m_ZingerMask        -> setCurrentIndex(mskIndex);
-      m_ZingerDestination -> setCurrentIndex(dstIndex);
+      if (z) {
+        int algIndex = m_ZingerAlgorithm   -> findData(z->get_ZingerAlgorithm());
+        int mskIndex = m_ZingerMask        -> findData(z->get_ZingerMask());
+        int dstIndex = m_ZingerDestination -> findData(z->get_ZingerDestination());
 
-      m_ZingerSize1       -> setValue(proc->get_ZingerSize1());
-      m_ZingerSize2       -> setValue(proc->get_ZingerSize2());
-      m_ZingerThreshold   -> setValue(proc->get_ZingerThreshold());
+        m_ZingerAlgorithm   -> setCurrentIndex(algIndex);
+        m_ZingerMask        -> setCurrentIndex(mskIndex);
+        m_ZingerDestination -> setCurrentIndex(dstIndex);
+
+        m_ZingerSize1       -> setValue(z->get_ZingerSize1());
+        m_ZingerSize2       -> setValue(z->get_ZingerSize2());
+        m_ZingerThreshold   -> setValue(z->get_ZingerThreshold());
+      }
     }
   }
 }
@@ -57,17 +65,17 @@ QxrdZingerDialog::~QxrdZingerDialog()
 
 void QxrdZingerDialog::accept()
 {
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdZingerFinderPtr zf(m_ZingerFinder);
 
-  if (proc) {
-    proc->set_ZingerAlgorithm   (m_ZingerAlgorithm   -> currentData().toInt());
-    proc->set_ZingerMask        (m_ZingerMask        -> currentData().toInt());
-    proc->set_ZingerDestination (m_ZingerDestination -> currentData().toInt());
-    proc->set_ZingerSize1       (m_ZingerSize1       -> value());
-    proc->set_ZingerSize2       (m_ZingerSize2       -> value());
-    proc->set_ZingerThreshold   (m_ZingerThreshold   -> value());
+  if (zf) {
+    zf->set_ZingerAlgorithm   (m_ZingerAlgorithm   -> currentData().toInt());
+    zf->set_ZingerMask        (m_ZingerMask        -> currentData().toInt());
+    zf->set_ZingerDestination (m_ZingerDestination -> currentData().toInt());
+    zf->set_ZingerSize1       (m_ZingerSize1       -> value());
+    zf->set_ZingerSize2       (m_ZingerSize2       -> value());
+    zf->set_ZingerThreshold   (m_ZingerThreshold   -> value());
 
-    proc->findZingers();
+    zf->findZingers();
   }
 
   QDialog::accept();

@@ -9,6 +9,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdmaskstack-ptr.h"
+#include "qxrdzingerfinder-ptr.h"
 
 //TODO: merge QxrdDataProcessor and QxrdDetectorProcessor into QxrdProcessor
 //TODO: separate processing steps into sub-objects
@@ -99,6 +100,8 @@ public:
   void maskCircle(QRectF pt);
   void maskPolygon(QVector<QPointF> poly);
 
+  QxrdZingerFinderWPtr zingerFinder() const;
+
 protected:
   void subtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);
   void unsubtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);
@@ -177,6 +180,7 @@ protected:
     QcepMaskDataPtr        m_Overflow;
 
     QxrdMaskStackPtr       m_MaskStack;
+    QxrdZingerFinderPtr    m_ZingerFinder;
 
     QVector<QxrdProcessorStepPtr> m_ProcessorSteps;
 };

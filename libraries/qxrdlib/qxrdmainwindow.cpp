@@ -20,7 +20,7 @@ QxrdMainWindow::QxrdMainWindow(QString name, QxrdApplicationWPtr app, QxrdExperi
     m_Application(app),
     m_Experiment(expt),
     m_Acquisition(acqw),
-    m_DataProcessor(procw),
+    m_Processor(procw),
     m_Progress(NULL),
     m_FileMenuP(NULL),
     m_EditMenuP(NULL),
