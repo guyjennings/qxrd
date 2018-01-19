@@ -9,8 +9,6 @@ public:
   QxrdSliceCommand(QString                    name,
                    QxrdPlotWidget            *plot,
                    QxrdPlotWidgetSettingsWPtr set);
-
-  QToolButton *toolButton();
 };
 
 #endif // QXRDSLICECOMMAND_H

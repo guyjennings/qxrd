@@ -9,8 +9,6 @@ public:
   QxrdPrintPlotButton(QString                    name,
                       QxrdPlotWidget            *plot,
                       QxrdPlotWidgetSettingsWPtr set);
-
-  QToolButton *toolButton();
 };
 
 #endif // QXRDPRINTPLOTBUTTON_H

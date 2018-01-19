@@ -782,7 +782,7 @@
   <action name="m_ActionInvertMask">
    <property name="icon">
     <iconset resource="qxrdresources.qrc">
-     <normaloff>:/images/mask_invert.png</normaloff>:/images/mask_invert.png</iconset>
+     <normaloff>:/images/mask_polygon_invert.png</normaloff>:/images/mask_invert.png</iconset>
    </property>
    <property name="text">
     <string>Invert Mask</string>

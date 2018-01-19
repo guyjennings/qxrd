@@ -4,34 +4,17 @@
 #include "qxrdimageplot.h"
 
 QxrdHistogramCommand::QxrdHistogramCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand(name, plot, set),
+  : QxrdPlotButtonCommand(name, plot, set, ":/images/histogram.png", "Histogram", true),
     m_HistogramSelector(NULL)
 {
+  connect(m_ToolButton,  &QToolButton::clicked,
+          this,          &QxrdHistogramCommand::enable);
+
   m_HistogramSelector = new QxrdHistogramSelector(m_Plot->canvas(), m_Plot);
   m_HistogramSelector -> setEnabled(false);
 
   connect(m_HistogramSelector, (void (QcepPlotMeasurer::*)( const QRectF &)) &QwtPlotPicker::selected,
           m_Plot, &QxrdImagePlot::selectHistogram);
-}
-
-QToolButton* QxrdHistogramCommand::toolButton()
-{
-  QToolButton* res = new QToolButton();
-
-  res->setObjectName(get_Name());
-  QIcon icon;
-
-  icon.addFile(QStringLiteral(":/images/histogram.png"), QSize(), QIcon::Normal, QIcon::Off);
-  res->setIcon(icon);
-  res->setIconSize(QSize(24,24));
-  res->setCheckable(true);
-  res->setAutoExclusive(true);
-  res->setToolTip(tr("Histogram"));
-
-  connect(res,  &QToolButton::clicked,
-          this, &QxrdHistogramCommand::enable);
-
-  return res;
 }
 
 void QxrdHistogramCommand::enable()

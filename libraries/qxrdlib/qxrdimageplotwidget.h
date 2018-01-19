@@ -7,6 +7,7 @@
 #include "qxrdmaskrasterdata-ptr.h"
 #include "qxrdoverflowrasterdata-ptr.h"
 #include "qwt_plot_spectrogram-ptr.h"
+#include "qxrdprocessor-ptr.h"
 
 class QXRD_EXPORT QxrdImagePlotWidget : public QxrdPlotWidget
 {
@@ -16,7 +17,8 @@ public:
   explicit QxrdImagePlotWidget(QWidget *parent = 0);
   ~QxrdImagePlotWidget();
 
-  void initialize(QxrdImagePlotWidgetSettingsWPtr settings);
+  void initialize(QxrdImagePlotWidgetSettingsWPtr settings,
+                  QxrdProcessorWPtr               processor);
 
   void editPreferences();
 
@@ -63,6 +65,7 @@ protected:
 
 private:
   QxrdImagePlotWidgetSettingsWPtr m_ImageSettings;
+  QxrdProcessorWPtr               m_Processor;
 };
 
 #endif // QXRDIMAGEPLOTWIDGET_H

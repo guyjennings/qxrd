@@ -1,6 +1,7 @@
 #include "qxrdcenteringwindow.h"
 #include "qxrdexperiment.h"
 #include "qxrdcenteringwindowsettings.h"
+#include "qxrddataprocessor.h"
 
 QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
                                          QString name,
@@ -32,7 +33,7 @@ QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
 
     if (settings) {
       m_FileBrowserWidget    -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings());
+      m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings(), proc);
       m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings());
       m_IntegratedPlotWidget -> initialize(settings->integratedPlotWidgetSettings());
     }

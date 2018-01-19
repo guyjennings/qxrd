@@ -9,8 +9,6 @@ public:
   QxrdZoomInCommand(QString                    name,
                     QxrdPlotWidget            *plot,
                     QxrdPlotWidgetSettingsWPtr set);
-
-  QToolButton *toolButton();
 };
 
 #endif // QXRDZOOMINCOMMAND_H

@@ -3,27 +3,9 @@
 #include "qxrdplotwidget.h"
 
 QxrdZoomInCommand::QxrdZoomInCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand(name, plot, set)
+  : QxrdPlotButtonCommand(name, plot, set, ":/images/zoom-in.png", "Zoom In", true)
 {
+  m_ToolButton->setChecked(true);
 
-}
-
-QToolButton* QxrdZoomInCommand::toolButton()
-{
-  QToolButton* res = new QToolButton();
-
-  res->setObjectName(get_Name());
-  QIcon icon;
-
-  icon.addFile(QStringLiteral(":/images/zoom-in.png"), QSize(), QIcon::Normal, QIcon::Off);
-  res->setIcon(icon);
-  res->setIconSize(QSize(24,24));
-  res->setCheckable(true);
-  res->setChecked(true);
-  res->setAutoExclusive(true);
-  res->setToolTip(tr("Zoom In"));
-
-  connect(res, &QToolButton::clicked, m_PlotWidget, &QxrdPlotWidget::zoomIn);
-
-  return res;
+  connect(m_ToolButton, &QToolButton::clicked, m_PlotWidget, &QxrdPlotWidget::zoomIn);
 }

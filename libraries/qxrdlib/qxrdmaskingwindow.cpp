@@ -4,6 +4,7 @@
 #include "qxrdprocessor.h"
 #include "qxrdmaskstack.h"
 #include "qxrdzingerdialog.h"
+#include "qxrddataprocessor.h"
 
 QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
                                      QString name,
@@ -37,7 +38,7 @@ QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
 
     if (settings) {
       m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings());
+      m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings(), proc);
     }
   }
 

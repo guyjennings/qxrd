@@ -21,6 +21,9 @@
 #include "qxrdcolormaplibrary.h"
 #include "qxrdcolormap.h"
 #include "qxrdmaskcolormap.h"
+#include "qxrdprocessor.h"
+#include "qxrdmaskstack-ptr.h"
+#include "qxrdmaskstack.h"
 
 QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent)
   : QxrdPlotWidget(parent),
@@ -42,14 +45,29 @@ QxrdImagePlotWidget::~QxrdImagePlotWidget()
 {
 }
 
-void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings)
+void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings,
+                                     QxrdProcessorWPtr processor)
 {
   QxrdPlotWidget::initialize(settings);
 
   m_ImageSettings = settings;
+  m_Processor     = processor;
 
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskCirclesCommand("Mask Circles", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskPolygonsCommand("Mask Polygons", this, settings)));
+  QxrdProcessorPtr p(m_Processor);
+
+  if (p) {
+    QxrdMaskStackPtr m(p->maskStack());
+    addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskCirclesCommand("Mask Circles",
+                                                                 this,
+                                                                 settings,
+                                                                 m)));
+
+    addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskPolygonsCommand("Mask Polygons",
+                                                                  this,
+                                                                  settings,
+                                                                  m)));
+  }
+
   addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdPowderPointsCommand("Powder Points", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdSliceCommand("Slice", this, settings)));

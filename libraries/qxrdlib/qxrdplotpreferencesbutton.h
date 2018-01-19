@@ -9,8 +9,6 @@ public:
   QxrdPlotPreferencesButton(QString                    name,
                             QxrdPlotWidget            *plot,
                             QxrdPlotWidgetSettingsWPtr set);
-
-  QToolButton *toolButton();
 };
 
 #endif // QXRDPLOTPREFERENCESBUTTON_H

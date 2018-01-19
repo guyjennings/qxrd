@@ -9,8 +9,6 @@ public:
   QxrdSetCenterCommand(QString                    name,
                        QxrdPlotWidget            *plot,
                        QxrdPlotWidgetSettingsWPtr set);
-
-  QToolButton *toolButton();
 };
 
 #endif // QXRDSETCENTERCOMMAND_H

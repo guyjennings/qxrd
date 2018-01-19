@@ -9,8 +9,6 @@ public:
   QxrdPowderPointsCommand(QString                    name,
                           QxrdPlotWidget            *plot,
                           QxrdPlotWidgetSettingsWPtr set);
-
-  QToolButton *toolButton();
 };
 
 #endif // QXRDPOWDERPOINTSCOMMAND_H

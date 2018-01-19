@@ -1433,7 +1433,7 @@ Script Function: acquire([fileName
              </property>
              <property name="icon">
               <iconset resource="qxrdresources.qrc">
-               <normaloff>:/images/mask_invert.png</normaloff>:/images/mask_invert.png</iconset>
+               <normaloff>:/images/mask_polygon_invert.png</normaloff>:/images/mask_invert.png</iconset>
              </property>
             </widget>
            </item>

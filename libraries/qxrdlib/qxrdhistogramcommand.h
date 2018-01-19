@@ -11,8 +11,6 @@ public:
                        QxrdPlotWidget            *plot,
                        QxrdPlotWidgetSettingsWPtr set);
 
-  QToolButton *toolButton();
-
   void enable();
   void disable();
 

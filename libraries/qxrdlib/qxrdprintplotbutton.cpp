@@ -5,26 +5,7 @@
 QxrdPrintPlotButton::QxrdPrintPlotButton(QString                    name,
                                          QxrdPlotWidget            *plot,
                                          QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand(name, plot, set)
+  : QxrdPlotButtonCommand(name, plot, set, ":/images/print.png", "Print Plot...", false)
 {
-
-}
-
-QToolButton* QxrdPrintPlotButton::toolButton()
-{
-  QToolButton* res = new QToolButton();
-
-  res->setObjectName(get_Name());
-  QIcon icon;
-
-  icon.addFile(QStringLiteral(":/images/print.png"), QSize(), QIcon::Normal, QIcon::Off);
-  res->setIcon(icon);
-  res->setIconSize(QSize(24,24));
-//  res->setCheckable(true);
-//  res->setAutoExclusive(true);
-  res->setToolTip(tr("Print Plot..."));
-
-  connect(res, &QToolButton::clicked, m_PlotWidget, &QxrdPlotWidget::printGraph);
-
-  return res;
+  connect(m_ToolButton, &QToolButton::clicked, m_PlotWidget, &QxrdPlotWidget::printGraph);
 }

@@ -232,7 +232,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
   QxrdDetectorControlWindowSettingsPtr set(detectorControlWindowSettings());
 
   if (set) {
-    m_DetectorImage -> initialize(set->imagePlotWidgetSettings());
+    m_DetectorImage -> initialize(set->imagePlotWidgetSettings(), dp);
   }
 }
 

@@ -1,25 +1,13 @@
 #include "qxrdmaskcirclescommand.h"
 #include <QToolButton>
+#include <QStringList>
 
-QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand(name, plot, set)
+QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QString name,
+                                               QxrdPlotWidget *plot,
+                                               QxrdPlotWidgetSettingsWPtr set,
+                                               QxrdMaskStackWPtr maskStack) :
+  QxrdPlotButtonCommand(name, plot, set, ":/images/mask_circles.png", "Mask Circles", true),
+  m_MaskStack(maskStack)
 {
-
-}
-
-QToolButton* QxrdMaskCirclesCommand::toolButton()
-{
-  QToolButton* res = new QToolButton();
-
-  res->setObjectName(get_Name());
-  QIcon icon;
-
-  icon.addFile(QStringLiteral(":/images/mask_circles.png"), QSize(), QIcon::Normal, QIcon::Off);
-  res->setIcon(icon);
-  res->setIconSize(QSize(24,24));
-  res->setCheckable(true);
-  res->setAutoExclusive(true);
-  res->setToolTip(tr("Mask Circles"));
-
-  return res;
+  appendMode(":/images/mask_circles_invert.png", "Unmask Circles");
 }

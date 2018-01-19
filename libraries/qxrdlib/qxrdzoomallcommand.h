@@ -9,8 +9,6 @@ public:
   QxrdZoomAllCommand(QString                    name,
                      QxrdPlotWidget            *plot,
                      QxrdPlotWidgetSettingsWPtr set);
-
-  QToolButton *toolButton();
 };
 
 #endif // QXRDZOOMALLCOMMAND_H
