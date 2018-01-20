@@ -3,6 +3,7 @@
 #include <QStringList>
 #include "qxrdmaskpicker.h"
 #include "qxrdimageplot.h"
+#include "qxrdmaskstack.h"
 
 QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QString name,
                                                QxrdPlotWidget *plot,
@@ -27,4 +28,10 @@ void QxrdMaskCirclesCommand::selected(const QRectF &r)
 {
   printf("QxrdMaskCirclesCommand::selected(l:%g,t:%g,r:%g,b:%g\n",
          r.left(), r.top(), r.right(), r.bottom());
+
+  QxrdMaskStackPtr m(m_MaskStack);
+
+  if (m) {
+    m->maskCircle(r, m_Index);
+  }
 }

@@ -4,6 +4,7 @@
 #include <QMenu>
 #include "qxrdmaskpicker.h"
 #include "qxrdimageplot.h"
+#include "qxrdmaskstack.h"
 
 QxrdMaskPolygonsCommand::QxrdMaskPolygonsCommand(QString name,
                                                  QxrdPlotWidget *plot,
@@ -23,8 +24,11 @@ QxrdMaskPolygonsCommand::QxrdMaskPolygonsCommand(QString name,
           this, &QxrdMaskPolygonsCommand::selected);
 }
 
-//TODO: implement
 void QxrdMaskPolygonsCommand::selected(const QVector<QPointF> &p)
 {
-  printf("QxrdMaskPolygonsCommand::selected\n");
+  QxrdMaskStackPtr m(m_MaskStack);
+
+  if (m) {
+    m->maskPolygon(p, m_Index);
+  }
 }

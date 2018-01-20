@@ -42,6 +42,8 @@ public:
   void andMasks(QModelIndexList sel);
   void orMasks(QModelIndexList sel);
 
+  void createMaskIfNeeded();
+
   void clearMaskStack();
   void clearMaskStackTop();
   void rollMaskStack(int amount);
@@ -59,6 +61,9 @@ public:
   void showMaskAllStack(int pos);
   void hideMaskRangeStack(int pos, QcepImageDataBasePtr img, double minVal, double maxVal);
   void showMaskRangeStack(int pos, QcepImageDataBasePtr img, double minVal, double maxVal);
+
+  void maskCircle(const QRectF& r, bool set);
+  void maskPolygon(const QVector<QPointF> &p, bool set);
 
   typedef enum {
     ExcludeInside,

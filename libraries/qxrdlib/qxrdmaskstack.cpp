@@ -445,3 +445,36 @@ void QxrdMaskStack::showMaskRangeStack(int pos,
   }
 }
 
+void QxrdMaskStack::maskCircle(const QRectF &r, bool set)
+{
+  createMaskIfNeeded();
+
+  QcepMaskDataPtr m(mask());
+
+  if (m) {
+    m->maskCircle(r, set);
+
+    emit maskChanged();
+  }
+}
+
+void QxrdMaskStack::maskPolygon(const QVector<QPointF> &p, bool set)
+{
+  createMaskIfNeeded();
+
+  QcepMaskDataPtr m(mask());
+
+  if (m) {
+    m->maskPolygon(p, set);
+
+    emit maskChanged();
+  }
+}
+
+//TODO: implement (need width and height)
+void QxrdMaskStack::createMaskIfNeeded()
+{
+  if (isEmpty()) {
+
+  }
+}
