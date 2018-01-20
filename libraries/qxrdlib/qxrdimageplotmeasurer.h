@@ -10,7 +10,7 @@ class QXRD_EXPORT QxrdImagePlotMeasurer : public QcepPlotMeasurer
   Q_OBJECT
 
 public:
-  QxrdImagePlotMeasurer(QWidget *canvas, QxrdImagePlot *plot);
+  QxrdImagePlotMeasurer(QxrdImagePlot *plot);
 
   QxrdImagePlot *imagePlot() const;
 

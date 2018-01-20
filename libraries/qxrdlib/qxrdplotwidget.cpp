@@ -77,7 +77,7 @@ void QxrdPlotWidget::initialize(QxrdPlotWidgetSettingsWPtr settings)
 
   QWidget* canvas = m_Plot -> canvas();
 
-  m_Zoomer = new QcepPlotZoomer(canvas, m_Plot);
+  m_Zoomer = new QcepPlotZoomer(m_Plot);
   m_Zoomer -> setStateMachine(new QwtPickerDragRectMachine());
   m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
   m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
@@ -102,7 +102,7 @@ void QxrdPlotWidget::initialize(QxrdPlotWidgetSettingsWPtr settings)
   m_Magnifier -> setMouseButton(Qt::NoButton);
   m_Magnifier -> setAxisEnabled(QwtPlot::yRight, false);
 
-  m_Measurer = new QcepPlotMeasurer(canvas, m_Plot);
+  m_Measurer = new QcepPlotMeasurer(m_Plot);
   m_Measurer -> setEnabled(false);
 
   m_Plot -> setAxisLabelRotation(QwtPlot::yLeft, -90);

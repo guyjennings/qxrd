@@ -35,9 +35,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_ObjectNamer(this, "imageGraph"),
     m_ImagePlotSettings(),
 //    m_Rescaler(NULL),
-    m_Slicer(NULL),
-    m_Measurer(NULL),
-    m_HistogramSelector(NULL),
+//    m_Slicer(NULL),
+//    m_Measurer(NULL),
+//    m_HistogramSelector(NULL),
     m_Data(NULL),
     m_Mask(NULL),
     m_Overflow(NULL),
@@ -53,10 +53,10 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 //    m_OverflowColorMap(new QxrdMaskColorMap(QxrdImagePlotWidgetSettingsWPtr(), QColor(0,0,0,0), Qt::green)),
 //    m_OverflowAlpha(256),
     m_DataProcessor(),
-    m_CenterFinderPicker(NULL),
+//    m_CenterFinderPicker(NULL),
     m_CenterMarker(NULL),
-    m_Circles(NULL),
-    m_Polygons(NULL),
+//    m_Circles(NULL),
+//    m_Polygons(NULL),
     m_PowderPointPicker(NULL),
     m_FirstTime(true),
     m_ContextMenuEnabled(true),
@@ -77,32 +77,32 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr pare
 
 //  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
-  delete m_Zoomer;
+//  delete m_Zoomer;
 
-  m_Zoomer = new QxrdImagePlotZoomer(canvas(), this);
-  m_Zoomer -> setStateMachine(new QwtPickerDragRectMachine());
-  m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
-  m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
+//  m_Zoomer = new QxrdImagePlotZoomer(canvas(), this);
+//  m_Zoomer -> setStateMachine(new QwtPickerDragRectMachine());
+//  m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
+//  m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
 
-  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect2,
-                              Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
-  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect3,
-                              Qt::LeftButton, Qt::ControlModifier);
+//  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect2,
+//                              Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
+//  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect3,
+//                              Qt::LeftButton, Qt::ControlModifier);
 
-  m_Zoomer -> setEnabled(true);
+//  m_Zoomer -> setEnabled(true);
 
 //  m_Rescaler = new QwtPlotRescaler(canvas(), QwtPlot::yLeft, QwtPlotRescaler::Expanding);
 //  m_Rescaler -> setEnabled(true);
 //  m_Rescaler -> setExpandingDirection(QwtPlotRescaler::ExpandBoth);
 
-  m_Slicer = new QxrdPlotSlicer(canvas(), this);
-  m_Slicer -> setEnabled(false);
+//  m_Slicer = new QxrdPlotSlicer(canvas(), this);
+//  m_Slicer -> setEnabled(false);
 
-  m_Measurer = new QxrdImagePlotMeasurer(canvas(), this);
-  m_Measurer -> setEnabled(false);
+//  m_Measurer = new QxrdImagePlotMeasurer(canvas(), this);
+//  m_Measurer -> setEnabled(false);
 
-  m_HistogramSelector = new QxrdHistogramSelector(canvas(), this);
-  m_HistogramSelector -> setEnabled(false);
+//  m_HistogramSelector = new QxrdHistogramSelector(canvas(), this);
+//  m_HistogramSelector -> setEnabled(false);
 
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);
   m_Legend -> setDefaultItemMode(QwtLegendData::Checkable);
@@ -123,17 +123,17 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr pare
 //  m_OverflowImage -> attach(this);
 //  m_OverflowImage -> setRenderThreadCount(0);
 
-  m_CenterFinderPicker = new QxrdCenterFinderPicker(this);
+//  m_CenterFinderPicker = new QxrdCenterFinderPicker(this);
 
   m_CenterMarker = new QwtPlotMarker();
   m_CenterMarker -> setLineStyle(QwtPlotMarker::Cross);
   m_CenterMarker -> attach(this);
 
-  m_Circles = new QxrdCircularMaskPicker(canvas(), this);
-  m_Circles -> setEnabled(false);
+//  m_Circles = new QxrdCircularMaskPicker(canvas(), this);
+//  m_Circles -> setEnabled(false);
 
-  m_Polygons = new QxrdPolygonalMaskPicker(canvas(), this);
-  m_Polygons -> setEnabled(false);
+//  m_Polygons = new QxrdPolygonalMaskPicker(canvas(), this);
+//  m_Polygons -> setEnabled(false);
 
   m_PowderPointPicker = new QxrdPowderPointPicker(this);
   m_PowderPointPicker -> setEnabled(false);
@@ -192,17 +192,17 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
     QxrdCenterFinderPtr cf(dp->centerFinder());
 
     if (cf) {
-      connect(m_CenterFinderPicker, (void (QcepPlotMeasurer::*)( const QPointF &)) &QwtPlotPicker::selected,
-              cf.data(), &QxrdCenterFinder::onCenterChanged);
+//      connect(m_CenterFinderPicker, (void (QcepPlotMeasurer::*)( const QPointF &)) &QwtPlotPicker::selected,
+//              cf.data(), &QxrdCenterFinder::onCenterChanged);
 
-      connect(m_Circles, (void (QcepPlotMeasurer::*)( const QRectF &)) &QwtPlotPicker::selected,
-              dp.data(), &QxrdDataProcessor::maskCircle);
+//      connect(m_Circles, (void (QcepPlotMeasurer::*)( const QRectF &)) &QwtPlotPicker::selected,
+//              dp.data(), &QxrdDataProcessor::maskCircle);
 
-      connect(m_Polygons, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
-              dp.data(), &QxrdDataProcessor::maskPolygon);
+//      connect(m_Polygons, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
+//              dp.data(), &QxrdDataProcessor::maskPolygon);
 
-      connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
-              dp.data(), &QxrdDataProcessor::measurePolygon);
+//      connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
+//              dp.data(), &QxrdDataProcessor::measurePolygon);
 
       connect(m_PowderPointPicker, (void (QcepPlotMeasurer::*)( const QPointF &)) &QwtPlotPicker::selected,
               cf.data(), &QxrdCenterFinder::onPointSelected);
@@ -216,11 +216,11 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
     }
   }
 
-  connect(m_Slicer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
-          this, &QxrdImagePlot::slicePolygon);
+//  connect(m_Slicer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
+//          this, &QxrdImagePlot::slicePolygon);
 
-  connect(m_HistogramSelector, (void (QcepPlotMeasurer::*)( const QRectF &)) &QwtPlotPicker::selected,
-          this, &QxrdImagePlot::selectHistogram);
+//  connect(m_HistogramSelector, (void (QcepPlotMeasurer::*)( const QRectF &)) &QwtPlotPicker::selected,
+//          this, &QxrdImagePlot::selectHistogram);
 }
 
 QxrdDataProcessorWPtr QxrdImagePlot::processor() const
@@ -950,35 +950,36 @@ QxrdRasterData* QxrdImagePlot::raster()
 //  return m_MaskRaster;
 //}
 
+//TODO: remove
 void QxrdImagePlot::disablePickers()
 {
-  if (m_Zoomer) {
-    m_Zoomer             -> setEnabled(false);
-  }
+//  if (m_Zoomer) {
+//    m_Zoomer             -> setEnabled(false);
+//  }
 
-  if (m_CenterFinderPicker) {
-    m_CenterFinderPicker -> setEnabled(false);
-  }
+//  if (m_CenterFinderPicker) {
+//    m_CenterFinderPicker -> setEnabled(false);
+//  }
 
-  if (m_Slicer) {
-    m_Slicer             -> setEnabled(false);
-  }
+//  if (m_Slicer) {
+//    m_Slicer             -> setEnabled(false);
+//  }
 
-  if (m_Measurer) {
-    m_Measurer           -> setEnabled(false);
-  }
+//  if (m_Measurer) {
+//    m_Measurer           -> setEnabled(false);
+//  }
 
-  if (m_HistogramSelector) {
-    m_HistogramSelector  -> setEnabled(false);
-  }
+//  if (m_HistogramSelector) {
+//    m_HistogramSelector  -> setEnabled(false);
+//  }
 
-  if (m_Circles) {
-    m_Circles            -> setEnabled(false);
-  }
+//  if (m_Circles) {
+//    m_Circles            -> setEnabled(false);
+//  }
 
-  if (m_Polygons) {
-    m_Polygons           -> setEnabled(false);
-  }
+//  if (m_Polygons) {
+//    m_Polygons           -> setEnabled(false);
+//  }
 
   if (m_PowderPointPicker) {
     m_PowderPointPicker  -> setEnabled(false);
@@ -989,67 +990,74 @@ void QxrdImagePlot::disablePickers()
   displayPowderMarkers();
 }
 
+//TODO: remove
 void QxrdImagePlot::enableZooming()
 {
   disablePickers();
 
-  if (m_Zoomer) {
-    m_Zoomer       -> setEnabled(true);
-  }
+//  if (m_Zoomer) {
+//    m_Zoomer       -> setEnabled(true);
+//  }
 }
 
+//TODO: remove
 void QxrdImagePlot::enableCentering()
 {
   disablePickers();
 
-  if (m_CenterFinderPicker) {
-    m_CenterFinderPicker -> setEnabled(true);
-  }
+//  if (m_CenterFinderPicker) {
+//    m_CenterFinderPicker -> setEnabled(true);
+//  }
 }
 
+//TODO: remove
 void QxrdImagePlot::enableSlicing()
 {
   disablePickers();
 
-  if (m_Slicer) {
-    m_Slicer   -> setEnabled(true);
-  }
+//  if (m_Slicer) {
+//    m_Slicer   -> setEnabled(true);
+//  }
 }
 
+//TODO: remove
 void QxrdImagePlot::enableMeasuring()
 {
   disablePickers();
 
-  if (m_Measurer) {
-    m_Measurer -> setEnabled(true);
-  }
+//  if (m_Measurer) {
+//    m_Measurer -> setEnabled(true);
+//  }
 }
 
+//TODO: remove
 void QxrdImagePlot::enableHistograms()
 {
   disablePickers();
 
-  if (m_HistogramSelector) {
-    m_HistogramSelector -> setEnabled(true);
-  }
+//  if (m_HistogramSelector) {
+//    m_HistogramSelector -> setEnabled(true);
+//  }
 }
 
+//TODO: remove
 void QxrdImagePlot::enableMaskCircles()
 {
   disablePickers();
 
-  if (m_Circles) {
-    m_Circles  -> setEnabled(true);
-  }
+//  if (m_Circles) {
+//    m_Circles  -> setEnabled(true);
+//  }
 }
 
+//TODO: remove
 void QxrdImagePlot::enableMaskPolygons()
 {
   disablePickers();
 
-  if (m_Polygons) {
-    m_Polygons -> setEnabled(true);
-  }
+//  if (m_Polygons) {
+//    m_Polygons -> setEnabled(true);
+//  }
 }
 
 void QxrdImagePlot::enablePowderPoints()

@@ -59,8 +59,8 @@ void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)
   if (dp) {
     m_CenterFinder = dp -> centerFinder();
 
-    connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QcepPlotMeasurer::selected,
-            dp.data(),  &QxrdDataProcessor::printMeasuredPolygon);
+//    connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QcepPlotMeasurer::selected,
+//            dp.data(),  &QxrdDataProcessor::printMeasuredPolygon);
 
     QxrdCenterFinderPtr cf(m_CenterFinder);
 
@@ -278,9 +278,9 @@ void QxrdCenterFinderPlot::onNewCenterFinderCurves(QxrdPlotCurveVectorPtr curves
 
   setAxisTitle(xBottom, "2Theta (deg)");
 
-  if (m_Zoomer && m_Zoomer -> zoomRectIndex() == 0) {
-    m_Zoomer -> setZoomBase();
-  }
+//  if (m_Zoomer && m_Zoomer -> zoomRectIndex() == 0) {
+//    m_Zoomer -> setZoomBase();
+//  }
 
   if (m_FirstTime) {
     autoScale();

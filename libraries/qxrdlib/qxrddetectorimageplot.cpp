@@ -6,6 +6,7 @@
 #include "qxrdroicoordinateslistmodel.h"
 #include <QItemSelectionModel>
 
+//TODO: reimplement using QxrdPlotButtonCommand
 QxrdDetectorImagePlot::QxrdDetectorImagePlot(QWidget *parent)
   : QxrdImagePlot(parent),
     m_ROICreator(NULL),
@@ -21,12 +22,12 @@ void QxrdDetectorImagePlot::init(QxrdImagePlotSettingsWPtr settings, QcepObjectW
 {
   QxrdImagePlot::init(settings, parent);
 
-  m_ROICreator    = new QxrdROICreator(canvas(), this);
-  m_ROISelector   = new QxrdROISelector(canvas(), this);
-  m_ROIAddNode    = new QxrdROIAddNode(canvas(), this);
-  m_ROIRemoveNode = new QxrdROIRemoveNode(canvas(), this);
-  m_ROIRotator    = new QxrdROIRotator(canvas(), this);
-  m_ROIResizer    = new QxrdROIResizer(canvas(), this);
+  m_ROICreator    = new QxrdROICreator(this);
+  m_ROISelector   = new QxrdROISelector(this);
+  m_ROIAddNode    = new QxrdROIAddNode(this);
+  m_ROIRemoveNode = new QxrdROIRemoveNode(this);
+  m_ROIRotator    = new QxrdROIRotator(this);
+  m_ROIResizer    = new QxrdROIResizer(this);
 }
 
 void QxrdDetectorImagePlot::disablePickers()

@@ -6,8 +6,8 @@
 #include "qxrdcenterfinder.h"
 #include "qwt_picker_machine.h"
 
-QxrdImagePlotMeasurer::QxrdImagePlotMeasurer(QWidget *canvas, QxrdImagePlot *plot)
-  : QcepPlotMeasurer(canvas, plot),
+QxrdImagePlotMeasurer::QxrdImagePlotMeasurer(QxrdImagePlot *plot)
+  : QcepPlotMeasurer(plot),
     m_Plot(plot)
 {
   qRegisterMetaType< QVector<QPointF> >("QVector<QPointF>");

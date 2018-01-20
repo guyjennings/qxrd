@@ -15,7 +15,7 @@ QxrdHistogramCommand::QxrdHistogramCommand(QString                    name,
   connect(m_ToolButton,  &QToolButton::clicked,
           this,          &QxrdHistogramCommand::enable);
 
-  m_HistogramSelector = new QxrdHistogramSelector(m_Plot->canvas(), m_Plot);
+  m_HistogramSelector = new QxrdHistogramSelector(m_Plot);
   m_HistogramSelector -> setEnabled(false);
 
   setPlotPicker(m_HistogramSelector);

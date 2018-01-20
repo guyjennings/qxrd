@@ -7,7 +7,7 @@
 class QXRD_EXPORT QxrdMaskPicker : public QxrdImagePlotMeasurer
 {
 public:
-  QxrdMaskPicker(QWidget *canvas, QxrdImagePlot *plot);
+  QxrdMaskPicker(QxrdImagePlot *plot);
 
 protected:
   QxrdImagePlot *m_Plot;
@@ -16,7 +16,7 @@ protected:
 class QXRD_EXPORT QxrdCircularMaskPicker : public QxrdMaskPicker
 {
 public:
-  QxrdCircularMaskPicker(QWidget *canvas, QxrdImagePlot *plot);
+  QxrdCircularMaskPicker(QxrdImagePlot *plot);
 
   QPolygon adjustedPoints(const QPolygon &points) const;
 };
@@ -24,7 +24,7 @@ public:
 class QXRD_EXPORT QxrdPolygonalMaskPicker : public QxrdMaskPicker
 {
 public:
-  QxrdPolygonalMaskPicker(QWidget *canvas, QxrdImagePlot *plot);
+  QxrdPolygonalMaskPicker(QxrdImagePlot *plot);
 
 protected:
   void append(const QPoint &pt);

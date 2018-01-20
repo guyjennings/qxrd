@@ -19,7 +19,7 @@
 #include "qxrdmaskcolormap.h"
 #include "qxrdhistogramselector-ptr.h"
 #include "qxrdplotslicer-ptr.h"
-#include "qxrdimageplotmeasurer-ptr.h"
+//#include "qxrdimageplotmeasurer-ptr.h"
 #include "qxrdcenterfinderpicker-ptr.h"
 #include "qxrdmaskpicker-ptr.h"
 #include "qxrddataprocessor-ptr.h"
@@ -210,9 +210,9 @@ protected:
 private:
   QcepObjectWPtr             m_Parent;
 //  QwtPlotRescaler           *m_Rescaler;
-  QxrdPlotSlicer            *m_Slicer;
-  QxrdImagePlotMeasurer     *m_Measurer;
-  QxrdHistogramSelector     *m_HistogramSelector;
+//  QxrdPlotSlicer            *m_Slicer;
+//  QxrdImagePlotMeasurer     *m_Measurer;
+//  QxrdHistogramSelector     *m_HistogramSelector;
 //  QwtLegendPtr               m_Legend;
 
   QcepImageDataBasePtr       m_Data;
@@ -236,11 +236,11 @@ private:
 
   QxrdDataProcessorWPtr      m_DataProcessor;
 
-  QxrdCenterFinderPicker    *m_CenterFinderPicker;
+//  QxrdCenterFinderPicker    *m_CenterFinderPicker;
   QwtPlotMarker             *m_CenterMarker;
 
-  QxrdMaskPicker            *m_Circles;
-  QxrdMaskPicker            *m_Polygons;
+//  QxrdMaskPicker            *m_Circles;
+//  QxrdMaskPicker            *m_Polygons;
 
   QxrdPowderPointPicker     *m_PowderPointPicker;
   QVector<QwtPlotCurve*>     m_PowderPointCurves;

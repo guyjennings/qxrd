@@ -10,10 +10,10 @@ class QXRD_EXPORT QxrdImagePlotZoomer : public QcepPlotZoomer
   Q_OBJECT
 
 public:
-  QxrdImagePlotZoomer(QWidget *canvas, QxrdImagePlot *plot);
+  QxrdImagePlotZoomer(QxrdImagePlot *plot);
 
-private:
-  QxrdImagePlot *m_ImagePlot;
+//private:
+//  QxrdImagePlot *m_ImagePlot;
 };
 
 #endif // QXRDIMAGEPLOTZOOMER_H

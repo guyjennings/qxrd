@@ -13,7 +13,7 @@ QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QString name,
 {
   appendMode(":/images/mask_circles_invert.png", "Unmask Circles");
 
-  m_Picker = new QxrdCircularMaskPicker(m_Plot->canvas(), m_Plot);
+  m_Picker = new QxrdCircularMaskPicker(m_Plot);
   m_Picker -> setEnabled(false);
 
   setPlotPicker(m_Picker);

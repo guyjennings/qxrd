@@ -14,7 +14,7 @@ QxrdMaskPolygonsCommand::QxrdMaskPolygonsCommand(QString name,
 {
   appendMode(":/images/mask_polygon_invert.png", "Unmask Polygons");
 
-  m_Picker = new QxrdPolygonalMaskPicker(m_Plot->canvas(), m_Plot);
+  m_Picker = new QxrdPolygonalMaskPicker(m_Plot);
   m_Picker -> setEnabled(false);
 
   setPlotPicker(m_Picker);

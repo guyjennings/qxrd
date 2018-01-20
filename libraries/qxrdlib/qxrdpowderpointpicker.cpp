@@ -4,8 +4,7 @@
 #include "qwt_picker_machine.h"
 
 QxrdPowderPointPicker::QxrdPowderPointPicker(QxrdImagePlot *plot)
-  : QxrdImagePlotMeasurer(plot -> canvas(), plot)/*,
-    m_Plot(plot)*/
+  : QxrdImagePlotMeasurer(plot)
 {
   setTrackerMode(QwtPicker::AlwaysOn);
   setStateMachine(new QwtPickerClickPointMachine());

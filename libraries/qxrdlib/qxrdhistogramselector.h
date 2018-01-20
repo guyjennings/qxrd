@@ -8,12 +8,7 @@ class QXRD_EXPORT QxrdHistogramSelector : public QcepPlotMeasurer
 {
     Q_OBJECT
 public:
-    explicit QxrdHistogramSelector(QWidget *canvas, QcepPlot *plot);
-
-signals:
-
-public slots:
-
+    explicit QxrdHistogramSelector(QcepPlot *plot);
 };
 
 #endif // QXRDHISTOGRAMSELECTOR_H

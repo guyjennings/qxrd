@@ -3,15 +3,15 @@
 #include "qxrdrasterdata.h"
 #include "qwt_picker_machine.h"
 
-QxrdMaskPicker::QxrdMaskPicker(QWidget *canvas, QxrdImagePlot *plot)
-  : QxrdImagePlotMeasurer(canvas, plot),
+QxrdMaskPicker::QxrdMaskPicker(QxrdImagePlot *plot)
+  : QxrdImagePlotMeasurer(plot),
     m_Plot(plot)
 {
   setTrackerMode(QwtPicker::AlwaysOn);
 }
 
-QxrdCircularMaskPicker::QxrdCircularMaskPicker(QWidget *canvas, QxrdImagePlot *plot)
-  : QxrdMaskPicker(canvas, plot)
+QxrdCircularMaskPicker::QxrdCircularMaskPicker(QxrdImagePlot *plot)
+  : QxrdMaskPicker(plot)
 {
   qRegisterMetaType<QRectF>("QRectF");
 
@@ -37,8 +37,8 @@ QPolygon QxrdCircularMaskPicker::adjustedPoints(const QPolygon &points) const
   return adjusted;
 }
 
-QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QWidget *canvas, QxrdImagePlot *plot)
-  : QxrdMaskPicker(canvas, plot)
+QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QxrdImagePlot *plot)
+  : QxrdMaskPicker(plot)
 {
   qRegisterMetaType< QVector<QPointF> >("QVector<QPointF>");
 

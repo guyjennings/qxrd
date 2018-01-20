@@ -6,7 +6,7 @@
 QxrdMeasureCommand::QxrdMeasureCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
   : QxrdPlotButtonCommand(name, plot, set, ":/images/measure.png", "Measure", true)
 {
-  m_Measurer = new QxrdImagePlotMeasurer(m_Plot->canvas(), m_Plot);
+  m_Measurer = new QxrdImagePlotMeasurer(m_Plot);
   m_Measurer -> setEnabled(false);
 
   setPlotPicker(m_Measurer);
@@ -19,4 +19,6 @@ QxrdMeasureCommand::QxrdMeasureCommand(QString name, QxrdPlotWidget *plot, QxrdP
 void QxrdMeasureCommand::selected(const QVector<QPointF> &p)
 {
   printf("QxrdMeasureCommand::selected\n");
+//  connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
+//          dp.data(), &QxrdDataProcessor::printMeasuredPolygon);
 }

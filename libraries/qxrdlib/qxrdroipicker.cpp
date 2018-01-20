@@ -9,15 +9,14 @@
 #include "qxrddebug.h"
 #include "qxrddetectorimageplot.h"
 
-QxrdROIPicker::QxrdROIPicker(QWidget *canvas,
-                             QxrdImagePlot *plot,
+QxrdROIPicker::QxrdROIPicker(QxrdImagePlot *plot,
                              bool useSelectedOnly,
                              bool canSelectEdges,
                              bool usePolygonsOnly,
                              int  triggeredAppend,
                              double  startingDistance,
                              double  secondaryDistance) :
-  QxrdImagePlotMeasurer(canvas, plot),
+  QxrdImagePlotMeasurer(plot),
   m_UseSelectedROIsOnly(useSelectedOnly),
   m_CanSelectEdges(canSelectEdges),
   m_UsePolygonsOnly(usePolygonsOnly),
@@ -293,8 +292,8 @@ bool QxrdROIPicker::end(bool ok)
   return QwtPlotPicker::end(ok);
 }
 
-QxrdROICreator::QxrdROICreator(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot,
+QxrdROICreator::QxrdROICreator(QxrdImagePlot *plot) :
+  QxrdROIPicker(plot,
                 UseAllROIs,
                 CanSelectEdges,
                 UseAnyShape,
@@ -408,8 +407,8 @@ bool QxrdROICreator::end(bool ok)
   return QwtPlotPicker::end(ok);
 }
 
-QxrdROISelector::QxrdROISelector(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot,
+QxrdROISelector::QxrdROISelector(QxrdImagePlot *plot) :
+  QxrdROIPicker(plot,
                 UseAllROIs,
                 CanSelectEdges,
                 UseAnyShape,
@@ -495,8 +494,8 @@ bool QxrdROISelector::end(bool ok)
   return QxrdROIPicker::end(ok);
 }
 
-QxrdROIAddNode::QxrdROIAddNode(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot,
+QxrdROIAddNode::QxrdROIAddNode(QxrdImagePlot *plot) :
+  QxrdROIPicker(plot,
                 UseSelectedROIs,
                 CanSelectEdges,
                 UsePolygonsOnly,
@@ -585,8 +584,8 @@ bool QxrdROIAddNode::end(bool ok)
   return QxrdROIPicker::end(ok);
 }
 
-QxrdROIRemoveNode::QxrdROIRemoveNode(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot,
+QxrdROIRemoveNode::QxrdROIRemoveNode(QxrdImagePlot *plot) :
+  QxrdROIPicker(plot,
                 UseSelectedROIs,
                 SelectPointsOnly,
                 UsePolygonsOnly,
@@ -628,8 +627,8 @@ bool QxrdROIRemoveNode::end(bool ok)
   return QxrdROIPicker::end(ok);
 }
 
-QxrdROIRotator::QxrdROIRotator(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot,
+QxrdROIRotator::QxrdROIRotator(QxrdImagePlot *plot) :
+  QxrdROIPicker(plot,
                 UseSelectedROIs,
                 SelectPointsOnly,
                 UseAnyShape,
@@ -739,8 +738,8 @@ bool QxrdROIRotator::end(bool ok)
   return QxrdROIPicker::end(ok);
 }
 
-QxrdROIResizer::QxrdROIResizer(QWidget *canvas, QxrdImagePlot *plot) :
-  QxrdROIPicker(canvas, plot,
+QxrdROIResizer::QxrdROIResizer(QxrdImagePlot *plot) :
+  QxrdROIPicker(plot,
                 UseSelectedROIs,
                 CanSelectEdges,
                 UseAnyShape,

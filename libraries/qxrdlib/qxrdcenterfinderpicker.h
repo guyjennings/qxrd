@@ -11,8 +11,8 @@ class QXRD_EXPORT QxrdCenterFinderPicker : public QxrdImagePlotMeasurer
 public:
   QxrdCenterFinderPicker(QxrdImagePlot *plot);
 
-private:
-  QxrdImagePlot *m_Plot;
+//private:
+//  QxrdImagePlot *m_Plot;
 };
 
 #endif // QXRDCENTERFINDERPICKER_H
