@@ -52,8 +52,8 @@ public slots:
   void clearPowderMarkers();
   void displayPowderMarkers();
 
-  void enableContextMenu();
-  void disableContextMenu();
+//  void enableContextMenu();
+//  void disableContextMenu();
 
   void zapPixel(int x, int y);
 

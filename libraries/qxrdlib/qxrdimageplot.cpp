@@ -225,16 +225,7 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
   return res;
 }
 
-void QxrdImagePlot::enableContextMenu()
-{
-  m_ContextMenuEnabled = true;
-}
-
-void QxrdImagePlot::disableContextMenu()
-{
-  m_ContextMenuEnabled = false;
-}
-
+//TODO: remove
 void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 {
   if (m_ContextMenuEnabled) {

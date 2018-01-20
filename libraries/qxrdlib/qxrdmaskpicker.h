@@ -25,10 +25,6 @@ class QXRD_EXPORT QxrdPolygonalMaskPicker : public QxrdMaskPicker
 {
 public:
   QxrdPolygonalMaskPicker(QxrdImagePlot *plot);
-
-protected:
-  void append(const QPoint &pt);
-  bool end(bool ok=true);
 };
 
 #endif // QXRDMASKPICKER_H
