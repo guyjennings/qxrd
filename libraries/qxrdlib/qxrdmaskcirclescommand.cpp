@@ -22,6 +22,7 @@ QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QString name,
           this, &QxrdMaskCirclesCommand::selected);
 }
 
+//TODO: implement
 void QxrdMaskCirclesCommand::selected(const QRectF &r)
 {
   printf("QxrdMaskCirclesCommand::selected(l:%g,t:%g,r:%g,b:%g\n",

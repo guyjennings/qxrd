@@ -522,7 +522,8 @@ HEADERS += qxrdlib.h\
     qxrdprocessorstep-ptr.h \
     qxrdzingerfinder.h \
     qxrdzingerfinder-ptr.h \
-    qwt_plot_picker-ptr.h
+    qwt_plot_picker-ptr.h \
+    qxrdpowderpointpicker-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

@@ -3,6 +3,7 @@
 
 #include "qxrdplotbuttoncommand.h"
 #include "qxrdmaskstack-ptr.h"
+#include "qxrdmaskpicker-ptr.h"
 
 class QXRD_EXPORT QxrdMaskPolygonsCommand : public QxrdPlotButtonCommand
 {
@@ -13,7 +14,11 @@ public:
                           QxrdMaskStackWPtr          maskStack);
 
 private:
-  QxrdMaskStackWPtr m_MaskStack;
+  void selected(const QVector<QPointF> &p);
+
+private:
+  QxrdMaskStackWPtr        m_MaskStack;
+  QxrdPolygonalMaskPicker *m_Picker;
 };
 
 #endif // QXRDMASKPOLYGONSCOMMAND_H

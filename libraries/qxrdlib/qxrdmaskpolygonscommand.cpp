@@ -2,6 +2,8 @@
 #include <QToolButton>
 #include <QAction>
 #include <QMenu>
+#include "qxrdmaskpicker.h"
+#include "qxrdimageplot.h"
 
 QxrdMaskPolygonsCommand::QxrdMaskPolygonsCommand(QString name,
                                                  QxrdPlotWidget *plot,
@@ -11,4 +13,18 @@ QxrdMaskPolygonsCommand::QxrdMaskPolygonsCommand(QString name,
   m_MaskStack(maskStack)
 {
   appendMode(":/images/mask_polygon_invert.png", "Unmask Polygons");
+
+  m_Picker = new QxrdPolygonalMaskPicker(m_Plot->canvas(), m_Plot);
+  m_Picker -> setEnabled(false);
+
+  setPlotPicker(m_Picker);
+
+  connect(m_Picker, (void (QwtPlotPicker::*)(const QVector<QPointF> &)) & QwtPlotPicker::selected,
+          this, &QxrdMaskPolygonsCommand::selected);
+}
+
+//TODO: implement
+void QxrdMaskPolygonsCommand::selected(const QVector<QPointF> &p)
+{
+  printf("QxrdMaskPolygonsCommand::selected\n");
 }

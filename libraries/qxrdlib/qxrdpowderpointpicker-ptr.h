@@ -1,0 +1,8 @@
+#ifndef QXRDPOWDERPOINTPICKERPTR_H
+#define QXRDPOWDERPOINTPICKERPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdPowderPointPicker)
+
+#endif // QXRDPOWDERPOINTPICKERPTR_H
