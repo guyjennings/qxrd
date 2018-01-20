@@ -55,10 +55,10 @@ public slots:
 protected:
   QcepPlotSettingsWPtr m_PlotSettings;
   QwtLegend           *m_Legend;
-  QwtPlotZoomer       *m_Zoomer;
-  QwtPlotPanner       *m_Panner;
-  QwtPlotMagnifier    *m_Magnifier;
-  QcepPlotMeasurerPtr  m_Measurer;
+//  QwtPlotZoomer       *m_Zoomer;
+//  QwtPlotPanner       *m_Panner;
+//  QwtPlotMagnifier    *m_Magnifier;
+//  QcepPlotMeasurerPtr  m_Measurer;
 
   int                  m_IsLog[QwtPlot::axisCnt];
 };

@@ -10,7 +10,7 @@ class QCEP_EXPORT QcepPlotZoomer : public QwtPlotZoomer
   Q_OBJECT
 
 public:
-  QcepPlotZoomer(QWidget *canvas, QcepPlot *plot);
+  QcepPlotZoomer(QcepPlot *plot);
 
 public:
   virtual QwtText trackerTextF(const QPointF &pos) const;

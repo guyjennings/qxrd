@@ -11,7 +11,7 @@ class QCEP_EXPORT QcepPlotMeasurer : public QwtPlotPicker
   Q_OBJECT
 
 public:
-  QcepPlotMeasurer(QWidget *canvas, QcepPlotPtr plot);
+  QcepPlotMeasurer(QcepPlot *plot);
 
   virtual QwtText trackerTextF(const QPointF &pos) const;
 

@@ -18,11 +18,11 @@
 QcepPlot::QcepPlot(QWidget *parent)
   : QwtPlot(parent),
     m_PlotSettings(),
-    m_Legend(NULL),
-    m_Zoomer(NULL),
-    m_Panner(NULL),
-    m_Magnifier(NULL),
-    m_Measurer(NULL)
+    m_Legend(NULL)
+//    m_Zoomer(NULL),
+//    m_Panner(NULL),
+//    m_Magnifier(NULL),
+//    m_Measurer(NULL)
 {
   for (int i=0; i<QwtPlot::axisCnt; i++) {
     m_IsLog[i] = 0;
@@ -41,33 +41,33 @@ void QcepPlot::init(QcepPlotSettingsWPtr settings)
 
   setCanvasBackground(QColor(Qt::white));
 
-  m_Zoomer = new QcepPlotZoomer(canvas(), this);
-  m_Zoomer -> setStateMachine(new QwtPickerDragRectMachine());
-  m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
-  m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
+//  m_Zoomer = new QcepPlotZoomer(canvas(), this);
+//  m_Zoomer -> setStateMachine(new QwtPickerDragRectMachine());
+//  m_Zoomer -> setTrackerMode(QwtPicker::AlwaysOn);
+//  m_Zoomer -> setRubberBand(QwtPicker::RectRubberBand);
 
-  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect2,
-                              Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
-  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect3,
-                              Qt::LeftButton, Qt::ControlModifier);
+//  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect2,
+//                              Qt::LeftButton, Qt::ControlModifier | Qt::ShiftModifier);
+//  m_Zoomer -> setMousePattern(QwtEventPattern::MouseSelect3,
+//                              Qt::LeftButton, Qt::ControlModifier);
 
-  m_Zoomer -> setEnabled(true);
+//  m_Zoomer -> setEnabled(true);
 
   m_Legend = new QwtLegend(this);
   m_Legend -> setDefaultItemMode(QwtLegendData::Checkable);
 
-  m_Panner = new QwtPlotPanner(canvas());
-  m_Panner -> setEnabled(true);
-  m_Panner -> setMouseButton(Qt::MidButton);
-  m_Panner -> setAxisEnabled(QwtPlot::yRight, false);
+//  m_Panner = new QwtPlotPanner(canvas());
+//  m_Panner -> setEnabled(true);
+//  m_Panner -> setMouseButton(Qt::MidButton);
+//  m_Panner -> setAxisEnabled(QwtPlot::yRight, false);
 
-  m_Magnifier = new QwtPlotMagnifier(canvas());
-  m_Magnifier -> setEnabled(true);
-  m_Magnifier -> setMouseButton(Qt::NoButton);
-  m_Magnifier -> setAxisEnabled(QwtPlot::yRight, false);
+//  m_Magnifier = new QwtPlotMagnifier(canvas());
+//  m_Magnifier -> setEnabled(true);
+//  m_Magnifier -> setMouseButton(Qt::NoButton);
+//  m_Magnifier -> setAxisEnabled(QwtPlot::yRight, false);
 
-  m_Measurer = new QcepPlotMeasurer(canvas(), this);
-  m_Measurer -> setEnabled(false);
+//  m_Measurer = new QcepPlotMeasurer(canvas(), this);
+//  m_Measurer -> setEnabled(false);
 
   setAxisLabelRotation(QwtPlot::yLeft, -90);
   setAxisLabelAlignment(QwtPlot::yLeft, Qt::AlignVCenter);
@@ -192,7 +192,7 @@ void QcepPlot::autoScale()
   setAxisAutoScale(QwtPlot::yLeft);
   setAxisAutoScale(QwtPlot::xBottom);
 
-  m_Zoomer -> setZoomBase();
+//  m_Zoomer -> setZoomBase();
 
 //
 //  replot();
@@ -241,37 +241,42 @@ void QcepPlot::printGraph()
   }
 }
 
+//TODO: remove
 void QcepPlot::zoomIn()
 {
-  m_Zoomer -> zoom(1);
+//  m_Zoomer -> zoom(1);
 }
 
 void QcepPlot::zoomOut()
 {
-  m_Zoomer -> zoom(-1);
+//  m_Zoomer -> zoom(-1);
 }
 
+//TODO: remove
 void QcepPlot::updateZoomer()
 {
-  if (m_Zoomer && m_Zoomer -> zoomRectIndex() == 0) {
-    m_Zoomer -> setZoomBase();
-  }
+//  if (m_Zoomer && m_Zoomer -> zoomRectIndex() == 0) {
+//    m_Zoomer -> setZoomBase();
+//  }
 
   replot();
 }
 
+//TODO: remove
 void QcepPlot::enableZooming()
 {
-  m_Zoomer       -> setEnabled(true);
-  m_Measurer     -> setEnabled(false);
+//  m_Zoomer       -> setEnabled(true);
+//  m_Measurer     -> setEnabled(false);
 }
 
+//TODO: remove
 void QcepPlot::enableMeasuring()
 {
-  m_Zoomer   -> setEnabled(false);
-  m_Measurer -> setEnabled(true);
+//  m_Zoomer   -> setEnabled(false);
+//  m_Measurer -> setEnabled(true);
 }
 
+//TODO: remove
 void QcepPlot::onLegendClicked(const QVariant & /*itemInfo*/, int /*index*/)
 {
 //  if (g_Application) {
@@ -279,6 +284,7 @@ void QcepPlot::onLegendClicked(const QVariant & /*itemInfo*/, int /*index*/)
 //  }
 }
 
+//TODO: remove
 void QcepPlot::onLegendChecked(const QVariant &itemInfo, bool on, int /*index*/)
 {
 //  if (g_Application) {

@@ -1,7 +1,7 @@
 #include "qcepplotzoomer.h"
 
-QcepPlotZoomer::QcepPlotZoomer(QWidget *canvas, QcepPlot *plot)
-  : QwtPlotZoomer(canvas),
+QcepPlotZoomer::QcepPlotZoomer(QcepPlot *plot)
+  : QwtPlotZoomer(plot->canvas()),
   m_Plot(plot)
 {
   setTrackerMode(QwtPicker::AlwaysOn);

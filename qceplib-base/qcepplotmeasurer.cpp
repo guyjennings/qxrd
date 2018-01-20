@@ -2,8 +2,8 @@
 #include "qcepplot.h"
 #include "qwt_picker_machine.h"
 
-QcepPlotMeasurer::QcepPlotMeasurer(QWidget *canvas, QcepPlotPtr plot)
-  : QwtPlotPicker(canvas),
+QcepPlotMeasurer::QcepPlotMeasurer(QcepPlot *plot)
+  : QwtPlotPicker(plot->canvas()),
     m_Plot(plot)
 {
   qRegisterMetaType< QVector<QPointF> >("QVector<QPointF>");
