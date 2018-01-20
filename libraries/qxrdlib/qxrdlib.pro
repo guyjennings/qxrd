@@ -897,14 +897,6 @@ DISTFILES += \
     help/*.html \
     help/images/*.*
 
-contains(DEFINES,HAVE_PERKIN_ELMER) {
-  SOURCES += \
-             qxrdperkinelmerplugininterface.cpp
-  HEADERS += \
-             qxrdperkinelmerplugininterface.h \
-             qxrdperkinelmerplugininterface-ptr.h
-}
-
 unix {
     target.path = /usr/lib
     INSTALLS += target
