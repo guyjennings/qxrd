@@ -6,8 +6,6 @@
 #include "qxrddetectorsettings.h"
 #include <QTimer>
 
-//TODO: rename to QxrdSimulatedSettings
-
 class QXRD_EXPORT QxrdSimulatedSettings : public QxrdDetectorSettings
 {
   Q_OBJECT

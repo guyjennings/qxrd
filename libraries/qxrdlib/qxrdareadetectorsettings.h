@@ -4,8 +4,6 @@
 #include "qxrdlib_global.h"
 #include "qxrddetectorsettings.h"
 
-//TODO: rename to QxrdAreaDetectorSettings
-
 class QXRD_EXPORT QxrdAreaDetectorSettings : public QxrdDetectorSettings
 {
   Q_OBJECT

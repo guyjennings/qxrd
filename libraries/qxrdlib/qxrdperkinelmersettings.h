@@ -7,8 +7,6 @@
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
 
-//TODO: rename to QxrdPerkinElmerSettings
-
 class QXRD_EXPORT QxrdPerkinElmerSettings : public QxrdDetectorSettings
 {
     Q_OBJECT

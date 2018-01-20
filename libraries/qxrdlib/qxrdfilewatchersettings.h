@@ -5,8 +5,6 @@
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
 
-//TODO: rename to QxrdFileWatcherSettings
-
 class QXRD_EXPORT QxrdFileWatcherSettings : public QxrdDetectorSettings
 {
   Q_OBJECT

@@ -1,9 +1,6 @@
 #ifndef QXRDPERKINELMERDIALOG_H
 #define QXRDPERKINELMERDIALOG_H
 
-//TODO: recast to multiple inheritance
-//TODO: make smart pointer
-
 #include "qxrdlib_global.h"
 #include "qxrddetectordialog.h"
 #include "ui_qxrdperkinelmerdialog.h"

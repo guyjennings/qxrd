@@ -5,8 +5,6 @@
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
 
-//TODO: rename to QxrdPilatusSettings
-
 class QXRD_EXPORT QxrdPilatusSettings : public QxrdDetectorSettings
 {
   Q_OBJECT

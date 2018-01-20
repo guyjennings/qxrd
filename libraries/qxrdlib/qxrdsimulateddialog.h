@@ -1,9 +1,6 @@
 #ifndef QXRDSIMULATEDDIALOG_H
 #define QXRDSIMULATEDDIALOG_H
 
-//TODO: recast to multiple inheritance
-//TODO: make smart pointer
-
 #include "qxrdlib_global.h"
 #include "qxrddetectordialog.h"
 #include "ui_qxrdsimulateddialog.h"
