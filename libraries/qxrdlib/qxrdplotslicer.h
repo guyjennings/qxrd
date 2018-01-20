@@ -7,7 +7,7 @@
 class QXRD_EXPORT QxrdPlotSlicer : public QxrdImagePlotMeasurer
 {
 public:
-  QxrdPlotSlicer(QWidget *canvas, QxrdImagePlot *plot);
+  QxrdPlotSlicer(QxrdImagePlot *plot);
 
 //  virtual QwtText trackerTextF(const QPointF &pos) const;
 

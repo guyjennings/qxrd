@@ -6,7 +6,7 @@
 QxrdSliceCommand::QxrdSliceCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
   : QxrdPlotButtonCommand(name, plot, set, ":/images/slice.png", "Slice", true)
 {
-  m_Slicer = new QxrdPlotSlicer(m_Plot->canvas(), m_Plot);
+  m_Slicer = new QxrdPlotSlicer(m_Plot);
   m_Slicer -> setEnabled(false);
 
   setPlotPicker(m_Slicer);

@@ -32,8 +32,6 @@ void QxrdDetectorImagePlot::init(QxrdImagePlotSettingsWPtr settings, QcepObjectW
 
 void QxrdDetectorImagePlot::disablePickers()
 {
-  QxrdImagePlot::disablePickers();
-
   if (m_ROICreator) {
     m_ROICreator    -> setEnabled(false);
   }

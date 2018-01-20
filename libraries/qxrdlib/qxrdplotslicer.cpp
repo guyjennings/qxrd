@@ -3,7 +3,7 @@
 #include "qxrdimageplot.h"
 #include "qwt_picker_machine.h"
 
-QxrdPlotSlicer::QxrdPlotSlicer(QWidget *canvas, QxrdImagePlot *plot)
+QxrdPlotSlicer::QxrdPlotSlicer(QxrdImagePlot *plot)
   : QxrdImagePlotMeasurer(plot)
 {
   qRegisterMetaType< QVector<QPointF> >("QVector<QPointF>");
