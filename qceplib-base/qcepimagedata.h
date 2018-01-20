@@ -31,6 +31,9 @@ public:
                     int size);
   virtual ~QcepImageDataBase();
 
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
+
   Q_PROPERTY(int width READ get_Width WRITE set_Width)
   QCEP_INTEGER_PROPERTY(Width)
 

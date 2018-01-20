@@ -37,6 +37,7 @@ public slots:
   void xorNotMask(QcepMaskDataPtr mask);
 
   void maskCircle(double cx, double cy, double r, bool val);
+  void maskCircle(QRectF r, bool val);
   void maskPolygon(QVector<QPointF> poly, bool newVal);
 
   int countMaskedPixels() const;

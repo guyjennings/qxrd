@@ -91,6 +91,18 @@ QcepImageDataBase::~QcepImageDataBase()
   QcepAllocator::deallocate(get_ByteSize());
 }
 
+void QcepImageDataBase::readSettings(QSettings *settings)
+{
+  QcepDataObject::readSettings(settings);
+
+  resize(get_Width(), get_Height());
+}
+
+void QcepImageDataBase::writeSettings(QSettings *settings)
+{
+  QcepDataObject::writeSettings(settings);
+}
+
 QString QcepImageDataBase::description() const
 {
   return tr("[%1 x %2] elements").arg(get_Width()).arg(get_Height());

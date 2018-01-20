@@ -46,7 +46,11 @@ bool QcepMaskData::maskValue(int x, int y) const
 void QcepMaskData::setMaskValue(int x, int y, bool mval)
 {
   if (x >= 0 && x < get_Width() && y >= 0 && y < get_Height()) {
-    m_Image[(get_Height()-y-1)*get_Width()+x] = mval;
+    int i = (get_Height()-y-1)*get_Width()+x;
+
+    if (i>=0 && i<m_Image.size()) {
+      m_Image[i] = mval;
+    }
   }
 }
 
@@ -285,6 +289,35 @@ void QcepMaskData::maskCircle(double cx, double cy, double r, bool val)
       double r0 = sqrt(dx*dx + dy*dy);
 
       if (r0 <= (r+1)) {
+        setMaskValue(x, y, val);
+      }
+    }
+  }
+
+  thumbnailInvalid();
+}
+
+void QcepMaskData::maskCircle(QRectF r, bool val)
+{
+  int x0 = qRound(r.left());
+  int x1 = qRound(r.right());
+  int y0 = qRound(r.top());
+  int y1 = qRound(r.bottom());
+
+  double cx = (r.left() + r.right())/2.0;
+  double cy = (r.top() + r.bottom())/2.0;
+  double rx = (r.left() - r.right())/2.0;
+  double ry = (r.top() - r.bottom())/2.0;
+  double rx2 = rx*rx;
+  double ry2 = ry*ry;
+
+  for (int y=y0; y<=y1; y++) {
+    for (int x=x0; x<=x1; x++) {
+      double dx = x-cx;
+      double dy = y-cy;
+      double r0 = sqrt(dx*dx/rx2 + dy*dy/ry2);
+
+      if (r0 <= 1) {
         setMaskValue(x, y, val);
       }
     }
