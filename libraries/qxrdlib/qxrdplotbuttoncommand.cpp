@@ -1,6 +1,7 @@
 #include "qxrdplotbuttoncommand.h"
 #include <QToolButton>
 #include <QMenu>
+#include <qwt_plot_picker.h>
 
 QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
                                              QxrdPlotWidget            *plot,
@@ -9,6 +10,8 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
                                              QString                    toolTip,
                                              bool                       checkable)
   : QxrdPlotCommand(name, plot, set),
+    m_ToolButton(NULL),
+    m_PlotPicker(NULL),
     m_IconPaths(iconPath),
     m_ToolTips(toolTip),
     m_Index(0)
@@ -30,6 +33,9 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
 
   connect(m_ToolButton,  &QWidget::customContextMenuRequested,
           this,          &QxrdPlotButtonCommand::contextMenu);
+
+  connect(m_ToolButton,  &QToolButton::toggled,
+          this,          &QxrdPlotButtonCommand::toggled);
 }
 
 void QxrdPlotButtonCommand::appendMode(QString iconPath, QString toolTip)
@@ -38,6 +44,48 @@ void QxrdPlotButtonCommand::appendMode(QString iconPath, QString toolTip)
   m_ToolTips.append(toolTip);
 
   m_ToolButton -> setContextMenuPolicy(Qt::CustomContextMenu);
+}
+
+void QxrdPlotButtonCommand::setPlotPicker(QwtPlotPicker *pick)
+{
+  m_PlotPicker = pick;
+}
+
+void QxrdPlotButtonCommand::toggled(bool on)
+{
+  if (on) {
+    enable();
+  } else {
+    disable();
+  }
+}
+
+void QxrdPlotButtonCommand::enable()
+{
+  QxrdPlotCommand::enable();
+
+  if (m_PlotPicker) {
+    m_PlotPicker->setEnabled(true);
+  }
+}
+
+void QxrdPlotButtonCommand::disable()
+{
+  QxrdPlotCommand::disable();
+
+  if (m_PlotPicker) {
+    m_PlotPicker->setEnabled(false);
+  }
+}
+
+void QxrdPlotButtonCommand::setPen(const QPen &pen)
+{
+  QxrdPlotCommand::setPen(pen);
+
+  if (m_PlotPicker) {
+    m_PlotPicker -> setTrackerPen(pen);
+    m_PlotPicker -> setRubberBandPen(pen);
+  }
 }
 
 QAction* QxrdPlotButtonCommand::contextMenuAction(const QPoint & /*pos*/)

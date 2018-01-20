@@ -101,6 +101,8 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings,
     m_PlotRescaler -> setEnabled(set->prop_MaintainAspectRatio());
     m_PlotRescaler -> setExpandingDirection(QwtPlotRescaler::ExpandBoth);
   }
+
+  updateColorMap();
 }
 
 void QxrdImagePlotWidget::editPreferences()

@@ -1,6 +1,8 @@
 #ifndef QXRDHISTOGRAMSELECTOR_PTR_H
 #define QXRDHISTOGRAMSELECTOR_PTR_H
 
-class QxrdHistogramSelector;
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdHistogramSelector)
 
 #endif // QXRDHISTOGRAMSELECTOR_PTR_H

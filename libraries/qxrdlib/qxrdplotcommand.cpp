@@ -11,9 +11,13 @@ QxrdPlotCommand::QxrdPlotCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWid
 
 void QxrdPlotCommand::enable()
 {
-  m_PlotWidget->disableCommands();
+  m_PlotWidget->disableCommands(this);
 }
 
 void QxrdPlotCommand::disable()
+{
+}
+
+void QxrdPlotCommand::setPen(const QPen &pen)
 {
 }

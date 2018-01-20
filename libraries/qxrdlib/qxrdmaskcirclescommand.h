@@ -3,6 +3,7 @@
 
 #include "qxrdplotbuttoncommand.h"
 #include "qxrdmaskstack-ptr.h"
+#include "qxrdmaskpicker-ptr.h"
 
 class QXRD_EXPORT QxrdMaskCirclesCommand : public QxrdPlotButtonCommand
 {
@@ -13,7 +14,11 @@ public:
                          QxrdMaskStackWPtr          maskStack);
 
 private:
-  QxrdMaskStackWPtr m_MaskStack;
+  void selected(const QRectF& r);
+
+private:
+  QxrdMaskStackWPtr       m_MaskStack;
+  QxrdCircularMaskPicker *m_Picker;
 };
 
 #endif // QXRDMASKCIRCLESCOMMAND_H

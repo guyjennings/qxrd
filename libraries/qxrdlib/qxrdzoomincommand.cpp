@@ -7,5 +7,20 @@ QxrdZoomInCommand::QxrdZoomInCommand(QString name, QxrdPlotWidget *plot, QxrdPlo
 {
   m_ToolButton->setChecked(true);
 
-  connect(m_ToolButton, &QToolButton::clicked, m_PlotWidget, &QxrdPlotWidget::zoomIn);
+  connect(m_ToolButton, &QToolButton::clicked,
+          m_PlotWidget, &QxrdPlotWidget::zoomIn);
+}
+
+void QxrdZoomInCommand::enable()
+{
+  QxrdPlotButtonCommand::enable();
+
+  m_PlotWidget->enableZooming();
+}
+
+void QxrdZoomInCommand::disable()
+{
+  QxrdPlotButtonCommand::disable();
+
+  m_PlotWidget->disableZooming();
 }

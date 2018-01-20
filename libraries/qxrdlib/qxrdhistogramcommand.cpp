@@ -3,8 +3,13 @@
 #include "qxrdhistogramselector.h"
 #include "qxrdimageplot.h"
 
-QxrdHistogramCommand::QxrdHistogramCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand(name, plot, set, ":/images/histogram.png", "Histogram", true),
+QxrdHistogramCommand::QxrdHistogramCommand(QString                    name,
+                                           QxrdPlotWidget            *plot,
+                                           QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotButtonCommand(name, plot, set,
+                          ":/images/histogram.png",
+                          "Histogram",
+                          true),
     m_HistogramSelector(NULL)
 {
   connect(m_ToolButton,  &QToolButton::clicked,
@@ -12,6 +17,8 @@ QxrdHistogramCommand::QxrdHistogramCommand(QString name, QxrdPlotWidget *plot, Q
 
   m_HistogramSelector = new QxrdHistogramSelector(m_Plot->canvas(), m_Plot);
   m_HistogramSelector -> setEnabled(false);
+
+  setPlotPicker(m_HistogramSelector);
 
   connect(m_HistogramSelector, (void (QcepPlotMeasurer::*)( const QRectF &)) &QwtPlotPicker::selected,
           m_Plot, &QxrdImagePlot::selectHistogram);

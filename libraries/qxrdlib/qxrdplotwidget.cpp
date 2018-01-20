@@ -25,7 +25,12 @@
 #include "qxrdcolormaplibrary.h"
 
 QxrdPlotWidget::QxrdPlotWidget(QWidget *parent) :
-  QWidget(parent)
+  QWidget(parent),
+  m_Legend(NULL),
+  m_Zoomer(NULL),
+  m_Panner(NULL),
+  m_Magnifier(NULL),
+  m_Measurer(NULL)
 {
   for (int i=0; i<QwtPlot::axisCnt; i++) {
     m_IsLog[i] = 0;
@@ -177,12 +182,26 @@ void QxrdPlotWidget::contextMenu(const QPoint &pos)
   plotMenu.exec(mapToGlobal(pos));
 }
 
-void QxrdPlotWidget::disableCommands()
+void QxrdPlotWidget::disableCommands(QxrdPlotCommand* except)
 {
   foreach (QxrdPlotCommandPtr cmd, m_PlotCommands) {
-    if (cmd) {
+    if (cmd && (cmd.data()!=except)) {
       cmd->disable();
     }
+  }
+}
+
+void QxrdPlotWidget::enableZooming()
+{
+  if (m_Zoomer) {
+    m_Zoomer->setEnabled(true);
+  }
+}
+
+void QxrdPlotWidget::disableZooming()
+{
+  if (m_Zoomer) {
+    m_Zoomer->setEnabled(false);
   }
 }
 
@@ -331,6 +350,10 @@ void QxrdPlotWidget::updateTrackerPen(int mapIndex)
 
   m_Zoomer->setTrackerPen(pen);
   m_Zoomer->setRubberBandPen(pen);
+
+  foreach (QxrdPlotCommandPtr p, m_PlotCommands) {
+    p->setPen(pen);
+  }
 }
 
 void QxrdPlotWidget::editPreferences()

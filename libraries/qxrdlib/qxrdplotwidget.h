@@ -20,7 +20,10 @@ public:
   void addPlotCommand(QxrdPlotCommandPtr cmd);
   void addPlotCommandSpacer();
 
-  void disableCommands();
+  void disableCommands(QxrdPlotCommand *except);
+
+  void enableZooming();
+  void disableZooming();
 
 public slots:
   void zoomIn();

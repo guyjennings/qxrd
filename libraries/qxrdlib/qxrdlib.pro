@@ -521,7 +521,8 @@ HEADERS += qxrdlib.h\
     qxrdprocessorstep.h \
     qxrdprocessorstep-ptr.h \
     qxrdzingerfinder.h \
-    qxrdzingerfinder-ptr.h
+    qxrdzingerfinder-ptr.h \
+    qwt_plot_picker-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

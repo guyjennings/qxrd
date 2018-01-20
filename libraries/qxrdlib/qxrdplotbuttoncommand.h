@@ -2,6 +2,7 @@
 #define QXRDPLOTBUTTONCOMMAND_H
 
 #include "qxrdplotcommand.h"
+#include "qwt_plot_picker-ptr.h"
 
 class QXRD_EXPORT QxrdPlotButtonCommand : public QxrdPlotCommand
 {
@@ -13,20 +14,28 @@ public:
                         QString                    toolTip,
                         bool                       checkable);
 
-  void appendMode(QString iconPath, QString toolTip);
-
   QAction     *contextMenuAction(const QPoint &pos);
   QToolButton *toolButton();
+
+  void enable();
+  void disable();
+  void setPen(const QPen &pen);
+
+protected:
+  void appendMode(QString iconPath, QString toolTip);
+  void setPlotPicker(QwtPlotPicker* pick);
+  void toggled(bool on);
 
 private:
   void contextMenu(const QPoint &pos);
   void changeMode(int i);
 
 protected:
-  QToolButton  *m_ToolButton;
-  QStringList   m_IconPaths;
-  QStringList   m_ToolTips;
-  int           m_Index;
+  QToolButton     *m_ToolButton;
+  QwtPlotPicker   *m_PlotPicker;
+  QStringList      m_IconPaths;
+  QStringList      m_ToolTips;
+  int              m_Index;
 };
 
 #endif // QXRDPLOTBUTTONCOMMAND_H

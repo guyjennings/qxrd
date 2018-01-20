@@ -9,6 +9,9 @@ public:
   QxrdZoomInCommand(QString                    name,
                     QxrdPlotWidget            *plot,
                     QxrdPlotWidgetSettingsWPtr set);
+
+  void enable();
+  void disable();
 };
 
 #endif // QXRDZOOMINCOMMAND_H

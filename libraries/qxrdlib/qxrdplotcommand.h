@@ -20,6 +20,8 @@ public:
   virtual void         enable();
   virtual void         disable();
 
+  virtual void         setPen(const QPen& pen);
+
 protected:
   QxrdPlotWidget            *m_PlotWidget;
   QxrdImagePlot             *m_Plot;
