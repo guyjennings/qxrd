@@ -56,7 +56,25 @@ QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
       connect(m_CenterMoveDownRight, &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveDownRight);
       connect(m_CenterMoveUpLeft,    &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveUpLeft);
       connect(m_CenterMoveUpRight,   &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveUpRight);
+
+      connect(cf->prop_ImplementTilt(), &QcepBoolProperty::valueChanged,
+              this, &QxrdCenteringWindow::onImplementTiltChanged);
+
+      onImplementTiltChanged(cf->get_ImplementTilt());
+
+      connect(cf->prop_CenterStep(),            &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged);
+      connect(cf->prop_DetectorDistanceStep(),  &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged);
+      connect(cf->prop_DetectorTiltStep(),      &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged);
+      connect(cf->prop_TiltPlaneRotationStep(), &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged);
+
+      cf->prop_Energy()               -> linkTo(m_Energy);
+      cf->prop_DetectorDistance()     -> linkTo(m_DetectorDistance);
+      cf->prop_DetectorDistanceStep() -> linkTo(m_DetectorDistanceStep);
+      cf->prop_DetectorXPixelSize()   -> linkTo(m_DetectorXPixelSize);
+      cf->prop_DetectorYPixelSize()   -> linkTo(m_DetectorYPixelSize);
     }
+
+    onStepSizesChanged();
   }
 }
 
@@ -74,4 +92,22 @@ void QxrdCenteringWindow::changeEvent(QEvent *e)
   default:
     break;
   }
+}
+
+void QxrdCenteringWindow::onStepSizesChanged()
+{
+  m_CenterX           -> setSingleStep(m_CenterStep->value());
+  m_CenterY           -> setSingleStep(m_CenterStep->value());
+  m_DetectorDistance  -> setSingleStep(m_DetectorDistanceStep->value());
+  m_DetectorTilt      -> setSingleStep(m_DetectorTiltStep->value());
+  m_TiltPlaneRotation -> setSingleStep(m_TiltPlaneRotationStep->value());
+}
+
+void QxrdCenteringWindow::onImplementTiltChanged(bool imp)
+{
+//  m_DetectorDistance  -> setEnabled(true /*imp*/);
+  m_DetectorTilt          -> setEnabled(imp);
+  m_DetectorTiltStep      -> setEnabled(imp);
+  m_TiltPlaneRotation     -> setEnabled(imp);
+  m_TiltPlaneRotationStep -> setEnabled(imp);
 }

@@ -22,7 +22,10 @@ public:
 
 protected:
   void changeEvent(QEvent *e);
+  void onImplementTiltChanged(bool imp);
+  void onStepSizesChanged();
 
+private:
   QxrdCenteringWindowSettingsWPtr m_CenteringWindowSettings;
 };
 
