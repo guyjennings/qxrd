@@ -173,6 +173,15 @@ signals:
   void parameterChanged();
 
 public slots:
+  void centerMoveUpLeft();
+  void centerMoveUp();
+  void centerMoveUpRight();
+  void centerMoveRight();
+  void centerMoveDownRight();
+  void centerMoveDown();
+  void centerMoveDownLeft();
+  void centerMoveLeft();
+
   void onCenterChanged(QPointF pt);
   void onPointSelected(QPointF pt);
 
@@ -262,6 +271,9 @@ public:
   static QString levmarFailureReason(int n);
 
   void setFittedRings(QxrdFittedRingsPtr rings);
+
+private:
+  void moveCenter(int dx, int dy);
 
 private:
   mutable QMutex             m_Mutex;

@@ -13,14 +13,14 @@ class QXRD_EXPORT QxrdPlotOverlay : public QcepObject
 
 public:
   QxrdPlotOverlay(QString                    name,
-                  QxrdPlotWidgetWPtr         plot,
+                  QxrdPlotWidget            *plot,
                   QxrdPlotWidgetSettingsWPtr set);
 
-  virtual void setPen(const QPen &pen);
+  virtual void setPen(QPen pen);
 
 protected:
-  QxrdPlotWidgetWPtr         m_PlotWidget;
-  QxrdPlotWidgetSettingsWPtr m_Settings;
+  QxrdPlotWidget             *m_PlotWidget;
+  QxrdPlotWidgetSettingsWPtr  m_Settings;
 };
 
 #endif // QXRDPLOTOVERLAY_H

@@ -3,19 +3,18 @@
 #include "qxrdcenterfinder.h"
 
 QxrdCenterMarker::QxrdCenterMarker(QString                    name,
-                                   QxrdPlotWidgetWPtr         plot,
+                                   QxrdPlotWidget            *plot,
                                    QxrdPlotWidgetSettingsWPtr set,
                                    QxrdCenterFinderWPtr       cf) :
   QxrdPlotOverlay(name, plot, set),
   m_CenterFinder(cf),
   m_CenterMarker(NULL)
 {
-  QxrdPlotWidgetPtr pw(m_PlotWidget);
   m_CenterMarker = new QwtPlotMarker();
   m_CenterMarker -> setLineStyle(QwtPlotMarker::Cross);
 
-  if (pw) {
-    QcepPlot *plot = pw->plot();
+  if (m_PlotWidget) {
+    QcepPlot *plot = m_PlotWidget->plot();
 
     if (plot) {
       m_CenterMarker -> attach(plot);
@@ -27,6 +26,8 @@ QxrdCenterMarker::QxrdCenterMarker(QString                    name,
   if (c) {
     connect(c->prop_Center(), &QcepDoublePointProperty::valueChanged,
             this,             &QxrdCenterMarker::centerChanged);
+
+    centerChanged(c->get_Center());
   }
 }
 
@@ -35,12 +36,28 @@ void QxrdCenterMarker::centerChanged(QPointF c)
 {
   if (m_CenterMarker) {
     m_CenterMarker -> setValue(c);
+
+    if (m_PlotWidget) {
+      QcepPlot *plot = m_PlotWidget->plot();
+
+      if (plot) {
+        plot -> replot();
+      }
+    }
   }
 }
 
-void QxrdCenterMarker::setPen(const QPen &pen)
+void QxrdCenterMarker::setPen(QPen pen)
 {
   if (m_CenterMarker) {
     m_CenterMarker -> setLinePen(pen);
+
+    if (m_PlotWidget) {
+      QcepPlot *plot = m_PlotWidget->plot();
+
+      if (plot) {
+        plot -> replot();
+      }
+    }
   }
 }

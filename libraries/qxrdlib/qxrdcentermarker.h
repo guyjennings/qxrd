@@ -13,11 +13,11 @@ class QXRD_EXPORT QxrdCenterMarker : public QxrdPlotOverlay
 
 public:
   QxrdCenterMarker(QString                    name,
-                   QxrdPlotWidgetWPtr         plot,
+                   QxrdPlotWidget            *plot,
                    QxrdPlotWidgetSettingsWPtr set,
                    QxrdCenterFinderWPtr       cf);
 
-  void setPen(const QPen &pen);
+  void setPen(QPen pen);
 
 private:
   void centerChanged(QPointF c);

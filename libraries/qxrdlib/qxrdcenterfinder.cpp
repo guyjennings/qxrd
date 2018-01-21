@@ -1703,3 +1703,53 @@ void QxrdCenterFinder::fromScriptValue(const QScriptValue &obj, QxrdCenterFinder
   }
 }
 
+void QxrdCenterFinder::moveCenter(int dx, int dy)
+{
+  double s = get_CenterStep();
+
+  QPointF c(get_Center() + QPointF(s*dx, s*dy));
+
+  set_Center(c);
+}
+
+void QxrdCenterFinder::centerMoveUpLeft()
+{
+  moveCenter(-1,1);
+}
+
+void QxrdCenterFinder::centerMoveUp()
+{
+  moveCenter(0,1);
+}
+
+void QxrdCenterFinder::centerMoveUpRight()
+{
+  moveCenter(1,1);
+}
+
+void QxrdCenterFinder::centerMoveRight()
+{
+  moveCenter(1,0);
+}
+
+void QxrdCenterFinder::centerMoveDownRight()
+{
+  moveCenter(1,-1);
+}
+
+void QxrdCenterFinder::centerMoveDown()
+{
+  moveCenter(0,-1);
+}
+
+void QxrdCenterFinder::centerMoveDownLeft()
+{
+  moveCenter(-1,-1);
+}
+
+void QxrdCenterFinder::centerMoveLeft()
+{
+  moveCenter(-1,0);
+}
+
+

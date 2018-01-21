@@ -28,7 +28,7 @@ QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
     m_DatasetBrowserView -> setDatasetModel(model);
 
     QxrdDataProcessorPtr proc(exp->dataProcessor());
-    QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderPtr());
+    QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
 
     QxrdCenteringWindowSettingsPtr settings(m_CenteringWindowSettings);
 
@@ -37,6 +37,25 @@ QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
       m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings(), proc);
       m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings(), cf);
       m_IntegratedPlotWidget -> initialize(settings->integratedPlotWidgetSettings());
+    }
+
+    if (cf) {
+      cf->prop_Center()                -> linkTo(m_CenterX, m_CenterY);
+      cf->prop_CenterStep()            -> linkTo(m_CenterStep);
+      cf->prop_ImplementTilt()         -> linkTo(m_ImplementTilt);
+      cf->prop_DetectorTilt()          -> linkTo(m_DetectorTilt);
+      cf->prop_DetectorTiltStep()      -> linkTo(m_DetectorTiltStep);
+      cf->prop_TiltPlaneRotation()     -> linkTo(m_TiltPlaneRotation);
+      cf->prop_TiltPlaneRotationStep() -> linkTo(m_TiltPlaneRotationStep);
+
+      connect(m_CenterMoveDown,      &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveDown);
+      connect(m_CenterMoveUp,        &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveUp);
+      connect(m_CenterMoveLeft,      &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveLeft);
+      connect(m_CenterMoveRight,     &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveRight);
+      connect(m_CenterMoveDownLeft,  &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveDownLeft);
+      connect(m_CenterMoveDownRight, &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveDownRight);
+      connect(m_CenterMoveUpLeft,    &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveUpLeft);
+      connect(m_CenterMoveUpRight,   &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveUpRight);
     }
   }
 }

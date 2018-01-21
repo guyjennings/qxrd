@@ -25,6 +25,7 @@
 #include "qxrdprocessor.h"
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdmaskstack.h"
+#include "qxrdcentermarker.h"
 
 QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent)
   : QxrdPlotWidget(parent),
@@ -71,7 +72,11 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings,
     QxrdCenterFinderPtr c(p->centerFinder());
 
     if (c) {
-      addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this, settings, c)));
+      addPlotCommand(QxrdPlotCommandPtr(
+                       new QxrdSetCenterCommand("Set Center", this, settings, c)));
+
+      addPlotOverlay(QxrdPlotOverlayPtr(
+                       new QxrdCenterMarker("Center Marker", this, settings, c)));
     }
   }
 

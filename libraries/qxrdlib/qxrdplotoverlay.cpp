@@ -2,7 +2,7 @@
 
 QxrdPlotOverlay::QxrdPlotOverlay(
     QString                    name,
-    QxrdPlotWidgetWPtr         plot,
+    QxrdPlotWidget            *plot,
     QxrdPlotWidgetSettingsWPtr set) :
   QcepObject(name),
   m_PlotWidget(plot),
@@ -10,6 +10,6 @@ QxrdPlotOverlay::QxrdPlotOverlay(
 {
 }
 
-void QxrdPlotOverlay::setPen(const QPen &pen)
+void QxrdPlotOverlay::setPen(QPen pen)
 {
 }

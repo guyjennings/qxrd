@@ -136,7 +136,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_DatasetBrowserView -> setDatasetModel(model);
 
     QxrdDataProcessorPtr proc(exp->dataProcessor());
-    QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderPtr());
+    QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
 
     QxrdWindowSettingsPtr settings(m_WindowSettings);
 
