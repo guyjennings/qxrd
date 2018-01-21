@@ -1,9 +1,9 @@
 #ifndef QCEPPLOTPTR_H
 #define QCEPPLOTPTR_H
 
-class QcepPlot;
+#include "qcepsharedpointer.h"
 
-typedef QcepPlot *QcepPlotPtr;
+QCEP_SHAREDPOINTER(QcepPlot)
 
 #endif // QCEPPLOTPTR_H
 

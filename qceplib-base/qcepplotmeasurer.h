@@ -16,7 +16,7 @@ public:
   virtual QwtText trackerTextF(const QPointF &pos) const;
 
 private:
-  QcepPlotPtr m_Plot;
+  QcepPlot *m_Plot;
 };
 
 #endif // QCEPPLOTMEASURER_H
