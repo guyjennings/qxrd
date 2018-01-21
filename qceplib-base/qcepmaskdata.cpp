@@ -275,6 +275,22 @@ void QcepMaskData::xorNotMask(QcepMaskDataPtr mask)
   thumbnailInvalid();
 }
 
+void QcepMaskData::maskRectangle(QRectF r, bool val)
+{
+  int x0 = qRound(r.left());
+  int x1 = qRound(r.right());
+  int y0 = qRound(r.top());
+  int y1 = qRound(r.bottom());
+
+  for (int y=y0; y<=y1; y++) {
+    for (int x=x0; x<=x1; x++) {
+      setMaskValue(x, y, val);
+    }
+  }
+
+  thumbnailInvalid();
+}
+
 void QcepMaskData::maskCircle(double cx, double cy, double r, bool val)
 {
   int x0 = qRound(cx-r);

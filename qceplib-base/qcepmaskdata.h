@@ -36,6 +36,7 @@ public slots:
   void orNotMask(QcepMaskDataPtr mask);
   void xorNotMask(QcepMaskDataPtr mask);
 
+  void maskRectangle(QRectF r, bool val);
   void maskCircle(double cx, double cy, double r, bool val);
   void maskCircle(QRectF r, bool val);
   void maskPolygon(QVector<QPointF> poly, bool newVal);
