@@ -25,10 +25,11 @@ protected:
   void appendMode(QString iconPath, QString toolTip);
   void setPlotPicker(QwtPlotPicker* pick);
   void toggled(bool on);
+  void clicked(bool checked);
+  virtual void changeMode(int i);
 
 private:
   void contextMenu(const QPoint &pos);
-  void changeMode(int i);
 
 protected:
   QToolButton     *m_ToolButton;

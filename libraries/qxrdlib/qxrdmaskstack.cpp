@@ -445,6 +445,19 @@ void QxrdMaskStack::showMaskRangeStack(int pos,
   }
 }
 
+void QxrdMaskStack::maskRectangle(const QRectF &r, bool set)
+{
+  createMaskIfNeeded();
+
+  QcepMaskDataPtr m(mask());
+
+  if (m) {
+    m->maskRectangle(r, set);
+
+    emit maskChanged();
+  }
+}
+
 void QxrdMaskStack::maskCircle(const QRectF &r, bool set)
 {
   createMaskIfNeeded();

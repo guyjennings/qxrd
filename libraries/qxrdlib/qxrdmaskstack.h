@@ -62,6 +62,7 @@ public:
   void hideMaskRangeStack(int pos, QcepImageDataBasePtr img, double minVal, double maxVal);
   void showMaskRangeStack(int pos, QcepImageDataBasePtr img, double minVal, double maxVal);
 
+  void maskRectangle(const QRectF& r, bool set);
   void maskCircle(const QRectF& r, bool set);
   void maskPolygon(const QVector<QPointF> &p, bool set);
 

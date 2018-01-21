@@ -43,6 +43,7 @@ private slots:
   void updateImage();
   void updateMask();
   void replotGraph();
+  void maskChanged();
 
 protected:
   QTimer                      m_ImageTimer;

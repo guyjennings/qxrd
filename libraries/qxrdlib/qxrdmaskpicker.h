@@ -13,6 +13,12 @@ protected:
   QxrdImagePlot *m_Plot;
 };
 
+class QXRD_EXPORT QxrdRectangularMaskPicker : public QxrdMaskPicker
+{
+public:
+  QxrdRectangularMaskPicker(QxrdImagePlot *plot);
+};
+
 class QXRD_EXPORT QxrdCircularMaskPicker : public QxrdMaskPicker
 {
 public:

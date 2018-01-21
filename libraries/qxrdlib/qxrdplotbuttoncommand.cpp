@@ -12,10 +12,15 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
   : QxrdPlotCommand(name, plot, set),
     m_ToolButton(NULL),
     m_PlotPicker(NULL),
-    m_IconPaths(iconPath),
-    m_ToolTips(toolTip),
+    m_IconPaths(),
+    m_ToolTips(),
     m_Index(0)
 {
+  if (!iconPath.isEmpty()) {
+    m_IconPaths.append(iconPath);
+    m_ToolTips.append(toolTip);
+  }
+
   m_ToolButton =  new QToolButton();
   m_ToolButton -> setObjectName(get_Name());
 
@@ -36,6 +41,9 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
 
   connect(m_ToolButton,  &QToolButton::toggled,
           this,          &QxrdPlotButtonCommand::toggled);
+
+  connect(m_ToolButton,  &QToolButton::clicked,
+          this,          &QxrdPlotButtonCommand::clicked);
 }
 
 void QxrdPlotButtonCommand::appendMode(QString iconPath, QString toolTip)
@@ -48,7 +56,15 @@ void QxrdPlotButtonCommand::appendMode(QString iconPath, QString toolTip)
 
 void QxrdPlotButtonCommand::setPlotPicker(QwtPlotPicker *pick)
 {
+  bool en = false;
+
+  if (m_PlotPicker) {
+    en = m_PlotPicker -> isEnabled();
+    m_PlotPicker -> setEnabled(false);
+  }
+
   m_PlotPicker = pick;
+  m_PlotPicker -> setEnabled(en);
 }
 
 void QxrdPlotButtonCommand::toggled(bool on)
@@ -102,6 +118,19 @@ void QxrdPlotButtonCommand::contextMenu(const QPoint &pos)
   }
 
   menu.exec(m_ToolButton->mapToGlobal(pos));
+}
+
+void QxrdPlotButtonCommand::clicked(bool checked)
+{
+  if (checked && (m_ToolTips.count() > 1)) {
+    QMenu menu(NULL, NULL);
+
+    for (int i=0; i<m_ToolTips.count(); i++) {
+      menu.addAction(m_ToolTips.value(i), [=]() {changeMode(i);});
+    }
+
+    menu.exec(QCursor::pos());
+  }
 }
 
 void QxrdPlotButtonCommand::changeMode(int i)

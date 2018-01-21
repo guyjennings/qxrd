@@ -356,7 +356,8 @@ SOURCES += qxrdlib.cpp \
     qxrdcolormaplibrary.cpp \
     qxrdcolormap.cpp \
     qxrdprocessorstep.cpp \
-    qxrdzingerfinder.cpp
+    qxrdzingerfinder.cpp \
+    qxrdmaskcommandbutton.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -523,7 +524,8 @@ HEADERS += qxrdlib.h\
     qxrdzingerfinder.h \
     qxrdzingerfinder-ptr.h \
     qwt_plot_picker-ptr.h \
-    qxrdpowderpointpicker-ptr.h
+    qxrdpowderpointpicker-ptr.h \
+    qxrdmaskcommandbutton.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

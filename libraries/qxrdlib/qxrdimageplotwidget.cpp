@@ -2,6 +2,7 @@
 #include "qxrdzoomincommand.h"
 #include "qxrdzoomoutcommand.h"
 #include "qxrdzoomallcommand.h"
+#include "qxrdmaskcommandbutton.h"
 #include "qxrdmaskcirclescommand.h"
 #include "qxrdmaskpolygonscommand.h"
 #include "qxrdsetcentercommand.h"
@@ -57,15 +58,15 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings,
 
   if (p) {
     QxrdMaskStackPtr m(p->maskStack());
-    addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskCirclesCommand("Mask Circles",
-                                                                 this,
-                                                                 settings,
-                                                                 m)));
 
-    addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskPolygonsCommand("Mask Polygons",
-                                                                  this,
-                                                                  settings,
-                                                                  m)));
+    if (m) {
+      addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskCommandButton("Mask Commands", this, settings, m)));
+//      addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskCirclesCommand("Mask Circles", this, settings, m)));
+//      addPlotCommand(QxrdPlotCommandPtr(new QxrdMaskPolygonsCommand("Mask Polygons", this, settings, m)));
+
+      connect(m.data(), &QxrdMaskStack::maskChanged,
+              this,     &QxrdImagePlotWidget::maskChanged);
+    }
   }
 
   addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this, settings)));
@@ -164,6 +165,21 @@ void QxrdImagePlotWidget::updateMask()
 
     replotMask();
   }
+}
+
+void QxrdImagePlotWidget::maskChanged()
+{
+  QxrdProcessorPtr p(m_Processor);
+
+  if (p) {
+    QxrdMaskStackPtr m(p->maskStack());
+
+    if (m) {
+      m_MaskData = m->mask();
+    }
+  }
+
+  replotMask();
 }
 
 void QxrdImagePlotWidget::replotImage()

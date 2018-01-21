@@ -10,6 +10,15 @@ QxrdMaskPicker::QxrdMaskPicker(QxrdImagePlot *plot)
   setTrackerMode(QwtPicker::AlwaysOn);
 }
 
+QxrdRectangularMaskPicker::QxrdRectangularMaskPicker(QxrdImagePlot *plot)
+  : QxrdMaskPicker(plot)
+{
+  qRegisterMetaType<QRectF>("QRectF");
+
+  setStateMachine(new QwtPickerDragRectMachine());
+  setRubberBand(QwtPicker::RectRubberBand);
+}
+
 QxrdCircularMaskPicker::QxrdCircularMaskPicker(QxrdImagePlot *plot)
   : QxrdMaskPicker(plot)
 {
