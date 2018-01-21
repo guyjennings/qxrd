@@ -119,5 +119,7 @@
         <file>images/mask_circles_invert.png</file>
         <file>images/mask_rectangles_invert.png</file>
         <file>images/mask_rectangles.png</file>
+        <file>images/powder_point_ring.png</file>
+        <file>images/powder_trace_ring.png</file>
     </qresource>
 </RCC>
