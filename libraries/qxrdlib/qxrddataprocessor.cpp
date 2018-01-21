@@ -93,7 +93,7 @@ QxrdDataProcessor::QxrdDataProcessor(QString name) :
   m_AcquiredInt32Images("acquiredInt32Images"),
   //    m_Mask(allocator -> newMask()),
   m_AcquiredCount(0),
-  m_CenterFinder(NULL),
+//  m_CenterFinder(NULL),
   m_Integrator(NULL),
   m_PolarTransform(NULL),
   m_PolarNormalization(NULL),
@@ -140,7 +140,7 @@ QxrdDataProcessorPtr QxrdDataProcessor::newDataProcessor()
   QxrdDataProcessorPtr proc(new QxrdDataProcessor("processor"));
 
   if (proc) {
-    proc->addChildPtr(QxrdCenterFinder::newCenterFinder());
+//    proc->addChildPtr(QxrdCenterFinder::newCenterFinder());
     proc->addChildPtr(QxrdIntegrator::newIntegrator());
     proc->addChildPtr(QxrdPolarTransform::newPolarTransform());
     proc->addChildPtr(QxrdPolarNormalization::newPolarNormalization());
@@ -154,10 +154,8 @@ void QxrdDataProcessor::addChildPtr(QcepObjectPtr child)
 {
   QxrdProcessor::addChildPtr(child);
 
-  if (checkPointer<QxrdCenterFinder>(child, m_CenterFinder)) {
-
-  } else if (checkPointer<QxrdIntegrator>(child, m_Integrator)) {
-    m_Integrator->initialize(m_CenterFinder);
+  if (checkPointer<QxrdIntegrator>(child, m_Integrator)) {
+    m_Integrator->initialize(centerFinder());
   } else if (checkPointer<QxrdPolarTransform>(child, m_PolarTransform)) {
 
   } else if (checkPointer<QxrdPolarNormalization>(child, m_PolarNormalization)) {
@@ -169,7 +167,7 @@ void QxrdDataProcessor::addChildPtr(QcepObjectPtr child)
 
 void QxrdDataProcessor::removeChildPtr(QcepObjectPtr /*child*/)
 {
-  printMessage("Need to write QxrdDataProcessorBase::removeChildPtr");
+  printMessage("Need to write QxrdDataProcessor::removeChildPtr");
 }
 
 QxrdAcquisitionWPtr QxrdDataProcessor::acquisition() const
@@ -227,7 +225,7 @@ void QxrdDataProcessor::setAcquisition(QxrdAcquisitionWPtr acq)
 //  newMask(mask());
 //}
 
-//QcepSettingsSaver *QxrdDataProcessorBase::saver()
+//QcepSettingsSaver *QxrdDataProcessor::saver()
 //{
 //  return m_Saver;
 //}
@@ -238,11 +236,11 @@ void QxrdDataProcessor::writeSettings(QSettings *settings)
 
   QxrdProcessor::writeSettings(settings);
 
-  if (m_CenterFinder) {
-    settings->beginGroup("centerfinder");
-    m_CenterFinder -> writeSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_CenterFinder) {
+//    settings->beginGroup("centerfinder");
+//    m_CenterFinder -> writeSettings(settings);
+//    settings->endGroup();
+//  }
 
   if (m_Integrator) {
     settings->beginGroup("integrator");
@@ -269,11 +267,11 @@ void QxrdDataProcessor::readSettings(QSettings *settings)
 
   QxrdProcessor::readSettings(settings);
 
-  if (m_CenterFinder) {
-    settings->beginGroup("centerfinder");
-    m_CenterFinder -> readSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_CenterFinder) {
+//    settings->beginGroup("centerfinder");
+//    m_CenterFinder -> readSettings(settings);
+//    settings->endGroup();
+//  }
 
   if (m_Integrator) {
     settings->beginGroup("integrator");
@@ -376,7 +374,7 @@ QString QxrdDataProcessor::pwd() const
   return dataDirectory();
 }
 
-//void QxrdDataProcessorBase::cd(QString path)
+//void QxrdDataProcessor::cd(QString path)
 //{
 //  QDir dir(currentDirectory());
 
@@ -425,7 +423,7 @@ QStringList QxrdDataProcessor::ls(QString pattern) const
 //  }
 //}
 
-//void QxrdDataProcessorBase::saveData(QcepDoubleImageDataPtr data, QString name, int canOverwrite)
+//void QxrdDataProcessor::saveData(QcepDoubleImageDataPtr data, QString name, int canOverwrite)
 //{
 //  if (QThread::currentThread() != thread()) {
 //    INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveData",
@@ -732,7 +730,7 @@ void QxrdDataProcessor::updateEstimatedProcessingTime()
   set_EstimatedProcessingTime(estimatedProcessingTime(estSerialTime, estParallelTime));
 }
 
-//double QxrdDataProcessorBase::estimatedProcessingTime(double estSerialTime, double estParallelTime)
+//double QxrdDataProcessor::estimatedProcessingTime(double estSerialTime, double estParallelTime)
 //{
 //  return estSerialTime + estParallelTime;
 //}
@@ -855,28 +853,28 @@ int QxrdDataProcessor::status(double time)
   }
 }
 
-//QxrdExperimentPtr QxrdDataProcessorBase::experiment() const
+//QxrdExperimentPtr QxrdDataProcessor::experiment() const
 //{
 //  if (m_Experiment == NULL) {
-//    printMessage("Problem: QxrdDataProcessorBase::experiment == NULL");
+//    printMessage("Problem: QxrdDataProcessor::experiment == NULL");
 //  }
 
 //  return m_Experiment;
 //}
 
-QxrdCenterFinderPtr QxrdDataProcessor::centerFinder() const
-{
-  if (m_CenterFinder == NULL) {
-    printMessage("Problem QxrdDataProcessorBase::centerFinder == NULL");
-  }
+//QxrdCenterFinderPtr QxrdDataProcessor::centerFinder() const
+//{
+//  if (m_CenterFinder == NULL) {
+//    printMessage("Problem QxrdDataProcessor::centerFinder == NULL");
+//  }
 
-  return m_CenterFinder;
-}
+//  return m_CenterFinder;
+//}
 
 QxrdIntegratorPtr QxrdDataProcessor::integrator() const
 {
   if (m_Integrator == NULL) {
-    printMessage("Problem QxrdDataProcessorBase::integrator == NULL");
+    printMessage("Problem QxrdDataProcessor::integrator == NULL");
   }
 
   return m_Integrator;
@@ -885,7 +883,7 @@ QxrdIntegratorPtr QxrdDataProcessor::integrator() const
 QxrdPolarTransformPtr QxrdDataProcessor::polarTransform() const
 {
   if (m_PolarTransform == NULL) {
-    printMessage("Problem QxrdDataProcessorBase::polarTransform == NULL");
+    printMessage("Problem QxrdDataProcessor::polarTransform == NULL");
   }
 
   return m_PolarTransform;
@@ -894,7 +892,7 @@ QxrdPolarTransformPtr QxrdDataProcessor::polarTransform() const
 QxrdPolarNormalizationPtr QxrdDataProcessor::polarNormalization() const
 {
   if (m_PolarNormalization == NULL) {
-    printMessage("Problem QxrdDataProcessorBase::polarNormalization == NULL");
+    printMessage("Problem QxrdDataProcessor::polarNormalization == NULL");
   }
 
   return m_PolarNormalization;
@@ -1474,12 +1472,13 @@ void QxrdDataProcessor::onCorrectedImageAvailable()
 {
   QcepDoubleImageDataPtr img = m_CorrectedImages.dequeue();
   QcepMaskDataPtr mask = (img ? img->mask() : QcepMaskDataPtr());
+  QxrdCenterFinderPtr cf(centerFinder());
 
-  if (img) {
+  if (img && cf) {
     m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::integrateImage,
                                                img, mask,
-                                               centerFinder() -> get_CenterX(),
-                                               centerFinder() -> get_CenterY()));
+                                               cf -> get_Center().x(),
+                                               cf -> get_Center().y()));
 
     m_ROIData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::calculateROI,
                                         img, mask));
@@ -1986,7 +1985,9 @@ void QxrdDataProcessor::integrateData(QString name)
 
   QString path = filePathInDataDirectory(name);
 
-  if (img && img -> readImage(path)) {
+  QxrdCenterFinderPtr cf(centerFinder());
+
+  if (cf && img && img -> readImage(path)) {
     printMessage(tr("Load image from %1").arg(path));
     statusMessage(tr("Load image from %1").arg(path));
 
@@ -1994,8 +1995,8 @@ void QxrdDataProcessor::integrateData(QString name)
 
     m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::integrateImage,
                                                img, mask(),
-                                               centerFinder() -> get_CenterX(),
-                                               centerFinder() -> get_CenterY()));
+                                               cf -> get_Center().x(),
+                                               cf -> get_Center().y()));
   } else {
     printMessage(tr("Couldn't load %1").arg(path));
     statusMessage(tr("Couldn't load %1").arg(path));
@@ -2149,13 +2150,18 @@ void QxrdDataProcessor::slicePolygon(QVector<QPointF> poly)
 void QxrdDataProcessor::integrateSaveAndDisplay()
 {
   QcepDoubleImageDataPtr dimg = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
+  QxrdCenterFinderPtr cf(centerFinder());
 
-  if (dimg){
+  if (dimg) {
     if (qcepDebug(DEBUG_INTEGRATOR)) {
-      printMessage(tr("processor.integrateSaveAndDisplay: %1, %2, %3")
-                   .arg(dimg->get_FileName())
-                   .arg(m_CenterFinder->get_CenterX())
-                   .arg(m_CenterFinder->get_CenterY()));
+      if (cf) {
+        printMessage(tr("processor.integrateSaveAndDisplay: %1, %2, %3")
+                     .arg(dimg->get_FileName())
+                     .arg(cf->get_Center().x())
+                     .arg(cf->get_Center().y()));
+      } else {
+        printMessage("QxrdDataProcessor::integrateSaveAndDisplay no center finder");
+      }
     }
 
     m_IntegratedData.enqueue(

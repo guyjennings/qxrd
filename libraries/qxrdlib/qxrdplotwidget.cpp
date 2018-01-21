@@ -1,6 +1,7 @@
 #include "qxrdplotwidget.h"
 #include "qxrdplotwidgetsettings.h"
 #include "qxrdplotcommand.h"
+#include "qxrdplotoverlay.h"
 #include <QLayout>
 #include <QToolButton>
 #include <QSpacerItem>
@@ -134,6 +135,16 @@ void QxrdPlotWidget::initialize(QxrdPlotWidgetSettingsWPtr settings)
     connect(m_Legend, &QwtLegend::clicked, this, &QxrdPlotWidget::onLegendClicked);
     connect(m_Legend, &QwtLegend::checked, this, &QxrdPlotWidget::onLegendChecked);
   }
+}
+
+QcepPlot *QxrdPlotWidget::plot()
+{
+  return m_Plot;
+}
+
+void QxrdPlotWidget::addPlotOverlay(QxrdPlotOverlayPtr ovl)
+{
+  m_PlotOverlays.append(ovl);
 }
 
 void QxrdPlotWidget::addPlotCommand(QxrdPlotCommandPtr cmd)
@@ -353,6 +364,10 @@ void QxrdPlotWidget::updateTrackerPen(int mapIndex)
 
   foreach (QxrdPlotCommandPtr p, m_PlotCommands) {
     p->setPen(pen);
+  }
+
+  foreach (QxrdPlotOverlayPtr o, m_PlotOverlays) {
+    o->setPen(pen);
   }
 }
 

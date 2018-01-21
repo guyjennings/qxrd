@@ -33,7 +33,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_DataRaster(NULL),
     m_MaskRaster(NULL),
     m_DataProcessor(),
-    m_CenterMarker(NULL),
+//    m_CenterMarker(NULL),
     m_FirstTime(true),
     m_ContextMenuEnabled(true),
 
@@ -54,9 +54,9 @@ void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr pare
   m_Legend -> setFrameStyle(QFrame::Box|QFrame::Sunken);
   m_Legend -> setDefaultItemMode(QwtLegendData::Checkable);
 
-  m_CenterMarker = new QwtPlotMarker();
-  m_CenterMarker -> setLineStyle(QwtPlotMarker::Cross);
-  m_CenterMarker -> attach(this);
+//  m_CenterMarker = new QwtPlotMarker();
+//  m_CenterMarker -> setLineStyle(QwtPlotMarker::Cross);
+//  m_CenterMarker -> attach(this);
 }
 
 void QxrdImagePlot::printMessage(QString msg, QDateTime dt) const
@@ -78,7 +78,7 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
     QxrdCenterFinderPtr cf(dp->centerFinder());
 
     if (cf) {
-      onCenterChanged(QPointF(cf->get_CenterX(), cf->get_CenterY()));
+//      onCenterChanged(cf->get_Center());
 
       connect(cf->prop_MarkedPoints(), &QxrdPowderPointVectorProperty::valueChanged,
               this, &QxrdImagePlot::onMarkedPointsChanged);
@@ -125,23 +125,23 @@ void QxrdImagePlot::changeROIShown(bool shown)
   }
 }
 
-void QxrdImagePlot::onCenterXChanged(double cx)
-{
-  m_CenterMarker -> setXValue(cx);
-  replot();
-}
+//void QxrdImagePlot::onCenterXChanged(double cx)
+//{
+//  m_CenterMarker -> setXValue(cx);
+//  replot();
+//}
 
-void QxrdImagePlot::onCenterYChanged(double cy)
-{
-  m_CenterMarker -> setYValue(cy);
-  replot();
-}
+//void QxrdImagePlot::onCenterYChanged(double cy)
+//{
+//  m_CenterMarker -> setYValue(cy);
+//  replot();
+//}
 
-void QxrdImagePlot::onCenterChanged(QPointF c)
-{
-  m_CenterMarker -> setValue(c);
-  replot();
-}
+//void QxrdImagePlot::onCenterChanged(QPointF c)
+//{
+//  m_CenterMarker -> setValue(c);
+//  replot();
+//}
 
 const QxrdRasterData* QxrdImagePlot::raster() const
 {

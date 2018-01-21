@@ -38,7 +38,7 @@ public:
 signals:
 
 public slots:
-  QxrdCenterFinderPtr  centerFinder();
+//  QxrdCenterFinderPtr  centerFinder();
   QxrdIntegratorPtr    integrator();
   QxrdROICalculatorPtr roiCalculator();
 
@@ -204,7 +204,7 @@ private:
   QxrdFileSaverWPtr     m_FileSaver;
   QxrdDetectorSettingsWPtr      m_Detector;
 
-  QxrdCenterFinderPtr   m_CenterFinder;
+//  QxrdCenterFinderPtr   m_CenterFinder;
   QxrdIntegratorPtr     m_Integrator;
   QxrdROICalculatorPtr  m_ROICalculator;
 

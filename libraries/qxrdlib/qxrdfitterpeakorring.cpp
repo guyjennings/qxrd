@@ -38,8 +38,8 @@ QxrdFitterPeakOrRing::QxrdFitterPeakOrRing() :
 double QxrdFitterPeakOrRing::fittedR() const
 {
   if (m_CenterFinder) {
-    double dx = m_FittedX - m_CenterFinder->get_CenterX();
-    double dy = m_FittedY - m_CenterFinder->get_CenterY();
+    double dx = m_FittedX - m_CenterFinder->get_Center().x();
+    double dy = m_FittedY - m_CenterFinder->get_Center().y();
 
     return sqrt(dx*dx + dy*dy);
   } else {
@@ -50,8 +50,8 @@ double QxrdFitterPeakOrRing::fittedR() const
 double QxrdFitterPeakOrRing::fittedAz() const
 {
   if (m_CenterFinder) {
-    double dx = m_FittedX - m_CenterFinder->get_CenterX();
-    double dy = m_FittedY - m_CenterFinder->get_CenterY();
+    double dx = m_FittedX - m_CenterFinder->get_Center().x();
+    double dy = m_FittedY - m_CenterFinder->get_Center().y();
 
     return atan2(dy,dx);
   } else {

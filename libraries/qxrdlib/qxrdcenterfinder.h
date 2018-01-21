@@ -30,11 +30,14 @@ public:
 //  virtual void removeChildPtr(QcepObjectPtr child);
 
 public:
-  Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
-  QCEP_DOUBLE_PROPERTY(CenterX)
+  Q_PROPERTY(QPointF center READ get_Center WRITE set_Center)
+  QCEP_DOUBLE_POINT_PROPERTY(Center)
 
-  Q_PROPERTY(double centerY READ get_CenterY WRITE set_CenterY)
-  QCEP_DOUBLE_PROPERTY(CenterY)
+//  Q_PROPERTY(double centerX READ get_CenterX WRITE set_CenterX)
+//  QCEP_DOUBLE_PROPERTY(CenterX)
+
+//  Q_PROPERTY(double centerY READ get_CenterY WRITE set_CenterY)
+//  QCEP_DOUBLE_PROPERTY(CenterY)
 
   Q_PROPERTY(double centerStep READ get_CenterStep WRITE set_CenterStep)
   QCEP_DOUBLE_PROPERTY(CenterStep)

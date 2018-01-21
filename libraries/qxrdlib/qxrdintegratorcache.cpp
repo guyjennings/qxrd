@@ -141,8 +141,8 @@ QxrdIntegratorCache::QxrdIntegratorCache
   QxrdCenterFinderPtr cfp(m_CenterFinder);
 
   if (cfp) {
-    m_CenterX            = cfp->get_CenterX();
-    m_CenterY            = cfp->get_CenterY();
+    m_CenterX            = cfp->get_Center().x();
+    m_CenterY            = cfp->get_Center().y();
     m_DetectorXPixelSize = cfp->get_DetectorXPixelSize();
     m_DetectorYPixelSize = cfp->get_DetectorYPixelSize();
     m_DetectorDistance   = cfp->get_DetectorDistance();

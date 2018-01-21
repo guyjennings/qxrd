@@ -28,13 +28,14 @@ QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
     m_DatasetBrowserView -> setDatasetModel(model);
 
     QxrdDataProcessorPtr proc(exp->dataProcessor());
+    QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderPtr());
 
     QxrdCenteringWindowSettingsPtr settings(m_CenteringWindowSettings);
 
     if (settings) {
       m_FileBrowserWidget    -> initialize(settings->fileBrowserSettings(), exp, proc);
       m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings(), proc);
-      m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings());
+      m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings(), cf);
       m_IntegratedPlotWidget -> initialize(settings->integratedPlotWidgetSettings());
     }
   }

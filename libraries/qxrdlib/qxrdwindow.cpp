@@ -136,13 +136,14 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     m_DatasetBrowserView -> setDatasetModel(model);
 
     QxrdDataProcessorPtr proc(exp->dataProcessor());
+    QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderPtr());
 
     QxrdWindowSettingsPtr settings(m_WindowSettings);
 
     if (settings) {
       m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
       m_ImagePlot         -> initialize(settings->imagePlotWidgetSettings(), proc);
-      m_CenterFinderPlot  -> initialize(settings->centeringPlotWidgetSettings());
+      m_CenterFinderPlot  -> initialize(settings->centeringPlotWidgetSettings(), cf);
       m_IntegratorPlot    -> initialize(settings->integratedPlotWidgetSettings());
       m_DistortionCorrectionPlot -> initialize(settings->distortionPlotWidgetSettings());
     }

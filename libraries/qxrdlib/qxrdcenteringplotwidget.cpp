@@ -6,7 +6,8 @@
 #include "qxrdcenteringplotwidgetsettings.h"
 
 QxrdCenteringPlotWidget::QxrdCenteringPlotWidget(QWidget *parent) :
-  QxrdPlotWidget(parent)
+  QxrdPlotWidget(parent),
+  m_CenterFinder()
 {
 }
 
@@ -14,11 +15,18 @@ QxrdCenteringPlotWidget::~QxrdCenteringPlotWidget()
 {
 }
 
-void QxrdCenteringPlotWidget::initialize(QxrdCenteringPlotWidgetSettingsWPtr settings)
+void QxrdCenteringPlotWidget::initialize(QxrdCenteringPlotWidgetSettingsWPtr settings,
+                                         QxrdCenterFinderWPtr cf)
 {
   QxrdPlotWidget::initialize(settings);
+  m_CenterFinder = cf;
 
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this, settings)));
+  QxrdCenterFinderPtr c(m_CenterFinder);
+
+  if (c) {
+    addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this, settings, c)));
+  }
+
   addPlotCommandSpacer();
 
   addPlotCommand(QxrdPlotCommandPtr(new QxrdContextSeparatorCommand("Separator", this, settings)));

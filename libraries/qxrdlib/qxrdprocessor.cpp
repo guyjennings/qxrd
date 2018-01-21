@@ -12,6 +12,7 @@
 #include "qxrdfilesaver.h"
 #include "qxrdmaskstack.h"
 #include "qxrdzingerfinder.h"
+#include "qxrdcenterfinder.h"
 
 #include <QFileInfo>
 #include <QThread>
@@ -38,13 +39,17 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_BadPixels(NULL),
   m_GainMap(NULL),
   m_MaskStack(),
-  m_ZingerFinder()
+  m_ZingerFinder(),
+  m_CenterFinder()
 {
   m_MaskStack = QxrdMaskStackPtr(
         new QxrdMaskStack("maskStack"));
 
   m_ZingerFinder = QxrdZingerFinderPtr(
         new QxrdZingerFinder("zingerFinder"));
+
+  m_CenterFinder = QxrdCenterFinderPtr(
+        new QxrdCenterFinder("centerFinder"));
 }
 
 QxrdProcessor::~QxrdProcessor()
@@ -57,7 +62,7 @@ QxrdExperimentWPtr QxrdProcessor::experiment() const
   QxrdExperimentWPtr expt(qSharedPointerDynamicCast<QxrdExperiment>(parentPtr()));
 
   if (expt == NULL) {
-    printMessage("QxrdDataProcessorBase::experiment == NULL");
+    printMessage("QxrdProcessor::experiment == NULL");
   }
 
   return expt;
@@ -76,6 +81,15 @@ QxrdFileSaverWPtr QxrdProcessor::fileSaver() const
   return res;
 }
 
+QxrdCenterFinderWPtr QxrdProcessor::centerFinder() const
+{
+  if (m_CenterFinder == NULL) {
+    printMessage("Problem QxrdProcessor::centerFinder == NULL");
+  }
+
+  return m_CenterFinder;
+}
+
 void QxrdProcessor::readSettings(QSettings *settings)
 {
   QcepObject::readSettings(settings);
@@ -89,6 +103,12 @@ void QxrdProcessor::readSettings(QSettings *settings)
   if (m_ZingerFinder) {
     settings->beginGroup("zingerFinder");
     m_ZingerFinder -> readSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_CenterFinder) {
+    settings->beginGroup("centerFinder");
+    m_CenterFinder->readSettings(settings);
     settings->endGroup();
   }
 
@@ -131,6 +151,12 @@ void QxrdProcessor::writeSettings(QSettings *settings)
     settings->endGroup();
   }
 
+  if (m_CenterFinder) {
+    settings->beginGroup("centerFinder");
+    m_CenterFinder->writeSettings(settings);
+    settings->endGroup();
+  }
+
   settings->beginWriteArray("processorSteps");
 
   for (int i=0; i<m_ProcessorSteps.count(); i++) {
@@ -152,7 +178,7 @@ void QxrdProcessor::loadData(QString name)
 
   if (qcepDebug(DEBUG_FILES)) {
     printMessage(
-          tr("QxrdDataProcessorBase::loadData(%1)").arg(name));
+          tr("QxrdProcessor::loadData(%1)").arg(name));
   }
 
   QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("data", 0,0, QcepAllocator::NullIfNotAvailable);
@@ -266,7 +292,7 @@ void QxrdProcessor::loadDark(QString name)
 
   if (qcepDebug(DEBUG_FILES)) {
     printMessage(
-          tr("QxrdDataProcessorBase::loadDark(%1)").arg(name));
+          tr("QxrdProcessor::loadDark(%1)").arg(name));
   }
 
   QcepDoubleImageDataPtr res =
@@ -388,7 +414,7 @@ void QxrdProcessor::loadMask(QString name)
   THREAD_CHECK;
 
   if (qcepDebug(DEBUG_FILES)) {
-    printMessage(tr("QxrdDataProcessorBase::loadMask(%1)").arg(name));
+    printMessage(tr("QxrdProcessor::loadMask(%1)").arg(name));
   }
 
   QcepMaskDataPtr res =
@@ -472,7 +498,7 @@ void QxrdProcessor::newMask(QcepMaskDataWPtr mask)
 void QxrdProcessor::loadBadPixels(QString name)
 {
   if (qcepDebug(DEBUG_FILES)) {
-    printMessage(tr("QxrdDataProcessorBase::loadBadPixels(%1)").arg(name));
+    printMessage(tr("QxrdProcessor::loadBadPixels(%1)").arg(name));
   }
 
   QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("bad", 0,0, QcepAllocator::NullIfNotAvailable);
@@ -529,7 +555,7 @@ void QxrdProcessor::newBadPixelsImage(QcepDoubleImageDataWPtr image)
 void QxrdProcessor::loadGainMap(QString name)
 {
   if (qcepDebug(DEBUG_FILES)) {
-    printMessage(tr("QxrdDataProcessorBase::loadGainMap(%1)").arg(name));
+    printMessage(tr("QxrdProcessor::loadGainMap(%1)").arg(name));
   }
 
   QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("gain", 0,0, QcepAllocator::NullIfNotAvailable);
@@ -1027,7 +1053,7 @@ void QxrdProcessor::maskPolygon(QVector<QPointF> poly)
   QcepMaskDataPtr m(mask());
 
   if (m) {
-    //  printf("QxrdDataProcessorBase::maskPolygon(%d points ...)\n", poly.size());
+    //  printf("QxrdProcessor::maskPolygon(%d points ...)\n", poly.size());
     bool newVal = get_MaskSetPixels();
     m -> maskPolygon(poly, newVal);
 //    int nRows = m -> get_Height();

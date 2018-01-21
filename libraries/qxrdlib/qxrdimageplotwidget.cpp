@@ -67,9 +67,14 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings,
       connect(m.data(), &QxrdMaskStack::maskChanged,
               this,     &QxrdImagePlotWidget::maskChanged);
     }
+
+    QxrdCenterFinderPtr c(p->centerFinder());
+
+    if (c) {
+      addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this, settings, c)));
+    }
   }
 
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdPowderPointsCommand("Powder Points", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdSliceCommand("Slice", this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdMeasureCommand("Measure", this, settings)));

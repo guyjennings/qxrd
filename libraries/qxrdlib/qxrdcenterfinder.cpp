@@ -35,8 +35,7 @@
 
 QxrdCenterFinder::QxrdCenterFinder(QString name)
   : QxrdDetectorGeometry(name),
-    m_CenterX(this, "centerX", 0, "X Center"),
-    m_CenterY(this, "centerY", 0, "Y Center"),
+    m_Center(this, "center", QPointF(0,0), "Center"),
     m_CenterStep(this, "centerStep", 1, "Center Step"),
     m_DetectorXPixelSize(this, "detectorXPixelSize", 200, "Detector X Pixels (um)"),
     m_DetectorYPixelSize(this, "detectorYPixelSize", 200, "Detector Y Pixels (um)"),
@@ -85,8 +84,7 @@ QxrdCenterFinder::QxrdCenterFinder(QString name)
 //  m_CenterX.setDebug(true);
 //  m_CenterY.setDebug(true);
 
-  connect(prop_CenterX(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
-  connect(prop_CenterY(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
+  connect(prop_Center(), &QcepDoublePointProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
   connect(prop_DetectorXPixelSize(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
   connect(prop_DetectorYPixelSize(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
   connect(prop_DetectorDistance(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
@@ -192,8 +190,9 @@ void QxrdCenterFinder::readSettings(QSettings *settings)
 
 void QxrdCenterFinder::onCenterChanged(QPointF pt)
 {
-  set_CenterX(pt.x());
-  set_CenterY(pt.y());
+  THREAD_CHECK;
+
+  set_Center(pt);
 }
 
 double QxrdCenterFinder::getTTH(QPointF pt) const
@@ -207,11 +206,11 @@ double QxrdCenterFinder::getTTH(double x, double y) const
     double beta = get_DetectorTilt()*M_PI/180.0;
     double rot  = get_TiltPlaneRotation()*M_PI/180.0;
 
-    return getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+    return getTwoTheta(get_Center().x(), get_Center().y(), get_DetectorDistance(),
                        x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
                        cos(beta), sin(beta), cos(rot), sin(rot));
   } else {
-    return getTwoTheta(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+    return getTwoTheta(get_Center().x(), get_Center().y(), get_DetectorDistance(),
                        x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
                        1.0, 0.0, 1.0, 0.0);
   }
@@ -225,14 +224,14 @@ QPointF QxrdCenterFinder::getXY(double tth, double chi)
 
   if (get_ImplementTilt()) {
 
-    QxrdDetectorGeometry::getXY(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+    QxrdDetectorGeometry::getXY(get_Center().x(), get_Center().y(), get_DetectorDistance(),
           get_Energy(),
           convertTwoThetaToQ(tth, convertEnergyToWavelength(get_Energy())), chi,
           get_DetectorXPixelSize(), get_DetectorYPixelSize(),
           rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
           &x, &y);
   } else {
-    QxrdDetectorGeometry::getXY(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+    QxrdDetectorGeometry::getXY(get_Center().x(), get_Center().y(), get_DetectorDistance(),
           get_Energy(),
           convertTwoThetaToQ(tth, convertEnergyToWavelength(get_Energy())), chi,
           get_DetectorXPixelSize(), get_DetectorYPixelSize(),
@@ -255,13 +254,13 @@ double QxrdCenterFinder::getQ(double x, double y) const
   double rot  = get_TiltPlaneRotation()*M_PI/180.0;
 
   if (get_ImplementTilt()) {
-    getQChi(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+    getQChi(get_Center().x(), get_Center().y(), get_DetectorDistance(),
             get_Energy(),
             x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
             rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
             &q, &chi);
   } else {
-    getQChi(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+    getQChi(get_Center().x(), get_Center().y(), get_DetectorDistance(),
             get_Energy(),
             x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
             0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0,
@@ -283,13 +282,13 @@ double QxrdCenterFinder::getChi(double x, double y) const
   double rot  = get_TiltPlaneRotation()*M_PI/180.0;
 
   if (get_ImplementTilt()) {
-    getQChi(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+    getQChi(get_Center().x(), get_Center().y(), get_DetectorDistance(),
             get_Energy(),
             x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
             rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
             &q, &chi);
   } else {
-    getQChi(get_CenterX(), get_CenterY(), get_DetectorDistance(),
+    getQChi(get_Center().x(), get_Center().y(), get_DetectorDistance(),
             get_Energy(),
             x, y, get_DetectorXPixelSize(), get_DetectorYPixelSize(),
             0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0,
@@ -335,7 +334,7 @@ void QxrdCenterFinder::onPointSelected(QPointF pt)
 
 void QxrdCenterFinder::fitPowderCircle(int n)
 {
-  QxrdFitterRingCircle fitter(this, n, get_CenterX(), get_CenterY());
+  QxrdFitterRingCircle fitter(this, n, get_Center().x(), get_Center().y());
 
   int niter = fitter.fit();
 
@@ -344,10 +343,10 @@ void QxrdCenterFinder::fitPowderCircle(int n)
 
   if (fitter.reason() == QxrdFitter::Successful) {
     message.append(tr("Circle Fitting Succeeded after %1 iterations\n").arg(niter));
-    message.append(tr("Old Center = [%1,%2]\n").arg(get_CenterX()).arg(get_CenterY()));
+    message.append(tr("Old Center = [%1,%2]\n").arg(get_Center().x()).arg(get_Center().y()));
     message.append(tr("New Center = [%1,%2], New Radius = %3\n").arg(fitter.fittedX()).arg(fitter.fittedY()).arg(fitter.fittedR()));
-    double dx = fitter.fittedX() - get_CenterX();
-    double dy = fitter.fittedY() - get_CenterY();
+    double dx = fitter.fittedX() - get_Center().x();
+    double dy = fitter.fittedY() - get_Center().y();
     message.append(tr("Moved by [%1,%2] = %3\n").arg(dx).arg(dy).arg(sqrt(dx*dx + dy*dy)));
   } else {
     message.append(tr("Circle Fitting Failed: Reason = %1\n").arg(fitter.reasonString()));
@@ -372,15 +371,14 @@ void QxrdCenterFinder::fitPowderCircle(int n)
   }
 
   if (update) {
-    set_CenterX(fitter.fittedX());
-    set_CenterY(fitter.fittedY());
+    set_Center(QPointF(fitter.fittedX(), fitter.fittedY()));
     set_RingRadius(fitter.fittedR());
   }
 }
 
 void QxrdCenterFinder::fitPowderEllipse(int n)
 {
-  QxrdFitterRingEllipse fitter(this, n, get_CenterX(), get_CenterY());
+  QxrdFitterRingEllipse fitter(this, n, get_Center().x(), get_Center().y());
 
   int niter = fitter.fit();
 
@@ -389,13 +387,13 @@ void QxrdCenterFinder::fitPowderEllipse(int n)
 
   if (fitter.reason() == QxrdFitter::Successful) {
     message.append(tr("Ellipse Fitting Succeeded after %1 iterations\n").arg(niter));
-    message.append(tr("Old Center = [%1,%2]\n").arg(get_CenterX()).arg(get_CenterY()));
+    message.append(tr("Old Center = [%1,%2]\n").arg(get_Center().x()).arg(get_Center().y()));
     message.append(tr("New Center = [%1,%2], New Radii = %3,%4\n")
                    .arg(fitter.fittedX()).arg(fitter.fittedY()).arg(fitter.fittedA()).arg(fitter.fittedB()));
     message.append(tr("Major Axis rotation = %1 deg\n").arg(fitter.fittedRot()*180.0/M_PI));
 
-    double dx = fitter.fittedX() - get_CenterX();
-    double dy = fitter.fittedY() - get_CenterY();
+    double dx = fitter.fittedX() - get_Center().x();
+    double dy = fitter.fittedY() - get_Center().y();
     message.append(tr("Moved by [%1,%2] = %3\n").arg(dx).arg(dy).arg(sqrt(dx*dx + dy*dy)));
   } else {
     message.append(tr("Ellipse Fitting Failed: Reason = %1\n").arg(fitter.reasonString()));
@@ -419,8 +417,7 @@ void QxrdCenterFinder::fitPowderEllipse(int n)
   }
 
   if (update) {
-    set_CenterX(fitter.fittedX());
-    set_CenterY(fitter.fittedY());
+    set_Center(QPointF(fitter.fittedX(), fitter.fittedY()));
     set_RingRadiusA(fitter.fittedA());
     set_RingRadiusB(fitter.fittedB());
     set_RingRotation(fitter.fittedRot());
@@ -434,7 +431,7 @@ void QxrdCenterFinder::fitPowderEllipses()
   QVector<QxrdFitterRingEllipse> fits;
 
   for (int i=0; i<nrings; i++) {
-    fits.append(QxrdFitterRingEllipse(this, i, get_CenterX(), get_CenterY()));
+    fits.append(QxrdFitterRingEllipse(this, i, get_Center().x(), get_Center().y()));
   }
 
   if (qcepDebug(DEBUG_NOPARALLEL)) {
@@ -773,8 +770,8 @@ bool QxrdCenterFinder::traceRingNear(double x0, double y0, double step)
   printMessage(tr("centering.traceRingNear(%1,%2,%3)").arg(x0).arg(y0).arg(step));
 
   double x=x0, y=y0;
-  double xc  = get_CenterX();
-  double yc  = get_CenterY();
+  double xc  = get_Center().x();
+  double yc  = get_Center().y();
   double dx  = x0-xc;
   double dy  = y0-yc;
   double az  = atan2(dy, dx);

@@ -397,7 +397,7 @@ public:
 //  void createMaskIfNeeded();
 
 //  QxrdMaskStackPtr       maskStack();
-  QxrdCenterFinderPtr    centerFinder() const;
+//  QxrdCenterFinderPtr    centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
   QxrdPolarTransformPtr  polarTransform() const;
   QxrdPolarNormalizationPtr  polarNormalization() const;
@@ -500,7 +500,7 @@ protected:
 
   QAtomicInt             m_AcquiredCount;
 
-  QxrdCenterFinderPtr       m_CenterFinder;
+//  QxrdCenterFinderPtr       m_CenterFinder;
   QxrdIntegratorPtr         m_Integrator;
   QxrdPolarTransformPtr     m_PolarTransform;
   QxrdPolarNormalizationPtr m_PolarNormalization;

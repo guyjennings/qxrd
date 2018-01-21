@@ -50,8 +50,8 @@ void QxrdFitterRingPoint::evaluate(double *parm, double *xv, int np, int /*nx*/)
       double by = parm[5];
 
       double dr = m_CenterFinder->get_PeakFitRadius();
-      double xc = m_CenterFinder->get_CenterX();
-      double yc = m_CenterFinder->get_CenterY();
+      double xc = m_CenterFinder->get_Center().x();
+      double yc = m_CenterFinder->get_Center().y();
       double cx0 = m_X0;
       double cy0 = m_Y0;
       double az = atan2(cy0-yc, cx0-xc);
@@ -112,8 +112,8 @@ int QxrdFitterRingPoint::fit()
       if (x<0 || x>width || y<0 || y>height) {
         m_Reason = OutsideData;
       } else {
-        double xc = m_CenterFinder->get_CenterX();
-        double yc = m_CenterFinder->get_CenterY();
+        double xc = m_CenterFinder->get_Center().x();
+        double yc = m_CenterFinder->get_Center().y();
         double dx = x - xc;
         double dy = y - yc;
         double r  = sqrt(dx*dx + dy*dy);

@@ -10,6 +10,7 @@
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdzingerfinder-ptr.h"
+#include "qxrdcenterfinder-ptr.h"
 
 //TODO: merge QxrdDataProcessor and QxrdDetectorProcessor into QxrdProcessor
 //TODO: separate processing steps into sub-objects
@@ -23,8 +24,9 @@ public:
   Q_INVOKABLE QxrdProcessor(QString name);
   virtual ~QxrdProcessor();
 
-  QxrdExperimentWPtr  experiment() const;
-  QxrdFileSaverWPtr   fileSaver() const;
+  QxrdExperimentWPtr   experiment() const;
+  QxrdFileSaverWPtr    fileSaver() const;
+  QxrdCenterFinderWPtr centerFinder() const;
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -183,6 +185,9 @@ protected:
     QxrdZingerFinderPtr    m_ZingerFinder;
 
     QVector<QxrdProcessorStepPtr> m_ProcessorSteps;
+
+private:
+    QxrdCenterFinderPtr    m_CenterFinder;
 };
 
 #endif // QXRDPROCESSOR_H

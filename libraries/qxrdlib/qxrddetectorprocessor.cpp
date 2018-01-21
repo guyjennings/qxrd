@@ -52,7 +52,7 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     m_Experiment(doc),
     m_FileSaver(fsav),
     m_Detector(det),
-    m_CenterFinder(),
+//    m_CenterFinder(),
     m_Integrator(),
     m_ROICalculator(),
     m_ControlWindow(),
@@ -62,13 +62,13 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     printf("QxrdDetectorProcessor::QxrdDetectorProcessor(%p)\n", this);
   }
 
-  m_CenterFinder  = QxrdCenterFinder::newCenterFinder();
+//  m_CenterFinder  = QxrdCenterFinder::newCenterFinder();
   m_Integrator    = QxrdIntegrator::newIntegrator();
   m_ROICalculator = QxrdROICalculator::newROICalculator();
 
-  if (m_CenterFinder) {
+  if (centerFinder()) {
     if (m_Integrator) {
-      m_Integrator->initialize(m_CenterFinder);
+      m_Integrator->initialize(centerFinder());
     }
   }
 
@@ -96,11 +96,11 @@ void QxrdDetectorProcessor::readSettings(QSettings *settings)
 
   QxrdProcessor::readSettings(settings);
 
-  if (m_CenterFinder) {
-    settings->beginGroup("centerFinder");
-    m_CenterFinder->readSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_CenterFinder) {
+//    settings->beginGroup("centerFinder");
+//    m_CenterFinder->readSettings(settings);
+//    settings->endGroup();
+//  }
 
   if (m_Integrator) {
     settings->beginGroup("integrator");
@@ -127,11 +127,11 @@ void QxrdDetectorProcessor::writeSettings(QSettings *settings)
 
   QxrdProcessor::writeSettings(settings);
 
-  if (m_CenterFinder) {
-    settings->beginGroup("centerFinder");
-    m_CenterFinder->writeSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_CenterFinder) {
+//    settings->beginGroup("centerFinder");
+//    m_CenterFinder->writeSettings(settings);
+//    settings->endGroup();
+//  }
 
   if (m_Integrator) {
     settings->beginGroup("integrator");
@@ -170,10 +170,10 @@ void QxrdDetectorProcessor::fromScriptValue(const QScriptValue &obj, QxrdDetecto
   }
 }
 
-QxrdCenterFinderPtr QxrdDetectorProcessor::centerFinder()
-{
-  return m_CenterFinder;
-}
+//QxrdCenterFinderPtr QxrdDetectorProcessor::centerFinder()
+//{
+//  return m_CenterFinder;
+//}
 
 QxrdIntegratorPtr QxrdDetectorProcessor::integrator()
 {

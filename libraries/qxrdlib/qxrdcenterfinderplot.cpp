@@ -130,7 +130,7 @@ void QxrdCenterFinderPlot::updateCenterFinderPlot()
         double plx = cf->get_DetectorXPixelSize();
         double ply = cf->get_DetectorYPixelSize();
 
-        double cx  = cf->get_CenterX(), cy = cf->get_CenterY();
+        double cx  = cf->get_Center().x(), cy = cf->get_Center().y();
         for (double ang=0; ang<2*M_PI; ang+=M_PI/36) {
           double x  = cx, y = cy;
           double dx = cos(ang);
@@ -271,7 +271,7 @@ void QxrdCenterFinderPlot::onNewCenterFinderCurves(QxrdPlotCurveVectorPtr curves
 
   if (m_Image && cf) {
     QString title = QString("Center:%1:").arg(m_Image->get_Name());
-    title += QString("(%1,%2):").arg(cf->get_CenterX()).arg(cf->get_CenterY());
+    title += QString("(%1,%2):").arg(cf->get_Center().x()).arg(cf->get_Center().y());
 
     setTitle(title);
   }

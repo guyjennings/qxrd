@@ -6,6 +6,8 @@
 #include "ui_qxrdplotwidget.h"
 #include "qxrdplotcommand-ptr.h"
 #include "qxrdplotwidgetsettings-ptr.h"
+#include "qcepplot-ptr.h"
+#include "qxrdplotoverlay-ptr.h"
 
 //TODO: implement mouse tracking
 class QXRD_EXPORT QxrdPlotWidget : public QWidget, public Ui::QxrdPlotWidget
@@ -17,6 +19,10 @@ public:
   ~QxrdPlotWidget();
   void initialize(QxrdPlotWidgetSettingsWPtr settings);
 
+  QcepPlot *plot();
+
+  void addPlotOverlay(QxrdPlotOverlayPtr ovl);
+
   void addPlotCommand(QxrdPlotCommandPtr cmd);
   void addPlotCommandSpacer();
 
@@ -24,6 +30,7 @@ public:
 
   void enableZooming();
   void disableZooming();
+
 
 public slots:
   void zoomIn();
@@ -51,6 +58,7 @@ protected:
 protected:
   QxrdPlotWidgetSettingsWPtr  m_Settings;
   QVector<QxrdPlotCommandPtr> m_PlotCommands;
+  QVector<QxrdPlotOverlayPtr> m_PlotOverlays;
 
   QwtLegend                  *m_Legend;
   QwtPlotZoomer              *m_Zoomer;

@@ -44,9 +44,9 @@ public slots:
   void toggleShowROI();
   void changeROIShown(bool shown);
 
-  void onCenterXChanged(double cx);
-  void onCenterYChanged(double cy);
-  void onCenterChanged(QPointF c);
+//  void onCenterXChanged(double cx);
+//  void onCenterYChanged(double cy);
+//  void onCenterChanged(QPointF c);
   void onMarkedPointsChanged();
 
   void clearPowderMarkers();
@@ -126,7 +126,7 @@ private:
 
   QxrdDataProcessorWPtr      m_DataProcessor;
 
-  QwtPlotMarker             *m_CenterMarker;
+//  QwtPlotMarker             *m_CenterMarker;
 
 //  QxrdPowderPointPicker     *m_PowderPointPicker;
   QVector<QwtPlotCurve*>     m_PowderPointCurves;

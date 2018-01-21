@@ -26,8 +26,7 @@ QxrdCenterFinderDialog::QxrdCenterFinderDialog(QxrdCenterFinderPtr cen, QWidget 
   QxrdCenterFinderPtr cf(m_CenterFinder);
 
   if (cf) {
-    cf -> prop_CenterX() -> linkTo(m_CenterX);
-    cf -> prop_CenterY() -> linkTo(m_CenterY);
+    cf -> prop_Center() -> linkTo(m_CenterX, m_CenterY);
     cf -> prop_CenterStep() -> linkTo(m_CenterStep);
     cf -> prop_ImplementTilt() -> linkTo(m_ImplementTilt);
     cf -> prop_DetectorDistance() -> linkTo(m_DetectorDistance);
@@ -95,8 +94,9 @@ void QxrdCenterFinderDialog::onCenterChanged(double cx, double cy)
   QxrdCenterFinderPtr cf(m_CenterFinder);
 
   if (cf) {
-    cf -> set_CenterX(cx);
-    cf -> set_CenterY(cy);
+    QPointF c(cx,cy);
+
+    cf -> set_Center(c);
   }
 //  printf("QxrdCenterFinderDialog::onCenterChanged(%g,%g)\n", cx, cy);
 }
@@ -106,8 +106,11 @@ void QxrdCenterFinderDialog::moveCenter(int dx, int dy)
   QxrdCenterFinderPtr cf(m_CenterFinder);
 
   if (cf) {
-    cf -> set_CenterX(cf -> get_CenterX() + cf -> get_CenterStep()*dx);
-    cf -> set_CenterY(cf -> get_CenterY() + cf -> get_CenterStep()*dy);
+    double s = cf->get_CenterStep();
+
+    QPointF c(cf->get_Center() + QPointF(s*dx, s*dy));
+
+    cf -> set_Center(c);
   }
 }
 
