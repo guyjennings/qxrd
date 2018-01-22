@@ -4,6 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
 
+//TODO: rename QxrdROIVector
 class QXRD_EXPORT QxrdROICoordinatesList : public QcepObject
 {
 public:

@@ -5,6 +5,7 @@
 #include <qwt_raster_data.h>
 #include "qxrdroicoordinates-ptr.h"
 
+//TODO: eliminate
 class QXRD_EXPORT QxrdROIRasterData : public QwtRasterData
 {
 public:

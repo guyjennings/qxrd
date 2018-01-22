@@ -5,6 +5,7 @@
 #include "qcepmacros.h"
 #include "qcepobject.h"
 
+//TODO: eliminate
 class QXRD_EXPORT QxrdROIData : public QcepObject
 {
 Q_OBJECT

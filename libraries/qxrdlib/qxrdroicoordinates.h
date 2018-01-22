@@ -15,6 +15,7 @@
 #include <QScriptEngine>
 #include <QMutex>
 
+//TODO: rename QxrdROI
 class QXRD_EXPORT QxrdROICoordinates : public QcepObject
 {
   Q_OBJECT

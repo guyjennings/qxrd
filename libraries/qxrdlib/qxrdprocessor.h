@@ -192,7 +192,11 @@ protected:
 
 private:
   QxrdCenterFinderPtr            m_CenterFinder;
+
+  //TODO: store a data object, not a model
   QxrdPowderRingsModelPtr        m_PowderRings;
+
+  //TODO: store a data object, not a model
   QxrdROICoordinatesListModelPtr m_ROICoords;
 };
 

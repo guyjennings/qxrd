@@ -12,6 +12,8 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
+//TODO: rename QxrdROIModel
+//TODO: refer to actual data in QxrdROIVector
 class QXRD_EXPORT QxrdROICoordinatesListModel : public QAbstractListModel
 {
   Q_OBJECT
