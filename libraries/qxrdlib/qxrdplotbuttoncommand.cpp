@@ -24,10 +24,7 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
   m_ToolButton =  new QToolButton();
   m_ToolButton -> setObjectName(get_Name());
 
-  QIcon icon;
-  icon.addFile(iconPath, QSize(), QIcon::Normal, QIcon::Off);
-  m_ToolButton->setIcon(icon);
-
+  m_ToolButton->setIcon(commandIcon(m_Index));
   m_ToolButton->setIconSize(QSize(24,24));
   m_ToolButton->setToolTip(toolTip);
 
@@ -114,7 +111,13 @@ void QxrdPlotButtonCommand::contextMenu(const QPoint &pos)
   QMenu menu(NULL, NULL);
 
   for (int i=0; i<m_ToolTips.count(); i++) {
-    menu.addAction(m_ToolTips.value(i), [=]() {changeMode(i);});
+    QAction *act = menu.addAction(m_ToolTips.value(i), [=]() {changeMode(i);});
+    act->setIcon(commandIcon(i));
+
+    if (i == m_Index) {
+      act->setCheckable(true);
+      act->setChecked(true);
+    }
   }
 
   menu.exec(m_ToolButton->mapToGlobal(pos));
@@ -126,7 +129,13 @@ void QxrdPlotButtonCommand::clicked(bool checked)
     QMenu menu(NULL, NULL);
 
     for (int i=0; i<m_ToolTips.count(); i++) {
-      menu.addAction(m_ToolTips.value(i), [=]() {changeMode(i);});
+      QAction *act = menu.addAction(m_ToolTips.value(i), [=]() {changeMode(i);});
+      act->setIcon(commandIcon(i));
+
+      if (i == m_Index) {
+        act->setCheckable(true);
+        act->setChecked(true);
+      }
     }
 
     menu.exec(QCursor::pos());
@@ -147,4 +156,12 @@ void QxrdPlotButtonCommand::changeMode(int i)
 QToolButton* QxrdPlotButtonCommand::toolButton()
 {
   return m_ToolButton;
+}
+
+QIcon QxrdPlotButtonCommand::commandIcon(int i)
+{
+  QIcon icon;
+  icon.addFile(m_IconPaths.value(i), QSize(), QIcon::Normal, QIcon::Off);
+
+  return icon;
 }
