@@ -90,6 +90,24 @@ QxrdCenterFinderWPtr QxrdProcessor::centerFinder() const
   return m_CenterFinder;
 }
 
+QxrdPowderRingsModelWPtr QxrdProcessor::powderRings() const
+{
+  if (m_PowderRings == NULL) {
+    printMessage("Problem QxrdProcessor::powderRings == NULL");
+  }
+
+  return m_PowderRings;
+}
+
+QxrdROICoordinatesListModelWPtr QxrdProcessor::roiModel() const
+{
+  if (m_ROICoords == NULL) {
+    printMessage("Problem QxrdProcessor::roiModel == NULL");
+  }
+
+  return m_ROICoords;
+}
+
 void QxrdProcessor::readSettings(QSettings *settings)
 {
   QcepObject::readSettings(settings);

@@ -11,6 +11,8 @@
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdzingerfinder-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
+#include "qxrdpowderringsmodel-ptr.h"
+#include "qxrdroicoordinateslistmodel-ptr.h"
 
 //TODO: merge QxrdDataProcessor and QxrdDetectorProcessor into QxrdProcessor
 //TODO: separate processing steps into sub-objects
@@ -27,6 +29,8 @@ public:
   QxrdExperimentWPtr   experiment() const;
   QxrdFileSaverWPtr    fileSaver() const;
   QxrdCenterFinderWPtr centerFinder() const;
+  QxrdPowderRingsModelWPtr powderRings() const;
+  QxrdROICoordinatesListModelWPtr roiModel() const;
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -174,20 +178,22 @@ public:
   QCEP_BOOLEAN_PROPERTY(MaskSetPixels)
 
 protected:
-    QcepImageDataBasePtr   m_Data;
-    QcepDoubleImageDataPtr m_Dark;
-    QcepDoubleImageDataPtr m_BadPixels;
-    QcepDoubleImageDataPtr m_GainMap;
-    QcepDoubleImageDataPtr m_LiveData;
-    QcepMaskDataPtr        m_Overflow;
+  QcepImageDataBasePtr   m_Data;
+  QcepDoubleImageDataPtr m_Dark;
+  QcepDoubleImageDataPtr m_BadPixels;
+  QcepDoubleImageDataPtr m_GainMap;
+  QcepDoubleImageDataPtr m_LiveData;
+  QcepMaskDataPtr        m_Overflow;
 
-    QxrdMaskStackPtr       m_MaskStack;
-    QxrdZingerFinderPtr    m_ZingerFinder;
+  QxrdMaskStackPtr       m_MaskStack;
+  QxrdZingerFinderPtr    m_ZingerFinder;
 
-    QVector<QxrdProcessorStepPtr> m_ProcessorSteps;
+  QVector<QxrdProcessorStepPtr> m_ProcessorSteps;
 
 private:
-    QxrdCenterFinderPtr    m_CenterFinder;
+  QxrdCenterFinderPtr            m_CenterFinder;
+  QxrdPowderRingsModelPtr        m_PowderRings;
+  QxrdROICoordinatesListModelPtr m_ROICoords;
 };
 
 #endif // QXRDPROCESSOR_H

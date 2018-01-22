@@ -359,7 +359,10 @@ SOURCES += qxrdlib.cpp \
     qxrdzingerfinder.cpp \
     qxrdmaskcommandbutton.cpp \
     qxrdplotoverlay.cpp \
-    qxrdcentermarker.cpp
+    qxrdcentermarker.cpp \
+    qxrdroioverlay.cpp \
+    qxrdpowderoverlay.cpp \
+    qxrdpowderringsmodel.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -530,7 +533,13 @@ HEADERS += qxrdlib.h\
     qxrdmaskcommandbutton.h \
     qxrdplotoverlay.h \
     qxrdplotoverlay-ptr.h \
-    qxrdcentermarker.h
+    qxrdcentermarker.h \
+    qxrdroioverlay.h \
+    qxrdpowderoverlay.h \
+    qxrdroioverlay-ptr.h \
+    qxrdpowderoverlay-ptr.h \
+    qxrdpowderringsmodel.h \
+    qxrdpowderringsmodel-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

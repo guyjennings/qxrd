@@ -26,6 +26,8 @@
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdmaskstack.h"
 #include "qxrdcentermarker.h"
+#include "qxrdroioverlay.h"
+#include "qxrdpowderoverlay.h"
 
 QxrdImagePlotWidget::QxrdImagePlotWidget(QWidget *parent)
   : QxrdPlotWidget(parent),
@@ -77,6 +79,20 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings,
 
       addPlotOverlay(QxrdPlotOverlayPtr(
                        new QxrdCenterMarker("Center Marker", this, settings, c)));
+    }
+
+    QxrdPowderRingsModelPtr pw(p->powderRings());
+
+    if (pw) {
+      addPlotOverlay(QxrdPlotOverlayPtr(
+                       new QxrdPowderOverlay("Powder Rings", this, settings, pw)));
+    }
+
+    QxrdROICoordinatesListModelPtr rois(p->roiModel());
+
+    if (rois) {
+      addPlotOverlay((QxrdPlotOverlayPtr(
+                        new QxrdROIOverlay("ROIs", this, settings, rois))));
     }
   }
 
