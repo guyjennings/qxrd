@@ -59,6 +59,10 @@ void QxrdJSEngine::initialize()
 //  qmlRegisterType<QcepDoubleImageDataPtr>();
 //  qmlRegisterType<QcepDoubleImageDataWPtr>();
 
+  qmlRegisterType<QxrdDetectorSettings>();
+//  qmlRegisterType<QxrdDetectorSettingsWPtr>();
+//  qmlRegisterType<QxrdDetectorSettingsPtr>();
+
   setGlobalProperty("global", globalObject());
   setGlobalProperty("scripting", newQObject(this));
 
