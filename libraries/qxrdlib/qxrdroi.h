@@ -1,12 +1,12 @@
-#ifndef QXRDROICOORDINATES_H
-#define QXRDROICOORDINATES_H
+#ifndef QXRDROI_H
+#define QXRDROI_H
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepproperty.h"
-#include "qxrdroicoordinates-ptr.h"
+#include "qxrdroi-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qxrdroishape-ptr.h"
@@ -15,14 +15,13 @@
 #include <QScriptEngine>
 #include <QMutex>
 
-//TODO: rename QxrdROI
-class QXRD_EXPORT QxrdROICoordinates : public QcepObject
+class QXRD_EXPORT QxrdROI : public QcepObject
 {
   Q_OBJECT
 
 public:
-  QxrdROICoordinates(int roiOuterType, int roiInnerType);
-  virtual ~QxrdROICoordinates();
+  QxrdROI(int roiOuterType, int roiInnerType);
+  virtual ~QxrdROI();
 
   static int     roiTypeID(int outerType, int innerType);
   static QString roiTypeName(int outerType, int innerType);
@@ -33,10 +32,10 @@ public:
   static int     outputCount();
   static QString outputName(int opt);
 
-  static QxrdROICoordinatesPtr newROICoordinates(int roiTypeID);
+  static QxrdROIPtr newROICoordinates(int roiTypeID);
 
-  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesPtr &coords);
-  static void fromScriptValue(const QScriptValue &obj, QxrdROICoordinatesPtr &coords);
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROIPtr &coords);
+  static void fromScriptValue(const QScriptValue &obj, QxrdROIPtr &coords);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -201,4 +200,4 @@ private:
   QRect           m_OuterBounds;
 };
 
-#endif // QXRDROICOORDINATES_H
+#endif // QXRDROI_H

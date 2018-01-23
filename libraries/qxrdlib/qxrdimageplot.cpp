@@ -17,8 +17,8 @@
 #include <QTime>
 #include <QMenu>
 #include <QContextMenuEvent>
-#include "qxrdroicoordinateslistmodel.h"
-#include "qxrdroicoordinates.h"
+#include "qxrdroimodel.h"
+#include "qxrdroi.h"
 #include "qxrdroieditordialog.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdplotwidgetdialog.h"
@@ -439,13 +439,13 @@ void QxrdImagePlot::enableROIDisplay(bool enable)
   updateROIDisplay();
 }
 
-void QxrdImagePlot::setROIModel(QxrdROICoordinatesListModelWPtr model)
+void QxrdImagePlot::setROIModel(QxrdROIModelWPtr model)
 {
   m_ROIModel = model;
 
   updateROIDisplay();
 
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QxrdROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel) {
     connect(roiModel.data(), &QAbstractItemModel::modelReset,    this, &QxrdImagePlot::updateROIDisplay);
@@ -456,7 +456,7 @@ void QxrdImagePlot::setROIModel(QxrdROICoordinatesListModelWPtr model)
   }
 }
 
-QxrdROICoordinatesListModelWPtr QxrdImagePlot::roiModel()
+QxrdROIModelWPtr QxrdImagePlot::roiModel()
 {
   return m_ROIModel;
 }
@@ -495,13 +495,13 @@ void QxrdImagePlot::updateROIDisplay()
   QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
 
   if (set && set->get_DisplayROI() && m_ROIModel && m_ROISelection) {
-    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+    QxrdROIModelPtr roiModel(m_ROIModel);
 
     if (roiModel) {
       int nROI = roiModel->rowCount(QModelIndex());
 
       for (int i=0; i<nROI; i++) {
-        QxrdROICoordinatesPtr roi = roiModel->roi(i);
+        QxrdROIPtr roi = roiModel->roi(i);
 
         if (roi) {
           QVector<QPointF> pts = roi->markerCoords();
@@ -563,7 +563,7 @@ void QxrdImagePlot::roiDataChanged(const QModelIndex & /*topLeft*/,
 //  printMessage(tr("roiDataChanged t:%1 l:%2 b:%3 r:%4 n:%5")
 //               .arg(t).arg(l).arg(b).arg(r).arg(roles.count()));
 
-  if (r >= QxrdROICoordinatesListModel::OuterTypeCol) {
+  if (r >= QxrdROIModel::OuterTypeCol) {
     updateROIDisplay();
   }
 }
@@ -594,7 +594,7 @@ void QxrdImagePlot::onLegendChecked(const QVariant &itemInfo, bool on, int index
     int i = m_ROICurves.indexOf(pc);
 
     if (i >= 0) {
-      QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+      QxrdROIModelPtr roiModel(m_ROIModel);
 
       if (m_ROISelection && roiModel) {
         if (on) {
@@ -659,7 +659,7 @@ void QxrdImagePlot::updateROISelection(
     const QItemSelection & /*selected*/,
     const QItemSelection & /*deselected*/)
 {
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QxrdROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel && m_ROISelection) {
     int n = roiModel->roiCount();
@@ -677,7 +677,7 @@ void QxrdImagePlot::updateROISelection(
 
 void QxrdImagePlot::moveSelectedROICenter(double x, double y)
 {
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QxrdROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel && m_ROISelection) {
     int n = roiModel->roiCount();
@@ -692,7 +692,7 @@ void QxrdImagePlot::moveSelectedROICenter(double x, double y)
 
 void QxrdImagePlot::editSelectedROI(double x, double y)
 {
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QxrdROIModelPtr roiModel(m_ROIModel);
   QPointF pt(x,y);
 
   if (roiModel) {
@@ -702,7 +702,7 @@ void QxrdImagePlot::editSelectedROI(double x, double y)
     int n = roiModel->roiCount();
 
     for (int i=0; i<n; i++) {
-      QxrdROICoordinatesPtr roi = roiModel->roi(i);
+      QxrdROIPtr roi = roiModel->roi(i);
 
       if (roi) {
         double dist = roi->nearestDistance(pt);
@@ -715,7 +715,7 @@ void QxrdImagePlot::editSelectedROI(double x, double y)
     }
 
     if (nearest >= 0) {
-      QxrdROICoordinatesPtr roi = roiModel->roi(nearest);
+      QxrdROIPtr roi = roiModel->roi(nearest);
 
       QxrdROIEditorDialog editor(roi, this);
 
@@ -730,7 +730,7 @@ void QxrdImagePlot::editSelectedROI(double x, double y)
 
 //void QxrdImagePlot::roiMouseSelected(const QVector<QPointF> &p)
 //{
-//  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+//  QxrdROIModelPtr roiModel(m_ROIModel);
 
 //  if (roiModel && p.count() == 2) {
 //    QPointF del = p.value(1) - p.value(0);
@@ -759,7 +759,7 @@ void QxrdImagePlot::editSelectedROI(double x, double y)
 
 //void QxrdImagePlot::roiMouseAdded(const QVector<QPointF> &p)
 //{
-//  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+//  QxrdROIModelPtr roiModel(m_ROIModel);
 
 //  if (roiModel && p.count() == 2) {
 //    int roiId, inOut, roiType, roiPtIndex;
@@ -772,7 +772,7 @@ void QxrdImagePlot::editSelectedROI(double x, double y)
 
 //void QxrdImagePlot::roiMouseRemoved(const QPointF &pt)
 //{
-//  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+//  QxrdROIModelPtr roiModel(m_ROIModel);
 
 //  if (roiModel) {
 //    int roiId, inOut, roiType, roiPtIndex;
@@ -786,7 +786,7 @@ void QxrdImagePlot::editSelectedROI(double x, double y)
 //void QxrdImagePlot::roiMouseRotated(const QVector<QPointF> &p)
 //{
 //  if (p.count() == 2) {
-//    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+//    QxrdROIModelPtr roiModel(m_ROIModel);
 
 //    if (roiModel && m_ROISelection) {
 //      int n = roiModel->roiCount();
@@ -802,7 +802,7 @@ void QxrdImagePlot::editSelectedROI(double x, double y)
 
 //void QxrdImagePlot::roiMouseResized(const QVector<QPointF> &p)
 //{
-//  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+//  QxrdROIModelPtr roiModel(m_ROIModel);
 
 //  if (roiModel && p.count() == 2) {
 //    int roiId, inOut, roiType, roiPtIndex;

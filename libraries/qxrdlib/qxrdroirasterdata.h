@@ -3,20 +3,20 @@
 
 #include "qxrdlib_global.h"
 #include <qwt_raster_data.h>
-#include "qxrdroicoordinates-ptr.h"
+#include "qxrdroi-ptr.h"
 
 //TODO: eliminate
 class QXRD_EXPORT QxrdROIRasterData : public QwtRasterData
 {
 public:
-  QxrdROIRasterData(QxrdROICoordinatesWPtr roi);
+  QxrdROIRasterData(QxrdROIWPtr roi);
 
 public:
   double value(double x, double y) const;
   QwtInterval range();
 
 private:
-  QxrdROICoordinatesWPtr m_ROI;
+  QxrdROIWPtr m_ROI;
 };
 
 #endif // QXRDROIRASTERDATA_H

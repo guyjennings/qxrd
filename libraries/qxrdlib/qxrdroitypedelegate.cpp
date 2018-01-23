@@ -1,7 +1,7 @@
 #include "qxrdroitypedelegate.h"
-#include "qxrdroicoordinateslistmodel.h"
+#include "qxrdroimodel.h"
 #include <QComboBox>
-#include "qxrdroicoordinates.h"
+#include "qxrdroi.h"
 #include <QMenu>
 #include "qxrdroishape.h"
 
@@ -14,8 +14,8 @@ QxrdROITypeDelegate::QxrdROITypeDelegate(QWidget *parent)
 QWidget *QxrdROITypeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                       const QModelIndex &index) const
 {
-  if (index.column() == QxrdROICoordinatesListModel::OuterTypeCol ||
-      index.column() == QxrdROICoordinatesListModel::InnerTypeCol) {
+  if (index.column() == QxrdROIModel::OuterTypeCol ||
+      index.column() == QxrdROIModel::InnerTypeCol) {
     QComboBox *editor = new QComboBox(parent);
 
     for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
@@ -31,8 +31,8 @@ QWidget *QxrdROITypeDelegate::createEditor(QWidget *parent, const QStyleOptionVi
 
 void QxrdROITypeDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-  if (index.column() == QxrdROICoordinatesListModel::OuterTypeCol ||
-      index.column() == QxrdROICoordinatesListModel::InnerTypeCol) {
+  if (index.column() == QxrdROIModel::OuterTypeCol ||
+      index.column() == QxrdROIModel::InnerTypeCol) {
     QComboBox *cb = qobject_cast<QComboBox*>(editor);
 
     if (cb) {
@@ -55,8 +55,8 @@ void QxrdROITypeDelegate::setEditorData(QWidget *editor, const QModelIndex &inde
 void QxrdROITypeDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                   const QModelIndex &index) const
 {
-  if (index.column() == QxrdROICoordinatesListModel::InnerTypeCol ||
-      index.column() == QxrdROICoordinatesListModel::OuterTypeCol) {
+  if (index.column() == QxrdROIModel::InnerTypeCol ||
+      index.column() == QxrdROIModel::OuterTypeCol) {
     QComboBox *cb = qobject_cast<QComboBox*>(editor);
 
     if (cb) {

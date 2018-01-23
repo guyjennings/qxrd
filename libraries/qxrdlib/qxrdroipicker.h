@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qxrdimageplotmeasurer.h"
 #include <QDateTime>
-#include "qxrdroicoordinates-ptr.h"
+#include "qxrdroi-ptr.h"
 
 class QXRD_EXPORT QxrdROIPicker : public QxrdImagePlotMeasurer
 {
@@ -83,7 +83,7 @@ public:
 private:
   int                   m_CreatedType;
   int                   m_CreatedTypeID;
-  QxrdROICoordinatesPtr m_NewROI;
+  QxrdROIPtr m_NewROI;
 };
 
 class QxrdROISelector : public QxrdROIPicker

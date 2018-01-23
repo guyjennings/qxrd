@@ -16,7 +16,7 @@
 #include "qxrdacquisition-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdwindow-ptr.h"
-#include "qxrdroicoordinates-ptr.h"
+#include "qxrdroi-ptr.h"
 
 //TODO: replace by QxrdJSEngine
 class QXRD_EXPORT QxrdScriptEngine : public QcepScriptEngine
@@ -66,7 +66,7 @@ public slots:
   void closeScriptOutput();
 
   QScriptValue roiFunc2(int n, int i);
-  QxrdROICoordinatesPtr roiFunc3(int n, int i);
+  QxrdROIPtr roiFunc3(int n, int i);
 
 private slots:
   void              evaluateScript(int src, QString cmd);

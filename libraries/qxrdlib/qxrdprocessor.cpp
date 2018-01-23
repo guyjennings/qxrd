@@ -99,13 +99,13 @@ QxrdPowderRingsModelWPtr QxrdProcessor::powderRings() const
   return m_PowderRings;
 }
 
-QxrdROICoordinatesListModelWPtr QxrdProcessor::roiModel() const
+QxrdROIModelWPtr QxrdProcessor::roiModel() const
 {
-  if (m_ROICoords == NULL) {
+  if (m_ROIModel == NULL) {
     printMessage("Problem QxrdProcessor::roiModel == NULL");
   }
 
-  return m_ROICoords;
+  return m_ROIModel;
 }
 
 void QxrdProcessor::readSettings(QSettings *settings)

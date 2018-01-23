@@ -1,13 +1,13 @@
 #include "qxrdroieditordialog.h"
 #include "ui_qxrdroieditordialog.h"
-#include "qxrdroicoordinates.h"
+#include "qxrdroi.h"
 #include "qxrdroipolygon.h"
 #include "qxrdroiellipse.h"
 #include "qxrdroirectangle.h"
 #include "qxrdroicenteredshape.h"
 #include "qxrdpolygonpointsmodel.h"
 
-QxrdROIEditorDialog::QxrdROIEditorDialog(QxrdROICoordinatesWPtr roi, QWidget *parent) :
+QxrdROIEditorDialog::QxrdROIEditorDialog(QxrdROIWPtr roi, QWidget *parent) :
   QDialog(parent),
   m_ROI(roi)
 {
@@ -36,7 +36,7 @@ QxrdROIEditorDialog::QxrdROIEditorDialog(QxrdROICoordinatesWPtr roi, QWidget *pa
   m_OuterHeight->setMinimum(-100);
   m_OuterHeight->setMaximum(10000);
 
-  QxrdROICoordinatesPtr roip(m_ROI);
+  QxrdROIPtr roip(m_ROI);
 
   if (roip) {
     m_CenterX->setValue(roip->get_Center().x());
@@ -94,7 +94,7 @@ QxrdROIEditorDialog::~QxrdROIEditorDialog()
 {
 }
 
-QxrdROICoordinatesWPtr QxrdROIEditorDialog::roi()
+QxrdROIWPtr QxrdROIEditorDialog::roi()
 {
   return m_ROI;
 }
@@ -169,7 +169,7 @@ void QxrdROIEditorDialog::outerDelPoint()
 
 void QxrdROIEditorDialog::accept()
 {
-  QxrdROICoordinatesPtr roip(m_ROI);
+  QxrdROIPtr roip(m_ROI);
 
   if (roip) {
     int newInnerType = m_InnerType->currentIndex();

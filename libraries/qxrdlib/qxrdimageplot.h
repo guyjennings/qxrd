@@ -20,7 +20,7 @@
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdimageplotsettings.h"
 #include "qxrdpowderpointpicker.h"
-#include "qxrdroicoordinateslistmodel-ptr.h"
+#include "qxrdroimodel-ptr.h"
 #include <QItemSelectionModel>
 #include "qxrdplotwidgetdialog-ptr.h"
 
@@ -72,10 +72,10 @@ public:
 
   void enableROIDisplay(bool enable);
 
-  void setROIModel(QxrdROICoordinatesListModelWPtr model);
+  void setROIModel(QxrdROIModelWPtr model);
   void setROISelection(QItemSelectionModel *select);
 
-  QxrdROICoordinatesListModelWPtr roiModel();
+  QxrdROIModelWPtr roiModel();
   QItemSelectionModel            *roiSelection();
 
 //  void roiMouseSelected(const QVector<QPointF> &p);
@@ -135,9 +135,9 @@ private:
 
   bool                       m_ContextMenuEnabled;
 
-  QxrdROICoordinatesListModelWPtr m_ROIModel;
-  QItemSelectionModel           *m_ROISelection;
-  QVector<QwtPlotCurve*>         m_ROICurves;
+  QxrdROIModelWPtr           m_ROIModel;
+  QItemSelectionModel       *m_ROISelection;
+  QVector<QwtPlotCurve*>     m_ROICurves;
 };
 
 #endif

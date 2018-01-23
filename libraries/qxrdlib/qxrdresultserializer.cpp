@@ -71,12 +71,9 @@ int QxrdResultSerializer<T>::count() const
 #include "qcepimagedata-ptr.h"
 #include "qcepintegrateddata.h"
 #include "qcepintegrateddata-ptr.h"
-#include "qxrdroidata.h"
-#include "qxrdroidata-ptr.h"
 #include "qxrdhistogramdata.h"
 #include "qxrdhistogramdata-ptr.h"
 
 template class QxrdResultSerializer<QcepDoubleImageDataPtr>;
 template class QxrdResultSerializer<QcepIntegratedDataPtr>;
-template class QxrdResultSerializer<QxrdROIDataPtr>;
 template class QxrdResultSerializer<QxrdHistogramDataPtr>;

@@ -94,7 +94,6 @@ SOURCES += qxrdlib.cpp \
     qxrdexperimentpreferencesdialog.cpp \
     qxrdsharedpointer.cpp \
     qxrdresultserializer.cpp \
-    qxrdroidata.cpp \
     qxrdhistogramdata.cpp \
     qxrdexposuretimespinner.cpp \
     qxrddetectorplugininterface.cpp \
@@ -185,8 +184,6 @@ SOURCES += qxrdlib.cpp \
     qxrdacquisitionexecution.cpp \
     qxrdtodolist.cpp \
     qxrdtodolistitem.cpp \
-    qxrdroicoordinates.cpp \
-    qxrdroicoordinateslistmodel.cpp \
     qxrddetectorimageplot.cpp \
     qxrdroitypedelegate.cpp \
     qxrdacquisitionscalerdialog.cpp \
@@ -204,7 +201,6 @@ SOURCES += qxrdlib.cpp \
     qxrdapplicationsettings.cpp \
     qxrdintegratorplotsettings.cpp \
     qxrdacquisitionextrainputsplotsettings.cpp \
-    qxrdroicoordinateslist.cpp \
     qxrddetectorsettings.cpp \
     qxrddetectordriver.cpp \
     qxrddetectordriverthread.cpp \
@@ -362,7 +358,10 @@ SOURCES += qxrdlib.cpp \
     qxrdcentermarker.cpp \
     qxrdroioverlay.cpp \
     qxrdpowderoverlay.cpp \
-    qxrdpowderringsmodel.cpp
+    qxrdpowderringsmodel.cpp \
+    qxrdroimodel.cpp \
+    qxrdroivector.cpp \
+    qxrdroi.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -539,7 +538,13 @@ HEADERS += qxrdlib.h\
     qxrdroioverlay-ptr.h \
     qxrdpowderoverlay-ptr.h \
     qxrdpowderringsmodel.h \
-    qxrdpowderringsmodel-ptr.h
+    qxrdpowderringsmodel-ptr.h \
+    qxrdroimodel.h \
+    qxrdroimodel-ptr.h \
+    qxrdroivector.h \
+    qxrdroivector-ptr.h \
+    qxrdroi.h \
+    qxrdroi-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -598,8 +603,6 @@ HEADERS += TODO.h \
     qxrdexperimentpreferencesdialog.h \
     qxrdsharedpointer.h \
     qxrdresultserializer.h \
-    qxrdroidata.h \
-    qxrdroidata-ptr.h \
     qxrdhistogramdata.h \
     qxrdhistogramdata-ptr.h \
     qxrdexposuretimespinner.h \
@@ -724,10 +727,6 @@ HEADERS += TODO.h \
     qxrdtodolist.h \
     qxrdtodolistitem.h \
     qxrdtodolistitem-ptr.h \
-    qxrdroicoordinates.h \
-    qxrdroicoordinates-ptr.h \
-    qxrdroicoordinateslistmodel.h \
-    qxrdroicoordinateslistmodel-ptr.h \
     qxrdimageplotsettings-ptr.h \
     qxrddetectorimageplot.h \
     qxrdroitypedelegate.h \
@@ -768,8 +767,6 @@ HEADERS += TODO.h \
     qxrdslicedialogsettings-ptr.h \
     qxrdsliceplotsettings-ptr.h \
     qxrdwindowsettings-ptr.h \
-    qxrdroicoordinateslist.h \
-    qxrdroicoordinateslist-ptr.h \
     qxrddetectorsettings.h \
     qxrddetectorsettings-ptr.h \
     qxrddetectordriver.h \

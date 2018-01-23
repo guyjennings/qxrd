@@ -1,6 +1,6 @@
 #include "qxrdroirasterdata.h"
 
-QxrdROIRasterData::QxrdROIRasterData(QxrdROICoordinatesWPtr roi)
+QxrdROIRasterData::QxrdROIRasterData(QxrdROIWPtr roi)
   : QwtRasterData(),
     m_ROI(roi)
 {

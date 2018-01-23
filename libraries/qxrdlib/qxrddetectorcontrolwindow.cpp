@@ -2,12 +2,12 @@
 #include "ui_qxrddetectorcontrolwindow.h"
 #include "qxrdacquisition.h"
 #include "qxrddetectorprocessor.h"
-#include "qxrdroicoordinateslistmodel.h"
+#include "qxrdroimodel.h"
 #include "qxrdroicalculator-ptr.h"
 #include "qxrdroicalculator.h"
 #include <QMessageBox>
 #include <QFileDialog>
-#include "qxrdroicoordinates.h"
+#include "qxrdroi.h"
 #include "qxrdapplication.h"
 #include "qxrdapplicationsettings.h"
 #include "qcepmutexlocker.h"
@@ -96,8 +96,8 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
     if (calc) {
       m_ROIModel = calc->roiModel();
 
-//      m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::OuterTypeCol, new QxrdROITypeDelegate());
-//      m_ROIWidget->setItemDelegateForColumn(QxrdROICoordinatesListModel::InnerTypeCol, new QxrdROITypeDelegate());
+//      m_ROIWidget->setItemDelegateForColumn(QxrdROIModel::OuterTypeCol, new QxrdROITypeDelegate());
+//      m_ROIWidget->setItemDelegateForColumn(QxrdROIModel::InnerTypeCol, new QxrdROITypeDelegate());
       m_ROIWidget->setModel(m_ROIModel.data());
 
       connect(m_NewROI,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doAppendROI);
@@ -344,7 +344,7 @@ void QxrdDetectorControlWindow::displayMessage(QString msg)
 QVector<int> QxrdDetectorControlWindow::selectedROIs()
 {
   QVector<int> res;
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QxrdROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel) {
     int roiCount = roiModel->rowCount(QModelIndex());
@@ -364,15 +364,15 @@ QVector<int> QxrdDetectorControlWindow::selectedROIs()
 void QxrdDetectorControlWindow::doAppendROI()
 {
   QVector<int> rois = selectedROIs();
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QxrdROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel) {
     QMenu menu;
 
     for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
       for (int j=1; j<QxrdROIShape::roiTypeCount(); j++) {
-        int t = QxrdROICoordinates::roiTypeID(i,j);
-        QAction *a = new QAction(QxrdROICoordinates::roiTypeName(i,j), &menu);
+        int t = QxrdROI::roiTypeID(i,j);
+        QAction *a = new QAction(QxrdROI::roiTypeName(i,j), &menu);
         a->setData(t);
 
         menu.addAction(a);
@@ -384,8 +384,8 @@ void QxrdDetectorControlWindow::doAppendROI()
     if (choice) {
       int roiTypeID = choice->data().toInt();
 
-      QxrdROICoordinatesPtr roi =
-          QxrdROICoordinates::newROICoordinates(roiTypeID);
+      QxrdROIPtr roi =
+          QxrdROI::newROICoordinates(roiTypeID);
 
       roiModel->append(roi);
     }
@@ -419,7 +419,7 @@ void QxrdDetectorControlWindow::doDeleteROI()
   }
 
   if (res == QMessageBox::Ok && m_ROIModel) {
-    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+    QxrdROIModelPtr roiModel(m_ROIModel);
 
     if (roiModel) {
       for (int i=rois.count()-1; i>=0; i--) {
@@ -436,7 +436,7 @@ void QxrdDetectorControlWindow::doMoveROIDown()
   if (rois.count() != 1) {
     QMessageBox::information(this, "Only Move One", "Must have a single ROI selected before moving it", QMessageBox::Ok);
   } else {
-    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+    QxrdROIModelPtr roiModel(m_ROIModel);
 
     if (roiModel) {
       roiModel->moveROIDown(rois.first());
@@ -451,7 +451,7 @@ void QxrdDetectorControlWindow::doMoveROIUp()
   if (rois.count() != 1) {
     QMessageBox::information(this, "Only Move One", "Must have a single ROI selected before moving it", QMessageBox::Ok);
   } else {
-    QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+    QxrdROIModelPtr roiModel(m_ROIModel);
 
     if (roiModel) {
       roiModel->moveROIUp(rois.first());
@@ -641,7 +641,7 @@ void QxrdDetectorControlWindow::doEditROI()
 {
   QxrdDetectorSettingsPtr  dt(m_Detector);
   QxrdDetectorProcessorPtr dp(m_Processor);
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QxrdROIModelPtr          roiModel(m_ROIModel);
 
   if (dt && dp) {
     QVector<int> rois = selectedROIs();
@@ -649,7 +649,7 @@ void QxrdDetectorControlWindow::doEditROI()
     if (rois.count() != 1) {
       QMessageBox::information(this, "Edit ROI", "Select one ROI to edit", QMessageBox::Ok);
     } else if (roiModel) {
-      QxrdROICoordinatesPtr roi = roiModel->roi(rois.first());
+      QxrdROIPtr roi = roiModel->roi(rois.first());
 
       QxrdROIEditorDialog editor(roi, this);
 
@@ -667,7 +667,7 @@ void QxrdDetectorControlWindow::doEditROI()
 void QxrdDetectorControlWindow::doRecalculate()
 {
   QxrdDetectorProcessorPtr dp(m_Processor);
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QxrdROIModelPtr          roiModel(m_ROIModel);
 
   if (dp && roiModel) {
     roiModel->recalculate(dp->data(), dp->mask());
@@ -677,7 +677,7 @@ void QxrdDetectorControlWindow::doRecalculate()
 void QxrdDetectorControlWindow::doVisualizeBackground()
 {
   QxrdDetectorProcessorPtr dp(m_Processor);
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QxrdROIModelPtr          roiModel(m_ROIModel);
 
   if (dp) {
     QVector<int> rois = selectedROIs();
@@ -695,7 +695,7 @@ void QxrdDetectorControlWindow::doVisualizeBackground()
 void QxrdDetectorControlWindow::doVisualizePeak()
 {
   QxrdDetectorProcessorPtr dp(m_Processor);
-  QxrdROICoordinatesListModelPtr roiModel(m_ROIModel);
+  QxrdROIModelPtr          roiModel(m_ROIModel);
 
   if (dp) {
     QVector<int> rois = selectedROIs();

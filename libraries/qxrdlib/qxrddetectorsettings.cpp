@@ -267,9 +267,9 @@ int QxrdDetectorSettings::roiCount()
   return res;
 }
 
-QxrdROICoordinatesPtr QxrdDetectorSettings::roi(int i)
+QxrdROIPtr QxrdDetectorSettings::roi(int i)
 {
-  QxrdROICoordinatesPtr res;
+  QxrdROIPtr res;
 
   if (m_Processor) {
     QxrdROICalculatorPtr calc = m_Processor->roiCalculator();

@@ -88,7 +88,7 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings,
                        new QxrdPowderOverlay("Powder Rings", this, settings, pw)));
     }
 
-    QxrdROICoordinatesListModelPtr rois(p->roiModel());
+    QxrdROIModelPtr rois(p->roiModel());
 
     if (rois) {
       addPlotOverlay((QxrdPlotOverlayPtr(

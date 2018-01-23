@@ -6,7 +6,7 @@
 #include "ui_qxrddetectorcontrolwindow.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrddetectorprocessor-ptr.h"
-#include "qxrdroicoordinateslistmodel-ptr.h"
+#include "qxrdroimodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
@@ -94,25 +94,25 @@ private:
   QVector<int>  selectedROIs();
 
 private:
-  QxrdExperimentWPtr              m_Experiment;
-  QxrdAcquisitionWPtr             m_Acquisition;
-  QxrdDetectorSettingsWPtr                m_Detector;
-  QxrdDetectorProcessorWPtr       m_Processor;
-  QxrdROICoordinatesListModelWPtr  m_ROIModel;
+  QxrdExperimentWPtr         m_Experiment;
+  QxrdAcquisitionWPtr        m_Acquisition;
+  QxrdDetectorSettingsWPtr   m_Detector;
+  QxrdDetectorProcessorWPtr  m_Processor;
+  QxrdROIModelWPtr           m_ROIModel;
 
-  QMutex                          m_UpdateMutex;
-  QTimer                          m_UpdateTimer;
+  QMutex                     m_UpdateMutex;
+  QTimer                     m_UpdateTimer;
 
-  QcepImageDataBasePtr            m_DisplayedImage;
-  QcepMaskDataPtr                 m_DisplayedMask;
-  QcepMaskDataPtr                 m_DisplayedOverflow;
+  QcepImageDataBasePtr       m_DisplayedImage;
+  QcepMaskDataPtr            m_DisplayedMask;
+  QcepMaskDataPtr            m_DisplayedOverflow;
 
-  QcepImageDataBasePtr            m_NewImage;
-  QcepMaskDataPtr                 m_NewMask;
-  QcepMaskDataPtr                 m_NewOverflow;
+  QcepImageDataBasePtr       m_NewImage;
+  QcepMaskDataPtr            m_NewMask;
+  QcepMaskDataPtr            m_NewOverflow;
 
-  QAtomicInt                      m_NewDataAvailable;
-  QAtomicInt                      m_NewMaskAvailable;
+  QAtomicInt                 m_NewDataAvailable;
+  QAtomicInt                 m_NewMaskAvailable;
 };
 
 #endif // QXRDDETECTORCONTROLWINDOW_H

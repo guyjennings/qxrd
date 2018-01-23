@@ -5,7 +5,7 @@
 #include "qcepallocator.h"
 #include "qxrdapplication.h"
 #include "qxrddataprocessor.h"
-#include "qxrdroicoordinates.h"
+#include "qxrdroi.h"
 #include "qxrddetectorsettings.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdserver.h"
@@ -45,7 +45,7 @@ void QxrdJSEngine::initialize()
 
   qRegisterMetaType< QVector<qreal> >("QVector<qreal>");
 
-  qmlRegisterType<QxrdROICoordinates>();
+  qmlRegisterType<QxrdROI>();
   qmlRegisterType<QxrdDetectorSettings>();
 //  qmlRegisterType<QxrdPowderPoint>();
   qmlRegisterType<QxrdCalibrant>();
@@ -868,7 +868,7 @@ QJSValue QxrdJSEngine::roiFunc(int n, int m)
     QxrdDetectorSettingsPtr det = acq->detector(n);
 
     if (det) {
-      QxrdROICoordinatesPtr roic = det->roi(m);
+      QxrdROIPtr roic = det->roi(m);
 
       if (roic) {
         res = newQObject(roic.data());

@@ -1,4 +1,4 @@
-#include "qxrdroicoordinates.h"
+#include "qxrdroi.h"
 #include "qxrdexperiment.h"
 #include <QtMath>
 #include <QMatrix4x4>
@@ -7,8 +7,7 @@
 #include "qcepproperty.h"
 #include "qxrdroicache.h"
 
-QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
-                                       int                   roiInnerType)
+QxrdROI::QxrdROI(int roiOuterType, int roiInnerType)
   : QcepObject("coords"),
     m_RoiOuterType(this, "roiOuterType", roiOuterType, "ROI Outer Type"),
     m_RoiInnerType(this, "roiInnerType", roiInnerType, "ROI Inner Type"),
@@ -37,68 +36,68 @@ QxrdROICoordinates::QxrdROICoordinates(int                   roiOuterType,
     m_OuterBounds(QRect())
 {
   if (m_OuterShape) {
-    connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
+    connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROI::changed);
   }
 
   if (m_InnerShape) {
-    connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
+    connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROI::changed);
   }
 
-  connect(prop_Center(), &QcepDoublePointProperty::valueChanged, this, &QxrdROICoordinates::changed);
-  connect(prop_Rotation(), &QcepDoubleProperty::valueChanged, this, &QxrdROICoordinates::changed);
+  connect(prop_Center(), &QcepDoublePointProperty::valueChanged, this, &QxrdROI::changed);
+  connect(prop_Rotation(), &QcepDoubleProperty::valueChanged, this, &QxrdROI::changed);
 
   changed();
 }
 
-int QxrdROICoordinates::innerType()
+int QxrdROI::innerType()
 {
   return get_RoiInnerType();
 }
 
-QString QxrdROICoordinates::innerTypeName()
+QString QxrdROI::innerTypeName()
 {
   return QxrdROIShape::roiTypeName(get_RoiInnerType());
 }
 
-void QxrdROICoordinates::changeInnerType(int t)
+void QxrdROI::changeInnerType(int t)
 {
   if (get_RoiInnerType() != t) {
     set_RoiInnerType(t);
 
     m_InnerShape = QxrdROIShape::newROIShape(t, 0.25);
-    connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
+    connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROI::changed);
 
     changed();
   }
 }
 
-int QxrdROICoordinates::outerType()
+int QxrdROI::outerType()
 {
   return get_RoiOuterType();
 }
 
-QString QxrdROICoordinates::outerTypeName()
+QString QxrdROI::outerTypeName()
 {
   return QxrdROIShape::roiTypeName(get_RoiOuterType());
 }
 
-void QxrdROICoordinates::changeOuterType(int t)
+void QxrdROI::changeOuterType(int t)
 {
   if (get_RoiOuterType() != t) {
     set_RoiOuterType(t);
 
     m_OuterShape = QxrdROIShape::newROIShape(t, 1.0);
-    connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROICoordinates::changed);
+    connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROI::changed);
 
     changed();
   }
 }
 
-QxrdROICoordinates::~QxrdROICoordinates()
+QxrdROI::~QxrdROI()
 {
 }
 
-void QxrdROICoordinates::writeSettings(QSettings *settings)
+void QxrdROI::writeSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -117,7 +116,7 @@ void QxrdROICoordinates::writeSettings(QSettings *settings)
   }
 }
 
-void QxrdROICoordinates::readSettings(QSettings *settings)
+void QxrdROI::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -141,30 +140,30 @@ void QxrdROICoordinates::readSettings(QSettings *settings)
   changed();
 }
 
-QScriptValue QxrdROICoordinates::toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesPtr &coords)
+QScriptValue QxrdROI::toScriptValue(QScriptEngine *engine, const QxrdROIPtr &coords)
 {
   return engine->newQObject(coords.data());
 }
 
-void QxrdROICoordinates::fromScriptValue(const QScriptValue &obj, QxrdROICoordinatesPtr &coords)
+void QxrdROI::fromScriptValue(const QScriptValue &obj, QxrdROIPtr &coords)
 {
   QObject *qobj = obj.toQObject();
 
   if (qobj) {
-    QxrdROICoordinates *qcoords = qobject_cast<QxrdROICoordinates*>(qobj);
+    QxrdROI *qcoords = qobject_cast<QxrdROI*>(qobj);
 
     if (qcoords) {
-      coords = QxrdROICoordinatesPtr(qcoords);
+      coords = QxrdROIPtr(qcoords);
     }
   }
 }
 
-int QxrdROICoordinates::roiTypeID(int outerType, int innerType)
+int QxrdROI::roiTypeID(int outerType, int innerType)
 {
   return (outerType & 15) + ((innerType & 15)<<4);
 }
 
-QString QxrdROICoordinates::roiTypeName(int outerType, int innerType)
+QString QxrdROI::roiTypeName(int outerType, int innerType)
 {
   if (outerType == QxrdROIShape::NoShape) {
     return QxrdROIShape::roiTypeName(innerType);
@@ -173,38 +172,38 @@ QString QxrdROICoordinates::roiTypeName(int outerType, int innerType)
   }
 }
 
-int QxrdROICoordinates::roiOuterType(int roiTypeID)
+int QxrdROI::roiOuterType(int roiTypeID)
 {
   return roiTypeID & 15;
 }
 
-int QxrdROICoordinates::roiInnerType(int roiTypeID)
+int QxrdROI::roiInnerType(int roiTypeID)
 {
   return (roiTypeID>>4) & 15;
 }
 
-QxrdROICoordinatesPtr QxrdROICoordinates::newROICoordinates(int roiTypeID)
+QxrdROIPtr QxrdROI::newROICoordinates(int roiTypeID)
 {
   int outerType = roiOuterType(roiTypeID);
   int innerType = roiInnerType(roiTypeID);
 
-  QxrdROICoordinatesPtr res = QxrdROICoordinatesPtr(
-        new QxrdROICoordinates(outerType, innerType));
+  QxrdROIPtr res = QxrdROIPtr(
+        new QxrdROI(outerType, innerType));
 
   return res;
 }
 
-QxrdROIShapePtr QxrdROICoordinates::outer() const
+QxrdROIShapePtr QxrdROI::outer() const
 {
   return m_OuterShape;
 }
 
-QxrdROIShapePtr QxrdROICoordinates::inner() const
+QxrdROIShapePtr QxrdROI::inner() const
 {
   return m_InnerShape;
 }
 
-void QxrdROICoordinates::selectNamedROIOuterType(QString nm)
+void QxrdROI::selectNamedROIOuterType(QString nm)
 {
   for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
     if (QxrdROIShape::roiTypeName(i) == nm) {
@@ -215,7 +214,7 @@ void QxrdROICoordinates::selectNamedROIOuterType(QString nm)
   }
 }
 
-void QxrdROICoordinates::selectNamedROIInnerType(QString nm)
+void QxrdROI::selectNamedROIInnerType(QString nm)
 {
   for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
     if (QxrdROIShape::roiTypeName(i) == nm) {
@@ -226,19 +225,19 @@ void QxrdROICoordinates::selectNamedROIInnerType(QString nm)
   }
 }
 
-void QxrdROICoordinates::changed()
+void QxrdROI::changed()
 {
   set_Changed(true);
 
   emit roiChanged();
 }
 
-void QxrdROICoordinates::setCenter(QPointF c)
+void QxrdROI::setCenter(QPointF c)
 {
   set_Center(c);
 }
 
-void QxrdROICoordinates::setCenterX(double cx)
+void QxrdROI::setCenterX(double cx)
 {
   QPointF c = get_Center();
 
@@ -247,7 +246,7 @@ void QxrdROICoordinates::setCenterX(double cx)
   set_Center(c);
 }
 
-void QxrdROICoordinates::setCenterY(double cy)
+void QxrdROI::setCenterY(double cy)
 {
   QPointF c = get_Center();
 
@@ -256,12 +255,12 @@ void QxrdROICoordinates::setCenterY(double cy)
   set_Center(c);
 }
 
-void QxrdROICoordinates::setRotation(double r)
+void QxrdROI::setRotation(double r)
 {
   set_Rotation(r);
 }
 
-QPointF QxrdROICoordinates::transform(const QPointF &pt) const
+QPointF QxrdROI::transform(const QPointF &pt) const
 {
   QPointF res;
   QPointF c = get_Center();
@@ -274,7 +273,7 @@ QPointF QxrdROICoordinates::transform(const QPointF &pt) const
   return res;
 }
 
-QPointF QxrdROICoordinates::invTransform(const QPointF &pt) const
+QPointF QxrdROI::invTransform(const QPointF &pt) const
 {
   QPointF res;
 
@@ -288,7 +287,7 @@ QPointF QxrdROICoordinates::invTransform(const QPointF &pt) const
   return res;
 }
 
-QVector<QPointF> QxrdROICoordinates::markerCoords()
+QVector<QPointF> QxrdROI::markerCoords()
 {
   QVector<QPointF> res;
   QPointF c = get_Center();
@@ -318,7 +317,7 @@ QVector<QPointF> QxrdROICoordinates::markerCoords()
   return res;
 }
 
-double QxrdROICoordinates::nearestDistance(QPointF pt)
+double QxrdROI::nearestDistance(QPointF pt)
 {
   QVector<QPointF> markers = markerCoords();
   double nearest = qInf();
@@ -336,14 +335,14 @@ double QxrdROICoordinates::nearestDistance(QPointF pt)
   return nearest;
 }
 
-QPolygonF QxrdROICoordinates::dragOutline()
+QPolygonF QxrdROI::dragOutline()
 {
   double  r = get_Rotation();
 
   return rotatedDragOutline(r);
 }
 
-QPolygonF QxrdROICoordinates::rotatedDragOutline(double r)
+QPolygonF QxrdROI::rotatedDragOutline(double r)
 {
   QPolygonF res;
   QPointF c = get_Center();
@@ -368,7 +367,7 @@ QPolygonF QxrdROICoordinates::rotatedDragOutline(double r)
   return res;
 }
 
-QPolygonF QxrdROICoordinates::innerOutline()
+QPolygonF QxrdROI::innerOutline()
 {
   QPolygonF res;
   QPointF c = get_Center();
@@ -388,7 +387,7 @@ QPolygonF QxrdROICoordinates::innerOutline()
   return res;
 }
 
-QPolygonF QxrdROICoordinates::outerOutline()
+QPolygonF QxrdROI::outerOutline()
 {
   QPolygonF res;
   QPointF c = get_Center();
@@ -408,7 +407,7 @@ QPolygonF QxrdROICoordinates::outerOutline()
   return res;
 }
 
-QPolygonF QxrdROICoordinates::scaledInnerOutline(double kx, double ky)
+QPolygonF QxrdROI::scaledInnerOutline(double kx, double ky)
 {
   QPolygonF res;
   QPointF c = get_Center();
@@ -430,7 +429,7 @@ QPolygonF QxrdROICoordinates::scaledInnerOutline(double kx, double ky)
   return res;
 }
 
-QPolygonF QxrdROICoordinates::scaledOuterOutline(double kx, double ky)
+QPolygonF QxrdROI::scaledOuterOutline(double kx, double ky)
 {
   QPolygonF res;
   QPointF c = get_Center();
@@ -452,12 +451,12 @@ QPolygonF QxrdROICoordinates::scaledOuterOutline(double kx, double ky)
   return res;
 }
 
-QPolygonF QxrdROICoordinates::scaledDragOutline(double kx, double ky)
+QPolygonF QxrdROI::scaledDragOutline(double kx, double ky)
 {
   return scaledOuterOutline(kx, ky);
 }
 
-void QxrdROICoordinates::scaleROI(int innerOuter, double kx, double ky)
+void QxrdROI::scaleROI(int innerOuter, double kx, double ky)
 {
   if (m_OuterShape && innerOuter == OuterShape) {
     m_OuterShape->scale(kx, ky);
@@ -468,13 +467,13 @@ void QxrdROICoordinates::scaleROI(int innerOuter, double kx, double ky)
   }
 }
 
-void QxrdROICoordinates::scaleROI(double kx, double ky)
+void QxrdROI::scaleROI(double kx, double ky)
 {
   scaleROI(OuterShape, kx, ky);
   scaleROI(InnerShape, kx, ky);
 }
 
-void QxrdROICoordinates::deleteROIPoint(int innerOuter, int n)
+void QxrdROI::deleteROIPoint(int innerOuter, int n)
 {
   if (innerOuter == InnerShape && m_InnerShape) {
     m_InnerShape->deleteROIPoint(n);
@@ -483,7 +482,7 @@ void QxrdROICoordinates::deleteROIPoint(int innerOuter, int n)
   }
 }
 
-void QxrdROICoordinates::changeROIPoint(int innerOuter, int n, QPointF pt)
+void QxrdROI::changeROIPoint(int innerOuter, int n, QPointF pt)
 {
   if (innerOuter == InnerShape && m_InnerShape) {
     m_InnerShape->changeROIPoint(n, invTransform(pt));
@@ -492,7 +491,7 @@ void QxrdROICoordinates::changeROIPoint(int innerOuter, int n, QPointF pt)
   }
 }
 
-void QxrdROICoordinates::insertROIPoint(int innerOuter, int n, QPointF pt)
+void QxrdROI::insertROIPoint(int innerOuter, int n, QPointF pt)
 {
   if (innerOuter == InnerShape && m_InnerShape) {
     m_InnerShape->insertROIPoint(n, invTransform(pt));
@@ -501,12 +500,12 @@ void QxrdROICoordinates::insertROIPoint(int innerOuter, int n, QPointF pt)
   }
 }
 
-void QxrdROICoordinates::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
+void QxrdROI::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
   recalculatePrivate(img, mask, VisualizeNone);
 }
 
-void QxrdROICoordinates::visualizeBackground(QcepImageDataBasePtr img, QcepMaskDataPtr /*mask*/)
+void QxrdROI::visualizeBackground(QcepImageDataBasePtr img, QcepMaskDataPtr /*mask*/)
 {
   int tp = m_Bounds.top();
   int bt = m_Bounds.bottom();
@@ -524,7 +523,7 @@ void QxrdROICoordinates::visualizeBackground(QcepImageDataBasePtr img, QcepMaskD
   }
 }
 
-void QxrdROICoordinates::visualizePeak(QcepImageDataBasePtr img, QcepMaskDataPtr /*mask*/)
+void QxrdROI::visualizePeak(QcepImageDataBasePtr img, QcepMaskDataPtr /*mask*/)
 {
   int tp = m_Bounds.top();
   int bt = m_Bounds.bottom();
@@ -542,7 +541,7 @@ void QxrdROICoordinates::visualizePeak(QcepImageDataBasePtr img, QcepMaskDataPtr
   }
 }
 
-bool QxrdROICoordinates::pointInOuter(QPointF pt)
+bool QxrdROI::pointInOuter(QPointF pt)
 {
   QxrdROIShapePtr sh = outer();
 
@@ -555,7 +554,7 @@ bool QxrdROICoordinates::pointInOuter(QPointF pt)
   }
 }
 
-bool QxrdROICoordinates::pointInInner(QPointF pt)
+bool QxrdROI::pointInInner(QPointF pt)
 {
   QxrdROIShapePtr sh = inner();
 
@@ -573,7 +572,7 @@ static int inRange(int minVal, int val, int maxVal)
   return qMin(qMax(minVal,val),maxVal);
 }
 
-void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int /*vis*/)
+void QxrdROI::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDataPtr mask, int /*vis*/)
 {
 #ifndef QT_NO_DEBUG
   printf("Recalculate ROI, inner: %s, outer: %s\n",
@@ -897,7 +896,7 @@ void QxrdROICoordinates::recalculatePrivate(QcepImageDataBasePtr img, QcepMaskDa
 #endif
 }
 
-QVector<double> QxrdROICoordinates::values() const
+QVector<double> QxrdROI::values() const
 {
   QVector<double> res;
 
@@ -916,12 +915,12 @@ QVector<double> QxrdROICoordinates::values() const
   return res;
 }
 
-int QxrdROICoordinates::outputCount()
+int QxrdROI::outputCount()
 {
   return OutputCount;
 }
 
-QString QxrdROICoordinates::outputName(int opt)
+QString QxrdROI::outputName(int opt)
 {
   QString res;
 

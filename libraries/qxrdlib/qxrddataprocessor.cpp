@@ -100,7 +100,7 @@ QxrdDataProcessor::QxrdDataProcessor(QString name) :
   m_GenerateTestImage(NULL),
   m_CorrectedImages(prop_CorrectionQueueLength(), sharedFromThis()),
   m_IntegratedData(prop_IntegrationQueueLength(), sharedFromThis()),
-  m_ROIData(NULL, sharedFromThis()),
+//  m_ROIData(NULL, sharedFromThis()),
   m_HistogramData(NULL, sharedFromThis())
 {
 //  m_SaverQueueLength.setDebug(1);
@@ -120,7 +120,7 @@ QxrdDataProcessor::QxrdDataProcessor(QString name) :
 
   connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onCorrectedImageAvailable);
   connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onIntegratedDataAvailable);
-  connect(&m_ROIData,         &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onROIDataAvailable);
+//  connect(&m_ROIData,         &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onROIDataAvailable);
   connect(&m_HistogramData,   &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onHistogramDataAvailable);
 }
 
@@ -1480,8 +1480,8 @@ void QxrdDataProcessor::onCorrectedImageAvailable()
                                                cf -> get_Center().x(),
                                                cf -> get_Center().y()));
 
-    m_ROIData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::calculateROI,
-                                        img, mask));
+//    m_ROIData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::calculateROI,
+//                                        img, mask));
 
     m_HistogramData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::calculateHistogram,
                                               img, mask));
@@ -1527,27 +1527,6 @@ void QxrdDataProcessor::onIntegratedDataAvailable()
       m_Integrator -> appendIntegration(get_AccumulateIntegratedName(), integ);
     }
   }
-}
-
-QxrdROIDataPtr QxrdDataProcessor::calculateROI
-    (QcepDoubleImageDataPtr /*image*/, QcepMaskDataPtr /*mask*/)
-{
-  QThread::currentThread()->setObjectName("calculateROI");
-
-  if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::calculateROI"));
-  }
-
-  return QxrdROIDataPtr();
-}
-
-void QxrdDataProcessor::onROIDataAvailable()
-{
-  if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::onROIDataAvailable"));
-  }
-
-  QxrdROIDataPtr roiData = m_ROIData.dequeue();
 }
 
 QxrdHistogramDataPtr QxrdDataProcessor::calculateHistogram

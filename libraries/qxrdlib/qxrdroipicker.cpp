@@ -2,8 +2,8 @@
 #include "qwt_picker_machine.h"
 #include "qxrdimageplot.h"
 #include "qxrddataprocessor.h"
-#include "qxrdroicoordinateslistmodel.h"
-#include "qxrdroicoordinates.h"
+#include "qxrdroimodel.h"
+#include "qxrdroi.h"
 #include "qxrdroishape.h"
 #include <QMessageBox>
 #include "qxrddebug.h"
@@ -96,8 +96,8 @@ void QxrdROIPicker::append(const QPoint &pt)
   QxrdImagePlot *imgPlot = imagePlot();
 
   if (imgPlot) {
-    QxrdROICoordinatesListModelPtr roiModel  = imgPlot->roiModel();
-    QItemSelectionModel           *roiSelect = imgPlot->roiSelection();
+    QxrdROIModelPtr      roiModel  = imgPlot->roiModel();
+    QItemSelectionModel *roiSelect = imgPlot->roiSelection();
 
     if (roiModel && roiSelect) {
       int nRois = roiModel->rowCount(QModelIndex());
@@ -113,7 +113,7 @@ void QxrdROIPicker::append(const QPoint &pt)
         for (int i=0; i<nRois; i++) {
           if ((!m_UseSelectedROIsOnly) || roiSelect->rowIntersectsSelection(i, QModelIndex())) {
             nSel += 1;
-            QxrdROICoordinatesPtr roi = roiModel->roi(i);
+            QxrdROIPtr roi = roiModel->roi(i);
 
             if (roi) {
               if ((!m_UsePolygonsOnly) || roi->get_RoiInnerType() == QxrdROIShape::PolygonShape) {
@@ -132,7 +132,7 @@ void QxrdROIPicker::append(const QPoint &pt)
                     if (dist < minDistance) {
                       minDistance = dist;
                       minDistROI  = i;
-                      minDistROIShape = QxrdROICoordinates::InnerShape;
+                      minDistROIShape = QxrdROI::InnerShape;
                       minDistROIPoint = j;
                     }
                   }
@@ -155,7 +155,7 @@ void QxrdROIPicker::append(const QPoint &pt)
                     if (dist < minDistance) {
                       minDistance = dist;
                       minDistROI  = i;
-                      minDistROIShape = QxrdROICoordinates::OuterShape;
+                      minDistROIShape = QxrdROI::OuterShape;
                       minDistROIPoint = j;
                     }
                   }
@@ -169,7 +169,7 @@ void QxrdROIPicker::append(const QPoint &pt)
           for (int i=0; i<nRois; i++) {
             if ((!m_UseSelectedROIsOnly) || roiSelect->rowIntersectsSelection(i, QModelIndex())) {
               nSel += 1;
-              QxrdROICoordinatesPtr roi = roiModel->roi(i);
+              QxrdROIPtr roi = roiModel->roi(i);
 
               if (roi) {
                 if ((!m_UsePolygonsOnly) || roi->get_RoiInnerType() == QxrdROIShape::PolygonShape) {
@@ -192,7 +192,7 @@ void QxrdROIPicker::append(const QPoint &pt)
                         if (dist < minDistance) {
                           minDistance = dist;
                           minDistROI  = i;
-                          minDistROIShape = QxrdROICoordinates::InnerShape;
+                          minDistROIShape = QxrdROI::InnerShape;
                           minDistROIEdge = j-1;
                         }
                       }
@@ -220,7 +220,7 @@ void QxrdROIPicker::append(const QPoint &pt)
                         if (dist < minDistance) {
                           minDistance = dist;
                           minDistROI  = i;
-                          minDistROIShape = QxrdROICoordinates::OuterShape;
+                          minDistROIShape = QxrdROI::OuterShape;
                           minDistROIEdge = j-1;
                         }
                       }
@@ -311,25 +311,25 @@ QxrdROICreator::QxrdROICreator(QxrdImagePlot *plot) :
 void QxrdROICreator::setCreatedType(int newType)
 {
   m_CreatedType = newType;
-  m_CreatedTypeID = QxrdROICoordinates::roiTypeID(QxrdROICoordinates::NoBounds,
-                                                  QxrdROICoordinates::NoBounds);
+  m_CreatedTypeID = QxrdROI::roiTypeID(QxrdROI::NoBounds,
+                                                  QxrdROI::NoBounds);
 
   switch (newType) {
   case QxrdDetectorImagePlot::NewRectROI:
-    m_CreatedTypeID = QxrdROICoordinates::roiTypeID(QxrdROICoordinates::NoBounds,
-                                                    QxrdROICoordinates::RectangleBounds);
+    m_CreatedTypeID = QxrdROI::roiTypeID(QxrdROI::NoBounds,
+                                                    QxrdROI::RectangleBounds);
     break;
   case QxrdDetectorImagePlot::NewEllipseROI:
-    m_CreatedTypeID = QxrdROICoordinates::roiTypeID(QxrdROICoordinates::NoBounds,
-                                                    QxrdROICoordinates::EllipseBounds);
+    m_CreatedTypeID = QxrdROI::roiTypeID(QxrdROI::NoBounds,
+                                                    QxrdROI::EllipseBounds);
     break;
   case QxrdDetectorImagePlot::NewRectDonutROI:
-    m_CreatedTypeID = QxrdROICoordinates::roiTypeID(QxrdROICoordinates::RectangleBounds,
-                                                    QxrdROICoordinates::RectangleBounds);
+    m_CreatedTypeID = QxrdROI::roiTypeID(QxrdROI::RectangleBounds,
+                                                    QxrdROI::RectangleBounds);
     break;
   case QxrdDetectorImagePlot::NewEllipseDonutROI:
-    m_CreatedTypeID = QxrdROICoordinates::roiTypeID(QxrdROICoordinates::EllipseBounds,
-                                                    QxrdROICoordinates::EllipseBounds);
+    m_CreatedTypeID = QxrdROI::roiTypeID(QxrdROI::EllipseBounds,
+                                                    QxrdROI::EllipseBounds);
     break;
   }
 }
@@ -338,7 +338,7 @@ void QxrdROICreator::begin()
 {
   QxrdROIPicker::begin();
 
-  m_NewROI = QxrdROICoordinates::newROICoordinates(m_CreatedTypeID);
+  m_NewROI = QxrdROI::newROICoordinates(m_CreatedTypeID);
 }
 
 void QxrdROICreator::move(const QPoint &pt)
@@ -390,7 +390,7 @@ bool QxrdROICreator::end(bool ok)
 
   if (imgPlot) {
     if (m_SelectedPoints.count() == 2) {
-      QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
+      QxrdROIModelPtr roiMod = imgPlot->roiModel();
 
       QPointF p1 = invTransform(m_SelectedPoints.value(0));
       QPointF p2 = invTransform(m_SelectedPoints.value(1));
@@ -431,14 +431,14 @@ void QxrdROISelector::move(const QPoint &pt)
   QxrdImagePlot* imgPlot = imagePlot();
 
   if (imgPlot) {
-    QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
-    QItemSelectionModel           *selMod = imgPlot->roiSelection();
+    QxrdROIModelPtr      roiMod = imgPlot->roiModel();
+    QItemSelectionModel *selMod = imgPlot->roiSelection();
 
     if (roiMod &&
         selMod &&
         m_SelectedROI >= 0 &&
         m_SelectedPoints.count() == 2) {
-      QxrdROICoordinatesPtr roi = roiMod->roi(m_SelectedROI);
+      QxrdROIPtr roi = roiMod->roi(m_SelectedROI);
 
       if (roi) {
         QPointF del = invTransform(m_SelectedPoints.value(1))
@@ -468,8 +468,8 @@ bool QxrdROISelector::end(bool ok)
     QxrdImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
-      QxrdROICoordinatesListModelPtr roi = imgPlot->roiModel();
-      QItemSelectionModel           *sel = imgPlot->roiSelection();
+      QxrdROIModelPtr      roi = imgPlot->roiModel();
+      QItemSelectionModel *sel = imgPlot->roiSelection();
 
       if (roi && sel && m_SelectedPoints.count() == 2) {
         QPointF del = invTransform(m_SelectedPoints.value(1))
@@ -518,18 +518,18 @@ void QxrdROIAddNode::move(const QPoint &pt)
   QxrdImagePlot* imgPlot = imagePlot();
 
   if (imgPlot) {
-    QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
-    QItemSelectionModel           *selMod = imgPlot->roiSelection();
+    QxrdROIModelPtr      roiMod = imgPlot->roiModel();
+    QItemSelectionModel *selMod = imgPlot->roiSelection();
 
     if (roiMod &&
         selMod &&
         m_SelectedROI >= 0 &&
         m_SelectedPoints.count() == 2) {
-      QxrdROICoordinatesPtr roi = roiMod->roi(m_SelectedROI);
+      QxrdROIPtr roi = roiMod->roi(m_SelectedROI);
 
       if (roi) {
         QPolygonF fb;
-        if (m_SelectedShape == QxrdROICoordinates::InnerShape) {
+        if (m_SelectedShape == QxrdROI::InnerShape) {
           fb = roi->innerOutline();
         } else {
           fb = roi->outerOutline();
@@ -563,8 +563,8 @@ bool QxrdROIAddNode::end(bool ok)
     QxrdImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
-      QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
-      QItemSelectionModel           *selMod = imgPlot->roiSelection();
+      QxrdROIModelPtr      roiMod = imgPlot->roiModel();
+      QItemSelectionModel *selMod = imgPlot->roiSelection();
 
       if (roiMod &&
           selMod &&
@@ -611,8 +611,8 @@ bool QxrdROIRemoveNode::end(bool ok)
     QxrdImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
-      QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
-      QItemSelectionModel           *selMod = imgPlot->roiSelection();
+      QxrdROIModelPtr      roiMod = imgPlot->roiModel();
+      QItemSelectionModel *selMod = imgPlot->roiSelection();
 
       if (roiMod &&
           selMod &&
@@ -651,14 +651,14 @@ void QxrdROIRotator::move(const QPoint &pt)
   QxrdImagePlot* imgPlot = imagePlot();
 
   if (imgPlot) {
-    QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
-    QItemSelectionModel           *selMod = imgPlot->roiSelection();
+    QxrdROIModelPtr      roiMod = imgPlot->roiModel();
+    QItemSelectionModel *selMod = imgPlot->roiSelection();
 
     if (roiMod &&
         selMod &&
         m_SelectedROI >= 0 &&
         m_SelectedPoints.count() == 2) {
-      QxrdROICoordinatesPtr roi = roiMod->roi(m_SelectedROI);
+      QxrdROIPtr roi = roiMod->roi(m_SelectedROI);
 
       if (roi) {
         QPointF ptf1 = invTransform(m_SelectedPoints.value(0));
@@ -701,14 +701,14 @@ bool QxrdROIRotator::end(bool ok)
     QxrdImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
-      QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
-      QItemSelectionModel           *selMod = imgPlot->roiSelection();
+      QxrdROIModelPtr      roiMod = imgPlot->roiModel();
+      QItemSelectionModel *selMod = imgPlot->roiSelection();
 
       if (roiMod &&
           selMod &&
           m_SelectedROI >= 0 &&
           m_SelectedPoints.count() == 2) {
-        QxrdROICoordinatesPtr roi = roiMod->roi(m_SelectedROI);
+        QxrdROIPtr roi = roiMod->roi(m_SelectedROI);
 
         if (roi) {
           QPointF ptf1 = invTransform(m_SelectedPoints.value(0));
@@ -764,14 +764,14 @@ void QxrdROIResizer::move(const QPoint &pt)
   QxrdImagePlot* imgPlot = imagePlot();
 
   if (imgPlot) {
-    QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
-    QItemSelectionModel           *selMod = imgPlot->roiSelection();
+    QxrdROIModelPtr      roiMod = imgPlot->roiModel();
+    QItemSelectionModel *selMod = imgPlot->roiSelection();
 
     if (roiMod &&
         selMod &&
         m_SelectedROI >= 0 &&
         m_SelectedPoints.count() == 2) {
-      QxrdROICoordinatesPtr roi = roiMod->roi(m_SelectedROI);
+      QxrdROIPtr roi = roiMod->roi(m_SelectedROI);
 
       if (roi) {
         QPointF ptf1 = invTransform(m_SelectedPoints.value(0));
@@ -795,7 +795,7 @@ void QxrdROIResizer::move(const QPoint &pt)
         }
 
         QPolygonF fb;
-        if (m_SelectedShape == QxrdROICoordinates::InnerShape) {
+        if (m_SelectedShape == QxrdROI::InnerShape) {
           fb = roi->scaledInnerOutline(kx, ky);
         } else {
           fb = roi->scaledOuterOutline(kx, ky);
@@ -824,8 +824,8 @@ bool QxrdROIResizer::end(bool ok)
     QxrdImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
-      QxrdROICoordinatesListModelPtr roiMod = imgPlot->roiModel();
-      QItemSelectionModel           *selMod = imgPlot->roiSelection();
+      QxrdROIModelPtr      roiMod = imgPlot->roiModel();
+      QItemSelectionModel *selMod = imgPlot->roiSelection();
 
       if (roiMod &&
           selMod &&

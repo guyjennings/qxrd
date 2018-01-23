@@ -2,8 +2,8 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 #include "qxrdroipicker.h"
-#include "qxrdroicoordinates.h"
-#include "qxrdroicoordinateslistmodel.h"
+#include "qxrdroi.h"
+#include "qxrdroimodel.h"
 #include <QItemSelectionModel>
 
 //TODO: reimplement using QxrdPlotButtonCommand
@@ -133,15 +133,15 @@ void QxrdDetectorImagePlot::enableROIResize()
 
 void QxrdDetectorImagePlot::classifyROIPoint(double x, double y)
 {
-  QxrdROICoordinatesListModelPtr roiMod = roiModel();
-  QItemSelectionModel           *roiSel = roiSelection();
+  QxrdROIModelPtr      roiMod = roiModel();
+  QItemSelectionModel *roiSel = roiSelection();
   QPointF pt(x,y);
 
   if (roiMod && roiSel) {
     int nRois = roiMod->rowCount(QModelIndex());
 
     for (int i=0; i<nRois; i++) {
-      QxrdROICoordinatesPtr roi = roiMod->roi(i);
+      QxrdROIPtr roi = roiMod->roi(i);
 
       bool isSelected = roiSel -> rowIntersectsSelection(i, QModelIndex());
       bool inInner    = roi -> pointInInner(pt);

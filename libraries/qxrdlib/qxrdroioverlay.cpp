@@ -1,11 +1,11 @@
 #include "qxrdroioverlay.h"
 
-QxrdROIOverlay::QxrdROIOverlay(QString                         name,
-                               QxrdPlotWidget                 *plot,
-                               QxrdPlotWidgetSettingsWPtr      set,
-                               QxrdROICoordinatesListModelWPtr roic) :
+QxrdROIOverlay::QxrdROIOverlay(QString                    name,
+                               QxrdPlotWidget            *plot,
+                               QxrdPlotWidgetSettingsWPtr set,
+                               QxrdROIModelWPtr           roic) :
   QxrdPlotOverlay(name, plot, set),
-  m_ROICoordsModel(roic),
+  m_ROIModel(roic),
   m_ROICurves()
 {
 }

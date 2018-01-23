@@ -9,8 +9,8 @@
 #include "qxrdexperiment-ptr.h"
 #include <QScriptEngine>
 #include "qxrdroicalculator-ptr.h"
-#include "qxrdroicoordinateslistmodel-ptr.h"
-#include "qxrdroicoordinates-ptr.h"
+#include "qxrdroimodel-ptr.h"
+#include "qxrdroi-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
@@ -33,14 +33,14 @@ signals:
 
 public slots:
   int roiCount();
-  QxrdROICoordinatesListModelWPtr roiModel();
-  QxrdROICoordinatesWPtr roi(int i);
+  QxrdROIModelWPtr roiModel();
+  QxrdROIWPtr roi(int i);
 
   QVector<double>           values(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
 
 private:
-  QMutex                         m_Mutex;
-  QxrdROICoordinatesListModelPtr m_ROICoordinatesModel;
+  QMutex           m_Mutex;
+  QxrdROIModelPtr  m_ROIModel;
 
 public:
 };

@@ -12,7 +12,7 @@
 #include "qxrdzingerfinder-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdpowderringsmodel-ptr.h"
-#include "qxrdroicoordinateslistmodel-ptr.h"
+#include "qxrdroimodel-ptr.h"
 
 //TODO: merge QxrdDataProcessor and QxrdDetectorProcessor into QxrdProcessor
 //TODO: separate processing steps into sub-objects
@@ -30,7 +30,7 @@ public:
   QxrdFileSaverWPtr    fileSaver() const;
   QxrdCenterFinderWPtr centerFinder() const;
   QxrdPowderRingsModelWPtr powderRings() const;
-  QxrdROICoordinatesListModelWPtr roiModel() const;
+  QxrdROIModelWPtr roiModel() const;
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -197,7 +197,7 @@ private:
   QxrdPowderRingsModelPtr        m_PowderRings;
 
   //TODO: store a data object, not a model
-  QxrdROICoordinatesListModelPtr m_ROICoords;
+  QxrdROIModelPtr m_ROIModel;
 };
 
 #endif // QXRDPROCESSOR_H

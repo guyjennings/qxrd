@@ -2,15 +2,15 @@
 #include "qxrddebug.h"
 #include <stdio.h>
 #include "qcepmutexlocker.h"
-#include "qxrdroicoordinateslistmodel.h"
+#include "qxrdroimodel.h"
 #include <QtConcurrentMap>
-#include "qxrdroicoordinates.h"
+#include "qxrdroi.h"
 #include "qcepimagedata.h"
 #include "qxrddetectorprocessor.h"
 
 QxrdROICalculator::QxrdROICalculator(QString name)
   : QcepObject(name),
-    m_ROICoordinatesModel(new QxrdROICoordinatesListModel())
+    m_ROIModel(new QxrdROIModel())
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing ROI Calculator\n");
@@ -63,9 +63,9 @@ void QxrdROICalculator::readSettings(QSettings *settings)
 
   QcepObject::readSettings(settings);
 
-  if (m_ROICoordinatesModel) {
+  if (m_ROIModel) {
     settings->beginGroup("coords");
-    m_ROICoordinatesModel->readSettings(settings);
+    m_ROIModel->readSettings(settings);
     settings->endGroup();
   }
 }
@@ -76,33 +76,33 @@ void QxrdROICalculator::writeSettings(QSettings *settings)
 
   QcepObject::writeSettings(settings);
 
-  if (m_ROICoordinatesModel) {
+  if (m_ROIModel) {
     settings->beginGroup("coords");
-    m_ROICoordinatesModel->writeSettings(settings);
+    m_ROIModel->writeSettings(settings);
     settings->endGroup();
   }
 }
 
 int QxrdROICalculator::roiCount()
 {
-  if (m_ROICoordinatesModel) {
-    return m_ROICoordinatesModel->roiCount();
+  if (m_ROIModel) {
+    return m_ROIModel->roiCount();
   } else {
     return 0;
   }
 }
 
-QxrdROICoordinatesListModelWPtr QxrdROICalculator::roiModel()
+QxrdROIModelWPtr QxrdROICalculator::roiModel()
 {
-  return m_ROICoordinatesModel;
+  return m_ROIModel;
 }
 
-QxrdROICoordinatesWPtr QxrdROICalculator::roi(int i)
+QxrdROIWPtr QxrdROICalculator::roi(int i)
 {
-  if (m_ROICoordinatesModel) {
-    return m_ROICoordinatesModel->roi(i);
+  if (m_ROIModel) {
+    return m_ROIModel->roi(i);
   } else {
-    return QxrdROICoordinatesPtr();
+    return QxrdROIPtr();
   }
 }
 
@@ -110,13 +110,13 @@ QVector<double> QxrdROICalculator::values(QcepImageDataBasePtr img, QcepMaskData
 {
   QVector<double> res;
 
-  if (img && m_ROICoordinatesModel) {
-    m_ROICoordinatesModel->recalculate(img, mask);
+  if (img && m_ROIModel) {
+    m_ROIModel->recalculate(img, mask);
 
-    int nVals = m_ROICoordinatesModel->roiCount();
+    int nVals = m_ROIModel->roiCount();
 
     for (int i=0; i<nVals; i++) {
-      QxrdROICoordinatesPtr roi = m_ROICoordinatesModel->roi(i);
+      QxrdROIPtr roi = m_ROIModel->roi(i);
 
       if (roi) {
 //        res.append();
@@ -133,51 +133,51 @@ QVector<double> QxrdROICalculator::values(QcepImageDataBasePtr img, QcepMaskData
 //{
 //  double res = 0;
 
-//  if (img && m_ROICoordinatesModel) {
-//    QxrdROICoordinatesPtr roi = m_ROICoordinatesModel->roi(i);
+//  if (img && m_ROIModel) {
+//    QxrdROIPtr roi = m_ROIModel->roi(i);
 
 //    if (roi) {
 //      switch (roi->get_RoiType()) {
-//      case QxrdROICoordinates::SumInRectangle:
+//      case QxrdROI::SumInRectangle:
 //        res = img->sumInRectangle(roi->get_Coords());
 //        break;
 
-//      case QxrdROICoordinates::AverageInRectangle:
+//      case QxrdROI::AverageInRectangle:
 //        res = img->averageInRectangle(roi->get_Coords());
 //        break;
 
-//      case QxrdROICoordinates::MinInRectangle:
+//      case QxrdROI::MinInRectangle:
 //        res = img->minInRectangle(roi->get_Coords());
 //        break;
 
-//      case QxrdROICoordinates::MaxInRectangle:
+//      case QxrdROI::MaxInRectangle:
 //        res = img->maxInRectangle(roi->get_Coords());
 //        break;
 
-//      case QxrdROICoordinates::SumInEllipse:
+//      case QxrdROI::SumInEllipse:
 //        res = img->sumInEllipse(roi->get_Coords());
 //        break;
 
-//      case QxrdROICoordinates::AverageInEllipse:
+//      case QxrdROI::AverageInEllipse:
 //        res = img->averageInEllipse(roi->get_Coords());
 //        break;
 
-//      case QxrdROICoordinates::MinInEllipse:
+//      case QxrdROI::MinInEllipse:
 //        res = img->minInEllipse(roi->get_Coords());
 //        break;
 
-//      case QxrdROICoordinates::MaxInEllipse:
+//      case QxrdROI::MaxInEllipse:
 //        res = img->maxInEllipse(roi->get_Coords());
 //        break;
 
-//      case QxrdROICoordinates::SumInPeak:
+//      case QxrdROI::SumInPeak:
 //        res = img->sumInPeak(roi->get_Coords());
 //        break;
 //      }
 
-//      QModelIndex index = m_ROICoordinatesModel->index(i, QxrdROICoordinatesListModel::ValueCol);
+//      QModelIndex index = m_ROIModel->index(i, QxrdROIModel::ValueCol);
 
-//      m_ROICoordinatesModel->setData(index, res, Qt::DisplayRole);
+//      m_ROIModel->setData(index, res, Qt::DisplayRole);
 //    }
 //  }
 

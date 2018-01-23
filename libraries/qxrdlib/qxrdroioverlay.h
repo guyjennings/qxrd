@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qxrdplotoverlay.h"
-#include "qxrdroicoordinateslistmodel-ptr.h"
+#include "qxrdroimodel-ptr.h"
 #include <qwt_plot_curve.h>
 
 class QXRD_EXPORT QxrdROIOverlay : public QxrdPlotOverlay
@@ -15,11 +15,11 @@ public:
   QxrdROIOverlay(QString                         name,
                  QxrdPlotWidget                 *plot,
                  QxrdPlotWidgetSettingsWPtr      set,
-                 QxrdROICoordinatesListModelWPtr roic);
+                 QxrdROIModelWPtr roic);
 
 private:
-  QxrdROICoordinatesListModelWPtr m_ROICoordsModel;
-  QVector<QwtPlotCurve*>          m_ROICurves;
+  QxrdROIModelWPtr       m_ROIModel;
+  QVector<QwtPlotCurve*> m_ROICurves;
 };
 
 #endif // QXRDROIOVERLAY_H

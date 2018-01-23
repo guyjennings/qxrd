@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include <QDialog>
-#include "qxrdroicoordinates-ptr.h"
+#include "qxrdroi-ptr.h"
 #include "ui_qxrdroieditordialog.h"
 
 class QXRD_EXPORT QxrdROIEditorDialog : public QDialog, public Ui::QxrdROIEditorDialog
@@ -11,14 +11,14 @@ class QXRD_EXPORT QxrdROIEditorDialog : public QDialog, public Ui::QxrdROIEditor
   Q_OBJECT
 
 public:
-  explicit QxrdROIEditorDialog(QxrdROICoordinatesWPtr roi, QWidget *parent = 0);
+  explicit QxrdROIEditorDialog(QxrdROIWPtr roi, QWidget *parent = 0);
   ~QxrdROIEditorDialog();
 
 public slots:
   void accept();
 
 public:
-  QxrdROICoordinatesWPtr roi();
+  QxrdROIWPtr roi();
 
 private slots:
   void newInnerType(int n);
@@ -30,7 +30,7 @@ private slots:
   void outerDelPoint();
 
 private:
-  QxrdROICoordinatesWPtr m_ROI;
+  QxrdROIWPtr m_ROI;
 };
 
 #endif // QXRDROIEDITORDIALOG_H

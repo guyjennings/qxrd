@@ -32,7 +32,6 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdwindow-ptr.h"
-#include "qxrdroidata-ptr.h"
 #include "qxrdhistogramdata-ptr.h"
 #include "qxrdresultserializer.h"
 #include "qxrddataprocessor-ptr.h"
@@ -468,7 +467,6 @@ public:
 private slots:
   void onCorrectedImageAvailable();
   void onIntegratedDataAvailable();
-  void onROIDataAvailable();
   void onHistogramDataAvailable();
 
 private:
@@ -477,7 +475,6 @@ private:
   QcepDoubleImageDataPtr correctDoubleImage(QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr correctDoubleImage(QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr overflow, QcepDoubleList v);
   QcepIntegratedDataPtr  integrateImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask, double, double cx);
-  QxrdROIDataPtr         calculateROI(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
   QxrdHistogramDataPtr   calculateHistogram(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
 
 private:
@@ -512,7 +509,6 @@ protected:
 private:
   QxrdResultSerializer<QcepDoubleImageDataPtr>  m_CorrectedImages;
   QxrdResultSerializer<QcepIntegratedDataPtr>   m_IntegratedData;
-  QxrdResultSerializer<QxrdROIDataPtr>          m_ROIData;
   QxrdResultSerializer<QxrdHistogramDataPtr>    m_HistogramData;
 };
 

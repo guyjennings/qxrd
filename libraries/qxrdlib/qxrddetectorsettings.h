@@ -18,7 +18,7 @@
 #include <QScriptEngine>
 #include <QSemaphore>
 #include "qcepimagequeue.h"
-#include "qxrdroicoordinates-ptr.h"
+#include "qxrdroi-ptr.h"
 #include "qxrddetectordriverthread-ptr.h"
 #include "qxrddetectorplugininterface-ptr.h"
 #include "qxrddetectordriver-ptr.h"
@@ -108,7 +108,7 @@ public slots:
   virtual QcepImageDataBasePtr acquireFrame();
 
   int roiCount();
-  QxrdROICoordinatesPtr roi(int i);
+  QxrdROIPtr roi(int i);
 
   QcepDoubleVector scalerCounts();
   double scalerCounts(int chan);

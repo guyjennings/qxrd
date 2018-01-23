@@ -31,8 +31,8 @@
 #include "qxrddetectorprocessor.h"
 #include "qxrdroicalculator.h"
 #include "qxrdroishape.h"
-#include "qxrdroicoordinates.h"
-#include "qxrdroicoordinateslistmodel.h"
+#include "qxrdroi.h"
+#include "qxrdroimodel.h"
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
 #include "qcepfixupgainmapcommand.h"
@@ -1871,9 +1871,9 @@ QScriptValue QxrdScriptEngine::roiFunc2(int n, int i)
   return QScriptValue();
 }
 
-QxrdROICoordinatesPtr QxrdScriptEngine::roiFunc3(int n, int i)
+QxrdROIPtr QxrdScriptEngine::roiFunc3(int n, int i)
 {
-  QxrdROICoordinatesPtr res;
+  QxrdROIPtr res;
 
   QxrdAcquisitionPtr acq(acquisition());
 
@@ -2150,15 +2150,15 @@ void QxrdScriptEngine::initialize()
                           QxrdROIShape::toScriptValue,
                           QxrdROIShape::fromScriptValue);
 
-  qRegisterMetaType<QxrdROICoordinatesPtr>("QxrdROICoordinatesPtr");
+  qRegisterMetaType<QxrdROIPtr>("QxrdROIPtr");
   qScriptRegisterMetaType(this,
-                          QxrdROICoordinates::toScriptValue,
-                          QxrdROICoordinates::fromScriptValue);
+                          QxrdROI::toScriptValue,
+                          QxrdROI::fromScriptValue);
 
-  qRegisterMetaType<QxrdROICoordinatesListModelPtr>("QxrdROICoordinatesListModelPtr");
+  qRegisterMetaType<QxrdROIModelPtr>("QxrdROIModelPtr");
   qScriptRegisterMetaType(this,
-                          QxrdROICoordinatesListModel::toScriptValue,
-                          QxrdROICoordinatesListModel::fromScriptValue);
+                          QxrdROIModel::toScriptValue,
+                          QxrdROIModel::fromScriptValue);
 
   QxrdApplicationPtr app(m_Application);
 

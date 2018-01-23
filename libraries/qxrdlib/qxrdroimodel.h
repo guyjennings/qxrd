@@ -1,32 +1,31 @@
-#ifndef QXRDROICOORDINATESLISTMODEL_H
-#define QXRDROICOORDINATESLISTMODEL_H
+#ifndef QXRDROIMODEL_H
+#define QXRDROIMODEL_H
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include <QAbstractListModel>
-#include "qxrdroicoordinates-ptr.h"
+#include "qxrdroi-ptr.h"
 #include <QScriptEngine>
-#include "qxrdroicoordinateslistmodel-ptr.h"
+#include "qxrdroimodel-ptr.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
-//TODO: rename QxrdROIModel
 //TODO: refer to actual data in QxrdROIVector
-class QXRD_EXPORT QxrdROICoordinatesListModel : public QAbstractListModel
+class QXRD_EXPORT QxrdROIModel : public QAbstractListModel
 {
   Q_OBJECT
 
 public:
-  QxrdROICoordinatesListModel();
-  virtual ~QxrdROICoordinatesListModel();
+  QxrdROIModel();
+  virtual ~QxrdROIModel();
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
 
-  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICoordinatesListModelPtr &coords);
-  static void fromScriptValue(const QScriptValue &obj, QxrdROICoordinatesListModelPtr &coords);
+  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROIModelPtr &coords);
+  static void fromScriptValue(const QScriptValue &obj, QxrdROIModelPtr &coords);
 
   int rowCount(const QModelIndex &parent) const;
   int columnCount(const QModelIndex &parent) const;
@@ -38,7 +37,7 @@ public:
 
   bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-  void append(QxrdROICoordinatesPtr coords);
+  void append(QxrdROIPtr coords);
   void removeROI(int row);
 
   void moveROIDown(int row);
@@ -55,8 +54,8 @@ public:
   void changeROIPoint(int i, int innerOuter, int n, QPointF pt);
   void insertROIPoint(int i, int innerOuter, int n, QPointF pt);
 
-  QxrdROICoordinatesWPtr roi(int row) const;
-  void setRoi(int row, QxrdROICoordinatesPtr c);
+  QxrdROIWPtr roi(int row) const;
+  void setRoi(int row, QxrdROIPtr c);
 
   int roiCount() const;
 
@@ -93,11 +92,11 @@ public slots:
   void onROIsChanged();
 
 private:
-  QxrdROICoordinatesPtr newROI(int roiOuterType, int roiInnerType);
+  QxrdROIPtr newROI(int roiOuterType, int roiInnerType);
 
 private:
   QMutex                         m_Mutex;
-  QVector<QxrdROICoordinatesPtr> m_ROICoordinates;
+  QVector<QxrdROIPtr> m_ROICoordinates;
 };
 
-#endif // QXRDROICOORDINATESLISTMODEL_H
+#endif // QXRDROIMODEL_H
