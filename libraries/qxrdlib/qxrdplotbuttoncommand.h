@@ -29,7 +29,8 @@ protected:
   virtual void changeMode(int i);
 
 private:
-  void contextMenu(const QPoint &pos);
+  void  contextMenu(const QPoint &pos);
+  QIcon commandIcon(int i);
 
 protected:
   QToolButton     *m_ToolButton;
