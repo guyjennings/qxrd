@@ -269,7 +269,16 @@ void QxrdFileBrowserWidget::doOpen()
       foreach(index, rows) {
         if (!m_Model->isDir(index)) {
           //    printf("Open: %s\n", qPrintable(m_Model->filePath(index)));
-          QMetaObject::invokeMethod(p, [=]() { p->loadData(m_Model->filePath(index)); });
+
+#if       QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+            INVOKE_CHECK(
+              QMetaObject::invokeMethod(p, [=]() { p->loadData(m_Model->filePath(index)); })
+            )
+#else
+            INVOKE_CHECK(
+              QMetaObject::invokeMethod(p, "loadData", Q_ARG(QString, m_Model->filePath(index)))
+            )
+#endif
         }
       }
     }
@@ -290,7 +299,15 @@ void QxrdFileBrowserWidget::doOpenDark()
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
       if (!m_Model->isDir(index)) {
-        QMetaObject::invokeMethod(p, [=]() { p->loadDark(m_Model->filePath(index));});
+#if     QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+          INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, [=]() { p->loadDark(m_Model->filePath(index));})
+          )
+#else
+          INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, "loadDark", Q_ARG(QString, m_Model->filePath(index)))
+          )
+#endif
       }
     }
   }
@@ -310,7 +327,15 @@ void QxrdFileBrowserWidget::doOpenMask()
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
       if (!m_Model->isDir(index)) {
-        QMetaObject::invokeMethod(p, [=]() { p->loadMask(m_Model->filePath(index));});
+#if     QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+          INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, [=]() { p->loadMask(m_Model->filePath(index));})
+          )
+#else
+          INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, "loadMask", Q_ARG(QString, m_Model->filePath(index)))
+          )
+#endif
       }
     }
   }
@@ -330,7 +355,15 @@ void QxrdFileBrowserWidget::doOpenGainMap()
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
       if (!m_Model->isDir(index)) {
-        QMetaObject::invokeMethod(p, [=]() { p->loadGainMap(m_Model->filePath(index));});
+#if     QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+          INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, [=]() { p->loadGainMap(m_Model->filePath(index));})
+          )
+#else
+          INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, "loadGainMap", Q_ARG(QString, m_Model->filePath(index)))
+          )
+#endif
       }
     }
   }
@@ -350,7 +383,15 @@ void QxrdFileBrowserWidget::doProcess()
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
       if (!m_Model->isDir(index)) {
-        QMetaObject::invokeMethod(p, [=]() { p->processData(m_Model->filePath(index));});
+#if     QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+          INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, [=]() { p->processData(m_Model->filePath(index));})
+          )
+#else
+          INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, "processData", Q_ARG(QString, m_Model->filePath(index)))
+          )
+#endif
       }
     }
   }
@@ -370,7 +411,15 @@ void QxrdFileBrowserWidget::doIntegrate()
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
       if (!m_Model->isDir(index)) {
-        QMetaObject::invokeMethod(p, [=]() {p->integrateData(m_Model->filePath(index));});
+#if     QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+          INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, [=]() { p->integrateData(m_Model->filePath(index));})
+          )
+#else
+          INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, "integrateData", Q_ARG(QString, m_Model->filePath(index)))
+          )
+#endif
       }
     }
   }
@@ -394,7 +443,15 @@ void QxrdFileBrowserWidget::doSumImages()
   if (proc) {
     QxrdDataProcessor *p = proc.data();
 
-    QMetaObject::invokeMethod(p, [=]() { p->sumImages(paths);});
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, [=]() { p->sumImages(paths);})
+      )
+#else
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, "sumImages", Q_ARG(QStringList, paths))
+      )
+#endif
   }
 }
 
@@ -405,7 +462,15 @@ void QxrdFileBrowserWidget::doClearAccumulator()
   if (proc) {
     QxrdDataProcessor *p = proc.data();
 
-    QMetaObject::invokeMethod(p, &QxrdDataProcessor::clearAccumulator);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, &QxrdDataProcessor::clearAccumulator)
+      )
+#else
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, "clearAccumulator")
+      )
+#endif
   }
 }
 
@@ -427,7 +492,15 @@ void QxrdFileBrowserWidget::doIntegrateAndAccumulate()
   if (proc) {
     QxrdDataProcessor *p = proc.data();
 
-    QMetaObject::invokeMethod(p, [=]() { p->integrateAndAccumulate(paths);});
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, [=]() { p->integrateAndAccumulate(paths);})
+      )
+#else
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, "integrateAndAccumulate", Q_ARG(QStringList, paths))
+      )
+#endif
   }
 }
 
@@ -498,7 +571,15 @@ void QxrdFileBrowserWidget::doAdd()
   if (proc) {
     QxrdDataProcessor *p = proc.data();
 
-    QMetaObject::invokeMethod(p, [=]() { p->addImages(paths); });
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, [=]() { p->addImages(paths);})
+      )
+#else
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, "addImages", Q_ARG(QStringList, paths))
+      )
+#endif
   }
 }
 
@@ -520,7 +601,15 @@ void QxrdFileBrowserWidget::doSubtract()
   if (proc) {
     QxrdDataProcessor *p = proc.data();
 
-    QMetaObject::invokeMethod(p, [=]() { p->subtractImages(paths); });
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, [=]() { p->subtractImages(paths);})
+      )
+#else
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, "subtractImages", Q_ARG(QStringList, paths))
+      )
+#endif
   }
 }
 
@@ -542,7 +631,15 @@ void QxrdFileBrowserWidget::doProjectX()
   if (proc) {
     QxrdDataProcessor *p = proc.data();
 
-    QMetaObject::invokeMethod(p, [=]() { p->projectImages(paths, 1, 0, 0); });
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, [=]() { p->projectImages(paths, 1, 0, 0);})
+      )
+#else
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, "projectImages", Q_ARG(int, 1), Q_ARG(int, 0), Q_ARG(int, 0))
+      )
+#endif
   }
 }
 
@@ -564,7 +661,15 @@ void QxrdFileBrowserWidget::doProjectY()
   if (proc) {
     QxrdDataProcessor *p = proc.data();
 
-    QMetaObject::invokeMethod(p, [=]() { p->projectImages(paths, 0, 1, 0); });
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, [=]() { p->projectImages(paths, 0, 1, 0);})
+      )
+#else
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, "projectImages", Q_ARG(int, 0), Q_ARG(int, 1), Q_ARG(int, 0))
+      )
+#endif
   }
 }
 
@@ -586,7 +691,15 @@ void QxrdFileBrowserWidget::doProjectZ()
   if (proc) {
     QxrdDataProcessor *p = proc.data();
 
-    QMetaObject::invokeMethod(p, [=]() { p->projectImages(paths, 0, 0, 1); });
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, [=]() { p->projectImages(paths, 0, 0, 1);})
+      )
+#else
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, "projectImages", Q_ARG(int, 0), Q_ARG(int, 0), Q_ARG(int, 1))
+      )
+#endif
   }
 }
 
@@ -608,7 +721,15 @@ void QxrdFileBrowserWidget::doCorrelate()
   if (proc) {
     QxrdDataProcessor *p = proc.data();
 
-    QMetaObject::invokeMethod(p, [=]() { p->correlateImages(paths); });
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, [=]() { p->correlateImages(paths);})
+      )
+#else
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(p, "correlateImages", Q_ARG(QStringList, paths))
+      )
+#endif
   }
 }
 
@@ -630,7 +751,15 @@ void QxrdFileBrowserWidget::doEvaluate(QString filePath)
   if (exp) {
     QxrdExperiment *expp = exp.data();
 
-    INVOKE_CHECK(QMetaObject::invokeMethod(expp, [=]() { expp->evaluateScriptFile(filePath); }));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(expp, [=]() { expp->evaluateScriptFile(filePath); })
+      )
+#else
+      INVOKE_CHECK(
+        QMetaObject::invokeMethod(expp, "evaluateScriptFile", Q_ARG(QString, filePath))
+      )
+#endif
   }
 }
 
