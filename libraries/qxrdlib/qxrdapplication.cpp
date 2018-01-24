@@ -52,6 +52,7 @@
 #include <QUrl>
 #include <QCoreApplication>
 #include <QJsonObject>
+#include <QCommandLineParser>
 
 static QList<QDir> pluginsDirList;
 
@@ -124,6 +125,7 @@ bool QxrdApplication::init(int &argc, char **argv)
   setOrganizationName("cep");
   setOrganizationDomain("xray.aps.anl.gov");
   setApplicationName("qxrd");
+  setApplicationVersion(STR(QXRD_VERSION));
 
   printMessage("------ Starting QXRD Application ------");
 
@@ -162,6 +164,15 @@ bool QxrdApplication::init(int &argc, char **argv)
     connect(m_ApplicationSettings -> prop_Debug(), &QcepInt64Property::valueChanged,
             this, &QxrdApplication::debugChanged);
     readSettings();
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription("qxrd");
+//    parser.addHelpOption();
+//    parser.addVersionOption();
+
+    parser.showVersion();
+
+    parser.process(QCoreApplication::arguments());
 
     for (int i=1; i<argc; i++) {
       int dbg=0;
