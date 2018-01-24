@@ -22,6 +22,7 @@ QxrdApplicationSettings::QxrdApplicationSettings(QxrdApplicationWPtr app, int ar
   m_StartDetectors(this, "startDetectors", 1, "Start Detectors when opening experiments"),
   m_CmdList(this, "cmdList", QStringList(), "Commands to Execute"),
   m_FileList(this, "fileList", QStringList(), "Files to Process"),
+  m_WatcherList(this, "watcherList", QStringList(), "File patterns to watch for"),
   m_LockerCount(this, "lockerCount", 0, "Number of mutex locks taken"),
   m_LockerRate(this, "lockerRate", 0, "Mutex Locking Rate"),
   m_ExperimentCount(this, "experimentCount", 0, "Number of open experiments")
@@ -86,3 +87,22 @@ void QxrdApplicationSettings::writeSettings(QSettings *settings)
   }
 }
 
+void QxrdApplicationSettings::appendCommand(QString cmd)
+{
+  prop_CmdList()->appendValue(cmd);
+}
+
+void QxrdApplicationSettings::appendScript(QString script)
+{
+  prop_CmdList()->appendValue(tr("loadScript(\"%1\")").arg(script));
+}
+
+void QxrdApplicationSettings::appendFile(QString file)
+{
+  prop_FileList()->appendValue(file);
+}
+
+void QxrdApplicationSettings::appendWatcher(QString patt)
+{
+  prop_WatcherList()->appendValue(patt);
+}

@@ -22,6 +22,11 @@ public:
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
 
+  void appendCommand(QString cmd);
+  void appendScript(QString script);
+  void appendFile(QString file);
+  void appendWatcher(QString patt);
+
 private:
   QcepAllocatorPtr                m_Allocator;
 
@@ -76,6 +81,9 @@ public:
 
   Q_PROPERTY(QStringList fileList READ get_FileList WRITE set_FileList STORED false)
   QCEP_STRING_LIST_PROPERTY(FileList)
+
+  Q_PROPERTY(QStringList watcherList READ get_WatcherList WRITE set_WatcherList STORED false)
+  QCEP_STRING_LIST_PROPERTY(WatcherList)
 
   Q_PROPERTY(int lockerCount READ get_LockerCount WRITE set_LockerCount STORED false)
   QCEP_INTEGER_PROPERTY(LockerCount)

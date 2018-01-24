@@ -146,9 +146,9 @@ bool QxrdApplication::init(int &argc, char **argv)
 #endif
 
 #ifdef QT_NO_DEBUG
-  about += " Release\n";
+  about += " Release";
 #else
-  about += " Debug\n";
+  about += " Debug";
 #endif
 
   printMessage(about);
@@ -165,51 +165,182 @@ bool QxrdApplication::init(int &argc, char **argv)
             this, &QxrdApplication::debugChanged);
     readSettings();
 
+    QStringList args(QCoreApplication::arguments());
+
     QCommandLineParser parser;
-    parser.setApplicationDescription("qxrd");
-//    parser.addHelpOption();
-//    parser.addVersionOption();
+    parser.setApplicationDescription("qxrd test");
+    parser.addHelpOption();
+    parser.addVersionOption();
 
-    parser.showVersion();
+    QCommandLineOption newOption({"n", "new"},      translate("main", "Open new experiment"));
+    parser.addOption(newOption);
 
-    parser.process(QCoreApplication::arguments());
+    QCommandLineOption freshOption({"f", "fresh"},  translate("main", "Fresh start"));
+    parser.addOption(freshOption);
 
-    for (int i=1; i<argc; i++) {
-      int dbg=0;
+    QCommandLineOption debugOption({"d", "debug"},
+                                   translate("main", "Set debug level"),
+                                   translate("main", "debugLevel"));
+    parser.addOption(debugOption);
 
-      if (strcmp(argv[i],"-new") == 0) {
-        m_ApplicationSettings -> set_OpenNew(true);
-      } else if (strcmp(argv[i],"-fresh") == 0) {
-        m_ApplicationSettings -> set_FreshStart(true);
-      } else if (sscanf(argv[i],"-debug=%d",&dbg)==1) {
+    QCommandLineOption noGuiOption("nogui", translate("main", "No GUI"));
+    parser.addOption(noGuiOption);
+
+    QCommandLineOption guiOption("gui", translate("main", "Want GUI"));
+    parser.addOption(guiOption);
+
+    QCommandLineOption noStartOption("nostart", translate("main", "Don't start detectors"));
+    parser.addOption(noStartOption);
+
+    QCommandLineOption startOption("start", translate("main", "Start detectors"));
+    parser.addOption(startOption);
+
+    QCommandLineOption cmdOption({"c", "command"},
+                                 translate("main", "Execute command (may be repeated)"),
+                                 translate("main", "command"));
+    parser.addOption(cmdOption);
+
+    QCommandLineOption scriptOption({"s", "script"},
+                                    translate("main", "Read script file (may be repeated)"),
+                                    translate("main", "scriptfile"));
+    parser.addOption(scriptOption);
+
+    QCommandLineOption watchOption({"w", "watch"},
+                                   translate("main", "Watch directory/path for changes (may be repeated)"),
+                                   translate("main", "pattern"));
+    parser.addOption(watchOption);
+
+    QCommandLineOption pluginOption("p", translate("main", "Special plugin load"));
+
+    parser.process(args);
+
+    if (parser.isSet(newOption)) {
+      m_ApplicationSettings -> set_OpenNew(true);
+    }
+
+    if (parser.isSet(freshOption)) {
+      m_ApplicationSettings -> set_FreshStart(true);
+    }
+
+    if (parser.isSet(debugOption)) {
+      qint64 dbg;
+      if (sscanf(qPrintable(parser.value(debugOption)),
+                 "%lld", &dbg)==1) {
         m_ApplicationSettings -> set_Debug(dbg);
-      } else if (strcmp(argv[i],"-nogui")==0) {
-        m_ApplicationSettings -> set_GuiWanted(false);
-      } else if (strcmp(argv[i],"-gui")==0) {
-        m_ApplicationSettings -> set_GuiWanted(true);
-      } else if (strcmp(argv[i],"-nostart")==0) {
-        printf("Don't start detectors\n");
-        m_ApplicationSettings -> set_StartDetectors(false);
-      } else if (strcmp(argv[i],"-start")==0) {
-        m_ApplicationSettings -> set_StartDetectors(true);
-      } else if (strcmp(argv[i],"-c")==0) {
-        if (i++ < argc) {
-          m_ApplicationSettings -> prop_CmdList()->appendValue(argv[i]);
-        }
-      } else if (strcmp(argv[i],"-s")==0) {
-        if (i++ < argc) {
-          m_ApplicationSettings -> prop_CmdList()->appendValue(tr("loadScript(\"%1\")").arg(argv[i]));
-        }
-      } else if (strcmp(argv[i],"-p")==0) {
-        QDir appDir(qApp->applicationDirPath());
-
-        appDir.cd("plugins");
-
-        pluginsDirList.append(appDir);
-      } else {
-        m_ApplicationSettings -> prop_FileList()->appendValue(argv[i]);
       }
     }
+
+    if (parser.isSet(noGuiOption)) {
+      m_ApplicationSettings -> set_GuiWanted(false);
+    }
+
+    if (parser.isSet(guiOption)) {
+      m_ApplicationSettings -> set_GuiWanted(true);
+    }
+
+    if (parser.isSet(noStartOption)) {
+      m_ApplicationSettings -> set_StartDetectors(false);
+    }
+
+    if (parser.isSet(startOption)) {
+      m_ApplicationSettings -> set_StartDetectors(true);
+    }
+
+    if (parser.isSet(cmdOption) || parser.isSet(scriptOption)) {
+      // Want to preserve order of -c and -s options
+      QStringList cnam = cmdOption.names();
+      QStringList snam = scriptOption.names();
+      QStringList opts = parser.optionNames();
+      QStringList cmds = parser.values(cmdOption);
+      QStringList scrp = parser.values(scriptOption);
+
+      for (int i=0, ic=0, is=0; i<opts.size(); i++) {
+        QString opt = opts.value(i);
+
+        foreach( QString nam, cnam) {
+          if (opt == nam) {
+            QString cmd = cmds.value(ic++);
+
+            printMessage(tr("cmd: %1").arg(cmd));
+
+            m_ApplicationSettings -> appendCommand(cmd);
+          }
+        }
+
+        foreach(QString nam, snam) {
+          if (opt == nam) {
+            QString script = scrp.value(is++);
+
+            printMessage(tr("Script: %1").arg(script));
+
+            m_ApplicationSettings -> appendScript(script);
+          }
+        }
+      }
+    }
+
+    if (parser.isSet(watchOption)) {
+      QStringList watches(parser.values(watchOption));
+
+      foreach(QString w, watches) {
+        printMessage(tr("Watch: \"%1\"").arg(w));
+
+        m_ApplicationSettings->appendWatcher(w);
+      }
+    }
+
+    if (parser.isSet(pluginOption)) {
+      QDir appDir(qApp->applicationDirPath());
+
+      appDir.cd("plugins");
+
+      pluginsDirList.append(appDir);
+    }
+
+    QStringList files(parser.positionalArguments());
+
+    foreach(QString f, files) {
+      printMessage(tr("File: %1").arg(f));
+
+      m_ApplicationSettings -> appendFile(f);
+    }
+
+//    for (int i=1; i<argc; i++) {
+//      int dbg=0;
+
+//      if (strcmp(argv[i],"-new") == 0) {
+//        m_ApplicationSettings -> set_OpenNew(true);
+//      } else if (strcmp(argv[i],"-fresh") == 0) {
+//        m_ApplicationSettings -> set_FreshStart(true);
+//      } else if (sscanf(argv[i],"-debug=%d",&dbg)==1) {
+//        m_ApplicationSettings -> set_Debug(dbg);
+//      } else if (strcmp(argv[i],"-nogui")==0) {
+//        m_ApplicationSettings -> set_GuiWanted(false);
+//      } else if (strcmp(argv[i],"-gui")==0) {
+//        m_ApplicationSettings -> set_GuiWanted(true);
+//      } else if (strcmp(argv[i],"-nostart")==0) {
+//        printf("Don't start detectors\n");
+//        m_ApplicationSettings -> set_StartDetectors(false);
+//      } else if (strcmp(argv[i],"-start")==0) {
+//        m_ApplicationSettings -> set_StartDetectors(true);
+//      } else if (strcmp(argv[i],"-c")==0) {
+//        if (i++ < argc) {
+//          m_ApplicationSettings -> prop_CmdList()->appendValue(argv[i]);
+//        }
+//      } else if (strcmp(argv[i],"-s")==0) {
+//        if (i++ < argc) {
+//          m_ApplicationSettings -> prop_CmdList()->appendValue(tr("loadScript(\"%1\")").arg(argv[i]));
+//        }
+//      } else if (strcmp(argv[i],"-p")==0) {
+//        QDir appDir(qApp->applicationDirPath());
+
+//        appDir.cd("plugins");
+
+//        pluginsDirList.append(appDir);
+//      } else {
+//        m_ApplicationSettings -> prop_FileList()->appendValue(argv[i]);
+//      }
+//    }
 
     if (m_ApplicationSettings -> get_GuiWanted() == false) {
       foreach(QString cmd, m_ApplicationSettings -> get_CmdList()) {
@@ -219,11 +350,18 @@ bool QxrdApplication::init(int &argc, char **argv)
       foreach(QString file, m_ApplicationSettings -> get_FileList()) {
         printf("File: %s\n", qPrintable(file));
       }
+
+      foreach(QString patt, m_ApplicationSettings -> get_WatcherList()) {
+        printf("Watch: %s\n", qPrintable(patt));
+      }
     }
 
     printMessage(tr("Home Path: %1").arg(QDir::homePath()));
     printMessage(tr("Current Path: %1").arg(QDir::currentPath()));
     printMessage(tr("Root Path %1").arg(QDir::rootPath()));
+
+    char *pwd = getenv("PWD");
+    printMessage(tr("pwd: %1").arg(pwd));
 
     setupTiffHandlers();
 
@@ -240,11 +378,22 @@ bool QxrdApplication::init(int &argc, char **argv)
     //    editGlobalPreferences();
     //  }
 
-    if (m_ApplicationSettings -> get_OpenNew()) {
+    int nWatches = m_ApplicationSettings -> get_WatcherList().length();
+    int nFiles   = m_ApplicationSettings -> get_FileList().length();
+
+    if (nFiles > 0 || nWatches > 0) {
+      foreach(QString file, m_ApplicationSettings->get_FileList()) {
+        openFile(file);
+      }
+
+      foreach(QString patt, m_ApplicationSettings->get_WatcherList()) {
+        openWatcher(patt);
+      }
+    } else if (m_ApplicationSettings -> get_OpenNew()) {
       createNewExperiment();
     } else if (m_ApplicationSettings -> get_FreshStart()) {
       openWelcomeWindow();
-    } else if (/*get_OpenDirectly() &&*/ (m_ApplicationSettings -> get_CurrentExperiment().length()>0)) {
+    } else if (m_ApplicationSettings -> get_CurrentExperiment().length()>0) {
       openExperiment(m_ApplicationSettings -> get_CurrentExperiment());
     } else {
       openWelcomeWindow();
@@ -1096,6 +1245,16 @@ void QxrdApplication::activateExperiment(QString path)
       }
     }
   }
+}
+
+void QxrdApplication::openFile(QString filePath)
+{
+  printMessage(tr("Open file \"%1\" (to be written)").arg(filePath));
+}
+
+void QxrdApplication::openWatcher(QString pattern)
+{
+  printMessage(tr("Open watcher \"%1\" (to be written)").arg(pattern));
 }
 
 void QxrdApplication::incLockerCount()

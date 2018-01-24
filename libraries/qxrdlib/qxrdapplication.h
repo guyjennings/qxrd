@@ -71,6 +71,9 @@ public slots:
   void openExperiment2(QString path);
   void closeExperiment(QxrdExperimentWPtr expw);
 
+  void openFile(QString filePath);
+  void openWatcher(QString pattern);
+
   void openedExperiment(QxrdExperimentThreadWPtr expwthr);
   void closedExperiment(QxrdExperimentThreadWPtr expwthr);
   QList<QxrdExperimentWPtr> &experiments();
