@@ -17,11 +17,17 @@ QxrdCenteringWindowSettings::QxrdCenteringWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdCenteringWindowSettings::newWindow()
 {
-  QxrdCenteringWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdCenteringWindowSettings>(sharedFromThis());
+  QxrdCenteringWindowSettingsPtr myself =
+      qSharedPointerDynamicCast<QxrdCenteringWindowSettings>(sharedFromThis());
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdCenteringWindow(myself, "Centering", m_Application, m_Experiment, m_Acquisition, m_Processor));
+        new QxrdCenteringWindow(myself,
+                                "Centering",
+                                m_Application,
+                                m_Experiment,
+                                m_Acquisition,
+                                m_Processor));
 
   return m_Window;
 }

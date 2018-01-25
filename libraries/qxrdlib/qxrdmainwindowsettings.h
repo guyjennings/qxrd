@@ -16,10 +16,11 @@ class QXRD_EXPORT QxrdMainWindowSettings : public QcepMainWindowSettings
 public:
   QxrdMainWindowSettings(QString name);
 
-  virtual void initialize(QxrdApplicationWPtr app,
-                          QxrdExperimentWPtr expt,
-                          QxrdAcquisitionWPtr acqw,
-                          QxrdProcessorWPtr procw);
+  virtual
+  void initialize(QxrdApplicationWPtr app,
+                  QxrdExperimentWPtr  expt,
+                  QxrdAcquisitionWPtr acqw,
+                  QxrdProcessorWPtr   procw);
 
   void openWindow();
   void closeWindow();

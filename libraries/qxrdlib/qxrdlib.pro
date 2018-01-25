@@ -361,7 +361,10 @@ SOURCES += qxrdlib.cpp \
     qxrdpowderringsmodel.cpp \
     qxrdroimodel.cpp \
     qxrdroivector.cpp \
-    qxrdroi.cpp
+    qxrdroi.cpp \
+    qxrdwatcherwindow.cpp \
+    qxrdwatcherwindowsettings.cpp \
+    qxrdwatcher.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -544,7 +547,13 @@ HEADERS += qxrdlib.h\
     qxrdroivector.h \
     qxrdroivector-ptr.h \
     qxrdroi.h \
-    qxrdroi-ptr.h
+    qxrdroi-ptr.h \
+    qxrdwatcherwindow.h \
+    qxrdwatcherwindow-ptr.h \
+    qxrdwatcherwindowsettings.h \
+    qxrdwatcherwindowsettings-ptr.h \
+    qxrdwatcher.h \
+    qxrdwatcher-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -882,7 +891,8 @@ FORMS += qxrdwindow.ui \
     qxrdfilewatcherdialog.ui \
     qxrddexeladialog.ui \
     qxrdplotwidgetdialog.ui \
-    qxrdimageplotwidgetdialog.ui
+    qxrdimageplotwidgetdialog.ui \
+    qxrdwatcherwindow.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS += \

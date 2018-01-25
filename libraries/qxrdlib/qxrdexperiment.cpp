@@ -59,6 +59,7 @@
 #include "qxrdcalibrantwindowsettings.h"
 #include "qxrdmaskingwindowsettings.h"
 #include "qxrdcenteringwindowsettings.h"
+#include "qxrdwatcherwindowsettings.h"
 #include "qxrdscriptingwindowsettings.h"
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdwindowsettings.h"
@@ -513,6 +514,7 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdCalibrantWindowSettings*>("QxrdCalibrantWindowSettings*");
   qRegisterMetaType<QxrdHelpWindowSettings*>("QxrdHelpWindowSettings*");
   qRegisterMetaType<QxrdCenteringWindowSettings*>("QxrdCenteringWindowSettings*");
+  qRegisterMetaType<QxrdWatcherWindowSettings*>("QxrdWatcherWindowSettings*");
   qRegisterMetaType<QxrdIntegrationWindowSettings*>("QxrdIntegrationWindowSettings*");
   qRegisterMetaType<QxrdMaskingWindowSettings*>("QxrdMaskingWindowSettings*");
   qRegisterMetaType<QxrdScriptingWindowSettings*>("QxrdScriptingWindowSettings*");
@@ -1500,6 +1502,8 @@ void QxrdExperiment::defaultWindowSettings()
                          new QxrdCalibrantWindowSettings("Calibrant")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdCenteringWindowSettings("Centering")));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdWatcherWindowSettings("Watcher")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdExtraIOWindowSettings("Extra IO")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
