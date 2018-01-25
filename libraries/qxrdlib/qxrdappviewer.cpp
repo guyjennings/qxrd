@@ -18,6 +18,8 @@ bool QxrdAppViewer::init(int &argc, char **argv)
 
   m_AppViewerSettings = QxrdAppViewerSettingsPtr(
         new QxrdAppViewerSettings(qSharedPointerDynamicCast<QxrdAppViewer>(sharedFromThis()), argc, argv));
+
+  return true;
 }
 
 void QxrdAppViewer::setDefaultObjectData(QcepDataObject *obj)

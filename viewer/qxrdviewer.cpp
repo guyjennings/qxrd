@@ -32,6 +32,8 @@ int main(int argc, char *argv[])
 //  mtrace();
 //#endif
 
+  printf("Start qxrd viewer\n");
+
   g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(new QxrdDebugDictionary());
 
   if (qcepDebug(DEBUG_APP)) {
