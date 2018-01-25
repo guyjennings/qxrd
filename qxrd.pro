@@ -4,7 +4,7 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS = libraries plugins source
+SUBDIRS = libraries plugins source viewer
 
 #SUBDIRS = plugins
 
@@ -22,7 +22,7 @@ win32 {
  include(nsis.pri)
 }
 
-DISTFILES += source plugins
+DISTFILES += libraries source plugins viewer
 
 OTHER_FILES += qxrd.nsi qxrd-qt5.nsi qxrd.dox Doxyfile qxrd.spec.in qxrd.desktop readme.markdown test/qxrd-macro-counter.mac
 
@@ -127,7 +127,27 @@ macx {
   dmg.commands += rm -rf $${TARGET}.app/Contents/Resources/qt.conf &&
   dmg.commands += $$[QT_INSTALL_BINS]/macdeployqt $${TARGET}.app -dmg &&
   dmg.commands += rm -rf $${TARGET}-$${VERSION}.dmg &&
-  dmg.commands += mv $${TARGET}.dmg $${TARGET}-$${VERSION}.dmg
+  dmg.commands += mv $${TARGET}.dmg $${TARGET}-$${VERSION}.dmg &&
+
+  VIEWER = qxrdviewer
+
+  dmg.depends  += $${VIEWER}.app
+  dmg.commands +=  mkdir -p $${VIEWER}.app/Contents/Frameworks/ &&
+  dmg.commands += cp lib*.dylib $${VIEWER}.app/Contents/Frameworks/ &&
+  dmg.commands += install_name_tool -change "libqceplib.1.dylib" "@rpath/libqceplib.1.dylib" $${VIEWER}.app/Contents/MacOS/$${VIEWER} &&
+  dmg.commands += install_name_tool -change "libqceplib.1.dylib" "@rpath/libqceplib.1.dylib" $${VIEWER}.app/Contents/Frameworks/libqxrdlib.0.dylib &&
+  dmg.commands += install_name_tool -change "libqxrdlib.0.dylib" "@rpath/libqxrdlib.0.dylib" $${VIEWER}.app/Contents/MacOS/$${VIEWER} &&
+  dmg.commands += mkdir -p $${VIEWER}.app/Contents/MacOS/plugins/ &&
+  dmg.commands += cp plugins/lib*.dylib $${VIEWER}.app/Contents/MacOS/plugins/ &&
+  dmg.commands += for f in $${VIEWER}.app/Contents/MacOS/plugins/lib*.dylib ; do
+  dmg.commands += install_name_tool -change "libqceplib.1.dylib" "@rpath/libqceplib.1.dylib" "\$\$f" ;
+  dmg.commands += install_name_tool -change "libqxrdlib.0.dylib" "@rpath/libqxrdlib.0.dylib" "\$\$f" ;
+  dmg.commands += done &&
+  dmg.commands += rm -rf $${VIEWER}.app/Contents/Plugins/ &&
+  dmg.commands += rm -rf $${VIEWER}.app/Contents/Resources/qt.conf &&
+  dmg.commands += $$[QT_INSTALL_BINS]/macdeployqt $${VIEWER}.app -dmg &&
+  dmg.commands += rm -rf $${VIEWER}-$${VERSION}.dmg &&
+  dmg.commands += mv $${VIEWER}.dmg $${VIEWER}-$${VERSION}.dmg
 }
 
 

@@ -68,7 +68,7 @@ void QxrdApplication::processEventCounter()
 }
 
 QxrdApplication::QxrdApplication(int &argc, char **argv) :
-  QcepApplication(argc, argv),
+  inherited(argc, argv),
   m_ObjectNamer(this, "application"),
 //  m_AppSaver(QcepSettingsSaverPtr(
 //            new QcepSettingsSaver(this))),
@@ -110,6 +110,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
 
 bool QxrdApplication::init(int &argc, char **argv)
 {
+  inherited::init(argc, argv);
 
   connect(this, &QCoreApplication::aboutToQuit, this, &QxrdApplication::finish);
 

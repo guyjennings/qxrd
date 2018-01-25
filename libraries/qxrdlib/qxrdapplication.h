@@ -5,7 +5,7 @@
 #include "qcepmacros.h"
 #include "qcepproperty.h"
 
-#include "qcepapplication.h"
+#include "qxrdappcommon.h"
 #include <QSettings>
 #include "qxrdresponsetimer.h"
 #include "qxrdexperiment.h"
@@ -20,9 +20,12 @@
 #include "qxrdapplicationsettings-ptr.h"
 #include "qxrdplugininfomodel-ptr.h"
 
-class QXRD_EXPORT QxrdApplication : public QcepApplication
+class QXRD_EXPORT QxrdApplication : public QxrdAppCommon
 {
   Q_OBJECT
+
+private:
+  typedef QxrdAppCommon inherited;
 
 public:
   QxrdApplication(int &argc, char **argv);

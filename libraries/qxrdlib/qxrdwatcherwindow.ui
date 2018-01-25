@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QxrdWatcherWindow</class>
+ <widget class="QMainWindow" name="QxrdWatcherWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QSplitter" name="m_Splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="m_FilesTab">
+        <attribute name="title">
+         <string>Files</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_11">
+         <item row="0" column="0">
+          <widget class="QxrdFileBrowserWidget" name="m_FileBrowserWidget" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="m_DataItemsTab">
+        <attribute name="title">
+         <string>Data Items</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_12">
+         <item row="0" column="0">
+          <widget class="QcepDatasetBrowserView" name="m_DatasetBrowserView">
+           <property name="acceptDrops">
+            <bool>true</bool>
+           </property>
+           <property name="dragEnabled">
+            <bool>true</bool>
+           </property>
+           <property name="dragDropOverwriteMode">
+            <bool>false</bool>
+           </property>
+           <property name="dragDropMode">
+            <enum>QAbstractItemView::DragDrop</enum>
+           </property>
+           <property name="defaultDropAction">
+            <enum>Qt::TargetMoveAction</enum>
+           </property>
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::ExtendedSelection</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QTabWidget" name="tabWidget_2">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="m_ImagePlotTab">
+        <attribute name="title">
+         <string>Image</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <widget class="QxrdImagePlotWidget" name="m_ImagePlotWidget" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="m_CenteringPlotTab">
+        <attribute name="title">
+         <string>Centering</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_9">
+         <item row="0" column="0">
+          <widget class="QxrdCenteringPlotWidget" name="m_CenteringPlotWidget" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="m_IntegratedPlotTab">
+        <attribute name="title">
+         <string>Integrated</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_10">
+         <item row="0" column="0">
+          <widget class="QxrdIntegratedPlotWidget" name="m_IntegratedPlotWidget" native="true"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="m_RingsTab">
+        <attribute name="title">
+         <string>Rings</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QTableView" name="m_CenteringRingsTable"/>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="m_FileMenu">
+    <property name="title">
+     <string>Fi&amp;le</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="m_EditMenu">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="m_WindowMenu">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="actionWindow"/>
+   </widget>
+   <addaction name="m_FileMenu"/>
+   <addaction name="m_EditMenu"/>
+   <addaction name="m_WindowMenu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionWindow">
+   <property name="text">
+    <string>Window</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QcepDatasetBrowserView</class>
+   <extends>QTreeView</extends>
+   <header>qcepdatasetbrowserview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QxrdImagePlotWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdimageplotwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QxrdIntegratedPlotWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdintegratedplotwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QxrdFileBrowserWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdfilebrowserwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QxrdCenteringPlotWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdcenteringplotwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

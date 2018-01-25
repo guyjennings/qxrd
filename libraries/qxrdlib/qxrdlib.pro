@@ -364,7 +364,11 @@ SOURCES += qxrdlib.cpp \
     qxrdroi.cpp \
     qxrdwatcherwindow.cpp \
     qxrdwatcherwindowsettings.cpp \
-    qxrdwatcher.cpp
+    qxrdwatcher.cpp \
+    qxrdappcommon.cpp \
+    qxrdappviewer.cpp \
+    qxrdappcommonsettings.cpp \
+    qxrdappviewersettings.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -553,7 +557,14 @@ HEADERS += qxrdlib.h\
     qxrdwatcherwindowsettings.h \
     qxrdwatcherwindowsettings-ptr.h \
     qxrdwatcher.h \
-    qxrdwatcher-ptr.h
+    qxrdwatcher-ptr.h \
+    qxrdappcommon.h \
+    qxrdappcommon-ptr.h \
+    qxrdappviewer.h \
+    qxrdappviewer-ptr.h \
+    qxrdappcommonsettings.h \
+    qxrdappviewersettings.h \
+    qxrdappviewersettings-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
