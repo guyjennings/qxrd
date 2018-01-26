@@ -11,7 +11,11 @@ DESTDIR  = ../
 #DESTDIR  = ../app/
 
 macx {
-  ICON = ../libraries/qxrdlib/images/qxrd-icon.icns
+  ICON = ../libraries/qxrdlib/images/qxrd-viewer-icon.icns
+}
+
+win32 {
+    RC_FILE = qxrdviewer.rc
 }
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
