@@ -34,9 +34,7 @@
 #include "qxrdcalibrant.h"
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdapplicationsettings.h"
-#include "qxrdwindowsettings.h"
 #include "qxrddetectorcontrolwindowsettings.h"
-#include "qxrdtestgenerator.h"
 #include "qcepimagedataformattiff.h"
 #include "qxrdplugininfomodel.h"
 
@@ -72,10 +70,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_ObjectNamer(this, "application"),
 //  m_AppSaver(QcepSettingsSaverPtr(
 //            new QcepSettingsSaver(this))),
-  m_Splash(NULL),
   m_WelcomeWindow(NULL),
   m_NIDAQPlugin(NULL),
-  m_ResponseTimer(NULL),
+//  m_ResponseTimer(NULL),
   m_SettingsMutex(),
   m_LastLockerCount(0)
 {
@@ -86,17 +83,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdApplication::QxrdApplication(%p)\n", this);
   }
-
-  QcepProperty::registerMetaTypes();
-  QxrdPowderPoint::registerMetaTypes();
-  QxrdPowderPointVector::registerMetaTypes();
-  QxrdCalibrantDSpacing::registerMetaTypes();
-  QxrdCalibrantDSpacings::registerMetaTypes();
-  QxrdExperiment::registerMetaTypes();
-  QxrdWindowSettings::registerMetaTypes();
-  QxrdDetectorControlWindowSettings::registerMetaTypes();
-  QxrdTestGenerator::registerMetaTypes();
-  QxrdDetectorSettings::registerMetaTypes();
 
   setQuitOnLastWindowClosed(false);
 
@@ -112,9 +98,6 @@ bool QxrdApplication::init(int &argc, char **argv)
 {
   inherited::init(argc, argv);
 
-  connect(this, &QCoreApplication::aboutToQuit, this, &QxrdApplication::finish);
-
-  connect(&m_SplashTimer, &QTimer::timeout, this, &QxrdApplication::hideSplash);
 
   connect(&m_LockerTimer, &QTimer::timeout, this, &QxrdApplication::lockerTimerElapsed);
 
@@ -156,203 +139,28 @@ bool QxrdApplication::init(int &argc, char **argv)
   printMessage("QWT Version " QWT_VERSION_STR);
   printMessage(tr("QT Version %1").arg(qVersion()));
 
-  m_ApplicationSettings = QxrdApplicationSettingsPtr(
-        new QxrdApplicationSettings(qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()), argc, argv));
+  setSettings(QxrdApplicationSettingsPtr(
+                new QxrdApplicationSettings(qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()), argc, argv)));
 
-  if (m_ApplicationSettings) {
-    m_ApplicationSettings->init();
+  if (settings()) {
+    settings()->init();
 
-    connect(m_ApplicationSettings -> prop_Debug(), &QcepInt64Property::valueChanged,
-            this, &QxrdApplication::debugChanged);
+    connect(settings() -> prop_Debug(), &QcepInt64Property::valueChanged,
+            this,                       &QxrdApplication::debugChanged);
     readSettings();
 
-    QStringList args(QCoreApplication::arguments());
+    parseCommandLine(true);
 
-    QCommandLineParser parser;
-    parser.setApplicationDescription("qxrd test");
-    parser.addHelpOption();
-    parser.addVersionOption();
-
-    QCommandLineOption newOption({"n", "new"},      translate("main", "Open new experiment"));
-    parser.addOption(newOption);
-
-    QCommandLineOption freshOption({"f", "fresh"},  translate("main", "Fresh start"));
-    parser.addOption(freshOption);
-
-    QCommandLineOption debugOption({"d", "debug"},
-                                   translate("main", "Set debug level"),
-                                   translate("main", "debugLevel"));
-    parser.addOption(debugOption);
-
-    QCommandLineOption noGuiOption("nogui", translate("main", "No GUI"));
-    parser.addOption(noGuiOption);
-
-    QCommandLineOption guiOption("gui", translate("main", "Want GUI"));
-    parser.addOption(guiOption);
-
-    QCommandLineOption noStartOption("nostart", translate("main", "Don't start detectors"));
-    parser.addOption(noStartOption);
-
-    QCommandLineOption startOption("start", translate("main", "Start detectors"));
-    parser.addOption(startOption);
-
-    QCommandLineOption cmdOption({"c", "command"},
-                                 translate("main", "Execute command (may be repeated)"),
-                                 translate("main", "command"));
-    parser.addOption(cmdOption);
-
-    QCommandLineOption scriptOption({"s", "script"},
-                                    translate("main", "Read script file (may be repeated)"),
-                                    translate("main", "scriptfile"));
-    parser.addOption(scriptOption);
-
-    QCommandLineOption watchOption({"w", "watch"},
-                                   translate("main", "Watch directory/path for changes (may be repeated)"),
-                                   translate("main", "pattern"));
-    parser.addOption(watchOption);
-
-    QCommandLineOption pluginOption("p", translate("main", "Special plugin load"));
-
-    parser.process(args);
-
-    if (parser.isSet(newOption)) {
-      m_ApplicationSettings -> set_OpenNew(true);
-    }
-
-    if (parser.isSet(freshOption)) {
-      m_ApplicationSettings -> set_FreshStart(true);
-    }
-
-    if (parser.isSet(debugOption)) {
-      qint64 dbg;
-      if (sscanf(qPrintable(parser.value(debugOption)),
-                 "%lld", &dbg)==1) {
-        m_ApplicationSettings -> set_Debug(dbg);
-      }
-    }
-
-    if (parser.isSet(noGuiOption)) {
-      m_ApplicationSettings -> set_GuiWanted(false);
-    }
-
-    if (parser.isSet(guiOption)) {
-      m_ApplicationSettings -> set_GuiWanted(true);
-    }
-
-    if (parser.isSet(noStartOption)) {
-      m_ApplicationSettings -> set_StartDetectors(false);
-    }
-
-    if (parser.isSet(startOption)) {
-      m_ApplicationSettings -> set_StartDetectors(true);
-    }
-
-    if (parser.isSet(cmdOption) || parser.isSet(scriptOption)) {
-      // Want to preserve order of -c and -s options
-      QStringList cnam = cmdOption.names();
-      QStringList snam = scriptOption.names();
-      QStringList opts = parser.optionNames();
-      QStringList cmds = parser.values(cmdOption);
-      QStringList scrp = parser.values(scriptOption);
-
-      for (int i=0, ic=0, is=0; i<opts.size(); i++) {
-        QString opt = opts.value(i);
-
-        foreach( QString nam, cnam) {
-          if (opt == nam) {
-            QString cmd = cmds.value(ic++);
-
-            printMessage(tr("cmd: %1").arg(cmd));
-
-            m_ApplicationSettings -> appendCommand(cmd);
-          }
-        }
-
-        foreach(QString nam, snam) {
-          if (opt == nam) {
-            QString script = scrp.value(is++);
-
-            printMessage(tr("Script: %1").arg(script));
-
-            m_ApplicationSettings -> appendScript(script);
-          }
-        }
-      }
-    }
-
-    if (parser.isSet(watchOption)) {
-      QStringList watches(parser.values(watchOption));
-
-      foreach(QString w, watches) {
-        printMessage(tr("Watch: \"%1\"").arg(w));
-
-        m_ApplicationSettings->appendWatcher(w);
-      }
-    }
-
-    if (parser.isSet(pluginOption)) {
-      QDir appDir(qApp->applicationDirPath());
-
-      appDir.cd("plugins");
-
-      pluginsDirList.append(appDir);
-    }
-
-    QStringList files(parser.positionalArguments());
-
-    foreach(QString f, files) {
-      printMessage(tr("File: %1").arg(f));
-
-      m_ApplicationSettings -> appendFile(f);
-    }
-
-//    for (int i=1; i<argc; i++) {
-//      int dbg=0;
-
-//      if (strcmp(argv[i],"-new") == 0) {
-//        m_ApplicationSettings -> set_OpenNew(true);
-//      } else if (strcmp(argv[i],"-fresh") == 0) {
-//        m_ApplicationSettings -> set_FreshStart(true);
-//      } else if (sscanf(argv[i],"-debug=%d",&dbg)==1) {
-//        m_ApplicationSettings -> set_Debug(dbg);
-//      } else if (strcmp(argv[i],"-nogui")==0) {
-//        m_ApplicationSettings -> set_GuiWanted(false);
-//      } else if (strcmp(argv[i],"-gui")==0) {
-//        m_ApplicationSettings -> set_GuiWanted(true);
-//      } else if (strcmp(argv[i],"-nostart")==0) {
-//        printf("Don't start detectors\n");
-//        m_ApplicationSettings -> set_StartDetectors(false);
-//      } else if (strcmp(argv[i],"-start")==0) {
-//        m_ApplicationSettings -> set_StartDetectors(true);
-//      } else if (strcmp(argv[i],"-c")==0) {
-//        if (i++ < argc) {
-//          m_ApplicationSettings -> prop_CmdList()->appendValue(argv[i]);
-//        }
-//      } else if (strcmp(argv[i],"-s")==0) {
-//        if (i++ < argc) {
-//          m_ApplicationSettings -> prop_CmdList()->appendValue(tr("loadScript(\"%1\")").arg(argv[i]));
-//        }
-//      } else if (strcmp(argv[i],"-p")==0) {
-//        QDir appDir(qApp->applicationDirPath());
-
-//        appDir.cd("plugins");
-
-//        pluginsDirList.append(appDir);
-//      } else {
-//        m_ApplicationSettings -> prop_FileList()->appendValue(argv[i]);
-//      }
-//    }
-
-    if (m_ApplicationSettings -> get_GuiWanted() == false) {
-      foreach(QString cmd, m_ApplicationSettings -> get_CmdList()) {
+    if (settings() -> get_GuiWanted() == false) {
+      foreach(QString cmd, settings() -> get_CmdList()) {
         printf("Cmd: %s\n", qPrintable(cmd));
       }
 
-      foreach(QString file, m_ApplicationSettings -> get_FileList()) {
+      foreach(QString file, settings() -> get_FileList()) {
         printf("File: %s\n", qPrintable(file));
       }
 
-      foreach(QString patt, m_ApplicationSettings -> get_WatcherList()) {
+      foreach(QString patt, settings() -> get_WatcherList()) {
         printf("Watch: %s\n", qPrintable(patt));
       }
     }
@@ -363,8 +171,6 @@ bool QxrdApplication::init(int &argc, char **argv)
 
     char *pwd = getenv("PWD");
     printMessage(tr("pwd: %1").arg(pwd));
-
-    setupTiffHandlers();
 
     QThread::currentThread()->setObjectName("app");
 
@@ -379,23 +185,23 @@ bool QxrdApplication::init(int &argc, char **argv)
     //    editGlobalPreferences();
     //  }
 
-    int nWatches = m_ApplicationSettings -> get_WatcherList().length();
-    int nFiles   = m_ApplicationSettings -> get_FileList().length();
+    int nWatches = settings() -> get_WatcherList().length();
+    int nFiles   = settings() -> get_FileList().length();
 
     if (nFiles > 0 || nWatches > 0) {
-      foreach(QString file, m_ApplicationSettings->get_FileList()) {
+      foreach(QString file, settings()->get_FileList()) {
         openFile(file);
       }
 
-      foreach(QString patt, m_ApplicationSettings->get_WatcherList()) {
+      foreach(QString patt, settings()->get_WatcherList()) {
         openWatcher(patt);
       }
-    } else if (m_ApplicationSettings -> get_OpenNew()) {
+    } else if (settings() -> get_OpenNew()) {
       createNewExperiment();
-    } else if (m_ApplicationSettings -> get_FreshStart()) {
+    } else if (settings() -> get_FreshStart()) {
       openWelcomeWindow();
-    } else if (m_ApplicationSettings -> get_CurrentExperiment().length()>0) {
-      openExperiment(m_ApplicationSettings -> get_CurrentExperiment());
+    } else if (settings() -> get_CurrentExperiment().length()>0) {
+      openExperiment(settings() -> get_CurrentExperiment());
     } else {
       openWelcomeWindow();
     }
@@ -464,11 +270,18 @@ void QxrdApplication::finish()
       t->wait();
     }
   }
+
+  inherited::finish();
+}
+
+QString QxrdApplication::applicationDescription()
+{
+  return QStringLiteral("QXRD Data Acquisition for 2-D XRay Detectors");
 }
 
 void QxrdApplication::onAutoSaveTimer()
 {
-  if (m_ApplicationSettings && m_ApplicationSettings->isChanged()) {
+  if (settings() && settings()->isChanged()) {
     writeSettings();
   }
 }
@@ -651,38 +464,6 @@ QxrdDetectorPluginInterfaceWPtr QxrdApplication::detectorPlugin(int detType)
   return res;
 }
 
-void QxrdApplication::splashMessage(QString msg)
-{
-  if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "splashMessage", Q_ARG(QString, msg));
-  } else {
-    GUI_THREAD_CHECK;
-
-    if (m_ApplicationSettings->get_GuiWanted()) {
-      if (m_Splash == NULL) {
-        m_Splash = QxrdSplashScreenPtr(new QxrdSplashScreen(NULL));
-      }
-
-      m_Splash -> show();
-
-      QString msgf = tr("Qxrd Version " STR(QXRD_VERSION) "\n")+msg;
-
-      m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
-      processEvents();
-
-      m_SplashTimer.start(5000);
-    }
-  }
-}
-
-void QxrdApplication::hideSplash()
-{
-  GUI_THREAD_CHECK;
-
-  if (m_Splash) {
-    m_Splash -> hide();
-  }
-}
 
 void QxrdApplication::logMessage(QString /*msg*/)
 {
@@ -776,9 +557,10 @@ QString QxrdApplication::rootPath()
   return QDir::rootPath();
 }
 
-QxrdApplicationSettingsWPtr QxrdApplication::settings()
+QxrdApplicationSettingsPtr QxrdApplication::settings()
 {
-  return m_ApplicationSettings;
+  return qSharedPointerDynamicCast<QxrdApplicationSettings>(
+        inherited::settings());
 }
 
 void QxrdApplication::readSettings()
@@ -787,9 +569,9 @@ void QxrdApplication::readSettings()
 
   QxrdGlobalSettings settings(this);
 
-  if (m_ApplicationSettings) {
+  if (QxrdApplication::settings()) {
     settings.beginGroup("application");
-    m_ApplicationSettings -> readSettings(&settings);
+    QxrdApplication::settings() -> readSettings(&settings);
     settings.endGroup();
   }
 }
@@ -800,11 +582,11 @@ void QxrdApplication::writeSettings()
 
   QxrdGlobalSettings settings(this);
 
-  if (m_ApplicationSettings) {
+  if (QxrdApplication::settings()) {
     settings.beginGroup("application");
-    m_ApplicationSettings -> writeSettings(&settings);
+    QxrdApplication::settings() -> writeSettings(&settings);
     settings.endGroup();
-    m_ApplicationSettings -> setChanged(0);
+    QxrdApplication::settings() -> setChanged(0);
   }
 }
 
@@ -822,9 +604,9 @@ void QxrdApplication::loadPreferences(QString path)
 {
   QxrdGlobalSettings settings(path, QSettings::IniFormat);
 
-  if (m_ApplicationSettings) {
+  if (QxrdApplication::settings()) {
     settings.beginGroup("application");
-    m_ApplicationSettings -> readSettings(&settings);
+    QxrdApplication::settings() -> readSettings(&settings);
     settings.endGroup();
   }
 }
@@ -846,9 +628,9 @@ void QxrdApplication::savePreferences(QString path)
   {
     QxrdGlobalSettings settings(path+".new", QSettings::IniFormat);
 
-    if (m_ApplicationSettings) {
+    if (QxrdApplication::settings()) {
       settings.beginGroup("application");
-      m_ApplicationSettings -> writeSettings(&settings);
+      QxrdApplication::settings() -> writeSettings(&settings);
       settings.endGroup();
     }
   }
@@ -936,7 +718,7 @@ void QxrdApplication::doOpenURL(QString url)
 
 void QxrdApplication::editGlobalPreferences()
 {
-  QxrdGlobalPreferencesDialog prefs(m_ApplicationSettings, m_PluginInfo);
+  QxrdGlobalPreferencesDialog prefs(QxrdApplication::settings(), m_PluginInfo);
 
   prefs.exec();
 }
@@ -947,54 +729,6 @@ void QxrdApplication::debugChanged(qint64 newValue)
     printMessage(tr("Debug level changed from %1 to %2").arg(g_DebugLevel->debugLevel()).arg(newValue));
 
     g_DebugLevel->setDebugLevel(newValue);
-  }
-}
-
-static void qxrdTIFFWarningHandler(const char* /*module*/, const char* /*fmt*/, va_list /*ap*/)
-{
-  //  char msg[100];
-  //
-  //  vsnprintf(msg, sizeof(msg), fmt, ap);
-  //
-  //  g_Application -> tiffWarning(module, msg);
-}
-
-static void qxrdTIFFErrorHandler(const char* module, const char* fmt, va_list ap)
-{
-  char msg[100];
-
-  vsnprintf(msg, sizeof(msg), fmt, ap);
-
-  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
-
-  if (app) {
-    app -> tiffError(module, msg);
-  }
-}
-
-void QxrdApplication::setupTiffHandlers()
-{
-  qcepTIFFSetErrorHandler      (&qxrdTIFFErrorHandler);
-  qcepTIFFSetErrorHandlerExt   (NULL);
-  qcepTIFFSetWarningHandler    (&qxrdTIFFWarningHandler);
-  qcepTIFFSetWarningHandlerExt (NULL);
-}
-
-void QxrdApplication::tiffWarning(const char *module, const char *msg)
-{
-  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
-
-  if (app) {
-    app->criticalMessage(tr("TIFF Warning from %1 : %2").arg(module).arg(msg));
-  }
-}
-
-void QxrdApplication::tiffError(const char *module, const char *msg)
-{
-  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
-
-  if (app) {
-    app->criticalMessage(tr("TIFF Error from %1 : %2").arg(module).arg(msg));
   }
 }
 
@@ -1027,18 +761,18 @@ void QxrdApplication::readDefaultSettings()
 {
   QSettings settings("cep.xor.aps.anl.gov", "qxrd-defaults");
 
-  m_ApplicationSettings -> set_RecentExperiments(settings.value("recentExperiments").toStringList());
-  m_ApplicationSettings -> set_RecentExperimentsSize(settings.value("recentExperimentsSize", 8).toInt());
-  m_ApplicationSettings -> set_CurrentExperiment(settings.value("currentExperiment").toString());
+  QxrdApplication::settings() -> set_RecentExperiments(settings.value("recentExperiments").toStringList());
+  QxrdApplication::settings() -> set_RecentExperimentsSize(settings.value("recentExperimentsSize", 8).toInt());
+  QxrdApplication::settings() -> set_CurrentExperiment(settings.value("currentExperiment").toString());
 }
 
 void QxrdApplication::writeDefaultSettings()
 {
   QSettings settings("cep.xor.aps.anl.gov", "qxrd-defaults");
 
-  settings.setValue("recentExperiments", m_ApplicationSettings -> get_RecentExperiments());
-  settings.setValue("recentExperimentsSize", m_ApplicationSettings -> get_RecentExperimentsSize());
-  settings.setValue("currentExperiment", m_ApplicationSettings -> get_CurrentExperiment());
+  settings.setValue("recentExperiments", QxrdApplication::settings() -> get_RecentExperiments());
+  settings.setValue("recentExperimentsSize", QxrdApplication::settings() -> get_RecentExperimentsSize());
+  settings.setValue("currentExperiment", QxrdApplication::settings() -> get_CurrentExperiment());
 }
 
 void QxrdApplication::createNewExperiment()
@@ -1058,7 +792,7 @@ void QxrdApplication::chooseExistingExperiment()
 {
   QString res = QFileDialog::getOpenFileName(NULL,
                                              "Open an existing experiment...",
-                                             m_ApplicationSettings -> get_CurrentExperiment(),
+                                             QxrdApplication::settings() -> get_CurrentExperiment(),
                                              "QXRD Experiments (*.qxrdp);;Other Files (*)");
 
   if (res.length() > 0) {
@@ -1122,16 +856,16 @@ void QxrdApplication::closeExperiment(QxrdExperimentWPtr expw)
 
 void QxrdApplication::appendRecentExperiment(QString path)
 {
-  QStringList recent = m_ApplicationSettings -> get_RecentExperiments();
+  QStringList recent = QxrdApplication::settings() -> get_RecentExperiments();
 
   recent.prepend(path);
   recent.removeDuplicates();
 
-  while(recent.length() > m_ApplicationSettings -> get_RecentExperimentsSize()) {
+  while(recent.length() > QxrdApplication::settings() -> get_RecentExperimentsSize()) {
     recent.removeLast();
   }
 
-  m_ApplicationSettings -> set_RecentExperiments(recent);
+  QxrdApplication::settings() -> set_RecentExperiments(recent);
 }
 
 QString QxrdApplication::normalizeExperimentName(QString filename)
@@ -1193,7 +927,7 @@ void QxrdApplication::openedExperiment(QxrdExperimentThreadWPtr expwthr)
 
     if (expt) {
       QString path = expt->experimentFilePath();
-      m_ApplicationSettings -> set_CurrentExperiment(path);
+      QxrdApplication::settings() -> set_CurrentExperiment(path);
       appendRecentExperiment(path);
 
       m_ExperimentThreads.append(exptthr);
@@ -1260,19 +994,19 @@ void QxrdApplication::openWatcher(QString pattern)
 
 void QxrdApplication::incLockerCount()
 {
-  m_ApplicationSettings -> prop_LockerCount()->incValue(1);
+  QxrdApplication::settings() -> prop_LockerCount()->incValue(1);
 }
 
 void QxrdApplication::lockerTimerElapsed()
 {
   double elapsed = m_LastLockerTime.restart();
 
-  double rate = 1000.0*(m_ApplicationSettings -> get_LockerCount() - m_LastLockerCount)/elapsed;
+  double rate = 1000.0*(QxrdApplication::settings() -> get_LockerCount() - m_LastLockerCount)/elapsed;
 
 //  set_LockerRate(rate);
 
 //  m_LastLockerTime = QTime::currentTime();
-  m_LastLockerCount= m_ApplicationSettings -> get_LockerCount();
+  m_LastLockerCount= QxrdApplication::settings() -> get_LockerCount();
 
   if (rate>10000) {
     printMessage(tr("Locker rate %1 locks/sec").arg(/*get_LockerRate()*/rate));

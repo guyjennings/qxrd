@@ -27,6 +27,7 @@ public:
   void appendScript(QString script);
   void appendFile(QString file);
   void appendWatcher(QString patt);
+  void appendPlugin(QString dir);
 
 private:
   QStringList makeStringListFromArgs(int argc, char **argv);
@@ -52,6 +53,22 @@ public:
 
   Q_PROPERTY(QStringList watcherList READ get_WatcherList WRITE set_WatcherList STORED false)
   QCEP_STRING_LIST_PROPERTY(WatcherList)
+
+  Q_PROPERTY(QStringList pluginList READ get_PluginList WRITE set_PluginList STORED false)
+  QCEP_STRING_LIST_PROPERTY(PluginList)
+
+  Q_PROPERTY(qint64    debug         READ get_Debug WRITE set_Debug)
+  QCEP_INTEGER64_PROPERTY(Debug)
+
+  Q_PROPERTY(int    openNew         READ get_OpenNew WRITE set_OpenNew STORED false)
+  QCEP_INTEGER_PROPERTY(OpenNew)
+
+  Q_PROPERTY(int    freshStart         READ get_FreshStart WRITE set_FreshStart STORED false)
+  QCEP_INTEGER_PROPERTY(FreshStart)
+
+  Q_PROPERTY(int    startDetectors READ get_StartDetectors WRITE set_StartDetectors STORED false)
+  QCEP_INTEGER_PROPERTY(StartDetectors)
+
 };
 
 #endif // QXRDAPPCOMMONSETTINGS_H

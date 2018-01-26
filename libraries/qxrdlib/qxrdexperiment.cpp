@@ -633,7 +633,8 @@ void QxrdExperiment::splashMessage(QString msg)
   QxrdApplicationPtr app(m_Application);
 
   if (app) {
-    app->splashMessage(msg);
+    QMetaObject::invokeMethod(app.data(), "splashMessage",
+                              Q_ARG(QString, msg));
   }
 }
 

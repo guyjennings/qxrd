@@ -564,7 +564,8 @@ HEADERS += qxrdlib.h\
     qxrdappviewer-ptr.h \
     qxrdappcommonsettings.h \
     qxrdappviewersettings.h \
-    qxrdappviewersettings-ptr.h
+    qxrdappviewersettings-ptr.h \
+    qxrdappcommonsettings-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

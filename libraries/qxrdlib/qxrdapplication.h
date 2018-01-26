@@ -44,14 +44,7 @@ public:
   QxrdDetectorPluginInterfacePtr fileWatcherPlugin();
   QxrdDetectorPluginInterfaceWPtr detectorPlugin(int detType);
 
-  void tiffWarning(const char* module, const char *msg);
-  void tiffError(const char* module, const char *msg);
-
-//  static QxrdApplicationPtr application();
-
   bool event(QEvent *ev);
-
-//  QWidget* window();
 
   void readDefaultSettings();
   void writeDefaultSettings();
@@ -59,8 +52,6 @@ public:
 
   QString normalizeExperimentName(QString filename);
   void setNewExperimentSettings(QSettings &settings, int type, QString filename);
-
-  QxrdApplicationSettingsWPtr settings();
 
 public slots:
   void finish();
@@ -105,7 +96,6 @@ public slots:
   void loadPreferences(QString path);
   void savePreferences(QString path);
 
-  void splashMessage(QString msg);
   void logMessage(QString msg);
   void warningMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
@@ -127,30 +117,22 @@ public slots:
   QxrdPluginInfoModelWPtr pluginInfo();
 
 public:
+  QxrdApplicationSettingsPtr settings();
+
+public:
   bool wantToQuit();
 
   void incLockerCount();
 
-private slots:
-  void hideSplash();
+private:
+  QString applicationDescription();
 
 private:
-
-  void setupTiffHandlers();
-
-private:
-  QcepObjectNamer      m_ObjectNamer;
-//  QcepSettingsSaverPtr m_AppSaver;
-  QTimer               m_AutoSaveTimer;
-
-private:
-  QxrdApplicationSettingsPtr      m_ApplicationSettings;
+  QcepObjectNamer                 m_ObjectNamer;
+  QTimer                          m_AutoSaveTimer;
 
   QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
   QList<QxrdExperimentWPtr>       m_Experiments;
-
-  QTimer                          m_SplashTimer;
-  QxrdSplashScreenPtr             m_Splash;
 
   QxrdWelcomeWindowPtr            m_WelcomeWindow;
   QxrdNIDAQPluginInterfacePtr     m_NIDAQPlugin;
@@ -161,7 +143,7 @@ private:
   QxrdDetectorPluginInterfacePtr  m_AreaDetectorPlugin;
   QxrdDetectorPluginInterfacePtr  m_FileWatcherPlugin;
 
-  QxrdResponseTimer              *m_ResponseTimer;
+//  QxrdResponseTimer              *m_ResponseTimer;
 
   QMutex                          m_SettingsMutex;
 

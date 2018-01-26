@@ -9,7 +9,12 @@ QxrdAppCommonSettings::QxrdAppCommonSettings(QxrdAppCommonWPtr app, int argc, ch
     m_GuiWanted(this, "guiWanted", 1, "GUI Wanted?"),
     m_CmdList(this, "cmdList", QStringList(), "Commands to Execute"),
     m_FileList(this, "fileList", QStringList(), "Files to Process"),
-    m_WatcherList(this, "watcherList", QStringList(), "File patterns to watch for")
+    m_WatcherList(this, "watcherList", QStringList(), "File patterns to watch for"),
+    m_PluginList(this, "pluginList", QStringList(), "Plugin directories"),
+    m_Debug(this,"debug", 0, "Debug Level"),
+    m_OpenNew(this,"openNew", 0, "Open a new experiment"),
+    m_FreshStart(this,"freshStart", 0, "Do a Fresh Start"),
+    m_StartDetectors(this, "startDetectors", 1, "Start Detectors when opening experiments")
 {
 
 }
@@ -84,4 +89,9 @@ void QxrdAppCommonSettings::appendFile(QString file)
 void QxrdAppCommonSettings::appendWatcher(QString patt)
 {
   prop_WatcherList()->appendValue(patt);
+}
+
+void QxrdAppCommonSettings::appendPlugin(QString dir)
+{
+  prop_PluginList()->appendValue(dir);
 }

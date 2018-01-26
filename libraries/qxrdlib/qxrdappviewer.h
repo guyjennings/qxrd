@@ -26,10 +26,13 @@ public:
 
   void setDefaultObjectData(QcepDataObject *obj);
 
-  QxrdAppViewerSettingsWPtr settings();
+  QxrdAppViewerSettingsPtr settings();
 
 private:
-  QxrdAppViewerSettingsPtr      m_AppViewerSettings;
+  QString applicationDescription();
+
+private:
+//  QxrdAppViewerSettingsPtr      m_AppViewerSettings;
 };
 
 #endif // QXRDAPPVIEWER_H

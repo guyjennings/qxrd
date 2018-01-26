@@ -16,8 +16,14 @@ bool QxrdAppViewer::init(int &argc, char **argv)
 {
   inherited::init(argc, argv);
 
-  m_AppViewerSettings = QxrdAppViewerSettingsPtr(
-        new QxrdAppViewerSettings(qSharedPointerDynamicCast<QxrdAppViewer>(sharedFromThis()), argc, argv));
+  setSettings(QxrdAppViewerSettingsPtr(
+        new QxrdAppViewerSettings(qSharedPointerDynamicCast<QxrdAppViewer>(sharedFromThis()), argc, argv)));
+
+  if (settings()) {
+    settings()->init();
+
+    parseCommandLine(false);
+  }
 
   return true;
 }
@@ -39,7 +45,13 @@ void QxrdAppViewer::criticalMessage(QString msg, QDateTime ts)
 {
 }
 
-QxrdAppViewerSettingsWPtr QxrdAppViewer::settings()
+QString QxrdAppViewer::applicationDescription()
 {
-  return m_AppViewerSettings;
+  return QStringLiteral("QXRDVIEWER Data Viewer for 2-D XRay Detector data");
+}
+
+QxrdAppViewerSettingsPtr QxrdAppViewer::settings()
+{
+  return qSharedPointerDynamicCast<QxrdAppViewerSettings>(
+        inherited::settings());
 }
