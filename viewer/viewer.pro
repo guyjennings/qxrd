@@ -47,8 +47,8 @@ UI_DIR = ui
 OBJECTS_DIR = obj
 RCC_DIR = rcc
 message(Building: $${TARGET})
+
 win32 { 
-    RC_FILE = qxrd.rc
     CONFIG(debug, debug|release):CONFIG += console
 }
 
