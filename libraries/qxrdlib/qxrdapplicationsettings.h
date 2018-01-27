@@ -21,12 +21,6 @@ public:
   void writeSettings(QSettings *settings);
 
 public:
-  Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
-  QCEP_STRING_LIST_PROPERTY(RecentExperiments)
-
-  Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize)
-  QCEP_INTEGER_PROPERTY(RecentExperimentsSize)
-
   Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment)
   QCEP_STRING_PROPERTY(CurrentExperiment)
 

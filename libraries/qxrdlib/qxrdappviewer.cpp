@@ -23,6 +23,19 @@ bool QxrdAppViewer::init(int &argc, char **argv)
     settings()->init();
 
     parseCommandLine(false);
+
+    int nWatches = settings() -> get_WatcherList().length();
+    int nFiles   = settings() -> get_FileList().length();
+
+    if (nFiles > 0 || nWatches > 0) {
+      foreach(QString file, settings()->get_FileList()) {
+        openFile(file);
+      }
+
+      foreach(QString patt, settings()->get_WatcherList()) {
+        openWatcher(patt);
+      }
+    }
   }
 
   return true;
@@ -54,4 +67,20 @@ QxrdAppViewerSettingsPtr QxrdAppViewer::settings()
 {
   return qSharedPointerDynamicCast<QxrdAppViewerSettings>(
         inherited::settings());
+}
+
+void QxrdAppViewer::openExperiment(QString path)
+{
+}
+
+void QxrdAppViewer::editGlobalPreferences()
+{
+}
+
+void QxrdAppViewer::createNewExperiment()
+{
+}
+
+void QxrdAppViewer::chooseExistingExperiment()
+{
 }

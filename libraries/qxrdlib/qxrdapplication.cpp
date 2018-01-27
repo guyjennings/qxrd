@@ -4,7 +4,6 @@
 #include "qxrdapplication.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdexperimentthread.h"
-#include "qxrdwelcomewindow.h"
 #include "qxrdwindow.h"
 #include "qxrdserverthread.h"
 #include "qxrdserver.h"
@@ -41,7 +40,6 @@
 #include <QTime>
 #include <QtConcurrentRun>
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QString>
 #include <tiffio.h>
 #include <QPluginLoader>
@@ -51,6 +49,7 @@
 #include <QCoreApplication>
 #include <QJsonObject>
 #include <QCommandLineParser>
+#include <QMessageBox>
 
 static QList<QDir> pluginsDirList;
 
@@ -70,7 +69,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_ObjectNamer(this, "application"),
 //  m_AppSaver(QcepSettingsSaverPtr(
 //            new QcepSettingsSaver(this))),
-  m_WelcomeWindow(NULL),
   m_NIDAQPlugin(NULL),
 //  m_ResponseTimer(NULL),
   m_SettingsMutex(),
@@ -171,8 +169,6 @@ bool QxrdApplication::init(int &argc, char **argv)
 
     char *pwd = getenv("PWD");
     printMessage(tr("pwd: %1").arg(pwd));
-
-    QThread::currentThread()->setObjectName("app");
 
     loadPlugins();
     readSettings();
@@ -283,27 +279,6 @@ void QxrdApplication::onAutoSaveTimer()
 {
   if (settings() && settings()->isChanged()) {
     writeSettings();
-  }
-}
-
-void QxrdApplication::openWelcomeWindow()
-{
-  GUI_THREAD_CHECK;
-
-  if (m_WelcomeWindow == NULL) {
-    m_WelcomeWindow = new QxrdWelcomeWindow(qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()));
-    m_WelcomeWindow->setAttribute(Qt::WA_DeleteOnClose, true);
-  }
-
-  m_WelcomeWindow -> show();
-}
-
-void QxrdApplication::closeWelcomeWindow()
-{
-  GUI_THREAD_CHECK;
-
-  if (m_WelcomeWindow) {
-    m_WelcomeWindow -> hide();
   }
 }
 
@@ -640,21 +615,6 @@ void QxrdApplication::savePreferences(QString path)
   QFile::rename(path+".new", path);
 }
 
-void QxrdApplication::possiblyQuit()
-{
-  if (wantToQuit()) {
-//    finish();
-    quit();
-  }
-}
-
-bool QxrdApplication::wantToQuit()
-{
-  return QMessageBox::question(NULL, tr("Really Quit?"),
-                               tr("Do you really want to exit the application?"),
-                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
-}
-
 void QxrdApplication::doAboutQxrd()
 {
   QString about = "QXRD Data Acquisition for PE Area Detectors\nVersion " STR(QXRD_VERSION);
@@ -907,17 +867,6 @@ void QxrdApplication::setNewExperimentSettings(QSettings &settings, int type, QS
   }
 }
 
-void QxrdApplication::openRecentExperiment(QString path)
-{
-  QFileInfo info(path);
-
-  if (info.exists()) {
-    openExperiment(path);
-  } else {
-    printMessage(tr("Experiment %1 does not exist").arg(path));
-  }
-}
-
 void QxrdApplication::openedExperiment(QxrdExperimentThreadWPtr expwthr)
 {
   QxrdExperimentThreadPtr exptthr(expwthr);
@@ -980,16 +929,6 @@ void QxrdApplication::activateExperiment(QString path)
       }
     }
   }
-}
-
-void QxrdApplication::openFile(QString filePath)
-{
-  printMessage(tr("Open file \"%1\" (to be written)").arg(filePath));
-}
-
-void QxrdApplication::openWatcher(QString pattern)
-{
-  printMessage(tr("Open watcher \"%1\" (to be written)").arg(pattern));
 }
 
 void QxrdApplication::incLockerCount()

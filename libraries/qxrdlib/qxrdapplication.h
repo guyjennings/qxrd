@@ -11,7 +11,6 @@
 #include "qxrdexperiment.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
-#include "qxrdwelcomewindow-ptr.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrddetectorplugininterface-ptr.h"
@@ -58,15 +57,11 @@ public slots:
 
   void createNewExperiment();
   void chooseExistingExperiment();
-  void openRecentExperiment(QString path);
 
   void activateExperiment(QString path);
   void openExperiment(QString path);
   void openExperiment2(QString path);
   void closeExperiment(QxrdExperimentWPtr expw);
-
-  void openFile(QString filePath);
-  void openWatcher(QString pattern);
 
   void openedExperiment(QxrdExperimentThreadWPtr expwthr);
   void closedExperiment(QxrdExperimentThreadWPtr expwthr);
@@ -74,14 +69,10 @@ public slots:
 
   QxrdExperimentPtr experiment(int i);
 
-  void openWelcomeWindow();
-  void closeWelcomeWindow();
-
   void doAboutQxrd();
   void doOpenQXRDWebPage();
   void doOpenURL(QString url);
 
-  void possiblyQuit();
   void editGlobalPreferences();
   void debugChanged(qint64 newValue);
 
@@ -120,8 +111,6 @@ public:
   QxrdApplicationSettingsPtr settings();
 
 public:
-  bool wantToQuit();
-
   void incLockerCount();
 
 private:
@@ -134,7 +123,6 @@ private:
   QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
   QList<QxrdExperimentWPtr>       m_Experiments;
 
-  QxrdWelcomeWindowPtr            m_WelcomeWindow;
   QxrdNIDAQPluginInterfacePtr     m_NIDAQPlugin;
   QxrdDetectorPluginInterfacePtr  m_SimulatedDetectorPlugin;
   QxrdDetectorPluginInterfacePtr  m_PerkinElmerDetectorPlugin;

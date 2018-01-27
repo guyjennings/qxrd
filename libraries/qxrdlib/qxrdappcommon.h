@@ -6,6 +6,7 @@
 #include "qcepapplication.h"
 #include "qxrdappcommonsettings-ptr.h"
 #include "qxrdsplashscreen-ptr.h"
+#include "qxrdwelcomewindow-ptr.h"
 #include <QTimer>
 
 class QXRD_EXPORT QxrdAppCommon : public QcepApplication
@@ -29,11 +30,26 @@ public:
   void tiffWarning(const char* module, const char *msg);
   void tiffError(const char* module, const char *msg);
 
-protected:
+  void openFile(QString filePath);
+  void openWatcher(QString pattern);
+
+  void openWelcomeWindow();
+  void closeWelcomeWindow();
+
   QxrdAppCommonSettingsPtr settings();
   void setSettings(QxrdAppCommonSettingsPtr set);
 
   virtual QString applicationDescription() = 0;
+
+  virtual void openExperiment(QString path) = 0;
+  virtual void openRecentExperiment(QString path);
+
+  virtual void editGlobalPreferences() = 0;
+  virtual void createNewExperiment() = 0;
+  virtual void chooseExistingExperiment() = 0;
+
+  void possiblyQuit();
+  bool wantToQuit();
 
 private:
   void hideSplash();
@@ -42,6 +58,8 @@ private:
   QxrdAppCommonSettingsPtr        m_ApplicationSettings;
   QTimer                          m_SplashTimer;
   QxrdSplashScreenPtr             m_Splash;
+
+  QxrdWelcomeWindowPtr            m_WelcomeWindow;
 };
 
 #endif // QXRDAPPCOMMON_H

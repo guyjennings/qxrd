@@ -14,7 +14,9 @@ QxrdAppCommonSettings::QxrdAppCommonSettings(QxrdAppCommonWPtr app, int argc, ch
     m_Debug(this,"debug", 0, "Debug Level"),
     m_OpenNew(this,"openNew", 0, "Open a new experiment"),
     m_FreshStart(this,"freshStart", 0, "Do a Fresh Start"),
-    m_StartDetectors(this, "startDetectors", 1, "Start Detectors when opening experiments")
+    m_StartDetectors(this, "startDetectors", 1, "Start Detectors when opening experiments"),
+    m_RecentExperiments(this, "recentExperiments", QStringList(), "Recent Experiments"),
+    m_RecentExperimentsSize(this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember")
 {
 
 }

@@ -9,13 +9,16 @@
 #include "qxrdtestgenerator.h"
 #include "qxrdwindowsettings.h"
 #include "qxrddetectorcontrolwindowsettings.h"
+#include "qxrdwelcomewindow.h"
 #include <QCommandLineParser>
 #include <QDir>
 #include <QThread>
+#include <QMessageBox>
 
 QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   : inherited(argc, argv),
-    m_Splash(NULL)
+    m_Splash(NULL),
+    m_WelcomeWindow(NULL)
 {
   QcepProperty::registerMetaTypes();
   QxrdPowderPoint::registerMetaTypes();
@@ -36,6 +39,8 @@ QxrdAppCommon::~QxrdAppCommon()
 bool QxrdAppCommon::init(int &argc, char **argv)
 {
   THREAD_CHECK;
+
+  QThread::currentThread()->setObjectName("app");
 
   connect(this,           &QCoreApplication::aboutToQuit,
           this,           &QxrdAppCommon::finish);
@@ -228,6 +233,27 @@ void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
   }
 }
 
+void QxrdAppCommon::openWelcomeWindow()
+{
+  GUI_THREAD_CHECK;
+
+  if (m_WelcomeWindow == NULL) {
+    m_WelcomeWindow = new QxrdWelcomeWindow(qSharedPointerDynamicCast<QxrdAppCommon>(sharedFromThis()));
+    m_WelcomeWindow->setAttribute(Qt::WA_DeleteOnClose, true);
+  }
+
+  m_WelcomeWindow -> show();
+}
+
+void QxrdAppCommon::closeWelcomeWindow()
+{
+  GUI_THREAD_CHECK;
+
+  if (m_WelcomeWindow) {
+    m_WelcomeWindow -> hide();
+  }
+}
+
 void QxrdAppCommon::splashMessage(QString msg)
 {
   GUI_THREAD_CHECK;
@@ -298,3 +324,40 @@ void QxrdAppCommon::setupTiffHandlers()
   qcepTIFFSetWarningHandler    (&qxrdTIFFWarningHandler);
   qcepTIFFSetWarningHandlerExt (NULL);
 }
+
+void QxrdAppCommon::openFile(QString filePath)
+{
+  printMessage(tr("Open file \"%1\" (to be written)").arg(filePath));
+}
+
+void QxrdAppCommon::openWatcher(QString pattern)
+{
+  printMessage(tr("Open watcher \"%1\" (to be written)").arg(pattern));
+}
+
+void QxrdAppCommon::openRecentExperiment(QString path)
+{
+  QFileInfo info(path);
+
+  if (info.exists()) {
+    openExperiment(path);
+  } else {
+    printMessage(tr("Experiment %1 does not exist").arg(path));
+  }
+}
+
+void QxrdAppCommon::possiblyQuit()
+{
+  if (wantToQuit()) {
+//    finish();
+    quit();
+  }
+}
+
+bool QxrdAppCommon::wantToQuit()
+{
+  return QMessageBox::question(NULL, tr("Really Quit?"),
+                               tr("Do you really want to exit the application?"),
+                               QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
+}
+

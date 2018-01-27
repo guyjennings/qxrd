@@ -1,19 +1,19 @@
 #include "qxrdwelcomewindow.h"
 #include "ui_qxrdwelcomewindow.h"
 #include "qxrdwelcomerecentitem.h"
-#include "qxrdapplication.h"
+#include "qxrdappcommon.h"
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QThread>
-#include "qxrdapplicationsettings.h"
+#include "qxrdappcommonsettings.h"
 
-QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplicationWPtr appw) :
+QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdAppCommonWPtr appw) :
   QMainWindow(NULL),
   m_Application(appw),
   m_InsertRow(5),
   m_RecentExperimentsMenu(NULL)
 {
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app) {
     setupUi(this);
@@ -27,15 +27,15 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdApplicationWPtr appw) :
 
     connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdWelcomeWindow::clearStatusMessage);
 
-    connect(m_ActionEditApplicationPreferences, &QAction::triggered, app.data(), &QxrdApplication::editGlobalPreferences);
-    connect(m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdApplication::createNewExperiment);
-    connect(m_ActionOpenExperiment, &QAction::triggered, app.data(), &QxrdApplication::chooseExistingExperiment);
-    connect(m_ActionExitApplication, &QAction::triggered, app.data(), &QxrdApplication::possiblyQuit);
+    connect(m_ActionEditApplicationPreferences, &QAction::triggered, app.data(), &QxrdAppCommon::editGlobalPreferences);
+    connect(m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdAppCommon::createNewExperiment);
+    connect(m_ActionOpenExperiment, &QAction::triggered, app.data(), &QxrdAppCommon::chooseExistingExperiment);
+    connect(m_ActionExitApplication, &QAction::triggered, app.data(), &QxrdAppCommon::possiblyQuit);
 
     connect(m_NewExperiment, &QAbstractButton::clicked, m_ActionNewExperiment, &QAction::trigger);
     connect(m_OpenExistingExperiment, &QAbstractButton::clicked, m_ActionOpenExperiment, &QAction::trigger);
 
-    QxrdApplicationSettingsPtr settings(app->settings());
+    QxrdAppCommonSettingsPtr settings(app->settings());
 
     if (settings) {
       QStringList recents = settings->get_RecentExperiments();
@@ -78,12 +78,12 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
 {
 //  printMessage("Populating recent experiments menu");
 
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app) {
     m_RecentExperimentsMenu->clear();
 
-    QxrdApplicationSettingsPtr settings(app->settings());
+    QxrdAppCommonSettingsPtr settings(app->settings());
 
     if (settings) {
       QStringList recent = settings->get_RecentExperiments();
@@ -101,7 +101,7 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
 
 void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 {
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app) {
     QxrdWelcomeRecentItem *item = new QxrdWelcomeRecentItem(NULL);
@@ -184,10 +184,10 @@ void QxrdWelcomeWindow::clearStatusMessage()
 
 void QxrdWelcomeWindow::openMostRecent()
 {
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app) {
-    QxrdApplicationSettingsPtr settings(app->settings());
+    QxrdAppCommonSettingsPtr settings(app->settings());
 
     if (settings) {
       QString experiment = settings->get_RecentExperiments().value(0);

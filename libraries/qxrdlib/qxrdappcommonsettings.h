@@ -69,6 +69,11 @@ public:
   Q_PROPERTY(int    startDetectors READ get_StartDetectors WRITE set_StartDetectors STORED false)
   QCEP_INTEGER_PROPERTY(StartDetectors)
 
+  Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
+  QCEP_STRING_LIST_PROPERTY(RecentExperiments)
+
+  Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize)
+  QCEP_INTEGER_PROPERTY(RecentExperimentsSize)
 };
 
 #endif // QXRDAPPCOMMONSETTINGS_H

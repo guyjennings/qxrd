@@ -8,14 +8,14 @@
 #include <QTimer>
 #include "ui_qxrdwelcomewindow.h"
 
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 
 class QXRD_EXPORT QxrdWelcomeWindow : public QMainWindow, public Ui::QxrdWelcomeWindow
 {
   Q_OBJECT
 
 public:
-  explicit QxrdWelcomeWindow(QxrdApplicationWPtr appw);
+  explicit QxrdWelcomeWindow(QxrdAppCommonWPtr appw);
   ~QxrdWelcomeWindow();
 
   void appendRecentExperiment(QString title);
@@ -42,7 +42,7 @@ private:
   void setupRecentExperimentsMenu(QAction *action);
 
 private:
-  QxrdApplicationWPtr    m_Application;
+  QxrdAppCommonWPtr      m_Application;
   int                    m_InsertRow;
   QLabel                *m_StatusMsg;
   QTimer                 m_StatusTimer;

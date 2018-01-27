@@ -28,6 +28,12 @@ public:
 
   QxrdAppViewerSettingsPtr settings();
 
+  void openExperiment(QString path);
+
+  void editGlobalPreferences();
+  void createNewExperiment();
+  void chooseExistingExperiment();
+
 private:
   QString applicationDescription();
 

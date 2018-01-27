@@ -4,8 +4,6 @@
 
 QxrdApplicationSettings::QxrdApplicationSettings(QxrdApplicationWPtr app, int argc, char **argv) :
   inherited(app, argc, argv),
-  m_RecentExperiments(this, "recentExperiments", QStringList(), "Recent Experiments"),
-  m_RecentExperimentsSize(this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
   m_CurrentExperiment(this, "currentExperiment", "", "Current Experiment"),
   m_CurrentDirectory(this, "currentDirectory", QDir::homePath(), "Current Directory"),
   //  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
