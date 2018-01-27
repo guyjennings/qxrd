@@ -1,1 +1,1 @@
-IDI_ICON1               ICON    DISCARDABLE     "images/qxrd-viewer-icon.ico"
+IDI_ICON1               ICON    DISCARDABLE     "../libraries/qxrdlib/images/qxrdviewer-icon.ico"

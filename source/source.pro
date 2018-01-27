@@ -54,6 +54,7 @@ INCLUDEPATH += $${PWD}/../libraries/qxrdlib/
 INCLUDEPATH += $${OUT_PWD}/../libraries/qxrdlib/
 
 OTHER_FILES += \
+    qxrd.rc \
     simpleServerTest.mac \
     testScripts.js \
     testScriptPlot.js \

@@ -930,7 +930,8 @@ RESOURCES += qxrdresources.qrc
 DISTFILES += \
     images/*.* \
     help/*.html \
-    help/images/*.*
+    help/images/*.* \
+    images/makeIcons.sh
 
 unix {
     target.path = /usr/lib
