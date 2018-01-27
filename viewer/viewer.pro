@@ -11,7 +11,7 @@ DESTDIR  = ../
 #DESTDIR  = ../app/
 
 macx {
-  ICON = ../libraries/qxrdlib/images/qxrd-viewer-icon.icns
+  ICON = ../libraries/qxrdlib/images/qxrdviewer-icon.icns
 }
 
 win32 {
