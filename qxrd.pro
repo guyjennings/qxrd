@@ -22,7 +22,8 @@ win32 {
  include(nsis.pri)
 }
 
-DISTFILES += libraries source plugins viewer
+DISTFILES += libraries source plugins viewer \
+    qxrdviewer.desktop
 
 OTHER_FILES += qxrd.nsi qxrd-qt5.nsi qxrd.dox Doxyfile qxrd.spec.in qxrd.desktop readme.markdown test/qxrd-macro-counter.mac
 

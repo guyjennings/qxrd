@@ -10,13 +10,11 @@ URL:            http://www.bessrc.aps.anl.gov/software/qxrd/index.html
 Source0:        http://www.bessrc.aps.anl.gov/software/qxrd/qxrd-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Obsoletes:      qxrd
-
 BuildRequires:  desktop-file-utils
 BuildRequires:  qt5-qtbase-devel, qt5-qtscript-devel, qt5-qtwebkit-devel, qt5-qtsvg-devel
 BuildRequires:  libtiff-devel, CBFlib-devel
 BuildRequires:  patchelf
-Requires:       qt5-qtbase, qt5-qtscript, qt5-qtwebkit, qt5-qtsvg
+Requires:       qt5-qtbase, qt5-qtscript, qt5-qtwebkit, qt5-qtsvg, qxrd-libs
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 
@@ -27,6 +25,13 @@ Requires:       qt5-qtcharts, qt5-qtdatavis3d
 
 %description
 qxrd is a readout and control program for perkin elmer x ray detector
+
+%package libs
+Summary:        qxrd libraries
+
+%package viewer
+Summary:        qxrdviewer
+Requires:       qxrd-libs
 
 %prep
 #%setup -n %{name}-%{version}
@@ -68,6 +73,10 @@ desktop-file-install --vendor=bessrc \
         --dir $RPM_BUILD_ROOT%{_datadir}/applications \
         qxrd.desktop
 
+desktop-file-install --vendor=bessrc \
+        --dir $RPM_BUILD_ROOT%{_datadir}/applications \
+        qxrdviewer.desktop
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -86,15 +95,18 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %files
 %defattr(-,root,root,-)
 %doc
-#%{_bindir}/%{name}
-#%{_libdir}/%{name}-%{version}/plugins/*.so
 %{_bindir}/qxrd
+%{_datadir}/applications/*qxrd.desktop
+
+%files lib
 %{_libdir}/qxrd-%{version}/*.so*
 %{_libdir}/qxrd-%{version}/plugins/*.so
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/qxrd-%{version}.conf
-#%{_datadir}/applications/*%{name}.desktop
-%{_datadir}/applications/*qxrd.desktop
 %{_datadir}/icons/hicolor/*/*/*
+
+%files viewer
+%{_bindir}/qxrd
+%{_datadir}/applications/*qxrdviewer.desktop
 
 %changelog
 * Fri Oct 10 2008  <jennings@weimar.bessrc.aps.anl.gov> - 0.4.10-3
