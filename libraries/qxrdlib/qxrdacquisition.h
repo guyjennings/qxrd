@@ -46,9 +46,6 @@ public:
 
   static QxrdAcquisitionPtr newAcquisition();
 
-  virtual void addChildPtr(QcepObjectPtr child);
-  virtual void removeChildPtr(QcepObjectPtr child);
-
   void setWindow(QxrdWindowWPtr win);
 
   QxrdAcquisitionWPtr myself();

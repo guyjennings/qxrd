@@ -25,9 +25,6 @@ public:
   virtual ~QxrdAcquisitionExtraInputs();
 
 public:
-  void addChildPtr(QcepObjectPtr child);
-  void removeChildPtr(QcepObjectPtr child);
-
   void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
   QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
 

@@ -50,32 +50,6 @@ QxrdAcquisitionExtraInputsPtr QxrdAcquisitionExtraInputs::newAcquisitionExtraInp
   return xtra;
 }
 
-void QxrdAcquisitionExtraInputs::addChildPtr(QcepObjectPtr child)
-{
-  QcepObject::addChildPtr(child);
-
-  QxrdAcquisitionExtraInputsChannelPtr chan = qSharedPointerDynamicCast<QxrdAcquisitionExtraInputsChannel>(child);
-
-  if (chan) {
-    int ch = chan->get_ChannelNumber();
-
-    int n = (ch < 0 ? m_Channels.size() : ch+1);
-
-    m_Channels.insert(n, chan);
-  }
-}
-
-void QxrdAcquisitionExtraInputs::removeChildPtr(QcepObjectPtr child)
-{
-  QxrdAcquisitionExtraInputsChannelPtr chan = qSharedPointerDynamicCast<QxrdAcquisitionExtraInputsChannel>(child);
-
-  if (chan) {
-    m_Channels.removeAll(chan);
-  }
-
-  QcepObject::removeChildPtr(child);
-}
-
 QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
 {
 #ifndef QT_NO_DEBUG
@@ -241,17 +215,22 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 {
   QxrdAcquisitionExtraInputsChannelPtr chan =
       QxrdAcquisitionExtraInputsChannel::newAcquisitionExtraInputsChannel(ch);
-  addChildPtr(chan);
 
-  connect(chan.data(), &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
+  if (chan) {
+    int n = (ch < 0 ? m_Channels.size() : ch+1);
 
-  QcepObjectPtr p(parentPtr());
+    m_Channels.insert(n, chan);
 
-  if (p) {
+    connect(chan.data(), &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
+
+    QcepObjectPtr p(parentPtr());
+
+    if (p) {
       p->propertyChanged(NULL);
-  }
+    }
 
-  emit channelCountChanged();
+    emit channelCountChanged();
+  }
 }
 
 void QxrdAcquisitionExtraInputs::removeChannel(int ch)
@@ -259,7 +238,7 @@ void QxrdAcquisitionExtraInputs::removeChannel(int ch)
   QxrdAcquisitionExtraInputsChannelPtr chan = channel(ch);
 
   if (chan) {
-    removeChildPtr(chan);
+    m_Channels.removeAll(chan);
 
     QcepObjectPtr p(parentPtr());
 

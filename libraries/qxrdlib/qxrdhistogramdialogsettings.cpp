@@ -7,22 +7,15 @@ QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QString name) :
   m_HistogramRect(this, "histogramRect", QRectF(), "Histogram Selection Rectangle"),
   m_HistogramPlotWidgetSettings(new QxrdHistogramPlotWidgetSettings(name))
 {
+  m_HistogramPlotSettings =
+      QxrdHistogramPlotSettings::newHistogramPlotSettings();
 }
 
 QxrdHistogramDialogSettingsPtr QxrdHistogramDialogSettings::newHistogramDialogSettings()
 {
   QxrdHistogramDialogSettingsPtr set(new QxrdHistogramDialogSettings("histDialogSettings"));
 
-  set->addChildPtr(QxrdHistogramPlotSettings::newHistogramPlotSettings());
-
   return set;
-}
-
-void QxrdHistogramDialogSettings::addChildPtr(QcepObjectPtr child)
-{
-  QcepObject::addChildPtr(child);
-
-  if (checkPointer<QxrdHistogramPlotSettings>(child, m_HistogramPlotSettings)) {}
 }
 
 void QxrdHistogramDialogSettings::readSettings(QSettings *settings)

@@ -32,11 +32,6 @@ QxrdCalibrantLibrary::~QxrdCalibrantLibrary()
 #endif
 }
 
-void QxrdCalibrantLibrary::addChildPtr(QcepObjectPtr /*child*/)
-{
-  printMessage("Need to write QxrdCalibrantLibrary::addChildPtr");
-}
-
 void QxrdCalibrantLibrary::readSettings(QSettings *settings)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);

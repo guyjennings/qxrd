@@ -29,10 +29,6 @@ QxrdTestScanGeneratorWindow::QxrdTestScanGeneratorWindow(QxrdExperimentWPtr doc,
   QxrdTestScanGeneratorPtr gen(m_Generator);
 
   if (expt) {
-    if (gen) {
-      expt->addChildPtr(gen);
-    }
-
     expt->printMessage("Started Test Scan Generator Thread");
   }
 

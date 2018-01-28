@@ -6,22 +6,15 @@ QxrdSliceDialogSettings::QxrdSliceDialogSettings(QString name) :
   QcepObject(name),
   m_SlicePolygon(this, "slicePolygon", QcepPolygon(), "Slice Polygon")
 {
+  m_SlicePlotSettings =
+      QxrdSlicePlotSettings::newSlicePlotSettings();
 }
 
 QxrdSliceDialogSettingsPtr QxrdSliceDialogSettings::newSliceDialogSettings()
 {
   QxrdSliceDialogSettingsPtr set(new QxrdSliceDialogSettings("sliceDialogSettings"));
 
-  set -> addChildPtr(QxrdSlicePlotSettings::newSlicePlotSettings());
-
   return set;
-}
-
-void QxrdSliceDialogSettings::addChildPtr(QcepObjectPtr child)
-{
-  QcepObject::addChildPtr(child);
-
-  if (checkPointer<QxrdSlicePlotSettings>(child, m_SlicePlotSettings)) {}
 }
 
 void QxrdSliceDialogSettings::readSettings(QSettings *settings)

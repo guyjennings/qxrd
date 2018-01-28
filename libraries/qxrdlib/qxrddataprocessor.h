@@ -46,9 +46,6 @@ public:
   virtual ~QxrdDataProcessor();
   static QxrdDataProcessorPtr newDataProcessor();
 
-  virtual void addChildPtr(QcepObjectPtr child);
-  virtual void removeChildPtr(QcepObjectPtr child);
-
 //  QxrdExperimentWPtr  experiment() const;
   QxrdAcquisitionWPtr acquisition() const;
 //  QxrdFileSaverWPtr   fileSaver() const;

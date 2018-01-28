@@ -108,22 +108,6 @@ QxrdCenterFinder::~QxrdCenterFinder()
 #endif
 }
 
-//void QxrdCenterFinder::addChildPtr(QcepObjectPtr child)
-//{
-//  QxrdDetectorGeometry::addChildPtr(child);
-
-//  QxrdExperimentPtr expt = qSharedPointerDynamicCast<QxrdExperiment>(child);
-
-//  if (expt) {
-//    m_Experiment = expt;
-//  }
-//}
-
-//void QxrdCenterFinder::removeChildPtr(QcepObjectPtr child)
-//{
-//  printMessage("Need to write QxrdCenterFinder::removeChildPtr");
-//}
-
 QxrdExperimentWPtr QxrdCenterFinder::experiment() const
 {
   QcepObjectPtr p = parentPtr();

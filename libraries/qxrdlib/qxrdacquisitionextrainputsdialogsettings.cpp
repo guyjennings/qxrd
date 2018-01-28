@@ -6,22 +6,15 @@
 QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettings(QString name) :
   QcepObject(name)
 {
+  m_AcquisitionExtraInputsPlotSettings =
+      QxrdAcquisitionExtraInputsPlotSettings::newAcquisitionExtraInputsPlotSettings();
 }
 
 QxrdAcquisitionExtraInputsDialogSettingsPtr QxrdAcquisitionExtraInputsDialogSettings::newAcquisitionExtraInputsDialogSettings()
 {
   QxrdAcquisitionExtraInputsDialogSettingsPtr set(new QxrdAcquisitionExtraInputsDialogSettings("extraInputsDialog"));
 
-  set -> addChildPtr(QxrdAcquisitionExtraInputsPlotSettings::newAcquisitionExtraInputsPlotSettings());
-
   return set;
-}
-
-void QxrdAcquisitionExtraInputsDialogSettings::addChildPtr(QcepObjectPtr child)
-{
-  QcepObject::addChildPtr(child);
-
-  if (checkPointer<QxrdAcquisitionExtraInputsPlotSettings>(child, m_AcquisitionExtraInputsPlotSettings)) {}
 }
 
 void QxrdAcquisitionExtraInputsDialogSettings::readSettings(QSettings *settings)

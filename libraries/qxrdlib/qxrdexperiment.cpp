@@ -192,7 +192,7 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     splashMessage("Initializing Data Processing");
 
-    addChildPtr(QxrdDataProcessor::newDataProcessor());
+    m_DataProcessor = QxrdDataProcessor::newDataProcessor();
 
     QxrdFileSaverPtr saver(m_FileSaver);
 
@@ -201,11 +201,9 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
       saver -> setExperiment(myself);
     }
 
-//    addChildPtr(m_FileSaver);
-
     splashMessage("Initializing Data Acquisition");
 
-    addChildPtr(QxrdAcquisition::newAcquisition());
+    m_Acquisition = QxrdAcquisition::newAcquisition();
 
     m_Acquisition -> initialize();
 
@@ -213,8 +211,6 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     m_CalibrantLibraryModel = QxrdCalibrantLibraryModelPtr(
           new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
-
-    addChildPtr(m_CalibrantLibrary);
 
     m_CalibrantDSpacings = QxrdCalibrantDSpacingsPtr(
           new QxrdCalibrantDSpacings());
@@ -238,7 +234,7 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
       acq -> setNIDAQPlugin(app->nidaqPlugin());
     }
 
-    addChildPtr(QcepAllocator::newDataset("dataset"));
+    m_Dataset = QcepAllocator::newDataset("dataset");
 
     m_DatasetModel = QcepDatasetModelPtr(
           new QcepDatasetModel(myself, m_Dataset));
@@ -262,7 +258,7 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 //    m_DatasetModel -> newColumn("/group4/t", 1000);
 //    m_DatasetModel -> newColumn("/group4/sdev", 1000);
 
-    addChildPtr(QxrdWindowSettings::newWindowSettings());
+    m_WindowSettings = QxrdWindowSettings::newWindowSettings();
 
     splashMessage("Starting SPEC Server");
 
@@ -272,8 +268,6 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
     m_ServerThread -> start();
     m_Server = m_ServerThread -> server();
 
-    addChildPtr(m_Server);
-
     splashMessage("Starting Simple Socket Server");
 
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
@@ -281,8 +275,6 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     m_SimpleServerThread -> start();
     m_SimpleServer = m_SimpleServerThread -> server();
-
-    addChildPtr(m_SimpleServer);
 
 //    m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
 //          new QxrdScriptEngineThread(m_Application, m_Experiment));
@@ -329,9 +321,7 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     splashMessage("Loading Preferences");
 
-//    settings->beginGroup("experiment");
     readSettings(settings.data());
-//    settings->endGroup();
 
     splashMessage("Loading Background Images");
 
@@ -402,65 +392,6 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     m_AutoSaveTimer.start(5000);
   }
-}
-
-void QxrdExperiment::addChildPtr(QcepObjectPtr child)
-{
-  QcepExperiment::addChildPtr(child);
-
-  if (checkPointer<QxrdWindowSettings>(child, m_WindowSettings)) {}
-
-  else if (checkPointer<QxrdServer>(child, m_Server)) {
-    QxrdServerPtr srv(m_Server);
-    srv -> moveToThread(m_ServerThread.data());
-  }
-
-  else if (checkPointer<QxrdSimpleServer>(child, m_SimpleServer)) {
-    QxrdSimpleServerPtr ssrv(m_SimpleServer);
-    ssrv -> moveToThread(m_SimpleServerThread.data());
-  }
-
-  else if (checkPointer<QxrdDataProcessor>(child, m_DataProcessor)) {}
-
-  else if (checkPointer<QxrdCalibrantLibrary>(child, m_CalibrantLibrary)) {
-    if (m_CalibrantLibraryModel == NULL) {
-      printMessage("Calibrant Library Model == NULL");
-    } else {
-      m_CalibrantLibraryModel->setCalibrantLibrary(m_CalibrantLibrary);
-    }
-  }
-
-//  else if (checkPointer<QxrdCalibrantDSpacings>(child, m_CalibrantDSpacings)) {
-//    if (m_CalibrantDSpacingsModel == NULL) {
-//      printMessage(("Calibrant D Spacings Model == NULL"));
-//    } else {
-//      m_CalibrantDSpacingsModel->setCalibrantDSpacings(m_CalibrantDSpacings);
-//    }
-//  }
-
-  else if (checkPointer<QxrdAcquisition>(child, m_Acquisition)) {}
-
-//  else if (checkPointer<QxrdFileSaver>(child, m_FileSaver)) {
-//    QxrdFileSaverPtr fsav(m_FileSaver);
-//    fsav -> moveToThread(m_FileSaverThread.data());
-//  }
-
-//  else if (checkPointer<QxrdScriptEngine>(child, m_ScriptEngine)) {}
-
-  else if (checkPointer<QcepDataset>(child, m_Dataset)) {
-    if (m_DatasetModel == NULL) {
-      printMessage("Dataset Model == NULL");
-    } else {
-      m_DatasetModel->setDataset(m_Dataset);
-    }
-  }
-}
-
-void QxrdExperiment::removeChildPtr(QcepObjectPtr child)
-{
-  printMessage("Need to write QxrdExperiment::removeChildPtr");
-
-  QcepExperiment::removeChildPtr(child);
 }
 
 void QxrdExperiment::registerMetaTypes()
@@ -1426,14 +1357,6 @@ void QxrdExperiment::plotImage(QcepDoubleImageDataPtr img)
   }
 }
 
-void QxrdExperiment::dump()
-{
-  printf("About to dump\n");
-  dumpObjectInfo();
-  dumpObjectTree();
-  printf("Dumped\n");
-}
-
 QColor QxrdExperiment::pickColor(QColor start)
 {
   QColor res =  QColorDialog::getColor(start);
@@ -1456,38 +1379,6 @@ void QxrdExperiment::evaluateScriptFile(QString path)
     printMessage(tr("Loading script %1").arg(path));
 
     eng->loadScript(path);
-  }
-}
-
-//void QxrdExperiment::openAcquisitionWindow()
-//{
-//  GUI_THREAD_CHECK;
-
-//  if (m_AcquisitionWindow == NULL) {
-//    m_AcquisitionWindow = QxrdDetectorControlWindowPtr(
-//          new QxrdDetectorControlWindow(acquisition(), NULL));
-//  }
-
-//  m_AcquisitionWindow->show();
-//}
-
-void QxrdExperiment::readObjectTreeFromText(QString filePath)
-{
-  printMessage(tr("Reading Object Tree from %1 ...").arg(filePath));
-
-  QcepFileFormatterPtr fmt = QcepFileFormatterPtr(
-        new QcepFileFormatterText(filePath));
-
-  fmt -> beginReadFile();
-
-  QcepObjectPtr obj = QcepObject::readDataObject(fmt);
-
-  fmt -> endReadFile();
-
-  if (obj) {
-    obj -> dumpObjectTreePtr();
-  } else {
-    printMessage("NULL");
   }
 }
 

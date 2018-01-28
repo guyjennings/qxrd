@@ -55,7 +55,6 @@ public:
 
 public slots:
   void doSaveExperimentAsText();
-  void doReadObjectTreeFromText();
   void doSaveData();
   void doLoadData();
   void doSaveDark();

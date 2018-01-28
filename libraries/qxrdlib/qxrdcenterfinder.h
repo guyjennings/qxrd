@@ -26,9 +26,6 @@ public:
   static QxrdCenterFinderPtr newCenterFinder();
   virtual ~QxrdCenterFinder();
 
-//  virtual void addChildPtr(QcepObjectPtr child);
-//  virtual void removeChildPtr(QcepObjectPtr child);
-
 public:
   Q_PROPERTY(QPointF center READ get_Center WRITE set_Center)
   QCEP_DOUBLE_POINT_PROPERTY(Center)

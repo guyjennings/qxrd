@@ -118,6 +118,13 @@ QxrdDataProcessor::QxrdDataProcessor(QString name) :
     printMessage("QxrdDataProcessor::QxrdDataProcessor");
   }
 
+  m_Integrator = QxrdIntegrator::newIntegrator();
+  m_PolarTransform = QxrdPolarTransform::newPolarTransform();
+  m_PolarNormalization = QxrdPolarNormalization::newPolarNormalization();
+  m_GenerateTestImage = QxrdGenerateTestImage::newGenerateTestImage();
+
+  m_Integrator->initialize(centerFinder());
+
   connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onCorrectedImageAvailable);
   connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onIntegratedDataAvailable);
 //  connect(&m_ROIData,         &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onROIDataAvailable);
@@ -139,35 +146,7 @@ QxrdDataProcessorPtr QxrdDataProcessor::newDataProcessor()
 {
   QxrdDataProcessorPtr proc(new QxrdDataProcessor("processor"));
 
-  if (proc) {
-//    proc->addChildPtr(QxrdCenterFinder::newCenterFinder());
-    proc->addChildPtr(QxrdIntegrator::newIntegrator());
-    proc->addChildPtr(QxrdPolarTransform::newPolarTransform());
-    proc->addChildPtr(QxrdPolarNormalization::newPolarNormalization());
-    proc->addChildPtr(QxrdGenerateTestImage::newGenerateTestImage());
-  }
-
   return proc;
-}
-
-void QxrdDataProcessor::addChildPtr(QcepObjectPtr child)
-{
-  QxrdProcessor::addChildPtr(child);
-
-  if (checkPointer<QxrdIntegrator>(child, m_Integrator)) {
-    m_Integrator->initialize(centerFinder());
-  } else if (checkPointer<QxrdPolarTransform>(child, m_PolarTransform)) {
-
-  } else if (checkPointer<QxrdPolarNormalization>(child, m_PolarNormalization)) {
-
-  } else if (checkPointer<QxrdGenerateTestImage>(child, m_GenerateTestImage)) {
-
-  }
-}
-
-void QxrdDataProcessor::removeChildPtr(QcepObjectPtr /*child*/)
-{
-  printMessage("Need to write QxrdDataProcessor::removeChildPtr");
 }
 
 QxrdAcquisitionWPtr QxrdDataProcessor::acquisition() const

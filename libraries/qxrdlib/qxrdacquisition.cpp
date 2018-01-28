@@ -80,6 +80,14 @@ QxrdAcquisition::QxrdAcquisition(QString name)
     printf("QxrdAcquisition::QxrdAcquisition(%p)\n", this);
   }
 
+  m_SynchronizedAcquisition =
+      QxrdSynchronizedAcquisition::newSynchronizedAcquisition();
+
+  m_AcquisitionExtraInputs =
+      QxrdAcquisitionExtraInputs::newAcquisitionExtraInputs();
+
+  connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged, this, &QxrdAcquisition::extraInputsChanged);
+
   connect(prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_SummedExposures(), &QcepIntProperty::valueChanged,  this, &QxrdAcquisition::updateSaveTimes);
@@ -100,42 +108,23 @@ QxrdAcquisitionPtr QxrdAcquisition::newAcquisition()
     acq->printMessage("QxrdAcquisition::QxrdAcquisition");
   }
 
-  acq->addChildPtr(QxrdSynchronizedAcquisition::newSynchronizedAcquisition());
-
-  acq->addChildPtr(QxrdAcquisitionExtraInputs::newAcquisitionExtraInputs());
-
-  acq->setAcquisitionScalerModel(
-        QxrdAcquisitionScalerModelPtr(
-          new QxrdAcquisitionScalerModel(acq)));
-
   return acq;
 }
 
 void QxrdAcquisition::initialize()
 {
+  QxrdAcquisitionPtr acq(
+        qSharedPointerDynamicCast<QxrdAcquisition>(sharedFromThis()));
+
+  m_ScalerModel =
+        QxrdAcquisitionScalerModelPtr(
+          new QxrdAcquisitionScalerModel(acq));
+
   m_ExecutionThread =
       QxrdAcquisitionExecutionThreadPtr(
-        new QxrdAcquisitionExecutionThread(qSharedPointerDynamicCast<QxrdAcquisition>(sharedFromThis())));
+        new QxrdAcquisitionExecutionThread(acq));
 
   m_ExecutionThread->start();
-}
-
-void QxrdAcquisition::addChildPtr(QcepObjectPtr child)
-{
-  QcepObject::addChildPtr(child);
-
-  if (checkPointer<QxrdSynchronizedAcquisition>(child, m_SynchronizedAcquisition)) {}
-  if (checkPointer<QxrdAcquisitionExtraInputs>(child, m_AcquisitionExtraInputs)) {
-    connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
-            this, &QxrdAcquisition::extraInputsChanged);
-  }
-}
-
-void QxrdAcquisition::removeChildPtr(QcepObjectPtr child)
-{
-  printMessage("Need to implement QxrdAcquisition::removeChildPtr");
-
-  QcepObject::removeChildPtr(child);
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -479,8 +468,6 @@ void QxrdAcquisition::readSettings(QSettings *settings)
     settings->setArrayIndex(i);
 
     QcepObjectPtr obj = QcepObject::readObject(settings);
-
-    addChildPtr(obj);
 
     QxrdDetectorSettingsPtr det =
         qSharedPointerDynamicCast<QxrdDetectorSettings>(obj);

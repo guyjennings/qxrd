@@ -60,9 +60,6 @@ public:
   virtual ~QxrdExperiment();
   void initialize(QxrdExperimentSettingsPtr settings);
 
-  virtual void addChildPtr(QcepObjectPtr child);
-  virtual void removeChildPtr(QcepObjectPtr child);
-
   static void registerMetaTypes();
 
   void openWindows();
@@ -139,8 +136,6 @@ public slots:
   void saveExperiment();
   void saveExperimentAsText(QString filePath);
 
-  void readObjectTreeFromText(QString filePath);
-
   void completeWork(int amt);
   void commenceWork(int amt);
   void finishedWork(int amt);
@@ -148,7 +143,6 @@ public slots:
 
   void plotImage(QcepDoubleImageDataPtr img);
 
-  void dump();
   QColor pickColor(QColor start=QColor(Qt::white));
 
   void evaluateScriptFiles(QStringList files);

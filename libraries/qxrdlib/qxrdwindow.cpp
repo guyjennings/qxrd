@@ -330,8 +330,6 @@ void QxrdWindow::initialize()
 
   connect(m_ActionSaveExperimentAsText, &QAction::triggered, this, &QxrdWindow::doSaveExperimentAsText);
 
-  connect(m_ActionReadObjectTreeFromText, &QAction::triggered, this, &QxrdWindow::doReadObjectTreeFromText);
-
 //  m_ExperimentsMenu->menuAction()->setMenuRole(QAction::NoRole);
 
   connect(m_ConfigureDetectorMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateConfigureDetectorMenu);
@@ -1154,31 +1152,6 @@ void QxrdWindow::doSaveExperimentAsText()
 
     if (newChoice.length() > 0) {
       expt->saveExperimentAsText(newChoice);
-    }
-  }
-}
-
-void QxrdWindow::doReadObjectTreeFromText()
-{
-  GUI_THREAD_CHECK;
-
-  QxrdExperimentPtr expt(m_Experiment);
-  QxrdApplicationPtr app(m_Application);
-
-  if (app && expt) {
-    QString path = expt->experimentFilePath();
-    QString name = expt->defaultExperimentName(path);
-    QString dirp = expt->defaultExperimentDirectory(path);
-
-    QDir dir(expt->get_ExperimentDirectory());
-
-    QString newPath = dir.filePath(name+".txt");
-
-    QString theFile = QFileDialog::getOpenFileName(
-          this, "Load Object Tree from...", newPath);
-
-    if (theFile.length()) {
-      expt->readObjectTreeFromText(theFile);
     }
   }
 }

@@ -27,10 +27,6 @@ QxrdTestImageGeneratorWindow::QxrdTestImageGeneratorWindow(QxrdExperimentWPtr do
   QxrdTestImageGeneratorPtr gen(m_Generator);
 
   if (expt) {
-    if (gen) {
-      expt->addChildPtr(gen);
-    }
-
     expt->printMessage("Started Test Image Generator Thread");
   }
 

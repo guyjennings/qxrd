@@ -28,8 +28,6 @@ public:
   Q_INVOKABLE QxrdWindowSettings(QString name);
   static QxrdWindowSettingsPtr newWindowSettings();
 
-  virtual void addChildPtr(QcepObjectPtr child);
-
   static void registerMetaTypes();
 
 public:

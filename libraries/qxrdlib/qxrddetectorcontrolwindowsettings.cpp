@@ -28,11 +28,6 @@ QxrdImagePlotWidgetSettingsPtr QxrdDetectorControlWindowSettings::imagePlotWidge
   return m_ImagePlotWidgetSettings;
 }
 
-void QxrdDetectorControlWindowSettings::addChildPtr(QcepObjectPtr child)
-{
-  QcepObject::addChildPtr(child);
-}
-
 void QxrdDetectorControlWindowSettings::registerMetaTypes()
 {
   qRegisterMetaType<QxrdDetectorControlWindowSettings*>("QxrdDetectorControlWindowSettings*");

@@ -15,8 +15,6 @@ public:
   static QxrdAcquisitionExtraInputsDialogSettingsPtr newAcquisitionExtraInputsDialogSettings();
   
 public:
-  virtual void addChildPtr(QcepObjectPtr child);
-
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
 

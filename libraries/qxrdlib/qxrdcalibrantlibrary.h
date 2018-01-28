@@ -18,8 +18,6 @@ public:
   virtual ~QxrdCalibrantLibrary();
   static QxrdCalibrantLibraryPtr newCalibrantLibrary();
 
-  virtual void addChildPtr(QcepObjectPtr child);
-
 public slots:
   int count();
   QString calibrantName(int n);

@@ -5,22 +5,15 @@
 QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings(QString name) :
   QcepObject(name)
 {
+  m_SynchronizedAcquisitionPlotSettings =
+      QxrdSynchronizedAcquisitionPlotSettings::newSynchronizedAcquisitionPlotSettings();
 }
 
 QxrdSynchronizedAcquisitionDialogSettingsPtr QxrdSynchronizedAcquisitionDialogSettings::newSynchronizedAcquisitionDialogSettings()
 {
   QxrdSynchronizedAcquisitionDialogSettingsPtr set(new QxrdSynchronizedAcquisitionDialogSettings("syncDialog"));
 
-  set -> addChildPtr(QxrdSynchronizedAcquisitionPlotSettings::newSynchronizedAcquisitionPlotSettings());
-
   return set;
-}
-
-void QxrdSynchronizedAcquisitionDialogSettings::addChildPtr(QcepObjectPtr child)
-{
-  QcepObject::addChildPtr(child);
-
-  if (checkPointer<QxrdSynchronizedAcquisitionPlotSettings>(child, m_SynchronizedAcquisitionPlotSettings)) {}
 }
 
 void QxrdSynchronizedAcquisitionDialogSettings::readSettings(QSettings *settings)

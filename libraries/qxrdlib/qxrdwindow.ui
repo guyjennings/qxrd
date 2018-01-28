@@ -410,7 +410,6 @@
     <addaction name="m_ActionSaveExperimentCopy"/>
     <addaction name="m_ActionSaveExperimentAsText"/>
     <addaction name="separator"/>
-    <addaction name="m_ActionReadObjectTreeFromText"/>
     <addaction name="m_ActionLoadData"/>
     <addaction name="m_ActionSaveData"/>
     <addaction name="m_ActionPrintImage"/>
@@ -782,7 +781,7 @@
   <action name="m_ActionInvertMask">
    <property name="icon">
     <iconset resource="qxrdresources.qrc">
-     <normaloff>:/images/mask_polygon_invert.png</normaloff>:/images/mask_invert.png</iconset>
+     <normaloff>:/images/mask_polygon_invert.png</normaloff>:/images/mask_polygon_invert.png</iconset>
    </property>
    <property name="text">
     <string>Invert Mask</string>
@@ -1318,11 +1317,6 @@
   <action name="m_ActionSaveExperimentAsText">
    <property name="text">
     <string>Save E&amp;xperiment as Text...</string>
-   </property>
-  </action>
-  <action name="m_ActionReadObjectTreeFromText">
-   <property name="text">
-    <string>Read O&amp;bject Tree From Text...</string>
    </property>
   </action>
   <action name="m_ActionExecuteScriptJS">
