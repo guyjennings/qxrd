@@ -5,6 +5,7 @@ OUT_PWD_WIN = $${replace(OUT_PWD, /, \\)}
 PWD_WIN = $${replace(PWD, /, \\)}
 
 setup.depends += qxrd.exe
+setup.depends += qxrdviewer.exe
 
 CONFIG(release, debug|release) {
   setup.target   = qxrd-setup-$${VERSION}$${QXRDSUFFIX}.exe
@@ -42,13 +43,8 @@ win32-g++ {
       setup.commands += //DPREFIX=\"$${QXRDSUFFIX}-dbg\" //DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
     }
 
-    isEqual(QT_MAJOR_VERSION, 4) {
-      setup.commands += \"$${PWD_WIN}\\qxrd.nsi\"
-      setup.depends  += $${PWD}/qxrd.nsi
-    } else {
-      setup.commands += \"$${PWD_WIN}\\qxrd-qt5.nsi\"
-      setup.depends  += $${PWD}/qxrd-qt5.nsi
-    }
+    setup.commands += \"$${PWD_WIN}\\qxrd.nsi\"
+    setup.depends  += $${PWD}/qxrd.nsi
   }
 }
 
@@ -84,12 +80,7 @@ win32-msvc* {
       setup.commands += /DPREFIX=\"$${QXRDSUFFIX}-dbg\" /DPREFIXSTR=\"$${QXRDSUFFIXSTR} Debug\"
     }
 
-    isEqual(QT_MAJOR_VERSION, 4) {
-      setup.commands += \"$${PWD_WIN}\\qxrd.nsi\"
-      setup.depends  += $${PWD}/qxrd.nsi
-    } else {
-      setup.commands += \"$${PWD_WIN}\\qxrd-qt5.nsi\"
-      setup.depends  += $${PWD}/qxrd-qt5.nsi
-    }
+    setup.commands += \"$${PWD_WIN}\\qxrd.nsi\"
+    setup.depends  += $${PWD}/qxrd.nsi
   }
 }

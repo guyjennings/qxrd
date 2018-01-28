@@ -26,12 +26,16 @@ RequestExecutionLevel admin
 Var StartMenuFolder
 
 !define MUI_ABORTWARNING
-!define MUI_ICON "source\images\qxrd-icon.ico"
-!define MUI_UNICON "source\images\qxrd-icon.ico"
+!define MUI_ICON "libraries\qxrdlib\images\qxrd-icon.ico"
+!define MUI_UNICON "libraries\qxrdlib\images\qxrd-icon.ico"
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "gpl.txt"
 !insertmacro MUI_PAGE_DIRECTORY
+
+;!define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM"
+;!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\qxrd\qxrd${PREFIX}-${VERSION}"
+;!define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
 !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
 
@@ -44,11 +48,17 @@ Section "Extract qxrd"
   SetShellVarContext all
   SetOutPath "$INSTDIR"
   File "${APPDIR}\qxrd.exe"
+  File "${APPDIR}\qxrdviewer.exe"
+  File "${APPDIR}\vcredist*.exe"
   File "${APPDIR}\*.dll"
 
   SetOutPath "$INSTDIR\plugins"
 
   File "${APPDIR}\plugins\*.dll"
+
+  SetOutPath "$INSTDIR\platforms"
+
+  File "${APPDIR}\platforms\*.dll"
 
   SetOutPath "$INSTDIR"
 
@@ -59,6 +69,7 @@ Section "Extract qxrd"
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}"
   CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\ QXRD ${VERSION} ${PREFIXSTR}.lnk" "$INSTDIR\qxrd.exe"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\ QXRDVIEWER ${VERSION} ${PREFIXSTR}.lnk" "$INSTDIR\qxrdviewer.exe"
   CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Fresh Start.lnk" "$INSTDIR\qxrd.exe" "-fresh"
   CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
@@ -67,18 +78,24 @@ Section "Extract qxrd"
                  "DisplayName" "QXRD ${VERSION} ${PREFIXSTR} -- Data Acquisition for Perkin-Elmer XRD Detectors"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QXRD ${VERSION} ${PREFIXSTR}" \
                  "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+  ExecWait "$INSTDIR\vcredist*.exe /install /quiet /norestart"
 SectionEnd
 
 Section "Uninstall"
   SetShellVarContext all
+  Delete "$INSTDIR\platforms\*.*"
+  RMDir  "$INSTDIR\platforms"
   Delete "$INSTDIR\plugins\*.*"
   RMDir  "$INSTDIR\plugins"
   Delete "$INSTDIR\*.dll"
   Delete "$INSTDIR\qxrd.exe"
+  Delete "$INSTDIR\qxrdviewer.exe"
+  Delete "$INSTDIR\vcredist*.exe"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
   Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Uninstall.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\ QXRD ${VERSION} ${PREFIXSTR}.lnk"
+  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\ QXRDVIEWER ${VERSION} ${PREFIXSTR}.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Fresh Start.lnk"
   RMDir "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
