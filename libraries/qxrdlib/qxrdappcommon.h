@@ -7,6 +7,8 @@
 #include "qxrdappcommonsettings-ptr.h"
 #include "qxrdsplashscreen-ptr.h"
 #include "qxrdwelcomewindow-ptr.h"
+#include "qxrdexperiment-ptr.h"
+#include "qxrdexperimentthread-ptr.h"
 #include <QTimer>
 
 class QXRD_EXPORT QxrdAppCommon : public QcepApplication
@@ -43,10 +45,17 @@ public:
 
   virtual void openExperiment(QString path) = 0;
   virtual void openRecentExperiment(QString path);
+  void appendRecentExperiment(QString path);
 
   virtual void editGlobalPreferences() = 0;
   virtual void createNewExperiment() = 0;
   virtual void chooseExistingExperiment() = 0;
+
+  void openedExperiment(QxrdExperimentThreadWPtr expwthr);
+  void closedExperiment(QxrdExperimentThreadWPtr expwthr);
+  QList<QxrdExperimentWPtr> &experiments();
+
+  QxrdExperimentPtr experiment(int i);
 
   void possiblyQuit();
   bool wantToQuit();
@@ -60,6 +69,9 @@ private:
   QxrdSplashScreenPtr             m_Splash;
 
   QxrdWelcomeWindowPtr            m_WelcomeWindow;
+
+  QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
+  QList<QxrdExperimentWPtr>       m_Experiments;
 };
 
 #endif // QXRDAPPCOMMON_H

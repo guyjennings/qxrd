@@ -47,7 +47,6 @@ public:
 
   void readDefaultSettings();
   void writeDefaultSettings();
-  void appendRecentExperiment(QString path);
 
   QString normalizeExperimentName(QString filename);
   void setNewExperimentSettings(QSettings &settings, int type, QString filename);
@@ -58,16 +57,9 @@ public slots:
   void createNewExperiment();
   void chooseExistingExperiment();
 
-  void activateExperiment(QString path);
   void openExperiment(QString path);
-  void openExperiment2(QString path);
+//  void openExperiment2(QString path);
   void closeExperiment(QxrdExperimentWPtr expw);
-
-  void openedExperiment(QxrdExperimentThreadWPtr expwthr);
-  void closedExperiment(QxrdExperimentThreadWPtr expwthr);
-  QList<QxrdExperimentWPtr> &experiments();
-
-  QxrdExperimentPtr experiment(int i);
 
   void doAboutQxrd();
   void doOpenQXRDWebPage();
@@ -119,9 +111,6 @@ private:
 private:
   QcepObjectNamer                 m_ObjectNamer;
   QTimer                          m_AutoSaveTimer;
-
-  QList<QxrdExperimentThreadPtr>  m_ExperimentThreads;
-  QList<QxrdExperimentWPtr>       m_Experiments;
 
   QxrdNIDAQPluginInterfacePtr     m_NIDAQPlugin;
   QxrdDetectorPluginInterfacePtr  m_SimulatedDetectorPlugin;

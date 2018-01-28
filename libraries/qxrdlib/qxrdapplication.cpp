@@ -250,22 +250,7 @@ void QxrdApplication::finish()
 
   GUI_THREAD_CHECK;
 
-  foreach(QxrdExperimentPtr expt, m_Experiments) {
-    if (expt) {
-      expt->closeWindows();
-    }
-  }
-
   writeSettings();
-
-  while (!m_ExperimentThreads.isEmpty()) {
-    QxrdExperimentThreadPtr t = m_ExperimentThreads.takeFirst();
-
-    if (t) {
-      t->quit();
-      t->wait();
-    }
-  }
 
   inherited::finish();
 }
@@ -778,28 +763,28 @@ void QxrdApplication::openExperiment(QString path)
   }
 }
 
-void QxrdApplication::openExperiment2(QString path)
-{
-  if (path.length() > 0) {
-    QxrdExperimentSettingsPtr settings(new QxrdExperimentSettings(path));
+//void QxrdApplication::openExperiment2(QString path)
+//{
+//  if (path.length() > 0) {
+//    QxrdExperimentSettingsPtr settings(new QxrdExperimentSettings(path));
 
-    if (settings) {
-      QcepObjectPtr newObj = QcepObject::readObject(settings.data());
+//    if (settings) {
+//      QcepObjectPtr newObj = QcepObject::readObject(settings.data());
 
-      if (newObj) {
-        QxrdExperimentPtr newExpt = qSharedPointerDynamicCast<QxrdExperiment>(newObj);
+//      if (newObj) {
+//        QxrdExperimentPtr newExpt = qSharedPointerDynamicCast<QxrdExperiment>(newObj);
 
-        if (newExpt) {
-          printMessage(tr("Opened new experiment %1").arg(path));
+//        if (newExpt) {
+//          printMessage(tr("Opened new experiment %1").arg(path));
 
-          QxrdExperimentSettingsPtr newSettings(new QxrdExperimentSettings(path+".new2"));
+//          QxrdExperimentSettingsPtr newSettings(new QxrdExperimentSettings(path+".new2"));
 
-          newExpt->writeSettings(newSettings.data());
-        }
-      }
-    }
-  }
-}
+//          newExpt->writeSettings(newSettings.data());
+//        }
+//      }
+//    }
+//  }
+//}
 
 void QxrdApplication::closeExperiment(QxrdExperimentWPtr expw)
 {
@@ -812,20 +797,6 @@ void QxrdApplication::closeExperiment(QxrdExperimentWPtr expw)
   if (exp) {
     closedExperiment(exp->experimentThread());
   }
-}
-
-void QxrdApplication::appendRecentExperiment(QString path)
-{
-  QStringList recent = QxrdApplication::settings() -> get_RecentExperiments();
-
-  recent.prepend(path);
-  recent.removeDuplicates();
-
-  while(recent.length() > QxrdApplication::settings() -> get_RecentExperimentsSize()) {
-    recent.removeLast();
-  }
-
-  QxrdApplication::settings() -> set_RecentExperiments(recent);
 }
 
 QString QxrdApplication::normalizeExperimentName(QString filename)
@@ -864,70 +835,6 @@ void QxrdApplication::setNewExperimentSettings(QSettings &settings, int type, QS
     settings.setValue("application/runSpecServer", false);
     settings.setValue("application/runSimpleServer", false);
     break;
-  }
-}
-
-void QxrdApplication::openedExperiment(QxrdExperimentThreadWPtr expwthr)
-{
-  QxrdExperimentThreadPtr exptthr(expwthr);
-
-  if (exptthr) {
-    QxrdExperimentPtr expt(exptthr->experiment());
-
-    if (expt) {
-      QString path = expt->experimentFilePath();
-      QxrdApplication::settings() -> set_CurrentExperiment(path);
-      appendRecentExperiment(path);
-
-      m_ExperimentThreads.append(exptthr);
-      m_Experiments.append(expt);
-
-      printMessage("");
-      printMessage("New experiment loaded");
-      printMessage("");
-
-      closeWelcomeWindow();
-
-      expt->openWindows();
-      expt->setChanged(0);
-    }
-  }
-}
-
-void QxrdApplication::closedExperiment(QxrdExperimentThreadWPtr expwthr)
-{
-  QxrdExperimentThreadPtr exptthr(expwthr);
-
-  if (exptthr) {
-    QxrdExperimentPtr expt(exptthr->experiment());
-
-    if (expt) {
-      m_Experiments.removeAll(expt);
-      m_ExperimentThreads.removeAll(exptthr);
-    }
-  }
-}
-
-QList<QxrdExperimentWPtr> &QxrdApplication::experiments()
-{
-  return m_Experiments;
-}
-
-QxrdExperimentPtr QxrdApplication::experiment(int i)
-{
-  return m_Experiments.value(i);
-}
-
-void QxrdApplication::activateExperiment(QString path)
-{
-  foreach(QxrdExperimentPtr exp, m_Experiments) {
-    if (exp->experimentFilePath() == path) {
-      QxrdWindowPtr win = exp->window();
-
-      if (win) {
-        win->activateWindow();
-      }
-    }
   }
 }
 

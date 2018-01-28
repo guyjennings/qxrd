@@ -4,7 +4,6 @@
 
 QxrdApplicationSettings::QxrdApplicationSettings(QxrdApplicationWPtr app, int argc, char **argv) :
   inherited(app, argc, argv),
-  m_CurrentExperiment(this, "currentExperiment", "", "Current Experiment"),
   m_CurrentDirectory(this, "currentDirectory", QDir::homePath(), "Current Directory"),
   //  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
   m_FileBrowserLimit(this, "fileBrowserLimit", 1000, "Max Number of Files in Browser Windows (0 = unlimited)"),

@@ -10,6 +10,9 @@
 #include "qxrdwindowsettings.h"
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdwelcomewindow.h"
+#include "qxrdexperiment.h"
+#include "qxrdexperimentthread.h"
+#include "qxrdwindow.h"
 #include <QCommandLineParser>
 #include <QDir>
 #include <QThread>
@@ -56,7 +59,20 @@ void QxrdAppCommon::finish()
 {
   THREAD_CHECK;
 
-  //TODO: move stuff from QxrdApplication::finish
+  foreach(QxrdExperimentPtr expt, m_Experiments) {
+    if (expt) {
+      expt->closeWindows();
+    }
+  }
+
+  while (!m_ExperimentThreads.isEmpty()) {
+    QxrdExperimentThreadPtr t = m_ExperimentThreads.takeFirst();
+
+    if (t) {
+      t->quit();
+      t->wait();
+    }
+  }
 }
 
 QxrdAppCommonSettingsPtr QxrdAppCommon::settings()
@@ -344,6 +360,71 @@ void QxrdAppCommon::openRecentExperiment(QString path)
   } else {
     printMessage(tr("Experiment %1 does not exist").arg(path));
   }
+}
+
+void QxrdAppCommon::appendRecentExperiment(QString path)
+{
+  QStringList recent = settings() -> get_RecentExperiments();
+
+  recent.prepend(path);
+  recent.removeDuplicates();
+
+  while(recent.length() > settings() -> get_RecentExperimentsSize()) {
+    recent.removeLast();
+  }
+
+  settings() -> set_RecentExperiments(recent);
+}
+
+void QxrdAppCommon::openedExperiment(QxrdExperimentThreadWPtr expwthr)
+{
+  QxrdExperimentThreadPtr exptthr(expwthr);
+
+  if (exptthr) {
+    QxrdExperimentPtr expt(exptthr->experiment());
+
+    if (expt) {
+      QString path = expt->experimentFilePath();
+      settings() -> set_CurrentExperiment(path);
+      appendRecentExperiment(path);
+
+      m_ExperimentThreads.append(exptthr);
+      m_Experiments.append(expt);
+
+      printMessage("");
+      printMessage("New experiment loaded");
+      printMessage("");
+
+      closeWelcomeWindow();
+
+      expt->openWindows();
+      expt->setChanged(0);
+    }
+  }
+}
+
+void QxrdAppCommon::closedExperiment(QxrdExperimentThreadWPtr expwthr)
+{
+  QxrdExperimentThreadPtr exptthr(expwthr);
+
+  if (exptthr) {
+    QxrdExperimentPtr expt(exptthr->experiment());
+
+    if (expt) {
+      m_Experiments.removeAll(expt);
+      m_ExperimentThreads.removeAll(exptthr);
+    }
+  }
+}
+
+QList<QxrdExperimentWPtr> &QxrdAppCommon::experiments()
+{
+  return m_Experiments;
+}
+
+QxrdExperimentPtr QxrdAppCommon::experiment(int i)
+{
+  return m_Experiments.value(i);
 }
 
 void QxrdAppCommon::possiblyQuit()

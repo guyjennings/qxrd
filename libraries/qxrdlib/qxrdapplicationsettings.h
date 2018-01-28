@@ -21,9 +21,6 @@ public:
   void writeSettings(QSettings *settings);
 
 public:
-  Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment)
-  QCEP_STRING_PROPERTY(CurrentExperiment)
-
   Q_PROPERTY(QString currentDirectory READ get_CurrentDirectory WRITE set_CurrentDirectory)
   QCEP_STRING_PROPERTY(CurrentDirectory)
 

@@ -69,6 +69,9 @@ public:
   Q_PROPERTY(int    startDetectors READ get_StartDetectors WRITE set_StartDetectors STORED false)
   QCEP_INTEGER_PROPERTY(StartDetectors)
 
+  Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment)
+  QCEP_STRING_PROPERTY(CurrentExperiment)
+
   Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
   QCEP_STRING_LIST_PROPERTY(RecentExperiments)
 
