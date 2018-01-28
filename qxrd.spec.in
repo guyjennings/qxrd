@@ -1,19 +1,17 @@
 Name:		qxrd
 Version:
 Release:        1%{?dist}
-Summary:        qxrd - a readout and control program for perkin elmer x ray detector
+Summary:        %{name} - a readout and control program for perkin elmer x ray detector
 
 Group:       	Applications/Engineering   
 License:        GPL
 URL:            http://www.bessrc.aps.anl.gov/software/qxrd/index.html
-#Source0:        http://www.bessrc.aps.anl.gov/software/qxrd/%{name}-%{version}.tar.gz
-Source0:        http://www.bessrc.aps.anl.gov/software/qxrd/qxrd-%{version}.tar.gz
+Source0:        http://www.bessrc.aps.anl.gov/software/qxrd/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  qt5-qtbase-devel, qt5-qtscript-devel, qt5-qtwebkit-devel, qt5-qtsvg-devel
 BuildRequires:  libtiff-devel, CBFlib-devel
-BuildRequires:  patchelf
 Requires:       qt5-qtbase, qt5-qtscript, qt5-qtwebkit, qt5-qtsvg, qxrd-libs
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
@@ -23,22 +21,35 @@ BuildRequires:  qt5-qtcharts-devel, qt5-qtdatavis3d-devel
 Requires:       qt5-qtcharts, qt5-qtdatavis3d
 %endif
 
+Requires:       qxrd-libs, qxrd-app, qxrd-viewer
+
 %description
-qxrd is a readout and control program for perkin elmer x ray detector
+%{name} is a readout and control program for perkin elmer x ray detector
 
 %package libs
-Summary:        qxrd libraries
+Summary:        %{name} libraries
+
+%description libs
+Libraries used by %{name} and %{name}viewer
+
+%package app
+Summary:        %{name} application and plugins
+
+%description app
+%{name} is a readout and control program for perkin elmer x ray detector
 
 %package viewer
-Summary:        qxrdviewer
-Requires:       qxrd-libs
+Summary:        %{name}viewer
+Requires:       %{name}-libs
+
+%description viewer
+qxrdviewer is a viewer and data analysis program for x ray data
 
 %prep
-#%setup -n %{name}-%{version}
-%setup -n qxrd-%{version}
+%setup -n %{name}-%{version}
 
 %build
-/usr/bin/qmake-qt5 qxrd.pro -recursive "QXRD_PLUGINS_DIR=%{_libdir}/qxrd-%{version}"
+/usr/bin/qmake-qt5 qxrd.pro -recursive CONFIG+=force_debug_info "QXRD_PLUGINS_DIR=%{_libdir}/%{name}-%{version}"
 make clean
 make %{?_smp_mflags}
 
@@ -46,36 +57,38 @@ make %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
-mkdir -p $RPM_BUILD_ROOT%{_libdir}/qxrd-%{version}
-mkdir -p $RPM_BUILD_ROOT%{_libdir}/qxrd-%{version}/plugins/
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/
 
-install qxrd $RPM_BUILD_ROOT%{_bindir}
+install %{name}       $RPM_BUILD_ROOT%{_bindir}
+install %{name}viewer $RPM_BUILD_ROOT%{_bindir}
 install libqceplib.so.1 $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/
 install libqxrdlib.so.0 $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/
-#install plugins/*.so  $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
-install plugins/*.so  $RPM_BUILD_ROOT%{_libdir}/qxrd-%{version}/plugins/
+install plugins/*.so  $RPM_BUILD_ROOT%{_libdir}/%{name}-%{version}/plugins/
 
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
-echo "%{_libdir}/qxrd-%{version}" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/qxrd-%{version}.conf
+echo "%{_libdir}/%{name}-%{version}" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{version}.conf
 
-#patchelf --set-rpath %{_libdir}/qxrd-%{version} $RPM_BUILD_ROOT%{_bindir}/qxrd
-
-cp libraries/qxrdlib/images/qxrd-icon-32x32.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/qxrd-icon.png
-cp libraries/qxrdlib/images/qxrd-icon-64x64.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps/qxrd-icon.png
-cp libraries/qxrdlib/images/qxrd-icon-128x128.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/qxrd-icon.png
-cp libraries/qxrdlib/images/qxrd-icon-256x256.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/qxrd-icon.png
-
-desktop-file-install --vendor=bessrc \
-        --dir $RPM_BUILD_ROOT%{_datadir}/applications \
-        qxrd.desktop
+cp libraries/qxrdlib/images/%{name}-icon-32x32.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/%{name}-icon.png
+cp libraries/qxrdlib/images/%{name}-icon-64x64.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps/%{name}-icon.png
+cp libraries/qxrdlib/images/%{name}-icon-128x128.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/%{name}-icon.png
+cp libraries/qxrdlib/images/%{name}-icon-256x256.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/%{name}-icon.png
+cp libraries/qxrdlib/images/%{name}viewer-icon-32x32.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps/%{name}viewer-icon.png
+cp libraries/qxrdlib/images/%{name}viewer-icon-64x64.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps/%{name}viewer-icon.png
+cp libraries/qxrdlib/images/%{name}viewer-icon-128x128.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/%{name}viewer-icon.png
+cp libraries/qxrdlib/images/%{name}viewer-icon-256x256.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps/%{name}viewer-icon.png
 
 desktop-file-install --vendor=bessrc \
         --dir $RPM_BUILD_ROOT%{_datadir}/applications \
-        qxrdviewer.desktop
+        %{name}.desktop
+
+desktop-file-install --vendor=bessrc \
+        --dir $RPM_BUILD_ROOT%{_datadir}/applications \
+        %{name}viewer.desktop
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -95,18 +108,20 @@ touch --no-create %{_datadir}/icons/hicolor || :
 %files
 %defattr(-,root,root,-)
 %doc
-%{_bindir}/qxrd
-%{_datadir}/applications/*qxrd.desktop
 
-%files lib
-%{_libdir}/qxrd-%{version}/*.so*
-%{_libdir}/qxrd-%{version}/plugins/*.so
-%config(noreplace) %{_sysconfdir}/ld.so.conf.d/qxrd-%{version}.conf
+%files app
+%{_bindir}/%{name}
+%{_datadir}/applications/*%{name}.desktop
+
+%files libs
+%{_libdir}/%{name}-%{version}/*.so*
+%{_libdir}/%{name}-%{version}/plugins/*.so
+%config(noreplace) %{_sysconfdir}/ld.so.conf.d/%{name}-%{version}.conf
 %{_datadir}/icons/hicolor/*/*/*
 
 %files viewer
-%{_bindir}/qxrd
-%{_datadir}/applications/*qxrdviewer.desktop
+%{_bindir}/%{name}viewer
+%{_datadir}/applications/*%{name}viewer.desktop
 
 %changelog
 * Fri Oct 10 2008  <jennings@weimar.bessrc.aps.anl.gov> - 0.4.10-3
