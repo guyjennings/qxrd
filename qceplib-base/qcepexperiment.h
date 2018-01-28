@@ -22,8 +22,6 @@ public:
   explicit QcepExperiment(QString path, QString name);
   void initialize();
 
-  virtual void addChildPtr(QcepObjectPtr child);
-
 signals:
 
 public slots:

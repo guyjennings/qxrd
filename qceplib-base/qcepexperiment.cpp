@@ -36,31 +36,20 @@ QcepExperiment::QcepExperiment(QString path, QString name) :
 
 void QcepExperiment::initialize()
 {
-  addChildPtr(QcepDataExportParametersPtr(
-                new QcepDataExportParameters("exportParameters")));
+  m_DataExportParameters = QcepDataExportParametersPtr(
+        new QcepDataExportParameters("exportParameters"));
 
-  addChildPtr(QcepDataImportParametersPtr(
-                new QcepDataImportParameters("importParameters")));
+  m_DataImportParameters = QcepDataImportParametersPtr(
+        new QcepDataImportParameters("importParameters"));
 
-  addChildPtr(QcepSetDataValueRangeCommandPtr(
-                new QcepSetDataValueRangeCommand()));
+  m_SetDataValueRangeCommand = QcepSetDataValueRangeCommandPtr(
+        new QcepSetDataValueRangeCommand());
 
-  addChildPtr(QcepSetRangeOfImageCommandPtr(
-                new QcepSetRangeOfImageCommand()));
+  m_SetRangeOfImageCommand = QcepSetRangeOfImageCommandPtr(
+        new QcepSetRangeOfImageCommand());
 
-  addChildPtr(QcepFixupGainMapCommandPtr(
-                new QcepFixupGainMapCommand()));
-}
-
-void QcepExperiment::addChildPtr(QcepObjectPtr child)
-{
-  QcepObject::addChildPtr(child);
-
-  if (checkPointer<QcepDataExportParameters>(child, m_DataExportParameters)) {}
-  else if (checkPointer<QcepDataImportParameters>(child, m_DataImportParameters)) {}
-  else if (checkPointer<QcepSetDataValueRangeCommand>(child, m_SetDataValueRangeCommand)) {}
-  else if (checkPointer<QcepSetRangeOfImageCommand>(child, m_SetRangeOfImageCommand)) {}
-  else if (checkPointer<QcepFixupGainMapCommand>(child, m_FixupGainMapCommand)) {}
+  m_FixupGainMapCommand = QcepFixupGainMapCommandPtr(
+        new QcepFixupGainMapCommand());
 }
 
 QString QcepExperiment::defaultExperimentDirectory(QString path) const
@@ -180,8 +169,6 @@ void QcepExperiment::readSettings(QSettings *settings)
       settings->setArrayIndex(i);
 
       QcepObjectPtr obj = QcepObject::readObject(settings);
-
-      addChildPtr(obj);
 
       QcepMainWindowSettingsPtr set =
           qSharedPointerDynamicCast<QcepMainWindowSettings>(obj);
