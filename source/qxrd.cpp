@@ -42,8 +42,6 @@ int main(int argc, char *argv[])
   {
     QxrdApplicationPtr app = QxrdApplicationPtr(
           new QxrdApplication(argc, argv));
-//    QxrdApplication* app =
-//        new QxrdApplication(argc, argv);
 
     if (app->init(argc, argv)) {
       QxrdApplicationSettingsPtr set(app->settings());
@@ -59,8 +57,6 @@ int main(int argc, char *argv[])
         while(1) {}
       }
     }
-
-//    delete app;
 
     app = QxrdApplicationPtr();
   }

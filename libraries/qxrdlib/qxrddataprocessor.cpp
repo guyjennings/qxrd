@@ -149,9 +149,9 @@ QxrdDataProcessorPtr QxrdDataProcessor::newDataProcessor()
   return proc;
 }
 
-QxrdAcquisitionWPtr QxrdDataProcessor::acquisition() const
+QxrdAcqCommonWPtr QxrdDataProcessor::acquisition() const
 {
-  QxrdAcquisitionWPtr res;
+  QxrdAcqCommonWPtr res;
 
   QxrdExperimentPtr expt(experiment());
 
@@ -167,7 +167,7 @@ void QxrdDataProcessor::shutdown()
   thread()->exit();
 }
 
-void QxrdDataProcessor::setAcquisition(QxrdAcquisitionWPtr acq)
+void QxrdDataProcessor::setAcquisition(QxrdAcqCommonWPtr acq)
 {
   connect(prop_SaveRawImages(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
   connect(prop_PerformDarkSubtraction(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
@@ -187,7 +187,7 @@ void QxrdDataProcessor::setAcquisition(QxrdAcquisitionWPtr acq)
   connect(prop_DisplayIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
   connect(prop_SaveIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
 
-  QxrdAcquisitionPtr acqp(acq);
+  QxrdAcquisitionPtr acqp(qSharedPointerDynamicCast<QxrdAcquisition>(acq));
 
   if (acqp) {
     connect(acqp -> prop_SummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
@@ -664,7 +664,8 @@ void QxrdDataProcessor::updateEstimatedProcessingTime()
 {
   double estSerialTime = 0, estParallelTime = 0;
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcquisitionPtr acq(
+        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
 
   if (acq && get_SaveRawImages()) {
     if (acq -> get_SummedExposures() > 1) {

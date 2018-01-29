@@ -30,7 +30,7 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrdhistogramdata-ptr.h"
 #include "qxrdresultserializer.h"
@@ -47,7 +47,7 @@ public:
   static QxrdDataProcessorPtr newDataProcessor();
 
 //  QxrdExperimentWPtr  experiment() const;
-  QxrdAcquisitionWPtr acquisition() const;
+  QxrdAcqCommonWPtr acquisition() const;
 //  QxrdFileSaverWPtr   fileSaver() const;
 
 public:
@@ -384,7 +384,7 @@ public:
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
 
-  void setAcquisition(QxrdAcquisitionWPtr acq);
+  void setAcquisition(QxrdAcqCommonWPtr acq);
 //  void setWindow(QxrdWindowWPtr win);
 
 //  QcepSettingsSaver     *saver();

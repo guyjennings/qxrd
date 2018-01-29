@@ -11,9 +11,9 @@
 
 #include "qcepscriptengine.h"
 
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrdroi-ptr.h"
@@ -24,7 +24,7 @@ class QXRD_EXPORT QxrdScriptEngine : public QcepScriptEngine
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdScriptEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp);
+  Q_INVOKABLE QxrdScriptEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp);
   virtual ~QxrdScriptEngine();
   void initialize();
 
@@ -48,9 +48,9 @@ public:
   QString uncaughtExceptionString() const;
   void cancelCommand();
 
-  QxrdApplicationWPtr application() const;
+  QxrdAppCommonWPtr application() const;
   QxrdExperimentWPtr experiment() const;
-  QxrdAcquisitionWPtr acquisition() const;
+  QxrdAcqCommonWPtr acquisition() const;
   QxrdDataProcessorWPtr dataProcessor() const;
   QxrdWindowWPtr window() const;
 
@@ -133,9 +133,9 @@ private:
 
 private:
   mutable QMutex         m_Mutex;
-  QxrdApplicationWPtr    m_Application;
+  QxrdAppCommonWPtr      m_Application;
   QxrdExperimentWPtr     m_Experiment;
-  QxrdAcquisitionWPtr    m_Acquisition;
+  QxrdAcqCommonWPtr      m_Acquisition;
   QxrdDataProcessorWPtr  m_DataProcessor;
   QxrdWindowWPtr         m_Window;
   FILE                  *m_ScriptOutput;

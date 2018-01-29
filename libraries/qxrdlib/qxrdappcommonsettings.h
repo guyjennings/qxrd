@@ -77,6 +77,9 @@ public:
 
   Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize)
   QCEP_INTEGER_PROPERTY(RecentExperimentsSize)
+
+  Q_PROPERTY(int experimentCount READ get_ExperimentCount WRITE set_ExperimentCount STORED false)
+  QCEP_INTEGER_PROPERTY(ExperimentCount)
 };
 
 #endif // QXRDAPPCOMMONSETTINGS_H

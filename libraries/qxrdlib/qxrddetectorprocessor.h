@@ -27,6 +27,9 @@ class QXRD_EXPORT QxrdDetectorProcessor : public QxrdProcessor
 {
     Q_OBJECT
 
+private:
+  typedef QxrdProcessor inherited;
+
 public:
   QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
                         QxrdFileSaverWPtr     fsav,
@@ -97,6 +100,8 @@ private slots:
   void onGainMapPathChanged(QString newPath);
 
 private:
+  QxrdAcquisitionWPtr acquisition();
+
   void setAcquiredImageProperties(QcepImageDataBasePtr image,
                                   int fileIndex,
                                   int phase,

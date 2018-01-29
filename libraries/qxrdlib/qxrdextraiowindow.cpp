@@ -30,7 +30,8 @@ QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    m_Acquisition = exp->acquisition();
+    m_Acquisition =
+        qSharedPointerDynamicCast<QxrdAcquisition>(exp->acquisition());
 
     QxrdAcquisitionPtr acq(m_Acquisition);
 

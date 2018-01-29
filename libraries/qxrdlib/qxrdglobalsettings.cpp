@@ -1,9 +1,9 @@
 #include "qxrddebug.h"
 #include "qxrdglobalsettings.h"
 #include <stdio.h>
-#include "qxrdapplication.h"
+#include "qxrdappcommon.h"
 
-QxrdGlobalSettings::QxrdGlobalSettings(QxrdApplication *app)
+QxrdGlobalSettings::QxrdGlobalSettings(QxrdAppCommon *app)
   : QSettings("cep.xray.aps.anl.gov","qxrd-global-4",NULL),
     m_Application(app)
 {

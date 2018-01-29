@@ -12,8 +12,7 @@
 #include <QWaitCondition>
 #include <QElapsedTimer>
 
-#include "qcepobject.h"
-//#include "qxrdrasterdata.h"
+#include "qxrdacqcommon.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"
@@ -33,16 +32,20 @@
 #include "qxrdacquisition-ptr.h"
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
+#include "qxrdacqcommon.h"
 
-class QXRD_EXPORT QxrdAcquisition : public QcepObject
+class QXRD_EXPORT QxrdAcquisition : public QxrdAcqCommon
 {
   Q_OBJECT
+
+private:
+  typedef QxrdAcqCommon inherited;
 
 public:
   Q_INVOKABLE QxrdAcquisition(QString name);
   ~QxrdAcquisition();
 
-  virtual void initialize();
+  void initialize();
 
   static QxrdAcquisitionPtr newAcquisition();
 

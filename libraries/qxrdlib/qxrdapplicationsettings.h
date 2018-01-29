@@ -41,9 +41,6 @@ public:
 
   Q_PROPERTY(double lockerRate READ get_LockerRate WRITE set_LockerRate STORED false)
   QCEP_DOUBLE_PROPERTY(LockerRate)
-
-  Q_PROPERTY(int experimentCount READ get_ExperimentCount WRITE set_ExperimentCount STORED false)
-  QCEP_INTEGER_PROPERTY(ExperimentCount)
 };
 
 #endif // QXRDAPPLICATIONSETTINGS_H

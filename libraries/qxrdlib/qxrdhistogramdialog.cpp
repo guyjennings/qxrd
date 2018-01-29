@@ -97,7 +97,9 @@ void QxrdHistogramDialog::recalculateHistogram()
         nsum = 1;
       }
 
-      QxrdAcquisitionPtr acq(expt->acquisition());
+      QxrdAcquisitionPtr acq(
+            qSharedPointerDynamicCast<QxrdAcquisition>(
+              expt->acquisition()));
 
       double satlev = 60000;
 

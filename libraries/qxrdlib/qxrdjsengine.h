@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include <QtQml>
 #include <QStringList>
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrdacquisition-ptr.h"
@@ -26,7 +26,7 @@ class QXRD_EXPORT QxrdJSEngine : public QQmlEngine
   Q_OBJECT
 
 public:
-  QxrdJSEngine(QxrdApplicationWPtr app,
+  QxrdJSEngine(QxrdAppCommonWPtr app,
                QxrdExperimentWPtr exp);
   virtual ~QxrdJSEngine();
   void initialize();
@@ -152,7 +152,7 @@ private:
 
 private:
   mutable QMutex         m_Mutex;
-  QxrdApplicationWPtr    m_Application;
+  QxrdAppCommonWPtr      m_Application;
   QxrdExperimentWPtr     m_Experiment;
 //  QxrdAcquisitionWPtr    m_Acquisition;
 //  QxrdDataProcessorWPtr  m_DataProcessor;

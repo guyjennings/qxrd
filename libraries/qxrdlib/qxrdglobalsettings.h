@@ -5,19 +5,19 @@
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include <QSettings>
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 
 class QXRD_EXPORT QxrdGlobalSettings : public QSettings
 {
   Q_OBJECT
 
 public:
-  QxrdGlobalSettings(QxrdApplication *app);
+  QxrdGlobalSettings(QxrdAppCommon *app);
   QxrdGlobalSettings(const QString &path, QSettings::Format format = QSettings::IniFormat, QcepObject *parent=0);
   ~QxrdGlobalSettings();
 
 private:
-  QxrdApplication *m_Application;
+  QxrdAppCommon *m_Application;
 };
 
 #endif

@@ -527,12 +527,12 @@ void QxrdApplication::readSettings()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
 
-  QxrdGlobalSettings settings(this);
+  QxrdGlobalSettings set(this);
 
-  if (QxrdApplication::settings()) {
-    settings.beginGroup("application");
-    QxrdApplication::settings() -> readSettings(&settings);
-    settings.endGroup();
+  if (settings()) {
+    set.beginGroup("application");
+    settings() -> readSettings(&set);
+    set.endGroup();
   }
 }
 
@@ -540,13 +540,13 @@ void QxrdApplication::writeSettings()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
 
-  QxrdGlobalSettings settings(this);
+  QxrdGlobalSettings set(this);
 
-  if (QxrdApplication::settings()) {
-    settings.beginGroup("application");
-    QxrdApplication::settings() -> writeSettings(&settings);
-    settings.endGroup();
-    QxrdApplication::settings() -> setChanged(0);
+  if (settings()) {
+    set.beginGroup("application");
+    settings() -> writeSettings(&set);
+    set.endGroup();
+    settings() -> setChanged(0);
   }
 }
 
@@ -724,7 +724,10 @@ void QxrdApplication::createNewExperiment()
 {
   QxrdExperimentThreadPtr expthr =
       QxrdExperimentThread::newExperimentThread(
-        "", qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()), QxrdExperimentSettingsPtr());
+        "",
+        qSharedPointerDynamicCast<QxrdAppCommon>(sharedFromThis()),
+        QxrdExperimentSettingsPtr(),
+        QxrdExperiment::AcquisitionAllowed);
 
   if (expthr) {
     openedExperiment(expthr);
@@ -753,8 +756,9 @@ void QxrdApplication::openExperiment(QString path)
     QxrdExperimentThreadPtr expthr =
         QxrdExperimentThread::newExperimentThread(
           path,
-          qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()),
-          settings);
+          qSharedPointerDynamicCast<QxrdAppCommon>(sharedFromThis()),
+          settings,
+          QxrdExperiment::AcquisitionAllowed);
 
     printMessage("");
     printMessage(tr("===== Open Experiment %1").arg(path));

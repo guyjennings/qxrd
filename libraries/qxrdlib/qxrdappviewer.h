@@ -30,6 +30,9 @@ public:
 
   void openExperiment(QString path);
 
+  void readSettings();
+  void writeSettings();
+
   void editGlobalPreferences();
   void createNewExperiment();
   void chooseExistingExperiment();

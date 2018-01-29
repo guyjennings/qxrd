@@ -35,7 +35,10 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
   if (expt) {
     setWindowTitle(expt->experimentFilePath() + " Preferences");
 
-    QxrdAcquisitionPtr acq = expt -> acquisition();
+    QxrdAcquisitionPtr acq =
+        qSharedPointerDynamicCast<QxrdAcquisition>(
+          expt -> acquisition());
+
     QxrdDataProcessorPtr proc = expt->dataProcessor();
     //  QcepAllocator *alloc = g_Application->allocator();
 
@@ -252,7 +255,9 @@ void QxrdExperimentPreferencesDialog::accept()
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdAcquisitionPtr acq = expt -> acquisition();
+    QxrdAcquisitionPtr acq =
+        qSharedPointerDynamicCast<QxrdAcquisition>(
+          expt -> acquisition());
     QxrdDataProcessorPtr proc = expt->dataProcessor();
     QxrdServerPtr srv(expt -> specServer());
     QxrdSimpleServerPtr ssrv(expt -> simpleServer());
@@ -326,7 +331,9 @@ void QxrdExperimentPreferencesDialog::addDetector()
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdAcquisitionPtr acq = expt -> acquisition();
+    QxrdAcquisitionPtr acq =
+        qSharedPointerDynamicCast<QxrdAcquisition>(
+          expt -> acquisition());
 
     if (acq) {
       QMenu menu;
@@ -342,13 +349,10 @@ void QxrdExperimentPreferencesDialog::addDetector()
 
       if (choice) {
         int type = choice->data().toInt();
-        QxrdApplicationWPtr app = expt->application();
 
-        if (acq) {
-          QxrdDetectorSettingsPtr det = acq->newDetector(type);
+        QxrdDetectorSettingsPtr det = acq->newDetector(type);
 
-          m_DetectorsModel->append(det);
-        }
+        m_DetectorsModel->append(det);
       }
     }
   }

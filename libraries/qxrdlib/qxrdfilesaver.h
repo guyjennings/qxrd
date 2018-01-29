@@ -13,7 +13,7 @@
 
 #include "qcepallocator-ptr.h"
 #include "qxrddataprocessor-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qcepimagedata.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata.h"
@@ -31,7 +31,7 @@ public:
   ~QxrdFileSaver();
 
   void setProcessor(QxrdDataProcessorWPtr proc);
-  void setAcquisition(QxrdAcquisitionWPtr acq);
+  void setAcquisition(QxrdAcqCommonWPtr acq);
   void setExperiment(QxrdExperimentWPtr expt);
 
 public:
@@ -65,7 +65,7 @@ private slots:
 private:
   void mkPath(QString filePath);
   QString uniqueFileName(QString name);
-  QxrdAcquisitionWPtr acquisition() const;
+  QxrdAcqCommonWPtr acquisition() const;
   QxrdExperimentWPtr experiment() const;
   void saveOverflowData(QString name, QcepMaskDataPtr overflow);
 
@@ -75,7 +75,7 @@ private:
 private:
   QxrdExperimentWPtr    m_Experiment;
   QxrdDataProcessorWPtr m_Processor;
-  QxrdAcquisitionWPtr   m_Acquisition;
+  QxrdAcqCommonWPtr     m_Acquisition;
 };
 
 Q_DECLARE_METATYPE(QxrdFileSaver*)

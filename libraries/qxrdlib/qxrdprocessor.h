@@ -7,6 +7,7 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrdprocessorstep-ptr.h"
 #include "qxrdexperiment-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdzingerfinder-ptr.h"
@@ -27,6 +28,7 @@ public:
   virtual ~QxrdProcessor();
 
   QxrdExperimentWPtr   experiment() const;
+  QxrdAcqCommonWPtr acquisition() const;
   QxrdFileSaverWPtr    fileSaver() const;
   QxrdCenterFinderWPtr centerFinder() const;
   QxrdPowderRingsModelWPtr powderRings() const;

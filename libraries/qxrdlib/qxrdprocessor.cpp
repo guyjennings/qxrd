@@ -13,7 +13,8 @@
 #include "qxrdmaskstack.h"
 #include "qxrdzingerfinder.h"
 #include "qxrdcenterfinder.h"
-
+#include "qxrdapplication.h"
+#include "qxrdacqcommon.h"
 #include <QFileInfo>
 #include <QThread>
 #include <QDir>
@@ -66,6 +67,20 @@ QxrdExperimentWPtr QxrdProcessor::experiment() const
   }
 
   return expt;
+}
+
+QxrdAcqCommonWPtr QxrdProcessor::acquisition() const
+{
+  QxrdAcqCommonWPtr res;
+
+  QxrdExperimentPtr expt(experiment());
+
+  if (expt) {
+    res =
+        qSharedPointerDynamicCast<QxrdAcqCommon>(expt->acquisition());
+  }
+
+  return res;
 }
 
 QxrdFileSaverWPtr QxrdProcessor::fileSaver() const

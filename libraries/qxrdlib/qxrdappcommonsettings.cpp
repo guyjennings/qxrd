@@ -2,24 +2,24 @@
 #include "qxrdappcommon.h"
 #include "qcepallocator.h"
 
-QxrdAppCommonSettings::QxrdAppCommonSettings(QxrdAppCommonWPtr app, int argc, char **argv)
-  : inherited(app),
-    m_Argc(this, "argc", argc, "Number of Command Line Arguments"),
-    m_Argv(this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
-    m_GuiWanted(this, "guiWanted", 1, "GUI Wanted?"),
-    m_CmdList(this, "cmdList", QStringList(), "Commands to Execute"),
-    m_FileList(this, "fileList", QStringList(), "Files to Process"),
-    m_WatcherList(this, "watcherList", QStringList(), "File patterns to watch for"),
-    m_PluginList(this, "pluginList", QStringList(), "Plugin directories"),
-    m_Debug(this,"debug", 0, "Debug Level"),
-    m_OpenNew(this,"openNew", 0, "Open a new experiment"),
-    m_FreshStart(this,"freshStart", 0, "Do a Fresh Start"),
-    m_StartDetectors(this, "startDetectors", 1, "Start Detectors when opening experiments"),
-    m_CurrentExperiment(this, "currentExperiment", "", "Current Experiment"),
-    m_RecentExperiments(this, "recentExperiments", QStringList(), "Recent Experiments"),
-    m_RecentExperimentsSize(this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember")
+QxrdAppCommonSettings::QxrdAppCommonSettings(QxrdAppCommonWPtr app, int argc, char **argv) :
+  inherited(app),
+  m_Argc(this, "argc", argc, "Number of Command Line Arguments"),
+  m_Argv(this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
+  m_GuiWanted(this, "guiWanted", 1, "GUI Wanted?"),
+  m_CmdList(this, "cmdList", QStringList(), "Commands to Execute"),
+  m_FileList(this, "fileList", QStringList(), "Files to Process"),
+  m_WatcherList(this, "watcherList", QStringList(), "File patterns to watch for"),
+  m_PluginList(this, "pluginList", QStringList(), "Plugin directories"),
+  m_Debug(this,"debug", 0, "Debug Level"),
+  m_OpenNew(this,"openNew", 0, "Open a new experiment"),
+  m_FreshStart(this,"freshStart", 0, "Do a Fresh Start"),
+  m_StartDetectors(this, "startDetectors", 1, "Start Detectors when opening experiments"),
+  m_CurrentExperiment(this, "currentExperiment", "", "Current Experiment"),
+  m_RecentExperiments(this, "recentExperiments", QStringList(), "Recent Experiments"),
+  m_RecentExperimentsSize(this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
+  m_ExperimentCount(this, "experimentCount", 0, "Number of open experiments")
 {
-
 }
 
 QxrdAppCommonSettings::~QxrdAppCommonSettings()

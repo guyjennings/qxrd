@@ -43,7 +43,8 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
     m_DetectorsModel =
         QxrdDetectorListModelPtr(new QxrdDetectorListModel());
 
-    m_Acquisition = exp->acquisition();
+    m_Acquisition =
+        qSharedPointerDynamicCast<QxrdAcquisition>(exp->acquisition());
 
     QxrdAcquisitionPtr acqp(m_Acquisition);
 
@@ -135,7 +136,7 @@ void QxrdAcquisitionWindow::doEditCorrection()
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    QxrdAcquisitionPtr   acq  = exp->acquisition();
+    QxrdAcquisitionPtr   acq(m_Acquisition);
     QxrdDataProcessorPtr proc = exp->dataProcessor();
 
     if (acq && proc) {

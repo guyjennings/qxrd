@@ -343,12 +343,37 @@ void QxrdAppCommon::setupTiffHandlers()
 
 void QxrdAppCommon::openFile(QString filePath)
 {
-  printMessage(tr("Open file \"%1\" (to be written)").arg(filePath));
+  QDir dir;
+
+  QStringList files = dir.entryList(QStringList(filePath));
+
+  if (files.length() == 0) {
+    printMessage(tr("No files match \"%1\"").arg(filePath));
+  } else {
+    foreach (QString f, files) {
+      printMessage(tr("Open file \"%1\" (to be written)").arg(f));
+    }
+  }
 }
 
 void QxrdAppCommon::openWatcher(QString pattern)
 {
-  printMessage(tr("Open watcher \"%1\" (to be written)").arg(pattern));
+  QxrdExperimentPtr expt(getFirstExperiment());
+
+  if (expt) {
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(
+            expt.data(), "openWatcher", Q_ARG(QString, pattern)));
+  }
+}
+
+QxrdExperimentPtr QxrdAppCommon::getFirstExperiment()
+{
+  if (experiments().count() == 0) {
+    createNewExperiment();
+  }
+
+  return experiment(0);
 }
 
 void QxrdAppCommon::openRecentExperiment(QString path)

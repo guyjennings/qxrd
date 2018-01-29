@@ -15,6 +15,7 @@
 #include "qxrdcalibrantdspacingsmodel.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
+#include "qxrdacqdummy.h"
 #include "qxrdserverthread.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserverthread.h"
@@ -86,6 +87,7 @@ QxrdExperiment::QxrdExperiment(QString name) :
   m_ScanFile(NULL),
   m_ExperimentFileMutex(),
 
+  m_ExperimentMode(this, "experimentMode", QxrdExperiment::DefaultMode, "Experiment Mode"),
   m_QxrdVersion(this, "qxrdVersion", STR(QXRD_VERSION), "Qxrd Version"),
   m_DataDirectory(this, "dataDirectory", defaultDataDirectory(""), "Saved Data Directory"),
   m_LogFileName(this, "logFileName", defaultLogName(""), "Log File Name"),
@@ -110,10 +112,10 @@ QxrdExperiment::QxrdExperiment(QString name) :
     printf("QxrdExperiment::QxrdExperiment(%p)\n", this);
   }
 
-  QxrdApplicationPtr appl(m_Application);
+  QxrdAppCommonPtr appl(m_Application);
 
   if (appl) {
-    QxrdApplicationSettingsPtr set(appl->settings());
+    QxrdAppCommonSettingsPtr set(appl->settings());
 
     if (set) {
       set->prop_ExperimentCount()->incValue(1);
@@ -121,11 +123,15 @@ QxrdExperiment::QxrdExperiment(QString name) :
   }
 }
 
-QxrdExperimentPtr QxrdExperiment::newExperiment(QString path, QxrdApplicationWPtr app, QxrdExperimentSettingsPtr set)
+QxrdExperimentPtr QxrdExperiment::newExperiment(QString path,
+                                                QxrdAppCommonWPtr app,
+                                                QxrdExperimentSettingsPtr set,
+                                                int mode)
 {
   QxrdExperimentPtr expt(new QxrdExperiment("experiment"));
 
   if (expt) {
+    expt->set_ExperimentMode(mode);
     expt->setExperimentFilePath(path);
     expt->setExperimentApplication(app);
     expt->initialize(set);
@@ -154,10 +160,10 @@ QxrdExperiment::~QxrdExperiment()
   closeScanFile();
   closeLogFile();
 
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app) {
-    QxrdApplicationSettingsPtr set(app->settings());
+    QxrdAppCommonSettingsPtr set(app->settings());
 
     if (set) {
       set->prop_ExperimentCount()->incValue(-1);
@@ -175,7 +181,7 @@ QxrdExperimentThreadPtr QxrdExperiment::experimentThread() const
 
 void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 {
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app) {
     QxrdExperimentPtr myself(qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()));
@@ -203,7 +209,11 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     splashMessage("Initializing Data Acquisition");
 
-    m_Acquisition = QxrdAcquisition::newAcquisition();
+    if (get_ExperimentMode() == QxrdExperiment::AcquisitionAllowed) {
+      m_Acquisition = QxrdAcquisition::newAcquisition();
+    } else {
+      m_Acquisition = QxrdAcqDummy::newAcquisition();
+    }
 
     m_Acquisition -> initialize();
 
@@ -228,10 +238,14 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
       saver -> setAcquisition(m_Acquisition);
     }
 
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdAcquisitionPtr acq(
+          qSharedPointerDynamicCast<QxrdAcquisition>(m_Acquisition));
 
-    if (acq) {
-      acq -> setNIDAQPlugin(app->nidaqPlugin());
+    QxrdApplicationPtr appp(
+          qSharedPointerDynamicCast<QxrdApplication>(app));
+
+    if (acq && appp) {
+      acq -> setNIDAQPlugin(appp->nidaqPlugin());
     }
 
     m_Dataset = QcepAllocator::newDataset("dataset");
@@ -452,7 +466,7 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
 }
 
-void QxrdExperiment::setExperimentApplication(QxrdApplicationWPtr app)
+void QxrdExperiment::setExperimentApplication(QxrdAppCommonWPtr app)
 {
   m_Application = app;
 }
@@ -461,22 +475,24 @@ void QxrdExperiment::openWindows()
 {
   GUI_THREAD_CHECK;
 
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app) {
-    QxrdApplicationSettingsPtr set(app->settings());
+    QxrdAppCommonSettingsPtr set(app->settings());
     if (set && set->get_GuiWanted()) {
       splashMessage("Opening Main Window");
+
+      QxrdAcquisitionPtr acq(qSharedPointerDynamicCast<QxrdAcquisition>(m_Acquisition));
+
       m_Window = QxrdWindowPtr(
             new QxrdWindow(m_WindowSettings,
-                           m_Application,
+                           qSharedPointerDynamicCast<QxrdApplication>(m_Application),
                            qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()),
-                           m_Acquisition,
+                           acq,
                            m_DataProcessor),
             &QObject::deleteLater); //TODO: is deleteLater necessary?
 
-      QxrdDataProcessorPtr proc(m_DataProcessor);
-      QxrdAcquisitionPtr acq(m_Acquisition);
+//      QxrdDataProcessorPtr proc(m_DataProcessor);
       QxrdScriptEnginePtr eng(m_ScriptEngine);
 
       if (m_Window) {
@@ -552,7 +568,8 @@ void QxrdExperiment::closeWindows()
     }
   }
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcquisitionPtr acq(
+        qSharedPointerDynamicCast<QxrdAcquisition>(m_Acquisition));
 
   if (acq) {
     acq->closeWindows();
@@ -561,17 +578,18 @@ void QxrdExperiment::closeWindows()
 
 void QxrdExperiment::splashMessage(QString msg)
 {
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app) {
-    QMetaObject::invokeMethod(app.data(), "splashMessage",
-                              Q_ARG(QString, msg));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(app.data(), "splashMessage",
+                                    Q_ARG(QString, msg)));
   }
 }
 
 void QxrdExperiment::criticalMessage(QString msg, QDateTime /*ts*/) const
 {
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr   app(m_Application);
   QxrdWindowPtr      win(m_Window);
 
   if (win) {
@@ -584,7 +602,6 @@ void QxrdExperiment::criticalMessage(QString msg, QDateTime /*ts*/) const
 
 void QxrdExperiment::statusMessage(QString msg, QDateTime /*ts*/) const
 {
-  QxrdApplicationPtr app(m_Application);
   QxrdWindowPtr      win(m_Window);
 
   if (win) {
@@ -658,7 +675,7 @@ void QxrdExperiment::pushMessage(QString msg) const
   m_PushedMessages.append(msg);
 }
 
-QxrdApplicationWPtr QxrdExperiment::application() const
+QxrdAppCommonWPtr QxrdExperiment::application() const
 {
   return m_Application;
 }
@@ -673,7 +690,7 @@ QxrdWindowPtr QxrdExperiment::window()
   return m_Window;
 }
 
-QxrdAcquisitionWPtr QxrdExperiment::acquisition() const
+QxrdAcqCommonWPtr QxrdExperiment::acquisition() const
 {
   return m_Acquisition;
 }
@@ -986,7 +1003,7 @@ void QxrdExperiment::readSettings(QSettings *settings)
   if (settings) {
     QcepExperiment::readSettings(settings);
 
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdAcqCommonPtr acq(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
@@ -1008,11 +1025,14 @@ void QxrdExperiment::readSettings(QSettings *settings)
       int detType = settings->value("detectorType", -1).toInt();
 
       if (detType == QxrdDetectorSettings::PerkinElmer) {
-        if (acq) {
-          if (acq->get_DetectorCount() == 0) {
-            QxrdDetectorSettingsPtr det = acq->newDetector(detType);
+        QxrdAcquisitionPtr acqp(
+              qSharedPointerDynamicCast<QxrdAcquisition>(acq));
 
-            acq->appendDetector(det);
+        if (acqp) {
+          if (acqp->get_DetectorCount() == 0) {
+            QxrdDetectorSettingsPtr det = acqp->newDetector(detType);
+
+            acqp->appendDetector(det);
           }
         }
       }
@@ -1125,10 +1145,10 @@ void QxrdExperiment::writeSettings(QSettings *settings)
   if (settings) {
     QcepExperiment::writeSettings(settings);
 
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdAcqCommonPtr     acq(m_Acquisition);
     QxrdDataProcessorPtr proc(m_DataProcessor);
-    QxrdServerPtr srv(m_Server);
-    QxrdSimpleServerPtr ssrv(m_SimpleServer);
+    QxrdServerPtr        srv(m_Server);
+    QxrdSimpleServerPtr  ssrv(m_SimpleServer);
 
     if (m_Window) {
       m_Window->captureSize();
@@ -1414,7 +1434,10 @@ void QxrdExperiment::defaultWindowSettings()
         qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(i));
 
     if (set) {
-      set -> initialize(application(), experiment(), acquisition(), dataProcessor());
+      set -> initialize(qSharedPointerDynamicCast<QxrdApplication>(application()),
+                        experiment(),
+                        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()),
+                        dataProcessor());
     }
   }
 }

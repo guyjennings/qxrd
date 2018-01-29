@@ -59,12 +59,12 @@ void QxrdFileSaver::setProcessor(QxrdDataProcessorWPtr proc)
   m_Processor = proc;
 }
 
-void QxrdFileSaver::setAcquisition(QxrdAcquisitionWPtr acq)
+void QxrdFileSaver::setAcquisition(QxrdAcqCommonWPtr acq)
 {
   m_Acquisition = acq;
 }
 
-QxrdAcquisitionWPtr QxrdFileSaver::acquisition() const
+QxrdAcqCommonWPtr QxrdFileSaver::acquisition() const
 {
   if (m_Acquisition == NULL) {
     printMessage("acquisition == NULL in QxrdFileSaver::acquisition\n");
@@ -114,7 +114,8 @@ QString QxrdFileSaver::uniqueFileName(QString name)
     QString base = f.completeBaseName();
     QString suff = f.suffix();
 
-    QxrdAcquisitionPtr acq(acquisition());
+    QxrdAcquisitionPtr acq(
+          qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
 
     int width = 5;
 
@@ -479,14 +480,18 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepUInt32ImageDataPtr im
       image -> saveMetaData(name);
 
       QxrdDataProcessorPtr proc(m_Processor);
-      QxrdAcquisitionPtr acq(m_Acquisition);
+      QxrdAcquisitionPtr acq(
+            qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
 
-      if (proc && acq) {
+      if (proc) {
         if (proc->get_SaveOverflowFiles()) {
           saveOverflowData(name, overflow);
         }
 
-        proc -> updateEstimatedTime(acq -> prop_Raw32SaveTime(), tic.elapsed());
+        if (acq) {
+          proc -> updateEstimatedTime(acq -> prop_Raw32SaveTime(), tic.elapsed());
+        }
+
         proc -> set_FileName(name);
 
         if (g_Application) {
@@ -575,14 +580,18 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString name, QcepUInt16ImageDataPtr im
       image -> saveMetaData(name);
 
       QxrdDataProcessorPtr proc(m_Processor);
-      QxrdAcquisitionPtr acq(m_Acquisition);
+      QxrdAcquisitionPtr acq(
+            qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
 
-      if (proc && acq) {
+      if (proc) {
         if (proc->get_SaveOverflowFiles()) {
           saveOverflowData(name, overflow);
         }
 
-        proc -> updateEstimatedTime(acq -> prop_Raw16SaveTime(), tic.elapsed());
+        if (acq) {
+          proc -> updateEstimatedTime(acq -> prop_Raw16SaveTime(), tic.elapsed());
+        }
+
         proc -> set_FileName(name);
 
         if (g_Application) {

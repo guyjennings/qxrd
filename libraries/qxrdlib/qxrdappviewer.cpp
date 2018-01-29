@@ -1,6 +1,9 @@
 #include "qxrdappviewer.h"
 #include "qcepdataobject.h"
 #include "qxrdappviewersettings.h"
+#include "qxrdviewersettings.h"
+#include "qxrdexperimentthread.h"
+#include "qxrdexperiment.h"
 
 QxrdAppViewer::QxrdAppViewer(int &argc, char **argv)
   : inherited(argc, argv)
@@ -35,6 +38,8 @@ bool QxrdAppViewer::init(int &argc, char **argv)
       foreach(QString patt, settings()->get_WatcherList()) {
         openWatcher(patt);
       }
+    } else {
+      openWatcher(".");
     }
   }
 
@@ -79,8 +84,43 @@ void QxrdAppViewer::editGlobalPreferences()
 
 void QxrdAppViewer::createNewExperiment()
 {
+  QxrdExperimentThreadPtr expthr =
+      QxrdExperimentThread::newExperimentThread(
+        "",
+        qSharedPointerDynamicCast<QxrdAppCommon>(sharedFromThis()),
+        QxrdExperimentSettingsPtr(),
+        QxrdExperiment::ViewerOnly);
+
+  if (expthr) {
+    openedExperiment(expthr);
+
+    closeWelcomeWindow();
+  }
 }
 
 void QxrdAppViewer::chooseExistingExperiment()
 {
+}
+
+void QxrdAppViewer::readSettings()
+{
+  QxrdViewerSettings set(this);
+
+  if (settings()) {
+    set.beginGroup("application");
+    settings() -> readSettings(&set);
+    set.endGroup();
+  }
+}
+
+void QxrdAppViewer::writeSettings()
+{
+  QxrdViewerSettings set(this);
+
+  if (settings()) {
+    set.beginGroup("application");
+    settings() -> writeSettings(&set);
+    set.endGroup();
+    settings() -> setChanged(0);
+  }
 }

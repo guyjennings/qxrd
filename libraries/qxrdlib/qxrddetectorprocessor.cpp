@@ -18,7 +18,7 @@
 QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     QxrdFileSaverWPtr     fsav,
     QxrdDetectorSettingsWPtr      det)
-  : QxrdProcessor("acquisitionProcessor"),
+  : inherited("acquisitionProcessor"),
     m_DetectorDisplayMode(this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
     m_PerformDarkSubtraction(this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
     m_SaveRawImages(this, "saveRawImages", true, "Save Raw Images?"),
@@ -150,6 +150,13 @@ void QxrdDetectorProcessor::writeSettings(QSettings *settings)
     m_ImagePlotSettings->writeSettings(settings);
     settings->endGroup();
   }
+}
+
+QxrdAcquisitionWPtr QxrdDetectorProcessor::acquisition()
+{
+  QxrdAcquisitionWPtr res(
+        qSharedPointerDynamicCast<QxrdAcquisition>(
+          inherited::acquisition()));
 }
 
 QScriptValue QxrdDetectorProcessor::toScriptValue(QScriptEngine *engine, const QxrdDetectorProcessorPtr &proc)
@@ -420,7 +427,7 @@ void QxrdDetectorProcessor::processIdleImage(QcepImageDataBasePtr image)
     QxrdExperimentPtr expt(m_Experiment);
 
     if (expt) {
-      QxrdAcquisitionPtr acq(expt->acquisition());
+      QxrdAcquisitionPtr acq(acquisition());
 
       if (acq && acq->get_LiveViewAtIdle()) {
         QcepDoubleVector scalers;

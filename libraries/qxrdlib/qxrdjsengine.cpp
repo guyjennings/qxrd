@@ -18,7 +18,7 @@
 #include "qcepdataimportparameters.h"
 #include "qxrdsynchronizedacquisition.h"
 
-QxrdJSEngine::QxrdJSEngine(QxrdApplicationWPtr app, QxrdExperimentWPtr exp) :
+QxrdJSEngine::QxrdJSEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp) :
   m_Application(app),
   m_Experiment(exp)
 {
@@ -116,17 +116,22 @@ void QxrdJSEngine::initialize()
   setGlobalProperty("newDataImage", newQObject(this).property("newDataImageFunc"));
   setGlobalProperty("newIntegratedData", newQObject(this).property("newIntegratedDataFunc"));
 
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app) {
 //    QCEP_DOC_OBJECT("application", "The QXRD Application Object");
     setGlobalProperty("application", newQObject(app.data()));
 
-    QObject *plugin = dynamic_cast<QObject*>(app->nidaqPlugin().data());
+    QxrdApplicationPtr appp(
+          qSharedPointerDynamicCast<QxrdApplication>(app));
 
-    if (plugin) {
-//      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
-      setGlobalProperty("nidaq", newQObject(plugin));
+    if (appp) {
+      QObject *plugin = dynamic_cast<QObject*>(appp->nidaqPlugin().data());
+
+      if (plugin) {
+        //      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
+        setGlobalProperty("nidaq", newQObject(plugin));
+      }
     }
   }
 
@@ -140,24 +145,24 @@ void QxrdJSEngine::initialize()
   if (expt) {
     setGlobalProperty("experiment", newQObject(expt.data()));
 
-    QxrdAcquisitionPtr acq(expt->acquisition());
+    QxrdAcquisitionPtr acq(acquisition());
 
     if (acq) {
       setGlobalProperty("acquisition", newQObject(acq.data()));
-    }
 
-    QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
+      QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
 
-    if (sync) {
-//      QCEP_DOC_OBJECT("synchronization", "Synchronized Acquisition");
-      setGlobalProperty("synchronization", newQObject(sync.data()));
-    }
+      if (sync) {
+        //      QCEP_DOC_OBJECT("synchronization", "Synchronized Acquisition");
+        setGlobalProperty("synchronization", newQObject(sync.data()));
+      }
 
-    QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
+      QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
 
-    if (extra) {
-//      QCEP_DOC_OBJECT("extraInputs", "Extra Inputs during Acquisition");
-      setGlobalProperty("extraInputs", newQObject(extra.data()));
+      if (extra) {
+  //      QCEP_DOC_OBJECT("extraInputs", "Extra Inputs during Acquisition");
+        setGlobalProperty("extraInputs", newQObject(extra.data()));
+      }
     }
 
     QxrdSimpleServerPtr ssrv(expt->simpleServer());
@@ -329,7 +334,8 @@ QxrdAcquisitionWPtr QxrdJSEngine::acquisition()
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    res = expt->acquisition();
+    res =
+        qSharedPointerDynamicCast<QxrdAcquisition>(expt->acquisition());
   }
 
   return res;

@@ -27,7 +27,7 @@ public:
 
   void parseCommandLine(bool wantFullOptions);
 
-  void splashMessage(QString msg);
+  Q_INVOKABLE void splashMessage(QString msg);
 
   void tiffWarning(const char* module, const char *msg);
   void tiffError(const char* module, const char *msg);
@@ -47,9 +47,14 @@ public:
   virtual void openRecentExperiment(QString path);
   void appendRecentExperiment(QString path);
 
+  virtual void readSettings() = 0;
+  virtual void writeSettings() = 0;
+
   virtual void editGlobalPreferences() = 0;
   virtual void createNewExperiment() = 0;
   virtual void chooseExistingExperiment() = 0;
+
+  QxrdExperimentPtr getFirstExperiment();
 
   void openedExperiment(QxrdExperimentThreadWPtr expwthr);
   void closedExperiment(QxrdExperimentThreadWPtr expwthr);

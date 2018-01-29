@@ -10,8 +10,7 @@ QxrdApplicationSettings::QxrdApplicationSettings(QxrdApplicationWPtr app, int ar
   m_MessageWindowLines(this, "messageWindowLines", 1000, "Number of Lines in Message Window (0 = unlimited)"),
   m_UpdateIntervalMsec(this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)"),
   m_LockerCount(this, "lockerCount", 0, "Number of mutex locks taken"),
-  m_LockerRate(this, "lockerRate", 0, "Mutex Locking Rate"),
-  m_ExperimentCount(this, "experimentCount", 0, "Number of open experiments")
+  m_LockerRate(this, "lockerRate", 0, "Mutex Locking Rate")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing application settings\n");

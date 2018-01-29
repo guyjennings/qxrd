@@ -12,9 +12,9 @@
 //#include <QScriptEngineDebugger>
 #include <QTimer>
 #include "qcepexperiment.h"
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrddataprocessorthread-ptr.h"
 #include "qxrddataprocessor-ptr.h"
 #include "qxrdserverthread-ptr.h"
@@ -54,23 +54,30 @@ public:
   Q_INVOKABLE QxrdExperiment(QString name);
 
   static QxrdExperimentPtr newExperiment(QString path,
-                                         QxrdApplicationWPtr app,
-                                         QxrdExperimentSettingsPtr set);
+                                         QxrdAppCommonWPtr app,
+                                         QxrdExperimentSettingsPtr set,
+                                         int mode);
 
   virtual ~QxrdExperiment();
   void initialize(QxrdExperimentSettingsPtr settings);
 
   static void registerMetaTypes();
 
+  enum {
+    DefaultMode,
+    AcquisitionAllowed,
+    ViewerOnly
+  };
+
   void openWindows();
   void closeWindows();
 
-  void setExperimentApplication(QxrdApplicationWPtr app);
+  void setExperimentApplication(QxrdAppCommonWPtr app);
 
-  QxrdApplicationWPtr application() const;
+  QxrdAppCommonWPtr application() const;
   QxrdExperimentThreadPtr experimentThread() const;
   QxrdExperimentWPtr experiment();
-  QxrdAcquisitionWPtr acquisition() const;
+  QxrdAcqCommonWPtr acquisition() const;
   QxrdWindowPtr window();
   QxrdDataProcessorWPtr dataProcessor() const;
   QxrdCenterFinderWPtr centerFinder() const;
@@ -169,7 +176,7 @@ public:
   void openScanFile();
 
 private:
-  QxrdApplicationWPtr             m_Application;
+  QxrdAppCommonWPtr               m_Application;
 
 private:
   QMutex                          m_Mutex;
@@ -185,7 +192,7 @@ private:
   QxrdCalibrantLibraryModelPtr    m_CalibrantLibraryModel;
   QxrdCalibrantDSpacingsPtr       m_CalibrantDSpacings;
   QxrdCalibrantDSpacingsModelPtr  m_CalibrantDSpacingsModel;
-  QxrdAcquisitionPtr              m_Acquisition;
+  QxrdAcqCommonPtr                m_Acquisition;
 //  QxrdDetectorThreadPtr           m_DetectorThread;
 //  QxrdDetectorWPtr                m_Detector;
   QxrdFileSaverThreadPtr          m_FileSaverThread;
@@ -212,6 +219,9 @@ private:
   mutable QStringList             m_PushedMessages;
 
 public:  // Properties
+  Q_PROPERTY(int experimentMode READ get_ExperimentMode WRITE set_ExperimentMode STORED false)
+  QCEP_INTEGER_PROPERTY(ExperimentMode)
+
   Q_PROPERTY(QString qxrdVersion       READ get_QxrdVersion   WRITE set_QxrdVersion)
   QCEP_STRING_PROPERTY(QxrdVersion)
 
