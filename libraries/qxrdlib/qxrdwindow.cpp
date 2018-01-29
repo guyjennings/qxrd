@@ -65,7 +65,7 @@
 #include <QSortFilterProxyModel>
 
 QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
-                       QxrdApplicationWPtr appl,
+                       QxrdAppCommonWPtr appl,
                        QxrdExperimentWPtr docw,
                        QxrdAcquisitionWPtr acqw,
                        QxrdDataProcessorWPtr procw)
@@ -112,7 +112,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
     printf("QxrdWindow::QxrdWindow(%p)\n", this);
   }
 
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app && qcepDebug(DEBUG_APP)) {
     app->printMessage("QxrdWindow::QxrdWindow");
@@ -154,8 +154,8 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 
 void QxrdWindow::initialize()
 {
-  QxrdApplicationPtr app(m_Application);
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdApplicationPtr    app(qSharedPointerDynamicCast<QxrdApplication>(m_Application));
+  QxrdExperimentPtr     expt(m_Experiment);
   QxrdWindowSettingsPtr set(m_WindowSettings);
 
 
@@ -669,7 +669,8 @@ void QxrdWindow::initialize()
 //          m_HistogramDialog, &QxrdHistogramDialog::histogramSelectionChanged);
 
   if (app) {
-    QxrdApplicationSettingsPtr appset(app->settings());
+    QxrdApplicationSettingsPtr appset(
+          qSharedPointerDynamicCast<QxrdApplicationSettings>(app->settings()));
 
     if (appset) {
       m_Messages -> document() -> setMaximumBlockCount(appset->get_MessageWindowLines());
@@ -708,7 +709,7 @@ QxrdWindow::~QxrdWindow()
   printf("Deleting main window from thread %s\n", qPrintable(QThread::currentThread()->objectName()));
 #endif  
 
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app && qcepDebug(DEBUG_APP)) {
     app->printMessage("QxrdWindow::~QxrdWindow");
@@ -764,7 +765,7 @@ void QxrdWindow::enableTiltRefinement(bool enable)
 void QxrdWindow::closeEvent ( QCloseEvent * event )
 {
   if (wantToClose()) {
-    QxrdApplicationPtr app(m_Application);
+    QxrdAppCommonPtr app(m_Application);
 
     if (app) {
       app->closeExperiment(m_Experiment);
@@ -1135,12 +1136,12 @@ void QxrdWindow::doSaveExperimentAsText()
   GUI_THREAD_CHECK;
 
   QxrdExperimentPtr expt(m_Experiment);
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr  app(m_Application);
 
   if (app && expt) {
     QString path = expt->experimentFilePath();
     QString name = expt->defaultExperimentName(path);
-    QString dirp = expt->defaultExperimentDirectory(path);
+//    QString dirp = expt->defaultExperimentDirectory(path);
 
     QDir dir(expt->get_ExperimentDirectory());
 

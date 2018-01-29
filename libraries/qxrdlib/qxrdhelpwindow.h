@@ -14,7 +14,7 @@ class QXRD_EXPORT QxrdHelpWindow : public QxrdMainWindow, public Ui::QxrdHelpWin
 public:
   explicit QxrdHelpWindow(QxrdHelpWindowSettingsWPtr set,
                           QString name,
-                          QxrdApplicationWPtr app,
+                          QxrdAppCommonWPtr app,
                           QxrdExperimentWPtr expt,
                           QxrdAcquisitionWPtr acqw,
                           QxrdProcessorWPtr procw);

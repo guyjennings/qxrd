@@ -7,7 +7,7 @@
 #include "qxrdacquisitionwindowsettings-ptr.h"
 #include "qxrddetectorlistmodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 #include "qxrdacquisition-ptr.h"
 
 //TODO: implement
@@ -18,7 +18,7 @@ class QXRD_EXPORT QxrdAcquisitionWindow : public QxrdMainWindow, public Ui::Qxrd
 public:
   explicit QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr set,
                                  QString name,
-                                 QxrdApplicationWPtr app,
+                                 QxrdAppCommonWPtr app,
                                  QxrdExperimentWPtr expt,
                                  QxrdAcquisitionWPtr acqw,
                                  QxrdProcessorWPtr  procw);

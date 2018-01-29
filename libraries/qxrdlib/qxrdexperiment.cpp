@@ -65,6 +65,8 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdwindowsettings.h"
 #include "qxrdhelpwindowsettings.h"
+#include "qxrdwatcherwindowsettings-ptr.h"
+#include "qxrdwatcherwindowsettings.h"
 
 QxrdExperiment::QxrdExperiment(QString name) :
   QcepExperiment("", name),
@@ -469,6 +471,25 @@ void QxrdExperiment::registerMetaTypes()
 void QxrdExperiment::setExperimentApplication(QxrdAppCommonWPtr app)
 {
   m_Application = app;
+}
+
+void QxrdExperiment::openWindow(QxrdMainWindowSettingsWPtr set)
+{
+  QxrdAppCommonPtr app(m_Application);
+
+  if (app && set) {
+    QxrdAppCommon *appp = app.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(appp, [=]() { app->openWindow(set); })
+    )
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(appp, "openWindow", Q_ARG(QxrdMainWindowSettingsWPtr, set))
+    )
+#endif
+  }
 }
 
 void QxrdExperiment::openWindows()
@@ -1342,6 +1363,31 @@ void QxrdExperiment::saveExperimentCopyAs(QString path)
 //  delete exp;
 }
 
+void QxrdExperiment::openWatcher(QString patt)
+{
+  THREAD_CHECK;
+
+  QxrdWatcherWindowSettingsPtr set(
+        new QxrdWatcherWindowSettings("watcher"));
+
+  if (set) {
+    QxrdExperimentPtr exp(
+          qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()));
+
+    set -> initialize(application(),
+                      exp,
+                      qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()),
+                      dataProcessor());
+
+    set -> set_WindowOpen(true);
+    set -> set_Pattern(patt);
+  }
+
+  appendWindowSettings(set);
+
+  openWindow(set);
+}
+
 void QxrdExperiment::updateCompletionPercentage(int, int)
 {
   int completed = get_WorkCompleted();
@@ -1404,6 +1450,8 @@ void QxrdExperiment::evaluateScriptFile(QString path)
 
 void QxrdExperiment::defaultWindowSettings()
 {
+  THREAD_CHECK;
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdAcquisitionWindowSettings("Acquisition")));
   appendWindowSettings(QcepMainWindowSettingsPtr(

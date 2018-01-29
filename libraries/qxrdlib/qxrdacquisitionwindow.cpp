@@ -9,7 +9,7 @@
 
 QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr set,
                                              QString name,
-                                             QxrdApplicationWPtr app,
+                                             QxrdAppCommonWPtr app,
                                              QxrdExperimentWPtr expt,
                                              QxrdAcquisitionWPtr acqw,
                                              QxrdProcessorWPtr procw) :

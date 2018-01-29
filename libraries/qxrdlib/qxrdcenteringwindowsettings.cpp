@@ -4,6 +4,7 @@
 #include "qxrdimageplotwidgetsettings.h"
 #include "qxrdcenteringplotwidgetsettings.h"
 #include "qxrdintegratedplotwidgetsettings.h"
+#include <QThread>
 
 QxrdCenteringWindowSettings::QxrdCenteringWindowSettings(QString name)
   : QxrdMainWindowSettings(name),
@@ -17,6 +18,8 @@ QxrdCenteringWindowSettings::QxrdCenteringWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdCenteringWindowSettings::newWindow()
 {
+  GUI_THREAD_CHECK;
+
   QxrdCenteringWindowSettingsPtr myself =
       qSharedPointerDynamicCast<QxrdCenteringWindowSettings>(sharedFromThis());
 

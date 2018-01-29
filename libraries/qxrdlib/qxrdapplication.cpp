@@ -600,66 +600,12 @@ void QxrdApplication::savePreferences(QString path)
   QFile::rename(path+".new", path);
 }
 
-void QxrdApplication::doAboutQxrd()
-{
-  QString about = "QXRD Data Acquisition for PE Area Detectors\nVersion " STR(QXRD_VERSION);
+//void QxrdApplication::doAboutQxrd()
+//{
+//  QString about = "QXRD Data Acquisition for PE Area Detectors";
 
-  if (sizeof(void*) == 4) {
-    about += " - 32 Bit";
-  } else {
-    about += " - 64 Bit";
-  }
-
-#ifdef Q_CC_MSVC
-  about += " MSVC";
-#endif
-
-#ifdef Q_CC_GNU
-#ifdef Q_CC_CLANG
-  about += " clang";
-#else
-  about += " gcc";
-#endif
-#endif
-
-#ifdef QT_NO_DEBUG
-  about += " Release\n";
-#else
-  about += " Debug\n";
-#endif
-
-  about += tr("Qt Version %1\n").arg(qVersion());
-  about += tr("Qceplib Version %1\n").arg(STR(QCEPLIB_VERSION));
-  about += tr("QWT Version %1\n").arg(STR(QCEPLIB_QWT_VERSION));
-  about += tr("Mar345 Version %1\n").arg(STR(QCEPLIB_MAR345_VERSION));
-  about += tr("CBF Version %1\n").arg(STR(QCEPLIB_CBF_VERSION));
-  about += tr("TIFF Version %1\n").arg(STR(QCEPLIB_TIFF_VERSION));
-  about += tr("LevMar Version %1\n").arg(STR(QCEPLIB_LEVMAR_VERSION));
-#ifdef QCEPLIB_ZLIB_VERSION
-  about += tr("ZLIB Version %1\n").arg(STR(QCEPLIB_ZLIB_VERSION));
-#endif
-
-#ifdef QCEPLIB_SZIP_VERSION
-  about += tr("SZIP Version %1\n").arg(STR(QCEPLIB_SZIP_VERSION));
-#endif
-
-#ifdef QCEPLIB_HDF5_VERSION
-  about += tr("HDF5 Version %1\n").arg(STR(QCEPLIB_HDF5_VERSION));
-#endif
-  about += tr("Spec Server Version %1\n").arg(STR(QCEPLIB_SPECSERVER_VERSION));
-
-  QMessageBox::about(NULL, "QXRD", about);
-}
-
-void QxrdApplication::doOpenQXRDWebPage()
-{
-  QDesktopServices::openUrl(QUrl("http://qxrd.sourceforge.net/"));
-}
-
-void QxrdApplication::doOpenURL(QString url)
-{
-  QDesktopServices::openUrl(QUrl(url));
-}
+//  doAbout(about);
+//}
 
 void QxrdApplication::editGlobalPreferences()
 {
@@ -789,19 +735,6 @@ void QxrdApplication::openExperiment(QString path)
 //    }
 //  }
 //}
-
-void QxrdApplication::closeExperiment(QxrdExperimentWPtr expw)
-{
-  if (qcepDebug(DEBUG_APP)) {
-    printf("QxrdApplication::closeExperiment(%p)\n", expw.data());
-  }
-
-  QxrdExperimentPtr exp(expw);
-
-  if (exp) {
-    closedExperiment(exp->experimentThread());
-  }
-}
 
 QString QxrdApplication::normalizeExperimentName(QString filename)
 {

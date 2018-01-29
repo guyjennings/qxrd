@@ -21,7 +21,7 @@ class QXRD_EXPORT QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::
   Q_OBJECT
 
 public:
-  explicit QxrdDetectorControlWindow(QxrdApplicationPtr       appl,
+  explicit QxrdDetectorControlWindow(QxrdAppCommonPtr       appl,
                                      QxrdExperimentWPtr        exp,
                                      QxrdAcquisitionWPtr       acq,
                                      QxrdDetectorSettingsWPtr          det,

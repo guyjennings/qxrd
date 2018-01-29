@@ -19,7 +19,7 @@
 #include "qxrdwindow.h"
 #include "qxrdroieditordialog.h"
 
-QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdApplicationPtr appl,
+QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr appl,
                                                      QxrdExperimentWPtr        exp,
                                                      QxrdAcquisitionWPtr       acq,
                                                      QxrdDetectorSettingsWPtr          det,

@@ -18,7 +18,7 @@ class QXRD_EXPORT QxrdExtraIOWindow : public QxrdMainWindow, public Ui::QxrdExtr
 public:
   explicit QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
                              QString name,
-                             QxrdApplicationWPtr app,
+                             QxrdAppCommonWPtr app,
                              QxrdExperimentWPtr expt,
                              QxrdAcquisitionWPtr acqw,
                              QxrdProcessorWPtr procw);

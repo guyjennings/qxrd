@@ -2,6 +2,7 @@
 #include "qxrdmaskingwindow.h"
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdimageplotwidgetsettings.h"
+#include <QThread>
 
 QxrdMaskingWindowSettings::QxrdMaskingWindowSettings(QString name)
   : QxrdMainWindowSettings(name),
@@ -13,6 +14,8 @@ QxrdMaskingWindowSettings::QxrdMaskingWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdMaskingWindowSettings::newWindow()
 {
+  GUI_THREAD_CHECK;
+
   QxrdMaskingWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdMaskingWindowSettings>(sharedFromThis());
 
   m_Window =

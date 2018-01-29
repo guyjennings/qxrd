@@ -1,6 +1,7 @@
 #include "qxrdacquisitionwindowsettings.h"
 #include "qxrdacquisitionwindow.h"
 #include "qxrdfilebrowsersettings.h"
+#include <QThread>
 
 QxrdAcquisitionWindowSettings::QxrdAcquisitionWindowSettings(QString name)
   : QxrdMainWindowSettings(name),
@@ -10,6 +11,8 @@ QxrdAcquisitionWindowSettings::QxrdAcquisitionWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdAcquisitionWindowSettings::newWindow()
 {
+  GUI_THREAD_CHECK;
+
   QxrdAcquisitionWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdAcquisitionWindowSettings>(sharedFromThis());
 
   m_Window =

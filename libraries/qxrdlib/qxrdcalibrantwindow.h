@@ -20,7 +20,7 @@ class QXRD_EXPORT QxrdCalibrantWindow : public QxrdMainWindow, public Ui::QxrdCa
 public:
   explicit QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set,
                                QString name,
-                               QxrdApplicationWPtr app,
+                               QxrdAppCommonWPtr app,
                                QxrdExperimentWPtr expt,
                                QxrdAcquisitionWPtr acqw,
                                QxrdProcessorWPtr procw);

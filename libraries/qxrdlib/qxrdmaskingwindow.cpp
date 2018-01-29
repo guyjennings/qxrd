@@ -8,7 +8,7 @@
 
 QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
                                      QString name,
-                                     QxrdApplicationWPtr app,
+                                     QxrdAppCommonWPtr app,
                                      QxrdExperimentWPtr expt,
                                      QxrdAcquisitionWPtr acqw,
                                      QxrdProcessorWPtr procw) :

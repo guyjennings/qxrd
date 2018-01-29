@@ -14,7 +14,7 @@
 #include "qxrdapplicationsettings.h"
 #include "qcepallocator.h"
 
-QxrdMainWindow::QxrdMainWindow(QString name, QxrdApplicationWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw)
+QxrdMainWindow::QxrdMainWindow(QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw)
   : QcepMainWindow(),
     m_Name(name),
     m_Application(app),
@@ -59,8 +59,8 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
   m_EditMenuP = edit;
   m_WindowMenuP = window;
 
-  QxrdApplicationPtr app(m_Application);
-  QxrdExperimentPtr exper(m_Experiment);
+  QxrdApplicationPtr app(qSharedPointerDynamicCast<QxrdApplication>(m_Application));
+  QxrdExperimentPtr  exper(m_Experiment);
 
   if (app) {
     QxrdApplicationSettingsPtr appset(app->settings());
@@ -294,10 +294,10 @@ void QxrdMainWindow::populateRecentExperimentsMenu()
 
   m_RecentExperimentsMenu->clear();
 
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app) {
-    QxrdApplicationSettingsPtr set(app->settings());
+    QxrdAppCommonSettingsPtr set(app->settings());
 
     if (set) {
       QStringList recent = set->get_RecentExperiments();
@@ -456,7 +456,7 @@ void QxrdMainWindow::saveExperimentAs()
   GUI_THREAD_CHECK;
 
   QxrdExperimentPtr expt(m_Experiment);
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr app(m_Application);
 
   if (app && expt) {
     QString path = expt->experimentFilePath();
@@ -484,12 +484,12 @@ void QxrdMainWindow::saveExperimentCopy()
   GUI_THREAD_CHECK;
 
   QxrdExperimentPtr expt(m_Experiment);
-  QxrdApplicationPtr app(m_Application);
+  QxrdAppCommonPtr  app(m_Application);
 
   if (app && expt) {
     QString path = expt->experimentFilePath();
     QString name = expt->defaultExperimentName(path);
-    QString dirp = expt->defaultExperimentDirectory(path);
+//    QString dirp = expt->defaultExperimentDirectory(path);
 
     QDir dir(expt->get_ExperimentDirectory());
 

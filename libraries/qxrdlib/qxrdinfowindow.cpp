@@ -1,7 +1,7 @@
 #include "qxrdinfowindow.h"
 
 QxrdInfoWindow::QxrdInfoWindow(QString name,
-                               QxrdApplicationWPtr app,
+                               QxrdAppCommonWPtr app,
                                QxrdExperimentWPtr expt,
                                QxrdAcquisitionWPtr acqw,
                                QxrdProcessorWPtr procw) :

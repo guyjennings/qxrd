@@ -8,7 +8,7 @@ QxrdMainWindowSettings::QxrdMainWindowSettings(QString name)
 {
 }
 
-void QxrdMainWindowSettings::initialize(QxrdApplicationWPtr app,
+void QxrdMainWindowSettings::initialize(QxrdAppCommonWPtr   app,
                                         QxrdExperimentWPtr  expt,
                                         QxrdAcquisitionWPtr acqw,
                                         QxrdProcessorWPtr   procw)

@@ -3,17 +3,19 @@
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdimageplotwidgetsettings.h"
 #include "qxrdcenteringplotwidgetsettings.h"
+#include <QThread>
 
 QxrdWatcherWindowSettings::QxrdWatcherWindowSettings(QString name)
   : QxrdMainWindowSettings(name),
     m_FileBrowserSettings(new QxrdFileBrowserSettings(name)),
     m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name)),
-    m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name))
+    m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name)),
+    m_Pattern(this, "pattern", "", "Watched Pattern")
 {
 
 }
 
-void QxrdWatcherWindowSettings::initialize(QxrdApplicationWPtr app,
+void QxrdWatcherWindowSettings::initialize(QxrdAppCommonWPtr   app,
                                            QxrdExperimentWPtr  expt,
                                            QxrdAcquisitionWPtr acqw,
                                            QxrdProcessorWPtr   procw)
@@ -28,6 +30,8 @@ void QxrdWatcherWindowSettings::initialize(QxrdApplicationWPtr app,
 
 QxrdMainWindowPtr QxrdWatcherWindowSettings::newWindow()
 {
+  GUI_THREAD_CHECK;
+
   QxrdWatcherWindowSettingsPtr myself =
       qSharedPointerDynamicCast<QxrdWatcherWindowSettings>(sharedFromThis());
 

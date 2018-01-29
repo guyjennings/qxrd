@@ -59,11 +59,10 @@ public slots:
 
   void openExperiment(QString path);
 //  void openExperiment2(QString path);
-  void closeExperiment(QxrdExperimentWPtr expw);
 
-  void doAboutQxrd();
-  void doOpenQXRDWebPage();
-  void doOpenURL(QString url);
+//  void doAboutQxrd();
+//  void doOpenQXRDWebPage();
+//  void doOpenURL(QString url);
 
   void editGlobalPreferences();
   void debugChanged(qint64 newValue);

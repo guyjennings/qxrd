@@ -5,7 +5,7 @@
 
 QxrdWatcherWindow::QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
                                      QString name,
-                                     QxrdApplicationWPtr app,
+                                     QxrdAppCommonWPtr app,
                                      QxrdExperimentWPtr expt,
                                      QxrdAcquisitionWPtr acqw,
                                      QxrdProcessorWPtr procw,
@@ -36,9 +36,9 @@ QxrdWatcherWindow::QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
     QxrdWatcherWindowSettingsPtr settings(m_WatcherWindowSettings);
 
     if (settings) {
-      m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings(), proc);
-      m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings(), cf);
+      m_FileBrowserWidget   -> initialize(settings->fileBrowserSettings(), exp, proc);
+      m_ImagePlotWidget     -> initialize(settings->imagePlotWidgetSettings(), proc);
+      m_CenteringPlotWidget -> initialize(settings->centeringPlotWidgetSettings(), cf);
     }
   }
 }

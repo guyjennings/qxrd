@@ -1,5 +1,6 @@
 #include "qxrdhelpwindowsettings.h"
 #include "qxrdhelpwindow.h"
+#include <QThread>
 
 QxrdHelpWindowSettings::QxrdHelpWindowSettings(QString name)
   : QxrdMainWindowSettings(name)
@@ -9,6 +10,8 @@ QxrdHelpWindowSettings::QxrdHelpWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdHelpWindowSettings::newWindow()
 {
+  GUI_THREAD_CHECK;
+
   QxrdHelpWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdHelpWindowSettings>(sharedFromThis());
 
   m_Window =

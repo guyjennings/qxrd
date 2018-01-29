@@ -1,5 +1,6 @@
 #include "qxrdcalculatorwindowsettings.h"
 #include "qxrdcalculatorwindow.h"
+#include <QThread>
 
 QxrdCalculatorWindowSettings::QxrdCalculatorWindowSettings(QString name)
   : QxrdMainWindowSettings(name)
@@ -9,6 +10,8 @@ QxrdCalculatorWindowSettings::QxrdCalculatorWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdCalculatorWindowSettings::newWindow()
 {
+  GUI_THREAD_CHECK;
+
   QxrdCalculatorWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdCalculatorWindowSettings>(sharedFromThis());
 
   m_Window =

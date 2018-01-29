@@ -44,6 +44,7 @@
 #include "qxrddetectorcontrolwindow-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdexperimentsettings-ptr.h"
+#include "qxrdmainwindowsettings-ptr.h"
 #include "qxrdjsengine-ptr.h"
 
 class QXRD_EXPORT QxrdExperiment : public QcepExperiment
@@ -157,9 +158,13 @@ public slots:
 
 //  void openAcquisitionWindow();
 
+  void openWindow(QxrdMainWindowSettingsWPtr set);
+
   void onAutoSaveTimer();
 
   void defaultWindowSettings();
+
+  void openWatcher(QString patt);
 
 private:
 

@@ -43,7 +43,7 @@ class QXRD_EXPORT QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow, pub
 
 public:
   QxrdWindow(QxrdWindowSettingsWPtr settings,
-             QxrdApplicationWPtr appl,
+             QxrdAppCommonWPtr appl,
              QxrdExperimentWPtr docw,
              QxrdAcquisitionWPtr acqw,
              QxrdDataProcessorWPtr procw);

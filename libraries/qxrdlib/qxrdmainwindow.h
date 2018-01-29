@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qcepmainwindow.h"
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdprocessor-ptr.h"
@@ -17,7 +17,7 @@ class QXRD_EXPORT QxrdMainWindow : public QcepMainWindow
   Q_OBJECT
 public:
   explicit QxrdMainWindow(QString name,
-                          QxrdApplicationWPtr app,
+                          QxrdAppCommonWPtr app,
                           QxrdExperimentWPtr expt,
                           QxrdAcquisitionWPtr acqw,
                           QxrdProcessorWPtr procw);
@@ -64,7 +64,7 @@ private:
 
 protected:
   QString             m_Name;
-  QxrdApplicationWPtr m_Application;
+  QxrdAppCommonWPtr   m_Application;
   QxrdExperimentWPtr  m_Experiment;
   QxrdAcquisitionWPtr m_Acquisition;
   QxrdProcessorWPtr   m_Processor;

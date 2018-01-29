@@ -14,7 +14,7 @@ class QXRD_EXPORT QxrdWatcherWindowSettings : public QxrdMainWindowSettings
 public:
   Q_INVOKABLE QxrdWatcherWindowSettings(QString name);
 
-  void initialize(QxrdApplicationWPtr app,
+  void initialize(QxrdAppCommonWPtr   app,
                   QxrdExperimentWPtr  expt,
                   QxrdAcquisitionWPtr acqw,
                   QxrdProcessorWPtr   procw);
@@ -35,6 +35,10 @@ private:
   QxrdFileBrowserSettingsPtr          m_FileBrowserSettings;
   QxrdImagePlotWidgetSettingsPtr      m_ImagePlotWidgetSettings;
   QxrdCenteringPlotWidgetSettingsPtr  m_CenteringPlotWidgetSettings;
+
+public:
+  Q_PROPERTY(QString pattern READ get_Pattern WRITE set_Pattern)
+  QCEP_STRING_PROPERTY(Pattern)
 };
 
 Q_DECLARE_METATYPE(QxrdWatcherWindowSettings*)

@@ -17,7 +17,7 @@ class QXRD_EXPORT QxrdIntegrationWindow : public QxrdMainWindow, public Ui::Qxrd
 public:
   explicit QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr set,
                                  QString name,
-                                 QxrdApplicationWPtr app,
+                                 QxrdAppCommonWPtr app,
                                  QxrdExperimentWPtr expt,
                                  QxrdAcquisitionWPtr acqw,
                                  QxrdProcessorWPtr procw);

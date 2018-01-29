@@ -9,6 +9,7 @@
 #include "qxrdwelcomewindow-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
+#include "qxrdmainwindowsettings-ptr.h"
 #include <QTimer>
 
 class QXRD_EXPORT QxrdAppCommon : public QcepApplication
@@ -46,6 +47,9 @@ public:
   virtual void openExperiment(QString path) = 0;
   virtual void openRecentExperiment(QString path);
   void appendRecentExperiment(QString path);
+  void closeExperiment(QxrdExperimentWPtr expw);
+
+  Q_INVOKABLE virtual void openWindow(QxrdMainWindowSettingsWPtr set);
 
   virtual void readSettings() = 0;
   virtual void writeSettings() = 0;
@@ -53,6 +57,10 @@ public:
   virtual void editGlobalPreferences() = 0;
   virtual void createNewExperiment() = 0;
   virtual void chooseExistingExperiment() = 0;
+
+  virtual void doAboutQxrd();
+  virtual void doOpenQXRDWebPage();
+  virtual void doOpenURL(QString url);
 
   QxrdExperimentPtr getFirstExperiment();
 

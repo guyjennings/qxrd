@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmainwindowsettings.h"
 #include "qxrdmainwindow-ptr.h"
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdprocessor-ptr.h"
@@ -17,7 +17,7 @@ public:
   QxrdMainWindowSettings(QString name);
 
   virtual
-  void initialize(QxrdApplicationWPtr app,
+  void initialize(QxrdAppCommonWPtr   app,
                   QxrdExperimentWPtr  expt,
                   QxrdAcquisitionWPtr acqw,
                   QxrdProcessorWPtr   procw);
@@ -33,7 +33,7 @@ public:
 
 protected:
   QxrdMainWindowPtr   m_Window;
-  QxrdApplicationWPtr m_Application;
+  QxrdAppCommonWPtr   m_Application;
   QxrdExperimentWPtr  m_Experiment;
   QxrdAcquisitionWPtr m_Acquisition;
   QxrdProcessorWPtr   m_Processor;

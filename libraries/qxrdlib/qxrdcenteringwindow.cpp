@@ -5,8 +5,10 @@
 
 QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
                                          QString name,
-                                         QxrdApplicationWPtr app,
-                                         QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw) :
+                                         QxrdAppCommonWPtr app,
+                                         QxrdExperimentWPtr expt,
+                                         QxrdAcquisitionWPtr acqw,
+                                         QxrdProcessorWPtr procw) :
   QxrdMainWindow(name, app, expt, acqw, procw),
   m_CenteringWindowSettings(set)
 {

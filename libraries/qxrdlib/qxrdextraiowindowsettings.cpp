@@ -2,6 +2,7 @@
 #include "qxrdextraiowindow.h"
 #include "qxrdextrainputsplotwidgetsettings.h"
 #include "qxrdextraoutputsplotwidgetsettings.h"
+#include <QThread>
 
 QxrdExtraIOWindowSettings::QxrdExtraIOWindowSettings(QString name)
   : QxrdMainWindowSettings(name),
@@ -13,6 +14,8 @@ QxrdExtraIOWindowSettings::QxrdExtraIOWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdExtraIOWindowSettings::newWindow()
 {
+  GUI_THREAD_CHECK;
+
   QxrdExtraIOWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdExtraIOWindowSettings>(sharedFromThis());
 
   m_Window =

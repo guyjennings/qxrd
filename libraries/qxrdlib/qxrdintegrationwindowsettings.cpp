@@ -3,6 +3,7 @@
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdimageplotwidgetsettings.h"
 #include "qxrdintegratedplotwidgetsettings.h"
+#include <QThread>
 
 QxrdIntegrationWindowSettings::QxrdIntegrationWindowSettings(QString name)
   : QxrdMainWindowSettings(name),
@@ -15,6 +16,8 @@ QxrdIntegrationWindowSettings::QxrdIntegrationWindowSettings(QString name)
 
 QxrdMainWindowPtr QxrdIntegrationWindowSettings::newWindow()
 {
+  GUI_THREAD_CHECK;
+
   QxrdIntegrationWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdIntegrationWindowSettings>(sharedFromThis());
 
   m_Window =

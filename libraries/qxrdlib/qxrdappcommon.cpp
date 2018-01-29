@@ -1,4 +1,5 @@
 #include "qxrdappcommon.h"
+#include "qxrddebug.h"
 #include "qcepimagedataformattiff.h"
 #include "qxrdappcommonsettings.h"
 #include "qxrdsplashscreen.h"
@@ -13,10 +14,12 @@
 #include "qxrdexperiment.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdwindow.h"
+#include "qxrdmainwindowsettings.h"
 #include <QCommandLineParser>
 #include <QDir>
 #include <QThread>
 #include <QMessageBox>
+#include <QDesktopServices>
 
 QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   : inherited(argc, argv),
@@ -367,6 +370,80 @@ void QxrdAppCommon::openWatcher(QString pattern)
   }
 }
 
+void QxrdAppCommon::openWindow(QxrdMainWindowSettingsWPtr set)
+{
+  GUI_THREAD_CHECK;
+
+  QxrdMainWindowSettingsPtr s(set);
+
+  if (s) {
+    s->openWindow();
+  }
+}
+
+void QxrdAppCommon::doAboutQxrd()
+{
+  QString about = applicationDescription();
+
+  about += "\nVersion " STR(QXRD_VERSION);
+
+  if (sizeof(void*) == 4) {
+    about += " - 32 Bit";
+  } else {
+    about += " - 64 Bit";
+  }
+
+#ifdef Q_CC_MSVC
+  about += " MSVC";
+#endif
+
+#ifdef Q_CC_GNU
+#ifdef Q_CC_CLANG
+  about += " clang";
+#else
+  about += " gcc";
+#endif
+#endif
+
+#ifdef QT_NO_DEBUG
+  about += " Release\n";
+#else
+  about += " Debug\n";
+#endif
+
+  about += tr("Qt Version %1\n").arg(qVersion());
+  about += tr("Qceplib Version %1\n").arg(STR(QCEPLIB_VERSION));
+  about += tr("QWT Version %1\n").arg(STR(QCEPLIB_QWT_VERSION));
+  about += tr("Mar345 Version %1\n").arg(STR(QCEPLIB_MAR345_VERSION));
+  about += tr("CBF Version %1\n").arg(STR(QCEPLIB_CBF_VERSION));
+  about += tr("TIFF Version %1\n").arg(STR(QCEPLIB_TIFF_VERSION));
+  about += tr("LevMar Version %1\n").arg(STR(QCEPLIB_LEVMAR_VERSION));
+#ifdef QCEPLIB_ZLIB_VERSION
+  about += tr("ZLIB Version %1\n").arg(STR(QCEPLIB_ZLIB_VERSION));
+#endif
+
+#ifdef QCEPLIB_SZIP_VERSION
+  about += tr("SZIP Version %1\n").arg(STR(QCEPLIB_SZIP_VERSION));
+#endif
+
+#ifdef QCEPLIB_HDF5_VERSION
+  about += tr("HDF5 Version %1\n").arg(STR(QCEPLIB_HDF5_VERSION));
+#endif
+  about += tr("Spec Server Version %1\n").arg(STR(QCEPLIB_SPECSERVER_VERSION));
+
+  QMessageBox::about(NULL, "QXRD", about);
+}
+
+void QxrdAppCommon::doOpenQXRDWebPage()
+{
+  QDesktopServices::openUrl(QUrl("http://qxrd.sourceforge.net/"));
+}
+
+void QxrdAppCommon::doOpenURL(QString url)
+{
+  QDesktopServices::openUrl(QUrl(url));
+}
+
 QxrdExperimentPtr QxrdAppCommon::getFirstExperiment()
 {
   if (experiments().count() == 0) {
@@ -384,6 +461,19 @@ void QxrdAppCommon::openRecentExperiment(QString path)
     openExperiment(path);
   } else {
     printMessage(tr("Experiment %1 does not exist").arg(path));
+  }
+}
+
+void QxrdAppCommon::closeExperiment(QxrdExperimentWPtr expw)
+{
+  if (qcepDebug(DEBUG_APP)) {
+    printf("QxrdAppCommon::closeExperiment(%p)\n", expw.data());
+  }
+
+  QxrdExperimentPtr exp(expw);
+
+  if (exp) {
+    closedExperiment(exp->experimentThread());
   }
 }
 
