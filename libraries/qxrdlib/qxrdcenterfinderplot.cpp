@@ -12,7 +12,7 @@
 #include <qwt_legend.h>
 #include <QMetaMethod>
 #include "qxrdwindow.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdcenterfinder.h"
 #include "qcepplotmeasurer.h"
 #include "qwt_plot_piecewise_curve.h"
@@ -24,7 +24,7 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
   : QcepPlot(parent),
     m_ObjectNamer(this, "centeringGraph"),
     m_Window(),
-    m_DataProcessor(),
+    m_Processor(),
     m_CenterFinder(),
     m_FirstTime(true)
 {
@@ -51,10 +51,10 @@ void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)
   QxrdWindow *wp = m_Window;
 
   if (wp) {
-    m_DataProcessor = wp -> dataProcessor();
+    m_Processor = wp -> processor();
   }
 
-  QxrdDataProcessorPtr dp(m_DataProcessor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     m_CenterFinder = dp -> centerFinder();

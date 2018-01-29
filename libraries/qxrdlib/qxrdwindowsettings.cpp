@@ -1,5 +1,5 @@
 #include "qxrdwindowsettings.h"
-#include "qcepmutexlocker.h"
+#include "qxrdwindow.h"
 #include "qxrdimageplotsettings.h"
 #include "qxrdcenterfinderplotsettings.h"
 #include "qxrdintegratorplotsettings.h"
@@ -21,7 +21,7 @@
 #include "qxrddistortionplotwidgetsettings.h"
 
 QxrdWindowSettings::QxrdWindowSettings(QString name) :
-  QcepObject(name),
+  inherited(name),
   m_WindowGeometry(this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(this, "windowState", QByteArray(), "Window State Settings"),
   m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name)),
@@ -49,6 +49,24 @@ QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
   return set;
 }
 
+QxrdMainWindowPtr QxrdWindowSettings::newWindow()
+{
+  GUI_THREAD_CHECK;
+
+  QxrdWindowSettingsPtr myself =
+      qSharedPointerDynamicCast<QxrdWindowSettings>(sharedFromThis());
+
+  m_Window =
+      QxrdMainWindowPtr(
+        new QxrdWindow(myself,
+                       m_Application,
+                       m_Experiment,
+                       m_Acquisition,
+                       m_Processor));
+
+  return m_Window;
+}
+
 void QxrdWindowSettings::registerMetaTypes()
 {
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
@@ -72,10 +90,8 @@ void QxrdWindowSettings::registerMetaTypes()
 
 void QxrdWindowSettings::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
   if (settings) {
-    QcepObject::readSettings(settings);
+    inherited::readSettings(settings);
 
     if (m_ImagePlotSettings) {
       settings->beginGroup("plot");
@@ -149,32 +165,36 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    settings->beginGroup("imagePlotWidget");
-    m_ImagePlotWidgetSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_ImagePlotWidgetSettings) {
+      settings->beginGroup("imagePlotWidget");
+      m_ImagePlotWidgetSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("centeringPlotWidget");
-    m_CenteringPlotWidgetSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_CenteringPlotWidgetSettings) {
+      settings->beginGroup("centeringPlotWidget");
+      m_CenteringPlotWidgetSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("integratedPlotWidget");
-    m_IntegratedPlotWidgetSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_IntegratedPlotWidgetSettings) {
+      settings->beginGroup("integratedPlotWidget");
+      m_IntegratedPlotWidgetSettings->readSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("distortionPlotWidget");
-    m_DistortionPlotWidgetSettings->readSettings(settings);
-    settings->endGroup();
+    if (m_DistortionPlotWidgetSettings) {
+      settings->beginGroup("distortionPlotWidget");
+      m_DistortionPlotWidgetSettings->readSettings(settings);
+      settings->endGroup();
+    }
   }
 }
 
 void QxrdWindowSettings::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  //    printf("QxrdWindow::writeSettings\n");
-
   if (settings) {
-    QcepObject::writeSettings(settings);
+    inherited::writeSettings(settings);
 
     if (m_ImagePlotSettings) {
       settings->beginGroup("plot");
@@ -254,21 +274,29 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    settings->beginGroup("imagePlotWidget");
-    m_ImagePlotWidgetSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_ImagePlotWidgetSettings) {
+      settings->beginGroup("imagePlotWidget");
+      m_ImagePlotWidgetSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("centeringPlotWidget");
-    m_CenteringPlotWidgetSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_CenteringPlotWidgetSettings) {
+      settings->beginGroup("centeringPlotWidget");
+      m_CenteringPlotWidgetSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("integratedPlotWidget");
-    m_IntegratedPlotWidgetSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_IntegratedPlotWidgetSettings) {
+      settings->beginGroup("integratedPlotWidget");
+      m_IntegratedPlotWidgetSettings->writeSettings(settings);
+      settings->endGroup();
+    }
 
-    settings->beginGroup("distortionPlotWidget");
-    m_DistortionPlotWidgetSettings->writeSettings(settings);
-    settings->endGroup();
+    if (m_DistortionPlotWidgetSettings) {
+      settings->beginGroup("distortionPlotWidget");
+      m_DistortionPlotWidgetSettings->writeSettings(settings);
+      settings->endGroup();
+    }
   }
 }
 

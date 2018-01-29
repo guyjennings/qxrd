@@ -1,6 +1,7 @@
 #include "qxrdappcommonsettings.h"
 #include "qxrdappcommon.h"
 #include "qcepallocator.h"
+#include <QDir>
 
 QxrdAppCommonSettings::QxrdAppCommonSettings(QxrdAppCommonWPtr app, int argc, char **argv) :
   inherited(app),
@@ -18,7 +19,12 @@ QxrdAppCommonSettings::QxrdAppCommonSettings(QxrdAppCommonWPtr app, int argc, ch
   m_CurrentExperiment(this, "currentExperiment", "", "Current Experiment"),
   m_RecentExperiments(this, "recentExperiments", QStringList(), "Recent Experiments"),
   m_RecentExperimentsSize(this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
-  m_ExperimentCount(this, "experimentCount", 0, "Number of open experiments")
+  m_ExperimentCount(this, "experimentCount", 0, "Number of open experiments"),
+  m_CurrentDirectory(this, "currentDirectory", QDir::homePath(), "Current Directory"),
+  //  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
+  m_FileBrowserLimit(this, "fileBrowserLimit", 1000, "Max Number of Files in Browser Windows (0 = unlimited)"),
+  m_MessageWindowLines(this, "messageWindowLines", 1000, "Number of Lines in Message Window (0 = unlimited)"),
+  m_UpdateIntervalMsec(this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)")
 {
 }
 

@@ -59,11 +59,11 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
   m_EditMenuP = edit;
   m_WindowMenuP = window;
 
-  QxrdApplicationPtr app(qSharedPointerDynamicCast<QxrdApplication>(m_Application));
+  QxrdAppCommonPtr   app(m_Application);
   QxrdExperimentPtr  exper(m_Experiment);
 
   if (app) {
-    QxrdApplicationSettingsPtr appset(app->settings());
+    QxrdAppCommonSettingsPtr appset(app->settings());
 
     if (appset) {
       connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdMainWindow::clearStatusMessage);
@@ -82,11 +82,11 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
   if (m_FileMenuP && app && exper) {
     m_FileMenuP->clear();
     m_ActionNewExperiment =
-        m_FileMenuP->addAction(tr("New Experiment..."), app.data(), &QxrdApplication::createNewExperiment);
+        m_FileMenuP->addAction(tr("New Experiment..."), app.data(), &QxrdAppCommon::createNewExperiment);
 //    QMenu *m_RecentExperiments = new QMenu();
 
     m_ActionOpenExperiment =
-        m_FileMenuP->addAction(tr("Open Experiment..."), app.data(), &QxrdApplication::chooseExistingExperiment);
+        m_FileMenuP->addAction(tr("Open Experiment..."), app.data(), &QxrdAppCommon::chooseExistingExperiment);
 
     m_ActionRecentExperiments =
         m_FileMenuP->addAction(tr("Recent Experiments"));
@@ -110,13 +110,13 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
     m_FileMenuP->addSeparator();
 
     m_ActionGlobalPreferences =
-        m_FileMenuP->addAction(tr("Global Preferences..."), app.data(), &QxrdApplication::editGlobalPreferences);
+        m_FileMenuP->addAction(tr("Global Preferences..."), app.data(), &QxrdAppCommon::editGlobalPreferences);
 
     m_ActionExperimentPreferences =
         m_FileMenuP->addAction(tr("Experiment Preferences..."), this, &QxrdMainWindow::doEditPreferences);
 
     m_ActionQuit =
-        m_FileMenuP->addAction(tr("Quit"), app.data(), &QxrdApplication::possiblyQuit);
+        m_FileMenuP->addAction(tr("Quit"), app.data(), &QxrdAppCommon::possiblyQuit);
   }
 
   if (m_EditMenuP) {

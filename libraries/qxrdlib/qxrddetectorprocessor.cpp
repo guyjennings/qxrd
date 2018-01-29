@@ -53,7 +53,7 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     m_FileSaver(fsav),
     m_Detector(det),
 //    m_CenterFinder(),
-    m_Integrator(),
+//    m_Integrator(),
     m_ROICalculator(),
     m_ControlWindow(),
     m_ImagePlotSettings(QxrdImagePlotSettings::newImagePlotSettings())
@@ -63,14 +63,14 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
   }
 
 //  m_CenterFinder  = QxrdCenterFinder::newCenterFinder();
-  m_Integrator    = QxrdIntegrator::newIntegrator();
+//  m_Integrator    = QxrdIntegrator::newIntegrator();
   m_ROICalculator = QxrdROICalculator::newROICalculator();
 
-  if (centerFinder()) {
-    if (m_Integrator) {
-      m_Integrator->initialize(centerFinder());
-    }
-  }
+//  if (centerFinder()) {
+//    if (m_Integrator) {
+//      m_Integrator->initialize(centerFinder());
+//    }
+//  }
 
   connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onMaskPathChanged);
   connect(prop_DarkImagePath(), &QcepStringProperty::valueChanged, this, &QxrdDetectorProcessor::onDarkImagePathChanged);
@@ -102,11 +102,11 @@ void QxrdDetectorProcessor::readSettings(QSettings *settings)
 //    settings->endGroup();
 //  }
 
-  if (m_Integrator) {
-    settings->beginGroup("integrator");
-    m_Integrator->readSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_Integrator) {
+//    settings->beginGroup("integrator");
+//    m_Integrator->readSettings(settings);
+//    settings->endGroup();
+//  }
 
   if (m_ROICalculator) {
     settings->beginGroup("roiCalculator");
@@ -133,11 +133,11 @@ void QxrdDetectorProcessor::writeSettings(QSettings *settings)
 //    settings->endGroup();
 //  }
 
-  if (m_Integrator) {
-    settings->beginGroup("integrator");
-    m_Integrator->writeSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_Integrator) {
+//    settings->beginGroup("integrator");
+//    m_Integrator->writeSettings(settings);
+//    settings->endGroup();
+//  }
 
   if (m_ROICalculator) {
     settings->beginGroup("roiCalculator");
@@ -182,10 +182,10 @@ void QxrdDetectorProcessor::fromScriptValue(const QScriptValue &obj, QxrdDetecto
 //  return m_CenterFinder;
 //}
 
-QxrdIntegratorPtr QxrdDetectorProcessor::integrator()
-{
-  return m_Integrator;
-}
+//QxrdIntegratorPtr QxrdDetectorProcessor::integrator()
+//{
+//  return m_Integrator;
+//}
 
 QxrdROICalculatorPtr QxrdDetectorProcessor::roiCalculator()
 {

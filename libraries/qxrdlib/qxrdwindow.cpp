@@ -68,7 +68,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
                        QxrdAppCommonWPtr appl,
                        QxrdExperimentWPtr docw,
                        QxrdAcquisitionWPtr acqw,
-                       QxrdDataProcessorWPtr procw)
+                       QxrdProcessorWPtr procw)
   : QxrdMainWindow("window", appl, docw, acqw, procw),
     m_ObjectNamer(this, "window"),
     m_Mutex(QMutex::Recursive),
@@ -160,7 +160,7 @@ void QxrdWindow::initialize()
 
 
   QxrdAcquisitionPtr acq(m_Acquisition);
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr   proc(processor());
 
 //  m_AcquisitionDialog = new QxrdAcquisitionDialog(m_Experiment,
 //                                                  sharedFromThis(),
@@ -415,11 +415,11 @@ void QxrdWindow::initialize()
 //  connect(m_ActionShowOverflow, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowOverflow);
 
   if (proc) {
-    connect(m_ActionShowMaskRange, &QAction::triggered, proc.data(), (void (QxrdDataProcessor::*)()) &QxrdDataProcessor::showMaskRange);
-    connect(m_ActionHideMaskRange, &QAction::triggered, proc.data(), (void (QxrdDataProcessor::*)()) &QxrdDataProcessor::hideMaskRange);
-    connect(m_ActionShowMaskAll, &QAction::triggered, proc.data(), &QxrdDataProcessor::showMaskAll);
-    connect(m_ActionHideMaskAll, &QAction::triggered, proc.data(), &QxrdDataProcessor::hideMaskAll);
-    connect(m_ActionInvertMask, &QAction::triggered, proc.data(), &QxrdDataProcessor::invertMask);
+    connect(m_ActionShowMaskRange, &QAction::triggered, proc.data(), (void (QxrdProcessor::*)()) &QxrdProcessor::showMaskRange);
+    connect(m_ActionHideMaskRange, &QAction::triggered, proc.data(), (void (QxrdProcessor::*)()) &QxrdProcessor::hideMaskRange);
+    connect(m_ActionShowMaskAll, &QAction::triggered, proc.data(), &QxrdProcessor::showMaskAll);
+    connect(m_ActionHideMaskAll, &QAction::triggered, proc.data(), &QxrdProcessor::hideMaskAll);
+    connect(m_ActionInvertMask, &QAction::triggered, proc.data(), &QxrdProcessor::invertMask);
 //    connect(m_ActionMaskCircles, &QAction::triggered, m_ImageMaskCirclesButton, &QAbstractButton::click);
 //    connect(m_ActionMaskPolygons, &QAction::triggered, m_ImageMaskPolygonsButton, &QAbstractButton::click);
 
@@ -475,7 +475,7 @@ void QxrdWindow::initialize()
 
   if (proc) {
     connect(m_ActionIntegrateCurrent, &QAction::triggered,
-            proc.data(), &QxrdDataProcessor::integrateSaveAndDisplay);
+            proc.data(), &QxrdProcessor::integrateSaveAndDisplay);
   }
 
 //  connect(m_ActionIntegrateInputImages, &QAction::triggered,
@@ -1161,7 +1161,7 @@ void QxrdWindow::doSaveData()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     if (proc->data() == NULL) {
@@ -1171,11 +1171,20 @@ void QxrdWindow::doSaveData()
             this, "Save Data in", proc -> get_DataPath());
 
       if (theFile.length()) {
-        QMetaObject::invokeMethod(proc.data(),
-                                  "saveData",
-                                  Qt::BlockingQueuedConnection,
-                                  Q_ARG(QString, theFile),
-                                  Q_ARG(int, QxrdDataProcessor::CanOverwrite));
+        QxrdProcessor *p = proc.data();
+
+#       if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+          INVOKE_CHECK(
+              QMetaObject::invokeMethod(p,
+                                        [=]() { p->saveData(theFile, QxrdProcessor::CanOverwrite);} ));
+#       else
+          INVOKE_CHECK(
+                QMetaObject::invokeMethod(proc.data(),
+                                          "saveData",
+                                          Qt::BlockingQueuedConnection,
+                                          Q_ARG(QString, theFile),
+                                          Q_ARG(int, QxrdProcessor::CanOverwrite)));
+#       endif
       }
     }
   }
@@ -1185,7 +1194,7 @@ void QxrdWindow::doLoadData()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1204,7 +1213,7 @@ void QxrdWindow::doSaveDark()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     if (proc->dark() == NULL) {
@@ -1224,7 +1233,7 @@ void QxrdWindow::doLoadDark()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1240,7 +1249,7 @@ void QxrdWindow::doClearDark()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     if (proc->dark() == NULL) {
@@ -1258,7 +1267,7 @@ void QxrdWindow::doSaveMask()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     if (proc->mask() == NULL) {
@@ -1278,7 +1287,7 @@ void QxrdWindow::doLoadMask()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1294,7 +1303,7 @@ void QxrdWindow::doClearMask()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     if (proc->mask() == NULL) {
@@ -1312,7 +1321,7 @@ void QxrdWindow::doSaveBadPixels()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     if (proc->badPixels() == NULL) {
@@ -1332,7 +1341,7 @@ void QxrdWindow::doLoadBadPixels()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1348,7 +1357,7 @@ void QxrdWindow::doClearBadPixels()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     if (proc->badPixels() == NULL) {
@@ -1366,7 +1375,7 @@ void QxrdWindow::doSaveGainMap()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     if (proc->gainMap() == NULL) {
@@ -1386,7 +1395,7 @@ void QxrdWindow::doLoadGainMap()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1402,7 +1411,7 @@ void QxrdWindow::doClearGainMap()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     if (proc->gainMap() == NULL) {
@@ -1420,11 +1429,9 @@ void QxrdWindow::doSaveCachedGeometry()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
-    QxrdIntegratorPtr integ(proc->integrator());
-
     QString theFile = QFileDialog::getSaveFileName(
           this, "Save Cached Geometry in", m_CachedGeometryPath);
 
@@ -1440,11 +1447,9 @@ void QxrdWindow::doSaveCachedIntensity()
 {
   GUI_THREAD_CHECK;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
-    QxrdIntegratorPtr integ(proc->integrator());
-
     QString theFile = QFileDialog::getSaveFileName(
           this, "Save Cached Intensity in", m_CachedIntensityPath);
 
@@ -1529,7 +1534,7 @@ void QxrdWindow::finishedCommandJS(QJSValue result)
 
 void QxrdWindow::doLoadScript()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QString theFile = QFileDialog::getOpenFileName(
@@ -1557,9 +1562,9 @@ void QxrdWindow::loadScript(QString path)
   }
 }
 
-QxrdDataProcessorWPtr QxrdWindow::dataProcessor() const
+QxrdProcessorWPtr QxrdWindow::processor() const
 {
-  return qSharedPointerDynamicCast<QxrdDataProcessor>(m_Processor);
+  return m_Processor;
 }
 
 QxrdAcquisitionWPtr QxrdWindow::acquisition() const
@@ -1583,119 +1588,128 @@ void QxrdWindow::doRefineCenterTilt()
 
 void QxrdWindow::doAccumulateImages()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
                                                       "Select data files to accumulate...",
                                                       proc -> get_DataPath());
 
-    QMetaObject::invokeMethod(proc.data(), "accumulateImages", Q_ARG(QStringList, files));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(proc.data(), "accumulateImages", Q_ARG(QStringList, files)));
   }
 }
 
 void QxrdWindow::doAddImages()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
                                                       "Select data file(s) to add to current...",
                                                       proc -> get_DataPath());
 
-    QMetaObject::invokeMethod(proc.data(), "addImages", Q_ARG(QStringList, files));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(proc.data(), "addImages", Q_ARG(QStringList, files)));
   }
 }
 
 void QxrdWindow::doSubtractImages()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
                                                       "Select data file(s) to subtract from current...",
                                                       proc -> get_DataPath());
 
-    QMetaObject::invokeMethod(proc.data(), "subtractImages", Q_ARG(QStringList, files));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(proc.data(), "subtractImages", Q_ARG(QStringList, files)));
   }
 }
 
 void QxrdWindow::doReflectHorizontally()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "reflectHorizontally");
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(proc.data(), "reflectHorizontally"));
   }
 }
 
 void QxrdWindow::doReflectVertically()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
-    QMetaObject::invokeMethod(proc.data(), "reflectVertically");
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(proc.data(), "reflectVertically"));
   }
 }
 
 void QxrdWindow::doProjectAlongX()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
                                                       "Select data files to project along X...",
                                                       proc -> get_DataPath());
 
-    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, files),
-                              Q_ARG(int, 1), Q_ARG(int, 0), Q_ARG(int, 0));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, files),
+                              Q_ARG(int, 1), Q_ARG(int, 0), Q_ARG(int, 0)));
   }
 }
 
 void QxrdWindow::doProjectAlongY()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
                                                       "Select data files to project along Y...",
                                                       proc -> get_DataPath());
 
-    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, files),
-                              Q_ARG(int, 0), Q_ARG(int, 1), Q_ARG(int, 0));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, files),
+                                    Q_ARG(int, 0), Q_ARG(int, 1), Q_ARG(int, 0)));
   }
 }
 
 void QxrdWindow::doProjectAlongZ()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
                                                       "Select data files to project along Z...",
                                                       proc -> get_DataPath());
 
-    QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, files),
-                              Q_ARG(int, 0), Q_ARG(int, 0), Q_ARG(int, 1));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, files),
+                                    Q_ARG(int, 0), Q_ARG(int, 0), Q_ARG(int, 1)));
   }
 }
 
 void QxrdWindow::doCorrelate()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
                                                       "Select data files to correlate with current image...",
                                                       proc -> get_DataPath());
 
-    QMetaObject::invokeMethod(proc.data(), "correlateImages", Q_ARG(QStringList, files));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(proc.data(), "correlateImages", Q_ARG(QStringList, files)));
   }
 }
 
 void QxrdWindow::doIntegrateSequence()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,
@@ -1710,7 +1724,7 @@ void QxrdWindow::doIntegrateSequence()
 
 void QxrdWindow::doProcessSequence()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     QStringList files = QFileDialog::getOpenFileNames(this,

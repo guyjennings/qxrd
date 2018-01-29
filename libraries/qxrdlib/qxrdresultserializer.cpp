@@ -12,7 +12,7 @@ QxrdResultSerializerBase::~QxrdResultSerializerBase()
 
 
 template <typename T>
-QxrdResultSerializer<T>::QxrdResultSerializer(QcepIntProperty *ctr, QcepObjectWPtr /*parent*/)
+QxrdResultSerializer<T>::QxrdResultSerializer(QcepIntProperty *ctr)
  : QxrdResultSerializerBase(),
    m_Counter(ctr)
 {

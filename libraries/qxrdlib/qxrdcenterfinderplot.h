@@ -10,7 +10,7 @@
 #include "qcepmaskdata.h"
 #include "qcepmaskdata-ptr.h"
 
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrdplotcurvevector-ptr.h"
@@ -44,7 +44,7 @@ private slots:
 private:
   QcepObjectNamer        m_ObjectNamer;
   QxrdWindow            *m_Window;
-  QxrdDataProcessorWPtr  m_DataProcessor;
+  QxrdProcessorWPtr      m_Processor;
   QxrdCenterFinderWPtr   m_CenterFinder;
   bool                   m_FirstTime;
   QcepDoubleImageDataPtr m_Image;

@@ -26,7 +26,7 @@ class QXRD_EXPORT QxrdIntegrator : public QcepObject
 
 public:
   Q_INVOKABLE QxrdIntegrator(QString name);
-  static QxrdIntegratorPtr newIntegrator();
+  static QxrdIntegratorPtr newIntegrator(QxrdCenterFinderWPtr cfw);
   virtual ~QxrdIntegrator();
 
   void initialize(QxrdCenterFinderWPtr cfw);

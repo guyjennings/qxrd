@@ -28,80 +28,80 @@
 #include <QDirIterator>
 
 QxrdDataProcessor::QxrdDataProcessor(QString name) :
-  QxrdProcessor(name),
+  inherited(name),
 //  m_OutputDirectory(saver, this,"outputDirectory", ""),
-  m_FileName(this, "fileName","", "Current File Name"),
+//  m_FileName(this, "fileName","", "Current File Name"),
 //  m_DataPath(this,"dataPath", "", "Data Path"),
 //  m_DarkImagePath(this, "darkImagePath", "", "Dark Images Path"),
 //  m_BadPixelsPath(this, "badPixelsPath", "", "Bad Pixels Path"),
 //  m_GainMapPath(this, "gainMapPath", "", "Gain Map Path"),
 //  m_MaskPath(this, "maskPath", "", "Mask Path"),
-  m_PerformDarkSubtraction(this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
-  m_SaveRawImages(this, "saveRawImages", true, "Save Raw Images?"),
-  m_SaveDarkImages(this, "saveDarkImages", true, "Save Dark Images?"),
-  m_PerformBadPixels(this, "performBadPixels", true, "Perform Bad Pixel Correction?"),
-  m_PerformGainCorrection(this, "performGainCorrection", true, "Perform Gain Correction?"),
-  m_SaveSubtracted(this, "saveSubtracted", true, "Save Dark Subtracted Data?"),
-  m_SaveAsText(this, "saveAsText", false, "Save as Text Files (warning - Large and Slow!)"),
-  m_SaveAsTextSeparator(this, "saveAsTextSeparator", " ", "Separator for Images Saved as Text"),
-  m_SaveAsTextPerLine(this,"saveAsTextPerLine",16, "Pixels per line in Images Saved as Text"),
-  m_SaveOverflowFiles(this,"saveOverflowFiles",0, "Save Overflow Pixel Files?"),
-  m_PerformIntegration(this, "performIntegration", true, "Perform Circular Integration?"),
-  m_DisplayIntegratedData(this, "displayIntegratedData", true, "Display Integrated Data?"),
-  m_SaveIntegratedData(this, "saveIntegratedData", true, "Save Integrated Data?"),
-  m_SaveIntegratedPath(this, "saveIntegratedPath", "", "Integrated Data Path"),
-  m_SaveDarkInSubdirectory(this,"saveDarkInSubdirectory",0, "Save Dark In Subdirectory?"),
-  m_SaveDarkSubdirectory(this,"saveDarkSubdirectory","", "Dark Subdirectory"),
-  m_SaveRawInSubdirectory(this,"saveRawInSubdirectory",0, "Save Raw in Subdirectory?"),
-  m_SaveRawSubdirectory(this,"saveRawSubdirectory","", "Raw Subdirectory"),
-  m_SaveSubtractedInSubdirectory(this,"saveSubtractedInSubdirectory",0, "Save Subtracted in Subdirectory?"),
-  m_SaveSubtractedSubdirectory(this,"saveSubtractedSubdirectory","", "Subtracted Subdirectory"),
-  m_SaveIntegratedInSeparateFiles(this,"saveIntegratedInSeparateFiles",0, "Save Integrated in Separate Files?"),
-  m_SaveIntegratedInSubdirectory(this,"saveIntegratedInSubdirectory",0, "Save Integrated in Subdirectory?"),
-  m_SaveIntegratedSubdirectory(this,"saveIntegratedSubdirectory","", "Integrated Subdirectory"),
-  m_AccumulateIntegrated2D(this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
-  m_AccumulateIntegratedName(this, "accumulateIntegratedName", "/accumulated/2d-data", "Dataset to accumulate to"),
-  m_AccumulateIntegratedDirectory(this, "accumulateIntegratedDirectory", "", "Accumulator save directory"),
-  m_AccumulateIntegratedFileName(this, "accumulateIntegratedFileName", "", "Accumulator save file"),
-  m_AccumulateIntegratedFormat(this, "accumulateIntegratedFormat", "", "Accumulator save format"),
-  m_PerformDarkSubtractionTime(this, "performDarkSubtractionTime", 0.01, "Avg Time to Perform Dark Subtraction (in sec)"),
-  m_PerformBadPixelsTime(this, "performBadPixelsTime", 0.01, "Avg Time to Perform Bad Pixel Correction (in sec)"),
-  m_PerformGainCorrectionTime(this, "performGainCorrectionTime", 0.01, "Avg Time to Perform Gain Correction (in sec)"),
-  m_SaveSubtractedTime(this, "saveSubtractedTime", 0.1, "Avg Time to Save Subtracted Data (in sec)"),
-  m_SaveAsTextTime(this, "saveAsTextTime", 0.1, "Avg Time to Save Images as Text (in sec)"),
-  m_PerformIntegrationTime(this, "performIntegrationTime", 0.05, "Avg Time to Perform Integration (in sec/core)"),
+//  m_PerformDarkSubtraction(this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
+//  m_SaveRawImages(this, "saveRawImages", true, "Save Raw Images?"),
+//  m_SaveDarkImages(this, "saveDarkImages", true, "Save Dark Images?"),
+//  m_PerformBadPixels(this, "performBadPixels", true, "Perform Bad Pixel Correction?"),
+//  m_PerformGainCorrection(this, "performGainCorrection", true, "Perform Gain Correction?"),
+//  m_SaveSubtracted(this, "saveSubtracted", true, "Save Dark Subtracted Data?"),
+//  m_SaveAsText(this, "saveAsText", false, "Save as Text Files (warning - Large and Slow!)"),
+//  m_SaveAsTextSeparator(this, "saveAsTextSeparator", " ", "Separator for Images Saved as Text"),
+//  m_SaveAsTextPerLine(this,"saveAsTextPerLine",16, "Pixels per line in Images Saved as Text"),
+//  m_SaveOverflowFiles(this,"saveOverflowFiles",0, "Save Overflow Pixel Files?"),
+//  m_PerformIntegration(this, "performIntegration", true, "Perform Circular Integration?"),
+//  m_DisplayIntegratedData(this, "displayIntegratedData", true, "Display Integrated Data?"),
+//  m_SaveIntegratedData(this, "saveIntegratedData", true, "Save Integrated Data?"),
+//  m_SaveIntegratedPath(this, "saveIntegratedPath", "", "Integrated Data Path"),
+//  m_SaveDarkInSubdirectory(this,"saveDarkInSubdirectory",0, "Save Dark In Subdirectory?"),
+//  m_SaveDarkSubdirectory(this,"saveDarkSubdirectory","", "Dark Subdirectory"),
+//  m_SaveRawInSubdirectory(this,"saveRawInSubdirectory",0, "Save Raw in Subdirectory?"),
+//  m_SaveRawSubdirectory(this,"saveRawSubdirectory","", "Raw Subdirectory"),
+//  m_SaveSubtractedInSubdirectory(this,"saveSubtractedInSubdirectory",0, "Save Subtracted in Subdirectory?"),
+//  m_SaveSubtractedSubdirectory(this,"saveSubtractedSubdirectory","", "Subtracted Subdirectory"),
+//  m_SaveIntegratedInSeparateFiles(this,"saveIntegratedInSeparateFiles",0, "Save Integrated in Separate Files?"),
+//  m_SaveIntegratedInSubdirectory(this,"saveIntegratedInSubdirectory",0, "Save Integrated in Subdirectory?"),
+//  m_SaveIntegratedSubdirectory(this,"saveIntegratedSubdirectory","", "Integrated Subdirectory"),
+//  m_AccumulateIntegrated2D(this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
+//  m_AccumulateIntegratedName(this, "accumulateIntegratedName", "/accumulated/2d-data", "Dataset to accumulate to"),
+//  m_AccumulateIntegratedDirectory(this, "accumulateIntegratedDirectory", "", "Accumulator save directory"),
+//  m_AccumulateIntegratedFileName(this, "accumulateIntegratedFileName", "", "Accumulator save file"),
+//  m_AccumulateIntegratedFormat(this, "accumulateIntegratedFormat", "", "Accumulator save format"),
+//  m_PerformDarkSubtractionTime(this, "performDarkSubtractionTime", 0.01, "Avg Time to Perform Dark Subtraction (in sec)"),
+//  m_PerformBadPixelsTime(this, "performBadPixelsTime", 0.01, "Avg Time to Perform Bad Pixel Correction (in sec)"),
+//  m_PerformGainCorrectionTime(this, "performGainCorrectionTime", 0.01, "Avg Time to Perform Gain Correction (in sec)"),
+//  m_SaveSubtractedTime(this, "saveSubtractedTime", 0.1, "Avg Time to Save Subtracted Data (in sec)"),
+//  m_SaveAsTextTime(this, "saveAsTextTime", 0.1, "Avg Time to Save Images as Text (in sec)"),
+//  m_PerformIntegrationTime(this, "performIntegrationTime", 0.05, "Avg Time to Perform Integration (in sec/core)"),
   m_DisplayIntegratedDataTime(this, "displayIntegratedDataTime", 0.2, "Avg Time to Display Integrated Data (in sec)"),
   m_SaveIntegratedDataTime(this, "saveIntegratedDataTime", 0.01, "Avg Time to Save Integrated Data (in sec)"),
-  m_EstimatedProcessingTime(this, "estimatedProcessingTime", 0.1, "Overall Estimated Processing Time (in sec/image)"),
-  m_AveragingRatio(this, "averagingRatio", 0.1, "Averaging Ratio for Estimated Timing"),
+//  m_EstimatedProcessingTime(this, "estimatedProcessingTime", 0.1, "Overall Estimated Processing Time (in sec/image)"),
+//  m_AveragingRatio(this, "averagingRatio", 0.1, "Averaging Ratio for Estimated Timing"),
 //  m_CompressImages(this, "compressImages", false, "Compress Images"),
 //  m_Average(this,"average",0.0, "Average Value of Acquired Image (per exposure)"),
 //  m_AverageDark(this,"averageDark",0.0, "Average Value of Dark Image"),
 //  m_AverageRaw(this,"averageRaw",0.0, "Average Value of Raw Image"),
-  m_CorrectionQueueLength(this, "correctionQueueLength", 0, "Image correction backlog"),
-  m_IntegrationQueueLength(this, "integrationQueueLength", 0, "Image integration backlog"),
-  m_SaverQueueLength(this, "saverQueueLength", 0, "Data saving backlog"),
+//  m_CorrectionQueueLength(this, "correctionQueueLength", 0, "Image correction backlog"),
+//  m_IntegrationQueueLength(this, "integrationQueueLength", 0, "Image integration backlog"),
+//  m_SaverQueueLength(this, "saverQueueLength", 0, "Data saving backlog"),
 //  m_ZingerAlgorithm(this, "zingerAlgorithm", 0, "Zinger Detection Algorithm"),
 //  m_ZingerMask(this, "zingerMask", 0, "Zinger Mask Source"),
 //  m_ZingerDestination(this, "zingerDestination", -1, "Zinger Destination"),
 //  m_ZingerSize1(this, "zingerSize1", 1, "Inner Zinger Search Box Size"),
 //  m_ZingerSize2(this, "zingerSize2", 5, "Outer Zinger Search Box Size"),
 //  m_ZingerThreshold(this, "zingerThreshold", 2.5, "Zinger Detection Threshold"),
-  m_Mutex(QMutex::Recursive),
 //  m_Window(),
-  m_AcquiredInt16Images("acquiredInt16Images"),
-  m_AcquiredInt32Images("acquiredInt32Images"),
+//  m_Mutex(QMutex::Recursive),
+//  m_AcquiredInt16Images("acquiredInt16Images"),
+//  m_AcquiredInt32Images("acquiredInt32Images"),
+//  m_AcquiredCount(0),
   //    m_Mask(allocator -> newMask()),
-  m_AcquiredCount(0),
 //  m_CenterFinder(NULL),
-  m_Integrator(NULL),
+//  m_Integrator(NULL),
   m_PolarTransform(NULL),
   m_PolarNormalization(NULL),
-  m_GenerateTestImage(NULL),
-  m_CorrectedImages(prop_CorrectionQueueLength(), sharedFromThis()),
-  m_IntegratedData(prop_IntegrationQueueLength(), sharedFromThis()),
+  m_GenerateTestImage(NULL)
+//  m_CorrectedImages(prop_CorrectionQueueLength(), sharedFromThis()),
+//  m_IntegratedData(prop_IntegrationQueueLength(), sharedFromThis()),
 //  m_ROIData(NULL, sharedFromThis()),
-  m_HistogramData(NULL, sharedFromThis())
+//  m_HistogramData(NULL, sharedFromThis())
 {
 //  m_SaverQueueLength.setDebug(1);
 //  m_IntegrationQueueLength.setDebug(1);
@@ -118,17 +118,17 @@ QxrdDataProcessor::QxrdDataProcessor(QString name) :
     printMessage("QxrdDataProcessor::QxrdDataProcessor");
   }
 
-  m_Integrator = QxrdIntegrator::newIntegrator();
+//  m_Integrator = QxrdIntegrator::newIntegrator();
   m_PolarTransform = QxrdPolarTransform::newPolarTransform();
   m_PolarNormalization = QxrdPolarNormalization::newPolarNormalization();
   m_GenerateTestImage = QxrdGenerateTestImage::newGenerateTestImage();
 
-  m_Integrator->initialize(centerFinder());
+//  m_Integrator->initialize(centerFinder());
 
-  connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onCorrectedImageAvailable);
-  connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onIntegratedDataAvailable);
-//  connect(&m_ROIData,         &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onROIDataAvailable);
-  connect(&m_HistogramData,   &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onHistogramDataAvailable);
+//  connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onCorrectedImageAvailable);
+//  connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onIntegratedDataAvailable);
+////  connect(&m_ROIData,         &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onROIDataAvailable);
+//  connect(&m_HistogramData,   &QxrdResultSerializerBase::resultAvailable, this, &QxrdDataProcessor::onHistogramDataAvailable);
 }
 
 QxrdDataProcessor::~QxrdDataProcessor()
@@ -211,9 +211,7 @@ void QxrdDataProcessor::setAcquisition(QxrdAcqCommonWPtr acq)
 
 void QxrdDataProcessor::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QxrdProcessor::writeSettings(settings);
+  inherited::writeSettings(settings);
 
 //  if (m_CenterFinder) {
 //    settings->beginGroup("centerfinder");
@@ -221,11 +219,11 @@ void QxrdDataProcessor::writeSettings(QSettings *settings)
 //    settings->endGroup();
 //  }
 
-  if (m_Integrator) {
-    settings->beginGroup("integrator");
-    m_Integrator   -> writeSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_Integrator) {
+//    settings->beginGroup("integrator");
+//    m_Integrator   -> writeSettings(settings);
+//    settings->endGroup();
+//  }
 
   if (m_PolarTransform) {
     settings->beginGroup("polarTransform");
@@ -242,9 +240,7 @@ void QxrdDataProcessor::writeSettings(QSettings *settings)
 
 void QxrdDataProcessor::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QxrdProcessor::readSettings(settings);
+  inherited::readSettings(settings);
 
 //  if (m_CenterFinder) {
 //    settings->beginGroup("centerfinder");
@@ -252,11 +248,11 @@ void QxrdDataProcessor::readSettings(QSettings *settings)
 //    settings->endGroup();
 //  }
 
-  if (m_Integrator) {
-    settings->beginGroup("integrator");
-    m_Integrator   -> readSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_Integrator) {
+//    settings->beginGroup("integrator");
+//    m_Integrator   -> readSettings(settings);
+//    settings->endGroup();
+//  }
 
   if (m_PolarTransform) {
     settings->beginGroup("polarTransform");
@@ -271,116 +267,116 @@ void QxrdDataProcessor::readSettings(QSettings *settings)
   }
 }
 
-QString QxrdDataProcessor::existingOutputDirectory(QString dir, QString subdir) const
-{
-  return QDir(dir).filePath(subdir);
-}
-
-QString QxrdDataProcessor::filePathInExperimentDirectory(QString name) const
-{
-  return QDir(experimentDirectory()).filePath(name);
-}
-
-QString QxrdDataProcessor::experimentDirectory() const
-{
-  QxrdExperimentPtr exp(experiment());
-
-  if (exp) {
-    return exp->get_ExperimentDirectory();
-  } else {
-    return QString();
-  }
-}
-
-QString QxrdDataProcessor::filePathInDarkOutputDirectory(QString name) const
-{
-  return QDir(darkOutputDirectory()).filePath(name);
-}
-
-QString QxrdDataProcessor::darkOutputDirectory() const
-{
-  if (get_SaveDarkInSubdirectory()) {
-    return existingOutputDirectory(dataDirectory(), get_SaveDarkSubdirectory());
-  } else {
-    return dataDirectory();
-  }
-}
-
-QString QxrdDataProcessor::filePathInRawOutputDirectory(QString name) const
-{
-  return QDir(rawOutputDirectory()).filePath(name);
-}
-
-QString QxrdDataProcessor::rawOutputDirectory() const
-{
-  if (get_SaveRawInSubdirectory()) {
-    return existingOutputDirectory(dataDirectory(), get_SaveRawSubdirectory());
-  } else {
-    return dataDirectory();
-  }
-}
-
-QString QxrdDataProcessor::filePathInSubtractedOutputDirectory(QString name) const
-{
-  return QDir(subtractedOutputDirectory()).filePath(name);
-}
-
-QString QxrdDataProcessor::subtractedOutputDirectory() const
-{
-  if (get_SaveSubtractedInSubdirectory()) {
-    return existingOutputDirectory(dataDirectory(), get_SaveSubtractedSubdirectory());
-  } else {
-    return dataDirectory();
-  }
-}
-
-QString QxrdDataProcessor::filePathInIntegratedOutputDirectory(QString name) const
-{
-  return QDir(integratedOutputDirectory()).filePath(name);
-}
-
-QString QxrdDataProcessor::integratedOutputDirectory() const
-{
-  if (get_SaveIntegratedInSubdirectory()) {
-    return existingOutputDirectory(dataDirectory(), get_SaveIntegratedSubdirectory());
-  } else {
-    return dataDirectory();
-  }
-}
-
-QString QxrdDataProcessor::pwd() const
-{
-  return dataDirectory();
-}
-
-//void QxrdDataProcessor::cd(QString path)
+//QString QxrdDataProcessor::existingOutputDirectory(QString dir, QString subdir) const
 //{
-//  QDir dir(currentDirectory());
+//  return QDir(dir).filePath(subdir);
+//}
 
-//  if (dir.cd(path)) {
-//    set_OutputDirectory(dir.path());
+//QString QxrdDataProcessor::filePathInExperimentDirectory(QString name) const
+//{
+//  return QDir(experimentDirectory()).filePath(name);
+//}
+
+//QString QxrdDataProcessor::experimentDirectory() const
+//{
+//  QxrdExperimentPtr exp(experiment());
+
+//  if (exp) {
+//    return exp->get_ExperimentDirectory();
+//  } else {
+//    return QString();
 //  }
 //}
 
-QStringList QxrdDataProcessor::ls() const
-{
-  QStringList res;
-  QDir dir(dataDirectory());
+//QString QxrdDataProcessor::filePathInDarkOutputDirectory(QString name) const
+//{
+//  return QDir(darkOutputDirectory()).filePath(name);
+//}
 
-  res = dir.entryList(QStringList());
+//QString QxrdDataProcessor::darkOutputDirectory() const
+//{
+//  if (get_SaveDarkInSubdirectory()) {
+//    return existingOutputDirectory(dataDirectory(), get_SaveDarkSubdirectory());
+//  } else {
+//    return dataDirectory();
+//  }
+//}
 
-  return res;
-}
+//QString QxrdDataProcessor::filePathInRawOutputDirectory(QString name) const
+//{
+//  return QDir(rawOutputDirectory()).filePath(name);
+//}
 
-QStringList QxrdDataProcessor::ls(QString pattern) const
-{
-  QStringList res;
-  QDir dir(dataDirectory());
+//QString QxrdDataProcessor::rawOutputDirectory() const
+//{
+//  if (get_SaveRawInSubdirectory()) {
+//    return existingOutputDirectory(dataDirectory(), get_SaveRawSubdirectory());
+//  } else {
+//    return dataDirectory();
+//  }
+//}
 
-  res = dir.entryList(QStringList(pattern));
+//QString QxrdDataProcessor::filePathInSubtractedOutputDirectory(QString name) const
+//{
+//  return QDir(subtractedOutputDirectory()).filePath(name);
+//}
 
-  return res;
-}
+//QString QxrdDataProcessor::subtractedOutputDirectory() const
+//{
+//  if (get_SaveSubtractedInSubdirectory()) {
+//    return existingOutputDirectory(dataDirectory(), get_SaveSubtractedSubdirectory());
+//  } else {
+//    return dataDirectory();
+//  }
+//}
+
+//QString QxrdDataProcessor::filePathInIntegratedOutputDirectory(QString name) const
+//{
+//  return QDir(integratedOutputDirectory()).filePath(name);
+//}
+
+//QString QxrdDataProcessor::integratedOutputDirectory() const
+//{
+//  if (get_SaveIntegratedInSubdirectory()) {
+//    return existingOutputDirectory(dataDirectory(), get_SaveIntegratedSubdirectory());
+//  } else {
+//    return dataDirectory();
+//  }
+//}
+
+//QString QxrdDataProcessor::pwd() const
+//{
+//  return dataDirectory();
+//}
+
+////void QxrdDataProcessor::cd(QString path)
+////{
+////  QDir dir(currentDirectory());
+
+////  if (dir.cd(path)) {
+////    set_OutputDirectory(dir.path());
+////  }
+////}
+
+//QStringList QxrdDataProcessor::ls() const
+//{
+//  QStringList res;
+//  QDir dir(dataDirectory());
+
+//  res = dir.entryList(QStringList());
+
+//  return res;
+//}
+
+//QStringList QxrdDataProcessor::ls(QString pattern) const
+//{
+//  QStringList res;
+//  QDir dir(dataDirectory());
+
+//  res = dir.entryList(QStringList(pattern));
+
+//  return res;
+//}
 
 //void QxrdDataProcessor::saveData(QcepDataObjectPtr object, QString name, int canOverwrite)
 //{
@@ -416,27 +412,27 @@ QStringList QxrdDataProcessor::ls(QString pattern) const
 //  }
 //}
 
-void QxrdDataProcessor::saveCachedGeometry(QString name)
-{
-  QString path = filePathInDataDirectory(name);
+//void QxrdDataProcessor::saveCachedGeometry(QString name)
+//{
+//  QString path = filePathInDataDirectory(name);
 
-  QcepUInt32ImageDataPtr data = m_Integrator->cachedGeometry();
+//  QcepUInt32ImageDataPtr data = m_Integrator->cachedGeometry();
 
-  if (data) {
-    saveNamedImageData(path, data, QcepMaskDataPtr(), true);
-  }
-}
+//  if (data) {
+//    saveNamedImageData(path, data, QcepMaskDataPtr(), true);
+//  }
+//}
 
-void QxrdDataProcessor::saveCachedIntensity(QString name)
-{
-  QString path = filePathInDataDirectory(name);
+//void QxrdDataProcessor::saveCachedIntensity(QString name)
+//{
+//  QString path = filePathInDataDirectory(name);
 
-  QcepDoubleImageDataPtr data = m_Integrator->cachedIntensity();
+//  QcepDoubleImageDataPtr data = m_Integrator->cachedIntensity();
 
-  if (data) {
-    saveNamedImageData(path, data, QcepMaskDataPtr(), true);
-  }
-}
+//  if (data) {
+//    saveNamedImageData(path, data, QcepMaskDataPtr(), true);
+//  }
+//}
 
 //QxrdMaskStackPtr QxrdDataProcessor::maskStack()
 //{
@@ -526,139 +522,139 @@ QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredInt32Image(
   }
 }
 
-QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredDoubleImage(
-    QcepDoubleImageDataPtr processed,
-    QcepDoubleImageDataPtr dimg,
-    QcepDoubleImageDataPtr dark,
-    QcepMaskDataPtr mask,
-    QcepMaskDataPtr overflow)
-{
-  return processAcquiredImage(processed, dimg, dark, mask, overflow);
-}
+//QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredDoubleImage(
+//    QcepDoubleImageDataPtr processed,
+//    QcepDoubleImageDataPtr dimg,
+//    QcepDoubleImageDataPtr dark,
+//    QcepMaskDataPtr mask,
+//    QcepMaskDataPtr overflow)
+//{
+//  return processAcquiredImage(processed, dimg, dark, mask, overflow);
+//}
 
-QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredDoubleImage(
-    QcepDoubleImageDataPtr processed,
-    QcepDoubleImageDataPtr dimg,
-    QcepDoubleImageDataPtr dark,
-    QcepMaskDataPtr mask,
-    QcepMaskDataPtr overflow,
-    QcepDoubleList v)
-{
-  return processAcquiredImage(processed, dimg, dark, mask, overflow, v);
-}
+//QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredDoubleImage(
+//    QcepDoubleImageDataPtr processed,
+//    QcepDoubleImageDataPtr dimg,
+//    QcepDoubleImageDataPtr dark,
+//    QcepMaskDataPtr mask,
+//    QcepMaskDataPtr overflow,
+//    QcepDoubleList v)
+//{
+//  return processAcquiredImage(processed, dimg, dark, mask, overflow, v);
+//}
 
-QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredImage(
-    QcepDoubleImageDataPtr processed,
-    QcepDoubleImageDataPtr img,
-    QcepDoubleImageDataPtr dark,
-    QcepMaskDataPtr /*mask*/,
-    QcepMaskDataPtr overflow,
-    QcepDoubleList v)
-{
-  if (processed && img) {
-    processed->copyFrom(img);
+//QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredImage(
+//    QcepDoubleImageDataPtr processed,
+//    QcepDoubleImageDataPtr img,
+//    QcepDoubleImageDataPtr dark,
+//    QcepMaskDataPtr /*mask*/,
+//    QcepMaskDataPtr overflow,
+//    QcepDoubleList v)
+//{
+//  if (processed && img) {
+//    processed->copyFrom(img);
 
-    statusMessage(tr("Processing Image \"%1\"").arg(processed->get_FileName()));
+//    statusMessage(tr("Processing Image \"%1\"").arg(processed->get_FileName()));
 
-    QTime tic;
-    tic.start();
+//    QTime tic;
+//    tic.start();
 
-    if (v.length() > 0) {
-      processed->set_Normalization(v);
-    }
+//    if (v.length() > 0) {
+//      processed->set_Normalization(v);
+//    }
 
-    if (qcepDebug(DEBUG_PROCESS)) {
-      printMessage(tr("Processing Image \"%1\", image number %2, count %3")
-                   .arg(processed->get_FileName()).arg(processed->get_ImageNumber()).arg(getAcquiredCount()));
-    }
+//    if (qcepDebug(DEBUG_PROCESS)) {
+//      printMessage(tr("Processing Image \"%1\", image number %2, count %3")
+//                   .arg(processed->get_FileName()).arg(processed->get_ImageNumber()).arg(getAcquiredCount()));
+//    }
 
-    if (get_PerformDarkSubtraction()) {
-      subtractDarkImage(processed, dark);
-      processed -> set_ObjectSaved(false);
+//    if (get_PerformDarkSubtraction()) {
+//      subtractDarkImage(processed, dark);
+//      processed -> set_ObjectSaved(false);
 
-      int subTime = tic.restart();
+//      int subTime = tic.restart();
 
-      updateEstimatedTime(prop_PerformDarkSubtractionTime(), subTime);
+//      updateEstimatedTime(prop_PerformDarkSubtractionTime(), subTime);
 
-      if (qcepDebug(DEBUG_PROCESS)) {
-        printMessage(tr("Dark subtraction took %1 msec").arg(subTime));
-      }
-    }
+//      if (qcepDebug(DEBUG_PROCESS)) {
+//        printMessage(tr("Dark subtraction took %1 msec").arg(subTime));
+//      }
+//    }
 
-    if (get_PerformBadPixels()) {
-      correctBadPixels(processed);
-      processed -> set_ObjectSaved(false);
+//    if (get_PerformBadPixels()) {
+//      correctBadPixels(processed);
+//      processed -> set_ObjectSaved(false);
 
-      int badPxlTime = tic.restart();
+//      int badPxlTime = tic.restart();
 
-      updateEstimatedTime(prop_PerformBadPixelsTime(), badPxlTime);
+//      updateEstimatedTime(prop_PerformBadPixelsTime(), badPxlTime);
 
-      if (qcepDebug(DEBUG_PROCESS)) {
-        printMessage(tr("Bad Pixel correction took %1 msec").arg(badPxlTime));
-      }
-    }
+//      if (qcepDebug(DEBUG_PROCESS)) {
+//        printMessage(tr("Bad Pixel correction took %1 msec").arg(badPxlTime));
+//      }
+//    }
 
-    if (get_PerformGainCorrection()) {
-      correctImageGains(processed);
-      processed -> set_ObjectSaved(false);
+//    if (get_PerformGainCorrection()) {
+//      correctImageGains(processed);
+//      processed -> set_ObjectSaved(false);
 
-      int gainTime = tic.restart();
+//      int gainTime = tic.restart();
 
-      updateEstimatedTime(prop_PerformGainCorrectionTime(), gainTime);
+//      updateEstimatedTime(prop_PerformGainCorrectionTime(), gainTime);
 
-      if (qcepDebug(DEBUG_PROCESS)) {
-        printMessage(tr("Gain correction took %1 msec").arg(gainTime));
-      }
-    }
+//      if (qcepDebug(DEBUG_PROCESS)) {
+//        printMessage(tr("Gain correction took %1 msec").arg(gainTime));
+//      }
+//    }
 
-    if (get_SaveSubtracted()) {
-      if (processed->get_ObjectSaved()) {
-        printMessage(tr("Image \"%1\" is already saved").arg(processed->rawFileName()));
-      } else {
-        saveNamedImageData(QDir(subtractedOutputDirectory()).filePath(processed->get_FileBase()), processed, overflow);
-      }
-    }
+//    if (get_SaveSubtracted()) {
+//      if (processed->get_ObjectSaved()) {
+//        printMessage(tr("Image \"%1\" is already saved").arg(processed->rawFileName()));
+//      } else {
+//        saveNamedImageData(QDir(subtractedOutputDirectory()).filePath(processed->get_FileBase()), processed, overflow);
+//      }
+//    }
 
-    if (get_SaveAsText()) {
-      saveNamedImageDataAsText(processed->get_FileName(), processed, overflow);
+//    if (get_SaveAsText()) {
+//      saveNamedImageDataAsText(processed->get_FileName(), processed, overflow);
 
-      updateEstimatedTime(prop_SaveAsTextTime(), tic.elapsed());
-    }
+//      updateEstimatedTime(prop_SaveAsTextTime(), tic.elapsed());
+//    }
 
-    newData(processed);
-    newOverflow(overflow);
+//    newData(processed);
+//    newOverflow(overflow);
 
-    if (qcepDebug(DEBUG_PROCESS)) {
-      printMessage(tr("Processing took %1 msec").arg(tic.restart()));
-    }
+//    if (qcepDebug(DEBUG_PROCESS)) {
+//      printMessage(tr("Processing took %1 msec").arg(tic.restart()));
+//    }
 
-    statusMessage(tr("Completed Processing Image \"%1\"").arg(processed->get_FileName()));
-  }
+//    statusMessage(tr("Completed Processing Image \"%1\"").arg(processed->get_FileName()));
+//  }
 
-  return processed;
-}
+//  return processed;
+//}
 
-void QxrdDataProcessor::updateEstimatedTime(QcepDoubleProperty *prop, int msec)
-{
-  double newVal = prop -> value() * (1.0 - get_AveragingRatio()) + ((double) msec)/1000.0* get_AveragingRatio();
+//void QxrdDataProcessor::updateEstimatedTime(QcepDoubleProperty *prop, int msec)
+//{
+//  double newVal = prop -> value() * (1.0 - get_AveragingRatio()) + ((double) msec)/1000.0* get_AveragingRatio();
 
-  prop -> setValue(newVal);
-}
+//  prop -> setValue(newVal);
+//}
 
-void QxrdDataProcessor::correctBadPixels(QcepDoubleImageDataPtr /*image*/)
-{
-}
+//void QxrdDataProcessor::correctBadPixels(QcepDoubleImageDataPtr /*image*/)
+//{
+//}
 
-void QxrdDataProcessor::correctImageGains(QcepDoubleImageDataPtr image)
-{
-  if (image) {
-    QcepDoubleImageDataPtr gains = gainMap();
+//void QxrdDataProcessor::correctImageGains(QcepDoubleImageDataPtr image)
+//{
+//  if (image) {
+//    QcepDoubleImageDataPtr gains = gainMap();
 
-    if (gains) {
-      image -> multiply(gains);
-    }
-  }
-}
+//    if (gains) {
+//      image -> multiply(gains);
+//    }
+//  }
+//}
 
 void QxrdDataProcessor::updateEstimatedProcessingTime()
 {
@@ -726,56 +722,56 @@ double QxrdDataProcessor::estimatedProcessingTime(double estSerialTime, double e
   }
 }
 
-void QxrdDataProcessor::measurePolygon(QVector<QPointF> poly)
-{
-  foreach(QPointF pt, poly) {
-    printMessage(tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
-                      .arg(m_Data -> getImageData(pt.x(),pt.y())));
-  }
+//void QxrdDataProcessor::measurePolygon(QVector<QPointF> poly)
+//{
+//  foreach(QPointF pt, poly) {
+//    printMessage(tr("Measure pt (%1,%2) = %3").arg(pt.x()).arg(pt.y())
+//                      .arg(m_Data -> getImageData(pt.x(),pt.y())));
+//  }
 
-  summarizeMeasuredPolygon(poly);
-}
+//  summarizeMeasuredPolygon(poly);
+//}
 
-void QxrdDataProcessor::printMeasuredPolygon(QVector<QPointF> poly)
-{
-  foreach(QPointF pt, poly) {
-    printMessage(tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
-  }
+//void QxrdDataProcessor::printMeasuredPolygon(QVector<QPointF> poly)
+//{
+//  foreach(QPointF pt, poly) {
+//    printMessage(tr("Measure pt (%1,%2)").arg(pt.x()).arg(pt.y()));
+//  }
 
-  summarizeMeasuredPolygon(poly);
-}
+//  summarizeMeasuredPolygon(poly);
+//}
 
-void QxrdDataProcessor::summarizeMeasuredPolygon(QVector<QPointF> poly)
-{
-  if (poly.size() >= 3) {
-    double x0 = poly[0].x();
-    double y0 = poly[0].y();
-    double x1 = poly[1].x();
-    double y1 = poly[1].y();
-    double x2 = poly[2].x();
-    double y2 = poly[2].y();
-    double dx1 = x0-x1, dy1 = y0-y1, dx2 = x2-x1, dy2 = y2-y1;
-    double a1 = atan2(dy1,dx1), a2 = atan2(dy2,dx2);
+//void QxrdDataProcessor::summarizeMeasuredPolygon(QVector<QPointF> poly)
+//{
+//  if (poly.size() >= 3) {
+//    double x0 = poly[0].x();
+//    double y0 = poly[0].y();
+//    double x1 = poly[1].x();
+//    double y1 = poly[1].y();
+//    double x2 = poly[2].x();
+//    double y2 = poly[2].y();
+//    double dx1 = x0-x1, dy1 = y0-y1, dx2 = x2-x1, dy2 = y2-y1;
+//    double a1 = atan2(dy1,dx1), a2 = atan2(dy2,dx2);
 
-    statusMessage(tr("Angle: @ %1,%2, ang %3 deg").arg(x1).arg(y1).arg((a2-a1)/M_PI*180.0));
-  } else if (poly.size() == 2) {
-    double x0 = poly[0].x();
-    double y0 = poly[0].y();
-    double x1 = poly[1].x();
-    double y1 = poly[1].y();
-    double dx = x1-x0;
-    double dy = y1-y0;
-    double ang = atan2(dy,dx);
-    double len = sqrt(dx*dx+dy*dy);
+//    statusMessage(tr("Angle: @ %1,%2, ang %3 deg").arg(x1).arg(y1).arg((a2-a1)/M_PI*180.0));
+//  } else if (poly.size() == 2) {
+//    double x0 = poly[0].x();
+//    double y0 = poly[0].y();
+//    double x1 = poly[1].x();
+//    double y1 = poly[1].y();
+//    double dx = x1-x0;
+//    double dy = y1-y0;
+//    double ang = atan2(dy,dx);
+//    double len = sqrt(dx*dx+dy*dy);
 
-    statusMessage(tr("Line: %1,%2 - %3,%4 : D %5,%6 : L %7 : Ang %8").
-                       arg(x0).arg(y0).arg(x1).arg(y1).
-                       arg(dx).arg(dy).arg(len).arg(ang/M_PI*180.0));
+//    statusMessage(tr("Line: %1,%2 - %3,%4 : D %5,%6 : L %7 : Ang %8").
+//                       arg(x0).arg(y0).arg(x1).arg(y1).
+//                       arg(dx).arg(dy).arg(len).arg(ang/M_PI*180.0));
 
-  } else if (poly.size() == 1) {
-    statusMessage(tr("Point: %1,%2").arg(poly[0].x()).arg(poly[0].y()));
-  }
-}
+//  } else if (poly.size() == 1) {
+//    statusMessage(tr("Point: %1,%2").arg(poly[0].x()).arg(poly[0].y()));
+//  }
+//}
 
 //QcepDoubleImageDataPtr QxrdDataProcessor::data() const
 //{
@@ -796,42 +792,21 @@ QcepMaskDataPtr QxrdDataProcessor::overflow() const
   return m_Overflow;
 }
 
-int QxrdDataProcessor::incrementAcquiredCount()
-{
-  return m_AcquiredCount.fetchAndAddOrdered(+1) + 1;
-}
+//int QxrdDataProcessor::status(double time)
+//{
+//  QMutex mutex;
+//  QcepMutexLocker lock(__FILE__, __LINE__, &mutex);
 
-int QxrdDataProcessor::decrementAcquiredCount()
-{
-  int res = m_AcquiredCount.fetchAndAddOrdered(-1) - 1;
+//  if (getAcquiredCount() == 0) {
+//    return 1;
+//  }
 
-  if (res == 0) {
-    m_ProcessWaiting.wakeAll();
-  }
-
-  return res;
-}
-
-int QxrdDataProcessor::getAcquiredCount()
-{
-  return m_AcquiredCount.fetchAndAddOrdered(0);
-}
-
-int QxrdDataProcessor::status(double time)
-{
-  QMutex mutex;
-  QcepMutexLocker lock(__FILE__, __LINE__, &mutex);
-
-  if (getAcquiredCount() == 0) {
-    return 1;
-  }
-
-  if (m_ProcessWaiting.wait(&mutex, (int)(time*1000))) {
-    return getAcquiredCount()==0;
-  } else {
-    return 0;
-  }
-}
+//  if (m_ProcessWaiting.wait(&mutex, (int)(time*1000))) {
+//    return getAcquiredCount()==0;
+//  } else {
+//    return 0;
+//  }
+//}
 
 //QxrdExperimentPtr QxrdDataProcessor::experiment() const
 //{
@@ -851,14 +826,14 @@ int QxrdDataProcessor::status(double time)
 //  return m_CenterFinder;
 //}
 
-QxrdIntegratorPtr QxrdDataProcessor::integrator() const
-{
-  if (m_Integrator == NULL) {
-    printMessage("Problem QxrdDataProcessor::integrator == NULL");
-  }
+//QxrdIntegratorPtr QxrdDataProcessor::integrator() const
+//{
+//  if (m_Integrator == NULL) {
+//    printMessage("Problem QxrdDataProcessor::integrator == NULL");
+//  }
 
-  return m_Integrator;
-}
+//  return m_Integrator;
+//}
 
 QxrdPolarTransformPtr QxrdDataProcessor::polarTransform() const
 {
@@ -1028,13 +1003,6 @@ void QxrdDataProcessor::writeOutputScan(QcepIntegratedDataPtr data)
     if (this->get_SaveIntegratedInSeparateFiles()) {
       f->writeOutputScan(integratedOutputDirectory(), data);
     }
-  }
-}
-
-void QxrdDataProcessor::displayIntegratedData(QcepIntegratedDataPtr data)
-{
-  if (this->get_DisplayIntegratedData()) {
-    emit newIntegrationAvailable(data);
   }
 }
 
@@ -1319,31 +1287,31 @@ void QxrdDataProcessor::idleInt16Image(QcepUInt16ImageDataPtr image, bool liveVi
 //                                              corrected, image, dark(), mask(), overflow));
 //}
 
-void QxrdDataProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow)
-{
-  QcepDoubleImageDataPtr corrected =
-      QcepAllocator::newDoubleImage("acquired", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
+//void QxrdDataProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow)
+//{
+//  QcepDoubleImageDataPtr corrected =
+//      QcepAllocator::newDoubleImage("acquired", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
 
-  typedef QcepDoubleImageDataPtr (QxrdDataProcessor::*MFType)(QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepMaskDataPtr, QcepMaskDataPtr);
-  MFType p = &QxrdDataProcessor::correctDoubleImage;
+//  typedef QcepDoubleImageDataPtr (QxrdDataProcessor::*MFType)(QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepMaskDataPtr, QcepMaskDataPtr);
+//  MFType p = &QxrdDataProcessor::correctDoubleImage;
 
-  m_CorrectedImages.enqueue(QtConcurrent::run(this,
-                                              p,
-                                              corrected, image, dark(), mask(), overflow));
-}
+//  m_CorrectedImages.enqueue(QtConcurrent::run(this,
+//                                              p,
+//                                              corrected, image, dark(), mask(), overflow));
+//}
 
-void QxrdDataProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, QList<double> v)
-{
-  QcepDoubleImageDataPtr corrected =
-      QcepAllocator::newDoubleImage("acquired", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
+//void QxrdDataProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, QList<double> v)
+//{
+//  QcepDoubleImageDataPtr corrected =
+//      QcepAllocator::newDoubleImage("acquired", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
 
-  typedef QcepDoubleImageDataPtr (QxrdDataProcessor::*MFType)(QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepMaskDataPtr, QList<double>);
-  MFType p = &QxrdDataProcessor::correctDoubleImage;
+//  typedef QcepDoubleImageDataPtr (QxrdDataProcessor::*MFType)(QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepMaskDataPtr, QList<double>);
+//  MFType p = &QxrdDataProcessor::correctDoubleImage;
 
-  m_CorrectedImages.enqueue(QtConcurrent::run(this,
-                                              p,
-                                              corrected, image, dark(), overflow, v));
-}
+//  m_CorrectedImages.enqueue(QtConcurrent::run(this,
+//                                              p,
+//                                              corrected, image, dark(), overflow, v));
+//}
 
 //QcepDoubleImageDataPtr QxrdDataProcessor::correctInt16Image
 //    (QcepDoubleImageDataPtr corrected, QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
@@ -1396,139 +1364,139 @@ void QxrdDataProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMas
 //  return QcepDoubleImageDataPtr();
 //}
 
-QcepDoubleImageDataPtr QxrdDataProcessor::correctDoubleImage
-    (QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
-{
-  QThread::currentThread()->setObjectName("correctDoubleImage");
+//QcepDoubleImageDataPtr QxrdDataProcessor::correctDoubleImage
+//    (QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow)
+//{
+//  QThread::currentThread()->setObjectName("correctDoubleImage");
 
-  if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
-  }
+//  if (qcepDebug(DEBUG_PROCESS)) {
+//    printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+//  }
 
-  if (image) {
-    if ((image -> get_ImageNumber()) >= 0) {
-      return processAcquiredDoubleImage(corrected, image, dark, mask, overflow);
-    } else {
-      if (get_SaveDarkImages()) {
-        saveNamedImageData(image->get_FileName(), image, overflow);
+//  if (image) {
+//    if ((image -> get_ImageNumber()) >= 0) {
+//      return processAcquiredDoubleImage(corrected, image, dark, mask, overflow);
+//    } else {
+//      if (get_SaveDarkImages()) {
+//        saveNamedImageData(image->get_FileName(), image, overflow);
 
-        set_DarkImagePath(image->get_FileName());
-      }
+//        set_DarkImagePath(image->get_FileName());
+//      }
 
-      newDark(image);
-    }
-  }
+//      newDark(image);
+//    }
+//  }
 
-  return QcepDoubleImageDataPtr();
-}
+//  return QcepDoubleImageDataPtr();
+//}
 
-QcepDoubleImageDataPtr QxrdDataProcessor::correctDoubleImage
-    (QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr overflow, QcepDoubleList v)
-{
-  QThread::currentThread()->setObjectName("correctDoubleImage");
+//QcepDoubleImageDataPtr QxrdDataProcessor::correctDoubleImage
+//    (QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr overflow, QcepDoubleList v)
+//{
+//  QThread::currentThread()->setObjectName("correctDoubleImage");
 
-  if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
-  }
+//  if (qcepDebug(DEBUG_PROCESS)) {
+//    printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+//  }
 
-  if (image) {
-    if ((image -> get_ImageNumber()) >= 0) {
-      return processAcquiredDoubleImage(corrected, image, dark, image->mask(), overflow, v);
-    } else {
-      if (get_SaveDarkImages()) {
-        saveNamedImageData(image->get_FileName(), image, overflow);
+//  if (image) {
+//    if ((image -> get_ImageNumber()) >= 0) {
+//      return processAcquiredDoubleImage(corrected, image, dark, image->mask(), overflow, v);
+//    } else {
+//      if (get_SaveDarkImages()) {
+//        saveNamedImageData(image->get_FileName(), image, overflow);
 
-        set_DarkImagePath(image->get_FileName());
-      }
+//        set_DarkImagePath(image->get_FileName());
+//      }
 
-      newDark(image);
-    }
-  }
+//      newDark(image);
+//    }
+//  }
 
-  return QcepDoubleImageDataPtr();
-}
+//  return QcepDoubleImageDataPtr();
+//}
 
-void QxrdDataProcessor::onCorrectedImageAvailable()
-{
-  QcepDoubleImageDataPtr img = m_CorrectedImages.dequeue();
-  QcepMaskDataPtr mask = (img ? img->mask() : QcepMaskDataPtr());
-  QxrdCenterFinderPtr cf(centerFinder());
+//void QxrdDataProcessor::onCorrectedImageAvailable()
+//{
+//  QcepDoubleImageDataPtr img = m_CorrectedImages.dequeue();
+//  QcepMaskDataPtr mask = (img ? img->mask() : QcepMaskDataPtr());
+//  QxrdCenterFinderPtr cf(centerFinder());
 
-  if (img && cf) {
-    m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::integrateImage,
-                                               img, mask,
-                                               cf -> get_Center().x(),
-                                               cf -> get_Center().y()));
+//  if (img && cf) {
+//    m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::integrateImage,
+//                                               img, mask,
+//                                               cf -> get_Center().x(),
+//                                               cf -> get_Center().y()));
 
-//    m_ROIData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::calculateROI,
-//                                        img, mask));
+////    m_ROIData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::calculateROI,
+////                                        img, mask));
 
-    m_HistogramData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::calculateHistogram,
-                                              img, mask));
-  }
-}
+//    m_HistogramData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::calculateHistogram,
+//                                              img, mask));
+//  }
+//}
 
-QcepIntegratedDataPtr QxrdDataProcessor::integrateImage
-    (QcepDoubleImageDataPtr image, QcepMaskDataPtr mask, double /*cx*/, double /*cy*/)
-{
-  QcepIntegratedDataPtr res;
+//QcepIntegratedDataPtr QxrdDataProcessor::integrateImage
+//    (QcepDoubleImageDataPtr image, QcepMaskDataPtr mask, double /*cx*/, double /*cy*/)
+//{
+//  QcepIntegratedDataPtr res;
 
-  QThread::currentThread()->setObjectName("integrateImage");
+//  QThread::currentThread()->setObjectName("integrateImage");
 
-  if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::integrateImage"));
-  }
+//  if (qcepDebug(DEBUG_PROCESS)) {
+//    printMessage(tr("QxrdDataProcessorThreaded::integrateImage"));
+//  }
 
-  if (image && get_PerformIntegration()) {
-    QTime tic;
-    tic.start();
+//  if (image && get_PerformIntegration()) {
+//    QTime tic;
+//    tic.start();
 
-    res = m_Integrator -> performIntegration(image, mask);
+//    res = m_Integrator -> performIntegration(image, mask);
 
-    updateEstimatedTime(prop_PerformIntegrationTime(), tic.restart());
-  }
+//    updateEstimatedTime(prop_PerformIntegrationTime(), tic.restart());
+//  }
 
-  return res;
-}
+//  return res;
+//}
 
-void QxrdDataProcessor::onIntegratedDataAvailable()
-{
-  if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
-  }
+//void QxrdDataProcessor::onIntegratedDataAvailable()
+//{
+//  if (qcepDebug(DEBUG_PROCESS)) {
+//    printMessage(tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
+//  }
 
-  QcepIntegratedDataPtr integ = m_IntegratedData.dequeue();
+//  QcepIntegratedDataPtr integ = m_IntegratedData.dequeue();
 
-  if (integ) {
-    writeOutputScan(integ);
-    displayIntegratedData(integ);
+//  if (integ) {
+//    writeOutputScan(integ);
+//    displayIntegratedData(integ);
 
-    if (get_AccumulateIntegrated2D()) {
-      m_Integrator -> appendIntegration(get_AccumulateIntegratedName(), integ);
-    }
-  }
-}
+//    if (get_AccumulateIntegrated2D()) {
+//      integrator() -> appendIntegration(get_AccumulateIntegratedName(), integ);
+//    }
+//  }
+//}
 
-QxrdHistogramDataPtr QxrdDataProcessor::calculateHistogram
-    (QcepDoubleImageDataPtr /*image*/, QcepMaskDataPtr /*mask*/)
-{
-  QThread::currentThread()->setObjectName("calculateHistogram");
+//QxrdHistogramDataPtr QxrdDataProcessor::calculateHistogram
+//    (QcepDoubleImageDataPtr /*image*/, QcepMaskDataPtr /*mask*/)
+//{
+//  QThread::currentThread()->setObjectName("calculateHistogram");
 
-  if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::calculateHistogram"));
-  }
+//  if (qcepDebug(DEBUG_PROCESS)) {
+//    printMessage(tr("QxrdDataProcessorThreaded::calculateHistogram"));
+//  }
 
-  return QxrdHistogramDataPtr();
-}
+//  return QxrdHistogramDataPtr();
+//}
 
-void QxrdDataProcessor::onHistogramDataAvailable()
-{
-  if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
-  }
+//void QxrdDataProcessor::onHistogramDataAvailable()
+//{
+//  if (qcepDebug(DEBUG_PROCESS)) {
+//    printMessage(tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
+//  }
 
-  QxrdHistogramDataPtr histData = m_HistogramData.dequeue();
-}
+//  QxrdHistogramDataPtr histData = m_HistogramData.dequeue();
+//}
 
 //double QxrdDataProcessorThreaded::estimatedProcessingTime(double estSerialTime, double estParallelTime)
 //{
@@ -1662,221 +1630,221 @@ void QxrdDataProcessor::subtractImages(QStringList names)
   }
 }
 
-void QxrdDataProcessor::clearAccumulator()
-{
-  m_Integrator -> clearAccumulator(get_AccumulateIntegratedName());
-}
+//void QxrdDataProcessor::clearAccumulator()
+//{
+//  m_Integrator -> clearAccumulator(get_AccumulateIntegratedName());
+//}
 
-void QxrdDataProcessor::integrateAndAccumulate(QStringList names)
-{
-  int nImages   = names.count();
-  m_Integrator -> prepareAccumulator(get_AccumulateIntegratedName(), nImages);
+//void QxrdDataProcessor::integrateAndAccumulate(QStringList names)
+//{
+//  int nImages   = names.count();
+//  m_Integrator -> prepareAccumulator(get_AccumulateIntegratedName(), nImages);
 
-  foreach(QString name, names) {
-    QcepDoubleImageDataPtr img =
-        QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
-    QString path = filePathInDataDirectory(name);
+//  foreach(QString name, names) {
+//    QcepDoubleImageDataPtr img =
+//        QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+//    QString path = filePathInDataDirectory(name);
 
-    if (img && img->readImage(path)) {
-      printMessage(tr("Load image from %1").arg(path));
-      statusMessage(tr("Load image from %1").arg(path));
+//    if (img && img->readImage(path)) {
+//      printMessage(tr("Load image from %1").arg(path));
+//      statusMessage(tr("Load image from %1").arg(path));
 
-      img -> loadMetaData();
+//      img -> loadMetaData();
 
-      m_Integrator -> appendIntegration(get_AccumulateIntegratedName(), img, mask());
-    } else {
-      printMessage(tr("Couldn't load %1").arg(path));
-      statusMessage(tr("Couldn't load %1").arg(path));
-    }
-  }
+//      m_Integrator -> appendIntegration(get_AccumulateIntegratedName(), img, mask());
+//    } else {
+//      printMessage(tr("Couldn't load %1").arg(path));
+//      statusMessage(tr("Couldn't load %1").arg(path));
+//    }
+//  }
 
-  m_Integrator -> completeAccumulator(get_AccumulateIntegratedName());
-}
+//  m_Integrator -> completeAccumulator(get_AccumulateIntegratedName());
+//}
 
-void QxrdDataProcessor::saveAccumulator(QString &path, QString filter)
-{
-  m_Integrator -> saveAccumulator(get_AccumulateIntegratedName(), path, filter);
-}
+//void QxrdDataProcessor::saveAccumulator(QString &path, QString filter)
+//{
+//  m_Integrator -> saveAccumulator(get_AccumulateIntegratedName(), path, filter);
+//}
 
-void QxrdDataProcessor::reflectHorizontally()
-{
-  QcepDoubleImageDataPtr image = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
+//void QxrdDataProcessor::reflectHorizontally()
+//{
+//  QcepDoubleImageDataPtr image = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
 
-  if (image) {
-    int wid = image->get_Width();
-    int hgt = image->get_Height();
+//  if (image) {
+//    int wid = image->get_Width();
+//    int hgt = image->get_Height();
 
-    for (int y=0; y<hgt; y++) {
-      for (int x=0; x<wid/2; x++) {
-        double val1 = image->getImageData(x,y);
-        double val2 = image->getImageData(wid-x-1, y);
+//    for (int y=0; y<hgt; y++) {
+//      for (int x=0; x<wid/2; x++) {
+//        double val1 = image->getImageData(x,y);
+//        double val2 = image->getImageData(wid-x-1, y);
 
-        image->setValue(wid-x-1, y, val1);
-        image->setValue(x,y, val2);
-      }
-    }
-  }
+//        image->setValue(wid-x-1, y, val1);
+//        image->setValue(x,y, val2);
+//      }
+//    }
+//  }
 
-  newData(image);
-}
+//  newData(image);
+//}
 
-void QxrdDataProcessor::reflectVertically()
-{
-  QcepDoubleImageDataPtr image = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
+//void QxrdDataProcessor::reflectVertically()
+//{
+//  QcepDoubleImageDataPtr image = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
 
-  if (image) {
-    int wid = image->get_Width();
-    int hgt = image->get_Height();
+//  if (image) {
+//    int wid = image->get_Width();
+//    int hgt = image->get_Height();
 
-    for (int x=0; x<wid; x++) {
-      for (int y=0; y<hgt/2; y++) {
-        double val1 = image->getImageData(x,y);
-        double val2 = image->getImageData(x, hgt-y-1);
+//    for (int x=0; x<wid; x++) {
+//      for (int y=0; y<hgt/2; y++) {
+//        double val1 = image->getImageData(x,y);
+//        double val2 = image->getImageData(x, hgt-y-1);
 
-        image->setValue(x, hgt-y-1, val1);
-        image->setValue(x,y, val2);
-      }
-    }
-  }
+//        image->setValue(x, hgt-y-1, val1);
+//        image->setValue(x,y, val2);
+//      }
+//    }
+//  }
 
-  newData(image);
-}
+//  newData(image);
+//}
 
-void QxrdDataProcessor::projectImages(QStringList names, int px, int py, int pz)
-{
-  QcepDoubleImageDataPtr sumx, sumy, sumz;
+//void QxrdDataProcessor::projectImages(QStringList names, int px, int py, int pz)
+//{
+//  QcepDoubleImageDataPtr sumx, sumy, sumz;
 
-  int nx = 0;
-  int ny = 0;
-  int nz = names.count();
-  int first = true;
+//  int nx = 0;
+//  int ny = 0;
+//  int nz = names.count();
+//  int first = true;
 
-  if (px) {
-    sumx = QcepAllocator::newDoubleImage("sumx", 0,0, QcepAllocator::NullIfNotAvailable);
-    printMessage(tr("Projecting %1 images onto X").arg(nz));
-  }
+//  if (px) {
+//    sumx = QcepAllocator::newDoubleImage("sumx", 0,0, QcepAllocator::NullIfNotAvailable);
+//    printMessage(tr("Projecting %1 images onto X").arg(nz));
+//  }
 
-  if (py) {
-    sumy = QcepAllocator::newDoubleImage("sumy", 0,0, QcepAllocator::NullIfNotAvailable);
-    printMessage(tr("Projecting %1 images onto Y").arg(nz));
-  }
+//  if (py) {
+//    sumy = QcepAllocator::newDoubleImage("sumy", 0,0, QcepAllocator::NullIfNotAvailable);
+//    printMessage(tr("Projecting %1 images onto Y").arg(nz));
+//  }
 
-  if (pz) {
-    sumz = QcepAllocator::newDoubleImage("sumz", 0,0, QcepAllocator::NullIfNotAvailable);
-    printMessage(tr("Projecting %1 images onto Z").arg(nz));
-  }
+//  if (pz) {
+//    sumz = QcepAllocator::newDoubleImage("sumz", 0,0, QcepAllocator::NullIfNotAvailable);
+//    printMessage(tr("Projecting %1 images onto Z").arg(nz));
+//  }
 
-  QxrdExperimentPtr expt(experiment());
+//  QxrdExperimentPtr expt(experiment());
 
-  if (expt) {
-    expt->commenceWork(nz);
-  }
+//  if (expt) {
+//    expt->commenceWork(nz);
+//  }
 
-  for (int i=0; i<nz; i++) {
-    QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(tr("image-%1").arg(i), 0,0, QcepAllocator::NullIfNotAvailable);
-    QString path = filePathInDataDirectory(names[i]);
+//  for (int i=0; i<nz; i++) {
+//    QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(tr("image-%1").arg(i), 0,0, QcepAllocator::NullIfNotAvailable);
+//    QString path = filePathInDataDirectory(names[i]);
 
-    if (img && img->readImage(path)) {
-      printMessage(tr("Load image from %1").arg(path));
-      statusMessage(tr("Load image from %1").arg(path));
+//    if (img && img->readImage(path)) {
+//      printMessage(tr("Load image from %1").arg(path));
+//      statusMessage(tr("Load image from %1").arg(path));
 
-      img->loadMetaData();
-      int typ = img->get_DataType();
+//      img->loadMetaData();
+//      int typ = img->get_DataType();
 
-      if ((typ == QcepDoubleImageData::Raw16Data) ||
-          (typ == QcepDoubleImageData::Raw32Data))
-      {
-        subtractDarkImage(img, dark());
-      }
+//      if ((typ == QcepDoubleImageData::Raw16Data) ||
+//          (typ == QcepDoubleImageData::Raw32Data))
+//      {
+//        subtractDarkImage(img, dark());
+//      }
 
-      if (first) {
-        nx = img->get_Width();
-        ny = img->get_Height();
+//      if (first) {
+//        nx = img->get_Width();
+//        ny = img->get_Height();
 
-        if (px && sumx) {
-          sumx->copyPropertiesFrom(img);
-          sumx->resize(nz,ny);
-          sumx->clear();
-          sumx->set_SummedExposures(0);
-        }
+//        if (px && sumx) {
+//          sumx->copyPropertiesFrom(img);
+//          sumx->resize(nz,ny);
+//          sumx->clear();
+//          sumx->set_SummedExposures(0);
+//        }
 
-        if (py && sumy) {
-          sumy->copyPropertiesFrom(img);
-          sumy->resize(nz,nx);
-          sumy->clear();
-          sumy->set_SummedExposures(0);
-        }
+//        if (py && sumy) {
+//          sumy->copyPropertiesFrom(img);
+//          sumy->resize(nz,nx);
+//          sumy->clear();
+//          sumy->set_SummedExposures(0);
+//        }
 
-        if (pz && sumz) {
-          sumz->copyPropertiesFrom(img);
-          sumz->resize(nx,ny);
-          sumz->clear();
-          sumz->set_SummedExposures(0);
-        }
+//        if (pz && sumz) {
+//          sumz->copyPropertiesFrom(img);
+//          sumz->resize(nx,ny);
+//          sumz->clear();
+//          sumz->set_SummedExposures(0);
+//        }
 
-        first = false;
-      }
+//        first = false;
+//      }
 
-      if (px && sumx) {
-        sumx->prop_SummedExposures()->incValue(1);
+//      if (px && sumx) {
+//        sumx->prop_SummedExposures()->incValue(1);
 
-        for (int y=0; y<ny; y++) {
-          double sum=0;
+//        for (int y=0; y<ny; y++) {
+//          double sum=0;
 
-          for (int x=0; x<nx; x++) {
-            sum += img->getImageData(x,y);
-          }
+//          for (int x=0; x<nx; x++) {
+//            sum += img->getImageData(x,y);
+//          }
 
-          sumx->addValue(i,y, sum);
-        }
-      }
+//          sumx->addValue(i,y, sum);
+//        }
+//      }
 
-      if (py && sumy) {
-        sumy->prop_SummedExposures()->incValue(1);
+//      if (py && sumy) {
+//        sumy->prop_SummedExposures()->incValue(1);
 
-        for (int x=0; x<nx; x++) {
-          double sum=0;
+//        for (int x=0; x<nx; x++) {
+//          double sum=0;
 
-          for (int y=0; y<ny; y++) {
-            sum += img->getImageData(x,y);
-          }
+//          for (int y=0; y<ny; y++) {
+//            sum += img->getImageData(x,y);
+//          }
 
-          sumy->addValue(i,x, sum);
-        }
-      }
+//          sumy->addValue(i,x, sum);
+//        }
+//      }
 
-      if (pz && sumz) {
-        sumz->prop_SummedExposures()->incValue(1);
+//      if (pz && sumz) {
+//        sumz->prop_SummedExposures()->incValue(1);
 
-        for (int x=0; x<nx; x++) {
-          for (int y=0; y<ny; y++) {
-            sumz->addValue(x,y, img->getImageData(x,y));
-          }
-        }
-      }
-    }
+//        for (int x=0; x<nx; x++) {
+//          for (int y=0; y<ny; y++) {
+//            sumz->addValue(x,y, img->getImageData(x,y));
+//          }
+//        }
+//      }
+//    }
 
-    if (expt) {
-      expt->completeWork(1);
-    }
-  }
+//    if (expt) {
+//      expt->completeWork(1);
+//    }
+//  }
 
-  if (px && sumx) {
-    newData(sumx);
-  }
+//  if (px && sumx) {
+//    newData(sumx);
+//  }
 
-  if (py && sumy) {
-    newData(sumy);
-  }
+//  if (py && sumy) {
+//    newData(sumy);
+//  }
 
-  if (pz && sumz) {
-    newData(sumz);
-  }
+//  if (pz && sumz) {
+//    newData(sumz);
+//  }
 
-  if (expt) {
-    expt->finishedWork(nz);
-  }
-}
+//  if (expt) {
+//    expt->finishedWork(nz);
+//  }
+//}
 
 void QxrdDataProcessor::correlateImages(QStringList names)
 {
@@ -1935,55 +1903,55 @@ void QxrdDataProcessor::shiftImage(int dx, int dy)
   }
 }
 
-void QxrdDataProcessor::integrateData(QString name)
-{
-  QThread::currentThread()->setObjectName("integrateData");
+//void QxrdDataProcessor::integrateData(QString name)
+//{
+//  QThread::currentThread()->setObjectName("integrateData");
 
-  QcepDoubleImageDataPtr img =
-      QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+//  QcepDoubleImageDataPtr img =
+//      QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
 
-  QString path = filePathInDataDirectory(name);
+//  QString path = filePathInDataDirectory(name);
 
-  QxrdCenterFinderPtr cf(centerFinder());
+//  QxrdCenterFinderPtr cf(centerFinder());
 
-  if (cf && img && img -> readImage(path)) {
-    printMessage(tr("Load image from %1").arg(path));
-    statusMessage(tr("Load image from %1").arg(path));
+//  if (cf && img && img -> readImage(path)) {
+//    printMessage(tr("Load image from %1").arg(path));
+//    statusMessage(tr("Load image from %1").arg(path));
 
-    img -> loadMetaData();
+//    img -> loadMetaData();
 
-    m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::integrateImage,
-                                               img, mask(),
-                                               cf -> get_Center().x(),
-                                               cf -> get_Center().y()));
-  } else {
-    printMessage(tr("Couldn't load %1").arg(path));
-    statusMessage(tr("Couldn't load %1").arg(path));
-  }
-}
+//    m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::integrateImage,
+//                                               img, mask(),
+//                                               cf -> get_Center().x(),
+//                                               cf -> get_Center().y()));
+//  } else {
+//    printMessage(tr("Couldn't load %1").arg(path));
+//    statusMessage(tr("Couldn't load %1").arg(path));
+//  }
+//}
 
-void QxrdDataProcessor::processData(QString name)
-{
-  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+//void QxrdDataProcessor::processData(QString name)
+//{
+//  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
 
-  QString path = filePathInDataDirectory(name);
+//  QString path = filePathInDataDirectory(name);
 
-  if (res && res -> readImage(path)) {
-    printMessage(tr("Load image from %1").arg(path));
-    statusMessage(tr("Load image from %1").arg(path));
+//  if (res && res -> readImage(path)) {
+//    printMessage(tr("Load image from %1").arg(path));
+//    statusMessage(tr("Load image from %1").arg(path));
 
-    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+//    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
+//    res -> loadMetaData();
 
-    processDoubleImage(res, /*darkImage(), mask(),*/ QcepMaskDataPtr());
+//    processDoubleImage(res, /*darkImage(), mask(),*/ QcepMaskDataPtr());
 
-    set_DataPath(res -> get_FileName());
-  } else {
-    printMessage(tr("Couldn't load %1").arg(path));
-    statusMessage(tr("Couldn't load %1").arg(path));
-  }
-}
+//    set_DataPath(res -> get_FileName());
+//  } else {
+//    printMessage(tr("Couldn't load %1").arg(path));
+//    statusMessage(tr("Couldn't load %1").arg(path));
+//  }
+//}
 
 void QxrdDataProcessor::processDataSequence(QString path, QString filter)
 {
@@ -2094,41 +2062,44 @@ void QxrdDataProcessor::setFileNormalization(QString name, QList<double> v)
   }
 }
 
-void QxrdDataProcessor::slicePolygon(QVector<QPointF> poly)
-{
-  QcepDoubleImageDataPtr dimg = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
+//void QxrdDataProcessor::slicePolygon(QVector<QPointF> poly)
+//{
+//  QcepDoubleImageDataPtr dimg = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
+//  QxrdIntegrator *integ = integrator().data();
 
-  if (dimg) {
-    m_IntegratedData.enqueue(
-          QtConcurrent::run(m_Integrator.data(),
-                            &QxrdIntegrator::slicePolygon,
-                            dimg, poly, 0));
-  }
-}
+//  if (dimg) {
+//    m_IntegratedData.enqueue(
+//          QtConcurrent::run(integ,
+//                            &QxrdIntegrator::slicePolygon,
+//                            dimg, poly, 0));
+//  }
+//}
 
-void QxrdDataProcessor::integrateSaveAndDisplay()
-{
-  QcepDoubleImageDataPtr dimg = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
-  QxrdCenterFinderPtr cf(centerFinder());
+//void QxrdDataProcessor::integrateSaveAndDisplay()
+//{
+//  QcepDoubleImageDataPtr dimg = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
+//  QxrdCenterFinderPtr cf(centerFinder());
 
-  if (dimg) {
-    if (qcepDebug(DEBUG_INTEGRATOR)) {
-      if (cf) {
-        printMessage(tr("processor.integrateSaveAndDisplay: %1, %2, %3")
-                     .arg(dimg->get_FileName())
-                     .arg(cf->get_Center().x())
-                     .arg(cf->get_Center().y()));
-      } else {
-        printMessage("QxrdDataProcessor::integrateSaveAndDisplay no center finder");
-      }
-    }
+//  if (dimg) {
+//    if (qcepDebug(DEBUG_INTEGRATOR)) {
+//      if (cf) {
+//        printMessage(tr("processor.integrateSaveAndDisplay: %1, %2, %3")
+//                     .arg(dimg->get_FileName())
+//                     .arg(cf->get_Center().x())
+//                     .arg(cf->get_Center().y()));
+//      } else {
+//        printMessage("QxrdDataProcessor::integrateSaveAndDisplay no center finder");
+//      }
+//    }
 
-    m_IntegratedData.enqueue(
-          QtConcurrent::run(m_Integrator.data(),
-                            &QxrdIntegrator::performIntegration,
-                            dimg, mask()));
-  }
-}
+//    QxrdIntegrator *integ = integrator().data();
+
+//    m_IntegratedData.enqueue(
+//          QtConcurrent::run(integ,
+//                            &QxrdIntegrator::performIntegration,
+//                            dimg, mask()));
+//  }
+//}
 
 void QxrdDataProcessor::fixupBadBackgroundSubtraction(QString imagePattern, int nImgExposures, QString darkPath, int nDarkExposures)
 {

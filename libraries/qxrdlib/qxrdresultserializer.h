@@ -29,7 +29,7 @@ template <typename T>
 class QXRD_EXPORT QxrdResultSerializer : public QxrdResultSerializerBase
 {
 public:
-  explicit QxrdResultSerializer(QcepIntProperty *ctr, QcepObjectWPtr parent);
+  explicit QxrdResultSerializer(QcepIntProperty *ctr);
 
   void enqueue(QFuture<T> future);
   T dequeue();

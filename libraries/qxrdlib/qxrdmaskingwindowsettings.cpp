@@ -20,7 +20,12 @@ QxrdMainWindowPtr QxrdMaskingWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdMaskingWindow(myself, "Masking", m_Application, m_Experiment, m_Acquisition, m_Processor));
+        new QxrdMaskingWindow(myself,
+                              "Masking",
+                              m_Application,
+                              m_Experiment,
+                              m_Acquisition,
+                              m_Processor));
 
   return m_Window;
 }

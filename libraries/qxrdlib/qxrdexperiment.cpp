@@ -1453,6 +1453,8 @@ void QxrdExperiment::defaultWindowSettings()
   THREAD_CHECK;
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdWindowSettings("Main Window")));
+  appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdAcquisitionWindowSettings("Acquisition")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdAnalysisWindowSettings("Analysis")));
@@ -1477,6 +1479,8 @@ void QxrdExperiment::defaultWindowSettings()
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdScriptingWindowSettings("Scripting")));
 
+  int nOpened = 0;
+
   for (int i=0; i<windowSettingsCount(); i++) {
     QxrdMainWindowSettingsPtr set =
         qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(i));
@@ -1486,6 +1490,21 @@ void QxrdExperiment::defaultWindowSettings()
                         experiment(),
                         qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()),
                         dataProcessor());
+
+      if (set -> get_WindowOpen()) {
+        nOpened += 1;
+      }
+    }
+  }
+
+  if (nOpened == 0) {
+    // If no windows are open, open the first...
+
+    QxrdMainWindowSettingsPtr set =
+        qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(0));
+
+    if (set) {
+      set -> set_WindowOpen(true);
     }
   }
 }

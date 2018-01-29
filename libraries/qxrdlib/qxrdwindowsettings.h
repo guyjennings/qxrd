@@ -2,6 +2,7 @@
 #define QXRDWINDOWSETTINGS_H
 
 #include "qxrdlib_global.h"
+#include "qxrdmainwindowsettings.h"
 #include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdimageplotsettings-ptr.h"
@@ -21,14 +22,20 @@
 #include "qxrdintegratedplotwidgetsettings-ptr.h"
 #include "qxrddistortionplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QxrdWindowSettings : public QcepObject
+class QXRD_EXPORT QxrdWindowSettings : public QxrdMainWindowSettings
 {
   Q_OBJECT
+
+private:
+  typedef QxrdMainWindowSettings inherited;
+
 public:
   Q_INVOKABLE QxrdWindowSettings(QString name);
   static QxrdWindowSettingsPtr newWindowSettings();
 
   static void registerMetaTypes();
+
+  QxrdMainWindowPtr newWindow();
 
 public:
   Q_PROPERTY(QByteArray windowGeometry READ get_WindowGeometry WRITE set_WindowGeometry)
@@ -64,7 +71,6 @@ signals:
 public slots:
   
 private:
-  QMutex                                       m_Mutex;
   QxrdImagePlotSettingsPtr                     m_ImagePlotSettings;
   QxrdCenterFinderPlotSettingsPtr              m_CenterFinderPlotSettings;
   QxrdIntegratorPlotSettingsPtr                m_IntegratorPlotSettings;

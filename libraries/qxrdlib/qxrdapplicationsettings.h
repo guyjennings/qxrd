@@ -21,20 +21,8 @@ public:
   void writeSettings(QSettings *settings);
 
 public:
-  Q_PROPERTY(QString currentDirectory READ get_CurrentDirectory WRITE set_CurrentDirectory)
-  QCEP_STRING_PROPERTY(CurrentDirectory)
-
 //  Q_PROPERTY(bool   openDirectly  READ get_OpenDirectly WRITE set_OpenDirectly)
 //  QCEP_BOOLEAN_PROPERTY(OpenDirectly)
-
-  Q_PROPERTY(int    fileBrowserLimit   READ get_FileBrowserLimit WRITE set_FileBrowserLimit)
-  QCEP_INTEGER_PROPERTY(FileBrowserLimit)
-
-  Q_PROPERTY(int    messageWindowLines   READ get_MessageWindowLines WRITE set_MessageWindowLines)
-  QCEP_INTEGER_PROPERTY(MessageWindowLines)
-
-  Q_PROPERTY(int    updateIntervalMsec   READ get_UpdateIntervalMsec WRITE set_UpdateIntervalMsec)
-  QCEP_INTEGER_PROPERTY(UpdateIntervalMsec)
 
   Q_PROPERTY(int lockerCount READ get_LockerCount WRITE set_LockerCount STORED false)
   QCEP_INTEGER_PROPERTY(LockerCount)

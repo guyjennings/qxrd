@@ -81,10 +81,12 @@ QxrdIntegrator::QxrdIntegrator(QString name)
   connect(prop_SelfNormalizationMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
 }
 
-QxrdIntegratorPtr QxrdIntegrator::newIntegrator()
+QxrdIntegratorPtr QxrdIntegrator::newIntegrator(QxrdCenterFinderWPtr cfw)
 
 {
   QxrdIntegratorPtr integ(new QxrdIntegrator("integrator"));
+
+  integ->initialize(cfw);
 
   return integ;
 }

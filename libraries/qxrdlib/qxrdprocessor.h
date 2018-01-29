@@ -4,6 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include "qcepimagedata-ptr.h"
+#include "qcepimagequeue.h"
 #include "qcepmaskdata-ptr.h"
 #include "qxrdprocessorstep-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -14,6 +15,12 @@
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdpowderringsmodel-ptr.h"
 #include "qxrdroimodel-ptr.h"
+#include "qxrdintegrator-ptr.h"
+#include "qcepintegrateddata-ptr.h"
+#include "qxrdresultserializer.h"
+#include "qxrdhistogramdata-ptr.h"
+
+#include <QWaitCondition>
 
 //TODO: merge QxrdDataProcessor and QxrdDetectorProcessor into QxrdProcessor
 //TODO: separate processing steps into sub-objects
@@ -31,6 +38,7 @@ public:
   QxrdAcqCommonWPtr acquisition() const;
   QxrdFileSaverWPtr    fileSaver() const;
   QxrdCenterFinderWPtr centerFinder() const;
+  QxrdIntegratorPtr      integrator() const;
   QxrdPowderRingsModelWPtr powderRings() const;
   QxrdROIModelWPtr roiModel() const;
 
@@ -49,7 +57,24 @@ public:
   QcepImageDataBaseWPtr data() const;
   void newData(QcepImageDataBaseWPtr image);
   QString dataDirectory() const;
+  void setDataDirectory(QString d);
+  QString existingOutputDirectory(QString dir, QString subdir) const;
   QString filePathInDataDirectory(QString name) const;
+  QString filePathInExperimentDirectory(QString name) const;
+  QString filePathInDarkOutputDirectory(QString name) const;
+  QString filePathInRawOutputDirectory(QString name) const;
+  QString filePathInSubtractedOutputDirectory(QString name) const;
+  QString filePathInIntegratedOutputDirectory(QString name) const;
+  QString experimentDirectory() const;
+  QString darkOutputDirectory() const;
+  QString rawOutputDirectory() const;
+  QString subtractedOutputDirectory() const;
+  QString integratedOutputDirectory() const;
+
+  QString pwd() const;
+  QStringList ls() const;
+  QStringList ls(QString pattern) const;
+  void cd(QString path);
 
   // dark operations...
   void loadDark(QString name);
@@ -91,6 +116,7 @@ public:
 
   void loadDefaultImages();
 
+  // masks...
   QxrdMaskStackWPtr maskStack() const;
 
   void newEmptyMask();
@@ -109,6 +135,55 @@ public:
   void maskPolygon(QVector<QPointF> poly);
 
   QxrdZingerFinderWPtr zingerFinder() const;
+
+  // acquired image correction...
+  void correctBadPixels(QcepDoubleImageDataPtr image);
+  void correctImageGains(QcepDoubleImageDataPtr image);
+  void performImageCorrections(QcepDoubleImageDataPtr image);
+  QcepDoubleImageDataPtr correctDoubleImage(QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr correctDoubleImage(QcepDoubleImageDataPtr corrected, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr overflow, QcepDoubleList v);
+
+  int incrementAcquiredCount();
+  int decrementAcquiredCount();
+  int getAcquiredCount();
+
+  // processing...
+  void processData(QString name);
+  void processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
+  void processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, QcepDoubleList v);
+  QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow, QcepDoubleList v);
+  QcepDoubleImageDataPtr processAcquiredImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr dimg, QcepDoubleImageDataPtr dark,
+                                              QcepMaskDataPtr mask, QcepMaskDataPtr overflow, QcepDoubleList v=QcepDoubleList());
+
+  // integration...
+  void integrateData(QString name);
+  void integrateSaveAndDisplay();
+
+  void clearAccumulator();
+  void integrateAndAccumulate(QStringList names);
+  void saveAccumulator(QString &path, QString filter);
+  void displayIntegratedData(QcepIntegratedDataPtr d);
+
+  void writeOutputScan(QVector<double> x, QVector<double> y);
+
+  // histogram...
+  QxrdHistogramDataPtr   calculateHistogram(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
+
+  // save cached data...
+  void saveCachedGeometry(QString name);
+  void saveCachedIntensity(QString name);
+
+  void updateEstimatedTime(QcepDoubleProperty *prop, int msec);
+
+  void projectImages(QStringList names, int px, int py, int pz);
+  void reflectVertically();
+  void reflectHorizontally();
+
+  void measurePolygon(QVector<QPointF> poly);
+  void slicePolygon(QVector<QPointF> poly);
+  void printMeasuredPolygon(QVector<QPointF> poly);
+  void summarizeMeasuredPolygon(QVector<QPointF> poly);
 
 protected:
   void subtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);
@@ -136,8 +211,19 @@ signals:
   void liveDataAvailable  (QcepDoubleImageDataPtr img);
   void overflowAvailable  (QcepMaskDataPtr        ovf);
 
+private slots:
+  void onCorrectedImageAvailable();
+  void onIntegratedDataAvailable();
+  void onHistogramDataAvailable();
+
+private:
+  QcepIntegratedDataPtr  integrateImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask, double, double cx);
+
 public:
   // Properties...
+
+  Q_PROPERTY(QString fileName READ get_FileName WRITE set_FileName STORED false)
+  QCEP_STRING_PROPERTY(FileName)
 
   Q_PROPERTY(QString dataPath   READ get_DataPath WRITE set_DataPath STORED false)
   QCEP_STRING_PROPERTY(DataPath)
@@ -179,7 +265,127 @@ public:
   Q_PROPERTY(bool maskSetPixels READ get_MaskSetPixels WRITE set_MaskSetPixels)
   QCEP_BOOLEAN_PROPERTY(MaskSetPixels)
 
-protected:
+  Q_PROPERTY(bool performBadPixels READ get_PerformBadPixels WRITE set_PerformBadPixels)
+  QCEP_BOOLEAN_PROPERTY(PerformBadPixels)
+
+  Q_PROPERTY(double performBadPixelsTime READ get_PerformBadPixelsTime WRITE set_PerformBadPixelsTime)
+  QCEP_DOUBLE_PROPERTY(PerformBadPixelsTime)
+
+  Q_PROPERTY(bool performGainCorrection READ get_PerformGainCorrection WRITE set_PerformGainCorrection)
+  QCEP_BOOLEAN_PROPERTY(PerformGainCorrection)
+
+  Q_PROPERTY(double performGainCorrectionTime READ get_PerformGainCorrectionTime WRITE set_PerformGainCorrectionTime)
+  QCEP_DOUBLE_PROPERTY(PerformGainCorrectionTime)
+
+  Q_PROPERTY(bool performDarkSubtraction READ get_PerformDarkSubtraction WRITE set_PerformDarkSubtraction)
+  QCEP_BOOLEAN_PROPERTY(PerformDarkSubtraction)
+
+  Q_PROPERTY(double performDarkSubtractionTime READ get_PerformDarkSubtractionTime WRITE set_PerformDarkSubtractionTime)
+  QCEP_DOUBLE_PROPERTY(PerformDarkSubtractionTime)
+
+  Q_PROPERTY(bool saveSubtracted READ get_SaveSubtracted WRITE set_SaveSubtracted)
+  QCEP_BOOLEAN_PROPERTY(SaveSubtracted)
+
+  Q_PROPERTY(double saveSubtractedTime READ get_SaveSubtractedTime WRITE set_SaveSubtractedTime)
+  QCEP_DOUBLE_PROPERTY(SaveSubtractedTime)
+
+  Q_PROPERTY(bool saveSubtractedInSubdirectory READ get_SaveSubtractedInSubdirectory WRITE set_SaveSubtractedInSubdirectory)
+  QCEP_BOOLEAN_PROPERTY(SaveSubtractedInSubdirectory)
+
+  Q_PROPERTY(QString saveSubtractedSubdirectory READ get_SaveSubtractedSubdirectory WRITE set_SaveSubtractedSubdirectory)
+  QCEP_STRING_PROPERTY(SaveSubtractedSubdirectory)
+
+  Q_PROPERTY(bool saveRawImages READ get_SaveRawImages WRITE set_SaveRawImages)
+  QCEP_BOOLEAN_PROPERTY(SaveRawImages)
+
+  Q_PROPERTY(bool saveRawInSubdirectory READ get_SaveRawInSubdirectory WRITE set_SaveRawInSubdirectory)
+  QCEP_BOOLEAN_PROPERTY(SaveRawInSubdirectory)
+
+  Q_PROPERTY(QString saveRawSubdirectory READ get_SaveRawSubdirectory WRITE set_SaveRawSubdirectory)
+  QCEP_STRING_PROPERTY(SaveRawSubdirectory)
+
+  Q_PROPERTY(bool saveDarkImages READ get_SaveDarkImages WRITE set_SaveDarkImages)
+  QCEP_BOOLEAN_PROPERTY(SaveDarkImages)
+
+  Q_PROPERTY(bool saveDarkInSubdirectory READ get_SaveDarkInSubdirectory WRITE set_SaveDarkInSubdirectory)
+  QCEP_BOOLEAN_PROPERTY(SaveDarkInSubdirectory)
+
+  Q_PROPERTY(QString saveDarkSubdirectory READ get_SaveDarkSubdirectory WRITE set_SaveDarkSubdirectory)
+  QCEP_STRING_PROPERTY(SaveDarkSubdirectory)
+
+  Q_PROPERTY(bool saveAsText READ get_SaveAsText WRITE set_SaveAsText)
+  QCEP_BOOLEAN_PROPERTY(SaveAsText)
+
+  Q_PROPERTY(double saveAsTextTime READ get_SaveAsTextTime WRITE set_SaveAsTextTime)
+  QCEP_DOUBLE_PROPERTY(SaveAsTextTime)
+
+  Q_PROPERTY(QString saveAsTextSeparator READ get_SaveAsTextSeparator WRITE set_SaveAsTextSeparator)
+  QCEP_STRING_PROPERTY(SaveAsTextSeparator)
+
+  Q_PROPERTY(int saveAsTextPerLine READ get_SaveAsTextPerLine WRITE set_SaveAsTextPerLine)
+  QCEP_INTEGER_PROPERTY(SaveAsTextPerLine)
+
+  Q_PROPERTY(bool saveOverflowFiles READ get_SaveOverflowFiles WRITE set_SaveOverflowFiles)
+  QCEP_BOOLEAN_PROPERTY(SaveOverflowFiles)
+
+  Q_PROPERTY(int correctionQueueLength READ get_CorrectionQueueLength WRITE set_CorrectionQueueLength STORED false)
+  QCEP_INTEGER_PROPERTY(CorrectionQueueLength)
+
+  Q_PROPERTY(bool performIntegration READ get_PerformIntegration WRITE set_PerformIntegration)
+  QCEP_BOOLEAN_PROPERTY(PerformIntegration)
+
+  Q_PROPERTY(double performIntegrationTime READ get_PerformIntegrationTime WRITE set_PerformIntegrationTime)
+  QCEP_DOUBLE_PROPERTY(PerformIntegrationTime)
+
+  Q_PROPERTY(int integrationQueueLength READ get_IntegrationQueueLength WRITE set_IntegrationQueueLength STORED false)
+  QCEP_INTEGER_PROPERTY(IntegrationQueueLength)
+
+  Q_PROPERTY(bool displayIntegratedData READ get_DisplayIntegratedData WRITE set_DisplayIntegratedData)
+  QCEP_BOOLEAN_PROPERTY(DisplayIntegratedData)
+
+  Q_PROPERTY(bool saveIntegratedData READ get_SaveIntegratedData WRITE set_SaveIntegratedData)
+  QCEP_BOOLEAN_PROPERTY(SaveIntegratedData)
+
+  Q_PROPERTY(QString saveIntegratedPath READ get_SaveIntegratedPath WRITE set_SaveIntegratedPath)
+  QCEP_STRING_PROPERTY(SaveIntegratedPath)
+
+  Q_PROPERTY(bool saveIntegratedInSeparateFiles READ get_SaveIntegratedInSeparateFiles WRITE set_SaveIntegratedInSeparateFiles)
+  QCEP_BOOLEAN_PROPERTY(SaveIntegratedInSeparateFiles)
+
+  Q_PROPERTY(bool saveIntegratedInSubdirectory READ get_SaveIntegratedInSubdirectory WRITE set_SaveIntegratedInSubdirectory)
+  QCEP_BOOLEAN_PROPERTY(SaveIntegratedInSubdirectory)
+
+  Q_PROPERTY(QString saveIntegratedSubdirectory READ get_SaveIntegratedSubdirectory WRITE set_SaveIntegratedSubdirectory)
+  QCEP_STRING_PROPERTY(SaveIntegratedSubdirectory)
+
+  Q_PROPERTY(bool accumulateIntegrated2D READ get_AccumulateIntegrated2D WRITE set_AccumulateIntegrated2D)
+  QCEP_BOOLEAN_PROPERTY(AccumulateIntegrated2D)
+
+  Q_PROPERTY(QString accumulateIntegratedName READ get_AccumulateIntegratedName WRITE set_AccumulateIntegratedName)
+  QCEP_STRING_PROPERTY(AccumulateIntegratedName)
+
+  Q_PROPERTY(QString accumulateIntegratedDirectory READ get_AccumulateIntegratedDirectory WRITE set_AccumulateIntegratedDirectory)
+  QCEP_STRING_PROPERTY(AccumulateIntegratedDirectory)
+
+  Q_PROPERTY(QString accumulateIntegratedFileName READ get_AccumulateIntegratedFileName WRITE set_AccumulateIntegratedFileName)
+  QCEP_STRING_PROPERTY(AccumulateIntegratedFileName)
+
+  Q_PROPERTY(QString accumulateIntegratedFormat READ get_AccumulateIntegratedFormat WRITE set_AccumulateIntegratedFormat)
+  QCEP_STRING_PROPERTY(AccumulateIntegratedFormat)
+
+  Q_PROPERTY(int histogramQueueLength READ get_HistogramQueueLength WRITE set_HistogramQueueLength STORED false)
+  QCEP_INTEGER_PROPERTY(HistogramQueueLength)
+
+  Q_PROPERTY(int saverQueueLength READ get_SaverQueueLength WRITE set_SaverQueueLength STORED false)
+  QCEP_INTEGER_PROPERTY(SaverQueueLength)
+
+  Q_PROPERTY(double estimatedProcessingTime READ get_EstimatedProcessingTime WRITE set_EstimatedProcessingTime)
+  QCEP_DOUBLE_PROPERTY(EstimatedProcessingTime)
+
+  Q_PROPERTY(double averagingRatio READ get_AveragingRatio WRITE set_AveragingRatio)
+  QCEP_DOUBLE_PROPERTY(AveragingRatio)
+
+  protected:
   QcepImageDataBasePtr   m_Data;
   QcepDoubleImageDataPtr m_Dark;
   QcepDoubleImageDataPtr m_BadPixels;
@@ -194,12 +400,23 @@ protected:
 
 private:
   QxrdCenterFinderPtr            m_CenterFinder;
+  QxrdIntegratorPtr              m_Integrator;
 
   //TODO: store a data object, not a model
   QxrdPowderRingsModelPtr        m_PowderRings;
 
   //TODO: store a data object, not a model
   QxrdROIModelPtr m_ROIModel;
+
+  mutable QMutex         m_Mutex;
+  QWaitCondition         m_ProcessWaiting;
+  QcepInt16ImageQueue    m_AcquiredInt16Images;
+  QcepInt32ImageQueue    m_AcquiredInt32Images;
+  QAtomicInt             m_AcquiredCount;
+
+  QxrdResultSerializer<QcepDoubleImageDataPtr>  m_CorrectedImages;
+  QxrdResultSerializer<QcepIntegratedDataPtr>   m_IntegratedData;
+  QxrdResultSerializer<QxrdHistogramDataPtr>    m_HistogramData;
 };
 
 #endif // QXRDPROCESSOR_H

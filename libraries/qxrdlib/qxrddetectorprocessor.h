@@ -42,7 +42,7 @@ signals:
 
 public slots:
 //  QxrdCenterFinderPtr  centerFinder();
-  QxrdIntegratorPtr    integrator();
+//  QxrdIntegratorPtr    integrator();
   QxrdROICalculatorPtr roiCalculator();
 
   void processAcquiredImage(QcepUInt32ImageDataPtr image,
@@ -210,7 +210,7 @@ private:
   QxrdDetectorSettingsWPtr      m_Detector;
 
 //  QxrdCenterFinderPtr   m_CenterFinder;
-  QxrdIntegratorPtr     m_Integrator;
+//  QxrdIntegratorPtr     m_Integrator;
   QxrdROICalculatorPtr  m_ROICalculator;
 
   QxrdDetectorControlWindowWPtr m_ControlWindow;

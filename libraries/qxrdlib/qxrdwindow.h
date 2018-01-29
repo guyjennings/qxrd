@@ -37,7 +37,7 @@
 
 #define QXRD_WINDOW_STATE_VERSION 3
 
-class QXRD_EXPORT QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow, public QEnableSharedFromThis<QxrdWindow>
+class QXRD_EXPORT QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow
 {
   Q_OBJECT
 
@@ -46,7 +46,7 @@ public:
              QxrdAppCommonWPtr appl,
              QxrdExperimentWPtr docw,
              QxrdAcquisitionWPtr acqw,
-             QxrdDataProcessorWPtr procw);
+             QxrdProcessorWPtr procw);
   virtual ~QxrdWindow();
   void initialize();
 //  void setupMenus();
@@ -134,7 +134,7 @@ private slots:
 public:
   void closeEvent (QCloseEvent * event);
 
-  QxrdDataProcessorWPtr dataProcessor() const;
+  QxrdProcessorWPtr processor() const;
 
   void newDataAvailable(QcepDoubleImageDataPtr img, QcepMaskDataPtr overflow);
   void newMaskAvailable(QcepMaskDataPtr img);
