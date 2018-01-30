@@ -986,25 +986,25 @@ void QxrdDataProcessor::ellipse(double cx, double cy, double a, double e, double
   newData(m_Data);
 }
 
-void QxrdDataProcessor::writeOutputScan(QcepIntegratedDataPtr data)
-{
-  QxrdFileSaverPtr f(fileSaver());
+//void QxrdDataProcessor::writeOutputScan(QcepIntegratedDataPtr data)
+//{
+//  QxrdFileSaverPtr f(fileSaver());
 
-  if (f) {
-    if (this->get_SaveIntegratedData()) {
-      QxrdExperimentPtr expt(experiment());
+//  if (f) {
+//    if (this->get_SaveIntegratedData()) {
+//      QxrdExperimentPtr expt(experiment());
 
-      if (expt) {
-        expt->openScanFile();
-        f->writeOutputScan(expt->scanFile(), data);
-      }
-    }
+//      if (expt) {
+//        expt->openScanFile();
+//        f->writeOutputScan(expt->scanFile(), data);
+//      }
+//    }
 
-    if (this->get_SaveIntegratedInSeparateFiles()) {
-      f->writeOutputScan(integratedOutputDirectory(), data);
-    }
-  }
-}
+//    if (this->get_SaveIntegratedInSeparateFiles()) {
+//      f->writeOutputScan(integratedOutputDirectory(), data);
+//    }
+//  }
+//}
 
 QxrdGenerateTestImageWPtr QxrdDataProcessor::generateTestImage() const
 {

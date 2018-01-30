@@ -249,8 +249,8 @@ public:
 //    CanOverwrite
 //  };
 
-signals:
-  void newIntegrationAvailable(QcepIntegratedDataPtr data);
+//signals:
+//  void newIntegrationAvailable(QcepIntegratedDataPtr data);
 
 public slots:
   void shutdown();
@@ -319,10 +319,10 @@ public slots:
 
   void updateEstimatedProcessingTime();
 
-  int status(double delay);
+//  int status(double delay);
 
 //  void displayIntegratedData(QcepIntegratedDataPtr d);
-  void writeOutputScan(QcepIntegratedDataPtr d);
+//  void writeOutputScan(QcepIntegratedDataPtr d);
 
   void newOutputScan(QString title);
   void appendToOutputScan(double x, double y);

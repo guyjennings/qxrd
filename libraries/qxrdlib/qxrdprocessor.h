@@ -66,6 +66,7 @@ public:
   QString filePathInSubtractedOutputDirectory(QString name) const;
   QString filePathInIntegratedOutputDirectory(QString name) const;
   QString experimentDirectory() const;
+  QString currentDirectory() const;
   QString darkOutputDirectory() const;
   QString rawOutputDirectory() const;
   QString subtractedOutputDirectory() const;
@@ -166,6 +167,7 @@ public:
   void displayIntegratedData(QcepIntegratedDataPtr d);
 
   void writeOutputScan(QVector<double> x, QVector<double> y);
+  void writeOutputScan(QcepIntegratedDataPtr d);
 
   // histogram...
   QxrdHistogramDataPtr   calculateHistogram(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
@@ -185,6 +187,8 @@ public:
   void printMeasuredPolygon(QVector<QPointF> poly);
   void summarizeMeasuredPolygon(QVector<QPointF> poly);
 
+  int status(double delay);
+
 protected:
   void subtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);
   void unsubtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);
@@ -203,13 +207,14 @@ protected:
   int newMaskHeight() const;
 
 signals:
-  void dataAvailable      (QcepDoubleImageDataPtr img);
-  void darkAvailable      (QcepDoubleImageDataPtr img);
-  void maskAvailable      (QcepMaskDataPtr        mask);
-  void badPixelsAvailable (QcepDoubleImageDataPtr img);
-  void gainMapAvailable   (QcepDoubleImageDataPtr map);
-  void liveDataAvailable  (QcepDoubleImageDataPtr img);
-  void overflowAvailable  (QcepMaskDataPtr        ovf);
+  void dataAvailable           (QcepDoubleImageDataPtr img);
+  void darkAvailable           (QcepDoubleImageDataPtr img);
+  void maskAvailable           (QcepMaskDataPtr        mask);
+  void badPixelsAvailable      (QcepDoubleImageDataPtr img);
+  void gainMapAvailable        (QcepDoubleImageDataPtr map);
+  void liveDataAvailable       (QcepDoubleImageDataPtr img);
+  void overflowAvailable       (QcepMaskDataPtr        ovf);
+  void newIntegrationAvailable (QcepIntegratedDataPtr  data);
 
 private slots:
   void onCorrectedImageAvailable();

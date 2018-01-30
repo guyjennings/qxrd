@@ -16,6 +16,7 @@
 #include "qxrdapplication.h"
 #include "qxrdacqcommon.h"
 #include "qxrdintegrator.h"
+#include "qcepmutexlocker.h"
 #include <QFileInfo>
 #include <QThread>
 #include <QDir>
@@ -419,6 +420,11 @@ void QxrdProcessor::newData(QcepImageDataBaseWPtr image)
 QString QxrdProcessor::filePathInDataDirectory(QString name) const
 {
   return QDir(dataDirectory()).filePath(name);
+}
+
+QString QxrdProcessor::currentDirectory() const
+{
+  return dataDirectory();
 }
 
 QString QxrdProcessor::dataDirectory() const
@@ -1705,6 +1711,27 @@ void QxrdProcessor::onIntegratedDataAvailable()
 
     if (get_AccumulateIntegrated2D()) {
       integrator() -> appendIntegration(get_AccumulateIntegratedName(), integ);
+    }
+  }
+}
+
+
+void QxrdProcessor::writeOutputScan(QcepIntegratedDataPtr data)
+{
+  QxrdFileSaverPtr f(fileSaver());
+
+  if (f) {
+    if (this->get_SaveIntegratedData()) {
+      QxrdExperimentPtr expt(experiment());
+
+      if (expt) {
+        expt->openScanFile();
+        f->writeOutputScan(expt->scanFile(), data);
+      }
+    }
+
+    if (this->get_SaveIntegratedInSeparateFiles()) {
+      f->writeOutputScan(integratedOutputDirectory(), data);
     }
   }
 }
