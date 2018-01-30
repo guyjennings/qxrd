@@ -159,8 +159,11 @@ public:
 
   // processing...
   void processData(QString name);
+  void idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView);
   void processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
   void processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, QcepDoubleList v);
+  QcepDoubleImageDataPtr processAcquiredInt16Image(QcepDoubleImageDataPtr processed, QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+  QcepDoubleImageDataPtr processAcquiredInt32Image(QcepDoubleImageDataPtr processed, QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow, QcepDoubleList v);
   QcepDoubleImageDataPtr processAcquiredImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr dimg, QcepDoubleImageDataPtr dark,
@@ -190,7 +193,9 @@ public:
   void saveCachedGeometry(QString name);
   void saveCachedIntensity(QString name);
 
+  double estimatedProcessingTime(double estSerTime, double estParallelTime);
   void updateEstimatedTime(QcepDoubleProperty *prop, int msec);
+  void updateEstimatedProcessingTime();
 
   void projectImages(QStringList names, int px, int py, int pz);
   void reflectVertically();

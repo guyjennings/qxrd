@@ -167,34 +167,34 @@ void QxrdDataProcessor::shutdown()
   thread()->exit();
 }
 
-void QxrdDataProcessor::setAcquisition(QxrdAcqCommonWPtr acq)
-{
-  connect(prop_SaveRawImages(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformDarkSubtraction(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformBadPixels(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformGainCorrection(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveSubtracted(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveAsText(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformIntegration(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_DisplayIntegratedData(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveIntegratedData(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformDarkSubtractionTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformBadPixelsTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformGainCorrectionTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveSubtractedTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveAsTextTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformIntegrationTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_DisplayIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//void QxrdDataProcessor::setAcquisition(QxrdAcqCommonWPtr acq)
+//{
+//  connect(prop_SaveRawImages(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_PerformDarkSubtraction(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_PerformBadPixels(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_PerformGainCorrection(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_SaveSubtracted(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_SaveAsText(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_PerformIntegration(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_DisplayIntegratedData(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_SaveIntegratedData(), &QcepBoolProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_PerformDarkSubtractionTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_PerformBadPixelsTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_PerformGainCorrectionTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_SaveSubtractedTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_SaveAsTextTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_PerformIntegrationTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_DisplayIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  connect(prop_SaveIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
 
-  QxrdAcquisitionPtr acqp(qSharedPointerDynamicCast<QxrdAcquisition>(acq));
+//  QxrdAcquisitionPtr acqp(qSharedPointerDynamicCast<QxrdAcquisition>(acq));
 
-  if (acqp) {
-    connect(acqp -> prop_SummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-    connect(acqp -> prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-    connect(acqp -> prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
-  }
-}
+//  if (acqp) {
+//    connect(acqp -> prop_SummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//    connect(acqp -> prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//    connect(acqp -> prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdDataProcessor::updateEstimatedProcessingTime);
+//  }
+//}
 
 ////TODO: this should go...
 //void QxrdDataProcessor::setWindow(QxrdWindowWPtr win)
@@ -209,63 +209,63 @@ void QxrdDataProcessor::setAcquisition(QxrdAcqCommonWPtr acq)
 //  return m_Saver;
 //}
 
-void QxrdDataProcessor::writeSettings(QSettings *settings)
-{
-  inherited::writeSettings(settings);
+//void QxrdDataProcessor::writeSettings(QSettings *settings)
+//{
+//  inherited::writeSettings(settings);
 
-//  if (m_CenterFinder) {
-//    settings->beginGroup("centerfinder");
-//    m_CenterFinder -> writeSettings(settings);
-//    settings->endGroup();
-//  }
+////  if (m_CenterFinder) {
+////    settings->beginGroup("centerfinder");
+////    m_CenterFinder -> writeSettings(settings);
+////    settings->endGroup();
+////  }
 
-//  if (m_Integrator) {
-//    settings->beginGroup("integrator");
-//    m_Integrator   -> writeSettings(settings);
-//    settings->endGroup();
-//  }
+////  if (m_Integrator) {
+////    settings->beginGroup("integrator");
+////    m_Integrator   -> writeSettings(settings);
+////    settings->endGroup();
+////  }
 
-//  if (m_PolarTransform) {
-//    settings->beginGroup("polarTransform");
-//    m_PolarTransform -> writeSettings(settings);
-//    settings->endGroup();
-//  }
+////  if (m_PolarTransform) {
+////    settings->beginGroup("polarTransform");
+////    m_PolarTransform -> writeSettings(settings);
+////    settings->endGroup();
+////  }
 
-//  if (m_PolarNormalization) {
-//    settings->beginGroup("polarNormalization");
-//    m_PolarNormalization -> writeSettings(settings);
-//    settings->endGroup();
-//  }
-}
+////  if (m_PolarNormalization) {
+////    settings->beginGroup("polarNormalization");
+////    m_PolarNormalization -> writeSettings(settings);
+////    settings->endGroup();
+////  }
+//}
 
-void QxrdDataProcessor::readSettings(QSettings *settings)
-{
-  inherited::readSettings(settings);
+//void QxrdDataProcessor::readSettings(QSettings *settings)
+//{
+//  inherited::readSettings(settings);
 
-//  if (m_CenterFinder) {
-//    settings->beginGroup("centerfinder");
-//    m_CenterFinder -> readSettings(settings);
-//    settings->endGroup();
-//  }
+////  if (m_CenterFinder) {
+////    settings->beginGroup("centerfinder");
+////    m_CenterFinder -> readSettings(settings);
+////    settings->endGroup();
+////  }
 
-//  if (m_Integrator) {
-//    settings->beginGroup("integrator");
-//    m_Integrator   -> readSettings(settings);
-//    settings->endGroup();
-//  }
+////  if (m_Integrator) {
+////    settings->beginGroup("integrator");
+////    m_Integrator   -> readSettings(settings);
+////    settings->endGroup();
+////  }
 
-//  if (m_PolarTransform) {
-//    settings->beginGroup("polarTransform");
-//    m_PolarTransform -> readSettings(settings);
-//    settings->endGroup();
-//  }
+////  if (m_PolarTransform) {
+////    settings->beginGroup("polarTransform");
+////    m_PolarTransform -> readSettings(settings);
+////    settings->endGroup();
+////  }
 
-//  if (m_PolarNormalization) {
-//    settings->beginGroup("polarNormalization");
-//    m_PolarNormalization -> readSettings(settings);
-//    settings->endGroup();
-//  }
-}
+////  if (m_PolarNormalization) {
+////    settings->beginGroup("polarNormalization");
+////    m_PolarNormalization -> readSettings(settings);
+////    settings->endGroup();
+////  }
+//}
 
 //QString QxrdDataProcessor::existingOutputDirectory(QString dir, QString subdir) const
 //{
@@ -458,69 +458,69 @@ void QxrdDataProcessor::readSettings(QSettings *settings)
 //  set_GainMapPath("");
 //}
 
-QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredInt16Image(
-    QcepDoubleImageDataPtr corrected,
-    QcepUInt16ImageDataPtr img,
-    QcepDoubleImageDataPtr dark,
-    QcepMaskDataPtr mask,
-    QcepMaskDataPtr overflow)
-{
-  if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("processing acquired 16 bit image, %1 remaining")
-                 .arg(getAcquiredCount()));
-  }
+//QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredInt16Image(
+//    QcepDoubleImageDataPtr corrected,
+//    QcepUInt16ImageDataPtr img,
+//    QcepDoubleImageDataPtr dark,
+//    QcepMaskDataPtr mask,
+//    QcepMaskDataPtr overflow)
+//{
+//  if (qcepDebug(DEBUG_PROCESS)) {
+//    printMessage(tr("processing acquired 16 bit image, %1 remaining")
+//                 .arg(getAcquiredCount()));
+//  }
 
-  if (img) {
-    if (get_SaveRawImages()) {
-      if (img->get_ObjectSaved()) {
-        printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
-      } else {
-        saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessor::NoOverwrite);
-      }
-    }
+//  if (img) {
+//    if (get_SaveRawImages()) {
+//      if (img->get_ObjectSaved()) {
+//        printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
+//      } else {
+//        saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessor::NoOverwrite);
+//      }
+//    }
 
-    corrected -> copyFrom(img);
-    corrected -> set_DateTime(QDateTime::currentDateTime());
+//    corrected -> copyFrom(img);
+//    corrected -> set_DateTime(QDateTime::currentDateTime());
 
-    processAcquiredImage(corrected, corrected, dark, mask, overflow);
+//    processAcquiredImage(corrected, corrected, dark, mask, overflow);
 
-    return corrected;
-  } else {
-    return QcepDoubleImageDataPtr();
-  }
-}
+//    return corrected;
+//  } else {
+//    return QcepDoubleImageDataPtr();
+//  }
+//}
 
-QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredInt32Image(
-    QcepDoubleImageDataPtr corrected,
-    QcepUInt32ImageDataPtr img,
-    QcepDoubleImageDataPtr dark,
-    QcepMaskDataPtr mask,
-    QcepMaskDataPtr overflow)
-{
-  if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("processing acquired 32 bit image, %1 remaining")
-                 .arg(getAcquiredCount()));
-  }
+//QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredInt32Image(
+//    QcepDoubleImageDataPtr corrected,
+//    QcepUInt32ImageDataPtr img,
+//    QcepDoubleImageDataPtr dark,
+//    QcepMaskDataPtr mask,
+//    QcepMaskDataPtr overflow)
+//{
+//  if (qcepDebug(DEBUG_PROCESS)) {
+//    printMessage(tr("processing acquired 32 bit image, %1 remaining")
+//                 .arg(getAcquiredCount()));
+//  }
 
-  if (img) {
-    if (get_SaveRawImages()) {
-      if (img->get_ObjectSaved()) {
-        printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
-      } else {
-        saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessor::NoOverwrite);
-      }
-    }
+//  if (img) {
+//    if (get_SaveRawImages()) {
+//      if (img->get_ObjectSaved()) {
+//        printMessage(tr("Image \"%1\" is already saved").arg(img->rawFileName()));
+//      } else {
+//        saveNamedRawImageData(img->rawFileName(), img, overflow, QxrdDataProcessor::NoOverwrite);
+//      }
+//    }
 
-    corrected -> copyFrom(img);
-    corrected -> set_DateTime(QDateTime::currentDateTime());
+//    corrected -> copyFrom(img);
+//    corrected -> set_DateTime(QDateTime::currentDateTime());
 
-    processAcquiredImage(corrected, corrected, dark, mask, overflow);
+//    processAcquiredImage(corrected, corrected, dark, mask, overflow);
 
-    return corrected;
-  } else {
-    return QcepDoubleImageDataPtr();
-  }
-}
+//    return corrected;
+//  } else {
+//    return QcepDoubleImageDataPtr();
+//  }
+//}
 
 //QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredDoubleImage(
 //    QcepDoubleImageDataPtr processed,
@@ -656,71 +656,71 @@ QcepDoubleImageDataPtr QxrdDataProcessor::processAcquiredInt32Image(
 //  }
 //}
 
-void QxrdDataProcessor::updateEstimatedProcessingTime()
-{
-  double estSerialTime = 0, estParallelTime = 0;
+//void QxrdDataProcessor::updateEstimatedProcessingTime()
+//{
+//  double estSerialTime = 0, estParallelTime = 0;
 
-  QxrdAcquisitionPtr acq(
-        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+//  QxrdAcquisitionPtr acq(
+//        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
 
-  if (acq && get_SaveRawImages()) {
-    if (acq -> get_SummedExposures() > 1) {
-      estSerialTime += acq -> get_Raw32SaveTime();
-    } else {
-      estSerialTime += acq -> get_Raw16SaveTime();
-    }
-  }
+//  if (acq && get_SaveRawImages()) {
+//    if (acq -> get_SummedExposures() > 1) {
+//      estSerialTime += acq -> get_Raw32SaveTime();
+//    } else {
+//      estSerialTime += acq -> get_Raw16SaveTime();
+//    }
+//  }
 
-  if (get_PerformDarkSubtraction()) {
-    estParallelTime += get_PerformDarkSubtractionTime();
-  }
+//  if (get_PerformDarkSubtraction()) {
+//    estParallelTime += get_PerformDarkSubtractionTime();
+//  }
 
-  if (get_PerformBadPixels()) {
-    estParallelTime += get_PerformBadPixelsTime();
-  }
+//  if (get_PerformBadPixels()) {
+//    estParallelTime += get_PerformBadPixelsTime();
+//  }
 
-  if (get_PerformGainCorrection()) {
-    estParallelTime += get_PerformGainCorrectionTime();
-  }
+//  if (get_PerformGainCorrection()) {
+//    estParallelTime += get_PerformGainCorrectionTime();
+//  }
 
-  if (get_SaveSubtracted()) {
-    estSerialTime += get_SaveSubtractedTime();
-  }
+//  if (get_SaveSubtracted()) {
+//    estSerialTime += get_SaveSubtractedTime();
+//  }
 
-  if (get_SaveAsText()) {
-    estSerialTime += get_SaveAsTextTime();
-  }
+//  if (get_SaveAsText()) {
+//    estSerialTime += get_SaveAsTextTime();
+//  }
 
-  if (get_PerformIntegration()) {
-    estParallelTime += get_PerformIntegrationTime();
-  }
+//  if (get_PerformIntegration()) {
+//    estParallelTime += get_PerformIntegrationTime();
+//  }
 
-  if (get_DisplayIntegratedData()) {
-    estSerialTime += get_DisplayIntegratedDataTime();
-  }
+//  if (get_DisplayIntegratedData()) {
+//    estSerialTime += get_DisplayIntegratedDataTime();
+//  }
 
-  if (get_SaveIntegratedData()) {
-    estSerialTime += get_SaveIntegratedDataTime();
-  }
+//  if (get_SaveIntegratedData()) {
+//    estSerialTime += get_SaveIntegratedDataTime();
+//  }
 
-  set_EstimatedProcessingTime(estimatedProcessingTime(estSerialTime, estParallelTime));
-}
+//  set_EstimatedProcessingTime(estimatedProcessingTime(estSerialTime, estParallelTime));
+//}
 
 //double QxrdDataProcessor::estimatedProcessingTime(double estSerialTime, double estParallelTime)
 //{
 //  return estSerialTime + estParallelTime;
 //}
 
-double QxrdDataProcessor::estimatedProcessingTime(double estSerialTime, double estParallelTime)
-{
-  int nThreads = QThreadPool::globalInstance()->maxThreadCount();
+//double QxrdDataProcessor::estimatedProcessingTime(double estSerialTime, double estParallelTime)
+//{
+//  int nThreads = QThreadPool::globalInstance()->maxThreadCount();
 
-  if (nThreads >= 2) {
-    return qMax(estSerialTime, estParallelTime/((double)nThreads));
-  } else {
-    return estSerialTime + estParallelTime;
-  }
-}
+//  if (nThreads >= 2) {
+//    return qMax(estSerialTime, estParallelTime/((double)nThreads));
+//  } else {
+//    return estSerialTime + estParallelTime;
+//  }
+//}
 
 //void QxrdDataProcessor::measurePolygon(QVector<QPointF> poly)
 //{
@@ -1011,31 +1011,31 @@ void QxrdDataProcessor::ellipse(double cx, double cy, double a, double e, double
 //  return m_GenerateTestImage;
 //}
 
-void QxrdDataProcessor::newOutputScan(QString title)
-{
-  m_OutputScan = QcepAllocator::newIntegratedData(title, 0, QcepAllocator::NullIfNotAvailable);
-}
+//void QxrdDataProcessor::newOutputScan(QString title)
+//{
+//  m_OutputScan = QcepAllocator::newIntegratedData(title, 0, QcepAllocator::NullIfNotAvailable);
+//}
 
-void QxrdDataProcessor::appendToOutputScan(double x, double y)
-{
-  if (m_OutputScan) {
-    m_OutputScan->append(x,y);
-  }
-}
+//void QxrdDataProcessor::appendToOutputScan(double x, double y)
+//{
+//  if (m_OutputScan) {
+//    m_OutputScan->append(x,y);
+//  }
+//}
 
-void QxrdDataProcessor::plotOutputScan()
-{
-  if (m_OutputScan) {
-    emit newIntegrationAvailable(m_OutputScan);
-  }
-}
+//void QxrdDataProcessor::plotOutputScan()
+//{
+//  if (m_OutputScan) {
+//    emit newIntegrationAvailable(m_OutputScan);
+//  }
+//}
 
-void QxrdDataProcessor::saveOutputScan(QString /*fileName*/)
-{
-  if (m_OutputScan) {
+//void QxrdDataProcessor::saveOutputScan(QString /*fileName*/)
+//{
+//  if (m_OutputScan) {
 
-  }
-}
+//  }
+//}
 
 //QStringList QxrdDataProcessor::integrateRectangle(int x0, int y0, int x1, int y1)
 //{
@@ -1187,41 +1187,41 @@ bool QxrdDataProcessor::polarIntegrateParameters()
   return res;
 }
 
-void QxrdDataProcessor::idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView)
-{
-  QcepMutexLocker lock(__FILE__, __LINE__, image->mutex());
-  int height = image->get_Height();
-  int width  = image->get_Width();
-  int nres = image-> get_SummedExposures();
-  int npixels = width*height;
-  if (nres <= 0) nres = 1;
-  double avgraw = 0;
-  quint16 *img = image->data();
+//void QxrdDataProcessor::idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView)
+//{
+//  QcepMutexLocker lock(__FILE__, __LINE__, image->mutex());
+//  int height = image->get_Height();
+//  int width  = image->get_Width();
+//  int nres = image-> get_SummedExposures();
+//  int npixels = width*height;
+//  if (nres <= 0) nres = 1;
+//  double avgraw = 0;
+//  quint16 *img = image->data();
 
-  for (int i=0; i<npixels; i++) {
-    avgraw += *img++;
-  }
+//  for (int i=0; i<npixels; i++) {
+//    avgraw += *img++;
+//  }
 
-  set_AverageRaw(avgraw/npixels/nres);
-  set_Average(get_AverageRaw() - get_AverageDark());
+//  set_AverageRaw(avgraw/npixels/nres);
+//  set_Average(get_AverageRaw() - get_AverageDark());
 
-  if (liveView) {
-    if (qcepDebug(DEBUG_PROCESS)) {
-      printMessage("Image Live View");
-    }
+//  if (liveView) {
+//    if (qcepDebug(DEBUG_PROCESS)) {
+//      printMessage("Image Live View");
+//    }
 
-    QcepDoubleImageDataPtr corrected =
-        QcepAllocator::newDoubleImage("idle", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
-    QcepDoubleImageDataPtr d      = dark();
+//    QcepDoubleImageDataPtr corrected =
+//        QcepAllocator::newDoubleImage("idle", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
+//    QcepDoubleImageDataPtr d      = dark();
 
-    corrected->copyFrom(image);
-    subtractDarkImage(corrected, d);
+//    corrected->copyFrom(image);
+//    subtractDarkImage(corrected, d);
 
-    newData(corrected);
+//    newData(corrected);
 
-    m_LiveData = corrected;
-  }
-}
+//    m_LiveData = corrected;
+//  }
+//}
 
 //void QxrdDataProcessor::acquiredInt16Image(QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow)
 //{

@@ -317,17 +317,17 @@ public slots:
   void powderRing(double cx, double cy, double radius, double width, double strength, int oversample);
   void ellipse(double cx, double cy, double a, double e, double ang, double width, double strength, int oversample);
 
-  void updateEstimatedProcessingTime();
+//  void updateEstimatedProcessingTime();
 
 //  int status(double delay);
 
 //  void displayIntegratedData(QcepIntegratedDataPtr d);
 //  void writeOutputScan(QcepIntegratedDataPtr d);
 
-  void newOutputScan(QString title);
-  void appendToOutputScan(double x, double y);
-  void plotOutputScan();
-  void saveOutputScan(QString fileName);
+//  void newOutputScan(QString title);
+//  void appendToOutputScan(double x, double y);
+//  void plotOutputScan();
+//  void saveOutputScan(QString fileName);
 
 //  QStringList integrateRectangle(int x0, int y0, int x1, int y1);
 
@@ -384,10 +384,10 @@ public:
 //    ZingerTopStack = -1
 //  } ZingerConstants;
 
-  void readSettings(QSettings *settings);
-  void writeSettings(QSettings *settings);
+//  void readSettings(QSettings *settings);
+//  void writeSettings(QSettings *settings);
 
-  void setAcquisition(QxrdAcqCommonWPtr acq);
+//  void setAcquisition(QxrdAcqCommonWPtr acq);
 //  void setWindow(QxrdWindowWPtr win);
 
 //  QcepSettingsSaver     *saver();
@@ -422,8 +422,8 @@ protected:
 //  void saveNamedImageDataAsText(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
 //  void writeOutputScan(QVector<double> x, QVector<double> y);
 
-  QcepDoubleImageDataPtr processAcquiredInt16Image(QcepDoubleImageDataPtr processed, QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
-  QcepDoubleImageDataPtr processAcquiredInt32Image(QcepDoubleImageDataPtr processed, QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+//  QcepDoubleImageDataPtr processAcquiredInt16Image(QcepDoubleImageDataPtr processed, QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+//  QcepDoubleImageDataPtr processAcquiredInt32Image(QcepDoubleImageDataPtr processed, QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
 //  QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
 //  QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow, QcepDoubleList v);
 
@@ -433,7 +433,7 @@ protected:
 //  void newDarkImage(QcepUInt16ImageDataPtr image);
 //  void newDarkImage(QcepUInt32ImageDataPtr image);
 
-  double estimatedProcessingTime(double estSerTime, double estParallelTime);
+//  double estimatedProcessingTime(double estSerTime, double estParallelTime);
 
 protected:
 //  void newDarkImage(QcepDoubleImageDataPtr image);
@@ -455,7 +455,7 @@ protected:
 //  void performImageCorrections(QcepDoubleImageDataPtr image);
 
 public:
-  void idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView);
+//  void idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView);
 //  void acquiredInt16Image(QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow);
 //  void processInt32Image(QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
 //  void processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
@@ -501,7 +501,7 @@ protected:
 
 //  QxrdGenerateTestImagePtr m_GenerateTestImage;
 
-  QcepIntegratedDataPtr m_OutputScan;
+//  QcepIntegratedDataPtr m_OutputScan;
 
 //private:
 //  QxrdResultSerializer<QcepDoubleImageDataPtr>  m_CorrectedImages;

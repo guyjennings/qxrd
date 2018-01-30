@@ -230,12 +230,6 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
     m_CalibrantDSpacingsModel = QxrdCalibrantDSpacingsModelPtr(
           new QxrdCalibrantDSpacingsModel(m_CalibrantLibrary, m_CalibrantDSpacings));
 
-    QxrdDataProcessorPtr proc(m_DataProcessor);
-
-    if (proc) {
-      proc -> setAcquisition(m_Acquisition);
-    }
-
     if (saver) {
       saver -> setAcquisition(m_Acquisition);
     }
@@ -340,6 +334,8 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
     readSettings(settings.data());
 
     splashMessage("Loading Background Images");
+
+    QxrdDataProcessorPtr proc(m_DataProcessor);
 
     if (proc) {
       proc -> loadDefaultImages();
