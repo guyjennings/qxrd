@@ -50,7 +50,7 @@ public:
   static QxrdDataProcessorPtr newDataProcessor();
 
 //  QxrdExperimentWPtr  experiment() const;
-  QxrdAcqCommonWPtr acquisition() const;
+//  QxrdAcqCommonWPtr acquisition() const;
 //  QxrdFileSaverWPtr   fileSaver() const;
 
 public:
@@ -177,11 +177,11 @@ public:
 //  Q_PROPERTY(double performIntegrationTime READ get_PerformIntegrationTime WRITE set_PerformIntegrationTime)
 //  QCEP_DOUBLE_PROPERTY(PerformIntegrationTime)
 
-  Q_PROPERTY(double displayIntegratedDataTime READ get_DisplayIntegratedDataTime WRITE set_DisplayIntegratedDataTime)
-  QCEP_DOUBLE_PROPERTY(DisplayIntegratedDataTime)
+//  Q_PROPERTY(double displayIntegratedDataTime READ get_DisplayIntegratedDataTime WRITE set_DisplayIntegratedDataTime)
+//  QCEP_DOUBLE_PROPERTY(DisplayIntegratedDataTime)
 
-  Q_PROPERTY(double saveIntegratedDataTime READ get_SaveIntegratedDataTime WRITE set_SaveIntegratedDataTime)
-  QCEP_DOUBLE_PROPERTY(SaveIntegratedDataTime)
+//  Q_PROPERTY(double saveIntegratedDataTime READ get_SaveIntegratedDataTime WRITE set_SaveIntegratedDataTime)
+//  QCEP_DOUBLE_PROPERTY(SaveIntegratedDataTime)
 
 //  Q_PROPERTY(double estimatedProcessingTime READ get_EstimatedProcessingTime WRITE set_EstimatedProcessingTime)
 //  QCEP_DOUBLE_PROPERTY(EstimatedProcessingTime)
@@ -282,10 +282,10 @@ public slots:
 //  void saveCachedGeometry(QString name);
 //  void saveCachedIntensity(QString name);
 
-  void subtractDark();
-  void unsubtractDark();
-  void multiplyData(double scalar);
-  void offsetData(double offset);
+//  void subtractDark();
+//  void unsubtractDark();
+//  void multiplyData(double scalar);
+//  void offsetData(double offset);
 
 //  int  maskStackSize();
 //  int  maskStackPosition(int pos);
@@ -329,7 +329,7 @@ public slots:
   void plotOutputScan();
   void saveOutputScan(QString fileName);
 
-  QStringList integrateRectangle(int x0, int y0, int x1, int y1);
+//  QStringList integrateRectangle(int x0, int y0, int x1, int y1);
 
 //  QString existingOutputDirectory(QString dir, QString subdir) const;
 //  QString filePathInExperimentDirectory(QString name) const;
@@ -398,18 +398,15 @@ public:
 //  QxrdMaskStackPtr       maskStack();
 //  QxrdCenterFinderPtr    centerFinder() const;
 //  QxrdIntegratorPtr      integrator() const;
-  QxrdPolarTransformPtr  polarTransform() const;
-  QxrdPolarNormalizationPtr  polarNormalization() const;
+//  QxrdPolarTransformPtr  polarTransform() const;
+//  QxrdPolarNormalizationPtr  polarNormalization() const;
 
-  QxrdGenerateTestImageWPtr generateTestImage() const;
+//  QxrdGenerateTestImageWPtr generateTestImage() const;
 
 //  void updateEstimatedTime(QcepDoubleProperty *prop, int msec);
 
 public slots:
 
-  QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img);
-  QcepDataObjectPtr polarTransform(QcepDoubleImageDataPtr img);
-  QcepDataObjectPtr polarIntegrate(QcepDoubleImageDataPtr img);
 
   bool integrateParameters();
   bool polarTransformParameters();
@@ -499,10 +496,10 @@ protected:
 
 //  QxrdCenterFinderPtr       m_CenterFinder;
 //  QxrdIntegratorPtr         m_Integrator;
-  QxrdPolarTransformPtr     m_PolarTransform;
-  QxrdPolarNormalizationPtr m_PolarNormalization;
+//  QxrdPolarTransformPtr     m_PolarTransform;
+//  QxrdPolarNormalizationPtr m_PolarNormalization;
 
-  QxrdGenerateTestImagePtr m_GenerateTestImage;
+//  QxrdGenerateTestImagePtr m_GenerateTestImage;
 
   QcepIntegratedDataPtr m_OutputScan;
 

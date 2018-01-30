@@ -17,6 +17,9 @@
 #include "qxrdacqcommon.h"
 #include "qxrdintegrator.h"
 #include "qcepmutexlocker.h"
+#include "qxrdpolartransform.h"
+#include "qxrdpolarnormalization.h"
+#include "qxrdgeneratetestimage.h"
 #include <QFileInfo>
 #include <QThread>
 #include <QDir>
@@ -65,7 +68,9 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_PerformIntegrationTime(this, "performIntegrationTime", 0.05, "Avg Time to Perform Integration (in sec/core)"),
   m_IntegrationQueueLength(this, "integrationQueueLength", 0, "Image integration backlog"),
   m_DisplayIntegratedData(this, "displayIntegratedData", true, "Display Integrated Data?"),
+  m_DisplayIntegratedDataTime(this, "displayIntegratedDataTime", 0.2, "Avg Time to Display Integrated Data (in sec)"),
   m_SaveIntegratedData(this, "saveIntegratedData", true, "Save Integrated Data?"),
+  m_SaveIntegratedDataTime(this, "saveIntegratedDataTime", 0.01, "Avg Time to Save Integrated Data (in sec)"),
   m_SaveIntegratedPath(this, "saveIntegratedPath", "", "Integrated Data Path"),
   m_SaveIntegratedInSeparateFiles(this,"saveIntegratedInSeparateFiles",0, "Save Integrated in Separate Files?"),
   m_SaveIntegratedInSubdirectory(this,"saveIntegratedInSubdirectory",0, "Save Integrated in Subdirectory?"),
@@ -105,6 +110,9 @@ QxrdProcessor::QxrdProcessor(QString name) :
         new QxrdCenterFinder("centerFinder"));
 
   m_Integrator = QxrdIntegrator::newIntegrator(m_CenterFinder);
+  m_PolarTransform = QxrdPolarTransform::newPolarTransform();
+  m_PolarNormalization = QxrdPolarNormalization::newPolarNormalization();
+  m_GenerateTestImage = QxrdGenerateTestImage::newGenerateTestImage();
 
   connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onCorrectedImageAvailable);
   connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onIntegratedDataAvailable);
@@ -173,6 +181,11 @@ QxrdIntegratorPtr QxrdProcessor::integrator() const
   return m_Integrator;
 }
 
+QxrdGenerateTestImageWPtr QxrdProcessor::generateTestImage() const
+{
+  return m_GenerateTestImage;
+}
+
 QxrdPowderRingsModelWPtr QxrdProcessor::powderRings() const
 {
   if (m_PowderRings == NULL) {
@@ -189,6 +202,24 @@ QxrdROIModelWPtr QxrdProcessor::roiModel() const
   }
 
   return m_ROIModel;
+}
+
+QxrdPolarTransformPtr QxrdProcessor::polarTransform() const
+{
+  if (m_PolarTransform == NULL) {
+    printMessage("Problem QxrdProcessor::polarTransform == NULL");
+  }
+
+  return m_PolarTransform;
+}
+
+QxrdPolarNormalizationPtr QxrdProcessor::polarNormalization() const
+{
+  if (m_PolarNormalization == NULL) {
+    printMessage("Problem QxrdProcessor::polarNormalization == NULL");
+  }
+
+  return m_PolarNormalization;
 }
 
 void QxrdProcessor::readSettings(QSettings *settings)
@@ -216,6 +247,18 @@ void QxrdProcessor::readSettings(QSettings *settings)
   if (m_Integrator) {
     settings->beginGroup("integrator");
     m_Integrator   -> readSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_PolarTransform) {
+    settings->beginGroup("polarTransform");
+    m_PolarTransform -> readSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_PolarNormalization) {
+    settings->beginGroup("polarNormalization");
+    m_PolarNormalization -> readSettings(settings);
     settings->endGroup();
   }
 
@@ -267,6 +310,18 @@ void QxrdProcessor::writeSettings(QSettings *settings)
   if (m_Integrator) {
     settings->beginGroup("integrator");
     m_Integrator   -> writeSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_PolarTransform) {
+    settings->beginGroup("polarTransform");
+    m_PolarTransform -> writeSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_PolarNormalization) {
+    settings->beginGroup("polarNormalization");
+    m_PolarNormalization -> writeSettings(settings);
     settings->endGroup();
   }
 
@@ -935,6 +990,50 @@ void QxrdProcessor::loadDefaultImages()
 
   if (fileInfo.exists() && fileInfo.isFile()) {
     loadGainMap(fileName);
+  }
+}
+
+void QxrdProcessor::subtractDark()
+{
+  QcepDoubleImageDataPtr data = qSharedPointerDynamicCast<QcepDoubleImageData>(m_Data);
+  QcepDoubleImageDataPtr dark = m_Dark;
+
+  subtractDarkImage(data, dark);
+}
+
+void QxrdProcessor::unsubtractDark()
+{
+  QcepDoubleImageDataPtr data = qSharedPointerDynamicCast<QcepDoubleImageData>(m_Data);
+  QcepDoubleImageDataPtr dark = m_Dark;
+
+  unsubtractDarkImage(data, dark);
+}
+
+void QxrdProcessor::multiplyData(double scalar)
+{
+  QcepDoubleImageDataPtr dat = qSharedPointerDynamicCast<QcepDoubleImageData>(m_Data);
+
+  int wid = dat->get_Width();
+  int ht  = dat->get_Height();
+
+  for (int y=0; y<ht; y++) {
+    for (int x=0; x<wid; x++) {
+      dat->setValue(x, y, dat->value(x, y) * scalar);
+    }
+  }
+}
+
+void QxrdProcessor::offsetData(double offset)
+{
+  QcepDoubleImageDataPtr dat = qSharedPointerDynamicCast<QcepDoubleImageData>(m_Data);
+
+  int wid = dat->get_Width();
+  int ht  = dat->get_Height();
+
+  for (int y=0; y<ht; y++) {
+    for (int x=0; x<wid; x++) {
+      dat->setValue(x, y, dat->value(x, y) + offset);
+    }
   }
 }
 
@@ -1889,6 +1988,88 @@ void QxrdProcessor::summarizeMeasuredPolygon(QVector<QPointF> poly)
   } else if (poly.size() == 1) {
     statusMessage(tr("Point: %1,%2").arg(poly[0].x()).arg(poly[0].y()));
   }
+}
+
+QStringList QxrdProcessor::integrateRectangle(int x0, int y0, int x1, int y1)
+{
+  double sum = 0;
+  double npx = 0;
+
+  QcepImageDataBasePtr   dat = m_Data;
+  QcepMaskDataPtr        msk = mask();
+  QStringList            res;
+
+  if (dat) {
+    if (msk) {
+      for (int y=y0; y<y1; y++) {
+        for (int x=x0; x<x1; x++) {
+          if (msk->value(x,y)) {
+            sum += dat->getImageData(x,y);
+            npx += 1;
+          }
+        }
+      }
+    } else {
+      for (int y=y0; y<y1; y++) {
+        for (int x=x0; x<x1; x++) {
+          sum += dat->getImageData(x,y);
+          npx += 1;
+        }
+      }
+    }
+
+    printMessage(tr("integrateRectange(\"%1\",%2,%3,%4,%5)=[%6,%7]=%8")
+                 .arg(dat->get_FileName())
+                 .arg(x0).arg(y0).arg(x1).arg(y1).arg(sum).arg(npx).arg(sum/npx));
+
+    if (npx > 0) {
+      res << tr("%1").arg(sum/npx);
+    } else {
+      res << "0";
+    }
+
+    res << tr("%1").arg(sum);
+    res << tr("%1").arg(npx);
+    res << dat->get_FileName();
+  }
+
+  return res;
+}
+
+QcepDataObjectPtr QxrdProcessor::integrate(QcepDoubleImageDataPtr img)
+{
+  QcepDataObjectPtr res;
+  QxrdIntegratorPtr integ = integrator();
+
+  if (integ) {
+    res = integ->performIntegration(img, mask());
+  }
+
+  return res;
+}
+
+QcepDataObjectPtr QxrdProcessor::polarTransform(QcepDoubleImageDataPtr img)
+{
+  QcepDataObjectPtr res;
+  QxrdPolarTransformPtr xform = polarTransform();
+
+  if (xform) {
+    res = xform->transform(img, mask());
+  }
+
+  return res;
+}
+
+QcepDataObjectPtr QxrdProcessor::polarIntegrate(QcepDoubleImageDataPtr img)
+{
+  QcepDataObjectPtr res;
+  QxrdPolarNormalizationPtr norm = polarNormalization();
+
+  if (norm) {
+    res = norm->transform(img);
+  }
+
+  return res;
 }
 
 void QxrdProcessor::reflectHorizontally()

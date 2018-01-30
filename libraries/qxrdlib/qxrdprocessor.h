@@ -19,7 +19,9 @@
 #include "qcepintegrateddata-ptr.h"
 #include "qxrdresultserializer.h"
 #include "qxrdhistogramdata-ptr.h"
-
+#include "qxrdpolartransform-ptr.h"
+#include "qxrdpolarnormalization-ptr.h"
+#include "qxrdgeneratetestimage-ptr.h"
 #include <QWaitCondition>
 
 //TODO: merge QxrdDataProcessor and QxrdDetectorProcessor into QxrdProcessor
@@ -41,6 +43,9 @@ public:
   QxrdIntegratorPtr      integrator() const;
   QxrdPowderRingsModelWPtr powderRings() const;
   QxrdROIModelWPtr roiModel() const;
+  QxrdPolarTransformPtr  polarTransform() const;
+  QxrdPolarNormalizationPtr  polarNormalization() const;
+  QxrdGenerateTestImageWPtr generateTestImage() const;
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -85,6 +90,10 @@ public:
   void newDark(QcepDoubleImageDataWPtr imageW);
   void newDarkInt16(QcepUInt16ImageDataWPtr imageW);
   void newDarkInt32(QcepUInt32ImageDataWPtr imageW);
+  void subtractDark();
+  void unsubtractDark();
+  void multiplyData(double scalar);
+  void offsetData(double offset);
 
   // mask operations...
   void loadMask(QString name);
@@ -168,6 +177,11 @@ public:
 
   void writeOutputScan(QVector<double> x, QVector<double> y);
   void writeOutputScan(QcepIntegratedDataPtr d);
+
+  QStringList integrateRectangle(int x0, int y0, int x1, int y1);
+  QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img);
+  QcepDataObjectPtr polarTransform(QcepDoubleImageDataPtr img);
+  QcepDataObjectPtr polarIntegrate(QcepDoubleImageDataPtr img);
 
   // histogram...
   QxrdHistogramDataPtr   calculateHistogram(QcepDoubleImageDataPtr image, QcepMaskDataPtr mask);
@@ -348,8 +362,14 @@ public:
   Q_PROPERTY(bool displayIntegratedData READ get_DisplayIntegratedData WRITE set_DisplayIntegratedData)
   QCEP_BOOLEAN_PROPERTY(DisplayIntegratedData)
 
+  Q_PROPERTY(double displayIntegratedDataTime READ get_DisplayIntegratedDataTime WRITE set_DisplayIntegratedDataTime)
+  QCEP_DOUBLE_PROPERTY(DisplayIntegratedDataTime)
+
   Q_PROPERTY(bool saveIntegratedData READ get_SaveIntegratedData WRITE set_SaveIntegratedData)
   QCEP_BOOLEAN_PROPERTY(SaveIntegratedData)
+
+  Q_PROPERTY(double saveIntegratedDataTime READ get_SaveIntegratedDataTime WRITE set_SaveIntegratedDataTime)
+  QCEP_DOUBLE_PROPERTY(SaveIntegratedDataTime)
 
   Q_PROPERTY(QString saveIntegratedPath READ get_SaveIntegratedPath WRITE set_SaveIntegratedPath)
   QCEP_STRING_PROPERTY(SaveIntegratedPath)
@@ -404,8 +424,11 @@ public:
   QVector<QxrdProcessorStepPtr> m_ProcessorSteps;
 
 private:
-  QxrdCenterFinderPtr            m_CenterFinder;
-  QxrdIntegratorPtr              m_Integrator;
+  QxrdCenterFinderPtr       m_CenterFinder;
+  QxrdIntegratorPtr         m_Integrator;
+  QxrdPolarTransformPtr     m_PolarTransform;
+  QxrdPolarNormalizationPtr m_PolarNormalization;
+  QxrdGenerateTestImagePtr  m_GenerateTestImage;
 
   //TODO: store a data object, not a model
   QxrdPowderRingsModelPtr        m_PowderRings;
