@@ -1,7 +1,7 @@
 #include "qxrddetectorcontrolwindow.h"
 #include "ui_qxrddetectorcontrolwindow.h"
 #include "qxrdacquisition.h"
-#include "qxrddetectorprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdroimodel.h"
 #include "qxrdroicalculator-ptr.h"
 #include "qxrdroicalculator.h"
@@ -19,11 +19,11 @@
 #include "qxrdwindow.h"
 #include "qxrdroieditordialog.h"
 
-QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr appl,
+QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          appl,
                                                      QxrdExperimentWPtr        exp,
                                                      QxrdAcquisitionWPtr       acq,
-                                                     QxrdDetectorSettingsWPtr          det,
-                                                     QxrdDetectorProcessorWPtr proc,
+                                                     QxrdDetectorSettingsWPtr  det,
+                                                     QxrdProcessorWPtr         proc,
                                                      QWidget                  * /*parent*/) :
   QxrdMainWindow("detector", appl, exp, acq, proc),
   m_Experiment(exp),
@@ -39,7 +39,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr appl,
 
   setAttribute(Qt::WA_DeleteOnClose, false);
 
-  QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdProcessorPtr dp(m_Processor);
   QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
   QxrdExperimentPtr expt(m_Experiment);
   QxrdDetectorSettingsPtr dt(m_Detector);
@@ -113,10 +113,10 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr appl,
       m_ROIWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     }
 
-    connect(dp.data(),       &QxrdDetectorProcessor::dataAvailable,
+    connect(dp.data(),       &QxrdProcessor::dataAvailable,
             m_DetectorImage, &QxrdImagePlotWidget::newImage);
 
-    connect(dp.data(),       &QxrdDetectorProcessor::maskAvailable,
+    connect(dp.data(),       &QxrdProcessor::maskAvailable,
             m_DetectorImage, &QxrdImagePlotWidget::newMask);
 
     //TODO: Initialise
@@ -474,10 +474,10 @@ void QxrdDetectorControlWindow::updateImageDisplay()
       m_NewOverflow = QcepMaskDataPtr();
     }
 
-    QxrdDetectorProcessorPtr proc(m_Processor);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (proc) {
-      if (proc->get_DetectorDisplayMode() == QxrdDetectorProcessor::ImageDisplayMode) {
+      if (proc->get_DetectorDisplayMode() == QxrdProcessor::ImageDisplayMode) {
 //        m_DetectorImage->onProcessedImageAvailable(m_DisplayedImage, m_DisplayedOverflow);
       }
     }
@@ -489,10 +489,10 @@ void QxrdDetectorControlWindow::updateImageDisplay()
       m_NewMask       = QcepMaskDataPtr();
     }
 
-    QxrdDetectorProcessorPtr proc(m_Processor);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (proc) {
-      if (proc->get_DetectorDisplayMode() == QxrdDetectorProcessor::ImageDisplayMode) {
+      if (proc->get_DetectorDisplayMode() == QxrdProcessor::ImageDisplayMode) {
 //        m_DetectorImage->onMaskedImageAvailable(m_DisplayedImage, m_DisplayedMask);
       }
     }
@@ -531,7 +531,7 @@ void QxrdDetectorControlWindow::updateROIDisplay(bool /*show*/)
 
 void QxrdDetectorControlWindow::doBrowseMask()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     QString newPath = QFileDialog::getOpenFileName(this, "Select Mask Image",
@@ -545,7 +545,7 @@ void QxrdDetectorControlWindow::doBrowseMask()
 
 void QxrdDetectorControlWindow::doClearMask()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     int res = QMessageBox::information(this, "Clear Mask?", "Do you really want to clear the mask?", QMessageBox::Ok, QMessageBox::Cancel);
@@ -558,7 +558,7 @@ void QxrdDetectorControlWindow::doClearMask()
 
 void QxrdDetectorControlWindow::doBrowseDark()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     QString newPath = QFileDialog::getOpenFileName(this, "Select Dark Image",
@@ -572,7 +572,7 @@ void QxrdDetectorControlWindow::doBrowseDark()
 
 void QxrdDetectorControlWindow::doClearDark()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     int res = QMessageBox::information(this, "Clear Dark?", "Do you really want to clear the dark image?", QMessageBox::Ok, QMessageBox::Cancel);
@@ -585,7 +585,7 @@ void QxrdDetectorControlWindow::doClearDark()
 
 void QxrdDetectorControlWindow::doBrowseBadPixels()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     QString newPath = QFileDialog::getOpenFileName(this, "Select Bad Pixels Image",
@@ -599,7 +599,7 @@ void QxrdDetectorControlWindow::doBrowseBadPixels()
 
 void QxrdDetectorControlWindow::doClearBadPixels()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     int res = QMessageBox::information(this, "Clear Bad Pixels?", "Do you really want to clear the bad pixels image?", QMessageBox::Ok, QMessageBox::Cancel);
@@ -612,7 +612,7 @@ void QxrdDetectorControlWindow::doClearBadPixels()
 
 void QxrdDetectorControlWindow::doBrowseGainCorrection()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     QString newPath = QFileDialog::getOpenFileName(this, "Select Gain Correction Image",
@@ -626,7 +626,7 @@ void QxrdDetectorControlWindow::doBrowseGainCorrection()
 
 void QxrdDetectorControlWindow::doClearGainCorrection()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     int res = QMessageBox::information(this, "Clear Gain Correction?", "Do you really want to clear the gain correction image?", QMessageBox::Ok, QMessageBox::Cancel);
@@ -639,9 +639,9 @@ void QxrdDetectorControlWindow::doClearGainCorrection()
 
 void QxrdDetectorControlWindow::doEditROI()
 {
-  QxrdDetectorSettingsPtr  dt(m_Detector);
-  QxrdDetectorProcessorPtr dp(m_Processor);
-  QxrdROIModelPtr          roiModel(m_ROIModel);
+  QxrdDetectorSettingsPtr dt(m_Detector);
+  QxrdProcessorPtr        dp(m_Processor);
+  QxrdROIModelPtr         roiModel(m_ROIModel);
 
   if (dt && dp) {
     QVector<int> rois = selectedROIs();
@@ -666,8 +666,8 @@ void QxrdDetectorControlWindow::doEditROI()
 
 void QxrdDetectorControlWindow::doRecalculate()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
-  QxrdROIModelPtr          roiModel(m_ROIModel);
+  QxrdProcessorPtr dp(m_Processor);
+  QxrdROIModelPtr  roiModel(m_ROIModel);
 
   if (dp && roiModel) {
     roiModel->recalculate(dp->data(), dp->mask());
@@ -676,8 +676,8 @@ void QxrdDetectorControlWindow::doRecalculate()
 
 void QxrdDetectorControlWindow::doVisualizeBackground()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
-  QxrdROIModelPtr          roiModel(m_ROIModel);
+  QxrdProcessorPtr dp(m_Processor);
+  QxrdROIModelPtr  roiModel(m_ROIModel);
 
   if (dp) {
     QVector<int> rois = selectedROIs();
@@ -694,8 +694,8 @@ void QxrdDetectorControlWindow::doVisualizeBackground()
 
 void QxrdDetectorControlWindow::doVisualizePeak()
 {
-  QxrdDetectorProcessorPtr dp(m_Processor);
-  QxrdROIModelPtr          roiModel(m_ROIModel);
+  QxrdProcessorPtr dp(m_Processor);
+  QxrdROIModelPtr  roiModel(m_ROIModel);
 
   if (dp) {
     QVector<int> rois = selectedROIs();

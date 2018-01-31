@@ -5,7 +5,7 @@
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include "qcepproperty.h"
-#include "qxrddetectorprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include <QScriptEngine>
 #include "qxrdroicalculator-ptr.h"

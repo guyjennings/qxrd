@@ -2,7 +2,7 @@
 #include "qxrdacquisition.h"
 #include "qxrddetectorsettings.h"
 #include "qxrdacquisitionextrainputs.h"
-#include "qxrddetectorprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdroicalculator.h"
 #include "qxrdroi.h"
 

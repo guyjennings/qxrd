@@ -1,7 +1,7 @@
 #include "qxrddetectorsettings.h"
 #include "qxrddetectordriverthread.h"
 #include "qxrddebug.h"
-#include "qxrddetectorprocessor.h"
+#include "qxrdprocessor.h"
 #include <stdio.h>
 #include "qcepmutexlocker.h"
 #include "qxrddetectorcontrolwindow.h"
@@ -75,11 +75,11 @@ void QxrdDetectorSettings::initialize(QxrdApplicationWPtr   app,
   QxrdExperimentPtr exper(m_Experiment);
 
   if (exper) {
-    m_Processor =
-        QxrdDetectorProcessorPtr(
-          new QxrdDetectorProcessor(m_Experiment,
-                                    exper->fileSaver(),
-                                    qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis())));
+    m_Processor = QxrdProcessor::newProcessor();
+//        QxrdProcessorPtr(
+//          new QxrdProcessor(m_Experiment,
+//                                    exper->fileSaver(),
+//                                    qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis())));
   }
 
   m_DetectorControlWindowSettings =
@@ -237,7 +237,7 @@ QxrdAcquisitionWPtr QxrdDetectorSettings::acquisition()
   return m_Acquisition;
 }
 
-QxrdDetectorProcessorPtr QxrdDetectorSettings::processor()
+QxrdProcessorPtr QxrdDetectorSettings::processor()
 {
   return m_Processor;
 }
@@ -470,7 +470,7 @@ void QxrdDetectorSettings::openControlWindow()
       }
     }
 
-    QxrdDetectorProcessorPtr dp(m_Processor);
+    QxrdProcessorPtr dp(m_Processor);
 
     if (dp) {
       dp->setControlWindow(m_DetectorControlWindow);

@@ -14,7 +14,7 @@
 #include <QMetaProperty>
 #include "qxrddetectorsettings.h"
 //#include "qxrddetectorthread.h"
-#include "qxrddetectorprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrddarkacquisitionparameterpack.h"
 #include "qxrdacquisitionscalermodel.h"
@@ -1009,7 +1009,7 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, QString extent, in
   QxrdDetectorSettingsPtr det(detector(detNum));
 
   if (det) {
-    QxrdDetectorProcessorPtr proc(det->processor());
+    QxrdProcessorPtr proc(det->processor());
     int nDet = get_DetectorCount();
 
     if (proc) {
@@ -1252,7 +1252,7 @@ void QxrdAcquisition::executeAcquisition(QxrdAcquisitionParameterPackPtr parmsp)
 
     int nDet = 0;
     QVector<QxrdDetectorSettingsPtr> dets;
-    QVector<QxrdDetectorProcessorPtr> procs;
+    QVector<QxrdProcessorPtr> procs;
     QVector<QVector<QVector<QcepUInt32ImageDataPtr> > >res;
     QVector<QVector<QVector<QcepMaskDataPtr> > >      ovf;
 
@@ -1597,7 +1597,7 @@ void QxrdAcquisition::doAcquireDark()
 
     int nDet = 0;
     QVector<QxrdDetectorSettingsPtr> dets;
-    QVector<QxrdDetectorProcessorPtr> procs;
+    QVector<QxrdProcessorPtr> procs;
     QVector<QcepDoubleImageDataPtr> res;
     QVector<QcepMaskDataPtr> overflow;
 
@@ -1780,7 +1780,7 @@ void QxrdAcquisition::onIdleTimeout()
           printMessage(tr("Tried to acquire frame from det %1 after %2 msec").arg(i).arg(tic.restart()));
         }
 
-        QxrdDetectorProcessorPtr proc = det->processor();
+        QxrdProcessorPtr proc = det->processor();
 
         if (proc) {
           proc->processIdleImage(res);

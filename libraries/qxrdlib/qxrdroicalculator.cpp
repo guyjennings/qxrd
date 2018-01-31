@@ -6,7 +6,7 @@
 #include <QtConcurrentMap>
 #include "qxrdroi.h"
 #include "qcepimagedata.h"
-#include "qxrddetectorprocessor.h"
+#include "qxrdprocessor.h"
 
 QxrdROICalculator::QxrdROICalculator(QString name)
   : QcepObject(name),

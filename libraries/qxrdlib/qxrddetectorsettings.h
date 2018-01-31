@@ -9,10 +9,10 @@
 #include <QComboBox>
 #include "qcepimagedata-ptr.h"
 #include "qxrdacquisition-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
-#include "qxrddetectorprocessor-ptr.h"
 #include "qxrddetectorcontrolwindow-ptr.h"
 #include "qxrddetectorcontrolwindowsettings-ptr.h"
 #include <QScriptEngine>
@@ -100,7 +100,7 @@ public slots:
   void openControlWindow();
   void closeWindow();
 
-  QxrdDetectorProcessorPtr processor();
+  QxrdProcessorPtr processor();
   void startOrStop(bool enabled);
 
   virtual void beginFrame();
@@ -129,7 +129,7 @@ protected:
   QxrdAcquisitionWPtr                  m_Acquisition;
 
   //TODO: should be in detector thread?
-  QxrdDetectorProcessorPtr             m_Processor;
+  QxrdProcessorPtr                     m_Processor;
 
   QxrdDetectorControlWindowSettingsPtr m_DetectorControlWindowSettings;
   QxrdDetectorControlWindowPtr         m_DetectorControlWindow;

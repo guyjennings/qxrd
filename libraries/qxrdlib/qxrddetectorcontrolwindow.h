@@ -5,7 +5,7 @@
 #include "qxrdmainwindow.h"
 #include "ui_qxrddetectorcontrolwindow.h"
 #include "qxrdacquisition-ptr.h"
-#include "qxrddetectorprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdroimodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdapplication-ptr.h"
@@ -21,11 +21,11 @@ class QXRD_EXPORT QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::
   Q_OBJECT
 
 public:
-  explicit QxrdDetectorControlWindow(QxrdAppCommonPtr       appl,
+  explicit QxrdDetectorControlWindow(QxrdAppCommonPtr          appl,
                                      QxrdExperimentWPtr        exp,
                                      QxrdAcquisitionWPtr       acq,
-                                     QxrdDetectorSettingsWPtr          det,
-                                     QxrdDetectorProcessorWPtr proc,
+                                     QxrdDetectorSettingsWPtr  det,
+                                     QxrdProcessorWPtr         proc,
                                      QWidget                  *parent = 0);
   virtual ~QxrdDetectorControlWindow();
 
@@ -97,7 +97,7 @@ private:
   QxrdExperimentWPtr         m_Experiment;
   QxrdAcquisitionWPtr        m_Acquisition;
   QxrdDetectorSettingsWPtr   m_Detector;
-  QxrdDetectorProcessorWPtr  m_Processor;
+  QxrdProcessorWPtr          m_Processor;
   QxrdROIModelWPtr           m_ROIModel;
 
   QMutex                     m_UpdateMutex;
