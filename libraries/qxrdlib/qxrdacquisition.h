@@ -22,7 +22,7 @@
 #include "qxrdwindow-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 //#include "qxrddetectorthread-ptr.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 //#include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
@@ -49,6 +49,7 @@ public:
 
   static QxrdAcquisitionPtr newAcquisition();
 
+  //TODO: change to experiment
   void setWindow(QxrdWindowWPtr win);
 
   QxrdAcquisitionWPtr myself();
@@ -124,7 +125,7 @@ protected:
 
   QxrdApplicationWPtr application() const;
   QxrdExperimentWPtr experiment() const;
-  QxrdDataProcessorWPtr dataProcessor() const;
+  QxrdProcessorWPtr processor() const;  //TODO: eliminate
 
 protected slots:
   void onIdleTimeout();

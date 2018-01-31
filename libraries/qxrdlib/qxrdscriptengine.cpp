@@ -6,7 +6,7 @@
 #include "qxrdexperiment.h"
 #include "qxrdacquisition.h"
 #include "qxrdcenterfinder.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdcalibrant.h"
 #include "qxrdintegrator.h"
@@ -28,7 +28,7 @@
 #include "qcepdatacolumnscan.h"
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepdatasetmodel.h"
-#include "qxrddetectorprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdroicalculator.h"
 #include "qxrdroishape.h"
 #include "qxrdroi.h"
@@ -44,6 +44,8 @@
 #include <QRegExp>
 #include "qxrddetectorplugininterface.h"
 #include "qxrddetectorinterface.h"
+#include "qxrdpolartransform.h"
+#include "qxrdpolarnormalization.h"
 
 QxrdScriptEngine::QxrdScriptEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp)
   : QcepScriptEngine(),
@@ -51,7 +53,7 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp
     m_Application(app),
     m_Experiment(exp),
     m_Acquisition(),
-    m_DataProcessor(),
+    m_Processor(),
     m_Window(),
     m_ScriptOutput(NULL)
 {
@@ -91,9 +93,9 @@ QxrdWindowWPtr QxrdScriptEngine::window() const
   return m_Window;
 }
 
-QxrdDataProcessorWPtr QxrdScriptEngine::dataProcessor() const
+QxrdProcessorWPtr QxrdScriptEngine::processor() const
 {
-  return m_DataProcessor;
+  return m_Processor;
 }
 
 void QxrdScriptEngine::setWindow(QxrdWindowWPtr win)
@@ -690,7 +692,7 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
     QxrdAcquisitionPtr acq(
           qSharedPointerDynamicCast<QxrdAcquisition>(
             eng->acquisition()));
-    QxrdDataProcessorPtr proc(eng->dataProcessor());
+    QxrdProcessorPtr proc(eng->processor());
 
     if (!acq || !proc) return QScriptValue(engine, -1);
 
@@ -783,7 +785,7 @@ QScriptValue QxrdScriptEngine::processStatusFunc(QScriptContext *context, QScrip
   QScriptValue res(engine, -1);
 
   if (eng) {
-    QxrdDataProcessorPtr proc(eng->dataProcessor());
+    QxrdProcessorPtr proc(eng->processor());
 
     if (proc) {
       if (context->argumentCount() == 0) {
@@ -1242,7 +1244,7 @@ QScriptValue QxrdScriptEngine::dataFunc(QScriptContext * /*context*/, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc(eng->dataProcessor());
+    QxrdProcessorPtr proc(eng->processor());
 
     if (proc) {
       return engine -> newQObject(proc -> data().data(),QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
@@ -1269,7 +1271,7 @@ QScriptValue QxrdScriptEngine::darkFunc(QScriptContext * /*context*/, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc(eng->dataProcessor());
+    QxrdProcessorPtr proc(eng->processor());
 
     if (proc) {
       return engine -> newQObject(proc -> dark().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
@@ -1292,7 +1294,7 @@ QScriptValue QxrdScriptEngine::maskFunc(QScriptContext * /*context*/, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc(eng->dataProcessor());
+    QxrdProcessorPtr proc(eng->processor());
 
     if (proc) {
       return engine -> newQObject(proc -> mask().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
@@ -1318,7 +1320,7 @@ QScriptValue QxrdScriptEngine::overflowFunc(QScriptContext * /*context*/, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc(eng->dataProcessor());
+    QxrdProcessorPtr proc(eng->processor());
 
     if (proc) {
       return engine -> newQObject(proc -> overflow().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
@@ -1343,7 +1345,7 @@ QScriptValue QxrdScriptEngine::liveDataFunc(QScriptContext * /*context*/, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc(eng->dataProcessor());
+    QxrdProcessorPtr proc(eng->processor());
 
     if (proc) {
       return engine -> newQObject(proc -> liveData().data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties);
@@ -1446,7 +1448,7 @@ QScriptValue QxrdScriptEngine::processFunc(QScriptContext *context, QScriptEngin
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc(eng->dataProcessor());
+    QxrdProcessorPtr proc(eng->processor());
 
     if (proc) {
       if (context->argumentCount() >= 1) {
@@ -1482,7 +1484,7 @@ QScriptValue QxrdScriptEngine::setFileNormalizationFunc(QScriptContext *context,
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc(eng->dataProcessor());
+    QxrdProcessorPtr proc(eng->processor());
 
     if (proc) {
       if (context->argumentCount() >= 1) {
@@ -1568,29 +1570,31 @@ QScriptValue QxrdScriptEngine::mapUserFunctionFunc(QScriptContext *context, QScr
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdDataProcessorPtr proc(eng->dataProcessor());
+    QxrdProcessorPtr proc(eng->processor());
 
-    QcepImageDataBasePtr d = proc->data();
+    if (proc) {
+      QcepImageDataBasePtr d = proc->data();
 
-    if (d) {
-      int ht = d->get_Height();
-      int wd = d->get_Width();
+      if (d) {
+        int ht = d->get_Height();
+        int wd = d->get_Width();
 
-      if (context->argumentCount() == 1) {
-        QScriptValue func = context->argument(0);
+        if (context->argumentCount() == 1) {
+          QScriptValue func = context->argument(0);
 
-        if (!func.isFunction()) {
-          func = eng->globalObject().property(func.toString());
-        }
-
-        if (func.isFunction()) {
-          for (int i=0; i<wd; i++) {
-            for (int j=0; j<ht; j++) {
-              d->setImageData(i,j, func.call(QScriptValue(), QScriptValueList() << i << j).toNumber());
-            }
+          if (!func.isFunction()) {
+            func = eng->globalObject().property(func.toString());
           }
 
-          proc->newData(d);
+          if (func.isFunction()) {
+            for (int i=0; i<wd; i++) {
+              for (int j=0; j<ht; j++) {
+                d->setImageData(i,j, func.call(QScriptValue(), QScriptValueList() << i << j).toNumber());
+              }
+            }
+
+            proc->newData(d);
+          }
         }
       }
     }
@@ -2167,10 +2171,10 @@ void QxrdScriptEngine::initialize()
                           QxrdDetectorSettings::toScriptValue,
                           QxrdDetectorSettings::fromScriptValue);
 
-  qRegisterMetaType<QxrdDetectorProcessorPtr>("QxrdDetectorProcessorPtr");
+  qRegisterMetaType<QxrdProcessorPtr>("QxrdProcessorPtr");
   qScriptRegisterMetaType(this,
-                          QxrdDetectorProcessor::toScriptValue,
-                          QxrdDetectorProcessor::fromScriptValue);
+                          QxrdProcessor::toScriptValue,
+                          QxrdProcessor::fromScriptValue);
 
   qRegisterMetaType<QxrdCenterFinderPtr>("QxrdCenterFinderPtr");
   qScriptRegisterMetaType(this,
@@ -2345,9 +2349,9 @@ void QxrdScriptEngine::initialize()
       globalObject().setProperty("specServer", newQObject(srv.data()));
     }
 
-    m_DataProcessor = expt->dataProcessor();
+    m_Processor = expt->processor();
 
-    QxrdDataProcessorPtr dp(m_DataProcessor);
+    QxrdProcessorPtr dp(m_Processor);
 
     if (dp) {
       QCEP_DOC_OBJECT("processor", "Control Data Processing Options");

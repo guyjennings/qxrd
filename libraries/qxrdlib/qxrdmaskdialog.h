@@ -5,7 +5,7 @@
 #include <QDockWidget>
 #include "ui_qxrdmaskdialog.h"
 
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdmaskstackmodel-ptr.h"
 #include "qxrdmaskstack-ptr.h"
 
@@ -14,7 +14,7 @@ class QXRD_EXPORT QxrdMaskDialog : public QDockWidget, public Ui::QxrdMaskDialog
   Q_OBJECT
 
 public:
-  explicit QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent = 0);
+  explicit QxrdMaskDialog(QxrdProcessorWPtr procw, QWidget *parent = 0);
   ~QxrdMaskDialog();
 
 protected:
@@ -49,7 +49,7 @@ private:
   int maskStackSelectPopup();
 
 private:
-  QxrdDataProcessorWPtr  m_Processor;
+  QxrdProcessorWPtr      m_Processor;
   QxrdMaskStackWPtr      m_Mask;
   QxrdMaskStackModelPtr  m_MaskStackModel;
 };

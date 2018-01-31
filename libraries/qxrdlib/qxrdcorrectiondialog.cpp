@@ -1,11 +1,13 @@
 #include "qxrdcorrectiondialog.h"
 #include "ui_qxrdcorrectiondialog.h"
 #include "qxrddebug.h"
+#include "qxrdacquisition.h"
+#include "qxrdprocessor.h"
 #include <QMessageBox>
 
 QxrdCorrectionDialog::QxrdCorrectionDialog(QWidget *parent,
                                            QxrdAcquisitionWPtr acqp,
-                                           QxrdDataProcessorWPtr procp) :
+                                           QxrdProcessorWPtr procp) :
     QDialog(parent),
     m_Acquisition(acqp),
     m_Processor(procp)
@@ -26,7 +28,7 @@ QxrdCorrectionDialog::QxrdCorrectionDialog(QWidget *parent,
     acq -> prop_DarkSaveTime() -> linkTo(m_SaveDarkTime);
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     proc -> prop_PerformDarkSubtraction() -> linkTo(m_PerformDark);

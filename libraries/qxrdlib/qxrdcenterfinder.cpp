@@ -24,6 +24,7 @@
 #include "qxrdfittedrings.h"
 #include "qxrdfittedrings-ptr.h"
 #include "qxrdcalibrantdspacings.h"
+#include "qxrdprocessor.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -142,20 +143,10 @@ QcepDoubleImageDataPtr QxrdCenterFinder::newData()
     ht = 2048;
   }
 
-  QxrdExperimentPtr expt(experiment());
+  QcepDoubleImageDataPtr res =
+      QcepAllocator::newDoubleImage("newData", wd,ht, QcepAllocator::NullIfNotAvailable);
 
-  if (expt) {
-    QxrdDataProcessorPtr proc(expt->dataProcessor());
-
-    if (proc) {
-      QcepDoubleImageDataPtr res =
-          QcepAllocator::newDoubleImage("newData", wd,ht, QcepAllocator::NullIfNotAvailable);
-
-      return res;
-    }
-  }
-
-  return QcepDoubleImageDataPtr();
+  return res;
 }
 
 void QxrdCenterFinder::writeSettings(QSettings *settings)
@@ -1481,7 +1472,7 @@ void QxrdCenterFinder::calculateCalibration()
   QxrdExperimentPtr expt(experiment());
 
   if (expt) {
-    QxrdDataProcessorPtr proc(expt->dataProcessor());
+    QxrdProcessorPtr proc(expt->processor());
 
     if (proc) {
       QcepDoubleImageDataPtr res = newData();

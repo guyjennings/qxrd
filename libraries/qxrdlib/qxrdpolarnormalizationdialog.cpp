@@ -1,16 +1,18 @@
 #include "qxrdpolarnormalizationdialog.h"
 #include "ui_qxrdpolarnormalizationdialog.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdpolarnormalization.h"
 
-QxrdPolarNormalizationDialog::QxrdPolarNormalizationDialog(QxrdDataProcessorWPtr procw) :
+QxrdPolarNormalizationDialog::QxrdPolarNormalizationDialog(QxrdProcessorWPtr procw) :
   QDialog(NULL),
   m_Processor(procw)
 {
   setupUi(this);
 
-  if (m_Processor) {
-    QxrdPolarNormalizationPtr norm = m_Processor->polarNormalization();
+  QxrdProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QxrdPolarNormalizationPtr norm = proc->polarNormalization();
 
     if (norm) {
       m_OutputType -> addItem("Integrated Scan");
@@ -32,8 +34,10 @@ QxrdPolarNormalizationDialog::~QxrdPolarNormalizationDialog()
 
 void QxrdPolarNormalizationDialog::accept()
 {
-  if (m_Processor) {
-    QxrdPolarNormalizationPtr norm = m_Processor->polarNormalization();
+  QxrdProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QxrdPolarNormalizationPtr norm = proc->polarNormalization();
 
     if (norm) {
       norm -> set_OutputType(m_OutputType->currentIndex());

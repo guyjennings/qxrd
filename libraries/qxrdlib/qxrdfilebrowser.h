@@ -8,7 +8,7 @@
 #include <QFileInfo>
 #include "qcepproperty.h"
 #include "ui_qxrdfilebrowser.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdfilebrowsermodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdfilebrowsersettings-ptr.h"
@@ -21,7 +21,7 @@ public:
   QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
                   int isOutput,
                   QxrdExperimentWPtr experiment,
-                  QxrdDataProcessorWPtr processor,
+                  QxrdProcessorWPtr processor,
                   QWidget *parent);
   virtual ~QxrdFileBrowser();
 
@@ -65,7 +65,7 @@ private:
   mutable QMutex               m_Mutex;
   int                          m_IsOutput;
   QxrdExperimentWPtr           m_Experiment;
-  QxrdDataProcessorWPtr        m_Processor;
+  QxrdProcessorWPtr            m_Processor;
   QxrdFileBrowserModelPtr      m_Model;
   QStringList                  m_DirectoryStack;
 };
@@ -75,7 +75,7 @@ class QXRD_EXPORT QxrdInputFileBrowser : public QxrdFileBrowser
   Q_OBJECT
 
 public:
-  QxrdInputFileBrowser(QxrdFileBrowserSettingsWPtr settings, QxrdExperimentWPtr experiment, QxrdDataProcessorWPtr processor, QWidget *parent);
+  QxrdInputFileBrowser(QxrdFileBrowserSettingsWPtr settings, QxrdExperimentWPtr experiment, QxrdProcessorWPtr processor, QWidget *parent);
 };
 
 class QXRD_EXPORT QxrdOutputFileBrowser : public QxrdFileBrowser
@@ -83,7 +83,7 @@ class QXRD_EXPORT QxrdOutputFileBrowser : public QxrdFileBrowser
   Q_OBJECT
 
 public:
-  QxrdOutputFileBrowser(QxrdFileBrowserSettingsWPtr settings, QxrdExperimentWPtr experiment, QxrdDataProcessorWPtr processor, QWidget *parent);
+  QxrdOutputFileBrowser(QxrdFileBrowserSettingsWPtr settings, QxrdExperimentWPtr experiment, QxrdProcessorWPtr processor, QWidget *parent);
 };
 
 #endif // QXRDFILEBROWSER_H

@@ -13,11 +13,10 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdrasterdata.h"
 #include "qxrdmaskrasterdata.h"
 #include "qxrdmaskcolormap.h"
-#include "qxrddataprocessor-ptr.h"
 #include "qxrdimageplotsettings.h"
 #include "qxrdpowderpointpicker.h"
 #include "qxrdroimodel-ptr.h"
@@ -63,8 +62,8 @@ public:
   const QxrdRasterData* raster() const;
   QxrdRasterData* raster();
 
-  QxrdDataProcessorWPtr processor() const;
-  void setProcessor(QxrdDataProcessorWPtr proc);
+  QxrdProcessorWPtr processor() const;
+  void setProcessor(QxrdProcessorWPtr proc);
 
   virtual QwtText trackerTextF(const QPointF &pos);
 
@@ -124,7 +123,7 @@ private:
   QxrdRasterData            *m_DataRaster;
   QxrdMaskRasterData        *m_MaskRaster;
 
-  QxrdDataProcessorWPtr      m_DataProcessor;
+  QxrdProcessorWPtr          m_Processor;
 
 //  QwtPlotMarker             *m_CenterMarker;
 

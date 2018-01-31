@@ -15,8 +15,7 @@
 #include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacqcommon-ptr.h"
-#include "qxrddataprocessorthread-ptr.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdserverthread-ptr.h"
 #include "qxrdserver-ptr.h"
 #include "qxrdsimpleserverthread-ptr.h"
@@ -80,7 +79,7 @@ public:
   QxrdExperimentWPtr experiment();
   QxrdAcqCommonWPtr acquisition() const;
   QxrdWindowPtr window();
-  QxrdDataProcessorWPtr dataProcessor() const;
+  QxrdProcessorWPtr processor() const;
   QxrdCenterFinderWPtr centerFinder() const;
   QxrdIntegratorWPtr integrator() const;
   QxrdServerWPtr specServer();
@@ -192,7 +191,7 @@ private:
   QxrdServerWPtr                  m_Server;
   QxrdSimpleServerThreadPtr       m_SimpleServerThread;
   QxrdSimpleServerWPtr            m_SimpleServer;
-  QxrdDataProcessorPtr            m_DataProcessor;
+  QxrdProcessorPtr                m_Processor;
   QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
   QxrdCalibrantLibraryModelPtr    m_CalibrantLibraryModel;
   QxrdCalibrantDSpacingsPtr       m_CalibrantDSpacings;

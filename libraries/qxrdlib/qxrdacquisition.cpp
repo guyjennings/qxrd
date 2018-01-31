@@ -1,7 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdacquisition.h"
 #include "qcepmutexlocker.h"
-#include "qxrddataprocessor.h"
 #include "qcepallocator.h"
 //#include "qxrdacquisitiondialog.h"
 #include "qxrdsynchronizedacquisition.h"
@@ -180,14 +179,14 @@ QxrdApplicationWPtr QxrdAcquisition::application() const
   return appw;
 }
 
-QxrdDataProcessorWPtr QxrdAcquisition::dataProcessor() const
+QxrdProcessorWPtr QxrdAcquisition::processor() const
 {
   QxrdExperimentPtr expt(experiment());
 
   if (expt) {
-    return expt->dataProcessor();
+    return expt->processor();
   } else {
-    return QxrdDataProcessorWPtr();
+    return QxrdProcessorWPtr();
   }
 }
 
@@ -1113,7 +1112,7 @@ void QxrdAcquisition::getFileBaseAndName(QString filePattern, QString extent, in
 //      image -> set_NPhases(nPhases);
 //    }
 
-//    QxrdDataProcessorPtr processor(dataProcessor());
+//    QxrdProcessorPtr processor(dataProcessor());
 
 //    if (processor) {
 //      processor -> acquiredInt32Image(image, overflow);

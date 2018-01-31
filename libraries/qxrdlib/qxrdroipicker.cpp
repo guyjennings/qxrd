@@ -1,7 +1,7 @@
 #include "qxrdroipicker.h"
 #include "qwt_picker_machine.h"
 #include "qxrdimageplot.h"
-#include "qxrddataprocessor.h"
+//#include "qxrdprocessor.h"
 #include "qxrdroimodel.h"
 #include "qxrdroi.h"
 #include "qxrdroishape.h"

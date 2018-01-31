@@ -1,13 +1,14 @@
 #include "qxrdmaskdialog.h"
 #include "ui_qxrdmaskdialog.h"
 #include "qxrdwindow.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdmaskstackmodel.h"
 #include "qxrdapplication.h"
 #include "qxrddebug.h"
 #include "qxrdzingerdialog.h"
+#include "qxrdmaskstack.h"
 
-QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
+QxrdMaskDialog::QxrdMaskDialog(QxrdProcessorWPtr procw, QWidget *parent) :
   QDockWidget(parent),
   m_Processor(procw),
   m_Mask(),
@@ -43,7 +44,7 @@ QxrdMaskDialog::QxrdMaskDialog(QxrdDataProcessorWPtr procw, QWidget *parent) :
   connect(m_UndoMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doUndoMask);
   connect(m_ZingerMask, &QAbstractButton::clicked, this, &QxrdMaskDialog::doZingersMask);
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     proc -> prop_MaskMinimumValue() -> linkTo(m_MaskMinimum);
@@ -85,7 +86,7 @@ int QxrdMaskDialog::maskStackSelectPopup()
 {
   QMenu actions;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QxrdMaskStackPtr m = proc->maskStack();
@@ -183,7 +184,7 @@ void QxrdMaskDialog::doZingersMask()
 //  int n = maskStackSelectPopup();
 
 //  if (n >= 0) {
-//    QxrdDataProcessorPtr proc(m_Processor);
+//    QxrdProcessorPtr proc(m_Processor);
 
 //    if (proc) {
 //      proc->zingersStack(n);
@@ -191,7 +192,7 @@ void QxrdMaskDialog::doZingersMask()
 //    }
 //  }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QxrdZingerFinderWPtr zf = proc->zingerFinder();
@@ -397,7 +398,7 @@ void QxrdMaskDialog::doClearMaskTop()
 
 void QxrdMaskDialog::doPushMask()
 {
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     proc->duplicateMask();
@@ -407,7 +408,7 @@ void QxrdMaskDialog::doPushMask()
 
 void QxrdMaskDialog::doNewMask()
 {
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     proc->newEmptyMask();
@@ -417,7 +418,7 @@ void QxrdMaskDialog::doNewMask()
 
 void QxrdMaskDialog::doUndoMask()
 {
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     proc->statusMessage("Undo Not Implemented");

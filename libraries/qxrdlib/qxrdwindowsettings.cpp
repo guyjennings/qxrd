@@ -19,6 +19,7 @@
 #include "qxrdcenteringplotwidgetsettings.h"
 #include "qxrdintegratedplotwidgetsettings.h"
 #include "qxrddistortionplotwidgetsettings.h"
+#include <QThread>
 
 QxrdWindowSettings::QxrdWindowSettings(QString name) :
   inherited(name),

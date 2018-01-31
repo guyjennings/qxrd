@@ -14,7 +14,7 @@
 #include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacqcommon-ptr.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrdroi-ptr.h"
 
@@ -51,7 +51,7 @@ public:
   QxrdAppCommonWPtr application() const;
   QxrdExperimentWPtr experiment() const;
   QxrdAcqCommonWPtr acquisition() const;
-  QxrdDataProcessorWPtr dataProcessor() const;
+  QxrdProcessorWPtr processor() const;
   QxrdWindowWPtr window() const;
 
   void setWindow(QxrdWindowWPtr win);
@@ -136,7 +136,7 @@ private:
   QxrdAppCommonWPtr      m_Application;
   QxrdExperimentWPtr     m_Experiment;
   QxrdAcqCommonWPtr      m_Acquisition;
-  QxrdDataProcessorWPtr  m_DataProcessor;
+  QxrdProcessorWPtr      m_Processor;     //TODO: is this always appropriate?
   QxrdWindowWPtr         m_Window;
   FILE                  *m_ScriptOutput;
 };

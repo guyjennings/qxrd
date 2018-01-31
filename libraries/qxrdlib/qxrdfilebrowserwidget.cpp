@@ -6,7 +6,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include "qxrdexperiment.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qcepdatasetmodel.h"
 
 QxrdFileBrowserWidget::QxrdFileBrowserWidget(QWidget *parent) :
@@ -33,7 +33,7 @@ void QxrdFileBrowserWidget::changeEvent(QEvent *e)
 
 void QxrdFileBrowserWidget::initialize(QxrdFileBrowserSettingsWPtr settings,
                                  QxrdExperimentWPtr          experiment,
-                                 QxrdDataProcessorWPtr       processor)
+                                 QxrdProcessorWPtr       processor)
 {
   m_FileBrowserSettings = settings;
   m_Experiment          = experiment;
@@ -261,10 +261,10 @@ void QxrdFileBrowserWidget::doOpen()
       }
     }
   } else {
-    QxrdDataProcessorPtr proc(m_Processor);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (proc) {
-      QxrdDataProcessor *p = proc.data();
+      QxrdProcessor *p = proc.data();
 
       foreach(index, rows) {
         if (!m_Model->isDir(index)) {
@@ -291,10 +291,10 @@ void QxrdFileBrowserWidget::doOpenDark()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
@@ -319,10 +319,10 @@ void QxrdFileBrowserWidget::doOpenMask()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
@@ -347,10 +347,10 @@ void QxrdFileBrowserWidget::doOpenGainMap()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
@@ -375,10 +375,10 @@ void QxrdFileBrowserWidget::doProcess()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
@@ -403,10 +403,10 @@ void QxrdFileBrowserWidget::doIntegrate()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
     foreach(index, rows) {
       //    printf("Process: %s\n", qPrintable(m_Model->filePath(index)));
@@ -438,10 +438,10 @@ void QxrdFileBrowserWidget::doSumImages()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
       INVOKE_CHECK(
@@ -457,14 +457,14 @@ void QxrdFileBrowserWidget::doSumImages()
 
 void QxrdFileBrowserWidget::doClearAccumulator()
 {
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
       INVOKE_CHECK(
-        QMetaObject::invokeMethod(p, &QxrdDataProcessor::clearAccumulator)
+        QMetaObject::invokeMethod(p, &QxrdProcessor::clearAccumulator)
       )
 #else
       INVOKE_CHECK(
@@ -487,10 +487,10 @@ void QxrdFileBrowserWidget::doIntegrateAndAccumulate()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
       INVOKE_CHECK(
@@ -518,7 +518,7 @@ void QxrdFileBrowserWidget::doSaveAccumulator()
 //  }
 
   QxrdExperimentPtr expt(m_Experiment);
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (expt && proc) {
     QcepDatasetModelPtr ds(expt->dataset());
@@ -566,10 +566,10 @@ void QxrdFileBrowserWidget::doAdd()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
       INVOKE_CHECK(
@@ -596,10 +596,10 @@ void QxrdFileBrowserWidget::doSubtract()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
       INVOKE_CHECK(
@@ -626,10 +626,10 @@ void QxrdFileBrowserWidget::doProjectX()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
       INVOKE_CHECK(
@@ -656,10 +656,10 @@ void QxrdFileBrowserWidget::doProjectY()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
       INVOKE_CHECK(
@@ -686,10 +686,10 @@ void QxrdFileBrowserWidget::doProjectZ()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
       INVOKE_CHECK(
@@ -716,10 +716,10 @@ void QxrdFileBrowserWidget::doCorrelate()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdDataProcessor *p = proc.data();
+    QxrdProcessor *p = proc.data();
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
       INVOKE_CHECK(

@@ -155,7 +155,7 @@ private:
 //  QxrdApplicationWPtr                    m_Application;
 //  QxrdExperimentWPtr                     m_Experiment;
 //  QxrdAcquisitionWPtr                    m_Acquisition;
-//  QxrdDataProcessorWPtr                  m_DataProcessor;
+//  QxrdProcessorWPtr                      m_Processor;
 //  QxrdAcquisitionScalerDialog           *m_AcquisitionScalerDialog;
 //  QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
 //  QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;

@@ -7,7 +7,7 @@
 #include "qcepobject.h"
 
 #include "qcepproperty.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qcepallocator-ptr.h"
 #include "qxrddetectorgeometry-ptr.h"
 #include "qxrddetectorgeometry.h"
@@ -35,10 +35,10 @@ public slots:
   void generateChiImage();
 
 public:
-  void setProcessor(QxrdDataProcessorWPtr proc);
+  void setProcessor(QxrdProcessorWPtr proc);
 
 private:
-  QxrdDataProcessorWPtr     m_Processor;
+  QxrdProcessorWPtr         m_Processor;
   QxrdDetectorGeometryPtr   m_Geometry;
 
 public:

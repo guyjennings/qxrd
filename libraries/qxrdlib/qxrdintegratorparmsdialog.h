@@ -5,20 +5,20 @@
 #include <QDialog>
 #include "ui_qxrdintegratorparmsdialog.h"
 
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 
 class QXRD_EXPORT QxrdIntegratorParmsDialog : public QDialog, public Ui::QxrdIntegratorParmsDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdIntegratorParmsDialog(QxrdDataProcessorWPtr procw);
+  explicit QxrdIntegratorParmsDialog(QxrdProcessorWPtr procw);
   ~QxrdIntegratorParmsDialog();
 
   void accept();
 
 private:
-  QxrdDataProcessorPtr m_Processor;
+  QxrdProcessorWPtr m_Processor;
 };
 
 #endif // QXRDINTEGRATORPARMSDIALOG_H

@@ -8,7 +8,7 @@
 #include "qxrdimageplot.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdcenterfinderdialog.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdmaskdialog.h"
@@ -135,7 +135,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdDataProcessorPtr proc(exp->dataProcessor());
+    QxrdProcessorPtr     proc(exp->processor());
     QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
 
     QxrdWindowSettingsPtr settings(m_WindowSettings);
@@ -423,8 +423,8 @@ void QxrdWindow::initialize()
 //    connect(m_ActionMaskCircles, &QAction::triggered, m_ImageMaskCirclesButton, &QAbstractButton::click);
 //    connect(m_ActionMaskPolygons, &QAction::triggered, m_ImageMaskPolygonsButton, &QAbstractButton::click);
 
-//    connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateROI);
-//    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdDataProcessor::doCalculateHistogram);
+//    connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdProcessor::doCalculateROI);
+//    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdProcessor::doCalculateHistogram);
   }
 
 //  connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableZooming);
@@ -622,7 +622,7 @@ void QxrdWindow::initialize()
 //    connect(proc -> centerFinder() -> prop_CenterY(), &QcepDoubleProperty::valueChanged,
 //            m_CenterFinderPlot, &QxrdCenterFinderPlot::onCenterYChanged);
 
-//    connect(proc.data(), &QxrdDataProcessor::newIntegrationAvailable,
+//    connect(proc.data(), &QxrdProcessor::newIntegrationAvailable,
 //            m_IntegratorPlot, &QxrdIntegratorPlot::onNewIntegrationAvailable);
 //  }
 
@@ -1223,7 +1223,7 @@ void QxrdWindow::doSaveDark()
             this, "Save Dark Data in", proc -> get_DataPath());
 
       if (theFile.length()) {
-        proc->saveDark(theFile, QxrdDataProcessor::CanOverwrite);
+        proc->saveDark(theFile, QxrdProcessor::CanOverwrite);
       }
     }
   }
@@ -1277,7 +1277,7 @@ void QxrdWindow::doSaveMask()
             this, "Save Mask in", proc -> get_DataPath());
 
       if (theFile.length()) {
-        proc->saveMask(theFile, QxrdDataProcessor::CanOverwrite);
+        proc->saveMask(theFile, QxrdProcessor::CanOverwrite);
       }
     }
   }
@@ -1331,7 +1331,7 @@ void QxrdWindow::doSaveBadPixels()
             this, "Save Bad Pixels in", proc -> get_DataPath());
 
       if (theFile.length()) {
-        proc->saveBadPixels(theFile, QxrdDataProcessor::CanOverwrite);
+        proc->saveBadPixels(theFile, QxrdProcessor::CanOverwrite);
       }
     }
   }
@@ -1385,7 +1385,7 @@ void QxrdWindow::doSaveGainMap()
             this, "Save Gain Map in", proc -> get_DataPath());
 
       if (theFile.length()) {
-        proc->saveGainMap(theFile, QxrdDataProcessor::CanOverwrite);
+        proc->saveGainMap(theFile, QxrdProcessor::CanOverwrite);
       }
     }
   }

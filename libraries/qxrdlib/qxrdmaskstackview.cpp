@@ -5,7 +5,7 @@
 #include "qxrdmaskdialog.h"
 #include "qxrdmaskstack.h"
 #include "qxrdmaskstackmodel.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 
 QxrdMaskStackView::QxrdMaskStackView(QWidget *parent) :
   QTableView(parent),

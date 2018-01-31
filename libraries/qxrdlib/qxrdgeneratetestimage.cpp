@@ -3,7 +3,7 @@
 #define _USE_MATH_DEFINES
 
 #include "qmath.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrddetectorgeometry.h"
 #include "qcepallocator.h"
 
@@ -37,7 +37,7 @@ QxrdGenerateTestImagePtr QxrdGenerateTestImage::newGenerateTestImage()
   return test;
 }
 
-void QxrdGenerateTestImage::setProcessor(QxrdDataProcessorWPtr proc)
+void QxrdGenerateTestImage::setProcessor(QxrdProcessorWPtr proc)
 {
   m_Processor = proc;
 }
@@ -153,7 +153,7 @@ void QxrdGenerateTestImage::generateImage()
       }
     }
 
-    QxrdDataProcessorPtr proc(m_Processor);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (proc) {
       proc -> newData(img);
@@ -200,7 +200,7 @@ void QxrdGenerateTestImage::generateTTHImage()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     proc -> newData(img);
@@ -247,7 +247,7 @@ void QxrdGenerateTestImage::generateChiImage()
       }
     }
 
-    QxrdDataProcessorPtr proc(m_Processor);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (proc) {
       proc -> newData(img);

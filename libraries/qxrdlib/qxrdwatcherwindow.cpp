@@ -1,7 +1,7 @@
 #include "qxrdwatcherwindow.h"
 #include "qxrdexperiment.h"
 #include "qxrdwatcherwindowsettings.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 
 QxrdWatcherWindow::QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
                                      QString name,
@@ -30,7 +30,7 @@ QxrdWatcherWindow::QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdDataProcessorPtr proc(exp->dataProcessor());
+    QxrdProcessorPtr     proc(m_Processor);
     QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
 
     QxrdWatcherWindowSettingsPtr settings(m_WatcherWindowSettings);

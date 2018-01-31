@@ -13,13 +13,13 @@
 #include "qcepplotmeasurer.h"
 #include "qcepintegrateddata.h"
 
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdintegrator.h"
 #include "qwt_plot_piecewise_curve.h"
 
 QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
   : QcepPlot(parent),
-    m_DataProcessor(),
+    m_Processor(),
     m_Integrator(),
     m_PlotIndex(0),
     m_XUnitsLabel("")
@@ -38,17 +38,17 @@ void QxrdIntegratorPlot::init(QcepPlotSettingsWPtr settings)
   }
 }
 
-void QxrdIntegratorPlot::setDataProcessor(QxrdDataProcessorWPtr proc)
+void QxrdIntegratorPlot::setProcessor(QxrdProcessorWPtr proc)
 {
-  m_DataProcessor = proc;
+  m_Processor = proc;
 
-  QxrdDataProcessorPtr dp(m_DataProcessor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     m_Integrator = dp -> integrator();
 
 //    connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
-//            dp.data(), &QxrdDataProcessor::printMeasuredPolygon);
+//            dp.data(), &QxrdProcessor::printMeasuredPolygon);
   }
 }
 
@@ -94,7 +94,7 @@ void QxrdIntegratorPlot::onNewIntegrationAvailable(QcepIntegratedDataPtr data)
 
     updateZoomer();
 
-    QxrdDataProcessorPtr proc(m_DataProcessor);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (proc) {
       proc -> updateEstimatedTime(proc -> prop_DisplayIntegratedDataTime(), tic.restart());

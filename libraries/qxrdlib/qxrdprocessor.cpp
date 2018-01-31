@@ -20,11 +20,15 @@
 #include "qxrdpolartransform.h"
 #include "qxrdpolarnormalization.h"
 #include "qxrdgeneratetestimage.h"
+#include "qxrdintegratorparmsdialog.h"
+#include "qxrdpolartransformdialog.h"
+#include "qxrdpolarnormalizationdialog.h"
 #include <QFileInfo>
 #include <QThread>
 #include <QDir>
 #include <QPainter>
 #include <QtConcurrentRun>
+#include <QDirIterator>
 
 QxrdProcessor::QxrdProcessor(QString name) :
   QcepObject(name),
@@ -149,6 +153,19 @@ QxrdProcessor::QxrdProcessor(QString name) :
 
 QxrdProcessor::~QxrdProcessor()
 {
+}
+
+QxrdProcessorPtr QxrdProcessor::newProcessor()
+{
+  QxrdProcessorPtr proc(new QxrdProcessor("processor"));
+
+  return proc;
+}
+
+//TODO: is this needed...
+void QxrdProcessor::shutdown()
+{
+  thread()->exit();
 }
 
 
@@ -1188,6 +1205,49 @@ void QxrdProcessor::unsubtractDarkImage(QcepDoubleImageDataPtr image, QcepDouble
   //  }
 }
 
+void QxrdProcessor::fixupBadBackgroundSubtraction(QString imagePattern, int nImgExposures, QString darkPath, int nDarkExposures)
+{
+  QDirIterator imagePaths(dataDirectory(), QStringList(imagePattern));
+
+  QcepDoubleImageDataPtr dark = QcepAllocator::newDoubleImage("dark", 0,0, QcepAllocator::NullIfNotAvailable);
+  QString path = filePathInDataDirectory(darkPath);
+
+  if (dark && dark->readImage(path)) {
+    dark->loadMetaData();
+
+    int nFileDarkExposures = dark->get_SummedExposures();
+
+    printMessage(tr("Loaded Dark image from %1 (%2 summed)").arg(path).arg(nFileDarkExposures));
+
+    while (imagePaths.hasNext()) {
+      QString imagePath=imagePaths.next();
+
+      QString path = filePathInDataDirectory(imagePath);
+      QcepDoubleImageDataPtr image = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+
+      if (image && image->readImage(path)) {
+        image->loadMetaData();
+
+        int nFileImageExposures = image->get_SummedExposures();
+
+        printMessage(tr("Loaded image from %1 (%2 summed)").arg(path).arg(nFileImageExposures));
+
+        image->correctBadBackgroundSubtraction(dark,nImgExposures,nDarkExposures);
+
+        QxrdFileSaverPtr saver(fileSaver());
+
+        if (saver) {
+          saver->saveDoubleData(path, image, QcepMaskDataPtr(), NoOverwrite);
+        }
+      } else {
+        printMessage(tr("Failed to load image from %1").arg(path));
+      }
+    }
+  } else {
+    printMessage(tr("Failed to load Dark image from %1").arg(path));
+  }
+}
+
 void QxrdProcessor::idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView)
 {
   int height = image->get_Height();
@@ -1818,7 +1878,7 @@ QcepDoubleImageDataPtr QxrdProcessor::correctDoubleImage
   QThread::currentThread()->setObjectName("correctDoubleImage");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+    printMessage(tr("QxrdProcessor::correctDoubleImage"));
   }
 
   if (image) {
@@ -1844,7 +1904,7 @@ QcepDoubleImageDataPtr QxrdProcessor::correctDoubleImage
   QThread::currentThread()->setObjectName("correctDoubleImage");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::correctDoubleImage"));
+    printMessage(tr("QxrdProcessor::correctDoubleImage"));
   }
 
   if (image) {
@@ -1872,7 +1932,7 @@ QcepIntegratedDataPtr QxrdProcessor::integrateImage
   QThread::currentThread()->setObjectName("integrateImage");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::integrateImage"));
+    printMessage(tr("QxrdProcessor::integrateImage"));
   }
 
   if (image && get_PerformIntegration()) {
@@ -1911,6 +1971,115 @@ void QxrdProcessor::integrateData(QString name)
   } else {
     printMessage(tr("Couldn't load %1").arg(path));
     statusMessage(tr("Couldn't load %1").arg(path));
+  }
+}
+
+void QxrdProcessor::processDataSequence(QString path, QString filter)
+{
+  QDirIterator iter(path, QStringList(filter));
+
+  while (iter.hasNext()) {
+    QString path = iter.next();
+
+    printMessage(path);
+
+    processData(path);
+  }
+}
+
+void QxrdProcessor::processDataSequence(QStringList paths)
+{
+  QString path;
+
+  foreach(path, paths) {
+    printMessage(path);
+
+    processData(path);
+  }
+}
+
+void QxrdProcessor::processDataSequence(QString path, QStringList filters)
+{
+  QDirIterator iter(path, filters);
+
+  while (iter.hasNext()) {
+    QString path = iter.next();
+
+    printMessage(path);
+
+    processData(path);
+  }
+}
+
+void QxrdProcessor::processNormalizedFile(QString path, double v1)
+{
+  QList<double> v;
+  v << v1;
+
+  processNormalizedFile(path, v);
+}
+
+void QxrdProcessor::processNormalizedFile(QString path, double v1, double v2)
+{
+  QList<double> v;
+  v << v1 << v2;
+
+  processNormalizedFile(path, v);
+}
+
+void QxrdProcessor::processNormalizedFile(QString name, QList<double> v)
+{
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+
+  QString path = filePathInDataDirectory(name);
+
+  if (res && res -> readImage(path)) {
+
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    res -> loadMetaData();
+    res -> setMask(mask(), QcepMaskDataPtr());
+
+    processDoubleImage(res, /*darkImage(), mask(),*/ QcepMaskDataPtr(), v);
+
+    set_DataPath(res -> get_FileName());
+  } else {
+    printMessage(tr("Couldn't load %1").arg(path));
+  }
+}
+
+void QxrdProcessor::setFileNormalization(QString path, double v1)
+{
+  QList<double> v;
+  v << v1;
+
+  setFileNormalization(path, v);
+}
+
+void QxrdProcessor::setFileNormalization(QString path, double v1, double v2)
+{
+  QList<double> v;
+  v << v1 << v2;
+
+  setFileNormalization(path, v);
+}
+
+void QxrdProcessor::setFileNormalization(QString name, QList<double> v)
+{
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+
+  QString path = filePathInDataDirectory(name);
+
+  if (res && res -> readImage(path)) {
+
+    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+
+    res -> loadMetaData();
+    res -> setMask(mask(), QcepMaskDataPtr());
+    res -> set_Normalization(v);
+    res -> saveMetaData(name);
+  } else {
+    printMessage(tr("Couldn't load %1").arg(path));
   }
 }
 
@@ -1975,7 +2144,7 @@ void QxrdProcessor::onCorrectedImageAvailable()
                                                cf -> get_Center().x(),
                                                cf -> get_Center().y()));
 
-//    m_ROIData.enqueue(QtConcurrent::run(this, &QxrdDataProcessor::calculateROI,
+//    m_ROIData.enqueue(QtConcurrent::run(this, &QxrdProcessor::calculateROI,
 //                                        img, mask));
 
     m_HistogramData.enqueue(QtConcurrent::run(this, &QxrdProcessor::calculateHistogram,
@@ -1986,7 +2155,7 @@ void QxrdProcessor::onCorrectedImageAvailable()
 void QxrdProcessor::onIntegratedDataAvailable()
 {
   if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::onIntegratedDataAvailable"));
+    printMessage(tr("QxrdProcessor::onIntegratedDataAvailable"));
   }
 
   QcepIntegratedDataPtr integ = m_IntegratedData.dequeue();
@@ -2028,7 +2197,7 @@ QxrdHistogramDataPtr QxrdProcessor::calculateHistogram
   QThread::currentThread()->setObjectName("calculateHistogram");
 
   if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::calculateHistogram"));
+    printMessage(tr("QxrdProcessor::calculateHistogram"));
   }
 
   return QxrdHistogramDataPtr();
@@ -2037,7 +2206,7 @@ QxrdHistogramDataPtr QxrdProcessor::calculateHistogram
 void QxrdProcessor::onHistogramDataAvailable()
 {
   if (qcepDebug(DEBUG_PROCESS)) {
-    printMessage(tr("QxrdDataProcessorThreaded::onHistogramDataAvailable"));
+    printMessage(tr("QxrdProcessor::onHistogramDataAvailable"));
   }
 
   QxrdHistogramDataPtr histData = m_HistogramData.dequeue();
@@ -2064,7 +2233,7 @@ void QxrdProcessor::integrateSaveAndDisplay()
                      .arg(cf->get_Center().x())
                      .arg(cf->get_Center().y()));
       } else {
-        printMessage("QxrdDataProcessor::integrateSaveAndDisplay no center finder");
+        printMessage("QxrdProcessor::integrateSaveAndDisplay no center finder");
       }
     }
 
@@ -2074,6 +2243,184 @@ void QxrdProcessor::integrateSaveAndDisplay()
           QtConcurrent::run(integ,
                             &QxrdIntegrator::performIntegration,
                             dimg, mask()));
+  }
+}
+
+void QxrdProcessor::correlateImages(QStringList names)
+{
+  QcepDoubleImageDataPtr imga = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
+
+  if (imga) {
+    foreach(QString name, names) {
+      QcepDoubleImageDataPtr imgb = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+      QString path = filePathInDataDirectory(name);
+
+      if (imgb && imgb->readImage(path)) {
+        printMessage(tr("Load image from %1").arg(path));
+        statusMessage(tr("Load image from %1").arg(path));
+
+        imgb -> loadMetaData();
+
+        int typ = imgb->get_DataType();
+
+        if ((typ == QcepDoubleImageData::Raw16Data) ||
+            (typ == QcepDoubleImageData::Raw32Data))
+        {
+          subtractDarkImage(imgb, dark());
+        }
+
+        printMessage("dx\tdy\tcorr");
+
+        for (int dy = -10; dy<=10; dy++) {
+          for (int dx = -10; dx<=10; dx++) {
+            double corr = imga->correlate(imgb, dx, dy, 10, 10);
+
+            printMessage(tr("%1\t%2\t%3").arg(dx).arg(dy).arg(corr));
+          }
+        }
+      } else {
+        printMessage(tr("Couldn't load %1").arg(path));
+        statusMessage(tr("Couldn't load %1").arg(path));
+      }
+    }
+  } else {
+    printMessage("Couldn't correlate images");
+  }
+}
+
+void QxrdProcessor::shiftImage(int dx, int dy)
+{
+  QcepDoubleImageDataPtr img = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
+
+  if (img) {
+    QcepDoubleImageDataPtr shft = QcepAllocator::newDoubleImage("image", img->get_Width(), img->get_Height(), QcepAllocator::NullIfNotAvailable);
+
+    if (shft) {
+      shft->shiftImage(img, dx, dy);
+
+      newData(shft);
+    }
+  }
+}
+
+void QxrdProcessor::sumImages(QStringList names)
+{
+  QcepDoubleImageDataPtr summed = QcepAllocator::newDoubleImage("sum", 0,0, QcepAllocator::NullIfNotAvailable);
+
+  if (summed) {
+    int first = true;
+
+    foreach(QString name, names) {
+      QcepDoubleImageDataPtr img =
+          QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+      QString path = filePathInDataDirectory(name);
+
+      if (img && img->readImage(path)) {
+        printMessage(tr("Load image from %1").arg(path));
+        statusMessage(tr("Load image from %1").arg(path));
+
+        img -> loadMetaData();
+
+        int typ = img->get_DataType();
+
+        if ((typ == QcepDoubleImageData::Raw16Data) ||
+            (typ == QcepDoubleImageData::Raw32Data))
+        {
+          subtractDarkImage(img, dark());
+        }
+
+        if (first) {
+          summed->copyFrom(img);
+          first = false;
+        } else {
+          summed->accumulateImage(img);
+        }
+      } else {
+        printMessage(tr("Couldn't load %1").arg(path));
+        statusMessage(tr("Couldn't load %1").arg(path));
+      }
+    }
+
+    if (first) {
+      printMessage(tr("No images were loaded"));
+      statusMessage(tr("No images were loaded"));
+    } else {
+      newData(summed);
+    }
+  }
+}
+
+void QxrdProcessor::addImages(QStringList names)
+{
+  QcepDoubleImageDataPtr summed = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
+
+  if (summed) {
+    foreach(QString name, names) {
+      QcepDoubleImageDataPtr img =
+          QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+      QString path = filePathInDataDirectory(name);
+
+      if (img && img->readImage(path)) {
+        printMessage(tr("Load image from %1").arg(path));
+        statusMessage(tr("Load image from %1").arg(path));
+
+        img -> loadMetaData();
+
+        int typ = img->get_DataType();
+
+        if ((typ == QcepDoubleImageData::Raw16Data) ||
+            (typ == QcepDoubleImageData::Raw32Data))
+        {
+          subtractDarkImage(img, dark());
+        }
+
+        summed->add(img);
+      } else {
+        printMessage(tr("Couldn't load %1").arg(path));
+        statusMessage(tr("Couldn't load %1").arg(path));
+      }
+    }
+
+    newData(summed);
+  } else {
+    printMessage("Couldn't sum image data");
+  }
+}
+
+void QxrdProcessor::subtractImages(QStringList names)
+{
+  QcepDoubleImageDataPtr summed = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
+
+  if (summed) {
+    foreach(QString name, names) {
+      QcepDoubleImageDataPtr img =
+          QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+      QString path = filePathInDataDirectory(name);
+
+      if (img && img->readImage(path)) {
+        printMessage(tr("Load image from %1").arg(path));
+        statusMessage(tr("Load image from %1").arg(path));
+
+        img -> loadMetaData();
+
+        int typ = img->get_DataType();
+
+        if ((typ == QcepDoubleImageData::Raw16Data) ||
+            (typ == QcepDoubleImageData::Raw32Data))
+        {
+          subtractDarkImage(img, dark());
+        }
+
+        summed->subtract(img);
+      } else {
+        printMessage(tr("Couldn't load %1").arg(path));
+        statusMessage(tr("Couldn't load %1").arg(path));
+      }
+    }
+
+    newData(summed);
+  } else {
+    printMessage("Couldn't subtract image data");
   }
 }
 
@@ -2218,6 +2565,67 @@ QStringList QxrdProcessor::integrateRectangle(int x0, int y0, int x1, int y1)
     res << tr("%1").arg(sum);
     res << tr("%1").arg(npx);
     res << dat->get_FileName();
+  }
+
+  return res;
+}
+
+bool QxrdProcessor::integrateParameters()
+{
+  GUI_THREAD_CHECK;
+
+  bool res = false;
+
+  QxrdProcessorPtr proc(
+        qSharedPointerDynamicCast<QxrdProcessor>(sharedFromThis()));
+
+  if (proc) {
+    QxrdIntegratorParmsDialog dlg(proc);
+
+    if (dlg.exec() == QDialog::Accepted) {
+      res = true;
+    }
+  }
+
+  return res;
+}
+
+bool QxrdProcessor::polarTransformParameters()
+{
+  GUI_THREAD_CHECK;
+
+  bool res = false;
+
+  QxrdProcessorPtr proc(
+        qSharedPointerDynamicCast<QxrdProcessor>(sharedFromThis()));
+
+  if (proc) {
+    QxrdPolarTransformDialog dlg(proc);
+
+    if (dlg.exec() == QDialog::Accepted) {
+      res = true;
+    }
+  }
+
+  return res;
+}
+
+bool QxrdProcessor::polarIntegrateParameters()
+{
+  GUI_THREAD_CHECK;
+
+  bool res = false;
+
+  QxrdProcessorPtr proc(
+        qSharedPointerDynamicCast<QxrdProcessor>(sharedFromThis()));
+
+
+  if (proc) {
+    QxrdPolarNormalizationDialog dlg(proc);
+
+    if (dlg.exec() == QDialog::Accepted) {
+      res = true;
+    }
   }
 
   return res;
@@ -2439,4 +2847,145 @@ void QxrdProcessor::projectImages(QStringList names, int px, int py, int pz)
   }
 }
 
+void QxrdProcessor::fitPeakNear(double x, double y)
+{
+  QxrdCenterFinderPtr cf(centerFinder());
+
+  if (cf) {
+    cf->fitPeakNear(x,y);
+  }
+}
+
+void QxrdProcessor::newImage(int ncols, int nrows)
+{
+  m_Data -> resize(ncols, nrows);
+  m_Data -> fill(0);
+
+  newData(m_Data);
+}
+
+void QxrdProcessor::exponentialTail(double cx, double cy, double width, int oversample)
+{
+  int nr = m_Data -> get_Height();
+  int nc = m_Data -> get_Width();
+
+  for (int y=0; y<nr; y++) {
+    for (int x=0; x<nc; x++) {
+      double sum = 0;
+
+      for (int iy = 0; iy < oversample; iy++) {
+        double yy = (double) y + ((double) iy)/((double) oversample) - cy;
+        double yy2 = yy*yy;
+        for (int ix = 0; ix < oversample; ix++) {
+          double xx = (double) x + ((double) ix)/((double) oversample) - cx;
+          double xx2 = xx*xx;
+          double r = sqrt(yy2 + xx2);
+          sum += exp(-r/width);
+        }
+      }
+
+      m_Data -> setImageData(x, y,
+                             m_Data -> getImageData(x,y) + sum/(oversample*oversample));
+    }
+  }
+
+  newData(m_Data);
+}
+
+void QxrdProcessor::reciprocalTail(double cx, double cy, double strength, int oversample)
+{
+  int nr = m_Data -> get_Height();
+  int nc = m_Data -> get_Width();
+
+  for (int y=0; y<nr; y++) {
+    for (int x=0; x<nc; x++) {
+      double sum = 0;
+
+      for (int iy = 0; iy < oversample; iy++) {
+        double yy = (double) y + ((double) iy)/((double) oversample) - cy;
+        double yy2 = yy*yy;
+        for (int ix = 0; ix < oversample; ix++) {
+          double xx = (double) x + ((double) ix)/((double) oversample) - cx;
+          double xx2 = xx*xx;
+          double r = sqrt(yy2 + xx2);
+          sum += strength/r;
+        }
+      }
+
+      m_Data -> setImageData(x, y,
+                             m_Data -> getImageData(x,y) + sum/(oversample*oversample));
+    }
+  }
+
+  newData(m_Data);
+}
+
+void QxrdProcessor::powderRing(double cx, double cy, double radius, double width, double strength, int oversample)
+{
+  int nr = m_Data -> get_Height();
+  int nc = m_Data -> get_Width();
+
+  for (int y=0; y<nr; y++) {
+    for (int x=0; x<nc; x++) {
+      double sum = 0;
+
+      for (int iy = 0; iy < oversample; iy++) {
+        double yy = (double) y + ((double) iy)/((double) oversample) - cy;
+        double yy2 = yy*yy;
+        for (int ix = 0; ix < oversample; ix++) {
+          double xx = (double) x + ((double) ix)/((double) oversample) - cx;
+          double xx2 = xx*xx;
+          double r = sqrt(yy2 + xx2);
+
+          double ndr = (r - radius)/width;
+
+          if (fabs(ndr) < 6) {
+            double val = strength*exp(-2*ndr*ndr)/width*sqrt(2.0/M_PI);
+            sum += val;
+          }
+        }
+      }
+
+      m_Data -> setImageData(x, y,
+                             m_Data -> getImageData(x,y) + sum/(oversample*oversample));
+    }
+  }
+
+  newData(m_Data);
+}
+
+void QxrdProcessor::ellipse(double cx, double cy, double a, double e, double ang, double width, double strength, int oversample)
+{
+  int nr = m_Data -> get_Height();
+  int nc = m_Data -> get_Width();
+
+  for (int y=0; y<nr; y++) {
+    for (int x=0; x<nc; x++) {
+      double sum = 0;
+
+      for (int iy = 0; iy < oversample; iy++) {
+        double yy = (double) y + ((double) iy)/((double) oversample) - cy;
+        double yy2 = yy*yy;
+        for (int ix = 0; ix < oversample; ix++) {
+          double xx = (double) x + ((double) ix)/((double) oversample) - cx;
+          double xx2 = xx*xx;
+          double r = sqrt(yy2 + xx2);
+          double th = atan2(yy,xx);
+          double elr = a*(1-e*e)/(1 - e*cos(th - ang));
+          double ndr = (elr - r)/width;
+
+          if (fabs(ndr) < 6) {
+            double val = strength*exp(-2*ndr*ndr)/width*sqrt(2.0/M_PI);
+            sum += val;
+          }
+        }
+      }
+
+      m_Data -> setImageData(x, y,
+                             m_Data -> getImageData(x,y) + sum/(oversample*oversample));
+    }
+  }
+
+  newData(m_Data);
+}
 

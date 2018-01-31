@@ -2,10 +2,9 @@
 #include "qxrdimageplot.h"
 #include "qxrdrasterdata.h"
 #include "qxrdcenterfinder.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdapplication.h"
 #include "qcepallocator.h"
-#include "qxrddataprocessor.h"
 #include "qxrdacquisition.h"
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_marker.h>
@@ -32,7 +31,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_Overflow(NULL),
     m_DataRaster(NULL),
     m_MaskRaster(NULL),
-    m_DataProcessor(),
+    m_Processor(),
 //    m_CenterMarker(NULL),
     m_FirstTime(true),
     m_ContextMenuEnabled(true),
@@ -68,11 +67,11 @@ void QxrdImagePlot::printMessage(QString msg, QDateTime dt) const
   }
 }
 
-void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
+void QxrdImagePlot::setProcessor(QxrdProcessorWPtr proc)
 {
-  m_DataProcessor = proc;
+  m_Processor = proc;
 
-  QxrdDataProcessorPtr dp(m_DataProcessor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     QxrdCenterFinderPtr cf(dp->centerFinder());
@@ -88,9 +87,9 @@ void QxrdImagePlot::setProcessor(QxrdDataProcessorWPtr proc)
   }
 }
 
-QxrdDataProcessorWPtr QxrdImagePlot::processor() const
+QxrdProcessorWPtr QxrdImagePlot::processor() const
 {
-  return m_DataProcessor;
+  return m_Processor;
 }
 
 void QxrdImagePlot::autoScale()
@@ -157,7 +156,7 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
 {
   const QxrdRasterData *ras = this->raster();
 
-  QxrdDataProcessorPtr processor = this->processor();
+  QxrdProcessorPtr    processor = this->processor();
   QxrdCenterFinderPtr centerFinder;
 
   if (processor) {
@@ -239,7 +238,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
 
       plotMenu.addSeparator();
 
-      QxrdDataProcessorPtr dp(m_DataProcessor);
+      QxrdProcessorPtr dp(m_Processor);
 
       if (dp) {
         QxrdCenterFinderPtr cf(dp->centerFinder());
@@ -379,7 +378,7 @@ void QxrdImagePlot::displayPowderMarkers()
 {
   clearPowderMarkers();
 
-  QxrdDataProcessorPtr dp(m_DataProcessor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     QxrdCenterFinderPtr cf(dp->centerFinder());

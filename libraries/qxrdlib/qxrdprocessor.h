@@ -7,6 +7,7 @@
 #include "qcepimagequeue.h"
 #include "qcepmaskdata-ptr.h"
 #include "qxrdprocessorstep-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdfilesaver-ptr.h"
@@ -32,9 +33,14 @@ class QXRD_EXPORT QxrdProcessor : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdProcessor(QString name);
   virtual ~QxrdProcessor();
+  static QxrdProcessorPtr newProcessor();
+  void shutdown();
 
   QxrdExperimentWPtr   experiment() const;
   QxrdAcqCommonWPtr acquisition() const;
@@ -121,7 +127,7 @@ public:
   void newLiveData(QcepDoubleImageDataWPtr image);
 
   // overflow operations...
-  QcepMaskDataWPtr        overflow() const;
+  QcepMaskDataWPtr overflow() const;
   void newOverflow(QcepMaskDataWPtr ovf);
 
   void loadDefaultImages();
@@ -169,6 +175,18 @@ public:
   QcepDoubleImageDataPtr processAcquiredImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr dimg, QcepDoubleImageDataPtr dark,
                                               QcepMaskDataPtr mask, QcepMaskDataPtr overflow, QcepDoubleList v=QcepDoubleList());
 
+  void processDataSequence(QString path, QString filter="*.tif");
+  void processDataSequence(QStringList paths);
+  void processDataSequence(QString path, QStringList filter);
+  void processNormalizedFile(QString path, double v1);
+  void processNormalizedFile(QString path, double v1, double v2);
+  void processNormalizedFile(QString path, QcepDoubleList v);
+  void setFileNormalization(QString path, double v1);
+  void setFileNormalization(QString path, double v1, double v2);
+  void setFileNormalization(QString path, QcepDoubleList v);
+
+  void fixupBadBackgroundSubtraction(QString imagePattern, int nImgExposures, QString darkPath, int nDarkExposures);
+
   // integration...
   void integrateData(QString name);
   void integrateSaveAndDisplay();
@@ -180,6 +198,10 @@ public:
 
   void writeOutputScan(QVector<double> x, QVector<double> y);
   void writeOutputScan(QcepIntegratedDataPtr d);
+
+  bool integrateParameters();
+  bool polarTransformParameters();
+  bool polarIntegrateParameters();
 
   QStringList integrateRectangle(int x0, int y0, int x1, int y1);
   QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img);
@@ -197,6 +219,10 @@ public:
   void updateEstimatedTime(QcepDoubleProperty *prop, int msec);
   void updateEstimatedProcessingTime();
 
+  void shiftImage(int dx, int dy);
+  void sumImages(QStringList names);
+  void addImages(QStringList names);
+  void subtractImages(QStringList names);
   void projectImages(QStringList names, int px, int py, int pz);
   void reflectVertically();
   void reflectHorizontally();
@@ -207,6 +233,17 @@ public:
   void summarizeMeasuredPolygon(QVector<QPointF> poly);
 
   int status(double delay);
+
+  void fitPeakNear(double x, double y);
+
+  void correlateImages(QStringList names);
+
+  // Image generation
+  void newImage(int ncols, int nrows);
+  void exponentialTail(double cx, double cy, double width, int oversample);
+  void reciprocalTail(double cx, double cy, double strength, int oversample);
+  void powderRing(double cx, double cy, double radius, double width, double strength, int oversample);
+  void ellipse(double cx, double cy, double a, double e, double ang, double width, double strength, int oversample);
 
 protected:
   void subtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);

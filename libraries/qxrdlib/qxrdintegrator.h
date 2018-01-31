@@ -18,7 +18,7 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata.h"
 #include "qcepmaskdata-ptr.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 
 class QXRD_EXPORT QxrdIntegrator : public QcepObject
 {
@@ -96,7 +96,7 @@ public:
   QCEP_DOUBLE_PROPERTY(SelfNormalizationMaximum)
 
 public:
-  QxrdDataProcessorPtr  dataProcessor() const;
+  QxrdProcessorPtr      dataProcessor() const;
   QxrdExperimentPtr     experiment()    const;
 
   enum {

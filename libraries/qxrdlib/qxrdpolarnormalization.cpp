@@ -4,7 +4,7 @@
 #include "qcepdatasetmodel.h"
 #include "qtconcurrentrun.h"
 #include "qxrdpolarintensityfitter.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include <qmath.h>
 #include "qcepallocator.h"
 #include "qxrddebug.h"
@@ -120,7 +120,7 @@ QxrdPolarNormalizationPtr QxrdPolarNormalization::newPolarNormalization()
 //        integ->selfNormalize(get_SelfNormalizeMin(), get_SelfNormalizeMax());
 //      }
 
-//      QxrdDataProcessorPtr proc(expt->dataProcessor());
+//      QxrdProcessorPtr proc(expt->dataProcessor());
 
 //      if (proc) {
 //        proc->displayIntegratedData(integ);

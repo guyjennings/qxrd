@@ -7,8 +7,11 @@
 #include "qxrdexperimentthread.h"
 #include "qxrdapplication.h"
 #include "qxrdapplicationsettings.h"
-#include "qxrddataprocessorthread.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
+#include "qxrdcenterfinder.h"
+#include "qxrdpolartransform.h"
+#include "qxrdpolarnormalization.h"
+#include "qxrdpowderpoint.h"
 #include "qxrdcalibrantlibrary.h"
 #include "qxrdcalibrantlibrarymodel.h"
 #include "qxrdcalibrantdspacings.h"
@@ -78,7 +81,7 @@ QxrdExperiment::QxrdExperiment(QString name) :
   m_Server(),
   m_SimpleServerThread(NULL),
   m_SimpleServer(),
-  m_DataProcessor(),
+  m_Processor(),
   m_Acquisition(),
   m_FileSaverThread(NULL),
   m_FileSaver(),
@@ -200,12 +203,12 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     splashMessage("Initializing Data Processing");
 
-    m_DataProcessor = QxrdDataProcessor::newDataProcessor();
+    m_Processor = QxrdProcessor::newProcessor();
 
     QxrdFileSaverPtr saver(m_FileSaver);
 
     if (saver) {
-      saver -> setProcessor(m_DataProcessor);
+      saver -> setProcessor(m_Processor);
       saver -> setExperiment(myself);
     }
 
@@ -335,7 +338,7 @@ void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
 
     splashMessage("Loading Background Images");
 
-    QxrdDataProcessorPtr proc(m_DataProcessor);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (proc) {
       proc -> loadDefaultImages();
@@ -418,7 +421,7 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdCalibrantDSpacings>("QxrdCalibrantDSpacings");
   qRegisterMetaType<QxrdCalibrantLibrary*>("QxrdCalibrantLibrary*");
   qRegisterMetaType<QxrdCenterFinder*>("QxrdCenterFinder*");
-  qRegisterMetaType<QxrdDataProcessor*>("QxrdDataProcessor*");
+  qRegisterMetaType<QxrdProcessor*>("QxrdProcessor*");
   qRegisterMetaType<QxrdFileBrowserModelUpdater*>("QxrdFileBrowserModelUpdater*");
   qRegisterMetaType<QxrdFileSaver*>("QxrdFileSaver*");
   qRegisterMetaType<QxrdIntegrator*>("QxrdIntegrator*");
@@ -506,10 +509,10 @@ void QxrdExperiment::openWindows()
                            qSharedPointerDynamicCast<QxrdApplication>(m_Application),
                            qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()),
                            acq,
-                           m_DataProcessor),
+                           m_Processor),
             &QObject::deleteLater); //TODO: is deleteLater necessary?
 
-//      QxrdDataProcessorPtr proc(m_DataProcessor);
+//      QxrdProcessorPtr proc(m_Processor);
       QxrdScriptEnginePtr eng(m_ScriptEngine);
 
       if (m_Window) {
@@ -737,9 +740,9 @@ QxrdSimpleServerThreadWPtr QxrdExperiment::simpleServerThread()
   return m_SimpleServerThread;
 }
 
-QxrdDataProcessorWPtr QxrdExperiment::dataProcessor() const
+QxrdProcessorWPtr QxrdExperiment::processor() const
 {
-  return m_DataProcessor;
+  return m_Processor;
 }
 
 QxrdCalibrantLibraryWPtr QxrdExperiment::calibrantLibrary() const
@@ -769,7 +772,7 @@ QcepDatasetModelPtr QxrdExperiment::dataset()
 
 QxrdCenterFinderWPtr QxrdExperiment::centerFinder() const
 {
-  QxrdDataProcessorPtr dp(m_DataProcessor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     return dp->centerFinder();
@@ -780,7 +783,7 @@ QxrdCenterFinderWPtr QxrdExperiment::centerFinder() const
 
 QxrdIntegratorWPtr QxrdExperiment::integrator() const
 {
-  QxrdDataProcessorPtr dp(m_DataProcessor);
+  QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     return dp->integrator();
@@ -1021,7 +1024,7 @@ void QxrdExperiment::readSettings(QSettings *settings)
     QcepExperiment::readSettings(settings);
 
     QxrdAcqCommonPtr acq(m_Acquisition);
-    QxrdDataProcessorPtr proc(m_DataProcessor);
+    QxrdProcessorPtr proc(m_Processor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
@@ -1163,7 +1166,7 @@ void QxrdExperiment::writeSettings(QSettings *settings)
     QcepExperiment::writeSettings(settings);
 
     QxrdAcqCommonPtr     acq(m_Acquisition);
-    QxrdDataProcessorPtr proc(m_DataProcessor);
+    QxrdProcessorPtr     proc(m_Processor);
     QxrdServerPtr        srv(m_Server);
     QxrdSimpleServerPtr  ssrv(m_SimpleServer);
 
@@ -1373,7 +1376,7 @@ void QxrdExperiment::openWatcher(QString patt)
     set -> initialize(application(),
                       exp,
                       qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()),
-                      dataProcessor());
+                      processor());
 
     set -> set_WindowOpen(true);
     set -> set_Pattern(patt);
@@ -1485,7 +1488,7 @@ void QxrdExperiment::defaultWindowSettings()
       set -> initialize(qSharedPointerDynamicCast<QxrdApplication>(application()),
                         experiment(),
                         qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()),
-                        dataProcessor());
+                        processor());
 
       if (set -> get_WindowOpen()) {
         nOpened += 1;

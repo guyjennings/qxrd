@@ -3,8 +3,8 @@
 
 #include "qxrdlib_global.h"
 #include <QDockWidget>
-#include "qxrdacquisition.h"
-#include "qxrddataprocessor.h"
+#include "qxrdacquisition-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "ui_qxrdcorrectiondialog.h"
 
 class QXRD_EXPORT QxrdCorrectionDialog : public QDialog, public Ui::QxrdCorrectionDialog
@@ -12,7 +12,7 @@ class QXRD_EXPORT QxrdCorrectionDialog : public QDialog, public Ui::QxrdCorrecti
   Q_OBJECT
 
 public:
-  explicit QxrdCorrectionDialog(QWidget *parent, QxrdAcquisitionWPtr acqp, QxrdDataProcessorWPtr procp);
+  explicit QxrdCorrectionDialog(QWidget *parent, QxrdAcquisitionWPtr acqp, QxrdProcessorWPtr procp);
   ~QxrdCorrectionDialog();
 
 public slots:
@@ -23,7 +23,7 @@ protected:
 
 private:
   QxrdAcquisitionWPtr   m_Acquisition;
-  QxrdDataProcessorWPtr m_Processor;
+  QxrdProcessorWPtr     m_Processor;
 };
 
 #endif // QXRDCORRECTIONDIALOG_H

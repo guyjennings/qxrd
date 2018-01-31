@@ -60,7 +60,7 @@ void QxrdCenterFinderPlot::setWindow(QxrdWindow *win)
     m_CenterFinder = dp -> centerFinder();
 
 //    connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QcepPlotMeasurer::selected,
-//            dp.data(),  &QxrdDataProcessor::printMeasuredPolygon);
+//            dp.data(),  &QxrdProcessor::printMeasuredPolygon);
 
     QxrdCenterFinderPtr cf(m_CenterFinder);
 

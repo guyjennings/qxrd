@@ -5,20 +5,20 @@
 #include <QDialog>
 #include "ui_qxrdpolartransformdialog.h"
 
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 
 class QXRD_EXPORT QxrdPolarTransformDialog : public QDialog, public Ui::QxrdPolarTransformDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdPolarTransformDialog(QxrdDataProcessorWPtr procw);
+  explicit QxrdPolarTransformDialog(QxrdProcessorWPtr procw);
   ~QxrdPolarTransformDialog();
 
   void accept();
 
 private:
-  QxrdDataProcessorPtr m_Processor;
+  QxrdProcessorWPtr m_Processor;
 };
 
 #endif // QXRDPOLARTRANSFORMDIALOG_H

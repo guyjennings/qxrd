@@ -1,16 +1,18 @@
 #include "qxrdintegratorparmsdialog.h"
 #include "ui_qxrdintegratorparmsdialog.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdintegrator.h"
 
-QxrdIntegratorParmsDialog::QxrdIntegratorParmsDialog(QxrdDataProcessorWPtr procw) :
+QxrdIntegratorParmsDialog::QxrdIntegratorParmsDialog(QxrdProcessorWPtr procw) :
   QDialog(NULL),
   m_Processor(procw)
 {
   setupUi(this);
 
-  if (m_Processor) {
-    QxrdIntegratorPtr integ = m_Processor->integrator();
+  QxrdProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QxrdIntegratorPtr integ = proc->integrator();
 
     if (integ) {
       m_RadialType->setCurrentIndex(integ->get_IntegrationXUnits());
@@ -34,8 +36,10 @@ QxrdIntegratorParmsDialog::~QxrdIntegratorParmsDialog()
 
 void QxrdIntegratorParmsDialog::accept()
 {
-  if (m_Processor) {
-    QxrdIntegratorPtr integ = m_Processor->integrator();
+  QxrdProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QxrdIntegratorPtr integ = proc->integrator();
 
     if (integ) {
       integ->set_IntegrationXUnits(m_RadialType->currentIndex());

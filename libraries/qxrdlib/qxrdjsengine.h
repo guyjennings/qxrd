@@ -8,7 +8,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrdacquisition-ptr.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
@@ -148,14 +148,14 @@ private:
   void setGlobalProperty(QString name, QJSValue val, ObjectOwnership owner = CppOwnership);
 
   QxrdAcquisitionWPtr   acquisition();
-  QxrdDataProcessorWPtr dataProcessor();
+  QxrdProcessorWPtr     processor();
 
 private:
   mutable QMutex         m_Mutex;
   QxrdAppCommonWPtr      m_Application;
   QxrdExperimentWPtr     m_Experiment;
-//  QxrdAcquisitionWPtr    m_Acquisition;
-//  QxrdDataProcessorWPtr  m_DataProcessor;
+//  QxrdAcquisitionWPtr  m_Acquisition;
+//  QxrdProcessorWPtr    m_DataProcessor;
   QxrdWindowWPtr         m_Window;
 };
 

@@ -8,7 +8,6 @@
 #include "qcepimagedata.h"
 #include "qcepallocator.h"
 #include "qxrdexperiment.h"
-#include "qxrddataprocessor.h"
 #include "qxrdpilatusdialog.h"
 #include "qxrdpilatusdialog-ptr.h"
 

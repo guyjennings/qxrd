@@ -8,7 +8,6 @@
 #include <QPen>
 #include "qcepproperty.h"
 #include "qxrddetectorgeometry.h"
-#include "qxrddataprocessor-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepimagedata.h"
 #include "qxrdexperiment-ptr.h"

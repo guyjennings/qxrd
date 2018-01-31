@@ -1,13 +1,15 @@
 #include "qxrdintegrationwindow.h"
 #include "qxrdexperiment.h"
 #include "qxrdintegrator.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdintegrationwindowsettings.h"
 
 QxrdIntegrationWindow::QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr set,
                                              QString name,
                                              QxrdAppCommonWPtr app,
-                                             QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw) :
+                                             QxrdExperimentWPtr expt,
+                                             QxrdAcquisitionWPtr acqw,
+                                             QxrdProcessorWPtr procw) :
   QxrdMainWindow(name, app, expt, acqw, procw),
   m_IntegrationWindowSettings(set)
 {
@@ -25,12 +27,16 @@ QxrdIntegrationWindow::QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr s
     m_Integrator = exp->integrator();
   }
 
+  QxrdProcessorPtr  proc(m_Processor);
+
+  if (proc) {
+    connect(m_IntegrateButton, &QAbstractButton::clicked,
+            proc.data(), &QxrdProcessor::integrateSaveAndDisplay);
+  }
+
   QxrdIntegratorPtr integ(m_Integrator);
 
   if (integ) {
-    connect(m_IntegrateButton, &QAbstractButton::clicked,
-            integ -> dataProcessor().data(), &QxrdDataProcessor::integrateSaveAndDisplay);
-
     integ -> prop_Oversample()         -> linkTo(m_OversampleFactor);
     integ -> prop_IntegrationStep()    -> linkTo(m_IntegratorStepSize);
     integ -> prop_IntegrationNSteps()  -> linkTo(m_IntegratorNSteps);
@@ -76,13 +82,11 @@ QxrdIntegrationWindow::QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr s
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdDataProcessorPtr proc(exp->dataProcessor());
-
     QxrdIntegrationWindowSettingsPtr settings(m_IntegrationWindowSettings);
 
     if (settings) {
-      m_FileBrowserWidget     -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlotWidget       -> initialize(settings->imagePlotWidgetSettings(), proc);
+      m_FileBrowserWidget     -> initialize(settings->fileBrowserSettings(), exp, procw);
+      m_ImagePlotWidget       -> initialize(settings->imagePlotWidgetSettings(), procw);
       m_IntegratedPlotWigdget -> initialize(settings->integratedPlotWidgetSettings());
     }
   }

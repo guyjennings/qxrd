@@ -68,7 +68,6 @@ SOURCES += qxrdlib.cpp \
     qxrdmaskrasterdata.cpp \
     qxrdmaskcolormap.cpp \
     qxrdwindow.cpp \
-    qxrddataprocessor.cpp \
     qxrdfilesaverthread.cpp \
     qxrdfilesaver.cpp \
     qxrdcenterfinder.cpp \
@@ -86,7 +85,6 @@ SOURCES += qxrdlib.cpp \
     qxrdplotslicer.cpp \
     qxrdscriptengine.cpp \
     qxrdscriptenginethread.cpp \
-    qxrddataprocessorthread.cpp \
     qxrdmaskpicker.cpp \
     qxrdimageplotmeasurer.cpp \
     qxrdfilebrowser.cpp \
@@ -592,10 +590,6 @@ HEADERS += TODO.h \
     qxrdmaskcolormap.h \
     qxrdwindow.h \
     qxrdwindow-ptr.h \
-    qxrddataprocessorthread.h \
-    qxrddataprocessorthread-ptr.h \
-    qxrddataprocessor.h \
-    qxrddataprocessor-ptr.h \
     qxrdfilesaverthread.h \
     qxrdfilesaverthread-ptr.h \
     qxrdfilesaver.h \

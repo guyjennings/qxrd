@@ -4,7 +4,7 @@
 #include "qxrddebug.h"
 #include "qcepallocator.h"
 #include "qxrdapplication.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdroi.h"
 #include "qxrddetectorsettings.h"
 #include "qxrdacquisitionextrainputs.h"
@@ -17,6 +17,10 @@
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
 #include "qxrdsynchronizedacquisition.h"
+#include "qxrdcenterfinder.h"
+#include "qxrdintegrator.h"
+#include "qxrdpolartransform.h"
+#include "qxrdpolarnormalization.h"
 
 QxrdJSEngine::QxrdJSEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp) :
   m_Application(app),
@@ -179,23 +183,44 @@ void QxrdJSEngine::initialize()
       setGlobalProperty("specServer", newQObject(srv.data()));
     }
 
-    QxrdDataProcessorPtr dp(expt->dataProcessor());
+    //TODO: is this the appropriate one...
+    QxrdProcessorPtr dp(expt->processor());
 
     if (dp) {
 //      QCEP_DOC_OBJECT("processor", "Control Data Processing Options");
       setGlobalProperty("processor",       newQObject(dp.data()));
 
 //      QCEP_DOC_OBJECT("centering", "Beam Center and Detector Alignment Options");
-      setGlobalProperty("centering",       newQObject(dp->centerFinder().data()));
+
+      QxrdCenterFinderPtr cf(dp->centerFinder());
+
+      if (cf) {
+        setGlobalProperty("centering",       newQObject(cf.data()));
+      }
 
 //      QCEP_DOC_OBJECT("integrator", "Image Circular Integration Options");
-      setGlobalProperty("integrator",      newQObject(dp->integrator().data()));
+
+      QxrdIntegratorPtr integ(dp->integrator());
+
+      if (integ) {
+        setGlobalProperty("integrator",      newQObject(integ.data()));
+      }
 
 //      QCEP_DOC_OBJECT("polarTransform", "Polar Transform Options");
-      setGlobalProperty("polarTransform",      newQObject(dp->polarTransform().data()));
+
+      QxrdPolarTransformPtr pt(dp->polarTransform());
+
+      if (pt) {
+        setGlobalProperty("polarTransform",      newQObject(pt.data()));
+      }
 
 //      QCEP_DOC_OBJECT("polarNormalization", "Polar Normalization Options");
-      setGlobalProperty("polarNormalization",      newQObject(dp->polarNormalization().data()));
+
+      QxrdPolarNormalizationPtr pn(dp->polarNormalization());
+
+      if (pn) {
+        setGlobalProperty("polarNormalization",      newQObject(pn.data()));
+      }
 
       QxrdGenerateTestImagePtr gti(dp->generateTestImage());
 
@@ -341,14 +366,14 @@ QxrdAcquisitionWPtr QxrdJSEngine::acquisition()
   return res;
 }
 
-QxrdDataProcessorWPtr QxrdJSEngine::dataProcessor()
+QxrdProcessorWPtr QxrdJSEngine::processor()
 {
-  QxrdDataProcessorWPtr res;
+  QxrdProcessorWPtr res;
 
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    res = expt->dataProcessor();
+    res = expt->processor();
   }
 
   return res;
@@ -504,7 +529,7 @@ int  QxrdJSEngine::statusFunc(double tim)
   int res = -1;
 
   QxrdAcquisitionPtr acq(acquisition());
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (acq && proc) {
     res = acq->acquisitionStatus(tim);
@@ -573,7 +598,7 @@ int  QxrdJSEngine::processStatusFunc(double tim)
 
   int res = -1;
 
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     res = proc->status(tim);
@@ -764,7 +789,7 @@ void QxrdJSEngine::fcloseFunc()
 
 QcepImageDataBase* QxrdJSEngine::dataFunc()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     return proc->data().data();
@@ -775,7 +800,7 @@ QcepImageDataBase* QxrdJSEngine::dataFunc()
 
 QcepDoubleImageData* QxrdJSEngine::darkFunc()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     return proc->dark().data();
@@ -786,7 +811,7 @@ QcepDoubleImageData* QxrdJSEngine::darkFunc()
 
 QcepMaskData*        QxrdJSEngine::maskFunc()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     return proc->mask().data();
@@ -797,7 +822,7 @@ QcepMaskData*        QxrdJSEngine::maskFunc()
 
 QcepMaskData*        QxrdJSEngine::overflowFunc()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     return proc->overflow().data();
@@ -808,7 +833,7 @@ QcepMaskData*        QxrdJSEngine::overflowFunc()
 
 QcepDoubleImageData* QxrdJSEngine::liveDataFunc()
 {
-  QxrdDataProcessorPtr proc(dataProcessor());
+  QxrdProcessorPtr proc(processor());
 
   if (proc) {
     return proc->liveData().data();

@@ -4,19 +4,19 @@
 #include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrdimagecalculator.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 
 class QXRD_EXPORT QxrdImageCalculator : public QDockWidget, public Ui::QxrdImageCalculator {
     Q_OBJECT
 public:
-    QxrdImageCalculator(QxrdDataProcessorWPtr processor, QWidget *parent);
+    QxrdImageCalculator(QxrdProcessorWPtr processor, QWidget *parent);
     ~QxrdImageCalculator();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
-    QxrdDataProcessorWPtr m_Processor;
+    QxrdProcessorWPtr m_Processor;
 };
 
 #endif // QXRDIMAGECALCULATOR_H

@@ -8,7 +8,7 @@
 #include "ui_qxrdfilebrowserwidget.h"
 #include "qxrdfilebrowsersettings-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdfilebrowsermodel-ptr.h"
 #include <QFileInfo>
 #include <QMutex>
@@ -22,7 +22,7 @@ public:
   ~QxrdFileBrowserWidget();
   void initialize(QxrdFileBrowserSettingsWPtr settings,
             QxrdExperimentWPtr          experiment,
-            QxrdDataProcessorWPtr       processor);
+            QxrdProcessorWPtr processor);
 
 protected:
   void changeEvent(QEvent *e);
@@ -66,7 +66,7 @@ private:
   QxrdFileBrowserSettingsWPtr  m_FileBrowserSettings;
   mutable QMutex               m_Mutex;
   QxrdExperimentWPtr           m_Experiment;
-  QxrdDataProcessorWPtr        m_Processor;
+  QxrdProcessorWPtr            m_Processor;
   QxrdFileBrowserModelPtr      m_Model;
   QStringList                  m_DirectoryStack;
 };

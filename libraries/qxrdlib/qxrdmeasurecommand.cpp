@@ -20,5 +20,5 @@ void QxrdMeasureCommand::selected(const QVector<QPointF> &p)
 {
   printf("QxrdMeasureCommand::selected\n");
 //  connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
-//          dp.data(), &QxrdDataProcessor::printMeasuredPolygon);
+//          dp.data(), &QxrdProcessor::printMeasuredPolygon);
 }

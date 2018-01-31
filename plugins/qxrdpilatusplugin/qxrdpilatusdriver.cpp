@@ -7,7 +7,7 @@
 #include <QPainter>
 #include "qxrdpilatussettings.h"
 #include "qxrdpilatusremote.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 
 QxrdPilatusDriver::QxrdPilatusDriver(QString name,
                                      QxrdDetectorSettingsWPtr det,
@@ -434,7 +434,8 @@ void QxrdPilatusDriver::remoteCopy(QString file)
   QxrdExperimentPtr      expt(m_Experiment);
 
   if (pil && expt) {
-    QxrdDataProcessorPtr proc = expt->dataProcessor();
+    //TODO: is this the right one...
+    QxrdProcessorPtr proc = expt->processor();
 
     if (proc) {
       QString dest = proc->filePathInRawOutputDirectory(file);
@@ -467,7 +468,8 @@ void QxrdPilatusDriver::remoteTransfer(QString file)
   QxrdExperimentPtr       expt(m_Experiment);
 
   if (pil && expt) {
-    QxrdDataProcessorPtr proc = expt->dataProcessor();
+    //TODO: is this the right one...
+    QxrdProcessorPtr proc = expt->processor();
 
     if (proc) {
       QString dest = proc->filePathInRawOutputDirectory(file);
@@ -484,7 +486,8 @@ void QxrdPilatusDriver::loadAndPush(QString f)
   QxrdExperimentPtr      expt(m_Experiment);
 
   if (pil && expt) {
-    QxrdDataProcessorPtr proc = expt->dataProcessor();
+    //TODO: is this the right one...
+    QxrdProcessorPtr proc = expt->processor();
 
     if (proc) {
       QString dest = proc->filePathInRawOutputDirectory(f);

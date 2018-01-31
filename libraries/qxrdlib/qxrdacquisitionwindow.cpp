@@ -3,6 +3,7 @@
 #include "qxrdacquisitionwindowsettings.h"
 #include "qxrdcorrectiondialog.h"
 #include "qxrddetectorlistmodel.h"
+#include "qxrdacquisition.h"
 #include <QTableView>
 #include <QDir>
 #include <QFileDialog>
@@ -32,12 +33,10 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdDataProcessorPtr proc(exp->dataProcessor());
-
     QxrdAcquisitionWindowSettingsPtr settings(m_AcquisitionWindowSettings);
 
     if (settings) {
-      m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
+      m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, procw);
     }
 
     m_DetectorsModel =
@@ -137,7 +136,7 @@ void QxrdAcquisitionWindow::doEditCorrection()
 
   if (exp) {
     QxrdAcquisitionPtr   acq(m_Acquisition);
-    QxrdDataProcessorPtr proc = exp->dataProcessor();
+    QxrdProcessorPtr     proc(m_Processor);
 
     if (acq && proc) {
       QxrdCorrectionDialog* editCorrection =

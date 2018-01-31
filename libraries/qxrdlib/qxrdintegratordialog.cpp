@@ -1,6 +1,6 @@
 #include "qxrdintegratordialog.h"
 #include "qxrdintegrator.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrddebug.h"
 
 QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegratorWPtr integw, QWidget *parent)
@@ -17,7 +17,7 @@ QxrdIntegratorDialog::QxrdIntegratorDialog(QxrdIntegratorWPtr integw, QWidget *p
 
   if (integ) {
     connect(m_IntegrateButton, &QAbstractButton::clicked,
-            integ -> dataProcessor().data(), &QxrdDataProcessor::integrateSaveAndDisplay);
+            integ -> dataProcessor().data(), &QxrdProcessor::integrateSaveAndDisplay);
 
     integ -> prop_Oversample()         -> linkTo(m_OversampleFactor);
     integ -> prop_IntegrationStep()    -> linkTo(m_IntegratorStepSize);

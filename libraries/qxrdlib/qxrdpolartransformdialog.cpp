@@ -1,21 +1,24 @@
 #include "qxrdpolartransformdialog.h"
 #include "ui_qxrdpolartransformdialog.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdpolartransform.h"
 
-QxrdPolarTransformDialog::QxrdPolarTransformDialog(QxrdDataProcessorWPtr procw) :
+QxrdPolarTransformDialog::QxrdPolarTransformDialog(QxrdProcessorWPtr procw) :
   QDialog(NULL),
   m_Processor(procw)
 {
   setupUi(this);
 
-  if (m_Processor) {
-    QxrdPolarTransformPtr transform = m_Processor->polarTransform();
+  QxrdProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QxrdPolarTransformPtr transform = proc->polarTransform();
 
     if (transform) {
 //      m_OutputType->setCurrentIndex(transform->get_OutputType());
 //      m_Destination->setText(transform->get_Destination());
 
+      //TODO: rewrite using copyTo/copyFrom
       m_PolarType->setCurrentIndex(transform->get_PolarUnits());
       m_PolarStep->setValue(transform->get_PolarStep());
       m_PolarNSteps->setValue(transform->get_PolarNSteps());
@@ -43,8 +46,10 @@ QxrdPolarTransformDialog::~QxrdPolarTransformDialog()
 
 void QxrdPolarTransformDialog::accept()
 {
-  if (m_Processor) {
-    QxrdPolarTransformPtr transform = m_Processor->polarTransform();
+  QxrdProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    QxrdPolarTransformPtr transform = proc->polarTransform();
 
     if (transform) {
 //      transform->set_OutputType(m_OutputType->currentIndex());

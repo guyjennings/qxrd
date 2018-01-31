@@ -1,7 +1,8 @@
 #include "qxrdcenteringwindow.h"
 #include "qxrdexperiment.h"
 #include "qxrdcenteringwindowsettings.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
+#include "qxrdcenterfinder.h"
 
 QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
                                          QString name,
@@ -29,14 +30,14 @@ QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdDataProcessorPtr proc(exp->dataProcessor());
+    QxrdProcessorPtr     proc(procw);
     QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
 
     QxrdCenteringWindowSettingsPtr settings(m_CenteringWindowSettings);
 
     if (settings) {
-      m_FileBrowserWidget    -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings(), proc);
+      m_FileBrowserWidget    -> initialize(settings->fileBrowserSettings(), exp, procw);
+      m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings(), procw);
       m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings(), cf);
       m_IntegratedPlotWidget -> initialize(settings->integratedPlotWidgetSettings());
     }

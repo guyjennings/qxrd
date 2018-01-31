@@ -3,7 +3,7 @@
 #include "qxrddebug.h"
 #include "qxrdfilesaver.h"
 #include "qxrdacquisition.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdapplication.h"
 #include "qcepintegrateddata.h"
 #include "qxrdexperiment.h"
@@ -54,7 +54,7 @@ QxrdExperimentWPtr QxrdFileSaver::experiment() const
   return m_Experiment;
 }
 
-void QxrdFileSaver::setProcessor(QxrdDataProcessorWPtr proc)
+void QxrdFileSaver::setProcessor(QxrdProcessorWPtr proc)
 {
   m_Processor = proc;
 }
@@ -75,7 +75,7 @@ QxrdAcqCommonWPtr QxrdFileSaver::acquisition() const
 
 void QxrdFileSaver::incBacklog()
 {
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     proc -> prop_SaverQueueLength()->incValue(1);
@@ -84,7 +84,7 @@ void QxrdFileSaver::incBacklog()
 
 void QxrdFileSaver::decBacklog()
 {
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     proc -> prop_SaverQueueLength()->incValue(-1);
@@ -250,7 +250,7 @@ void QxrdFileSaver::saveDoubleDataPrivate(QString name, QcepDoubleImageDataPtr i
 
       image -> saveMetaData();
 
-      QxrdDataProcessorPtr proc(m_Processor);
+      QxrdProcessorPtr proc(m_Processor);
 
       if (proc) {
         if (proc->get_SaveOverflowFiles()) {
@@ -479,7 +479,7 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepUInt32ImageDataPtr im
 
       image -> saveMetaData(name);
 
-      QxrdDataProcessorPtr proc(m_Processor);
+      QxrdProcessorPtr proc(m_Processor);
       QxrdAcquisitionPtr acq(
             qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
 
@@ -579,7 +579,7 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString name, QcepUInt16ImageDataPtr im
 
       image -> saveMetaData(name);
 
-      QxrdDataProcessorPtr proc(m_Processor);
+      QxrdProcessorPtr proc(m_Processor);
       QxrdAcquisitionPtr acq(
             qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
 
@@ -650,7 +650,7 @@ void QxrdFileSaver::saveTextDataPrivate(QString name, QcepDoubleImageDataPtr ima
 
     FILE* file = fopen(qPrintable(name),"a");
 
-    QxrdDataProcessorPtr proc(m_Processor);
+    QxrdProcessorPtr proc(m_Processor);
 
     QString separator = "\t";
 
@@ -832,7 +832,7 @@ void QxrdFileSaver::writeOutputScanPrivate(FILE* logFile, QcepIntegratedDataPtr 
 
     fflush(logFile);
 
-    QxrdDataProcessorPtr proc(m_Processor);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (proc) {
       proc -> updateEstimatedTime(proc -> prop_SaveIntegratedDataTime(), tic.restart());

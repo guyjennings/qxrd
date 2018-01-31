@@ -6,8 +6,8 @@
 #include "qcepplot.h"
 #include "qcepintegrateddata-ptr.h"
 
-#include "qxrddataprocessor.h"
-#include "qxrdintegrator.h"
+#include "qxrdprocessor-ptr.h"
+#include "qxrdintegrator-ptr.h"
 
 class QXRD_EXPORT QxrdIntegratorPlot : public QcepPlot
 {
@@ -17,7 +17,7 @@ public:
   QxrdIntegratorPlot(QWidget *parent=0);
   void init(QcepPlotSettingsWPtr settings);
 
-  void setDataProcessor(QxrdDataProcessorWPtr proc);
+  void setProcessor(QxrdProcessorWPtr proc);
 
 public slots:
   void onNewIntegrationAvailable(QcepIntegratedDataPtr data);
@@ -25,7 +25,7 @@ public slots:
   void clearSelectedCurves();
 
 private:
-  QxrdDataProcessorWPtr m_DataProcessor;
+  QxrdProcessorWPtr     m_Processor;
   QxrdIntegratorWPtr    m_Integrator;
   int                   m_PlotIndex;
   QString               m_XUnitsLabel;

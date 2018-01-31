@@ -12,7 +12,7 @@
 #include "qcepproperty.h"
 
 #include "qcepallocator-ptr.h"
-#include "qxrddataprocessor-ptr.h"
+#include "qxrdprocessor-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qcepimagedata.h"
 #include "qcepimagedata-ptr.h"
@@ -30,7 +30,7 @@ public:
   Q_INVOKABLE QxrdFileSaver();
   ~QxrdFileSaver();
 
-  void setProcessor(QxrdDataProcessorWPtr proc);
+  void setProcessor(QxrdProcessorWPtr proc);
   void setAcquisition(QxrdAcqCommonWPtr acq);
   void setExperiment(QxrdExperimentWPtr expt);
 
@@ -73,9 +73,9 @@ private:
   void decBacklog();
 
 private:
-  QxrdExperimentWPtr    m_Experiment;
-  QxrdDataProcessorWPtr m_Processor;
-  QxrdAcqCommonWPtr     m_Acquisition;
+  QxrdExperimentWPtr m_Experiment;
+  QxrdProcessorWPtr  m_Processor;
+  QxrdAcqCommonWPtr  m_Acquisition;
 };
 
 Q_DECLARE_METATYPE(QxrdFileSaver*)

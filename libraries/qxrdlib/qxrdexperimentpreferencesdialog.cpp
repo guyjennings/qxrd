@@ -1,7 +1,7 @@
 #include "qxrddebug.h"
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdacquisition.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qxrdapplication.h"
 #include "qcepallocator.h"
 #include "qxrdexperiment.h"
@@ -39,7 +39,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
         qSharedPointerDynamicCast<QxrdAcquisition>(
           expt -> acquisition());
 
-    QxrdDataProcessorPtr proc = expt->dataProcessor();
+    QxrdProcessorPtr proc = expt->processor();
     //  QcepAllocator *alloc = g_Application->allocator();
 
     int runSpecServer = 0;
@@ -258,7 +258,7 @@ void QxrdExperimentPreferencesDialog::accept()
     QxrdAcquisitionPtr acq =
         qSharedPointerDynamicCast<QxrdAcquisition>(
           expt -> acquisition());
-    QxrdDataProcessorPtr proc = expt->dataProcessor();
+    QxrdProcessorPtr proc = expt->processor();
     QxrdServerPtr srv(expt -> specServer());
     QxrdSimpleServerPtr ssrv(expt -> simpleServer());
 

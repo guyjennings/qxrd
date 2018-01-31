@@ -1,6 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdfilebrowser.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include <QFileSystemModel>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -17,7 +17,7 @@
 QxrdFileBrowser::QxrdFileBrowser(QxrdFileBrowserSettingsWPtr settings,
                                  int isOutput,
                                  QxrdExperimentWPtr experiment,
-                                 QxrdDataProcessorWPtr processor,
+                                 QxrdProcessorWPtr processor,
                                  QWidget *parent)
   : QDockWidget(parent),
     m_FileBrowserSettings(settings),
@@ -273,7 +273,7 @@ void QxrdFileBrowser::doOpen()
       }
     }
   } else {
-    QxrdDataProcessorPtr proc(m_Processor);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (proc) {
       foreach(index, rows) {
@@ -292,7 +292,7 @@ void QxrdFileBrowser::doOpenDark()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     foreach(index, rows) {
@@ -310,7 +310,7 @@ void QxrdFileBrowser::doOpenMask()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     foreach(index, rows) {
@@ -328,7 +328,7 @@ void QxrdFileBrowser::doOpenGainMap()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     foreach(index, rows) {
@@ -346,7 +346,7 @@ void QxrdFileBrowser::doProcess()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     foreach(index, rows) {
@@ -364,7 +364,7 @@ void QxrdFileBrowser::doIntegrate()
   QModelIndexList rows = sel->selectedRows();
   QModelIndex index;
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     foreach(index, rows) {
@@ -389,7 +389,7 @@ void QxrdFileBrowser::doSumImages()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "sumImages", Q_ARG(QStringList, paths));
@@ -398,7 +398,7 @@ void QxrdFileBrowser::doSumImages()
 
 void QxrdFileBrowser::doClearAccumulator()
 {
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "clearAccumulator");
@@ -418,7 +418,7 @@ void QxrdFileBrowser::doIntegrateAndAccumulate()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "integrateAndAccumulate", Q_ARG(QStringList, paths));
@@ -439,7 +439,7 @@ void QxrdFileBrowser::doSaveAccumulator()
 //  }
 
   QxrdExperimentPtr expt(m_Experiment);
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (expt && proc) {
     QcepDatasetModelPtr ds(expt->dataset());
@@ -487,7 +487,7 @@ void QxrdFileBrowser::doAdd()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "addImages", Q_ARG(QStringList, paths));
@@ -507,7 +507,7 @@ void QxrdFileBrowser::doSubtract()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "subtractImages", Q_ARG(QStringList, paths));
@@ -527,7 +527,7 @@ void QxrdFileBrowser::doProjectX()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, paths), Q_ARG(int, 1), Q_ARG(int, 0), Q_ARG(int, 0));
@@ -547,7 +547,7 @@ void QxrdFileBrowser::doProjectY()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, paths), Q_ARG(int, 0), Q_ARG(int, 1), Q_ARG(int, 0));
@@ -567,7 +567,7 @@ void QxrdFileBrowser::doProjectZ()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "projectImages", Q_ARG(QStringList, paths), Q_ARG(int, 0), Q_ARG(int, 0), Q_ARG(int, 1));
@@ -587,7 +587,7 @@ void QxrdFileBrowser::doCorrelate()
     }
   }
 
-  QxrdDataProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QMetaObject::invokeMethod(proc.data(), "correlateImages", Q_ARG(QStringList, paths));
@@ -723,7 +723,7 @@ void QxrdFileBrowser::onFileUpdated(QFileInfo file)
 
 QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdFileBrowserSettingsWPtr settings,
                                            QxrdExperimentWPtr experiment,
-                                           QxrdDataProcessorWPtr processor,
+                                           QxrdProcessorWPtr processor,
                                            QWidget *parent)
   : QxrdFileBrowser(settings, false, experiment, processor, parent)
 {
@@ -731,7 +731,7 @@ QxrdInputFileBrowser::QxrdInputFileBrowser(QxrdFileBrowserSettingsWPtr settings,
 
 QxrdOutputFileBrowser::QxrdOutputFileBrowser(QxrdFileBrowserSettingsWPtr settings,
                                              QxrdExperimentWPtr experiment,
-                                             QxrdDataProcessorWPtr processor,
+                                             QxrdProcessorWPtr processor,
                                              QWidget *parent)
   : QxrdFileBrowser(settings, true, experiment, processor, parent)
 {

@@ -1,6 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdintegrator.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
 #include "qxrdcenterfinder.h"
@@ -113,14 +113,14 @@ void QxrdIntegrator::initialize(QxrdCenterFinderWPtr cfw)
   }
 }
 
-QxrdDataProcessorPtr QxrdIntegrator::dataProcessor() const
+QxrdProcessorPtr QxrdIntegrator::dataProcessor() const
 {
-  QxrdDataProcessorPtr proc;
+  QxrdProcessorPtr proc;
 
   QcepObjectPtr p = parentPtr();
 
   while (p) {
-    proc = qSharedPointerDynamicCast<QxrdDataProcessor>(p);
+    proc = qSharedPointerDynamicCast<QxrdProcessor>(p);
 
     if (proc) {
       return proc;
@@ -129,9 +129,9 @@ QxrdDataProcessorPtr QxrdIntegrator::dataProcessor() const
     p = p -> parentPtr();
   }
 
-  printMessage("QxrdDataProcessor of QxrdExperiment not found");
+  printMessage("QxrdProcessor of QxrdIntegrator not found");
 
-  return QxrdDataProcessorPtr();
+  return QxrdProcessorPtr();
 }
 
 QxrdExperimentPtr QxrdIntegrator::experiment() const

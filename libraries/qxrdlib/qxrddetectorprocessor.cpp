@@ -157,6 +157,8 @@ QxrdAcquisitionWPtr QxrdDetectorProcessor::acquisition()
   QxrdAcquisitionWPtr res(
         qSharedPointerDynamicCast<QxrdAcquisition>(
           inherited::acquisition()));
+
+  return res;
 }
 
 QScriptValue QxrdDetectorProcessor::toScriptValue(QScriptEngine *engine, const QxrdDetectorProcessorPtr &proc)

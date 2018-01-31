@@ -4,7 +4,7 @@
 #include "qxrdprocessor.h"
 #include "qxrdmaskstack.h"
 #include "qxrdzingerdialog.h"
-#include "qxrddataprocessor.h"
+#include "qxrdprocessor.h"
 
 QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
                                      QString name,
@@ -32,13 +32,11 @@ QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdDataProcessorPtr proc(exp->dataProcessor());
-
     QxrdMaskingWindowSettingsPtr settings(m_MaskingWindowSettings);
 
     if (settings) {
-      m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings(), proc);
+      m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, procw);
+      m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings(), procw);
     }
   }
 
@@ -245,7 +243,7 @@ void QxrdMaskingWindow::doZingersMask()
 //  int n = maskStackSelectPopup();
 
 //  if (n >= 0) {
-//    QxrdDataProcessorPtr proc(m_Processor);
+//    QxrdProcessorPtr proc(m_Processor);
 
 //    if (proc) {
 //      proc->zingersStack(n);
