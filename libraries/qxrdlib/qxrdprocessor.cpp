@@ -23,6 +23,7 @@
 #include "qxrdintegratorparmsdialog.h"
 #include "qxrdpolartransformdialog.h"
 #include "qxrdpolarnormalizationdialog.h"
+#include "qxrdroicalculator.h"
 #include <QFileInfo>
 #include <QThread>
 #include <QDir>
@@ -42,6 +43,7 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_Average(this,"average",0.0, "Average Value of Acquired Image (per exposure)"),
   m_AverageDark(this,"averageDark",0.0, "Average Value of Dark Image"),
   m_AverageRaw(this,"averageRaw",0.0, "Average Value of Raw Image"),
+  m_DetectorDisplayMode(this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
   m_MaskMinimumValue(this, "maskMinimumValue", 0, "Mask Minimum Value"),
   m_MaskMaximumValue(this, "maskMaximumValue", 20000, "Mask Maximum Value"),
   m_MaskCircleRadius(this, "maskCircleRadius", 10, "Mask Circle Radius"),
@@ -88,6 +90,9 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_SaverQueueLength(this, "saverQueueLength", 0, "Data saving backlog"),
   m_EstimatedProcessingTime(this, "estimatedProcessingTime", 0.1, "Overall Estimated Processing Time (in sec/image)"),
   m_AveragingRatio(this, "averagingRatio", 0.1, "Averaging Ratio for Estimated Timing"),
+  m_CalculateROICounts(this, "calculateROICounts", true, "Calculate ROI Counts"),
+  m_DisplayROIBorders(this, "displayROIBorders", true, "Display ROIs in image"),
+  m_RoiCounts(this, "roiCounts", QcepDoubleVector(), "ROI Counts"),
   m_Data(QcepAllocator::newDoubleImage("data", 2048, 2048, QcepAllocator::WaitTillAvailable)),
   m_Dark(NULL),
   m_BadPixels(NULL),
@@ -95,6 +100,7 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_MaskStack(),
   m_ZingerFinder(),
   m_CenterFinder(),
+  m_ROICalculator(),
   m_Mutex(QMutex::Recursive),
   m_AcquiredInt16Images("acquiredInt16Images"),
   m_AcquiredInt32Images("acquiredInt32Images"),
@@ -117,6 +123,7 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_PolarTransform = QxrdPolarTransform::newPolarTransform();
   m_PolarNormalization = QxrdPolarNormalization::newPolarNormalization();
   m_GenerateTestImage = QxrdGenerateTestImage::newGenerateTestImage();
+  m_ROICalculator = QxrdROICalculator::newROICalculator();
 
   connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onCorrectedImageAvailable);
   connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onIntegratedDataAvailable);
@@ -230,6 +237,11 @@ QxrdGenerateTestImageWPtr QxrdProcessor::generateTestImage() const
   return m_GenerateTestImage;
 }
 
+QxrdROICalculatorPtr QxrdProcessor::roiCalculator() const
+{
+  return m_ROICalculator;
+}
+
 QxrdPowderRingsModelWPtr QxrdProcessor::powderRings() const
 {
   if (m_PowderRings == NULL) {
@@ -306,6 +318,12 @@ void QxrdProcessor::readSettings(QSettings *settings)
     settings->endGroup();
   }
 
+  if (m_ROICalculator) {
+    settings->beginGroup("roiCalculator");
+    m_ROICalculator->readSettings(settings);
+    settings->endGroup();
+  }
+
   int n = settings->beginReadArray("processorSteps");
 
   for (int i=0; i<n; i++) {
@@ -366,6 +384,12 @@ void QxrdProcessor::writeSettings(QSettings *settings)
   if (m_PolarNormalization) {
     settings->beginGroup("polarNormalization");
     m_PolarNormalization -> writeSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_ROICalculator) {
+    settings->beginGroup("roiCalculator");
+    m_ROICalculator->writeSettings(settings);
     settings->endGroup();
   }
 
@@ -779,6 +803,22 @@ void QxrdProcessor::newDarkInt32(QcepUInt32ImageDataWPtr imageW)
   }
 }
 
+void QxrdProcessor::onDarkImagePathChanged(QString newPath)
+{
+  if (newPath.length() == 0) {
+    printMessage("Clear Dark Image");
+    m_Dark = QcepDoubleImageDataPtr();
+  } else {
+    printMessage(tr("Load Dark Image from %1").arg(newPath));
+
+    QcepDoubleImageDataPtr dark = QcepAllocator::newDoubleImage("dark", 0,0, QcepAllocator::NullIfNotAvailable);
+
+    if (dark && dark -> readImage(newPath)) {
+      m_Dark = dark;
+    }
+  }
+}
+
 void QxrdProcessor::loadMask(QString name)
 {
   THREAD_CHECK;
@@ -922,6 +962,22 @@ void QxrdProcessor::newBadPixelsImage(QcepDoubleImageDataWPtr image)
   }
 }
 
+void QxrdProcessor::onBadPixelsPathChanged(QString newPath)
+{
+  if (newPath.length() == 0) {
+    printMessage("Clear Bad Pixels");
+    m_BadPixels = QcepDoubleImageDataPtr();
+  } else {
+    printMessage(tr("Load Bad Pixels from %1").arg(newPath));
+
+    QcepDoubleImageDataPtr bad = QcepAllocator::newDoubleImage("bad", 0,0, QcepAllocator::NullIfNotAvailable);
+
+    if (bad && bad->readImage(newPath)) {
+      m_BadPixels = bad;
+    }
+  }
+}
+
 void QxrdProcessor::loadGainMap(QString name)
 {
   if (qcepDebug(DEBUG_FILES)) {
@@ -978,6 +1034,15 @@ void QxrdProcessor::newGainMapImage(QcepDoubleImageDataWPtr image)
     set_GainMapPath(m_GainMap->get_FileName());
   } else {
     set_GainMapPath("");
+  }
+}
+
+void QxrdProcessor::onGainMapPathChanged(QString newPath)
+{
+  if (newPath.length() == 0) {
+    printMessage("Clear Gain Map");
+  } else {
+    printMessage(tr("Load Gain Map from %1").arg(newPath));
   }
 }
 
@@ -1620,6 +1685,28 @@ double QxrdProcessor::estimatedProcessingTime(double estSerialTime, double estPa
   }
 }
 
+void QxrdProcessor::onMaskPathChanged(QString newPath)
+{
+  if (newPath.length() == 0) {
+    printMessage("Clear Mask");
+    m_MaskStack->clearMaskStack();
+  } else {
+    printMessage(tr("Load mask from %1").arg(newPath));
+
+    QcepMaskDataPtr m = QcepAllocator::newMask(newPath, 0,0, 0, QcepAllocator::NullIfNotAvailable);
+
+    if (m && m->readImage(newPath)) {
+      m_MaskStack->push(m);
+
+      QxrdDetectorControlWindowPtr ctl(m_ControlWindow);
+
+      if (ctl) {
+        ctl->displayNewMask(m);
+      }
+    }
+  }
+}
+
 int QxrdProcessor::newMaskWidth() const
 {
   QcepImageDataBasePtr   d(data());
@@ -2130,6 +2217,34 @@ void QxrdProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDat
   m_CorrectedImages.enqueue(QtConcurrent::run(this,
                                               p,
                                               corrected, image, dark(), overflow, v));
+}
+
+QcepDoubleVector QxrdProcessor::doCalculateROICounts(QcepImageDataBasePtr img)
+{
+  QcepDoubleVector res;
+
+  if (img && m_ROICalculator) {
+    // TODO: check mask source...
+    res = m_ROICalculator->values(img, mask());
+  }
+
+  if (qcepDebug(DEBUG_ACQUIRE)) {
+    QString s = "[";
+
+    for (int i=0; i<res.count(); i++) {
+      if (i == 0) {
+        s.append(tr("%1").arg(res.value(i)));
+      } else {
+        s.append(tr(", %1").arg(res.value(i)));
+      }
+    }
+
+    s.append("]");
+
+    printMessage(tr("ROI Values = %1").arg(s));
+  }
+
+  return res;
 }
 
 void QxrdProcessor::onCorrectedImageAvailable()

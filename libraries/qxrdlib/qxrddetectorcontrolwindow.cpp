@@ -55,20 +55,21 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          a
     dp->prop_SaveSubtracted()          -> linkTo(m_SaveSubtractedData);
 
     dp->prop_DarkImagePath()           -> linkTo(m_DarkImagePath);
-    dp->prop_RawDataSubdir()           -> linkTo(m_RawDataSubdir);
-    dp->prop_DarkDataSubdir()          -> linkTo(m_DarkDataSubdir);
+    dp->prop_SaveRawSubdirectory()     -> linkTo(m_RawDataSubdir);
+    dp->prop_SaveDarkSubdirectory()    -> linkTo(m_DarkDataSubdir);
     dp->prop_BadPixelsPath()           -> linkTo(m_BadPixelPath);
     dp->prop_GainMapPath()             -> linkTo(m_GainCorrectionPath);
-    dp->prop_SubtractedSubdir()        -> linkTo(m_SubtractedDataSubdir);
+    dp->prop_SaveSubtractedSubdirectory()
+                                       -> linkTo(m_SubtractedDataSubdir);
 
     dp->prop_MaskPath()                -> linkTo(m_MaskImagePath);
 
     dp->prop_PerformIntegration()      -> linkTo(m_PerformIntegration);
     dp->prop_DisplayIntegratedData()   -> linkTo(m_DisplayIntegratedData);
     dp->prop_SaveIntegratedData()      -> linkTo(m_SaveIntegratedData);
-    dp->prop_IntegratedDataFile()      -> linkTo(m_IntegratedDataFile);
-    dp->prop_SaveIntegratedDataSeparate() -> linkTo(m_SaveIntegratedDataSeparate);
-    dp->prop_IntegratedDataSubdir()    -> linkTo(m_IntegratedDataSubdir);
+    dp->prop_SaveIntegratedPath()      -> linkTo(m_IntegratedDataFile);
+    dp->prop_SaveIntegratedInSeparateFiles() -> linkTo(m_SaveIntegratedDataSeparate);
+    dp->prop_SaveIntegratedSubdirectory()    -> linkTo(m_IntegratedDataSubdir);
 
     dp->prop_AccumulateIntegrated2D()  -> linkTo(m_AccumulateIntegratedData);
     dp->prop_AccumulateIntegratedName()-> linkTo(m_AccumulateIntegratedName);

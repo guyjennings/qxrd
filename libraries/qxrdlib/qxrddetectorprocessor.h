@@ -43,7 +43,7 @@ signals:
 public slots:
 //  QxrdCenterFinderPtr  centerFinder();
 //  QxrdIntegratorPtr    integrator();
-  QxrdROICalculatorPtr roiCalculator();
+//  QxrdROICalculatorPtr roiCalculator();
 
   void processAcquiredImage(QcepUInt32ImageDataPtr image,
                             QcepMaskDataPtr overflow,
@@ -65,13 +65,13 @@ public slots:
 //  QcepMaskDataPtr        mask();
 //  QcepMaskDataPtr        overflow();
 
-  QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img);
-  QcepDataObjectPtr polarTransform(QcepDoubleImageDataPtr img);
-  QcepDataObjectPtr polarIntegrate(QcepDoubleImageDataPtr img);
+//  QcepDataObjectPtr integrate(QcepDoubleImageDataPtr img);
+//  QcepDataObjectPtr polarTransform(QcepDoubleImageDataPtr img);
+//  QcepDataObjectPtr polarIntegrate(QcepDoubleImageDataPtr img);
 
-  bool integrateParameters();
-  bool polarTransformParameters();
-  bool polarIntegrateParameters();
+//  bool integrateParameters();
+//  bool polarTransformParameters();
+//  bool polarIntegrateParameters();
 
 public:
   void readSettings(QSettings *settings);
@@ -82,22 +82,22 @@ public:
 
   QxrdImagePlotSettingsWPtr imagePlotSettings();
 
-  enum {
-    NoDisplayMode,
-    ImageDisplayMode,
-    IntegratedDisplayMode
-  };
+//  enum {
+//    NoDisplayMode,
+//    ImageDisplayMode,
+//    IntegratedDisplayMode
+//  };
 
-  QString              filePathInDarkOutputDirectory(QString fileName) const;
-  QString              filePathInRawOutputDirectory(QString fileName) const;
-  QString              filePathInSubtractedOutputDirectory(QString fileName) const;
-  QString              filePathInIntegratedOutputDirectory(QString fileName) const;
+//  QString              filePathInDarkOutputDirectory(QString fileName) const;
+//  QString              filePathInRawOutputDirectory(QString fileName) const;
+//  QString              filePathInSubtractedOutputDirectory(QString fileName) const;
+//  QString              filePathInIntegratedOutputDirectory(QString fileName) const;
 
 private slots:
-  void onMaskPathChanged(QString newPath);
-  void onDarkImagePathChanged(QString newPath);
-  void onBadPixelsPathChanged(QString newPath);
-  void onGainMapPathChanged(QString newPath);
+//  void onMaskPathChanged(QString newPath);
+//  void onDarkImagePathChanged(QString newPath);
+//  void onBadPixelsPathChanged(QString newPath);
+//  void onGainMapPathChanged(QString newPath);
 
 private:
   QxrdAcquisitionWPtr acquisition();
@@ -111,41 +111,41 @@ private:
   QcepImageDataBasePtr doDarkSubtraction    (QcepImageDataBasePtr img);
   QcepImageDataBasePtr doBadPixels          (QcepImageDataBasePtr img);
   QcepImageDataBasePtr doGainCorrection     (QcepImageDataBasePtr img);
-  QcepDoubleVector     doCalculateROICounts (QcepImageDataBasePtr img);
+//  QcepDoubleVector     doCalculateROICounts (QcepImageDataBasePtr img);
   void                 doSaveRawImage       (QcepImageDataBasePtr img, QcepMaskDataPtr ovf);
   void                 doSaveSubtractedImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf);
   void                 doSaveDarkImage      (QcepImageDataBasePtr img, QcepMaskDataPtr ovf);
 
-  QString              dataDirectory() const;
-  QString              darkOutputDirectory() const;
-  QString              rawOutputDirectory() const;
-  QString              subtractedOutputDirectory() const;
-  QString              integratedOutputDirectory() const;
-  QString              existingOutputDirectory(QString dir, QString subdir) const;
+//  QString              dataDirectory() const;
+//  QString              darkOutputDirectory() const;
+//  QString              rawOutputDirectory() const;
+//  QString              subtractedOutputDirectory() const;
+//  QString              integratedOutputDirectory() const;
+//  QString              existingOutputDirectory(QString dir, QString subdir) const;
 
 public:
   // Properties...
 
-  Q_PROPERTY(int detectorDisplayMode READ get_DetectorDisplayMode WRITE set_DetectorDisplayMode)
-  QCEP_INTEGER_PROPERTY(DetectorDisplayMode)
+//  Q_PROPERTY(int detectorDisplayMode READ get_DetectorDisplayMode WRITE set_DetectorDisplayMode)
+//  QCEP_INTEGER_PROPERTY(DetectorDisplayMode)
 
-  Q_PROPERTY(bool performDarkSubtraction READ get_PerformDarkSubtraction WRITE set_PerformDarkSubtraction)
-  QCEP_BOOLEAN_PROPERTY(PerformDarkSubtraction)
+//  Q_PROPERTY(bool performDarkSubtraction READ get_PerformDarkSubtraction WRITE set_PerformDarkSubtraction)
+//  QCEP_BOOLEAN_PROPERTY(PerformDarkSubtraction)
 
-  Q_PROPERTY(bool saveRawImages READ get_SaveRawImages WRITE set_SaveRawImages)
-  QCEP_BOOLEAN_PROPERTY(SaveRawImages)
+//  Q_PROPERTY(bool saveRawImages READ get_SaveRawImages WRITE set_SaveRawImages)
+//  QCEP_BOOLEAN_PROPERTY(SaveRawImages)
 
-  Q_PROPERTY(bool saveDarkImages READ get_SaveDarkImages WRITE set_SaveDarkImages)
-  QCEP_BOOLEAN_PROPERTY(SaveDarkImages)
+//  Q_PROPERTY(bool saveDarkImages READ get_SaveDarkImages WRITE set_SaveDarkImages)
+//  QCEP_BOOLEAN_PROPERTY(SaveDarkImages)
 
-  Q_PROPERTY(bool performBadPixels READ get_PerformBadPixels WRITE set_PerformBadPixels)
-  QCEP_BOOLEAN_PROPERTY(PerformBadPixels)
+//  Q_PROPERTY(bool performBadPixels READ get_PerformBadPixels WRITE set_PerformBadPixels)
+//  QCEP_BOOLEAN_PROPERTY(PerformBadPixels)
 
-  Q_PROPERTY(bool performGainCorrection READ get_PerformGainCorrection WRITE set_PerformGainCorrection)
-  QCEP_BOOLEAN_PROPERTY(PerformGainCorrection)
+//  Q_PROPERTY(bool performGainCorrection READ get_PerformGainCorrection WRITE set_PerformGainCorrection)
+//  QCEP_BOOLEAN_PROPERTY(PerformGainCorrection)
 
-  Q_PROPERTY(bool saveSubtracted READ get_SaveSubtracted WRITE set_SaveSubtracted)
-  QCEP_BOOLEAN_PROPERTY(SaveSubtracted)
+//  Q_PROPERTY(bool saveSubtracted READ get_SaveSubtracted WRITE set_SaveSubtracted)
+//  QCEP_BOOLEAN_PROPERTY(SaveSubtracted)
 
 //  Q_PROPERTY(QString darkImagePath   READ get_DarkImagePath WRITE set_DarkImagePath)
 //  QCEP_STRING_PROPERTY(DarkImagePath)
@@ -169,14 +169,14 @@ public:
 //  QCEP_STRING_PROPERTY(MaskPath)
 
 
-  Q_PROPERTY(bool performIntegration READ get_PerformIntegration WRITE set_PerformIntegration)
-  QCEP_BOOLEAN_PROPERTY(PerformIntegration)
+//  Q_PROPERTY(bool performIntegration READ get_PerformIntegration WRITE set_PerformIntegration)
+//  QCEP_BOOLEAN_PROPERTY(PerformIntegration)
 
-  Q_PROPERTY(bool displayIntegratedData READ get_DisplayIntegratedData WRITE set_DisplayIntegratedData)
-  QCEP_BOOLEAN_PROPERTY(DisplayIntegratedData)
+//  Q_PROPERTY(bool displayIntegratedData READ get_DisplayIntegratedData WRITE set_DisplayIntegratedData)
+//  QCEP_BOOLEAN_PROPERTY(DisplayIntegratedData)
 
-  Q_PROPERTY(bool saveIntegratedData READ get_SaveIntegratedData WRITE set_SaveIntegratedData)
-  QCEP_BOOLEAN_PROPERTY(SaveIntegratedData)
+//  Q_PROPERTY(bool saveIntegratedData READ get_SaveIntegratedData WRITE set_SaveIntegratedData)
+//  QCEP_BOOLEAN_PROPERTY(SaveIntegratedData)
 
   Q_PROPERTY(QString integratedDataFile READ get_IntegratedDataFile WRITE set_IntegratedDataFile)
   QCEP_STRING_PROPERTY(IntegratedDataFile)
@@ -187,20 +187,20 @@ public:
   Q_PROPERTY(QString integratedDataSubdir READ get_IntegratedDataSubdir WRITE set_IntegratedDataSubdir)
   QCEP_STRING_PROPERTY(IntegratedDataSubdir)
 
-  Q_PROPERTY(bool accumulateIntegrated2D READ get_AccumulateIntegrated2D WRITE set_AccumulateIntegrated2D)
-  QCEP_BOOLEAN_PROPERTY(AccumulateIntegrated2D)
+//  Q_PROPERTY(bool accumulateIntegrated2D READ get_AccumulateIntegrated2D WRITE set_AccumulateIntegrated2D)
+//  QCEP_BOOLEAN_PROPERTY(AccumulateIntegrated2D)
 
-  Q_PROPERTY(QString accumulateIntegratedName READ get_AccumulateIntegratedName WRITE set_AccumulateIntegratedName)
-  QCEP_STRING_PROPERTY(AccumulateIntegratedName)
+//  Q_PROPERTY(QString accumulateIntegratedName READ get_AccumulateIntegratedName WRITE set_AccumulateIntegratedName)
+//  QCEP_STRING_PROPERTY(AccumulateIntegratedName)
 
-  Q_PROPERTY(bool calculateROICounts READ get_CalculateROICounts WRITE set_CalculateROICounts)
-  QCEP_BOOLEAN_PROPERTY(CalculateROICounts)
+//  Q_PROPERTY(bool calculateROICounts READ get_CalculateROICounts WRITE set_CalculateROICounts)
+//  QCEP_BOOLEAN_PROPERTY(CalculateROICounts)
 
-  Q_PROPERTY(bool displayROIBorders READ get_DisplayROIBorders WRITE set_DisplayROIBorders)
-  QCEP_BOOLEAN_PROPERTY(DisplayROIBorders)
+//  Q_PROPERTY(bool displayROIBorders READ get_DisplayROIBorders WRITE set_DisplayROIBorders)
+//  QCEP_BOOLEAN_PROPERTY(DisplayROIBorders)
 
-  Q_PROPERTY(QcepDoubleVector roiCounts READ get_RoiCounts WRITE set_RoiCounts STORED false)
-  QCEP_DOUBLE_VECTOR_PROPERTY(RoiCounts)
+//  Q_PROPERTY(QcepDoubleVector roiCounts READ get_RoiCounts WRITE set_RoiCounts STORED false)
+//  QCEP_DOUBLE_VECTOR_PROPERTY(RoiCounts)
 
 private:
   QMutex                m_Mutex;
@@ -211,7 +211,7 @@ private:
 
 //  QxrdCenterFinderPtr   m_CenterFinder;
 //  QxrdIntegratorPtr     m_Integrator;
-  QxrdROICalculatorPtr  m_ROICalculator;
+//  QxrdROICalculatorPtr  m_ROICalculator;
 
   QxrdDetectorControlWindowWPtr m_ControlWindow;
 

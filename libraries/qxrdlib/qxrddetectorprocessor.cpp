@@ -19,13 +19,13 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     QxrdFileSaverWPtr     fsav,
     QxrdDetectorSettingsWPtr      det)
   : inherited("acquisitionProcessor"),
-    m_DetectorDisplayMode(this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
-    m_PerformDarkSubtraction(this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
-    m_SaveRawImages(this, "saveRawImages", true, "Save Raw Images?"),
-    m_SaveDarkImages(this, "saveDarkImages", true, "Save Dark Images?"),
-    m_PerformBadPixels(this, "performBadPixels", true, "Perform Bad Pixel Correction?"),
-    m_PerformGainCorrection(this, "performGainCorrection", true, "Perform Gain Correction?"),
-    m_SaveSubtracted(this, "saveSubtracted", true, "Save Dark Subtracted Data?"),
+//    m_DetectorDisplayMode(this, "detectorDisplayMode", ImageDisplayMode, "Detector Display Mode"),
+//    m_PerformDarkSubtraction(this, "performDarkSubtraction", true, "Perform Dark Subtraction?"),
+//    m_SaveRawImages(this, "saveRawImages", true, "Save Raw Images?"),
+//    m_SaveDarkImages(this, "saveDarkImages", true, "Save Dark Images?"),
+//    m_PerformBadPixels(this, "performBadPixels", true, "Perform Bad Pixel Correction?"),
+//    m_PerformGainCorrection(this, "performGainCorrection", true, "Perform Gain Correction?"),
+//    m_SaveSubtracted(this, "saveSubtracted", true, "Save Dark Subtracted Data?"),
 //    m_DarkImagePath(this, "darkImagePath", "", "Dark Images Path"),
     m_RawDataSubdir(this, "rawDataSubdir", "", "Raw Data Subdirectory"),
     m_DarkDataSubdir(this, "darkDataSubdir", "", "Dark Data Subdirectory"),
@@ -34,27 +34,27 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
     m_SubtractedSubdir(this, "subtractedSubdir", "", "Subtracted Data Subdirectory"),
 //    m_MaskPath(this, "maskPath", "", "Mask Path"),
 
-    m_PerformIntegration(this, "performIntegration", true, "Perform Circular Integration?"),
-    m_DisplayIntegratedData(this, "displayIntegratedData", true, "Display Integrated Data?"),
-    m_SaveIntegratedData(this, "saveIntegratedData", true, "Save Integrated Data?"),
+//    m_PerformIntegration(this, "performIntegration", true, "Perform Circular Integration?"),
+//    m_DisplayIntegratedData(this, "displayIntegratedData", true, "Display Integrated Data?"),
+//    m_SaveIntegratedData(this, "saveIntegratedData", true, "Save Integrated Data?"),
     m_IntegratedDataFile(this, "integratedDataFile", "", "Integrated Data File"),
     m_SaveIntegratedDataSeparate(this, "saveIntegratedDataSeparate", false, "Save Integrated Data in Separate Files?"),
     m_IntegratedDataSubdir(this, "integratedDataSubdir", "", "Integrated Data Subdir"),
 
-    m_AccumulateIntegrated2D(this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
-    m_AccumulateIntegratedName(this, "accumulateIntegratedName", "", "Dataset name for accumulated data"),
+//    m_AccumulateIntegrated2D(this, "accumulateIntegrated2D", 0, "Accumulate integrated data in 2-d dataset"),
+//    m_AccumulateIntegratedName(this, "accumulateIntegratedName", "", "Dataset name for accumulated data"),
 
-    m_CalculateROICounts(this, "calculateROICounts", true, "Calculate ROI Counts"),
-    m_DisplayROIBorders(this, "displayROIBorders", true, "Display ROIs in image"),
+//    m_CalculateROICounts(this, "calculateROICounts", true, "Calculate ROI Counts"),
+//    m_DisplayROIBorders(this, "displayROIBorders", true, "Display ROIs in image"),
 
-    m_RoiCounts(this, "roiCounts", QcepDoubleVector(), "ROI Counts"),
+//    m_RoiCounts(this, "roiCounts", QcepDoubleVector(), "ROI Counts"),
 
     m_Experiment(doc),
     m_FileSaver(fsav),
     m_Detector(det),
 //    m_CenterFinder(),
 //    m_Integrator(),
-    m_ROICalculator(),
+//    m_ROICalculator(),
     m_ControlWindow(),
     m_ImagePlotSettings(QxrdImagePlotSettings::newImagePlotSettings())
 {
@@ -64,7 +64,7 @@ QxrdDetectorProcessor::QxrdDetectorProcessor(QxrdExperimentWPtr    doc,
 
 //  m_CenterFinder  = QxrdCenterFinder::newCenterFinder();
 //  m_Integrator    = QxrdIntegrator::newIntegrator();
-  m_ROICalculator = QxrdROICalculator::newROICalculator();
+//  m_ROICalculator = QxrdROICalculator::newROICalculator();
 
 //  if (centerFinder()) {
 //    if (m_Integrator) {
@@ -108,11 +108,11 @@ void QxrdDetectorProcessor::readSettings(QSettings *settings)
 //    settings->endGroup();
 //  }
 
-  if (m_ROICalculator) {
-    settings->beginGroup("roiCalculator");
-    m_ROICalculator->readSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_ROICalculator) {
+//    settings->beginGroup("roiCalculator");
+//    m_ROICalculator->readSettings(settings);
+//    settings->endGroup();
+//  }
 
   if (m_ImagePlotSettings) {
     settings->beginGroup("imagePlotSettings");
@@ -139,11 +139,11 @@ void QxrdDetectorProcessor::writeSettings(QSettings *settings)
 //    settings->endGroup();
 //  }
 
-  if (m_ROICalculator) {
-    settings->beginGroup("roiCalculator");
-    m_ROICalculator->writeSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_ROICalculator) {
+//    settings->beginGroup("roiCalculator");
+//    m_ROICalculator->writeSettings(settings);
+//    settings->endGroup();
+//  }
 
   if (m_ImagePlotSettings) {
     settings->beginGroup("imagePlotSettings");
@@ -189,10 +189,10 @@ void QxrdDetectorProcessor::fromScriptValue(const QScriptValue &obj, QxrdDetecto
 //  return m_Integrator;
 //}
 
-QxrdROICalculatorPtr QxrdDetectorProcessor::roiCalculator()
-{
-  return m_ROICalculator;
-}
+//QxrdROICalculatorPtr QxrdDetectorProcessor::roiCalculator() const
+//{
+//  return m_ROICalculator;
+//}
 
 //QcepImageDataBasePtr QxrdDetectorProcessor::data()
 //{
@@ -625,32 +625,32 @@ QcepImageDataBasePtr QxrdDetectorProcessor::doGainCorrection(QcepImageDataBasePt
   return img;
 }
 
-QcepDoubleVector QxrdDetectorProcessor::doCalculateROICounts(QcepImageDataBasePtr img)
-{
-  QcepDoubleVector res;
+//QcepDoubleVector QxrdDetectorProcessor::doCalculateROICounts(QcepImageDataBasePtr img)
+//{
+//  QcepDoubleVector res;
 
-  if (img && m_ROICalculator) {
-    res = m_ROICalculator->values(img, mask());
-  }
+//  if (img && m_ROICalculator) {
+//    res = m_ROICalculator->values(img, mask());
+//  }
 
-  if (qcepDebug(DEBUG_ACQUIRE)) {
-    QString s = "[";
+//  if (qcepDebug(DEBUG_ACQUIRE)) {
+//    QString s = "[";
 
-    for (int i=0; i<res.count(); i++) {
-      if (i == 0) {
-        s.append(tr("%1").arg(res.value(i)));
-      } else {
-        s.append(tr(", %1").arg(res.value(i)));
-      }
-    }
+//    for (int i=0; i<res.count(); i++) {
+//      if (i == 0) {
+//        s.append(tr("%1").arg(res.value(i)));
+//      } else {
+//        s.append(tr(", %1").arg(res.value(i)));
+//      }
+//    }
 
-    s.append("]");
+//    s.append("]");
 
-    printMessage(tr("ROI Values = %1").arg(s));
-  }
+//    printMessage(tr("ROI Values = %1").arg(s));
+//  }
 
-  return res;
-}
+//  return res;
+//}
 
 void QxrdDetectorProcessor::doSaveRawImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
 {
@@ -688,154 +688,121 @@ void QxrdDetectorProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img, Qcep
   }
 }
 
-QString QxrdDetectorProcessor::dataDirectory() const
-{
-  QxrdExperimentPtr expt(m_Experiment);
+//QString QxrdDetectorProcessor::dataDirectory() const
+//{
+//  QxrdExperimentPtr expt(m_Experiment);
 
-  if (expt) {
-    return QDir(expt->get_ExperimentDirectory()).filePath(expt->get_DataDirectory());
-  } else {
-    return QString();
-  }
-}
+//  if (expt) {
+//    return QDir(expt->get_ExperimentDirectory()).filePath(expt->get_DataDirectory());
+//  } else {
+//    return QString();
+//  }
+//}
 
-QString QxrdDetectorProcessor::existingOutputDirectory(QString dir, QString subdir) const
-{
-  return QDir(dir).filePath(subdir);
-}
+//QString QxrdDetectorProcessor::existingOutputDirectory(QString dir, QString subdir) const
+//{
+//  return QDir(dir).filePath(subdir);
+//}
 
-QString QxrdDetectorProcessor::darkOutputDirectory() const
-{
-  return existingOutputDirectory(dataDirectory(), get_DarkDataSubdir());
-}
+//QString QxrdDetectorProcessor::darkOutputDirectory() const
+//{
+//  return existingOutputDirectory(dataDirectory(), get_DarkDataSubdir());
+//}
 
-QString QxrdDetectorProcessor::filePathInDarkOutputDirectory(QString fileName) const
-{
-  return QDir(darkOutputDirectory()).filePath(fileName);
-}
+//QString QxrdDetectorProcessor::filePathInDarkOutputDirectory(QString fileName) const
+//{
+//  return QDir(darkOutputDirectory()).filePath(fileName);
+//}
 
-QString QxrdDetectorProcessor::rawOutputDirectory() const
-{
-  return existingOutputDirectory(dataDirectory(), get_RawDataSubdir());
-}
+//QString QxrdDetectorProcessor::rawOutputDirectory() const
+//{
+//  return existingOutputDirectory(dataDirectory(), get_RawDataSubdir());
+//}
 
-QString QxrdDetectorProcessor::filePathInRawOutputDirectory(QString fileName) const
-{
-  return QDir(rawOutputDirectory()).filePath(fileName);
-}
+//QString QxrdDetectorProcessor::filePathInRawOutputDirectory(QString fileName) const
+//{
+//  return QDir(rawOutputDirectory()).filePath(fileName);
+//}
 
-QString QxrdDetectorProcessor::subtractedOutputDirectory() const
-{
-  return existingOutputDirectory(dataDirectory(), get_SubtractedSubdir());
-}
+//QString QxrdDetectorProcessor::subtractedOutputDirectory() const
+//{
+//  return existingOutputDirectory(dataDirectory(), get_SubtractedSubdir());
+//}
 
-QString QxrdDetectorProcessor::filePathInSubtractedOutputDirectory(QString fileName) const
-{
-  return QDir(subtractedOutputDirectory()).filePath(fileName);
-}
+//QString QxrdDetectorProcessor::filePathInSubtractedOutputDirectory(QString fileName) const
+//{
+//  return QDir(subtractedOutputDirectory()).filePath(fileName);
+//}
 
-QString QxrdDetectorProcessor::integratedOutputDirectory() const
-{
-  return existingOutputDirectory(dataDirectory(), get_IntegratedDataSubdir());
-}
+//QString QxrdDetectorProcessor::integratedOutputDirectory() const
+//{
+//  return existingOutputDirectory(dataDirectory(), get_IntegratedDataSubdir());
+//}
 
-QString QxrdDetectorProcessor::filePathInIntegratedOutputDirectory(QString fileName) const
-{
-  return QDir(integratedOutputDirectory()).filePath(fileName);
-}
+//QString QxrdDetectorProcessor::filePathInIntegratedOutputDirectory(QString fileName) const
+//{
+//  return QDir(integratedOutputDirectory()).filePath(fileName);
+//}
 
-void QxrdDetectorProcessor::onMaskPathChanged(QString newPath)
-{
-  if (newPath.length() == 0) {
-    printMessage("Clear Mask");
-    m_MaskStack->clearMaskStack();
-  } else {
-    printMessage(tr("Load mask from %1").arg(newPath));
+//void QxrdDetectorProcessor::onMaskPathChanged(QString newPath)
+//{
+//  if (newPath.length() == 0) {
+//    printMessage("Clear Mask");
+//    m_MaskStack->clearMaskStack();
+//  } else {
+//    printMessage(tr("Load mask from %1").arg(newPath));
 
-    QcepMaskDataPtr m = QcepAllocator::newMask(newPath, 0,0, 0, QcepAllocator::NullIfNotAvailable);
+//    QcepMaskDataPtr m = QcepAllocator::newMask(newPath, 0,0, 0, QcepAllocator::NullIfNotAvailable);
 
-    if (m && m->readImage(newPath)) {
-      m_MaskStack->push(m);
+//    if (m && m->readImage(newPath)) {
+//      m_MaskStack->push(m);
 
-      QxrdDetectorControlWindowPtr ctl(m_ControlWindow);
+//      QxrdDetectorControlWindowPtr ctl(m_ControlWindow);
 
-      if (ctl) {
-        ctl->displayNewMask(m);
-      }
-    }
-  }
-}
+//      if (ctl) {
+//        ctl->displayNewMask(m);
+//      }
+//    }
+//  }
+//}
 
-void QxrdDetectorProcessor::onDarkImagePathChanged(QString newPath)
-{
-  if (newPath.length() == 0) {
-    printMessage("Clear Dark Image");
-    m_Dark = QcepDoubleImageDataPtr();
-  } else {
-    printMessage(tr("Load Dark Image from %1").arg(newPath));
+//void QxrdDetectorProcessor::onDarkImagePathChanged(QString newPath)
+//{
+//  if (newPath.length() == 0) {
+//    printMessage("Clear Dark Image");
+//    m_Dark = QcepDoubleImageDataPtr();
+//  } else {
+//    printMessage(tr("Load Dark Image from %1").arg(newPath));
 
-    QcepDoubleImageDataPtr dark = QcepAllocator::newDoubleImage("dark", 0,0, QcepAllocator::NullIfNotAvailable);
+//    QcepDoubleImageDataPtr dark = QcepAllocator::newDoubleImage("dark", 0,0, QcepAllocator::NullIfNotAvailable);
 
-    if (dark && dark -> readImage(newPath)) {
-      m_Dark = dark;
-    }
-  }
-}
+//    if (dark && dark -> readImage(newPath)) {
+//      m_Dark = dark;
+//    }
+//  }
+//}
 
-void QxrdDetectorProcessor::onBadPixelsPathChanged(QString newPath)
-{
-  if (newPath.length() == 0) {
-    printMessage("Clear Bad Pixels");
-    m_BadPixels = QcepDoubleImageDataPtr();
-  } else {
-    printMessage(tr("Load Bad Pixels from %1").arg(newPath));
+//void QxrdDetectorProcessor::onBadPixelsPathChanged(QString newPath)
+//{
+//  if (newPath.length() == 0) {
+//    printMessage("Clear Bad Pixels");
+//    m_BadPixels = QcepDoubleImageDataPtr();
+//  } else {
+//    printMessage(tr("Load Bad Pixels from %1").arg(newPath));
 
-    QcepDoubleImageDataPtr bad = QcepAllocator::newDoubleImage("bad", 0,0, QcepAllocator::NullIfNotAvailable);
+//    QcepDoubleImageDataPtr bad = QcepAllocator::newDoubleImage("bad", 0,0, QcepAllocator::NullIfNotAvailable);
 
-    if (bad && bad->readImage(newPath)) {
-      m_BadPixels = bad;
-    }
-  }
-}
+//    if (bad && bad->readImage(newPath)) {
+//      m_BadPixels = bad;
+//    }
+//  }
+//}
 
-void QxrdDetectorProcessor::onGainMapPathChanged(QString newPath)
-{
-  if (newPath.length() == 0) {
-    printMessage("Clear Gain Map");
-  } else {
-    printMessage(tr("Load Gain Map from %1").arg(newPath));
-  }
-}
-
-//TODO: implement
-QcepDataObjectPtr QxrdDetectorProcessor::integrate(QcepDoubleImageDataPtr /*img*/)
-{
-  return QcepDataObjectPtr();
-}
-
-//TODO: implement
-QcepDataObjectPtr QxrdDetectorProcessor::polarTransform(QcepDoubleImageDataPtr /*img*/)
-{
-  return QcepDataObjectPtr();
-}
-
-//TODO: implement
-QcepDataObjectPtr QxrdDetectorProcessor::polarIntegrate(QcepDoubleImageDataPtr /*img*/)
-{
-  return QcepDataObjectPtr();
-}
-
-bool QxrdDetectorProcessor::integrateParameters()
-{
-  return false;
-}
-
-bool QxrdDetectorProcessor::polarTransformParameters()
-{
-  return false;
-}
-
-bool QxrdDetectorProcessor::polarIntegrateParameters()
-{
-  return false;
-}
+//void QxrdDetectorProcessor::onGainMapPathChanged(QString newPath)
+//{
+//  if (newPath.length() == 0) {
+//    printMessage("Clear Gain Map");
+//  } else {
+//    printMessage(tr("Load Gain Map from %1").arg(newPath));
+//  }
+//}

@@ -23,6 +23,7 @@
 #include "qxrdpolartransform-ptr.h"
 #include "qxrdpolarnormalization-ptr.h"
 #include "qxrdgeneratetestimage-ptr.h"
+#include "qxrdroicalculator-ptr.h"
 #include <QWaitCondition>
 
 //TODO: merge QxrdDataProcessor and QxrdDetectorProcessor into QxrdProcessor
@@ -52,6 +53,7 @@ public:
   QxrdPolarTransformPtr  polarTransform() const;
   QxrdPolarNormalizationPtr  polarNormalization() const;
   QxrdGenerateTestImageWPtr generateTestImage() const;
+  QxrdROICalculatorPtr roiCalculator() const;
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -59,6 +61,12 @@ public:
   enum {
     NoOverwrite,
     CanOverwrite
+  };
+
+  enum {
+    NoDisplayMode,
+    ImageDisplayMode,
+    IntegratedDisplayMode
   };
 
   // Data operations...
@@ -100,6 +108,7 @@ public:
   void unsubtractDark();
   void multiplyData(double scalar);
   void offsetData(double offset);
+  void onDarkImagePathChanged(QString newPath);
 
   // mask operations...
   void loadMask(QString name);
@@ -107,6 +116,7 @@ public:
   void clearMask();
   QcepMaskDataWPtr        mask() const;
   void newMask(QcepMaskDataWPtr mask);
+  void onMaskPathChanged(QString newPath);
 
   // bad pixel operations...
   void loadBadPixels(QString name);
@@ -114,6 +124,7 @@ public:
   void clearBadPixels();
   QcepDoubleImageDataWPtr badPixels() const;
   void newBadPixelsImage(QcepDoubleImageDataWPtr image);
+  void onBadPixelsPathChanged(QString newPath);
 
   // gain map operations...
   void loadGainMap(QString name);
@@ -121,6 +132,7 @@ public:
   void clearGainMap();
   QcepDoubleImageDataWPtr gainMap() const;
   void newGainMapImage(QcepDoubleImageDataWPtr image);
+  void onGainMapPathChanged(QString newPath);
 
   // live data operations...
   QcepDoubleImageDataWPtr liveData() const;
@@ -238,6 +250,9 @@ public:
 
   void correlateImages(QStringList names);
 
+  // ROI calculation
+  QcepDoubleVector     doCalculateROICounts (QcepImageDataBasePtr img);
+
   // Image generation
   void newImage(int ncols, int nrows);
   void exponentialTail(double cx, double cy, double width, int oversample);
@@ -313,6 +328,9 @@ public:
 
   Q_PROPERTY(double     averageRaw    READ get_AverageRaw WRITE set_AverageRaw STORED false)
   QCEP_DOUBLE_PROPERTY(AverageRaw)
+
+  Q_PROPERTY(int detectorDisplayMode READ get_DetectorDisplayMode WRITE set_DetectorDisplayMode)
+  QCEP_INTEGER_PROPERTY(DetectorDisplayMode)
 
   Q_PROPERTY(double maskMinimumValue READ get_MaskMinimumValue WRITE set_MaskMinimumValue)
   QCEP_DOUBLE_PROPERTY(MaskMinimumValue)
@@ -452,6 +470,15 @@ public:
   Q_PROPERTY(double averagingRatio READ get_AveragingRatio WRITE set_AveragingRatio)
   QCEP_DOUBLE_PROPERTY(AveragingRatio)
 
+  Q_PROPERTY(bool calculateROICounts READ get_CalculateROICounts WRITE set_CalculateROICounts)
+  QCEP_BOOLEAN_PROPERTY(CalculateROICounts)
+
+  Q_PROPERTY(bool displayROIBorders READ get_DisplayROIBorders WRITE set_DisplayROIBorders)
+  QCEP_BOOLEAN_PROPERTY(DisplayROIBorders)
+
+  Q_PROPERTY(QcepDoubleVector roiCounts READ get_RoiCounts WRITE set_RoiCounts STORED false)
+  QCEP_DOUBLE_VECTOR_PROPERTY(RoiCounts)
+
   protected:
   QcepImageDataBasePtr   m_Data;
   QcepDoubleImageDataPtr m_Dark;
@@ -471,6 +498,7 @@ private:
   QxrdPolarTransformPtr     m_PolarTransform;
   QxrdPolarNormalizationPtr m_PolarNormalization;
   QxrdGenerateTestImagePtr  m_GenerateTestImage;
+  QxrdROICalculatorPtr      m_ROICalculator;
 
   //TODO: store a data object, not a model
   QxrdPowderRingsModelPtr        m_PowderRings;

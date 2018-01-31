@@ -470,11 +470,11 @@ void QxrdDetectorSettings::openControlWindow()
       }
     }
 
-    QxrdProcessorPtr dp(m_Processor);
+//    QxrdProcessorPtr dp(m_Processor);
 
-    if (dp) {
-      dp->setControlWindow(m_DetectorControlWindow);
-    }
+//    if (dp) {
+//      dp->setControlWindow(m_DetectorControlWindow);
+//    }
   }
 
   if (m_DetectorControlWindow) {
