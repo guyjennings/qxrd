@@ -16,6 +16,7 @@
 
 #include <QMenu>
 
+//TODO: remove detector related stuff when called from viewer...
 QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent, int initialPage) :
   QDialog(parent),
   m_Experiment(exptw)
@@ -339,21 +340,28 @@ void QxrdExperimentPreferencesDialog::addDetector()
       QMenu menu;
 
       for (int i=0; i<QxrdDetectorSettings::detectorTypeCount(); i++) {
-        QAction *a = new QAction(QxrdDetectorSettings::detectorTypeName(i), &menu);
-        a->setData(i);
-
-        menu.addAction(a);
+        menu.addAction(QxrdDetectorSettings::detectorTypeName(i),
+                       [=]() { addDetectorOfType(i);});
       }
 
-      QAction *choice = menu.exec(QCursor::pos());
+      menu.exec(QCursor::pos());
+    }
+  }
+}
 
-      if (choice) {
-        int type = choice->data().toInt();
+void QxrdExperimentPreferencesDialog::addDetectorOfType(int t)
+{
+  QxrdExperimentPtr expt(m_Experiment);
 
-        QxrdDetectorSettingsPtr det = acq->newDetector(type);
+  if (expt) {
+    QxrdAcquisitionPtr acq(
+          qSharedPointerDynamicCast<QxrdAcquisition>(
+            expt -> acquisition()));
 
-        m_DetectorsModel->append(det);
-      }
+    if (acq) {
+      QxrdDetectorSettingsPtr det(acq->newDetector(t));
+
+      m_DetectorsModel->append(det);
     }
   }
 }

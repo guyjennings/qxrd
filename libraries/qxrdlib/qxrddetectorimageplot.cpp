@@ -64,25 +64,14 @@ void QxrdDetectorImagePlot::enableROICreate()
   if (m_ROICreator) {
     m_ROICreator -> setEnabled(true);
 
-    QMenu *popUp = new QMenu(this);
+    QMenu          *popUp = new QMenu(this);
 
     for (int i=0; i<newROITypeCount(); i++) {
-      QAction *act = new QAction(newROITypeName(i), popUp);
-
-      act->setData(i);
-
-      popUp->addAction(act);
+      popUp -> addAction(newROITypeName(i),
+                         [=]() { m_ROICreator -> setCreatedType(i);});
     }
 
-    QAction *act = popUp->exec(QCursor::pos());
-
-    if (act) {
-      int newType = act->data().toInt();
-
-      emit changeROICreateType(newType);
-
-      m_ROICreator -> setCreatedType(newType);
-    }
+    popUp->exec(QCursor::pos());
   }
 }
 

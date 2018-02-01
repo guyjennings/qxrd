@@ -46,6 +46,8 @@ protected:
 private:
   void getRelativeDirectoryPath(QLineEdit *edit);
 
+  void addDetectorOfType(int t);
+
   QString experimentDirectory();
   QString dataDirectory();
 

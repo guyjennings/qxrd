@@ -92,6 +92,7 @@ private slots:
 
 private:
   QVector<int>  selectedROIs();
+  void appendROI(int roiType);
 
 private:
   QxrdExperimentWPtr         m_Experiment;

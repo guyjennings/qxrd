@@ -274,10 +274,12 @@ void QxrdMainWindow::populateWindowsMenu()
 
         if (win) {
           act = m_WindowMenuP ->
-              addAction(tr("Show %1 Window").arg(set->get_Name()), this, &QxrdMainWindow::newWindow);
+              addAction(tr("Show %1 Window").arg(set->get_Name()),
+                        this, &QxrdMainWindow::newWindow);
         } else {
           act = m_WindowMenuP ->
-              addAction(tr("New %1 Window").arg(set->get_Name()), this, &QxrdMainWindow::newWindow);
+              addAction(tr("New %1 Window").arg(set->get_Name()),
+                        this, &QxrdMainWindow::newWindow);
         }
 
         if (act) {

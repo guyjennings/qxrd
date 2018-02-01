@@ -31,6 +31,8 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          a
   m_Detector(det),
   m_Processor(proc)
 {
+  //TODO: check args are non-null...
+
   GUI_THREAD_CHECK;
 
   setupUi(this);
@@ -364,7 +366,6 @@ QVector<int> QxrdDetectorControlWindow::selectedROIs()
 
 void QxrdDetectorControlWindow::doAppendROI()
 {
-  QVector<int> rois = selectedROIs();
   QxrdROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel) {
@@ -372,24 +373,24 @@ void QxrdDetectorControlWindow::doAppendROI()
 
     for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
       for (int j=1; j<QxrdROIShape::roiTypeCount(); j++) {
-        int t = QxrdROI::roiTypeID(i,j);
-        QAction *a = new QAction(QxrdROI::roiTypeName(i,j), &menu);
-        a->setData(t);
-
-        menu.addAction(a);
+        menu.addAction(QxrdROI::roiTypeName(i,j),
+                       [=]() { appendROI(QxrdROI::roiTypeID(i,j));});
       }
     }
 
-    QAction *choice = menu.exec(QCursor::pos());
+    menu.exec(QCursor::pos());
+  }
+}
 
-    if (choice) {
-      int roiTypeID = choice->data().toInt();
+void QxrdDetectorControlWindow::appendROI(int roiType)
+{
+  QxrdROIModelPtr roiModel(m_ROIModel);
 
-      QxrdROIPtr roi =
-          QxrdROI::newROICoordinates(roiTypeID);
+  if (roiModel) {
+    QxrdROIPtr roi =
+        QxrdROI::newROICoordinates(roiType);
 
-      roiModel->append(roi);
-    }
+    roiModel->append(roi);
   }
 }
 

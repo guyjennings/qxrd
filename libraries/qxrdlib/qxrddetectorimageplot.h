@@ -35,8 +35,8 @@ public:
   static int newROITypeCount();
   static QString newROITypeName(int i);
 
-signals:
-  void changeROICreateType(int newType);
+//signals:
+//  void changeROICreateType(int newType);
 
 protected:
   void disablePickers();
