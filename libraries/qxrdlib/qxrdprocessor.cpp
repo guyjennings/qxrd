@@ -24,6 +24,7 @@
 #include "qxrdpolartransformdialog.h"
 #include "qxrdpolarnormalizationdialog.h"
 #include "qxrdroicalculator.h"
+#include "qxrdfilesaver.h"
 #include <QFileInfo>
 #include <QThread>
 #include <QDir>
@@ -31,6 +32,7 @@
 #include <QtConcurrentRun>
 #include <QDirIterator>
 
+//TODO: emit data available signals when appropriate...
 QxrdProcessor::QxrdProcessor(QString name) :
   QcepObject(name),
   m_FileName(this, "fileName","", "Current File Name"),
@@ -148,6 +150,11 @@ QxrdProcessor::QxrdProcessor(QString name) :
   connect(prop_DisplayIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
   connect(prop_SaveIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
 
+  connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onMaskPathChanged);
+  connect(prop_DarkImagePath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onDarkImagePathChanged);
+  connect(prop_BadPixelsPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onBadPixelsPathChanged);
+  connect(prop_GainMapPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onGainMapPathChanged);
+
   QxrdAcquisitionPtr acqp(
         qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
 
@@ -199,6 +206,14 @@ QxrdAcqCommonWPtr QxrdProcessor::acquisition() const
   }
 
   return res;
+}
+
+QxrdDetectorSettingsWPtr QxrdProcessor::detector() const
+{
+  QxrdDetectorSettingsWPtr set =
+      qSharedPointerDynamicCast<QxrdDetectorSettings>(parentPtr());
+
+  return set;
 }
 
 QxrdFileSaverWPtr QxrdProcessor::fileSaver() const
@@ -1348,6 +1363,471 @@ void QxrdProcessor::idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView)
   }
 }
 
+QcepImageDataBasePtr QxrdProcessor::doDarkSubtraction(QcepImageDataBasePtr img)
+{
+  QcepDoubleImageDataPtr dark = m_Dark;
+  QcepImageDataBasePtr   res  = img;
+
+  if (img && dark) {
+    if (img->get_ExposureTime() != dark->get_ExposureTime()) {
+      printMessage("Exposure times of acquired data and dark image are different, skipping");
+      return img;
+    }
+
+    if (img->get_Width() != dark->get_Width() ||
+        img->get_Height() != dark->get_Height()) {
+      printMessage("Dimensions of acquired data and dark image are different, skipping");
+      return img;
+    }
+
+    if (img->get_CameraGain() != dark->get_CameraGain()) {
+      printMessage("Gains of acquired data and dark image are different, skipping");
+      return img;
+    }
+
+    int height = img->get_Height();
+    int width  = img->get_Width();
+    int nres = img -> get_SummedExposures();
+    int ndrk = dark -> get_SummedExposures();
+    int npixels = width*height;
+
+    if (nres <= 0) nres = 1;
+
+
+    double ratio = ((double) nres)/((double) ndrk);
+
+    QcepDoubleImageDataPtr result = QcepAllocator::newDoubleImage("image",
+                                                                  width, height,
+                                                                  QcepAllocator::NullIfNotAvailable);
+
+    if (result) {
+      result->copyPropertiesFrom(img);
+
+      double sumraw = 0, sumdark = 0;
+
+      double *resptr = result->data();
+      double *drkptr = dark->data();
+
+      QcepUInt16ImageDataPtr i16 = qSharedPointerDynamicCast<QcepUInt16ImageData>(img);
+
+      if (i16) {
+        quint16 *imgptr = i16->data();
+
+        for (int i=0; i<npixels; i++) {
+          double valraw = imgptr[i];
+          double valdark = drkptr[i];
+
+          sumraw  += valraw;
+          sumdark += valdark;
+
+          resptr[i] = valraw - ratio*valdark;
+        }
+      } else {
+        QcepUInt32ImageDataPtr i32 = qSharedPointerDynamicCast<QcepUInt32ImageData>(img);
+
+        if (i32) {
+          quint32 *imgptr = i32->data();
+
+          for (int i=0; i<npixels; i++) {
+            double valraw = imgptr[i];
+            double valdark = drkptr[i];
+
+            sumraw  += valraw;
+            sumdark += valdark;
+
+            resptr[i] = valraw - ratio*valdark;
+          }
+        } else {
+          npixels = 0;
+
+          for (int row=0; row<height; row++) {
+            for (int col=0; col<width; col++) {
+              double valraw  = img  -> getImageData(col, row);
+              double valdark = dark -> getImageData(col, row);
+              if (valraw == valraw && valdark == valdark) { // Check for NaNs
+                sumraw += valraw; sumdark += valdark;
+                npixels += 1;
+                double resval = valraw - ratio*valdark;
+
+                result->setImageData(col, row, resval);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    res = result;
+  }
+
+  return res;
+}
+
+QcepImageDataBasePtr QxrdProcessor::doBadPixels(QcepImageDataBasePtr img)
+{
+  printMessage("Bad Pixel Correction not yet implemented");
+
+  return img;
+}
+
+QcepImageDataBasePtr QxrdProcessor::doGainCorrection(QcepImageDataBasePtr img)
+{
+  printMessage("Gain Correction not yet implemented");
+
+  return img;
+}
+
+//QcepDoubleVector QxrdProcessor::doCalculateROICounts(QcepImageDataBasePtr img)
+//{
+//  QcepDoubleVector res;
+
+//  if (img && m_ROICalculator) {
+//    res = m_ROICalculator->values(img, mask());
+//  }
+
+//  if (qcepDebug(DEBUG_ACQUIRE)) {
+//    QString s = "[";
+
+//    for (int i=0; i<res.count(); i++) {
+//      if (i == 0) {
+//        s.append(tr("%1").arg(res.value(i)));
+//      } else {
+//        s.append(tr(", %1").arg(res.value(i)));
+//      }
+//    }
+
+//    s.append("]");
+
+//    printMessage(tr("ROI Values = %1").arg(s));
+//  }
+
+//  return res;
+//}
+
+void QxrdProcessor::doSaveRawImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
+{
+  QxrdExperimentPtr expt(experiment());
+  QxrdFileSaverPtr  fsav(fileSaver());
+
+  if (fsav && expt && img) {
+    QString fullPath = filePathInRawOutputDirectory(img->get_FileBase());
+
+    fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
+  }
+}
+
+void QxrdProcessor::doSaveDarkImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
+{
+  QxrdExperimentPtr expt(experiment());
+  QxrdFileSaverPtr  fsav(fileSaver());
+
+  if (fsav && expt && img) {
+    QString fullPath = filePathInDarkOutputDirectory(img->get_FileBase());
+
+    fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
+  }
+}
+
+void QxrdProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
+{
+  QxrdExperimentPtr expt(experiment());
+  QxrdFileSaverPtr  fsav(fileSaver());
+
+  if (fsav && expt && img) {
+    QString fullPath = filePathInSubtractedOutputDirectory(img->get_FileBase());
+
+    fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
+  }
+}
+
+void QxrdProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image,
+                                               int fileIndex,
+                                               int phase,
+                                               int nPhases,
+                                               bool trig)
+{
+  QxrdAcquisitionPtr acq(
+        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+
+  QxrdDetectorSettingsPtr det(detector());
+
+  if (image && acq) {
+    QDateTime now = QDateTime::currentDateTime();
+    double msec = QcepImageDataBase::secondsSinceEpoch();
+
+    image -> set_Name             (image -> get_FileBase());
+    image -> set_ExposureTime     (acq   -> get_ExposureTime());
+    image -> set_DateTime         (now);
+    image -> set_TimeStamp        (msec);
+
+    if (det) {
+      image -> set_HBinning         (det   -> get_HBinning());
+      image -> set_VBinning         (det   -> get_VBinning());
+    } else {
+      image -> set_HBinning         (1);
+      image -> set_VBinning         (1);
+    }
+
+    image -> set_DataType(QcepUInt32ImageData::Raw32Data);
+
+    image -> set_UserComment1     (acq   -> get_UserComment1());
+    image -> set_UserComment2     (acq   -> get_UserComment2());
+    image -> set_UserComment3     (acq   -> get_UserComment3());
+    image -> set_UserComment4     (acq   -> get_UserComment4());
+    image -> set_ObjectSaved      (false);
+    image -> set_Triggered        (trig);
+    image -> set_Normalization    (acq   -> get_Normalization());
+
+    image -> set_ImageNumber      (fileIndex);
+    image -> set_PhaseNumber      (phase);
+    image -> set_NPhases          (nPhases);
+
+    acq -> copyDynamicProperties(image.data());
+  }
+}
+
+void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
+                                         QcepMaskDataPtr overflow,
+                                         int fileIndex,
+                                         int phase,
+                                         int nPhases,
+                                         bool trig)
+{
+  THREAD_CHECK;
+
+  if (image) {
+    m_Data     = image;
+    m_Overflow = overflow;
+
+    QcepDoubleVector scalers;
+
+    QcepImageDataBasePtr img = image;
+
+    if (qcepDebug(DEBUG_ACQUIRE)) {
+      printMessage(tr("QxrdDetectorProcessor::processAcquiredImage(\"%1\",...)")
+                   .arg(img->get_FileName()));
+    }
+
+    QTime tic;
+    tic.start();
+
+    setAcquiredImageProperties(img, fileIndex, phase, nPhases, trig);
+
+//    QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+
+    if (get_SaveRawImages()) {
+      doSaveRawImage(img, overflow);
+
+      int saveTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Save took %1 msec").arg(saveTime));
+      }
+    }
+
+    if (img && get_PerformDarkSubtraction()) {
+      img = doDarkSubtraction(img);
+
+      int subTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Subtraction took %1 msec").arg(subTime));
+      }
+    }
+
+    if (img && get_PerformBadPixels()) {
+      img = doBadPixels(img);
+
+      int pxlTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
+      }
+    }
+
+    if (img && get_PerformGainCorrection()) {
+      img = doGainCorrection(img);
+
+      int gainTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Gain correction took %1 msec").arg(gainTime));
+      }
+    }
+
+    QcepDoubleImageDataPtr dimg =
+        qSharedPointerCast<QcepDoubleImageData>(img);
+
+    if (dimg) {
+      emit dataAvailable(dimg);
+    }
+
+//    if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+//      ctrl->displayNewData(img, overflow);
+
+//      int displayTime = tic.restart();
+
+//      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+//        printMessage(tr("Display took %1 msec").arg(displayTime));
+//      }
+//    }
+
+    if (img && get_CalculateROICounts()) {
+      const QcepDoubleVector s = doCalculateROICounts(img);
+
+      scalers += s;
+
+      set_RoiCounts(scalers);
+
+      int roiTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
+      }
+    }
+
+    if (img && get_SaveSubtracted()) {
+      doSaveSubtractedImage(img, overflow);
+
+      int saveTime = tic.restart();
+
+      if (qcepDebug(DEBUG_ACQUIRETIME)) {
+        printMessage(tr("Save Subtracted took %1 msec").arg(saveTime));
+      }
+    }
+
+    //    if (get_PerformIntegration()) {
+    //      integ = doPerformIntegration(img);
+
+    //      if (ctrl && get_DisplayIntegratedData()) {
+    //        ctrl->displayIntegratedData(integ);
+    //      }
+
+    //      if (get_SaveIntegratedData()) {
+    //        doSaveIntegratedData(integ);
+    //      }
+
+    //      if (get_SaveIntegratedDataSeparate()) {
+    //        doSaveIntegratedDataSeparate(integ);
+    //      }
+
+    //      if (get_AccumulateIntegrated2D()) {
+    //        doAccumulateIntegrated2D(integ);
+    //      }
+    //    }
+  }
+}
+
+void QxrdProcessor::processDarkImage(QcepDoubleImageDataPtr image,
+                                             QcepMaskDataPtr overflow,
+                                             int fileIndex)
+{
+  THREAD_CHECK;
+
+  if (image) {
+    if (qcepDebug(DEBUG_ACQUIRE)) {
+      printMessage(tr("QxrdDetectorProcessor::processDarkImage(\"%1\",...)")
+                   .arg(image->get_FileName()));
+    }
+
+    setAcquiredImageProperties(image, fileIndex, -1, 0, true);
+
+    if (get_SaveDarkImages()) {
+      doSaveDarkImage(image, overflow);
+
+      set_DarkImagePath(image->get_FileName());
+    }
+
+    m_Dark = image;
+  }
+}
+
+void QxrdProcessor::processIdleImage(QcepImageDataBasePtr image)
+{
+  THREAD_CHECK;
+
+  if (image) {
+    QxrdExperimentPtr expt(experiment());
+
+    if (expt) {
+      QxrdAcquisitionPtr acq(
+            qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+
+      if (acq && acq->get_LiveViewAtIdle()) {
+        QcepDoubleVector scalers;
+
+        QcepImageDataBasePtr img = image;
+
+        if (qcepDebug(DEBUG_ACQUIRE)) {
+          printMessage(tr("QxrdDetectorProcessor::processIdleImage(\"%1\")")
+                       .arg(image->get_FileName()));
+        }
+
+        QTime tic;
+        tic.start();
+
+        setAcquiredImageProperties(img, -1, -1, 0, true);
+
+//        QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+
+        if (img && get_PerformDarkSubtraction()) {
+          img = doDarkSubtraction(img);
+
+          int subTime = tic.restart();
+
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("Subtraction took %1 msec").arg(subTime));
+          }
+        }
+
+        if (img && get_PerformBadPixels()) {
+          img = doBadPixels(img);
+
+          int pxlTime = tic.restart();
+
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("Bd pixels took %1 msec").arg(pxlTime));
+          }
+        }
+
+        if (img && get_PerformGainCorrection()) {
+          img = doGainCorrection(img);
+
+          int gainTime = tic.restart();
+
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("Gain correction took %1 msec").arg(gainTime));
+          }
+        }
+
+//        if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {
+//          ctrl->displayNewData(img, QcepMaskDataWPtr());
+
+//          int displayTime = tic.restart();
+
+//          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+//            printMessage(tr("Display took %1 msec").arg(displayTime));
+//          }
+//        }
+
+        if (img && get_CalculateROICounts()) {
+          const QcepDoubleVector s = doCalculateROICounts(img);
+
+          scalers += s;
+
+          set_RoiCounts(scalers);
+
+          int roiTime = tic.restart();
+
+          if (qcepDebug(DEBUG_ACQUIRETIME)) {
+            printMessage(tr("ROI calculation took %1 msec").arg(roiTime));
+          }
+        }
+      }
+    }
+  }
+}
+
 QcepDoubleImageDataPtr QxrdProcessor::processAcquiredInt16Image(
     QcepDoubleImageDataPtr corrected,
     QcepUInt16ImageDataPtr img,
@@ -1698,11 +2178,7 @@ void QxrdProcessor::onMaskPathChanged(QString newPath)
     if (m && m->readImage(newPath)) {
       m_MaskStack->push(m);
 
-      QxrdDetectorControlWindowPtr ctl(m_ControlWindow);
-
-      if (ctl) {
-        ctl->displayNewMask(m);
-      }
+      emit maskAvailable(m);
     }
   }
 }

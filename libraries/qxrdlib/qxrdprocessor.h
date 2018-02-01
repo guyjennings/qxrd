@@ -8,6 +8,7 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrdprocessorstep-ptr.h"
 #include "qxrdprocessor-ptr.h"
+#include "qxrddetectorsettings-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdfilesaver-ptr.h"
@@ -26,7 +27,6 @@
 #include "qxrdroicalculator-ptr.h"
 #include <QWaitCondition>
 
-//TODO: merge QxrdDataProcessor and QxrdDetectorProcessor into QxrdProcessor
 //TODO: separate processing steps into sub-objects
 //TODO: need separate settings class for experiment thread
 
@@ -45,6 +45,7 @@ public:
 
   QxrdExperimentWPtr   experiment() const;
   QxrdAcqCommonWPtr acquisition() const;
+  QxrdDetectorSettingsWPtr detector() const;
   QxrdFileSaverWPtr    fileSaver() const;
   QxrdCenterFinderWPtr centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
@@ -178,14 +179,52 @@ public:
   // processing...
   void processData(QString name);
   void idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView);
-  void processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
-  void processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, QcepDoubleList v);
+  void processDoubleImage(QcepDoubleImageDataPtr image,
+                          QcepMaskDataPtr overflow);
+  void processDoubleImage(QcepDoubleImageDataPtr image,
+                          QcepMaskDataPtr overflow,
+                          QcepDoubleList v);
+
+  void processAcquiredImage(QcepUInt32ImageDataPtr image,
+                            QcepMaskDataPtr overflow,
+                            int fileIndex,
+                            int phase,
+                            int nPhases,
+                            bool trig);
+
+  void processDarkImage(QcepDoubleImageDataPtr image,
+                        QcepMaskDataPtr overflow,
+                        int fileIndex);
+
+  void processIdleImage(QcepImageDataBasePtr image);
+
+  void setAcquiredImageProperties(QcepImageDataBasePtr image,
+                                  int fileIndex,
+                                  int phase,
+                                  int nPhases,
+                                  bool trig);
+
+  QcepImageDataBasePtr doDarkSubtraction    (QcepImageDataBasePtr img);
+  QcepImageDataBasePtr doBadPixels          (QcepImageDataBasePtr img);
+  QcepImageDataBasePtr doGainCorrection     (QcepImageDataBasePtr img);
+//  QcepDoubleVector     doCalculateROICounts (QcepImageDataBasePtr img);
+  void                 doSaveRawImage       (QcepImageDataBasePtr img,
+                                             QcepMaskDataPtr ovf);
+  void                 doSaveSubtractedImage(QcepImageDataBasePtr img,
+                                             QcepMaskDataPtr ovf);
+  void                 doSaveDarkImage      (QcepImageDataBasePtr img,
+                                             QcepMaskDataPtr ovf);
+
   QcepDoubleImageDataPtr processAcquiredInt16Image(QcepDoubleImageDataPtr processed, QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr processAcquiredInt32Image(QcepDoubleImageDataPtr processed, QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow, QcepDoubleList v);
-  QcepDoubleImageDataPtr processAcquiredImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr dimg, QcepDoubleImageDataPtr dark,
-                                              QcepMaskDataPtr mask, QcepMaskDataPtr overflow, QcepDoubleList v=QcepDoubleList());
+  QcepDoubleImageDataPtr processAcquiredImage(QcepDoubleImageDataPtr processed,
+                                              QcepDoubleImageDataPtr dimg,
+                                              QcepDoubleImageDataPtr dark,
+                                              QcepMaskDataPtr mask,
+                                              QcepMaskDataPtr overflow,
+                                              QcepDoubleList v=QcepDoubleList());
 
   void processDataSequence(QString path, QString filter="*.tif");
   void processDataSequence(QStringList paths);
@@ -479,7 +518,7 @@ public:
   Q_PROPERTY(QcepDoubleVector roiCounts READ get_RoiCounts WRITE set_RoiCounts STORED false)
   QCEP_DOUBLE_VECTOR_PROPERTY(RoiCounts)
 
-  protected:
+protected:
   QcepImageDataBasePtr   m_Data;
   QcepDoubleImageDataPtr m_Dark;
   QcepDoubleImageDataPtr m_BadPixels;
@@ -499,6 +538,7 @@ private:
   QxrdPolarNormalizationPtr m_PolarNormalization;
   QxrdGenerateTestImagePtr  m_GenerateTestImage;
   QxrdROICalculatorPtr      m_ROICalculator;
+  QxrdFileSaverWPtr         m_FileSaver;
 
   //TODO: store a data object, not a model
   QxrdPowderRingsModelPtr        m_PowderRings;
