@@ -2,8 +2,13 @@
 
 QcepApplicationSettings *g_ApplicationSettings = NULL;
 
-QcepApplicationSettings::QcepApplicationSettings(QcepApplicationWPtr /*app*/) :
-  QcepObject("appSettings")
+QcepApplicationSettings::QcepApplicationSettings(QString name) :
+  inherited(name)
 {
   g_ApplicationSettings = this;
+}
+
+void QcepApplicationSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }

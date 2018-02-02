@@ -9,8 +9,12 @@ class QCEP_EXPORT QcepApplicationSettings : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
-  QcepApplicationSettings(QcepApplicationWPtr app);
+  QcepApplicationSettings(QString name);
+  void initialize(QcepObjectWPtr parent);
 };
 
 extern QCEP_EXPORT QcepApplicationSettings *g_ApplicationSettings;

@@ -24,9 +24,13 @@ class QCEP_EXPORT QcepAllocator : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QcepAllocator(QString name);
   virtual ~QcepAllocator();
+  void initialize(QcepObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

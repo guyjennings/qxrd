@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QUndoStack>
 #include "qcepproperty.h"
+#include "qcepapplication-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepdataexportparameters-ptr.h"
@@ -18,9 +19,14 @@
 class QCEP_EXPORT QcepExperiment : public QcepObject
 {
   Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
-  explicit QcepExperiment(QString path, QString name);
-  void initialize();
+  explicit QcepExperiment(QString path,
+                          QString name);
+  void initialize(QcepObjectWPtr parent);
 
 signals:
 

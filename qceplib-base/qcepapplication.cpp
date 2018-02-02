@@ -8,3 +8,6 @@ QcepApplication::QcepApplication(int &argc, char **argv) :
   g_Application = this;
 }
 
+void QcepApplication::initialize()
+{
+}

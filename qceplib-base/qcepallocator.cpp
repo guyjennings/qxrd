@@ -41,16 +41,6 @@ QcepAllocator::QcepAllocator
   if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage(tr("allocator %1 constructed").HEXARG(this));
   };
-
-  if (sizeof(void*) == 4) {
-    set_AvailableBytes(qint64(get_TotalBufferSizeMB32())*qint64(MegaBytes));
-    connect(prop_TotalBufferSizeMB32(), &QcepIntProperty::valueChanged,
-            this, &QcepAllocator::onMemorySizeChanged);
-  } else {
-    set_AvailableBytes(qint64(get_TotalBufferSizeMB64())*qint64(MegaBytes));
-    connect(prop_TotalBufferSizeMB64(), &QcepIntProperty::valueChanged,
-            this, &QcepAllocator::onMemorySizeChanged);
-  }
 }
 
 QcepAllocator::~QcepAllocator()
@@ -67,7 +57,22 @@ QcepAllocator::~QcepAllocator()
 
   if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
     g_Application->printMessage(tr("allocator %1 deleted").HEXARG(this));
-  };
+  }
+}
+
+void QcepAllocator::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  if (sizeof(void*) == 4) {
+    set_AvailableBytes(qint64(get_TotalBufferSizeMB32())*qint64(MegaBytes));
+    connect(prop_TotalBufferSizeMB32(), &QcepIntProperty::valueChanged,
+            this, &QcepAllocator::onMemorySizeChanged);
+  } else {
+    set_AvailableBytes(qint64(get_TotalBufferSizeMB64())*qint64(MegaBytes));
+    connect(prop_TotalBufferSizeMB64(), &QcepIntProperty::valueChanged,
+            this, &QcepAllocator::onMemorySizeChanged);
+  }
 }
 
 void QcepAllocator::onMemorySizeChanged(qint64 newMB)

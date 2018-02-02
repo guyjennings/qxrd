@@ -13,6 +13,7 @@ class QCEP_EXPORT QcepApplication : public QApplication, public QEnableSharedFro
 
 public:
   QcepApplication(int &argc, char **argv);
+  void initialize();
 
   virtual void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) = 0;
   virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) = 0;

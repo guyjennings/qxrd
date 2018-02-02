@@ -32,10 +32,6 @@ QcepExperiment::QcepExperiment(QString path, QString name) :
   m_NewImageWidth         (this, "newImageWidth", 2048, "Width of new image"),
   m_NewImageHeight        (this, "newImageHeight", 2048, "Height of new image")
 {
-}
-
-void QcepExperiment::initialize()
-{
   m_DataExportParameters = QcepDataExportParametersPtr(
         new QcepDataExportParameters("exportParameters"));
 
@@ -50,6 +46,21 @@ void QcepExperiment::initialize()
 
   m_FixupGainMapCommand = QcepFixupGainMapCommandPtr(
         new QcepFixupGainMapCommand());
+}
+
+void QcepExperiment::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_DataExportParameters -> initialize(parent);
+
+  m_DataImportParameters -> initialize(parent);
+
+  m_SetDataValueRangeCommand -> initialize(parent);
+
+  m_SetRangeOfImageCommand -> initialize(parent);
+
+  m_FixupGainMapCommand -> initialize(parent);
 }
 
 QString QcepExperiment::defaultExperimentDirectory(QString path) const
