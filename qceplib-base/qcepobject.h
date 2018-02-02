@@ -19,6 +19,7 @@ class QCEP_EXPORT QcepObject : public QObject, public QEnableSharedFromThis<Qcep
 public:
   QcepObject(QString name);
   virtual ~QcepObject();
+  virtual void initialize(QcepObjectWPtr parent);
 
   static int allocatedObjects();
   static int deletedObjects();
@@ -106,17 +107,24 @@ public:
 
 private:
   QcepObjectNamer                     m_ObjectNamer;
+  bool                                m_Initialized;
   QAtomicInt                          m_ChangeCount;
   QAtomicPointer<QcepProperty>        m_LastChanged;
   QcepObjectWPtr                      m_Parent;
+  //TODO: eliminate?
   QVector<QcepObjectPtr>              m_Children;
 
 protected:
+#ifndef QT_NO_DEBUG
+  void checkObjectInitialization() const;
+#endif
 
+  //TODO: eliminate
 #ifndef QT_NO_DEBUG
   void checkPointerMatchCount(QcepObjectWPtr ptr);
 #endif
 
+  //TODO: eliminate
   template <typename T>
   inline bool checkPointer(QcepObjectWPtr ptr, QSharedPointer<T>& field)
   {
@@ -135,6 +143,7 @@ protected:
     }
   }
 
+  //TODO: eliminate
   template <typename T>
   inline bool checkPointer(QcepObjectWPtr ptr, QWeakPointer<T>& field)
   {

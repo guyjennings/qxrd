@@ -18,7 +18,8 @@ static QSet<QcepObject*> s_Allocated;
 
 QcepObject::QcepObject(QString name) :
   QObject(NULL),
-  m_ObjectNamer(this, name)
+  m_ObjectNamer(this, name),
+  m_Initialized(false)
 {
   s_ObjectAllocateCount.fetchAndAddOrdered(1);
 
@@ -61,6 +62,24 @@ QcepObject::~QcepObject()
 #endif
 }
 
+void QcepObject::initialize(QcepObjectWPtr parent)
+{
+  m_Initialized = true;
+  m_Parent      = parent;
+}
+
+#ifndef QT_NO_DEBUG
+void QcepObject::checkObjectInitialization() const
+{
+  if (m_Initialized == false) {
+    printf("QcepObject 0x%08x %s not initialized\n",
+           this,
+           metaObject()->className());
+  }
+}
+#endif
+
+//TODO: eliminate (replace by calls to 'initialize')
 void QcepObject::setParentPtr(QcepObjectWPtr parent)
 {
   m_Parent = parent;
@@ -76,13 +95,23 @@ const QcepObjectWPtr QcepObject::parentPtr() const
   return m_Parent;
 }
 
+//TODO: reimplement by virtual method in all classes ?
 int QcepObject::childCount() const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   return m_Children.count();
 }
 
+//TODO: reimplement by virtual method in all classes ?
 QcepObjectPtr QcepObject::childPtr(int n) const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   QcepObjectPtr p = m_Children.value(n);
 
   if (p) {
@@ -110,6 +139,10 @@ void QcepObject::checkPointerMatchCount(QcepObjectWPtr ptr)
 
 int QcepObject::checkChildren(int verbose, int level) const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   int ck = true;
 
   if (verbose) {
@@ -146,8 +179,13 @@ int QcepObject::checkChildren(int verbose, int level) const
   return ck;
 }
 
+//TODO: move functionality into QcepDataGroup
 void QcepObject::addChildPtr(QcepObjectPtr child)
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   QcepObjectWPtr myself = sharedFromThis();
 
   if (m_Children.contains(child)) {
@@ -169,8 +207,13 @@ void QcepObject::addChildPtr(QcepObjectPtr child)
 #endif
 }
 
+//TODO: move functionality into QcepDataGroup
 void QcepObject::removeChildPtr(QcepObjectPtr child)
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   if (m_Children.contains(child)) {
     m_Children.removeAll(child);
   } else {
@@ -178,8 +221,13 @@ void QcepObject::removeChildPtr(QcepObjectPtr child)
   }
 }
 
+//TODO: move functionality into QcepDataGroup
 void QcepObject::clearChildren()
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   int n = childCount();
 
   for (int i=n-1; i>=0; i--) {
@@ -187,8 +235,13 @@ void QcepObject::clearChildren()
   }
 }
 
+//TODO: move functionality into QcepDataGroup
 void QcepObject::prependChildPtr(QcepObjectPtr child)
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   addChildPtr(child);
 
   int n = childCount();
@@ -200,8 +253,13 @@ void QcepObject::prependChildPtr(QcepObjectPtr child)
   m_Children[0] = child;
 }
 
+//TODO: move functionality into QcepDataGroup
 void QcepObject::insertChildPtr(int atRow, QcepObjectPtr child)
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   addChildPtr(child);
 
   int n = childCount();
@@ -214,8 +272,13 @@ void QcepObject::insertChildPtr(int atRow, QcepObjectPtr child)
 }
 
 
+//TODO: remove?
 int QcepObject::childrenChanged() const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   if (isChanged()) {
     return true;
   } else {
@@ -233,8 +296,13 @@ int QcepObject::childrenChanged() const
   return 0;
 }
 
+//TODO: remove?
 QString QcepObject::childrenChangedBy() const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   if (isChanged()) {
     return changedBy();
   } else {
@@ -256,6 +324,10 @@ QString QcepObject::childrenChangedBy() const
 
 void QcepObject::propertyChanged(QcepProperty *prop)
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   if (prop == NULL || prop->isStored()) {
     m_ChangeCount.fetchAndAddOrdered(1);
     m_LastChanged.store(prop);
@@ -270,11 +342,19 @@ void QcepObject::propertyChanged(QcepProperty *prop)
 
 int QcepObject::isChanged() const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   return m_ChangeCount.load();
 }
 
 QString QcepObject::changedBy() const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   QcepProperty *p = m_LastChanged.load();
 
   if (p) {
@@ -286,6 +366,10 @@ QString QcepObject::changedBy() const
 
 void QcepObject::setChanged(int /*ct*/)
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   m_ChangeCount.fetchAndStoreOrdered(0);
 }
 
@@ -308,11 +392,19 @@ QSet<QcepObject*> QcepObject::allocatedObjectsSet()
 
 void QcepObject::set_Name(QString name)
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   setObjectName(name);
 }
 
 QString QcepObject::get_Name() const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   return objectName();
 }
 
@@ -322,16 +414,28 @@ QString QcepObject::get_Name() const
 
 QString QcepObject::className() const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   return metaObject()->className();
 }
 
 QString QcepObject::get_Type() const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   return metaObject()->className();
 }
 
 void QcepObject::printLine(QString line) const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   QcepObjectPtr p(m_Parent);
 
   if (p) {
@@ -349,6 +453,10 @@ void QcepObject::printLine(QString line) const
 
 void QcepObject::printMessage(QString msg, QDateTime dt) const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   QcepObjectPtr p(m_Parent);
 
   if (p) {
@@ -367,6 +475,10 @@ void QcepObject::printMessage(QString msg, QDateTime dt) const
 
 void QcepObject::criticalMessage(QString msg, QDateTime dt) const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   QcepObjectPtr p(m_Parent);
 
   if (p) {
@@ -385,6 +497,10 @@ void QcepObject::criticalMessage(QString msg, QDateTime dt) const
 
 void QcepObject::statusMessage(QString msg, QDateTime dt) const
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   QcepObjectPtr p(parentPtr());
 
   if (p) {
@@ -403,14 +519,18 @@ void QcepObject::statusMessage(QString msg, QDateTime dt) const
 
 void QcepObject::writeSettings(QSettings *set)
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   if (set) {
     set->setValue("name", get_Name());
     set->setValue("class", className());
-  }
 
-  set->beginGroup("properties");
-  QcepProperty::writeSettings(this, set);
-  set->endGroup();
+    set->beginGroup("properties");
+    QcepProperty::writeSettings(this, set);
+    set->endGroup();
+  }
 
   m_ChangeCount.fetchAndStoreOrdered(0);
   m_LastChanged.store(NULL);
@@ -418,28 +538,34 @@ void QcepObject::writeSettings(QSettings *set)
 
 void QcepObject::readSettings(QSettings *set)
 {
-  if (QThread::currentThread() != thread()) {
-//    INVOKE_CHECK(QMetaObject::invokeMethod(this, "readObjectSettings", Qt::BlockingQueuedConnection, Q_ARG(QSettings*, set)));
-    readObjectSettings(set);
-  } else {
-    readObjectSettings(set);
-  }
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
+  readObjectSettings(set);
 }
 
 void QcepObject::readObjectSettings(QSettings *set)
 {
-  set->beginGroup("properties");
-  QcepProperty::readSettings(this, set);
-  set->endGroup();
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
+  if (set) {
+    set->beginGroup("properties");
+    QcepProperty::readSettings(this, set);
+    set->endGroup();
+  }
 }
 
+//TODO: add parent ptr for initialization
 QcepObjectPtr QcepObject::readObject(QSettings *set)
 {
   QcepObjectPtr res;
 
   if (set) {
-    QStringList keys  = set->childKeys();
-    QStringList allk  = set->allKeys();
+//    QStringList keys  = set->childKeys();
+//    QStringList allk  = set->allKeys();
 
     QString className = set->value("class", "").toString();
     QString name      = set->value("name",  "").toString();
@@ -505,6 +631,10 @@ QcepObjectPtr QcepObject::construct(QString name, QString className)
 
 void QcepObject::writeObject(QSettings *set)
 {
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
   writeSettings(set);
 
   int nChildren = childCount();
@@ -783,6 +913,7 @@ void QcepObject::dumpObjectTreePtr(int level)
   }
 }
 
+//TODO: remove
 QcepObjectPtr QcepObject::readDataObject(QcepFileFormatterPtr fmt)
 {
   if (fmt) {
@@ -792,6 +923,7 @@ QcepObjectPtr QcepObject::readDataObject(QcepFileFormatterPtr fmt)
   }
 }
 
+//TODO: remove
 void QcepObject::writeObjectFmt(QcepFileFormatterPtr fmt)
 {
   const QMetaObject* metaObject = this->metaObject();
@@ -875,6 +1007,7 @@ void QcepObject::writeObjectFmt(QcepFileFormatterPtr fmt)
   fmt->endWriteObject();
 }
 
+//TODO: remove
 void QcepObject::readObjectFmt(QcepFileFormatterPtr fmt)
 {
   QcepObjectWPtr myself = sharedFromThis();
@@ -940,10 +1073,12 @@ void QcepObject::readObjectFmt(QcepFileFormatterPtr fmt)
   fmt->endReadObject();
 }
 
+//TODO: remove
 void QcepObject::writeObjectData(QcepFileFormatterPtr /*fmt*/)
 {
 }
 
+//TODO: remove
 void QcepObject::readObjectData(QcepFileFormatterPtr /*fmt*/)
 {
 }
