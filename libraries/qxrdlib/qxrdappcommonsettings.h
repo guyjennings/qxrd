@@ -14,9 +14,12 @@ private:
   typedef QcepApplicationSettings inherited;
 
 public:
-  QxrdAppCommonSettings(QxrdAppCommonWPtr app, int argc, char **argv);
+  QxrdAppCommonSettings(QString name,
+                        int argc,
+                        char **argv);
+
   virtual ~QxrdAppCommonSettings();
-  virtual void init();
+  void initialize(QcepObjectWPtr parent);
 
   QcepAllocatorWPtr allocator() const;
 

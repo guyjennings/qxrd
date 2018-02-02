@@ -13,9 +13,11 @@ private:
   typedef QxrdAppCommonSettings inherited;
 
 public:
-  QxrdApplicationSettings(QxrdApplicationWPtr app, int argc, char **argv);
+  QxrdApplicationSettings(QString name,
+                          int argc,
+                          char **argv);
   virtual ~QxrdApplicationSettings();
-  void init();
+  void initialize(QcepObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

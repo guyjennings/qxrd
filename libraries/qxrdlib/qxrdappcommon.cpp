@@ -42,6 +42,15 @@ QxrdAppCommon::~QxrdAppCommon()
 {
 }
 
+void QxrdAppCommon::initialize()
+{
+  inherited::initialize();
+
+  if (m_ApplicationSettings) {
+    m_ApplicationSettings->initialize(QcepObjectWPtr());
+  }
+}
+
 bool QxrdAppCommon::init(int &argc, char **argv)
 {
   THREAD_CHECK;

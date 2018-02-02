@@ -50,8 +50,15 @@ class QXRD_EXPORT QxrdExperiment : public QcepExperiment
 {
   Q_OBJECT
 
+private:
+  typedef QcepExperiment inherited;
+
 public:
-  Q_INVOKABLE QxrdExperiment(QString name);
+  QxrdExperiment(QString path,
+                 QString name,
+                 QxrdAppCommonWPtr app,
+                 QxrdExperimentSettingsWPtr set,
+                 int mode);
 
   static QxrdExperimentPtr newExperiment(QString path,
                                          QxrdAppCommonWPtr app,
@@ -59,7 +66,9 @@ public:
                                          int mode);
 
   virtual ~QxrdExperiment();
-  void initialize(QxrdExperimentSettingsPtr settings);
+  void initialize(QcepObjectWPtr parent);
+
+  void init(QxrdExperimentSettingsPtr settings);
 
   static void registerMetaTypes();
 

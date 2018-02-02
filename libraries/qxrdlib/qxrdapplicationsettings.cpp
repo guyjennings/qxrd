@@ -2,8 +2,10 @@
 #include "qxrdapplication.h"
 #include <QDir>
 
-QxrdApplicationSettings::QxrdApplicationSettings(QxrdApplicationWPtr app, int argc, char **argv) :
-  inherited(app, argc, argv),
+QxrdApplicationSettings::QxrdApplicationSettings(QString name,
+                                                 int argc,
+                                                 char **argv) :
+  inherited(name, argc, argv),
   m_LockerCount(this, "lockerCount", 0, "Number of mutex locks taken"),
   m_LockerRate(this, "lockerRate", 0, "Mutex Locking Rate")
 {
@@ -19,9 +21,9 @@ QxrdApplicationSettings::~QxrdApplicationSettings()
 #endif
 }
 
-void QxrdApplicationSettings::init()
+void QxrdApplicationSettings::initialize(QcepObjectWPtr parent)
 {
-  inherited::init();
+  inherited::initialize(parent);
 }
 
 void QxrdApplicationSettings::readSettings(QSettings *settings)

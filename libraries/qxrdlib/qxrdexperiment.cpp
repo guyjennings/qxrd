@@ -71,8 +71,12 @@
 #include "qxrdwatcherwindowsettings-ptr.h"
 #include "qxrdwatcherwindowsettings.h"
 
-QxrdExperiment::QxrdExperiment(QString name) :
-  QcepExperiment("", name),
+QxrdExperiment::QxrdExperiment(QString path,
+                               QString name,
+                               QxrdAppCommonWPtr app,
+                               QxrdExperimentSettingsWPtr set,
+                               int mode) :
+  inherited(path, name),
   m_Application(),
   m_WindowSettings(NULL),
   m_Window(),
@@ -133,13 +137,18 @@ QxrdExperimentPtr QxrdExperiment::newExperiment(QString path,
                                                 QxrdExperimentSettingsPtr set,
                                                 int mode)
 {
-  QxrdExperimentPtr expt(new QxrdExperiment("experiment"));
+  QxrdExperimentPtr expt(new QxrdExperiment(path,
+                                            "experiment",
+                                            app,
+                                            set,
+                                            mode));
 
   if (expt) {
+    expt->initialize(app);
+
     expt->set_ExperimentMode(mode);
     expt->setExperimentFilePath(path);
     expt->setExperimentApplication(app);
-    expt->initialize(set);
   }
 
   return expt;
@@ -184,14 +193,17 @@ QxrdExperimentThreadPtr QxrdExperiment::experimentThread() const
   return QxrdExperimentThreadPtr(t);
 }
 
-void QxrdExperiment::initialize(QxrdExperimentSettingsPtr settings)
+void QxrdExperiment::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}
+
+void QxrdExperiment::init(QxrdExperimentSettingsPtr settings)
 {
   QxrdAppCommonPtr app(m_Application);
 
   if (app) {
     QxrdExperimentPtr myself(qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()));
-
-    QcepExperiment::initialize();
 
     splashMessage("Initializing File Saver");
 

@@ -13,9 +13,12 @@ private:
   typedef QxrdAppCommonSettings inherited;
 
 public:
-  QxrdAppViewerSettings(QxrdAppViewerWPtr app, int argc, char **argv);
+  QxrdAppViewerSettings(QString name,
+//                        QxrdAppViewerWPtr app,
+                        int argc,
+                        char **argv);
   virtual ~QxrdAppViewerSettings();
-  void init();
+  void initialize(QcepObjectWPtr parent);
 };
 
 #endif // QXRDAPPVIEWERSETTINGS_H

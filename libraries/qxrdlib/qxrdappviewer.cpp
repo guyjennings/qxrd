@@ -8,23 +8,27 @@
 QxrdAppViewer::QxrdAppViewer(int &argc, char **argv)
   : inherited(argc, argv)
 {
-
+  setSettings(QxrdAppViewerSettingsPtr(
+        new QxrdAppViewerSettings(
+                  "qxrdViewerSettings",
+                  argc,
+                  argv)));
 }
 
 QxrdAppViewer::~QxrdAppViewer()
 {
 }
 
+void QxrdAppViewer::initialize()
+{
+  inherited::initialize();
+}
+
 bool QxrdAppViewer::init(int &argc, char **argv)
 {
   inherited::init(argc, argv);
 
-  setSettings(QxrdAppViewerSettingsPtr(
-        new QxrdAppViewerSettings(qSharedPointerDynamicCast<QxrdAppViewer>(sharedFromThis()), argc, argv)));
-
   if (settings()) {
-    settings()->init();
-
     parseCommandLine(false);
 
     int nWatches = settings() -> get_WatcherList().length();
@@ -57,10 +61,12 @@ void QxrdAppViewer::setDefaultObjectData(QcepDataObject *obj)
 
 void QxrdAppViewer::printMessage(QString msg, QDateTime ts)
 {
+  printf("%s\n", qPrintable(msg));
 }
 
 void QxrdAppViewer::criticalMessage(QString msg, QDateTime ts)
 {
+  printf("CRITICAL: %s\n", qPrintable(msg));
 }
 
 QString QxrdAppViewer::applicationDescription()

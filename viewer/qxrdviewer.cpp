@@ -46,6 +46,8 @@ int main(int argc, char *argv[])
     QxrdAppViewerPtr app = QxrdAppViewerPtr(
           new QxrdAppViewer(argc, argv));
 
+    app -> initialize();
+
     if (app->init(argc, argv)) {
       QxrdAppViewerSettingsPtr set(app->settings());
 

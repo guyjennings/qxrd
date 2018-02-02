@@ -1,17 +1,18 @@
 #include "qxrdappviewersettings.h"
 #include "qxrdappviewer.h"
 
-QxrdAppViewerSettings::QxrdAppViewerSettings(QxrdAppViewerWPtr app, int argc, char **argv)
-  : inherited(app, argc, argv)
+QxrdAppViewerSettings::QxrdAppViewerSettings(QString name,
+                                             int argc,
+                                             char **argv)
+  : inherited(name, argc, argv)
 {
-
 }
 
 QxrdAppViewerSettings::~QxrdAppViewerSettings()
 {
 }
 
-void QxrdAppViewerSettings::init()
+void QxrdAppViewerSettings::initialize(QcepObjectWPtr parent)
 {
-  inherited::init();
+  inherited::initialize(parent);
 }

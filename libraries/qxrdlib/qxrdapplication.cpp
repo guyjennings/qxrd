@@ -89,12 +89,22 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
 
   m_PluginInfo =
       QxrdPluginInfoModelPtr(new QxrdPluginInfoModel());
+
+  setSettings(QxrdApplicationSettingsPtr(
+                new QxrdApplicationSettings(
+                  "qxrdApplicationSettings",
+                  argc,
+                  argv)));
+}
+
+void QxrdApplication::initialize()
+{
+  inherited::initialize();
 }
 
 bool QxrdApplication::init(int &argc, char **argv)
 {
   inherited::init(argc, argv);
-
 
   connect(&m_LockerTimer, &QTimer::timeout, this, &QxrdApplication::lockerTimerElapsed);
 
@@ -136,11 +146,8 @@ bool QxrdApplication::init(int &argc, char **argv)
   printMessage("QWT Version " QWT_VERSION_STR);
   printMessage(tr("QT Version %1").arg(qVersion()));
 
-  setSettings(QxrdApplicationSettingsPtr(
-                new QxrdApplicationSettings(qSharedPointerDynamicCast<QxrdApplication>(sharedFromThis()), argc, argv)));
-
   if (settings()) {
-    settings()->init();
+//    settings()->initialize(sharedFromThis());
 
     connect(settings() -> prop_Debug(), &QcepInt64Property::valueChanged,
             this,                       &QxrdApplication::debugChanged);

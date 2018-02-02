@@ -18,6 +18,7 @@ private:
 public:
   QxrdAppViewer(int &argc, char **argv);
   virtual ~QxrdAppViewer();
+  void initialize();
 
   bool init(int &argc, char **argv);
 

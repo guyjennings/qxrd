@@ -3,8 +3,10 @@
 #include "qcepallocator.h"
 #include <QDir>
 
-QxrdAppCommonSettings::QxrdAppCommonSettings(QxrdAppCommonWPtr app, int argc, char **argv) :
-  inherited(app),
+QxrdAppCommonSettings::QxrdAppCommonSettings(QString name,
+                                             int argc,
+                                             char **argv) :
+  inherited(name),
   m_Argc(this, "argc", argc, "Number of Command Line Arguments"),
   m_Argv(this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
   m_GuiWanted(this, "guiWanted", 1, "GUI Wanted?"),
@@ -26,16 +28,19 @@ QxrdAppCommonSettings::QxrdAppCommonSettings(QxrdAppCommonWPtr app, int argc, ch
   m_MessageWindowLines(this, "messageWindowLines", 1000, "Number of Lines in Message Window (0 = unlimited)"),
   m_UpdateIntervalMsec(this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)")
 {
+  m_Allocator = QcepAllocatorPtr(
+        new QcepAllocator("allocator"));
 }
 
 QxrdAppCommonSettings::~QxrdAppCommonSettings()
 {
 }
 
-void QxrdAppCommonSettings::init()
+void QxrdAppCommonSettings::initialize(QcepObjectWPtr parent)
 {
-  m_Allocator = QcepAllocatorPtr(
-        new QcepAllocator("allocator"));
+  inherited::initialize(parent);
+
+  m_Allocator->initialize(parent);
 }
 
 QcepAllocatorWPtr QxrdAppCommonSettings::allocator() const

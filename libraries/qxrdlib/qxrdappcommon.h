@@ -22,6 +22,7 @@ private:
 public:
   QxrdAppCommon(int &argc, char **argv);
   virtual ~QxrdAppCommon();
+  void initialize();
 
   virtual bool init(int &argc, char **argv);
   virtual void finish();
