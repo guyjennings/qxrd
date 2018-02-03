@@ -121,11 +121,20 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_CenterFinder = QxrdCenterFinderPtr(
         new QxrdCenterFinder("centerFinder"));
 
-  m_Integrator = QxrdIntegrator::newIntegrator(m_CenterFinder);
-  m_PolarTransform = QxrdPolarTransform::newPolarTransform();
-  m_PolarNormalization = QxrdPolarNormalization::newPolarNormalization();
-  m_GenerateTestImage = QxrdGenerateTestImage::newGenerateTestImage();
-  m_ROICalculator = QxrdROICalculator::newROICalculator();
+  m_Integrator = QxrdIntegratorPtr(
+        new QxrdIntegrator("integrator"));
+
+  m_PolarTransform = QxrdPolarTransformPtr(
+        new QxrdPolarTransform("polarTransform"));
+
+  m_PolarNormalization = QxrdPolarNormalizationPtr(
+        new QxrdPolarNormalization("polarNormalization"));
+
+  m_GenerateTestImage = QxrdGenerateTestImagePtr(
+        new QxrdGenerateTestImage("testImage"));
+
+  m_ROICalculator = QxrdROICalculatorPtr(
+        new QxrdROICalculator("roiCalculator"));
 
   connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onCorrectedImageAvailable);
   connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onIntegratedDataAvailable);
@@ -174,6 +183,24 @@ QxrdProcessorPtr QxrdProcessor::newProcessor()
   QxrdProcessorPtr proc(new QxrdProcessor("processor"));
 
   return proc;
+}
+
+void QxrdProcessor::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  QxrdProcessorPtr myself(
+        qSharedPointerDynamicCast<QxrdProcessor>(
+          sharedFromThis()));
+
+  m_MaskStack          -> initialize(myself);
+  m_ZingerFinder       -> initialize(myself);
+  m_CenterFinder       -> initialize(myself);
+  m_Integrator         -> initialize(myself);
+  m_PolarTransform     -> initialize(myself);
+  m_PolarNormalization -> initialize(myself);
+  m_GenerateTestImage  -> initialize(myself);
+  m_ROICalculator      -> initialize(myself);
 }
 
 //TODO: is this needed...
@@ -333,6 +360,12 @@ void QxrdProcessor::readSettings(QSettings *settings)
     settings->endGroup();
   }
 
+  if (m_GenerateTestImage) {
+    settings->beginGroup("generateTestImage");
+    m_GenerateTestImage -> readSettings(settings);
+    settings->endGroup();
+  }
+
   if (m_ROICalculator) {
     settings->beginGroup("roiCalculator");
     m_ROICalculator->readSettings(settings);
@@ -399,6 +432,12 @@ void QxrdProcessor::writeSettings(QSettings *settings)
   if (m_PolarNormalization) {
     settings->beginGroup("polarNormalization");
     m_PolarNormalization -> writeSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_GenerateTestImage) {
+    settings->beginGroup("generateTestImage");
+    m_GenerateTestImage -> writeSettings(settings);
     settings->endGroup();
   }
 

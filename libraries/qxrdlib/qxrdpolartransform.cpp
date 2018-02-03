@@ -8,7 +8,7 @@
 #include "qxrdintegrator.h"
 
 QxrdPolarTransform::QxrdPolarTransform(QString name) :
-  QcepObject(name),
+  inherited(name),
 //  m_Destination(saver, this, "destination", "Polar/image", "Destination for polar transform"),
 //  m_OutputType(saver, this, "outputType", 3, "Output type 0=none, 1=data, 2=radial plot, 3=polar plot"),
   m_Oversample(this, "oversample", 1, "Oversample factor"),
@@ -28,15 +28,13 @@ QxrdPolarTransform::QxrdPolarTransform(QString name) :
 {
 }
 
-QxrdPolarTransformPtr QxrdPolarTransform::newPolarTransform()
-{
-  QxrdPolarTransformPtr xform(new QxrdPolarTransform("polarTransform"));
-
-  return xform;
-}
-
 QxrdPolarTransform::~QxrdPolarTransform()
 {
+}
+
+void QxrdPolarTransform::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 QxrdExperimentWPtr QxrdPolarTransform::experiment() const

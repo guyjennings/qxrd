@@ -148,7 +148,6 @@ QxrdExperimentPtr QxrdExperiment::newExperiment(QString path,
 
     expt->set_ExperimentMode(mode);
     expt->setExperimentFilePath(path);
-    expt->setExperimentApplication(app);
   }
 
   return expt;
@@ -193,13 +192,13 @@ QxrdExperimentThreadPtr QxrdExperiment::experimentThread() const
   return QxrdExperimentThreadPtr(t);
 }
 
-void QxrdExperiment::initialize(QcepObjectWPtr parent)
+void QxrdExperiment::initialize(QObjectWPtr parent)
 {
   inherited::initialize(parent);
-}
 
-void QxrdExperiment::init(QxrdExperimentSettingsPtr settings)
-{
+  m_Application =
+      qSharedPointerDynamicCast<QxrdAppCommon>(parent);
+
   QxrdAppCommonPtr app(m_Application);
 
   if (app) {
@@ -344,18 +343,6 @@ void QxrdExperiment::init(QxrdExperimentSettingsPtr settings)
               ssrv.data(),  &QxrdSimpleServer::finishedCommand);
     }
 
-    splashMessage("Loading Preferences");
-
-    readSettings(settings.data());
-
-    splashMessage("Loading Background Images");
-
-    QxrdProcessorPtr proc(m_Processor);
-
-    if (proc) {
-      proc -> loadDefaultImages();
-    }
-
 #ifdef Q_OS_WIN32
     QDir::setCurrent(QDir::homePath());
 #endif
@@ -477,11 +464,6 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdMaskingWindowSettings*>("QxrdMaskingWindowSettings*");
   qRegisterMetaType<QxrdScriptingWindowSettings*>("QxrdScriptingWindowSettings*");
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
-}
-
-void QxrdExperiment::setExperimentApplication(QxrdAppCommonWPtr app)
-{
-  m_Application = app;
 }
 
 void QxrdExperiment::openWindow(QxrdMainWindowSettingsWPtr set)
@@ -991,6 +973,8 @@ void QxrdExperiment::readSettings()
 {
   prop_IsReading()->incValue(1);
 
+  splashMessage("Loading Experiment");
+
   //  if (qcepDebug(DEBUG_PREFS)) {
   printMessage("started QxrdExperiment::readSettings");
   printf("started QxrdExperiment::readSettings\n");
@@ -1012,6 +996,16 @@ void QxrdExperiment::readSettings()
     //    settings.beginGroup("experiment");
     readSettings(&settings);
     //    settings.endGroup();
+  }
+
+//  readSettings(settings.data());
+
+  splashMessage("Loading Background Images");
+
+  QxrdProcessorPtr proc(m_Processor);
+
+  if (proc) {
+    proc -> loadDefaultImages();
   }
 
   //  if (qcepDebug(DEBUG_PREFS)) {

@@ -24,12 +24,14 @@ class QXRD_EXPORT QxrdIntegrator : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdIntegrator(QString name);
-  static QxrdIntegratorPtr newIntegrator(QxrdCenterFinderWPtr cfw);
   virtual ~QxrdIntegrator();
 
-  void initialize(QxrdCenterFinderWPtr cfw);
+  void initialize(QObjectWPtr parent);
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)

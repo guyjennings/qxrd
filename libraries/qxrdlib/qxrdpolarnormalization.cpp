@@ -10,7 +10,7 @@
 #include "qxrddebug.h"
 
 QxrdPolarNormalization::QxrdPolarNormalization(QString name) :
-  QcepObject(name),
+  inherited(name),
   m_OutputType(this, "outputType", IntegratedOutput, "Output Type (0=Integ, 1=Fit, 2=Deltas"),
   m_SelfNormalize(this, "selfNormalize", false, "Self-Normalize integrated curves"),
   m_SelfNormalizeMin(this, "selfNormalizeMin", 0, "Self-Normalize Range Minimum"),
@@ -18,12 +18,17 @@ QxrdPolarNormalization::QxrdPolarNormalization(QString name) :
 {
 }
 
-QxrdPolarNormalizationPtr QxrdPolarNormalization::newPolarNormalization()
+void QxrdPolarNormalization::initialize(QObjectWPtr parent)
 {
-  QxrdPolarNormalizationPtr norm(new QxrdPolarNormalization("polarNormalization"));
-
-  return norm;
+  inherited::initialize(parent);
 }
+
+//QxrdPolarNormalizationPtr QxrdPolarNormalization::newPolarNormalization()
+//{
+//  QxrdPolarNormalizationPtr norm(new QxrdPolarNormalization("polarNormalization"));
+
+//  return norm;
+//}
 
 //void QxrdPolarNormalization::execute()
 //{

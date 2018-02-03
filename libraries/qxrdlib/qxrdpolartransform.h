@@ -20,10 +20,13 @@ class QXRD_EXPORT QxrdPolarTransform : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdPolarTransform(QString name);
-  static QxrdPolarTransformPtr newPolarTransform();
   virtual ~QxrdPolarTransform();
+  void initialize(QObjectWPtr parent);
 
   QxrdExperimentWPtr experiment() const;
   QxrdIntegratorWPtr integrator() const;

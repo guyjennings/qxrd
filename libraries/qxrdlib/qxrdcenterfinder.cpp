@@ -109,9 +109,12 @@ QxrdCenterFinder::~QxrdCenterFinder()
 #endif
 }
 
+//TODO: redo ...
 QxrdExperimentWPtr QxrdCenterFinder::experiment() const
 {
-  QcepObjectPtr p = parentPtr();
+  QcepObjectPtr p(
+        qSharedPointerDynamicCast<QcepObject>(
+          parentPtr()));
 
   while (p) {
     QxrdExperimentWPtr e = qSharedPointerDynamicCast<QxrdExperiment>(p);
@@ -119,7 +122,8 @@ QxrdExperimentWPtr QxrdCenterFinder::experiment() const
     if (e) {
       return e;
     } else {
-      p = p->parentPtr();
+      p = qSharedPointerDynamicCast<QcepObject>(
+            parentPtr());
     }
   }
 

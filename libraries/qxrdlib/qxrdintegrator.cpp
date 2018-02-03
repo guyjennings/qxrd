@@ -21,7 +21,7 @@
 #include "qmath.h"
 
 QxrdIntegrator::QxrdIntegrator(QString name)
-  : QcepObject(name),
+  : inherited(name),
     m_Oversample(this, "oversample", 1, "Oversampling for Integration"),
     m_IntegrationStep(this, "integrationStep", 0.01, "Integration Step Size"),
     m_IntegrationNSteps(this, "integrationNSteps", 0, "Integration Number of Steps"),
@@ -81,16 +81,6 @@ QxrdIntegrator::QxrdIntegrator(QString name)
   connect(prop_SelfNormalizationMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
 }
 
-QxrdIntegratorPtr QxrdIntegrator::newIntegrator(QxrdCenterFinderWPtr cfw)
-
-{
-  QxrdIntegratorPtr integ(new QxrdIntegrator("integrator"));
-
-  integ->initialize(cfw);
-
-  return integ;
-}
-
 QxrdIntegrator::~QxrdIntegrator()
 {
 #ifndef QT_NO_DEBUG
@@ -102,14 +92,23 @@ QxrdIntegrator::~QxrdIntegrator()
   }
 }
 
-void QxrdIntegrator::initialize(QxrdCenterFinderWPtr cfw)
+void QxrdIntegrator::initialize(QObjectWPtr parent)
 {
-  m_CenterFinder = cfw;
+  inherited::initialize(parent);
 
-  QxrdCenterFinderPtr cf(m_CenterFinder);
+  QxrdProcessorPtr proc(
+        qSharedPointerDynamicCast<QxrdProcessor>(parent));
 
-  if (cf) {
-    connect(cf.data(), &QxrdCenterFinder::parameterChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
+  if (!proc) {
+    printMessage("QxrdIntegrator parent is not QxrdProcessor");
+  } else {
+    m_CenterFinder = proc->centerFinder();
+
+    QxrdCenterFinderPtr cf(m_CenterFinder);
+
+    if (cf) {
+      connect(cf.data(), &QxrdCenterFinder::parameterChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
+    }
   }
 }
 
@@ -117,7 +116,9 @@ QxrdProcessorPtr QxrdIntegrator::dataProcessor() const
 {
   QxrdProcessorPtr proc;
 
-  QcepObjectPtr p = parentPtr();
+  QcepObjectPtr p(
+        qSharedPointerDynamicCast<QcepObject>(
+          parentPtr()));
 
   while (p) {
     proc = qSharedPointerDynamicCast<QxrdProcessor>(p);
@@ -126,7 +127,8 @@ QxrdProcessorPtr QxrdIntegrator::dataProcessor() const
       return proc;
     }
 
-    p = p -> parentPtr();
+    p = qSharedPointerDynamicCast<QcepObject>(
+          parentPtr());
   }
 
   printMessage("QxrdProcessor of QxrdIntegrator not found");
@@ -134,11 +136,14 @@ QxrdProcessorPtr QxrdIntegrator::dataProcessor() const
   return QxrdProcessorPtr();
 }
 
+//TODO: redo
 QxrdExperimentPtr QxrdIntegrator::experiment() const
 {
   QxrdExperimentPtr expt;
 
-  QcepObjectPtr p = parentPtr();
+  QcepObjectPtr p(
+        qSharedPointerDynamicCast<QcepObject>(
+          parentPtr()));
 
   while (p) {
     expt = qSharedPointerDynamicCast<QxrdExperiment>(p);
@@ -147,7 +152,8 @@ QxrdExperimentPtr QxrdIntegrator::experiment() const
       return expt;
     }
 
-    p = p -> parentPtr();
+    p = qSharedPointerDynamicCast<QcepObject>(
+          parentPtr());
   }
 
   printMessage("QxrdExperiment of QxrdIntegrator not found");

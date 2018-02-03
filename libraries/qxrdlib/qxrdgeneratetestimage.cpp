@@ -8,7 +8,7 @@
 #include "qcepallocator.h"
 
 QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
-  QcepObject(name),
+  inherited(name),
   m_Processor(),
   m_Geometry(new QxrdDetectorGeometry("testGeometry")),
   m_NRows(this, "nRows", 2048, "Number of Rows"),
@@ -30,11 +30,9 @@ QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
 {
 }
 
-QxrdGenerateTestImagePtr QxrdGenerateTestImage::newGenerateTestImage()
+void QxrdGenerateTestImage::initialize(QObjectWPtr parent)
 {
-  QxrdGenerateTestImagePtr test(new QxrdGenerateTestImage("testImage"));
-
-  return test;
+  inherited::initialize(parent);
 }
 
 void QxrdGenerateTestImage::setProcessor(QxrdProcessorWPtr proc)

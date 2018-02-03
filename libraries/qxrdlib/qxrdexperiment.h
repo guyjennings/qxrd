@@ -66,9 +66,7 @@ public:
                                          int mode);
 
   virtual ~QxrdExperiment();
-  void initialize(QcepObjectWPtr parent);
-
-  void init(QxrdExperimentSettingsPtr settings);
+  void initialize(QObjectWPtr parent);
 
   static void registerMetaTypes();
 
@@ -80,8 +78,6 @@ public:
 
   void openWindows();
   void closeWindows();
-
-  void setExperimentApplication(QxrdAppCommonWPtr app);
 
   QxrdAppCommonWPtr application() const;
   QxrdExperimentThreadPtr experimentThread() const;

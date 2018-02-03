@@ -41,6 +41,7 @@ public:
   Q_INVOKABLE QxrdProcessor(QString name);
   virtual ~QxrdProcessor();
   static QxrdProcessorPtr newProcessor();
+  void initialize(QObjectWPtr parent);
   void shutdown();
 
   QxrdExperimentWPtr   experiment() const;

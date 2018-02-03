@@ -16,9 +16,13 @@ class QXRD_EXPORT QxrdPolarNormalization : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdPolarNormalization(QString name);
-  static QxrdPolarNormalizationPtr newPolarNormalization();
+  void initialize(QObjectWPtr parent);
+
   QcepDataObjectPtr transform(QcepDoubleImageDataPtr img);
 
   enum {

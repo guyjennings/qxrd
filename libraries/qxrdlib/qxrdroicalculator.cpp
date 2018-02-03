@@ -9,7 +9,7 @@
 #include "qxrdprocessor.h"
 
 QxrdROICalculator::QxrdROICalculator(QString name)
-  : QcepObject(name),
+  : inherited(name),
     m_ROIModel(new QxrdROIModel())
 {
 #ifndef QT_NO_DEBUG
@@ -19,13 +19,9 @@ QxrdROICalculator::QxrdROICalculator(QString name)
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdROICalculator::QxrdROICalculator(%p)\n", this);
   }
-}
 
-QxrdROICalculatorPtr QxrdROICalculator::newROICalculator()
-{
-  QxrdROICalculatorPtr calc(new QxrdROICalculator("roiCalculator"));
-
-  return calc;
+  m_ROIModel = QxrdROIModelPtr(
+        new QxrdROIModel());
 }
 
 QxrdROICalculator::~QxrdROICalculator()
@@ -37,6 +33,13 @@ QxrdROICalculator::~QxrdROICalculator()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdROICalculator::~QxrdROICalculator(%p)\n", this);
   }
+}
+
+void QxrdROICalculator::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+//  m_ROIModel -> initialize(parent);
 }
 
 QScriptValue QxrdROICalculator::toScriptValue(QScriptEngine *engine, const QxrdROICalculatorPtr &proc)
@@ -59,9 +62,7 @@ void QxrdROICalculator::fromScriptValue(const QScriptValue &obj, QxrdROICalculat
 
 void QxrdROICalculator::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::readSettings(settings);
+  inherited::readSettings(settings);
 
   if (m_ROIModel) {
     settings->beginGroup("coords");
@@ -72,9 +73,7 @@ void QxrdROICalculator::readSettings(QSettings *settings)
 
 void QxrdROICalculator::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 
   if (m_ROIModel) {
     settings->beginGroup("coords");

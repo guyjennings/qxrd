@@ -16,9 +16,13 @@
 class QXRD_EXPORT QxrdGenerateTestImage : public QcepObject
 {
   Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdGenerateTestImage(QString name);
-  static QxrdGenerateTestImagePtr newGenerateTestImage();
+  void initialize(QObjectWPtr parent);
 
 public slots:
   void setDimension(int nc, int nr);

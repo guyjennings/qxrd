@@ -18,10 +18,13 @@ class QXRD_EXPORT QxrdROICalculator : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdROICalculator(QString name);
   virtual ~QxrdROICalculator();
-  static QxrdROICalculatorPtr newROICalculator();
+  void initialize(QObjectWPtr parent);
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROICalculatorPtr &proc);
   static void fromScriptValue(const QScriptValue &obj, QxrdROICalculatorPtr &proc);
