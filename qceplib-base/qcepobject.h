@@ -7,6 +7,7 @@
 #include "qcepobjectnamer.h"
 #include <QDateTime>
 #include <QSet>
+#include "qobject-ptr.h"
 #include "qcepobject-ptr.h"
 #include <QVector>
 #include "qcepproperty.h"
@@ -19,7 +20,7 @@ class QCEP_EXPORT QcepObject : public QObject, public QEnableSharedFromThis<Qcep
 public:
   QcepObject(QString name);
   virtual ~QcepObject();
-  virtual void initialize(QcepObjectWPtr parent);
+  virtual void initialize(QObjectWPtr parent);
 
   static int allocatedObjects();
   static int deletedObjects();
@@ -29,8 +30,8 @@ public:
 #endif
 
   void setParentPtr(QcepObjectWPtr parent);
-  QcepObjectWPtr parentPtr();
-  const QcepObjectWPtr parentPtr() const;
+  QObjectWPtr parentPtr();
+  const QObjectWPtr parentPtr() const;
 
 signals:
 
@@ -110,7 +111,7 @@ private:
   bool                                m_Initialized;
   QAtomicInt                          m_ChangeCount;
   QAtomicPointer<QcepProperty>        m_LastChanged;
-  QcepObjectWPtr                      m_Parent;
+  QObjectWPtr                         m_Parent;
   //TODO: eliminate?
   QVector<QcepObjectPtr>              m_Children;
 

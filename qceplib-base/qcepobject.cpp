@@ -62,7 +62,7 @@ QcepObject::~QcepObject()
 #endif
 }
 
-void QcepObject::initialize(QcepObjectWPtr parent)
+void QcepObject::initialize(QObjectWPtr parent)
 {
   m_Initialized = true;
   m_Parent      = parent;
@@ -85,12 +85,12 @@ void QcepObject::setParentPtr(QcepObjectWPtr parent)
   m_Parent = parent;
 }
 
-QcepObjectWPtr QcepObject::parentPtr()
+QObjectWPtr QcepObject::parentPtr()
 {
   return m_Parent;
 }
 
-const QcepObjectWPtr QcepObject::parentPtr() const
+const QObjectWPtr QcepObject::parentPtr() const
 {
   return m_Parent;
 }
@@ -162,7 +162,7 @@ int QcepObject::checkChildren(int verbose, int level) const
       printLine(tr("NULL child of %1").arg(get_Name()));
       ck = false;
     } else {
-      QcepObjectWPtr parent = child->parentPtr();
+      QObjectWPtr parent = child->parentPtr();
 
       if (parent != sharedFromThis()) {
         printLine(tr("parent of %1 is not %2")
@@ -324,15 +324,17 @@ QString QcepObject::childrenChangedBy() const
 
 void QcepObject::propertyChanged(QcepProperty *prop)
 {
-#ifndef QT_NO_DEBUG
-  checkObjectInitialization();
-#endif
+//#ifndef QT_NO_DEBUG
+//  checkObjectInitialization();
+//#endif
 
   if (prop == NULL || prop->isStored()) {
     m_ChangeCount.fetchAndAddOrdered(1);
     m_LastChanged.store(prop);
 
-    QcepObjectPtr parent(parentPtr());
+    QcepObjectPtr parent(
+          qSharedPointerDynamicCast<QcepObject>(
+            parentPtr()));
 
     if (parent) {
       parent->propertyChanged(prop);
@@ -436,7 +438,8 @@ void QcepObject::printLine(QString line) const
   checkObjectInitialization();
 #endif
 
-  QcepObjectPtr p(m_Parent);
+  QcepObjectPtr p(
+        qSharedPointerDynamicCast<QcepObject>(m_Parent));
 
   if (p) {
     p->printLine(line);
@@ -457,7 +460,8 @@ void QcepObject::printMessage(QString msg, QDateTime dt) const
   checkObjectInitialization();
 #endif
 
-  QcepObjectPtr p(m_Parent);
+  QcepObjectPtr p(
+        qSharedPointerDynamicCast<QcepObject>(m_Parent));
 
   if (p) {
     p->printMessage(msg, dt);
@@ -479,7 +483,8 @@ void QcepObject::criticalMessage(QString msg, QDateTime dt) const
   checkObjectInitialization();
 #endif
 
-  QcepObjectPtr p(m_Parent);
+  QcepObjectPtr p(
+        qSharedPointerDynamicCast<QcepObject>(m_Parent));
 
   if (p) {
     p->criticalMessage(msg, dt);
@@ -501,7 +506,8 @@ void QcepObject::statusMessage(QString msg, QDateTime dt) const
   checkObjectInitialization();
 #endif
 
-  QcepObjectPtr p(parentPtr());
+  QcepObjectPtr p(
+        qSharedPointerDynamicCast<QcepObject>(m_Parent));
 
   if (p) {
     p->statusMessage(msg, dt);
@@ -839,13 +845,14 @@ int QcepObject::methodCount()
 void QcepObject::dumpObjectTreePtr(int level)
 {
   const QMetaObject* metaObject = this->metaObject();
-  QcepObjectPtr parent(parentPtr());
+  QcepObjectPtr p(
+        qSharedPointerDynamicCast<QcepObject>(m_Parent));
 
   printLine(tr("%1// %2: %3 constrs, parent %4")
             .arg("", level)
             .arg(metaObject->className())
             .arg(metaObject->constructorCount())
-            .arg(parent ? parent->get_Type() : "NULL"));
+            .arg(p ? p->get_Type() : "NULL"));
 
   int nDumped = 0;
 

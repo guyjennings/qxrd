@@ -244,7 +244,8 @@ HEADERS += \
     $$PWD/qcepfixupdetectorpanelgains.h \
     $$PWD/qcepscandetectorpanelgains.h \
     $$PWD/qcepmainwindowsettings.h \
-    $$PWD/qcepmainwindowsettings-ptr.h
+    $$PWD/qcepmainwindowsettings-ptr.h \
+    $$PWD/qobject-ptr.h
 
 contains (DEFINES, HAVE_DATAVIS) {
  HEADERS += \

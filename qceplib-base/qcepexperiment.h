@@ -26,7 +26,7 @@ private:
 public:
   explicit QcepExperiment(QString path,
                           QString name);
-  void initialize(QcepObjectWPtr parent);
+  void initialize(QObjectWPtr parent);
 
 signals:
 
