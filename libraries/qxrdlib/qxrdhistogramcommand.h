@@ -6,6 +6,8 @@
 
 class QXRD_EXPORT QxrdHistogramCommand : public QxrdPlotButtonCommand
 {
+  Q_OBJECT
+
 public:
   QxrdHistogramCommand(QString                    name,
                        QxrdPlotWidget            *plot,

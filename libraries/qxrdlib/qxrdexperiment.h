@@ -68,6 +68,8 @@ public:
   virtual ~QxrdExperiment();
   void initialize(QObjectWPtr parent);
 
+  static QxrdExperimentWPtr findExperiment(QObjectWPtr p);
+
   static void registerMetaTypes();
 
   enum {

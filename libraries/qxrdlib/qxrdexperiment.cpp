@@ -184,6 +184,23 @@ QxrdExperiment::~QxrdExperiment()
   }
 }
 
+QxrdExperimentWPtr QxrdExperiment::findExperiment(QObjectWPtr p)
+{
+  QxrdExperimentWPtr res =
+      qSharedPointerDynamicCast<QxrdExperiment>(p);
+
+  if (res == NULL) {
+    QcepObjectPtr objp =
+        qSharedPointerDynamicCast<QcepObject>(p);
+
+    if (objp) {
+      res = findExperiment(objp->parentPtr());
+    }
+  }
+
+  return res;
+}
+
 QxrdExperimentThreadPtr QxrdExperiment::experimentThread() const
 {
   QxrdExperimentThread* t =
@@ -259,6 +276,7 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
     }
 
     m_Dataset = QcepAllocator::newDataset("dataset");
+    m_Dataset -> initialize(sharedFromThis());
 
     m_DatasetModel = QcepDatasetModelPtr(
           new QcepDatasetModel(myself, m_Dataset));
@@ -1376,13 +1394,7 @@ void QxrdExperiment::openWatcher(QString patt)
         new QxrdWatcherWindowSettings("watcher"));
 
   if (set) {
-    QxrdExperimentPtr exp(
-          qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()));
-
-    set -> initialize(application(),
-                      exp,
-                      qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()),
-                      processor());
+    set -> initialize(sharedFromThis());
 
     set -> set_WindowOpen(true);
     set -> set_Pattern(patt);
@@ -1491,10 +1503,7 @@ void QxrdExperiment::defaultWindowSettings()
         qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(i));
 
     if (set) {
-      set -> initialize(qSharedPointerDynamicCast<QxrdApplication>(application()),
-                        experiment(),
-                        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()),
-                        processor());
+      set -> initialize(sharedFromThis());
 
       if (set -> get_WindowOpen()) {
         nOpened += 1;

@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdFitEllipsesCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdFitEllipsesCommand(QString                    name,
                          QxrdPlotWidget            *plot,

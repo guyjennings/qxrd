@@ -968,6 +968,8 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
                 QcepAllocator::newIntegratedData(dimg->get_Name(), 0, QcepAllocator::NullIfNotAvailable);
 
             if (integ) {
+              integ -> initialize(m_Integrator);
+
               integ -> resize(0);
               integ -> set_Center(m_CenterX, m_CenterY);
 

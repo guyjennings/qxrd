@@ -6,6 +6,8 @@
 
 class QXRD_EXPORT QxrdPowderPointsCommand : public QxrdPlotButtonCommand
 {
+  Q_OBJECT
+
 public:
   QxrdPowderPointsCommand(QString                    name,
                           QxrdPlotWidget            *plot,

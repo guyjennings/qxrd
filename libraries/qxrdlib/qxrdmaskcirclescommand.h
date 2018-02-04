@@ -7,6 +7,8 @@
 
 class QXRD_EXPORT QxrdMaskCirclesCommand : public QxrdPlotButtonCommand
 {
+  Q_OBJECT
+
 public:
   QxrdMaskCirclesCommand(QString                    name,
                          QxrdPlotWidget            *plot,

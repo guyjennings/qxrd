@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdAxisSubmenuCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdAxisSubmenuCommand(QString                    name,
                          QxrdPlotWidget            *plot,

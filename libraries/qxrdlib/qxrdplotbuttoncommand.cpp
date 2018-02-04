@@ -9,7 +9,7 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
                                              QString                    iconPath,
                                              QString                    toolTip,
                                              bool                       checkable)
-  : QxrdPlotCommand(name, plot, set),
+  : inherited(name, plot, set),
     m_ToolButton(NULL),
     m_PlotPicker(NULL),
     m_IconPaths(),
@@ -22,7 +22,6 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
   }
 
   m_ToolButton =  new QToolButton();
-  m_ToolButton -> setObjectName(get_Name());
 
   m_ToolButton->setIcon(commandIcon(m_Index));
   m_ToolButton->setIconSize(QSize(24,24));
@@ -41,6 +40,13 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
 
   connect(m_ToolButton,  &QToolButton::clicked,
           this,          &QxrdPlotButtonCommand::clicked);
+}
+
+void QxrdPlotButtonCommand::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_ToolButton -> setObjectName(get_Name());
 }
 
 void QxrdPlotButtonCommand::appendMode(QString iconPath, QString toolTip)
@@ -75,7 +81,7 @@ void QxrdPlotButtonCommand::toggled(bool on)
 
 void QxrdPlotButtonCommand::enable()
 {
-  QxrdPlotCommand::enable();
+  inherited::enable();
 
   if (m_PlotPicker) {
     m_PlotPicker->setEnabled(true);
@@ -84,7 +90,7 @@ void QxrdPlotButtonCommand::enable()
 
 void QxrdPlotButtonCommand::disable()
 {
-  QxrdPlotCommand::disable();
+  inherited::disable();
 
   if (m_PlotPicker) {
     m_PlotPicker->setEnabled(false);
@@ -93,7 +99,7 @@ void QxrdPlotButtonCommand::disable()
 
 void QxrdPlotButtonCommand::setPen(const QPen &pen)
 {
-  QxrdPlotCommand::setPen(pen);
+  inherited::setPen(pen);
 
   if (m_PlotPicker) {
     m_PlotPicker -> setTrackerPen(pen);

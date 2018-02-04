@@ -157,6 +157,23 @@ QxrdAcquisition::~QxrdAcquisition()
 //  }
 }
 
+QxrdAcquisitionWPtr QxrdAcquisition::findAcquisition(QObjectWPtr p)
+{
+  QxrdAcquisitionWPtr res =
+      qSharedPointerDynamicCast<QxrdAcquisition>(p);
+
+  if (res == NULL) {
+    QcepObjectPtr objp =
+        qSharedPointerDynamicCast<QcepObject>(p);
+
+    if (objp) {
+      res = findAcquisition(objp->parentPtr());
+    }
+  }
+
+  return res;
+}
+
 QxrdAcquisitionWPtr QxrdAcquisition::myself()
 {
   return qSharedPointerDynamicCast<QxrdAcquisition>(sharedFromThis());

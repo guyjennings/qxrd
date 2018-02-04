@@ -10,6 +10,8 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdmainwindowsettings-ptr.h"
+#include "qxrdappcommon-ptr.h"
+#include "qobject-ptr.h"
 #include <QTimer>
 
 class QXRD_EXPORT QxrdAppCommon : public QcepApplication
@@ -23,6 +25,8 @@ public:
   QxrdAppCommon(int &argc, char **argv);
   virtual ~QxrdAppCommon();
   void initialize();
+
+  static QxrdAppCommonWPtr findApplication(QObjectWPtr p);
 
   virtual bool init(int &argc, char **argv);
   virtual void finish();

@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdNormalizeRingsCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdNormalizeRingsCommand(QString                    name,
                             QxrdPlotWidget            *plot,

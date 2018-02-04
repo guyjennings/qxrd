@@ -14,10 +14,7 @@ class QXRD_EXPORT QxrdWatcherWindowSettings : public QxrdMainWindowSettings
 public:
   Q_INVOKABLE QxrdWatcherWindowSettings(QString name);
 
-  void initialize(QxrdAppCommonWPtr   app,
-                  QxrdExperimentWPtr  expt,
-                  QxrdAcquisitionWPtr acqw,
-                  QxrdProcessorWPtr   procw);
+  void initialize(QObjectWPtr parent);
 
   QxrdMainWindowPtr newWindow();
 

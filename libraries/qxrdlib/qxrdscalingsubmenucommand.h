@@ -7,6 +7,8 @@
 
 class QXRD_EXPORT QxrdScalingSubmenuCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdScalingSubmenuCommand(QString                         name,
                             QxrdImagePlotWidget            *plot,

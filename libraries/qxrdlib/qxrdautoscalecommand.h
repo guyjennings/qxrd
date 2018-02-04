@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdAutoScaleCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdAutoScaleCommand(QString                    name,
                        QxrdPlotWidget            *plot,

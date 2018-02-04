@@ -7,6 +7,8 @@
 
 class QXRD_EXPORT QxrdColorMapSubmenuCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdColorMapSubmenuCommand(QString                         name,
                              QxrdImagePlotWidget            *plot,

@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdMissingRingCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdMissingRingCommand(QString                    name,
                          QxrdPlotWidget            *plot,

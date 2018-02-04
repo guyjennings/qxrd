@@ -7,6 +7,8 @@
 
 class QXRD_EXPORT QxrdSetCenterCommand : public QxrdPlotButtonCommand
 {
+  Q_OBJECT
+
 public:
   QxrdSetCenterCommand(QString                    name,
                        QxrdPlotWidget            *plot,

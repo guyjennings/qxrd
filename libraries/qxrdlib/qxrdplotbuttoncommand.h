@@ -6,6 +6,11 @@
 
 class QXRD_EXPORT QxrdPlotButtonCommand : public QxrdPlotCommand
 {
+  Q_OBJECT
+
+private:
+  typedef QxrdPlotCommand inherited;
+
 public:
   QxrdPlotButtonCommand(QString                    name,
                         QxrdPlotWidget            *plot,
@@ -13,6 +18,8 @@ public:
                         QString                    iconPath,
                         QString                    toolTip,
                         bool                       checkable);
+
+  void initialize(QObjectWPtr parent);
 
   QAction     *contextMenuAction(const QPoint &pos);
   QToolButton *toolButton();

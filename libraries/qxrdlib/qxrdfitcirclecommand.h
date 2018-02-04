@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdFitCircleCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdFitCircleCommand(QString                    name,
                        QxrdPlotWidget            *plot,

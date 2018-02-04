@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdDelRingCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdDelRingCommand(QString                    name,
                      QxrdPlotWidget            *plot,

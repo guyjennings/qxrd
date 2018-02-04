@@ -6,6 +6,8 @@
 
 class QXRD_EXPORT QxrdSliceCommand : public QxrdPlotButtonCommand
 {
+  Q_OBJECT
+
 public:
   QxrdSliceCommand(QString                    name,
                    QxrdPlotWidget            *plot,

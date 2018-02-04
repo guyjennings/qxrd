@@ -9,6 +9,8 @@
 
 class QXRD_EXPORT QxrdPlotCommand : public QcepObject
 {
+  Q_OBJECT
+
 public:
   QxrdPlotCommand(QString                    name,
                   QxrdPlotWidget            *plot,

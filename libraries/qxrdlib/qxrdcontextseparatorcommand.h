@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdContextSeparatorCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdContextSeparatorCommand(QString                    name,
                               QxrdPlotWidget            *plot,

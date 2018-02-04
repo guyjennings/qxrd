@@ -6,6 +6,8 @@
 
 class QXRD_EXPORT QxrdAdjustDistanceCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdAdjustDistanceCommand(QString                    name,
                             QxrdPlotWidget            *plot,

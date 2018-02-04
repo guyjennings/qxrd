@@ -87,6 +87,23 @@ void QxrdAppCommon::finish()
   }
 }
 
+QxrdAppCommonWPtr QxrdAppCommon::findApplication(QObjectWPtr p)
+{
+  QxrdAppCommonWPtr res =
+      qSharedPointerDynamicCast<QxrdAppCommon>(p);
+
+  if (res == NULL) {
+    QcepObjectPtr objp =
+        qSharedPointerDynamicCast<QcepObject>(p);
+
+    if (objp) {
+      res = findApplication(objp->parentPtr());
+    }
+  }
+
+  return res;
+}
+
 QxrdAppCommonSettingsPtr QxrdAppCommon::settings()
 {
   return m_ApplicationSettings;

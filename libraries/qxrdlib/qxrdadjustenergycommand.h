@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdAdjustEnergyCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdAdjustEnergyCommand(QString                    name,
                           QxrdPlotWidget            *plot,

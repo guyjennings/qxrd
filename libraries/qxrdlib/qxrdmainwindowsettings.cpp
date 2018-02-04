@@ -1,5 +1,9 @@
 #include "qxrdmainwindowsettings.h"
 #include "qxrdmainwindow.h"
+#include "qxrdappcommon.h"
+#include "qxrdexperiment.h"
+#include "qxrdacquisition.h"
+#include "qxrdprocessor.h"
 
 QxrdMainWindowSettings::QxrdMainWindowSettings(QString name)
   : QcepMainWindowSettings(name),
@@ -8,15 +12,30 @@ QxrdMainWindowSettings::QxrdMainWindowSettings(QString name)
 {
 }
 
-void QxrdMainWindowSettings::initialize(QxrdAppCommonWPtr   app,
-                                        QxrdExperimentWPtr  expt,
-                                        QxrdAcquisitionWPtr acqw,
-                                        QxrdProcessorWPtr   procw)
+void QxrdMainWindowSettings::initialize(QObjectWPtr parent)
 {
-  m_Application = app;
-  m_Experiment  = expt;
-  m_Acquisition = acqw;
-  m_Processor   = procw;
+  inherited::initialize(parent);
+
+  m_Application = QxrdAppCommon::findApplication(parent);
+  m_Experiment  = QxrdExperiment::findExperiment(parent);
+  m_Acquisition = QxrdAcquisition::findAcquisition(parent);
+  m_Processor   = QxrdProcessor::findProcessor(parent);
+
+  if (m_Application == NULL) {
+    printMessage("QxrdMainWindowSettings::m_Application == NULL");
+  }
+
+  if (m_Experiment  == NULL) {
+    printMessage("QxrdMainWindowSettings::m_Experiment == NULL");
+  }
+
+  if (m_Acquisition == NULL) {
+    printMessage("QxrdMainWindowSettings::m_Acquisition == NULL");
+  }
+
+  if (m_Processor   == NULL) {
+    printMessage("QxrdMainWindowSettings::m_Processor == NULL");
+  }
 }
 
 QxrdMainWindowPtr QxrdMainWindowSettings::window()

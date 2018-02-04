@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdFitPeakCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdFitPeakCommand(QString                    name,
                      QxrdPlotWidget            *plot,

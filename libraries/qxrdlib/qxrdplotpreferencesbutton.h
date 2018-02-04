@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdPlotPreferencesButton : public QxrdPlotButtonCommand
 {
+  Q_OBJECT
+
 public:
   QxrdPlotPreferencesButton(QString                    name,
                             QxrdPlotWidget            *plot,

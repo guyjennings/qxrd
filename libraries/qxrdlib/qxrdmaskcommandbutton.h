@@ -7,6 +7,8 @@
 
 class QXRD_EXPORT QxrdMaskCommandButton : public QxrdPlotButtonCommand
 {
+  Q_OBJECT
+
 public:
   QxrdMaskCommandButton(QString                    name,
                         QxrdPlotWidget            *plot,

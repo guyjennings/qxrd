@@ -7,6 +7,8 @@
 
 class QXRD_EXPORT QxrdZoomOutCommand : public QxrdPlotButtonCommand
 {
+  Q_OBJECT
+
 public:
   QxrdZoomOutCommand(QString                    name,
                      QxrdPlotWidget            *plot,

@@ -25,6 +25,8 @@
 #include "qxrdpolarnormalizationdialog.h"
 #include "qxrdroicalculator.h"
 #include "qxrdfilesaver.h"
+#include "qxrdpowderringsmodel.h"
+#include "qxrdroimodel.h"
 #include <QFileInfo>
 #include <QThread>
 #include <QDir>
@@ -136,6 +138,12 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_ROICalculator = QxrdROICalculatorPtr(
         new QxrdROICalculator("roiCalculator"));
 
+  m_PowderRings = QxrdPowderRingsModelPtr(
+        new QxrdPowderRingsModel());
+
+  m_ROIModel = QxrdROIModelPtr(
+        new QxrdROIModel());
+
   connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onCorrectedImageAvailable);
   connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onIntegratedDataAvailable);
 //  connect(&m_ROIData,         &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onROIDataAvailable);
@@ -163,15 +171,6 @@ QxrdProcessor::QxrdProcessor(QString name) :
   connect(prop_DarkImagePath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onDarkImagePathChanged);
   connect(prop_BadPixelsPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onBadPixelsPathChanged);
   connect(prop_GainMapPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onGainMapPathChanged);
-
-  QxrdAcquisitionPtr acqp(
-        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
-
-  if (acqp) {
-    connect(acqp -> prop_SummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-    connect(acqp -> prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-    connect(acqp -> prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  }
 }
 
 QxrdProcessor::~QxrdProcessor()
@@ -201,6 +200,15 @@ void QxrdProcessor::initialize(QObjectWPtr parent)
   m_PolarNormalization -> initialize(myself);
   m_GenerateTestImage  -> initialize(myself);
   m_ROICalculator      -> initialize(myself);
+
+  QxrdAcquisitionPtr acqp(
+        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+
+  if (acqp) {
+    connect(acqp -> prop_SummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
+    connect(acqp -> prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
+    connect(acqp -> prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
+  }
 }
 
 //TODO: is this needed...
@@ -209,6 +217,22 @@ void QxrdProcessor::shutdown()
   thread()->exit();
 }
 
+QxrdProcessorWPtr QxrdProcessor::findProcessor(QObjectWPtr p)
+{
+  QxrdProcessorWPtr res =
+      qSharedPointerDynamicCast<QxrdProcessor>(p);
+
+  if (res == NULL) {
+    QcepObjectPtr objp =
+        qSharedPointerDynamicCast<QcepObject>(p);
+
+    if (objp) {
+      res = findProcessor(objp->parentPtr());
+    }
+  }
+
+  return res;
+}
 
 QxrdExperimentWPtr QxrdProcessor::experiment() const
 {

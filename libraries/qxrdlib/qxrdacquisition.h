@@ -32,7 +32,6 @@
 #include "qxrdacquisition-ptr.h"
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
-#include "qxrdacqcommon.h"
 
 class QXRD_EXPORT QxrdAcquisition : public QxrdAcqCommon
 {
@@ -48,6 +47,8 @@ public:
   void initialize();
 
   static QxrdAcquisitionPtr newAcquisition();
+
+  static QxrdAcquisitionWPtr findAcquisition(QObjectWPtr p);
 
   //TODO: change to experiment
   void setWindow(QxrdWindowWPtr win);

@@ -13,14 +13,13 @@ class QXRD_EXPORT QxrdMainWindowSettings : public QcepMainWindowSettings
 {
   Q_OBJECT
 
+private:
+  typedef QcepMainWindowSettings inherited;
+
 public:
   QxrdMainWindowSettings(QString name);
 
-  virtual
-  void initialize(QxrdAppCommonWPtr   app,
-                  QxrdExperimentWPtr  expt,
-                  QxrdAcquisitionWPtr acqw,
-                  QxrdProcessorWPtr   procw);
+  void initialize(QObjectWPtr parent);
 
   void openWindow();
   void closeWindow();

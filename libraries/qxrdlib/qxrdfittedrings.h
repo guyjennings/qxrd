@@ -9,10 +9,12 @@ class QXRD_EXPORT QxrdFittedRings : public QcepDataColumnScan
 {
   Q_OBJECT
 
+private:
+  typedef QcepDataColumnScan inherited;
+
 public:
   Q_INVOKABLE QxrdFittedRings(QString name, int sz=0);
-
-  static QxrdFittedRingsPtr newFittedRings(QString name);
+  void initialize(QObjectWPtr parent);
 
 public slots:
   void append(int n,

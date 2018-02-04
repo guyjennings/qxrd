@@ -5,6 +5,8 @@
 
 class QXRD_EXPORT QxrdPrintPlotCommand : public QxrdPlotContextMenuCommand
 {
+  Q_OBJECT
+
 public:
   QxrdPrintPlotCommand(QString                    name,
                        QxrdPlotWidget            *plot,

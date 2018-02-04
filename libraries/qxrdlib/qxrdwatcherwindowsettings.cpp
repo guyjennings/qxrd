@@ -15,15 +15,9 @@ QxrdWatcherWindowSettings::QxrdWatcherWindowSettings(QString name)
 
 }
 
-void QxrdWatcherWindowSettings::initialize(QxrdAppCommonWPtr   app,
-                                           QxrdExperimentWPtr  expt,
-                                           QxrdAcquisitionWPtr acqw,
-                                           QxrdProcessorWPtr   procw)
+void QxrdWatcherWindowSettings::initialize(QObjectWPtr parent)
 {
-  QxrdMainWindowSettings::initialize(app,
-                                     expt,
-                                     acqw,
-                                     procw);
+  QxrdMainWindowSettings::initialize(parent);
 
 //  m_Watcher = watcher;
 }

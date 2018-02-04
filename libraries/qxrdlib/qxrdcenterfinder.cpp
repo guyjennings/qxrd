@@ -423,9 +423,11 @@ void QxrdCenterFinder::fitPowderEllipses()
     fitDone.waitForFinished();
   }
 
-  QxrdFittedRingsPtr pts(QxrdFittedRings::newFittedRings("rings"));
+  QxrdFittedRingsPtr pts(new QxrdFittedRings("rings"));
 
   if (pts) {
+    pts->initialize(sharedFromThis());
+
     for (int i=0; i<nrings; i++) {
       QxrdFitterRingEllipse &r = fits[i];
 
