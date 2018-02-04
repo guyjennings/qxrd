@@ -6,7 +6,7 @@
 #include "qcepmutexlocker.h"
 
 QcepDataColumnScan::QcepDataColumnScan(QString name, QStringList cols, int sz) :
-  QcepDataGroup(name),
+  inherited(name),
   m_NumPoints(this, "numPoints", sz, "Number of points in scan")
 {
   foreach (QString col, cols) {
@@ -14,18 +14,19 @@ QcepDataColumnScan::QcepDataColumnScan(QString name, QStringList cols, int sz) :
   }
 }
 
+void QcepDataColumnScan::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}
+
 void QcepDataColumnScan::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepDataGroup::writeSettings(settings);
+  inherited::writeSettings(settings);
 }
 
 void QcepDataColumnScan::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepDataGroup::readSettings(settings);
+  inherited::readSettings(settings);
 }
 
 QString QcepDataColumnScan::description() const
@@ -78,9 +79,11 @@ int QcepDataColumnScan::rowCount() const
 
 QcepDataColumnPtr QcepDataColumnScan::appendColumn(QString title)
 {
-  QcepDataColumnPtr col = QcepAllocator::newColumn(title, get_NumPoints(), QcepAllocator::NullIfNotAvailable);
+  QcepDataColumnPtr col = QcepAllocator::newColumn(title, get_NumPoints(), QcepAllocator::WaitTillAvailable);
 
   if (col) {
+    col -> initialize(sharedFromThis());
+
     append(col);
   }
 

@@ -16,11 +16,14 @@ QcepDataGroup::QcepDataGroup(QString name) :
 {
 }
 
+void QcepDataGroup::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}
+
 void QcepDataGroup::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepDataObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 
   if (settings) {
     settings->beginWriteArray("items");
@@ -44,11 +47,9 @@ void QcepDataGroup::writeSettings(QSettings *settings)
 
 void QcepDataGroup::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
   QString id = get_Type();
 
-  QcepDataObject::readSettings(settings);
+  inherited::readSettings(settings);
 
 #ifndef QT_NO_DEBUG
   if (get_Type() != id) {

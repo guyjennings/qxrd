@@ -11,11 +11,15 @@ class QCEP_EXPORT QcepIntegratedData : public QcepDataObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepDataObject inherited;
+
 public:
   Q_INVOKABLE QcepIntegratedData(QString name,
       int maxSize=0);
 
   ~QcepIntegratedData();
+  void initialize(QObjectWPtr parent);
 
 public slots:
   virtual QString description() const;

@@ -22,7 +22,7 @@
 QAtomicInt allocCount = 0;
 
 QcepImageDataBase::QcepImageDataBase(QString name, int width, int height, int size)
-  : QcepDataObject(name, size),
+  : inherited(name, size),
     m_Width(this, "width", width, "Image Width"),
     m_Height(this, "height", height, "Image Height"),
     m_HStart(this, "hStart", 0.0, "H Start Coord"),
@@ -74,6 +74,11 @@ QcepImageDataBase::QcepImageDataBase(QString name, int width, int height, int si
   }
 
   QcepAllocator::allocate(size);
+}
+
+void QcepImageDataBase::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 QcepImageDataBase::~QcepImageDataBase()

@@ -62,8 +62,25 @@ QcepObject::~QcepObject()
 #endif
 }
 
+QString QcepObject::hexArg(const void *p)
+{
+#if (QT_POINTER_SIZE==4)
+  return tr("0x%1").arg((quint32)p, 8, 16, QLatin1Char('0'));
+#else
+  return tr("0x%1").arg((quint64)p, 16, 16, QLatin1Char('0'));
+#endif
+}
+
 void QcepObject::initialize(QObjectWPtr parent)
 {
+#ifndef QT_NO_DEBUG
+  if (m_Initialized) {
+    printf("QcepObject %s %s initialized multiple times\n",
+           qPrintable(hexArg(this)),
+           metaObject()->className());
+  }
+#endif
+
   m_Initialized = true;
   m_Parent      = parent;
 }
@@ -72,8 +89,8 @@ void QcepObject::initialize(QObjectWPtr parent)
 void QcepObject::checkObjectInitialization() const
 {
   if (m_Initialized == false) {
-    printf("QcepObject 0x%08x %s not initialized\n",
-           this,
+    printf("QcepObject %s %s not initialized\n",
+           qPrintable(hexArg(this)),
            metaObject()->className());
   }
 }

@@ -4,7 +4,7 @@
 
 QcepIntegratedData::QcepIntegratedData(QString name,
                                        int maxSize) :
-  QcepDataObject(name, 2*maxSize*sizeof(double)),
+  inherited(name, 2*maxSize*sizeof(double)),
   m_MaxSize(maxSize),
   m_Size(0),
   m_AllocStep(1024),
@@ -21,6 +21,11 @@ QcepIntegratedData::QcepIntegratedData(QString name,
 QcepIntegratedData::~QcepIntegratedData()
 {
   QcepAllocator::deallocate(sizeof(double), 2, m_MaxSize);
+}
+
+void QcepIntegratedData::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 QString QcepIntegratedData::description() const

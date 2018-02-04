@@ -17,8 +17,12 @@ class QCEP_EXPORT QcepDataGroup : public QcepDataObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepDataObject inherited;
+
 public:
   Q_INVOKABLE QcepDataGroup(QString name);
+  void initialize(QObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

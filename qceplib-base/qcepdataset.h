@@ -9,8 +9,13 @@ class QCEP_EXPORT QcepDataset : public QcepDataGroup
 {
   Q_OBJECT
 
+private:
+  typedef QcepDataGroup inherited;
+
 public:
   Q_INVOKABLE QcepDataset(QString name);
+
+  void initialize(QObjectWPtr parent);
 
 //  void readSettings(QSettings *settings, QString section);
 //  void writeSettings(QSettings *settings, QString section);

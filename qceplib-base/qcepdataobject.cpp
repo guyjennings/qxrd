@@ -12,9 +12,9 @@ static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
 
 QcepDataObject::QcepDataObject(QString name, qint64 byteSize) :
-  QcepObject(name),
+  inherited(name),
 //  m_Saver(saver),
-  m_Mutex(QMutex::Recursive),
+//  m_Mutex(QMutex::Recursive),
   m_ByteSize   (this, "size", byteSize, "Object Size"),
   m_Creator    (this, "creator", "Unknown", "QXRD Version Number"),
   m_Version    (this, "version", "Unknown", "QXRD Version Number"),
@@ -54,18 +54,19 @@ QcepDataObject::~QcepDataObject()
   s_ObjectDeleteCount.fetchAndAddOrdered(1);
 }
 
+void QcepDataObject::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}
+
 void QcepDataObject::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 }
 
 void QcepDataObject::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::readSettings(settings);
+  inherited::readSettings(settings);
 }
 
 QString QcepDataObject::mimeType()

@@ -11,16 +11,20 @@ class QCEP_EXPORT QcepDataArray : public QcepDataObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepDataObject inherited;
+
 public:
   QcepDataArray(QString name,
                 QVector<int> dims = QVector<int>());
   virtual ~QcepDataArray();
-
-  static QScriptValue toArrayScriptValue(QScriptEngine *engine, const QcepDataArrayPtr &data);
-  static void fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayPtr &data);
+  void initialize(QObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
+
+  static QScriptValue toArrayScriptValue(QScriptEngine *engine, const QcepDataArrayPtr &data);
+  static void fromArrayScriptValue(const QScriptValue &obj, QcepDataArrayPtr &data);
 
 public slots:
   virtual QString description() const;

@@ -24,11 +24,15 @@ class QCEP_EXPORT QcepImageDataBase : public QcepDataObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepDataObject inherited;
+
 public:
   QcepImageDataBase(QString name,
                     int width,
                     int height,
                     int size);
+  void initialize(QObjectWPtr parent);
   virtual ~QcepImageDataBase();
 
   void readSettings(QSettings *settings);

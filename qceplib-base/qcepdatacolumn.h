@@ -22,6 +22,9 @@ class QCEP_EXPORT QcepDataColumn : public QcepDataObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepDataObject inherited;
+
 public:
   enum ColumnType {
     NormalColumn,
@@ -37,6 +40,7 @@ public:
                  ColumnType colType = NormalColumn,
                  int col1 = -1,
                  int col2 = -1);
+  void initialize(QObjectWPtr parent);
 
   virtual ~QcepDataColumn();
 

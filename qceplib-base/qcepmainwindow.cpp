@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <QLayout>
 #include <QDockWidget>
+#include "qcepobject.h"
 
 QcepMainWindow::QcepMainWindow(QWidget *parent) : QMainWindow(parent)
 {

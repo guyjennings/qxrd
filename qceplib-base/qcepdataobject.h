@@ -13,9 +13,13 @@ class QCEP_EXPORT QcepDataObject : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QcepDataObject(QString name, qint64 byteSize);
   virtual ~QcepDataObject();
+  void initialize(QObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -79,8 +83,8 @@ private:
 //  QcepDataGroupWPtr     m_Parent;
 //  QcepSettingsSaverWPtr m_Saver;
 
-protected:
-  mutable QMutex        m_Mutex;
+//protected:
+//  mutable QMutex        m_Mutex;
 
 public:
   Q_PROPERTY(quint64 byteSize READ get_ByteSize WRITE set_ByteSize STORED false)

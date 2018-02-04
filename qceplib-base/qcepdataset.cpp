@@ -2,8 +2,13 @@
 #include "qcepmutexlocker.h"
 
 QcepDataset::QcepDataset(QString name) :
-  QcepDataGroup(name)
+  inherited(name)
 {
+}
+
+void QcepDataset::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 //void QcepDataset::writeSettings(QSettings *settings, QString section)

@@ -40,8 +40,6 @@ public:
 
   QString message(int val) const;
 
-  static QString hexArg(void *p);
-
 protected:
   void setMessage(int val, QString msg);
 
@@ -53,7 +51,5 @@ private:
 extern QCEP_EXPORT qint64 qcepDebug(int cond);
 
 extern QCEP_EXPORT QSharedPointer<QcepDebugDictionary> g_DebugLevel;
-
-#define HEXARG(a) arg(QcepDebugDictionary::hexArg(a))
 
 #endif // QCEPDEBUG_H

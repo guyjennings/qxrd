@@ -4,7 +4,7 @@
 #include "qcepmutexlocker.h"
 
 QcepDataColumn::QcepDataColumn(QString name, int npts, ColumnType colType, int col1, int col2) :
-  QcepDataObject(name, npts*sizeof(double)),
+  inherited(name, npts*sizeof(double)),
   m_ColumnType(this, "columnType", colType, "Column Type"),
   m_Column1   (this, "column1", col1, "1st dependent column"),
   m_Column2   (this, "column2", col2, "2nd dependent column"),
@@ -20,11 +20,14 @@ QcepDataColumn::~QcepDataColumn()
   QcepAllocator::deallocate(m_NPoints*sizeof(double));
 }
 
+void QcepDataColumn::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}
+
 void QcepDataColumn::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepDataObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 
   if (settings) {
     settings->beginWriteArray("d");
@@ -40,9 +43,7 @@ void QcepDataColumn::writeSettings(QSettings *settings)
 
 void QcepDataColumn::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepDataObject::readSettings(settings);
+  inherited::readSettings(settings);
 
   if (settings) {
     int n = settings->beginReadArray("d");

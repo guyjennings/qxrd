@@ -30,7 +30,7 @@ private:
 public:
   QcepAllocator(QString name);
   virtual ~QcepAllocator();
-  void initialize(QcepObjectWPtr parent);
+  void initialize(QObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

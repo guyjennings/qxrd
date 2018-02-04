@@ -9,6 +9,9 @@ class QCEP_EXPORT QcepMainWindowSettings : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QcepMainWindowSettings(QString name);
 

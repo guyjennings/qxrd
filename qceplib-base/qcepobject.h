@@ -17,6 +17,7 @@
 class QCEP_EXPORT QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
 {
   Q_OBJECT
+
 public:
   QcepObject(QString name);
   virtual ~QcepObject();
@@ -32,6 +33,8 @@ public:
   void setParentPtr(QcepObjectWPtr parent);
   QObjectWPtr parentPtr();
   const QObjectWPtr parentPtr() const;
+
+  static QString hexArg(const void *p);
 
 signals:
 
@@ -177,6 +180,8 @@ public:
 //  Q_PROPERTY(int typeID READ get_TypeID WRITE set_TypeID STORED false)
 //  QCEP_INTEGER_PROPERTY(TypeID)
 };
+
+#define HEXARG(a) arg(QcepObject::hexArg(a))
 
 Q_DECLARE_METATYPE(QcepObject*)
 

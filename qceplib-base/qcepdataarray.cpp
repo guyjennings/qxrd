@@ -4,7 +4,7 @@
 #include "qcepmutexlocker.h"
 
 QcepDataArray::QcepDataArray(QString name, QVector<int> dims) :
-  QcepDataObject(name, 0),
+  inherited(name, 0),
   m_Dimensions(dims)
 {
   qint64 prod = arrayCount(dims);
@@ -16,6 +16,11 @@ QcepDataArray::QcepDataArray(QString name, QVector<int> dims) :
   QcepAllocator::allocate(get_ByteSize());
 }
 
+void QcepDataArray::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}
+
 QcepDataArray::~QcepDataArray()
 {
   QcepAllocator::deallocate(get_ByteSize());
@@ -23,9 +28,8 @@ QcepDataArray::~QcepDataArray()
 
 void QcepDataArray::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepDataObject::writeSettings(settings);
+  //TODO: need to complete...
+  inherited::writeSettings(settings);
 
   if (settings) {
     settings->beginWriteArray("dims");
@@ -39,8 +43,10 @@ void QcepDataArray::writeSettings(QSettings *settings)
   }
 }
 
-void QcepDataArray::readSettings(QSettings * /*settings*/)
+void QcepDataArray::readSettings(QSettings * settings)
 {
+  //TODO: need to write...
+  inherited::readSettings(settings);
 }
 
 QString QcepDataArray::description() const
