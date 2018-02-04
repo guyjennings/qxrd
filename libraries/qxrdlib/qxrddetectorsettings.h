@@ -11,7 +11,7 @@
 #include "qxrdacquisition-ptr.h"
 #include "qxrdprocessor-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrddetectorcontrolwindow-ptr.h"
 #include "qxrddetectorcontrolwindowsettings-ptr.h"
@@ -32,16 +32,14 @@ class QXRD_EXPORT QxrdDetectorSettings : public QcepObject
 public:
   QxrdDetectorSettings(QString name, int detType);
 
-  void initialize(QxrdApplicationWPtr   app,
-                  QxrdExperimentWPtr    expt,
-                  QxrdAcquisitionWPtr   acq);
+  void initialize(QObjectWPtr parent);
+
   virtual ~QxrdDetectorSettings();
 
+  static QxrdDetectorSettingsWPtr findDetectorSettings(QObjectWPtr p);
+
   //TODO: rename to newDetectorSettings
-  static QxrdDetectorSettingsPtr newDetector(QxrdApplicationWPtr   app,
-                                             QxrdExperimentWPtr    expt,
-                                             QxrdAcquisitionWPtr   acq,
-                                             int                   detType);
+  static QxrdDetectorSettingsPtr newDetector(QObjectWPtr parent, int detType);
 
   static void registerMetaTypes();
 
@@ -124,7 +122,7 @@ public slots:
   virtual void configureDetector();
 
 protected:
-  QxrdApplicationWPtr                  m_Application;
+  QxrdAppCommonWPtr                    m_Application;
   QxrdExperimentWPtr                   m_Experiment;
   QxrdAcquisitionWPtr                  m_Acquisition;
 

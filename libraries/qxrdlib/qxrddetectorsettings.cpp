@@ -48,43 +48,51 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorSettings::QxrdDetectorSettings(%p)\n", this);
   }
+
+  m_Processor = QxrdProcessor::newProcessor();
+
+  m_DetectorControlWindowSettings =
+      QxrdDetectorControlWindowSettingsPtr(
+        new QxrdDetectorControlWindowSettings("controlWindowSettings"));
+
+  connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
+          this,           &QxrdDetectorSettings::startOrStop);
 }
 
-void QxrdDetectorSettings::initialize(QxrdApplicationWPtr   app,
-                                      QxrdExperimentWPtr    expt,
-                                      QxrdAcquisitionWPtr   acq)
+void QxrdDetectorSettings::initialize(QObjectWPtr parent)
 {
   THREAD_CHECK;
 
   printf("QxrdDetectorSettings::initialize(%p)\n", this);
 
-  m_Application = app;
-  m_Experiment  = expt;
-  m_Acquisition = acq;
+  m_Application = QxrdApplication::findApplication(parent);
+  m_Experiment  = QxrdExperiment::findExperiment(parent);
+  m_Acquisition = QxrdAcquisition::findAcquisition(parent);
 
-  QxrdApplicationPtr appp(m_Application);
+#ifndef QT_NO_DEBUG
+  if (m_Application == NULL) {
+    printMessage("QxrdDetectorSettings::m_Application == NULL");
+  }
+
+  if (m_Experiment == NULL) {
+    printMessage("QxrdDetectorSettings::m_Experiment == NULL");
+  }
+
+  if (m_Acquisition == NULL) {
+    printMessage("QxrdDetectorSettings::m_Acquisition == NULL");
+  }
+#endif
+
+  QxrdApplicationPtr appp(
+        qSharedPointerDynamicCast<QxrdApplication>(m_Application));
 
   if (appp) {
     m_DetectorPlugin =
         appp->detectorPlugin(get_DetectorType());
   }
 
-  connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
-          this,           &QxrdDetectorSettings::startOrStop);
-
-  QxrdExperimentPtr exper(m_Experiment);
-
-  if (exper) {
-    m_Processor = QxrdProcessor::newProcessor();
-//        QxrdProcessorPtr(
-//          new QxrdProcessor(m_Experiment,
-//                                    exper->fileSaver(),
-//                                    qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis())));
-  }
-
-  m_DetectorControlWindowSettings =
-      QxrdDetectorControlWindowSettings::newDetectorWindowSettings(
-        qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis()));
+  m_Processor                     -> initialize(sharedFromThis());
+  m_DetectorControlWindowSettings -> initialize(sharedFromThis());
 
   QxrdAcquisitionPtr a(m_Acquisition);
 
@@ -98,6 +106,23 @@ void QxrdDetectorSettings::initialize(QxrdApplicationWPtr   app,
         qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis()));
 
   m_DetectorDriver -> start();
+}
+
+QxrdDetectorSettingsWPtr QxrdDetectorSettings::findDetectorSettings(QObjectWPtr p)
+{
+  QxrdDetectorSettingsWPtr res =
+      qSharedPointerDynamicCast<QxrdDetectorSettings>(p);
+
+  if (res == NULL) {
+    QcepObjectPtr objp =
+        qSharedPointerDynamicCast<QcepObject>(p);
+
+    if (objp) {
+      res = findDetectorSettings(objp->parentPtr());
+    }
+  }
+
+  return res;
 }
 
 QxrdDetectorSettings::~QxrdDetectorSettings()
@@ -556,9 +581,7 @@ double QxrdDetectorSettings::scalerCounts(int chan)
   }
 }
 
-QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QxrdApplicationWPtr app,
-                                                          QxrdExperimentWPtr expt,
-                                                          QxrdAcquisitionWPtr acq,
+QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QObjectWPtr parent,
                                                           int detType)
 {
   QxrdDetectorSettingsPtr det;
@@ -601,7 +624,7 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QxrdApplicationWPtr ap
   }
 
   if (det) {
-    det -> initialize(app, expt, acq);
+    det -> initialize(parent);
   }
 
   return det;

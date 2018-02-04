@@ -12,9 +12,13 @@ class QXRD_EXPORT QxrdDetectorControlWindowSettings : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
-  Q_INVOKABLE QxrdDetectorControlWindowSettings(QxrdDetectorSettingsWPtr det);
-  static QxrdDetectorControlWindowSettingsPtr newDetectorWindowSettings(QxrdDetectorSettingsWPtr det);
+  Q_INVOKABLE QxrdDetectorControlWindowSettings(QString name);
+//  static QxrdDetectorControlWindowSettingsPtr newDetectorWindowSettings(QxrdDetectorSettingsWPtr det);
+  void initialize(QObjectWPtr parent);
 
   void writeSettings(QSettings *set);
   void readSettings(QSettings *set);

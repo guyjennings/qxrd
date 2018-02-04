@@ -493,9 +493,10 @@ void QxrdAcquisition::readSettings(QSettings *settings)
 
       m_Detectors.append(det);
 
-      QxrdApplicationSettings *set = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
+      QxrdApplicationSettings *set =
+          qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
 
-      det->initialize(application(), experiment(), myself());
+      det->initialize(sharedFromThis());
 
       if (set && set->get_StartDetectors() == 0) {
         det->set_Enabled(false);
@@ -521,7 +522,7 @@ QxrdDetectorSettingsPtr QxrdAcquisition::newDetector(int detType)
     return res;
   } else {
     QxrdDetectorSettingsPtr det =
-        QxrdDetectorSettings::newDetector(application(), experiment(), myself(), detType);
+        QxrdDetectorSettings::newDetector(sharedFromThis(), detType);
 
     return det;
   }

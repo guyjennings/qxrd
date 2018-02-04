@@ -1,27 +1,44 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrddetectorimageplot.h"
 #include "qxrdimageplotwidgetsettings.h"
+#include "qxrddetectorsettings.h"
 
-QxrdDetectorControlWindowSettings::QxrdDetectorControlWindowSettings(QxrdDetectorSettingsWPtr det)
-  : QcepObject("detectorWindowSettings"),
-    m_DetectorSettings(det),
-    m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings("detectorPlotWidget")),
+QxrdDetectorControlWindowSettings::QxrdDetectorControlWindowSettings(QString name)
+  : inherited(name),
     m_DetectorWindowOpen(this, "detectorWindowOpen", 0, "Detector Window Open?"),
     m_DetectorWindowGeometry(this, "detectorWindowGeometry", QByteArray(), "Detector Window Geometry"),
     m_DetectorWindowState(this, "detectorWindowState", QByteArray(), "Detector Window State"),
     m_DetectorWindowNewROIType(this, "detectorWindowNewROIType", QxrdDetectorImagePlot::NewRectROI, "Detector Window New ROI Type"),
     m_DetectorWindowRect(this, "detectorWindowRect", QRectF(), "Window Geometry")
 {
+  m_ImagePlotWidgetSettings =
+      QxrdImagePlotWidgetSettingsPtr(
+        new QxrdImagePlotWidgetSettings("detectorPlotWidget"));
 }
 
-QxrdDetectorControlWindowSettingsPtr QxrdDetectorControlWindowSettings::newDetectorWindowSettings(
-    QxrdDetectorSettingsWPtr det)
+void QxrdDetectorControlWindowSettings::initialize(QObjectWPtr parent)
 {
-  QxrdDetectorControlWindowSettingsPtr res(
-        new QxrdDetectorControlWindowSettings(det));
+  inherited::initialize(parent);
 
-  return res;
+  m_DetectorSettings = QxrdDetectorSettings::findDetectorSettings(parent);
+
+#ifndef QT_NO_DEBUG
+  if (m_DetectorSettings == NULL) {
+    printMessage("QxrdDetectorControlWindowSettings::m_DetectorSettings == NULL");
+  }
+#endif
+
+  m_ImagePlotWidgetSettings -> initialize(parent);
 }
+
+//QxrdDetectorControlWindowSettingsPtr QxrdDetectorControlWindowSettings::newDetectorWindowSettings(
+//    QxrdDetectorSettingsWPtr det)
+//{
+//  QxrdDetectorControlWindowSettingsPtr res(
+//        new QxrdDetectorControlWindowSettings(det));
+
+//  return res;
+//}
 
 QxrdImagePlotWidgetSettingsPtr QxrdDetectorControlWindowSettings::imagePlotWidgetSettings()
 {
@@ -35,7 +52,7 @@ void QxrdDetectorControlWindowSettings::registerMetaTypes()
 
 void QxrdDetectorControlWindowSettings::readSettings(QSettings *set)
 {
-  QcepObject::readSettings(set);
+  inherited::readSettings(set);
 
   set->beginGroup("detectorPlot");
   m_ImagePlotWidgetSettings->readSettings(set);
@@ -44,7 +61,7 @@ void QxrdDetectorControlWindowSettings::readSettings(QSettings *set)
 
 void QxrdDetectorControlWindowSettings::writeSettings(QSettings *set)
 {
-  QcepObject::writeSettings(set);
+  inherited::writeSettings(set);
 
   set->beginGroup("detectorPlot");
   m_ImagePlotWidgetSettings->writeSettings(set);
