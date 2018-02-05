@@ -8,7 +8,7 @@ QcepApplicationSettings::QcepApplicationSettings(QString name) :
   g_ApplicationSettings = this;
 }
 
-void QcepApplicationSettings::initialize(QcepObjectWPtr parent)
+void QcepApplicationSettings::initialize(QObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

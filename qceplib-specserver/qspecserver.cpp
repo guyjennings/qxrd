@@ -11,6 +11,7 @@
 #include <QNetworkInterface>
 #include <QHostInfo>
 #include "qcepexperiment.h"
+#include "qcepobject.h"
 
 QSpecServer::QSpecServer(QString name)
   : QTcpServer(NULL),
@@ -28,9 +29,10 @@ QSpecServer::QSpecServer(QString name)
   connect(this, &QTcpServer::newConnection, this, &QSpecServer::openNewConnection);
 }
 
-void QSpecServer::initialize(QcepObjectWPtr owner)
+void QSpecServer::initialize(QObjectWPtr owner)
 {
-  m_Owner = owner;
+  m_Owner =
+      qSharedPointerDynamicCast<QcepObject>(owner);
 }
 
 QSpecServer::~QSpecServer()

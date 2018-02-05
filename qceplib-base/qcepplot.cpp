@@ -35,7 +35,7 @@ QcepPlot::~QcepPlot()
 {
 }
 
-void QcepPlot::init(QcepPlotSettingsWPtr settings)
+void QcepPlot::initialize(QcepPlotSettingsWPtr settings)
 {
   m_PlotSettings = settings;
 

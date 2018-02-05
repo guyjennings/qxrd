@@ -15,6 +15,7 @@
 #include <QDateTime>
 #include <QTcpSocket>
 
+#include "qobject-ptr.h"
 #include "qcepobject-ptr.h"
 
 /**
@@ -28,7 +29,7 @@ class QCEP_EXPORT QSpecServer : public QTcpServer
 
 public:
   QSpecServer(QString name);
-  void initialize(QcepObjectWPtr owner);
+  void initialize(QObjectWPtr owner);
 
   virtual ~QSpecServer();
 

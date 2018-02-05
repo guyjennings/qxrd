@@ -89,7 +89,7 @@ QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(QcepExperimentWPtr expt, Qc
 
   QcepPlotSettingsPtr settings(new QcepPlotSettings("plotSettings"));
 
-  m_ImagePlot->init(settings);
+  m_ImagePlot->initialize(settings);
 
   m_PlotModeSelector->clear();
 

@@ -20,7 +20,8 @@ class QCEP_EXPORT QcepPlot : public QwtPlot
 public:
   QcepPlot(QWidget *parent = 0);
   virtual ~QcepPlot();
-  void init(QcepPlotSettingsWPtr settings);
+  //TODO: change to QObjectWPtr...
+  void initialize(QcepPlotSettingsWPtr settings);
 
 public:
   void setPlotCurveStyle(int index, QwtPlotCurve *curve);
