@@ -12,6 +12,10 @@
 class QCEP_EXPORT QcepDataObjectSurfacePlotWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectSurfacePlotWindow
 {
   Q_OBJECT
+
+private:
+  typedef QcepDataObjectWindow inherited;
+
 public:
   explicit QcepDataObjectSurfacePlotWindow(
       QcepExperimentWPtr expt,

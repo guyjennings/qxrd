@@ -7,6 +7,10 @@
 class QCEP_EXPORT QcepDataObjectWindow : public QcepMainWindow
 {
   Q_OBJECT
+
+private:
+  typedef QcepMainWindow inherited;
+
 public:
   explicit QcepDataObjectWindow(QWidget *parent = 0);
 

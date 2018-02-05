@@ -12,6 +12,9 @@ class QCEP_EXPORT QcepFixupGainMapDialog : public QDialog, public Ui::QcepFixupG
 {
   Q_OBJECT
 
+private:
+  typedef QDialog inherited;
+
 public:
   explicit QcepFixupGainMapDialog(QcepDatasetModelPtr model, const QModelIndex &idx);
   ~QcepFixupGainMapDialog();

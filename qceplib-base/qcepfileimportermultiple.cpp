@@ -2,7 +2,7 @@
 
 QcepFileImporterMultiple::QcepFileImporterMultiple(QcepDatasetModelPtr model,
                                                    QModelIndexList &indexes) :
-  QcepFileImporter(model, indexes, ""),
+  inherited(model, indexes, ""),
   m_Progress()
 {
 }

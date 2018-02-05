@@ -11,6 +11,9 @@ class QCEP_EXPORT QcepDatasetSelectionDialog : public QDialog, public Ui::QcepDa
 {
   Q_OBJECT
 
+private:
+  typedef QDialog inherited;
+
 public:
   explicit QcepDatasetSelectionDialog(QString title, QcepDatasetModelPtr ds, const QModelIndex &idx);
   ~QcepDatasetSelectionDialog();

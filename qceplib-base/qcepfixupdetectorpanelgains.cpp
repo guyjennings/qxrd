@@ -3,7 +3,7 @@
 #include "levmar.h"
 
 QcepFixupDetectorPanelGains::QcepFixupDetectorPanelGains()
-  : QcepObject("fixupDetectorPanelGains")
+  : inherited("fixupDetectorPanelGains")
 {
 
 }

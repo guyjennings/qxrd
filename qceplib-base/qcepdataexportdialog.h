@@ -13,6 +13,9 @@ class QCEP_EXPORT QcepDataExportDialog : public QDialog, public Ui::QcepDataExpo
 {
   Q_OBJECT
 
+private:
+  typedef QDialog inherited;
+
 public:
   explicit QcepDataExportDialog(QcepDatasetModelPtr model,
                                 const QModelIndexList &idx,

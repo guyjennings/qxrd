@@ -13,6 +13,10 @@
 class QCEP_EXPORT QcepDataObjectSpreadsheetWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectSpreadsheetWindow
 {
   Q_OBJECT
+
+private:
+  typedef QcepDataObjectWindow inherited;
+
 public:
   explicit QcepDataObjectSpreadsheetWindow(
       QcepExperimentWPtr expt,

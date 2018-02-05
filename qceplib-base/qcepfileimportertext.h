@@ -10,6 +10,9 @@ class QCEP_EXPORT QcepFileImporterText : public QcepFileImporter
 {
   Q_OBJECT
 
+private:
+  typedef QcepFileImporter inherited;
+
 public:
   QcepFileImporterText(QcepDatasetModelPtr model,
                        QModelIndexList &indexes,

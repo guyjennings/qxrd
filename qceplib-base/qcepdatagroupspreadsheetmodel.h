@@ -9,6 +9,9 @@ class QCEP_EXPORT QcepDataGroupSpreadsheetModel : public QcepSpreadsheetModel
 {
   Q_OBJECT
 
+private:
+  typedef QcepSpreadsheetModel inherited;
+
 public:
   QcepDataGroupSpreadsheetModel(QcepDataGroupWPtr group);
 

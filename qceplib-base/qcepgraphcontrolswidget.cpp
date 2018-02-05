@@ -4,7 +4,7 @@
 
 QcepGraphControlsWidget::QcepGraphControlsWidget
   (QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object) :
-  QWidget(window),
+  inherited(window),
   m_Window(window),
   m_Mode(mode),
   m_Object(object)

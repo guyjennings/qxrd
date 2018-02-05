@@ -16,6 +16,9 @@ class QCEP_EXPORT QcepFileImporterHDF : public QcepFileImporter
 {
   Q_OBJECT
 
+private:
+  typedef QcepFileImporter inherited;
+
 public:
   QcepFileImporterHDF(QcepDatasetModelPtr model,
                       QModelIndexList &indexes,

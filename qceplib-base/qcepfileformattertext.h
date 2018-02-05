@@ -11,6 +11,9 @@ class QCEP_EXPORT QcepFileFormatterText : public QcepFileFormatter
 {
   Q_OBJECT
 
+private:
+  typedef QcepFileFormatter inherited;
+
 public:
   QcepFileFormatterText(QString filePath);
 

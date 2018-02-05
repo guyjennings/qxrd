@@ -13,6 +13,9 @@ class QCEP_EXPORT QcepDataExportCommand : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QcepDataExportCommand(QcepDatasetModelWPtr model,
                         const QModelIndexList &idx,

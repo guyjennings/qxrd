@@ -5,7 +5,7 @@
 #include "qcepdataexportdialog.h"
 
 QcepDataExportCommand::QcepDataExportCommand(QcepDatasetModelWPtr model, const QModelIndexList &idx, QString file) :
-  QcepObject("dataExport"),
+  inherited("dataExport"),
   m_Model(model),
   m_Indexes(idx),
   m_File(file)

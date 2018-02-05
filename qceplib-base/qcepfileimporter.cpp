@@ -17,7 +17,7 @@
 QcepFileImporter::QcepFileImporter(QcepDatasetModelPtr model,
                                    QModelIndexList &indexes,
                                    QString path)
-  : QcepObject("importer"),
+  : inherited("importer"),
     m_Model(model),
     m_Indexes(indexes),
     m_Path(path)

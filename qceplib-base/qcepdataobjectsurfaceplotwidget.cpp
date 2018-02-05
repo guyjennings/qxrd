@@ -7,7 +7,7 @@
 using namespace QtDataVisualization;
 
 QcepDataObjectSurfacePlotWidget::QcepDataObjectSurfacePlotWidget(QWidget *parent)
-  : QWidget(parent),
+  : inherited(parent),
     m_Surface(NULL),
     m_MinPlottedVal(0),
     m_MaxPlottedVal(256),

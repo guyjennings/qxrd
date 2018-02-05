@@ -13,7 +13,7 @@
 QcepFileImporterHDF::QcepFileImporterHDF(QcepDatasetModelPtr model,
                                          QModelIndexList &indexes,
                                          QString path)
-  : QcepFileImporter(model, indexes, path)
+  : inherited(model, indexes, path)
 {
 }
 

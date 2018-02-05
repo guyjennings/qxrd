@@ -6,7 +6,7 @@
 #include "qcepdebug.h"
 
 QcepFileFormatter::QcepFileFormatter(QString filePath) :
-  QcepObject("fileFormatter"),
+  inherited("fileFormatter"),
   m_FilePath(filePath)
 {
 }

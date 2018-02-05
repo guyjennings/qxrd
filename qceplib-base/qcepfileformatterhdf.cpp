@@ -3,7 +3,7 @@
 #include "qcepfileformatterhdf.h"
 
 QcepFileFormatterHDF::QcepFileFormatterHDF(QString filePath) :
-  QcepFileFormatter(filePath)
+  inherited(filePath)
 {
 
 }

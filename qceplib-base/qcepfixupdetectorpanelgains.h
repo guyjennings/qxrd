@@ -9,6 +9,9 @@ class QCEP_EXPORT QcepFixupDetectorPanelGains : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QcepFixupDetectorPanelGains();
 

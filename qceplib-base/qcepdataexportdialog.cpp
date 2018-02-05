@@ -8,7 +8,7 @@ QcepDataExportDialog::QcepDataExportDialog(QcepDatasetModelPtr model,
                                            QString file,
                                            QcepExperimentPtr expt,
                                            QcepDataExportParametersPtr parms) :
-  QDialog(),
+  inherited(),
   m_Model(model),
   m_Indexes(idx),
   m_File(file),
@@ -39,5 +39,5 @@ QcepDataExportDialog::~QcepDataExportDialog()
 
 void QcepDataExportDialog::accept()
 {
-  QDialog::accept();
+  inherited::accept();
 }

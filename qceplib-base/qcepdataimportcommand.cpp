@@ -10,7 +10,7 @@
 QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelWPtr model,
                                              const QModelIndexList &idx,
                                              QStringList files) :
-  QcepObject("dataImport"),
+  inherited("dataImport"),
   m_Model(model),
   m_Indexes(idx),
   m_Files(files)

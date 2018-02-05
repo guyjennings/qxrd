@@ -13,6 +13,9 @@ class QCEP_EXPORT QcepDataImportDialog : public QDialog, public Ui::QcepDataImpo
 {
   Q_OBJECT
 
+private:
+  typedef QDialog inherited;
+
 public:
   explicit QcepDataImportDialog(QcepDatasetModelPtr indata,
                                 QModelIndexList &inselect,

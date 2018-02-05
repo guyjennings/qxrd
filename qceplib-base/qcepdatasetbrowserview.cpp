@@ -32,7 +32,7 @@
 #include "qcepfixupgainmapdialog.h"
 
 QcepDatasetBrowserView::QcepDatasetBrowserView(QWidget *parent)
-  : QTreeView(parent)
+  : inherited(parent)
 {
   connect(this, &QWidget::customContextMenuRequested, this, &QcepDatasetBrowserView::onCustomContextMenuRequested);
   connect(this, &QAbstractItemView::doubleClicked, this, &QcepDatasetBrowserView::onDoubleClicked);

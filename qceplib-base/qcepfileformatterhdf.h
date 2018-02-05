@@ -10,6 +10,9 @@ class QCEP_EXPORT QcepFileFormatterHDF : public QcepFileFormatter
 {
   Q_OBJECT
 
+private:
+  typedef QcepFileFormatter inherited;
+
 public:
   QcepFileFormatterHDF(QString filePath);
 

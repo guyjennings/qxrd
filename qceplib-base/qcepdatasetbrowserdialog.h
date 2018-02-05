@@ -11,6 +11,9 @@ class QCEP_EXPORT QcepDatasetBrowserDialog : public QDockWidget, public Ui::Qcep
 {
   Q_OBJECT
 
+private:
+  typedef QDockWidget inherited;
+
 public:
   explicit QcepDatasetBrowserDialog(QcepExperimentWPtr expt, QcepDatasetModelWPtr ds, QWidget *parent = 0);
   virtual ~QcepDatasetBrowserDialog();

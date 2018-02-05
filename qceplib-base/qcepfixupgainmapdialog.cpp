@@ -4,7 +4,7 @@
 #include "qcepfixupgainmapcommand.h"
 
 QcepFixupGainMapDialog::QcepFixupGainMapDialog(QcepDatasetModelPtr model, const QModelIndex &idx) :
-  QDialog(NULL),
+  inherited(NULL),
   m_Model(model),
   m_Index(idx)
 {
@@ -40,7 +40,8 @@ QcepFixupGainMapDialog::~QcepFixupGainMapDialog()
 
 void QcepFixupGainMapDialog::changeEvent(QEvent *e)
 {
-  QDialog::changeEvent(e);
+  inherited::changeEvent(e);
+
   switch (e->type()) {
   case QEvent::LanguageChange:
     retranslateUi(this);
@@ -86,5 +87,5 @@ void QcepFixupGainMapDialog::accept()
     }
   }
 
-  QDialog::accept();
+  inherited::accept();
 }

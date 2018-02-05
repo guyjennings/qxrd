@@ -11,7 +11,7 @@ QcepDataObjectSurfacePlotWindow::QcepDataObjectSurfacePlotWindow(
     QcepExperimentWPtr /*expt*/,
     QcepDataObjectWPtr obj,
     QWidget *parent)
-  : QcepDataObjectWindow(parent)
+  : inherited(parent)
 {
   setupUi(this);
 

@@ -3,7 +3,7 @@
 #include "qcepdebug.h"
 
 QcepFileFormatterText::QcepFileFormatterText(QString filePath) :
-  QcepFileFormatter(filePath),
+  inherited(filePath),
   m_OutputIndent(0),
   m_OutputStep(2),
   m_File(NULL)

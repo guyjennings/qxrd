@@ -1,7 +1,7 @@
 #include "qcepdatasetbrowserdialog.h"
 
 QcepDatasetBrowserDialog::QcepDatasetBrowserDialog(QcepExperimentWPtr expt, QcepDatasetModelWPtr ds, QWidget *parent) :
-  QDockWidget(parent),
+  inherited(parent),
   m_Experiment(expt),
   m_DatasetModel(ds)
 {

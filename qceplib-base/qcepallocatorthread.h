@@ -10,6 +10,9 @@ class QCEP_EXPORT QcepAllocatorThread : public QcepThread
 {
   Q_OBJECT
 
+private:
+  typedef QcepThread inherited;
+
 public:
   QcepAllocatorThread(QcepApplicationWPtr   app);
   ~QcepAllocatorThread();

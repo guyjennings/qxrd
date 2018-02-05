@@ -15,6 +15,10 @@
 class QCEP_EXPORT QcepDataObjectGraphWindow : public QcepDataObjectWindow, public Ui::QcepDataObjectGraphWindow
 {
   Q_OBJECT
+
+private:
+  typedef QcepDataObjectWindow inherited;
+
 public:
   explicit QcepDataObjectGraphWindow(
       QcepExperimentWPtr expt,

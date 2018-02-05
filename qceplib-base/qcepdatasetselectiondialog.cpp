@@ -6,7 +6,7 @@ int    QcepDatasetSelectionDialog::m_ConstantSelected = false;
 double QcepDatasetSelectionDialog::m_ConstantValue = 0;
 
 QcepDatasetSelectionDialog::QcepDatasetSelectionDialog(QString title, QcepDatasetModelPtr ds, const QModelIndex &idx) :
-  QDialog(NULL),
+  inherited(NULL),
   m_Title(title),
   m_DatasetModel(ds),
   m_Destination(ds->indexedObject(idx))

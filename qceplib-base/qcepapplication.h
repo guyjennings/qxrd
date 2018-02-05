@@ -11,6 +11,9 @@ class QCEP_EXPORT QcepApplication : public QApplication, public QEnableSharedFro
 {
   Q_OBJECT
 
+private:
+  typedef QApplication inherited;
+
 public:
   QcepApplication(int &argc, char **argv);
   void initialize();

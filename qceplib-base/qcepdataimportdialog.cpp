@@ -10,7 +10,7 @@ QcepDataImportDialog::QcepDataImportDialog(QcepDatasetModelPtr indata,
                                            QStringList files,
                                            QcepExperimentPtr expt,
                                            QcepDataImportParametersPtr parms) :
-  QDialog(),
+  inherited(),
   m_InData(indata),
   m_InSelect(inselect),
   m_DestData(destdata),

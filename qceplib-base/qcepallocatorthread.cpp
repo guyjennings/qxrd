@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 QcepAllocatorThread::QcepAllocatorThread(QcepApplicationWPtr /*app*/)
-  : QcepThread(QcepObjectWPtr()),
+  : inherited(QcepObjectWPtr()),
     m_Allocator(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {

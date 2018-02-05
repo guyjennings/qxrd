@@ -14,6 +14,10 @@
 class QCEP_EXPORT QcepDataObjectSurfacePlotWidget : public QWidget, public Ui::QcepDataObjectSurfacePlotWidget
 {
   Q_OBJECT
+
+private:
+  typedef QWidget inherited;
+
 public:
   explicit QcepDataObjectSurfacePlotWidget(QWidget *parent = 0);
   virtual ~QcepDataObjectSurfacePlotWidget();

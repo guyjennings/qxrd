@@ -10,6 +10,10 @@ class QcepDataObjectGraphWindow;
 class QCEP_EXPORT QcepGraphControlsWidget : public QWidget
 {
   Q_OBJECT
+
+private:
+  typedef QWidget inherited;
+
 public:
   explicit QcepGraphControlsWidget(QcepDataObjectGraphWindow *window, int mode, QcepDataObjectWPtr object);
 

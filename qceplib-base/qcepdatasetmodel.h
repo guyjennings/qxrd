@@ -24,6 +24,9 @@ class QCEP_EXPORT QcepDatasetModel : public QAbstractItemModel
 {
   Q_OBJECT
 
+private:
+  typedef QAbstractItemModel inherited;
+
 public:
   QcepDatasetModel(QcepExperimentWPtr expt,
                    QcepDatasetPtr ds = QcepDatasetPtr());

@@ -3,7 +3,7 @@
 QcepApplication *g_Application = NULL;
 
 QcepApplication::QcepApplication(int &argc, char **argv) :
-  QApplication(argc, argv)
+  inherited(argc, argv)
 {
   g_Application = this;
 }

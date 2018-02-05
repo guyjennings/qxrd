@@ -32,6 +32,9 @@ enum {
 class QCEP_EXPORT QcepDebugDictionary : public QObject {
   Q_OBJECT
 
+private:
+  typedef QObject inherited;
+
 public:
   QcepDebugDictionary();
 

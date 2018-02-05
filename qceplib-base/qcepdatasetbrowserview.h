@@ -11,6 +11,9 @@ class QCEP_EXPORT QcepDatasetBrowserView : public QTreeView
 {
   Q_OBJECT
 
+private:
+  typedef QTreeView inherited;
+
 public:
   QcepDatasetBrowserView(QWidget *parent = 0);
 

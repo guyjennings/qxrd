@@ -1,7 +1,8 @@
 #include "qcepdataobjectwindow.h"
 #include <stdio.h>
 
-QcepDataObjectWindow::QcepDataObjectWindow(QWidget *parent) : QcepMainWindow(parent)
+QcepDataObjectWindow::QcepDataObjectWindow(QWidget *parent)
+  : inherited(parent)
 {
 
 }

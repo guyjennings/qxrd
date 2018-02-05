@@ -10,6 +10,9 @@ class QCEP_EXPORT QcepFixupGainMapCommand : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QcepFixupGainMapCommand();
 

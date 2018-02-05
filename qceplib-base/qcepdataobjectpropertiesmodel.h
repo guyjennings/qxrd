@@ -9,6 +9,9 @@ class QCEP_EXPORT QcepDataObjectPropertiesModel : public QcepPropertiesModel
 {
   Q_OBJECT
 
+private:
+  typedef QcepPropertiesModel inherited;
+
 public:
   QcepDataObjectPropertiesModel(QcepDataObjectWPtr obj);
 

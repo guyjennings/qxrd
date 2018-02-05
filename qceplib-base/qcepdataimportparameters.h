@@ -10,6 +10,9 @@ class QCEP_EXPORT QcepDataImportParameters : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QcepDataImportParameters(QString name);
 

@@ -3,7 +3,7 @@
 #include "qcepfileformatternexus.h"
 
 QcepFileFormatterNexus::QcepFileFormatterNexus(QString filePath)
-  : QcepFileFormatter(filePath)
+  : inherited(filePath)
 {
 
 }
