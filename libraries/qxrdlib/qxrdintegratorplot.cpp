@@ -29,9 +29,9 @@ QxrdIntegratorPlot::QxrdIntegratorPlot(QWidget *parent)
 
 }
 
-void QxrdIntegratorPlot::init(QcepPlotSettingsWPtr settings)
+void QxrdIntegratorPlot::initialize(QcepPlotSettingsWPtr settings)
 {
-  QcepPlot::init(settings);
+  QcepPlot::initialize(settings);
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::BottomLegend);

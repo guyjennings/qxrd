@@ -12,7 +12,8 @@ class QXRD_EXPORT QxrdAcquisitionExtraInputsPlot : public QcepPlot
   Q_OBJECT
 public:
   explicit QxrdAcquisitionExtraInputsPlot(QWidget *parent = 0);
-  void init(QcepPlotSettingsWPtr settings);
+  //TODO: change to QObjectWPtr...
+  void initialize(QcepPlotSettingsWPtr settings);
 
 signals:
   

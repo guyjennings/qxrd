@@ -74,7 +74,7 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
   QxrdAcquisitionExtraInputsDialogSettingsPtr setg(m_Settings);
 
   if (setg) {
-    m_AcquisitionWaveforms -> init(setg->plotSettings());
+    m_AcquisitionWaveforms -> initialize(setg->plotSettings());
   }
 
   updateUi();

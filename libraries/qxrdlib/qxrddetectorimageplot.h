@@ -11,7 +11,8 @@ class QXRD_EXPORT QxrdDetectorImagePlot : public QxrdImagePlot
 
 public:
   QxrdDetectorImagePlot(QWidget *parent=0);
-  void init(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent);
+  //TODO: change to QObjectWPtr...
+  void initialize(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent);
 
   void contextMenuEvent(QContextMenuEvent *event);
 

@@ -18,7 +18,7 @@ QxrdHelpWindow::QxrdHelpWindow(QxrdHelpWindowSettingsWPtr set, QString name, Qxr
   connect(m_HelpBrowser, &QTextBrowser::forwardAvailable, m_HelpForwardButton, &QWidget::setEnabled);
   connect(m_HelpBrowser, &QTextBrowser::backwardAvailable, m_HelpBackButton, &QWidget::setEnabled);
 
-  m_HelpBrowser->init(m_Experiment);
+  m_HelpBrowser->initialize(m_Experiment);
 
   QxrdToDoList *toDoList = new QxrdToDoList(this);
   QSortFilterProxyModel *sorted = new QSortFilterProxyModel(this);

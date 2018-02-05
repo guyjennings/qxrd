@@ -6,9 +6,9 @@ QxrdSynchronizedAcquisitionPlot::QxrdSynchronizedAcquisitionPlot(QWidget *parent
 {
 }
 
-void QxrdSynchronizedAcquisitionPlot::init(QxrdSynchronizedAcquisitionPlotSettingsWPtr settings)
+void QxrdSynchronizedAcquisitionPlot::initialize(QxrdSynchronizedAcquisitionPlotSettingsWPtr settings)
 {
-  QcepPlot::init(settings);
+  QcepPlot::initialize(settings);
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);
 }

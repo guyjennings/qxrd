@@ -11,6 +11,7 @@ class QxrdExtraInputsPlotWidget : public QxrdPlotWidget
 public:
   explicit QxrdExtraInputsPlotWidget(QWidget *parent);
 
+  //TODO: change to QObjectWPtr
   void initialize(QxrdExtraInputsPlotWidgetSettingsWPtr settings);
 };
 

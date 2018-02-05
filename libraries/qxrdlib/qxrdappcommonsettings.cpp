@@ -36,7 +36,7 @@ QxrdAppCommonSettings::~QxrdAppCommonSettings()
 {
 }
 
-void QxrdAppCommonSettings::initialize(QcepObjectWPtr parent)
+void QxrdAppCommonSettings::initialize(QObjectWPtr parent)
 {
   inherited::initialize(parent);
 

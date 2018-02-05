@@ -8,12 +8,14 @@
 
 #include "qxrdwindow-ptr.h"
 
+//TODO: is class still used?
 class QXRD_EXPORT QxrdDistortionCorrectionPlot : public QcepPlot
 {
   Q_OBJECT
 public:
   explicit QxrdDistortionCorrectionPlot(QWidget *parent = 0);
-  void init(QcepPlotSettingsWPtr settings);
+  //TODO: change to QObjectWPtr...
+  void initialize(QcepPlotSettingsWPtr settings);
   void setWindow(QxrdWindow *win);
 
 signals:

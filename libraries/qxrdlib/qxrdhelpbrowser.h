@@ -12,7 +12,8 @@ public:
   explicit QxrdHelpBrowser(QWidget *parent = 0);
   virtual ~QxrdHelpBrowser();
 
-  void init(QxrdExperimentWPtr expt);
+  //TODO: change to QObjectWPtr...
+  void initialize(QxrdExperimentWPtr expt);
 
   QVariant loadResource(int type, const QUrl &name);
 

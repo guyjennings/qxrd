@@ -8,3 +8,8 @@ QxrdAcqCommon::QxrdAcqCommon(QString name) :
 QxrdAcqCommon::~QxrdAcqCommon()
 {
 }
+
+void QxrdAcqCommon::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}

@@ -166,7 +166,7 @@ public slots:
 
   void openWindow(QxrdMainWindowSettingsWPtr set);
 
-  void onAutoSaveTimer();
+//  void onAutoSaveTimer();
 
   void defaultWindowSettings();
 
@@ -225,7 +225,7 @@ private:
 
   QMutex                          m_ExperimentFileMutex;
 
-  QTimer                          m_AutoSaveTimer;
+//  QTimer                          m_AutoSaveTimer;
 
   mutable QStringList             m_PushedMessages;
 

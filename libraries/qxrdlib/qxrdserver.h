@@ -13,9 +13,12 @@ class QXRD_EXPORT QxrdServer : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdServer(QString name);
-  void initialize(QcepObjectWPtr parent);
+  void initialize(QObjectWPtr parent);
   virtual ~QxrdServer();
 
   virtual void readSettings(QSettings *settings);

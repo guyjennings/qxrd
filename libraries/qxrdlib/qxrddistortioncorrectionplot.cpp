@@ -9,9 +9,9 @@ QxrdDistortionCorrectionPlot::QxrdDistortionCorrectionPlot(QWidget *parent) :
 {
 }
 
-void QxrdDistortionCorrectionPlot::init(QcepPlotSettingsWPtr settings)
+void QxrdDistortionCorrectionPlot::initialize(QcepPlotSettingsWPtr settings)
 {
-  QcepPlot::init(settings);
+  QcepPlot::initialize(settings);
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::RightLegend);

@@ -167,7 +167,7 @@ QxrdExperiment::~QxrdExperiment()
     printf("QxrdExperiment::~QxrdExperiment(%p)\n", this);
   }
 
-  onAutoSaveTimer();
+//  onAutoSaveTimer();
 //  m_SettingsSaver->performSave();
 
   closeScanFile();
@@ -248,7 +248,7 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
       m_Acquisition = QxrdAcqDummy::newAcquisition();
     }
 
-    m_Acquisition -> initialize();
+    m_Acquisition -> initialize(sharedFromThis());
 
     m_CalibrantLibrary = QxrdCalibrantLibrary::newCalibrantLibrary();
 
@@ -420,9 +420,9 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
 
 //    m_SettingsSaver->start();
 
-    connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdExperiment::onAutoSaveTimer);
+//    connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdExperiment::onAutoSaveTimer);
 
-    m_AutoSaveTimer.start(5000);
+//    m_AutoSaveTimer.start(5000);
   }
 }
 
@@ -1253,22 +1253,22 @@ void QxrdExperiment::writeSettings(QSettings *settings)
 //  }
 }
 
-void QxrdExperiment::onAutoSaveTimer()
-{
-//  printMessage("Auto save experiment");
+//void QxrdExperiment::onAutoSaveTimer()
+//{
+////  printMessage("Auto save experiment");
 
-//  if (m_Window) {
-  //    m_Window->setChanged(isChanged());
-  //  }
-  if (!get_IsReading()) {
-    if (isChanged()) {
-      printMessage(tr("QxrdExperiment::onAutoSaveTimer saved because %1 changed").arg(changedBy()));
-      printf("QxrdExperiment::onAutoSaveTimer saved because %s changed\n", qPrintable(changedBy()));
+////  if (m_Window) {
+//  //    m_Window->setChanged(isChanged());
+//  //  }
+//  if (!get_IsReading()) {
+//    if (isChanged()) {
+//      printMessage(tr("QxrdExperiment::onAutoSaveTimer saved because %1 changed").arg(changedBy()));
+//      printf("QxrdExperiment::onAutoSaveTimer saved because %s changed\n", qPrintable(changedBy()));
 
-      writeSettings();
-    }
-  }
-}
+//      writeSettings();
+//    }
+//  }
+//}
 
 QString QxrdExperiment::defaultDataDirectory(QString /*path*/) const
 {

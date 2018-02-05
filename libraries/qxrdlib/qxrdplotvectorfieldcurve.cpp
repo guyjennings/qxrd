@@ -4,7 +4,7 @@
 
 QxrdPlotVectorFieldCurve::QxrdPlotVectorFieldCurve()
 {
-  init();
+  initialize();
 }
 
 void QxrdPlotVectorFieldCurve::setSamples(QxrdPlotVectorFieldData *data)
@@ -82,7 +82,7 @@ QRectF QxrdPlotVectorFieldCurve::dataRect() const
   }
 }
 
-void QxrdPlotVectorFieldCurve::init()
+void QxrdPlotVectorFieldCurve::initialize()
 {
   setItemAttribute( QwtPlotItem::AutoScale, true );
   setItemAttribute( QwtPlotItem::Legend, false );

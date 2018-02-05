@@ -20,6 +20,7 @@ public:
   virtual ~QxrdAppViewer();
   void initialize();
 
+  //TODO: merge into 'initialize'
   bool init(int &argc, char **argv);
 
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());

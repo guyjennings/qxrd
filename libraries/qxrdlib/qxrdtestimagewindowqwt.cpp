@@ -11,7 +11,7 @@ QxrdTestImageWindowQwt::QxrdTestImageWindowQwt(QWidget *parent) :
   m_GraphSettings = QxrdImagePlotSettingsPtr(
         new QxrdImagePlotSettings("settings"));
 
-  m_Graph->init(m_GraphSettings, QcepObjectPtr());
+  m_Graph->initialize(m_GraphSettings, QcepObjectPtr());
 }
 
 QxrdTestImageWindowQwt::~QxrdTestImageWindowQwt()

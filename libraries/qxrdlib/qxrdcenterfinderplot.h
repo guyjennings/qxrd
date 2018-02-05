@@ -15,13 +15,15 @@
 #include "qxrdwindow-ptr.h"
 #include "qxrdplotcurvevector-ptr.h"
 
+//TODO: is class still used?
 class QXRD_EXPORT QxrdCenterFinderPlot : public QcepPlot
 {
   Q_OBJECT
 
 public:
   QxrdCenterFinderPlot(QWidget *parent=0);
-  void init(QcepPlotSettingsWPtr settings);
+  //TODO: change to QObjectWPtr...
+  void initialize(QcepPlotSettingsWPtr settings);
 
   void setWindow(QxrdWindow *win);
 

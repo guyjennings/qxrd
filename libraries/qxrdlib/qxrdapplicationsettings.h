@@ -17,7 +17,7 @@ public:
                           int argc,
                           char **argv);
   virtual ~QxrdApplicationSettings();
-  void initialize(QcepObjectWPtr parent);
+  void initialize(QObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

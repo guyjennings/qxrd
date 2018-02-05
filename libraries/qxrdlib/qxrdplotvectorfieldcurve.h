@@ -24,7 +24,8 @@ public:
   QRectF dataRect() const;
 
 private:
-  void init();
+  //TODO: change to QObjectWPtr...
+  void initialize();
 };
 
 #endif // QXRDPLOTVECTORFIELDCURVE_H

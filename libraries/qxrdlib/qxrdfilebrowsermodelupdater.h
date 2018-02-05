@@ -16,6 +16,7 @@ class QXRD_EXPORT QxrdFileBrowserModelUpdater : public QcepObject
     Q_OBJECT
 public:
   explicit QxrdFileBrowserModelUpdater(QString name);
+  //TODO: change to QObjectWPtr
   void initialize(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr parent);
   virtual ~QxrdFileBrowserModelUpdater();
 

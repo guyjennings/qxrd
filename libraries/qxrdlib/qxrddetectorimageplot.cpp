@@ -18,9 +18,9 @@ QxrdDetectorImagePlot::QxrdDetectorImagePlot(QWidget *parent)
 {
 }
 
-void QxrdDetectorImagePlot::init(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent)
+void QxrdDetectorImagePlot::initialize(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent)
 {
-  QxrdImagePlot::init(settings, parent);
+  QxrdImagePlot::initialize(settings, parent);
 
   m_ROICreator    = new QxrdROICreator(this);
   m_ROISelector   = new QxrdROISelector(this);

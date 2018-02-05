@@ -28,6 +28,7 @@ public:
 
   static QxrdAppCommonWPtr findApplication(QObjectWPtr p);
 
+  //TODO: merge into 'initialize'
   virtual bool init(int &argc, char **argv);
   virtual void finish();
 

@@ -9,13 +9,15 @@
 #include "qxrdprocessor-ptr.h"
 #include "qxrdintegrator-ptr.h"
 
+//TODO: is class used?
 class QXRD_EXPORT QxrdIntegratorPlot : public QcepPlot
 {
   Q_OBJECT
 
 public:
   QxrdIntegratorPlot(QWidget *parent=0);
-  void init(QcepPlotSettingsWPtr settings);
+  //TODO: change to QObjectWPtr...
+  void initialize(QcepPlotSettingsWPtr settings);
 
   void setProcessor(QxrdProcessorWPtr proc);
 

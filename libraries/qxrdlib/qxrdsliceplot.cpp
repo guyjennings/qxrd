@@ -5,9 +5,9 @@ QxrdSlicePlot::QxrdSlicePlot(QWidget *parent) :
 {
 }
 
-void QxrdSlicePlot::init(QcepPlotSettingsWPtr settings)
+void QxrdSlicePlot::initialize(QcepPlotSettingsWPtr settings)
 {
-  QcepPlot::init(settings);
+  QcepPlot::initialize(settings);
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::BottomLegend);

@@ -44,7 +44,7 @@ public:
   Q_INVOKABLE QxrdAcquisition(QString name);
   ~QxrdAcquisition();
 
-  void initialize();
+  void initialize(QObjectWPtr parent);
 
   static QxrdAcquisitionPtr newAcquisition();
 

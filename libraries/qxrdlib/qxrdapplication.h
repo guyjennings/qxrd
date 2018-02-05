@@ -31,6 +31,7 @@ public:
   virtual ~QxrdApplication();
   void initialize();
 
+  //TODO: merge into 'initialize'
   bool init(int &argc, char **argv);
 
   void loadPlugins();

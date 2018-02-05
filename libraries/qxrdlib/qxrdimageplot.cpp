@@ -42,9 +42,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 {
 }
 
-void QxrdImagePlot::init(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent)
+void QxrdImagePlot::initialize(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent)
 {
-  QcepPlot::init(settings);
+  QcepPlot::initialize(settings);
 
   m_Parent = parent;
 

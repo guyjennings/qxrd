@@ -11,6 +11,7 @@ class QxrdDistortionPlotWidget : public QxrdPlotWidget
 public:
   explicit QxrdDistortionPlotWidget(QWidget *parent = 0);
 
+  //TODO: change to QObjectWPtr
   void initialize(QxrdDistortionPlotWidgetSettingsWPtr settings);
 };
 

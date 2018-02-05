@@ -26,6 +26,7 @@ class QXRD_EXPORT QxrdScriptEngine : public QcepScriptEngine
 public:
   Q_INVOKABLE QxrdScriptEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp);
   virtual ~QxrdScriptEngine();
+  //TODO: change to QObjectWPtr
   void initialize();
 
   void lock();

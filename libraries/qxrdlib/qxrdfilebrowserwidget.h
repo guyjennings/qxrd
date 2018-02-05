@@ -20,6 +20,7 @@ class QXRD_EXPORT QxrdFileBrowserWidget : public QWidget, public Ui::QxrdFileBro
 public:
   explicit QxrdFileBrowserWidget(QWidget *parent = 0);
   ~QxrdFileBrowserWidget();
+  //TODO: change to QObjectWPtr
   void initialize(QxrdFileBrowserSettingsWPtr settings,
             QxrdExperimentWPtr          experiment,
             QxrdProcessorWPtr processor);

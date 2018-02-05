@@ -10,7 +10,7 @@
 #include "qxrdexperiment.h"
 
 QxrdServer::QxrdServer(QString name) :
-  QcepObject(name),
+  inherited(name),
   m_RunSpecServer(this,"runSpecServer", 1, "Run SPEC Server?"),
   m_SpecServerPort(this,"specServerPort", -1, "Port for SPEC Server"),
   m_Server(name)
@@ -26,8 +26,10 @@ QxrdServer::QxrdServer(QString name) :
           this,      &QxrdServer::executeCommand);
 }
 
-void QxrdServer::initialize(QcepObjectWPtr parent)
+void QxrdServer::initialize(QObjectWPtr parent)
 {
+  inherited::initialize(parent);
+
   m_Server.initialize(parent);
 }
 
@@ -40,14 +42,14 @@ QxrdServer::~QxrdServer()
 
 void QxrdServer::readSettings(QSettings *settings)
 {
-  QcepObject::readSettings(settings);
+  inherited::readSettings(settings);
 
   runModeChanged();
 }
 
 void QxrdServer::writeSettings(QSettings *settings)
 {
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 }
 
 void QxrdServer::runModeChanged()

@@ -10,7 +10,8 @@ class QXRD_EXPORT QxrdSlicePlot : public QcepPlot
   Q_OBJECT
 public:
   explicit QxrdSlicePlot(QWidget *parent = 0);
-  void init(QcepPlotSettingsWPtr settings);
+  //TODO: change to QObjectWPtr...
+  void initialize(QcepPlotSettingsWPtr settings);
 
 signals:
 

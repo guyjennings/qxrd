@@ -6,9 +6,9 @@ QxrdHistogramPlot::QxrdHistogramPlot(QWidget *parent) :
 {
 }
 
-void QxrdHistogramPlot::init(QxrdHistogramPlotSettingsWPtr settings)
+void QxrdHistogramPlot::initialize(QxrdHistogramPlotSettingsWPtr settings)
 {
-  QcepPlot::init(settings);
+  QcepPlot::initialize(settings);
 
   insertLegend(m_Legend, QwtPlot::BottomLegend);
   setAxisTitle(QwtPlot::yLeft, "# Pixels");

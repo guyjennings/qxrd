@@ -19,7 +19,7 @@ public:
   Q_INVOKABLE QxrdAcqDummy(QString name);
   ~QxrdAcqDummy();
 
-  void initialize();
+  void initialize(QObjectWPtr parent);
 
   static QxrdAcqDummyPtr newAcquisition();
 };

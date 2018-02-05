@@ -5,12 +5,14 @@
 #include "qcepplot.h"
 #include "qxrdsynchronizedacquisitionplotsettings-ptr.h"
 
+//TODO: is class used?
 class QXRD_EXPORT QxrdSynchronizedAcquisitionPlot : public QcepPlot
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    explicit QxrdSynchronizedAcquisitionPlot(QWidget *parent = 0);
-  void init(QxrdSynchronizedAcquisitionPlotSettingsWPtr settings);
+  explicit QxrdSynchronizedAcquisitionPlot(QWidget *parent = 0);
+  //TODO: change to QObjectWPtr...
+  void initialize(QxrdSynchronizedAcquisitionPlotSettingsWPtr settings);
 
 signals:
 

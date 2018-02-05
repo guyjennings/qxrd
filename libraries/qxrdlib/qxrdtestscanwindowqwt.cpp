@@ -7,7 +7,7 @@ QxrdTestScanWindowQwt::QxrdTestScanWindowQwt(QWidget *parent) :
   setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
 
-  m_Graph->init(QcepPlotSettingsPtr());
+  m_Graph->initialize(QcepPlotSettingsPtr());
 }
 
 QxrdTestScanWindowQwt::~QxrdTestScanWindowQwt()

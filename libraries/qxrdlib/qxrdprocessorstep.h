@@ -9,11 +9,14 @@ class QXRD_EXPORT QxrdProcessorStep : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdProcessorStep(QString name);
   virtual ~QxrdProcessorStep();
 
-  void initialize(QxrdProcessorWPtr proc);
+  void initialize(QObjectWPtr p);
 
 protected:
   QxrdProcessorWPtr m_Processor;

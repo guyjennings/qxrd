@@ -110,8 +110,14 @@ QxrdAcquisitionPtr QxrdAcquisition::newAcquisition()
   return acq;
 }
 
-void QxrdAcquisition::initialize()
+void QxrdAcquisition::initialize(QObjectWPtr parent)
 {
+  inherited::initialize(parent);
+  
+  m_SynchronizedAcquisition -> initialize(parent);
+  
+  m_AcquisitionExtraInputs  -> initialize(parent);
+  
   QxrdAcquisitionPtr acq(
         qSharedPointerDynamicCast<QxrdAcquisition>(sharedFromThis()));
 

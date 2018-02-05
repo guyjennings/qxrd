@@ -15,9 +15,9 @@ QxrdAcquisitionExtraInputsPlot::QxrdAcquisitionExtraInputsPlot(QWidget *parent) 
            << Qt::gray;
 }
 
-void QxrdAcquisitionExtraInputsPlot::init(QcepPlotSettingsWPtr settings)
+void QxrdAcquisitionExtraInputsPlot::initialize(QcepPlotSettingsWPtr settings)
 {
-  QcepPlot::init(settings);
+  QcepPlot::initialize(settings);
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::BottomLegend);

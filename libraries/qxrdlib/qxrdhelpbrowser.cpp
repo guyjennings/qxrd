@@ -19,7 +19,7 @@ QxrdHelpBrowser::~QxrdHelpBrowser()
   }
 }
 
-void QxrdHelpBrowser::init(QxrdExperimentWPtr expt)
+void QxrdHelpBrowser::initialize(QxrdExperimentWPtr expt)
 {
   m_Experiment = expt;
 }

@@ -19,7 +19,7 @@ public:
                         char **argv);
 
   virtual ~QxrdAppCommonSettings();
-  void initialize(QcepObjectWPtr parent);
+  void initialize(QObjectWPtr parent);
 
   QcepAllocatorWPtr allocator() const;
 

@@ -35,9 +35,9 @@ QxrdCenterFinderPlot::QxrdCenterFinderPlot(QWidget *parent)
           Qt::QueuedConnection);
 }
 
-void QxrdCenterFinderPlot::init(QcepPlotSettingsWPtr settings)
+void QxrdCenterFinderPlot::initialize(QcepPlotSettingsWPtr settings)
 {
-  QcepPlot::init(settings);
+  QcepPlot::initialize(settings);
 
   if (m_Legend) {
     insertLegend(m_Legend, QwtPlot::RightLegend);

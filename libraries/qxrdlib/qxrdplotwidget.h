@@ -17,6 +17,7 @@ class QXRD_EXPORT QxrdPlotWidget : public QWidget, public Ui::QxrdPlotWidget
 public:
   explicit QxrdPlotWidget(QWidget *parent = 0);
   ~QxrdPlotWidget();
+  //TODO: change to QObjectWPtr
   void initialize(QxrdPlotWidgetSettingsWPtr settings);
 
   QcepPlot *plot();

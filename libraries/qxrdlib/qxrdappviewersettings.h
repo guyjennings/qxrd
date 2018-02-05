@@ -18,7 +18,7 @@ public:
                         int argc,
                         char **argv);
   virtual ~QxrdAppViewerSettings();
-  void initialize(QcepObjectWPtr parent);
+  void initialize(QObjectWPtr parent);
 };
 
 #endif // QXRDAPPVIEWERSETTINGS_H

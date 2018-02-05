@@ -468,7 +468,7 @@ void QxrdWindow::initialize()
   connect(m_HelpBrowser, &QTextBrowser::forwardAvailable, m_HelpForwardButton, &QWidget::setEnabled);
   connect(m_HelpBrowser, &QTextBrowser::backwardAvailable, m_HelpBackButton, &QWidget::setEnabled);
 
-  m_HelpBrowser->init(m_Experiment);
+  m_HelpBrowser->initialize(m_Experiment);
 
 
   connect(m_ActionIntegrate, &QAction::triggered, this, &QxrdWindow::doIntegrateSequence);

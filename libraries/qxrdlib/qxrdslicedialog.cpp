@@ -19,7 +19,7 @@ QxrdSliceDialog::QxrdSliceDialog(QxrdSliceDialogSettingsWPtr settings, QWidget *
   QxrdSliceDialogSettingsPtr set(m_SliceDialogSettings);
 
   if (set) {
-    m_SlicePlot->init(set->slicePlotSettings());
+    m_SlicePlot->initialize(set->slicePlotSettings());
   }
 }
 

@@ -21,7 +21,7 @@ QxrdApplicationSettings::~QxrdApplicationSettings()
 #endif
 }
 
-void QxrdApplicationSettings::initialize(QcepObjectWPtr parent)
+void QxrdApplicationSettings::initialize(QObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

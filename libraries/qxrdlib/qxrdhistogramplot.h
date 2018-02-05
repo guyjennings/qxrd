@@ -10,7 +10,8 @@ class QXRD_EXPORT QxrdHistogramPlot : public QcepPlot
   Q_OBJECT
 public:
   explicit QxrdHistogramPlot(QWidget *parent = 0);
-  void init(QxrdHistogramPlotSettingsWPtr settings);
+  //TODO: change to QObjectWPtr...
+  void initialize(QxrdHistogramPlotSettingsWPtr settings);
 
 signals:
 
