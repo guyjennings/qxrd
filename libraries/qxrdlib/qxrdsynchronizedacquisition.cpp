@@ -24,11 +24,9 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
 #endif
 }
 
-QxrdSynchronizedAcquisitionPtr QxrdSynchronizedAcquisition::newSynchronizedAcquisition()
+void QxrdSynchronizedAcquisition::initialize(QObjectWPtr parent)
 {
-  QxrdSynchronizedAcquisitionPtr acq(new QxrdSynchronizedAcquisition("synchronized"));
-
-  return acq;
+  inherited::initialize(parent);
 }
 
 QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
@@ -36,6 +34,56 @@ QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
 #ifndef QT_NO_DEBUG
   printf("Deleting synchronized acquisition\n");
 #endif
+}
+
+void QxrdSynchronizedAcquisition::readSettings(QSettings *settings)
+{
+  inherited::readSettings(settings);
+
+//  int n = settings->beginReadArray("channels");
+
+//  //TODO: rewrite...
+//  while (m_Channels.count() > n) {
+//    removeChannel();
+//  }
+
+//  while (m_Channels.count() < n) {
+//    appendChannel();
+//  }
+
+//  for (int i=0; i<n; i++) {
+//    settings->setArrayIndex(i);
+
+//    QxrdAcquisitionExtraInputsChannelPtr chan = channel(i);
+
+//    if (chan) {
+//      chan->readSettings(settings);
+//    }
+//  }
+
+//  settings->endArray();
+
+//  initiate();
+}
+
+void QxrdSynchronizedAcquisition::writeSettings(QSettings *settings)
+{
+  inherited::writeSettings(settings);
+
+//  settings->beginWriteArray("channels");
+
+//  int n = m_Channels.count();
+
+//  for (int i=0; i<n; i++) {
+//    settings->setArrayIndex(i);
+//    QxrdAcquisitionExtraInputsChannelPtr chan = channel(i);
+
+//    if (chan) {
+//      chan->writeSettings(settings);
+//    }
+//  }
+
+//  settings->endArray();
 }
 
 void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfaceWPtr nidaqPlugin)
@@ -190,12 +238,8 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
         nidaq->setAnalogWaveform(chan, sampleRate, outputVoltage.data(), iSamples+1);
       }
 
-      {
-        QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-        m_OutputTimes = outputTimes;
-        m_OutputVoltage = outputVoltage;
-      }
+      m_OutputTimes = outputTimes;
+      m_OutputVoltage = outputVoltage;
     }
   }
 }
@@ -273,14 +317,10 @@ void QxrdSynchronizedAcquisition::triggerOnce()
 
 QVector<double>  QxrdSynchronizedAcquisition::outputTimes()
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
   return m_OutputTimes;
 }
 
 QVector<double>  QxrdSynchronizedAcquisition::outputVoltage()
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
   return m_OutputVoltage;
 }

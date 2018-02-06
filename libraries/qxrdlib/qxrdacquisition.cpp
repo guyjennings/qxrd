@@ -80,10 +80,12 @@ QxrdAcquisition::QxrdAcquisition(QString name) :
   }
 
   m_SynchronizedAcquisition =
-      QxrdSynchronizedAcquisition::newSynchronizedAcquisition();
+      QxrdSynchronizedAcquisitionPtr(
+        new QxrdSynchronizedAcquisition("synchronizedAcquisition"));
 
   m_AcquisitionExtraInputs =
-      QxrdAcquisitionExtraInputs::newAcquisitionExtraInputs();
+      QxrdAcquisitionExtraInputsPtr(
+        new QxrdAcquisitionExtraInputs("extraInputs"));
 
   connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged, this, &QxrdAcquisition::extraInputsChanged);
 

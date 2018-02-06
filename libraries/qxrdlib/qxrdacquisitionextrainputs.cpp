@@ -43,13 +43,6 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QString name) :
   }
 }
 
-QxrdAcquisitionExtraInputsPtr QxrdAcquisitionExtraInputs::newAcquisitionExtraInputs()
-{
-  QxrdAcquisitionExtraInputsPtr xtra(new QxrdAcquisitionExtraInputs("extraInputs"));
-
-  return xtra;
-}
-
 QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
 {
 #ifndef QT_NO_DEBUG
@@ -59,6 +52,11 @@ QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs(%p)\n", this);
   }
+}
+
+void QxrdAcquisitionExtraInputs::initialize(QObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 QxrdAcquisitionWPtr QxrdAcquisitionExtraInputs::acquisition()
@@ -84,12 +82,11 @@ QxrdNIDAQPluginInterfacePtr QxrdAcquisitionExtraInputs::nidaqPlugin() const
 
 void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::readSettings(settings);
+  inherited::readSettings(settings);
 
   int n = settings->beginReadArray("channels");
 
+  //TODO: rewrite...
   while (m_Channels.count() > n) {
     removeChannel();
   }
@@ -115,9 +112,7 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings)
 
 void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 
   settings->beginWriteArray("channels");
 

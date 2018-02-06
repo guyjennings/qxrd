@@ -19,9 +19,13 @@
 class QXRD_EXPORT QxrdAcquisitionExtraInputs : public QcepObject
 {
   Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdAcquisitionExtraInputs(QString name);
-  static QxrdAcquisitionExtraInputsPtr newAcquisitionExtraInputs();
+  void initialize(QObjectWPtr parent);
   virtual ~QxrdAcquisitionExtraInputs();
 
 public:

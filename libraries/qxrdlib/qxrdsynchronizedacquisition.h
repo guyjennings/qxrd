@@ -16,10 +16,17 @@
 class QXRD_EXPORT QxrdSynchronizedAcquisition : public QcepObject
 {
   Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdSynchronizedAcquisition(QString name);
-  static QxrdSynchronizedAcquisitionPtr newSynchronizedAcquisition();
+  void initialize(QObjectWPtr parent);
   virtual ~QxrdSynchronizedAcquisition();
+
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
 public:
   Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)
@@ -89,7 +96,6 @@ private:
   QxrdAcquisitionWPtr acquisition();
 
 private:
-  mutable QMutex              m_Mutex;
   QxrdAcquisitionParameterPackWPtr m_AcquisitionParms;
   QxrdNIDAQPluginInterfaceWPtr m_NIDAQPlugin;
   int                         m_SyncMode;
