@@ -160,6 +160,7 @@ int QcepProperty::debug() const
 void QcepProperty::registerMetaTypes()
 {
   qRegisterMetaType< QcepObject* >("QcepObject*");
+  qRegisterMetaType< QcepObjectWPtr >("QcepObjectWPtr");
   qRegisterMetaType< QcepDataObject*>("QcepDataObject*");
   qRegisterMetaType< QcepDoubleVector >("QcepDoubleVector");
   qRegisterMetaType< QcepBoolVector >("QcepBoolVector");

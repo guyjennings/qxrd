@@ -99,7 +99,10 @@ SOURCES += \
     $$PWD/qcepsetrangeofimagecommand.cpp \
     $$PWD/qcepfixupdetectorpanelgains.cpp \
     $$PWD/qcepscandetectorpanelgains.cpp \
-    $$PWD/qcepmainwindowsettings.cpp
+    $$PWD/qcepmainwindowsettings.cpp \
+    $$PWD/qcepobjecttreemodel.cpp \
+    $$PWD/qcepobjecttreewindow.cpp \
+    $$PWD/qcepobjectpropertiesmodel.cpp
 
 contains (DEFINES, HAVE_DATAVIS) {
  SOURCES += \
@@ -245,7 +248,10 @@ HEADERS += \
     $$PWD/qcepscandetectorpanelgains.h \
     $$PWD/qcepmainwindowsettings.h \
     $$PWD/qcepmainwindowsettings-ptr.h \
-    $$PWD/qobject-ptr.h
+    $$PWD/qobject-ptr.h \
+    $$PWD/qcepobjecttreemodel.h \
+    $$PWD/qcepobjecttreewindow.h \
+    $$PWD/qcepobjectpropertiesmodel.h
 
 contains (DEFINES, HAVE_DATAVIS) {
  HEADERS += \
@@ -293,7 +299,8 @@ FORMS += \
   $${PWD}/qcepdataexportdialog.ui \
     $$PWD/qcepsetrangeofimagedialog.ui \
     $$PWD/qcepsetdatavaluerangedialog.ui \
-    $$PWD/qcepfixupgainmapdialog.ui
+    $$PWD/qcepfixupgainmapdialog.ui \
+    $$PWD/qcepobjecttreewindow.ui
 
 contains(DEFINES, HAVE_QWT) {
  FORMS += \

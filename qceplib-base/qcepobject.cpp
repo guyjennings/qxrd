@@ -8,6 +8,7 @@
 #include "qcepfileformatter.h"
 #include <QScriptEngine>
 #include "qcepdebug.h"
+#include "qcepapplication.h"
 
 static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
@@ -337,6 +338,39 @@ QString QcepObject::childrenChangedBy() const
   }
 
   return "NULL";
+}
+
+void QcepObject::dumpParentage()
+{
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
+  QObjectPtr p = sharedFromThis();
+
+  printMessage("Object Parentage of");
+
+  while (p) {
+    const char* className = p->metaObject()->className();
+
+    printMessage(tr("%1 : %2").HEXARG(p.data()).arg(className));
+
+    QcepObjectPtr objp =
+        qSharedPointerDynamicCast<QcepObject>(p);
+
+    if (objp) {
+      p = objp->parentPtr();
+    } else {
+      p = QObjectPtr();
+    }
+  }
+}
+
+void QcepObject::openBrowserWindow()
+{
+  if (g_Application) {
+    g_Application -> openObjectBrowser(sharedFromThis());
+  }
 }
 
 void QcepObject::propertyChanged(QcepProperty *prop)

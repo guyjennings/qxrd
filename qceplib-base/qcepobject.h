@@ -68,6 +68,10 @@ public slots:
 
   void dumpObjectTreePtr(int level=0);
 
+  void dumpParentage();
+
+  void openBrowserWindow();
+
   int childrenChanged() const;
   QString childrenChangedBy() const;
 
@@ -184,5 +188,7 @@ public:
 #define HEXARG(a) arg(QcepObject::hexArg(a))
 
 Q_DECLARE_METATYPE(QcepObject*)
+Q_DECLARE_METATYPE(QcepObjectWPtr)
+Q_DECLARE_METATYPE(QcepObjectPtr)
 
 #endif // QCEPOBJECT_H

@@ -6,7 +6,9 @@
 #include <QMutex>
 #include "qcepobject-ptr.h"
 
-class QCEP_EXPORT QcepThread : public QThread
+class QCEP_EXPORT QcepThread
+    : public QThread,
+      public QEnableSharedFromThis<QcepThread>
 {
   Q_OBJECT
 
