@@ -369,7 +369,7 @@ bool QxrdPerkinElmerDriver::startDetectorDriver()
   THREAD_CHECK;
 
   if (qcepDebug(DEBUG_PERKINELMER)) {
-    printMessage(tr("QxrdAcquisitionPerkinElmer::start"));
+    printMessage(tr("QxrdPerkinElmerDriver::startDetectorDriver"));
   }
 
   //    QxrdDetectorSettings::startDetector();

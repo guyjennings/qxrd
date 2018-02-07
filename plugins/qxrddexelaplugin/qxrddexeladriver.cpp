@@ -35,7 +35,11 @@ bool QxrdDexelaDriver::startDetectorDriver()
 {
   THREAD_CHECK;
 
-  QxrdDetectorSettingsPtr det(m_Detector);
+  if (qcepDebug(DEBUG_DEXELA)) {
+    printMessage(tr("QxrdDexelaDriver::startDetectorDriver"));
+  }
+
+  QxrdDexelaSettingsPtr   det(m_Dexela);
   QxrdAcquisitionPtr      acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
