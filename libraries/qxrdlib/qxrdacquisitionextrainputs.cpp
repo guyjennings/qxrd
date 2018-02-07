@@ -61,6 +61,8 @@ void QxrdAcquisitionExtraInputs::initialize(QObjectWPtr parent)
 
 QxrdAcquisitionWPtr QxrdAcquisitionExtraInputs::acquisition()
 {
+  INIT_CHECK;
+
   QxrdAcquisitionPtr acq = qSharedPointerDynamicCast<QxrdAcquisition>(parentPtr());
 
   if (acq == NULL) {
@@ -77,11 +79,15 @@ void QxrdAcquisitionExtraInputs::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nida
 
 QxrdNIDAQPluginInterfacePtr QxrdAcquisitionExtraInputs::nidaqPlugin() const
 {
+  INIT_CHECK;
+
   return m_NIDAQPlugin;
 }
 
 void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings)
 {
+  INIT_CHECK;
+
   inherited::readSettings(settings);
 
   int n = settings->beginReadArray("channels");
@@ -112,6 +118,8 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings)
 
 void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings)
 {
+  INIT_CHECK;
+
   inherited::writeSettings(settings);
 
   settings->beginWriteArray("channels");
@@ -132,6 +140,8 @@ void QxrdAcquisitionExtraInputs::writeSettings(QSettings *settings)
 
 void QxrdAcquisitionExtraInputs::prepareForAcquisition(QxrdAcquisitionParameterPackWPtr /*parms*/)
 {
+  INIT_CHECK;
+
   if (!get_Enabled()) {
     initiate();
   }
@@ -139,6 +149,8 @@ void QxrdAcquisitionExtraInputs::prepareForAcquisition(QxrdAcquisitionParameterP
 
 void QxrdAcquisitionExtraInputs::initiate()
 {
+  INIT_CHECK;
+
   QxrdAcquisitionPtr acq(acquisition());
 
   if (acq && m_NIDAQPlugin) {
@@ -208,6 +220,8 @@ QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputs::channel(int cha
 
 void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 {
+  INIT_CHECK;
+
   QxrdAcquisitionExtraInputsChannelPtr chan =
       QxrdAcquisitionExtraInputsChannel::newAcquisitionExtraInputsChannel(ch);
 
@@ -232,6 +246,8 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 
 void QxrdAcquisitionExtraInputs::removeChannel(int ch)
 {
+  INIT_CHECK;
+
   QxrdAcquisitionExtraInputsChannelPtr chan = channel(ch);
 
   if (chan) {
@@ -251,6 +267,8 @@ void QxrdAcquisitionExtraInputs::removeChannel(int ch)
 
 void QxrdAcquisitionExtraInputs::acquire()
 {
+  INIT_CHECK;
+
   if (get_Enabled()) {
     if (!get_Skipping()) {
       QxrdAcquisitionPtr acq(acquisition());
@@ -295,6 +313,8 @@ void QxrdAcquisitionExtraInputs::finish()
 
 QVector<double> QxrdAcquisitionExtraInputs::evaluateChannels()
 {
+  INIT_CHECK;
+
   QVector<double> res;
 
   for(int i=0; i<m_Channels.count(); i++) {
