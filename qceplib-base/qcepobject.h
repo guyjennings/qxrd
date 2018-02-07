@@ -70,7 +70,7 @@ public slots:
 
   void dumpParentage();
 
-  void openBrowserWindow();
+  void openObjectBrowser();
 
   int childrenChanged() const;
   QString childrenChangedBy() const;
@@ -184,6 +184,12 @@ public:
 //  Q_PROPERTY(int typeID READ get_TypeID WRITE set_TypeID STORED false)
 //  QCEP_INTEGER_PROPERTY(TypeID)
 };
+
+#ifndef QT_NO_DEBUG
+#define INIT_CHECK checkObjectInitialization()
+#else
+#define INIT_CHECK do {} while(0)
+#endif
 
 #define HEXARG(a) arg(QcepObject::hexArg(a))
 

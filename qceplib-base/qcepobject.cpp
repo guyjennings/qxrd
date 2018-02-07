@@ -366,7 +366,7 @@ void QcepObject::dumpParentage()
   }
 }
 
-void QcepObject::openBrowserWindow()
+void QcepObject::openObjectBrowser()
 {
   if (g_Application) {
     g_Application -> openObjectBrowser(sharedFromThis());
