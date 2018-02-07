@@ -49,7 +49,9 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
     printf("QxrdDetectorSettings::QxrdDetectorSettings(%p)\n", this);
   }
 
-  m_Processor = QxrdProcessor::newProcessor();
+  m_Processor =
+      QxrdProcessorPtr(
+        new QxrdProcessor("processor"));
 
   m_DetectorControlWindowSettings =
       QxrdDetectorControlWindowSettingsPtr(

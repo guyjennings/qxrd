@@ -56,14 +56,7 @@ private:
 public:
   QxrdExperiment(QString path,
                  QString name,
-                 QxrdAppCommonWPtr app,
-                 QxrdExperimentSettingsWPtr set,
                  int mode);
-
-  static QxrdExperimentPtr newExperiment(QString path,
-                                         QxrdAppCommonWPtr app,
-                                         QxrdExperimentSettingsPtr set,
-                                         int mode);
 
   virtual ~QxrdExperiment();
   void initialize(QObjectWPtr parent);
@@ -82,8 +75,7 @@ public:
   void closeWindows();
 
   QxrdAppCommonWPtr application() const;
-  QxrdExperimentThreadPtr experimentThread() const;
-  QxrdExperimentWPtr experiment();
+  QxrdExperimentThreadWPtr experimentThread() const;
   QxrdAcqCommonWPtr acquisition() const;
   QxrdWindowPtr window();
   QxrdProcessorWPtr processor() const;
@@ -188,9 +180,7 @@ public:
 
 private:
   QxrdAppCommonWPtr               m_Application;
-
-private:
-  QMutex                          m_Mutex;
+  QxrdExperimentThreadWPtr        m_ExperimentThread;
   QxrdWindowSettingsPtr           m_WindowSettings;
   QxrdWindowPtr                   m_Window;
 //  QxrdDetectorControlWindowPtr        m_AcquisitionWindow;

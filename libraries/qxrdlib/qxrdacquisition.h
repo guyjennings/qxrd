@@ -46,8 +46,6 @@ public:
 
   void initialize(QObjectWPtr parent);
 
-  static QxrdAcquisitionPtr newAcquisition();
-
   static QxrdAcquisitionWPtr findAcquisition(QObjectWPtr p);
 
   //TODO: change to experiment

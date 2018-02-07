@@ -73,8 +73,6 @@
 
 QxrdExperiment::QxrdExperiment(QString path,
                                QString name,
-                               QxrdAppCommonWPtr app,
-                               QxrdExperimentSettingsWPtr set,
                                int mode) :
   inherited(path, name),
   m_Application(),
@@ -96,7 +94,7 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_ScanFile(NULL),
   m_ExperimentFileMutex(),
 
-  m_ExperimentMode(this, "experimentMode", QxrdExperiment::DefaultMode, "Experiment Mode"),
+  m_ExperimentMode(this, "experimentMode", mode, "Experiment Mode"),
   m_QxrdVersion(this, "qxrdVersion", STR(QXRD_VERSION), "Qxrd Version"),
   m_DataDirectory(this, "dataDirectory", defaultDataDirectory(""), "Saved Data Directory"),
   m_LogFileName(this, "logFileName", defaultLogName(""), "Log File Name"),
@@ -130,27 +128,38 @@ QxrdExperiment::QxrdExperiment(QString path,
       set->prop_ExperimentCount()->incValue(1);
     }
   }
-}
 
-QxrdExperimentPtr QxrdExperiment::newExperiment(QString path,
-                                                QxrdAppCommonWPtr app,
-                                                QxrdExperimentSettingsPtr set,
-                                                int mode)
-{
-  QxrdExperimentPtr expt(new QxrdExperiment(path,
-                                            "experiment",
-                                            app,
-                                            set,
-                                            mode));
+  m_Processor =
+      QxrdProcessorPtr(
+        new QxrdProcessor("processor"));
 
-  if (expt) {
-    expt->initialize(app);
-
-    expt->set_ExperimentMode(mode);
-    expt->setExperimentFilePath(path);
+  if (get_ExperimentMode() == QxrdExperiment::AcquisitionAllowed) {
+    m_Acquisition =
+        QxrdAcqCommonPtr(
+          new QxrdAcquisition("acquisition"));
+  } else {
+    m_Acquisition =
+        QxrdAcqCommonPtr(
+          new QxrdAcqDummy("dummyAcq"));
   }
 
-  return expt;
+  m_CalibrantLibrary =
+      QxrdCalibrantLibraryPtr(
+        new QxrdCalibrantLibrary("calibrantLibrary"));
+
+  m_CalibrantLibraryModel =
+      QxrdCalibrantLibraryModelPtr(
+        new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
+
+  m_CalibrantDSpacings =
+      QxrdCalibrantDSpacingsPtr(
+        new QxrdCalibrantDSpacings());
+
+  m_CalibrantDSpacingsModel =
+      QxrdCalibrantDSpacingsModelPtr(
+        new QxrdCalibrantDSpacingsModel(m_CalibrantLibrary,
+                                        m_CalibrantDSpacings));
+
 }
 
 QxrdExperiment::~QxrdExperiment()
@@ -201,7 +210,7 @@ QxrdExperimentWPtr QxrdExperiment::findExperiment(QObjectWPtr p)
   return res;
 }
 
-QxrdExperimentThreadPtr QxrdExperiment::experimentThread() const
+QxrdExperimentThreadWPtr QxrdExperiment::experimentThread() const
 {
   QxrdExperimentThread* t =
       qobject_cast<QxrdExperimentThread*>(thread());
@@ -214,7 +223,10 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
   inherited::initialize(parent);
 
   m_Application =
-      qSharedPointerDynamicCast<QxrdAppCommon>(parent);
+      QxrdAppCommon::findApplication(parent);
+
+  m_ExperimentThread =
+      QxrdExperimentThread::findExperimentThread(parent);
 
   QxrdAppCommonPtr app(m_Application);
 
@@ -231,7 +243,7 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
 
     splashMessage("Initializing Data Processing");
 
-    m_Processor = QxrdProcessor::newProcessor();
+    m_Processor -> initialize(sharedFromThis());
 
     QxrdFileSaverPtr saver(m_FileSaver);
 
@@ -242,24 +254,11 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
 
     splashMessage("Initializing Data Acquisition");
 
-    if (get_ExperimentMode() == QxrdExperiment::AcquisitionAllowed) {
-      m_Acquisition = QxrdAcquisition::newAcquisition();
-    } else {
-      m_Acquisition = QxrdAcqDummy::newAcquisition();
-    }
-
     m_Acquisition -> initialize(sharedFromThis());
 
-    m_CalibrantLibrary = QxrdCalibrantLibrary::newCalibrantLibrary();
+    m_CalibrantLibrary -> initialize(sharedFromThis());
 
-    m_CalibrantLibraryModel = QxrdCalibrantLibraryModelPtr(
-          new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
-
-    m_CalibrantDSpacings = QxrdCalibrantDSpacingsPtr(
-          new QxrdCalibrantDSpacings());
-
-    m_CalibrantDSpacingsModel = QxrdCalibrantDSpacingsModelPtr(
-          new QxrdCalibrantDSpacingsModel(m_CalibrantLibrary, m_CalibrantDSpacings));
+    m_CalibrantDSpacings -> initialize(sharedFromThis());
 
     if (saver) {
       saver -> setAcquisition(m_Acquisition);
@@ -712,11 +711,6 @@ QxrdAppCommonWPtr QxrdExperiment::application() const
   return m_Application;
 }
 
-QxrdExperimentWPtr QxrdExperiment::experiment()
-{
-  return qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis());
-}
-
 QxrdWindowPtr QxrdExperiment::window()
 {
   return m_Window;
@@ -1042,10 +1036,8 @@ void QxrdExperiment::readSettings(QSettings *settings)
   printf("started QxrdExperiment::readSettings(QSettings*)\n");
   //  }
 
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
   if (settings) {
-    QcepExperiment::readSettings(settings);
+    inherited::readSettings(settings);
 
     QxrdAcqCommonPtr acq(m_Acquisition);
     QxrdProcessorPtr proc(m_Processor);
@@ -1187,7 +1179,7 @@ void QxrdExperiment::writeSettings(QSettings *settings)
     tic.start();
 
   if (settings) {
-    QcepExperiment::writeSettings(settings);
+    inherited::writeSettings(settings);
 
     QxrdAcqCommonPtr     acq(m_Acquisition);
     QxrdProcessorPtr     proc(m_Processor);

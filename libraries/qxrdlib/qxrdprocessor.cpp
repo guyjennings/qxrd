@@ -177,13 +177,6 @@ QxrdProcessor::~QxrdProcessor()
 {
 }
 
-QxrdProcessorPtr QxrdProcessor::newProcessor()
-{
-  QxrdProcessorPtr proc(new QxrdProcessor("processor"));
-
-  return proc;
-}
-
 void QxrdProcessor::initialize(QObjectWPtr parent)
 {
   inherited::initialize(parent);

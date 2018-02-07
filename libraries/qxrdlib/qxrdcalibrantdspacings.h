@@ -7,10 +7,13 @@
 #include "qxrdcalibrantdspacing.h"
 #include <QSettings>
 #include "qcepproperty.h"
+#include "qobject-ptr.h"
 
 class QXRD_EXPORT QxrdCalibrantDSpacings : public QVector<QxrdCalibrantDSpacing>
 {
 public:
+  void initialize(QObjectWPtr parent);
+
   void setSettingsValue(QSettings *settings, QString name);
   static void customSaver(const QVariant &val, QSettings *settings, QString name);
 

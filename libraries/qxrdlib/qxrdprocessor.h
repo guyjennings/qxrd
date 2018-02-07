@@ -42,7 +42,6 @@ public:
   virtual ~QxrdProcessor();
   void initialize(QObjectWPtr parent);
 
-  static QxrdProcessorPtr newProcessor();
   static QxrdProcessorWPtr findProcessor(QObjectWPtr p);
 
   void shutdown();

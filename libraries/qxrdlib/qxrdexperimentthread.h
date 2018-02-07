@@ -7,18 +7,22 @@
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include "qxrdexperimentsettings-ptr.h"
+#include "qobject-ptr.h"
 
 class QXRD_EXPORT QxrdExperimentThread : public QxrdThread
 {
   Q_OBJECT
 
 public:
+  //TODO: pass parent pointer on initialization...
   QxrdExperimentThread(QString path,
                        QxrdAppCommonWPtr parent,
                        QxrdExperimentSettingsPtr set,
                        int mode);
 
   ~QxrdExperimentThread();
+
+  static QxrdExperimentThreadWPtr findExperimentThread(QObjectWPtr parent);
 
   static QxrdExperimentThreadPtr newExperimentThread(QString path,
                                                      QxrdAppCommonWPtr parent,

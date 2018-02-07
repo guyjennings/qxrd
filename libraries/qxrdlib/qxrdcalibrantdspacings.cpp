@@ -1,5 +1,9 @@
 #include "qxrdcalibrantdspacings.h"
 
+void QxrdCalibrantDSpacings::initialize(QObjectWPtr parent)
+{
+}
+
 void QxrdCalibrantDSpacings::setSettingsValue(QSettings *settings, QString name)
 {
   settings->beginWriteArray(name, count());

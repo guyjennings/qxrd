@@ -1,6 +1,8 @@
 #include "qxrddebug.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdexperiment.h"
+#include "qxrdexperimentsettings.h"
+#include "qxrdappcommon.h"
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentThread(QString path,
                                                                   QxrdAppCommonWPtr parent,
@@ -47,10 +49,15 @@ void QxrdExperimentThread::run()
     printf("Experiment thread started\n");
   }
 
-  m_Experiment = QxrdExperiment::newExperiment(m_Path,
-                                               m_Parent,
-                                               m_Settings,
-                                               m_ExperimentMode);
+  QxrdExperimentPtr expt =
+      QxrdExperimentPtr(
+        new QxrdExperiment(m_Path, "experiment", m_ExperimentMode));
+
+  expt -> initialize(m_Parent);
+
+  expt -> readSettings(m_Settings.data());
+
+  m_Experiment = expt;
 
   int rc = exec();
 
@@ -77,4 +84,21 @@ QxrdExperimentPtr QxrdExperimentThread::experiment() const
   }
 
   return QxrdExperimentPtr();
+}
+
+QxrdExperimentThreadWPtr QxrdExperimentThread::findExperimentThread(QObjectWPtr p)
+{
+  QxrdExperimentThreadWPtr res =
+      qSharedPointerDynamicCast<QxrdExperimentThread>(p);
+
+  if (res == NULL) {
+    QcepObjectPtr objp =
+        qSharedPointerDynamicCast<QcepObject>(p);
+
+    if (objp) {
+      res = findExperimentThread(objp->parentPtr());
+    }
+  }
+
+  return res;
 }

@@ -100,18 +100,6 @@ QxrdAcquisition::QxrdAcquisition(QString name) :
   m_IdleTimer.start(1000);
 }
 
-
-QxrdAcquisitionPtr QxrdAcquisition::newAcquisition()
-{
-  QxrdAcquisitionPtr acq(new QxrdAcquisition("acquisition"));
-
-  if (qcepDebug(DEBUG_APP)) {
-    acq->printMessage("QxrdAcquisition::newAcquisition");
-  }
-
-  return acq;
-}
-
 void QxrdAcquisition::initialize(QObjectWPtr parent)
 {
   inherited::initialize(parent);
