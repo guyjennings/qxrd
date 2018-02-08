@@ -4,6 +4,7 @@
 #include "qceplib_global.h"
 #include <QAbstractItemModel>
 #include "qcepobject-ptr.h"
+#include "qcepobject.h"
 
 class QCEP_EXPORT QcepObjectTreeModel : public QAbstractItemModel
 {
@@ -14,6 +15,7 @@ private:
 
 public:
   QcepObjectTreeModel(QObject *parent, QcepObjectWPtr obj);
+  virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
 
   enum {
     NameColumn,
@@ -34,6 +36,7 @@ public:
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
   QcepObjectPtr indexedObject(const QModelIndex& index) const;
+  QString indexDescription(const QModelIndex& index) const;
 
 private:
   QcepObjectWPtr m_Object;

@@ -7,6 +7,15 @@ QcepObjectTreeModel::QcepObjectTreeModel(QObject *parent, QcepObjectWPtr obj)
 {
 }
 
+void QcepObjectTreeModel::printMessage(QString msg, QDateTime dt) const
+{
+  QcepObjectPtr obj(m_Object);
+
+  if (obj) {
+    obj->printMessage(msg, dt);
+  }
+}
+
 QcepObjectPtr QcepObjectTreeModel::indexedObject(const QModelIndex& index) const
 {
   QcepObjectPtr res;
@@ -18,6 +27,8 @@ QcepObjectPtr QcepObjectTreeModel::indexedObject(const QModelIndex& index) const
     if (obj) {
       res = qSharedPointerDynamicCast<QcepObject>(obj->sharedFromThis());
     }
+  } else {
+    res = m_Object;
   }
 
   return res;
@@ -32,6 +43,11 @@ QModelIndex QcepObjectTreeModel::index(int row, int column, const QModelIndex &p
   if (!parentObject) {
     parentObject = m_Object;
   }
+
+  printMessage(tr("QcepObjectTreeModel::index(%1,%2,%3 [%4])")
+               .arg(row).arg(column)
+               .arg(parentObject?parentObject->objectName():"NULL")
+               .HEXARG(parentObject.data()));
 
   if (parentObject) {
     QcepObjectPtr childItem = parentObject -> childPtr(row);
@@ -79,6 +95,8 @@ int QcepObjectTreeModel::rowCount(const QModelIndex &parent) const
       res = root->childCount();
     }
   }
+
+  printMessage(tr("QcepObjectTreeModel::rowCount(%1) = %2").arg(indexDescription(parent)).arg(res));
 
   return res;
 }
@@ -145,3 +163,29 @@ QVariant QcepObjectTreeModel::data(const QModelIndex &index, int role) const
 
   return res;
 }
+
+QString QcepObjectTreeModel::indexDescription(const QModelIndex &index) const
+{
+  if (index.isValid()) {
+    QcepObjectPtr obj = indexedObject(index);
+    QcepObjectPtr par = indexedObject(parent(index));
+
+    if (obj) {
+      if (par) {
+        return tr("\"%1\" : Row %2, Col %3 of \"%4\"")
+            .arg(obj->objectName())
+            .arg(index.row())
+            .arg(index.column())
+            .arg(par->objectName());
+      } else {
+        return tr("\"%1\" : Row %2, Col %3 of \"/\"")
+            .arg(obj->objectName())
+            .arg(index.row())
+            .arg(index.column());
+      }
+    }
+  }
+
+  return tr("(%1,%2,null)").arg(index.row()).arg(index.column());
+}
+
