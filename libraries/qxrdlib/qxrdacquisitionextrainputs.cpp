@@ -27,20 +27,8 @@ QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QString name) :
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(%p)\n", this);
   }
-
-  QxrdAcquisitionPtr acqp(acquisition());
-
-  if (acqp) {
-    m_NIDAQPlugin = acqp->nidaqPlugin();
-  }
-
   connect(prop_SampleRate(), &QcepDoubleProperty::valueChanged,
           this, &QxrdAcquisitionExtraInputs::reinitiate);
-
-  if (acqp) {
-    connect(acqp->prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
-            this, &QxrdAcquisitionExtraInputs::reinitiate);
-  }
 }
 
 QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
@@ -57,19 +45,19 @@ QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
 void QxrdAcquisitionExtraInputs::initialize(QObjectWPtr parent)
 {
   inherited::initialize(parent);
-}
 
-QxrdAcquisitionWPtr QxrdAcquisitionExtraInputs::acquisition()
-{
-  INIT_CHECK;
+  m_Acquisition = QxrdAcquisition::findAcquisition(parent);
 
-  QxrdAcquisitionPtr acq = qSharedPointerDynamicCast<QxrdAcquisition>(parentPtr());
+  QxrdAcquisitionPtr acqp(m_Acquisition);
 
-  if (acq == NULL) {
-    printMessage("QxrdAcquisitionExtraInputs::acquisition == NULL");
+  if (acqp) {
+    m_NIDAQPlugin = acqp->nidaqPlugin();
   }
 
-  return acq;
+  if (acqp) {
+    connect(acqp->prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
+            this, &QxrdAcquisitionExtraInputs::reinitiate);
+  }
 }
 
 void QxrdAcquisitionExtraInputs::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
@@ -151,7 +139,7 @@ void QxrdAcquisitionExtraInputs::initiate()
 {
   INIT_CHECK;
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq && m_NIDAQPlugin) {
     QStringList uniqueChannels;
@@ -271,7 +259,7 @@ void QxrdAcquisitionExtraInputs::acquire()
 
   if (get_Enabled()) {
     if (!get_Skipping()) {
-      QxrdAcquisitionPtr acq(acquisition());
+      QxrdAcquisitionPtr acq(m_Acquisition);
 
       if (acq && m_NIDAQPlugin) {
         m_NIDAQPlugin->readContinuousInput();
@@ -302,7 +290,7 @@ void QxrdAcquisitionExtraInputs::logToImage(QcepUInt16ImageDataPtr img)
 
 void QxrdAcquisitionExtraInputs::finish()
 {
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcquisitionPtr acq(m_Acquisition);
 
   if (acq && m_NIDAQPlugin) {
     m_NIDAQPlugin->finishContinuousInput();

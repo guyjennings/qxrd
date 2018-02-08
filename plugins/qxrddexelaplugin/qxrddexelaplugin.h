@@ -4,6 +4,8 @@
 #include <QObject>
 #include "qxrddetectorplugininterface.h"
 
+class BusScanner;
+
 class QxrdDexelaPlugin : public QObject, public QxrdDetectorPluginInterface
 {
   Q_OBJECT
@@ -11,14 +13,18 @@ class QxrdDexelaPlugin : public QObject, public QxrdDetectorPluginInterface
   Q_INTERFACES(QxrdNamedPluginInterface QxrdDetectorPluginInterface)
 
 public:
-    QxrdDexelaPlugin();
+  QxrdDexelaPlugin();
 
-    QString name() const;
+  QString name() const;
 
-    QxrdDetectorDriverPtr createDetector(QString name,
-                                         QxrdDetectorSettingsWPtr det,
-                                         QxrdExperimentWPtr expt,
-                                         QxrdAcquisitionWPtr acq);
+  QxrdDetectorDriverPtr createDetector(QString name,
+                                       QxrdDetectorSettingsWPtr det,
+                                       QxrdExperimentWPtr expt,
+                                       QxrdAcquisitionWPtr acq);
+
+private:
+  BusScanner *m_BusScanner;
+  int         m_NDevs;
 };
 
 #endif // QXRDDEXELAPLUGIN_H

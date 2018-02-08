@@ -27,11 +27,16 @@ void QxrdMaskStack::readSettings(QSettings *settings)
     settings -> setArrayIndex(i);
 
     QcepObjectPtr obj = QcepObject::readObject(settings);
-    QcepMaskDataPtr m =
-        qSharedPointerDynamicCast<QcepMaskData>(obj);
 
-    if (m) {
-      push_back(m);
+    if (obj) {
+      QcepMaskDataPtr m =
+          qSharedPointerDynamicCast<QcepMaskData>(obj);
+
+      if (m) {
+        m->initialize(sharedFromThis());
+
+        push_back(m);
+      }
     }
   }
 

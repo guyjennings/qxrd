@@ -481,24 +481,28 @@ void QxrdAcquisition::readSettings(QSettings *settings)
 
     QcepObjectPtr obj = QcepObject::readObject(settings);
 
-    QxrdDetectorSettingsPtr det =
-        qSharedPointerDynamicCast<QxrdDetectorSettings>(obj);
+    if (obj) {
+      QxrdDetectorSettingsPtr det =
+          qSharedPointerDynamicCast<QxrdDetectorSettings>(obj);
 
-    if (det) {
-      det->set_DetectorNumber(m_Detectors.count());
+      if (det) {
+        det->initialize(sharedFromThis());
 
-      m_Detectors.append(det);
+        det->set_DetectorNumber(m_Detectors.count());
 
-      QxrdApplicationSettings *set =
-          qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
+        m_Detectors.append(det);
 
-      det->initialize(sharedFromThis());
+        QxrdApplicationSettings *set =
+            qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
 
-      if (set && set->get_StartDetectors() == 0) {
-        det->set_Enabled(false);
+        det->initialize(sharedFromThis());
+
+        if (set && set->get_StartDetectors() == 0) {
+          det->set_Enabled(false);
+        }
+
+        det->startOrStop(det->isEnabled());
       }
-
-      det->startOrStop(det->isEnabled());
     }
   }
 

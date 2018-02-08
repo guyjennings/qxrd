@@ -396,16 +396,15 @@ void QxrdProcessor::readSettings(QSettings *settings)
 
     QcepObjectPtr obj = QcepObject::readObject(settings);
 
-    QxrdProcessorStepPtr s =
-        qSharedPointerDynamicCast<QxrdProcessorStep>(obj);
+    if (obj) {
+      QxrdProcessorStepPtr s =
+          qSharedPointerDynamicCast<QxrdProcessorStep>(obj);
 
-    if (s) {
-      m_ProcessorSteps.append(s);
+      if (s) {
+        s->initialize(sharedFromThis());
 
-      QxrdProcessorPtr me =
-          qSharedPointerDynamicCast<QxrdProcessor>(sharedFromThis());
-
-      s->initialize(me);
+        m_ProcessorSteps.append(s);
+      }
     }
   }
 

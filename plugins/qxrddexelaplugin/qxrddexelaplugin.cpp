@@ -6,12 +6,12 @@
 
 QxrdDexelaPlugin::QxrdDexelaPlugin()
 {
-  BusScanner scanner;
+  m_BusScanner = new BusScanner();
 
-  int nDevs = scanner.EnumerateDevices();
+  m_NDevs = m_BusScanner -> EnumerateDevices();
 
-  for (int i=0; i<nDevs; i++) {
-    DevInfo info = scanner.GetDevice(i);
+  for (int i=0; i<m_NDevs; i++) {
+    DevInfo info = m_BusScanner -> GetDevice(i);
   }
 }
 
@@ -28,7 +28,8 @@ QxrdDetectorDriverPtr QxrdDexelaPlugin::createDetector(QString name,
   QxrdDexelaSettingsWPtr set = qSharedPointerDynamicCast<QxrdDexelaSettings>(det);
 
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdDexelaDriver(name, set, expt, acq));
+      QxrdDetectorDriverPtr(
+        new QxrdDexelaDriver(name, set, expt, acq));
 
   return res;
 }

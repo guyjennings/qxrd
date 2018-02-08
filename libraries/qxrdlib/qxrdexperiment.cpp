@@ -1039,8 +1039,6 @@ void QxrdExperiment::readSettings(QSettings *settings)
   if (settings) {
     inherited::readSettings(settings);
 
-    QxrdAcqCommonPtr acq(m_Acquisition);
-    QxrdProcessorPtr proc(m_Processor);
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
@@ -1050,9 +1048,9 @@ void QxrdExperiment::readSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (acq) {
+    if (m_Acquisition) {
       settings->beginGroup("acquisition");
-      acq -> readSettings(settings);
+      m_Acquisition -> readSettings(settings);
       settings->endGroup();
     }
 
@@ -1062,7 +1060,7 @@ void QxrdExperiment::readSettings(QSettings *settings)
 
       if (detType == QxrdDetectorSettings::PerkinElmer) {
         QxrdAcquisitionPtr acqp(
-              qSharedPointerDynamicCast<QxrdAcquisition>(acq));
+              qSharedPointerDynamicCast<QxrdAcquisition>(m_Acquisition));
 
         if (acqp) {
           if (acqp->get_DetectorCount() == 0) {
@@ -1075,9 +1073,9 @@ void QxrdExperiment::readSettings(QSettings *settings)
     }
     settings->endGroup();
 
-    if (proc) {
+    if (m_Processor) {
       settings->beginGroup("processor");
-      proc -> readSettings(settings);
+      m_Processor -> readSettings(settings);
       settings->endGroup();
     }
 
@@ -1181,8 +1179,6 @@ void QxrdExperiment::writeSettings(QSettings *settings)
   if (settings) {
     inherited::writeSettings(settings);
 
-    QxrdAcqCommonPtr     acq(m_Acquisition);
-    QxrdProcessorPtr     proc(m_Processor);
     QxrdServerPtr        srv(m_Server);
     QxrdSimpleServerPtr  ssrv(m_SimpleServer);
 
@@ -1196,15 +1192,15 @@ void QxrdExperiment::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (acq) {
+    if (m_Acquisition) {
       settings->beginGroup("acquisition");
-      acq -> writeSettings(settings);
+      m_Acquisition -> writeSettings(settings);
       settings->endGroup();
     }
 
-    if (proc) {
+    if (m_Processor) {
       settings->beginGroup("processor");
-      proc -> writeSettings(settings);
+      m_Processor -> writeSettings(settings);
       settings->endGroup();
     }
 

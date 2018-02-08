@@ -12,7 +12,8 @@
 #include <QThread>
 
 QxrdDexelaSettings::QxrdDexelaSettings(QString name) :
-  QxrdDetectorSettings(name, Dexela)
+  QxrdDetectorSettings(name, Dexela),
+  m_DetectorIndex  (this, "detectorIndex",   0, "Dexela Detector Number")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing dexela detector\n");

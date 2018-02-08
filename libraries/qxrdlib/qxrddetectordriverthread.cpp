@@ -61,7 +61,7 @@ void QxrdDetectorDriverThread::run()
     m_DetectorDriver = det->createDetector(name, det, expt, acq);
 
     if (m_DetectorDriver) {
-      m_DetectorDriver -> setParentPtr(m_Detector);
+      m_DetectorDriver -> initialize(m_Detector);
 
       if (det->get_Enabled()) {
         m_DetectorDriver -> startDetectorDriver();

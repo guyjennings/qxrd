@@ -59,9 +59,6 @@ public slots:
   QVector<QxrdAcquisitionExtraInputsChannelPtr> channels() const;
   QxrdAcquisitionExtraInputsChannelPtr channel(int chan) const;
 
-private:
-  QxrdAcquisitionWPtr acquisition();
-  
 public:
   Q_PROPERTY(bool enabled READ get_Enabled WRITE set_Enabled STORED false)
   QCEP_BOOLEAN_PROPERTY(Enabled)
@@ -83,6 +80,7 @@ public:
 
 private:
   mutable QMutex              m_Mutex;
+  QxrdAcquisitionWPtr         m_Acquisition;
   QVector<QxrdAcquisitionExtraInputsChannelPtr> m_Channels;
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
   QVector< QVector<double> >  m_ChannelData;

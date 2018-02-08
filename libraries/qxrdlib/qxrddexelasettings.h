@@ -14,6 +14,10 @@ public:
   virtual ~QxrdDexelaSettings();
 
   void configureDetector();
+
+public:
+  Q_PROPERTY(int detectorIndex READ get_DetectorIndex WRITE set_DetectorIndex)
+  QCEP_INTEGER_PROPERTY(DetectorIndex)
 };
 
 Q_DECLARE_METATYPE(QxrdDexelaSettings*)
