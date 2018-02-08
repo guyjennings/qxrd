@@ -211,6 +211,7 @@ int QcepDatasetModel::rowCount(const QModelIndex &parent) const
 
       res = nrows;
     } else {
+      //TODO: check this...
       QcepDatasetPtr ds(m_Dataset);
 
       if (ds) {

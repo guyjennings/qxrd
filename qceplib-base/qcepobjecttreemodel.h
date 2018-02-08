@@ -9,21 +9,31 @@ class QCEP_EXPORT QcepObjectTreeModel : public QAbstractItemModel
 {
   Q_OBJECT
 
-public:
-  explicit QcepObjectTreeModel(QObject *parent, QcepObjectWPtr obj);
+private:
+  typedef QAbstractItemModel inherited;
 
-  // Header:
-  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+public:
+  QcepObjectTreeModel(QObject *parent, QcepObjectWPtr obj);
+
+  enum {
+    NameColumn,
+    ClassColumn,
+    AddressColumn,
+    ColumnCount
+  };
 
   // Basic functionality:
   QModelIndex index(int row, int column,
-                    const QModelIndex &parent = QModelIndex()) const override;
-  QModelIndex parent(const QModelIndex &index) const override;
+                    const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex parent(const QModelIndex &index) const;
 
-  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-  int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+  QcepObjectPtr indexedObject(const QModelIndex& index) const;
 
 private:
   QcepObjectWPtr m_Object;
