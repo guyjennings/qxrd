@@ -181,11 +181,15 @@ void QcepExperiment::readSettings(QSettings *settings)
 
       QcepObjectPtr obj = QcepObject::readObject(settings);
 
-      QcepMainWindowSettingsPtr set =
-          qSharedPointerDynamicCast<QcepMainWindowSettings>(obj);
+      if (obj) {
+        QcepMainWindowSettingsPtr set =
+            qSharedPointerDynamicCast<QcepMainWindowSettings>(obj);
 
-      if (set) {
-        m_WindowSettings.append(set);
+        if (set) {
+          set -> initialize(sharedFromThis());
+
+          m_WindowSettings.append(set);
+        }
       }
     }
 

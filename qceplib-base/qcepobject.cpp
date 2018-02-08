@@ -454,9 +454,9 @@ void QcepObject::set_Name(QString name)
 
 QString QcepObject::get_Name() const
 {
-#ifndef QT_NO_DEBUG
-  checkObjectInitialization();
-#endif
+//#ifndef QT_NO_DEBUG
+//  checkObjectInitialization();
+//#endif
 
   return objectName();
 }
@@ -467,18 +467,18 @@ QString QcepObject::get_Name() const
 
 QString QcepObject::className() const
 {
-#ifndef QT_NO_DEBUG
-  checkObjectInitialization();
-#endif
+//#ifndef QT_NO_DEBUG
+//  checkObjectInitialization();
+//#endif
 
   return metaObject()->className();
 }
 
 QString QcepObject::get_Type() const
 {
-#ifndef QT_NO_DEBUG
-  checkObjectInitialization();
-#endif
+//#ifndef QT_NO_DEBUG
+//  checkObjectInitialization();
+//#endif
 
   return metaObject()->className();
 }
@@ -595,18 +595,18 @@ void QcepObject::writeSettings(QSettings *set)
 
 void QcepObject::readSettings(QSettings *set)
 {
-#ifndef QT_NO_DEBUG
-  checkObjectInitialization();
-#endif
+//#ifndef QT_NO_DEBUG
+//  checkObjectInitialization();
+//#endif
 
   readObjectSettings(set);
 }
 
 void QcepObject::readObjectSettings(QSettings *set)
 {
-#ifndef QT_NO_DEBUG
-  checkObjectInitialization();
-#endif
+//#ifndef QT_NO_DEBUG
+//  checkObjectInitialization();
+//#endif
 
   if (set) {
     set->beginGroup("properties");
@@ -639,6 +639,8 @@ QcepObjectPtr QcepObject::readObject(QSettings *set)
           QcepObjectPtr child = readObject(set);
 
           if (child) {
+            child->initialize(res);
+
             res->addChildPtr(child);
           }
         }
