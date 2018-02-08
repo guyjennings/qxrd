@@ -71,7 +71,7 @@ win32 {
 
   exists($${DEX_SDK}/include/BusScanner.h) {
     DEFINES += HAVE_DEXELA
-    message("Dexela Detecor SDK Found")
+    message("Dexela Detector SDK Found")
   }
 }
 
