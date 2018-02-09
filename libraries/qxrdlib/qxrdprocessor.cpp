@@ -26,6 +26,7 @@
 #include "qxrdroicalculator.h"
 #include "qxrdfilesaver.h"
 #include "qxrdpowderringsmodel.h"
+#include "qxrdroivector.h"
 #include "qxrdroimodel.h"
 #include <QFileInfo>
 #include <QThread>
@@ -135,14 +136,17 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_GenerateTestImage = QxrdGenerateTestImagePtr(
         new QxrdGenerateTestImage("testImage"));
 
-  m_ROICalculator = QxrdROICalculatorPtr(
-        new QxrdROICalculator("roiCalculator"));
-
   m_PowderRings = QxrdPowderRingsModelPtr(
         new QxrdPowderRingsModel());
 
+  m_ROIVector = QxrdROIVectorPtr(
+        new QxrdROIVector("roiVector"));
+
   m_ROIModel = QxrdROIModelPtr(
-        new QxrdROIModel());
+        new QxrdROIModel(m_ROIVector));
+
+  m_ROICalculator = QxrdROICalculatorPtr(
+        new QxrdROICalculator("roiCalculator", m_ROIVector, m_ROIModel));
 
   connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onCorrectedImageAvailable);
   connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onIntegratedDataAvailable);
@@ -181,18 +185,16 @@ void QxrdProcessor::initialize(QObjectWPtr parent)
 {
   inherited::initialize(parent);
 
-  QxrdProcessorPtr myself(
-        qSharedPointerDynamicCast<QxrdProcessor>(
-          sharedFromThis()));
-
-  m_MaskStack          -> initialize(myself);
-  m_ZingerFinder       -> initialize(myself);
-  m_CenterFinder       -> initialize(myself);
-  m_Integrator         -> initialize(myself);
-  m_PolarTransform     -> initialize(myself);
-  m_PolarNormalization -> initialize(myself);
-  m_GenerateTestImage  -> initialize(myself);
-  m_ROICalculator      -> initialize(myself);
+  m_MaskStack          -> initialize(sharedFromThis());
+  m_ZingerFinder       -> initialize(sharedFromThis());
+  m_CenterFinder       -> initialize(sharedFromThis());
+  m_Integrator         -> initialize(sharedFromThis());
+  m_PolarTransform     -> initialize(sharedFromThis());
+  m_PolarNormalization -> initialize(sharedFromThis());
+  m_GenerateTestImage  -> initialize(sharedFromThis());
+  m_ROIVector          -> initialize(sharedFromThis());
+  m_ROIModel           -> initialize(sharedFromThis());
+  m_ROICalculator      -> initialize(sharedFromThis());
 
   QxrdAcquisitionPtr acqp(
         qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
@@ -380,6 +382,12 @@ void QxrdProcessor::readSettings(QSettings *settings)
   if (m_GenerateTestImage) {
     settings->beginGroup("generateTestImage");
     m_GenerateTestImage -> readSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_ROIVector) {
+    settings->beginGroup("roiVector");
+    m_ROIVector->readSettings(settings);
     settings->endGroup();
   }
 
@@ -1146,9 +1154,9 @@ void QxrdProcessor::loadDefaultImages()
   QString fileName = get_MaskPath();
   QFileInfo fileInfo(fileName);
 
-  if (fileInfo.exists() && fileInfo.isFile()) {
-    loadMask(fileName);
-  }
+//  if (fileInfo.exists() && fileInfo.isFile()) {
+//    loadMask(fileName);
+//  }
 
   fileName = get_DarkImagePath();
   fileInfo.setFile(fileName);

@@ -32,7 +32,7 @@
 #include "qxrdroicalculator.h"
 #include "qxrdroishape.h"
 #include "qxrdroi.h"
-#include "qxrdroimodel.h"
+//#include "qxrdroimodel.h"
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
 #include "qcepfixupgainmapcommand.h"
@@ -2201,10 +2201,10 @@ void QxrdScriptEngine::initialize()
                           QxrdROI::toScriptValue,
                           QxrdROI::fromScriptValue);
 
-  qRegisterMetaType<QxrdROIModelPtr>("QxrdROIModelPtr");
-  qScriptRegisterMetaType(this,
-                          QxrdROIModel::toScriptValue,
-                          QxrdROIModel::fromScriptValue);
+//  qRegisterMetaType<QxrdROIModelPtr>("QxrdROIModelPtr");
+//  qScriptRegisterMetaType(this,
+//                          QxrdROIModel::toScriptValue,
+//                          QxrdROIModel::fromScriptValue);
 
   QxrdAppCommonPtr app(m_Application);
 

@@ -2,15 +2,19 @@
 #include "qxrddebug.h"
 #include <stdio.h>
 #include "qcepmutexlocker.h"
+#include "qxrdroivector.h"
 #include "qxrdroimodel.h"
 #include <QtConcurrentMap>
 #include "qxrdroi.h"
 #include "qcepimagedata.h"
 #include "qxrdprocessor.h"
 
-QxrdROICalculator::QxrdROICalculator(QString name)
+QxrdROICalculator::QxrdROICalculator(QString name,
+                                     QxrdROIVectorWPtr rois,
+                                     QxrdROIModelWPtr model)
   : inherited(name),
-    m_ROIModel(new QxrdROIModel())
+    m_ROIVector(rois),
+    m_ROIModel(model)
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing ROI Calculator\n");
@@ -19,9 +23,6 @@ QxrdROICalculator::QxrdROICalculator(QString name)
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdROICalculator::QxrdROICalculator(%p)\n", this);
   }
-
-  m_ROIModel = QxrdROIModelPtr(
-        new QxrdROIModel());
 }
 
 QxrdROICalculator::~QxrdROICalculator()
@@ -38,8 +39,6 @@ QxrdROICalculator::~QxrdROICalculator()
 void QxrdROICalculator::initialize(QObjectWPtr parent)
 {
   inherited::initialize(parent);
-
-//  m_ROIModel -> initialize(parent);
 }
 
 QScriptValue QxrdROICalculator::toScriptValue(QScriptEngine *engine, const QxrdROICalculatorPtr &proc)
@@ -64,28 +63,30 @@ void QxrdROICalculator::readSettings(QSettings *settings)
 {
   inherited::readSettings(settings);
 
-  if (m_ROIModel) {
-    settings->beginGroup("coords");
-    m_ROIModel->readSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_ROIModel) {
+//    settings->beginGroup("coords");
+//    m_ROIModel->readSettings(settings);
+//    settings->endGroup();
+//  }
 }
 
 void QxrdROICalculator::writeSettings(QSettings *settings)
 {
   inherited::writeSettings(settings);
 
-  if (m_ROIModel) {
-    settings->beginGroup("coords");
-    m_ROIModel->writeSettings(settings);
-    settings->endGroup();
-  }
+//  if (m_ROIModel) {
+//    settings->beginGroup("coords");
+//    m_ROIModel->writeSettings(settings);
+//    settings->endGroup();
+//  }
 }
 
 int QxrdROICalculator::roiCount()
 {
-  if (m_ROIModel) {
-    return m_ROIModel->roiCount();
+  QxrdROIModelPtr m(m_ROIModel);
+
+  if (m) {
+    return m->roiCount();
   } else {
     return 0;
   }
@@ -98,8 +99,10 @@ QxrdROIModelWPtr QxrdROICalculator::roiModel()
 
 QxrdROIWPtr QxrdROICalculator::roi(int i)
 {
-  if (m_ROIModel) {
-    return m_ROIModel->roi(i);
+  QxrdROIModelPtr m(m_ROIModel);
+
+  if (m) {
+    return m->roi(i);
   } else {
     return QxrdROIPtr();
   }
@@ -109,13 +112,15 @@ QVector<double> QxrdROICalculator::values(QcepImageDataBasePtr img, QcepMaskData
 {
   QVector<double> res;
 
-  if (img && m_ROIModel) {
-    m_ROIModel->recalculate(img, mask);
+  QxrdROIModelPtr m(m_ROIModel);
 
-    int nVals = m_ROIModel->roiCount();
+  if (img && m) {
+    m->recalculate(img, mask);
+
+    int nVals = m->roiCount();
 
     for (int i=0; i<nVals; i++) {
-      QxrdROIPtr roi = m_ROIModel->roi(i);
+      QxrdROIPtr roi = m->roi(i);
 
       if (roi) {
 //        res.append();

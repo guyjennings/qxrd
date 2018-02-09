@@ -52,20 +52,32 @@ void QxrdCalibrantLibrary::readSettings(QSettings *settings)
 
   settings->endArray();
 
+  //TODO: rewrite to use readObject
   int nc   = settings->beginReadArray("calibrants");
 
-  while (m_Calibrants.count() > (nc + nstd)) {
-    removeCalibrant();
-  }
+//  while (m_Calibrants.count() > (nc + nstd)) {
+//    removeCalibrant();
+//  }
 
-  while (m_Calibrants.count() < (nc + nstd)) {
-    appendCalibrant();
-  }
+//  while (m_Calibrants.count() < (nc + nstd)) {
+//    appendCalibrant();
+//  }
 
   for (int i=0; i<nc; i++) {
     settings->setArrayIndex(i);
 
-    m_Calibrants[i+nstd]->readSettings(settings);
+    QcepObjectPtr obj = QcepObject::readObject(settings);
+
+    if (obj) {
+      QxrdCalibrantPtr cal =
+          qSharedPointerDynamicCast<QxrdCalibrant>(obj);
+
+      if (cal) {
+        cal->initialize(sharedFromThis());
+
+        appendCalibrant(cal);
+      }
+    }
   }
 
   settings->endArray();

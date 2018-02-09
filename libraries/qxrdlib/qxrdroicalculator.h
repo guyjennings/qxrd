@@ -10,6 +10,7 @@
 #include <QScriptEngine>
 #include "qxrdroicalculator-ptr.h"
 #include "qxrdroimodel-ptr.h"
+#include "qxrdroivector-ptr.h"
 #include "qxrdroi-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
@@ -22,7 +23,9 @@ private:
   typedef QcepObject inherited;
 
 public:
-  Q_INVOKABLE QxrdROICalculator(QString name);
+  Q_INVOKABLE QxrdROICalculator(QString name,
+                                QxrdROIVectorWPtr rois,
+                                QxrdROIModelWPtr model);
   virtual ~QxrdROICalculator();
   void initialize(QObjectWPtr parent);
 
@@ -42,8 +45,8 @@ public slots:
   QVector<double>           values(QcepImageDataBasePtr img, QcepMaskDataPtr mask);
 
 private:
-  QMutex           m_Mutex;
-  QxrdROIModelPtr  m_ROIModel;
+  QxrdROIVectorWPtr m_ROIVector;
+  QxrdROIModelWPtr  m_ROIModel;
 
 public:
 };

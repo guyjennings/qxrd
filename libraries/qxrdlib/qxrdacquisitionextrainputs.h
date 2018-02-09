@@ -49,6 +49,7 @@ public slots:
   void timerDone();
   void appendChannel(int ch = -1);
   void removeChannel(int ch = -1);
+  void appendChannel(QxrdAcquisitionExtraInputsChannelWPtr chan);
 
   QVector<double> evaluateChannels();
   double          evaluateChannel(int ch);

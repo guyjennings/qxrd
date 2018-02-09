@@ -1337,13 +1337,6 @@ void QxrdExperiment::saveExperimentAs(QString path)
 //  settings.endGroup();
 }
 
-void QxrdExperiment::saveExperiment2(QString path)
-{
-  QxrdExperimentSettings settings(path);
-
-  QcepObject::writeObject(&settings);
-}
-
 void QxrdExperiment::saveExperimentAsText(QString filePath)
 {
   QcepFileFormatterPtr fmt = QcepFileFormatterPtr(new QcepFileFormatterText(filePath));

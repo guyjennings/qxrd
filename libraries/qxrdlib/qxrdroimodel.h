@@ -5,6 +5,7 @@
 #include "qcepobject.h"
 #include <QAbstractListModel>
 #include "qxrdroi-ptr.h"
+#include "qxrdroivector-ptr.h"
 #include <QScriptEngine>
 #include "qxrdroimodel-ptr.h"
 #include "qcepproperty.h"
@@ -18,14 +19,13 @@ class QXRD_EXPORT QxrdROIModel : public QAbstractListModel
   Q_OBJECT
 
 public:
-  QxrdROIModel();
+  QxrdROIModel(QxrdROIVectorWPtr rois);
   virtual ~QxrdROIModel();
 
-  void readSettings(QSettings *settings);
-  void writeSettings(QSettings *settings);
+  void initialize(QObjectWPtr parent);
 
-  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROIModelPtr &coords);
-  static void fromScriptValue(const QScriptValue &obj, QxrdROIModelPtr &coords);
+//  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROIModelPtr &coords);
+//  static void fromScriptValue(const QScriptValue &obj, QxrdROIModelPtr &coords);
 
   int rowCount(const QModelIndex &parent) const;
   int columnCount(const QModelIndex &parent) const;
@@ -95,8 +95,7 @@ private:
   QxrdROIPtr newROI(int roiOuterType, int roiInnerType);
 
 private:
-  QMutex                         m_Mutex;
-  QVector<QxrdROIPtr> m_ROICoordinates;
+  QxrdROIVectorWPtr   m_ROIs;
 };
 
 #endif // QXRDROIMODEL_H

@@ -16,6 +16,7 @@
 #include "qxrdzingerfinder-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 #include "qxrdpowderringsmodel-ptr.h"
+#include "qxrdroivector-ptr.h"
 #include "qxrdroimodel-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qcepintegrateddata-ptr.h"
@@ -546,8 +547,8 @@ private:
   //TODO: store a data object, not a model
   QxrdPowderRingsModelPtr        m_PowderRings;
 
-  //TODO: store a data object, not a model
-  QxrdROIModelPtr m_ROIModel;
+  QxrdROIVectorPtr       m_ROIVector;
+  QxrdROIModelPtr        m_ROIModel;
 
   mutable QMutex         m_Mutex;
   QWaitCondition         m_ProcessWaiting;

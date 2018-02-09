@@ -5,7 +5,7 @@
 #include "qcepdebug.h"
 
 enum {
-  DEBUG_ACQUIRE     = (LAST_CEP_DEBUG + 1),
+  DEBUG_ACQUIRE     = LAST_CEP_DEBUG,
   DEBUG_PROCESS,
   DEBUG_FILES,
   DEBUG_PERFORM,

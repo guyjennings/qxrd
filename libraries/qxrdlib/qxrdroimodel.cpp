@@ -1,4 +1,5 @@
 #include "qxrdroimodel.h"
+#include "qxrdroivector.h"
 #include "qxrdroi.h"
 #include "qcepmutexlocker.h"
 #include <stdio.h>
@@ -6,9 +7,9 @@
 #include "qtconcurrentrun.h"
 #include "qxrddebug.h"
 
-QxrdROIModel::QxrdROIModel()
+QxrdROIModel::QxrdROIModel(QxrdROIVectorWPtr rois)
   : QAbstractListModel(),
-    m_ROICoordinates()
+    m_ROIs(rois)
 {
 }
 
@@ -16,84 +17,44 @@ QxrdROIModel::~QxrdROIModel()
 {
 }
 
-void QxrdROIModel::readSettings(QSettings *settings)
+void QxrdROIModel::initialize(QObjectWPtr parent)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  beginResetModel();
-
-  int n = settings->beginReadArray("roi");
-
-  m_ROICoordinates.resize(0);
-
-  for (int i=0; i<n; i++) {
-    settings->setArrayIndex(i);
-
-    int roiOuterType = settings->value("roiOuterType", 0).toInt();
-    int roiInnerType = settings->value("roiInnerType", 0).toInt();
-
-    QxrdROIPtr roi = newROI(roiOuterType, roiInnerType);
-
-    if (roi) {
-      roi->readSettings(settings);
-
-      m_ROICoordinates.append(roi);
-
-      connect(roi.data(), &QxrdROI::roiChanged,
-              this, &QxrdROIModel::onROIChanged);
-    }
-  }
-
-  settings->endArray();
-
-  endResetModel();
 }
 
-void QxrdROIModel::writeSettings(QSettings *settings)
-{
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+//QScriptValue QxrdROIModel::toScriptValue(QScriptEngine *engine, const QxrdROIModelPtr &coords)
+//{
+//  return engine->newQObject(coords.data());
+//}
 
-  settings->beginWriteArray("roi");
+//void QxrdROIModel::fromScriptValue(const QScriptValue &obj, QxrdROIModelPtr &coords)
+//{
+//  QObject *qobj = obj.toQObject();
 
-  for (int i=0; i<m_ROICoordinates.count(); i++) {
-    settings->setArrayIndex(i);
+//  if (qobj) {
+//    QxrdROIModel *qcoords = qobject_cast<QxrdROIModel*>(qobj);
 
-    QxrdROIPtr roi = m_ROICoordinates.value(i);
-
-    if (roi) {
-      roi->writeSettings(settings);
-    }
-  }
-
-  settings->endArray();
-}
-
-QScriptValue QxrdROIModel::toScriptValue(QScriptEngine *engine, const QxrdROIModelPtr &coords)
-{
-  return engine->newQObject(coords.data());
-}
-
-void QxrdROIModel::fromScriptValue(const QScriptValue &obj, QxrdROIModelPtr &coords)
-{
-  QObject *qobj = obj.toQObject();
-
-  if (qobj) {
-    QxrdROIModel *qcoords = qobject_cast<QxrdROIModel*>(qobj);
-
-    if (qcoords) {
-      coords = QxrdROIModelPtr(qcoords);
-    }
-  }
-}
+//    if (qcoords) {
+//      coords = QxrdROIModelPtr(qcoords);
+//    }
+//  }
+//}
 
 int QxrdROIModel::roiCount() const
 {
-  return m_ROICoordinates.count();
+  int res = 0;
+
+  QxrdROIVectorPtr rois(m_ROIs);
+
+  if (rois) {
+    res = rois -> count();
+  }
+
+  return res;
 }
 
 int QxrdROIModel::rowCount(const QModelIndex & /*parent*/) const
 {
-  return m_ROICoordinates.count();
+  return roiCount();
 }
 
 int QxrdROIModel::columnCount(const QModelIndex & /*parent*/) const
@@ -290,56 +251,64 @@ QxrdROIPtr QxrdROIModel::newROI(int roiOuterType, int roiInnerType)
 
 void QxrdROIModel::append(QxrdROIPtr coords)
 {
-  beginInsertRows(QModelIndex(), m_ROICoordinates.count(), m_ROICoordinates.count());
+  QxrdROIVectorPtr rois(m_ROIs);
 
-  m_ROICoordinates.append(coords);
+  if (rois) {
+    beginInsertRows(QModelIndex(), rois -> count(), rois -> count());
 
-  connect(coords.data(), &QxrdROI::roiChanged,
-          this, &QxrdROIModel::onROIChanged);
+    rois -> append(coords);
 
-  endInsertRows();
+    connect(coords.data(), &QxrdROI::roiChanged,
+            this, &QxrdROIModel::onROIChanged);
+
+    endInsertRows();
+  }
 }
 
 void QxrdROIModel::removeROI(int row)
 {
-  beginRemoveRows(QModelIndex(), row, row);
+  QxrdROIVectorPtr rois(m_ROIs);
 
-  m_ROICoordinates.remove(row);
+  if (rois) {
+    beginRemoveRows(QModelIndex(), row, row);
 
-  endRemoveRows();
+    rois -> remove(row);
+
+    endRemoveRows();
+  }
 }
 
 void QxrdROIModel::moveROIDown(int row)
 {
-  int nRows = m_ROICoordinates.count();
+  QxrdROIVectorPtr rois(m_ROIs);
 
-  if (row >= 0 && row < (nRows-1)) {
-    beginMoveRows(QModelIndex(), row+1, row+1, QModelIndex(), row);
+  if (rois) {
+    int nRows = rois -> count();
 
-    QxrdROIPtr p1 = m_ROICoordinates.value(row);
-    QxrdROIPtr p2 = m_ROICoordinates.value(row+1);
+    if (row >= 0 && row < (nRows-1)) {
+      beginMoveRows(QModelIndex(), row+1, row+1, QModelIndex(), row);
 
-    m_ROICoordinates[row]   = p2;
-    m_ROICoordinates[row+1] = p1;
+      rois -> exchange(row, row+1);
 
-    endMoveRows();
+      endMoveRows();
+    }
   }
 }
 
 void QxrdROIModel::moveROIUp(int row)
 {
-  int nRows = m_ROICoordinates.count();
+  QxrdROIVectorPtr rois(m_ROIs);
 
-  if (row >= 1 && row < nRows) {
-    beginMoveRows(QModelIndex(), row, row, QModelIndex(), row-1);
+  if (rois) {
+    int nRows = rois -> count();
 
-    QxrdROIPtr p1 = m_ROICoordinates.value(row-1);
-    QxrdROIPtr p2 = m_ROICoordinates.value(row);
+    if (row >= 1 && row < nRows) {
+      beginMoveRows(QModelIndex(), row, row, QModelIndex(), row-1);
 
-    m_ROICoordinates[row-1] = p2;
-    m_ROICoordinates[row]   = p1;
+      rois -> exchange(row-1, row);
 
-    endMoveRows();
+      endMoveRows();
+    }
   }
 }
 
@@ -350,15 +319,27 @@ void QxrdROIModel::editROI(int /*row*/)
 
 QxrdROIWPtr QxrdROIModel::roi(int row) const
 {
-  return m_ROICoordinates.value(row);
+  QxrdROIWPtr res;
+
+  QxrdROIVectorPtr rois(m_ROIs);
+
+  if (rois) {
+    res = rois -> roi(row);
+  }
+
+  return res;
 }
 
 void QxrdROIModel::setRoi(int row, QxrdROIPtr c)
 {
-  if (row >= 0 && row < m_ROICoordinates.count()) {
-    m_ROICoordinates[row] = c;
+  QxrdROIVectorPtr rois(m_ROIs);
 
-    emit dataChanged(index(row,0), index(row,ColCount-1));
+  if (rois) {
+    if (row >= 0 && row < rois -> count()) {
+      rois -> setRoi(row, c);
+
+      emit dataChanged(index(row,0), index(row,ColCount-1));
+    }
   }
 }
 
@@ -452,20 +433,24 @@ void QxrdROIModel::insertROIPoint(int i,
 
 void QxrdROIModel::onROIChanged()
 {
-//  printf("QxrdROIModel::onROIChanged()\n");
+  //  printf("QxrdROIModel::onROIChanged()\n");
 
-  QObject *s = sender();
+  QxrdROIVectorPtr rois(m_ROIs);
 
-  QxrdROI *c = qobject_cast<QxrdROI*>(s);
+  if (rois) {
+    QObject *s = sender();
 
-  if (c) {
-    for (int i=0; i<m_ROICoordinates.count(); i++) {
-      QxrdROIPtr r = m_ROICoordinates.value(i);
+    QxrdROI *c = qobject_cast<QxrdROI*>(s);
 
-      if (r && r.data() == c) {
-//        printf("ROI %d changed\n", i);
+    if (c) {
+      for (int i=0; i< rois->count(); i++) {
+        QxrdROIPtr r = rois->roi(i);
 
-        emit dataChanged(index(i,0), index(i,columnCount(QModelIndex())-1));
+        if (r && r.data() == c) {
+          //        printf("ROI %d changed\n", i);
+
+          emit dataChanged(index(i,0), index(i,columnCount(QModelIndex())-1));
+        }
       }
     }
   }
@@ -478,41 +463,45 @@ void QxrdROIModel::onROIsChanged()
 
 void QxrdROIModel::recalculate(QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
-  QTime tic;
-  tic.start();
+  QxrdROIVectorPtr rois(m_ROIs);
 
-  QVector<  QFuture<void> > res;
+  if (rois) {
+    QTime tic;
+    tic.start();
 
-  for (int i=0; i<m_ROICoordinates.count(); i++) {
-    QxrdROIPtr r = m_ROICoordinates.value(i);
+    QVector<  QFuture<void> > res;
 
-    if (r) {
-      res.append(
-            QtConcurrent::run(r.data(),
-                              &QxrdROI::recalculate, img, mask));
+    for (int i=0; i<rois->count(); i++) {
+      QxrdROIPtr r = rois->roi(i);
 
-      if (qcepDebug(DEBUG_NOPARALLEL)) {
-        res.value(i).waitForFinished();
+      if (r) {
+        res.append(
+              QtConcurrent::run(r.data(),
+                                &QxrdROI::recalculate, img, mask));
+
+        if (qcepDebug(DEBUG_NOPARALLEL)) {
+          res.value(i).waitForFinished();
+        }
       }
     }
+
+    for (int i=0; i<res.count(); i++) {
+      res.value(i).waitForFinished();
+    }
+
+    QVector<int> roles;
+    roles.append(Qt::DisplayRole);
+    roles.append(Qt::EditRole);
+
+    emit dataChanged(index(0,SumCol), index(rois->count()-1,YGradientCol), roles);
+
+    printf("ROI Calculation in %d msec\n",tic.elapsed());
   }
-
-  for (int i=0; i<res.count(); i++) {
-    res.value(i).waitForFinished();
-  }
-
-  QVector<int> roles;
-  roles.append(Qt::DisplayRole);
-  roles.append(Qt::EditRole);
-
-  emit dataChanged(index(0,SumCol), index(m_ROICoordinates.count()-1,YGradientCol), roles);
-
-  printf("ROI Calculation in %d msec\n",tic.elapsed());
 }
 
 void QxrdROIModel::visualizeBackground(int n, QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
-  QxrdROIPtr r = m_ROICoordinates.value(n);
+  QxrdROIPtr r = roi(n);
 
   if (r) {
     r->visualizeBackground(img, mask);
@@ -521,7 +510,7 @@ void QxrdROIModel::visualizeBackground(int n, QcepImageDataBasePtr img, QcepMask
 
 void QxrdROIModel::visualizePeak(int n, QcepImageDataBasePtr img, QcepMaskDataPtr mask)
 {
-  QxrdROIPtr r = m_ROICoordinates.value(n);
+  QxrdROIPtr r = roi(n);
 
   if (r) {
     r->visualizePeak(img, mask);

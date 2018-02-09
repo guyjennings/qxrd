@@ -472,10 +472,6 @@ void QxrdAcquisition::readSettings(QSettings *settings)
 
   int n = settings->beginReadArray("detectors");
 
-//  m_Detectors.resize(n);
-
-  //TODO: re-write to use readObject rather than pre-reading detector type
-
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
