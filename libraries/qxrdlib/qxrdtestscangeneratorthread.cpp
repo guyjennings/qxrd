@@ -50,7 +50,7 @@ QxrdTestScanGeneratorPtr QxrdTestScanGeneratorThread::generator() const
   while (isRunning()) {
     if (m_Generator) return m_Generator;
 
-    QThread::msleep(50);
+    msleep(50);
   }
 
   return QxrdTestScanGeneratorPtr();

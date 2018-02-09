@@ -32,7 +32,7 @@ QxrdSimpleServerPtr QxrdSimpleServerThread::server() const
   while (isRunning()) {
     if (m_Server) return m_Server;
 
-    QThread::msleep(50);
+    msleep(50);
   }
 
   return QxrdSimpleServerPtr();

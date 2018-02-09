@@ -34,7 +34,7 @@ void QxrdScriptEngineThread::shutdown()
 {
   exit();
 
-  wait(1000);
+  wait();
 }
 
 QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
@@ -42,7 +42,7 @@ QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const
   while (isRunning()) {
     if (m_ScriptEngine) return m_ScriptEngine;
 
-    QThread::msleep(50);
+    msleep(50);
   }
 
   return QxrdScriptEnginePtr();

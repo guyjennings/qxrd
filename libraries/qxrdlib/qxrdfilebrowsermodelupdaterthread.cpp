@@ -64,7 +64,7 @@ QxrdFileBrowserModelUpdaterPtr QxrdFileBrowserModelUpdaterThread::updater() cons
   while (isRunning()) {
     if (m_Updater) return m_Updater;
 
-    QThread::msleep(50);
+    msleep(50);
   }
 
   return QxrdFileBrowserModelUpdaterPtr();

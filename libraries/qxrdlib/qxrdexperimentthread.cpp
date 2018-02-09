@@ -80,7 +80,7 @@ QxrdExperimentPtr QxrdExperimentThread::experiment() const
   while (isRunning()) {
     if (m_Experiment) return m_Experiment;
 
-    QThread::msleep(50);
+    msleep(50);
   }
 
   return QxrdExperimentPtr();
