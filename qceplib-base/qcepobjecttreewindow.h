@@ -16,9 +16,13 @@ public:
   explicit QcepObjectTreeWindow(QWidget *parent, QcepObjectWPtr obj);
   ~QcepObjectTreeWindow();
 
+  void selectionChanged(const QItemSelection &selected,
+                        const QItemSelection &deselected);
+
 private:
   QcepObjectTreeModel       *m_ObjectTreeModel;
   QcepObjectPropertiesModel *m_ObjectPropertiesModel;
+  QItemSelectionModel       *m_ObjectSelection;
 };
 
 #endif // QCEPOBJECTTREEWINDOW_H

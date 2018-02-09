@@ -21,7 +21,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QTreeView" name="m_ObjectTree"/>
-      <widget class="QListView" name="m_ObjectProperties"/>
+      <widget class="QTreeView" name="m_ObjectProperties"/>
      </widget>
     </item>
    </layout>

@@ -2,10 +2,10 @@
 #define QCEPOBJECTPROPERTIESMODEL_H
 
 #include "qceplib_global.h"
-#include <QAbstractItemModel>
+#include <QAbstractTableModel>
 #include "qcepobject-ptr.h"
 
-class QCEP_EXPORT QcepObjectPropertiesModel : public QAbstractItemModel
+class QCEP_EXPORT QcepObjectPropertiesModel : public QAbstractTableModel
 {
   Q_OBJECT
 
@@ -18,12 +18,15 @@ public:
   // Basic functionality:
   QModelIndex index(int row, int column,
                     const QModelIndex &parent = QModelIndex()) const override;
-  QModelIndex parent(const QModelIndex &index) const override;
+//  QModelIndex parent(const QModelIndex &index) const override;
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
   int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+  void deselect();
+  void select(QcepObjectWPtr obj);
 
 private:
   QcepObjectWPtr m_Object;

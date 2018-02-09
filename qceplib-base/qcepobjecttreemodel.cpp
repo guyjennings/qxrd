@@ -1,5 +1,6 @@
 #include "qcepobjecttreemodel.h"
 #include "qcepobject.h"
+#include "qcepdebug.h"
 
 QcepObjectTreeModel::QcepObjectTreeModel(QObject *parent, QcepObjectWPtr obj)
   : QAbstractItemModel(parent),
@@ -52,11 +53,13 @@ QModelIndex QcepObjectTreeModel::index(int row, int column, const QModelIndex &p
     }
   }
 
-  printMessage(tr("QcepObjectTreeModel::index(%1,%2,%3 [%4]) = %5")
-               .arg(row).arg(column)
-               .arg(parentObject?parentObject->objectName():"NULL")
-               .HEXARG(parentObject.data())
-               .arg(indexDescription(res)));
+  if (qcepDebug(DEBUG_OBJECTBROWSER)) {
+    printMessage(tr("QcepObjectTreeModel::index(%1,%2,%3 [%4]) = %5")
+                 .arg(row).arg(column)
+                 .arg(parentObject?parentObject->objectName():"NULL")
+                 .HEXARG(parentObject.data())
+                 .arg(indexDescription(res)));
+  }
 
   return res;
 }
@@ -101,7 +104,9 @@ int QcepObjectTreeModel::rowCount(const QModelIndex &parent) const
     res = root->childCount();
   }
 
-  printMessage(tr("QcepObjectTreeModel::rowCount(%1) = %2").arg(indexDescription(parent)).arg(res));
+  if (qcepDebug(DEBUG_OBJECTBROWSER)) {
+    printMessage(tr("QcepObjectTreeModel::rowCount(%1) = %2").arg(indexDescription(parent)).arg(res));
+  }
 
   return res;
 }
