@@ -61,7 +61,6 @@ SOURCES += \
   $${PWD}/qcepallocator.cpp \
   $${PWD}/qcepapplication.cpp \
   $${PWD}/qcepthread.cpp \
-  $${PWD}/qcepallocatorthread.cpp \
   $${PWD}/qcepimagedataspreadsheetmodel.cpp \
   $${PWD}/qcepnewdatagroupdialog.cpp \
   $${PWD}/qcepnewdatacolumndialog.cpp \
@@ -102,7 +101,8 @@ SOURCES += \
     $$PWD/qcepmainwindowsettings.cpp \
     $$PWD/qcepobjecttreemodel.cpp \
     $$PWD/qcepobjecttreewindow.cpp \
-    $$PWD/qcepobjectpropertiesmodel.cpp
+    $$PWD/qcepobjectpropertiesmodel.cpp \
+    $$PWD/qnewthread.cpp
 
 contains (DEFINES, HAVE_DATAVIS) {
  SOURCES += \
@@ -193,9 +193,6 @@ HEADERS += \
   $${PWD}/qcepapplication-ptr.h \
   $${PWD}/qcepthread.h \
   $${PWD}/qcepintegrateddataqueue.h \
-  $${PWD}/qcepallocatorthread.h \
-  $${PWD}/qcepallocatorthread-ptr.h \
-  $${PWD}/qcepallocatorthread-ptr.h \
   $${PWD}/qcepimagedataspreadsheetmodel.h \
   $${PWD}/qcepnewdatagroupdialog.h \
   $${PWD}/qcepnewdatacolumndialog.h \
@@ -251,7 +248,11 @@ HEADERS += \
     $$PWD/qobject-ptr.h \
     $$PWD/qcepobjecttreemodel.h \
     $$PWD/qcepobjecttreewindow.h \
-    $$PWD/qcepobjectpropertiesmodel.h
+    $$PWD/qcepobjectpropertiesmodel.h \
+    $$PWD/qthread-ptr.h \
+    $$PWD/qnewthread.h \
+    $$PWD/qnewthread-ptr.h \
+    $$PWD/qcepthread-ptr.h
 
 contains (DEFINES, HAVE_DATAVIS) {
  HEADERS += \

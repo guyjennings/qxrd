@@ -1,9 +1,0 @@
-#ifndef QCEPALLOCATORTHREADPTR_H
-#define QCEPALLOCATORTHREADPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QcepAllocatorThread)
-
-#endif // QCEPALLOCATORTHREADPTR_H
-

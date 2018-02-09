@@ -44,11 +44,6 @@ QModelIndex QcepObjectTreeModel::index(int row, int column, const QModelIndex &p
     parentObject = m_Object;
   }
 
-  printMessage(tr("QcepObjectTreeModel::index(%1,%2,%3 [%4])")
-               .arg(row).arg(column)
-               .arg(parentObject?parentObject->objectName():"NULL")
-               .HEXARG(parentObject.data()));
-
   if (parentObject) {
     QcepObjectPtr childItem = parentObject -> childPtr(row);
 
@@ -56,6 +51,12 @@ QModelIndex QcepObjectTreeModel::index(int row, int column, const QModelIndex &p
       res = createIndex(row, column, childItem.data());
     }
   }
+
+  printMessage(tr("QcepObjectTreeModel::index(%1,%2,%3 [%4]) = %5")
+               .arg(row).arg(column)
+               .arg(parentObject?parentObject->objectName():"NULL")
+               .HEXARG(parentObject.data())
+               .arg(indexDescription(res)));
 
   return res;
 }
@@ -94,6 +95,10 @@ int QcepObjectTreeModel::rowCount(const QModelIndex &parent) const
 
       res = root->childCount();
     }
+  } else {
+    QcepObjectPtr root(m_Object);
+
+    res = root->childCount();
   }
 
   printMessage(tr("QcepObjectTreeModel::rowCount(%1) = %2").arg(indexDescription(parent)).arg(res));

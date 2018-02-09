@@ -84,6 +84,15 @@ void QcepObject::initialize(QObjectWPtr parent)
 
   m_Initialized = true;
   m_Parent      = parent;
+
+  if (m_Parent) {
+    QcepObjectPtr parP =
+        qSharedPointerDynamicCast<QcepObject>(parent);
+
+    if (parP) {
+      parP -> addChildPtr(sharedFromThis());
+    }
+  }
 }
 
 #ifndef QT_NO_DEBUG
