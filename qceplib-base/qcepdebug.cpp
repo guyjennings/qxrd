@@ -23,6 +23,7 @@ QcepDebugDictionary::QcepDebugDictionary() :
   setMessage(DEBUG_IMPORT,       "Data Import Operations");
   setMessage(DEBUG_EXPORT,       "Data Export Operations");
   setMessage(DEBUG_DATABROWSER,  "Data Browser Operations");
+  setMessage(DEBUG_OBJECTBROWSER,  "Object Browser Operations");
   setMessage(DEBUG_DRAGDROP,     "Drag and Drop Operations");
   setMessage(DEBUG_PANEL_SHOW,   "Visualize PE Panel Boundaries");
 }

@@ -607,22 +607,30 @@ void QcepObject::readSettings(QSettings *set)
 //#ifndef QT_NO_DEBUG
 //  checkObjectInitialization();
 //#endif
-
-  readObjectSettings(set);
-}
-
-void QcepObject::readObjectSettings(QSettings *set)
-{
-//#ifndef QT_NO_DEBUG
-//  checkObjectInitialization();
-//#endif
-
   if (set) {
     set->beginGroup("properties");
     QcepProperty::readSettings(this, set);
     set->endGroup();
   }
+
+  m_ChangeCount.fetchAndStoreOrdered(0);
+  m_LastChanged.store(NULL);
+
+//  readObjectSettings(set);
 }
+
+//void QcepObject::readObjectSettings(QSettings *set)
+//{
+////#ifndef QT_NO_DEBUG
+////  checkObjectInitialization();
+////#endif
+
+//  if (set) {
+//    set->beginGroup("properties");
+//    QcepProperty::readSettings(this, set);
+//    set->endGroup();
+//  }
+//}
 
 //TODO: add parent ptr for initialization
 QcepObjectPtr QcepObject::readObject(QSettings *set)
@@ -640,21 +648,22 @@ QcepObjectPtr QcepObject::readObject(QSettings *set)
       res = construct(name, className);
 
       if (res) {
-        int nChildren = set -> beginReadArray("children");
+        //TODO: don't do this...
+//        int nChildren = set -> beginReadArray("children");
 
-        for (int i=0; i<nChildren; i++) {
-          set->setArrayIndex(i);
+//        for (int i=0; i<nChildren; i++) {
+//          set->setArrayIndex(i);
 
-          QcepObjectPtr child = readObject(set);
+//          QcepObjectPtr child = readObject(set);
 
-          if (child) {
-            child->initialize(res);
+//          if (child) {
+//            child->initialize(res);
 
-            res->addChildPtr(child);
-          }
-        }
+//            res->addChildPtr(child);
+//          }
+//        }
 
-        set->endArray();
+//        set->endArray();
 
         res -> readSettings(set);
       }
@@ -695,31 +704,6 @@ QcepObjectPtr QcepObject::construct(QString name, QString className)
   }
 
   return res;
-}
-
-void QcepObject::writeObject(QSettings *set)
-{
-#ifndef QT_NO_DEBUG
-  checkObjectInitialization();
-#endif
-
-  writeSettings(set);
-
-  int nChildren = childCount();
-
-  set->beginWriteArray("children", nChildren);
-
-  for (int i=0; i<nChildren; i++) {
-    set->setArrayIndex(i);
-
-    QcepObjectPtr child = childPtr(i);
-
-    if (child) {
-      child->writeObject(set);
-    }
-  }
-
-  set->endArray();
 }
 
 QString QcepObject::addSlashes(QString str)

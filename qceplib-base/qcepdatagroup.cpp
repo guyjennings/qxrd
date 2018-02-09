@@ -60,17 +60,21 @@ void QcepDataGroup::readSettings(QSettings *settings)
   if (settings) {
     int n = settings->beginReadArray("items");
 
+    //TODO: rewrite to use readObject...
     for (int i=0; i<n; i++) {
       settings->setArrayIndex(i);
 
-      QString name = settings->value("name").toString();
-      QString id = settings->value("class").toString();
-
-      QcepDataObjectPtr obj = QcepAllocator::newDataObject(id, name);
+      QcepObjectPtr obj = QcepObject::readObject(settings);
 
       if (obj) {
-        addChildPtr(obj);
-        obj -> readSettings(settings);
+        QcepDataObjectPtr dobj =
+            qSharedPointerDynamicCast<QcepDataObject>(obj);
+
+        if (dobj) {
+          dobj -> initialize(sharedFromThis());
+
+          append(dobj);
+        }
       }
     }
 

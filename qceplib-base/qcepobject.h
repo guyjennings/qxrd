@@ -49,7 +49,7 @@ public slots:
   QString toScriptLiteral(QVariant v);
   QVariant fromScriptLiteral(QString lit);
 
-  void readObjectSettings(QSettings *set);
+//  void readObjectSettings(QSettings *set);
 
   int isChanged() const;
   QString changedBy() const;
@@ -83,7 +83,6 @@ public:
   static QcepObjectPtr readObject(QSettings *set);
   static QcepObjectPtr construct(QString name, QString className);
 
-  virtual void writeObject(QSettings *set);
   virtual void writeSettings(QSettings *set);
   virtual void readSettings(QSettings *set);
 
