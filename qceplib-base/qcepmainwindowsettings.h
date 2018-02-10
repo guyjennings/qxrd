@@ -14,9 +14,17 @@ private:
 
 public:
   QcepMainWindowSettings(QString name);
+  void initialize(QObjectWPtr parent);
 
   virtual void openWindow() = 0;
   virtual void closeWindow() = 0;
+
+public:
+  Q_PROPERTY(int windowOpen READ get_WindowOpen WRITE set_WindowOpen)
+  QCEP_INTEGER_PROPERTY(WindowOpen)
+
+  Q_PROPERTY(QRectF windowRect READ get_WindowRect WRITE set_WindowRect)
+  QCEP_DOUBLE_RECT_PROPERTY(WindowRect)
 };
 
 Q_DECLARE_METATYPE(QcepMainWindowSettings*)

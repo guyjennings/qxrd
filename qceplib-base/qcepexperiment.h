@@ -28,6 +28,8 @@ public:
                           QString name);
   void initialize(QObjectWPtr parent);
 
+  virtual void defaultWindowSettings();
+
 signals:
 
 public slots:
