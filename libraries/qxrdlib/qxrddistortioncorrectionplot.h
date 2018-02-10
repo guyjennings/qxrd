@@ -14,7 +14,7 @@ class QXRD_EXPORT QxrdDistortionCorrectionPlot : public QcepPlot
   Q_OBJECT
 public:
   explicit QxrdDistortionCorrectionPlot(QWidget *parent = 0);
-  //TODO: change to QObjectWPtr...
+  //TODO: change to QcepObjectWPtr...
   void initialize(QcepPlotSettingsWPtr settings);
   void setWindow(QxrdWindow *win);
 

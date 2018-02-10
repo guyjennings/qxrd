@@ -18,7 +18,7 @@ private:
 public:
   Q_INVOKABLE QxrdDetectorControlWindowSettings(QString name);
 //  static QxrdDetectorControlWindowSettingsPtr newDetectorWindowSettings(QxrdDetectorSettingsWPtr det);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   void writeSettings(QSettings *set);
   void readSettings(QSettings *set);

@@ -11,7 +11,7 @@ class QxrdHistogramPlotWidget : public QxrdPlotWidget
 public:
   explicit QxrdHistogramPlotWidget(QWidget *parent);
 
-  //TODO: change to QObjectWPtr
+  //TODO: change to QcepObjectWPtr
   void initialize(QxrdHistogramPlotWidgetSettingsWPtr settings);
 };
 

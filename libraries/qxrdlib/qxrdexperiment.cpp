@@ -193,7 +193,7 @@ QxrdExperiment::~QxrdExperiment()
   }
 }
 
-QxrdExperimentWPtr QxrdExperiment::findExperiment(QObjectWPtr p)
+QxrdExperimentWPtr QxrdExperiment::findExperiment(QcepObjectWPtr p)
 {
   QxrdExperimentWPtr res =
       qSharedPointerDynamicCast<QxrdExperiment>(p);
@@ -218,7 +218,7 @@ QxrdExperimentThreadWPtr QxrdExperiment::experimentThread() const
   return QxrdExperimentThreadPtr(t);
 }
 
-void QxrdExperiment::initialize(QObjectWPtr parent)
+void QxrdExperiment::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 

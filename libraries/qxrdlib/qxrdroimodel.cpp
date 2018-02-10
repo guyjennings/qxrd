@@ -17,7 +17,7 @@ QxrdROIModel::~QxrdROIModel()
 {
 }
 
-void QxrdROIModel::initialize(QObjectWPtr parent)
+void QxrdROIModel::initialize(QcepObjectWPtr parent)
 {
 }
 

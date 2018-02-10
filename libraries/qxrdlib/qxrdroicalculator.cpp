@@ -36,7 +36,7 @@ QxrdROICalculator::~QxrdROICalculator()
   }
 }
 
-void QxrdROICalculator::initialize(QObjectWPtr parent)
+void QxrdROICalculator::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

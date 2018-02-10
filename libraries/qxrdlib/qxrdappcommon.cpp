@@ -43,7 +43,7 @@ QxrdAppCommon::~QxrdAppCommon()
 {
 }
 
-void QxrdAppCommon::initialize(QObjectWPtr parent)
+void QxrdAppCommon::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
@@ -88,7 +88,7 @@ void QxrdAppCommon::finish()
   }
 }
 
-QxrdAppCommonWPtr QxrdAppCommon::findApplication(QObjectWPtr p)
+QxrdAppCommonWPtr QxrdAppCommon::findApplication(QcepObjectWPtr p)
 {
   QxrdAppCommonWPtr res =
       qSharedPointerDynamicCast<QxrdAppCommon>(p);

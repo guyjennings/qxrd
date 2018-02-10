@@ -29,7 +29,7 @@ private:
 public:
   explicit QxrdApplication(int &argc, char **argv);
   virtual ~QxrdApplication();
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   //TODO: merge into 'initialize'
   bool init(int &argc, char **argv);

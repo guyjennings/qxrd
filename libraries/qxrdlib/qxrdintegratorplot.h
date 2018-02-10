@@ -16,7 +16,7 @@ class QXRD_EXPORT QxrdIntegratorPlot : public QcepPlot
 
 public:
   QxrdIntegratorPlot(QWidget *parent=0);
-  //TODO: change to QObjectWPtr...
+  //TODO: change to QcepObjectWPtr...
   void initialize(QcepPlotSettingsWPtr settings);
 
   void setProcessor(QxrdProcessorWPtr proc);

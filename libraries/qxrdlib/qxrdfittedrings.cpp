@@ -14,7 +14,7 @@ QxrdFittedRings::QxrdFittedRings(QString name, int sz)
 //  appendColumn("rot");
 }
 
-void QxrdFittedRings::initialize(QObjectWPtr parent)
+void QxrdFittedRings::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 

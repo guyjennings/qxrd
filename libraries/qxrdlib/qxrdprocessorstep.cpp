@@ -10,7 +10,7 @@ QxrdProcessorStep::~QxrdProcessorStep()
 {
 }
 
-void QxrdProcessorStep::initialize(QObjectWPtr p)
+void QxrdProcessorStep::initialize(QcepObjectWPtr p)
 {
   inherited::initialize(p);
 

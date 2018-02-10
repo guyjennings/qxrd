@@ -99,7 +99,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
                   argv)));
 }
 
-void QxrdApplication::initialize(QObjectWPtr parent)
+void QxrdApplication::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

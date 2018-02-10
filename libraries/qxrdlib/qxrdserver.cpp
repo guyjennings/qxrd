@@ -26,7 +26,7 @@ QxrdServer::QxrdServer(QString name) :
           this,      &QxrdServer::executeCommand);
 }
 
-void QxrdServer::initialize(QObjectWPtr parent)
+void QxrdServer::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 

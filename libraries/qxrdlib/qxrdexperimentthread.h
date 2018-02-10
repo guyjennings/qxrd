@@ -7,7 +7,6 @@
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include "qxrdexperimentsettings-ptr.h"
-#include "qobject-ptr.h"
 
 class QXRD_EXPORT QxrdExperimentThread : public QxrdThread
 {
@@ -22,7 +21,7 @@ public:
 
   ~QxrdExperimentThread();
 
-  static QxrdExperimentThreadWPtr findExperimentThread(QObjectWPtr parent);
+  static QxrdExperimentThreadWPtr findExperimentThread(QcepObjectWPtr parent);
 
   static QxrdExperimentThreadPtr newExperimentThread(QString path,
                                                      QxrdAppCommonWPtr parent,

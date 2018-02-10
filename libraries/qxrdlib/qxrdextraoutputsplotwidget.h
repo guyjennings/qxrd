@@ -11,7 +11,7 @@ class QxrdExtraOutputsPlotWidget : public QxrdPlotWidget
 public:
   explicit QxrdExtraOutputsPlotWidget(QWidget *parent);
 
-  //TODO: change to QObjectWPtr
+  //TODO: change to QcepObjectWPtr
   void initialize(QxrdExtraOutputsPlotWidgetSettingsWPtr settings);
 };
 

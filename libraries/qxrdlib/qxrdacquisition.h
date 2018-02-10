@@ -44,9 +44,9 @@ public:
   Q_INVOKABLE QxrdAcquisition(QString name);
   ~QxrdAcquisition();
 
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
-  static QxrdAcquisitionWPtr findAcquisition(QObjectWPtr p);
+  static QxrdAcquisitionWPtr findAcquisition(QcepObjectWPtr p);
 
   //TODO: change to experiment
   void setWindow(QxrdWindowWPtr win);

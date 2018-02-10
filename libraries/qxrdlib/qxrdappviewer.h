@@ -18,7 +18,7 @@ private:
 public:
   explicit QxrdAppViewer(int &argc, char **argv);
   virtual ~QxrdAppViewer();
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   //TODO: merge into 'initialize'
   bool init(int &argc, char **argv);

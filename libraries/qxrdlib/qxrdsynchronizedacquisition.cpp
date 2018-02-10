@@ -24,7 +24,7 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
 #endif
 }
 
-void QxrdSynchronizedAcquisition::initialize(QObjectWPtr parent)
+void QxrdSynchronizedAcquisition::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

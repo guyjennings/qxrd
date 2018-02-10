@@ -26,7 +26,7 @@ private:
 public:
   Q_INVOKABLE QxrdPolarTransform(QString name);
   virtual ~QxrdPolarTransform();
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   QxrdExperimentWPtr experiment() const;
   QxrdIntegratorWPtr integrator() const;

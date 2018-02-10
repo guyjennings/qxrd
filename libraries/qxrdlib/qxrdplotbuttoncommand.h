@@ -19,7 +19,7 @@ public:
                         QString                    toolTip,
                         bool                       checkable);
 
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   QAction     *contextMenuAction(const QPoint &pos);
   QToolButton *toolButton();

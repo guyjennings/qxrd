@@ -61,7 +61,7 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
           this,           &QxrdDetectorSettings::startOrStop);
 }
 
-void QxrdDetectorSettings::initialize(QObjectWPtr parent)
+void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
 {
   THREAD_CHECK;
 
@@ -112,7 +112,7 @@ void QxrdDetectorSettings::initialize(QObjectWPtr parent)
   m_DetectorDriver -> start();
 }
 
-QxrdDetectorSettingsWPtr QxrdDetectorSettings::findDetectorSettings(QObjectWPtr p)
+QxrdDetectorSettingsWPtr QxrdDetectorSettings::findDetectorSettings(QcepObjectWPtr p)
 {
   QxrdDetectorSettingsWPtr res =
       qSharedPointerDynamicCast<QxrdDetectorSettings>(p);
@@ -581,7 +581,7 @@ double QxrdDetectorSettings::scalerCounts(int chan)
   }
 }
 
-QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QObjectWPtr parent,
+QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QcepObjectWPtr parent,
                                                           int detType)
 {
   QxrdDetectorSettingsPtr det;

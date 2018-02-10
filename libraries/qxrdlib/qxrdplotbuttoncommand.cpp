@@ -42,7 +42,7 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
           this,          &QxrdPlotButtonCommand::clicked);
 }
 
-void QxrdPlotButtonCommand::initialize(QObjectWPtr parent)
+void QxrdPlotButtonCommand::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 

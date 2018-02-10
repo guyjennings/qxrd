@@ -31,7 +31,7 @@ public:
   Q_INVOKABLE QxrdIntegrator(QString name);
   virtual ~QxrdIntegrator();
 
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
 public:
   Q_PROPERTY(int oversample READ get_Oversample WRITE set_Oversample)

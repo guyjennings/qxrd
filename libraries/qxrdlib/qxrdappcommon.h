@@ -11,7 +11,6 @@
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdmainwindowsettings-ptr.h"
 #include "qxrdappcommon-ptr.h"
-#include "qobject-ptr.h"
 #include <QTimer>
 
 class QXRD_EXPORT QxrdAppCommon : public QcepApplication
@@ -24,9 +23,9 @@ private:
 public:
   explicit QxrdAppCommon(int &argc, char **argv);
   virtual ~QxrdAppCommon();
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
-  static QxrdAppCommonWPtr findApplication(QObjectWPtr p);
+  static QxrdAppCommonWPtr findApplication(QcepObjectWPtr p);
 
   //TODO: merge into 'initialize'
   virtual bool init(int &argc, char **argv);

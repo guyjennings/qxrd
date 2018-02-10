@@ -10,7 +10,7 @@ QxrdMainWindowSettings::QxrdMainWindowSettings(QString name)
 {
 }
 
-void QxrdMainWindowSettings::initialize(QObjectWPtr parent)
+void QxrdMainWindowSettings::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 

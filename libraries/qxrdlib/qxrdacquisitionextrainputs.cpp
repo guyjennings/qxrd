@@ -42,7 +42,7 @@ QxrdAcquisitionExtraInputs::~QxrdAcquisitionExtraInputs()
   }
 }
 
-void QxrdAcquisitionExtraInputs::initialize(QObjectWPtr parent)
+void QxrdAcquisitionExtraInputs::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 

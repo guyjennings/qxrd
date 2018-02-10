@@ -29,7 +29,7 @@ public:
   QxrdJSEngine(QxrdAppCommonWPtr app,
                QxrdExperimentWPtr exp);
   virtual ~QxrdJSEngine();
-  //TODO: change to QObjectWPtr
+  //TODO: change to QcepObjectWPtr
   void initialize();
   void setWindow(QxrdWindowWPtr win);
 

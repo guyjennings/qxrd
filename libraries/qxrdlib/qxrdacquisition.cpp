@@ -100,7 +100,7 @@ QxrdAcquisition::QxrdAcquisition(QString name) :
   m_IdleTimer.start(1000);
 }
 
-void QxrdAcquisition::initialize(QObjectWPtr parent)
+void QxrdAcquisition::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
   
@@ -153,7 +153,7 @@ QxrdAcquisition::~QxrdAcquisition()
 //  }
 }
 
-QxrdAcquisitionWPtr QxrdAcquisition::findAcquisition(QObjectWPtr p)
+QxrdAcquisitionWPtr QxrdAcquisition::findAcquisition(QcepObjectWPtr p)
 {
   QxrdAcquisitionWPtr res =
       qSharedPointerDynamicCast<QxrdAcquisition>(p);

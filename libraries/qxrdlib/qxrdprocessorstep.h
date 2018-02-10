@@ -16,7 +16,7 @@ public:
   Q_INVOKABLE QxrdProcessorStep(QString name);
   virtual ~QxrdProcessorStep();
 
-  void initialize(QObjectWPtr p);
+  void initialize(QcepObjectWPtr p);
 
 protected:
   QxrdProcessorWPtr m_Processor;

@@ -6,7 +6,7 @@ QxrdROIVector::QxrdROIVector(QString name)
 {
 }
 
-void QxrdROIVector::initialize(QObjectWPtr parent)
+void QxrdROIVector::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

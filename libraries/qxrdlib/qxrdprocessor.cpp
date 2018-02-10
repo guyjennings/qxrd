@@ -181,7 +181,7 @@ QxrdProcessor::~QxrdProcessor()
 {
 }
 
-void QxrdProcessor::initialize(QObjectWPtr parent)
+void QxrdProcessor::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
@@ -212,7 +212,7 @@ void QxrdProcessor::shutdown()
   thread()->exit();
 }
 
-QxrdProcessorWPtr QxrdProcessor::findProcessor(QObjectWPtr p)
+QxrdProcessorWPtr QxrdProcessor::findProcessor(QcepObjectWPtr p)
 {
   QxrdProcessorWPtr res =
       qSharedPointerDynamicCast<QxrdProcessor>(p);

@@ -9,7 +9,7 @@ QxrdAcqCommon::~QxrdAcqCommon()
 {
 }
 
-void QxrdAcqCommon::initialize(QObjectWPtr parent)
+void QxrdAcqCommon::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

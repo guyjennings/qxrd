@@ -35,14 +35,14 @@ private:
 public:
   QxrdDetectorSettings(QString name, int detType);
 
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   virtual ~QxrdDetectorSettings();
 
-  static QxrdDetectorSettingsWPtr findDetectorSettings(QObjectWPtr p);
+  static QxrdDetectorSettingsWPtr findDetectorSettings(QcepObjectWPtr p);
 
   //TODO: rename to newDetectorSettings
-  static QxrdDetectorSettingsPtr newDetector(QObjectWPtr parent, int detType);
+  static QxrdDetectorSettingsPtr newDetector(QcepObjectWPtr parent, int detType);
 
   static void registerMetaTypes();
 

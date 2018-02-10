@@ -30,7 +30,7 @@ QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
 {
 }
 
-void QxrdGenerateTestImage::initialize(QObjectWPtr parent)
+void QxrdGenerateTestImage::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

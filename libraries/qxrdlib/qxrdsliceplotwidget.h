@@ -11,7 +11,7 @@ class QxrdSlicePlotWidget : public QxrdPlotWidget
 public:
   explicit QxrdSlicePlotWidget(QWidget *parent);
 
-  //TODO: change to QObjectWPtr
+  //TODO: change to QcepObjectWPtr
   void initialize(QxrdSlicePlotWidgetSettingsWPtr settings);
 };
 

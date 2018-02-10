@@ -17,7 +17,7 @@ public:
   explicit QxrdImagePlotWidget(QWidget *parent = 0);
   ~QxrdImagePlotWidget();
 
-  //TODO: change to QObjectWPtr
+  //TODO: change to QcepObjectWPtr
   void initialize(QxrdImagePlotWidgetSettingsWPtr settings,
                   QxrdProcessorWPtr               processor);
 

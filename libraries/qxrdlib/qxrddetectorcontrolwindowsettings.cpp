@@ -16,7 +16,7 @@ QxrdDetectorControlWindowSettings::QxrdDetectorControlWindowSettings(QString nam
         new QxrdImagePlotWidgetSettings("detectorPlotWidget"));
 }
 
-void QxrdDetectorControlWindowSettings::initialize(QObjectWPtr parent)
+void QxrdDetectorControlWindowSettings::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 

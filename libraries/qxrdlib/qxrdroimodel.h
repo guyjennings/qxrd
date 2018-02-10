@@ -22,7 +22,7 @@ public:
   QxrdROIModel(QxrdROIVectorWPtr rois);
   virtual ~QxrdROIModel();
 
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
 //  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROIModelPtr &coords);
 //  static void fromScriptValue(const QScriptValue &obj, QxrdROIModelPtr &coords);

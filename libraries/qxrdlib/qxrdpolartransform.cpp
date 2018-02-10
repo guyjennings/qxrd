@@ -32,7 +32,7 @@ QxrdPolarTransform::~QxrdPolarTransform()
 {
 }
 
-void QxrdPolarTransform::initialize(QObjectWPtr parent)
+void QxrdPolarTransform::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

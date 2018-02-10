@@ -29,7 +29,7 @@ class QXRD_EXPORT QxrdImagePlot : public QcepPlot
 
 public:
   QxrdImagePlot(QWidget *parent = 0);
-  //TODO: change to QObjectWPtr...
+  //TODO: change to QcepObjectWPtr...
   void initialize(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent);
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
 

@@ -1,6 +1,6 @@
 #include "qxrdcalibrantdspacings.h"
 
-void QxrdCalibrantDSpacings::initialize(QObjectWPtr parent)
+void QxrdCalibrantDSpacings::initialize(QcepObjectWPtr parent)
 {
 }
 

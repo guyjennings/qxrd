@@ -59,9 +59,9 @@ public:
                  int mode);
 
   virtual ~QxrdExperiment();
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
-  static QxrdExperimentWPtr findExperiment(QObjectWPtr p);
+  static QxrdExperimentWPtr findExperiment(QcepObjectWPtr p);
 
   static void registerMetaTypes();
 

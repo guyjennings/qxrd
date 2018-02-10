@@ -13,7 +13,7 @@ public:
   explicit QxrdCenteringPlotWidget(QWidget *parent = 0);
   ~QxrdCenteringPlotWidget();
 
-  //TODO: change to QObjectWPtr
+  //TODO: change to QcepObjectWPtr
   void initialize(QxrdCenteringPlotWidgetSettingsWPtr settings, QxrdCenterFinderWPtr cf);
 
 private:

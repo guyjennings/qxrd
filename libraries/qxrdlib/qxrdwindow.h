@@ -48,7 +48,7 @@ public:
              QxrdAcquisitionWPtr acqw,
              QxrdProcessorWPtr procw);
   virtual ~QxrdWindow();
-  //TODO: change to QObjectWPtr
+  //TODO: change to QcepObjectWPtr
   void initialize();
 //  void setupMenus();
 

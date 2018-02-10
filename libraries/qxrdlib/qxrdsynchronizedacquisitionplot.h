@@ -11,7 +11,7 @@ class QXRD_EXPORT QxrdSynchronizedAcquisitionPlot : public QcepPlot
   Q_OBJECT
 public:
   explicit QxrdSynchronizedAcquisitionPlot(QWidget *parent = 0);
-  //TODO: change to QObjectWPtr...
+  //TODO: change to QcepObjectWPtr...
   void initialize(QxrdSynchronizedAcquisitionPlotSettingsWPtr settings);
 
 signals:

@@ -86,7 +86,7 @@ QxrdExperimentPtr QxrdExperimentThread::experiment() const
   return QxrdExperimentPtr();
 }
 
-QxrdExperimentThreadWPtr QxrdExperimentThread::findExperimentThread(QObjectWPtr p)
+QxrdExperimentThreadWPtr QxrdExperimentThread::findExperimentThread(QcepObjectWPtr p)
 {
   QxrdExperimentThreadWPtr res =
       qSharedPointerDynamicCast<QxrdExperimentThread>(p);

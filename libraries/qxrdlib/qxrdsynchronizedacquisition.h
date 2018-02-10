@@ -22,7 +22,7 @@ private:
 
 public:
   Q_INVOKABLE QxrdSynchronizedAcquisition(QString name);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
   virtual ~QxrdSynchronizedAcquisition();
 
   void readSettings(QSettings *settings);

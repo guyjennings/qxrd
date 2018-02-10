@@ -22,7 +22,7 @@ class QXRD_EXPORT QxrdCenterFinderPlot : public QcepPlot
 
 public:
   QxrdCenterFinderPlot(QWidget *parent=0);
-  //TODO: change to QObjectWPtr...
+  //TODO: change to QcepObjectWPtr...
   void initialize(QcepPlotSettingsWPtr settings);
 
   void setWindow(QxrdWindow *win);

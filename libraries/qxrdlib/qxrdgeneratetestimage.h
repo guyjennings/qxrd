@@ -22,7 +22,7 @@ private:
 
 public:
   Q_INVOKABLE QxrdGenerateTestImage(QString name);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
 public slots:
   void setDimension(int nc, int nr);

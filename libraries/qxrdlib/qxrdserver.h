@@ -18,7 +18,7 @@ private:
 
 public:
   Q_INVOKABLE QxrdServer(QString name);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
   virtual ~QxrdServer();
 
   virtual void readSettings(QSettings *settings);

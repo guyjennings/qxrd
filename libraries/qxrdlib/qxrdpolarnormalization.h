@@ -21,7 +21,7 @@ private:
 
 public:
   Q_INVOKABLE QxrdPolarNormalization(QString name);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   QcepDataObjectPtr transform(QcepDoubleImageDataPtr img);
 

@@ -12,7 +12,7 @@ public:
   explicit QxrdIntegratedPlotWidget(QWidget *parent = 0);
   ~QxrdIntegratedPlotWidget();
 
-  //TODO: change to QObjectWPtr
+  //TODO: change to QcepObjectWPtr
   void initialize(QxrdIntegratedPlotWidgetSettingsWPtr settings);
 };
 

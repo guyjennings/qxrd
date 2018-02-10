@@ -17,7 +17,7 @@ public:
   QxrdAcqCommon(QString name);
   ~QxrdAcqCommon();
 
-  virtual void initialize(QObjectWPtr);
+  virtual void initialize(QcepObjectWPtr);
 };
 
 #endif // QXRDACQCOMMON_H

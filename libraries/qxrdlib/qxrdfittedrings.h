@@ -14,7 +14,7 @@ private:
 
 public:
   Q_INVOKABLE QxrdFittedRings(QString name, int sz=0);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
 public slots:
   void append(int n,

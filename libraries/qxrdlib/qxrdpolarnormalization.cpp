@@ -18,7 +18,7 @@ QxrdPolarNormalization::QxrdPolarNormalization(QString name) :
 {
 }
 
-void QxrdPolarNormalization::initialize(QObjectWPtr parent)
+void QxrdPolarNormalization::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

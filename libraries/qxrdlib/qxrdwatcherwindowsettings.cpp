@@ -15,7 +15,7 @@ QxrdWatcherWindowSettings::QxrdWatcherWindowSettings(QString name)
 
 }
 
-void QxrdWatcherWindowSettings::initialize(QObjectWPtr parent)
+void QxrdWatcherWindowSettings::initialize(QcepObjectWPtr parent)
 {
   QxrdMainWindowSettings::initialize(parent);
 

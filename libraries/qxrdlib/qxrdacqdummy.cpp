@@ -11,7 +11,7 @@ QxrdAcqDummy::~QxrdAcqDummy()
 {
 }
 
-void QxrdAcqDummy::initialize(QObjectWPtr parent)
+void QxrdAcqDummy::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

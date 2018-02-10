@@ -25,7 +25,7 @@ private:
 
 public:
   Q_INVOKABLE QxrdAcquisitionExtraInputs(QString name);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
   virtual ~QxrdAcquisitionExtraInputs();
 
 public:

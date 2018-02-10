@@ -92,7 +92,7 @@ QxrdIntegrator::~QxrdIntegrator()
   }
 }
 
-void QxrdIntegrator::initialize(QObjectWPtr parent)
+void QxrdIntegrator::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 

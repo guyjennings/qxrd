@@ -12,7 +12,7 @@ QxrdAppViewerSettings::~QxrdAppViewerSettings()
 {
 }
 
-void QxrdAppViewerSettings::initialize(QObjectWPtr parent)
+void QxrdAppViewerSettings::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

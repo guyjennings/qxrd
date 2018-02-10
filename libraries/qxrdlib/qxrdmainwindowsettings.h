@@ -19,7 +19,7 @@ private:
 public:
   QxrdMainWindowSettings(QString name);
 
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   void openWindow();
   void closeWindow();
