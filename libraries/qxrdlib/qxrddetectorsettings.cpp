@@ -22,7 +22,7 @@
 #include <QThread>
 
 QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
-  QcepObject(name),
+  inherited(name),
   m_Application(),
   m_Experiment(),
   m_Acquisition(),
@@ -64,6 +64,8 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
 void QxrdDetectorSettings::initialize(QObjectWPtr parent)
 {
   THREAD_CHECK;
+
+  inherited::initialize(parent);
 
   printf("QxrdDetectorSettings::initialize(%p)\n", this);
 
@@ -311,9 +313,7 @@ QxrdROIPtr QxrdDetectorSettings::roi(int i)
 
 void QxrdDetectorSettings::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::readSettings(settings);
+  inherited::readSettings(settings);
 
   if (m_Processor) {
     settings->beginGroup("processor");
@@ -330,9 +330,7 @@ void QxrdDetectorSettings::readSettings(QSettings *settings)
 
 void QxrdDetectorSettings::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 
   if (m_Processor) {
     settings->beginGroup("processor");

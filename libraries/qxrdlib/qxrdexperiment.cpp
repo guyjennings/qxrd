@@ -237,20 +237,14 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
 
     m_FileSaverThread = QxrdFileSaverThreadPtr(
           new QxrdFileSaverThread(sharedFromThis()));
-
+    m_FileSaverThread -> initialize(sharedFromThis());
     m_FileSaverThread -> start();
+
     m_FileSaver = m_FileSaverThread -> fileSaver();
 
     splashMessage("Initializing Data Processing");
 
     m_Processor -> initialize(sharedFromThis());
-
-    QxrdFileSaverPtr saver(m_FileSaver);
-
-    if (saver) {
-      saver -> setProcessor(m_Processor);
-      saver -> setExperiment(myself);
-    }
 
     splashMessage("Initializing Data Acquisition");
 
@@ -259,10 +253,6 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
     m_CalibrantLibrary -> initialize(sharedFromThis());
 
     m_CalibrantDSpacings -> initialize(sharedFromThis());
-
-    if (saver) {
-      saver -> setAcquisition(m_Acquisition);
-    }
 
     QxrdAcquisitionPtr acq(
           qSharedPointerDynamicCast<QxrdAcquisition>(m_Acquisition));
@@ -304,17 +294,19 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
     splashMessage("Starting SPEC Server");
 
     m_ServerThread = QxrdServerThreadPtr(
-          new QxrdServerThread(myself, "qxrd"));
-
+          new QxrdServerThread(myself, "specServerThread"));
+    m_ServerThread -> initialize(sharedFromThis());
     m_ServerThread -> start();
+
     m_Server = m_ServerThread -> server();
 
     splashMessage("Starting Simple Socket Server");
 
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
-          new QxrdSimpleServerThread(myself, "simpleserver"));
-
+          new QxrdSimpleServerThread(myself, "simpleServerThread"));
+    m_SimpleServerThread -> initialize(sharedFromThis());
     m_SimpleServerThread -> start();
+
     m_SimpleServer = m_SimpleServerThread -> server();
 
 //    m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
@@ -333,8 +325,13 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
 
     m_ScriptEngineJS -> initialize();
 
-    QxrdServerPtr srv(m_Server);
     QxrdScriptEnginePtr eng(m_ScriptEngine);
+
+    QxrdServerPtr srv(m_Server);
+
+    if (srv) {
+      srv -> initialize(m_ServerThread);
+    }
 
 //    if (eng) {
 //      m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
@@ -352,12 +349,25 @@ void QxrdExperiment::initialize(QObjectWPtr parent)
 
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
+    if (ssrv) {
+      ssrv -> initialize(m_SimpleServerThread);
+    }
+
     if (ssrv && eng) {
       connect(ssrv.data(),  &QxrdSimpleServer::executeCommand,
               eng.data(),   &QxrdScriptEngine::evaluateSimpleServerCommand);
 
       connect(eng.data(),   &QxrdScriptEngine::simpleServerResultAvailable,
               ssrv.data(),  &QxrdSimpleServer::finishedCommand);
+    }
+
+    QxrdFileSaverPtr saver(m_FileSaver);
+
+    if (saver) {
+      saver -> initialize(m_FileSaverThread);
+      saver -> setProcessor(m_Processor);
+      saver -> setExperiment(myself);
+      saver -> setAcquisition(m_Acquisition);
     }
 
 #ifdef Q_OS_WIN32

@@ -15,7 +15,7 @@ QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdExperimentWPtr doc, QString n
     printf("QxrdSimpleServerThread::QxrdSimpleServerThread(%p)\n", this);
   }
 
-  setObjectName("simpleserver");
+  setObjectName("simpleServerThread");
 }
 
 QxrdSimpleServerThread::~QxrdSimpleServerThread()
@@ -52,7 +52,7 @@ void QxrdSimpleServerThread::run()
   }
 
   m_Server = QxrdSimpleServerPtr(
-        new QxrdSimpleServer(m_Name));
+        new QxrdSimpleServer("simpleServer"));
 
   int rc = exec();
 

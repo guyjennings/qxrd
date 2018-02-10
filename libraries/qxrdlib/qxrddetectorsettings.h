@@ -29,6 +29,9 @@ class QXRD_EXPORT QxrdDetectorSettings : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QxrdDetectorSettings(QString name, int detType);
 
@@ -136,7 +139,6 @@ protected:
   QxrdDetectorDriverThreadPtr          m_DetectorDriver;
 
 private:
-  QMutex                      m_Mutex;
   QSemaphore                  m_NAcquiredImages;
   QcepImageBaseQueue          m_AcquiredImages;
 

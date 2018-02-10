@@ -18,7 +18,7 @@ QxrdServerThread::QxrdServerThread(QxrdExperimentWPtr doc, QString name) :
     printf("QxrdServerThread::QxrdServerThread(%p)\n", this);
   }
 
-  setObjectName("specserver");
+  setObjectName("specServerThread");
 }
 
 QxrdServerThread::~QxrdServerThread()
@@ -55,7 +55,7 @@ void QxrdServerThread::run()
   }
 
   m_Server = QxrdServerPtr(
-        new QxrdServer(m_Name));
+        new QxrdServer("specServer"));
 
   m_Server->initialize(m_Experiment);
 
