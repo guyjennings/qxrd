@@ -179,8 +179,8 @@ public:
 private:
   QxrdAppCommonWPtr               m_Application;
   QxrdExperimentThreadWPtr        m_ExperimentThread;
-  QxrdWindowSettingsPtr           m_WindowSettings;
-  QxrdWindowPtr                   m_Window;
+  QxrdWindowSettingsPtr           m_WindowSettings;   //TODO: elim
+  QxrdWindowPtr                   m_Window;           //TODO: elim
 //  QxrdDetectorControlWindowPtr        m_AcquisitionWindow;
   QxrdServerThreadPtr             m_ServerThread;
   QxrdServerWPtr                  m_Server;

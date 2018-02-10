@@ -6,9 +6,7 @@
 #include "qxrdprocessor.h"
 
 QxrdMainWindowSettings::QxrdMainWindowSettings(QString name)
-  : QcepMainWindowSettings(name),
-    m_WindowOpen(this, "windowOpen", 0, "Is window open?"),
-    m_WindowRect(this, "windowRect", QRectF(), "Window Geometry")
+  : QcepMainWindowSettings(name)
 {
 }
 

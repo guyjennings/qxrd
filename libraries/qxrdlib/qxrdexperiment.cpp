@@ -1116,7 +1116,7 @@ void QxrdExperiment::readSettings(QSettings *settings)
       set_QxrdVersion(STR(QXRD_VERSION));
     }
 
-    defaultWindowSettings();
+//    defaultWindowSettings();
   }
 
   if (qcepDebug(DEBUG_PREFS)) {
@@ -1444,6 +1444,8 @@ void QxrdExperiment::defaultWindowSettings()
 {
   THREAD_CHECK;
 
+  inherited::defaultWindowSettings();
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdWindowSettings("Main Window")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
@@ -1470,30 +1472,4 @@ void QxrdExperiment::defaultWindowSettings()
                          new QxrdMaskingWindowSettings("Masking")));
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdScriptingWindowSettings("Scripting")));
-
-  int nOpened = 0;
-
-  for (int i=0; i<windowSettingsCount(); i++) {
-    QxrdMainWindowSettingsPtr set =
-        qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(i));
-
-    if (set) {
-      set -> initialize(sharedFromThis());
-
-      if (set -> get_WindowOpen()) {
-        nOpened += 1;
-      }
-    }
-  }
-
-  if (nOpened == 0) {
-    // If no windows are open, open the first...
-
-    QxrdMainWindowSettingsPtr set =
-        qSharedPointerDynamicCast<QxrdMainWindowSettings>(windowSettings(0));
-
-    if (set) {
-      set -> set_WindowOpen(true);
-    }
-  }
 }
