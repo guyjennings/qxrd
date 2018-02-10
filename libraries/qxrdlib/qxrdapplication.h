@@ -27,9 +27,9 @@ private:
   typedef QxrdAppCommon inherited;
 
 public:
-  QxrdApplication(int &argc, char **argv);
+  explicit QxrdApplication(int &argc, char **argv);
   virtual ~QxrdApplication();
-  void initialize();
+  void initialize(QObjectWPtr parent);
 
   //TODO: merge into 'initialize'
   bool init(int &argc, char **argv);

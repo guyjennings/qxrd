@@ -22,9 +22,9 @@ private:
   typedef QcepApplication inherited;
 
 public:
-  QxrdAppCommon(int &argc, char **argv);
+  explicit QxrdAppCommon(int &argc, char **argv);
   virtual ~QxrdAppCommon();
-  void initialize();
+  void initialize(QObjectWPtr parent);
 
   static QxrdAppCommonWPtr findApplication(QObjectWPtr p);
 

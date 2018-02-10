@@ -48,6 +48,7 @@
 #include <QJsonObject>
 #include <QCommandLineParser>
 #include <QMessageBox>
+#include "qnewapplication.h"
 
 static QList<QDir> pluginsDirList;
 
@@ -80,7 +81,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
     printf("QxrdApplication::QxrdApplication(%p)\n", this);
   }
 
-  setQuitOnLastWindowClosed(false);
+  if (m_Application) {
+    m_Application -> setQuitOnLastWindowClosed(false);
+  }
 
   connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdApplication::onAutoSaveTimer);
 
@@ -96,9 +99,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
                   argv)));
 }
 
-void QxrdApplication::initialize()
+void QxrdApplication::initialize(QObjectWPtr parent)
 {
-  inherited::initialize();
+  inherited::initialize(parent);
 }
 
 bool QxrdApplication::init(int &argc, char **argv)
@@ -112,10 +115,12 @@ bool QxrdApplication::init(int &argc, char **argv)
 
   QDir::setCurrent(QDir::homePath());
 
-  setOrganizationName("cep");
-  setOrganizationDomain("xray.aps.anl.gov");
-  setApplicationName("qxrd");
-  setApplicationVersion(STR(QXRD_VERSION));
+  if (m_Application) {
+    m_Application -> setOrganizationName("cep");
+    m_Application -> setOrganizationDomain("xray.aps.anl.gov");
+    m_Application -> setApplicationName("qxrd");
+    m_Application -> setApplicationVersion(STR(QXRD_VERSION));
+  }
 
   printMessage("------ Starting QXRD Application ------");
 
@@ -633,7 +638,11 @@ bool QxrdApplication::event(QEvent *ev)
   QTime tick;
   tick.start();
 
-  bool res = QApplication::event(ev);
+  bool res = false;
+
+  if (m_Application) {
+    res = m_Application -> event(ev);
+  }
 
   int elapsed = tick.restart();
 

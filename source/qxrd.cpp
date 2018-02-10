@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     QxrdApplicationPtr app = QxrdApplicationPtr(
           new QxrdApplication(argc, argv));
 
-    app->initialize();
+    app->initialize(QObjectWPtr());
 
     if (app->init(argc, argv)) {
       QxrdApplicationSettingsPtr set(app->settings());

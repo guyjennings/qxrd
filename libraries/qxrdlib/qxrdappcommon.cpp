@@ -20,6 +20,7 @@
 #include <QThread>
 #include <QMessageBox>
 #include <QDesktopServices>
+#include "qnewapplication.h"
 
 QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   : inherited(argc, argv),
@@ -42,12 +43,12 @@ QxrdAppCommon::~QxrdAppCommon()
 {
 }
 
-void QxrdAppCommon::initialize()
+void QxrdAppCommon::initialize(QObjectWPtr parent)
 {
-  inherited::initialize();
+  inherited::initialize(parent);
 
   if (m_ApplicationSettings) {
-    m_ApplicationSettings->initialize(QcepObjectWPtr());
+    m_ApplicationSettings->initialize(sharedFromThis());
   }
 }
 
@@ -57,10 +58,10 @@ bool QxrdAppCommon::init(int &argc, char **argv)
 
   QThread::currentThread()->setObjectName("app");
 
-  connect(this,           &QCoreApplication::aboutToQuit,
-          this,           &QxrdAppCommon::finish);
-  connect(&m_SplashTimer, &QTimer::timeout,
-          this,           &QxrdAppCommon::hideSplash);
+  connect(m_Application.data(),  &QNewApplication::aboutToQuit,
+          this,                  &QxrdAppCommon::finish);
+  connect(&m_SplashTimer,        &QTimer::timeout,
+          this,                  &QxrdAppCommon::hideSplash);
 
   setupTiffHandlers();
 
@@ -128,57 +129,57 @@ void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
 
     parser.addPositionalArgument("files", "Files to open, optionally", "[file...]");
 
-    QCommandLineOption newOption({"n", "new"},      translate("main", "Open new experiment"));
+    QCommandLineOption newOption({"n", "new"},      QCoreApplication::translate("main", "Open new experiment"));
     if (wantFullOptions) {
       parser.addOption(newOption);
     }
 
-    QCommandLineOption freshOption({"f", "fresh"},  translate("main", "Fresh start"));
+    QCommandLineOption freshOption({"f", "fresh"},  QCoreApplication::translate("main", "Fresh start"));
     if (wantFullOptions) {
       parser.addOption(freshOption);
     }
 
     QCommandLineOption debugOption({"d", "debug"},
-                                   translate("main", "Set debug level"),
-                                   translate("main", "debugLevel"));
+                                   QCoreApplication::translate("main", "Set debug level"),
+                                   QCoreApplication::translate("main", "debugLevel"));
     parser.addOption(debugOption);
 
-    QCommandLineOption noGuiOption("nogui", translate("main", "No GUI"));
+    QCommandLineOption noGuiOption("nogui", QCoreApplication::translate("main", "No GUI"));
     if (wantFullOptions) {
       parser.addOption(noGuiOption);
     }
 
-    QCommandLineOption guiOption("gui", translate("main", "Want GUI"));
+    QCommandLineOption guiOption("gui", QCoreApplication::translate("main", "Want GUI"));
     if (wantFullOptions) {
       parser.addOption(guiOption);
     }
 
-    QCommandLineOption noStartOption("nostart", translate("main", "Don't start detectors"));
+    QCommandLineOption noStartOption("nostart", QCoreApplication::translate("main", "Don't start detectors"));
     if (wantFullOptions) {
       parser.addOption(noStartOption);
     }
 
-    QCommandLineOption startOption("start", translate("main", "Start detectors"));
+    QCommandLineOption startOption("start", QCoreApplication::translate("main", "Start detectors"));
     if (wantFullOptions) {
       parser.addOption(startOption);
     }
 
     QCommandLineOption cmdOption({"c", "command"},
-                                 translate("main", "Execute command (may be repeated)"),
-                                 translate("main", "command"));
+                                 QCoreApplication::translate("main", "Execute command (may be repeated)"),
+                                 QCoreApplication::translate("main", "command"));
     parser.addOption(cmdOption);
 
     QCommandLineOption scriptOption({"s", "script"},
-                                    translate("main", "Read script file (may be repeated)"),
-                                    translate("main", "scriptfile"));
+                                    QCoreApplication::translate("main", "Read script file (may be repeated)"),
+                                    QCoreApplication::translate("main", "scriptfile"));
     parser.addOption(scriptOption);
 
     QCommandLineOption watchOption({"w", "watch"},
-                                   translate("main", "Watch directory/path for changes (may be repeated)"),
-                                   translate("main", "pattern"));
+                                   QCoreApplication::translate("main", "Watch directory/path for changes (may be repeated)"),
+                                   QCoreApplication::translate("main", "pattern"));
     parser.addOption(watchOption);
 
-    QCommandLineOption pluginOption("p", translate("main", "Special plugin load"));
+    QCommandLineOption pluginOption("p", QCoreApplication::translate("main", "Special plugin load"));
     if (wantFullOptions) {
       parser.addOption(pluginOption);
     }
@@ -313,6 +314,7 @@ void QxrdAppCommon::splashMessage(QString msg)
     QString msgf = tr("Qxrd Version " STR(QXRD_VERSION) "\n")+msg;
 
     m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
+
     processEvents();
 
     m_SplashTimer.start(5000);
