@@ -7,7 +7,7 @@
 #include "qcepproperty.h"
 #include "qcepdataobject-ptr.h"
 #include "qcepobject.h"
-#include "qnewapplication-ptr.h"
+#include "qapplication-ptr.h"
 
 class QCEP_EXPORT QcepApplication : public QcepObject
 {
@@ -20,8 +20,6 @@ public:
   explicit QcepApplication(int &argc, char **argv);
   void initialize(QObjectWPtr parent);
 
-//  virtual void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) = 0;
-//  virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) = 0;
   virtual void setDefaultObjectData(QcepDataObject *obj) = 0;
 
   int exec();
@@ -33,7 +31,7 @@ public slots:
   void openObjectBrowserWindow(QcepObjectWPtr obj);
 
 protected:
-  QNewApplicationPtr m_Application;
+  QApplicationPtr m_Application;
 };
 
 extern QCEP_EXPORT QcepApplication *g_Application;

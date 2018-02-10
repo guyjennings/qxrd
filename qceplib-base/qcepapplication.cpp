@@ -1,7 +1,7 @@
 #include "qcepapplication.h"
 #include "qcepobjecttreewindow.h"
 #include <QThread>
-#include "qnewapplication.h"
+#include <QApplication>
 
 QcepApplication *g_Application = NULL;
 
@@ -11,8 +11,8 @@ QcepApplication::QcepApplication(int &argc, char **argv) :
   g_Application = this;
 
   m_Application =
-      QNewApplicationPtr(
-        new QNewApplication(argc, argv));
+      QApplicationPtr(
+        new QApplication(argc, argv));
 }
 
 void QcepApplication::initialize(QObjectWPtr parent)
