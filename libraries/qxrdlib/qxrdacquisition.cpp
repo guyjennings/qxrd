@@ -159,8 +159,7 @@ QxrdAcquisitionWPtr QxrdAcquisition::findAcquisition(QcepObjectWPtr p)
       qSharedPointerDynamicCast<QxrdAcquisition>(p);
 
   if (res == NULL) {
-    QcepObjectPtr objp =
-        qSharedPointerDynamicCast<QcepObject>(p);
+    QcepObjectPtr objp(p);
 
     if (objp) {
       res = findAcquisition(objp->parentPtr());

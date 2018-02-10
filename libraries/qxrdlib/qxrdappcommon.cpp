@@ -94,8 +94,7 @@ QxrdAppCommonWPtr QxrdAppCommon::findApplication(QcepObjectWPtr p)
       qSharedPointerDynamicCast<QxrdAppCommon>(p);
 
   if (res == NULL) {
-    QcepObjectPtr objp =
-        qSharedPointerDynamicCast<QcepObject>(p);
+    QcepObjectPtr objp(p);
 
     if (objp) {
       res = findApplication(objp->parentPtr());

@@ -92,8 +92,7 @@ QxrdExperimentThreadWPtr QxrdExperimentThread::findExperimentThread(QcepObjectWP
       qSharedPointerDynamicCast<QxrdExperimentThread>(p);
 
   if (res == NULL) {
-    QcepObjectPtr objp =
-        qSharedPointerDynamicCast<QcepObject>(p);
+    QcepObjectPtr objp(p);
 
     if (objp) {
       res = findExperimentThread(objp->parentPtr());

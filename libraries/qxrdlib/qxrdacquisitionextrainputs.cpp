@@ -227,9 +227,7 @@ void QxrdAcquisitionExtraInputs::appendChannel(int ch)
 
     connect(chan.data(), &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
 
-    QcepObjectPtr p(
-          qSharedPointerDynamicCast<QcepObject>(
-            parentPtr()));
+    QcepObjectPtr p(parentPtr());
 
     if (p) {
       p->propertyChanged(NULL);
@@ -248,9 +246,7 @@ void QxrdAcquisitionExtraInputs::appendChannel(QxrdAcquisitionExtraInputsChannel
 
     connect(chan.data(), &QxrdAcquisitionExtraInputsChannel::reinitiateNeeded, this, &QxrdAcquisitionExtraInputs::reinitiate);
 
-    QcepObjectPtr p(
-          qSharedPointerDynamicCast<QcepObject>(
-            parentPtr()));
+    QcepObjectPtr p(parentPtr());
 
     if (p) {
       p->propertyChanged(NULL);
@@ -269,9 +265,7 @@ void QxrdAcquisitionExtraInputs::removeChannel(int ch)
   if (chan) {
     m_Channels.removeAll(chan);
 
-    QcepObjectPtr p(
-          qSharedPointerDynamicCast<QcepObject>(
-            parentPtr()));
+    QcepObjectPtr p(parentPtr());
 
     if (p) {
       p->propertyChanged(NULL);

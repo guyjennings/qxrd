@@ -218,8 +218,7 @@ QxrdProcessorWPtr QxrdProcessor::findProcessor(QcepObjectWPtr p)
       qSharedPointerDynamicCast<QxrdProcessor>(p);
 
   if (res == NULL) {
-    QcepObjectPtr objp =
-        qSharedPointerDynamicCast<QcepObject>(p);
+    QcepObjectPtr objp(p);
 
     if (objp) {
       res = findProcessor(objp->parentPtr());

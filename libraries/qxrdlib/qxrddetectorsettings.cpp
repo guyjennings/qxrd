@@ -118,8 +118,7 @@ QxrdDetectorSettingsWPtr QxrdDetectorSettings::findDetectorSettings(QcepObjectWP
       qSharedPointerDynamicCast<QxrdDetectorSettings>(p);
 
   if (res == NULL) {
-    QcepObjectPtr objp =
-        qSharedPointerDynamicCast<QcepObject>(p);
+    QcepObjectPtr objp(p);
 
     if (objp) {
       res = findDetectorSettings(objp->parentPtr());
