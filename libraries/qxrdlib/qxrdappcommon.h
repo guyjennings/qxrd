@@ -57,8 +57,8 @@ public:
 
   Q_INVOKABLE virtual void openWindow(QxrdMainWindowSettingsWPtr set);
 
-  virtual void readSettings() = 0;
-  virtual void writeSettings() = 0;
+  virtual void readApplicationSettings() = 0;
+  virtual void writeApplicationSettings() = 0;
 
   virtual void editGlobalPreferences() = 0;
   virtual void createNewExperiment() = 0;
@@ -74,7 +74,7 @@ public:
   void closedExperiment(QxrdExperimentThreadWPtr expwthr);
   QList<QxrdExperimentWPtr> &experiments();
 
-  QxrdExperimentPtr experiment(int i);
+  QxrdExperimentPtr experiment(int i) const;
 
   void possiblyQuit();
   bool wantToQuit();

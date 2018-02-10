@@ -59,12 +59,12 @@ void QxrdAppViewer::setDefaultObjectData(QcepDataObject *obj)
   }
 }
 
-void QxrdAppViewer::printMessage(QString msg, QDateTime ts)
+void QxrdAppViewer::printMessage(QString msg, QDateTime ts) const
 {
   printf("%s\n", qPrintable(msg));
 }
 
-void QxrdAppViewer::criticalMessage(QString msg, QDateTime ts)
+void QxrdAppViewer::criticalMessage(QString msg, QDateTime ts) const
 {
   printf("CRITICAL: %s\n", qPrintable(msg));
 }
@@ -108,7 +108,7 @@ void QxrdAppViewer::chooseExistingExperiment()
 {
 }
 
-void QxrdAppViewer::readSettings()
+void QxrdAppViewer::readApplicationSettings()
 {
   QxrdViewerSettings set(this);
 
@@ -119,7 +119,7 @@ void QxrdAppViewer::readSettings()
   }
 }
 
-void QxrdAppViewer::writeSettings()
+void QxrdAppViewer::writeApplicationSettings()
 {
   QxrdViewerSettings set(this);
 

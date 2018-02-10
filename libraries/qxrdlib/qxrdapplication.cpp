@@ -48,7 +48,7 @@
 #include <QJsonObject>
 #include <QCommandLineParser>
 #include <QMessageBox>
-#include "qnewapplication.h"
+#include <QApplication>
 
 static QList<QDir> pluginsDirList;
 
@@ -155,7 +155,7 @@ bool QxrdApplication::init(int &argc, char **argv)
 
     connect(settings() -> prop_Debug(), &QcepInt64Property::valueChanged,
             this,                       &QxrdApplication::debugChanged);
-    readSettings();
+    readApplicationSettings();
 
     parseCommandLine(true);
 
@@ -181,7 +181,7 @@ bool QxrdApplication::init(int &argc, char **argv)
     printMessage(tr("pwd: %1").arg(pwd));
 
     loadPlugins();
-    readSettings();
+    readApplicationSettings();
 
     printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
@@ -260,7 +260,7 @@ void QxrdApplication::finish()
 
   GUI_THREAD_CHECK;
 
-  writeSettings();
+  writeApplicationSettings();
 
   inherited::finish();
 }
@@ -273,7 +273,7 @@ QString QxrdApplication::applicationDescription()
 void QxrdApplication::onAutoSaveTimer()
 {
   if (settings() && settings()->isChanged()) {
-    writeSettings();
+    writeApplicationSettings();
   }
 }
 
@@ -435,11 +435,11 @@ QxrdDetectorPluginInterfaceWPtr QxrdApplication::detectorPlugin(int detType)
 }
 
 
-void QxrdApplication::logMessage(QString /*msg*/)
+void QxrdApplication::logMessage(QString /*msg*/) const
 {
 }
 
-void QxrdApplication::warningMessage(QString msg, QDateTime /*ts*/)
+void QxrdApplication::warningMessage(QString msg, QDateTime /*ts*/) const
 {
   if (experiment(0)) {
     INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "warningMessage", Qt::BlockingQueuedConnection, Q_ARG(QString, msg)));
@@ -448,7 +448,7 @@ void QxrdApplication::warningMessage(QString msg, QDateTime /*ts*/)
   }
 }
 
-void QxrdApplication::printMessage(QString msg, QDateTime ts)
+void QxrdApplication::printMessage(QString msg, QDateTime ts) const
 {
   if (qcepDebug(DEBUG_NOMESSAGES)) {
   } else {
@@ -468,7 +468,7 @@ void QxrdApplication::printMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdApplication::statusMessage(QString msg, QDateTime ts)
+void QxrdApplication::statusMessage(QString msg, QDateTime ts) const
 {
   if (qcepDebug(DEBUG_NOMESSAGES)) {
   } else {
@@ -486,7 +486,7 @@ void QxrdApplication::statusMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdApplication::criticalMessage(QString msg, QDateTime ts)
+void QxrdApplication::criticalMessage(QString msg, QDateTime ts) const
 {
   QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
 
@@ -501,7 +501,7 @@ void QxrdApplication::criticalMessage(QString msg, QDateTime ts)
   }
 }
 
-void QxrdApplication::printLine(QString msg)
+void QxrdApplication::printLine(QString msg) const
 {
   logMessage(msg);
 
@@ -533,7 +533,7 @@ QxrdApplicationSettingsPtr QxrdApplication::settings()
         inherited::settings());
 }
 
-void QxrdApplication::readSettings()
+void QxrdApplication::readApplicationSettings()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
 
@@ -546,7 +546,7 @@ void QxrdApplication::readSettings()
   }
 }
 
-void QxrdApplication::writeSettings()
+void QxrdApplication::writeApplicationSettings()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
 
@@ -641,7 +641,7 @@ bool QxrdApplication::event(QEvent *ev)
   bool res = false;
 
   if (m_Application) {
-    res = m_Application -> event(ev);
+    res = inherited::event(ev);
   }
 
   int elapsed = tick.restart();

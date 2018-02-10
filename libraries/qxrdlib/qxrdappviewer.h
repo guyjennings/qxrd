@@ -23,8 +23,8 @@ public:
   //TODO: merge into 'initialize'
   bool init(int &argc, char **argv);
 
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   void setDefaultObjectData(QcepDataObject *obj);
 
@@ -32,8 +32,8 @@ public:
 
   void openExperiment(QString path);
 
-  void readSettings();
-  void writeSettings();
+  void readApplicationSettings();
+  void writeApplicationSettings();
 
   void editGlobalPreferences();
   void createNewExperiment();

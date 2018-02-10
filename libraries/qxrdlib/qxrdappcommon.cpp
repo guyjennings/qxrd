@@ -20,7 +20,7 @@
 #include <QThread>
 #include <QMessageBox>
 #include <QDesktopServices>
-#include "qnewapplication.h"
+#include <QApplication>
 
 QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   : inherited(argc, argv),
@@ -58,7 +58,7 @@ bool QxrdAppCommon::init(int &argc, char **argv)
 
   QThread::currentThread()->setObjectName("app");
 
-  connect(m_Application.data(),  &QNewApplication::aboutToQuit,
+  connect(m_Application.data(),  &QApplication::aboutToQuit,
           this,                  &QxrdAppCommon::finish);
   connect(&m_SplashTimer,        &QTimer::timeout,
           this,                  &QxrdAppCommon::hideSplash);
@@ -565,7 +565,7 @@ QList<QxrdExperimentWPtr> &QxrdAppCommon::experiments()
   return m_Experiments;
 }
 
-QxrdExperimentPtr QxrdAppCommon::experiment(int i)
+QxrdExperimentPtr QxrdAppCommon::experiment(int i) const
 {
   return m_Experiments.value(i);
 }
