@@ -739,12 +739,12 @@ void QxrdAcquisition::indicateDroppedFrame(int n)
 
 //void QxrdAcquisition::accumulateAcquiredImage(QcepImageDataBasePtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow)
 //{
-//  QcepUInt16ImageDataPtr img16 = qSharedPointerCast<QcepUInt16ImageData>(image);
+//  QcepUInt16ImageDataPtr img16 = qSharedPointerDynamicCast<QcepUInt16ImageData>(image);
 
 //  if (img16) {
 //    accumulateAcquiredImage(img16, accum, overflow);
 //  } else {
-//    QcepUInt32ImageDataPtr img32 = qSharedPointerCast<QcepUInt32ImageData>(image);
+//    QcepUInt32ImageDataPtr img32 = qSharedPointerDynamicCast<QcepUInt32ImageData>(image);
 
 //    if (img32) {
 //      accumulateAcquiredImage(img32, accum, overflow);

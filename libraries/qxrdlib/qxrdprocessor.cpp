@@ -1718,7 +1718,7 @@ void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
     }
 
     QcepDoubleImageDataPtr dimg =
-        qSharedPointerCast<QcepDoubleImageData>(img);
+        qSharedPointerDynamicCast<QcepDoubleImageData>(img);
 
     if (dimg) {
       emit dataAvailable(dimg);
