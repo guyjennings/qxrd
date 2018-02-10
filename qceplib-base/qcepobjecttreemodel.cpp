@@ -26,7 +26,7 @@ QcepObjectPtr QcepObjectTreeModel::indexedObject(const QModelIndex& index) const
         static_cast<QcepObject*>(index.internalPointer());
 
     if (obj) {
-      res = qSharedPointerDynamicCast<QcepObject>(obj->sharedFromThis());
+      res = obj->sharedFromThis();
     }
   } else {
     res = m_Object;
@@ -71,9 +71,7 @@ QModelIndex QcepObjectTreeModel::parent(const QModelIndex &index) const
   QcepObjectPtr object = indexedObject(index);
 
   if (object) {
-    QcepObjectPtr p =
-        qSharedPointerDynamicCast<QcepObject>(
-          object->parentPtr());
+    QcepObjectPtr p(object->parentPtr());
 
     if (p != m_Object) {
       //TODO: check this

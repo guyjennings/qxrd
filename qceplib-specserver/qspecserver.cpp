@@ -31,8 +31,7 @@ QSpecServer::QSpecServer(QString name)
 
 void QSpecServer::initialize(QcepObjectWPtr owner)
 {
-  m_Owner =
-      qSharedPointerDynamicCast<QcepObject>(owner);
+  m_Owner = owner;
 }
 
 QSpecServer::~QSpecServer()
