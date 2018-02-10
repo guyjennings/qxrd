@@ -1,24 +1,62 @@
 #include "qcepapplication.h"
 #include "qcepobjecttreewindow.h"
 #include <QThread>
+#include "qnewapplication.h"
 
 QcepApplication *g_Application = NULL;
 
 QcepApplication::QcepApplication(int &argc, char **argv) :
-  inherited(argc, argv)
+  inherited("application")
 {
   g_Application = this;
+
+  m_Application =
+      QNewApplicationPtr(
+        new QNewApplication(argc, argv));
 }
 
-void QcepApplication::initialize()
+void QcepApplication::initialize(QObjectWPtr parent)
 {
+  inherited::initialize(parent);
 }
 
-void QcepApplication::openObjectBrowser(QcepObjectWPtr obj)
+int QcepApplication::exec()
+{
+  int res = 0;
+
+  if (m_Application) {
+    res = m_Application -> exec();
+  }
+
+  return res;
+}
+
+void QcepApplication::processEvents()
+{
+  if (m_Application) {
+    m_Application -> processEvents();
+  }
+}
+
+void QcepApplication::exit()
+{
+  if (m_Application) {
+    m_Application -> exit();
+  }
+}
+
+void QcepApplication::quit()
+{
+  if (m_Application) {
+    m_Application -> quit();
+  }
+}
+
+void QcepApplication::openObjectBrowserWindow(QcepObjectWPtr obj)
 {
   if (QThread::currentThread() != thread()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(this,
-                                           "openObjectBrowser",
+                                           "openObjectBrowserWindow",
                                            Q_ARG(QcepObjectWPtr, obj)));
   } else {
     QcepObjectTreeWindow *w =

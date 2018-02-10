@@ -102,7 +102,8 @@ SOURCES += \
     $$PWD/qcepobjecttreemodel.cpp \
     $$PWD/qcepobjecttreewindow.cpp \
     $$PWD/qcepobjectpropertiesmodel.cpp \
-    $$PWD/qnewthread.cpp
+    $$PWD/qnewthread.cpp \
+    $$PWD/qnewapplication.cpp
 
 contains (DEFINES, HAVE_DATAVIS) {
  SOURCES += \
@@ -252,7 +253,10 @@ HEADERS += \
     $$PWD/qthread-ptr.h \
     $$PWD/qnewthread.h \
     $$PWD/qnewthread-ptr.h \
-    $$PWD/qcepthread-ptr.h
+    $$PWD/qcepthread-ptr.h \
+    $$PWD/qapplication-ptr.h \
+    $$PWD/qnewapplication.h \
+    $$PWD/qnewapplication-ptr.h
 
 contains (DEFINES, HAVE_DATAVIS) {
  HEADERS += \
