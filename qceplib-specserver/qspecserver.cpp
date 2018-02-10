@@ -29,7 +29,7 @@ QSpecServer::QSpecServer(QString name)
   connect(this, &QTcpServer::newConnection, this, &QSpecServer::openNewConnection);
 }
 
-void QSpecServer::initialize(QObjectWPtr owner)
+void QSpecServer::initialize(QcepObjectWPtr owner)
 {
   m_Owner =
       qSharedPointerDynamicCast<QcepObject>(owner);

@@ -18,7 +18,7 @@ public:
   QcepDataArray(QString name,
                 QVector<int> dims = QVector<int>());
   virtual ~QcepDataArray();
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

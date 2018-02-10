@@ -15,7 +15,7 @@ QcepApplication::QcepApplication(int &argc, char **argv) :
         new QApplication(argc, argv));
 }
 
-void QcepApplication::initialize(QObjectWPtr parent)
+void QcepApplication::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

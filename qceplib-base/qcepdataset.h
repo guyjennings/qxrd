@@ -15,7 +15,7 @@ private:
 public:
   Q_INVOKABLE QcepDataset(QString name);
 
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
 //  void readSettings(QSettings *settings, QString section);
 //  void writeSettings(QSettings *settings, QString section);

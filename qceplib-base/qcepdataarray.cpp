@@ -16,7 +16,7 @@ QcepDataArray::QcepDataArray(QString name, QVector<int> dims) :
   QcepAllocator::allocate(get_ByteSize());
 }
 
-void QcepDataArray::initialize(QObjectWPtr parent)
+void QcepDataArray::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

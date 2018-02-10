@@ -16,7 +16,7 @@ private:
 public:
   Q_INVOKABLE QcepDataColumnScan(QString name,
       QStringList cols = QStringList(), int sz=0);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

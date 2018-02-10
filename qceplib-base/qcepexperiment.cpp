@@ -48,7 +48,7 @@ QcepExperiment::QcepExperiment(QString path, QString name) :
         new QcepFixupGainMapCommand());
 }
 
-void QcepExperiment::initialize(QObjectWPtr parent)
+void QcepExperiment::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 

@@ -14,7 +14,7 @@ private:
 
 public:
   QcepMainWindowSettings(QString name);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   virtual void openWindow() = 0;
   virtual void closeWindow() = 0;

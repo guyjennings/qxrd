@@ -26,7 +26,7 @@ private:
 public:
   explicit QcepExperiment(QString path,
                           QString name);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   virtual void defaultWindowSettings();
 

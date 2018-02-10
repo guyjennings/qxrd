@@ -70,7 +70,7 @@ QcepAllocator::~QcepAllocator()
   }
 }
 
-void QcepAllocator::initialize(QObjectWPtr parent)
+void QcepAllocator::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

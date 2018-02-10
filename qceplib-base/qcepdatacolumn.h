@@ -40,7 +40,7 @@ public:
                  ColumnType colType = NormalColumn,
                  int col1 = -1,
                  int col2 = -1);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   virtual ~QcepDataColumn();
 

@@ -15,7 +15,7 @@ private:
 public:
   QcepApplicationSettings(QString name);
 
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 };
 
 extern QCEP_EXPORT QcepApplicationSettings *g_ApplicationSettings;

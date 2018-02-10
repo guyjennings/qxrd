@@ -54,7 +54,7 @@ QcepDataObject::~QcepDataObject()
   s_ObjectDeleteCount.fetchAndAddOrdered(1);
 }
 
-void QcepDataObject::initialize(QObjectWPtr parent)
+void QcepDataObject::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

@@ -76,7 +76,7 @@ QcepImageDataBase::QcepImageDataBase(QString name, int width, int height, int si
   QcepAllocator::allocate(size);
 }
 
-void QcepImageDataBase::initialize(QObjectWPtr parent)
+void QcepImageDataBase::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

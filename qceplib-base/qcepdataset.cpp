@@ -6,7 +6,7 @@ QcepDataset::QcepDataset(QString name) :
 {
 }
 
-void QcepDataset::initialize(QObjectWPtr parent)
+void QcepDataset::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

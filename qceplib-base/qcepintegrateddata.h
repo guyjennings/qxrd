@@ -19,7 +19,7 @@ public:
       int maxSize=0);
 
   ~QcepIntegratedData();
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
 public slots:
   virtual QString description() const;

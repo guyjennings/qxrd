@@ -20,7 +20,7 @@ class QCEP_EXPORT QcepPlot : public QwtPlot
 public:
   QcepPlot(QWidget *parent = 0);
   virtual ~QcepPlot();
-  //TODO: change to QObjectWPtr...
+  //TODO: change to QcepObjectWPtr...
   void initialize(QcepPlotSettingsWPtr settings);
 
 public:

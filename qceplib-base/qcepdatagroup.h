@@ -22,7 +22,7 @@ private:
 
 public:
   Q_INVOKABLE QcepDataGroup(QString name);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

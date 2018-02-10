@@ -18,7 +18,7 @@ private:
 
 public:
   explicit QcepApplication(int &argc, char **argv);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   virtual void setDefaultObjectData(QcepDataObject *obj) = 0;
 

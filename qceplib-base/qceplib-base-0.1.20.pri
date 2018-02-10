@@ -245,7 +245,6 @@ HEADERS += \
     $$PWD/qcepscandetectorpanelgains.h \
     $$PWD/qcepmainwindowsettings.h \
     $$PWD/qcepmainwindowsettings-ptr.h \
-    $$PWD/qobject-ptr.h \
     $$PWD/qcepobjecttreemodel.h \
     $$PWD/qcepobjecttreewindow.h \
     $$PWD/qcepobjectpropertiesmodel.h \

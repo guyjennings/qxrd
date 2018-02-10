@@ -20,7 +20,7 @@ QcepDataColumn::~QcepDataColumn()
   QcepAllocator::deallocate(m_NPoints*sizeof(double));
 }
 
-void QcepDataColumn::initialize(QObjectWPtr parent)
+void QcepDataColumn::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

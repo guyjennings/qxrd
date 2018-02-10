@@ -8,7 +8,7 @@ QcepMainWindowSettings::QcepMainWindowSettings(QString name)
 
 }
 
-void QcepMainWindowSettings::initialize(QObjectWPtr parent)
+void QcepMainWindowSettings::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

@@ -32,7 +32,7 @@ public:
                     int width,
                     int height,
                     int size);
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
   virtual ~QcepImageDataBase();
 
   void readSettings(QSettings *settings);

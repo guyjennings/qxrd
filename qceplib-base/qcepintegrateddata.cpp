@@ -23,7 +23,7 @@ QcepIntegratedData::~QcepIntegratedData()
   QcepAllocator::deallocate(sizeof(double), 2, m_MaxSize);
 }
 
-void QcepIntegratedData::initialize(QObjectWPtr parent)
+void QcepIntegratedData::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

@@ -19,7 +19,7 @@ private:
 public:
   QcepDataObject(QString name, qint64 byteSize);
   virtual ~QcepDataObject();
-  void initialize(QObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

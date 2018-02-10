@@ -16,7 +16,7 @@ QcepDataGroup::QcepDataGroup(QString name) :
 {
 }
 
-void QcepDataGroup::initialize(QObjectWPtr parent)
+void QcepDataGroup::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

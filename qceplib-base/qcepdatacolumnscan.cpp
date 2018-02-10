@@ -14,7 +14,7 @@ QcepDataColumnScan::QcepDataColumnScan(QString name, QStringList cols, int sz) :
   }
 }
 
-void QcepDataColumnScan::initialize(QObjectWPtr parent)
+void QcepDataColumnScan::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }
