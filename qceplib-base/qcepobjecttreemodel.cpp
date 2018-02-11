@@ -117,7 +117,8 @@ int QcepObjectTreeModel::columnCount(const QModelIndex &parent) const
 //    res = ColumnCount;
 //  }
 
-  return ColumnCount;
+  return 1;
+//  return ColumnCount;
 }
 
 QVariant QcepObjectTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -151,7 +152,7 @@ QVariant QcepObjectTreeModel::data(const QModelIndex &index, int role) const
     QcepObjectPtr object = indexedObject(index);
 
     if (object) {
-      if (role == Qt::DisplayRole || role == Qt::EditRole){
+      if (role == Qt::DisplayRole || role == Qt::EditRole) {
         switch (index.column()) {
         case NameColumn:
           res = object->objectName();
@@ -165,6 +166,11 @@ QVariant QcepObjectTreeModel::data(const QModelIndex &index, int role) const
           res = tr("%1").HEXARG(object.data());
           break;
         }
+      } else if (role == Qt::ToolTipRole) {
+        res = tr("%1 : %2\n@ %3")
+            .arg(object->objectName())
+            .arg(object->metaObject()->className())
+            .HEXARG(object.data());
       }
     }
   }
