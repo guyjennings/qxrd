@@ -41,6 +41,9 @@ class QXRD_EXPORT QxrdWindow : public QxrdMainWindow, public Ui::QxrdWindow
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   QxrdWindow(QxrdWindowSettingsWPtr settings,
              QxrdAppCommonWPtr appl,
@@ -49,7 +52,7 @@ public:
              QxrdProcessorWPtr procw);
   virtual ~QxrdWindow();
   //TODO: change to QcepObjectWPtr
-  void initialize();
+  void initialize(QcepObjectWPtr parent);
 //  void setupMenus();
 
   void onAcquisitionInit();

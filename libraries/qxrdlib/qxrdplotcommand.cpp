@@ -12,7 +12,6 @@ QxrdPlotCommand::QxrdPlotCommand(QString name,
     m_Plot((plot?plot->m_Plot:NULL)),
     m_Settings(set)
 {
-  initialize(set);
 }
 
 void QxrdPlotCommand::enable()
@@ -26,4 +25,9 @@ void QxrdPlotCommand::disable()
 
 void QxrdPlotCommand::setPen(const QPen &pen)
 {
+}
+
+QxrdPlotWidgetSettingsWPtr QxrdPlotCommand::settings() const
+{
+  return m_Settings;
 }

@@ -145,6 +145,10 @@ QcepPlot *QxrdPlotWidget::plot()
 void QxrdPlotWidget::addPlotOverlay(QxrdPlotOverlayPtr ovl)
 {
   m_PlotOverlays.append(ovl);
+
+  if (ovl) {
+    ovl -> initialize(ovl->settings());
+  }
 }
 
 void QxrdPlotWidget::addPlotCommand(QxrdPlotCommandPtr cmd)
@@ -152,6 +156,8 @@ void QxrdPlotWidget::addPlotCommand(QxrdPlotCommandPtr cmd)
   m_PlotCommands.append(cmd);
 
   if (cmd) {
+    cmd -> initialize(cmd->settings());
+
     QToolButton *button = cmd->toolButton();
 
     if (button) {

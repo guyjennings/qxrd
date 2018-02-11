@@ -13,3 +13,8 @@ QxrdPlotOverlay::QxrdPlotOverlay(
 void QxrdPlotOverlay::setPen(QPen pen)
 {
 }
+
+QxrdPlotWidgetSettingsWPtr QxrdPlotOverlay::settings() const
+{
+  return m_Settings;
+}

@@ -15,6 +15,10 @@
 class QXRD_EXPORT QxrdMainWindow : public QcepMainWindow
 {
   Q_OBJECT
+
+private:
+  typedef QcepMainWindow inherited;
+
 public:
   explicit QxrdMainWindow(QString name,
                           QxrdAppCommonWPtr app,

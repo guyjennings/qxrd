@@ -68,7 +68,7 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
                        QxrdExperimentWPtr docw,
                        QxrdAcqCommonWPtr acqw,
                        QxrdProcessorWPtr procw)
-  : QxrdMainWindow("window", appl, docw, acqw, procw),
+  : inherited("window", appl, docw, acqw, procw),
     m_ObjectNamer(this, "window"),
     m_Mutex(QMutex::Recursive),
     m_WindowSettings(settings),
@@ -151,8 +151,10 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   setAttribute(Qt::WA_DeleteOnClose, false);
 }
 
-void QxrdWindow::initialize()
+void QxrdWindow::initialize(QcepObjectWPtr parent)
 {
+  inherited::initialize(parent);
+
   QxrdApplicationPtr    app(qSharedPointerDynamicCast<QxrdApplication>(m_Application));
   QxrdExperimentPtr     expt(m_Experiment);
   QxrdWindowSettingsPtr set(m_WindowSettings);

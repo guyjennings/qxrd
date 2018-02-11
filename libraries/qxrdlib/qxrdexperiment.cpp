@@ -513,7 +513,7 @@ void QxrdExperiment::openWindows()
     QxrdScriptEnginePtr eng(m_ScriptEngine);
 
     if (m_Window) {
-      m_Window -> initialize();
+      m_Window -> initialize(m_WindowSettings);
 
       if (m_Acquisition) {
         //          m_Acquisition -> setWindow(m_Window);

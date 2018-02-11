@@ -18,6 +18,8 @@ public:
 
   virtual void setPen(QPen pen);
 
+  QxrdPlotWidgetSettingsWPtr settings() const;
+
 protected:
   QxrdPlotWidget             *m_PlotWidget;
   QxrdPlotWidgetSettingsWPtr  m_Settings;

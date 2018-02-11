@@ -77,7 +77,7 @@ void QxrdAppCommon::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 
   if (m_Allocator) {
-    m_Allocator->initialize(parent);
+    m_Allocator->initialize(sharedFromThis());
   }
 
   connect(m_Application.data(),  &QApplication::aboutToQuit,

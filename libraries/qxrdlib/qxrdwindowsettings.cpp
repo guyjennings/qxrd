@@ -47,6 +47,10 @@ void QxrdWindowSettings::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
+  m_ImagePlotWidgetSettings               -> initialize(sharedFromThis());
+  m_CenteringPlotWidgetSettings           -> initialize(sharedFromThis());
+  m_IntegratedPlotWidgetSettings          -> initialize(sharedFromThis());
+  m_DistortionPlotWidgetSettings          -> initialize(sharedFromThis());
   m_ImagePlotSettings                     -> initialize(sharedFromThis());
   m_CenterFinderPlotSettings              -> initialize(sharedFromThis());
   m_IntegratorPlotSettings                -> initialize(sharedFromThis());
