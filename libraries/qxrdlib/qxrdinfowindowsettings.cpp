@@ -2,8 +2,8 @@
 #include "qxrdinfowindow.h"
 #include <QThread>
 
-QxrdInfoWindowSettings::QxrdInfoWindowSettings(QString name)
-  : QxrdMainWindowSettings(name)
+QxrdInfoWindowSettings::QxrdInfoWindowSettings(QString name, QString desc)
+  : QxrdMainWindowSettings(name, desc)
 {
 
 }

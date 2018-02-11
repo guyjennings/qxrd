@@ -12,7 +12,7 @@ class QXRD_EXPORT QxrdCenteringWindowSettings : public QxrdMainWindowSettings
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdCenteringWindowSettings(QString name);
+  QxrdCenteringWindowSettings(QString name, QString desc);
 
   QxrdMainWindowPtr newWindow();
 

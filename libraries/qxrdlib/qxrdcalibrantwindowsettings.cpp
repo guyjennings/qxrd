@@ -2,8 +2,8 @@
 #include "qxrdcalibrantwindow.h"
 #include <QThread>
 
-QxrdCalibrantWindowSettings::QxrdCalibrantWindowSettings(QString name)
-  : QxrdMainWindowSettings(name)
+QxrdCalibrantWindowSettings::QxrdCalibrantWindowSettings(QString name, QString desc)
+  : QxrdMainWindowSettings(name, desc)
 {
 }
 

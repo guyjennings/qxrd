@@ -8,7 +8,7 @@ class QXRD_EXPORT QxrdHelpWindowSettings : public QxrdMainWindowSettings
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdHelpWindowSettings(QString name);
+  QxrdHelpWindowSettings(QString name, QString desc);
 
   QxrdMainWindowPtr newWindow();
 };

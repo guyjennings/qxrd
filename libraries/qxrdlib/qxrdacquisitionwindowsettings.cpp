@@ -3,9 +3,9 @@
 #include "qxrdfilebrowsersettings.h"
 #include <QThread>
 
-QxrdAcquisitionWindowSettings::QxrdAcquisitionWindowSettings(QString name)
-  : QxrdMainWindowSettings(name),
-    m_FileBrowserSettings(new QxrdFileBrowserSettings(name))
+QxrdAcquisitionWindowSettings::QxrdAcquisitionWindowSettings(QString name, QString desc)
+  : QxrdMainWindowSettings(name, desc),
+    m_FileBrowserSettings(new QxrdFileBrowserSettings(desc))
 {
 }
 

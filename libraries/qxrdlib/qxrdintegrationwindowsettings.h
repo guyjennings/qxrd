@@ -11,7 +11,7 @@ class QXRD_EXPORT QxrdIntegrationWindowSettings : public QxrdMainWindowSettings
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdIntegrationWindowSettings(QString name);
+  QxrdIntegrationWindowSettings(QString name, QString desc);
 
   QxrdMainWindowPtr newWindow();
 

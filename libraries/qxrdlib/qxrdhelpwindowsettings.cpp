@@ -2,8 +2,8 @@
 #include "qxrdhelpwindow.h"
 #include <QThread>
 
-QxrdHelpWindowSettings::QxrdHelpWindowSettings(QString name)
-  : QxrdMainWindowSettings(name)
+QxrdHelpWindowSettings::QxrdHelpWindowSettings(QString name, QString desc)
+  : QxrdMainWindowSettings(name, desc)
 {
 
 }

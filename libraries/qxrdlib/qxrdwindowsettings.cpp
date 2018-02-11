@@ -21,8 +21,8 @@
 #include "qxrddistortionplotwidgetsettings.h"
 #include <QThread>
 
-QxrdWindowSettings::QxrdWindowSettings(QString name) :
-  inherited(name),
+QxrdWindowSettings::QxrdWindowSettings(QString name, QString desc) :
+  inherited(name, desc),
   m_WindowGeometry(this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(this, "windowState", QByteArray(), "Window State Settings"),
   m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name)),
@@ -45,7 +45,7 @@ QxrdWindowSettings::QxrdWindowSettings(QString name) :
 
 QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
 {
-  QxrdWindowSettingsPtr set(new QxrdWindowSettings("windowSettings"));
+  QxrdWindowSettingsPtr set(new QxrdWindowSettings("windowSettings", "Window"));
 
   return set;
 }

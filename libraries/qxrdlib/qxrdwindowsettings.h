@@ -30,7 +30,7 @@ private:
   typedef QxrdMainWindowSettings inherited;
 
 public:
-  Q_INVOKABLE QxrdWindowSettings(QString name);
+  QxrdWindowSettings(QString name, QString desc);
   static QxrdWindowSettingsPtr newWindowSettings();
 
   static void registerMetaTypes();

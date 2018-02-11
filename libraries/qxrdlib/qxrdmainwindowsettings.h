@@ -17,7 +17,8 @@ private:
   typedef QcepMainWindowSettings inherited;
 
 public:
-  QxrdMainWindowSettings(QString name);
+  QxrdMainWindowSettings(QString name,
+                         QString desc);
 
   void initialize(QcepObjectWPtr parent);
 

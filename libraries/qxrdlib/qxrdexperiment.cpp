@@ -1348,7 +1348,7 @@ void QxrdExperiment::openWatcher(QString patt)
   THREAD_CHECK;
 
   QxrdWatcherWindowSettingsPtr set(
-        new QxrdWatcherWindowSettings("watcher"));
+        new QxrdWatcherWindowSettings("watcherWindowSettings", "Watcher Window"));
 
   if (set) {
     set -> initialize(sharedFromThis());
@@ -1429,29 +1429,67 @@ void QxrdExperiment::defaultWindowSettings()
   inherited::defaultWindowSettings();
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdWindowSettings("Main Window")));
+                         new QxrdWindowSettings(
+                           "mainWindowSettings",
+                           "Main Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAcquisitionWindowSettings("Acquisition")));
+                         new QxrdAcquisitionWindowSettings(
+                           "acquisitionWindowSettings",
+                           "Acquisition Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAnalysisWindowSettings("Analysis")));
+                         new QxrdAnalysisWindowSettings(
+                           "analysisWindowSettings",
+                           "Analysis Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCalculatorWindowSettings("Calculator")));
+                         new QxrdCalculatorWindowSettings(
+                           "calculatorWindowSettings",
+                           "Calculator Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCalibrantWindowSettings("Calibrant")));
+                         new QxrdCalibrantWindowSettings(
+                           "calibrantWindowSettings",
+                           "Calibrant Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCenteringWindowSettings("Centering")));
+                         new QxrdCenteringWindowSettings(
+                           "centeringWindowSettings",
+                           "Centering Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdWatcherWindowSettings("Watcher")));
+                         new QxrdWatcherWindowSettings(
+                           "watcherWindowSettings",
+                           "Watcher Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdExtraIOWindowSettings("Extra IO")));
+                         new QxrdExtraIOWindowSettings(
+                           "extraIOWindowSettings",
+                           "Extra IO Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdHelpWindowSettings("Help")));
+                         new QxrdHelpWindowSettings(
+                           "helpWindowSettings",
+                           "Help Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdInfoWindowSettings("Info")));
+                         new QxrdInfoWindowSettings(
+                           "infoWindowSettings",
+                           "Info Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdIntegrationWindowSettings("Integration")));
+                         new QxrdIntegrationWindowSettings(
+                           "integrationWindowSettings",
+                           "Integration Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdMaskingWindowSettings("Masking")));
+                         new QxrdMaskingWindowSettings(
+                           "maskingWindowSettings",
+                           "Masking Window")));
+
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdScriptingWindowSettings("Scripting")));
+                         new QxrdScriptingWindowSettings(
+                           "scriptingWindowSettings",
+                           "Scripting Window")));
 }

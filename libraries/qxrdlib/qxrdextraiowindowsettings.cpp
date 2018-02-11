@@ -4,8 +4,8 @@
 #include "qxrdextraoutputsplotwidgetsettings.h"
 #include <QThread>
 
-QxrdExtraIOWindowSettings::QxrdExtraIOWindowSettings(QString name)
-  : QxrdMainWindowSettings(name),
+QxrdExtraIOWindowSettings::QxrdExtraIOWindowSettings(QString name, QString desc)
+  : QxrdMainWindowSettings(name, desc),
     m_ExtraInputsPlotWidgetSettings(new QxrdExtraInputsPlotWidgetSettings(name)),
     m_ExtraOutputsPlotWidgetSettings(new QxrdExtraOutputsPlotWidgetSettings(name))
 {

@@ -8,7 +8,7 @@ class QXRD_EXPORT QxrdCalculatorWindowSettings : public QxrdMainWindowSettings
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdCalculatorWindowSettings(QString name);
+  QxrdCalculatorWindowSettings(QString name, QString desc);
 
   QxrdMainWindowPtr newWindow();
 };

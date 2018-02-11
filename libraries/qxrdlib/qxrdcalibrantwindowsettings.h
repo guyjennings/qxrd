@@ -8,7 +8,7 @@ class QXRD_EXPORT QxrdCalibrantWindowSettings : public QxrdMainWindowSettings
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdCalibrantWindowSettings(QString name);
+  Q_INVOKABLE QxrdCalibrantWindowSettings(QString name, QString desc);
 
   QxrdMainWindowPtr newWindow();
 };

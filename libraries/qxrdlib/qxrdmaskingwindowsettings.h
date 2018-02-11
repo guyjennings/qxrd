@@ -10,7 +10,7 @@ class QXRD_EXPORT QxrdMaskingWindowSettings : public QxrdMainWindowSettings
   Q_OBJECT
 
 public:
-  Q_INVOKABLE QxrdMaskingWindowSettings(QString name);
+  QxrdMaskingWindowSettings(QString name, QString desc);
 
   QxrdMainWindowPtr newWindow();
 

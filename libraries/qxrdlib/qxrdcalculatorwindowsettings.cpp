@@ -2,8 +2,8 @@
 #include "qxrdcalculatorwindow.h"
 #include <QThread>
 
-QxrdCalculatorWindowSettings::QxrdCalculatorWindowSettings(QString name)
-  : QxrdMainWindowSettings(name)
+QxrdCalculatorWindowSettings::QxrdCalculatorWindowSettings(QString name, QString desc)
+  : QxrdMainWindowSettings(name, desc)
 {
 
 }

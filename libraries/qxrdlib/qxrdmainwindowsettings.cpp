@@ -5,8 +5,8 @@
 #include "qxrdacqcommon.h"
 #include "qxrdprocessor.h"
 
-QxrdMainWindowSettings::QxrdMainWindowSettings(QString name)
-  : QcepMainWindowSettings(name)
+QxrdMainWindowSettings::QxrdMainWindowSettings(QString name, QString desc)
+  : QcepMainWindowSettings(name, desc)
 {
 }
 

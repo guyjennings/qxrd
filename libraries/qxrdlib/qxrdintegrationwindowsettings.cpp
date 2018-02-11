@@ -5,8 +5,8 @@
 #include "qxrdintegratedplotwidgetsettings.h"
 #include <QThread>
 
-QxrdIntegrationWindowSettings::QxrdIntegrationWindowSettings(QString name)
-  : QxrdMainWindowSettings(name),
+QxrdIntegrationWindowSettings::QxrdIntegrationWindowSettings(QString name, QString desc)
+  : QxrdMainWindowSettings(name, desc),
     m_FileBrowserSettings(new QxrdFileBrowserSettings(name)),
     m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name)),
     m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name))
