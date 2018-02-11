@@ -171,7 +171,7 @@ QxrdProcessor::QxrdProcessor(QString name) :
   connect(prop_DisplayIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
   connect(prop_SaveIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
 
-  connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onMaskPathChanged);
+//  connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onMaskPathChanged);
   connect(prop_DarkImagePath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onDarkImagePathChanged);
   connect(prop_BadPixelsPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onBadPixelsPathChanged);
   connect(prop_GainMapPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onGainMapPathChanged);
@@ -392,15 +392,13 @@ void QxrdProcessor::readSettings(QSettings *settings)
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
-    QcepObjectPtr obj = QcepObject::readObject(settings);
+    QcepObjectPtr obj = QcepObject::readObject(sharedFromThis(), settings);
 
     if (obj) {
       QxrdProcessorStepPtr s =
           qSharedPointerDynamicCast<QxrdProcessorStep>(obj);
 
       if (s) {
-        s->initialize(sharedFromThis());
-
         m_ProcessorSteps.append(s);
       }
     }
@@ -898,24 +896,25 @@ void QxrdProcessor::loadMask(QString name)
   QcepMaskDataPtr res =
       QcepAllocator::newMask("mask", 0,0, 0, QcepAllocator::NullIfNotAvailable);
 
-  QString path = filePathInDataDirectory(name);
+  if (res) {
+    QString path = filePathInDataDirectory(name);
 
-  if (res && res -> readImage(path)) {
+    if (res -> readImage(path)) {
+      res -> initialize(m_MaskStack);
 
-    //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
+      //  printf("Read %d x %d image\n", res->get_Width(), res->get_Height());
 
-    res -> loadMetaData();
-    res -> set_DataType(QcepMaskData::MaskData);
+      res -> loadMetaData();
+      res -> set_DataType(QcepMaskData::MaskData);
 
-    //    res -> copyMaskTo(m_Mask);
+      //    res -> copyMaskTo(m_Mask);
 
-    newMask(res);
+      newMask(res);
 
-    set_MaskPath(res -> get_FileName());
-
-    printMessage(tr("Loaded Mask from %1").arg(path));
-  } else {
-    printMessage(tr("loadMask(%1) failed").arg(name));
+      printMessage(tr("Loaded Mask from %1").arg(path));
+    } else {
+      printMessage(tr("loadMask(%1) failed").arg(name));
+    }
   }
 }
 
@@ -930,8 +929,6 @@ void QxrdProcessor::saveMask(QString name, int canOverwrite)
 
     if (m) {
       saveNamedMaskData(path, m, canOverwrite);
-
-      set_MaskPath(m -> get_FileName());
     }
   }
 }
@@ -943,8 +940,6 @@ void QxrdProcessor::clearMask()
   if (m_MaskStack) {
     m_MaskStack -> clearMaskStack();
   }
-
-  set_MaskPath("");
 }
 
 QcepMaskDataWPtr QxrdProcessor::mask() const
@@ -1141,15 +1136,8 @@ void QxrdProcessor::newOverflow(QcepMaskDataWPtr ovf)
 //TODO: don't load things that would be loaded by readSettings
 void QxrdProcessor::loadDefaultImages()
 {
-  QString fileName = get_MaskPath();
+  QString fileName = get_DarkImagePath();
   QFileInfo fileInfo(fileName);
-
-//  if (fileInfo.exists() && fileInfo.isFile()) {
-//    loadMask(fileName);
-//  }
-
-  fileName = get_DarkImagePath();
-  fileInfo.setFile(fileName);
 
   if (fileInfo.exists() && fileInfo.isFile()) {
     loadDark(fileName);
@@ -2215,23 +2203,24 @@ double QxrdProcessor::estimatedProcessingTime(double estSerialTime, double estPa
   }
 }
 
-void QxrdProcessor::onMaskPathChanged(QString newPath)
-{
-  if (newPath.length() == 0) {
-    printMessage("Clear Mask");
-    m_MaskStack->clearMaskStack();
-  } else {
-    printMessage(tr("Load mask from %1").arg(newPath));
+//TODO: no longer needed?
+//void QxrdProcessor::onMaskPathChanged(QString newPath)
+//{
+//  if (newPath.length() == 0) {
+//    printMessage("Clear Mask");
+//    m_MaskStack->clearMaskStack();
+//  } else {
+//    printMessage(tr("Load mask from %1").arg(newPath));
 
-    QcepMaskDataPtr m = QcepAllocator::newMask(newPath, 0,0, 0, QcepAllocator::NullIfNotAvailable);
+//    QcepMaskDataPtr m = QcepAllocator::newMask(newPath, 0,0, 0, QcepAllocator::NullIfNotAvailable);
 
-    if (m && m->readImage(newPath)) {
-      m_MaskStack->push(m);
+//    if (m && m->readImage(newPath)) {
+//      m_MaskStack->push(m);
 
-      emit maskAvailable(m);
-    }
-  }
-}
+//      emit maskAvailable(m);
+//    }
+//  }
+//}
 
 int QxrdProcessor::newMaskWidth() const
 {
@@ -2278,6 +2267,8 @@ void QxrdProcessor::newEmptyMask()
                                              QcepAllocator::NullIfNotAvailable);
 
   if (m && m_MaskStack) {
+    m -> initialize(m_MaskStack);
+
     m_MaskStack -> push(m);
 
     printMessage(tr("new mask, %1 on stack").arg(m_MaskStack -> maskCount()));
@@ -2298,6 +2289,8 @@ void QxrdProcessor::duplicateMask()
     if (m1) {
       m1->copyMaskTo(m);
     }
+
+    m -> initialize(m_MaskStack);
 
     m_MaskStack -> push(m);
 

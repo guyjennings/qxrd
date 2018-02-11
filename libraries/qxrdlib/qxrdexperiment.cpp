@@ -6,7 +6,6 @@
 #include "qxrdexperiment.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdapplication.h"
-#include "qxrdapplicationsettings.h"
 #include "qxrdprocessor.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdpolartransform.h"
@@ -122,11 +121,7 @@ QxrdExperiment::QxrdExperiment(QString path,
   QxrdAppCommonPtr appl(m_Application);
 
   if (appl) {
-    QxrdAppCommonSettingsPtr set(appl->settings());
-
-    if (set) {
-      set->prop_ExperimentCount()->incValue(1);
-    }
+    appl->prop_ExperimentCount()->incValue(1);
   }
 
   m_Processor =
@@ -185,11 +180,7 @@ QxrdExperiment::~QxrdExperiment()
   QxrdAppCommonPtr app(m_Application);
 
   if (app) {
-    QxrdAppCommonSettingsPtr set(app->settings());
-
-    if (set) {
-      set->prop_ExperimentCount()->incValue(-1);
-    }
+    app->prop_ExperimentCount()->incValue(-1);
   }
 }
 
@@ -506,72 +497,69 @@ void QxrdExperiment::openWindows()
 
   QxrdAppCommonPtr app(m_Application);
 
-  if (app) {
-    QxrdAppCommonSettingsPtr set(app->settings());
-    if (set && set->get_GuiWanted()) {
-      splashMessage("Opening Main Window");
+  if (app && app->get_GuiWanted()) {
+    splashMessage("Opening Main Window");
 
-      //TODO: remove
-      m_Window = QxrdWindowPtr(
-            new QxrdWindow(m_WindowSettings,
-                           qSharedPointerDynamicCast<QxrdApplication>(m_Application),
-                           qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()),
-                           m_Acquisition,
-                           m_Processor),
-            &QObject::deleteLater); //TODO: is deleteLater necessary?
+    //TODO: remove
+    m_Window = QxrdWindowPtr(
+          new QxrdWindow(m_WindowSettings,
+                         qSharedPointerDynamicCast<QxrdApplication>(m_Application),
+                         qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()),
+                         m_Acquisition,
+                         m_Processor),
+          &QObject::deleteLater); //TODO: is deleteLater necessary?
 
-      QxrdScriptEnginePtr eng(m_ScriptEngine);
+    QxrdScriptEnginePtr eng(m_ScriptEngine);
 
-      if (m_Window) {
-        m_Window -> initialize();
+    if (m_Window) {
+      m_Window -> initialize();
 
-        if (m_Acquisition) {
-//          m_Acquisition -> setWindow(m_Window);
+      if (m_Acquisition) {
+        //          m_Acquisition -> setWindow(m_Window);
 
-          m_Acquisition->openWindows(); // Open detector control windows...
-        }
-
-        if (eng) {
-          eng -> setWindow(m_Window);
-        }
-
-        if (m_ScriptEngineJS) {
-          m_ScriptEngineJS -> setWindow(m_Window);
-        }
-
-        m_Window -> onAcquisitionInit();
-
-        if (eng) {
-          connect(m_Window.data(),   &QxrdWindow::executeCommand,
-                  eng.data(),   &QxrdScriptEngine::evaluateAppCommand);
-
-          connect(eng.data(),   &QxrdScriptEngine::appResultAvailable,
-                  m_Window.data(),   &QxrdWindow::finishedCommand);
-        }
-
-        if (m_ScriptEngineJS) {
-          connect(m_Window.data(), &QxrdWindow::executeCommandJS,
-                  m_ScriptEngineJS.data(), &QxrdJSEngine::evaluateAppCommandJS);
-
-          connect(m_ScriptEngineJS.data(), &QxrdJSEngine::appResultAvailableJS,
-                  m_Window.data(), &QxrdWindow::finishedCommandJS);
-        }
-
-        readInitialLogFile();
-
-        if (m_Window && set && set->get_GuiWanted()) {
-          m_Window -> show();
-        }
+        m_Acquisition->openWindows(); // Open detector control windows...
       }
 
-      //TODO: move to base class...
-      for (int i=0; i<windowSettingsCount(); i++) {
-        QcepMainWindowSettingsPtr set =
-            windowSettings(i);
+      if (eng) {
+        eng -> setWindow(m_Window);
+      }
 
-        if (set) {
-          set->openWindow();
-        }
+      if (m_ScriptEngineJS) {
+        m_ScriptEngineJS -> setWindow(m_Window);
+      }
+
+      m_Window -> onAcquisitionInit();
+
+      if (eng) {
+        connect(m_Window.data(),   &QxrdWindow::executeCommand,
+                eng.data(),   &QxrdScriptEngine::evaluateAppCommand);
+
+        connect(eng.data(),   &QxrdScriptEngine::appResultAvailable,
+                m_Window.data(),   &QxrdWindow::finishedCommand);
+      }
+
+      if (m_ScriptEngineJS) {
+        connect(m_Window.data(), &QxrdWindow::executeCommandJS,
+                m_ScriptEngineJS.data(), &QxrdJSEngine::evaluateAppCommandJS);
+
+        connect(m_ScriptEngineJS.data(), &QxrdJSEngine::appResultAvailableJS,
+                m_Window.data(), &QxrdWindow::finishedCommandJS);
+      }
+
+      readInitialLogFile();
+
+      if (m_Window) {
+        m_Window -> show();
+      }
+    }
+
+    //TODO: move to base class...
+    for (int i=0; i<windowSettingsCount(); i++) {
+      QcepMainWindowSettingsPtr set =
+          windowSettings(i);
+
+      if (set) {
+        set->openWindow();
       }
     }
   }

@@ -5,7 +5,7 @@
 #include <QDialog>
 #include <QCheckBox>
 #include "ui_qxrdglobalpreferencesdialog.h"
-#include "qxrdapplicationsettings-ptr.h"
+#include "qxrdappcommon-ptr.h"
 #include "qxrdplugininfomodel-ptr.h"
 
 class QXRD_EXPORT QxrdGlobalPreferencesDialog : public QDialog, public Ui::QxrdGlobalPreferencesDialog
@@ -13,7 +13,7 @@ class QXRD_EXPORT QxrdGlobalPreferencesDialog : public QDialog, public Ui::QxrdG
   Q_OBJECT
 
 public:
-  explicit QxrdGlobalPreferencesDialog(QxrdApplicationSettingsWPtr set,
+  explicit QxrdGlobalPreferencesDialog(QxrdAppCommonWPtr       app,
                                        QxrdPluginInfoModelWPtr plugins);
   ~QxrdGlobalPreferencesDialog();
 
@@ -28,9 +28,9 @@ private:
   qint64 readDebugWidgets();
 
 private:
-  QxrdApplicationSettingsPtr       m_ApplicationSettings;
-  QxrdPluginInfoModelPtr           m_PluginInfo;
-  QVector<QCheckBox*>              m_DebugWidgetList;
+  QxrdAppCommonPtr         m_Application;
+  QxrdPluginInfoModelPtr   m_PluginInfo;
+  QVector<QCheckBox*>      m_DebugWidgetList;
 };
 
 #endif // QXRDGLOBALPREFERENCESDIALOG_H

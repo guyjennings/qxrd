@@ -5,7 +5,6 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QThread>
-#include "qxrdappcommonsettings.h"
 
 QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdAppCommonWPtr appw) :
   QMainWindow(NULL),
@@ -35,14 +34,10 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdAppCommonWPtr appw) :
     connect(m_NewExperiment, &QAbstractButton::clicked, m_ActionNewExperiment, &QAction::trigger);
     connect(m_OpenExistingExperiment, &QAbstractButton::clicked, m_ActionOpenExperiment, &QAction::trigger);
 
-    QxrdAppCommonSettingsPtr settings(app->settings());
+    QStringList recents = app->get_RecentExperiments();
 
-    if (settings) {
-      QStringList recents = settings->get_RecentExperiments();
-
-      foreach (QString recent, recents) {
-        appendRecentExperiment(recent);
-      }
+    foreach (QString recent, recents) {
+      appendRecentExperiment(recent);
     }
 
     setupRecentExperimentsMenu(m_ActionOpenRecentExperiment);
@@ -83,18 +78,14 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
   if (app) {
     m_RecentExperimentsMenu->clear();
 
-    QxrdAppCommonSettingsPtr settings(app->settings());
+    QStringList recent = app->get_RecentExperiments();
 
-    if (settings) {
-      QStringList recent = settings->get_RecentExperiments();
+    foreach (QString exp, recent) {
+      QAction *action = new QAction(exp, m_RecentExperimentsMenu);
 
-      foreach (QString exp, recent) {
-        QAction *action = new QAction(exp, m_RecentExperimentsMenu);
+      connect(action, &QAction::triggered, [=] {app->openRecentExperiment(exp);});
 
-        connect(action, &QAction::triggered, [=] {app->openRecentExperiment(exp);});
-
-        m_RecentExperimentsMenu -> addAction(action);
-      }
+      m_RecentExperimentsMenu -> addAction(action);
     }
   }
 }
@@ -187,14 +178,10 @@ void QxrdWelcomeWindow::openMostRecent()
   QxrdAppCommonPtr app(m_Application);
 
   if (app) {
-    QxrdAppCommonSettingsPtr settings(app->settings());
+    QString experiment = app->get_RecentExperiments().value(0);
 
-    if (settings) {
-      QString experiment = settings->get_RecentExperiments().value(0);
-
-      if (experiment.length()) {
-        app->openExperiment(experiment);
-      }
+    if (experiment.length()) {
+      app->openExperiment(experiment);
     }
   }
 }

@@ -92,15 +92,13 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings)
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
-    QcepObjectPtr obj = QcepObject::readObject(settings);
+    QcepObjectPtr obj = QcepObject::readObject(sharedFromThis(), settings);
 
     if (obj) {
       QxrdAcquisitionExtraInputsChannelPtr chan =
           qSharedPointerDynamicCast<QxrdAcquisitionExtraInputsChannel>(obj);
 
       if (chan) {
-        chan -> initialize(sharedFromThis());
-
         appendChannel(chan);
       }
     }

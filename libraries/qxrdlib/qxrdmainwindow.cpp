@@ -12,7 +12,6 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QThread>
-#include "qxrdapplicationsettings.h"
 #include "qcepallocator.h"
 
 QxrdMainWindow::QxrdMainWindow(QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw)
@@ -64,16 +63,12 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
   QxrdExperimentPtr  exper(m_Experiment);
 
   if (app) {
-    QxrdAppCommonSettingsPtr appset(app->settings());
+    connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdMainWindow::clearStatusMessage);
+    connect(&m_UpdateTimer, &QTimer::timeout, this, &QxrdMainWindow::doTimerUpdate);
 
-    if (appset) {
-      connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdMainWindow::clearStatusMessage);
-      connect(&m_UpdateTimer, &QTimer::timeout, this, &QxrdMainWindow::doTimerUpdate);
+    m_UpdateTimer.start(app->get_UpdateIntervalMsec());
 
-      m_UpdateTimer.start(appset->get_UpdateIntervalMsec());
-
-      connect(appset->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged, this, &QxrdMainWindow::onUpdateIntervalMsecChanged);
-    }
+    connect(app->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged, this, &QxrdMainWindow::onUpdateIntervalMsecChanged);
   }
 
   updateTitle();
@@ -300,18 +295,16 @@ void QxrdMainWindow::populateRecentExperimentsMenu()
   QxrdAppCommonPtr app(m_Application);
 
   if (app) {
-    QxrdAppCommonSettingsPtr set(app->settings());
+    QStringList recent = app->get_RecentExperiments();
 
-    if (set) {
-      QStringList recent = set->get_RecentExperiments();
+    foreach (QString exp, recent) {
+      QAction *action = new QAction(exp, m_RecentExperimentsMenu);
 
-      foreach (QString exp, recent) {
-        QAction *action = new QAction(exp, m_RecentExperimentsMenu);
+      QxrdAppCommon *appp = app.data();
 
-        connect(action, &QAction::triggered, [=] {app->openRecentExperiment(exp);});
+      connect(action, &QAction::triggered, [=] {appp->openRecentExperiment(exp);});
 
-        m_RecentExperimentsMenu -> addAction(action);
-      }
+      m_RecentExperimentsMenu -> addAction(action);
     }
   }
 }

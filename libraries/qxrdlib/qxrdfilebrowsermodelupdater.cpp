@@ -1,6 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdfilebrowsermodelupdater.h"
-#include "qxrdapplicationsettings.h"
+#include "qxrdappcommon.h"
 #include <QThread>
 #include <QDirIterator>
 #include "qxrdfilebrowsermodel.h"
@@ -310,7 +310,7 @@ void QxrdFileBrowserModelUpdater::updateContents()
 
     int limit = 10000;
 
-    QxrdApplicationSettings *app = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
+    QxrdAppCommon *app = qobject_cast<QxrdAppCommon*>(g_Application);
 
     if (app) {
       limit = app->get_FileBrowserLimit();

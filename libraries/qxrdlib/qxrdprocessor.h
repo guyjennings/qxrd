@@ -121,7 +121,7 @@ public:
   void clearMask();
   QcepMaskDataWPtr        mask() const;
   void newMask(QcepMaskDataWPtr mask);
-  void onMaskPathChanged(QString newPath);
+//  void onMaskPathChanged(QString newPath);
 
   // bad pixel operations...
   void loadBadPixels(QString name);

@@ -1,8 +1,0 @@
-#ifndef QXRDAPPCOMMONSETTINGSPTR_H
-#define QXRDAPPCOMMONSETTINGSPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdAppCommonSettings)
-
-#endif // QXRDAPPCOMMONSETTINGSPTR_H

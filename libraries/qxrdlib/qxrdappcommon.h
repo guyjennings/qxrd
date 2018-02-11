@@ -4,7 +4,6 @@
 #include "qxrdlib_global.h"
 #include "qcepproperty.h"
 #include "qcepapplication.h"
-#include "qxrdappcommonsettings-ptr.h"
 #include "qxrdsplashscreen-ptr.h"
 #include "qxrdwelcomewindow-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -12,6 +11,7 @@
 #include "qxrdmainwindowsettings-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include <QTimer>
+#include "qcepallocator-ptr.h"
 
 class QXRD_EXPORT QxrdAppCommon : public QcepApplication
 {
@@ -29,6 +29,12 @@ public:
 
   virtual void finish();
 
+  void appendCommand(QString cmd);
+  void appendScript(QString script);
+  void appendFile(QString file);
+  void appendWatcher(QString patt);
+  void appendPlugin(QString dir);
+
   void parseCommandLine(bool wantFullOptions);
 
   Q_INVOKABLE void splashMessage(QString msg);
@@ -42,9 +48,6 @@ public:
   void openWelcomeWindow();
   void closeWelcomeWindow();
 
-  QxrdAppCommonSettingsPtr settings();
-  void setSettings(QxrdAppCommonSettingsPtr set);
-
   virtual QString applicationDescription() = 0;
 
   virtual void openExperiment(QString path) = 0;
@@ -56,6 +59,9 @@ public:
 
   virtual void readApplicationSettings() = 0;
   virtual void writeApplicationSettings() = 0;
+
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
 
   virtual void editGlobalPreferences() = 0;
   virtual void createNewExperiment() = 0;
@@ -73,14 +79,84 @@ public:
 
   QxrdExperimentPtr experiment(int i) const;
 
+  QcepAllocatorWPtr allocator() const;
+
   void possiblyQuit();
   bool wantToQuit();
+
+private:
+  QStringList makeStringListFromArgs(int argc, char **argv);
+
+public:
+  Q_PROPERTY(int    argc       READ get_Argc      WRITE set_Argc STORED false)
+  QCEP_INTEGER_PROPERTY(Argc)
+
+  Q_PROPERTY(QStringList argv READ get_Argv WRITE set_Argv STORED false)
+  QCEP_STRING_LIST_PROPERTY(Argv)
+
+  Q_PROPERTY(int    guiWanted  READ get_GuiWanted WRITE set_GuiWanted STORED false)
+  QCEP_INTEGER_PROPERTY(GuiWanted)
+
+  Q_PROPERTY(QStringList cmdList READ get_CmdList WRITE set_CmdList STORED false)
+  QCEP_STRING_LIST_PROPERTY(CmdList)
+
+  Q_PROPERTY(QStringList fileList READ get_FileList WRITE set_FileList STORED false)
+  QCEP_STRING_LIST_PROPERTY(FileList)
+
+  Q_PROPERTY(QStringList watcherList READ get_WatcherList WRITE set_WatcherList STORED false)
+  QCEP_STRING_LIST_PROPERTY(WatcherList)
+
+  Q_PROPERTY(QStringList pluginList READ get_PluginList WRITE set_PluginList STORED false)
+  QCEP_STRING_LIST_PROPERTY(PluginList)
+
+  Q_PROPERTY(qint64    debug         READ get_Debug WRITE set_Debug)
+  QCEP_INTEGER64_PROPERTY(Debug)
+
+  Q_PROPERTY(int    openNew         READ get_OpenNew WRITE set_OpenNew STORED false)
+  QCEP_INTEGER_PROPERTY(OpenNew)
+
+  Q_PROPERTY(int    freshStart         READ get_FreshStart WRITE set_FreshStart STORED false)
+  QCEP_INTEGER_PROPERTY(FreshStart)
+
+  Q_PROPERTY(int    startDetectors READ get_StartDetectors WRITE set_StartDetectors STORED false)
+  QCEP_INTEGER_PROPERTY(StartDetectors)
+
+  Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment)
+  QCEP_STRING_PROPERTY(CurrentExperiment)
+
+  Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
+  QCEP_STRING_LIST_PROPERTY(RecentExperiments)
+
+  Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize)
+  QCEP_INTEGER_PROPERTY(RecentExperimentsSize)
+
+  Q_PROPERTY(int experimentCount READ get_ExperimentCount WRITE set_ExperimentCount STORED false)
+  QCEP_INTEGER_PROPERTY(ExperimentCount)
+
+  Q_PROPERTY(QString currentDirectory READ get_CurrentDirectory WRITE set_CurrentDirectory)
+  QCEP_STRING_PROPERTY(CurrentDirectory)
+
+  Q_PROPERTY(int    fileBrowserLimit   READ get_FileBrowserLimit WRITE set_FileBrowserLimit)
+  QCEP_INTEGER_PROPERTY(FileBrowserLimit)
+
+  Q_PROPERTY(int    messageWindowLines   READ get_MessageWindowLines WRITE set_MessageWindowLines)
+  QCEP_INTEGER_PROPERTY(MessageWindowLines)
+
+  Q_PROPERTY(int    updateIntervalMsec   READ get_UpdateIntervalMsec WRITE set_UpdateIntervalMsec)
+  QCEP_INTEGER_PROPERTY(UpdateIntervalMsec)
+
+  Q_PROPERTY(int lockerCount READ get_LockerCount WRITE set_LockerCount STORED false)
+  QCEP_INTEGER_PROPERTY(LockerCount)
+
+  Q_PROPERTY(double lockerRate READ get_LockerRate WRITE set_LockerRate STORED false)
+  QCEP_DOUBLE_PROPERTY(LockerRate)
 
 private:
   void hideSplash();
   void setupTiffHandlers();
 
-  QxrdAppCommonSettingsPtr        m_ApplicationSettings;
+  QcepAllocatorPtr                m_Allocator;
+
   QTimer                          m_SplashTimer;
   QxrdSplashScreenPtr             m_Splash;
 

@@ -7,7 +7,7 @@
 #include "qcepmutexlocker.h"
 #include "levmar.h"
 #include <QMessageBox>
-#include "qxrdapplicationsettings.h"
+#include "qxrdappcommon.h"
 #include <QtConcurrentMap>
 #include "qxrddebug.h"
 #include "qxrdfitterpeakpoint.h"
@@ -330,9 +330,9 @@ void QxrdCenterFinder::fitPowderCircle(int n)
 
   printMessage(message);
 
-  QxrdApplicationSettings *set = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
+  QxrdAppCommon *app = qobject_cast<QxrdAppCommon*>(g_Application);
 
-  if (set && set->get_GuiWanted()) {
+  if (app && app->get_GuiWanted()) {
     if (niter >= 0) {
       message.append(tr("Do you want to update the beam centering parameters?"));
 
@@ -377,9 +377,9 @@ void QxrdCenterFinder::fitPowderEllipse(int n)
 
   printMessage(message);
 
-  QxrdApplicationSettings *set = qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
+  QxrdAppCommon *app = qobject_cast<QxrdAppCommon*>(g_Application);
 
-  if (set && set->get_GuiWanted()) {
+  if (app && app->get_GuiWanted()) {
     if (fitter.reason() == QxrdFitter::Successful) {
       message.append(tr("Do you want to update the beam centering parameters?"));
       if (QMessageBox::question(NULL, "Update Fitted Center?", message, QMessageBox::Ok | QMessageBox::No, QMessageBox::Ok) == QMessageBox::Ok) {

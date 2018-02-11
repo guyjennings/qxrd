@@ -1,18 +1,13 @@
 #include "qxrdappviewer.h"
 #include "qcepdataobject.h"
-#include "qxrdappviewersettings.h"
-#include "qxrdviewersettings.h"
+#include "qxrdappcommon.h"
 #include "qxrdexperimentthread.h"
 #include "qxrdexperiment.h"
+#include "qxrdviewersettings.h"
 
 QxrdAppViewer::QxrdAppViewer(int &argc, char **argv)
   : inherited(argc, argv)
 {
-  setSettings(QxrdAppViewerSettingsPtr(
-        new QxrdAppViewerSettings(
-                  "qxrdViewerSettings",
-                  argc,
-                  argv)));
 }
 
 QxrdAppViewer::~QxrdAppViewer()
@@ -23,23 +18,21 @@ void QxrdAppViewer::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
-  if (settings()) {
-    parseCommandLine(false);
+  parseCommandLine(false);
 
-    int nWatches = settings() -> get_WatcherList().length();
-    int nFiles   = settings() -> get_FileList().length();
+  int nWatches = get_WatcherList().length();
+  int nFiles   = get_FileList().length();
 
-    if (nFiles > 0 || nWatches > 0) {
-      foreach(QString file, settings()->get_FileList()) {
-        openFile(file);
-      }
-
-      foreach(QString patt, settings()->get_WatcherList()) {
-        openWatcher(patt);
-      }
-    } else {
-      openWatcher(".");
+  if (nFiles > 0 || nWatches > 0) {
+    foreach(QString file, get_FileList()) {
+      openFile(file);
     }
+
+    foreach(QString patt, get_WatcherList()) {
+      openWatcher(patt);
+    }
+  } else {
+    openWatcher(".");
   }
 }
 
@@ -65,12 +58,6 @@ void QxrdAppViewer::criticalMessage(QString msg, QDateTime ts) const
 QString QxrdAppViewer::applicationDescription()
 {
   return QStringLiteral("QXRDVIEWER Data Viewer for 2-D XRay Detector data");
-}
-
-QxrdAppViewerSettingsPtr QxrdAppViewer::settings()
-{
-  return qSharedPointerDynamicCast<QxrdAppViewerSettings>(
-        inherited::settings());
 }
 
 void QxrdAppViewer::openExperiment(QString path)
@@ -105,21 +92,17 @@ void QxrdAppViewer::readApplicationSettings()
 {
   QxrdViewerSettings set(this);
 
-  if (settings()) {
-    set.beginGroup("application");
-    settings() -> readSettings(&set);
-    set.endGroup();
-  }
+  set.beginGroup("application");
+  readSettings(&set);
+  set.endGroup();
 }
 
 void QxrdAppViewer::writeApplicationSettings()
 {
   QxrdViewerSettings set(this);
 
-  if (settings()) {
-    set.beginGroup("application");
-    settings() -> writeSettings(&set);
-    set.endGroup();
-    settings() -> setChanged(0);
-  }
+  set.beginGroup("application");
+  writeSettings(&set);
+  set.endGroup();
+  setChanged(0);
 }

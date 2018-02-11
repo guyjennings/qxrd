@@ -6,7 +6,6 @@
 #include "qcepproperty.h"
 
 #include "qxrdappcommon.h"
-#include "qxrdappviewersettings-ptr.h"
 
 class QXRD_EXPORT QxrdAppViewer : public QxrdAppCommon
 {
@@ -25,8 +24,6 @@ public:
 
   void setDefaultObjectData(QcepDataObject *obj);
 
-  QxrdAppViewerSettingsPtr settings();
-
   void openExperiment(QString path);
 
   void readApplicationSettings();
@@ -38,9 +35,6 @@ public:
 
 private:
   QString applicationDescription();
-
-private:
-//  QxrdAppViewerSettingsPtr      m_AppViewerSettings;
 };
 
 #endif // QXRDAPPVIEWER_H

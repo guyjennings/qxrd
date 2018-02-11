@@ -6,7 +6,7 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdwindow.h"
-#include "qxrdapplication.h"
+//#include "qxrdapplication.h"
 #include "qxrdacqcommon-ptr.h"
 //#include <QThreadPool>
 #include <QtConcurrentRun>
@@ -18,10 +18,11 @@
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrddarkacquisitionparameterpack.h"
 #include "qxrdacquisitionscalermodel.h"
-#include "qxrdapplicationsettings.h"
+#include "qxrdappcommon.h"
 #include "qxrdacquisitionexecutionthread.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
+#include "qxrdexperiment.h"
 
 QxrdAcquisition::QxrdAcquisition(QString name) :
   inherited(name),
@@ -124,12 +125,13 @@ QxrdExperimentWPtr QxrdAcquisition::experiment() const
   return expt;
 }
 
-QxrdApplicationWPtr QxrdAcquisition::application() const
+//TODO: rewrite
+QxrdAppCommonWPtr QxrdAcquisition::application() const
 {
-  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+  QxrdAppCommon *app = qobject_cast<QxrdAppCommon*>(g_Application);
 
-  QxrdApplicationWPtr appw =
-      qSharedPointerDynamicCast<QxrdApplication>(app->sharedFromThis());
+  QxrdAppCommonWPtr appw =
+      qSharedPointerDynamicCast<QxrdAppCommon>(app->sharedFromThis());
 
   return appw;
 }
@@ -362,23 +364,21 @@ void QxrdAcquisition::readSettings(QSettings *settings)
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
-    QcepObjectPtr obj = QcepObject::readObject(settings);
+    QcepObjectPtr obj = QcepObject::readObject(sharedFromThis(), settings);
 
     if (obj) {
       QxrdDetectorSettingsPtr det =
           qSharedPointerDynamicCast<QxrdDetectorSettings>(obj);
 
       if (det) {
-        det->initialize(sharedFromThis());
-
         det->set_DetectorNumber(m_Detectors.count());
 
         m_Detectors.append(det);
 
-        QxrdApplicationSettings *set =
-            qobject_cast<QxrdApplicationSettings*>(g_ApplicationSettings);
+        QxrdAppCommon *app =
+            qobject_cast<QxrdAppCommon*>(g_Application);
 
-        if (set && set->get_StartDetectors() == 0) {
+        if (app && app->get_StartDetectors() == 0) {
           det->set_Enabled(false);
         }
 

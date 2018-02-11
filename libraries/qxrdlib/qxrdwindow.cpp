@@ -35,7 +35,6 @@
 #include "qxrdtodolist.h"
 #include "qxrdpolartransformdialog.h"
 #include "qxrdpolarnormalizationdialog.h"
-#include "qxrdapplicationsettings.h"
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdcenterfinderplotsettings.h"
 #include "qxrddistortioncorrectionplotsettings.h"
@@ -669,33 +668,28 @@ void QxrdWindow::initialize()
 //          m_HistogramDialog, &QxrdHistogramDialog::histogramSelectionChanged);
 
   if (app) {
-    QxrdApplicationSettingsPtr appset(
-          qSharedPointerDynamicCast<QxrdApplicationSettings>(app->settings()));
+    m_Messages -> document() -> setMaximumBlockCount(app->get_MessageWindowLines());
 
-    if (appset) {
-      m_Messages -> document() -> setMaximumBlockCount(appset->get_MessageWindowLines());
-
-      connect(appset->prop_MessageWindowLines(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onMessageWindowLinesChanged);
+    connect(app->prop_MessageWindowLines(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onMessageWindowLinesChanged);
 
 #ifdef QT_NO_DEBUG
-      m_ActionRefineCenterTilt->setEnabled(false);
+    m_ActionRefineCenterTilt->setEnabled(false);
 #endif
 
-      if (expt && set) {
-        if (!expt->get_DefaultLayout()) {
-          QByteArray geometry = set->get_WindowGeometry();
-          QByteArray winstate = set->get_WindowState();
+    if (expt && set) {
+      if (!expt->get_DefaultLayout()) {
+        QByteArray geometry = set->get_WindowGeometry();
+        QByteArray winstate = set->get_WindowState();
 
-          if (!restoreGeometry(geometry)) {
-            printf("Restore geometry failed\n");
-          }
-
-          if (!restoreState(winstate, QXRD_WINDOW_STATE_VERSION)) {
-            printf("Restore state failed\n");
-          }
-        } else{
-          expt->set_DefaultLayout(0);
+        if (!restoreGeometry(geometry)) {
+          printf("Restore geometry failed\n");
         }
+
+        if (!restoreState(winstate, QXRD_WINDOW_STATE_VERSION)) {
+          printf("Restore state failed\n");
+        }
+      } else{
+        expt->set_DefaultLayout(0);
       }
     }
   }

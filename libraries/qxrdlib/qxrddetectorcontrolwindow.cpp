@@ -8,8 +8,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include "qxrdroi.h"
-#include "qxrdapplication.h"
-#include "qxrdapplicationsettings.h"
+#include "qxrdappcommon.h"
 #include "qcepmutexlocker.h"
 #include "qxrddetectorsettings.h"
 #include "qxrdroitypedelegate.h"
@@ -18,6 +17,7 @@
 #include "qxrdwindow.h"
 #include "qxrdroieditordialog.h"
 #include <QThread>
+#include "qxrdexperiment.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          appl,
                                                      QxrdExperimentWPtr        exp,
@@ -42,7 +42,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          a
   setAttribute(Qt::WA_DeleteOnClose, false);
 
   QxrdProcessorPtr dp(m_Processor);
-  QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
+  QxrdAppCommon *app = qobject_cast<QxrdAppCommon*>(g_Application);
   QxrdExperimentPtr expt(m_Experiment);
   QxrdDetectorSettingsPtr dt(m_Detector);
   QxrdAcqCommonPtr acqp(m_Acquisition);
@@ -64,8 +64,6 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          a
     dp->prop_SaveSubtractedSubdirectory()
                                        -> linkTo(m_SubtractedDataSubdir);
 
-    dp->prop_MaskPath()                -> linkTo(m_MaskImagePath);
-
     dp->prop_PerformIntegration()      -> linkTo(m_PerformIntegration);
     dp->prop_DisplayIntegratedData()   -> linkTo(m_DisplayIntegratedData);
     dp->prop_SaveIntegratedData()      -> linkTo(m_SaveIntegratedData);
@@ -81,8 +79,6 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          a
 
     connect(dp->prop_DisplayROIBorders(), &QcepBoolProperty::valueChanged, this, &QxrdDetectorControlWindow::updateROIDisplay);
 
-    connect(m_BrowseMask,          &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseMask);
-    connect(m_ClearMask,           &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearMask);
     connect(m_BrowseDarkImage,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseDark);
     connect(m_ClearDarkImage,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearDark);
     connect(m_BrowseBadPixels,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseBadPixels);
@@ -144,15 +140,13 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          a
   }
 
   if (app) {
-    QxrdApplicationSettingsPtr set(app->settings());
-
-    connect(set->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged,
+    connect(app->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged,
             this, &QxrdDetectorControlWindow::onUpdateIntervalMsecChanged);
 
     connect(&m_UpdateTimer, &QTimer::timeout,
             this, &QxrdDetectorControlWindow::updateImageDisplay);
 
-    m_UpdateTimer.start(set->get_UpdateIntervalMsec());
+    m_UpdateTimer.start(app->get_UpdateIntervalMsec());
   }
 
   if (expt) {
@@ -540,23 +534,25 @@ void QxrdDetectorControlWindow::doBrowseMask()
                                                    dp->get_MaskPath());
 
     if (newPath.length() > 0) {
+      dp->loadMask(newPath);
+
       dp->set_MaskPath(newPath);
     }
   }
 }
 
-void QxrdDetectorControlWindow::doClearMask()
-{
-  QxrdProcessorPtr dp(m_Processor);
+//void QxrdDetectorControlWindow::doClearMask()
+//{
+//  QxrdProcessorPtr dp(m_Processor);
 
-  if (dp) {
-    int res = QMessageBox::information(this, "Clear Mask?", "Do you really want to clear the mask?", QMessageBox::Ok, QMessageBox::Cancel);
+//  if (dp) {
+//    int res = QMessageBox::information(this, "Clear Mask?", "Do you really want to clear the mask?", QMessageBox::Ok, QMessageBox::Cancel);
 
-    if (res == QMessageBox::Ok) {
-      dp->set_MaskPath("");
-    }
-  }
-}
+//    if (res == QMessageBox::Ok) {
+//      dp->set_MaskPath("");
+//    }
+//  }
+//}
 
 void QxrdDetectorControlWindow::doBrowseDark()
 {

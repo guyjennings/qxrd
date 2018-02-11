@@ -195,7 +195,6 @@ SOURCES += qxrdlib.cpp \
     qxrdcalibrantdspacings.cpp \
     qxrdcalibrantdspacing.cpp \
     qxrdintegratorparmsdialog.cpp \
-    qxrdapplicationsettings.cpp \
     qxrdintegratorplotsettings.cpp \
     qxrdacquisitionextrainputsplotsettings.cpp \
     qxrddetectorsettings.cpp \
@@ -364,8 +363,6 @@ SOURCES += qxrdlib.cpp \
     qxrdwatcher.cpp \
     qxrdappcommon.cpp \
     qxrdappviewer.cpp \
-    qxrdappcommonsettings.cpp \
-    qxrdappviewersettings.cpp \
     qxrdviewersettings.cpp \
     qxrdacqcommon.cpp \
     qxrdacqdummy.cpp
@@ -562,10 +559,6 @@ HEADERS += qxrdlib.h\
     qxrdappcommon-ptr.h \
     qxrdappviewer.h \
     qxrdappviewer-ptr.h \
-    qxrdappcommonsettings.h \
-    qxrdappviewersettings.h \
-    qxrdappviewersettings-ptr.h \
-    qxrdappcommonsettings-ptr.h \
     qxrdviewersettings.h \
     qxrdacqcommon.h \
     qxrdacqcommon-ptr.h \
@@ -768,8 +761,6 @@ HEADERS += TODO.h \
     qxrdcalibrantdspacing-ptr.h \
     qxrdcalibrantdspacings-ptr.h \
     qxrdintegratorparmsdialog.h \
-    qxrdapplicationsettings.h \
-    qxrdapplicationsettings-ptr.h \
     qxrdintegratorplotsettings.h \
     qxrdintegratorplotsettings-ptr.h \
     qxrddistortioncorrectionplotsettings-ptr.h \

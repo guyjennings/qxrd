@@ -66,15 +66,13 @@ void QxrdCalibrantLibrary::readSettings(QSettings *settings)
   for (int i=0; i<nc; i++) {
     settings->setArrayIndex(i);
 
-    QcepObjectPtr obj = QcepObject::readObject(settings);
+    QcepObjectPtr obj = QcepObject::readObject(sharedFromThis(), settings);
 
     if (obj) {
       QxrdCalibrantPtr cal =
           qSharedPointerDynamicCast<QxrdCalibrant>(obj);
 
       if (cal) {
-        cal->initialize(sharedFromThis());
-
         appendCalibrant(cal);
       }
     }

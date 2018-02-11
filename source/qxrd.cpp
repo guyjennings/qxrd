@@ -4,7 +4,6 @@
 #include "qcepallocator.h"
 #include "qxrdapplication.h"
 #include "qxrdapplication-ptr.h"
-#include "qxrdapplicationsettings.h"
 #include "qxrdwindow.h"
 #include "qxrdsplashscreen.h"
 #include "qxrdsplashscreen-ptr.h"
@@ -44,19 +43,19 @@ int main(int argc, char *argv[])
         QxrdApplicationPtr(
           new QxrdApplication(argc, argv));
 
-    app->initialize(QcepObjectWPtr());
+    if (app) {
+      app->initialize(QcepObjectWPtr());
 
-    QxrdApplicationSettingsPtr set(app->settings());
+      if (app->get_GuiWanted()) {
+        res = app->exec();
+      } else {
+        app->processEvents();
+        app->exit();
+      }
 
-    if (set && set->get_GuiWanted()) {
-      res = app->exec();
-    } else {
-      app->processEvents();
-      app->exit();
-    }
-
-    if (qcepDebug(DEBUG_EXITWAIT)) {
-      while(1) {}
+      if (qcepDebug(DEBUG_EXITWAIT)) {
+        while(1) {}
+      }
     }
 
     app = QxrdApplicationPtr();

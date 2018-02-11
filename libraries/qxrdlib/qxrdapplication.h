@@ -16,7 +16,6 @@
 #include "qxrddetectorplugininterface-ptr.h"
 #include "qxrdsplashscreen-ptr.h"
 #include "qcepdataobject-ptr.h"
-#include "qxrdapplicationsettings-ptr.h"
 #include "qxrdplugininfomodel-ptr.h"
 
 class QXRD_EXPORT QxrdApplication : public QxrdAppCommon
@@ -96,9 +95,6 @@ public slots:
 
 
   QxrdPluginInfoModelWPtr pluginInfo();
-
-public:
-  QxrdApplicationSettingsPtr settings();
 
 public:
   void incLockerCount();

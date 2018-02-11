@@ -17,7 +17,7 @@
 #include "qcepmaskdata-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
@@ -109,7 +109,7 @@ public:
 protected:
 //  void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
-  QxrdApplicationWPtr application() const;
+  QxrdAppCommonWPtr application() const;
   QxrdExperimentWPtr experiment() const;
   QxrdProcessorWPtr processor() const;  //TODO: eliminate
 

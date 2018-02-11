@@ -21,15 +21,13 @@ void QxrdROIVector::readSettings(QSettings *settings)
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
-    QcepObjectPtr obj = QcepObject::readObject(settings);
+    QcepObjectPtr obj = QcepObject::readObject(sharedFromThis(), settings);
 
     if (obj) {
       QxrdROIPtr roi =
           qSharedPointerDynamicCast<QxrdROI>(obj);
 
       if (roi) {
-        roi->initialize(sharedFromThis());
-
         int i = m_ROICoordinates.count();
 
         m_ROICoordinates.append(roi);

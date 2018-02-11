@@ -8,7 +8,7 @@
 #include "qxrdprocessor-ptr.h"
 #include "qxrdroimodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdapplication-ptr.h"
+#include "qxrdappcommon-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrddetectorcontrolwindowsettings-ptr.h"
 #include <QTimer>
@@ -74,7 +74,6 @@ private slots:
   void updateROIDisplay(bool show);
 
   void doBrowseMask();
-  void doClearMask();
 
   void doBrowseDark();
   void doClearDark();

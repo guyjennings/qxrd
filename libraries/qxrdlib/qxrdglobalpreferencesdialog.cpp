@@ -1,14 +1,15 @@
 #include "qxrddebug.h"
 #include "qxrdglobalpreferencesdialog.h"
 #include "ui_qxrdglobalpreferencesdialog.h"
-#include "qxrdapplicationsettings.h"
+#include "qxrdappcommon.h"
 #include "qcepallocator.h"
 #include <stdio.h>
 #include "qxrdplugininfomodel.h"
 
-QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplicationSettingsWPtr set, QxrdPluginInfoModelWPtr plugins) :
+QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(
+    QxrdAppCommonWPtr app, QxrdPluginInfoModelWPtr plugins) :
   QDialog(NULL),
-  m_ApplicationSettings(set),
+  m_Application(app),
   m_PluginInfo(plugins)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -18,32 +19,34 @@ QxrdGlobalPreferencesDialog::QxrdGlobalPreferencesDialog(QxrdApplicationSettings
   setupUi(this);
 
 //  m_OpenDirectly -> setChecked(m_Application->get_OpenDirectly());
-  m_RecentExperimentsSize -> setValue(m_ApplicationSettings->get_RecentExperimentsSize());
+  if (m_Application) {
+    m_RecentExperimentsSize -> setValue(m_Application->get_RecentExperimentsSize());
 
-  qint64 debugLevel = m_ApplicationSettings -> get_Debug();
+    qint64 debugLevel = m_Application -> get_Debug();
 
-  QcepAllocatorPtr alloc(m_ApplicationSettings->allocator());
+    QcepAllocatorPtr alloc(m_Application->allocator());
 
-  if (alloc) {
-    m_ReservedMemory32 -> setRange(500, 3000);
-    m_ReservedMemory32 -> setValue(alloc->get_TotalBufferSizeMB32());
-    m_ReservedMemory64 -> setRange(500, 60000);
-    m_ReservedMemory64 -> setValue(alloc->get_TotalBufferSizeMB64());
-    m_ExtraReservedMemory -> setRange(0, 500);
-    m_ExtraReservedMemory -> setValue(alloc->get_Reserve());
+    if (alloc) {
+      m_ReservedMemory32 -> setRange(500, 3000);
+      m_ReservedMemory32 -> setValue(alloc->get_TotalBufferSizeMB32());
+      m_ReservedMemory64 -> setRange(500, 60000);
+      m_ReservedMemory64 -> setValue(alloc->get_TotalBufferSizeMB64());
+      m_ExtraReservedMemory -> setRange(0, 500);
+      m_ExtraReservedMemory -> setValue(alloc->get_Reserve());
+    }
+
+    m_FileBrowserLimit -> setValue(m_Application->get_FileBrowserLimit());
+
+    m_MessageWindowLines -> setValue(m_Application->get_MessageWindowLines());
+    m_UpdateIntervalMsec -> setValue(m_Application->get_UpdateIntervalMsec());
+
+    if (m_PluginInfo) {
+      m_PluginInfoTable->setModel(m_PluginInfo.data());
+      m_PluginInfoTable->resizeColumnsToContents();
+    }
+
+    setupDebugWidgets(debugLevel);
   }
-
-  m_FileBrowserLimit -> setValue(m_ApplicationSettings->get_FileBrowserLimit());
-
-  m_MessageWindowLines -> setValue(m_ApplicationSettings->get_MessageWindowLines());
-  m_UpdateIntervalMsec -> setValue(m_ApplicationSettings->get_UpdateIntervalMsec());
-
-  if (m_PluginInfo) {
-    m_PluginInfoTable->setModel(m_PluginInfo.data());
-    m_PluginInfoTable->resizeColumnsToContents();
-  }
-
-  setupDebugWidgets(debugLevel);
 }
 
 QxrdGlobalPreferencesDialog::~QxrdGlobalPreferencesDialog()
@@ -69,27 +72,28 @@ void QxrdGlobalPreferencesDialog::accept()
 {
   qint64 debugLevel = readDebugWidgets();
 
-//  m_Application -> set_OpenDirectly(m_OpenDirectly->isChecked());
-  m_ApplicationSettings -> set_RecentExperimentsSize(m_RecentExperimentsSize->value());
+  if (m_Application) {
+    //  m_Application -> set_OpenDirectly(m_OpenDirectly->isChecked());
+    m_Application -> set_RecentExperimentsSize(m_RecentExperimentsSize->value());
 
-  int bufferSize32 = m_ReservedMemory32 -> value();
-  int bufferSize64 = m_ReservedMemory64 -> value();
-  int extraReserve = m_ExtraReservedMemory -> value();
+    int bufferSize32 = m_ReservedMemory32 -> value();
+    int bufferSize64 = m_ReservedMemory64 -> value();
+    int extraReserve = m_ExtraReservedMemory -> value();
 
+    m_Application -> set_Debug(debugLevel);
 
-  m_ApplicationSettings -> set_Debug(debugLevel);
+    QcepAllocatorPtr alloc(m_Application->allocator());
 
-  QcepAllocatorPtr alloc(m_ApplicationSettings->allocator());
+    if (alloc) {
+      alloc         -> set_TotalBufferSizeMB32(bufferSize32);
+      alloc         -> set_TotalBufferSizeMB64(bufferSize64);
+      alloc         -> set_Reserve(extraReserve);
+    }
 
-  if (alloc) {
-    alloc         -> set_TotalBufferSizeMB32(bufferSize32);
-    alloc         -> set_TotalBufferSizeMB64(bufferSize64);
-    alloc         -> set_Reserve(extraReserve);
+    m_Application -> set_FileBrowserLimit(m_FileBrowserLimit->value());
+    m_Application -> set_MessageWindowLines(m_MessageWindowLines -> value());
+    m_Application -> set_UpdateIntervalMsec(m_UpdateIntervalMsec -> value());
   }
-
-  m_ApplicationSettings -> set_FileBrowserLimit(m_FileBrowserLimit->value());
-  m_ApplicationSettings -> set_MessageWindowLines(m_MessageWindowLines -> value());
-  m_ApplicationSettings -> set_UpdateIntervalMsec(m_UpdateIntervalMsec -> value());
 
   QDialog::accept();
 }

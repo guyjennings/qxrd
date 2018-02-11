@@ -1,7 +1,6 @@
 #include "qxrdappcommon.h"
 #include "qxrddebug.h"
 #include "qcepimagedataformattiff.h"
-#include "qxrdappcommonsettings.h"
 #include "qxrdsplashscreen.h"
 #include "qxrdpowderpoint.h"
 #include "qxrdcalibrantdspacing.h"
@@ -21,9 +20,32 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QApplication>
+#include "qcepallocator.h"
 
 QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   : inherited(argc, argv),
+    m_Argc(this, "argc", argc, "Number of Command Line Arguments"),
+    m_Argv(this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
+    m_GuiWanted(this, "guiWanted", 1, "GUI Wanted?"),
+    m_CmdList(this, "cmdList", QStringList(), "Commands to Execute"),
+    m_FileList(this, "fileList", QStringList(), "Files to Process"),
+    m_WatcherList(this, "watcherList", QStringList(), "File patterns to watch for"),
+    m_PluginList(this, "pluginList", QStringList(), "Plugin directories"),
+    m_Debug(this,"debug", 0, "Debug Level"),
+    m_OpenNew(this,"openNew", 0, "Open a new experiment"),
+    m_FreshStart(this,"freshStart", 0, "Do a Fresh Start"),
+    m_StartDetectors(this, "startDetectors", 1, "Start Detectors when opening experiments"),
+    m_CurrentExperiment(this, "currentExperiment", "", "Current Experiment"),
+    m_RecentExperiments(this, "recentExperiments", QStringList(), "Recent Experiments"),
+    m_RecentExperimentsSize(this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
+    m_ExperimentCount(this, "experimentCount", 0, "Number of open experiments"),
+    m_CurrentDirectory(this, "currentDirectory", QDir::homePath(), "Current Directory"),
+    //  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
+    m_FileBrowserLimit(this, "fileBrowserLimit", 1000, "Max Number of Files in Browser Windows (0 = unlimited)"),
+    m_MessageWindowLines(this, "messageWindowLines", 1000, "Number of Lines in Message Window (0 = unlimited)"),
+    m_UpdateIntervalMsec(this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)"),
+    m_LockerCount(this, "lockerCount", 0, "Number of mutex locks taken"),
+    m_LockerRate(this, "lockerRate", 0, "Mutex Locking Rate"),
     m_Splash(NULL),
     m_WelcomeWindow(NULL)
 {
@@ -37,6 +59,9 @@ QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   QxrdDetectorControlWindowSettings::registerMetaTypes();
   QxrdTestGenerator::registerMetaTypes();
   QxrdDetectorSettings::registerMetaTypes();
+
+  m_Allocator = QcepAllocatorPtr(
+        new QcepAllocator("allocator"));
 }
 
 QxrdAppCommon::~QxrdAppCommon()
@@ -51,8 +76,8 @@ void QxrdAppCommon::initialize(QcepObjectWPtr parent)
 
   inherited::initialize(parent);
 
-  if (m_ApplicationSettings) {
-    m_ApplicationSettings->initialize(sharedFromThis());
+  if (m_Allocator) {
+    m_Allocator->initialize(parent);
   }
 
   connect(m_Application.data(),  &QApplication::aboutToQuit,
@@ -99,177 +124,217 @@ QxrdAppCommonWPtr QxrdAppCommon::findApplication(QcepObjectWPtr p)
   return res;
 }
 
-QxrdAppCommonSettingsPtr QxrdAppCommon::settings()
+QcepAllocatorWPtr QxrdAppCommon::allocator() const
 {
-  return m_ApplicationSettings;
+  return m_Allocator;
 }
 
-void QxrdAppCommon::setSettings(QxrdAppCommonSettingsPtr set)
+void QxrdAppCommon::readSettings(QSettings *settings)
 {
-  m_ApplicationSettings = set;
+  inherited::readSettings(settings);
+
+  if (m_Allocator) {
+    settings->beginGroup("allocator");
+    m_Allocator->readSettings(settings);
+    settings->endGroup();
+  }
+}
+
+void QxrdAppCommon::writeSettings(QSettings *settings)
+{
+  inherited::writeSettings(settings);
+
+  if (m_Allocator) {
+    settings->beginGroup("allocator");
+    m_Allocator->writeSettings(settings);
+    settings->endGroup();
+  }
+}
+
+void QxrdAppCommon::appendCommand(QString cmd)
+{
+  prop_CmdList()->appendValue(cmd);
+}
+
+void QxrdAppCommon::appendScript(QString script)
+{
+  prop_CmdList()->appendValue(tr("loadScript(\"%1\")").arg(script));
+}
+
+void QxrdAppCommon::appendFile(QString file)
+{
+  prop_FileList()->appendValue(file);
+}
+
+void QxrdAppCommon::appendWatcher(QString patt)
+{
+  prop_WatcherList()->appendValue(patt);
+}
+
+void QxrdAppCommon::appendPlugin(QString dir)
+{
+  prop_PluginList()->appendValue(dir);
 }
 
 void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
 {
   THREAD_CHECK;
 
-  if (m_ApplicationSettings) {
-    QStringList args(QCoreApplication::arguments());
+  QStringList args(QCoreApplication::arguments());
 
-    QCommandLineParser parser;
-    parser.setApplicationDescription(applicationDescription());
-    parser.addHelpOption();
-    parser.addVersionOption();
+  QCommandLineParser parser;
+  parser.setApplicationDescription(applicationDescription());
+  parser.addHelpOption();
+  parser.addVersionOption();
 
-    parser.addPositionalArgument("files", "Files to open, optionally", "[file...]");
+  parser.addPositionalArgument("files", "Files to open, optionally", "[file...]");
 
-    QCommandLineOption newOption({"n", "new"},      QCoreApplication::translate("main", "Open new experiment"));
-    if (wantFullOptions) {
-      parser.addOption(newOption);
+  QCommandLineOption newOption({"n", "new"},      QCoreApplication::translate("main", "Open new experiment"));
+  if (wantFullOptions) {
+    parser.addOption(newOption);
+  }
+
+  QCommandLineOption freshOption({"f", "fresh"},  QCoreApplication::translate("main", "Fresh start"));
+  if (wantFullOptions) {
+    parser.addOption(freshOption);
+  }
+
+  QCommandLineOption debugOption({"d", "debug"},
+                                 QCoreApplication::translate("main", "Set debug level"),
+                                 QCoreApplication::translate("main", "debugLevel"));
+  parser.addOption(debugOption);
+
+  QCommandLineOption noGuiOption("nogui", QCoreApplication::translate("main", "No GUI"));
+  if (wantFullOptions) {
+    parser.addOption(noGuiOption);
+  }
+
+  QCommandLineOption guiOption("gui", QCoreApplication::translate("main", "Want GUI"));
+  if (wantFullOptions) {
+    parser.addOption(guiOption);
+  }
+
+  QCommandLineOption noStartOption("nostart", QCoreApplication::translate("main", "Don't start detectors"));
+  if (wantFullOptions) {
+    parser.addOption(noStartOption);
+  }
+
+  QCommandLineOption startOption("start", QCoreApplication::translate("main", "Start detectors"));
+  if (wantFullOptions) {
+    parser.addOption(startOption);
+  }
+
+  QCommandLineOption cmdOption({"c", "command"},
+                               QCoreApplication::translate("main", "Execute command (may be repeated)"),
+                               QCoreApplication::translate("main", "command"));
+  parser.addOption(cmdOption);
+
+  QCommandLineOption scriptOption({"s", "script"},
+                                  QCoreApplication::translate("main", "Read script file (may be repeated)"),
+                                  QCoreApplication::translate("main", "scriptfile"));
+  parser.addOption(scriptOption);
+
+  QCommandLineOption watchOption({"w", "watch"},
+                                 QCoreApplication::translate("main", "Watch directory/path for changes (may be repeated)"),
+                                 QCoreApplication::translate("main", "pattern"));
+  parser.addOption(watchOption);
+
+  QCommandLineOption pluginOption("p", QCoreApplication::translate("main", "Special plugin load"));
+  if (wantFullOptions) {
+    parser.addOption(pluginOption);
+  }
+
+  parser.process(args);
+
+  if (wantFullOptions && parser.isSet(newOption)) {
+    set_OpenNew(true);
+  }
+
+  if (wantFullOptions && parser.isSet(freshOption)) {
+    set_FreshStart(true);
+  }
+
+  if (parser.isSet(debugOption)) {
+    qint64 dbg;
+    if (sscanf(qPrintable(parser.value(debugOption)),
+               "%lld", &dbg)==1) {
+      set_Debug(dbg);
     }
+  }
 
-    QCommandLineOption freshOption({"f", "fresh"},  QCoreApplication::translate("main", "Fresh start"));
-    if (wantFullOptions) {
-      parser.addOption(freshOption);
-    }
+  if (wantFullOptions && parser.isSet(noGuiOption)) {
+    set_GuiWanted(false);
+  }
 
-    QCommandLineOption debugOption({"d", "debug"},
-                                   QCoreApplication::translate("main", "Set debug level"),
-                                   QCoreApplication::translate("main", "debugLevel"));
-    parser.addOption(debugOption);
+  if (wantFullOptions && parser.isSet(guiOption)) {
+    set_GuiWanted(true);
+  }
 
-    QCommandLineOption noGuiOption("nogui", QCoreApplication::translate("main", "No GUI"));
-    if (wantFullOptions) {
-      parser.addOption(noGuiOption);
-    }
+  if (wantFullOptions && parser.isSet(noStartOption)) {
+    set_StartDetectors(false);
+  }
 
-    QCommandLineOption guiOption("gui", QCoreApplication::translate("main", "Want GUI"));
-    if (wantFullOptions) {
-      parser.addOption(guiOption);
-    }
+  if (wantFullOptions && parser.isSet(startOption)) {
+    set_StartDetectors(true);
+  }
 
-    QCommandLineOption noStartOption("nostart", QCoreApplication::translate("main", "Don't start detectors"));
-    if (wantFullOptions) {
-      parser.addOption(noStartOption);
-    }
+  if (parser.isSet(cmdOption) || parser.isSet(scriptOption)) {
+    // Want to preserve order of -c and -s options
+    QStringList cnam = cmdOption.names();
+    QStringList snam = scriptOption.names();
+    QStringList opts = parser.optionNames();
+    QStringList cmds = parser.values(cmdOption);
+    QStringList scrp = parser.values(scriptOption);
 
-    QCommandLineOption startOption("start", QCoreApplication::translate("main", "Start detectors"));
-    if (wantFullOptions) {
-      parser.addOption(startOption);
-    }
+    for (int i=0, ic=0, is=0; i<opts.size(); i++) {
+      QString opt = opts.value(i);
 
-    QCommandLineOption cmdOption({"c", "command"},
-                                 QCoreApplication::translate("main", "Execute command (may be repeated)"),
-                                 QCoreApplication::translate("main", "command"));
-    parser.addOption(cmdOption);
+      foreach( QString nam, cnam) {
+        if (opt == nam) {
+          QString cmd = cmds.value(ic++);
 
-    QCommandLineOption scriptOption({"s", "script"},
-                                    QCoreApplication::translate("main", "Read script file (may be repeated)"),
-                                    QCoreApplication::translate("main", "scriptfile"));
-    parser.addOption(scriptOption);
+          printMessage(tr("cmd: %1").arg(cmd));
 
-    QCommandLineOption watchOption({"w", "watch"},
-                                   QCoreApplication::translate("main", "Watch directory/path for changes (may be repeated)"),
-                                   QCoreApplication::translate("main", "pattern"));
-    parser.addOption(watchOption);
-
-    QCommandLineOption pluginOption("p", QCoreApplication::translate("main", "Special plugin load"));
-    if (wantFullOptions) {
-      parser.addOption(pluginOption);
-    }
-
-    parser.process(args);
-
-    if (wantFullOptions && parser.isSet(newOption)) {
-      m_ApplicationSettings -> set_OpenNew(true);
-    }
-
-    if (wantFullOptions && parser.isSet(freshOption)) {
-      m_ApplicationSettings -> set_FreshStart(true);
-    }
-
-    if (parser.isSet(debugOption)) {
-      qint64 dbg;
-      if (sscanf(qPrintable(parser.value(debugOption)),
-                 "%lld", &dbg)==1) {
-        m_ApplicationSettings -> set_Debug(dbg);
-      }
-    }
-
-    if (wantFullOptions && parser.isSet(noGuiOption)) {
-      m_ApplicationSettings -> set_GuiWanted(false);
-    }
-
-    if (wantFullOptions && parser.isSet(guiOption)) {
-      m_ApplicationSettings -> set_GuiWanted(true);
-    }
-
-    if (wantFullOptions && parser.isSet(noStartOption)) {
-      m_ApplicationSettings -> set_StartDetectors(false);
-    }
-
-    if (wantFullOptions && parser.isSet(startOption)) {
-      m_ApplicationSettings -> set_StartDetectors(true);
-    }
-
-    if (parser.isSet(cmdOption) || parser.isSet(scriptOption)) {
-      // Want to preserve order of -c and -s options
-      QStringList cnam = cmdOption.names();
-      QStringList snam = scriptOption.names();
-      QStringList opts = parser.optionNames();
-      QStringList cmds = parser.values(cmdOption);
-      QStringList scrp = parser.values(scriptOption);
-
-      for (int i=0, ic=0, is=0; i<opts.size(); i++) {
-        QString opt = opts.value(i);
-
-        foreach( QString nam, cnam) {
-          if (opt == nam) {
-            QString cmd = cmds.value(ic++);
-
-            printMessage(tr("cmd: %1").arg(cmd));
-
-            m_ApplicationSettings -> appendCommand(cmd);
-          }
+          appendCommand(cmd);
         }
+      }
 
-        foreach(QString nam, snam) {
-          if (opt == nam) {
-            QString script = scrp.value(is++);
+      foreach(QString nam, snam) {
+        if (opt == nam) {
+          QString script = scrp.value(is++);
 
-            printMessage(tr("Script: %1").arg(script));
+          printMessage(tr("Script: %1").arg(script));
 
-            m_ApplicationSettings -> appendScript(script);
-          }
+          appendScript(script);
         }
       }
     }
+  }
 
-    if (parser.isSet(watchOption)) {
-      QStringList watches(parser.values(watchOption));
+  if (parser.isSet(watchOption)) {
+    QStringList watches(parser.values(watchOption));
 
-      foreach(QString w, watches) {
-        printMessage(tr("Watch: \"%1\"").arg(w));
+    foreach(QString w, watches) {
+      printMessage(tr("Watch: \"%1\"").arg(w));
 
-        m_ApplicationSettings->appendWatcher(w);
-      }
+      appendWatcher(w);
     }
+  }
 
-    if (wantFullOptions && parser.isSet(pluginOption)) {
-      QDir appDir(qApp->applicationDirPath());
+  if (wantFullOptions && parser.isSet(pluginOption)) {
+    QDir appDir(qApp->applicationDirPath());
 
-      appDir.cd("plugins");
+    appDir.cd("plugins");
 
-      m_ApplicationSettings->appendPlugin(appDir.absolutePath());
-    }
+    appendPlugin(appDir.absolutePath());
+  }
 
-    QStringList files(parser.positionalArguments());
+  QStringList files(parser.positionalArguments());
 
-    foreach(QString f, files) {
-      printMessage(tr("File: %1").arg(f));
+  foreach(QString f, files) {
+    printMessage(tr("File: %1").arg(f));
 
-      m_ApplicationSettings -> appendFile(f);
-    }
+    appendFile(f);
   }
 }
 
@@ -298,7 +363,7 @@ void QxrdAppCommon::splashMessage(QString msg)
 {
   GUI_THREAD_CHECK;
 
-  if (m_ApplicationSettings->get_GuiWanted()) {
+  if (get_GuiWanted()) {
     if (m_Splash == NULL) {
       m_Splash = QxrdSplashScreenPtr(new QxrdSplashScreen(NULL));
     }
@@ -501,16 +566,16 @@ void QxrdAppCommon::closeExperiment(QxrdExperimentWPtr expw)
 
 void QxrdAppCommon::appendRecentExperiment(QString path)
 {
-  QStringList recent = settings() -> get_RecentExperiments();
+  QStringList recent = get_RecentExperiments();
 
   recent.prepend(path);
   recent.removeDuplicates();
 
-  while(recent.length() > settings() -> get_RecentExperimentsSize()) {
+  while(recent.length() > get_RecentExperimentsSize()) {
     recent.removeLast();
   }
 
-  settings() -> set_RecentExperiments(recent);
+  set_RecentExperiments(recent);
 }
 
 void QxrdAppCommon::openedExperiment(QxrdExperimentThreadWPtr expwthr)
@@ -522,7 +587,7 @@ void QxrdAppCommon::openedExperiment(QxrdExperimentThreadWPtr expwthr)
 
     if (expt) {
       QString path = expt->experimentFilePath();
-      settings() -> set_CurrentExperiment(path);
+      set_CurrentExperiment(path);
       appendRecentExperiment(path);
 
       m_ExperimentThreads.append(exptthr);
@@ -578,4 +643,16 @@ bool QxrdAppCommon::wantToQuit()
                                tr("Do you really want to exit the application?"),
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
+
+QStringList QxrdAppCommon::makeStringListFromArgs(int argc, char **argv)
+{
+  QStringList res;
+
+  for (int i=0; i<argc; i++) {
+    res.append(argv[i]);
+  }
+
+  return res;
+}
+
 
