@@ -98,6 +98,12 @@ void QcepObject::initialize(QcepObjectWPtr parent)
   }
 }
 
+void QcepObject::initializeRoot()
+{
+  m_Initialized = true;
+  m_Parent      = QcepObjectPtr();
+}
+
 bool QcepObject::isInitialized() const
 {
   return m_Initialized;

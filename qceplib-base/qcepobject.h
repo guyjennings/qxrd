@@ -20,6 +20,7 @@ class QCEP_EXPORT QcepObject : public QObject, public QEnableSharedFromThis<Qcep
 public:
   QcepObject(QString name);
   virtual ~QcepObject();
+  virtual void initializeRoot();
   virtual void initialize(QcepObjectWPtr parent);
 
   bool isInitialized() const;
