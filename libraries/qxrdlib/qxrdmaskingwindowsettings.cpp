@@ -5,11 +5,19 @@
 #include <QThread>
 
 QxrdMaskingWindowSettings::QxrdMaskingWindowSettings(QString name, QString desc)
-  : QxrdMainWindowSettings(name, desc),
+  : inherited(name, desc),
     m_FileBrowserSettings(new QxrdFileBrowserSettings(name)),
     m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name))
 {
 
+}
+
+void QxrdMaskingWindowSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_FileBrowserSettings     -> initialize(sharedFromThis());
+  m_ImagePlotWidgetSettings -> initialize(sharedFromThis());
 }
 
 QxrdMainWindowPtr QxrdMaskingWindowSettings::newWindow()

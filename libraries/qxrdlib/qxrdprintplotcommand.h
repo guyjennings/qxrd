@@ -8,8 +8,7 @@ class QXRD_EXPORT QxrdPrintPlotCommand : public QxrdPlotContextMenuCommand
   Q_OBJECT
 
 public:
-  QxrdPrintPlotCommand(QString                    name,
-                       QxrdPlotWidget            *plot,
+  QxrdPrintPlotCommand(QxrdPlotWidget            *plot,
                        QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);

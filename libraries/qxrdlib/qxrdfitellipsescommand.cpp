@@ -1,7 +1,7 @@
 #include "qxrdfitellipsescommand.h"
 
-QxrdFitEllipsesCommand::QxrdFitEllipsesCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdFitEllipsesCommand::QxrdFitEllipsesCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("fitEllipsesCommand", "Fit Ellipses to all powder rings", plot, set)
 {
 
 }

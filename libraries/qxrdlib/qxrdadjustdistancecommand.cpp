@@ -1,7 +1,7 @@
 #include "qxrdadjustdistancecommand.h"
 
-QxrdAdjustDistanceCommand::QxrdAdjustDistanceCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdAdjustDistanceCommand::QxrdAdjustDistanceCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("adjustDistanceCommand", "Adjust Detector Distance to match Calibrant Ring", plot, set)
 {
 }
 

@@ -7,8 +7,12 @@ class QXRD_EXPORT QxrdCalculatorWindowSettings : public QxrdMainWindowSettings
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindowSettings inherited;
+
 public:
   QxrdCalculatorWindowSettings(QString name, QString desc);
+  void initialize(QcepObjectWPtr parent);
 
   QxrdMainWindowPtr newWindow();
 };

@@ -1,8 +1,8 @@
 #include "qxrdprintplotcommand.h"
 #include "qxrdimageplot.h"
 
-QxrdPrintPlotCommand::QxrdPrintPlotCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdPrintPlotCommand::QxrdPrintPlotCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("printPlotCommand", "Print Graph", plot, set)
 {
 
 }

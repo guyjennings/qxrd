@@ -3,12 +3,13 @@
 #include "qxrdhistogramselector.h"
 #include "qxrdimageplot.h"
 
-QxrdHistogramCommand::QxrdHistogramCommand(QString                    name,
-                                           QxrdPlotWidget            *plot,
+QxrdHistogramCommand::QxrdHistogramCommand(QxrdPlotWidget            *plot,
                                            QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand(name, plot, set,
-                          ":/images/histogram.png",
+  : QxrdPlotButtonCommand("histogramCommand",
                           "Histogram",
+                          plot,
+                          set,
+                          ":/images/histogram.png",
                           true),
     m_HistogramSelector(NULL)
 {

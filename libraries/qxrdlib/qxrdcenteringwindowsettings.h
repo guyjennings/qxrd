@@ -11,8 +11,12 @@ class QXRD_EXPORT QxrdCenteringWindowSettings : public QxrdMainWindowSettings
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindowSettings inherited;
+
 public:
   QxrdCenteringWindowSettings(QString name, QString desc);
+  void initialize(QcepObjectWPtr parent);
 
   QxrdMainWindowPtr newWindow();
 

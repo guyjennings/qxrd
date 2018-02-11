@@ -8,8 +8,7 @@ class QXRD_EXPORT QxrdAutoScaleCommand : public QxrdPlotContextMenuCommand
   Q_OBJECT
 
 public:
-  QxrdAutoScaleCommand(QString                    name,
-                       QxrdPlotWidget            *plot,
+  QxrdAutoScaleCommand(QxrdPlotWidget            *plot,
                        QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);

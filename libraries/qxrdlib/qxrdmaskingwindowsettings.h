@@ -9,8 +9,12 @@ class QXRD_EXPORT QxrdMaskingWindowSettings : public QxrdMainWindowSettings
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindowSettings inherited;
+
 public:
   QxrdMaskingWindowSettings(QString name, QString desc);
+  void initialize(QcepObjectWPtr parent);
 
   QxrdMainWindowPtr newWindow();
 

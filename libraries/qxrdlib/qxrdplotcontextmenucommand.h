@@ -11,6 +11,7 @@ class QXRD_EXPORT QxrdPlotContextMenuCommand : public QxrdPlotCommand
 
 public:
   QxrdPlotContextMenuCommand(QString                    name,
+                             QString                    desc,
                              QxrdPlotWidget            *plot,
                              QxrdPlotWidgetSettingsWPtr set);
 

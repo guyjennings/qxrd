@@ -3,9 +3,14 @@
 #include <QThread>
 
 QxrdHelpWindowSettings::QxrdHelpWindowSettings(QString name, QString desc)
-  : QxrdMainWindowSettings(name, desc)
+  : inherited(name, desc)
 {
 
+}
+
+void QxrdHelpWindowSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 QxrdMainWindowPtr QxrdHelpWindowSettings::newWindow()

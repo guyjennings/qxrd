@@ -9,8 +9,7 @@ class QXRD_EXPORT QxrdHistogramCommand : public QxrdPlotButtonCommand
   Q_OBJECT
 
 public:
-  QxrdHistogramCommand(QString                    name,
-                       QxrdPlotWidget            *plot,
+  QxrdHistogramCommand(QxrdPlotWidget            *plot,
                        QxrdPlotWidgetSettingsWPtr set);
 
   void enable();

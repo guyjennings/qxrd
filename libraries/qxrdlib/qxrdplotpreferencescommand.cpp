@@ -2,8 +2,8 @@
 #include <QToolButton>
 #include "qxrdimageplot.h"
 
-QxrdPlotPreferencesCommand::QxrdPlotPreferencesCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdPlotPreferencesCommand::QxrdPlotPreferencesCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("plotPreferencesCommand", "Edit Graph Preferences", plot, set)
 {
 
 }

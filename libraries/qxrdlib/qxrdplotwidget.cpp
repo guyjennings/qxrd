@@ -65,16 +65,16 @@ void QxrdPlotWidget::initialize(QxrdPlotWidgetSettingsWPtr settings)
   //  m_Plot -> setCanvasBackground(QBrush(Qt::cyan));
   m_Plot -> setCanvasBackground(QBrush(Qt::white));
 
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomInCommand("Zoom In", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomOutCommand("Zoom Out", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomAllCommand("Zoom All", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotButton("Print Graph...", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdPlotPreferencesButton("Plot Preferences...", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomInCommand(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomOutCommand(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdZoomAllCommand(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotButton(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPlotPreferencesButton(this, settings)));
 
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdAutoScaleCommand("Auto Scale", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotCommand("Print Graph...", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdPlotPreferencesCommand("Plot Preferences...", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdAxisSubmenuCommand("Display", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdAutoScaleCommand(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPrintPlotCommand(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPlotPreferencesCommand(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdAxisSubmenuCommand(this, settings)));
 
   QWidget* canvas = m_Plot -> canvas();
 

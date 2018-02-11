@@ -9,8 +9,7 @@ class QXRD_EXPORT QxrdMeasureCommand : public QxrdPlotButtonCommand
   Q_OBJECT
 
 public:
-  QxrdMeasureCommand(QString                    name,
-                     QxrdPlotWidget            *plot,
+  QxrdMeasureCommand(QxrdPlotWidget            *plot,
                      QxrdPlotWidgetSettingsWPtr set);
 
 private:

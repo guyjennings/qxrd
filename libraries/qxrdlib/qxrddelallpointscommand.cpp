@@ -1,7 +1,7 @@
 #include "qxrddelallpointscommand.h"
 
-QxrdDelAllPointsCommand::QxrdDelAllPointsCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdDelAllPointsCommand::QxrdDelAllPointsCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("deleteAllCommand", "Delete all Rings", plot, set)
 {
 
 }

@@ -13,10 +13,10 @@ private:
 
 public:
   QxrdPlotButtonCommand(QString                    name,
+                        QString                    desc,
                         QxrdPlotWidget            *plot,
                         QxrdPlotWidgetSettingsWPtr set,
                         QString                    iconPath,
-                        QString                    toolTip,
                         bool                       checkable);
 
   void initialize(QcepObjectWPtr parent);
@@ -29,7 +29,7 @@ public:
   void setPen(const QPen &pen);
 
 protected:
-  void appendMode(QString iconPath, QString toolTip);
+  void appendMode(QString iconPath, QString desc);
   void setPlotPicker(QwtPlotPicker* pick);
   void toggled(bool on);
   void clicked(bool checked);

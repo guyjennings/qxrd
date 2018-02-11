@@ -2,8 +2,8 @@
 #include <QToolButton>
 #include "qxrdplotwidget.h"
 
-QxrdZoomAllCommand::QxrdZoomAllCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand(name, plot, set, ":/images/zoom-all.png", "Auto Scale", false)
+QxrdZoomAllCommand::QxrdZoomAllCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotButtonCommand("zoomAllCommand", "Auto Scale", plot, set, ":/images/zoom-all.png", false)
 {
   connect(m_ToolButton, &QToolButton::clicked, m_PlotWidget, &QxrdPlotWidget::zoomAll);
 }

@@ -8,8 +8,7 @@ class QXRD_EXPORT QxrdFitRingPointCommand : public QxrdPlotContextMenuCommand
   Q_OBJECT
 
 public:
-  QxrdFitRingPointCommand(QString                    name,
-                          QxrdPlotWidget            *plot,
+  QxrdFitRingPointCommand(QxrdPlotWidget            *plot,
                           QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);

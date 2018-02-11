@@ -2,8 +2,8 @@
 #include <QToolButton>
 #include "qxrdplotwidget.h"
 
-QxrdZoomInCommand::QxrdZoomInCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand(name, plot, set, ":/images/zoom-in.png", "Zoom In", true)
+QxrdZoomInCommand::QxrdZoomInCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotButtonCommand("zoomInCommand", "Zoom In", plot, set, ":/images/zoom-in.png", true)
 {
   m_ToolButton->setChecked(true);
 

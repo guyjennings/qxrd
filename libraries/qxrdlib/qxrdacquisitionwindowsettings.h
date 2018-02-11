@@ -8,8 +8,13 @@ class QXRD_EXPORT QxrdAcquisitionWindowSettings : public QxrdMainWindowSettings
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindowSettings inherited;
+
 public:
   QxrdAcquisitionWindowSettings(QString name, QString desc);
+
+  void initialize(QcepObjectWPtr parent);
 
   QxrdMainWindowPtr newWindow();
 

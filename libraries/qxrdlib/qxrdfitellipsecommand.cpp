@@ -1,7 +1,7 @@
 #include "qxrdfitellipsecommand.h"
 
-QxrdFitEllipseCommand::QxrdFitEllipseCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdFitEllipseCommand::QxrdFitEllipseCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("fitEllipseCommand", "Fit Ellipse from Points on Ring", plot, set)
 {
 
 }

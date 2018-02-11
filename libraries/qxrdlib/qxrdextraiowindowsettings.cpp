@@ -5,11 +5,19 @@
 #include <QThread>
 
 QxrdExtraIOWindowSettings::QxrdExtraIOWindowSettings(QString name, QString desc)
-  : QxrdMainWindowSettings(name, desc),
+  : inherited(name, desc),
     m_ExtraInputsPlotWidgetSettings(new QxrdExtraInputsPlotWidgetSettings(name)),
     m_ExtraOutputsPlotWidgetSettings(new QxrdExtraOutputsPlotWidgetSettings(name))
 {
 
+}
+
+void QxrdExtraIOWindowSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_ExtraInputsPlotWidgetSettings  -> initialize(sharedFromThis());
+  m_ExtraOutputsPlotWidgetSettings -> initialize(sharedFromThis());
 }
 
 QxrdMainWindowPtr QxrdExtraIOWindowSettings::newWindow()

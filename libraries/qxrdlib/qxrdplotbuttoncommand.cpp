@@ -4,12 +4,12 @@
 #include <qwt_plot_picker.h>
 
 QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
+                                             QString                    desc,
                                              QxrdPlotWidget            *plot,
                                              QxrdPlotWidgetSettingsWPtr set,
                                              QString                    iconPath,
-                                             QString                    toolTip,
                                              bool                       checkable)
-  : inherited(name, plot, set),
+  : inherited(name, desc, plot, set),
     m_ToolButton(NULL),
     m_PlotPicker(NULL),
     m_IconPaths(),
@@ -18,14 +18,14 @@ QxrdPlotButtonCommand::QxrdPlotButtonCommand(QString                    name,
 {
   if (!iconPath.isEmpty()) {
     m_IconPaths.append(iconPath);
-    m_ToolTips.append(toolTip);
+    m_ToolTips.append(desc);
   }
 
   m_ToolButton =  new QToolButton();
 
   m_ToolButton->setIcon(commandIcon(m_Index));
   m_ToolButton->setIconSize(QSize(24,24));
-  m_ToolButton->setToolTip(toolTip);
+  m_ToolButton->setToolTip(desc);
 
   if (checkable) {
     m_ToolButton->setCheckable(checkable);
@@ -49,10 +49,10 @@ void QxrdPlotButtonCommand::initialize(QcepObjectWPtr parent)
   m_ToolButton -> setObjectName(get_Name());
 }
 
-void QxrdPlotButtonCommand::appendMode(QString iconPath, QString toolTip)
+void QxrdPlotButtonCommand::appendMode(QString iconPath, QString desc)
 {
   m_IconPaths.append(iconPath);
-  m_ToolTips.append(toolTip);
+  m_ToolTips.append(desc);
 
   m_ToolButton -> setContextMenuPolicy(Qt::CustomContextMenu);
 }

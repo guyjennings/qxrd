@@ -3,12 +3,11 @@
 #include "qxrdpowderpointpicker.h"
 #include "qxrdimageplot.h"
 
-QxrdPowderPointsCommand::QxrdPowderPointsCommand(QString name,
-                                                 QxrdPlotWidget *plot,
+QxrdPowderPointsCommand::QxrdPowderPointsCommand(QxrdPlotWidget *plot,
                                                  QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand(name, plot, set, QString(), QString(), true)
+  : QxrdPlotButtonCommand("powderPointsCommand", "Powder Points", plot, set, ":/images/powder_point.png", true)
 {  
-  appendMode(":/images/powder_point.png",      "Powder Points");
+//  appendMode(":/images/powder_point.png",      "Powder Points");
   appendMode(":/images/powder_point_ring.png", "Powder Point on Ring");
   appendMode(":/images/powder_trace_ring.png", "Trace Points on Ring");
 

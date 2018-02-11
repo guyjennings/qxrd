@@ -1,8 +1,8 @@
 #include "qxrdfitringpointcommand.h"
 #include "qxrdimageplot.h"
 
-QxrdFitRingPointCommand::QxrdFitRingPointCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdFitRingPointCommand::QxrdFitRingPointCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("fitRingPointCommand", "Fit Point on Diffracted Ring", plot, set)
 {
 
 }

@@ -9,7 +9,7 @@ QxrdMaskCommandButton::QxrdMaskCommandButton(QString name,
                                              QxrdPlotWidget *plot,
                                              QxrdPlotWidgetSettingsWPtr set,
                                              QxrdMaskStackWPtr maskStack) :
-  QxrdPlotButtonCommand(name, plot, set, QString(), QString(), true),
+  QxrdPlotButtonCommand("maskCommandButton", QString(), plot, set, QString(), true),
   m_MaskStack(maskStack)
 {
   appendMode(":/images/mask_circles.png",           "Mask Circles");

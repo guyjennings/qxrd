@@ -10,8 +10,7 @@ class QXRD_EXPORT QxrdMaskPolygonsCommand : public QxrdPlotButtonCommand
   Q_OBJECT
 
 public:
-  QxrdMaskPolygonsCommand(QString                    name,
-                          QxrdPlotWidget            *plot,
+  QxrdMaskPolygonsCommand(QxrdPlotWidget            *plot,
                           QxrdPlotWidgetSettingsWPtr set,
                           QxrdMaskStackWPtr          maskStack);
 

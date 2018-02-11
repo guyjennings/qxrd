@@ -3,9 +3,14 @@
 #include <QThread>
 
 QxrdAnalysisWindowSettings::QxrdAnalysisWindowSettings(QString name, QString desc)
-  : QxrdMainWindowSettings(name, desc)
+  : inherited(name, desc)
 {
 
+}
+
+void QxrdAnalysisWindowSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 QxrdMainWindowPtr QxrdAnalysisWindowSettings::newWindow()

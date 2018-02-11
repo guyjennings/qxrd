@@ -24,11 +24,11 @@ void QxrdCenteringPlotWidget::initialize(QxrdCenteringPlotWidgetSettingsWPtr set
   QxrdCenterFinderPtr c(m_CenterFinder);
 
   if (c) {
-    addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand("Set Center", this, settings, c)));
+    addPlotCommand(QxrdPlotCommandPtr(new QxrdSetCenterCommand(this, settings, c)));
   }
 
   addPlotCommandSpacer();
 
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdContextSeparatorCommand("Separator", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdEnableRingCommand("Enable Ring", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdContextSeparatorCommand(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdEnableRingCommand(this, settings)));
 }

@@ -2,8 +2,8 @@
 #include "qxrdplotwidgetsettings.h"
 #include <QMenu>
 
-QxrdAxisSubmenuCommand::QxrdAxisSubmenuCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdAxisSubmenuCommand::QxrdAxisSubmenuCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("axisSubmenuCommand", "Axes", plot, set)
 {
 }
 

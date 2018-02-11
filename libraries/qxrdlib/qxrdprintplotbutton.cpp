@@ -2,10 +2,9 @@
 #include "qxrdplotwidget.h"
 #include <QToolButton>
 
-QxrdPrintPlotButton::QxrdPrintPlotButton(QString                    name,
-                                         QxrdPlotWidget            *plot,
+QxrdPrintPlotButton::QxrdPrintPlotButton(QxrdPlotWidget            *plot,
                                          QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand(name, plot, set, ":/images/print.png", "Print Plot...", false)
+  : QxrdPlotButtonCommand("printPlotButton", "Print Plot...", plot, set, ":/images/print.png", false)
 {
   connect(m_ToolButton, &QToolButton::clicked, m_PlotWidget, &QxrdPlotWidget::printGraph);
 }

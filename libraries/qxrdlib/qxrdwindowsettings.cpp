@@ -43,6 +43,23 @@ QxrdWindowSettings::QxrdWindowSettings(QString name, QString desc) :
   m_DistortionCorrectionPlotSettings = QxrdDistortionCorrectionPlotSettings::newDistortionCorrectionPlotSettings();
 }
 
+void QxrdWindowSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_ImagePlotSettings                     -> initialize(sharedFromThis());
+  m_CenterFinderPlotSettings              -> initialize(sharedFromThis());
+  m_IntegratorPlotSettings                -> initialize(sharedFromThis());
+  m_FileBrowserSettings                   -> initialize(sharedFromThis());
+  m_HistogramDialogSettings               -> initialize(sharedFromThis());
+  m_SliceDialogSettings                   -> initialize(sharedFromThis());
+  m_InfoDialogSettings                    -> initialize(sharedFromThis());
+  m_ScriptDialogSettings                  -> initialize(sharedFromThis());
+  m_SynchronizedAcquisitionDialogSettings -> initialize(sharedFromThis());
+  m_AcquisitionExtraInputsDialogSettings  -> initialize(sharedFromThis());
+  m_DistortionCorrectionPlotSettings      -> initialize(sharedFromThis());
+}
+
 QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
 {
   QxrdWindowSettingsPtr set(new QxrdWindowSettings("windowSettings", "Window"));

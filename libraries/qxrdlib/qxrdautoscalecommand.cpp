@@ -2,8 +2,8 @@
 #include "qxrdplotwidget.h"
 #include <QObject>
 
-QxrdAutoScaleCommand::QxrdAutoScaleCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdAutoScaleCommand::QxrdAutoScaleCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("autoScaleCommand", "Autoscale", plot, set)
 {
 
 }

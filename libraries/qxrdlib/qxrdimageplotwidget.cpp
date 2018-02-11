@@ -75,7 +75,7 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings,
 
     if (c) {
       addPlotCommand(QxrdPlotCommandPtr(
-                       new QxrdSetCenterCommand("Set Center", this, settings, c)));
+                       new QxrdSetCenterCommand(this, settings, c)));
 
       addPlotOverlay(QxrdPlotOverlayPtr(
                        new QxrdCenterMarker("Center Marker", this, settings, c)));
@@ -96,13 +96,13 @@ void QxrdImagePlotWidget::initialize(QxrdImagePlotWidgetSettingsWPtr settings,
     }
   }
 
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdPowderPointsCommand("Powder Points", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdSliceCommand("Slice", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdMeasureCommand("Measure", this, settings)));
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdHistogramCommand("Histogram", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdPowderPointsCommand(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdSliceCommand(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdMeasureCommand(this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdHistogramCommand(this, settings)));
   addPlotCommandSpacer();
 
-  addPlotCommand(QxrdPlotCommandPtr(new QxrdScalingSubmenuCommand("Display", this, settings)));
+  addPlotCommand(QxrdPlotCommandPtr(new QxrdScalingSubmenuCommand(this, settings)));
   addPlotCommand(QxrdPlotCommandPtr(new QxrdColorMapSubmenuCommand("Display", this, settings)));
 
   QxrdImagePlotWidgetSettingsPtr set(m_ImageSettings);

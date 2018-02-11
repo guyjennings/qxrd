@@ -8,8 +8,7 @@ class QXRD_EXPORT QxrdAxisSubmenuCommand : public QxrdPlotContextMenuCommand
   Q_OBJECT
 
 public:
-  QxrdAxisSubmenuCommand(QString                    name,
-                         QxrdPlotWidget            *plot,
+  QxrdAxisSubmenuCommand(QxrdPlotWidget            *plot,
                          QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);

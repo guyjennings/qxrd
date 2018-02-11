@@ -9,8 +9,12 @@ class QXRD_EXPORT QxrdExtraIOWindowSettings : public QxrdMainWindowSettings
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindowSettings inherited;
+
 public:
   QxrdExtraIOWindowSettings(QString name, QString desc);
+  void initialize(QcepObjectWPtr parent);
 
   QxrdMainWindowPtr newWindow();
 

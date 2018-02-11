@@ -1,7 +1,7 @@
 #include "qxrdfitcirclecommand.h"
 
-QxrdFitCircleCommand::QxrdFitCircleCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdFitCircleCommand::QxrdFitCircleCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("fitCircleCommand", "Fit Circle from Points on Ring", plot, set)
 {
 }
 

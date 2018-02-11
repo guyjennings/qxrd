@@ -8,8 +8,7 @@ class QXRD_EXPORT QxrdDelAllPointsCommand : public QxrdPlotContextMenuCommand
   Q_OBJECT
 
 public:
-  QxrdDelAllPointsCommand(QString                    name,
-                          QxrdPlotWidget            *plot,
+  QxrdDelAllPointsCommand(QxrdPlotWidget            *plot,
                           QxrdPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);

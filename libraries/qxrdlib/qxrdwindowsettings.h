@@ -33,6 +33,8 @@ public:
   QxrdWindowSettings(QString name, QString desc);
   static QxrdWindowSettingsPtr newWindowSettings();
 
+  void initialize(QcepObjectWPtr parent);
+
   static void registerMetaTypes();
 
   QxrdMainWindowPtr newWindow();

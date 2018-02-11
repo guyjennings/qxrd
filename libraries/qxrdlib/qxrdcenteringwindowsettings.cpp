@@ -7,13 +7,23 @@
 #include <QThread>
 
 QxrdCenteringWindowSettings::QxrdCenteringWindowSettings(QString name, QString desc)
-  : QxrdMainWindowSettings(name, desc),
+  : inherited(name, desc),
     m_FileBrowserSettings(new QxrdFileBrowserSettings(name)),
     m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name)),
     m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name)),
     m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name))
 {
 
+}
+
+void QxrdCenteringWindowSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_FileBrowserSettings          -> initialize(sharedFromThis());
+  m_ImagePlotWidgetSettings      -> initialize(sharedFromThis());
+  m_CenteringPlotWidgetSettings  -> initialize(sharedFromThis());
+  m_IntegratedPlotWidgetSettings -> initialize(sharedFromThis());
 }
 
 QxrdMainWindowPtr QxrdCenteringWindowSettings::newWindow()

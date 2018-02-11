@@ -7,8 +7,12 @@ class QXRD_EXPORT QxrdCalibrantWindowSettings : public QxrdMainWindowSettings
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindowSettings inherited;
+
 public:
   Q_INVOKABLE QxrdCalibrantWindowSettings(QString name, QString desc);
+  void initialize(QcepObjectWPtr parent);
 
   QxrdMainWindowPtr newWindow();
 };

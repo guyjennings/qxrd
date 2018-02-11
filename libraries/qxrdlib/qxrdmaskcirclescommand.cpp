@@ -5,11 +5,15 @@
 #include "qxrdimageplot.h"
 #include "qxrdmaskstack.h"
 
-QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QString name,
-                                               QxrdPlotWidget *plot,
+QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QxrdPlotWidget *plot,
                                                QxrdPlotWidgetSettingsWPtr set,
                                                QxrdMaskStackWPtr maskStack) :
-  QxrdPlotButtonCommand(name, plot, set, ":/images/mask_circles.png", "Mask Circles", true),
+  QxrdPlotButtonCommand("maskCirclesCommand",
+                        "Mask Circles",
+                        plot,
+                        set,
+                        ":/images/mask_circles.png",
+                        true),
   m_MaskStack(maskStack)
 {
   appendMode(":/images/mask_circles_invert.png", "Unmask Circles");

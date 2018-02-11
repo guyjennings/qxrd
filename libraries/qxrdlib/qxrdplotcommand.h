@@ -13,6 +13,7 @@ class QXRD_EXPORT QxrdPlotCommand : public QcepObject
 
 public:
   QxrdPlotCommand(QString                    name,
+                  QString                    desc,
                   QxrdPlotWidget            *plot,
                   QxrdPlotWidgetSettingsWPtr set);
 
@@ -25,6 +26,7 @@ public:
   virtual void         setPen(const QPen& pen);
 
 protected:
+  QString                    m_Description;
   QxrdPlotWidget            *m_PlotWidget;
   QxrdImagePlot             *m_Plot;
   QxrdPlotWidgetSettingsWPtr m_Settings;

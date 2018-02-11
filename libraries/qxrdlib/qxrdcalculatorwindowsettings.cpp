@@ -3,9 +3,14 @@
 #include <QThread>
 
 QxrdCalculatorWindowSettings::QxrdCalculatorWindowSettings(QString name, QString desc)
-  : QxrdMainWindowSettings(name, desc)
+  : inherited(name, desc)
 {
 
+}
+
+void QxrdCalculatorWindowSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 QxrdMainWindowPtr QxrdCalculatorWindowSettings::newWindow()

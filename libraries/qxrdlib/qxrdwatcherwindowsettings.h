@@ -11,10 +11,11 @@ class QXRD_EXPORT QxrdWatcherWindowSettings : public QxrdMainWindowSettings
 {
   Q_OBJECT
 
-public:
-  QxrdWatcherWindowSettings(QString name,
-                                        QString desc);
+private:
+  typedef QxrdMainWindowSettings inherited;
 
+public:
+  QxrdWatcherWindowSettings(QString name, QString desc);
   void initialize(QcepObjectWPtr parent);
 
   QxrdMainWindowPtr newWindow();

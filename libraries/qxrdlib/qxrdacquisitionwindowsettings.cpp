@@ -4,9 +4,16 @@
 #include <QThread>
 
 QxrdAcquisitionWindowSettings::QxrdAcquisitionWindowSettings(QString name, QString desc)
-  : QxrdMainWindowSettings(name, desc),
+  : inherited(name, desc),
     m_FileBrowserSettings(new QxrdFileBrowserSettings(desc))
 {
+}
+
+void QxrdAcquisitionWindowSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_FileBrowserSettings -> initialize(sharedFromThis());
 }
 
 QxrdMainWindowPtr QxrdAcquisitionWindowSettings::newWindow()

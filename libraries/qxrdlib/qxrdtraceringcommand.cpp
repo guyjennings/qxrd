@@ -1,7 +1,7 @@
 #include "qxrdtraceringcommand.h"
 
-QxrdTraceRingCommand::QxrdTraceRingCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdTraceRingCommand::QxrdTraceRingCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("traceRingCommand", "Trace Diffracted Ring", plot, set)
 {
 
 }

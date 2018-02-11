@@ -1,7 +1,7 @@
 #include "qxrdfitpeakcommand.h"
 
-QxrdFitPeakCommand::QxrdFitPeakCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdFitPeakCommand::QxrdFitPeakCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("fitPeakCommand", "Fit Diffracted Peak near", plot, set)
 {
 
 }

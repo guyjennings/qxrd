@@ -3,8 +3,11 @@
 #include <QObject>
 #include "qxrdimageplot.h"
 
-QxrdPlotContextMenuCommand::QxrdPlotContextMenuCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotCommand(name, plot, set)
+QxrdPlotContextMenuCommand::QxrdPlotContextMenuCommand(QString                    name,
+                                                       QString                    desc,
+                                                       QxrdPlotWidget            *plot,
+                                                       QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotCommand(name, desc, plot, set)
 {
 
 }

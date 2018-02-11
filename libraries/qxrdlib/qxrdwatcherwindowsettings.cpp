@@ -6,7 +6,7 @@
 #include <QThread>
 
 QxrdWatcherWindowSettings::QxrdWatcherWindowSettings(QString name, QString desc)
-  : QxrdMainWindowSettings(name, desc),
+  : inherited(name, desc),
     m_FileBrowserSettings(new QxrdFileBrowserSettings(name)),
     m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name)),
     m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name)),
@@ -17,9 +17,11 @@ QxrdWatcherWindowSettings::QxrdWatcherWindowSettings(QString name, QString desc)
 
 void QxrdWatcherWindowSettings::initialize(QcepObjectWPtr parent)
 {
-  QxrdMainWindowSettings::initialize(parent);
+  inherited::initialize(parent);
 
-//  m_Watcher = watcher;
+  m_FileBrowserSettings         -> initialize(sharedFromThis());
+  m_ImagePlotWidgetSettings     -> initialize(sharedFromThis());
+  m_CenteringPlotWidgetSettings -> initialize(sharedFromThis());
 }
 
 QxrdMainWindowPtr QxrdWatcherWindowSettings::newWindow()

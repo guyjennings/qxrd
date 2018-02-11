@@ -3,8 +3,13 @@
 #include <QThread>
 
 QxrdCalibrantWindowSettings::QxrdCalibrantWindowSettings(QString name, QString desc)
-  : QxrdMainWindowSettings(name, desc)
+  : inherited(name, desc)
 {
+}
+
+void QxrdCalibrantWindowSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 QxrdMainWindowPtr QxrdCalibrantWindowSettings::newWindow()

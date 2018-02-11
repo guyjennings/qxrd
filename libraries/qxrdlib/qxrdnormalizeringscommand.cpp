@@ -1,7 +1,7 @@
 #include "qxrdnormalizeringscommand.h"
 
 QxrdNormalizeRingsCommand::QxrdNormalizeRingsCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+  : QxrdPlotContextMenuCommand("normalizeRingsCommand", "Normalize Powder Rings", plot, set)
 {
 
 }

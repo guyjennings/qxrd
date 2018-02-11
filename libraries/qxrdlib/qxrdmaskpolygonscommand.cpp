@@ -6,11 +6,10 @@
 #include "qxrdimageplot.h"
 #include "qxrdmaskstack.h"
 
-QxrdMaskPolygonsCommand::QxrdMaskPolygonsCommand(QString name,
-                                                 QxrdPlotWidget *plot,
+QxrdMaskPolygonsCommand::QxrdMaskPolygonsCommand(QxrdPlotWidget *plot,
                                                  QxrdPlotWidgetSettingsWPtr set,
                                                  QxrdMaskStackWPtr maskStack) :
-  QxrdPlotButtonCommand(name, plot, set, ":/images/mask_polygon.png", "Mask Polygons", true),
+  QxrdPlotButtonCommand("maskPolygonsCommand", "Mask Polygons", plot, set, ":/images/mask_polygon.png", true),
   m_MaskStack(maskStack)
 {
   appendMode(":/images/mask_polygon_invert.png", "Unmask Polygons");

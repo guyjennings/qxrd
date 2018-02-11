@@ -277,6 +277,7 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
 //    m_DatasetModel -> newColumn("/group4/sdev", 1000);
 
     m_WindowSettings = QxrdWindowSettings::newWindowSettings();
+    m_WindowSettings -> initialize(sharedFromThis());
 
     splashMessage("Starting SPEC Server");
 

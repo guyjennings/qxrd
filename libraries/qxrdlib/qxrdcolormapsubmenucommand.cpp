@@ -5,7 +5,7 @@
 #include "qxrdimageplotwidgetsettings.h"
 
 QxrdColorMapSubmenuCommand::QxrdColorMapSubmenuCommand(QString name, QxrdImagePlotWidget *plot, QxrdImagePlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+  : QxrdPlotContextMenuCommand("colorMapSubmenu", "Color Map", plot, set)
 {
 }
 

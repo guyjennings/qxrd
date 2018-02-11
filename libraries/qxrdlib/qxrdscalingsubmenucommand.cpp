@@ -3,8 +3,8 @@
 #include "qxrdimageplotwidgetsettings.h"
 #include <QMenu>
 
-QxrdScalingSubmenuCommand::QxrdScalingSubmenuCommand(QString name, QxrdImagePlotWidget *plot, QxrdImagePlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdScalingSubmenuCommand::QxrdScalingSubmenuCommand(QxrdImagePlotWidget *plot, QxrdImagePlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("displayMenu", "Display", plot, set)
 {
 }
 

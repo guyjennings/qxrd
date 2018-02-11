@@ -1,7 +1,7 @@
 #include "qxrdadjustfitcommand.h"
 
-QxrdAdjustFitCommand::QxrdAdjustFitCommand(QString name, QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand(name, plot, set)
+QxrdAdjustFitCommand::QxrdAdjustFitCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
+  : QxrdPlotContextMenuCommand("adjustFitCommand", "Fit to nearby peak when adding powder points", plot, set)
 {
 
 }
