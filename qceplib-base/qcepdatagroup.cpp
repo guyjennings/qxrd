@@ -60,19 +60,16 @@ void QcepDataGroup::readSettings(QSettings *settings)
   if (settings) {
     int n = settings->beginReadArray("items");
 
-    //TODO: rewrite to use readObject...
     for (int i=0; i<n; i++) {
       settings->setArrayIndex(i);
 
-      QcepObjectPtr obj = QcepObject::readObject(settings);
+      QcepObjectPtr obj = QcepObject::readObject(sharedFromThis(), settings);
 
       if (obj) {
         QcepDataObjectPtr dobj =
             qSharedPointerDynamicCast<QcepDataObject>(obj);
 
         if (dobj) {
-          dobj -> initialize(sharedFromThis());
-
           append(dobj);
         }
       }
@@ -289,7 +286,7 @@ void QcepDataGroup::insert(int atRow, QcepDataObjectPtr obj)
 void QcepDataGroup::append(QcepDataObjectPtr obj)
 {
   if (obj) {
-    addChildPtr(obj);
+//    addChildPtr(obj);
 
     connect(obj.data(), &QcepDataObject::dataObjectChanged, this, &QcepDataObject::dataObjectChanged);
 

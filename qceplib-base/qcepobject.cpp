@@ -613,7 +613,7 @@ void QcepObject::readSettings(QSettings *set)
 //}
 
 //TODO: add parent ptr for initialization
-QcepObjectPtr QcepObject::readObject(QSettings *set)
+QcepObjectPtr QcepObject::readObject(QcepObjectWPtr parent, QSettings *set)
 {
   QcepObjectPtr res;
 
@@ -628,22 +628,7 @@ QcepObjectPtr QcepObject::readObject(QSettings *set)
       res = construct(name, className);
 
       if (res) {
-        //TODO: don't do this...
-//        int nChildren = set -> beginReadArray("children");
-
-//        for (int i=0; i<nChildren; i++) {
-//          set->setArrayIndex(i);
-
-//          QcepObjectPtr child = readObject(set);
-
-//          if (child) {
-//            child->initialize(res);
-
-//            res->addChildPtr(child);
-//          }
-//        }
-
-//        set->endArray();
+        res -> initialize(parent);
 
         res -> readSettings(set);
       }

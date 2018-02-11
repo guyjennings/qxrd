@@ -85,7 +85,6 @@ SOURCES += \
   $${PWD}/qcepfileimportertiff.cpp \
   $${PWD}/qcepfileimporterhdf.cpp \
   $${PWD}/qcepfileimportermultiple.cpp \
-  $${PWD}/qcepapplicationsettings.cpp \
     $${PWD}/qcepfileformatter.cpp \
     $${PWD}/qcepfileformattertext.cpp \
     $${PWD}/qcepfileformatterhdf.cpp \
@@ -225,8 +224,6 @@ HEADERS += \
   $${PWD}/qcepfileimporterhdf.h \
   $${PWD}/qcepfileimporter-ptr.h \
   $${PWD}/qcepfileimportermultiple.h \
-  $${PWD}/qcepapplicationsettings.h \
-  $${PWD}/qcepapplicationsettings-ptr.h \
     $${PWD}/qcepfileformatter.h \
     $${PWD}/qcepfileformatter-ptr.h \
     $${PWD}/qcepfileformattertext.h \

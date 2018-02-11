@@ -79,7 +79,7 @@ public slots:
   int     methodCount();
 
 public:
-  static QcepObjectPtr readObject(QSettings *set);
+  static QcepObjectPtr readObject(QcepObjectWPtr parent, QSettings *set);
   static QcepObjectPtr construct(QString name, QString className);
 
   virtual void writeSettings(QSettings *set);
