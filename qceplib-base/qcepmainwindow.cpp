@@ -18,6 +18,10 @@ QcepMainWindow::~QcepMainWindow()
 {
 }
 
+void QcepMainWindow::initialize(QcepObjectWPtr parent)
+{
+}
+
 void QcepMainWindow::possiblyClose()
 {
   //   printf("QxrdWindow::possiblyClose()\n");

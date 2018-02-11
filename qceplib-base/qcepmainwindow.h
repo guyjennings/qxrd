@@ -4,6 +4,7 @@
 #include "qceplib_global.h"
 #include <QMainWindow>
 #include <QDateTime>
+#include "qcepobject-ptr.h"
 
 class QCEP_EXPORT QcepMainWindow : public QMainWindow
 {
@@ -12,6 +13,8 @@ class QCEP_EXPORT QcepMainWindow : public QMainWindow
 public:
   explicit QcepMainWindow(QWidget *parent = 0);
   virtual ~QcepMainWindow();
+
+  virtual void initialize(QcepObjectWPtr parent);
 
   void possiblyClose();
   bool wantToClose();

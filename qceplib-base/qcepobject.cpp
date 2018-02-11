@@ -80,6 +80,12 @@ void QcepObject::initialize(QcepObjectWPtr parent)
            qPrintable(hexArg(this)),
            metaObject()->className());
   }
+
+  if (parent == NULL) {
+    printf("QcepObect %s %s initialized with NULL parent\n",
+           qPrintable(hexArg(this)),
+           metaObject()->className());
+  }
 #endif
 
   m_Initialized = true;
