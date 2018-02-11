@@ -13,13 +13,16 @@ private:
   typedef QcepObject inherited;
 
 public:
-  QcepMainWindowSettings(QString name);
+  QcepMainWindowSettings(QString name, QString desc);
   void initialize(QcepObjectWPtr parent);
 
   virtual void openWindow() = 0;
   virtual void closeWindow() = 0;
 
 public:
+  Q_PROPERTY(QString description READ get_Description WRITE set_Description)
+  QCEP_STRING_PROPERTY(Description)
+
   Q_PROPERTY(int windowOpen READ get_WindowOpen WRITE set_WindowOpen)
   QCEP_INTEGER_PROPERTY(WindowOpen)
 
