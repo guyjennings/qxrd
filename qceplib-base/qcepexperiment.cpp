@@ -52,15 +52,15 @@ void QcepExperiment::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
-  m_DataExportParameters -> initialize(parent);
+  m_DataExportParameters -> initialize(sharedFromThis());
 
-  m_DataImportParameters -> initialize(parent);
+  m_DataImportParameters -> initialize(sharedFromThis());
 
-  m_SetDataValueRangeCommand -> initialize(parent);
+  m_SetDataValueRangeCommand -> initialize(sharedFromThis());
 
-  m_SetRangeOfImageCommand -> initialize(parent);
+  m_SetRangeOfImageCommand -> initialize(sharedFromThis());
 
-  m_FixupGainMapCommand -> initialize(parent);
+  m_FixupGainMapCommand -> initialize(sharedFromThis());
 
   defaultWindowSettings();
 
