@@ -10,8 +10,14 @@
 class QXRD_EXPORT QxrdImagePlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
+
+private:
+  typedef QcepPlotSettings inherited;
+
 public:
   Q_INVOKABLE QxrdImagePlotSettings(QString name);
+  void initialize(QcepObjectWPtr parent);
+
   static QxrdImagePlotSettingsPtr newImagePlotSettings();
 
 public:

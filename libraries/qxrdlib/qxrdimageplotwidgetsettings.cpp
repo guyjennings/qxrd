@@ -1,7 +1,7 @@
 #include "qxrdimageplotwidgetsettings.h"
 
 QxrdImagePlotWidgetSettings::QxrdImagePlotWidgetSettings(QString name)
- : QxrdPlotWidgetSettings(name),
+ : inherited(name),
    m_DisplayMinimumPctle(this, "displayMinimumPctle", 0, "Minimum Displayed Value (as a percentile)"),
    m_DisplayMaximumPctle(this, "displayMaximumPctle", 100, "Maximum Displayed Value (as a percentile)"),
    m_DisplayMinimumPct(this, "displayMinimumPct", 0, "Minimum Displayed Value (as % of data range)"),
@@ -25,4 +25,9 @@ QxrdImagePlotWidgetSettings::QxrdImagePlotWidgetSettings(QString name)
    m_MaskMouse(this,"maskMouse",0, "Mask Value at Mouse")
 {
 
+}
+
+void QxrdImagePlotWidgetSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }

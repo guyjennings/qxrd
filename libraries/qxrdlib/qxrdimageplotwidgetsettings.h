@@ -7,8 +7,12 @@ class QXRD_EXPORT QxrdImagePlotWidgetSettings : public QxrdPlotWidgetSettings
 {
   Q_OBJECT
 
+private:
+  typedef QxrdPlotWidgetSettings inherited;
+
 public:
   Q_INVOKABLE QxrdImagePlotWidgetSettings(QString name);
+  void initialize(QcepObjectWPtr parent);
 
 public:
   Q_PROPERTY(double displayMinimumPctle     READ get_DisplayMinimumPctle WRITE set_DisplayMinimumPctle)
