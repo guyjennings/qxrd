@@ -22,6 +22,8 @@ public:
   virtual ~QcepObject();
   virtual void initialize(QcepObjectWPtr parent);
 
+  bool isInitialized() const;
+
   static int allocatedObjects();
   static int deletedObjects();
 
@@ -70,6 +72,10 @@ public slots:
   void dumpParentage();
 
   void openObjectBrowser();
+
+#ifndef QT_NO_DEBUG
+  void checkInitialization();
+#endif
 
   int childrenChanged() const;
   QString childrenChangedBy() const;

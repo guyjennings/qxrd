@@ -92,6 +92,11 @@ void QcepObject::initialize(QcepObjectWPtr parent)
   }
 }
 
+bool QcepObject::isInitialized() const
+{
+  return m_Initialized;
+}
+
 #ifndef QT_NO_DEBUG
 void QcepObject::checkObjectInitialization() const
 {
@@ -1099,4 +1104,19 @@ void QcepObject::writeObjectData(QcepFileFormatterPtr /*fmt*/)
 void QcepObject::readObjectData(QcepFileFormatterPtr /*fmt*/)
 {
 }
+
+#ifndef QT_NO_DEBUG
+void QcepObject::checkInitialization()
+{
+  foreach (QcepObject* obj, s_Allocated) {
+    if (obj && !obj->isInitialized()) {
+      printMessage(tr("Object %1 (%2) at %3 not initialized")
+                   .arg(obj->objectName())
+                   .arg(obj->get_Type())
+                   .HEXARG(obj)
+                   );
+    }
+  }
+}
+#endif
 
