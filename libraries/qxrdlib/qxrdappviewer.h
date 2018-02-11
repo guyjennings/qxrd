@@ -17,7 +17,7 @@ private:
 public:
   explicit QxrdAppViewer(int &argc, char **argv);
   virtual ~QxrdAppViewer();
-  void initialize(QcepObjectWPtr parent);
+  void initializeRoot();
 
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;

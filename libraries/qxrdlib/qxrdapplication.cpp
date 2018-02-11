@@ -92,9 +92,9 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
       QxrdPluginInfoModelPtr(new QxrdPluginInfoModel());
 }
 
-void QxrdApplication::initialize(QcepObjectWPtr parent)
+void QxrdApplication::initializeRoot()
 {
-  inherited::initialize(parent);
+  inherited::initializeRoot();
 
   connect(&m_LockerTimer, &QTimer::timeout, this, &QxrdApplication::lockerTimerElapsed);
 

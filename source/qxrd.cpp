@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
           new QxrdApplication(argc, argv));
 
     if (app) {
-      app->initialize(QcepObjectWPtr());
+      app->initializeRoot();
 
       if (app->get_GuiWanted()) {
         res = app->exec();

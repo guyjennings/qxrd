@@ -10,10 +10,15 @@
 class QXRD_EXPORT QxrdAcquisitionExtraInputsDialogSettings : public QcepObject
 {
   Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdAcquisitionExtraInputsDialogSettings(QString name);
   static QxrdAcquisitionExtraInputsDialogSettingsPtr newAcquisitionExtraInputsDialogSettings();
-  
+  void initialize(QcepObjectWPtr parent);
+
 public:
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -25,7 +30,6 @@ signals:
 public slots:
 
 private:
-  QMutex                                    m_Mutex;
   QxrdAcquisitionExtraInputsPlotSettingsPtr m_AcquisitionExtraInputsPlotSettings;
 };
 

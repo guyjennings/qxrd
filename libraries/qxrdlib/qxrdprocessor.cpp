@@ -453,6 +453,12 @@ void QxrdProcessor::writeSettings(QSettings *settings)
     settings->endGroup();
   }
 
+  if (m_ROIVector) {
+    settings->beginGroup("roiVector");
+    m_ROIVector->writeSettings(settings);
+    settings->endGroup();
+  }
+
   if (m_ROICalculator) {
     settings->beginGroup("roiCalculator");
     m_ROICalculator->writeSettings(settings);

@@ -3,7 +3,7 @@
 #include "qxrdsliceplotsettings.h"
 
 QxrdSliceDialogSettings::QxrdSliceDialogSettings(QString name) :
-  QcepObject(name),
+  inherited(name),
   m_SlicePolygon(this, "slicePolygon", QcepPolygon(), "Slice Polygon")
 {
   m_SlicePlotSettings =
@@ -17,11 +17,17 @@ QxrdSliceDialogSettingsPtr QxrdSliceDialogSettings::newSliceDialogSettings()
   return set;
 }
 
+void QxrdSliceDialogSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  if (m_SlicePlotSettings) {
+    m_SlicePlotSettings -> initialize(sharedFromThis());
+  }
+}
 void QxrdSliceDialogSettings::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::readSettings(settings);
+  inherited::readSettings(settings);
 
   if (m_SlicePlotSettings) {
     settings->beginGroup("plot");
@@ -32,9 +38,7 @@ void QxrdSliceDialogSettings::readSettings(QSettings *settings)
 
 void QxrdSliceDialogSettings::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 
   if (m_SlicePlotSettings) {
     settings->beginGroup("plot");

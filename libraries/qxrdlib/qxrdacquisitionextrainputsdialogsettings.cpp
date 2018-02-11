@@ -4,7 +4,7 @@
 #include "qxrdacquisitionextrainputsplotsettings.h"
 
 QxrdAcquisitionExtraInputsDialogSettings::QxrdAcquisitionExtraInputsDialogSettings(QString name) :
-  QcepObject(name)
+  inherited(name)
 {
   m_AcquisitionExtraInputsPlotSettings =
       QxrdAcquisitionExtraInputsPlotSettings::newAcquisitionExtraInputsPlotSettings();
@@ -17,11 +17,17 @@ QxrdAcquisitionExtraInputsDialogSettingsPtr QxrdAcquisitionExtraInputsDialogSett
   return set;
 }
 
+void QxrdAcquisitionExtraInputsDialogSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  if (m_AcquisitionExtraInputsPlotSettings) {
+    m_AcquisitionExtraInputsPlotSettings -> initialize(sharedFromThis());
+  }
+}
 void QxrdAcquisitionExtraInputsDialogSettings::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::readSettings(settings);
+  inherited::readSettings(settings);
 
   if (m_AcquisitionExtraInputsPlotSettings) {
     settings->beginGroup("plot");
@@ -32,9 +38,7 @@ void QxrdAcquisitionExtraInputsDialogSettings::readSettings(QSettings *settings)
 
 void QxrdAcquisitionExtraInputsDialogSettings::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 
   if (m_AcquisitionExtraInputsPlotSettings) {
     settings->beginGroup("plot");

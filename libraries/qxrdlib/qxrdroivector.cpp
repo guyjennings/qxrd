@@ -13,10 +13,11 @@ void QxrdROIVector::initialize(QcepObjectWPtr parent)
 
 void QxrdROIVector::readSettings(QSettings *settings)
 {
+  inherited::readSettings(settings);
+
   int n = settings->beginReadArray("roi");
 
   //TODO: rewrite to use readObject...
-//  m_ROICoordinates.resize(0);
 
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
@@ -45,6 +46,8 @@ void QxrdROIVector::readSettings(QSettings *settings)
 
 void QxrdROIVector::writeSettings(QSettings *settings)
 {
+  inherited::writeSettings(settings);
+
   settings->beginWriteArray("roi");
 
   for (int i=0; i<m_ROICoordinates.count(); i++) {

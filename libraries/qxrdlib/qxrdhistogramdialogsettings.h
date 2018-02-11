@@ -12,9 +12,14 @@
 class QXRD_EXPORT QxrdHistogramDialogSettings : public QcepObject
 {
   Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdHistogramDialogSettings(QString name);
   static QxrdHistogramDialogSettingsPtr newHistogramDialogSettings();
+  void initialize(QcepObjectWPtr parent);
 
 public:
   void readSettings(QSettings *settings);

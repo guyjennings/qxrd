@@ -28,7 +28,7 @@ private:
 public:
   explicit QxrdApplication(int &argc, char **argv);
   virtual ~QxrdApplication();
-  void initialize(QcepObjectWPtr parent);
+  void initializeRoot();
 
   void loadPlugins();
 

@@ -23,7 +23,7 @@ private:
 public:
   explicit QxrdAppCommon(int &argc, char **argv);
   virtual ~QxrdAppCommon();
-  void initialize(QcepObjectWPtr parent);
+  void initializeRoot();
 
   static QxrdAppCommonWPtr findApplication(QcepObjectWPtr p);
 

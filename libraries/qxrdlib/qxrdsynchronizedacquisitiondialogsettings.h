@@ -11,9 +11,14 @@
 class QXRD_EXPORT QxrdSynchronizedAcquisitionDialogSettings : public QcepObject
 {
   Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdSynchronizedAcquisitionDialogSettings(QString name);
   static QxrdSynchronizedAcquisitionDialogSettingsPtr newSynchronizedAcquisitionDialogSettings();
+  void initialize(QcepObjectWPtr parent);
 
 public:
   void readSettings(QSettings *settings);
@@ -25,7 +30,6 @@ signals:
 public slots:
 
 private:
-  QMutex              m_Mutex;
   QxrdSynchronizedAcquisitionPlotSettingsPtr m_SynchronizedAcquisitionPlotSettings;
 };
 

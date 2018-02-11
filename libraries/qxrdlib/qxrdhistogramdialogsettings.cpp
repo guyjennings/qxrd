@@ -18,6 +18,19 @@ QxrdHistogramDialogSettingsPtr QxrdHistogramDialogSettings::newHistogramDialogSe
   return set;
 }
 
+void QxrdHistogramDialogSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  if (m_HistogramPlotSettings) {
+    m_HistogramPlotSettings       -> initialize(sharedFromThis());
+  }
+
+  if (m_HistogramPlotWidgetSettings) {
+    m_HistogramPlotWidgetSettings -> initialize(sharedFromThis());
+  }
+}
+
 void QxrdHistogramDialogSettings::readSettings(QSettings *settings)
 {
   QcepObject::readSettings(settings);

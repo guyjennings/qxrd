@@ -3,7 +3,7 @@
 #include "qxrdsynchronizedacquisitionplotsettings.h"
 
 QxrdSynchronizedAcquisitionDialogSettings::QxrdSynchronizedAcquisitionDialogSettings(QString name) :
-  QcepObject(name)
+  inherited(name)
 {
   m_SynchronizedAcquisitionPlotSettings =
       QxrdSynchronizedAcquisitionPlotSettings::newSynchronizedAcquisitionPlotSettings();
@@ -16,11 +16,18 @@ QxrdSynchronizedAcquisitionDialogSettingsPtr QxrdSynchronizedAcquisitionDialogSe
   return set;
 }
 
+void QxrdSynchronizedAcquisitionDialogSettings::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  if (m_SynchronizedAcquisitionPlotSettings) {
+    m_SynchronizedAcquisitionPlotSettings -> initialize(sharedFromThis());
+  }
+}
+
 void QxrdSynchronizedAcquisitionDialogSettings::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::readSettings(settings);
+  inherited::readSettings(settings);
 
   if (m_SynchronizedAcquisitionPlotSettings) {
     settings->beginGroup("plot");
@@ -31,9 +38,7 @@ void QxrdSynchronizedAcquisitionDialogSettings::readSettings(QSettings *settings
 
 void QxrdSynchronizedAcquisitionDialogSettings::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 
   if (m_SynchronizedAcquisitionPlotSettings) {
     settings->beginGroup("plot");

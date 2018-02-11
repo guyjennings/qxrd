@@ -68,13 +68,13 @@ QxrdAppCommon::~QxrdAppCommon()
 {
 }
 
-void QxrdAppCommon::initialize(QcepObjectWPtr parent)
+void QxrdAppCommon::initializeRoot()
 {
   THREAD_CHECK;
 
   QThread::currentThread()->setObjectName("applicationThread");
 
-  inherited::initialize(parent);
+  inherited::initializeRoot();
 
   if (m_Allocator) {
     m_Allocator->initialize(sharedFromThis());
