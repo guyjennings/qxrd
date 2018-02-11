@@ -1,13 +1,14 @@
 #include "qxrdsimulatedsettings.h"
 #include "qxrdsimulatedsettings-ptr.h"
 #include "qxrdexperiment.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qcepallocator.h"
 #include "qxrddebug.h"
 #include "qxrdsimulateddialog.h"
 #include "qxrdsimulateddialog-ptr.h"
 #include <stdio.h>
 #include <QPainter>
+#include <QThread>
 
 QxrdSimulatedSettings::QxrdSimulatedSettings(QString name) :
   QxrdDetectorSettings(name, Simulated)

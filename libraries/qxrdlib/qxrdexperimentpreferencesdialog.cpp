@@ -1,6 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdexperimentpreferencesdialog.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdprocessor.h"
 #include "qxrdapplication.h"
 #include "qcepallocator.h"
@@ -36,9 +36,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
   if (expt) {
     setWindowTitle(expt->experimentFilePath() + " Preferences");
 
-    QxrdAcquisitionPtr acq =
-        qSharedPointerDynamicCast<QxrdAcquisition>(
-          expt -> acquisition());
+    QxrdAcqCommonPtr acq(expt->acquisition());
 
     QxrdProcessorPtr proc = expt->processor();
     //  QcepAllocator *alloc = g_Application->allocator();
@@ -67,7 +65,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
         QxrdDetectorListModelPtr(new QxrdDetectorListModel());
 
     if (acq) {
-      for (int i=0; i<acq->get_DetectorCount(); i++) {
+      for (int i=0; i<acq->detectorCount(); i++) {
         QxrdDetectorSettingsPtr det = acq->detector(i);
 
         m_DetectorsModel -> append(det);
@@ -256,9 +254,7 @@ void QxrdExperimentPreferencesDialog::accept()
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdAcquisitionPtr acq =
-        qSharedPointerDynamicCast<QxrdAcquisition>(
-          expt -> acquisition());
+    QxrdAcqCommonPtr acq(expt->acquisition());
     QxrdProcessorPtr proc = expt->processor();
     QxrdServerPtr srv(expt -> specServer());
     QxrdSimpleServerPtr ssrv(expt -> simpleServer());
@@ -332,9 +328,7 @@ void QxrdExperimentPreferencesDialog::addDetector()
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdAcquisitionPtr acq =
-        qSharedPointerDynamicCast<QxrdAcquisition>(
-          expt -> acquisition());
+    QxrdAcqCommonPtr acq(expt->acquisition());
 
     if (acq) {
       QMenu menu;
@@ -354,9 +348,7 @@ void QxrdExperimentPreferencesDialog::addDetectorOfType(int t)
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            expt -> acquisition()));
+    QxrdAcqCommonPtr acq(expt->acquisition());
 
     if (acq) {
       QxrdDetectorSettingsPtr det(acq->newDetector(t));

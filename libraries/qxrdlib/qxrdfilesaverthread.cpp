@@ -2,10 +2,11 @@
 #include "qxrdfilesaverthread.h"
 
 #include "qxrdfilesaver.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qcepintegrateddata.h"
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
+#include "qcepthread.h"
 
 QxrdFileSaverThread::QxrdFileSaverThread(QcepObjectWPtr parent)
   : QxrdThread(parent),
@@ -66,7 +67,7 @@ QxrdFileSaverPtr QxrdFileSaverThread::fileSaver() const
   while (isRunning()) {
     if (m_FileSaver) return m_FileSaver;
 
-    QThread::msleep(50);
+    QcepThread::msleep(50);
   }
 
   return QxrdFileSaverPtr();

@@ -22,6 +22,37 @@ public:
   void initialize(QcepObjectWPtr parent);
 
   static QxrdAcqDummyPtr newAcquisition();
+
+  int detectorCount() const;
+  QxrdDetectorSettingsPtr detector(int i) const;
+  void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
+  QxrdNIDAQPluginInterfaceWPtr nidaqPlugin() const;
+
+  QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
+  QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
+
+  void acquire();
+  void acquireOnce();
+  void acquireDark();
+  void cancel();
+  void trigger();
+
+  int acquisitionStatus(double time);
+
+  void clearDropped();
+  void configureDetector(int i);
+  void openDetectorControlWindow(int i);
+
+  void openWindows();
+  void closeWindows();
+
+  QxrdDetectorSettingsPtr newDetector(int detType);
+  void appendDetector(QxrdDetectorSettingsPtr det);
+  void clearDetectors();
+
+  void doAcquire();
+  void doAcquireOnce();
+  void doAcquireDark();
 };
 
 Q_DECLARE_METATYPE(QxrdAcqDummy*)

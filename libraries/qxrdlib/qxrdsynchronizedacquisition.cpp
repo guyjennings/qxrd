@@ -1,7 +1,7 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qcepmutexlocker.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qwt_math.h"
 #include "qxrdacquisitionparameterpack.h"
 
@@ -27,6 +27,8 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
 void QxrdSynchronizedAcquisition::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
+
+  m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
 }
 
 QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
@@ -91,14 +93,9 @@ void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfaceWPtr ni
   m_NIDAQPlugin = nidaqPlugin;
 }
 
-QxrdAcquisitionWPtr QxrdSynchronizedAcquisition::acquisition()
+QxrdAcqCommonWPtr QxrdSynchronizedAcquisition::acquisition()
 {
-  if (parentPtr()==NULL) {
-    printMessage("QxrdSynchronizedAcquisition Parent == NULL");
-    return QxrdAcquisitionWPtr();
-  } else {
-    return qSharedPointerDynamicCast<QxrdAcquisition>(parentPtr());
-  }
+  return m_Acquisition;
 }
 
 QxrdNIDAQPluginInterfaceWPtr QxrdSynchronizedAcquisition::nidaqPlugin() const
@@ -254,7 +251,7 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
     nidaq->pulseOutput();
   }
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(m_Acquisition);
   QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
 
   if (m_SyncMode && acq && parms) {
@@ -289,7 +286,7 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
 
 void QxrdSynchronizedAcquisition::setManualOutput()
 {
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(m_Acquisition);
   QxrdNIDAQPluginInterfacePtr nidaq(m_NIDAQPlugin);
 
   if (acq && nidaq) {
@@ -305,7 +302,7 @@ void QxrdSynchronizedAcquisition::setManualOutput()
 
 void QxrdSynchronizedAcquisition::triggerOnce()
 {
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(m_Acquisition);
   QxrdNIDAQPluginInterfacePtr nidaq(m_NIDAQPlugin);
   QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
 

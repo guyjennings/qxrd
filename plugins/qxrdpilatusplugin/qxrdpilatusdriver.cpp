@@ -1,6 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdpilatusdriver.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdexperiment.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
@@ -8,11 +8,12 @@
 #include "qxrdpilatussettings.h"
 #include "qxrdpilatusremote.h"
 #include "qxrdprocessor.h"
+#include <QThread>
 
 QxrdPilatusDriver::QxrdPilatusDriver(QString name,
                                      QxrdDetectorSettingsWPtr det,
                                      QxrdExperimentWPtr expt,
-                                     QxrdAcquisitionWPtr acq)
+                                     QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
     m_Pilatus(qSharedPointerDynamicCast<QxrdPilatusSettings>(det)),
     m_PilatusSocket(),
@@ -314,7 +315,7 @@ void QxrdPilatusDriver::beginExposure(double exposure)
 void QxrdPilatusDriver::expose()
 {
   QxrdPilatusSettingsPtr pil(m_Pilatus);
-  QxrdAcquisitionPtr     acq(m_Acquisition);
+  QxrdAcqCommonPtr       acq(m_Acquisition);
 
   if (pil && acq) {
     m_CurrentFile = acq->currentFileBase(pil->get_DetectorNumber(),

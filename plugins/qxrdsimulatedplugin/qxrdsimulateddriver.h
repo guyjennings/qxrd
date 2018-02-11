@@ -13,7 +13,7 @@ public:
   QxrdSimulatedDriver(QString name,
                       QxrdDetectorSettingsWPtr det,
                       QxrdExperimentWPtr expt,
-                      QxrdAcquisitionWPtr acq);
+                      QxrdAcqCommonWPtr acq);
   virtual ~QxrdSimulatedDriver();
 
 public slots:

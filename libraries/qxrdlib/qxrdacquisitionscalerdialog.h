@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "ui_qxrdacquisitionscalerdialog.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdacquisitionscalermodel-ptr.h"
 #include <QDockWidget>
 
@@ -13,12 +13,12 @@ class QXRD_EXPORT QxrdAcquisitionScalerDialog : public QDockWidget, public Ui::Q
   Q_OBJECT
 
 public:
-  explicit QxrdAcquisitionScalerDialog(QxrdAcquisitionWPtr acq,
+  explicit QxrdAcquisitionScalerDialog(QxrdAcqCommonWPtr acq,
                                        QWidget *parent=0);
   ~QxrdAcquisitionScalerDialog();
 
 private:
-  QxrdAcquisitionWPtr             m_Acquisition;
+  QxrdAcqCommonWPtr               m_Acquisition;
   QxrdAcquisitionScalerModelPtr   m_Model;
 };
 

@@ -9,7 +9,7 @@
 #include "qxrdcenterfinder.h"
 #include <QClipboard>
 
-QxrdCalibrantWindow::QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw) :
+QxrdCalibrantWindow::QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
   QxrdMainWindow(name, app, expt, acqw, procw),
   m_CalibrantWindowSettings(set)
 {

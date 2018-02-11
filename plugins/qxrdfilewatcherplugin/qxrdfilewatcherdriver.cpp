@@ -1,16 +1,17 @@
 #include "qxrddebug.h"
 #include "qxrdfilewatcherdriver.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdexperiment.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
 #include <QPainter>
 #include "qxrdfilewatchersettings.h"
+#include <QThread>
 
 QxrdFileWatcherDriver::QxrdFileWatcherDriver(QString name,
                                                          QxrdDetectorSettingsWPtr det,
                                                          QxrdExperimentWPtr expt,
-                                                         QxrdAcquisitionWPtr acq)
+                                                         QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
     m_FileWatcher(qSharedPointerDynamicCast<QxrdFileWatcherSettings>(det))
 {
@@ -33,7 +34,7 @@ bool QxrdFileWatcherDriver::startDetectorDriver()
   THREAD_CHECK;
 
   QxrdDetectorSettingsPtr det(m_Detector);
-  QxrdAcquisitionPtr      acq(m_Acquisition);
+  QxrdAcqCommonPtr        acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
     printMessage(tr("Starting File Watcher detector \"%1\"").arg(det->get_DetectorName()));
@@ -113,7 +114,7 @@ bool QxrdFileWatcherDriver::shutdownAcquisition()
 void QxrdFileWatcherDriver::onTimerTimeout()
 {
   QxrdDetectorSettingsPtr det(m_Detector);
-  QxrdAcquisitionPtr      acq(m_Acquisition);
+  QxrdAcqCommonPtr        acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
     QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());

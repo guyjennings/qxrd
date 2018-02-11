@@ -1,6 +1,6 @@
 #include "qxrdscriptingwindow.h"
 
-QxrdScriptingWindow::QxrdScriptingWindow(QxrdScriptingWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw) :
+QxrdScriptingWindow::QxrdScriptingWindow(QxrdScriptingWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
   QxrdMainWindow(name, app, expt, acqw, procw),
   m_ScriptingWindowSettings(set)
 {

@@ -1,6 +1,6 @@
 #include "qxrdcalculatorwindow.h"
 
-QxrdCalculatorWindow::QxrdCalculatorWindow(QxrdCalculatorWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw) :
+QxrdCalculatorWindow::QxrdCalculatorWindow(QxrdCalculatorWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
   QxrdMainWindow(name, app, expt, acqw, procw),
   m_CalculatorWindowSettings(set)
 {

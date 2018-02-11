@@ -5,7 +5,7 @@
 #include "qxrdprocessor.h"
 #include "qxrdapplication.h"
 #include "qcepallocator.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_marker.h>
 #include <qwt_legend.h>

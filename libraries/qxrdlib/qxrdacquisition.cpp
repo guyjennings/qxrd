@@ -7,7 +7,7 @@
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdwindow.h"
 #include "qxrdapplication.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 //#include <QThreadPool>
 #include <QtConcurrentRun>
 #include <QDir>
@@ -26,49 +26,10 @@
 QxrdAcquisition::QxrdAcquisition(QString name) :
   inherited(name),
   m_ExecutionThread(),
-  m_Cancelling(this, "cancelling", 0, "Cancel Acquisition?"),
-  m_Triggered(this, "triggered", 0, "Trigger Acquisition"),
-  m_ExposureTime(this,"exposureTime",0.1, "Exposure Time (in sec)"),
-  m_SkippedExposuresAtStart(this,"skippedExposuresAtStart",0, "Exposures to Skip at Start"),
-  m_PhasesInGroup(this,"phasesInGroup",1, "Number of Image Phases"),
-  m_CurrentPhase(this, "currentPhase", 0, "Current Acquisition Phase"),
-  m_SummedExposures(this,"summedExposures",1, "Summed Exposures per Image"),
-  m_DarkSummedExposures(this,"darkSummedExposures",1, "Summed Exposures in Dark Image"),
-  m_CurrentSummation(this, "currentSumation", 0, "Current Acquisition Summation"),
-  m_SkippedExposures(this,"skippedExposures",0, "Skipped Exposures between Images"),
-  m_PreTriggerFiles(this,"preTriggerFiles",0, "Number of pre-Trigger Images"),
-  m_PostTriggerFiles(this,"postTriggerFiles",1, "Number of post-Trigger Images"),
-  m_CurrentFile(this, "currentFile", 0, "File Index of Current File"),
-  m_FilePattern(this,"filePattern","", "File Name Pattern"),
-  m_QxrdVersion(this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
-  m_QtVersion(this,"qtVersion",qVersion(), "QT Version Number"),
-  m_DetectorCount(this, "detectorCount", 0, "Number of Detectors"),
-  m_LastAcquired(this, "lastAcquired", 0, "Internal Acquisition Flag"),
-  m_FileIndex(this,"fileIndex",0, "File Index"),
-  m_FileIndexWidth(this, "fileIndexWidth", 5, "Digits in File Index Field"),
-  m_FilePhaseWidth(this, "filePhaseWidth", 3, "Digits in Phase Number Field"),
-  m_FileOverflowWidth(this, "fileOverflowWidth", 5, "Digits in Overflow Index Field"),
-  m_DetectorNumberWidth(this, "detectorNumberWidth", 2, "Digits in detector number field"),
-  m_FileBase(this,"fileBase","", "File Base"),
-  m_OverflowLevel(this, "overflowLevel", 65500, "Overflow level (per exposure)"),
-  m_Raw16SaveTime(this,"raw16SaveTime", 0.1, "Time to save 16 bit images"),
-  m_Raw32SaveTime(this,"raw32SaveTime", 0.2, "Time to save 32 bit images"),
-  m_RawSaveTime(this,"rawSaveTime", 0.2, "Time to save raw images"),
-  m_DarkSaveTime(this,"darkSaveTime", 0.2, "Time to save dark images"),
-  m_UserComment1(this,"userComment1","", "User Comment 1"),
-  m_UserComment2(this,"userComment2","", "User Comment 2"),
-  m_UserComment3(this,"userComment3","", "User Comment 3"),
-  m_UserComment4(this,"userComment4","", "User Comment 4"),
-  m_Normalization(this, "normalization", QcepDoubleList(), "Normalization Values"),
-  m_DroppedFrames(this,"droppedFrames",0, "Number of Dropped Frames"),
-  m_LiveViewAtIdle(this, "liveViewAtIdle", false, "Live View during Idle"),
-  m_AcquisitionCancelsLiveView(this, "acquisitionCancelsLiveView", true, "Acquisition operations cancel live view"),
-  m_RetryDropped(this, "retryDropped", false, "Automatically retry dropped frames during acquisition"),
-  m_ScalerValues(this, "scalerValues", QcepDoubleVector(), "Scaler Values"),
   m_Mutex(QMutex::Recursive),
   m_SynchronizedAcquisition(NULL),
   m_AcquisitionExtraInputs(NULL),
-  m_Window(),
+//  m_Window(),
   m_Idling(1)
 {
 #ifndef QT_NO_DEBUG
@@ -108,18 +69,16 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
   
   m_AcquisitionExtraInputs  -> initialize(parent);
   
-  QxrdAcquisitionPtr acq(
-        qSharedPointerDynamicCast<QxrdAcquisition>(sharedFromThis()));
-
-  m_ScalerModel =
-        QxrdAcquisitionScalerModelPtr(
-          new QxrdAcquisitionScalerModel(acq));
+  QxrdAcqCommonPtr acq(
+        qSharedPointerDynamicCast<QxrdAcqCommon>(sharedFromThis()));
 
   m_ExecutionThread =
       QxrdAcquisitionExecutionThreadPtr(
         new QxrdAcquisitionExecutionThread(acq));
 
-  m_ExecutionThread->start();
+  m_ExecutionThread -> initialize(sharedFromThis());
+
+  m_ExecutionThread -> start();
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -153,22 +112,6 @@ QxrdAcquisition::~QxrdAcquisition()
 //  }
 }
 
-QxrdAcquisitionWPtr QxrdAcquisition::findAcquisition(QcepObjectWPtr p)
-{
-  QxrdAcquisitionWPtr res =
-      qSharedPointerDynamicCast<QxrdAcquisition>(p);
-
-  if (res == NULL) {
-    QcepObjectPtr objp(p);
-
-    if (objp) {
-      res = findAcquisition(objp->parentPtr());
-    }
-  }
-
-  return res;
-}
-
 QxrdAcquisitionWPtr QxrdAcquisition::myself()
 {
   return qSharedPointerDynamicCast<QxrdAcquisition>(sharedFromThis());
@@ -200,16 +143,6 @@ QxrdProcessorWPtr QxrdAcquisition::processor() const
   } else {
     return QxrdProcessorWPtr();
   }
-}
-
-void QxrdAcquisition::setAcquisitionScalerModel(QxrdAcquisitionScalerModelPtr model)
-{
-  m_ScalerModel = model;
-}
-
-QxrdAcquisitionScalerModelPtr QxrdAcquisition::acquisitionScalerModel() const
-{
-  return m_ScalerModel;
 }
 
 void QxrdAcquisition::acquire()
@@ -315,36 +248,13 @@ int  QxrdAcquisition::acquisitionStatus(double time)
   }
 }
 
-QxrdAcquisitionParameterPackPtr QxrdAcquisition::acquisitionParameterPack()
-{
-  return QxrdAcquisitionParameterPackPtr(
-        new QxrdAcquisitionParameterPack (get_FilePattern(),
-                                          get_ExposureTime(),
-                                          get_SummedExposures(),
-                                          get_PreTriggerFiles(),
-                                          get_PostTriggerFiles(),
-                                          get_PhasesInGroup(),
-                                          get_SkippedExposuresAtStart(),
-                                          get_SkippedExposures()));
-}
-
-QxrdDarkAcquisitionParameterPackPtr QxrdAcquisition::darkAcquisitionParameterPack()
-{
-  return QxrdDarkAcquisitionParameterPackPtr(
-        new QxrdDarkAcquisitionParameterPack(get_FilePattern(),
-                                          get_ExposureTime(),
-                                          get_DarkSummedExposures(),
-                                          get_SkippedExposuresAtStart()));
-
-}
-
 void QxrdAcquisition::shutdown()
 {
   if (qcepDebug(DEBUG_APP)) {
     printMessage("QxrdAcquisition::shutdown()");
   }
 
-  for (int i=0; i<get_DetectorCount(); i++) {
+  for (int i=0; i<detectorCount(); i++) {
     QxrdDetectorSettingsPtr det = detector(i);
 
     if (det) {
@@ -367,28 +277,6 @@ void QxrdAcquisition::updateSaveTimes()
     set_DarkSaveTime(get_Raw16SaveTime());
   } else {
     set_DarkSaveTime(get_Raw32SaveTime());
-  }
-}
-
-void QxrdAcquisition::dynamicProperties()
-{
-  QByteArray name;
-
-  if (g_Application) {
-    foreach(name, dynamicPropertyNames()) {
-      g_Application->printMessage(tr("acquisition.%1\n").arg(name.data()));
-    }
-  }
-}
-
-void QxrdAcquisition::copyDynamicProperties(QObject *dest)
-{
-  if (dest) {
-    QByteArray name;
-
-    foreach(name, dynamicPropertyNames()) {
-      dest -> setProperty(name.data(), property(name.data()));
-    }
   }
 }
 
@@ -499,8 +387,6 @@ void QxrdAcquisition::readSettings(QSettings *settings)
     }
   }
 
-  set_DetectorCount(m_Detectors.count());
-
   settings->endArray();
 }
 
@@ -531,8 +417,6 @@ void QxrdAcquisition::appendDetector(QxrdDetectorSettingsPtr det)
       det -> set_DetectorNumber(m_Detectors.count());
 
       m_Detectors.append(det);
-
-      set_DetectorCount(m_Detectors.count());
     }
   }
 }
@@ -543,36 +427,39 @@ void QxrdAcquisition::clearDetectors()
     QMetaObject::invokeMethod(this, "clearDetectors", Qt::BlockingQueuedConnection);
   } else {
     m_Detectors.resize(0);
-
-    set_DetectorCount(0);
   }
 }
 
-QxrdDetectorSettingsWPtr QxrdAcquisition::detector(int n)
+int QxrdAcquisition::detectorCount() const
+{
+  return m_Detectors.count();
+}
+
+QxrdDetectorSettingsPtr QxrdAcquisition::detector(int n) const
 {
   return m_Detectors.value(n);
 }
 
-QxrdDetectorSettings *QxrdAcquisition::det(int n)
+QxrdDetectorSettings *QxrdAcquisition::det(int n) const
 {
   return m_Detectors.value(n).data();
 }
 
-void QxrdAcquisition::setWindow(QxrdWindowWPtr win)
-{
-  m_Window = win;
-}
+//void QxrdAcquisition::setWindow(QxrdWindowWPtr win)
+//{
+//  m_Window = win;
+//}
 
 bool QxrdAcquisition::sanityCheckCommon()
 {
-  if (get_DetectorCount() == 0) {
+  if (detectorCount() == 0) {
     criticalMessage("No Detectors are configured");
     return false;
   }
 
   int ndet = 0;
 
-  for (int i=0; i<get_DetectorCount(); i++) {
+  for (int i=0; i<detectorCount(); i++) {
     QxrdDetectorSettingsPtr det = detector(i);
 
     if (det && det->isEnabled()) {
@@ -986,79 +873,52 @@ void QxrdAcquisition::accumulateAcquiredImage(QcepUInt32ImageDataPtr image,
   }
 }
 
-QString QxrdAcquisition::currentFileBase(int detNum, QString extension)
-{
-  QString fileBase, fileName;
+//void QxrdAcquisition::getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName)
+//{
+//  int width = get_FileIndexWidth();
+//  int detWidth = get_DetectorNumberWidth();
+//  QxrdDetectorSettingsPtr det(detector(detNum));
 
-  QxrdDetectorSettingsPtr det = detector(detNum);
-  QString extent;
+//  if (det) {
+//    QxrdProcessorPtr proc(det->processor());
+//    int nDet = detectorCount();
 
-  if (extension.length()) {
-    extent = extension;
-  } else if (det) {
-    extent = det->get_Extension();
-  } else {
-    extent = "tif";
-  }
+//    if (proc) {
+//      if (nphases == 0 || phase < 0) {
+//        if (nDet <= 1) {
+//          fileBase = tr("%1-%2.dark.%3")
+//              .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(extent);
+//        } else {
+//          fileBase = tr("%1-%2-%3.dark.%4")
+//              .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0')).arg(extent);
+//        }
 
-  getFileBaseAndName(
-        get_FilePattern(),
-        extent,
-        detNum,
-        get_CurrentFile(),
-        get_CurrentPhase(),
-        get_PhasesInGroup(),
-        fileBase, fileName);
-
-  return fileBase;
-}
-
-void QxrdAcquisition::getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName)
-{
-  int width = get_FileIndexWidth();
-  int detWidth = get_DetectorNumberWidth();
-  QxrdDetectorSettingsPtr det(detector(detNum));
-
-  if (det) {
-    QxrdProcessorPtr proc(det->processor());
-    int nDet = get_DetectorCount();
-
-    if (proc) {
-      if (nphases == 0 || phase < 0) {
-        if (nDet <= 1) {
-          fileBase = tr("%1-%2.dark.%3")
-              .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(extent);
-        } else {
-          fileBase = tr("%1-%2-%3.dark.%4")
-              .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0')).arg(extent);
-        }
-
-        fileName = proc -> filePathInDarkOutputDirectory(fileBase);
-      } else {
-        if (nphases > 1) {
-          int phswidth = get_FilePhaseWidth();
-          if (nDet <= 1) {
-            fileBase = tr("%1-%2-%3.%4")
-                .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(phase,phswidth,10,QChar('0')).arg(extent);
-          } else {
-            fileBase = tr("%1-%2-%3-%4.%5")
-                .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0'))
-                .arg(phase,phswidth,10,QChar('0')).arg(extent);
-          }
-        } else {
-          if (nDet <= 1) {
-            fileBase = tr("%1-%2.%3")
-                .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(extent);
-          } else {
-            fileBase = tr("%1-%2-%3.%4")
-                .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0')).arg(extent);
-          }
-        }
-        fileName = proc -> filePathInRawOutputDirectory(fileBase);
-      }
-    }
-  }
-}
+//        fileName = proc -> filePathInDarkOutputDirectory(fileBase);
+//      } else {
+//        if (nphases > 1) {
+//          int phswidth = get_FilePhaseWidth();
+//          if (nDet <= 1) {
+//            fileBase = tr("%1-%2-%3.%4")
+//                .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(phase,phswidth,10,QChar('0')).arg(extent);
+//          } else {
+//            fileBase = tr("%1-%2-%3-%4.%5")
+//                .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0'))
+//                .arg(phase,phswidth,10,QChar('0')).arg(extent);
+//          }
+//        } else {
+//          if (nDet <= 1) {
+//            fileBase = tr("%1-%2.%3")
+//                .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(extent);
+//          } else {
+//            fileBase = tr("%1-%2-%3.%4")
+//                .arg(filePattern).arg(detNum,detWidth,10,QChar('0')).arg(fileIndex,width,10,QChar('0')).arg(extent);
+//          }
+//        }
+//        fileName = proc -> filePathInRawOutputDirectory(fileBase);
+//      }
+//    }
+//  }
+//}
 
 //void QxrdAcquisition::processImage(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow)
 //{
@@ -1178,7 +1038,7 @@ void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
   }
 }
 
-QxrdNIDAQPluginInterfacePtr QxrdAcquisition::nidaqPlugin() const
+QxrdNIDAQPluginInterfaceWPtr QxrdAcquisition::nidaqPlugin() const
 {
   if (m_SynchronizedAcquisition) {
     return m_SynchronizedAcquisition -> nidaqPlugin();
@@ -1267,7 +1127,7 @@ void QxrdAcquisition::executeAcquisition(QxrdAcquisitionParameterPackPtr parmsp)
     QVector<QVector<QVector<QcepUInt32ImageDataPtr> > >res;
     QVector<QVector<QVector<QcepMaskDataPtr> > >      ovf;
 
-    for (int i=0; i<get_DetectorCount(); i++) {
+    for (int i=0; i<detectorCount(); i++) {
       QxrdDetectorSettingsPtr det = detector(i);
 
       if (det && det->isEnabled()) {
@@ -1616,7 +1476,7 @@ void QxrdAcquisition::doAcquireDark()
     set_CurrentSummation(0);
     set_CurrentFile(fileIndex);
 
-    for (int i=0; i<get_DetectorCount(); i++) {
+    for (int i=0; i<detectorCount(); i++) {
       QxrdDetectorSettingsPtr det = detector(i);
 
       if (det && det->isEnabled()) {
@@ -1778,7 +1638,7 @@ void QxrdAcquisition::onIdleTimeout()
     QTime tic;
     tic.start();
 
-    for (int i=0; i<get_DetectorCount(); i++) {
+    for (int i=0; i<detectorCount(); i++) {
       QxrdDetectorSettingsPtr det = detector(i);
 
       if (det && det->isEnabled()) {
@@ -1844,9 +1704,4 @@ void QxrdAcquisition::propertyList()
 //TODO: still needed?
 void QxrdAcquisition::setupExposureMenu(QDoubleSpinBox * /*cb*/)
 {
-}
-
-double QxrdAcquisition::scalerValue(int i)
-{
-  return get_ScalerValues().value(i);
 }

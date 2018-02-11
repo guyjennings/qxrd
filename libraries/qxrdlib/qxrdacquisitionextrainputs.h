@@ -5,7 +5,7 @@
 #include "qcepobject.h"
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qcepimagedata.h"
@@ -81,7 +81,7 @@ public:
 
 private:
   mutable QMutex              m_Mutex;
-  QxrdAcquisitionWPtr         m_Acquisition;
+  QxrdAcqCommonWPtr           m_Acquisition;
   QVector<QxrdAcquisitionExtraInputsChannelPtr> m_Channels;
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
   QVector< QVector<double> >  m_ChannelData;

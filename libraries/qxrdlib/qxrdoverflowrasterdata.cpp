@@ -41,6 +41,7 @@ void QxrdOverflowRasterData::setIntervals()
   setInterval(Qt::ZAxis, QwtInterval(0.0, 3.0));
 }
 
+//TODO: implement this...
 double QxrdOverflowRasterData::value(double x, double y) const
 {
   return 0;

@@ -3,7 +3,7 @@
 #include "qxrdacquisitionwindowsettings.h"
 #include "qxrdcorrectiondialog.h"
 #include "qxrddetectorlistmodel.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include <QTableView>
 #include <QDir>
 #include <QFileDialog>
@@ -12,7 +12,7 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
                                              QString name,
                                              QxrdAppCommonWPtr app,
                                              QxrdExperimentWPtr expt,
-                                             QxrdAcquisitionWPtr acqw,
+                                             QxrdAcqCommonWPtr acqw,
                                              QxrdProcessorWPtr procw) :
   QxrdMainWindow(name, app, expt, acqw, procw),
   m_AcquisitionWindowSettings(set)
@@ -42,13 +42,10 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
     m_DetectorsModel =
         QxrdDetectorListModelPtr(new QxrdDetectorListModel());
 
-    m_Acquisition =
-        qSharedPointerDynamicCast<QxrdAcquisition>(exp->acquisition());
-
-    QxrdAcquisitionPtr acqp(m_Acquisition);
+    QxrdAcqCommonPtr acqp(m_Acquisition);
 
     if (acqp) {
-      for (int i=0; i<acqp->get_DetectorCount(); i++) {
+      for (int i=0; i<acqp->detectorCount(); i++) {
         QxrdDetectorSettingsPtr det = acqp->detector(i);
 
         m_DetectorsModel -> append(det);
@@ -66,11 +63,11 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
     connect(m_LogFileName, &QLineEdit::editingFinished, exp.data(), &QxrdExperiment::openNewLogFile);
 
     if (acqp) {
-      connect(m_ActionAcquire,     &QAction::triggered, acqp.data(), &QxrdAcquisition::acquire);
-      connect(m_ActionAcquireOnce, &QAction::triggered, acqp.data(), &QxrdAcquisition::acquireOnce);
-      connect(m_ActionCancel,      &QAction::triggered, acqp.data(), &QxrdAcquisition::cancel);
-      connect(m_ActionAcquireDark, &QAction::triggered, acqp.data(), &QxrdAcquisition::acquireDark);
-      connect(m_ActionTrigger,     &QAction::triggered, acqp.data(), &QxrdAcquisition::trigger);
+      connect(m_ActionAcquire,     &QAction::triggered, acqp.data(), &QxrdAcqCommon::acquire);
+      connect(m_ActionAcquireOnce, &QAction::triggered, acqp.data(), &QxrdAcqCommon::acquireOnce);
+      connect(m_ActionCancel,      &QAction::triggered, acqp.data(), &QxrdAcqCommon::cancel);
+      connect(m_ActionAcquireDark, &QAction::triggered, acqp.data(), &QxrdAcqCommon::acquireDark);
+      connect(m_ActionTrigger,     &QAction::triggered, acqp.data(), &QxrdAcqCommon::trigger);
 
       connect(m_BrowseLogFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::browseLogFile);
       connect(m_BrowseScanFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::browseScanFile);
@@ -81,10 +78,10 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
       connect(m_TriggerButton, &QAbstractButton::clicked, m_ActionTrigger, &QAction::triggered);
       connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered);
 
-      connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcquisition::clearDropped);
+      connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcqCommon::clearDropped);
 
-      connect(acqp.data(), &QxrdAcquisition::acquireStarted, this, &QxrdAcquisitionWindow::acquireStarted);
-      connect(acqp.data(), &QxrdAcquisition::acquireComplete, this, &QxrdAcquisitionWindow::acquireComplete);
+      connect(acqp.data(), &QxrdAcqCommon::acquireStarted, this, &QxrdAcquisitionWindow::acquireStarted);
+      connect(acqp.data(), &QxrdAcqCommon::acquireComplete, this, &QxrdAcquisitionWindow::acquireComplete);
 
       acqp -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
       acqp -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
@@ -135,8 +132,8 @@ void QxrdAcquisitionWindow::doEditCorrection()
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    QxrdAcquisitionPtr   acq(m_Acquisition);
-    QxrdProcessorPtr     proc(m_Processor);
+    QxrdAcqCommonPtr acq(m_Acquisition);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (acq && proc) {
       QxrdCorrectionDialog* editCorrection =
@@ -150,7 +147,7 @@ void QxrdAcquisitionWindow::doEditCorrection()
 
 void QxrdAcquisitionWindow::acquireStarted()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     m_AcquireButton -> setEnabled(false);

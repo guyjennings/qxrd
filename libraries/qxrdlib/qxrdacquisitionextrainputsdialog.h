@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include <QDockWidget>
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "ui_qxrdacquisitionextrainputsdialog.h"
 #include "qxrdacquisitionextrainputsdialogsettings-ptr.h"
@@ -13,7 +13,9 @@ class QXRD_EXPORT QxrdAcquisitionExtraInputsDialog : public QDockWidget, public 
   Q_OBJECT
   
 public:
-  explicit QxrdAcquisitionExtraInputsDialog(QxrdAcquisitionExtraInputsDialogSettingsWPtr set, QWidget *parent, QxrdAcquisitionWPtr acq);
+  explicit QxrdAcquisitionExtraInputsDialog(QxrdAcquisitionExtraInputsDialogSettingsWPtr set,
+                                            QWidget *parent,
+                                            QxrdAcqCommonWPtr acq);
   ~QxrdAcquisitionExtraInputsDialog();
 
 private:
@@ -28,7 +30,7 @@ private slots:
 
 private:
   QxrdAcquisitionExtraInputsDialogSettingsWPtr m_Settings;
-  QxrdAcquisitionWPtr            m_Acquisition;
+  QxrdAcqCommonWPtr              m_Acquisition;
   QxrdAcquisitionExtraInputsWPtr m_AcquisitionExtraInputs;
   int                            m_ChannelsInRows;
 };

@@ -14,7 +14,7 @@ QString QxrdPerkinElmerPlugin::name() const
 QxrdDetectorDriverPtr QxrdPerkinElmerPlugin::createDetector(QString name,
                                                             QxrdDetectorSettingsWPtr det,
                                                             QxrdExperimentWPtr expt,
-                                                            QxrdAcquisitionWPtr acq)
+                                                            QxrdAcqCommonWPtr acq)
 {
   QxrdDetectorDriverPtr res =
       QxrdDetectorDriverPtr(new QxrdPerkinElmerDriver(name, det, expt, acq));

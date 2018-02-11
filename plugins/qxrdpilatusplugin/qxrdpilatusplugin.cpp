@@ -14,7 +14,7 @@ QString QxrdPilatusPlugin::name() const
 QxrdDetectorDriverPtr QxrdPilatusPlugin::createDetector(QString name,
                                                         QxrdDetectorSettingsWPtr det,
                                                         QxrdExperimentWPtr expt,
-                                                        QxrdAcquisitionWPtr acq)
+                                                        QxrdAcqCommonWPtr acq)
 {
   QxrdDetectorDriverPtr res =
       QxrdDetectorDriverPtr(new QxrdPilatusDriver(name, det, expt, acq));

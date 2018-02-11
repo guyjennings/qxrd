@@ -2,7 +2,7 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "ui_qxrdsynchronizedacquisitiondialog.h"
 #include "qwt_plot_piecewise_curve.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrddebug.h"
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrdsynchronizedacquisitiondialogsettings.h"
@@ -11,7 +11,7 @@
 QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(
     QxrdSynchronizedAcquisitionDialogSettingsWPtr settings,
     QWidget *parent,
-    QxrdAcquisitionWPtr acqw) :
+    QxrdAcqCommonWPtr acqw) :
 
   QDockWidget(parent),
   m_DialogSettings(settings),
@@ -30,7 +30,7 @@ QxrdSynchronizedAcquisitionDialog::QxrdSynchronizedAcquisitionDialog(
     m_WaveformPlot->initialize(set->synchronizedAcquisitionPlotSettings());
   }
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     m_SynchronizedAcquisition = acq->synchronizedAcquisition();
@@ -158,7 +158,7 @@ void QxrdSynchronizedAcquisitionDialog::deviceChanged()
 
 void QxrdSynchronizedAcquisitionDialog::waveformChanged()
 {
-  QxrdAcquisitionPtr             acq(m_Acquisition);
+  QxrdAcqCommonPtr               acq(m_Acquisition);
   QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (acq && sync) {

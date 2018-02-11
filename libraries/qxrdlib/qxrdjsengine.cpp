@@ -1,6 +1,6 @@
 #include "qxrdjsengine.h"
 #include "qxrdexperiment.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrddebug.h"
 #include "qcepallocator.h"
 #include "qxrdapplication.h"
@@ -149,7 +149,7 @@ void QxrdJSEngine::initialize()
   if (expt) {
     setGlobalProperty("experiment", newQObject(expt.data()));
 
-    QxrdAcquisitionPtr acq(acquisition());
+    QxrdAcqCommonPtr acq(acquisition());
 
     if (acq) {
       setGlobalProperty("acquisition", newQObject(acq.data()));
@@ -352,15 +352,14 @@ QString QxrdJSEngine::convertHelper(QJSValue result, int depth)
   }
 }
 
-QxrdAcquisitionWPtr QxrdJSEngine::acquisition()
+QxrdAcqCommonWPtr QxrdJSEngine::acquisition()
 {
-  QxrdAcquisitionWPtr res;
+  QxrdAcqCommonWPtr res;
 
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    res =
-        qSharedPointerDynamicCast<QxrdAcquisition>(expt->acquisition());
+    res = expt->acquisition();
   }
 
   return res;
@@ -417,7 +416,7 @@ void QxrdJSEngine::acquireFunc(QString fp,
     tick.start();
   }
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     if (fp.length()) {
@@ -462,7 +461,7 @@ void QxrdJSEngine::acquireDarkFunc(QString fp,
     tick.start();
   }
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     if (fp.length()) {
@@ -495,7 +494,7 @@ void QxrdJSEngine::acquireOnceFunc(QString fp,
     tick.start();
   }
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     if (fp.length()) {
@@ -528,7 +527,7 @@ int  QxrdJSEngine::statusFunc(double tim)
 
   int res = -1;
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(acquisition());
   QxrdProcessorPtr proc(processor());
 
   if (acq && proc) {
@@ -556,7 +555,7 @@ int  QxrdJSEngine::acquireStatusFunc(double tim)
 
   int res = -1;
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     res = acq->acquisitionStatus(tim);
@@ -577,7 +576,7 @@ void QxrdJSEngine::acquireCancelFunc()
     tick.start();
   }
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     acq->cancel();
@@ -621,7 +620,7 @@ QJSValue QxrdJSEngine::acquireScalersFunc()
 
   QJSValue res = newArray();
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     QcepDoubleVector v = acq->get_ScalerValues();
@@ -648,7 +647,7 @@ double QxrdJSEngine::acquireScalersFunc(int i)
 
   double res = 0;
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     res = acq->scalerValue(i);
@@ -878,7 +877,7 @@ QJSValue QxrdJSEngine::detectorFunc(int n)
 {
   QJSValue res;
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     QxrdDetectorSettingsPtr det = acq->detector(n);
@@ -897,7 +896,7 @@ QJSValue QxrdJSEngine::roiFunc(int n, int m)
 {
   QJSValue res;
 
-  QxrdAcquisitionPtr acq(acquisition());
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     QxrdDetectorSettingsPtr det = acq->detector(n);

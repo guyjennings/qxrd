@@ -20,7 +20,7 @@ public:
   QxrdDetectorDriverPtr createDetector(QString name,
                                        QxrdDetectorSettingsWPtr det,
                                        QxrdExperimentWPtr expt,
-                                       QxrdAcquisitionWPtr acq);
+                                       QxrdAcqCommonWPtr acq);
 
 private:
   BusScanner *m_BusScanner;

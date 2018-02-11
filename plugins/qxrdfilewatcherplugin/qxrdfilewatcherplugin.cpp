@@ -14,7 +14,7 @@ QString QxrdFileWatcherPlugin::name() const
 QxrdDetectorDriverPtr QxrdFileWatcherPlugin::createDetector(QString name,
                                                             QxrdDetectorSettingsWPtr det,
                                                             QxrdExperimentWPtr expt,
-                                                            QxrdAcquisitionWPtr acq)
+                                                            QxrdAcqCommonWPtr acq)
 {
   QxrdDetectorDriverPtr res =
       QxrdDetectorDriverPtr(new QxrdFileWatcherDriver(name, det, expt, acq));

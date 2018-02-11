@@ -13,7 +13,7 @@ public:
   explicit QxrdInfoWindow(QString name,
                           QxrdAppCommonWPtr app,
                           QxrdExperimentWPtr expt,
-                          QxrdAcquisitionWPtr acqw,
+                          QxrdAcqCommonWPtr acqw,
                           QxrdProcessorWPtr procw);
   ~QxrdInfoWindow();
 

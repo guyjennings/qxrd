@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qxrdthread.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdacquisitionexecution-ptr.h"
 
 class QXRD_EXPORT QxrdAcquisitionExecutionThread : public QxrdThread
@@ -11,7 +11,7 @@ class QXRD_EXPORT QxrdAcquisitionExecutionThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdAcquisitionExecutionThread(QxrdAcquisitionWPtr acq);
+  QxrdAcquisitionExecutionThread(QxrdAcqCommonWPtr acq);
   ~QxrdAcquisitionExecutionThread();
 
   void shutdown();
@@ -27,7 +27,7 @@ protected:
   void run();
 
 private:
-  QxrdAcquisitionWPtr          m_Acquisition;
+  QxrdAcqCommonWPtr            m_Acquisition;
   QxrdAcquisitionExecutionPtr  m_AcquisitionExecution;
 };
 

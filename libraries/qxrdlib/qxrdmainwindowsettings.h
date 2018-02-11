@@ -6,7 +6,7 @@
 #include "qxrdmainwindow-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdprocessor-ptr.h"
 
 class QXRD_EXPORT QxrdMainWindowSettings : public QcepMainWindowSettings
@@ -34,7 +34,7 @@ protected:
   QxrdMainWindowPtr   m_Window;
   QxrdAppCommonWPtr   m_Application;
   QxrdExperimentWPtr  m_Experiment;
-  QxrdAcquisitionWPtr m_Acquisition;
+  QxrdAcqCommonWPtr   m_Acquisition;
   QxrdProcessorWPtr   m_Processor;
 };
 

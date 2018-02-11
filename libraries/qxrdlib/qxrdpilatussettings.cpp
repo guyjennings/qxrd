@@ -2,7 +2,7 @@
 #include "qxrdpilatussettings-ptr.h"
 #include "qcepproperty.h"
 #include "qxrddebug.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include <QDir>
 #include <QFile>
 #include "qcepimagedata.h"
@@ -10,6 +10,7 @@
 #include "qxrdexperiment.h"
 #include "qxrdpilatusdialog.h"
 #include "qxrdpilatusdialog-ptr.h"
+#include <QThread>
 
 QxrdPilatusSettings::QxrdPilatusSettings(QString name) :
   QxrdDetectorSettings(name, Pilatus),

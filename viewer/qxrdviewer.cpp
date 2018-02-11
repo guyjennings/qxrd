@@ -43,24 +43,23 @@ int main(int argc, char *argv[])
   int res = 0;
 
   {
-    QxrdAppViewerPtr app = QxrdAppViewerPtr(
+    QxrdAppViewerPtr app =
+        QxrdAppViewerPtr(
           new QxrdAppViewer(argc, argv));
 
     app -> initialize(QcepObjectWPtr());
 
-    if (app->init(argc, argv)) {
-      QxrdAppViewerSettingsPtr set(app->settings());
+    QxrdAppViewerSettingsPtr set(app->settings());
 
-      if (set && set->get_GuiWanted()) {
-        res = app->exec();
-      } else {
-        app->processEvents();
-        app->exit();
-      }
+    if (set && set->get_GuiWanted()) {
+      res = app->exec();
+    } else {
+      app->processEvents();
+      app->exit();
+    }
 
-      if (qcepDebug(DEBUG_EXITWAIT)) {
-        while(1) {}
-      }
+    if (qcepDebug(DEBUG_EXITWAIT)) {
+      while(1) {}
     }
 
     app = QxrdAppViewerPtr();

@@ -4,7 +4,7 @@
 #include "qxrdmainwindow.h"
 #include "qxrdimageplotsettings-ptr.h"
 #include "qxrdimageplotsettings.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdimageplotwidget.h"
 #include "qxrdimageplotwidgetsettings.h"
 #include <QComboBox>

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "qcepmutexlocker.h"
 
-QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcquisitionWPtr acq)
+QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcqCommonWPtr acq)
   : QxrdThread(acq),
     m_Acquisition(acq)
 {
@@ -40,6 +40,8 @@ void QxrdAcquisitionExecutionThread::run()
 
   m_AcquisitionExecution =
       QxrdAcquisitionExecutionPtr(new QxrdAcquisitionExecution(m_Acquisition));
+
+  m_AcquisitionExecution -> initialize(sharedFromThis());
 
   int rc = exec();
 

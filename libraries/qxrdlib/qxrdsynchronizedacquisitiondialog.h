@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include <QDockWidget>
 #include "ui_qxrdsynchronizedacquisitiondialog.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdsynchronizedacquisitiondialogsettings-ptr.h"
 
@@ -13,10 +13,9 @@ class QXRD_EXPORT QxrdSynchronizedAcquisitionDialog : public QDockWidget, public
   Q_OBJECT
 
 public:
-  explicit QxrdSynchronizedAcquisitionDialog(
-      QxrdSynchronizedAcquisitionDialogSettingsWPtr settings,
-      QWidget *parent,
-      QxrdAcquisitionWPtr acq);
+  explicit QxrdSynchronizedAcquisitionDialog(QxrdSynchronizedAcquisitionDialogSettingsWPtr settings,
+                                             QWidget *parent,
+                                             QxrdAcqCommonWPtr acq);
 
   ~QxrdSynchronizedAcquisitionDialog();
 
@@ -29,8 +28,8 @@ private slots:
 
 private:
   QxrdSynchronizedAcquisitionDialogSettingsWPtr m_DialogSettings;
-  QxrdAcquisitionWPtr             m_Acquisition;
-  QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
+  QxrdAcqCommonWPtr                             m_Acquisition;
+  QxrdSynchronizedAcquisitionWPtr               m_SynchronizedAcquisition;
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITIONDIALOG_H

@@ -1,9 +1,9 @@
 #include "qxrdacquisitionexecution.h"
 #include "qxrddebug.h"
 #include <stdio.h>
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 
-QxrdAcquisitionExecution::QxrdAcquisitionExecution(QxrdAcquisitionWPtr acq)
+QxrdAcquisitionExecution::QxrdAcquisitionExecution(QxrdAcqCommonWPtr acq)
   : QcepObject("acquisitionExecution"),
     m_Acquisition(acq)
 {
@@ -31,14 +31,14 @@ QxrdAcquisitionExecution::~QxrdAcquisitionExecution()
   }
 }
 
-void QxrdAcquisitionExecution::setAcquisition(QxrdAcquisitionWPtr acq)
+void QxrdAcquisitionExecution::setAcquisition(QxrdAcqCommonWPtr acq)
 {
   m_Acquisition = acq;
 }
 
 void QxrdAcquisitionExecution::doAcquire()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     acq -> doAcquire();
@@ -47,7 +47,7 @@ void QxrdAcquisitionExecution::doAcquire()
 
 void QxrdAcquisitionExecution::doAcquireOnce()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     acq -> doAcquireOnce();
@@ -56,7 +56,7 @@ void QxrdAcquisitionExecution::doAcquireOnce()
 
 void QxrdAcquisitionExecution::doAcquireDark()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     acq -> doAcquireDark();

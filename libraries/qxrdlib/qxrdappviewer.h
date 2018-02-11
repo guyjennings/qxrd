@@ -20,9 +20,6 @@ public:
   virtual ~QxrdAppViewer();
   void initialize(QcepObjectWPtr parent);
 
-  //TODO: merge into 'initialize'
-  bool init(int &argc, char **argv);
-
   void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 

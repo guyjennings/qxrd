@@ -13,7 +13,7 @@ public:
   QxrdFileWatcherDriver(QString name,
                         QxrdDetectorSettingsWPtr det,
                         QxrdExperimentWPtr expt,
-                        QxrdAcquisitionWPtr acq);
+                        QxrdAcqCommonWPtr acq);
   virtual ~QxrdFileWatcherDriver();
 
 public slots:

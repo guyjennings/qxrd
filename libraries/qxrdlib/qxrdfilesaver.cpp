@@ -2,7 +2,7 @@
 
 #include "qxrddebug.h"
 #include "qxrdfilesaver.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdprocessor.h"
 #include "qxrdapplication.h"
 #include "qcepintegrateddata.h"
@@ -11,7 +11,7 @@
 #include "qxrdintegrator.h"
 #include "qcepimagedataformattiff.h"
 #include <QDir>
-
+#include <QThread>
 #include "tiffio.h"
 
 QxrdFileSaver::QxrdFileSaver()
@@ -114,8 +114,7 @@ QString QxrdFileSaver::uniqueFileName(QString name)
     QString base = f.completeBaseName();
     QString suff = f.suffix();
 
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+    QxrdAcqCommonPtr acq(m_Acquisition);
 
     int width = 5;
 
@@ -480,8 +479,7 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString name, QcepUInt32ImageDataPtr im
       image -> saveMetaData(name);
 
       QxrdProcessorPtr proc(m_Processor);
-      QxrdAcquisitionPtr acq(
-            qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+      QxrdAcqCommonPtr acq(m_Acquisition);
 
       if (proc) {
         if (proc->get_SaveOverflowFiles()) {
@@ -580,8 +578,7 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString name, QcepUInt16ImageDataPtr im
       image -> saveMetaData(name);
 
       QxrdProcessorPtr proc(m_Processor);
-      QxrdAcquisitionPtr acq(
-            qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+      QxrdAcqCommonPtr acq(m_Acquisition);
 
       if (proc) {
         if (proc->get_SaveOverflowFiles()) {

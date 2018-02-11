@@ -1,7 +1,7 @@
 #include "qxrddexelasettings.h"
 #include "qxrddexelasettings-ptr.h"
 #include "qxrdexperiment.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qcepallocator.h"
 #include "qxrddebug.h"
 #include "qxrddexeladialog.h"

@@ -26,3 +26,103 @@ QxrdAcqDummyPtr QxrdAcqDummy::newAcquisition()
 
   return acq;
 }
+
+int QxrdAcqDummy::detectorCount() const
+{
+  return 0;
+}
+
+QxrdDetectorSettingsPtr QxrdAcqDummy::detector(int i) const
+{
+  return QxrdDetectorSettingsPtr();
+}
+
+void QxrdAcqDummy::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
+{
+}
+
+QxrdNIDAQPluginInterfaceWPtr QxrdAcqDummy::nidaqPlugin() const
+{
+  return QxrdNIDAQPluginInterfaceWPtr();
+}
+
+QxrdSynchronizedAcquisitionPtr QxrdAcqDummy::synchronizedAcquisition() const
+{
+  return QxrdSynchronizedAcquisitionPtr();
+}
+
+QxrdAcquisitionExtraInputsPtr QxrdAcqDummy::acquisitionExtraInputs() const
+{
+  return QxrdAcquisitionExtraInputsPtr();
+}
+
+void QxrdAcqDummy::acquire()
+{
+}
+
+void QxrdAcqDummy::acquireOnce()
+{
+}
+
+void QxrdAcqDummy::acquireDark()
+{
+}
+
+void QxrdAcqDummy::cancel()
+{
+}
+
+void QxrdAcqDummy::trigger()
+{
+}
+
+int QxrdAcqDummy::acquisitionStatus(double time)
+{
+  return 1;
+}
+
+void QxrdAcqDummy::clearDropped()
+{
+}
+
+void QxrdAcqDummy::configureDetector(int i)
+{
+}
+
+void QxrdAcqDummy::openDetectorControlWindow(int i)
+{
+}
+
+//TODO: move into QcepObject?
+void QxrdAcqDummy::openWindows()
+{
+}
+
+void QxrdAcqDummy::closeWindows()
+{
+}
+
+void QxrdAcqDummy::doAcquire()
+{
+}
+
+void QxrdAcqDummy::doAcquireOnce()
+{
+}
+
+void QxrdAcqDummy::doAcquireDark()
+{
+}
+
+QxrdDetectorSettingsPtr QxrdAcqDummy::newDetector(int detType)
+{
+  return QxrdDetectorSettingsPtr();
+}
+
+void QxrdAcqDummy::appendDetector(QxrdDetectorSettingsPtr det)
+{
+}
+
+void QxrdAcqDummy::clearDetectors()
+{
+}

@@ -4,7 +4,7 @@
 #include "qxrddebug.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdexperiment.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdhistogramplotsettings.h"
 #include "qxrdhistogramplotwidgetsettings.h"
@@ -97,9 +97,7 @@ void QxrdHistogramDialog::recalculateHistogram()
         nsum = 1;
       }
 
-      QxrdAcquisitionPtr acq(
-            qSharedPointerDynamicCast<QxrdAcquisition>(
-              expt->acquisition()));
+      QxrdAcqCommonPtr acq(expt->acquisition());
 
       double satlev = 60000;
 

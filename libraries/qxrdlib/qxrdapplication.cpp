@@ -102,11 +102,6 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
 void QxrdApplication::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
-}
-
-bool QxrdApplication::init(int &argc, char **argv)
-{
-  inherited::init(argc, argv);
 
   connect(&m_LockerTimer, &QTimer::timeout, this, &QxrdApplication::lockerTimerElapsed);
 
@@ -212,10 +207,6 @@ bool QxrdApplication::init(int &argc, char **argv)
       openWelcomeWindow();
     }
   }
-
-//  m_AppSaver->start();
-
-  return true;
 }
 
 QxrdApplication::~QxrdApplication()

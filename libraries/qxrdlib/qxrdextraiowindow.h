@@ -20,7 +20,7 @@ public:
                              QString name,
                              QxrdAppCommonWPtr app,
                              QxrdExperimentWPtr expt,
-                             QxrdAcquisitionWPtr acqw,
+                             QxrdAcqCommonWPtr acqw,
                              QxrdProcessorWPtr procw);
   ~QxrdExtraIOWindow();
 
@@ -43,7 +43,6 @@ private slots:
 
 private:
   QxrdExtraIOWindowSettingsWPtr   m_ExtraIOWindowSettings;
-  QxrdAcquisitionWPtr             m_Acquisition;
   QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
   QxrdAcquisitionExtraInputsWPtr m_AcquisitionExtraInputs;
   int                            m_ChannelsInRows;

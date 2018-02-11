@@ -45,7 +45,7 @@ public:
   QxrdWindow(QxrdWindowSettingsWPtr settings,
              QxrdAppCommonWPtr appl,
              QxrdExperimentWPtr docw,
-             QxrdAcquisitionWPtr acqw,
+             QxrdAcqCommonWPtr acqw,
              QxrdProcessorWPtr procw);
   virtual ~QxrdWindow();
   //TODO: change to QcepObjectWPtr
@@ -142,8 +142,6 @@ public:
 
   QcepDoubleImageDataPtr data();
   QcepMaskDataPtr mask();
-
-  QxrdAcquisitionWPtr acquisition() const;
 
   void captureSize();
   void resizeEvent(QResizeEvent *);

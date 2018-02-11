@@ -40,24 +40,23 @@ int main(int argc, char *argv[])
   int res = 0;
 
   {
-    QxrdApplicationPtr app = QxrdApplicationPtr(
+    QxrdApplicationPtr app =
+        QxrdApplicationPtr(
           new QxrdApplication(argc, argv));
 
     app->initialize(QcepObjectWPtr());
 
-    if (app->init(argc, argv)) {
-      QxrdApplicationSettingsPtr set(app->settings());
+    QxrdApplicationSettingsPtr set(app->settings());
 
-      if (set && set->get_GuiWanted()) {
-        res = app->exec();
-      } else {
-        app->processEvents();
-        app->exit();
-      }
+    if (set && set->get_GuiWanted()) {
+      res = app->exec();
+    } else {
+      app->processEvents();
+      app->exit();
+    }
 
-      if (qcepDebug(DEBUG_EXITWAIT)) {
-        while(1) {}
-      }
+    if (qcepDebug(DEBUG_EXITWAIT)) {
+      while(1) {}
     }
 
     app = QxrdApplicationPtr();

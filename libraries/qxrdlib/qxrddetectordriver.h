@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 
@@ -15,7 +15,7 @@ public:
   QxrdDetectorDriver(QString name,
                      QxrdDetectorSettingsWPtr det,
                      QxrdExperimentWPtr expt,
-                     QxrdAcquisitionWPtr acq);
+                     QxrdAcqCommonWPtr acq);
 
 public slots:
   virtual bool startDetectorDriver() = 0;
@@ -29,7 +29,7 @@ public slots:
 protected:
   QxrdDetectorSettingsWPtr m_Detector;
   QxrdExperimentWPtr       m_Experiment;
-  QxrdAcquisitionWPtr      m_Acquisition;
+  QxrdAcqCommonWPtr        m_Acquisition;
 };
 
 #endif // QXRDDETECTORDRIVER_H

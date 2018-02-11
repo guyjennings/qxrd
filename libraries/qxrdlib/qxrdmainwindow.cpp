@@ -3,7 +3,7 @@
 #include "qxrdmainwindow.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdmainwindowsettings-ptr.h"
 #include "qxrdmainwindowsettings.h"
 #include "qxrdexperimentpreferencesdialog.h"
@@ -11,10 +11,11 @@
 #include <QMenuBar>
 #include <QDir>
 #include <QFileDialog>
+#include <QThread>
 #include "qxrdapplicationsettings.h"
 #include "qcepallocator.h"
 
-QxrdMainWindow::QxrdMainWindow(QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw)
+QxrdMainWindow::QxrdMainWindow(QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw)
   : QcepMainWindow(),
     m_Name(name),
     m_Application(app),
@@ -165,16 +166,16 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
 
   }
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
-    connect(acq.data(), &QxrdAcquisition::acquireStarted,
+    connect(acq.data(), &QxrdAcqCommon::acquireStarted,
             this,       &QxrdMainWindow::acquireStarted);
 
-    connect(acq.data(), &QxrdAcquisition::acquiredFrame,
+    connect(acq.data(), &QxrdAcqCommon::acquiredFrame,
             this,       &QxrdMainWindow::acquiredFrame);
 
-    connect(acq.data(), &QxrdAcquisition::acquireComplete,
+    connect(acq.data(), &QxrdAcqCommon::acquireComplete,
             this,       &QxrdMainWindow::acquireComplete);
   }
 }

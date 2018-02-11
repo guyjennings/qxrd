@@ -27,8 +27,6 @@ public:
 
   static QxrdAppCommonWPtr findApplication(QcepObjectWPtr p);
 
-  //TODO: merge into 'initialize'
-  virtual bool init(int &argc, char **argv);
   virtual void finish();
 
   void parseCommandLine(bool wantFullOptions);

@@ -54,6 +54,8 @@ void QxrdSimpleServerThread::run()
   m_Server = QxrdSimpleServerPtr(
         new QxrdSimpleServer("simpleServer"));
 
+  m_Server -> initialize(sharedFromThis());
+
   int rc = exec();
 
   m_Server = QxrdSimpleServerPtr();

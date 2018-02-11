@@ -1,12 +1,13 @@
 #include "qxrddebug.h"
 #include "qxrdperkinelmerdriver.h"
 #include "qxrdperkinelmersettings.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
 #include "qxrdsynchronizedacquisition.h"
+#include <QThread>
 
 #ifdef WIN64
 #if WIN64
@@ -26,7 +27,7 @@ static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 QxrdPerkinElmerDriver::QxrdPerkinElmerDriver(QString name,
                                              QxrdDetectorSettingsWPtr det,
                                              QxrdExperimentWPtr expt,
-                                             QxrdAcquisitionWPtr acq)
+                                             QxrdAcqCommonWPtr acq)
 : QxrdDetectorDriver(name, det, expt, acq),
   m_Mutex(QMutex::Recursive),
   m_BufferSize(0),
@@ -310,7 +311,7 @@ QString QxrdPerkinElmerDriver::acquisitionErrorString(int n)
 
 void QxrdPerkinElmerDriver::acquisitionError(const char *fn, int ln, int n)
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     acq -> cancel();
@@ -540,7 +541,7 @@ bool QxrdPerkinElmerDriver::startDetectorDriver()
                    .arg(dwAcqType).arg(dwSystemID).arg(dwSyncMode).arg(dwHwAccess));
     }
 
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdAcqCommonPtr acq(m_Acquisition);
 
     if (acq) {
       det -> set_NRows(dwRows);
@@ -678,7 +679,7 @@ bool QxrdPerkinElmerDriver::changeExposureTime(double expos)
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled()) {
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdAcqCommonPtr acq(m_Acquisition);
 
     if (acq) {
 //      double newTime = acq->get_ExposureTime();
@@ -716,7 +717,7 @@ void QxrdPerkinElmerDriver::onBinningModeChanged()
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled()) {
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdAcqCommonPtr acq(m_Acquisition);
 
     if (acq) {
       if (m_HeaderID == 14) {
@@ -787,7 +788,7 @@ void QxrdPerkinElmerDriver::onCameraGainChanged()
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled()) {
-    QxrdAcquisitionPtr  acq(m_Acquisition);
+    QxrdAcqCommonPtr  acq(m_Acquisition);
 
     if (acq) {
       if (m_HeaderID >= 11) {
@@ -821,7 +822,7 @@ void QxrdPerkinElmerDriver::onTimingSourceChanged()
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled()) {
-    QxrdAcquisitionPtr  acq(m_Acquisition);
+    QxrdAcqCommonPtr  acq(m_Acquisition);
 
     if (acq) {
       if (m_HeaderID >= 11) {
@@ -945,7 +946,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> checkDetectorEnabled()) {
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdAcqCommonPtr acq(m_Acquisition);
 
     if (acq) {
       QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(tr("frame-%1").arg(counter),
@@ -1153,7 +1154,7 @@ void QxrdPerkinElmerDriver::onEndFrameCallback()
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> checkDetectorEnabled()) {
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdAcqCommonPtr acq(m_Acquisition);
 
     if (acq) {
       QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());

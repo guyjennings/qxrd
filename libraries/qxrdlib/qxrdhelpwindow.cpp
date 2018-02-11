@@ -3,7 +3,7 @@
 #include "qxrdtodolist.h"
 #include <QSortFilterProxyModel>
 
-QxrdHelpWindow::QxrdHelpWindow(QxrdHelpWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw) :
+QxrdHelpWindow::QxrdHelpWindow(QxrdHelpWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
   QxrdMainWindow(name, app, expt, acqw, procw),
   m_HelpWindowSettings(set)
 {

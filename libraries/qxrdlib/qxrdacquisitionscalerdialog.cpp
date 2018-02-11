@@ -1,15 +1,15 @@
 #include "qxrdacquisitionscalerdialog.h"
 #include "ui_qxrdacquisitionscalerdialog.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdacquisitionscalermodel.h"
 
-QxrdAcquisitionScalerDialog::QxrdAcquisitionScalerDialog(QxrdAcquisitionWPtr acq,
+QxrdAcquisitionScalerDialog::QxrdAcquisitionScalerDialog(QxrdAcqCommonWPtr acq,
                                                          QWidget *parent) :
   QDockWidget(parent),
   m_Acquisition(acq),
   m_Model()
 {
-  QxrdAcquisitionPtr acquisition(m_Acquisition);
+  QxrdAcqCommonPtr acquisition(m_Acquisition);
 
   if (acquisition) {
     m_Model = acquisition->acquisitionScalerModel();

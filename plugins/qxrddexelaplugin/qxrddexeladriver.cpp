@@ -1,7 +1,7 @@
 #include "qxrddebug.h"
 #include "qxrddexeladriver.h"
 #include "qxrddexelasettings.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdexperiment.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
@@ -9,11 +9,12 @@
 #include "BusScanner.h"
 #include "DexelaDetector.h"
 #include "DexImage.h"
+#include <QThread>
 
 QxrdDexelaDriver::QxrdDexelaDriver(QString name,
                                                    QxrdDexelaSettingsWPtr det,
                                                    QxrdExperimentWPtr expt,
-                                                   QxrdAcquisitionWPtr acq)
+                                                   QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
     m_Dexela(qSharedPointerDynamicCast<QxrdDexelaSettings>(det))
 {
@@ -39,8 +40,8 @@ bool QxrdDexelaDriver::startDetectorDriver()
     printMessage(tr("QxrdDexelaDriver::startDetectorDriver"));
   }
 
-  QxrdDexelaSettingsPtr   det(m_Dexela);
-  QxrdAcquisitionPtr      acq(m_Acquisition);
+  QxrdDexelaSettingsPtr det(m_Dexela);
+  QxrdAcqCommonPtr      acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
     printMessage(tr("Starting Dexela detector \"%1\"").arg(det->get_DetectorName()));
@@ -120,7 +121,7 @@ bool QxrdDexelaDriver::shutdownAcquisition()
 void QxrdDexelaDriver::onTimerTimeout()
 {
   QxrdDetectorSettingsPtr det(m_Detector);
-  QxrdAcquisitionPtr      acq(m_Acquisition);
+  QxrdAcqCommonPtr        acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
     QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());

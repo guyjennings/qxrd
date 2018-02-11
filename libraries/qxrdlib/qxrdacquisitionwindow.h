@@ -20,7 +20,7 @@ public:
                                  QString name,
                                  QxrdAppCommonWPtr app,
                                  QxrdExperimentWPtr expt,
-                                 QxrdAcquisitionWPtr acqw,
+                                 QxrdAcqCommonWPtr acqw,
                                  QxrdProcessorWPtr  procw);
   ~QxrdAcquisitionWindow();
 
@@ -35,7 +35,6 @@ protected:
   void changeEvent(QEvent *e);
 
   QxrdAcquisitionWindowSettingsWPtr m_AcquisitionWindowSettings;
-  QxrdAcquisitionWPtr      m_Acquisition;
   QxrdDetectorListModelPtr m_DetectorsModel;
 };
 

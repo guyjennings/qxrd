@@ -1,16 +1,17 @@
 #include "qxrddebug.h"
 #include "qxrdareadetectordriver.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdexperiment.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
 #include <QPainter>
 #include "qxrdareadetectorsettings.h"
+#include <QThread>
 
 QxrdAreaDetectorDriver::QxrdAreaDetectorDriver(QString name,
                                                QxrdDetectorSettingsWPtr det,
                                                QxrdExperimentWPtr expt,
-                                               QxrdAcquisitionWPtr acq)
+                                               QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
     m_AreaDetector(qSharedPointerDynamicCast<QxrdAreaDetectorSettings>(det))
 {
@@ -33,7 +34,7 @@ bool QxrdAreaDetectorDriver::startDetectorDriver()
   THREAD_CHECK;
 
   QxrdDetectorSettingsPtr det(m_Detector);
-  QxrdAcquisitionPtr      acq(m_Acquisition);
+  QxrdAcqCommonPtr        acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
     printMessage(tr("Starting Area Detector \"%1\"").arg(det->get_DetectorName()));
@@ -113,7 +114,7 @@ bool QxrdAreaDetectorDriver::shutdownAcquisition()
 void QxrdAreaDetectorDriver::onTimerTimeout()
 {
   QxrdDetectorSettingsPtr det(m_Detector);
-  QxrdAcquisitionPtr      acq(m_Acquisition);
+  QxrdAcqCommonPtr        acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
     QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());

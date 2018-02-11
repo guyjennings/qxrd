@@ -57,7 +57,7 @@ void QxrdServerThread::run()
   m_Server = QxrdServerPtr(
         new QxrdServer("specServer"));
 
-  m_Server->initialize(m_Experiment);
+  m_Server->initialize(sharedFromThis());
 
   int rc = exec();
 

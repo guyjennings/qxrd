@@ -22,11 +22,6 @@ QxrdAppViewer::~QxrdAppViewer()
 void QxrdAppViewer::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
-}
-
-bool QxrdAppViewer::init(int &argc, char **argv)
-{
-  inherited::init(argc, argv);
 
   if (settings()) {
     parseCommandLine(false);
@@ -46,8 +41,6 @@ bool QxrdAppViewer::init(int &argc, char **argv)
       openWatcher(".");
     }
   }
-
-  return true;
 }
 
 void QxrdAppViewer::setDefaultObjectData(QcepDataObject *obj)

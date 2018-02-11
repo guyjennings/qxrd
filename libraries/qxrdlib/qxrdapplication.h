@@ -31,9 +31,6 @@ public:
   virtual ~QxrdApplication();
   void initialize(QcepObjectWPtr parent);
 
-  //TODO: merge into 'initialize'
-  bool init(int &argc, char **argv);
-
   void loadPlugins();
 
   QxrdNIDAQPluginInterfacePtr    nidaqPlugin();

@@ -45,18 +45,15 @@ QxrdAppCommon::~QxrdAppCommon()
 
 void QxrdAppCommon::initialize(QcepObjectWPtr parent)
 {
+  THREAD_CHECK;
+
+  QThread::currentThread()->setObjectName("applicationThread");
+
   inherited::initialize(parent);
 
   if (m_ApplicationSettings) {
     m_ApplicationSettings->initialize(sharedFromThis());
   }
-}
-
-bool QxrdAppCommon::init(int &argc, char **argv)
-{
-  THREAD_CHECK;
-
-  QThread::currentThread()->setObjectName("app");
 
   connect(m_Application.data(),  &QApplication::aboutToQuit,
           this,                  &QxrdAppCommon::finish);
@@ -64,8 +61,6 @@ bool QxrdAppCommon::init(int &argc, char **argv)
           this,                  &QxrdAppCommon::hideSplash);
 
   setupTiffHandlers();
-
-  return true;
 }
 
 void QxrdAppCommon::finish()

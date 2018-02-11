@@ -1,6 +1,6 @@
 #include "qxrddetectorcontrolwindow.h"
 #include "ui_qxrddetectorcontrolwindow.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdprocessor.h"
 #include "qxrdroimodel.h"
 #include "qxrdroicalculator-ptr.h"
@@ -15,13 +15,13 @@
 #include "qxrdroitypedelegate.h"
 #include "qxrdroishape.h"
 #include "qxrddetectorcontrolwindowsettings.h"
-#include "qxrdacquisition.h"
 #include "qxrdwindow.h"
 #include "qxrdroieditordialog.h"
+#include <QThread>
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          appl,
                                                      QxrdExperimentWPtr        exp,
-                                                     QxrdAcquisitionWPtr       acq,
+                                                     QxrdAcqCommonWPtr         acq,
                                                      QxrdDetectorSettingsWPtr  det,
                                                      QxrdProcessorWPtr         proc,
                                                      QWidget                  * /*parent*/) :
@@ -45,7 +45,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          a
   QxrdApplication *app = qobject_cast<QxrdApplication*>(g_Application);
   QxrdExperimentPtr expt(m_Experiment);
   QxrdDetectorSettingsPtr dt(m_Detector);
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (dp) {
     dp->prop_DetectorDisplayMode()     -> linkTo(m_DetectorDisplayMode);
@@ -191,7 +191,7 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          a
     connect(m_ActionAcquireOnce, &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquireOnce);
     connect(m_ActionCancel,      &QAction::triggered, this, &QxrdDetectorControlWindow::doCancel);
     connect(m_ActionAcquireDark, &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquireDark);
-    connect(m_ActionTrigger,     &QAction::triggered, acqp.data(), &QxrdAcquisition::trigger);
+    connect(m_ActionTrigger,     &QAction::triggered, acqp.data(), &QxrdAcqCommon::trigger);
 
     connect(m_BrowseLogFileButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::browseLogFile);
     connect(m_BrowseScanFileButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::browseScanFile);
@@ -202,10 +202,10 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          a
     connect(m_TriggerButton, &QAbstractButton::clicked, m_ActionTrigger, &QAction::triggered);
     connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered);
 
-    connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcquisition::clearDropped);
+    connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcqCommon::clearDropped);
 
-    connect(acqp.data(), &QxrdAcquisition::acquireStarted, this, &QxrdDetectorControlWindow::acquireStarted);
-    connect(acqp.data(), &QxrdAcquisition::acquireComplete, this, &QxrdDetectorControlWindow::acquireComplete);
+    connect(acqp.data(), &QxrdAcqCommon::acquireStarted, this, &QxrdDetectorControlWindow::acquireStarted);
+    connect(acqp.data(), &QxrdAcqCommon::acquireComplete, this, &QxrdDetectorControlWindow::acquireComplete);
 
     acqp -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
     acqp -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
@@ -714,7 +714,7 @@ void QxrdDetectorControlWindow::doVisualizePeak()
 
 void QxrdDetectorControlWindow::doAcquire()
 {
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     acqp -> acquire();
@@ -723,7 +723,7 @@ void QxrdDetectorControlWindow::doAcquire()
 
 void QxrdDetectorControlWindow::doAcquireOnce()
 {
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     acqp -> acquireOnce();
@@ -732,7 +732,7 @@ void QxrdDetectorControlWindow::doAcquireOnce()
 
 void QxrdDetectorControlWindow::doCancel()
 {
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     acqp -> cancel();
@@ -741,7 +741,7 @@ void QxrdDetectorControlWindow::doCancel()
 
 void QxrdDetectorControlWindow::doAcquireDark()
 {
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     acqp -> acquireDark();
@@ -750,7 +750,7 @@ void QxrdDetectorControlWindow::doAcquireDark()
 
 void QxrdDetectorControlWindow::acquireStarted()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     m_AcquireButton -> setEnabled(false);

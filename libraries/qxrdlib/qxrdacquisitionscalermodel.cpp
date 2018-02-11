@@ -1,21 +1,21 @@
 #include "qxrdacquisitionscalermodel.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrddetectorsettings.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdprocessor.h"
 #include "qxrdroicalculator.h"
 #include "qxrdroi.h"
 
-QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcquisitionWPtr acq)
+QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcqCommonWPtr acq)
   : m_Acquisition(acq)
 {
-  QxrdAcquisitionPtr acqr(m_Acquisition);
+  QxrdAcqCommonPtr acqr(m_Acquisition);
 
   if (acqr) {
-    connect(acqr.data(),               &QxrdAcquisition::detectorStateChanged,
+    connect(acqr.data(),               &QxrdAcqCommon::detectorStateChanged,
             this,                      &QxrdAcquisitionScalerModel::forceFullUpdate);
 
-    connect(acqr.data(),               &QxrdAcquisition::extraInputsChanged,
+    connect(acqr.data(),               &QxrdAcqCommon::extraInputsChanged,
             this,                      &QxrdAcquisitionScalerModel::forceFullUpdate);
 
     connect(acqr->prop_ScalerValues(), &QcepDoubleVectorProperty::valueChanged,
@@ -34,7 +34,7 @@ int QxrdAcquisitionScalerModel::rowCount(const QModelIndex & /*parent*/) const
 {
   int nRows = 2;
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     QxrdAcquisitionExtraInputsPtr xtra = acq->acquisitionExtraInputs();
@@ -50,7 +50,7 @@ int QxrdAcquisitionScalerModel::rowCount(const QModelIndex & /*parent*/) const
       nRows += nXtra+1;
     }
 
-    int nDet = acq->get_DetectorCount();
+    int nDet = acq->detectorCount();
 
     for (int det=0; det<nDet; det++) {
       QxrdDetectorSettingsPtr d = acq->detector(det);
@@ -73,7 +73,7 @@ int QxrdAcquisitionScalerModel::columnCount(const QModelIndex & /*parent*/) cons
 
 QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) const
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     int scalerchan = 0;
@@ -88,7 +88,7 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
     int row = index.row();
     int col = index.column();
     int nXtra = xchans.count();
-    int nDet = acq->get_DetectorCount();
+    int nDet = acq->detectorCount();
 
     if (role == Qt::DisplayRole) {
       if (row == 0) {

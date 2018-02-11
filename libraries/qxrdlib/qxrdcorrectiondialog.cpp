@@ -1,12 +1,12 @@
 #include "qxrdcorrectiondialog.h"
 #include "ui_qxrdcorrectiondialog.h"
 #include "qxrddebug.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdprocessor.h"
 #include <QMessageBox>
 
 QxrdCorrectionDialog::QxrdCorrectionDialog(QWidget *parent,
-                                           QxrdAcquisitionWPtr acqp,
+                                           QxrdAcqCommonWPtr acqp,
                                            QxrdProcessorWPtr procp) :
     QDialog(parent),
     m_Acquisition(acqp),
@@ -21,7 +21,7 @@ QxrdCorrectionDialog::QxrdCorrectionDialog(QWidget *parent,
   connect(m_CorrectionOptionsButton, &QAbstractButton::clicked,
           this, &QxrdCorrectionDialog::doEditPreferences);
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     acq -> prop_RawSaveTime() -> linkTo(m_SaveRawTime);

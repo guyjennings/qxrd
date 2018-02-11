@@ -5,12 +5,14 @@
 #include "qxrdappcommon.h"
 
 QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentThread(QString path,
-                                                                  QxrdAppCommonWPtr parent,
+                                                                  QcepObjectWPtr parent,
                                                                   QxrdExperimentSettingsPtr set,
                                                                   int mode)
 {
   QxrdExperimentThreadPtr expth(
-        new QxrdExperimentThread(path, parent, set, mode));
+        new QxrdExperimentThread(path, set, mode));
+
+  expth -> initialize(parent);
 
   expth -> start();
 
@@ -18,12 +20,10 @@ QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentThread(QString path,
 }
 
 QxrdExperimentThread::QxrdExperimentThread(QString path,
-                                           QxrdAppCommonWPtr parent,
                                            QxrdExperimentSettingsPtr set,
                                            int mode) :
   QxrdThread(QcepObjectWPtr()),
   m_Path(path),
-  m_Parent(parent),
   m_Settings(set),
   m_ExperimentMode(mode)
 {
@@ -53,7 +53,7 @@ void QxrdExperimentThread::run()
       QxrdExperimentPtr(
         new QxrdExperiment(m_Path, "experiment", m_ExperimentMode));
 
-  expt -> initialize(m_Parent);
+  expt -> initialize(sharedFromThis());
 
   expt -> readSettings(m_Settings.data());
 
@@ -62,6 +62,7 @@ void QxrdExperimentThread::run()
   int rc = exec();
 
   m_Experiment = QxrdExperimentPtr();
+  m_Settings   = QxrdExperimentSettingsPtr();
 
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Experiment thread terminated with rd %d\n", rc);

@@ -7,7 +7,7 @@ QxrdWatcherWindow::QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
                                      QString name,
                                      QxrdAppCommonWPtr app,
                                      QxrdExperimentWPtr expt,
-                                     QxrdAcquisitionWPtr acqw,
+                                     QxrdAcqCommonWPtr acqw,
                                      QxrdProcessorWPtr procw,
                                      QxrdWatcherWPtr watcher) :
   QxrdMainWindow(name, app, expt, acqw, procw),

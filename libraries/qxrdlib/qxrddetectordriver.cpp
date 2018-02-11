@@ -3,7 +3,7 @@
 QxrdDetectorDriver::QxrdDetectorDriver(QString name,
                                        QxrdDetectorSettingsWPtr det,
                                        QxrdExperimentWPtr expt,
-                                       QxrdAcquisitionWPtr acq) :
+                                       QxrdAcqCommonWPtr acq) :
   QcepObject(name),
   m_Detector(det),
   m_Experiment(expt),

@@ -5,7 +5,7 @@
 #include "qcepmainwindow.h"
 #include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdprocessor-ptr.h"
 #include <QLabel>
 #include <QProgressBar>
@@ -19,7 +19,7 @@ public:
   explicit QxrdMainWindow(QString name,
                           QxrdAppCommonWPtr app,
                           QxrdExperimentWPtr expt,
-                          QxrdAcquisitionWPtr acqw,
+                          QxrdAcqCommonWPtr acqw,
                           QxrdProcessorWPtr procw);
 
   virtual void setupMenus(QMenu *file, QMenu *edit, QMenu *window);
@@ -66,7 +66,7 @@ protected:
   QString             m_Name;
   QxrdAppCommonWPtr   m_Application;
   QxrdExperimentWPtr  m_Experiment;
-  QxrdAcquisitionWPtr m_Acquisition;
+  QxrdAcqCommonWPtr   m_Acquisition;
   QxrdProcessorWPtr   m_Processor;
 
   QLabel             *m_StatusMsg;

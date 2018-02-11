@@ -2,11 +2,12 @@
 #include "qxrdperkinelmersettings.h"
 #include "qxrdperkinelmersettings-ptr.h"
 #include "qxrdapplication.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qcepallocator.h"
 #include "qcepmutexlocker.h"
 #include "qxrdperkinelmerdialog.h"
 #include "qxrdperkinelmerdialog-ptr.h"
+#include <QThread>
 
 QxrdPerkinElmerSettings::QxrdPerkinElmerSettings(QString name) :
   QxrdDetectorSettings(name, PerkinElmer),

@@ -18,7 +18,7 @@ public:
   QxrdDetectorDriverPtr createDetector(QString name,
                                        QxrdDetectorSettingsWPtr det,
                                        QxrdExperimentWPtr expt,
-                                       QxrdAcquisitionWPtr acq);
+                                       QxrdAcqCommonWPtr acq);
 };
 
 #endif // QXRDPERKINELMERPLUGIN_H

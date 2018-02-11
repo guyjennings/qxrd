@@ -2,7 +2,7 @@
 #include "qxrdmainwindow.h"
 #include "qxrdappcommon.h"
 #include "qxrdexperiment.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdprocessor.h"
 
 QxrdMainWindowSettings::QxrdMainWindowSettings(QString name)
@@ -16,7 +16,7 @@ void QxrdMainWindowSettings::initialize(QcepObjectWPtr parent)
 
   m_Application = QxrdAppCommon::findApplication(parent);
   m_Experiment  = QxrdExperiment::findExperiment(parent);
-  m_Acquisition = QxrdAcquisition::findAcquisition(parent);
+  m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
   m_Processor   = QxrdProcessor::findProcessor(parent);
 
   if (m_Application == NULL) {

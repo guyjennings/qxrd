@@ -6,7 +6,7 @@
 #include "qxrdnamedplugininterface.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdexperiment-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrddetectordriver-ptr.h"
 
 class QXRD_EXPORT QxrdDetectorPluginInterface : public QxrdNamedPluginInterface
@@ -17,7 +17,7 @@ public:
   virtual QxrdDetectorDriverPtr createDetector(QString name,
                                                QxrdDetectorSettingsWPtr det,
                                                QxrdExperimentWPtr expt,
-                                               QxrdAcquisitionWPtr acq) = 0;
+                                               QxrdAcqCommonWPtr acq) = 0;
 };
 
 #define DetectorPluginInterface_iid "gov.anl.aps.cep.Qxrd.DetectorInterface/2.0"

@@ -1,7 +1,7 @@
 #include "qxrdextraiowindow.h"
 #include "ui_qxrdextraiowindow.h"
 #include "qxrdexperiment.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdacquisitionparameterpack.h"
@@ -11,11 +11,12 @@
 #include <QCheckBox>
 #include <QMessageBox>
 #include "qxrdextraiowindowsettings.h"
+#include <QThread>
 
 QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
                                      QString name,
                                      QxrdAppCommonWPtr app,
-                                     QxrdExperimentWPtr expt, QxrdAcquisitionWPtr acqw, QxrdProcessorWPtr procw) :
+                                     QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
   QxrdMainWindow(name, app, expt, acqw, procw),
   m_ExtraIOWindowSettings(set),
   m_ChannelsInRows(0)
@@ -30,10 +31,7 @@ QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
-    m_Acquisition =
-        qSharedPointerDynamicCast<QxrdAcquisition>(exp->acquisition());
-
-    QxrdAcquisitionPtr acq(m_Acquisition);
+    QxrdAcqCommonPtr acq(m_Acquisition);
 
     if (acq) {
       m_SynchronizedAcquisition = acq->synchronizedAcquisition();
@@ -218,7 +216,7 @@ void QxrdExtraIOWindow::deviceChanged()
 
 void QxrdExtraIOWindow::waveformChanged()
 {
-  QxrdAcquisitionPtr             acq(m_Acquisition);
+  QxrdAcqCommonPtr               acq(m_Acquisition);
   QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (acq && sync) {
@@ -394,7 +392,7 @@ void QxrdExtraIOWindow::updateUi()
 {
   GUI_THREAD_CHECK;
 
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
@@ -454,7 +452,7 @@ void QxrdExtraIOWindow::updateUi()
 
 void QxrdExtraIOWindow::addChannel()
 {
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
@@ -495,7 +493,7 @@ void QxrdExtraIOWindow::addChannel()
 
 void QxrdExtraIOWindow::removeChannel()
 {
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();

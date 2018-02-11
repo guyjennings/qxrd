@@ -14,9 +14,9 @@ QxrdDetectorDriverThread::QxrdDetectorDriverThread(QxrdDetectorSettingsWPtr det)
   m_Detector(det),
   m_DetectorDriver()
 {
-#ifndef QT_NO_DEBUG
   QxrdDetectorSettingsPtr d(m_Detector);
 
+#ifndef QT_NO_DEBUG
   if (d) {
     printf("Detector driver thread constructed for %s\n", qPrintable(d->get_DetectorTypeName()));
   } else {
@@ -28,7 +28,9 @@ QxrdDetectorDriverThread::QxrdDetectorDriverThread(QxrdDetectorSettingsWPtr det)
     printf("QxrdDetectorDriverThread::QxrdDetectorDriverThread(%p)\n", this);
   }
 
-//  setObjectName(detectorTypeName(detType));
+  if (d) {
+    setObjectName(d->get_DetectorTypeName()+"Thread");
+  }
 }
 
 QxrdDetectorDriverThread::~QxrdDetectorDriverThread()
@@ -56,12 +58,12 @@ void QxrdDetectorDriverThread::run()
     QString name = det->get_DetectorName();
 
     QxrdExperimentPtr expt(det->experiment());
-    QxrdAcquisitionPtr acq(det->acquisition());
+    QxrdAcqCommonPtr acq(det->acquisition());
 
     m_DetectorDriver = det->createDetector(name, det, expt, acq);
 
     if (m_DetectorDriver) {
-      m_DetectorDriver -> initialize(m_Detector);
+      m_DetectorDriver -> initialize(sharedFromThis());
 
       if (det->get_Enabled()) {
         m_DetectorDriver -> startDetectorDriver();

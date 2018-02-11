@@ -536,6 +536,8 @@ protected:
   QVector<QxrdProcessorStepPtr> m_ProcessorSteps;
 
 private:
+  QxrdExperimentWPtr        m_Experiment;
+  QxrdAcqCommonWPtr         m_Acquisition;
   QxrdCenterFinderPtr       m_CenterFinder;
   QxrdIntegratorPtr         m_Integrator;
   QxrdPolarTransformPtr     m_PolarTransform;

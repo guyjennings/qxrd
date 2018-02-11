@@ -1,7 +1,7 @@
 #include "qxrddebug.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qcepmutexlocker.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qcepimagedata.h"
@@ -46,9 +46,9 @@ void QxrdAcquisitionExtraInputs::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
-  m_Acquisition = QxrdAcquisition::findAcquisition(parent);
+  m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
 
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     m_NIDAQPlugin = acqp->nidaqPlugin();
@@ -146,7 +146,7 @@ void QxrdAcquisitionExtraInputs::initiate()
 {
   INIT_CHECK;
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq && m_NIDAQPlugin) {
     QStringList uniqueChannels;
@@ -281,7 +281,7 @@ void QxrdAcquisitionExtraInputs::acquire()
 
   if (get_Enabled()) {
     if (!get_Skipping()) {
-      QxrdAcquisitionPtr acq(m_Acquisition);
+      QxrdAcqCommonPtr acq(m_Acquisition);
 
       if (acq && m_NIDAQPlugin) {
         m_NIDAQPlugin->readContinuousInput();
@@ -312,7 +312,7 @@ void QxrdAcquisitionExtraInputs::logToImage(QcepUInt16ImageDataPtr img)
 
 void QxrdAcquisitionExtraInputs::finish()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq && m_NIDAQPlugin) {
     m_NIDAQPlugin->finishContinuousInput();

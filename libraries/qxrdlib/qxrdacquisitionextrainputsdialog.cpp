@@ -8,8 +8,9 @@
 #include "qxrddebug.h"
 #include "qxrdacquisitionextrainputsdialogsettings.h"
 #include "qxrdacquisitionextrainputsplotsettings.h"
+#include <QThread>
 
-QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisitionExtraInputsDialogSettingsWPtr set, QWidget *parent, QxrdAcquisitionWPtr acq) :
+QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisitionExtraInputsDialogSettingsWPtr set, QWidget *parent, QxrdAcqCommonWPtr acq) :
   QDockWidget(parent),
   m_Settings(set),
   m_Acquisition(acq),
@@ -26,7 +27,7 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
   connect(m_RemoveChannel, &QAbstractButton::clicked, this, &QxrdAcquisitionExtraInputsDialog::removeChannel);
   connect(m_TestReadout, &QAbstractButton::clicked, this, &QxrdAcquisitionExtraInputsDialog::initiateReadout);
 
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
@@ -234,7 +235,7 @@ void QxrdAcquisitionExtraInputsDialog::updateUi()
 {
   GUI_THREAD_CHECK;
 
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
@@ -294,7 +295,7 @@ void QxrdAcquisitionExtraInputsDialog::updateUi()
 
 void QxrdAcquisitionExtraInputsDialog::addChannel()
 {
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
@@ -335,7 +336,7 @@ void QxrdAcquisitionExtraInputsDialog::addChannel()
 
 void QxrdAcquisitionExtraInputsDialog::removeChannel()
 {
-  QxrdAcquisitionPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();

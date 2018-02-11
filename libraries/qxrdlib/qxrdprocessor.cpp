@@ -14,7 +14,7 @@
 #include "qxrdzingerfinder.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdapplication.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdintegrator.h"
 #include "qcepmutexlocker.h"
 #include "qxrdpolartransform.h"
@@ -185,6 +185,9 @@ void QxrdProcessor::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
+  m_Experiment = QxrdExperiment::findExperiment(parent);
+  m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
+
   m_MaskStack          -> initialize(sharedFromThis());
   m_ZingerFinder       -> initialize(sharedFromThis());
   m_CenterFinder       -> initialize(sharedFromThis());
@@ -196,8 +199,7 @@ void QxrdProcessor::initialize(QcepObjectWPtr parent)
   m_ROIModel           -> initialize(sharedFromThis());
   m_ROICalculator      -> initialize(sharedFromThis());
 
-  QxrdAcquisitionPtr acqp(
-        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+  QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
     connect(acqp -> prop_SummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
@@ -230,27 +232,16 @@ QxrdProcessorWPtr QxrdProcessor::findProcessor(QcepObjectWPtr p)
 
 QxrdExperimentWPtr QxrdProcessor::experiment() const
 {
-  QxrdExperimentWPtr expt(qSharedPointerDynamicCast<QxrdExperiment>(parentPtr()));
-
-  if (expt == NULL) {
+  if (m_Experiment == NULL) {
     printMessage("QxrdProcessor::experiment == NULL");
   }
 
-  return expt;
+  return m_Experiment;
 }
 
 QxrdAcqCommonWPtr QxrdProcessor::acquisition() const
 {
-  QxrdAcqCommonWPtr res;
-
-  QxrdExperimentPtr expt(experiment());
-
-  if (expt) {
-    res =
-        qSharedPointerDynamicCast<QxrdAcqCommon>(expt->acquisition());
-  }
-
-  return res;
+  return m_Acquisition;
 }
 
 QxrdDetectorSettingsWPtr QxrdProcessor::detector() const
@@ -1608,8 +1599,7 @@ void QxrdProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image,
                                                int nPhases,
                                                bool trig)
 {
-  QxrdAcquisitionPtr acq(
-        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   QxrdDetectorSettingsPtr det(detector());
 
@@ -1812,8 +1802,7 @@ void QxrdProcessor::processIdleImage(QcepImageDataBasePtr image)
     QxrdExperimentPtr expt(experiment());
 
     if (expt) {
-      QxrdAcquisitionPtr acq(
-            qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+      QxrdAcqCommonPtr acq(m_Acquisition);
 
       if (acq && acq->get_LiveViewAtIdle()) {
         QcepDoubleVector scalers;
@@ -2170,8 +2159,7 @@ void QxrdProcessor::updateEstimatedProcessingTime()
 {
   double estSerialTime = 0, estParallelTime = 0;
 
-  QxrdAcquisitionPtr acq(
-        qSharedPointerDynamicCast<QxrdAcquisition>(acquisition()));
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq && get_SaveRawImages()) {
     if (acq -> get_SummedExposures() > 1) {

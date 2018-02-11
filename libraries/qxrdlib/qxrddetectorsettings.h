@@ -8,7 +8,7 @@
 #include <QDoubleSpinBox>
 #include <QComboBox>
 #include "qcepimagedata-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdprocessor-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdappcommon-ptr.h"
@@ -56,7 +56,7 @@ public:
   static QStringList detectorTypeNames();
 
   QxrdExperimentWPtr experiment();
-  QxrdAcquisitionWPtr acquisition();
+  QxrdAcqCommonWPtr acquisition();
 
   static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdDetectorSettingsWPtr &det);
   static void fromScriptValue(const QScriptValue &obj, QxrdDetectorSettingsWPtr &det);
@@ -120,14 +120,14 @@ public slots:
   QxrdDetectorDriverPtr createDetector(QString name,
                                        QxrdDetectorSettingsWPtr det,
                                        QxrdExperimentWPtr expt,
-                                       QxrdAcquisitionWPtr acq);
+                                       QxrdAcqCommonWPtr acq);
 
   virtual void configureDetector();
 
 protected:
   QxrdAppCommonWPtr                    m_Application;
   QxrdExperimentWPtr                   m_Experiment;
-  QxrdAcquisitionWPtr                  m_Acquisition;
+  QxrdAcqCommonWPtr                    m_Acquisition;
 
   //TODO: should be in detector thread?
   QxrdProcessorPtr                     m_Processor;
@@ -136,7 +136,7 @@ protected:
   QxrdDetectorControlWindowPtr         m_DetectorControlWindow;
 
   QxrdDetectorPluginInterfaceWPtr      m_DetectorPlugin;
-  QxrdDetectorDriverThreadPtr          m_DetectorDriver;
+  QxrdDetectorDriverThreadPtr          m_DetectorDriverThread;
 
 private:
   QSemaphore                  m_NAcquiredImages;

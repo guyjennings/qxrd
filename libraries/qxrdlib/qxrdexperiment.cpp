@@ -253,14 +253,11 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
 
     m_CalibrantDSpacings -> initialize(sharedFromThis());
 
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(m_Acquisition));
-
     QxrdApplicationPtr appp(
           qSharedPointerDynamicCast<QxrdApplication>(app));
 
-    if (acq && appp) {
-      acq -> setNIDAQPlugin(appp->nidaqPlugin());
+    if (m_Acquisition && appp) {
+      m_Acquisition -> setNIDAQPlugin(appp->nidaqPlugin());
     }
 
     m_Dataset = QcepAllocator::newDataset("dataset");
@@ -328,10 +325,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
 
     QxrdServerPtr srv(m_Server);
 
-    if (srv) {
-      srv -> initialize(m_ServerThread);
-    }
-
 //    if (eng) {
 //      m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
 //      m_ScriptEngineDebugger -> attachTo(eng.data());
@@ -347,10 +340,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
     }
 
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
-
-    if (ssrv) {
-      ssrv -> initialize(m_SimpleServerThread);
-    }
 
     if (ssrv && eng) {
       connect(ssrv.data(),  &QxrdSimpleServer::executeCommand,
@@ -522,13 +511,12 @@ void QxrdExperiment::openWindows()
     if (set && set->get_GuiWanted()) {
       splashMessage("Opening Main Window");
 
-      QxrdAcquisitionPtr acq(qSharedPointerDynamicCast<QxrdAcquisition>(m_Acquisition));
-
+      //TODO: remove
       m_Window = QxrdWindowPtr(
             new QxrdWindow(m_WindowSettings,
                            qSharedPointerDynamicCast<QxrdApplication>(m_Application),
                            qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()),
-                           acq,
+                           m_Acquisition,
                            m_Processor),
             &QObject::deleteLater); //TODO: is deleteLater necessary?
 
@@ -537,10 +525,10 @@ void QxrdExperiment::openWindows()
       if (m_Window) {
         m_Window -> initialize();
 
-        if (acq) {
-          acq -> setWindow(m_Window);
+        if (m_Acquisition) {
+//          m_Acquisition -> setWindow(m_Window);
 
-          acq->openWindows(); // Open detector control windows...
+          m_Acquisition->openWindows(); // Open detector control windows...
         }
 
         if (eng) {
@@ -576,6 +564,7 @@ void QxrdExperiment::openWindows()
         }
       }
 
+      //TODO: move to base class...
       for (int i=0; i<windowSettingsCount(); i++) {
         QcepMainWindowSettingsPtr set =
             windowSettings(i);
@@ -603,11 +592,8 @@ void QxrdExperiment::closeWindows()
     }
   }
 
-  QxrdAcquisitionPtr acq(
-        qSharedPointerDynamicCast<QxrdAcquisition>(m_Acquisition));
-
-  if (acq) {
-    acq->closeWindows();
+  if (m_Acquisition) {
+    m_Acquisition->closeWindows();
   }
 }
 
@@ -1051,14 +1037,11 @@ void QxrdExperiment::readSettings(QSettings *settings)
       int detType = settings->value("detectorType", -1).toInt();
 
       if (detType == QxrdDetectorSettings::PerkinElmer) {
-        QxrdAcquisitionPtr acqp(
-              qSharedPointerDynamicCast<QxrdAcquisition>(m_Acquisition));
+        if (m_Acquisition) {
+          if (m_Acquisition->detectorCount() == 0) {
+            QxrdDetectorSettingsPtr det = m_Acquisition->newDetector(detType);
 
-        if (acqp) {
-          if (acqp->get_DetectorCount() == 0) {
-            QxrdDetectorSettingsPtr det = acqp->newDetector(detType);
-
-            acqp->appendDetector(det);
+            m_Acquisition->appendDetector(det);
           }
         }
       }

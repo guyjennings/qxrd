@@ -18,7 +18,7 @@ public:
   QxrdPerkinElmerDriver(QString name,
                         QxrdDetectorSettingsWPtr det,
                         QxrdExperimentWPtr expt,
-                        QxrdAcquisitionWPtr acq);
+                        QxrdAcqCommonWPtr acq);
   virtual ~QxrdPerkinElmerDriver();
 
 public slots:

@@ -15,7 +15,7 @@ QString QxrdSimulatedPlugin::name() const
 QxrdDetectorDriverPtr QxrdSimulatedPlugin::createDetector(QString name,
                                                           QxrdDetectorSettingsWPtr det,
                                                           QxrdExperimentWPtr expt,
-                                                          QxrdAcquisitionWPtr acq)
+                                                          QxrdAcqCommonWPtr acq)
 {
   QxrdDetectorDriverPtr res =
       QxrdDetectorDriverPtr(new QxrdSimulatedDriver(name, det, expt, acq));

@@ -3,14 +3,14 @@
 
 #include "qxrdlib_global.h"
 #include <QAbstractListModel>
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 
 class QXRD_EXPORT QxrdAcquisitionScalerModel : public QAbstractListModel
 {
   Q_OBJECT
 
 public:
-  QxrdAcquisitionScalerModel(QxrdAcquisitionWPtr acq);
+  QxrdAcquisitionScalerModel(QxrdAcqCommonWPtr acq);
 
   int rowCount(const QModelIndex &parent) const;
   int columnCount(const QModelIndex &parent) const;
@@ -30,7 +30,7 @@ public slots:
   void forceFullUpdate();
 
 private:
-  QxrdAcquisitionWPtr m_Acquisition;
+  QxrdAcqCommonWPtr m_Acquisition;
 };
 
 #endif // QXRDACQUISITIONSCALERMODEL_H

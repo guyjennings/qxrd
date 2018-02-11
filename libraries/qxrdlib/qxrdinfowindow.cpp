@@ -3,7 +3,7 @@
 QxrdInfoWindow::QxrdInfoWindow(QString name,
                                QxrdAppCommonWPtr app,
                                QxrdExperimentWPtr expt,
-                               QxrdAcquisitionWPtr acqw,
+                               QxrdAcqCommonWPtr acqw,
                                QxrdProcessorWPtr procw) :
   QxrdMainWindow(name, app, expt, acqw, procw)
 {

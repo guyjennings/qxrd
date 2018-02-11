@@ -4,7 +4,7 @@
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qxrdplotwidgetdialog.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdimageplot.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
@@ -67,7 +67,7 @@
 QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
                        QxrdAppCommonWPtr appl,
                        QxrdExperimentWPtr docw,
-                       QxrdAcquisitionWPtr acqw,
+                       QxrdAcqCommonWPtr acqw,
                        QxrdProcessorWPtr procw)
   : QxrdMainWindow("window", appl, docw, acqw, procw),
     m_ObjectNamer(this, "window"),
@@ -159,7 +159,7 @@ void QxrdWindow::initialize()
   QxrdWindowSettingsPtr set(m_WindowSettings);
 
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr   acq(m_Acquisition);
   QxrdProcessorPtr   proc(processor());
 
 //  m_AcquisitionDialog = new QxrdAcquisitionDialog(m_Experiment,
@@ -785,10 +785,10 @@ void QxrdWindow::populateConfigureDetectorMenu()
 {
   m_ConfigureDetectorMenu->clear();
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
-    int nDets = acq->get_DetectorCount();
+    int nDets = acq->detectorCount();
 
     for (int i=0; i<nDets; i++) {
       QxrdDetectorSettingsPtr det = acq->detector(i);
@@ -814,10 +814,10 @@ void QxrdWindow::populateDetectorControlWindowsMenu()
 {
   m_DetectorControlWindowsMenu->clear();
 
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
-    int nDets = acq->get_DetectorCount();
+    int nDets = acq->detectorCount();
 
     for (int i=0; i<nDets; i++) {
       QxrdDetectorSettingsPtr det = acq->detector(i);
@@ -1565,11 +1565,6 @@ void QxrdWindow::loadScript(QString path)
 QxrdProcessorWPtr QxrdWindow::processor() const
 {
   return m_Processor;
-}
-
-QxrdAcquisitionWPtr QxrdWindow::acquisition() const
-{
-  return m_Acquisition;
 }
 
 QcepDoubleImageDataPtr QxrdWindow::data()

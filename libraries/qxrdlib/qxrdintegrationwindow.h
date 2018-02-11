@@ -19,7 +19,7 @@ public:
                                  QString name,
                                  QxrdAppCommonWPtr app,
                                  QxrdExperimentWPtr expt,
-                                 QxrdAcquisitionWPtr acqw,
+                                 QxrdAcqCommonWPtr acqw,
                                  QxrdProcessorWPtr procw);
   ~QxrdIntegrationWindow();
 

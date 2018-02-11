@@ -13,7 +13,7 @@ public:
   QxrdDexelaDriver(QString name,
                    QxrdDexelaSettingsWPtr det,
                    QxrdExperimentWPtr expt,
-                   QxrdAcquisitionWPtr acq);
+                   QxrdAcqCommonWPtr acq);
   virtual ~QxrdDexelaDriver();
 
 public slots:

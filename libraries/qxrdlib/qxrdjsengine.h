@@ -7,7 +7,7 @@
 #include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdwindow-ptr.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdprocessor-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
@@ -148,7 +148,7 @@ private:
 
   void setGlobalProperty(QString name, QJSValue val, ObjectOwnership owner = CppOwnership);
 
-  QxrdAcquisitionWPtr   acquisition();
+  QxrdAcqCommonWPtr     acquisition();
   QxrdProcessorWPtr     processor();
 
 private:

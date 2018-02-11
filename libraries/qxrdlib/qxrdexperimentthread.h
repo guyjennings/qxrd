@@ -15,7 +15,6 @@ class QXRD_EXPORT QxrdExperimentThread : public QxrdThread
 public:
   //TODO: pass parent pointer on initialization...
   QxrdExperimentThread(QString path,
-                       QxrdAppCommonWPtr parent,
                        QxrdExperimentSettingsPtr set,
                        int mode);
 
@@ -24,7 +23,7 @@ public:
   static QxrdExperimentThreadWPtr findExperimentThread(QcepObjectWPtr parent);
 
   static QxrdExperimentThreadPtr newExperimentThread(QString path,
-                                                     QxrdAppCommonWPtr parent,
+                                                     QcepObjectWPtr parent,
                                                      QxrdExperimentSettingsPtr set,
                                                      int mode);
 
@@ -38,7 +37,6 @@ protected:
 private:
   QxrdExperimentPtr         m_Experiment;
   QString                   m_Path;
-  QxrdAppCommonWPtr         m_Parent;
   QxrdExperimentSettingsPtr m_Settings;
   int                       m_ExperimentMode;
 };

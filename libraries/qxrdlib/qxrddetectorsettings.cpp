@@ -8,7 +8,7 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdexperiment.h"
 #include "qcepimagedata.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdroicalculator.h"
 #include "qxrdareadetectorsettings.h"
 #include "qxrdfilewatchersettings.h"
@@ -71,7 +71,7 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
 
   m_Application = QxrdApplication::findApplication(parent);
   m_Experiment  = QxrdExperiment::findExperiment(parent);
-  m_Acquisition = QxrdAcquisition::findAcquisition(parent);
+  m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
 
 #ifndef QT_NO_DEBUG
   if (m_Application == NULL) {
@@ -98,18 +98,21 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
   m_Processor                     -> initialize(sharedFromThis());
   m_DetectorControlWindowSettings -> initialize(sharedFromThis());
 
-  QxrdAcquisitionPtr a(m_Acquisition);
+  QxrdAcqCommonPtr a(m_Acquisition);
 
   if (a) {
     connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
-            a.data(), &QxrdAcquisition::detectorStateChanged);
+            a.data(),       &QxrdAcqCommon::detectorStateChanged);
   }
 
-  m_DetectorDriver =
-      QxrdDetectorDriverThread::newDetectorDriverThread(
-        qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis()));
+  m_DetectorDriverThread =
+      QxrdDetectorDriverThreadPtr(
+        new QxrdDetectorDriverThread(
+          qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis())));
 
-  m_DetectorDriver -> start();
+  m_DetectorDriverThread -> initialize(sharedFromThis());
+
+  m_DetectorDriverThread -> start();
 }
 
 QxrdDetectorSettingsWPtr QxrdDetectorSettings::findDetectorSettings(QcepObjectWPtr p)
@@ -260,7 +263,7 @@ QxrdExperimentWPtr QxrdDetectorSettings::experiment()
   return m_Experiment;
 }
 
-QxrdAcquisitionWPtr QxrdDetectorSettings::acquisition()
+QxrdAcqCommonWPtr QxrdDetectorSettings::acquisition()
 {
   return m_Acquisition;
 }
@@ -374,8 +377,8 @@ bool QxrdDetectorSettings::checkDetectorEnabled()
 
 bool QxrdDetectorSettings::startDetector()
 {
-  if (m_DetectorDriver) {
-    return m_DetectorDriver->startDetectorDriver();
+  if (m_DetectorDriverThread) {
+    return m_DetectorDriverThread->startDetectorDriver();
   } else {
     return false;
   }
@@ -383,8 +386,8 @@ bool QxrdDetectorSettings::startDetector()
 
 bool QxrdDetectorSettings::stopDetector()
 {
-  if (m_DetectorDriver) {
-    return m_DetectorDriver->stopDetectorDriver();
+  if (m_DetectorDriverThread) {
+    return m_DetectorDriverThread->stopDetectorDriver();
   } else {
     return false;
   }
@@ -392,8 +395,8 @@ bool QxrdDetectorSettings::stopDetector()
 
 bool QxrdDetectorSettings::changeExposureTime(double expos)
 {
-  if (m_DetectorDriver) {
-    return m_DetectorDriver->changeExposureTime(expos);
+  if (m_DetectorDriverThread) {
+    return m_DetectorDriverThread->changeExposureTime(expos);
   } else {
     return false;
   }
@@ -401,8 +404,8 @@ bool QxrdDetectorSettings::changeExposureTime(double expos)
 
 bool QxrdDetectorSettings::beginAcquisition(double exposure)
 {
-  if (m_DetectorDriver) {
-    return m_DetectorDriver->beginAcquisition(exposure);
+  if (m_DetectorDriverThread) {
+    return m_DetectorDriverThread->beginAcquisition(exposure);
   } else {
     return false;
   }
@@ -410,15 +413,15 @@ bool QxrdDetectorSettings::beginAcquisition(double exposure)
 
 void QxrdDetectorSettings::beginFrame()
 {
-  if (m_DetectorDriver) {
-    m_DetectorDriver->beginFrame();
+  if (m_DetectorDriverThread) {
+    m_DetectorDriverThread->beginFrame();
   }
 }
 
 bool QxrdDetectorSettings::endAcquisition()
 {
-  if (m_DetectorDriver) {
-    return m_DetectorDriver->endAcquisition();
+  if (m_DetectorDriverThread) {
+    return m_DetectorDriverThread->endAcquisition();
   } else {
     return false;
   }
@@ -426,8 +429,8 @@ bool QxrdDetectorSettings::endAcquisition()
 
 bool QxrdDetectorSettings::shutdownAcquisition()
 {
-  if (m_DetectorDriver) {
-    return m_DetectorDriver->shutdownAcquisition();
+  if (m_DetectorDriverThread) {
+    return m_DetectorDriverThread->shutdownAcquisition();
   } else {
     return false;
   }
@@ -536,7 +539,7 @@ void QxrdDetectorSettings::enqueueAcquiredFrame(QcepImageDataBasePtr img)
 
 QcepImageDataBasePtr QxrdDetectorSettings::acquireFrame()
 {
-  QxrdAcquisitionPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     while (1) {
@@ -634,11 +637,10 @@ void QxrdDetectorSettings::configureDetector()
   printf("QxrdDetectorSettings::configureDetector is not implemented\n");
 }
 
-QxrdDetectorDriverPtr QxrdDetectorSettings::createDetector(
-    QString name,
+QxrdDetectorDriverPtr QxrdDetectorSettings::createDetector(QString name,
     QxrdDetectorSettingsWPtr det,
     QxrdExperimentWPtr expt,
-    QxrdAcquisitionWPtr acq)
+    QxrdAcqCommonWPtr acq)
 {
   QxrdDetectorDriverPtr res;
 

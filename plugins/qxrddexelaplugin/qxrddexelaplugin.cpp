@@ -21,9 +21,9 @@ QString QxrdDexelaPlugin::name() const
 }
 
 QxrdDetectorDriverPtr QxrdDexelaPlugin::createDetector(QString name,
-                                                               QxrdDetectorSettingsWPtr det,
-                                                               QxrdExperimentWPtr expt,
-                                                               QxrdAcquisitionWPtr acq)
+                                                       QxrdDetectorSettingsWPtr det,
+                                                       QxrdExperimentWPtr expt,
+                                                       QxrdAcqCommonWPtr acq)
 {
   QxrdDexelaSettingsWPtr set = qSharedPointerDynamicCast<QxrdDexelaSettings>(det);
 

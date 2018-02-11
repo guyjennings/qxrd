@@ -15,7 +15,7 @@ public:
   QxrdPilatusDriver(QString name,
                     QxrdDetectorSettingsWPtr det,
                     QxrdExperimentWPtr expt,
-                    QxrdAcquisitionWPtr acq);
+                    QxrdAcqCommonWPtr acq);
   virtual ~QxrdPilatusDriver();
 
 public slots:

@@ -8,7 +8,7 @@
 #include "qcepproperty.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdnidaqplugininterface.h"
-#include "qxrdacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
@@ -93,9 +93,10 @@ public:
   QxrdAcquisitionParameterPackWPtr parms();
 
 private:
-  QxrdAcquisitionWPtr acquisition();
+  QxrdAcqCommonWPtr acquisition();
 
 private:
+  QxrdAcqCommonWPtr           m_Acquisition;
   QxrdAcquisitionParameterPackWPtr m_AcquisitionParms;
   QxrdNIDAQPluginInterfaceWPtr m_NIDAQPlugin;
   int                         m_SyncMode;

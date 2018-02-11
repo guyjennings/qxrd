@@ -4,7 +4,7 @@
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
 #include "qxrdexperiment.h"
-#include "qxrdacquisition.h"
+#include "qxrdacqcommon.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdprocessor.h"
 #include "qxrdcalibrantlibrary.h"
@@ -485,9 +485,7 @@ QScriptValue QxrdScriptEngine::acquireFunc(QScriptContext *context, QScriptEngin
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (!acq) return QScriptValue(engine, -1);
 
@@ -563,9 +561,7 @@ QScriptValue QxrdScriptEngine::acquireDarkFunc(QScriptContext *context, QScriptE
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (!acq) return QScriptValue(engine, -1);
 
@@ -621,9 +617,7 @@ QScriptValue QxrdScriptEngine::acquireOnceFunc(QScriptContext *context, QScriptE
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (!acq) return QScriptValue(engine, -1);
 
@@ -689,9 +683,7 @@ QScriptValue QxrdScriptEngine::statusFunc(QScriptContext *context, QScriptEngine
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
     QxrdProcessorPtr proc(eng->processor());
 
     if (!acq || !proc) return QScriptValue(engine, -1);
@@ -741,9 +733,7 @@ QScriptValue QxrdScriptEngine::acquireStatusFunc(QScriptContext *context, QScrip
   QScriptValue res;
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() == 0) {
@@ -822,9 +812,7 @@ QScriptValue QxrdScriptEngine::acquireCancelFunc(QScriptContext * /*context*/, Q
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       acq -> cancel();
@@ -857,9 +845,7 @@ QScriptValue QxrdScriptEngine::acquireScalersFunc(QScriptContext *context, QScri
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -869,7 +855,7 @@ QScriptValue QxrdScriptEngine::acquireScalersFunc(QScriptContext *context, QScri
           acq->printMessage(tr("acquireScalers(%1) call took %2 msec").arg(i).arg(tick.elapsed()));
         }
 
-        return QScriptValue(eng, acq->scalerValue(i));
+        return QScriptValue(engine, acq->scalerValue(i));
       } else {
         QScriptValue r = eng->newArray();
 
@@ -912,9 +898,7 @@ QScriptValue QxrdScriptEngine::triggerFunc(QScriptContext * /*context*/, QScript
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       acq -> trigger();
@@ -945,9 +929,7 @@ QScriptValue QxrdScriptEngine::exposureTimeFunc(QScriptContext *context, QScript
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -975,9 +957,7 @@ QScriptValue QxrdScriptEngine::summedExposuresFunc(QScriptContext *context, QScr
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -1005,9 +985,7 @@ QScriptValue QxrdScriptEngine::skippedExposuresFunc(QScriptContext *context, QSc
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -1035,9 +1013,7 @@ QScriptValue QxrdScriptEngine::darkSummedExposuresFunc(QScriptContext *context, 
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -1065,9 +1041,7 @@ QScriptValue QxrdScriptEngine::phasesInGroupFunc(QScriptContext *context, QScrip
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -1095,9 +1069,7 @@ QScriptValue QxrdScriptEngine::preTriggerFilesFunc(QScriptContext *context, QScr
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -1125,9 +1097,7 @@ QScriptValue QxrdScriptEngine::postTriggerFilesFunc(QScriptContext *context, QSc
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -1155,9 +1125,7 @@ QScriptValue QxrdScriptEngine::filePatternFunc(QScriptContext *context, QScriptE
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -1213,9 +1181,7 @@ QScriptValue QxrdScriptEngine::fileIndexFunc(QScriptContext *context, QScriptEng
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       if (context->argumentCount() != 0) {
@@ -1411,9 +1377,7 @@ QScriptValue QxrdScriptEngine::extraChannelFunc(QScriptContext *context, QScript
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       QxrdAcquisitionExtraInputsPtr xtra(acq->acquisitionExtraInputs());
@@ -1821,9 +1785,7 @@ QScriptValue QxrdScriptEngine::detectorFunc(QScriptContext *context, QScriptEngi
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       int n = context->argument(0).toInteger();
@@ -1879,9 +1841,7 @@ QScriptValue QxrdScriptEngine::roiFunc(QScriptContext *context, QScriptEngine *e
   QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
   if (eng) {
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            eng->acquisition()));
+    QxrdAcqCommonPtr acq(eng->acquisition());
 
     if (acq) {
       int n = context->argument(0).toInteger();
@@ -1900,9 +1860,7 @@ QScriptValue QxrdScriptEngine::roiFunc(QScriptContext *context, QScriptEngine *e
 
 QScriptValue QxrdScriptEngine::roiFunc2(int n, int i)
 {
-  QxrdAcquisitionPtr acq(
-        qSharedPointerDynamicCast<QxrdAcquisition>(
-          acquisition()));
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     QxrdDetectorSettingsPtr d = acq->detector(n);
@@ -1919,9 +1877,7 @@ QxrdROIPtr QxrdScriptEngine::roiFunc3(int n, int i)
 {
   QxrdROIPtr res;
 
-  QxrdAcquisitionPtr acq(
-        qSharedPointerDynamicCast<QxrdAcquisition>(
-          acquisition()));
+  QxrdAcqCommonPtr acq(acquisition());
 
   if (acq) {
     QxrdDetectorSettingsPtr d = acq->detector(n);
@@ -2298,9 +2254,7 @@ void QxrdScriptEngine::initialize()
 
     m_Acquisition   = expt->acquisition();
 
-    QxrdAcquisitionPtr acq(
-          qSharedPointerDynamicCast<QxrdAcquisition>(
-            acquisition()));
+    QxrdAcqCommonPtr acq(acquisition());
 
     if (acq) {
       QCEP_DOC_OBJECT("acquisition", "The Acquisition Object");

@@ -14,7 +14,7 @@ QString QxrdAreaDetectorPlugin::name() const
 QxrdDetectorDriverPtr QxrdAreaDetectorPlugin::createDetector(QString name,
                                                              QxrdDetectorSettingsWPtr det,
                                                              QxrdExperimentWPtr expt,
-                                                             QxrdAcquisitionWPtr acq)
+                                                             QxrdAcqCommonWPtr acq)
 {
   QxrdDetectorDriverPtr res =
       QxrdDetectorDriverPtr(new QxrdAreaDetectorDriver(name, det, expt, acq));
