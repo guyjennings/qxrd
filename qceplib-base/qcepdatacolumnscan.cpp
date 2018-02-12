@@ -79,11 +79,12 @@ int QcepDataColumnScan::rowCount() const
 
 QcepDataColumnPtr QcepDataColumnScan::appendColumn(QString title)
 {
-  QcepDataColumnPtr col = QcepAllocator::newColumn(title, get_NumPoints(), QcepAllocator::WaitTillAvailable);
+  QcepDataColumnPtr col = QcepAllocator::newColumn(sharedFromThis(),
+                                                   title,
+                                                   get_NumPoints(),
+                                                   QcepAllocator::WaitTillAvailable);
 
   if (col) {
-    col -> initialize(sharedFromThis());
-
     append(col);
   }
 

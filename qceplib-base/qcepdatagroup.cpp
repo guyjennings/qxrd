@@ -346,7 +346,8 @@ QcepDataGroupPtr QcepDataGroup::createGroup(QString path)
 
       if (sgr) {
         QcepDataGroupPtr ng =
-            QcepAllocator::newGroup(object(path));
+            QcepAllocator::newGroup(sharedFromThis(),
+                                    object(path));
 
         if (ng) {
           sgr->append(ng);

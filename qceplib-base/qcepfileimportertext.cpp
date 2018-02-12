@@ -84,7 +84,11 @@ void QcepFileImporterText::processScan(QString aLine)
     QString scanCmd = m_ScanLine.cap(2);
     QString name    = tr("scan_%1").arg(scanNum);
 
-    m_LatestScan = QcepAllocator::newColumnScan(name, QStringList(), 0, QcepAllocator::NullIfNotAvailable);
+    m_LatestScan = QcepAllocator::newColumnScan(sharedFromThis(),
+                                                name,
+                                                QStringList(),
+                                                0,
+                                                QcepAllocator::NullIfNotAvailable);
 
     if (m_LatestScan) {
       m_LatestScan->set_Description(scanCmd);

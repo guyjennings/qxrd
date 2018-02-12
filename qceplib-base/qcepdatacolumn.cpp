@@ -347,7 +347,10 @@ void QcepDataColumn::concat(double val)
 
 QcepDataColumnPtr QcepDataColumn::duplicate()
 {
-  QcepDataColumnPtr dup = QcepAllocator::newColumn(tr("%1.dup").arg(get_Name()), rowCount(), QcepAllocator::AlwaysAllocate);
+  QcepDataColumnPtr dup = QcepAllocator::newColumn(parentPtr(),
+                                                   tr("%1.dup").arg(get_Name()),
+                                                   rowCount(),
+                                                   QcepAllocator::AlwaysAllocate);
 
   dup -> set_ColumnType(get_ColumnType());
   dup -> set_Column1(get_Column1());

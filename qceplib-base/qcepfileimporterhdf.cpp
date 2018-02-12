@@ -65,7 +65,7 @@ void QcepFileImporterHDF::scanGroup(QModelIndex dest, hid_t gid, int level)
       scanLink(dest, gid, memb_name);
     } else if (otype == H5G_GROUP) {
 //      QcepDataGroupPtr dgrp = m_Model->group(dest);
-      QcepDataGroupPtr ngrp = QcepAllocator::newGroup(memb_name);
+      QcepDataGroupPtr ngrp = QcepAllocator::newGroup(sharedFromThis(), memb_name);
       QModelIndex      inst = m_Model->append(dest, ngrp);
 
       hid_t grpid = H5Gopen(gid, memb_name, H5P_DEFAULT);
@@ -115,7 +115,10 @@ void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
 
   if (rank == 0) {
   } else if (rank == 1) {
-    QcepDataColumnPtr ncol = QcepAllocator::newColumn(name, dims.value(0), QcepAllocator::NullIfNotAvailable);
+    QcepDataColumnPtr ncol = QcepAllocator::newColumn(sharedFromThis(),
+                                                      name,
+                                                      dims.value(0),
+                                                      QcepAllocator::NullIfNotAvailable);
 
     if (ncol) {
       readColumnData(ncol, dsid);
@@ -123,8 +126,10 @@ void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
       m_Model->append(dest, ncol);
     }
   } else if (rank == 2) {
-    QcepDoubleImageDataPtr nimg = QcepAllocator::newDoubleImage(name,
-                                                                dims.value(1), dims.value(0),
+    QcepDoubleImageDataPtr nimg = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                                name,
+                                                                dims.value(1),
+                                                                dims.value(0),
                                                                 QcepAllocator::NullIfNotAvailable);
 
     if (nimg) {
@@ -139,7 +144,10 @@ void QcepFileImporterHDF::scanDataset(QModelIndex dest, hid_t dsid, char *name)
       idims[rank-i-1]=dims[i];
     }
 
-    QcepDataArrayPtr narr = QcepAllocator::newArray(name, idims, QcepAllocator::NullIfNotAvailable);
+    QcepDataArrayPtr narr = QcepAllocator::newArray(sharedFromThis(),
+                                                    name,
+                                                    idims,
+                                                    QcepAllocator::NullIfNotAvailable);
 
     if (narr) {
       readArrayData(narr, dsid);

@@ -138,7 +138,12 @@ void QcepMaskData::invertMask()
 QcepMaskDataPtr QcepMaskData::copyMask()
 {
   QcepMaskDataPtr copy =
-      QcepAllocator::newMask(get_Name(), get_Width(), get_Height(), 0, QcepAllocator::NullIfNotAvailable);
+      QcepAllocator::newMask(parentPtr(),
+                             get_Name(),
+                             get_Width(),
+                             get_Height(),
+                             0,
+                             QcepAllocator::NullIfNotAvailable);
 
   if (copy) {
     copyMaskTo(copy);

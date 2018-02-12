@@ -137,7 +137,11 @@ QcepDoubleImageDataPtr QcepFixupGainMapCommand::averageSubTiles(QcepDoubleImageD
     int nw = w/tw;
     int nh = h/th;
 
-    res = QcepAllocator::newDoubleImage("avg", nw, nh, QcepAllocator::AlwaysAllocate);
+    res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "avg",
+                                        nw,
+                                        nh,
+                                        QcepAllocator::AlwaysAllocate);
 
     res -> copyPropertiesFrom(img);
 
@@ -183,7 +187,11 @@ QcepDoubleImageDataPtr QcepFixupGainMapCommand::generateAveragedImage(QcepDouble
     int tw = get_AverageWidth();
     int th = get_AverageHeight();
 
-    res = QcepAllocator::newDoubleImage("avg", w, h, QcepAllocator::AlwaysAllocate);
+    res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "avg",
+                                        w,
+                                        h,
+                                        QcepAllocator::AlwaysAllocate);
 
     res -> copyPropertiesFrom(img);
 
@@ -212,7 +220,11 @@ QcepDoubleImageDataPtr QcepFixupGainMapCommand::generateAveragedDiff(QcepDoubleI
     int w = img->get_Width();
     int h = img->get_Height();
 
-    res = QcepAllocator::newDoubleImage("diff", w, h, QcepAllocator::AlwaysAllocate);
+    res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "diff",
+                                        w,
+                                        h,
+                                        QcepAllocator::AlwaysAllocate);
 
     performWork(h);
 
@@ -303,7 +315,11 @@ QcepDoubleImageDataPtr QcepFixupGainMapCommand::generateParaboloid(QcepDoubleIma
     double width   = get_FittedWidth();
     double height  = get_FittedHeight();
 
-    res = QcepAllocator::newDoubleImage("fit", w, h, QcepAllocator::AlwaysAllocate);
+    res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "fit",
+                                        w,
+                                        h,
+                                        QcepAllocator::AlwaysAllocate);
 
     res -> copyPropertiesFrom(img);
 
@@ -335,7 +351,11 @@ QcepDoubleImageDataPtr QcepFixupGainMapCommand::generateParaboloidDiff(QcepDoubl
     int w = img->get_Width();
     int h = img->get_Height();
 
-    res = QcepAllocator::newDoubleImage("diff", w, h, QcepAllocator::AlwaysAllocate);
+    res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "diff",
+                                        w,
+                                        h,
+                                        QcepAllocator::AlwaysAllocate);
 
     performWork(h);
 

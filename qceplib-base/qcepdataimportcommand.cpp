@@ -22,7 +22,7 @@ QcepDataImportCommand::QcepDataImportCommand(QcepDatasetModelWPtr model,
       m_Parameters = m_Experiment->dataImportParameters();
 
       m_ImportedData =
-          QcepAllocator::newDataset("import");
+          QcepAllocator::newDataset(sharedFromThis(), "import");
 
       m_ImportedDataset = QcepDatasetModelPtr(
             new QcepDatasetModel(m_Experiment, m_ImportedData));

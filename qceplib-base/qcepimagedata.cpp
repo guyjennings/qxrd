@@ -2161,8 +2161,11 @@ void QcepDoubleImageData::accumulateImage(QcepDoubleImageDataPtr img)
 
 QcepDoubleImageDataPtr QcepDoubleImageData::duplicate()
 {
-  QcepDoubleImageDataPtr dup = QcepAllocator::newDoubleImage("dup",
-                                                             get_Width(), get_Height(), QcepAllocator::AlwaysAllocate);
+  QcepDoubleImageDataPtr dup = QcepAllocator::newDoubleImage(parentPtr(),
+                                                             "dup",
+                                                             get_Width(),
+                                                             get_Height(),
+                                                             QcepAllocator::AlwaysAllocate);
   copyImage<double>(dup);
 
   dup->set_Name(tr("%1.dup").arg(get_Name()));
@@ -2172,8 +2175,11 @@ QcepDoubleImageDataPtr QcepDoubleImageData::duplicate()
 
 QcepDoubleImageDataPtr QcepDoubleImageData::differentiateH()
 {
-  QcepDoubleImageDataPtr dup = QcepAllocator::newDoubleImage("dup",
-                                                             get_Width(), get_Height(), QcepAllocator::AlwaysAllocate);
+  QcepDoubleImageDataPtr dup = QcepAllocator::newDoubleImage(parentPtr(),
+                                                             "dup",
+                                                             get_Width(),
+                                                             get_Height(),
+                                                             QcepAllocator::AlwaysAllocate);
   copyImage<double>(dup);
 
   dup->set_Name(tr("%1.dh").arg(get_Name()));
@@ -2194,8 +2200,11 @@ QcepDoubleImageDataPtr QcepDoubleImageData::differentiateH()
 
 QcepDoubleImageDataPtr QcepDoubleImageData::differentiateV()
 {
-  QcepDoubleImageDataPtr dup = QcepAllocator::newDoubleImage("dup",
-                                                             get_Width(), get_Height(), QcepAllocator::AlwaysAllocate);
+  QcepDoubleImageDataPtr dup = QcepAllocator::newDoubleImage(parentPtr(),
+                                                             "dup",
+                                                             get_Width(),
+                                                             get_Height(),
+                                                             QcepAllocator::AlwaysAllocate);
   copyImage<double>(dup);
 
   dup->set_Name(tr("%1.dv").arg(get_Name()));

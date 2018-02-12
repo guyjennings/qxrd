@@ -142,7 +142,11 @@ int QcepAllocator::waitTillAvailable(AllocationStrategy strat, qint64 size)
   }
 }
 
-QcepUInt16ImageDataPtr QcepAllocator::newInt16Image(QString name, int width, int height, AllocationStrategy strat)
+QcepUInt16ImageDataPtr QcepAllocator::newInt16Image(QcepObjectWPtr     parent,
+                                                    QString            name,
+                                                    int                width,
+                                                    int                height,
+                                                    AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
@@ -151,7 +155,8 @@ QcepUInt16ImageDataPtr QcepAllocator::newInt16Image(QString name, int width, int
       QcepUInt16ImageDataPtr res(new QcepUInt16ImageData(name, width, height, 0));
 
       if (res) {
-        res->moveToThread(NULL);
+        res -> moveToThread(NULL);
+        res -> initialize(parent);
       }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
@@ -169,7 +174,11 @@ QcepUInt16ImageDataPtr QcepAllocator::newInt16Image(QString name, int width, int
   return QcepUInt16ImageDataPtr(NULL);
 }
 
-QcepUInt32ImageDataPtr QcepAllocator::newInt32Image(QString name, int width, int height, AllocationStrategy strat)
+QcepUInt32ImageDataPtr QcepAllocator::newInt32Image(QcepObjectWPtr     parent,
+                                                    QString            name,
+                                                    int                width,
+                                                    int                height,
+                                                    AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
@@ -178,7 +187,8 @@ QcepUInt32ImageDataPtr QcepAllocator::newInt32Image(QString name, int width, int
       QcepUInt32ImageDataPtr res(new QcepUInt32ImageData(name, width, height, 0));
 
       if (res) {
-        res->moveToThread(NULL);
+        res -> moveToThread(NULL);
+        res -> initialize(parent);
       }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
@@ -196,7 +206,11 @@ QcepUInt32ImageDataPtr QcepAllocator::newInt32Image(QString name, int width, int
   return QcepUInt32ImageDataPtr(NULL);
 }
 
-QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(QString name, int width, int height, AllocationStrategy strat)
+QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(QcepObjectWPtr     parent,
+                                                     QString            name,
+                                                     int                width,
+                                                     int                height,
+                                                     AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
@@ -206,6 +220,7 @@ QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(QString name, int width, in
 
       if (res) {
         res -> moveToThread(NULL);
+        res -> initialize(parent);
       }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
@@ -223,7 +238,12 @@ QcepDoubleImageDataPtr QcepAllocator::newDoubleImage(QString name, int width, in
   return QcepDoubleImageDataPtr(NULL);
 }
 
-QcepMaskDataPtr QcepAllocator::newMask(QString name, int width, int height, int def, AllocationStrategy strat)
+QcepMaskDataPtr QcepAllocator::newMask(QcepObjectWPtr     parent,
+                                       QString            name,
+                                       int                width,
+                                       int                height,
+                                       int                def,
+                                       AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
@@ -232,7 +252,8 @@ QcepMaskDataPtr QcepAllocator::newMask(QString name, int width, int height, int 
       QcepMaskDataPtr res(new QcepMaskData(name, width, height, def));
 
       if (res) {
-        res->moveToThread(NULL);
+        res -> moveToThread(NULL);
+        res -> initialize(parent);
       }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
@@ -250,7 +271,10 @@ QcepMaskDataPtr QcepAllocator::newMask(QString name, int width, int height, int 
   return QcepMaskDataPtr(NULL);
 }
 
-QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QString name, int size, AllocationStrategy strat)
+QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QcepObjectWPtr     parent,
+                                                       QString            name,
+                                                       int                size,
+                                                       AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
@@ -258,7 +282,10 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QString name, int size, A
     if (g_Allocator->waitTillAvailable(strat, integratedSize(size))) {
       QcepIntegratedDataPtr res(new QcepIntegratedData(name, size));
 
-      res->moveToThread(NULL);
+      if (res) {
+        res -> moveToThread(NULL);
+        res -> initialize(parent);
+      }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
         g_Application->printMessage(tr("QcepAllocator::newIntegratedData() succeeded [%1] [%2]").HEXARG(res.data()).arg(g_Allocator->allocatedMemoryMB()));
@@ -275,7 +302,11 @@ QcepIntegratedDataPtr QcepAllocator::newIntegratedData(QString name, int size, A
   return QcepIntegratedDataPtr(NULL);
 }
 
-QcepDataColumnScanPtr QcepAllocator::newColumnScan(QString name, QStringList cols, int nRows, AllocationStrategy strat)
+QcepDataColumnScanPtr QcepAllocator::newColumnScan(QcepObjectWPtr     parent,
+                                                   QString            name,
+                                                   QStringList        cols,
+                                                   int                nRows,
+                                                   AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
@@ -285,6 +316,7 @@ QcepDataColumnScanPtr QcepAllocator::newColumnScan(QString name, QStringList col
 
       if (res) {
         res -> moveToThread(NULL);
+        res -> initialize(parent);
       }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
@@ -302,7 +334,10 @@ QcepDataColumnScanPtr QcepAllocator::newColumnScan(QString name, QStringList col
   return QcepDataColumnScanPtr();
 }
 
-QcepDataColumnPtr QcepAllocator::newColumn(QString name, int sz, AllocationStrategy strat)
+QcepDataColumnPtr QcepAllocator::newColumn(QcepObjectWPtr     parent,
+                                           QString            name,
+                                           int                sz,
+                                           AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
@@ -312,6 +347,7 @@ QcepDataColumnPtr QcepAllocator::newColumn(QString name, int sz, AllocationStrat
 
       if (res) {
         res -> moveToThread(NULL);
+        res -> initialize(parent);
       }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
@@ -329,7 +365,10 @@ QcepDataColumnPtr QcepAllocator::newColumn(QString name, int sz, AllocationStrat
   return QcepDataColumnPtr();
 }
 
-QcepDataArrayPtr QcepAllocator::newArray(QString name, QVector<int> dims, AllocationStrategy strat)
+QcepDataArrayPtr QcepAllocator::newArray(QcepObjectWPtr     parent,
+                                         QString            name,
+                                         QVector<int>       dims,
+                                         AllocationStrategy strat)
 {
   if (g_Allocator) {
     QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
@@ -339,6 +378,7 @@ QcepDataArrayPtr QcepAllocator::newArray(QString name, QVector<int> dims, Alloca
 
       if (res) {
         res -> moveToThread(NULL);
+        res -> initialize(parent);
       }
 
       if (g_Application && qcepDebug(DEBUG_ALLOCATOR)) {
@@ -356,14 +396,28 @@ QcepDataArrayPtr QcepAllocator::newArray(QString name, QVector<int> dims, Alloca
   return QcepDataArrayPtr();
 }
 
-QcepDataGroupPtr QcepAllocator::newGroup(QString name)
+QcepDataGroupPtr QcepAllocator::newGroup(QcepObjectWPtr parent,
+                                         QString        name)
 {
-  return QcepDataGroupPtr(new QcepDataGroup(name));
+  QcepDataGroupPtr res(new QcepDataGroup(name));
+
+  if (res) {
+    res -> initialize(parent);
+  }
+
+  return res;
 }
 
-QcepDatasetPtr QcepAllocator::newDataset(QString name)
+QcepDatasetPtr QcepAllocator::newDataset(QcepObjectWPtr parent,
+                                         QString        name)
 {
-  return QcepDatasetPtr(new QcepDataset(name));
+  QcepDatasetPtr res(new QcepDataset(name));
+
+  if (res) {
+    res -> initialize(parent);
+  }
+
+  return res;
 }
 
 /* static */
@@ -511,18 +565,18 @@ void QcepAllocator::setAvailableBytes(qint64 newsize)
   set_AvailableBytes(newsize);
 }
 
-QcepDataObjectPtr QcepAllocator::newDataObject(QString id, QString name)
+QcepDataObjectPtr QcepAllocator::newDataObject(QcepObjectWPtr parent, QString id, QString name)
 {
   QcepDataObjectPtr res;
 
   if (id == "QcepDataset") {
-    res = newDataset(name);
+    res = newDataset(parent, name);
   } else if (id == "QcepDataGroup") {
-    res = newGroup(name);
+    res = newGroup(parent, name);
   } else if (id == "QcepDataColumn") {
-    res = newColumn(name, 0, QcepAllocator::NullIfNotAvailable);
+    res = newColumn(parent, name, 0, QcepAllocator::NullIfNotAvailable);
   } else if (id == "QcepDataColumnScan") {
-    res = newColumnScan(name, QStringList(), 0, QcepAllocator::NullIfNotAvailable);
+    res = newColumnScan(parent, name, QStringList(), 0, QcepAllocator::NullIfNotAvailable);
   }
 
   return res;

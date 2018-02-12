@@ -34,8 +34,11 @@ QcepDoubleImageDataPtr QcepSetRangeOfImageCommand::exec(QcepDoubleImageDataPtr i
   if (img) {
     emit progressMade(0);
 
-    res = QcepAllocator::newDoubleImage("dup",
-                                        img->get_Width(), img->get_Height(), QcepAllocator::AlwaysAllocate);
+    res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "dup",
+                                        img->get_Width(),
+                                        img->get_Height(),
+                                        QcepAllocator::AlwaysAllocate);
 
     emit progressMade(10);
 

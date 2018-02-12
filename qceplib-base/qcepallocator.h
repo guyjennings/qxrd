@@ -44,21 +44,61 @@ public:
     AlwaysAllocate
   };
 
-  static QcepDataObjectPtr      newDataObject(QString id, QString name);
-  static QcepUInt16ImageDataPtr newInt16Image(QString name, int width, int height, AllocationStrategy strat);
-  static QcepUInt32ImageDataPtr newInt32Image(QString name, int width, int height, AllocationStrategy strat);
-  static QcepDoubleImageDataPtr newDoubleImage(QString name, int width, int height, AllocationStrategy strat);
-  static QcepMaskDataPtr        newMask(QString name, int width, int height, int def, AllocationStrategy strat);
+  static QcepDataObjectPtr      newDataObject(QcepObjectWPtr parent,
+                                              QString        id,
+                                              QString        name);
 
-  static QcepIntegratedDataPtr  newIntegratedData(QString name, int size, AllocationStrategy strat);
+  static QcepUInt16ImageDataPtr newInt16Image(QcepObjectWPtr     parent,
+                                              QString            name,
+                                              int                width,
+                                              int                height,
+                                              AllocationStrategy strat);
 
-  static QcepDataColumnScanPtr  newColumnScan(QString name, QStringList cols, int nRows, AllocationStrategy strat);
-  static QcepDataColumnPtr      newColumn(QString name, int sz, AllocationStrategy strat);
-  static QcepDataArrayPtr       newArray(QString name, QVector<int> dims, AllocationStrategy strat);
+  static QcepUInt32ImageDataPtr newInt32Image(QcepObjectWPtr     parent,
+                                              QString            name,
+                                              int                width,
+                                              int                height,
+                                              AllocationStrategy strat);
 
+  static QcepDoubleImageDataPtr newDoubleImage(QcepObjectWPtr     parent,
+                                               QString            name,
+                                               int                width,
+                                               int                height,
+                                               AllocationStrategy strat);
 
-  static QcepDataGroupPtr       newGroup(QString name);
-  static QcepDatasetPtr         newDataset(QString name);
+  static QcepMaskDataPtr        newMask(QcepObjectWPtr     parent,
+                                        QString            name,
+                                        int                width,
+                                        int                height,
+                                        int                def,
+                                        AllocationStrategy strat);
+
+  static QcepIntegratedDataPtr  newIntegratedData(QcepObjectWPtr     parent,
+                                                  QString            name,
+                                                  int                size,
+                                                  AllocationStrategy strat);
+
+  static QcepDataColumnScanPtr  newColumnScan(QcepObjectWPtr     parent,
+                                              QString            name,
+                                              QStringList        cols,
+                                              int                nRows,
+                                              AllocationStrategy strat);
+
+  static QcepDataColumnPtr      newColumn(QcepObjectWPtr     parent,
+                                          QString            name,
+                                          int                sz,
+                                          AllocationStrategy strat);
+
+  static QcepDataArrayPtr       newArray(QcepObjectWPtr     parent,
+                                         QString            name,
+                                         QVector<int>       dims,
+                                         AllocationStrategy strat);
+
+  static QcepDataGroupPtr       newGroup(QcepObjectWPtr parent,
+                                         QString        name);
+
+  static QcepDatasetPtr         newDataset(QcepObjectWPtr parent,
+                                           QString        name);
 
   static qint64 allocatedMemoryMB();
   static qint64 availableMemoryMB();

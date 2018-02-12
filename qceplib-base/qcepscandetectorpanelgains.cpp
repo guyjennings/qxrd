@@ -251,8 +251,11 @@ QcepDataColumnScanPtr QcepScanDetectorPanelGains::exec(QcepDoubleImageDataPtr im
     cols << tr("VFit%1").arg(i);
   }
 
-  QcepDataColumnScanPtr res = QcepAllocator::newColumnScan(tr("%1.sc").arg(img->get_Name()),
-                                                           cols, 21, QcepAllocator::AlwaysAllocate);
+  QcepDataColumnScanPtr res = QcepAllocator::newColumnScan(img->parentPtr(),
+                                                           tr("%1.sc").arg(img->get_Name()),
+                                                           cols,
+                                                           21,
+                                                           QcepAllocator::AlwaysAllocate);
 
   for (int i=0; i<21; i++) {
     double gain = 0.5+i*0.05;
