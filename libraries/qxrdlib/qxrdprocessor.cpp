@@ -107,8 +107,8 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_CenterFinder(),
   m_ROICalculator(),
   m_Mutex(QMutex::Recursive),
-  m_AcquiredInt16Images("acquiredInt16Images"),
-  m_AcquiredInt32Images("acquiredInt32Images"),
+  m_AcquiredInt16Images(),
+  m_AcquiredInt32Images(),
   m_AcquiredCount(0),
   m_CorrectedImages(prop_CorrectionQueueLength()),
   m_IntegratedData(prop_IntegrationQueueLength()),
@@ -147,6 +147,14 @@ QxrdProcessor::QxrdProcessor(QString name) :
 
   m_ROICalculator = QxrdROICalculatorPtr(
         new QxrdROICalculator("roiCalculator", m_ROIVector, m_ROIModel));
+
+  m_AcquiredInt16Images =
+      QcepInt16ImageQueuePtr(
+        new QcepInt16ImageQueue("acquiredInt16Images"));
+
+  m_AcquiredInt32Images =
+      QcepInt32ImageQueuePtr(
+        new QcepInt32ImageQueue("acquiredInt32Images"));
 
   connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onCorrectedImageAvailable);
   connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onIntegratedDataAvailable);
@@ -193,16 +201,18 @@ void QxrdProcessor::initialize(QcepObjectWPtr parent)
   m_Experiment = QxrdExperiment::findExperiment(parent);
   m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
 
-  m_MaskStack          -> initialize(sharedFromThis());
-  m_ZingerFinder       -> initialize(sharedFromThis());
-  m_CenterFinder       -> initialize(sharedFromThis());
-  m_Integrator         -> initialize(sharedFromThis());
-  m_PolarTransform     -> initialize(sharedFromThis());
-  m_PolarNormalization -> initialize(sharedFromThis());
-  m_GenerateTestImage  -> initialize(sharedFromThis());
-  m_ROIVector          -> initialize(sharedFromThis());
-  m_ROIModel           -> initialize(sharedFromThis());
-  m_ROICalculator      -> initialize(sharedFromThis());
+  m_MaskStack           -> initialize(sharedFromThis());
+  m_ZingerFinder        -> initialize(sharedFromThis());
+  m_CenterFinder        -> initialize(sharedFromThis());
+  m_Integrator          -> initialize(sharedFromThis());
+  m_PolarTransform      -> initialize(sharedFromThis());
+  m_PolarNormalization  -> initialize(sharedFromThis());
+  m_GenerateTestImage   -> initialize(sharedFromThis());
+  m_ROIVector           -> initialize(sharedFromThis());
+  m_ROIModel            -> initialize(sharedFromThis());
+  m_ROICalculator       -> initialize(sharedFromThis());
+  m_AcquiredInt16Images -> initialize(sharedFromThis());
+  m_AcquiredInt32Images -> initialize(sharedFromThis());
 
   QxrdAcqCommonPtr acqp(m_Acquisition);
 

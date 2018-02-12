@@ -554,8 +554,8 @@ private:
 
   mutable QMutex         m_Mutex;
   QWaitCondition         m_ProcessWaiting;
-  QcepInt16ImageQueue    m_AcquiredInt16Images;
-  QcepInt32ImageQueue    m_AcquiredInt32Images;
+  QcepInt16ImageQueuePtr m_AcquiredInt16Images;
+  QcepInt32ImageQueuePtr m_AcquiredInt32Images;
   QAtomicInt             m_AcquiredCount;
 
   QxrdResultSerializer<QcepDoubleImageDataPtr>  m_CorrectedImages;
