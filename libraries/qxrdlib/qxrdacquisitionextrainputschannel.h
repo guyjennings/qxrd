@@ -12,6 +12,10 @@
 class QXRD_EXPORT QxrdAcquisitionExtraInputsChannel : public QcepObject
 {
   Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdAcquisitionExtraInputsChannel(QString name);
   static QxrdAcquisitionExtraInputsChannelPtr newAcquisitionExtraInputsChannel(int chnum);

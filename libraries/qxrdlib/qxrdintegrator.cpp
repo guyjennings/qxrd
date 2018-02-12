@@ -201,6 +201,8 @@ QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepDoubleImageDataPtr 
                                   QxrdPolarTransformWPtr(),
                                   m_CenterFinder));
 
+    cache -> initialize(sharedFromThis());
+
     m_IntegratorCache = cache;
   }
 

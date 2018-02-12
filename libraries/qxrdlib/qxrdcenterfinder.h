@@ -20,8 +20,13 @@ class QXRD_EXPORT QxrdCenterFinder : public QxrdDetectorGeometry
 {
   Q_OBJECT
 
+private:
+  typedef QxrdDetectorGeometry inherited;
+
 public:
   Q_INVOKABLE QxrdCenterFinder(QString name);
+  void initialize(QcepObjectWPtr parent);
+
   static QxrdCenterFinderPtr newCenterFinder();
   virtual ~QxrdCenterFinder();
 

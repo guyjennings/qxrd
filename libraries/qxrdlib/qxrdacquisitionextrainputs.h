@@ -80,7 +80,6 @@ public:
   QCEP_STRING_PROPERTY(DeviceName)
 
 private:
-  mutable QMutex              m_Mutex;
   QxrdAcqCommonWPtr           m_Acquisition;
   QVector<QxrdAcquisitionExtraInputsChannelPtr> m_Channels;
   QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;

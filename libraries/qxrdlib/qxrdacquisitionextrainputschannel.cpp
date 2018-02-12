@@ -13,7 +13,7 @@ QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputsChannel::newAcqui
 }
 
 QxrdAcquisitionExtraInputsChannel::QxrdAcquisitionExtraInputsChannel(QString name) :
-  QcepObject(name),
+  inherited(name),
   m_ChannelNumber(this, "channelNumber", -1, "Extra Input Channel Number"),
   m_Enabled(this, "enabled", 1, "Enabled?"),
   m_Plotted(this, "plotted", 1, "Plotted?"),
@@ -66,16 +66,12 @@ QxrdAcquisitionExtraInputsWPtr QxrdAcquisitionExtraInputsChannel::extraInputs()
 
 void QxrdAcquisitionExtraInputsChannel::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::readSettings(settings);
+  inherited::readSettings(settings);
 }
 
 void QxrdAcquisitionExtraInputsChannel::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 }
 
 QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()

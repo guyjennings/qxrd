@@ -3,8 +3,13 @@
 #include "qmath.h"
 
 QxrdDetectorGeometry::QxrdDetectorGeometry(QString name) :
-    QcepObject(name)
+    inherited(name)
 {
+}
+
+void QxrdDetectorGeometry::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 /* geometry code taken from "areaDiffractionMachine" */

@@ -35,7 +35,7 @@
 # endif /* LINSOLVERS_RETAIN_MEMORY */
 
 QxrdCenterFinder::QxrdCenterFinder(QString name)
-  : QxrdDetectorGeometry(name),
+  : inherited(name),
     m_Center(this, "center", QPointF(0,0), "Center"),
     m_CenterStep(this, "centerStep", 1, "Center Step"),
     m_DetectorXPixelSize(this, "detectorXPixelSize", 200, "Detector X Pixels (um)"),
@@ -95,6 +95,11 @@ QxrdCenterFinder::QxrdCenterFinder(QString name)
   connect(prop_TiltPlaneRotation(), &QcepDoubleProperty::valueChanged, this, &QxrdCenterFinder::parameterChanged, Qt::DirectConnection);
 }
 
+void QxrdCenterFinder::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}
+
 QxrdCenterFinderPtr QxrdCenterFinder::newCenterFinder()
 {
   QxrdCenterFinderPtr cf(new QxrdCenterFinder("centerFinder"));
@@ -152,16 +157,12 @@ QcepDoubleImageDataPtr QxrdCenterFinder::newData()
 
 void QxrdCenterFinder::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QxrdDetectorGeometry::writeSettings(settings);
+  inherited::writeSettings(settings);
 }
 
 void QxrdCenterFinder::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QxrdDetectorGeometry::readSettings(settings);
+  inherited::readSettings(settings);
 }
 
 void QxrdCenterFinder::onCenterChanged(QPointF pt)
@@ -200,14 +201,14 @@ QPointF QxrdCenterFinder::getXY(double tth, double chi)
 
   if (get_ImplementTilt()) {
 
-    QxrdDetectorGeometry::getXY(get_Center().x(), get_Center().y(), get_DetectorDistance(),
+    inherited::getXY(get_Center().x(), get_Center().y(), get_DetectorDistance(),
           get_Energy(),
           convertTwoThetaToQ(tth, convertEnergyToWavelength(get_Energy())), chi,
           get_DetectorXPixelSize(), get_DetectorYPixelSize(),
           rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
           &x, &y);
   } else {
-    QxrdDetectorGeometry::getXY(get_Center().x(), get_Center().y(), get_DetectorDistance(),
+    inherited::getXY(get_Center().x(), get_Center().y(), get_DetectorDistance(),
           get_Energy(),
           convertTwoThetaToQ(tth, convertEnergyToWavelength(get_Energy())), chi,
           get_DetectorXPixelSize(), get_DetectorYPixelSize(),

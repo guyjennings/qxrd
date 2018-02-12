@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qcepproperty.h"
 
 #include "qcepimagedata-ptr.h"
@@ -19,9 +19,13 @@
 #include "qxrdscriptengine-ptr.h"
 #include <QScriptValue>
 
-class QXRD_EXPORT QxrdIntegratorCache : public QObject
+class QXRD_EXPORT QxrdIntegratorCache : public QcepObject
 {
   Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
   QxrdIntegratorCache(QxrdIntegratorWPtr integ,
                       QxrdPolarTransformWPtr xform,
@@ -100,9 +104,9 @@ private:
   double m_SelfNormalizationMaximum;
 
 public:
-    QcepDataObjectPtr performIntegration(QcepDoubleImageDataPtr dimg,
-                                             QcepMaskDataPtr mask,
-                                             int normalize);
+  QcepDataObjectPtr performIntegration(QcepDoubleImageDataPtr dimg,
+                                       QcepMaskDataPtr mask,
+                                       int normalize);
 
 private:
   double getTTH(double x, double y);
@@ -126,8 +130,8 @@ private:
   QAtomicInt             m_CacheFillLevel;
   QAtomicInt             m_CacheFullLevel;
   bool                   m_HasChi;
-  QcepUInt32ImageDataPtr  m_CachedRadialBinNumbers;
-  QcepUInt32ImageDataPtr  m_CachedPolarBinNumbers;
+  QcepUInt32ImageDataPtr m_CachedRadialBinNumbers;
+  QcepUInt32ImageDataPtr m_CachedPolarBinNumbers;
   QcepDoubleImageDataPtr m_CachedNormalization;
   QcepDoubleImageDataPtr m_CachedRadialValues;
   QcepDoubleImageDataPtr m_CachedPolarValues;

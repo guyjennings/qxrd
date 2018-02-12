@@ -9,8 +9,13 @@
 class QXRD_EXPORT QxrdDetectorGeometry : public QcepObject
 {
   Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdDetectorGeometry(QString name);
+  void initialize(QcepObjectWPtr parent);
 
 public slots:
   static double convertEnergyToWavelength(double energy);

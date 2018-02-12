@@ -10,7 +10,7 @@
 #include <QTimer>
 
 QxrdAcquisitionExtraInputs::QxrdAcquisitionExtraInputs(QString name) :
-  QcepObject(name),
+  inherited(name),
   m_Enabled(this, "enabled", 0, "Extra Inputs Enabled?"),
   m_Skipping(this, "skipping", 0, "Skipping initial readout?"),
   m_SampleRate(this, "sampleRate", 1000.0, "Sampling Rate for Extra Inputs"),
@@ -99,6 +99,8 @@ void QxrdAcquisitionExtraInputs::readSettings(QSettings *settings)
           qSharedPointerDynamicCast<QxrdAcquisitionExtraInputsChannel>(obj);
 
       if (chan) {
+        chan->setObjectName(tr("channel-%1").arg(i));
+
         appendChannel(chan);
       }
     }

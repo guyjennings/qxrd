@@ -28,7 +28,7 @@ QxrdIntegratorCache::QxrdIntegratorCache
   (QxrdIntegratorWPtr integ,
    QxrdPolarTransformWPtr xform,
    QxrdCenterFinderWPtr cf) :
-  QObject(),
+  inherited("integratorCache"),
   m_ThreadCount(QThreadPool::globalInstance()->maxThreadCount()),
   m_Oversample(1),
   m_RadialStep(0.001),
@@ -710,27 +710,32 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
                                                                    m_NCols*m_Oversample,
                                                                    m_NRows*m_Oversample,
                                                                    QcepAllocator::NullIfNotAvailable);
+          m_CachedRadialBinNumbers -> initialize(sharedFromThis());
 
           m_CachedRadialValues = QcepAllocator::newDoubleImage("cachedRadialValues",
                                                                m_NCols*m_Oversample,
                                                                m_NRows*m_Oversample,
                                                                QcepAllocator::NullIfNotAvailable);
+          m_CachedRadialValues -> initialize(sharedFromThis());
 
           m_CachedNormalization = QcepAllocator::newDoubleImage("cachedNormalization",
                                                                 m_NCols*m_Oversample,
                                                                 m_NRows*m_Oversample,
                                                                 QcepAllocator::NullIfNotAvailable);
+          m_CachedNormalization -> initialize(sharedFromThis());
 
           if (m_PolarTransform) {
             m_CachedPolarBinNumbers = QcepAllocator::newInt32Image("cachedPolarBins",
                                                                    m_NCols*m_Oversample,
                                                                    m_NRows*m_Oversample,
                                                                    QcepAllocator::NullIfNotAvailable);
+            m_CachedPolarBinNumbers -> initialize(sharedFromThis());
 
             m_CachedPolarValues = QcepAllocator::newDoubleImage("cachedPolarValues",
                                                                 m_NCols*m_Oversample,
                                                                 m_NRows*m_Oversample,
                                                                 QcepAllocator::NullIfNotAvailable);
+            m_CachedPolarValues -> initialize(sharedFromThis());
           }
 
           if (m_CachedRadialBinNumbers && m_CachedNormalization) {

@@ -33,6 +33,10 @@ QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
 void QxrdGenerateTestImage::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
+
+  if (m_Geometry) {
+    m_Geometry -> initialize(sharedFromThis());
+  }
 }
 
 void QxrdGenerateTestImage::setProcessor(QxrdProcessorWPtr proc)
