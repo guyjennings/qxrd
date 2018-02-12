@@ -20,7 +20,7 @@
 #include "qxrdroimodel-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qcepintegrateddata-ptr.h"
-#include "qxrdresultserializer.h"
+#include "qxrdresultserializer-ptr.h"
 #include "qxrdhistogramdata-ptr.h"
 #include "qxrdpolartransform-ptr.h"
 #include "qxrdpolarnormalization-ptr.h"
@@ -558,9 +558,9 @@ private:
   QcepInt32ImageQueuePtr m_AcquiredInt32Images;
   QAtomicInt             m_AcquiredCount;
 
-  QxrdResultSerializer<QcepDoubleImageDataPtr>  m_CorrectedImages;
-  QxrdResultSerializer<QcepIntegratedDataPtr>   m_IntegratedData;
-  QxrdResultSerializer<QxrdHistogramDataPtr>    m_HistogramData;
+  QxrdDoubleSerializerPtr     m_CorrectedImages;
+  QxrdIntegratedSerializerPtr m_IntegratedData;
+  QxrdHistogramSerializerPtr  m_HistogramData;
 };
 
 #endif // QXRDPROCESSOR_H

@@ -34,6 +34,7 @@
 #include <QPainter>
 #include <QtConcurrentRun>
 #include <QDirIterator>
+#include "qxrdresultserializer.h"
 
 //TODO: emit data available signals when appropriate...
 QxrdProcessor::QxrdProcessor(QString name) :
@@ -110,10 +111,10 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_AcquiredInt16Images(),
   m_AcquiredInt32Images(),
   m_AcquiredCount(0),
-  m_CorrectedImages(prop_CorrectionQueueLength()),
-  m_IntegratedData(prop_IntegrationQueueLength()),
+  m_CorrectedImages(),
+  m_IntegratedData(),
   //  m_ROIData(NULL, this),
-  m_HistogramData(prop_HistogramQueueLength())
+  m_HistogramData()
 {
   m_MaskStack = QxrdMaskStackPtr(
         new QxrdMaskStack("maskStack"));
@@ -156,10 +157,28 @@ QxrdProcessor::QxrdProcessor(QString name) :
       QcepInt32ImageQueuePtr(
         new QcepInt32ImageQueue("acquiredInt32Images"));
 
-  connect(&m_CorrectedImages, &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onCorrectedImageAvailable);
-  connect(&m_IntegratedData,  &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onIntegratedDataAvailable);
+  m_CorrectedImages =
+      QxrdDoubleSerializerPtr(
+        new QxrdDoubleSerializer("correctedImagesSerializer", prop_CorrectionQueueLength()));
+
+  m_IntegratedData =
+      QxrdIntegratedSerializerPtr(
+        new QxrdIntegratedSerializer("integratedDataSerializer", prop_IntegrationQueueLength()));
+
+  m_HistogramData =
+      QxrdHistogramSerializerPtr(
+        new QxrdHistogramSerializer("histogramDataSerializer", prop_HistogramQueueLength()));
+
+  connect(m_CorrectedImages.data(), &QxrdResultSerializerBase::resultAvailable,
+          this,                     &QxrdProcessor::onCorrectedImageAvailable);
+
+  connect(m_IntegratedData.data(),  &QxrdResultSerializerBase::resultAvailable,
+          this,                     &QxrdProcessor::onIntegratedDataAvailable);
+
 //  connect(&m_ROIData,         &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onROIDataAvailable);
-  connect(&m_HistogramData,   &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onHistogramDataAvailable);
+
+  connect(m_HistogramData.data(),   &QxrdResultSerializerBase::resultAvailable,
+          this,                     &QxrdProcessor::onHistogramDataAvailable);
 
   connect(prop_SaveRawImages(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
   connect(prop_PerformDarkSubtraction(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
@@ -213,6 +232,9 @@ void QxrdProcessor::initialize(QcepObjectWPtr parent)
   m_ROICalculator       -> initialize(sharedFromThis());
   m_AcquiredInt16Images -> initialize(sharedFromThis());
   m_AcquiredInt32Images -> initialize(sharedFromThis());
+  m_CorrectedImages     -> initialize(sharedFromThis());
+  m_IntegratedData      -> initialize(sharedFromThis());
+  m_HistogramData       -> initialize(sharedFromThis());
 
   QxrdAcqCommonPtr acqp(m_Acquisition);
 
@@ -2631,7 +2653,7 @@ void QxrdProcessor::integrateData(QString name)
 
     img -> loadMetaData();
 
-    m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdProcessor::integrateImage,
+    m_IntegratedData -> enqueue(QtConcurrent::run(this, &QxrdProcessor::integrateImage,
                                                img, mask(),
                                                cf -> get_Center().x(),
                                                cf -> get_Center().y()));
@@ -2794,7 +2816,7 @@ void QxrdProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDat
   typedef QcepDoubleImageDataPtr (QxrdProcessor::*MFType)(QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepMaskDataPtr, QcepMaskDataPtr);
   MFType p = &QxrdProcessor::correctDoubleImage;
 
-  m_CorrectedImages.enqueue(QtConcurrent::run(this,
+  m_CorrectedImages -> enqueue(QtConcurrent::run(this,
                                               p,
                                               corrected, image, dark(), mask(), overflow));
 }
@@ -2811,7 +2833,7 @@ void QxrdProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDat
   typedef QcepDoubleImageDataPtr (QxrdProcessor::*MFType)(QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepMaskDataPtr, QList<double>);
   MFType p = &QxrdProcessor::correctDoubleImage;
 
-  m_CorrectedImages.enqueue(QtConcurrent::run(this,
+  m_CorrectedImages -> enqueue(QtConcurrent::run(this,
                                               p,
                                               corrected, image, dark(), overflow, v));
 }
@@ -2846,20 +2868,20 @@ QcepDoubleVector QxrdProcessor::doCalculateROICounts(QcepImageDataBasePtr img)
 
 void QxrdProcessor::onCorrectedImageAvailable()
 {
-  QcepDoubleImageDataPtr img = m_CorrectedImages.dequeue();
+  QcepDoubleImageDataPtr img = m_CorrectedImages -> dequeue();
   QcepMaskDataPtr mask = (img ? img->mask() : QcepMaskDataPtr());
   QxrdCenterFinderPtr cf(centerFinder());
 
   if (img && cf) {
-    m_IntegratedData.enqueue(QtConcurrent::run(this, &QxrdProcessor::integrateImage,
+    m_IntegratedData -> enqueue(QtConcurrent::run(this, &QxrdProcessor::integrateImage,
                                                img, mask,
                                                cf -> get_Center().x(),
                                                cf -> get_Center().y()));
 
-//    m_ROIData.enqueue(QtConcurrent::run(this, &QxrdProcessor::calculateROI,
+//    m_ROIData -> enqueue(QtConcurrent::run(this, &QxrdProcessor::calculateROI,
 //                                        img, mask));
 
-    m_HistogramData.enqueue(QtConcurrent::run(this, &QxrdProcessor::calculateHistogram,
+    m_HistogramData -> enqueue(QtConcurrent::run(this, &QxrdProcessor::calculateHistogram,
                                               img, mask));
   }
 }
@@ -2870,7 +2892,7 @@ void QxrdProcessor::onIntegratedDataAvailable()
     printMessage(tr("QxrdProcessor::onIntegratedDataAvailable"));
   }
 
-  QcepIntegratedDataPtr integ = m_IntegratedData.dequeue();
+  QcepIntegratedDataPtr integ = m_IntegratedData -> dequeue();
 
   if (integ) {
     writeOutputScan(integ);
@@ -2921,7 +2943,7 @@ void QxrdProcessor::onHistogramDataAvailable()
     printMessage(tr("QxrdProcessor::onHistogramDataAvailable"));
   }
 
-  QxrdHistogramDataPtr histData = m_HistogramData.dequeue();
+  QxrdHistogramDataPtr histData = m_HistogramData -> dequeue();
 }
 
 //TODO: consider if this should be changed...
@@ -2951,7 +2973,7 @@ void QxrdProcessor::integrateSaveAndDisplay()
 
     QxrdIntegrator *integ = integrator().data();
 
-    m_IntegratedData.enqueue(
+    m_IntegratedData -> enqueue(
           QtConcurrent::run(integ,
                             &QxrdIntegrator::performIntegration,
                             dimg, mask()));
@@ -3200,7 +3222,7 @@ void QxrdProcessor::slicePolygon(QVector<QPointF> poly)
   QxrdIntegrator *integ = m_Integrator.data();
 
   if (dimg) {
-    m_IntegratedData.enqueue(
+    m_IntegratedData -> enqueue(
           QtConcurrent::run(integ,
                             &QxrdIntegrator::slicePolygon,
                             dimg, poly, 0));

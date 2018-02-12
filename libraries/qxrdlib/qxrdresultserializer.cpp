@@ -1,8 +1,15 @@
 #include "qxrdresultserializer.h"
 #include "qcepmutexlocker.h"
+#include "qcepimagedata.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepintegrateddata.h"
+#include "qcepintegrateddata-ptr.h"
+#include "qxrdhistogramdata.h"
+#include "qxrdhistogramdata-ptr.h"
 
-QxrdResultSerializerBase::QxrdResultSerializerBase() :
-    QcepObject("resultSerializer")
+QxrdResultSerializerBase::QxrdResultSerializerBase(QString name, QcepIntProperty *ctr)
+  : QcepObject(name),
+    m_Counter(ctr)
 {
 }
 
@@ -10,11 +17,9 @@ QxrdResultSerializerBase::~QxrdResultSerializerBase()
 {
 }
 
-
 template <typename T>
-QxrdResultSerializer<T>::QxrdResultSerializer(QcepIntProperty *ctr)
- : QxrdResultSerializerBase(),
-   m_Counter(ctr)
+QxrdResultSerializer<T>::QxrdResultSerializer(QString name, QcepIntProperty *ctr)
+ : QxrdResultSerializerBase(name, ctr)
 {
   connect(&m_Watcher, &QFutureWatcherBase::finished, this, &QxrdResultSerializerBase::resultAvailable);
 }
@@ -67,12 +72,20 @@ int QxrdResultSerializer<T>::count() const
   return m_Results.size();
 }
 
-#include "qcepimagedata.h"
-#include "qcepimagedata-ptr.h"
-#include "qcepintegrateddata.h"
-#include "qcepintegrateddata-ptr.h"
-#include "qxrdhistogramdata.h"
-#include "qxrdhistogramdata-ptr.h"
+QxrdDoubleSerializer::QxrdDoubleSerializer(QString name, QcepIntProperty *ctr)
+  : QxrdResultSerializer<QcepDoubleImageDataPtr>(name, ctr)
+{
+}
+
+QxrdIntegratedSerializer::QxrdIntegratedSerializer(QString name, QcepIntProperty *ctr)
+  : QxrdResultSerializer<QcepIntegratedDataPtr>(name, ctr)
+{
+}
+
+QxrdHistogramSerializer::QxrdHistogramSerializer(QString name, QcepIntProperty *ctr)
+  : QxrdResultSerializer<QxrdHistogramDataPtr>(name, ctr)
+{
+}
 
 template class QxrdResultSerializer<QcepDoubleImageDataPtr>;
 template class QxrdResultSerializer<QcepIntegratedDataPtr>;
