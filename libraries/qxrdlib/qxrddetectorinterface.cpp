@@ -9,7 +9,10 @@ QxrdDetectorInterface::QxrdDetectorInterface(QString name)
 void QxrdDetectorInterface::ping()
 {
   static QcepDoubleImageDataPtr img =
-      QcepAllocator::newDoubleImage("junk", 2048, 2048, QcepAllocator::AlwaysAllocate);
+      QcepAllocator::newDoubleImage(sharedFromThis(),
+                                    "junk",
+                                    2048, 2048,
+                                    QcepAllocator::AlwaysAllocate);
 
   emit imageDataAvailable(img);
 }
@@ -17,7 +20,10 @@ void QxrdDetectorInterface::ping()
 QcepDoubleImageDataPtr QxrdDetectorInterface::newImage()
 {
   static QcepDoubleImageDataPtr img =
-      QcepAllocator::newDoubleImage("junk", 2048, 2048, QcepAllocator::AlwaysAllocate);
+      QcepAllocator::newDoubleImage(sharedFromThis(),
+                                    "junk",
+                                    2048, 2048,
+                                    QcepAllocator::AlwaysAllocate);
 
   printMessage(tr("QxrdDetectorInterface::newImage"));
 

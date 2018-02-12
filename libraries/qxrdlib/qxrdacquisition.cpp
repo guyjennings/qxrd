@@ -1228,9 +1228,10 @@ void QxrdAcquisition::executeAcquisition(QxrdAcquisitionParameterPackPtr parmsp)
             int nRows = det->get_NRows();
 
             if (res[d][p][0] == NULL) {
-              QcepUInt32ImageDataPtr nres = QcepAllocator::newInt32Image(tr("acc-%1-%2").arg(d).arg(p),
-                                                                        nCols, nRows,
-                                                                        QcepAllocator::AllocateFromReserve);
+              QcepUInt32ImageDataPtr nres = QcepAllocator::newInt32Image(sharedFromThis(),
+                                                                         tr("acc-%1-%2").arg(d).arg(p),
+                                                                         nCols, nRows,
+                                                                         QcepAllocator::AllocateFromReserve);
 
               res[d][p][0] = nres;
 
@@ -1257,7 +1258,8 @@ void QxrdAcquisition::executeAcquisition(QxrdAcquisitionParameterPackPtr parmsp)
             }
 
             if (ovf[d][p][0] == NULL) {
-              QcepMaskDataPtr novf = QcepAllocator::newMask(tr("mask-%1-%2").arg(d).arg(p),
+              QcepMaskDataPtr novf = QcepAllocator::newMask(sharedFromThis(),
+                                                            tr("mask-%1-%2").arg(d).arg(p),
                                                             nCols, nRows, 0,
                                                             QcepAllocator::AllocateFromReserve);
               ovf[d][p][0] = novf;
@@ -1486,13 +1488,15 @@ void QxrdAcquisition::doAcquireDark()
         dets.append(det);
         procs.append(det->processor());
 
-        QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(tr("dark-%1").arg(i),
-                                                                 det->get_NCols(), det->get_NRows(),
-                                                                 QcepAllocator::AllocateFromReserve);
+        QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                                   tr("dark-%1").arg(i),
+                                                                   det->get_NCols(), det->get_NRows(),
+                                                                   QcepAllocator::AllocateFromReserve);
 
         res.append(img);
 
-        QcepMaskDataPtr msk = QcepAllocator::newMask(tr("mask-%1").arg(i),
+        QcepMaskDataPtr msk = QcepAllocator::newMask(sharedFromThis(),
+                                                     tr("mask-%1").arg(i),
                                                      det->get_NCols(), det->get_NRows(),0,
                                                      QcepAllocator::AllocateFromReserve);
 

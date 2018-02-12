@@ -129,7 +129,8 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
     int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
     int frame = g_FrameCounter % 8;
 
-    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(tr("areadet-%1").arg(frame),
+    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
+                                                                tr("areadet-%1").arg(frame),
                                                                 nCols, nRows,
                                                                 QcepAllocator::AllocateFromReserve);
 

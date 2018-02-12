@@ -98,7 +98,11 @@ void QxrdGenerateTestImage::appendRing(double tth, double intensity, double widt
 void QxrdGenerateTestImage::generateImage()
 {
   QcepDoubleImageDataPtr img =
-      QcepAllocator::newDoubleImage("testImage", get_NCols(), get_NRows(), QcepAllocator::NullIfNotAvailable);
+      QcepAllocator::newDoubleImage(sharedFromThis(),
+                                    "testImage",
+                                    get_NCols(),
+                                    get_NRows(),
+                                    QcepAllocator::NullIfNotAvailable);
 
   if (img) {
     img->clear();
@@ -165,57 +169,65 @@ void QxrdGenerateTestImage::generateImage()
 
 void QxrdGenerateTestImage::generateTTHImage()
 {
-  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage("testImage", get_NCols(), get_NRows(), QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                             "testImage",
+                                                             get_NCols(),
+                                                             get_NRows(),
+                                                             QcepAllocator::NullIfNotAvailable);
 
   if (img) {
-  img->clear();
+    img -> clear();
 
-  int col, row, ncols = get_NCols(), nrows = get_NRows();
+    int col, row, ncols = get_NCols(), nrows = get_NRows();
 
-  double xc = get_CenterX();
-  double yc = get_CenterY();
-  double distance = get_Distance();
-  double pixWidth = get_PixelWidth();
-  double pixHeight = get_PixelHeight();
-  double alpha = get_Alpha();
-  double cos_alpha = cos(alpha*M_PI/180.0);
-  double sin_alpha = sin(alpha*M_PI/180.0);
-  double beta = get_Beta();
-  double cos_beta = cos(beta*M_PI/180.0);
-  double sin_beta = sin(beta*M_PI/180.0);
-  double rotation = get_Gamma();
-  double cos_rotation = cos(rotation*M_PI/180.0);
-  double sin_rotation = sin(rotation*M_PI/180.0);
+    double xc = get_CenterX();
+    double yc = get_CenterY();
+    double distance = get_Distance();
+    double pixWidth = get_PixelWidth();
+    double pixHeight = get_PixelHeight();
+    double alpha = get_Alpha();
+    double cos_alpha = cos(alpha*M_PI/180.0);
+    double sin_alpha = sin(alpha*M_PI/180.0);
+    double beta = get_Beta();
+    double cos_beta = cos(beta*M_PI/180.0);
+    double sin_beta = sin(beta*M_PI/180.0);
+    double rotation = get_Gamma();
+    double cos_rotation = cos(rotation*M_PI/180.0);
+    double sin_rotation = sin(rotation*M_PI/180.0);
 
-  double twoTheta, chi;
+    double twoTheta, chi;
 
-  for (row = 0; row < nrows; row++) {
-    for (col = 0; col < ncols; col++) {
-      m_Geometry -> getTwoThetaChi(xc,yc,distance,col,row,
-                                   pixWidth, pixHeight,
-                                   rotation, cos_beta, sin_beta,
-                                   cos_alpha, sin_alpha,
-                                   cos_rotation, sin_rotation,
-                                   &twoTheta, &chi);
+    for (row = 0; row < nrows; row++) {
+      for (col = 0; col < ncols; col++) {
+        m_Geometry -> getTwoThetaChi(xc,yc,distance,col,row,
+                                     pixWidth, pixHeight,
+                                     rotation, cos_beta, sin_beta,
+                                     cos_alpha, sin_alpha,
+                                     cos_rotation, sin_rotation,
+                                     &twoTheta, &chi);
 
-      img->setValue(col,row,twoTheta);
+        img->setValue(col,row,twoTheta);
+      }
     }
-  }
 
-  QxrdProcessorPtr proc(m_Processor);
+    QxrdProcessorPtr proc(m_Processor);
 
-  if (proc) {
-    proc -> newData(img);
-  }
+    if (proc) {
+      proc -> newData(img);
+    }
   }
 }
 
 void QxrdGenerateTestImage::generateChiImage()
 {
-  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage("testImage", get_NCols(), get_NRows(), QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                             "testImage",
+                                                             get_NCols(),
+                                                             get_NRows(),
+                                                             QcepAllocator::NullIfNotAvailable);
 
   if (img) {
-    img->clear();
+    img -> clear();
 
     int col, row, ncols = get_NCols(), nrows = get_NRows();
 

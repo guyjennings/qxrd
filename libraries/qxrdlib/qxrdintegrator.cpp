@@ -323,11 +323,12 @@ QcepIntegratedDataPtr QxrdIntegrator::slicePolygon(QcepDoubleImageDataPtr image,
   QThread::currentThread()->setObjectName("slicePolygon");
 
   if (image) {
-    integ = QcepAllocator::newIntegratedData(image->get_Name(), 0, QcepAllocator::NullIfNotAvailable);
+    integ = QcepAllocator::newIntegratedData(sharedFromThis(),
+                                             image->get_Name(),
+                                             0,
+                                             QcepAllocator::NullIfNotAvailable);
 
     if (integ) {
-      integ -> initialize(sharedFromThis());
-
       double length = 0;
 
       if (poly.size() >= 2) {

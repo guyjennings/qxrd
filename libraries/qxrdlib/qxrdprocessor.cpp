@@ -98,7 +98,7 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_CalculateROICounts(this, "calculateROICounts", true, "Calculate ROI Counts"),
   m_DisplayROIBorders(this, "displayROIBorders", true, "Display ROIs in image"),
   m_RoiCounts(this, "roiCounts", QcepDoubleVector(), "ROI Counts"),
-  m_Data(QcepAllocator::newDoubleImage("data", 2048, 2048, QcepAllocator::WaitTillAvailable)),
+  m_Data(NULL),
   m_Dark(NULL),
   m_BadPixels(NULL),
   m_GainMap(NULL),
@@ -184,6 +184,11 @@ QxrdProcessor::~QxrdProcessor()
 void QxrdProcessor::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
+
+  m_Data = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                         "data",
+                                         2048, 2048,
+                                         QcepAllocator::WaitTillAvailable);
 
   m_Experiment = QxrdExperiment::findExperiment(parent);
   m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
@@ -523,7 +528,10 @@ void QxrdProcessor::loadData(QString name)
           tr("QxrdProcessor::loadData(%1)").arg(name));
   }
 
-  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("data", 0,0, QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                             "data",
+                                                             0,0,
+                                                             QcepAllocator::NullIfNotAvailable);
 
   QString path = filePathInDataDirectory(name);
 
@@ -762,7 +770,10 @@ void QxrdProcessor::loadDark(QString name)
   }
 
   QcepDoubleImageDataPtr res =
-      QcepAllocator::newDoubleImage("dark", 0,0, QcepAllocator::NullIfNotAvailable);
+      QcepAllocator::newDoubleImage(sharedFromThis(),
+                                    "dark",
+                                    0,0,
+                                    QcepAllocator::NullIfNotAvailable);
 
   QString path = filePathInDataDirectory(name);
 
@@ -840,7 +851,8 @@ void QxrdProcessor::newDarkInt16(QcepUInt16ImageDataWPtr imageW)
 
   if (image) {
     QcepDoubleImageDataPtr d
-        = QcepAllocator::newDoubleImage("dark",
+        = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "dark",
                                         image->get_Width(),
                                         image->get_Height(),
                                         QcepAllocator::NullIfNotAvailable);
@@ -860,7 +872,8 @@ void QxrdProcessor::newDarkInt32(QcepUInt32ImageDataWPtr imageW)
 
   if (image) {
     QcepDoubleImageDataPtr d
-        = QcepAllocator::newDoubleImage("dark",
+        = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "dark",
                                         image->get_Width(),
                                         image->get_Height(),
                                         QcepAllocator::NullIfNotAvailable);
@@ -883,7 +896,10 @@ void QxrdProcessor::onDarkImagePathChanged(QString newPath)
   } else {
     printMessage(tr("Load Dark Image from %1").arg(newPath));
 
-    QcepDoubleImageDataPtr dark = QcepAllocator::newDoubleImage("dark", 0,0, QcepAllocator::NullIfNotAvailable);
+    QcepDoubleImageDataPtr dark = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                                "dark",
+                                                                0,0,
+                                                                QcepAllocator::NullIfNotAvailable);
 
     if (dark && dark -> readImage(newPath)) {
       m_Dark = dark;
@@ -900,7 +916,11 @@ void QxrdProcessor::loadMask(QString name)
   }
 
   QcepMaskDataPtr res =
-      QcepAllocator::newMask("mask", 0,0, 0, QcepAllocator::NullIfNotAvailable);
+      QcepAllocator::newMask(sharedFromThis(),
+                             "mask",
+                             0,0,
+                             0,
+                             QcepAllocator::NullIfNotAvailable);
 
   if (res) {
     QString path = filePathInDataDirectory(name);
@@ -980,7 +1000,10 @@ void QxrdProcessor::loadBadPixels(QString name)
     printMessage(tr("QxrdProcessor::loadBadPixels(%1)").arg(name));
   }
 
-  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("bad", 0,0, QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                             "bad",
+                                                             0,0,
+                                                             QcepAllocator::NullIfNotAvailable);
 
   QString path = filePathInDataDirectory(name);
 
@@ -1039,7 +1062,10 @@ void QxrdProcessor::onBadPixelsPathChanged(QString newPath)
   } else {
     printMessage(tr("Load Bad Pixels from %1").arg(newPath));
 
-    QcepDoubleImageDataPtr bad = QcepAllocator::newDoubleImage("bad", 0,0, QcepAllocator::NullIfNotAvailable);
+    QcepDoubleImageDataPtr bad = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                               "bad",
+                                                               0,0,
+                                                               QcepAllocator::NullIfNotAvailable);
 
     if (bad && bad->readImage(newPath)) {
       m_BadPixels = bad;
@@ -1053,7 +1079,10 @@ void QxrdProcessor::loadGainMap(QString name)
     printMessage(tr("QxrdProcessor::loadGainMap(%1)").arg(name));
   }
 
-  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("gain", 0,0, QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                             "gain",
+                                                             0,0,
+                                                             QcepAllocator::NullIfNotAvailable);
 
   QString path = filePathInDataDirectory(name);
 
@@ -1336,7 +1365,10 @@ void QxrdProcessor::fixupBadBackgroundSubtraction(QString imagePattern, int nImg
 {
   QDirIterator imagePaths(dataDirectory(), QStringList(imagePattern));
 
-  QcepDoubleImageDataPtr dark = QcepAllocator::newDoubleImage("dark", 0,0, QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr dark = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                              "dark",
+                                                              0,0,
+                                                              QcepAllocator::NullIfNotAvailable);
   QString path = filePathInDataDirectory(darkPath);
 
   if (dark && dark->readImage(path)) {
@@ -1350,7 +1382,10 @@ void QxrdProcessor::fixupBadBackgroundSubtraction(QString imagePattern, int nImg
       QString imagePath=imagePaths.next();
 
       QString path = filePathInDataDirectory(imagePath);
-      QcepDoubleImageDataPtr image = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+      QcepDoubleImageDataPtr image = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                                   "image",
+                                                                   0,0,
+                                                                   QcepAllocator::NullIfNotAvailable);
 
       if (image && image->readImage(path)) {
         image->loadMetaData();
@@ -1398,7 +1433,11 @@ void QxrdProcessor::idleInt16Image(QcepUInt16ImageDataPtr image, bool liveView)
     }
 
     QcepDoubleImageDataPtr corrected =
-        QcepAllocator::newDoubleImage("idle", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
+        QcepAllocator::newDoubleImage(sharedFromThis(),
+                                      "idle",
+                                      image->get_Width(),
+                                      image->get_Height(),
+                                      QcepAllocator::AlwaysAllocate);
     QcepDoubleImageDataPtr d      = dark();
 
     corrected->copyFrom(image);
@@ -1443,7 +1482,8 @@ QcepImageDataBasePtr QxrdProcessor::doDarkSubtraction(QcepImageDataBasePtr img)
 
     double ratio = ((double) nres)/((double) ndrk);
 
-    QcepDoubleImageDataPtr result = QcepAllocator::newDoubleImage("image",
+    QcepDoubleImageDataPtr result = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                                  "image",
                                                                   width, height,
                                                                   QcepAllocator::NullIfNotAvailable);
 
@@ -2268,7 +2308,8 @@ QxrdMaskStackWPtr QxrdProcessor::maskStack() const
 void QxrdProcessor::newEmptyMask()
 {
 
-  QcepMaskDataPtr m = QcepAllocator::newMask("mask",
+  QcepMaskDataPtr m = QcepAllocator::newMask(sharedFromThis(),
+                                             "mask",
                                              newMaskWidth(), newMaskHeight(), 1,
                                              QcepAllocator::NullIfNotAvailable);
 
@@ -2285,7 +2326,8 @@ void QxrdProcessor::newEmptyMask()
 
 void QxrdProcessor::duplicateMask()
 {
-  QcepMaskDataPtr m =  QcepAllocator::newMask("mask",
+  QcepMaskDataPtr m =  QcepAllocator::newMask(sharedFromThis(),
+                                              "mask",
                                               newMaskWidth(), newMaskHeight(), 1,
                                               QcepAllocator::NullIfNotAvailable);
 
@@ -2564,7 +2606,10 @@ void QxrdProcessor::integrateData(QString name)
   QThread::currentThread()->setObjectName("integrateData");
 
   QcepDoubleImageDataPtr img =
-      QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+      QcepAllocator::newDoubleImage(sharedFromThis(),
+                                    "image",
+                                    0,0,
+                                    QcepAllocator::NullIfNotAvailable);
 
   QString path = filePathInDataDirectory(name);
 
@@ -2641,7 +2686,10 @@ void QxrdProcessor::processNormalizedFile(QString path, double v1, double v2)
 
 void QxrdProcessor::processNormalizedFile(QString name, QList<double> v)
 {
-  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                             "image",
+                                                             0,0,
+                                                             QcepAllocator::NullIfNotAvailable);
 
   QString path = filePathInDataDirectory(name);
 
@@ -2678,7 +2726,10 @@ void QxrdProcessor::setFileNormalization(QString path, double v1, double v2)
 
 void QxrdProcessor::setFileNormalization(QString name, QList<double> v)
 {
-  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                             "image",
+                                                             0,0,
+                                                             QcepAllocator::NullIfNotAvailable);
 
   QString path = filePathInDataDirectory(name);
 
@@ -2697,7 +2748,10 @@ void QxrdProcessor::setFileNormalization(QString name, QList<double> v)
 
 void QxrdProcessor::processData(QString name)
 {
-  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr res = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                             "image",
+                                                             0,0,
+                                                             QcepAllocator::NullIfNotAvailable);
 
   QString path = filePathInDataDirectory(name);
 
@@ -2721,7 +2775,11 @@ void QxrdProcessor::processData(QString name)
 void QxrdProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow)
 {
   QcepDoubleImageDataPtr corrected =
-      QcepAllocator::newDoubleImage("acquired", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
+      QcepAllocator::newDoubleImage(sharedFromThis(),
+                                    "acquired",
+                                    image->get_Width(),
+                                    image->get_Height(),
+                                    QcepAllocator::AlwaysAllocate);
 
   typedef QcepDoubleImageDataPtr (QxrdProcessor::*MFType)(QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepMaskDataPtr, QcepMaskDataPtr);
   MFType p = &QxrdProcessor::correctDoubleImage;
@@ -2734,7 +2792,11 @@ void QxrdProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDat
 void QxrdProcessor::processDoubleImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, QList<double> v)
 {
   QcepDoubleImageDataPtr corrected =
-      QcepAllocator::newDoubleImage("acquired", image->get_Width(), image->get_Height(), QcepAllocator::AlwaysAllocate);
+      QcepAllocator::newDoubleImage(sharedFromThis(),
+                                    "acquired",
+                                    image->get_Width(),
+                                    image->get_Height(),
+                                    QcepAllocator::AlwaysAllocate);
 
   typedef QcepDoubleImageDataPtr (QxrdProcessor::*MFType)(QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepDoubleImageDataPtr, QcepMaskDataPtr, QList<double>);
   MFType p = &QxrdProcessor::correctDoubleImage;
@@ -2892,7 +2954,10 @@ void QxrdProcessor::correlateImages(QStringList names)
 
   if (imga) {
     foreach(QString name, names) {
-      QcepDoubleImageDataPtr imgb = QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+      QcepDoubleImageDataPtr imgb = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                                  "image",
+                                                                  0,0,
+                                                                  QcepAllocator::NullIfNotAvailable);
       QString path = filePathInDataDirectory(name);
 
       if (imgb && imgb->readImage(path)) {
@@ -2933,7 +2998,11 @@ void QxrdProcessor::shiftImage(int dx, int dy)
   QcepDoubleImageDataPtr img = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
 
   if (img) {
-    QcepDoubleImageDataPtr shft = QcepAllocator::newDoubleImage("image", img->get_Width(), img->get_Height(), QcepAllocator::NullIfNotAvailable);
+    QcepDoubleImageDataPtr shft = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                                "image",
+                                                                img->get_Width(),
+                                                                img->get_Height(),
+                                                                QcepAllocator::NullIfNotAvailable);
 
     if (shft) {
       shft->shiftImage(img, dx, dy);
@@ -2945,14 +3014,20 @@ void QxrdProcessor::shiftImage(int dx, int dy)
 
 void QxrdProcessor::sumImages(QStringList names)
 {
-  QcepDoubleImageDataPtr summed = QcepAllocator::newDoubleImage("sum", 0,0, QcepAllocator::NullIfNotAvailable);
+  QcepDoubleImageDataPtr summed = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                                "sum",
+                                                                0,0,
+                                                                QcepAllocator::NullIfNotAvailable);
 
   if (summed) {
     int first = true;
 
     foreach(QString name, names) {
       QcepDoubleImageDataPtr img =
-          QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+          QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "image",
+                                        0,0,
+                                        QcepAllocator::NullIfNotAvailable);
       QString path = filePathInDataDirectory(name);
 
       if (img && img->readImage(path)) {
@@ -2997,7 +3072,10 @@ void QxrdProcessor::addImages(QStringList names)
   if (summed) {
     foreach(QString name, names) {
       QcepDoubleImageDataPtr img =
-          QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+          QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "image",
+                                        0,0,
+                                        QcepAllocator::NullIfNotAvailable);
       QString path = filePathInDataDirectory(name);
 
       if (img && img->readImage(path)) {
@@ -3034,7 +3112,10 @@ void QxrdProcessor::subtractImages(QStringList names)
   if (summed) {
     foreach(QString name, names) {
       QcepDoubleImageDataPtr img =
-          QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+          QcepAllocator::newDoubleImage(sharedFromThis(),
+                                        "image",
+                                        0,0,
+                                        QcepAllocator::NullIfNotAvailable);
       QString path = filePathInDataDirectory(name);
 
       if (img && img->readImage(path)) {
@@ -3076,7 +3157,10 @@ void QxrdProcessor::integrateAndAccumulate(QStringList names)
 
   foreach(QString name, names) {
     QcepDoubleImageDataPtr img =
-        QcepAllocator::newDoubleImage("image", 0,0, QcepAllocator::NullIfNotAvailable);
+        QcepAllocator::newDoubleImage(sharedFromThis(),
+                                      "image",
+                                      0,0,
+                                      QcepAllocator::NullIfNotAvailable);
     QString path = filePathInDataDirectory(name);
 
     if (img && img->readImage(path)) {
@@ -3361,17 +3445,17 @@ void QxrdProcessor::projectImages(QStringList names, int px, int py, int pz)
   int first = true;
 
   if (px) {
-    sumx = QcepAllocator::newDoubleImage("sumx", 0,0, QcepAllocator::NullIfNotAvailable);
+    sumx = QcepAllocator::newDoubleImage(sharedFromThis(), "sumx", 0,0, QcepAllocator::NullIfNotAvailable);
     printMessage(tr("Projecting %1 images onto X").arg(nz));
   }
 
   if (py) {
-    sumy = QcepAllocator::newDoubleImage("sumy", 0,0, QcepAllocator::NullIfNotAvailable);
+    sumy = QcepAllocator::newDoubleImage(sharedFromThis(), "sumy", 0,0, QcepAllocator::NullIfNotAvailable);
     printMessage(tr("Projecting %1 images onto Y").arg(nz));
   }
 
   if (pz) {
-    sumz = QcepAllocator::newDoubleImage("sumz", 0,0, QcepAllocator::NullIfNotAvailable);
+    sumz = QcepAllocator::newDoubleImage(sharedFromThis(), "sumz", 0,0, QcepAllocator::NullIfNotAvailable);
     printMessage(tr("Projecting %1 images onto Z").arg(nz));
   }
 
@@ -3382,7 +3466,10 @@ void QxrdProcessor::projectImages(QStringList names, int px, int py, int pz)
   }
 
   for (int i=0; i<nz; i++) {
-    QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(tr("image-%1").arg(i), 0,0, QcepAllocator::NullIfNotAvailable);
+    QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                               tr("image-%1").arg(i),
+                                                               0,0,
+                                                               QcepAllocator::NullIfNotAvailable);
     QString path = filePathInDataDirectory(names[i]);
 
     if (img && img->readImage(path)) {

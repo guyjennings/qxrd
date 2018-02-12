@@ -25,8 +25,10 @@ void QxrdTestScanGenerator::generateTest()
   cols.append("Y");
 
   QcepDataColumnScanPtr scan =
-      QcepAllocator::newColumnScan(tr("newScan-%1").arg(ind),
-                                   cols, 1024, QcepAllocator::NullIfNotAvailable);
+      QcepAllocator::newColumnScan(sharedFromThis(),
+                                   tr("newScan-%1").arg(ind),
+                                   cols, 1024,
+                                   QcepAllocator::NullIfNotAvailable);
 
   if (scan) {
     QcepDataColumnPtr xCol = scan->column(0);

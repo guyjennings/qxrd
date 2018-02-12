@@ -150,7 +150,11 @@ QcepDoubleImageDataPtr QxrdCenterFinder::newData()
   }
 
   QcepDoubleImageDataPtr res =
-      QcepAllocator::newDoubleImage("newData", wd,ht, QcepAllocator::NullIfNotAvailable);
+      QcepAllocator::newDoubleImage(sharedFromThis(),
+                                    "newData",
+                                    wd,
+                                    ht,
+                                    QcepAllocator::NullIfNotAvailable);
 
   return res;
 }

@@ -706,36 +706,36 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
 
           // Allocate new cache and fill it...
 
-          m_CachedRadialBinNumbers =  QcepAllocator::newInt32Image("cachedRadialBins",
+          m_CachedRadialBinNumbers =  QcepAllocator::newInt32Image(sharedFromThis(),
+                                                                   "cachedRadialBins",
                                                                    m_NCols*m_Oversample,
                                                                    m_NRows*m_Oversample,
                                                                    QcepAllocator::NullIfNotAvailable);
-          m_CachedRadialBinNumbers -> initialize(sharedFromThis());
 
-          m_CachedRadialValues = QcepAllocator::newDoubleImage("cachedRadialValues",
+          m_CachedRadialValues = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                               "cachedRadialValues",
                                                                m_NCols*m_Oversample,
                                                                m_NRows*m_Oversample,
                                                                QcepAllocator::NullIfNotAvailable);
-          m_CachedRadialValues -> initialize(sharedFromThis());
 
-          m_CachedNormalization = QcepAllocator::newDoubleImage("cachedNormalization",
+          m_CachedNormalization = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                                "cachedNormalization",
                                                                 m_NCols*m_Oversample,
                                                                 m_NRows*m_Oversample,
                                                                 QcepAllocator::NullIfNotAvailable);
-          m_CachedNormalization -> initialize(sharedFromThis());
 
           if (m_PolarTransform) {
-            m_CachedPolarBinNumbers = QcepAllocator::newInt32Image("cachedPolarBins",
+            m_CachedPolarBinNumbers = QcepAllocator::newInt32Image(sharedFromThis(),
+                                                                   "cachedPolarBins",
                                                                    m_NCols*m_Oversample,
                                                                    m_NRows*m_Oversample,
                                                                    QcepAllocator::NullIfNotAvailable);
-            m_CachedPolarBinNumbers -> initialize(sharedFromThis());
 
-            m_CachedPolarValues = QcepAllocator::newDoubleImage("cachedPolarValues",
+            m_CachedPolarValues = QcepAllocator::newDoubleImage(sharedFromThis(),
+                                                                "cachedPolarValues",
                                                                 m_NCols*m_Oversample,
                                                                 m_NRows*m_Oversample,
                                                                 QcepAllocator::NullIfNotAvailable);
-            m_CachedPolarValues -> initialize(sharedFromThis());
           }
 
           if (m_CachedRadialBinNumbers && m_CachedNormalization) {
@@ -933,7 +933,10 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
 
           if (m_HasChi) {
             QcepDoubleImageDataPtr img =
-                QcepAllocator::newDoubleImage(dimg->get_FileBase(), m_NRSteps, m_NCSteps,
+                QcepAllocator::newDoubleImage(sharedFromThis(),
+                                              dimg->get_FileBase(),
+                                              m_NRSteps,
+                                              m_NCSteps,
                                               QcepAllocator::NullIfNotAvailable);
 
             if (img) {
@@ -970,7 +973,10 @@ QcepDataObjectPtr QxrdIntegratorCache::performIntegration(QcepDoubleImageDataPtr
             }
           } else {
             QcepIntegratedDataPtr integ =
-                QcepAllocator::newIntegratedData(dimg->get_Name(), 0, QcepAllocator::NullIfNotAvailable);
+                QcepAllocator::newIntegratedData(sharedFromThis(),
+                                                 dimg->get_Name(),
+                                                 0,
+                                                 QcepAllocator::NullIfNotAvailable);
 
             if (integ) {
               integ -> initialize(m_Integrator);

@@ -251,8 +251,7 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
       m_Acquisition -> setNIDAQPlugin(appp->nidaqPlugin());
     }
 
-    m_Dataset = QcepAllocator::newDataset("dataset");
-    m_Dataset -> initialize(sharedFromThis());
+    m_Dataset = QcepAllocator::newDataset(sharedFromThis(), "dataset");
 
     m_DatasetModel = QcepDatasetModelPtr(
           new QcepDatasetModel(myself, m_Dataset));

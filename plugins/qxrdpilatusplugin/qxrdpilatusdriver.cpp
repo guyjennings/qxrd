@@ -493,7 +493,10 @@ void QxrdPilatusDriver::loadAndPush(QString f)
     if (proc) {
       QString dest = proc->filePathInRawOutputDirectory(f);
 
-      QcepUInt32ImageDataPtr data = QcepAllocator::newInt32Image("pilatus", 0,0, QcepAllocator::AllocateFromReserve);
+      QcepUInt32ImageDataPtr data = QcepAllocator::newInt32Image(sharedFromThis(),
+                                                                 "pilatus",
+                                                                 0,0,
+                                                                 QcepAllocator::AllocateFromReserve);
 
       if (data->readImage(dest)) {
         printMessage(tr("Read %1 successfully").arg(dest));
