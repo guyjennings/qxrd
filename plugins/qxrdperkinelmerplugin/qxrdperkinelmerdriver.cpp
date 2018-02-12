@@ -949,7 +949,8 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
     QxrdAcqCommonPtr acq(m_Acquisition);
 
     if (acq) {
-      QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(tr("frame-%1").arg(counter),
+      QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
+                                                                  tr("frame-%1").arg(counter),
                                                                  det -> get_NCols(), det -> get_NRows(),
                                                                  QcepAllocator::AllocateFromReserve);
 
