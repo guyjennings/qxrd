@@ -20,6 +20,7 @@ private:
 public:
   QcepImageQueueBase(QString name);
   ~QcepImageQueueBase();
+  void initialize(QcepObjectWPtr parent);
 
 //  void preallocate(int nFrames, int nCols, int nRows);
 

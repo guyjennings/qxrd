@@ -16,6 +16,11 @@ QcepImageQueueBase::~QcepImageQueueBase()
 {
 }
 
+void QcepImageQueueBase::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}
+
 template <typename T>
 QcepImageQueue<T>::QcepImageQueue(QString name)
   : inherited(name)
