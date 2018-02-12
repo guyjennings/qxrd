@@ -56,6 +56,12 @@ QcepObject::~QcepObject()
   }
 #endif
 
+  QcepObjectPtr parent(m_Parent);
+
+  if (parent) {
+    parent->removeChildPtr(sharedFromThis());
+  }
+
   s_ObjectDeleteCount.fetchAndAddOrdered(1);
 
 #ifndef QT_NO_DEBUG
