@@ -129,10 +129,11 @@ void QxrdSimulatedDriver::onTimerTimeout()
     int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
     int frame = g_FrameCounter % 8;
 
-    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
-                                                                tr("simdet-%1").arg(frame),
-                                                                nCols, nRows,
-                                                                QcepAllocator::AllocateFromReserve);
+    QcepUInt16ImageDataPtr image =
+        QcepAllocator::newInt16Image(sharedFromThis(),
+                                     tr("simdet-%1").arg(frame),
+                                     nCols, nRows,
+                                     QcepAllocator::AllocateFromReserve);
 
 
     if (image) {
@@ -186,6 +187,8 @@ void QxrdSimulatedDriver::onTimerTimeout()
           }
         }
       }
+//    } else {
+//      printMessage("Simulated Detector Image == NULL");
     }
 
     if (qcepDebug(DEBUG_DETECTORIDLING)) {

@@ -29,7 +29,7 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   m_Processor(),
   m_DetectorControlWindow(NULL),
   m_NAcquiredImages(),
-  m_AcquiredImages("acquired"),
+  m_AcquiredImages(),
   m_DetectorNumber(this, "detectorNumber", -1, "Detector Number"),
   m_DetectorType(this, "detectorType", detType, "Detector Type"),
   m_DetectorTypeName(this, "detectorTypeName", detectorTypeName(detType), "Detector Type Name"),
@@ -56,6 +56,10 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   m_DetectorControlWindowSettings =
       QxrdDetectorControlWindowSettingsPtr(
         new QxrdDetectorControlWindowSettings("controlWindowSettings"));
+
+  m_AcquiredImages =
+      QcepImageBaseQueuePtr(
+        new QcepImageBaseQueue("acquired"));
 
   connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
           this,           &QxrdDetectorSettings::startOrStop);
@@ -104,6 +108,8 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
     connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
             a.data(),       &QxrdAcqCommon::detectorStateChanged);
   }
+
+  m_AcquiredImages -> initialize(sharedFromThis());
 
   m_DetectorDriverThread =
       QxrdDetectorDriverThreadPtr(
@@ -532,7 +538,9 @@ void QxrdDetectorSettings::closeWindow()
 
 void QxrdDetectorSettings::enqueueAcquiredFrame(QcepImageDataBasePtr img)
 {
-  m_AcquiredImages.enqueue(img);
+  if (m_AcquiredImages) {
+    m_AcquiredImages -> enqueue(img);
+  }
 
   m_NAcquiredImages.release(1);
 }
@@ -541,10 +549,10 @@ QcepImageDataBasePtr QxrdDetectorSettings::acquireFrame()
 {
   QxrdAcqCommonPtr acq(m_Acquisition);
 
-  if (acq) {
+  if (acq && m_AcquiredImages) {
     while (1) {
       if (m_NAcquiredImages.tryAcquire(1, 1000)) {
-        return m_AcquiredImages.dequeue();
+        return m_AcquiredImages -> dequeue();
       } else if (acq->get_Cancelling()) {
         return QcepImageDataBasePtr();
       }

@@ -140,7 +140,7 @@ protected:
 
 private:
   QSemaphore                  m_NAcquiredImages;
-  QcepImageBaseQueue          m_AcquiredImages;
+  QcepImageBaseQueuePtr       m_AcquiredImages;
 
 public:
   Q_PROPERTY(int detectorNumber READ get_DetectorNumber WRITE set_DetectorNumber STORED false)

@@ -5,25 +5,30 @@
 #include "qxrdexperiment.h"
 
 QxrdCalibrantLibrary::QxrdCalibrantLibrary(QString name)
-  : QcepObject(name)
+  : inherited(name)
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing calibrant library\n");
 #endif
+}
+
+void QxrdCalibrantLibrary::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
 
   int nCals = numberStandardCalibrants();
 
   for (int i=0; i<nCals; i++) {
-    appendCalibrant(standardCalibrant(i));
+    appendCalibrant(standardCalibrant(sharedFromThis(), i));
   }
 }
 
-QxrdCalibrantLibraryPtr QxrdCalibrantLibrary::newCalibrantLibrary()
-{
-  QxrdCalibrantLibraryPtr lib(new QxrdCalibrantLibrary("calibrantLibrary"));
+//QxrdCalibrantLibraryPtr QxrdCalibrantLibrary::newCalibrantLibrary()
+//{
+//  QxrdCalibrantLibraryPtr lib(new QxrdCalibrantLibrary("calibrantLibrary"));
 
-  return lib;
-}
+//  return lib;
+//}
 
 QxrdCalibrantLibrary::~QxrdCalibrantLibrary()
 {
@@ -34,9 +39,7 @@ QxrdCalibrantLibrary::~QxrdCalibrantLibrary()
 
 void QxrdCalibrantLibrary::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::readSettings(settings);
+  inherited::readSettings(settings);
 
   int nstd = numberStandardCalibrants();
 
@@ -52,16 +55,7 @@ void QxrdCalibrantLibrary::readSettings(QSettings *settings)
 
   settings->endArray();
 
-  //TODO: rewrite to use readObject
   int nc   = settings->beginReadArray("calibrants");
-
-//  while (m_Calibrants.count() > (nc + nstd)) {
-//    removeCalibrant();
-//  }
-
-//  while (m_Calibrants.count() < (nc + nstd)) {
-//    appendCalibrant();
-//  }
 
   for (int i=0; i<nc; i++) {
     settings->setArrayIndex(i);
@@ -83,9 +77,7 @@ void QxrdCalibrantLibrary::readSettings(QSettings *settings)
 
 void QxrdCalibrantLibrary::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 
   int nstd = numberStandardCalibrants();
 
@@ -120,24 +112,23 @@ void QxrdCalibrantLibrary::appendCalibrant(QxrdCalibrantPtr cal)
   if (cal) {
     m_Calibrants.append(cal);
   } else {
-    m_Calibrants.append(standardCalibrant(0));
+    m_Calibrants.append(standardCalibrant(sharedFromThis(), 0));
   }
 }
 
 int QxrdCalibrantLibrary::numberStandardCalibrants()
 {
-  return 8;
+  return StandardCalibrantCount;
 }
 
-QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
+QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(QcepObjectWPtr parent, int n)
 {
   QxrdCalibrantPtr res;
-  QxrdCalibrantLibraryWPtr myself(qSharedPointerDynamicCast<QxrdCalibrantLibrary>(sharedFromThis()));
 
   switch (n) {
-  case 0: // Silicon Powder
+  case SiliconCalibrant: // Silicon Powder
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant("Si"));
+      res = QxrdCalibrantPtr(new QxrdCalibrant("stdSiCalibrant"));
       res->set_Index(n);
       res->set_Description("Silicon Powder");
       res->set_Symmetry(QxrdCalibrant::DiamondCubic);
@@ -150,9 +141,9 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
     }
     break;
 
-  case 1: // Alumina
+  case AluminaCalibrant: // Alumina
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant("Al2O3"));
+      res = QxrdCalibrantPtr(new QxrdCalibrant("stdAl2O3Calibrant"));
       res->set_Index(n);
       res->set_Description("Alumina Powder");
       res->set_Symmetry(QxrdCalibrant::RHexagonal);
@@ -165,9 +156,9 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
     }
     break;
 
-  case 2: // NAC
+  case NACCalibrant: // NAC
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant("NAC"));
+      res = QxrdCalibrantPtr(new QxrdCalibrant("stdNACCalibrant"));
       res->set_Index(n);
       res->set_Description("NAC Powder");
       res->set_Symmetry(QxrdCalibrant::BodyCenteredCubic);
@@ -180,9 +171,9 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
     }
     break;
 
-  case 3: // LaB6
+  case LaB6Calibrant: // LaB6
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant("LaB6"));
+      res = QxrdCalibrantPtr(new QxrdCalibrant("stdLaB6Calibrant"));
       res->set_Index(n);
       res->set_Description("NIST SRM LaB6 660a");
       res->set_Symmetry(QxrdCalibrant::SimpleCubic);
@@ -195,9 +186,9 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
     }
     break;
 
-  case 4: // ZnO
+  case ZnOCalibrant: // ZnO
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant("ZnO"));
+      res = QxrdCalibrantPtr(new QxrdCalibrant("stdZnOCalibrant"));
       res->set_Index(n);
       res->set_Description("Zinc oxide");
       res->set_Symmetry(QxrdCalibrant::RHexagonal);
@@ -210,9 +201,9 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
     }
     break;
 
-  case 5: // CeO2
+  case CeO2Calibrant: // CeO2
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant("CeO2"));
+      res = QxrdCalibrantPtr(new QxrdCalibrant("stdCeO2Calibrant"));
       res->set_Index(n);
       res->set_Description("Cerium(IV) dioxide");
       res->set_Symmetry(QxrdCalibrant::FaceCenteredCubic);
@@ -225,9 +216,9 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
     }
     break;
 
-  case 6: // Cr2O3
+  case Cr2O3Calibrant: // Cr2O3
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant("Cr2O3"));
+      res = QxrdCalibrantPtr(new QxrdCalibrant("stdCr2O3Calibrant"));
       res->set_Index(n);
       res->set_Description("Chromium oxide");
       res->set_Symmetry(QxrdCalibrant::RHexagonal);
@@ -240,9 +231,9 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
     }
     break;
 
-  case 7: // Germanium Powder
+  case GeCalibrant: // Germanium Powder
     {
-      res = QxrdCalibrantPtr(new QxrdCalibrant("Ge"));
+      res = QxrdCalibrantPtr(new QxrdCalibrant("stdGeCalibrant"));
       res->set_Index(n);
       res->set_Description("Germanium Powder");
       res->set_Symmetry(QxrdCalibrant::DiamondCubic);
@@ -255,6 +246,10 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(int n)
     }
     break;
 
+  }
+
+  if (res) {
+    res -> initialize(parent);
   }
 
   return res;

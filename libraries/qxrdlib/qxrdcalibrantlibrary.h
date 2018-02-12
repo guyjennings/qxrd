@@ -13,10 +13,14 @@ class QXRD_EXPORT QxrdCalibrantLibrary : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdCalibrantLibrary(QString name);
   virtual ~QxrdCalibrantLibrary();
-  static QxrdCalibrantLibraryPtr newCalibrantLibrary();
+//  static QxrdCalibrantLibraryPtr newCalibrantLibrary();
+  void initialize(QcepObjectWPtr parent);
 
 public slots:
   int count();
@@ -30,12 +34,22 @@ public:
   void removeCalibrant();
   void appendCalibrant(QxrdCalibrantPtr cal = QxrdCalibrantPtr());
   int numberStandardCalibrants();
-  QxrdCalibrantPtr standardCalibrant(int n);
+  QxrdCalibrantPtr standardCalibrant(QcepObjectWPtr parent, int n);
 
+  enum {
+    SiliconCalibrant,
+    AluminaCalibrant,
+    NACCalibrant,
+    LaB6Calibrant,
+    ZnOCalibrant,
+    CeO2Calibrant,
+    Cr2O3Calibrant,
+    GeCalibrant,
+    StandardCalibrantCount
+  };
 public:
 
 private:
-  mutable QMutex            m_Mutex;
   QxrdExperimentWPtr        m_Experiment;
   QVector<QxrdCalibrantPtr> m_Calibrants;
 };
