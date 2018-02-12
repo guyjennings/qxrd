@@ -14,7 +14,7 @@ QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(QcepObjectW
     printf("QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(%p)\n", this);
   }
 
-  setObjectName("updater");
+  setObjectName("fileBrowserUpdater");
 }
 
 QxrdFileBrowserModelUpdaterThread::~QxrdFileBrowserModelUpdaterThread()

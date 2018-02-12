@@ -18,7 +18,7 @@ QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplicationWPtr app, QxrdExpe
     printf("QxrdScriptEngineThread::QxrdScriptEngineThread(%p)\n", this);
   }
 
-  setObjectName("script");
+  setObjectName("scriptEngine");
 }
 
 QxrdScriptEngineThread::~QxrdScriptEngineThread()

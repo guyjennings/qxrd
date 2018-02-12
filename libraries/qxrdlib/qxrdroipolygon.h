@@ -8,9 +8,12 @@ class QXRD_EXPORT QxrdROIPolygon : public QxrdROIShape
 {
   Q_OBJECT
 
+private:
+  typedef QxrdROIShape inherited;
+
 public:
-  QxrdROIPolygon(QPolygonF poly);
-  QxrdROIPolygon(double scale);
+  QxrdROIPolygon(QString name, QPolygonF poly);
+  QxrdROIPolygon(QString name, double scale);
 
 public slots:
   void clear();

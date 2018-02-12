@@ -8,7 +8,7 @@
 #include "qxrdroicache.h"
 
 QxrdROI::QxrdROI(int roiOuterType, int roiInnerType)
-  : QcepObject("coords"),
+  : inherited("coords"),
     m_RoiOuterType(this, "roiOuterType", roiOuterType, "ROI Outer Type"),
     m_RoiInnerType(this, "roiInnerType", roiInnerType, "ROI Inner Type"),
 //    m_RoiOuterTypeName(this, "roiOuterTypeName", QxrdROIShape::roiTypeName(roiOuterType), "ROI Outer Type Name"),
@@ -27,9 +27,8 @@ QxrdROI::QxrdROI(int roiOuterType, int roiInnerType)
     m_YGradient(this, "yGradient", 0, "ROI Y Gradient"),
     m_InnerSum(this, "innerSum", 0, "Inner ROI Pixel Sum"),
     m_OuterSum(this, "outerSum", 0, "Outer ROI Pixel Sum"),
-    m_Mutex(QMutex::Recursive),
-    m_OuterShape(QxrdROIShape::newROIShape(roiOuterType, 1.0)),
-    m_InnerShape(QxrdROIShape::newROIShape(roiInnerType, 0.25)),
+    m_OuterShape(QxrdROIShape::newROIShape("outerShape", roiOuterType, 1.0)),
+    m_InnerShape(QxrdROIShape::newROIShape("innerShape", roiInnerType, 0.25)),
     m_Cache(new QxrdROICache()),
     m_Bounds(QRect()),
     m_InnerBounds(QRect()),
@@ -49,6 +48,33 @@ QxrdROI::QxrdROI(int roiOuterType, int roiInnerType)
   changed();
 }
 
+void QxrdROI::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  if (m_InnerShape) {
+    m_InnerShape -> initialize(sharedFromThis());
+  }
+
+  if (m_OuterShape) {
+    m_OuterShape -> initialize(sharedFromThis());
+  }
+}
+
+QxrdROIPtr QxrdROI::readROI(QcepObjectWPtr parent, QSettings *settings)
+{
+  QxrdROIPtr res =
+      QxrdROIPtr(new QxrdROI(NoBounds, NoBounds));
+
+  if (res) {
+    res -> initialize(parent);
+
+    res -> readSettings(settings);
+  }
+
+  return res;
+}
+
 int QxrdROI::innerType()
 {
   return get_RoiInnerType();
@@ -64,7 +90,10 @@ void QxrdROI::changeInnerType(int t)
   if (get_RoiInnerType() != t) {
     set_RoiInnerType(t);
 
-    m_InnerShape = QxrdROIShape::newROIShape(t, 0.25);
+    m_InnerShape = QxrdROIShape::newROIShape("innerShape", t, 0.25);
+
+    m_InnerShape -> initialize(sharedFromThis());
+
     connect(m_InnerShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROI::changed);
 
     changed();
@@ -86,7 +115,10 @@ void QxrdROI::changeOuterType(int t)
   if (get_RoiOuterType() != t) {
     set_RoiOuterType(t);
 
-    m_OuterShape = QxrdROIShape::newROIShape(t, 1.0);
+    m_OuterShape = QxrdROIShape::newROIShape("outerShape", t, 1.0);
+
+    m_OuterShape -> initialize(sharedFromThis());
+
     connect(m_OuterShape.data(), &QxrdROIShape::roiChanged, this, &QxrdROI::changed);
 
     changed();
@@ -99,9 +131,7 @@ QxrdROI::~QxrdROI()
 
 void QxrdROI::writeSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
-  QcepObject::writeSettings(settings);
+  inherited::writeSettings(settings);
 
   if (m_OuterShape) {
     settings->beginGroup("outer");
@@ -118,23 +148,23 @@ void QxrdROI::writeSettings(QSettings *settings)
 
 void QxrdROI::readSettings(QSettings *settings)
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+  inherited::readSettings(settings);
 
-  QcepObject::readSettings(settings);
-
-  m_InnerShape = QxrdROIShape::newROIShape(get_RoiInnerType(), 0.25);
-  m_OuterShape = QxrdROIShape::newROIShape(get_RoiOuterType(), 1.00);
+  m_InnerShape = QxrdROIShape::newROIShape("innerShape", get_RoiInnerType(), 0.25);
+  m_OuterShape = QxrdROIShape::newROIShape("outerShape", get_RoiOuterType(), 1.00);
 
   if (m_OuterShape) {
-    settings->beginGroup("outer");
-    m_OuterShape->readSettings(settings);
-    settings->endGroup();
+    m_OuterShape -> initialize(sharedFromThis());
+    settings     -> beginGroup("outer");
+    m_OuterShape -> readSettings(settings);
+    settings     -> endGroup();
   }
 
   if (m_InnerShape) {
-    settings->beginGroup("inner");
-    m_InnerShape->readSettings(settings);
-    settings->endGroup();
+    m_InnerShape -> initialize(sharedFromThis());
+    settings     -> beginGroup("inner");
+    m_InnerShape -> readSettings(settings);
+    settings     -> endGroup();
   }
 
   changed();

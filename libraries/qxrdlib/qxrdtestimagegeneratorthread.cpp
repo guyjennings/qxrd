@@ -6,7 +6,7 @@
 QxrdTestImageGeneratorThread::QxrdTestImageGeneratorThread(QxrdExperimentWPtr doc) :
   QxrdThread(doc)
 {
-
+  setObjectName("imageGenerator");
 }
 
 QxrdTestImageGeneratorThread::~QxrdTestImageGeneratorThread()

@@ -20,15 +20,17 @@ public:
 
   Q_ENUM(ROIShapeType)
 
-  QxrdROIShape(ROIShapeType shapeType);
+  QxrdROIShape(QString      name,
+               ROIShapeType shapeType);
 
-  QxrdROIShape(int    shapeType,
-               QRectF boundingBox);
+  QxrdROIShape(QString      name,
+               int          shapeType,
+               QRectF       boundingBox);
 signals:
   void roiChanged();
 
 public:
-  static QxrdROIShapePtr newROIShape(int shapeType, double scale);
+  static QxrdROIShapePtr newROIShape(QString name, int shapeType, double scale);
   static int             roiTypeCount();
   static QString         roiTypeName(int roiType);
 

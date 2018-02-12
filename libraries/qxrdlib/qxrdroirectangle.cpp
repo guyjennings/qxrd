@@ -1,14 +1,15 @@
 #include "qxrdroirectangle.h"
 
-QxrdROIRectangle::QxrdROIRectangle(double halfWidth,
+QxrdROIRectangle::QxrdROIRectangle(QString name,
+                                   double halfWidth,
                                    double halfHeight)
-  : QxrdROICenteredShape(RectangleShape, halfWidth, halfHeight)
+  : inherited(name, RectangleShape, halfWidth, halfHeight)
 {
 
 }
 
-QxrdROIRectangle::QxrdROIRectangle(double scale)
-  : QxrdROICenteredShape(RectangleShape, scale*50, scale*50)
+QxrdROIRectangle::QxrdROIRectangle(QString name, double scale)
+  : inherited(name, RectangleShape, scale*50, scale*50)
 {
 }
 

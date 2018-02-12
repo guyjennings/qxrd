@@ -1,13 +1,13 @@
 #include "qxrdroipolygon.h"
 
-QxrdROIPolygon::QxrdROIPolygon(QPolygonF poly)
-  : QxrdROIShape(PolygonShape),
+QxrdROIPolygon::QxrdROIPolygon(QString name, QPolygonF poly)
+  : inherited(name, PolygonShape),
     m_Poly(this, "poly", poly, "ROI Polygon Shape")
 {
 }
 
-QxrdROIPolygon::QxrdROIPolygon(double scale)
-  : QxrdROIShape(PolygonShape),
+QxrdROIPolygon::QxrdROIPolygon(QString name, double scale)
+  : inherited(name, PolygonShape),
     m_Poly(this, "poly", QPolygonF(), "ROI Polygon Shape")
 {
   m_Poly.appendValue(QPointF(-50,0)*scale);

@@ -8,10 +8,16 @@ class QXRD_EXPORT QxrdROIEllipse : public QxrdROICenteredShape
 {
   Q_OBJECT
 
+private:
+  typedef QxrdROICenteredShape inherited;
+
 public:
-  QxrdROIEllipse(double halfWidth,
+  QxrdROIEllipse(QString name,
+                 double halfWidth,
                  double halfHeight);
-  QxrdROIEllipse(double scale);
+
+  QxrdROIEllipse(QString name,
+                 double scale);
 
   virtual int markerCount();
   virtual QPointF markerPoint(int n);

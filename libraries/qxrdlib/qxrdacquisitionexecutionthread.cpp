@@ -13,7 +13,7 @@ QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcqCommonWPtr
     printf("QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(%p)\n", this);
   }
 
-  setObjectName("acqExec");
+  setObjectName("acquisitionExecution");
 }
 
 QxrdAcquisitionExecutionThread::~QxrdAcquisitionExecutionThread()

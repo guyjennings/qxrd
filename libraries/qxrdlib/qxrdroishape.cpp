@@ -4,27 +4,28 @@
 #include "qxrdroipolygon.h"
 #include <QScriptEngine>
 
-QxrdROIShape::QxrdROIShape(QxrdROIShape::ROIShapeType shapeType)
-  : QcepObject("shape"),
+QxrdROIShape::QxrdROIShape(QString                    name,
+                           QxrdROIShape::ROIShapeType shapeType)
+  : QcepObject(name),
     m_ShapeType(this, "shapeType", shapeType, "ROI Shape Type")
 {
 }
 
-QxrdROIShapePtr QxrdROIShape::newROIShape(int shapeType, double scale)
+QxrdROIShapePtr QxrdROIShape::newROIShape(QString name, int shapeType, double scale)
 {
   QxrdROIShapePtr res;
 
   switch (shapeType) {
   case RectangleShape:
-    res = QxrdROIShapePtr(new QxrdROIRectangle(scale));
+    res = QxrdROIShapePtr(new QxrdROIRectangle(name, scale));
     break;
 
   case EllipseShape:
-    res = QxrdROIShapePtr(new QxrdROIEllipse(scale));
+    res = QxrdROIShapePtr(new QxrdROIEllipse(name, scale));
     break;
 
   case PolygonShape:
-    res = QxrdROIShapePtr(new QxrdROIPolygon(scale));
+    res = QxrdROIShapePtr(new QxrdROIPolygon(name, scale));
     break;
   }
 

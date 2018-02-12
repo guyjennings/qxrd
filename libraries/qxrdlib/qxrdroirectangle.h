@@ -8,10 +8,16 @@ class QXRD_EXPORT QxrdROIRectangle : public QxrdROICenteredShape
 {
   Q_OBJECT
 
+private:
+  typedef QxrdROICenteredShape inherited;
+
 public:
-  QxrdROIRectangle(double halfWidth,
+  QxrdROIRectangle(QString name,
+                   double halfWidth,
                    double halfHeight);
-  QxrdROIRectangle(double scale);
+
+  QxrdROIRectangle(QString name,
+                   double scale);
 
 public:
   virtual int markerCount();

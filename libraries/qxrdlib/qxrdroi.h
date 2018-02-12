@@ -19,9 +19,15 @@ class QXRD_EXPORT QxrdROI : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QxrdROI(int roiOuterType, int roiInnerType);
   virtual ~QxrdROI();
+  void initialize(QcepObjectWPtr parent);
+
+  static QxrdROIPtr readROI(QcepObjectWPtr parent, QSettings *settings);
 
   static int     roiTypeID(int outerType, int innerType);
   static QString roiTypeName(int outerType, int innerType);
@@ -190,7 +196,6 @@ public:
   QCEP_DOUBLE_PROPERTY(OuterSum)
 
 private:
-  QMutex          m_Mutex;
   QxrdROIShapePtr m_OuterShape;
   QxrdROIShapePtr m_InnerShape;
 

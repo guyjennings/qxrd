@@ -6,7 +6,7 @@
 QxrdTestScanGeneratorThread::QxrdTestScanGeneratorThread(QxrdExperimentWPtr doc) :
   QxrdThread(doc)
 {
-
+  setObjectName("testScanGenerator");
 }
 
 QxrdTestScanGeneratorThread::~QxrdTestScanGeneratorThread()

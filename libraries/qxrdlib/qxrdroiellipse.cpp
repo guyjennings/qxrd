@@ -3,13 +3,13 @@
 
 static const int nPts = 16;
 
-QxrdROIEllipse::QxrdROIEllipse(double halfWidth, double halfHeight)
-  : QxrdROICenteredShape(EllipseShape, halfWidth, halfHeight)
+QxrdROIEllipse::QxrdROIEllipse(QString name, double halfWidth, double halfHeight)
+  : QxrdROICenteredShape(name, EllipseShape, halfWidth, halfHeight)
 {
 }
 
-QxrdROIEllipse::QxrdROIEllipse(double scale)
-  : QxrdROICenteredShape(EllipseShape, 50*scale, 50*scale)
+QxrdROIEllipse::QxrdROIEllipse(QString name, double scale)
+  : QxrdROICenteredShape(name, EllipseShape, 50*scale, 50*scale)
 {
 }
 

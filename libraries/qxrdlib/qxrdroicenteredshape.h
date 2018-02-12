@@ -8,10 +8,14 @@ class QXRD_EXPORT QxrdROICenteredShape : public QxrdROIShape
 {
   Q_OBJECT
 
+private:
+  typedef QxrdROIShape inherited;
+
 public:
-  QxrdROICenteredShape(ROIShapeType shapeType,
-                       double halfWidth,
-                       double halfHeight);
+  QxrdROICenteredShape(QString      name,
+                       ROIShapeType shapeType,
+                       double       halfWidth,
+                       double       halfHeight);
 
   virtual QRectF boundingRect();
   virtual void scale(double kx, double ky);

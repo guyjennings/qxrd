@@ -10,7 +10,7 @@ template <class T>
 QxrdTestThread<T>::QxrdTestThread(QcepObjectWPtr parent)
   : QxrdThread(parent)
 {
-
+  setObjectName("testThread");
 }
 
 template <class T>

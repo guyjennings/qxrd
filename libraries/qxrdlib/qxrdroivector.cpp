@@ -22,20 +22,17 @@ void QxrdROIVector::readSettings(QSettings *settings)
   for (int i=0; i<n; i++) {
     settings->setArrayIndex(i);
 
-    QcepObjectPtr obj = QcepObject::readObject(sharedFromThis(), settings);
+    QxrdROIPtr roi = QxrdROI::readROI(sharedFromThis(), settings);
 
-    if (obj) {
-      QxrdROIPtr roi =
-          qSharedPointerDynamicCast<QxrdROI>(obj);
+    if (roi) {
+      roi->setObjectName(tr("roi-%1").arg(i));
 
-      if (roi) {
-        int i = m_ROICoordinates.count();
+      int i = m_ROICoordinates.count();
 
-        m_ROICoordinates.append(roi);
+      m_ROICoordinates.append(roi);
 
-        connect(roi.data(), &QxrdROI::roiChanged,
-                [=]() { emit roiChanged(i); });
-      }
+      connect(roi.data(), &QxrdROI::roiChanged,
+              [=]() { emit roiChanged(i); });
     }
   }
 
