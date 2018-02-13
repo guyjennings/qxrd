@@ -9,6 +9,10 @@
 class QXRD_EXPORT QxrdFileBrowserModelUpdaterThread : public QxrdThread
 {
   Q_OBJECT
+
+private:
+  typedef QxrdThread inherited;
+
 public:
   explicit QxrdFileBrowserModelUpdaterThread(QcepObjectWPtr parent);
   virtual ~QxrdFileBrowserModelUpdaterThread();

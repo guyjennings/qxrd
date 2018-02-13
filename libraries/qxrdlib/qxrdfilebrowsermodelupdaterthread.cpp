@@ -6,7 +6,7 @@
 #include "qcepmutexlocker.h"
 
 QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(QcepObjectWPtr parent) :
-  QxrdThread(parent),
+  inherited(parent),
   m_Model(),
   m_Updater()
 {
@@ -47,6 +47,8 @@ void QxrdFileBrowserModelUpdaterThread::run()
 
   m_Updater = QxrdFileBrowserModelUpdaterPtr(
         new QxrdFileBrowserModelUpdater("browserModelUpdater"));
+
+  m_Updater -> initialize(sharedFromThis());
 
   m_Updater -> setBrowserModel(m_Model);
 

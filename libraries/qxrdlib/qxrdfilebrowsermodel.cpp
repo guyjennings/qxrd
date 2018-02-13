@@ -45,9 +45,10 @@ void QxrdFileBrowserModel::initialize()
       QxrdFileBrowserModelUpdaterThreadPtr(
         new QxrdFileBrowserModelUpdaterThread(m_Parent));
 
+  m_UpdaterThread -> initialize(m_Parent);
   m_UpdaterThread -> setModel(sharedFromThis());
-//  m_UpdaterThread -> setObjectName("browser");
   m_UpdaterThread -> start();
+
   m_Updater = m_UpdaterThread->updater();
 }
 

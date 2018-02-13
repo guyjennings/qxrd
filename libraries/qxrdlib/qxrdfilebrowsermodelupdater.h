@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
-#include <QFileSystemWatcher>
+#include "qfilesystemwatcher-ptr.h"
 #include <QTimer>
 #include <QDateTime>
 #include <QFileInfo>
@@ -14,10 +14,13 @@
 class QXRD_EXPORT QxrdFileBrowserModelUpdater : public QcepObject
 {
     Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
+
 public:
   explicit QxrdFileBrowserModelUpdater(QString name);
-  //TODO: change to QcepObjectWPtr
-  void initialize(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent);
   virtual ~QxrdFileBrowserModelUpdater();
 
   bool updateNeeded();
@@ -35,7 +38,7 @@ public slots:
 private:
   QxrdFileBrowserModelWPtr m_BrowserModel;
   QString                  m_RootPath;
-  QFileSystemWatcher      *m_FileSystemWatcher;
+  QFileSystemWatcherPtr    m_FileSystemWatcher;
   QAtomicInt               m_UpdateNeeded;
   QTimer                   m_UpdateTimer;
   int                      m_UpdateInterval;

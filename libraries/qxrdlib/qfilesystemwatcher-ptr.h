@@ -1,0 +1,8 @@
+#ifndef QFILESYSTEMWATCHERPTR_H
+#define QFILESYSTEMWATCHERPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QFileSystemWatcher)
+
+#endif // QFILESYSTEMWATCHERPTR_H

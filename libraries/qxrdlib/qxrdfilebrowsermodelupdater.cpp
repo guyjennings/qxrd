@@ -3,15 +3,16 @@
 #include "qxrdappcommon.h"
 #include <QThread>
 #include <QDirIterator>
+#include <QFileSystemWatcher>
 #include "qxrdfilebrowsermodel.h"
 #include "qxrdfilebrowsermodelupdaterthread.h"
 #include "qxrdfilebrowsermodelupdaterthread-ptr.h"
 
 QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QString name) :
-  QcepObject(name),
+  inherited(name),
   m_BrowserModel(),
   m_RootPath(""),
-  m_FileSystemWatcher(NULL),
+  m_FileSystemWatcher(),
   m_UpdateNeeded(1),
   m_UpdateTimer(),
   m_UpdateInterval(1000),
@@ -23,30 +24,30 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QString name) :
   }
 }
 
-void QxrdFileBrowserModelUpdater::initialize(QxrdFileBrowserModelWPtr browser, QcepObjectWPtr /*parent*/)
+void QxrdFileBrowserModelUpdater::initialize(QcepObjectWPtr parent)
 {
-  setBrowserModel(browser);
+  inherited::initialize(parent);
 }
 
 void QxrdFileBrowserModelUpdater::setBrowserModel(QxrdFileBrowserModelWPtr browser)
 {
   m_BrowserModel = browser;
 
-  delete m_FileSystemWatcher;
-
-  m_FileSystemWatcher = new QFileSystemWatcher(this);
+  m_FileSystemWatcher =
+      QFileSystemWatcherPtr(
+        new QFileSystemWatcher(this));
 
   QxrdFileBrowserModelPtr model(m_BrowserModel);
 
   if (model) {
-    connect(model.data(),        &QxrdFileBrowserModel::rootChanged,
-            this,                &QxrdFileBrowserModelUpdater::changeRoot);
+    connect(model.data(),              &QxrdFileBrowserModel::rootChanged,
+            this,                      &QxrdFileBrowserModelUpdater::changeRoot);
   }
 
-  connect(m_FileSystemWatcher,   &QFileSystemWatcher::directoryChanged,
-          this,                  &QxrdFileBrowserModelUpdater::changeContents, Qt::DirectConnection);
-  connect(&m_UpdateTimer,        &QTimer::timeout,
-          this,                  &QxrdFileBrowserModelUpdater::updateTimeout);
+  connect(m_FileSystemWatcher.data(),  &QFileSystemWatcher::directoryChanged,
+          this,                        &QxrdFileBrowserModelUpdater::changeContents, Qt::DirectConnection);
+  connect(&m_UpdateTimer,              &QTimer::timeout,
+          this,                        &QxrdFileBrowserModelUpdater::updateTimeout);
 
   m_UpdateTimer.setSingleShot(true);
   m_UpdateTimer.start(m_UpdateInterval);
