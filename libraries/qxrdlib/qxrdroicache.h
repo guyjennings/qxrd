@@ -8,6 +8,9 @@ class QXRD_EXPORT QxrdROICache : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QxrdROICache();
 

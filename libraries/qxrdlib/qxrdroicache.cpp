@@ -1,7 +1,7 @@
 #include "qxrdroicache.h"
 
 QxrdROICache::QxrdROICache() :
-  QcepObject("cache")
+  inherited("cache")
 {
 }
 

@@ -59,6 +59,10 @@ void QxrdROI::initialize(QcepObjectWPtr parent)
   if (m_OuterShape) {
     m_OuterShape -> initialize(sharedFromThis());
   }
+
+  if (m_Cache) {
+    m_Cache      -> initialize(sharedFromThis());
+  }
 }
 
 QxrdROIPtr QxrdROI::readROI(QcepObjectWPtr parent, QSettings *settings)
