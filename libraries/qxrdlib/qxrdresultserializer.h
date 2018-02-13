@@ -31,6 +31,10 @@ signals:
 protected:
   mutable QMutex   m_Mutex;
   QcepIntProperty *m_Counter;
+
+public:
+  Q_PROPERTY(int size READ get_Size WRITE set_Size STORED false)
+  QCEP_INTEGER_PROPERTY(Size)
 };
 
 template <typename T>

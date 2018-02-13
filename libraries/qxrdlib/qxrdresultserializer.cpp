@@ -9,7 +9,8 @@
 
 QxrdResultSerializerBase::QxrdResultSerializerBase(QString name, QcepIntProperty *ctr)
   : QcepObject(name),
-    m_Counter(ctr)
+    m_Counter(ctr),
+    m_Size(this, "size", 0, "Queue Size")
 {
 }
 
@@ -36,6 +37,8 @@ void QxrdResultSerializer<T>::enqueue(QFuture<T> future)
   if (m_Counter) {
     m_Counter->incValue(1);
   }
+
+  prop_Size()->incValue(1);
 }
 
 template <typename T>
@@ -53,6 +56,8 @@ T QxrdResultSerializer<T>::dequeue()
     if (m_Counter) {
       m_Counter->incValue(-1);
     }
+
+    prop_Size()->incValue(-1);
 
     return val.result();
   } else {
