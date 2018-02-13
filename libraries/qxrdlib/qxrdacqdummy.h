@@ -51,6 +51,7 @@ public:
   void clearDetectors();
 
   void doAcquire();
+  void doAcquireIdle();
   void doAcquireOnce();
   void doAcquireDark();
 };

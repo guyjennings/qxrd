@@ -65,6 +65,7 @@ public:
   virtual void clearDetectors() = 0;
 
   virtual void doAcquire() = 0;
+  virtual void doAcquireIdle() = 0;
   virtual void doAcquireOnce() = 0;
   virtual void doAcquireDark() = 0;
 

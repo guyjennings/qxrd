@@ -107,6 +107,7 @@ public slots:
   virtual void beginFrame();
   virtual QcepImageDataBasePtr acquireFrameIfAvailable();
   virtual QcepImageDataBasePtr acquireFrame();
+  int availableImageCount();
 
   int roiCount();
   QxrdROIPtr roi(int i);

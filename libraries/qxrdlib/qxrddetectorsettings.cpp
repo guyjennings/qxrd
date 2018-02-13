@@ -573,6 +573,11 @@ QcepImageDataBasePtr QxrdDetectorSettings::acquireFrameIfAvailable()
   return res;
 }
 
+int QxrdDetectorSettings::availableImageCount()
+{
+  return m_NAcquiredImages.available();
+}
+
 QcepDoubleVector QxrdDetectorSettings::scalerCounts()
 {
   if (m_Processor) {

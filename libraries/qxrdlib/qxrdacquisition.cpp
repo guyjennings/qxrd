@@ -1091,6 +1091,24 @@ void QxrdAcquisition::doAcquire()
   }
 }
 
+void QxrdAcquisition::doAcquireIdle()
+{
+  int n = 0;
+
+  for (int i=0; i<detectorCount(); i++) {
+    QxrdDetectorSettingsPtr det = detector(i);
+
+    if (det && det->isEnabled()) {
+      n += det->availableImageCount();
+      det->acquireFrameIfAvailable();
+    }
+  }
+
+  if (n>0) {
+    printMessage(tr("%1 images at idle").arg(n));
+  }
+}
+
 void QxrdAcquisition::executeAcquisition(QxrdAcquisitionParameterPackPtr parmsp)
 {
   if (parmsp) {

@@ -565,7 +565,8 @@ HEADERS += qxrdlib.h\
     qxrdacqdummy.h \
     qxrdacqdummy-ptr.h \
     qxrdresultserializer-ptr.h \
-    qfilesystemwatcher-ptr.h
+    qfilesystemwatcher-ptr.h \
+    qtimer-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

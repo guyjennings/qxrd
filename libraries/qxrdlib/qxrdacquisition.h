@@ -68,6 +68,7 @@ public slots:
   void shutdown();
 
   void doAcquire    ();
+  void doAcquireIdle();
   void doAcquireOnce();
   void doAcquireDark();
 

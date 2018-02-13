@@ -106,6 +106,10 @@ void QxrdAcqDummy::doAcquire()
 {
 }
 
+void QxrdAcqDummy::doAcquireIdle()
+{
+}
+
 void QxrdAcqDummy::doAcquireOnce()
 {
 }
