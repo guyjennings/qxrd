@@ -12,6 +12,7 @@
 #include "qxrdappcommon-ptr.h"
 #include <QTimer>
 #include "qcepallocator-ptr.h"
+#include "qxrddebug.h"
 
 class QXRD_EXPORT QxrdAppCommon : public QcepApplication
 {
@@ -83,6 +84,21 @@ public:
 
   void possiblyQuit();
   bool wantToQuit();
+
+  Q_ENUM(QcepDebugFlags)
+  Q_ENUM(QxrdDebugFlags)
+
+  enum TestEnum { Value1, Value2};
+
+  Q_ENUM(TestEnum)
+
+  Q_INVOKABLE void listEnums();
+  Q_INVOKABLE int  debugFlag(QString f);
+  Q_INVOKABLE QString debugFlagName(int i);
+  Q_INVOKABLE QString debugFlagOption(int i);
+  Q_INVOKABLE QString debugFlagDescription(int i);
+  Q_INVOKABLE int  debugFlagCount();
+  Q_INVOKABLE void listDebugFlags();
 
 private:
   QStringList makeStringListFromArgs(int argc, char **argv);

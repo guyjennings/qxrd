@@ -166,7 +166,7 @@ void QxrdApplication::initializeRoot()
   printMessage(tr("pwd: %1").arg(pwd));
 
   loadPlugins();
-  readApplicationSettings();
+//  readApplicationSettings();
 
   printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
@@ -276,8 +276,13 @@ void QxrdApplication::loadPlugins()
   pluginsDir.cd("plugins");
   pluginsDirList.append(pluginsDir);
 #endif
+  if (qcepDebug(DEBUG_PLUGINS)) {
+    if (get_PluginList().count() == 0) {
+      printf("No plugin directories specified\n");
+    }
+  }
 
-  foreach (QDir pluginsDir, pluginsDirList) {
+  foreach (QDir pluginsDir, get_PluginList()) {
     if (qcepDebug(DEBUG_PLUGINS)) {
       printf("Looking for plugins in directory %s\n", qPrintable(pluginsDir.absolutePath()));
     }

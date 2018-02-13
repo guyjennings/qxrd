@@ -20,6 +20,8 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QApplication>
+#include <QMetaObject>
+#include <QMetaEnum>
 #include "qcepallocator.h"
 
 QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
@@ -204,6 +206,13 @@ void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
                                  QCoreApplication::translate("main", "debugLevel"));
   parser.addOption(debugOption);
 
+  QCommandLineOption debugFlagsOption("D",
+                                     QCoreApplication::translate("main", "Set debug flag (may be repeated)\n"
+                                                                         "'-Dlist' to list flags\n"
+                                                                         "'-Dnone' to unset all flags"),
+                                     QCoreApplication::translate("main", "debugFlag"));
+  parser.addOption(debugFlagsOption);
+
   QCommandLineOption noGuiOption("nogui", QCoreApplication::translate("main", "No GUI"));
   if (wantFullOptions) {
     parser.addOption(noGuiOption);
@@ -244,6 +253,13 @@ void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
     parser.addOption(pluginOption);
   }
 
+  QCommandLineOption pluginDirOption({"P", "plugin"},
+                                     QCoreApplication::translate("main", "Extra Plugin Search Directory (may be repeated)"),
+                                     QCoreApplication::translate("main", "dir"));
+  if (wantFullOptions) {
+    parser.addOption(pluginDirOption);
+  }
+
   parser.process(args);
 
   if (wantFullOptions && parser.isSet(newOption)) {
@@ -260,6 +276,54 @@ void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
                "%lld", &dbg)==1) {
       set_Debug(dbg);
     }
+  }
+
+  //TODO: try to insert list of debug flag values into
+  if (parser.isSet(debugFlagsOption)) {
+    qint64 dbg = get_Debug();
+    QStringList flags = parser.values(debugFlagsOption);
+
+    foreach (QString flag, flags) {
+      if (flag == "list") {
+//        listDebugFlags();
+
+        QString desc = debugFlagsOption.description();
+
+        printf("description = %s\n", qPrintable(desc));
+
+        for (int i=0; i<debugFlagCount(); i++) {
+          const QString opt = debugFlagOption(i);
+          const QString dsc = debugFlagDescription(i);
+
+          desc.append(tr("\n%1 : %2").arg(opt,-20).arg(dsc));
+        }
+
+        debugFlagsOption.setDescription(desc);
+
+        printf("new description = %s\n", qPrintable(desc));
+
+        parser.parse(args);
+        parser.showHelp();
+      } else if (flag == "none") {
+        dbg = 0;
+      } else {
+        int v = debugFlag(flag);
+
+        if (v >= 0) {
+          dbg |= qint64(1) << v;
+        }
+
+#ifndef QT_NO_DEBUG
+        printf(" set debug flag %s = %d : mask = 0x%llx\n", qPrintable(flag), v, dbg);
+#endif
+      }
+    }
+
+    set_Debug(dbg);
+
+#ifndef QT_NO_DEBUG
+    printf(" new debug level 0x%llx\n", get_Debug());
+#endif
   }
 
   if (wantFullOptions && parser.isSet(noGuiOption)) {
@@ -327,6 +391,16 @@ void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
     appDir.cd("plugins");
 
     appendPlugin(appDir.absolutePath());
+  }
+
+  if (wantFullOptions && parser.isSet(pluginDirOption)) {
+    QStringList plugins(parser.values(pluginDirOption));
+
+    foreach(QString ds, plugins) {
+      QDir d(ds);
+
+      appendPlugin(d.absolutePath());
+    }
   }
 
   QStringList files(parser.positionalArguments());
@@ -655,4 +729,157 @@ QStringList QxrdAppCommon::makeStringListFromArgs(int argc, char **argv)
   return res;
 }
 
+void QxrdAppCommon::listEnums()
+{
+  const QMetaObject *mo = &staticMetaObject;
 
+  int n = mo->enumeratorCount();
+
+  printMessage(tr("Listing %1 enumerators").arg(n));
+
+  for (int i=0; i<n; i++) {
+    QMetaEnum en = mo->enumerator(i);
+
+    printMessage(tr("Enumerator %1 name %2").arg(i).arg(en.name()));
+
+    for (int j=0; j<en.keyCount(); j++) {
+      printMessage(tr(" key %1 = %2 = %3")
+                   .arg(j)
+                   .arg(en.key(j))
+                   .arg(en.value(j)));
+    }
+  }
+
+  const QMetaObject *mo1 = &QcepDebug::staticMetaObject;
+  const QMetaObject *mo2 = &QxrdDebug::staticMetaObject;
+
+  int n1 = mo1->enumeratorCount();
+
+  printMessage(tr("Listing %1 qcepdebug enumerators").arg(n1));
+
+  for (int i=0; i<n1; i++) {
+    QMetaEnum en = mo1->enumerator(i);
+
+    printMessage(tr("Enumerator %1 name %2").arg(i).arg(en.name()));
+
+    for (int j=0; j<en.keyCount(); j++) {
+      printMessage(tr(" key %1 = %2 = %3")
+                   .arg(j)
+                   .arg(en.key(j))
+                   .arg(en.value(j)));
+    }
+  }
+
+  int n2 = mo2->enumeratorCount();
+
+  printMessage(tr("Listing %1 qxrddebug enumerators").arg(n2));
+
+  for (int i=0; i<n2; i++) {
+    QMetaEnum en = mo2->enumerator(i);
+
+    printMessage(tr("Enumerator %1 name %2").arg(i).arg(en.name()));
+
+    for (int j=0; j<en.keyCount(); j++) {
+      printMessage(tr(" key %1 = %2 = %3")
+                   .arg(j)
+                   .arg(en.key(j))
+                   .arg(en.value(j)));
+    }
+  }
+}
+
+static int debugFlagCheck(const QMetaObject &meta, QString f)
+{
+  int n = meta.enumeratorCount();
+
+  QString flag = "DEBUG_" + f;
+
+  for (int i=0; i<n; i++) {
+    QMetaEnum en = meta.enumerator(i);
+
+    bool isOk = false;
+    int  val  = en.keyToValue(qPrintable(flag), &isOk);
+
+    if (isOk) {
+      return val;
+    }
+  }
+
+  return -1;
+}
+
+int QxrdAppCommon::debugFlag(QString f)
+{
+  int n1 = debugFlagCheck(QcepDebug::staticMetaObject, f);
+
+  if (n1 >= 0) {
+    return n1;
+  } else {
+    int n2 = debugFlagCheck(QxrdDebug::staticMetaObject, f);
+
+    return n2;
+  }
+}
+
+static QString debugFlagNameFrom(const QMetaObject &meta, int i)
+{
+  int n = meta.enumeratorCount();
+
+  for (int j=0; j<n; j++) {
+    QMetaEnum en = meta.enumerator(j);
+
+    return en.key(i);
+  }
+
+  return QString();
+}
+
+QString QxrdAppCommon::debugFlagName(int i)
+{
+  if (i < 0) {
+    return QString();
+  } else if (i < LAST_QCEP_DEBUG) {
+    return debugFlagNameFrom(QcepDebug::staticMetaObject, i);
+  } else if (i < LAST_QXRD_DEBUG) {
+    return debugFlagNameFrom(QxrdDebug::staticMetaObject, i-LAST_QCEP_DEBUG);
+  } else {
+    return QString();
+  }
+}
+
+int QxrdAppCommon::debugFlagCount()
+{
+  return LAST_QXRD_DEBUG;
+}
+
+QString QxrdAppCommon::debugFlagOption(int i)
+{
+  QString res;
+  QString name = debugFlagName(i);
+
+  if (name.startsWith("DEBUG_")) {
+    res = tr("-D%1").arg(name.mid(6));
+  }
+
+  return res;
+}
+
+QString QxrdAppCommon::debugFlagDescription(int i)
+{
+  QString res;
+
+  if (g_DebugLevel) {
+    res = g_DebugLevel -> message(i);
+  }
+
+  return res;
+}
+
+void QxrdAppCommon::listDebugFlags()
+{
+  for (int i=0; i<debugFlagCount(); i++) {
+    printf("%-20s : %s\n",
+           qPrintable(debugFlagOption(i)),
+           qPrintable(debugFlagDescription(i)));
+  }
+}
