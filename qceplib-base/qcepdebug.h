@@ -6,51 +6,59 @@
 #include <QMap>
 #include <QSharedPointer>
 
-enum {
-  DEBUG_NOMESSAGES         = 0,
-  DEBUG_APP,
-  DEBUG_PROPERTIES,
-  DEBUG_DYNPROPS,
-  DEBUG_WINDOW,
-  DEBUG_PREFS,
-  DEBUG_DISPLAY,
-  DEBUG_CONSTRUCTORS,
-  DEBUG_ALLOCATOR,
-  DEBUG_THREADS,
-  DEBUG_QUEUES,
-  DEBUG_IMAGE_CONSTRUCTORS,
-  DEBUG_LOCKING,
-  DEBUG_SERVER,
-  DEBUG_IMPORT,
-  DEBUG_EXPORT,
-  DEBUG_DATABROWSER,
-  DEBUG_OBJECTBROWSER,
-  DEBUG_DRAGDROP,
-  DEBUG_PANEL_SHOW,
-  LAST_CEP_DEBUG
-};
+namespace QcepDebug {
+  Q_NAMESPACE
 
-class QCEP_EXPORT QcepDebugDictionary : public QObject {
-  Q_OBJECT
+  enum QcepDebugFlags {
+    DEBUG_NOMESSAGES         = 0,
+    DEBUG_APP,
+    DEBUG_PROPERTIES,
+    DEBUG_DYNPROPS,
+    DEBUG_WINDOW,
+    DEBUG_PREFS,
+    DEBUG_DISPLAY,
+    DEBUG_CONSTRUCTORS,
+    DEBUG_ALLOCATOR,
+    DEBUG_THREADS,
+    DEBUG_QUEUES,
+    DEBUG_IMAGE_CONSTRUCTORS,
+    DEBUG_LOCKING,
+    DEBUG_SERVER,
+    DEBUG_IMPORT,
+    DEBUG_EXPORT,
+    DEBUG_DATABROWSER,
+    DEBUG_OBJECTBROWSER,
+    DEBUG_DRAGDROP,
+    DEBUG_PANEL_SHOW,
+    LAST_QCEP_DEBUG
+  };
 
-private:
-  typedef QObject inherited;
+  Q_ENUM_NS(QcepDebugFlags)
 
-public:
-  QcepDebugDictionary();
+  class QCEP_EXPORT QcepDebugDictionary : public QObject {
+    Q_OBJECT
 
-  qint64 debugLevel() const;
-  void setDebugLevel(qint64 level);
+  private:
+    typedef QObject inherited;
 
-  QString message(int val) const;
+  public:
+    QcepDebugDictionary();
 
-protected:
-  void setMessage(int val, QString msg);
+    qint64 debugLevel() const;
+    void setDebugLevel(qint64 level);
 
-private:
-  qint64             m_DebugLevel;
-  QMap<int, QString> m_Messages;
-};
+    QString message(int val) const;
+
+  protected:
+    void setMessage(int val, QString msg);
+
+  private:
+    qint64             m_DebugLevel;
+    QMap<int, QString> m_Messages;
+  };
+}
+
+using namespace QcepDebug;
 
 extern QCEP_EXPORT qint64 qcepDebug(int cond);
 

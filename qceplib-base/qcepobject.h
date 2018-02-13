@@ -12,6 +12,7 @@
 #include "qcepproperty.h"
 #include <QScriptValue>
 #include "qcepfileformatter-ptr.h"
+#include "qcepdebug.h"
 
 class QCEP_EXPORT QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
 {
