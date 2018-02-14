@@ -191,74 +191,78 @@ void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
 
   parser.addPositionalArgument("files", "Files to open, optionally", "[file...]");
 
-  QCommandLineOption newOption({"n", "new"},      QCoreApplication::translate("main", "Open new experiment"));
+  QCommandLineOption newOption({"n", "new"},      "Open new experiment");
   if (wantFullOptions) {
     parser.addOption(newOption);
   }
 
-  QCommandLineOption freshOption({"f", "fresh"},  QCoreApplication::translate("main", "Fresh start"));
+  QCommandLineOption freshOption({"f", "fresh"},  "Fresh start");
   if (wantFullOptions) {
     parser.addOption(freshOption);
   }
 
-  QCommandLineOption debugOption({"d", "debug"},
-                                 QCoreApplication::translate("main", "Set debug level"),
-                                 QCoreApplication::translate("main", "debugLevel"));
+  QCommandLineOption debugOption({"d", "debug"},  "Set debug level", "debugLevel");
   parser.addOption(debugOption);
 
-  QCommandLineOption debugFlagsOption("D",
-                                     QCoreApplication::translate("main", "Set debug flag (may be repeated)\n"
-                                                                         "'-Dlist' to list flags\n"
-                                                                         "'-Dnone' to unset all flags"),
-                                     QCoreApplication::translate("main", "debugFlag"));
-  parser.addOption(debugFlagsOption);
+  QCommandLineOption debugListOption("Dlist", "List available debug flags");
+  parser.addOption(debugListOption);
 
-  QCommandLineOption noGuiOption("nogui", QCoreApplication::translate("main", "No GUI"));
+  QCommandLineOption debugNoneOption("Dnone", "Unset all debug flags");
+  parser.addOption(debugNoneOption);
+
+  QList<QCommandLineOption> debugFlagOptions;
+
+  for (int i=0; i<debugFlagCount(); i++) {
+    QString opt = debugFlagOption(i);
+    QString dsc = debugFlagDescription(i);
+
+    debugFlagOptions.append(
+          QCommandLineOption(opt.mid(1), dsc));
+  }
+
+  parser.addOptions(debugFlagOptions);
+
+  QCommandLineOption noGuiOption("nogui", "No GUI");
   if (wantFullOptions) {
     parser.addOption(noGuiOption);
   }
 
-  QCommandLineOption guiOption("gui", QCoreApplication::translate("main", "Want GUI"));
+  QCommandLineOption guiOption("gui", "Want GUI");
   if (wantFullOptions) {
     parser.addOption(guiOption);
   }
 
-  QCommandLineOption noStartOption("nostart", QCoreApplication::translate("main", "Don't start detectors"));
+  QCommandLineOption noStartOption("nostart", "Don't start detectors");
   if (wantFullOptions) {
     parser.addOption(noStartOption);
   }
 
-  QCommandLineOption startOption("start", QCoreApplication::translate("main", "Start detectors"));
+  QCommandLineOption startOption("start", "Start detectors");
   if (wantFullOptions) {
     parser.addOption(startOption);
   }
 
-  QCommandLineOption cmdOption({"c", "command"},
-                               QCoreApplication::translate("main", "Execute command (may be repeated)"),
-                               QCoreApplication::translate("main", "command"));
+  QCommandLineOption cmdOption({"c", "command"},  "Execute command (may be repeated)" , "command");
   parser.addOption(cmdOption);
 
-  QCommandLineOption scriptOption({"s", "script"},
-                                  QCoreApplication::translate("main", "Read script file (may be repeated)"),
-                                  QCoreApplication::translate("main", "scriptfile"));
+  QCommandLineOption scriptOption({"s", "script"}, "Read script file (may be repeated)", "scriptfile");
   parser.addOption(scriptOption);
 
-  QCommandLineOption watchOption({"w", "watch"},
-                                 QCoreApplication::translate("main", "Watch directory/path for changes (may be repeated)"),
-                                 QCoreApplication::translate("main", "pattern"));
+  QCommandLineOption watchOption({"w", "watch"}, "Watch directory/path for changes (may be repeated)", "pattern");
   parser.addOption(watchOption);
 
-  QCommandLineOption pluginOption("p", QCoreApplication::translate("main", "Special plugin load"));
+  QCommandLineOption pluginOption("p", "Special plugin load");
   if (wantFullOptions) {
     parser.addOption(pluginOption);
   }
 
-  QCommandLineOption pluginDirOption({"P", "plugin"},
-                                     QCoreApplication::translate("main", "Extra Plugin Search Directory (may be repeated)"),
-                                     QCoreApplication::translate("main", "dir"));
+  QCommandLineOption pluginDirOption({"P", "plugin"}, "Extra Plugin Search Directory (may be repeated)", "dir");
   if (wantFullOptions) {
     parser.addOption(pluginDirOption);
   }
+
+  parser.setSingleDashWordOptionMode(
+        QCommandLineParser::ParseAsLongOptions);
 
   parser.process(args);
 
@@ -278,52 +282,32 @@ void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
     }
   }
 
-  //TODO: try to insert list of debug flag values into
-  if (parser.isSet(debugFlagsOption)) {
-    qint64 dbg = get_Debug();
-    QStringList flags = parser.values(debugFlagsOption);
+  qint64 dbg = get_Debug();
+  bool dbgChanged = false;
 
-    foreach (QString flag, flags) {
-      if (flag == "list") {
-//        listDebugFlags();
+  if (parser.isSet(debugNoneOption)) {
+    dbg = 0;
+    dbgChanged = true;
+  }
 
-        QString desc = debugFlagsOption.description();
-
-        printf("description = %s\n", qPrintable(desc));
-
-        for (int i=0; i<debugFlagCount(); i++) {
-          const QString opt = debugFlagOption(i);
-          const QString dsc = debugFlagDescription(i);
-
-          desc.append(tr("\n%1 : %2").arg(opt,-20).arg(dsc));
-        }
-
-        debugFlagsOption.setDescription(desc);
-
-        printf("new description = %s\n", qPrintable(desc));
-
-        parser.parse(args);
-        parser.showHelp();
-      } else if (flag == "none") {
-        dbg = 0;
-      } else {
-        int v = debugFlag(flag);
-
-        if (v >= 0) {
-          dbg |= qint64(1) << v;
-        }
-
-#ifndef QT_NO_DEBUG
-        printf(" set debug flag %s = %d : mask = 0x%llx\n", qPrintable(flag), v, dbg);
-#endif
-      }
+  for (int i=0; i<debugFlagCount(); i++) {
+    if (parser.isSet(debugFlagOptions[i])) {
+      dbg |= qint64(1) << i;
+      dbgChanged = true;
     }
+  }
 
+  if (dbgChanged) {
     set_Debug(dbg);
 
 #ifndef QT_NO_DEBUG
     printf(" new debug level 0x%llx\n", get_Debug());
 #endif
+  }
+
+  if (parser.isSet(debugListOption)) {
+    listDebugFlags();
+    ::exit(0);
   }
 
   if (wantFullOptions && parser.isSet(noGuiOption)) {
