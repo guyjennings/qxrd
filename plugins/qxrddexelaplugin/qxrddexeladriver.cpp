@@ -10,6 +10,7 @@
 #include "DexelaDetector.h"
 #include "DexImage.h"
 #include <QThread>
+#include "qcepmutexlocker.h"
 
 QxrdDexelaDriver::QxrdDexelaDriver(QString name,
                                                    QxrdDexelaSettingsWPtr det,
@@ -32,6 +33,43 @@ QxrdDexelaDriver::~QxrdDexelaDriver()
 #endif
 }
 
+QMutex           QxrdDexelaDriver::m_Mutex;
+BusScanner      *QxrdDexelaDriver::m_BusScanner;
+int              QxrdDexelaDriver::m_DetectorCount;
+int              QxrdDexelaDriver::m_Initialized;
+QVector<DevInfo> QxrdDexelaDriver::m_Devices;
+
+int QxrdDexelaDriver::scanForDetectors()
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  if (m_Initialized == 0) {
+    m_BusScanner = new BusScanner();
+
+    m_DetectorCount = m_BusScanner -> EnumerateDevices();
+
+    printMessage(tr("Found %1 Detectors").arg(m_DetectorCount));
+
+    for (int i=0; i<m_DetectorCount; i++) {
+      DevInfo info = m_BusScanner -> GetDevice(i);
+
+      m_Devices.append(info);
+
+      printMessage(tr("Detector %1: Model %2: Serial Number %3")
+                   .arg(i)
+                   .arg(info.model)
+                   .arg(info.serialNum));
+
+    }
+
+    m_Initialized = 1;
+
+    return true;
+  } else {
+    return false;
+  }
+}
+
 bool QxrdDexelaDriver::startDetectorDriver()
 {
   THREAD_CHECK;
@@ -44,6 +82,8 @@ bool QxrdDexelaDriver::startDetectorDriver()
   QxrdAcqCommonPtr      acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
+    scanForDetectors();
+
     printMessage(tr("Starting Dexela detector \"%1\"").arg(det->get_DetectorName()));
 
     det -> set_NRows(2048);

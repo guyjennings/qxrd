@@ -3,16 +3,24 @@
 #include "qxrddexeladriver.h"
 #include "qxrddexelasettings.h"
 #include "BusScanner.h"
+#include "Dexeladetector.h"
 
 QxrdDexelaPlugin::QxrdDexelaPlugin()
 {
-  m_BusScanner = new BusScanner();
+//  m_BusScanner = new BusScanner();
 
-  m_NDevs = m_BusScanner -> EnumerateDevices();
+//  m_NDevs = m_BusScanner -> EnumerateDevices();
 
-  for (int i=0; i<m_NDevs; i++) {
-    DevInfo info = m_BusScanner -> GetDevice(i);
-  }
+//  printf("Found %d Dexela Devices\n", m_NDevs);
+
+//  for (int i=0; i<m_NDevs; i++) {
+//    DevInfo info = m_BusScanner -> GetDevice(i);
+
+//    printf("Found Dexela Device %d, Model %d, Serial %d\n",
+//           i, info.model, info.serialNum);
+
+//    printf("  unit = %d, param = ""%s""\n", info.unit, info.param);
+//  }
 }
 
 QString QxrdDexelaPlugin::name() const
