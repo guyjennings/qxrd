@@ -1,5 +1,6 @@
 #include "qcepdebug.h"
 #include <stdio.h>
+#include <QMetaEnum>
 
 QSharedPointer<QcepDebugDictionary> g_DebugLevel;
 
@@ -77,3 +78,54 @@ void QcepDebugDictionary::setMessage(int val, QString msg)
 //#endif
 //}
 
+int QcepDebugDictionary::debugFlagCount()
+{
+  return LAST_QCEP_DEBUG;
+}
+
+QString QcepDebugDictionary::debugFlagName(int i)
+{
+  QString res = debugFlagNameFrom(QcepDebug::staticMetaObject, i);
+
+  return res;
+}
+
+QString QcepDebugDictionary::debugFlagNameFrom(const QMetaObject &meta, int i)
+{
+  int n = meta.enumeratorCount();
+
+  for (int j=0; j<n; j++) {
+    QMetaEnum en = meta.enumerator(j);
+
+    return en.key(i);
+  }
+
+  return QString();
+}
+
+int QcepDebugDictionary::debugFlagCheck(QString name)
+{
+  int res = debugFlagCheckFrom(QcepDebug::staticMetaObject, name);
+
+  return res;
+}
+
+int QcepDebugDictionary::debugFlagCheckFrom(const QMetaObject &meta, QString f)
+{
+  int n = meta.enumeratorCount();
+
+  QString flag = "DEBUG_" + f;
+
+  for (int i=0; i<n; i++) {
+    QMetaEnum en = meta.enumerator(i);
+
+    bool isOk = false;
+    int  val  = en.keyToValue(qPrintable(flag), &isOk);
+
+    if (isOk) {
+      return val;
+    }
+  }
+
+  return -1;
+}
