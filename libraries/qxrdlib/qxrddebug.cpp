@@ -31,3 +31,28 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_FILEWATCHER,  "File Watcher Acquisition");
   setMessage(DEBUG_ROI,          "Debug ROI Operations");
 }
+
+int QxrdDebugDictionary::debugFlagCount()
+{
+  return LAST_QXRD_DEBUG;
+}
+
+QString QxrdDebugDictionary::debugFlagName(int i)
+{
+  if (i < LAST_QCEP_DEBUG) {
+    return QcepDebugDictionary::debugFlagName(i);
+  } else {
+    return debugFlagNameFrom(QxrdDebug::staticMetaObject, i-LAST_QCEP_DEBUG);
+  }
+}
+
+int QxrdDebugDictionary::debugFlagCheck(QString name)
+{
+  int res = debugFlagCheckFrom(QxrdDebug::staticMetaObject, name);
+
+  if (res < 0) {
+    res = inherited::debugFlagCheck(name);
+  }
+
+  return res;
+}

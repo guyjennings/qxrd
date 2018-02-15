@@ -729,127 +729,23 @@ QStringList QxrdAppCommon::makeStringListFromArgs(int argc, char **argv)
   return res;
 }
 
-void QxrdAppCommon::listEnums()
-{
-  const QMetaObject *mo = &staticMetaObject;
-
-  int n = mo->enumeratorCount();
-
-  printMessage(tr("Listing %1 enumerators").arg(n));
-
-  for (int i=0; i<n; i++) {
-    QMetaEnum en = mo->enumerator(i);
-
-    printMessage(tr("Enumerator %1 name %2").arg(i).arg(en.name()));
-
-    for (int j=0; j<en.keyCount(); j++) {
-      printMessage(tr(" key %1 = %2 = %3")
-                   .arg(j)
-                   .arg(en.key(j))
-                   .arg(en.value(j)));
-    }
-  }
-
-  const QMetaObject *mo1 = &QcepDebug::staticMetaObject;
-  const QMetaObject *mo2 = &QxrdDebug::staticMetaObject;
-
-  int n1 = mo1->enumeratorCount();
-
-  printMessage(tr("Listing %1 qcepdebug enumerators").arg(n1));
-
-  for (int i=0; i<n1; i++) {
-    QMetaEnum en = mo1->enumerator(i);
-
-    printMessage(tr("Enumerator %1 name %2").arg(i).arg(en.name()));
-
-    for (int j=0; j<en.keyCount(); j++) {
-      printMessage(tr(" key %1 = %2 = %3")
-                   .arg(j)
-                   .arg(en.key(j))
-                   .arg(en.value(j)));
-    }
-  }
-
-  int n2 = mo2->enumeratorCount();
-
-  printMessage(tr("Listing %1 qxrddebug enumerators").arg(n2));
-
-  for (int i=0; i<n2; i++) {
-    QMetaEnum en = mo2->enumerator(i);
-
-    printMessage(tr("Enumerator %1 name %2").arg(i).arg(en.name()));
-
-    for (int j=0; j<en.keyCount(); j++) {
-      printMessage(tr(" key %1 = %2 = %3")
-                   .arg(j)
-                   .arg(en.key(j))
-                   .arg(en.value(j)));
-    }
-  }
-}
-
-static int debugFlagCheck(const QMetaObject &meta, QString f)
-{
-  int n = meta.enumeratorCount();
-
-  QString flag = "DEBUG_" + f;
-
-  for (int i=0; i<n; i++) {
-    QMetaEnum en = meta.enumerator(i);
-
-    bool isOk = false;
-    int  val  = en.keyToValue(qPrintable(flag), &isOk);
-
-    if (isOk) {
-      return val;
-    }
-  }
-
-  return -1;
-}
-
 int QxrdAppCommon::debugFlag(QString f)
 {
-  int n1 = debugFlagCheck(QcepDebug::staticMetaObject, f);
+  int n1 = QxrdDebugDictionary::debugFlagCheck(f);
 
-  if (n1 >= 0) {
-    return n1;
-  } else {
-    int n2 = debugFlagCheck(QxrdDebug::staticMetaObject, f);
-
-    return n2;
-  }
-}
-
-static QString debugFlagNameFrom(const QMetaObject &meta, int i)
-{
-  int n = meta.enumeratorCount();
-
-  for (int j=0; j<n; j++) {
-    QMetaEnum en = meta.enumerator(j);
-
-    return en.key(i);
-  }
-
-  return QString();
+  return n1;
 }
 
 QString QxrdAppCommon::debugFlagName(int i)
 {
-  if (i < 0) {
-    return QString();
-  } else if (i < LAST_QCEP_DEBUG) {
-    return debugFlagNameFrom(QcepDebug::staticMetaObject, i);
-  } else if (i < LAST_QXRD_DEBUG) {
-    return debugFlagNameFrom(QxrdDebug::staticMetaObject, i-LAST_QCEP_DEBUG);
-  } else {
-    return QString();
-  }
+  QString res = QxrdDebugDictionary::debugFlagName(i);
+
+  return res;
 }
 
 int QxrdAppCommon::debugFlagCount()
 {
-  return LAST_QXRD_DEBUG;
+  return QxrdDebugDictionary::debugFlagCount();
 }
 
 QString QxrdAppCommon::debugFlagOption(int i)

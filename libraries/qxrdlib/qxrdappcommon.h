@@ -92,7 +92,6 @@ public:
 
   Q_ENUM(TestEnum)
 
-  Q_INVOKABLE void listEnums();
   Q_INVOKABLE int  debugFlag(QString f);
   Q_INVOKABLE QString debugFlagName(int i);
   Q_INVOKABLE QString debugFlagOption(int i);

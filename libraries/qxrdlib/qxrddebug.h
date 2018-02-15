@@ -42,8 +42,15 @@ namespace QxrdDebug {
   class QXRD_EXPORT QxrdDebugDictionary : public QcepDebugDictionary {
     Q_OBJECT
 
+  private:
+    typedef QcepDebugDictionary inherited;
+
   public:
     QxrdDebugDictionary();
+
+    static int     debugFlagCount();
+    static QString debugFlagName(int i);
+    static int     debugFlagCheck(QString name);
   };
 }
 
