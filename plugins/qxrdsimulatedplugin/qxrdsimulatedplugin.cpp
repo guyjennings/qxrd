@@ -4,7 +4,15 @@
 #include "qxrdsimulatedsettings.h"
 
 QxrdSimulatedPlugin::QxrdSimulatedPlugin()
+  : inherited("simulatedPlugin")
 {
+}
+
+void QxrdSimulatedPlugin::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  printMessage("QxrdSimulatedPlugin::initialize");
 }
 
 QString QxrdSimulatedPlugin::name() const

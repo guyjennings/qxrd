@@ -5,6 +5,7 @@
 #include "BusScanner.h"
 
 QxrdDexelaPlugin::QxrdDexelaPlugin()
+  : inherited("dexelaPlugin")
 {
   m_BusScanner = new BusScanner();
 
@@ -13,6 +14,13 @@ QxrdDexelaPlugin::QxrdDexelaPlugin()
   for (int i=0; i<m_NDevs; i++) {
     DevInfo info = m_BusScanner -> GetDevice(i);
   }
+}
+
+void QxrdDexelaPlugin::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  printMessage("QxrdDexelaPlugin::initialize");
 }
 
 QString QxrdDexelaPlugin::name() const

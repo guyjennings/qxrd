@@ -56,7 +56,6 @@ public slots:
   void chooseExistingExperiment();
 
   void openExperiment(QString path);
-//  void openExperiment2(QString path);
 
 //  void doAboutQxrd();
 //  void doOpenQXRDWebPage();

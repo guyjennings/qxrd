@@ -1,18 +1,22 @@
 #ifndef QXRDPILATUSPLUGIN_H
 #define QXRDPILATUSPLUGIN_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qxrddetectorplugininterface.h"
 
-class QxrdPilatusPlugin : public QObject, public QxrdDetectorPluginInterface
+class QxrdPilatusPlugin : public QcepObject, public QxrdDetectorPluginInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "pilatus.json")
   Q_INTERFACES(QxrdNamedPluginInterface QxrdDetectorPluginInterface)
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QxrdPilatusPlugin();
 
+  void initialize(QcepObjectWPtr parent);
   QString name() const;
 
   QxrdDetectorDriverPtr createDetector(QString name,

@@ -315,24 +315,45 @@ void QxrdApplication::loadPlugins()
         if (className == "QxrdAreaDetectorPlugin") {
           m_AreaDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+          if (m_AreaDetectorPlugin) {
+            m_AreaDetectorPlugin -> initialize(sharedFromThis());
+          }
         } else if (className == "QxrdDexelaPlugin") {
           m_DexelaPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+          if (m_DexelaPlugin) {
+            m_DexelaPlugin -> initialize(sharedFromThis());
+          }
         } else if (className == "QxrdNIDAQPlugin") {
           m_NIDAQPlugin =
               QxrdNIDAQPluginInterfacePtr(qobject_cast<QxrdNIDAQPluginInterface*>(plugin));
+          if (m_NIDAQPlugin) {
+            m_NIDAQPlugin -> initialize(sharedFromThis());
+          }
         } else if (className == "QxrdPerkinElmerPlugin") {
           m_PerkinElmerDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+          if (m_PerkinElmerDetectorPlugin) {
+            m_PerkinElmerDetectorPlugin -> initialize(sharedFromThis());
+          }
         } else if (className == "QxrdPilatusPlugin") {
           m_PilatusDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+          if (m_PilatusDetectorPlugin) {
+            m_PilatusDetectorPlugin -> initialize(sharedFromThis());
+          }
         } else if (className == "QxrdSimulatedPlugin") {
           m_SimulatedDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+          if (m_SimulatedDetectorPlugin) {
+            m_SimulatedDetectorPlugin -> initialize(sharedFromThis());
+          }
         } else if (className == "QxrdFileWatcherPlugin") {
           m_FileWatcherPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+          if (m_FileWatcherPlugin) {
+            m_FileWatcherPlugin -> initialize(sharedFromThis());
+          }
         } else {
         }
 
@@ -701,29 +722,6 @@ void QxrdApplication::openExperiment(QString path)
     openedExperiment(expthr);
   }
 }
-
-//void QxrdApplication::openExperiment2(QString path)
-//{
-//  if (path.length() > 0) {
-//    QxrdExperimentSettingsPtr settings(new QxrdExperimentSettings(path));
-
-//    if (settings) {
-//      QcepObjectPtr newObj = QcepObject::readObject(settings.data());
-
-//      if (newObj) {
-//        QxrdExperimentPtr newExpt = qSharedPointerDynamicCast<QxrdExperiment>(newObj);
-
-//        if (newExpt) {
-//          printMessage(tr("Opened new experiment %1").arg(path));
-
-//          QxrdExperimentSettingsPtr newSettings(new QxrdExperimentSettings(path+".new2"));
-
-//          newExpt->writeSettings(newSettings.data());
-//        }
-//      }
-//    }
-//  }
-//}
 
 QString QxrdApplication::normalizeExperimentName(QString filename)
 {

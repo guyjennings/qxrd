@@ -1,18 +1,22 @@
 #ifndef QXRDAREADETECTORPLUGIN_H
 #define QXRDAREADETECTORPLUGIN_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qxrddetectorplugininterface.h"
 
-class QxrdAreaDetectorPlugin : public QObject, public QxrdDetectorPluginInterface
+class QxrdAreaDetectorPlugin : public QcepObject, public QxrdDetectorPluginInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "areaDetector.json")
   Q_INTERFACES(QxrdNamedPluginInterface QxrdDetectorPluginInterface)
 
+private:
+  typedef QcepObject inherited;
+
 public:
     QxrdAreaDetectorPlugin();
 
+    void initialize(QcepObjectWPtr parent);
     QString name() const;
 
     QxrdDetectorDriverPtr createDetector(QString name,

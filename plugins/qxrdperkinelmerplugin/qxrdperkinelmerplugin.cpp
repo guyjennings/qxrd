@@ -3,7 +3,15 @@
 #include "qxrdperkinelmerdriver.h"
 
 QxrdPerkinElmerPlugin::QxrdPerkinElmerPlugin()
+  : inherited("perkinElmerPlugin")
 {
+}
+
+void QxrdPerkinElmerPlugin::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  printMessage("QxrdPerkinElmerPlugin::initialize");
 }
 
 QString QxrdPerkinElmerPlugin::name() const

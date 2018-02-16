@@ -9,6 +9,7 @@
 #define DAQmxErrChk(functionCall) do { if( DAQmxFailed(error=(functionCall)) ) { QxrdNIDAQPlugin::errorCheck(__FILE__,__LINE__,error); goto Error; } } while(0)
 
 QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
+  inherited("nidaqPlugin"),
   m_ErrorOutput(NULL),
   m_AOTaskHandle(0),
   m_AITaskHandle(0),
@@ -57,6 +58,13 @@ QxrdNIDAQPlugin::~QxrdNIDAQPlugin()
 void QxrdNIDAQPlugin::setErrorOutput(QObject *errors)
 {
   m_ErrorOutput = errors;
+}
+
+void QxrdNIDAQPlugin::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  printMessage("QxrdNIDAQPlugin::initialize");
 }
 
 QString QxrdNIDAQPlugin::name() const

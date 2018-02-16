@@ -1,18 +1,22 @@
 #ifndef QXRDPERKINELMERPLUGIN_H
 #define QXRDPERKINELMERPLUGIN_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include "qxrddetectorplugininterface.h"
 
-class QxrdPerkinElmerPlugin : public QObject, public QxrdDetectorPluginInterface
+class QxrdPerkinElmerPlugin : public QcepObject, public QxrdDetectorPluginInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "pe.json")
   Q_INTERFACES(QxrdNamedPluginInterface QxrdDetectorPluginInterface)
 
+private:
+  typedef QcepObject inherited;
+
 public:
   QxrdPerkinElmerPlugin();
 
+  void initialize(QcepObjectWPtr parent);
   QString name() const;
 
   QxrdDetectorDriverPtr createDetector(QString name,
