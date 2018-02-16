@@ -11,6 +11,7 @@
 #include "DexImage.h"
 #include <QThread>
 #include "qcepmutexlocker.h"
+#include "qcepallocator.h"
 
 QxrdDexelaDriver::QxrdDexelaDriver(QString name,
                                                    QxrdDexelaSettingsWPtr det,
@@ -22,8 +23,6 @@ QxrdDexelaDriver::QxrdDexelaDriver(QString name,
 #ifndef QT_NO_DEBUG
   printf("Dexela Driver \"%s\" Constructed\n", qPrintable(name));
 #endif
-
-  connect(&m_Timer, &QTimer::timeout, this, &QxrdDexelaDriver::onTimerTimeout);
 }
 
 QxrdDexelaDriver::~QxrdDexelaDriver()
@@ -60,6 +59,26 @@ int QxrdDexelaDriver::scanForDetectors()
                    .arg(info.model)
                    .arg(info.serialNum));
 
+//      DexelaDetector det(info);
+
+//      det.OpenBoard();
+
+//      int fwVersion = det.GetFirmwareVersion();
+
+//      int dayMonth, year, time;
+
+//      det.GetFirmwareBuild(dayMonth, year, time);
+
+//      printMessage(tr("Detector %1 : XDim %2, YDim %3, NBuff %4")
+//                   .arg(i).arg(det.GetBufferXdim()).arg(det.GetBufferYdim()).arg(det.GetNumBuffers()));
+
+//      printMessage(tr("Detector %1 : Firmware %2: Build %3/%4: %5")
+//                   .arg(i).arg(fwVersion).arg(dayMonth).arg(year).arg(time));
+
+//      printMessage(tr("Detector %1 : Exposure Time %2, Gap Time %3")
+//                   .arg(i).arg(det.GetExposureTime()).arg(det.GetGapTime()));
+
+//      det.CloseBoard();
     }
 
     m_Initialized = 1;
@@ -69,6 +88,8 @@ int QxrdDexelaDriver::scanForDetectors()
     return false;
   }
 }
+
+static int detIndex = 0;
 
 bool QxrdDexelaDriver::startDetectorDriver()
 {
@@ -84,14 +105,99 @@ bool QxrdDexelaDriver::startDetectorDriver()
   if (acq && det && det->checkDetectorEnabled()) {
     scanForDetectors();
 
-    printMessage(tr("Starting Dexela detector \"%1\"").arg(det->get_DetectorName()));
+    m_DetectorIndex = detIndex++; // det->get_DetectorIndex();
 
-    det -> set_NRows(2048);
-    det -> set_NCols(2048);
+    printMessage(tr("Starting Dexela detector %1: \"%2\"")
+                 .arg(m_DetectorIndex)
+                 .arg(det->get_DetectorName()));
+
+
+    if (m_DetectorIndex >= 0 && m_DetectorIndex < m_DetectorCount) {
+      m_DexelaDetector = new DexelaDetector(m_Devices[m_DetectorIndex]);
+
+      if (m_DexelaDetector) {
+        QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+        try {
+          m_DexelaDetector -> OpenBoard();
+
+          m_XDim = m_DexelaDetector -> GetBufferXdim();
+          m_YDim = m_DexelaDetector -> GetBufferYdim();
+
+          det -> set_NCols(m_XDim);
+          det -> set_NRows(m_YDim);
+
+          m_DexelaDetector -> SetCallback(&QxrdDexelaDriver::staticCallback);
+          m_DexelaDetector -> SetCallbackData((void*) this);
+
+          m_DexelaDetector -> SetFullWellMode(High);
+          m_DexelaDetector -> SetExposureTime(acq->get_ExposureTime());
+          m_DexelaDetector -> SetBinningMode(x11);
+          m_DexelaDetector -> SetExposureMode(Expose_and_read);
+          m_DexelaDetector -> SetTriggerSource(Internal_Software);
+          m_DexelaDetector -> EnablePulseGenerator();
+
+          m_DexelaDetector -> GoLiveSeq();
+
+          m_DexelaDetector -> ToggleGenerator(true);
+
+          printMessage(tr("Dexela Detector Exposure time %1").arg(m_DexelaDetector->GetExposureTime()));
+        } catch (DexelaException &e) {
+          printMessage(tr("Dexela Exception caught"));
+        }
+      }
+    }
 
     return changeExposureTime(acq->get_ExposureTime());
   } else {
     return false;
+  }
+}
+
+void QxrdDexelaDriver::staticCallback(int fc, int buf, DexelaDetector *det)
+{
+//  printf("QxrdDexelaDriver::staticCallback called fc=%d, buf=%d, det=%x\n", fc, buf, det);
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  QxrdDexelaDriver *dex = reinterpret_cast<QxrdDexelaDriver*>(det->GetCallbackData());
+
+  if (dex) {
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(dex, "onAcquiredFrame", Qt::QueuedConnection, Q_ARG(int, fc), Q_ARG(int, buf)))
+  }
+}
+
+void QxrdDexelaDriver::callback(int fc, int buf, DexelaDetector *det)
+{
+//  printMessage(tr("QxrdDexelaDriver::callback ind:%1, fc:%2, buf:%3")
+//               .arg(m_DetectorIndex).arg(fc).arg(buf));
+
+//  if (det != m_DexelaDetector) {
+//    printMessage("Dexela detector mismatch in QxrdDexelaDriver::callback");
+//  }
+
+}
+
+void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
+{
+  QcepUInt16ImageDataPtr image =
+      QcepAllocator::newInt16Image(sharedFromThis(),
+                                   tr("frame-%1").arg(fc),
+                                   m_XDim, m_YDim,
+                                   QcepAllocator::AllocateFromReserve);
+
+  if (image) {
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    quint16 *ptr = image->data();
+
+    m_DexelaDetector -> ReadBuffer(buf, (byte*) ptr);
+
+    QxrdDetectorSettingsPtr det(m_Detector);
+
+    if (det) {
+      det->enqueueAcquiredFrame(image);
+    }
   }
 }
 
@@ -104,8 +210,6 @@ bool QxrdDexelaDriver::stopDetectorDriver()
   if (det) {
     printMessage(tr("Stopping Dexela detector \"%1\"").arg(det->get_DetectorName()));
   }
-
-  m_Timer.stop();
 
   return true;
 }
@@ -121,7 +225,9 @@ bool QxrdDexelaDriver::changeExposureTime(double expos)
   if (det && det->isEnabled()) {
     printMessage(tr("Exposure time changed to %1").arg(expos));
 
-    m_Timer.start(expos*1000);
+    if (m_DexelaDetector) {
+      m_DexelaDetector -> SetExposureTime(expos);
+    }
 
     return true;
   }
@@ -153,94 +259,92 @@ bool QxrdDexelaDriver::shutdownAcquisition()
 {
   THREAD_CHECK;
 
-  m_Timer.stop();
-
   return true;
 }
 
-void QxrdDexelaDriver::onTimerTimeout()
-{
-  QxrdDetectorSettingsPtr det(m_Detector);
-  QxrdAcqCommonPtr        acq(m_Acquisition);
+//void QxrdDexelaDriver::onTimerTimeout()
+//{
+//  QxrdDetectorSettingsPtr det(m_Detector);
+//  QxrdAcqCommonPtr        acq(m_Acquisition);
 
-  if (acq && det && det->checkDetectorEnabled()) {
-    QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
+//  if (acq && det && det->checkDetectorEnabled()) {
+//    QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
 
-    if (sacq) {
-      sacq->acquiredFrameAvailable(g_FrameCounter);
-    }
+//    if (sacq) {
+//      sacq->acquiredFrameAvailable(g_FrameCounter);
+//    }
 
-    int nRows = det -> get_NRows();
-    int nCols = det -> get_NCols();
+//    int nRows = det -> get_NRows();
+//    int nCols = det -> get_NCols();
 
-    int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
-    int frame = g_FrameCounter % 8;
+//    int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
+//    int frame = g_FrameCounter % 8;
 
-    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
-                                                                tr("simdet-%1").arg(frame),
-                                                                nCols, nRows,
-                                                                QcepAllocator::AllocateFromReserve);
+//    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
+//                                                                tr("simdet-%1").arg(frame),
+//                                                                nCols, nRows,
+//                                                                QcepAllocator::AllocateFromReserve);
 
 
-    if (image) {
-      quint16 *ptr = image->data();
+//    if (image) {
+//      quint16 *ptr = image->data();
 
-      for (int j=0; j<nRows; j++) {
-        for (int i=0; i<nCols; i++) {
-          if ((i>=frame*64) && (i<(frame+1)*64) && (j < 64)) {
-            *ptr++ = frame;
-          } else {
-            *ptr++ = xpmsec;
-          }
-        }
-      }
+//      for (int j=0; j<nRows; j++) {
+//        for (int i=0; i<nCols; i++) {
+//          if ((i>=frame*64) && (i<(frame+1)*64) && (j < 64)) {
+//            *ptr++ = frame;
+//          } else {
+//            *ptr++ = xpmsec;
+//          }
+//        }
+//      }
 
-      if ((nRows > 1024) && (nCols > 1024)) {
-        const int labelWidth = 256;
-        const int labelHeight = 64;
+//      if ((nRows > 1024) && (nCols > 1024)) {
+//        const int labelWidth = 256;
+//        const int labelHeight = 64;
 
-        QImage imageLabel(labelWidth, labelHeight, QImage::Format_RGB32);
-        QPainter painter(&imageLabel);
+//        QImage imageLabel(labelWidth, labelHeight, QImage::Format_RGB32);
+//        QPainter painter(&imageLabel);
 
-        painter.fillRect(0,0,labelWidth,labelHeight, Qt::black);
-        painter.setPen(Qt::white);
-        painter.setFont(QFont("Times", labelHeight, QFont::Bold, true));
-        painter.drawText(0, labelHeight, tr("%1").arg(g_FrameCounter));
+//        painter.fillRect(0,0,labelWidth,labelHeight, Qt::black);
+//        painter.setPen(Qt::white);
+//        painter.setFont(QFont("Times", labelHeight, QFont::Bold, true));
+//        painter.drawText(0, labelHeight, tr("%1").arg(g_FrameCounter));
 
-        QRgb    *rgb = (QRgb*) imageLabel.bits();
-        int nFrames = nRows / labelHeight;
-        int frameN = g_FrameCounter % nFrames;
-        int plval = qGray(*rgb);
-        int pRgb  = *rgb;
+//        QRgb    *rgb = (QRgb*) imageLabel.bits();
+//        int nFrames = nRows / labelHeight;
+//        int frameN = g_FrameCounter % nFrames;
+//        int plval = qGray(*rgb);
+//        int pRgb  = *rgb;
 
-        for (int j=0; j<labelHeight; j++) {
-          for (int i=0; i<labelWidth; i++) {
-            int x = nCols-labelWidth+i;
-            int y = (frameN+1)*labelHeight-j;
-            //          int val = image->value(x,y);
-            int vRgb = *rgb++;
-            int lval = qGray(vRgb);
+//        for (int j=0; j<labelHeight; j++) {
+//          for (int i=0; i<labelWidth; i++) {
+//            int x = nCols-labelWidth+i;
+//            int y = (frameN+1)*labelHeight-j;
+//            //          int val = image->value(x,y);
+//            int vRgb = *rgb++;
+//            int lval = qGray(vRgb);
 
-            if (lval != plval) {
-              plval = lval;
-            }
+//            if (lval != plval) {
+//              plval = lval;
+//            }
 
-            if (vRgb != pRgb) {
-              pRgb = vRgb;
-            }
+//            if (vRgb != pRgb) {
+//              pRgb = vRgb;
+//            }
 
-            image->setValue(x,y,lval);
-          }
-        }
-      }
-    }
+//            image->setValue(x,y,lval);
+//          }
+//        }
+//      }
+//    }
 
-    if (qcepDebug(DEBUG_DETECTORIDLING)) {
-      printMessage("enqueue dexela acquired frame");
-    }
+//    if (qcepDebug(DEBUG_DETECTORIDLING)) {
+//      printMessage("enqueue dexela acquired frame");
+//    }
 
-    det->enqueueAcquiredFrame(image);
+//    det->enqueueAcquiredFrame(image);
 
-    g_FrameCounter++;
-  }
-}
+//    g_FrameCounter++;
+//  }
+//}

@@ -28,15 +28,22 @@ public slots:
   virtual void beginFrame();
 
 private slots:
-  void onTimerTimeout();
+  void onAcquiredFrame       (int fc, int buf);
 
 private:
   int scanForDetectors();
 
-private:
-  QxrdDexelaSettingsWPtr m_Dexela;
-  QTimer                 m_Timer;
+  void        callback       (int fc, int buf, DexelaDetector *det);
+  static void staticCallback (int fc, int buf, DexelaDetector *det);
 
+private:
+  QxrdDexelaSettingsWPtr  m_Dexela;
+  int                     m_DetectorIndex;
+  DexelaDetector         *m_DexelaDetector;
+  int                     m_XDim;
+  int                     m_YDim;
+
+private: // Static members...
   static QMutex           m_Mutex;
   static BusScanner      *m_BusScanner;
   static int              m_DetectorCount;
