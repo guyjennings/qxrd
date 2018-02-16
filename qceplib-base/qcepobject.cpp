@@ -104,6 +104,24 @@ void QcepObject::initialize(QcepObjectWPtr parent)
   }
 }
 
+//TODO: eliminate (replace by calls to 'initialize')
+void QcepObject::setParentPtr(QcepObjectWPtr parent)
+{
+  QcepObjectPtr oldParent(m_Parent);
+
+  if (oldParent) {
+    oldParent->removeChildPtr(sharedFromThis());
+  }
+
+  m_Parent = parent;
+
+  QcepObjectPtr newParent(m_Parent);
+
+  if (newParent) {
+    newParent -> addChildPtr(sharedFromThis());
+  }
+}
+
 void QcepObject::initializeRoot()
 {
   m_Initialized = true;
@@ -125,12 +143,6 @@ void QcepObject::checkObjectInitialization() const
   }
 }
 #endif
-
-//TODO: eliminate (replace by calls to 'initialize')
-void QcepObject::setParentPtr(QcepObjectWPtr parent)
-{
-  m_Parent = parent;
-}
 
 QcepObjectWPtr QcepObject::parentPtr()
 {
