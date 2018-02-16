@@ -79,7 +79,11 @@ void QxrdMaskStack::push(QcepMaskDataPtr m)
 
 QcepMaskDataPtr QxrdMaskStack::pop()
 {
-  QcepMaskDataPtr res = inherited::takeFirst();
+  QcepMaskDataPtr res;
+
+  if (maskCount() > 0) {
+    res = inherited::takeFirst();
+  }
 
   emit maskChanged();
 
@@ -88,7 +92,11 @@ QcepMaskDataPtr QxrdMaskStack::pop()
 
 QcepMaskDataPtr QxrdMaskStack::first()
 {
-  QcepMaskDataPtr res = inherited::first();
+  QcepMaskDataPtr res;
+
+  if (maskCount() > 0) {
+    res = inherited::first();
+  }
 
   return res;
 }
