@@ -3,7 +3,15 @@
 #include "qxrdareadetectordriver.h"
 
 QxrdAreaDetectorPlugin::QxrdAreaDetectorPlugin()
+  : inherited("areaDetectorPlugin")
 {
+}
+
+void QxrdAreaDetectorPlugin::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  printMessage("QxrdAreaDetectorPlugin::initialize");
 }
 
 QString QxrdAreaDetectorPlugin::name() const

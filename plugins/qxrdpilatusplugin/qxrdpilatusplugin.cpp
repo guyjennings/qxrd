@@ -3,7 +3,15 @@
 #include "qxrdpilatusdriver.h"
 
 QxrdPilatusPlugin::QxrdPilatusPlugin()
+  : inherited("pilatusPlugin")
 {
+}
+
+void QxrdPilatusPlugin::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  printMessage("QxrdPilatusPlugin::initialize");
 }
 
 QString QxrdPilatusPlugin::name() const

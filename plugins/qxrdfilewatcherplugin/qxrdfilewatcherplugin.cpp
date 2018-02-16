@@ -3,7 +3,15 @@
 #include "qxrdfilewatcherdriver.h"
 
 QxrdFileWatcherPlugin::QxrdFileWatcherPlugin()
+  : inherited("fileWatcherPlugin")
 {
+}
+
+void QxrdFileWatcherPlugin::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  printMessage("QxrdFileWatcherPlugin::initialize");
 }
 
 QString QxrdFileWatcherPlugin::name() const

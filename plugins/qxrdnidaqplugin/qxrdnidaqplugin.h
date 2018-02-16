@@ -1,7 +1,7 @@
 #ifndef QXRDNIDAQPLUGIN_H
 #define QXRDNIDAQPLUGIN_H
 
-#include <QObject>
+#include "qcepobject.h"
 #include <QDateTime>
 #include <QMutex>
 #include <QStringList>
@@ -10,17 +10,21 @@
 #include "qxrdnidaqplugininterface.h"
 #include "NIDAQmx.h"
 
-class QxrdNIDAQPlugin : public QObject, public QxrdNIDAQPluginInterface
+class QxrdNIDAQPlugin : public QcepObject, public QxrdNIDAQPluginInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID QxrdNIDAQPluginInterface_iid FILE "nidaq.json")
   Q_INTERFACES(QxrdNamedPluginInterface QxrdNIDAQPluginInterface)
+
+private:
+  typedef QcepObject inherited;
 
 public:
   QxrdNIDAQPlugin();
   virtual ~QxrdNIDAQPlugin();
   virtual void setErrorOutput(QObject *errors);
 
+  void initialize(QcepObjectWPtr parent);
   QString name() const;
 
 public slots:

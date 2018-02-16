@@ -6,6 +6,7 @@
 #include "Dexeladetector.h"
 
 QxrdDexelaPlugin::QxrdDexelaPlugin()
+  : inherited("dexelaPlugin")
 {
 //  m_BusScanner = new BusScanner();
 
@@ -21,6 +22,13 @@ QxrdDexelaPlugin::QxrdDexelaPlugin()
 
 //    printf("  unit = %d, param = ""%s""\n", info.unit, info.param);
 //  }
+}
+
+void QxrdDexelaPlugin::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  printMessage("QxrdDexelaPlugin::initialize");
 }
 
 QString QxrdDexelaPlugin::name() const
