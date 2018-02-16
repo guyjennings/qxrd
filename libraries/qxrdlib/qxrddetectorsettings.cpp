@@ -538,11 +538,15 @@ void QxrdDetectorSettings::closeWindow()
 
 void QxrdDetectorSettings::enqueueAcquiredFrame(QcepImageDataBasePtr img)
 {
-  if (m_AcquiredImages) {
-    m_AcquiredImages -> enqueue(img);
-  }
+  if (img) {
+    img -> setParentPtr(sharedFromThis());
 
-  m_NAcquiredImages.release(1);
+    if (m_AcquiredImages) {
+      m_AcquiredImages -> enqueue(img);
+    }
+
+    m_NAcquiredImages.release(1);
+  }
 }
 
 QcepImageDataBasePtr QxrdDetectorSettings::acquireFrame()
