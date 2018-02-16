@@ -686,7 +686,7 @@ int QxrdNIDAQPlugin::readContinuousInput()
         DAQmxErrChk(DAQmxGetReadCurrReadPos(tsk, &lastSample[i+1]));
 
         if (lastSample[i+1] != lastSample[i]) {
-          printf("Sync error %ld:%ld\n", lastSample[i+1], lastSample[i]);
+          printf("Sync error %lld:%lld\n", lastSample[i+1], lastSample[i]);
         }
       }
     }

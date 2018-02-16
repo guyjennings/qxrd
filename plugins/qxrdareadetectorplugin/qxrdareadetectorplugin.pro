@@ -1,6 +1,8 @@
 include("../../qxrd.version.pri")
 include("../../qxrd.platform.pri")
 
+QT += widgets qml network script concurrent
+
 TEMPLATE = lib
 CONFIG += plugin
 
