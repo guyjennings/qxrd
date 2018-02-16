@@ -233,14 +233,18 @@ void QcepObject::addChildPtr(QcepObjectPtr child)
   checkObjectInitialization();
 #endif
 
-  if (m_Children.contains(child)) {
-    printMessage("Added same child more than once");
-  } else {
-    m_Children.append(child);
-  }
-
   if (child) {
+    if (m_Children.contains(child)) {
+      printMessage("Added same child more than once");
+    } else {
+      m_Children.append(child);
+    }
+
     child->setParentPtr(sharedFromThis());
+  } else {
+#ifndef QT_NO_DEBUG
+    printMessage(tr("QcepObject::addChildPtr(NULL)"));
+#endif
   }
 
 #ifndef QT_NO_DEBUG
