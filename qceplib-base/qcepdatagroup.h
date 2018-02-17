@@ -73,8 +73,8 @@ public slots:
   QcepDataGroupPtr containingGroup(QString path);
   QcepDataObjectPtr referencedObject(QString path);
 
-//private:
-//  QVector<QcepDataObjectPtr> m_Objects;
+private:
+  QVector<QcepDataObjectPtr> m_Objects;
 };
 
 Q_DECLARE_METATYPE(QcepDataGroup*)

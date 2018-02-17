@@ -86,8 +86,8 @@ QString QcepDataGroup::description() const
 
 QcepDataObjectPtr QcepDataGroup::item(int n)
 {
-  QcepObjectPtr      ch  = childPtr(n);
-  QcepDataObjectPtr  res = qSharedPointerDynamicCast<QcepDataObject>(ch);
+//  QcepObjectPtr      ch  = childPtr(n);
+  QcepDataObjectPtr  res = m_Objects.value(n);
   return res;
 }
 
@@ -265,6 +265,8 @@ void QcepDataGroup::clear()
 {
   clearChildren();
 
+  m_Objects.clear();
+
   emit dataObjectChanged();
 }
 
@@ -273,10 +275,13 @@ void QcepDataGroup::insert(int atRow, QcepDataObjectPtr obj)
   if (obj) {
     if (atRow <= 0) {
       prependChildPtr(obj);
+      m_Objects.insert(0, obj);
     } else if (atRow >= childCount()) {
       addChildPtr(obj);
+      m_Objects.append(obj);
     } else {
       insertChildPtr(atRow, obj);
+      m_Objects.insert(atRow+1, obj);
     }
 
     obj->setParentItem(qSharedPointerDynamicCast<QcepDataGroup>(sharedFromThis()));
@@ -287,6 +292,8 @@ void QcepDataGroup::append(QcepDataObjectPtr obj)
 {
   if (obj) {
 //    addChildPtr(obj);
+
+    m_Objects.append(obj);
 
     connect(obj.data(), &QcepDataObject::dataObjectChanged, this, &QcepDataObject::dataObjectChanged);
 
@@ -308,6 +315,8 @@ void QcepDataGroup::remove(int n)
   if (n >= 0 && n < childCount()) {
     removeChildPtr(childPtr(n));
 
+    m_Objects.remove(n);
+
     emit dataObjectChanged();
   }
 }
@@ -315,6 +324,8 @@ void QcepDataGroup::remove(int n)
 void QcepDataGroup::remove(QcepDataObjectPtr obj)
 {
   removeChildPtr(obj);
+
+  m_Objects.removeOne(obj);
 }
 
 void QcepDataGroup::remove(QString path)

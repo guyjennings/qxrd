@@ -59,13 +59,13 @@ public slots:
   void setChanged(int ct);
 
   int childCount() const;
-  QcepObjectPtr childPtr(int n) const;
+  QcepObjectWPtr childPtr(int n) const;
 
-  virtual void addChildPtr(QcepObjectPtr child);
-  virtual void removeChildPtr(QcepObjectPtr child);
+  virtual void addChildPtr(QcepObjectWPtr child);
+  virtual void removeChildPtr(QcepObjectWPtr child);
   virtual void clearChildren();
-  virtual void prependChildPtr(QcepObjectPtr child);
-  virtual void insertChildPtr(int atRow, QcepObjectPtr child);
+  virtual void prependChildPtr(QcepObjectWPtr child);
+  virtual void insertChildPtr(int atRow, QcepObjectWPtr child);
 
   int checkChildren(int verbose=0, int level=0) const;
 
@@ -120,13 +120,17 @@ public:
   virtual void writeObjectData(QcepFileFormatterPtr fmt);
 
 private:
+  void setParentImpl(QcepObjectWPtr parent);
+  void addChildImpl(QcepObjectWPtr child);
+
+private:
   QcepObjectNamer                     m_ObjectNamer;
   bool                                m_Initialized;
   QAtomicInt                          m_ChangeCount;
   QAtomicPointer<QcepProperty>        m_LastChanged;
   QcepObjectWPtr                      m_Parent;
   //TODO: eliminate?
-  QVector<QcepObjectPtr>              m_Children;
+  QVector<QcepObjectWPtr>             m_Children;
 
 protected:
 #ifndef QT_NO_DEBUG

@@ -118,7 +118,24 @@ void QcepObject::setParentPtr(QcepObjectWPtr parent)
   QcepObjectPtr newParent(m_Parent);
 
   if (newParent) {
-    newParent -> addChildPtr(sharedFromThis());
+    newParent -> addChildImpl(sharedFromThis());
+  }
+}
+
+void QcepObject::setParentImpl(QcepObjectWPtr parent)
+{
+}
+
+void QcepObject::addChildImpl(QcepObjectWPtr child)
+{
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
+  if (m_Children.contains(child)) {
+    printMessage("Added same child more than once");
+  } else {
+    m_Children.append(child);
   }
 }
 
@@ -165,7 +182,7 @@ int QcepObject::childCount() const
 }
 
 //TODO: reimplement by virtual method in all classes ?
-QcepObjectPtr QcepObject::childPtr(int n) const
+QcepObjectWPtr QcepObject::childPtr(int n) const
 {
 #ifndef QT_NO_DEBUG
   checkObjectInitialization();
@@ -239,20 +256,20 @@ int QcepObject::checkChildren(int verbose, int level) const
 }
 
 //TODO: move functionality into QcepDataGroup
-void QcepObject::addChildPtr(QcepObjectPtr child)
+void QcepObject::addChildPtr(QcepObjectWPtr child)
 {
 #ifndef QT_NO_DEBUG
   checkObjectInitialization();
 #endif
 
   if (child) {
-    if (m_Children.contains(child)) {
-      printMessage("Added same child more than once");
-    } else {
-      m_Children.append(child);
-    }
+    addChildImpl(child);
 
-    child->setParentPtr(sharedFromThis());
+    QcepObjectPtr childP(child);
+
+    if (childP) {
+      childP->setParentPtr(sharedFromThis());
+    }
   } else {
 #ifndef QT_NO_DEBUG
     printMessage(tr("QcepObject::addChildPtr(NULL)"));
@@ -265,7 +282,7 @@ void QcepObject::addChildPtr(QcepObjectPtr child)
 }
 
 //TODO: move functionality into QcepDataGroup
-void QcepObject::removeChildPtr(QcepObjectPtr child)
+void QcepObject::removeChildPtr(QcepObjectWPtr child)
 {
 #ifndef QT_NO_DEBUG
   checkObjectInitialization();
@@ -293,7 +310,7 @@ void QcepObject::clearChildren()
 }
 
 //TODO: move functionality into QcepDataGroup
-void QcepObject::prependChildPtr(QcepObjectPtr child)
+void QcepObject::prependChildPtr(QcepObjectWPtr child)
 {
 #ifndef QT_NO_DEBUG
   checkObjectInitialization();
@@ -311,7 +328,7 @@ void QcepObject::prependChildPtr(QcepObjectPtr child)
 }
 
 //TODO: move functionality into QcepDataGroup
-void QcepObject::insertChildPtr(int atRow, QcepObjectPtr child)
+void QcepObject::insertChildPtr(int atRow, QcepObjectWPtr child)
 {
 #ifndef QT_NO_DEBUG
   checkObjectInitialization();
