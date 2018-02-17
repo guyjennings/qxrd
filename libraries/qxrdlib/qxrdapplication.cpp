@@ -49,8 +49,6 @@
 #include <QMessageBox>
 #include <QApplication>
 
-static QList<QDir> pluginsDirList;
-
 int eventCounter;
 
 void QxrdApplication::processEventCounter()
@@ -268,17 +266,21 @@ QxrdNIDAQPluginInterfacePtr QxrdApplication::nidaqPlugin()
 
 void QxrdApplication::loadPlugins()
 {
-
 #ifdef QXRD_PLUGIN_PATH
-  pluginsDirList.append(QDir(xstr(QXRD_PLUGIN_PATH)));
+  prop_PluginList()->appendValue(QDir(xstr(QXRD_PLUGIN_PATH)));
 #else
   QDir pluginsDir = QDir(qApp->applicationDirPath());
   pluginsDir.cd("plugins");
-  pluginsDirList.append(pluginsDir);
+  prop_PluginList()->appendValue(pluginsDir.absolutePath());
 #endif
+
   if (qcepDebug(DEBUG_PLUGINS)) {
     if (get_PluginList().count() == 0) {
       printf("No plugin directories specified\n");
+    } else {
+      foreach (QString dir, get_PluginList()) {
+        printf("Plugin directory %s\n", qPrintable(dir));
+      }
     }
   }
 
