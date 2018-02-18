@@ -280,7 +280,7 @@ QxrdNIDAQPluginInterfacePtr QxrdApplication::nidaqPlugin()
 void QxrdApplication::loadPlugins()
 {
 #ifdef QXRD_PLUGIN_PATH
-  prop_PluginList()->appendValue(QDir(xstr(QXRD_PLUGIN_PATH)));
+  prop_PluginList()->appendValue(xstr(QXRD_PLUGIN_PATH));
 #else
   QDir pluginsDir = QDir(qApp->applicationDirPath());
   pluginsDir.cd("plugins");
