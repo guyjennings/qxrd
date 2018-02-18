@@ -39,7 +39,7 @@ public:
 
   void parseCommandLine(bool wantFullOptions);
 
-  Q_INVOKABLE void splashMessage(QString msg);
+  Q_INVOKABLE void splashMessage(QString msg, QDateTime dt=QDateTime::currentDateTime());
 
   void tiffWarning(const char* module, const char *msg);
   void tiffError(const char* module, const char *msg);

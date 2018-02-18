@@ -429,7 +429,7 @@ void QxrdAppCommon::closeWelcomeWindow()
   }
 }
 
-void QxrdAppCommon::splashMessage(QString msg)
+void QxrdAppCommon::splashMessage(QString msg, QDateTime dt)
 {
   GUI_THREAD_CHECK;
 
@@ -444,11 +444,11 @@ void QxrdAppCommon::splashMessage(QString msg)
 
 //    m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
 
-    processEvents();
-
     if (m_StartupWindow) {
-      m_StartupWindow -> appendMessage(msg);
+      m_StartupWindow -> appendMessage(msg, dt);
     }
+
+    processEvents();
   }
 }
 

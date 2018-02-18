@@ -7,6 +7,8 @@
 #include "qxrdwindow.h"
 #include <stdio.h>
 #include "qcepdataobject.h"
+#include "qceprunguard.h"
+#include <QMessageBox>
 
 //#if defined(Q_OS_UNIX) && !defined(Q_OS_MACX)
 //#include <mcheck.h>
@@ -26,6 +28,15 @@ int main(int argc, char *argv[])
 //#if defined(Q_OS_UNIX) && !defined(Q_OS_MACX)
 //  mtrace();
 //#endif
+  QcepRunGuard guard( "QXRD" );
+
+  if ( !guard.tryToRun() ) {
+    QApplication app(argc, argv);
+    QMessageBox::critical(NULL, "ALready Running",
+                          "Another instance of QXRD is already running");
+
+    return 0;
+  }
 
   g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(new QxrdDebugDictionary());
 

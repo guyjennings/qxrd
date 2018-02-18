@@ -1,4 +1,5 @@
 #include "qxrdstartupwindow.h"
+#include <QDateTime>
 
 QxrdStartupWindow::QxrdStartupWindow(QWidget *parent) :
   QMainWindow(parent)
@@ -30,7 +31,23 @@ void QxrdStartupWindow::setApplicationDescription(QString desc)
   m_Description -> append(desc);
 }
 
-void QxrdStartupWindow::appendMessage(QString msg)
+void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)
 {
-  m_Messages -> append(msg);
+  QString day1 = m_LastDateTime.toString("[ yyyy/MM/dd hh:mm ]");
+  QString day2 = dt.toString("[ yyyy/MM/dd hh:mm ]");
+
+  if (day1 != day2) {
+    m_Messages -> append("<span style=\"color:blue\">"+
+                         day2+
+                         "</span>");
+  }
+
+  QString secs = dt.toString("[  +ss.zzz]");
+
+  m_Messages -> append("<span style=\"color:blue\">"+
+                       secs +
+                       "</span> : " +
+                       msg);
+
+  m_LastDateTime = dt;
 }

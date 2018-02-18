@@ -246,12 +246,11 @@ void QxrdApplication::openStartupWindow()
         new QxrdStartupWindow());
 
   m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrd-icon-256x256.png"));
-  m_StartupWindow -> setApplicationDescription(tr(
+  m_StartupWindow -> setApplicationDescription(
         "<h3>Data Acquisition for 2-D XRay Detectors<h3>\n"
         "<h3>Guy Jennings<h3>\n"
-        "<h3>Version %1</h3>\n"
-        "<p>Build : " __DATE__ " : " __TIME__ "</p>\n"
-        ).arg(STR(QXRD_VERSION)));
+        "<h3>Version " STR(QXRD_VERSION) "</h3>\n"
+        "<p>Build : " __DATE__ " : " __TIME__ "</p>\n");
 
   m_StartupWindow -> setWindowTitle(applicationDescription());
   m_StartupWindow -> show();
