@@ -72,7 +72,6 @@ SOURCES += qxrdlib.cpp \
     qxrdfilesaver.cpp \
     qxrdcenterfinder.cpp \
     qxrdcenterfinderplot.cpp \
-    qxrdcenterfinderdialog.cpp \
     qxrdcenterfinderpicker.cpp \
     qxrdpowderpointpicker.cpp \
     qxrdintegrator.cpp \
@@ -113,7 +112,6 @@ SOURCES += qxrdlib.cpp \
     qxrdfilebrowserview.cpp \
     qxrdslicedialog.cpp \
     qxrdhistogramdialog.cpp \
-    qxrdinfodialog.cpp \
     qxrdhistogramplot.cpp \
     qxrdsliceplot.cpp \
     qxrdhistogramselector.cpp \
@@ -138,7 +136,6 @@ SOURCES += qxrdlib.cpp \
     qxrdfilebrowsersettings.cpp \
     qxrdhistogramdialogsettings.cpp \
     qxrdhistogramplotsettings.cpp \
-    qxrdinfodialogsettings.cpp \
     qxrdcenterfinderplotsettings.cpp \
     qxrdsliceplotsettings.cpp \
     triangulate.c \
@@ -592,7 +589,6 @@ HEADERS += TODO.h \
     qxrdcenterfinder.h \
     qxrdcenterfinder-ptr.h \
     qxrdcenterfinderplot.h \
-    qxrdcenterfinderdialog.h \
     qxrdcenterfinderpicker.h \
     qxrdpowderpointpicker.h \
     qxrdintegrator.h \
@@ -654,7 +650,6 @@ HEADERS += TODO.h \
     qxrdfilebrowserview.h \
     qxrdslicedialog.h \
     qxrdhistogramdialog.h \
-    qxrdinfodialog.h \
     qxrdhistogramplot.h \
     qxrdsliceplot.h \
     qxrdhistogramselector.h \
@@ -688,7 +683,6 @@ HEADERS += TODO.h \
     qxrdfilebrowsersettings.h \
     qxrdhistogramdialogsettings.h \
     qxrdhistogramplotsettings.h \
-    qxrdinfodialogsettings.h \
     qxrdcenterfinderplotsettings.h \
     qxrdsliceplotsettings.h \
     triangulate.h \
@@ -774,7 +768,6 @@ HEADERS += TODO.h \
     qxrdhistogramdialogsettings-ptr.h \
     qxrdcenterfinderplotsettings-ptr.h \
     qxrdfilebrowsersettings-ptr.h \
-    qxrdinfodialogsettings-ptr.h \
     qxrdscriptdialogsettings-ptr.h \
     qxrdsynchronizedacquisitiondialogsettings-ptr.h \
     qxrdsynchronizedacquisitionplotsettings-ptr.h \
@@ -847,7 +840,6 @@ HEADERS += TODO.h \
 
 
 FORMS += qxrdwindow.ui \
-    qxrdcenterfinderdialog.ui \
     qxrdintegratordialog.ui \
     qxrdfilebrowser.ui \
     qxrdimagecalculator.ui \
@@ -857,7 +849,6 @@ FORMS += qxrdwindow.ui \
     qxrdcorrectiondialog.ui \
     qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \
-    qxrdinfodialog.ui \
     qxrdwelcomewindow.ui \
     qxrdglobalpreferencesdialog.ui \
     qxrdwelcomerecentitem.ui \

@@ -6,7 +6,6 @@
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdslicedialogsettings.h"
-#include "qxrdinfodialogsettings.h"
 #include "qxrdscriptdialogsettings.h"
 #include "qxrdsynchronizedacquisitiondialogsettings.h"
 #include "qxrdacquisitionextrainputsdialogsettings.h"
@@ -36,7 +35,6 @@ QxrdWindowSettings::QxrdWindowSettings(QString name, QString desc) :
   m_FileBrowserSettings = QxrdFileBrowserSettings::newFileBrowserSettings();
   m_HistogramDialogSettings = QxrdHistogramDialogSettings::newHistogramDialogSettings();
   m_SliceDialogSettings = QxrdSliceDialogSettings::newSliceDialogSettings();
-  m_InfoDialogSettings = QxrdInfoDialogSettings::newInfoDialogSettings();
   m_ScriptDialogSettings = QxrdScriptDialogSettings::newScriptDialogSettings();
   m_SynchronizedAcquisitionDialogSettings = QxrdSynchronizedAcquisitionDialogSettings::newSynchronizedAcquisitionDialogSettings();
   m_AcquisitionExtraInputsDialogSettings = QxrdAcquisitionExtraInputsDialogSettings::newAcquisitionExtraInputsDialogSettings();
@@ -57,7 +55,6 @@ void QxrdWindowSettings::initialize(QcepObjectWPtr parent)
   m_FileBrowserSettings                   -> initialize(sharedFromThis());
   m_HistogramDialogSettings               -> initialize(sharedFromThis());
   m_SliceDialogSettings                   -> initialize(sharedFromThis());
-  m_InfoDialogSettings                    -> initialize(sharedFromThis());
   m_ScriptDialogSettings                  -> initialize(sharedFromThis());
   m_SynchronizedAcquisitionDialogSettings -> initialize(sharedFromThis());
   m_AcquisitionExtraInputsDialogSettings  -> initialize(sharedFromThis());
@@ -96,12 +93,10 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdCenterFinderPlotSettings*>("QxrdCenterFinderPlotSettings*");
   qRegisterMetaType<QxrdIntegratorPlotSettings*>("QxrdIntegratorPlotSettings*");
   qRegisterMetaType<QxrdFileBrowserSettings*>("QxrdFileBrowserSettings*");
-//  qRegisterMetaType<QxrdOutputFileBrowserSettings*>("QxrdOutputFileBrowserSettings*");
   qRegisterMetaType<QxrdHistogramDialogSettings*>("QxrdHistogramDialogSettings*");
   qRegisterMetaType<QxrdHistogramPlotSettings*>("QxrdHistogramPlotSettings*");
   qRegisterMetaType<QxrdSliceDialogSettings*>("QxrdSliceDialogSettings*");
   qRegisterMetaType<QxrdSlicePlotSettings*>("QxrdSlicePlotSettings*");
-  qRegisterMetaType<QxrdInfoDialogSettings*>("QxrdInfoDialogSettings*");
   qRegisterMetaType<QxrdScriptDialogSettings*>("QxrdScriptDialogSettings*");
   qRegisterMetaType<QxrdSynchronizedAcquisitionDialogSettings*>("QxrdSynchronizedAcquisitionDialogSettings*");
   qRegisterMetaType<QxrdSynchronizedAcquisitionPlotSettings*>("QxrdSynchronizedAcquisitionPlotSettings*");
@@ -139,12 +134,6 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
       settings->endGroup();
     }
 
-//    if (m_OutputFileBrowserSettings) {
-//      settings->beginGroup("outputFileBrowser");
-//      m_OutputFileBrowserSettings->readSettings(settings);
-//      settings->endGroup();
-//    }
-
     if (m_HistogramDialogSettings) {
       settings->beginGroup("histogramDialog");
       m_HistogramDialogSettings->readSettings(settings);
@@ -154,12 +143,6 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
     if (m_SliceDialogSettings) {
       settings->beginGroup("sliceDialog");
       m_SliceDialogSettings->readSettings(settings);
-      settings->endGroup();
-    }
-
-    if (m_InfoDialogSettings) {
-      settings->beginGroup("imageInfoDialog");
-      m_InfoDialogSettings->readSettings(settings);
       settings->endGroup();
     }
 
@@ -260,13 +243,13 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (m_InfoDialogSettings) {
-      settings->beginGroup("imageInfoDialog");
-      m_InfoDialogSettings->writeSettings(settings);
-      settings->endGroup();
-    }
+//    if (m_InfoDialogSettings) {
+//      settings->beginGroup("imageInfoDialog");
+//      m_InfoDialogSettings->writeSettings(settings);
+//      settings->endGroup();
+//    }
 
-    if (m_SliceDialogSettings) {
+    if (m_ScriptDialogSettings) {
       settings->beginGroup("scriptDialog");
       m_ScriptDialogSettings->writeSettings(settings);
       settings->endGroup();
@@ -357,10 +340,10 @@ QxrdHistogramDialogSettingsWPtr QxrdWindowSettings::histogramDialogSettings()
   return m_HistogramDialogSettings;
 }
 
-QxrdInfoDialogSettingsWPtr QxrdWindowSettings::infoDialogSettings()
-{
-  return m_InfoDialogSettings;
-}
+//QxrdInfoDialogSettingsWPtr QxrdWindowSettings::infoDialogSettings()
+//{
+//  return m_InfoDialogSettings;
+//}
 
 QxrdScriptDialogSettingsWPtr QxrdWindowSettings::scriptDialogSettings()
 {

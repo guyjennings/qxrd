@@ -1,6 +1,5 @@
 #include "qcepallocator.h"
 #include "qxrdcenterfinder.h"
-#include "qxrdcenterfinderdialog.h"
 #include "qxrdcenterfinderpicker.h"
 #include "qxrdwindow.h"
 #include <qwt_plot_marker.h>

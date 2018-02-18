@@ -10,7 +10,6 @@
 #include "qxrdcenterfinderplotsettings-ptr.h"
 #include "qxrdfilebrowsersettings-ptr.h"
 #include "qxrdhistogramdialogsettings-ptr.h"
-#include "qxrdinfodialogsettings-ptr.h"
 #include "qxrdscriptdialogsettings-ptr.h"
 #include "qxrdslicedialogsettings-ptr.h"
 #include "qxrdsynchronizedacquisitiondialogsettings-ptr.h"
@@ -54,10 +53,8 @@ public:
   QxrdCenterFinderPlotSettingsWPtr             centerFinderPlotSettings();
   QxrdIntegratorPlotSettingsWPtr               integratorPlotSettings();
   QxrdFileBrowserSettingsWPtr                  fileBrowserSettings();
-//  QxrdOutputFileBrowserSettingsWPtr            outputFileBrowserSettings();
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
   QxrdSliceDialogSettingsWPtr                  sliceDialogSettings();
-  QxrdInfoDialogSettingsWPtr                   infoDialogSettings();
   QxrdScriptDialogSettingsWPtr                 scriptDialogSettings();
   QxrdSynchronizedAcquisitionDialogSettingsWPtr synchronizedAcquisitionDialogSettings();
   QxrdAcquisitionExtraInputsDialogSettingsWPtr acquisitionExtraInputsDialogSettings();
@@ -77,10 +74,8 @@ private:
   QxrdCenterFinderPlotSettingsPtr              m_CenterFinderPlotSettings;
   QxrdIntegratorPlotSettingsPtr                m_IntegratorPlotSettings;
   QxrdFileBrowserSettingsPtr                   m_FileBrowserSettings;
-//  QxrdOutputFileBrowserSettingsPtr             m_OutputFileBrowserSettings;
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;
   QxrdSliceDialogSettingsPtr                   m_SliceDialogSettings;
-  QxrdInfoDialogSettingsPtr                    m_InfoDialogSettings;
   QxrdScriptDialogSettingsPtr                  m_ScriptDialogSettings;
   QxrdSynchronizedAcquisitionDialogSettingsPtr m_SynchronizedAcquisitionDialogSettings;
   QxrdAcquisitionExtraInputsDialogSettingsPtr  m_AcquisitionExtraInputsDialogSettings;

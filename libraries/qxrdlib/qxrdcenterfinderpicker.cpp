@@ -1,5 +1,4 @@
 #include "qxrdcenterfinderpicker.h"
-#include "qxrdcenterfinderdialog.h"
 #include "qxrdimageplot.h"
 #include "qxrdrasterdata.h"
 #include "qwt_picker_machine.h"
