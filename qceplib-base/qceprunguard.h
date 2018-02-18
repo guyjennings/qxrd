@@ -16,6 +16,9 @@ public:
   void release();
 
 private:
+  QString generateKeyHash( const QString& key, const QString& salt );
+
+private:
   const QString    m_Key;
   const QString    m_MemLockKey;
   const QString    m_SharedMemKey;

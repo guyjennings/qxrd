@@ -1,8 +1,35 @@
 #include "qceprunguard.h"
 #include <QCryptographicHash>
 
-namespace {
-QString generateKeyHash( const QString& key, const QString& salt )
+/*
+ * Based on code posted to stack overflow by Dimitry Sazonov
+ * in answer to:
+ * https://stackoverflow.com/questions/5006547/qt-best-practice-for-a-single-instance-app-protection
+*/
+
+QcepRunGuard::QcepRunGuard( const QString& key )
+  : m_Key(key),
+    m_MemLockKey   (generateKeyHash(key, "_memLockKey")),
+    m_SharedMemKey (generateKeyHash(key, "_sharedmemKey")),
+    m_SharedMem    (m_SharedMemKey),
+    m_MemLock      (m_MemLockKey, 1)
+{
+  m_MemLock.acquire();
+
+  {
+    QSharedMemory fix(m_SharedMemKey);    // Fix for *nix: http://habrahabr.ru/post/173281/
+    fix.attach();
+  }
+
+  m_MemLock.release();
+}
+
+QcepRunGuard::~QcepRunGuard()
+{
+    release();
+}
+
+QString QcepRunGuard::generateKeyHash( const QString& key, const QString& salt )
 {
   QByteArray data;
 
@@ -11,27 +38,6 @@ QString generateKeyHash( const QString& key, const QString& salt )
   data = QCryptographicHash::hash( data, QCryptographicHash::Sha1 ).toHex();
 
   return data;
-}
-}
-
-QcepRunGuard::QcepRunGuard( const QString& key )
-  : m_Key( key )
-  , m_MemLockKey( generateKeyHash( key, "_memLockKey" ) )
-  , m_SharedMemKey( generateKeyHash( key, "_sharedmemKey" ) )
-  , m_SharedMem( m_SharedMemKey )
-  , m_MemLock( m_MemLockKey, 1 )
-{
-  m_MemLock.acquire();
-  {
-    QSharedMemory fix( m_SharedMemKey );    // Fix for *nix: http://habrahabr.ru/post/173281/
-    fix.attach();
-  }
-  m_MemLock.release();
-}
-
-QcepRunGuard::~QcepRunGuard()
-{
-    release();
 }
 
 bool QcepRunGuard::isAnotherRunning()
