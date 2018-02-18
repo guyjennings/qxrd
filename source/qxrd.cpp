@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
   if ( !guard.tryToRun() ) {
     QApplication app(argc, argv);
-    QMessageBox::critical(NULL, "ALready Running",
+    QMessageBox::critical(NULL, "Already Running",
                           "Another instance of QXRD is already running");
 
     return 0;

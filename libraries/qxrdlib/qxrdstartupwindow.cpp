@@ -28,7 +28,7 @@ void QxrdStartupWindow::setApplicationIcon(QIcon icon)
 
 void QxrdStartupWindow::setApplicationDescription(QString desc)
 {
-  m_Description -> append(desc);
+  m_Description -> setText(desc);
 }
 
 void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)
