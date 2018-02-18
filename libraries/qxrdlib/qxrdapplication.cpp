@@ -253,6 +253,7 @@ void QxrdApplication::openStartupWindow()
         "<p>Build : " __DATE__ " : " __TIME__ "</p>\n"
         ).arg(STR(QXRD_VERSION)));
 
+  m_StartupWindow -> setWindowTitle(applicationDescription());
   m_StartupWindow -> show();
   m_StartupWindow -> raise();
 }

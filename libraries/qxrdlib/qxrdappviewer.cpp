@@ -49,6 +49,7 @@ void QxrdAppViewer::openStartupWindow()
              "<h3>Version " STR(QXRD_VERSION) "</h3>\n"
              "<p>Build : " __DATE__ " : " __TIME__ "</p>\n");
 
+  m_StartupWindow -> setWindowTitle(applicationDescription());
   m_StartupWindow -> show();
   m_StartupWindow -> raise();
 }

@@ -1,4 +1,5 @@
 #include "qxrdinfowindow.h"
+#include "qxrdappcommon.h"
 
 QxrdInfoWindow::QxrdInfoWindow(QString name,
                                QxrdAppCommonWPtr app,
@@ -9,7 +10,46 @@ QxrdInfoWindow::QxrdInfoWindow(QString name,
 {
   setupUi(this);
 
+  m_ObjectTreeModel =
+      new QcepObjectTreeModel(this, app);
+
+  m_ObjectPropertiesModel =
+      new QcepObjectPropertiesModel(this, app);
+
+  m_ObjectView     -> setModel(m_ObjectTreeModel);
+  m_PropertiesView -> setModel(m_ObjectPropertiesModel);
+
+  m_ObjectSelection =
+      m_ObjectView -> selectionModel();
+
+  connect(m_ObjectSelection, &QItemSelectionModel::selectionChanged,
+          this,              &QxrdInfoWindow::selectionChanged);
+
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
+
+  QHeaderView *oh =
+    m_ObjectView -> header();
+
+  if (oh) {
+    oh -> setSectionResizeMode(0, QHeaderView::ResizeToContents);
+  }
+
+  QGridLayout *gl =
+      qobject_cast<QGridLayout*>(
+        m_GridView->layout());
+
+  if (gl) {
+    gl -> setColumnStretch(0, 0);
+    gl -> setColumnStretch(1, 1);
+  }
+
+  QHeaderView *hv =
+    m_PropertiesView -> header();
+
+  if (hv) {
+    hv -> setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    hv -> setSectionResizeMode(1, QHeaderView::ResizeToContents);
+  }
 }
 
 QxrdInfoWindow::~QxrdInfoWindow()
@@ -25,6 +65,23 @@ void QxrdInfoWindow::changeEvent(QEvent *e)
     break;
   default:
     break;
+  }
+}
+
+void QxrdInfoWindow::selectionChanged(const QItemSelection &selected,
+                                      const QItemSelection &deselected)
+{
+  QModelIndexList sel = selected.indexes();
+
+  if (sel.count() == 0) {
+    m_ObjectPropertiesModel -> deselect();
+  } else {
+    QModelIndex ind = sel.first();
+
+    QcepObjectWPtr obj =
+        m_ObjectTreeModel -> indexedObject(ind);
+
+    m_ObjectPropertiesModel -> select(obj);
   }
 }
 
