@@ -1,7 +1,6 @@
 #include "qxrdappcommon.h"
 #include "qxrddebug.h"
 #include "qcepimagedataformattiff.h"
-#include "qxrdsplashscreen.h"
 #include "qxrdpowderpoint.h"
 #include "qxrdcalibrantdspacing.h"
 #include "qxrdcalibrantdspacings.h"
@@ -23,6 +22,7 @@
 #include <QMetaObject>
 #include <QMetaEnum>
 #include "qcepallocator.h"
+#include "qxrdstartupwindow.h"
 
 QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   : inherited(argc, argv),
@@ -48,7 +48,7 @@ QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
     m_UpdateIntervalMsec(this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)"),
     m_LockerCount(this, "lockerCount", 0, "Number of mutex locks taken"),
     m_LockerRate(this, "lockerRate", 0, "Mutex Locking Rate"),
-    m_Splash(NULL),
+//    m_Splash(NULL),
     m_WelcomeWindow(NULL)
 {
   QcepProperty::registerMetaTypes();
@@ -73,6 +73,18 @@ QxrdAppCommon::~QxrdAppCommon()
 void QxrdAppCommon::initializeRoot()
 {
   THREAD_CHECK;
+
+  connect(prop_Debug(), &QcepInt64Property::valueChanged,
+          this,         &QxrdAppCommon::debugChanged);
+  readApplicationSettings();
+
+  parseCommandLine(true);
+
+  if (get_GuiWanted()) {
+    openStartupWindow();
+  }
+
+  processEvents();
 
   QThread::currentThread()->setObjectName("applicationThread");
 
@@ -422,19 +434,21 @@ void QxrdAppCommon::splashMessage(QString msg)
   GUI_THREAD_CHECK;
 
   if (get_GuiWanted()) {
-    if (m_Splash == NULL) {
-      m_Splash = QxrdSplashScreenPtr(new QxrdSplashScreen(NULL));
-    }
+//    if (m_Splash == NULL) {
+//      m_Splash = QxrdSplashScreenPtr(new QxrdSplashScreen(NULL));
+//    }
 
-    m_Splash -> show();
+//    m_Splash -> show();
 
-    QString msgf = tr("Qxrd Version " STR(QXRD_VERSION) "\n")+msg;
+//    QString msgf = tr("Qxrd Version " STR(QXRD_VERSION) "\n")+msg;
 
-    m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
+//    m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
 
     processEvents();
 
-    m_SplashTimer.start(5000);
+    if (m_StartupWindow) {
+      m_StartupWindow -> appendMessage(msg);
+    }
   }
 }
 
@@ -442,8 +456,8 @@ void QxrdAppCommon::hideSplash()
 {
   GUI_THREAD_CHECK;
 
-  if (m_Splash) {
-    m_Splash -> hide();
+  if (m_StartupWindow) {
+    m_StartupWindow -> hide();
   }
 }
 
@@ -711,6 +725,15 @@ QStringList QxrdAppCommon::makeStringListFromArgs(int argc, char **argv)
   }
 
   return res;
+}
+
+void QxrdAppCommon::debugChanged(qint64 newValue)
+{
+  if (g_DebugLevel) {
+    printMessage(tr("Debug level changed from %1 to %2").arg(g_DebugLevel->debugLevel()).arg(newValue));
+
+    g_DebugLevel->setDebugLevel(newValue);
+  }
 }
 
 int QxrdAppCommon::debugFlag(QString f)

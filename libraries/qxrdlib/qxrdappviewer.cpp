@@ -4,6 +4,7 @@
 #include "qxrdexperimentthread.h"
 #include "qxrdexperiment.h"
 #include "qxrdviewersettings.h"
+#include "qxrdstartupwindow.h"
 
 QxrdAppViewer::QxrdAppViewer(int &argc, char **argv)
   : inherited(argc, argv)
@@ -34,6 +35,26 @@ void QxrdAppViewer::initializeRoot()
   } else {
     openWatcher(".");
   }
+}
+
+void QxrdAppViewer::openStartupWindow()
+{
+  m_StartupWindow = QxrdStartupWindowPtr(
+        new QxrdStartupWindow());
+
+  m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrdviewer-icon-128x128.png"));
+  m_StartupWindow -> setApplicationDescription(
+             "<h3>Data Viewer for 2-D XRay Detector data<h3>\n"
+             "<h3>Guy Jennings<h3>\n"
+             "<h3>Version " STR(QXRD_VERSION) "</h3>\n"
+             "<p>Build : " __DATE__ " : " __TIME__ "</p>\n");
+
+  m_StartupWindow -> show();
+  m_StartupWindow -> raise();
+}
+
+void QxrdAppViewer::closeStartupWindow()
+{
 }
 
 void QxrdAppViewer::setDefaultObjectData(QcepDataObject *obj)

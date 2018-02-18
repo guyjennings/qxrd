@@ -98,7 +98,6 @@ include(submodules/qceplib/qceplib-specserver-include.pri)
 #macx {
 #}
 
-
 SOURCES += qxrd.cpp
 
 OTHER_FILES += testImage.js

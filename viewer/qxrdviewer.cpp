@@ -5,10 +5,7 @@
 #include "qxrdappviewer.h"
 #include "qxrdappviewer-ptr.h"
 #include "qxrdwindow.h"
-#include "qxrdsplashscreen.h"
-#include "qxrdsplashscreen-ptr.h"
 #include <stdio.h>
-#include <QSplashScreen>
 #include "qcepdataobject.h"
 
 //#if defined(Q_OS_UNIX) && !defined(Q_OS_MACX)

@@ -33,6 +33,9 @@ public:
   void createNewExperiment();
   void chooseExistingExperiment();
 
+  void openStartupWindow();
+  void closeStartupWindow();
+
 private:
   QString applicationDescription();
 };

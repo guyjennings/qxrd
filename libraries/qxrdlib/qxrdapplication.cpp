@@ -25,14 +25,13 @@
 #include "qxrdglobalsettings.h"
 #include "qxrdexperiment.h"
 #include "qxrdexperimentsettings.h"
-#include "qxrdsplashscreen.h"
-#include "qxrdsplashscreen-ptr.h"
 #include "qcepmutexlocker.h"
 #include "qxrdcalibrant.h"
 #include "qxrdcalibrantlibrary.h"
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qcepimagedataformattiff.h"
 #include "qxrdplugininfomodel.h"
+#include "qxrdstartupwindow.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -40,7 +39,6 @@
 #include <QString>
 #include <tiffio.h>
 #include <QPluginLoader>
-#include <QSplashScreen>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QCoreApplication>
@@ -63,10 +61,7 @@ void QxrdApplication::processEventCounter()
 QxrdApplication::QxrdApplication(int &argc, char **argv) :
   inherited(argc, argv),
   m_ObjectNamer(this, "application"),
-//  m_AppSaver(QcepSettingsSaverPtr(
-//            new QcepSettingsSaver(this))),
   m_NIDAQPlugin(NULL),
-//  m_ResponseTimer(NULL),
   m_SettingsMutex(),
   m_LastLockerCount(0)
 {
@@ -133,14 +128,9 @@ void QxrdApplication::initializeRoot()
 #endif
 
   printMessage(about);
-  printMessage("QWT Version " QWT_VERSION_STR);
-  printMessage(tr("QT Version %1").arg(qVersion()));
-
-  connect(prop_Debug(), &QcepInt64Property::valueChanged,
-          this,         &QxrdApplication::debugChanged);
-  readApplicationSettings();
-
-  parseCommandLine(true);
+  splashMessage(about);
+  splashMessage("QWT Version " QWT_VERSION_STR);
+  splashMessage(tr("QT Version %1").arg(qVersion()));
 
   if (get_GuiWanted() == false) {
     foreach(QString cmd, get_CmdList()) {
@@ -154,19 +144,21 @@ void QxrdApplication::initializeRoot()
     foreach(QString patt, get_WatcherList()) {
       printf("Watch: %s\n", qPrintable(patt));
     }
+  } else {
+
   }
 
-  printMessage(tr("Home Path: %1").arg(QDir::homePath()));
-  printMessage(tr("Current Path: %1").arg(QDir::currentPath()));
-  printMessage(tr("Root Path %1").arg(QDir::rootPath()));
+  splashMessage(tr("Home Path: %1").arg(QDir::homePath()));
+  splashMessage(tr("Current Path: %1").arg(QDir::currentPath()));
+  splashMessage(tr("Root Path %1").arg(QDir::rootPath()));
 
   char *pwd = getenv("PWD");
-  printMessage(tr("pwd: %1").arg(pwd));
+  splashMessage(tr("pwd: %1").arg(pwd));
 
   loadPlugins();
 //  readApplicationSettings();
 
-  printMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
+  splashMessage(tr("Optimal thread count = %1").arg(QThread::idealThreadCount()));
 
   //  m_ResponseTimer = new QxrdResponseTimer(30000, 5000, this);
 
@@ -248,6 +240,27 @@ QString QxrdApplication::applicationDescription()
   return QStringLiteral("QXRD Data Acquisition for 2-D XRay Detectors");
 }
 
+void QxrdApplication::openStartupWindow()
+{
+  m_StartupWindow = QxrdStartupWindowPtr(
+        new QxrdStartupWindow());
+
+  m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrd-icon-256x256.png"));
+  m_StartupWindow -> setApplicationDescription(tr(
+        "<h3>Data Acquisition for 2-D XRay Detectors<h3>\n"
+        "<h3>Guy Jennings<h3>\n"
+        "<h3>Version %1</h3>\n"
+        "<p>Build : " __DATE__ " : " __TIME__ "</p>\n"
+        ).arg(STR(QXRD_VERSION)));
+
+  m_StartupWindow -> show();
+  m_StartupWindow -> raise();
+}
+
+void QxrdApplication::closeStartupWindow()
+{
+}
+
 //TODO: maybe rewrite...
 void QxrdApplication::onAutoSaveTimer()
 {
@@ -274,13 +287,11 @@ void QxrdApplication::loadPlugins()
   prop_PluginList()->appendValue(pluginsDir.absolutePath());
 #endif
 
-  if (qcepDebug(DEBUG_PLUGINS)) {
-    if (get_PluginList().count() == 0) {
-      printf("No plugin directories specified\n");
-    } else {
-      foreach (QString dir, get_PluginList()) {
-        printf("Plugin directory %s\n", qPrintable(dir));
-      }
+  if (get_PluginList().count() == 0) {
+    splashMessage("No plugin directories specified\n");
+  } else {
+    foreach (QString dir, get_PluginList()) {
+      splashMessage(tr("Plugin directory %1").arg(dir));
     }
   }
 
@@ -318,42 +329,56 @@ void QxrdApplication::loadPlugins()
           m_AreaDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_AreaDetectorPlugin) {
+            splashMessage(tr("Area Detector Plugin loaded from %1").arg(fullPath));
+
             m_AreaDetectorPlugin -> initialize(sharedFromThis());
           }
         } else if (className == "QxrdDexelaPlugin") {
           m_DexelaPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_DexelaPlugin) {
+            splashMessage(tr("Dexela Plugin loaded from %1").arg(fullPath));
+
             m_DexelaPlugin -> initialize(sharedFromThis());
           }
         } else if (className == "QxrdNIDAQPlugin") {
           m_NIDAQPlugin =
               QxrdNIDAQPluginInterfacePtr(qobject_cast<QxrdNIDAQPluginInterface*>(plugin));
           if (m_NIDAQPlugin) {
+            splashMessage(tr("NIDAQ Plugin loaded from %1").arg(fullPath));
+
             m_NIDAQPlugin -> initialize(sharedFromThis());
           }
         } else if (className == "QxrdPerkinElmerPlugin") {
           m_PerkinElmerDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_PerkinElmerDetectorPlugin) {
+            splashMessage(tr("Perkin Elmer Plugin loaded from %1").arg(fullPath));
+
             m_PerkinElmerDetectorPlugin -> initialize(sharedFromThis());
           }
         } else if (className == "QxrdPilatusPlugin") {
           m_PilatusDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_PilatusDetectorPlugin) {
+            splashMessage(tr("Pilatus Plugin loaded from %1").arg(fullPath));
+
             m_PilatusDetectorPlugin -> initialize(sharedFromThis());
           }
         } else if (className == "QxrdSimulatedPlugin") {
           m_SimulatedDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_SimulatedDetectorPlugin) {
+            splashMessage(tr("Simulated Detector Plugin loaded from %1").arg(fullPath));
+
             m_SimulatedDetectorPlugin -> initialize(sharedFromThis());
           }
         } else if (className == "QxrdFileWatcherPlugin") {
           m_FileWatcherPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_FileWatcherPlugin) {
+            splashMessage(tr("File Watcher Plugin loaded from %1").arg(fullPath));
+
             m_FileWatcherPlugin -> initialize(sharedFromThis());
           }
         } else {
@@ -620,15 +645,6 @@ void QxrdApplication::editGlobalPreferences()
   QxrdGlobalPreferencesDialog prefs(myself, m_PluginInfo);
 
   prefs.exec();
-}
-
-void QxrdApplication::debugChanged(qint64 newValue)
-{
-  if (g_DebugLevel) {
-    printMessage(tr("Debug level changed from %1 to %2").arg(g_DebugLevel->debugLevel()).arg(newValue));
-
-    g_DebugLevel->setDebugLevel(newValue);
-  }
 }
 
 bool QxrdApplication::event(QEvent *ev)

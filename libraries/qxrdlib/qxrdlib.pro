@@ -123,7 +123,6 @@ SOURCES += qxrdlib.cpp \
     qxrdwelcomewindow.cpp \
     qxrdglobalpreferencesdialog.cpp \
     qxrdwelcomerecentitem.cpp \
-    qxrdsplashscreen.cpp \
     qxrdacquisitionextrainputs.cpp \
     qxrdacquisitionextrainputsdialog.cpp \
     qxrdacquisitionextrainputschannel.cpp \
@@ -358,7 +357,8 @@ SOURCES += qxrdlib.cpp \
     qxrdappviewer.cpp \
     qxrdviewersettings.cpp \
     qxrdacqcommon.cpp \
-    qxrdacqdummy.cpp
+    qxrdacqdummy.cpp \
+    qxrdstartupwindow.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -559,7 +559,9 @@ HEADERS += qxrdlib.h\
     qxrdacqdummy-ptr.h \
     qxrdresultserializer-ptr.h \
     qfilesystemwatcher-ptr.h \
-    qtimer-ptr.h
+    qtimer-ptr.h \
+    qxrdstartupwindow.h \
+    qxrdstartupwindow-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -661,8 +663,6 @@ HEADERS += TODO.h \
     qxrdwelcomewindow-ptr.h \
     qxrdglobalpreferencesdialog.h \
     qxrdwelcomerecentitem.h \
-    qxrdsplashscreen.h \
-    qxrdsplashscreen-ptr.h \
     qxrdacquisitionextrainputs.h \
     qxrdacquisitionextrainputs-ptr.h \
     qxrdacquisitionextrainputsdialog.h \
@@ -876,7 +876,8 @@ FORMS += qxrdwindow.ui \
     qxrddexeladialog.ui \
     qxrdplotwidgetdialog.ui \
     qxrdimageplotwidgetdialog.ui \
-    qxrdwatcherwindow.ui
+    qxrdwatcherwindow.ui \
+    qxrdstartupwindow.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS += \

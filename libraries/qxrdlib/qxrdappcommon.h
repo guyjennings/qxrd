@@ -4,7 +4,6 @@
 #include "qxrdlib_global.h"
 #include "qcepproperty.h"
 #include "qcepapplication.h"
-#include "qxrdsplashscreen-ptr.h"
 #include "qxrdwelcomewindow-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
@@ -13,6 +12,7 @@
 #include <QTimer>
 #include "qcepallocator-ptr.h"
 #include "qxrddebug.h"
+#include "qxrdstartupwindow-ptr.h"
 
 class QXRD_EXPORT QxrdAppCommon : public QcepApplication
 {
@@ -22,7 +22,8 @@ private:
   typedef QcepApplication inherited;
 
 public:
-  explicit QxrdAppCommon(int &argc, char **argv);
+  explicit QxrdAppCommon(int &argc,
+                         char **argv);
   virtual ~QxrdAppCommon();
   void initializeRoot();
 
@@ -45,6 +46,9 @@ public:
 
   void openFile(QString filePath);
   void openWatcher(QString pattern);
+
+  virtual void openStartupWindow() = 0;
+  virtual void closeStartupWindow() = 0;
 
   void openWelcomeWindow();
   void closeWelcomeWindow();
@@ -88,9 +92,7 @@ public:
   Q_ENUM(QcepDebugFlags)
   Q_ENUM(QxrdDebugFlags)
 
-  enum TestEnum { Value1, Value2};
-
-  Q_ENUM(TestEnum)
+  void debugChanged(qint64 newValue);
 
   Q_INVOKABLE int  debugFlag(QString f);
   Q_INVOKABLE QString debugFlagName(int i);
@@ -166,6 +168,9 @@ public:
   Q_PROPERTY(double lockerRate READ get_LockerRate WRITE set_LockerRate STORED false)
   QCEP_DOUBLE_PROPERTY(LockerRate)
 
+protected:
+  QxrdStartupWindowPtr            m_StartupWindow;
+
 private:
   void hideSplash();
   void setupTiffHandlers();
@@ -173,7 +178,7 @@ private:
   QcepAllocatorPtr                m_Allocator;
 
   QTimer                          m_SplashTimer;
-  QxrdSplashScreenPtr             m_Splash;
+//  QxrdSplashScreenPtr             m_Splash;
 
   QxrdWelcomeWindowPtr            m_WelcomeWindow;
 

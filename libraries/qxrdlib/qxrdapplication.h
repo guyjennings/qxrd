@@ -14,7 +14,6 @@
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrddetectorplugininterface-ptr.h"
-#include "qxrdsplashscreen-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qxrdplugininfomodel-ptr.h"
 
@@ -29,6 +28,9 @@ public:
   explicit QxrdApplication(int &argc, char **argv);
   virtual ~QxrdApplication();
   void initializeRoot();
+
+  void openStartupWindow();
+  void closeStartupWindow();
 
   void loadPlugins();
 
@@ -62,7 +64,6 @@ public slots:
 //  void doOpenURL(QString url);
 
   void editGlobalPreferences();
-  void debugChanged(qint64 newValue);
 
   void onAutoSaveTimer();
 
