@@ -18,7 +18,6 @@
 #include "qxrdcorrectiondialog.h"
 #include "qxrdintegratordialog.h"
 #include "qxrdintegratorplot.h"
-#include "qcepdatasetbrowserdialog.h"
 #include "qxrdslicedialog.h"
 #include "qxrdhistogramdialog.h"
 #include "qxrdscriptdialog.h"
