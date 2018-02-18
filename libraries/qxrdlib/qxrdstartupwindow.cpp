@@ -1,5 +1,7 @@
 #include "qxrdstartupwindow.h"
 #include <QDateTime>
+#include <QStyle>
+#include <QDesktopWidget>
 
 QxrdStartupWindow::QxrdStartupWindow(QWidget *parent) :
   QMainWindow(parent)
@@ -15,6 +17,15 @@ QxrdStartupWindow::QxrdStartupWindow(QWidget *parent) :
     gl -> setColumnStretch(0, 0);
     gl -> setColumnStretch(1, 1);
   }
+
+  setGeometry(
+      QStyle::alignedRect(
+          Qt::LeftToRight,
+          Qt::AlignCenter,
+          size(),
+          qApp->desktop()->availableGeometry()
+      )
+  );
 }
 
 QxrdStartupWindow::~QxrdStartupWindow()
