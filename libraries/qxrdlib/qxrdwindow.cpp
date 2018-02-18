@@ -17,7 +17,6 @@
 #include "qcepplotzoomer.h"
 #include "qxrdscriptengine.h"
 #include "qxrdjsengine.h"
-#include "qxrdfilebrowser.h"
 #include "qcepmutexlocker.h"
 #include "qcepallocator.h"
 #include "qxrdexperimentpreferencesdialog.h"
