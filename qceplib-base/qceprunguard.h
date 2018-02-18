@@ -1,11 +1,12 @@
 #ifndef QCEPRUNGUARD_H
 #define QCEPRUNGUARD_H
 
+#include "qceplib_global.h"
 #include <QObject>
 #include <QSharedMemory>
 #include <QSystemSemaphore>
 
-class QcepRunGuard
+class QCEP_EXPORT QcepRunGuard
 {
 public:
   QcepRunGuard( const QString& m_Key );
