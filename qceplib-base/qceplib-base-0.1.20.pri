@@ -112,7 +112,6 @@ contains (DEFINES, HAVE_DATAVIS) {
 contains (DEFINES, HAVE_QWT) {
  SOURCES += \
   $$PWD/qcepdatasetbrowserview.cpp \
-  $${PWD}/qcepdatasetbrowserdialog.cpp \
   $${PWD}/qcepdataobjectgraphcontroller.cpp \
   $${PWD}/qcepdataobjectgraphwindow.cpp \
   $${PWD}/qcepscatterplotgraphcontrols.cpp \
@@ -260,7 +259,6 @@ contains (DEFINES, HAVE_DATAVIS) {
 contains (DEFINES, HAVE_QWT) {
  HEADERS += \
   $$PWD/qcepdatasetbrowserview.h \
-  $${PWD}/qcepdatasetbrowserdialog.h \
   $${PWD}/qcepdataobjectgraphcontroller-ptr.h \
   $${PWD}/qcepdataobjectgraphcontroller.h \
   $${PWD}/qcepdataobjectgraphwindow.h \
@@ -302,7 +300,6 @@ FORMS += \
 
 contains(DEFINES, HAVE_QWT) {
  FORMS += \
-  $${PWD}/qcepdatasetbrowserdialog.ui \
   $${PWD}/qcepdataobjectgraphwindow.ui \
   $${PWD}/qcepscatterplotgraphcontrols.ui \
   $${PWD}/qcepimagedatagraphcontrols.ui \
