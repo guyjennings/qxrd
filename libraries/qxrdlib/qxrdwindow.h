@@ -19,7 +19,6 @@
 #include "qxrdintegratordialog.h"
 #include "qxrdintegratorplot.h"
 #include "qcepdatasetbrowserdialog.h"
-#include "qxrdimagecalculator.h"
 #include "qxrdfilebrowser.h"
 #include "qxrdslicedialog.h"
 #include "qxrdhistogramdialog.h"
@@ -151,25 +150,6 @@ private:
   QcepObjectNamer                        m_ObjectNamer;
   mutable QMutex                         m_Mutex;
   QxrdWindowSettingsWPtr                 m_WindowSettings;
-//  QxrdApplicationWPtr                    m_Application;
-//  QxrdExperimentWPtr                     m_Experiment;
-//  QxrdAcquisitionWPtr                    m_Acquisition;
-//  QxrdProcessorWPtr                      m_Processor;
-//  QxrdAcquisitionScalerDialog           *m_AcquisitionScalerDialog;
-//  QxrdAcquisitionExtraInputsDialogPtr    m_AcquisitionExtraInputsDialog;
-//  QxrdSynchronizedAcquisitionDialogPtr   m_SynchronizedAcquisitionDialog;
-//  QxrdCenterFinderDialog                *m_CenterFinderDialog;
-//  QxrdMaskDialog                        *m_MaskDialog;
-//  QxrdCorrectionDialog                  *m_CorrectionDialog;
-//  QcepDatasetBrowserDialog              *m_DatasetBrowserDialog;
-//  QxrdIntegratorDialog                  *m_IntegratorDialog;
-//  QxrdImageCalculator                   *m_Calculator;
-//  QxrdInputFileBrowser                  *m_InputFileBrowser;
-//  QxrdOutputFileBrowser                 *m_OutputFileBrowser;
-//  QxrdSliceDialog                       *m_SliceDialog;
-//  QxrdHistogramDialog                   *m_HistogramDialog;
-//  QxrdInfoDialog                        *m_ImageInfoDialog;
-//  QxrdScriptDialog                      *m_ScriptDialog;
   QVector<double>                        m_Exposures;
 
   QcepDoubleImageDataPtr                 m_Data;

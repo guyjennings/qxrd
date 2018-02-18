@@ -18,7 +18,6 @@
 #include "qxrdscriptengine.h"
 #include "qxrdjsengine.h"
 #include "qxrdfilebrowser.h"
-#include "qxrdimagecalculator.h"
 #include "qcepmutexlocker.h"
 #include "qcepallocator.h"
 #include "qxrdexperimentpreferencesdialog.h"
@@ -307,8 +306,6 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
 //    connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdWindow::setSpacing);
 //  }
 
-  //  m_Calculator = new QxrdImageCalculator(m_DataProcessor);
-  //  addDockWidget(Qt::RightDockWidgetArea, m_Calculator);
 
   connect(m_ExecuteScriptJSButton, &QAbstractButton::clicked, m_ActionExecuteScriptJS, &QAction::triggered);
   connect(m_ExecuteScriptButton, &QAbstractButton::clicked, m_ActionExecuteScript, &QAction::triggered);

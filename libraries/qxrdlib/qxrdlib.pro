@@ -87,7 +87,6 @@ SOURCES += qxrdlib.cpp \
     qxrdmaskpicker.cpp \
     qxrdimageplotmeasurer.cpp \
     qxrdfilebrowser.cpp \
-    qxrdimagecalculator.cpp \
     qxrdexperimentpreferencesdialog.cpp \
     qxrdsharedpointer.cpp \
     qxrdresultserializer.cpp \
@@ -611,7 +610,6 @@ HEADERS += TODO.h \
     qxrdimageplotmeasurer.h \
     qxrdimageplotmeasurer-ptr.h \
     qxrdfilebrowser.h \
-    qxrdimagecalculator.h \
     qxrdexperimentpreferencesdialog.h \
     qxrdsharedpointer.h \
     qxrdresultserializer.h \
@@ -836,7 +834,6 @@ HEADERS += TODO.h \
 FORMS += qxrdwindow.ui \
     qxrdintegratordialog.ui \
     qxrdfilebrowser.ui \
-    qxrdimagecalculator.ui \
     qxrdexperimentpreferencesdialog.ui \
     qxrdmaskdialog.ui \
     qxrdcorrectiondialog.ui \
