@@ -22,7 +22,6 @@
 #include "qcepmutexlocker.h"
 #include "qcepallocator.h"
 #include "qxrdexperimentpreferencesdialog.h"
-#include "qxrdsynchronizedacquisitiondialog.h"
 #include "qxrdcorrectiondialog.h"
 #include "qxrdslicedialog.h"
 #include "qxrdhistogramdialog.h"

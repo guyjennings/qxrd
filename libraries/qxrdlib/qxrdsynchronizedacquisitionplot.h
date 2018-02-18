@@ -17,7 +17,13 @@ public:
 signals:
 
 public slots:
+  void deviceChanged();
+  void waveformChanged();
 
+//private:
+//  QxrdSynchronizedAcquisitionDialogSettingsWPtr m_DialogSettings;
+//  QxrdAcqCommonWPtr                             m_Acquisition;
+//  QxrdSynchronizedAcquisitionWPtr               m_SynchronizedAcquisition;
 };
 
 #endif // QXRDSYNCHRONIZEDACQUISITIONPLOT_H

@@ -106,7 +106,6 @@ SOURCES += qxrdlib.cpp \
     qxrdmaskstack.cpp \
     qxrdmaskstackview.cpp \
     qxrdsynchronizedacquisition.cpp \
-    qxrdsynchronizedacquisitiondialog.cpp \
     qxrdcorrectiondialog.cpp \
     qxrdfilebrowsermodel.cpp \
     qxrdfilebrowserview.cpp \
@@ -144,7 +143,6 @@ SOURCES += qxrdlib.cpp \
     qxrdacquisitionextrainputsdialogsettings.cpp \
     qxrdhelpbrowser.cpp \
     qxrduserscriptdialog.cpp \
-    qxrdsynchronizedacquisitiondialogsettings.cpp \
     qxrdsynchronizedacquisitionplotsettings.cpp \
     qxrdimagedataformatcbf.cpp \
     qxrddistortioncorrectionplot.cpp \
@@ -642,8 +640,6 @@ HEADERS += TODO.h \
     qxrdmaskstackview.h \
     qxrdsynchronizedacquisition.h \
     qxrdsynchronizedacquisition-ptr.h \
-    qxrdsynchronizedacquisitiondialog.h \
-    qxrdsynchronizedacquisitiondialog-ptr.h \
     qxrdcorrectiondialog.h \
     qxrdfilebrowsermodel.h \
     qxrdfilebrowsermodel-ptr.h \
@@ -691,7 +687,6 @@ HEADERS += TODO.h \
     qxrdacquisitionextrainputsdialogsettings.h \
     qxrdhelpbrowser.h \
     qxrduserscriptdialog.h \
-    qxrdsynchronizedacquisitiondialogsettings.h \
     qxrdsynchronizedacquisitionplotsettings.h \
     qxrdimagedataformatcbf.h \
     qxrddistortioncorrectionplot.h \
@@ -769,7 +764,6 @@ HEADERS += TODO.h \
     qxrdcenterfinderplotsettings-ptr.h \
     qxrdfilebrowsersettings-ptr.h \
     qxrdscriptdialogsettings-ptr.h \
-    qxrdsynchronizedacquisitiondialogsettings-ptr.h \
     qxrdsynchronizedacquisitionplotsettings-ptr.h \
     qxrdslicedialogsettings-ptr.h \
     qxrdsliceplotsettings-ptr.h \
@@ -845,7 +839,6 @@ FORMS += qxrdwindow.ui \
     qxrdimagecalculator.ui \
     qxrdexperimentpreferencesdialog.ui \
     qxrdmaskdialog.ui \
-    qxrdsynchronizedacquisitiondialog.ui \
     qxrdcorrectiondialog.ui \
     qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \

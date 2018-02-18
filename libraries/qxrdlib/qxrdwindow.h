@@ -28,7 +28,6 @@
 #include "qxrdmaskdialog.h"
 
 #include "qxrdexperiment-ptr.h"
-#include "qxrdsynchronizedacquisitiondialog-ptr.h"
 #include "qxrdacquisitionextrainputsdialog-ptr.h"
 #include "qxrdwindowsettings-ptr.h"
 #include "qcepobjectnamer.h"
