@@ -196,6 +196,12 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
     QxrdDetectorSettingsPtr det(m_Detector);
 
     if (det) {
+//      splashMessage(tr("Acquired Frame %1 from %2 on detector %3")
+//                    .arg(fc).arg(buf).arg(m_DetectorIndex));
+
+      printf("Acquired frame %d from buffer %d on detector %d\n",
+             fc, buf, m_DetectorIndex);
+
       det->enqueueAcquiredFrame(image);
     }
   }
