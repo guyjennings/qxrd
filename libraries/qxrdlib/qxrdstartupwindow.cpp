@@ -48,17 +48,23 @@ void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)
   QString day2 = dt.toString("[ yyyy/MM/dd hh:mm ]");
 
   if (day1 != day2) {
-    m_Messages -> append("<span style=\"color:blue\">"+
+    m_Messages -> append("<span style=\""
+                         "color:blue;font-family:monospace;font-style:italic"
+                         "\">"+
                          day2+
                          "</span>");
   }
 
   QString secs = dt.toString("[  +ss.zzz]");
 
-  m_Messages -> append("<span style=\"color:blue\">"+
+  m_Messages -> append("<span style=\""
+                       "color:blue;font-family:monospace;font-style:italic"
+                       "\">"+
                        secs +
                        "</span> : " +
                        msg);
 
   m_LastDateTime = dt;
+
+  raise();
 }

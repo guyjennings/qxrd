@@ -362,6 +362,7 @@ void QxrdAcquisition::readSettings(QSettings *settings)
   int n = settings->beginReadArray("detectors");
 
   for (int i=0; i<n; i++) {
+    splashMessage(tr("Reading detector %1 of %2").arg(i).arg(n));
     settings->setArrayIndex(i);
 
     QcepObjectPtr obj = QcepObject::readObject(sharedFromThis(), settings);

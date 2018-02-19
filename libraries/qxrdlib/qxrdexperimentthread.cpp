@@ -55,9 +55,9 @@ void QxrdExperimentThread::run()
 
   expt -> initialize(sharedFromThis());
 
-  expt -> readSettings(m_Settings.data());
-
   m_Experiment = expt;
+
+  expt -> readSettings(m_Settings.data());
 
   int rc = exec();
 

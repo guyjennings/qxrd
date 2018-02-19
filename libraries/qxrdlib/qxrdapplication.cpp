@@ -311,7 +311,7 @@ void QxrdApplication::loadPlugins()
 
       if (qcepDebug(DEBUG_PLUGINS)) {
         printf("-------------------------------------\n");
-        printf("Looking for plugin in file %s\n", qPrintable(fullPath));
+        printf("Looking for plugin in file %s\n", qPrintable(fileName));
       }
 
       if (QLibrary::isLibrary(fullPath)) {
@@ -335,7 +335,7 @@ void QxrdApplication::loadPlugins()
           m_AreaDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_AreaDetectorPlugin) {
-            splashMessage(tr("Area Detector Plugin loaded from %1").arg(fullPath));
+            splashMessage(tr("Area Detector Plugin loaded from %1").arg(fileName));
 
             m_AreaDetectorPlugin -> initialize(sharedFromThis());
           }
@@ -343,7 +343,7 @@ void QxrdApplication::loadPlugins()
           m_DexelaPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_DexelaPlugin) {
-            splashMessage(tr("Dexela Plugin loaded from %1").arg(fullPath));
+            splashMessage(tr("Dexela Plugin loaded from %1").arg(fileName));
 
             m_DexelaPlugin -> initialize(sharedFromThis());
           }
@@ -351,7 +351,7 @@ void QxrdApplication::loadPlugins()
           m_NIDAQPlugin =
               QxrdNIDAQPluginInterfacePtr(qobject_cast<QxrdNIDAQPluginInterface*>(plugin));
           if (m_NIDAQPlugin) {
-            splashMessage(tr("NIDAQ Plugin loaded from %1").arg(fullPath));
+            splashMessage(tr("NIDAQ Plugin loaded from %1").arg(fileName));
 
             m_NIDAQPlugin -> initialize(sharedFromThis());
           }
@@ -359,7 +359,7 @@ void QxrdApplication::loadPlugins()
           m_PerkinElmerDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_PerkinElmerDetectorPlugin) {
-            splashMessage(tr("Perkin Elmer Plugin loaded from %1").arg(fullPath));
+            splashMessage(tr("Perkin Elmer Plugin loaded from %1").arg(fileName));
 
             m_PerkinElmerDetectorPlugin -> initialize(sharedFromThis());
           }
@@ -367,7 +367,7 @@ void QxrdApplication::loadPlugins()
           m_PilatusDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_PilatusDetectorPlugin) {
-            splashMessage(tr("Pilatus Plugin loaded from %1").arg(fullPath));
+            splashMessage(tr("Pilatus Plugin loaded from %1").arg(fileName));
 
             m_PilatusDetectorPlugin -> initialize(sharedFromThis());
           }
@@ -375,7 +375,7 @@ void QxrdApplication::loadPlugins()
           m_SimulatedDetectorPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_SimulatedDetectorPlugin) {
-            splashMessage(tr("Simulated Detector Plugin loaded from %1").arg(fullPath));
+            splashMessage(tr("Simulated Detector Plugin loaded from %1").arg(fileName));
 
             m_SimulatedDetectorPlugin -> initialize(sharedFromThis());
           }
@@ -383,7 +383,7 @@ void QxrdApplication::loadPlugins()
           m_FileWatcherPlugin =
               QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_FileWatcherPlugin) {
-            splashMessage(tr("File Watcher Plugin loaded from %1").arg(fullPath));
+            splashMessage(tr("File Watcher Plugin loaded from %1").arg(fileName));
 
             m_FileWatcherPlugin -> initialize(sharedFromThis());
           }

@@ -585,14 +585,15 @@ void QxrdExperiment::closeWindows()
   }
 }
 
-void QxrdExperiment::splashMessage(QString msg)
+void QxrdExperiment::splashMessage(QString msg, QDateTime ts)
 {
   QxrdAppCommonPtr app(m_Application);
 
   if (app) {
     INVOKE_CHECK(
           QMetaObject::invokeMethod(app.data(), "splashMessage",
-                                    Q_ARG(QString, msg)));
+                                    Q_ARG(QString, msg),
+                                    Q_ARG(QDateTime, ts)));
   }
 }
 
