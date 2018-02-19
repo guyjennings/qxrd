@@ -332,60 +332,88 @@ void QxrdApplication::loadPlugins()
         QString pluginName = "";
 
         if (className == "QxrdAreaDetectorPlugin") {
-          m_AreaDetectorPlugin =
-              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_AreaDetectorPlugin) {
-            splashMessage(tr("Area Detector Plugin loaded from %1").arg(fileName));
+            splashMessage("Area detector plugin already loaded");
+          } else {
+            m_AreaDetectorPlugin =
+                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+            if (m_AreaDetectorPlugin) {
+              splashMessage(tr("Area Detector Plugin loaded from %1").arg(fileName));
 
-            m_AreaDetectorPlugin -> initialize(sharedFromThis());
+              m_AreaDetectorPlugin -> initialize(sharedFromThis());
+            }
           }
         } else if (className == "QxrdDexelaPlugin") {
-          m_DexelaPlugin =
-              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_DexelaPlugin) {
-            splashMessage(tr("Dexela Plugin loaded from %1").arg(fileName));
+            splashMessage("Dexela Detector Plugin already loaded");
+          } else {
+            m_DexelaPlugin =
+                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+            if (m_DexelaPlugin) {
+              splashMessage(tr("Dexela Plugin loaded from %1").arg(fileName));
 
-            m_DexelaPlugin -> initialize(sharedFromThis());
+              m_DexelaPlugin -> initialize(sharedFromThis());
+            }
           }
         } else if (className == "QxrdNIDAQPlugin") {
-          m_NIDAQPlugin =
-              QxrdNIDAQPluginInterfacePtr(qobject_cast<QxrdNIDAQPluginInterface*>(plugin));
           if (m_NIDAQPlugin) {
-            splashMessage(tr("NIDAQ Plugin loaded from %1").arg(fileName));
+            splashMessage("NIDAQ Plugin already loaded");
+          } else {
+            m_NIDAQPlugin =
+                QxrdNIDAQPluginInterfacePtr(qobject_cast<QxrdNIDAQPluginInterface*>(plugin));
+            if (m_NIDAQPlugin) {
+              splashMessage(tr("NIDAQ Plugin loaded from %1").arg(fileName));
 
-            m_NIDAQPlugin -> initialize(sharedFromThis());
+              m_NIDAQPlugin -> initialize(sharedFromThis());
+            }
           }
         } else if (className == "QxrdPerkinElmerPlugin") {
-          m_PerkinElmerDetectorPlugin =
-              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_PerkinElmerDetectorPlugin) {
-            splashMessage(tr("Perkin Elmer Plugin loaded from %1").arg(fileName));
+            splashMessage("Perkin Elmer Plugin already loaded");
+          } else {
+            m_PerkinElmerDetectorPlugin =
+                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+            if (m_PerkinElmerDetectorPlugin) {
+              splashMessage(tr("Perkin Elmer Plugin loaded from %1").arg(fileName));
 
-            m_PerkinElmerDetectorPlugin -> initialize(sharedFromThis());
+              m_PerkinElmerDetectorPlugin -> initialize(sharedFromThis());
+            }
           }
         } else if (className == "QxrdPilatusPlugin") {
-          m_PilatusDetectorPlugin =
-              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_PilatusDetectorPlugin) {
-            splashMessage(tr("Pilatus Plugin loaded from %1").arg(fileName));
+            splashMessage("Pilatus Plugin already loaded");
+          } else {
+            m_PilatusDetectorPlugin =
+                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+            if (m_PilatusDetectorPlugin) {
+              splashMessage(tr("Pilatus Plugin loaded from %1").arg(fileName));
 
-            m_PilatusDetectorPlugin -> initialize(sharedFromThis());
+              m_PilatusDetectorPlugin -> initialize(sharedFromThis());
+            }
           }
         } else if (className == "QxrdSimulatedPlugin") {
-          m_SimulatedDetectorPlugin =
-              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_SimulatedDetectorPlugin) {
-            splashMessage(tr("Simulated Detector Plugin loaded from %1").arg(fileName));
+            splashMessage("Simulated Detector Plugin already loaded");
+          } else {
+            m_SimulatedDetectorPlugin =
+                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+            if (m_SimulatedDetectorPlugin) {
+              splashMessage(tr("Simulated Detector Plugin loaded from %1").arg(fileName));
 
-            m_SimulatedDetectorPlugin -> initialize(sharedFromThis());
+              m_SimulatedDetectorPlugin -> initialize(sharedFromThis());
+            }
           }
         } else if (className == "QxrdFileWatcherPlugin") {
-          m_FileWatcherPlugin =
-              QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
           if (m_FileWatcherPlugin) {
-            splashMessage(tr("File Watcher Plugin loaded from %1").arg(fileName));
+            splashMessage("File Watcher Plugin already loaded");
+          } else {
+            m_FileWatcherPlugin =
+                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+            if (m_FileWatcherPlugin) {
+              splashMessage(tr("File Watcher Plugin loaded from %1").arg(fileName));
 
-            m_FileWatcherPlugin -> initialize(sharedFromThis());
+              m_FileWatcherPlugin -> initialize(sharedFromThis());
+            }
           }
         } else {
         }
