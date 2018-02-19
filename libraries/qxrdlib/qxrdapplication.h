@@ -101,6 +101,7 @@ public:
 
 private:
   QString applicationDescription();
+  QIcon   applicationIcon();
 
 private:
   QcepObjectNamer                 m_ObjectNamer;

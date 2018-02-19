@@ -240,6 +240,11 @@ QString QxrdApplication::applicationDescription()
   return QStringLiteral("QXRD Data Acquisition for 2-D XRay Detectors");
 }
 
+QIcon QxrdApplication::applicationIcon()
+{
+  return QIcon(":/images/qxrd-icon-64x64.png");
+}
+
 void QxrdApplication::openStartupWindow()
 {
   m_StartupWindow = QxrdStartupWindowPtr(
@@ -247,12 +252,13 @@ void QxrdApplication::openStartupWindow()
 
   m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrd-icon-256x256.png"));
   m_StartupWindow -> setApplicationDescription(
-        "<h3>Data Acquisition for 2-D XRay Detectors<h3>\n"
-        "<h3>Guy Jennings<h3>\n"
-        "<h3>Version " STR(QXRD_VERSION) "</h3>\n"
-        "<p>Build : " __DATE__ " : " __TIME__ "</p>\n");
+        "Data Acquisition for 2-D XRay Detectors\n"
+        "Guy Jennings\n"
+        "Version " STR(QXRD_VERSION) "\n"
+        "Build : " __DATE__ " : " __TIME__ "\n");
 
   m_StartupWindow -> setWindowTitle(applicationDescription());
+  m_StartupWindow -> setWindowIcon(applicationIcon());
   m_StartupWindow -> show();
   m_StartupWindow -> raise();
 }

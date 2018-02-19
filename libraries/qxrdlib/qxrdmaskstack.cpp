@@ -24,6 +24,8 @@ void QxrdMaskStack::readSettings(QSettings *settings)
   int n = settings -> beginReadArray("masks");
 
   for (int i=0; i<n; i++) {
+    splashMessage(tr("Reading mask stack entry %1").arg(i));
+
     settings -> setArrayIndex(i);
 
     QcepObjectPtr obj = QcepObject::readObject(sharedFromThis(), settings);

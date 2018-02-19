@@ -38,6 +38,7 @@ public:
 
 private:
   QString applicationDescription();
+  QIcon   applicationIcon();
 };
 
 #endif // QXRDAPPVIEWER_H

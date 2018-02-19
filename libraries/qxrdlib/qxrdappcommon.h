@@ -54,11 +54,13 @@ public:
   void closeWelcomeWindow();
 
   virtual QString applicationDescription() = 0;
+  virtual QIcon   applicationIcon() = 0;
 
   virtual void openExperiment(QString path) = 0;
   virtual void openRecentExperiment(QString path);
   void appendRecentExperiment(QString path);
   void closeExperiment(QxrdExperimentWPtr expw);
+
 
   Q_INVOKABLE virtual void openWindow(QxrdMainWindowSettingsWPtr set);
 

@@ -44,12 +44,13 @@ void QxrdAppViewer::openStartupWindow()
 
   m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrdviewer-icon-128x128.png"));
   m_StartupWindow -> setApplicationDescription(
-             "<h3>Data Viewer for 2-D XRay Detector data<h3>\n"
-             "<h3>Guy Jennings<h3>\n"
-             "<h3>Version " STR(QXRD_VERSION) "</h3>\n"
-             "<p>Build : " __DATE__ " : " __TIME__ "</p>\n");
+             "Data Viewer for 2-D XRay Detector data\n"
+             "Guy Jennings\n"
+             "Version " STR(QXRD_VERSION) "\n"
+             "Build : " __DATE__ " : " __TIME__ "\n");
 
   m_StartupWindow -> setWindowTitle(applicationDescription());
+  m_StartupWindow -> setWindowIcon(applicationIcon());
   m_StartupWindow -> show();
   m_StartupWindow -> raise();
 }
@@ -80,6 +81,11 @@ void QxrdAppViewer::criticalMessage(QString msg, QDateTime ts) const
 QString QxrdAppViewer::applicationDescription()
 {
   return QStringLiteral("QXRDVIEWER Data Viewer for 2-D XRay Detector data");
+}
+
+QIcon QxrdAppViewer::applicationIcon()
+{
+  return QIcon(":/images/qxrdviewer-icon-64x64.png");
 }
 
 void QxrdAppViewer::openExperiment(QString path)

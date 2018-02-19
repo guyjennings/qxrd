@@ -15,6 +15,8 @@ public:
 
   void setApplicationIcon        (QIcon     icon);
   void setApplicationDescription (QString   desc);
+
+public slots:
   void appendMessage             (QString   msg,
                                   QDateTime dt=QDateTime::currentDateTime());
 private:

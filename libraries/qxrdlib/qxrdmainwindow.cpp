@@ -69,11 +69,11 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
     m_UpdateTimer.start(app->get_UpdateIntervalMsec());
 
     connect(app->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged, this, &QxrdMainWindow::onUpdateIntervalMsecChanged);
+
+    updateTitle();
+
+    setWindowIcon(app -> applicationIcon());
   }
-
-  updateTitle();
-
-  setWindowIcon(QIcon(":/images/qxrd-icon-64x64.png"));
 
   if (m_FileMenuP && app && exper) {
     m_FileMenuP->clear();

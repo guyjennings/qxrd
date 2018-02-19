@@ -431,7 +431,7 @@ void QxrdAppCommon::closeWelcomeWindow()
 
 void QxrdAppCommon::splashMessage(QString msg, QDateTime dt)
 {
-  GUI_THREAD_CHECK;
+//  GUI_THREAD_CHECK;
 
   if (get_GuiWanted()) {
 //    if (m_Splash == NULL) {
@@ -445,7 +445,12 @@ void QxrdAppCommon::splashMessage(QString msg, QDateTime dt)
 //    m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
 
     if (m_StartupWindow) {
-      m_StartupWindow -> appendMessage(msg, dt);
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(m_StartupWindow.data(),
+                                      "appendMessage",
+                                      Qt::QueuedConnection,
+                                      Q_ARG(QString, msg),
+                                      Q_ARG(QDateTime, dt)));
     }
 
     processEvents();
