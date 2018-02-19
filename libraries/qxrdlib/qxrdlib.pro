@@ -99,7 +99,6 @@ SOURCES += qxrdlib.cpp \
     qxrdsimpleserver.cpp \
     qxrdsimpleserverthread.cpp \
     qxrdcenterstepspinner.cpp \
-    qxrdmaskdialog.cpp \
     qxrdmaskstackmodel.cpp \
     qxrdmaskstack.cpp \
     qxrdmaskstackview.cpp \
@@ -629,8 +628,6 @@ HEADERS += TODO.h \
     qxrdsimpleserverthread.h \
     qxrdsimpleserverthread-ptr.h \
     qxrdcenterstepspinner.h \
-    qxrdmaskdialog.h \
-    qxrdmaskdialog-ptr.h \
     qxrdmaskstackmodel.h \
     qxrdmaskstackmodel-ptr.h \
     qxrdmaskstack.h \
@@ -833,7 +830,6 @@ FORMS += qxrdwindow.ui \
     qxrdintegratordialog.ui \
     qxrdfilebrowser.ui \
     qxrdexperimentpreferencesdialog.ui \
-    qxrdmaskdialog.ui \
     qxrdcorrectiondialog.ui \
     qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \

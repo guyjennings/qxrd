@@ -2,23 +2,16 @@
 #include <QListView>
 #include <QMenu>
 #include <QContextMenuEvent>
-#include "qxrdmaskdialog.h"
 #include "qxrdmaskstack.h"
 #include "qxrdmaskstackmodel.h"
 #include "qxrdprocessor.h"
 
 QxrdMaskStackView::QxrdMaskStackView(QWidget *parent) :
   QTableView(parent),
-  m_Dialog(NULL),
   m_MaskStack(NULL),
   m_MaskStackModel(NULL),
   m_Processor()
 {
-}
-
-void QxrdMaskStackView::setMaskDialog(QxrdMaskDialog *dlg)
-{
-  m_Dialog = dlg;
 }
 
 void QxrdMaskStackView::setMaskStack(QxrdMaskStackWPtr stk)

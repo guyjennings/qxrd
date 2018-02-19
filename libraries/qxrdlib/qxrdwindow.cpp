@@ -10,7 +10,6 @@
 #include "qcepmaskdata.h"
 #include "qxrdprocessor.h"
 #include "qxrdcenterfinder.h"
-#include "qxrdmaskdialog.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdintegratordialog.h"
 #include "qxrdintegrator.h"

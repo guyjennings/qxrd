@@ -22,7 +22,6 @@
 #include "qxrdhistogramdialog.h"
 #include "qxrdscriptdialog.h"
 #include "qxrdhighlighter.h"
-#include "qxrdmaskdialog.h"
 
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisitionextrainputsdialog-ptr.h"
