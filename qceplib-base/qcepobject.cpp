@@ -619,6 +619,28 @@ void QcepObject::statusMessage(QString msg, QDateTime dt) const
   }
 }
 
+void QcepObject::splashMessage(QString msg, QDateTime dt)
+{
+#ifndef QT_NO_DEBUG
+  checkObjectInitialization();
+#endif
+
+  QcepObjectPtr p(m_Parent);
+
+  if (p) {
+    p->splashMessage(msg, dt);
+  } else {
+    QcepObject *p = qobject_cast<QcepObject*>(parent());
+
+    if (p) {
+      p->splashMessage(msg, dt);
+    } else {
+      printf("SPLASH: %s %s\n",
+             qPrintable(dt.toString("hh:mm:ss")), qPrintable(msg));
+    }
+  }
+}
+
 void QcepObject::writeSettings(QSettings *set)
 {
 #ifndef QT_NO_DEBUG

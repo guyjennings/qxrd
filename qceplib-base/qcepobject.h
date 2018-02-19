@@ -46,6 +46,7 @@ public slots:
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
   virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  virtual void splashMessage(QString msg, QDateTime dt=QDateTime::currentDateTime());
 
   virtual QString settingsScript();
 
