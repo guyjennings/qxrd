@@ -6,20 +6,36 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>717</width>
+    <height>430</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0" colspan="2">
+     <widget class="QTextBrowser" name="m_Output"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLineEdit" name="m_InputText"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="m_EvalButton">
+      <property name="text">
+       <string>Eval</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>717</width>
      <height>22</height>
     </rect>
    </property>
@@ -43,7 +59,6 @@
    <addaction name="m_EditMenu"/>
    <addaction name="m_WindowMenu"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionWindow">
    <property name="text">
     <string>Window</string>

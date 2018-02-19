@@ -32,13 +32,17 @@ public:
   void lock();
   void unlock();
 
+  int  nextDataIndex();
+
 public slots:
   void evaluateAppCommand(QString cmd);
   void evaluateSimpleServerCommand(QString cmd);
   void evaluateSpecCommand(QString cmd);
+  void evaluateCommand(int index, QString cmd);
   void loadScript(QString path);
 
 signals:
+  void resultAvailable(int index, QScriptValue res);
   void appResultAvailable(QScriptValue res);
   void simpleServerResultAvailable(QScriptValue cmd);
   void specResultAvailable(QScriptValue cmd);
@@ -140,6 +144,7 @@ private:
   QxrdProcessorWPtr      m_Processor;     //TODO: is this always appropriate?
   QxrdWindowWPtr         m_Window;
   FILE                  *m_ScriptOutput;
+  int                    m_DataIndex;
 };
 
 Q_DECLARE_METATYPE(QxrdScriptEngine*)

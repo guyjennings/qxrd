@@ -55,7 +55,8 @@ QxrdScriptEngine::QxrdScriptEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp
     m_Acquisition(),
     m_Processor(),
     m_Window(),
-    m_ScriptOutput(NULL)
+    m_ScriptOutput(NULL),
+    m_DataIndex(3)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngine::QxrdScriptEngine(%p)\n", this);
@@ -129,13 +130,34 @@ void QxrdScriptEngine::unlock()
   m_Mutex.unlock();
 }
 
+int QxrdScriptEngine::nextDataIndex()
+{
+  return m_DataIndex++;
+}
+
+void QxrdScriptEngine::evaluateCommand(int index, QString cmd)
+{
+  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+  //  printf("QxrdScriptingEngine::evaluateAppCommand(%s)\n", qPrintable(expr));
+
+  INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                         "evaluateScript",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(int, index),
+                                         Q_ARG(QString, cmd)));
+}
 void QxrdScriptEngine::evaluateAppCommand(QString expr)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   //  printf("QxrdScriptingEngine::evaluateAppCommand(%s)\n", qPrintable(expr));
 
-  INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluateScript", Qt::QueuedConnection, Q_ARG(int, 0), Q_ARG(QString, expr)));
+  INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                         "evaluateScript",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(int, 0),
+                                         Q_ARG(QString, expr)));
 }
 
 void QxrdScriptEngine::evaluateSimpleServerCommand(QString expr)
@@ -144,7 +166,11 @@ void QxrdScriptEngine::evaluateSimpleServerCommand(QString expr)
 
   //  printf("QxrdScriptingEngine::evaluateServerCommand(%s)\n", qPrintable(expr));
 
-  INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluateScript", Qt::QueuedConnection, Q_ARG(int, 1), Q_ARG(QString, expr)));
+  INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                         "evaluateScript",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(int, 1),
+                                         Q_ARG(QString, expr)));
 }
 
 void QxrdScriptEngine::evaluateSpecCommand(QString expr)
@@ -153,7 +179,11 @@ void QxrdScriptEngine::evaluateSpecCommand(QString expr)
 
   //  printf("QxrdScriptingEngine::evaluateSpecCommand(%s)\n", qPrintable(expr));
 
-  INVOKE_CHECK(QMetaObject::invokeMethod(this, "evaluateScript", Qt::QueuedConnection, Q_ARG(int, 2), Q_ARG(QString, expr)));
+  INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                         "evaluateScript",
+                                         Qt::QueuedConnection,
+                                         Q_ARG(int, 2),
+                                         Q_ARG(QString, expr)));
 }
 
 void QxrdScriptEngine::loadScript(QString path)
@@ -280,6 +310,8 @@ void QxrdScriptEngine::evaluateScript(int src, QString expr)
   case 2:
     emit specResultAvailable(result);
     break;
+  default:
+    emit resultAvailable(src, result);
   }
 }
 
