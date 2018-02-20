@@ -72,13 +72,6 @@ QString QxrdNIDAQPlugin::name() const
   return "NI DAQ Card";
 }
 
-void QxrdNIDAQPlugin::printMessage(QString msg)
-{
-  if (m_ErrorOutput) {
-    QMetaObject::invokeMethod(m_ErrorOutput, "printMessage", Qt::QueuedConnection, Q_ARG(QString, msg));
-  }
-}
-
 void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
 {
   if (DAQmxFailed(err)) {

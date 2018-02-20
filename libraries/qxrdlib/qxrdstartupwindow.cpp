@@ -2,9 +2,16 @@
 #include <QDateTime>
 #include <QStyle>
 #include <QDesktopWidget>
+#include "qxrdstartupwindowsettings.h"
+#include <QThread>
+#include "qxrdappcommon.h"
 
-QxrdStartupWindow::QxrdStartupWindow(QWidget *parent) :
-  QMainWindow(parent)
+QxrdStartupWindow::QxrdStartupWindow(QxrdStartupWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app) :
+  inherited(name,
+            app,
+            QxrdExperimentWPtr(),
+            QxrdAcqCommonWPtr(),
+            QxrdProcessorWPtr())
 {
   setupUi(this);
 
@@ -18,14 +25,35 @@ QxrdStartupWindow::QxrdStartupWindow(QWidget *parent) :
     gl -> setColumnStretch(1, 1);
   }
 
-  setGeometry(
-      QStyle::alignedRect(
-          Qt::LeftToRight,
-          Qt::AlignCenter,
-          size(),
-          qApp->desktop()->availableGeometry()
-      )
-  );
+  QxrdStartupWindowSettingsPtr s(set);
+
+  if (s) {
+    QSizeF sz = s->get_WindowRect().size();
+
+    if (sz.width() < 256 ||
+        sz.height() < 128) {
+
+      sz = size();
+    }
+
+    setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            QSize(sz.width(), sz.height()),
+            qApp->desktop()->availableGeometry()
+        )
+    );
+
+    QxrdAppCommonPtr a(app);
+
+    if (a) {
+      connect(a->prop_MessageWindowLines(), &QcepIntProperty::valueChanged,
+              this, &QxrdStartupWindow::onMessageWindowLinesChanged);
+
+      onMessageWindowLinesChanged(a->get_MessageWindowLines());
+    }
+  }
 }
 
 QxrdStartupWindow::~QxrdStartupWindow()
@@ -42,8 +70,19 @@ void QxrdStartupWindow::setApplicationDescription(QString desc)
   m_Description -> setText(desc);
 }
 
+void QxrdStartupWindow::appendSplashMessage(QString msg, QDateTime dt)
+{
+  GUI_THREAD_CHECK;
+
+  appendMessage(msg, dt);
+
+  raise();
+}
+
 void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)
 {
+  GUI_THREAD_CHECK;
+
   QString day1 = m_LastDateTime.toString("[ yyyy/MM/dd hh:mm ]");
   QString day2 = dt.toString("[ yyyy/MM/dd hh:mm ]");
 
@@ -65,6 +104,11 @@ void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)
                        msg);
 
   m_LastDateTime = dt;
+}
 
-  raise();
+void QxrdStartupWindow::onMessageWindowLinesChanged(int newVal)
+{
+  appendMessage(tr("Message lines set to %1").arg(newVal));
+
+  m_Messages -> document() -> setMaximumBlockCount(newVal);
 }

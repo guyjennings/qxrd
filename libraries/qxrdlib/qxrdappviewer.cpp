@@ -5,6 +5,7 @@
 #include "qxrdexperiment.h"
 #include "qxrdviewersettings.h"
 #include "qxrdstartupwindow.h"
+#include "qxrdstartupwindowsettings.h"
 
 QxrdAppViewer::QxrdAppViewer(int &argc, char **argv)
   : inherited(argc, argv)
@@ -39,20 +40,23 @@ void QxrdAppViewer::initializeRoot()
 
 void QxrdAppViewer::openStartupWindow()
 {
-  m_StartupWindow = QxrdStartupWindowPtr(
-        new QxrdStartupWindow());
+  if (m_StartupWindowSettings) {
+    m_StartupWindow =
+        qSharedPointerDynamicCast<QxrdStartupWindow>(
+          m_StartupWindowSettings -> newWindow());
 
-  m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrdviewer-icon-128x128.png"));
-  m_StartupWindow -> setApplicationDescription(
-             "Data Viewer for 2-D XRay Detector data\n"
-             "Guy Jennings\n"
-             "Version " STR(QXRD_VERSION) "\n"
-             "Build : " __DATE__ " : " __TIME__ "\n");
+    m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrdviewer-icon-128x128.png"));
+    m_StartupWindow -> setApplicationDescription(
+          "Data Viewer for 2-D XRay Detector data\n"
+          "Guy Jennings\n"
+          "Version " STR(QXRD_VERSION) "\n"
+                                       "Build : " __DATE__ " : " __TIME__ "\n");
 
-  m_StartupWindow -> setWindowTitle(applicationDescription());
-  m_StartupWindow -> setWindowIcon(applicationIcon());
-  m_StartupWindow -> show();
-  m_StartupWindow -> raise();
+    m_StartupWindow -> setWindowTitle(applicationDescription());
+    m_StartupWindow -> setWindowIcon(applicationIcon());
+    m_StartupWindow -> show();
+    m_StartupWindow -> raise();
+  }
 }
 
 void QxrdAppViewer::closeStartupWindow()
@@ -66,11 +70,6 @@ void QxrdAppViewer::setDefaultObjectData(QcepDataObject *obj)
     obj->set_Version(STR(QXRD_VERSION));
     obj->set_QtVersion(QT_VERSION_STR);
   }
-}
-
-void QxrdAppViewer::printMessage(QString msg, QDateTime ts) const
-{
-  printf("%s\n", qPrintable(msg));
 }
 
 void QxrdAppViewer::criticalMessage(QString msg, QDateTime ts) const

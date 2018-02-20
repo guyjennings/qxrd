@@ -67,6 +67,7 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdwindowsettings.h"
 #include "qxrdhelpwindowsettings.h"
+#include "qxrdstartupwindowsettings.h"
 #include "qxrdwatcherwindowsettings-ptr.h"
 #include "qxrdwatcherwindowsettings.h"
 
@@ -470,6 +471,7 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdMaskingWindowSettings*>("QxrdMaskingWindowSettings*");
   qRegisterMetaType<QxrdScriptingWindowSettings*>("QxrdScriptingWindowSettings*");
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
+  qRegisterMetaType<QxrdStartupWindowSettings*>("QxrdStartupWindowSettings*");
 }
 
 void QxrdExperiment::openWindow(QxrdMainWindowSettingsWPtr set)
@@ -585,18 +587,6 @@ void QxrdExperiment::closeWindows()
   }
 }
 
-void QxrdExperiment::splashMessage(QString msg, QDateTime ts)
-{
-  QxrdAppCommonPtr app(m_Application);
-
-  if (app) {
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(app.data(), "splashMessage",
-                                    Q_ARG(QString, msg),
-                                    Q_ARG(QDateTime, ts)));
-  }
-}
-
 void QxrdExperiment::criticalMessage(QString msg, QDateTime /*ts*/) const
 {
   QxrdAppCommonPtr   app(m_Application);
@@ -619,30 +609,6 @@ void QxrdExperiment::statusMessage(QString msg, QDateTime /*ts*/) const
     win->displayStatusMessage(msg);
   } else {
     pushMessage(msg);
-  }
-}
-
-void QxrdExperiment::printMessage(QString msg, QDateTime ts) const
-{
-  if (qcepDebug(DEBUG_NOMESSAGES)) {
-  } else {
-    QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+
-        QThread::currentThread()->objectName()+": "+
-        msg.trimmed();
-
-    message = message.replace("\n", " : ");
-
-    logMessage(message);
-
-    QxrdWindowPtr win = m_Window;
-
-    if (win) {
-      displayPushedMessages();
-
-      win->displayMessage(message);
-    } else {
-      pushMessage(message);
-    }
   }
 }
 

@@ -131,10 +131,9 @@ public slots:
   void writeSettings(QSettings *settings);
 
   void logMessage(QString msg) const;
-  void splashMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
+  //TODO: remove...
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void printLine(QString msg) const;
 
   void saveExperiment();

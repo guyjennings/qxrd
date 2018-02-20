@@ -13,6 +13,7 @@
 #include "qcepallocator-ptr.h"
 #include "qxrddebug.h"
 #include "qxrdstartupwindow-ptr.h"
+#include "qxrdstartupwindowsettings-ptr.h"
 
 class QXRD_EXPORT QxrdAppCommon : public QcepApplication
 {
@@ -40,6 +41,7 @@ public:
   void parseCommandLine(bool wantFullOptions);
 
   Q_INVOKABLE void splashMessage(QString msg, QDateTime dt=QDateTime::currentDateTime());
+  Q_INVOKABLE void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
 
   void tiffWarning(const char* module, const char *msg);
   void tiffError(const char* module, const char *msg);
@@ -171,6 +173,7 @@ public:
   QCEP_DOUBLE_PROPERTY(LockerRate)
 
 protected:
+  QxrdStartupWindowSettingsPtr    m_StartupWindowSettings;
   QxrdStartupWindowPtr            m_StartupWindow;
 
 private:

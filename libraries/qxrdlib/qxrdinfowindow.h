@@ -13,6 +13,9 @@ class QXRD_EXPORT QxrdInfoWindow : public QxrdMainWindow, public Ui::QxrdInfoWin
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdInfoWindow(QString name,
                           QxrdAppCommonWPtr app,

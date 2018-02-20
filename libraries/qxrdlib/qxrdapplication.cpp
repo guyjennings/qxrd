@@ -32,6 +32,7 @@
 #include "qcepimagedataformattiff.h"
 #include "qxrdplugininfomodel.h"
 #include "qxrdstartupwindow.h"
+#include "qxrdstartupwindowsettings.h"
 
 #include <QTime>
 #include <QtConcurrentRun>
@@ -247,20 +248,23 @@ QIcon QxrdApplication::applicationIcon()
 
 void QxrdApplication::openStartupWindow()
 {
-  m_StartupWindow = QxrdStartupWindowPtr(
-        new QxrdStartupWindow());
+  if (m_StartupWindowSettings) {
+    m_StartupWindow =
+        qSharedPointerDynamicCast<QxrdStartupWindow>(
+          m_StartupWindowSettings -> newWindow());
 
-  m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrd-icon-256x256.png"));
-  m_StartupWindow -> setApplicationDescription(
-        "Data Acquisition for 2-D XRay Detectors\n"
-        "Guy Jennings\n"
-        "Version " STR(QXRD_VERSION) "\n"
-        "Build : " __DATE__ " : " __TIME__ "\n");
+    m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrd-icon-256x256.png"));
+    m_StartupWindow -> setApplicationDescription(
+          "Data Acquisition for 2-D XRay Detectors\n"
+          "Guy Jennings\n"
+          "Version " STR(QXRD_VERSION) "\n"
+                                       "Build : " __DATE__ " : " __TIME__ "\n");
 
-  m_StartupWindow -> setWindowTitle(applicationDescription());
-  m_StartupWindow -> setWindowIcon(applicationIcon());
-  m_StartupWindow -> show();
-  m_StartupWindow -> raise();
+    m_StartupWindow -> setWindowTitle(applicationDescription());
+    m_StartupWindow -> setWindowIcon(applicationIcon());
+    m_StartupWindow -> show();
+    m_StartupWindow -> raise();
+  }
 }
 
 void QxrdApplication::closeStartupWindow()
@@ -513,26 +517,6 @@ void QxrdApplication::warningMessage(QString msg, QDateTime /*ts*/) const
     INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "warningMessage", Qt::BlockingQueuedConnection, Q_ARG(QString, msg)));
   } else {
     printf("%s\n", qPrintable(msg));
-  }
-}
-
-void QxrdApplication::printMessage(QString msg, QDateTime ts) const
-{
-  if (qcepDebug(DEBUG_NOMESSAGES)) {
-  } else {
-    QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+
-        QThread::currentThread()->objectName()+": "+
-        msg.trimmed();
-
-    message = message.replace("\n", " : ");
-
-    logMessage(message);
-
-    if (experiment(0)) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "printMessage", Qt::QueuedConnection, Q_ARG(QString, msg)));
-    } else {
-      printf("%s\n", qPrintable(msg));
-    }
   }
 }
 

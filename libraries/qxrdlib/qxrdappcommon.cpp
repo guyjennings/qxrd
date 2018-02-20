@@ -23,6 +23,7 @@
 #include <QMetaEnum>
 #include "qcepallocator.h"
 #include "qxrdstartupwindow.h"
+#include "qxrdstartupwindowsettings.h"
 
 QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   : inherited(argc, argv),
@@ -64,6 +65,9 @@ QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
 
   m_Allocator = QcepAllocatorPtr(
         new QcepAllocator("allocator"));
+
+  m_StartupWindowSettings = QxrdStartupWindowSettingsPtr(
+        new QxrdStartupWindowSettings("startupWindowSettings", "Startup Window"));
 }
 
 QxrdAppCommon::~QxrdAppCommon()
@@ -73,6 +77,14 @@ QxrdAppCommon::~QxrdAppCommon()
 void QxrdAppCommon::initializeRoot()
 {
   THREAD_CHECK;
+
+  if (m_Allocator) {
+    m_Allocator->initialize(sharedFromThis());
+  }
+
+  if (m_StartupWindowSettings) {
+    m_StartupWindowSettings->initialize(sharedFromThis());
+  }
 
   connect(prop_Debug(), &QcepInt64Property::valueChanged,
           this,         &QxrdAppCommon::debugChanged);
@@ -90,9 +102,6 @@ void QxrdAppCommon::initializeRoot()
 
   inherited::initializeRoot();
 
-  if (m_Allocator) {
-    m_Allocator->initialize(sharedFromThis());
-  }
 
   connect(m_Application.data(),  &QApplication::aboutToQuit,
           this,                  &QxrdAppCommon::finish);
@@ -152,6 +161,12 @@ void QxrdAppCommon::readSettings(QSettings *settings)
     m_Allocator->readSettings(settings);
     settings->endGroup();
   }
+
+  if (m_StartupWindowSettings) {
+    settings->beginGroup("startupWindowSettings");
+    m_StartupWindowSettings->readSettings(settings);
+    settings->endGroup();
+  }
 }
 
 void QxrdAppCommon::writeSettings(QSettings *settings)
@@ -161,6 +176,12 @@ void QxrdAppCommon::writeSettings(QSettings *settings)
   if (m_Allocator) {
     settings->beginGroup("allocator");
     m_Allocator->writeSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_StartupWindowSettings) {
+    settings->beginGroup("startupWindowSettings");
+    m_StartupWindowSettings->writeSettings(settings);
     settings->endGroup();
   }
 }
@@ -434,16 +455,22 @@ void QxrdAppCommon::splashMessage(QString msg, QDateTime dt)
 //  GUI_THREAD_CHECK;
 
   if (get_GuiWanted()) {
-//    if (m_Splash == NULL) {
-//      m_Splash = QxrdSplashScreenPtr(new QxrdSplashScreen(NULL));
-//    }
+    if (m_StartupWindow) {
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(m_StartupWindow.data(),
+                                      "appendSplashMessage",
+                                      Qt::QueuedConnection,
+                                      Q_ARG(QString, msg),
+                                      Q_ARG(QDateTime, dt)));
+    }
 
-//    m_Splash -> show();
+    processEvents();
+  }
+}
 
-//    QString msgf = tr("Qxrd Version " STR(QXRD_VERSION) "\n")+msg;
-
-//    m_Splash->showMessage(msgf, Qt::AlignBottom|Qt::AlignHCenter);
-
+void QxrdAppCommon::printMessage(QString msg, QDateTime dt) const
+{
+  if (get_GuiWanted()) {
     if (m_StartupWindow) {
       INVOKE_CHECK(
             QMetaObject::invokeMethod(m_StartupWindow.data(),
@@ -451,9 +478,9 @@ void QxrdAppCommon::splashMessage(QString msg, QDateTime dt)
                                       Qt::QueuedConnection,
                                       Q_ARG(QString, msg),
                                       Q_ARG(QDateTime, dt)));
-    }
 
-    processEvents();
+      processEvents();
+    }
   }
 }
 

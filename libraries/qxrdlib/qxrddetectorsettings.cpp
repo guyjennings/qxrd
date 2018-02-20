@@ -148,66 +148,6 @@ QxrdDetectorSettings::~QxrdDetectorSettings()
   }
 }
 
-void QxrdDetectorSettings::printLine(QString line) const
-{
-  if (m_DetectorControlWindow) {
-    m_DetectorControlWindow->printLine(line);
-  }
-
-  QxrdExperimentPtr expt(m_Experiment);
-
-  if (expt) {
-    expt->printLine(line);
-  } else {
-    printf("%s\n", qPrintable(line));
-  }
-}
-
-void QxrdDetectorSettings::printMessage(QString msg, QDateTime dt) const
-{
-  if (m_DetectorControlWindow) {
-    m_DetectorControlWindow->printMessage(msg, dt);
-  }
-
-  QxrdExperimentPtr expt(m_Experiment);
-
-  if (expt) {
-    expt->printMessage(msg, dt);
-  } else {
-    printf("MESSAGE: %s\n", qPrintable(msg));
-  }
-}
-
-void QxrdDetectorSettings::criticalMessage(QString msg, QDateTime ts) const
-{
-  if (m_DetectorControlWindow) {
-    m_DetectorControlWindow->criticalMessage(msg, ts);
-  }
-
-  QxrdExperimentPtr expt(m_Experiment);
-
-  if (expt) {
-    expt->criticalMessage(msg, ts);
-  } else {
-    printf("CRITICAL: %s\n", qPrintable(msg));
-  }
-}
-
-void QxrdDetectorSettings::statusMessage(QString msg, QDateTime ts) const
-{
-  if (m_DetectorControlWindow) {
-    m_DetectorControlWindow->statusMessage(msg, ts);
-  }
-
-  QxrdExperimentPtr expt(m_Experiment);
-
-  if (expt) {
-    expt->statusMessage(msg, ts);
-  } else {
-    printf("STATUS: %s\n", qPrintable(msg));
-  }
-}
-
 int QxrdDetectorSettings::detectorTypeCount()
 {
   return 7;

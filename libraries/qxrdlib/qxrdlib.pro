@@ -357,7 +357,8 @@ SOURCES += qxrdlib.cpp \
     qxrdviewersettings.cpp \
     qxrdacqcommon.cpp \
     qxrdacqdummy.cpp \
-    qxrdstartupwindow.cpp
+    qxrdstartupwindow.cpp \
+    qxrdstartupwindowsettings.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -560,7 +561,9 @@ HEADERS += qxrdlib.h\
     qfilesystemwatcher-ptr.h \
     qtimer-ptr.h \
     qxrdstartupwindow.h \
-    qxrdstartupwindow-ptr.h
+    qxrdstartupwindow-ptr.h \
+    qxrdstartupwindowsettings.h \
+    qxrdstartupwindowsettings-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

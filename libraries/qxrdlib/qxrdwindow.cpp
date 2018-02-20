@@ -827,36 +827,6 @@ void QxrdWindow::populateDetectorControlWindowsMenu()
   }
 }
 
-QString QxrdWindow::timeStamp() const
-{
-  return QDateTime::currentDateTime().toString("yyyy.MM.dd : hh:mm:ss.zzz ");
-}
-
-void QxrdWindow::printLine(QString line)
-{
-  displayMessage(line);
-}
-
-void QxrdWindow::criticalMessage(QString msg, QDateTime /*ts*/)
-{
-  displayCriticalMessage(msg);
-}
-
-void QxrdWindow::statusMessage(QString /*msg*/, QDateTime /*ts*/)
-{
-}
-
-void QxrdWindow::printMessage(QString msg, QDateTime ts)
-{
-  QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+
-      QThread::currentThread()->objectName()+": "+
-      msg.trimmed();
-
-  message = message.replace("\n", " : ");
-
-  displayMessage(message);
-}
-
 void QxrdWindow::warningMessage(QString msg)
 {
   if (QThread::currentThread()==thread()) {

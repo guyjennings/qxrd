@@ -46,11 +46,6 @@ public:
 
   static void registerMetaTypes();
 
-  virtual void printLine(QString line) const;
-  virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
-  virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-
   static int detectorTypeCount();
   static QString detectorTypeName(int detectorType);
   static QStringList detectorTypeNames();

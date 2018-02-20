@@ -78,7 +78,6 @@ public slots:
 
   void logMessage(QString msg) const;
   void warningMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void printLine(QString msg) const;

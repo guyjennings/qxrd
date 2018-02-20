@@ -1,24 +1,37 @@
 #ifndef QXRDSTARTUPWINDOW_H
 #define QXRDSTARTUPWINDOW_H
 
-#include <QMainWindow>
+#include "qcepmacros.h"
+#include "qxrdmainwindow.h"
 #include "ui_qxrdstartupwindow.h"
 #include <QDateTime>
+#include "qxrdappcommon-ptr.h"
+#include "qxrdstartupwindowsettings-ptr.h"
 
-class QxrdStartupWindow : public QMainWindow, public Ui::QxrdStartupWindow
+class QXRD_EXPORT QxrdStartupWindow : public QxrdMainWindow, public Ui::QxrdStartupWindow
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
-  explicit QxrdStartupWindow(QWidget *parent = 0);
+  explicit QxrdStartupWindow(QxrdStartupWindowSettingsWPtr set,
+                             QString name,
+                             QxrdAppCommonWPtr app);
   ~QxrdStartupWindow();
 
   void setApplicationIcon        (QIcon     icon);
   void setApplicationDescription (QString   desc);
 
 public slots:
+  void appendSplashMessage       (QString   msg,
+                                  QDateTime dt=QDateTime::currentDateTime());
   void appendMessage             (QString   msg,
                                   QDateTime dt=QDateTime::currentDateTime());
+
+  void onMessageWindowLinesChanged(int newVal);
+
 private:
   QDateTime m_LastDateTime;
 };

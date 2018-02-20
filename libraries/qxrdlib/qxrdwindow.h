@@ -98,15 +98,10 @@ public slots:
   void doLoadScript();
   void loadScript(QString path);
 
-  QString timeStamp() const;
   void warningMessage(QString msg);
   void displayMessage(QString msg);
   void displayCriticalMessage(QString msg);
   void initialLogEntry(QString aline);
-  virtual void printLine(QString line);
-  virtual void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  virtual void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
-  virtual void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());
 
 //  void selectOutputDirectory();
 

@@ -6,7 +6,7 @@ QxrdInfoWindow::QxrdInfoWindow(QString name,
                                QxrdExperimentWPtr expt,
                                QxrdAcqCommonWPtr acqw,
                                QxrdProcessorWPtr procw) :
-  QxrdMainWindow(name, app, expt, acqw, procw)
+  inherited(name, app, expt, acqw, procw)
 {
   setupUi(this);
 

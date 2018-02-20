@@ -19,7 +19,6 @@ public:
   virtual ~QxrdAppViewer();
   void initializeRoot();
 
-  void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
   void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   void setDefaultObjectData(QcepDataObject *obj);
