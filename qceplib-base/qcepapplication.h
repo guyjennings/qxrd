@@ -23,7 +23,7 @@ public:
   virtual void setDefaultObjectData(QcepDataObject *obj) = 0;
 
   int exec();
-  void processEvents();
+  void processEvents() const;
   void exit();
   void quit();
 

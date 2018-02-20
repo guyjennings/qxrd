@@ -31,7 +31,7 @@ int QcepApplication::exec()
   return res;
 }
 
-void QcepApplication::processEvents()
+void QcepApplication::processEvents() const
 {
   if (m_Application) {
     m_Application -> processEvents();
