@@ -18,6 +18,9 @@ public:
 public:
   Q_PROPERTY(int detectorIndex READ get_DetectorIndex WRITE set_DetectorIndex)
   QCEP_INTEGER_PROPERTY(DetectorIndex)
+
+  Q_PROPERTY(double exposureFactor READ get_ExposureFactor WRITE set_ExposureFactor)
+  QCEP_DOUBLE_PROPERTY(ExposureFactor)
 };
 
 Q_DECLARE_METATYPE(QxrdDexelaSettings*)

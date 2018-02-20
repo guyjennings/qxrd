@@ -13,7 +13,8 @@
 
 QxrdDexelaSettings::QxrdDexelaSettings(QString name) :
   QxrdDetectorSettings(name, Dexela),
-  m_DetectorIndex  (this, "detectorIndex",   0, "Dexela Detector Number")
+  m_DetectorIndex  (this, "detectorIndex",   0,   "Dexela Detector Number"),
+  m_ExposureFactor (this, "exposureFactor",  1.0, "Relative Exposure Factor")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing dexela detector\n");

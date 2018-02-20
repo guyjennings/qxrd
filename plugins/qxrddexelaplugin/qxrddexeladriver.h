@@ -38,7 +38,6 @@ private:
 
 private:
   QxrdDexelaSettingsWPtr  m_Dexela;
-  int                     m_DetectorIndex;
   DexelaDetector         *m_DexelaDetector;
   int                     m_XDim;
   int                     m_YDim;

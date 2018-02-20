@@ -89,8 +89,6 @@ int QxrdDexelaDriver::scanForDetectors()
   }
 }
 
-static int detIndex = 0;
-
 bool QxrdDexelaDriver::startDetectorDriver()
 {
   THREAD_CHECK;
@@ -105,27 +103,20 @@ bool QxrdDexelaDriver::startDetectorDriver()
   if (acq && det && det->checkDetectorEnabled()) {
     scanForDetectors();
 
-    m_DetectorIndex = detIndex++; // det->get_DetectorIndex();
-
     printMessage(tr("Starting Dexela detector %1: \"%2\"")
                  .arg(m_DetectorIndex)
                  .arg(det->get_DetectorName()));
 
+    int index = det->get_DetectorIndex();
 
-    if (m_DetectorIndex >= 0 && m_DetectorIndex < m_DetectorCount) {
-      m_DexelaDetector = new DexelaDetector(m_Devices[m_DetectorIndex]);
+    if (index >= 0 && index < m_DetectorCount) {
+      m_DexelaDetector = new DexelaDetector(m_Devices.value(index));
 
       if (m_DexelaDetector) {
         QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
         try {
           m_DexelaDetector -> OpenBoard();
-
-          m_XDim = m_DexelaDetector -> GetBufferXdim();
-          m_YDim = m_DexelaDetector -> GetBufferYdim();
-
-          det -> set_NCols(m_XDim);
-          det -> set_NRows(m_YDim);
 
           m_DexelaDetector -> SetCallback(&QxrdDexelaDriver::staticCallback);
           m_DexelaDetector -> SetCallbackData((void*) this);
@@ -136,6 +127,12 @@ bool QxrdDexelaDriver::startDetectorDriver()
           m_DexelaDetector -> SetExposureMode(Expose_and_read);
           m_DexelaDetector -> SetTriggerSource(Internal_Software);
           m_DexelaDetector -> EnablePulseGenerator();
+
+          m_XDim = m_DexelaDetector -> GetBufferXdim();
+          m_YDim = m_DexelaDetector -> GetBufferYdim();
+
+          det -> set_NCols(m_XDim);
+          det -> set_NRows(m_YDim);
 
           m_DexelaDetector -> GoLiveSeq();
 
