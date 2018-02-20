@@ -29,7 +29,7 @@ QxrdFileWatcherDriver::~QxrdFileWatcherDriver()
 #endif
 }
 
-bool QxrdFileWatcherDriver::startDetectorDriver()
+void QxrdFileWatcherDriver::startDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -42,13 +42,11 @@ bool QxrdFileWatcherDriver::startDetectorDriver()
     det -> set_NRows(2048);
     det -> set_NCols(2048);
 
-    return changeExposureTime(acq->get_ExposureTime());
-  } else {
-    return false;
+    changeExposureTime(acq->get_ExposureTime());
   }
 }
 
-bool QxrdFileWatcherDriver::stopDetectorDriver()
+void QxrdFileWatcherDriver::stopDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -59,13 +57,11 @@ bool QxrdFileWatcherDriver::stopDetectorDriver()
   }
 
   m_Timer.stop();
-
-  return true;
 }
 
 static int g_FrameCounter = 0;
 
-bool QxrdFileWatcherDriver::changeExposureTime(double expos)
+void QxrdFileWatcherDriver::changeExposureTime(double expos)
 {
   THREAD_CHECK;
 
@@ -75,40 +71,31 @@ bool QxrdFileWatcherDriver::changeExposureTime(double expos)
     printMessage(tr("Exposure time changed to %1").arg(expos));
 
     m_Timer.start(expos*1000);
-
-    return true;
   }
-
-  return false;
 }
 
-bool QxrdFileWatcherDriver::beginAcquisition(double /*exposure*/)
+void QxrdFileWatcherDriver::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
 
   g_FrameCounter = 0;
-
-  return true;
 }
 
 void QxrdFileWatcherDriver::beginFrame()
 {
+  THREAD_CHECK;
 }
 
-bool QxrdFileWatcherDriver::endAcquisition()
+void QxrdFileWatcherDriver::endAcquisition()
 {
   THREAD_CHECK;
-
-  return true;
 }
 
-bool QxrdFileWatcherDriver::shutdownAcquisition()
+void QxrdFileWatcherDriver::shutdownAcquisition()
 {
   THREAD_CHECK;
 
   m_Timer.stop();
-
-  return true;
 }
 
 void QxrdFileWatcherDriver::onTimerTimeout()

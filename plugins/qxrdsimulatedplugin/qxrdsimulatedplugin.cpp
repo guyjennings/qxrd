@@ -12,6 +12,15 @@ void QxrdSimulatedPlugin::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
+  QcepObjectWPtr me = sharedFromThis();
+
+  QSharedPointer<QxrdSimulatedPlugin> myself =
+      qSharedPointerDynamicCast<QxrdSimulatedPlugin>(me);
+
+  if (myself) {
+    printMessage("QxrdSimulatedPlugin::myself != NULL");
+  }
+
   printMessage("QxrdSimulatedPlugin::initialize");
 }
 

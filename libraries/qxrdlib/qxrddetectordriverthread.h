@@ -26,13 +26,13 @@ public:
 signals:
 
 public slots:
-  bool startDetectorDriver();
-  bool stopDetectorDriver();
+  void startDetectorDriver();
+  void stopDetectorDriver();
 
-  bool changeExposureTime(double expos);
-  bool beginAcquisition(double expos);
-  bool endAcquisition();
-  bool shutdownAcquisition();
+  void changeExposureTime(double expos);
+  void beginAcquisition(double expos);
+  void endAcquisition();
+  void shutdownAcquisition();
 
   void beginFrame();
 

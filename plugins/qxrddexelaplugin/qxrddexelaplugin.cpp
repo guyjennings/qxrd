@@ -4,24 +4,13 @@
 #include "qxrddexelasettings.h"
 #include "BusScanner.h"
 #include "Dexeladetector.h"
+#include "qxrddexelaplugin-ptr.h"
 
 QxrdDexelaPlugin::QxrdDexelaPlugin()
-  : inherited("dexelaPlugin")
+  : inherited("dexelaPlugin"),
+    m_BusScanner(NULL),
+    m_NDevs(0)
 {
-//  m_BusScanner = new BusScanner();
-
-//  m_NDevs = m_BusScanner -> EnumerateDevices();
-
-//  printf("Found %d Dexela Devices\n", m_NDevs);
-
-//  for (int i=0; i<m_NDevs; i++) {
-//    DevInfo info = m_BusScanner -> GetDevice(i);
-
-//    printf("Found Dexela Device %d, Model %d, Serial %d\n",
-//           i, info.model, info.serialNum);
-
-//    printf("  unit = %d, param = ""%s""\n", info.unit, info.param);
-//  }
 }
 
 void QxrdDexelaPlugin::initialize(QcepObjectWPtr parent)
@@ -29,6 +18,21 @@ void QxrdDexelaPlugin::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 
   printMessage("QxrdDexelaPlugin::initialize");
+
+  m_BusScanner = new BusScanner();
+
+  m_NDevs = m_BusScanner -> EnumerateDevices();
+
+  printMessage(tr("Found %1 Dexela Devices").arg(m_NDevs));
+
+  for (int i=0; i<m_NDevs; i++) {
+    DevInfo info = m_BusScanner -> GetDevice(i);
+
+    printMessage(tr("Found Dexela Device %1, Model %2, Serial %3")
+                 .arg(i).arg(info.model).arg(info.serialNum));
+
+    printMessage(tr("  unit = %1, param = ""%2""").arg(info.unit).arg(info.param));
+  }
 }
 
 QString QxrdDexelaPlugin::name() const
@@ -41,11 +45,27 @@ QxrdDetectorDriverPtr QxrdDexelaPlugin::createDetector(QString name,
                                                        QxrdExperimentWPtr expt,
                                                        QxrdAcqCommonWPtr acq)
 {
-  QxrdDexelaSettingsWPtr set = qSharedPointerDynamicCast<QxrdDexelaSettings>(det);
+  QxrdDexelaSettingsWPtr  set = qSharedPointerDynamicCast<QxrdDexelaSettings>(det);
+  QcepObjectWPtr           me = sharedFromThis();
+  QxrdDexelaPluginWPtr myself = qSharedPointerDynamicCast<QxrdDexelaPlugin>(me);
 
   QxrdDetectorDriverPtr res =
       QxrdDetectorDriverPtr(
-        new QxrdDexelaDriver(name, set, expt, acq));
+        new QxrdDexelaDriver(name, set, expt, acq, myself));
 
   return res;
+}
+
+int QxrdDexelaPlugin::deviceCount()
+{
+  return m_NDevs;
+}
+
+DevInfo QxrdDexelaPlugin::device(int n)
+{
+  if (n >= 0 && n < m_NDevs) {
+    return m_BusScanner -> GetDevice(n);
+  } else {
+    return DevInfo();
+  }
 }

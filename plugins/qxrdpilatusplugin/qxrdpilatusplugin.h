@@ -8,7 +8,7 @@ class QxrdPilatusPlugin : public QcepObject, public QxrdDetectorPluginInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "pilatus.json")
-  Q_INTERFACES(QxrdNamedPluginInterface QxrdDetectorPluginInterface)
+  Q_INTERFACES(QxrdDetectorPluginInterface)
 
 private:
   typedef QcepObject inherited;

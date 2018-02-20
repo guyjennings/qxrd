@@ -8,7 +8,7 @@ class QxrdPerkinElmerPlugin : public QcepObject, public QxrdDetectorPluginInterf
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "pe.json")
-  Q_INTERFACES(QxrdNamedPluginInterface QxrdDetectorPluginInterface)
+  Q_INTERFACES(QxrdDetectorPluginInterface)
 
 private:
   typedef QcepObject inherited;

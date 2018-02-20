@@ -33,7 +33,7 @@ QxrdPilatusDriver::~QxrdPilatusDriver()
 #endif
 }
 
-bool QxrdPilatusDriver::startDetectorDriver()
+void QxrdPilatusDriver::startDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -60,11 +60,9 @@ bool QxrdPilatusDriver::startDetectorDriver()
 
     imagePath(pil->get_PilatusDataDirectory());
   }
-
-  return true;
 }
 
-bool QxrdPilatusDriver::stopDetectorDriver()
+void QxrdPilatusDriver::stopDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -76,13 +74,11 @@ bool QxrdPilatusDriver::stopDetectorDriver()
 
     m_PilatusSocket.close();
   }
-
-  return true;
 }
 
-bool QxrdPilatusDriver::changeExposureTime(double expos)
+void QxrdPilatusDriver::changeExposureTime(double expos)
 {
-//  THREAD_CHECK;
+  THREAD_CHECK;
 
 //  QxrdDetectorSettingsPtr det(m_Detector);
 
@@ -95,10 +91,9 @@ bool QxrdPilatusDriver::changeExposureTime(double expos)
 //  }
 
 //  return false;
-  return true;
 }
 
-bool QxrdPilatusDriver::beginAcquisition(double exposure)
+void QxrdPilatusDriver::beginAcquisition(double exposure)
 {
   THREAD_CHECK;
 
@@ -113,24 +108,18 @@ bool QxrdPilatusDriver::beginAcquisition(double exposure)
 
     beginExposure(exposure);
   }
-
-  return true;
 }
 
-bool QxrdPilatusDriver::endAcquisition()
+void QxrdPilatusDriver::endAcquisition()
+{
+  THREAD_CHECK;
+}
+
+void QxrdPilatusDriver::shutdownAcquisition()
 {
   THREAD_CHECK;
 
-  return true;
-}
-
-bool QxrdPilatusDriver::shutdownAcquisition()
-{
-//  THREAD_CHECK;
-
 //  m_Timer.stop();
-
-  return true;
 }
 
 //void QxrdPilatusDriver::onTimerTimeout()

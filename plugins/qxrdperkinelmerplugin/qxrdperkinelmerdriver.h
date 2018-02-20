@@ -22,14 +22,14 @@ public:
   virtual ~QxrdPerkinElmerDriver();
 
 public slots:
-  bool startDetectorDriver();
-  bool stopDetectorDriver();
+  void startDetectorDriver();
+  void stopDetectorDriver();
 
-  bool changeExposureTime(double exposure);
-  bool beginAcquisition(double exposure);
-  bool endAcquisition();
+  void changeExposureTime(double exposure);
+  void beginAcquisition(double exposure);
+  void endAcquisition();
   void beginFrame();
-  bool shutdownAcquisition();
+  void shutdownAcquisition();
 
   void onBinningModeChanged();
   void onCameraGainChanged();

@@ -3,14 +3,13 @@
 
 #include "qcepobject.h"
 #include "qxrddetectorplugininterface.h"
-
-class BusScanner;
+#include "BusScanner.h"
 
 class QxrdDexelaPlugin : public QcepObject, public QxrdDetectorPluginInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "dexela.json")
-  Q_INTERFACES(QxrdNamedPluginInterface QxrdDetectorPluginInterface)
+  Q_INTERFACES(QxrdDetectorPluginInterface)
 
 private:
   typedef QcepObject inherited;
@@ -25,6 +24,9 @@ public:
                                        QxrdDetectorSettingsWPtr det,
                                        QxrdExperimentWPtr expt,
                                        QxrdAcqCommonWPtr acq);
+
+  int     deviceCount();
+  DevInfo device(int n);
 
 private:
   BusScanner *m_BusScanner;

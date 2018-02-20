@@ -29,7 +29,7 @@ QxrdAreaDetectorDriver::~QxrdAreaDetectorDriver()
 #endif
 }
 
-bool QxrdAreaDetectorDriver::startDetectorDriver()
+void QxrdAreaDetectorDriver::startDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -42,13 +42,11 @@ bool QxrdAreaDetectorDriver::startDetectorDriver()
     det -> set_NRows(2048);
     det -> set_NCols(2048);
 
-    return changeExposureTime(acq->get_ExposureTime());
-  } else {
-    return false;
+    changeExposureTime(acq->get_ExposureTime());
   }
 }
 
-bool QxrdAreaDetectorDriver::stopDetectorDriver()
+void QxrdAreaDetectorDriver::stopDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -59,13 +57,11 @@ bool QxrdAreaDetectorDriver::stopDetectorDriver()
   }
 
   m_Timer.stop();
-
-  return true;
 }
 
 static int g_FrameCounter = 0;
 
-bool QxrdAreaDetectorDriver::changeExposureTime(double expos)
+void QxrdAreaDetectorDriver::changeExposureTime(double expos)
 {
   THREAD_CHECK;
 
@@ -75,40 +71,31 @@ bool QxrdAreaDetectorDriver::changeExposureTime(double expos)
     printMessage(tr("Exposure time changed to %1").arg(expos));
 
     m_Timer.start(expos*1000);
-
-    return true;
   }
-
-  return false;
 }
 
-bool QxrdAreaDetectorDriver::beginAcquisition(double /*exposure*/)
+void QxrdAreaDetectorDriver::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
 
   g_FrameCounter = 0;
-
-  return true;
 }
 
 void QxrdAreaDetectorDriver::beginFrame()
 {
+  THREAD_CHECK;
 }
 
-bool QxrdAreaDetectorDriver::endAcquisition()
+void QxrdAreaDetectorDriver::endAcquisition()
 {
   THREAD_CHECK;
-
-  return true;
 }
 
-bool QxrdAreaDetectorDriver::shutdownAcquisition()
+void QxrdAreaDetectorDriver::shutdownAcquisition()
 {
   THREAD_CHECK;
 
   m_Timer.stop();
-
-  return true;
 }
 
 void QxrdAreaDetectorDriver::onTimerTimeout()

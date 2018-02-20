@@ -18,12 +18,12 @@ public:
                      QxrdAcqCommonWPtr acq);
 
 public slots:
-  virtual bool startDetectorDriver() = 0;
-  virtual bool stopDetectorDriver() = 0;
-  virtual bool changeExposureTime(double exposure) = 0;
-  virtual bool beginAcquisition(double exposure) = 0;
-  virtual bool endAcquisition() = 0;
-  virtual bool shutdownAcquisition() = 0;
+  virtual void startDetectorDriver() = 0;
+  virtual void stopDetectorDriver() = 0;
+  virtual void changeExposureTime(double exposure) = 0;
+  virtual void beginAcquisition(double exposure) = 0;
+  virtual void endAcquisition() = 0;
+  virtual void shutdownAcquisition() = 0;
   virtual void beginFrame() = 0;
 
 protected:

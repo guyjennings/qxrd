@@ -93,7 +93,6 @@ SOURCES += qxrdlib.cpp \
     qxrdexposuretimespinner.cpp \
     qxrddetectorplugininterface.cpp \
     qxrdnidaqplugininterface.cpp \
-    qxrdnamedplugininterface.cpp \
     qxrddetectorgeometry.cpp \
     qxrdgeneratetestimage.cpp \
     qxrdsimpleserver.cpp \
@@ -621,7 +620,6 @@ HEADERS += TODO.h \
     qxrddetectorplugininterface.h \
     qxrdnidaqplugininterface.h \
     qxrdnidaqplugininterface-ptr.h \
-    qxrdnamedplugininterface.h \
     qxrddetectorgeometry.h \
     qxrddetectorgeometry-ptr.h \
     qxrdgeneratetestimage.h \

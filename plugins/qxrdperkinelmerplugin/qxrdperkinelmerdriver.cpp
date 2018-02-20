@@ -365,7 +365,7 @@ void QxrdPerkinElmerDriver::acquisitionError(const char *fn, int ln, int n)
  XRD 1621 AN        14
  */
 
-bool QxrdPerkinElmerDriver::startDetectorDriver()
+void QxrdPerkinElmerDriver::startDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -661,23 +661,23 @@ bool QxrdPerkinElmerDriver::startDetectorDriver()
       startupAcquisition();
     }
   }
-
-  return true;
 }
 
-bool QxrdPerkinElmerDriver::stopDetectorDriver()
+void QxrdPerkinElmerDriver::stopDetectorDriver()
 {
+  THREAD_CHECK;
+
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det) {
     printMessage(tr("Stopping Perkin Elmer Detector %1").arg(det -> get_DetectorName()));
   }
-
-  return true;
 }
 
-bool QxrdPerkinElmerDriver::changeExposureTime(double expos)
+void QxrdPerkinElmerDriver::changeExposureTime(double expos)
 {
+  THREAD_CHECK;
+
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled()) {
@@ -715,7 +715,9 @@ bool QxrdPerkinElmerDriver::changeExposureTime(double expos)
 
 void QxrdPerkinElmerDriver::onBinningModeChanged()
 {
-//  return;
+  THREAD_CHECK;
+
+  //  return;
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled()) {
@@ -787,6 +789,8 @@ void QxrdPerkinElmerDriver::onBinningModeChanged()
 
 void QxrdPerkinElmerDriver::onCameraGainChanged()
 {
+  THREAD_CHECK;
+
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled()) {
@@ -821,6 +825,8 @@ void QxrdPerkinElmerDriver::onCameraGainChanged()
 
 void QxrdPerkinElmerDriver::onTimingSourceChanged()
 {
+  THREAD_CHECK;
+
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> isEnabled()) {
@@ -873,6 +879,8 @@ void QxrdPerkinElmerDriver::onTimingSourceChanged()
 
 void QxrdPerkinElmerDriver::startupAcquisition()
 {
+  THREAD_CHECK;
+
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> checkDetectorEnabled()) {
@@ -890,7 +898,7 @@ void QxrdPerkinElmerDriver::startupAcquisition()
   }
 }
 
-bool QxrdPerkinElmerDriver::beginAcquisition(double exposure)
+void QxrdPerkinElmerDriver::beginAcquisition(double exposure)
 {
   THREAD_CHECK;
 
@@ -912,30 +920,25 @@ bool QxrdPerkinElmerDriver::beginAcquisition(double exposure)
 
     Acquisition_ResetFrameCnt(m_AcqDesc);
   }
-
-  return true;
 }
 
-bool QxrdPerkinElmerDriver::endAcquisition()
+void QxrdPerkinElmerDriver::endAcquisition()
 {
   THREAD_CHECK;
-
-  return true;
 }
 
 void QxrdPerkinElmerDriver::beginFrame()
 {
+  THREAD_CHECK;
 }
 
-bool QxrdPerkinElmerDriver::shutdownAcquisition()
+void QxrdPerkinElmerDriver::shutdownAcquisition()
 {
   THREAD_CHECK;
 
   if (m_AcqDesc) {
     Acquisition_Abort(m_AcqDesc);
   }
-
-  return true;
 }
 
 void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned int n2)

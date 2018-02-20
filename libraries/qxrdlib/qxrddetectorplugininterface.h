@@ -3,13 +3,13 @@
 
 #include "qxrdlib_global.h"
 #include <QtPlugin>
-#include "qxrdnamedplugininterface.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrddetectordriver-ptr.h"
+#include "qcepobject-ptr.h"
 
-class QXRD_EXPORT QxrdDetectorPluginInterface : public QxrdNamedPluginInterface
+class QXRD_EXPORT QxrdDetectorPluginInterface
 {
 public:
   virtual ~QxrdDetectorPluginInterface() {}
@@ -18,6 +18,9 @@ public:
                                                QxrdDetectorSettingsWPtr det,
                                                QxrdExperimentWPtr expt,
                                                QxrdAcqCommonWPtr acq) = 0;
+
+  virtual QString name() const = 0;
+  virtual void initialize(QcepObjectWPtr parent) = 0;
 };
 
 #define DetectorPluginInterface_iid "gov.anl.aps.cep.Qxrd.DetectorInterface/2.0"

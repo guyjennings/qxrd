@@ -17,12 +17,12 @@ public:
   virtual ~QxrdSimulatedDriver();
 
 public slots:
-  virtual bool startDetectorDriver();
-  virtual bool stopDetectorDriver();
-  virtual bool changeExposureTime(double exposure);
-  virtual bool beginAcquisition(double exposure);
-  virtual bool endAcquisition();
-  virtual bool shutdownAcquisition();
+  virtual void startDetectorDriver();
+  virtual void stopDetectorDriver();
+  virtual void changeExposureTime(double exposure);
+  virtual void beginAcquisition(double exposure);
+  virtual void endAcquisition();
+  virtual void shutdownAcquisition();
   virtual void beginFrame();
 
 private slots:

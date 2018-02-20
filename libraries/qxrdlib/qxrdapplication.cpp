@@ -19,7 +19,6 @@
 #include "qxrdscriptengine.h"
 #include "qxrdglobalpreferencesdialog.h"
 #include "qcepproperty.h"
-#include "qxrdnamedplugininterface.h"
 #include "qxrddetectorplugininterface.h"
 #include "qxrdnidaqplugininterface.h"
 #include "qxrdglobalsettings.h"
@@ -423,10 +422,16 @@ void QxrdApplication::loadPlugins()
         }
 
         if (plugin) {
-          QxrdNamedPluginInterface* namedPlugin = qobject_cast<QxrdNamedPluginInterface*>(plugin);
+          QxrdDetectorPluginInterface* namedPlugin = qobject_cast<QxrdDetectorPluginInterface*>(plugin);
 
           if (namedPlugin) {
             pluginName = namedPlugin->name();
+          }
+
+          QxrdNIDAQPluginInterface* nidaqPlugin = qobject_cast<QxrdNIDAQPluginInterface*>(plugin);
+
+          if (nidaqPlugin) {
+            pluginName = nidaqPlugin->name();
           }
 
           if (qcepDebug(DEBUG_PLUGINS)) {

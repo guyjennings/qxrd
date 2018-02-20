@@ -4,14 +4,17 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include <QtPlugin>
-#include "qxrdnamedplugininterface.h"
+#include "qcepobject-ptr.h"
 
-class QXRD_EXPORT QxrdNIDAQPluginInterface : public QxrdNamedPluginInterface
+class QXRD_EXPORT QxrdNIDAQPluginInterface
 {
 public:
   virtual ~QxrdNIDAQPluginInterface() {}
 
 public:
+  virtual QString name() const = 0;
+  virtual void initialize(QcepObjectWPtr parent) = 0;
+
   virtual void setErrorOutput(QObject *errors) = 0;
 
 //  virtual void setAnalogChannel(int chan) = 0;

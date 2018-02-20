@@ -84,13 +84,13 @@ public slots:
 
   bool checkDetectorEnabled();
 
-  bool startDetector();
-  bool stopDetector();
+  void startDetector();
+  void stopDetector();
 
-  bool changeExposureTime(double expos);
-  bool beginAcquisition(double exposure);
-  bool endAcquisition();
-  bool shutdownAcquisition();
+  void changeExposureTime(double expos);
+  void beginAcquisition(double exposure);
+  void endAcquisition();
+  void shutdownAcquisition();
 
   void openWindow();
   void openControlWindow();

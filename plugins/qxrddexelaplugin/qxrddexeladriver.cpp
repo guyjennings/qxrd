@@ -12,17 +12,22 @@
 #include <QThread>
 #include "qcepmutexlocker.h"
 #include "qcepallocator.h"
+#include "qxrddexelaplugin.h"
 
 QxrdDexelaDriver::QxrdDexelaDriver(QString name,
-                                                   QxrdDexelaSettingsWPtr det,
-                                                   QxrdExperimentWPtr expt,
-                                                   QxrdAcqCommonWPtr acq)
+                                   QxrdDexelaSettingsWPtr det,
+                                   QxrdExperimentWPtr expt,
+                                   QxrdAcqCommonWPtr acq,
+                                   QxrdDexelaPluginWPtr plugin)
   : QxrdDetectorDriver(name, det, expt, acq),
-    m_Dexela(qSharedPointerDynamicCast<QxrdDexelaSettings>(det))
+    m_Dexela(qSharedPointerDynamicCast<QxrdDexelaSettings>(det)),
+    m_DexelaPlugin(plugin),
+    m_DexelaDetector(NULL)
 {
 #ifndef QT_NO_DEBUG
   printf("Dexela Driver \"%s\" Constructed\n", qPrintable(name));
 #endif
+
 }
 
 QxrdDexelaDriver::~QxrdDexelaDriver()
@@ -33,64 +38,11 @@ QxrdDexelaDriver::~QxrdDexelaDriver()
 }
 
 QMutex           QxrdDexelaDriver::m_Mutex;
-BusScanner      *QxrdDexelaDriver::m_BusScanner;
-int              QxrdDexelaDriver::m_DetectorCount;
-int              QxrdDexelaDriver::m_Initialized;
-QVector<DevInfo> QxrdDexelaDriver::m_Devices;
 
-int QxrdDexelaDriver::scanForDetectors()
+void QxrdDexelaDriver::startDetectorDriver()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  if (m_Initialized == 0) {
-    m_BusScanner = new BusScanner();
-
-    m_DetectorCount = m_BusScanner -> EnumerateDevices();
-
-    printMessage(tr("Found %1 Detectors").arg(m_DetectorCount));
-
-    for (int i=0; i<m_DetectorCount; i++) {
-      DevInfo info = m_BusScanner -> GetDevice(i);
-
-      m_Devices.append(info);
-
-      printMessage(tr("Detector %1: Model %2: Serial Number %3")
-                   .arg(i)
-                   .arg(info.model)
-                   .arg(info.serialNum));
-
-//      DexelaDetector det(info);
-
-//      det.OpenBoard();
-
-//      int fwVersion = det.GetFirmwareVersion();
-
-//      int dayMonth, year, time;
-
-//      det.GetFirmwareBuild(dayMonth, year, time);
-
-//      printMessage(tr("Detector %1 : XDim %2, YDim %3, NBuff %4")
-//                   .arg(i).arg(det.GetBufferXdim()).arg(det.GetBufferYdim()).arg(det.GetNumBuffers()));
-
-//      printMessage(tr("Detector %1 : Firmware %2: Build %3/%4: %5")
-//                   .arg(i).arg(fwVersion).arg(dayMonth).arg(year).arg(time));
-
-//      printMessage(tr("Detector %1 : Exposure Time %2, Gap Time %3")
-//                   .arg(i).arg(det.GetExposureTime()).arg(det.GetGapTime()));
-
-//      det.CloseBoard();
-    }
-
-    m_Initialized = 1;
-
-    return true;
-  } else {
-    return false;
-  }
-}
-
-bool QxrdDexelaDriver::startDetectorDriver()
-{
   THREAD_CHECK;
 
   if (qcepDebug(DEBUG_DEXELA)) {
@@ -100,8 +52,15 @@ bool QxrdDexelaDriver::startDetectorDriver()
   QxrdDexelaSettingsPtr det(m_Dexela);
   QxrdAcqCommonPtr      acq(m_Acquisition);
 
+  if (det == NULL) {
+    printMessage("Attempting to start Dexela Detector with settings == NULL");
+  }
+
+  if (acq == NULL) {
+    printMessage("Attempting to start Dexela Detector with acquisition == NULL");
+  }
+
   if (acq && det && det->checkDetectorEnabled()) {
-    scanForDetectors();
 
     printMessage(tr("Starting Dexela detector %1: \"%2\"")
                  .arg(det->get_DetectorIndex())
@@ -109,10 +68,11 @@ bool QxrdDexelaDriver::startDetectorDriver()
 
     int index = det->get_DetectorIndex();
 
-    if (index >= 0 && index < m_DetectorCount) {
-      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+    QxrdDexelaPluginPtr plugin(m_DexelaPlugin);
 
-      m_DexelaDetector = new DexelaDetector(m_Devices[index]);
+    if (plugin && index >= 0 && index < plugin -> deviceCount()) {
+      DevInfo info = plugin -> device(index);
+      m_DexelaDetector = new DexelaDetector(info);
 
       if (m_DexelaDetector) {
         try {
@@ -126,7 +86,7 @@ bool QxrdDexelaDriver::startDetectorDriver()
           m_DexelaDetector -> SetBinningMode(x11);
           m_DexelaDetector -> SetExposureMode(Expose_and_read);
           m_DexelaDetector -> SetTriggerSource(Internal_Software);
-          m_DexelaDetector -> EnablePulseGenerator();
+          m_DexelaDetector -> EnablePulseGenerator(acq->get_ExposureTime());
 
           m_XDim = m_DexelaDetector -> GetBufferXdim();
           m_YDim = m_DexelaDetector -> GetBufferYdim();
@@ -140,21 +100,24 @@ bool QxrdDexelaDriver::startDetectorDriver()
 
           printMessage(tr("Dexela Detector Exposure time %1").arg(m_DexelaDetector->GetExposureTime()));
         } catch (DexelaException &e) {
-          printMessage(tr("Dexela Exception caught"));
+          printMessage(tr("Dexela Exception caught: Description %1: function %2")
+                       .arg(e.what()).arg(e.GetFunctionName()));
         }
       }
     }
 
-    return changeExposureTime(acq->get_ExposureTime());
-  } else {
-    return false;
+    changeExposureTime(acq->get_ExposureTime());
+  }
+
+  if (qcepDebug(DEBUG_DEXELA)) {
+    printMessage(tr("QxrdDexelaDriver::startDetectorDriver finished"));
   }
 }
 
 void QxrdDexelaDriver::staticCallback(int fc, int buf, DexelaDetector *det)
 {
 //  printf("QxrdDexelaDriver::staticCallback called fc=%d, buf=%d, det=%x\n", fc, buf, det);
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+//  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   QxrdDexelaDriver *dex = reinterpret_cast<QxrdDexelaDriver*>(det->GetCallbackData());
 
@@ -166,6 +129,8 @@ void QxrdDexelaDriver::staticCallback(int fc, int buf, DexelaDetector *det)
 
 void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
 {
+  THREAD_CHECK;
+
   QcepUInt16ImageDataPtr image =
       QcepAllocator::newInt16Image(sharedFromThis(),
                                    tr("frame-%1").arg(fc),
@@ -173,27 +138,32 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
                                    QcepAllocator::AllocateFromReserve);
 
   if (image) {
-    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+//    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
     quint16 *ptr = image->data();
 
-    m_DexelaDetector -> ReadBuffer(buf, (byte*) ptr);
+    try {
+      m_DexelaDetector -> ReadBuffer(buf, (byte*) ptr);
+    } catch (DexelaException &e) {
+      printMessage(tr("Dexela Exception caught: Description %1: function %2")
+                   .arg(e.what()).arg(e.GetFunctionName()));
+    }
 
     QxrdDexelaSettingsPtr det(m_Dexela);
 
     if (det) {
-//      splashMessage(tr("Acquired Frame %1 from %2 on detector %3")
-//                    .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
+      splashMessage(tr("Acquired Frame %1 from %2 on detector %3")
+                    .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
 
-      printf("Acquired frame %d from buffer %d on detector %d\n",
-             fc, buf, det->get_DetectorIndex());
+//      printf("Acquired frame %d from buffer %d on detector %d\n",
+//             fc, buf, det->get_DetectorIndex());
 
       det->enqueueAcquiredFrame(image);
     }
   }
 }
 
-bool QxrdDexelaDriver::stopDetectorDriver()
+void QxrdDexelaDriver::stopDetectorDriver()
 {
   THREAD_CHECK;
 
@@ -202,13 +172,9 @@ bool QxrdDexelaDriver::stopDetectorDriver()
   if (det) {
     printMessage(tr("Stopping Dexela detector \"%1\"").arg(det->get_DetectorName()));
   }
-
-  return true;
 }
 
-static int g_FrameCounter = 0;
-
-bool QxrdDexelaDriver::changeExposureTime(double expos)
+void QxrdDexelaDriver::changeExposureTime(double expos)
 {
   THREAD_CHECK;
 
@@ -218,125 +184,32 @@ bool QxrdDexelaDriver::changeExposureTime(double expos)
     printMessage(tr("Exposure time changed to %1").arg(expos));
 
     if (m_DexelaDetector) {
-      m_DexelaDetector -> SetExposureTime(expos);
+      try {
+        m_DexelaDetector -> SetExposureTime(expos);
+      } catch (DexelaException &e) {
+        printMessage(tr("Dexela Exception caught: Description %1: function %2")
+                     .arg(e.what()).arg(e.GetFunctionName()));
+      }
     }
-
-    return true;
   }
-
-  return false;
 }
 
-bool QxrdDexelaDriver::beginAcquisition(double /*exposure*/)
+void QxrdDexelaDriver::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
-
-  g_FrameCounter = 0;
-
-  return true;
 }
 
 void QxrdDexelaDriver::beginFrame()
 {
+  THREAD_CHECK;
 }
 
-bool QxrdDexelaDriver::endAcquisition()
+void QxrdDexelaDriver::endAcquisition()
 {
   THREAD_CHECK;
-
-  return true;
 }
 
-bool QxrdDexelaDriver::shutdownAcquisition()
+void QxrdDexelaDriver::shutdownAcquisition()
 {
   THREAD_CHECK;
-
-  return true;
 }
-
-//void QxrdDexelaDriver::onTimerTimeout()
-//{
-//  QxrdDetectorSettingsPtr det(m_Detector);
-//  QxrdAcqCommonPtr        acq(m_Acquisition);
-
-//  if (acq && det && det->checkDetectorEnabled()) {
-//    QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
-
-//    if (sacq) {
-//      sacq->acquiredFrameAvailable(g_FrameCounter);
-//    }
-
-//    int nRows = det -> get_NRows();
-//    int nCols = det -> get_NCols();
-
-//    int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
-//    int frame = g_FrameCounter % 8;
-
-//    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
-//                                                                tr("simdet-%1").arg(frame),
-//                                                                nCols, nRows,
-//                                                                QcepAllocator::AllocateFromReserve);
-
-
-//    if (image) {
-//      quint16 *ptr = image->data();
-
-//      for (int j=0; j<nRows; j++) {
-//        for (int i=0; i<nCols; i++) {
-//          if ((i>=frame*64) && (i<(frame+1)*64) && (j < 64)) {
-//            *ptr++ = frame;
-//          } else {
-//            *ptr++ = xpmsec;
-//          }
-//        }
-//      }
-
-//      if ((nRows > 1024) && (nCols > 1024)) {
-//        const int labelWidth = 256;
-//        const int labelHeight = 64;
-
-//        QImage imageLabel(labelWidth, labelHeight, QImage::Format_RGB32);
-//        QPainter painter(&imageLabel);
-
-//        painter.fillRect(0,0,labelWidth,labelHeight, Qt::black);
-//        painter.setPen(Qt::white);
-//        painter.setFont(QFont("Times", labelHeight, QFont::Bold, true));
-//        painter.drawText(0, labelHeight, tr("%1").arg(g_FrameCounter));
-
-//        QRgb    *rgb = (QRgb*) imageLabel.bits();
-//        int nFrames = nRows / labelHeight;
-//        int frameN = g_FrameCounter % nFrames;
-//        int plval = qGray(*rgb);
-//        int pRgb  = *rgb;
-
-//        for (int j=0; j<labelHeight; j++) {
-//          for (int i=0; i<labelWidth; i++) {
-//            int x = nCols-labelWidth+i;
-//            int y = (frameN+1)*labelHeight-j;
-//            //          int val = image->value(x,y);
-//            int vRgb = *rgb++;
-//            int lval = qGray(vRgb);
-
-//            if (lval != plval) {
-//              plval = lval;
-//            }
-
-//            if (vRgb != pRgb) {
-//              pRgb = vRgb;
-//            }
-
-//            image->setValue(x,y,lval);
-//          }
-//        }
-//      }
-//    }
-
-//    if (qcepDebug(DEBUG_DETECTORIDLING)) {
-//      printMessage("enqueue dexela acquired frame");
-//    }
-
-//    det->enqueueAcquiredFrame(image);
-
-//    g_FrameCounter++;
-//  }
-//}

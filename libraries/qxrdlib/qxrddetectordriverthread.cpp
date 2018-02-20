@@ -105,64 +105,112 @@ void QxrdDetectorDriverThread::shutdown()
   wait();
 }
 
-bool QxrdDetectorDriverThread::startDetectorDriver()
+void QxrdDetectorDriverThread::startDetectorDriver()
 {
   if (m_DetectorDriver) {
-    return QMetaObject::invokeMethod(m_DetectorDriver.data(), "startDetectorDriver");
-  } else {
-    return false;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(), &QxrdDetectorDriver::startDetectorDriver, Qt::QueuedConnection)
+    )
+#else
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(), "startDetectorDriver", Qt::QueuedConnection)
+    )
+#endif
   }
 }
 
-bool QxrdDetectorDriverThread::stopDetectorDriver()
+void QxrdDetectorDriverThread::stopDetectorDriver()
 {
   if (m_DetectorDriver) {
-    return QMetaObject::invokeMethod(m_DetectorDriver.data(), "stopDetectorDriver");
-  } else {
-    return false;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(), &QxrdDetectorDriver::stopDetectorDriver, Qt::QueuedConnection)
+    )
+#else
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(), "stopDetectorDriver", Qt::QueuedConnection)
+    )
+#endif
   }
 }
 
-bool QxrdDetectorDriverThread::changeExposureTime(double expos)
+void QxrdDetectorDriverThread::changeExposureTime(double expos)
 {
   if (m_DetectorDriver) {
-    return QMetaObject::invokeMethod(m_DetectorDriver.data(), "changeExposureTime", Q_ARG(double, expos));
-  } else {
-    return false;
+    QxrdDetectorDriver *d = m_DetectorDriver.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(d, [=]() { d->changeExposureTime(expos); }, Qt::QueuedConnection)
+    )
+#else
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(d, "changeExposureTime", Q_ARG(double, expos), Qt::QueuedConnection)
+    )
+#endif
   }
 }
 
-bool QxrdDetectorDriverThread::beginAcquisition(double expos)
+void QxrdDetectorDriverThread::beginAcquisition(double expos)
 {
   if (m_DetectorDriver) {
-    return QMetaObject::invokeMethod(m_DetectorDriver.data(), "beginAcquisition", Q_ARG(double, expos));
-  } else {
-    return false;
+    QxrdDetectorDriver *d = m_DetectorDriver.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(d, [=]() { d->beginAcquisition(expos); }, Qt::QueuedConnection)
+    )
+#else
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(d, "beginAcquisition", Qt::QueuedConnection)
+    )
+#endif
   }
 }
 
-bool QxrdDetectorDriverThread::endAcquisition()
+void QxrdDetectorDriverThread::endAcquisition()
 {
   if (m_DetectorDriver) {
-    return QMetaObject::invokeMethod(m_DetectorDriver.data(), "endAcquisition");
-  } else {
-    return false;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(), &QxrdDetectorDriver::endAcquisition, Qt::QueuedConnection)
+    )
+#else
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(), "endAcquisition", Qt::QueuedConnection)
+    )
+#endif
   }
 }
 
 void QxrdDetectorDriverThread::beginFrame()
 {
   if (m_DetectorDriver) {
-    QMetaObject::invokeMethod(m_DetectorDriver.data(), "beginFrame");
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(), &QxrdDetectorDriver::beginFrame, Qt::QueuedConnection)
+    )
+#else
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(), "beginFrame", Qt::QueuedConnection)
+    )
+#endif
   }
 }
 
-bool QxrdDetectorDriverThread::shutdownAcquisition()
+void QxrdDetectorDriverThread::shutdownAcquisition()
 {
   if (m_DetectorDriver) {
-    return QMetaObject::invokeMethod(m_DetectorDriver.data(), "shutdownAcquisition");
-  } else {
-    return false;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(), &QxrdDetectorDriver::shutdownAcquisition, Qt::QueuedConnection)
+    )
+#else
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(), "shutdownAcquisition", Qt::QueuedConnection)
+    )
+#endif
   }
 }
 

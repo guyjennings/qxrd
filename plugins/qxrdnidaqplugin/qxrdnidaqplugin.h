@@ -14,7 +14,7 @@ class QxrdNIDAQPlugin : public QcepObject, public QxrdNIDAQPluginInterface
 {
   Q_OBJECT
   Q_PLUGIN_METADATA(IID QxrdNIDAQPluginInterface_iid FILE "nidaq.json")
-  Q_INTERFACES(QxrdNamedPluginInterface QxrdNIDAQPluginInterface)
+  Q_INTERFACES(QxrdNIDAQPluginInterface)
 
 private:
   typedef QcepObject inherited;

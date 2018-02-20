@@ -321,39 +321,31 @@ bool QxrdDetectorSettings::checkDetectorEnabled()
   }
 }
 
-bool QxrdDetectorSettings::startDetector()
+void QxrdDetectorSettings::startDetector()
 {
   if (m_DetectorDriverThread) {
-    return m_DetectorDriverThread->startDetectorDriver();
-  } else {
-    return false;
+    m_DetectorDriverThread->startDetectorDriver();
   }
 }
 
-bool QxrdDetectorSettings::stopDetector()
+void QxrdDetectorSettings::stopDetector()
 {
   if (m_DetectorDriverThread) {
-    return m_DetectorDriverThread->stopDetectorDriver();
-  } else {
-    return false;
+    m_DetectorDriverThread->stopDetectorDriver();
   }
 }
 
-bool QxrdDetectorSettings::changeExposureTime(double expos)
+void QxrdDetectorSettings::changeExposureTime(double expos)
 {
   if (m_DetectorDriverThread) {
-    return m_DetectorDriverThread->changeExposureTime(expos);
-  } else {
-    return false;
+    m_DetectorDriverThread->changeExposureTime(expos);
   }
 }
 
-bool QxrdDetectorSettings::beginAcquisition(double exposure)
+void QxrdDetectorSettings::beginAcquisition(double exposure)
 {
   if (m_DetectorDriverThread) {
-    return m_DetectorDriverThread->beginAcquisition(exposure);
-  } else {
-    return false;
+    m_DetectorDriverThread->beginAcquisition(exposure);
   }
 }
 
@@ -364,21 +356,17 @@ void QxrdDetectorSettings::beginFrame()
   }
 }
 
-bool QxrdDetectorSettings::endAcquisition()
+void QxrdDetectorSettings::endAcquisition()
 {
   if (m_DetectorDriverThread) {
-    return m_DetectorDriverThread->endAcquisition();
-  } else {
-    return false;
+    m_DetectorDriverThread->endAcquisition();
   }
 }
 
-bool QxrdDetectorSettings::shutdownAcquisition()
+void QxrdDetectorSettings::shutdownAcquisition()
 {
   if (m_DetectorDriverThread) {
-    return m_DetectorDriverThread->shutdownAcquisition();
-  } else {
-    return false;
+    m_DetectorDriverThread->shutdownAcquisition();
   }
 }
 
