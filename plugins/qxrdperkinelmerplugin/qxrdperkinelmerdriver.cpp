@@ -378,6 +378,8 @@ bool QxrdPerkinElmerDriver::startDetectorDriver()
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
 
   if (det && det -> checkDetectorEnabled()) {
+    printMessage(tr("Starting Perkin Elmer Detector \"%1\"").arg(det->get_DetectorName()));
+
     int nRet = HIS_ALL_OK;
     UINT nSensors;
     BOOL bEnableIRQ = true;

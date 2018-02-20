@@ -50,7 +50,7 @@ void QxrdAppViewer::openStartupWindow()
           "Data Viewer for 2-D XRay Detector data\n"
           "Guy Jennings\n"
           "Version " STR(QXRD_VERSION) "\n"
-                                       "Build : " __DATE__ " : " __TIME__ "\n");
+          "Build : " __DATE__ " : " __TIME__);
 
     m_StartupWindow -> setWindowTitle(applicationDescription());
     m_StartupWindow -> setWindowIcon(applicationIcon());

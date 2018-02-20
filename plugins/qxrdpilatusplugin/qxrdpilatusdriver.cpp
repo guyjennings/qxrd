@@ -39,7 +39,7 @@ bool QxrdPilatusDriver::startDetectorDriver()
 
   QxrdPilatusSettingsPtr pil(m_Pilatus);
 
-  if (pil) {
+  if (pil && pil->checkDetectorEnabled()) {
     printMessage(tr("Starting Pilatus Detector at %1:%2")
                  .arg(pil->get_PilatusHost())
                  .arg(pil->get_PilatusPort()));
