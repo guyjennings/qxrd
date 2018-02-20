@@ -104,17 +104,17 @@ bool QxrdDexelaDriver::startDetectorDriver()
     scanForDetectors();
 
     printMessage(tr("Starting Dexela detector %1: \"%2\"")
-                 .arg(m_DetectorIndex)
+                 .arg(det->get_DetectorIndex())
                  .arg(det->get_DetectorName()));
 
     int index = det->get_DetectorIndex();
 
     if (index >= 0 && index < m_DetectorCount) {
-      m_DexelaDetector = new DexelaDetector(m_Devices.value(index));
+      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+      m_DexelaDetector = new DexelaDetector(m_Devices[index]);
 
       if (m_DexelaDetector) {
-        QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
         try {
           m_DexelaDetector -> OpenBoard();
 
@@ -164,17 +164,6 @@ void QxrdDexelaDriver::staticCallback(int fc, int buf, DexelaDetector *det)
   }
 }
 
-void QxrdDexelaDriver::callback(int fc, int buf, DexelaDetector *det)
-{
-//  printMessage(tr("QxrdDexelaDriver::callback ind:%1, fc:%2, buf:%3")
-//               .arg(m_DetectorIndex).arg(fc).arg(buf));
-
-//  if (det != m_DexelaDetector) {
-//    printMessage("Dexela detector mismatch in QxrdDexelaDriver::callback");
-//  }
-
-}
-
 void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
 {
   QcepUInt16ImageDataPtr image =
@@ -190,14 +179,14 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
 
     m_DexelaDetector -> ReadBuffer(buf, (byte*) ptr);
 
-    QxrdDetectorSettingsPtr det(m_Detector);
+    QxrdDexelaSettingsPtr det(m_Dexela);
 
     if (det) {
 //      splashMessage(tr("Acquired Frame %1 from %2 on detector %3")
-//                    .arg(fc).arg(buf).arg(m_DetectorIndex));
+//                    .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
 
       printf("Acquired frame %d from buffer %d on detector %d\n",
-             fc, buf, m_DetectorIndex);
+             fc, buf, det->get_DetectorIndex());
 
       det->enqueueAcquiredFrame(image);
     }

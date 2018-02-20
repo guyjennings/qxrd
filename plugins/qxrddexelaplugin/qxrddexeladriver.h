@@ -33,7 +33,6 @@ private slots:
 private:
   int scanForDetectors();
 
-  void        callback       (int fc, int buf, DexelaDetector *det);
   static void staticCallback (int fc, int buf, DexelaDetector *det);
 
 private:
