@@ -78,6 +78,8 @@ void QxrdAppCommon::initializeRoot()
 {
   THREAD_CHECK;
 
+  inherited::initializeRoot();
+
   if (m_Allocator) {
     m_Allocator->initialize(sharedFromThis());
   }
@@ -99,9 +101,6 @@ void QxrdAppCommon::initializeRoot()
   processEvents();
 
   QThread::currentThread()->setObjectName("applicationThread");
-
-  inherited::initializeRoot();
-
 
   connect(m_Application.data(),  &QApplication::aboutToQuit,
           this,                  &QxrdAppCommon::finish);
