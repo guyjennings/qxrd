@@ -44,7 +44,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>13</pointsize>
+        <pointsize>10</pointsize>
        </font>
       </property>
       <property name="textInteractionFlags">
