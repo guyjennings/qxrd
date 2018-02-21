@@ -23,7 +23,7 @@ public:
   virtual void initialize(QcepObjectWPtr parent) = 0;
 };
 
-#define DetectorPluginInterface_iid "gov.anl.aps.cep.Qxrd.DetectorInterface/2.0"
+#define DetectorPluginInterface_iid "gov.anl.aps.cep.Qxrd.DetectorInterface"
 Q_DECLARE_INTERFACE(QxrdDetectorPluginInterface, DetectorPluginInterface_iid)
 
 #endif // QXRDDETECTORPLUGININTERFACE_H

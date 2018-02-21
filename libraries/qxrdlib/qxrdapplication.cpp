@@ -306,15 +306,15 @@ void QxrdApplication::loadPlugins()
 
   foreach (QDir pluginsDir, get_PluginList()) {
     if (qcepDebug(DEBUG_PLUGINS)) {
-      printf("Looking for plugins in directory %s\n", qPrintable(pluginsDir.absolutePath()));
+      printMessage(tr("Looking for plugins in directory %1").arg(pluginsDir.absolutePath()));
     }
 
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
       QString fullPath = pluginsDir.absoluteFilePath(fileName);
 
       if (qcepDebug(DEBUG_PLUGINS)) {
-        printf("-------------------------------------\n");
-        printf("Looking for plugin in file %s\n", qPrintable(fileName));
+        printMessage("-------------------------------------");
+        printMessage(tr("Looking for plugin in file %1").arg(fileName));
       }
 
       if (QLibrary::isLibrary(fullPath)) {
@@ -323,9 +323,9 @@ void QxrdApplication::loadPlugins()
         QJsonObject meta = loader.metaData();
 
         if (qcepDebug(DEBUG_PLUGINS)) {
-          printf("Plugin metadata for %s\n", qPrintable(fullPath));
+          printMessage(tr("Plugin metadata for %1").arg(fullPath));
           foreach(QString key, meta.keys()) {
-            printf("Key %s = %s\n", qPrintable(key), qPrintable(meta.value(key).toString()));
+            printMessage(tr("Key %1 = %2").arg(key).arg(meta.value(key).toString()));
           }
         }
 
@@ -334,12 +334,15 @@ void QxrdApplication::loadPlugins()
         QString errorString = "";
         QString pluginName = "";
 
+        QcepObject *obj = qobject_cast<QcepObject*>(plugin);
+        QcepObjectPtr objp(obj);
+
         if (className == "QxrdAreaDetectorPlugin") {
           if (m_AreaDetectorPlugin) {
             splashMessage("Area detector plugin already loaded");
           } else {
             m_AreaDetectorPlugin =
-                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+                qSharedPointerDynamicCast<QxrdDetectorPluginInterface>(objp);
             if (m_AreaDetectorPlugin) {
               splashMessage(tr("Area Detector Plugin loaded from %1").arg(fileName));
 
@@ -351,7 +354,7 @@ void QxrdApplication::loadPlugins()
             splashMessage("Dexela Detector Plugin already loaded");
           } else {
             m_DexelaPlugin =
-                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+                qSharedPointerDynamicCast<QxrdDetectorPluginInterface>(objp);
             if (m_DexelaPlugin) {
               splashMessage(tr("Dexela Plugin loaded from %1").arg(fileName));
 
@@ -363,7 +366,7 @@ void QxrdApplication::loadPlugins()
             splashMessage("NIDAQ Plugin already loaded");
           } else {
             m_NIDAQPlugin =
-                QxrdNIDAQPluginInterfacePtr(qobject_cast<QxrdNIDAQPluginInterface*>(plugin));
+                qSharedPointerDynamicCast<QxrdNIDAQPluginInterface>(objp);
             if (m_NIDAQPlugin) {
               splashMessage(tr("NIDAQ Plugin loaded from %1").arg(fileName));
 
@@ -375,7 +378,7 @@ void QxrdApplication::loadPlugins()
             splashMessage("Perkin Elmer Plugin already loaded");
           } else {
             m_PerkinElmerDetectorPlugin =
-                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+                qSharedPointerDynamicCast<QxrdDetectorPluginInterface>(objp);
             if (m_PerkinElmerDetectorPlugin) {
               splashMessage(tr("Perkin Elmer Plugin loaded from %1").arg(fileName));
 
@@ -387,7 +390,7 @@ void QxrdApplication::loadPlugins()
             splashMessage("Pilatus Plugin already loaded");
           } else {
             m_PilatusDetectorPlugin =
-                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+                qSharedPointerDynamicCast<QxrdDetectorPluginInterface>(objp);
             if (m_PilatusDetectorPlugin) {
               splashMessage(tr("Pilatus Plugin loaded from %1").arg(fileName));
 
@@ -399,7 +402,7 @@ void QxrdApplication::loadPlugins()
             splashMessage("Simulated Detector Plugin already loaded");
           } else {
             m_SimulatedDetectorPlugin =
-                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+                qSharedPointerDynamicCast<QxrdDetectorPluginInterface>(objp);
             if (m_SimulatedDetectorPlugin) {
               splashMessage(tr("Simulated Detector Plugin loaded from %1").arg(fileName));
 
@@ -411,7 +414,7 @@ void QxrdApplication::loadPlugins()
             splashMessage("File Watcher Plugin already loaded");
           } else {
             m_FileWatcherPlugin =
-                QxrdDetectorPluginInterfacePtr(qobject_cast<QxrdDetectorPluginInterface*>(plugin));
+                qSharedPointerDynamicCast<QxrdDetectorPluginInterface>(objp);
             if (m_FileWatcherPlugin) {
               splashMessage(tr("File Watcher Plugin loaded from %1").arg(fileName));
 
@@ -435,7 +438,8 @@ void QxrdApplication::loadPlugins()
           }
 
           if (qcepDebug(DEBUG_PLUGINS)) {
-            printf("Loaded plugin %s from %s : type %s\n", qPrintable(pluginName), qPrintable(fullPath), qPrintable(plugin->metaObject()->className()));
+            printMessage(tr("Loaded plugin %1 from %2 : type %3")
+                         .arg(pluginName).arg(fullPath).arg(plugin->metaObject()->className()));
           }
 
           splashMessage(tr("Loaded plugin \"%1\"").arg(pluginName));
@@ -445,7 +449,7 @@ void QxrdApplication::loadPlugins()
                        .arg(pluginsDir.absoluteFilePath(fileName)));
         } else {
           if (qcepDebug(DEBUG_PLUGINS)) {
-            printf("Failed to load plugin from %s : %s\n", qPrintable(fileName), qPrintable(loader.errorString()));
+            printMessage(tr("Failed to load plugin from %1 : %2").arg(fileName).arg(loader.errorString()));
           }
 
           errorString = loader.errorString();
@@ -471,7 +475,7 @@ void QxrdApplication::loadPlugins()
 
       } else {
         if (qcepDebug(DEBUG_PLUGINS)) {
-          printf("File %s is not a library\n", qPrintable(fileName));
+          printMessage(tr("File %1 is not a library").arg(fileName));
         }
       }
     }

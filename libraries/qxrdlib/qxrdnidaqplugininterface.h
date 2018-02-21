@@ -50,7 +50,7 @@ public:
   virtual void finishContinuousInput() = 0;
 };
 
-#define QxrdNIDAQPluginInterface_iid "gov.anl.aps.cep.Qxrd.NIDAQInterface/1.0"
+#define QxrdNIDAQPluginInterface_iid "gov.anl.aps.cep.Qxrd.NIDAQInterface"
 Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, QxrdNIDAQPluginInterface_iid)
 
 #endif // QXRDNIDAQPLUGININTERFACE_H
