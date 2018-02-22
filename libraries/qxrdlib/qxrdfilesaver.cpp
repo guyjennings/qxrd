@@ -48,7 +48,7 @@ void QxrdFileSaver::setExperiment(QxrdExperimentWPtr expt)
 QxrdExperimentWPtr QxrdFileSaver::experiment() const
 {
   if (m_Experiment == NULL) {
-    printMessage(("experiment == NULL in QxrdFileSaver::experiment\n"));
+    printMessage("experiment == NULL in QxrdFileSaver::experiment");
   }
 
   return m_Experiment;
@@ -67,7 +67,7 @@ void QxrdFileSaver::setAcquisition(QxrdAcqCommonWPtr acq)
 QxrdAcqCommonWPtr QxrdFileSaver::acquisition() const
 {
   if (m_Acquisition == NULL) {
-    printMessage("acquisition == NULL in QxrdFileSaver::acquisition\n");
+    printMessage("acquisition == NULL in QxrdFileSaver::acquisition");
   }
 
   return m_Acquisition;

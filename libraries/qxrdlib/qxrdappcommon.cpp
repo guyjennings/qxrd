@@ -696,9 +696,7 @@ void QxrdAppCommon::openedExperiment(QxrdExperimentThreadWPtr expwthr)
       m_ExperimentThreads.append(exptthr);
       m_Experiments.append(expt);
 
-      printMessage("");
       printMessage("New experiment loaded");
-      printMessage("");
 
       closeWelcomeWindow();
 

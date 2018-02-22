@@ -193,7 +193,7 @@ void QxrdAcqCommon::dynamicProperties()
   QByteArray name;
 
   foreach(name, dynamicPropertyNames()) {
-    printMessage(tr("acquisition.%1\n").arg(name.data()));
+    printMessage(tr("acquisition.%1").arg(name.data()));
   }
 }
 

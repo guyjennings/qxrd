@@ -1022,7 +1022,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
       //  set_Average(avg/npixels);
 
       if (qcepDebug(DEBUG_DETECTORIDLING)) {
-        printMessage(tr("Frame checksum 0x%1, avg %2\n")
+        printMessage(tr("Frame checksum 0x%1, avg %2")
                      .arg(cksum,8,16,QChar('0')).arg(avg/npixels));
 
         for (int f=0; f<m_BufferSize; f++) {
@@ -1037,7 +1037,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
             avg += val;
           }
 
-          printMessage(tr("Frame %1 checksum 0x%2, avg %3\n")
+          printMessage(tr("Frame %1 checksum 0x%2, avg %3")
                        .arg(f).arg(cksum,8,16,QChar('0')).arg(avg/npixels));
         }
       }

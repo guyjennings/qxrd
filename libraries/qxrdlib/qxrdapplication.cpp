@@ -297,7 +297,7 @@ void QxrdApplication::loadPlugins()
 #endif
 
   if (get_PluginList().count() == 0) {
-    splashMessage("No plugin directories specified\n");
+    splashMessage("No plugin directories specified");
   } else {
     foreach (QString dir, get_PluginList()) {
       splashMessage(tr("Plugin directory %1").arg(dir));
@@ -761,7 +761,6 @@ void QxrdApplication::openExperiment(QString path)
           settings,
           QxrdExperiment::AcquisitionAllowed);
 
-    printMessage("");
     printMessage(tr("===== Open Experiment %1").arg(path));
 
     openedExperiment(expthr);
