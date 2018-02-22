@@ -100,7 +100,7 @@ void QcepObject::initialize(QcepObjectWPtr parent)
   QcepObjectPtr parP(m_Parent);
 
   if (parP) {
-    parP -> addChildPtr(sharedFromThis());
+    parP -> addChildImpl(sharedFromThis());
   }
 }
 
@@ -264,10 +264,12 @@ void QcepObject::removeChildPtr(QcepObjectWPtr child)
   checkObjectInitialization();
 #endif
 
-  if (m_Children.contains(child)) {
-    m_Children.removeAll(child);
-  } else {
-    printMessage("Removing object which is not a child");
+  if (child) {
+    if (m_Children.contains(child)) {
+      m_Children.removeAll(child);
+    } else {
+      printMessage("Removing object which is not a child");
+    }
   }
 }
 
