@@ -146,7 +146,7 @@ void QxrdDetectorDriverThread::changeExposureTime(double expos)
     )
 #else
     INVOKE_CHECK(
-      QMetaObject::invokeMethod(d, "changeExposureTime", Q_ARG(double, expos), Qt::QueuedConnection)
+      QMetaObject::invokeMethod(d, "changeExposureTime", Qt::QueuedConnection, Q_ARG(double, expos))
     )
 #endif
   }
@@ -163,7 +163,7 @@ void QxrdDetectorDriverThread::beginAcquisition(double expos)
     )
 #else
     INVOKE_CHECK(
-      QMetaObject::invokeMethod(d, "beginAcquisition", Qt::QueuedConnection)
+      QMetaObject::invokeMethod(d, "beginAcquisition", Qt::QueuedConnection, Q_ARG(double, expos))
     )
 #endif
   }
