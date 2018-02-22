@@ -122,10 +122,6 @@ void QcepObject::setParentPtr(QcepObjectWPtr parent)
   }
 }
 
-void QcepObject::setParentImpl(QcepObjectWPtr parent)
-{
-}
-
 void QcepObject::addChildImpl(QcepObjectWPtr child)
 {
 #ifndef QT_NO_DEBUG
@@ -197,22 +193,6 @@ QcepObjectWPtr QcepObject::childPtr(int n) const
   }
 }
 
-
-#ifndef QT_NO_DEBUG
-void QcepObject::checkPointerMatchCount(QcepObjectWPtr ptr)
-{
-  QcepObjectPtr p(ptr);
-
-  if (p) {
-    if (m_PointerMatchCount > 0) {
-      printMessage(tr("%1:%2 matches multiple times").arg(p->get_Name()).arg(p->className()));
-    }
-    m_PointerMatchCount++;
-  }
-}
-#endif
-
-
 int QcepObject::checkChildren(int verbose, int level) const
 {
 #ifndef QT_NO_DEBUG
@@ -275,10 +255,6 @@ void QcepObject::addChildPtr(QcepObjectWPtr child)
     printMessage(tr("QcepObject::addChildPtr(NULL)"));
 #endif
   }
-
-#ifndef QT_NO_DEBUG
-  m_PointerMatchCount = 0;
-#endif
 }
 
 //TODO: move functionality into QcepDataGroup
@@ -510,10 +486,6 @@ QString QcepObject::get_Name() const
   return objectName();
 }
 
-//void QcepObject::set_Type(QString name)
-//{
-//}
-
 QString QcepObject::className() const
 {
 //#ifndef QT_NO_DEBUG
@@ -676,19 +648,6 @@ void QcepObject::readSettings(QSettings *set)
 
 //  readObjectSettings(set);
 }
-
-//void QcepObject::readObjectSettings(QSettings *set)
-//{
-////#ifndef QT_NO_DEBUG
-////  checkObjectInitialization();
-////#endif
-
-//  if (set) {
-//    set->beginGroup("properties");
-//    QcepProperty::readSettings(this, set);
-//    set->endGroup();
-//  }
-//}
 
 //TODO: add parent ptr for initialization
 QcepObjectPtr QcepObject::readObject(QcepObjectWPtr parent, QSettings *set)

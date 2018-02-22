@@ -53,8 +53,6 @@ public slots:
   QString toScriptLiteral(QVariant v);
   QVariant fromScriptLiteral(QString lit);
 
-//  void readObjectSettings(QSettings *set);
-
   int isChanged() const;
   QString changedBy() const;
   void setChanged(int ct);
@@ -100,7 +98,6 @@ public:
   QString className() const;
 
   QString get_Type() const;
-//  void    set_Type(QString name);
 
   static QString addSlashes(QString str);
   static QString removeSlashes(QString str);
@@ -121,7 +118,6 @@ public:
   virtual void writeObjectData(QcepFileFormatterPtr fmt);
 
 private:
-  void setParentImpl(QcepObjectWPtr parent);
   void addChildImpl(QcepObjectWPtr child);
 
 private:
@@ -136,53 +132,6 @@ private:
 protected:
 #ifndef QT_NO_DEBUG
   void checkObjectInitialization() const;
-#endif
-
-  //TODO: eliminate
-#ifndef QT_NO_DEBUG
-  void checkPointerMatchCount(QcepObjectWPtr ptr);
-#endif
-
-  //TODO: eliminate
-  template <typename T>
-  inline bool checkPointer(QcepObjectWPtr ptr, QSharedPointer<T>& field)
-  {
-    QSharedPointer<T> fp = qSharedPointerDynamicCast<T>(ptr);
-
-    if (fp) {
-      field = fp;
-#ifdef QT_NO_DEBUG
-      return true;
-#else
-      checkPointerMatchCount(ptr);
-      return false;
-#endif
-    } else {
-      return false;
-    }
-  }
-
-  //TODO: eliminate
-  template <typename T>
-  inline bool checkPointer(QcepObjectWPtr ptr, QWeakPointer<T>& field)
-  {
-    QWeakPointer<T> fp = qSharedPointerDynamicCast<T>(ptr);
-
-    if (fp) {
-      field = fp;
-#ifdef QT_NO_DEBUG
-      return true;
-#else
-      checkPointerMatchCount(ptr);
-      return false;
-#endif
-    } else {
-      return false;
-    }
-  }
-
-#ifndef QT_NO_DEBUG
-  int                                 m_PointerMatchCount;
 #endif
 
 public:
