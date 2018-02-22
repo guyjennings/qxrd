@@ -221,7 +221,7 @@ QSpecServer::readPacketData()
   } else if (m_Packet.magic == swapUInt32(SV_SPEC_MAGIC)) {
     m_SwapBytes = 1;
   } else {
-    printMessage(tr("Bad packet\n"));
+    printMessage(tr("Bad packet"));
     return 0;
   }
 

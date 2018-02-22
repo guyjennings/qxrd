@@ -79,7 +79,7 @@ QcepDataObjectPtr QcepDatasetModel::indexedObject(const QModelIndex &index) cons
       res = qSharedPointerDynamicCast<QcepDataObject>(obj->sharedFromThis());
 
       if (!res) {
-        printMessage("QcepDatasetModel::indexedObject returns NULL\n");
+        printMessage("QcepDatasetModel::indexedObject returns NULL");
       }
     }
   } else {
