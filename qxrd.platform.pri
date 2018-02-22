@@ -1,5 +1,5 @@
 macx{
-  QMAKE_MAC_SDK=macosx10.11
+  QMAKE_MAC_SDK=macosx10.12
   QXRDSUFFIX = -macx
   QXRDSUFFIXSTR = " mac"
 } else:unix {
