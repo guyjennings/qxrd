@@ -45,13 +45,12 @@ QxrdDetectorDriverPtr QxrdDexelaPlugin::createDetector(QString name,
                                                        QxrdExperimentWPtr expt,
                                                        QxrdAcqCommonWPtr acq)
 {
-  QxrdDexelaSettingsWPtr  set = qSharedPointerDynamicCast<QxrdDexelaSettings>(det);
-  QcepObjectWPtr           me = sharedFromThis();
-  QxrdDexelaPluginWPtr myself = qSharedPointerDynamicCast<QxrdDexelaPlugin>(me);
+  QxrdDexelaPluginPtr plugin(
+        qSharedPointerDynamicCast<QxrdDexelaPlugin>(me));
 
   QxrdDetectorDriverPtr res =
       QxrdDetectorDriverPtr(
-        new QxrdDexelaDriver(name, set, expt, acq, myself));
+        new QxrdDexelaDriver(name, plugin, set, expt, acq));
 
   return res;
 }

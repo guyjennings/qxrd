@@ -4,6 +4,7 @@
 #include "qxrddetectordriver.h"
 #include "qxrdareadetectorsettings-ptr.h"
 #include <QTimer>
+#include "qxrdareadetectorplugin-ptr.h"
 
 class QxrdAreaDetectorDriver : public QxrdDetectorDriver
 {
@@ -11,6 +12,7 @@ class QxrdAreaDetectorDriver : public QxrdDetectorDriver
 
 public:
   QxrdAreaDetectorDriver(QString name,
+                         QxrdAreaDetectorPluginWPtr plugin,
                          QxrdDetectorSettingsWPtr det,
                          QxrdExperimentWPtr expt,
                          QxrdAcqCommonWPtr acq);
@@ -29,6 +31,7 @@ private slots:
   void onTimerTimeout();
 
 private:
+  QxrdAreaDetectorPluginWPtr   m_Plugin;
   QxrdAreaDetectorSettingsWPtr m_AreaDetector;
   QTimer m_Timer;
 };

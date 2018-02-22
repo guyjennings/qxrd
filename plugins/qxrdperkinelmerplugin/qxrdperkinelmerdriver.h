@@ -3,6 +3,7 @@
 
 #include "qxrddetectordriver.h"
 #include "qxrdperkinelmersettings-ptr.h"
+#include "qxrdperkinelmerplugin-ptr.h"
 
 #ifdef Q_OS_WIN32
 #include <windows.h>
@@ -16,6 +17,7 @@ class QxrdPerkinElmerDriver : public QxrdDetectorDriver
 
 public:
   QxrdPerkinElmerDriver(QString name,
+                        QxrdPerkinElmerPluginWPtr plugin,
                         QxrdDetectorSettingsWPtr det,
                         QxrdExperimentWPtr expt,
                         QxrdAcqCommonWPtr acq);
@@ -57,6 +59,7 @@ private:
   void acquisitionNSensorsError(const char *fn, int ln, int n);
 
 private:
+  QxrdPerkinElmerPluginWPtr m_Plugin;
   mutable QMutex         m_Mutex;
   int                    m_BufferSize;
   int                    m_BufferIndex;

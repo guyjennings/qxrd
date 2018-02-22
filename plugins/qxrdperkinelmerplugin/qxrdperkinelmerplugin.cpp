@@ -24,8 +24,11 @@ QxrdDetectorDriverPtr QxrdPerkinElmerPlugin::createDetector(QString name,
                                                             QxrdExperimentWPtr expt,
                                                             QxrdAcqCommonWPtr acq)
 {
+  QxrdPerkinElmerPluginPtr plugin(
+        qSharedPointerDynamicCast<QxrdPerkinElmerPlugin>(sharedFromThis()));
+
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdPerkinElmerDriver(name, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdPerkinElmerDriver(name, plugin, det, expt, acq));
 
   return res;
 }

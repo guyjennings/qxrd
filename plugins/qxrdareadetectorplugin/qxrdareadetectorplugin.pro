@@ -17,7 +17,9 @@ SOURCES += \
 
 HEADERS += \
     qxrdareadetectorplugin.h \
-    qxrdareadetectordriver.h
+    qxrdareadetectordriver.h \
+    qxrdareadetectordriver-ptr.h \
+    qxrdareadetectorplugin-ptr.h
 
 OTHER_FILES += \
     areaDetector.json

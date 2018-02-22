@@ -20,7 +20,8 @@ SOURCES += \
 HEADERS += \
     qxrddexeladriver.h \
     qxrddexelaplugin.h \
-    qxrddexelaplugin-ptr.h
+    qxrddexelaplugin-ptr.h \
+    qxrddexeladriver-ptr.h
 
 OTHER_FILES += \
     dexela.json

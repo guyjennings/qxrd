@@ -2,6 +2,7 @@
 #include "qxrddetectorinterface.h"
 #include "qxrdsimulateddriver.h"
 #include "qxrdsimulatedsettings.h"
+#include "qxrdsimulatedplugin-ptr.h"
 
 QxrdSimulatedPlugin::QxrdSimulatedPlugin()
   : inherited("simulatedPlugin")
@@ -34,8 +35,11 @@ QxrdDetectorDriverPtr QxrdSimulatedPlugin::createDetector(QString name,
                                                           QxrdExperimentWPtr expt,
                                                           QxrdAcqCommonWPtr acq)
 {
+  QxrdSimulatedPluginPtr plugin(
+        qSharedPointerDynamicCast<QxrdSimulatedPlugin>(sharedFromThis()));
+
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdSimulatedDriver(name, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdSimulatedDriver(name, plugin, det, expt, acq));
 
   return res;
 }

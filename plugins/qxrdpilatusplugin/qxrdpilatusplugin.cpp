@@ -24,8 +24,11 @@ QxrdDetectorDriverPtr QxrdPilatusPlugin::createDetector(QString name,
                                                         QxrdExperimentWPtr expt,
                                                         QxrdAcqCommonWPtr acq)
 {
+  QxrdPilatusPluginPtr plugin(
+        qSharedPointerDynamicCast<QxrdPilatusPlugin>(sharedFromThis()));
+
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdPilatusDriver(name, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdPilatusDriver(name, plugin, det, expt, acq));
 
   return res;
 }

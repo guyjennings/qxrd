@@ -1,0 +1,8 @@
+#ifndef QXRDSIMULATEDDRIVERPTR_H
+#define QXRDSIMULATEDDRIVERPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdSimulatedDriver)
+
+#endif // QXRDSIMULATEDDRIVERPTR_H

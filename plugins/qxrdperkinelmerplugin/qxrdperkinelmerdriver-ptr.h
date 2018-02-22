@@ -1,0 +1,8 @@
+#ifndef QXRDPERKINELMERDRIVERPTR_H
+#define QXRDPERKINELMERDRIVERPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdPerkinElmerDriver)
+
+#endif // QXRDPERKINELMERDRIVERPTR_H

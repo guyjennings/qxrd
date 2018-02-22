@@ -1,0 +1,8 @@
+#ifndef QXRDFILEWATCHERDRIVERPTR_H
+#define QXRDFILEWATCHERDRIVERPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdFileWatcherDriver)
+
+#endif // QXRDFILEWATCHERDRIVERPTR_H

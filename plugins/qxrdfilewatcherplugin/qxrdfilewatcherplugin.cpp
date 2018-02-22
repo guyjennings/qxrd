@@ -24,8 +24,11 @@ QxrdDetectorDriverPtr QxrdFileWatcherPlugin::createDetector(QString name,
                                                             QxrdExperimentWPtr expt,
                                                             QxrdAcqCommonWPtr acq)
 {
+  QxrdFileWatcherPluginPtr plugin(
+        qSharedPointerDynamicCast<QxrdFileWatcherPlugin>(sharedFromThis()));
+
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdFileWatcherDriver(name, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdFileWatcherDriver(name, plugin, det, expt, acq));
 
   return res;
 }

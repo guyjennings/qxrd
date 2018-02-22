@@ -11,10 +11,12 @@
 #include <QThread>
 
 QxrdPilatusDriver::QxrdPilatusDriver(QString name,
+                                     QxrdPilatusPluginWPtr plugin,
                                      QxrdDetectorSettingsWPtr det,
                                      QxrdExperimentWPtr expt,
                                      QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
+    m_Plugin(plugin),
     m_Pilatus(qSharedPointerDynamicCast<QxrdPilatusSettings>(det)),
     m_PilatusSocket(),
     m_ExposureTime(-1),

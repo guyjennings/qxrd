@@ -4,6 +4,7 @@
 #include "qxrddetectordriver.h"
 #include "qxrdfilewatchersettings-ptr.h"
 #include <QTimer>
+#include "qxrdfilewatcherplugin-ptr.h"
 
 class QxrdFileWatcherDriver : public QxrdDetectorDriver
 {
@@ -11,6 +12,7 @@ class QxrdFileWatcherDriver : public QxrdDetectorDriver
 
 public:
   QxrdFileWatcherDriver(QString name,
+                        QxrdFileWatcherPluginWPtr plugin,
                         QxrdDetectorSettingsWPtr det,
                         QxrdExperimentWPtr expt,
                         QxrdAcqCommonWPtr acq);

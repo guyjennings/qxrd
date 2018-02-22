@@ -17,7 +17,9 @@ SOURCES += \
 
 HEADERS += \
     qxrdsimulateddriver.h \
-    qxrdsimulatedplugin.h
+    qxrdsimulatedplugin.h \
+    qxrdsimulatedplugin-ptr.h \
+    qxrdsimulateddriver-ptr.h
 
 OTHER_FILES += \
     simulated.json

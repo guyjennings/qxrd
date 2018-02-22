@@ -8,7 +8,7 @@
 #include "qxrdfilewatchersettings.h"
 #include <QThread>
 
-QxrdFileWatcherDriver::QxrdFileWatcherDriver(QString name,
+QxrdFileWatcherDriver::QxrdFileWatcherDriver(QString name, QxrdFileWatcherPluginWPtr plugin,
                                                          QxrdDetectorSettingsWPtr det,
                                                          QxrdExperimentWPtr expt,
                                                          QxrdAcqCommonWPtr acq)

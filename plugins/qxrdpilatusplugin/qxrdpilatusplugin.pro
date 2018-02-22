@@ -15,7 +15,9 @@ HEADERS += \
     qxrdpilatusplugin.h \
     qxrdpilatusremote.h \
     qxrdpilatusremote-ptr.h \
-    qxrdpilatusdriver.h
+    qxrdpilatusdriver.h \
+    qxrdpilatusplugin-ptr.h \
+    qxrdpilatusdriver-ptr.h
 
 SOURCES += \
     qxrdpilatusplugin.cpp \

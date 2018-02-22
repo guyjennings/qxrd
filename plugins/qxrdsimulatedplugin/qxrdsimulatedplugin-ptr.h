@@ -1,0 +1,8 @@
+#ifndef QXRDSIMULATEDPLUGINPTR_H
+#define QXRDSIMULATEDPLUGINPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdSimulatedPlugin)
+
+#endif // QXRDSIMULATEDPLUGINPTR_H

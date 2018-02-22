@@ -6,13 +6,16 @@
 #include "qcepallocator.h"
 #include <QPainter>
 #include "qxrdsimulatedsettings.h"
+#include "qxrdsimulatedplugin.h"
 #include <QThread>
 
 QxrdSimulatedDriver::QxrdSimulatedDriver(QString name,
+                                         QxrdSimulatedPluginWPtr plugin,
                                          QxrdDetectorSettingsWPtr det,
                                          QxrdExperimentWPtr expt,
                                          QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
+    m_Plugin(plugin),
     m_Simulated(qSharedPointerDynamicCast<QxrdSimulatedSettings>(det))
 {
 #ifndef QT_NO_DEBUG

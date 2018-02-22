@@ -17,7 +17,9 @@ SOURCES += \
 
 HEADERS += \
     qxrdfilewatcherplugin.h \
-    qxrdfilewatcherdriver.h
+    qxrdfilewatcherdriver.h \
+    qxrdfilewatcherdriver-ptr.h \
+    qxrdfilewatcherplugin-ptr.h
 
 OTHER_FILES += \
     filewatcher.json

@@ -1,0 +1,8 @@
+#ifndef QXRDPERKINELMERPLUGINPTR_H
+#define QXRDPERKINELMERPLUGINPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdPerkinElmerPlugin)
+
+#endif // QXRDPERKINELMERPLUGINPTR_H

@@ -15,10 +15,10 @@
 #include "qxrddexelaplugin.h"
 
 QxrdDexelaDriver::QxrdDexelaDriver(QString name,
+                                   QxrdDexelaPluginWPtr plugin,
                                    QxrdDexelaSettingsWPtr det,
                                    QxrdExperimentWPtr expt,
-                                   QxrdAcqCommonWPtr acq,
-                                   QxrdDexelaPluginWPtr plugin)
+                                   QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
     m_Dexela(qSharedPointerDynamicCast<QxrdDexelaSettings>(det)),
     m_DexelaPlugin(plugin),

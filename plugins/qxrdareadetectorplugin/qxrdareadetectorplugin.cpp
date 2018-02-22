@@ -24,8 +24,11 @@ QxrdDetectorDriverPtr QxrdAreaDetectorPlugin::createDetector(QString name,
                                                              QxrdExperimentWPtr expt,
                                                              QxrdAcqCommonWPtr acq)
 {
+  QxrdAreaDetectorPluginPtr plugin(
+        qSharedPointerDynamicCast<QxrdAreaDetectorPlugin>(sharedFromThis()));
+
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdAreaDetectorDriver(name, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdAreaDetectorDriver(name, plugin, det, expt, acq));
 
   return res;
 }

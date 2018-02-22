@@ -16,7 +16,9 @@ LIBS += $${PE_SDK}/XISL.lib
 
 HEADERS += \
     qxrdperkinelmerplugin.h \
-    qxrdperkinelmerdriver.h
+    qxrdperkinelmerdriver.h \
+    qxrdperkinelmerdriver-ptr.h \
+    qxrdperkinelmerplugin-ptr.h
 
 SOURCES += \
     qxrdperkinelmerplugin.cpp \

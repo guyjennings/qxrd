@@ -1,0 +1,8 @@
+#ifndef QXRDAREADETECTORDRIVERPTR_H
+#define QXRDAREADETECTORDRIVERPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdAreaDetectorDriver)
+
+#endif // QXRDAREADETECTORDRIVERPTR_H

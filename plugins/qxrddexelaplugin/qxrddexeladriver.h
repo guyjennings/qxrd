@@ -14,10 +14,10 @@ class QxrdDexelaDriver : public QxrdDetectorDriver
 
 public:
   QxrdDexelaDriver(QString name,
+                   QxrdDexelaPluginWPtr plugin,
                    QxrdDexelaSettingsWPtr det,
                    QxrdExperimentWPtr expt,
-                   QxrdAcqCommonWPtr acq,
-                   QxrdDexelaPluginWPtr plugin);
+                   QxrdAcqCommonWPtr acq);
   virtual ~QxrdDexelaDriver();
 
 public slots:
