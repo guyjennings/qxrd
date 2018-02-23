@@ -158,31 +158,31 @@ QString QxrdDetectorSettings::detectorTypeName(int detectorType)
   QString res = "unknown";
   switch (detectorType) {
   case NoDetector:
-    res = "No Detector";
+    res = "noDetector";
     break;
 
   case Simulated:
-    res = "Simulated Detector";
+    res = "simulatedDetector";
     break;
 
   case PerkinElmer:
-    res = "Perkin Elmer Detector";
+    res = "perkinElmerDetector";
     break;
 
   case Pilatus:
-    res = "Pilatus Detector";
+    res = "pilatusDetector";
     break;
 
   case AreaDetector:
-    res = "Epics Area Detector";
+    res = "epicsAreaDetector";
     break;
 
   case FileWatcher:
-    res = "File Watcher";
+    res = "fileWatcher";
     break;
 
   case Dexela:
-    res = "Dexela Detector";
+    res = "dexelaDetector";
     break;
   }
 
@@ -582,7 +582,8 @@ void QxrdDetectorSettings::configureDetector()
   printf("QxrdDetectorSettings::configureDetector is not implemented\n");
 }
 
-QxrdDetectorDriverPtr QxrdDetectorSettings::createDetector(QString name,
+QxrdDetectorDriverPtr QxrdDetectorSettings::createDetector(
+    QString name,
     QxrdDetectorSettingsWPtr det,
     QxrdExperimentWPtr expt,
     QxrdAcqCommonWPtr acq)
