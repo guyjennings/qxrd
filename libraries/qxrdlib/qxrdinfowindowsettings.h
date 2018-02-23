@@ -14,7 +14,7 @@ public:
   QxrdInfoWindowSettings(QString name, QString desc);
   void initialize(QcepObjectWPtr parent);
 
-  QxrdMainWindowPtr newWindow();
+  QcepMainWindowPtr newWindow();
 };
 
 Q_DECLARE_METATYPE(QxrdInfoWindowSettings*)

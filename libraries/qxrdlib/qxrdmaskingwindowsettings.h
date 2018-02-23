@@ -16,7 +16,7 @@ public:
   QxrdMaskingWindowSettings(QString name, QString desc);
   void initialize(QcepObjectWPtr parent);
 
-  QxrdMainWindowPtr newWindow();
+  QcepMainWindowPtr newWindow();
 
   void writeSettings(QSettings *set);
   void readSettings(QSettings *set);

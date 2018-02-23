@@ -17,7 +17,7 @@ void QxrdPerkinElmerPlugin::initialize(QcepObjectWPtr parent)
 
 QString QxrdPerkinElmerPlugin::name() const
 {
-  return "Perkin Elmer XRD Detector";
+  return "Perkin Elmer Detector";
 }
 
 QxrdDetectorDriverPtr QxrdPerkinElmerPlugin::createDetector(QString name,

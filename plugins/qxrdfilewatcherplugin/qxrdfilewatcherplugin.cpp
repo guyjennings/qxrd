@@ -17,7 +17,7 @@ void QxrdFileWatcherPlugin::initialize(QcepObjectWPtr parent)
 
 QString QxrdFileWatcherPlugin::name() const
 {
-  return "Simulated Detector Plugin";
+  return "File Watcher Plugin";
 }
 
 QxrdDetectorDriverPtr QxrdFileWatcherPlugin::createDetector(QString name,

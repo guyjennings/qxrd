@@ -20,7 +20,7 @@ void QxrdExtraIOWindowSettings::initialize(QcepObjectWPtr parent)
   m_ExtraOutputsPlotWidgetSettings -> initialize(sharedFromThis());
 }
 
-QxrdMainWindowPtr QxrdExtraIOWindowSettings::newWindow()
+QcepMainWindowPtr QxrdExtraIOWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 

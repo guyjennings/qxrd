@@ -69,7 +69,7 @@ void QxrdNIDAQPlugin::initialize(QcepObjectWPtr parent)
 
 QString QxrdNIDAQPlugin::name() const
 {
-  return "NI DAQ Card";
+  return "NI DAQ Plugin";
 }
 
 void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)

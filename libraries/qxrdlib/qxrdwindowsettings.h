@@ -35,7 +35,7 @@ public:
 
   static void registerMetaTypes();
 
-  QxrdMainWindowPtr newWindow();
+  QcepMainWindowPtr newWindow();
 
 public:
   Q_PROPERTY(QByteArray windowGeometry READ get_WindowGeometry WRITE set_WindowGeometry)

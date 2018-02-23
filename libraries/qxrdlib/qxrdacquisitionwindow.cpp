@@ -213,4 +213,3 @@ void QxrdAcquisitionWindow::browseScanFile()
     m_ScanFileName->setText(pwd.relativeFilePath(file));
   }
 }
-
