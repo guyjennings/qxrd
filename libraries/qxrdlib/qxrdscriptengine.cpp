@@ -2266,17 +2266,19 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("newDataImage", newFunction(newDataImageFunc));
   globalObject().setProperty("newIntegratedData", newFunction(newIntegratedDataFunc));
 
-  QxrdApplicationPtr appp(
-        qSharedPointerDynamicCast<QxrdApplication>(app));
+  //TODO: replace - QxrdNIDAQPluginInterface is not a QObject
+//  QxrdApplicationPtr appp(
+//        qSharedPointerDynamicCast<QxrdApplication>(app));
 
-  if (appp) {
-    QObject *plugin = dynamic_cast<QObject*>(appp->nidaqPlugin().data());
+//  if (appp) {
+//    QxrdNIDAQPluginInterfacePtr nidaq =
+//        appp->nidaqPlugin();
 
-    if (plugin) {
-      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
-      globalObject().setProperty("nidaq", newQObject(plugin));
-    }
-  }
+//    if (nidaq) {
+//      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
+//      globalObject().setProperty("nidaq", newQObject(nidaq.data()));
+//    }
+//  }
 
   QxrdExperimentPtr expt(m_Experiment);
 

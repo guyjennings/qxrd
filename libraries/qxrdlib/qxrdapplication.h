@@ -34,14 +34,14 @@ public:
 
   void loadPlugins();
 
-  QxrdNIDAQPluginInterfacePtr    nidaqPlugin();
-  QxrdDetectorPluginInterfacePtr simulatedDetectorPlugin();
-  QxrdDetectorPluginInterfacePtr perkinElmerDetectorPlugin();
-  QxrdDetectorPluginInterfacePtr dexelaDetectorPlugin();
-  QxrdDetectorPluginInterfacePtr pilatusDetectorPlugin();
-  QxrdDetectorPluginInterfacePtr areaDetectorPlugin();
-  QxrdDetectorPluginInterfacePtr fileWatcherPlugin();
-  QxrdDetectorPluginInterfaceWPtr detectorPlugin(int detType);
+  QxrdNIDAQPluginInterface *nidaqPlugin();
+//  QxrdDetectorPluginInterface *simulatedDetectorPlugin();
+//  QxrdDetectorPluginInterfacePtr perkinElmerDetectorPlugin();
+//  QxrdDetectorPluginInterfacePtr dexelaDetectorPlugin();
+//  QxrdDetectorPluginInterfacePtr pilatusDetectorPlugin();
+//  QxrdDetectorPluginInterfacePtr areaDetectorPlugin();
+//  QxrdDetectorPluginInterfacePtr fileWatcherPlugin();
+  QxrdDetectorPluginInterface *detectorPlugin(int detType);
 
   bool event(QEvent *ev);
 
@@ -106,13 +106,13 @@ private:
   QcepObjectNamer                 m_ObjectNamer;
   QTimer                          m_AutoSaveTimer;
 
-  QxrdNIDAQPluginInterfacePtr     m_NIDAQPlugin;
-  QxrdDetectorPluginInterfacePtr  m_SimulatedDetectorPlugin;
-  QxrdDetectorPluginInterfacePtr  m_PerkinElmerDetectorPlugin;
-  QxrdDetectorPluginInterfacePtr  m_DexelaPlugin;
-  QxrdDetectorPluginInterfacePtr  m_PilatusDetectorPlugin;
-  QxrdDetectorPluginInterfacePtr  m_AreaDetectorPlugin;
-  QxrdDetectorPluginInterfacePtr  m_FileWatcherPlugin;
+  QObject                        *m_NIDAQPlugin;
+  QObject                        *m_SimulatedDetectorPlugin;
+  QObject                        *m_PerkinElmerDetectorPlugin;
+  QObject                        *m_DexelaPlugin;
+  QObject                        *m_PilatusDetectorPlugin;
+  QObject                        *m_AreaDetectorPlugin;
+  QObject                        *m_FileWatcherPlugin;
 
 //  QxrdResponseTimer              *m_ResponseTimer;
 

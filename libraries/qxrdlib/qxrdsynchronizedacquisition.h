@@ -84,8 +84,8 @@ public:
   void prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPackWPtr parms);
   void finishedAcquisition();
   void acquiredFrameAvailable(int currentPhase);
-  void setNIDAQPlugin(QxrdNIDAQPluginInterfaceWPtr nidaqPlugin);
-  QxrdNIDAQPluginInterfaceWPtr nidaqPlugin() const;
+  void setNIDAQPlugin(QxrdNIDAQPluginInterface* nidaqPlugin);
+  QxrdNIDAQPluginInterface *nidaqPlugin() const;
 
   QVector<double>  outputTimes();
   QVector<double>  outputVoltage();
@@ -98,7 +98,7 @@ private:
 private:
   QxrdAcqCommonWPtr           m_Acquisition;
   QxrdAcquisitionParameterPackWPtr m_AcquisitionParms;
-  QxrdNIDAQPluginInterfaceWPtr m_NIDAQPlugin;
+  QxrdNIDAQPluginInterface   *m_NIDAQPlugin;
   int                         m_SyncMode;
   QVector<double>             m_OutputTimes;
   QVector<double>             m_OutputVoltage;

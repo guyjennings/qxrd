@@ -30,8 +30,8 @@ public:
 
   virtual int detectorCount() const = 0;
   virtual QxrdDetectorSettingsPtr detector(int i) const = 0;
-  virtual void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin) = 0;
-  virtual QxrdNIDAQPluginInterfaceWPtr nidaqPlugin() const = 0;
+  virtual void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin) = 0;
+  virtual QxrdNIDAQPluginInterface* nidaqPlugin() const = 0;
 
   QxrdAcquisitionScalerModelPtr acquisitionScalerModel() const;
 

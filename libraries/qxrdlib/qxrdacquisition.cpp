@@ -1030,7 +1030,7 @@ void QxrdAcquisition::accumulateAcquiredImage(QcepUInt32ImageDataPtr image,
 //  processImage(filePattern, extent, fileIndex, -1, 0, true, image, overflow);
 //}
 
-void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
+void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterface* nidaqPlugin)
 {
   if (m_SynchronizedAcquisition) {
     m_SynchronizedAcquisition -> setNIDAQPlugin(nidaqPlugin);
@@ -1041,12 +1041,12 @@ void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
   }
 }
 
-QxrdNIDAQPluginInterfaceWPtr QxrdAcquisition::nidaqPlugin() const
+QxrdNIDAQPluginInterface *QxrdAcquisition::nidaqPlugin() const
 {
   if (m_SynchronizedAcquisition) {
     return m_SynchronizedAcquisition -> nidaqPlugin();
   } else {
-    return QxrdNIDAQPluginInterfacePtr();
+    return NULL;
   }
 }
 

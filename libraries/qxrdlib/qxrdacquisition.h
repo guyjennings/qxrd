@@ -104,8 +104,8 @@ public:
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
   QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
 
-  void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
-  QxrdNIDAQPluginInterfaceWPtr nidaqPlugin() const;
+  void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
+  QxrdNIDAQPluginInterface* nidaqPlugin() const;
 
 protected:
 //  void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);

@@ -29,8 +29,8 @@ public:
   virtual ~QxrdAcquisitionExtraInputs();
 
 public:
-  void setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin);
-  QxrdNIDAQPluginInterfacePtr nidaqPlugin() const;
+  void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
+  QxrdNIDAQPluginInterface *nidaqPlugin() const;
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -82,7 +82,7 @@ public:
 private:
   QxrdAcqCommonWPtr           m_Acquisition;
   QVector<QxrdAcquisitionExtraInputsChannelPtr> m_Channels;
-  QxrdNIDAQPluginInterfacePtr m_NIDAQPlugin;
+  QxrdNIDAQPluginInterface   *m_NIDAQPlugin;
   QVector< QVector<double> >  m_ChannelData;
 };
 

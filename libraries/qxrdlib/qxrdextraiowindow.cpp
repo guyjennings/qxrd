@@ -65,7 +65,7 @@ QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
       QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
       if (sync) {
-        QxrdNIDAQPluginInterfacePtr nidaq = sync->nidaqPlugin();
+        QxrdNIDAQPluginInterface* nidaq = sync->nidaqPlugin();
 
         if (nidaq) {
           QStringList devices = nidaq->deviceNames();
@@ -130,7 +130,7 @@ QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
         QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
         if (xtra) {
-          QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+          QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
 
           if (nidaq) {
             QStringList devices = nidaq->deviceNames();
@@ -197,7 +197,7 @@ void QxrdExtraIOWindow::deviceChanged()
   QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
-    QxrdNIDAQPluginInterfacePtr nidaq = sync->nidaqPlugin();
+    QxrdNIDAQPluginInterface* nidaq = sync->nidaqPlugin();
 
     if (nidaq) {
       QStringList aoChannels = nidaq->deviceAOChannels(sync->get_SyncAcquisitionOutputDevice());
@@ -260,7 +260,7 @@ void QxrdExtraIOWindow::setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelP
 
     if (xtra) {
       QString deviceName = xtra->get_DeviceName();
-      QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+      QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
 
       if (nidaq) {
         QStringList aiChannels = nidaq->deviceAIChannels(deviceName);

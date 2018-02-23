@@ -28,6 +28,7 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   m_Acquisition(),
   m_Processor(),
   m_DetectorControlWindow(NULL),
+  m_DetectorPlugin(NULL),
   m_NAcquiredImages(),
   m_AcquiredImages(),
   m_DetectorNumber(this, "detectorNumber", -1, "Detector Number"),

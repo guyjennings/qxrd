@@ -60,12 +60,12 @@ void QxrdAcquisitionExtraInputs::initialize(QcepObjectWPtr parent)
   }
 }
 
-void QxrdAcquisitionExtraInputs::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
+void QxrdAcquisitionExtraInputs::setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin)
 {
   m_NIDAQPlugin = nidaqPlugin;
 }
 
-QxrdNIDAQPluginInterfacePtr QxrdAcquisitionExtraInputs::nidaqPlugin() const
+QxrdNIDAQPluginInterface* QxrdAcquisitionExtraInputs::nidaqPlugin() const
 {
   INIT_CHECK;
 

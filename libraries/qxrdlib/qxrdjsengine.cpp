@@ -126,17 +126,18 @@ void QxrdJSEngine::initialize()
 //    QCEP_DOC_OBJECT("application", "The QXRD Application Object");
     setGlobalProperty("application", newQObject(app.data()));
 
-    QxrdApplicationPtr appp(
-          qSharedPointerDynamicCast<QxrdApplication>(app));
+    //TODO: replace - QxrdNIDAQPluginInterface is not a QObject
+//    QxrdApplicationPtr appp(
+//          qSharedPointerDynamicCast<QxrdApplication>(app));
 
-    if (appp) {
-      QObject *plugin = dynamic_cast<QObject*>(appp->nidaqPlugin().data());
+//    if (appp) {
+//      QObject *plugin = dynamic_cast<QObject*>(appp->nidaqPlugin().data());
 
-      if (plugin) {
-        //      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
-        setGlobalProperty("nidaq", newQObject(plugin));
-      }
-    }
+//      if (plugin) {
+//        //      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
+//        setGlobalProperty("nidaq", newQObject(plugin));
+//      }
+//    }
   }
 
   if (g_Allocator) {

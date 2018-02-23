@@ -131,7 +131,7 @@ protected:
   QxrdDetectorControlWindowSettingsPtr m_DetectorControlWindowSettings;
   QxrdDetectorControlWindowPtr         m_DetectorControlWindow;
 
-  QxrdDetectorPluginInterfaceWPtr      m_DetectorPlugin;
+  QxrdDetectorPluginInterface         *m_DetectorPlugin;
   QxrdDetectorDriverThreadPtr          m_DetectorDriverThread;
 
 private:

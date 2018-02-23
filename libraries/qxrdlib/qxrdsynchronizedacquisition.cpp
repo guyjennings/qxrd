@@ -88,7 +88,7 @@ void QxrdSynchronizedAcquisition::writeSettings(QSettings *settings)
 //  settings->endArray();
 }
 
-void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterfaceWPtr nidaqPlugin)
+void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin)
 {
   m_NIDAQPlugin = nidaqPlugin;
 }
@@ -98,7 +98,7 @@ QxrdAcqCommonWPtr QxrdSynchronizedAcquisition::acquisition()
   return m_Acquisition;
 }
 
-QxrdNIDAQPluginInterfaceWPtr QxrdSynchronizedAcquisition::nidaqPlugin() const
+QxrdNIDAQPluginInterface* QxrdSynchronizedAcquisition::nidaqPlugin() const
 {
   return m_NIDAQPlugin;
 }

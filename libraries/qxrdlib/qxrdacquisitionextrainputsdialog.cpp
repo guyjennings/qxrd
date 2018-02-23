@@ -37,7 +37,7 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
       QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
       if (xtra) {
-        QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+        QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
 
         if (nidaq) {
           QStringList devices = nidaq->deviceNames();
@@ -103,7 +103,7 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
 
     if (xtra) {
       QString deviceName = xtra->get_DeviceName();
-      QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+      QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
 
       if (nidaq) {
         QStringList aiChannels = nidaq->deviceAIChannels(deviceName);

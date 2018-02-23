@@ -79,7 +79,7 @@ QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()
   QxrdAcquisitionExtraInputsPtr xtra(extraInputs());
 
   if (xtra) {
-    QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+    QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
 
     if (nidaq) {
       return nidaq->readContinuousInputChannel(get_PhysicalChannel());
@@ -96,7 +96,7 @@ int QxrdAcquisitionExtraInputsChannel::startIndex()
   QxrdAcquisitionExtraInputsPtr xtra(extraInputs());
 
   if (xtra) {
-    QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+    QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
 
     if (nidaq) {
       int nSamples = nidaq->countContinuousInput();
@@ -120,7 +120,7 @@ int QxrdAcquisitionExtraInputsChannel::endIndex()
   QxrdAcquisitionExtraInputsPtr xtra(extraInputs());
 
   if (xtra) {
-    QxrdNIDAQPluginInterfacePtr nidaq = xtra->nidaqPlugin();
+    QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
 
     if (nidaq) {
       int nSamples = nidaq->countContinuousInput();

@@ -37,13 +37,13 @@ QxrdDetectorSettingsPtr QxrdAcqDummy::detector(int i) const
   return QxrdDetectorSettingsPtr();
 }
 
-void QxrdAcqDummy::setNIDAQPlugin(QxrdNIDAQPluginInterfacePtr nidaqPlugin)
+void QxrdAcqDummy::setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin)
 {
 }
 
-QxrdNIDAQPluginInterfaceWPtr QxrdAcqDummy::nidaqPlugin() const
+QxrdNIDAQPluginInterface *QxrdAcqDummy::nidaqPlugin() const
 {
-  return QxrdNIDAQPluginInterfaceWPtr();
+  return NULL;
 }
 
 QxrdSynchronizedAcquisitionPtr QxrdAcqDummy::synchronizedAcquisition() const
