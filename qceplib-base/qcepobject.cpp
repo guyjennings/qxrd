@@ -9,6 +9,7 @@
 #include <QScriptEngine>
 #include "qcepdebug.h"
 #include "qcepapplication.h"
+#include "qcepmainwindowsettings.h"
 
 static QAtomicInt s_ObjectAllocateCount(0);
 static QAtomicInt s_ObjectDeleteCount(0);
@@ -615,35 +616,75 @@ void QcepObject::splashMessage(QString msg, QDateTime dt)
   }
 }
 
-void QcepObject::writeSettings(QSettings *set)
+void QcepObject::writeSettings(QSettings *settings)
 {
 #ifndef QT_NO_DEBUG
   checkObjectInitialization();
 #endif
 
-  if (set) {
-    set->setValue("name", get_Name());
-    set->setValue("class", className());
+  if (settings) {
+    settings->setValue("name", get_Name());
+    settings->setValue("class", className());
 
-    set->beginGroup("properties");
-    QcepProperty::writeSettings(this, set);
-    set->endGroup();
+    settings->beginGroup("properties");
+    QcepProperty::writeSettings(this, settings);
+    settings->endGroup();
   }
+
+  settings->beginWriteArray("windowSettings");
+
+  for (int i=0; i<m_WindowSettings.count(); i++) {
+    settings->setArrayIndex(i);
+    QcepMainWindowSettingsPtr set = windowSettings(i);
+
+    if (set) {
+      set->writeSettings(settings);
+    }
+  }
+
+  settings->endArray();
 
   m_ChangeCount.fetchAndStoreOrdered(0);
   m_LastChanged.store(NULL);
 }
 
-void QcepObject::readSettings(QSettings *set)
+void QcepObject::readSettings(QSettings *settings)
 {
 //#ifndef QT_NO_DEBUG
 //  checkObjectInitialization();
 //#endif
-  if (set) {
-    set->beginGroup("properties");
-    QcepProperty::readSettings(this, set);
-    set->endGroup();
+  if (settings) {
+    settings->beginGroup("properties");
+    QcepProperty::readSettings(this, settings);
+    settings->endGroup();
   }
+
+  int n = settings->beginReadArray("windowSettings");
+
+  int nOpened = 0;
+
+  for (int i=0; i<m_WindowSettings.count(); i++) {
+    settings->setArrayIndex(i);
+    QcepMainWindowSettingsPtr set = windowSettings(i);
+
+    if (set) {
+      set->readSettings(settings);
+
+      if (set->get_WindowOpen()) {
+        nOpened += 1;
+      }
+    }
+  }
+
+  if (nOpened == 0) {
+    QcepMainWindowSettingsPtr set = windowSettings(0);
+
+    if (set) {
+      set -> set_WindowOpen(true);
+    }
+  }
+
+  settings->endArray();
 
   m_ChangeCount.fetchAndStoreOrdered(0);
   m_LastChanged.store(NULL);
@@ -1153,4 +1194,34 @@ void QcepObject::checkInitialization()
   }
 }
 #endif
+
+int QcepObject::windowSettingsCount()
+{
+  return m_WindowSettings.count();
+}
+
+QcepMainWindowSettingsPtr QcepObject::windowSettings(int n)
+{
+  return m_WindowSettings.value(n);
+}
+
+void QcepObject::appendWindowSettings(QcepMainWindowSettingsPtr settings)
+{
+  if (settings) {
+    for (int i=0; i<windowSettingsCount(); i++) {
+      QcepMainWindowSettingsPtr set = windowSettings(i);
+
+      if (set && set->className() == settings->className()) {
+        return;
+      }
+    }
+
+    m_WindowSettings.append(settings);
+  }
+}
+
+void QcepObject::defaultWindowSettings()
+{
+
+}
 

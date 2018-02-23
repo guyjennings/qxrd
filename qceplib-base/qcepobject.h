@@ -13,6 +13,7 @@
 #include <QScriptValue>
 #include "qcepfileformatter-ptr.h"
 #include "qcepdebug.h"
+#include "qcepmainwindowsettings-ptr.h"
 
 class QCEP_EXPORT QcepObject : public QObject, public QEnableSharedFromThis<QcepObject>
 {
@@ -38,6 +39,12 @@ public:
   const QcepObjectWPtr parentPtr() const;
 
   static QString hexArg(const void *p);
+
+  void appendWindowSettings(QcepMainWindowSettingsPtr settings);
+  QcepMainWindowSettingsPtr windowSettings(int n);
+  int windowSettingsCount();
+
+  virtual void defaultWindowSettings();
 
 signals:
 
@@ -89,8 +96,8 @@ public:
   static QcepObjectPtr readObject(QcepObjectWPtr parent, QSettings *set);
   static QcepObjectPtr construct(QString name, QString className);
 
-  virtual void writeSettings(QSettings *set);
-  virtual void readSettings(QSettings *set);
+  virtual void writeSettings(QSettings *settings);
+  virtual void readSettings(QSettings *settings);
 
   QString get_Name() const;
   void    set_Name(QString name);
@@ -128,6 +135,8 @@ private:
   QcepObjectWPtr                      m_Parent;
   //TODO: eliminate?
   QVector<QcepObjectWPtr>             m_Children;
+
+  QVector<QcepMainWindowSettingsPtr>  m_WindowSettings;
 
 protected:
 #ifndef QT_NO_DEBUG

@@ -199,50 +199,6 @@ void QcepExperiment::readSettings(QSettings *settings)
       m_FixupGainMapCommand -> readSettings(settings);
       settings->endGroup();
     }
-
-    int n = settings->beginReadArray("windowSettings");
-
-//    for (int i=0; i<n; i++) {
-//      settings->setArrayIndex(i);
-
-//      QcepObjectPtr obj = QcepObject::readObject(settings);
-
-//      if (obj) {
-//        QcepMainWindowSettingsPtr set =
-//            qSharedPointerDynamicCast<QcepMainWindowSettings>(obj);
-
-//        if (set) {
-//          set -> initialize(sharedFromThis());
-
-//          m_WindowSettings.append(set);
-//        }
-//      }
-//    }
-
-    int nOpened = 0;
-
-    for (int i=0; i<m_WindowSettings.count(); i++) {
-      settings->setArrayIndex(i);
-      QcepMainWindowSettingsPtr set = windowSettings(i);
-
-      if (set) {
-        set->readSettings(settings);
-
-        if (set->get_WindowOpen()) {
-          nOpened += 1;
-        }
-      }
-    }
-
-    if (nOpened == 0) {
-      QcepMainWindowSettingsPtr set = windowSettings(0);
-
-      if (set) {
-        set -> set_WindowOpen(true);
-      }
-    }
-
-    settings->endArray();
   }
 }
 
@@ -280,48 +236,5 @@ void QcepExperiment::writeSettings(QSettings *settings)
       m_FixupGainMapCommand -> writeSettings(settings);
       settings->endGroup();
     }
-
-    settings->beginWriteArray("windowSettings");
-
-    for (int i=0; i<m_WindowSettings.count(); i++) {
-      settings->setArrayIndex(i);
-      QcepMainWindowSettingsPtr set = windowSettings(i);
-
-      if (set) {
-        set->writeSettings(settings);
-      }
-    }
-
-    settings->endArray();
   }
-}
-
-int QcepExperiment::windowSettingsCount()
-{
-  return m_WindowSettings.count();
-}
-
-QcepMainWindowSettingsPtr QcepExperiment::windowSettings(int n)
-{
-  return m_WindowSettings.value(n);
-}
-
-void QcepExperiment::appendWindowSettings(QcepMainWindowSettingsPtr settings)
-{
-  if (settings) {
-    for (int i=0; i<windowSettingsCount(); i++) {
-      QcepMainWindowSettingsPtr set = windowSettings(i);
-
-      if (set && set->className() == settings->className()) {
-        return;
-      }
-    }
-
-    m_WindowSettings.append(settings);
-  }
-}
-
-void QcepExperiment::defaultWindowSettings()
-{
-
 }

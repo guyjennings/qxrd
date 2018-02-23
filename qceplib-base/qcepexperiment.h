@@ -14,7 +14,6 @@
 #include "qcepsetrangeofimagecommand-ptr.h"
 #include "qcepsetdatavaluerangecommand-ptr.h"
 #include "qcepfixupgainmapcommand-ptr.h"
-#include "qcepmainwindowsettings-ptr.h"
 
 class QCEP_EXPORT QcepExperiment : public QcepObject
 {
@@ -27,8 +26,6 @@ public:
   explicit QcepExperiment(QString path,
                           QString name);
   void initialize(QcepObjectWPtr parent);
-
-  virtual void defaultWindowSettings();
 
 signals:
 
@@ -50,10 +47,6 @@ public slots:
 public:
   QUndoStack *undoStack();
 
-  void appendWindowSettings(QcepMainWindowSettingsPtr settings);
-  QcepMainWindowSettingsPtr windowSettings(int n);
-  int windowSettingsCount();
-
 protected:
 //  QcepSettingsSaverPtr            m_SettingsSaver;
 
@@ -68,8 +61,6 @@ private:
   QcepSetDataValueRangeCommandPtr m_SetDataValueRangeCommand;
   QcepSetRangeOfImageCommandPtr   m_SetRangeOfImageCommand;
   QcepFixupGainMapCommandPtr      m_FixupGainMapCommand;
-
-  QVector<QcepMainWindowSettingsPtr> m_WindowSettings;
 
 public:
   Q_PROPERTY(int experimentKind READ get_ExperimentKind WRITE set_ExperimentKind)
