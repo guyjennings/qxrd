@@ -72,3 +72,14 @@ bool QcepDataObjectPropertiesWindow::wantToClose()
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
 
+void QcepDataObjectPropertiesWindow::saveExperimentAs()
+{
+}
+
+void QcepDataObjectPropertiesWindow::saveExperimentCopy()
+{
+}
+
+void QcepDataObjectPropertiesWindow::doEditPreferences()
+{
+}

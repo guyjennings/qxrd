@@ -38,6 +38,10 @@ public:
 
   QcepExperimentWPtr experiment();
 
+  void saveExperimentAs();
+  void saveExperimentCopy();
+  void doEditPreferences();
+
 signals:
 
 public slots:

@@ -8,6 +8,7 @@
 #include "qcepdataobject-ptr.h"
 #include "qcepobject.h"
 #include "qapplication-ptr.h"
+#include "qcepapplication-ptr.h"
 
 class QCEP_EXPORT QcepApplication : public QcepObject
 {
@@ -20,6 +21,8 @@ public:
   explicit QcepApplication(int &argc, char **argv);
   void initializeRoot();
 
+  static QcepApplicationWPtr findApplication(QcepObjectWPtr p);
+
   virtual void setDefaultObjectData(QcepDataObject *obj) = 0;
 
   int exec();
@@ -27,11 +30,45 @@ public:
   void exit();
   void quit();
 
+  virtual void openStartupWindow() = 0;
+  virtual void closeStartupWindow() = 0;
+
+  virtual QString applicationDescription() = 0;
+  virtual QIcon   applicationIcon() = 0;
+
+  virtual void openExperiment(QString path) = 0;
+  virtual void openRecentExperiment(QString path) = 0;
+
+  virtual void editGlobalPreferences() = 0;
+  virtual void createNewExperiment() = 0;
+  virtual void chooseExistingExperiment() = 0;
+
+  virtual void readApplicationSettings() = 0;
+  virtual void writeApplicationSettings() = 0;
+
+  virtual void possiblyQuit() = 0;
+
 public slots:
   void openObjectBrowserWindow(QcepObjectWPtr obj);
 
 protected:
   QApplicationPtr m_Application;
+
+public:
+  Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment)
+  QCEP_STRING_PROPERTY(CurrentExperiment)
+
+  Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
+  QCEP_STRING_LIST_PROPERTY(RecentExperiments)
+
+  Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize)
+  QCEP_INTEGER_PROPERTY(RecentExperimentsSize)
+
+  Q_PROPERTY(int experimentCount READ get_ExperimentCount WRITE set_ExperimentCount STORED false)
+  QCEP_INTEGER_PROPERTY(ExperimentCount)
+
+  Q_PROPERTY(int    updateIntervalMsec   READ get_UpdateIntervalMsec WRITE set_UpdateIntervalMsec)
+  QCEP_INTEGER_PROPERTY(UpdateIntervalMsec)
 };
 
 extern QCEP_EXPORT QcepApplication *g_Application;

@@ -14,6 +14,7 @@
 #include "qcepsetrangeofimagecommand-ptr.h"
 #include "qcepsetdatavaluerangecommand-ptr.h"
 #include "qcepfixupgainmapcommand-ptr.h"
+#include "qcepexperiment-ptr.h"
 
 class QCEP_EXPORT QcepExperiment : public QcepObject
 {
@@ -26,6 +27,12 @@ public:
   explicit QcepExperiment(QString path,
                           QString name);
   void initialize(QcepObjectWPtr parent);
+
+  static QcepExperimentWPtr findExperiment(QcepObjectWPtr p);
+
+  virtual void saveExperiment() = 0;
+  virtual void saveExperimentAs(QString path) = 0;
+  virtual void saveExperimentCopyAs(QString path) = 0;
 
 signals:
 

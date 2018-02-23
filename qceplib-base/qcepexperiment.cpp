@@ -89,6 +89,22 @@ void QcepExperiment::initialize(QcepObjectWPtr parent)
   }
 }
 
+QcepExperimentWPtr QcepExperiment::findExperiment(QcepObjectWPtr p)
+{
+  QcepExperimentWPtr res =
+      qSharedPointerDynamicCast<QcepExperiment>(p);
+
+  if (res == NULL) {
+    QcepObjectPtr objp(p);
+
+    if (objp) {
+      res = findExperiment(objp->parentPtr());
+    }
+  }
+
+  return res;
+}
+
 QString QcepExperiment::defaultExperimentDirectory(QString path) const
 {
   QFileInfo info(path);

@@ -6,7 +6,12 @@
 QcepApplication *g_Application = NULL;
 
 QcepApplication::QcepApplication(int &argc, char **argv) :
-  inherited("application")
+  inherited("application"),
+  m_CurrentExperiment(this, "currentExperiment", "", "Current Experiment"),
+  m_RecentExperiments(this, "recentExperiments", QStringList(), "Recent Experiments"),
+  m_RecentExperimentsSize(this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
+  m_ExperimentCount(this, "experimentCount", 0, "Number of open experiments"),
+  m_UpdateIntervalMsec(this, "updateIntervalMsec", 1000, "Time Intervale for Updates (in msec)")
 {
   g_Application = this;
 
@@ -18,6 +23,22 @@ QcepApplication::QcepApplication(int &argc, char **argv) :
 void QcepApplication::initializeRoot()
 {
   inherited::initializeRoot();
+}
+
+QcepApplicationWPtr QcepApplication::findApplication(QcepObjectWPtr p)
+{
+  QcepApplicationWPtr res =
+      qSharedPointerDynamicCast<QcepApplication>(p);
+
+  if (res == NULL) {
+    QcepObjectPtr objp(p);
+
+    if (objp) {
+      res = findApplication(objp->parentPtr());
+    }
+  }
+
+  return res;
 }
 
 int QcepApplication::exec()

@@ -133,3 +133,15 @@ bool QcepDataObjectSpreadsheetWindow::wantToClose()
                                .arg(windowTitle()),
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
 }
+
+void QcepDataObjectSpreadsheetWindow::saveExperimentAs()
+{
+}
+
+void QcepDataObjectSpreadsheetWindow::saveExperimentCopy()
+{
+}
+
+void QcepDataObjectSpreadsheetWindow::doEditPreferences()
+{
+}

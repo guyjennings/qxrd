@@ -8,9 +8,24 @@
 #include <stdio.h>
 #include <QLayout>
 #include <QDockWidget>
+#include <QStatusBar>
+#include <QMenu>
+#include <QAbstractItemView>
 #include "qcepobject.h"
+#include "qcepapplication.h"
+#include "qcepexperiment.h"
+#include "qcepapplication-ptr.h"
+#include "qcepexperiment-ptr.h"
+#include "qcepmainwindow-ptr.h"
+#include "qcepmainwindowsettings.h"
+#include "qcepallocator.h"
 
-QcepMainWindow::QcepMainWindow(QWidget *parent) : QMainWindow(parent)
+QcepMainWindow::QcepMainWindow(QWidget *parent)
+  : QMainWindow(parent),
+    m_Progress(NULL),
+    m_FileMenuP(NULL),
+    m_EditMenuP(NULL),
+    m_WindowMenuP(NULL)
 {
 }
 
@@ -20,6 +35,512 @@ QcepMainWindow::~QcepMainWindow()
 
 void QcepMainWindow::initialize(QcepObjectWPtr parent)
 {
+  m_Parent = parent;
+}
+
+void QcepMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
+{
+  m_StatusMsg = new QLabel(NULL);
+  m_StatusMsg -> setMinimumWidth(200);
+  m_StatusMsg -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  m_StatusMsg -> setToolTip(tr("Status Messages"));
+
+  statusBar() -> addPermanentWidget(m_StatusMsg);
+
+  m_Progress = new QProgressBar(NULL);
+  m_Progress -> setMinimumWidth(150);
+  m_Progress -> setMinimum(0);
+  m_Progress -> setMaximum(100);
+  m_Progress -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  m_Progress -> setToolTip(tr("Acquisition progress"));
+
+  statusBar() -> addPermanentWidget(m_Progress);
+
+  m_AllocationStatus = new QProgressBar(NULL);
+  m_AllocationStatus -> setMinimumWidth(100);
+  m_AllocationStatus -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  m_AllocationStatus -> setFormat("%v/%m");
+  m_AllocationStatus -> setTextVisible(true);
+  m_AllocationStatus -> setToolTip(tr("Memory usage"));
+
+  statusBar() -> addPermanentWidget(m_AllocationStatus);
+
+  m_FileMenuP = file;
+  m_EditMenuP = edit;
+  m_WindowMenuP = window;
+
+  QcepApplicationPtr app(QcepApplication::findApplication(m_Parent));
+  QcepExperimentPtr  exper(QcepExperiment::findExperiment(m_Parent));
+
+  if (app) {
+    connect(&m_StatusTimer, &QTimer::timeout, this, &QcepMainWindow::clearStatusMessage);
+    connect(&m_UpdateTimer, &QTimer::timeout, this, &QcepMainWindow::doTimerUpdate);
+
+    m_UpdateTimer.start(app->get_UpdateIntervalMsec());
+
+    connect(app->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged, this, &QcepMainWindow::onUpdateIntervalMsecChanged);
+
+    updateTitle();
+
+    setWindowIcon(app -> applicationIcon());
+  }
+
+  if (m_FileMenuP && app && exper) {
+    m_FileMenuP->clear();
+    m_ActionNewExperiment =
+        m_FileMenuP->addAction(tr("New Experiment..."), app.data(), &QcepApplication::createNewExperiment);
+//    QMenu *m_RecentExperiments = new QMenu();
+
+    m_ActionOpenExperiment =
+        m_FileMenuP->addAction(tr("Open Experiment..."), app.data(), &QcepApplication::chooseExistingExperiment);
+
+    m_ActionRecentExperiments =
+        m_FileMenuP->addAction(tr("Recent Experiments"));
+
+    m_RecentExperimentsMenu = new QMenu(this);
+
+    m_ActionRecentExperiments -> setMenu(m_RecentExperimentsMenu);
+
+    connect(m_RecentExperimentsMenu, &QMenu::aboutToShow,
+            this,                    &QcepMainWindow::populateRecentExperimentsMenu);
+
+    m_ActionSaveExperiment =
+        m_FileMenuP->addAction(tr("Save Experiment..."), exper.data(), &QcepExperiment::saveExperiment);
+
+    m_ActionSaveExperimentAs =
+        m_FileMenuP->addAction(tr("Save Experiment As..."), this, &QcepMainWindow::saveExperimentAs);
+
+    m_ActionSaveExperimentCopy =
+        m_FileMenuP->addAction(tr("Save Experiment Copy..."), this, &QcepMainWindow::saveExperimentCopy);
+
+    m_FileMenuP->addSeparator();
+
+    m_ActionGlobalPreferences =
+        m_FileMenuP->addAction(tr("Global Preferences..."), app.data(), &QcepApplication::editGlobalPreferences);
+
+    m_ActionExperimentPreferences =
+        m_FileMenuP->addAction(tr("Experiment Preferences..."), this, &QcepMainWindow::doEditPreferences);
+
+    m_ActionQuit =
+        m_FileMenuP->addAction(tr("Quit"), app.data(), &QcepApplication::possiblyQuit);
+  }
+
+  if (m_EditMenuP) {
+    connect(m_EditMenuP, &QMenu::aboutToShow, this, &QcepMainWindow::populateEditMenu);
+
+    m_ActionUndo = new QAction(this);
+    m_ActionUndo->setObjectName(QStringLiteral("m_ActionUndo"));
+    m_ActionUndo->setText(QApplication::translate("QxrdWindow", "Undo", Q_NULLPTR));
+
+    m_ActionRedo = new QAction(this);
+    m_ActionRedo->setObjectName(QStringLiteral("m_ActionRedo"));
+    m_ActionRedo->setText(QApplication::translate("QxrdWindow", "Redo", Q_NULLPTR));
+
+    m_ActionCut = new QAction(this);
+    m_ActionCut->setObjectName(QStringLiteral("m_ActionCut"));
+    m_ActionCut->setText(QApplication::translate("QxrdWindow", "Cut", Q_NULLPTR));
+
+    m_ActionCopy = new QAction(this);
+    m_ActionCopy->setObjectName(QStringLiteral("m_ActionCopy"));
+    m_ActionCopy->setText(QApplication::translate("QxrdWindow", "Copy", Q_NULLPTR));
+
+    m_ActionPaste = new QAction(this);
+    m_ActionPaste->setObjectName(QStringLiteral("m_ActionPaste"));
+    m_ActionPaste->setText(QApplication::translate("QxrdWindow", "Paste", Q_NULLPTR));
+
+    m_ActionDelete = new QAction(this);
+    m_ActionDelete->setObjectName(QStringLiteral("m_ActionDelete"));
+    m_ActionDelete->setText(QApplication::translate("QxrdWindow", "Delete", Q_NULLPTR));
+
+    m_ActionSelectAll = new QAction(this);
+    m_ActionSelectAll->setObjectName(QStringLiteral("m_ActionSelectAll"));
+    m_ActionSelectAll->setText(QApplication::translate("QxrdWindow", "Select All", Q_NULLPTR));
+
+    connect(m_ActionUndo, &QAction::triggered, this, &QcepMainWindow::doUndo);
+    connect(m_ActionRedo, &QAction::triggered, this, &QcepMainWindow::doRedo);
+    connect(m_ActionCut, &QAction::triggered, this, &QcepMainWindow::doCut);
+    connect(m_ActionCopy, &QAction::triggered, this, &QcepMainWindow::doCopy);
+    connect(m_ActionPaste, &QAction::triggered, this, &QcepMainWindow::doPaste);
+    connect(m_ActionDelete, &QAction::triggered, this, &QcepMainWindow::doDelete);
+    connect(m_ActionSelectAll, &QAction::triggered, this, &QcepMainWindow::doSelectAll);
+  }
+
+  if (m_WindowMenuP) {
+    connect(m_WindowMenuP,  &QMenu::aboutToShow,
+            this, &QcepMainWindow::populateWindowsMenu);
+
+  }
+}
+
+void QcepMainWindow::populateEditMenu()
+{
+  QcepExperimentPtr expt(QcepExperiment::findExperiment(m_Parent));
+
+  m_EditMenuP -> clear();
+
+  if (expt) {
+    QAction *undoAction = NULL, *redoAction = NULL;
+
+    QWidget* focusWidget = QApplication::focusWidget();
+
+    if (focusWidget) {
+//      printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+      QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+      QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+      QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+      QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+      QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+      if (txed || lned || ispn || dspn || cbox) {
+        undoAction = m_ActionUndo;
+        redoAction = m_ActionRedo;
+      }
+    }
+
+    if (undoAction == NULL) {
+      undoAction = expt->undoStack()->createUndoAction(this);
+    }
+
+    if (redoAction == NULL) {
+      redoAction = expt->undoStack()->createRedoAction(this);
+    }
+
+    m_EditMenuP->addAction(undoAction);
+    m_EditMenuP->addAction(redoAction);
+    m_EditMenuP->addSeparator();
+    m_EditMenuP->addAction(m_ActionCut);
+    m_EditMenuP->addAction(m_ActionCopy);
+    m_EditMenuP->addAction(m_ActionPaste);
+    m_EditMenuP->addAction(m_ActionDelete);
+    m_EditMenuP->addSeparator();
+    m_EditMenuP->addAction(m_ActionSelectAll);
+  }
+}
+
+void QcepMainWindow::populateWindowsMenu()
+{
+  QcepExperimentPtr expt(QcepExperiment::findExperiment(m_Parent));
+
+  if (expt && m_WindowMenuP) {
+    m_WindowMenuP->clear();
+
+    for (int i=0; i<expt->windowSettingsCount(); i++) {
+      QcepMainWindowSettingsPtr set =
+          qSharedPointerDynamicCast<QcepMainWindowSettings>(expt->windowSettings(i));
+
+      if (set) {
+        QcepMainWindowPtr win = set -> window();
+
+        QAction *act = NULL;
+
+        if (win) {
+          act = m_WindowMenuP ->
+              addAction(tr("Show %1").arg(set->get_Description()),
+                        this, [=]() { newWindow(set); });
+        } else {
+          act = m_WindowMenuP ->
+              addAction(tr("New %1").arg(set->get_Description()),
+                        this, [=]() { newWindow(set); });
+        }
+
+        if (act) {
+          act->setData(i);
+        }
+      }
+    }
+  }
+}
+
+void QcepMainWindow::populateRecentExperimentsMenu()
+{
+  //  printMessage("Populating recent experiments menu");
+
+  m_RecentExperimentsMenu->clear();
+
+  QcepApplicationPtr app(QcepApplication::findApplication(m_Parent));
+
+  if (app) {
+    QStringList recent = app->get_RecentExperiments();
+
+    foreach (QString exp, recent) {
+      QAction *action = new QAction(exp, m_RecentExperimentsMenu);
+
+      QcepApplication *appp = app.data();
+
+      connect(action, &QAction::triggered, [=] {appp->openRecentExperiment(exp);});
+
+      m_RecentExperimentsMenu -> addAction(action);
+    }
+  }
+}
+
+void QcepMainWindow::newWindow(QcepMainWindowSettingsWPtr set)
+{
+  QcepMainWindowSettingsPtr setp(set);
+
+  if (setp) {
+    QcepMainWindowPtr win = setp->window();
+
+    if (!win) {
+      win =setp->newWindow();
+    }
+
+    if (win) {
+      win->show();
+      win->raise();
+      win->activateWindow();
+    }
+  }
+}
+
+void QcepMainWindow::updateTitle()
+{
+//  QxrdExperimentPtr exper(m_Experiment);
+
+  QString title;
+
+//  title = m_Name;
+
+//  if (exper) {
+//    title.append(" - ");
+//    title.append(exper->experimentFilePath());
+
+//    exper -> prop_CompletionPercentage() -> linkTo(m_Progress);
+//  }
+
+  title.append(" - QXRD");
+
+  if (sizeof(void*) == 4) {
+    title.append(" - 32 bit - v");
+  } else {
+    title.append(" - 64 bit - v");
+  }
+
+  title.append(STR(QXRD_VERSION));
+
+//  if (exper && exper->isChanged()) {
+//    title.append(tr(" [%1]").arg(exper->isChanged()));
+//  }
+
+  setWindowTitle(title);
+}
+
+void QcepMainWindow::doTimerUpdate()
+{
+  updateTitle();
+
+  allocatedMemoryChanged();
+}
+
+void QcepMainWindow::displayStatusMessage(QString msg)
+{
+  if (QThread::currentThread()==thread()) {
+    m_StatusMsg -> setText(msg);
+
+    //  printMessage(msg);
+
+    m_StatusTimer.start(5000);
+  } else {
+    INVOKE_CHECK(QMetaObject::invokeMethod(this,
+                                           "displayStatusMessage",
+                                           Qt::QueuedConnection,
+                                           Q_ARG(QString, msg)));
+  }
+}
+
+void QcepMainWindow::onUpdateIntervalMsecChanged(int newVal)
+{
+  m_UpdateTimer.setInterval(newVal);
+}
+
+void QcepMainWindow::clearStatusMessage()
+{
+  m_StatusMsg -> setText("");
+}
+
+void QcepMainWindow::allocatedMemoryChanged()
+{
+  int alloc = QcepAllocator::allocatedMemoryMB();
+  int avail = QcepAllocator::availableMemoryMB();
+
+  m_AllocationStatus -> setMaximum(avail);
+  m_AllocationStatus -> setValue(alloc);
+}
+
+void QcepMainWindow::doUndo()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+//    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      txed->undo();
+    } else if (lned) {
+      lned->undo();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QcepMainWindow::doRedo()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+//    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      txed->redo();
+    } else if (lned) {
+      lned->redo();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QcepMainWindow::doCut()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+//    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      txed->cut();
+    } else if (lned) {
+      lned->cut();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QcepMainWindow::doCopy()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+//    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      txed->copy();
+    } else if (lned) {
+      lned->copy();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QcepMainWindow::doPaste()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+//    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      txed->paste();
+    } else if (lned) {
+      lned->paste();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QcepMainWindow::doDelete()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+//    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+
+    if (txed) {
+      if (txed->textCursor().hasSelection()) {
+        txed->textCursor().deleteChar();
+      }
+    } else if (lned) {
+      if (lned->selectedText().length()) {
+        lned->del();
+      }
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    }
+  }
+}
+
+void QcepMainWindow::doSelectAll()
+{
+  QWidget* focusWidget = QApplication::focusWidget();
+
+  if (focusWidget) {
+//    printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+    QAbstractItemView *itmv = qobject_cast<QAbstractItemView*>(focusWidget);
+
+    if (txed) {
+      txed->selectAll();
+    } else if (lned) {
+      lned->selectAll();
+    } else if (ispn) {
+    } else if (dspn) {
+    } else if (cbox) {
+    } else if (itmv) {
+      itmv->selectAll();
+    }
+  }
 }
 
 void QcepMainWindow::possiblyClose()

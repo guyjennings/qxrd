@@ -4,6 +4,7 @@
 #include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
+#include "qcepmainwindow-ptr.h"
 
 class QCEP_EXPORT QcepMainWindowSettings : public QcepObject
 {
@@ -16,11 +17,21 @@ public:
   QcepMainWindowSettings(QString name, QString desc);
   void initialize(QcepObjectWPtr parent);
 
-  virtual void openWindow() = 0;
-  virtual void closeWindow() = 0;
+  void readSettings(QSettings *settings);
+  void writeSettings(QSettings *settings);
+
+  virtual QcepMainWindowPtr newWindow() = 0;
+
+  QcepMainWindowPtr  window();
+
+  void openWindow();
+  void closeWindow();
+
+protected:
+  QcepMainWindowPtr   m_Window;
 
 public:
-  Q_PROPERTY(QString description READ get_Description WRITE set_Description)
+  Q_PROPERTY(QString description READ get_Description WRITE set_Description STORED false)
   QCEP_STRING_PROPERTY(Description)
 
   Q_PROPERTY(int windowOpen READ get_WindowOpen WRITE set_WindowOpen)
