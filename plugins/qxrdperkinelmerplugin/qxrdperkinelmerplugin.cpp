@@ -1,6 +1,7 @@
 #include "qxrdperkinelmerplugin.h"
 #include "qxrddetectorinterface.h"
 #include "qxrdperkinelmerdriver.h"
+#include "qxrdperkinelmersettings.h"
 
 QxrdPerkinElmerPlugin::QxrdPerkinElmerPlugin()
   : inherited("perkinElmerPlugin")
@@ -27,8 +28,11 @@ QxrdDetectorDriverPtr QxrdPerkinElmerPlugin::createDetector(QString name,
   QxrdPerkinElmerPluginPtr plugin(
         qSharedPointerDynamicCast<QxrdPerkinElmerPlugin>(sharedFromThis()));
 
+  QxrdPerkinElmerSettingsPtr set(
+        qSharedPointerDynamicCast<QxrdPerkinElmerSettings>(det));
+
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdPerkinElmerDriver(name, plugin, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdPerkinElmerDriver(name, plugin, set, expt, acq));
 
   return res;
 }

@@ -38,8 +38,11 @@ QxrdDetectorDriverPtr QxrdSimulatedPlugin::createDetector(QString name,
   QxrdSimulatedPluginPtr plugin(
         qSharedPointerDynamicCast<QxrdSimulatedPlugin>(sharedFromThis()));
 
+  QxrdSimulatedSettingsPtr set(
+        qSharedPointerDynamicCast<QxrdSimulatedSettings>(det));
+
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdSimulatedDriver(name, plugin, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdSimulatedDriver(name, plugin, set, expt, acq));
 
   return res;
 }

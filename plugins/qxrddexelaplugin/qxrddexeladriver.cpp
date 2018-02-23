@@ -20,7 +20,7 @@ QxrdDexelaDriver::QxrdDexelaDriver(QString name,
                                    QxrdExperimentWPtr expt,
                                    QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
-    m_Dexela(qSharedPointerDynamicCast<QxrdDexelaSettings>(det)),
+    m_Dexela(det),
     m_DexelaPlugin(plugin),
     m_DexelaDetector(NULL)
 {

@@ -1,6 +1,7 @@
 #include "qxrdareadetectorplugin.h"
 #include "qxrddetectorinterface.h"
 #include "qxrdareadetectordriver.h"
+#include "qxrdareadetectorsettings.h"
 
 QxrdAreaDetectorPlugin::QxrdAreaDetectorPlugin()
   : inherited("areaDetectorPlugin")
@@ -27,8 +28,11 @@ QxrdDetectorDriverPtr QxrdAreaDetectorPlugin::createDetector(QString name,
   QxrdAreaDetectorPluginPtr plugin(
         qSharedPointerDynamicCast<QxrdAreaDetectorPlugin>(sharedFromThis()));
 
+  QxrdAreaDetectorSettingsPtr set(
+        qSharedPointerDynamicCast<QxrdAreaDetectorSettings>(det));
+
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdAreaDetectorDriver(name, plugin, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdAreaDetectorDriver(name, plugin, set, expt, acq));
 
   return res;
 }

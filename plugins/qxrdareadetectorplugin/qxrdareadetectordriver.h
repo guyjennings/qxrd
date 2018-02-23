@@ -13,7 +13,7 @@ class QxrdAreaDetectorDriver : public QxrdDetectorDriver
 public:
   QxrdAreaDetectorDriver(QString name,
                          QxrdAreaDetectorPluginWPtr plugin,
-                         QxrdDetectorSettingsWPtr det,
+                         QxrdAreaDetectorSettingsWPtr det,
                          QxrdExperimentWPtr expt,
                          QxrdAcqCommonWPtr acq);
   virtual ~QxrdAreaDetectorDriver();

@@ -15,7 +15,7 @@ class QxrdPilatusDriver : public QxrdDetectorDriver
 public:
   QxrdPilatusDriver(QString name,
                     QxrdPilatusPluginWPtr plugin,
-                    QxrdDetectorSettingsWPtr det,
+                    QxrdPilatusSettingsWPtr det,
                     QxrdExperimentWPtr expt,
                     QxrdAcqCommonWPtr acq);
   virtual ~QxrdPilatusDriver();

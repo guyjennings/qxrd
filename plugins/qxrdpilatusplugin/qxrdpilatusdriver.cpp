@@ -12,12 +12,12 @@
 
 QxrdPilatusDriver::QxrdPilatusDriver(QString name,
                                      QxrdPilatusPluginWPtr plugin,
-                                     QxrdDetectorSettingsWPtr det,
+                                     QxrdPilatusSettingsWPtr det,
                                      QxrdExperimentWPtr expt,
                                      QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
     m_Plugin(plugin),
-    m_Pilatus(qSharedPointerDynamicCast<QxrdPilatusSettings>(det)),
+    m_Pilatus(det),
     m_PilatusSocket(),
     m_ExposureTime(-1),
     m_ExposuresPerFrame(-1),

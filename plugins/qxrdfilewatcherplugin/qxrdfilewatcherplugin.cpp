@@ -1,6 +1,7 @@
 #include "qxrdfilewatcherplugin.h"
 #include "qxrddetectorinterface.h"
 #include "qxrdfilewatcherdriver.h"
+#include "qxrdfilewatchersettings.h"
 
 QxrdFileWatcherPlugin::QxrdFileWatcherPlugin()
   : inherited("fileWatcherPlugin")
@@ -27,8 +28,11 @@ QxrdDetectorDriverPtr QxrdFileWatcherPlugin::createDetector(QString name,
   QxrdFileWatcherPluginPtr plugin(
         qSharedPointerDynamicCast<QxrdFileWatcherPlugin>(sharedFromThis()));
 
+  QxrdFileWatcherSettingsPtr set(
+        qSharedPointerDynamicCast<QxrdFileWatcherSettings>(det));
+
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdFileWatcherDriver(name, plugin, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdFileWatcherDriver(name, plugin, set, expt, acq));
 
   return res;
 }

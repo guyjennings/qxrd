@@ -10,12 +10,12 @@
 
 QxrdAreaDetectorDriver::QxrdAreaDetectorDriver(QString name,
                                                QxrdAreaDetectorPluginWPtr plugin,
-                                               QxrdDetectorSettingsWPtr det,
+                                               QxrdAreaDetectorSettingsWPtr det,
                                                QxrdExperimentWPtr expt,
                                                QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
     m_Plugin(plugin),
-    m_AreaDetector(qSharedPointerDynamicCast<QxrdAreaDetectorSettings>(det))
+    m_AreaDetector(det)
 {
 #ifndef QT_NO_DEBUG
   printf("Area Detector Driver \"%s\" Constructed\n", qPrintable(name));

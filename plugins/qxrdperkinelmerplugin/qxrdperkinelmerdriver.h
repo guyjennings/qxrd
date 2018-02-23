@@ -18,7 +18,7 @@ class QxrdPerkinElmerDriver : public QxrdDetectorDriver
 public:
   QxrdPerkinElmerDriver(QString name,
                         QxrdPerkinElmerPluginWPtr plugin,
-                        QxrdDetectorSettingsWPtr det,
+                        QxrdPerkinElmerSettingsWPtr det,
                         QxrdExperimentWPtr expt,
                         QxrdAcqCommonWPtr acq);
   virtual ~QxrdPerkinElmerDriver();

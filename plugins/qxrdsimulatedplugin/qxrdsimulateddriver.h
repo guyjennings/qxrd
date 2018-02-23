@@ -13,7 +13,7 @@ class QxrdSimulatedDriver : public QxrdDetectorDriver
 public:
   QxrdSimulatedDriver(QString name,
                       QxrdSimulatedPluginWPtr plugin,
-                      QxrdDetectorSettingsWPtr det,
+                      QxrdSimulatedSettingsWPtr det,
                       QxrdExperimentWPtr expt,
                       QxrdAcqCommonWPtr acq);
   virtual ~QxrdSimulatedDriver();

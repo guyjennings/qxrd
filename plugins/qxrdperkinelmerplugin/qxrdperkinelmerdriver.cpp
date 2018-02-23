@@ -26,7 +26,7 @@ static void CALLBACK OnEndAcqCallback(HACQDESC hAcqDesc);
 
 QxrdPerkinElmerDriver::QxrdPerkinElmerDriver(QString name,
                                              QxrdPerkinElmerPluginWPtr plugin,
-                                             QxrdDetectorSettingsWPtr det,
+                                             QxrdPerkinElmerSettingsWPtr det,
                                              QxrdExperimentWPtr expt,
                                              QxrdAcqCommonWPtr acq)
 : QxrdDetectorDriver(name, det, expt, acq),
@@ -43,7 +43,7 @@ QxrdPerkinElmerDriver::QxrdPerkinElmerDriver(QString name,
   m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
   m_TimingSource(-1),
   m_Counter(0),
-  m_PerkinElmer(qSharedPointerDynamicCast<QxrdPerkinElmerSettings>(det))
+  m_PerkinElmer(det)
 {
 #ifndef QT_NO_DEBUG
   printf("Perkin Elmer Detector Driver \"%s\" Constructed\n", qPrintable(name));

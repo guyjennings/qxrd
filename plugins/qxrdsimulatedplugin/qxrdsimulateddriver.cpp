@@ -11,12 +11,12 @@
 
 QxrdSimulatedDriver::QxrdSimulatedDriver(QString name,
                                          QxrdSimulatedPluginWPtr plugin,
-                                         QxrdDetectorSettingsWPtr det,
+                                         QxrdSimulatedSettingsWPtr det,
                                          QxrdExperimentWPtr expt,
                                          QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
     m_Plugin(plugin),
-    m_Simulated(qSharedPointerDynamicCast<QxrdSimulatedSettings>(det))
+    m_Simulated(det)
 {
 #ifndef QT_NO_DEBUG
   printf("Simulated Driver \"%s\" Constructed\n", qPrintable(name));

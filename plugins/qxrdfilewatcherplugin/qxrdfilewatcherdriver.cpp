@@ -9,11 +9,11 @@
 #include <QThread>
 
 QxrdFileWatcherDriver::QxrdFileWatcherDriver(QString name, QxrdFileWatcherPluginWPtr plugin,
-                                                         QxrdDetectorSettingsWPtr det,
+                                                         QxrdFileWatcherSettingsWPtr det,
                                                          QxrdExperimentWPtr expt,
                                                          QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
-    m_FileWatcher(qSharedPointerDynamicCast<QxrdFileWatcherSettings>(det))
+    m_FileWatcher(det)
 {
 #ifndef QT_NO_DEBUG
   printf("File Watcher Driver \"%s\" Constructed\n", qPrintable(name));

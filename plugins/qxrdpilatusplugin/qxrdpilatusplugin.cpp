@@ -1,6 +1,7 @@
 #include "qxrdpilatusplugin.h"
 #include "qxrddetectorinterface.h"
 #include "qxrdpilatusdriver.h"
+#include "qxrdpilatussettings.h"
 
 QxrdPilatusPlugin::QxrdPilatusPlugin()
   : inherited("pilatusPlugin")
@@ -27,8 +28,11 @@ QxrdDetectorDriverPtr QxrdPilatusPlugin::createDetector(QString name,
   QxrdPilatusPluginPtr plugin(
         qSharedPointerDynamicCast<QxrdPilatusPlugin>(sharedFromThis()));
 
+  QxrdPilatusSettingsPtr set(
+        qSharedPointerDynamicCast<QxrdPilatusSettings>(det));
+
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdPilatusDriver(name, plugin, det, expt, acq));
+      QxrdDetectorDriverPtr(new QxrdPilatusDriver(name, plugin, set, expt, acq));
 
   return res;
 }

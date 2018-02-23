@@ -13,7 +13,7 @@ class QxrdFileWatcherDriver : public QxrdDetectorDriver
 public:
   QxrdFileWatcherDriver(QString name,
                         QxrdFileWatcherPluginWPtr plugin,
-                        QxrdDetectorSettingsWPtr det,
+                        QxrdFileWatcherSettingsWPtr det,
                         QxrdExperimentWPtr expt,
                         QxrdAcqCommonWPtr acq);
   virtual ~QxrdFileWatcherDriver();
