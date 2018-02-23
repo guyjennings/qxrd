@@ -1389,11 +1389,6 @@ void QxrdExperiment::defaultWindowSettings()
                            "Main Window")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAcquisitionWindowSettings(
-                           "acquisitionWindowSettings",
-                           "Acquisition Window")));
-
-  appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdAnalysisWindowSettings(
                            "analysisWindowSettings",
                            "Analysis Window")));

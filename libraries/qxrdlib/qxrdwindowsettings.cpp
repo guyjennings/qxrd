@@ -65,7 +65,7 @@ QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
   return set;
 }
 
-QxrdMainWindowPtr QxrdWindowSettings::newWindow()
+QcepMainWindowPtr QxrdWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 

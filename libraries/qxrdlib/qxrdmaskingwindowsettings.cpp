@@ -20,7 +20,7 @@ void QxrdMaskingWindowSettings::initialize(QcepObjectWPtr parent)
   m_ImagePlotWidgetSettings -> initialize(sharedFromThis());
 }
 
-QxrdMainWindowPtr QxrdMaskingWindowSettings::newWindow()
+QcepMainWindowPtr QxrdMaskingWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 

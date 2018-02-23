@@ -15,7 +15,7 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
-  QxrdMainWindowPtr newWindow();
+  QcepMainWindowPtr newWindow();
 };
 
 Q_DECLARE_METATYPE(QxrdStartupWindowSettings*)

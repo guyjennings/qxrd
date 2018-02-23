@@ -22,17 +22,7 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
-  void openWindow();
-  void closeWindow();
-  virtual QxrdMainWindowPtr newWindow() = 0;
-
-  QxrdMainWindowPtr  window();
-
-  void readSettings(QSettings *settings);
-  void writeSettings(QSettings *settings);
-
 protected:
-  QxrdMainWindowPtr   m_Window;
   QxrdAppCommonWPtr   m_Application;
   QxrdExperimentWPtr  m_Experiment;
   QxrdAcqCommonWPtr   m_Acquisition;

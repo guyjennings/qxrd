@@ -12,7 +12,7 @@ void QxrdCalibrantWindowSettings::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 }
 
-QxrdMainWindowPtr QxrdCalibrantWindowSettings::newWindow()
+QcepMainWindowPtr QxrdCalibrantWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 

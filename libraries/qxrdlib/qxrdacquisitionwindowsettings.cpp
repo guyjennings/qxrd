@@ -16,7 +16,19 @@ void QxrdAcquisitionWindowSettings::initialize(QcepObjectWPtr parent)
   m_FileBrowserSettings -> initialize(sharedFromThis());
 }
 
-QxrdMainWindowPtr QxrdAcquisitionWindowSettings::newWindow()
+void QxrdAcquisitionWindowSettings::defaultWindowSettings()
+{
+  THREAD_CHECK;
+
+  inherited::defaultWindowSettings();
+
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdAcquisitionWindowSettings(
+                           "acquisitionWindowSettings",
+                           "Acquisition Window")));
+}
+
+QcepMainWindowPtr QxrdAcquisitionWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 

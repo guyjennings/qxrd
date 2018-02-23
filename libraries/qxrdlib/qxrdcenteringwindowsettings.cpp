@@ -26,7 +26,7 @@ void QxrdCenteringWindowSettings::initialize(QcepObjectWPtr parent)
   m_IntegratedPlotWidgetSettings -> initialize(sharedFromThis());
 }
 
-QxrdMainWindowPtr QxrdCenteringWindowSettings::newWindow()
+QcepMainWindowPtr QxrdCenteringWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 

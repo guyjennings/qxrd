@@ -13,7 +13,7 @@ void QxrdCalculatorWindowSettings::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 }
 
-QxrdMainWindowPtr QxrdCalculatorWindowSettings::newWindow()
+QcepMainWindowPtr QxrdCalculatorWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 

@@ -13,7 +13,7 @@ void QxrdAnalysisWindowSettings::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 }
 
-QxrdMainWindowPtr QxrdAnalysisWindowSettings::newWindow()
+QcepMainWindowPtr QxrdAnalysisWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 

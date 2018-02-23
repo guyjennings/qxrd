@@ -23,7 +23,7 @@ void QxrdIntegrationWindowSettings::initialize(QcepObjectWPtr parent)
   m_IntegratedPlotWidgetSettings -> initialize(sharedFromThis());
 }
 
-QxrdMainWindowPtr QxrdIntegrationWindowSettings::newWindow()
+QcepMainWindowPtr QxrdIntegrationWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 

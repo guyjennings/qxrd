@@ -49,32 +49,18 @@ public:
   void openFile(QString filePath);
   void openWatcher(QString pattern);
 
-  virtual void openStartupWindow() = 0;
-  virtual void closeStartupWindow() = 0;
-
   void openWelcomeWindow();
   void closeWelcomeWindow();
 
-  virtual QString applicationDescription() = 0;
-  virtual QIcon   applicationIcon() = 0;
-
-  virtual void openExperiment(QString path) = 0;
-  virtual void openRecentExperiment(QString path);
+  void openRecentExperiment(QString path);
   void appendRecentExperiment(QString path);
   void closeExperiment(QxrdExperimentWPtr expw);
 
 
   Q_INVOKABLE virtual void openWindow(QxrdMainWindowSettingsWPtr set);
 
-  virtual void readApplicationSettings() = 0;
-  virtual void writeApplicationSettings() = 0;
-
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
-
-  virtual void editGlobalPreferences() = 0;
-  virtual void createNewExperiment() = 0;
-  virtual void chooseExistingExperiment() = 0;
 
   virtual void doAboutQxrd();
   virtual void doOpenQXRDWebPage();
@@ -142,18 +128,6 @@ public:
   Q_PROPERTY(int    startDetectors READ get_StartDetectors WRITE set_StartDetectors STORED false)
   QCEP_INTEGER_PROPERTY(StartDetectors)
 
-  Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment)
-  QCEP_STRING_PROPERTY(CurrentExperiment)
-
-  Q_PROPERTY(QStringList recentExperiments READ get_RecentExperiments WRITE set_RecentExperiments)
-  QCEP_STRING_LIST_PROPERTY(RecentExperiments)
-
-  Q_PROPERTY(int recentExperimentsSize READ get_RecentExperimentsSize WRITE set_RecentExperimentsSize)
-  QCEP_INTEGER_PROPERTY(RecentExperimentsSize)
-
-  Q_PROPERTY(int experimentCount READ get_ExperimentCount WRITE set_ExperimentCount STORED false)
-  QCEP_INTEGER_PROPERTY(ExperimentCount)
-
   Q_PROPERTY(QString currentDirectory READ get_CurrentDirectory WRITE set_CurrentDirectory)
   QCEP_STRING_PROPERTY(CurrentDirectory)
 
@@ -162,9 +136,6 @@ public:
 
   Q_PROPERTY(int    messageWindowLines   READ get_MessageWindowLines WRITE set_MessageWindowLines)
   QCEP_INTEGER_PROPERTY(MessageWindowLines)
-
-  Q_PROPERTY(int    updateIntervalMsec   READ get_UpdateIntervalMsec WRITE set_UpdateIntervalMsec)
-  QCEP_INTEGER_PROPERTY(UpdateIntervalMsec)
 
   Q_PROPERTY(int lockerCount READ get_LockerCount WRITE set_LockerCount STORED false)
   QCEP_INTEGER_PROPERTY(LockerCount)
