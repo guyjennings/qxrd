@@ -17,6 +17,9 @@ class QXRD_EXPORT QxrdCalibrantWindow : public QxrdMainWindow, public Ui::QxrdCa
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set,
                                QString name,
@@ -24,6 +27,7 @@ public:
                                QxrdExperimentWPtr expt,
                                QxrdAcqCommonWPtr acqw,
                                QxrdProcessorWPtr procw);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdCalibrantWindow();
 
 public slots:

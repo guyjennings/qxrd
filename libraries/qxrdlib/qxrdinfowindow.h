@@ -22,6 +22,7 @@ public:
                           QxrdExperimentWPtr expt,
                           QxrdAcqCommonWPtr acqw,
                           QxrdProcessorWPtr procw);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdInfoWindow();
 
   void onProcessedImageAvailable(QcepDoubleImageDataPtr image,

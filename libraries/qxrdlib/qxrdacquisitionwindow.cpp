@@ -7,6 +7,7 @@
 #include <QTableView>
 #include <QDir>
 #include <QFileDialog>
+#include <QThread>
 
 QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr set,
                                              QString name,
@@ -14,9 +15,17 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
                                              QxrdExperimentWPtr expt,
                                              QxrdAcqCommonWPtr acqw,
                                              QxrdProcessorWPtr procw) :
-  QxrdMainWindow(name, app, expt, acqw, procw),
+  inherited(name, app, expt, acqw, procw),
   m_AcquisitionWindowSettings(set)
 {
+}
+
+void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
+{
+  GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
+
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
@@ -24,18 +33,19 @@ QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr s
   m_Splitter->setStretchFactor(0, 1);
   m_Splitter->setStretchFactor(1, 5);
 
-  m_DatasetBrowserView -> setExperiment(expt);
-
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
+    m_DatasetBrowserView -> setExperiment(exp);
+
     QcepDatasetModelPtr model(exp->dataset());
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
     QxrdAcquisitionWindowSettingsPtr settings(m_AcquisitionWindowSettings);
+    QxrdProcessorPtr                 procw(m_Processor);
 
-    if (settings) {
+    if (settings && procw) {
       m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, procw);
     }
 
@@ -117,7 +127,7 @@ QxrdAcquisitionWindow::~QxrdAcquisitionWindow()
 
 void QxrdAcquisitionWindow::changeEvent(QEvent *e)
 {
-  QMainWindow::changeEvent(e);
+  inherited::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
     retranslateUi(this);

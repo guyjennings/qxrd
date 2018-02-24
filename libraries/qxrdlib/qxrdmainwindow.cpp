@@ -24,6 +24,11 @@ QxrdMainWindow::QxrdMainWindow(QString name, QxrdAppCommonWPtr app, QxrdExperime
 {
 }
 
+void QxrdMainWindow::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}
+
 void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
 {
   inherited::setupMenus(file, edit, window);

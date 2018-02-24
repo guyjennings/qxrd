@@ -2,6 +2,7 @@
 #include "qxrdexperiment.h"
 #include "qxrdwatcherwindowsettings.h"
 #include "qxrdprocessor.h"
+#include <QThread>
 
 QxrdWatcherWindow::QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
                                      QString name,
@@ -10,10 +11,18 @@ QxrdWatcherWindow::QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
                                      QxrdAcqCommonWPtr acqw,
                                      QxrdProcessorWPtr procw,
                                      QxrdWatcherWPtr watcher) :
-  QxrdMainWindow(name, app, expt, acqw, procw),
+  inherited(name, app, expt, acqw, procw),
   m_WatcherWindowSettings(set),
   m_Watcher(watcher)
 {
+}
+
+void QxrdWatcherWindow::initialize(QcepObjectWPtr parent)
+{
+  GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
+
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
@@ -21,11 +30,11 @@ QxrdWatcherWindow::QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
   m_Splitter->setStretchFactor(0, 1);
   m_Splitter->setStretchFactor(1, 5);
 
-  m_DatasetBrowserView -> setExperiment(expt);
-
   QxrdExperimentPtr exp(m_Experiment);
 
-  if (exp) {
+  if (exp) {    
+    m_DatasetBrowserView -> setExperiment(exp);
+
     QcepDatasetModelPtr model(exp->dataset());
 
     m_DatasetBrowserView -> setDatasetModel(model);
@@ -49,7 +58,7 @@ QxrdWatcherWindow::~QxrdWatcherWindow()
 
 void QxrdWatcherWindow::changeEvent(QEvent *e)
 {
-  QMainWindow::changeEvent(e);
+  inherited::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
     retranslateUi(this);

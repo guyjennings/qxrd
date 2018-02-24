@@ -2,11 +2,20 @@
 #include "ui_qxrdhelpwindow.h"
 #include "qxrdtodolist.h"
 #include <QSortFilterProxyModel>
+#include <QThread>
 
 QxrdHelpWindow::QxrdHelpWindow(QxrdHelpWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
-  QxrdMainWindow(name, app, expt, acqw, procw),
+  inherited(name, app, expt, acqw, procw),
   m_HelpWindowSettings(set)
 {
+}
+
+void QxrdHelpWindow::initialize(QcepObjectWPtr parent)
+{
+  GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
+
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
@@ -39,7 +48,7 @@ QxrdHelpWindow::~QxrdHelpWindow()
 
 void QxrdHelpWindow::changeEvent(QEvent *e)
 {
-  QMainWindow::changeEvent(e);
+  inherited::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
     retranslateUi(this);

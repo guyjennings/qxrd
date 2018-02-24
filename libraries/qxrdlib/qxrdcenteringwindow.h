@@ -11,6 +11,9 @@ class QXRD_EXPORT QxrdCenteringWindow : public QxrdMainWindow, public Ui::QxrdCe
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
                                QString name,
@@ -18,6 +21,7 @@ public:
                                QxrdExperimentWPtr expt,
                                QxrdAcqCommonWPtr acqw,
                                QxrdProcessorWPtr procw);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdCenteringWindow();
 
 protected:

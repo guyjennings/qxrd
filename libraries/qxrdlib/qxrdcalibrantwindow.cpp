@@ -8,11 +8,20 @@
 #include "qxrdcalibrant.h"
 #include "qxrdcenterfinder.h"
 #include <QClipboard>
+#include <QThread>
 
 QxrdCalibrantWindow::QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
-  QxrdMainWindow(name, app, expt, acqw, procw),
+  inherited(name, app, expt, acqw, procw),
   m_CalibrantWindowSettings(set)
 {
+}
+
+void QxrdCalibrantWindow::initialize(QcepObjectWPtr parent)
+{
+  GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
+
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
@@ -74,7 +83,7 @@ QxrdCalibrantWindow::~QxrdCalibrantWindow()
 
 void QxrdCalibrantWindow::changeEvent(QEvent *e)
 {
-  QMainWindow::changeEvent(e);
+  inherited::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
     retranslateUi(this);

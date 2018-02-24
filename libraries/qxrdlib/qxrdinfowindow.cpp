@@ -1,5 +1,6 @@
 #include "qxrdinfowindow.h"
 #include "qxrdappcommon.h"
+#include <QThread>
 
 QxrdInfoWindow::QxrdInfoWindow(QString name,
                                QxrdAppCommonWPtr app,
@@ -8,13 +9,21 @@ QxrdInfoWindow::QxrdInfoWindow(QString name,
                                QxrdProcessorWPtr procw) :
   inherited(name, app, expt, acqw, procw)
 {
+}
+
+void QxrdInfoWindow::initialize(QcepObjectWPtr parent)
+{
+  GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
+
   setupUi(this);
 
   m_ObjectTreeModel =
-      new QcepObjectTreeModel(this, app);
+      new QcepObjectTreeModel(this, m_Application);
 
   m_ObjectPropertiesModel =
-      new QcepObjectPropertiesModel(this, app);
+      new QcepObjectPropertiesModel(this, m_Application);
 
   m_ObjectView     -> setModel(m_ObjectTreeModel);
   m_PropertiesView -> setModel(m_ObjectPropertiesModel);
@@ -58,7 +67,7 @@ QxrdInfoWindow::~QxrdInfoWindow()
 
 void QxrdInfoWindow::changeEvent(QEvent *e)
 {
-  QMainWindow::changeEvent(e);
+  inherited::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
     retranslateUi(this);

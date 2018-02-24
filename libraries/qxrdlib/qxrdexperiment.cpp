@@ -955,6 +955,8 @@ void QxrdExperiment::readExperimentSettings()
   }
 
   prop_IsReading()->incValue(-1);
+
+  splashMessage("Experiment loaded");
 }
 
 void QxrdExperiment::readSettings(QSettings *settings)

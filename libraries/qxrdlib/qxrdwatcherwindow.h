@@ -11,6 +11,9 @@ class QXRD_EXPORT QxrdWatcherWindow : public QxrdMainWindow, public Ui::QxrdWatc
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
                              QString name,
@@ -19,6 +22,7 @@ public:
                              QxrdAcqCommonWPtr acqw,
                              QxrdProcessorWPtr procw,
                              QxrdWatcherWPtr watcher);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdWatcherWindow();
 
 protected:

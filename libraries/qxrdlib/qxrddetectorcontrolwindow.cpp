@@ -25,15 +25,19 @@ QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          a
                                                      QxrdDetectorSettingsWPtr  det,
                                                      QxrdProcessorWPtr         proc,
                                                      QWidget                  * /*parent*/) :
-  QxrdMainWindow("detector", appl, exp, acq, proc),
+  inherited("detector", appl, exp, acq, proc),
   m_Experiment(exp),
   m_Acquisition(acq),
   m_Detector(det),
   m_Processor(proc)
 {
-  //TODO: check args are non-null...
+}
 
+void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
+{
   GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
 
   setupUi(this);
 

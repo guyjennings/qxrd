@@ -257,6 +257,8 @@ void QxrdApplication::openStartupWindow()
         qSharedPointerDynamicCast<QxrdStartupWindow>(
           m_StartupWindowSettings -> newWindow());
 
+    m_StartupWindow -> initialize(sharedFromThis());
+
     m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrd-icon-256x256.png"));
     m_StartupWindow -> setApplicationDescription(
           "Data Acquisition for 2-D XRay Detectors\n"
@@ -734,6 +736,8 @@ void QxrdApplication::writeDefaultSettings()
 
 void QxrdApplication::createNewExperiment()
 {
+  splashMessage("===== Opening new experiment");
+
   QxrdExperimentThreadPtr expthr =
       QxrdExperimentThread::newExperimentThread(
         "",
@@ -772,7 +776,7 @@ void QxrdApplication::openExperiment(QString path)
           settings,
           QxrdExperiment::AcquisitionAllowed);
 
-    printMessage(tr("===== Open Experiment %1").arg(path));
+    splashMessage(tr("===== Opening Experiment %1").arg(path));
 
     openedExperiment(expthr);
   }

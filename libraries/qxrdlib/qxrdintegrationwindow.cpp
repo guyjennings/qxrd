@@ -3,6 +3,7 @@
 #include "qxrdintegrator.h"
 #include "qxrdprocessor.h"
 #include "qxrdintegrationwindowsettings.h"
+#include <QThread>
 
 QxrdIntegrationWindow::QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr set,
                                              QString name,
@@ -10,9 +11,17 @@ QxrdIntegrationWindow::QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr s
                                              QxrdExperimentWPtr expt,
                                              QxrdAcqCommonWPtr acqw,
                                              QxrdProcessorWPtr procw) :
-  QxrdMainWindow(name, app, expt, acqw, procw),
+  inherited(name, app, expt, acqw, procw),
   m_IntegrationWindowSettings(set)
 {
+}
+
+void QxrdIntegrationWindow::initialize(QcepObjectWPtr parent)
+{
+  GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
+
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
@@ -75,18 +84,18 @@ QxrdIntegrationWindow::QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr s
     onEnableAbsorptionChanged(integ -> get_EnableAbsorptionCorrections());
   }
 
-  m_DatasetBrowserView -> setExperiment(expt);
-
   if (exp) {
+    m_DatasetBrowserView -> setExperiment(exp);
+
     QcepDatasetModelPtr model(exp->dataset());
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
     QxrdIntegrationWindowSettingsPtr settings(m_IntegrationWindowSettings);
 
-    if (settings) {
-      m_FileBrowserWidget     -> initialize(settings->fileBrowserSettings(), exp, procw);
-      m_ImagePlotWidget       -> initialize(settings->imagePlotWidgetSettings(), procw);
+    if (settings && proc) {
+      m_FileBrowserWidget     -> initialize(settings->fileBrowserSettings(), exp, proc);
+      m_ImagePlotWidget       -> initialize(settings->imagePlotWidgetSettings(), proc);
       m_IntegratedPlotWigdget -> initialize(settings->integratedPlotWidgetSettings());
     }
   }
@@ -98,7 +107,7 @@ QxrdIntegrationWindow::~QxrdIntegrationWindow()
 
 void QxrdIntegrationWindow::changeEvent(QEvent *e)
 {
-  QMainWindow::changeEvent(e);
+  inherited::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
     retranslateUi(this);

@@ -11,6 +11,9 @@ class QXRD_EXPORT QxrdHelpWindow : public QxrdMainWindow, public Ui::QxrdHelpWin
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdHelpWindow(QxrdHelpWindowSettingsWPtr set,
                           QString name,
@@ -18,6 +21,7 @@ public:
                           QxrdExperimentWPtr expt,
                           QxrdAcqCommonWPtr acqw,
                           QxrdProcessorWPtr procw);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdHelpWindow();
 
 protected:

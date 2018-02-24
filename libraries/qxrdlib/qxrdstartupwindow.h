@@ -19,6 +19,7 @@ public:
   explicit QxrdStartupWindow(QxrdStartupWindowSettingsWPtr set,
                              QString name,
                              QxrdAppCommonWPtr app);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdStartupWindow();
 
   void setApplicationIcon        (QIcon     icon);
@@ -33,7 +34,8 @@ public slots:
   void onMessageWindowLinesChanged(int newVal);
 
 private:
-  QDateTime m_LastDateTime;
+  QxrdStartupWindowSettingsWPtr m_StartupWindowSettings;
+  QDateTime                     m_LastDateTime;
 };
 
 #endif // QXRDSTARTUPWINDOW_H

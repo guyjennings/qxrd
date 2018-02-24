@@ -20,6 +20,9 @@ class QXRD_EXPORT QxrdDetectorControlWindow : public QxrdMainWindow, public Ui::
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdDetectorControlWindow(QxrdAppCommonPtr          appl,
                                      QxrdExperimentWPtr        exp,
@@ -27,6 +30,7 @@ public:
                                      QxrdDetectorSettingsWPtr  det,
                                      QxrdProcessorWPtr         proc,
                                      QWidget                  *parent = 0);
+  void initialize(QcepObjectWPtr parent);
   virtual ~QxrdDetectorControlWindow();
 
 public slots:

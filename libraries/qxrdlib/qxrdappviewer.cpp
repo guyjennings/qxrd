@@ -45,6 +45,8 @@ void QxrdAppViewer::openStartupWindow()
         qSharedPointerDynamicCast<QxrdStartupWindow>(
           m_StartupWindowSettings -> newWindow());
 
+    m_StartupWindow -> initialize(sharedFromThis());
+
     m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrdviewer-icon-128x128.png"));
     m_StartupWindow -> setApplicationDescription(
           "Data Viewer for 2-D XRay Detector data\n"

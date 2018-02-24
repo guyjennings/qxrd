@@ -110,6 +110,13 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   if (app && qcepDebug(DEBUG_APP)) {
     app->printMessage("QxrdWindow::QxrdWindow");
   }
+}
+
+void QxrdWindow::initialize(QcepObjectWPtr parent)
+{
+  GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
 
   setupUi(this);
 
@@ -143,11 +150,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   }
 
   setAttribute(Qt::WA_DeleteOnClose, false);
-}
-
-void QxrdWindow::initialize(QcepObjectWPtr parent)
-{
-  inherited::initialize(parent);
 
   QxrdApplicationPtr    app(qSharedPointerDynamicCast<QxrdApplication>(m_Application));
   QxrdExperimentPtr     expt(m_Experiment);

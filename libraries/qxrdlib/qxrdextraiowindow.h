@@ -15,6 +15,9 @@ class QXRD_EXPORT QxrdExtraIOWindow : public QxrdMainWindow, public Ui::QxrdExtr
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
                              QString name,
@@ -22,6 +25,7 @@ public:
                              QxrdExperimentWPtr expt,
                              QxrdAcqCommonWPtr acqw,
                              QxrdProcessorWPtr procw);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdExtraIOWindow();
 
 protected:

@@ -14,6 +14,9 @@ class QXRD_EXPORT QxrdIntegrationWindow : public QxrdMainWindow, public Ui::Qxrd
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr set,
                                  QString name,
@@ -21,6 +24,7 @@ public:
                                  QxrdExperimentWPtr expt,
                                  QxrdAcqCommonWPtr acqw,
                                  QxrdProcessorWPtr procw);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdIntegrationWindow();
 
 protected:

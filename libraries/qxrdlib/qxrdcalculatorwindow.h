@@ -11,6 +11,9 @@ class QXRD_EXPORT QxrdCalculatorWindow : public QxrdMainWindow, public Ui::QxrdC
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdCalculatorWindow(QxrdCalculatorWindowSettingsWPtr set,
                                 QString name,
@@ -18,6 +21,7 @@ public:
                                 QxrdExperimentWPtr expt,
                                 QxrdAcqCommonWPtr acqw,
                                 QxrdProcessorWPtr procw);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdCalculatorWindow();
 
 protected:

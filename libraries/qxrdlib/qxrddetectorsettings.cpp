@@ -417,6 +417,10 @@ void QxrdDetectorSettings::openControlWindow()
                                         qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis()),
                                         m_Processor, NULL));
 
+    if (m_DetectorControlWindow) {
+      m_DetectorControlWindow -> initialize(sharedFromThis());
+    }
+
     QxrdDetectorControlWindowSettingsPtr set(detectorControlWindowSettings());
 
     if (set && m_DetectorControlWindow) {

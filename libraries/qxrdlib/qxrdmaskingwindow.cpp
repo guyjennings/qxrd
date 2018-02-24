@@ -5,6 +5,7 @@
 #include "qxrdmaskstack.h"
 #include "qxrdzingerdialog.h"
 #include "qxrdprocessor.h"
+#include <QThread>
 
 QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
                                      QString name,
@@ -12,9 +13,17 @@ QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
                                      QxrdExperimentWPtr expt,
                                      QxrdAcqCommonWPtr acqw,
                                      QxrdProcessorWPtr procw) :
-  QxrdMainWindow(name, app, expt, acqw, procw),
+  inherited(name, app, expt, acqw, procw),
   m_MaskingWindowSettings(set)
 {
+}
+
+void QxrdMaskingWindow::initialize(QcepObjectWPtr parent)
+{
+  GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
+
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
@@ -23,18 +32,19 @@ QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
   m_Splitter->setStretchFactor(1, 5);
   m_Splitter->setStretchFactor(2, 1);
 
-  m_DatasetBrowserView -> setExperiment(expt);
-
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
+    m_DatasetBrowserView -> setExperiment(exp);
+
     QcepDatasetModelPtr model(exp->dataset());
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
     QxrdMaskingWindowSettingsPtr settings(m_MaskingWindowSettings);
+    QxrdProcessorPtr             procw(m_Processor);
 
-    if (settings) {
+    if (settings && procw) {
       m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, procw);
       m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings(), procw);
     }
@@ -131,7 +141,7 @@ QxrdMaskingWindow::~QxrdMaskingWindow()
 
 void QxrdMaskingWindow::changeEvent(QEvent *e)
 {
-  QMainWindow::changeEvent(e);
+  inherited::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
     retranslateUi(this);

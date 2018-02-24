@@ -15,6 +15,9 @@ class QXRD_EXPORT QxrdAcquisitionWindow : public QxrdMainWindow, public Ui::Qxrd
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr set,
                                  QString name,
@@ -22,6 +25,7 @@ public:
                                  QxrdExperimentWPtr expt,
                                  QxrdAcqCommonWPtr acqw,
                                  QxrdProcessorWPtr  procw);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdAcquisitionWindow();
 
 private slots:

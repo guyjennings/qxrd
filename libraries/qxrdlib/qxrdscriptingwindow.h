@@ -13,6 +13,9 @@ class QXRD_EXPORT QxrdScriptingWindow : public QxrdMainWindow, public Ui::QxrdSc
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdScriptingWindow(QxrdScriptingWindowSettingsWPtr set,
                                QString name,
@@ -20,6 +23,7 @@ public:
                                QxrdExperimentWPtr expt,
                                QxrdAcqCommonWPtr acqw,
                                QxrdProcessorWPtr procw);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdScriptingWindow();
 
 signals:

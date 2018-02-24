@@ -25,6 +25,7 @@ public:
                           QxrdExperimentWPtr expt,
                           QxrdAcqCommonWPtr acqw,
                           QxrdProcessorWPtr procw);
+  void initialize(QcepObjectWPtr parent);
 
   void setupMenus(QMenu *file, QMenu *edit, QMenu *window);
 

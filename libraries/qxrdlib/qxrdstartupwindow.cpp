@@ -11,8 +11,17 @@ QxrdStartupWindow::QxrdStartupWindow(QxrdStartupWindowSettingsWPtr set, QString 
             app,
             QxrdExperimentWPtr(),
             QxrdAcqCommonWPtr(),
-            QxrdProcessorWPtr())
+            QxrdProcessorWPtr()),
+  m_StartupWindowSettings(set)
 {
+}
+
+void QxrdStartupWindow::initialize(QcepObjectWPtr parent)
+{
+  GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
+
   setupUi(this);
 
   QGridLayout *gl = qobject_cast<QGridLayout*>(m_Layout -> layout());
@@ -25,7 +34,7 @@ QxrdStartupWindow::QxrdStartupWindow(QxrdStartupWindowSettingsWPtr set, QString 
     gl -> setColumnStretch(1, 1);
   }
 
-  QxrdStartupWindowSettingsPtr s(set);
+  QxrdStartupWindowSettingsPtr s(m_StartupWindowSettings);
 
   if (s) {
     QSizeF sz = s->get_WindowRect().size();
@@ -45,7 +54,7 @@ QxrdStartupWindow::QxrdStartupWindow(QxrdStartupWindowSettingsWPtr set, QString 
         )
     );
 
-    QxrdAppCommonPtr a(app);
+    QxrdAppCommonPtr a(m_Application);
 
     if (a) {
       connect(a->prop_MessageWindowLines(), &QcepIntProperty::valueChanged,
@@ -76,6 +85,7 @@ void QxrdStartupWindow::appendSplashMessage(QString msg, QDateTime dt)
 
   appendMessage(msg, dt);
 
+  activateWindow();
   raise();
 }
 

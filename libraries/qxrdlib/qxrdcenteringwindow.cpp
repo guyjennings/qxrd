@@ -3,6 +3,7 @@
 #include "qxrdcenteringwindowsettings.h"
 #include "qxrdprocessor.h"
 #include "qxrdcenterfinder.h"
+#include <QThread>
 
 QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
                                          QString name,
@@ -10,9 +11,17 @@ QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
                                          QxrdExperimentWPtr expt,
                                          QxrdAcqCommonWPtr acqw,
                                          QxrdProcessorWPtr procw) :
-  QxrdMainWindow(name, app, expt, acqw, procw),
+  inherited(name, app, expt, acqw, procw),
   m_CenteringWindowSettings(set)
 {
+}
+
+void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
+{
+  GUI_THREAD_CHECK;
+
+  inherited::initialize(parent);
+
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
@@ -21,23 +30,23 @@ QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
   m_Splitter->setStretchFactor(1, 5);
   m_Splitter->setStretchFactor(2, 1);
 
-  m_DatasetBrowserView -> setExperiment(expt);
-
   QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
+    m_DatasetBrowserView -> setExperiment(exp);
+
     QcepDatasetModelPtr model(exp->dataset());
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdProcessorPtr     proc(procw);
+    QxrdProcessorPtr     proc(m_Processor);
     QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
 
     QxrdCenteringWindowSettingsPtr settings(m_CenteringWindowSettings);
 
     if (settings) {
-      m_FileBrowserWidget    -> initialize(settings->fileBrowserSettings(), exp, procw);
-      m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings(), procw);
+      m_FileBrowserWidget    -> initialize(settings->fileBrowserSettings(), exp, proc);
+      m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings(), proc);
       m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings(), cf);
       m_IntegratedPlotWidget -> initialize(settings->integratedPlotWidgetSettings());
     }
@@ -87,7 +96,7 @@ QxrdCenteringWindow::~QxrdCenteringWindow()
 
 void QxrdCenteringWindow::changeEvent(QEvent *e)
 {
-  QMainWindow::changeEvent(e);
+  inherited::changeEvent(e);
   switch (e->type()) {
   case QEvent::LanguageChange:
     retranslateUi(this);

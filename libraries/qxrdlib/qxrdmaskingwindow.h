@@ -11,6 +11,9 @@ class QXRD_EXPORT QxrdMaskingWindow : public QxrdMainWindow, public Ui::QxrdMask
 {
   Q_OBJECT
 
+private:
+  typedef QxrdMainWindow inherited;
+
 public:
   explicit QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
                              QString name,
@@ -18,6 +21,7 @@ public:
                              QxrdExperimentWPtr expt,
                              QxrdAcqCommonWPtr acqw,
                              QxrdProcessorWPtr procw);
+  void initialize(QcepObjectWPtr parent);
   ~QxrdMaskingWindow();
 
 private:
