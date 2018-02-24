@@ -168,7 +168,6 @@ SOURCES += qxrdlib.cpp \
     qxrdtodolistitem.cpp \
     qxrddetectorimageplot.cpp \
     qxrdroitypedelegate.cpp \
-    qxrdacquisitionscalerdialog.cpp \
     qxrdacquisitionscalermodel.cpp \
     qxrdzingerdialog.cpp \
     qxrdpolartransform.cpp \
@@ -721,10 +720,8 @@ HEADERS += TODO.h \
     qxrdimageplotsettings-ptr.h \
     qxrddetectorimageplot.h \
     qxrdroitypedelegate.h \
-    qxrdacquisitionscalerdialog.h \
     qxrdacquisitionscalermodel.h \
     qxrdacquisitionscalermodel-ptr.h \
-    qxrdacquisitionscalerdialog-ptr.h \
     qxrdzingerdialog.h \
     qxrdpolartransform.h \
     qxrdpolartransformdialog.h \
@@ -828,7 +825,6 @@ FORMS += qxrdwindow.ui \
     qxrduserscriptdialog.ui \
     qxrdscriptdialog.ui \
     qxrddetectorcontrolwindow.ui \
-    qxrdacquisitionscalerdialog.ui \
     qxrdzingerdialog.ui \
     qxrdpolartransformdialog.ui \
     qxrdpolarnormalizationdialog.ui \
