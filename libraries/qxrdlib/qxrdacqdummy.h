@@ -25,8 +25,8 @@ public:
 
   int detectorCount() const;
   QxrdDetectorSettingsPtr detector(int i) const;
-  void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
-  QxrdNIDAQPluginInterface* nidaqPlugin() const;
+  void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
+  QxrdNIDAQWPtr nidaqPlugin() const;
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
   QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;

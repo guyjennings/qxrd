@@ -37,6 +37,7 @@ QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
     m_Debug(this,"debug", 0, "Debug Level"),
     m_OpenNew(this,"openNew", 0, "Open a new experiment"),
     m_FreshStart(this,"freshStart", 0, "Do a Fresh Start"),
+    m_LoadPlugins(this, "loadPlugins", 1, "Load plugins"),
     m_StartDetectors(this, "startDetectors", 1, "Start Detectors when opening experiments"),
     m_CurrentDirectory(this, "currentDirectory", QDir::homePath(), "Current Directory"),
     //  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
@@ -288,6 +289,11 @@ void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
     parser.addOption(pluginDirOption);
   }
 
+  QCommandLineOption noPluginOption("noplugins", "Don't load plugins");
+  if (wantFullOptions) {
+    parser.addOption(noPluginOption);
+  }
+
   parser.setSingleDashWordOptionMode(
         QCommandLineParser::ParseAsLongOptions);
 
@@ -412,6 +418,10 @@ void QxrdAppCommon::parseCommandLine(bool wantFullOptions)
 
       appendPlugin(d.absolutePath());
     }
+  }
+
+  if (wantFullOptions && parser.isSet(noPluginOption)) {
+    set_LoadPlugins(false);
   }
 
   QStringList files(parser.positionalArguments());

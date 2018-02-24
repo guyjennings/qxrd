@@ -91,8 +91,6 @@ SOURCES += qxrdlib.cpp \
     qxrdresultserializer.cpp \
     qxrdhistogramdata.cpp \
     qxrdexposuretimespinner.cpp \
-    qxrddetectorplugininterface.cpp \
-    qxrdnidaqplugininterface.cpp \
     qxrddetectorgeometry.cpp \
     qxrdgeneratetestimage.cpp \
     qxrdsimpleserver.cpp \
@@ -357,7 +355,9 @@ SOURCES += qxrdlib.cpp \
     qxrdacqcommon.cpp \
     qxrdacqdummy.cpp \
     qxrdstartupwindow.cpp \
-    qxrdstartupwindowsettings.cpp
+    qxrdstartupwindowsettings.cpp \
+    qxrddetectorplugin.cpp \
+    qxrdnidaq.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -369,7 +369,6 @@ HEADERS += qxrdlib.h\
     commands/specremote/qxrdspecremotecommand.h \
     qxrddetectorinterface.h \
     qxrddetectorinterface-ptr.h \
-    qxrddetectorplugininterface-ptr.h \
     qxrdanalysiswindow.h \
     qxrdcenteringwindow.h \
     qxrdintegrationwindow.h \
@@ -562,7 +561,11 @@ HEADERS += qxrdlib.h\
     qxrdstartupwindow.h \
     qxrdstartupwindow-ptr.h \
     qxrdstartupwindowsettings.h \
-    qxrdstartupwindowsettings-ptr.h
+    qxrdstartupwindowsettings-ptr.h \
+    qxrddetectorplugin.h \
+    qxrddetectorplugin-ptr.h \
+    qxrdnidaq.h \
+    qxrdnidaq-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -617,9 +620,6 @@ HEADERS += TODO.h \
     qxrdhistogramdata.h \
     qxrdhistogramdata-ptr.h \
     qxrdexposuretimespinner.h \
-    qxrddetectorplugininterface.h \
-    qxrdnidaqplugininterface.h \
-    qxrdnidaqplugininterface-ptr.h \
     qxrddetectorgeometry.h \
     qxrddetectorgeometry-ptr.h \
     qxrdgeneratetestimage.h \

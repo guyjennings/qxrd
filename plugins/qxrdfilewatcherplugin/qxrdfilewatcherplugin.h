@@ -2,17 +2,18 @@
 #define QXRDSIMULATEDDETECTORPLUGIN_H
 
 #include "qcepobject.h"
-#include "qxrddetectorplugininterface.h"
 #include <QTimer>
+#include "qxrddetectorplugin.h"
 
-class QxrdFileWatcherPlugin : public QcepObject, public QxrdDetectorPluginInterface
+class QxrdFileWatcherPlugin :
+    public QxrdDetectorPlugin
 {
   Q_OBJECT
-  Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "filewatcher.json")
-  Q_INTERFACES(QxrdDetectorPluginInterface)
+  Q_PLUGIN_METADATA(IID DetectorPlugin_iid FILE "filewatcher.json")
+  Q_INTERFACES(QxrdDetectorPlugin)
 
 private:
-  typedef QcepObject inherited;
+  typedef QxrdDetectorPlugin inherited;
 
 public:
     QxrdFileWatcherPlugin();

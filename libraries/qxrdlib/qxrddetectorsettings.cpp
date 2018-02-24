@@ -18,7 +18,7 @@
 #include "qxrddexelasettings.h"
 #include "qxrdexperiment.h"
 #include "qxrdapplication.h"
-#include "qxrddetectorplugininterface.h"
+#include "qxrddetectorplugin.h"
 #include <QThread>
 
 QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
@@ -591,7 +591,7 @@ QxrdDetectorDriverPtr QxrdDetectorSettings::createDetector(
 {
   QxrdDetectorDriverPtr res;
 
-  QxrdDetectorPluginInterfacePtr plugin(m_DetectorPlugin);
+  QxrdDetectorPluginPtr plugin(m_DetectorPlugin);
 
   if (plugin) {
     res = plugin->createDetector(name, det, expt, acq);

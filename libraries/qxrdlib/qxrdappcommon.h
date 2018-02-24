@@ -125,6 +125,9 @@ public:
   Q_PROPERTY(int    freshStart         READ get_FreshStart WRITE set_FreshStart STORED false)
   QCEP_INTEGER_PROPERTY(FreshStart)
 
+  Q_PROPERTY(int    loadPlugins    READ get_LoadPlugins WRITE set_LoadPlugins STORED false)
+  QCEP_INTEGER_PROPERTY(LoadPlugins)
+
   Q_PROPERTY(int    startDetectors READ get_StartDetectors WRITE set_StartDetectors STORED false)
   QCEP_INTEGER_PROPERTY(StartDetectors)
 

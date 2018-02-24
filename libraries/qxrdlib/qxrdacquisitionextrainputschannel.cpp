@@ -1,7 +1,7 @@
 #include "qxrdacquisitionextrainputschannel.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qcepmutexlocker.h"
-#include "qxrdnidaqplugininterface.h"
+#include "qxrdnidaq.h"
 
 QxrdAcquisitionExtraInputsChannelPtr QxrdAcquisitionExtraInputsChannel::newAcquisitionExtraInputsChannel(int chnum)
 {
@@ -79,7 +79,7 @@ QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()
   QxrdAcquisitionExtraInputsPtr xtra(extraInputs());
 
   if (xtra) {
-    QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
+    QxrdNIDAQPtr nidaq(xtra->nidaqPlugin());
 
     if (nidaq) {
       return nidaq->readContinuousInputChannel(get_PhysicalChannel());
@@ -96,7 +96,7 @@ int QxrdAcquisitionExtraInputsChannel::startIndex()
   QxrdAcquisitionExtraInputsPtr xtra(extraInputs());
 
   if (xtra) {
-    QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
+    QxrdNIDAQPtr nidaq(xtra->nidaqPlugin());
 
     if (nidaq) {
       int nSamples = nidaq->countContinuousInput();
@@ -120,7 +120,7 @@ int QxrdAcquisitionExtraInputsChannel::endIndex()
   QxrdAcquisitionExtraInputsPtr xtra(extraInputs());
 
   if (xtra) {
-    QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
+    QxrdNIDAQPtr nidaq(xtra->nidaqPlugin());
 
     if (nidaq) {
       int nSamples = nidaq->countContinuousInput();

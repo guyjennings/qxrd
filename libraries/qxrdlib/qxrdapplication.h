@@ -11,11 +11,10 @@
 #include "qxrdexperiment.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
-#include "qxrdnidaqplugininterface.h"
-#include "qxrdnidaqplugininterface-ptr.h"
-#include "qxrddetectorplugininterface-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qxrdplugininfomodel-ptr.h"
+#include "qxrdnidaq-ptr.h"
+#include "qxrddetectorplugin-ptr.h"
 
 class QXRD_EXPORT QxrdApplication : public QxrdAppCommon
 {
@@ -34,14 +33,14 @@ public:
 
   void loadPlugins();
 
-  QxrdNIDAQPluginInterface *nidaqPlugin();
+  QxrdNIDAQPtr nidaqPlugin();
 //  QxrdDetectorPluginInterface *simulatedDetectorPlugin();
 //  QxrdDetectorPluginInterfacePtr perkinElmerDetectorPlugin();
 //  QxrdDetectorPluginInterfacePtr dexelaDetectorPlugin();
 //  QxrdDetectorPluginInterfacePtr pilatusDetectorPlugin();
 //  QxrdDetectorPluginInterfacePtr areaDetectorPlugin();
 //  QxrdDetectorPluginInterfacePtr fileWatcherPlugin();
-  QxrdDetectorPluginInterface *detectorPlugin(int detType);
+  QxrdDetectorPluginPtr detectorPlugin(int detType);
 
   bool event(QEvent *ev);
 
@@ -106,13 +105,13 @@ private:
   QcepObjectNamer                 m_ObjectNamer;
   QTimer                          m_AutoSaveTimer;
 
-  QObject                        *m_NIDAQPlugin;
-  QObject                        *m_SimulatedDetectorPlugin;
-  QObject                        *m_PerkinElmerDetectorPlugin;
-  QObject                        *m_DexelaPlugin;
-  QObject                        *m_PilatusDetectorPlugin;
-  QObject                        *m_AreaDetectorPlugin;
-  QObject                        *m_FileWatcherPlugin;
+  QxrdNIDAQPtr                    m_NIDAQPlugin;
+  QxrdDetectorPluginPtr           m_SimulatedDetectorPlugin;
+  QxrdDetectorPluginPtr           m_PerkinElmerDetectorPlugin;
+  QxrdDetectorPluginPtr           m_DexelaPlugin;
+  QxrdDetectorPluginPtr           m_PilatusDetectorPlugin;
+  QxrdDetectorPluginPtr           m_AreaDetectorPlugin;
+  QxrdDetectorPluginPtr           m_FileWatcherPlugin;
 
 //  QxrdResponseTimer              *m_ResponseTimer;
 

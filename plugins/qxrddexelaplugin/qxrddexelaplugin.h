@@ -2,17 +2,18 @@
 #define QXRDDEXELAPLUGIN_H
 
 #include "qcepobject.h"
-#include "qxrddetectorplugininterface.h"
 #include "BusScanner.h"
+#include "qxrddetectorplugin.h"
 
-class QxrdDexelaPlugin : public QcepObject, public QxrdDetectorPluginInterface
+class QxrdDexelaPlugin :
+    public QxrdDetectorPlugin
 {
   Q_OBJECT
-  Q_PLUGIN_METADATA(IID DetectorPluginInterface_iid FILE "dexela.json")
-  Q_INTERFACES(QxrdDetectorPluginInterface)
+  Q_PLUGIN_METADATA(IID DetectorPlugin_iid FILE "dexela.json")
+  Q_INTERFACES(QxrdDetectorPlugin)
 
 private:
-  typedef QcepObject inherited;
+  typedef QxrdDetectorPlugin inherited;
 
 public:
   QxrdDexelaPlugin();

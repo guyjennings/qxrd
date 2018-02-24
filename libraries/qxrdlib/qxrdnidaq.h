@@ -1,23 +1,24 @@
-#ifndef QXRDNIDAQPLUGININTERFACE_H
-#define QXRDNIDAQPLUGININTERFACE_H
+#ifndef QXRDNIDAQ_H
+#define QXRDNIDAQ_H
 
 #include "qxrdlib_global.h"
-#include "qcepmacros.h"
-#include <QtPlugin>
-#include "qcepobject-ptr.h"
+#include "qcepobject.h"
 
-class QXRD_EXPORT QxrdNIDAQPluginInterface
+class QXRD_EXPORT QxrdNIDAQ : public QcepObject
 {
-public:
-  virtual ~QxrdNIDAQPluginInterface() {}
+  Q_OBJECT
+
+private:
+  typedef QcepObject inherited;
 
 public:
+  QxrdNIDAQ(QString name);
+
   virtual QString name() const = 0;
   virtual void initialize(QcepObjectWPtr parent) = 0;
 
   virtual void setErrorOutput(QObject *errors) = 0;
 
-//  virtual void setAnalogChannel(int chan) = 0;
   virtual void setAnalogWaveform(QString chan, double rate, double wfm[], int size) = 0;
   virtual void triggerAnalogWaveform() = 0;
   virtual void pulseOutput() = 0;
@@ -50,7 +51,7 @@ public:
   virtual void finishContinuousInput() = 0;
 };
 
-#define QxrdNIDAQPluginInterface_iid "gov.anl.aps.cep.Qxrd.NIDAQInterface"
-Q_DECLARE_INTERFACE(QxrdNIDAQPluginInterface, QxrdNIDAQPluginInterface_iid)
+#define NIDAQInterface_iid "gov.anl.aps.cep.Qxrd.NIDAQ"
+Q_DECLARE_INTERFACE(QxrdNIDAQ, NIDAQInterface_iid)
 
-#endif // QXRDNIDAQPLUGININTERFACE_H
+#endif // QXRDNIDAQ_H

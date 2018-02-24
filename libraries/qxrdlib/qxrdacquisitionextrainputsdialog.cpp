@@ -9,6 +9,7 @@
 #include "qxrdacquisitionextrainputsdialogsettings.h"
 #include "qxrdacquisitionextrainputsplotsettings.h"
 #include <QThread>
+#include "qxrdnidaq.h"
 
 QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisitionExtraInputsDialogSettingsWPtr set, QWidget *parent, QxrdAcqCommonWPtr acq) :
   QDockWidget(parent),
@@ -37,7 +38,7 @@ QxrdAcquisitionExtraInputsDialog::QxrdAcquisitionExtraInputsDialog(QxrdAcquisiti
       QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
       if (xtra) {
-        QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
+        QxrdNIDAQPtr nidaq(xtra->nidaqPlugin());
 
         if (nidaq) {
           QStringList devices = nidaq->deviceNames();
@@ -103,7 +104,7 @@ void QxrdAcquisitionExtraInputsDialog::setupUiChannel(int i, QxrdAcquisitionExtr
 
     if (xtra) {
       QString deviceName = xtra->get_DeviceName();
-      QxrdNIDAQPluginInterface* nidaq = xtra->nidaqPlugin();
+      QxrdNIDAQPtr nidaq(xtra->nidaqPlugin());
 
       if (nidaq) {
         QStringList aiChannels = nidaq->deviceAIChannels(deviceName);

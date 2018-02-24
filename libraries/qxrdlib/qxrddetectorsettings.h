@@ -20,8 +20,8 @@
 #include "qcepimagequeue.h"
 #include "qxrdroi-ptr.h"
 #include "qxrddetectordriverthread-ptr.h"
-#include "qxrddetectorplugininterface-ptr.h"
 #include "qxrddetectordriver-ptr.h"
+#include "qxrddetectorplugin-ptr.h"
 
 //TODO: Attach detector output to processor
 
@@ -131,7 +131,7 @@ protected:
   QxrdDetectorControlWindowSettingsPtr m_DetectorControlWindowSettings;
   QxrdDetectorControlWindowPtr         m_DetectorControlWindow;
 
-  QxrdDetectorPluginInterface         *m_DetectorPlugin;
+  QxrdDetectorPluginWPtr               m_DetectorPlugin;
   QxrdDetectorDriverThreadPtr          m_DetectorDriverThread;
 
 private:

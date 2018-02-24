@@ -21,6 +21,7 @@
 #include "qxrdintegrator.h"
 #include "qxrdpolartransform.h"
 #include "qxrdpolarnormalization.h"
+#include "qxrdnidaq.h"
 
 QxrdJSEngine::QxrdJSEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp) :
   m_Application(app),
@@ -126,18 +127,17 @@ void QxrdJSEngine::initialize()
 //    QCEP_DOC_OBJECT("application", "The QXRD Application Object");
     setGlobalProperty("application", newQObject(app.data()));
 
-    //TODO: replace - QxrdNIDAQPluginInterface is not a QObject
-//    QxrdApplicationPtr appp(
-//          qSharedPointerDynamicCast<QxrdApplication>(app));
+    QxrdApplicationPtr appp(
+          qSharedPointerDynamicCast<QxrdApplication>(app));
 
-//    if (appp) {
-//      QObject *plugin = dynamic_cast<QObject*>(appp->nidaqPlugin().data());
+    if (appp) {
+      QxrdNIDAQPtr nidaq = appp->nidaqPlugin();
 
-//      if (plugin) {
-//        //      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
-//        setGlobalProperty("nidaq", newQObject(plugin));
-//      }
-//    }
+      if (nidaq) {
+        //      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
+        setGlobalProperty("nidaq", newQObject(nidaq.data()));
+      }
+    }
   }
 
   if (g_Allocator) {

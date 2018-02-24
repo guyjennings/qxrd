@@ -3,7 +3,7 @@
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdacqcommon.h"
 #include "qcepmutexlocker.h"
-#include "qxrdnidaqplugininterface.h"
+#include "qxrdnidaq.h"
 #include "qcepimagedata.h"
 #include "qxrdacquisitionextrainputschannel.h"
 #include "qxrdacquisitionparameterpack.h"
@@ -60,12 +60,12 @@ void QxrdAcquisitionExtraInputs::initialize(QcepObjectWPtr parent)
   }
 }
 
-void QxrdAcquisitionExtraInputs::setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin)
+void QxrdAcquisitionExtraInputs::setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin)
 {
   m_NIDAQPlugin = nidaqPlugin;
 }
 
-QxrdNIDAQPluginInterface* QxrdAcquisitionExtraInputs::nidaqPlugin() const
+QxrdNIDAQWPtr QxrdAcquisitionExtraInputs::nidaqPlugin() const
 {
   INIT_CHECK;
 
@@ -174,12 +174,14 @@ void QxrdAcquisitionExtraInputs::initiate()
       }
     }
 
-    if (m_NIDAQPlugin->prepareContinuousInput(get_SampleRate(),
-                                              get_AcquireDelay(),
-                                              acq->get_ExposureTime(),
-                                              uniqueChannels,
-                                              channelMinimum,
-                                              channelMaximum) == 0) {
+    QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+    if (nidaq && nidaq->prepareContinuousInput(get_SampleRate(),
+                                               get_AcquireDelay(),
+                                               acq->get_ExposureTime(),
+                                               uniqueChannels,
+                                               channelMinimum,
+                                               channelMaximum) == 0) {
       set_Skipping(true);
       set_ExposureTime(acq->get_ExposureTime());
 
@@ -283,8 +285,10 @@ void QxrdAcquisitionExtraInputs::acquire()
     if (!get_Skipping()) {
       QxrdAcqCommonPtr acq(m_Acquisition);
 
-      if (acq && m_NIDAQPlugin) {
-        m_NIDAQPlugin->readContinuousInput();
+      QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+      if (acq && nidaq) {
+        nidaq->readContinuousInput();
       }
 
       foreach (QxrdAcquisitionExtraInputsChannelPtr chanp, m_Channels) {
@@ -314,8 +318,10 @@ void QxrdAcquisitionExtraInputs::finish()
 {
   QxrdAcqCommonPtr acq(m_Acquisition);
 
-  if (acq && m_NIDAQPlugin) {
-    m_NIDAQPlugin->finishContinuousInput();
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (acq && nidaq) {
+    nidaq->finishContinuousInput();
   }
 
   set_Enabled(false);

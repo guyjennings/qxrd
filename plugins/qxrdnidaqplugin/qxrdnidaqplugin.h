@@ -7,17 +7,18 @@
 #include <QStringList>
 #include <QVector>
 
-#include "qxrdnidaqplugininterface.h"
+#include "qxrdnidaq.h"
 #include "NIDAQmx.h"
 
-class QxrdNIDAQPlugin : public QcepObject, public QxrdNIDAQPluginInterface
+class QxrdNIDAQPlugin :
+    public QxrdNIDAQ
 {
   Q_OBJECT
-  Q_PLUGIN_METADATA(IID QxrdNIDAQPluginInterface_iid FILE "nidaq.json")
-  Q_INTERFACES(QxrdNIDAQPluginInterface)
+  Q_PLUGIN_METADATA(IID NIDAQInterface_iid FILE "nidaq.json")
+  Q_INTERFACES(QxrdNIDAQ)
 
 private:
-  typedef QcepObject inherited;
+  typedef QxrdNIDAQ inherited;
 
 public:
   QxrdNIDAQPlugin();

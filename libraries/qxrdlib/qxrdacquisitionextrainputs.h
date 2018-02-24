@@ -6,8 +6,6 @@
 #include "qcepproperty.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacqcommon-ptr.h"
-#include "qxrdnidaqplugininterface-ptr.h"
-#include "qxrdnidaqplugininterface.h"
 #include "qcepimagedata.h"
 #include "qcepimagedata-ptr.h"
 #include "qxrdacquisitionextrainputschannel.h"
@@ -15,6 +13,7 @@
 #include <QSettings>
 #include <QMutex>
 #include "qxrdacquisitionparameterpack-ptr.h"
+#include "qxrdnidaq-ptr.h"
 
 class QXRD_EXPORT QxrdAcquisitionExtraInputs : public QcepObject
 {
@@ -29,8 +28,8 @@ public:
   virtual ~QxrdAcquisitionExtraInputs();
 
 public:
-  void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
-  QxrdNIDAQPluginInterface *nidaqPlugin() const;
+  void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
+  QxrdNIDAQWPtr nidaqPlugin() const;
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -82,7 +81,7 @@ public:
 private:
   QxrdAcqCommonWPtr           m_Acquisition;
   QVector<QxrdAcquisitionExtraInputsChannelPtr> m_Channels;
-  QxrdNIDAQPluginInterface   *m_NIDAQPlugin;
+  QxrdNIDAQWPtr               m_NIDAQPlugin;
   QVector< QVector<double> >  m_ChannelData;
 };
 

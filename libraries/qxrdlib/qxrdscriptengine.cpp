@@ -13,7 +13,6 @@
 #include "qcepmutexlocker.h"
 #include "qxrdgeneratetestimage.h"
 #include "qxrdsynchronizedacquisition.h"
-#include "qxrdnidaqplugininterface.h"
 #include "qxrdacquisitionextrainputs.h"
 #include "qcepallocator.h"
 #include "qxrdserver.h"
@@ -42,10 +41,10 @@
 #include <QMetaObject>
 #include <QMetaProperty>
 #include <QRegExp>
-#include "qxrddetectorplugininterface.h"
 #include "qxrddetectorinterface.h"
 #include "qxrdpolartransform.h"
 #include "qxrdpolarnormalization.h"
+#include "qxrdnidaq.h"
 
 QxrdScriptEngine::QxrdScriptEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp)
   : QcepScriptEngine(),
@@ -2266,19 +2265,17 @@ void QxrdScriptEngine::initialize()
   globalObject().setProperty("newDataImage", newFunction(newDataImageFunc));
   globalObject().setProperty("newIntegratedData", newFunction(newIntegratedDataFunc));
 
-  //TODO: replace - QxrdNIDAQPluginInterface is not a QObject
-//  QxrdApplicationPtr appp(
-//        qSharedPointerDynamicCast<QxrdApplication>(app));
+  QxrdApplicationPtr appp(
+        qSharedPointerDynamicCast<QxrdApplication>(app));
 
-//  if (appp) {
-//    QxrdNIDAQPluginInterfacePtr nidaq =
-//        appp->nidaqPlugin();
+  if (appp) {
+    QxrdNIDAQPtr nidaq = appp->nidaqPlugin();
 
-//    if (nidaq) {
-//      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
-//      globalObject().setProperty("nidaq", newQObject(nidaq.data()));
-//    }
-//  }
+    if (nidaq) {
+      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
+      globalObject().setProperty("nidaq", newQObject(nidaq.data()));
+    }
+  }
 
   QxrdExperimentPtr expt(m_Experiment);
 

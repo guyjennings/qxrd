@@ -1,0 +1,8 @@
+#ifndef QXRDDETECTORPLUGINPTR_H
+#define QXRDDETECTORPLUGINPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdDetectorPlugin)
+
+#endif // QXRDDETECTORPLUGINPTR_H

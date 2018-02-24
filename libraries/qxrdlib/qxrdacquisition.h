@@ -15,7 +15,6 @@
 #include "qxrdacqcommon.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
-#include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
@@ -104,8 +103,8 @@ public:
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
   QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
 
-  void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin);
-  QxrdNIDAQPluginInterface* nidaqPlugin() const;
+  void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
+  QxrdNIDAQWPtr nidaqPlugin() const;
 
 protected:
 //  void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);

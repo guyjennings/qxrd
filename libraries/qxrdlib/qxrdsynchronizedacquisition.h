@@ -6,12 +6,11 @@
 #include <QVector>
 #include <QMutex>
 #include "qcepproperty.h"
-#include "qxrdnidaqplugininterface-ptr.h"
-#include "qxrdnidaqplugininterface.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
+#include "qxrdnidaq-ptr.h"
 
 class QXRD_EXPORT QxrdSynchronizedAcquisition : public QcepObject
 {
@@ -84,8 +83,8 @@ public:
   void prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPackWPtr parms);
   void finishedAcquisition();
   void acquiredFrameAvailable(int currentPhase);
-  void setNIDAQPlugin(QxrdNIDAQPluginInterface* nidaqPlugin);
-  QxrdNIDAQPluginInterface *nidaqPlugin() const;
+  void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
+  QxrdNIDAQWPtr nidaqPlugin() const;
 
   QVector<double>  outputTimes();
   QVector<double>  outputVoltage();
@@ -98,7 +97,7 @@ private:
 private:
   QxrdAcqCommonWPtr           m_Acquisition;
   QxrdAcquisitionParameterPackWPtr m_AcquisitionParms;
-  QxrdNIDAQPluginInterface   *m_NIDAQPlugin;
+  QxrdNIDAQWPtr               m_NIDAQPlugin;
   int                         m_SyncMode;
   QVector<double>             m_OutputTimes;
   QVector<double>             m_OutputVoltage;

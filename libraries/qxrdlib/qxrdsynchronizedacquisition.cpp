@@ -1,9 +1,9 @@
 #include "qxrdsynchronizedacquisition.h"
-#include "qxrdnidaqplugininterface.h"
 #include "qcepmutexlocker.h"
 #include "qxrdacqcommon.h"
 #include "qwt_math.h"
 #include "qxrdacquisitionparameterpack.h"
+#include "qxrdnidaq.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
   QcepObject(name),
@@ -88,7 +88,7 @@ void QxrdSynchronizedAcquisition::writeSettings(QSettings *settings)
 //  settings->endArray();
 }
 
-void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin)
+void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin)
 {
   m_NIDAQPlugin = nidaqPlugin;
 }
@@ -98,7 +98,7 @@ QxrdAcqCommonWPtr QxrdSynchronizedAcquisition::acquisition()
   return m_Acquisition;
 }
 
-QxrdNIDAQPluginInterface* QxrdSynchronizedAcquisition::nidaqPlugin() const
+QxrdNIDAQWPtr QxrdSynchronizedAcquisition::nidaqPlugin() const
 {
   return m_NIDAQPlugin;
 }
@@ -229,7 +229,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
 
       outputVoltage[iSamples] = outputVoltage[0]; // Return output voltage to starting value at the end of the waveform
 
-      QxrdNIDAQPluginInterfacePtr nidaq(m_NIDAQPlugin);
+      QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
 
       if (nidaq) {
         nidaq->setAnalogWaveform(chan, sampleRate, outputVoltage.data(), iSamples+1);
@@ -245,7 +245,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
 
 void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
 {
-  QxrdNIDAQPluginInterfacePtr nidaq(m_NIDAQPlugin);
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
 
   if (nidaq) {
     nidaq->pulseOutput();
@@ -287,7 +287,7 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
 void QxrdSynchronizedAcquisition::setManualOutput()
 {
   QxrdAcqCommonPtr acq(m_Acquisition);
-  QxrdNIDAQPluginInterfacePtr nidaq(m_NIDAQPlugin);
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
 
   if (acq && nidaq) {
     QString fullChannel = get_SyncAcquisitionOutputChannel();
@@ -303,7 +303,7 @@ void QxrdSynchronizedAcquisition::setManualOutput()
 void QxrdSynchronizedAcquisition::triggerOnce()
 {
   QxrdAcqCommonPtr acq(m_Acquisition);
-  QxrdNIDAQPluginInterfacePtr nidaq(m_NIDAQPlugin);
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
   QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
 
   if (acq && nidaq && parms) {

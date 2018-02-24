@@ -6,12 +6,12 @@
 #include "qcepobject.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
-#include "qxrdnidaqplugininterface-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 #include "qxrdacquisitionscalermodel-ptr.h"
+#include "qxrdnidaq-ptr.h"
 
 class QXRD_EXPORT QxrdAcqCommon : public QcepObject
 {
@@ -30,8 +30,8 @@ public:
 
   virtual int detectorCount() const = 0;
   virtual QxrdDetectorSettingsPtr detector(int i) const = 0;
-  virtual void setNIDAQPlugin(QxrdNIDAQPluginInterface *nidaqPlugin) = 0;
-  virtual QxrdNIDAQPluginInterface* nidaqPlugin() const = 0;
+  virtual void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin) = 0;
+  virtual QxrdNIDAQWPtr nidaqPlugin() const = 0;
 
   QxrdAcquisitionScalerModelPtr acquisitionScalerModel() const;
 
