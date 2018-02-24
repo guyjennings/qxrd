@@ -22,6 +22,7 @@
 
 QcepMainWindow::QcepMainWindow(QWidget *parent)
   : QMainWindow(parent),
+    m_Initialized(false),
     m_Progress(NULL),
     m_FileMenuP(NULL),
     m_EditMenuP(NULL),
@@ -35,11 +36,39 @@ QcepMainWindow::~QcepMainWindow()
 
 void QcepMainWindow::initialize(QcepObjectWPtr parent)
 {
-  m_Parent = parent;
+#ifndef QT_NO_DEBUG
+  if (m_Initialized) {
+    printf("QcepMainWindow %s %s initialized multiple times\n",
+           qPrintable(QcepObject::hexArg(this)),
+           metaObject()->className());
+  }
+
+  if (parent == NULL) {
+    printf("QcepMainWindow %s %s initialized with NULL parent\n",
+           qPrintable(QcepObject::hexArg(this)),
+           metaObject()->className());
+  }
+#endif
+
+  m_Initialized = true;
+  m_Parent      = parent;
 }
+
+#ifndef QT_NO_DEBUG
+void QcepMainWindow::checkObjectInitialization() const
+{
+  if (m_Initialized == false) {
+    printf("QcepMainWindow %s %s not initialized\n",
+           qPrintable(QcepObject::hexArg(this)),
+           metaObject()->className());
+  }
+}
+#endif
 
 void QcepMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
 {
+  INIT_CHECK;
+
   m_StatusMsg = new QLabel(NULL);
   m_StatusMsg -> setMinimumWidth(200);
   m_StatusMsg -> setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -174,6 +203,8 @@ void QcepMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
 
 void QcepMainWindow::populateEditMenu()
 {
+  INIT_CHECK;
+
   QcepExperimentPtr expt(QcepExperiment::findExperiment(m_Parent));
 
   m_EditMenuP -> clear();
@@ -220,6 +251,8 @@ void QcepMainWindow::populateEditMenu()
 
 void QcepMainWindow::populateWindowsMenu()
 {
+  INIT_CHECK;
+
   QcepExperimentPtr expt(QcepExperiment::findExperiment(m_Parent));
 
   if (expt && m_WindowMenuP) {
@@ -254,6 +287,8 @@ void QcepMainWindow::populateWindowsMenu()
 
 void QcepMainWindow::populateRecentExperimentsMenu()
 {
+  INIT_CHECK;
+
   //  printMessage("Populating recent experiments menu");
 
   m_RecentExperimentsMenu->clear();
@@ -277,6 +312,8 @@ void QcepMainWindow::populateRecentExperimentsMenu()
 
 void QcepMainWindow::newWindow(QcepMainWindowSettingsWPtr set)
 {
+  INIT_CHECK;
+
   QcepMainWindowSettingsPtr setp(set);
 
   if (setp) {
@@ -296,6 +333,8 @@ void QcepMainWindow::newWindow(QcepMainWindowSettingsWPtr set)
 
 void QcepMainWindow::updateTitle()
 {
+  INIT_CHECK;
+
 //  QxrdExperimentPtr exper(m_Experiment);
 
   QString title;
@@ -328,6 +367,8 @@ void QcepMainWindow::updateTitle()
 
 void QcepMainWindow::doTimerUpdate()
 {
+  INIT_CHECK;
+
   updateTitle();
 
   allocatedMemoryChanged();
@@ -335,6 +376,8 @@ void QcepMainWindow::doTimerUpdate()
 
 void QcepMainWindow::displayStatusMessage(QString msg)
 {
+  INIT_CHECK;
+
   if (QThread::currentThread()==thread()) {
     m_StatusMsg -> setText(msg);
 
@@ -351,16 +394,22 @@ void QcepMainWindow::displayStatusMessage(QString msg)
 
 void QcepMainWindow::onUpdateIntervalMsecChanged(int newVal)
 {
+  INIT_CHECK;
+
   m_UpdateTimer.setInterval(newVal);
 }
 
 void QcepMainWindow::clearStatusMessage()
 {
+  INIT_CHECK;
+
   m_StatusMsg -> setText("");
 }
 
 void QcepMainWindow::allocatedMemoryChanged()
 {
+  INIT_CHECK;
+
   int alloc = QcepAllocator::allocatedMemoryMB();
   int avail = QcepAllocator::availableMemoryMB();
 
@@ -370,6 +419,8 @@ void QcepMainWindow::allocatedMemoryChanged()
 
 void QcepMainWindow::doUndo()
 {
+  INIT_CHECK;
+
   QWidget* focusWidget = QApplication::focusWidget();
 
   if (focusWidget) {
@@ -394,6 +445,8 @@ void QcepMainWindow::doUndo()
 
 void QcepMainWindow::doRedo()
 {
+  INIT_CHECK;
+
   QWidget* focusWidget = QApplication::focusWidget();
 
   if (focusWidget) {
@@ -418,6 +471,8 @@ void QcepMainWindow::doRedo()
 
 void QcepMainWindow::doCut()
 {
+  INIT_CHECK;
+
   QWidget* focusWidget = QApplication::focusWidget();
 
   if (focusWidget) {
@@ -442,6 +497,8 @@ void QcepMainWindow::doCut()
 
 void QcepMainWindow::doCopy()
 {
+  INIT_CHECK;
+
   QWidget* focusWidget = QApplication::focusWidget();
 
   if (focusWidget) {
@@ -466,6 +523,8 @@ void QcepMainWindow::doCopy()
 
 void QcepMainWindow::doPaste()
 {
+  INIT_CHECK;
+
   QWidget* focusWidget = QApplication::focusWidget();
 
   if (focusWidget) {
@@ -490,6 +549,8 @@ void QcepMainWindow::doPaste()
 
 void QcepMainWindow::doDelete()
 {
+  INIT_CHECK;
+
   QWidget* focusWidget = QApplication::focusWidget();
 
   if (focusWidget) {
@@ -518,6 +579,8 @@ void QcepMainWindow::doDelete()
 
 void QcepMainWindow::doSelectAll()
 {
+  INIT_CHECK;
+
   QWidget* focusWidget = QApplication::focusWidget();
 
   if (focusWidget) {
@@ -545,6 +608,8 @@ void QcepMainWindow::doSelectAll()
 
 void QcepMainWindow::possiblyClose()
 {
+  INIT_CHECK;
+
   //   printf("QxrdWindow::possiblyClose()\n");
   if (wantToClose()) {
     close();
@@ -555,6 +620,8 @@ bool QcepMainWindow::wantToClose()
 {
   THREAD_CHECK;
 
+  INIT_CHECK;
+
   return QMessageBox::question(this, tr("Really Close?"),
                                tr("Do you really want to close the window?"),
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
@@ -562,6 +629,8 @@ bool QcepMainWindow::wantToClose()
 
 void QcepMainWindow::setFontSize(int fontSize)
 {
+  INIT_CHECK;
+
   if (QThread::currentThread()==thread()) {
     if (fontSize > 0) {
       QFont f = font();
@@ -583,6 +652,8 @@ void QcepMainWindow::setFontSize(int fontSize)
 
 void QcepMainWindow::setSpacing(int spacing)
 {
+  INIT_CHECK;
+
   if (QThread::currentThread()==thread()) {
     setObjectSpacing(this, spacing);
   } else {
@@ -595,6 +666,8 @@ void QcepMainWindow::setSpacing(int spacing)
 
 void QcepMainWindow::setObjectSpacing(QObject *obj, int spacing)
 {
+  INIT_CHECK;
+
   QLayout *ly = qobject_cast<QLayout*>(obj);
 
   if (ly) {
@@ -622,6 +695,8 @@ void QcepMainWindow::setObjectSpacing(QObject *obj, int spacing)
 
 void QcepMainWindow::shrinkPanels(int fontSize, int spacing)
 {
+  INIT_CHECK;
+
 //  if (QThread::currentThread()==thread()) {
 //    shrinkObject(this, fontSize, spacing);
 //  } else {
@@ -637,11 +712,15 @@ void QcepMainWindow::shrinkPanels(int fontSize, int spacing)
 
 void QcepMainWindow::shrinkDockWidget(QDockWidget *dw, int fontSize, int spacing)
 {
+  INIT_CHECK;
+
   shrinkObject(dw, fontSize, spacing);
 }
 
 void QcepMainWindow::shrinkObject(QObject *obj, int fontSize, int spacing)
 {
+  INIT_CHECK;
+
   if (obj) {
     //    printf("shrinkObject %p[%s]\n", obj, qPrintable(obj->objectName()));
 

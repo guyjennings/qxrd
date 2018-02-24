@@ -50,15 +50,19 @@ void QcepMainWindowSettings::openWindow()
   if (get_WindowOpen()) {
     newWindow();
 
-    if (get_WindowRect().isValid()) {
-      QRect geom = get_WindowRect().toAlignedRect();
+    if (m_Window) {
+      m_Window -> initialize(sharedFromThis());
 
-      m_Window->setGeometry(geom);
+      if (get_WindowRect().isValid()) {
+        QRect geom = get_WindowRect().toAlignedRect();
+
+        m_Window->setGeometry(geom);
+      }
+
+      m_Window->show();
+      m_Window->raise();
+      m_Window->activateWindow();
     }
-
-    m_Window->show();
-    m_Window->raise();
-    m_Window->activateWindow();
   }
 }
 

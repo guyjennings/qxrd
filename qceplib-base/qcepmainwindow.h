@@ -49,6 +49,10 @@ protected:
   void shrinkObject(QObject *obj, int fontSize, int spacing);
   void setObjectSpacing(QObject *obj, int spacing);
 
+#ifndef QT_NO_DEBUG
+  void checkObjectInitialization() const;
+#endif
+
 private:
   void doTimerUpdate();
   void clearStatusMessage();
@@ -69,6 +73,7 @@ private:
   void doSelectAll();
 
 protected:
+  bool                m_Initialized;
   QcepObjectWPtr      m_Parent;
 
   QLabel             *m_StatusMsg;
