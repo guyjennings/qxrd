@@ -15,7 +15,6 @@ public:
   QxrdNIDAQ(QString name);
 
   virtual QString name() const = 0;
-  virtual void initialize(QcepObjectWPtr parent) = 0;
 
   virtual void setErrorOutput(QObject *errors) = 0;
 
