@@ -2,7 +2,7 @@
 #define QXRDCORRECTIONDIALOG_H
 
 #include "qxrdlib_global.h"
-#include <QDockWidget>
+#include <QDialog>
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdprocessor-ptr.h"
 #include "ui_qxrdcorrectiondialog.h"
