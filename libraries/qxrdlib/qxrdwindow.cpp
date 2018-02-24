@@ -24,7 +24,6 @@
 #include "qxrdhistogramdialog.h"
 #include "qxrdscriptdialog.h"
 #include "qxrdhighlighter.h"
-#include "qxrdacquisitionextrainputsdialog.h"
 #include "qxrdacquisitionscalerdialog.h"
 #include "qxrdtodolist.h"
 #include "qxrdpolartransformdialog.h"

@@ -120,7 +120,6 @@ SOURCES += qxrdlib.cpp \
     qxrdglobalpreferencesdialog.cpp \
     qxrdwelcomerecentitem.cpp \
     qxrdacquisitionextrainputs.cpp \
-    qxrdacquisitionextrainputsdialog.cpp \
     qxrdacquisitionextrainputschannel.cpp \
     qxrdwindowsettings.cpp \
     qxrdslicedialogsettings.cpp \
@@ -132,8 +131,6 @@ SOURCES += qxrdlib.cpp \
     qxrdsliceplotsettings.cpp \
     triangulate.c \
     qxrddebug.cpp \
-    qxrdacquisitionextrainputsplot.cpp \
-    qxrdacquisitionextrainputsdialogsettings.cpp \
     qxrdhelpbrowser.cpp \
     qxrduserscriptdialog.cpp \
     qxrdsynchronizedacquisitionplotsettings.cpp \
@@ -184,7 +181,6 @@ SOURCES += qxrdlib.cpp \
     qxrdcalibrantdspacing.cpp \
     qxrdintegratorparmsdialog.cpp \
     qxrdintegratorplotsettings.cpp \
-    qxrdacquisitionextrainputsplotsettings.cpp \
     qxrddetectorsettings.cpp \
     qxrddetectordriver.cpp \
     qxrddetectordriverthread.cpp \
@@ -663,8 +659,6 @@ HEADERS += TODO.h \
     qxrdwelcomerecentitem.h \
     qxrdacquisitionextrainputs.h \
     qxrdacquisitionextrainputs-ptr.h \
-    qxrdacquisitionextrainputsdialog.h \
-    qxrdacquisitionextrainputsdialog-ptr.h \
     qxrdacquisitionextrainputschannel.h \
     qxrdacquisitionextrainputschannel-ptr.h \
     qxrdwindowsettings.h \
@@ -677,8 +671,6 @@ HEADERS += TODO.h \
     qxrdsliceplotsettings.h \
     triangulate.h \
     qxrddebug.h \
-    qxrdacquisitionextrainputsplot.h \
-    qxrdacquisitionextrainputsdialogsettings.h \
     qxrdhelpbrowser.h \
     qxrduserscriptdialog.h \
     qxrdsynchronizedacquisitionplotsettings.h \
@@ -750,9 +742,6 @@ HEADERS += TODO.h \
     qxrdintegratorplotsettings.h \
     qxrdintegratorplotsettings-ptr.h \
     qxrddistortioncorrectionplotsettings-ptr.h \
-    qxrdacquisitionextrainputsdialogsettings-ptr.h \
-    qxrdacquisitionextrainputsplotsettings.h \
-    qxrdacquisitionextrainputsplotsettings-ptr.h \
     qxrdhistogramplotsettings-ptr.h \
     qxrdhistogramdialogsettings-ptr.h \
     qxrdcenterfinderplotsettings-ptr.h \
@@ -829,7 +818,6 @@ HEADERS += TODO.h \
 
 FORMS += qxrdwindow.ui \
     qxrdintegratordialog.ui \
-    qxrdfilebrowser.ui \
     qxrdexperimentpreferencesdialog.ui \
     qxrdcorrectiondialog.ui \
     qxrdslicedialog.ui \
@@ -837,7 +825,6 @@ FORMS += qxrdwindow.ui \
     qxrdwelcomewindow.ui \
     qxrdglobalpreferencesdialog.ui \
     qxrdwelcomerecentitem.ui \
-    qxrdacquisitionextrainputsdialog.ui \
     qxrduserscriptdialog.ui \
     qxrdscriptdialog.ui \
     qxrddetectorcontrolwindow.ui \

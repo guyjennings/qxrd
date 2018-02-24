@@ -5,8 +5,6 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdacquisitionparameterpack.h"
-#include "qxrdacquisitionextrainputsplotsettings-ptr.h"
-#include "qxrdacquisitionextrainputsplotsettings.h"
 #include "qxrdacquisitionextrainputs.h"
 #include <QCheckBox>
 #include <QMessageBox>

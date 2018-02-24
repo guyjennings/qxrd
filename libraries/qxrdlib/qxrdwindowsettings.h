@@ -12,7 +12,6 @@
 #include "qxrdhistogramdialogsettings-ptr.h"
 #include "qxrdscriptdialogsettings-ptr.h"
 #include "qxrdslicedialogsettings-ptr.h"
-#include "qxrdacquisitionextrainputsdialogsettings-ptr.h"
 #include "qxrddistortioncorrectionplotsettings-ptr.h"
 #include "qxrdwindowsettings-ptr.h"
 #include "qxrdimageplotwidgetsettings-ptr.h"
@@ -55,7 +54,6 @@ public:
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
   QxrdSliceDialogSettingsWPtr                  sliceDialogSettings();
   QxrdScriptDialogSettingsWPtr                 scriptDialogSettings();
-  QxrdAcquisitionExtraInputsDialogSettingsWPtr acquisitionExtraInputsDialogSettings();
   QxrdDistortionCorrectionPlotSettingsWPtr     distortionCorrectionPlotSettings();
 
   QxrdImagePlotWidgetSettingsPtr               imagePlotWidgetSettings();
@@ -75,7 +73,6 @@ private:
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;
   QxrdSliceDialogSettingsPtr                   m_SliceDialogSettings;
   QxrdScriptDialogSettingsPtr                  m_ScriptDialogSettings;
-  QxrdAcquisitionExtraInputsDialogSettingsPtr  m_AcquisitionExtraInputsDialogSettings;
   QxrdDistortionCorrectionPlotSettingsPtr      m_DistortionCorrectionPlotSettings;
   QxrdImagePlotWidgetSettingsPtr               m_ImagePlotWidgetSettings;
   QxrdCenteringPlotWidgetSettingsPtr           m_CenteringPlotWidgetSettings;

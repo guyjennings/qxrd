@@ -7,11 +7,9 @@
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdslicedialogsettings.h"
 #include "qxrdscriptdialogsettings.h"
-#include "qxrdacquisitionextrainputsdialogsettings.h"
 #include "qxrddistortioncorrectionplotsettings.h"
 #include "qxrdsliceplotsettings.h"
 #include "qxrdsynchronizedacquisitionplotsettings.h"
-#include "qxrdacquisitionextrainputsplotsettings.h"
 #include "qxrdhistogramplotsettings.h"
 #include "qxrdimageplotwidgetsettings.h"
 #include "qxrdcenteringplotwidgetsettings.h"
@@ -35,7 +33,6 @@ QxrdWindowSettings::QxrdWindowSettings(QString name, QString desc) :
   m_HistogramDialogSettings = QxrdHistogramDialogSettings::newHistogramDialogSettings();
   m_SliceDialogSettings = QxrdSliceDialogSettings::newSliceDialogSettings();
   m_ScriptDialogSettings = QxrdScriptDialogSettings::newScriptDialogSettings();
-  m_AcquisitionExtraInputsDialogSettings = QxrdAcquisitionExtraInputsDialogSettings::newAcquisitionExtraInputsDialogSettings();
   m_DistortionCorrectionPlotSettings = QxrdDistortionCorrectionPlotSettings::newDistortionCorrectionPlotSettings();
 }
 
@@ -54,7 +51,6 @@ void QxrdWindowSettings::initialize(QcepObjectWPtr parent)
   m_HistogramDialogSettings               -> initialize(sharedFromThis());
   m_SliceDialogSettings                   -> initialize(sharedFromThis());
   m_ScriptDialogSettings                  -> initialize(sharedFromThis());
-  m_AcquisitionExtraInputsDialogSettings  -> initialize(sharedFromThis());
   m_DistortionCorrectionPlotSettings      -> initialize(sharedFromThis());
 }
 
@@ -96,8 +92,6 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdSlicePlotSettings*>("QxrdSlicePlotSettings*");
   qRegisterMetaType<QxrdScriptDialogSettings*>("QxrdScriptDialogSettings*");
   qRegisterMetaType<QxrdSynchronizedAcquisitionPlotSettings*>("QxrdSynchronizedAcquisitionPlotSettings*");
-  qRegisterMetaType<QxrdAcquisitionExtraInputsDialogSettings*>("QxrdAcquisitionExtraInputsDialogSettings*");
-  qRegisterMetaType<QxrdAcquisitionExtraInputsPlotSettings*>("QxrdAcquisitionExtraInputsPlotSettings*");
   qRegisterMetaType<QxrdDistortionCorrectionPlotSettings*>("QxrdDistortionCorrectionPlotSettings*");
 }
 
@@ -145,12 +139,6 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
     if (m_ScriptDialogSettings) {
       settings->beginGroup("scriptDialog");
       m_ScriptDialogSettings->readSettings(settings);
-      settings->endGroup();
-    }
-
-    if (m_AcquisitionExtraInputsDialogSettings) {
-      settings->beginGroup("extraInputsDialog");
-      m_AcquisitionExtraInputsDialogSettings->readSettings(settings);
       settings->endGroup();
     }
 
@@ -233,18 +221,6 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (m_AcquisitionExtraInputsDialogSettings) {
-      settings->beginGroup("extraInputsDialog");
-      m_AcquisitionExtraInputsDialogSettings->writeSettings(settings);
-      settings->endGroup();
-    }
-
-    if (m_AcquisitionExtraInputsDialogSettings) {
-      settings->beginGroup("extraInputsDialog");
-      m_AcquisitionExtraInputsDialogSettings->writeSettings(settings);
-      settings->endGroup();
-    }
-
     if (m_DistortionCorrectionPlotSettings) {
       settings->beginGroup("distortionCorrectionPlot");
       m_DistortionCorrectionPlotSettings->writeSettings(settings);
@@ -315,11 +291,6 @@ QxrdHistogramDialogSettingsWPtr QxrdWindowSettings::histogramDialogSettings()
 QxrdScriptDialogSettingsWPtr QxrdWindowSettings::scriptDialogSettings()
 {
   return m_ScriptDialogSettings;
-}
-
-QxrdAcquisitionExtraInputsDialogSettingsWPtr QxrdWindowSettings::acquisitionExtraInputsDialogSettings()
-{
-  return m_AcquisitionExtraInputsDialogSettings;
 }
 
 QxrdDistortionCorrectionPlotSettingsWPtr QxrdWindowSettings::distortionCorrectionPlotSettings()
