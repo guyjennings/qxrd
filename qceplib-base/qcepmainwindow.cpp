@@ -324,6 +324,7 @@ void QcepMainWindow::newWindow(QcepMainWindowSettingsWPtr set)
     }
 
     if (win) {
+      win->initialize(set);
       win->show();
       win->raise();
       win->activateWindow();
