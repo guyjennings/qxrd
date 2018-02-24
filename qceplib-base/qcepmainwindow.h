@@ -53,6 +53,8 @@ protected:
   void checkObjectInitialization() const;
 #endif
 
+  virtual void populateWindowsMenu();
+
 private:
   void doTimerUpdate();
   void clearStatusMessage();
@@ -61,7 +63,6 @@ private:
   void allocatedMemoryChanged();
 
   void populateEditMenu();
-  void populateWindowsMenu();
   void populateRecentExperimentsMenu();
 
   void doUndo();
