@@ -15,13 +15,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
-                             QString name,
-                             QxrdAppCommonWPtr app,
-                             QxrdExperimentWPtr expt,
-                             QxrdAcqCommonWPtr acqw,
-                             QxrdProcessorWPtr procw,
-                             QxrdWatcherWPtr watcher);
+  explicit QxrdWatcherWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdWatcherWindow();
 
@@ -29,7 +23,6 @@ protected:
   void changeEvent(QEvent *e);
 
 private:
-  QxrdWatcherWindowSettingsWPtr m_WatcherWindowSettings;
   QxrdWatcherWPtr               m_Watcher;
 };
 

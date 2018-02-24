@@ -19,12 +19,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
-                             QString name,
-                             QxrdAppCommonWPtr app,
-                             QxrdExperimentWPtr expt,
-                             QxrdAcqCommonWPtr acqw,
-                             QxrdProcessorWPtr procw);
+  explicit QxrdExtraIOWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdExtraIOWindow();
 
@@ -46,10 +41,9 @@ private slots:
   void updateWaveforms();
 
 private:
-  QxrdExtraIOWindowSettingsWPtr   m_ExtraIOWindowSettings;
   QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
-  QxrdAcquisitionExtraInputsWPtr m_AcquisitionExtraInputs;
-  int                            m_ChannelsInRows;
+  QxrdAcquisitionExtraInputsWPtr  m_AcquisitionExtraInputs;
+  int                             m_ChannelsInRows;
 };
 
 #endif // QXRDEXTRAIOWINDOW_H

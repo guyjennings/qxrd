@@ -12,12 +12,8 @@
 #include <QThread>
 #include "qxrdnidaq.h"
 
-QxrdExtraIOWindow::QxrdExtraIOWindow(QxrdExtraIOWindowSettingsWPtr set,
-                                     QString name,
-                                     QxrdAppCommonWPtr app,
-                                     QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw),
-  m_ExtraIOWindowSettings(set),
+QxrdExtraIOWindow::QxrdExtraIOWindow(QString name) :
+  inherited(name),
   m_ChannelsInRows(0)
 {
 }
@@ -35,10 +31,10 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
   //TODO: reinit waveform plot widget
 //  m_WaveformPlot->init(QxrdSynchronizedAcquisitionPlotSettingsWPtr());
 
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {
-    QxrdAcqCommonPtr acq(m_Acquisition);
+    QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
 
     if (acq) {
       m_SynchronizedAcquisition = acq->synchronizedAcquisition();
@@ -175,7 +171,8 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
     }
   }
 
-  QxrdExtraIOWindowSettingsPtr settings(m_ExtraIOWindowSettings);
+  QxrdExtraIOWindowSettingsPtr settings(
+        qSharedPointerDynamicCast<QxrdExtraIOWindowSettings>(m_Parent));
 
   if (settings) {
     m_AcquisitionWaveforms -> initialize(settings->extraInputsPlotWidgetSettings());
@@ -223,7 +220,7 @@ void QxrdExtraIOWindow::deviceChanged()
 
 void QxrdExtraIOWindow::waveformChanged()
 {
-  QxrdAcqCommonPtr               acq(m_Acquisition);
+  QxrdAcqCommonPtr               acq(QxrdAcqCommon::findAcquisition(m_Parent));
   QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (acq && sync) {
@@ -399,7 +396,7 @@ void QxrdExtraIOWindow::updateUi()
 {
   GUI_THREAD_CHECK;
 
-  QxrdAcqCommonPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
 
   if (acqp) {
     m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
@@ -459,7 +456,7 @@ void QxrdExtraIOWindow::updateUi()
 
 void QxrdExtraIOWindow::addChannel()
 {
-  QxrdAcqCommonPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
 
   if (acqp) {
     m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
@@ -500,7 +497,7 @@ void QxrdExtraIOWindow::addChannel()
 
 void QxrdExtraIOWindow::removeChannel()
 {
-  QxrdAcqCommonPtr acqp(m_Acquisition);
+  QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
 
   if (acqp) {
     m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();

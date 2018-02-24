@@ -6,13 +6,8 @@
 #include <QThread>
 #include "qxrdappcommon.h"
 
-QxrdStartupWindow::QxrdStartupWindow(QxrdStartupWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app) :
-  inherited(name,
-            app,
-            QxrdExperimentWPtr(),
-            QxrdAcqCommonWPtr(),
-            QxrdProcessorWPtr()),
-  m_StartupWindowSettings(set)
+QxrdStartupWindow::QxrdStartupWindow(QString name) :
+  inherited(name)
 {
 }
 
@@ -34,7 +29,8 @@ void QxrdStartupWindow::initialize(QcepObjectWPtr parent)
     gl -> setColumnStretch(1, 1);
   }
 
-  QxrdStartupWindowSettingsPtr s(m_StartupWindowSettings);
+  QxrdStartupWindowSettingsPtr s(
+        qSharedPointerDynamicCast<QxrdStartupWindowSettings>(m_Parent));
 
   if (s) {
     QSizeF sz = s->get_WindowRect().size();
@@ -54,7 +50,7 @@ void QxrdStartupWindow::initialize(QcepObjectWPtr parent)
         )
     );
 
-    QxrdAppCommonPtr a(m_Application);
+    QxrdAppCommonPtr a(QxrdAppCommon::findApplication(m_Parent));
 
     if (a) {
       connect(a->prop_MessageWindowLines(), &QcepIntProperty::valueChanged,

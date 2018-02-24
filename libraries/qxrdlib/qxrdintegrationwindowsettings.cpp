@@ -27,11 +27,9 @@ QcepMainWindowPtr QxrdIntegrationWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 
-  QxrdIntegrationWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdIntegrationWindowSettings>(sharedFromThis());
-
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdIntegrationWindow(myself, "Integration", m_Application, m_Experiment, m_Acquisition, m_Processor));
+        new QxrdIntegrationWindow("Integration"));
 
   return m_Window;
 }

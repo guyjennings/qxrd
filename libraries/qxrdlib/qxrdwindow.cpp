@@ -51,15 +51,11 @@
 #include <QDesktopWidget>
 #include <QSortFilterProxyModel>
 
-QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
-                       QxrdAppCommonWPtr appl,
-                       QxrdExperimentWPtr docw,
-                       QxrdAcqCommonWPtr acqw,
-                       QxrdProcessorWPtr procw)
-  : inherited("window", appl, docw, acqw, procw),
+QxrdWindow::QxrdWindow(QString name)
+  : inherited(name),
     m_ObjectNamer(this, "window"),
     m_Mutex(QMutex::Recursive),
-    m_WindowSettings(settings),
+//    m_WindowSettings(settings),
 //    m_Application(appl),
 //    m_Experiment(docw),
 //    m_Acquisition(acqw),
@@ -98,12 +94,6 @@ QxrdWindow::QxrdWindow(QxrdWindowSettingsWPtr settings,
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdWindow::QxrdWindow(%p)\n", this);
   }
-
-  QxrdAppCommonPtr app(m_Application);
-
-  if (app && qcepDebug(DEBUG_APP)) {
-    app->printMessage("QxrdWindow::QxrdWindow");
-  }
 }
 
 void QxrdWindow::initialize(QcepObjectWPtr parent)
@@ -111,6 +101,9 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   GUI_THREAD_CHECK;
 
   inherited::initialize(parent);
+
+  m_WindowSettings =
+      qSharedPointerDynamicCast<QxrdWindowSettings>(m_Parent);
 
   setupUi(this);
 
@@ -120,9 +113,9 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   m_Splitter->setStretchFactor(1, 5);
   m_Splitter->setStretchFactor(2, 1);
 
-  m_DatasetBrowserView -> setExperiment(m_Experiment);
+  m_DatasetBrowserView -> setExperiment(QxrdExperiment::findExperiment(m_Parent));
 
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {
     QcepDatasetModelPtr model(exp->dataset());
@@ -145,12 +138,13 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
 
   setAttribute(Qt::WA_DeleteOnClose, false);
 
-  QxrdApplicationPtr    app(qSharedPointerDynamicCast<QxrdApplication>(m_Application));
-  QxrdExperimentPtr     expt(m_Experiment);
+  QxrdApplicationPtr    app(
+        qSharedPointerDynamicCast<QxrdApplication>(QxrdAppCommon::findApplication(m_Parent)));
+  QxrdExperimentPtr     expt(QxrdExperiment::findExperiment(m_Parent));
   QxrdWindowSettingsPtr set(m_WindowSettings);
 
 
-  QxrdAcqCommonPtr   acq(m_Acquisition);
+  QxrdAcqCommonPtr   acq(QxrdAcqCommon::findAcquisition(m_Parent));
   QxrdProcessorPtr   proc(processor());
 
   connect(m_ExecuteScriptJSButton, &QAbstractButton::clicked, m_ActionExecuteScriptJS, &QAction::triggered);
@@ -309,7 +303,7 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   connect(m_HelpBrowser, &QTextBrowser::forwardAvailable, m_HelpForwardButton, &QWidget::setEnabled);
   connect(m_HelpBrowser, &QTextBrowser::backwardAvailable, m_HelpBackButton, &QWidget::setEnabled);
 
-  m_HelpBrowser->initialize(m_Experiment);
+  m_HelpBrowser->initialize(QxrdExperiment::findExperiment(m_Parent));
 
 
   connect(m_ActionIntegrate, &QAction::triggered, this, &QxrdWindow::doIntegrateSequence);
@@ -539,7 +533,7 @@ QxrdWindow::~QxrdWindow()
   printf("Deleting main window from thread %s\n", qPrintable(QThread::currentThread()->objectName()));
 #endif  
 
-  QxrdAppCommonPtr app(m_Application);
+  QxrdAppCommonPtr app(QxrdAppCommon::findApplication(m_Parent));
 
   if (app && qcepDebug(DEBUG_APP)) {
     app->printMessage("QxrdWindow::~QxrdWindow");
@@ -595,10 +589,10 @@ void QxrdWindow::enableTiltRefinement(bool enable)
 void QxrdWindow::closeEvent ( QCloseEvent * event )
 {
   if (wantToClose()) {
-    QxrdAppCommonPtr app(m_Application);
+    QxrdAppCommonPtr app(QxrdAppCommon::findApplication(m_Parent));
 
     if (app) {
-      app->closeExperiment(m_Experiment);
+      app->closeExperiment(QxrdExperiment::findExperiment(m_Parent));
     }
     event -> accept();
   } else {
@@ -615,7 +609,7 @@ void QxrdWindow::populateConfigureDetectorMenu()
 {
   m_ConfigureDetectorMenu->clear();
 
-  QxrdAcqCommonPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
 
   if (acq) {
     int nDets = acq->detectorCount();
@@ -644,7 +638,7 @@ void QxrdWindow::populateDetectorControlWindowsMenu()
 {
   m_DetectorControlWindowsMenu->clear();
 
-  QxrdAcqCommonPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
 
   if (acq) {
     int nDets = acq->detectorCount();
@@ -710,7 +704,7 @@ void QxrdWindow::displayCriticalMessage(QString msg)
   if (QThread::currentThread()==thread()) {
     static int dialogCount = 0;
 
-    QxrdExperimentPtr expt(m_Experiment);
+    QxrdExperimentPtr expt(QxrdExperiment::findExperiment(m_Parent));
 
     if (expt) {
       expt->printMessage(tr("critical message %1, count = %2").arg(msg).arg(dialogCount));
@@ -935,8 +929,8 @@ void QxrdWindow::doSaveExperimentAsText()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExperimentPtr expt(m_Experiment);
-  QxrdAppCommonPtr  app(m_Application);
+  QxrdExperimentPtr expt(QxrdExperiment::findExperiment(m_Parent));
+  QxrdAppCommonPtr  app(QxrdAppCommon::findApplication(m_Parent));
 
   if (app && expt) {
     QString path = expt->experimentFilePath();
@@ -1285,7 +1279,7 @@ void QxrdWindow::executeScriptJS()
 
 void QxrdWindow::cancelScript()
 {
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(QxrdExperiment::findExperiment(m_Parent));
 
   if (expt) {
     QxrdScriptEnginePtr eng(expt -> scriptEngine());
@@ -1350,7 +1344,7 @@ void QxrdWindow::doLoadScript()
 
 void QxrdWindow::loadScript(QString path)
 {
-  QxrdExperimentPtr expt(m_Experiment);
+  QxrdExperimentPtr expt(QxrdExperiment::findExperiment(m_Parent));
 
   if (expt) {
     QxrdScriptEnginePtr eng(expt -> scriptEngine());
@@ -1364,7 +1358,7 @@ void QxrdWindow::loadScript(QString path)
 
 QxrdProcessorWPtr QxrdWindow::processor() const
 {
-  return m_Processor;
+  return QxrdProcessor::findProcessor(m_Parent);
 }
 
 QcepDoubleImageDataPtr QxrdWindow::data()
@@ -1735,7 +1729,7 @@ static int s_TestScanCount = 0;
 
 void QxrdWindow::doNewTestImageGenerator()
 {
-  auto win = new QxrdTestImageGeneratorWindow(m_Experiment);
+  auto win = new QxrdTestImageGeneratorWindow(QxrdExperiment::findExperiment(m_Parent));
 
   win -> setWindowTitle(tr("Test Image Generator %1").arg(s_TestImageCount++));
   win -> show();
@@ -1743,7 +1737,7 @@ void QxrdWindow::doNewTestImageGenerator()
 
 void QxrdWindow::doNewTestScanGenerator()
 {
-  auto win = new QxrdTestScanGeneratorWindow(m_Experiment);
+  auto win = new QxrdTestScanGeneratorWindow(QxrdExperiment::findExperiment(m_Parent));
 
   win -> setWindowTitle(tr("Test Scan Generator %1").arg(s_TestScanCount++));
   win -> show();

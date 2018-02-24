@@ -15,12 +15,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
-                             QString name,
-                             QxrdAppCommonWPtr app,
-                             QxrdExperimentWPtr expt,
-                             QxrdAcqCommonWPtr acqw,
-                             QxrdProcessorWPtr procw);
+  explicit QxrdMaskingWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdMaskingWindow();
 
@@ -54,7 +49,6 @@ private:
 protected:
   void changeEvent(QEvent *e);
 
-  QxrdMaskingWindowSettingsWPtr m_MaskingWindowSettings;
   QxrdMaskStackWPtr             m_MaskStack;
 };
 

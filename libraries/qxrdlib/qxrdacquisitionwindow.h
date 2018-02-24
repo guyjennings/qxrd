@@ -19,12 +19,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr set,
-                                 QString name,
-                                 QxrdAppCommonWPtr app,
-                                 QxrdExperimentWPtr expt,
-                                 QxrdAcqCommonWPtr acqw,
-                                 QxrdProcessorWPtr  procw);
+  explicit QxrdAcquisitionWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdAcquisitionWindow();
 
@@ -38,7 +33,6 @@ private slots:
 protected:
   void changeEvent(QEvent *e);
 
-  QxrdAcquisitionWindowSettingsWPtr m_AcquisitionWindowSettings;
   QxrdDetectorListModelPtr m_DetectorsModel;
 };
 

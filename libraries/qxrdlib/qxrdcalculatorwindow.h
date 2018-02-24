@@ -15,12 +15,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdCalculatorWindow(QxrdCalculatorWindowSettingsWPtr set,
-                                QString name,
-                                QxrdAppCommonWPtr app,
-                                QxrdExperimentWPtr expt,
-                                QxrdAcqCommonWPtr acqw,
-                                QxrdProcessorWPtr procw);
+  explicit QxrdCalculatorWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdCalculatorWindow();
 
@@ -28,7 +23,6 @@ protected:
   void changeEvent(QEvent *e);
 
 private:
-  QxrdCalculatorWindowSettingsWPtr m_CalculatorWindowSettings;
 };
 
 #endif // QXRDCALCULATORWINDOW_H

@@ -17,12 +17,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdScriptingWindow(QxrdScriptingWindowSettingsWPtr set,
-                               QString name,
-                               QxrdAppCommonWPtr app,
-                               QxrdExperimentWPtr expt,
-                               QxrdAcqCommonWPtr acqw,
-                               QxrdProcessorWPtr procw);
+  explicit QxrdScriptingWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdScriptingWindow();
 
@@ -35,8 +30,6 @@ private slots:
 
 protected:
   void changeEvent(QEvent *e);
-
-  QxrdScriptingWindowSettingsWPtr m_ScriptingWindowSettings;
 
   QxrdScriptEngineWPtr            m_ScriptEngine;
   int                             m_CommandIndex;

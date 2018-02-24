@@ -14,13 +14,9 @@
 #include <QThread>
 #include "qcepallocator.h"
 
-QxrdMainWindow::QxrdMainWindow(QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw)
+QxrdMainWindow::QxrdMainWindow(QString name)
   : QcepMainWindow(),
-    m_Name(name),
-    m_Application(app),
-    m_Experiment(expt),
-    m_Acquisition(acqw),
-    m_Processor(procw)
+    m_Name(name)
 {
 }
 
@@ -33,7 +29,7 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
 {
   inherited::setupMenus(file, edit, window);
 
-  QxrdAcqCommonPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
 
   if (acq) {
     connect(acq.data(), &QxrdAcqCommon::acquireStarted,
@@ -49,7 +45,7 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
 
 void QxrdMainWindow::updateTitle()
 {
-  QxrdExperimentPtr exper(m_Experiment);
+  QxrdExperimentPtr exper(QxrdExperiment::findExperiment(m_Parent));
 
   QString title;
 
@@ -132,7 +128,9 @@ void QxrdMainWindow::doEditPreferences()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExperimentPreferencesDialog prefs(m_Experiment, NULL, 1);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
+
+  QxrdExperimentPreferencesDialog prefs(exp, NULL, 1);
 
   prefs.exec();
 }
@@ -141,7 +139,9 @@ void QxrdMainWindow::doEditDetectorPreferences()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExperimentPreferencesDialog prefs(m_Experiment, NULL, 0);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
+
+  QxrdExperimentPreferencesDialog prefs(exp, NULL, 0);
 
   prefs.exec();
 }
@@ -150,8 +150,8 @@ void QxrdMainWindow::saveExperimentAs()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExperimentPtr expt(m_Experiment);
-  QxrdAppCommonPtr app(m_Application);
+  QxrdExperimentPtr expt(QxrdExperiment::findExperiment(m_Parent));
+  QxrdAppCommonPtr  app(QxrdAppCommon::findApplication(m_Parent));
 
   if (app && expt) {
     QString path = expt->experimentFilePath();
@@ -178,8 +178,8 @@ void QxrdMainWindow::saveExperimentCopy()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExperimentPtr expt(m_Experiment);
-  QxrdAppCommonPtr  app(m_Application);
+  QxrdExperimentPtr expt(QxrdExperiment::findExperiment(m_Parent));
+  QxrdAppCommonPtr  app(QxrdAppCommon::findApplication(m_Parent));
 
   if (app && expt) {
     QString path = expt->experimentFilePath();

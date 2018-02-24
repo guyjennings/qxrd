@@ -16,11 +16,9 @@ QcepMainWindowPtr QxrdCalibrantWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 
-  QxrdCalibrantWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdCalibrantWindowSettings>(sharedFromThis());
-
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdCalibrantWindow(myself, "Calibrant", m_Application, m_Experiment, m_Acquisition, m_Processor));
+        new QxrdCalibrantWindow("Calibrant"));
 
   return m_Window;
 }

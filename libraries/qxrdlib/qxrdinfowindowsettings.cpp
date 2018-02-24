@@ -19,7 +19,7 @@ QcepMainWindowPtr QxrdInfoWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdInfoWindow("Info", m_Application, m_Experiment, m_Acquisition, m_Processor));
+        new QxrdInfoWindow("Info"));
 
   return m_Window;
 }

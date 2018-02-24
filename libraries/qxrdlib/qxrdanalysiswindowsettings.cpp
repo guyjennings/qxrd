@@ -19,11 +19,7 @@ QcepMainWindowPtr QxrdAnalysisWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdAnalysisWindow("Analysis",
-                               m_Application,
-                               m_Experiment,
-                               m_Acquisition,
-                               m_Processor));
+        new QxrdAnalysisWindow("Analysis"));
 
   return m_Window;
 }

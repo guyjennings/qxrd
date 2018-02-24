@@ -8,15 +8,10 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QThread>
+#include "qxrdprocessor.h"
 
-QxrdAcquisitionWindow::QxrdAcquisitionWindow(QxrdAcquisitionWindowSettingsWPtr set,
-                                             QString name,
-                                             QxrdAppCommonWPtr app,
-                                             QxrdExperimentWPtr expt,
-                                             QxrdAcqCommonWPtr acqw,
-                                             QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw),
-  m_AcquisitionWindowSettings(set)
+QxrdAcquisitionWindow::QxrdAcquisitionWindow(QString name) :
+  inherited(name)
 {
 }
 
@@ -33,7 +28,7 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
   m_Splitter->setStretchFactor(0, 1);
   m_Splitter->setStretchFactor(1, 5);
 
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {
     m_DatasetBrowserView -> setExperiment(exp);
@@ -42,8 +37,9 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdAcquisitionWindowSettingsPtr settings(m_AcquisitionWindowSettings);
-    QxrdProcessorPtr                 procw(m_Processor);
+    QxrdAcquisitionWindowSettingsPtr settings(
+          qSharedPointerDynamicCast<QxrdAcquisitionWindowSettings>(m_Parent));
+    QxrdProcessorPtr                 procw(QxrdProcessor::findProcessor(m_Parent));
 
     if (settings && procw) {
       m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, procw);
@@ -52,7 +48,7 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
     m_DetectorsModel =
         QxrdDetectorListModelPtr(new QxrdDetectorListModel());
 
-    QxrdAcqCommonPtr acqp(m_Acquisition);
+    QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
 
     if (acqp) {
       for (int i=0; i<acqp->detectorCount(); i++) {
@@ -139,11 +135,11 @@ void QxrdAcquisitionWindow::changeEvent(QEvent *e)
 
 void QxrdAcquisitionWindow::doEditCorrection()
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {
-    QxrdAcqCommonPtr acq(m_Acquisition);
-    QxrdProcessorPtr proc(m_Processor);
+    QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
+    QxrdProcessorPtr proc(QxrdProcessor::findProcessor(m_Parent));
 
     if (acq && proc) {
       QxrdCorrectionDialog* editCorrection =
@@ -157,7 +153,7 @@ void QxrdAcquisitionWindow::doEditCorrection()
 
 void QxrdAcquisitionWindow::acquireStarted()
 {
-  QxrdAcqCommonPtr acq(m_Acquisition);
+  QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
 
   if (acq) {
     m_AcquireButton -> setEnabled(false);

@@ -10,9 +10,8 @@
 #include <QClipboard>
 #include <QThread>
 
-QxrdCalibrantWindow::QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw),
-  m_CalibrantWindowSettings(set)
+QxrdCalibrantWindow::QxrdCalibrantWindow(QString name) :
+  inherited(name)
 {
 }
 
@@ -26,7 +25,7 @@ void QxrdCalibrantWindow::initialize(QcepObjectWPtr parent)
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {
     m_CenterFinder = exp->centerFinder();

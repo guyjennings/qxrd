@@ -17,11 +17,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdInfoWindow(QString name,
-                          QxrdAppCommonWPtr app,
-                          QxrdExperimentWPtr expt,
-                          QxrdAcqCommonWPtr acqw,
-                          QxrdProcessorWPtr procw);
+  explicit QxrdInfoWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdInfoWindow();
 

@@ -1,9 +1,8 @@
 #include "qxrdcalculatorwindow.h"
 #include <QThread>
 
-QxrdCalculatorWindow::QxrdCalculatorWindow(QxrdCalculatorWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw),
-  m_CalculatorWindowSettings(set)
+QxrdCalculatorWindow::QxrdCalculatorWindow(QString name) :
+  inherited(name)
 {
 }
 

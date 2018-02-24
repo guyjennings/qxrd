@@ -2,12 +2,8 @@
 #include "qxrdappcommon.h"
 #include <QThread>
 
-QxrdInfoWindow::QxrdInfoWindow(QString name,
-                               QxrdAppCommonWPtr app,
-                               QxrdExperimentWPtr expt,
-                               QxrdAcqCommonWPtr acqw,
-                               QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw)
+QxrdInfoWindow::QxrdInfoWindow(QString name) :
+  inherited(name)
 {
 }
 
@@ -19,20 +15,24 @@ void QxrdInfoWindow::initialize(QcepObjectWPtr parent)
 
   setupUi(this);
 
-  m_ObjectTreeModel =
-      new QcepObjectTreeModel(this, m_Application);
+  QxrdAppCommonPtr app(QxrdAppCommon::findApplication(m_Parent));
 
-  m_ObjectPropertiesModel =
-      new QcepObjectPropertiesModel(this, m_Application);
+  if (app) {
+    m_ObjectTreeModel =
+        new QcepObjectTreeModel(this, app);
 
-  m_ObjectView     -> setModel(m_ObjectTreeModel);
-  m_PropertiesView -> setModel(m_ObjectPropertiesModel);
+    m_ObjectPropertiesModel =
+        new QcepObjectPropertiesModel(this, app);
 
-  m_ObjectSelection =
-      m_ObjectView -> selectionModel();
+    m_ObjectView     -> setModel(m_ObjectTreeModel);
+    m_PropertiesView -> setModel(m_ObjectPropertiesModel);
 
-  connect(m_ObjectSelection, &QItemSelectionModel::selectionChanged,
-          this,              &QxrdInfoWindow::selectionChanged);
+    m_ObjectSelection =
+        m_ObjectView -> selectionModel();
+
+    connect(m_ObjectSelection, &QItemSelectionModel::selectionChanged,
+            this,              &QxrdInfoWindow::selectionChanged);
+  }
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 

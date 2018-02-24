@@ -24,12 +24,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdDetectorControlWindow(QxrdAppCommonPtr          appl,
-                                     QxrdExperimentWPtr        exp,
-                                     QxrdAcqCommonWPtr       acq,
-                                     QxrdDetectorSettingsWPtr  det,
-                                     QxrdProcessorWPtr         proc,
-                                     QWidget                  *parent = 0);
+  explicit QxrdDetectorControlWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   virtual ~QxrdDetectorControlWindow();
 

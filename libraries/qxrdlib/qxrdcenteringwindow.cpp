@@ -5,14 +5,8 @@
 #include "qxrdcenterfinder.h"
 #include <QThread>
 
-QxrdCenteringWindow::QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
-                                         QString name,
-                                         QxrdAppCommonWPtr app,
-                                         QxrdExperimentWPtr expt,
-                                         QxrdAcqCommonWPtr acqw,
-                                         QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw),
-  m_CenteringWindowSettings(set)
+QxrdCenteringWindow::QxrdCenteringWindow(QString name) :
+  inherited(name)
 {
 }
 
@@ -30,7 +24,7 @@ void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
   m_Splitter->setStretchFactor(1, 5);
   m_Splitter->setStretchFactor(2, 1);
 
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {
     m_DatasetBrowserView -> setExperiment(exp);
@@ -39,10 +33,11 @@ void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdProcessorPtr     proc(m_Processor);
+    QxrdProcessorPtr     proc(QxrdProcessor::findProcessor(m_Parent));
     QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
 
-    QxrdCenteringWindowSettingsPtr settings(m_CenteringWindowSettings);
+    QxrdCenteringWindowSettingsPtr settings(
+          qSharedPointerDynamicCast<QxrdCenteringWindowSettings>(m_Parent));
 
     if (settings) {
       m_FileBrowserWidget    -> initialize(settings->fileBrowserSettings(), exp, proc);

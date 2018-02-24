@@ -30,17 +30,9 @@ QcepMainWindowPtr QxrdCenteringWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 
-  QxrdCenteringWindowSettingsPtr myself =
-      qSharedPointerDynamicCast<QxrdCenteringWindowSettings>(sharedFromThis());
-
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdCenteringWindow(myself,
-                                "Centering",
-                                m_Application,
-                                m_Experiment,
-                                m_Acquisition,
-                                m_Processor));
+        new QxrdCenteringWindow("Centering"));
 
   return m_Window;
 }

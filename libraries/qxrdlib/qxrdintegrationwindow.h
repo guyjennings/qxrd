@@ -18,12 +18,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr set,
-                                 QString name,
-                                 QxrdAppCommonWPtr app,
-                                 QxrdExperimentWPtr expt,
-                                 QxrdAcqCommonWPtr acqw,
-                                 QxrdProcessorWPtr procw);
+  explicit QxrdIntegrationWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdIntegrationWindow();
 
@@ -40,8 +35,6 @@ public slots:
   void onEditedUserAbsorption();
 
 private:
-  QxrdIntegrationWindowSettingsWPtr m_IntegrationWindowSettings;
-
   QxrdIntegratorWPtr m_Integrator;
   QString            m_GeometryPath;
   QString            m_IntensityPath;

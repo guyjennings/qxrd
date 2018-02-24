@@ -4,16 +4,9 @@
 #include "qxrdprocessor.h"
 #include <QThread>
 
-QxrdWatcherWindow::QxrdWatcherWindow(QxrdWatcherWindowSettingsWPtr set,
-                                     QString name,
-                                     QxrdAppCommonWPtr app,
-                                     QxrdExperimentWPtr expt,
-                                     QxrdAcqCommonWPtr acqw,
-                                     QxrdProcessorWPtr procw,
-                                     QxrdWatcherWPtr watcher) :
-  inherited(name, app, expt, acqw, procw),
-  m_WatcherWindowSettings(set),
-  m_Watcher(watcher)
+QxrdWatcherWindow::QxrdWatcherWindow(QString name) :
+  inherited(name),
+  m_Watcher()
 {
 }
 
@@ -30,7 +23,7 @@ void QxrdWatcherWindow::initialize(QcepObjectWPtr parent)
   m_Splitter->setStretchFactor(0, 1);
   m_Splitter->setStretchFactor(1, 5);
 
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {    
     m_DatasetBrowserView -> setExperiment(exp);
@@ -39,10 +32,11 @@ void QxrdWatcherWindow::initialize(QcepObjectWPtr parent)
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdProcessorPtr     proc(m_Processor);
+    QxrdProcessorPtr     proc(QxrdProcessor::findProcessor(m_Parent));
     QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
 
-    QxrdWatcherWindowSettingsPtr settings(m_WatcherWindowSettings);
+    QxrdWatcherWindowSettingsPtr settings(
+          qSharedPointerDynamicCast<QxrdWatcherWindowSettings>(m_Parent));
 
     if (settings) {
       m_FileBrowserWidget   -> initialize(settings->fileBrowserSettings(), exp, proc);

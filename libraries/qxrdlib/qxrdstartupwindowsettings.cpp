@@ -17,15 +17,9 @@ QcepMainWindowPtr QxrdStartupWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 
-  QxrdStartupWindowSettingsPtr myself =
-      qSharedPointerDynamicCast<QxrdStartupWindowSettings>(
-        sharedFromThis());
-
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdStartupWindow(myself,
-                              "startupWindow",
-                              m_Application));
+        new QxrdStartupWindow("startupWindow"));
 
   return m_Window;
 }

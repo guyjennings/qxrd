@@ -16,8 +16,8 @@ void QxrdMainWindowSettings::initialize(QcepObjectWPtr parent)
 
   m_Application = QxrdAppCommon::findApplication(parent);
   m_Experiment  = QxrdExperiment::findExperiment(parent);
-  m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
-  m_Processor   = QxrdProcessor::findProcessor(parent);
+//  m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
+//  m_Processor   = QxrdProcessor::findProcessor(parent);
 
   if (m_Application == NULL) {
     printMessage("QxrdMainWindowSettings::m_Application == NULL");
@@ -27,11 +27,11 @@ void QxrdMainWindowSettings::initialize(QcepObjectWPtr parent)
     printMessage("QxrdMainWindowSettings::m_Experiment == NULL");
   }
 
-  if (m_Acquisition == NULL) {
-    printMessage("QxrdMainWindowSettings::m_Acquisition == NULL");
-  }
+//  if (m_Acquisition == NULL) {
+//    printMessage("QxrdMainWindowSettings::m_Acquisition == NULL");
+//  }
 
-  if (m_Processor   == NULL) {
-    printMessage("QxrdMainWindowSettings::m_Processor == NULL");
-  }
+//  if (m_Processor   == NULL) {
+//    printMessage("QxrdMainWindowSettings::m_Processor == NULL");
+//  }
 }

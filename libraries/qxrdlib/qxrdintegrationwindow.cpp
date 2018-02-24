@@ -5,14 +5,8 @@
 #include "qxrdintegrationwindowsettings.h"
 #include <QThread>
 
-QxrdIntegrationWindow::QxrdIntegrationWindow(QxrdIntegrationWindowSettingsWPtr set,
-                                             QString name,
-                                             QxrdAppCommonWPtr app,
-                                             QxrdExperimentWPtr expt,
-                                             QxrdAcqCommonWPtr acqw,
-                                             QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw),
-  m_IntegrationWindowSettings(set)
+QxrdIntegrationWindow::QxrdIntegrationWindow(QString name) :
+  inherited(name)
 {
 }
 
@@ -30,13 +24,13 @@ void QxrdIntegrationWindow::initialize(QcepObjectWPtr parent)
   m_Splitter->setStretchFactor(1, 5);
   m_Splitter->setStretchFactor(2, 1);
 
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
+  QxrdProcessorPtr  proc(QxrdProcessor::findProcessor(m_Parent));
 
   if (exp) {
+    proc         = exp->processor();
     m_Integrator = exp->integrator();
   }
-
-  QxrdProcessorPtr  proc(m_Processor);
 
   if (proc) {
     connect(m_IntegrateButton, &QAbstractButton::clicked,
@@ -91,7 +85,8 @@ void QxrdIntegrationWindow::initialize(QcepObjectWPtr parent)
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdIntegrationWindowSettingsPtr settings(m_IntegrationWindowSettings);
+    QxrdIntegrationWindowSettingsPtr settings(
+          qSharedPointerDynamicCast<QxrdIntegrationWindowSettings>(m_Parent));
 
     if (settings && proc) {
       m_FileBrowserWidget     -> initialize(settings->fileBrowserSettings(), exp, proc);

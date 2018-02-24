@@ -3,10 +3,10 @@
 #include "qxrdtodolist.h"
 #include <QSortFilterProxyModel>
 #include <QThread>
+#include "qxrdexperiment.h"
 
-QxrdHelpWindow::QxrdHelpWindow(QxrdHelpWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw),
-  m_HelpWindowSettings(set)
+QxrdHelpWindow::QxrdHelpWindow(QString name) :
+  inherited(name)
 {
 }
 
@@ -27,7 +27,7 @@ void QxrdHelpWindow::initialize(QcepObjectWPtr parent)
   connect(m_HelpBrowser, &QTextBrowser::forwardAvailable, m_HelpForwardButton, &QWidget::setEnabled);
   connect(m_HelpBrowser, &QTextBrowser::backwardAvailable, m_HelpBackButton, &QWidget::setEnabled);
 
-  m_HelpBrowser->initialize(m_Experiment);
+  m_HelpBrowser->initialize(QxrdExperiment::findExperiment(m_Parent));
 
   QxrdToDoList *toDoList = new QxrdToDoList(this);
   QSortFilterProxyModel *sorted = new QSortFilterProxyModel(this);

@@ -32,11 +32,9 @@ QcepMainWindowPtr QxrdAcquisitionWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 
-  QxrdAcquisitionWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdAcquisitionWindowSettings>(sharedFromThis());
-
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdAcquisitionWindow(myself, "Acquisition", m_Application, m_Experiment, m_Acquisition, m_Processor));
+        new QxrdAcquisitionWindow("Acquisition"));
 
   return m_Window;
 }

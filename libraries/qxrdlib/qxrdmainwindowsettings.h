@@ -25,8 +25,8 @@ public:
 protected:
   QxrdAppCommonWPtr   m_Application;
   QxrdExperimentWPtr  m_Experiment;
-  QxrdAcqCommonWPtr   m_Acquisition;
-  QxrdProcessorWPtr   m_Processor;
+//  QxrdAcqCommonWPtr   m_Acquisition;
+//  QxrdProcessorWPtr   m_Processor;
 };
 
 Q_DECLARE_METATYPE(QxrdMainWindowSettings*)

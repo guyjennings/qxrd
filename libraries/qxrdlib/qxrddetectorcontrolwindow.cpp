@@ -19,17 +19,12 @@
 #include <QThread>
 #include "qxrdexperiment.h"
 
-QxrdDetectorControlWindow::QxrdDetectorControlWindow(QxrdAppCommonPtr          appl,
-                                                     QxrdExperimentWPtr        exp,
-                                                     QxrdAcqCommonWPtr         acq,
-                                                     QxrdDetectorSettingsWPtr  det,
-                                                     QxrdProcessorWPtr         proc,
-                                                     QWidget                  * /*parent*/) :
-  inherited("detector", appl, exp, acq, proc),
-  m_Experiment(exp),
-  m_Acquisition(acq),
-  m_Detector(det),
-  m_Processor(proc)
+QxrdDetectorControlWindow::QxrdDetectorControlWindow(QString name) :
+  inherited("detector"),
+  m_Experiment(),
+  m_Acquisition(),
+  m_Detector(),
+  m_Processor()
 {
 }
 
@@ -38,6 +33,11 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
   GUI_THREAD_CHECK;
 
   inherited::initialize(parent);
+
+  m_Experiment = QxrdExperiment::findExperiment(m_Parent);
+  m_Acquisition = QxrdAcqCommon::findAcquisition(m_Parent);
+  m_Detector = QxrdDetectorSettings::findDetectorSettings(m_Parent);
+  m_Processor = QxrdProcessor::findProcessor(m_Parent);
 
   setupUi(this);
 

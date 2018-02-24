@@ -24,11 +24,9 @@ QcepMainWindowPtr QxrdExtraIOWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExtraIOWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdExtraIOWindowSettings>(sharedFromThis());
-
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdExtraIOWindow(myself, "Extra I/O", m_Application, m_Experiment, m_Acquisition, m_Processor));
+        new QxrdExtraIOWindow("Extra I/O"));
 
   return m_Window;
 }

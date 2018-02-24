@@ -7,14 +7,8 @@
 #include "qxrdprocessor.h"
 #include <QThread>
 
-QxrdMaskingWindow::QxrdMaskingWindow(QxrdMaskingWindowSettingsWPtr set,
-                                     QString name,
-                                     QxrdAppCommonWPtr app,
-                                     QxrdExperimentWPtr expt,
-                                     QxrdAcqCommonWPtr acqw,
-                                     QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw),
-  m_MaskingWindowSettings(set)
+QxrdMaskingWindow::QxrdMaskingWindow(QString name) :
+  inherited(name)
 {
 }
 
@@ -32,25 +26,27 @@ void QxrdMaskingWindow::initialize(QcepObjectWPtr parent)
   m_Splitter->setStretchFactor(1, 5);
   m_Splitter->setStretchFactor(2, 1);
 
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
+
+  QxrdProcessorPtr proc(QxrdProcessor::findProcessor(m_Parent));
 
   if (exp) {
+    proc = exp->processor();
+
     m_DatasetBrowserView -> setExperiment(exp);
 
     QcepDatasetModelPtr model(exp->dataset());
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdMaskingWindowSettingsPtr settings(m_MaskingWindowSettings);
-    QxrdProcessorPtr             procw(m_Processor);
+    QxrdMaskingWindowSettingsPtr settings(
+          qSharedPointerDynamicCast<QxrdMaskingWindowSettings>(m_Parent));
 
-    if (settings && procw) {
-      m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, procw);
-      m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings(), procw);
+    if (settings && proc) {
+      m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
+      m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings(), proc);
     }
   }
-
-  QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     m_MaskStack = proc->maskStack();
@@ -155,7 +151,7 @@ int QxrdMaskingWindow::maskStackSelectPopup()
 {
   QMenu actions;
 
-  QxrdProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(QxrdProcessor::findProcessor(m_Parent));
 
   if (proc) {
     QxrdMaskStackPtr m = proc->maskStack();
@@ -215,7 +211,7 @@ void QxrdMaskingWindow::doHideMaskRange()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdProcessorPtr p(m_Processor);
+    QxrdProcessorPtr p(QxrdProcessor::findProcessor(m_Parent));
     QxrdMaskStackPtr m(m_MaskStack);
 
     if (m && p) {
@@ -234,7 +230,7 @@ void QxrdMaskingWindow::doShowMaskRange()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdProcessorPtr p(m_Processor);
+    QxrdProcessorPtr p(QxrdProcessor::findProcessor(m_Parent));
     QxrdMaskStackPtr m(m_MaskStack);
 
     if (m && p) {
@@ -261,7 +257,7 @@ void QxrdMaskingWindow::doZingersMask()
 //    }
 //  }
 
-  QxrdProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(QxrdProcessor::findProcessor(m_Parent));
 
   if (proc) {
     QxrdZingerFinderWPtr zf = proc->zingerFinder();
@@ -467,7 +463,7 @@ void QxrdMaskingWindow::doClearMaskTop()
 
 void QxrdMaskingWindow::doPushMask()
 {
-  QxrdProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(QxrdProcessor::findProcessor(m_Parent));
 
   if (proc) {
     proc->duplicateMask();
@@ -477,7 +473,7 @@ void QxrdMaskingWindow::doPushMask()
 
 void QxrdMaskingWindow::doNewMask()
 {
-  QxrdProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(QxrdProcessor::findProcessor(m_Parent));
 
   if (proc) {
     proc->newEmptyMask();
@@ -487,7 +483,7 @@ void QxrdMaskingWindow::doNewMask()
 
 void QxrdMaskingWindow::doUndoMask()
 {
-  QxrdProcessorPtr proc(m_Processor);
+  QxrdProcessorPtr proc(QxrdProcessor::findProcessor(m_Parent));
 
   if (proc) {
     proc->statusMessage("Undo Not Implemented");

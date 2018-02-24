@@ -15,12 +15,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdCenteringWindow(QxrdCenteringWindowSettingsWPtr set,
-                               QString name,
-                               QxrdAppCommonWPtr app,
-                               QxrdExperimentWPtr expt,
-                               QxrdAcqCommonWPtr acqw,
-                               QxrdProcessorWPtr procw);
+  explicit QxrdCenteringWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdCenteringWindow();
 
@@ -30,7 +25,6 @@ protected:
   void onStepSizesChanged();
 
 private:
-  QxrdCenteringWindowSettingsWPtr m_CenteringWindowSettings;
 };
 
 #endif // QXRDCENTERINGWINDOW_H

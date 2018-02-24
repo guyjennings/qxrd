@@ -15,19 +15,12 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdHelpWindow(QxrdHelpWindowSettingsWPtr set,
-                          QString name,
-                          QxrdAppCommonWPtr app,
-                          QxrdExperimentWPtr expt,
-                          QxrdAcqCommonWPtr acqw,
-                          QxrdProcessorWPtr procw);
+  explicit QxrdHelpWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdHelpWindow();
 
 protected:
   void changeEvent(QEvent *e);
-
-  QxrdHelpWindowSettingsWPtr m_HelpWindowSettings;
 };
 
 #endif // QXRDHELPWINDOW_H

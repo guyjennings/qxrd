@@ -2,9 +2,8 @@
 #include "qxrdexperiment.h"
 #include <QThread>
 
-QxrdScriptingWindow::QxrdScriptingWindow(QxrdScriptingWindowSettingsWPtr set, QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw),
-  m_ScriptingWindowSettings(set),
+QxrdScriptingWindow::QxrdScriptingWindow(QString name) :
+  inherited(name),
   m_CommandIndex(0)
 {
 }
@@ -19,7 +18,7 @@ void QxrdScriptingWindow::initialize(QcepObjectWPtr parent)
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 
-  QxrdExperimentPtr exp(m_Experiment);
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {
     m_ScriptEngine = exp->scriptEngine();

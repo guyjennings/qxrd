@@ -1,8 +1,8 @@
 #include "qxrdanalysiswindow.h"
 #include <QThread>
 
-QxrdAnalysisWindow::QxrdAnalysisWindow(QString name, QxrdAppCommonWPtr app, QxrdExperimentWPtr expt, QxrdAcqCommonWPtr acqw, QxrdProcessorWPtr procw) :
-  inherited(name, app, expt, acqw, procw)
+QxrdAnalysisWindow::QxrdAnalysisWindow(QString name) :
+  inherited(name)
 {
 }
 

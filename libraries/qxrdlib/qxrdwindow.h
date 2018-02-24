@@ -32,11 +32,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  QxrdWindow(QxrdWindowSettingsWPtr settings,
-             QxrdAppCommonWPtr appl,
-             QxrdExperimentWPtr docw,
-             QxrdAcqCommonWPtr acqw,
-             QxrdProcessorWPtr procw);
+  QxrdWindow(QString name);
   virtual ~QxrdWindow();
   //TODO: change to QcepObjectWPtr
   void initialize(QcepObjectWPtr parent);

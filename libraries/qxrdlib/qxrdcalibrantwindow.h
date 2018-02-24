@@ -21,12 +21,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdCalibrantWindow(QxrdCalibrantWindowSettingsWPtr set,
-                               QString name,
-                               QxrdAppCommonWPtr app,
-                               QxrdExperimentWPtr expt,
-                               QxrdAcqCommonWPtr acqw,
-                               QxrdProcessorWPtr procw);
+  explicit QxrdCalibrantWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdCalibrantWindow();
 
@@ -49,7 +44,6 @@ protected:
   void changeEvent(QEvent *e);
 
 private:
-  QxrdCalibrantWindowSettingsWPtr m_CalibrantWindowSettings;
   QxrdCenterFinderWPtr            m_CenterFinder;
   QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
   QxrdCalibrantLibraryModelPtr    m_CalibrantLibraryModel;

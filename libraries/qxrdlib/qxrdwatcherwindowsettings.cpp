@@ -33,13 +33,7 @@ QcepMainWindowPtr QxrdWatcherWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdWatcherWindow(myself,
-                              "Watcher",
-                              m_Application,
-                              m_Experiment,
-                              m_Acquisition,
-                              m_Processor,
-                              m_Watcher));
+        new QxrdWatcherWindow("Watcher"));
 
   return m_Window;
 }

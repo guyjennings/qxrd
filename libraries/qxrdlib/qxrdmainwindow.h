@@ -20,11 +20,7 @@ private:
   typedef QcepMainWindow inherited;
 
 public:
-  explicit QxrdMainWindow(QString name,
-                          QxrdAppCommonWPtr app,
-                          QxrdExperimentWPtr expt,
-                          QxrdAcqCommonWPtr acqw,
-                          QxrdProcessorWPtr procw);
+  explicit QxrdMainWindow(QString name);
   void initialize(QcepObjectWPtr parent);
 
   void setupMenus(QMenu *file, QMenu *edit, QMenu *window);
@@ -48,10 +44,10 @@ private:
 
 protected:
   QString             m_Name;
-  QxrdAppCommonWPtr   m_Application;
-  QxrdExperimentWPtr  m_Experiment;
-  QxrdAcqCommonWPtr   m_Acquisition;
-  QxrdProcessorWPtr   m_Processor;
+//  QxrdAppCommonWPtr   m_Application;
+//  QxrdExperimentWPtr  m_Experiment;
+//  QxrdAcqCommonWPtr   m_Acquisition;
+//  QxrdProcessorWPtr   m_Processor;
 };
 
 #endif // QXRDMAINWINDOW_H

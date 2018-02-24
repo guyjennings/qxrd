@@ -16,9 +16,7 @@ private:
   typedef QxrdMainWindow inherited;
 
 public:
-  explicit QxrdStartupWindow(QxrdStartupWindowSettingsWPtr set,
-                             QString name,
-                             QxrdAppCommonWPtr app);
+  explicit QxrdStartupWindow(QString name);
   void initialize(QcepObjectWPtr parent);
   ~QxrdStartupWindow();
 
@@ -34,7 +32,6 @@ public slots:
   void onMessageWindowLinesChanged(int newVal);
 
 private:
-  QxrdStartupWindowSettingsWPtr m_StartupWindowSettings;
   QDateTime                     m_LastDateTime;
 };
 

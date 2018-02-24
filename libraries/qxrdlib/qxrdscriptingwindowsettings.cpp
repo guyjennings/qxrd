@@ -22,9 +22,7 @@ QcepMainWindowPtr QxrdScriptingWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdScriptingWindow(myself,
-                                get_Name(),
-                                m_Application, m_Experiment, m_Acquisition, m_Processor));
+        new QxrdScriptingWindow(get_Name()));
 
   return m_Window;
 }

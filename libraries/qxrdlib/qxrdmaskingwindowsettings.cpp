@@ -24,16 +24,9 @@ QcepMainWindowPtr QxrdMaskingWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 
-  QxrdMaskingWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdMaskingWindowSettings>(sharedFromThis());
-
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdMaskingWindow(myself,
-                              "Masking",
-                              m_Application,
-                              m_Experiment,
-                              m_Acquisition,
-                              m_Processor));
+        new QxrdMaskingWindow("Masking"));
 
   return m_Window;
 }

@@ -506,11 +506,7 @@ void QxrdExperiment::openWindows()
 
     //TODO: remove
     m_Window = QxrdWindowPtr(
-          new QxrdWindow(m_WindowSettings,
-                         qSharedPointerDynamicCast<QxrdApplication>(m_Application),
-                         qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()),
-                         m_Acquisition,
-                         m_Processor),
+          new QxrdWindow("mainWindow"),
           &QObject::deleteLater); //TODO: is deleteLater necessary?
 
     QxrdScriptEnginePtr eng(m_ScriptEngine);
