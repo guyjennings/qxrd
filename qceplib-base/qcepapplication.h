@@ -54,7 +54,19 @@ public slots:
 protected:
   QApplicationPtr m_Application;
 
+private:
+  QStringList makeStringListFromArgs(int argc, char **argv);
+
 public:
+  Q_PROPERTY(int    argc       READ get_Argc      WRITE set_Argc STORED false)
+  QCEP_INTEGER_PROPERTY(Argc)
+
+  Q_PROPERTY(QStringList argv READ get_Argv WRITE set_Argv STORED false)
+  QCEP_STRING_LIST_PROPERTY(Argv)
+
+  Q_PROPERTY(int    guiWanted  READ get_GuiWanted WRITE set_GuiWanted STORED false)
+  QCEP_INTEGER_PROPERTY(GuiWanted)
+
   Q_PROPERTY(QString currentExperiment READ get_CurrentExperiment WRITE set_CurrentExperiment)
   QCEP_STRING_PROPERTY(CurrentExperiment)
 

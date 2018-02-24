@@ -7,6 +7,9 @@ QcepApplication *g_Application = NULL;
 
 QcepApplication::QcepApplication(int &argc, char **argv) :
   inherited("application"),
+  m_Argc(this, "argc", argc, "Number of Command Line Arguments"),
+  m_Argv(this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
+  m_GuiWanted(this, "guiWanted", 1, "GUI Wanted?"),
   m_CurrentExperiment(this, "currentExperiment", "", "Current Experiment"),
   m_RecentExperiments(this, "recentExperiments", QStringList(), "Recent Experiments"),
   m_RecentExperimentsSize(this,"recentExperimentsSize", 8, "Number of Recent Experiments to Remember"),
@@ -86,4 +89,15 @@ void QcepApplication::openObjectBrowserWindow(QcepObjectWPtr obj)
     w->show();
     w->raise();
   }
+}
+
+QStringList QcepApplication::makeStringListFromArgs(int argc, char **argv)
+{
+  QStringList res;
+
+  for (int i=0; i<argc; i++) {
+    res.append(argv[i]);
+  }
+
+  return res;
 }

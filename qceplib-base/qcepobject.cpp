@@ -1225,3 +1225,32 @@ void QcepObject::defaultWindowSettings()
 
 }
 
+void QcepObject::openWindows()
+{
+  if (g_Application && g_Application -> get_GuiWanted()) {
+    foreach (QcepObjectPtr child, m_Children) {
+      QcepMainWindowSettingsPtr set =
+          qSharedPointerDynamicCast<QcepMainWindowSettings>(child);
+
+      if (set) {
+        set   -> openWindow();
+      } else if (child) {
+        child -> openWindows();
+      }
+    }
+  }
+}
+
+void QcepObject::closeWindows()
+{
+  foreach (QcepObjectPtr child, m_Children) {
+    QcepMainWindowSettingsPtr set =
+        qSharedPointerDynamicCast<QcepMainWindowSettings>(child);
+
+    if (set) {
+      set   -> closeWindow();
+    } else if (child) {
+      child -> closeWindows();
+    }
+  }
+}

@@ -45,6 +45,8 @@ public:
   int windowSettingsCount();
 
   virtual void defaultWindowSettings();
+  virtual void openWindows();
+  virtual void closeWindows();
 
 signals:
 
