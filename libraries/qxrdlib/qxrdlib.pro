@@ -76,7 +76,6 @@ SOURCES += qxrdlib.cpp \
     qxrdpowderpointpicker.cpp \
     qxrdintegrator.cpp \
     qxrdintegratorplot.cpp \
-    qxrdintegratordialog.cpp \
     qxrdimageplot.cpp \
     qxrdserver.cpp \
     qxrdserverthread.cpp \
@@ -100,7 +99,6 @@ SOURCES += qxrdlib.cpp \
     qxrdmaskstack.cpp \
     qxrdmaskstackview.cpp \
     qxrdsynchronizedacquisition.cpp \
-    qxrdcorrectiondialog.cpp \
     qxrdfilebrowsermodel.cpp \
     qxrdfilebrowserview.cpp \
     qxrdslicedialog.cpp \
@@ -591,7 +589,6 @@ HEADERS += TODO.h \
     qxrdintegrator.h \
     qxrdintegrator-ptr.h \
     qxrdintegratorplot.h \
-    qxrdintegratordialog.h \
     qxrdimageplot.h \
     qxrdserver.h \
     qxrdserver-ptr.h \
@@ -631,7 +628,6 @@ HEADERS += TODO.h \
     qxrdmaskstackview.h \
     qxrdsynchronizedacquisition.h \
     qxrdsynchronizedacquisition-ptr.h \
-    qxrdcorrectiondialog.h \
     qxrdfilebrowsermodel.h \
     qxrdfilebrowsermodel-ptr.h \
     qxrdfilebrowserview.h \
@@ -814,9 +810,7 @@ HEADERS += TODO.h \
 
 
 FORMS += qxrdwindow.ui \
-    qxrdintegratordialog.ui \
     qxrdexperimentpreferencesdialog.ui \
-    qxrdcorrectiondialog.ui \
     qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \
     qxrdwelcomewindow.ui \
