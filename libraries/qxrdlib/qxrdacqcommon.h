@@ -52,9 +52,6 @@ public:
   virtual void configureDetector(int i) = 0;
   virtual void openDetectorControlWindow(int i) = 0;
 
-  virtual void openWindows() = 0;
-  virtual void closeWindows() = 0;
-
   QxrdAcquisitionParameterPackPtr acquisitionParameterPack();
   QxrdDarkAcquisitionParameterPackPtr darkAcquisitionParameterPack();
 

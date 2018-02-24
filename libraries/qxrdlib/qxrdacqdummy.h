@@ -43,9 +43,6 @@ public:
   void configureDetector(int i);
   void openDetectorControlWindow(int i);
 
-  void openWindows();
-  void closeWindows();
-
   QxrdDetectorSettingsPtr newDetector(int detType);
   void appendDetector(QxrdDetectorSettingsPtr det);
   void clearDetectors();

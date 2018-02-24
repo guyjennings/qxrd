@@ -319,6 +319,8 @@ void QxrdAcquisition::openWindows()
 {
   GUI_THREAD_CHECK;
 
+  inherited::openWindows();
+
   for (int i=0; i<m_Detectors.count(); i++) {
     QxrdDetectorSettingsPtr det = m_Detectors.value(i);
 
@@ -331,6 +333,8 @@ void QxrdAcquisition::openWindows()
 void QxrdAcquisition::closeWindows()
 {
   GUI_THREAD_CHECK;
+
+  inherited::closeWindows();
 
   for (int i=0; i<m_Detectors.count(); i++) {
     QxrdDetectorSettingsPtr det = m_Detectors.value(i);

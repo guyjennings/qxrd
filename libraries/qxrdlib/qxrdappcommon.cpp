@@ -27,9 +27,6 @@
 
 QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   : inherited(argc, argv),
-    m_Argc(this, "argc", argc, "Number of Command Line Arguments"),
-    m_Argv(this, "argv", makeStringListFromArgs(argc, argv), "Command Line Arguments"),
-    m_GuiWanted(this, "guiWanted", 1, "GUI Wanted?"),
     m_CmdList(this, "cmdList", QStringList(), "Commands to Execute"),
     m_FileList(this, "fileList", QStringList(), "Files to Process"),
     m_WatcherList(this, "watcherList", QStringList(), "File patterns to watch for"),
@@ -748,17 +745,6 @@ bool QxrdAppCommon::wantToQuit()
   return QMessageBox::question(NULL, tr("Really Quit?"),
                                tr("Do you really want to exit the application?"),
                                QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok;
-}
-
-QStringList QxrdAppCommon::makeStringListFromArgs(int argc, char **argv)
-{
-  QStringList res;
-
-  for (int i=0; i<argc; i++) {
-    res.append(argv[i]);
-  }
-
-  return res;
 }
 
 void QxrdAppCommon::debugChanged(qint64 newValue)

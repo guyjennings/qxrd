@@ -497,6 +497,8 @@ void QxrdExperiment::openWindows()
 {
   GUI_THREAD_CHECK;
 
+  inherited::openWindows();
+
   QxrdAppCommonPtr app(m_Application);
 
   if (app && app->get_GuiWanted()) {
@@ -516,11 +518,11 @@ void QxrdExperiment::openWindows()
     if (m_Window) {
       m_Window -> initialize(m_WindowSettings);
 
-      if (m_Acquisition) {
-        //          m_Acquisition -> setWindow(m_Window);
+//      if (m_Acquisition) {
+//        //          m_Acquisition -> setWindow(m_Window);
 
-        m_Acquisition->openWindows(); // Open detector control windows...
-      }
+//        m_Acquisition->openWindows(); // Open detector control windows...
+//      }
 
       if (eng) {
         eng -> setWindow(m_Window);
@@ -554,16 +556,6 @@ void QxrdExperiment::openWindows()
         m_Window -> show();
       }
     }
-
-    //TODO: move to base class...
-    for (int i=0; i<windowSettingsCount(); i++) {
-      QcepMainWindowSettingsPtr set =
-          windowSettings(i);
-
-      if (set) {
-        set->openWindow();
-      }
-    }
   }
 }
 
@@ -571,20 +563,9 @@ void QxrdExperiment::closeWindows()
 {
   GUI_THREAD_CHECK;
 
+  inherited::closeWindows();
+
   m_Window = QxrdWindowPtr();
-
-  for (int i=0; i<windowSettingsCount(); i++) {
-    QcepMainWindowSettingsPtr set =
-        windowSettings(i);
-
-    if (set) {
-      set->closeWindow();
-    }
-  }
-
-  if (m_Acquisition) {
-    m_Acquisition->closeWindows();
-  }
 }
 
 void QxrdExperiment::criticalMessage(QString msg, QDateTime /*ts*/) const

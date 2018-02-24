@@ -93,15 +93,6 @@ void QxrdAcqDummy::openDetectorControlWindow(int i)
 {
 }
 
-//TODO: move into QcepObject?
-void QxrdAcqDummy::openWindows()
-{
-}
-
-void QxrdAcqDummy::closeWindows()
-{
-}
-
 void QxrdAcqDummy::doAcquire()
 {
 }
