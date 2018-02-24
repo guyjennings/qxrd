@@ -2,7 +2,7 @@
 #define QXRDHISTOGRAMDIALOG_H
 
 #include "qxrdlib_global.h"
-#include <QDockWidget>
+#include <QDialog>
 #include "ui_qxrdhistogramdialog.h"
 #include "qcepimagedata.h"
 #include "qcepimagedata-ptr.h"

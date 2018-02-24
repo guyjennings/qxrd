@@ -11,7 +11,6 @@
 #include "qxrdprocessor.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdcenterfinder.h"
-#include "qxrdintegratordialog.h"
 #include "qxrdintegrator.h"
 #include "qcepplotzoomer.h"
 #include "qxrdscriptengine.h"
@@ -19,12 +18,8 @@
 #include "qcepmutexlocker.h"
 #include "qcepallocator.h"
 #include "qxrdexperimentpreferencesdialog.h"
-#include "qxrdcorrectiondialog.h"
-#include "qxrdslicedialog.h"
 #include "qxrdhistogramdialog.h"
-#include "qxrdscriptdialog.h"
 #include "qxrdhighlighter.h"
-#include "qxrdacquisitionscalerdialog.h"
 #include "qxrdtodolist.h"
 #include "qxrdpolartransformdialog.h"
 #include "qxrdpolarnormalizationdialog.h"
@@ -157,154 +152,6 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
 
   QxrdAcqCommonPtr   acq(m_Acquisition);
   QxrdProcessorPtr   proc(processor());
-
-//  m_AcquisitionDialog = new QxrdAcquisitionDialog(m_Experiment,
-//                                                  sharedFromThis(),
-//                                                  m_Acquisition,
-//                                                  m_DataProcessor,
-//                                                  this);
-
-//  m_AcquisitionScalerDialog = new QxrdAcquisitionScalerDialog(m_Acquisition, this);
-//  m_SynchronizedAcquisitionDialog = new QxrdSynchronizedAcquisitionDialog(set->synchronizedAcquisitionDialogSettings(), this, m_Acquisition);
-//  m_AcquisitionExtraInputsDialog = new QxrdAcquisitionExtraInputsDialog(set->acquisitionExtraInputsDialogSettings(), this, m_Acquisition);
-
-//  if (proc) {
-//    m_CenterFinderDialog = new QxrdCenterFinderDialog(proc -> centerFinder());
-//  } else {
-//    m_CenterFinderDialog = new QxrdCenterFinderDialog(QxrdCenterFinderWPtr());
-//  }
-
-//  m_MaskDialog       = new QxrdMaskDialog(m_DataProcessor, this);
-
-//  m_CorrectionDialog   = new QxrdCorrectionDialog(this, m_Acquisition, m_DataProcessor);
-
-//  if (proc) {
-//    m_IntegratorDialog   = new QxrdIntegratorDialog(proc -> integrator());
-//  } else {
-//    m_IntegratorDialog   = new QxrdIntegratorDialog(QxrdIntegratorWPtr());
-//  }
-
-//  if (expt) {
-//    QcepDatasetModelPtr ds = expt->dataset();
-
-//    if (ds) {
-//      m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(expt, ds, this);
-//    } else {
-//      m_DatasetBrowserDialog = new QcepDatasetBrowserDialog(expt, QcepDatasetModelWPtr(), this);
-//    }
-//  }
-
-//  if (expt && set) {
-//    m_InputFileBrowser   = new QxrdInputFileBrowser(set->inputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
-//    m_OutputFileBrowser  = new QxrdOutputFileBrowser(set->outputFileBrowserSettings(), m_Experiment, m_DataProcessor, this);
-//    m_ScriptDialog       = new QxrdScriptDialog(set->scriptDialogSettings(), m_Experiment, this);
-//  }
-
-//  if (set) {
-//    m_SliceDialog        = new QxrdSliceDialog(set->sliceDialogSettings(), this);
-//    m_HistogramDialog    = new QxrdHistogramDialog(set->histogramDialogSettings(), m_Experiment, this);
-//    m_ImageInfoDialog    = new QxrdInfoDialog(set->infoDialogSettings(), this);
-//  }
-
-  if (set) {
-    //TODO: re-init
-//    m_ImagePlot        -> init(set->imagePlotSettings(), expt);
-//    m_CenterFinderPlot -> init(set->centerFinderPlotSettings());
-//    m_IntegratorPlot   -> init(set->integratorPlotSettings());
-//    m_DistortionCorrectionPlot -> init(set->distortionCorrectionPlotSettings());
-  }
-
-//  QDesktopWidget *dw = QApplication::desktop();
-  //  int screenNum = dw->screenNumber(this);
-//  QRect screenGeom = dw->screenGeometry(this);
-
-  //  printf("Screen number %d Geom: %d,%d-%d,%d\n", screenNum,
-  //         screenGeom.left(), screenGeom.top(),
-  //         screenGeom.right(), screenGeom.bottom());
-
-//  if (m_AcquisitionDialog) {
-//    addDockWidget(Qt::RightDockWidgetArea, m_AcquisitionDialog);
-//  }
-
-//  if (m_InputFileBrowser) {
-//    addDockWidget(Qt::LeftDockWidgetArea, m_InputFileBrowser);
-//  }
-
-//  if (screenGeom.height() >= 1280) {
-//    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
-//    splitDockWidget(m_CenterFinderDialog, m_IntegratorDialog, Qt::Vertical);
-
-//    tabifyDockWidget(m_InputFileBrowser, /*m_DatasetBrowserDialog);
-
-//    tabifyDockWidget(m_AcquisitionDialog, *//*m_AcquisitionScalerDialog);
-//    tabifyDockWidget(m_AcquisitionScalerDialog, *//*m_AcquisitionExtraInputsDialog);
-//    tabifyDockWidget(m_AcquisitionExtraInputsDialog, *//*m_SynchronizedAcquisitionDialog);
-//    tabifyDockWidget(m_SynchronizedAcquisitionDialog, */m_DisplayDialog);
-//    tabifyDockWidget(m_DisplayDialog, /*m_SliceDialog);
-//    tabifyDockWidget(m_SliceDialog, *//*m_ImageInfoDialog);
-//    tabifyDockWidget(m_ImageInfoDialog,*/ m_ScriptDialog);
-
-//    tabifyDockWidget(m_CenterFinderDialog, /*m_MaskDialog);
-//    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
-//    tabifyDockWidget(m_OutputFileBrowser, */m_HistogramDialog);
-//  } else if (screenGeom.height() >= 1000) {
-//    splitDockWidget(m_AcquisitionDialog, m_CenterFinderDialog, Qt::Vertical);
-
-//    tabifyDockWidget(m_InputFileBrowser, /*m_DatasetBrowserDialog);
-
-//    tabifyDockWidget(m_AcquisitionDialog, *//*m_AcquisitionScalerDialog);
-//    tabifyDockWidget(m_AcquisitionScalerDialog, *//*m_AcquisitionExtraInputsDialog);
-//    tabifyDockWidget(m_AcquisitionExtraInputsDialog, *//*m_SynchronizedAcquisitionDialog);
-//    tabifyDockWidget(m_SynchronizedAcquisitionDialog, */m_DisplayDialog);
-//    tabifyDockWidget(m_DisplayDialog, /*m_SliceDialog);
-//    tabifyDockWidget(m_SliceDialog, *//*m_ImageInfoDialog);
-//    tabifyDockWidget(m_ImageInfoDialog,*/ m_ScriptDialog);
-
-//    tabifyDockWidget(m_CenterFinderDialog, /*m_MaskDialog);
-//    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
-//    tabifyDockWidget(m_OutputFileBrowser, */m_HistogramDialog);
-//    tabifyDockWidget(m_HistogramDialog, m_IntegratorDialog);
-//  } else {
-//    tabifyDockWidget(m_AcquisitionDialog, /*m_AcquisitionScalerDialog);
-//    tabifyDockWidget(m_AcquisitionScalerDialog, *//*m_AcquisitionExtraInputsDialog);
-//    tabifyDockWidget(m_AcquisitionExtraInputsDialog, *//*m_SynchronizedAcquisitionDialog);
-//    tabifyDockWidget(m_CenterFinderDialog, *//*m_IntegratorDialog);
-
-//    tabifyDockWidget(m_IntegratorDialog,*/ /*m_SynchronizedAcquisitionDialog);
-//    tabifyDockWidget(m_SynchronizedAcquisitionDialog, */m_DisplayDialog);
-
-//    tabifyDockWidget(m_InputFileBrowser, m_DatasetBrowserDialog);
-
-//    tabifyDockWidget(m_DisplayDialog, /*m_MaskDialog);
-//    tabifyDockWidget(m_MaskDialog, */m_CorrectionDialog);
-
-//    tabifyDockWidget(m_OutputFileBrowser, *//*m_SliceDialog);
-//    tabifyDockWidget(m_SliceDialog, *//*m_HistogramDialog);
-//    tabifyDockWidget(m_HistogramDialog, *//*m_ImageInfoDialog);
-//    tabifyDockWidget(m_ImageInfoDialog,*/ m_ScriptDialog);
-
-//    if (screenGeom.height() < 1000) {
-//      //      shrinkObject(this);
-//      shrinkPanels(6,1);
-//    }
-//  }
-
-//  if (expt) {
-//    int fs = expt->get_FontSize();
-//    int sp = expt->get_Spacing();
-
-//    if (fs > 0) {
-//      setFontSize(fs);
-//    }
-
-//    if (sp >= 0) {
-//      setSpacing(sp);
-//    }
-
-//    connect(expt->prop_FontSize(), &QcepIntProperty::valueChanged, this, &QxrdWindow::setFontSize);
-//    connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdWindow::setSpacing);
-//  }
-
 
   connect(m_ExecuteScriptJSButton, &QAbstractButton::clicked, m_ActionExecuteScriptJS, &QAction::triggered);
   connect(m_ExecuteScriptButton, &QAbstractButton::clicked, m_ActionExecuteScript, &QAction::triggered);
@@ -655,12 +502,6 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   m_ToDoList->horizontalHeader()->setStretchLastSection(true);
   m_ToDoList->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   m_ToDoList->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-//  connect(m_ImagePlot, &QxrdImagePlot::slicePolygon,
-//          m_SliceDialog, &QxrdSliceDialog::slicePolygon);
-
-//  connect(m_ImagePlot, &QxrdImagePlot::selectHistogram,
-//          m_HistogramDialog, &QxrdHistogramDialog::histogramSelectionChanged);
 
   if (app) {
     m_Messages -> document() -> setMaximumBlockCount(app->get_MessageWindowLines());

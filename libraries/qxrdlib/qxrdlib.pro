@@ -101,7 +101,6 @@ SOURCES += qxrdlib.cpp \
     qxrdsynchronizedacquisition.cpp \
     qxrdfilebrowsermodel.cpp \
     qxrdfilebrowserview.cpp \
-    qxrdslicedialog.cpp \
     qxrdhistogramdialog.cpp \
     qxrdhistogramplot.cpp \
     qxrdsliceplot.cpp \
@@ -120,7 +119,6 @@ SOURCES += qxrdlib.cpp \
     qxrdacquisitionextrainputs.cpp \
     qxrdacquisitionextrainputschannel.cpp \
     qxrdwindowsettings.cpp \
-    qxrdslicedialogsettings.cpp \
     qxrdimageplotsettings.cpp \
     qxrdfilebrowsersettings.cpp \
     qxrdhistogramdialogsettings.cpp \
@@ -138,8 +136,6 @@ SOURCES += qxrdlib.cpp \
     qxrdplotvectorfieldcurve.cpp \
     qxrdpoint4d.cpp \
     qxrdplotvectorfielddata.cpp \
-    qxrdscriptdialog.cpp \
-    qxrdscriptdialogsettings.cpp \
     qxrdscripteditwidget.cpp \
     qxrdpowderpoint.cpp \
     qxrdpowderpointproperty.cpp \
@@ -233,6 +229,7 @@ SOURCES += qxrdlib.cpp \
     qxrdanalysiswindowsettings.cpp \
     qxrdacquisitionwindowsettings.cpp \
     qxrdacquisitionwindow.cpp \
+    qxrdcorrectiondialog.cpp \
     qxrdcalibrantwindow.cpp \
     qxrdcalibrantwindowsettings.cpp \
     qxrdcenteringwindowsettings.cpp \
@@ -370,6 +367,7 @@ HEADERS += qxrdlib.h\
     qxrdanalysiswindowsettings.h \
     qxrdacquisitionwindowsettings.h \
     qxrdacquisitionwindow.h \
+    qxrdcorrectiondialog.h \
     qxrdcalibrantwindow.h \
     qxrdcalibrantwindowsettings.h \
     qxrdcenteringwindowsettings.h \
@@ -631,7 +629,6 @@ HEADERS += TODO.h \
     qxrdfilebrowsermodel.h \
     qxrdfilebrowsermodel-ptr.h \
     qxrdfilebrowserview.h \
-    qxrdslicedialog.h \
     qxrdhistogramdialog.h \
     qxrdhistogramplot.h \
     qxrdsliceplot.h \
@@ -657,7 +654,6 @@ HEADERS += TODO.h \
     qxrdacquisitionextrainputschannel.h \
     qxrdacquisitionextrainputschannel-ptr.h \
     qxrdwindowsettings.h \
-    qxrdslicedialogsettings.h \
     qxrdimageplotsettings.h \
     qxrdfilebrowsersettings.h \
     qxrdhistogramdialogsettings.h \
@@ -675,8 +671,6 @@ HEADERS += TODO.h \
     qxrdplotvectorfieldcurve.h \
     qxrdpoint4d.h \
     qxrdplotvectorfielddata.h \
-    qxrdscriptdialog.h \
-    qxrdscriptdialogsettings.h \
     qxrdscripteditwidget.h \
     qxrdpowderpoint.h \
     qxrdpowderpointproperty.h \
@@ -739,9 +733,7 @@ HEADERS += TODO.h \
     qxrdhistogramdialogsettings-ptr.h \
     qxrdcenterfinderplotsettings-ptr.h \
     qxrdfilebrowsersettings-ptr.h \
-    qxrdscriptdialogsettings-ptr.h \
     qxrdsynchronizedacquisitionplotsettings-ptr.h \
-    qxrdslicedialogsettings-ptr.h \
     qxrdsliceplotsettings-ptr.h \
     qxrdwindowsettings-ptr.h \
     qxrddetectorsettings.h \
@@ -811,13 +803,11 @@ HEADERS += TODO.h \
 
 FORMS += qxrdwindow.ui \
     qxrdexperimentpreferencesdialog.ui \
-    qxrdslicedialog.ui \
     qxrdhistogramdialog.ui \
     qxrdwelcomewindow.ui \
     qxrdglobalpreferencesdialog.ui \
     qxrdwelcomerecentitem.ui \
     qxrduserscriptdialog.ui \
-    qxrdscriptdialog.ui \
     qxrddetectorcontrolwindow.ui \
     qxrdzingerdialog.ui \
     qxrdpolartransformdialog.ui \
@@ -835,6 +825,7 @@ FORMS += qxrdwindow.ui \
     qxrdmaskingwindow.ui \
     qxrdscriptingwindow.ui \
     qxrdacquisitionwindow.ui \
+    qxrdcorrectiondialog.ui \
     qxrdcalibrantwindow.ui \
     qxrdhelpwindow.ui \
     qxrdcalculatorwindow.ui \

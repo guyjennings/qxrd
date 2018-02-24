@@ -2,7 +2,7 @@
 #define QXRDPLOTWIDGETDIALOG_H
 
 #include "qxrdlib_global.h"
-#include <QDockWidget>
+#include <QDialog>
 #include "ui_qxrdplotwidgetdialog.h"
 #include "qxrdplotwidgetsettings-ptr.h"
 

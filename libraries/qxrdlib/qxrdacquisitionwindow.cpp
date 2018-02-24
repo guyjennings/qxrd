@@ -1,9 +1,9 @@
 #include "qxrdacquisitionwindow.h"
 #include "qxrdexperiment.h"
 #include "qxrdacquisitionwindowsettings.h"
-#include "qxrdcorrectiondialog.h"
 #include "qxrddetectorlistmodel.h"
 #include "qxrdacqcommon.h"
+#include "qxrdcorrectiondialog.h"
 #include <QTableView>
 #include <QDir>
 #include <QFileDialog>

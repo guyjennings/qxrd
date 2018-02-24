@@ -50,7 +50,7 @@
 #include "qxrdwindowsettings.h"
 #include "qxrdgeneratetestimage.h"
 #include "qxrdjsengine.h"
-
+#include "qxrdintegrator.h"
 #include "qxrdmainwindowsettings-ptr.h"
 #include "qxrdacquisitionwindowsettings.h"
 #include "qxrdextraiowindowsettings.h"

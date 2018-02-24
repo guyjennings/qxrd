@@ -13,14 +13,9 @@
 
 #include "qxrdmainwindow.h"
 #include "qxrdscriptengine.h"
-#include "qxrdacquisitionscalerdialog-ptr.h"
 #include "qxrdplotwidgetdialog.h"
-#include "qxrdcorrectiondialog.h"
-#include "qxrdintegratordialog.h"
 #include "qxrdintegratorplot.h"
-#include "qxrdslicedialog.h"
 #include "qxrdhistogramdialog.h"
-#include "qxrdscriptdialog.h"
 #include "qxrdhighlighter.h"
 
 #include "qxrdexperiment-ptr.h"

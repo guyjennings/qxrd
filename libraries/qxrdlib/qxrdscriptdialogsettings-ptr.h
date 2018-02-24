@@ -1,8 +1,0 @@
-#ifndef QXRDSCRIPTDIALOGSETTINGSPTR_H
-#define QXRDSCRIPTDIALOGSETTINGSPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdScriptDialogSettings)
-
-#endif // QXRDSCRIPTDIALOGSETTINGSPTR_H

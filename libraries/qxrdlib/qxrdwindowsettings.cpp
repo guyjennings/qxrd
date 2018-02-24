@@ -5,8 +5,6 @@
 #include "qxrdintegratorplotsettings.h"
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdhistogramdialogsettings.h"
-#include "qxrdslicedialogsettings.h"
-#include "qxrdscriptdialogsettings.h"
 #include "qxrddistortioncorrectionplotsettings.h"
 #include "qxrdsliceplotsettings.h"
 #include "qxrdsynchronizedacquisitionplotsettings.h"
@@ -31,8 +29,6 @@ QxrdWindowSettings::QxrdWindowSettings(QString name, QString desc) :
   m_IntegratorPlotSettings = QxrdIntegratorPlotSettings::newIntegratorPlotSettings();
   m_FileBrowserSettings = QxrdFileBrowserSettings::newFileBrowserSettings();
   m_HistogramDialogSettings = QxrdHistogramDialogSettings::newHistogramDialogSettings();
-  m_SliceDialogSettings = QxrdSliceDialogSettings::newSliceDialogSettings();
-  m_ScriptDialogSettings = QxrdScriptDialogSettings::newScriptDialogSettings();
   m_DistortionCorrectionPlotSettings = QxrdDistortionCorrectionPlotSettings::newDistortionCorrectionPlotSettings();
 }
 
@@ -49,8 +45,6 @@ void QxrdWindowSettings::initialize(QcepObjectWPtr parent)
   m_IntegratorPlotSettings                -> initialize(sharedFromThis());
   m_FileBrowserSettings                   -> initialize(sharedFromThis());
   m_HistogramDialogSettings               -> initialize(sharedFromThis());
-  m_SliceDialogSettings                   -> initialize(sharedFromThis());
-  m_ScriptDialogSettings                  -> initialize(sharedFromThis());
   m_DistortionCorrectionPlotSettings      -> initialize(sharedFromThis());
 }
 
@@ -88,9 +82,7 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdFileBrowserSettings*>("QxrdFileBrowserSettings*");
   qRegisterMetaType<QxrdHistogramDialogSettings*>("QxrdHistogramDialogSettings*");
   qRegisterMetaType<QxrdHistogramPlotSettings*>("QxrdHistogramPlotSettings*");
-  qRegisterMetaType<QxrdSliceDialogSettings*>("QxrdSliceDialogSettings*");
   qRegisterMetaType<QxrdSlicePlotSettings*>("QxrdSlicePlotSettings*");
-  qRegisterMetaType<QxrdScriptDialogSettings*>("QxrdScriptDialogSettings*");
   qRegisterMetaType<QxrdSynchronizedAcquisitionPlotSettings*>("QxrdSynchronizedAcquisitionPlotSettings*");
   qRegisterMetaType<QxrdDistortionCorrectionPlotSettings*>("QxrdDistortionCorrectionPlotSettings*");
 }
@@ -127,18 +119,6 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
     if (m_HistogramDialogSettings) {
       settings->beginGroup("histogramDialog");
       m_HistogramDialogSettings->readSettings(settings);
-      settings->endGroup();
-    }
-
-    if (m_SliceDialogSettings) {
-      settings->beginGroup("sliceDialog");
-      m_SliceDialogSettings->readSettings(settings);
-      settings->endGroup();
-    }
-
-    if (m_ScriptDialogSettings) {
-      settings->beginGroup("scriptDialog");
-      m_ScriptDialogSettings->readSettings(settings);
       settings->endGroup();
     }
 
@@ -209,18 +189,6 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (m_SliceDialogSettings) {
-      settings->beginGroup("sliceDialog");
-      m_SliceDialogSettings->writeSettings(settings);
-      settings->endGroup();
-    }
-
-    if (m_ScriptDialogSettings) {
-      settings->beginGroup("scriptDialog");
-      m_ScriptDialogSettings->writeSettings(settings);
-      settings->endGroup();
-    }
-
     if (m_DistortionCorrectionPlotSettings) {
       settings->beginGroup("distortionCorrectionPlot");
       m_DistortionCorrectionPlotSettings->writeSettings(settings);
@@ -273,24 +241,9 @@ QxrdFileBrowserSettingsWPtr QxrdWindowSettings::fileBrowserSettings()
   return m_FileBrowserSettings;
 }
 
-//QxrdOutputFileBrowserSettingsWPtr QxrdWindowSettings::outputFileBrowserSettings()
-//{
-//  return m_OutputFileBrowserSettings;
-//}
-
-QxrdSliceDialogSettingsWPtr QxrdWindowSettings::sliceDialogSettings()
-{
-  return m_SliceDialogSettings;
-}
-
 QxrdHistogramDialogSettingsWPtr QxrdWindowSettings::histogramDialogSettings()
 {
   return m_HistogramDialogSettings;
-}
-
-QxrdScriptDialogSettingsWPtr QxrdWindowSettings::scriptDialogSettings()
-{
-  return m_ScriptDialogSettings;
 }
 
 QxrdDistortionCorrectionPlotSettingsWPtr QxrdWindowSettings::distortionCorrectionPlotSettings()
