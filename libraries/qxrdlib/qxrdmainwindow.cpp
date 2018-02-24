@@ -43,6 +43,77 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
   }
 }
 
+void QxrdMainWindow::populateWindowsMenu()
+{
+  inherited::populateWindowsMenu();
+
+  QxrdExperimentPtr expt(
+        QxrdExperiment::findExperiment(m_Parent));
+
+  if (expt) {
+    QxrdAcqCommonPtr acqp(expt->acquisition());
+
+    QxrdAcqCommon *acq = acqp.data();
+
+    if (acq) {
+      QMenu *acquireWins = new QMenu("Detectors");
+
+      acquireWins -> addAction("Setup Detectors...",
+                               this, &QxrdMainWindow::doEditDetectorPreferences);
+
+      QMenu *configMenu = new QMenu("Configure Detector");
+      QMenu *ctrlMenu   = new QMenu("Open Detector Window");
+
+      int nDets = acq->detectorCount();
+
+      for (int i=0; i<nDets; i++) {
+        QxrdDetectorSettingsPtr det = acq->detector(i);
+
+        QString detType = det->get_DetectorTypeName();
+        QString detName = det->get_DetectorName();
+        bool    enabled = det->get_Enabled();
+
+        QString str =
+            tr("(%1) Configure %2 \"%3\"...")
+            .arg(i).arg(detType).arg(detName);
+
+        QAction *act =
+            new QAction(str);
+
+        act -> setCheckable(true);
+        act -> setChecked(enabled);
+
+        connect(act, &QAction::triggered,
+                [=]() {acq->configureDetector(i);});
+
+        configMenu -> addAction(act);
+
+        QString str2 =
+            tr("(%1) Open %2 detector \"%3\" Control...")
+            .arg(i).arg(detType).arg(detName);
+
+        QAction *act2 =
+            new QAction(str2);
+
+        act2 -> setCheckable(true);
+        act2 -> setChecked(enabled);
+
+        connect(act2, &QAction::triggered,
+                [=]() {acq->openDetectorControlWindow(i);});
+
+        ctrlMenu -> addAction(act2);
+      }
+
+      acquireWins   -> addMenu(configMenu);
+      acquireWins   -> addMenu(ctrlMenu);
+
+      m_WindowMenuP -> insertMenu(
+            m_WindowMenuP -> actions().first(),
+            acquireWins);
+    }
+  }
+}
+
 void QxrdMainWindow::updateTitle()
 {
   QxrdExperimentPtr exper(QxrdExperiment::findExperiment(m_Parent));

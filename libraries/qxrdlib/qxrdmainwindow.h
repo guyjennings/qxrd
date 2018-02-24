@@ -36,6 +36,9 @@ public slots:
   void doEditPreferences();
   void doEditDetectorPreferences();
 
+protected:
+  void populateWindowsMenu();
+
 private:
   void updateTitle();
   void acquireStarted();
@@ -44,10 +47,6 @@ private:
 
 protected:
   QString             m_Name;
-//  QxrdAppCommonWPtr   m_Application;
-//  QxrdExperimentWPtr  m_Experiment;
-//  QxrdAcqCommonWPtr   m_Acquisition;
-//  QxrdProcessorWPtr   m_Processor;
 };
 
 #endif // QXRDMAINWINDOW_H
