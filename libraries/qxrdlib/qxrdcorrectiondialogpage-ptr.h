@@ -1,0 +1,8 @@
+#ifndef QXRDCORRECTIONDIALOGPAGEPTR_H
+#define QXRDCORRECTIONDIALOGPAGEPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdCorrectionDialogPage)
+
+#endif // QXRDCORRECTIONDIALOGPAGEPTR_H

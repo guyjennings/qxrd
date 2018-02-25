@@ -987,6 +987,16 @@ Script Function: acquire([fileName
                </property>
               </widget>
              </item>
+             <item row="21" column="3">
+              <widget class="QPushButton" name="m_ProcessorOptionsButton">
+               <property name="toolTip">
+                <string>Processing Options</string>
+               </property>
+               <property name="text">
+                <string>Processor Options...</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
            <widget class="QWidget" name="m_WatcherPage"/>
@@ -1015,7 +1025,7 @@ Script Function: acquire([fileName
      <x>0</x>
      <y>0</y>
      <width>1244</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -1127,6 +1137,11 @@ Script Function: acquire([fileName
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QxrdExposureTimeSpinner</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>qxrdexposuretimespinner.h</header>
+  </customwidget>
+  <customwidget>
    <class>QcepDatasetBrowserView</class>
    <extends>QTreeView</extends>
    <header>qcepdatasetbrowserview.h</header>
@@ -1136,11 +1151,6 @@ Script Function: acquire([fileName
    <extends>QWidget</extends>
    <header>qxrdfilebrowserwidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QxrdExposureTimeSpinner</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>qxrdexposuretimespinner.h</header>
   </customwidget>
  </customwidgets>
  <resources>

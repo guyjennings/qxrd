@@ -33,7 +33,12 @@ private slots:
 protected:
   void changeEvent(QEvent *e);
 
-  QxrdDetectorListModelPtr m_DetectorsModel;
+private:
+  QxrdAcquisitionWindowSettingsWPtr m_Settings;
+  QxrdExperimentWPtr                m_Experiment;
+  QxrdAcqCommonWPtr                 m_Acquisition;
+  QxrdProcessorWPtr                 m_Processor;
+  QxrdDetectorListModelPtr          m_DetectorsModel;
 };
 
 #endif // QXRDACQUISITIONWINDOW_H

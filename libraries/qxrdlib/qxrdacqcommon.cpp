@@ -13,6 +13,7 @@ QxrdAcqCommon::QxrdAcqCommon(QString name) :
   m_SkippedExposuresAtStart(this,"skippedExposuresAtStart",0, "Exposures to Skip at Start"),
   m_PhasesInGroup(this,"phasesInGroup",1, "Number of Image Phases"),
   m_CurrentPhase(this, "currentPhase", 0, "Current Acquisition Phase"),
+  m_ApplyToAll(this, "applyToAll", false, "Apply processor options to all detectors"),
   m_SummedExposures(this,"summedExposures",1, "Summed Exposures per Image"),
   m_DarkSummedExposures(this,"darkSummedExposures",1, "Summed Exposures in Dark Image"),
   m_CurrentSummation(this, "currentSumation", 0, "Current Acquisition Summation"),

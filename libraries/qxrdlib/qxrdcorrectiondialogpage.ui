@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QxrdCorrectionDialogPage</class>
+ <widget class="QWidget" name="QxrdCorrectionDialogPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>375</width>
+    <height>466</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="10" column="0">
+      <widget class="QCheckBox" name="m_DisplayIntegratedData">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Add integrated data to graph as it is calculated</string>
+       </property>
+       <property name="text">
+        <string>Display integrated data</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0">
+      <widget class="QCheckBox" name="m_SaveIntegratedData">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Save each integration as it is calculated</string>
+       </property>
+       <property name="text">
+        <string>Save Integrated Data in Scan File</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QCheckBox" name="m_PerformIntegration">
+       <property name="toolTip">
+        <string>Perform angular integration as each image is taken</string>
+       </property>
+       <property name="text">
+        <string>Perform Integration</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="0">
+      <widget class="QCheckBox" name="m_AccumulateIntegrated2D">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Save each integration in a separate file as it is calculated</string>
+       </property>
+       <property name="text">
+        <string>Accumulate Integrated Data into 2-D dataset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QCheckBox" name="m_SaveAsText">
+       <property name="toolTip">
+        <string>Save subtracted images as they are taken</string>
+       </property>
+       <property name="text">
+        <string>Save images as text</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="m_PerformDark">
+       <property name="toolTip">
+        <string>Do dark subtraction as images are taken</string>
+       </property>
+       <property name="text">
+        <string>Perform Dark Subtraction </string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="m_SaveDark">
+       <property name="toolTip">
+        <string>Save 'dark' images</string>
+       </property>
+       <property name="text">
+        <string>Save 'dark' images</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0">
+      <widget class="QCheckBox" name="m_SaveIntegratedInSeparateFiles">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Save each integration in a separate file as it is calculated</string>
+       </property>
+       <property name="text">
+        <string>Save Integrated Data in separate files</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="0">
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>238</width>
+         <height>47</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="6" column="0">
+      <widget class="QCheckBox" name="m_PerformGainCorrection">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Perform gain correction</string>
+       </property>
+       <property name="text">
+        <string>Perform Gain Correction</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="m_SaveRaw">
+       <property name="toolTip">
+        <string>Save 'raw' images (before dark subtraction), as well</string>
+       </property>
+       <property name="text">
+        <string>Save 'raw' images</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QCheckBox" name="m_SaveSubtracted">
+       <property name="toolTip">
+        <string>Save subtracted images as they are taken</string>
+       </property>
+       <property name="text">
+        <string>Save 'subtracted' images</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QCheckBox" name="m_PerformBadPixels">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Do Bad Pixel Correction</string>
+       </property>
+       <property name="text">
+        <string>Perform Bad Pixel Correction</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="m_DetectorEnabled">
+       <property name="text">
+        <string>Detector Enabled?</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="m_DetectorName">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

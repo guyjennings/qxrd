@@ -98,6 +98,9 @@ public:
   Q_PROPERTY(int    currentPhase READ get_CurrentPhase WRITE set_CurrentPhase STORED false)
   QCEP_INTEGER_PROPERTY(CurrentPhase)
 
+  Q_PROPERTY(bool   applyToAll       READ get_ApplyToAll      WRITE set_ApplyToAll)
+  QCEP_BOOLEAN_PROPERTY(ApplyToAll)
+
   Q_PROPERTY(int    summedExposures  READ get_SummedExposures WRITE set_SummedExposures)
   QCEP_INTEGER_PROPERTY(SummedExposures)
 

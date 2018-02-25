@@ -21,6 +21,8 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
 
   inherited::initialize(parent);
 
+  m_Settings    = qSharedPointerDynamicCast<QxrdAcquisitionWindowSettings>(m_Parent);
+  m_Experiment  = QxrdExperiment::findExperiment(m_Parent);
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
@@ -31,15 +33,17 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
   QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {
+    m_Acquisition = exp -> acquisition();
+    m_Processor   = exp -> processor();
+
     m_DatasetBrowserView -> setExperiment(exp);
 
     QcepDatasetModelPtr model(exp->dataset());
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdAcquisitionWindowSettingsPtr settings(
-          qSharedPointerDynamicCast<QxrdAcquisitionWindowSettings>(m_Parent));
-    QxrdProcessorPtr                 procw(QxrdProcessor::findProcessor(m_Parent));
+    QxrdAcquisitionWindowSettingsPtr settings(m_Settings);
+    QxrdProcessorPtr                 procw(m_Processor);
 
     if (settings && procw) {
       m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, procw);
@@ -48,7 +52,7 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
     m_DetectorsModel =
         QxrdDetectorListModelPtr(new QxrdDetectorListModel());
 
-    QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
+    QxrdAcqCommonPtr acqp(m_Acquisition);
 
     if (acqp) {
       for (int i=0; i<acqp->detectorCount(); i++) {
@@ -112,7 +116,7 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
     }
   }
 
-  connect(m_AcquireOptionsButton, &QPushButton::clicked, this, &QxrdAcquisitionWindow::doEditCorrection);
+  connect(m_ProcessorOptionsButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::doEditCorrection);
   connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences);
   connect(m_AcquireOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditPreferences);
 }
@@ -135,11 +139,11 @@ void QxrdAcquisitionWindow::changeEvent(QEvent *e)
 
 void QxrdAcquisitionWindow::doEditCorrection()
 {
-  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
+  QxrdExperimentPtr exp();
 
   if (exp) {
-    QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
-    QxrdProcessorPtr proc(QxrdProcessor::findProcessor(m_Parent));
+    QxrdAcqCommonPtr acq(m_Acquisition);
+    QxrdProcessorPtr proc(m_Processor);
 
     if (acq && proc) {
       QxrdCorrectionDialog* editCorrection =
