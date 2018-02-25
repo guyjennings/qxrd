@@ -244,6 +244,11 @@ QxrdDetectorControlWindow::~QxrdDetectorControlWindow()
 #endif
 }
 
+void QxrdDetectorControlWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
+{
+  inherited::setupMenus(file, edit, window);
+}
+
 void QxrdDetectorControlWindow::updateWindowTitle()
 {
   QxrdDetectorSettingsPtr dt(m_Detector);

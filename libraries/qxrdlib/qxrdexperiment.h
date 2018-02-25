@@ -76,7 +76,6 @@ public:
   QxrdAppCommonWPtr application() const;
   QxrdExperimentThreadWPtr experimentThread() const;
   QxrdAcqCommonWPtr acquisition() const;
-  QxrdWindowPtr window();
   QxrdProcessorWPtr processor() const;
   QxrdCenterFinderWPtr centerFinder() const;
   QxrdIntegratorWPtr integrator() const;
@@ -97,7 +96,6 @@ public:
   FILE* scanFile();
   void newScanFile(QString path);
 
-//  QcepSettingsSaverPtr settingsSaver();
   QxrdScriptEngineWPtr scriptEngine();
   QxrdJSEngineWPtr     jsEngine();
 
@@ -130,10 +128,6 @@ public slots:
   void writeSettings(QSettings *settings);
 
   void logMessage(QString msg) const;
-  //TODO: remove...
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void printLine(QString msg) const;
 
   void saveExperiment();
   void saveExperimentAsText(QString filePath);
@@ -150,11 +144,7 @@ public slots:
   void evaluateScriptFiles(QStringList files);
   void evaluateScriptFile(QString path);
 
-//  void openAcquisitionWindow();
-
   void openWindow(QxrdMainWindowSettingsWPtr set);
-
-//  void onAutoSaveTimer();
 
   void defaultWindowSettings();
 
@@ -168,18 +158,12 @@ private:
 
   void closeScanFile();
 
-  void displayPushedMessages() const;
-  void pushMessage(QString msg) const;
-
 public:
   void openScanFile();
 
 private:
   QxrdAppCommonWPtr               m_Application;
   QxrdExperimentThreadWPtr        m_ExperimentThread;
-  QxrdWindowSettingsPtr           m_WindowSettings;   //TODO: elim
-  QxrdWindowPtr                   m_Window;           //TODO: elim
-//  QxrdDetectorControlWindowPtr        m_AcquisitionWindow;
   QxrdServerThreadPtr             m_ServerThread;
   QxrdServerWPtr                  m_Server;
   QxrdSimpleServerThreadPtr       m_SimpleServerThread;
@@ -190,14 +174,9 @@ private:
   QxrdCalibrantDSpacingsPtr       m_CalibrantDSpacings;
   QxrdCalibrantDSpacingsModelPtr  m_CalibrantDSpacingsModel;
   QxrdAcqCommonPtr                m_Acquisition;
-//  QxrdDetectorThreadPtr           m_DetectorThread;
-//  QxrdDetectorWPtr                m_Detector;
   QxrdFileSaverThreadPtr          m_FileSaverThread;
   QxrdFileSaverWPtr               m_FileSaver;
-//  QxrdScriptEngineThreadPtr       m_ScriptEngineThread;
-//  QxrdScriptEngineWPtr            m_ScriptEngine;
   QxrdScriptEnginePtr             m_ScriptEngine;
-//  QScriptEngineDebugger          *m_ScriptEngineDebugger;
 
   QxrdJSEnginePtr                 m_ScriptEngineJS;
 
@@ -210,8 +189,6 @@ private:
   FILE                           *m_ScanFile;
 
   QMutex                          m_ExperimentFileMutex;
-
-//  QTimer                          m_AutoSaveTimer;
 
   mutable QStringList             m_PushedMessages;
 

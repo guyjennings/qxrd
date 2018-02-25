@@ -76,9 +76,6 @@ QxrdExperiment::QxrdExperiment(QString path,
                                int mode) :
   inherited(path, name),
   m_Application(),
-  m_WindowSettings(NULL),
-  m_Window(),
-//  m_AcquisitionWindow(),
   m_ServerThread(NULL),
   m_Server(),
   m_SimpleServerThread(NULL),
@@ -88,7 +85,6 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_FileSaverThread(NULL),
   m_FileSaver(),
   m_ScriptEngine(),
-//  m_ScriptEngineDebugger(NULL),
   m_ScriptEngineJS(),
   m_LogFile(NULL),
   m_ScanFile(NULL),
@@ -171,9 +167,6 @@ QxrdExperiment::~QxrdExperiment()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::~QxrdExperiment(%p)\n", this);
   }
-
-//  onAutoSaveTimer();
-//  m_SettingsSaver->performSave();
 
   closeScanFile();
   closeLogFile();
@@ -276,9 +269,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
 //    m_DatasetModel -> newColumn("/group4/t", 1000);
 //    m_DatasetModel -> newColumn("/group4/sdev", 1000);
 
-    m_WindowSettings = QxrdWindowSettings::newWindowSettings();
-    m_WindowSettings -> initialize(sharedFromThis());
-
     splashMessage("Starting SPEC Server");
 
     m_ServerThread = QxrdServerThreadPtr(
@@ -297,12 +287,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
 
     m_SimpleServer = m_SimpleServerThread -> server();
 
-//    m_ScriptEngineThread = QxrdScriptEngineThreadPtr(
-//          new QxrdScriptEngineThread(m_Application, m_Experiment));
-//    m_ScriptEngineThread -> setObjectName("script");
-//    m_ScriptEngineThread -> start();
-//    m_ScriptEngine = m_ScriptEngineThread -> scriptEngine();
-
     m_ScriptEngine = QxrdScriptEnginePtr(
           new QxrdScriptEngine(app, myself));
 
@@ -316,12 +300,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
     QxrdScriptEnginePtr eng(m_ScriptEngine);
 
     QxrdServerPtr srv(m_Server);
-
-//    if (eng) {
-//      m_ScriptEngineDebugger = new QScriptEngineDebugger(this);
-//      m_ScriptEngineDebugger -> attachTo(eng.data());
-//      m_ScriptEngineDebugger -> setAutoShowStandardWindow(true);
-//    }
 
     if (srv && eng) {
       connect(srv.data(),   &QxrdServer::executeCommand,
@@ -406,12 +384,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
 
     connect(prop_WorkCompleted(),   &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage);
     connect(prop_WorkTarget(),      &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage);
-
-//    m_SettingsSaver->start();
-
-//    connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdExperiment::onAutoSaveTimer);
-
-//    m_AutoSaveTimer.start(5000);
   }
 }
 
@@ -498,61 +470,6 @@ void QxrdExperiment::openWindows()
   GUI_THREAD_CHECK;
 
   inherited::openWindows();
-
-  QxrdAppCommonPtr app(m_Application);
-
-  if (app && app->get_GuiWanted()) {
-    splashMessage("Opening Main Window");
-
-    //TODO: remove
-    m_Window = QxrdWindowPtr(
-          new QxrdWindow("mainWindow"),
-          &QObject::deleteLater); //TODO: is deleteLater necessary?
-
-    QxrdScriptEnginePtr eng(m_ScriptEngine);
-
-    if (m_Window) {
-      m_Window -> initialize(m_WindowSettings);
-
-//      if (m_Acquisition) {
-//        //          m_Acquisition -> setWindow(m_Window);
-
-//        m_Acquisition->openWindows(); // Open detector control windows...
-//      }
-
-      if (eng) {
-        eng -> setWindow(m_Window);
-      }
-
-      if (m_ScriptEngineJS) {
-        m_ScriptEngineJS -> setWindow(m_Window);
-      }
-
-      m_Window -> onAcquisitionInit();
-
-      if (eng) {
-        connect(m_Window.data(),   &QxrdWindow::executeCommand,
-                eng.data(),   &QxrdScriptEngine::evaluateAppCommand);
-
-        connect(eng.data(),   &QxrdScriptEngine::appResultAvailable,
-                m_Window.data(),   &QxrdWindow::finishedCommand);
-      }
-
-      if (m_ScriptEngineJS) {
-        connect(m_Window.data(), &QxrdWindow::executeCommandJS,
-                m_ScriptEngineJS.data(), &QxrdJSEngine::evaluateAppCommandJS);
-
-        connect(m_ScriptEngineJS.data(), &QxrdJSEngine::appResultAvailableJS,
-                m_Window.data(), &QxrdWindow::finishedCommandJS);
-      }
-
-      readInitialLogFile();
-
-      if (m_Window) {
-        m_Window -> show();
-      }
-    }
-  }
 }
 
 void QxrdExperiment::closeWindows()
@@ -560,74 +477,11 @@ void QxrdExperiment::closeWindows()
   GUI_THREAD_CHECK;
 
   inherited::closeWindows();
-
-  m_Window = QxrdWindowPtr();
-}
-
-void QxrdExperiment::criticalMessage(QString msg, QDateTime /*ts*/) const
-{
-  QxrdAppCommonPtr   app(m_Application);
-  QxrdWindowPtr      win(m_Window);
-
-  if (win) {
-    displayPushedMessages();
-    win->displayCriticalMessage(msg);
-  } else if (app) {
-    pushMessage(msg);
-  }
-}
-
-void QxrdExperiment::statusMessage(QString msg, QDateTime /*ts*/) const
-{
-  QxrdWindowPtr      win(m_Window);
-
-  if (win) {
-    displayPushedMessages();
-    win->displayStatusMessage(msg);
-  } else {
-    pushMessage(msg);
-  }
-}
-
-void QxrdExperiment::printLine(QString msg) const
-{
-  QxrdWindowPtr win = m_Window;
-
-  if (win) {
-    displayPushedMessages();
-
-    win->displayMessage(msg);
-  } else {
-    pushMessage(msg);
-  }
-}
-
-void QxrdExperiment::displayPushedMessages() const
-{
-  QxrdWindowPtr win = m_Window;
-
-  if (win) {
-    foreach (QString m, m_PushedMessages) {
-      win->displayMessage(m);
-    }
-
-    m_PushedMessages.clear();
-  }
-}
-
-void QxrdExperiment::pushMessage(QString msg) const
-{
-  m_PushedMessages.append(msg);
 }
 
 QxrdAppCommonWPtr QxrdExperiment::application() const
 {
   return m_Application;
-}
-
-QxrdWindowPtr QxrdExperiment::window()
-{
-  return m_Window;
 }
 
 QxrdAcqCommonWPtr QxrdExperiment::acquisition() const
@@ -809,7 +663,8 @@ void QxrdExperiment::readInitialLogFile()
     while (!feof(logFile)) {
       fgets(buff, 10000, logFile);
 
-      m_Window->initialLogEntry(buff);
+      //TODO: replace
+//      m_Window->initialLogEntry(buff);
     }
 
     fclose(logFile);
@@ -950,14 +805,6 @@ void QxrdExperiment::readSettings(QSettings *settings)
     QxrdServerPtr srv(m_Server);
     QxrdSimpleServerPtr ssrv(m_SimpleServer);
 
-    splashMessage("Reading Window Settings");
-
-    if (m_WindowSettings) {
-      settings->beginGroup("window");
-      m_WindowSettings -> readSettings(settings);
-      settings->endGroup();
-    }
-
     splashMessage("Reading Acquisition Settings");
 
     if (m_Acquisition) {
@@ -1014,12 +861,6 @@ void QxrdExperiment::readSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    //    if (m_DatasetModel) {
-    //      settings->beginGroup("dataset");
-    //      m_DatasetModel->readSettings(settings, "dataset");
-    //      settings->endGroup();
-    //    }
-
     splashMessage("Reading Dataset Settings");
 
     if (m_Dataset) {
@@ -1031,8 +872,6 @@ void QxrdExperiment::readSettings(QSettings *settings)
     if (get_QxrdVersion() != STR(QXRD_VERSION)) {
       set_QxrdVersion(STR(QXRD_VERSION));
     }
-
-//    defaultWindowSettings();
   }
 
   if (qcepDebug(DEBUG_PREFS)) {
@@ -1093,16 +932,6 @@ void QxrdExperiment::writeSettings(QSettings *settings)
     QxrdServerPtr        srv(m_Server);
     QxrdSimpleServerPtr  ssrv(m_SimpleServer);
 
-    if (m_Window) {
-      m_Window->captureSize();
-    }
-
-    if (m_WindowSettings) {
-      settings->beginGroup("window");
-      m_WindowSettings -> writeSettings(settings);
-      settings->endGroup();
-    }
-
     if (m_Acquisition) {
       settings->beginGroup("acquisition");
       m_Acquisition -> writeSettings(settings);
@@ -1133,12 +962,6 @@ void QxrdExperiment::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    //    if (m_DatasetModel) {
-    //      settings->beginGroup("dataset");
-    //      m_DatasetModel -> writeSettings(settings, "dataset");
-    //      settings->endGroup();
-    //    }
-
     if (m_Dataset) {
       settings->beginGroup("dataset");
       m_Dataset -> writeSettings(settings);
@@ -1150,23 +973,6 @@ void QxrdExperiment::writeSettings(QSettings *settings)
     printMessage(tr("finished QxrdExperiment::writeSettings(QSettings*) after %1 msec").arg(tic.elapsed()));
   }
 }
-
-//void QxrdExperiment::onAutoSaveTimer()
-//{
-////  printMessage("Auto save experiment");
-
-////  if (m_Window) {
-//  //    m_Window->setChanged(isChanged());
-//  //  }
-//  if (!get_IsReading()) {
-//    if (isChanged()) {
-//      printMessage(tr("QxrdExperiment::onAutoSaveTimer saved because %1 changed").arg(changedBy()));
-//      printf("QxrdExperiment::onAutoSaveTimer saved because %s changed\n", qPrintable(changedBy()));
-
-//      writeSettings();
-//    }
-//  }
-//}
 
 QString QxrdExperiment::defaultDataDirectory(QString /*path*/) const
 {
@@ -1197,12 +1003,6 @@ void QxrdExperiment::setExperimentFilePath(QString path)
   set_ExperimentName(defaultExperimentName(path));
   set_LogFileName(defaultLogName(path));
   set_ScanFileName(defaultScanName(path));
-
-//  QxrdWindowPtr win = m_Window;
-
-//  if (win) {
-//    win -> updateTitle();
-//  }
 
   if (qcepDebug(DEBUG_PREFS)) {
     printMessage(tr("setExperimentFilePath %1").arg(path));
@@ -1242,9 +1042,7 @@ void QxrdExperiment::saveExperimentAs(QString path)
 
   setExperimentFilePath(path);
 
-//  settings.beginGroup("experiment");
   writeSettings(&settings);
-//  settings.endGroup();
 }
 
 void QxrdExperiment::saveExperimentAsText(QString filePath)
@@ -1264,17 +1062,7 @@ void QxrdExperiment::saveExperimentCopyAs(QString path)
 
   QxrdExperimentSettings settings(path);
 
-//  settings.beginGroup("experiment");
   writeSettings(&settings);
-//  settings.endGroup();
-
-//  QxrdExperiment *exp = new QxrdExperiment(path, m_Application, &settings);
-
-//  exp -> setExperimentFilePath(path);
-
-//  exp -> writeSettings(&settings);
-
-//  delete exp;
 }
 
 void QxrdExperiment::openWatcher(QString patt)
@@ -1326,9 +1114,10 @@ void QxrdExperiment::finishedWork(int amt)
 
 void QxrdExperiment::plotImage(QcepDoubleImageDataPtr img)
 {
-  if (m_Window) {
-    m_Window->newDataAvailable(img, QcepMaskDataPtr());
-  }
+  //TODO: replace
+//  if (m_Window) {
+//    m_Window->newDataAvailable(img, QcepMaskDataPtr());
+//  }
 }
 
 QColor QxrdExperiment::pickColor(QColor start)

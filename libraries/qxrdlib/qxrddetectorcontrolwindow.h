@@ -28,6 +28,8 @@ public:
   void initialize(QcepObjectWPtr parent);
   virtual ~QxrdDetectorControlWindow();
 
+  void setupMenus(QMenu *file, QMenu *edit, QMenu *window);
+
 public slots:
   virtual void printLine(QString line);
   virtual void printMessage(QString msg, QDateTime ts=QDateTime::currentDateTime());

@@ -1587,6 +1587,7 @@ Script Function: acquire([fileName
     <property name="title">
      <string>Window</string>
     </property>
+    <addaction name="actionWindows"/>
    </widget>
    <addaction name="m_FileMenu"/>
    <addaction name="m_EditMenu"/>
@@ -1676,6 +1677,11 @@ Script Function: acquire([fileName
    </property>
    <property name="toolTip">
     <string>Acquire Once</string>
+   </property>
+  </action>
+  <action name="actionWindows">
+   <property name="text">
+    <string>Windows</string>
    </property>
   </action>
  </widget>
