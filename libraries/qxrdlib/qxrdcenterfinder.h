@@ -27,6 +27,8 @@ public:
   Q_INVOKABLE QxrdCenterFinder(QString name);
   void initialize(QcepObjectWPtr parent);
 
+  static QxrdCenterFinderWPtr findCenterFinder(QcepObjectWPtr p);
+
   static QxrdCenterFinderPtr newCenterFinder();
   virtual ~QxrdCenterFinder();
 

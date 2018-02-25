@@ -113,6 +113,22 @@ QxrdCenterFinder::~QxrdCenterFinder()
 #endif
 }
 
+QxrdCenterFinderWPtr QxrdCenterFinder::findCenterFinder(QcepObjectWPtr p)
+{
+  QxrdCenterFinderWPtr res =
+      qSharedPointerDynamicCast<QxrdCenterFinder>(p);
+
+  if (res == NULL) {
+    QcepObjectPtr objp(p);
+
+    if (objp) {
+      res = findCenterFinder(objp->parentPtr());
+    }
+  }
+
+  return res;
+}
+
 //TODO: redo ...
 QxrdExperimentWPtr QxrdCenterFinder::experiment() const
 {
