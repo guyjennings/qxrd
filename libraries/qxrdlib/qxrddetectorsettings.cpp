@@ -20,6 +20,11 @@
 #include "qxrdapplication.h"
 #include "qxrddetectorplugin.h"
 #include <QThread>
+#include "qxrdacquisitionwindowsettings.h"
+#include "qxrdcenteringwindowsettings.h"
+#include "qxrdinfowindowsettings.h"
+#include "qxrdintegrationwindowsettings.h"
+#include "qxrdmaskingwindowsettings.h"
 
 QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   inherited(name),
@@ -77,6 +82,39 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
   m_Application = QxrdApplication::findApplication(parent);
   m_Experiment  = QxrdExperiment::findExperiment(parent);
   m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
+
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdAcquisitionWindowSettings(
+                           "acquisitionWindowSettings",
+                           "Acquisition Window")));
+
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdCenteringWindowSettings(
+                           "centeringWindowSettings",
+                           "Centering Window")));
+
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdInfoWindowSettings(
+                           "infoWindowSettings",
+                           "Info Window")));
+
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdIntegrationWindowSettings(
+                           "integrationWindowSettings",
+                           "Integration Window")));
+
+  appendWindowSettings(QcepMainWindowSettingsPtr(
+                         new QxrdMaskingWindowSettings(
+                           "maskingWindowSettings",
+                           "Masking Window")));
+
+  for (int i=0; i<windowSettingsCount(); i++) {
+    QcepMainWindowSettingsPtr set = windowSettings(i);
+
+    if (set) {
+      set -> initialize(sharedFromThis());
+    }
+  }
 
 #ifndef QT_NO_DEBUG
   if (m_Application == NULL) {

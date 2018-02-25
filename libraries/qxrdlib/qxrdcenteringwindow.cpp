@@ -24,7 +24,29 @@ void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
   m_Splitter->setStretchFactor(1, 5);
   m_Splitter->setStretchFactor(2, 1);
 
-  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
+  QxrdCenteringWindowSettingsPtr settings(
+        qSharedPointerDynamicCast<QxrdCenteringWindowSettings>(m_Parent));
+
+  QxrdExperimentPtr       exp(QxrdExperiment::findExperiment(m_Parent));
+  QxrdDetectorSettingsPtr det(QxrdDetectorSettings::findDetectorSettings(m_Parent));
+  QxrdProcessorPtr       proc(QxrdProcessor::findProcessor(m_Parent));
+  QxrdCenterFinderPtr      cf(QxrdCenterFinder::findCenterFinder(m_Parent));
+
+  if (cf == NULL) {
+    if (proc) {
+      cf = proc->centerFinder();
+    } else if (det) {
+      proc = det->processor();
+      if (proc) {
+        cf = proc->centerFinder();
+      }
+    } else if (exp) {
+      proc = exp->processor();
+      if (proc) {
+        cf = proc->centerFinder();
+      }
+    }
+  }
 
   if (exp) {
     m_DatasetBrowserView -> setExperiment(exp);
@@ -33,17 +55,14 @@ void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
 
     m_DatasetBrowserView -> setDatasetModel(model);
 
-    QxrdProcessorPtr     proc(QxrdProcessor::findProcessor(m_Parent));
-    QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
-
-    QxrdCenteringWindowSettingsPtr settings(
-          qSharedPointerDynamicCast<QxrdCenteringWindowSettings>(m_Parent));
 
     if (settings) {
       m_FileBrowserWidget    -> initialize(settings->fileBrowserSettings(), exp, proc);
       m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings(), proc);
       m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings(), cf);
       m_IntegratedPlotWidget -> initialize(settings->integratedPlotWidgetSettings());
+    } else {
+      printMessage("No settings found for centering window");
     }
 
     if (cf) {
@@ -79,9 +98,13 @@ void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
       cf->prop_DetectorDistanceStep() -> linkTo(m_DetectorDistanceStep);
       cf->prop_DetectorXPixelSize()   -> linkTo(m_DetectorXPixelSize);
       cf->prop_DetectorYPixelSize()   -> linkTo(m_DetectorYPixelSize);
+    } else {
+      printMessage("No center finder found for centering window");
     }
 
     onStepSizesChanged();
+  } else {
+    printMessage("No experiment found for centering window");
   }
 }
 

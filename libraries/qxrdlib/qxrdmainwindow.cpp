@@ -69,13 +69,6 @@ void QxrdMainWindow::populateWindowsMenu()
     QxrdAcqCommon *acq = acqp.data();
 
     if (acq) {
-      int nWin = acq->windowSettingsCount();
-
-      for (int i=0; i<nWin; i++) {
-        appendToWindowMenu(m_WindowMenuP,
-                           acq -> windowSettings(i));
-      }
-
       QMenu *acquireWins = new QMenu("Detectors");
 
       acquireWins -> addAction("Setup Detectors...",
@@ -127,6 +120,36 @@ void QxrdMainWindow::populateWindowsMenu()
       acquireWins   -> addMenu(configMenu);
       acquireWins   -> addMenu(ctrlMenu);
 
+      QMenu* detsMenu = new QMenu("Detectors");
+
+      for (int i=0; i<nDets; i++) {
+        QxrdDetectorSettingsPtr det = acq->detector(i);
+
+        if (det) {
+          int nWin = det->windowSettingsCount();
+
+          if (nWin > 0) {
+            QMenu* detMenu = new QMenu(tr("Detector %1").arg(i));
+
+            for (int i=0; i<nWin; i++) {
+              appendToWindowMenu(detMenu,
+                                 det->windowSettings(i));
+            }
+
+            detsMenu -> addMenu(detMenu);
+          }
+        }
+      }
+
+      acquireWins -> addMenu(detsMenu);
+
+      int nWin = acq->windowSettingsCount();
+
+      for (int i=0; i<nWin; i++) {
+        appendToWindowMenu(acquireWins,
+                           acq -> windowSettings(i));
+      }
+
       m_WindowMenuP -> insertMenu(
             m_WindowMenuP -> actions().first(),
             acquireWins);
@@ -166,20 +189,56 @@ void QxrdMainWindow::updateTitle()
   setWindowTitle(title);
 }
 
-void QxrdMainWindow::printLine(QString /*line*/)
+void QxrdMainWindow::printLine(QString line)
 {
+  QcepObjectPtr p(m_Parent);
+
+  if (p) {
+    p->printLine(line);
+  } else if (g_Application) {
+    g_Application->printLine(line);
+  } else {
+    printf("LINE: %s\n", qPrintable(line));
+  }
 }
 
-void QxrdMainWindow::printMessage(QString /*msg*/, QDateTime /*ts*/)
+void QxrdMainWindow::printMessage(QString msg, QDateTime ts)
 {
+  QcepObjectPtr p(m_Parent);
+
+  if (p) {
+    p->printMessage(msg, ts);
+  } else if (g_Application) {
+    g_Application->printMessage(msg, ts);
+  } else {
+    printf("MESSAGE: %s\n", qPrintable(msg));
+  }
 }
 
-void QxrdMainWindow::criticalMessage(QString /*msg*/, QDateTime /*ts*/)
+void QxrdMainWindow::criticalMessage(QString msg, QDateTime ts)
 {
+  QcepObjectPtr p(m_Parent);
+
+  if (p) {
+    p->criticalMessage(msg, ts);
+  } else if (g_Application) {
+    g_Application->criticalMessage(msg, ts);
+  } else {
+    printf("CRITICAL: %s\n", qPrintable(msg));
+  }
 }
 
-void QxrdMainWindow::statusMessage(QString /*msg*/, QDateTime /*ts*/)
+void QxrdMainWindow::statusMessage(QString msg, QDateTime ts)
 {
+  QcepObjectPtr p(m_Parent);
+
+  if (p) {
+    p->statusMessage(msg, ts);
+  } else if (g_Application) {
+    g_Application->statusMessage(msg, ts);
+  } else {
+    printf("STATUS: %s\n", qPrintable(msg));
+  }
 }
 
 void QxrdMainWindow::acquireStarted()
