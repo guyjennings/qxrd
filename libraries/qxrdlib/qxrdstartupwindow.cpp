@@ -19,6 +19,8 @@ void QxrdStartupWindow::initialize(QcepObjectWPtr parent)
 
   setupUi(this);
 
+  setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
+
   QGridLayout *gl = qobject_cast<QGridLayout*>(m_Layout -> layout());
 
   if (gl) {

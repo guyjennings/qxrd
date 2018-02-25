@@ -50,12 +50,32 @@ void QxrdMainWindow::populateWindowsMenu()
   QxrdExperimentPtr expt(
         QxrdExperiment::findExperiment(m_Parent));
 
+  QxrdAppCommonPtr app(QxrdAppCommon::findApplication(m_Parent));
+
+  if (expt == NULL) {
+    expt = app->experiment(0);
+
+    int nWin = expt->windowSettingsCount();
+
+    for (int i=0; i<nWin; i++) {
+      appendToWindowMenu(m_WindowMenuP,
+                         expt -> windowSettings(i));
+    }
+  }
+
   if (expt) {
     QxrdAcqCommonPtr acqp(expt->acquisition());
 
     QxrdAcqCommon *acq = acqp.data();
 
     if (acq) {
+      int nWin = acq->windowSettingsCount();
+
+      for (int i=0; i<nWin; i++) {
+        appendToWindowMenu(m_WindowMenuP,
+                           acq -> windowSettings(i));
+      }
+
       QMenu *acquireWins = new QMenu("Detectors");
 
       acquireWins -> addAction("Setup Detectors...",

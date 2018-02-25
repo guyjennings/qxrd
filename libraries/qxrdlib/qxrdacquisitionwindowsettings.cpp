@@ -21,11 +21,6 @@ void QxrdAcquisitionWindowSettings::defaultWindowSettings()
   THREAD_CHECK;
 
   inherited::defaultWindowSettings();
-
-  appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAcquisitionWindowSettings(
-                           "acquisitionWindowSettings",
-                           "Acquisition Window")));
 }
 
 QcepMainWindowPtr QxrdAcquisitionWindowSettings::newWindow()
