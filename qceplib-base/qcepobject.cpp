@@ -661,26 +661,12 @@ void QcepObject::readSettings(QSettings *settings)
 
   int n = settings->beginReadArray("windowSettings");
 
-  int nOpened = 0;
-
   for (int i=0; i<m_WindowSettings.count(); i++) {
     settings->setArrayIndex(i);
     QcepMainWindowSettingsPtr set = windowSettings(i);
 
     if (set) {
       set->readSettings(settings);
-
-      if (set->get_WindowOpen()) {
-        nOpened += 1;
-      }
-    }
-  }
-
-  if (nOpened == 0) {
-    QcepMainWindowSettingsPtr set = windowSettings(0);
-
-    if (set) {
-      set -> set_WindowOpen(true);
     }
   }
 
