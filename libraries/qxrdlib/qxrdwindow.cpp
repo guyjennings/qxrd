@@ -55,27 +55,6 @@ QxrdWindow::QxrdWindow(QString name)
   : inherited(name),
     m_ObjectNamer(this, "window"),
     m_Mutex(QMutex::Recursive),
-//    m_WindowSettings(settings),
-//    m_Application(appl),
-//    m_Experiment(docw),
-//    m_Acquisition(acqw),
-//    m_DataProcessor(procw),
-//    m_AcquisitionScalerDialog(NULL),
-//    m_AcquisitionExtraInputsDialog(NULL),
-//    m_SynchronizedAcquisitionDialog(NULL),
-//    m_CenterFinderDialog(NULL),
-//    m_MaskDialog(NULL),
-//    m_CorrectionDialog(NULL),
-//    m_IntegratorDialog(NULL),
-//    m_DatasetBrowserDialog(NULL),
-//    m_Calculator(NULL),
-//    m_InputFileBrowser(NULL),
-//    m_OutputFileBrowser(NULL),
-//    m_SliceDialog(NULL),
-//    m_HistogramDialog(NULL),
-//    m_ImageInfoDialog(NULL),
-//    m_ScriptDialog(NULL),
-//    m_AllocationStatus(NULL),
     m_Data(NULL),
     m_Overflow(NULL),
     m_NewData(NULL),
@@ -84,7 +63,6 @@ QxrdWindow::QxrdWindow(QString name)
     m_Mask(NULL),
     m_NewMask(NULL),
     m_NewMaskAvailable(false),
-//    m_ImageDisplay(NULL),
     m_Highlighter(NULL)
 {
 #ifndef QT_NO_DEBUG
@@ -156,21 +134,12 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   connect(m_LoadScriptButton, &QAbstractButton::clicked, m_ActionLoadScript, &QAction::triggered);
   connect(m_ActionLoadScript, &QAction::triggered, this, &QxrdWindow::doLoadScript);
 
-//  connect(m_ActionAutoScale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::autoScale);
-
   if (app) {
     connect(m_ActionLoadPreferences, &QAction::triggered, app.data(), &QxrdApplication::doLoadPreferences);
     connect(m_ActionSavePreferences, &QAction::triggered, app.data(), &QxrdApplication::doSavePreferences);
   }
 
   connect(m_ActionSaveExperimentAsText, &QAction::triggered, this, &QxrdWindow::doSaveExperimentAsText);
-
-//  m_ExperimentsMenu->menuAction()->setMenuRole(QAction::NoRole);
-
-  connect(m_ConfigureDetectorMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateConfigureDetectorMenu);
-  m_ConfigureDetectorMenu->menuAction()->setMenuRole(QAction::NoRole);
-
-  connect(m_DetectorControlWindowsMenu, &QMenu::aboutToShow, this, &QxrdWindow::populateDetectorControlWindowsMenu);
 
   connect(m_ActionSetupDetectors, &QAction::triggered, this, &QxrdWindow::doEditDetectorPreferences);
 
@@ -186,8 +155,6 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   connect(m_ActionSaveGainMap, &QAction::triggered, this, &QxrdWindow::doSaveGainMap);
   connect(m_ActionClearGainMap, &QAction::triggered, this, &QxrdWindow::doClearGainMap);
 
-//  connect(m_ActionPrintImage, &QAction::triggered, m_ImagePlot, &QcepPlot::printGraph);
-
   connect(m_ActionAccumulateImages, &QAction::triggered, this, &QxrdWindow::doAccumulateImages);
   connect(m_ActionAddImage, &QAction::triggered, this, &QxrdWindow::doAddImages);
   connect(m_ActionSubtractImage, &QAction::triggered, this, &QxrdWindow::doSubtractImages);
@@ -200,28 +167,7 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   connect(m_ActionReflectHorizontally, &QAction::triggered, this, &QxrdWindow::doReflectHorizontally);
   connect(m_ActionReflectVertically, &QAction::triggered, this, &QxrdWindow::doReflectVertically);
 
-//  connect(m_DisplayDialog -> m_AutoRange, &QAbstractButton::clicked, m_ActionAutoRange, &QAction::triggered);
-//  connect(m_DisplayDialog -> m_Display_5pct, &QAbstractButton::clicked, m_Action005Range, &QAction::triggered);
-//  connect(m_DisplayDialog -> m_Display_10pct, &QAbstractButton::clicked, m_Action010Range, &QAction::triggered);
-//  connect(m_DisplayDialog -> m_Display_100pct, &QAbstractButton::clicked, m_Action100Range, &QAction::triggered);
-
-//  connect(m_Action005Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set005Range);
-//  connect(m_Action010Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set010Range);
-//  connect(m_Action100Range, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::set100Range);
-//  connect(m_ActionAutoRange, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setAutoRange);
-
-//  connect(m_ActionGrayscale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setGrayscale);
-//  connect(m_ActionInverseGrayscale, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setInverseGrayscale);
-//  connect(m_ActionEarthTones, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setEarthTones);
-//  connect(m_ActionSpectrum, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setSpectrum);
-//  connect(m_ActionFire, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setFire);
-//  connect(m_ActionIce, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::setIce);
-
   connect(m_ActionRefineCenterTilt, &QAction::triggered, this, &QxrdWindow::doRefineCenterTilt);
-//  connect(m_ActionMoveCenterUp, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveUp);
-//  connect(m_ActionMoveCenterDown, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveDown);
-//  connect(m_ActionMoveCenterLeft, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveLeft);
-//  connect(m_ActionMoveCenterRight, &QAction::triggered, m_CenterFinderDialog, &QxrdCenterFinderDialog::centerMoveRight);
 
   connect(m_ActionNewTestImageGenerator, &QAction::triggered, this, &QxrdWindow::doNewTestImageGenerator);
   connect(m_ActionNewTestScanGenerator, &QAction::triggered, this, &QxrdWindow::doNewTestScanGenerator);
@@ -240,15 +186,6 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   connect(m_ActionPlotPowderRingTwoTheta, &QAction::triggered, this, &QxrdWindow::plotPowderRingTwoTheta);
   connect(m_ActionPlotPowderRingCenters, &QAction::triggered, this, &QxrdWindow::plotPowderRingCenters);
 
-//  m_AcquisitionDialog->setupDetectorsMenu(m_DetectorsMenu);
-
-//  m_AcquisitionDialog->acquisitionReady();
-
-  //TODO: re-implement
-//  connect(m_ActionShowImage, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowImage);
-//  connect(m_ActionShowMask, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowMask);
-//  connect(m_ActionShowOverflow, &QAction::triggered, m_ImagePlot, &QxrdImagePlot::toggleShowOverflow);
-
   if (proc) {
     connect(m_ActionShowMaskRange, &QAction::triggered, proc.data(), (void (QxrdProcessor::*)()) &QxrdProcessor::showMaskRange);
     connect(m_ActionHideMaskRange, &QAction::triggered, proc.data(), (void (QxrdProcessor::*)()) &QxrdProcessor::hideMaskRange);
@@ -261,35 +198,6 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
 //    connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdProcessor::doCalculateROI);
 //    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdProcessor::doCalculateHistogram);
   }
-
-//  connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableZooming);
-//  connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_ImagePlot, &QcepPlot::zoomOut);
-//  connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::autoScale);
-//  connect(m_ImageSetCenterButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableCentering);
-//  connect(m_ImageSliceButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableSlicing);
-//  connect(m_ImageMeasureButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMeasuring);
-//  connect(m_ImageHistogramButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableHistograms);
-//  connect(m_ImageMaskCirclesButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMaskCircles);
-//  connect(m_ImageMaskPolygonsButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enableMaskPolygons);
-//  connect(m_ImagePowderPointsButton, &QAbstractButton::clicked, m_ImagePlot, &QxrdImagePlot::enablePowderPoints);
-
-//  connect(m_CenteringZoomInButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::enableZooming);
-//  connect(m_CenteringZoomOutButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::zoomOut);
-//  connect(m_CenteringZoomAllButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::autoScale);
-//  connect(m_CenteringMeasureButton, &QAbstractButton::clicked, m_CenterFinderPlot, &QcepPlot::enableMeasuring);
-
-//  connect(m_IntegratorZoomInButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::enableZooming);
-//  connect(m_IntegratorZoomOutButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::zoomOut);
-//  connect(m_IntegratorZoomAllButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::autoScale);
-//  connect(m_IntegratorMeasureButton, &QAbstractButton::clicked, m_IntegratorPlot, &QcepPlot::enableMeasuring);
-
-//  connect(m_DistortionCorrectionZoomInButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::enableZooming);
-//  connect(m_DistortionCorrectionZoomOutButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::zoomOut);
-//  connect(m_DistortionCorrectionZoomAllButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::autoScale);
-//  connect(m_DistortionCorrectionMeasureButton, &QAbstractButton::clicked, m_DistortionCorrectionPlot, &QcepPlot::enableMeasuring);
-
-//  connect(m_DisplayDialog -> m_DisplayOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
-//  connect(m_CorrectionDialog -> m_CorrectionOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
 
   if (app) {
     connect(m_ActionAboutQXRD, &QAction::triggered, app.data(), &QxrdApplication::doAboutQxrd);
@@ -313,18 +221,6 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
             proc.data(), &QxrdProcessor::integrateSaveAndDisplay);
   }
 
-//  connect(m_ActionIntegrateInputImages, &QAction::triggered,
-//          m_InputFileBrowser, &QxrdFileBrowser::doIntegrate);
-
-//  connect(m_ActionPolarTransform, &QAction::triggered, this, &QxrdWindow::doPolarTransform);
-//  connect(m_ActionPolarNormalization, &QAction::triggered, this, &QxrdWindow::doPolarNormalization);
-
-//  connect(m_IntegratorDialog -> m_ClearGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
-//  connect(m_IntegratorDialog -> m_ClearSelectedGraphButton, &QAbstractButton::clicked, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
-  //TODO: replace?
-  //  connect(m_ActionClearIntegratedData, &QAction::triggered, m_IntegratorPlot, &QxrdIntegratorPlot::clearGraph);
-//  connect(m_ActionClearSelectedIntegratedData, &QAction::triggered, m_IntegratorPlot, &QxrdIntegratorPlot::clearSelectedCurves);
-
   connect(m_ActionSaveCachedGeometry, &QAction::triggered, this, &QxrdWindow::doSaveCachedGeometry);
   connect(m_ActionSaveCachedIntensity, &QAction::triggered, this, &QxrdWindow::doSaveCachedIntensity);
 
@@ -346,143 +242,7 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
     connect(m_ActionIntegrateVsTTH, &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsTTH);
   }
 
-  //TODO: reimplement
-//  if (set) {
-//    QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
-
-//    if (ps) {
-//      ps->prop_XMouse()->linkTo(m_XMouse);
-//      ps->prop_YMouse()->linkTo(m_YMouse);
-//      ps->prop_ValMouse()->linkTo(m_ValMouse);
-//      ps->prop_TTHMouse()->linkTo(m_TTHMouse);
-//      ps->prop_QMouse()->linkTo(m_QMouse);
-//      ps->prop_RMouse()->linkTo(m_RMouse);
-//    }
-//  }
-
-
-//  if (app && m_Acquisition == NULL) {
-//    app->criticalMessage("Oh no, QxrdWindow::m_Acquisition == NULL");
-//  }
-
-//  if (acq) {
-//    connect(acq.data(), &QxrdAcquisition::acquireStarted,
-//            this,       &QxrdWindow::acquireStarted);
-//    connect(acq.data(), &QxrdAcquisition::acquiredFrame,
-//            this,       &QxrdWindow::acquiredFrame);
-//    connect(acq.data(), &QxrdAcquisition::acquireComplete,
-//            this,       &QxrdWindow::acquireComplete);
-
-////    acq -> prop_OverflowLevel() -> linkTo(m_DisplayDialog->m_OverflowLevel);
-////    acq -> prop_RawSaveTime() -> linkTo(m_CorrectionDialog->m_SaveRawTime);
-////    acq -> prop_DarkSaveTime() -> linkTo(m_CorrectionDialog->m_SaveDarkTime);
-
-////    connect(acq->prop_OverflowLevel(), &QcepIntProperty::valueChanged,
-////            m_HistogramDialog, &QxrdHistogramDialog::updateHistogramNeeded);
-//  }
-
-//  if (expt) {
-//  }
-
-//  if (proc) {
-//    proc -> prop_PerformDarkSubtraction() -> linkTo(m_CorrectionDialog->m_PerformDark);
-//    proc -> prop_PerformDarkSubtractionTime() -> linkTo(m_CorrectionDialog->m_PerformDarkTime);
-//    proc -> prop_SaveRawImages() -> linkTo(m_CorrectionDialog->m_SaveRaw);
-//    proc -> prop_SaveDarkImages() -> linkTo(m_CorrectionDialog->m_SaveDark);
-//    proc -> prop_PerformBadPixels() -> linkTo(m_CorrectionDialog->m_PerformBadPixels);
-//    proc -> prop_PerformBadPixelsTime() -> linkTo(m_CorrectionDialog->m_PerformBadPixelsTime);
-//    proc -> prop_PerformGainCorrection() -> linkTo(m_CorrectionDialog->m_PerformGainCorrection);
-//    proc -> prop_PerformGainCorrectionTime() -> linkTo(m_CorrectionDialog->m_PerformGainCorrectionTime);
-//    proc -> prop_SaveSubtracted() -> linkTo(m_CorrectionDialog->m_SaveSubtracted);
-//    proc -> prop_SaveSubtractedTime() -> linkTo(m_CorrectionDialog->m_SaveSubtractedTime);
-//    proc -> prop_SaveAsText() -> linkTo(m_CorrectionDialog->m_SaveAsText);
-//    proc -> prop_SaveAsTextTime() -> linkTo(m_CorrectionDialog->m_SaveAsTextTime);
-//    proc -> prop_PerformIntegration() -> linkTo(m_CorrectionDialog->m_PerformIntegration);
-//    proc -> prop_PerformIntegrationTime() -> linkTo(m_CorrectionDialog->m_PerformIntegrationTime);
-//    proc -> prop_DisplayIntegratedData() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedData);
-//    proc -> prop_DisplayIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_DisplayIntegratedDataTime);
-//    proc -> prop_SaveIntegratedData() -> linkTo(m_CorrectionDialog->m_SaveIntegratedData);
-//    proc -> prop_SaveIntegratedDataTime() -> linkTo(m_CorrectionDialog->m_SaveIntegratedDataTime);
-//    proc -> prop_SaveIntegratedInSeparateFiles() -> linkTo(m_CorrectionDialog->m_SaveIntegratedInSeparateFiles);
-//    proc -> prop_AccumulateIntegrated2D() ->linkTo(m_CorrectionDialog->m_AccumulateIntegrated2D);
-//    proc -> prop_AccumulateIntegratedName() -> linkTo(m_CorrectionDialog->m_AccumulateIntegratedName);
-//    proc -> prop_EstimatedProcessingTime() -> linkTo(m_CorrectionDialog->m_EstimatedProcessingTime);
-//  }
-
-//  if (set) {
-//    QxrdImagePlotSettingsPtr ps(set->imagePlotSettings());
-
-//    if (ps) {
-//      ps -> prop_DisplayMinimumPct() -> linkTo(m_DisplayDialog->m_DisplayMinimumPct);
-//      ps -> prop_DisplayMaximumPct() -> linkTo(m_DisplayDialog->m_DisplayMaximumPct);
-//      ps -> prop_DisplayMinimumVal() -> linkTo(m_DisplayDialog->m_DisplayMinimumVal);
-//      ps -> prop_DisplayMaximumVal() -> linkTo(m_DisplayDialog->m_DisplayMaximumVal);
-//      ps -> prop_DisplayMinimumPctle() -> linkTo(m_DisplayDialog->m_DisplayMinimumPctle);
-//      ps -> prop_DisplayMaximumPctle() -> linkTo(m_DisplayDialog->m_DisplayMaximumPctle);
-
-//      ps -> prop_DisplayLog() -> linkTo(m_DisplayDialog->m_DisplayImageLog);
-//      ps -> prop_DisplayScalingMode() -> linkTo(m_DisplayDialog->m_DisplayScalingMode);
-
-//      connect(ps -> prop_DisplayScalingMode(), &QcepIntProperty::valueChanged, m_DisplayDialog->m_DisplayParmsStack, &QStackedWidget::setCurrentIndex);
-//      m_DisplayDialog->m_DisplayParmsStack->setCurrentIndex(ps->get_DisplayScalingMode());
-
-//      ps -> prop_DisplayColorMap() -> linkTo(m_DisplayDialog->m_DisplayColorMap);
-
-//      ps -> prop_ImageShown() -> linkTo(m_DisplayDialog->m_DisplayImage);
-//      ps -> prop_MaskShown() -> linkTo(m_DisplayDialog->m_DisplayMask);
-//      ps -> prop_OverflowShown() -> linkTo(m_DisplayDialog->m_DisplayOverflow);
-//      ps -> prop_InterpolatePixels() -> linkTo(m_DisplayDialog->m_InterpolatePixels);
-//      ps -> prop_MaintainAspectRatio() -> linkTo(m_DisplayDialog->m_MaintainAspectRatio);
-
-//    }
-//  }
-
-  //TODO: re-init
-//  m_ImagePlot -> setProcessor(m_DataProcessor);
-//  m_DistortionCorrectionPlot -> setWindow(this);
-//  m_CenterFinderPlot -> setWindow(this);
-//  m_IntegratorPlot -> setDataProcessor(m_DataProcessor);
-
-  //TODO: re-connect data flows
-//  if (proc) {
-//    connect(proc -> centerFinder() -> prop_CenterX(), &QcepDoubleProperty::valueChanged,
-//            m_ImagePlot, &QxrdImagePlot::onCenterXChanged);
-
-//    connect(proc -> centerFinder() -> prop_CenterY(), &QcepDoubleProperty::valueChanged,
-//            m_ImagePlot, &QxrdImagePlot::onCenterYChanged);
-
-//    connect(proc -> centerFinder() -> prop_CenterX(), &QcepDoubleProperty::valueChanged,
-//            m_CenterFinderPlot, &QxrdCenterFinderPlot::onCenterXChanged);
-
-//    connect(proc -> centerFinder() -> prop_CenterY(), &QcepDoubleProperty::valueChanged,
-//            m_CenterFinderPlot, &QxrdCenterFinderPlot::onCenterYChanged);
-
-//    connect(proc.data(), &QxrdProcessor::newIntegrationAvailable,
-//            m_IntegratorPlot, &QxrdIntegratorPlot::onNewIntegrationAvailable);
-//  }
-
-//  m_WindowsMenu -> addAction(m_AcquisitionDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_AcquisitionScalerDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_AcquisitionExtraInputsDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_InputFileBrowser -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_OutputFileBrowser -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_SynchronizedAcquisitionDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_DisplayDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_CenterFinderDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_DatasetBrowserDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_MaskDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_CorrectionDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_IntegratorDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_SliceDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_HistogramDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_ImageInfoDialog -> toggleViewAction());
-//  m_WindowsMenu -> addAction(m_ScriptDialog -> toggleViewAction());
-
   m_Highlighter = new QxrdHighlighter(m_ScriptEdit->document());
-
-//  if (expt) {
-//    expt->prop_DefaultScript()->linkTo(m_ScriptEdit);
-//  }
 
   QxrdToDoList *toDoList = new QxrdToDoList(this);
   QSortFilterProxyModel *sorted = new QSortFilterProxyModel(this);
@@ -544,38 +304,6 @@ QxrdWindow::~QxrdWindow()
   }
 }
 
-//void QxrdWindow::setupMenus()
-//{
-//  QxrdMainWindow::setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
-//}
-
-//void QxrdWindow::updateTitle()
-//{
-//  QString title;
-
-//  QxrdExperimentPtr expt(m_Experiment);
-
-//  if (expt) {
-//    title = expt->experimentFilePath()+" - QXRD";
-//  } else {
-//    title = "QXRD";
-//  }
-
-//  if (sizeof(void*) == 4) {
-//    title.append(" - 32 bit - v");
-//  } else {
-//    title.append(" - 64 bit - v");
-//  }
-
-//  title.append(STR(QXRD_VERSION));
-
-//  if (expt && expt->isChanged()) {
-//    title.append(tr(" [%1]").arg(expt->isChanged()));
-//  }
-
-//  setWindowTitle(title);
-//}
-
 void QxrdWindow::onAcquisitionInit()
 {
 //  m_AcquisitionDialog->onAcquisitionInit();
@@ -597,69 +325,6 @@ void QxrdWindow::closeEvent ( QCloseEvent * event )
     event -> accept();
   } else {
     event -> ignore();
-  }
-}
-
-//void QxrdWindow::populateWindowMenu()
-//{
-//  printMessage("populate window menu");
-//}
-
-void QxrdWindow::populateConfigureDetectorMenu()
-{
-  m_ConfigureDetectorMenu->clear();
-
-  QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
-
-  if (acq) {
-    int nDets = acq->detectorCount();
-
-    for (int i=0; i<nDets; i++) {
-      QxrdDetectorSettingsPtr det = acq->detector(i);
-      QString detType = det->get_DetectorTypeName();
-      QString detName = det->get_DetectorName();
-      bool    enabled = det->get_Enabled();
-
-      QString str = tr("(%1) Configure %2 detector \"%3\"...").arg(i).arg(detType).arg(detName);
-
-      QAction *action = new QAction(str, m_ConfigureDetectorMenu);
-
-      action->setCheckable(true);
-      action->setChecked(enabled);
-
-      connect(action, &QAction::triggered, [=] {acq->configureDetector(i);});
-
-      m_ConfigureDetectorMenu->addAction(action);
-    }
-  }
-}
-
-void QxrdWindow::populateDetectorControlWindowsMenu()
-{
-  m_DetectorControlWindowsMenu->clear();
-
-  QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
-
-  if (acq) {
-    int nDets = acq->detectorCount();
-
-    for (int i=0; i<nDets; i++) {
-      QxrdDetectorSettingsPtr det = acq->detector(i);
-      QString detType = det->get_DetectorTypeName();
-      QString detName = det->get_DetectorName();
-      bool    enabled = det->get_Enabled();
-
-      QString str = tr("(%1) Open %2 detector \"%3\" Control...").arg(i).arg(detType).arg(detName);
-
-      QAction *action = new QAction(str, m_DetectorControlWindowsMenu);
-
-      action->setCheckable(true);
-      action->setChecked(enabled);
-
-      connect(action, &QAction::triggered, [=] {acq->openDetectorControlWindow(i);});
-
-      m_DetectorControlWindowsMenu->addAction(action);
-    }
   }
 }
 
@@ -722,55 +387,6 @@ void QxrdWindow::displayCriticalMessage(QString msg)
                                            Q_ARG(QString, msg)));
   }
 }
-
-//void QxrdWindow::acquireStarted()
-//{
-//}
-
-//void QxrdWindow::acquireComplete()
-//{
-//  THREAD_CHECK;
-
-//  m_Progress -> reset();
-//}
-
-//void QxrdWindow::acquiredFrame(
-//    QString fileName, int iphase, int nphases, int isum, int nsum, int igroup, int ngroup)
-//{
-//  printMessage(tr("QxrdWindow::acquiredFrame(\"%1\",%2,%3,%4,%5,%6,%7)")
-//               .arg(fileName)
-//               .arg(iphase).arg(nphases)
-//               .arg(isum).arg(nsum)
-//               .arg(igroup).arg(ngroup));
-//  //   printf("\n",
-//  // 	 qPrintable(fileName), fileIndex, isum, nsum, iframe, nframe);
-
-//  int totalFrames = (nphases*nsum*ngroup <= 0 ? 1 : nphases*nsum*ngroup);
-//  int thisFrame   = igroup*nphases*nsum + isum*nphases + iphase + 1;
-
-//  printMessage(tr("Frame %1 of %2").arg(thisFrame).arg(totalFrames));
-
-//  //  printf("%d %% progress\n", thisFrame*100/totalFrames);
-
-//  QxrdExperimentPtr expt(m_Experiment);
-
-//  if (expt) {
-//    if (nphases <= 1) {
-//      expt->statusMessage(tr("%1: Exposure %2 of %3, File %4 of %5")
-//                          .arg(fileName)
-//                          .arg(isum+1).arg(nsum)
-//                          .arg(igroup+1).arg(ngroup));
-//    } else {
-//      expt->statusMessage(tr("%1: Phase %2 of %3, Sum %4 of %5, Group %6 of %7")
-//                          .arg(fileName)
-//                          .arg(iphase+1).arg(nphases)
-//                          .arg(isum+1).arg(nsum)
-//                          .arg(igroup+1).arg(ngroup));
-//    }
-//  }
-
-//  m_Progress -> setValue(thisFrame*100/totalFrames);
-//}
 
 void QxrdWindow::captureSize()
 {
@@ -851,52 +467,6 @@ void QxrdWindow::doTimerUpdate()
       g_Application->printMessage(tr("QxrdWindow::newData new data after %1 msec").arg(t.elapsed()));
     }
 
-    //TODO: re-connect data flow
-//    m_ImagePlot        -> onProcessedImageAvailable(m_Data, m_Overflow);
-
-//    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-//      g_Application->printMessage(tr("QxrdWindow::newData imagePlot after %1 msec").arg(t.elapsed()));
-//    }
-
-//    m_CenterFinderPlot -> onProcessedImageAvailable(m_Data);
-
-//    if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-//      g_Application->printMessage(tr("QxrdWindow::newData centerFinder after %1 msec").arg(t.elapsed()));
-//    }
-
-//    if (m_ImageDisplay) {
-//      m_ImageDisplay -> updateImage(m_Data, m_Overflow);
-
-//      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-//        g_Application->printMessage(tr("QxrdWindow::newData imageDisplay after %1 msec").arg(t.elapsed()));
-//      }
-//    }
-
-//    if (m_SliceDialog) {
-//      m_SliceDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
-
-//      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-//        g_Application->printMessage(tr("QxrdWindow::newData sliceDialog after %1 msec").arg(t.elapsed()));
-//      }
-//    }
-
-//    if (m_HistogramDialog) {
-//      m_HistogramDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
-
-//      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-//        g_Application->printMessage(tr("QxrdWindow::newData histogramDialog after %1 msec").arg(t.elapsed()));
-//      }
-//    }
-
-//    if (m_ImageInfoDialog) {
-//      m_ImageInfoDialog -> onProcessedImageAvailable(m_Data, m_Overflow);
-
-//      if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
-//        g_Application->printMessage(tr("QxrdWindow::newData imageInfoDialog after %1 msec").arg(t.elapsed()));
-//      }
-//    }
-
-
     if (g_Application && qcepDebug(DEBUG_DISPLAY)) {
       g_Application->printMessage(tr("QxrdWindow::newData took %1 msec").arg(t.elapsed()));
     }
@@ -914,14 +484,6 @@ void QxrdWindow::newMask()
     m_Mask = m_NewMask;
     m_NewMask = QcepMaskDataPtr(NULL);
     m_NewMaskAvailable.fetchAndStoreOrdered(0);
-
-    //TODO: reconnect data flow
-//    m_ImagePlot        -> onMaskedImageAvailable(m_Data, m_Mask);
-//    m_CenterFinderPlot -> onMaskedImageAvailable(m_Data, m_Mask);
-
-//    if (m_ImageDisplay) {
-//      m_ImageDisplay->updateImage(QcepDoubleImageDataPtr(), QcepMaskDataPtr(), m_Mask);
-//    }
   }
 }
 

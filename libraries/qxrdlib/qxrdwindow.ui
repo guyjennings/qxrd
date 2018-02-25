@@ -438,26 +438,6 @@
     </property>
     <addaction name="actionPlaceholder"/>
    </widget>
-   <widget class="QMenu" name="m_DetectorsMenu">
-    <property name="title">
-     <string>Detectors</string>
-    </property>
-    <widget class="QMenu" name="m_ConfigureDetectorMenu">
-     <property name="title">
-      <string>&amp;Configure Detector...</string>
-     </property>
-     <addaction name="m_ActionConfigureDetector"/>
-    </widget>
-    <widget class="QMenu" name="m_DetectorControlWindowsMenu">
-     <property name="title">
-      <string>&amp;Detector Control Windows...</string>
-     </property>
-     <addaction name="m_ActionOpenDetectorControlWindow"/>
-    </widget>
-    <addaction name="m_ActionSetupDetectors"/>
-    <addaction name="m_ConfigureDetectorMenu"/>
-    <addaction name="m_DetectorControlWindowsMenu"/>
-   </widget>
    <widget class="QMenu" name="m_DisplayMenu">
     <property name="title">
      <string>D&amp;isplay</string>
@@ -566,7 +546,6 @@
    <addaction name="m_FileMenu"/>
    <addaction name="m_EditMenu"/>
    <addaction name="m_WindowMenu"/>
-   <addaction name="m_DetectorsMenu"/>
    <addaction name="m_OperationsMenu"/>
    <addaction name="m_CalibrationMenu"/>
    <addaction name="m_DisplayMenu"/>
@@ -1371,9 +1350,10 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QxrdHelpBrowser</class>
-   <extends>QTextBrowser</extends>
-   <header>qxrdhelpbrowser.h</header>
+   <class>QxrdImagePlotWidget</class>
+   <extends>QWidget</extends>
+   <header>qxrdimageplotwidget.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QcepDatasetBrowserView</class>
@@ -1381,10 +1361,15 @@
    <header>qcepdatasetbrowserview.h</header>
   </customwidget>
   <customwidget>
-   <class>QxrdImagePlotWidget</class>
+   <class>QxrdFileBrowserWidget</class>
    <extends>QWidget</extends>
-   <header>qxrdimageplotwidget.h</header>
+   <header>qxrdfilebrowserwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QxrdHelpBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header>qxrdhelpbrowser.h</header>
   </customwidget>
   <customwidget>
    <class>QxrdIntegratedPlotWidget</class>
@@ -1396,12 +1381,6 @@
    <class>QxrdCenteringPlotWidget</class>
    <extends>QWidget</extends>
    <header>qxrdcenteringplotwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QxrdFileBrowserWidget</class>
-   <extends>QWidget</extends>
-   <header>qxrdfilebrowserwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

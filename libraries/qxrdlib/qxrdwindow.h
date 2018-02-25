@@ -36,7 +36,6 @@ public:
   virtual ~QxrdWindow();
   //TODO: change to QcepObjectWPtr
   void initialize(QcepObjectWPtr parent);
-//  void setupMenus();
 
   void onAcquisitionInit();
 
@@ -58,7 +57,6 @@ public slots:
   void doClearGainMap();
   void doSaveCachedGeometry();
   void doSaveCachedIntensity();
-//  void selectLogFile();
   void doRefineCenterTilt();
   void doAccumulateImages();
   void doAddImages();
@@ -75,11 +73,6 @@ public slots:
   void doNewTestImageGenerator();
   void doNewTestScanGenerator();
 
-//  void updateTitle();
-//  void acquireStarted();
-//  void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
-//  void acquireComplete();
-
   void executeScript();
   void executeScriptJS();
   void finishedCommand(QScriptValue result);
@@ -93,8 +86,6 @@ public slots:
   void displayCriticalMessage(QString msg);
   void initialLogEntry(QString aline);
 
-//  void selectOutputDirectory();
-
   void enableTiltRefinement(bool enable);
 
 signals:
@@ -106,9 +97,6 @@ private slots:
   void newMask();
   void integrationXUnitsChanged(int newXUnits);
   void onMessageWindowLinesChanged(int newVal);
-//  void populateWindowMenu();
-  void populateConfigureDetectorMenu();
-  void populateDetectorControlWindowsMenu();
   void plotPowderRingRadii();
   void plotPowderRingTwoTheta();
   void plotPowderRingCenters();
