@@ -8,10 +8,10 @@
 using namespace QtDataVisualization;
 
 QcepDataObjectSurfacePlotWindow::QcepDataObjectSurfacePlotWindow(
+    QString            name,
     QcepExperimentWPtr /*expt*/,
-    QcepDataObjectWPtr obj,
-    QWidget *parent)
-  : inherited(parent)
+    QcepDataObjectWPtr obj)
+  : inherited(name)
 {
   setupUi(this);
 

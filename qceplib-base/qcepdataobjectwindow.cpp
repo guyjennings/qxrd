@@ -1,8 +1,8 @@
 #include "qcepdataobjectwindow.h"
 #include <stdio.h>
 
-QcepDataObjectWindow::QcepDataObjectWindow(QWidget *parent)
-  : inherited(parent)
+QcepDataObjectWindow::QcepDataObjectWindow(QString name)
+  : inherited(name)
 {
 
 }

@@ -31,8 +31,8 @@
 #include "qcepimagehistogramgraphcontroller.h"
 #include "qcepimageslicegraphcontroller.h"
 
-QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(QcepExperimentWPtr expt, QcepDataObjectWPtr obj, QWidget *parent) :
-  inherited(parent),
+QcepDataObjectGraphWindow::QcepDataObjectGraphWindow(QString name, QcepExperimentWPtr expt, QcepDataObjectWPtr obj) :
+  inherited(name),
   m_Experiment(expt),
   m_Object(obj),
   m_PlottingMode(NoPlot),

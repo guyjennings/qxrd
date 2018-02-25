@@ -7,8 +7,8 @@
 #include <QMessageBox>
 
 QcepDataObjectPropertiesWindow::QcepDataObjectPropertiesWindow
-  (QcepExperimentWPtr expt, QcepDataObjectWPtr obj, QWidget *parent) :
-  inherited(parent),
+  (QString name, QcepExperimentWPtr expt, QcepDataObjectWPtr obj) :
+  inherited(name),
   m_Experiment(expt),
   m_Object(obj)
 {

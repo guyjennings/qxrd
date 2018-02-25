@@ -15,7 +15,7 @@ class QCEP_EXPORT QcepMainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  explicit QcepMainWindow(QWidget *parent = 0);
+  explicit QcepMainWindow(QString name);
   virtual ~QcepMainWindow();
 
   virtual void initialize(QcepObjectWPtr parent);
@@ -59,6 +59,7 @@ protected:
 private:
   void doTimerUpdate();
   void clearStatusMessage();
+  void setBasicTitle(QString t);
   virtual void updateTitle();
   void onUpdateIntervalMsecChanged(int newVal);
   void allocatedMemoryChanged();
@@ -77,6 +78,7 @@ private:
 protected:
   bool                m_Initialized;
   QcepObjectWPtr      m_Parent;
+  QString             m_Name;
 
   QLabel             *m_StatusMsg;
   QProgressBar       *m_Progress;

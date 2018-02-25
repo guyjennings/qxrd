@@ -19,9 +19,9 @@ private:
 
 public:
   explicit QcepDataObjectSpreadsheetWindow(
+      QString name,
       QcepExperimentWPtr expt,
-      QcepDataObjectWPtr  obj,
-      QWidget *parent = 0);
+      QcepDataObjectWPtr  obj);
   virtual ~QcepDataObjectSpreadsheetWindow();
 
   void closeEvent (QCloseEvent * event);

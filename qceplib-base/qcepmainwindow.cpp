@@ -20,9 +20,11 @@
 #include "qcepmainwindowsettings.h"
 #include "qcepallocator.h"
 
-QcepMainWindow::QcepMainWindow(QWidget *parent)
-  : QMainWindow(parent),
+QcepMainWindow::QcepMainWindow(QString name)
+  : QMainWindow(),
     m_Initialized(false),
+    m_Parent(NULL),
+    m_Name(name),
     m_Progress(NULL),
     m_FileMenuP(NULL),
     m_EditMenuP(NULL),
@@ -343,13 +345,20 @@ void QcepMainWindow::newWindow(QcepMainWindowSettingsWPtr set)
   }
 }
 
+void QcepMainWindow::setBasicTitle(QString t)
+{
+  m_Name = t;
+
+  updateTitle();
+}
+
 void QcepMainWindow::updateTitle()
 {
   INIT_CHECK;
 
 //  QxrdExperimentPtr exper(m_Experiment);
 
-  QString title;
+  QString title = m_Name;
 
 //  title = m_Name;
 

@@ -12,7 +12,7 @@ private:
   typedef QcepMainWindow inherited;
 
 public:
-  explicit QcepDataObjectWindow(QWidget *parent = 0);
+  explicit QcepDataObjectWindow(QString name);
 
 signals:
 

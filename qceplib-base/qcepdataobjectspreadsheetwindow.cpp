@@ -28,8 +28,8 @@
 #include "qcepdatagroup-ptr.h"
 #include "qcepdatagroupspreadsheetmodel.h"
 
-QcepDataObjectSpreadsheetWindow::QcepDataObjectSpreadsheetWindow(QcepExperimentWPtr expt, QcepDataObjectWPtr obj, QWidget *parent) :
-  inherited(parent),
+QcepDataObjectSpreadsheetWindow::QcepDataObjectSpreadsheetWindow(QString name, QcepExperimentWPtr expt, QcepDataObjectWPtr obj) :
+  inherited(name),
   m_Experiment(expt),
   m_Object(obj),
   m_Model()

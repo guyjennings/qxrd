@@ -18,9 +18,9 @@ private:
 
 public:
   explicit QcepDataObjectSurfacePlotWindow(
+      QString name,
       QcepExperimentWPtr expt,
-      QcepDataObjectWPtr  obj,
-      QWidget *parent = 0);
+      QcepDataObjectWPtr  obj);
 
   virtual ~QcepDataObjectSurfacePlotWindow();
 
