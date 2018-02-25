@@ -285,11 +285,11 @@ void QcepMainWindow::appendToWindowMenu(
     QAction *act = NULL;
 
     if (win) {
-      act = m_WindowMenuP ->
+      act = wmenu ->
           addAction(tr("Show %1").arg(set->get_Description()),
                     this, [=]() { newWindow(set); });
     } else {
-      act = m_WindowMenuP ->
+      act = wmenu ->
           addAction(tr("New %1").arg(set->get_Description()),
                     this, [=]() { newWindow(set); });
     }

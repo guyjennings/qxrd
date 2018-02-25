@@ -1208,13 +1208,13 @@ QcepMainWindowSettingsPtr QcepObject::windowSettings(int n)
 void QcepObject::appendWindowSettings(QcepMainWindowSettingsPtr settings)
 {
   if (settings) {
-    for (int i=0; i<windowSettingsCount(); i++) {
-      QcepMainWindowSettingsPtr set = windowSettings(i);
+//    for (int i=0; i<windowSettingsCount(); i++) {
+//      QcepMainWindowSettingsPtr set = windowSettings(i);
 
-      if (set && set->className() == settings->className()) {
-        return;
-      }
-    }
+//      if (set && set->className() == settings->className()) {
+//        return;
+//      }
+//    }
 
     m_WindowSettings.append(settings);
   }

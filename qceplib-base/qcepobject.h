@@ -134,8 +134,8 @@ private:
   bool                                m_Initialized;
   QAtomicInt                          m_ChangeCount;
   QAtomicPointer<QcepProperty>        m_LastChanged;
+
   QcepObjectWPtr                      m_Parent;
-  //TODO: eliminate?
   QVector<QcepObjectWPtr>             m_Children;
 
   QVector<QcepMainWindowSettingsPtr>  m_WindowSettings;
