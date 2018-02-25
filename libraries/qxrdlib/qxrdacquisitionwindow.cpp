@@ -33,9 +33,25 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
 
   QxrdExperimentPtr exp(m_Experiment);
 
+  if (exp == NULL) {
+    printMessage("NULL Experiment opening Acquisition Window");
+  }
+
   if (exp) {
     m_Acquisition = exp -> acquisition();
     m_Processor   = exp -> processor();
+
+    if (m_Acquisition == NULL) {
+      printMessage("NULL Acquisition opening Acquisition Window");
+    }
+
+    if (m_Processor == NULL) {
+      printMessage("NULL Processor opening Acquisition Window");
+    }
+
+    if (m_Settings == NULL) {
+      printMessage("NULL Settings opening Acquisition Window");
+    }
 
     m_DatasetBrowserView -> setExperiment(exp);
 
