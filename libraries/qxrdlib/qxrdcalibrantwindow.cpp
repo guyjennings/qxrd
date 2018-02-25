@@ -28,24 +28,25 @@ void QxrdCalibrantWindow::initialize(QcepObjectWPtr parent)
   QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {
-    m_CenterFinder = exp->centerFinder();
-  }
+    m_CenterFinder            = exp->centerFinder();
 
-  QxrdCenterFinderPtr cfp(m_CenterFinder);
-
-  if (cfp && exp) {
     m_CalibrantLibrary        = exp->calibrantLibrary();
     m_CalibrantLibraryModel   = exp->calibrantLibraryModel();
 
     m_CalibrantDSpacings      = exp->calibrantDSpacings();
     m_CalibrantDSpacingsModel = exp->calibrantDSpacingsModel();
+  } else {
+    printMessage("No experiment available for calibrant window");
   }
 
   QxrdCalibrantLibraryModelPtr   lib(m_CalibrantLibraryModel);
   QxrdCalibrantDSpacingsModelPtr dsp(m_CalibrantDSpacingsModel);
 
-  if (lib && dsp) {
+  if (lib) {
     m_CalibrantTableView     -> setModel(lib.data());
+  }
+
+  if (dsp) {
     m_CalibrantDSpacingsView -> setModel(dsp.data());
   }
 
@@ -68,9 +69,13 @@ void QxrdCalibrantWindow::initialize(QcepObjectWPtr parent)
             this, &QxrdCalibrantWindow::onCalibrantChanged);
   }
 
+  QxrdCenterFinderPtr cfp(m_CenterFinder);
+
   if (cfp) {
     connect(cfp->prop_Energy(), &QcepDoubleProperty::valueChanged,
             this, &QxrdCalibrantWindow::onCalibrantChanged);
+  } else {
+    printMessage("No center finder for calibrant window");
   }
 
   onCalibrantChanged();
