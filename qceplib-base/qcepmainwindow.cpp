@@ -114,7 +114,7 @@ void QcepMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
     setWindowIcon(app -> applicationIcon());
   }
 
-  if (m_FileMenuP && app && exper) {
+  if (m_FileMenuP && app) {
     m_FileMenuP->clear();
     m_ActionNewExperiment =
         m_FileMenuP->addAction(tr("New Experiment..."), app.data(), &QcepApplication::createNewExperiment);
@@ -133,8 +133,10 @@ void QcepMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
     connect(m_RecentExperimentsMenu, &QMenu::aboutToShow,
             this,                    &QcepMainWindow::populateRecentExperimentsMenu);
 
-    m_ActionSaveExperiment =
-        m_FileMenuP->addAction(tr("Save Experiment..."), exper.data(), &QcepExperiment::saveExperiment);
+    if (exper) {
+      m_ActionSaveExperiment =
+          m_FileMenuP->addAction(tr("Save Experiment..."), exper.data(), &QcepExperiment::saveExperiment);
+    }
 
     m_ActionSaveExperimentAs =
         m_FileMenuP->addAction(tr("Save Experiment As..."), this, &QcepMainWindow::saveExperimentAs);
@@ -209,26 +211,26 @@ void QcepMainWindow::populateEditMenu()
 
   m_EditMenuP -> clear();
 
-  if (expt) {
-    QAction *undoAction = NULL, *redoAction = NULL;
+  QAction *undoAction = NULL, *redoAction = NULL;
 
-    QWidget* focusWidget = QApplication::focusWidget();
+  QWidget* focusWidget = QApplication::focusWidget();
 
-    if (focusWidget) {
-//      printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
+  if (focusWidget) {
+    //      printMessage(tr("focusWidget = %1").arg(focusWidget->objectName()));
 
-      QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
-      QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
-      QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
-      QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
-      QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
+    QTextEdit *txed = qobject_cast<QTextEdit*>(focusWidget);
+    QLineEdit *lned = qobject_cast<QLineEdit*>(focusWidget);
+    QSpinBox  *ispn = qobject_cast<QSpinBox*>(focusWidget);
+    QDoubleSpinBox *dspn = qobject_cast<QDoubleSpinBox*>(focusWidget);
+    QComboBox *cbox = qobject_cast<QComboBox*>(focusWidget);
 
-      if (txed || lned || ispn || dspn || cbox) {
-        undoAction = m_ActionUndo;
-        redoAction = m_ActionRedo;
-      }
+    if (txed || lned || ispn || dspn || cbox) {
+      undoAction = m_ActionUndo;
+      redoAction = m_ActionRedo;
     }
+  }
 
+  if (expt) {
     if (undoAction == NULL) {
       undoAction = expt->undoStack()->createUndoAction(this);
     }
@@ -236,17 +238,21 @@ void QcepMainWindow::populateEditMenu()
     if (redoAction == NULL) {
       redoAction = expt->undoStack()->createRedoAction(this);
     }
-
-    m_EditMenuP->addAction(undoAction);
-    m_EditMenuP->addAction(redoAction);
-    m_EditMenuP->addSeparator();
-    m_EditMenuP->addAction(m_ActionCut);
-    m_EditMenuP->addAction(m_ActionCopy);
-    m_EditMenuP->addAction(m_ActionPaste);
-    m_EditMenuP->addAction(m_ActionDelete);
-    m_EditMenuP->addSeparator();
-    m_EditMenuP->addAction(m_ActionSelectAll);
   }
+
+  m_EditMenuP->addAction(undoAction);
+  m_EditMenuP->addAction(redoAction);
+
+  m_EditMenuP->addSeparator();
+
+  m_EditMenuP->addAction(m_ActionCut);
+  m_EditMenuP->addAction(m_ActionCopy);
+  m_EditMenuP->addAction(m_ActionPaste);
+  m_EditMenuP->addAction(m_ActionDelete);
+
+  m_EditMenuP->addSeparator();
+
+  m_EditMenuP->addAction(m_ActionSelectAll);
 }
 
 void QcepMainWindow::populateWindowsMenu()
@@ -255,32 +261,37 @@ void QcepMainWindow::populateWindowsMenu()
 
   QcepExperimentPtr expt(QcepExperiment::findExperiment(m_Parent));
 
-  if (expt && m_WindowMenuP) {
+  if (m_WindowMenuP) {
     m_WindowMenuP->clear();
 
-    for (int i=0; i<expt->windowSettingsCount(); i++) {
-      QcepMainWindowSettingsPtr set =
-          qSharedPointerDynamicCast<QcepMainWindowSettings>(expt->windowSettings(i));
+    if (expt) {
+      for (int i=0; i<expt->windowSettingsCount(); i++) {
+        QcepMainWindowSettingsPtr set(expt->windowSettings(i));
 
-      if (set) {
-        QcepMainWindowPtr win = set -> window();
-
-        QAction *act = NULL;
-
-        if (win) {
-          act = m_WindowMenuP ->
-              addAction(tr("Show %1").arg(set->get_Description()),
-                        this, [=]() { newWindow(set); });
-        } else {
-          act = m_WindowMenuP ->
-              addAction(tr("New %1").arg(set->get_Description()),
-                        this, [=]() { newWindow(set); });
-        }
-
-        if (act) {
-          act->setData(i);
-        }
+        appendToWindowMenu(m_WindowMenuP, set);
       }
+    }
+  }
+}
+
+void QcepMainWindow::appendToWindowMenu(
+    QMenu* wmenu, QcepMainWindowSettingsWPtr s)
+{
+  QcepMainWindowSettingsPtr set(s);
+
+  if (set) {
+    QcepMainWindowPtr win = set -> window();
+
+    QAction *act = NULL;
+
+    if (win) {
+      act = m_WindowMenuP ->
+          addAction(tr("Show %1").arg(set->get_Description()),
+                    this, [=]() { newWindow(set); });
+    } else {
+      act = m_WindowMenuP ->
+          addAction(tr("New %1").arg(set->get_Description()),
+                    this, [=]() { newWindow(set); });
     }
   }
 }

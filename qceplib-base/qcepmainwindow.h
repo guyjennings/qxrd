@@ -54,6 +54,7 @@ protected:
 #endif
 
   virtual void populateWindowsMenu();
+  void appendToWindowMenu(QMenu* wmenu, QcepMainWindowSettingsWPtr s);
 
 private:
   void doTimerUpdate();
