@@ -23,6 +23,7 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
 
   m_Settings    = qSharedPointerDynamicCast<QxrdAcquisitionWindowSettings>(m_Parent);
   m_Experiment  = QxrdExperiment::findExperiment(m_Parent);
+
   setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
@@ -30,7 +31,7 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
   m_Splitter->setStretchFactor(0, 1);
   m_Splitter->setStretchFactor(1, 5);
 
-  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     m_Acquisition = exp -> acquisition();
@@ -139,7 +140,7 @@ void QxrdAcquisitionWindow::changeEvent(QEvent *e)
 
 void QxrdAcquisitionWindow::doEditCorrection()
 {
-  QxrdExperimentPtr exp();
+  QxrdExperimentPtr exp(m_Experiment);
 
   if (exp) {
     QxrdAcqCommonPtr acq(m_Acquisition);
@@ -157,7 +158,7 @@ void QxrdAcquisitionWindow::doEditCorrection()
 
 void QxrdAcquisitionWindow::acquireStarted()
 {
-  QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
+  QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
     m_AcquireButton -> setEnabled(false);

@@ -872,6 +872,27 @@ void QxrdExperiment::readSettings(QSettings *settings)
     if (get_QxrdVersion() != STR(QXRD_VERSION)) {
       set_QxrdVersion(STR(QXRD_VERSION));
     }
+
+    int nWin  = windowSettingsCount();
+    int nOpened = 0;
+
+    for (int i=0; i<nWin; i++) {
+      QcepMainWindowSettingsPtr set = windowSettings(i);
+
+      if (set) {
+        if (set->get_WindowOpen()) {
+          nOpened += 1;
+        }
+      }
+    }
+
+    if (nOpened == 0) {
+      QcepMainWindowSettingsPtr set = windowSettings(0);
+
+      if (set) {
+        set -> set_WindowOpen(true);
+      }
+    }
   }
 
   if (qcepDebug(DEBUG_PREFS)) {
