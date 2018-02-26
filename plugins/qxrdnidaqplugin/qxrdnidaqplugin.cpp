@@ -15,7 +15,8 @@ QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   m_AITaskHandle(0),
   m_TrigAOTask(0),
   m_PulseTask(0),
-  m_CountersTask(0)
+  m_CountersTask(0),
+  m_SyncTask(0)
 {
   setObjectName("nidaq");
 
@@ -81,12 +82,7 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
       char *buff = (char*) malloc(sz);
 
       if (DAQmxGetErrorString(err, buff, sz) == 0) {
-        if (m_ErrorOutput &&
-            QMetaObject::invokeMethod(m_ErrorOutput, "printMessage", Qt::QueuedConnection,
-                                      Q_ARG(QString, tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff)))) {
-        } else {
-          printf("%s:%d NI-DAQ Error %d : %s\n", file, line, err, buff);
-        }
+        printMessage(tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff));
       }
 
       free(buff);
@@ -895,4 +891,35 @@ Error:
   DAQmxClearTask(task);
 
   return res;
+}
+
+void QxrdNIDAQPlugin::syncOutput(double period, int n1, int n2, double d0, double d1)
+{
+  int error;
+
+  if (m_SyncTask) {
+    DAQmxErrChk(DAQmxStopTask(m_SyncTask));
+    DAQmxErrChk(DAQmxClearTask(m_SyncTask));
+    m_SyncTask = NULL;
+  }
+
+  if (m_SyncTask == NULL) {
+    DAQmxErrChk(DAQmxCreateTask("sync", &m_SyncTask));
+    DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_SyncTask,
+                                           "Dev1/ctr0",
+                                           NULL,
+                                           DAQmx_Val_Seconds,
+                                           DAQmx_Val_Low,
+                                           0.0,
+                                           period/2,
+                                           period/2
+                                           ));
+    DAQmxErrChk(DAQmxCfgImplicitTiming(m_SyncTask, DAQmx_Val_ContSamps, 100));
+    DAQmxErrChk(DAQmxStartTask(m_SyncTask));
+  }
+
+  return;
+
+Error:
+  return;
 }

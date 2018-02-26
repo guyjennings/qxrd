@@ -29,6 +29,8 @@ public:
   QString name() const;
 
 public slots:
+  void   syncOutput(double period, int n1, int n2, double d0, double d1);
+
   void   setAnalogWaveform(QString chan, double rate, double wfm[], int size);
   void   setAnalogOutput(int chan, double val);
   double getAnalogInput(int chan);
@@ -81,6 +83,7 @@ private:
   TaskHandle          m_TrigAOTask;
   TaskHandle          m_PulseTask;
   TaskHandle          m_CountersTask;
+  TaskHandle          m_SyncTask;
   int                 m_NCounters;
   QVector<double>     m_Counts;
 
