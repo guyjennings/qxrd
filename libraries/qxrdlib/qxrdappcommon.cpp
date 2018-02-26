@@ -58,9 +58,6 @@ QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
 
   m_Allocator = QcepAllocatorPtr(
         new QcepAllocator("allocator"));
-
-  m_StartupWindowSettings = QxrdStartupWindowSettingsPtr(
-        new QxrdStartupWindowSettings("startupWindowSettings", "Startup Window"));
 }
 
 QxrdAppCommon::~QxrdAppCommon()
@@ -76,6 +73,12 @@ void QxrdAppCommon::initializeRoot()
   if (m_Allocator) {
     m_Allocator->initialize(sharedFromThis());
   }
+
+  m_StartupWindowSettings =
+      qSharedPointerDynamicCast<QxrdStartupWindowSettings>(
+        appendWindowSettings(
+          QxrdStartupWindowSettingsPtr(
+            new QxrdStartupWindowSettings("startupWindowSettings", "Startup Window"))));
 
   if (m_StartupWindowSettings) {
     m_StartupWindowSettings->initialize(sharedFromThis());

@@ -8,7 +8,9 @@
 #include "qxrdappcommon-ptr.h"
 #include "qxrdstartupwindowsettings-ptr.h"
 
-class QXRD_EXPORT QxrdStartupWindow : public QxrdMainWindow, public Ui::QxrdStartupWindow
+class QXRD_EXPORT QxrdStartupWindow :
+    public QxrdMainWindow,
+    public Ui::QxrdStartupWindow
 {
   Q_OBJECT
 

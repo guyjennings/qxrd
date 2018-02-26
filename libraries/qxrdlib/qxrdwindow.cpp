@@ -313,7 +313,7 @@ void QxrdWindow::enableTiltRefinement(bool enable)
 {
   m_ActionRefineCenterTilt->setEnabled(enable);
 }
-
+//TODO: rework
 void QxrdWindow::closeEvent ( QCloseEvent * event )
 {
   if (wantToClose()) {
@@ -328,6 +328,7 @@ void QxrdWindow::closeEvent ( QCloseEvent * event )
   }
 }
 
+//TODO: move to QcepApplication
 void QxrdWindow::warningMessage(QString msg)
 {
   if (QThread::currentThread()==thread()) {
@@ -340,6 +341,7 @@ void QxrdWindow::warningMessage(QString msg)
   }
 }
 
+//TODO: move to QcepApplication
 void QxrdWindow::displayMessage(QString msg)
 {
   if (QThread::currentThread()==thread()) {
@@ -352,6 +354,7 @@ void QxrdWindow::displayMessage(QString msg)
   }
 }
 
+//TODO: move to QxrdStartupWindow
 void QxrdWindow::initialLogEntry(QString aline)
 {
   if (QThread::currentThread()==thread()) {
@@ -364,6 +367,7 @@ void QxrdWindow::initialLogEntry(QString aline)
   }
 }
 
+//TODO: move to QxrdStartupWindow
 void QxrdWindow::displayCriticalMessage(QString msg)
 {
   if (QThread::currentThread()==thread()) {

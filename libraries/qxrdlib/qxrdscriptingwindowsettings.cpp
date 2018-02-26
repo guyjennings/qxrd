@@ -18,8 +18,6 @@ QcepMainWindowPtr QxrdScriptingWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 
-  QxrdScriptingWindowSettingsPtr myself = qSharedPointerDynamicCast<QxrdScriptingWindowSettings>(sharedFromThis());
-
   m_Window =
       QxrdMainWindowPtr(
         new QxrdScriptingWindow(get_Name()));

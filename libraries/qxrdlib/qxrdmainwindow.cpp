@@ -51,14 +51,23 @@ void QxrdMainWindow::populateWindowsMenu()
 
   QxrdAppCommonPtr app(QxrdAppCommon::findApplication(m_Parent));
 
-  if (expt == NULL) {
-    expt = app->experiment(0);
+  if (app) {
+    if (expt == NULL) {
+      expt = app->experiment(0);
 
-    int nWin = expt->windowSettingsCount();
+      int nWin = expt->windowSettingsCount();
 
-    for (int i=0; i<nWin; i++) {
+      for (int i=0; i<nWin; i++) {
+        appendToWindowMenu(m_WindowMenuP,
+                           expt -> windowSettings(i));
+      }
+    }
+
+    int nAppWin = app->windowSettingsCount();
+
+    for (int i=0; i<nAppWin; i++) {
       appendToWindowMenu(m_WindowMenuP,
-                         expt -> windowSettings(i));
+                         app->windowSettings(i));
     }
   }
 

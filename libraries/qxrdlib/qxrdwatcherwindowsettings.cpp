@@ -28,9 +28,6 @@ QcepMainWindowPtr QxrdWatcherWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 
-  QxrdWatcherWindowSettingsPtr myself =
-      qSharedPointerDynamicCast<QxrdWatcherWindowSettings>(sharedFromThis());
-
   m_Window =
       QxrdMainWindowPtr(
         new QxrdWatcherWindow("Watcher"));

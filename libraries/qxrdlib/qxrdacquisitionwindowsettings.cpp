@@ -16,20 +16,17 @@ void QxrdAcquisitionWindowSettings::initialize(QcepObjectWPtr parent)
   m_FileBrowserSettings -> initialize(sharedFromThis());
 }
 
-void QxrdAcquisitionWindowSettings::defaultWindowSettings()
-{
-  THREAD_CHECK;
-
-  inherited::defaultWindowSettings();
-}
-
 QcepMainWindowPtr QxrdAcquisitionWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;
 
-  m_Window =
-      QxrdMainWindowPtr(
-        new QxrdAcquisitionWindow("Acquisition"));
+  if (m_Window) {
+    printMessage("Attempt to re-open window");
+  } else {
+    m_Window =
+        QxrdMainWindowPtr(
+          new QxrdAcquisitionWindow("Acquisition"));
+  }
 
   return m_Window;
 }

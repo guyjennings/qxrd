@@ -16,8 +16,6 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
-  void defaultWindowSettings();
-
   QcepMainWindowPtr newWindow();
 
   void writeSettings(QSettings *set);
