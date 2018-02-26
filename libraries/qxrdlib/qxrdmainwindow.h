@@ -44,9 +44,6 @@ private:
   void acquireStarted();
   void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
   void acquireComplete();
-
-protected:
-  QString             m_Name;
 };
 
 #endif // QXRDMAINWINDOW_H

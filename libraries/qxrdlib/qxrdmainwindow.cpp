@@ -15,8 +15,7 @@
 #include "qcepallocator.h"
 
 QxrdMainWindow::QxrdMainWindow(QString name)
-  : QcepMainWindow(),
-    m_Name(name)
+  : inherited(name)
 {
 }
 
@@ -161,9 +160,7 @@ void QxrdMainWindow::updateTitle()
 {
   QxrdExperimentPtr exper(QxrdExperiment::findExperiment(m_Parent));
 
-  QString title;
-
-  title = m_Name;
+  QString title = m_Name;
 
   if (exper) {
     title.append(" - ");
