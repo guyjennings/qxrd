@@ -333,15 +333,29 @@ void QcepMainWindow::newWindow(QcepMainWindowSettingsWPtr set)
     QcepMainWindowPtr win = setp->window();
 
     if (!win) {
-      win =setp->newWindow();
+      win = setp->newWindow();
+
+      if (win) {
+        win->initialize(set);
+      }
     }
 
     if (win) {
-      win->initialize(set);
       win->show();
       win->raise();
       win->activateWindow();
     }
+  }
+}
+
+void QcepMainWindow::closeEvent(QCloseEvent *event)
+{
+  if (wantToClose()) {
+    hide();
+
+    event -> accept();
+  } else {
+    event -> ignore();
   }
 }
 

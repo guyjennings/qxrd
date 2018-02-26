@@ -1191,7 +1191,7 @@ QcepMainWindowSettingsPtr QcepObject::windowSettings(int n)
   return m_WindowSettings.value(n);
 }
 
-void QcepObject::appendWindowSettings(QcepMainWindowSettingsPtr settings)
+QcepMainWindowSettingsPtr QcepObject::appendWindowSettings(QcepMainWindowSettingsPtr settings)
 {
   if (settings) {
 //    for (int i=0; i<windowSettingsCount(); i++) {
@@ -1204,6 +1204,8 @@ void QcepObject::appendWindowSettings(QcepMainWindowSettingsPtr settings)
 
     m_WindowSettings.append(settings);
   }
+
+  return settings;
 }
 
 void QcepObject::defaultWindowSettings()

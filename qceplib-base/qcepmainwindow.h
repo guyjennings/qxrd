@@ -29,6 +29,8 @@ public:
   virtual void saveExperimentAs() = 0;
   virtual void doEditPreferences() = 0;
 
+  void closeEvent(QCloseEvent *event);
+
 signals:
 
 public slots:

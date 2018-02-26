@@ -48,17 +48,21 @@ QcepMainWindowPtr QcepMainWindowSettings::window()
 void QcepMainWindowSettings::openWindow()
 {
   if (get_WindowOpen()) {
-    newWindow();
+    if (m_Window == NULL) {
+      newWindow();
+
+      if (m_Window) {
+        m_Window -> initialize(sharedFromThis());
+
+        if (get_WindowRect().isValid()) {
+          QRect geom = get_WindowRect().toAlignedRect();
+
+          m_Window->setGeometry(geom);
+        }
+      }
+    }
 
     if (m_Window) {
-      m_Window -> initialize(sharedFromThis());
-
-      if (get_WindowRect().isValid()) {
-        QRect geom = get_WindowRect().toAlignedRect();
-
-        m_Window->setGeometry(geom);
-      }
-
       m_Window->show();
       m_Window->raise();
       m_Window->activateWindow();

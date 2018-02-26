@@ -40,7 +40,7 @@ public:
 
   static QString hexArg(const void *p);
 
-  void appendWindowSettings(QcepMainWindowSettingsPtr settings);
+  QcepMainWindowSettingsPtr appendWindowSettings(QcepMainWindowSettingsPtr settings);
   QcepMainWindowSettingsPtr windowSettings(int n);
   int windowSettingsCount();
 
