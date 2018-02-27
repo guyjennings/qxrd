@@ -87,6 +87,18 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
 
       free(buff);
     }
+
+    int szx = DAQmxGetExtendedErrorInfo(NULL, 0);
+
+    if (szx > 0) {
+      char *buff = (char*) malloc(szx);
+
+      if (DAQmxGetExtendedErrorInfo(buff, szx) == 0) {
+        printMessage(tr("%1:%2 NI-DAQ Extra Info %3").arg(file).arg(line).arg(buff));
+      }
+
+      free(buff);
+    }
   }
 }
 
