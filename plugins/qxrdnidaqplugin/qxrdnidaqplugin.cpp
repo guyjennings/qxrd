@@ -903,19 +903,117 @@ void QxrdNIDAQPlugin::syncOutput(double period, int n1, int n2, double d0, doubl
     m_SyncTask = NULL;
   }
 
+  if (m_AOTaskHandle) {
+    DAQmxClearTask(m_AOTaskHandle);
+    m_AOTaskHandle = 0;
+  }
+
+  if (m_AITaskHandle) {
+    DAQmxClearTask(m_AITaskHandle);
+    m_AITaskHandle = 0;
+  }
+
   if (m_SyncTask == NULL) {
     DAQmxErrChk(DAQmxCreateTask("sync", &m_SyncTask));
+    DAQmxErrChk(DAQmxCreateTask("ai",   &m_AITaskHandle));
+    DAQmxErrChk(DAQmxCreateTask("ao",   &m_AOTaskHandle));
+
     DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_SyncTask,
                                            "Dev1/ctr0",
-                                           NULL,
+                                           "ctr0",
                                            DAQmx_Val_Seconds,
                                            DAQmx_Val_Low,
                                            0.0,
                                            period/2,
                                            period/2
                                            ));
+
+    DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_SyncTask,
+                                           "Dev1/ctr1",
+                                           "ctr1",
+                                           DAQmx_Val_Seconds,
+                                           DAQmx_Val_Low,
+                                           0.0,
+                                           period/5,
+                                           period/5));
+
+    DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_SyncTask,
+                                           "Dev1/ctr2",
+                                           "ctr2",
+                                           DAQmx_Val_Seconds,
+                                           DAQmx_Val_Low,
+                                           0.0,
+                                           period/10,
+                                           period/10));
+
+    DAQmxErrChk(DAQmxCreateAIVoltageChan(m_AITaskHandle,
+                                         "Dev1/ai0",
+                                         "ai0",
+                                         DAQmx_Val_Cfg_Default,
+                                         -10.0,
+                                         10.0,
+                                         DAQmx_Val_Volts,
+                                         NULL));
+
+    DAQmxErrChk(DAQmxCreateAIVoltageChan(m_AITaskHandle,
+                                         "Dev1/ai1",
+                                         "ai1",
+                                         DAQmx_Val_Cfg_Default,
+                                         -10.0,
+                                         10.0,
+                                         DAQmx_Val_Volts,
+                                         NULL));
+
+    DAQmxErrChk(DAQmxCreateAIVoltageChan(m_AITaskHandle,
+                                         "Dev1/ai2",
+                                         "ai2",
+                                         DAQmx_Val_Cfg_Default,
+                                         -10.0,
+                                         10.0,
+                                         DAQmx_Val_Volts,
+                                         NULL));
+
+    DAQmxErrChk(DAQmxCreateAIVoltageChan(m_AITaskHandle,
+                                         "Dev1/ai3",
+                                         "ai3",
+                                         DAQmx_Val_Cfg_Default,
+                                         -10.0,
+                                         10.0,
+                                         DAQmx_Val_Volts,
+                                         NULL));
+
+    DAQmxErrChk(DAQmxCreateAOVoltageChan(m_AOTaskHandle,
+                                         "Dev1/ao0",
+                                         "ao0",
+                                         -10.0,
+                                         10.0,
+                                         DAQmx_Val_Volts,
+                                         NULL));
+
+    DAQmxErrChk(DAQmxCreateAOVoltageChan(m_AOTaskHandle,
+                                         "Dev1/ao1",
+                                         "ao1",
+                                         -10.0,
+                                         10.0,
+                                         DAQmx_Val_Volts,
+                                         NULL));
+
+    DAQmxErrChk(DAQmxCfgSampClkTiming(m_AOTaskHandle,
+                                      "ao0",
+                                      1000,
+                                      DAQmx_Val_Rising, DAQmx_Val_FiniteSamps,
+                                      1024));
+
+    DAQmxErrChk(DAQmxCfgSampClkTiming(m_AOTaskHandle,
+                                      "ao1",
+                                      1000,
+                                      DAQmx_Val_Rising, DAQmx_Val_FiniteSamps,
+                                      1024));
+
     DAQmxErrChk(DAQmxCfgImplicitTiming(m_SyncTask, DAQmx_Val_ContSamps, 100));
     DAQmxErrChk(DAQmxStartTask(m_SyncTask));
+    DAQmxErrChk(DAQmxStartTask(m_AITaskHandle));
+    DAQmxErrChk(DAQmxStartTask(m_AOTaskHandle));
   }
 
   return;
