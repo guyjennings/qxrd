@@ -965,6 +965,8 @@ void QxrdNIDAQPlugin::syncOutput(double period, int nphases)
     m_SyncAITask = 0;
   }
 
+  double longTime = period*nphases;
+
   if (m_SyncTask == NULL) {
     DAQmxErrChk(DAQmxCreateTask("sync", &m_SyncTask));
 
@@ -974,8 +976,8 @@ void QxrdNIDAQPlugin::syncOutput(double period, int nphases)
                                            DAQmx_Val_Seconds,
                                            DAQmx_Val_Low,
                                            0.0,
-                                           period*nphases/2,
-                                           period*nphases/2
+                                           longTime - (1e-3),
+                                           (1e-3)
                                            ));
 
     if (m_SyncDetectors.count() > 0) {

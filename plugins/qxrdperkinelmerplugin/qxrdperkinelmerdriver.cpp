@@ -415,7 +415,7 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
 
       if (nRet != HIS_ALL_OK) {
         acquisitionInitError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       }
 
       if (qcepDebug(DEBUG_PERKINELMER)) {
@@ -424,16 +424,16 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
 
       if (det -> get_DetectorNumber() == 0 && nSensors != 1) {
         acquisitionNSensorsError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       } else if (det -> get_DetectorNumber() < 0 || det -> get_DetectorNumber() > nSensors) {
         acquisitionNSensorsError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       }
 
       for (int i=1; i<=(det -> get_DetectorNumber() ? det -> get_DetectorNumber() : 1); i++) {
         if ((nRet = Acquisition_GetNextSensor(&Pos, &m_AcqDesc))!=HIS_ALL_OK) {
           acquisitionNSensorsError(__FILE__, __LINE__, nRet);
-          return false;
+          return;
         }
       }
     } else if (subType == QxrdPerkinElmerSettings::GBIF_IP_SubType) {
@@ -446,7 +446,7 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
                                        (GBIF_STRING_DATATYPE*)
                                        qPrintable(det -> get_DetectorAddress()))) != HIS_ALL_OK) {
         acquisitionInitError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       }
     } else if (subType == QxrdPerkinElmerSettings::GBIF_MAC_SubType) {
       printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at MAC address %1").arg(det -> get_DetectorAddress()));
@@ -457,7 +457,7 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
                                        (GBIF_STRING_DATATYPE*)
                                        qPrintable(det -> get_DetectorAddress()))) != HIS_ALL_OK) {
         acquisitionInitError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       }
     } else if (subType == QxrdPerkinElmerSettings::GBIF_Name_SubType) {
       printMessage(tr("Attempting to connect to Perkin Elmer detector on the network at device name %1").arg(det -> get_DetectorAddress()));
@@ -468,7 +468,7 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
                                         (GBIF_STRING_DATATYPE*)
                                         qPrintable(det -> get_DetectorAddress()))) != HIS_ALL_OK) {
         acquisitionInitError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       }
     } else if (subType == QxrdPerkinElmerSettings::GBIF_Scan_SubType) {
       printMessage("Searching for Perkin Elmer Detectors on the network");
@@ -477,21 +477,21 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
 
       if ((nRet = Acquisition_GbIF_GetDeviceCnt(&nBoards)) != HIS_ALL_OK) {
         acquisitionNSensorsError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       }
 
       QVector<GBIF_DEVICE_PARAM> devs(nBoards);
 
       if ((nRet = Acquisition_GbIF_GetDeviceList(devs.data(), nBoards))) {
         acquisitionNSensorsError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       }
 
       printMessage(tr("Found %1 Detectors").arg(nBoards));
 
       if (nBoards == 0) {
         criticalMessage("No detectors found");
-        return false;
+        return;
       }
 
       for (int i=0; i<nBoards; i++) {
@@ -511,17 +511,17 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
                                           bAlwaysOpen, 1,
                                           devs[n-1].ucIP)) != HIS_ALL_OK) {
           acquisitionInitError(__FILE__, __LINE__, nRet);
-          return false;
+          return;
         }
       }
     } else {
       criticalMessage(tr("Unrecognized detector type %1").arg(subType));
-      return false;
+      return;
     }
 
     if ((nRet = Acquisition_GetCommChannel(m_AcqDesc, &nChannelType, &nChannelNr))!=HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
-      return false;
+      return;
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
@@ -533,7 +533,7 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
                                            &dwSortFlags, &bEnableIRQ, &dwAcqType,
                                            &dwSystemID, &dwSyncMode, &dwHwAccess))!=HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
-      return false;
+      return;
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
@@ -554,7 +554,7 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
 
     if ((nRet=Acquisition_GetCameraBinningMode(m_AcqDesc, &binningMode)) != HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
-      return false;
+      return;
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
@@ -563,7 +563,7 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
 
     if ((nRet=Acquisition_GetHwHeaderInfo(m_AcqDesc, &m_HwHeaderInfo)) != HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
-      return false;
+      return;
     }
 
     if (qcepDebug(DEBUG_PERKINELMER)) {
@@ -579,7 +579,7 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
                                                 &m_HwHeaderInfo,
                                                 &m_HwHeaderInfoEx)) != HIS_ALL_OK) {
         acquisitionError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       }
 
       if (qcepDebug(DEBUG_PERKINELMER)) {
@@ -595,7 +595,7 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
 
     if ((nRet = Acquisition_GetIntTimes(m_AcqDesc, readoutTimes, &nReadoutTimes)) != HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
-      return false;
+      return;
     }
 
     for (int i=0; i<nReadoutTimes; i++) {
@@ -612,13 +612,13 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
 
     if ((nRet = Acquisition_SetAcqData(m_AcqDesc, (ACQDATATYPE) this)) != HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
-      return false;
+      return;
     }
 
     if ((nRet = Acquisition_SetCallbacksAndMessages(m_AcqDesc, NULL, 0,
                                                     0, OnEndFrameCallback, OnEndAcqCallback))!=HIS_ALL_OK) {
       acquisitionError(__FILE__, __LINE__, nRet);
-      return false;
+      return;
     }
 
     m_BufferSize = 4;
@@ -649,7 +649,7 @@ void QxrdPerkinElmerDriver::startDetectorDriver()
       if ((nRet=Acquisition_DefineDestBuffers(m_AcqDesc, m_Buffer.data(), m_BufferSize,
                                               det -> get_NRows(), det -> get_NCols())) != HIS_ALL_OK) {
         acquisitionError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       }
     }
 
@@ -704,7 +704,7 @@ void QxrdPerkinElmerDriver::changeExposureTime(double expos)
 
       if ((nRet=Acquisition_SetTimerSync(m_AcqDesc, &tmp)) != HIS_ALL_OK) {
         acquisitionError(__FILE__, __LINE__, nRet);
-        return false;
+        return;
       }
 
       printMessage(tr("TimerSync = %1").arg(tmp));
@@ -712,7 +712,6 @@ void QxrdPerkinElmerDriver::changeExposureTime(double expos)
 //      acq->set_ExposureTime(tmp/1.0e6);
     }
   }
-  return true;
 }
 
 void QxrdPerkinElmerDriver::onBinningModeChanged()
