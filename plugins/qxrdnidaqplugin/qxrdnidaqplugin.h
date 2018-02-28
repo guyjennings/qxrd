@@ -9,6 +9,9 @@
 
 #include "qxrdnidaq.h"
 #include "NIDAQmx.h"
+#include "qxrdnidaqsyncdetectoroutput-ptr.h"
+#include "qxrdnidaqsyncwaveformoutput-ptr.h"
+#include "qxrdnidaqsyncanaloginput-ptr.h"
 
 class QxrdNIDAQPlugin :
     public QxrdNIDAQ
@@ -29,7 +32,10 @@ public:
   QString name() const;
 
 public slots:
-  void   syncOutput(double period, int n1, int n2, double d0, double d1);
+  void   addSyncDetectorOutput(int n, double d0, double d1);
+  void   addSyncWaveformOutput();
+  void   addSyncAnalogInput();
+  void   syncOutput(double period, int nphases);
 
   void   setAnalogWaveform(QString chan, double rate, double wfm[], int size);
   void   setAnalogOutput(int chan, double val);
@@ -83,7 +89,6 @@ private:
   TaskHandle          m_TrigAOTask;
   TaskHandle          m_PulseTask;
   TaskHandle          m_CountersTask;
-  TaskHandle          m_SyncTask;
   int                 m_NCounters;
   QVector<double>     m_Counts;
 
@@ -102,6 +107,14 @@ private:
   QVector<int>        m_ContinuousChans;
 
   QVector< QVector<double> > m_ContinuousInputData;
+
+  TaskHandle          m_SyncTask;
+  TaskHandle          m_SyncAOTask;
+  TaskHandle          m_SyncAITask;
+
+  QVector<QxrdNIDAQSyncDetectorOutputPtr>  m_SyncDetectors;
+  QVector<QxrdNIDAQSyncWaveformOutputPtr>  m_SyncWaveforms;
+  QVector<QxrdNIDAQSyncAnalogInputPtr>     m_SyncInputs;
 };
 
 #endif // QXRDNIDAQPLUGIN_H

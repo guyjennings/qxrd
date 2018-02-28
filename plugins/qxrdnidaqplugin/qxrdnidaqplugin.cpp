@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <QMutexLocker>
 #include <QStringList>
+#include "qxrdnidaqsyncdetectoroutput.h"
+#include "qxrdnidaqsyncwaveformoutput.h"
+#include "qxrdnidaqsyncanaloginput.h"
 
 #define DAQmxErrChk(functionCall) do { if( DAQmxFailed(error=(functionCall)) ) { QxrdNIDAQPlugin::errorCheck(__FILE__,__LINE__,error); goto Error; } } while(0)
 
@@ -16,7 +19,9 @@ QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   m_TrigAOTask(0),
   m_PulseTask(0),
   m_CountersTask(0),
-  m_SyncTask(0)
+  m_SyncTask(0),
+  m_SyncAOTask(0),
+  m_SyncAITask(0)
 {
   setObjectName("nidaq");
 
@@ -149,6 +154,21 @@ void QxrdNIDAQPlugin::closeTaskHandles()
   if (m_TrigAOTask) {
     DAQmxClearTask(m_TrigAOTask);
     m_TrigAOTask = 0;
+  }
+
+  if (m_SyncTask) {
+    DAQmxClearTask(m_SyncTask);
+    m_SyncTask = 0;
+  }
+
+  if (m_SyncAOTask) {
+    DAQmxClearTask(m_SyncAOTask);
+    m_SyncAOTask = 0;
+  }
+
+  if (m_SyncAITask) {
+    DAQmxClearTask(m_SyncAITask);
+    m_SyncAITask = 0;
   }
 }
 
@@ -905,30 +925,48 @@ Error:
   return res;
 }
 
-void QxrdNIDAQPlugin::syncOutput(double period, int n1, int n2, double d0, double d1)
+void QxrdNIDAQPlugin::addSyncDetectorOutput(int n, double d0, double d1)
+{
+  m_SyncDetectors.append(
+        QxrdNIDAQSyncDetectorOutputPtr(
+          new QxrdNIDAQSyncDetectorOutput(n, d0, d1)));
+}
+
+void QxrdNIDAQPlugin::addSyncWaveformOutput()
+{
+  m_SyncWaveforms.append(
+        QxrdNIDAQSyncWaveformOutputPtr(
+          new QxrdNIDAQSyncWaveformOutput()));
+}
+
+void QxrdNIDAQPlugin::addSyncAnalogInput()
+{
+  m_SyncInputs.append(
+        QxrdNIDAQSyncAnalogInputPtr(
+          new QxrdNIDAQSyncAnalogInput()));
+}
+
+void QxrdNIDAQPlugin::syncOutput(double period, int nphases)
 {
   int error;
 
   if (m_SyncTask) {
-    DAQmxErrChk(DAQmxStopTask(m_SyncTask));
     DAQmxErrChk(DAQmxClearTask(m_SyncTask));
     m_SyncTask = NULL;
   }
 
-  if (m_AOTaskHandle) {
-    DAQmxClearTask(m_AOTaskHandle);
-    m_AOTaskHandle = 0;
+  if (m_SyncAOTask) {
+    DAQmxClearTask(m_SyncAOTask);
+    m_SyncAOTask = 0;
   }
 
-  if (m_AITaskHandle) {
-    DAQmxClearTask(m_AITaskHandle);
-    m_AITaskHandle = 0;
+  if (m_SyncAITask) {
+    DAQmxClearTask(m_SyncAITask);
+    m_SyncAITask = 0;
   }
 
   if (m_SyncTask == NULL) {
     DAQmxErrChk(DAQmxCreateTask("sync", &m_SyncTask));
-    DAQmxErrChk(DAQmxCreateTask("ai",   &m_AITaskHandle));
-    DAQmxErrChk(DAQmxCreateTask("ao",   &m_AOTaskHandle));
 
     DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_SyncTask,
                                            "Dev1/ctr0",
@@ -936,96 +974,87 @@ void QxrdNIDAQPlugin::syncOutput(double period, int n1, int n2, double d0, doubl
                                            DAQmx_Val_Seconds,
                                            DAQmx_Val_Low,
                                            0.0,
-                                           period/2,
-                                           period/2
+                                           period*nphases/2,
+                                           period*nphases/2
                                            ));
 
-    DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_SyncTask,
-                                           "Dev1/ctr1",
-                                           "ctr1",
-                                           DAQmx_Val_Seconds,
-                                           DAQmx_Val_Low,
-                                           0.0,
-                                           period/5,
-                                           period/5));
+    if (m_SyncDetectors.count() > 0) {
+      for (int i=0; i<m_SyncDetectors.count(); i++) {
+        QxrdNIDAQSyncDetectorOutputPtr det = m_SyncDetectors.value(i);
 
-    DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_SyncTask,
-                                           "Dev1/ctr2",
-                                           "ctr2",
-                                           DAQmx_Val_Seconds,
-                                           DAQmx_Val_Low,
-                                           0.0,
-                                           period/10,
-                                           period/10));
+        if (det) {
+          DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_SyncTask,
+                                                 qPrintable(tr("Dev1/ctr%1").arg(i+1)),
+                                                 qPrintable(tr("ctr%1").arg(i+1)),
+                                                 DAQmx_Val_Seconds,
+                                                 DAQmx_Val_Low,
+                                                 det -> get_InitialDelay(),
+                                                 period - det->get_ReadoutDelay(),
+                                                 det->get_ReadoutDelay()));
+        }
+      }
+    }
 
-    DAQmxErrChk(DAQmxCreateAIVoltageChan(m_AITaskHandle,
-                                         "Dev1/ai0",
-                                         "ai0",
-                                         DAQmx_Val_Cfg_Default,
-                                         -10.0,
-                                         10.0,
-                                         DAQmx_Val_Volts,
-                                         NULL));
+    if (m_SyncWaveforms.count() > 0) {
+      DAQmxErrChk(DAQmxCreateTask("ao",   &m_SyncAOTask));
 
-    DAQmxErrChk(DAQmxCreateAIVoltageChan(m_AITaskHandle,
-                                         "Dev1/ai1",
-                                         "ai1",
-                                         DAQmx_Val_Cfg_Default,
-                                         -10.0,
-                                         10.0,
-                                         DAQmx_Val_Volts,
-                                         NULL));
+      for (int i=0; i<m_SyncWaveforms.count(); i++) {
+        DAQmxErrChk(DAQmxCreateAOVoltageChan(m_SyncAOTask,
+                                             qPrintable(tr("Dev1/ao%1").arg(i)),
+                                             qPrintable(tr("ao%1").arg(i)),
+                                             -10.0,
+                                             10.0,
+                                             DAQmx_Val_Volts,
+                                             NULL));
+      }
+    }
 
-    DAQmxErrChk(DAQmxCreateAIVoltageChan(m_AITaskHandle,
-                                         "Dev1/ai2",
-                                         "ai2",
-                                         DAQmx_Val_Cfg_Default,
-                                         -10.0,
-                                         10.0,
-                                         DAQmx_Val_Volts,
-                                         NULL));
+    if (m_SyncInputs.count() > 0) {
+      DAQmxErrChk(DAQmxCreateTask("ai",   &m_SyncAITask));
 
-    DAQmxErrChk(DAQmxCreateAIVoltageChan(m_AITaskHandle,
-                                         "Dev1/ai3",
-                                         "ai3",
-                                         DAQmx_Val_Cfg_Default,
-                                         -10.0,
-                                         10.0,
-                                         DAQmx_Val_Volts,
-                                         NULL));
+      for (int i=0; i<m_SyncInputs.count(); i++) {
+        DAQmxErrChk(DAQmxCreateAIVoltageChan(m_SyncAITask,
+                                             qPrintable(tr("Dev1/ai%1").arg(i)),
+                                             qPrintable(tr("ai%1").arg(i)),
+                                             DAQmx_Val_Cfg_Default,
+                                             -10.0,
+                                             10.0,
+                                             DAQmx_Val_Volts,
+                                             NULL));
+      }
+    }
 
-    DAQmxErrChk(DAQmxCreateAOVoltageChan(m_AOTaskHandle,
-                                         "Dev1/ao0",
-                                         "ao0",
-                                         -10.0,
-                                         10.0,
-                                         DAQmx_Val_Volts,
-                                         NULL));
+//    DAQmxErrChk(DAQmxCreateAOVoltageChan(m_AOTaskHandle,
+//                                         "Dev1/ao1",
+//                                         "ao1",
+//                                         -10.0,
+//                                         10.0,
+//                                         DAQmx_Val_Volts,
+//                                         NULL));
 
-    DAQmxErrChk(DAQmxCreateAOVoltageChan(m_AOTaskHandle,
-                                         "Dev1/ao1",
-                                         "ao1",
-                                         -10.0,
-                                         10.0,
-                                         DAQmx_Val_Volts,
-                                         NULL));
+//    DAQmxErrChk(DAQmxCfgSampClkTiming(m_AOTaskHandle,
+//                                      "ao0",
+//                                      1000,
+//                                      DAQmx_Val_Rising, DAQmx_Val_FiniteSamps,
+//                                      1024));
 
-    DAQmxErrChk(DAQmxCfgSampClkTiming(m_AOTaskHandle,
-                                      "ao0",
-                                      1000,
-                                      DAQmx_Val_Rising, DAQmx_Val_FiniteSamps,
-                                      1024));
-
-    DAQmxErrChk(DAQmxCfgSampClkTiming(m_AOTaskHandle,
-                                      "ao1",
-                                      1000,
-                                      DAQmx_Val_Rising, DAQmx_Val_FiniteSamps,
-                                      1024));
+//    DAQmxErrChk(DAQmxCfgSampClkTiming(m_AOTaskHandle,
+//                                      "ao1",
+//                                      1000,
+//                                      DAQmx_Val_Rising, DAQmx_Val_FiniteSamps,
+//                                      1024));
 
     DAQmxErrChk(DAQmxCfgImplicitTiming(m_SyncTask, DAQmx_Val_ContSamps, 100));
+
+    if (m_SyncAITask) {
+      DAQmxErrChk(DAQmxStartTask(m_SyncAITask));
+    }
+
+    if (m_SyncAOTask) {
+      DAQmxErrChk(DAQmxStartTask(m_SyncAOTask));
+    }
+
     DAQmxErrChk(DAQmxStartTask(m_SyncTask));
-    DAQmxErrChk(DAQmxStartTask(m_AITaskHandle));
-    DAQmxErrChk(DAQmxStartTask(m_AOTaskHandle));
   }
 
   return;
