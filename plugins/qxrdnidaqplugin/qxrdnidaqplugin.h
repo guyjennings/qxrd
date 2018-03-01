@@ -33,9 +33,10 @@ public:
 
 public slots:
   void   addSyncDetectorOutput(int n, double d0, double d1);
-  void   addSyncWaveformOutput();
+  void   addSyncWaveformOutput(int style, double v0, double v1);
   void   addSyncAnalogInput();
   void   syncOutput(double period, int nphases);
+  void   syncTest();
 
   void   setAnalogWaveform(QString chan, double rate, double wfm[], int size);
   void   setAnalogOutput(int chan, double val);
@@ -76,6 +77,11 @@ public slots:
   virtual QVector<double> readContinuousInputChannel(int ch);
   virtual void finishContinuousInput();
 
+public:
+  int32 syncCallback(TaskHandle task, int32 status);
+  int32 aiCallback(TaskHandle task, int32 status);
+  int32 aoCallback(TaskHandle task, int32 status);
+
 private:
   void initTaskHandles();
   void closeTaskHandles();
@@ -109,6 +115,8 @@ private:
   QVector< QVector<double> > m_ContinuousInputData;
 
   TaskHandle          m_SyncTask;
+  QVector<TaskHandle> m_SyncDetTasks;
+//  TaskHandle          m_SyncDetTask;
   TaskHandle          m_SyncAOTask;
   TaskHandle          m_SyncAITask;
 
