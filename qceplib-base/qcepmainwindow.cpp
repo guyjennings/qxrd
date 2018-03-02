@@ -135,10 +135,8 @@ void QcepMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
     connect(m_RecentExperimentsMenu, &QMenu::aboutToShow,
             this,                    &QcepMainWindow::populateRecentExperimentsMenu);
 
-    if (exper) {
-      m_ActionSaveExperiment =
-          m_FileMenuP->addAction(tr("Save Experiment..."), exper.data(), &QcepExperiment::saveExperiment);
-    }
+    m_ActionSaveExperiment =
+        m_FileMenuP->addAction(tr("Save Experiment..."), this, &QcepMainWindow::saveExperiment);
 
     m_ActionSaveExperimentAs =
         m_FileMenuP->addAction(tr("Save Experiment As..."), this, &QcepMainWindow::saveExperimentAs);

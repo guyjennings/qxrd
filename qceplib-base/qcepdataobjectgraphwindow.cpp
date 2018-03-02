@@ -288,15 +288,3 @@ void QcepDataObjectGraphWindow::appendCurve(QwtPlotCurve *curve)
     curve->attach(m_ImagePlot);
   }
 }
-
-void QcepDataObjectGraphWindow::saveExperimentAs()
-{
-}
-
-void QcepDataObjectGraphWindow::saveExperimentCopy()
-{
-}
-
-void QcepDataObjectGraphWindow::doEditPreferences()
-{
-}

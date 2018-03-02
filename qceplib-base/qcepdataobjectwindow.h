@@ -14,6 +14,11 @@ private:
 public:
   explicit QcepDataObjectWindow(QString name);
 
+  void saveExperiment();
+  void saveExperimentAs();
+  void saveExperimentCopy();
+  void doEditPreferences();
+
 signals:
 
 public slots:

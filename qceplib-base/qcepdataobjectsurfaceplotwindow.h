@@ -27,10 +27,6 @@ public:
   void closeEvent (QCloseEvent * event);
   bool wantToClose();
 
-  void saveExperimentAs();
-  void saveExperimentCopy();
-  void doEditPreferences();
-
 signals:
 
 public slots:

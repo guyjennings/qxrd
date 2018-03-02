@@ -25,6 +25,7 @@ public:
 
   virtual void setupMenus(QMenu *file, QMenu *edit, QMenu *window);
 
+  virtual void saveExperiment() = 0;
   virtual void saveExperimentCopy() = 0;
   virtual void saveExperimentAs() = 0;
   virtual void doEditPreferences() = 0;

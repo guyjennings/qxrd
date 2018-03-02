@@ -26,3 +26,19 @@ void QcepDataObjectWindow::statusMessage(QString msg, QDateTime /*ts*/)
 {
   printf("STATUS: %s\n", qPrintable(msg));
 }
+
+void QcepDataObjectWindow::saveExperiment()
+{
+}
+
+void QcepDataObjectWindow::saveExperimentAs()
+{
+}
+
+void QcepDataObjectWindow::saveExperimentCopy()
+{
+}
+
+void QcepDataObjectWindow::doEditPreferences()
+{
+}

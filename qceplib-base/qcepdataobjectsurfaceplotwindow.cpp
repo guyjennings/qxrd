@@ -57,16 +57,4 @@ void QcepDataObjectSurfacePlotWindow::onNewImageAvailable(QcepDoubleImageDataWPt
   }
 }
 
-void QcepDataObjectSurfacePlotWindow::saveExperimentAs()
-{
-}
-
-void QcepDataObjectSurfacePlotWindow::saveExperimentCopy()
-{
-}
-
-void QcepDataObjectSurfacePlotWindow::doEditPreferences()
-{
-}
-
 #endif
