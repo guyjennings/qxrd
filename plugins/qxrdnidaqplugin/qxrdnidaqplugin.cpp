@@ -932,6 +932,11 @@ void QxrdNIDAQPlugin::addSyncDetectorOutput(int n, double d0, double d1)
           new QxrdNIDAQSyncDetectorOutput(n, d0, d1)));
 }
 
+void QxrdNIDAQPlugin::clearSyncDetectorOutputs()
+{
+  m_SyncDetectors.clear();
+}
+
 void QxrdNIDAQPlugin::addSyncWaveformOutput(int style, double v0, double v1)
 {
   m_SyncWaveforms.append(
@@ -939,11 +944,21 @@ void QxrdNIDAQPlugin::addSyncWaveformOutput(int style, double v0, double v1)
           new QxrdNIDAQSyncWaveformOutput(style, v0, v1)));
 }
 
+void QxrdNIDAQPlugin::clearSyncWaveformOutputs()
+{
+  m_SyncWaveforms.clear();
+}
+
 void QxrdNIDAQPlugin::addSyncAnalogInput()
 {
   m_SyncInputs.append(
         QxrdNIDAQSyncAnalogInputPtr(
           new QxrdNIDAQSyncAnalogInput()));
+}
+
+void QxrdNIDAQPlugin::clearSyncAnalogInputs()
+{
+  m_SyncInputs.clear();
 }
 
 static int32 CVICALLBACK syncCallback(TaskHandle taskHandle, int32 status, void *callbackData)
@@ -979,7 +994,7 @@ static int32 CVICALLBACK aoCallback(TaskHandle taskHandle, int32 status, void *c
   }
 }
 
-void QxrdNIDAQPlugin::syncOutput(double period, int nphases)
+void QxrdNIDAQPlugin::syncStop()
 {
   int error;
 
@@ -1002,6 +1017,16 @@ void QxrdNIDAQPlugin::syncOutput(double period, int nphases)
     m_SyncAITask = 0;
   }
 
+Error:
+  return;
+}
+
+void QxrdNIDAQPlugin::syncOutput(double period, int nphases, double retrigTime)
+{
+  int error;
+
+  syncStop();
+
   double longTime = period*nphases;
   int    bufferSize = longTime*1000;
 
@@ -1014,16 +1039,16 @@ void QxrdNIDAQPlugin::syncOutput(double period, int nphases)
                                            DAQmx_Val_Seconds,
                                            DAQmx_Val_Low,
                                            0.0,
-                                           longTime - (0.1),
-                                           (0.1)
+                                           longTime - (0.005) + retrigTime,
+                                           (0.005)
                                            ));
 
     DAQmxErrChk(DAQmxCfgImplicitTiming(m_SyncTask, DAQmx_Val_ContSamps, 100));
-    DAQmxErrChk(DAQmxRegisterSignalEvent(m_SyncTask,
-                                         DAQmx_Val_CounterOutputEvent,
-                                         DAQmx_Val_SynchronousEventCallbacks,
-                                         &::syncCallback,
-                                         this));
+//    DAQmxErrChk(DAQmxRegisterSignalEvent(m_SyncTask,
+//                                         DAQmx_Val_CounterOutputEvent,
+//                                         DAQmx_Val_SynchronousEventCallbacks,
+//                                         &::syncCallback,
+//                                         this));
 
     if (m_SyncDetectors.count() > 0) {
       for (int i=0; i<m_SyncDetectors.count(); i++) {
@@ -1043,9 +1068,12 @@ void QxrdNIDAQPlugin::syncOutput(double period, int nphases)
                                                  DAQmx_Val_Low,
                                                  0.0 /*det -> get_InitialDelay()*/,
                                                  det -> get_ReadoutDelay(),
-                                                 dp - det->get_ReadoutDelay() - 0.01));
+                                                 dp - det->get_ReadoutDelay()));
 
-          DAQmxErrChk(DAQmxCfgImplicitTiming  (detTask, DAQmx_Val_FiniteSamps, nphases*re));
+          if (nphases*re > 1) {
+            DAQmxErrChk(DAQmxCfgImplicitTiming  (detTask, DAQmx_Val_FiniteSamps, nphases*re));
+          }
+
           DAQmxErrChk(DAQmxCfgDigEdgeStartTrig(detTask, "/Dev1/Ctr0InternalOutput", DAQmx_Val_Rising));
           DAQmxErrChk(DAQmxSetStartTrigRetriggerable(detTask, true));
         }
@@ -1099,8 +1127,8 @@ void QxrdNIDAQPlugin::syncOutput(double period, int nphases)
       DAQmxErrChk(DAQmxWriteAnalogF64(m_SyncAOTask, bufferSize, false, -1, DAQmx_Val_GroupByChannel,
                                       wfms, &nsampwrtn, NULL));
 
-      DAQmxErrChk(DAQmxRegisterDoneEvent(m_SyncAOTask, DAQmx_Val_SynchronousEventCallbacks,
-                                         &::aoCallback, this));
+//      DAQmxErrChk(DAQmxRegisterDoneEvent(m_SyncAOTask, DAQmx_Val_SynchronousEventCallbacks,
+//                                         &::aoCallback, this));
     }
 
     if (m_SyncInputs.count() > 0) {
@@ -1124,8 +1152,8 @@ void QxrdNIDAQPlugin::syncOutput(double period, int nphases)
                                           bufferSize));
         DAQmxErrChk(DAQmxCfgDigEdgeStartTrig(m_SyncAITask, "/Dev1/Ctr0InternalOutput", DAQmx_Val_Rising));
         DAQmxErrChk(DAQmxSetStartTrigRetriggerable(m_SyncAITask, true));
-        DAQmxErrChk(DAQmxRegisterDoneEvent(m_SyncAITask, DAQmx_Val_SynchronousEventCallbacks,
-                                           &::aiCallback, this));
+//        DAQmxErrChk(DAQmxRegisterDoneEvent(m_SyncAITask, DAQmx_Val_SynchronousEventCallbacks,
+//                                           &::aiCallback, this));
       }
     }
 
@@ -1152,31 +1180,40 @@ Error:
 
 int32 QxrdNIDAQPlugin::syncCallback(TaskHandle task, int32 status)
 {
-  printMessage(tr("syncCallback %1").arg(status));
+//  printMessage(tr("syncCallback %1").arg(status));
 
   return status;
 }
 
 int32 QxrdNIDAQPlugin::aiCallback(TaskHandle task, int32 status)
 {
-  printMessage(tr("aiCallback %1").arg(status));
+//  printMessage(tr("aiCallback %1").arg(status));
 
   return status;
 }
 
 int32 QxrdNIDAQPlugin::aoCallback(TaskHandle task, int32 status)
 {
-  printMessage(tr("aoCallback %1").arg(status));
+//  printMessage(tr("aoCallback %1").arg(status));
 
   return status;
 }
 
 void QxrdNIDAQPlugin::syncTest()
 {
-  addSyncDetectorOutput(1, 0.1, 0.1);
-  addSyncDetectorOutput(2, 0.1, 0.1);
+  addSyncDetectorOutput(1, 0.0, 0.01);
+  addSyncDetectorOutput(2, 0.0, 0.01);
 
   addSyncWaveformOutput(0, 5.0, -5.0);
 
-  syncOutput(0.5, 10);
+  syncOutput(0.1, 10, 0.001);
+}
+
+void QxrdNIDAQPlugin::syncClear()
+{
+  clearSyncDetectorOutputs();
+  clearSyncWaveformOutputs();
+  clearSyncAnalogInputs();
+
+  syncStop();
 }

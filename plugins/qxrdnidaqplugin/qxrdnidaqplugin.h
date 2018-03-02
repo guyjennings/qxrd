@@ -35,8 +35,16 @@ public slots:
   void   addSyncDetectorOutput(int n, double d0, double d1);
   void   addSyncWaveformOutput(int style, double v0, double v1);
   void   addSyncAnalogInput();
-  void   syncOutput(double period, int nphases);
+
+  void   clearSyncDetectorOutputs();
+  void   clearSyncWaveformOutputs();
+  void   clearSyncAnalogInputs();
+
+  void   syncOutput(double period, int nphases, double retrigTime);
+  void   syncStop();
+
   void   syncTest();
+  void   syncClear();
 
   void   setAnalogWaveform(QString chan, double rate, double wfm[], int size);
   void   setAnalogOutput(int chan, double val);
