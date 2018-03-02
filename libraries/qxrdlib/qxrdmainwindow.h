@@ -31,6 +31,7 @@ public:
   void statusMessage(QString msg, QDateTime ts = QDateTime::currentDateTime());
 
 public slots:
+  void saveExperiment();
   void saveExperimentCopy();
   void saveExperimentAs();
   void doEditPreferences();
@@ -38,6 +39,9 @@ public slots:
 
 protected:
   void populateWindowsMenu();
+
+  QxrdExperimentPtr findExperiment();
+  QxrdAppCommonPtr  findApplication();
 
 private:
   void updateTitle();
