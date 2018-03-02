@@ -41,8 +41,6 @@ QMutex           QxrdDexelaDriver::m_Mutex;
 
 void QxrdDexelaDriver::startDetectorDriver()
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
-
   THREAD_CHECK;
 
   if (qcepDebug(DEBUG_DEXELA)) {
@@ -81,24 +79,22 @@ void QxrdDexelaDriver::startDetectorDriver()
           m_DexelaDetector -> SetCallback(&QxrdDexelaDriver::staticCallback);
           m_DexelaDetector -> SetCallbackData((void*) this);
 
-          m_DexelaDetector -> SetFullWellMode(High);
-          m_DexelaDetector -> SetExposureTime(acq->get_ExposureTime());
-          m_DexelaDetector -> SetBinningMode(x11);
-          m_DexelaDetector -> SetExposureMode(Expose_and_read);
-          m_DexelaDetector -> SetTriggerSource(Internal_Software);
-          m_DexelaDetector -> EnablePulseGenerator(acq->get_ExposureTime());
+          connect(acq -> prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
+                  this,                       &QxrdDexelaDriver::restartDetector);
 
-          m_XDim = m_DexelaDetector -> GetBufferXdim();
-          m_YDim = m_DexelaDetector -> GetBufferYdim();
+          connect(det -> prop_ExposureFactor(), &QcepDoubleProperty::valueChanged,
+                  this,                         &QxrdDexelaDriver::restartDetector);
 
-          det -> set_NCols(m_XDim);
-          det -> set_NRows(m_YDim);
+          connect(det -> prop_HardwareSync(),   &QcepBoolProperty::valueChanged,
+                  this,                         &QxrdDexelaDriver::restartDetector);
 
-          m_DexelaDetector -> GoLiveSeq();
+          connect(det -> prop_HBinning(),       &QcepIntProperty::valueChanged,
+                  this,                         &QxrdDexelaDriver::restartDetector);
 
-          m_DexelaDetector -> ToggleGenerator(true);
+          connect(det -> prop_VBinning(),       &QcepIntProperty::valueChanged,
+                  this,                         &QxrdDexelaDriver::restartDetector);
 
-          printMessage(tr("Dexela Detector Exposure time %1").arg(m_DexelaDetector->GetExposureTime()));
+          restartDetector();
         } catch (DexelaException &e) {
           printMessage(tr("Dexela Exception caught: Description %1: function %2")
                        .arg(e.what()).arg(e.GetFunctionName()));
@@ -111,6 +107,77 @@ void QxrdDexelaDriver::startDetectorDriver()
 
   if (qcepDebug(DEBUG_DEXELA)) {
     printMessage(tr("QxrdDexelaDriver::startDetectorDriver finished"));
+  }
+}
+
+void QxrdDexelaDriver::restartDetector()
+{
+  THREAD_CHECK;
+
+  if (qcepDebug(DEBUG_DEXELA)) {
+    printMessage(tr("QxrdDexelaDriver::startDetectorDriver"));
+  }
+
+  QxrdDexelaSettingsPtr det(m_Dexela);
+  QxrdAcqCommonPtr      acq(m_Acquisition);
+
+  if (det == NULL) {
+    printMessage("Attempting to start Dexela Detector with settings == NULL");
+  }
+
+  if (acq == NULL) {
+    printMessage("Attempting to start Dexela Detector with acquisition == NULL");
+  }
+
+  if (acq && det && det->checkDetectorEnabled()) {
+    printMessage(tr("Restarting Dexela detector %1: \"%2\"")
+                 .arg(det->get_DetectorIndex())
+                 .arg(det->get_DetectorName()));
+
+    if (m_DexelaDetector == NULL) {
+      startDetectorDriver();
+    } else {
+      try {
+
+        m_DexelaDetector -> SetFullWellMode(High);
+        m_DexelaDetector -> SetBinningMode(x11);
+
+        double expTime = acq->get_ExposureTime()/det->get_ExposureFactor();
+
+        switch (det->get_HardwareSync()) {
+        case QxrdDexelaSettings::SoftwareSync:
+          m_DexelaDetector -> SetExposureTime(expTime);
+          m_DexelaDetector -> SetExposureMode(Expose_and_read);
+          m_DexelaDetector -> SetTriggerSource(Internal_Software);
+          m_DexelaDetector -> EnablePulseGenerator(expTime);
+          break;
+
+        case QxrdDexelaSettings::HardwareSync:
+          m_DexelaDetector -> SetExposureMode (Expose_and_read);
+          m_DexelaDetector -> SetTriggerSource(Ext_Duration_Trig);
+          break;
+        }
+
+        det -> set_ReadoutTime(m_DexelaDetector -> GetReadOutTime());
+
+        m_XDim = m_DexelaDetector -> GetBufferXdim();
+        m_YDim = m_DexelaDetector -> GetBufferYdim();
+
+        det -> set_NCols(m_XDim);
+        det -> set_NRows(m_YDim);
+
+        m_DexelaDetector -> GoLiveSeq();
+
+        if (det->get_HardwareSync() == QxrdDexelaSettings::SoftwareSync) {
+          m_DexelaDetector -> ToggleGenerator(true);
+        }
+
+        printMessage(tr("Dexela Detector Exposure time %1").arg(m_DexelaDetector->GetExposureTime()));
+      } catch (DexelaException &e) {
+        printMessage(tr("Dexela Exception caught: Description %1: function %2")
+                     .arg(e.what()).arg(e.GetFunctionName()));
+      }
+    }
   }
 }
 
@@ -152,7 +219,7 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
     QxrdDexelaSettingsPtr det(m_Dexela);
 
     if (det) {
-      splashMessage(tr("Acquired Frame %1 from %2 on detector %3")
+      printMessage(tr("Acquired Frame %1 from %2 on detector %3")
                     .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
 
 //      printf("Acquired frame %d from buffer %d on detector %d\n",

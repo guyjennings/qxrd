@@ -25,6 +25,7 @@
 #include "qxrdinfowindowsettings.h"
 #include "qxrdintegrationwindowsettings.h"
 #include "qxrdmaskingwindowsettings.h"
+#include "qxrddetectordriver.h"
 
 QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   inherited(name),
@@ -258,6 +259,17 @@ QxrdProcessorPtr QxrdDetectorSettings::processor()
   return m_Processor;
 }
 
+QxrdDetectorDriver *QxrdDetectorSettings::detectorDriver()
+{
+  QxrdDetectorDriverPtr res;
+
+  if (m_DetectorDriverThread) {
+    res = m_DetectorDriverThread -> detectorDriver();
+  }
+
+  return res.data();
+}
+
 QxrdDetectorControlWindowSettingsWPtr QxrdDetectorSettings::detectorControlWindowSettings()
 {
   return m_DetectorControlWindowSettings;
@@ -364,6 +376,8 @@ void QxrdDetectorSettings::startDetector()
 {
   if (m_DetectorDriverThread) {
     m_DetectorDriverThread->startDetectorDriver();
+  } else {
+    printMessage("No detector to start");
   }
 }
 
@@ -646,4 +660,7 @@ void QxrdDetectorSettings::registerMetaTypes()
   qRegisterMetaType<QxrdAreaDetectorSettings*>("QxrdAreaDetectorSettings*");
   qRegisterMetaType<QxrdFileWatcherSettings*>("QxrdFileWatcherSettings*");
   qRegisterMetaType<QxrdDexelaSettings*>("QxrdDexelaSettings*");
+  qRegisterMetaType<QxrdDetectorDriver*>("QxrdDetectorDriver*");
+  qRegisterMetaType<QxrdDetectorDriverPtr>("QxrdDetectorDriverPtr");
+  qRegisterMetaType<QxrdDetectorDriverWPtr>("QxrdDetectorDriverWPtr");
 }

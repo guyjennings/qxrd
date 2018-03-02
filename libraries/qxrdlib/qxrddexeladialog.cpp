@@ -19,6 +19,7 @@ QxrdDexelaDialog::QxrdDexelaDialog(
     m_Settings->prop_DetectorTypeName() -> copyTo(m_DetectorType);
     m_Settings->prop_DetectorIndex()    -> copyTo(m_DetectorIndex);
     m_Settings->prop_ExposureFactor()   -> copyTo(m_ExposureFactor);
+    m_Settings->prop_HardwareSync()     -> copyTo(m_HardwareSync);
   }
 }
 
@@ -28,6 +29,7 @@ void QxrdDexelaDialog::accept()
     m_Settings->prop_DetectorName()     -> copyFrom(m_DetectorName);
     m_Settings->prop_DetectorIndex()    -> copyFrom(m_DetectorIndex);
     m_Settings->prop_ExposureFactor()   -> copyFrom(m_ExposureFactor);
+    m_Settings->prop_HardwareSync()     -> copyFrom(m_HardwareSync);
   }
 
   QxrdDetectorDialog::accept();

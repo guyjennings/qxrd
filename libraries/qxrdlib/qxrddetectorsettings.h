@@ -87,6 +87,8 @@ public slots:
   void startDetector();
   void stopDetector();
 
+  QxrdDetectorDriver* detectorDriver();
+
   void changeExposureTime(double expos);
   void beginAcquisition(double exposure);
   void endAcquisition();

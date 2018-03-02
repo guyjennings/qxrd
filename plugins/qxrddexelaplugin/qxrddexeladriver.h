@@ -29,6 +29,8 @@ public slots:
   virtual void shutdownAcquisition();
   virtual void beginFrame();
 
+  void restartDetector();
+
 private slots:
   void onAcquiredFrame       (int fc, int buf);
 

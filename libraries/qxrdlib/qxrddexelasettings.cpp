@@ -14,7 +14,9 @@
 QxrdDexelaSettings::QxrdDexelaSettings(QString name) :
   QxrdDetectorSettings(name, Dexela),
   m_DetectorIndex  (this, "detectorIndex",   0,   "Dexela Detector Number"),
-  m_ExposureFactor (this, "exposureFactor",  1.0, "Relative Exposure Factor")
+  m_ExposureFactor (this, "exposureFactor",  1.0, "Relative Exposure Factor"),
+  m_HardwareSync   (this, "hardwareSync",    QxrdDexelaSettings::SoftwareSync, "Hardware Synchronization?"),
+  m_ReadoutTime    (this, "readoutTime",     -1.0, "Detector Readout Time")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing dexela detector\n");
