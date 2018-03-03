@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmainwindow.h"
 #include "qxrdappcommon-ptr.h"
-#include "qxrdexperiment-ptr.h"
+#include "qcepexperiment-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdprocessor-ptr.h"
 #include <QLabel>
@@ -39,9 +39,6 @@ public slots:
 
 protected:
   void populateWindowsMenu();
-
-  QxrdExperimentPtr findExperiment();
-  QxrdAppCommonPtr  findApplication();
 
 private:
   void updateTitle();

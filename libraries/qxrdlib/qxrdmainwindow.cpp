@@ -24,28 +24,6 @@ void QxrdMainWindow::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 }
 
-QxrdExperimentPtr QxrdMainWindow::findExperiment()
-{
-  QxrdExperimentPtr res(QxrdExperiment::findExperiment(m_Parent));
-
-  if (res == NULL) {
-    QxrdAppCommonPtr app(findApplication());
-
-    if (app) {
-      res = app->experiment(0);
-    }
-  }
-
-  return res;
-}
-
-QxrdAppCommonPtr QxrdMainWindow::findApplication()
-{
-  QxrdAppCommonPtr res(QxrdAppCommon::findApplication(m_Parent));
-
-  return res;
-}
-
 void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
 {
   inherited::setupMenus(file, edit, window);
@@ -68,18 +46,22 @@ void QxrdMainWindow::populateWindowsMenu()
 {
   inherited::populateWindowsMenu();
 
-  QxrdExperimentPtr expt(findExperiment());
-  QxrdAppCommonPtr app(findApplication());
+  QxrdExperimentPtr  expt(
+        qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
+
+  QcepApplicationPtr app(findApplication());
 
   if (app) {
     if (expt == NULL) {
-      expt = app->experiment(0);
+      expt = qSharedPointerDynamicCast<QxrdExperiment>(app->experiment(0));
 
-      int nWin = expt->windowSettingsCount();
+      if (expt) {
+        int nWin = expt->windowSettingsCount();
 
-      for (int i=0; i<nWin; i++) {
-        appendToWindowMenu(m_WindowMenuP,
-                           expt -> windowSettings(i));
+        for (int i=0; i<nWin; i++) {
+          appendToWindowMenu(m_WindowMenuP,
+                             expt -> windowSettings(i));
+        }
       }
     }
 
@@ -187,7 +169,7 @@ void QxrdMainWindow::populateWindowsMenu()
 
 void QxrdMainWindow::updateTitle()
 {
-  QxrdExperimentPtr exper(findExperiment());
+  QxrdExperimentPtr exper(qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
 
   QString title = m_Name;
 
@@ -304,7 +286,7 @@ void QxrdMainWindow::doEditPreferences()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExperimentPtr exp(findExperiment());
+  QxrdExperimentPtr exp(qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
 
   QxrdExperimentPreferencesDialog prefs(exp, NULL, 1);
 
@@ -315,7 +297,7 @@ void QxrdMainWindow::doEditDetectorPreferences()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExperimentPtr exp(findExperiment());
+  QxrdExperimentPtr exp(qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
 
   QxrdExperimentPreferencesDialog prefs(exp, NULL, 0);
 
@@ -324,7 +306,7 @@ void QxrdMainWindow::doEditDetectorPreferences()
 
 void QxrdMainWindow::saveExperiment()
 {
-  QxrdExperimentPtr expt(findExperiment());
+  QxrdExperimentPtr expt(qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
 
   if (expt) {
     expt->saveExperiment();
@@ -335,8 +317,8 @@ void QxrdMainWindow::saveExperimentAs()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExperimentPtr expt(findExperiment());
-  QxrdAppCommonPtr  app(findApplication());
+  QxrdExperimentPtr expt(qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
+  QxrdAppCommonPtr  app(qSharedPointerDynamicCast<QxrdAppCommon>(findApplication()));
 
   if (app && expt) {
     QString path = expt->experimentFilePath();
@@ -363,8 +345,8 @@ void QxrdMainWindow::saveExperimentCopy()
 {
   GUI_THREAD_CHECK;
 
-  QxrdExperimentPtr expt(findExperiment());
-  QxrdAppCommonPtr  app(findApplication());
+  QxrdExperimentPtr expt(qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
+  QxrdAppCommonPtr  app(qSharedPointerDynamicCast<QxrdAppCommon>(findApplication()));
 
   if (app && expt) {
     QString path = expt->experimentFilePath();

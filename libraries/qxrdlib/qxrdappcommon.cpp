@@ -556,7 +556,7 @@ void QxrdAppCommon::openFile(QString filePath)
 
 void QxrdAppCommon::openWatcher(QString pattern)
 {
-  QxrdExperimentPtr expt(getFirstExperiment());
+  QxrdExperimentPtr expt(qSharedPointerDynamicCast<QxrdExperiment>(getFirstExperiment()));
 
   if (expt) {
     INVOKE_CHECK(
@@ -639,7 +639,7 @@ void QxrdAppCommon::doOpenURL(QString url)
   QDesktopServices::openUrl(QUrl(url));
 }
 
-QxrdExperimentPtr QxrdAppCommon::getFirstExperiment()
+QcepExperimentPtr QxrdAppCommon::getFirstExperiment()
 {
   if (experiments().count() == 0) {
     createNewExperiment();
@@ -730,7 +730,7 @@ QList<QxrdExperimentWPtr> &QxrdAppCommon::experiments()
   return m_Experiments;
 }
 
-QxrdExperimentPtr QxrdAppCommon::experiment(int i) const
+QcepExperimentPtr QxrdAppCommon::experiment(int i) const
 {
   return m_Experiments.value(i);
 }

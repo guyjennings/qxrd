@@ -66,13 +66,13 @@ public:
   virtual void doOpenQXRDWebPage();
   virtual void doOpenURL(QString url);
 
-  QxrdExperimentPtr getFirstExperiment();
+  QcepExperimentPtr getFirstExperiment();
 
   void openedExperiment(QxrdExperimentThreadWPtr expwthr);
   void closedExperiment(QxrdExperimentThreadWPtr expwthr);
   QList<QxrdExperimentWPtr> &experiments();
 
-  QxrdExperimentPtr experiment(int i) const;
+  QcepExperimentPtr experiment(int i) const;
 
   QcepAllocatorWPtr allocator() const;
 
