@@ -105,7 +105,6 @@ SOURCES += qxrdlib.cpp \
     qxrdhistogramplot.cpp \
     qxrdsliceplot.cpp \
     qxrdhistogramselector.cpp \
-    qxrdresponsetimer.cpp \
     qxrdthread.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
     qxrdhighlighter.cpp \
@@ -611,7 +610,6 @@ HEADERS += TODO.h \
     qxrdhistogramplot.h \
     qxrdsliceplot.h \
     qxrdhistogramselector.h \
-    qxrdresponsetimer.h \
     qxrdthread.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \

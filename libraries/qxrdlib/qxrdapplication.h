@@ -7,7 +7,6 @@
 
 #include "qxrdappcommon.h"
 #include <QSettings>
-#include "qxrdresponsetimer.h"
 #include "qxrdexperiment.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
@@ -112,8 +111,6 @@ private:
   QxrdDetectorPluginPtr           m_PilatusDetectorPlugin;
   QxrdDetectorPluginPtr           m_AreaDetectorPlugin;
   QxrdDetectorPluginPtr           m_FileWatcherPlugin;
-
-//  QxrdResponseTimer              *m_ResponseTimer;
 
   QMutex                          m_SettingsMutex;
 
