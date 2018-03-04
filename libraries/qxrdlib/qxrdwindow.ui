@@ -396,7 +396,7 @@
      <x>0</x>
      <y>0</y>
      <width>1131</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -465,13 +465,6 @@
     </property>
     <addaction name="m_ActionAboutQXRD"/>
     <addaction name="m_ActionOpenQXRDWebPage"/>
-   </widget>
-   <widget class="QMenu" name="m_TestsMenu">
-    <property name="title">
-     <string>Tests</string>
-    </property>
-    <addaction name="m_ActionNewTestImageGenerator"/>
-    <addaction name="m_ActionNewTestScanGenerator"/>
    </widget>
    <widget class="QMenu" name="m_CalibrationMenu">
     <property name="title">
@@ -551,7 +544,6 @@
    <addaction name="m_DisplayMenu"/>
    <addaction name="m_ScriptMenu"/>
    <addaction name="m_HelpMenu"/>
-   <addaction name="m_TestsMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="m_ActionQuit">
@@ -1304,16 +1296,6 @@
    </property>
    <property name="toolTip">
     <string>Execute JS Script</string>
-   </property>
-  </action>
-  <action name="m_ActionNewTestImageGenerator">
-   <property name="text">
-    <string>&amp;New Test Image Generator</string>
-   </property>
-  </action>
-  <action name="m_ActionNewTestScanGenerator">
-   <property name="text">
-    <string>New Test &amp;Scan Generator</string>
    </property>
   </action>
   <action name="m_ActionNewAcquireWindow">

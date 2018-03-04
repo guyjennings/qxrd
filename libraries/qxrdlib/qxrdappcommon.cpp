@@ -5,7 +5,6 @@
 #include "qxrdcalibrantdspacing.h"
 #include "qxrdcalibrantdspacings.h"
 #include "qxrdexperiment.h"
-#include "qxrdtestgenerator.h"
 #include "qxrdwindowsettings.h"
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdwelcomewindow.h"
@@ -53,7 +52,6 @@ QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   QxrdExperiment::registerMetaTypes();
   QxrdWindowSettings::registerMetaTypes();
   QxrdDetectorControlWindowSettings::registerMetaTypes();
-  QxrdTestGenerator::registerMetaTypes();
   QxrdDetectorSettings::registerMetaTypes();
 
   m_Allocator = QcepAllocatorPtr(

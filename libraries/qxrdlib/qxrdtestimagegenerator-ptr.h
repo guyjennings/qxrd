@@ -1,8 +1,0 @@
-#ifndef QXRDTESTIMAGEGENERATORPTR_H
-#define QXRDTESTIMAGEGENERATORPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdTestImageGenerator)
-
-#endif // QXRDTESTIMAGEGENERATORPTR_H

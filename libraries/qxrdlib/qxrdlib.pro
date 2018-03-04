@@ -191,28 +191,6 @@ SOURCES += qxrdlib.cpp \
     qxrdroieditordialog.cpp \
     qxrdpolygonpointsmodel.cpp \
     qxrdfittedrings.cpp \
-    qxrdtestimagegenerator.cpp \
-    qxrdtestimagegeneratorwindow.cpp \
-    qxrdtestscangeneratorwindow.cpp \
-    qxrdtestimagegeneratorthread.cpp \
-    qxrdtestscangenerator.cpp \
-    qxrdtestscangeneratorthread.cpp \
-    qxrdtestscanwindowqwt.cpp \
-    qxrdtestscanwindow.cpp \
-    qxrdtestscanwindowdatavis.cpp \
-    qxrdtestimagewindow.cpp \
-    qxrdtestimagewindowdatavis.cpp \
-    qxrdtestimagewindowqwt.cpp \
-    qxrdtestgenerator.cpp \
-    qxrdtestimageplotqwt.cpp \
-    qxrdtestimageplotdatavis.cpp \
-    qxrdtestscanplotdatavis.cpp \
-    qxrdtestscanplotqwt.cpp \
-    qxrdtestscanplotdatavishelper.cpp \
-    qxrdtestscanplotqwthelper.cpp \
-    qxrdtestimageplotdatavishelper.cpp \
-    qxrdtestimageplotqwthelper.cpp \
-    qxrdtestthread.cpp \
     qxrdplotcurvevector.cpp \
     commands/00generic/qxrdcommand.cpp \
     commands/00generic/qxrdapplicationcommand.cpp \
@@ -770,38 +748,8 @@ HEADERS += TODO.h \
     qxrdroicenteredshape-ptr.h \
     qxrdfittedrings.h \
     qxrdfittedrings-ptr.h \
-    qxrdtestimagegenerator.h \
-    qxrdtestimagegeneratorwindow.h \
-    qxrdtestscangeneratorwindow.h \
-    qxrdtestimagegeneratorthread.h \
-    qxrdtestimagegenerator-ptr.h \
-    qxrdtestscangenerator-ptr.h \
-    qxrdtestscangeneratorthread-ptr.h \
-    qxrdtestimagegeneratorthread-ptr.h \
-    qxrdtestscangenerator.h \
-    qxrdtestscangeneratorthread.h \
-    qxrdtestscanwindow.h \
-    qxrdtestscanwindowdatavis.h \
-    qxrdtestimagewindow.h \
-    qxrdtestimagewindowqwt.h \
-    qxrdtestimagewindowdatavis.h \
-    qxrdtestscanwindowqwt.h \
-    qxrdtestgenerator.h \
-    qxrdtestimageplotqwt.h \
-    qxrdtestimageplotdatavis.h \
-    qxrdtestscanplotdatavis.h \
-    qxrdtestscanplotqwt.h \
-    qxrdtestscanplotdatavishelper.h \
-    qxrdtestscanplotqwthelper.h \
-    qxrdtestimageplotdatavishelper.h \
-    qxrdtestimageplotqwthelper.h \
-    qxrdtestscanplotdatavishelper-ptr.h \
-    qxrdtestscanplotqwthelper-ptr.h \
-    qxrdtestimageplotdatavishelper-ptr.h \
-    qxrdtestimageplotqwthelper-ptr.h \
     qxrdplotcurvevector-ptr.h \
-    qxrdplotcurvevector.h \
-    qxrdtestthread.h
+    qxrdplotcurvevector.h
 
 
 FORMS += qxrdwindow.ui \
@@ -818,10 +766,6 @@ FORMS += qxrdwindow.ui \
     qxrdcalibrantpropertiesdialog.ui \
     qxrdintegratorparmsdialog.ui \
     qxrdroieditordialog.ui \
-    qxrdtestimagegeneratorwindow.ui \
-    qxrdtestscangeneratorwindow.ui \
-    qxrdtestimagewindowqwt.ui \
-    qxrdtestscanwindowqwt.ui \
     qxrdanalysiswindow.ui \
     qxrdcenteringwindow.ui \
     qxrdintegrationwindow.ui \
@@ -849,9 +793,7 @@ FORMS += qxrdwindow.ui \
     qxrdcorrectiondialogpage.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
-  FORMS += \
-    qxrdtestscanwindowdatavis.ui \
-    qxrdtestimagewindowdatavis.ui
+  FORMS +=
 }
 
 OTHER_FILES += help/qxrdhelptext.html \

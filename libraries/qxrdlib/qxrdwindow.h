@@ -70,9 +70,6 @@ public slots:
   void doReflectVertically();
   void doReflectHorizontally();
 
-  void doNewTestImageGenerator();
-  void doNewTestScanGenerator();
-
   void executeScript();
   void executeScriptJS();
   void finishedCommand(QScriptValue result);

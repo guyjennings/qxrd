@@ -28,9 +28,6 @@
 #include "qxrddistortioncorrectionplotsettings.h"
 #include "qxrdintegratorplotsettings.h"
 
-#include "qxrdtestimagegeneratorwindow.h"
-#include "qxrdtestscangeneratorwindow.h"
-
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>
 #include <qwt_plot_zoomer.h>
@@ -168,9 +165,6 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   connect(m_ActionReflectVertically, &QAction::triggered, this, &QxrdWindow::doReflectVertically);
 
   connect(m_ActionRefineCenterTilt, &QAction::triggered, this, &QxrdWindow::doRefineCenterTilt);
-
-  connect(m_ActionNewTestImageGenerator, &QAction::triggered, this, &QxrdWindow::doNewTestImageGenerator);
-  connect(m_ActionNewTestScanGenerator, &QAction::triggered, this, &QxrdWindow::doNewTestScanGenerator);
 
   if (proc) {
     QxrdCenterFinderPtr cf(proc->centerFinder());
@@ -1288,23 +1282,4 @@ void QxrdWindow::plotPowderRingCenters()
 //      m_DistortionCorrectionPlot->replot();
 //    }
 //  }
-}
-
-static int s_TestImageCount = 0;
-static int s_TestScanCount = 0;
-
-void QxrdWindow::doNewTestImageGenerator()
-{
-  auto win = new QxrdTestImageGeneratorWindow(QxrdExperiment::findExperiment(m_Parent));
-
-  win -> setWindowTitle(tr("Test Image Generator %1").arg(s_TestImageCount++));
-  win -> show();
-}
-
-void QxrdWindow::doNewTestScanGenerator()
-{
-  auto win = new QxrdTestScanGeneratorWindow(QxrdExperiment::findExperiment(m_Parent));
-
-  win -> setWindowTitle(tr("Test Scan Generator %1").arg(s_TestScanCount++));
-  win -> show();
 }
