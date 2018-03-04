@@ -788,6 +788,8 @@ void QxrdExperiment::readExperimentSettings()
 
   prop_IsReading()->incValue(-1);
 
+  setChanged(0);
+
   splashMessage("Experiment loaded");
 }
 
