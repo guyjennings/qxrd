@@ -1,8 +1,0 @@
-#ifndef QXRDSLICEPLOTSETTINGSPTR_H
-#define QXRDSLICEPLOTSETTINGSPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdSlicePlotSettings)
-
-#endif // QXRDSLICEPLOTSETTINGSPTR_H
