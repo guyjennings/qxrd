@@ -29,7 +29,8 @@ QcepMainWindowPtr QxrdIntegrationWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdIntegrationWindow("Integration"));
+        new QxrdIntegrationWindow("Integration"),
+        &QcepObject::deleteLater);
 
   return m_Window;
 }

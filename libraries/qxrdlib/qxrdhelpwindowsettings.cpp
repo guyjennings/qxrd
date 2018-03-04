@@ -19,7 +19,8 @@ QcepMainWindowPtr QxrdHelpWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdHelpWindow("Help"));
+        new QxrdHelpWindow("Help"),
+        &QObject::deleteLater);
 
   return m_Window;
 }

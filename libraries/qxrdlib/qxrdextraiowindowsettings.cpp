@@ -26,7 +26,8 @@ QcepMainWindowPtr QxrdExtraIOWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdExtraIOWindow("Extra I/O"));
+        new QxrdExtraIOWindow("Extra I/O"),
+        &QObject::deleteLater);
 
   return m_Window;
 }

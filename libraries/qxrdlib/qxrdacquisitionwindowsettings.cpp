@@ -25,7 +25,8 @@ QcepMainWindowPtr QxrdAcquisitionWindowSettings::newWindow()
   } else {
     m_Window =
         QxrdMainWindowPtr(
-          new QxrdAcquisitionWindow("Acquisition"));
+          new QxrdAcquisitionWindow("Acquisition"),
+          &QObject::deleteLater);
   }
 
   return m_Window;

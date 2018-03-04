@@ -30,7 +30,8 @@ QcepMainWindowPtr QxrdWatcherWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdWatcherWindow("Watcher"));
+        new QxrdWatcherWindow("Watcher"),
+        &QObject::deleteLater);
 
   return m_Window;
 }

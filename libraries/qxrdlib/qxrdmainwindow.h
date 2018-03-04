@@ -25,11 +25,6 @@ public:
 
   void setupMenus(QMenu *file, QMenu *edit, QMenu *window);
 
-  void printLine(QString line);
-  void printMessage(QString msg, QDateTime ts = QDateTime::currentDateTime());
-  void criticalMessage(QString msg, QDateTime ts = QDateTime::currentDateTime());
-  void statusMessage(QString msg, QDateTime ts = QDateTime::currentDateTime());
-
 public slots:
   void saveExperiment();
   void saveExperimentCopy();

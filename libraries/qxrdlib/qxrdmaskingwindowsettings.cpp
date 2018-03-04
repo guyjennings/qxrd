@@ -26,7 +26,8 @@ QcepMainWindowPtr QxrdMaskingWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdMaskingWindow("Masking"));
+        new QxrdMaskingWindow("Masking"),
+        &QObject::deleteLater);
 
   return m_Window;
 }

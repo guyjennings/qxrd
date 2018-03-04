@@ -83,8 +83,8 @@ void QxrdStartupWindow::appendSplashMessage(QString msg, QDateTime dt)
 
   appendMessage(msg, dt);
 
-  activateWindow();
-  raise();
+//  activateWindow();
+//  raise();
 }
 
 void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)

@@ -197,58 +197,6 @@ void QxrdMainWindow::updateTitle()
   setWindowTitle(title);
 }
 
-void QxrdMainWindow::printLine(QString line)
-{
-  QcepObjectPtr p(m_Parent);
-
-  if (p) {
-    p->printLine(line);
-  } else if (g_Application) {
-    g_Application->printLine(line);
-  } else {
-    printf("LINE: %s\n", qPrintable(line));
-  }
-}
-
-void QxrdMainWindow::printMessage(QString msg, QDateTime ts)
-{
-  QcepObjectPtr p(m_Parent);
-
-  if (p) {
-    p->printMessage(msg, ts);
-  } else if (g_Application) {
-    g_Application->printMessage(msg, ts);
-  } else {
-    printf("MESSAGE: %s\n", qPrintable(msg));
-  }
-}
-
-void QxrdMainWindow::criticalMessage(QString msg, QDateTime ts)
-{
-  QcepObjectPtr p(m_Parent);
-
-  if (p) {
-    p->criticalMessage(msg, ts);
-  } else if (g_Application) {
-    g_Application->criticalMessage(msg, ts);
-  } else {
-    printf("CRITICAL: %s\n", qPrintable(msg));
-  }
-}
-
-void QxrdMainWindow::statusMessage(QString msg, QDateTime ts)
-{
-  QcepObjectPtr p(m_Parent);
-
-  if (p) {
-    p->statusMessage(msg, ts);
-  } else if (g_Application) {
-    g_Application->statusMessage(msg, ts);
-  } else {
-    printf("STATUS: %s\n", qPrintable(msg));
-  }
-}
-
 void QxrdMainWindow::acquireStarted()
 {
 }

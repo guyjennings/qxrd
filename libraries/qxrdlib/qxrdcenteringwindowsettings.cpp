@@ -32,7 +32,8 @@ QcepMainWindowPtr QxrdCenteringWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdCenteringWindow("Centering"));
+        new QxrdCenteringWindow("Centering"),
+        &QObject::deleteLater);
 
   return m_Window;
 }

@@ -19,7 +19,8 @@ QcepMainWindowPtr QxrdAnalysisWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdAnalysisWindow("Analysis"));
+        new QxrdAnalysisWindow("Analysis"),
+        &QObject::deleteLater);
 
   return m_Window;
 }

@@ -19,7 +19,8 @@ QcepMainWindowPtr QxrdCalculatorWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdCalculatorWindow("Calculator"));
+        new QxrdCalculatorWindow("Calculator"),
+        &QObject::deleteLater);
 
   return m_Window;
 }

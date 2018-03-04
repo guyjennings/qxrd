@@ -18,7 +18,8 @@ QcepMainWindowPtr QxrdCalibrantWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdCalibrantWindow("Calibrant"));
+        new QxrdCalibrantWindow("Calibrant"),
+        &QObject::deleteLater);
 
   return m_Window;
 }

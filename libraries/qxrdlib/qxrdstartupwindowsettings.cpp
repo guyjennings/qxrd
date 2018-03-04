@@ -19,7 +19,8 @@ QcepMainWindowPtr QxrdStartupWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdStartupWindow("startupWindow"));
+        new QxrdStartupWindow("startupWindow"),
+        &QObject::deleteLater);
 
   return m_Window;
 }
