@@ -6,7 +6,6 @@
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdsliceplotsettings.h"
 #include "qxrdsynchronizedacquisitionplotsettings.h"
-#include "qxrdhistogramplotsettings.h"
 #include "qxrdimageplotwidgetsettings.h"
 #include "qxrdcenteringplotwidgetsettings.h"
 #include "qxrdintegratedplotwidgetsettings.h"
@@ -68,7 +67,6 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdIntegratorPlotSettings*>("QxrdIntegratorPlotSettings*");
   qRegisterMetaType<QxrdFileBrowserSettings*>("QxrdFileBrowserSettings*");
   qRegisterMetaType<QxrdHistogramDialogSettings*>("QxrdHistogramDialogSettings*");
-  qRegisterMetaType<QxrdHistogramPlotSettings*>("QxrdHistogramPlotSettings*");
   qRegisterMetaType<QxrdSlicePlotSettings*>("QxrdSlicePlotSettings*");
   qRegisterMetaType<QxrdSynchronizedAcquisitionPlotSettings*>("QxrdSynchronizedAcquisitionPlotSettings*");
 }

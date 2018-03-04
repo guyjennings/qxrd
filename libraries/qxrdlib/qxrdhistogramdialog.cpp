@@ -6,7 +6,6 @@
 #include "qxrdexperiment.h"
 #include "qxrdacqcommon.h"
 #include "qxrdhistogramdialogsettings.h"
-#include "qxrdhistogramplotsettings.h"
 #include "qxrdhistogramplotwidgetsettings.h"
 #include <QtConcurrentRun>
 #include "qxrdimageplot.h"

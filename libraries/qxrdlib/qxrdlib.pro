@@ -101,7 +101,6 @@ SOURCES += qxrdlib.cpp \
     qxrdfilebrowsermodel.cpp \
     qxrdfilebrowserview.cpp \
     qxrdhistogramdialog.cpp \
-    qxrdhistogramplot.cpp \
     qxrdsliceplot.cpp \
     qxrdhistogramselector.cpp \
     qxrdthread.cpp \
@@ -120,7 +119,6 @@ SOURCES += qxrdlib.cpp \
     qxrdimageplotsettings.cpp \
     qxrdfilebrowsersettings.cpp \
     qxrdhistogramdialogsettings.cpp \
-    qxrdhistogramplotsettings.cpp \
     qxrdsliceplotsettings.cpp \
     triangulate.c \
     qxrddebug.cpp \
@@ -602,7 +600,6 @@ HEADERS += TODO.h \
     qxrdfilebrowsermodel-ptr.h \
     qxrdfilebrowserview.h \
     qxrdhistogramdialog.h \
-    qxrdhistogramplot.h \
     qxrdsliceplot.h \
     qxrdhistogramselector.h \
     qxrdthread.h \
@@ -628,7 +625,6 @@ HEADERS += TODO.h \
     qxrdimageplotsettings.h \
     qxrdfilebrowsersettings.h \
     qxrdhistogramdialogsettings.h \
-    qxrdhistogramplotsettings.h \
     qxrdsliceplotsettings.h \
     triangulate.h \
     qxrddebug.h \
@@ -696,7 +692,6 @@ HEADERS += TODO.h \
     qxrdintegratorparmsdialog.h \
     qxrdintegratorplotsettings.h \
     qxrdintegratorplotsettings-ptr.h \
-    qxrdhistogramplotsettings-ptr.h \
     qxrdhistogramdialogsettings-ptr.h \
     qxrdfilebrowsersettings-ptr.h \
     qxrdsynchronizedacquisitionplotsettings-ptr.h \

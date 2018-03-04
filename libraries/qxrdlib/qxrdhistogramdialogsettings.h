@@ -5,7 +5,6 @@
 #include <QObject>
 #include "qcepproperty.h"
 #include "qcepobject.h"
-#include "qxrdhistogramplotsettings-ptr.h"
 #include "qxrdhistogramdialogsettings-ptr.h"
 #include "qxrdhistogramplotwidgetsettings-ptr.h"
 
@@ -25,7 +24,6 @@ public:
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
 
-  QxrdHistogramPlotSettingsWPtr histogramPlotSettings();
   QxrdHistogramPlotWidgetSettingsPtr histogramPlotWidgetSettings();
 
 public:
@@ -33,7 +31,6 @@ public:
   QCEP_DOUBLE_RECT_PROPERTY(HistogramRect)
 
 private:
-  QxrdHistogramPlotSettingsPtr       m_HistogramPlotSettings;
   QxrdHistogramPlotWidgetSettingsPtr m_HistogramPlotWidgetSettings;
 };
 
