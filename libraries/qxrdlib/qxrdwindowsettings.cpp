@@ -1,7 +1,6 @@
 #include "qxrdwindowsettings.h"
 #include "qxrdwindow.h"
 #include "qxrdimageplotsettings.h"
-#include "qxrdcenterfinderplotsettings.h"
 #include "qxrdintegratorplotsettings.h"
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdhistogramdialogsettings.h"

@@ -7,7 +7,6 @@
 #include "qcepproperty.h"
 #include "qxrdimageplotsettings-ptr.h"
 #include "qxrdintegratorplotsettings-ptr.h"
-#include "qxrdcenterfinderplotsettings-ptr.h"
 #include "qxrdfilebrowsersettings-ptr.h"
 #include "qxrdhistogramdialogsettings-ptr.h"
 #include "qxrdwindowsettings-ptr.h"
