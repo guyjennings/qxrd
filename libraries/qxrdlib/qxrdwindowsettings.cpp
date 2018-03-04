@@ -24,7 +24,6 @@ QxrdWindowSettings::QxrdWindowSettings(QString name, QString desc) :
   m_DistortionPlotWidgetSettings(new QxrdDistortionPlotWidgetSettings(name))
 {
   m_ImagePlotSettings = QxrdImagePlotSettings::newImagePlotSettings();
-  m_CenterFinderPlotSettings = QxrdCenterFinderPlotSettings::newCenterFinderPlotSettings();
   m_IntegratorPlotSettings = QxrdIntegratorPlotSettings::newIntegratorPlotSettings();
   m_FileBrowserSettings = QxrdFileBrowserSettings::newFileBrowserSettings();
   m_HistogramDialogSettings = QxrdHistogramDialogSettings::newHistogramDialogSettings();
@@ -39,7 +38,6 @@ void QxrdWindowSettings::initialize(QcepObjectWPtr parent)
   m_IntegratedPlotWidgetSettings          -> initialize(sharedFromThis());
   m_DistortionPlotWidgetSettings          -> initialize(sharedFromThis());
   m_ImagePlotSettings                     -> initialize(sharedFromThis());
-  m_CenterFinderPlotSettings              -> initialize(sharedFromThis());
   m_IntegratorPlotSettings                -> initialize(sharedFromThis());
   m_FileBrowserSettings                   -> initialize(sharedFromThis());
   m_HistogramDialogSettings               -> initialize(sharedFromThis());
@@ -68,7 +66,6 @@ void QxrdWindowSettings::registerMetaTypes()
 {
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
   qRegisterMetaType<QxrdImagePlotSettings*>("QxrdImagePlotSettings*");
-  qRegisterMetaType<QxrdCenterFinderPlotSettings*>("QxrdCenterFinderPlotSettings*");
   qRegisterMetaType<QxrdIntegratorPlotSettings*>("QxrdIntegratorPlotSettings*");
   qRegisterMetaType<QxrdFileBrowserSettings*>("QxrdFileBrowserSettings*");
   qRegisterMetaType<QxrdHistogramDialogSettings*>("QxrdHistogramDialogSettings*");
@@ -85,12 +82,6 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
     if (m_ImagePlotSettings) {
       settings->beginGroup("plot");
       m_ImagePlotSettings->readSettings(settings);
-      settings->endGroup();
-    }
-
-    if (m_CenterFinderPlotSettings) {
-      settings->beginGroup("centerFinderPlot");
-      m_CenterFinderPlotSettings->readSettings(settings);
       settings->endGroup();
     }
 
@@ -149,12 +140,6 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (m_CenterFinderPlotSettings) {
-      settings->beginGroup("centerFinderPlot");
-      m_CenterFinderPlotSettings->writeSettings(settings);
-      settings->endGroup();
-    }
-
     if (m_IntegratorPlotSettings) {
       settings->beginGroup("integratorPlot");
       m_IntegratorPlotSettings->writeSettings(settings);
@@ -202,11 +187,6 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
 QxrdImagePlotSettingsWPtr QxrdWindowSettings::imagePlotSettings()
 {
   return m_ImagePlotSettings;
-}
-
-QxrdCenterFinderPlotSettingsWPtr QxrdWindowSettings::centerFinderPlotSettings()
-{
-  return m_CenterFinderPlotSettings;
 }
 
 QxrdIntegratorPlotSettingsWPtr QxrdWindowSettings::integratorPlotSettings()

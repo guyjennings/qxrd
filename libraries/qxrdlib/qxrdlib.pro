@@ -71,7 +71,6 @@ SOURCES += qxrdlib.cpp \
     qxrdfilesaverthread.cpp \
     qxrdfilesaver.cpp \
     qxrdcenterfinder.cpp \
-    qxrdcenterfinderplot.cpp \
     qxrdcenterfinderpicker.cpp \
     qxrdpowderpointpicker.cpp \
     qxrdintegrator.cpp \
@@ -122,7 +121,6 @@ SOURCES += qxrdlib.cpp \
     qxrdfilebrowsersettings.cpp \
     qxrdhistogramdialogsettings.cpp \
     qxrdhistogramplotsettings.cpp \
-    qxrdcenterfinderplotsettings.cpp \
     qxrdsliceplotsettings.cpp \
     triangulate.c \
     qxrddebug.cpp \
@@ -556,7 +554,6 @@ HEADERS += TODO.h \
     qxrdfilesaver-ptr.h \
     qxrdcenterfinder.h \
     qxrdcenterfinder-ptr.h \
-    qxrdcenterfinderplot.h \
     qxrdcenterfinderpicker.h \
     qxrdpowderpointpicker.h \
     qxrdintegrator.h \
@@ -632,7 +629,6 @@ HEADERS += TODO.h \
     qxrdfilebrowsersettings.h \
     qxrdhistogramdialogsettings.h \
     qxrdhistogramplotsettings.h \
-    qxrdcenterfinderplotsettings.h \
     qxrdsliceplotsettings.h \
     triangulate.h \
     qxrddebug.h \
@@ -702,7 +698,6 @@ HEADERS += TODO.h \
     qxrdintegratorplotsettings-ptr.h \
     qxrdhistogramplotsettings-ptr.h \
     qxrdhistogramdialogsettings-ptr.h \
-    qxrdcenterfinderplotsettings-ptr.h \
     qxrdfilebrowsersettings-ptr.h \
     qxrdsynchronizedacquisitionplotsettings-ptr.h \
     qxrdsliceplotsettings-ptr.h \

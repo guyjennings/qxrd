@@ -45,7 +45,6 @@ public:
   void writeSettings(QSettings *settings);
 
   QxrdImagePlotSettingsWPtr                    imagePlotSettings();
-  QxrdCenterFinderPlotSettingsWPtr             centerFinderPlotSettings();
   QxrdIntegratorPlotSettingsWPtr               integratorPlotSettings();
   QxrdFileBrowserSettingsWPtr                  fileBrowserSettings();
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
@@ -61,7 +60,6 @@ public slots:
   
 private:
   QxrdImagePlotSettingsPtr                     m_ImagePlotSettings;
-  QxrdCenterFinderPlotSettingsPtr              m_CenterFinderPlotSettings;
   QxrdIntegratorPlotSettingsPtr                m_IntegratorPlotSettings;
   QxrdFileBrowserSettingsPtr                   m_FileBrowserSettings;
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;
