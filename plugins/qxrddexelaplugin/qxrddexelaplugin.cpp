@@ -1,5 +1,4 @@
 #include "qxrddexelaplugin.h"
-#include "qxrddetectorinterface.h"
 #include "qxrddexeladriver.h"
 #include "qxrddexelasettings.h"
 #include "BusScanner.h"

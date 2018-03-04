@@ -1,8 +1,0 @@
-#ifndef QXRDDETECTORINTERFACEPTR_H
-#define QXRDDETECTORINTERFACEPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdDetectorInterface)
-
-#endif // QXRDDETECTORINTERFACEPTR_H

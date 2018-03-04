@@ -1,5 +1,4 @@
 #include "qxrdsimulatedplugin.h"
-#include "qxrddetectorinterface.h"
 #include "qxrdsimulateddriver.h"
 #include "qxrdsimulatedsettings.h"
 #include "qxrdsimulatedplugin-ptr.h"

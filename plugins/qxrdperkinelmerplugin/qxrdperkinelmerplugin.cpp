@@ -1,5 +1,4 @@
 #include "qxrdperkinelmerplugin.h"
-#include "qxrddetectorinterface.h"
 #include "qxrdperkinelmerdriver.h"
 #include "qxrdperkinelmersettings.h"
 

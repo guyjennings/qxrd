@@ -1,5 +1,4 @@
 #include "qxrdareadetectorplugin.h"
-#include "qxrddetectorinterface.h"
 #include "qxrdareadetectordriver.h"
 #include "qxrdareadetectorsettings.h"
 

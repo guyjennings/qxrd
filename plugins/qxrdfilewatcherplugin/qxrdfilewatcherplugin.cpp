@@ -1,5 +1,4 @@
 #include "qxrdfilewatcherplugin.h"
-#include "qxrddetectorinterface.h"
 #include "qxrdfilewatcherdriver.h"
 #include "qxrdfilewatchersettings.h"
 

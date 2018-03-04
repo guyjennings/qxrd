@@ -1,5 +1,4 @@
 #include "qxrdpilatusplugin.h"
-#include "qxrddetectorinterface.h"
 #include "qxrdpilatusdriver.h"
 #include "qxrdpilatussettings.h"
 

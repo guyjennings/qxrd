@@ -198,7 +198,6 @@ SOURCES += qxrdlib.cpp \
     commands/00generic/qxrdgraphcommand.cpp \
     commands/00generic/qxrddatasetcommand.cpp \
     commands/specremote/qxrdspecremotecommand.cpp \
-    qxrddetectorinterface.cpp \
     qxrdanalysiswindow.cpp \
     qxrdcenteringwindow.cpp \
     qxrdintegrationwindow.cpp \
@@ -336,8 +335,6 @@ HEADERS += qxrdlib.h\
     commands/00generic/qxrdgraphcommand.h \
     commands/00generic/qxrddatasetcommand.h \
     commands/specremote/qxrdspecremotecommand.h \
-    qxrddetectorinterface.h \
-    qxrddetectorinterface-ptr.h \
     qxrdanalysiswindow.h \
     qxrdcenteringwindow.h \
     qxrdintegrationwindow.h \
