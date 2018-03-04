@@ -5,7 +5,6 @@
 #include "qxrdintegratorplotsettings.h"
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdhistogramdialogsettings.h"
-#include "qxrddistortioncorrectionplotsettings.h"
 #include "qxrdsliceplotsettings.h"
 #include "qxrdsynchronizedacquisitionplotsettings.h"
 #include "qxrdhistogramplotsettings.h"
@@ -29,7 +28,6 @@ QxrdWindowSettings::QxrdWindowSettings(QString name, QString desc) :
   m_IntegratorPlotSettings = QxrdIntegratorPlotSettings::newIntegratorPlotSettings();
   m_FileBrowserSettings = QxrdFileBrowserSettings::newFileBrowserSettings();
   m_HistogramDialogSettings = QxrdHistogramDialogSettings::newHistogramDialogSettings();
-  m_DistortionCorrectionPlotSettings = QxrdDistortionCorrectionPlotSettings::newDistortionCorrectionPlotSettings();
 }
 
 void QxrdWindowSettings::initialize(QcepObjectWPtr parent)
@@ -45,7 +43,6 @@ void QxrdWindowSettings::initialize(QcepObjectWPtr parent)
   m_IntegratorPlotSettings                -> initialize(sharedFromThis());
   m_FileBrowserSettings                   -> initialize(sharedFromThis());
   m_HistogramDialogSettings               -> initialize(sharedFromThis());
-  m_DistortionCorrectionPlotSettings      -> initialize(sharedFromThis());
 }
 
 QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
@@ -78,7 +75,6 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdHistogramPlotSettings*>("QxrdHistogramPlotSettings*");
   qRegisterMetaType<QxrdSlicePlotSettings*>("QxrdSlicePlotSettings*");
   qRegisterMetaType<QxrdSynchronizedAcquisitionPlotSettings*>("QxrdSynchronizedAcquisitionPlotSettings*");
-  qRegisterMetaType<QxrdDistortionCorrectionPlotSettings*>("QxrdDistortionCorrectionPlotSettings*");
 }
 
 void QxrdWindowSettings::readSettings(QSettings *settings)
@@ -113,12 +109,6 @@ void QxrdWindowSettings::readSettings(QSettings *settings)
     if (m_HistogramDialogSettings) {
       settings->beginGroup("histogramDialog");
       m_HistogramDialogSettings->readSettings(settings);
-      settings->endGroup();
-    }
-
-    if (m_DistortionCorrectionPlotSettings) {
-      settings->beginGroup("distortionCorrectionPlot");
-      m_DistortionCorrectionPlotSettings->readSettings(settings);
       settings->endGroup();
     }
 
@@ -183,12 +173,6 @@ void QxrdWindowSettings::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (m_DistortionCorrectionPlotSettings) {
-      settings->beginGroup("distortionCorrectionPlot");
-      m_DistortionCorrectionPlotSettings->writeSettings(settings);
-      settings->endGroup();
-    }
-
     if (m_ImagePlotWidgetSettings) {
       settings->beginGroup("imagePlotWidget");
       m_ImagePlotWidgetSettings->writeSettings(settings);
@@ -238,11 +222,6 @@ QxrdFileBrowserSettingsWPtr QxrdWindowSettings::fileBrowserSettings()
 QxrdHistogramDialogSettingsWPtr QxrdWindowSettings::histogramDialogSettings()
 {
   return m_HistogramDialogSettings;
-}
-
-QxrdDistortionCorrectionPlotSettingsWPtr QxrdWindowSettings::distortionCorrectionPlotSettings()
-{
-  return m_DistortionCorrectionPlotSettings;
 }
 
 QxrdImagePlotWidgetSettingsPtr QxrdWindowSettings::imagePlotWidgetSettings()

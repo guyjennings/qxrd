@@ -130,8 +130,6 @@ SOURCES += qxrdlib.cpp \
     qxrduserscriptdialog.cpp \
     qxrdsynchronizedacquisitionplotsettings.cpp \
     qxrdimagedataformatcbf.cpp \
-    qxrddistortioncorrectionplot.cpp \
-    qxrddistortioncorrectionplotsettings.cpp \
     qxrdplotvectorfieldcurve.cpp \
     qxrdpoint4d.cpp \
     qxrdplotvectorfielddata.cpp \
@@ -642,8 +640,6 @@ HEADERS += TODO.h \
     qxrduserscriptdialog.h \
     qxrdsynchronizedacquisitionplotsettings.h \
     qxrdimagedataformatcbf.h \
-    qxrddistortioncorrectionplot.h \
-    qxrddistortioncorrectionplotsettings.h \
     qxrdplotvectorfieldcurve.h \
     qxrdpoint4d.h \
     qxrdplotvectorfielddata.h \
@@ -704,7 +700,6 @@ HEADERS += TODO.h \
     qxrdintegratorparmsdialog.h \
     qxrdintegratorplotsettings.h \
     qxrdintegratorplotsettings-ptr.h \
-    qxrddistortioncorrectionplotsettings-ptr.h \
     qxrdhistogramplotsettings-ptr.h \
     qxrdhistogramdialogsettings-ptr.h \
     qxrdcenterfinderplotsettings-ptr.h \

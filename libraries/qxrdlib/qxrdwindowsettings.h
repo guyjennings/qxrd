@@ -10,7 +10,6 @@
 #include "qxrdcenterfinderplotsettings-ptr.h"
 #include "qxrdfilebrowsersettings-ptr.h"
 #include "qxrdhistogramdialogsettings-ptr.h"
-#include "qxrddistortioncorrectionplotsettings-ptr.h"
 #include "qxrdwindowsettings-ptr.h"
 #include "qxrdimageplotwidgetsettings-ptr.h"
 #include "qxrdcenteringplotwidgetsettings-ptr.h"
@@ -50,7 +49,6 @@ public:
   QxrdIntegratorPlotSettingsWPtr               integratorPlotSettings();
   QxrdFileBrowserSettingsWPtr                  fileBrowserSettings();
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
-  QxrdDistortionCorrectionPlotSettingsWPtr     distortionCorrectionPlotSettings();
 
   QxrdImagePlotWidgetSettingsPtr               imagePlotWidgetSettings();
   QxrdCenteringPlotWidgetSettingsPtr           centeringPlotWidgetSettings();
@@ -67,7 +65,6 @@ private:
   QxrdIntegratorPlotSettingsPtr                m_IntegratorPlotSettings;
   QxrdFileBrowserSettingsPtr                   m_FileBrowserSettings;
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;
-  QxrdDistortionCorrectionPlotSettingsPtr      m_DistortionCorrectionPlotSettings;
   QxrdImagePlotWidgetSettingsPtr               m_ImagePlotWidgetSettings;
   QxrdCenteringPlotWidgetSettingsPtr           m_CenteringPlotWidgetSettings;
   QxrdIntegratedPlotWidgetSettingsPtr          m_IntegratedPlotWidgetSettings;
