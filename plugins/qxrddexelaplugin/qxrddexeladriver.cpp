@@ -82,7 +82,7 @@ void QxrdDexelaDriver::startDetectorDriver()
           connect(acq -> prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
                   this,                       &QxrdDexelaDriver::restartDetector);
 
-          connect(det -> prop_ExposureFactor(), &QcepDoubleProperty::valueChanged,
+          connect(det -> prop_ExposureFactor(), &QcepIntProperty::valueChanged,
                   this,                         &QxrdDexelaDriver::restartDetector);
 
           connect(det -> prop_HardwareSync(),   &QcepBoolProperty::valueChanged,
