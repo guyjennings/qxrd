@@ -17,6 +17,8 @@ QxrdAreaDetectorDialog::QxrdAreaDetectorDialog(
     m_Settings->prop_DetectorNumber()   -> copyTo(m_DetectorNumber);
     m_Settings->prop_DetectorName()     -> copyTo(m_DetectorName);
     m_Settings->prop_DetectorTypeName() -> copyTo(m_DetectorType);
+    m_Settings->prop_ExposureFactor()   -> copyTo(m_ExposureFactor);
+    m_Settings->prop_HardwareSync()     -> copyTo(m_HardwareSync);
   }
 }
 
@@ -24,6 +26,8 @@ void QxrdAreaDetectorDialog::accept()
 {
   if (m_Settings) {
     m_Settings->prop_DetectorName()     -> copyFrom(m_DetectorName);
+    m_Settings->prop_ExposureFactor()   -> copyFrom(m_ExposureFactor);
+    m_Settings->prop_HardwareSync()     -> copyFrom(m_HardwareSync);
   }
 
   QxrdDetectorDialog::accept();

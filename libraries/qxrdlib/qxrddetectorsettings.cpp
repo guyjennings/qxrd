@@ -38,6 +38,7 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   m_NAcquiredImages(),
   m_AcquiredImages(),
   m_DetectorNumber(this, "detectorNumber", -1, "Detector Number"),
+  m_DetectorIndex  (this, "detectorIndex",   0,   "Detector Index"),
   m_DetectorType(this, "detectorType", detType, "Detector Type"),
   m_DetectorTypeName(this, "detectorTypeName", detectorTypeName(detType), "Detector Type Name"),
   m_Enabled(this, "enabled", true, "Is Detector Enabled?"),
@@ -46,6 +47,9 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   m_NRows(this, "nRows", 0, "No of detector rows"),
   m_HBinning(this, "hBinning", 0, "Horiz Binning"),
   m_VBinning(this, "vBinning", 0, "Vert Binning"),
+  m_ExposureFactor (this, "exposureFactor",  1,   "Relative Exposure Factor"),
+  m_CanHardwareSync   (this, "canHardwareSync",    false, "Hardware Synchronization Possible?"),
+  m_HardwareSync   (this, "hardwareSync",          false, "Hardware Synchronization?"),
   m_Extension(this, "extension", "tif", "File extension")
 {
 #ifndef QT_NO_DEBUG

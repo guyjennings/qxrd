@@ -144,6 +144,9 @@ public:
   Q_PROPERTY(int detectorNumber READ get_DetectorNumber WRITE set_DetectorNumber STORED false)
   QCEP_INTEGER_PROPERTY(DetectorNumber)
 
+  Q_PROPERTY(int detectorIndex READ get_DetectorIndex WRITE set_DetectorIndex)
+  QCEP_INTEGER_PROPERTY(DetectorIndex)
+
   Q_PROPERTY(int detectorType READ get_DetectorType WRITE set_DetectorType)
   QCEP_INTEGER_PROPERTY(DetectorType)
 
@@ -167,6 +170,15 @@ public:
 
   Q_PROPERTY(int vBinning READ get_VBinning WRITE set_VBinning STORED false)
   QCEP_INTEGER_PROPERTY(VBinning)
+
+  Q_PROPERTY(int exposureFactor READ get_ExposureFactor WRITE set_ExposureFactor)
+  QCEP_INTEGER_PROPERTY(ExposureFactor)
+
+  Q_PROPERTY(bool canHardwareSync READ get_CanHardwareSync WRITE set_CanHardwareSync STORED false)
+  QCEP_BOOLEAN_PROPERTY(CanHardwareSync)
+
+  Q_PROPERTY(bool hardwareSync READ get_HardwareSync WRITE set_HardwareSync)
+  QCEP_BOOLEAN_PROPERTY(HardwareSync)
 
   Q_PROPERTY(QString extension READ get_Extension WRITE set_Extension)
   QCEP_STRING_PROPERTY(Extension)

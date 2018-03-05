@@ -51,6 +51,8 @@ QxrdPerkinElmerDialog::QxrdPerkinElmerDialog(
     m_Settings->prop_DetectorGain()     -> copyTo(m_DetectorGain);
     m_Settings->prop_DetectorBinning()  -> copyTo(m_DetectorBinning);
     m_Settings->prop_DetectorTiming()   -> copyTo(m_DetectorTiming);
+    m_Settings->prop_ExposureFactor()   -> copyTo(m_ExposureFactor);
+    m_Settings->prop_HardwareSync()     -> copyTo(m_HardwareSync);
   }
 }
 
@@ -65,6 +67,8 @@ void QxrdPerkinElmerDialog::accept()
     m_Settings->prop_DetectorGain()     -> copyFrom(m_DetectorGain);
     m_Settings->prop_DetectorBinning()  -> copyFrom(m_DetectorBinning);
     m_Settings->prop_DetectorTiming()   -> copyFrom(m_DetectorTiming);
+    m_Settings->prop_ExposureFactor()   -> copyFrom(m_ExposureFactor);
+    m_Settings->prop_HardwareSync()     -> copyFrom(m_HardwareSync);
   }
 
   QxrdDetectorDialog::accept();

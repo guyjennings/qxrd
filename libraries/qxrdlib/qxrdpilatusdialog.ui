@@ -6,85 +6,202 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>529</width>
-    <height>465</height>
+    <width>594</width>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Data Directory</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="label_11">
-     <property name="text">
-      <string>File Extension</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="label_12">
-     <property name="text">
-      <string>Exposure Mode</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_10">
-     <property name="text">
-      <string>Read Files Locally</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Pilatus SCP</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Pilatus Host</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_9">
-     <property name="text">
-      <string>Delete Files after reading</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Pilatus User</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="m_DetectorType">
-     <property name="text">
-      <string>n</string>
-     </property>
-    </widget>
-   </item>
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Detector Number</string>
-     </property>
-    </widget>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Detector Number</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Detector Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Pilatus Host</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_14">
+       <property name="text">
+        <string>Exposure Factor</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Pilatus User</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1" colspan="3">
+      <widget class="QLineEdit" name="m_PilatusUser"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Pilatus SSH</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Data Directory</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" colspan="2">
+      <widget class="QCheckBox" name="m_ReadFilesLocally">
+       <property name="text">
+        <string>Read Files Locally</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_11">
+       <property name="text">
+        <string>File Extension</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="label_13">
+       <property name="text">
+        <string>Enable Frequency</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="m_DetectorNumber">
+       <property name="text">
+        <string>n</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Detector Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLabel" name="m_DetectorType">
+       <property name="text">
+        <string>n</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="3">
+      <widget class="QLineEdit" name="m_DetectorName"/>
+     </item>
+     <item row="2" column="1" colspan="3">
+      <widget class="QLineEdit" name="m_PilatusHost"/>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="m_PilatusSSH"/>
+     </item>
+     <item row="3" column="1">
+      <widget class="QSpinBox" name="m_ExposureFactor"/>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Pilatus SCP</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="3">
+      <widget class="QLineEdit" name="m_PilatusSCP"/>
+     </item>
+     <item row="8" column="1">
+      <widget class="QComboBox" name="m_PilatusExtension">
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string>cbf</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>tif</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="QLabel" name="label_12">
+       <property name="text">
+        <string>Exposure Mode</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="3">
+      <widget class="QComboBox" name="m_ExposureMode">
+       <item>
+        <property name="text">
+         <string>No Trigger</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>External Trigger</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>External Enable</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="7" column="2" colspan="2">
+      <widget class="QCheckBox" name="m_DeleteFilesAfterReading">
+       <property name="text">
+        <string>Delete Files After Reading</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1" colspan="3">
+      <widget class="QLineEdit" name="m_PilatusDataDirectory"/>
+     </item>
+     <item row="3" column="2" colspan="2">
+      <widget class="QCheckBox" name="m_HardwareSync">
+       <property name="text">
+        <string>Hardware Synchronization</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QDoubleSpinBox" name="m_EnableFrequency">
+       <property name="maximum">
+        <double>1000000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="13" column="0" colspan="2">
+   <item row="1" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -98,23 +215,6 @@
     </spacer>
    </item>
    <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Detector Name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="m_DetectorName"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Detector Type</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -122,99 +222,6 @@
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="m_DetectorNumber">
-     <property name="text">
-      <string>n</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Pilatus SSH</string>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="0">
-    <widget class="QLabel" name="label_13">
-     <property name="text">
-      <string>Enable Frequency</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="QLineEdit" name="m_PilatusHost"/>
-   </item>
-   <item row="4" column="1">
-    <widget class="QLineEdit" name="m_PilatusUser"/>
-   </item>
-   <item row="5" column="1">
-    <widget class="QLineEdit" name="m_PilatusSSH"/>
-   </item>
-   <item row="6" column="1">
-    <widget class="QLineEdit" name="m_PilatusSCP"/>
-   </item>
-   <item row="7" column="1">
-    <widget class="QLineEdit" name="m_PilatusDataDirectory"/>
-   </item>
-   <item row="8" column="1">
-    <widget class="QCheckBox" name="m_ReadFilesLocally">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
-    <widget class="QCheckBox" name="m_DeleteFilesAfterReading">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="1">
-    <widget class="QComboBox" name="m_ExposureMode">
-     <item>
-      <property name="text">
-       <string>No Trigger</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>External Trigger</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>External Enable</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="12" column="1">
-    <widget class="QDoubleSpinBox" name="m_EnableFrequency">
-     <property name="maximum">
-      <double>1000000.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="1">
-    <widget class="QComboBox" name="m_PilatusExtension">
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>cbf</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>tif</string>
-      </property>
-     </item>
     </widget>
    </item>
   </layout>

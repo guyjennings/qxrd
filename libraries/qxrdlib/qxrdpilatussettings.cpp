@@ -33,6 +33,8 @@ QxrdPilatusSettings::QxrdPilatusSettings(QString name) :
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorPilatus::QxrdDetectorPilatus(%p)\n", this);
   }
+
+  set_CanHardwareSync(true);
 }
 
 QxrdPilatusSettings::~QxrdPilatusSettings()

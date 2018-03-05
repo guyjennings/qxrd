@@ -44,9 +44,6 @@ public:
   static QStringList timingModeNamesPE();
 
 public:
-  Q_PROPERTY(int detectorIndex READ get_DetectorIndex WRITE set_DetectorIndex)
-  QCEP_INTEGER_PROPERTY(DetectorIndex)
-
   Q_PROPERTY(int detectorSubType READ get_DetectorSubType WRITE set_DetectorSubType)
   QCEP_INTEGER_PROPERTY(DetectorSubType)
 

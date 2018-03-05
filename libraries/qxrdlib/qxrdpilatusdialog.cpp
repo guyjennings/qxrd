@@ -28,6 +28,8 @@ QxrdPilatusDialog::QxrdPilatusDialog(
     m_Settings->prop_PilatusExtension()        -> copyTo(m_PilatusExtension);
     m_Settings->prop_ExposureMode()            -> copyTo(m_ExposureMode);
     m_Settings->prop_EnableFrequency()         -> copyTo(m_EnableFrequency);
+    m_Settings->prop_ExposureFactor()          -> copyTo(m_ExposureFactor);
+    m_Settings->prop_HardwareSync()            -> copyTo(m_HardwareSync);
   }
 }
 
@@ -46,6 +48,8 @@ void QxrdPilatusDialog::accept()
     m_Settings->prop_PilatusExtension()        -> copyFrom(m_PilatusExtension);
     m_Settings->prop_ExposureMode()            -> copyFrom(m_ExposureMode);
     m_Settings->prop_EnableFrequency()         -> copyFrom(m_EnableFrequency);
+    m_Settings->prop_ExposureFactor()          -> copyFrom(m_ExposureFactor);
+    m_Settings->prop_HardwareSync()            -> copyFrom(m_HardwareSync);
   }
 
   QxrdDetectorDialog::accept();

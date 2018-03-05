@@ -11,7 +11,6 @@
 
 QxrdPerkinElmerSettings::QxrdPerkinElmerSettings(QString name) :
   QxrdDetectorSettings(name, PerkinElmer),
-  m_DetectorIndex  (this, "detectorIndex",   0, "Perkin Elmer Detector Number"),
   m_DetectorSubType(this, "detectorSubType", 0, "Perkin Elmer Detector Subtype"),
   m_DetectorAddress(this, "detectorAddress", "", "Perkin Elmer Detector Address"),
   m_DetectorGain   (this, "detectorGain",    0, "Detector Gain"),
@@ -29,6 +28,8 @@ QxrdPerkinElmerSettings::QxrdPerkinElmerSettings(QString name) :
   if (qcepDebug(DEBUG_PERKINELMER)) {
     printMessage("QxrdPerkinElmerSettings::QxrdPerkinElmerSettings()");
   }
+
+  set_CanHardwareSync(true);
 }
 
 QxrdPerkinElmerSettings::~QxrdPerkinElmerSettings()

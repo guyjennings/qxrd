@@ -14,52 +14,16 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Detector Binning</string>
-     </property>
-    </widget>
+   <item row="9" column="1">
+    <widget class="QSpinBox" name="m_ExposureFactor"/>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Detector Type</string>
-     </property>
-    </widget>
+   <item row="4" column="1">
+    <widget class="QComboBox" name="m_DetectorSubType"/>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Detector Name</string>
-     </property>
-    </widget>
+   <item row="8" column="1">
+    <widget class="QComboBox" name="m_DetectorTiming"/>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Detector Number</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="m_DetectorNumber">
-     <property name="text">
-      <string>n</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="m_DetectorName"/>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="m_DetectorType">
-     <property name="text">
-      <string>n</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0" colspan="2">
+   <item row="12" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -69,7 +33,7 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="0" colspan="2">
+   <item row="11" column="0" colspan="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -82,12 +46,38 @@
      </property>
     </spacer>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_7">
+   <item row="6" column="1">
+    <widget class="QComboBox" name="m_DetectorGain"/>
+   </item>
+   <item row="5" column="1">
+    <widget class="QLineEdit" name="m_DetectorAddress"/>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label_9">
      <property name="text">
-      <string>Detector Gain</string>
+      <string>Detector Timing Mode</string>
      </property>
     </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QComboBox" name="m_DetectorIndex"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Detector Address</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="m_DetectorType">
+     <property name="text">
+      <string>n</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QComboBox" name="m_DetectorBinning"/>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_5">
@@ -103,37 +93,71 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_6">
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>Detector Address</string>
+      <string>Detector Gain</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_9">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
      <property name="text">
-      <string>Detector Timing Mode</string>
+      <string>Detector Number</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <widget class="QComboBox" name="m_DetectorIndex"/>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="m_DetectorName"/>
    </item>
-   <item row="4" column="1">
-    <widget class="QComboBox" name="m_DetectorSubType"/>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Detector Type</string>
+     </property>
+    </widget>
    </item>
-   <item row="5" column="1">
-    <widget class="QLineEdit" name="m_DetectorAddress"/>
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_10">
+     <property name="text">
+      <string>Exposure Factor</string>
+     </property>
+    </widget>
    </item>
-   <item row="6" column="1">
-    <widget class="QComboBox" name="m_DetectorGain"/>
+   <item row="0" column="1">
+    <widget class="QLabel" name="m_DetectorNumber">
+     <property name="text">
+      <string>n</string>
+     </property>
+    </widget>
    </item>
-   <item row="7" column="1">
-    <widget class="QComboBox" name="m_DetectorBinning"/>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Detector Name</string>
+     </property>
+    </widget>
    </item>
-   <item row="8" column="1">
-    <widget class="QComboBox" name="m_DetectorTiming"/>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Detector Binning</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
+      <string>Hardware Sync</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
+    <widget class="QCheckBox" name="m_HardwareSync">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
