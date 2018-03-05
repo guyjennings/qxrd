@@ -43,6 +43,10 @@ void QxrdDexelaDriver::startDetectorDriver()
 {
   THREAD_CHECK;
 
+  if (m_DexelaDetector) {
+    stopDetectorDriver();
+  }
+
   if (qcepDebug(DEBUG_DEXELA)) {
     printMessage(tr("QxrdDexelaDriver::startDetectorDriver"));
   }
@@ -115,18 +119,18 @@ void QxrdDexelaDriver::restartDetector()
   THREAD_CHECK;
 
   if (qcepDebug(DEBUG_DEXELA)) {
-    printMessage(tr("QxrdDexelaDriver::startDetectorDriver"));
+    printMessage(tr("QxrdDexelaDriver::restartDetectorDriver"));
   }
 
   QxrdDexelaSettingsPtr det(m_Dexela);
   QxrdAcqCommonPtr      acq(m_Acquisition);
 
   if (det == NULL) {
-    printMessage("Attempting to start Dexela Detector with settings == NULL");
+    printMessage("Attempting to restart Dexela Detector with settings == NULL");
   }
 
   if (acq == NULL) {
-    printMessage("Attempting to start Dexela Detector with acquisition == NULL");
+    printMessage("Attempting to restart Dexela Detector with acquisition == NULL");
   }
 
   if (acq && det && det->checkDetectorEnabled()) {
@@ -191,6 +195,7 @@ void QxrdDexelaDriver::staticCallback(int fc, int buf, DexelaDetector *det)
   if (dex) {
     INVOKE_CHECK(
           QMetaObject::invokeMethod(dex, "onAcquiredFrame", Qt::QueuedConnection, Q_ARG(int, fc), Q_ARG(int, buf)))
+//    dex -> onAcquiredFrame(fc, buf);
   }
 }
 
@@ -238,6 +243,14 @@ void QxrdDexelaDriver::stopDetectorDriver()
 
   if (det) {
     printMessage(tr("Stopping Dexela detector \"%1\"").arg(det->get_DetectorName()));
+  }
+
+  if (m_DexelaDetector) {
+    m_DexelaDetector -> CloseBoard();
+
+    delete m_DexelaDetector;
+
+    m_DexelaDetector = NULL;
   }
 }
 
