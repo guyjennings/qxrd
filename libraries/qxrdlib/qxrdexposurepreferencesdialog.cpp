@@ -30,13 +30,16 @@ QxrdExposurePreferencesDialog::QxrdExposurePreferencesDialog(QxrdAcqCommonWPtr a
       m_SpinBoxes.append(relExposure);
 
       if (det) {
-        isEnabled->setChecked(det->get_Enabled());
-        relExposure->setValue(det->get_ExposureFactor());
-        relExposure->setMinimum(1);
-        relExposure->setMaximum(100);
+        iLabel -> setText(tr("%1: %2").arg(i).arg(det->get_DetectorName()));
+
+        relExposure -> setMinimum(1);
+        relExposure -> setMaximum(100);
+
+        det    -> prop_Enabled() -> copyTo(m_CheckBoxes.value(i));
+        det    -> prop_ExposureFactor() -> copyTo(m_SpinBoxes.value(i));
       }
 
-      m_ExposureGrid -> addWidget(iLabel, 2+i, 0, 1, 1, Qt::AlignCenter);
+      m_ExposureGrid -> addWidget(iLabel, 2+i, 0, 1, 1, Qt::AlignLeft | Qt::AlignVCenter);
       m_ExposureGrid -> addWidget(isEnabled, 2+i, 1, 1, 1, Qt::AlignCenter);
       m_ExposureGrid -> addWidget(relExposure, 2+i, 2, 1, 1, Qt::AlignCenter);
     }
