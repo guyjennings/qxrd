@@ -133,6 +133,7 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
     }
   }
 
+  connect(m_ExposureOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditExposurePreferences);
   connect(m_ProcessorOptionsButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::doEditCorrection);
   connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences);
   connect(m_AcquireOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditPreferences);

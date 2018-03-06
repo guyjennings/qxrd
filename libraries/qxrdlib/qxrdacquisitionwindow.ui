@@ -440,18 +440,6 @@ Script Property: &quot;acquisition.skippedExposuresAtStart&quot;</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="3">
-              <widget class="QPushButton" name="m_DetectorOptionsButton">
-               <property name="toolTip">
-                <string>Acquisition options, such as
-Location(s) where data files are saved
-</string>
-               </property>
-               <property name="text">
-                <string>Detector Options...</string>
-               </property>
-              </widget>
-             </item>
              <item row="9" column="1" colspan="3">
               <widget class="QLineEdit" name="m_UserComment2">
                <property name="sizePolicy">
@@ -663,13 +651,6 @@ Script Function: exposureTime()</string>
                </property>
               </widget>
              </item>
-             <item row="19" column="2" colspan="2">
-              <widget class="QCheckBox" name="m_RetryDropped">
-               <property name="text">
-                <string>Retry Dropped Frames Automatically</string>
-               </property>
-              </widget>
-             </item>
              <item row="17" column="2">
               <widget class="QLabel" name="label_7">
                <property name="text">
@@ -839,26 +820,6 @@ Script Function: fileindex()</string>
                </property>
               </widget>
              </item>
-             <item row="20" column="3">
-              <widget class="QPushButton" name="m_DarkAcquireButton">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>1</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>Do Dark Acquisition
-Script Function: acquireDark([fileName[,exposures[,summed]]])</string>
-               </property>
-               <property name="text">
-                <string>Dark</string>
-               </property>
-              </widget>
-             </item>
              <item row="24" column="0">
               <widget class="QLabel" name="label_25">
                <property name="text">
@@ -997,6 +958,55 @@ Script Function: acquire([fileName
                </property>
               </widget>
              </item>
+             <item row="21" column="2">
+              <widget class="QPushButton" name="m_DarkAcquireButton">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Do Dark Acquisition
+Script Function: acquireDark([fileName[,exposures[,summed]]])</string>
+               </property>
+               <property name="text">
+                <string>Acquire Dark</string>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="3">
+              <widget class="QPushButton" name="m_DetectorOptionsButton">
+               <property name="toolTip">
+                <string>Acquisition options, such as
+Location(s) where data files are saved
+</string>
+               </property>
+               <property name="text">
+                <string>Detector Options...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="2">
+              <widget class="QCheckBox" name="m_RetryDropped">
+               <property name="text">
+                <string>Retry Dropped Frames Automatically</string>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="3">
+              <widget class="QPushButton" name="m_ExposureOptionsButton">
+               <property name="toolTip">
+                <string>Exposure Options</string>
+               </property>
+               <property name="text">
+                <string>Exposure Options...</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
            <widget class="QWidget" name="m_WatcherPage"/>
@@ -1025,7 +1035,7 @@ Script Function: acquire([fileName
      <x>0</x>
      <y>0</y>
      <width>1244</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">

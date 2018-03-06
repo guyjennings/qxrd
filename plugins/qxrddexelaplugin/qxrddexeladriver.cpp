@@ -83,6 +83,12 @@ void QxrdDexelaDriver::startDetectorDriver()
           m_DexelaDetector -> SetCallback(&QxrdDexelaDriver::staticCallback);
           m_DexelaDetector -> SetCallbackData((void*) this);
 
+          int xDim = m_DexelaDetector -> GetBufferXdim();
+          int yDim = m_DexelaDetector -> GetBufferYdim();
+          int nBuf = m_DexelaDetector -> GetNumBuffers();
+
+          printMessage(tr("Detector dimensions %1 x %2, nBuffers %3").arg(xDim).arg(yDim).arg(nBuf));
+
           connect(acq -> prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
                   this,                       &QxrdDexelaDriver::restartDetector);
 

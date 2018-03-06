@@ -30,6 +30,7 @@ public slots:
   void saveExperimentCopy();
   void saveExperimentAs();
   void doEditPreferences();
+  void doEditExposurePreferences();
   void doEditDetectorPreferences();
 
 protected:

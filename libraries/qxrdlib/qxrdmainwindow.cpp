@@ -7,6 +7,7 @@
 #include "qxrdmainwindowsettings-ptr.h"
 #include "qxrdmainwindowsettings.h"
 #include "qxrdexperimentpreferencesdialog.h"
+#include "qxrdexposurepreferencesdialog.h"
 #include <QMenu>
 #include <QMenuBar>
 #include <QDir>
@@ -241,6 +242,22 @@ void QxrdMainWindow::doEditPreferences()
   prefs.exec();
 }
 
+void QxrdMainWindow::doEditExposurePreferences()
+{
+  GUI_THREAD_CHECK;
+
+  QxrdExperimentPtr exp(qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
+
+  if (exp) {
+    QxrdAcqCommonPtr acq(exp->acquisition());
+
+    if (acq) {
+      QxrdExposurePreferencesDialog prefs(acq);
+
+      prefs.exec();
+    }
+  }
+}
 void QxrdMainWindow::doEditDetectorPreferences()
 {
   GUI_THREAD_CHECK;

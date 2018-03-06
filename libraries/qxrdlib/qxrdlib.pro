@@ -316,7 +316,8 @@ SOURCES += qxrdlib.cpp \
     qxrdstartupwindowsettings.cpp \
     qxrddetectorplugin.cpp \
     qxrdnidaq.cpp \
-    qxrdcorrectiondialogpage.cpp
+    qxrdcorrectiondialogpage.cpp \
+    qxrdexposurepreferencesdialog.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -525,7 +526,8 @@ HEADERS += qxrdlib.h\
     qxrdnidaq.h \
     qxrdnidaq-ptr.h \
     qxrdcorrectiondialogpage.h \
-    qxrdcorrectiondialogpage-ptr.h
+    qxrdcorrectiondialogpage-ptr.h \
+    qxrdexposurepreferencesdialog.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -765,7 +767,8 @@ FORMS += qxrdwindow.ui \
     qxrdimageplotwidgetdialog.ui \
     qxrdwatcherwindow.ui \
     qxrdstartupwindow.ui \
-    qxrdcorrectiondialogpage.ui
+    qxrdcorrectiondialogpage.ui \
+    qxrdexposurepreferencesdialog.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS +=

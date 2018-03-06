@@ -227,6 +227,7 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
     acqp -> prop_RetryDropped() -> linkTo(this -> m_RetryDropped);
   }
 
+  connect(m_ExposureOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditExposurePreferences);
   connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences);
   connect(m_AcquireOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditPreferences);
 
