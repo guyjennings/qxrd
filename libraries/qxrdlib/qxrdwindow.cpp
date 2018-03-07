@@ -73,12 +73,12 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
 {
   GUI_THREAD_CHECK;
 
+  setupUi(this);
+
   inherited::initialize(parent);
 
   m_WindowSettings =
       qSharedPointerDynamicCast<QxrdWindowSettings>(m_Parent);
-
-  setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 

@@ -34,7 +34,6 @@ private:
 public:
   QxrdWindow(QString name);
   virtual ~QxrdWindow();
-  //TODO: change to QcepObjectWPtr
   void initialize(QcepObjectWPtr parent);
 
   void onAcquisitionInit();

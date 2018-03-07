@@ -23,6 +23,12 @@ QxrdMainWindow::QxrdMainWindow(QString name)
 void QxrdMainWindow::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
+
+  QxrdExperimentPtr exper(qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
+
+  if (exper) {
+    exper -> prop_CompletionPercentage() -> linkTo(m_Progress);
+  }
 }
 
 void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
@@ -177,8 +183,6 @@ void QxrdMainWindow::updateTitle()
   if (exper) {
     title.append(" - ");
     title.append(exper->experimentFilePath());
-
-    exper -> prop_CompletionPercentage() -> linkTo(m_Progress);
   }
 
   title.append(" - QXRD");
@@ -204,14 +208,19 @@ void QxrdMainWindow::acquireStarted()
 
 void QxrdMainWindow::acquireComplete()
 {
-  THREAD_CHECK;
-
-  m_Progress -> reset();
 }
 
 void QxrdMainWindow::acquiredFrame(
-    QString fileName, int iphase, int nphases, int isum, int nsum, int igroup, int ngroup)
+    QString fileName,
+    int iphase,
+    int nphases,
+    int isum,
+    int nsum,
+    int igroup,
+    int ngroup)
 {
+  THREAD_CHECK;
+
   int totalFrames = (nphases*nsum*ngroup <= 0 ? 1 : nphases*nsum*ngroup);
   int thisFrame   = igroup*nphases*nsum + isum*nphases + iphase + 1;
 
@@ -227,8 +236,6 @@ void QxrdMainWindow::acquiredFrame(
                          .arg(isum+1).arg(nsum)
                          .arg(igroup+1).arg(ngroup));
   }
-
-  m_Progress -> setValue(thisFrame*100/totalFrames);
 }
 
 void QxrdMainWindow::doEditPreferences()

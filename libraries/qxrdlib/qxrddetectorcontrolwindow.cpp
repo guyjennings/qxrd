@@ -32,14 +32,14 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
 {
   GUI_THREAD_CHECK;
 
+  setupUi(this);
+
   inherited::initialize(parent);
 
   m_Experiment = QxrdExperiment::findExperiment(m_Parent);
   m_Acquisition = QxrdAcqCommon::findAcquisition(m_Parent);
   m_Detector = QxrdDetectorSettings::findDetectorSettings(m_Parent);
   m_Processor = QxrdProcessor::findProcessor(m_Parent);
-
-  setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 
@@ -201,9 +201,6 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
     connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered);
 
     connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcqCommon::clearDropped);
-
-    connect(acqp.data(), &QxrdAcqCommon::acquireStarted, this, &QxrdDetectorControlWindow::acquireStarted);
-    connect(acqp.data(), &QxrdAcqCommon::acquireComplete, this, &QxrdDetectorControlWindow::acquireComplete);
 
     acqp -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
     acqp -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
@@ -779,6 +776,8 @@ void QxrdDetectorControlWindow::acquireStarted()
     m_DarkAcquireButton -> setEnabled(false);
     m_ActionAcquireDark -> setEnabled(false);
   }
+
+  inherited::acquireStarted();
 }
 
 void QxrdDetectorControlWindow::acquireComplete()
@@ -797,6 +796,8 @@ void QxrdDetectorControlWindow::acquireComplete()
 
   m_DarkAcquireButton -> setEnabled(true);
   m_ActionAcquireDark -> setEnabled(true);
+
+  inherited::acquireComplete();
 }
 
 void QxrdDetectorControlWindow::browseLogFile()

@@ -36,11 +36,16 @@ public slots:
 protected:
   void populateWindowsMenu();
 
-private:
   void updateTitle();
-  void acquireStarted();
-  void acquiredFrame(QString fileName, int isum, int nsum, int iframe, int nframe, int igroup, int ngroup);
-  void acquireComplete();
+  virtual void acquireStarted();
+  virtual void acquiredFrame(QString fileName,
+      int iphase,
+      int nphases,
+      int isum,
+      int nsum,
+      int igroup,
+      int ngroup);
+  virtual void acquireComplete();
 };
 
 #endif // QXRDMAINWINDOW_H

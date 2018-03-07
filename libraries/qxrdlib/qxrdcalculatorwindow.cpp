@@ -10,9 +10,9 @@ void QxrdCalculatorWindow::initialize(QcepObjectWPtr parent)
 {
   GUI_THREAD_CHECK;
 
-  inherited::initialize(parent);
-
   setupUi(this);
+
+  inherited::initialize(parent);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 }

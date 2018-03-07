@@ -19,12 +19,12 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
 {
   GUI_THREAD_CHECK;
 
+  setupUi(this);
+
   inherited::initialize(parent);
 
   m_Settings    = qSharedPointerDynamicCast<QxrdAcquisitionWindowSettings>(m_Parent);
   m_Experiment  = QxrdExperiment::findExperiment(m_Parent);
-
-  setupUi(this);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 
@@ -106,9 +106,6 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
       connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered);
 
       connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcqCommon::clearDropped);
-
-      connect(acqp.data(), &QxrdAcqCommon::acquireStarted, this, &QxrdAcquisitionWindow::acquireStarted);
-      connect(acqp.data(), &QxrdAcqCommon::acquireComplete, this, &QxrdAcquisitionWindow::acquireComplete);
 
       acqp -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
       acqp -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);

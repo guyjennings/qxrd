@@ -243,6 +243,10 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
 
     if (m_Acquisition && appp) {
       m_Acquisition -> setNIDAQPlugin(appp->nidaqPlugin());
+
+      connect(m_Acquisition.data(), &QxrdAcqCommon::acquireStarted, this, &QxrdExperiment::acquireStarted);
+      connect(m_Acquisition.data(), &QxrdAcqCommon::acquireComplete, this, &QxrdExperiment::acquireComplete);
+      connect(m_Acquisition.data(), &QxrdAcqCommon::acquiredFrame, this, &QxrdExperiment::acquiredFrame);
     }
 
     m_Dataset = QcepAllocator::newDataset(sharedFromThis(), "dataset");
@@ -1133,6 +1137,31 @@ void QxrdExperiment::finishedWork(int amt)
 {
   prop_WorkCompleted()->incValue(-amt);
   prop_WorkTarget()->incValue(-amt);
+}
+
+void QxrdExperiment::acquireStarted()
+{
+  commenceWork(100);
+}
+
+void QxrdExperiment::acquireComplete()
+{
+  finishedWork(100);
+}
+
+void QxrdExperiment::acquiredFrame(QString fileName,
+                                   int iphase,
+                                   int nphases,
+                                   int isum,
+                                   int nsum,
+                                   int igroup,
+                                   int ngroup)
+{
+  int totalFrames = (nphases*nsum*ngroup <= 0 ? 1 : nphases*nsum*ngroup);
+  int thisFrame   = igroup*nphases*nsum + isum*nphases + iphase + 1;
+  int pctComplete = thisFrame*100/totalFrames;
+
+  set_WorkCompleted(pctComplete);
 }
 
 void QxrdExperiment::plotImage(QcepDoubleImageDataPtr img)
