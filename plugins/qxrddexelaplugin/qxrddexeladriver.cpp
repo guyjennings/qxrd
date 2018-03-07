@@ -230,11 +230,10 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
     QxrdDexelaSettingsPtr det(m_Dexela);
 
     if (det) {
-      printMessage(tr("Acquired Frame %1 from %2 on detector %3")
-                    .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
-
-//      printf("Acquired frame %d from buffer %d on detector %d\n",
-//             fc, buf, det->get_DetectorIndex());
+      if (qcepDebug(DEBUG_DEXELA)) {
+        printMessage(tr("Acquired Frame %1 from %2 on detector %3")
+                     .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
+      }
 
       det->enqueueAcquiredFrame(image);
     }

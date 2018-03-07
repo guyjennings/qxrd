@@ -40,11 +40,15 @@ public slots:
   void   clearSyncWaveformOutputs();
   void   clearSyncAnalogInputs();
 
-  void   syncOutput(double period, int nphases, double retrigTime);
+  void   syncOutput(double period, int nphases);
   void   syncStop();
 
   void   syncTest();
   void   syncClear();
+
+  void   syncReadAnalogInputs();
+
+  QVector<double> syncAnalogInputs();
 
   void   setAnalogWaveform(QString chan, double rate, double wfm[], int size);
   void   setAnalogOutput(int chan, double val);
@@ -87,8 +91,8 @@ public slots:
 
 public:
   int32 syncCallback(TaskHandle task, int32 status);
-  int32 aiCallback(TaskHandle task, int32 status);
-  int32 aoCallback(TaskHandle task, int32 status);
+//  int32 aiCallback(TaskHandle task, int32 status);
+//  int32 aoCallback(TaskHandle task, int32 status);
 
 private:
   void initTaskHandles();
@@ -127,6 +131,14 @@ private:
 //  TaskHandle          m_SyncDetTask;
   TaskHandle          m_SyncAOTask;
   TaskHandle          m_SyncAITask;
+
+  int                 m_SyncCounter;
+  double              m_SyncPeriod;
+  double              m_SyncLongTime;
+  int                 m_SyncNPhases;
+  int                 m_SyncBufferSize;
+
+  QVector<double>     m_SyncAnalogInputs;
 
   QVector<QxrdNIDAQSyncDetectorOutputPtr>  m_SyncDetectors;
   QVector<QxrdNIDAQSyncWaveformOutputPtr>  m_SyncWaveforms;
