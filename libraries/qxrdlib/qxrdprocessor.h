@@ -189,18 +189,18 @@ public:
                           QcepMaskDataPtr overflow,
                           QcepDoubleList v);
 
-  void processAcquiredImage(QcepUInt32ImageDataPtr image,
-                            QcepMaskDataPtr overflow,
-                            int fileIndex,
-                            int phase,
-                            int nPhases,
-                            bool trig);
+  Q_INVOKABLE void processAcquiredImage(QcepUInt32ImageDataPtr image,
+                                        QcepMaskDataPtr overflow,
+                                        int fileIndex,
+                                        int phase,
+                                        int nPhases,
+                                        bool trig);
 
-  void processDarkImage(QcepDoubleImageDataPtr image,
-                        QcepMaskDataPtr overflow,
-                        int fileIndex);
+  Q_INVOKABLE void processDarkImage(QcepDoubleImageDataPtr image,
+                                    QcepMaskDataPtr overflow,
+                                    int fileIndex);
 
-  void processIdleImage(QcepImageDataBasePtr image);
+  Q_INVOKABLE void processIdleImage(QcepImageDataBasePtr image);
 
   void setAcquiredImageProperties(QcepImageDataBasePtr image,
                                   int fileIndex,

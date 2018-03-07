@@ -1379,7 +1379,16 @@ saveCancel:
           for (int p=0; p<nphases; p++) {
             for (int d=0; d<nDet; d++) {
 
-              procs[d] -> processAcquiredImage(res[d][p][ii], ovf[d][p][ii], fileIndex, p, nphases, false);
+//              procs[d] -> processAcquiredImage(res[d][p][ii], ovf[d][p][ii], fileIndex, p, nphases, false);
+
+              INVOKE_CHECK(
+                    QMetaObject::invokeMethod(procs[d].data(), "processAcquiredImage",
+                                              Q_ARG(QcepUInt32ImageDataPtr, res[d][p][ii]),
+                                              Q_ARG(QcepMaskDataPtr, ovf[d][p][ii]),
+                                              Q_ARG(int, fileIndex),
+                                              Q_ARG(int, p),
+                                              Q_ARG(int, nphases),
+                                              Q_ARG(bool, false)));
 
               if (qcepDebug(DEBUG_ACQUIRETIME)) {
                 printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
@@ -1404,7 +1413,16 @@ saveCancel:
 
         for (int p=0; p<nphases; p++) {
           for (int d=0; d<nDet; d++) {
-            procs[d] -> processAcquiredImage(res[d][p][0], ovf[d][p][0], fileIndex, p, nphases, true);
+//            procs[d] -> processAcquiredImage(res[d][p][0], ovf[d][p][0], fileIndex, p, nphases, true);
+
+            INVOKE_CHECK(
+                  QMetaObject::invokeMethod(procs[d].data(), "processAcquiredImage",
+                                            Q_ARG(QcepUInt32ImageDataPtr, res[d][p][0]),
+                                            Q_ARG(QcepMaskDataPtr, ovf[d][p][0]),
+                                            Q_ARG(int, fileIndex),
+                                            Q_ARG(int, p),
+                                            Q_ARG(int, nphases),
+                                            Q_ARG(bool, true)));
 
             if (qcepDebug(DEBUG_ACQUIRETIME)) {
               printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
@@ -1627,7 +1645,13 @@ void QxrdAcquisition::doAcquireDark()
     //saveCancel:
 
     for (int d=0; d<nDet; d++) {
-      procs[d]->processDarkImage(res[d], overflow[d], fileIndex);
+//      procs[d]->processDarkImage(res[d], overflow[d], fileIndex);
+
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(procs[d].data(), "processDarkImage",
+                                      Q_ARG(QcepDoubleImageDataPtr, res[d]),
+                                      Q_ARG(QcepMaskDataPtr, overflow[d]),
+                                      Q_ARG(int, fileIndex)));
     }
 
     statusMessage(tr("Acquisition complete"));
@@ -1683,7 +1707,11 @@ void QxrdAcquisition::onIdleTimeout()
         QxrdProcessorPtr proc = det->processor();
 
         if (proc) {
-          proc->processIdleImage(res);
+//          proc->processIdleImage(res);
+
+          INVOKE_CHECK(
+                QMetaObject::invokeMethod(proc.data(), "processIdleImage",
+                                          Q_ARG(QcepImageDataBasePtr, res)));
 
           if (qcepDebug(DEBUG_ACQUIRETIME)) {
             printMessage(tr("Processed idle frame from det %1 after %2 msec").arg(i).arg(tic.restart()));
