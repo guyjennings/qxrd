@@ -28,9 +28,9 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
     m_ImagePlotSettings(),
     m_Data(NULL),
     m_Mask(NULL),
-    m_Overflow(NULL),
-    m_DataRaster(NULL),
-    m_MaskRaster(NULL),
+//    m_Overflow(NULL),
+//    m_DataRaster(NULL),
+//    m_MaskRaster(NULL),
     m_Processor(),
 //    m_CenterMarker(NULL),
     m_FirstTime(true),
@@ -92,6 +92,16 @@ QxrdProcessorWPtr QxrdImagePlot::processor() const
   return m_Processor;
 }
 
+void QxrdImagePlot::setData(QcepImageDataBaseWPtr data)
+{
+  m_Data = data;
+}
+
+void QxrdImagePlot::setMask(QcepMaskDataWPtr mask)
+{
+  m_Mask = mask;
+}
+
 void QxrdImagePlot::autoScale()
 {
   QcepPlot::autoScale();
@@ -142,20 +152,18 @@ void QxrdImagePlot::changeROIShown(bool shown)
 //  replot();
 //}
 
-const QxrdRasterData* QxrdImagePlot::raster() const
-{
-  return m_DataRaster;
-}
+//const QxrdRasterData* QxrdImagePlot::raster() const
+//{
+//  return m_DataRaster;
+//}
 
-QxrdRasterData* QxrdImagePlot::raster()
-{
-  return m_DataRaster;
-}
+//QxrdRasterData* QxrdImagePlot::raster()
+//{
+//  return m_DataRaster;
+//}
 
 QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
 {
-  const QxrdRasterData *ras = this->raster();
-
   QxrdProcessorPtr    processor = this->processor();
   QxrdCenterFinderPtr centerFinder;
 
@@ -172,8 +180,10 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
     set->set_YMouse(pos.y());
   }
 
-  if (m_Data) {
-    double val = m_Data->getImageData(pos.x(),pos.y());
+  QcepImageDataBasePtr data(m_Data);
+
+  if (data) {
+    double val = data->getImageData(pos.x(),pos.y());
     res += tr(", %1").arg(val);
 
     if (set) {
@@ -181,12 +191,14 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
     }
   }
 
-  if (m_MaskRaster/* && m_MaskRaster->data()*/) {
-    double mask = m_MaskRaster->value(pos.x(),pos.y());
-    res += tr(", %1").arg(mask);
+  QcepMaskDataPtr mask(m_Mask);
+
+  if (mask) {
+    double maskv = mask->getImageData((int) pos.x(), (int) pos.y());
+    res += tr(", %1").arg(maskv);
 
     if (set) {
-      set->set_MaskMouse(mask);
+      set->set_MaskMouse(maskv);
     }
   }
 
@@ -352,19 +364,24 @@ void QxrdImagePlot::zapPixel(int x, int y)
   double sum = 0;
   int    npx = 0;
 
-  for (int ix = x-1; ix <= x+1; ix++) {
-    for (int iy = y-1; iy <= y+1; iy++) {
-      sum += m_Data->getImageData(ix, iy);
-      npx += 1;
+  QcepImageDataBasePtr data(m_Data);
+
+  //TODO: move into QxrdImagePlotWidget
+  if (data) {
+    for (int ix = x-1; ix <= x+1; ix++) {
+      for (int iy = y-1; iy <= y+1; iy++) {
+        sum += data->getImageData(ix, iy);
+        npx += 1;
+      }
     }
+
+    sum -= data->getImageData(x,y);
+    npx -= 1;
+
+    data->setImageData(x,y, sum/npx);
+
+    replot();
   }
-
-  sum -= m_Data->getImageData(x,y);
-  npx -= 1;
-
-  m_Data->setImageData(x,y, sum/npx);
-
-  replot();
 }
 
 void QxrdImagePlot::onMarkedPointsChanged()

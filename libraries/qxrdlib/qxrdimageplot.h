@@ -60,8 +60,8 @@ public slots:
   virtual void onLegendChecked(const QVariant &itemInfo, bool on, int index);
 
 public:
-  const QxrdRasterData* raster() const;
-  QxrdRasterData* raster();
+//  const QxrdRasterData* raster() const;
+//  QxrdRasterData* raster();
 
   QxrdProcessorWPtr processor() const;
   void setProcessor(QxrdProcessorWPtr proc);
@@ -77,6 +77,9 @@ public:
 
   QxrdROIModelWPtr roiModel();
   QItemSelectionModel            *roiSelection();
+
+  void setData(QcepImageDataBaseWPtr data);
+  void setMask(QcepMaskDataWPtr mask);
 
 //  void roiMouseSelected(const QVector<QPointF> &p);
 //  void roiMouseAdded(const QVector<QPointF> &p);
@@ -117,12 +120,12 @@ protected:
 private:
   QcepObjectWPtr             m_Parent;
 
-  QcepImageDataBasePtr       m_Data;
-  QcepMaskDataPtr            m_Mask;
-  QcepMaskDataPtr            m_Overflow;
+  QcepImageDataBaseWPtr      m_Data;
+  QcepMaskDataWPtr           m_Mask;
+//  QcepMaskDataWPtr            m_Overflow;
 
-  QxrdRasterData            *m_DataRaster;
-  QxrdMaskRasterData        *m_MaskRaster;
+//  QxrdRasterData            *m_DataRaster;
+//  QxrdMaskRasterData        *m_MaskRaster;
 
   QxrdProcessorWPtr          m_Processor;
 

@@ -213,6 +213,10 @@ void QxrdImagePlotWidget::replotImage()
   QxrdImagePlotWidgetSettingsPtr set(m_ImageSettings);
 
   if (set && m_ImageData) {
+    if (m_Plot) {
+      m_Plot -> setData(m_ImageData);
+    }
+
     if (m_ImageRaster == NULL) {
       m_ImageRaster =
           new QxrdRasterData(m_ImageData,
@@ -285,6 +289,10 @@ void QxrdImagePlotWidget::replotMask()
   QxrdImagePlotWidgetSettingsPtr set(m_ImageSettings);
 
   if (set && m_MaskData) {
+    if (m_Plot) {
+      m_Plot -> setMask(m_MaskData);
+    }
+
     if(m_MaskRaster == NULL) {
       m_MaskRaster =
           new QxrdMaskRasterData(m_MaskData,
