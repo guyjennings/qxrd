@@ -82,17 +82,17 @@ QString QxrdNIDAQPlugin::name() const
 void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
 {
   if (DAQmxFailed(err)) {
-    int sz = DAQmxGetErrorString(err, NULL, 0);
+//    int sz = DAQmxGetErrorString(err, NULL, 0);
 
-    if (sz > 0) {
-      char *buff = (char*) malloc(sz);
+//    if (sz > 0) {
+//      char *buff = (char*) malloc(sz);
 
-      if (DAQmxGetErrorString(err, buff, sz) == 0) {
-        printMessage(tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff));
-      }
+//      if (DAQmxGetErrorString(err, buff, sz) == 0) {
+//        printMessage(tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff));
+//      }
 
-      free(buff);
-    }
+//      free(buff);
+//    }
 
     int szx = DAQmxGetExtendedErrorInfo(NULL, 0);
 
@@ -100,7 +100,7 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
       char *buff = (char*) malloc(szx);
 
       if (DAQmxGetExtendedErrorInfo(buff, szx) == 0) {
-        printMessage(tr("%1:%2 NI-DAQ Extra Info %3").arg(file).arg(line).arg(buff));
+        printMessage(tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff));
       }
 
       free(buff);
@@ -1050,7 +1050,7 @@ void QxrdNIDAQPlugin::syncOutput(double period, int nphases)
     DAQmxErrChk(DAQmxCfgImplicitTiming(m_SyncTask, DAQmx_Val_ContSamps, 100));
     DAQmxErrChk(DAQmxRegisterSignalEvent(m_SyncTask,
                                          DAQmx_Val_CounterOutputEvent,
-                                         DAQmx_Val_SynchronousEventCallbacks,
+                                         /*0*/ DAQmx_Val_SynchronousEventCallbacks,
                                          &::syncCallback,
                                          this));
 
@@ -1202,10 +1202,10 @@ int32 QxrdNIDAQPlugin::syncCallback(TaskHandle task, int32 status)
 
   m_SyncCounter += 1;
 
-  printMessage(tr("syncCallback %1 = %2, state = %3")
-               .arg(status)
-               .arg(m_SyncCounter)
-               .arg(state));
+//  printMessage(tr("syncCallback %1 = %2, state = %3")
+//               .arg(status)
+//               .arg(m_SyncCounter)
+//               .arg(state));
 
   if (m_SyncCounter && (state == 1)) {
     syncReadAnalogInputs();
@@ -1234,13 +1234,13 @@ void QxrdNIDAQPlugin::syncTest()
   addSyncDetectorOutput(1, 0.0, 0.01);
   addSyncDetectorOutput(2, 0.0, 0.01);
 
-  addSyncAnalogInput();
-  addSyncAnalogInput();
+//  addSyncAnalogInput();
+//  addSyncAnalogInput();
 
-  addSyncWaveformOutput(0, +5.0, -5.0);
-  addSyncWaveformOutput(0, -1.0, +1.0);
+//  addSyncWaveformOutput(0, +5.0, -5.0);
+//  addSyncWaveformOutput(0, -1.0, +1.0);
 
-  syncOutput(0.1, 10);
+  syncOutput(1.0, 1);
 }
 
 void QxrdNIDAQPlugin::syncClear()
@@ -1270,10 +1270,10 @@ void QxrdNIDAQPlugin::syncReadAnalogInputs()
                                    DAQmx_Val_GroupByChannel, m_SyncAnalogInputs.data(), m_SyncAnalogInputs.count(),
                                    &actuallyRead, NULL));
 
-    printMessage(tr("%1 of %2 analog samples read, %3 avail")
-                 .arg(actuallyRead)
-                 .arg(m_SyncBufferSize)
-                 .arg(avail));
+//    printMessage(tr("%1 of %2 analog samples read, %3 avail")
+//                 .arg(actuallyRead)
+//                 .arg(m_SyncBufferSize)
+//                 .arg(avail));
   }
 
 Error:
