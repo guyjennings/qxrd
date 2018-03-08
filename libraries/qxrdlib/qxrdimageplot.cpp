@@ -95,6 +95,12 @@ QxrdProcessorWPtr QxrdImagePlot::processor() const
 void QxrdImagePlot::setData(QcepImageDataBaseWPtr data)
 {
   m_Data = data;
+
+  QcepImageDataBasePtr d(m_Data);
+
+  if (d) {
+    setTitle(d->get_FileName());
+  }
 }
 
 void QxrdImagePlot::setMask(QcepMaskDataWPtr mask)
