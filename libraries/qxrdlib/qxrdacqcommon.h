@@ -61,13 +61,14 @@ public:
   virtual void appendDetector(QxrdDetectorSettingsPtr det) = 0;
   virtual void clearDetectors() = 0;
 
-  virtual void doAcquire() = 0;
-  virtual void doAcquireIdle() = 0;
-  virtual void doAcquireOnce() = 0;
-  virtual void doAcquireDark() = 0;
-
   Q_INVOKABLE void dynamicProperties();
   void copyDynamicProperties(QObject *dest);
+
+  int cancelling();
+  void indicateDroppedFrame(int n);
+  void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
+
+  virtual void unlock();
 
 signals:
   void acquireStarted();
@@ -75,9 +76,6 @@ signals:
   void acquiredFrame(QString fileName, int iphase, int nphases, int isum, int nsum, int igroup, int ngroup);
   void detectorStateChanged();
   void extraInputsChanged();
-
-protected:
-  void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
 
 public:
   Q_PROPERTY(int     cancelling      READ get_Cancelling WRITE set_Cancelling STORED false)

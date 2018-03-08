@@ -55,20 +55,31 @@ void QxrdAcquisitionExecutionThread::run()
 void QxrdAcquisitionExecutionThread::doAcquire()
 {
   if (m_AcquisitionExecution) {
-    QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquire");
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquire"));
   }
 }
 
 void QxrdAcquisitionExecutionThread::doAcquireOnce()
 {
   if (m_AcquisitionExecution) {
-    QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquireOnce");
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquireOnce"));
   }
 }
 
 void QxrdAcquisitionExecutionThread::doAcquireDark()
 {
   if (m_AcquisitionExecution) {
-    QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquireDark");
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquireDark"));
+  }
+}
+
+void QxrdAcquisitionExecutionThread::doAcquireIdle()
+{
+  if (m_AcquisitionExecution) {
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquireIdle"));
   }
 }

@@ -20,9 +20,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
-//#include "qxrddetectorthread-ptr.h"
 #include "qxrdprocessor-ptr.h"
-//#include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qcepallocator-ptr.h"
@@ -43,11 +41,6 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
-  //TODO: change to experiment
-//  void setWindow(QxrdWindowWPtr win);
-
-  QxrdAcquisitionWPtr myself();
-
 public slots:
   void acquire();
   void acquireOnce();
@@ -58,7 +51,6 @@ public slots:
   int acquisitionStatus(double time);
 
   void propertyList();
-  void Message(QString cmd);
 
   void updateSaveTimes();
 
@@ -66,10 +58,7 @@ public slots:
 
   void shutdown();
 
-  void doAcquire    ();
-  void doAcquireIdle();
-  void doAcquireOnce();
-  void doAcquireDark();
+  void unlock();
 
   bool sanityCheckCommon();
   bool sanityCheckAcquire();
@@ -92,13 +81,8 @@ public:
   void openWindows();
   void closeWindows();
 
-  virtual void setupExposureMenu(QDoubleSpinBox *cb);
-
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
-
-  void indicateDroppedFrame(int n);
-//  virtual QxrdAcquisitionDialogPtr controlPanel(QxrdWindowWPtr win);
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
   QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
@@ -106,37 +90,8 @@ public:
   void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
   QxrdNIDAQWPtr nidaqPlugin() const;
 
-protected:
-//  void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
-
-  QxrdAppCommonWPtr application() const;
-  QxrdExperimentWPtr experiment() const;
-  QxrdProcessorWPtr processor() const;  //TODO: eliminate
-
 protected slots:
   void onIdleTimeout();
-
-private:
-  void executeAcquisition(QxrdAcquisitionParameterPackPtr parmsp);
-  virtual void stopIdling();
-  virtual void startIdling();
-
-//  template <typename TIMG, typename TACC>
-//  void accumulateAcquiredImage(QSharedPointer< QcepImageData<TIMG> > image,
-//                               QSharedPointer< QcepImageData<TACC> > accum,
-//                               QcepMaskDataPtr overflow);
-
-  void accumulateAcquiredImage(QcepUInt16ImageDataPtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
-  void accumulateAcquiredImage(QcepUInt32ImageDataPtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
-  void accumulateAcquiredImage(QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr accum, QcepMaskDataPtr overflow);
-  void accumulateAcquiredImage(QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr accum, QcepMaskDataPtr overflow);
-
-//  void processImage(const QxrdProcessArgs &args);
-//  void processImage        (QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
-//  void processAcquiredImage(QString filePattern, QString extent, int fileIndex, int phase, int nPhases, bool trig, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
-//  void processDarkImage    (QString filePattern, QString extent, int fileIndex,                                    QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
-
-  int cancelling();
 
 protected:
   QMutex                 m_Acquiring;

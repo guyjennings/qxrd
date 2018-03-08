@@ -4,6 +4,7 @@
 #include "qxrddetectorsettings.h"
 #include "qxrdprocessor.h"
 #include "qxrdacquisitionscalermodel.h"
+#include "qcepallocator.h"
 
 QxrdAcqCommon::QxrdAcqCommon(QString name) :
   inherited(name),
@@ -207,5 +208,34 @@ void QxrdAcqCommon::copyDynamicProperties(QObject *dest)
       dest -> setProperty(name.data(), property(name.data()));
     }
   }
+}
+
+int QxrdAcqCommon::cancelling()
+{
+  int res = get_Cancelling();
+
+  if (res) {
+    printMessage(tr("Cancelling acquisition"));
+    statusMessage(tr("Cancelling acquisition"));
+  }
+
+  return res;
+}
+
+void QxrdAcqCommon::unlock()
+{
+}
+
+void QxrdAcqCommon::indicateDroppedFrame(int n)
+{
+  QString msg = tr("Frame %1 dropped [%2/%3 MB Used]")
+      .arg(n)
+      .arg(QcepAllocator::allocatedMemoryMB())
+      .arg(QcepAllocator::availableMemoryMB());
+
+  statusMessage(msg);
+  printMessage(msg);
+
+  prop_DroppedFrames() -> incValue(1);
 }
 

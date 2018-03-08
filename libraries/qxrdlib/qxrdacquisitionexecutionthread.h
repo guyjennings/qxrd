@@ -22,6 +22,7 @@ public slots:
   void doAcquire();
   void doAcquireOnce();
   void doAcquireDark();
+  void doAcquireIdle();
 
 protected:
   void run();

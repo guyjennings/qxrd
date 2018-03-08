@@ -93,22 +93,6 @@ void QxrdAcqDummy::openDetectorControlWindow(int i)
 {
 }
 
-void QxrdAcqDummy::doAcquire()
-{
-}
-
-void QxrdAcqDummy::doAcquireIdle()
-{
-}
-
-void QxrdAcqDummy::doAcquireOnce()
-{
-}
-
-void QxrdAcqDummy::doAcquireDark()
-{
-}
-
 QxrdDetectorSettingsPtr QxrdAcqDummy::newDetector(int detType)
 {
   return QxrdDetectorSettingsPtr();

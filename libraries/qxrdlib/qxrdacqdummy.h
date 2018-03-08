@@ -46,11 +46,6 @@ public:
   QxrdDetectorSettingsPtr newDetector(int detType);
   void appendDetector(QxrdDetectorSettingsPtr det);
   void clearDetectors();
-
-  void doAcquire();
-  void doAcquireIdle();
-  void doAcquireOnce();
-  void doAcquireDark();
 };
 
 Q_DECLARE_METATYPE(QxrdAcqDummy*)

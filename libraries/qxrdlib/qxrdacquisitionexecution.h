@@ -5,6 +5,10 @@
 #include "qcepobject.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qtimer-ptr.h"
+#include "qxrdacquisitionparameterpack-ptr.h"
+#include "qxrddarkacquisitionparameterpack-ptr.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
 
 class QXRD_EXPORT QxrdAcquisitionExecution : public QcepObject
 {
@@ -28,8 +32,16 @@ public slots:
   void doAcquireIdle();
 
 private:
+  void executeAcquisition    (QxrdAcquisitionParameterPackPtr     parmsp);
+  void executeDarkAcquisition(QxrdDarkAcquisitionParameterPackPtr parmsp);
+
   void stopIdling();
   void startIdling();
+
+  void accumulateAcquiredImage(QcepUInt16ImageDataPtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepUInt32ImageDataPtr image, QcepUInt32ImageDataPtr accum, QcepMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr accum, QcepMaskDataPtr overflow);
+  void accumulateAcquiredImage(QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr accum, QcepMaskDataPtr overflow);
 
 public:
   Q_PROPERTY(int acquiring READ get_Acquiring WRITE set_Acquiring STORED false)
