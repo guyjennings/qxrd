@@ -172,8 +172,8 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
     set->set_YMouse(pos.y());
   }
 
-  if (ras) {
-    double val = ras->value(pos.x(),pos.y());
+  if (m_Data) {
+    double val = m_Data->getImageData(pos.x(),pos.y());
     res += tr(", %1").arg(val);
 
     if (set) {
