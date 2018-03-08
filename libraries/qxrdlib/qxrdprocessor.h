@@ -321,7 +321,7 @@ protected:
   int newMaskHeight() const;
 
 signals:
-  void dataAvailable           (QcepDoubleImageDataPtr img);
+  void dataAvailable           (QcepImageDataBasePtr   img);
   void darkAvailable           (QcepDoubleImageDataPtr img);
   void maskAvailable           (QcepMaskDataPtr        mask);
   void badPixelsAvailable      (QcepDoubleImageDataPtr img);

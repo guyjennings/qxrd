@@ -45,10 +45,15 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
 
   setAttribute(Qt::WA_DeleteOnClose, false);
 
+  QxrdDetectorSettingsPtr dt(m_Detector);
+
+  if (dt) {
+    m_Processor = dt->processor();
+  }
+
   QxrdProcessorPtr dp(m_Processor);
   QxrdAppCommon *app = qobject_cast<QxrdAppCommon*>(g_Application);
   QxrdExperimentPtr expt(m_Experiment);
-  QxrdDetectorSettingsPtr dt(m_Detector);
   QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (dp) {

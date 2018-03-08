@@ -33,7 +33,7 @@ public:
   static QString scalingModeName(int n);
 
 public slots:
-  void newImage(QcepDoubleImageDataPtr img);
+  void newImage(QcepImageDataBasePtr img);
   void newMask (QcepMaskDataPtr        msk);
 
   void replotImage();
@@ -49,8 +49,8 @@ private slots:
 protected:
   QTimer                      m_ImageTimer;
 
-  QcepDoubleImageDataPtr      m_NewImageData;
-  QcepDoubleImageDataPtr      m_ImageData;
+  QcepImageDataBasePtr        m_NewImageData;
+  QcepImageDataBasePtr        m_ImageData;
 
   QcepMaskDataPtr             m_NewMaskData;
   QcepMaskDataPtr             m_MaskData;

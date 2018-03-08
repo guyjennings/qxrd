@@ -624,12 +624,12 @@ void QxrdProcessor::newData(QcepImageDataBaseWPtr image)
 //  QxrdWindowPtr w = m_Window;
 
 //  if (m_Data) {
-  QcepDoubleImageDataPtr dimg(qSharedPointerDynamicCast<QcepDoubleImageData>(image));
+//  QcepDoubleImageDataPtr dimg(qSharedPointerDynamicCast<QcepDoubleImageData>(image));
 
-  if (dimg) {
-    emit dataAvailable(dimg);
-  } else {
-    printMessage("QxrdProcessor::newData != double");
+  if (image) {
+    emit dataAvailable(image);
+//  } else {
+//    printMessage("QxrdProcessor::newData != double");
   }
 //  }
 
@@ -1773,11 +1773,11 @@ void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
       }
     }
 
-    QcepDoubleImageDataPtr dimg =
-        qSharedPointerDynamicCast<QcepDoubleImageData>(img);
+//    QcepDoubleImageDataPtr dimg =
+//        qSharedPointerDynamicCast<QcepDoubleImageData>(img);
 
-    if (dimg) {
-      emit dataAvailable(dimg);
+    if (img) {
+      emit dataAvailable(img);
     }
 
 //    if (ctrl && get_DetectorDisplayMode() == ImageDisplayMode) {

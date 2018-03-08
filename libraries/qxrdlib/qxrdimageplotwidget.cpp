@@ -163,7 +163,7 @@ QString QxrdImagePlotWidget::scalingModeName(int n)
 
   return res;
 }
-void QxrdImagePlotWidget::newImage(QcepDoubleImageDataPtr img)
+void QxrdImagePlotWidget::newImage(QcepImageDataBasePtr img)
 {
   m_NewImageData = img;
 }
