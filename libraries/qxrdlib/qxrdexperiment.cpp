@@ -94,9 +94,13 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_QxrdVersion(this, "qxrdVersion", STR(QXRD_VERSION), "Qxrd Version"),
   m_DataDirectory(this, "dataDirectory", defaultDataDirectory(""), "Saved Data Directory"),
   m_LogFileName(this, "logFileName", defaultLogName(""), "Log File Name"),
+  m_LogMaxLengthMB(this, "logMaxLengthMB", 0, "Max log file length in MB (or 0 for unlimited)"),
+  m_LogMaxSaved(this, "logMaxSaved", 0, "Number of saved log files (or 0 for unlimited)"),
   m_ScanFileName(this, "scanFileName", defaultScanName(""), "Scan File Name"),
   m_ScanFileExtension(this, "scanFileExtension", ".avg", "Scan File Extension"),
   m_ScanDataNegative(this, "scanDataNegative", 0, "Scan Data Negative Value Handling"),
+  m_ScanMaxLengthMB(this, "scanMaxLengthMB", 0, "Max scan file length in MB (or 0 for unlimited)"),
+  m_ScanMaxSaved(this, "scanMaxSaved", 0, "Number of saved scan files (or 0 for unlimited)"),
   m_DefaultLayout(this,"defaultLayout",0, "Default Layout Used?"),
   m_WorkCompleted(this, "workCompleted", 0, "Amount of Work Completed"),
   m_WorkTarget(this, "workTarget", 0, "Amount of Work Targetted"),
@@ -620,7 +624,7 @@ void QxrdExperiment::newLogFile(QString path)
   openLogFile();
 }
 
-void QxrdExperiment::openNewLogFile() const
+void QxrdExperiment::openNewLogFile()
 {
   {
     QcepMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
@@ -634,7 +638,7 @@ void QxrdExperiment::openNewLogFile() const
   openLogFile();
 }
 
-void QxrdExperiment::openLogFile() const
+void QxrdExperiment::openLogFile()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
@@ -648,6 +652,66 @@ void QxrdExperiment::openLogFile() const
       fflush(m_LogFile);
     }
   }
+
+  if (backupFileIfNeeded(m_LogFile, get_LogMaxLengthMB(), logFilePath(), get_LogMaxSaved())) {
+    m_LogFile = fopen(qPrintable(logFilePath()), "a");
+
+    if (m_LogFile) {
+      fprintf(m_LogFile, "#F %s\n", qPrintable(get_LogFileName()));
+      fprintf(m_LogFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
+      fprintf(m_LogFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
+      fflush(m_LogFile);
+    }
+  }
+}
+
+QString QxrdExperiment::backupFilePath(QString path, int n)
+{
+  return path+tr(".%1.bak").arg(n);
+}
+
+bool QxrdExperiment::backupFileIfNeeded(FILE *f, int maxLenMB, QString path, int nBackups)
+{
+  bool needsReopen = false;
+
+  if (maxLenMB && f) {
+    fpos_t pos;
+    fgetpos(f, &pos);
+
+    if (pos > (((qint64)maxLenMB)*QcepAllocator::MegaBytes)) {
+      fclose(f);
+
+      int maxSave = nBackups;
+
+      if (nBackups == 0) {
+        for (int i=0; ;i++) {
+          QFileInfo info(backupFilePath(path, i));
+
+          if (info.exists()) {
+            maxSave++;
+          } else {
+            break;
+          }
+        }
+      }
+
+      if (nBackups) {
+        remove(qPrintable(backupFilePath(path, maxSave)));
+      }
+
+      for (int i=maxSave; i>=1; i--) {
+        rename(qPrintable(backupFilePath(path, i-1)),
+               qPrintable(backupFilePath(path, i)));
+      }
+
+      rename(qPrintable(path),
+             qPrintable(backupFilePath(path, 0)));
+
+      needsReopen = true;
+    }
+  }
+
+  return needsReopen;
 }
 
 void QxrdExperiment::readInitialLogFile()
@@ -680,7 +744,7 @@ FILE* QxrdExperiment::logFile()
   return m_LogFile;
 }
 
-void QxrdExperiment::logMessage(QString msg) const
+void QxrdExperiment::logMessage(QString msg)
 {
   openLogFile();
 
@@ -692,7 +756,7 @@ void QxrdExperiment::logMessage(QString msg) const
   }
 }
 
-void QxrdExperiment::closeLogFile() const
+void QxrdExperiment::closeLogFile()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_LogFileMutex);
 
@@ -729,7 +793,18 @@ void QxrdExperiment::openScanFile()
     m_ScanFile = fopen(qPrintable(scanFilePath()), "a");
 
     if (m_ScanFile) {
-      fprintf(m_ScanFile, "#F %s\n", qPrintable(get_LogFileName()));
+      fprintf(m_ScanFile, "#F %s\n", qPrintable(get_ScanFileName()));
+      fprintf(m_ScanFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
+      fprintf(m_ScanFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
+      fflush(m_ScanFile);
+    }
+  }
+
+  if (backupFileIfNeeded(m_ScanFile, get_ScanMaxLengthMB(), scanFilePath(), get_ScanMaxSaved())) {
+    m_ScanFile = fopen(qPrintable(scanFilePath()), "a");
+
+    if (m_ScanFile) {
+      fprintf(m_ScanFile, "#F %s\n", qPrintable(get_ScanFileName()));
       fprintf(m_ScanFile, "#E %d\n", QDateTime::currentDateTime().toTime_t());
       fprintf(m_ScanFile, "#D %s\n", qPrintable(QDateTime::currentDateTime().toString("ddd MMM d hh:mm:ss yyyy")));
       fflush(m_ScanFile);

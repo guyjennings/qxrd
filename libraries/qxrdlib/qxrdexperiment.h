@@ -101,7 +101,7 @@ public:
 
 public slots:
   void newLogFile(QString path);
-  void openNewLogFile() const;
+  void openNewLogFile();
 
   void executeCommand(QString cmd);
   QString systemCommand(QString cmd);
@@ -116,6 +116,9 @@ public slots:
   QString logFilePath() const;
   QString scanFilePath() const;
 
+  QString backupFilePath(QString path, int n);
+  bool    backupFileIfNeeded(FILE* f, int maxLenMB, QString path, int nBackups);
+
   void setExperimentFilePath(QString path);
 
   void saveExperimentAs(QString path);
@@ -127,7 +130,7 @@ public slots:
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
 
-  void logMessage(QString msg) const;
+  void logMessage(QString msg);
 
   void saveExperiment();
   void saveExperimentAsText(QString filePath);
@@ -162,8 +165,8 @@ public slots:
 
 private:
 
-  void closeLogFile() const;
-  void openLogFile() const;
+  void closeLogFile();
+  void openLogFile();
   void readInitialLogFile();
 
   void closeScanFile();
@@ -200,8 +203,6 @@ private:
 
   QMutex                          m_ExperimentFileMutex;
 
-  mutable QStringList             m_PushedMessages;
-
 public:  // Properties
   Q_PROPERTY(int experimentMode READ get_ExperimentMode WRITE set_ExperimentMode STORED false)
   QCEP_INTEGER_PROPERTY(ExperimentMode)
@@ -215,6 +216,12 @@ public:  // Properties
   Q_PROPERTY(QString logFileName     READ get_LogFileName WRITE set_LogFileName)
   QCEP_STRING_PROPERTY(LogFileName)
 
+  Q_PROPERTY(int logMaxLengthMB READ get_LogMaxLengthMB WRITE set_LogMaxLengthMB)
+  QCEP_INTEGER_PROPERTY(LogMaxLengthMB)
+
+  Q_PROPERTY(int logMaxSaved READ get_LogMaxSaved WRITE set_LogMaxSaved)
+  QCEP_INTEGER_PROPERTY(LogMaxSaved)
+
   Q_PROPERTY(QString scanFileName     READ get_ScanFileName WRITE set_ScanFileName)
   QCEP_STRING_PROPERTY(ScanFileName)
 
@@ -223,6 +230,12 @@ public:  // Properties
 
   Q_PROPERTY(int     scanDataNegative      READ get_ScanDataNegative WRITE set_ScanDataNegative)
   QCEP_INTEGER_PROPERTY(ScanDataNegative)
+
+  Q_PROPERTY(int  scanMaxLengthMB READ get_ScanMaxLengthMB WRITE set_ScanMaxLengthMB)
+  QCEP_INTEGER_PROPERTY(ScanMaxLengthMB)
+
+  Q_PROPERTY(int scanMaxSaved READ get_ScanMaxSaved WRITE set_ScanMaxSaved)
+  QCEP_INTEGER_PROPERTY(ScanMaxSaved)
 
   Q_PROPERTY(int    defaultLayout   READ get_DefaultLayout WRITE set_DefaultLayout STORED false)
   QCEP_INTEGER_PROPERTY(DefaultLayout)

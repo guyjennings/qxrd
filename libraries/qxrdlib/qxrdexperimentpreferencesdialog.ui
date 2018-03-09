@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>747</width>
-    <height>767</height>
+    <width>792</width>
+    <height>471</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -126,35 +126,11 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tab_3">
       <attribute name="title">
-       <string>Saving</string>
+       <string>Expt and Logging</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_7">
-       <item row="7" column="1">
-        <widget class="QLineEdit" name="m_SaveDarkSubdir"/>
-       </item>
-       <item row="15" column="0">
-        <widget class="QCheckBox" name="m_SaveIntegratedInSubdir">
-         <property name="text">
-          <string>Save Integrated Data in Subdirectory?</string>
-         </property>
-        </widget>
-       </item>
-       <item row="25" column="0" colspan="2">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Width of file index field in saved file names</string>
-         </property>
-        </widget>
-       </item>
-       <item row="26" column="0" colspan="2">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Width of 'phase' field in saved file names</string>
-         </property>
-        </widget>
-       </item>
+      <layout class="QGridLayout" name="gridLayout">
        <item row="1" column="2">
         <widget class="QPushButton" name="m_CurrentLogFileBrowse">
          <property name="toolTip">
@@ -165,14 +141,121 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Data dir:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="m_DataDirectory">
+         <property name="toolTip">
+          <string>Directory where data files are saved 
+(relative to experiment dir)</string>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="m_ExperimentDirectory">
+         <property name="toolTip">
+          <string>Directory where experiment file is saved
+Change only by saving a new experiment</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>log file:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="m_CurrentLogFile">
+         <property name="toolTip">
+          <string>Log file path (relative to experiment dir)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Experiment dir:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="m_DataDirectoryBrowse">
+         <property name="toolTip">
+          <string>Select new data directory</string>
+         </property>
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="3">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>678</width>
+           <height>182</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Max log file length (MB):</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="m_LogFileMaxMB">
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Number of log file backups:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QSpinBox" name="m_LogFileBackups"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Image Saving</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="m_SaveDarkSubdir"/>
+       </item>
+       <item row="7" column="0">
         <widget class="QCheckBox" name="m_SaveSubtractedInSubdir">
          <property name="text">
           <string>Save Subtracted Data in Subdirectory?</string>
          </property>
         </widget>
        </item>
-       <item row="29" column="0" colspan="3">
+       <item row="19" column="0" colspan="3">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -185,31 +268,14 @@
          </property>
         </spacer>
        </item>
-       <item row="28" column="2">
-        <widget class="QSpinBox" name="m_DetectorNumberWidth">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>20</number>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
+       <item row="4" column="0">
         <widget class="QCheckBox" name="m_SaveDarkInSubdir">
          <property name="text">
           <string>Save Dark Data in Subdirectory?</string>
          </property>
         </widget>
        </item>
-       <item row="27" column="0" colspan="2">
-        <widget class="QLabel" name="label_12">
-         <property name="text">
-          <string>Width of 'overflow' field in saved file names</string>
-         </property>
-        </widget>
-       </item>
-       <item row="23" column="0">
+       <item row="13" column="0">
         <widget class="QCheckBox" name="m_SaveOverflowFiles">
          <property name="enabled">
           <bool>true</bool>
@@ -225,85 +291,90 @@
          </property>
         </widget>
        </item>
-       <item row="18" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>For Negative intensities in integrated data</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="2">
-        <widget class="QPushButton" name="m_IntegratedScansFileBrowse">
+       <item row="4" column="2">
+        <widget class="QPushButton" name="m_SaveDarkBrowse">
          <property name="text">
           <string>Browse...</string>
          </property>
         </widget>
        </item>
-       <item row="21" column="0" colspan="2">
-        <widget class="QCheckBox" name="m_AccumulateIntegrated2D">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
+       <item row="7" column="1">
+        <widget class="QLineEdit" name="m_SaveSubtractedSubdir"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="m_SaveRawInSubdir">
          <property name="text">
-          <string>Accumulate Integrated Data into 2-D Dataset?</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
+          <string>Save Raw Data in Subdirectory?</string>
          </property>
         </widget>
        </item>
-       <item row="22" column="0">
-        <widget class="QLabel" name="label_17">
+       <item row="14" column="0">
+        <widget class="QLabel" name="label_8">
          <property name="text">
-          <string>Data name for accumulated 2-D Dataset</string>
+          <string>Output file numbering format</string>
          </property>
         </widget>
        </item>
-       <item row="27" column="2">
-        <widget class="QSpinBox" name="m_FileOverflowWidth">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>20</number>
+       <item row="14" column="1" colspan="2">
+        <widget class="QComboBox" name="m_FileNameFormat">
+         <item>
+          <property name="text">
+           <string>Include scan number and detector number &lt;file&gt;-&lt;scan&gt;-&lt;det&gt;.tif</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Include detector number and scan number &lt;file&gt;-&lt;det&gt;-&lt;scan&gt;.tif</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="m_SaveRawSubdir"/>
+       </item>
+       <item row="7" column="2">
+        <widget class="QPushButton" name="m_SaveSubtractedBrowse">
+         <property name="text">
+          <string>Browse...</string>
          </property>
         </widget>
        </item>
-       <item row="28" column="0" colspan="2">
+       <item row="2" column="2">
+        <widget class="QPushButton" name="m_SaveRawBrowse">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Width of file index field in saved file names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Width of 'phase' field in saved file names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Width of 'overflow' field in saved file names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="0">
         <widget class="QLabel" name="label_13">
          <property name="text">
           <string>Width of 'detector number' field in saved file names</string>
          </property>
         </widget>
        </item>
-       <item row="12" column="0">
-        <widget class="QCheckBox" name="m_SaveIntegratedInLogFile">
-         <property name="text">
-          <string>Save Integrated Data in Scans File?</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QPushButton" name="m_DataDirectoryBrowse">
-         <property name="toolTip">
-          <string>Select new data directory</string>
-         </property>
-         <property name="text">
-          <string>Browse...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="22" column="1">
-        <widget class="QLineEdit" name="m_AccumulateIntegratedName"/>
-       </item>
-       <item row="15" column="2">
-        <widget class="QPushButton" name="m_SaveIntegratedBrowse">
-         <property name="text">
-          <string>Browse...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="25" column="2">
+       <item row="15" column="1">
         <widget class="QSpinBox" name="m_FileIndexWidth">
          <property name="minimum">
           <number>1</number>
@@ -313,7 +384,7 @@
          </property>
         </widget>
        </item>
-       <item row="26" column="2">
+       <item row="16" column="1">
         <widget class="QSpinBox" name="m_FilePhaseWidth">
          <property name="minimum">
           <number>1</number>
@@ -323,111 +394,40 @@
          </property>
         </widget>
        </item>
-       <item row="15" column="1">
-        <widget class="QLineEdit" name="m_SaveIntegratedSubdir"/>
-       </item>
-       <item row="7" column="2">
-        <widget class="QPushButton" name="m_SaveDarkBrowse">
-         <property name="text">
-          <string>Browse...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="1">
-        <widget class="QLineEdit" name="m_SaveSubtractedSubdir"/>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="m_DataDirectory">
-         <property name="toolTip">
-          <string>Directory where data files are saved 
-(relative to experiment dir)</string>
-         </property>
-         <property name="readOnly">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QCheckBox" name="m_SaveRawInSubdir">
-         <property name="text">
-          <string>Save Raw Data in Subdirectory?</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="m_CurrentLogFile">
-         <property name="toolTip">
-          <string>Log file path (relative to experiment dir)</string>
-         </property>
-        </widget>
-       </item>
        <item row="17" column="1">
-        <widget class="QLineEdit" name="m_ScanFileExtension"/>
-       </item>
-       <item row="12" column="1">
-        <widget class="QLineEdit" name="m_IntegratedScansFile">
-         <property name="toolTip">
-          <string>Integrated Scans File (relative to data directory)</string>
+        <widget class="QSpinBox" name="m_FileOverflowWidth">
+         <property name="minimum">
+          <number>1</number>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Experiment dir:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_10">
-         <property name="text">
-          <string>log file:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="m_ExperimentDirectory">
-         <property name="toolTip">
-          <string>Directory where experiment file is saved
-Change only by saving a new experiment</string>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="17" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>File extension for integrated data</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="m_SaveRawSubdir"/>
-       </item>
-       <item row="14" column="0">
-        <widget class="QCheckBox" name="m_SaveIntegratedInSeparateFiles">
-         <property name="text">
-          <string>Save Integrated Data in Individual Files?</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="2">
-        <widget class="QPushButton" name="m_SaveSubtractedBrowse">
-         <property name="text">
-          <string>Browse...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Data dir:</string>
+         <property name="maximum">
+          <number>20</number>
          </property>
         </widget>
        </item>
        <item row="18" column="1">
+        <widget class="QSpinBox" name="m_DetectorNumberWidth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_5">
+      <attribute name="title">
+       <string>Saving</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="6" column="1">
+        <widget class="QLineEdit" name="m_AccumulateIntegratedName"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="m_SaveIntegratedSubdir"/>
+       </item>
+       <item row="4" column="1">
         <widget class="QComboBox" name="m_ScanDataNegative">
          <item>
           <property name="text">
@@ -446,33 +446,121 @@ Change only by saving a new experiment</string>
          </item>
         </widget>
        </item>
-       <item row="5" column="2">
-        <widget class="QPushButton" name="m_SaveRawBrowse">
+       <item row="2" column="2">
+        <widget class="QPushButton" name="m_SaveIntegratedBrowse">
          <property name="text">
           <string>Browse...</string>
          </property>
         </widget>
        </item>
-       <item row="24" column="0">
-        <widget class="QLabel" name="label_8">
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="m_SaveIntegratedInSeparateFiles">
          <property name="text">
-          <string>Output file numbering format</string>
+          <string>Save Integrated Data in Individual Files?</string>
          </property>
         </widget>
        </item>
-       <item row="24" column="1" colspan="2">
-        <widget class="QComboBox" name="m_FileNameFormat">
-         <item>
-          <property name="text">
-           <string>Include scan number and detector number &lt;file&gt;-&lt;scan&gt;-&lt;det&gt;.tif</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Include detector number and scan number &lt;file&gt;-&lt;det&gt;-&lt;scan&gt;.tif</string>
-          </property>
-         </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="m_IntegratedScansFileBrowse">
+         <property name="text">
+          <string>Browse...</string>
+         </property>
         </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="m_ScanFileExtension"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>Max scan file length (MB):</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>For Negative intensities in integrated data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>File extension for integrated data</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="m_SaveIntegratedInLogFile">
+         <property name="text">
+          <string>Save Integrated Data in Scans File?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="4">
+        <spacer name="verticalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>628</width>
+           <height>75</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="m_SaveIntegratedInSubdir">
+         <property name="text">
+          <string>Save Integrated Data in Subdirectory?</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="4">
+        <widget class="QCheckBox" name="m_AccumulateIntegrated2D">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Accumulate Integrated Data into 2-D Dataset?</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="m_IntegratedScansFile">
+         <property name="toolTip">
+          <string>Integrated Scans File (relative to data directory)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_17">
+         <property name="text">
+          <string>Data name for accumulated 2-D Dataset</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>Number of backup scan files:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QSpinBox" name="m_ScanFileMaxMB">
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QSpinBox" name="m_ScanFileBackups"/>
        </item>
       </layout>
      </widget>

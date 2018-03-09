@@ -89,9 +89,14 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     expt -> prop_ExperimentDirectory() -> copyTo(m_ExperimentDirectory);
     expt -> prop_DataDirectory()       -> copyTo(m_DataDirectory);
     expt -> prop_LogFileName()         -> copyTo(m_CurrentLogFile);
+    expt -> prop_LogMaxLengthMB()      -> copyTo(m_LogFileMaxMB);
+    expt -> prop_LogMaxSaved()         -> copyTo(m_LogFileBackups);
+
     expt -> prop_ScanFileName()        -> copyTo(m_IntegratedScansFile);
     expt -> prop_ScanFileExtension()   -> copyTo(m_ScanFileExtension);
     expt -> prop_ScanDataNegative()    -> copyTo(m_ScanDataNegative);
+    expt -> prop_ScanMaxLengthMB()     -> copyTo(m_ScanFileMaxMB);
+    expt -> prop_ScanMaxSaved()        -> copyTo(m_ScanFileBackups);
 
     if (proc) {
       connect(m_SaveRawBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveRawBrowse);
@@ -300,9 +305,14 @@ void QxrdExperimentPreferencesDialog::accept()
 
     expt -> prop_DataDirectory()     -> copyFrom(m_DataDirectory);
     expt -> prop_LogFileName()       -> copyFrom(m_CurrentLogFile);
+    expt -> prop_LogMaxLengthMB()    -> copyFrom(m_LogFileMaxMB);
+    expt -> prop_LogMaxSaved()       -> copyFrom(m_LogFileBackups);
+
     expt -> prop_ScanFileName()      -> copyFrom(m_IntegratedScansFile);
     expt -> prop_ScanFileExtension() -> copyFrom(m_ScanFileExtension);
     expt -> prop_ScanDataNegative()  -> copyFrom(m_ScanDataNegative);
+    expt -> prop_ScanMaxLengthMB()   -> copyFrom(m_ScanFileMaxMB);
+    expt -> prop_ScanMaxSaved()      -> copyFrom(m_ScanFileBackups);
 
     if (acq) {
       acq -> prop_FileIndexWidth()      -> copyFrom(m_FileIndexWidth);

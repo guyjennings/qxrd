@@ -220,7 +220,11 @@ void QxrdAcquisitionWindow::browseLogFile()
   QDir pwd(m_ExperimentDirectory->text());
   QFileInfo initial(pwd, m_LogFileName->text());
 
-  QString file = QFileDialog::getSaveFileName(this, "Log File", initial.absoluteFilePath());
+  QString file = QFileDialog::getSaveFileName(this, "Log File",
+                                              initial.absoluteFilePath()/*,
+                                              QString(),
+                                              Q_NULLPTR,
+                                              QFileDialog::DontUseNativeDialog*/);
 
   if (file != "") {
     m_LogFileName->setText(pwd.relativeFilePath(file));
