@@ -82,44 +82,41 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     connect(m_ConfigureDetector,&QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::configureDetector);
     connect(m_DetectorsList,    &QTreeView::doubleClicked, this, &QxrdExperimentPreferencesDialog::detectorDoubleClicked);
 
-    m_ExperimentDirectory -> setText(expt->get_ExperimentDirectory());
-
     connect(m_CurrentLogFileBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::currentLogFileBrowse);
-    m_CurrentLogFile -> setText(expt->get_LogFileName());
-
     connect(m_DataDirectoryBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::dataDirectoryBrowse);
-    m_DataDirectory -> setText(expt->get_DataDirectory());
-
     connect(m_IntegratedScansFileBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::integratedScansFileBrowse);
-    m_IntegratedScansFile -> setText(expt->get_ScanFileName());
 
-    m_ScanFileExtension -> setText(expt->get_ScanFileExtension());
-
-    m_ScanDataNegative -> setCurrentIndex(expt->get_ScanDataNegative());
+    expt -> prop_ExperimentDirectory() -> copyTo(m_ExperimentDirectory);
+    expt -> prop_DataDirectory()       -> copyTo(m_DataDirectory);
+    expt -> prop_LogFileName()         -> copyTo(m_CurrentLogFile);
+    expt -> prop_ScanFileName()        -> copyTo(m_IntegratedScansFile);
+    expt -> prop_ScanFileExtension()   -> copyTo(m_ScanFileExtension);
+    expt -> prop_ScanDataNegative()    -> copyTo(m_ScanDataNegative);
 
     if (proc) {
       connect(m_SaveRawBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveRawBrowse);
-      m_SaveRawInSubdir  -> setChecked(proc->get_SaveRawInSubdirectory());
-      m_SaveRawSubdir    -> setText  (proc->get_SaveRawSubdirectory());
-
       connect(m_SaveDarkBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveDarkBrowse);
-      m_SaveDarkInSubdir  -> setChecked(proc->get_SaveDarkInSubdirectory());
-      m_SaveDarkSubdir    -> setText  (proc->get_SaveDarkSubdirectory());
-
       connect(m_SaveSubtractedBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveSubtractedBrowse);
-      m_SaveSubtractedInSubdir  -> setChecked(proc->get_SaveSubtractedInSubdirectory());
-      m_SaveSubtractedSubdir    -> setText  (proc->get_SaveSubtractedSubdirectory());
-
       connect(m_SaveIntegratedBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveIntegratedBrowse);
-      m_SaveIntegratedInLogFile  -> setChecked(proc->get_SaveIntegratedData());
-      m_SaveIntegratedInSeparateFiles  -> setChecked(proc->get_SaveIntegratedInSeparateFiles());
-      m_SaveIntegratedInSubdir  -> setChecked(proc->get_SaveIntegratedInSubdirectory());
-      m_SaveIntegratedSubdir    -> setText  (proc->get_SaveIntegratedSubdirectory());
 
-      m_AccumulateIntegrated2D -> setChecked(proc->get_AccumulateIntegrated2D());
-      m_AccumulateIntegratedName ->setText(proc->get_AccumulateIntegratedName());
+      proc -> prop_SaveRawInSubdirectory()         -> copyTo(m_SaveRawInSubdir);
+      proc -> prop_SaveRawSubdirectory()           -> copyTo(m_SaveRawSubdir);
 
-      m_SaveOverflowFiles -> setChecked(proc->get_SaveOverflowFiles());
+      proc -> prop_SaveDarkInSubdirectory()        -> copyTo(m_SaveDarkInSubdir);
+      proc -> prop_SaveDarkSubdirectory()          -> copyTo(m_SaveDarkSubdir);
+
+      proc -> prop_SaveSubtractedInSubdirectory()  -> copyTo(m_SaveSubtractedInSubdir);
+      proc -> prop_SaveSubtractedSubdirectory()    -> copyTo(m_SaveSubtractedSubdir);
+
+      proc -> prop_SaveIntegratedData()            -> copyTo(m_SaveIntegratedInLogFile);
+      proc -> prop_SaveIntegratedInSeparateFiles() -> copyTo(m_SaveIntegratedInSeparateFiles);
+      proc -> prop_SaveIntegratedInSubdirectory()  -> copyTo(m_SaveIntegratedInSubdir);
+      proc -> prop_SaveIntegratedSubdirectory()    -> copyTo(m_SaveIntegratedSubdir);
+
+      proc -> prop_AccumulateIntegrated2D()        -> copyTo(m_AccumulateIntegrated2D);
+      proc -> prop_AccumulateIntegratedName()      -> copyTo(m_AccumulateIntegratedName);
+
+      proc -> prop_SaveOverflowFiles()             -> copyTo(m_SaveOverflowFiles);
     }
 
     if (srv) {
@@ -136,14 +133,20 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     }
 
     if (acq) {
-      m_FileIndexWidth -> setValue(acq->get_FileIndexWidth());
-      m_FilePhaseWidth -> setValue(acq->get_FilePhaseWidth());
-      m_FileOverflowWidth -> setValue(acq->get_FileOverflowWidth());
-      m_DetectorNumberWidth -> setValue(acq->get_DetectorNumberWidth());
-    }
+      m_FileNameFormat -> clear();
+      m_FileNameFormat -> addItem("<file>-<det>-<phase>-<index>.tif");
+      m_FileNameFormat -> addItem("<file>-<det>-<index>-<phase>.tif");
+      m_FileNameFormat -> addItem("<file>-<phase>-<det>-<index>.tif");
+      m_FileNameFormat -> addItem("<file>-<phase>-<index>-<det>.tif");
+      m_FileNameFormat -> addItem("<file>-<index>-<phase>-<det>.tif");
+      m_FileNameFormat -> addItem("<file>-<index>-<det>-<phase>.tif");
 
-    m_FontSize -> setValue(expt->get_FontSize());
-    m_Spacing  -> setValue(expt->get_Spacing());
+      acq -> prop_FileIndexWidth()      -> copyTo(m_FileIndexWidth);
+      acq -> prop_FilePhaseWidth()      -> copyTo(m_FilePhaseWidth);
+      acq -> prop_FileOverflowWidth()   -> copyTo(m_FileOverflowWidth);
+      acq -> prop_DetectorNumberWidth() -> copyTo(m_DetectorNumberWidth);
+      acq -> prop_FileNameFormat()      -> copyTo(m_FileNameFormat);
+    }
   }
 }
 
@@ -275,37 +278,38 @@ void QxrdExperimentPreferencesDialog::accept()
     }
 
     if (proc) {
-      proc -> set_SaveRawInSubdirectory(m_SaveRawInSubdir -> isChecked());
-      proc -> set_SaveRawSubdirectory  (m_SaveRawSubdir   -> text());
+      proc -> prop_SaveRawInSubdirectory()         -> copyFrom(m_SaveRawInSubdir);
+      proc -> prop_SaveRawSubdirectory()           -> copyFrom(m_SaveRawSubdir);
 
-      proc -> set_SaveDarkInSubdirectory(m_SaveDarkInSubdir  -> isChecked());
-      proc -> set_SaveDarkSubdirectory  (m_SaveDarkSubdir    -> text());
+      proc -> prop_SaveDarkInSubdirectory()        -> copyFrom(m_SaveDarkInSubdir);
+      proc -> prop_SaveDarkSubdirectory()          -> copyFrom(m_SaveDarkSubdir);
 
-      proc -> set_SaveSubtractedInSubdirectory(m_SaveSubtractedInSubdir -> isChecked());
-      proc -> set_SaveSubtractedSubdirectory  (m_SaveSubtractedSubdir   -> text());
+      proc -> prop_SaveSubtractedInSubdirectory()  -> copyFrom(m_SaveSubtractedInSubdir);
+      proc -> prop_SaveSubtractedSubdirectory()    -> copyFrom(m_SaveSubtractedSubdir);
 
-      proc -> set_SaveIntegratedData(m_SaveIntegratedInLogFile  -> isChecked());
-      proc -> set_SaveIntegratedInSeparateFiles(m_SaveIntegratedInSeparateFiles -> isChecked());
-      proc -> set_SaveIntegratedInSubdirectory (m_SaveIntegratedInSubdir  -> isChecked());
-      proc -> set_SaveIntegratedSubdirectory   (m_SaveIntegratedSubdir    -> text());
+      proc -> prop_SaveIntegratedData()            -> copyFrom(m_SaveIntegratedInLogFile);
+      proc -> prop_SaveIntegratedInSeparateFiles() -> copyFrom(m_SaveIntegratedInSeparateFiles);
+      proc -> prop_SaveIntegratedInSubdirectory()  -> copyFrom(m_SaveIntegratedInSubdir);
+      proc -> prop_SaveIntegratedSubdirectory()    -> copyFrom(m_SaveIntegratedSubdir);
 
-      proc -> set_AccumulateIntegrated2D(m_AccumulateIntegrated2D -> isChecked());
-      proc -> set_AccumulateIntegratedName(m_AccumulateIntegratedName -> text());
+      proc -> prop_AccumulateIntegrated2D()        -> copyFrom(m_AccumulateIntegrated2D);
+      proc -> prop_AccumulateIntegratedName()      -> copyFrom(m_AccumulateIntegratedName);
 
-      proc -> set_SaveOverflowFiles(m_SaveOverflowFiles -> isChecked());
+      proc -> prop_SaveOverflowFiles()             -> copyFrom(m_SaveOverflowFiles);
     }
 
-    expt -> set_DataDirectory(m_DataDirectory -> text());
-    expt -> set_LogFileName    (m_CurrentLogFile -> text());
-    expt -> set_ScanFileName    (m_IntegratedScansFile -> text());
-    expt -> set_ScanFileExtension(m_ScanFileExtension->text());
-    expt -> set_ScanDataNegative(m_ScanDataNegative->currentIndex());
+    expt -> prop_DataDirectory()     -> copyFrom(m_DataDirectory);
+    expt -> prop_LogFileName()       -> copyFrom(m_CurrentLogFile);
+    expt -> prop_ScanFileName()      -> copyFrom(m_IntegratedScansFile);
+    expt -> prop_ScanFileExtension() -> copyFrom(m_ScanFileExtension);
+    expt -> prop_ScanDataNegative()  -> copyFrom(m_ScanDataNegative);
 
     if (acq) {
-      acq  -> set_FileIndexWidth(m_FileIndexWidth -> value());
-      acq  -> set_FilePhaseWidth(m_FilePhaseWidth -> value());
-      acq  -> set_FileOverflowWidth(m_FileOverflowWidth -> value());
-      acq  -> set_DetectorNumberWidth(m_DetectorNumberWidth -> value());
+      acq -> prop_FileIndexWidth()      -> copyFrom(m_FileIndexWidth);
+      acq -> prop_FilePhaseWidth()      -> copyFrom(m_FilePhaseWidth);
+      acq -> prop_FileOverflowWidth()   -> copyFrom(m_FileOverflowWidth);
+      acq -> prop_DetectorNumberWidth() -> copyFrom(m_DetectorNumberWidth);
+      acq -> prop_FileNameFormat()      -> copyFrom(m_FileNameFormat);
 
       int nDets = m_DetectorsModel->rowCount(QModelIndex());
 
@@ -315,9 +319,6 @@ void QxrdExperimentPreferencesDialog::accept()
         acq->appendDetector(m_DetectorsModel->detector(i));
       }
     }
-
-    expt -> set_FontSize(m_FontSize -> value());
-    expt -> set_Spacing(m_Spacing -> value());
   }
 
   QDialog::accept();

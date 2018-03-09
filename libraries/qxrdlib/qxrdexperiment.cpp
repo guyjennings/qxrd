@@ -103,8 +103,6 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_CompletionPercentage(this, "completionPercentage", 0, "Percentage of Work Completed"),
   m_DefaultScript(this, "defaultScript", "", "Default script for experiment"),
   m_ExtraScriptFiles(this, "extraScriptFiles", QStringList(), "Additional script files for experiment"),
-  m_FontSize(this, "fontSize", -1, "Suggested font size"),
-  m_Spacing(this, "spacing", -1, "Suggested widget spacing"),
   m_IsReading(this, "isReading", 0, "Is being read?")
 {
 #ifndef QT_NO_DEBUG

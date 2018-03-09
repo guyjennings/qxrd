@@ -159,16 +159,16 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
   }
 
   if (expt) {
-    int fs = expt->get_FontSize();
-    int sp = expt->get_Spacing();
+//    int fs = expt->get_FontSize();
+//    int sp = expt->get_Spacing();
 
-    if (fs > 0) {
-      setFontSize(fs);
-    }
+//    if (fs > 0) {
+//      setFontSize(fs);
+//    }
 
-    if (sp >= 0) {
-      setSpacing(sp);
-    }
+//    if (sp >= 0) {
+//      setSpacing(sp);
+//    }
 
     expt  -> prop_ExperimentDirectory() -> linkTo(this -> m_ExperimentDirectory);
     expt  -> prop_LogFileName() -> linkTo(this -> m_LogFileName);
@@ -177,8 +177,8 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
 
     connect(m_LogFileName, &QLineEdit::editingFinished, expt.data(), &QxrdExperiment::openNewLogFile);
 
-    connect(expt->prop_FontSize(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setFontSize);
-    connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setSpacing);
+//    connect(expt->prop_FontSize(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setFontSize);
+//    connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setSpacing);
   }
 
   if (dt) {

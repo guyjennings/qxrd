@@ -242,12 +242,6 @@ public:  // Properties
   Q_PROPERTY(QStringList extraScriptFiles READ get_ExtraScriptFiles WRITE set_ExtraScriptFiles)
   QCEP_STRING_LIST_PROPERTY(ExtraScriptFiles)
 
-  Q_PROPERTY(int fontSize READ get_FontSize WRITE set_FontSize)
-  QCEP_INTEGER_PROPERTY(FontSize)
-
-  Q_PROPERTY(int spacing READ get_Spacing WRITE set_Spacing)
-  QCEP_INTEGER_PROPERTY(Spacing)
-
   Q_PROPERTY(int isReading READ get_IsReading WRITE set_IsReading STORED false)
   QCEP_INTEGER_PROPERTY(IsReading)
 };

@@ -70,6 +70,15 @@ public:
 
   virtual void unlock();
 
+  enum {
+    FmtDetPhsInd,
+    FmtDetIndPhs,
+    FmtPhsDetInd,
+    FmtPhsIndDet,
+    FmtIndPhsDet,
+    FmtIndDetPhs
+  };
+
 signals:
   void acquireStarted();
   void acquireComplete();
@@ -149,6 +158,9 @@ public:
 
   Q_PROPERTY(int detectorNumberWidth READ get_DetectorNumberWidth WRITE set_DetectorNumberWidth)
   QCEP_INTEGER_PROPERTY(DetectorNumberWidth)
+
+  Q_PROPERTY(int    fileNameFormat   READ get_FileNameFormat WRITE set_FileNameFormat)
+  QCEP_INTEGER_PROPERTY(FileNameFormat)
 
   Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase)
   QCEP_STRING_PROPERTY(FileBase)
