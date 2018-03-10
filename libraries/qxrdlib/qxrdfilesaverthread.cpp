@@ -8,8 +8,8 @@
 #include "qcepmutexlocker.h"
 #include "qcepthread.h"
 
-QxrdFileSaverThread::QxrdFileSaverThread(QcepObjectWPtr parent)
-  : QxrdThread(parent),
+QxrdFileSaverThread::QxrdFileSaverThread(QString name)
+  : QxrdThread(name),
     m_FileSaver()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -25,8 +25,6 @@ QxrdFileSaverThread::QxrdFileSaverThread(QcepObjectWPtr parent)
   qRegisterMetaType<QcepIntegratedDataPtr>("QcepIntegratedDataPtr");
   qRegisterMetaType<FILE*>("FILE*");
   qRegisterMetaType< QVector<double> >("QVector<double>");
-
-  setObjectName("fileSaver");
 }
 
 QxrdFileSaverThread::~QxrdFileSaverThread()

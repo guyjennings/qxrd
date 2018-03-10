@@ -16,6 +16,8 @@ public:
 
   virtual QString name() const = 0;
 
+  virtual void registerMetaTypes() = 0;
+
   virtual void setErrorOutput(QObject *errors) = 0;
 
   virtual void setAnalogWaveform(QString chan, double rate, double wfm[], int size) = 0;

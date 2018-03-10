@@ -39,9 +39,9 @@ void QxrdFileBrowserWidget::initialize(QxrdFileBrowserSettingsWPtr settings,
   m_Experiment          = experiment;
   m_Processor           = processor;
   m_Model = QxrdFileBrowserModelPtr(
-        new QxrdFileBrowserModel(experiment));
+        new QxrdFileBrowserModel("fileBrowserModel"));
 
-  m_Model -> initialize();
+  m_Model -> initialize(experiment);
   m_Model -> setRootPath(QDir::currentPath());
 
   m_FileBrowser -> setModel(m_Model.data());

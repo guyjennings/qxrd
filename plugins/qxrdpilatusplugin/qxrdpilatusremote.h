@@ -30,4 +30,6 @@ private:
   QByteArray m_TransferredFile;
 };
 
+Q_DECLARE_METATYPE(QxrdPilatusRemote*)
+
 #endif // QXRDPILATUSREMOTE_H

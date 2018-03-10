@@ -17,7 +17,7 @@
 #include "qxrddetectorcontrolwindowsettings-ptr.h"
 #include <QScriptEngine>
 #include <QSemaphore>
-#include "qcepimagequeue.h"
+#include "qcepimagequeue-ptr.h"
 #include "qxrdroi-ptr.h"
 #include "qxrddetectordriverthread-ptr.h"
 #include "qxrddetectordriver-ptr.h"

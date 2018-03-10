@@ -25,4 +25,6 @@ public:
   QCEP_DOUBLE_PROPERTY(ReadoutDelay)
 };
 
+Q_DECLARE_METATYPE(QxrdNIDAQSyncDetectorOutput*)
+
 #endif // QXRDNIDAQSYNCDETECTOROUTPUT_H

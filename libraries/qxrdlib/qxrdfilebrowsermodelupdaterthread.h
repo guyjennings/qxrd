@@ -14,7 +14,7 @@ private:
   typedef QxrdThread inherited;
 
 public:
-  explicit QxrdFileBrowserModelUpdaterThread(QcepObjectWPtr parent);
+  Q_INVOKABLE QxrdFileBrowserModelUpdaterThread(QString name);
   virtual ~QxrdFileBrowserModelUpdaterThread();
 
   void setModel(QxrdFileBrowserModelWPtr model);

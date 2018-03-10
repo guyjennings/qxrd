@@ -15,10 +15,10 @@
 #include "qxrdacquisitionextrainputs.h"
 #include <QVector>
 
-QxrdAcquisitionExecution::QxrdAcquisitionExecution(QxrdAcqCommonWPtr acq)
-  : inherited("acquisitionExecution"),
+QxrdAcquisitionExecution::QxrdAcquisitionExecution(QString name)
+  : inherited(name),
     m_Acquiring(this, "acquiring", 0, "Is acquiring?"),
-    m_Acquisition(acq)
+    m_Acquisition()
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing acquisition execution\n");
@@ -37,6 +37,8 @@ QxrdAcquisitionExecution::QxrdAcquisitionExecution(QxrdAcqCommonWPtr acq)
 void QxrdAcquisitionExecution::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
+
+  m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
 
   startIdling();
 }

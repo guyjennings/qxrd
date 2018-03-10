@@ -6,6 +6,8 @@
 #include "qcepmutexlocker.h"
 #include "qcepproperty.h"
 #include "qxrdroicache.h"
+#include "qcepimagedata.h"
+#include "qcepmaskdata.h"
 
 QxrdROI::QxrdROI(int roiOuterType, int roiInnerType)
   : inherited("coords"),

@@ -14,8 +14,10 @@ class QXRD_EXPORT QxrdServerThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdServerThread(QxrdExperimentWPtr doc, QString name);
+  Q_INVOKABLE QxrdServerThread(QString name);
   ~QxrdServerThread();
+
+  void initialize(QcepObjectWPtr);
 
   QxrdServerPtr server() const;
 
@@ -33,5 +35,7 @@ private:
   QString               m_Name;
   QxrdServerPtr         m_Server;
 };
+
+Q_DECLARE_METATYPE(QxrdServerThread*)
 
 #endif // QXRDSERVERTHREAD_H

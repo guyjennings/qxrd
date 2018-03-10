@@ -53,12 +53,12 @@ private:
   typedef QcepExperiment inherited;
 
 public:
-  QxrdExperiment(QString path,
-                 QString name,
-                 int mode);
+  Q_INVOKABLE QxrdExperiment(QString name);
 
   virtual ~QxrdExperiment();
-  void initialize(QcepObjectWPtr parent);
+  void initialize(QcepObjectWPtr parent,
+                  QString        path,
+                  int            mode);
 
   static QxrdExperimentWPtr findExperiment(QcepObjectWPtr p);
 

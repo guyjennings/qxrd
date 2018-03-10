@@ -8,17 +8,20 @@
 #include "qxrdexperiment.h"
 #include "qcepmutexlocker.h"
 
-QxrdServerThread::QxrdServerThread(QxrdExperimentWPtr doc, QString name) :
-  QxrdThread(doc),
-  m_Experiment(doc),
+QxrdServerThread::QxrdServerThread(QString name) :
+  QxrdThread(name),
+  m_Experiment(),
   m_Name(name),
   m_Server(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdServerThread::QxrdServerThread(%p)\n", this);
   }
+}
 
-  setObjectName("specServerThread");
+void QxrdServerThread::initialize(QcepObjectWPtr parent)
+{
+  m_Experiment = QxrdExperiment::findExperiment(parent);
 }
 
 QxrdServerThread::~QxrdServerThread()

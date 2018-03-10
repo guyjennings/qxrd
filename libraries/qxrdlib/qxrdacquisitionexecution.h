@@ -18,7 +18,7 @@ private:
   typedef QcepObject inherited;
 
 public:
-  explicit QxrdAcquisitionExecution(QxrdAcqCommonWPtr acq);
+  Q_INVOKABLE QxrdAcquisitionExecution(QString name);
   virtual ~QxrdAcquisitionExecution();
   void initialize(QcepObjectWPtr parent);
   void setAcquisition(QxrdAcqCommonWPtr acq);
@@ -51,5 +51,7 @@ private:
   QxrdAcqCommonWPtr m_Acquisition;
   QTimerPtr         m_IdleTimer;
 };
+
+Q_DECLARE_METATYPE(QxrdAcquisitionExecution*)
 
 #endif // QXRDACQUISITIONEXECUTION_H

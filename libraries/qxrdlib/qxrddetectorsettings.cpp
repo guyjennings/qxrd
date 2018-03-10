@@ -8,6 +8,7 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdexperiment.h"
 #include "qcepimagedata.h"
+#include "qcepimagequeue.h"
 #include "qxrdacqcommon.h"
 #include "qxrdroicalculator.h"
 #include "qxrdareadetectorsettings.h"
@@ -26,6 +27,8 @@
 #include "qxrdintegrationwindowsettings.h"
 #include "qxrdmaskingwindowsettings.h"
 #include "qxrddetectordriver.h"
+#include "qxrdapplication.h"
+#include "qxrdapplication-ptr.h"
 
 QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   inherited(name),
@@ -84,7 +87,7 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
 
   printf("QxrdDetectorSettings::initialize(%p)\n", this);
 
-  m_Application = QxrdApplication::findApplication(parent);
+  m_Application = QxrdAppCommon::findApplication(parent);
   m_Experiment  = QxrdExperiment::findExperiment(parent);
   m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
 
@@ -157,8 +160,7 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
 
   m_DetectorDriverThread =
       QxrdDetectorDriverThreadPtr(
-        new QxrdDetectorDriverThread(
-          qSharedPointerDynamicCast<QxrdDetectorSettings>(sharedFromThis())));
+        new QxrdDetectorDriverThread("detectorDriverThread"));
 
   m_DetectorDriverThread -> initialize(sharedFromThis());
 
@@ -658,6 +660,7 @@ QxrdDetectorDriverPtr QxrdDetectorSettings::createDetector(
 
 void QxrdDetectorSettings::registerMetaTypes()
 {
+  qRegisterMetaType<QxrdDetectorDriverThread*>("QxrdDetectorDriverThread*");
   qRegisterMetaType<QxrdSimulatedSettings*>("QxrdSimulatedSettings*");
   qRegisterMetaType<QxrdPerkinElmerSettings*>("QxrdPerkinElmerSettings*");
   qRegisterMetaType<QxrdPilatusSettings*>("QxrdPilatusSettings*");

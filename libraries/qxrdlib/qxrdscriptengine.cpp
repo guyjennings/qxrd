@@ -1,6 +1,7 @@
 #include "qxrddebug.h"
 #include "qxrdscriptengine.h"
 
+#include "qxrdapplication-ptr.h"
 #include "qxrdapplication.h"
 #include "qxrdwindow.h"
 #include "qxrdexperiment.h"
@@ -45,11 +46,11 @@
 #include "qxrdpolarnormalization.h"
 #include "qxrdnidaq.h"
 
-QxrdScriptEngine::QxrdScriptEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp)
-  : QcepScriptEngine(),
+QxrdScriptEngine::QxrdScriptEngine(QString name)
+  : inherited(name),
     m_Mutex(QMutex::Recursive),
-    m_Application(app),
-    m_Experiment(exp),
+    m_Application(),
+    m_Experiment(),
     m_Acquisition(),
     m_Processor(),
     m_Window(),
@@ -1988,8 +1989,11 @@ QCEP_DOC_FUNCTION(
     "<p>See also: <a href=\"http://www.w3schools.com/jsref/jsref_obj_number.asp\">JavaScript Number Object</a></p>"
     )
 
-void QxrdScriptEngine::initialize()
+void QxrdScriptEngine::initialize(QcepObjectWPtr parent)
 {
+  m_Application = QxrdAppCommon::findApplication(parent);
+  m_Experiment  = QxrdExperiment::findExperiment(parent);
+
   qScriptRegisterMetaType(this, QxrdScriptEngine::QPointFToScriptValue,
                           QxrdScriptEngine::QPointFFromScriptValue);
 

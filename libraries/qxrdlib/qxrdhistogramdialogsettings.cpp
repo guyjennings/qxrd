@@ -24,6 +24,12 @@ void QxrdHistogramDialogSettings::initialize(QcepObjectWPtr parent)
   }
 }
 
+void QxrdHistogramDialogSettings::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdHistogramDialogSettings*>("QxrdHistogramDialogSettings*");
+  qRegisterMetaType<QxrdHistogramPlotWidgetSettings*>("QxrdHistogramPlotWidgetSettings*");
+}
+
 void QxrdHistogramDialogSettings::readSettings(QSettings *settings)
 {
   QcepObject::readSettings(settings);

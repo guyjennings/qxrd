@@ -36,4 +36,6 @@ private:
   QTimer m_Timer;
 };
 
+Q_DECLARE_METATYPE(QxrdAreaDetectorDriver*)
+
 #endif // QXRDAREADETECTORDRIVER_H

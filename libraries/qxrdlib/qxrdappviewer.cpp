@@ -100,13 +100,16 @@ void QxrdAppViewer::editGlobalPreferences()
 void QxrdAppViewer::createNewExperiment()
 {
   QxrdExperimentThreadPtr expthr =
-      QxrdExperimentThread::newExperimentThread(
-        "",
-        qSharedPointerDynamicCast<QxrdAppCommon>(sharedFromThis()),
-        QxrdExperimentSettingsPtr(),
-        QxrdExperiment::ViewerOnly);
+      QxrdExperimentThreadPtr(
+        new QxrdExperimentThread("experimentThread"));
 
   if (expthr) {
+    expthr -> initialize(sharedFromThis(),
+                         "",
+                         QxrdExperimentSettingsPtr(),
+                         QxrdExperiment::ViewerOnly);
+    expthr -> start();
+
     openedExperiment(expthr);
 
     closeWelcomeWindow();

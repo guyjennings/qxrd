@@ -5,6 +5,7 @@
 #include "qcepallocator.h"
 #include "qxrdexperiment.h"
 #include "qxrdexperimentthread.h"
+#include "qxrdapplication-ptr.h"
 #include "qxrdapplication.h"
 #include "qxrdprocessor.h"
 #include "qxrdcenterfinder.h"
@@ -70,11 +71,10 @@
 #include "qxrdstartupwindowsettings.h"
 #include "qxrdwatcherwindowsettings-ptr.h"
 #include "qxrdwatcherwindowsettings.h"
+#include "qxrdhistogramdialogsettings.h"
 
-QxrdExperiment::QxrdExperiment(QString path,
-                               QString name,
-                               int mode) :
-  inherited(path, name),
+QxrdExperiment::QxrdExperiment(QString name) :
+  inherited(name),
   m_Application(),
   m_ServerThread(NULL),
   m_Server(),
@@ -90,7 +90,7 @@ QxrdExperiment::QxrdExperiment(QString path,
   m_ScanFile(NULL),
   m_ExperimentFileMutex(),
 
-  m_ExperimentMode(this, "experimentMode", mode, "Experiment Mode"),
+  m_ExperimentMode(this, "experimentMode", -1, "Experiment Mode"),
   m_QxrdVersion(this, "qxrdVersion", STR(QXRD_VERSION), "Qxrd Version"),
   m_DataDirectory(this, "dataDirectory", defaultDataDirectory(""), "Saved Data Directory"),
   m_LogFileName(this, "logFileName", defaultLogName(""), "Log File Name"),
@@ -116,44 +116,6 @@ QxrdExperiment::QxrdExperiment(QString path,
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperiment::QxrdExperiment(%p)\n", this);
   }
-
-  QxrdAppCommonPtr appl(m_Application);
-
-  if (appl) {
-    appl->prop_ExperimentCount()->incValue(1);
-  }
-
-  m_Processor =
-      QxrdProcessorPtr(
-        new QxrdProcessor("processor"));
-
-  if (get_ExperimentMode() == QxrdExperiment::AcquisitionAllowed) {
-    m_Acquisition =
-        QxrdAcqCommonPtr(
-          new QxrdAcquisition("acquisition"));
-  } else {
-    m_Acquisition =
-        QxrdAcqCommonPtr(
-          new QxrdAcqDummy("dummyAcq"));
-  }
-
-  m_CalibrantLibrary =
-      QxrdCalibrantLibraryPtr(
-        new QxrdCalibrantLibrary("calibrantLibrary"));
-
-  m_CalibrantLibraryModel =
-      QxrdCalibrantLibraryModelPtr(
-        new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
-
-  m_CalibrantDSpacings =
-      QxrdCalibrantDSpacingsPtr(
-        new QxrdCalibrantDSpacings());
-
-  m_CalibrantDSpacingsModel =
-      QxrdCalibrantDSpacingsModelPtr(
-        new QxrdCalibrantDSpacingsModel(m_CalibrantLibrary,
-                                        m_CalibrantDSpacings));
-
 }
 
 QxrdExperiment::~QxrdExperiment()
@@ -204,15 +166,56 @@ QxrdExperimentThreadWPtr QxrdExperiment::experimentThread() const
   return QxrdExperimentThreadPtr(t);
 }
 
-void QxrdExperiment::initialize(QcepObjectWPtr parent)
+void QxrdExperiment::initialize(QcepObjectWPtr parent,
+                                QString path,
+                                int mode)
 {
-  inherited::initialize(parent);
+  set_ExperimentMode(mode);
+
+  inherited::initialize(parent, path);
 
   m_Application =
       QxrdAppCommon::findApplication(parent);
 
   m_ExperimentThread =
       QxrdExperimentThread::findExperimentThread(parent);
+
+  QxrdAppCommonPtr appl(m_Application);
+
+  if (appl) {
+    appl->prop_ExperimentCount()->incValue(1);
+  }
+
+  m_Processor =
+      QxrdProcessorPtr(
+        new QxrdProcessor("processor"));
+
+  if (get_ExperimentMode() == QxrdExperiment::AcquisitionAllowed) {
+    m_Acquisition =
+        QxrdAcqCommonPtr(
+          new QxrdAcquisition("acquisition"));
+  } else {
+    m_Acquisition =
+        QxrdAcqCommonPtr(
+          new QxrdAcqDummy("dummyAcq"));
+  }
+
+  m_CalibrantLibrary =
+      QxrdCalibrantLibraryPtr(
+        new QxrdCalibrantLibrary("calibrantLibrary"));
+
+  m_CalibrantLibraryModel =
+      QxrdCalibrantLibraryModelPtr(
+        new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
+
+  m_CalibrantDSpacings =
+      QxrdCalibrantDSpacingsPtr(
+        new QxrdCalibrantDSpacings());
+
+  m_CalibrantDSpacingsModel =
+      QxrdCalibrantDSpacingsModelPtr(
+        new QxrdCalibrantDSpacingsModel(m_CalibrantLibrary,
+                                        m_CalibrantDSpacings));
 
   QxrdAppCommonPtr app(m_Application);
 
@@ -222,7 +225,7 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
     splashMessage("Initializing File Saver");
 
     m_FileSaverThread = QxrdFileSaverThreadPtr(
-          new QxrdFileSaverThread(sharedFromThis()));
+          new QxrdFileSaverThread("fileSaverThread"));
     m_FileSaverThread -> initialize(sharedFromThis());
     m_FileSaverThread -> start();
 
@@ -278,7 +281,7 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
     splashMessage("Starting SPEC Server");
 
     m_ServerThread = QxrdServerThreadPtr(
-          new QxrdServerThread(myself, "specServerThread"));
+          new QxrdServerThread("specServerThread"));
     m_ServerThread -> initialize(sharedFromThis());
     m_ServerThread -> start();
 
@@ -287,21 +290,19 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
     splashMessage("Starting Simple Socket Server");
 
     m_SimpleServerThread = QxrdSimpleServerThreadPtr(
-          new QxrdSimpleServerThread(myself, "simpleServerThread"));
+          new QxrdSimpleServerThread("simpleServerThread"));
     m_SimpleServerThread -> initialize(sharedFromThis());
     m_SimpleServerThread -> start();
 
     m_SimpleServer = m_SimpleServerThread -> server();
 
     m_ScriptEngine = QxrdScriptEnginePtr(
-          new QxrdScriptEngine(app, myself));
-
-    m_ScriptEngine -> initialize();
+          new QxrdScriptEngine("scriptEngine"));
+    m_ScriptEngine -> initialize(sharedFromThis());
 
     m_ScriptEngineJS = QxrdJSEnginePtr(
-          new QxrdJSEngine(app, myself));
-
-    m_ScriptEngineJS -> initialize();
+          new QxrdJSEngine("jsEngine"));
+    m_ScriptEngineJS -> initialize(sharedFromThis());
 
     QxrdScriptEnginePtr eng(m_ScriptEngine);
 
@@ -395,17 +396,22 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent)
 
 void QxrdExperiment::registerMetaTypes()
 {
+  inherited::registerMetaTypes();
+
   qRegisterMetaType< QList<QwtLegendData> >("QList<QwtLegendData>");
   qRegisterMetaType<QxrdExperiment*>("QxrdExperiment*");
-  qRegisterMetaType<QxrdAcquisition*>("QxrdAcquisition*");
-  qRegisterMetaType<QxrdAcquisitionExtraInputs*>("QxrdAcquisitionExtraInputs*");
-  qRegisterMetaType<QxrdAcquisitionExtraInputsChannel*>("QxrdAcquisitionExtraInputsChannel*");
+
+  QxrdAcquisition::registerMetaTypes();
+  QxrdAcqDummy::registerMetaTypes();
+
   qRegisterMetaType<QxrdCalibrantWPtr>("QxrdCalibrantWPtr");
   qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
   qRegisterMetaType<QxrdCalibrantDSpacings>("QxrdCalibrantDSpacings");
   qRegisterMetaType<QxrdCalibrantLibrary*>("QxrdCalibrantLibrary*");
   qRegisterMetaType<QxrdCenterFinder*>("QxrdCenterFinder*");
-  qRegisterMetaType<QxrdProcessor*>("QxrdProcessor*");
+
+  QxrdProcessor::registerMetaTypes();
+
   qRegisterMetaType<QxrdFileBrowserModelUpdater*>("QxrdFileBrowserModelUpdater*");
   qRegisterMetaType<QxrdFileSaver*>("QxrdFileSaver*");
   qRegisterMetaType<QxrdIntegrator*>("QxrdIntegrator*");
@@ -416,29 +422,21 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdPowderPointVector>("QxrdPowderPointVector");
   qRegisterMetaType<QxrdScriptEngine*>("QxrdScriptEngine*");
   qRegisterMetaType<QxrdServer*>("QxrdServer*");
+  qRegisterMetaType<QxrdServerThread*>("QxrdServerThread*");
   qRegisterMetaType<QxrdSimpleServer*>("QxrdSimpleServer*");
+  qRegisterMetaType<QxrdSimpleServerThread*>("QxrdSimpleServerThread*");
+
   qRegisterMetaType<QxrdSynchronizedAcquisition*>("QxrdSynchronizedAcquisition*");
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
-  qRegisterMetaType<QcepDataset*>("QcepDataset*");
-  qRegisterMetaType<QcepDataColumn*>("QcepDataColumn*");
-  qRegisterMetaType<QcepDataGroup*>("QcepDataGroup*");
-  qRegisterMetaType<QcepDataArray*>("QcepDataArray*");
-  qRegisterMetaType<QcepDoubleImageData*>("QcepDoubleImageData*");
-  qRegisterMetaType<QcepFloatImageData*>("QcepFloatImageData*");
-  qRegisterMetaType<QcepInt32ImageData*>("QcepInt32ImageData*");
-  qRegisterMetaType<QcepUInt32ImageData*>("QcepUInt32ImageData*");
-  qRegisterMetaType<QcepInt16ImageData*>("QcepInt16ImageData*");
-  qRegisterMetaType<QcepUInt16ImageData*>("QcepUInt16ImageData*");
-  qRegisterMetaType<QcepMaskData*>("QcepMaskData*");
-  qRegisterMetaType<QcepIntegratedData*>("QcepIntegratedData*");
-  qRegisterMetaType<QcepDataColumnScan*>("QcepDataColumnScan*");
-  qRegisterMetaType<QcepDataExportParameters*>("QcepDataExportParameters*");
-  qRegisterMetaType<QcepDataImportParameters*>("QcepDataImportParameters*");
   qRegisterMetaType<QxrdGenerateTestImage*>("QxrdGenerateTestImage*");
   qRegisterMetaType<QxrdMainWindowSettings*>("QxrdMainWindowSettings*");
   qRegisterMetaType<QxrdAcquisitionWindowSettings*>("QxrdAcquisitionWindowSettings*");
+  qRegisterMetaType<QxrdFileSaverThread*>("QxrdFileSaverThread*");
+
+  QxrdExtraIOWindowSettings::registerMetaTypes();
+  QxrdHistogramDialogSettings::registerMetaTypes();
+
   qRegisterMetaType<QxrdAnalysisWindowSettings*>("QxrdAnalysisWindowSettings*");
-  qRegisterMetaType<QxrdExtraIOWindowSettings*>("QxrdExtraIOWindowSettings*");
   qRegisterMetaType<QxrdInfoWindowSettings*>("QxrdInfoWindowSettings*");
   qRegisterMetaType<QxrdCalculatorWindowSettings*>("QxrdCalculatorWindowSettings*");
   qRegisterMetaType<QxrdCalibrantWindowSettings*>("QxrdCalibrantWindowSettings*");

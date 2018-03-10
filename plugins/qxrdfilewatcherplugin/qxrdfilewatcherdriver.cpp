@@ -7,6 +7,7 @@
 #include <QPainter>
 #include "qxrdfilewatchersettings.h"
 #include <QThread>
+#include "qcepimagedata.h"
 
 QxrdFileWatcherDriver::QxrdFileWatcherDriver(QString name, QxrdFileWatcherPluginWPtr plugin,
                                                          QxrdFileWatcherSettingsWPtr det,

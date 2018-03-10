@@ -65,8 +65,13 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdImagePlotSettings*>("QxrdImagePlotSettings*");
   qRegisterMetaType<QxrdIntegratorPlotSettings*>("QxrdIntegratorPlotSettings*");
   qRegisterMetaType<QxrdFileBrowserSettings*>("QxrdFileBrowserSettings*");
-  qRegisterMetaType<QxrdHistogramDialogSettings*>("QxrdHistogramDialogSettings*");
   qRegisterMetaType<QxrdSynchronizedAcquisitionPlotSettings*>("QxrdSynchronizedAcquisitionPlotSettings*");
+  qRegisterMetaType<QxrdImagePlotWidgetSettings*>("QxrdImagePlotWidgetSettings*");
+  qRegisterMetaType<QxrdCenteringPlotWidgetSettings*>("QxrdCenteringPlotWidgetSettings*");
+  qRegisterMetaType<QxrdIntegratedPlotWidgetSettings*>("QxrdIntegratedPlotWidgetSettings*");
+  qRegisterMetaType<QxrdDistortionPlotWidgetSettings*>("QxrdDistortionPlotWidgetSettings*");
+
+  QxrdHistogramDialogSettings::registerMetaTypes();
 }
 
 void QxrdWindowSettings::readSettings(QSettings *settings)

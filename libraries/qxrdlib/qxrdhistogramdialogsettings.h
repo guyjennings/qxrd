@@ -20,6 +20,8 @@ public:
   static QxrdHistogramDialogSettingsPtr newHistogramDialogSettings();
   void initialize(QcepObjectWPtr parent);
 
+  static void registerMetaTypes();
+
 public:
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);

@@ -347,6 +347,12 @@ void QxrdApplication::loadPlugins()
           QxrdNIDAQ          *nidaqPlugin = qobject_cast<QxrdNIDAQ*>(plugin);
           QcepObject         *qcepObject  = qobject_cast<QcepObject*>(plugin);
 
+          if (detPlugin) {
+            detPlugin -> registerMetaTypes();
+          } else if (nidaqPlugin) {
+            nidaqPlugin -> registerMetaTypes();
+          }
+
           if (className == "QxrdAreaDetectorPlugin") {
             if (m_AreaDetectorPlugin) {
               splashMessage("Area detector plugin already loaded");
@@ -737,13 +743,13 @@ void QxrdApplication::createNewExperiment()
   splashMessage("===== Opening new experiment");
 
   QxrdExperimentThreadPtr expthr =
-      QxrdExperimentThread::newExperimentThread(
-        "",
-        qSharedPointerDynamicCast<QxrdAppCommon>(sharedFromThis()),
-        QxrdExperimentSettingsPtr(),
-        QxrdExperiment::AcquisitionAllowed);
+      QxrdExperimentThreadPtr(
+        new QxrdExperimentThread("experimentThread"));
 
   if (expthr) {
+    expthr -> initialize(sharedFromThis(), "", QxrdExperimentSettingsPtr(), QxrdExperiment::AcquisitionAllowed);
+    expthr -> start();
+
     openedExperiment(expthr);
 
     closeWelcomeWindow();
@@ -768,15 +774,17 @@ void QxrdApplication::openExperiment(QString path)
     QxrdExperimentSettingsPtr settings(new QxrdExperimentSettings(path));
 
     QxrdExperimentThreadPtr expthr =
-        QxrdExperimentThread::newExperimentThread(
-          path,
-          qSharedPointerDynamicCast<QxrdAppCommon>(sharedFromThis()),
-          settings,
-          QxrdExperiment::AcquisitionAllowed);
+        QxrdExperimentThreadPtr(
+          new QxrdExperimentThread("experimentThread"));
 
     splashMessage(tr("===== Opening Experiment %1").arg(path));
 
-    openedExperiment(expthr);
+    if (expthr) {
+      expthr -> initialize(sharedFromThis(), path, settings, QxrdExperiment::AcquisitionAllowed);
+      expthr -> start();
+
+      openedExperiment(expthr);
+    }
   }
 }
 

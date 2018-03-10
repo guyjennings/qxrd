@@ -4,34 +4,42 @@
 #include "qxrdexperimentsettings.h"
 #include "qxrdappcommon.h"
 
-QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentThread(QString path,
-                                                                  QcepObjectWPtr parent,
-                                                                  QxrdExperimentSettingsPtr set,
-                                                                  int mode)
-{
-  QxrdExperimentThreadPtr expth(
-        new QxrdExperimentThread(path, set, mode));
+//QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentThread(QString path,
+//                                                                  QcepObjectWPtr parent,
+//                                                                  QxrdExperimentSettingsPtr set,
+//                                                                  int mode)
+//{
+//  QxrdExperimentThreadPtr expth(
+//        new QxrdExperimentThread(path, set, mode));
 
-  expth -> initialize(parent);
+//  expth -> initialize(parent);
 
-  expth -> start();
+//  expth -> start();
 
-  return expth;
-}
+//  return expth;
+//}
 
-QxrdExperimentThread::QxrdExperimentThread(QString path,
-                                           QxrdExperimentSettingsPtr set,
-                                           int mode) :
-  QxrdThread(QcepObjectWPtr()),
-  m_Path(path),
-  m_Settings(set),
-  m_ExperimentMode(mode)
+QxrdExperimentThread::QxrdExperimentThread(QString name) :
+  QxrdThread(name),
+  m_Path(),
+  m_Settings(),
+  m_ExperimentMode()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperimentThread::QxrdExperimentThread(%p)\n", this);
   }
+}
 
-  setObjectName("experimentThread");
+void QxrdExperimentThread::initialize(QcepObjectWPtr parent,
+                                      QString path,
+                                      QxrdExperimentSettingsPtr set,
+                                      int mode)
+{
+  inherited::initialize(parent);
+
+  m_Path            = path;
+  m_Settings        = set;
+  m_ExperimentMode  = mode;
 }
 
 QxrdExperimentThread::~QxrdExperimentThread()
@@ -51,13 +59,19 @@ void QxrdExperimentThread::run()
 
   QxrdExperimentPtr expt =
       QxrdExperimentPtr(
-        new QxrdExperiment(m_Path, "experiment", m_ExperimentMode));
+        new QxrdExperiment("experiment"));
 
-  expt -> initialize(sharedFromThis());
+  expt -> initialize(sharedFromThis(),
+                     m_Path,
+                     m_ExperimentMode);
 
   m_Experiment = expt;
 
+  printMessage("Start reading experiment settings");
+
   expt -> readSettings(m_Settings.data());
+
+  printMessage("Finished reading experiment settings");
 
   int rc = exec();
 

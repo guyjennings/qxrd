@@ -9,6 +9,7 @@
 #include "qxrdpilatusremote.h"
 #include "qxrdprocessor.h"
 #include <QThread>
+#include "qcepimagedata.h"
 
 QxrdPilatusDriver::QxrdPilatusDriver(QString name,
                                      QxrdPilatusPluginWPtr plugin,

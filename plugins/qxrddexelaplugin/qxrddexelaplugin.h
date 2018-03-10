@@ -18,6 +18,8 @@ private:
 public:
   QxrdDexelaPlugin();
 
+  void registerMetaTypes();
+
   void initialize(QcepObjectWPtr parent);
   QString name() const;
 
@@ -33,5 +35,7 @@ private:
   BusScanner *m_BusScanner;
   int         m_NDevs;
 };
+
+Q_DECLARE_METATYPE(QxrdDexelaPlugin*)
 
 #endif // QXRDDEXELAPLUGIN_H

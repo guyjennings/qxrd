@@ -18,6 +18,8 @@ private:
 public:
     QxrdFileWatcherPlugin();
 
+    void registerMetaTypes();
+
     void initialize(QcepObjectWPtr parent);
     QString name() const;
 
@@ -26,5 +28,7 @@ public:
                                          QxrdExperimentWPtr expt,
                                          QxrdAcqCommonWPtr acq);
 };
+
+Q_DECLARE_METATYPE(QxrdFileWatcherPlugin*)
 
 #endif // QXRDSIMULATEDDETECTORPLUGIN_H

@@ -28,6 +28,8 @@ public:
   virtual ~QxrdNIDAQPlugin();
   virtual void setErrorOutput(QObject *errors);
 
+  void registerMetaTypes();
+
   void initialize(QcepObjectWPtr parent);
   QString name() const;
 
@@ -144,5 +146,7 @@ private:
   QVector<QxrdNIDAQSyncWaveformOutputPtr>  m_SyncWaveforms;
   QVector<QxrdNIDAQSyncAnalogInputPtr>     m_SyncInputs;
 };
+
+Q_DECLARE_METATYPE(QxrdNIDAQPlugin*)
 
 #endif // QXRDNIDAQPLUGIN_H

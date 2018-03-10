@@ -35,4 +35,6 @@ private:
   QTimer m_Timer;
 };
 
+Q_DECLARE_METATYPE(QxrdFileWatcherDriver*)
+
 #endif // QXRDFILEWATCHERDRIVER_H

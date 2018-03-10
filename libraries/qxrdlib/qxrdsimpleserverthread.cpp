@@ -5,17 +5,22 @@
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
 
-QxrdSimpleServerThread::QxrdSimpleServerThread(QxrdExperimentWPtr doc, QString name) :
-  QxrdThread(doc),
-  m_Experiment(doc),
+QxrdSimpleServerThread::QxrdSimpleServerThread(QString name) :
+  inherited(name),
+  m_Experiment(),
   m_Name(name),
   m_Server(NULL)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdSimpleServerThread::QxrdSimpleServerThread(%p)\n", this);
   }
+}
 
-  setObjectName("simpleServerThread");
+void QxrdSimpleServerThread::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_Experiment = QxrdExperiment::findExperiment(parent);
 }
 
 QxrdSimpleServerThread::~QxrdSimpleServerThread()

@@ -7,6 +7,12 @@ QxrdAreaDetectorPlugin::QxrdAreaDetectorPlugin()
 {
 }
 
+void QxrdAreaDetectorPlugin::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdAreaDetectorPlugin*>("QxrdAreaDetectorPlugin*");
+  qRegisterMetaType<QxrdAreaDetectorDriver*>("QxrdAreaDetectorDriver*");
+}
+
 void QxrdAreaDetectorPlugin::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);

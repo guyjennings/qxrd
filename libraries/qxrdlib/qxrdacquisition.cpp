@@ -16,6 +16,7 @@
 #include "qxrdacquisitionscalermodel.h"
 #include "qxrdappcommon.h"
 #include "qxrdacquisitionexecutionthread.h"
+#include "qxrdacquisitionexecution.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
 #include "qxrdexperiment.h"
@@ -70,7 +71,7 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
 
   m_ExecutionThread =
       QxrdAcquisitionExecutionThreadPtr(
-        new QxrdAcquisitionExecutionThread(acq));
+        new QxrdAcquisitionExecutionThread("acquisitionExecutionThread"));
 
   m_ExecutionThread -> initialize(sharedFromThis());
 
@@ -98,6 +99,15 @@ QxrdAcquisition::~QxrdAcquisition()
       d->stopDetector();
     }
   }
+}
+
+void QxrdAcquisition::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdAcquisition*>("QxrdAcquisition*");
+  qRegisterMetaType<QxrdAcquisitionExtraInputs*>("QxrdAcquisitionExtraInputs*");
+  qRegisterMetaType<QxrdAcquisitionExtraInputsChannel*>("QxrdAcquisitionExtraInputsChannel*");
+  qRegisterMetaType<QxrdAcquisitionExecutionThread*>("QxrdAcquisitionExecutionThread*");
+  qRegisterMetaType<QxrdAcquisitionExecution*>("QxrdAcquisitionExecution*");
 }
 
 void QxrdAcquisition::acquire()

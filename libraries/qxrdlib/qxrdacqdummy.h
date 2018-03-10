@@ -21,7 +21,7 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
-  static QxrdAcqDummyPtr newAcquisition();
+  static void registerMetaTypes();
 
   int detectorCount() const;
   QxrdDetectorSettingsPtr detector(int i) const;

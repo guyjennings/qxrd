@@ -36,4 +36,6 @@ private:
   QTimer                    m_Timer;
 };
 
+Q_DECLARE_METATYPE(QxrdSimulatedDriver*)
+
 #endif // QXRDSIMULATEDDRIVER_H

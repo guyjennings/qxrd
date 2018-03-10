@@ -23,11 +23,13 @@ class QXRD_EXPORT QxrdScriptEngine : public QcepScriptEngine
 {
   Q_OBJECT
 
+private:
+  typedef QcepScriptEngine inherited;
+
 public:
-  Q_INVOKABLE QxrdScriptEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp);
+  Q_INVOKABLE QxrdScriptEngine(QString name);
   virtual ~QxrdScriptEngine();
-  //TODO: change to QcepObjectWPtr
-  void initialize();
+  void initialize(QcepObjectWPtr parent);
 
   void lock();
   void unlock();

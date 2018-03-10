@@ -29,4 +29,6 @@ private:
   QxrdPolygonalMaskPicker   *m_PolygonPicker;
 };
 
+Q_DECLARE_METATYPE(QxrdMaskCommandButton*)
+
 #endif // QXRDMASKCOMMANDBUTTON_H

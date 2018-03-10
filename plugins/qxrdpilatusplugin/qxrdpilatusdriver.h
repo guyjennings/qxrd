@@ -74,4 +74,6 @@ private:
   QxrdPilatusRemotePtr m_Remote;
 };
 
+Q_DECLARE_METATYPE(QxrdPilatusDriver*)
+
 #endif // QXRDPILATUSDRIVER_H

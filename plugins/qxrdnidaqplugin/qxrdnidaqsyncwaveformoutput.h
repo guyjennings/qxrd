@@ -25,4 +25,6 @@ public:
   QCEP_DOUBLE_PROPERTY(WaveformEndV)
 };
 
+Q_DECLARE_METATYPE(QxrdNIDAQSyncWaveformOutput*)
+
 #endif // QXRDNIDAQSYNCWAVEFORMOUTPUT_H

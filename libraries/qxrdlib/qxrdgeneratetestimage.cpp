@@ -6,6 +6,7 @@
 #include "qxrdprocessor.h"
 #include "qxrddetectorgeometry.h"
 #include "qcepallocator.h"
+#include "qcepimagedata.h"
 
 QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
   inherited(name),

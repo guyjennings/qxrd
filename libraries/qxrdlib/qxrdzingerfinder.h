@@ -41,4 +41,6 @@ public:
   QCEP_DOUBLE_PROPERTY(ZingerThreshold)
 };
 
+Q_DECLARE_METATYPE(QxrdZingerFinder*)
+
 #endif // QXRDZINGERFINDER_H

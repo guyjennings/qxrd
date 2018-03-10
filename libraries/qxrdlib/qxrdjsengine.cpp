@@ -22,10 +22,12 @@
 #include "qxrdpolartransform.h"
 #include "qxrdpolarnormalization.h"
 #include "qxrdnidaq.h"
+#include "qxrdapplication-ptr.h"
+#include "qxrdapplication.h"
 
-QxrdJSEngine::QxrdJSEngine(QxrdAppCommonWPtr app, QxrdExperimentWPtr exp) :
-  m_Application(app),
-  m_Experiment(exp)
+QxrdJSEngine::QxrdJSEngine(QString name) :
+  m_Application(),
+  m_Experiment()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdJSEngine::QxrdJSEngine(%p)\n", this);
@@ -43,8 +45,10 @@ QxrdJSEngine::~QxrdJSEngine()
 //  }
 }
 
-void QxrdJSEngine::initialize()
+void QxrdJSEngine::initialize(QcepObjectWPtr parent)
 {
+  m_Application = QxrdAppCommon::findApplication(parent);
+  m_Experiment  = QxrdExperiment::findExperiment(parent);
 
   installExtensions(QJSEngine::AllExtensions);
 

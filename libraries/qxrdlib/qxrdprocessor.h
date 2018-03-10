@@ -3,8 +3,9 @@
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
+#include "qcepdataobject-ptr.h"
 #include "qcepimagedata-ptr.h"
-#include "qcepimagequeue.h"
+#include "qcepimagequeue-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qxrdprocessorstep-ptr.h"
 #include "qxrdprocessor-ptr.h"
@@ -42,6 +43,7 @@ public:
   Q_INVOKABLE QxrdProcessor(QString name);
   virtual ~QxrdProcessor();
   void initialize(QcepObjectWPtr parent);
+  static void registerMetaTypes();
 
   static QxrdProcessorWPtr findProcessor(QcepObjectWPtr p);
 
@@ -554,8 +556,8 @@ private:
 
   mutable QMutex         m_Mutex;
   QWaitCondition         m_ProcessWaiting;
-  QcepInt16ImageQueuePtr m_AcquiredInt16Images;
-  QcepInt32ImageQueuePtr m_AcquiredInt32Images;
+  QcepUInt16ImageQueuePtr m_AcquiredUInt16Images;
+  QcepUInt32ImageQueuePtr m_AcquiredUInt32Images;
   QAtomicInt             m_AcquiredCount;
 
   QxrdDoubleSerializerPtr     m_CorrectedImages;

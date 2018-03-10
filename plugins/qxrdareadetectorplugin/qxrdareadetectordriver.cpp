@@ -7,6 +7,7 @@
 #include <QPainter>
 #include "qxrdareadetectorsettings.h"
 #include <QThread>
+#include "qcepimagedata.h"
 
 QxrdAreaDetectorDriver::QxrdAreaDetectorDriver(QString name,
                                                QxrdAreaDetectorPluginWPtr plugin,

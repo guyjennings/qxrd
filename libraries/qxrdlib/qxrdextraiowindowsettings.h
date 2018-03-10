@@ -16,6 +16,8 @@ public:
   QxrdExtraIOWindowSettings(QString name, QString desc);
   void initialize(QcepObjectWPtr parent);
 
+  static void registerMetaTypes();
+
   QcepMainWindowPtr newWindow();
 
   void writeSettings(QSettings *set);

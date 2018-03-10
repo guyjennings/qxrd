@@ -18,6 +18,9 @@ public:
   QxrdPerkinElmerPlugin();
 
   void initialize(QcepObjectWPtr parent);
+
+  void registerMetaTypes();
+
   QString name() const;
 
   QxrdDetectorDriverPtr createDetector(QString name,
@@ -25,5 +28,7 @@ public:
                                        QxrdExperimentWPtr expt,
                                        QxrdAcqCommonWPtr acq);
 };
+
+Q_DECLARE_METATYPE(QxrdPerkinElmerPlugin*)
 
 #endif // QXRDPERKINELMERPLUGIN_H

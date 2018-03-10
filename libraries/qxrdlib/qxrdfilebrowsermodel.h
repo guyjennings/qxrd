@@ -20,10 +20,9 @@ class QXRD_EXPORT QxrdFileBrowserModel : public QAbstractTableModel, public QEna
   Q_OBJECT
 
 public:
-  explicit QxrdFileBrowserModel(QcepObjectWPtr parent);
+  explicit QxrdFileBrowserModel(QString name);
   ~QxrdFileBrowserModel();
-  //TODO: change to QcepObjectWPtr...
-  void initialize();
+  void initialize(QcepObjectWPtr parent);
 
   typedef QAbstractTableModel inherited;
 

@@ -25,6 +25,8 @@
 #include "qxrdpolarnormalizationdialog.h"
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdintegratorplotsettings.h"
+#include "qxrdapplication-ptr.h"
+#include "qxrdapplication.h"
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>

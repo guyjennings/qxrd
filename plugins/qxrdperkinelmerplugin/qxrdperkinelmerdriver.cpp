@@ -8,6 +8,7 @@
 #include "qcepmutexlocker.h"
 #include "qxrdsynchronizedacquisition.h"
 #include <QThread>
+#include "qcepimagedata.h"
 
 #ifdef WIN64
 #if WIN64

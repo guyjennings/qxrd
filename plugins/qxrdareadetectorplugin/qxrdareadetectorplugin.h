@@ -16,6 +16,8 @@ private:
 public:
     QxrdAreaDetectorPlugin();
 
+    void registerMetaTypes();
+
     void initialize(QcepObjectWPtr parent);
     QString name() const;
 
@@ -24,5 +26,7 @@ public:
                                          QxrdExperimentWPtr expt,
                                          QxrdAcqCommonWPtr acq);
 };
+
+Q_DECLARE_METATYPE(QxrdAreaDetectorPlugin*)
 
 #endif // QXRDAREADETECTORPLUGIN_H

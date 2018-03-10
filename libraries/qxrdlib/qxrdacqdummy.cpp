@@ -16,15 +16,9 @@ void QxrdAcqDummy::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 }
 
-QxrdAcqDummyPtr QxrdAcqDummy::newAcquisition()
+void QxrdAcqDummy::registerMetaTypes()
 {
-  QxrdAcqDummyPtr acq(new QxrdAcqDummy("acquisition"));
-
-  if (qcepDebug(DEBUG_APP)) {
-    acq->printMessage("QxrdAcqDummy::newAcquisition");
-  }
-
-  return acq;
+  qRegisterMetaType<QxrdAcqDummy*>("QxrdAcqDummy*");
 }
 
 int QxrdAcqDummy::detectorCount() const

@@ -86,4 +86,6 @@ private:
   QxrdPerkinElmerSettingsWPtr m_PerkinElmer;
 };
 
+Q_DECLARE_METATYPE(QxrdPerkinElmerDriver*)
+
 #endif // QXRDPERKINELMERDRIVER_H

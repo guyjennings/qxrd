@@ -10,10 +10,15 @@
 class QXRD_EXPORT QxrdSimpleServerThread : public QxrdThread
 {
   Q_OBJECT
+
+private:
+  typedef QxrdThread inherited;
+
 public:
-  QxrdSimpleServerThread(QxrdExperimentWPtr doc, QString name);
+  Q_INVOKABLE QxrdSimpleServerThread(QString name);
   ~QxrdSimpleServerThread();
 
+  void initialize(QcepObjectWPtr parent);
   void shutdown();
 
   QxrdSimpleServerPtr server() const;
@@ -26,5 +31,7 @@ private:
   QString               m_Name;
   QxrdSimpleServerPtr   m_Server;
 };
+
+Q_DECLARE_METATYPE(QxrdSimpleServerThread*)
 
 #endif // QXRDSIMPLESERVERTHREAD_H

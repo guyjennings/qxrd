@@ -18,6 +18,8 @@ private:
 public:
   QxrdDetectorPlugin(QString name);
 
+  virtual void registerMetaTypes() = 0;
+
   virtual QxrdDetectorDriverPtr createDetector(QString name,
                                                QxrdDetectorSettingsWPtr det,
                                                QxrdExperimentWPtr expt,

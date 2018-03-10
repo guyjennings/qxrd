@@ -8,6 +8,7 @@
 #include "qxrdsimulatedsettings.h"
 #include "qxrdsimulatedplugin.h"
 #include <QThread>
+#include "qcepimagedata.h"
 
 QxrdSimulatedDriver::QxrdSimulatedDriver(QString name,
                                          QxrdSimulatedPluginWPtr plugin,

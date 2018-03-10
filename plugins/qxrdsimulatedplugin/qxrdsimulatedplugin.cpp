@@ -8,6 +8,12 @@ QxrdSimulatedPlugin::QxrdSimulatedPlugin()
 {
 }
 
+void QxrdSimulatedPlugin::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdSimulatedPlugin*>("QxrdSimulatedPlugin*");
+  qRegisterMetaType<QxrdSimulatedDriver*>("QxrdSimulatedDriver*");
+}
+
 void QxrdSimulatedPlugin::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);

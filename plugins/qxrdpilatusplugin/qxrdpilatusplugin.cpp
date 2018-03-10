@@ -1,10 +1,18 @@
 #include "qxrdpilatusplugin.h"
 #include "qxrdpilatusdriver.h"
 #include "qxrdpilatussettings.h"
+#include "qxrdpilatusremote.h"
 
 QxrdPilatusPlugin::QxrdPilatusPlugin()
   : inherited("pilatusPlugin")
 {
+}
+
+void QxrdPilatusPlugin::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdPilatusPlugin*>("QxrdPilatusPlugin*");
+  qRegisterMetaType<QxrdPilatusDriver*>("QxrdPilatusDriver*");
+  qRegisterMetaType<QxrdPilatusRemote*>("QxrdPilatusRemote*");
 }
 
 void QxrdPilatusPlugin::initialize(QcepObjectWPtr parent)

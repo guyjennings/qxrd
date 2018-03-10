@@ -7,11 +7,17 @@
 
 #include <stdio.h>
 
-QxrdDetectorDriverThread::QxrdDetectorDriverThread(QxrdDetectorSettingsWPtr det) :
-  QxrdThread(QcepObjectWPtr()),
-  m_Detector(det),
+QxrdDetectorDriverThread::QxrdDetectorDriverThread(QString name) :
+  QxrdThread(name),
+  m_Detector(),
   m_DetectorDriver()
 {
+}
+
+void QxrdDetectorDriverThread::initialize(QcepObjectWPtr parent)
+{
+  m_Detector = QxrdDetectorSettings::findDetectorSettings(parent);
+
   QxrdDetectorSettingsPtr d(m_Detector);
 
 #ifndef QT_NO_DEBUG
@@ -210,11 +216,4 @@ void QxrdDetectorDriverThread::shutdownAcquisition()
     )
 #endif
   }
-}
-
-QxrdDetectorDriverThreadPtr QxrdDetectorDriverThread::newDetectorDriverThread(QxrdDetectorSettingsWPtr det)
-{
-  QxrdDetectorDriverThreadPtr thrd(new QxrdDetectorDriverThread(det));
-
-  return thrd;
 }

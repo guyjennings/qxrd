@@ -19,6 +19,7 @@
 #include "qxrdroi-ptr.h"
 #include "qcepdatagroup-ptr.h"
 #include "qcepintegrateddata-ptr.h"
+#include "qcepobject-ptr.h"
 
 //TODO: replace QxrdScriptEngine with QxrdJSEngine
 class QXRD_EXPORT QxrdJSEngine : public QQmlEngine
@@ -26,11 +27,9 @@ class QXRD_EXPORT QxrdJSEngine : public QQmlEngine
   Q_OBJECT
 
 public:
-  QxrdJSEngine(QxrdAppCommonWPtr app,
-               QxrdExperimentWPtr exp);
+  Q_INVOKABLE QxrdJSEngine(QString name);
   virtual ~QxrdJSEngine();
-  //TODO: change to QcepObjectWPtr
-  void initialize();
+  void initialize(QcepObjectWPtr parent);
   void setWindow(QxrdWindowWPtr win);
 
 public slots:

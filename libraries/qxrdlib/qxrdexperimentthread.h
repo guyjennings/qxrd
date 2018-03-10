@@ -12,20 +12,26 @@ class QXRD_EXPORT QxrdExperimentThread : public QxrdThread
 {
   Q_OBJECT
 
+private:
+  typedef QxrdThread inherited;
+
 public:
   //TODO: pass parent pointer on initialization...
-  QxrdExperimentThread(QString path,
-                       QxrdExperimentSettingsPtr set,
-                       int mode);
+  Q_INVOKABLE QxrdExperimentThread(QString name);
 
   ~QxrdExperimentThread();
 
+  void initialize(QcepObjectWPtr            parent,
+                  QString                   path,
+                  QxrdExperimentSettingsPtr set,
+                  int                       mode);
+
   static QxrdExperimentThreadWPtr findExperimentThread(QcepObjectWPtr parent);
 
-  static QxrdExperimentThreadPtr newExperimentThread(QString path,
-                                                     QcepObjectWPtr parent,
-                                                     QxrdExperimentSettingsPtr set,
-                                                     int mode);
+//  static QxrdExperimentThreadPtr newExperimentThread(QString path,
+//                                                     QcepObjectWPtr parent,
+//                                                     QxrdExperimentSettingsPtr set,
+//                                                     int mode);
 
   void shutdown();
 

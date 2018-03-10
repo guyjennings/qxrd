@@ -5,16 +5,14 @@
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
 
-QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(QcepObjectWPtr parent) :
-  inherited(parent),
+QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(QString name) :
+  inherited(name),
   m_Model(),
   m_Updater()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(%p)\n", this);
   }
-
-  setObjectName("fileBrowserUpdater");
 }
 
 QxrdFileBrowserModelUpdaterThread::~QxrdFileBrowserModelUpdaterThread()

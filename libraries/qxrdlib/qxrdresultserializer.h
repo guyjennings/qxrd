@@ -79,4 +79,8 @@ public:
   QxrdHistogramSerializer(QString name, QcepIntProperty *ctr);
 };
 
+Q_DECLARE_METATYPE(QxrdDoubleSerializer*)
+Q_DECLARE_METATYPE(QxrdIntegratedSerializer*)
+Q_DECLARE_METATYPE(QxrdHistogramSerializer*)
+
 #endif // QXRDRESULTSERIALIZER_H

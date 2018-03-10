@@ -5,6 +5,7 @@
 #include "qcepallocator.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
+#include "qcepimagequeue.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperiment.h"
 #include "qxrdprocessorstep.h"
@@ -108,8 +109,8 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_CenterFinder(),
   m_ROICalculator(),
   m_Mutex(QMutex::Recursive),
-  m_AcquiredInt16Images(),
-  m_AcquiredInt32Images(),
+  m_AcquiredUInt16Images(),
+  m_AcquiredUInt32Images(),
   m_AcquiredCount(0),
   m_CorrectedImages(),
   m_IntegratedData(),
@@ -149,13 +150,13 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_ROICalculator = QxrdROICalculatorPtr(
         new QxrdROICalculator("roiCalculator", m_ROIVector, m_ROIModel));
 
-  m_AcquiredInt16Images =
-      QcepInt16ImageQueuePtr(
-        new QcepInt16ImageQueue("acquiredInt16Images"));
+  m_AcquiredUInt16Images =
+      QcepUInt16ImageQueuePtr(
+        new QcepUInt16ImageQueue("acquiredUInt16Images"));
 
-  m_AcquiredInt32Images =
-      QcepInt32ImageQueuePtr(
-        new QcepInt32ImageQueue("acquiredInt32Images"));
+  m_AcquiredUInt32Images =
+      QcepUInt32ImageQueuePtr(
+        new QcepUInt32ImageQueue("acquiredInt32Images"));
 
   m_CorrectedImages =
       QxrdDoubleSerializerPtr(
@@ -230,8 +231,8 @@ void QxrdProcessor::initialize(QcepObjectWPtr parent)
   m_ROIVector           -> initialize(sharedFromThis());
   m_ROIModel            -> initialize(sharedFromThis());
   m_ROICalculator       -> initialize(sharedFromThis());
-  m_AcquiredInt16Images -> initialize(sharedFromThis());
-  m_AcquiredInt32Images -> initialize(sharedFromThis());
+  m_AcquiredUInt16Images -> initialize(sharedFromThis());
+  m_AcquiredUInt32Images -> initialize(sharedFromThis());
   m_CorrectedImages     -> initialize(sharedFromThis());
   m_IntegratedData      -> initialize(sharedFromThis());
   m_HistogramData       -> initialize(sharedFromThis());
@@ -243,6 +244,26 @@ void QxrdProcessor::initialize(QcepObjectWPtr parent)
     connect(acqp -> prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
     connect(acqp -> prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
   }
+}
+
+void QxrdProcessor::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdProcessor*>("QxrdProcessor*");
+  qRegisterMetaType<QxrdMaskStack*>("QxrdMaskStack*");
+  qRegisterMetaType<QxrdZingerFinder*>("QxrdZingerFinder*");
+  qRegisterMetaType<QxrdROICalculator*>("QxrdROICalculator*");
+  qRegisterMetaType<QxrdROIVector*>("QxrdROIVector*");
+  qRegisterMetaType<QcepImageBaseQueue*>("QcepImageBaseQueue*");
+  qRegisterMetaType<QcepUInt16ImageQueue*>("QcepUInt16ImageQueue*");
+  qRegisterMetaType<QcepInt16ImageQueue*>("QcepInt16ImageQueue*");
+  qRegisterMetaType<QcepUInt32ImageQueue*>("QcepUInt32ImageQueue*");
+  qRegisterMetaType<QcepInt32ImageQueue*>("QcepInt32ImageQueue*");
+  qRegisterMetaType<QcepDoubleImageQueue*>("QcepDoubleImageQueue*");
+  qRegisterMetaType<QcepFloatImageQueue*>("QcepFloatImageQueue*");
+  qRegisterMetaType<QcepMaskQueue*>("QcepMaskQueue*");
+  qRegisterMetaType<QxrdDoubleSerializer*>("QxrdDoubleSerializer*");
+  qRegisterMetaType<QxrdIntegratedSerializer*>("QxrdIntegratedSerializer*");
+  qRegisterMetaType<QxrdHistogramSerializer*>("QxrdHistogramSerializer*");
 }
 
 //TODO: is this needed...

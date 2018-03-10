@@ -62,6 +62,14 @@ QxrdNIDAQPlugin::~QxrdNIDAQPlugin()
   closeTaskHandles();
 }
 
+void QxrdNIDAQPlugin::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdNIDAQPlugin*>("QxrdNIDAQPlugin*");
+  qRegisterMetaType<QxrdNIDAQSyncDetectorOutput*>("QxrdNIDAQSyncDetectorOutput*");
+  qRegisterMetaType<QxrdNIDAQSyncWaveformOutput*>("QxrdNIDAQSyncWaveformOutput*");
+  qRegisterMetaType<QxrdNIDAQSyncAnalogInput*>("QxrdNIDAQSyncAnalogInput*");
+}
+
 void QxrdNIDAQPlugin::setErrorOutput(QObject *errors)
 {
   m_ErrorOutput = errors;

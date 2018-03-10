@@ -12,6 +12,12 @@ QxrdDexelaPlugin::QxrdDexelaPlugin()
 {
 }
 
+void QxrdDexelaPlugin::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdDexelaPlugin*>("QxrdDexelaPlugin*");
+  qRegisterMetaType<QxrdDexelaDriver*>("QxrdDexelaDriver*");
+}
+
 void QxrdDexelaPlugin::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);

@@ -17,7 +17,10 @@ private:
 public:
   QxrdPilatusPlugin();
 
+  void registerMetaTypes();
+
   void initialize(QcepObjectWPtr parent);
+
   QString name() const;
 
   QxrdDetectorDriverPtr createDetector(QString name,
@@ -25,5 +28,7 @@ public:
                                        QxrdExperimentWPtr expt,
                                        QxrdAcqCommonWPtr acq);
 };
+
+Q_DECLARE_METATYPE(QxrdPilatusPlugin*)
 
 #endif // QXRDPILATUSPLUGIN_H

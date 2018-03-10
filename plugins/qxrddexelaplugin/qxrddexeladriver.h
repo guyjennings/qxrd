@@ -54,4 +54,6 @@ private: // Static members...
 //  static QVector<DevInfo> m_Devices;
 };
 
+Q_DECLARE_METATYPE(QxrdDexelaDriver*)
+
 #endif // QXRDDEXELADETECTORDRIVER_H

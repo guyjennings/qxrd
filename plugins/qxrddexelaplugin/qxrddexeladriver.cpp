@@ -10,6 +10,7 @@
 #include "DexelaDetector.h"
 #include "DexImage.h"
 #include <QThread>
+#include "qcepimagedata.h"
 #include "qcepmutexlocker.h"
 #include "qcepallocator.h"
 #include "qxrddexelaplugin.h"

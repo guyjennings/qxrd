@@ -41,6 +41,8 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
+  static void registerMetaTypes();
+
 public slots:
   void acquire();
   void acquireOnce();

@@ -7,6 +7,12 @@ QxrdFileWatcherPlugin::QxrdFileWatcherPlugin()
 {
 }
 
+void QxrdFileWatcherPlugin::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdFileWatcherPlugin*>("QxrdFileWatcherPlugin*");
+  qRegisterMetaType<QxrdFileWatcherDriver*>("QxrdFileWatcherDriver*");
+}
+
 void QxrdFileWatcherPlugin::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);

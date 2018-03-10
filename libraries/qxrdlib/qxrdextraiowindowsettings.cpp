@@ -20,6 +20,13 @@ void QxrdExtraIOWindowSettings::initialize(QcepObjectWPtr parent)
   m_ExtraOutputsPlotWidgetSettings -> initialize(sharedFromThis());
 }
 
+void QxrdExtraIOWindowSettings::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdExtraIOWindowSettings*>("QxrdExtraIOWindowSettings*");
+  qRegisterMetaType<QxrdExtraInputsPlotWidgetSettings*>("QxrdExtraInputsPlotWidgetSettings*");
+  qRegisterMetaType<QxrdExtraOutputsPlotWidgetSettings*>("QxrdExtraOutputsPlotWidgetSettings*");
+}
+
 QcepMainWindowPtr QxrdExtraIOWindowSettings::newWindow()
 {
   GUI_THREAD_CHECK;

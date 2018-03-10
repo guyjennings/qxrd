@@ -2,23 +2,29 @@
 #include "qxrdscriptenginethread.h"
 
 #include "qxrdscriptengine.h"
-#include "qxrdapplication.h"
+#include "qxrdappcommon.h"
 #include "qcepmutexlocker.h"
 #include "qxrdexperiment.h"
 
 #include <stdio.h>
 
-QxrdScriptEngineThread::QxrdScriptEngineThread(QxrdApplicationWPtr app, QxrdExperimentWPtr exp)
-  : QxrdThread(exp),
+QxrdScriptEngineThread::QxrdScriptEngineThread(QString name)
+  : QxrdThread(name),
     m_ScriptEngine(NULL),
-    m_Application(app),
-    m_Experiment(exp)
+    m_Application(),
+    m_Experiment()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngineThread::QxrdScriptEngineThread(%p)\n", this);
   }
+}
 
-  setObjectName("scriptEngine");
+void QxrdScriptEngineThread::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_Application = QxrdAppCommon::findApplication(parent);
+  m_Experiment  = QxrdExperiment::findExperiment(parent);
 }
 
 QxrdScriptEngineThread::~QxrdScriptEngineThread()
@@ -56,10 +62,10 @@ void QxrdScriptEngineThread::run()
 
   {
     QxrdScriptEnginePtr engine = QxrdScriptEnginePtr(
-          new QxrdScriptEngine(m_Application, m_Experiment));
+          new QxrdScriptEngine("scriptEngine"));
 
     if (engine) {
-      engine -> initialize();
+      engine -> initialize(sharedFromThis());
     }
     m_ScriptEngine = engine;
   }

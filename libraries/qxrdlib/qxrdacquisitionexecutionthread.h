@@ -10,9 +10,14 @@ class QXRD_EXPORT QxrdAcquisitionExecutionThread : public QxrdThread
 {
   Q_OBJECT
 
+private:
+  typedef QxrdThread inherited;
+
 public:
-  QxrdAcquisitionExecutionThread(QxrdAcqCommonWPtr acq);
+  Q_INVOKABLE QxrdAcquisitionExecutionThread(QString name);
   ~QxrdAcquisitionExecutionThread();
+
+  void initialize(QcepObjectWPtr parent);
 
   void shutdown();
 
@@ -31,5 +36,7 @@ private:
   QxrdAcqCommonWPtr            m_Acquisition;
   QxrdAcquisitionExecutionPtr  m_AcquisitionExecution;
 };
+
+Q_DECLARE_METATYPE(QxrdAcquisitionExecutionThread*)
 
 #endif // QXRDACQUISITIONEXECUTIONTHREAD_H

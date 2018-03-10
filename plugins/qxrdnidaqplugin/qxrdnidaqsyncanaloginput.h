@@ -15,4 +15,6 @@ private:
   typedef QcepObject inherited;
 };
 
+Q_DECLARE_METATYPE(QxrdNIDAQSyncAnalogInput*)
+
 #endif // QXRDNIDAQSYNCANALOGINPUT_H

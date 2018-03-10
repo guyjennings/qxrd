@@ -5,15 +5,20 @@
 #include <stdio.h>
 #include "qcepmutexlocker.h"
 
-QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QxrdAcqCommonWPtr acq)
-  : QxrdThread(acq),
-    m_Acquisition(acq)
+QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QString name)
+  : inherited(name),
+    m_Acquisition()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(%p)\n", this);
   }
+}
 
-  setObjectName("acquisitionExecution");
+void QxrdAcquisitionExecutionThread::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_Acquisition = QxrdAcquisition::findAcquisition(parent);
 }
 
 QxrdAcquisitionExecutionThread::~QxrdAcquisitionExecutionThread()
@@ -39,7 +44,8 @@ void QxrdAcquisitionExecutionThread::run()
   }
 
   m_AcquisitionExecution =
-      QxrdAcquisitionExecutionPtr(new QxrdAcquisitionExecution(m_Acquisition));
+      QxrdAcquisitionExecutionPtr(
+        new QxrdAcquisitionExecution("acquisitionExecution"));
 
   m_AcquisitionExecution -> initialize(sharedFromThis());
 

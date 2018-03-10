@@ -13,10 +13,10 @@ class QXRD_EXPORT QxrdDetectorDriverThread : public QxrdThread
 {
   Q_OBJECT
 public:
-  explicit QxrdDetectorDriverThread(QxrdDetectorSettingsWPtr det);
+  explicit QxrdDetectorDriverThread(QString name);
   virtual ~QxrdDetectorDriverThread();
 
-  static QxrdDetectorDriverThreadPtr newDetectorDriverThread(QxrdDetectorSettingsWPtr det);
+  void initialize(QcepObjectWPtr parent);
 
   void setDetectorDriver(QxrdDetectorDriverPtr detDriver);
   QxrdDetectorDriverWPtr detectorDriver() const;
@@ -43,5 +43,7 @@ private:
   QxrdDetectorSettingsWPtr  m_Detector;
   QxrdDetectorDriverPtr     m_DetectorDriver;
 };
+
+Q_DECLARE_METATYPE(QxrdDetectorDriverThread*)
 
 #endif // QXRDDETECTORDRIVERTHREAD_H

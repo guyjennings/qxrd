@@ -17,6 +17,8 @@ private:
 public:
     QxrdSimulatedPlugin();
 
+    void registerMetaTypes();
+
     void initialize(QcepObjectWPtr parent);
     QString name() const;
 
@@ -25,5 +27,7 @@ public:
                                          QxrdExperimentWPtr expt,
                                          QxrdAcqCommonWPtr acq);
 };
+
+Q_DECLARE_METATYPE(QxrdSimulatedPlugin*)
 
 #endif // QXRDSIMULATEDPLUGIN_H

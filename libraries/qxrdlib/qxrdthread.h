@@ -9,8 +9,11 @@ class QXRD_EXPORT QxrdThread : public QcepThread
 {
   Q_OBJECT
 
+private:
+  typedef QcepThread inherited;
+
 public:
-  QxrdThread(QcepObjectWPtr      parent);
+  QxrdThread(QString name);
 
   virtual void shutdown() = 0;
 };

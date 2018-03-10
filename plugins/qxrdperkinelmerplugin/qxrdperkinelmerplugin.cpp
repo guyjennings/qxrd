@@ -14,6 +14,11 @@ void QxrdPerkinElmerPlugin::initialize(QcepObjectWPtr parent)
   printMessage("QxrdPerkinElmerPlugin::initialize");
 }
 
+void QxrdPerkinElmerPlugin::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdPerkinElmerPlugin*>("QxrdPerkinElmerPlugin*");
+  qRegisterMetaType<QxrdPerkinElmerDriver*>("QxrdPerkinElmerDriver*");
+}
 QString QxrdPerkinElmerPlugin::name() const
 {
   return "Perkin Elmer Detector";

@@ -22,4 +22,6 @@ private:
   QxrdCircularMaskPicker *m_Picker;
 };
 
+Q_DECLARE_METATYPE(QxrdMaskCirclesCommand*)
+
 #endif // QXRDMASKCIRCLESCOMMAND_H
