@@ -15,7 +15,7 @@ private:
   typedef QxrdMainWindowSettings inherited;
 
 public:
-  QxrdCenteringWindowSettings(QString name, QString desc);
+  Q_INVOKABLE QxrdCenteringWindowSettings(QString name);
   void initialize(QcepObjectWPtr parent);
 
   QcepMainWindowPtr newWindow();

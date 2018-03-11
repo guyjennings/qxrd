@@ -13,7 +13,7 @@ private:
   typedef QxrdMainWindowSettings inherited;
 
 public:
-  QxrdExtraIOWindowSettings(QString name, QString desc);
+  Q_INVOKABLE QxrdExtraIOWindowSettings(QString name);
   void initialize(QcepObjectWPtr parent);
 
   static void registerMetaTypes();

@@ -122,7 +122,6 @@ SOURCES += qxrdlib.cpp \
     qxrddebug.cpp \
     qxrdhelpbrowser.cpp \
     qxrduserscriptdialog.cpp \
-    qxrdsynchronizedacquisitionplotsettings.cpp \
     qxrdimagedataformatcbf.cpp \
     qxrdplotvectorfieldcurve.cpp \
     qxrdpoint4d.cpp \
@@ -628,7 +627,6 @@ HEADERS += TODO.h \
     qxrddebug.h \
     qxrdhelpbrowser.h \
     qxrduserscriptdialog.h \
-    qxrdsynchronizedacquisitionplotsettings.h \
     qxrdimagedataformatcbf.h \
     qxrdplotvectorfieldcurve.h \
     qxrdpoint4d.h \
@@ -692,7 +690,6 @@ HEADERS += TODO.h \
     qxrdintegratorplotsettings-ptr.h \
     qxrdhistogramdialogsettings-ptr.h \
     qxrdfilebrowsersettings-ptr.h \
-    qxrdsynchronizedacquisitionplotsettings-ptr.h \
     qxrdwindowsettings-ptr.h \
     qxrddetectorsettings.h \
     qxrddetectorsettings-ptr.h \

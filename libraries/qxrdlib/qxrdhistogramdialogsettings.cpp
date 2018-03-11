@@ -8,13 +8,6 @@ QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QString name) :
 {
 }
 
-QxrdHistogramDialogSettingsPtr QxrdHistogramDialogSettings::newHistogramDialogSettings()
-{
-  QxrdHistogramDialogSettingsPtr set(new QxrdHistogramDialogSettings("histDialogSettings"));
-
-  return set;
-}
-
 void QxrdHistogramDialogSettings::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);

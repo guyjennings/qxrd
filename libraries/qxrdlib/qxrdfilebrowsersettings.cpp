@@ -7,34 +7,3 @@ QxrdFileBrowserSettings::QxrdFileBrowserSettings(QString name) :
   m_RootDirectory(this, "rootDirectory","", "Browser Root Directory")
 {
 }
-
-QxrdFileBrowserSettingsPtr QxrdFileBrowserSettings::newFileBrowserSettings()
-{
-  QxrdFileBrowserSettingsPtr set(new QxrdFileBrowserSettings("fileBrowserSettings"));
-
-  return set;
-}
-
-QxrdInputFileBrowserSettings::QxrdInputFileBrowserSettings(QString name) :
-  QxrdFileBrowserSettings(name)
-{
-}
-
-QxrdInputFileBrowserSettingsPtr QxrdInputFileBrowserSettings::newInputFileBrowserSettings()
-{
-  QxrdInputFileBrowserSettingsPtr set(new QxrdInputFileBrowserSettings("inputFileBrowserSettings"));
-
-  return set;
-}
-
-QxrdOutputFileBrowserSettings::QxrdOutputFileBrowserSettings(QString name) :
-  QxrdFileBrowserSettings(name)
-{
-}
-
-QxrdOutputFileBrowserSettingsPtr QxrdOutputFileBrowserSettings::newOutputFileBrowserSettings()
-{
-  QxrdOutputFileBrowserSettingsPtr set(new QxrdOutputFileBrowserSettings("outputFileBrowserSettings"));
-
-  return set;
-}

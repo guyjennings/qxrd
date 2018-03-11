@@ -17,7 +17,6 @@ private:
 
 public:
   Q_INVOKABLE QxrdHistogramDialogSettings(QString name);
-  static QxrdHistogramDialogSettingsPtr newHistogramDialogSettings();
   void initialize(QcepObjectWPtr parent);
 
   static void registerMetaTypes();

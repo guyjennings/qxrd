@@ -2,8 +2,8 @@
 #include "qxrdstartupwindow.h"
 #include <QThread>
 
-QxrdStartupWindowSettings::QxrdStartupWindowSettings(QString name, QString desc)
-  : inherited(name, desc)
+QxrdStartupWindowSettings::QxrdStartupWindowSettings(QString name)
+  : inherited(name, "Startup Window")
 {
 
 }

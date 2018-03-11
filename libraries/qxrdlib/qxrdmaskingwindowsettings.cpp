@@ -4,10 +4,10 @@
 #include "qxrdimageplotwidgetsettings.h"
 #include <QThread>
 
-QxrdMaskingWindowSettings::QxrdMaskingWindowSettings(QString name, QString desc)
-  : inherited(name, desc),
-    m_FileBrowserSettings(new QxrdFileBrowserSettings(name)),
-    m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name))
+QxrdMaskingWindowSettings::QxrdMaskingWindowSettings(QString name)
+  : inherited(name, "Masking Window"),
+    m_FileBrowserSettings(new QxrdFileBrowserSettings(name+"Browser")),
+    m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name+"ImagePlot"))
 {
 
 }

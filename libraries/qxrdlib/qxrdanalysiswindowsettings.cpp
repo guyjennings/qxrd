@@ -2,8 +2,8 @@
 #include "qxrdanalysiswindow.h"
 #include <QThread>
 
-QxrdAnalysisWindowSettings::QxrdAnalysisWindowSettings(QString name, QString desc)
-  : inherited(name, desc)
+QxrdAnalysisWindowSettings::QxrdAnalysisWindowSettings(QString name)
+  : inherited(name, "Analysis Window")
 {
 
 }

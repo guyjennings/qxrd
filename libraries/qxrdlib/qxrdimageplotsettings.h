@@ -18,8 +18,6 @@ public:
   Q_INVOKABLE QxrdImagePlotSettings(QString name);
   void initialize(QcepObjectWPtr parent);
 
-  static QxrdImagePlotSettingsPtr newImagePlotSettings();
-
 public:
   Q_PROPERTY(double displayMinimumPctle     READ get_DisplayMinimumPctle WRITE set_DisplayMinimumPctle)
   QCEP_DOUBLE_PROPERTY(DisplayMinimumPctle)

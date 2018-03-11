@@ -4,26 +4,25 @@
 #include "qxrdintegratorplotsettings.h"
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdhistogramdialogsettings.h"
-#include "qxrdsynchronizedacquisitionplotsettings.h"
 #include "qxrdimageplotwidgetsettings.h"
 #include "qxrdcenteringplotwidgetsettings.h"
 #include "qxrdintegratedplotwidgetsettings.h"
 #include "qxrddistortionplotwidgetsettings.h"
 #include <QThread>
 
-QxrdWindowSettings::QxrdWindowSettings(QString name, QString desc) :
-  inherited(name, desc),
+QxrdWindowSettings::QxrdWindowSettings(QString name) :
+  inherited(name, "Main Window"),
   m_WindowGeometry(this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(this, "windowState", QByteArray(), "Window State Settings"),
-  m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name)),
-  m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name)),
-  m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name)),
-  m_DistortionPlotWidgetSettings(new QxrdDistortionPlotWidgetSettings(name))
+  m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name+"ImagePlot")),
+  m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name+"CenteringPlot")),
+  m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot")),
+  m_DistortionPlotWidgetSettings(new QxrdDistortionPlotWidgetSettings(name+"DistortionPlot")),
+  m_ImagePlotSettings(new QxrdImagePlotSettings(name+"ImagePlotSettings")),
+  m_IntegratorPlotSettings(new QxrdIntegratorPlotSettings(name+"IntegratorPlotSettings")),
+  m_FileBrowserSettings(new QxrdFileBrowserSettings(name+"FileBrowser")),
+  m_HistogramDialogSettings(new QxrdHistogramDialogSettings(name+"HistogramPlot"))
 {
-  m_ImagePlotSettings = QxrdImagePlotSettings::newImagePlotSettings();
-  m_IntegratorPlotSettings = QxrdIntegratorPlotSettings::newIntegratorPlotSettings();
-  m_FileBrowserSettings = QxrdFileBrowserSettings::newFileBrowserSettings();
-  m_HistogramDialogSettings = QxrdHistogramDialogSettings::newHistogramDialogSettings();
 }
 
 void QxrdWindowSettings::initialize(QcepObjectWPtr parent)
@@ -38,13 +37,6 @@ void QxrdWindowSettings::initialize(QcepObjectWPtr parent)
   m_IntegratorPlotSettings                -> initialize(sharedFromThis());
   m_FileBrowserSettings                   -> initialize(sharedFromThis());
   m_HistogramDialogSettings               -> initialize(sharedFromThis());
-}
-
-QxrdWindowSettingsPtr QxrdWindowSettings::newWindowSettings()
-{
-  QxrdWindowSettingsPtr set(new QxrdWindowSettings("windowSettings", "Window"));
-
-  return set;
 }
 
 QcepMainWindowPtr QxrdWindowSettings::newWindow()
@@ -65,7 +57,6 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdImagePlotSettings*>("QxrdImagePlotSettings*");
   qRegisterMetaType<QxrdIntegratorPlotSettings*>("QxrdIntegratorPlotSettings*");
   qRegisterMetaType<QxrdFileBrowserSettings*>("QxrdFileBrowserSettings*");
-  qRegisterMetaType<QxrdSynchronizedAcquisitionPlotSettings*>("QxrdSynchronizedAcquisitionPlotSettings*");
   qRegisterMetaType<QxrdImagePlotWidgetSettings*>("QxrdImagePlotWidgetSettings*");
   qRegisterMetaType<QxrdCenteringPlotWidgetSettings*>("QxrdCenteringPlotWidgetSettings*");
   qRegisterMetaType<QxrdIntegratedPlotWidgetSettings*>("QxrdIntegratedPlotWidgetSettings*");

@@ -29,10 +29,3 @@ void QxrdImagePlotSettings::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }
-
-QxrdImagePlotSettingsPtr QxrdImagePlotSettings::newImagePlotSettings()
-{
-  QxrdImagePlotSettingsPtr set(new QxrdImagePlotSettings("imagePlotSettings"));
-
-  return set;
-}

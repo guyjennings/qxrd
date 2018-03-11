@@ -5,8 +5,8 @@
 #include "qxrdcenteringplotwidgetsettings.h"
 #include <QThread>
 
-QxrdWatcherWindowSettings::QxrdWatcherWindowSettings(QString name, QString desc)
-  : inherited(name, desc),
+QxrdWatcherWindowSettings::QxrdWatcherWindowSettings(QString name)
+  : inherited(name, "Watcher Window"),
     m_FileBrowserSettings(new QxrdFileBrowserSettings(name)),
     m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name)),
     m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name)),

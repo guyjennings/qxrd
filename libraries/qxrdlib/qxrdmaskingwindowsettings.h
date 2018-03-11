@@ -13,7 +13,7 @@ private:
   typedef QxrdMainWindowSettings inherited;
 
 public:
-  QxrdMaskingWindowSettings(QString name, QString desc);
+  Q_INVOKABLE QxrdMaskingWindowSettings(QString name);
   void initialize(QcepObjectWPtr parent);
 
   QcepMainWindowPtr newWindow();

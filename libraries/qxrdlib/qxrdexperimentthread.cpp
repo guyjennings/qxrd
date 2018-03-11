@@ -4,21 +4,6 @@
 #include "qxrdexperimentsettings.h"
 #include "qxrdappcommon.h"
 
-//QxrdExperimentThreadPtr QxrdExperimentThread::newExperimentThread(QString path,
-//                                                                  QcepObjectWPtr parent,
-//                                                                  QxrdExperimentSettingsPtr set,
-//                                                                  int mode)
-//{
-//  QxrdExperimentThreadPtr expth(
-//        new QxrdExperimentThread(path, set, mode));
-
-//  expth -> initialize(parent);
-
-//  expth -> start();
-
-//  return expth;
-//}
-
 QxrdExperimentThread::QxrdExperimentThread(QString name) :
   QxrdThread(name),
   m_Path(),

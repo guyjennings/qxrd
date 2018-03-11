@@ -29,7 +29,6 @@ public:
 
   static QxrdCenterFinderWPtr findCenterFinder(QcepObjectWPtr p);
 
-  static QxrdCenterFinderPtr newCenterFinder();
   virtual ~QxrdCenterFinder();
 
 public:

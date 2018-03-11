@@ -23,13 +23,6 @@ void QxrdCalibrantLibrary::initialize(QcepObjectWPtr parent)
   }
 }
 
-//QxrdCalibrantLibraryPtr QxrdCalibrantLibrary::newCalibrantLibrary()
-//{
-//  QxrdCalibrantLibraryPtr lib(new QxrdCalibrantLibrary("calibrantLibrary"));
-
-//  return lib;
-//}
-
 QxrdCalibrantLibrary::~QxrdCalibrantLibrary()
 {
 #ifndef QT_NO_DEBUG

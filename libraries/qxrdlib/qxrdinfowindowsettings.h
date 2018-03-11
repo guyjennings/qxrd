@@ -11,7 +11,7 @@ private:
   typedef QxrdMainWindowSettings inherited;
 
 public:
-  QxrdInfoWindowSettings(QString name, QString desc);
+  Q_INVOKABLE QxrdInfoWindowSettings(QString name);
   void initialize(QcepObjectWPtr parent);
 
   QcepMainWindowPtr newWindow();

@@ -12,7 +12,7 @@ private:
   typedef QxrdMainWindowSettings inherited;
 
 public:
-  QxrdAcquisitionWindowSettings(QString name, QString desc);
+  Q_INVOKABLE QxrdAcquisitionWindowSettings(QString name);
 
   void initialize(QcepObjectWPtr parent);
 

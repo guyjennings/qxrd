@@ -19,7 +19,6 @@ private:
 public:
   Q_INVOKABLE QxrdCalibrantLibrary(QString name);
   virtual ~QxrdCalibrantLibrary();
-//  static QxrdCalibrantLibraryPtr newCalibrantLibrary();
   void initialize(QcepObjectWPtr parent);
 
 public slots:

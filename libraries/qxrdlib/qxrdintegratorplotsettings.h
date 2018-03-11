@@ -11,7 +11,6 @@ class QXRD_EXPORT QxrdIntegratorPlotSettings : public QcepPlotSettings
   Q_OBJECT
 public:
   Q_INVOKABLE QxrdIntegratorPlotSettings(QString name);
-  static QxrdIntegratorPlotSettingsPtr newIntegratorPlotSettings();
 };
 
 Q_DECLARE_METATYPE(QxrdIntegratorPlotSettings*)

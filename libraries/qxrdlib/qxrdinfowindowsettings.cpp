@@ -2,8 +2,8 @@
 #include "qxrdinfowindow.h"
 #include <QThread>
 
-QxrdInfoWindowSettings::QxrdInfoWindowSettings(QString name, QString desc)
-  : inherited(name, desc)
+QxrdInfoWindowSettings::QxrdInfoWindowSettings(QString name)
+  : inherited(name, "Info Window")
 {
 
 }

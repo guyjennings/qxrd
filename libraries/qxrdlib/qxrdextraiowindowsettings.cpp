@@ -4,10 +4,10 @@
 #include "qxrdextraoutputsplotwidgetsettings.h"
 #include <QThread>
 
-QxrdExtraIOWindowSettings::QxrdExtraIOWindowSettings(QString name, QString desc)
-  : inherited(name, desc),
-    m_ExtraInputsPlotWidgetSettings(new QxrdExtraInputsPlotWidgetSettings(name)),
-    m_ExtraOutputsPlotWidgetSettings(new QxrdExtraOutputsPlotWidgetSettings(name))
+QxrdExtraIOWindowSettings::QxrdExtraIOWindowSettings(QString name)
+  : inherited(name, "Extra IO Window"),
+    m_ExtraInputsPlotWidgetSettings(new QxrdExtraInputsPlotWidgetSettings(name+"Inputs")),
+    m_ExtraOutputsPlotWidgetSettings(new QxrdExtraOutputsPlotWidgetSettings(name+"Outputs"))
 {
 
 }

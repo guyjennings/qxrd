@@ -3,8 +3,8 @@
 #include "qxrdscriptingwindowsettings.h"
 #include <QThread>
 
-QxrdScriptingWindowSettings::QxrdScriptingWindowSettings(QString name, QString desc)
-  : inherited(name, desc)
+QxrdScriptingWindowSettings::QxrdScriptingWindowSettings(QString name)
+  : inherited(name, "Scripting Window")
 {
 
 }

@@ -1168,7 +1168,7 @@ void QxrdExperiment::openWatcher(QString patt)
   THREAD_CHECK;
 
   QxrdWatcherWindowSettingsPtr set(
-        new QxrdWatcherWindowSettings("watcherWindowSettings", "Watcher Window"));
+        new QxrdWatcherWindowSettings("watcherWindowSettings"));
 
   if (set) {
     set -> initialize(sharedFromThis());
@@ -1276,66 +1276,53 @@ void QxrdExperiment::defaultWindowSettings()
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdWindowSettings(
-                           "mainWindowSettings",
-                           "Main Window")));
+                           "mainWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdAcquisitionWindowSettings(
-                           "acquisitionWindowSettings",
-                           "Acquisition Window")));
+                           "acquisitionWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdAnalysisWindowSettings(
-                           "analysisWindowSettings",
-                           "Analysis Window")));
+                           "analysisWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdCalculatorWindowSettings(
-                           "calculatorWindowSettings",
-                           "Calculator Window")));
+                           "calculatorWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdCalibrantWindowSettings(
-                           "calibrantWindowSettings",
-                           "Calibrant Window")));
+                           "calibrantWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdCenteringWindowSettings(
-                           "centeringWindowSettings",
-                           "Centering Window")));
+                           "centeringWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdWatcherWindowSettings(
-                           "watcherWindowSettings",
-                           "Watcher Window")));
+                           "watcherWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdExtraIOWindowSettings(
-                           "extraIOWindowSettings",
-                           "Extra IO Window")));
+                           "extraIOWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdHelpWindowSettings(
-                           "helpWindowSettings",
-                           "Help Window")));
+                           "helpWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdInfoWindowSettings(
-                           "infoWindowSettings",
-                           "Info Window")));
+                           "infoWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdIntegrationWindowSettings(
-                           "integrationWindowSettings",
-                           "Integration Window")));
+                           "integrationWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdMaskingWindowSettings(
-                           "maskingWindowSettings",
-                           "Masking Window")));
+                           "maskingWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdScriptingWindowSettings(
-                           "scriptingWindowSettings",
-                           "Scripting Window")));
+                           "scriptingWindowSettings")));
 }

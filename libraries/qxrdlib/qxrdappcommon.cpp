@@ -76,7 +76,7 @@ void QxrdAppCommon::initializeRoot()
       qSharedPointerDynamicCast<QxrdStartupWindowSettings>(
         appendWindowSettings(
           QxrdStartupWindowSettingsPtr(
-            new QxrdStartupWindowSettings("startupWindowSettings", "Startup Window"))));
+            new QxrdStartupWindowSettings("startupWindowSettings"))));
 
   if (m_StartupWindowSettings) {
     m_StartupWindowSettings->initialize(sharedFromThis());

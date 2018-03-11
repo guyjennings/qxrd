@@ -6,12 +6,12 @@
 #include "qxrdintegratedplotwidgetsettings.h"
 #include <QThread>
 
-QxrdCenteringWindowSettings::QxrdCenteringWindowSettings(QString name, QString desc)
-  : inherited(name, desc),
-    m_FileBrowserSettings(new QxrdFileBrowserSettings(name)),
-    m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name)),
-    m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name)),
-    m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name))
+QxrdCenteringWindowSettings::QxrdCenteringWindowSettings(QString name)
+  : inherited(name, "Centering Window"),
+    m_FileBrowserSettings(new QxrdFileBrowserSettings(name+"Browser")),
+    m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name+"ImagePlot")),
+    m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name+"CenteringPlot")),
+    m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot"))
 {
 
 }

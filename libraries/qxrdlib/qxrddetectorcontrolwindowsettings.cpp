@@ -31,15 +31,6 @@ void QxrdDetectorControlWindowSettings::initialize(QcepObjectWPtr parent)
   m_ImagePlotWidgetSettings -> initialize(parent);
 }
 
-//QxrdDetectorControlWindowSettingsPtr QxrdDetectorControlWindowSettings::newDetectorWindowSettings(
-//    QxrdDetectorSettingsWPtr det)
-//{
-//  QxrdDetectorControlWindowSettingsPtr res(
-//        new QxrdDetectorControlWindowSettings(det));
-
-//  return res;
-//}
-
 QxrdImagePlotWidgetSettingsPtr QxrdDetectorControlWindowSettings::imagePlotWidgetSettings()
 {
   return m_ImagePlotWidgetSettings;

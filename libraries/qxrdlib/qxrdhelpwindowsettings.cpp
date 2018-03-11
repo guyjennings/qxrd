@@ -2,8 +2,8 @@
 #include "qxrdhelpwindow.h"
 #include <QThread>
 
-QxrdHelpWindowSettings::QxrdHelpWindowSettings(QString name, QString desc)
-  : inherited(name, desc)
+QxrdHelpWindowSettings::QxrdHelpWindowSettings(QString name)
+  : inherited(name, "Help Window")
 {
 
 }

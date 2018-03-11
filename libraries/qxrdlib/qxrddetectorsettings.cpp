@@ -93,28 +93,23 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdAcquisitionWindowSettings(
-                           "acquisitionWindowSettings",
-                           "Acquisition Window")));
+                           "acquisitionWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdCenteringWindowSettings(
-                           "centeringWindowSettings",
-                           "Centering Window")));
+                           "centeringWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdInfoWindowSettings(
-                           "infoWindowSettings",
-                           "Info Window")));
+                           "infoWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdIntegrationWindowSettings(
-                           "integrationWindowSettings",
-                           "Integration Window")));
+                           "integrationWindowSettings")));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
                          new QxrdMaskingWindowSettings(
-                           "maskingWindowSettings",
-                           "Masking Window")));
+                           "maskingWindowSettings")));
 
   for (int i=0; i<windowSettingsCount(); i++) {
     QcepMainWindowSettingsPtr set = windowSettings(i);

@@ -99,13 +99,6 @@ void QxrdCenterFinder::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 }
 
-QxrdCenterFinderPtr QxrdCenterFinder::newCenterFinder()
-{
-  QxrdCenterFinderPtr cf(new QxrdCenterFinder("centerFinder"));
-
-  return cf;
-}
-
 QxrdCenterFinder::~QxrdCenterFinder()
 {
 #ifndef QT_NO_DEBUG

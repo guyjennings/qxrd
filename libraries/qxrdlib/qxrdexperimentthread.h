@@ -28,11 +28,6 @@ public:
 
   static QxrdExperimentThreadWPtr findExperimentThread(QcepObjectWPtr parent);
 
-//  static QxrdExperimentThreadPtr newExperimentThread(QString path,
-//                                                     QcepObjectWPtr parent,
-//                                                     QxrdExperimentSettingsPtr set,
-//                                                     int mode);
-
   void shutdown();
 
   QxrdExperimentPtr experiment() const;

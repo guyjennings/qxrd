@@ -28,9 +28,6 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 
-  //TODO: reinit waveform plot widget
-//  m_WaveformPlot->init(QxrdSynchronizedAcquisitionPlotSettingsWPtr());
-
   QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_Parent));
 
   if (exp) {

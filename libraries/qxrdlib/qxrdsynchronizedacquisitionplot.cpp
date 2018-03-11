@@ -1,5 +1,5 @@
 #include "qxrdsynchronizedacquisitionplot.h"
-#include "qxrdsynchronizedacquisitionplotsettings.h"
+//#include "qxrdsynchronizedacquisitionplotsettings.h"
 
 QxrdSynchronizedAcquisitionPlot::QxrdSynchronizedAcquisitionPlot(QWidget *parent) :
     QcepPlot(parent)
@@ -93,12 +93,12 @@ QxrdSynchronizedAcquisitionPlot::QxrdSynchronizedAcquisitionPlot(QWidget *parent
 //  }
 }
 
-void QxrdSynchronizedAcquisitionPlot::initialize(QxrdSynchronizedAcquisitionPlotSettingsWPtr settings)
-{
-  QcepPlot::initialize(settings);
+//void QxrdSynchronizedAcquisitionPlot::initialize(QxrdSynchronizedAcquisitionPlotSettingsWPtr settings)
+//{
+//  QcepPlot::initialize(settings);
 
-  insertLegend(m_Legend, QwtPlot::BottomLegend);
-}
+//  insertLegend(m_Legend, QwtPlot::BottomLegend);
+//}
 
 void QxrdSynchronizedAcquisitionPlot::deviceChanged()
 {

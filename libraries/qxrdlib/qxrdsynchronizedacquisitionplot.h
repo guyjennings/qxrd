@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qcepplot.h"
-#include "qxrdsynchronizedacquisitionplotsettings-ptr.h"
+//#include "qxrdsynchronizedacquisitionplotsettings-ptr.h"
 
 //TODO: is class used?
 class QXRD_EXPORT QxrdSynchronizedAcquisitionPlot : public QcepPlot
@@ -12,7 +12,7 @@ class QXRD_EXPORT QxrdSynchronizedAcquisitionPlot : public QcepPlot
 public:
   explicit QxrdSynchronizedAcquisitionPlot(QWidget *parent = 0);
   //TODO: change to QcepObjectWPtr...
-  void initialize(QxrdSynchronizedAcquisitionPlotSettingsWPtr settings);
+//  void initialize(QxrdSynchronizedAcquisitionPlotSettingsWPtr settings);
 
 signals:
 

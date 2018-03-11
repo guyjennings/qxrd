@@ -2,8 +2,8 @@
 #include "qxrdcalculatorwindow.h"
 #include <QThread>
 
-QxrdCalculatorWindowSettings::QxrdCalculatorWindowSettings(QString name, QString desc)
-  : inherited(name, desc)
+QxrdCalculatorWindowSettings::QxrdCalculatorWindowSettings(QString name)
+  : inherited(name, "Calculator Window")
 {
 
 }
