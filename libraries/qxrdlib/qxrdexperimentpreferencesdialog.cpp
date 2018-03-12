@@ -16,6 +16,8 @@
 
 #include <QMenu>
 
+//TODO: move detector options to separate dialog
+//TODO: move server options to separate dialog
 //TODO: remove detector related stuff when called from viewer...
 QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentWPtr exptw, QWidget *parent, int initialPage) :
   QDialog(parent),
@@ -209,34 +211,37 @@ void QxrdExperimentPreferencesDialog::saveIntegratedBrowse()
 
 void QxrdExperimentPreferencesDialog::dataDirectoryBrowse()
 {
-  QString initial = QDir(experimentDirectory()).filePath(m_DataDirectory->text());
+  QDir pwd(m_ExperimentDirectory->text());
+  QFileInfo initial(pwd, m_DataDirectory->text());
 
-  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", initial, QFileDialog::ShowDirsOnly);
+  QString dir = QFileDialog::getExistingDirectory(this, "Output Directory", initial.absoluteFilePath(), QFileDialog::ShowDirsOnly);
 
   if (dir != "") {
-    m_DataDirectory->setText(QDir(experimentDirectory()).relativeFilePath(dir));
+    m_DataDirectory->setText(pwd.relativeFilePath(dir));
   }
 }
 
 void QxrdExperimentPreferencesDialog::currentLogFileBrowse()
 {
-  QString initial = QDir(experimentDirectory()).filePath(m_ExperimentDirectory->text());
+  QDir pwd(m_ExperimentDirectory->text());
+  QFileInfo initial(pwd, m_CurrentLogFile->text());
 
-  QString file = QFileDialog::getSaveFileName(this, "Log File", initial);
+  QString file = QFileDialog::getSaveFileName(this, "Log File", initial.absoluteFilePath());
 
   if (file != "") {
-    m_CurrentLogFile->setText(QDir(experimentDirectory()).relativeFilePath(file));
+    m_CurrentLogFile->setText(pwd.relativeFilePath(file));
   }
 }
 
 void QxrdExperimentPreferencesDialog::integratedScansFileBrowse()
 {
-  QString initial = QDir(dataDirectory()).filePath(m_IntegratedScansFile->text());
+  QDir pwd(m_ExperimentDirectory->text());
+  QFileInfo initial(pwd, m_IntegratedScansFile->text());
 
-  QString file = QFileDialog::getSaveFileName(this, "Scans File", initial);
+  QString file = QFileDialog::getSaveFileName(this, "Scans File", initial.absoluteFilePath());
 
   if (file != "") {
-    m_IntegratedScansFile->setText(QDir(dataDirectory()).relativeFilePath(file));
+    m_IntegratedScansFile->setText(pwd.relativeFilePath(file));
   }
 }
 
