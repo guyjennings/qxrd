@@ -718,6 +718,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
     quint16* src = image->data();
     quint32* dst = accum->data();
     short int* ovf = overflow->data();
+    int srcsum  = image->get_SummedExposures();
     int nsummed = accum->get_SummedExposures();
 
     if (nsummed == 0) {
@@ -739,7 +740,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
 
       accum->set_Normalization(image->get_Normalization());
       accum->set_ExtraInputs(image->get_ExtraInputs());
-      accum->set_SummedExposures(1);
+      accum->set_SummedExposures(srcsum);
       accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
@@ -760,7 +761,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
 
       accum->prop_Normalization()   -> incValue(image->get_Normalization());
       accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
-      accum->prop_SummedExposures() -> incValue(1);
+      accum->prop_SummedExposures() -> incValue(srcsum);
       accum->prop_ImageSequenceNumber() -> incValue(image->get_ImageSequenceNumber());
     }
   }
@@ -778,6 +779,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
     quint32* src = image->data();
     quint32* dst = accum->data();
     short int* ovf = overflow->data();
+    int srcsum  = image->get_SummedExposures();
     int nsummed = accum->get_SummedExposures();
 
     if (nsummed == 0) {
@@ -799,7 +801,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
 
       accum->set_Normalization(image->get_Normalization());
       accum->set_ExtraInputs(image->get_ExtraInputs());
-      accum->set_SummedExposures(1);
+      accum->set_SummedExposures(srcsum);
       accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
@@ -820,7 +822,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
 
       accum->prop_Normalization()   -> incValue(image->get_Normalization());
       accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
-      accum->prop_SummedExposures() -> incValue(1);
+      accum->prop_SummedExposures() -> incValue(srcsum);
       accum->prop_ImageSequenceNumber() -> incValue(image->get_ImageSequenceNumber());
     }
   }
@@ -838,6 +840,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
     quint16* src = image->data();
     double* dst = accum->data();
     short int* ovf = overflow->data();
+    int srcsum  = image->get_SummedExposures();
     int nsummed = accum->get_SummedExposures();
 
     if (nsummed == 0) {
@@ -859,7 +862,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
 
       accum->set_Normalization(image->get_Normalization());
       accum->set_ExtraInputs(image->get_ExtraInputs());
-      accum->set_SummedExposures(1);
+      accum->set_SummedExposures(srcsum);
       accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
@@ -880,7 +883,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
 
       accum->prop_Normalization()   -> incValue(image->get_Normalization());
       accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
-      accum->prop_SummedExposures() -> incValue(1);
+      accum->prop_SummedExposures() -> incValue(srcsum);
       accum->prop_ImageSequenceNumber() -> incValue(image->get_ImageSequenceNumber());
     }
   }
@@ -898,6 +901,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
     quint32* src = image->data();
     double* dst = accum->data();
     short int* ovf = overflow->data();
+    int srcsum  = image->get_SummedExposures();
     int nsummed = accum->get_SummedExposures();
 
     if (nsummed == 0) {
@@ -919,7 +923,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
 
       accum->set_Normalization(image->get_Normalization());
       accum->set_ExtraInputs(image->get_ExtraInputs());
-      accum->set_SummedExposures(1);
+      accum->set_SummedExposures(srcsum);
       accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
@@ -940,7 +944,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
 
       accum->prop_Normalization()   -> incValue(image->get_Normalization());
       accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
-      accum->prop_SummedExposures() -> incValue(1);
+      accum->prop_SummedExposures() -> incValue(srcsum);
       accum->prop_ImageSequenceNumber() -> incValue(image->get_ImageSequenceNumber());
     }
   }
