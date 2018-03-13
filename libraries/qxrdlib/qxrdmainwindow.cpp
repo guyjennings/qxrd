@@ -119,7 +119,7 @@ void QxrdMainWindow::populateWindowsMenu()
         configMenu -> addAction(act);
 
         QString str2 =
-            tr("(%1) Open %2 detector \"%3\" Control...")
+            tr("(%1) Open %2 \"%3\" Control...")
             .arg(i).arg(detType).arg(detName);
 
         QAction *act2 =
@@ -174,33 +174,33 @@ void QxrdMainWindow::populateWindowsMenu()
   }
 }
 
-void QxrdMainWindow::updateTitle()
-{
-  QxrdExperimentPtr exper(qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
+//void QxrdMainWindow::updateTitle()
+//{
+//  QxrdExperimentPtr exper(qSharedPointerDynamicCast<QxrdExperiment>(findExperiment()));
 
-  QString title = m_Name;
+//  QString title = m_Name;
 
-  if (exper) {
-    title.append(" - ");
-    title.append(exper->experimentFilePath());
-  }
+//  if (exper) {
+//    title.append(" - ");
+//    title.append(exper->experimentFilePath());
+//  }
 
-  title.append(" - QXRD");
+//  title.append(" - QXRD");
 
-  if (sizeof(void*) == 4) {
-    title.append(" - 32 bit - v");
-  } else {
-    title.append(" - 64 bit - v");
-  }
+//  if (sizeof(void*) == 4) {
+//    title.append(" - 32 bit - v");
+//  } else {
+//    title.append(" - 64 bit - v");
+//  }
 
-  title.append(STR(QXRD_VERSION));
+//  title.append(g_Application->applicationVersion());
 
-  if (exper && exper->isChanged()) {
-    title.append(tr(" [%1]").arg(exper->isChanged()));
-  }
+//  if (exper && exper->isChanged()) {
+//    title.append(tr(" [%1]").arg(exper->isChanged()));
+//  }
 
-  setWindowTitle(title);
-}
+//  setWindowTitle(title);
+//}
 
 void QxrdMainWindow::acquireStarted()
 {

@@ -182,11 +182,11 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
   }
 
   if (dt) {
-    connect(dt->prop_DetectorNumber(),   &QcepIntProperty::valueChanged,    this, &QxrdDetectorControlWindow::updateWindowTitle);
-    connect(dt->prop_DetectorTypeName(), &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateWindowTitle);
-    connect(dt->prop_DetectorName(),     &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateWindowTitle);
+    connect(dt->prop_DetectorNumber(),   &QcepIntProperty::valueChanged,    this, &QxrdDetectorControlWindow::updateTitle);
+    connect(dt->prop_DetectorTypeName(), &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateTitle);
+    connect(dt->prop_DetectorName(),     &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateTitle);
 
-    updateWindowTitle();
+    updateTitle();
   }
 
   if (acqp) {
@@ -252,16 +252,22 @@ void QxrdDetectorControlWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *wind
   inherited::setupMenus(file, edit, window);
 }
 
-void QxrdDetectorControlWindow::updateWindowTitle()
+QString QxrdDetectorControlWindow::windowName() const
 {
+  QString name;
+
   QxrdDetectorSettingsPtr dt(m_Detector);
 
   if (dt) {
-    setWindowTitle(tr("%1: Control %2 detector \"%3\"")
-                   .arg(dt->get_DetectorNumber())
-                   .arg(dt->get_DetectorTypeName())
-                   .arg(dt->get_DetectorName()));
+    name = tr("Control %1 %2: \"%3\"")
+        .arg(dt->get_DetectorTypeName())
+        .arg(dt->get_DetectorNumber())
+        .arg(dt->get_DetectorName());
+  } else {
+    name = inherited::windowName();
   }
+
+  return name;
 }
 
 void QxrdDetectorControlWindow::changeEvent(QEvent *e)

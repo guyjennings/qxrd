@@ -51,7 +51,7 @@ void QxrdAppViewer::openStartupWindow()
     m_StartupWindow -> setApplicationDescription(
           "Data Viewer for 2-D XRay Detector data\n"
           "Guy Jennings\n"
-          "Version " STR(QXRD_VERSION) "\n"
+          "Version " + applicationVersion() + "\n"
           "Build : " __DATE__ " : " __TIME__);
 
     m_StartupWindow -> setWindowTitle(applicationDescription());
@@ -68,8 +68,8 @@ void QxrdAppViewer::closeStartupWindow()
 void QxrdAppViewer::setDefaultObjectData(QcepDataObject *obj)
 {
   if (obj) {
-    obj->set_Creator("QXRD Viewer");
-    obj->set_Version(STR(QXRD_VERSION));
+    obj->set_Creator(applicationName());
+    obj->set_Version(applicationVersion());
     obj->set_QtVersion(QT_VERSION_STR);
   }
 }
@@ -77,6 +77,16 @@ void QxrdAppViewer::setDefaultObjectData(QcepDataObject *obj)
 void QxrdAppViewer::criticalMessage(QString msg, QDateTime ts) const
 {
   printf("CRITICAL: %s\n", qPrintable(msg));
+}
+
+QString QxrdAppViewer::applicationName()
+{
+  return QStringLiteral("QXRDVIEWER");
+}
+
+QString QxrdAppViewer::applicationVersion()
+{
+  return QStringLiteral(STR(QXRD_VERSION));
 }
 
 QString QxrdAppViewer::applicationDescription()

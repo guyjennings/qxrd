@@ -105,12 +105,12 @@ void QxrdApplication::initializeRoot()
     m_Application -> setOrganizationName("cep");
     m_Application -> setOrganizationDomain("xray.aps.anl.gov");
     m_Application -> setApplicationName("qxrd");
-    m_Application -> setApplicationVersion(STR(QXRD_VERSION));
+    m_Application -> setApplicationVersion(applicationVersion());
   }
 
   printMessage("------ Starting QXRD Application ------");
 
-  QString about = "QXRD Version " STR(QXRD_VERSION);
+  QString about = applicationName() + " Version " + applicationVersion();
 
   if (sizeof(void*) == 4) {
     about += " - 32 Bit";
@@ -238,6 +238,16 @@ void QxrdApplication::finish()
   inherited::finish();
 }
 
+QString QxrdApplication::applicationName()
+{
+  return QStringLiteral("QXRD");
+}
+
+QString QxrdApplication::applicationVersion()
+{
+  return QStringLiteral(STR(QXRD_VERSION));
+}
+
 QString QxrdApplication::applicationDescription()
 {
   return QStringLiteral("QXRD Data Acquisition for 2-D XRay Detectors");
@@ -261,7 +271,7 @@ void QxrdApplication::openStartupWindow()
     m_StartupWindow -> setApplicationDescription(
           "Data Acquisition for 2-D XRay Detectors\n"
           "Guy Jennings\n"
-          "Version " STR(QXRD_VERSION) "\n"
+          "Version " + applicationVersion() + "\n"
           "Build : " __DATE__ " : " __TIME__);
 
     m_StartupWindow -> setWindowTitle(applicationDescription());
@@ -275,12 +285,11 @@ void QxrdApplication::closeStartupWindow()
 {
 }
 
-//TODO: maybe rewrite...
 void QxrdApplication::onAutoSaveTimer()
 {
-//  if (settings() && settings()->isChanged()) {
-//    writeApplicationSettings();
-//  }
+  if (isChanged()) {
+    writeApplicationSettings();
+  }
 }
 
 QxrdNIDAQPtr QxrdApplication::nidaqPlugin()
@@ -714,8 +723,8 @@ bool QxrdApplication::event(QEvent *ev)
 void QxrdApplication::setDefaultObjectData(QcepDataObject *obj)
 {
   if (obj) {
-    obj->set_Creator("QXRD");
-    obj->set_Version(STR(QXRD_VERSION));
+    obj->set_Creator(applicationName());
+    obj->set_Version(applicationVersion());
     obj->set_QtVersion(QT_VERSION_STR);
   }
 }
@@ -771,7 +780,9 @@ void QxrdApplication::chooseExistingExperiment()
 void QxrdApplication::openExperiment(QString path)
 {
   if (path.length() > 0) {
-    QxrdExperimentSettingsPtr settings(new QxrdExperimentSettings(path));
+    QxrdExperimentSettingsPtr settings(
+          new QxrdExperimentSettings(
+            QxrdExperimentSettings::latestAutoPath(path)));
 
     QxrdExperimentThreadPtr expthr =
         QxrdExperimentThreadPtr(

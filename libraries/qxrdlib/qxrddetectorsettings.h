@@ -68,7 +68,8 @@ public:
     Pilatus,
     AreaDetector,
     FileWatcher,
-    Dexela
+    Dexela,
+    DetectorTypeCount
   } DetectorType;
 
   enum {

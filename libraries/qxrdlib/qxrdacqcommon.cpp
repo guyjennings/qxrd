@@ -5,6 +5,7 @@
 #include "qxrdprocessor.h"
 #include "qxrdacquisitionscalermodel.h"
 #include "qcepallocator.h"
+#include "qxrdappcommon.h"
 
 QxrdAcqCommon::QxrdAcqCommon(QString name) :
   inherited(name),
@@ -23,7 +24,7 @@ QxrdAcqCommon::QxrdAcqCommon(QString name) :
   m_PostTriggerFiles(this,"postTriggerFiles",1, "Number of post-Trigger Images"),
   m_CurrentFile(this, "currentFile", 0, "File Index of Current File"),
   m_FilePattern(this,"filePattern","", "File Name Pattern"),
-  m_QxrdVersion(this,"qxrdVersion",STR(QXRD_VERSION), "QXRD Version Number"),
+  m_QxrdVersion(this,"qxrdVersion",g_Application->applicationVersion(), "QXRD Version Number"),
   m_QtVersion(this,"qtVersion",qVersion(), "QT Version Number"),
   //  m_DetectorCount(this, "detectorCount", 0, "Number of Detectors"),
   m_LastAcquired(this, "lastAcquired", 0, "Internal Acquisition Flag"),

@@ -36,7 +36,7 @@ public slots:
 protected:
   void populateWindowsMenu();
 
-  void updateTitle();
+//  void updateTitle();
   virtual void acquireStarted();
   virtual void acquiredFrame(QString fileName,
       int iphase,

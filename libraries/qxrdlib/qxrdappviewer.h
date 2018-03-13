@@ -36,6 +36,8 @@ public:
   void closeStartupWindow();
 
 private:
+  QString applicationName();
+  QString applicationVersion();
   QString applicationDescription();
   QIcon   applicationIcon();
 };

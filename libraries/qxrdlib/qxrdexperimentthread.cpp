@@ -15,12 +15,17 @@ QxrdExperimentThread::QxrdExperimentThread(QString name) :
   }
 }
 
+void QxrdExperimentThread::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+}
+
 void QxrdExperimentThread::initialize(QcepObjectWPtr parent,
                                       QString path,
                                       QxrdExperimentSettingsPtr set,
                                       int mode)
 {
-  inherited::initialize(parent);
+  initialize(parent);
 
   m_Path            = path;
   m_Settings        = set;

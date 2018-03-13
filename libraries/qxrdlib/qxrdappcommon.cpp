@@ -110,6 +110,10 @@ void QxrdAppCommon::finish()
 
   foreach(QxrdExperimentPtr expt, m_Experiments) {
     if (expt) {
+      if (expt->isChanged() || expt->wasAutoSaved()) {
+        expt->saveExperiment();
+      }
+
       expt->closeWindows();
     }
   }
@@ -578,7 +582,7 @@ void QxrdAppCommon::doAboutQxrd()
 {
   QString about = applicationDescription();
 
-  about += "\nVersion " STR(QXRD_VERSION);
+  about += "\nVersion " + applicationVersion();
 
   if (sizeof(void*) == 4) {
     about += " - 32 Bit";
@@ -624,7 +628,7 @@ void QxrdAppCommon::doAboutQxrd()
 #endif
   about += tr("Spec Server Version %1\n").arg(STR(QCEPLIB_SPECSERVER_VERSION));
 
-  QMessageBox::about(NULL, "QXRD", about);
+  QMessageBox::about(NULL, applicationName(), about);
 }
 
 void QxrdAppCommon::doOpenQXRDWebPage()

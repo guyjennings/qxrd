@@ -16,6 +16,8 @@ public:
   QxrdExperimentSettings(const QString &path, QSettings::Format format = QSettings::IniFormat, QcepObject *parent=0);
   ~QxrdExperimentSettings();
 
+  static QString latestAutoPath(QString path);
+
 private:
   QxrdExperiment *m_Experiment;
 };

@@ -97,6 +97,8 @@ public:
   void incLockerCount();
 
 private:
+  QString applicationName();
+  QString applicationVersion();
   QString applicationDescription();
   QIcon   applicationIcon();
 

@@ -89,9 +89,10 @@ QxrdExperiment::QxrdExperiment(QString name) :
   m_LogFile(NULL),
   m_ScanFile(NULL),
   m_ExperimentFileMutex(),
+  m_WasAutoSaved(false),
 
   m_ExperimentMode(this, "experimentMode", -1, "Experiment Mode"),
-  m_QxrdVersion(this, "qxrdVersion", STR(QXRD_VERSION), "Qxrd Version"),
+  m_QxrdVersion(this, "qxrdVersion", g_Application -> applicationVersion(), "Qxrd Version"),
   m_DataDirectory(this, "dataDirectory", defaultDataDirectory(""), "Saved Data Directory"),
   m_LogFileName(this, "logFileName", defaultLogName(""), "Log File Name"),
   m_LogMaxLengthMB(this, "logMaxLengthMB", 0, "Max log file length in MB (or 0 for unlimited)"),
@@ -164,6 +165,11 @@ QxrdExperimentThreadWPtr QxrdExperiment::experimentThread() const
       qobject_cast<QxrdExperimentThread*>(thread());
 
   return QxrdExperimentThreadPtr(t);
+}
+
+void QxrdExperiment::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
 }
 
 void QxrdExperiment::initialize(QcepObjectWPtr parent,
@@ -344,7 +350,7 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
     printMessage(tr("Experiment Directory: %1").arg(get_ExperimentDirectory()));
     printMessage(tr("Stored in file: %1").arg(get_ExperimentFileName()));
 
-    QString about = STR(QXRD_VERSION);
+    QString about = app -> applicationVersion();
 
     if (sizeof(void*) == 4) {
       about += " - 32 Bit";
@@ -946,8 +952,8 @@ void QxrdExperiment::readSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (get_QxrdVersion() != STR(QXRD_VERSION)) {
-      set_QxrdVersion(STR(QXRD_VERSION));
+    if (get_QxrdVersion() != g_Application->applicationVersion()) {
+      set_QxrdVersion(g_Application->applicationVersion());
     }
 
     int nWin  = windowSettingsCount();
@@ -977,6 +983,10 @@ void QxrdExperiment::readSettings(QSettings *settings)
   }
 
   prop_IsReading()->incValue(-1);
+
+  connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdExperiment::autoSaveExperiment);
+
+  m_AutoSaveTimer.start(5000);
 }
 
 void QxrdExperiment::writeExperimentSettings()
@@ -1096,6 +1106,7 @@ QString QxrdExperiment::experimentFilePath() const
 
 void QxrdExperiment::setExperimentFilePath(QString path)
 {
+  set_ExperimentPath(path);
   set_ExperimentDirectory(defaultExperimentDirectory(path));
   set_ExperimentFileName(defaultExperimentFileName(path));
   set_ExperimentName(defaultExperimentName(path));
@@ -1161,6 +1172,52 @@ void QxrdExperiment::saveExperimentCopyAs(QString path)
   QxrdExperimentSettings settings(path);
 
   writeSettings(&settings);
+}
+
+void QxrdExperiment::autoSaveExperiment()
+{
+  THREAD_CHECK;
+
+  if (isChanged()) {
+    if (qcepDebug(DEBUG_PREFS)) {
+      printMessage("started QxrdExperiment::autoSaveExperiment");
+    }
+
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_ExperimentFileMutex);
+
+    QString docPath = experimentFilePath()+".auto";
+
+    if (docPath.length()>0) {
+      QFile::remove(docPath);
+
+      {
+        QSettings settings(docPath+".new", QSettings::IniFormat);
+
+        writeSettings(&settings);
+      }
+
+      QFile::remove(docPath+".bak");
+      QFile::rename(docPath, docPath+".bak");
+      QFile::rename(docPath+".new", docPath);
+    } else {
+      QxrdExperimentSettings settings;
+
+      writeSettings(&settings);
+    }
+
+    setChanged(0);
+
+    m_WasAutoSaved = true;
+
+    if (qcepDebug(DEBUG_PREFS)) {
+      printMessage("finished QxrdExperiment::autoSaveExperiment");
+    }
+  }
+}
+
+int QxrdExperiment::wasAutoSaved()
+{
+  return m_WasAutoSaved;
 }
 
 void QxrdExperiment::openWatcher(QString patt)

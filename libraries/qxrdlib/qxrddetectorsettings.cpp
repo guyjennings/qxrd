@@ -191,7 +191,7 @@ QxrdDetectorSettings::~QxrdDetectorSettings()
 
 int QxrdDetectorSettings::detectorTypeCount()
 {
-  return 7;
+  return DetectorTypeCount;
 }
 
 QString QxrdDetectorSettings::detectorTypeName(int detectorType)
@@ -199,31 +199,31 @@ QString QxrdDetectorSettings::detectorTypeName(int detectorType)
   QString res = "unknown";
   switch (detectorType) {
   case NoDetector:
-    res = "noDetector";
+    res = "No Detector";
     break;
 
   case Simulated:
-    res = "simulatedDetector";
+    res = "Simulated Detector";
     break;
 
   case PerkinElmer:
-    res = "perkinElmerDetector";
+    res = "Perkin Elmer Detector";
     break;
 
   case Pilatus:
-    res = "pilatusDetector";
+    res = "Pilatus Detector";
     break;
 
   case AreaDetector:
-    res = "epicsAreaDetector";
+    res = "Epics Area Detector";
     break;
 
   case FileWatcher:
-    res = "fileWatcher";
+    res = "File Watcher";
     break;
 
   case Dexela:
-    res = "dexelaDetector";
+    res = "Dexela Detector";
     break;
   }
 

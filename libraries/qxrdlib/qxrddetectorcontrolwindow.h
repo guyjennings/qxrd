@@ -70,7 +70,7 @@ private slots:
 
   void updateImageDisplay();
   void onUpdateIntervalMsecChanged(int newVal);
-  void updateWindowTitle();
+  QString windowName() const;
 
   void updateROIDisplay(bool show);
 

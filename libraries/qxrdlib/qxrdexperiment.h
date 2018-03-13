@@ -56,6 +56,7 @@ public:
   Q_INVOKABLE QxrdExperiment(QString name);
 
   virtual ~QxrdExperiment();
+  void initialize(QcepObjectWPtr parent);
   void initialize(QcepObjectWPtr parent,
                   QString        path,
                   int            mode);
@@ -135,6 +136,9 @@ public slots:
   void saveExperiment();
   void saveExperimentAsText(QString filePath);
 
+  void autoSaveExperiment();
+  int  wasAutoSaved();
+
   void completeWork(int amt);
   void commenceWork(int amt);
   void finishedWork(int amt);
@@ -202,6 +206,9 @@ private:
   FILE                           *m_ScanFile;
 
   QMutex                          m_ExperimentFileMutex;
+
+  QTimer                          m_AutoSaveTimer;
+  int                             m_WasAutoSaved;
 
 public:  // Properties
   Q_PROPERTY(int experimentMode READ get_ExperimentMode WRITE set_ExperimentMode STORED false)
