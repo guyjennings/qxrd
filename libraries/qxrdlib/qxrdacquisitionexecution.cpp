@@ -422,7 +422,6 @@ saveCancel:
             for (int d=0; d<nDet; d++) {
 
 //              procs[d] -> processAcquiredImage(res[d][p][ii], ovf[d][p][ii], fileIndex, p, nphases, false);
-
               INVOKE_CHECK(
                     QMetaObject::invokeMethod(procs[d].data(), "processAcquiredImage",
                                               Q_ARG(QcepUInt32ImageDataPtr, res[d][p][ii]),

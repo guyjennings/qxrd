@@ -61,31 +61,67 @@ void QxrdAcquisitionExecutionThread::run()
 void QxrdAcquisitionExecutionThread::doAcquire()
 {
   if (m_AcquisitionExecution) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
     INVOKE_CHECK(
-          QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquire"));
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(),
+                                    &QxrdAcquisitionExecution::doAcquire,
+                                    Qt::QueuedConnection));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(),
+                                    "doAcquire",
+                                    Qt::QueuedConnection));
+#endif
   }
 }
 
 void QxrdAcquisitionExecutionThread::doAcquireOnce()
 {
   if (m_AcquisitionExecution) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
     INVOKE_CHECK(
-          QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquireOnce"));
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(),
+                                    &QxrdAcquisitionExecution::doAcquireOnce,
+                                    Qt::QueuedConnection));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(),
+                                    "doAcquireOnce",
+                                    Qt::QueuedConnection));
+#endif
   }
 }
 
 void QxrdAcquisitionExecutionThread::doAcquireDark()
 {
   if (m_AcquisitionExecution) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
     INVOKE_CHECK(
-          QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquireDark"));
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(),
+                                    &QxrdAcquisitionExecution::doAcquireDark,
+                                    Qt::QueuedConnection));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(),
+                                    "doAcquireDark",
+                                    Qt::QueuedConnection));
+#endif
   }
 }
 
 void QxrdAcquisitionExecutionThread::doAcquireIdle()
 {
   if (m_AcquisitionExecution) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
     INVOKE_CHECK(
-          QMetaObject::invokeMethod(m_AcquisitionExecution.data(), "doAcquireIdle"));
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(),
+                                    &QxrdAcquisitionExecution::doAcquireIdle,
+                                    Qt::QueuedConnection));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(),
+                                    "doAcquireIdle",
+                                    Qt::QueuedConnection));
+#endif
   }
 }
