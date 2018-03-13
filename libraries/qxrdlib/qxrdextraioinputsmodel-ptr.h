@@ -1,0 +1,8 @@
+#ifndef QXRDEXTRAIOINPUTSMODELPTR_H
+#define QXRDEXTRAIOINPUTSMODELPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdExtraIOInputsModel)
+
+#endif // QXRDEXTRAIOINPUTSMODELPTR_H

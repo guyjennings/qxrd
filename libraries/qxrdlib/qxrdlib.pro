@@ -316,7 +316,10 @@ SOURCES += qxrdlib.cpp \
     qxrddetectorplugin.cpp \
     qxrdnidaq.cpp \
     qxrdcorrectiondialogpage.cpp \
-    qxrdexposurepreferencesdialog.cpp
+    qxrdexposurepreferencesdialog.cpp \
+    qxrdextraiodetectorsmodel.cpp \
+    qxrdextraioinputsmodel.cpp \
+    qxrdextraiooutputsmodel.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -526,7 +529,13 @@ HEADERS += qxrdlib.h\
     qxrdnidaq-ptr.h \
     qxrdcorrectiondialogpage.h \
     qxrdcorrectiondialogpage-ptr.h \
-    qxrdexposurepreferencesdialog.h
+    qxrdexposurepreferencesdialog.h \
+    qxrdextraiodetectorsmodel.h \
+    qxrdextraioinputsmodel.h \
+    qxrdextraiooutputsmodel.h \
+    qxrdextraiooutputsmodel-ptr.h \
+    qxrdextraioinputsmodel-ptr.h \
+    qxrdextraiodetectorsmodel-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

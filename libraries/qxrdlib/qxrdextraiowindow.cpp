@@ -11,6 +11,9 @@
 #include "qxrdextraiowindowsettings.h"
 #include <QThread>
 #include "qxrdnidaq.h"
+#include "qxrdextraiodetectorsmodel.h"
+#include "qxrdextraiooutputsmodel.h"
+#include "qxrdextraioinputsmodel.h"
 
 QxrdExtraIOWindow::QxrdExtraIOWindow(QString name) :
   inherited(name),
@@ -153,20 +156,36 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
           xtra->prop_AcquireDelay()->linkTo(m_AcquisitionDelay);
           xtra->prop_DeviceName()->linkTo(m_AcquisitionDevice);
 
-          connect(xtra->prop_DeviceName(), &QcepStringProperty::valueChanged,
-                  this, &QxrdExtraIOWindow::updateUi);
+//          connect(xtra->prop_DeviceName(), &QcepStringProperty::valueChanged,
+//                  this, &QxrdExtraIOWindow::updateUi);
 
           connect(xtra.data(), &QxrdAcquisitionExtraInputs::newDataAvailable,
                   this, &QxrdExtraIOWindow::updateWaveforms);
 
-          connect(xtra.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
-                  this, &QxrdExtraIOWindow::updateUi);
+//          connect(xtra.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
+//                  this, &QxrdExtraIOWindow::updateUi);
 
-          updateUi();
+//          updateUi();
         }
       }
     }
   }
+
+  m_DetectorsModel =
+      QxrdExtraIODetectorsModelPtr(
+        new QxrdExtraIODetectorsModel(m_SynchronizedAcquisition));
+
+  m_OutputsModel =
+      QxrdExtraIOOutputsModelPtr(
+        new QxrdExtraIOOutputsModel(m_SynchronizedAcquisition));
+
+  m_InputsModel =
+      QxrdExtraIOInputsModelPtr(
+        new QxrdExtraIOInputsModel(m_SynchronizedAcquisition));
+
+  m_DetectorsTable -> setModel(m_DetectorsModel.data());
+  m_OutputsTable   -> setModel(m_OutputsModel.data());
+  m_InputsTable    -> setModel(m_InputsModel.data());
 
   QxrdExtraIOWindowSettingsPtr settings(
         qSharedPointerDynamicCast<QxrdExtraIOWindowSettings>(m_Parent));
@@ -353,184 +372,184 @@ void QxrdExtraIOWindow::setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelP
 
     int c = 0;
 
-    if (m_ChannelsInRows) {
-      m_ExtraInputsTable->setCellWidget(i, c++, cb);
-      m_ExtraInputsTable->setCellWidget(i, c++, cb2);
-      m_ExtraInputsTable->setCellWidget(i, c++, nm);
-      m_ExtraInputsTable->setCellWidget(i, c++, md);
-      m_ExtraInputsTable->setCellWidget(i, c++, wf);
-      m_ExtraInputsTable->setCellWidget(i, c++, min);
-      m_ExtraInputsTable->setCellWidget(i, c++, max);
-      m_ExtraInputsTable->setCellWidget(i, c++, stt);
-      m_ExtraInputsTable->setCellWidget(i, c++, end);
-      m_ExtraInputsTable->setCellWidget(i, c++, tmode);
-      m_ExtraInputsTable->setCellWidget(i, c++, tlevel);
-      m_ExtraInputsTable->setCellWidget(i, c++, thyst);
-      m_ExtraInputsTable->setCellWidget(i, c++, phy);
-      m_ExtraInputsTable->setCellWidget(i, c++, val);
-      m_ExtraInputsTable->setCellWidget(i, c++, trig);
-    } else {
-      m_ExtraInputsTable->setCellWidget(c++, i, cb);
-      m_ExtraInputsTable->setCellWidget(c++, i, cb2);
-      m_ExtraInputsTable->setCellWidget(c++, i, nm);
-      m_ExtraInputsTable->setCellWidget(c++, i, md);
-      m_ExtraInputsTable->setCellWidget(c++, i, wf);
-      m_ExtraInputsTable->setCellWidget(c++, i, min);
-      m_ExtraInputsTable->setCellWidget(c++, i, max);
-      m_ExtraInputsTable->setCellWidget(c++, i, stt);
-      m_ExtraInputsTable->setCellWidget(c++, i, end);
-      m_ExtraInputsTable->setCellWidget(c++, i, tmode);
-      m_ExtraInputsTable->setCellWidget(c++, i, tlevel);
-      m_ExtraInputsTable->setCellWidget(c++, i, thyst);
-      m_ExtraInputsTable->setCellWidget(c++, i, phy);
-      m_ExtraInputsTable->setCellWidget(c++, i, val);
-      m_ExtraInputsTable->setCellWidget(c++, i, trig);
-    }
+//    if (m_ChannelsInRows) {
+//      m_ExtraInputsTable->setCellWidget(i, c++, cb);
+//      m_ExtraInputsTable->setCellWidget(i, c++, cb2);
+//      m_ExtraInputsTable->setCellWidget(i, c++, nm);
+//      m_ExtraInputsTable->setCellWidget(i, c++, md);
+//      m_ExtraInputsTable->setCellWidget(i, c++, wf);
+//      m_ExtraInputsTable->setCellWidget(i, c++, min);
+//      m_ExtraInputsTable->setCellWidget(i, c++, max);
+//      m_ExtraInputsTable->setCellWidget(i, c++, stt);
+//      m_ExtraInputsTable->setCellWidget(i, c++, end);
+//      m_ExtraInputsTable->setCellWidget(i, c++, tmode);
+//      m_ExtraInputsTable->setCellWidget(i, c++, tlevel);
+//      m_ExtraInputsTable->setCellWidget(i, c++, thyst);
+//      m_ExtraInputsTable->setCellWidget(i, c++, phy);
+//      m_ExtraInputsTable->setCellWidget(i, c++, val);
+//      m_ExtraInputsTable->setCellWidget(i, c++, trig);
+//    } else {
+//      m_ExtraInputsTable->setCellWidget(c++, i, cb);
+//      m_ExtraInputsTable->setCellWidget(c++, i, cb2);
+//      m_ExtraInputsTable->setCellWidget(c++, i, nm);
+//      m_ExtraInputsTable->setCellWidget(c++, i, md);
+//      m_ExtraInputsTable->setCellWidget(c++, i, wf);
+//      m_ExtraInputsTable->setCellWidget(c++, i, min);
+//      m_ExtraInputsTable->setCellWidget(c++, i, max);
+//      m_ExtraInputsTable->setCellWidget(c++, i, stt);
+//      m_ExtraInputsTable->setCellWidget(c++, i, end);
+//      m_ExtraInputsTable->setCellWidget(c++, i, tmode);
+//      m_ExtraInputsTable->setCellWidget(c++, i, tlevel);
+//      m_ExtraInputsTable->setCellWidget(c++, i, thyst);
+//      m_ExtraInputsTable->setCellWidget(c++, i, phy);
+//      m_ExtraInputsTable->setCellWidget(c++, i, val);
+//      m_ExtraInputsTable->setCellWidget(c++, i, trig);
+//    }
   }
 }
 
-void QxrdExtraIOWindow::updateUi()
-{
-  GUI_THREAD_CHECK;
+//void QxrdExtraIOWindow::updateUi()
+//{
+//  GUI_THREAD_CHECK;
 
-  QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
+//  QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
 
-  if (acqp) {
-    m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
+//  if (acqp) {
+//    m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
 
-    if (m_AcquisitionExtraInputs) {
+//    if (m_AcquisitionExtraInputs) {
 
-      QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+//      QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
-      if (xtra) {
-        int nInputs = xtra->channels().count();
+//      if (xtra) {
+//        int nInputs = xtra->channels().count();
 
-        m_ExtraInputsTable->clear();
+//        m_ExtraInputsTable->clear();
 
-        QStringList labels;
+//        QStringList labels;
 
-        labels << "Enabled" << "Plotted" << "Device Name" << "Mode" << "SaveWfm?"
-               << "Min V" << "Max V"
-               << "Start" << "End"
-               << "Trigger Mode" << "Trigger Level" << "Trigger Hysteresis"
-               << "Phys Chan" << "Value" << "Triggered?";
+//        labels << "Enabled" << "Plotted" << "Device Name" << "Mode" << "SaveWfm?"
+//               << "Min V" << "Max V"
+//               << "Start" << "End"
+//               << "Trigger Mode" << "Trigger Level" << "Trigger Hysteresis"
+//               << "Phys Chan" << "Value" << "Triggered?";
 
-        QStringList chanLabels;
+//        QStringList chanLabels;
 
-        for (int i=0; i<nInputs; i++) {
-          chanLabels << tr("Chan %1").arg(i);
-        }
+//        for (int i=0; i<nInputs; i++) {
+//          chanLabels << tr("Chan %1").arg(i);
+//        }
 
-        if (m_ChannelsInRows) {
-          m_ExtraInputsTable->setRowCount(nInputs);
-          m_ExtraInputsTable->setColumnCount(labels.count());
-        } else {
-          m_ExtraInputsTable->setRowCount(labels.count());
-          m_ExtraInputsTable->setColumnCount(nInputs);
-        }
+//        if (m_ChannelsInRows) {
+//          m_ExtraInputsTable->setRowCount(nInputs);
+//          m_ExtraInputsTable->setColumnCount(labels.count());
+//        } else {
+//          m_ExtraInputsTable->setRowCount(labels.count());
+//          m_ExtraInputsTable->setColumnCount(nInputs);
+//        }
 
-        for (int i=0; i<nInputs; i++) {
-          setupUiChannel(i, xtra->channels().value(i));
-        }
+//        for (int i=0; i<nInputs; i++) {
+//          setupUiChannel(i, xtra->channels().value(i));
+//        }
 
 
-        if (m_ChannelsInRows) {
-          m_ExtraInputsTable->setHorizontalHeaderLabels(labels);
-          m_ExtraInputsTable->setVerticalHeaderLabels(chanLabels);
-        } else {
-          m_ExtraInputsTable->setHorizontalHeaderLabels(chanLabels);
-          m_ExtraInputsTable->setVerticalHeaderLabels(labels);
-        }
+//        if (m_ChannelsInRows) {
+//          m_ExtraInputsTable->setHorizontalHeaderLabels(labels);
+//          m_ExtraInputsTable->setVerticalHeaderLabels(chanLabels);
+//        } else {
+//          m_ExtraInputsTable->setHorizontalHeaderLabels(chanLabels);
+//          m_ExtraInputsTable->setVerticalHeaderLabels(labels);
+//        }
 
-        if (m_ExtraInputsTable->columnCount() && m_ExtraInputsTable->rowCount()) {
-          m_ExtraInputsTable->resizeColumnsToContents();
-          m_ExtraInputsTable->resizeRowsToContents();
-        }
-      }
-    }
-  }
-}
+//        if (m_ExtraInputsTable->columnCount() && m_ExtraInputsTable->rowCount()) {
+//          m_ExtraInputsTable->resizeColumnsToContents();
+//          m_ExtraInputsTable->resizeRowsToContents();
+//        }
+//      }
+//    }
+//  }
+//}
 
 void QxrdExtraIOWindow::addChannel()
 {
-  QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
+//  QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
 
-  if (acqp) {
-    m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
+//  if (acqp) {
+//    m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
 
-    if (m_AcquisitionExtraInputs) {
+//    if (m_AcquisitionExtraInputs) {
 
-      QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+//      QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
-      if (xtra) {
-        int nch = xtra->channels().count();
+//      if (xtra) {
+//        int nch = xtra->channels().count();
 
-        int n = (m_ChannelsInRows ?
-                   m_ExtraInputsTable->currentRow() :
-                   m_ExtraInputsTable->currentColumn());
+//        int n = (m_ChannelsInRows ?
+//                   m_ExtraInputsTable->currentRow() :
+//                   m_ExtraInputsTable->currentColumn());
 
-        int ch = (n<0 ? nch-1 : n);
+//        int ch = (n<0 ? nch-1 : n);
 
-        QString titleString = tr("New Channel after Channel %1").arg(ch);
-        QString questString = tr("Do you really want to create a new extra input channel after channel %1").arg(ch);
+//        QString titleString = tr("New Channel after Channel %1").arg(ch);
+//        QString questString = tr("Do you really want to create a new extra input channel after channel %1").arg(ch);
 
-        int reply = QMessageBox::question(this, titleString, questString,
-                                          QMessageBox::Ok | QMessageBox::Cancel,
-                                          QMessageBox::Cancel);
+//        int reply = QMessageBox::question(this, titleString, questString,
+//                                          QMessageBox::Ok | QMessageBox::Cancel,
+//                                          QMessageBox::Cancel);
 
-        if (reply== QMessageBox::Ok) {
-          if (ch < 0) {
-            xtra->appendChannel();
-          } else {
-            xtra->appendChannel(ch);
-          }
+//        if (reply== QMessageBox::Ok) {
+//          if (ch < 0) {
+//            xtra->appendChannel();
+//          } else {
+//            xtra->appendChannel(ch);
+//          }
 
-          updateUi();
-        }
-      }
-    }
-  }
+//          updateUi();
+//        }
+//      }
+//    }
+//  }
 }
 
 void QxrdExtraIOWindow::removeChannel()
 {
-  QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
+//  QxrdAcqCommonPtr acqp(QxrdAcqCommon::findAcquisition(m_Parent));
 
-  if (acqp) {
-    m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
+//  if (acqp) {
+//    m_AcquisitionExtraInputs = acqp->acquisitionExtraInputs();
 
-    if (m_AcquisitionExtraInputs) {
+//    if (m_AcquisitionExtraInputs) {
 
-      QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+//      QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
-      if (xtra) {
-        int nch = xtra->channels().count();
+//      if (xtra) {
+//        int nch = xtra->channels().count();
 
-        int n = (m_ChannelsInRows ?
-                   m_ExtraInputsTable->currentRow() :
-                   m_ExtraInputsTable->currentColumn());
+//        int n = (m_ChannelsInRows ?
+//                   m_ExtraInputsTable->currentRow() :
+//                   m_ExtraInputsTable->currentColumn());
 
-        int ch = (n<0 ? nch-1 : n);
+//        int ch = (n<0 ? nch-1 : n);
 
-        QString titleString = tr("Delete Channel %1").arg(ch);
-        QString questString = tr("Do you really want to delete extra input channel %1").arg(ch);
+//        QString titleString = tr("Delete Channel %1").arg(ch);
+//        QString questString = tr("Do you really want to delete extra input channel %1").arg(ch);
 
-        int reply = QMessageBox::question(this, titleString, questString,
-                                          QMessageBox::Ok | QMessageBox::Cancel,
-                                          QMessageBox::Cancel);
+//        int reply = QMessageBox::question(this, titleString, questString,
+//                                          QMessageBox::Ok | QMessageBox::Cancel,
+//                                          QMessageBox::Cancel);
 
-        if (reply== QMessageBox::Ok) {
-          if (n < 0) {
-            xtra->removeChannel();
-          } else {
-            xtra->removeChannel(n);
-          }
+//        if (reply== QMessageBox::Ok) {
+//          if (n < 0) {
+//            xtra->removeChannel();
+//          } else {
+//            xtra->removeChannel(n);
+//          }
 
-          updateUi();
-        }
-      }
-    }
-  }
+//          updateUi();
+//        }
+//      }
+//    }
+//  }
 }
 
 void QxrdExtraIOWindow::initiateReadout()

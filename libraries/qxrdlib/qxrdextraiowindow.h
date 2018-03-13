@@ -9,6 +9,9 @@
 #include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdacquisitionextrainputschannel-ptr.h"
 #include "qxrdextraiowindowsettings-ptr.h"
+#include "qxrdextraiodetectorsmodel-ptr.h"
+#include "qxrdextraiooutputsmodel-ptr.h"
+#include "qxrdextraioinputsmodel-ptr.h"
 
 //TODO: implement
 class QXRD_EXPORT QxrdExtraIOWindow : public QxrdMainWindow, public Ui::QxrdExtraIOWindow
@@ -34,7 +37,7 @@ private:
   void setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelPtr ch);
 
 private slots:
-  void updateUi();
+//  void updateUi();
   void addChannel();
   void removeChannel();
   void initiateReadout();
@@ -44,6 +47,9 @@ private:
   QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
   QxrdAcquisitionExtraInputsWPtr  m_AcquisitionExtraInputs;
   int                             m_ChannelsInRows;
+  QxrdExtraIODetectorsModelPtr    m_DetectorsModel;
+  QxrdExtraIOOutputsModelPtr      m_OutputsModel;
+  QxrdExtraIOInputsModelPtr       m_InputsModel;
 };
 
 #endif // QXRDEXTRAIOWINDOW_H
