@@ -58,7 +58,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QToolButton" name="m_AddDetectorButton">
+           <widget class="QToolButton" name="m_NewDetectorButton">
             <property name="text">
              <string>...</string>
             </property>
@@ -75,7 +75,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="m_RemoveDetectorButton">
+           <widget class="QToolButton" name="m_DeleteDetectorButton">
             <property name="text">
              <string>...</string>
             </property>
@@ -245,7 +245,7 @@ Script property: synchronization.syncAcquisitionMinimum</string>
              </spacer>
             </item>
             <item>
-             <widget class="QToolButton" name="m_AddOutputChannel">
+             <widget class="QToolButton" name="m_NewOutputButton">
               <property name="text">
                <string>...</string>
               </property>
@@ -262,7 +262,7 @@ Script property: synchronization.syncAcquisitionMinimum</string>
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="m_RemoveOutputChannel">
+             <widget class="QToolButton" name="m_DeleteOutputButton">
               <property name="text">
                <string>...</string>
               </property>
@@ -446,7 +446,7 @@ Script property: synchronization.syncAcquisitionMaximum</string>
              <bool>true</bool>
             </property>
             <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectColumns</enum>
+             <enum>QAbstractItemView::SelectItems</enum>
             </property>
            </widget>
           </item>
@@ -486,7 +486,7 @@ Script property: synchronization.syncAcquisitionMaximum</string>
          </spacer>
         </item>
         <item row="1" column="2">
-         <widget class="QToolButton" name="m_AddChannel">
+         <widget class="QToolButton" name="m_NewInputButton">
           <property name="toolTip">
            <string>Add a new channel</string>
           </property>
@@ -506,7 +506,7 @@ Script property: synchronization.syncAcquisitionMaximum</string>
          </widget>
         </item>
         <item row="1" column="3">
-         <widget class="QToolButton" name="m_RemoveChannel">
+         <widget class="QToolButton" name="m_DeleteInputButton">
           <property name="toolTip">
            <string>Remove channel</string>
           </property>
@@ -547,7 +547,7 @@ Script property: synchronization.syncAcquisitionMaximum</string>
      <x>0</x>
      <y>0</y>
      <width>727</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">

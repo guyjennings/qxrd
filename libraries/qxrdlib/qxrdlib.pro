@@ -319,7 +319,13 @@ SOURCES += qxrdlib.cpp \
     qxrdexposurepreferencesdialog.cpp \
     qxrdextraiodetectorsmodel.cpp \
     qxrdextraioinputsmodel.cpp \
-    qxrdextraiooutputsmodel.cpp
+    qxrdextraiooutputsmodel.cpp \
+    qxrdsynchronizeddetectorchannel.cpp \
+    qxrdsynchronizedoutputchannel.cpp \
+    qxrdsynchronizedinputchannel.cpp \
+    qxrdextraiodetectorsdelegate.cpp \
+    qxrdextraioinputsdelegate.cpp \
+    qxrdextraiooutputsdelegate.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -535,7 +541,19 @@ HEADERS += qxrdlib.h\
     qxrdextraiooutputsmodel.h \
     qxrdextraiooutputsmodel-ptr.h \
     qxrdextraioinputsmodel-ptr.h \
-    qxrdextraiodetectorsmodel-ptr.h
+    qxrdextraiodetectorsmodel-ptr.h \
+    qxrdsynchronizeddetectorchannel.h \
+    qxrdsynchronizedoutputchannel.h \
+    qxrdsynchronizedinputchannel.h \
+    qxrdsynchronizeddetectorchannel-ptr.h \
+    qxrdsynchronizedinputchannel-ptr.h \
+    qxrdsynchronizedoutputchannel-ptr.h \
+    qxrdextraiodetectorsdelegate.h \
+    qxrdextraiodetectorsdelegate-ptr.h \
+    qxrdextraioinputsdelegate.h \
+    qxrdextraioinputsdelegate-ptr.h \
+    qxrdextraiooutputsdelegate.h \
+    qxrdextraiooutputsdelegate-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

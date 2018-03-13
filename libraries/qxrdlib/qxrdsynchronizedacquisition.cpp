@@ -4,6 +4,9 @@
 #include "qwt_math.h"
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrdnidaq.h"
+#include "qxrdsynchronizeddetectorchannel.h"
+#include "qxrdsynchronizedoutputchannel.h"
+#include "qxrdsynchronizedinputchannel.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
   QcepObject(name),
@@ -42,50 +45,238 @@ void QxrdSynchronizedAcquisition::readSettings(QSettings *settings)
 {
   inherited::readSettings(settings);
 
-//  int n = settings->beginReadArray("channels");
+  int nDet = settings -> beginReadArray("detectors");
 
-//  //TODO: rewrite...
-//  while (m_Channels.count() > n) {
-//    removeChannel();
-//  }
+  for (int i=0; i<nDet; i++) {
+    settings -> setArrayIndex(i);
 
-//  while (m_Channels.count() < n) {
-//    appendChannel();
-//  }
+    QxrdSynchronizedDetectorChannelPtr det(
+          new QxrdSynchronizedDetectorChannel(tr("detector-%1").arg(i)));
 
-//  for (int i=0; i<n; i++) {
-//    settings->setArrayIndex(i);
+    if (det) {
+      det -> initialize(sharedFromThis());
 
-//    QxrdAcquisitionExtraInputsChannelPtr chan = channel(i);
+      det -> readSettings(settings);
 
-//    if (chan) {
-//      chan->readSettings(settings);
-//    }
-//  }
+      m_Detectors.append(det);
+    }
+  }
 
-//  settings->endArray();
+  settings -> endArray();
 
-//  initiate();
+  int nOut = settings -> beginReadArray("outputs");
+
+  for (int i=0; i<nOut; i++) {
+    settings -> setArrayIndex(i);
+
+    QxrdSynchronizedOutputChannelPtr out(
+          new QxrdSynchronizedOutputChannel(tr("output-%1").arg(i)));
+
+    if (out) {
+      out -> initialize(sharedFromThis());
+
+      out -> readSettings(settings);
+
+      m_Outputs.append(out);
+    }
+  }
+
+  settings -> endArray();
+
+  int nInp = settings -> beginReadArray("inputs");
+
+  for (int i=0; i<nInp; i++) {
+    settings -> setArrayIndex(i);
+
+    QxrdSynchronizedInputChannelPtr inp(
+          new QxrdSynchronizedInputChannel(tr("input-%1").arg(i)));
+
+    if (inp) {
+      inp -> initialize(sharedFromThis());
+
+      inp -> readSettings(settings);
+
+      m_Inputs.append(inp);
+    }
+  }
+
+  settings -> endArray();
 }
 
 void QxrdSynchronizedAcquisition::writeSettings(QSettings *settings)
 {
   inherited::writeSettings(settings);
 
-//  settings->beginWriteArray("channels");
+  settings->beginWriteArray("detectors");
 
-//  int n = m_Channels.count();
+  int nDets = m_Detectors.count();
 
-//  for (int i=0; i<n; i++) {
-//    settings->setArrayIndex(i);
-//    QxrdAcquisitionExtraInputsChannelPtr chan = channel(i);
+  for (int i=0; i<nDets; i++) {
+    settings->setArrayIndex(i);
+    QxrdSynchronizedDetectorChannelPtr det = m_Detectors.value(i);
 
-//    if (chan) {
-//      chan->writeSettings(settings);
-//    }
-//  }
+    if (det) {
+      det->writeSettings(settings);
+    }
+  }
 
-//  settings->endArray();
+  settings->endArray();
+
+  settings->beginWriteArray("outputs");
+
+  int nOut = m_Outputs.count();
+
+  for (int i=0; i<nOut; i++) {
+    settings->setArrayIndex(i);
+    QxrdSynchronizedOutputChannelPtr out = m_Outputs.value(i);
+
+    if (out) {
+      out->writeSettings(settings);
+    }
+  }
+
+  settings->endArray();
+
+  settings->beginWriteArray("inputs");
+
+  int nInp = m_Inputs.count();
+
+  for (int i=0; i<nInp; i++) {
+    settings->setArrayIndex(i);
+    QxrdSynchronizedInputChannelPtr inp = m_Inputs.value(i);
+
+    if (inp) {
+      inp->writeSettings(settings);
+    }
+  }
+
+  settings->endArray();
+}
+
+int QxrdSynchronizedAcquisition::detectorCount()
+{
+  return m_Detectors.count();
+}
+
+QxrdSynchronizedDetectorChannelPtr QxrdSynchronizedAcquisition::detector(int n)
+{
+  return m_Detectors.value(n);
+}
+
+void QxrdSynchronizedAcquisition::newDetector(int before)
+{
+  QxrdSynchronizedDetectorChannelPtr det(
+        new QxrdSynchronizedDetectorChannel(tr("detector")));
+
+  if (det) {
+    det->initialize(sharedFromThis());
+
+    m_Detectors.insert(before, det);
+  }
+
+  renumberDetectors();
+}
+
+void QxrdSynchronizedAcquisition::deleteDetector(int n)
+{
+  m_Detectors.removeAt(n);
+
+  renumberDetectors();
+}
+
+void QxrdSynchronizedAcquisition::renumberDetectors()
+{
+  for (int i=0; i<detectorCount(); i++) {
+    QxrdSynchronizedDetectorChannelPtr det(detector(i));
+
+    if (det) {
+      det -> setObjectName(tr("detector-%1").arg(i));
+    }
+  }
+}
+
+int QxrdSynchronizedAcquisition::outputCount()
+{
+  return m_Outputs.count();
+}
+
+QxrdSynchronizedOutputChannelPtr QxrdSynchronizedAcquisition::output(int n)
+{
+  return m_Outputs.value(n);
+}
+
+void QxrdSynchronizedAcquisition::newOutput(int before)
+{
+  QxrdSynchronizedOutputChannelPtr out(
+        new QxrdSynchronizedOutputChannel(tr("output")));
+
+  if (out) {
+    out -> initialize(sharedFromThis());
+
+    m_Outputs.insert(before, out);
+  }
+
+  renumberOutputs();
+}
+
+void QxrdSynchronizedAcquisition::deleteOutput(int n)
+{
+  m_Outputs.removeAt(n);
+
+  renumberOutputs();
+}
+
+void QxrdSynchronizedAcquisition::renumberOutputs()
+{
+  for (int i=0; i<outputCount(); i++) {
+    QxrdSynchronizedOutputChannelPtr out(output(i));
+
+    if (out) {
+      out -> setObjectName(tr("output-%1").arg(i));
+    }
+  }
+}
+
+int QxrdSynchronizedAcquisition::inputCount()
+{
+  return m_Inputs.count();
+}
+
+QxrdSynchronizedInputChannelPtr QxrdSynchronizedAcquisition::input(int n)
+{
+  return m_Inputs.value(n);
+}
+
+void QxrdSynchronizedAcquisition::newInput(int before)
+{
+  QxrdSynchronizedInputChannelPtr inp(
+        new QxrdSynchronizedInputChannel(tr("input")));
+
+  if (inp) {
+    inp -> initialize(sharedFromThis());
+
+    m_Inputs.insert(before, inp);
+  }
+
+  renumberInputs();
+}
+
+void QxrdSynchronizedAcquisition::deleteInput(int n)
+{
+  m_Inputs.removeAt(n);
+
+  renumberInputs();
+}
+
+void QxrdSynchronizedAcquisition::renumberInputs()
+{
+  for (int i=0; i<inputCount(); i++) {
+    QxrdSynchronizedInputChannelPtr inp(input(i));
+
+    if (inp) {
+      inp -> setObjectName(tr("input-%1").arg(i));
+    }
+  }
 }
 
 void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin)

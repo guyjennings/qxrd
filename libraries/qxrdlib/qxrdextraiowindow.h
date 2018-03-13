@@ -38,10 +38,20 @@ private:
 
 private slots:
 //  void updateUi();
-  void addChannel();
-  void removeChannel();
+//  void addChannel();
+//  void removeChannel();
   void initiateReadout();
   void updateWaveforms();
+
+  void doNewDetector();
+  void doNewOutput();
+  void doNewInput();
+  void doDeleteDetector();
+  void doDeleteOutput();
+  void doDeleteInput();
+
+  bool askToInsert(QString thing, int before, int count);
+  bool askToDelete(QString thing, QVector<int> items);
 
 private:
   QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;

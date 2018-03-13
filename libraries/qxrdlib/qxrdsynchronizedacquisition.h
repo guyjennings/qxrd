@@ -11,6 +11,9 @@
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdnidaq-ptr.h"
+#include "qxrdsynchronizeddetectorchannel-ptr.h"
+#include "qxrdsynchronizedoutputchannel-ptr.h"
+#include "qxrdsynchronizedinputchannel-ptr.h"
 
 class QXRD_EXPORT QxrdSynchronizedAcquisition : public QcepObject
 {
@@ -26,6 +29,24 @@ public:
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
+
+  int detectorCount();
+  QxrdSynchronizedDetectorChannelPtr detector(int n);
+  void newDetector(int before);
+  void deleteDetector(int n);
+  void renumberDetectors();
+
+  int outputCount();
+  QxrdSynchronizedOutputChannelPtr output(int n);
+  void newOutput(int before);
+  void deleteOutput(int n);
+  void renumberOutputs();
+
+  int inputCount();
+  QxrdSynchronizedInputChannelPtr input(int n);
+  void newInput(int before);
+  void deleteInput(int n);
+  void renumberInputs();
 
 public:
   Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)
@@ -101,6 +122,10 @@ private:
   int                         m_SyncMode;
   QVector<double>             m_OutputTimes;
   QVector<double>             m_OutputVoltage;
+
+  QVector<QxrdSynchronizedDetectorChannelPtr> m_Detectors;
+  QVector<QxrdSynchronizedOutputChannelPtr>   m_Outputs;
+  QVector<QxrdSynchronizedInputChannelPtr>    m_Inputs;
 };
 
 Q_DECLARE_METATYPE(QxrdSynchronizedAcquisition*)
