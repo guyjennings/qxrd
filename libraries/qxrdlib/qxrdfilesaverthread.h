@@ -13,7 +13,7 @@ class QXRD_EXPORT QxrdFileSaverThread : public QxrdThread
   Q_OBJECT
 
 public:
-  QxrdFileSaverThread(QString name);
+  Q_INVOKABLE QxrdFileSaverThread(QString name);
   ~QxrdFileSaverThread();
 
   void shutdown();
