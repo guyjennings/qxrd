@@ -3,6 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
+#include "qxrdnidaq-ptr.h"
 
 class QXRD_EXPORT QxrdSynchronizedInputChannel : public QcepObject
 {
@@ -13,11 +14,33 @@ private:
 
 public:
   Q_INVOKABLE QxrdSynchronizedInputChannel(QString name);
+  void initialize(QcepObjectWPtr parent);
 
   QString channelName();
-  QString channelMode();
+  static int     channelModeCount();
+  static QString channelMode(int n);
 
   double evaluateInput();
+
+  enum {
+    ModeSummed,
+    ModeAveraged,
+    ModeMaximum,
+    ModeMinimum,
+    ModeCount
+  };
+
+  enum {
+    TriggerModeNone,
+    TriggerModeEdgePos,
+    TriggerModeEdgeNeg,
+    TriggerModeLevelPos,
+    TriggerModeLevelNeg,
+    TriggerModeCount
+  };
+
+private:
+  QxrdNIDAQWPtr m_NIDAQ;
 
 public:
   Q_PROPERTY(int channelNumber READ get_ChannelNumber WRITE set_ChannelNumber)
@@ -37,6 +60,9 @@ public:
 
   Q_PROPERTY(double max READ get_Max WRITE set_Max)
   QCEP_DOUBLE_PROPERTY(Max)
+
+  Q_PROPERTY(double sampleRate READ get_SampleRate WRITE set_SampleRate)
+  QCEP_DOUBLE_PROPERTY(SampleRate)
 
   Q_PROPERTY(QcepDoubleVector waveform READ get_Waveform WRITE set_Waveform STORED false)
   QCEP_DOUBLE_VECTOR_PROPERTY(Waveform)

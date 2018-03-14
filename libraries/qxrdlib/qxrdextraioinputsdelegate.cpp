@@ -3,8 +3,12 @@
 #include <QComboBox>
 #include <QApplication>
 #include <QDoubleSpinBox>
+#include "qxrdsynchronizedacquisition.h"
+#include "qxrdsynchronizedinputchannel-ptr.h"
+#include "qxrdsynchronizedinputchannel.h"
 
-QxrdExtraIOInputsDelegate::QxrdExtraIOInputsDelegate()
+QxrdExtraIOInputsDelegate::QxrdExtraIOInputsDelegate(QxrdSynchronizedAcquisitionWPtr sync)
+  : m_SynchronizedAcquisition(sync)
 {
 }
 
@@ -14,43 +18,63 @@ QWidget* QxrdExtraIOInputsDelegate::createEditor(QWidget *parent,
 {
   QWidget* res = NULL;
 
-  switch (index.column()) {
-  case QxrdExtraIOInputsModel::ChannelNumberColumn:
-    {
-      QComboBox *cb = new QComboBox(parent);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
-      for (int i=0; i<8; i++) {
-        cb -> addItem(tr("ai%1").arg(i));
+  if (sync) {
+    QxrdSynchronizedInputChannelPtr inp(sync->input(index.row()));
+
+    if (inp) {
+      switch (index.column()) {
+      case QxrdExtraIOInputsModel::ChannelNumberColumn:
+        {
+          QComboBox *cb = new QComboBox(parent);
+
+          for (int i=0; i<sync->inputDeviceCount(); i++) {
+            cb -> addItem(sync->inputDeviceName(i));
+          }
+
+          res = cb;
+        }
+        break;
+
+      case QxrdExtraIOInputsModel::ChannelModeColumn:
+        {
+          QComboBox *cb = new QComboBox(parent);
+
+          for (int i=0; i<inp->channelModeCount(); i++) {
+            cb -> addItem(inp->channelMode(i));
+          }
+
+          res = cb;
+        }
+        break;
+
+      case QxrdExtraIOInputsModel::MinColumn:
+      case QxrdExtraIOInputsModel::MaxColumn:
+        {
+          QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
+
+          sb -> setValue(index.data().toDouble());
+          sb -> setMinimum(-20);
+          sb -> setMaximum(20);
+
+          res = sb;
+        }
+        break;
+
+      case QxrdExtraIOInputsModel::SampleRateColumn:
+        {
+          QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
+
+          sb -> setValue(index.data().toDouble());
+          sb -> setMinimum(0);
+          sb -> setMaximum(50000);
+
+          res = sb;
+        }
+        break;
       }
-
-      res = cb;
     }
-    break;
-
-  case QxrdExtraIOInputsModel::ChannelModeColumn:
-    {
-      QComboBox *cb = new QComboBox(parent);
-
-      for (int i=0; i<6; i++) {
-        cb -> addItem(tr("Mode %1").arg(i));
-      }
-
-      res = cb;
-    }
-    break;
-
-  case QxrdExtraIOInputsModel::MinColumn:
-  case QxrdExtraIOInputsModel::MaxColumn:
-    {
-      QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
-
-      sb -> setValue(index.data().toDouble());
-      sb -> setMinimum(-20);
-      sb -> setMaximum(20);
-
-      res = sb;
-    }
-    break;
   }
 
   if (res == NULL) {

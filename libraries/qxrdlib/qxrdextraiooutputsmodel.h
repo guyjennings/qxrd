@@ -27,8 +27,12 @@ public:
     ChannelNumberColumn,
     SignalNameColumn,
     ChannelModeColumn,
+    WaveformColumn,
     StartVColumn,
     EndVColumn,
+    SymmetryColumn,
+    PhaseShiftColumn,
+    SampleRateColumn,
     ColumnCount
   };
 
@@ -37,7 +41,7 @@ public:
   void deleteOutputs(QVector<int> n);
 
 private:
-  QxrdSynchronizedAcquisitionWPtr m_Sync;
+  QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
 };
 
 #endif // QXRDEXTRAIOOUTPUTSMODEL_H

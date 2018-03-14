@@ -3,8 +3,14 @@
 #include <QComboBox>
 #include "qxrddetectorsettings.h"
 #include <QApplication>
+#include "qxrdsynchronizedacquisition.h"
+#include "qxrdsynchronizeddetectorchannel-ptr.h"
+#include "qxrdsynchronizeddetectorchannel.h"
+#include "qxrdacqcommon.h"
+#include "qxrdexperiment.h"
 
-QxrdExtraIODetectorsDelegate::QxrdExtraIODetectorsDelegate()
+QxrdExtraIODetectorsDelegate::QxrdExtraIODetectorsDelegate(QxrdSynchronizedAcquisitionWPtr sync)
+  : m_SynchronizedAcquisition(sync)
 {
 
 }
@@ -13,29 +19,71 @@ QWidget* QxrdExtraIODetectorsDelegate::createEditor(QWidget *parent,
                                                   const QStyleOptionViewItem &option,
                                                   const QModelIndex &index) const
 {
-  QComboBox *editor = new QComboBox(parent);
+  QWidget *res = NULL;
 
-  switch (index.column()) {
-  case QxrdExtraIODetectorsModel::ChannelNumberColumn:
-    for (int i=1; i<4; i++) {
-      editor -> addItem(tr("ctr%1").arg(i));
-    }
-    break;
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
-  case QxrdExtraIODetectorsModel::DetectorNumberColumn:
-    for (int i=0; i<6; i++) {
-      editor -> addItem(tr("det%1").arg(i));
-    }
-    break;
+  QxrdExperimentPtr exp(QxrdExperiment::findExperiment(m_SynchronizedAcquisition));
 
-  case QxrdExtraIODetectorsModel::DetectorTypeColumn:
-    for (int i=0; i<QxrdDetectorSettings::detectorTypeCount(); i++) {
-      editor -> addItem(QxrdDetectorSettings::detectorTypeName(i));
-    }
-    break;
+  QxrdAcqCommonPtr  acq;
+
+  if (exp) {
+    acq = exp->acquisition();
   }
 
-  return editor; /*inherited::createEditor(parent, option, index);*/
+  if (sync && acq) {
+    QxrdSynchronizedDetectorChannelPtr det(sync->detector(index.row()));
+
+    if (det) {
+      switch (index.column()) {
+      case QxrdExtraIODetectorsModel::ChannelNumberColumn:
+        {
+          QComboBox *editor = new QComboBox(parent);
+
+          for (int i=0; i<sync->detectorDeviceCount(); i++) {
+            editor -> addItem(sync->detectorDeviceName(i));
+          }
+
+          res = editor;
+        }
+        break;
+
+      case QxrdExtraIODetectorsModel::DetectorNumberColumn:
+        {
+          QComboBox *editor = new QComboBox(parent);
+
+          for (int i=0; i<acq->detectorCount(); i++) {
+            QxrdDetectorSettingsPtr det = acq->detector(i);
+
+            if (det) {
+              editor -> addItem(tr("%1 : %2").arg(i).arg(det->get_DetectorName()));
+            }
+          }
+
+          res = editor;
+        }
+        break;
+
+      case QxrdExtraIODetectorsModel::DetectorTypeColumn:
+        {
+          QComboBox *editor = new QComboBox(parent);
+
+          for (int i=0; i<QxrdDetectorSettings::detectorTypeCount(); i++) {
+            editor -> addItem(QxrdDetectorSettings::detectorTypeName(i));
+          }
+
+          res = editor;
+        }
+        break;
+      }
+    }
+  }
+
+  if (res == NULL) {
+    res = inherited::createEditor(parent, option, index);
+  }
+
+  return res;
 }
 
 void QxrdExtraIODetectorsDelegate::setEditorData(QWidget *editor,

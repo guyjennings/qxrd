@@ -91,6 +91,15 @@ public slots:
   virtual QVector<double> readContinuousInputChannel(int ch);
   virtual void finishContinuousInput();
 
+  virtual int detectorDeviceCount();
+  virtual QString detectorDeviceName(int n);
+
+  virtual int outputDeviceCount();
+  virtual QString outputDeviceName(int n);
+
+  virtual int inputDeviceCount();
+  virtual QString inputDeviceName(int n);
+
 public:
   int32 syncCallback(TaskHandle task, int32 status);
 //  int32 aiCallback(TaskHandle task, int32 status);
@@ -145,6 +154,18 @@ private:
   QVector<QxrdNIDAQSyncDetectorOutputPtr>  m_SyncDetectors;
   QVector<QxrdNIDAQSyncWaveformOutputPtr>  m_SyncWaveforms;
   QVector<QxrdNIDAQSyncAnalogInputPtr>     m_SyncInputs;
+
+  int                 m_DeviceCount;
+  QStringList         m_DeviceNames;
+
+  int                 m_DetectorDeviceCount;
+  QStringList         m_DetectorDeviceNames;
+
+  int                 m_OutputDeviceCount;
+  QStringList         m_OutputDeviceNames;
+
+  int                 m_InputDeviceCount;
+  QStringList         m_InputDeviceNames;
 };
 
 Q_DECLARE_METATYPE(QxrdNIDAQPlugin*)

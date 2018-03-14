@@ -3,8 +3,12 @@
 #include <QComboBox>
 #include <QApplication>
 #include <QDoubleSpinBox>
+#include "qxrdsynchronizedacquisition.h"
+#include "qxrdsynchronizedoutputchannel-ptr.h"
+#include "qxrdsynchronizedoutputchannel.h"
 
-QxrdExtraIOOutputsDelegate::QxrdExtraIOOutputsDelegate()
+QxrdExtraIOOutputsDelegate::QxrdExtraIOOutputsDelegate(QxrdSynchronizedAcquisitionWPtr sync)
+  : m_SynchronizedAcquisition(sync)
 {
 
 }
@@ -14,44 +18,99 @@ QWidget* QxrdExtraIOOutputsDelegate::createEditor(QWidget *parent,
                                                   const QModelIndex &index) const
 {
   QWidget* res = NULL;
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
-  switch (index.column()) {
-  case QxrdExtraIOOutputsModel::ChannelNumberColumn:
-    {
-      QComboBox *cb = new QComboBox(parent);
+  if (sync) {
+    QxrdSynchronizedOutputChannelPtr out(sync->output(index.row()));
 
-      for (int i=0; i<2; i++) {
-        cb -> addItem(tr("ao%1").arg(i));
+    if (out) {
+      switch (index.column()) {
+      case QxrdExtraIOOutputsModel::ChannelNumberColumn:
+        {
+          QComboBox *cb = new QComboBox(parent);
+
+          for (int i=0; i<sync->outputDeviceCount(); i++) {
+            cb -> addItem(sync->outputDeviceName(i));
+          }
+
+          res = cb;
+        }
+        break;
+
+      case QxrdExtraIOOutputsModel::ChannelModeColumn:
+        {
+          QComboBox *cb = new QComboBox(parent);
+
+          for (int i=0; i<out->channelModeCount(); i++) {
+            cb -> addItem(out->channelMode(i));
+          }
+
+          res = cb;
+        }
+        break;
+
+      case QxrdExtraIOOutputsModel::WaveformColumn:
+        {
+          QComboBox *cb = new QComboBox(parent);
+
+          for (int i=0; i<out->waveformModeCount(); i++) {
+            cb -> addItem(out->waveformMode(i));
+          }
+
+          res = cb;
+        }
+        break;
+
+      case QxrdExtraIOOutputsModel::StartVColumn:
+      case QxrdExtraIOOutputsModel::EndVColumn:
+        {
+          QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
+
+          sb -> setValue(index.data().toDouble());
+          sb -> setMinimum(-20);
+          sb -> setMaximum(20);
+
+          res = sb;
+        }
+        break;
+
+      case QxrdExtraIOOutputsModel::SymmetryColumn:
+        {
+          QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
+
+          sb -> setValue(index.data().toDouble());
+          sb -> setMinimum(-1);
+          sb -> setMaximum(1);
+
+          res = sb;
+        }
+        break;
+
+      case QxrdExtraIOOutputsModel::PhaseShiftColumn:
+        {
+          QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
+
+          sb -> setValue(index.data().toDouble());
+          sb -> setMinimum(-450);
+          sb -> setMaximum(450);
+
+          res = sb;
+        }
+        break;
+
+      case QxrdExtraIOOutputsModel::SampleRateColumn:
+        {
+          QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
+
+          sb -> setValue(index.data().toDouble());
+          sb -> setMinimum(0);
+          sb -> setMaximum(50000);
+
+          res = sb;
+        }
+        break;
       }
-
-      res = cb;
     }
-    break;
-
-  case QxrdExtraIOOutputsModel::ChannelModeColumn:
-    {
-      QComboBox *cb = new QComboBox(parent);
-
-      for (int i=0; i<6; i++) {
-        cb -> addItem(tr("Mode %1").arg(i));
-      }
-
-      res = cb;
-    }
-    break;
-
-  case QxrdExtraIOOutputsModel::StartVColumn:
-  case QxrdExtraIOOutputsModel::EndVColumn:
-    {
-      QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
-
-      sb -> setValue(index.data().toDouble());
-      sb -> setMinimum(-20);
-      sb -> setMaximum(20);
-
-      res = sb;
-    }
-    break;
   }
 
   if (res == NULL) {

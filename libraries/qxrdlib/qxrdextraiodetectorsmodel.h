@@ -35,7 +35,7 @@ public:
   void deleteDetectors(QVector<int> n);
 
 private:
-  QxrdSynchronizedAcquisitionWPtr m_Sync;
+  QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
 };
 
 #endif // QXRDEXTRAIODETECTORSMODEL_H

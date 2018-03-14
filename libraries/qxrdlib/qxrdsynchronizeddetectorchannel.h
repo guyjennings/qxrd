@@ -3,6 +3,8 @@
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
+#include "qxrdnidaq-ptr.h"
+#include "qxrdacqcommon-ptr.h"
 
 class QXRD_EXPORT QxrdSynchronizedDetectorChannel : public QcepObject
 {
@@ -13,10 +15,16 @@ private:
 
 public:
   Q_INVOKABLE QxrdSynchronizedDetectorChannel(QString name);
+  void initialize(QcepObjectWPtr parent);
 
   QString channelName();
   QString detectorName();
-  QString detectorTypeName();
+  static int detectorTypeCount();
+  static QString detectorTypeName(int n);
+
+private:
+  QxrdAcqCommonWPtr m_AcqCommon;
+  QxrdNIDAQWPtr     m_NIDAQ;
 
 public:
   Q_PROPERTY(int channelNumber READ get_ChannelNumber WRITE set_ChannelNumber)

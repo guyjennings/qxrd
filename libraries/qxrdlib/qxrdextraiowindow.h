@@ -6,8 +6,8 @@
 #include "ui_qxrdextraiowindow.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
-#include "qxrdacquisitionextrainputs-ptr.h"
-#include "qxrdacquisitionextrainputschannel-ptr.h"
+//#include "qxrdacquisitionextrainputs-ptr.h"
+//#include "qxrdacquisitionextrainputschannel-ptr.h"
 #include "qxrdextraiowindowsettings-ptr.h"
 #include "qxrdextraiodetectorsmodel-ptr.h"
 #include "qxrdextraiooutputsmodel-ptr.h"
@@ -34,7 +34,7 @@ private slots:
   void waveformChanged();
 
 private:
-  void setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelPtr ch);
+//  void setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelPtr ch);
 
 private slots:
 //  void updateUi();
@@ -55,8 +55,8 @@ private slots:
 
 private:
   QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
-  QxrdAcquisitionExtraInputsWPtr  m_AcquisitionExtraInputs;
-  int                             m_ChannelsInRows;
+//  QxrdAcquisitionExtraInputsWPtr  m_AcquisitionExtraInputs;
+//  int                             m_ChannelsInRows;
   QxrdExtraIODetectorsModelPtr    m_DetectorsModel;
   QxrdExtraIOOutputsModelPtr      m_OutputsModel;
   QxrdExtraIOInputsModelPtr       m_InputsModel;

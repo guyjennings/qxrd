@@ -3,7 +3,7 @@
 #include "qxrdsynchronizedoutputchannel.h"
 
 QxrdExtraIOOutputsModel::QxrdExtraIOOutputsModel(QxrdSynchronizedAcquisitionWPtr sync)
-  : m_Sync(sync)
+  : m_SynchronizedAcquisition(sync)
 {
 
 }
@@ -12,7 +12,7 @@ int QxrdExtraIOOutputsModel::rowCount(const QModelIndex &parent) const
 {
   int res = 0;
 
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     res = sync->outputCount();
@@ -30,7 +30,7 @@ QVariant QxrdExtraIOOutputsModel::data(const QModelIndex &index, int role) const
 {
   QVariant res = QVariant();
 
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync && index.isValid()) {
     int row = index.row();
@@ -50,7 +50,11 @@ QVariant QxrdExtraIOOutputsModel::data(const QModelIndex &index, int role) const
           break;
 
         case ChannelModeColumn:
-          res = out->channelMode();
+          res = out->channelMode(out->get_Mode());
+          break;
+
+        case WaveformColumn:
+          res = out->waveformMode(out->get_WaveformMode());
           break;
 
         case StartVColumn:
@@ -59,6 +63,18 @@ QVariant QxrdExtraIOOutputsModel::data(const QModelIndex &index, int role) const
 
         case EndVColumn:
           res = out->get_EndV();
+          break;
+
+        case SymmetryColumn:
+          res = out->get_Symmetry();
+          break;
+
+        case PhaseShiftColumn:
+          res = out->get_PhaseShift();
+          break;
+
+        case SampleRateColumn:
+          res = out->get_SampleRate();
           break;
         }
       } else if (role == Qt::EditRole) {
@@ -75,12 +91,28 @@ QVariant QxrdExtraIOOutputsModel::data(const QModelIndex &index, int role) const
           res = out->get_Mode();
           break;
 
+        case WaveformColumn:
+          res = out->get_WaveformMode();
+          break;
+
         case StartVColumn:
           res = out->get_StartV();
           break;
 
         case EndVColumn:
           res = out->get_EndV();
+          break;
+
+        case SymmetryColumn:
+          res = out->get_Symmetry();
+          break;
+
+        case PhaseShiftColumn:
+          res = out->get_PhaseShift();
+          break;
+
+        case SampleRateColumn:
+          res = out->get_SampleRate();
           break;
         }
       }
@@ -109,12 +141,28 @@ QVariant QxrdExtraIOOutputsModel::headerData(int section, Qt::Orientation orient
         res = "Mode";
         break;
 
+      case WaveformColumn:
+        res = "Waveform";
+        break;
+
       case StartVColumn:
         res = "Start V";
         break;
 
       case EndVColumn:
         res = "End V";
+        break;
+
+      case SymmetryColumn:
+        res = "Symmetry";
+        break;
+
+      case PhaseShiftColumn:
+        res = "Phase Shift";
+        break;
+
+      case SampleRateColumn:
+        res = "Sample Rate";
         break;
       }
     } else {
@@ -138,7 +186,7 @@ bool QxrdExtraIOOutputsModel::setData(const QModelIndex &index, const QVariant &
 {
   bool res = false;
 
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync && index.isValid()) {
     int row = index.row();
@@ -164,6 +212,10 @@ bool QxrdExtraIOOutputsModel::setData(const QModelIndex &index, const QVariant &
           res = true;
           break;
 
+        case WaveformColumn:
+          out->set_WaveformMode(value.toInt());
+          break;
+
         case StartVColumn:
           out->set_StartV(value.toDouble());
           res = true;
@@ -172,6 +224,18 @@ bool QxrdExtraIOOutputsModel::setData(const QModelIndex &index, const QVariant &
         case EndVColumn:
           out->set_EndV(value.toDouble());
           res = true;
+          break;
+
+        case SymmetryColumn:
+          out->set_Symmetry(value.toDouble());
+          break;
+
+        case PhaseShiftColumn:
+          out->set_PhaseShift(value.toDouble());
+          break;
+
+        case SampleRateColumn:
+          out->set_SampleRate(value.toDouble());
           break;
         }
       }
@@ -183,7 +247,7 @@ bool QxrdExtraIOOutputsModel::setData(const QModelIndex &index, const QVariant &
 
 void QxrdExtraIOOutputsModel::newOutput(int before)
 {
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     beginInsertRows(QModelIndex(), before, before);
@@ -196,7 +260,7 @@ void QxrdExtraIOOutputsModel::newOutput(int before)
 
 void QxrdExtraIOOutputsModel::deleteOutput(int n)
 {
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     beginRemoveRows(QModelIndex(), n, n);
@@ -209,7 +273,7 @@ void QxrdExtraIOOutputsModel::deleteOutput(int n)
 
 void QxrdExtraIOOutputsModel::deleteOutputs(QVector<int> n)
 {
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     if (n.count() == 1) {

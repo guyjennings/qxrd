@@ -1,9 +1,11 @@
 #include "qxrdextraiodetectorsmodel.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizeddetectorchannel.h"
+#include "qxrdacqcommon.h"
+#include "qxrdexperiment.h"
 
 QxrdExtraIODetectorsModel::QxrdExtraIODetectorsModel(QxrdSynchronizedAcquisitionWPtr sync)
-  : m_Sync(sync)
+  : m_SynchronizedAcquisition(sync)
 {
 
 }
@@ -12,7 +14,7 @@ int QxrdExtraIODetectorsModel::rowCount(const QModelIndex &parent) const
 {
   int res = 0;
 
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     res = sync->detectorCount();
@@ -30,9 +32,15 @@ QVariant QxrdExtraIODetectorsModel::data(const QModelIndex &index, int role) con
 {
   QVariant res = QVariant();
 
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+  QxrdExperimentPtr              exp(QxrdExperiment::findExperiment(m_SynchronizedAcquisition));
+  QxrdAcqCommonPtr               acq;
 
-  if (sync && index.isValid()) {
+  if (exp) {
+    acq = exp->acquisition();
+  }
+
+  if (sync && acq && index.isValid()) {
     int row = index.row();
     int col = index.column();
 
@@ -46,11 +54,11 @@ QVariant QxrdExtraIODetectorsModel::data(const QModelIndex &index, int role) con
           break;
 
         case DetectorNumberColumn:
-          res = det->detectorName();
+          res = tr("%1 : %2").arg(det->get_DetectorNumber()).arg(det->detectorName());
           break;
 
         case DetectorTypeColumn:
-          res = det->detectorTypeName();
+          res = det->detectorTypeName(det->get_DetectorType());
           break;
         }
       } else if (role == Qt::EditRole) {
@@ -114,7 +122,7 @@ bool QxrdExtraIODetectorsModel::setData(const QModelIndex &index, const QVariant
 {
   bool res = false;
 
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync && index.isValid()) {
     int row = index.row();
@@ -149,7 +157,7 @@ bool QxrdExtraIODetectorsModel::setData(const QModelIndex &index, const QVariant
 
 void QxrdExtraIODetectorsModel::newDetector(int before)
 {
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     beginInsertRows(QModelIndex(), before, before);
@@ -162,7 +170,7 @@ void QxrdExtraIODetectorsModel::newDetector(int before)
 
 void QxrdExtraIODetectorsModel::deleteDetector(int n)
 {
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     beginRemoveRows(QModelIndex(), n, n);
@@ -175,7 +183,7 @@ void QxrdExtraIODetectorsModel::deleteDetector(int n)
 
 void QxrdExtraIODetectorsModel::deleteDetectors(QVector<int> n)
 {
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     if (n.count() == 1) {

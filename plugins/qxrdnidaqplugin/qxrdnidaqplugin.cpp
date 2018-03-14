@@ -80,6 +80,28 @@ void QxrdNIDAQPlugin::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 
   printMessage("QxrdNIDAQPlugin::initialize");
+
+  m_DeviceNames = deviceNames();
+
+  m_DeviceCount = m_DeviceNames.count();
+
+  for (int i=0; i<m_DeviceCount; i++) {
+    QString deviceName = m_DeviceNames.value(i);
+
+    if (!deviceIsSimulated(deviceName)) {
+      QStringList counterChans = deviceCOChannels(deviceName);
+      QStringList outputChans  = deviceAOChannels(deviceName);
+      QStringList inputChans   = deviceAIChannels(deviceName);
+
+      m_DetectorDeviceNames.append(counterChans);
+      m_OutputDeviceNames.append(outputChans);
+      m_InputDeviceNames.append(inputChans);
+    }
+  }
+
+  m_DetectorDeviceCount = m_DetectorDeviceNames.count();
+  m_OutputDeviceCount   = m_OutputDeviceNames.count();
+  m_InputDeviceCount    = m_InputDeviceNames.count();
 }
 
 QString QxrdNIDAQPlugin::name() const
@@ -90,18 +112,6 @@ QString QxrdNIDAQPlugin::name() const
 void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
 {
   if (DAQmxFailed(err)) {
-//    int sz = DAQmxGetErrorString(err, NULL, 0);
-
-//    if (sz > 0) {
-//      char *buff = (char*) malloc(sz);
-
-//      if (DAQmxGetErrorString(err, buff, sz) == 0) {
-//        printMessage(tr("%1:%2 NI-DAQ Error %3 : %4").arg(file).arg(line).arg(err).arg(buff));
-//      }
-
-//      free(buff);
-//    }
-
     int szx = DAQmxGetExtendedErrorInfo(NULL, 0);
 
     if (szx > 0) {
@@ -1291,4 +1301,34 @@ Error:
 QVector<double> QxrdNIDAQPlugin::syncAnalogInputs()
 {
   return m_SyncAnalogInputs;
+}
+
+int QxrdNIDAQPlugin::detectorDeviceCount()
+{
+  return m_DetectorDeviceCount;
+}
+
+QString QxrdNIDAQPlugin::detectorDeviceName(int n)
+{
+  return m_DetectorDeviceNames.value(n);
+}
+
+int QxrdNIDAQPlugin::outputDeviceCount()
+{
+  return m_OutputDeviceCount;
+}
+
+QString QxrdNIDAQPlugin::outputDeviceName(int n)
+{
+  return m_OutputDeviceNames.value(n);
+}
+
+int QxrdNIDAQPlugin::inputDeviceCount()
+{
+  return m_InputDeviceCount;
+}
+
+QString QxrdNIDAQPlugin::inputDeviceName(int n)
+{
+  return m_InputDeviceNames.value(n);
 }

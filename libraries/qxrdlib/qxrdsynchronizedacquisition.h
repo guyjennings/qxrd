@@ -39,17 +39,26 @@ public:
   void deleteDetector(int n);
   void renumberDetectors();
 
+  int detectorDeviceCount();
+  QString detectorDeviceName(int n);
+
   int outputCount();
   QxrdSynchronizedOutputChannelPtr output(int n);
   void newOutput(int before);
   void deleteOutput(int n);
   void renumberOutputs();
 
+  int outputDeviceCount();
+  QString outputDeviceName(int n);
+
   int inputCount();
   QxrdSynchronizedInputChannelPtr input(int n);
   void newInput(int before);
   void deleteInput(int n);
   void renumberInputs();
+
+  int inputDeviceCount();
+  QString inputDeviceName(int n);
 
   QVector<double> evaluateInputs();
   double          evaluateInput(int ch);
@@ -60,8 +69,8 @@ signals:
   void inputCountChanged(int n);
 
 public:
-  Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)
-  QCEP_INTEGER_PROPERTY(SyncAcquisitionMode)
+//  Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)
+//  QCEP_INTEGER_PROPERTY(SyncAcquisitionMode)
 
   enum {
     SyncAcquisitionModeNone,
@@ -69,8 +78,8 @@ public:
     SyncAcquisitionModeContinuous
   };
 
-  Q_PROPERTY(int syncAcquisitionWaveform READ get_SyncAcquisitionWaveform WRITE set_SyncAcquisitionWaveform)
-  QCEP_INTEGER_PROPERTY(SyncAcquisitionWaveform)
+//  Q_PROPERTY(int syncAcquisitionWaveform READ get_SyncAcquisitionWaveform WRITE set_SyncAcquisitionWaveform)
+//  QCEP_INTEGER_PROPERTY(SyncAcquisitionWaveform)
 
   enum {
     SyncAcquisitionWaveformSquare,
@@ -80,35 +89,35 @@ public:
     SyncAcquisitionWaveformBipolarTriangle
   };
 
-  Q_PROPERTY(QString syncAcquisitionOutputDevice READ get_SyncAcquisitionOutputDevice WRITE set_SyncAcquisitionOutputDevice)
-  QCEP_STRING_PROPERTY(SyncAcquisitionOutputDevice)
+//  Q_PROPERTY(QString syncAcquisitionOutputDevice READ get_SyncAcquisitionOutputDevice WRITE set_SyncAcquisitionOutputDevice)
+//  QCEP_STRING_PROPERTY(SyncAcquisitionOutputDevice)
 
-  Q_PROPERTY(QString syncAcquisitionOutputChannel READ get_SyncAcquisitionOutputChannel WRITE set_SyncAcquisitionOutputChannel)
-  QCEP_STRING_PROPERTY(SyncAcquisitionOutputChannel)
+//  Q_PROPERTY(QString syncAcquisitionOutputChannel READ get_SyncAcquisitionOutputChannel WRITE set_SyncAcquisitionOutputChannel)
+//  QCEP_STRING_PROPERTY(SyncAcquisitionOutputChannel)
 
 //  Q_PROPERTY(int syncAcquisitionFlagChannel READ get_SyncAcquisitionFlagChannel WRITE set_SyncAcquisitionFlagChannel)
 //  QCEP_INTEGER_PROPERTY(SyncAcquisitionFlagChannel)
 
-  Q_PROPERTY(double syncAcquisitionMinimum READ get_SyncAcquisitionMinimum WRITE set_SyncAcquisitionMinimum)
-  QCEP_DOUBLE_PROPERTY(SyncAcquisitionMinimum)
+//  Q_PROPERTY(double syncAcquisitionMinimum READ get_SyncAcquisitionMinimum WRITE set_SyncAcquisitionMinimum)
+//  QCEP_DOUBLE_PROPERTY(SyncAcquisitionMinimum)
 
-  Q_PROPERTY(double syncAcquisitionMaximum READ get_SyncAcquisitionMaximum WRITE set_SyncAcquisitionMaximum)
-  QCEP_DOUBLE_PROPERTY(SyncAcquisitionMaximum)
+//  Q_PROPERTY(double syncAcquisitionMaximum READ get_SyncAcquisitionMaximum WRITE set_SyncAcquisitionMaximum)
+//  QCEP_DOUBLE_PROPERTY(SyncAcquisitionMaximum)
 
-  Q_PROPERTY(double syncAcquisitionSymmetry READ get_SyncAcquisitionSymmetry WRITE set_SyncAcquisitionSymmetry)
-  QCEP_DOUBLE_PROPERTY(SyncAcquisitionSymmetry)
+//  Q_PROPERTY(double syncAcquisitionSymmetry READ get_SyncAcquisitionSymmetry WRITE set_SyncAcquisitionSymmetry)
+//  QCEP_DOUBLE_PROPERTY(SyncAcquisitionSymmetry)
 
-  Q_PROPERTY(double syncAcquisitionPhaseShift READ get_SyncAcquisitionPhaseShift WRITE set_SyncAcquisitionPhaseShift)
-  QCEP_DOUBLE_PROPERTY(SyncAcquisitionPhaseShift)
+//  Q_PROPERTY(double syncAcquisitionPhaseShift READ get_SyncAcquisitionPhaseShift WRITE set_SyncAcquisitionPhaseShift)
+//  QCEP_DOUBLE_PROPERTY(SyncAcquisitionPhaseShift)
 
-  Q_PROPERTY(double syncAcquisitionManualValue READ get_SyncAcquisitionManualValue WRITE set_SyncAcquisitionManualValue)
-  QCEP_DOUBLE_PROPERTY(SyncAcquisitionManualValue)
+//  Q_PROPERTY(double syncAcquisitionManualValue READ get_SyncAcquisitionManualValue WRITE set_SyncAcquisitionManualValue)
+//  QCEP_DOUBLE_PROPERTY(SyncAcquisitionManualValue)
 
 signals:
 
 public slots:
-  void setManualOutput();
-  void triggerOnce();
+//  void setManualOutput();
+//  void triggerOnce();
 
 public:
   void prepareForAcquisition(QxrdAcquisitionParameterPackWPtr parms);

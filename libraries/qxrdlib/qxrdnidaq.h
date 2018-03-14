@@ -50,6 +50,15 @@ public:
   virtual int readContinuousInput() = 0;
   virtual QVector<double> readContinuousInputChannel(int ch) = 0;
   virtual void finishContinuousInput() = 0;
+
+  virtual int detectorDeviceCount() = 0;
+  virtual QString detectorDeviceName(int n) = 0;
+
+  virtual int outputDeviceCount() = 0;
+  virtual QString outputDeviceName(int n) = 0;
+
+  virtual int inputDeviceCount() = 0;
+  virtual QString inputDeviceName(int n) = 0;
 };
 
 #define NIDAQInterface_iid "gov.anl.aps.cep.Qxrd.NIDAQ"

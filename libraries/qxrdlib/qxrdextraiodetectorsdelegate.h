@@ -3,6 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include <QStyledItemDelegate>
+#include "qxrdsynchronizedacquisition-ptr.h"
 
 class QXRD_EXPORT QxrdExtraIODetectorsDelegate : public QStyledItemDelegate
 {
@@ -12,7 +13,7 @@ private:
   typedef QStyledItemDelegate inherited;
 
 public:
-  QxrdExtraIODetectorsDelegate();
+  QxrdExtraIODetectorsDelegate(QxrdSynchronizedAcquisitionWPtr sync);
 
   QWidget *createEditor(QWidget *parent,
                         const QStyleOptionViewItem &option,
@@ -28,6 +29,9 @@ public:
 //  void paint           (QPainter *painter,
 //                        const QStyleOptionViewItem &option,
 //                        const QModelIndex &index) const;
+
+private:
+  QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
 };
 
 #endif // QXRDEXTRAIODETECTORSDELEGATE_H

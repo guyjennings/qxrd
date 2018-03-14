@@ -5,7 +5,7 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qxrdacquisitionparameterpack.h"
-#include "qxrdacquisitionextrainputs.h"
+//#include "qxrdacquisitionextrainputs.h"
 #include <QCheckBox>
 #include <QMessageBox>
 #include "qxrdextraiowindowsettings.h"
@@ -20,8 +20,8 @@
 #include "qxrdextraioinputsdelegate.h"
 
 QxrdExtraIOWindow::QxrdExtraIOWindow(QString name) :
-  inherited(name),
-  m_ChannelsInRows(0)
+  inherited(name)/*,
+  m_ChannelsInRows(0)*/
 {
 }
 
@@ -43,77 +43,77 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
     if (acq) {
       m_SynchronizedAcquisition = acq->synchronizedAcquisition();
 
-      m_SyncAcqMode     -> addItem("None");
-      m_SyncAcqMode     -> addItem("Stepped Output");
-      m_SyncAcqMode     -> addItem("Continuous Output");
+//      m_SyncAcqMode     -> addItem("None");
+//      m_SyncAcqMode     -> addItem("Stepped Output");
+//      m_SyncAcqMode     -> addItem("Continuous Output");
 
-      m_SyncAcqWfm      -> addItem("Square");
-      m_SyncAcqWfm      -> addItem("Sine");
-      m_SyncAcqWfm      -> addItem("Triangle");
-      m_SyncAcqWfm      -> addItem("Sawtooth");
-      m_SyncAcqWfm      -> addItem("Bipolar Triangle");
+//      m_SyncAcqWfm      -> addItem("Square");
+//      m_SyncAcqWfm      -> addItem("Sine");
+//      m_SyncAcqWfm      -> addItem("Triangle");
+//      m_SyncAcqWfm      -> addItem("Sawtooth");
+//      m_SyncAcqWfm      -> addItem("Bipolar Triangle");
 
-      m_SyncAcqMinimum  -> setMinimum(-10.0);
-      m_SyncAcqMinimum  -> setMaximum(10.0);
-      m_SyncAcqMinimum  -> setSingleStep(0.1);
+//      m_SyncAcqMinimum  -> setMinimum(-10.0);
+//      m_SyncAcqMinimum  -> setMaximum(10.0);
+//      m_SyncAcqMinimum  -> setSingleStep(0.1);
 
-      m_SyncAcqMaximum  -> setMinimum(-10.0);
-      m_SyncAcqMaximum  -> setMaximum(10.0);
-      m_SyncAcqMaximum  -> setSingleStep(0.1);
+//      m_SyncAcqMaximum  -> setMinimum(-10.0);
+//      m_SyncAcqMaximum  -> setMaximum(10.0);
+//      m_SyncAcqMaximum  -> setSingleStep(0.1);
 
-      m_SyncAcqSymmetry -> setMinimum(-1.0);
-      m_SyncAcqSymmetry -> setMaximum(1.0);
-      m_SyncAcqSymmetry -> setSingleStep(0.1);
+//      m_SyncAcqSymmetry -> setMinimum(-1.0);
+//      m_SyncAcqSymmetry -> setMaximum(1.0);
+//      m_SyncAcqSymmetry -> setSingleStep(0.1);
 
-      m_SyncAcqPhaseShift -> setMinimum(-100.0);
-      m_SyncAcqPhaseShift -> setMaximum(100.0);
-      m_SyncAcqPhaseShift -> setSingleStep(1);
+//      m_SyncAcqPhaseShift -> setMinimum(-100.0);
+//      m_SyncAcqPhaseShift -> setMaximum(100.0);
+//      m_SyncAcqPhaseShift -> setSingleStep(1);
 
-      QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+//      QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
-      if (sync) {
-        QxrdNIDAQPtr nidaq(sync->nidaqPlugin());
+//      if (sync) {
+//        QxrdNIDAQPtr nidaq(sync->nidaqPlugin());
 
-        if (nidaq) {
-          QStringList devices = nidaq->deviceNames();
+//        if (nidaq) {
+//          QStringList devices = nidaq->deviceNames();
 
-          foreach(QString device, devices) {
-            QString desc = nidaq->deviceType(device);
-            int     isSim = nidaq->deviceIsSimulated(device);
+//          foreach(QString device, devices) {
+//            QString desc = nidaq->deviceType(device);
+//            int     isSim = nidaq->deviceIsSimulated(device);
 
-            QString item = device+" : "+desc;
+//            QString item = device+" : "+desc;
 
-            if (isSim) {
-              item += " [simulated]";
-            }
+//            if (isSim) {
+//              item += " [simulated]";
+//            }
 
-            m_SyncAcqOutDevice->addItem(item, device);
-          }
-        }
+////            m_SyncAcqOutDevice->addItem(item, device);
+//          }
+//        }
 
-        sync -> prop_SyncAcquisitionMode()          -> linkTo(m_SyncAcqMode);
-        sync -> prop_SyncAcquisitionWaveform()      -> linkTo(m_SyncAcqWfm);
-        sync -> prop_SyncAcquisitionOutputDevice()  -> linkTo(m_SyncAcqOutDevice);
-        sync -> prop_SyncAcquisitionOutputChannel() -> linkTo(m_SyncAcqOutChan);
+//        sync -> prop_SyncAcquisitionMode()          -> linkTo(m_SyncAcqMode);
+//        sync -> prop_SyncAcquisitionWaveform()      -> linkTo(m_SyncAcqWfm);
+//        sync -> prop_SyncAcquisitionOutputDevice()  -> linkTo(m_SyncAcqOutDevice);
+//        sync -> prop_SyncAcquisitionOutputChannel() -> linkTo(m_SyncAcqOutChan);
 
-        sync -> prop_SyncAcquisitionMinimum()       -> linkTo(m_SyncAcqMinimum);
-        sync -> prop_SyncAcquisitionMaximum()       -> linkTo(m_SyncAcqMaximum);
-        sync -> prop_SyncAcquisitionSymmetry()      -> linkTo(m_SyncAcqSymmetry);
-        sync -> prop_SyncAcquisitionPhaseShift()    -> linkTo(m_SyncAcqPhaseShift);
-        sync -> prop_SyncAcquisitionManualValue()   -> linkTo(m_ManualOutputVolts);
+//        sync -> prop_SyncAcquisitionMinimum()       -> linkTo(m_SyncAcqMinimum);
+//        sync -> prop_SyncAcquisitionMaximum()       -> linkTo(m_SyncAcqMaximum);
+//        sync -> prop_SyncAcquisitionSymmetry()      -> linkTo(m_SyncAcqSymmetry);
+//        sync -> prop_SyncAcquisitionPhaseShift()    -> linkTo(m_SyncAcqPhaseShift);
+//        sync -> prop_SyncAcquisitionManualValue()   -> linkTo(m_ManualOutputVolts);
 
-        connect(sync -> prop_SyncAcquisitionOutputDevice(), &QcepStringProperty::valueChanged, this, &QxrdExtraIOWindow::deviceChanged);
-        connect(sync -> prop_SyncAcquisitionOutputChannel(), &QcepStringProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
-        connect(sync -> prop_SyncAcquisitionMode(), &QcepIntProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
-        connect(sync -> prop_SyncAcquisitionWaveform(), &QcepIntProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
-        connect(sync -> prop_SyncAcquisitionMinimum(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
-        connect(sync -> prop_SyncAcquisitionMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
-        connect(sync -> prop_SyncAcquisitionSymmetry(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
-        connect(sync -> prop_SyncAcquisitionPhaseShift(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
+//        connect(sync -> prop_SyncAcquisitionOutputDevice(), &QcepStringProperty::valueChanged, this, &QxrdExtraIOWindow::deviceChanged);
+//        connect(sync -> prop_SyncAcquisitionOutputChannel(), &QcepStringProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
+//        connect(sync -> prop_SyncAcquisitionMode(), &QcepIntProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
+//        connect(sync -> prop_SyncAcquisitionWaveform(), &QcepIntProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
+//        connect(sync -> prop_SyncAcquisitionMinimum(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
+//        connect(sync -> prop_SyncAcquisitionMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
+//        connect(sync -> prop_SyncAcquisitionSymmetry(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
+//        connect(sync -> prop_SyncAcquisitionPhaseShift(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
 
-        connect(m_ManualOutput, &QAbstractButton::clicked, sync.data(), &QxrdSynchronizedAcquisition::setManualOutput);
-        connect(m_ManualTrigger, &QAbstractButton::clicked, sync.data(), &QxrdSynchronizedAcquisition::triggerOnce);
-      }
+//        connect(m_ManualOutput, &QAbstractButton::clicked, sync.data(), &QxrdSynchronizedAcquisition::setManualOutput);
+//        connect(m_ManualTrigger, &QAbstractButton::clicked, sync.data(), &QxrdSynchronizedAcquisition::triggerOnce);
+//      }
 
       connect(acq->prop_ExposureTime(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
       connect(acq->prop_PhasesInGroup(), &QcepIntProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
@@ -130,46 +130,46 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
 
 //      m_AcquisitionExtraInputs = acq->acquisitionExtraInputs();
 
-      if (m_AcquisitionExtraInputs) {
+//      if (m_AcquisitionExtraInputs) {
 
-        QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+//        QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
-        if (xtra) {
-          QxrdNIDAQPtr nidaq(xtra->nidaqPlugin());
+//        if (xtra) {
+//          QxrdNIDAQPtr nidaq(xtra->nidaqPlugin());
 
-          if (nidaq) {
-            QStringList devices = nidaq->deviceNames();
+//          if (nidaq) {
+//            QStringList devices = nidaq->deviceNames();
 
-            foreach(QString device, devices) {
-              QString desc = nidaq->deviceType(device);
-              int     isSim = nidaq->deviceIsSimulated(device);
+//            foreach(QString device, devices) {
+//              QString desc = nidaq->deviceType(device);
+//              int     isSim = nidaq->deviceIsSimulated(device);
 
-              QString item = device+" : "+desc;
+//              QString item = device+" : "+desc;
 
-              if (isSim) {
-                item += " [simulated]";
-              }
+//              if (isSim) {
+//                item += " [simulated]";
+//              }
 
-              m_AcquisitionDevice->addItem(item, device);
-            }
-          }
+////              m_AcquisitionDevice->addItem(item, device);
+//            }
+//          }
 
-          xtra->prop_SampleRate()->linkTo(m_SampleRate);
-          xtra->prop_AcquireDelay()->linkTo(m_AcquisitionDelay);
-          xtra->prop_DeviceName()->linkTo(m_AcquisitionDevice);
+////          xtra->prop_SampleRate()->linkTo(m_SampleRate);
+////          xtra->prop_AcquireDelay()->linkTo(m_AcquisitionDelay);
+////          xtra->prop_DeviceName()->linkTo(m_AcquisitionDevice);
 
-//          connect(xtra->prop_DeviceName(), &QcepStringProperty::valueChanged,
-//                  this, &QxrdExtraIOWindow::updateUi);
+////          connect(xtra->prop_DeviceName(), &QcepStringProperty::valueChanged,
+////                  this, &QxrdExtraIOWindow::updateUi);
 
-          connect(xtra.data(), &QxrdAcquisitionExtraInputs::newDataAvailable,
-                  this, &QxrdExtraIOWindow::updateWaveforms);
+//          connect(xtra.data(), &QxrdAcquisitionExtraInputs::newDataAvailable,
+//                  this, &QxrdExtraIOWindow::updateWaveforms);
 
-//          connect(xtra.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
-//                  this, &QxrdExtraIOWindow::updateUi);
+////          connect(xtra.data(), &QxrdAcquisitionExtraInputs::channelCountChanged,
+////                  this, &QxrdExtraIOWindow::updateUi);
 
-//          updateUi();
-        }
-      }
+////          updateUi();
+//        }
+//      }
     }
   }
 
@@ -196,9 +196,9 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
   m_OutputsTable   -> setModel(m_OutputsModel.data());
   m_InputsTable    -> setModel(m_InputsModel.data());
 
-  m_DetectorsTable -> setItemDelegate(new QxrdExtraIODetectorsDelegate());
-  m_OutputsTable   -> setItemDelegate(new QxrdExtraIOOutputsDelegate());
-  m_InputsTable    -> setItemDelegate(new QxrdExtraIOInputsDelegate());
+  m_DetectorsTable -> setItemDelegate(new QxrdExtraIODetectorsDelegate(m_SynchronizedAcquisition));
+  m_OutputsTable   -> setItemDelegate(new QxrdExtraIOOutputsDelegate(m_SynchronizedAcquisition));
+  m_InputsTable    -> setItemDelegate(new QxrdExtraIOInputsDelegate(m_SynchronizedAcquisition));
 
   m_DetectorsTable -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Stretch);
   m_OutputsTable   -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Stretch);
@@ -236,18 +236,18 @@ void QxrdExtraIOWindow::deviceChanged()
   if (sync) {
     QxrdNIDAQPtr nidaq(sync->nidaqPlugin());
 
-    if (nidaq) {
-      QStringList aoChannels = nidaq->deviceAOChannels(sync->get_SyncAcquisitionOutputDevice());
+//    if (nidaq) {
+//      QStringList aoChannels = nidaq->deviceAOChannels(sync->get_SyncAcquisitionOutputDevice());
 
-      bool blocked = m_SyncAcqOutChan->blockSignals(true);
-      m_SyncAcqOutChan->clear();
+//      bool blocked = m_SyncAcqOutChan->blockSignals(true);
+//      m_SyncAcqOutChan->clear();
 
-      foreach(QString chan, aoChannels) {
-        m_SyncAcqOutChan->addItem(chan, chan);
-      }
+//      foreach(QString chan, aoChannels) {
+//        m_SyncAcqOutChan->addItem(chan, chan);
+//      }
 
-      m_SyncAcqOutChan->blockSignals(blocked);
-    }
+//      m_SyncAcqOutChan->blockSignals(blocked);
+//    }
   }
 }
 
@@ -282,112 +282,112 @@ void QxrdExtraIOWindow::waveformChanged()
   }
 }
 
-void QxrdExtraIOWindow::setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelPtr ch)
-{
-  if (ch) {
-    QCheckBox *cb = new QCheckBox();
-    ch->prop_Enabled()->linkTo(cb);
+//void QxrdExtraIOWindow::setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelPtr ch)
+//{
+//  if (ch) {
+//    QCheckBox *cb = new QCheckBox();
+//    ch->prop_Enabled()->linkTo(cb);
 
-    QCheckBox *cb2 = new QCheckBox();
-    ch->prop_Plotted()->linkTo(cb2);
+//    QCheckBox *cb2 = new QCheckBox();
+//    ch->prop_Plotted()->linkTo(cb2);
 
-    QComboBox *nm = new QComboBox();
+//    QComboBox *nm = new QComboBox();
 
-    QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+//    QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
-    if (xtra) {
-      QString deviceName = xtra->get_DeviceName();
-      QxrdNIDAQPtr nidaq(xtra->nidaqPlugin());
+//    if (xtra) {
+//      QString deviceName = xtra->get_DeviceName();
+//      QxrdNIDAQPtr nidaq(xtra->nidaqPlugin());
 
-      if (nidaq) {
-        QStringList aiChannels = nidaq->deviceAIChannels(deviceName);
-        QStringList ctrChannels = nidaq->deviceCIChannels(deviceName);
+//      if (nidaq) {
+//        QStringList aiChannels = nidaq->deviceAIChannels(deviceName);
+//        QStringList ctrChannels = nidaq->deviceCIChannels(deviceName);
 
-        nm->addItem("Analog Inputs");
-        foreach(QString chan, aiChannels) {
-          nm->addItem(chan, chan);
-        }
+//        nm->addItem("Analog Inputs");
+//        foreach(QString chan, aiChannels) {
+//          nm->addItem(chan, chan);
+//        }
 
-        nm->addItem("Counter Inputs");
-        foreach(QString chan, ctrChannels) {
-          nm->addItem(chan, chan);
-        }
-      }
-    }
+//        nm->addItem("Counter Inputs");
+//        foreach(QString chan, ctrChannels) {
+//          nm->addItem(chan, chan);
+//        }
+//      }
+//    }
 
-    ch->prop_ChannelName()->linkTo(nm);
+//    ch->prop_ChannelName()->linkTo(nm);
 
-    QComboBox *md = new QComboBox();
+//    QComboBox *md = new QComboBox();
 
-    md->addItem("Sum");
-    md->addItem("Avg");
-    md->addItem("Max");
-    md->addItem("Min");
+//    md->addItem("Sum");
+//    md->addItem("Avg");
+//    md->addItem("Max");
+//    md->addItem("Min");
 
-    md->setItemData(0, "Value = Sum(wfm)", Qt::ToolTipRole);
-    md->setItemData(1, "Value = Avg(wfm)", Qt::ToolTipRole);
-    md->setItemData(2, "Value = Max(wfm)", Qt::ToolTipRole);
-    md->setItemData(3, "Value = Min(wfm)", Qt::ToolTipRole);
+//    md->setItemData(0, "Value = Sum(wfm)", Qt::ToolTipRole);
+//    md->setItemData(1, "Value = Avg(wfm)", Qt::ToolTipRole);
+//    md->setItemData(2, "Value = Max(wfm)", Qt::ToolTipRole);
+//    md->setItemData(3, "Value = Min(wfm)", Qt::ToolTipRole);
 
-    ch->prop_Mode()->linkTo(md);
+//    ch->prop_Mode()->linkTo(md);
 
-    QCheckBox *wf = new QCheckBox();
-    ch->prop_SaveWave()->linkTo(wf);
+//    QCheckBox *wf = new QCheckBox();
+//    ch->prop_SaveWave()->linkTo(wf);
 
-    QDoubleSpinBox *min = new QDoubleSpinBox();
-    min->setMinimum(-20.0);
-    min->setMaximum(20.0);
-    min->setSingleStep(0.1);
-    ch->prop_Min()->linkTo(min);
+//    QDoubleSpinBox *min = new QDoubleSpinBox();
+//    min->setMinimum(-20.0);
+//    min->setMaximum(20.0);
+//    min->setSingleStep(0.1);
+//    ch->prop_Min()->linkTo(min);
 
-    QDoubleSpinBox *max = new QDoubleSpinBox();
-    max->setMinimum(-20.0);
-    max->setMaximum(20.0);
-    max->setSingleStep(0.1);
-    ch->prop_Max()->linkTo(max);
+//    QDoubleSpinBox *max = new QDoubleSpinBox();
+//    max->setMinimum(-20.0);
+//    max->setMaximum(20.0);
+//    max->setSingleStep(0.1);
+//    ch->prop_Max()->linkTo(max);
 
-    QDoubleSpinBox *stt = new QDoubleSpinBox();
-    stt->setMinimum(-0.2);
-    stt->setMaximum(10.0);
-    stt->setSingleStep(0.1);
-    ch->prop_Start()->linkTo(stt);
+//    QDoubleSpinBox *stt = new QDoubleSpinBox();
+//    stt->setMinimum(-0.2);
+//    stt->setMaximum(10.0);
+//    stt->setSingleStep(0.1);
+//    ch->prop_Start()->linkTo(stt);
 
-    QDoubleSpinBox *end = new QDoubleSpinBox();
-    end->setMinimum(-0.2);
-    end->setMaximum(10.0);
-    end->setSingleStep(0.1);
-    ch->prop_End()->linkTo(end);
+//    QDoubleSpinBox *end = new QDoubleSpinBox();
+//    end->setMinimum(-0.2);
+//    end->setMaximum(10.0);
+//    end->setSingleStep(0.1);
+//    ch->prop_End()->linkTo(end);
 
-    QComboBox  *tmode = new QComboBox();
-    tmode -> addItem("No Trigger");
-    tmode -> addItem("Positive Edge");
-    tmode -> addItem("Negative Edge");
-    tmode -> addItem("Positive Level");
-    tmode -> addItem("Negative Level");
-    ch->prop_TriggerMode()->linkTo(tmode);
+//    QComboBox  *tmode = new QComboBox();
+//    tmode -> addItem("No Trigger");
+//    tmode -> addItem("Positive Edge");
+//    tmode -> addItem("Negative Edge");
+//    tmode -> addItem("Positive Level");
+//    tmode -> addItem("Negative Level");
+//    ch->prop_TriggerMode()->linkTo(tmode);
 
-    QDoubleSpinBox *tlevel = new QDoubleSpinBox();
-    tlevel -> setMinimum(-20.0);
-    tlevel -> setMaximum(+20.0);
-    tlevel -> setSingleStep(0.1);
-    ch->prop_TriggerLevel()->linkTo(tlevel);
+//    QDoubleSpinBox *tlevel = new QDoubleSpinBox();
+//    tlevel -> setMinimum(-20.0);
+//    tlevel -> setMaximum(+20.0);
+//    tlevel -> setSingleStep(0.1);
+//    ch->prop_TriggerLevel()->linkTo(tlevel);
 
-    QDoubleSpinBox *thyst = new QDoubleSpinBox();
-    thyst -> setMinimum(0.0);
-    thyst -> setMaximum(+20.0);
-    thyst -> setSingleStep(0.1);
-    ch->prop_TriggerHysteresis()->linkTo(thyst);
+//    QDoubleSpinBox *thyst = new QDoubleSpinBox();
+//    thyst -> setMinimum(0.0);
+//    thyst -> setMaximum(+20.0);
+//    thyst -> setSingleStep(0.1);
+//    ch->prop_TriggerHysteresis()->linkTo(thyst);
 
-    QLabel *phy = new QLabel();
-    ch->prop_PhysicalChannel()->linkTo(phy);
+//    QLabel *phy = new QLabel();
+//    ch->prop_PhysicalChannel()->linkTo(phy);
 
-    QLabel *val = new QLabel();
-    ch->prop_Value()->linkTo(val);
+//    QLabel *val = new QLabel();
+//    ch->prop_Value()->linkTo(val);
 
-    QCheckBox *trig = new QCheckBox();
-    ch->prop_Triggered()->linkTo(trig);
+//    QCheckBox *trig = new QCheckBox();
+//    ch->prop_Triggered()->linkTo(trig);
 
-    int c = 0;
+//    int c = 0;
 
 //    if (m_ChannelsInRows) {
 //      m_ExtraInputsTable->setCellWidget(i, c++, cb);
@@ -422,8 +422,8 @@ void QxrdExtraIOWindow::setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelP
 //      m_ExtraInputsTable->setCellWidget(c++, i, val);
 //      m_ExtraInputsTable->setCellWidget(c++, i, trig);
 //    }
-  }
-}
+//  }
+//}
 
 //void QxrdExtraIOWindow::updateUi()
 //{
@@ -571,11 +571,11 @@ void QxrdExtraIOWindow::setupUiChannel(int i, QxrdAcquisitionExtraInputsChannelP
 
 void QxrdExtraIOWindow::initiateReadout()
 {
-  QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
+//  QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
 
-  if (xtra) {
-    xtra->initiate();
-  }
+//  if (xtra) {
+//    xtra->initiate();
+//  }
 }
 
 void QxrdExtraIOWindow::updateWaveforms()

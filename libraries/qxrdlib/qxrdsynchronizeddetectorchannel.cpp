@@ -1,5 +1,9 @@
 #include "qxrdsynchronizeddetectorchannel.h"
 #include "qxrddetectorsettings.h"
+#include "qxrdacqcommon.h"
+#include "qxrdsynchronizedacquisition.h"
+#include "qxrdnidaq.h"
+#include "qxrdexperiment.h"
 
 QxrdSynchronizedDetectorChannel::QxrdSynchronizedDetectorChannel(QString name)
   : inherited(name),
@@ -9,17 +13,60 @@ QxrdSynchronizedDetectorChannel::QxrdSynchronizedDetectorChannel(QString name)
 {
 }
 
+void QxrdSynchronizedDetectorChannel::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  QxrdExperimentPtr exp = (QxrdExperiment::findExperiment(parent));
+
+  if (exp) {
+    m_AcqCommon = exp->acquisition();
+  }
+
+  QxrdSynchronizedAcquisitionPtr acq(
+        qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(parent));
+
+  if (acq) {
+    m_NIDAQ = acq->nidaqPlugin();
+  } else {
+    printMessage("QxrdSynchronizedDetectorChannel::initialize parent not QxrdSynchronizedAcquisition");
+  }
+}
+
 QString QxrdSynchronizedDetectorChannel::channelName()
 {
-  return tr("ctr%1").arg(get_ChannelNumber());
+  QString      res = "Unknown Channel";
+  QxrdNIDAQPtr nidaq(m_NIDAQ);
+
+  if (nidaq) {
+    res = nidaq->detectorDeviceName(get_ChannelNumber());
+  }
+
+  return res;
 }
 
 QString QxrdSynchronizedDetectorChannel::detectorName()
 {
-  return tr("det%1").arg(get_DetectorNumber());
+  QString          res = "Unknown Detector";
+  QxrdAcqCommonPtr acq(m_AcqCommon);
+
+  if (acq) {
+    QxrdDetectorSettingsPtr det = acq->detector(get_DetectorNumber());
+
+    if (det) {
+      res = det->get_DetectorName();
+    }
+  }
+
+  return res;
 }
 
-QString QxrdSynchronizedDetectorChannel::detectorTypeName()
+int QxrdSynchronizedDetectorChannel::detectorTypeCount()
 {
-  return QxrdDetectorSettings::detectorTypeName(get_DetectorType());
+  return QxrdDetectorSettings::detectorTypeCount();
+}
+
+QString QxrdSynchronizedDetectorChannel::detectorTypeName(int n)
+{
+  return QxrdDetectorSettings::detectorTypeName(n);
 }

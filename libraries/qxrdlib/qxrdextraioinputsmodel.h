@@ -30,6 +30,7 @@ public:
     SaveWaveColumn,
     MinColumn,
     MaxColumn,
+    SampleRateColumn,
     ColumnCount
   };
 
@@ -38,7 +39,7 @@ public:
   void deleteInputs(QVector<int> n);
 
 private:
-  QxrdSynchronizedAcquisitionWPtr m_Sync;
+  QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
 };
 
 #endif // QXRDEXTRAIOINPUTSMODEL_H

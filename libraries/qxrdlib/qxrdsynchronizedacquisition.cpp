@@ -10,16 +10,16 @@
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
   QcepObject(name),
-  m_SyncAcquisitionMode(this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
-  m_SyncAcquisitionWaveform(this,"syncAcquisitionWaveform", 0,
-                            "Synchronized Acquisition Waveform (0 = Square, 1 = Sine, 2 = Triangle, 3 = Sawtooth, 4 = Bipolar Triangle)"),
-  m_SyncAcquisitionOutputDevice(this,"syncAcquisitionOutputDevice", "", "Synchronized Acquisition Output Device"),
-  m_SyncAcquisitionOutputChannel(this,"syncAcquisitionOutputChannel", "", "Synchronized Acquisition Output Channel"),
-  m_SyncAcquisitionMinimum(this,"syncAcquisitionMinimum", 0.0, "Synchronized Acquisition Minimum (in Volts)"),
-  m_SyncAcquisitionMaximum(this,"syncAcquisitionMaximum", 5.0, "Synchronized Acquisition Maximum (in Volts)"),
-  m_SyncAcquisitionSymmetry(this,"syncAcquisitionSymmetry", 0.0, "Synchronized Acquisition Symmetry (0 = symmetric)"),
-  m_SyncAcquisitionPhaseShift(this,"syncAcquisitionPhaseShift", 0.0, "Synchronized Acquisition Phase Shift (deg)"),
-  m_SyncAcquisitionManualValue(this,"syncAcquisitionManualValue", 0.0, "Manual Output Voltage (in Volts)"),
+//  m_SyncAcquisitionMode(this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
+//  m_SyncAcquisitionWaveform(this,"syncAcquisitionWaveform", 0,
+//                            "Synchronized Acquisition Waveform (0 = Square, 1 = Sine, 2 = Triangle, 3 = Sawtooth, 4 = Bipolar Triangle)"),
+//  m_SyncAcquisitionOutputDevice(this,"syncAcquisitionOutputDevice", "", "Synchronized Acquisition Output Device"),
+//  m_SyncAcquisitionOutputChannel(this,"syncAcquisitionOutputChannel", "", "Synchronized Acquisition Output Channel"),
+//  m_SyncAcquisitionMinimum(this,"syncAcquisitionMinimum", 0.0, "Synchronized Acquisition Minimum (in Volts)"),
+//  m_SyncAcquisitionMaximum(this,"syncAcquisitionMaximum", 5.0, "Synchronized Acquisition Maximum (in Volts)"),
+//  m_SyncAcquisitionSymmetry(this,"syncAcquisitionSymmetry", 0.0, "Synchronized Acquisition Symmetry (0 = symmetric)"),
+//  m_SyncAcquisitionPhaseShift(this,"syncAcquisitionPhaseShift", 0.0, "Synchronized Acquisition Phase Shift (deg)"),
+//  m_SyncAcquisitionManualValue(this,"syncAcquisitionManualValue", 0.0, "Manual Output Voltage (in Volts)"),
   m_SyncMode(0)
 {
 #ifndef QT_NO_DEBUG
@@ -171,6 +171,32 @@ QxrdSynchronizedDetectorChannelPtr QxrdSynchronizedAcquisition::detector(int n)
   return m_Detectors.value(n);
 }
 
+int QxrdSynchronizedAcquisition::detectorDeviceCount()
+{
+  int res = 0;
+
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (nidaq) {
+    res = nidaq->detectorDeviceCount();
+  }
+
+  return res;
+}
+
+QString QxrdSynchronizedAcquisition::detectorDeviceName(int n)
+{
+  QString res = QString();
+
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (nidaq) {
+    res = nidaq->detectorDeviceName(n);
+  }
+
+  return res;
+}
+
 void QxrdSynchronizedAcquisition::newDetector(int before)
 {
   QxrdSynchronizedDetectorChannelPtr det(
@@ -213,6 +239,32 @@ QxrdSynchronizedOutputChannelPtr QxrdSynchronizedAcquisition::output(int n)
   return m_Outputs.value(n);
 }
 
+int QxrdSynchronizedAcquisition::outputDeviceCount()
+{
+  int res = 0;
+
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (nidaq) {
+    res = nidaq->outputDeviceCount();
+  }
+
+  return res;
+}
+
+QString QxrdSynchronizedAcquisition::outputDeviceName(int n)
+{
+  QString res = QString();
+
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (nidaq) {
+    res = nidaq->outputDeviceName(n);
+  }
+
+  return res;
+}
+
 void QxrdSynchronizedAcquisition::newOutput(int before)
 {
   QxrdSynchronizedOutputChannelPtr out(
@@ -253,6 +305,32 @@ int QxrdSynchronizedAcquisition::inputCount()
 QxrdSynchronizedInputChannelPtr QxrdSynchronizedAcquisition::input(int n)
 {
   return m_Inputs.value(n);
+}
+
+int QxrdSynchronizedAcquisition::inputDeviceCount()
+{
+  int res = 0;
+
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (nidaq) {
+    res = nidaq->inputDeviceCount();
+  }
+
+  return res;
+}
+
+QString QxrdSynchronizedAcquisition::inputDeviceName(int n)
+{
+  QString res = QString();
+
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (nidaq) {
+    res = nidaq->inputDeviceName(n);
+  }
+
+  return res;
 }
 
 void QxrdSynchronizedAcquisition::newInput(int before)
@@ -348,124 +426,124 @@ void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionP
 
 void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameterPackWPtr parms)
 {
-  m_AcquisitionParms = parms;
+//  m_AcquisitionParms = parms;
 
-  QxrdAcquisitionParameterPackPtr parmsp(parms);
+//  QxrdAcquisitionParameterPackPtr parmsp(parms);
 
-  if (parmsp) {
-    m_SyncMode = 0;
-    m_AcquisitionParms = parms;
+//  if (parmsp) {
+//    m_SyncMode = 0;
+//    m_AcquisitionParms = parms;
 
-    double exposureTime = parmsp->exposure();
-    int    nphases      = parmsp->nphases();
-    double cycleTime    = exposureTime/**nsummed*/*nphases;
-    double sampleRate   = 1000;
-    double nSamples     = cycleTime*sampleRate;
-    double minVal       = get_SyncAcquisitionMinimum();
-    double maxVal       = get_SyncAcquisitionMaximum();
-    QString chan        = get_SyncAcquisitionOutputChannel();
-    int wfm             = get_SyncAcquisitionWaveform();
-    m_SyncMode          = get_SyncAcquisitionMode();
-    double symm         = get_SyncAcquisitionSymmetry();
-    double phase        = get_SyncAcquisitionPhaseShift();
+//    double exposureTime = parmsp->exposure();
+//    int    nphases      = parmsp->nphases();
+//    double cycleTime    = exposureTime/**nsummed*/*nphases;
+//    double sampleRate   = 1000;
+//    double nSamples     = cycleTime*sampleRate;
+//    double minVal       = get_SyncAcquisitionMinimum();
+//    double maxVal       = get_SyncAcquisitionMaximum();
+//    QString chan        = get_SyncAcquisitionOutputChannel();
+//    int wfm             = get_SyncAcquisitionWaveform();
+//    m_SyncMode          = get_SyncAcquisitionMode();
+//    double symm         = get_SyncAcquisitionSymmetry();
+//    double phase        = get_SyncAcquisitionPhaseShift();
 
-    if (symm > 1.0) {
-      symm = 1.0;
-    } else if (symm < -1.0) {
-      symm = -1.0;
-    }
+//    if (symm > 1.0) {
+//      symm = 1.0;
+//    } else if (symm < -1.0) {
+//      symm = -1.0;
+//    }
 
-    if (nphases <= 0) {
-      m_SyncMode = 0;
-    } else if (m_SyncMode) {
+//    if (nphases <= 0) {
+//      m_SyncMode = 0;
+//    } else if (m_SyncMode) {
 
-      while (nSamples > 10000) {
-        sampleRate /= 10;
-        nSamples = cycleTime*sampleRate;
-      }
+//      while (nSamples > 10000) {
+//        sampleRate /= 10;
+//        nSamples = cycleTime*sampleRate;
+//      }
 
-      int iSamples = (int) nSamples;
-      double divide = iSamples * (0.5 + symm/2.0);
-      double divideBy2 = divide/2;
-      int shift = (int)((double) phase*iSamples/360.0 /*+ nphases*/) % iSamples;
+//      int iSamples = (int) nSamples;
+//      double divide = iSamples * (0.5 + symm/2.0);
+//      double divideBy2 = divide/2;
+//      int shift = (int)((double) phase*iSamples/360.0 /*+ nphases*/) % iSamples;
 
-      QVector<double> outputTimes(iSamples+1);
-      QVector<double> outputVoltage(iSamples+1);
+//      QVector<double> outputTimes(iSamples+1);
+//      QVector<double> outputVoltage(iSamples+1);
 
-      for (int i=0; i<=iSamples; i++) {
-        outputTimes[i] = ((double)i)/((double) sampleRate);
-      }
+//      for (int i=0; i<=iSamples; i++) {
+//        outputTimes[i] = ((double)i)/((double) sampleRate);
+//      }
 
-      switch (wfm) {
-      case SyncAcquisitionWaveformSquare:
-        for (int ii=0; ii<iSamples; ii++) {
-          int i = (ii+iSamples-shift) % iSamples;
-          if (i<divide) {
-            outputVoltage[ii] = minVal;
-          } else {
-            outputVoltage[ii] = maxVal;
-          }
-        }
-        break;
+//      switch (wfm) {
+//      case SyncAcquisitionWaveformSquare:
+//        for (int ii=0; ii<iSamples; ii++) {
+//          int i = (ii+iSamples-shift) % iSamples;
+//          if (i<divide) {
+//            outputVoltage[ii] = minVal;
+//          } else {
+//            outputVoltage[ii] = maxVal;
+//          }
+//        }
+//        break;
 
-      case SyncAcquisitionWaveformSine:
-        for (int ii=0; ii<iSamples; ii++) {
-          int i = (ii+iSamples-shift) % iSamples;
-          double x;
-          if (i<divide) {
-            x = M_PI*i/divide;
-          } else {
-            x = M_PI+M_PI*(i-divide)/(iSamples-divide);
-          }
-          outputVoltage[ii] = minVal + (maxVal-minVal)*(1.0 - cos(x))/2.0;
-        }
-        break;
+//      case SyncAcquisitionWaveformSine:
+//        for (int ii=0; ii<iSamples; ii++) {
+//          int i = (ii+iSamples-shift) % iSamples;
+//          double x;
+//          if (i<divide) {
+//            x = M_PI*i/divide;
+//          } else {
+//            x = M_PI+M_PI*(i-divide)/(iSamples-divide);
+//          }
+//          outputVoltage[ii] = minVal + (maxVal-minVal)*(1.0 - cos(x))/2.0;
+//        }
+//        break;
 
-      case SyncAcquisitionWaveformTriangle:
-        for (int ii=0; ii<iSamples; ii++) {
-          int i = (ii+iSamples-shift) % iSamples;
-          if (i<divide) {
-            outputVoltage[ii] = minVal + i*(maxVal-minVal)/divide;
-          } else {
-            outputVoltage[ii] = maxVal - (i-divide)*(maxVal-minVal)/(iSamples-divide);
-          }
-        }
-        break;
+//      case SyncAcquisitionWaveformTriangle:
+//        for (int ii=0; ii<iSamples; ii++) {
+//          int i = (ii+iSamples-shift) % iSamples;
+//          if (i<divide) {
+//            outputVoltage[ii] = minVal + i*(maxVal-minVal)/divide;
+//          } else {
+//            outputVoltage[ii] = maxVal - (i-divide)*(maxVal-minVal)/(iSamples-divide);
+//          }
+//        }
+//        break;
 
-      case SyncAcquisitionWaveformBipolarTriangle:
-        for (int ii=0; ii<iSamples; ii++) {
-          int i = (ii+iSamples-shift) % iSamples;
-          if (i < divideBy2) {
-            outputVoltage[ii] = minVal + i*(maxVal-minVal)/divideBy2;
-          } else if (i < (iSamples-divideBy2)) {
-            outputVoltage[ii] = maxVal - (i-divideBy2)*(maxVal-minVal)/((iSamples-divide)/2);
-          } else {
-            outputVoltage[ii] = minVal - (iSamples-i)*(maxVal-minVal)/divideBy2;
-          }
-        }
-        break;
+//      case SyncAcquisitionWaveformBipolarTriangle:
+//        for (int ii=0; ii<iSamples; ii++) {
+//          int i = (ii+iSamples-shift) % iSamples;
+//          if (i < divideBy2) {
+//            outputVoltage[ii] = minVal + i*(maxVal-minVal)/divideBy2;
+//          } else if (i < (iSamples-divideBy2)) {
+//            outputVoltage[ii] = maxVal - (i-divideBy2)*(maxVal-minVal)/((iSamples-divide)/2);
+//          } else {
+//            outputVoltage[ii] = minVal - (iSamples-i)*(maxVal-minVal)/divideBy2;
+//          }
+//        }
+//        break;
 
-      case SyncAcquisitionWaveformSawtooth:
-      default:
-        for (int ii=0; ii<iSamples; ii++) {
-          int i = (ii+iSamples-shift) % iSamples;
-          outputVoltage[ii] = minVal + i*(maxVal-minVal)/iSamples;
-        }
-        break;
-      }
+//      case SyncAcquisitionWaveformSawtooth:
+//      default:
+//        for (int ii=0; ii<iSamples; ii++) {
+//          int i = (ii+iSamples-shift) % iSamples;
+//          outputVoltage[ii] = minVal + i*(maxVal-minVal)/iSamples;
+//        }
+//        break;
+//      }
 
-      outputVoltage[iSamples] = outputVoltage[0]; // Return output voltage to starting value at the end of the waveform
+//      outputVoltage[iSamples] = outputVoltage[0]; // Return output voltage to starting value at the end of the waveform
 
-      QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+//      QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
 
-      if (nidaq) {
-        nidaq->setAnalogWaveform(chan, sampleRate, outputVoltage.data(), iSamples+1);
-      }
+//      if (nidaq) {
+//        nidaq->setAnalogWaveform(chan, sampleRate, outputVoltage.data(), iSamples+1);
+//      }
 
-      m_OutputTimes = outputTimes;
-      m_OutputVoltage = outputVoltage;
-    }
-  }
+//      m_OutputTimes = outputTimes;
+//      m_OutputVoltage = outputVoltage;
+//    }
+//  }
 }
 
 //static QTime tick;
@@ -511,33 +589,33 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
   }
 }
 
-void QxrdSynchronizedAcquisition::setManualOutput()
-{
-  QxrdAcqCommonPtr acq(m_Acquisition);
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+//void QxrdSynchronizedAcquisition::setManualOutput()
+//{
+//  QxrdAcqCommonPtr acq(m_Acquisition);
+//  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
 
-  if (acq && nidaq) {
-    QString fullChannel = get_SyncAcquisitionOutputChannel();
+//  if (acq && nidaq) {
+//    QString fullChannel = get_SyncAcquisitionOutputChannel();
 
-    acq->printMessage(tr("Manually Setting %1 to %2 V")
-                                .arg(fullChannel)
-                                .arg(get_SyncAcquisitionManualValue()));
+//    acq->printMessage(tr("Manually Setting %1 to %2 V")
+//                                .arg(fullChannel)
+//                                .arg(get_SyncAcquisitionManualValue()));
 
-    nidaq->setAnalogOutput(fullChannel, get_SyncAcquisitionManualValue());
-  }
-}
+//    nidaq->setAnalogOutput(fullChannel, get_SyncAcquisitionManualValue());
+//  }
+//}
 
-void QxrdSynchronizedAcquisition::triggerOnce()
-{
-  QxrdAcqCommonPtr acq(m_Acquisition);
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
-  QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
+//void QxrdSynchronizedAcquisition::triggerOnce()
+//{
+//  QxrdAcqCommonPtr acq(m_Acquisition);
+//  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+//  QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
 
-  if (acq && nidaq && parms) {
-    prepareForAcquisition(parms);
-    nidaq->triggerAnalogWaveform();
-  }
-}
+//  if (acq && nidaq && parms) {
+//    prepareForAcquisition(parms);
+//    nidaq->triggerAnalogWaveform();
+//  }
+//}
 
 QVector<double>  QxrdSynchronizedAcquisition::outputTimes()
 {

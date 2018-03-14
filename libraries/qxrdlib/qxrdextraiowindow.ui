@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_4">
-    <item row="0" column="1">
+    <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
        <number>0</number>
@@ -25,24 +25,10 @@
         <string>Detectors</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_8">
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="m_EnableHardwareSync">
-          <property name="text">
-           <string>Hardware Sync Detectors</string>
-          </property>
-         </widget>
+        <item row="0" column="0" colspan="2">
+         <widget class="QTableView" name="m_DetectorsTable"/>
         </item>
-        <item row="0" column="1">
-         <widget class="QLabel" name="label_14">
-          <property name="text">
-           <string>Device:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QComboBox" name="m_DetectorsDevice"/>
-        </item>
-        <item row="2" column="0" colspan="3">
+        <item row="1" column="0" colspan="2">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <spacer name="horizontalSpacer_3">
@@ -93,9 +79,6 @@
           </item>
          </layout>
         </item>
-        <item row="1" column="0" colspan="3">
-         <widget class="QTableView" name="m_DetectorsTable"/>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="m_OutputsTab">
@@ -105,131 +88,7 @@
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout">
-          <item row="1" column="2">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>Output Device</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_10">
-            <property name="text">
-             <string>Manual Output V</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Wfm Symmetry</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="4">
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>Synchronized Acquisition Parameters</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="3">
-           <widget class="QDoubleSpinBox" name="m_SyncAcqPhaseShift">
-            <property name="toolTip">
-             <string>Phase shift of synchronization waveform 
-- range -360 deg .. 360 deg
-Script Property synchronization.syncAcquisitionPhaseShift</string>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="suffix">
-             <string> deg</string>
-            </property>
-            <property name="decimals">
-             <number>5</number>
-            </property>
-            <property name="minimum">
-             <double>-360.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>360.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Output Wfm</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Synch Mode</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="3">
-           <widget class="QPushButton" name="m_ManualTrigger">
-            <property name="toolTip">
-             <string>Manually trigger the output waveform generator</string>
-            </property>
-            <property name="text">
-             <string>Trigger</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="3">
-           <widget class="QDoubleSpinBox" name="m_SyncAcqSymmetry">
-            <property name="toolTip">
-             <string>Waveform symmetry factor (range -1..+1)
-Script property: synchronization.syncAcquisitionSymmetry</string>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="decimals">
-             <number>5</number>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>Final Output V</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="2">
-           <widget class="QPushButton" name="m_ManualOutput">
-            <property name="toolTip">
-             <string>Manually Set Output Voltage</string>
-            </property>
-            <property name="text">
-             <string>Set Output</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="m_SyncAcqMinimum">
-            <property name="toolTip">
-             <string>Output voltage at waveform minimum: range -10V .. 10V
-Script property: synchronization.syncAcquisitionMinimum</string>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="decimals">
-             <number>5</number>
-            </property>
-            <property name="minimum">
-             <double>-99.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="7" column="0" colspan="4">
+          <item row="1" column="0" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <spacer name="horizontalSpacer_2">
@@ -280,78 +139,7 @@ Script property: synchronization.syncAcquisitionMinimum</string>
             </item>
            </layout>
           </item>
-          <item row="4" column="2">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Phase Shift</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="label_8">
-            <property name="text">
-             <string>Output Chan</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QDoubleSpinBox" name="m_ManualOutputVolts">
-            <property name="toolTip">
-             <string>Output voltage at waveform maximum: range -10V .. 10V
-Script property: synchronization.syncAcquisitionMaximum</string>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="decimals">
-             <number>5</number>
-            </property>
-            <property name="minimum">
-             <double>-99.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3">
-           <widget class="QComboBox" name="m_SyncAcqOutChan"/>
-          </item>
-          <item row="4" column="1">
-           <widget class="QDoubleSpinBox" name="m_SyncAcqMaximum">
-            <property name="toolTip">
-             <string>Output voltage at waveform maximum: range -10V .. 10V
-Script property: synchronization.syncAcquisitionMaximum</string>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="decimals">
-             <number>5</number>
-            </property>
-            <property name="minimum">
-             <double>-99.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QComboBox" name="m_SyncAcqMode"/>
-          </item>
-          <item row="1" column="3">
-           <widget class="QComboBox" name="m_SyncAcqOutDevice">
-            <property name="toolTip">
-             <string>Output channel for synchronization waveform</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QComboBox" name="m_SyncAcqWfm"/>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_11">
-            <property name="text">
-             <string>Initial Output V</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0" colspan="4">
+          <item row="0" column="0" colspan="2">
            <widget class="QTableView" name="m_OutputsTable"/>
           </item>
          </layout>
@@ -380,78 +168,6 @@ Script property: synchronization.syncAcquisitionMaximum</string>
         <string>Inputs</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0" colspan="4">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="m_SampleRate">
-            <property name="toolTip">
-             <string>Select sampling rate for extra input channels
-(About 1Khz is probably best)
-</string>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Sample Rate (samples/sec)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="m_AcquisitionDelay">
-            <property name="toolTip">
-             <string>Approximate delay between actual exposure end and data available to computer (probably about 0.1 sec)</string>
-            </property>
-            <property name="decimals">
-             <number>3</number>
-            </property>
-            <property name="minimum">
-             <double>-0.500000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>0.500000000000000</double>
-            </property>
-            <property name="singleStep">
-             <double>0.010000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Acquisition Delay (sec)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>Acquisition Device:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="m_AcquisitionDevice"/>
-          </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QTableView" name="m_InputsTable">
-            <property name="toolTip">
-             <string>Channel Information</string>
-            </property>
-            <property name="alternatingRowColors">
-             <bool>true</bool>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectItems</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
         <item row="1" column="0">
          <widget class="QToolButton" name="m_TestReadout">
           <property name="toolTip">
@@ -472,6 +188,23 @@ Script property: synchronization.syncAcquisitionMaximum</string>
           </property>
          </widget>
         </item>
+        <item row="0" column="0" colspan="4">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="0" colspan="2">
+           <widget class="QTableView" name="m_InputsTable">
+            <property name="toolTip">
+             <string>Channel Information</string>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectItems</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
         <item row="1" column="1">
          <spacer name="horizontalSpacer">
           <property name="orientation">
@@ -485,26 +218,6 @@ Script property: synchronization.syncAcquisitionMaximum</string>
           </property>
          </spacer>
         </item>
-        <item row="1" column="2">
-         <widget class="QToolButton" name="m_NewInputButton">
-          <property name="toolTip">
-           <string>Add a new channel</string>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-          <property name="icon">
-           <iconset resource="qxrdresources.qrc">
-            <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>24</width>
-            <height>24</height>
-           </size>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="3">
          <widget class="QToolButton" name="m_DeleteInputButton">
           <property name="toolTip">
@@ -516,6 +229,26 @@ Script property: synchronization.syncAcquisitionMaximum</string>
           <property name="icon">
            <iconset resource="qxrdresources.qrc">
             <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QToolButton" name="m_NewInputButton">
+          <property name="toolTip">
+           <string>Add a new channel</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="qxrdresources.qrc">
+            <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
           </property>
           <property name="iconSize">
            <size>

@@ -3,6 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include <QStyledItemDelegate>
+#include "qxrdsynchronizedacquisition-ptr.h"
 
 class QXRD_EXPORT QxrdExtraIOOutputsDelegate : public QStyledItemDelegate
 {
@@ -12,7 +13,7 @@ private:
   typedef QStyledItemDelegate inherited;
 
 public:
-  QxrdExtraIOOutputsDelegate();
+  QxrdExtraIOOutputsDelegate(QxrdSynchronizedAcquisitionWPtr sync);
 
   QWidget *createEditor(QWidget *parent,
                         const QStyleOptionViewItem &option,
@@ -24,6 +25,8 @@ public:
   void setModelData    (QWidget *editor,
                         QAbstractItemModel *model,
                         const QModelIndex &index) const;
+private:
+  QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
 };
 
 #endif // QXRDEXTRAIOOUTPUTSDELEGATE_H

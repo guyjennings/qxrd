@@ -3,7 +3,7 @@
 #include "qxrdsynchronizedinputchannel.h"
 
 QxrdExtraIOInputsModel::QxrdExtraIOInputsModel(QxrdSynchronizedAcquisitionWPtr sync)
-  : m_Sync(sync)
+  : m_SynchronizedAcquisition(sync)
 {
 
 }
@@ -12,7 +12,7 @@ int QxrdExtraIOInputsModel::rowCount(const QModelIndex &parent) const
 {
   int res = 0;
 
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     res = sync->inputCount();
@@ -30,7 +30,7 @@ QVariant QxrdExtraIOInputsModel::data(const QModelIndex &index, int role) const
 {
   QVariant res = QVariant();
 
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync && index.isValid()) {
     int row = index.row();
@@ -50,7 +50,7 @@ QVariant QxrdExtraIOInputsModel::data(const QModelIndex &index, int role) const
           break;
 
         case ChannelModeColumn:
-          res = inp->channelMode();
+          res = QxrdSynchronizedInputChannel::channelMode(inp->get_Mode());
           break;
 
         case SaveWaveColumn:
@@ -63,6 +63,10 @@ QVariant QxrdExtraIOInputsModel::data(const QModelIndex &index, int role) const
 
         case MaxColumn:
           res = inp->get_Max();
+          break;
+
+        case SampleRateColumn:
+          res = inp->get_SampleRate();
           break;
         }
       } else if (role == Qt::EditRole) {
@@ -89,6 +93,10 @@ QVariant QxrdExtraIOInputsModel::data(const QModelIndex &index, int role) const
 
         case MaxColumn:
           res = inp->get_Max();
+          break;
+
+        case SampleRateColumn:
+          res = inp->get_SampleRate();
           break;
         }
       }
@@ -129,6 +137,10 @@ QVariant QxrdExtraIOInputsModel::headerData(int section, Qt::Orientation orienta
       case MaxColumn:
         res = "Max V";
         break;
+
+      case SampleRateColumn:
+        res = "Sample Rate";
+        break;
       }
     } else {
       res = tr("Input-%1").arg(section);
@@ -151,7 +163,7 @@ bool QxrdExtraIOInputsModel::setData(const QModelIndex &index, const QVariant &v
 {
   bool res = false;
 
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync && index.isValid()) {
     int row = index.row();
@@ -191,6 +203,10 @@ bool QxrdExtraIOInputsModel::setData(const QModelIndex &index, const QVariant &v
           inp->set_Max(value.toDouble());
           res = true;
           break;
+
+        case SampleRateColumn:
+          inp->set_SampleRate(value.toDouble());
+          break;
         }
       }
     }
@@ -201,7 +217,7 @@ bool QxrdExtraIOInputsModel::setData(const QModelIndex &index, const QVariant &v
 
 void QxrdExtraIOInputsModel::newInput(int before)
 {
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     beginInsertRows(QModelIndex(), before, before);
@@ -214,7 +230,7 @@ void QxrdExtraIOInputsModel::newInput(int before)
 
 void QxrdExtraIOInputsModel::deleteInput(int n)
 {
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     beginRemoveRows(QModelIndex(), n, n);
@@ -227,7 +243,7 @@ void QxrdExtraIOInputsModel::deleteInput(int n)
 
 void QxrdExtraIOInputsModel::deleteInputs(QVector<int> n)
 {
-  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
   if (sync) {
     if (n.count() == 1) {
