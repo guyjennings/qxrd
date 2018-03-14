@@ -7,7 +7,6 @@
 #include "qxrdprocessor.h"
 #include "qxrdroi.h"
 #include "qxrddetectorsettings.h"
-#include "qxrdacquisitionextrainputs.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
 #include "qxrdcalibrantlibrary.h"
@@ -857,10 +856,10 @@ QStringList QxrdJSEngine::matchFilesFunc(QString /*patt*/)
   return QStringList();
 }
 
-QxrdAcquisitionExtraInputsChannel* QxrdJSEngine::extraChannelFunc(int /*n*/)
-{
-  return NULL;
-}
+//QxrdAcquisitionExtraInputsChannel* QxrdJSEngine::extraChannelFunc(int /*n*/)
+//{
+//  return NULL;
+//}
 
 void QxrdJSEngine::mapUserFunctionFunc(QString /*func*/)
 {

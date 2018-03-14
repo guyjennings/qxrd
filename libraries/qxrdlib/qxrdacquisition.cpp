@@ -3,7 +3,6 @@
 #include "qcepmutexlocker.h"
 #include "qcepallocator.h"
 #include "qxrdsynchronizedacquisition.h"
-#include "qxrdacquisitionextrainputs.h"
 #include "qxrdwindow.h"
 #include "qxrdacqcommon-ptr.h"
 #include <QtConcurrentRun>
@@ -40,8 +39,6 @@ QxrdAcquisition::QxrdAcquisition(QString name) :
       QxrdSynchronizedAcquisitionPtr(
         new QxrdSynchronizedAcquisition("synchronizedAcquisition"));
 
-//  connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged, this, &QxrdAcquisition::extraInputsChanged);
-
   connect(prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_SummedExposures(), &QcepIntProperty::valueChanged,  this, &QxrdAcquisition::updateSaveTimes);
@@ -57,7 +54,7 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
   
-  m_SynchronizedAcquisition -> initialize(parent);
+  m_SynchronizedAcquisition -> initialize(sharedFromThis());
   
   QxrdAcqCommonPtr acq(
         qSharedPointerDynamicCast<QxrdAcqCommon>(sharedFromThis()));
@@ -100,8 +97,6 @@ void QxrdAcquisition::registerMetaTypes()
 
   QxrdSynchronizedAcquisition::registerMetaTypes();
 
-  qRegisterMetaType<QxrdAcquisitionExtraInputs*>("QxrdAcquisitionExtraInputs*");
-  qRegisterMetaType<QxrdAcquisitionExtraInputsChannel*>("QxrdAcquisitionExtraInputsChannel*");
   qRegisterMetaType<QxrdAcquisitionExecutionThread*>("QxrdAcquisitionExecutionThread*");
   qRegisterMetaType<QxrdAcquisitionExecution*>("QxrdAcquisitionExecution*");
 }

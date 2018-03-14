@@ -12,7 +12,6 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
-#include "qxrdacquisitionextrainputschannel-ptr.h"
 #include "qcepdataarray-ptr.h"
 #include "qcepdatacolumn-ptr.h"
 #include "qcepdatacolumnscan-ptr.h"
@@ -122,7 +121,7 @@ public slots:
 
   QStringList matchFilesFunc(QString patt);
 
-  QxrdAcquisitionExtraInputsChannel* extraChannelFunc(int n);
+//  QxrdAcquisitionExtraInputsChannel* extraChannelFunc(int n);
 
   void mapUserFunctionFunc(QString func);
   double timeStampFunc();

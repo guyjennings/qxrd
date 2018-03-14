@@ -112,8 +112,6 @@ SOURCES += qxrdlib.cpp \
     qxrdwelcomewindow.cpp \
     qxrdglobalpreferencesdialog.cpp \
     qxrdwelcomerecentitem.cpp \
-    qxrdacquisitionextrainputs.cpp \
-    qxrdacquisitionextrainputschannel.cpp \
     qxrdwindowsettings.cpp \
     qxrdimageplotsettings.cpp \
     qxrdfilebrowsersettings.cpp \
@@ -642,10 +640,6 @@ HEADERS += TODO.h \
     qxrdwelcomewindow-ptr.h \
     qxrdglobalpreferencesdialog.h \
     qxrdwelcomerecentitem.h \
-    qxrdacquisitionextrainputs.h \
-    qxrdacquisitionextrainputs-ptr.h \
-    qxrdacquisitionextrainputschannel.h \
-    qxrdacquisitionextrainputschannel-ptr.h \
     qxrdwindowsettings.h \
     qxrdimageplotsettings.h \
     qxrdfilebrowsersettings.h \

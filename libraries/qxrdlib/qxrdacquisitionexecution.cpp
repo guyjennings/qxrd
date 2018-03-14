@@ -12,7 +12,6 @@
 #include "qxrddetectorsettings.h"
 #include "qcepallocator.h"
 #include "qxrdsynchronizedacquisition.h"
-#include "qxrdacquisitionextrainputs.h"
 #include <QVector>
 
 QxrdAcquisitionExecution::QxrdAcquisitionExecution(QString name)

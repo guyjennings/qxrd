@@ -30,7 +30,7 @@ void QxrdServer::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
-  m_Server.initialize(parent);
+  m_Server.initialize(sharedFromThis());
 }
 
 QxrdServer::~QxrdServer()

@@ -242,7 +242,7 @@ QxrdCalibrantPtr QxrdCalibrantLibrary::standardCalibrant(QcepObjectWPtr parent, 
   }
 
   if (res) {
-    res -> initialize(parent);
+    res -> initialize(sharedFromThis());
   }
 
   return res;

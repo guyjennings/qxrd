@@ -22,7 +22,6 @@
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdprocessor-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
-#include "qxrdacquisitionextrainputs-ptr.h"
 #include "qcepallocator-ptr.h"
 #include "qxrdacquisitionscalermodel-ptr.h"
 #include "qxrdacquisitionexecutionthread-ptr.h"
@@ -106,11 +105,6 @@ private:
   mutable QMutex                   m_Mutex;
 
   QxrdSynchronizedAcquisitionPtr   m_SynchronizedAcquisition;
-  QxrdAcquisitionExtraInputsPtr    m_AcquisitionExtraInputs;
-
-//  QxrdWindowWPtr                   m_Window;
-
-//  QxrdAcquisitionDialogPtr         m_ControlPanel;
 
   QTimer                           m_IdleTimer;
   QAtomicInt                       m_Idling;

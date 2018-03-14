@@ -14,7 +14,6 @@
 #include "qcepmutexlocker.h"
 #include "qxrdgeneratetestimage.h"
 #include "qxrdsynchronizedacquisition.h"
-#include "qxrdacquisitionextrainputs.h"
 #include "qcepallocator.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"

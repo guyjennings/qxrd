@@ -69,6 +69,7 @@ QWidget* QxrdExtraIOOutputsDelegate::createEditor(QWidget *parent,
           sb -> setValue(index.data().toDouble());
           sb -> setMinimum(-20);
           sb -> setMaximum(20);
+          sb -> setSingleStep(0.1);
 
           res = sb;
         }
@@ -81,6 +82,7 @@ QWidget* QxrdExtraIOOutputsDelegate::createEditor(QWidget *parent,
           sb -> setValue(index.data().toDouble());
           sb -> setMinimum(-1);
           sb -> setMaximum(1);
+          sb -> setSingleStep(0.01);
 
           res = sb;
         }

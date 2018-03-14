@@ -1,8 +1,0 @@
-#ifndef QXRDACQUISITIONEXTRAINPUTS_PTR_H
-#define QXRDACQUISITIONEXTRAINPUTS_PTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdAcquisitionExtraInputs)
-
-#endif // QXRDACQUISITIONEXTRAINPUTS_PTR_H

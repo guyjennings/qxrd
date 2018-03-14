@@ -28,7 +28,7 @@ void QxrdDetectorControlWindowSettings::initialize(QcepObjectWPtr parent)
   }
 #endif
 
-  m_ImagePlotWidgetSettings -> initialize(parent);
+  m_ImagePlotWidgetSettings -> initialize(sharedFromThis());
 }
 
 QxrdImagePlotWidgetSettingsPtr QxrdDetectorControlWindowSettings::imagePlotWidgetSettings()

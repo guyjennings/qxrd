@@ -7,7 +7,6 @@
 #include "qxrdacqcommon-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
-#include "qxrdacquisitionextrainputs-ptr.h"
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 #include "qxrdacquisitionscalermodel-ptr.h"
