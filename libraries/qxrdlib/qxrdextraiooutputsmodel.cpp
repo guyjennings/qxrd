@@ -42,11 +42,33 @@ QVariant QxrdExtraIOOutputsModel::data(const QModelIndex &index, int role) const
       if (role == Qt::DisplayRole) {
         switch (col) {
         case ChannelNumberColumn:
+          res = out->channelName();
+          break;
+
+        case SignalNameColumn:
+          res = out->get_SignalName();
+          break;
+
+        case ChannelModeColumn:
+          res = out->channelMode();
+          break;
+
+        case StartVColumn:
+          res = out->get_StartV();
+          break;
+
+        case EndVColumn:
+          res = out->get_EndV();
+          break;
+        }
+      } else if (role == Qt::EditRole) {
+        switch (col) {
+        case ChannelNumberColumn:
           res = out->get_ChannelNumber();
           break;
 
-        case ChannelNameColumn:
-          res = out->get_ChannelName();
+        case SignalNameColumn:
+          res = out->get_SignalName();
           break;
 
         case ChannelModeColumn:
@@ -79,7 +101,7 @@ QVariant QxrdExtraIOOutputsModel::headerData(int section, Qt::Orientation orient
         res = "NIDAQ Channel";
         break;
 
-      case ChannelNameColumn:
+      case SignalNameColumn:
         res = "Signal Name";
         break;
 
@@ -114,7 +136,49 @@ Qt::ItemFlags QxrdExtraIOOutputsModel::flags(const QModelIndex &index) const
 
 bool QxrdExtraIOOutputsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-  return false;
+  bool res = false;
+
+  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+
+  if (sync && index.isValid()) {
+    int row = index.row();
+    int col = index.column();
+
+    QxrdSynchronizedOutputChannelPtr out(sync->output(row));
+
+    if (out) {
+      if (role == Qt::EditRole) {
+        switch (col) {
+        case ChannelNumberColumn:
+          out->set_ChannelNumber(value.toInt());
+          res = true;
+          break;
+
+        case SignalNameColumn:
+          out->set_SignalName(value.toString());
+          res = true;
+          break;
+
+        case ChannelModeColumn:
+          out->set_Mode(value.toInt());
+          res = true;
+          break;
+
+        case StartVColumn:
+          out->set_StartV(value.toDouble());
+          res = true;
+          break;
+
+        case EndVColumn:
+          out->set_EndV(value.toDouble());
+          res = true;
+          break;
+        }
+      }
+    }
+  }
+
+  return res;
 }
 
 void QxrdExtraIOOutputsModel::newOutput(int before)

@@ -42,11 +42,37 @@ QVariant QxrdExtraIOInputsModel::data(const QModelIndex &index, int role) const
       if (role == Qt::DisplayRole) {
         switch (col) {
         case ChannelNumberColumn:
+          res = inp->channelName();
+          break;
+
+        case SignalNameColumn:
+          res = inp->get_SignalName();
+          break;
+
+        case ChannelModeColumn:
+          res = inp->channelMode();
+          break;
+
+        case SaveWaveColumn:
+          res = inp->get_SaveWave();
+          break;
+
+        case MinColumn:
+          res = inp->get_Min();
+          break;
+
+        case MaxColumn:
+          res = inp->get_Max();
+          break;
+        }
+      } else if (role == Qt::EditRole) {
+        switch (col) {
+        case ChannelNumberColumn:
           res = inp->get_ChannelNumber();
           break;
 
-        case ChannelNameColumn:
-          res = inp->get_ChannelName();
+        case SignalNameColumn:
+          res = inp->get_SignalName();
           break;
 
         case ChannelModeColumn:
@@ -84,7 +110,7 @@ QVariant QxrdExtraIOInputsModel::headerData(int section, Qt::Orientation orienta
         res = "NIDAQ Channel";
         break;
 
-      case ChannelNameColumn:
+      case SignalNameColumn:
         res = "Signal Name";
         break;
 
@@ -123,7 +149,54 @@ Qt::ItemFlags QxrdExtraIOInputsModel::flags(const QModelIndex &index) const
 
 bool QxrdExtraIOInputsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-  return false;
+  bool res = false;
+
+  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+
+  if (sync && index.isValid()) {
+    int row = index.row();
+    int col = index.column();
+
+    QxrdSynchronizedInputChannelPtr inp(sync->input(row));
+
+    if (inp) {
+      if (role == Qt::EditRole) {
+        switch (col) {
+        case ChannelNumberColumn:
+          inp->set_ChannelNumber(value.toInt());
+          res = true;
+          break;
+
+        case SignalNameColumn:
+          inp->set_SignalName(value.toString());
+          res = true;
+          break;
+
+        case ChannelModeColumn:
+          inp->set_Mode(value.toInt());
+          res = true;
+          break;
+
+        case SaveWaveColumn:
+          inp->set_SaveWave(value.toBool());
+          res = true;
+          break;
+
+        case MinColumn:
+          inp->set_Min(value.toDouble());
+          res = true;
+          break;
+
+        case MaxColumn:
+          inp->set_Max(value.toDouble());
+          res = true;
+          break;
+        }
+      }
+    }
+  }
+
+  return res;
 }
 
 void QxrdExtraIOInputsModel::newInput(int before)

@@ -14,6 +14,10 @@ private:
 public:
   Q_INVOKABLE QxrdSynchronizedDetectorChannel(QString name);
 
+  QString channelName();
+  QString detectorName();
+  QString detectorTypeName();
+
 public:
   Q_PROPERTY(int channelNumber READ get_ChannelNumber WRITE set_ChannelNumber)
   QCEP_INTEGER_PROPERTY(ChannelNumber)

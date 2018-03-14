@@ -42,6 +42,20 @@ QVariant QxrdExtraIODetectorsModel::data(const QModelIndex &index, int role) con
       if (role == Qt::DisplayRole) {
         switch (col) {
         case ChannelNumberColumn:
+          res = det->channelName();
+          break;
+
+        case DetectorNumberColumn:
+          res = det->detectorName();
+          break;
+
+        case DetectorTypeColumn:
+          res = det->detectorTypeName();
+          break;
+        }
+      } else if (role == Qt::EditRole) {
+        switch (col) {
+        case ChannelNumberColumn:
           res = det->get_ChannelNumber();
           break;
 
@@ -98,7 +112,39 @@ Qt::ItemFlags QxrdExtraIODetectorsModel::flags(const QModelIndex &index) const
 
 bool QxrdExtraIODetectorsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-  return false;
+  bool res = false;
+
+  QxrdSynchronizedAcquisitionPtr sync(m_Sync);
+
+  if (sync && index.isValid()) {
+    int row = index.row();
+    int col = index.column();
+
+    QxrdSynchronizedDetectorChannelPtr det(sync->detector(row));
+
+    if (det) {
+      if (role == Qt::EditRole) {
+        switch (col) {
+        case ChannelNumberColumn:
+          det->set_ChannelNumber(value.toInt());
+          res = true;
+          break;
+
+        case DetectorNumberColumn:
+          det->set_DetectorNumber(value.toInt());
+          res = true;
+          break;
+
+        case DetectorTypeColumn:
+          det->set_DetectorType(value.toInt());
+          res = true;
+          break;
+        }
+      }
+    }
+  }
+
+  return res;
 }
 
 void QxrdExtraIODetectorsModel::newDetector(int before)

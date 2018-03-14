@@ -200,6 +200,10 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
   m_OutputsTable   -> setItemDelegate(new QxrdExtraIOOutputsDelegate());
   m_InputsTable    -> setItemDelegate(new QxrdExtraIOInputsDelegate());
 
+  m_DetectorsTable -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Stretch);
+  m_OutputsTable   -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Stretch);
+  m_InputsTable    -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Stretch);
+
   QxrdExtraIOWindowSettingsPtr settings(
         qSharedPointerDynamicCast<QxrdExtraIOWindowSettings>(m_Parent));
 

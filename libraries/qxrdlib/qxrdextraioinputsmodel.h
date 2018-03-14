@@ -25,7 +25,7 @@ public:
 
   enum {
     ChannelNumberColumn,
-    ChannelNameColumn,
+    SignalNameColumn,
     ChannelModeColumn,
     SaveWaveColumn,
     MinColumn,
