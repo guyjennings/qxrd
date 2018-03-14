@@ -1394,39 +1394,39 @@ QScriptValue QxrdScriptEngine::helpFunc(QScriptContext * context, QScriptEngine 
   }
 }
 
-QCEP_DOC_FUNCTION(
-    "extraChannel",
-    "extraChannel(n)",
-    "Access channels for extra inputs",
-    "<p>Returns a reference to configuration data for an extra input channel.</p>"
-    "<p>Example: to access the acquired waveform for extra channel 0</p>"
-    "<code>extraChannel(0).waveform</code>"
-    )
+//QCEP_DOC_FUNCTION(
+//    "extraChannel",
+//    "extraChannel(n)",
+//    "Access channels for extra inputs",
+//    "<p>Returns a reference to configuration data for an extra input channel.</p>"
+//    "<p>Example: to access the acquired waveform for extra channel 0</p>"
+//    "<code>extraChannel(0).waveform</code>"
+//    )
 
-QScriptValue QxrdScriptEngine::extraChannelFunc(QScriptContext *context, QScriptEngine *engine)
-{
-  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
+//QScriptValue QxrdScriptEngine::extraChannelFunc(QScriptContext *context, QScriptEngine *engine)
+//{
+//  QxrdScriptEngine *eng = qobject_cast<QxrdScriptEngine*>(engine);
 
-  if (eng) {
-    QxrdAcqCommonPtr acq(eng->acquisition());
+//  if (eng) {
+//    QxrdAcqCommonPtr acq(eng->acquisition());
 
-    if (acq) {
-      QxrdAcquisitionExtraInputsPtr xtra(acq->acquisitionExtraInputs());
+//    if (acq) {
+//      QxrdAcquisitionExtraInputsPtr xtra(acq->acquisitionExtraInputs());
 
-      if (xtra) {
-        if (context->argumentCount() != 0) {
-          int channel = context->argument(0).toInteger();
+//      if (xtra) {
+//        if (context->argumentCount() != 0) {
+//          int channel = context->argument(0).toInteger();
 
-          QxrdAcquisitionExtraInputsChannelPtr chan(xtra->channel(channel));
+//          QxrdAcquisitionExtraInputsChannelPtr chan(xtra->channel(channel));
 
-          return engine->newQObject(chan.data());
-        }
-      }
-    }
-  }
+//          return engine->newQObject(chan.data());
+//        }
+//      }
+//    }
+//  }
 
-  return QScriptValue();
-}
+//  return QScriptValue();
+//}
 
 QCEP_DOC_FUNCTION(
     "process",
@@ -2216,7 +2216,7 @@ void QxrdScriptEngine::initialize(QcepObjectWPtr parent)
   globalObject().setProperty("process", newFunction(processFunc));
   globalObject().setProperty("setFileNormalization", newFunction(setFileNormalizationFunc));
   globalObject().setProperty("matchFiles", newFunction(matchFilesFunc));
-  globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
+//  globalObject().setProperty("extraChannel", newFunction(extraChannelFunc, 1));
   globalObject().setProperty("mapUserFunction", newFunction(mapUserFunctionFunc, 1));
   globalObject().setProperty("timeStamp", newFunction(timeStampFunc, 1));
 
@@ -2267,13 +2267,6 @@ void QxrdScriptEngine::initialize(QcepObjectWPtr parent)
       if (sync) {
         QCEP_DOC_OBJECT("synchronization", "Synchronized Acquisition");
         globalObject().setProperty("synchronization", newQObject(sync.data()));
-      }
-
-      QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
-
-      if (extra) {
-        QCEP_DOC_OBJECT("extraInputs", "Extra Inputs during Acquisition");
-        globalObject().setProperty("extraInputs", newQObject(extra.data()));
       }
     }
 

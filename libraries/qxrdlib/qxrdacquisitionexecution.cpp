@@ -220,10 +220,6 @@ void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPt
       acq->synchronizedAcquisition()->prepareForAcquisition(parmsp);
     }
 
-    if (acq->acquisitionExtraInputs()) {
-      acq->acquisitionExtraInputs()->prepareForAcquisition(parmsp);
-    }
-
     for (int d=0; d<nDet; d++) {
       dets[d] -> beginAcquisition(exposure);
     }
@@ -510,8 +506,8 @@ cancel:
 
     scalers.append(acq->get_FileIndex()-1);
 
-    if (acq->acquisitionExtraInputs()) {
-      scalers += acq->acquisitionExtraInputs()->evaluateChannels();
+    if (acq->synchronizedAcquisition()) {
+      scalers += acq->synchronizedAcquisition()->evaluateInputs();
     }
 
     for (int d=0; d<nDet; d++) {

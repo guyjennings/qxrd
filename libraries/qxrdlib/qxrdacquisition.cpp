@@ -26,7 +26,6 @@ QxrdAcquisition::QxrdAcquisition(QString name) :
   m_ExecutionThread(),
   m_Mutex(QMutex::Recursive),
   m_SynchronizedAcquisition(NULL),
-  m_AcquisitionExtraInputs(NULL),
   m_Idling(1)
 {
 #ifndef QT_NO_DEBUG
@@ -41,11 +40,7 @@ QxrdAcquisition::QxrdAcquisition(QString name) :
       QxrdSynchronizedAcquisitionPtr(
         new QxrdSynchronizedAcquisition("synchronizedAcquisition"));
 
-  m_AcquisitionExtraInputs =
-      QxrdAcquisitionExtraInputsPtr(
-        new QxrdAcquisitionExtraInputs("extraInputs"));
-
-  connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged, this, &QxrdAcquisition::extraInputsChanged);
+//  connect(m_AcquisitionExtraInputs.data(), &QxrdAcquisitionExtraInputs::channelCountChanged, this, &QxrdAcquisition::extraInputsChanged);
 
   connect(prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
   connect(prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
@@ -63,8 +58,6 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
   
   m_SynchronizedAcquisition -> initialize(parent);
-  
-  m_AcquisitionExtraInputs  -> initialize(parent);
   
   QxrdAcqCommonPtr acq(
         qSharedPointerDynamicCast<QxrdAcqCommon>(sharedFromThis()));
@@ -104,6 +97,9 @@ QxrdAcquisition::~QxrdAcquisition()
 void QxrdAcquisition::registerMetaTypes()
 {
   qRegisterMetaType<QxrdAcquisition*>("QxrdAcquisition*");
+
+  QxrdSynchronizedAcquisition::registerMetaTypes();
+
   qRegisterMetaType<QxrdAcquisitionExtraInputs*>("QxrdAcquisitionExtraInputs*");
   qRegisterMetaType<QxrdAcquisitionExtraInputsChannel*>("QxrdAcquisitionExtraInputsChannel*");
   qRegisterMetaType<QxrdAcquisitionExecutionThread*>("QxrdAcquisitionExecutionThread*");
@@ -256,12 +252,6 @@ void QxrdAcquisition::writeSettings(QSettings *settings)
     settings->endGroup();
   }
 
-  if (m_AcquisitionExtraInputs) {
-    settings->beginGroup("extrainputs");
-    m_AcquisitionExtraInputs->writeSettings(settings);
-    settings->endGroup();
-  }
-
   settings->beginWriteArray("detectors");
 
   for (int i=0; i<m_Detectors.count(); i++) {
@@ -316,12 +306,6 @@ void QxrdAcquisition::readSettings(QSettings *settings)
   if (m_SynchronizedAcquisition) {
     settings->beginGroup("sync");
     m_SynchronizedAcquisition->readSettings(settings);
-    settings->endGroup();
-  }
-
-  if (m_AcquisitionExtraInputs) {
-    settings->beginGroup("extrainputs");
-    m_AcquisitionExtraInputs->readSettings(settings);
     settings->endGroup();
   }
 
@@ -521,10 +505,6 @@ void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin)
   if (m_SynchronizedAcquisition) {
     m_SynchronizedAcquisition -> setNIDAQPlugin(nidaqPlugin);
   }
-
-  if (m_AcquisitionExtraInputs) {
-    m_AcquisitionExtraInputs -> setNIDAQPlugin(nidaqPlugin);
-  }
 }
 
 QxrdNIDAQWPtr QxrdAcquisition::nidaqPlugin() const
@@ -539,11 +519,6 @@ QxrdNIDAQWPtr QxrdAcquisition::nidaqPlugin() const
 QxrdSynchronizedAcquisitionPtr QxrdAcquisition::synchronizedAcquisition() const
 {
   return m_SynchronizedAcquisition;
-}
-
-QxrdAcquisitionExtraInputsPtr QxrdAcquisition::acquisitionExtraInputs() const
-{
-  return m_AcquisitionExtraInputs;
 }
 
 void QxrdAcquisition::onIdleTimeout()

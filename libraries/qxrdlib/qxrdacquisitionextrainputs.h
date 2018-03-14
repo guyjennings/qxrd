@@ -15,6 +15,7 @@
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrdnidaq-ptr.h"
 
+//TODO: Eliminate
 class QXRD_EXPORT QxrdAcquisitionExtraInputs : public QcepObject
 {
   Q_OBJECT

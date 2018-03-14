@@ -21,3 +21,9 @@ QString QxrdSynchronizedInputChannel::channelMode()
 {
   return tr("Mode %1").arg(get_Mode());
 }
+
+//TODO: implement
+double QxrdSynchronizedInputChannel::evaluateInput()
+{
+  return 0;
+}

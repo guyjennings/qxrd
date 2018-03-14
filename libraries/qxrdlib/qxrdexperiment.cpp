@@ -432,7 +432,6 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdSimpleServer*>("QxrdSimpleServer*");
   qRegisterMetaType<QxrdSimpleServerThread*>("QxrdSimpleServerThread*");
 
-  qRegisterMetaType<QxrdSynchronizedAcquisition*>("QxrdSynchronizedAcquisition*");
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
   qRegisterMetaType<QxrdGenerateTestImage*>("QxrdGenerateTestImage*");
   qRegisterMetaType<QxrdMainWindowSettings*>("QxrdMainWindowSettings*");

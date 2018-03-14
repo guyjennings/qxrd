@@ -1,7 +1,8 @@
 #include "qxrdacquisitionscalermodel.h"
 #include "qxrdacqcommon.h"
 #include "qxrddetectorsettings.h"
-#include "qxrdacquisitionextrainputs.h"
+#include "qxrdsynchronizedacquisition.h"
+#include "qxrdsynchronizedinputchannel.h"
 #include "qxrdprocessor.h"
 #include "qxrdroicalculator.h"
 #include "qxrdroi.h"
@@ -21,10 +22,10 @@ QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcqCommonWPtr acq)
     connect(acqr->prop_ScalerValues(), &QcepDoubleVectorProperty::valueChanged,
             this,                      &QxrdAcquisitionScalerModel::forceFullUpdate);
 
-    QxrdAcquisitionExtraInputsPtr xtra(acqr->acquisitionExtraInputs());
+    QxrdSynchronizedAcquisitionPtr sync(acqr->synchronizedAcquisition());
 
-    if (xtra) {
-      connect(xtra.data(),   &QxrdAcquisitionExtraInputs::channelCountChanged,
+    if (sync) {
+      connect(sync.data(),   &QxrdSynchronizedAcquisition::inputCountChanged,
               this,          &QxrdAcquisitionScalerModel::forceFullUpdate);
     }
   }
@@ -37,11 +38,15 @@ int QxrdAcquisitionScalerModel::rowCount(const QModelIndex & /*parent*/) const
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
-    QxrdAcquisitionExtraInputsPtr xtra = acq->acquisitionExtraInputs();
-    QVector<QxrdAcquisitionExtraInputsChannelPtr> xchans;
+    QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
+    QVector<QxrdSynchronizedInputChannelPtr> xchans;
 
-    if (xtra) {
-      xchans = xtra->channels();
+    if (sync) {
+      int nChans = sync->inputCount();
+
+      for (int i=0; i<nChans; i++) {
+        xchans.append(sync->input(i));
+      }
     }
 
     int nXtra = xchans.count();
@@ -78,11 +83,15 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
   if (acq) {
     int scalerchan = 0;
 
-    QxrdAcquisitionExtraInputsPtr xtra = acq->acquisitionExtraInputs();
-    QVector<QxrdAcquisitionExtraInputsChannelPtr> xchans;
+    QxrdSynchronizedAcquisitionPtr sync = acq->synchronizedAcquisition();
+    QVector<QxrdSynchronizedInputChannelPtr> xchans;
 
-    if (xtra) {
-      xchans = xtra->channels();
+    if (sync) {
+      int nChan = sync->inputCount();
+
+      for (int i=0; i<nChan; i++) {
+        xchans.append(sync->input(i));
+      }
     }
 
     int row = index.row();
@@ -120,10 +129,10 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
             if (col == NumCol) {
               return scalerchan+row;
             } else if (col == ValueCol) {
-              QxrdAcquisitionExtraInputsChannelPtr chan = xchans.value(row);
+              QxrdSynchronizedInputChannelPtr chan = xchans.value(row);
 
               if (chan) {
-                return chan->evaluateChannel();
+                return chan->evaluateInput();
               }
             } else if (col == DescriptionCol) {
               return tr("NIDAQ Channel %1").arg(row);

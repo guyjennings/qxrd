@@ -38,7 +38,6 @@ public:
   double scalerValue(int i);
 
   virtual QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const = 0;
-  virtual QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const = 0;
 
   virtual void acquire() = 0;
   virtual void acquireOnce() = 0;

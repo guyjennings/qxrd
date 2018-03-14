@@ -24,8 +24,11 @@ private:
 
 public:
   Q_INVOKABLE QxrdSynchronizedAcquisition(QString name);
-  void initialize(QcepObjectWPtr parent);
   virtual ~QxrdSynchronizedAcquisition();
+
+  void initialize(QcepObjectWPtr parent);
+
+  static void registerMetaTypes();
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -47,6 +50,14 @@ public:
   void newInput(int before);
   void deleteInput(int n);
   void renumberInputs();
+
+  QVector<double> evaluateInputs();
+  double          evaluateInput(int ch);
+
+signals:
+  void detectorCountChanged(int n);
+  void outputCountChanged(int n);
+  void inputCountChanged(int n);
 
 public:
   Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)

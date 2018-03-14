@@ -87,7 +87,6 @@ public:
   void writeSettings(QSettings *settings);
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
-  QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
 
   void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
   QxrdNIDAQWPtr nidaqPlugin() const;

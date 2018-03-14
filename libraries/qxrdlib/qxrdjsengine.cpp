@@ -165,13 +165,6 @@ void QxrdJSEngine::initialize(QcepObjectWPtr parent)
         //      QCEP_DOC_OBJECT("synchronization", "Synchronized Acquisition");
         setGlobalProperty("synchronization", newQObject(sync.data()));
       }
-
-      QxrdAcquisitionExtraInputsPtr extra(acq->acquisitionExtraInputs());
-
-      if (extra) {
-  //      QCEP_DOC_OBJECT("extraInputs", "Extra Inputs during Acquisition");
-        setGlobalProperty("extraInputs", newQObject(extra.data()));
-      }
     }
 
     QxrdSimpleServerPtr ssrv(expt->simpleServer());

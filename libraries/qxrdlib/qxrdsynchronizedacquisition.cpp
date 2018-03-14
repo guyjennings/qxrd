@@ -41,6 +41,14 @@ QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
 #endif
 }
 
+void QxrdSynchronizedAcquisition::registerMetaTypes()
+{
+  qRegisterMetaType<QxrdSynchronizedAcquisition*>("QxrdSynchronizedAcquisition*");
+  qRegisterMetaType<QxrdSynchronizedDetectorChannel*>("QxrdSynchronizedDetectorChannel*");
+  qRegisterMetaType<QxrdSynchronizedOutputChannel*>("QxrdSynchronizedOutputChannel*");
+  qRegisterMetaType<QxrdSynchronizedInputChannel*>("QxrdSynchronizedInputChannel*");
+}
+
 void QxrdSynchronizedAcquisition::readSettings(QSettings *settings)
 {
   inherited::readSettings(settings);
@@ -277,6 +285,34 @@ void QxrdSynchronizedAcquisition::renumberInputs()
       inp -> setObjectName(tr("input-%1").arg(i));
     }
   }
+}
+
+QVector<double> QxrdSynchronizedAcquisition::evaluateInputs()
+{
+  QVector<double> res;
+
+  for (int i=0; i<inputCount(); i++) {
+    QxrdSynchronizedInputChannelPtr inp(input(i));
+
+    if (inp) {
+      res.append(inp -> evaluateInput());
+    }
+  }
+
+  return res;
+}
+
+double QxrdSynchronizedAcquisition::evaluateInput(int ch)
+{
+  double res = 0;
+
+  QxrdSynchronizedInputChannelPtr inp(input(ch));
+
+  if (inp) {
+    res = inp -> evaluateInput();
+  }
+
+  return res;
 }
 
 void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin)

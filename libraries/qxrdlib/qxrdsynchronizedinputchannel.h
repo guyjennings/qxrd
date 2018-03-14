@@ -17,6 +17,8 @@ public:
   QString channelName();
   QString channelMode();
 
+  double evaluateInput();
+
 public:
   Q_PROPERTY(int channelNumber READ get_ChannelNumber WRITE set_ChannelNumber)
   QCEP_INTEGER_PROPERTY(ChannelNumber)

@@ -45,11 +45,6 @@ QxrdSynchronizedAcquisitionPtr QxrdAcqDummy::synchronizedAcquisition() const
   return QxrdSynchronizedAcquisitionPtr();
 }
 
-QxrdAcquisitionExtraInputsPtr QxrdAcqDummy::acquisitionExtraInputs() const
-{
-  return QxrdAcquisitionExtraInputsPtr();
-}
-
 void QxrdAcqDummy::acquire()
 {
 }

@@ -128,7 +128,7 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
       //TODO: re-init
 //      m_AcquisitionWaveforms -> init(QxrdAcquisitionExtraInputsPlotSettingsWPtr());
 
-      m_AcquisitionExtraInputs = acq->acquisitionExtraInputs();
+//      m_AcquisitionExtraInputs = acq->acquisitionExtraInputs();
 
       if (m_AcquisitionExtraInputs) {
 

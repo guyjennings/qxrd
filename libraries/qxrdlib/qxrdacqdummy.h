@@ -29,7 +29,6 @@ public:
   QxrdNIDAQWPtr nidaqPlugin() const;
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
-  QxrdAcquisitionExtraInputsPtr acquisitionExtraInputs() const;
 
   void acquire();
   void acquireOnce();
