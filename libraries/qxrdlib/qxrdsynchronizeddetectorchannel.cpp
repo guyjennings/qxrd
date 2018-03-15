@@ -17,17 +17,18 @@ void QxrdSynchronizedDetectorChannel::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
-  QxrdExperimentPtr exp = (QxrdExperiment::findExperiment(parent));
+  m_AcqCommon = QxrdAcqCommon::findAcquisition(parent);
 
-  if (exp) {
-    m_AcqCommon = exp->acquisition();
-  }
-
-  QxrdSynchronizedAcquisitionPtr acq(
-        qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(parent));
+  QxrdAcqCommonPtr acq(m_AcqCommon);
 
   if (acq) {
-    m_NIDAQ = acq->nidaqPlugin();
+    m_SynchronizedAcquisition = acq->synchronizedAcquisition();
+  }
+
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+
+  if (sync) {
+    m_NIDAQ = sync->nidaqPlugin();
   } else {
     printMessage("QxrdSynchronizedDetectorChannel::initialize parent not QxrdSynchronizedAcquisition");
   }

@@ -1,4 +1,5 @@
 #include "qxrdsynchronizedinputchannel.h"
+#include "qxrdacqcommon.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaq.h"
 
@@ -10,6 +11,9 @@ QxrdSynchronizedInputChannel::QxrdSynchronizedInputChannel(QString name)
   m_SaveWave(this, "saveWave", 0, "Save entire waveform (0 = no, 1 = yes)"),
   m_Min(this, "min", -10.0, "Minimum Input value for Analog Channel (in Volts)"),
   m_Max(this, "max", 10.0, "Maximum Input Value for Analog Channel (in Volts)"),
+  m_NSamples(this, "nSamples", 0, "Number of samples in waveform"),
+  m_ActualSampleRate(this, "actualSampleRate", 1000, "Actual Sample Rate Used"),
+  m_TimeValues(this, "timeValues", QcepDoubleVector(), "Time Values on Channel"),
   m_SampleRate(this, "sampleRate", 1000, "Sampling rate of analog channel (in Hz)"),
   m_Waveform(this, "waveform", QcepDoubleVector(), "Waveform on Channel")
 {
@@ -19,11 +23,18 @@ void QxrdSynchronizedInputChannel::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
-  QxrdSynchronizedAcquisitionPtr acq(
-        qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(parent));
+  m_AcqCommon = QxrdAcqCommon::findAcquisition(parent);
+
+  QxrdAcqCommonPtr acq(m_AcqCommon);
 
   if (acq) {
-    m_NIDAQ = acq->nidaqPlugin();
+    m_SynchronizedAcquisition = acq->synchronizedAcquisition();
+  }
+
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+
+  if (sync) {
+    m_NIDAQ = sync->nidaqPlugin();
   } else {
     printMessage("QxrdSynchronizedInputChannel::initialize parent not QxrdSynchronizedAcquisition");
   }
@@ -75,6 +86,11 @@ int QxrdSynchronizedInputChannel::channelModeCount()
 double QxrdSynchronizedInputChannel::evaluateInput()
 {
   return 0;
+}
+
+void QxrdSynchronizedInputChannel::prepareForInput()
+{
+  set_ActualSampleRate(get_SampleRate());
 }
 
 //QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()

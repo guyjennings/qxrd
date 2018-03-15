@@ -50,6 +50,7 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   m_NRows(this, "nRows", 0, "No of detector rows"),
   m_HBinning(this, "hBinning", 0, "Horiz Binning"),
   m_VBinning(this, "vBinning", 0, "Vert Binning"),
+  m_ReadoutDelay(this, "readoutDelay", 5e-3, "Detector Readout Delay"),
   m_ExposureFactor (this, "exposureFactor",  1,   "Relative Exposure Factor"),
   m_CanHardwareSync   (this, "canHardwareSync",    false, "Hardware Synchronization Possible?"),
   m_HardwareSync   (this, "hardwareSync",          false, "Hardware Synchronization?"),

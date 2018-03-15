@@ -3,6 +3,10 @@
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
+#include "qxrdsynchronizedacquisition-ptr.h"
+#include "qxrdacqcommon-ptr.h"
+#include "qxrdacquisitionparameterpack-ptr.h"
+#include "qxrddarkacquisitionparameterpack-ptr.h"
 
 class QXRD_EXPORT QxrdNIDAQ : public QcepObject
 {
@@ -59,6 +63,13 @@ public:
 
   virtual int inputDeviceCount() = 0;
   virtual QString inputDeviceName(int n) = 0;
+
+  virtual void updateSyncWaveforms     (QxrdSynchronizedAcquisitionWPtr      s,
+                                        QxrdAcquisitionParameterPackWPtr     p) = 0;
+  virtual void prepareForAcquisition   (QxrdSynchronizedAcquisitionWPtr      s,
+                                        QxrdAcquisitionParameterPackWPtr     p) = 0;
+  virtual void prepareForDarkAcquistion(QxrdSynchronizedAcquisitionWPtr      s,
+                                        QxrdDarkAcquisitionParameterPackWPtr p) = 0;
 };
 
 #define NIDAQInterface_iid "gov.anl.aps.cep.Qxrd.NIDAQ"

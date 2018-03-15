@@ -12,6 +12,10 @@
 #include "qxrdnidaqsyncdetectoroutput-ptr.h"
 #include "qxrdnidaqsyncwaveformoutput-ptr.h"
 #include "qxrdnidaqsyncanaloginput-ptr.h"
+#include "qxrdsynchronizedacquisition-ptr.h"
+#include "qxrdsynchronizeddetectorchannel-ptr.h"
+#include "qxrdsynchronizedoutputchannel-ptr.h"
+#include "qxrdsynchronizedinputchannel-ptr.h"
 
 class QxrdNIDAQPlugin :
     public QxrdNIDAQ
@@ -34,23 +38,39 @@ public:
   QString name() const;
 
 public slots:
-  void   addSyncDetectorOutput(int n, double d0, double d1);
-  void   addSyncWaveformOutput(int style, double v0, double v1);
-  void   addSyncAnalogInput();
+  void   changeExposureTime(double t, int n);
 
-  void   clearSyncDetectorOutputs();
-  void   clearSyncWaveformOutputs();
-  void   clearSyncAnalogInputs();
+  void   clearSync();
+  void   clearDetectorSync();
+  void   clearOutputChannels();
+  void   clearInputChannels();
 
-  void   syncOutput(double period, int nphases);
-  void   syncStop();
+  void   addDetectorSync(QxrdSynchronizedDetectorChannelWPtr p);
+  void   addOutputChannel(QxrdSynchronizedOutputChannelWPtr p);
+  void   addInputChannel(QxrdSynchronizedInputChannelWPtr p);
 
-  void   syncTest();
-  void   syncClear();
+  void   startSync();
+  void   startDetectorSync();
+  void   startOutputChannels();
+  void   startInputChannels();
 
-  void   syncReadAnalogInputs();
+//  void   addSyncDetectorOutput(int n, double d0, double d1);
+//  void   addSyncWaveformOutput(int style, double v0, double v1);
+//  void   addSyncAnalogInput();
 
-  QVector<double> syncAnalogInputs();
+//  void   clearSyncDetectorOutputs();
+//  void   clearSyncWaveformOutputs();
+//  void   clearSyncAnalogInputs();
+
+//  void   syncOutput(double period, int nphases);
+//  void   syncStop();
+
+//  void   syncTest();
+//  void   syncClear();
+
+//  void   syncReadAnalogInputs();
+
+//  QVector<double> syncAnalogInputs();
 
   void   setAnalogWaveform(QString chan, double rate, double wfm[], int size);
   void   setAnalogOutput(int chan, double val);
@@ -80,25 +100,32 @@ public slots:
   void   setAnalogOutput(QString channelName, double value);
   void   setAnalogOutput(double value);
 
-  virtual int prepareContinuousInput(double sampleRate,
+  int prepareContinuousInput(double sampleRate,
                                      double acquireDelay,
                                      double exposureTime,
                                      QStringList chans,
                                      QVector<double> minVals,
                                      QVector<double> maxVals);
-  virtual int countContinuousInput();
-  virtual int readContinuousInput();
-  virtual QVector<double> readContinuousInputChannel(int ch);
-  virtual void finishContinuousInput();
+  int countContinuousInput();
+  int readContinuousInput();
+  QVector<double> readContinuousInputChannel(int ch);
+  void finishContinuousInput();
 
-  virtual int detectorDeviceCount();
-  virtual QString detectorDeviceName(int n);
+  int detectorDeviceCount();
+  QString detectorDeviceName(int n);
 
-  virtual int outputDeviceCount();
-  virtual QString outputDeviceName(int n);
+  int outputDeviceCount();
+  QString outputDeviceName(int n);
 
-  virtual int inputDeviceCount();
-  virtual QString inputDeviceName(int n);
+  int inputDeviceCount();
+  QString inputDeviceName(int n);
+
+  void updateSyncWaveforms     (QxrdSynchronizedAcquisitionWPtr      s,
+                                QxrdAcquisitionParameterPackWPtr     p);
+  void prepareForAcquisition   (QxrdSynchronizedAcquisitionWPtr      s,
+                                QxrdAcquisitionParameterPackWPtr     p);
+  void prepareForDarkAcquistion(QxrdSynchronizedAcquisitionWPtr      s,
+                                QxrdDarkAcquisitionParameterPackWPtr p);
 
 public:
   int32 syncCallback(TaskHandle task, int32 status);
@@ -139,9 +166,8 @@ private:
 
   TaskHandle          m_SyncTask;
   QVector<TaskHandle> m_SyncDetTasks;
-//  TaskHandle          m_SyncDetTask;
-  TaskHandle          m_SyncAOTask;
-  TaskHandle          m_SyncAITask;
+  QVector<TaskHandle> m_SyncAOTasks;
+  QVector<TaskHandle> m_SyncAITasks;
 
   int                 m_SyncCounter;
   double              m_SyncPeriod;
@@ -154,6 +180,10 @@ private:
   QVector<QxrdNIDAQSyncDetectorOutputPtr>  m_SyncDetectors;
   QVector<QxrdNIDAQSyncWaveformOutputPtr>  m_SyncWaveforms;
   QVector<QxrdNIDAQSyncAnalogInputPtr>     m_SyncInputs;
+
+  QVector<QxrdSynchronizedDetectorChannelWPtr> m_DetectorChannels;
+  QVector<QxrdSynchronizedOutputChannelWPtr>   m_OutputChannels;
+  QVector<QxrdSynchronizedInputChannelWPtr>    m_InputChannels;
 
   int                 m_DeviceCount;
   QStringList         m_DeviceNames;

@@ -1,18 +1,21 @@
 #include "qxrdextrainputsplotwidget.h"
 #include "qxrdextrainputsplotwidgetsettings.h"
+#include "qxrdsynchronizedinputchannel.h"
+#include <qwt_symbol.h>
+#include <qwt_plot_curve.h>
 
 QxrdExtraInputsPlotWidget::QxrdExtraInputsPlotWidget(QWidget *parent)
   : QxrdPlotWidget(parent)
 {
-//  m_Colors << Qt::black
-//           << QColor(170,110,40)
-//           << Qt::red
-//           << QColor(255,180,60)
-//           << Qt::yellow
-//           << Qt::green
-//           << Qt::blue
-//           << Qt::magenta
-//           << Qt::gray;
+  m_Colors << Qt::black
+           << QColor(170,110,40)
+           << Qt::red
+           << QColor(255,180,60)
+           << Qt::yellow
+           << Qt::green
+           << Qt::blue
+           << Qt::magenta
+           << Qt::gray;
 }
 
 void QxrdExtraInputsPlotWidget::initialize(QxrdExtraInputsPlotWidgetSettingsWPtr settings)
@@ -85,3 +88,49 @@ void QxrdExtraInputsPlotWidget::initialize(QxrdExtraInputsPlotWidgetSettingsWPtr
 //    pc2->setSamples(x.mid(i0, i1-i0), y.mid(i0, i1-i0));
 //  }
 //}
+
+void QxrdExtraInputsPlotWidget::clear()
+{
+  for (int i=0; i<m_Curves.count(); i++) {
+    QwtPlotCurve *pc = m_Curves.value(i);
+
+    if (pc) {
+      pc->detach();
+      delete pc;
+    }
+  }
+
+  m_Curves.resize(0);
+}
+
+void QxrdExtraInputsPlotWidget::plotChannel(QxrdSynchronizedInputChannelWPtr chan)
+{
+  QxrdSynchronizedInputChannelPtr inp(chan);
+
+  if (inp) {
+    int n = m_Curves.count();
+
+    QwtPlotCurve *pc = new QwtPlotCurve(inp->get_Name());
+
+    if (pc) {
+      m_Curves.append(pc);
+      QPen pen(m_Colors[n % m_Colors.count()]);
+      QBrush brush(m_Colors[n % m_Colors.count()]);
+
+      QwtSymbol *a = new QwtSymbol(QwtSymbol::Rect, brush, pen, QSize(3,3));
+
+//      pc->setStyle(QwtPlotCurve::NoCurve);
+      pc->setPen(pen);
+      pc->setSymbol(a);
+
+      pc->setSamples(inp->get_TimeValues(), inp->get_Waveform());
+
+      pc->attach(m_Plot);
+    }
+  }
+}
+
+void QxrdExtraInputsPlotWidget::replot()
+{
+  m_Plot->replot();
+}

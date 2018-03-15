@@ -2,6 +2,7 @@
 #include "qcepmutexlocker.h"
 #include "qxrdacqcommon.h"
 #include "qwt_math.h"
+#include "qxrdacqcommon.h"
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrdnidaq.h"
 #include "qxrdsynchronizeddetectorchannel.h"
@@ -9,7 +10,7 @@
 #include "qxrdsynchronizedinputchannel.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
-  QcepObject(name),
+  QcepObject(name)
 //  m_SyncAcquisitionMode(this,"syncAcquisitionMode", 0, "Synchronized Acquisition Mode (0 = None, 1 = Stepped, 2 = Continuous)"),
 //  m_SyncAcquisitionWaveform(this,"syncAcquisitionWaveform", 0,
 //                            "Synchronized Acquisition Waveform (0 = Square, 1 = Sine, 2 = Triangle, 3 = Sawtooth, 4 = Bipolar Triangle)"),
@@ -20,7 +21,7 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
 //  m_SyncAcquisitionSymmetry(this,"syncAcquisitionSymmetry", 0.0, "Synchronized Acquisition Symmetry (0 = symmetric)"),
 //  m_SyncAcquisitionPhaseShift(this,"syncAcquisitionPhaseShift", 0.0, "Synchronized Acquisition Phase Shift (deg)"),
 //  m_SyncAcquisitionManualValue(this,"syncAcquisitionManualValue", 0.0, "Manual Output Voltage (in Volts)"),
-  m_SyncMode(0)
+//  m_SyncMode(0)
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing synchronized acquisition\n");
@@ -32,6 +33,21 @@ void QxrdSynchronizedAcquisition::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 
   m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
+
+  QxrdAcqCommonPtr acq(m_Acquisition);
+
+  if (acq) {
+    connect(acq->prop_ExposureTime(),  &QcepDoubleProperty::valueChanged,
+            this,                      &QxrdSynchronizedAcquisition::updateWaveforms);
+
+    connect(acq->prop_PhasesInGroup(), &QcepIntProperty::valueChanged,
+            this,                      &QxrdSynchronizedAcquisition::updateWaveforms);
+
+    connect(this,                      &QcepObject::propertyWasChanged,
+            this,                      &QxrdSynchronizedAcquisition::updateWaveforms);
+
+    updateWaveforms();
+  }
 }
 
 QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
@@ -47,6 +63,11 @@ void QxrdSynchronizedAcquisition::registerMetaTypes()
   qRegisterMetaType<QxrdSynchronizedDetectorChannel*>("QxrdSynchronizedDetectorChannel*");
   qRegisterMetaType<QxrdSynchronizedOutputChannel*>("QxrdSynchronizedOutputChannel*");
   qRegisterMetaType<QxrdSynchronizedInputChannel*>("QxrdSynchronizedInputChannel*");
+}
+
+QxrdAcqCommonWPtr QxrdSynchronizedAcquisition::acquisition()
+{
+  return m_Acquisition;
 }
 
 void QxrdSynchronizedAcquisition::readSettings(QSettings *settings)
@@ -398,10 +419,10 @@ void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin)
   m_NIDAQPlugin = nidaqPlugin;
 }
 
-QxrdAcqCommonWPtr QxrdSynchronizedAcquisition::acquisition()
-{
-  return m_Acquisition;
-}
+//QxrdAcqCommonWPtr QxrdSynchronizedAcquisition::acquisition()
+//{
+//  return m_Acquisition;
+//}
 
 QxrdNIDAQWPtr QxrdSynchronizedAcquisition::nidaqPlugin() const
 {
@@ -416,16 +437,76 @@ QxrdAcquisitionParameterPackWPtr QxrdSynchronizedAcquisition::parms()
 void QxrdSynchronizedAcquisition::finishedAcquisition()
 {
   m_AcquisitionParms = QxrdAcquisitionParameterPackWPtr();
-  m_SyncMode = 0;
+//  m_SyncMode = 0;
 }
 
-void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPackWPtr /*parms*/)
+void QxrdSynchronizedAcquisition::updateWaveforms()
 {
-  m_SyncMode = 0;
+  QxrdAcqCommonPtr acq(m_Acquisition);
+
+  if (acq) {
+    QxrdAcquisitionParameterPackPtr parms(acq->acquisitionParameterPack());
+
+    for (int i=0; i<outputCount(); i++) {
+      QxrdSynchronizedOutputChannelPtr out(output(i));
+
+      if (out) {
+        out->recalculateWaveform(parms);
+      }
+    }
+
+    QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+    if (nidaq) {
+      nidaq->updateSyncWaveforms(
+            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+    }
+  }
+
+  emit waveformsChanged();
+}
+
+void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPackWPtr parms)
+{
+//  m_SyncMode = 0;
+  for (int i=0; i<outputCount(); i++) {
+    QxrdSynchronizedOutputChannelPtr out(output(i));
+
+    if (out) {
+      out->disableWaveform();
+    }
+  }
+
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (nidaq) {
+    nidaq->prepareForDarkAcquistion(
+          qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+  }
+
+  emit waveformsChanged();
 }
 
 void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameterPackWPtr parms)
 {
+  for (int i=0; i<outputCount(); i++) {
+    QxrdSynchronizedOutputChannelPtr out(output(i));
+
+    if (out) {
+      out->recalculateWaveform(parms);
+    }
+  }
+
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (nidaq) {
+    nidaq -> prepareForAcquisition(
+          qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+  }
+
+  emit waveformsChanged();
+}
+
 //  m_AcquisitionParms = parms;
 
 //  QxrdAcquisitionParameterPackPtr parmsp(parms);
@@ -544,7 +625,6 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
 //      m_OutputVoltage = outputVoltage;
 //    }
 //  }
-}
 
 //static QTime tick;
 
@@ -559,7 +639,7 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
   QxrdAcqCommonPtr acq(m_Acquisition);
   QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
 
-  if (m_SyncMode && acq && parms) {
+  if (acq && parms) {
     if (acq->acquisitionStatus(0.0) == 0) {
 //      printf("QxrdSynchronizedAcquisition::acquiredFrameAvailable(%d)\n", frameNumber);
 
@@ -617,12 +697,12 @@ void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
 //  }
 //}
 
-QVector<double>  QxrdSynchronizedAcquisition::outputTimes()
-{
-  return m_OutputTimes;
-}
+//QVector<double>  QxrdSynchronizedAcquisition::outputTimes()
+//{
+//  return m_OutputTimes;
+//}
 
-QVector<double>  QxrdSynchronizedAcquisition::outputVoltage()
-{
-  return m_OutputVoltage;
-}
+//QVector<double>  QxrdSynchronizedAcquisition::outputVoltage()
+//{
+//  return m_OutputVoltage;
+//}

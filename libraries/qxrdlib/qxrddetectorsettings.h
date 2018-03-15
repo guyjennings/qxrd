@@ -172,6 +172,9 @@ public:
   Q_PROPERTY(int vBinning READ get_VBinning WRITE set_VBinning STORED false)
   QCEP_INTEGER_PROPERTY(VBinning)
 
+  Q_PROPERTY(double readoutDelay READ get_ReadoutDelay WRITE set_ReadoutDelay STORED false)
+  QCEP_DOUBLE_PROPERTY(ReadoutDelay)
+
   Q_PROPERTY(int exposureFactor READ get_ExposureFactor WRITE set_ExposureFactor)
   QCEP_INTEGER_PROPERTY(ExposureFactor)
 

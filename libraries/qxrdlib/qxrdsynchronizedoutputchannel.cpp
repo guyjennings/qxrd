@@ -1,6 +1,10 @@
 #include "qxrdsynchronizedoutputchannel.h"
+#include "qxrdacqcommon.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaq.h"
+#include "qxrdacquisitionparameterpack.h"
+#include "qxrddarkacquisitionparameterpack.h"
+#include "qwt_math.h"
 
 QxrdSynchronizedOutputChannel::QxrdSynchronizedOutputChannel(QString name)
   : inherited(name),
@@ -14,7 +18,11 @@ QxrdSynchronizedOutputChannel::QxrdSynchronizedOutputChannel(QString name)
   m_Symmetry(this, "symmetry", 0.0, "Waveform Symmetry (0 = symmetric)"),
   m_PhaseShift(this, "phaseShift", 0.0, "Waveform Phase Shift (deg)"),
   m_SampleRate(this, "sampleRate", 1000, "Sampling rate of analog channel (in Hz)"),
-  m_Waveform(this, "waveform", QcepDoubleVector(), "Waveform on Channel")
+  m_NSamples(this, "nSamples", 0, "Number of samples in waveform"),
+  m_ActualSampleRate(this, "actualSampleRate", 1000, "Actual Sample Rate Used"),
+  m_TimeValues(this, "timeValues", QcepDoubleVector(), "Time Values on Channel"),
+  m_Waveform(this, "waveform", QcepDoubleVector(), "Waveform on Channel"),
+  m_Enabled(this, "enabled", false, "Enable Output Waveform?")
 {
 }
 
@@ -22,11 +30,18 @@ void QxrdSynchronizedOutputChannel::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
-  QxrdSynchronizedAcquisitionPtr acq(
-        qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(parent));
+  m_AcqCommon = QxrdAcqCommon::findAcquisition(parent);
+
+  QxrdAcqCommonPtr acq(m_AcqCommon);
 
   if (acq) {
-    m_NIDAQ = acq->nidaqPlugin();
+    m_SynchronizedAcquisition = acq->synchronizedAcquisition();
+  }
+
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+
+  if (sync) {
+    m_NIDAQ = sync->nidaqPlugin();
   } else {
     printMessage("QxrdSynchronizedOutputChannel::initialize parent not QxrdSynchronizedAcquisition");
   }
@@ -102,4 +117,145 @@ QString QxrdSynchronizedOutputChannel::waveformMode(int n)
   }
 
   return res;
+}
+
+void QxrdSynchronizedOutputChannel::disableWaveform()
+{
+  set_Enabled(false);
+}
+
+void QxrdSynchronizedOutputChannel::recalculateWaveform(QxrdAcquisitionParameterPackWPtr p)
+{
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+
+  if (sync) {
+    QxrdAcquisitionParameterPackPtr parms(p);
+
+    if (parms) {
+      double exposureTime = parms->exposure();
+      int    nPhases      = parms->nphases();
+      double cycleTime    = exposureTime*nPhases;
+      double sampleRate   = get_SampleRate();
+      double nSamples     = cycleTime*sampleRate;
+      double minVal       = get_StartV();
+      double maxVal       = get_EndV();
+      double symm         = get_Symmetry();
+      double phase        = get_PhaseShift();
+      int    wfm          = get_WaveformMode();
+
+      if (symm > 1.0) {
+        symm = 1.0;
+      } else if (symm < -1.0) {
+        symm = -1.0;
+      } else if (symm != symm) { //NaN?
+        symm = 0.0;
+      }
+
+      if (nPhases <= 0) {
+        printMessage(tr("Output Channel nPhases (%1) <= 0").arg(nPhases));
+      } else if (exposureTime <= 0) {
+        printMessage(tr("Output Channel exposureTime (%1 sec) <= 0.0").arg(exposureTime));
+      } else if (sampleRate <= 0) {
+        printMessage(tr("Output Channel sampleRate (%1 Hz) <= 0").arg(sampleRate));
+      } else if (minVal < -10.0 || minVal > 10.0) {
+        printMessage(tr("Output Channel startV (%1 V) outside [-10.0..10.0]").arg(minVal));
+      } else if (maxVal < -10.0 || maxVal > 10.0) {
+        printMessage(tr("Output Channel endV (%1 V) outside [-10.0 V .. 10.0 V]").arg(minVal));
+      } else if (phase < -450 || phase > 450) {
+        printMessage(tr("Output Channel phase (%1 deg) outside [-450.0 deg .. 450.0 deg]"));
+      } else if (wfm < 0 || wfm >= WaveformCount) {
+        printMessage(tr("Output Channel unknown waveform (%1)").arg(wfm));
+      } else if (nSamples <= 0) {
+        printMessage(tr("Output Channel nSamples (%1) <= 0").arg(nSamples));
+      } else {
+        if (nSamples > 1000000) {
+          while (nSamples > 1000000) {
+            sampleRate /= 10;
+            nSamples    = cycleTime*sampleRate;
+          }
+
+          printMessage(tr("Too many samples - sampleRate reduced to %1 Hz, now %2 samples").arg(sampleRate).arg(nSamples));
+        }
+
+        int iSamples = (int) nSamples;
+        double divide = iSamples * (0.5 + symm/2.0);
+        double divideBy2 = divide/2.0;
+        int shift = (int)((double) phase*iSamples/360.0 /*+ nPhases*/) % iSamples;
+
+        QVector<double> outputTimes(iSamples+1);
+        QVector<double> outputVoltage(iSamples+1);
+
+        for (int i=0; i<=nSamples; i++) {
+          outputTimes[i] = ((double)i)/((double) sampleRate);
+        }
+
+        switch (wfm) {
+        case WaveformSquare:
+          for (int ii=0; ii<iSamples; ii++) {
+            int i = (ii+iSamples-shift) % iSamples;
+            if (i<divide) {
+              outputVoltage[ii] = minVal;
+            } else {
+              outputVoltage[ii] = maxVal;
+            }
+          }
+          break;
+
+        case WaveformSine:
+          for (int ii=0; ii<iSamples; ii++) {
+            int i = (ii+iSamples-shift) % iSamples;
+            double x;
+            if (i<divide) {
+              x = M_PI*i/divide;
+            } else {
+              x = M_PI+M_PI*(i-divide)/(iSamples-divide);
+            }
+            outputVoltage[ii] = minVal + (maxVal-minVal)*(1.0 - cos(x))/2.0;
+          }
+          break;
+
+        case WaveformTriangle:
+          for (int ii=0; ii<iSamples; ii++) {
+            int i = (ii+iSamples-shift) % iSamples;
+            if (i<divide) {
+              outputVoltage[ii] = minVal + i*(maxVal-minVal)/divide;
+            } else {
+              outputVoltage[ii] = maxVal - (i-divide)*(maxVal-minVal)/(iSamples-divide);
+            }
+          }
+          break;
+
+        case WaveformBipolarTriangle:
+          for (int ii=0; ii<iSamples; ii++) {
+            int i = (ii+iSamples-shift) % iSamples;
+            if (i < divideBy2) {
+              outputVoltage[ii] = minVal + i*(maxVal-minVal)/divideBy2;
+            } else if (i < (iSamples-divideBy2)) {
+              outputVoltage[ii] = maxVal - (i-divideBy2)*(maxVal-minVal)/((iSamples-divide)/2);
+            } else {
+              outputVoltage[ii] = minVal - (iSamples-i)*(maxVal-minVal)/divideBy2;
+            }
+          }
+          break;
+
+        case WaveformRamp:
+        default:
+          for (int ii=0; ii<iSamples; ii++) {
+            int i = (ii+iSamples-shift) % iSamples;
+            outputVoltage[ii] = minVal + i*(maxVal-minVal)/iSamples;
+          }
+          break;
+        }
+
+        outputVoltage[iSamples] = outputVoltage[0];
+
+        set_Enabled(true);
+
+        set_ActualSampleRate(sampleRate);
+        set_TimeValues(outputTimes);
+        set_Waveform(outputVoltage);
+        set_NSamples(iSamples);
+      }
+    }
+  }
 }

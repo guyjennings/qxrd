@@ -33,6 +33,7 @@ public:
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
 
+public slots:
   int detectorCount();
   QxrdSynchronizedDetectorChannelPtr detector(int n);
   void newDetector(int before);
@@ -63,57 +64,20 @@ public:
   QVector<double> evaluateInputs();
   double          evaluateInput(int ch);
 
+  void updateWaveforms();
+
+  QxrdAcqCommonWPtr acquisition();
+
 signals:
   void detectorCountChanged(int n);
   void outputCountChanged(int n);
   void inputCountChanged(int n);
 
 public:
-//  Q_PROPERTY(int syncAcquisitionMode READ get_SyncAcquisitionMode WRITE set_SyncAcquisitionMode)
-//  QCEP_INTEGER_PROPERTY(SyncAcquisitionMode)
-
-  enum {
-    SyncAcquisitionModeNone,
-    SyncAcquisitionModeStepped,
-    SyncAcquisitionModeContinuous
-  };
-
-//  Q_PROPERTY(int syncAcquisitionWaveform READ get_SyncAcquisitionWaveform WRITE set_SyncAcquisitionWaveform)
-//  QCEP_INTEGER_PROPERTY(SyncAcquisitionWaveform)
-
-  enum {
-    SyncAcquisitionWaveformSquare,
-    SyncAcquisitionWaveformSine,
-    SyncAcquisitionWaveformTriangle,
-    SyncAcquisitionWaveformSawtooth,
-    SyncAcquisitionWaveformBipolarTriangle
-  };
-
-//  Q_PROPERTY(QString syncAcquisitionOutputDevice READ get_SyncAcquisitionOutputDevice WRITE set_SyncAcquisitionOutputDevice)
-//  QCEP_STRING_PROPERTY(SyncAcquisitionOutputDevice)
-
-//  Q_PROPERTY(QString syncAcquisitionOutputChannel READ get_SyncAcquisitionOutputChannel WRITE set_SyncAcquisitionOutputChannel)
-//  QCEP_STRING_PROPERTY(SyncAcquisitionOutputChannel)
-
-//  Q_PROPERTY(int syncAcquisitionFlagChannel READ get_SyncAcquisitionFlagChannel WRITE set_SyncAcquisitionFlagChannel)
-//  QCEP_INTEGER_PROPERTY(SyncAcquisitionFlagChannel)
-
-//  Q_PROPERTY(double syncAcquisitionMinimum READ get_SyncAcquisitionMinimum WRITE set_SyncAcquisitionMinimum)
-//  QCEP_DOUBLE_PROPERTY(SyncAcquisitionMinimum)
-
-//  Q_PROPERTY(double syncAcquisitionMaximum READ get_SyncAcquisitionMaximum WRITE set_SyncAcquisitionMaximum)
-//  QCEP_DOUBLE_PROPERTY(SyncAcquisitionMaximum)
-
-//  Q_PROPERTY(double syncAcquisitionSymmetry READ get_SyncAcquisitionSymmetry WRITE set_SyncAcquisitionSymmetry)
-//  QCEP_DOUBLE_PROPERTY(SyncAcquisitionSymmetry)
-
-//  Q_PROPERTY(double syncAcquisitionPhaseShift READ get_SyncAcquisitionPhaseShift WRITE set_SyncAcquisitionPhaseShift)
-//  QCEP_DOUBLE_PROPERTY(SyncAcquisitionPhaseShift)
-
-//  Q_PROPERTY(double syncAcquisitionManualValue READ get_SyncAcquisitionManualValue WRITE set_SyncAcquisitionManualValue)
-//  QCEP_DOUBLE_PROPERTY(SyncAcquisitionManualValue)
 
 signals:
+  void waveformParametersChanged();
+  void waveformsChanged();
 
 public slots:
 //  void setManualOutput();
@@ -127,21 +91,22 @@ public:
   void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
   QxrdNIDAQWPtr nidaqPlugin() const;
 
-  QVector<double>  outputTimes();
-  QVector<double>  outputVoltage();
+//  QVector<double>  outputTimes();
+//  QVector<double>  outputVoltage();
 
   QxrdAcquisitionParameterPackWPtr parms();
 
-private:
-  QxrdAcqCommonWPtr acquisition();
+//private:
+//  QxrdAcqCommonWPtr acquisition();
 
 private:
-  QxrdAcqCommonWPtr           m_Acquisition;
-  QxrdAcquisitionParameterPackWPtr m_AcquisitionParms;
-  QxrdNIDAQWPtr               m_NIDAQPlugin;
-  int                         m_SyncMode;
-  QVector<double>             m_OutputTimes;
-  QVector<double>             m_OutputVoltage;
+  QxrdAcqCommonWPtr                    m_Acquisition;
+  QxrdAcquisitionParameterPackWPtr     m_AcquisitionParms;
+  QxrdDarkAcquisitionParameterPackWPtr m_DarkAcquisitionParms;
+  QxrdNIDAQWPtr                        m_NIDAQPlugin;
+  int                                  m_SyncMode;
+//  QVector<double>                      m_OutputTimes;
+//  QVector<double>                      m_OutputVoltage;
 
   QVector<QxrdSynchronizedDetectorChannelPtr> m_Detectors;
   QVector<QxrdSynchronizedOutputChannelPtr>   m_Outputs;

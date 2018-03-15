@@ -28,12 +28,13 @@ protected:
   void changeEvent(QEvent *e);
 
 private slots:
-  void deviceChanged();
   void waveformChanged();
 
 private slots:
   void initiateReadout();
   void updateWaveforms();
+  void updateInputWaveforms();
+  void updateOutputWaveforms();
 
   void doNewDetector();
   void doNewOutput();

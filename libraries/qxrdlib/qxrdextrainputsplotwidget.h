@@ -3,6 +3,7 @@
 
 #include "qxrdplotwidget.h"
 #include "qxrdextrainputsplotwidgetsettings-ptr.h"
+#include "qxrdsynchronizedinputchannel-ptr.h"
 
 class QxrdExtraInputsPlotWidget : public QxrdPlotWidget
 {
@@ -16,12 +17,14 @@ public:
 
 //public slots:
 //  void setNChannels(int nch);
-//  void plotChannel(int ch, int i0, int i1, QcepDoubleVector x, QcepDoubleVector y);
+  void clear();
+  void plotChannel(QxrdSynchronizedInputChannelWPtr chan);
+  void replot();
 
-//private:
-//  QVector<QwtPlotCurve*> m_RawData;
+private:
+  QVector<QwtPlotCurve*> m_Curves;
 //  QVector<QwtPlotCurve*> m_Selections;
-//  QVector<QColor>        m_Colors;
+  QVector<QColor>        m_Colors;
 };
 
 #endif // QXRDEXTRAINPUTSPLOTWIDGET_H
