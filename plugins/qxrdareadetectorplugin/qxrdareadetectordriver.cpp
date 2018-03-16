@@ -172,6 +172,7 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
               pRgb = vRgb;
             }
 
+            image->set_SummedExposures(1);
             image->setValue(x,y,lval);
           }
         }

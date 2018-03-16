@@ -236,6 +236,7 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
                      .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
       }
 
+      image->set_SummedExposures(1);
       det->enqueueAcquiredFrame(image);
     }
   }

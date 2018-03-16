@@ -498,6 +498,7 @@ void QxrdPilatusDriver::loadAndPush(QString f)
         printMessage("enqueue pilatus acquired frame");
       }
 
+      data->set_SummedExposures(1);
       pil->enqueueAcquiredFrame(data);
     }
   }

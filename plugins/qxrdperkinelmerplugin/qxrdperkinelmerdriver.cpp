@@ -1057,6 +1057,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
         printMessage("enqueue perkin elmer acquired frame");
       }
 
+      image -> set_SummedExposures(1);
       det -> enqueueAcquiredFrame(image);
     }
   }

@@ -180,6 +180,7 @@ void QxrdFileWatcherDriver::onTimerTimeout()
       printMessage("enqueue file watcher acquired frame");
     }
 
+    image->set_SummedExposures(1);
     det->enqueueAcquiredFrame(image);
 
     g_FrameCounter++;
