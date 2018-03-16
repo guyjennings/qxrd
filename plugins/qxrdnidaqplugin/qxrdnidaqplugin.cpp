@@ -5,9 +5,6 @@
 #include <stdio.h>
 #include <QMutexLocker>
 #include <QStringList>
-#include "qxrdnidaqsyncdetectoroutput.h"
-#include "qxrdnidaqsyncwaveformoutput.h"
-#include "qxrdnidaqsyncanaloginput.h"
 #include <QThread>
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizeddetectorchannel.h"
@@ -22,16 +19,16 @@
 QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   inherited("nidaqPlugin"),
   m_ErrorOutput(NULL),
-  m_AOTaskHandle(0),
-  m_AITaskHandle(0),
-  m_TrigAOTask(0),
-  m_PulseTask(0),
-  m_CountersTask(0),
+//  m_AOTaskHandle(0),
+//  m_AITaskHandle(0),
+//  m_TrigAOTask(0),
+//  m_PulseTask(0),
+//  m_CountersTask(0),
   m_SyncTask(0)/*,
   m_SyncAOTask(0),
   m_SyncAITask(0)*/
 {
-  setObjectName("nidaq");
+//  setObjectName("nidaq");
 
   //  printf("NI-DAQ plugin constructed\n");
   //  initTaskHandles();
@@ -167,20 +164,20 @@ void QxrdNIDAQPlugin::closeTaskHandles()
 {
   QMutexLocker lock(&m_Mutex);
 
-  if (m_AOTaskHandle) {
-    DAQmxClearTask(m_AOTaskHandle);
-    m_AOTaskHandle = 0;
-  }
+//  if (m_AOTaskHandle) {
+//    DAQmxClearTask(m_AOTaskHandle);
+//    m_AOTaskHandle = 0;
+//  }
 
-  if (m_AITaskHandle) {
-    DAQmxClearTask(m_AITaskHandle);
-    m_AITaskHandle = 0;
-  }
+//  if (m_AITaskHandle) {
+//    DAQmxClearTask(m_AITaskHandle);
+//    m_AITaskHandle = 0;
+//  }
 
-  if (m_TrigAOTask) {
-    DAQmxClearTask(m_TrigAOTask);
-    m_TrigAOTask = 0;
-  }
+//  if (m_TrigAOTask) {
+//    DAQmxClearTask(m_TrigAOTask);
+//    m_TrigAOTask = 0;
+//  }
 
   clearSync();
   clearDetectorSync();
@@ -465,62 +462,62 @@ Error:
   return res;
 }
 
-int QxrdNIDAQPlugin::configCounters(QStringList chans)
-{
-  if (m_CountersTask) {
-    DAQmxClearTask(m_CountersTask);
+//int QxrdNIDAQPlugin::configCounters(QStringList chans)
+//{
+//  if (m_CountersTask) {
+//    DAQmxClearTask(m_CountersTask);
 
-    m_CountersTask = 0;
-  }
+//    m_CountersTask = 0;
+//  }
 
-  if (m_CountersTask == 0) {
-    DAQmxErrChk(DAQmxCreateTask("counters", &m_CountersTask));
+//  if (m_CountersTask == 0) {
+//    DAQmxErrChk(DAQmxCreateTask("counters", &m_CountersTask));
 
-    m_NCounters = chans.count();
-    m_Counts.resize(m_NCounters);
+//    m_NCounters = chans.count();
+//    m_Counts.resize(m_NCounters);
 
-    foreach(QString chan, chans) {
-      QStringList parsed = chan.split(",");
-      QString ch = parsed.value(0);
-      QString sig = parsed.value(1);
+//    foreach(QString chan, chans) {
+//      QStringList parsed = chan.split(",");
+//      QString ch = parsed.value(0);
+//      QString sig = parsed.value(1);
 
-      DAQmxErrChk(DAQmxCreateCICountEdgesChan(m_CountersTask, qPrintable(parsed.value(0)), "", DAQmx_Val_Rising, 0, DAQmx_Val_CountUp));
-      DAQmxErrChk(DAQmxSetCICountEdgesTerm(m_CountersTask, qPrintable(ch), qPrintable(sig)));
-    }
+//      DAQmxErrChk(DAQmxCreateCICountEdgesChan(m_CountersTask, qPrintable(parsed.value(0)), "", DAQmx_Val_Rising, 0, DAQmx_Val_CountUp));
+//      DAQmxErrChk(DAQmxSetCICountEdgesTerm(m_CountersTask, qPrintable(ch), qPrintable(sig)));
+//    }
 
-    DAQmxErrChk(DAQmxStartTask(m_CountersTask));
+//    DAQmxErrChk(DAQmxStartTask(m_CountersTask));
 
-    return m_NCounters;
-  }
+//    return m_NCounters;
+//  }
 
-Error:
-  DAQmxClearTask(m_CountersTask);
+//Error:
+//  DAQmxClearTask(m_CountersTask);
 
-  m_CountersTask = 0;
+//  m_CountersTask = 0;
 
-  return 0;
-}
+//  return 0;
+//}
 
-QVector<double> QxrdNIDAQPlugin::readCounters()
-{
-  if (m_CountersTask) {
-    QVector<float64> counts(m_NCounters);
+//QVector<double> QxrdNIDAQPlugin::readCounters()
+//{
+//  if (m_CountersTask) {
+//    QVector<float64> counts(m_NCounters);
 
-    DAQmxErrChk(DAQmxReadCounterScalarF64(m_CountersTask, 0, counts.data(), NULL));
+//    DAQmxErrChk(DAQmxReadCounterScalarF64(m_CountersTask, 0, counts.data(), NULL));
 
-    QVector<double> res(m_NCounters);
+//    QVector<double> res(m_NCounters);
 
-    for (int i=0; i<m_NCounters; i++) {
-      res[i] = counts[i] - m_Counts[i];
-      m_Counts[i] = counts[i];
-    }
+//    for (int i=0; i<m_NCounters; i++) {
+//      res[i] = counts[i] - m_Counts[i];
+//      m_Counts[i] = counts[i];
+//    }
 
-    return res;
-  }
+//    return res;
+//  }
 
-Error:
-  return QVector<double>();
-}
+//Error:
+//  return QVector<double>();
+//}
 
 //int QxrdNIDAQPlugin::prepareContinuousInput(double sampleRate,
 //                                            double acquireDelay,
@@ -1065,7 +1062,7 @@ void QxrdNIDAQPlugin::addDetectorSync(QxrdSynchronizedDetectorChannelWPtr p)
 
       int relExpos = det->get_ExposureFactor();
 
-      double dp = m_SyncPeriod / relExpos;
+      double dp = m_ExposureTime / relExpos;
 
       DAQmxErrChk(DAQmxCreateCOPulseChanTime(detTask,
                                              qPrintable(sync->channelName()),

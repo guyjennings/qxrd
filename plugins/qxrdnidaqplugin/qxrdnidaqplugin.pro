@@ -16,19 +16,10 @@ contains(DEFINES,HAVE_NIDAQ) {
 }
 
 HEADERS += \
-    qxrdnidaqplugin.h \
-    qxrdnidaqsyncdetectoroutput.h \
-    qxrdnidaqsyncwaveformoutput.h \
-    qxrdnidaqsyncdetectoroutput-ptr.h \
-    qxrdnidaqsyncwaveformoutput-ptr.h \
-    qxrdnidaqsyncanaloginput-ptr.h \
-    qxrdnidaqsyncanaloginput.h
+    qxrdnidaqplugin.h
 
 SOURCES += \
-    qxrdnidaqplugin.cpp \
-    qxrdnidaqsyncdetectoroutput.cpp \
-    qxrdnidaqsyncwaveformoutput.cpp \
-    qxrdnidaqsyncanaloginput.cpp
+    qxrdnidaqplugin.cpp
 
 OTHER_FILES += \
     nidaq.json

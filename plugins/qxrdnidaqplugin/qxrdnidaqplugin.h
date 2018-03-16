@@ -9,9 +9,6 @@
 
 #include "qxrdnidaq.h"
 #include "NIDAQmx.h"
-#include "qxrdnidaqsyncdetectoroutput-ptr.h"
-#include "qxrdnidaqsyncwaveformoutput-ptr.h"
-#include "qxrdnidaqsyncanaloginput-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdsynchronizeddetectorchannel-ptr.h"
 #include "qxrdsynchronizedoutputchannel-ptr.h"
@@ -81,7 +78,7 @@ public slots:
 
   double count(int chan, double time);
 
-  int configCounters(QStringList chans);
+//  int configCounters(QStringList chans);
   QVector<double> readCounters();
 
   QStringList deviceNames();
@@ -140,46 +137,46 @@ private:
 private:
   QObject            *m_ErrorOutput;
   QMutex              m_Mutex;
-  TaskHandle          m_AOTaskHandle;
-  TaskHandle          m_AITaskHandle;
-  TaskHandle          m_TrigAOTask;
-  TaskHandle          m_PulseTask;
-  TaskHandle          m_CountersTask;
-  int                 m_NCounters;
-  QVector<double>     m_Counts;
+//  TaskHandle          m_AOTaskHandle;
+//  TaskHandle          m_AITaskHandle;
+//  TaskHandle          m_TrigAOTask;
+//  TaskHandle          m_PulseTask;
+//  TaskHandle          m_CountersTask;
+//  int                 m_NCounters;
+//  QVector<double>     m_Counts;
 
-  double              m_SampleRate;
-  double              m_ExposureTime;
-  double              m_AcquireDelay;
+//  double              m_AcquireDelay;
 
-  int                 m_NContinuousInputs;
-  int                 m_NContinuousSamples;
+//  int                 m_NContinuousInputs;
+//  int                 m_NContinuousSamples;
 
-  int                 m_NAIChannels;
-  int                 m_NCIChannels;
-  TaskHandle          m_ContinuousAITask;
-  QVector<TaskHandle> m_ContinuousCITasks;
-  QVector<int>        m_ContinuousFlags;
-  QVector<int>        m_ContinuousChans;
+//  int                 m_NAIChannels;
+//  int                 m_NCIChannels;
+//  TaskHandle          m_ContinuousAITask;
+//  QVector<TaskHandle> m_ContinuousCITasks;
+//  QVector<int>        m_ContinuousFlags;
+//  QVector<int>        m_ContinuousChans;
 
-  QVector< QVector<double> > m_ContinuousInputData;
+//  QVector< QVector<double> > m_ContinuousInputData;
 
   TaskHandle          m_SyncTask;
   QVector<TaskHandle> m_SyncDetTasks;
   QVector<TaskHandle> m_SyncAOTasks;
   QVector<TaskHandle> m_SyncAITasks;
 
+//  double              m_SampleRate;
+  double              m_ExposureTime;
   int                 m_SyncCounter;
-  double              m_SyncPeriod;
+//  double              m_SyncPeriod;
   double              m_SyncLongTime;
   int                 m_SyncNPhases;
-  int                 m_SyncBufferSize;
+//  int                 m_SyncBufferSize;
 
-  QVector<double>     m_SyncAnalogInputs;
+//  QVector<double>     m_SyncAnalogInputs;
 
-  QVector<QxrdNIDAQSyncDetectorOutputPtr>  m_SyncDetectors;
-  QVector<QxrdNIDAQSyncWaveformOutputPtr>  m_SyncWaveforms;
-  QVector<QxrdNIDAQSyncAnalogInputPtr>     m_SyncInputs;
+//  QVector<QxrdNIDAQSyncDetectorOutputPtr>  m_SyncDetectors;
+//  QVector<QxrdNIDAQSyncWaveformOutputPtr>  m_SyncWaveforms;
+//  QVector<QxrdNIDAQSyncAnalogInputPtr>     m_SyncInputs;
 
   QVector<QxrdSynchronizedDetectorChannelWPtr> m_DetectorChannels;
   QVector<QxrdSynchronizedOutputChannelWPtr>   m_OutputChannels;
