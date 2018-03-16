@@ -76,7 +76,7 @@ public slots:
 
 //  void   pulseOutput();
 
-  double count(int chan, double time);
+//  double count(int chan, double time);
 
 //  int configCounters(QStringList chans);
 //  QVector<double> readCounters();
@@ -135,8 +135,8 @@ private:
   void errorCheck(const char* file, int line, int err);
 
 private:
-  QObject            *m_ErrorOutput;
-  QMutex              m_Mutex;
+//  QObject            *m_ErrorOutput;
+//  QMutex              m_Mutex;
 //  TaskHandle          m_AOTaskHandle;
 //  TaskHandle          m_AITaskHandle;
 //  TaskHandle          m_TrigAOTask;

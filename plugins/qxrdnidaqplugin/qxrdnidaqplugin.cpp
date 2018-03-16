@@ -18,7 +18,6 @@
 
 QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   inherited("nidaqPlugin"),
-  m_ErrorOutput(NULL),
   m_SyncTask(0),
   m_DeviceCount(0),
   m_DetectorDeviceCount(0),
@@ -129,7 +128,7 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
 
 void QxrdNIDAQPlugin::closeTaskHandles()
 {
-  QMutexLocker lock(&m_Mutex);
+//  QMutexLocker lock(&m_Mutex);
 
 //  if (m_AOTaskHandle) {
 //    DAQmxClearTask(m_AOTaskHandle);
@@ -404,30 +403,30 @@ void QxrdNIDAQPlugin::closeTaskHandles()
 //  return;
 //}
 
-double QxrdNIDAQPlugin::count(int /* chan */, double /* time */)
-{
-  QMutexLocker lock(&m_Mutex);
+//double QxrdNIDAQPlugin::count(int /* chan */, double /* time */)
+//{
+//  QMutexLocker lock(&m_Mutex);
 
-  static TaskHandle counterTask = 0;
-  float64 res = 0;
+//  static TaskHandle counterTask = 0;
+//  float64 res = 0;
 
-  if (counterTask == 0) {
-    DAQmxErrChk(DAQmxCreateTask("counter", &counterTask));
-    DAQmxErrChk(DAQmxCreateCICountEdgesChan(counterTask,"Dev1/ctr2", "", DAQmx_Val_Rising, 0, DAQmx_Val_CountUp));
-    DAQmxErrChk(DAQmxSetCICountEdgesTerm(counterTask, "/Dev1/ctr2", "/Dev1/100MHzTimebase"));
-    DAQmxErrChk(DAQmxStartTask(counterTask));
-  }
+//  if (counterTask == 0) {
+//    DAQmxErrChk(DAQmxCreateTask("counter", &counterTask));
+//    DAQmxErrChk(DAQmxCreateCICountEdgesChan(counterTask,"Dev1/ctr2", "", DAQmx_Val_Rising, 0, DAQmx_Val_CountUp));
+//    DAQmxErrChk(DAQmxSetCICountEdgesTerm(counterTask, "/Dev1/ctr2", "/Dev1/100MHzTimebase"));
+//    DAQmxErrChk(DAQmxStartTask(counterTask));
+//  }
 
-  if (counterTask) {
-    DAQmxErrChk(DAQmxReadCounterScalarF64(counterTask, 0, &res, NULL));
-  }
+//  if (counterTask) {
+//    DAQmxErrChk(DAQmxReadCounterScalarF64(counterTask, 0, &res, NULL));
+//  }
 
-  return res;
+//  return res;
 
-Error:
-  DAQmxClearTask(counterTask);
-  return res;
-}
+//Error:
+//  DAQmxClearTask(counterTask);
+//  return res;
+//}
 
 //int QxrdNIDAQPlugin::configCounters(QStringList chans)
 //{
