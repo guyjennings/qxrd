@@ -33,6 +33,7 @@ namespace QxrdDebug {
     DEBUG_AREADETECTOR,
     DEBUG_SIMULATED,
     DEBUG_FILEWATCHER,
+    DEBUG_NIDAQ,
     DEBUG_ROI,
     LAST_QXRD_DEBUG
   };

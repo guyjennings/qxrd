@@ -79,7 +79,7 @@ public slots:
   double count(int chan, double time);
 
 //  int configCounters(QStringList chans);
-  QVector<double> readCounters();
+//  QVector<double> readCounters();
 
   QStringList deviceNames();
 //  QString     deviceType(QString device);
@@ -130,7 +130,7 @@ public:
 //  int32 aoCallback(TaskHandle task, int32 status);
 
 private:
-  void initTaskHandles();
+//  void initTaskHandles();
   void closeTaskHandles();
   void errorCheck(const char* file, int line, int err);
 
@@ -164,13 +164,10 @@ private:
   QVector<TaskHandle> m_SyncAOTasks;
   QVector<TaskHandle> m_SyncAITasks;
 
-//  double              m_SampleRate;
   double              m_ExposureTime;
   int                 m_SyncCounter;
-//  double              m_SyncPeriod;
   double              m_SyncLongTime;
   int                 m_SyncNPhases;
-//  int                 m_SyncBufferSize;
 
 //  QVector<double>     m_SyncAnalogInputs;
 

@@ -19,14 +19,11 @@
 QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   inherited("nidaqPlugin"),
   m_ErrorOutput(NULL),
-//  m_AOTaskHandle(0),
-//  m_AITaskHandle(0),
-//  m_TrigAOTask(0),
-//  m_PulseTask(0),
-//  m_CountersTask(0),
-  m_SyncTask(0)/*,
-  m_SyncAOTask(0),
-  m_SyncAITask(0)*/
+  m_SyncTask(0),
+  m_DeviceCount(0),
+  m_DetectorDeviceCount(0),
+  m_OutputDeviceCount(0),
+  m_InputDeviceCount(0)
 {
 //  setObjectName("nidaq");
 
@@ -69,9 +66,9 @@ QxrdNIDAQPlugin::~QxrdNIDAQPlugin()
 void QxrdNIDAQPlugin::registerMetaTypes()
 {
   qRegisterMetaType<QxrdNIDAQPlugin*>("QxrdNIDAQPlugin*");
-  qRegisterMetaType<QxrdNIDAQSyncDetectorOutput*>("QxrdNIDAQSyncDetectorOutput*");
-  qRegisterMetaType<QxrdNIDAQSyncWaveformOutput*>("QxrdNIDAQSyncWaveformOutput*");
-  qRegisterMetaType<QxrdNIDAQSyncAnalogInput*>("QxrdNIDAQSyncAnalogInput*");
+//  qRegisterMetaType<QxrdNIDAQSyncDetectorOutput*>("QxrdNIDAQSyncDetectorOutput*");
+//  qRegisterMetaType<QxrdNIDAQSyncWaveformOutput*>("QxrdNIDAQSyncWaveformOutput*");
+//  qRegisterMetaType<QxrdNIDAQSyncAnalogInput*>("QxrdNIDAQSyncAnalogInput*");
 }
 
 //void QxrdNIDAQPlugin::setErrorOutput(QObject *errors)
@@ -128,36 +125,6 @@ void QxrdNIDAQPlugin::errorCheck(const char* file, int line, int err)
       free(buff);
     }
   }
-}
-
-void QxrdNIDAQPlugin::initTaskHandles()
-{
-  //  int error;
-
-  //  if (m_AOTaskHandle == 0) {
-  //    DAQmxErrChk(DAQmxCreateTask("", &m_AOTaskHandle));
-  //    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-  //    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_AOTaskHandle, "Dev1/ao1", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-  //  }
-
-  //  if (m_AITaskHandle == 0) {
-  //    DAQmxErrChk(DAQmxCreateTask("", &m_AITaskHandle));
-  //    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai0", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-  //    DAQmxErrChk(DAQmxCreateAIVoltageChan (m_AITaskHandle, "Dev1/ai1", NULL, DAQmx_Val_Cfg_Default, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-  //  }
-
-  //  if (m_TrigAOTask == 0) {
-  //    DAQmxErrChk(DAQmxCreateTask("", &m_TrigAOTask));
-  //    DAQmxErrChk(DAQmxCreateAOVoltageChan (m_TrigAOTask, "Dev1/ao0", NULL, -10.0, 10.0, DAQmx_Val_Volts, NULL));
-  ////    DAQmxErrChk(DAQmxCfgAnlgEdgeStartTrig(m_TrigAOTask, "Dev1/ai2", DAQmx_Val_FallingSlope, 1.0));
-  //  }
-
-  //  return;
-
-  //Error:
-  //  printf("Error in initTaskHandles\n");
-
-  //  closeTaskHandles();
 }
 
 void QxrdNIDAQPlugin::closeTaskHandles()

@@ -29,6 +29,7 @@ QxrdDebugDictionary::QxrdDebugDictionary()
   setMessage(DEBUG_AREADETECTOR, "Area Detector Acquisition");
   setMessage(DEBUG_SIMULATED,    "Simulated Detector Acquisition");
   setMessage(DEBUG_FILEWATCHER,  "File Watcher Acquisition");
+  setMessage(DEBUG_NIDAQ,        "NIDAQ Operations");
   setMessage(DEBUG_ROI,          "Debug ROI Operations");
 }
 
