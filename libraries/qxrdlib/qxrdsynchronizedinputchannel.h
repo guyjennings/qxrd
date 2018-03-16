@@ -6,6 +6,8 @@
 #include "qxrdnidaq-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
+#include "qxrdacquisitionparameterpack-ptr.h"
+#include "qxrddarkacquisitionparameterpack-ptr.h"
 
 class QXRD_EXPORT QxrdSynchronizedInputChannel : public QcepObject
 {
@@ -24,7 +26,8 @@ public:
 
   double evaluateInput();
 
-  void prepareForInput();
+  void prepareForInput(QxrdAcquisitionParameterPackWPtr p);
+  void prepareForDarkInput(QxrdDarkAcquisitionParameterPackWPtr p);
 
   enum {
     ModeSummed,

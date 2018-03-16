@@ -90,14 +90,7 @@ public:
   void acquiredFrameAvailable(int currentPhase);
   void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
   QxrdNIDAQWPtr nidaqPlugin() const;
-
-//  QVector<double>  outputTimes();
-//  QVector<double>  outputVoltage();
-
   QxrdAcquisitionParameterPackWPtr parms();
-
-//private:
-//  QxrdAcqCommonWPtr acquisition();
 
 private:
   QxrdAcqCommonWPtr                    m_Acquisition;
@@ -105,12 +98,19 @@ private:
   QxrdDarkAcquisitionParameterPackWPtr m_DarkAcquisitionParms;
   QxrdNIDAQWPtr                        m_NIDAQPlugin;
   int                                  m_SyncMode;
-//  QVector<double>                      m_OutputTimes;
-//  QVector<double>                      m_OutputVoltage;
 
   QVector<QxrdSynchronizedDetectorChannelPtr> m_Detectors;
   QVector<QxrdSynchronizedOutputChannelPtr>   m_Outputs;
   QVector<QxrdSynchronizedInputChannelPtr>    m_Inputs;
+
+  Q_PROPERTY(int detectorCount READ get_DetectorCount WRITE set_DetectorCount STORED false)
+  QCEP_INTEGER_PROPERTY(DetectorCount)
+
+  Q_PROPERTY(int outputCount READ get_OutputCount WRITE set_OutputCount STORED false)
+  QCEP_INTEGER_PROPERTY(OutputCount)
+
+  Q_PROPERTY(int inputCount READ get_InputCount WRITE set_OutputCount STORED false)
+  QCEP_INTEGER_PROPERTY(InputCount)
 };
 
 Q_DECLARE_METATYPE(QxrdSynchronizedAcquisition*)

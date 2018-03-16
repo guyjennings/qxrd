@@ -2,6 +2,8 @@
 #include "qxrdacqcommon.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdnidaq.h"
+#include "qxrdacquisitionparameterpack.h"
+#include "qxrddarkacquisitionparameterpack.h"
 
 QxrdSynchronizedInputChannel::QxrdSynchronizedInputChannel(QString name)
   : inherited(name),
@@ -88,9 +90,50 @@ double QxrdSynchronizedInputChannel::evaluateInput()
   return 0;
 }
 
-void QxrdSynchronizedInputChannel::prepareForInput()
+void QxrdSynchronizedInputChannel::prepareForInput(QxrdAcquisitionParameterPackWPtr p)
 {
-  set_ActualSampleRate(get_SampleRate());
+  QxrdAcquisitionParameterPackPtr parms(p);
+
+  if (parms) {
+    double exposureTime = parms->exposure();
+    int    nPhases      = parms->nphases();
+    double cycleTime    = exposureTime*nPhases;
+    double sampleRate   = get_SampleRate();
+    double nSamples     = cycleTime*sampleRate;
+
+    if (nSamples > 1000000) {
+      while (nSamples > 1000000) {
+        sampleRate /= 10;
+        nSamples    = cycleTime*sampleRate;
+      }
+
+      printMessage(tr("Too many samples - sampleRate reduced to %1 Hz, now %2 samples").arg(sampleRate).arg(nSamples));
+    }
+
+    int iSamples = (int) nSamples;
+
+    QVector<double> inputTimes(iSamples+1);
+    QVector<double> inputValues(iSamples+1);
+
+    for (int i=0; i<=iSamples; i++) {
+      inputTimes[i] = ((double)i)/((double) sampleRate);
+      inputValues[i] = 0.0;
+    }
+
+    set_ActualSampleRate(sampleRate);
+    set_TimeValues(inputTimes);
+    set_Waveform(inputValues);
+    set_NSamples(iSamples);
+  }
+}
+
+void QxrdSynchronizedInputChannel::prepareForDarkInput(QxrdDarkAcquisitionParameterPackWPtr p)
+{
+  QxrdDarkAcquisitionParameterPackPtr parms(p);
+
+  if (parms) {
+    set_ActualSampleRate(get_SampleRate());
+  }
 }
 
 //QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()

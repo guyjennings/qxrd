@@ -72,12 +72,12 @@ public slots:
 
 //  QVector<double> syncAnalogInputs();
 
-  void   setAnalogWaveform(QString chan, double rate, double wfm[], int size);
-  void   setAnalogOutput(int chan, double val);
-  double getAnalogInput(int chan);
-  void   triggerAnalogWaveform();
+//  void   setAnalogWaveform(QString chan, double rate, double wfm[], int size);
+//  void   setAnalogOutput(int chan, double val);
+//  double getAnalogInput(int chan);
+//  void   triggerAnalogWaveform();
 
-  void   pulseOutput();
+//  void   pulseOutput();
 
   double count(int chan, double time);
 
@@ -85,31 +85,31 @@ public slots:
   QVector<double> readCounters();
 
   QStringList deviceNames();
-  QString     deviceType(QString device);
+//  QString     deviceType(QString device);
   int         deviceIsSimulated(QString device);
   QStringList deviceAIChannels(QString device);
   QStringList deviceAOChannels(QString device);
-  QStringList deviceDIPorts(QString device);
-  QStringList deviceDILines(QString port);
-  QStringList deviceDOPorts(QString device);
-  QStringList deviceDOLines(QString port);
-  QStringList deviceCIChannels(QString device);
+//  QStringList deviceDIPorts(QString device);
+//  QStringList deviceDILines(QString port);
+//  QStringList deviceDOPorts(QString device);
+//  QStringList deviceDOLines(QString port);
+//  QStringList deviceCIChannels(QString device);
   QStringList deviceCOChannels(QString device);
 
-  double getAnalogInput(QString channelName);
-  void   setAnalogOutput(QString channelName, double value);
-  void   setAnalogOutput(double value);
+//  double getAnalogInput(QString channelName);
+//  void   setAnalogOutput(QString channelName, double value);
+//  void   setAnalogOutput(double value);
 
-  int prepareContinuousInput(double sampleRate,
-                                     double acquireDelay,
-                                     double exposureTime,
-                                     QStringList chans,
-                                     QVector<double> minVals,
-                                     QVector<double> maxVals);
-  int countContinuousInput();
-  int readContinuousInput();
-  QVector<double> readContinuousInputChannel(int ch);
-  void finishContinuousInput();
+//  int prepareContinuousInput(double sampleRate,
+//                                     double acquireDelay,
+//                                     double exposureTime,
+//                                     QStringList chans,
+//                                     QVector<double> minVals,
+//                                     QVector<double> maxVals);
+//  int countContinuousInput();
+//  int readContinuousInput();
+//  QVector<double> readContinuousInputChannel(int ch);
+//  void finishContinuousInput();
 
   int detectorDeviceCount();
   QString detectorDeviceName(int n);

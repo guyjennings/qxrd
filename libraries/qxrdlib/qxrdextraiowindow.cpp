@@ -57,6 +57,8 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
       connect(acq->prop_PhasesInGroup(), &QcepIntProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
 
       waveformChanged();
+
+      updateWaveforms();
     }
 
     connect(m_TestReadout, &QAbstractButton::clicked, this, &QxrdExtraIOWindow::initiateReadout);
@@ -186,31 +188,6 @@ void QxrdExtraIOWindow::updateWaveforms()
 {
   updateInputWaveforms();
   updateOutputWaveforms();
-
-  //TODO: reimplement
-//  QxrdAcquisitionExtraInputsPtr xtra(m_AcquisitionExtraInputs);
-
-//  if (xtra) {
-//    int nchan = xtra->channels().count();
-
-//    m_AcquisitionWaveforms->setNChannels(nchan);
-
-//    for (int i=0; i<nchan; i++) {
-//      QxrdAcquisitionExtraInputsChannelPtr chanp(xtra->channel(i));
-
-//      if (chanp && chanp->get_Enabled() && chanp->get_Plotted()) {
-//        m_AcquisitionWaveforms->plotChannel(i,
-//                                            chanp->startIndex(),
-//                                            chanp->endIndex(),
-//                                            xtra->readXChannel(),
-//                                            xtra->readChannel(i));
-//      } else {
-//        m_AcquisitionWaveforms->plotChannel(i, 0, 0, QcepDoubleVector(), QcepDoubleVector());
-//      }
-//    }
-
-//    m_AcquisitionWaveforms->replot();
-//  }
 }
 
 void QxrdExtraIOWindow::doNewDetector()
