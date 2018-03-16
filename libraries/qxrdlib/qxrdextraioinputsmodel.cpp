@@ -64,10 +64,6 @@ QVariant QxrdExtraIOInputsModel::data(const QModelIndex &index, int role) const
         case MaxColumn:
           res = inp->get_Max();
           break;
-
-        case SampleRateColumn:
-          res = inp->get_SampleRate();
-          break;
         }
       } else if (role == Qt::EditRole) {
         switch (col) {
@@ -93,10 +89,6 @@ QVariant QxrdExtraIOInputsModel::data(const QModelIndex &index, int role) const
 
         case MaxColumn:
           res = inp->get_Max();
-          break;
-
-        case SampleRateColumn:
-          res = inp->get_SampleRate();
           break;
         }
       }
@@ -136,10 +128,6 @@ QVariant QxrdExtraIOInputsModel::headerData(int section, Qt::Orientation orienta
 
       case MaxColumn:
         res = "Max V";
-        break;
-
-      case SampleRateColumn:
-        res = "Sample Rate";
         break;
       }
     } else {
@@ -202,10 +190,6 @@ bool QxrdExtraIOInputsModel::setData(const QModelIndex &index, const QVariant &v
         case MaxColumn:
           inp->set_Max(value.toDouble());
           res = true;
-          break;
-
-        case SampleRateColumn:
-          inp->set_SampleRate(value.toDouble());
           break;
         }
       }

@@ -101,6 +101,15 @@ void QxrdAcquisition::registerMetaTypes()
   qRegisterMetaType<QxrdAcquisitionExecution*>("QxrdAcquisitionExecution*");
 }
 
+void QxrdAcquisition::setupAcquisition()
+{
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+
+  if (sync) {
+    sync -> setupAcquisition();
+  }
+}
+
 void QxrdAcquisition::acquire()
 {
   if (QThread::currentThread() != thread()) {

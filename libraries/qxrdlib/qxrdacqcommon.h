@@ -38,6 +38,7 @@ public:
 
   virtual QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const = 0;
 
+  virtual void setupAcquisition() = 0;
   virtual void acquire() = 0;
   virtual void acquireOnce() = 0;
   virtual void acquireDark() = 0;

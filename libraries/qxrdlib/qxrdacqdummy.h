@@ -30,6 +30,7 @@ public:
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
 
+  void setupAcquisition();
   void acquire();
   void acquireOnce();
   void acquireDark();

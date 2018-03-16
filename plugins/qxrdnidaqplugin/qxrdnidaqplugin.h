@@ -161,13 +161,16 @@ private:
 
   TaskHandle          m_SyncTask;
   QVector<TaskHandle> m_SyncDetTasks;
-  QVector<TaskHandle> m_SyncAOTasks;
-  QVector<TaskHandle> m_SyncAITasks;
+  TaskHandle          m_SyncAOTask;
+  TaskHandle          m_SyncAITask;
 
   double              m_ExposureTime;
   int                 m_SyncCounter;
   double              m_SyncLongTime;
   int                 m_SyncNPhases;
+
+  int                 m_OutputNSamples;
+  int                 m_InputNSamples;
 
 //  QVector<double>     m_SyncAnalogInputs;
 

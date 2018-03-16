@@ -43,6 +43,7 @@ public:
   static void registerMetaTypes();
 
 public slots:
+  void setupAcquisition();
   void acquire();
   void acquireOnce();
   void acquireDark();

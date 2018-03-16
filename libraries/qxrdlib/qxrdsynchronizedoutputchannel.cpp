@@ -17,9 +17,7 @@ QxrdSynchronizedOutputChannel::QxrdSynchronizedOutputChannel(QString name)
   m_EndV(this, "endV", 10.0, "Ending value for output (in Volts)"),
   m_Symmetry(this, "symmetry", 0.0, "Waveform Symmetry (0 = symmetric)"),
   m_PhaseShift(this, "phaseShift", 0.0, "Waveform Phase Shift (deg)"),
-  m_SampleRate(this, "sampleRate", 1000, "Sampling rate of analog channel (in Hz)"),
   m_NSamples(this, "nSamples", 0, "Number of samples in waveform"),
-  m_ActualSampleRate(this, "actualSampleRate", 1000, "Actual Sample Rate Used"),
   m_TimeValues(this, "timeValues", QcepDoubleVector(), "Time Values on Channel"),
   m_Waveform(this, "waveform", QcepDoubleVector(), "Waveform on Channel"),
   m_Enabled(this, "enabled", false, "Enable Output Waveform?")
@@ -124,15 +122,18 @@ void QxrdSynchronizedOutputChannel::disableWaveform()
   set_Enabled(false);
 }
 
-void QxrdSynchronizedOutputChannel::recalculateWaveform(QxrdAcquisitionParameterPackWPtr p)
+void QxrdSynchronizedOutputChannel::recalculateWaveform(
+    QxrdSynchronizedAcquisitionWPtr  s,
+    QxrdAcquisitionParameterPackWPtr p)
 {
   QxrdAcquisitionParameterPackPtr parms(p);
+  QxrdSynchronizedAcquisitionPtr  sync(s);
 
-  if (parms) {
+  if (parms && sync) {
     double exposureTime = parms->exposure();
     int    nPhases      = parms->nphases();
     double cycleTime    = exposureTime*nPhases;
-    double sampleRate   = get_SampleRate();
+    double sampleRate   = sync -> get_OutputSampleRate();
     double nSamples     = cycleTime*sampleRate;
     double minVal       = get_StartV();
     double maxVal       = get_EndV();
@@ -165,14 +166,14 @@ void QxrdSynchronizedOutputChannel::recalculateWaveform(QxrdAcquisitionParameter
     } else if (nSamples <= 0) {
       printMessage(tr("Output Channel nSamples (%1) <= 0").arg(nSamples));
     } else {
-      if (nSamples > 1000000) {
-        while (nSamples > 1000000) {
-          sampleRate /= 10;
-          nSamples    = cycleTime*sampleRate;
-        }
+//      if (nSamples > 1000000) {
+//        while (nSamples > 1000000) {
+//          sampleRate /= 10;
+//          nSamples    = cycleTime*sampleRate;
+//        }
 
-        printMessage(tr("Too many samples - sampleRate reduced to %1 Hz, now %2 samples").arg(sampleRate).arg(nSamples));
-      }
+//        printMessage(tr("Too many samples - sampleRate reduced to %1 Hz, now %2 samples").arg(sampleRate).arg(nSamples));
+//      }
 
       int iSamples = (int) nSamples;
       double divide = iSamples * (0.5 + symm/2.0);
@@ -248,7 +249,6 @@ void QxrdSynchronizedOutputChannel::recalculateWaveform(QxrdAcquisitionParameter
 
       set_Enabled(true);
 
-      set_ActualSampleRate(sampleRate);
       set_TimeValues(outputTimes);
       set_Waveform(outputVoltage);
       set_NSamples(iSamples);

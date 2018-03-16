@@ -84,6 +84,7 @@ public slots:
 //  void triggerOnce();
 
 public:
+  void setupAcquisition();
   void prepareForAcquisition(QxrdAcquisitionParameterPackWPtr parms);
   void prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPackWPtr parms);
   void finishedAcquisition();
@@ -111,6 +112,12 @@ private:
 
   Q_PROPERTY(int inputCount READ get_InputCount WRITE set_OutputCount STORED false)
   QCEP_INTEGER_PROPERTY(InputCount)
+
+  Q_PROPERTY(double outputSampleRate READ get_OutputSampleRate WRITE set_OutputSampleRate)
+  QCEP_DOUBLE_PROPERTY(OutputSampleRate)
+
+  Q_PROPERTY(double inputSampleRate READ get_InputSampleRate WRITE set_InputSampleRate)
+  QCEP_DOUBLE_PROPERTY(InputSampleRate)
 };
 
 Q_DECLARE_METATYPE(QxrdSynchronizedAcquisition*)

@@ -13,7 +13,9 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
   QcepObject(name),
   m_DetectorCount(this, "detectorCount", 0, "Number of detector synchronization channels"),
   m_OutputCount(this, "outputCount", 0, "Number of synchronized output channels"),
-  m_InputCount(this, "inputCount", 0, "Number of synchronized input channels")
+  m_InputCount(this, "inputCount", 0, "Number of synchronized input channels"),
+  m_OutputSampleRate(this, "outputSampleRate", 1000, "Sample Rate for outputs (Hz)"),
+  m_InputSampleRate(this, "inputSampleRate", 1000, "Sample Rate for inputs (Hz)")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing synchronized acquisition\n");
@@ -25,7 +27,17 @@ void QxrdSynchronizedAcquisition::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 
   m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
+}
 
+QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting synchronized acquisition\n");
+#endif
+}
+
+void QxrdSynchronizedAcquisition::setupAcquisition()
+{
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
@@ -40,13 +52,6 @@ void QxrdSynchronizedAcquisition::initialize(QcepObjectWPtr parent)
 
     updateWaveforms();
   }
-}
-
-QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
-{
-#ifndef QT_NO_DEBUG
-  printf("Deleting synchronized acquisition\n");
-#endif
 }
 
 void QxrdSynchronizedAcquisition::registerMetaTypes()
@@ -450,7 +455,8 @@ void QxrdSynchronizedAcquisition::updateWaveforms()
       QxrdSynchronizedOutputChannelPtr out(output(i));
 
       if (out) {
-        out->recalculateWaveform(parms);
+        out->recalculateWaveform(
+              qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
       }
     }
 
@@ -458,7 +464,8 @@ void QxrdSynchronizedAcquisition::updateWaveforms()
       QxrdSynchronizedInputChannelPtr inp(input(i));
 
       if (inp) {
-        inp->prepareForInput(parms);
+        inp->prepareForInput(
+              qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
       }
     }
 
@@ -488,7 +495,8 @@ void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionP
     QxrdSynchronizedInputChannelPtr inp(input(i));
 
     if (inp) {
-      inp->prepareForDarkInput(parms);
+      inp->prepareForDarkInput(
+            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
     }
   }
 
@@ -508,7 +516,8 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
     QxrdSynchronizedOutputChannelPtr out(output(i));
 
     if (out) {
-      out->recalculateWaveform(parms);
+      out->recalculateWaveform(
+            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
     }
   }
 
@@ -516,7 +525,8 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
     QxrdSynchronizedInputChannelPtr inp(input(i));
 
     if (inp) {
-      inp->prepareForInput(parms);
+      inp->prepareForInput(
+            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
     }
   }
 

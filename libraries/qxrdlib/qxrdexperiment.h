@@ -154,6 +154,8 @@ public slots:
                      int ngroup);
   void acquireComplete();
 
+  void setupAcquisition();
+
   void plotImage(QcepDoubleImageDataPtr img);
 
   QColor pickColor(QColor start=QColor(Qt::white));

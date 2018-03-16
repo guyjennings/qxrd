@@ -709,6 +709,7 @@ void QxrdAppCommon::openedExperiment(QxrdExperimentThreadWPtr expwthr)
 
       expt->openWindows();
       expt->setChanged(0);
+      expt->setupAcquisition();
     }
   }
 }

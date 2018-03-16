@@ -14,9 +14,7 @@ QxrdSynchronizedInputChannel::QxrdSynchronizedInputChannel(QString name)
   m_Min(this, "min", -10.0, "Minimum Input value for Analog Channel (in Volts)"),
   m_Max(this, "max", 10.0, "Maximum Input Value for Analog Channel (in Volts)"),
   m_NSamples(this, "nSamples", 0, "Number of samples in waveform"),
-  m_ActualSampleRate(this, "actualSampleRate", 1000, "Actual Sample Rate Used"),
   m_TimeValues(this, "timeValues", QcepDoubleVector(), "Time Values on Channel"),
-  m_SampleRate(this, "sampleRate", 1000, "Sampling rate of analog channel (in Hz)"),
   m_Waveform(this, "waveform", QcepDoubleVector(), "Waveform on Channel")
 {
 }
@@ -90,25 +88,27 @@ double QxrdSynchronizedInputChannel::evaluateInput()
   return 0;
 }
 
-void QxrdSynchronizedInputChannel::prepareForInput(QxrdAcquisitionParameterPackWPtr p)
+void QxrdSynchronizedInputChannel::prepareForInput(QxrdSynchronizedAcquisitionWPtr  s,
+                                                   QxrdAcquisitionParameterPackWPtr p)
 {
   QxrdAcquisitionParameterPackPtr parms(p);
+  QxrdSynchronizedAcquisitionPtr  sync(s);
 
-  if (parms) {
+  if (parms && sync) {
     double exposureTime = parms->exposure();
     int    nPhases      = parms->nphases();
     double cycleTime    = exposureTime*nPhases;
-    double sampleRate   = get_SampleRate();
+    double sampleRate   = sync -> get_InputSampleRate();
     double nSamples     = cycleTime*sampleRate;
 
-    if (nSamples > 1000000) {
-      while (nSamples > 1000000) {
-        sampleRate /= 10;
-        nSamples    = cycleTime*sampleRate;
-      }
+//    if (nSamples > 1000000) {
+//      while (nSamples > 1000000) {
+//        sampleRate /= 10;
+//        nSamples    = cycleTime*sampleRate;
+//      }
 
-      printMessage(tr("Too many samples - sampleRate reduced to %1 Hz, now %2 samples").arg(sampleRate).arg(nSamples));
-    }
+//      printMessage(tr("Too many samples - sampleRate reduced to %1 Hz, now %2 samples").arg(sampleRate).arg(nSamples));
+//    }
 
     int iSamples = (int) nSamples;
 
@@ -120,20 +120,21 @@ void QxrdSynchronizedInputChannel::prepareForInput(QxrdAcquisitionParameterPackW
       inputValues[i] = 0.0;
     }
 
-    set_ActualSampleRate(sampleRate);
     set_TimeValues(inputTimes);
     set_Waveform(inputValues);
     set_NSamples(iSamples);
   }
 }
 
-void QxrdSynchronizedInputChannel::prepareForDarkInput(QxrdDarkAcquisitionParameterPackWPtr p)
+void QxrdSynchronizedInputChannel::prepareForDarkInput(QxrdSynchronizedAcquisitionWPtr      s,
+                                                       QxrdDarkAcquisitionParameterPackWPtr p)
 {
-  QxrdDarkAcquisitionParameterPackPtr parms(p);
+//  QxrdDarkAcquisitionParameterPackPtr parms(p);
+//  QxrdSynchronizedAcquisitionPtr      sync(s);
 
-  if (parms) {
-    set_ActualSampleRate(get_SampleRate());
-  }
+//  if (parms && sync) {
+//    set_ActualSampleRate(sync -> get_InputSampleRate());
+//  }
 }
 
 //QVector<double> QxrdAcquisitionExtraInputsChannel::readChannel()

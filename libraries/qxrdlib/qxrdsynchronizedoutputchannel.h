@@ -43,7 +43,7 @@ public:
   static QString waveformMode(int n);
 
   void disableWaveform();
-  void recalculateWaveform(QxrdAcquisitionParameterPackWPtr p);
+  void recalculateWaveform(QxrdSynchronizedAcquisitionWPtr s, QxrdAcquisitionParameterPackWPtr p);
 
 private:
   QxrdAcqCommonWPtr               m_AcqCommon;
@@ -75,14 +75,8 @@ public:
   Q_PROPERTY(double phaseShift READ get_PhaseShift WRITE set_PhaseShift)
   QCEP_DOUBLE_PROPERTY(PhaseShift)
 
-  Q_PROPERTY(double sampleRate READ get_SampleRate WRITE set_SampleRate)
-  QCEP_DOUBLE_PROPERTY(SampleRate)
-
   Q_PROPERTY(int nSamples READ get_NSamples WRITE set_NSamples STORED false)
   QCEP_INTEGER_PROPERTY(NSamples)
-
-  Q_PROPERTY(double actualSampleRate READ get_ActualSampleRate WRITE set_ActualSampleRate STORED false)
-  QCEP_DOUBLE_PROPERTY(ActualSampleRate)
 
   Q_PROPERTY(QcepDoubleVector timeValues READ get_TimeValues WRITE set_TimeValues STORED false)
   QCEP_DOUBLE_VECTOR_PROPERTY(TimeValues)

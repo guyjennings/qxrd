@@ -99,18 +99,6 @@ QWidget* QxrdExtraIOOutputsDelegate::createEditor(QWidget *parent,
           res = sb;
         }
         break;
-
-      case QxrdExtraIOOutputsModel::SampleRateColumn:
-        {
-          QDoubleSpinBox *sb = new QDoubleSpinBox(parent);
-
-          sb -> setValue(index.data().toDouble());
-          sb -> setMinimum(0);
-          sb -> setMaximum(50000);
-
-          res = sb;
-        }
-        break;
       }
     }
   }

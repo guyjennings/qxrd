@@ -45,6 +45,10 @@ QxrdSynchronizedAcquisitionPtr QxrdAcqDummy::synchronizedAcquisition() const
   return QxrdSynchronizedAcquisitionPtr();
 }
 
+void QxrdAcqDummy::setupAcquisition()
+{
+}
+
 void QxrdAcqDummy::acquire()
 {
 }

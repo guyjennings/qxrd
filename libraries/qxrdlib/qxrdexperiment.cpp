@@ -1289,6 +1289,14 @@ void QxrdExperiment::acquiredFrame(QString fileName,
   set_WorkCompleted(pctComplete);
 }
 
+void QxrdExperiment::setupAcquisition()
+{
+  QxrdAcqCommonPtr acq(m_Acquisition);
+
+  if (acq) {
+    acq -> setupAcquisition();
+  }
+}
 void QxrdExperiment::plotImage(QcepDoubleImageDataPtr img)
 {
   //TODO: replace
