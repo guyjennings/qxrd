@@ -27,7 +27,7 @@ private:
 public:
   QxrdNIDAQPlugin();
   virtual ~QxrdNIDAQPlugin();
-  virtual void setErrorOutput(QObject *errors);
+//  virtual void setErrorOutput(QObject *errors);
 
   void registerMetaTypes();
 
