@@ -14,6 +14,7 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
   m_DetectorCount(this, "detectorCount", 0, "Number of detector synchronization channels"),
   m_OutputCount(this, "outputCount", 0, "Number of synchronized output channels"),
   m_InputCount(this, "inputCount", 0, "Number of synchronized input channels"),
+  m_PrimaryCounter(this, "primaryCounter", -1, "Primary Counter Device Number"),
   m_OutputSampleRate(this, "outputSampleRate", 1000, "Sample Rate for outputs (Hz)"),
   m_InputSampleRate(this, "inputSampleRate", 1000, "Sample Rate for inputs (Hz)")
 {
@@ -177,6 +178,21 @@ void QxrdSynchronizedAcquisition::writeSettings(QSettings *settings)
   }
 
   settings->endArray();
+}
+
+QString QxrdSynchronizedAcquisition::primaryCounterName()
+{
+  int n = get_PrimaryCounter();
+
+  QString res = QString();
+
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (nidaq) {
+    res = nidaq->detectorDeviceName(n);
+  }
+
+  return res;
 }
 
 int QxrdSynchronizedAcquisition::detectorCount()

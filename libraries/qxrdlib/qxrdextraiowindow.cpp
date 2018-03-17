@@ -45,12 +45,26 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
 
     if (acq) {
       m_SynchronizedAcquisition = acq->synchronizedAcquisition();
+      m_NIDAQPlugin             = acq->nidaqPlugin();
 
       QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
       if (sync) {
         connect(sync.data(), &QxrdSynchronizedAcquisition::waveformsChanged,
                 this,        &QxrdExtraIOWindow::updateWaveforms);
+
+
+        QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+        if (nidaq) {
+          for (int i=0; i<nidaq->detectorDeviceCount(); i++) {
+            m_DetectorCounter -> addItem(nidaq->detectorDeviceName(i));
+          }
+        }
+
+        sync->prop_PrimaryCounter()   -> linkTo(m_DetectorCounter);
+        sync->prop_OutputSampleRate() -> linkTo(m_OutputSampleRate);
+        sync->prop_InputSampleRate()  -> linkTo(m_InputSampleRate);
       }
 
       connect(acq->prop_ExposureTime(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
