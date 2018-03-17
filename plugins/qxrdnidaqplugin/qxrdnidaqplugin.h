@@ -27,7 +27,6 @@ private:
 public:
   QxrdNIDAQPlugin();
   virtual ~QxrdNIDAQPlugin();
-//  virtual void setErrorOutput(QObject *errors);
 
   void registerMetaTypes();
 
@@ -51,62 +50,11 @@ public slots:
   void   startOutputChannels();
   void   startInputChannels();
 
-//  void   addSyncDetectorOutput(int n, double d0, double d1);
-//  void   addSyncWaveformOutput(int style, double v0, double v1);
-//  void   addSyncAnalogInput();
-
-//  void   clearSyncDetectorOutputs();
-//  void   clearSyncWaveformOutputs();
-//  void   clearSyncAnalogInputs();
-
-//  void   syncOutput(double period, int nphases);
-//  void   syncStop();
-
-//  void   syncTest();
-//  void   syncClear();
-
-//  void   syncReadAnalogInputs();
-
-//  QVector<double> syncAnalogInputs();
-
-//  void   setAnalogWaveform(QString chan, double rate, double wfm[], int size);
-//  void   setAnalogOutput(int chan, double val);
-//  double getAnalogInput(int chan);
-//  void   triggerAnalogWaveform();
-
-//  void   pulseOutput();
-
-//  double count(int chan, double time);
-
-//  int configCounters(QStringList chans);
-//  QVector<double> readCounters();
-
   QStringList deviceNames();
-//  QString     deviceType(QString device);
   int         deviceIsSimulated(QString device);
   QStringList deviceAIChannels(QString device);
   QStringList deviceAOChannels(QString device);
-//  QStringList deviceDIPorts(QString device);
-//  QStringList deviceDILines(QString port);
-//  QStringList deviceDOPorts(QString device);
-//  QStringList deviceDOLines(QString port);
-//  QStringList deviceCIChannels(QString device);
   QStringList deviceCOChannels(QString device);
-
-//  double getAnalogInput(QString channelName);
-//  void   setAnalogOutput(QString channelName, double value);
-//  void   setAnalogOutput(double value);
-
-//  int prepareContinuousInput(double sampleRate,
-//                                     double acquireDelay,
-//                                     double exposureTime,
-//                                     QStringList chans,
-//                                     QVector<double> minVals,
-//                                     QVector<double> maxVals);
-//  int countContinuousInput();
-//  int readContinuousInput();
-//  QVector<double> readContinuousInputChannel(int ch);
-//  void finishContinuousInput();
 
   int detectorDeviceCount();
   QString detectorDeviceName(int n);
@@ -130,34 +78,10 @@ public:
 //  int32 aoCallback(TaskHandle task, int32 status);
 
 private:
-//  void initTaskHandles();
   void closeTaskHandles();
   void errorCheck(const char* file, int line, int err);
 
 private:
-//  QObject            *m_ErrorOutput;
-//  QMutex              m_Mutex;
-//  TaskHandle          m_AOTaskHandle;
-//  TaskHandle          m_AITaskHandle;
-//  TaskHandle          m_TrigAOTask;
-//  TaskHandle          m_PulseTask;
-//  TaskHandle          m_CountersTask;
-//  int                 m_NCounters;
-//  QVector<double>     m_Counts;
-
-//  double              m_AcquireDelay;
-
-//  int                 m_NContinuousInputs;
-//  int                 m_NContinuousSamples;
-
-//  int                 m_NAIChannels;
-//  int                 m_NCIChannels;
-//  TaskHandle          m_ContinuousAITask;
-//  QVector<TaskHandle> m_ContinuousCITasks;
-//  QVector<int>        m_ContinuousFlags;
-//  QVector<int>        m_ContinuousChans;
-
-//  QVector< QVector<double> > m_ContinuousInputData;
 
   TaskHandle          m_SyncTask;
   QVector<TaskHandle> m_SyncDetTasks;
@@ -171,12 +95,6 @@ private:
 
   int                 m_OutputNSamples;
   int                 m_InputNSamples;
-
-//  QVector<double>     m_SyncAnalogInputs;
-
-//  QVector<QxrdNIDAQSyncDetectorOutputPtr>  m_SyncDetectors;
-//  QVector<QxrdNIDAQSyncWaveformOutputPtr>  m_SyncWaveforms;
-//  QVector<QxrdNIDAQSyncAnalogInputPtr>     m_SyncInputs;
 
   QVector<QxrdSynchronizedDetectorChannelWPtr> m_DetectorChannels;
   QVector<QxrdSynchronizedOutputChannelWPtr>   m_OutputChannels;
