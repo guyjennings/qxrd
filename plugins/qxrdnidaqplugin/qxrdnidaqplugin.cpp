@@ -60,7 +60,7 @@ void QxrdNIDAQPlugin::initialize(QcepObjectWPtr parent)
   for (int i=0; i<m_DeviceCount; i++) {
     QString deviceName = m_DeviceNames.value(i);
 
-    if (!deviceIsSimulated(deviceName)) {
+//    if (!deviceIsSimulated(deviceName)) {
       QStringList counterChans = deviceCOChannels(deviceName);
       QStringList outputChans  = deviceAOChannels(deviceName);
       QStringList inputChans   = deviceAIChannels(deviceName);
@@ -68,7 +68,7 @@ void QxrdNIDAQPlugin::initialize(QcepObjectWPtr parent)
       m_DetectorDeviceNames.append(counterChans);
       m_OutputDeviceNames.append(outputChans);
       m_InputDeviceNames.append(inputChans);
-    }
+//    }
   }
 
   m_DetectorDeviceCount = m_DetectorDeviceNames.count();
@@ -896,7 +896,7 @@ void QxrdNIDAQPlugin::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr s, Qxr
   }
 
   if (sync && parm) {
-    m_PrimaryCounterName = sync->primaryCounterName();
+    m_PrimaryCounterName = "/" + sync->primaryCounterName();
     m_PrimaryTriggerName = m_PrimaryCounterName + "InternalOutput";
 
     bool changedExposure = (parm->exposure() != m_ExposureTime ||
