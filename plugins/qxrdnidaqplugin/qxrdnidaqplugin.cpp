@@ -22,6 +22,8 @@ QxrdNIDAQPlugin::QxrdNIDAQPlugin() :
   m_SyncTask(0),
   m_SyncAOTask(0),
   m_SyncAITask(0),
+  m_PrimaryCounterName(""),
+  m_PrimaryTriggerName(""),
   m_ExposureTime(0),
   m_SyncCounter(0),
   m_SyncLongTime(0),
@@ -519,7 +521,7 @@ void QxrdNIDAQPlugin::changeExposureTime(double t, int n)
     DAQmxErrChk(DAQmxCreateTask("sync", &m_SyncTask));
 
     DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_SyncTask,
-                                           "Dev1/ctr0",
+                                           qPrintable(m_PrimaryCounterName),
                                            "ctr0",
                                            DAQmx_Val_Seconds,
                                            DAQmx_Val_Low,
@@ -588,11 +590,17 @@ void QxrdNIDAQPlugin::addDetectorSync(QxrdSynchronizedDetectorChannelWPtr p)
                                              dp - det->get_ReadoutDelay()));
 
       if (m_SyncNPhases*relExpos > 1) {
-        DAQmxErrChk(DAQmxCfgImplicitTiming  (detTask, DAQmx_Val_FiniteSamps, m_SyncNPhases*relExpos));
+        DAQmxErrChk(DAQmxCfgImplicitTiming  (detTask,
+                                             DAQmx_Val_FiniteSamps,
+                                             m_SyncNPhases*relExpos));
       }
 
-      DAQmxErrChk(DAQmxCfgDigEdgeStartTrig(detTask, "/Dev1/Ctr0InternalOutput", DAQmx_Val_Rising));
-      DAQmxErrChk(DAQmxSetStartTrigRetriggerable(detTask, true));
+      DAQmxErrChk(DAQmxCfgDigEdgeStartTrig(detTask,
+                                           qPrintable(m_PrimaryTriggerName),
+                                           DAQmx_Val_Rising));
+
+      DAQmxErrChk(DAQmxSetStartTrigRetriggerable(detTask,
+                                                 true));
     }
   }
 
@@ -650,10 +658,11 @@ void QxrdNIDAQPlugin::addOutputChannel(QxrdSynchronizedOutputChannelWPtr p)
 
 
         DAQmxErrChk(DAQmxCfgDigEdgeStartTrig(m_SyncAOTask,
-                                             "/Dev1/Ctr0InternalOutput",
+                                             qPrintable(m_PrimaryTriggerName),
                                              DAQmx_Val_Rising));
 
-        DAQmxErrChk(DAQmxSetStartTrigRetriggerable(m_SyncAOTask, true));
+        DAQmxErrChk(DAQmxSetStartTrigRetriggerable(m_SyncAOTask,
+                                                   true));
       }
     }
   }
@@ -712,7 +721,7 @@ void QxrdNIDAQPlugin::addInputChannel(QxrdSynchronizedInputChannelWPtr p)
                                           m_InputNSamples));
 
         DAQmxErrChk(DAQmxCfgDigEdgeStartTrig(m_SyncAITask,
-                                             "/Dev1/Ctr0InternalOutput",
+                                             qPrintable(m_PrimaryTriggerName),
                                              DAQmx_Val_Rising));
 
         DAQmxErrChk(DAQmxSetStartTrigRetriggerable(m_SyncAITask, true));
@@ -887,6 +896,9 @@ void QxrdNIDAQPlugin::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr s, Qxr
   }
 
   if (sync && parm) {
+    m_PrimaryCounterName = sync->primaryCounterName();
+    m_PrimaryTriggerName = m_PrimaryCounterName + "InternalOutput";
+
     bool changedExposure = (parm->exposure() != m_ExposureTime ||
                             parm->nphases()  != m_SyncNPhases);
 

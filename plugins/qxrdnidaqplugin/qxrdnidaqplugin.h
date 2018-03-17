@@ -88,6 +88,8 @@ private:
   TaskHandle          m_SyncAOTask;
   TaskHandle          m_SyncAITask;
 
+  QString             m_PrimaryCounterName;
+  QString             m_PrimaryTriggerName;
   double              m_ExposureTime;
   int                 m_SyncCounter;
   double              m_SyncLongTime;
