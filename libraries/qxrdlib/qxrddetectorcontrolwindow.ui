@@ -1500,7 +1500,7 @@ Script Property: &quot;acquisition.userComment1&quot;
      <x>0</x>
      <y>0</y>
      <width>1428</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">

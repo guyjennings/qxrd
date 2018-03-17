@@ -14,6 +14,7 @@
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrddetectorsettings.h"
 #include "qxrddebug.h"
+#include <QMetaObject>
 
 #define DAQmxErrChk(functionCall) do { int error; if( DAQmxFailed(error=(functionCall)) ) { QxrdNIDAQPlugin::errorCheck(__FILE__,__LINE__,error); goto Error; } } while(0)
 
@@ -424,16 +425,18 @@ static int32 CVICALLBACK syncCallback(TaskHandle taskHandle, int32 status, void 
   }
 }
 
-//static int32 CVICALLBACK aiCallback(TaskHandle taskHandle, int32 status, void *callbackData)
-//{
-//  QxrdNIDAQPlugin *plugin = reinterpret_cast<QxrdNIDAQPlugin*>(callbackData);
+static int32 CVICALLBACK aiCallback(TaskHandle taskHandle, int32 everyNSamplesEventType, uInt32 nSamples, void *callbackData)
+{
+  QxrdNIDAQPlugin *plugin = reinterpret_cast<QxrdNIDAQPlugin*>(callbackData);
 
-//  if (plugin) {
-//    return plugin->aiCallback(taskHandle, status);
-//  } else {
-//    return status;
-//  }
-//}
+  if (plugin) {
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(plugin,
+            [=]() { plugin->aiCallback(taskHandle, everyNSamplesEventType, nSamples); }));
+  } else {
+    return everyNSamplesEventType;
+  }
+}
 
 //static int32 CVICALLBACK aoCallback(TaskHandle taskHandle, int32 status, void *callbackData)
 //{
@@ -470,12 +473,13 @@ void QxrdNIDAQPlugin::clearDetectorSync()
     }
 
     while (m_SyncDetTasks.count()) {
-      DAQmxClearTask(m_SyncDetTasks.takeFirst());
+      DAQmxErrChk(DAQmxClearTask(m_SyncDetTasks.takeFirst()));
     }
 
     m_DetectorChannels.clear();
   }
 
+Error:
   return;
 }
 
@@ -486,12 +490,13 @@ void QxrdNIDAQPlugin::clearOutputChannels()
       printMessage(tr("Stopping NIDAQ output channel(s)"));
     }
 
-    DAQmxClearTask(m_SyncAOTask);
+    DAQmxErrChk(DAQmxClearTask(m_SyncAOTask));
     m_SyncAOTask = NULL;
     m_OutputChannels.clear();
     m_OutputNSamples = 0;
   }
 
+Error:
   return;
 }
 
@@ -502,12 +507,13 @@ void QxrdNIDAQPlugin::clearInputChannels()
       printMessage(tr("Stopping NIDAQ input channel(s)"));
     }
 
-    DAQmxClearTask(m_SyncAITask);
+    DAQmxErrChk(DAQmxClearTask(m_SyncAITask));
     m_SyncAITask = NULL;
     m_InputChannels.clear();
     m_InputNSamples = 0;
   }
 
+Error:
   return;
 }
 
@@ -533,7 +539,7 @@ void QxrdNIDAQPlugin::changeExposureTime(double t, int n)
     DAQmxErrChk(DAQmxCfgImplicitTiming(m_SyncTask, DAQmx_Val_ContSamps, 100));
     DAQmxErrChk(DAQmxRegisterSignalEvent(m_SyncTask,
                                          DAQmx_Val_CounterOutputEvent,
-                                         /*0*/ DAQmx_Val_SynchronousEventCallbacks,
+                                         0 /*DAQmx_Val_SynchronousEventCallbacks*/,
                                          &::syncCallback,
                                          this));
   } else if (qcepDebug(DEBUG_NIDAQ)) {
@@ -690,7 +696,7 @@ void QxrdNIDAQPlugin::addInputChannel(QxrdSynchronizedInputChannelWPtr p)
 
       if (qcepDebug(DEBUG_NIDAQ)) {
         printMessage(tr("Adding NIDAQ input channel %1").arg(n));
-        printMessage(tr("Task name aoTask, Channel Name %1, Device Name %2, Sample Rate %3, NSamples %4")
+        printMessage(tr("Task name aiTask, Channel Name %1, Device Name %2, Sample Rate %3, NSamples %4")
                      .arg(chanName)
                      .arg(inp->channelName())
                      .arg(sync->get_InputSampleRate())
@@ -724,7 +730,20 @@ void QxrdNIDAQPlugin::addInputChannel(QxrdSynchronizedInputChannelWPtr p)
                                              qPrintable(m_PrimaryTriggerName),
                                              DAQmx_Val_Rising));
 
+        DAQmxErrChk(DAQmxSetBufInputBufSize(m_SyncAITask,
+                                            m_InputNSamples*3));
+
+        DAQmxErrChk(DAQmxSetReadOverWrite(m_SyncAITask,
+                                          DAQmx_Val_OverwriteUnreadSamps));
+
         DAQmxErrChk(DAQmxSetStartTrigRetriggerable(m_SyncAITask, true));
+
+        DAQmxErrChk(DAQmxRegisterEveryNSamplesEvent(m_SyncAITask,
+                                                    DAQmx_Val_Acquired_Into_Buffer,
+                                                    m_InputNSamples,
+                                                    0 /*DAQmx_Val_SynchronousEventCallbacks*/,
+                                                    &::aiCallback,
+                                                    this));
       }
     }
   }
@@ -783,7 +802,7 @@ void QxrdNIDAQPlugin::startOutputChannels()
                                     m_OutputNSamples,
                                     false,
                                     -1,
-                                    DAQmx_Val_GroupByScanNumber,
+                                    DAQmx_Val_GroupByChannel,
                                     waveForms.data(),
                                     &nWritten,
                                     NULL));
@@ -815,6 +834,9 @@ Error:
 
 int32 QxrdNIDAQPlugin::syncCallback(TaskHandle task, int32 status)
 {
+  QxrdAcqCommonPtr acq(m_Acquisition);
+
+
   int32 state;
 
   DAQmxErrChk(DAQmxGetCOOutputState(task, "ctr0", &state));
@@ -823,6 +845,10 @@ int32 QxrdNIDAQPlugin::syncCallback(TaskHandle task, int32 status)
     state = 0;
   } else if (state == DAQmx_Val_High) {
     state = 1;
+  }
+
+  if (acq) {
+    acq -> appendEvent(QxrdAcqCommon::NIDAQSyncEvent, state);
   }
 
   m_SyncCounter += 1;
@@ -842,12 +868,53 @@ Error:
   return status;
 }
 
-//int32 QxrdNIDAQPlugin::aiCallback(TaskHandle task, int32 status)
-//{
-//  printMessage(tr("aiCallback %1").arg(status));
+int32 QxrdNIDAQPlugin::aiCallback(TaskHandle task, int32 eventType, int32 nSamples)
+{
+  QxrdAcqCommonPtr               acq(m_Acquisition);
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+  QVector<double>                buff;
 
-//  return status;
-//}
+  uInt32 available;
+  DAQmxErrChk(DAQmxGetReadAvailSampPerChan(task, &available));
+
+  if (acq) {
+    acq -> appendEvent(QxrdAcqCommon::NIDAQAnalogInputEvent, available);
+  }
+
+  int nChans = m_InputChannels.count();
+
+  buff.resize(nChans*m_InputNSamples);
+
+  int32 actuallyRead;
+
+  DAQmxErrChk(DAQmxReadAnalogF64(task,
+                                 m_InputNSamples,
+                                 -1,
+                                 DAQmx_Val_GroupByChannel,
+                                 buff.data(),
+                                 buff.count(),
+                                 &actuallyRead,
+                                 NULL));
+
+  for (int i=0; i<nChans; i++) {
+    QxrdSynchronizedInputChannelPtr inp(m_InputChannels.value(i));
+
+    if (inp) {
+      inp->set_Waveform(buff.mid(i*m_InputNSamples, m_InputNSamples));
+    }
+  }
+
+  if (sync) {
+    sync -> waveformsChanged();
+  }
+
+  if (acq) {
+    acq -> appendEvent(QxrdAcqCommon::NIDAQAnalogPostEvent, actuallyRead);
+  }
+
+Error:
+  return eventType;
+}
 
 //int32 QxrdNIDAQPlugin::aoCallback(TaskHandle task, int32 status)
 //{
@@ -896,6 +963,15 @@ void QxrdNIDAQPlugin::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr s, Qxr
   }
 
   if (sync && parm) {
+    m_SynchronizedAcquisition = sync;
+    m_Acquisition = sync->acquisition();
+
+    QxrdAcqCommonPtr acq(m_Acquisition);
+
+    if (acq) {
+      acq->appendEvent(QxrdAcqCommon::NIDAQStartEvent, 0);
+    }
+
     m_PrimaryCounterName = "/" + sync->primaryCounterName();
     m_PrimaryTriggerName = m_PrimaryCounterName + "InternalOutput";
 

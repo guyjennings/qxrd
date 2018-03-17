@@ -67,6 +67,8 @@ void QxrdAcquisitionExecution::doAcquire()
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
+    acq -> appendEvent(QxrdAcqCommon::StartAcquireEvent, 0);
+
     QxrdAcquisitionParameterPackPtr parmsp = acq -> acquisitionParameterPack();
 
     if (parmsp) {
@@ -82,6 +84,8 @@ void QxrdAcquisitionExecution::doAcquireOnce()
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
+    acq -> appendEvent(QxrdAcqCommon::StartAcquireOnceEvent, 0);
+
     QxrdAcquisitionParameterPackPtr parmsp = acq -> acquisitionParameterPack();
 
     if (parmsp) {
@@ -99,6 +103,8 @@ void QxrdAcquisitionExecution::doAcquireDark()
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
+    acq -> appendEvent(QxrdAcqCommon::StartAcquireDarkEvent, 0);
+
     QxrdDarkAcquisitionParameterPackPtr parmsp = acq -> darkAcquisitionParameterPack();
 
     if (parmsp) {
@@ -114,6 +120,8 @@ void QxrdAcquisitionExecution::doAcquireIdle()
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
+    acq -> appendEvent(QxrdAcqCommon::StartAcquireIdleEvent, 0);
+
     int n = 0;
 
     for (int i=0; i<acq->detectorCount(); i++) {

@@ -9,6 +9,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include "qxrdacquisition-ptr.h"
+#include "qxrdacquisitioneventlogwindow-ptr.h"
 
 //TODO: implement
 class QXRD_EXPORT QxrdAcquisitionWindow : public QxrdMainWindow, public Ui::QxrdAcquisitionWindow
@@ -30,6 +31,8 @@ private slots:
   void browseLogFile();
   void browseScanFile();
 
+  void eventLogWindow();
+
 protected:
   void changeEvent(QEvent *e);
 
@@ -39,6 +42,7 @@ private:
   QxrdAcqCommonWPtr                 m_Acquisition;
   QxrdProcessorWPtr                 m_Processor;
   QxrdDetectorListModelPtr          m_DetectorsModel;
+  QxrdAcquisitionEventLogWindowPtr  m_AcquisitionEventLog;
 };
 
 #endif // QXRDACQUISITIONWINDOW_H

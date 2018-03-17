@@ -323,7 +323,10 @@ SOURCES += qxrdlib.cpp \
     qxrdsynchronizedinputchannel.cpp \
     qxrdextraiodetectorsdelegate.cpp \
     qxrdextraioinputsdelegate.cpp \
-    qxrdextraiooutputsdelegate.cpp
+    qxrdextraiooutputsdelegate.cpp \
+    qxrdacquisitioneventlog.cpp \
+    qxrdacquisitioneventlogwindow.cpp \
+    qxrdacquisitioneventlogmodel.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -551,7 +554,13 @@ HEADERS += qxrdlib.h\
     qxrdextraioinputsdelegate.h \
     qxrdextraioinputsdelegate-ptr.h \
     qxrdextraiooutputsdelegate.h \
-    qxrdextraiooutputsdelegate-ptr.h
+    qxrdextraiooutputsdelegate-ptr.h \
+    qxrdacquisitioneventlog.h \
+    qxrdacquisitioneventlog-ptr.h \
+    qxrdacquisitioneventlogmodel-ptr.h \
+    qxrdacquisitioneventlogwindow.h \
+    qxrdacquisitioneventlogmodel.h \
+    qxrdacquisitioneventlogwindow-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -786,7 +795,8 @@ FORMS += qxrdwindow.ui \
     qxrdwatcherwindow.ui \
     qxrdstartupwindow.ui \
     qxrdcorrectiondialogpage.ui \
-    qxrdexposurepreferencesdialog.ui
+    qxrdexposurepreferencesdialog.ui \
+    qxrdacquisitioneventlogwindow.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS +=

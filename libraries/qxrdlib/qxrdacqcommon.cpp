@@ -6,6 +6,7 @@
 #include "qxrdacquisitionscalermodel.h"
 #include "qcepallocator.h"
 #include "qxrdappcommon.h"
+#include "qxrdacquisitioneventlog.h"
 
 QxrdAcqCommon::QxrdAcqCommon(QString name) :
   inherited(name),
@@ -65,8 +66,16 @@ void QxrdAcqCommon::initialize(QcepObjectWPtr parent)
         qSharedPointerDynamicCast<QxrdAcqCommon>(sharedFromThis()));
 
   m_ScalerModel =
-        QxrdAcquisitionScalerModelPtr(
-          new QxrdAcquisitionScalerModel(acq));
+      QxrdAcquisitionScalerModelPtr(
+        new QxrdAcquisitionScalerModel(acq));
+
+  m_AcquisitionEventLog =
+      QxrdAcquisitionEventLogPtr(
+        new QxrdAcquisitionEventLog("eventLog"));
+
+  if (m_AcquisitionEventLog) {
+    m_AcquisitionEventLog -> initialize(sharedFromThis());
+  }
 }
 
 QxrdAcqCommonWPtr QxrdAcqCommon::findAcquisition(QcepObjectWPtr p)
@@ -88,6 +97,11 @@ QxrdAcqCommonWPtr QxrdAcqCommon::findAcquisition(QcepObjectWPtr p)
 QxrdAcquisitionScalerModelPtr QxrdAcqCommon::acquisitionScalerModel() const
 {
   return m_ScalerModel;
+}
+
+QxrdAcquisitionEventLogWPtr QxrdAcqCommon::acquisitionEventLog() const
+{
+  return m_AcquisitionEventLog;
 }
 
 QxrdAcquisitionParameterPackPtr QxrdAcqCommon::acquisitionParameterPack()
@@ -351,3 +365,20 @@ void QxrdAcqCommon::indicateDroppedFrame(int n)
   prop_DroppedFrames() -> incValue(1);
 }
 
+void QxrdAcqCommon::clearEventLog()
+{
+  QxrdAcquisitionEventLogPtr log(m_AcquisitionEventLog);
+
+  if (log) {
+    log->clearEventLog();
+  }
+}
+
+void QxrdAcqCommon::appendEvent(int eventCode, int eventArg, QDateTime eventTime)
+{
+  QxrdAcquisitionEventLogPtr log(m_AcquisitionEventLog);
+
+  if (log) {
+    log->appendEvent(eventCode, eventArg, eventTime);
+  }
+}

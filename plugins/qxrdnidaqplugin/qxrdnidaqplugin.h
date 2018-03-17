@@ -74,7 +74,7 @@ public slots:
 
 public:
   int32 syncCallback(TaskHandle task, int32 status);
-//  int32 aiCallback(TaskHandle task, int32 status);
+  int32 aiCallback(TaskHandle task, int32 eventType, int32 nSamples);
 //  int32 aoCallback(TaskHandle task, int32 status);
 
 private:
@@ -82,6 +82,8 @@ private:
   void errorCheck(const char* file, int line, int err);
 
 private:
+  QxrdAcqCommonWPtr               m_Acquisition;
+  QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
 
   TaskHandle          m_SyncTask;
   QVector<TaskHandle> m_SyncDetTasks;

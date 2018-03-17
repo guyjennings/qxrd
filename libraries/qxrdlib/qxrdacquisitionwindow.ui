@@ -933,6 +933,16 @@ Script Function: exposureTime()</string>
                </property>
               </widget>
              </item>
+             <item row="21" column="3">
+              <widget class="QPushButton" name="m_EventLogButton">
+               <property name="toolTip">
+                <string>Processing Options</string>
+               </property>
+               <property name="text">
+                <string>Event Log...</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
            <widget class="QWidget" name="m_WatcherPage"/>
@@ -961,7 +971,7 @@ Script Function: exposureTime()</string>
      <x>0</x>
      <y>0</y>
      <width>1244</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">

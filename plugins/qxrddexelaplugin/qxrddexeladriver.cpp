@@ -210,6 +210,13 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
 {
   THREAD_CHECK;
 
+  QxrdDexelaSettingsPtr det(m_Dexela);
+  QxrdAcqCommonPtr acq(m_Acquisition);
+
+  if (acq && det) {
+    acq -> appendEvent(QxrdAcqCommon::DetectorFrameEvent, det->get_DetectorIndex());
+  }
+
   QcepUInt16ImageDataPtr image =
       QcepAllocator::newInt16Image(sharedFromThis(),
                                    tr("frame-%1").arg(fc),
@@ -228,8 +235,6 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
                    .arg(e.what()).arg(e.GetFunctionName()));
     }
 
-    QxrdDexelaSettingsPtr det(m_Dexela);
-
     if (det) {
       if (qcepDebug(DEBUG_DEXELA)) {
         printMessage(tr("Acquired Frame %1 from %2 on detector %3")
@@ -238,6 +243,10 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
 
       image->set_SummedExposures(1);
       det->enqueueAcquiredFrame(image);
+
+      if (acq) {
+        acq -> appendEvent(QxrdAcqCommon::DetectorFramePostedEvent, det->get_DetectorIndex());
+      }
     }
   }
 }

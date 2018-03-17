@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QThread>
 #include "qxrdprocessor.h"
+#include "qxrdacquisitioneventlogwindow.h"
 
 QxrdAcquisitionWindow::QxrdAcquisitionWindow(QString name) :
   inherited(name)
@@ -134,6 +135,7 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
   connect(m_ProcessorOptionsButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::doEditCorrection);
   connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences);
   connect(m_AcquireOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditPreferences);
+  connect(m_EventLogButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::eventLogWindow);
 }
 
 QxrdAcquisitionWindow::~QxrdAcquisitionWindow()
@@ -240,5 +242,20 @@ void QxrdAcquisitionWindow::browseScanFile()
 
   if (file != "") {
     m_ScanFileName->setText(pwd.relativeFilePath(file));
+  }
+}
+
+void QxrdAcquisitionWindow::eventLogWindow()
+{
+  if (m_AcquisitionEventLog == NULL) {
+    m_AcquisitionEventLog =
+        QxrdAcquisitionEventLogWindowPtr(
+          new QxrdAcquisitionEventLogWindow(m_Acquisition));
+  }
+
+  if (m_AcquisitionEventLog) {
+    m_AcquisitionEventLog->show();
+    m_AcquisitionEventLog->activateWindow();
+    m_AcquisitionEventLog->raise();
   }
 }

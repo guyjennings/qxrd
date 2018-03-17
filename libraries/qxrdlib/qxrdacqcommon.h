@@ -10,6 +10,7 @@
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 #include "qxrdacquisitionscalermodel-ptr.h"
+#include "qxrdacquisitioneventlog-ptr.h"
 #include "qxrdnidaq-ptr.h"
 
 class QXRD_EXPORT QxrdAcqCommon : public QcepObject
@@ -37,6 +38,25 @@ public:
   double scalerValue(int i);
 
   virtual QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const = 0;
+
+  QxrdAcquisitionEventLogWPtr   acquisitionEventLog() const;
+
+  enum {
+    StartEvent,
+    StartAcquireEvent,
+    StartAcquireOnceEvent,
+    StartAcquireDarkEvent,
+    StartAcquireIdleEvent,
+    NIDAQStartEvent,
+    NIDAQSyncEvent,
+    NIDAQAnalogInputEvent,
+    NIDAQAnalogPostEvent,
+    DetectorFrameEvent,
+    DetectorFramePostedEvent
+  };
+
+  void clearEventLog();
+  void appendEvent(int eventCode, int eventArg, QDateTime eventTime=QDateTime::currentDateTime());
 
   virtual void setupAcquisition() = 0;
   virtual void acquire() = 0;
@@ -211,6 +231,7 @@ public:
 
 private:
   QxrdAcquisitionScalerModelPtr    m_ScalerModel;
+  QxrdAcquisitionEventLogPtr       m_AcquisitionEventLog;
 };
 
 #endif // QXRDACQCOMMON_H
