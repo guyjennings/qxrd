@@ -1083,6 +1083,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
         det->enqueueAcquiredFrame(m_AccumulatedData);
 
         m_AccumulatedData = QcepUInt32ImageDataPtr();
+        m_SubframeCounter = 0;
       }
     } else {
       image->set_SummedExposures(1);

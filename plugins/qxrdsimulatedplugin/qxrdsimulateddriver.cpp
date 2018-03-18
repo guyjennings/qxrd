@@ -199,7 +199,7 @@ void QxrdSimulatedDriver::onTimerTimeout()
                                          QcepAllocator::AllocateFromReserve);
       }
 
-      m_AccumulatedData -> accumulateImage<quint16>(image);
+      m_AccumulatedData -> accumulateImage(image);
 
       m_SubframeCounter++;
 
@@ -207,6 +207,7 @@ void QxrdSimulatedDriver::onTimerTimeout()
         det->enqueueAcquiredFrame(m_AccumulatedData);
 
         m_AccumulatedData = QcepUInt32ImageDataPtr();
+        m_SubframeCounter = 0;
       }
     } else {
       image->set_SummedExposures(1);

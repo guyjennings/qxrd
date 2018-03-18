@@ -520,7 +520,7 @@ void QxrdPilatusDriver::loadAndPush(QString f)
                                            QcepAllocator::AllocateFromReserve);
         }
 
-        m_AccumulatedData -> accumulateImage<quint32>(image);
+        m_AccumulatedData -> accumulateImage(image);
 
         m_SubframeCounter++;
 
@@ -528,6 +528,7 @@ void QxrdPilatusDriver::loadAndPush(QString f)
           det->enqueueAcquiredFrame(m_AccumulatedData);
 
           m_AccumulatedData = QcepUInt32ImageDataPtr();
+          m_SubframeCounter = 0;
         }
       } else {
         image->set_SummedExposures(1);

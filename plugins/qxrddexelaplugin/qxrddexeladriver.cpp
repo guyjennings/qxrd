@@ -250,8 +250,8 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
         if (m_SubframeCounter == 0) {
           m_AccumulatedData =
               QcepAllocator::newInt32Image(sharedFromThis(),
-                                           tr("areadet-%1").arg(frame),
-                                           nCols, nRows,
+                                           tr("dexela-%1").arg(m_FrameCounter),
+                                           m_XDim, m_YDim,
                                            QcepAllocator::AllocateFromReserve);
         }
 
@@ -263,6 +263,7 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
           det->enqueueAcquiredFrame(m_AccumulatedData);
 
           m_AccumulatedData = QcepUInt32ImageDataPtr();
+          m_SubframeCounter = 0;
         }
       } else {
         image->set_SummedExposures(1);
