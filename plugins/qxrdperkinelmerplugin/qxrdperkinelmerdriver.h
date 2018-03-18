@@ -84,6 +84,7 @@ private:
 
 private:
   QxrdPerkinElmerSettingsWPtr m_PerkinElmer;
+  int                         m_FrameCounter;
 };
 
 Q_DECLARE_METATYPE(QxrdPerkinElmerDriver*)

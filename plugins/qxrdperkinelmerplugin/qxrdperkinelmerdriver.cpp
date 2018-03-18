@@ -44,7 +44,8 @@ QxrdPerkinElmerDriver::QxrdPerkinElmerDriver(QString name,
   m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
   m_TimingSource(-1),
   m_Counter(0),
-  m_PerkinElmer(det)
+  m_PerkinElmer(det),
+  m_FrameCounter(0)
 {
 #ifndef QT_NO_DEBUG
   printf("Perkin Elmer Detector Driver \"%s\" Constructed\n", qPrintable(name));
@@ -922,6 +923,8 @@ void QxrdPerkinElmerDriver::beginAcquisition(double exposure)
 
     Acquisition_ResetFrameCnt(m_AcqDesc);
   }
+
+  m_FrameCounter = 0;
 }
 
 void QxrdPerkinElmerDriver::endAcquisition()
@@ -951,115 +954,126 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
   //  tic.start();
 
   QxrdPerkinElmerSettingsPtr det(m_PerkinElmer);
+  QxrdAcqCommonPtr           acq(m_Acquisition);
 
-  if (det && det -> checkDetectorEnabled()) {
-    QxrdAcqCommonPtr acq(m_Acquisition);
+  if (acq && det && det -> checkDetectorEnabled()) {
+    acq -> appendEvent(QxrdAcqCommon::DetectorFrameEvent,
+                       det->get_DetectorIndex());
 
-    if (acq) {
-      QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
-                                                                  tr("frame-%1").arg(counter),
-                                                                 det -> get_NCols(), det -> get_NRows(),
-                                                                 QcepAllocator::AllocateFromReserve);
+//    QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
 
-      //    printf("allocator took %d msec\n", tic.restart());
+//    if (sacq) {
+//      sacq->acquiredFrameAvailable(m_FrameCounter);
+//    }
 
-      if (qcepDebug(DEBUG_DETECTORIDLING)) {
-        printMessage(tr("QxrdDetectorPerkinElmer::onEndFrame(%1,%2,%3)")
-                     .arg(counter).arg(n1).arg(n2));
-      }
+    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
+                                                                tr("frame-%1").arg(counter),
+                                                                det -> get_NCols(), det -> get_NRows(),
+                                                                QcepAllocator::AllocateFromReserve);
 
-      QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+    //    printf("allocator took %d msec\n", tic.restart());
 
-      //  if (get_Cancelling()) {
-      //    set_Cancelling(false);
-      //    return /*true*/;
-      //  }
-
-      long npixels = det -> get_NRows() * det -> get_NCols();
-
-      unsigned short* frame = m_Buffer.data() + m_BufferIndex*npixels;
-
-      DWORD /*actualFrame = n1,*/ actSecFrame = n2;
-
-      //  this->Acquisition_GetActFrame(m_AcqDesc, &actualFrame, &actSecFrame);
-      //
-      //  if (n1 != actualFrame || n2 != actSecFrame) {
-      //    printf("Lost frame, %d[%d], %d[%d]\n", n1, (int) actualFrame, n2, (int) actSecFrame);
-      //    return;
-      //  }
-
-      int counter1 = m_Counter.load();
-
-      if ((counter1 - counter) > 5) {
-        printMessage(tr("%1 frames behind [%2,%3], skipping")
-                     .arg(counter1-counter).arg(counter).arg(counter1));
-        return;
-      }
-
-      if (((actSecFrame-1)%m_BufferSize) != m_BufferIndex) {
-        if (qcepDebug(DEBUG_DETECTORIDLING)) {
-          printMessage(tr("actSecFrame %1, m_BufferIndex %2")
-                       .arg(actSecFrame).arg(m_BufferIndex));
-        }
-      }
-
-      quint16* current = (image ? image->data() : NULL);
-      quint32  cksum = 0;
-      double   avg = 0;
-
-      unsigned short *fp = frame;
-
-      for (long i=0; i<npixels; i++) {
-        unsigned short val = *fp++;
-        cksum += val;
-        avg += val;
-      }
-
-      if (current && frame) {
-        ::memcpy(current, frame, npixels*sizeof(quint16));
-      }
-
-      //    printf("Image copy took %d msec\n", tic.restart());
-
-      //  set_Average(avg/npixels);
-
-      if (qcepDebug(DEBUG_DETECTORIDLING)) {
-        printMessage(tr("Frame checksum 0x%1, avg %2")
-                     .arg(cksum,8,16,QChar('0')).arg(avg/npixels));
-
-        for (int f=0; f<m_BufferSize; f++) {
-          unsigned short* fp = m_Buffer.data() + f*npixels;
-
-          quint32  cksum = 0;
-          double   avg = 0;
-
-          for (long i=0; i<npixels; i++) {
-            unsigned short val = *fp++;
-            cksum += val;
-            avg += val;
-          }
-
-          printMessage(tr("Frame %1 checksum 0x%2, avg %3")
-                       .arg(f).arg(cksum,8,16,QChar('0')).arg(avg/npixels));
-        }
-      }
-
-      m_BufferIndex = (m_BufferIndex+1)%m_BufferSize;
-
-      //    acquiredFrameAvailable(image);
-
-      if (image) {
-        image->set_ImageSequenceNumber(counter1);
-        image->set_ImageNumber(n1);
-      }
-
-      if (qcepDebug(DEBUG_DETECTORIDLING)) {
-        printMessage("enqueue perkin elmer acquired frame");
-      }
-
-      image -> set_SummedExposures(1);
-      det -> enqueueAcquiredFrame(image);
+    if (qcepDebug(DEBUG_DETECTORIDLING)) {
+      printMessage(tr("QxrdDetectorPerkinElmer::onEndFrame(%1,%2,%3)")
+                   .arg(counter).arg(n1).arg(n2));
     }
+
+    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+
+    //  if (get_Cancelling()) {
+    //    set_Cancelling(false);
+    //    return /*true*/;
+    //  }
+
+    long npixels = det -> get_NRows() * det -> get_NCols();
+
+    unsigned short* frame = m_Buffer.data() + m_BufferIndex*npixels;
+
+    DWORD /*actualFrame = n1,*/ actSecFrame = n2;
+
+    //  this->Acquisition_GetActFrame(m_AcqDesc, &actualFrame, &actSecFrame);
+    //
+    //  if (n1 != actualFrame || n2 != actSecFrame) {
+    //    printf("Lost frame, %d[%d], %d[%d]\n", n1, (int) actualFrame, n2, (int) actSecFrame);
+    //    return;
+    //  }
+
+    int counter1 = m_Counter.load();
+
+    if ((counter1 - counter) > 5) {
+      printMessage(tr("%1 frames behind [%2,%3], skipping")
+                   .arg(counter1-counter).arg(counter).arg(counter1));
+      return;
+    }
+
+    if (((actSecFrame-1)%m_BufferSize) != m_BufferIndex) {
+      if (qcepDebug(DEBUG_DETECTORIDLING)) {
+        printMessage(tr("actSecFrame %1, m_BufferIndex %2")
+                     .arg(actSecFrame).arg(m_BufferIndex));
+      }
+    }
+
+    quint16* current = (image ? image->data() : NULL);
+    quint32  cksum = 0;
+    double   avg = 0;
+
+    unsigned short *fp = frame;
+
+    for (long i=0; i<npixels; i++) {
+      unsigned short val = *fp++;
+      cksum += val;
+      avg += val;
+    }
+
+    if (current && frame) {
+      ::memcpy(current, frame, npixels*sizeof(quint16));
+    }
+
+    //    printf("Image copy took %d msec\n", tic.restart());
+
+    //  set_Average(avg/npixels);
+
+    if (qcepDebug(DEBUG_DETECTORIDLING)) {
+      printMessage(tr("Frame checksum 0x%1, avg %2")
+                   .arg(cksum,8,16,QChar('0')).arg(avg/npixels));
+
+      for (int f=0; f<m_BufferSize; f++) {
+        unsigned short* fp = m_Buffer.data() + f*npixels;
+
+        quint32  cksum = 0;
+        double   avg = 0;
+
+        for (long i=0; i<npixels; i++) {
+          unsigned short val = *fp++;
+          cksum += val;
+          avg += val;
+        }
+
+        printMessage(tr("Frame %1 checksum 0x%2, avg %3")
+                     .arg(f).arg(cksum,8,16,QChar('0')).arg(avg/npixels));
+      }
+    }
+
+    m_BufferIndex = (m_BufferIndex+1)%m_BufferSize;
+
+    //    acquiredFrameAvailable(image);
+
+    if (image) {
+      image->set_ImageSequenceNumber(counter1);
+      image->set_ImageNumber(n1);
+    }
+
+    if (qcepDebug(DEBUG_DETECTORIDLING)) {
+      printMessage("enqueue perkin elmer acquired frame");
+    }
+
+    image -> set_SummedExposures(1);
+    det -> enqueueAcquiredFrame(image);
+
+    m_FrameCounter++;
+
+    acq -> appendEvent(QxrdAcqCommon::DetectorFramePostedEvent,
+                       det->get_DetectorIndex());
   }
 }
 
@@ -1166,11 +1180,11 @@ void QxrdPerkinElmerDriver::onEndFrameCallback()
     QxrdAcqCommonPtr acq(m_Acquisition);
 
     if (acq) {
-      QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
+//      QxrdSynchronizedAcquisitionPtr sync(acq->synchronizedAcquisition());
 
-      if (sync) {
-        sync->acquiredFrameAvailable(m_Counter.load());
-      }
+//      if (sync) {
+//        sync->acquiredFrameAvailable(m_Counter.load());
+//      }
 
       //  printf("syncAcq->acquiredFrameAvailable took %d msec\n", tic.restart());
 

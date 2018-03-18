@@ -33,7 +33,8 @@ private slots:
 private:
   QxrdAreaDetectorPluginWPtr   m_Plugin;
   QxrdAreaDetectorSettingsWPtr m_AreaDetector;
-  QTimer m_Timer;
+  QTimer                       m_Timer;
+  int                          m_FrameCounter;
 };
 
 Q_DECLARE_METATYPE(QxrdAreaDetectorDriver*)

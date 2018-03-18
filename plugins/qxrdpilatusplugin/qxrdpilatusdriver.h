@@ -72,6 +72,8 @@ private:
   int        m_ExposureFrameCount;
 
   QxrdPilatusRemotePtr m_Remote;
+
+  int        m_FrameCounter;
 };
 
 Q_DECLARE_METATYPE(QxrdPilatusDriver*)

@@ -22,7 +22,8 @@ QxrdPilatusDriver::QxrdPilatusDriver(QString name,
     m_PilatusSocket(),
     m_ExposureTime(-1),
     m_ExposuresPerFrame(-1),
-    m_ExposureFrameCount(-1)
+    m_ExposureFrameCount(-1),
+    m_FrameCounter(0)
 {
 #ifndef QT_NO_DEBUG
   printf("Pilatus Detector Driver \"%s\" Constructed\n", qPrintable(name));
@@ -40,14 +41,14 @@ void QxrdPilatusDriver::startDetectorDriver()
 {
   THREAD_CHECK;
 
-  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr det(m_Pilatus);
 
-  if (pil && pil->checkDetectorEnabled()) {
+  if (det && det->checkDetectorEnabled()) {
     printMessage(tr("Starting Pilatus Detector at %1:%2")
-                 .arg(pil->get_PilatusHost())
-                 .arg(pil->get_PilatusPort()));
+                 .arg(det->get_PilatusHost())
+                 .arg(det->get_PilatusPort()));
 
-    m_PilatusSocket.connectToHost(pil->get_PilatusHost(), pil->get_PilatusPort());
+    m_PilatusSocket.connectToHost(det->get_PilatusHost(), det->get_PilatusPort());
     m_PilatusSocket.waitForConnected();
 
     if (qcepDebug(DEBUG_PILATUS)) {
@@ -61,7 +62,7 @@ void QxrdPilatusDriver::startDetectorDriver()
     sendCommand("nimages 1");
     sendCommand("nexpframe 1");
 
-    imagePath(pil->get_PilatusDataDirectory());
+    imagePath(det->get_PilatusDataDirectory());
   }
 }
 
@@ -69,11 +70,11 @@ void QxrdPilatusDriver::stopDetectorDriver()
 {
   THREAD_CHECK;
 
-  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr det(m_Pilatus);
 
-  if (pil) {
+  if (det && det->checkDetectorEnabled()) {
     printMessage(tr("Stopping Pilatus Detector at %1").arg(
-                   pil->get_PilatusHost()));
+                   det->get_PilatusHost()));
 
     m_PilatusSocket.close();
   }
@@ -100,17 +101,19 @@ void QxrdPilatusDriver::beginAcquisition(double exposure)
 {
   THREAD_CHECK;
 
-  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr det(m_Pilatus);
 
-  if (pil) {
+  if (det && det->checkDetectorEnabled()) {
     if (qcepDebug(DEBUG_PILATUS)) {
       printMessage(tr("QxrdPilatusDriver::beginAcquisition(%1)").arg(exposure));
     }
 
-    imagePath(pil->get_PilatusDataDirectory());
+    imagePath(det->get_PilatusDataDirectory());
 
     beginExposure(exposure);
   }
+
+  m_FrameCounter = 0;
 }
 
 void QxrdPilatusDriver::endAcquisition()
@@ -134,14 +137,14 @@ void QxrdPilatusDriver::shutdownAcquisition()
 //    QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
 
 //    if (sacq) {
-//      sacq->acquiredFrameAvailable(g_FrameCounter);
+//      sacq->acquiredFrameAvailable(m_FrameCounter);
 //    }
 
 //    int nRows = det -> get_NRows();
 //    int nCols = det -> get_NCols();
 
 //    int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
-//    int frame = g_FrameCounter % 8;
+//    int frame = m_FrameCounter % 8;
 
 //    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(tr("simdet-%1").arg(frame),
 //                                                                nCols, nRows,
@@ -171,11 +174,11 @@ void QxrdPilatusDriver::shutdownAcquisition()
 //        painter.fillRect(0,0,labelWidth,labelHeight, Qt::black);
 //        painter.setPen(Qt::white);
 //        painter.setFont(QFont("Times", labelHeight, QFont::Bold, true));
-//        painter.drawText(0, labelHeight, tr("%1").arg(g_FrameCounter));
+//        painter.drawText(0, labelHeight, tr("%1").arg(m_FrameCounter));
 
 //        QRgb    *rgb = (QRgb*) imageLabel.bits();
 //        int nFrames = nRows / labelHeight;
-//        int frameN = g_FrameCounter % nFrames;
+//        int frameN = m_FrameCounter % nFrames;
 //        int plval = qGray(*rgb);
 //        int pRgb  = *rgb;
 
@@ -203,7 +206,7 @@ void QxrdPilatusDriver::shutdownAcquisition()
 
 //    det->enqueueAcquiredFrame(image);
 
-//    g_FrameCounter++;
+//    m_FrameCounter++;
 //  }
 //}
 
@@ -273,21 +276,19 @@ void QxrdPilatusDriver::sendCommand(QString cmd)
 
 void QxrdPilatusDriver::imagePath(QString path)
 {
-  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr det(m_Pilatus);
 
-  if (pil) {
-    if (pil->checkDetectorEnabled()) {
-      sendCommand(tr("imgpath \"%1\"").arg(path));
-    }
+  if (det && det->checkDetectorEnabled()) {
+    sendCommand(tr("imgpath \"%1\"").arg(path));
   }
 }
 
 void QxrdPilatusDriver::beginExposure(double exposure)
 {
-  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr det(m_Pilatus);
 
-  if (pil) {
-    int expMode = pil->get_ExposureMode();
+  if (det && det->checkDetectorEnabled()) {
+    int expMode = det->get_ExposureMode();
 
     if (expMode == NoExternalTrigger) {
       sendCommand(tr("ExpTime %1").arg(exposure));
@@ -298,7 +299,7 @@ void QxrdPilatusDriver::beginExposure(double exposure)
       sendCommand(tr("ExpTime %1").arg(exposure));
       sendCommand("nexpframe 1");
     } else if (expMode == ExternalEnable) {
-      int nFrames = (int) (pil->get_EnableFrequency()*exposure);
+      int nFrames = (int) (det->get_EnableFrequency()*exposure);
       sendCommand(tr("nexpframe %1").arg(nFrames));
     }
   }
@@ -306,20 +307,20 @@ void QxrdPilatusDriver::beginExposure(double exposure)
 
 void QxrdPilatusDriver::expose()
 {
-  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr det(m_Pilatus);
   QxrdAcqCommonPtr       acq(m_Acquisition);
 
-  if (pil && acq) {
-    m_CurrentFile = acq->currentFileBase(pil->get_DetectorNumber(),
-                                         pil->get_PilatusExtension());
+  if (acq && det && det->checkDetectorEnabled()) {
+    m_CurrentFile = acq->currentFileBase(det->get_DetectorNumber(),
+                                         det->get_PilatusExtension());
 
-    if (pil->get_ReadFilesLocally()) { // Check to see if file exists...
-      if (pil->get_DeleteFilesAfterReading()) {
-        // Attempt to delete file before acquisition...
+    if (det->get_ReadFilesLocally()) { // Check to see if file exists...
+      if (det->get_DeleteFilesAfterReading()) {
+        //TODO: Attempt to delete file before acquisition...
       }
     }
 
-    int expMode = pil->get_ExposureMode();
+    int expMode = det->get_ExposureMode();
 
     if (expMode == NoExternalTrigger) {
       sendCommand(tr("Exposure \"%1\"").arg(m_CurrentFile));
@@ -342,9 +343,9 @@ void QxrdPilatusDriver::beginFrame()
 
 void QxrdPilatusDriver::interpretReply(QString reply)
 {
-  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr det(m_Pilatus);
 
-  if (pil) {
+  if (det && det->checkDetectorEnabled()) {
     if (qcepDebug(DEBUG_PILATUS)) {
       printMessage(tr("QxrdPilatusDriver::interpretReply(\"%1\")").arg(reply));
     }
@@ -352,14 +353,14 @@ void QxrdPilatusDriver::interpretReply(QString reply)
     if (reply.startsWith("1 ERR")) {
       criticalMessage(tr("Error with pilatus detector: %1").arg(reply));
     } else if (reply.startsWith("7 OK")) { // Image has been saved...
-      if (pil->get_ReadFilesLocally() == false) {
-        pil->enqueueAcquiredFrame(QcepUInt16ImageDataPtr());
+      if (det->get_ReadFilesLocally() == false) {
+        det->enqueueAcquiredFrame(QcepUInt16ImageDataPtr());
       } else {
         remoteCopy(m_CurrentFile);
         //      pushFileExpected(m_CurrentFile);
         loadAndPush(m_CurrentFile);
 
-        if (pil->get_DeleteFilesAfterReading()) {
+        if (det->get_DeleteFilesAfterReading()) {
           remoteDelete(m_CurrentFile);
         }
       }
@@ -372,10 +373,10 @@ void QxrdPilatusDriver::interpretReply(QString reply)
 
         printMessage(tr("Detector dimensions %1 cols x %2 rows").arg(width).arg(height));
 
-        pil->set_NRows(height);
-        pil->set_NCols(width);
-        pil->set_HBinning(1);
-        pil->set_VBinning(1);
+        det->set_NRows(height);
+        det->set_NCols(width);
+        det->set_HBinning(1);
+        det->set_VBinning(1);
       } else {
         printMessage(tr("Unmatched: %1, %2").arg(reply).arg(matcher.pattern()));
         printMessage(tr("Matched Length %1").arg(matcher.matchedLength()));
@@ -400,14 +401,14 @@ void QxrdPilatusDriver::remoteCommand(QString cmd)
 
 void QxrdPilatusDriver::remoteDelete(QString file)
 {
-  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr det(m_Pilatus);
 
-  if (pil) {
+  if (det && det->checkDetectorEnabled()) {
     QString cmd = tr("%1 -o ForwardX11=No %2@%3 rm %4/%5")
-        .arg(pil->get_PilatusSSH())
-        .arg(pil->get_PilatusUser())
-        .arg(pil->get_PilatusHost())
-        .arg(pil->get_PilatusDataDirectory()).arg(file);
+        .arg(det->get_PilatusSSH())
+        .arg(det->get_PilatusUser())
+        .arg(det->get_PilatusHost())
+        .arg(det->get_PilatusDataDirectory()).arg(file);
 
     if (qcepDebug(DEBUG_PILATUS)) {
       printMessage(tr("Deleting: %1").arg(cmd));
@@ -423,10 +424,10 @@ void QxrdPilatusDriver::remoteDelete(QString file)
 
 void QxrdPilatusDriver::remoteCopy(QString file)
 {
-  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr det(m_Pilatus);
   QxrdExperimentPtr      expt(m_Experiment);
 
-  if (pil && expt) {
+  if (det && expt && det->checkDetectorEnabled()) {
     //TODO: is this the right one...
     QxrdProcessorPtr proc = expt->processor();
 
@@ -434,10 +435,10 @@ void QxrdPilatusDriver::remoteCopy(QString file)
       QString dest = proc->filePathInRawOutputDirectory(file);
 
       QString cmd = tr("%1 -o ForwardX11=No %2@%3:%4/%5 %6")
-          .arg(pil->get_PilatusSCP())
-          .arg(pil->get_PilatusUser())
-          .arg(pil->get_PilatusHost())
-          .arg(pil->get_PilatusDataDirectory()).arg(file)
+          .arg(det->get_PilatusSCP())
+          .arg(det->get_PilatusUser())
+          .arg(det->get_PilatusHost())
+          .arg(det->get_PilatusDataDirectory()).arg(file)
           .arg(dest);
 
       if (qcepDebug(DEBUG_PILATUS)) {
@@ -457,10 +458,10 @@ void QxrdPilatusDriver::remoteTransfer(QString file)
 {
   // Transfer contents of a remote file to a local memory buffer:"
 
-  QxrdPilatusSettingsWPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr  det(m_Pilatus);
   QxrdExperimentPtr       expt(m_Experiment);
 
-  if (pil && expt) {
+  if (det && expt && det->checkDetectorEnabled()) {
     //TODO: is this the right one...
     QxrdProcessorPtr proc = expt->processor();
 
@@ -475,14 +476,24 @@ void QxrdPilatusDriver::remoteTransfer(QString file)
 
 void QxrdPilatusDriver::loadAndPush(QString f)
 {
-  QxrdPilatusSettingsPtr pil(m_Pilatus);
+  QxrdPilatusSettingsPtr det(m_Pilatus);
+  QxrdAcqCommonPtr       acq(m_Acquisition);
   QxrdExperimentPtr      expt(m_Experiment);
 
-  if (pil && expt) {
-    //TODO: is this the right one...
+  if (acq && det && expt && det->checkDetectorEnabled()) {
     QxrdProcessorPtr proc = expt->processor();
 
     if (proc) {
+      acq -> appendEvent(QxrdAcqCommon::DetectorFrameEvent,
+                         det->get_DetectorIndex());
+
+//      QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
+
+//      if (sacq) {
+//        sacq->acquiredFrameAvailable(m_FrameCounter);
+//      }
+
+    //TODO: is this the right one...
       QString dest = proc->filePathInRawOutputDirectory(f);
 
       QcepUInt32ImageDataPtr data = QcepAllocator::newInt32Image(sharedFromThis(),
@@ -499,7 +510,12 @@ void QxrdPilatusDriver::loadAndPush(QString f)
       }
 
       data->set_SummedExposures(1);
-      pil->enqueueAcquiredFrame(data);
+      det->enqueueAcquiredFrame(data);
+
+      m_FrameCounter++;
+
+      acq -> appendEvent(QxrdAcqCommon::DetectorFramePostedEvent,
+                         det->get_DetectorIndex());
     }
   }
 }

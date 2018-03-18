@@ -14,7 +14,8 @@ QxrdFileWatcherDriver::QxrdFileWatcherDriver(QString name, QxrdFileWatcherPlugin
                                                          QxrdExperimentWPtr expt,
                                                          QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
-    m_FileWatcher(det)
+    m_FileWatcher(det),
+    m_FrameCounter(0)
 {
 #ifndef QT_NO_DEBUG
   printf("File Watcher Driver \"%s\" Constructed\n", qPrintable(name));
@@ -60,8 +61,6 @@ void QxrdFileWatcherDriver::stopDetectorDriver()
   m_Timer.stop();
 }
 
-static int g_FrameCounter = 0;
-
 void QxrdFileWatcherDriver::changeExposureTime(double expos)
 {
   THREAD_CHECK;
@@ -79,7 +78,7 @@ void QxrdFileWatcherDriver::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
 
-  g_FrameCounter = 0;
+  m_FrameCounter = 0;
 }
 
 void QxrdFileWatcherDriver::beginFrame()
@@ -105,17 +104,20 @@ void QxrdFileWatcherDriver::onTimerTimeout()
   QxrdAcqCommonPtr        acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
-    QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
+    acq -> appendEvent(QxrdAcqCommon::DetectorFrameEvent,
+                       det->get_DetectorIndex());
 
-    if (sacq) {
-      sacq->acquiredFrameAvailable(g_FrameCounter);
-    }
+//    QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
+
+//    if (sacq) {
+//      sacq->acquiredFrameAvailable(m_FrameCounter);
+//    }
 
     int nRows = det -> get_NRows();
     int nCols = det -> get_NCols();
 
     int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
-    int frame = g_FrameCounter % 8;
+    int frame = m_FrameCounter % 8;
 
     QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
                                                                 tr("filewatcher-%1").arg(frame),
@@ -146,11 +148,11 @@ void QxrdFileWatcherDriver::onTimerTimeout()
         painter.fillRect(0,0,labelWidth,labelHeight, Qt::black);
         painter.setPen(Qt::white);
         painter.setFont(QFont("Times", labelHeight, QFont::Bold, true));
-        painter.drawText(0, labelHeight, tr("%1").arg(g_FrameCounter));
+        painter.drawText(0, labelHeight, tr("%1").arg(m_FrameCounter));
 
         QRgb    *rgb = (QRgb*) imageLabel.bits();
         int nFrames = nRows / labelHeight;
-        int frameN = g_FrameCounter % nFrames;
+        int frameN = m_FrameCounter % nFrames;
         int plval = qGray(*rgb);
         int pRgb  = *rgb;
 
@@ -183,6 +185,9 @@ void QxrdFileWatcherDriver::onTimerTimeout()
     image->set_SummedExposures(1);
     det->enqueueAcquiredFrame(image);
 
-    g_FrameCounter++;
+    m_FrameCounter++;
+
+    acq -> appendEvent(QxrdAcqCommon::DetectorFramePostedEvent,
+                       det->get_DetectorIndex());
   }
 }

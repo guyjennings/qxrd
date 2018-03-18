@@ -23,7 +23,8 @@ QxrdDexelaDriver::QxrdDexelaDriver(QString name,
   : QxrdDetectorDriver(name, det, expt, acq),
     m_Dexela(det),
     m_DexelaPlugin(plugin),
-    m_DexelaDetector(NULL)
+    m_DexelaDetector(NULL),
+    m_FrameCounter(0)
 {
 #ifndef QT_NO_DEBUG
   printf("Dexela Driver \"%s\" Constructed\n", qPrintable(name));
@@ -213,29 +214,34 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
   QxrdDexelaSettingsPtr det(m_Dexela);
   QxrdAcqCommonPtr acq(m_Acquisition);
 
-  if (acq && det) {
-    acq -> appendEvent(QxrdAcqCommon::DetectorFrameEvent, det->get_DetectorIndex());
-  }
+  if (acq && det && det->checkDetectorEnabled()) {
+    acq -> appendEvent(QxrdAcqCommon::DetectorFrameEvent,
+                       det->get_DetectorIndex());
 
-  QcepUInt16ImageDataPtr image =
-      QcepAllocator::newInt16Image(sharedFromThis(),
-                                   tr("frame-%1").arg(fc),
-                                   m_XDim, m_YDim,
-                                   QcepAllocator::AllocateFromReserve);
+//    QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
 
-  if (image) {
-//    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
+//    if (sacq) {
+//      sacq->acquiredFrameAvailable(m_FrameCounter);
+//    }
 
-    quint16 *ptr = image->data();
+    QcepUInt16ImageDataPtr image =
+        QcepAllocator::newInt16Image(sharedFromThis(),
+                                     tr("frame-%1").arg(fc),
+                                     m_XDim, m_YDim,
+                                     QcepAllocator::AllocateFromReserve);
 
-    try {
-      m_DexelaDetector -> ReadBuffer(buf, (byte*) ptr);
-    } catch (DexelaException &e) {
-      printMessage(tr("Dexela Exception caught: Description %1: function %2")
-                   .arg(e.what()).arg(e.GetFunctionName()));
-    }
+    if (image) {
+      //    QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-    if (det) {
+      quint16 *ptr = image->data();
+
+      try {
+        m_DexelaDetector -> ReadBuffer(buf, (byte*) ptr);
+      } catch (DexelaException &e) {
+        printMessage(tr("Dexela Exception caught: Description %1: function %2")
+                     .arg(e.what()).arg(e.GetFunctionName()));
+      }
+
       if (qcepDebug(DEBUG_DEXELA)) {
         printMessage(tr("Acquired Frame %1 from %2 on detector %3")
                      .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
@@ -244,9 +250,10 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
       image->set_SummedExposures(1);
       det->enqueueAcquiredFrame(image);
 
-      if (acq) {
-        acq -> appendEvent(QxrdAcqCommon::DetectorFramePostedEvent, det->get_DetectorIndex());
-      }
+      m_FrameCounter++;
+
+      acq -> appendEvent(QxrdAcqCommon::DetectorFramePostedEvent,
+                         det->get_DetectorIndex());
     }
   }
 }
@@ -293,6 +300,8 @@ void QxrdDexelaDriver::changeExposureTime(double expos)
 void QxrdDexelaDriver::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
+
+  m_FrameCounter = 0;
 }
 
 void QxrdDexelaDriver::beginFrame()

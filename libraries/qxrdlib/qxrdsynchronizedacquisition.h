@@ -90,7 +90,7 @@ public:
   void prepareForAcquisition(QxrdAcquisitionParameterPackWPtr parms);
   void prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPackWPtr parms);
   void finishedAcquisition();
-  void acquiredFrameAvailable(int currentPhase);
+//  void acquiredFrameAvailable(int currentPhase);
   void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
   QxrdNIDAQWPtr nidaqPlugin() const;
   QxrdAcquisitionParameterPackWPtr parms();

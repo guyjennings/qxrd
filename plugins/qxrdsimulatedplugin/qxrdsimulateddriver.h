@@ -34,6 +34,7 @@ private:
   QxrdSimulatedPluginWPtr   m_Plugin;
   QxrdSimulatedSettingsWPtr m_Simulated;
   QTimer                    m_Timer;
+  int                       m_FrameCounter;
 };
 
 Q_DECLARE_METATYPE(QxrdSimulatedDriver*)

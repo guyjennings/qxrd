@@ -556,46 +556,46 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
   emit waveformsChanged();
 }
 
-void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
-{
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+//void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
+//{
+//  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
 
-//  if (nidaq) {
-//    nidaq->pulseOutput();
+////  if (nidaq) {
+////    nidaq->pulseOutput();
+////  }
+
+//  QxrdAcqCommonPtr acq(m_Acquisition);
+//  QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
+
+//  if (acq && parms) {
+//    if (acq->acquisitionStatus(0.0) == 0) {
+////      printf("QxrdSynchronizedAcquisition::acquiredFrameAvailable(%d)\n", frameNumber);
+
+//      int skipBefore = parms->skipBefore();
+//      int skipBetween = parms->skipBetween();
+//      int nPhases = parms->nphases();
+//      int nSummed = parms->nsummed();
+//      int nGroups = parms->postTrigger();
+//      int perGroup = nPhases*nSummed+skipBetween;
+//      int inGroup = (frameNumber-skipBefore) % perGroup;
+//      int phase = inGroup % nPhases;
+
+//      if (nPhases > 0) {
+//        if ((frameNumber >= skipBefore) && (frameNumber < (nGroups*perGroup-skipBetween+skipBefore))) {
+//          if (inGroup < nPhases*nSummed) {
+//            if (phase == 0) {
+//              if (nidaq) {
+////                printf("Triggered on frame %d\n", frameNumber);
+////                nidaq->triggerAnalogWaveform();
+//              }
+//            }
+//          }
+//        }
+//      }
+////      printf("elapsed[%d] %d msec\n", currentPhase, tick.restart());
+//    }
 //  }
-
-  QxrdAcqCommonPtr acq(m_Acquisition);
-  QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
-
-  if (acq && parms) {
-    if (acq->acquisitionStatus(0.0) == 0) {
-//      printf("QxrdSynchronizedAcquisition::acquiredFrameAvailable(%d)\n", frameNumber);
-
-      int skipBefore = parms->skipBefore();
-      int skipBetween = parms->skipBetween();
-      int nPhases = parms->nphases();
-      int nSummed = parms->nsummed();
-      int nGroups = parms->postTrigger();
-      int perGroup = nPhases*nSummed+skipBetween;
-      int inGroup = (frameNumber-skipBefore) % perGroup;
-      int phase = inGroup % nPhases;
-
-      if (nPhases > 0) {
-        if ((frameNumber >= skipBefore) && (frameNumber < (nGroups*perGroup-skipBetween+skipBefore))) {
-          if (inGroup < nPhases*nSummed) {
-            if (phase == 0) {
-              if (nidaq) {
-//                printf("Triggered on frame %d\n", frameNumber);
-//                nidaq->triggerAnalogWaveform();
-              }
-            }
-          }
-        }
-      }
-//      printf("elapsed[%d] %d msec\n", currentPhase, tick.restart());
-    }
-  }
-}
+//}
 
 //void QxrdSynchronizedAcquisition::setManualOutput()
 //{

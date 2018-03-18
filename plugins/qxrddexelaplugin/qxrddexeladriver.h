@@ -45,6 +45,7 @@ private:
   DexelaDetector         *m_DexelaDetector;
   int                     m_XDim;
   int                     m_YDim;
+  int                     m_FrameCounter;
 
 private: // Static members...
   static QMutex           m_Mutex;
