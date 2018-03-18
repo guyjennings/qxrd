@@ -23,12 +23,16 @@ public:
   void resumeEventLog();
   bool isPaused();
 
-  void appendEvent(int eventCode, int eventArg, QDateTime eventTime=QDateTime::currentDateTime());
+  void appendEvent(int eventCode,
+                   int eventArg1 = -1,
+                   int eventArg2 = -1,
+                   QDateTime eventTime=QDateTime::currentDateTime());
 
   int  eventCount();
   int  eventCode(int i);
   QString eventCodeName(int i);
-  int  eventArg(int i);
+  int  eventArg1(int i);
+  int  eventArg2(int i);
   QDateTime eventTime(int i);
 
 signals:
@@ -39,7 +43,8 @@ private:
   QAtomicInt         m_EventCount;
   int                m_EventMaxCount;
   QVector<int>       m_EventCodes;
-  QVector<int>       m_EventArgs;
+  QVector<int>       m_EventArg1s;
+  QVector<int>       m_EventArg2s;
   QVector<QDateTime> m_EventTimes;
 };
 

@@ -47,16 +47,26 @@ public:
     StartAcquireOnceEvent,
     StartAcquireDarkEvent,
     StartAcquireIdleEvent,
+    AcquireComplete,
     NIDAQStartEvent,
     NIDAQSyncEvent,
     NIDAQAnalogInputEvent,
     NIDAQAnalogPostEvent,
     DetectorFrameEvent,
-    DetectorFramePostedEvent
+    DetectorFramePostedEvent,
+    AcquireSkip,
+    AcquireFrame,
+    AcquireDark,
+    AcquirePost
   };
 
   void clearEventLog();
-  void appendEvent(int eventCode, int eventArg, QDateTime eventTime=QDateTime::currentDateTime());
+  void pauseEventLog();
+  void resumeEventLog();
+  void appendEvent(int eventCode,
+                   int eventArg1 = -1,
+                   int eventArg2 = -1,
+                   QDateTime eventTime=QDateTime::currentDateTime());
 
   virtual void setupAcquisition() = 0;
   virtual void acquire() = 0;

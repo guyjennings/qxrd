@@ -1680,17 +1680,13 @@ void QxrdProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img, QcepMaskData
   }
 }
 
-void QxrdProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image,
-                                               int fileIndex,
-                                               int phase,
-                                               int nPhases,
-                                               bool trig)
+void QxrdProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image)
 {
   QxrdAcqCommonPtr acq(m_Acquisition);
 
-  QxrdDetectorSettingsPtr det(detector());
-
   if (image && acq) {
+    QxrdDetectorSettingsPtr det(acq->detector(image->get_DetectorNumber()));
+
     QDateTime now = QDateTime::currentDateTime();
     double msec = QcepImageDataBase::secondsSinceEpoch();
 
@@ -1714,23 +1710,15 @@ void QxrdProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image,
     image -> set_UserComment3     (acq   -> get_UserComment3());
     image -> set_UserComment4     (acq   -> get_UserComment4());
     image -> set_ObjectSaved      (false);
-    image -> set_Triggered        (trig);
+    image -> set_Triggered        (image -> get_ImageNumber() >= 0);
     image -> set_Normalization    (acq   -> get_Normalization());
-
-    image -> set_ImageNumber      (fileIndex);
-    image -> set_PhaseNumber      (phase);
-    image -> set_NPhases          (nPhases);
 
     acq -> copyDynamicProperties(image.data());
   }
 }
 
 void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
-                                         QcepMaskDataPtr overflow,
-                                         int fileIndex,
-                                         int phase,
-                                         int nPhases,
-                                         bool trig)
+                                         QcepMaskDataPtr        overflow)
 {
   THREAD_CHECK;
 
@@ -1750,7 +1738,7 @@ void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
     QTime tic;
     tic.start();
 
-    setAcquiredImageProperties(img, fileIndex, phase, nPhases, trig);
+    setAcquiredImageProperties(img);
 
 //    QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
 
@@ -1858,8 +1846,7 @@ void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
 }
 
 void QxrdProcessor::processDarkImage(QcepDoubleImageDataPtr image,
-                                             QcepMaskDataPtr overflow,
-                                             int fileIndex)
+                                             QcepMaskDataPtr overflow)
 {
   THREAD_CHECK;
 
@@ -1869,7 +1856,7 @@ void QxrdProcessor::processDarkImage(QcepDoubleImageDataPtr image,
                    .arg(image->get_FileName()));
     }
 
-    setAcquiredImageProperties(image, fileIndex, -1, 0, true);
+    setAcquiredImageProperties(image);
 
     if (get_SaveDarkImages()) {
       doSaveDarkImage(image, overflow);
@@ -1904,7 +1891,7 @@ void QxrdProcessor::processIdleImage(QcepImageDataBasePtr image)
         QTime tic;
         tic.start();
 
-        setAcquiredImageProperties(img, -1, -1, 0, true);
+        setAcquiredImageProperties(img);
 
 //        QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
 

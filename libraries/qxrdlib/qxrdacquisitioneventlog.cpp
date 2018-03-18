@@ -7,7 +7,8 @@ QxrdAcquisitionEventLog::QxrdAcquisitionEventLog(QString name)
     m_EventCount(0),
     m_EventMaxCount(1000),
     m_EventCodes(m_EventMaxCount),
-    m_EventArgs(m_EventMaxCount),
+    m_EventArg1s(m_EventMaxCount),
+    m_EventArg2s(m_EventMaxCount),
     m_EventTimes(m_EventMaxCount)
 {
 }
@@ -39,14 +40,18 @@ bool QxrdAcquisitionEventLog::isPaused()
   return m_IsPaused;
 }
 
-void QxrdAcquisitionEventLog::appendEvent(int eventCode, int eventArg, QDateTime eventTime)
+void QxrdAcquisitionEventLog::appendEvent(int eventCode,
+                                          int eventArg1,
+                                          int eventArg2,
+                                          QDateTime eventTime)
 {
   if (!m_IsPaused) {
     int n = m_EventCount.fetchAndAddOrdered(1);
 
     if (n < m_EventMaxCount) {
       m_EventCodes[n] = eventCode;
-      m_EventArgs[n]  = eventArg;
+      m_EventArg1s[n] = eventArg1;
+      m_EventArg2s[n] = eventArg2;
       m_EventTimes[n] = eventTime;
 
       emit eventLogChanged();
@@ -70,9 +75,14 @@ int QxrdAcquisitionEventLog::eventCode(int i)
   return m_EventCodes.value(i);
 }
 
-int QxrdAcquisitionEventLog::eventArg(int i)
+int QxrdAcquisitionEventLog::eventArg1(int i)
 {
-  return m_EventArgs.value(i);
+  return m_EventArg1s.value(i);
+}
+
+int QxrdAcquisitionEventLog::eventArg2(int i)
+{
+  return m_EventArg2s.value(i);
 }
 
 QDateTime QxrdAcquisitionEventLog::eventTime(int i)
@@ -106,6 +116,10 @@ QString QxrdAcquisitionEventLog::eventCodeName(int i)
     res = "Start Acquire Idle";
     break;
 
+  case QxrdAcqCommon::AcquireComplete:
+    res = "Acquire Complete";
+    break;
+
   case QxrdAcqCommon::NIDAQStartEvent:
     res = "NIDAQ Start";
     break;
@@ -128,6 +142,23 @@ QString QxrdAcquisitionEventLog::eventCodeName(int i)
 
   case QxrdAcqCommon::DetectorFramePostedEvent:
     res = "Detector Frame Posted";
+    break;
+
+  case QxrdAcqCommon::AcquireSkip:
+    res = "Acquire Skip";
+    break;
+
+  case QxrdAcqCommon::AcquireFrame:
+    res = "Acquire Frame";
+    break;
+
+  case QxrdAcqCommon::AcquireDark:
+    res = "Acquire Dark";
+    break;
+
+  case QxrdAcqCommon::AcquirePost:
+    res = "Acquire Post";
+    break;
   }
 
   return res;

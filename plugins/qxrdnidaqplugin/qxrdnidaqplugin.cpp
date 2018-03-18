@@ -969,7 +969,7 @@ void QxrdNIDAQPlugin::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr s, Qxr
     QxrdAcqCommonPtr acq(m_Acquisition);
 
     if (acq) {
-      acq->appendEvent(QxrdAcqCommon::NIDAQStartEvent, 0);
+      acq->appendEvent(QxrdAcqCommon::NIDAQStartEvent);
     }
 
     m_PrimaryCounterName = "/" + sync->primaryCounterName();

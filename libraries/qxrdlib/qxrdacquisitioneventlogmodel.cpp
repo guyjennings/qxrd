@@ -81,6 +81,7 @@ QVariant QxrdAcquisitionEventLogModel::data(const QModelIndex &index, int role) 
 {
   QVariant res = QVariant();
   QxrdAcquisitionEventLogPtr log(m_AcquisitionEventLog);
+  int arg1, arg2;
 
   if (log && index.isValid() && role == Qt::DisplayRole) {
     int row = index.row();
@@ -95,8 +96,20 @@ QVariant QxrdAcquisitionEventLogModel::data(const QModelIndex &index, int role) 
       res = log->eventCodeName(row);
       break;
 
-    case EventArgColumn:
-      res = log->eventArg(row);
+    case EventArg1Column:
+      arg1 = log->eventArg1(row);
+
+      if (arg1 >= 0) {
+        res = arg1;
+      }
+      break;
+
+    case EventArg2Column:
+      arg2 = log->eventArg2(row);
+
+      if (arg2 >= 0) {
+        res = arg2;
+      }
       break;
 
     case EventTimeColumn:
@@ -129,8 +142,12 @@ QVariant QxrdAcquisitionEventLogModel::headerData(int section, Qt::Orientation o
         res = "Code";
         break;
 
-      case EventArgColumn:
-        res = "Arg";
+      case EventArg1Column:
+        res = "Arg 1";
+        break;
+
+      case EventArg2Column:
+        res = "Arg 2";
         break;
 
       case EventTimeColumn:

@@ -374,11 +374,35 @@ void QxrdAcqCommon::clearEventLog()
   }
 }
 
-void QxrdAcqCommon::appendEvent(int eventCode, int eventArg, QDateTime eventTime)
+void QxrdAcqCommon::pauseEventLog()
 {
   QxrdAcquisitionEventLogPtr log(m_AcquisitionEventLog);
 
   if (log) {
-    log->appendEvent(eventCode, eventArg, eventTime);
+    log->pauseEventLog();
+  }
+}
+
+void QxrdAcqCommon::resumeEventLog()
+{
+  QxrdAcquisitionEventLogPtr log(m_AcquisitionEventLog);
+
+  if (log) {
+    log->resumeEventLog();
+  }
+}
+
+void QxrdAcqCommon::appendEvent(int eventCode,
+                                int eventArg1,
+                                int eventArg2,
+                                QDateTime eventTime)
+{
+  QxrdAcquisitionEventLogPtr log(m_AcquisitionEventLog);
+
+  if (log) {
+    log->appendEvent(eventCode,
+                     eventArg1,
+                     eventArg2,
+                     eventTime);
   }
 }

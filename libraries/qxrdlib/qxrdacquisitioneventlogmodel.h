@@ -29,10 +29,11 @@ public:
 
   enum {
     EventNumberColumn,
-    EventCodeColumn,
-    EventArgColumn,
     EventTimeColumn,
     EventDeltaColumn,
+    EventCodeColumn,
+    EventArg1Column,
+    EventArg2Column,
     EventColumnCount
   };
 

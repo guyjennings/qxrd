@@ -757,4 +757,16 @@ TODO("2017-10-10", "",
 TODO("2017-11-08", "",
      "QxrdIntegrationWindow should distinguish between different integrators (for multiple detectors)");
 
+TODO("2018-03-18", "",
+     "Flush detector image queues at start of acquisition operation");
+
+TODO("2018-03-18", "",
+     "Process analog input data during acquisition");
+
+TODO("2018-03-18", "",
+     "Check acquisition operations for correctness");
+
+TODO("2018-03-18", "",
+     "Generate appropriate filenames with imageNumber and raw/dark suffixes");
+
 #endif // TODO_H

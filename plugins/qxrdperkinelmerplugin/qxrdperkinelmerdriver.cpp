@@ -1057,10 +1057,10 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
 
     //    acquiredFrameAvailable(image);
 
-    if (image) {
-      image->set_ImageSequenceNumber(counter1);
-      image->set_ImageNumber(n1);
-    }
+//    if (image) {
+//      image->set_ImageSequenceNumber(counter1);
+//      image->set_ImageNumber(n1);
+//    }
 
     if (qcepDebug(DEBUG_DETECTORIDLING)) {
       printMessage("enqueue perkin elmer acquired frame");
