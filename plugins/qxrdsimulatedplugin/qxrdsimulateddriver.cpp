@@ -17,8 +17,7 @@ QxrdSimulatedDriver::QxrdSimulatedDriver(QString name,
                                          QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
     m_Plugin(plugin),
-    m_Simulated(det),
-    m_FrameCounter(0)
+    m_Simulated(det)
 {
 #ifndef QT_NO_DEBUG
   printf("Simulated Driver \"%s\" Constructed\n", qPrintable(name));
@@ -71,9 +70,12 @@ void QxrdSimulatedDriver::changeExposureTime(double expos)
   QxrdDetectorSettingsPtr det(m_Detector);
 
   if (det && det->isEnabled()) {
-    printMessage(tr("Exposure time changed to %1").arg(expos));
+    m_ExposureFactor = det->get_ExposureFactor();
+    m_ExposureTime   = expos/m_ExposureFactor;
 
-    m_Timer.start(expos*1000);
+    printMessage(tr("Exposure time changed to %1").arg(m_ExposureTime));
+
+    m_Timer.start(m_ExposureTime*1000);
   }
 }
 
@@ -188,8 +190,28 @@ void QxrdSimulatedDriver::onTimerTimeout()
       printMessage("enqueue simulated detector acquired frame");
     }
 
-    image->set_SummedExposures(1);
-    det->enqueueAcquiredFrame(image);
+    if (m_ExposureFactor > 1) {
+      if (m_SubframeCounter == 0) {
+        m_AccumulatedData =
+            QcepAllocator::newInt32Image(sharedFromThis(),
+                                         tr("areadet-%1").arg(frame),
+                                         nCols, nRows,
+                                         QcepAllocator::AllocateFromReserve);
+      }
+
+      m_AccumulatedData -> accumulateImage<quint16>(image);
+
+      m_SubframeCounter++;
+
+      if (m_SubframeCounter == m_ExposureFactor) {
+        det->enqueueAcquiredFrame(m_AccumulatedData);
+
+        m_AccumulatedData = QcepUInt32ImageDataPtr();
+      }
+    } else {
+      image->set_SummedExposures(1);
+      det->enqueueAcquiredFrame(image);
+    }
 
     m_FrameCounter++;
 

@@ -30,6 +30,10 @@ protected:
   QxrdDetectorSettingsWPtr m_Detector;
   QxrdExperimentWPtr       m_Experiment;
   QxrdAcqCommonWPtr        m_Acquisition;
+  double                   m_ExposureTime;
+  int                      m_ExposureFactor;
+  int                      m_FrameCounter;
+  int                      m_SubframeCounter;
 };
 
 #endif // QXRDDETECTORDRIVER_H

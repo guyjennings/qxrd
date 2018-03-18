@@ -16,8 +16,7 @@ QxrdAreaDetectorDriver::QxrdAreaDetectorDriver(QString name,
                                                QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
     m_Plugin(plugin),
-    m_AreaDetector(det),
-    m_FrameCounter(0)
+    m_AreaDetector(det)
 {
 #ifndef QT_NO_DEBUG
   printf("Area Detector Driver \"%s\" Constructed\n", qPrintable(name));
@@ -70,9 +69,12 @@ void QxrdAreaDetectorDriver::changeExposureTime(double expos)
   QxrdDetectorSettingsPtr det(m_Detector);
 
   if (det && det->isEnabled()) {
-    printMessage(tr("Exposure time changed to %1").arg(expos));
+    m_ExposureFactor = det->get_ExposureFactor();
+    m_ExposureTime   = expos/m_ExposureFactor;
 
-    m_Timer.start(expos*1000);
+    printMessage(tr("Exposure time changed to %1").arg(m_ExposureTime));
+
+    m_Timer.start(m_ExposureTime*1000);
   }
 }
 
@@ -174,7 +176,6 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
               pRgb = vRgb;
             }
 
-            image->set_SummedExposures(1);
             image->setValue(x,y,lval);
           }
         }
@@ -185,7 +186,28 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
       printMessage("enqueue area detector acquired frame");
     }
 
-    det->enqueueAcquiredFrame(image);
+    if (m_ExposureFactor > 1) {
+      if (m_SubframeCounter == 0) {
+        m_AccumulatedData =
+            QcepAllocator::newInt32Image(sharedFromThis(),
+                                         tr("areadet-%1").arg(frame),
+                                         nCols, nRows,
+                                         QcepAllocator::AllocateFromReserve);
+      }
+
+      m_AccumulatedData -> accumulateImage<quint16>(image);
+
+      m_SubframeCounter++;
+
+      if (m_SubframeCounter == m_ExposureFactor) {
+        det->enqueueAcquiredFrame(m_AccumulatedData);
+
+        m_AccumulatedData = QcepUInt32ImageDataPtr();
+      }
+    } else {
+      image->set_SummedExposures(1);
+      det->enqueueAcquiredFrame(image);
+    }
 
     m_FrameCounter++;
 

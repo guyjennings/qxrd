@@ -14,8 +14,7 @@ QxrdFileWatcherDriver::QxrdFileWatcherDriver(QString name, QxrdFileWatcherPlugin
                                                          QxrdExperimentWPtr expt,
                                                          QxrdAcqCommonWPtr acq)
   : QxrdDetectorDriver(name, det, expt, acq),
-    m_FileWatcher(det),
-    m_FrameCounter(0)
+    m_FileWatcher(det)
 {
 #ifndef QT_NO_DEBUG
   printf("File Watcher Driver \"%s\" Constructed\n", qPrintable(name));

@@ -23,8 +23,7 @@ QxrdDexelaDriver::QxrdDexelaDriver(QString name,
   : QxrdDetectorDriver(name, det, expt, acq),
     m_Dexela(det),
     m_DexelaPlugin(plugin),
-    m_DexelaDetector(NULL),
-    m_FrameCounter(0)
+    m_DexelaDetector(NULL)
 {
 #ifndef QT_NO_DEBUG
   printf("Dexela Driver \"%s\" Constructed\n", qPrintable(name));
@@ -247,8 +246,28 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
                      .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
       }
 
-      image->set_SummedExposures(1);
-      det->enqueueAcquiredFrame(image);
+      if (m_ExposureFactor > 1) {
+        if (m_SubframeCounter == 0) {
+          m_AccumulatedData =
+              QcepAllocator::newInt32Image(sharedFromThis(),
+                                           tr("areadet-%1").arg(frame),
+                                           nCols, nRows,
+                                           QcepAllocator::AllocateFromReserve);
+        }
+
+        m_AccumulatedData -> accumulateImage(image);
+
+        m_SubframeCounter++;
+
+        if (m_SubframeCounter == m_ExposureFactor) {
+          det->enqueueAcquiredFrame(m_AccumulatedData);
+
+          m_AccumulatedData = QcepUInt32ImageDataPtr();
+        }
+      } else {
+        image->set_SummedExposures(1);
+        det->enqueueAcquiredFrame(image);
+      }
 
       m_FrameCounter++;
 
@@ -284,11 +303,14 @@ void QxrdDexelaDriver::changeExposureTime(double expos)
   QxrdDetectorSettingsPtr det(m_Detector);
 
   if (det && det->isEnabled()) {
-    printMessage(tr("Exposure time changed to %1").arg(expos));
+    m_ExposureFactor = det->get_ExposureFactor();
+    m_ExposureTime   = expos/m_ExposureFactor;
+
+    printMessage(tr("Exposure time changed to %1").arg(m_ExposureTime));
 
     if (m_DexelaDetector) {
       try {
-        m_DexelaDetector -> SetExposureTime(expos);
+        m_DexelaDetector -> SetExposureTime(m_ExposureTime);
       } catch (DexelaException &e) {
         printMessage(tr("Dexela Exception caught: Description %1: function %2")
                      .arg(e.what()).arg(e.GetFunctionName()));

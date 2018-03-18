@@ -44,8 +44,7 @@ QxrdPerkinElmerDriver::QxrdPerkinElmerDriver(QString name,
   m_SyncMode(HIS_SYNCMODE_INTERNAL_TIMER),
   m_TimingSource(-1),
   m_Counter(0),
-  m_PerkinElmer(det),
-  m_FrameCounter(0)
+  m_PerkinElmer(det)
 {
 #ifndef QT_NO_DEBUG
   printf("Perkin Elmer Detector Driver \"%s\" Constructed\n", qPrintable(name));
@@ -695,10 +694,12 @@ void QxrdPerkinElmerDriver::changeExposureTime(double expos)
 
 //        newTime = m_ReadoutTimes.value(0)/1e6;
 //      }
+      m_ExposureFactor = det->get_ExposureFactor();
+      m_ExposureTime   = expos/m_ExposureFactor;
 
-      printMessage(tr("Exposure time changed to %1").arg(expos));
+      printMessage(tr("Exposure time changed to %1").arg(m_ExposureTime));
 
-      DWORD tmp = (int)(expos*1e6);
+      DWORD tmp = (int)(m_ExposureTime*1e6);
 
       printMessage(tr("SetTimerSync %1").arg(tmp));
 
@@ -710,8 +711,6 @@ void QxrdPerkinElmerDriver::changeExposureTime(double expos)
       }
 
       printMessage(tr("TimerSync = %1").arg(tmp));
-
-//      acq->set_ExposureTime(tmp/1.0e6);
     }
   }
 }
@@ -1067,8 +1066,28 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
       printMessage("enqueue perkin elmer acquired frame");
     }
 
-    image -> set_SummedExposures(1);
-    det -> enqueueAcquiredFrame(image);
+    if (m_ExposureFactor > 1) {
+      if (m_SubframeCounter == 0) {
+        m_AccumulatedData =
+            QcepAllocator::newInt32Image(sharedFromThis(),
+                                         tr("areadet-%1").arg(frame),
+                                         nCols, nRows,
+                                         QcepAllocator::AllocateFromReserve);
+      }
+
+      m_AccumulatedData -> accumulateImage(image);
+
+      m_SubframeCounter++;
+
+      if (m_SubframeCounter == m_ExposureFactor) {
+        det->enqueueAcquiredFrame(m_AccumulatedData);
+
+        m_AccumulatedData = QcepUInt32ImageDataPtr();
+      }
+    } else {
+      image->set_SummedExposures(1);
+      det->enqueueAcquiredFrame(image);
+    }
 
     m_FrameCounter++;
 

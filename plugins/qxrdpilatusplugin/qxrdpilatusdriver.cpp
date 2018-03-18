@@ -22,8 +22,7 @@ QxrdPilatusDriver::QxrdPilatusDriver(QString name,
     m_PilatusSocket(),
     m_ExposureTime(-1),
     m_ExposuresPerFrame(-1),
-    m_ExposureFrameCount(-1),
-    m_FrameCounter(0)
+    m_ExposureFrameCount(-1)
 {
 #ifndef QT_NO_DEBUG
   printf("Pilatus Detector Driver \"%s\" Constructed\n", qPrintable(name));
@@ -87,9 +86,11 @@ void QxrdPilatusDriver::changeExposureTime(double expos)
 //  QxrdDetectorSettingsPtr det(m_Detector);
 
 //  if (det && det->isEnabled()) {
+//  m_ExposureFactor = det->get_ExposureFactor();
+//  m_ExposureTime   = expos/m_ExposureFactor;
 //    printMessage(tr("Exposure time changed to %1").arg(expos));
 
-//    m_Timer.start(expos*1000);
+//    m_Timer.start(m_ExposureTime*1000);
 
 //    return true;
 //  }
@@ -496,12 +497,13 @@ void QxrdPilatusDriver::loadAndPush(QString f)
     //TODO: is this the right one...
       QString dest = proc->filePathInRawOutputDirectory(f);
 
-      QcepUInt32ImageDataPtr data = QcepAllocator::newInt32Image(sharedFromThis(),
-                                                                 "pilatus",
-                                                                 0,0,
-                                                                 QcepAllocator::AllocateFromReserve);
+      QcepUInt32ImageDataPtr image =
+          QcepAllocator::newInt32Image(sharedFromThis(),
+                                       "pilatus",
+                                       0,0,
+                                       QcepAllocator::AllocateFromReserve);
 
-      if (data->readImage(dest)) {
+      if (image->readImage(dest)) {
         printMessage(tr("Read %1 successfully").arg(dest));
       }
 
@@ -509,8 +511,28 @@ void QxrdPilatusDriver::loadAndPush(QString f)
         printMessage("enqueue pilatus acquired frame");
       }
 
-      data->set_SummedExposures(1);
-      det->enqueueAcquiredFrame(data);
+      if (m_ExposureFactor > 1) {
+        if (m_SubframeCounter == 0) {
+          m_AccumulatedData =
+              QcepAllocator::newInt32Image(sharedFromThis(),
+                                           tr("areadet-%1").arg(m_FrameCounter),
+                                           image->get_Width(), image->get_Height(),
+                                           QcepAllocator::AllocateFromReserve);
+        }
+
+        m_AccumulatedData -> accumulateImage<quint32>(image);
+
+        m_SubframeCounter++;
+
+        if (m_SubframeCounter == m_ExposureFactor) {
+          det->enqueueAcquiredFrame(m_AccumulatedData);
+
+          m_AccumulatedData = QcepUInt32ImageDataPtr();
+        }
+      } else {
+        image->set_SummedExposures(1);
+        det->enqueueAcquiredFrame(image);
+      }
 
       m_FrameCounter++;
 

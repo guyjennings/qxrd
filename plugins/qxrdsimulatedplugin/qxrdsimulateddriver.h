@@ -5,6 +5,7 @@
 #include "qxrdsimulatedsettings-ptr.h"
 #include "qxrdsimulatedplugin-ptr.h"
 #include <QTimer>
+#include "qcepimagedata-ptr.h"
 
 class QxrdSimulatedDriver : public QxrdDetectorDriver
 {
@@ -34,7 +35,7 @@ private:
   QxrdSimulatedPluginWPtr   m_Plugin;
   QxrdSimulatedSettingsWPtr m_Simulated;
   QTimer                    m_Timer;
-  int                       m_FrameCounter;
+  QcepUInt32ImageDataPtr    m_AccumulatedData;
 };
 
 Q_DECLARE_METATYPE(QxrdSimulatedDriver*)
