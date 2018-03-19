@@ -190,6 +190,9 @@ void QxrdSimulatedDriver::onTimerTimeout()
       printMessage("enqueue simulated detector acquired frame");
     }
 
+    image -> set_ExposureTime(m_ExposureTime);
+    image -> set_SummedExposures(1);
+
     if (m_ExposureFactor > 1) {
       if (m_SubframeCounter == 0) {
         m_AccumulatedData =
@@ -199,6 +202,7 @@ void QxrdSimulatedDriver::onTimerTimeout()
                                          QcepAllocator::AllocateFromReserve);
       }
 
+      m_AccumulatedData -> set_ExposureTime(m_ExposureTime);
       m_AccumulatedData -> accumulateImage(image);
 
       m_SubframeCounter++;
@@ -210,7 +214,6 @@ void QxrdSimulatedDriver::onTimerTimeout()
         m_SubframeCounter = 0;
       }
     } else {
-      image->set_SummedExposures(1);
       det->enqueueAcquiredFrame(image);
     }
 

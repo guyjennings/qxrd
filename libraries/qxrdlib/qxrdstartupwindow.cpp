@@ -85,6 +85,7 @@ void QxrdStartupWindow::appendSplashMessage(QString msg, QDateTime dt)
 
 //  activateWindow();
 //  raise();
+
 }
 
 void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)
@@ -112,6 +113,10 @@ void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)
                        msg);
 
   m_LastDateTime = dt;
+
+//  if (g_Application) {
+//    g_Application -> processEvents();
+//  }
 }
 
 void QxrdStartupWindow::onMessageWindowLinesChanged(int newVal)

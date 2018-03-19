@@ -97,7 +97,7 @@ public:
 
   int cancelling();
   void indicateDroppedFrame(int n);
-  QString getFileBaseAndName(QcepImageDataBaseWPtr imgp);
+  QString getFileName(QcepImageDataBaseWPtr imgp);
 
   virtual void unlock();
 

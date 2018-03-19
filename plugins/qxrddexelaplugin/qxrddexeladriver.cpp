@@ -105,6 +105,8 @@ void QxrdDexelaDriver::startDetectorDriver()
           connect(det -> prop_VBinning(),       &QcepIntProperty::valueChanged,
                   this,                         &QxrdDexelaDriver::restartDetector);
 
+          changeExposureTime(acq->get_ExposureTime());
+
           restartDetector();
         } catch (DexelaException &e) {
           printMessage(tr("Dexela Exception caught: Description %1: function %2")
@@ -112,8 +114,6 @@ void QxrdDexelaDriver::startDetectorDriver()
         }
       }
     }
-
-    changeExposureTime(acq->get_ExposureTime());
   }
 
   if (qcepDebug(DEBUG_DEXELA)) {
@@ -153,14 +153,15 @@ void QxrdDexelaDriver::restartDetector()
         m_DexelaDetector -> SetFullWellMode(High);
         m_DexelaDetector -> SetBinningMode(x11);
 
-        double expTime = acq->get_ExposureTime()/det->get_ExposureFactor();
+        m_ExposureFactor = det->get_ExposureFactor();
+        m_ExposureTime   = acq->get_ExposureTime() / m_ExposureFactor;
 
         switch (det->get_HardwareSync()) {
         case QxrdDexelaSettings::SoftwareSync:
-          m_DexelaDetector -> SetExposureTime(expTime);
+          m_DexelaDetector -> SetExposureTime(m_ExposureTime);
           m_DexelaDetector -> SetExposureMode(Expose_and_read);
           m_DexelaDetector -> SetTriggerSource(Internal_Software);
-          m_DexelaDetector -> EnablePulseGenerator(expTime);
+          m_DexelaDetector -> EnablePulseGenerator(m_ExposureTime);
           break;
 
         case QxrdDexelaSettings::HardwareSync:
@@ -246,6 +247,9 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
                      .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
       }
 
+      image -> set_ExposureTime(m_ExposureTime);
+      image -> set_SummedExposures(1);
+
       if (m_ExposureFactor > 1) {
         if (m_SubframeCounter == 0) {
           m_AccumulatedData =
@@ -255,6 +259,7 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
                                            QcepAllocator::AllocateFromReserve);
         }
 
+        m_AccumulatedData -> set_ExposureTime(m_ExposureTime);
         m_AccumulatedData -> accumulateImage(image);
 
         m_SubframeCounter++;
@@ -266,7 +271,6 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
           m_SubframeCounter = 0;
         }
       } else {
-        image->set_SummedExposures(1);
         det->enqueueAcquiredFrame(image);
       }
 

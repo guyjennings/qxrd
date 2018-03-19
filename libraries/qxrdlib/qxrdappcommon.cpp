@@ -485,7 +485,7 @@ void QxrdAppCommon::printMessage(QString msg, QDateTime dt) const
                                       Q_ARG(QString, msg),
                                       Q_ARG(QDateTime, dt)));
 
-      processEvents();
+//      processEvents();
     }
   }
 }

@@ -36,10 +36,10 @@ QxrdAcqCommon::QxrdAcqCommon(QString name) :
   m_FileOverflowWidth(this, "fileOverflowWidth", 5, "Digits in Overflow Index Field"),
   m_FileNumberWidth(this, "fileNumberWidth", 5, "Digits in File Number Field"),
   m_DetectorNumberWidth(this, "detectorNumberWidth", 2, "Digits in detector number field"),
-  m_FileNameFormat1(this, "fileNameFormat1", 1, "File name format 1st Item"),
-  m_FileNameFormat2(this, "fileNameFormat2", 1, "File name format 2nd Item"),
-  m_FileNameFormat3(this, "fileNameFormat3", 1, "File name format 3rd Item"),
-  m_FileNameFormat4(this, "fileNameFormat4", 1, "File name format 4th Item"),
+  m_FileNameFormat1(this, "fileNameFormat1", IndexFormatItem, "File name format 1st Item"),
+  m_FileNameFormat2(this, "fileNameFormat2", DetectorFormatItem, "File name format 2nd Item"),
+  m_FileNameFormat3(this, "fileNameFormat3", PhaseFormatItem, "File name format 3rd Item"),
+  m_FileNameFormat4(this, "fileNameFormat4", IndexFormatItem, "File name format 4th Item"),
   m_FileBase(this,"fileBase","", "File Base"),
   m_OverflowLevel(this, "overflowLevel", 65500, "Overflow level (per exposure)"),
   m_Raw16SaveTime(this,"raw16SaveTime", 0.1, "Time to save 16 bit images"),
@@ -172,7 +172,7 @@ QString QxrdAcqCommon::fmtString(int f)
   return res;
 }
 
-QString QxrdAcqCommon::getFileBaseAndName(QcepImageDataBaseWPtr imgp)
+QString QxrdAcqCommon::getFileName(QcepImageDataBaseWPtr imgp)
 {
   QString res = "";
 
@@ -218,16 +218,9 @@ QString QxrdAcqCommon::getFileBaseAndName(QcepImageDataBaseWPtr imgp)
                                       10,
                                       QChar('0'));
 
-    QString typString = "";
-
-    QString extString = img->get_FileExtension();
-
     if (img->isDark()) {
       phsString = "";
       numString = "";
-      typString = ".dark";
-    } else if (img->isRaw()) {
-      typString = ".raw";
     }
 
     if (activeDetectorCount() <= 1) {
@@ -246,17 +239,14 @@ QString QxrdAcqCommon::getFileBaseAndName(QcepImageDataBaseWPtr imgp)
         "%1%" + tr("%1").arg(fmt1+1)
         +"%"  + tr("%1").arg(fmt2+1)
         +"%"  + tr("%1").arg(fmt3+1)
-        +"%"  + tr("%1").arg(fmt4+1)
-        +"%6.%7";
+        +"%"  + tr("%1").arg(fmt4+1);
 
     res = tr(qPrintable(fmt))
         .arg(basString)
         .arg(idxString)
         .arg(detString)
         .arg(phsString)
-        .arg(numString)
-        .arg(typString)
-        .arg(extString);
+        .arg(numString);
   }
 
   return res;
@@ -277,7 +267,7 @@ QString QxrdAcqCommon::currentFileBase(int detNum, QString extension)
     extent = "tif";
   }
 
-  fileBase = getFileBaseAndName(QcepImageDataBaseWPtr());
+  fileBase = getFileName(QcepImageDataBaseWPtr());
 
   return fileBase;
 }

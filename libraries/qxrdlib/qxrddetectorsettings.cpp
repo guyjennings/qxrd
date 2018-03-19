@@ -54,7 +54,7 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
   m_ExposureFactor (this, "exposureFactor",  1,   "Relative Exposure Factor"),
   m_CanHardwareSync   (this, "canHardwareSync",    false, "Hardware Synchronization Possible?"),
   m_HardwareSync   (this, "hardwareSync",          false, "Hardware Synchronization?"),
-  m_Extension(this, "extension", "tif", "File extension")
+  m_Extension(this, "extension", ".tif", "File extension")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing detector settings\n");
@@ -327,6 +327,12 @@ void QxrdDetectorSettings::readSettings(QSettings *settings)
     m_DetectorControlWindowSettings->readSettings(settings);
     settings->endGroup();
   }
+
+  QString exten = get_Extension();
+
+  if (!exten.startsWith(".")) {
+    set_Extension("." + exten);
+  }
 }
 
 void QxrdDetectorSettings::writeSettings(QSettings *settings)
@@ -399,6 +405,8 @@ void QxrdDetectorSettings::changeExposureTime(double expos)
 
 void QxrdDetectorSettings::beginAcquisition(double exposure)
 {
+  acquireFrameIfAvailable();
+
   if (m_DetectorDriverThread) {
     m_DetectorDriverThread->beginAcquisition(exposure);
   }
