@@ -4,6 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
+#include "qcepimagedata-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
@@ -29,6 +30,7 @@ public:
   static QxrdAcqCommonWPtr findAcquisition(QcepObjectWPtr p);
 
   virtual int detectorCount() const = 0;
+  virtual int activeDetectorCount() const;
   virtual QxrdDetectorSettingsPtr detector(int i) const = 0;
   virtual void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin) = 0;
   virtual QxrdNIDAQWPtr nidaqPlugin() const = 0;
@@ -95,18 +97,19 @@ public:
 
   int cancelling();
   void indicateDroppedFrame(int n);
-  void getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName);
+  QString getFileBaseAndName(QcepImageDataBaseWPtr imgp);
 
   virtual void unlock();
 
   enum {
-    FmtDetPhsInd,
-    FmtDetIndPhs,
-    FmtPhsDetInd,
-    FmtPhsIndDet,
-    FmtIndPhsDet,
-    FmtIndDetPhs
+    IndexFormatItem,
+    DetectorFormatItem,
+    PhaseFormatItem,
+    NumberFormatItem
   };
+
+private:
+  QString fmtString(int i);
 
 signals:
   void acquireStarted();
@@ -185,11 +188,23 @@ public:
   Q_PROPERTY(int    fileOverflowWidth        READ get_FileOverflowWidth WRITE set_FileOverflowWidth)
   QCEP_INTEGER_PROPERTY(FileOverflowWidth)
 
+  Q_PROPERTY(int    fileNumberWidth  READ get_FileNumberWidth WRITE set_FileNumberWidth)
+  QCEP_INTEGER_PROPERTY(FileNumberWidth)
+
   Q_PROPERTY(int detectorNumberWidth READ get_DetectorNumberWidth WRITE set_DetectorNumberWidth)
   QCEP_INTEGER_PROPERTY(DetectorNumberWidth)
 
-  Q_PROPERTY(int    fileNameFormat   READ get_FileNameFormat WRITE set_FileNameFormat)
-  QCEP_INTEGER_PROPERTY(FileNameFormat)
+  Q_PROPERTY(int    fileNameFormat1   READ get_FileNameFormat1 WRITE set_FileNameFormat1)
+  QCEP_INTEGER_PROPERTY(FileNameFormat1)
+
+  Q_PROPERTY(int    fileNameFormat2   READ get_FileNameFormat2 WRITE set_FileNameFormat2)
+  QCEP_INTEGER_PROPERTY(FileNameFormat2)
+
+  Q_PROPERTY(int    fileNameFormat3   READ get_FileNameFormat3 WRITE set_FileNameFormat3)
+  QCEP_INTEGER_PROPERTY(FileNameFormat3)
+
+  Q_PROPERTY(int    fileNameFormat4   READ get_FileNameFormat4 WRITE set_FileNameFormat4)
+  QCEP_INTEGER_PROPERTY(FileNameFormat4)
 
   Q_PROPERTY(QString fileBase        READ get_FileBase WRITE set_FileBase)
   QCEP_STRING_PROPERTY(FileBase)

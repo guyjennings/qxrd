@@ -51,6 +51,7 @@ private:
   QString experimentDirectory();
   QString dataDirectory();
 
+  void initializeFormatMenu(QComboBox* cb);
 //  void appendDetector(QxrdDetectorSettingsPtr det);
 
 private:

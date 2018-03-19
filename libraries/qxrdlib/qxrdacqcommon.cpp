@@ -1,3 +1,4 @@
+#include "qcepimagedata.h"
 #include "qxrdacqcommon.h"
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrddarkacquisitionparameterpack.h"
@@ -33,8 +34,12 @@ QxrdAcqCommon::QxrdAcqCommon(QString name) :
   m_FileIndexWidth(this, "fileIndexWidth", 5, "Digits in File Index Field"),
   m_FilePhaseWidth(this, "filePhaseWidth", 3, "Digits in Phase Number Field"),
   m_FileOverflowWidth(this, "fileOverflowWidth", 5, "Digits in Overflow Index Field"),
+  m_FileNumberWidth(this, "fileNumberWidth", 5, "Digits in File Number Field"),
   m_DetectorNumberWidth(this, "detectorNumberWidth", 2, "Digits in detector number field"),
-  m_FileNameFormat(this, "fileNameFormat", 1, "File name format"),
+  m_FileNameFormat1(this, "fileNameFormat1", 1, "File name format 1st Item"),
+  m_FileNameFormat2(this, "fileNameFormat2", 1, "File name format 2nd Item"),
+  m_FileNameFormat3(this, "fileNameFormat3", 1, "File name format 3rd Item"),
+  m_FileNameFormat4(this, "fileNameFormat4", 1, "File name format 4th Item"),
   m_FileBase(this,"fileBase","", "File Base"),
   m_OverflowLevel(this, "overflowLevel", 65500, "Overflow level (per exposure)"),
   m_Raw16SaveTime(this,"raw16SaveTime", 0.1, "Time to save 16 bit images"),
@@ -127,161 +132,134 @@ QxrdDarkAcquisitionParameterPackPtr QxrdAcqCommon::darkAcquisitionParameterPack(
 
 }
 
-void QxrdAcqCommon::getFileBaseAndName(QString filePattern, QString extent, int detNum, int fileIndex, int phase, int nphases, QString &fileBase, QString &fileName)
+int QxrdAcqCommon::activeDetectorCount() const
 {
-  int width = get_FileIndexWidth();
-  int detWidth = get_DetectorNumberWidth();
-  QxrdDetectorSettingsPtr det(detector(detNum));
-  int fileNameFormat = get_FileNameFormat();
+  int nActive = 0;
 
-  if (det) {
-    QxrdProcessorPtr proc(det->processor());
-    int nDet = detectorCount();
+  for (int i=0; i<detectorCount(); i++) {
+    QxrdDetectorSettingsPtr det(detector(i));
 
-    if (proc) {
-      if (nphases == 0 || phase < 0) {
-        if (nDet <= 1) {
-          fileBase = tr("%1-%2.dark.%3")
-              .arg(filePattern).arg(fileIndex,width,10,QChar('0')).arg(extent);
-        } else switch (fileNameFormat) {
-        case FmtDetIndPhs:
-        case FmtDetPhsInd:
-        case FmtPhsDetInd:
-          fileBase = tr("%1-%2-%3.dark.%4")
-              .arg(filePattern)
-              .arg(detNum,detWidth,10,QChar('0'))
-              .arg(fileIndex,width,10,QChar('0'))
-              .arg(extent);
-          break;
-
-        case FmtIndDetPhs:
-        case FmtIndPhsDet:
-        case FmtPhsIndDet:
-          fileBase = tr("%1-%2-%3.dark.%4")
-              .arg(filePattern)
-              .arg(fileIndex,width,10,QChar('0'))
-              .arg(detNum,detWidth,10,QChar('0'))
-              .arg(extent);
-          break;
-        }
-
-        fileName = proc -> filePathInDarkOutputDirectory(fileBase);
-      } else {
-        if (nphases > 1) {
-          int phswidth = get_FilePhaseWidth();
-          if (nDet <= 1) {
-            switch (fileNameFormat) {
-            case FmtDetIndPhs:
-            case FmtIndDetPhs:
-            case FmtIndPhsDet:
-              fileBase = tr("%1-%2-%3.%4")
-                  .arg(filePattern)
-                  .arg(fileIndex,width,10,QChar('0'))
-                  .arg(phase,phswidth,10,QChar('0'))
-                  .arg(extent);
-              break;
-
-            case FmtDetPhsInd:
-            case FmtPhsDetInd:
-            case FmtPhsIndDet:
-              fileBase = tr("%1-%2-%3.%4")
-                  .arg(filePattern)
-                  .arg(phase,phswidth,10,QChar('0'))
-                  .arg(fileIndex,width,10,QChar('0'))
-                  .arg(extent);
-              break;
-            }
-          } else {
-            switch (fileNameFormat) {
-            case FmtDetIndPhs:
-              fileBase = tr("%1-%2-%3-%4.%5")
-                  .arg(filePattern)
-                  .arg(detNum,detWidth,10,QChar('0'))
-                  .arg(fileIndex,width,10,QChar('0'))
-                  .arg(phase,phswidth,10,QChar('0'))
-                  .arg(extent);
-              break;
-
-            case FmtIndDetPhs:
-              fileBase = tr("%1-%2-%3-%4.%5")
-                  .arg(filePattern)
-                  .arg(fileIndex,width,10,QChar('0'))
-                  .arg(detNum,detWidth,10,QChar('0'))
-                  .arg(phase,phswidth,10,QChar('0'))
-                  .arg(extent);
-              break;
-
-            case FmtIndPhsDet:
-              fileBase = tr("%1-%2-%3-%4.%5")
-                  .arg(filePattern)
-                  .arg(fileIndex,width,10,QChar('0'))
-                  .arg(phase,phswidth,10,QChar('0'))
-                  .arg(detNum,detWidth,10,QChar('0'))
-                  .arg(extent);
-              break;
-
-            case FmtDetPhsInd:
-              fileBase = tr("%1-%2-%3-%4.%5")
-                  .arg(filePattern)
-                  .arg(detNum,detWidth,10,QChar('0'))
-                  .arg(phase,phswidth,10,QChar('0'))
-                  .arg(fileIndex,width,10,QChar('0'))
-                  .arg(extent);
-              break;
-
-            case FmtPhsDetInd:
-              fileBase = tr("%1-%2-%3-%4.%5")
-                  .arg(filePattern)
-                  .arg(phase,phswidth,10,QChar('0'))
-                  .arg(detNum,detWidth,10,QChar('0'))
-                  .arg(fileIndex,width,10,QChar('0'))
-                  .arg(extent);
-              break;
-
-            case FmtPhsIndDet:
-              fileBase = tr("%1-%2-%3-%4.%5")
-                  .arg(filePattern)
-                  .arg(phase,phswidth,10,QChar('0'))
-                  .arg(fileIndex,width,10,QChar('0'))
-                  .arg(detNum,detWidth,10,QChar('0'))
-                  .arg(extent);
-              break;
-            }
-          }
-        } else {
-          if (nDet <= 1) {
-            fileBase = tr("%1-%2.%3")
-                .arg(filePattern)
-                .arg(fileIndex,width,10,QChar('0'))
-                .arg(extent);
-          } else {
-            switch (fileNameFormat) {
-            case FmtDetIndPhs:
-            case FmtDetPhsInd:
-            case FmtPhsDetInd:
-              fileBase = tr("%1-%2-%3.%4")
-                  .arg(filePattern)
-                  .arg(detNum,detWidth,10,QChar('0'))
-                  .arg(fileIndex,width,10,QChar('0'))
-                  .arg(extent);
-              break;
-
-            case FmtIndDetPhs:
-            case FmtIndPhsDet:
-            case FmtPhsIndDet:
-              fileBase = tr("%1-%2-%3.%4")
-                  .arg(filePattern)
-                  .arg(fileIndex,width,10,QChar('0'))
-                  .arg(detNum,detWidth,10,QChar('0'))
-                  .arg(extent);
-              break;
-            }
-          }
-        }
-        fileName = proc -> filePathInRawOutputDirectory(fileBase);
-      }
+    if (det && det->isEnabled()) {
+      nActive++;
     }
   }
+
+  return nActive;
+}
+
+QString QxrdAcqCommon::fmtString(int f)
+{
+  QString res = "";
+
+  switch (f) {
+  case IndexFormatItem:
+    res = "-%2";
+    break;
+
+  case DetectorFormatItem:
+    res = "-%3";
+    break;
+
+  case PhaseFormatItem:
+    res = "-%4";
+    break;
+
+  case NumberFormatItem:
+    res = "-%5";
+    break;
+  }
+
+  return res;
+}
+
+QString QxrdAcqCommon::getFileBaseAndName(QcepImageDataBaseWPtr imgp)
+{
+  QString res = "";
+
+  int idxWidth = get_FileIndexWidth();
+  int detWidth = get_DetectorNumberWidth();
+  int phsWidth = get_FilePhaseWidth();
+  int numWidth = get_FileNumberWidth();
+
+  int fmt1     = get_FileNameFormat1();
+  int fmt2     = get_FileNameFormat2();
+  int fmt3     = get_FileNameFormat3();
+  int fmt4     = get_FileNameFormat4();
+
+  QcepImageDataBasePtr img(imgp);
+
+  if (img) {
+    int idxNum = img->get_ImageSequenceNumber();
+    int detNum = img->get_DetectorNumber();
+    int phsNum = img->get_PhaseNumber();
+    int imgNum = img->get_ImageNumber();
+    int nPhase = img->get_NPhases();
+    int nImages = img->get_NImages();
+
+    QString basString = img->get_FileBase();
+
+    QString idxString = tr("_%1").arg(idxNum,
+                                      idxWidth,
+                                      10,
+                                      QChar('0'));
+
+    QString detString = tr("_%1").arg(detNum,
+                                      detWidth,
+                                      10,
+                                      QChar('0'));
+
+    QString phsString = tr("_%1").arg(phsNum,
+                                      phsWidth,
+                                      10,
+                                      QChar('0'));
+
+    QString numString = tr("_%1").arg(imgNum,
+                                      numWidth,
+                                      10,
+                                      QChar('0'));
+
+    QString typString = "";
+
+    QString extString = img->get_FileExtension();
+
+    if (img->isDark()) {
+      phsString = "";
+      numString = "";
+      typString = ".dark";
+    } else if (img->isRaw()) {
+      typString = ".raw";
+    }
+
+    if (activeDetectorCount() <= 1) {
+      detString = "";
+    }
+
+    if (nPhase <= 1) {
+      phsString = "";
+    }
+
+    if (nImages <= 1) {
+      numString = "";
+    }
+
+    QString fmt =
+        "%1%" + tr("%1").arg(fmt1+1)
+        +"%"  + tr("%1").arg(fmt2+1)
+        +"%"  + tr("%1").arg(fmt3+1)
+        +"%"  + tr("%1").arg(fmt4+1)
+        +"%6.%7";
+
+    res = tr(qPrintable(fmt))
+        .arg(basString)
+        .arg(idxString)
+        .arg(detString)
+        .arg(phsString)
+        .arg(numString)
+        .arg(typString)
+        .arg(extString);
+  }
+
+  return res;
 }
 
 QString QxrdAcqCommon::currentFileBase(int detNum, QString extension)
@@ -299,14 +277,7 @@ QString QxrdAcqCommon::currentFileBase(int detNum, QString extension)
     extent = "tif";
   }
 
-  getFileBaseAndName(
-        get_FilePattern(),
-        extent,
-        detNum,
-        get_CurrentFile(),
-        get_CurrentPhase(),
-        get_PhasesInGroup(),
-        fileBase, fileName);
+  fileBase = getFileBaseAndName(QcepImageDataBaseWPtr());
 
   return fileBase;
 }

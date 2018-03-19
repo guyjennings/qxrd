@@ -150,9 +150,9 @@ void QxrdAcquisitionExecution::doAcquireIdle()
 
     acq -> appendEvent((QxrdAcqCommon::AcquireComplete));
 
-    if (n>0) {
-      printMessage(tr("%1 images at idle").arg(n));
-    }
+//    if (n>0) {
+//      printMessage(tr("%1 images at idle").arg(n));
+//    }
   }
 }
 
@@ -330,19 +330,22 @@ void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPt
                 }
                 acq->indicateDroppedFrame(i);
               } else {
-                QString fb, fn;
                 if (qcepDebug(DEBUG_ACQUIRETIME)) {
                   printMessage(tr("Newly allocated image number %1").arg(nres->get_ImageNumber()));
                 }
 
                 nres -> set_SummedExposures(0);
 
-                acq->getFileBaseAndName(fileBase, det->get_Extension(),
-                                   det->get_DetectorNumber(),
-                                   fileIndex, p, nphases, fb, fn);
+                nres -> set_FileBase(fileBase);
+                nres -> set_DataType(QcepImageDataBase::Raw32Data);
+                nres -> set_FileExtension(det->get_Extension());
+                nres -> set_ImageSequenceNumber(fileIndex);
+                nres -> set_NImages(postTrigger+preTrigger);
 
-                nres -> set_FileBase(fb);
-                nres -> set_FileName(fn);
+//                QString name =
+//                    acq->getFileBaseAndName(nres);
+
+//                nres -> set_FileName(name);
               }
             }
 
@@ -446,15 +449,18 @@ saveCancel:
         for (int ii=nPre; ii >= 1; ii--) {
           for (int p=0; p<nphases; p++) {
             for (int d=0; d<nDet; d++) {
+              res[d][p][ii] -> set_FileExtension(dets[d]->get_Extension());
+              res[d][p][ii] -> set_DataType(QcepImageDataBase::Raw32Data);
               res[d][p][ii] -> set_ImageSequenceNumber(fileIndex);
               res[d][p][ii] -> set_PhaseNumber(p);
+              res[d][p][ii] -> set_NPhases(nphases);
               res[d][p][ii] -> set_DetectorNumber(d);
               res[d][p][ii] -> set_ImageNumber(-ii);
-              res[d][p][ii] -> set_NPhases(nphases);
+              res[d][p][ii] -> set_NImages(nPre+postTrigger);
+              res[d][p][ii] -> set_FileName(acq->getFileBaseAndName(res[d][p][ii]));
 
               acq -> appendEvent(QxrdAcqCommon::AcquireFrame, d, p);
 
-//              procs[d] -> processAcquiredImage(res[d][p][ii], ovf[d][p][ii], fileIndex, p, nphases, false);
               QxrdProcessor *proc = procs[d].data();
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
@@ -462,10 +468,12 @@ saveCancel:
                     QMetaObject::invokeMethod(proc, [=]() { proc->processAcquiredImage(res[d][p][ii], ovf[d][p][ii]); } ));
 #else
               INVOKE_CHECK(
-                    QMetaObject::invokeMethod(procs[d].data(), "processAcquiredImage",
+                    QMetaObject::invokeMethod(procs[d].data(),
+                                              "processAcquiredImage",
                                               Q_ARG(QcepUInt32ImageDataPtr, res[d][p][ii]),
                                               Q_ARG(QcepMaskDataPtr, ovf[d][p][ii])));
 #endif
+
               if (qcepDebug(DEBUG_ACQUIRETIME)) {
                 printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
                              .arg(__LINE__)
@@ -491,11 +499,15 @@ saveCancel:
           for (int d=0; d<nDet; d++) {
 //            procs[d] -> processAcquiredImage(res[d][p][0], ovf[d][p][0], fileIndex, p, nphases, true);
 
+            res[d][p][0] -> set_FileExtension(dets[d]->get_Extension());
+            res[d][p][0] -> set_DataType(QcepImageDataBase::Raw32Data);
             res[d][p][0] -> set_ImageSequenceNumber(fileIndex);
             res[d][p][0] -> set_PhaseNumber(p);
+            res[d][p][0] -> set_NPhases(nphases);
             res[d][p][0] -> set_DetectorNumber(d);
             res[d][p][0] -> set_ImageNumber(i);
-            res[d][p][0] -> set_NPhases(nphases);
+            res[d][p][0] -> set_NImages(nPre+postTrigger);
+            res[d][p][0] -> set_FileName(acq->getFileBaseAndName(res[d][p][0]));
 
             acq -> appendEvent(QxrdAcqCommon::AcquirePost, d, p);
 
@@ -506,7 +518,8 @@ saveCancel:
                   QMetaObject::invokeMethod(proc, [=]() { proc->processAcquiredImage(res[d][p][0], ovf[d][p][0]); } ));
 #else
             INVOKE_CHECK(
-                  QMetaObject::invokeMethod(proc, "processAcquiredImage",
+                  QMetaObject::invokeMethod(proc,
+                                            "processAcquiredImage",
                                             Q_ARG(QcepUInt32ImageDataPtr, res[d][p][0]),
                                             Q_ARG(QcepMaskDataPtr, ovf[d][p][0])));
 #endif
@@ -650,10 +663,15 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
     for (int d=0; d<nDet; d++) {
       QxrdDetectorSettingsPtr det = dets[d];
 
-      acq->getFileBaseAndName(fileBase, det->get_Extension(), det->get_DetectorNumber(), fileIndex, -1, 1, fb, fn);
+      res[d] -> set_FileBase(fileBase);
+      res[d] -> set_DataType(QcepImageDataBase::DarkData);
+      res[d] -> set_FileExtension(det->get_Extension());
+      res[d] -> set_ImageSequenceNumber(fileIndex);
 
-      res[d] -> set_FileBase(fb);
-      res[d] -> set_FileName(fn);
+//      QString name =
+//          acq->getFileBaseAndName(res[d]);
+
+//      res[d] -> set_FileName(fn);
     }
 
     for (int i=0; i<skipBefore; i++) {
@@ -738,11 +756,13 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
 
       acq -> appendEvent(QxrdAcqCommon::AcquirePost, d);
 
+      res[d] -> set_DataType(QcepImageDataBase::DarkData);
       res[d] -> set_ImageSequenceNumber(fileIndex);
       res[d] -> set_PhaseNumber(-1);
       res[d] -> set_DetectorNumber(d);
       res[d] -> set_ImageNumber(0);
       res[d] -> set_NPhases(-1);
+      res[d] -> set_FileName(acq->getFileBaseAndName(res[d]));
 
       QxrdProcessor *p = procs[d].data();
 #if QT_VERSION >= QT_VERSION_CHECK(5,10,0)

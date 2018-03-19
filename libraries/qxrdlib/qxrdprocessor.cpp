@@ -1650,7 +1650,9 @@ void QxrdProcessor::doSaveRawImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf
   QxrdFileSaverPtr  fsav(fileSaver());
 
   if (fsav && expt && img) {
-    QString fullPath = filePathInRawOutputDirectory(img->get_FileBase());
+    QString fullPath = filePathInRawOutputDirectory(img->get_FileName());
+
+    img -> set_FilePath(fullPath);
 
     fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
   }
@@ -1662,7 +1664,9 @@ void QxrdProcessor::doSaveDarkImage(QcepImageDataBasePtr img, QcepMaskDataPtr ov
   QxrdFileSaverPtr  fsav(fileSaver());
 
   if (fsav && expt && img) {
-    QString fullPath = filePathInDarkOutputDirectory(img->get_FileBase());
+    QString fullPath = filePathInDarkOutputDirectory(img->get_FileName());
+
+    img -> set_FilePath(fullPath);
 
     fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
   }
@@ -1674,7 +1678,9 @@ void QxrdProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img, QcepMaskData
   QxrdFileSaverPtr  fsav(fileSaver());
 
   if (fsav && expt && img) {
-    QString fullPath = filePathInSubtractedOutputDirectory(img->get_FileBase());
+    QString fullPath = filePathInSubtractedOutputDirectory(img->get_FileName());
+
+    img -> set_FilePath(fullPath);
 
     fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
   }
@@ -1690,7 +1696,7 @@ void QxrdProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image)
     QDateTime now = QDateTime::currentDateTime();
     double msec = QcepImageDataBase::secondsSinceEpoch();
 
-    image -> set_Name             (image -> get_FileBase());
+//    image -> set_Name             (image -> get_FileBase());
     image -> set_ExposureTime     (acq   -> get_ExposureTime());
     image -> set_DateTime         (now);
     image -> set_TimeStamp        (msec);
@@ -1740,8 +1746,6 @@ void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
 
     setAcquiredImageProperties(img);
 
-//    QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
-
     if (get_SaveRawImages()) {
       doSaveRawImage(img, overflow);
 
@@ -1781,9 +1785,6 @@ void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
         printMessage(tr("Gain correction took %1 msec").arg(gainTime));
       }
     }
-
-//    QcepDoubleImageDataPtr dimg =
-//        qSharedPointerDynamicCast<QcepDoubleImageData>(img);
 
     if (img) {
       emit dataAvailable(img);
