@@ -1,0 +1,8 @@
+#ifndef QXRDALLIEDVISIONPLUGINPTR_H
+#define QXRDALLIEDVISIONPLUGINPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdAlliedVisionPlugin)
+
+#endif // QXRDALLIEDVISIONPLUGINPTR_H

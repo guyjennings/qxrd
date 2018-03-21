@@ -262,8 +262,10 @@ SOURCES += qxrdlib.cpp \
     qxrdfilewatchersettings.cpp \
     qxrdpilatussettings.cpp \
     qxrdsimulatedsettings.cpp \
+    qxrdalliedvisionsettings.cpp \
     qxrddetectordialog.cpp \
     qxrdsimulateddialog.cpp \
+    qxrdalliedvisiondialog.cpp \
     qxrdperkinelmerdialog.cpp \
     qxrdpilatusdialog.cpp \
     qxrdareadetectordialog.cpp \
@@ -433,7 +435,10 @@ HEADERS += qxrdlib.h\
     qxrdpilatussettings-ptr.h \
     qxrdsimulatedsettings.h \
     qxrdsimulatedsettings-ptr.h \
+    qxrdalliedvisionsettings.h \
+    qxrdalliedvisionsettings-ptr.h \
     qxrddetectordialog.h \
+    qxrdalliedvisiondialog.h \
     qxrdsimulateddialog.h \
     qxrdperkinelmerdialog.h \
     qxrdpilatusdialog.h \
@@ -449,6 +454,7 @@ HEADERS += qxrdlib.h\
     qxrdareadetectorsettings-ptr.h \
     qxrdperkinelmersettings.h \
     qxrdperkinelmersettings-ptr.h \
+    qxrdalliedvisiondialog-ptr.h \
     qxrdsimulateddialog-ptr.h \
     qxrdimageplotwidgetsettings.h \
     qxrdimageplotwidgetsettings-ptr.h \
@@ -784,6 +790,7 @@ FORMS += qxrdwindow.ui \
     qxrdextraiowindow.ui \
     qxrdfilebrowserwidget.ui \
     qxrdplotwidget.ui \
+    qxrdalliedvisiondialog.ui \
     qxrdsimulateddialog.ui \
     qxrdperkinelmerdialog.ui \
     qxrdpilatusdialog.ui \

@@ -984,7 +984,9 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
     //    return /*true*/;
     //  }
 
-    long npixels = det -> get_NRows() * det -> get_NCols();
+    int nRows = det -> get_NRows();
+    int nCols = det -> get_NCols();
+    long npixels = nRows * nCols;
 
     unsigned short* frame = m_Buffer.data() + m_BufferIndex*npixels;
 

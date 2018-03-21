@@ -26,4 +26,9 @@ contains(DEFINES,HAVE_NIDAQ) {
   SUBDIRS += qxrdnidaqplugin
 }
 
+contains(DEFINES,HAVE_ALLIEDVISION) {
+  message("HAVE_ALLIEDVISION")
+  SUBDIRS += qxrdalliedvisionplugin
+}
+
 CONFIG += ordered

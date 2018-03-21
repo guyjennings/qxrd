@@ -1,0 +1,8 @@
+#ifndef QXRDALLIEDVISIONSETTINGSPTR_H
+#define QXRDALLIEDVISIONSETTINGSPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdAlliedVisionSettings)
+
+#endif // QXRDALLIEDVISIONSETTINGSPTR_H
