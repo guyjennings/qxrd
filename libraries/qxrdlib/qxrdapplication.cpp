@@ -548,6 +548,7 @@ QxrdDetectorPluginPtr QxrdApplication::detectorPlugin(int detType)
 
   case QxrdDetectorSettings::Dexela:
     res = m_DexelaPlugin;
+    break;
 
   case QxrdDetectorSettings::AlliedVision:
     res = m_AlliedVisionPlugin;
