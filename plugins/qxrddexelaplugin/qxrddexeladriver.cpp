@@ -236,7 +236,22 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
       quint16 *ptr = image->data();
 
       try {
-        m_DexelaDetector -> ReadBuffer(buf, (byte*) ptr);
+        int canUnscramble = m_DexelaDetector->QueryOnBoardUnscrambling();
+
+        printMessage(tr("QxrdDexelaDriver::onAcquiredFrame canUnscramble = %1").arg(canUnscramble));
+
+        DexImage img;
+
+        m_DexelaDetector -> ReadBuffer(buf, img/*(byte*) ptr*/);
+
+        img.UnscrambleImage();
+
+        qint16 *imgBuff = (qint16*) img.GetDataPointerToPlane(0);
+
+        if (ptr && imgBuff) {
+          memcpy(ptr, imgBuff, m_XDim*m_YDim*sizeof(quint16));
+        }
+
       } catch (DexelaException &e) {
         printMessage(tr("Dexela Exception caught: Description %1: function %2")
                      .arg(e.what()).arg(e.GetFunctionName()));
