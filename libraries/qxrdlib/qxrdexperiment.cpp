@@ -676,8 +676,10 @@ bool QxrdExperiment::backupFileIfNeeded(FILE *f, int maxLenMB, QString path, int
   bool needsReopen = false;
 
   if (maxLenMB && f) {
-    fpos_t pos;
-    fgetpos(f, &pos);
+    QFile file;
+    file.open(f, QIODevice::ReadWrite);
+
+    qint64 pos = file.size();
 
     if (pos > (((qint64)maxLenMB)*QcepAllocator::MegaBytes)) {
       fclose(f);
