@@ -121,4 +121,10 @@ win32 {
   }
 }
 
+macx {
+# look for vimba on Mac OS X
+} else:unix {
+# look for vimba on Linux
+}
+
 !isEmpty(QXRD_PLUGIN_PATH):DEFINES += QXRD_PLUGIN_PATH=\"$$QXRD_PLUGIN_PATH\"
