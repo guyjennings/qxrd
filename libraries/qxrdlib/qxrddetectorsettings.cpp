@@ -17,6 +17,7 @@
 #include "qxrdpilatussettings.h"
 #include "qxrdsimulatedsettings.h"
 #include "qxrddexelasettings.h"
+#include "qxrdalliedvisionsettings.h"
 #include "qxrdexperiment.h"
 #include "qxrdapplication.h"
 #include "qxrddetectorplugin.h"
@@ -226,6 +227,10 @@ QString QxrdDetectorSettings::detectorTypeName(int detectorType)
   case Dexela:
     res = "Dexela Detector";
     break;
+
+  case AlliedVision:
+    res = "Allied Vision Detector";
+    break;
   }
 
   return res;
@@ -242,6 +247,7 @@ QStringList QxrdDetectorSettings::detectorTypeNames()
   res.append(detectorTypeName(AreaDetector));
   res.append(detectorTypeName(FileWatcher));
   res.append(detectorTypeName(Dexela));
+  res.append(detectorTypeName(AlliedVision));
 
   return res;
 }
@@ -626,6 +632,11 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QcepObjectWPtr parent,
     det = QxrdDetectorSettingsPtr(
           new QxrdDexelaSettings("dexela"));
     break;
+
+  case AlliedVision:
+    det = QxrdDetectorSettingsPtr(
+          new QxrdAlliedVisionSettings("alliedVision"));
+    break;
   }
 
   if (det == NULL) {
@@ -671,6 +682,7 @@ void QxrdDetectorSettings::registerMetaTypes()
   qRegisterMetaType<QxrdAreaDetectorSettings*>("QxrdAreaDetectorSettings*");
   qRegisterMetaType<QxrdFileWatcherSettings*>("QxrdFileWatcherSettings*");
   qRegisterMetaType<QxrdDexelaSettings*>("QxrdDexelaSettings*");
+  qRegisterMetaType<QxrdAlliedVisionSettings*>("QxrdAlliedVisionSettings*");
   qRegisterMetaType<QxrdDetectorDriver*>("QxrdDetectorDriver*");
   qRegisterMetaType<QxrdDetectorDriverPtr>("QxrdDetectorDriverPtr");
   qRegisterMetaType<QxrdDetectorDriverWPtr>("QxrdDetectorDriverWPtr");
