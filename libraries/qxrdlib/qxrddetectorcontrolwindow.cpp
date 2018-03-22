@@ -18,6 +18,7 @@
 #include "qxrdroieditordialog.h"
 #include <QThread>
 #include "qxrdexperiment.h"
+#include "qcepdataobjectpropertiesmodel.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QString name) :
   inherited("detector"),
@@ -126,6 +127,11 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
 
     connect(dp.data(),       &QxrdProcessor::maskAvailable,
             m_DetectorImage, &QxrdImagePlotWidget::newMask);
+
+    connect(dp.data(),       &QxrdProcessor::dataAvailable,
+            this,            &QxrdDetectorControlWindow::newImage);
+
+    m_ImageInfoTable -> horizontalHeader() -> setSectionResizeMode(QHeaderView::ResizeToContents);
 
     //TODO: Initialise
 
@@ -855,4 +861,15 @@ void QxrdDetectorControlWindow::onChangeROICreateType(int /*newType*/)
 //    m_ROICreateButton->setIcon(QIcon(":/images/draw-donut.png"));
 //    break;
 //  }
+}
+
+void QxrdDetectorControlWindow::newImage(QcepImageDataBasePtr img)
+{
+  printMessage("QxrdDetectorControlWindow::newImage");
+
+  m_ImageProperties =
+      QcepDataObjectPropertiesModelPtr(
+        new QcepDataObjectPropertiesModel(img));
+
+  m_ImageInfoTable -> setModel(m_ImageProperties.data());
 }
