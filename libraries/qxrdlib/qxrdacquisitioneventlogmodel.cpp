@@ -1,5 +1,6 @@
 #include "qxrdacquisitioneventlogmodel.h"
 #include "qxrdacquisitioneventlog.h"
+#include <QThread>
 
 QxrdAcquisitionEventLogModel::QxrdAcquisitionEventLogModel(QxrdAcquisitionEventLogWPtr l)
   : m_AcquisitionEventLog(l)
@@ -92,6 +93,18 @@ QVariant QxrdAcquisitionEventLogModel::data(const QModelIndex &index, int role) 
       res = row;
       break;
 
+    case EventThreadColumn:
+      {
+        QThread* t = log->eventThread(row);
+
+        if (t) {
+          res = t->objectName();
+        } else {
+          res = "NULL";
+        }
+      }
+      break;
+
     case EventCodeColumn:
       res = log->eventCodeName(row);
       break;
@@ -136,6 +149,10 @@ QVariant QxrdAcquisitionEventLogModel::headerData(int section, Qt::Orientation o
       switch (section) {
       case EventNumberColumn:
         res = "#";
+        break;
+
+      case EventThreadColumn:
+        res = "Thread";
         break;
 
       case EventCodeColumn:

@@ -1,5 +1,6 @@
 #include "qxrdacquisitioneventlog.h"
 #include "qxrdacqcommon.h"
+#include <QThread>
 
 QxrdAcquisitionEventLog::QxrdAcquisitionEventLog(QString name)
   : inherited(name),
@@ -9,7 +10,8 @@ QxrdAcquisitionEventLog::QxrdAcquisitionEventLog(QString name)
     m_EventCodes(m_EventMaxCount),
     m_EventArg1s(m_EventMaxCount),
     m_EventArg2s(m_EventMaxCount),
-    m_EventTimes(m_EventMaxCount)
+    m_EventTimes(m_EventMaxCount),
+    m_EventThreads(m_EventMaxCount)
 {
 }
 
@@ -53,6 +55,7 @@ void QxrdAcquisitionEventLog::appendEvent(int eventCode,
       m_EventArg1s[n] = eventArg1;
       m_EventArg2s[n] = eventArg2;
       m_EventTimes[n] = eventTime;
+      m_EventThreads[n] = QThread::currentThread();
 
       emit eventLogChanged();
     }
@@ -162,4 +165,9 @@ QString QxrdAcquisitionEventLog::eventCodeName(int i)
   }
 
   return res;
+}
+
+QThread* QxrdAcquisitionEventLog::eventThread(int i)
+{
+  return m_EventThreads.value(i);
 }

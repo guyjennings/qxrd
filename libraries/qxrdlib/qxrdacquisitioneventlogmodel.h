@@ -31,6 +31,7 @@ public:
     EventNumberColumn,
     EventTimeColumn,
     EventDeltaColumn,
+    EventThreadColumn,
     EventCodeColumn,
     EventArg1Column,
     EventArg2Column,

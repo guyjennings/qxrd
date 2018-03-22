@@ -34,6 +34,7 @@ public:
   int  eventArg1(int i);
   int  eventArg2(int i);
   QDateTime eventTime(int i);
+  QThread*  eventThread(int i);
 
 signals:
   void eventLogChanged();
@@ -46,6 +47,7 @@ private:
   QVector<int>       m_EventArg1s;
   QVector<int>       m_EventArg2s;
   QVector<QDateTime> m_EventTimes;
+  QVector<QThread*>  m_EventThreads;
 };
 
 #endif // QXRDACQUISITIONEVENTLOG_H

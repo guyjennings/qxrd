@@ -36,6 +36,8 @@ QxrdAcquisitionEventLogWindow::~QxrdAcquisitionEventLogWindow()
 void QxrdAcquisitionEventLogWindow::doClearEventLog()
 {
   m_AcquisitionEventLogModel -> clearEventLog();
+
+  updateButtonTitles();
 }
 
 void QxrdAcquisitionEventLogWindow::doPauseResume()
@@ -45,6 +47,8 @@ void QxrdAcquisitionEventLogWindow::doPauseResume()
   } else {
     m_AcquisitionEventLogModel -> pauseEventLog();
   }
+
+  updateButtonTitles();
 }
 
 void QxrdAcquisitionEventLogWindow::updateButtonTitles()
