@@ -1911,6 +1911,10 @@ void QxrdProcessor::processDarkImage(QcepDoubleImageDataPtr image,
     }
 
     m_Dark = image;
+
+    if (m_Dark) {
+      emit darkAvailable(m_Dark);
+    }
   }
 }
 

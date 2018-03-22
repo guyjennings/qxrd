@@ -131,6 +131,9 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
     connect(dp.data(),       &QxrdProcessor::dataAvailable,
             this,            &QxrdDetectorControlWindow::newImage);
 
+    connect(dp.data(),       &QxrdProcessor::darkAvailable,
+            this,            &QxrdDetectorControlWindow::newImage);
+
     m_ImageInfoTable -> horizontalHeader() -> setSectionResizeMode(QHeaderView::ResizeToContents);
 
     //TODO: Initialise
