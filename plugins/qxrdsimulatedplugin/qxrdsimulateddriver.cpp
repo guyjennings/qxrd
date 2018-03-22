@@ -63,8 +63,6 @@ void QxrdSimulatedDriver::stopDetectorDriver()
   m_Timer.stop();
 }
 
-static int g_FrameCounter = 0;
-
 void QxrdSimulatedDriver::changeExposureTime(double expos)
 {
   THREAD_CHECK;
@@ -72,9 +70,12 @@ void QxrdSimulatedDriver::changeExposureTime(double expos)
   QxrdDetectorSettingsPtr det(m_Detector);
 
   if (det && det->isEnabled()) {
-    printMessage(tr("Exposure time changed to %1").arg(expos));
+    m_ExposureFactor = det->get_ExposureFactor();
+    m_ExposureTime   = expos/m_ExposureFactor;
 
-    m_Timer.start(expos*1000);
+    printMessage(tr("Exposure time changed to %1").arg(m_ExposureTime));
+
+    m_Timer.start(m_ExposureTime*1000);
   }
 }
 
@@ -82,7 +83,7 @@ void QxrdSimulatedDriver::beginAcquisition(double /*exposure*/)
 {
   THREAD_CHECK;
 
-  g_FrameCounter = 0;
+  m_FrameCounter = 0;
 }
 
 void QxrdSimulatedDriver::beginFrame()
@@ -108,17 +109,20 @@ void QxrdSimulatedDriver::onTimerTimeout()
   QxrdAcqCommonPtr        acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
-    QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
+    acq -> appendEvent(QxrdAcqCommon::DetectorFrameEvent,
+                       det->get_DetectorIndex());
 
-    if (sacq) {
-      sacq->acquiredFrameAvailable(g_FrameCounter);
-    }
+//    QxrdSynchronizedAcquisitionPtr sacq(acq->synchronizedAcquisition());
+
+//    if (sacq) {
+//      sacq->acquiredFrameAvailable(m_FrameCounter);
+//    }
 
     int nRows = det -> get_NRows();
     int nCols = det -> get_NCols();
 
     int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
-    int frame = g_FrameCounter % 8;
+    int frame = m_FrameCounter % 8;
 
     QcepUInt16ImageDataPtr image =
         QcepAllocator::newInt16Image(sharedFromThis(),
@@ -150,11 +154,11 @@ void QxrdSimulatedDriver::onTimerTimeout()
         painter.fillRect(0,0,labelWidth,labelHeight, Qt::black);
         painter.setPen(Qt::white);
         painter.setFont(QFont("Times", labelHeight, QFont::Bold, true));
-        painter.drawText(0, labelHeight, tr("%1").arg(g_FrameCounter));
+        painter.drawText(0, labelHeight, tr("%1").arg(m_FrameCounter));
 
         QRgb    *rgb = (QRgb*) imageLabel.bits();
         int nFrames = nRows / labelHeight;
-        int frameN = g_FrameCounter % nFrames;
+        int frameN = m_FrameCounter % nFrames;
         int plval = qGray(*rgb);
         int pRgb  = *rgb;
 
@@ -186,8 +190,36 @@ void QxrdSimulatedDriver::onTimerTimeout()
       printMessage("enqueue simulated detector acquired frame");
     }
 
-    det->enqueueAcquiredFrame(image);
+    image -> set_ExposureTime(m_ExposureTime);
+    image -> set_SummedExposures(1);
 
-    g_FrameCounter++;
+    if (m_ExposureFactor > 1) {
+      if (m_SubframeCounter == 0) {
+        m_AccumulatedData =
+            QcepAllocator::newInt32Image(sharedFromThis(),
+                                         tr("areadet-%1").arg(frame),
+                                         nCols, nRows,
+                                         QcepAllocator::AllocateFromReserve);
+      }
+
+      m_AccumulatedData -> set_ExposureTime(m_ExposureTime);
+      m_AccumulatedData -> accumulateImage(image);
+
+      m_SubframeCounter++;
+
+      if (m_SubframeCounter == m_ExposureFactor) {
+        det->enqueueAcquiredFrame(m_AccumulatedData);
+
+        m_AccumulatedData = QcepUInt32ImageDataPtr();
+        m_SubframeCounter = 0;
+      }
+    } else {
+      det->enqueueAcquiredFrame(image);
+    }
+
+    m_FrameCounter++;
+
+    acq -> appendEvent(QxrdAcqCommon::DetectorFramePostedEvent,
+                       det -> get_DetectorIndex());
   }
 }

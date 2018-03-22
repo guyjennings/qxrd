@@ -109,10 +109,11 @@ private:
   QxrdNIDAQPtr                    m_NIDAQPlugin;
   QxrdDetectorPluginPtr           m_SimulatedDetectorPlugin;
   QxrdDetectorPluginPtr           m_PerkinElmerDetectorPlugin;
-  QxrdDetectorPluginPtr           m_DexelaPlugin;
   QxrdDetectorPluginPtr           m_PilatusDetectorPlugin;
   QxrdDetectorPluginPtr           m_AreaDetectorPlugin;
   QxrdDetectorPluginPtr           m_FileWatcherPlugin;
+  QxrdDetectorPluginPtr           m_DexelaPlugin;
+  QxrdDetectorPluginPtr           m_AlliedVisionPlugin;
 
   QMutex                          m_SettingsMutex;
 

@@ -25,10 +25,10 @@
         <string>Detectors</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_8">
-        <item row="0" column="0" colspan="2">
+        <item row="2" column="0" colspan="2">
          <widget class="QTableView" name="m_DetectorsTable"/>
         </item>
-        <item row="1" column="0" colspan="2">
+        <item row="3" column="0" colspan="2">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QToolButton" name="m_RestartButton">
@@ -119,68 +119,88 @@
           </item>
          </layout>
         </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Primary Synchronization Counter:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="m_DetectorCounter"/>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="m_OutputsTab">
        <attribute name="title">
         <string>Outputs</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_2">
+       <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="1" column="0" colspan="2">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QToolButton" name="m_NewOutputButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="m_DeleteOutputButton">
-              <property name="text">
-               <string>...</string>
-              </property>
-              <property name="icon">
-               <iconset resource="qxrdresources.qrc">
-                <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Ouput Waveform Sampling Rate (Hz):</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QDoubleSpinBox" name="m_OutputSampleRate">
+          <property name="maximum">
+           <double>1000000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QTableView" name="m_OutputsTable"/>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QTableView" name="m_OutputsTable"/>
+          <item>
+           <widget class="QToolButton" name="m_NewOutputButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="qxrdresources.qrc">
+              <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="m_DeleteOutputButton">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="qxrdresources.qrc">
+              <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -207,76 +227,110 @@
        <attribute name="title">
         <string>Inputs</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0" colspan="4">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="1" column="0" colspan="2">
-           <widget class="QTableView" name="m_InputsTable">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Input Waveform Sampling Rate (Hz)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QDoubleSpinBox" name="m_InputSampleRate">
+          <property name="maximum">
+           <double>1000000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QTableView" name="m_InputsTable">
+          <property name="toolTip">
+           <string>Channel Information</string>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectItems</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QToolButton" name="m_TestReadout">
             <property name="toolTip">
-             <string>Channel Information</string>
+             <string>Initialize Readout</string>
             </property>
-            <property name="alternatingRowColors">
-             <bool>true</bool>
+            <property name="text">
+             <string>...</string>
             </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectItems</enum>
+            <property name="icon">
+             <iconset resource="qxrdresources.qrc">
+              <normaloff>:/images/view-refresh.png</normaloff>:/images/view-refresh.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QToolButton" name="m_NewInputButton">
+            <property name="toolTip">
+             <string>Add a new channel</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="qxrdresources.qrc">
+              <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="m_DeleteInputButton">
+            <property name="toolTip">
+             <string>Remove channel</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="qxrdresources.qrc">
+              <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
             </property>
            </widget>
           </item>
          </layout>
-        </item>
-        <item row="1" column="1">
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="3">
-         <widget class="QToolButton" name="m_DeleteInputButton">
-          <property name="toolTip">
-           <string>Remove channel</string>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-          <property name="icon">
-           <iconset resource="qxrdresources.qrc">
-            <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>32</width>
-            <height>32</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QToolButton" name="m_NewInputButton">
-          <property name="toolTip">
-           <string>Add a new channel</string>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-          <property name="icon">
-           <iconset resource="qxrdresources.qrc">
-            <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>32</width>
-            <height>32</height>
-           </size>
-          </property>
-         </widget>
         </item>
        </layout>
       </widget>

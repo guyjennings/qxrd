@@ -32,7 +32,6 @@ public:
     EndVColumn,
     SymmetryColumn,
     PhaseShiftColumn,
-    SampleRateColumn,
     ColumnCount
   };
 

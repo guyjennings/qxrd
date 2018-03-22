@@ -26,6 +26,7 @@
 #include "qxrdacquisitionscalermodel-ptr.h"
 #include "qxrdacquisitionexecutionthread-ptr.h"
 #include "qxrdacquisition-ptr.h"
+#include "qxrdacquisitioneventlog-ptr.h"
 
 class QXRD_EXPORT QxrdAcquisition : public QxrdAcqCommon
 {
@@ -43,6 +44,7 @@ public:
   static void registerMetaTypes();
 
 public slots:
+  void setupAcquisition();
   void acquire();
   void acquireOnce();
   void acquireDark();

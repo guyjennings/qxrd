@@ -1,0 +1,8 @@
+#ifndef QXRDALLIEDVISIONDIALOGPTR_H
+#define QXRDALLIEDVISIONDIALOGPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdAlliedVisionDialog)
+
+#endif // QXRDALLIEDVISIONDIALOGPTR_H

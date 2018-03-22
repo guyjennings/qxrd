@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1428</width>
+    <width>953</width>
     <height>962</height>
    </rect>
   </property>
@@ -43,8 +43,13 @@
        </widget>
        <widget class="QWidget" name="tab_7">
         <attribute name="title">
-         <string>Tab 2</string>
+         <string>Image Info</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_9">
+         <item row="0" column="0">
+          <widget class="QTableView" name="m_ImageInfoTable"/>
+         </item>
+        </layout>
        </widget>
       </widget>
       <widget class="QTabWidget" name="tabWidget">
@@ -1499,8 +1504,8 @@ Script Property: &quot;acquisition.userComment1&quot;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1428</width>
-     <height>22</height>
+     <width>953</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">

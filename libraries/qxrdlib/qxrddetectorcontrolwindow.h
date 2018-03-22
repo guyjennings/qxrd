@@ -12,6 +12,7 @@
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrddetectorcontrolwindowsettings-ptr.h"
 #include <QTimer>
+#include "qcepdataobjectpropertiesmodel-ptr.h"
 
 #define QXRD_DETECTOR_WINDOW_STATE_VERSION 0
 
@@ -48,6 +49,8 @@ public slots:
   void browseScanFile();
 
   void onChangeROICreateType(int newType);
+
+  void newImage(QcepImageDataBasePtr img);
 
 public:
   void displayNewData(QcepImageDataBasePtr img, QcepMaskDataPtr overflow);
@@ -100,6 +103,8 @@ private:
   QxrdDetectorSettingsWPtr   m_Detector;
   QxrdProcessorWPtr          m_Processor;
   QxrdROIModelWPtr           m_ROIModel;
+
+  QcepDataObjectPropertiesModelPtr m_ImageProperties;
 
   QMutex                     m_UpdateMutex;
   QTimer                     m_UpdateTimer;

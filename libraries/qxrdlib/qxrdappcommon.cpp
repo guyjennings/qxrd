@@ -485,7 +485,7 @@ void QxrdAppCommon::printMessage(QString msg, QDateTime dt) const
                                       Q_ARG(QString, msg),
                                       Q_ARG(QDateTime, dt)));
 
-      processEvents();
+//      processEvents();
     }
   }
 }
@@ -709,6 +709,7 @@ void QxrdAppCommon::openedExperiment(QxrdExperimentThreadWPtr expwthr)
 
       expt->openWindows();
       expt->setChanged(0);
+      expt->setupAcquisition();
     }
   }
 }

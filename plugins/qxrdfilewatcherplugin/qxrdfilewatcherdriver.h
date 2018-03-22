@@ -32,7 +32,7 @@ private slots:
 
 private:
   QxrdFileWatcherSettingsWPtr m_FileWatcher;
-  QTimer m_Timer;
+  QTimer                      m_Timer;
 };
 
 Q_DECLARE_METATYPE(QxrdFileWatcherDriver*)

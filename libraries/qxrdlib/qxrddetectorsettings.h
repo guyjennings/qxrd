@@ -69,6 +69,7 @@ public:
     AreaDetector,
     FileWatcher,
     Dexela,
+    AlliedVision,
     DetectorTypeCount
   } DetectorType;
 

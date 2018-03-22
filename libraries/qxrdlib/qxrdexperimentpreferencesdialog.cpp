@@ -66,6 +66,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     m_DetectorsModel =
         QxrdDetectorListModelPtr(new QxrdDetectorListModel());
 
+
     if (acq) {
       for (int i=0; i<acq->detectorCount(); i++) {
         QxrdDetectorSettingsPtr det = acq->detector(i);
@@ -140,19 +141,20 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     }
 
     if (acq) {
-      m_FileNameFormat -> clear();
-      m_FileNameFormat -> addItem("<file>-<det>-<phase>-<index>.tif");
-      m_FileNameFormat -> addItem("<file>-<det>-<index>-<phase>.tif");
-      m_FileNameFormat -> addItem("<file>-<phase>-<det>-<index>.tif");
-      m_FileNameFormat -> addItem("<file>-<phase>-<index>-<det>.tif");
-      m_FileNameFormat -> addItem("<file>-<index>-<phase>-<det>.tif");
-      m_FileNameFormat -> addItem("<file>-<index>-<det>-<phase>.tif");
+      initializeFormatMenu(m_FileNameFormat1);
+      initializeFormatMenu(m_FileNameFormat2);
+      initializeFormatMenu(m_FileNameFormat3);
+      initializeFormatMenu(m_FileNameFormat4);
 
       acq -> prop_FileIndexWidth()      -> copyTo(m_FileIndexWidth);
       acq -> prop_FilePhaseWidth()      -> copyTo(m_FilePhaseWidth);
       acq -> prop_FileOverflowWidth()   -> copyTo(m_FileOverflowWidth);
       acq -> prop_DetectorNumberWidth() -> copyTo(m_DetectorNumberWidth);
-      acq -> prop_FileNameFormat()      -> copyTo(m_FileNameFormat);
+      acq -> prop_FileNumberWidth()     -> copyTo(m_FileNumberWidth);
+      acq -> prop_FileNameFormat1()     -> copyTo(m_FileNameFormat1);
+      acq -> prop_FileNameFormat2()     -> copyTo(m_FileNameFormat2);
+      acq -> prop_FileNameFormat3()     -> copyTo(m_FileNameFormat3);
+      acq -> prop_FileNameFormat4()     -> copyTo(m_FileNameFormat4);
     }
   }
 }
@@ -162,6 +164,16 @@ QxrdExperimentPreferencesDialog::~QxrdExperimentPreferencesDialog()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperimentPreferencesDialog::~QxrdExperimentPreferencesDialog(%p)\n", this);
   }
+}
+
+void QxrdExperimentPreferencesDialog::initializeFormatMenu(QComboBox *cb)
+{
+  cb -> clear();
+  cb -> addItem("(empty)");
+  cb -> addItem("-<index>");
+  cb -> addItem("-<det>");
+  cb -> addItem("-<phase>");
+  cb -> addItem("-<num>");
 }
 
 QString QxrdExperimentPreferencesDialog::experimentDirectory()
@@ -259,6 +271,20 @@ void QxrdExperimentPreferencesDialog::changeEvent(QEvent *e)
 
 void QxrdExperimentPreferencesDialog::accept()
 {
+//  int mask = 0;
+
+//  mask |= 1 << m_FileNameFormat1 -> currentIndex();
+//  mask |= 1 << m_FileNameFormat2 -> currentIndex();
+//  mask |= 1 << m_FileNameFormat3 -> currentIndex();
+//  mask |= 1 << m_FileNameFormat4 -> currentIndex();
+
+//  if (mask != 15) {
+//    QMessageBox::warning(this,
+//                         "File Format",
+//                         "File Format invalid");
+//    return;
+//  }
+
   int runSpecServer = m_RunSpecServer -> isChecked();
   int runSimpleServer = m_RunSimpleServer -> isChecked();
   int specServerPort = m_SpecServerPort -> value();
@@ -324,7 +350,11 @@ void QxrdExperimentPreferencesDialog::accept()
       acq -> prop_FilePhaseWidth()      -> copyFrom(m_FilePhaseWidth);
       acq -> prop_FileOverflowWidth()   -> copyFrom(m_FileOverflowWidth);
       acq -> prop_DetectorNumberWidth() -> copyFrom(m_DetectorNumberWidth);
-      acq -> prop_FileNameFormat()      -> copyFrom(m_FileNameFormat);
+      acq -> prop_FileNumberWidth()     -> copyFrom(m_FileNumberWidth);
+      acq -> prop_FileNameFormat1()     -> copyFrom(m_FileNameFormat1);
+      acq -> prop_FileNameFormat2()     -> copyFrom(m_FileNameFormat2);
+      acq -> prop_FileNameFormat3()     -> copyFrom(m_FileNameFormat3);
+      acq -> prop_FileNameFormat4()     -> copyFrom(m_FileNameFormat4);
 
       int nDets = m_DetectorsModel->rowCount(QModelIndex());
 

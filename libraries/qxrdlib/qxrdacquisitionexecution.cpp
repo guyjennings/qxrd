@@ -67,6 +67,10 @@ void QxrdAcquisitionExecution::doAcquire()
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
+    acq -> clearEventLog();
+    acq -> resumeEventLog();
+    acq -> appendEvent(QxrdAcqCommon::StartAcquireEvent);
+
     QxrdAcquisitionParameterPackPtr parmsp = acq -> acquisitionParameterPack();
 
     if (parmsp) {
@@ -74,6 +78,9 @@ void QxrdAcquisitionExecution::doAcquire()
       executeAcquisition(parmsp);
       startIdling();
     }
+
+    acq -> appendEvent((QxrdAcqCommon::AcquireComplete));
+    acq -> pauseEventLog();
   }
 }
 
@@ -82,6 +89,10 @@ void QxrdAcquisitionExecution::doAcquireOnce()
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
+    acq -> clearEventLog();
+    acq -> resumeEventLog();
+    acq -> appendEvent(QxrdAcqCommon::StartAcquireOnceEvent);
+
     QxrdAcquisitionParameterPackPtr parmsp = acq -> acquisitionParameterPack();
 
     if (parmsp) {
@@ -91,6 +102,9 @@ void QxrdAcquisitionExecution::doAcquireOnce()
       executeAcquisition(parmsp);
       startIdling();
     }
+
+    acq -> appendEvent((QxrdAcqCommon::AcquireComplete));
+    acq -> pauseEventLog();
   }
 }
 
@@ -99,6 +113,10 @@ void QxrdAcquisitionExecution::doAcquireDark()
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
+    acq -> clearEventLog();
+    acq -> resumeEventLog();
+    acq -> appendEvent(QxrdAcqCommon::StartAcquireDarkEvent);
+
     QxrdDarkAcquisitionParameterPackPtr parmsp = acq -> darkAcquisitionParameterPack();
 
     if (parmsp) {
@@ -106,6 +124,9 @@ void QxrdAcquisitionExecution::doAcquireDark()
       executeDarkAcquisition(parmsp);
       startIdling();
     }
+
+    acq -> appendEvent((QxrdAcqCommon::AcquireComplete));
+    acq -> pauseEventLog();
   }
 }
 
@@ -114,6 +135,8 @@ void QxrdAcquisitionExecution::doAcquireIdle()
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
+    acq -> appendEvent(QxrdAcqCommon::StartAcquireIdleEvent);
+
     int n = 0;
 
     for (int i=0; i<acq->detectorCount(); i++) {
@@ -125,9 +148,11 @@ void QxrdAcquisitionExecution::doAcquireIdle()
       }
     }
 
-    if (n>0) {
-      printMessage(tr("%1 images at idle").arg(n));
-    }
+    acq -> appendEvent((QxrdAcqCommon::AcquireComplete));
+
+//    if (n>0) {
+//      printMessage(tr("%1 images at idle").arg(n));
+//    }
   }
 }
 
@@ -243,6 +268,8 @@ void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPt
 
       for (int d=0; d<nDet; d++) {
         dets[d]->acquireFrame();
+
+        acq->appendEvent(QxrdAcqCommon::AcquireSkip, d, i);
       }
     }
 
@@ -260,6 +287,8 @@ void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPt
 
           for (int d=0; d<nDet; d++) {
             dets[d]->acquireFrame();
+
+            acq->appendEvent(QxrdAcqCommon::AcquireSkip, d, k);
           }
 
           if (qcepDebug(DEBUG_ACQUIRETIME)) {
@@ -301,19 +330,23 @@ void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPt
                 }
                 acq->indicateDroppedFrame(i);
               } else {
-                QString fb, fn;
                 if (qcepDebug(DEBUG_ACQUIRETIME)) {
                   printMessage(tr("Newly allocated image number %1").arg(nres->get_ImageNumber()));
                 }
 
                 nres -> set_SummedExposures(0);
 
-                acq->getFileBaseAndName(fileBase, det->get_Extension(),
-                                   det->get_DetectorNumber(),
-                                   fileIndex, p, nphases, fb, fn);
+                nres -> set_FileBase(fileBase);
+                nres -> set_DataType(QcepImageDataBase::Raw32Data);
+                nres -> set_FileTypeName(".raw");
+                nres -> set_FileExtension(det->get_Extension());
+                nres -> set_ImageSequenceNumber(fileIndex);
+                nres -> set_NImages(postTrigger+preTrigger);
 
-                nres -> set_FileBase(fb);
-                nres -> set_FileName(fn);
+//                QString name =
+//                    acq->getFileBaseAndName(nres);
+
+//                nres -> set_FileName(name);
               }
             }
 
@@ -346,6 +379,8 @@ void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPt
             }
 
             QcepImageDataBasePtr   img = det -> acquireFrame();
+
+            acq -> appendEvent(QxrdAcqCommon::AcquireFrame, d, p);
 
             if (img && res[d][p][0] && ovf[d][p][0]) {
               QcepUInt16ImageDataPtr i16 = qSharedPointerDynamicCast<QcepUInt16ImageData>(img);
@@ -415,16 +450,31 @@ saveCancel:
         for (int ii=nPre; ii >= 1; ii--) {
           for (int p=0; p<nphases; p++) {
             for (int d=0; d<nDet; d++) {
+              res[d][p][ii] -> set_FileTypeName(".raw");
+              res[d][p][ii] -> set_FileExtension(dets[d]->get_Extension());
+              res[d][p][ii] -> set_DataType(QcepImageDataBase::Raw32Data);
+              res[d][p][ii] -> set_ImageSequenceNumber(fileIndex);
+              res[d][p][ii] -> set_PhaseNumber(p);
+              res[d][p][ii] -> set_NPhases(nphases);
+              res[d][p][ii] -> set_DetectorNumber(d);
+              res[d][p][ii] -> set_ImageNumber(-ii);
+              res[d][p][ii] -> set_NImages(nPre+postTrigger);
+              res[d][p][ii] -> set_FileName(acq->getFileName(res[d][p][ii]));
 
-//              procs[d] -> processAcquiredImage(res[d][p][ii], ovf[d][p][ii], fileIndex, p, nphases, false);
+              acq -> appendEvent(QxrdAcqCommon::AcquireFrame, d, p);
+
+              QxrdProcessor *proc = procs[d].data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
               INVOKE_CHECK(
-                    QMetaObject::invokeMethod(procs[d].data(), "processAcquiredImage",
+                    QMetaObject::invokeMethod(proc, [=]() { proc->processAcquiredImage(res[d][p][ii], ovf[d][p][ii]); } ));
+#else
+              INVOKE_CHECK(
+                    QMetaObject::invokeMethod(procs[d].data(),
+                                              "processAcquiredImage",
                                               Q_ARG(QcepUInt32ImageDataPtr, res[d][p][ii]),
-                                              Q_ARG(QcepMaskDataPtr, ovf[d][p][ii]),
-                                              Q_ARG(int, fileIndex),
-                                              Q_ARG(int, p),
-                                              Q_ARG(int, nphases),
-                                              Q_ARG(bool, false)));
+                                              Q_ARG(QcepMaskDataPtr, ovf[d][p][ii])));
+#endif
 
               if (qcepDebug(DEBUG_ACQUIRETIME)) {
                 printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
@@ -451,14 +501,31 @@ saveCancel:
           for (int d=0; d<nDet; d++) {
 //            procs[d] -> processAcquiredImage(res[d][p][0], ovf[d][p][0], fileIndex, p, nphases, true);
 
+            res[d][p][0] -> set_FileTypeName(".raw");
+            res[d][p][0] -> set_FileExtension(dets[d]->get_Extension());
+            res[d][p][0] -> set_DataType(QcepImageDataBase::Raw32Data);
+            res[d][p][0] -> set_ImageSequenceNumber(fileIndex);
+            res[d][p][0] -> set_PhaseNumber(p);
+            res[d][p][0] -> set_NPhases(nphases);
+            res[d][p][0] -> set_DetectorNumber(d);
+            res[d][p][0] -> set_ImageNumber(i);
+            res[d][p][0] -> set_NImages(nPre+postTrigger);
+            res[d][p][0] -> set_FileName(acq->getFileName(res[d][p][0]));
+
+            acq -> appendEvent(QxrdAcqCommon::AcquirePost, d, p);
+
+            QxrdProcessor *proc = procs[d].data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
             INVOKE_CHECK(
-                  QMetaObject::invokeMethod(procs[d].data(), "processAcquiredImage",
+                  QMetaObject::invokeMethod(proc, [=]() { proc->processAcquiredImage(res[d][p][0], ovf[d][p][0]); } ));
+#else
+            INVOKE_CHECK(
+                  QMetaObject::invokeMethod(proc,
+                                            "processAcquiredImage",
                                             Q_ARG(QcepUInt32ImageDataPtr, res[d][p][0]),
-                                            Q_ARG(QcepMaskDataPtr, ovf[d][p][0]),
-                                            Q_ARG(int, fileIndex),
-                                            Q_ARG(int, p),
-                                            Q_ARG(int, nphases),
-                                            Q_ARG(bool, true)));
+                                            Q_ARG(QcepMaskDataPtr, ovf[d][p][0])));
+#endif
 
             if (qcepDebug(DEBUG_ACQUIRETIME)) {
               printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
@@ -514,11 +581,13 @@ cancel:
     }
 
     acq->set_ScalerValues(scalers);
+
+    acq->unlock();
+
+    acq->appendEvent(QxrdAcqCommon::AcquireComplete);
+
+    emit acq->acquireComplete();
   }
-
-  acq->unlock();
-
-  emit acq->acquireComplete();
 }
 
 void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParameterPackPtr parmsp)
@@ -597,10 +666,16 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
     for (int d=0; d<nDet; d++) {
       QxrdDetectorSettingsPtr det = dets[d];
 
-      acq->getFileBaseAndName(fileBase, det->get_Extension(), det->get_DetectorNumber(), fileIndex, -1, 1, fb, fn);
+      res[d] -> set_FileBase(fileBase);
+      res[d] -> set_DataType(QcepImageDataBase::DarkData);
+      res[d] -> set_FileTypeName(".dark");
+      res[d] -> set_FileExtension(det->get_Extension());
+      res[d] -> set_ImageSequenceNumber(fileIndex);
 
-      res[d] -> set_FileBase(fb);
-      res[d] -> set_FileName(fn);
+//      QString name =
+//          acq->getFileBaseAndName(res[d]);
+
+//      res[d] -> set_FileName(fn);
     }
 
     for (int i=0; i<skipBefore; i++) {
@@ -618,6 +693,8 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
 
       for (int d=0; d<nDet; d++) {
         dets[i] -> acquireFrame();
+
+        acq -> appendEvent(QxrdAcqCommon::AcquireSkip, d, i);
       }
     }
 
@@ -634,6 +711,8 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
         emit acq->acquiredFrame(res[d]->get_FileBase(), 0, 1, i, nsummed, 0, 1);
 
         QcepImageDataBasePtr   img = dets[d] -> acquireFrame();
+
+        acq -> appendEvent(QxrdAcqCommon::AcquireDark, d);
 
         if (img) {
           QcepUInt16ImageDataPtr i16 = qSharedPointerDynamicCast<QcepUInt16ImageData>(img);
@@ -679,11 +758,26 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
     for (int d=0; d<nDet; d++) {
 //      procs[d]->processDarkImage(res[d], overflow[d], fileIndex);
 
+      acq -> appendEvent(QxrdAcqCommon::AcquirePost, d);
+
+      res[d] -> set_DataType(QcepImageDataBase::DarkData);
+      res[d] -> set_ImageSequenceNumber(fileIndex);
+      res[d] -> set_PhaseNumber(-1);
+      res[d] -> set_DetectorNumber(d);
+      res[d] -> set_ImageNumber(0);
+      res[d] -> set_NPhases(-1);
+      res[d] -> set_FileName(acq->getFileName(res[d]));
+
+      QxrdProcessor *p = procs[d].data();
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
       INVOKE_CHECK(
-            QMetaObject::invokeMethod(procs[d].data(), "processDarkImage",
+            QMetaObject::invokeMethod(p, [=]() { p->processDarkImage(res[d], overflow[d]);} ));
+#else
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(p, "processDarkImage",
                                       Q_ARG(QcepDoubleImageDataPtr, res[d]),
-                                      Q_ARG(QcepMaskDataPtr, overflow[d]),
-                                      Q_ARG(int, fileIndex)));
+                                      Q_ARG(QcepMaskDataPtr, overflow[d])));
+#endif
     }
 
     statusMessage(tr("Acquisition complete"));
@@ -693,11 +787,13 @@ cancel:
     if (acq->synchronizedAcquisition()) {
       acq->synchronizedAcquisition()->finishedAcquisition();
     }
+
+    acq->unlock();
+
+    acq->appendEvent(QxrdAcqCommon::AcquireComplete);
+
+    emit acq->acquireComplete();
   }
-
-  acq->unlock();
-
-  emit acq->acquireComplete();
 }
 
 void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr image,
@@ -734,6 +830,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
 
       accum->set_Normalization(image->get_Normalization());
       accum->set_ExtraInputs(image->get_ExtraInputs());
+      accum->set_ExposureTime(image->get_ExposureTime());
       accum->set_SummedExposures(srcsum);
       accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
     } else {
@@ -795,6 +892,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
 
       accum->set_Normalization(image->get_Normalization());
       accum->set_ExtraInputs(image->get_ExtraInputs());
+      accum->set_ExposureTime(image->get_ExposureTime());
       accum->set_SummedExposures(srcsum);
       accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
     } else {
@@ -856,6 +954,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
 
       accum->set_Normalization(image->get_Normalization());
       accum->set_ExtraInputs(image->get_ExtraInputs());
+      accum->set_ExposureTime(image->get_ExposureTime());
       accum->set_SummedExposures(srcsum);
       accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
     } else {
@@ -917,6 +1016,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
 
       accum->set_Normalization(image->get_Normalization());
       accum->set_ExtraInputs(image->get_ExtraInputs());
+      accum->set_ExposureTime(image->get_ExposureTime());
       accum->set_SummedExposures(srcsum);
       accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
     } else {

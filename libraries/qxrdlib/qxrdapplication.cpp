@@ -64,6 +64,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_SimulatedDetectorPlugin(NULL),
   m_PerkinElmerDetectorPlugin(NULL),
   m_DexelaPlugin(NULL),
+  m_AlliedVisionPlugin(NULL),
   m_PilatusDetectorPlugin(NULL),
   m_AreaDetectorPlugin(NULL),
   m_FileWatcherPlugin(NULL),
@@ -374,6 +375,18 @@ void QxrdApplication::loadPlugins()
                 m_AreaDetectorPlugin -> initialize(sharedFromThis());
               }
             }
+          } else if (className == "QxrdAlliedVisionPlugin") {
+            if (m_AlliedVisionPlugin) {
+              splashMessage("Allied Vision Detector Plugin already loaded");
+            } else {
+              m_AlliedVisionPlugin =
+                  QxrdDetectorPluginPtr(detPlugin);
+              if (m_AlliedVisionPlugin) {
+                splashMessage(tr("Allied Vision Plugin loaded from %1").arg(fileName));
+
+                m_AlliedVisionPlugin -> initialize(sharedFromThis());
+              }
+            }
           } else if (className == "QxrdDexelaPlugin") {
             if (m_DexelaPlugin) {
               splashMessage("Dexela Detector Plugin already loaded");
@@ -535,6 +548,10 @@ QxrdDetectorPluginPtr QxrdApplication::detectorPlugin(int detType)
 
   case QxrdDetectorSettings::Dexela:
     res = m_DexelaPlugin;
+    break;
+
+  case QxrdDetectorSettings::AlliedVision:
+    res = m_AlliedVisionPlugin;
     break;
   }
 

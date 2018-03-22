@@ -34,6 +34,8 @@ public:
   void writeSettings(QSettings *settings);
 
 public slots:
+  QString primaryCounterName();
+
   int detectorCount();
   QxrdSynchronizedDetectorChannelPtr detector(int n);
   void newDetector(int before);
@@ -84,10 +86,11 @@ public slots:
 //  void triggerOnce();
 
 public:
+  void setupAcquisition();
   void prepareForAcquisition(QxrdAcquisitionParameterPackWPtr parms);
   void prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPackWPtr parms);
   void finishedAcquisition();
-  void acquiredFrameAvailable(int currentPhase);
+//  void acquiredFrameAvailable(int currentPhase);
   void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
   QxrdNIDAQWPtr nidaqPlugin() const;
   QxrdAcquisitionParameterPackWPtr parms();
@@ -111,6 +114,15 @@ private:
 
   Q_PROPERTY(int inputCount READ get_InputCount WRITE set_OutputCount STORED false)
   QCEP_INTEGER_PROPERTY(InputCount)
+
+  Q_PROPERTY(int primaryCounter READ get_PrimaryCounter WRITE set_PrimaryCounter)
+  QCEP_INTEGER_PROPERTY(PrimaryCounter)
+
+  Q_PROPERTY(double outputSampleRate READ get_OutputSampleRate WRITE set_OutputSampleRate)
+  QCEP_DOUBLE_PROPERTY(OutputSampleRate)
+
+  Q_PROPERTY(double inputSampleRate READ get_InputSampleRate WRITE set_InputSampleRate)
+  QCEP_DOUBLE_PROPERTY(InputSampleRate)
 };
 
 Q_DECLARE_METATYPE(QxrdSynchronizedAcquisition*)

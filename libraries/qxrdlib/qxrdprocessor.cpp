@@ -1595,6 +1595,11 @@ QcepImageDataBasePtr QxrdProcessor::doDarkSubtraction(QcepImageDataBasePtr img)
           }
         }
       }
+
+      if (result) {
+        result -> set_DataType(QcepImageDataBase::SubtractedData);
+        result -> set_FileTypeName("");
+      }
     }
 
     res = result;
@@ -1650,9 +1655,25 @@ void QxrdProcessor::doSaveRawImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf
   QxrdFileSaverPtr  fsav(fileSaver());
 
   if (fsav && expt && img) {
-    QString fullPath = filePathInRawOutputDirectory(img->get_FileBase());
+    QString dirPath = rawOutputDirectory();
 
-    fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
+    QxrdFileSaver *f = fsav.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(
+            f, [=]() { f -> saveImageData(dirPath, img, ovf, QxrdFileSaver::NoOverwrite); } ));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(
+            f, "saveImageData",
+            Qt::QueuedConnection,
+            Q_ARG(QString, dirPath),
+            Q_ARG(QcepImageDataBasePtr, img),
+            Q_ARG(QcepMaskDataPtr, ovf),
+            Q_ARG(int, QxrdFileSaver::NoOverwrite)));
+#endif
+//    fsav->saveImageData(dirPath, img, ovf, QxrdFileSaver::NoOverwrite);
   }
 }
 
@@ -1662,9 +1683,24 @@ void QxrdProcessor::doSaveDarkImage(QcepImageDataBasePtr img, QcepMaskDataPtr ov
   QxrdFileSaverPtr  fsav(fileSaver());
 
   if (fsav && expt && img) {
-    QString fullPath = filePathInDarkOutputDirectory(img->get_FileBase());
+    QString dirPath = darkOutputDirectory();
 
-    fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
+    QxrdFileSaver *f = fsav.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(
+            f, [=]() { f -> saveImageData(dirPath, img, ovf, QxrdFileSaver::NoOverwrite); } ));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(
+            f, "saveImageData",
+            Q_ARG(QString, dirPath),
+            Q_ARG(QcepImageDataBasePtr, img),
+            Q_ARG(QcepMaskDataPtr, ovf),
+            Q_ARG(int, QxrdFileSaver::NoOverwrite)));
+#endif
+//    fsav->saveImageData(dirPath, img, ovf, QxrdFileSaver::NoOverwrite);
   }
 }
 
@@ -1674,28 +1710,39 @@ void QxrdProcessor::doSaveSubtractedImage(QcepImageDataBasePtr img, QcepMaskData
   QxrdFileSaverPtr  fsav(fileSaver());
 
   if (fsav && expt && img) {
-    QString fullPath = filePathInSubtractedOutputDirectory(img->get_FileBase());
+    QString dirPath = subtractedOutputDirectory();
 
-    fsav->saveImageData(fullPath, img, ovf, QxrdFileSaver::NoOverwrite);
+    QxrdFileSaver *f = fsav.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(
+            f, [=]() { f -> saveImageData(dirPath, img, ovf, QxrdFileSaver::NoOverwrite); } ));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(
+            f, "saveImageData",
+            Q_ARG(QString, dirPath),
+            Q_ARG(QcepImageDataBasePtr, img),
+            Q_ARG(QcepMaskDataPtr, ovf),
+            Q_ARG(int, QxrdFileSaver::NoOverwrite)));
+#endif
+//    fsav->saveImageData(dirPath, img, ovf, QxrdFileSaver::NoOverwrite);
   }
 }
 
-void QxrdProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image,
-                                               int fileIndex,
-                                               int phase,
-                                               int nPhases,
-                                               bool trig)
+void QxrdProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image)
 {
   QxrdAcqCommonPtr acq(m_Acquisition);
 
-  QxrdDetectorSettingsPtr det(detector());
-
   if (image && acq) {
+    QxrdDetectorSettingsPtr det(acq->detector(image->get_DetectorNumber()));
+
     QDateTime now = QDateTime::currentDateTime();
     double msec = QcepImageDataBase::secondsSinceEpoch();
 
-    image -> set_Name             (image -> get_FileBase());
-    image -> set_ExposureTime     (acq   -> get_ExposureTime());
+//    image -> set_Name             (image -> get_FileBase());
+//    image -> set_ExposureTime     (acq   -> get_ExposureTime());
     image -> set_DateTime         (now);
     image -> set_TimeStamp        (msec);
 
@@ -1714,23 +1761,15 @@ void QxrdProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image,
     image -> set_UserComment3     (acq   -> get_UserComment3());
     image -> set_UserComment4     (acq   -> get_UserComment4());
     image -> set_ObjectSaved      (false);
-    image -> set_Triggered        (trig);
+    image -> set_Triggered        (image -> get_ImageNumber() >= 0);
     image -> set_Normalization    (acq   -> get_Normalization());
-
-    image -> set_ImageNumber      (fileIndex);
-    image -> set_PhaseNumber      (phase);
-    image -> set_NPhases          (nPhases);
 
     acq -> copyDynamicProperties(image.data());
   }
 }
 
 void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
-                                         QcepMaskDataPtr overflow,
-                                         int fileIndex,
-                                         int phase,
-                                         int nPhases,
-                                         bool trig)
+                                         QcepMaskDataPtr        overflow)
 {
   THREAD_CHECK;
 
@@ -1750,9 +1789,7 @@ void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
     QTime tic;
     tic.start();
 
-    setAcquiredImageProperties(img, fileIndex, phase, nPhases, trig);
-
-//    QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
+    setAcquiredImageProperties(img);
 
     if (get_SaveRawImages()) {
       doSaveRawImage(img, overflow);
@@ -1793,9 +1830,6 @@ void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
         printMessage(tr("Gain correction took %1 msec").arg(gainTime));
       }
     }
-
-//    QcepDoubleImageDataPtr dimg =
-//        qSharedPointerDynamicCast<QcepDoubleImageData>(img);
 
     if (img) {
       emit dataAvailable(img);
@@ -1858,8 +1892,7 @@ void QxrdProcessor::processAcquiredImage(QcepUInt32ImageDataPtr image,
 }
 
 void QxrdProcessor::processDarkImage(QcepDoubleImageDataPtr image,
-                                             QcepMaskDataPtr overflow,
-                                             int fileIndex)
+                                             QcepMaskDataPtr overflow)
 {
   THREAD_CHECK;
 
@@ -1869,7 +1902,7 @@ void QxrdProcessor::processDarkImage(QcepDoubleImageDataPtr image,
                    .arg(image->get_FileName()));
     }
 
-    setAcquiredImageProperties(image, fileIndex, -1, 0, true);
+    setAcquiredImageProperties(image);
 
     if (get_SaveDarkImages()) {
       doSaveDarkImage(image, overflow);
@@ -1878,6 +1911,10 @@ void QxrdProcessor::processDarkImage(QcepDoubleImageDataPtr image,
     }
 
     m_Dark = image;
+
+    if (m_Dark) {
+      emit darkAvailable(m_Dark);
+    }
   }
 }
 
@@ -1904,7 +1941,7 @@ void QxrdProcessor::processIdleImage(QcepImageDataBasePtr image)
         QTime tic;
         tic.start();
 
-        setAcquiredImageProperties(img, -1, -1, 0, true);
+        setAcquiredImageProperties(img);
 
 //        QxrdDetectorControlWindowPtr ctrl(m_ControlWindow);
 
@@ -2144,18 +2181,44 @@ QcepDoubleImageDataPtr QxrdProcessor::processAcquiredImage(
 
 void QxrdProcessor::saveNamedImageData(QString name, QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f(fileSaver());
+  QxrdFileSaverPtr fs(fileSaver());
 
-  if (f) {
-    f -> saveImageData(name, image, overflow, canOverwrite);
+  if (fs) {
+    QxrdFileSaver *f = fs.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(f, [=]() { f->saveImageData(name, image, overflow, canOverwrite); } ));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(f, "saveImageData",
+                                    Q_ARG(QString, name),
+                                    Q_ARG(QcepImageDataBasePtr, image),
+                                    Q_ARG(QcepMaskDataPtr, overflow),
+                                    Q_ARG(int, canOverwrite)));
+#endif
+//    f -> saveImageData(name, image, overflow, canOverwrite);
   }
 }
 void QxrdProcessor::saveNamedDoubleImageData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr f(fileSaver());
+  QxrdFileSaverPtr fs(fileSaver());
 
-  if (f) {
-    f -> saveDoubleData(name, image, overflow, canOverwrite);
+  if (fs) {
+    QxrdFileSaver *f = fs.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+    INVOKE_CHECK(
+        QMetaObject::invokeMethod(f, [=]() { f->saveDoubleData(name, image, overflow, canOverwrite); } ));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(f, "saveDoubleData",
+                                    Q_ARG(QString, name),
+                                    Q_ARG(QcepDoubleImageDataPtr, image),
+                                    Q_ARG(QcepMaskDataPtr, overflow),
+                                    Q_ARG(int, canOverwrite)));
+#endif
+//    f -> saveDoubleData(name, image, overflow, canOverwrite);
   }
 }
 

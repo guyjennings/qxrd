@@ -58,10 +58,14 @@ dox.commands = ( cat $${PWD}/Doxyfile ; \
                  echo "INPUT+=\"$${PWD}\"/source/submodules/qceplib/qceplib-base/" ; \
                  echo "INPUT+=\"$${PWD}\"/libraries/qxrdlib/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdalliedvisionplugin/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/qxrdareadetectorplugin/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/qxrddexelaplugin/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdfilewatcherplugin/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdnidaqplugin/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/qxrdperkinelmerplugin/" ; \
                  echo "INPUT+=\"$${PWD}\"/plugins/qxrdpilatusplugin/" ; \
-                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdnidaqplugin/" ; \
+                 echo "INPUT+=\"$${PWD}\"/plugins/qxrdsimulatedplugin/" ; \
                  echo "IMAGE_PATH+= \"$${PWD}\"/images \"$${PWD}\"/source/images" ; \
                  echo "IMAGE_PATH+= \"$${PWD}\"/source/help/images \"$${PWD}\"/qwt-5.2/doc/images" ; \
                  echo "ALIASES=\"projectnumber=$${VERSION}\"" \

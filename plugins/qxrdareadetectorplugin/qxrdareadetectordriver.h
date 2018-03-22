@@ -5,6 +5,7 @@
 #include "qxrdareadetectorsettings-ptr.h"
 #include <QTimer>
 #include "qxrdareadetectorplugin-ptr.h"
+#include "qcepimagedata-ptr.h"
 
 class QxrdAreaDetectorDriver : public QxrdDetectorDriver
 {
@@ -33,7 +34,8 @@ private slots:
 private:
   QxrdAreaDetectorPluginWPtr   m_Plugin;
   QxrdAreaDetectorSettingsWPtr m_AreaDetector;
-  QTimer m_Timer;
+  QTimer                       m_Timer;
+  QcepUInt32ImageDataPtr       m_AccumulatedData;
 };
 
 Q_DECLARE_METATYPE(QxrdAreaDetectorDriver*)

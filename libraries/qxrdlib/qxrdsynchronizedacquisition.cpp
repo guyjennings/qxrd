@@ -13,7 +13,10 @@ QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
   QcepObject(name),
   m_DetectorCount(this, "detectorCount", 0, "Number of detector synchronization channels"),
   m_OutputCount(this, "outputCount", 0, "Number of synchronized output channels"),
-  m_InputCount(this, "inputCount", 0, "Number of synchronized input channels")
+  m_InputCount(this, "inputCount", 0, "Number of synchronized input channels"),
+  m_PrimaryCounter(this, "primaryCounter", -1, "Primary Counter Device Number"),
+  m_OutputSampleRate(this, "outputSampleRate", 1000, "Sample Rate for outputs (Hz)"),
+  m_InputSampleRate(this, "inputSampleRate", 1000, "Sample Rate for inputs (Hz)")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing synchronized acquisition\n");
@@ -25,7 +28,17 @@ void QxrdSynchronizedAcquisition::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 
   m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
+}
 
+QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
+{
+#ifndef QT_NO_DEBUG
+  printf("Deleting synchronized acquisition\n");
+#endif
+}
+
+void QxrdSynchronizedAcquisition::setupAcquisition()
+{
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
@@ -40,13 +53,6 @@ void QxrdSynchronizedAcquisition::initialize(QcepObjectWPtr parent)
 
     updateWaveforms();
   }
-}
-
-QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
-{
-#ifndef QT_NO_DEBUG
-  printf("Deleting synchronized acquisition\n");
-#endif
 }
 
 void QxrdSynchronizedAcquisition::registerMetaTypes()
@@ -172,6 +178,21 @@ void QxrdSynchronizedAcquisition::writeSettings(QSettings *settings)
   }
 
   settings->endArray();
+}
+
+QString QxrdSynchronizedAcquisition::primaryCounterName()
+{
+  int n = get_PrimaryCounter();
+
+  QString res = QString();
+
+  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+
+  if (nidaq) {
+    res = nidaq->detectorDeviceName(n);
+  }
+
+  return res;
 }
 
 int QxrdSynchronizedAcquisition::detectorCount()
@@ -450,7 +471,8 @@ void QxrdSynchronizedAcquisition::updateWaveforms()
       QxrdSynchronizedOutputChannelPtr out(output(i));
 
       if (out) {
-        out->recalculateWaveform(parms);
+        out->recalculateWaveform(
+              qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
       }
     }
 
@@ -458,7 +480,8 @@ void QxrdSynchronizedAcquisition::updateWaveforms()
       QxrdSynchronizedInputChannelPtr inp(input(i));
 
       if (inp) {
-        inp->prepareForInput(parms);
+        inp->prepareForInput(
+              qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
       }
     }
 
@@ -488,7 +511,8 @@ void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionP
     QxrdSynchronizedInputChannelPtr inp(input(i));
 
     if (inp) {
-      inp->prepareForDarkInput(parms);
+      inp->prepareForDarkInput(
+            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
     }
   }
 
@@ -508,7 +532,8 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
     QxrdSynchronizedOutputChannelPtr out(output(i));
 
     if (out) {
-      out->recalculateWaveform(parms);
+      out->recalculateWaveform(
+            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
     }
   }
 
@@ -516,7 +541,8 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
     QxrdSynchronizedInputChannelPtr inp(input(i));
 
     if (inp) {
-      inp->prepareForInput(parms);
+      inp->prepareForInput(
+            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
     }
   }
 
@@ -530,46 +556,46 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
   emit waveformsChanged();
 }
 
-void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
-{
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+//void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
+//{
+//  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
 
-//  if (nidaq) {
-//    nidaq->pulseOutput();
+////  if (nidaq) {
+////    nidaq->pulseOutput();
+////  }
+
+//  QxrdAcqCommonPtr acq(m_Acquisition);
+//  QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
+
+//  if (acq && parms) {
+//    if (acq->acquisitionStatus(0.0) == 0) {
+////      printf("QxrdSynchronizedAcquisition::acquiredFrameAvailable(%d)\n", frameNumber);
+
+//      int skipBefore = parms->skipBefore();
+//      int skipBetween = parms->skipBetween();
+//      int nPhases = parms->nphases();
+//      int nSummed = parms->nsummed();
+//      int nGroups = parms->postTrigger();
+//      int perGroup = nPhases*nSummed+skipBetween;
+//      int inGroup = (frameNumber-skipBefore) % perGroup;
+//      int phase = inGroup % nPhases;
+
+//      if (nPhases > 0) {
+//        if ((frameNumber >= skipBefore) && (frameNumber < (nGroups*perGroup-skipBetween+skipBefore))) {
+//          if (inGroup < nPhases*nSummed) {
+//            if (phase == 0) {
+//              if (nidaq) {
+////                printf("Triggered on frame %d\n", frameNumber);
+////                nidaq->triggerAnalogWaveform();
+//              }
+//            }
+//          }
+//        }
+//      }
+////      printf("elapsed[%d] %d msec\n", currentPhase, tick.restart());
+//    }
 //  }
-
-  QxrdAcqCommonPtr acq(m_Acquisition);
-  QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
-
-  if (acq && parms) {
-    if (acq->acquisitionStatus(0.0) == 0) {
-//      printf("QxrdSynchronizedAcquisition::acquiredFrameAvailable(%d)\n", frameNumber);
-
-      int skipBefore = parms->skipBefore();
-      int skipBetween = parms->skipBetween();
-      int nPhases = parms->nphases();
-      int nSummed = parms->nsummed();
-      int nGroups = parms->postTrigger();
-      int perGroup = nPhases*nSummed+skipBetween;
-      int inGroup = (frameNumber-skipBefore) % perGroup;
-      int phase = inGroup % nPhases;
-
-      if (nPhases > 0) {
-        if ((frameNumber >= skipBefore) && (frameNumber < (nGroups*perGroup-skipBetween+skipBefore))) {
-          if (inGroup < nPhases*nSummed) {
-            if (phase == 0) {
-              if (nidaq) {
-//                printf("Triggered on frame %d\n", frameNumber);
-//                nidaq->triggerAnalogWaveform();
-              }
-            }
-          }
-        }
-      }
-//      printf("elapsed[%d] %d msec\n", currentPhase, tick.restart());
-    }
-  }
-}
+//}
 
 //void QxrdSynchronizedAcquisition::setManualOutput()
 //{

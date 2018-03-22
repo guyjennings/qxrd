@@ -262,8 +262,10 @@ SOURCES += qxrdlib.cpp \
     qxrdfilewatchersettings.cpp \
     qxrdpilatussettings.cpp \
     qxrdsimulatedsettings.cpp \
+    qxrdalliedvisionsettings.cpp \
     qxrddetectordialog.cpp \
     qxrdsimulateddialog.cpp \
+    qxrdalliedvisiondialog.cpp \
     qxrdperkinelmerdialog.cpp \
     qxrdpilatusdialog.cpp \
     qxrdareadetectordialog.cpp \
@@ -323,7 +325,10 @@ SOURCES += qxrdlib.cpp \
     qxrdsynchronizedinputchannel.cpp \
     qxrdextraiodetectorsdelegate.cpp \
     qxrdextraioinputsdelegate.cpp \
-    qxrdextraiooutputsdelegate.cpp
+    qxrdextraiooutputsdelegate.cpp \
+    qxrdacquisitioneventlog.cpp \
+    qxrdacquisitioneventlogwindow.cpp \
+    qxrdacquisitioneventlogmodel.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -430,7 +435,10 @@ HEADERS += qxrdlib.h\
     qxrdpilatussettings-ptr.h \
     qxrdsimulatedsettings.h \
     qxrdsimulatedsettings-ptr.h \
+    qxrdalliedvisionsettings.h \
+    qxrdalliedvisionsettings-ptr.h \
     qxrddetectordialog.h \
+    qxrdalliedvisiondialog.h \
     qxrdsimulateddialog.h \
     qxrdperkinelmerdialog.h \
     qxrdpilatusdialog.h \
@@ -446,6 +454,7 @@ HEADERS += qxrdlib.h\
     qxrdareadetectorsettings-ptr.h \
     qxrdperkinelmersettings.h \
     qxrdperkinelmersettings-ptr.h \
+    qxrdalliedvisiondialog-ptr.h \
     qxrdsimulateddialog-ptr.h \
     qxrdimageplotwidgetsettings.h \
     qxrdimageplotwidgetsettings-ptr.h \
@@ -551,7 +560,13 @@ HEADERS += qxrdlib.h\
     qxrdextraioinputsdelegate.h \
     qxrdextraioinputsdelegate-ptr.h \
     qxrdextraiooutputsdelegate.h \
-    qxrdextraiooutputsdelegate-ptr.h
+    qxrdextraiooutputsdelegate-ptr.h \
+    qxrdacquisitioneventlog.h \
+    qxrdacquisitioneventlog-ptr.h \
+    qxrdacquisitioneventlogmodel-ptr.h \
+    qxrdacquisitioneventlogwindow.h \
+    qxrdacquisitioneventlogmodel.h \
+    qxrdacquisitioneventlogwindow-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -775,6 +790,7 @@ FORMS += qxrdwindow.ui \
     qxrdextraiowindow.ui \
     qxrdfilebrowserwidget.ui \
     qxrdplotwidget.ui \
+    qxrdalliedvisiondialog.ui \
     qxrdsimulateddialog.ui \
     qxrdperkinelmerdialog.ui \
     qxrdpilatusdialog.ui \
@@ -786,7 +802,8 @@ FORMS += qxrdwindow.ui \
     qxrdwatcherwindow.ui \
     qxrdstartupwindow.ui \
     qxrdcorrectiondialogpage.ui \
-    qxrdexposurepreferencesdialog.ui
+    qxrdexposurepreferencesdialog.ui \
+    qxrdacquisitioneventlogwindow.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS +=

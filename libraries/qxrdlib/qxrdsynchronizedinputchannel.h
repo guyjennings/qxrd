@@ -26,8 +26,11 @@ public:
 
   double evaluateInput();
 
-  void prepareForInput(QxrdAcquisitionParameterPackWPtr p);
-  void prepareForDarkInput(QxrdDarkAcquisitionParameterPackWPtr p);
+  void prepareForInput(QxrdSynchronizedAcquisitionWPtr  s,
+                       QxrdAcquisitionParameterPackWPtr p);
+
+  void prepareForDarkInput(QxrdSynchronizedAcquisitionWPtr      s,
+                           QxrdDarkAcquisitionParameterPackWPtr p);
 
   enum {
     ModeSummed,
@@ -70,14 +73,8 @@ public:
   Q_PROPERTY(double max READ get_Max WRITE set_Max)
   QCEP_DOUBLE_PROPERTY(Max)
 
-  Q_PROPERTY(double sampleRate READ get_SampleRate WRITE set_SampleRate)
-  QCEP_DOUBLE_PROPERTY(SampleRate)
-
   Q_PROPERTY(int nSamples READ get_NSamples WRITE set_NSamples STORED false)
   QCEP_INTEGER_PROPERTY(NSamples)
-
-  Q_PROPERTY(double actualSampleRate READ get_ActualSampleRate WRITE set_ActualSampleRate STORED false)
-  QCEP_DOUBLE_PROPERTY(ActualSampleRate)
 
   Q_PROPERTY(QcepDoubleVector timeValues READ get_TimeValues WRITE set_TimeValues STORED false)
   QCEP_DOUBLE_VECTOR_PROPERTY(TimeValues)

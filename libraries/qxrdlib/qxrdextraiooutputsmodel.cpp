@@ -72,10 +72,6 @@ QVariant QxrdExtraIOOutputsModel::data(const QModelIndex &index, int role) const
         case PhaseShiftColumn:
           res = out->get_PhaseShift();
           break;
-
-        case SampleRateColumn:
-          res = out->get_SampleRate();
-          break;
         }
       } else if (role == Qt::EditRole) {
         switch (col) {
@@ -109,10 +105,6 @@ QVariant QxrdExtraIOOutputsModel::data(const QModelIndex &index, int role) const
 
         case PhaseShiftColumn:
           res = out->get_PhaseShift();
-          break;
-
-        case SampleRateColumn:
-          res = out->get_SampleRate();
           break;
         }
       }
@@ -159,10 +151,6 @@ QVariant QxrdExtraIOOutputsModel::headerData(int section, Qt::Orientation orient
 
       case PhaseShiftColumn:
         res = "Phase Shift";
-        break;
-
-      case SampleRateColumn:
-        res = "Sample Rate";
         break;
       }
     } else {
@@ -232,10 +220,6 @@ bool QxrdExtraIOOutputsModel::setData(const QModelIndex &index, const QVariant &
 
         case PhaseShiftColumn:
           out->set_PhaseShift(value.toDouble());
-          break;
-
-        case SampleRateColumn:
-          out->set_SampleRate(value.toDouble());
           break;
         }
       }

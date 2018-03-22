@@ -4,6 +4,7 @@
 #include "qxrddetectordriver.h"
 #include "qxrdperkinelmersettings-ptr.h"
 #include "qxrdperkinelmerplugin-ptr.h"
+#include "qcepimagedata-ptr.h"
 
 #ifdef Q_OS_WIN32
 #include <windows.h>
@@ -84,6 +85,7 @@ private:
 
 private:
   QxrdPerkinElmerSettingsWPtr m_PerkinElmer;
+  QcepUInt32ImageDataPtr      m_AccumulatedData;
 };
 
 Q_DECLARE_METATYPE(QxrdPerkinElmerDriver*)

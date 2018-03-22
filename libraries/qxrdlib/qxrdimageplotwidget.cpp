@@ -211,23 +211,24 @@ void QxrdImagePlotWidget::maskChanged()
 void QxrdImagePlotWidget::replotImage()
 {
   QxrdImagePlotWidgetSettingsPtr set(m_ImageSettings);
+  QcepImageDataBasePtr img(m_ImageData);
 
-  if (set && m_ImageData) {
+  if (set && img) {
     if (m_Plot) {
-      m_Plot -> setData(m_ImageData);
+      m_Plot -> setData(img);
     }
 
     if (m_ImageRaster == NULL) {
       m_ImageRaster =
-          new QxrdRasterData(m_ImageData,
+          new QxrdRasterData(img,
                              m_ImageSettings);
     } else {
-      m_ImageRaster -> setImage(m_ImageData);
+      m_ImageRaster -> setImage(img);
     }
 
     if (m_OverflowRaster == NULL) {
       m_OverflowRaster =
-          new QxrdOverflowRasterData(m_ImageData,
+          new QxrdOverflowRasterData(img,
                                      m_ImageSettings);
     }
 
@@ -258,8 +259,8 @@ void QxrdImagePlotWidget::replotImage()
 
     switch (set->get_DisplayScalingMode()) {
     case PercentageScalingMode:
-      minv = m_ImageData->minValue();
-      maxv = m_ImageData->maxValue();
+      minv = img->minValue();
+      maxv = img->maxValue();
       del  = maxv - minv;
 
       mindis = minv+del*set->get_DisplayMinimumPct()/100.0;
@@ -267,8 +268,8 @@ void QxrdImagePlotWidget::replotImage()
       break;
 
     case PercentileScalingMode:
-      mindis = m_ImageData->percentileValue(set->get_DisplayMinimumPctle());
-      maxdis = m_ImageData->percentileValue(set->get_DisplayMaximumPctle());
+      mindis = img->percentileValue(set->get_DisplayMinimumPctle());
+      maxdis = img->percentileValue(set->get_DisplayMaximumPctle());
       break;
 
     default:
@@ -287,18 +288,19 @@ void QxrdImagePlotWidget::replotImage()
 void QxrdImagePlotWidget::replotMask()
 {
   QxrdImagePlotWidgetSettingsPtr set(m_ImageSettings);
+  QcepMaskDataPtr mask(m_MaskData);
 
-  if (set && m_MaskData) {
+  if (set && mask) {
     if (m_Plot) {
-      m_Plot -> setMask(m_MaskData);
+      m_Plot -> setMask(mask);
     }
 
     if(m_MaskRaster == NULL) {
       m_MaskRaster =
-          new QxrdMaskRasterData(m_MaskData,
+          new QxrdMaskRasterData(mask,
                                  m_ImageSettings);
     } else {
-      m_MaskRaster -> setMask(m_MaskData);
+      m_MaskRaster -> setMask(mask);
     }
 
     if (m_MaskSpectrogram == NULL) {

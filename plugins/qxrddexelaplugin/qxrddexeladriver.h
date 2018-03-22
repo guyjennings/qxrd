@@ -7,6 +7,7 @@
 #include <QMutex>
 #include "BusScanner.h"
 #include "qxrddexelaplugin-ptr.h"
+#include "qcepimagedata-ptr.h"
 
 class QxrdDexelaDriver : public QxrdDetectorDriver
 {
@@ -45,6 +46,7 @@ private:
   DexelaDetector         *m_DexelaDetector;
   int                     m_XDim;
   int                     m_YDim;
+  QcepUInt32ImageDataPtr  m_AccumulatedData;
 
 private: // Static members...
   static QMutex           m_Mutex;

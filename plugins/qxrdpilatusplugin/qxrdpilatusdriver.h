@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QTcpSocket>
 #include "qxrdpilatusplugin-ptr.h"
+#include "qcepimagedata-ptr.h"
 
 class QxrdPilatusDriver : public QxrdDetectorDriver
 {
@@ -72,6 +73,8 @@ private:
   int        m_ExposureFrameCount;
 
   QxrdPilatusRemotePtr m_Remote;
+
+  QcepUInt32ImageDataPtr m_AccumulatedData;
 };
 
 Q_DECLARE_METATYPE(QxrdPilatusDriver*)

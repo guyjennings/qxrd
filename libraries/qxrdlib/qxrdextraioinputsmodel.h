@@ -30,7 +30,6 @@ public:
     SaveWaveColumn,
     MinColumn,
     MaxColumn,
-    SampleRateColumn,
     ColumnCount
   };
 
