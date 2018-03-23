@@ -13,6 +13,11 @@ QxrdSynchronizedDetectorChannel::QxrdSynchronizedDetectorChannel(QString name)
 {
 }
 
+QxrdSynchronizedDetectorChannel::~QxrdSynchronizedDetectorChannel()
+{
+  printMessage("QxrdSynchronizedDetectorChannel::~QxrdSynchronizedDetectorChannel");
+}
+
 void QxrdSynchronizedDetectorChannel::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);

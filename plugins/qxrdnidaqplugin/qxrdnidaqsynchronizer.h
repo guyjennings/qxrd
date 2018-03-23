@@ -81,6 +81,7 @@ public:
 private:
   void closeTaskHandles();
   void errorCheck(const char* file, int line, int err);
+  void dumpTask(TaskHandle t);
 
 private:
   QxrdAcqCommonWPtr               m_Acquisition;

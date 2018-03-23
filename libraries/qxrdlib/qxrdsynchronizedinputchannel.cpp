@@ -19,6 +19,11 @@ QxrdSynchronizedInputChannel::QxrdSynchronizedInputChannel(QString name)
 {
 }
 
+QxrdSynchronizedInputChannel::~QxrdSynchronizedInputChannel()
+{
+  printMessage("QxrdSynchronizedInputChannel::~QxrdSynchronizedInputChannel");
+}
+
 void QxrdSynchronizedInputChannel::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);

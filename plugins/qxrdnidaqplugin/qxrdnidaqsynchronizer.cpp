@@ -566,11 +566,11 @@ void QxrdNIDAQSynchronizer::changeExposureTime(double t, int n)
 
     DAQmxErrChk(DAQmxCreateCOPulseChanTime(m_SyncTask,
                                            qPrintable(m_PrimaryCounterName),
-                                           "ctr0",
+                                           "",
                                            DAQmx_Val_Seconds,
                                            DAQmx_Val_Low,
                                            0.0,
-                                           m_SyncLongTime / 2.0 + 0.0001,
+                                           m_SyncLongTime / 2.0 + 0.001,
                                            m_SyncLongTime / 2.0
                                            ));
 
@@ -605,15 +605,21 @@ void QxrdNIDAQSynchronizer::addDetectorSync(QxrdSynchronizedDetectorChannelWPtr 
 
       int relExpos = det->get_ExposureFactor();
 
+      int     chNum    = sync->get_ChannelNumber();
+      QString chanName = tr("ctr%1").arg(chNum);
+      QString coName   = sync->channelName();
+      double  rDelay   = det -> get_ReadoutDelay();
+
       if (qcepDebug(DEBUG_NIDAQ)) {
         printMessage(tr("Adding NIDAQ detector sync channel %1").arg(m_SyncDetTasks.count()));
-        printMessage(tr("TaskName %1, Channel Name %2, Detector Number %3, Exposure Time %4, Relative Exposure %5, Readout Delay %6")
+        printMessage(tr("TaskName %1, Device Name %2, Channel Name %3, Detector Number %4, Exposure Time %5, Relative Exposure %6, Readout Delay %7")
                      .arg(taskName)
-                     .arg(sync->channelName())
+                     .arg(coName)
+                     .arg(chanName)
                      .arg(i)
                      .arg(m_ExposureTime)
                      .arg(relExpos)
-                     .arg(det->get_ReadoutDelay()));
+                     .arg(rDelay));
       }
 
       TaskHandle detTask;
@@ -625,13 +631,13 @@ void QxrdNIDAQSynchronizer::addDetectorSync(QxrdSynchronizedDetectorChannelWPtr 
       double dp = m_ExposureTime / relExpos;
 
       DAQmxErrChk(DAQmxCreateCOPulseChanTime(detTask,
-                                             qPrintable(sync->channelName()),
-                                             qPrintable(tr("ctr%1").arg(sync->get_ChannelNumber())),
+                                             qPrintable(coName),
+                                             ""/*qPrintable(chanName)*/,
                                              DAQmx_Val_Seconds,
                                              DAQmx_Val_Low,
                                              0.0,
-                                             det -> get_ReadoutDelay(),
-                                             dp - det->get_ReadoutDelay()));
+                                             rDelay,
+                                             dp - rDelay));
 
       if (m_SyncNPhases*relExpos > 1) {
         DAQmxErrChk(DAQmxCfgImplicitTiming  (detTask,
@@ -664,6 +670,7 @@ void QxrdNIDAQSynchronizer::addOutputChannel(QxrdSynchronizedOutputChannelWPtr p
       int n = m_OutputChannels.count();
 
       QString chanName = tr("aoTask%1").arg(n);
+      QString aoName   = out->channelName();
 
       if (n == 0) {
         m_OutputNSamples = out->get_NSamples();
@@ -671,9 +678,9 @@ void QxrdNIDAQSynchronizer::addOutputChannel(QxrdSynchronizedOutputChannelWPtr p
 
       if (qcepDebug(DEBUG_NIDAQ)) {
         printMessage(tr("Adding NIDAQ output channel %1").arg(n));
-        printMessage(tr("Task name aoTask, Channel Name %1, Device Name %2, Sample Rate %3, nSamples %4")
+        printMessage(tr("Task name aoTask, Device Name %1, Channel Name %2, Sample Rate %3, nSamples %4")
+                     .arg(aoName)
                      .arg(chanName)
-                     .arg(out->channelName())
                      .arg(sync->get_OutputSampleRate())
                      .arg(m_OutputNSamples));
       }
@@ -685,8 +692,8 @@ void QxrdNIDAQSynchronizer::addOutputChannel(QxrdSynchronizedOutputChannelWPtr p
       m_OutputChannels.append(p);
 
       DAQmxErrChk(DAQmxCreateAOVoltageChan(m_SyncAOTask,
-                                           qPrintable(out->channelName()),
-                                           qPrintable(chanName),
+                                           qPrintable(aoName),
+                                           ""/*qPrintable(chanName)*/,
                                            -10.0,
                                            10.0,
                                            DAQmx_Val_Volts,
@@ -727,18 +734,23 @@ void QxrdNIDAQSynchronizer::addInputChannel(QxrdSynchronizedInputChannelWPtr p)
       int n = m_InputChannels.count();
 
       QString chanName = tr("ai%1").arg(n);
+      QString aiName   = inp->channelName();
 
       if (n == 0) {
         m_InputNSamples = inp->get_NSamples();
       }
 
+      double sampleRate = sync->get_InputSampleRate();
+      int    bufferSize = m_InputNSamples*3 + 5*int(sampleRate);
+
       if (qcepDebug(DEBUG_NIDAQ)) {
         printMessage(tr("Adding NIDAQ input channel %1").arg(n));
-        printMessage(tr("Task name aiTask, Channel Name %1, Device Name %2, Sample Rate %3, NSamples %4")
+        printMessage(tr("Task name aiTask, Device Name %1, Channel Name %2, Sample Rate %3, NSamples %4, Buffer %5")
+                     .arg(aiName)
                      .arg(chanName)
-                     .arg(inp->channelName())
-                     .arg(sync->get_InputSampleRate())
-                     .arg(m_InputNSamples));
+                     .arg(sampleRate)
+                     .arg(m_InputNSamples)
+                     .arg(bufferSize));
       }
 
       if (m_SyncAITask == NULL) {
@@ -748,8 +760,8 @@ void QxrdNIDAQSynchronizer::addInputChannel(QxrdSynchronizedInputChannelWPtr p)
       m_InputChannels.append(p);
 
       DAQmxErrChk(DAQmxCreateAIVoltageChan(m_SyncAITask,
-                                           qPrintable(inp->channelName()),
-                                           qPrintable(chanName),
+                                           qPrintable(aiName),
+                                           ""/*qPrintable(chanName)*/,
                                            DAQmx_Val_Cfg_Default,
                                            -10.0,
                                            10.0,
@@ -759,7 +771,7 @@ void QxrdNIDAQSynchronizer::addInputChannel(QxrdSynchronizedInputChannelWPtr p)
       if (n == 0) {
         DAQmxErrChk(DAQmxCfgSampClkTiming(m_SyncAITask,
                                           NULL,
-                                          sync->get_InputSampleRate(),
+                                          sampleRate,
                                           DAQmx_Val_Rising,
                                           DAQmx_Val_FiniteSamps,
                                           m_InputNSamples));
@@ -769,7 +781,7 @@ void QxrdNIDAQSynchronizer::addInputChannel(QxrdSynchronizedInputChannelWPtr p)
                                              DAQmx_Val_Rising));
 
         DAQmxErrChk(DAQmxSetBufInputBufSize(m_SyncAITask,
-                                            m_InputNSamples*3));
+                                            bufferSize));
 
         DAQmxErrChk(DAQmxSetReadOverWrite(m_SyncAITask,
                                           DAQmx_Val_OverwriteUnreadSamps));
@@ -877,7 +889,7 @@ int32 QxrdNIDAQSynchronizer::syncCallback(TaskHandle task, int32 status)
 
   int32 state;
 
-  DAQmxErrChk(DAQmxGetCOOutputState(task, "ctr0", &state));
+  DAQmxErrChk(DAQmxGetCOOutputState(task, "/Dev1/ctr0", &state));
 
   if (state == DAQmx_Val_Low) {
     state = 0;
@@ -1046,6 +1058,15 @@ void QxrdNIDAQSynchronizer::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr 
       startSync();
     }
   }
+
+  if (qcepDebug(DEBUG_NIDAQ)) {
+    dumpTask(m_SyncTask);
+    for (int i=0; i<sync->detectorCount(); i++) {
+      dumpTask(m_SyncDetTasks.value(i));
+    }
+    dumpTask(m_SyncAOTask);
+    dumpTask(m_SyncAITask);
+  }
 }
 
 void QxrdNIDAQSynchronizer::prepareForIdling(QxrdSynchronizedAcquisitionWPtr s,
@@ -1070,4 +1091,34 @@ void QxrdNIDAQSynchronizer::prepareForDarkAcquistion(QxrdSynchronizedAcquisition
   printMessage("QxrdNIDAQSynchronizer::prepareForDarkAcquisition");
 
 //  updateSyncWaveforms(s, p);
+}
+
+void QxrdNIDAQSynchronizer::dumpTask(TaskHandle t)
+{
+  if (t) {
+    char taskName[256];
+    uInt32 numChans;
+    char chanNames[512];
+    uInt32 numDevs;
+    char devNames[1024];
+    int32  trigType;
+    char trigTerm[256];
+    char trigSrc[256];
+
+    DAQmxErrChk(DAQmxGetTaskName(t, taskName, 256));
+    DAQmxErrChk(DAQmxGetTaskNumChans(t, &numChans));
+    DAQmxErrChk(DAQmxGetTaskChannels(t, chanNames, 512));
+    DAQmxErrChk(DAQmxGetTaskNumDevices(t, &numDevs));
+    DAQmxErrChk(DAQmxGetTaskDevices(t, devNames, 1024));
+    DAQmxErrChk(DAQmxGetStartTrigType(t, &trigType));
+    DAQmxErrChk(DAQmxGetStartTrigTerm(t, trigTerm, 256));
+    DAQmxErrChk(DAQmxGetDigEdgeStartTrigSrc(t, trigSrc, 256));
+
+    printMessage(tr("Task %1: %2 channels : %3").arg(taskName).arg(numChans).arg(chanNames));
+    printMessage(tr("         %1 devices  : %2").arg(numDevs).arg(devNames));
+    printMessage(tr("         Trig Type %1 : Terminal %2 : Source %3").arg(trigType).arg(trigTerm).arg(trigSrc));
+  }
+
+Error:
+  return;
 }

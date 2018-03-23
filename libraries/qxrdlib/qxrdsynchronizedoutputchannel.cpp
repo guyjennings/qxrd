@@ -24,6 +24,11 @@ QxrdSynchronizedOutputChannel::QxrdSynchronizedOutputChannel(QString name)
 {
 }
 
+QxrdSynchronizedOutputChannel::~QxrdSynchronizedOutputChannel()
+{
+  printMessage("QxrdSynchronizedOutputChannel::~QxrdSynchronizedOutputChannel");
+}
+
 void QxrdSynchronizedOutputChannel::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);

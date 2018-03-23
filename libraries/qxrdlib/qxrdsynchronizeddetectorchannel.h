@@ -16,6 +16,8 @@ private:
 
 public:
   Q_INVOKABLE QxrdSynchronizedDetectorChannel(QString name);
+  ~QxrdSynchronizedDetectorChannel();
+
   void initialize(QcepObjectWPtr parent);
 
   QString channelName();

@@ -18,6 +18,8 @@ private:
 
 public:
   Q_INVOKABLE QxrdSynchronizedInputChannel(QString name);
+  ~QxrdSynchronizedInputChannel();
+
   void initialize(QcepObjectWPtr parent);
 
   QString channelName();
