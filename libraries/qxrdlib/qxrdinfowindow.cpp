@@ -3,7 +3,15 @@
 #include <QThread>
 
 QxrdInfoWindow::QxrdInfoWindow(QString name) :
-  inherited(name)
+  inherited(name),
+  m_RootObject()
+{
+
+}
+
+QxrdInfoWindow::QxrdInfoWindow(QString name, QcepObjectWPtr rootObject) :
+  inherited(name),
+  m_RootObject(rootObject)
 {
 }
 
@@ -15,24 +23,24 @@ void QxrdInfoWindow::initialize(QcepObjectWPtr parent)
 
   inherited::initialize(parent);
 
-  QxrdAppCommonPtr app(QxrdAppCommon::findApplication(m_Parent));
-
-  if (app) {
-    m_ObjectTreeModel =
-        new QcepObjectTreeModel(this, app);
-
-    m_ObjectPropertiesModel =
-        new QcepObjectPropertiesModel(this, app);
-
-    m_ObjectView     -> setModel(m_ObjectTreeModel);
-    m_PropertiesView -> setModel(m_ObjectPropertiesModel);
-
-    m_ObjectSelection =
-        m_ObjectView -> selectionModel();
-
-    connect(m_ObjectSelection, &QItemSelectionModel::selectionChanged,
-            this,              &QxrdInfoWindow::selectionChanged);
+  if (m_RootObject == NULL) {
+    m_RootObject = QxrdAppCommon::findApplication(parent);
   }
+
+  m_ObjectTreeModel =
+      new QcepObjectTreeModel(this, m_RootObject);
+
+  m_ObjectPropertiesModel =
+      new QcepObjectPropertiesModel(this, m_RootObject);
+
+  m_ObjectView     -> setModel(m_ObjectTreeModel);
+  m_PropertiesView -> setModel(m_ObjectPropertiesModel);
+
+  m_ObjectSelection =
+      m_ObjectView -> selectionModel();
+
+  connect(m_ObjectSelection, &QItemSelectionModel::selectionChanged,
+          this,              &QxrdInfoWindow::selectionChanged);
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 

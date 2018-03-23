@@ -285,7 +285,7 @@ void QxrdAcquisitionWindow::acquisitionInfoWindow()
   if (m_InfoWindow == NULL) {
     m_InfoWindow =
         QxrdInfoWindowPtr(
-          new QxrdInfoWindow("extraIOInfo"));
+          new QxrdInfoWindow("extraIOInfo", m_Acquisition));
 
     m_InfoWindow -> initialize(m_Acquisition);
   }

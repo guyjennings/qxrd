@@ -20,6 +20,7 @@
 #include "qxrdexperiment.h"
 #include "qcepdataobjectpropertiesmodel.h"
 #include "qxrdinfowindow.h"
+#include "qxrdacquisitioneventlogwindow.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QString name) :
   inherited("detector"),
@@ -217,6 +218,7 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
 
     connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcqCommon::clearDropped);
 
+
     acqp -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
     acqp -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
     acqp -> prop_SkippedExposures() -> linkTo(this -> m_SkippedExposures);
@@ -238,6 +240,10 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
     acqp -> prop_AcquisitionCancelsLiveView() -> linkTo(this -> m_AcquisitionCancelsLiveView);
     acqp -> prop_RetryDropped() -> linkTo(this -> m_RetryDropped);
   }
+
+  connect(m_EventLogButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::openEventLog);
+  connect(m_DetectorInfoButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::detectorInfoWindow);
+  connect(m_RestartDetectorsButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::restartDetectors);
 
   connect(m_ExposureOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditExposurePreferences);
   connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences);
@@ -894,18 +900,33 @@ void QxrdDetectorControlWindow::restartDetectors()
   }
 }
 
-void QxrdDetectorControlWindow::acquisitionInfoWindow()
+void QxrdDetectorControlWindow::detectorInfoWindow()
 {
   if (m_InfoWindow == NULL) {
     m_InfoWindow =
         QxrdInfoWindowPtr(
-          new QxrdInfoWindow("extraIOInfo"));
+          new QxrdInfoWindow("detectorInfo", m_Detector));
 
-    m_InfoWindow -> initialize(m_Acquisition);
+    m_InfoWindow -> initialize(m_Detector);
   }
 
   if (m_InfoWindow) {
     m_InfoWindow -> show();
     m_InfoWindow -> raise();
+  }
+}
+
+void QxrdDetectorControlWindow::openEventLog()
+{
+  if (m_AcquisitionEventLog == NULL) {
+    m_AcquisitionEventLog =
+        QxrdAcquisitionEventLogWindowPtr(
+          new QxrdAcquisitionEventLogWindow(m_Acquisition));
+  }
+
+  if (m_AcquisitionEventLog) {
+    m_AcquisitionEventLog->show();
+    m_AcquisitionEventLog->activateWindow();
+    m_AcquisitionEventLog->raise();
   }
 }

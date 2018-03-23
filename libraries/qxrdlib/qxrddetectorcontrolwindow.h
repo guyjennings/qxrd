@@ -14,6 +14,7 @@
 #include <QTimer>
 #include "qcepdataobjectpropertiesmodel-ptr.h"
 #include "qxrdinfowindow-ptr.h"
+#include "qxrdacquisitioneventlogwindow-ptr.h"
 
 #define QXRD_DETECTOR_WINDOW_STATE_VERSION 0
 
@@ -94,8 +95,9 @@ private slots:
   void doVisualizeBackground();
   void doVisualizePeak();
 
+  void openEventLog();
   void restartDetectors();
-  void acquisitionInfoWindow();
+  void detectorInfoWindow();
 
 private:
   QVector<int>  selectedROIs();
@@ -124,7 +126,8 @@ private:
   QAtomicInt                 m_NewDataAvailable;
   QAtomicInt                 m_NewMaskAvailable;
 
-  QxrdInfoWindowPtr          m_InfoWindow;
+  QxrdAcquisitionEventLogWindowPtr m_AcquisitionEventLog;
+  QxrdInfoWindowPtr                m_InfoWindow;
 };
 
 #endif // QXRDDETECTORCONTROLWINDOW_H

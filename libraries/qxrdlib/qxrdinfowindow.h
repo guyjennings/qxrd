@@ -18,6 +18,7 @@ private:
 
 public:
   explicit QxrdInfoWindow(QString name);
+  explicit QxrdInfoWindow(QString name, QcepObjectWPtr rootObject);
   void initialize(QcepObjectWPtr parent);
   ~QxrdInfoWindow();
 
@@ -31,6 +32,7 @@ protected:
   void changeEvent(QEvent *e);
 
 private:
+  QcepObjectWPtr             m_RootObject;
   QcepObjectTreeModel       *m_ObjectTreeModel;
   QcepObjectPropertiesModel *m_ObjectPropertiesModel;
   QItemSelectionModel       *m_ObjectSelection;
