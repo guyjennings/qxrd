@@ -558,7 +558,7 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
 
 void QxrdSynchronizedAcquisition::restartSync()
 {
-  printMessage("QxrdSynchronizedAcquisition::restartSync not yet implemented");
+  splashMessage("Restarting Synchronized Hardware...");
 }
 
 //void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)

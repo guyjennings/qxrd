@@ -386,6 +386,11 @@ bool QxrdDetectorSettings::checkDetectorEnabled()
   }
 }
 
+void QxrdDetectorSettings::restartDetector()
+{
+  startDetector();
+}
+
 void QxrdDetectorSettings::startDetector()
 {
   if (m_DetectorDriverThread) {

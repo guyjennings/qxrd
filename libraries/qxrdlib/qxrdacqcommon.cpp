@@ -367,3 +367,18 @@ void QxrdAcqCommon::appendEvent(int eventCode,
                      eventTime);
   }
 }
+
+void QxrdAcqCommon::restartDetectors()
+{
+  splashMessage("Restarting Detectors...");
+
+  int n = detectorCount();
+
+  for (int i = 0; i<n; i++) {
+    QxrdDetectorSettingsPtr det = detector(i);
+
+    if (det) {
+      det -> restartDetector();
+    }
+  }
+}

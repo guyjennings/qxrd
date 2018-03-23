@@ -566,7 +566,8 @@ HEADERS += qxrdlib.h\
     qxrdacquisitioneventlogmodel-ptr.h \
     qxrdacquisitioneventlogwindow.h \
     qxrdacquisitioneventlogmodel.h \
-    qxrdacquisitioneventlogwindow-ptr.h
+    qxrdacquisitioneventlogwindow-ptr.h \
+    qxrdinfowindow-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

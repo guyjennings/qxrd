@@ -108,6 +108,9 @@ public:
     NumberFormatItem
   };
 
+private slots:
+  void restartDetectors();
+
 private:
   QString fmtString(int i);
 

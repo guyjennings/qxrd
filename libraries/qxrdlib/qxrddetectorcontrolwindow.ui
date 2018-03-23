@@ -903,6 +903,10 @@ Script Function: darkSummedExposures()</string>
                <property name="text">
                 <string>Restart Detectors...</string>
                </property>
+               <property name="icon">
+                <iconset resource="qxrdresources.qrc">
+                 <normaloff>:/images/system-reboot.png</normaloff>:/images/system-reboot.png</iconset>
+               </property>
               </widget>
              </item>
              <item row="1" column="3">
@@ -919,8 +923,8 @@ Script Function: darkSummedExposures()</string>
                </property>
                <property name="iconSize">
                 <size>
-                 <width>24</width>
-                 <height>24</height>
+                 <width>16</width>
+                 <height>16</height>
                 </size>
                </property>
               </widget>

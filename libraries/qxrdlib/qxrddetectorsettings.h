@@ -86,6 +86,7 @@ public slots:
 
   bool checkDetectorEnabled();
 
+  void restartDetector();
   void startDetector();
   void stopDetector();
 

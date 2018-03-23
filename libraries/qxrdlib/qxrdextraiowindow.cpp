@@ -21,6 +21,7 @@
 #include "qxrdextraiodetectorsdelegate.h"
 #include "qxrdextraiooutputsdelegate.h"
 #include "qxrdextraioinputsdelegate.h"
+#include "qxrdinfowindow.h"
 
 QxrdExtraIOWindow::QxrdExtraIOWindow(QString name) :
   inherited(name)/*,
@@ -430,4 +431,16 @@ void QxrdExtraIOWindow::restartSync()
 
 void QxrdExtraIOWindow::syncInfoWindow()
 {
+  if (m_InfoWindow == NULL) {
+    m_InfoWindow =
+        QxrdInfoWindowPtr(
+          new QxrdInfoWindow("extraIOInfo"));
+
+    m_InfoWindow -> initialize(m_SynchronizedAcquisition);
+  }
+
+  if (m_InfoWindow) {
+    m_InfoWindow -> show();
+    m_InfoWindow -> raise();
+  }
 }

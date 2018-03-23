@@ -19,6 +19,7 @@
 #include <QThread>
 #include "qxrdexperiment.h"
 #include "qcepdataobjectpropertiesmodel.h"
+#include "qxrdinfowindow.h"
 
 QxrdDetectorControlWindow::QxrdDetectorControlWindow(QString name) :
   inherited("detector"),
@@ -875,4 +876,36 @@ void QxrdDetectorControlWindow::newImage(QcepImageDataBasePtr img)
         new QcepDataObjectPropertiesModel(img));
 
   m_ImageInfoTable -> setModel(m_ImageProperties.data());
+}
+
+void QxrdDetectorControlWindow::restartDetectors()
+{
+  int reply = QMessageBox::question(this, "Restart Detector Hardware", "Do you want to restart\nthe detector hardware?",
+                                    QMessageBox::Yes | QMessageBox::No,
+                                    QMessageBox::No);
+
+  if (reply == QMessageBox::Yes) {
+    QxrdAcqCommonPtr acq(m_Acquisition);
+
+    if (acq) {
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(acq.data(), "restartDetectors"));
+    }
+  }
+}
+
+void QxrdDetectorControlWindow::acquisitionInfoWindow()
+{
+  if (m_InfoWindow == NULL) {
+    m_InfoWindow =
+        QxrdInfoWindowPtr(
+          new QxrdInfoWindow("extraIOInfo"));
+
+    m_InfoWindow -> initialize(m_Acquisition);
+  }
+
+  if (m_InfoWindow) {
+    m_InfoWindow -> show();
+    m_InfoWindow -> raise();
+  }
 }

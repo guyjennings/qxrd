@@ -11,6 +11,7 @@
 #include "qxrdextraiooutputsmodel-ptr.h"
 #include "qxrdextraioinputsmodel-ptr.h"
 #include "qxrdnidaq-ptr.h"
+#include "qxrdinfowindow-ptr.h"
 
 //TODO: add options to edit input and output sample rates (fixed at 1Khz for now)
 //TODO: add options to set master counter for detector sync (fixed at /Dev1/ctr0 for now)
@@ -57,6 +58,7 @@ private:
   QxrdExtraIOOutputsModelPtr      m_OutputsModel;
   QxrdExtraIOInputsModelPtr       m_InputsModel;
   QxrdNIDAQWPtr                   m_NIDAQPlugin;
+  QxrdInfoWindowPtr               m_InfoWindow;
 };
 
 #endif // QXRDEXTRAIOWINDOW_H

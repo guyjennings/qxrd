@@ -8,8 +8,10 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QThread>
+#include <QMessageBox>
 #include "qxrdprocessor.h"
 #include "qxrdacquisitioneventlogwindow.h"
+#include "qxrdinfowindow.h"
 
 QxrdAcquisitionWindow::QxrdAcquisitionWindow(QString name) :
   inherited(name)
@@ -131,6 +133,8 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
     }
   }
 
+  connect(m_RestartDetectorsButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::restartDetectors);
+  connect(m_AcquisitionInfoButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::acquisitionInfoWindow);
   connect(m_ExposureOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditExposurePreferences);
   connect(m_ProcessorOptionsButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::doEditCorrection);
   connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences);
@@ -257,5 +261,37 @@ void QxrdAcquisitionWindow::eventLogWindow()
     m_AcquisitionEventLog->show();
     m_AcquisitionEventLog->activateWindow();
     m_AcquisitionEventLog->raise();
+  }
+}
+
+void QxrdAcquisitionWindow::restartDetectors()
+{
+  int reply = QMessageBox::question(this, "Restart Detector Hardware", "Do you want to restart\nthe detector hardware?",
+                                    QMessageBox::Yes | QMessageBox::No,
+                                    QMessageBox::No);
+
+  if (reply == QMessageBox::Yes) {
+    QxrdAcqCommonPtr acq(m_Acquisition);
+
+    if (acq) {
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(acq.data(), "restartDetectors"));
+    }
+  }
+}
+
+void QxrdAcquisitionWindow::acquisitionInfoWindow()
+{
+  if (m_InfoWindow == NULL) {
+    m_InfoWindow =
+        QxrdInfoWindowPtr(
+          new QxrdInfoWindow("extraIOInfo"));
+
+    m_InfoWindow -> initialize(m_Acquisition);
+  }
+
+  if (m_InfoWindow) {
+    m_InfoWindow -> show();
+    m_InfoWindow -> raise();
   }
 }
