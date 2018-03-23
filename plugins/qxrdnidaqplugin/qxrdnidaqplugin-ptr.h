@@ -1,0 +1,8 @@
+#ifndef QXRDNIDAQPLUGINPTR_H
+#define QXRDNIDAQPLUGINPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdNIDAQPlugin)
+
+#endif // QXRDNIDAQPLUGINPTR_H

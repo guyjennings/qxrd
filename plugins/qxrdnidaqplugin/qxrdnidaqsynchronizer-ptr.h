@@ -1,0 +1,8 @@
+#ifndef QXRDNIDAQSYNCHRONIZERPTR_H
+#define QXRDNIDAQSYNCHRONIZERPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdNIDAQSynchronizer)
+
+#endif // QXRDNIDAQSYNCHRONIZERPTR_H

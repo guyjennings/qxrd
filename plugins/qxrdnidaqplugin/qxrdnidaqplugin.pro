@@ -16,10 +16,14 @@ contains(DEFINES,HAVE_NIDAQ) {
 }
 
 HEADERS += \
-    qxrdnidaqplugin.h
+    qxrdnidaqplugin.h \
+    qxrdnidaqsynchronizer.h \
+    qxrdnidaqplugin-ptr.h \
+    qxrdnidaqsynchronizer-ptr.h
 
 SOURCES += \
-    qxrdnidaqplugin.cpp
+    qxrdnidaqplugin.cpp \
+    qxrdnidaqsynchronizer.cpp
 
 OTHER_FILES += \
     nidaq.json

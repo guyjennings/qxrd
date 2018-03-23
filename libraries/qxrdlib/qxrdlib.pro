@@ -328,7 +328,9 @@ SOURCES += qxrdlib.cpp \
     qxrdextraiooutputsdelegate.cpp \
     qxrdacquisitioneventlog.cpp \
     qxrdacquisitioneventlogwindow.cpp \
-    qxrdacquisitioneventlogmodel.cpp
+    qxrdacquisitioneventlogmodel.cpp \
+    qxrdsynchronizerplugin.cpp \
+    qxrdsynchronizer.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -567,7 +569,11 @@ HEADERS += qxrdlib.h\
     qxrdacquisitioneventlogwindow.h \
     qxrdacquisitioneventlogmodel.h \
     qxrdacquisitioneventlogwindow-ptr.h \
-    qxrdinfowindow-ptr.h
+    qxrdinfowindow-ptr.h \
+    qxrdsynchronizerplugin.h \
+    qxrdsynchronizerplugin-ptr.h \
+    qxrdsynchronizer.h \
+    qxrdsynchronizer-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
