@@ -19,6 +19,7 @@
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
 #include "qxrdexperiment.h"
+#include "qxrdsynchronizerthread.h"
 
 QxrdAcquisition::QxrdAcquisition(QString name) :
   inherited(name),
@@ -66,6 +67,16 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
   m_ExecutionThread -> initialize(sharedFromThis());
 
   m_ExecutionThread -> start();
+
+  m_SynchronizerThread =
+      QxrdSynchronizerThreadPtr(
+        new QxrdSynchronizerThread("synchronizerThread"));
+
+  m_SynchronizerThread -> initialize(sharedFromThis());
+
+  m_SynchronizerThread -> start();
+
+  m_Synchronizer = m_SynchronizerThread -> synchronizer();
 }
 
 QxrdAcquisition::~QxrdAcquisition()
@@ -504,20 +515,9 @@ void QxrdAcquisition::clearDropped()
   prop_DroppedFrames() -> setValue(0);
 }
 
-void QxrdAcquisition::setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin)
+QxrdSynchronizerWPtr QxrdAcquisition::synchronizer()
 {
-  if (m_SynchronizedAcquisition) {
-    m_SynchronizedAcquisition -> setNIDAQPlugin(nidaqPlugin);
-  }
-}
-
-QxrdNIDAQWPtr QxrdAcquisition::nidaqPlugin() const
-{
-  if (m_SynchronizedAcquisition) {
-    return m_SynchronizedAcquisition -> nidaqPlugin();
-  } else {
-    return QxrdNIDAQWPtr();
-  }
+  return m_Synchronizer;
 }
 
 QxrdSynchronizedAcquisitionPtr QxrdAcquisition::synchronizedAcquisition() const

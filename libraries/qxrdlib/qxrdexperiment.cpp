@@ -247,12 +247,10 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
 
     m_CalibrantDSpacings -> initialize(sharedFromThis());
 
-    QxrdApplicationPtr appp(
-          qSharedPointerDynamicCast<QxrdApplication>(app));
+//    QxrdApplicationPtr appp(
+//          qSharedPointerDynamicCast<QxrdApplication>(app));
 
-    if (m_Acquisition && appp) {
-      m_Acquisition -> setNIDAQPlugin(appp->nidaqPlugin());
-
+    if (m_Acquisition) {
       connect(m_Acquisition.data(), &QxrdAcqCommon::acquireStarted, this, &QxrdExperiment::acquireStarted);
       connect(m_Acquisition.data(), &QxrdAcqCommon::acquireComplete, this, &QxrdExperiment::acquireComplete);
       connect(m_Acquisition.data(), &QxrdAcqCommon::acquiredFrame, this, &QxrdExperiment::acquiredFrame);
@@ -1178,6 +1176,10 @@ void QxrdExperiment::autoSaveExperiment()
   THREAD_CHECK;
 
   if (isChanged()) {
+    QString cb = changedBy();
+
+    printMessage(tr("Autosave experiment because %1 changed").arg(cb));
+
     if (qcepDebug(DEBUG_PREFS)) {
       printMessage("started QxrdExperiment::autoSaveExperiment");
     }

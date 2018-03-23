@@ -1,0 +1,8 @@
+#ifndef QXRDSYNCHRONIZERTHREADPTR_H
+#define QXRDSYNCHRONIZERTHREADPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdSynchronizerThread)
+
+#endif // QXRDSYNCHRONIZERTHREADPTR_H

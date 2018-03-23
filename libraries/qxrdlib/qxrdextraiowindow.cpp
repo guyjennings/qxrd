@@ -13,7 +13,6 @@
 #include <QMessageBox>
 #include "qxrdextraiowindowsettings.h"
 #include <QThread>
-#include "qxrdnidaq.h"
 #include "qxrdextraiodetectorsmodel.h"
 #include "qxrdextraiooutputsmodel.h"
 #include "qxrdextraioinputsmodel.h"
@@ -22,6 +21,7 @@
 #include "qxrdextraiooutputsdelegate.h"
 #include "qxrdextraioinputsdelegate.h"
 #include "qxrdinfowindow.h"
+#include "qxrdsynchronizer.h"
 
 QxrdExtraIOWindow::QxrdExtraIOWindow(QString name) :
   inherited(name)/*,
@@ -46,7 +46,7 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
 
     if (acq) {
       m_SynchronizedAcquisition = acq->synchronizedAcquisition();
-      m_NIDAQPlugin             = acq->nidaqPlugin();
+      m_Synchronizer            = acq->synchronizer();
 
       QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
@@ -55,11 +55,11 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
                 this,        &QxrdExtraIOWindow::updateWaveforms);
 
 
-        QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+        QxrdSynchronizerPtr syncro(m_Synchronizer);
 
-        if (nidaq) {
-          for (int i=0; i<nidaq->detectorDeviceCount(); i++) {
-            m_DetectorCounter -> addItem(nidaq->detectorDeviceName(i));
+        if (syncro) {
+          for (int i=0; i<syncro->detectorDeviceCount(); i++) {
+            m_DetectorCounter -> addItem(syncro->detectorDeviceName(i));
           }
         }
 

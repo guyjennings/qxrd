@@ -12,8 +12,8 @@
 #include "qxrdexperimentthread-ptr.h"
 #include "qcepdataobject-ptr.h"
 #include "qxrdplugininfomodel-ptr.h"
-#include "qxrdnidaq-ptr.h"
 #include "qxrddetectorplugin-ptr.h"
+#include "qxrdsynchronizerplugin-ptr.h"
 
 class QXRD_EXPORT QxrdApplication : public QxrdAppCommon
 {
@@ -32,14 +32,8 @@ public:
 
   void loadPlugins();
 
-  QxrdNIDAQPtr nidaqPlugin();
-//  QxrdDetectorPluginInterface *simulatedDetectorPlugin();
-//  QxrdDetectorPluginInterfacePtr perkinElmerDetectorPlugin();
-//  QxrdDetectorPluginInterfacePtr dexelaDetectorPlugin();
-//  QxrdDetectorPluginInterfacePtr pilatusDetectorPlugin();
-//  QxrdDetectorPluginInterfacePtr areaDetectorPlugin();
-//  QxrdDetectorPluginInterfacePtr fileWatcherPlugin();
   QxrdDetectorPluginPtr detectorPlugin(int detType);
+  QxrdSynchronizerPluginPtr synchronizerPlugin();
 
   bool event(QEvent *ev);
 
@@ -106,7 +100,7 @@ private:
   QcepObjectNamer                 m_ObjectNamer;
   QTimer                          m_AutoSaveTimer;
 
-  QxrdNIDAQPtr                    m_NIDAQPlugin;
+  QxrdSynchronizerPluginPtr       m_SynchronizerPlugin;
   QxrdDetectorPluginPtr           m_SimulatedDetectorPlugin;
   QxrdDetectorPluginPtr           m_PerkinElmerDetectorPlugin;
   QxrdDetectorPluginPtr           m_PilatusDetectorPlugin;

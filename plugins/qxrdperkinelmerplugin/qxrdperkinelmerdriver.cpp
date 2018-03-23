@@ -965,7 +965,7 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
 //      sacq->acquiredFrameAvailable(m_FrameCounter);
 //    }
 
-    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
+    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepObjectWPtr()/*sharedFromThis()*/,
                                                                 tr("frame-%1").arg(counter),
                                                                 det -> get_NCols(), det -> get_NRows(),
                                                                 QcepAllocator::AllocateFromReserve);
@@ -1074,8 +1074,8 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
     if (m_ExposureFactor > 1) {
       if (m_SubframeCounter == 0) {
         m_AccumulatedData =
-            QcepAllocator::newInt32Image(sharedFromThis(),
-                                         tr("areadet-%1").arg(frame),
+            QcepAllocator::newInt32Image(QcepObjectWPtr()/*sharedFromThis()*/,
+                                         tr("accum-%1").arg(frame),
                                          nCols, nRows,
                                          QcepAllocator::AllocateFromReserve);
       }

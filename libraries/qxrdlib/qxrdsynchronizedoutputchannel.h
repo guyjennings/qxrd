@@ -3,10 +3,10 @@
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
-#include "qxrdnidaq-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdacquisitionparameterpack-ptr.h"
+#include "qxrdsynchronizer-ptr.h"
 
 class QXRD_EXPORT QxrdSynchronizedOutputChannel : public QcepObject
 {
@@ -48,7 +48,7 @@ public:
 private:
   QxrdAcqCommonWPtr               m_AcqCommon;
   QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
-  QxrdNIDAQWPtr                   m_NIDAQ;
+  QxrdSynchronizerWPtr            m_Synchronizer;
 
 public:
   Q_PROPERTY(int channelNumber READ get_ChannelNumber WRITE set_ChannelNumber)

@@ -1,10 +1,10 @@
 #include "qxrdsynchronizedoutputchannel.h"
 #include "qxrdacqcommon.h"
 #include "qxrdsynchronizedacquisition.h"
-#include "qxrdnidaq.h"
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrddarkacquisitionparameterpack.h"
 #include "qwt_math.h"
+#include "qxrdsynchronizer.h"
 
 QxrdSynchronizedOutputChannel::QxrdSynchronizedOutputChannel(QString name)
   : inherited(name),
@@ -34,24 +34,17 @@ void QxrdSynchronizedOutputChannel::initialize(QcepObjectWPtr parent)
 
   if (acq) {
     m_SynchronizedAcquisition = acq->synchronizedAcquisition();
-  }
-
-  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
-
-  if (sync) {
-    m_NIDAQ = sync->nidaqPlugin();
-  } else {
-    printMessage("QxrdSynchronizedOutputChannel::initialize parent not QxrdSynchronizedAcquisition");
+    m_Synchronizer            = acq->synchronizer();
   }
 }
 
 QString QxrdSynchronizedOutputChannel::channelName()
 {
   QString      res = "Unknown Input";
-  QxrdNIDAQPtr nidaq(m_NIDAQ);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    res = nidaq->outputDeviceName(get_ChannelNumber());
+  if (sync) {
+    res = sync->outputDeviceName(get_ChannelNumber());
   }
 
   return res;

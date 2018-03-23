@@ -225,7 +225,7 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
 //    }
 
     QcepUInt16ImageDataPtr image =
-        QcepAllocator::newInt16Image(sharedFromThis(),
+        QcepAllocator::newInt16Image(QcepObjectWPtr()/*sharedFromThis()*/,
                                      tr("frame-%1").arg(fc),
                                      m_XDim, m_YDim,
                                      QcepAllocator::AllocateFromReserve);
@@ -268,7 +268,7 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
       if (m_ExposureFactor > 1) {
         if (m_SubframeCounter == 0) {
           m_AccumulatedData =
-              QcepAllocator::newInt32Image(sharedFromThis(),
+              QcepAllocator::newInt32Image(QcepObjectWPtr()/*sharedFromThis()*/,
                                            tr("dexela-%1").arg(m_FrameCounter),
                                            m_XDim, m_YDim,
                                            QcepAllocator::AllocateFromReserve);

@@ -314,7 +314,6 @@ SOURCES += qxrdlib.cpp \
     qxrdstartupwindow.cpp \
     qxrdstartupwindowsettings.cpp \
     qxrddetectorplugin.cpp \
-    qxrdnidaq.cpp \
     qxrdcorrectiondialogpage.cpp \
     qxrdexposurepreferencesdialog.cpp \
     qxrdextraiodetectorsmodel.cpp \
@@ -330,7 +329,8 @@ SOURCES += qxrdlib.cpp \
     qxrdacquisitioneventlogwindow.cpp \
     qxrdacquisitioneventlogmodel.cpp \
     qxrdsynchronizerplugin.cpp \
-    qxrdsynchronizer.cpp
+    qxrdsynchronizer.cpp \
+    qxrdsynchronizerthread.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -540,8 +540,6 @@ HEADERS += qxrdlib.h\
     qxrdstartupwindowsettings-ptr.h \
     qxrddetectorplugin.h \
     qxrddetectorplugin-ptr.h \
-    qxrdnidaq.h \
-    qxrdnidaq-ptr.h \
     qxrdcorrectiondialogpage.h \
     qxrdcorrectiondialogpage-ptr.h \
     qxrdexposurepreferencesdialog.h \
@@ -573,7 +571,9 @@ HEADERS += qxrdlib.h\
     qxrdsynchronizerplugin.h \
     qxrdsynchronizerplugin-ptr.h \
     qxrdsynchronizer.h \
-    qxrdsynchronizer-ptr.h
+    qxrdsynchronizer-ptr.h \
+    qxrdsynchronizerthread.h \
+    qxrdsynchronizerthread-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

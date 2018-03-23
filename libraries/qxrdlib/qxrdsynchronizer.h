@@ -17,6 +17,8 @@ private:
 public:
   QxrdSynchronizer(QString name);
 
+  virtual void stopSynchronizer() = 0;
+
   virtual QString name() const = 0;
 
   virtual int detectorDeviceCount() = 0;

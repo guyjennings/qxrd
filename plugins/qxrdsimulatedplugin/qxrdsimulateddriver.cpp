@@ -125,7 +125,7 @@ void QxrdSimulatedDriver::onTimerTimeout()
     int frame = m_FrameCounter % 8;
 
     QcepUInt16ImageDataPtr image =
-        QcepAllocator::newInt16Image(sharedFromThis(),
+        QcepAllocator::newInt16Image(QcepObjectWPtr()/*sharedFromThis()*/,
                                      tr("simdet-%1").arg(frame),
                                      nCols, nRows,
                                      QcepAllocator::AllocateFromReserve);
@@ -196,7 +196,7 @@ void QxrdSimulatedDriver::onTimerTimeout()
     if (m_ExposureFactor > 1) {
       if (m_SubframeCounter == 0) {
         m_AccumulatedData =
-            QcepAllocator::newInt32Image(sharedFromThis(),
+            QcepAllocator::newInt32Image(QcepObjectWPtr()/*sharedFromThis()*/,
                                          tr("areadet-%1").arg(frame),
                                          nCols, nRows,
                                          QcepAllocator::AllocateFromReserve);

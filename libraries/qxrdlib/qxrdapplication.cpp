@@ -31,7 +31,7 @@
 #include "qxrdstartupwindow.h"
 #include "qxrdstartupwindowsettings.h"
 #include "qxrddetectorplugin.h"
-#include "qxrdnidaq.h"
+#include "qxrdsynchronizerplugin.h"
 #include <QTime>
 #include <QtConcurrentRun>
 #include <QFileDialog>
@@ -60,7 +60,6 @@ void QxrdApplication::processEventCounter()
 QxrdApplication::QxrdApplication(int &argc, char **argv) :
   inherited(argc, argv),
   m_ObjectNamer(this, "application"),
-  m_NIDAQPlugin(NULL),
   m_SimulatedDetectorPlugin(NULL),
   m_PerkinElmerDetectorPlugin(NULL),
   m_DexelaPlugin(NULL),
@@ -293,9 +292,9 @@ void QxrdApplication::onAutoSaveTimer()
   }
 }
 
-QxrdNIDAQPtr QxrdApplication::nidaqPlugin()
+QxrdSynchronizerPluginPtr QxrdApplication::synchronizerPlugin()
 {
-  return m_NIDAQPlugin;
+  return m_SynchronizerPlugin;
 }
 
 #define xstr(s) str(s)
@@ -350,17 +349,13 @@ void QxrdApplication::loadPlugins()
           QString errorString = "";
           QString pluginName = "";
 
-          //        QcepObject *obj = qobject_cast<QcepObject*>(plugin);
-          //        QcepObjectPtr objp(obj);
-
-          QxrdDetectorPlugin *detPlugin   = qobject_cast<QxrdDetectorPlugin*>(plugin);
-          QxrdNIDAQ          *nidaqPlugin = qobject_cast<QxrdNIDAQ*>(plugin);
-          QcepObject         *qcepObject  = qobject_cast<QcepObject*>(plugin);
+          QxrdDetectorPlugin     *detPlugin   = qobject_cast<QxrdDetectorPlugin*>(plugin);
+          QxrdSynchronizerPlugin *syncPlugin  = qobject_cast<QxrdSynchronizerPlugin*>(plugin);
 
           if (detPlugin) {
             detPlugin -> registerMetaTypes();
-          } else if (nidaqPlugin) {
-            nidaqPlugin -> registerMetaTypes();
+          } else if (syncPlugin) {
+            syncPlugin -> registerMetaTypes();
           }
 
           if (className == "QxrdAreaDetectorPlugin") {
@@ -400,15 +395,15 @@ void QxrdApplication::loadPlugins()
               }
             }
           } else if (className == "QxrdNIDAQPlugin") {
-            if (m_NIDAQPlugin) {
+            if (m_SynchronizerPlugin) {
               splashMessage("NIDAQ Plugin already loaded");
             } else {
-              m_NIDAQPlugin =
-                  QxrdNIDAQPtr(nidaqPlugin);
-              if (m_NIDAQPlugin) {
-                splashMessage(tr("NIDAQ Plugin loaded from %1").arg(fileName));
+              m_SynchronizerPlugin =
+                  QxrdSynchronizerPluginPtr(syncPlugin);
+              if (m_SynchronizerPlugin) {
+                splashMessage(tr("Synchronizer Plugin loaded from %1").arg(fileName));
 
-                m_NIDAQPlugin -> initialize(sharedFromThis());
+                m_SynchronizerPlugin -> initialize(sharedFromThis());
               }
             }
           } else if (className == "QxrdPerkinElmerPlugin") {
@@ -469,10 +464,10 @@ void QxrdApplication::loadPlugins()
               pluginName = detPlugin->name();
             }
 
-            QxrdNIDAQ* nidaqPlugin = qobject_cast<QxrdNIDAQ*>(plugin);
+            QxrdSynchronizerPlugin* syncPlugin = qobject_cast<QxrdSynchronizerPlugin*>(plugin);
 
-            if (nidaqPlugin) {
-              pluginName = nidaqPlugin->name();
+            if (syncPlugin) {
+              pluginName = syncPlugin->name();
             }
 
             if (qcepDebug(DEBUG_PLUGINS)) {

@@ -118,7 +118,7 @@ void QxrdFileWatcherDriver::onTimerTimeout()
     int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
     int frame = m_FrameCounter % 8;
 
-    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
+    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepObjectWPtr()/*sharedFromThis()*/,
                                                                 tr("filewatcher-%1").arg(frame),
                                                                 nCols, nRows,
                                                                 QcepAllocator::AllocateFromReserve);

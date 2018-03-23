@@ -20,7 +20,7 @@
 #include "qxrdintegrator.h"
 #include "qxrdpolartransform.h"
 #include "qxrdpolarnormalization.h"
-#include "qxrdnidaq.h"
+#include "qxrdsynchronizerplugin.h".h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdapplication.h"
 
@@ -134,11 +134,10 @@ void QxrdJSEngine::initialize(QcepObjectWPtr parent)
           qSharedPointerDynamicCast<QxrdApplication>(app));
 
     if (appp) {
-      QxrdNIDAQPtr nidaq = appp->nidaqPlugin();
+      QxrdSynchronizerPluginPtr sync = appp->synchronizerPlugin();
 
-      if (nidaq) {
-        //      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
-        setGlobalProperty("nidaq", newQObject(nidaq.data()));
+      if (sync) {
+        setGlobalProperty("syncPlugin", newQObject(sync.data()));
       }
     }
   }

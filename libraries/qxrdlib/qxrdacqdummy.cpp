@@ -31,13 +31,9 @@ QxrdDetectorSettingsPtr QxrdAcqDummy::detector(int i) const
   return QxrdDetectorSettingsPtr();
 }
 
-void QxrdAcqDummy::setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin)
+QxrdSynchronizerWPtr QxrdAcqDummy::synchronizer()
 {
-}
-
-QxrdNIDAQWPtr QxrdAcqDummy::nidaqPlugin() const
-{
-  return QxrdNIDAQWPtr();
+  return QxrdSynchronizerWPtr();
 }
 
 QxrdSynchronizedAcquisitionPtr QxrdAcqDummy::synchronizedAcquisition() const

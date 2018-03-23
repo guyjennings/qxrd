@@ -1,7 +1,7 @@
 #include "qxrdsynchronizedinputchannel.h"
 #include "qxrdacqcommon.h"
 #include "qxrdsynchronizedacquisition.h"
-#include "qxrdnidaq.h"
+#include "qxrdsynchronizer.h"
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrddarkacquisitionparameterpack.h"
 
@@ -29,24 +29,17 @@ void QxrdSynchronizedInputChannel::initialize(QcepObjectWPtr parent)
 
   if (acq) {
     m_SynchronizedAcquisition = acq->synchronizedAcquisition();
-  }
-
-  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
-
-  if (sync) {
-    m_NIDAQ = sync->nidaqPlugin();
-  } else {
-    printMessage("QxrdSynchronizedInputChannel::initialize parent not QxrdSynchronizedAcquisition");
+    m_Synchronizer            = acq->synchronizer();
   }
 }
 
 QString QxrdSynchronizedInputChannel::channelName()
 {
-  QString      res = "Unknown Input";
-  QxrdNIDAQPtr nidaq(m_NIDAQ);
+  QString             res = "Unknown Input";
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    res = nidaq->inputDeviceName(get_ChannelNumber());
+  if (sync) {
+    res = sync->inputDeviceName(get_ChannelNumber());
   }
 
   return res;

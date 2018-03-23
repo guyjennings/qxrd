@@ -43,7 +43,7 @@
 #include <QRegExp>
 #include "qxrdpolartransform.h"
 #include "qxrdpolarnormalization.h"
-#include "qxrdnidaq.h"
+#include "qxrdsynchronizerplugin.h"
 
 QxrdScriptEngine::QxrdScriptEngine(QString name)
   : inherited(name),
@@ -2239,11 +2239,11 @@ void QxrdScriptEngine::initialize(QcepObjectWPtr parent)
         qSharedPointerDynamicCast<QxrdApplication>(app));
 
   if (appp) {
-    QxrdNIDAQPtr nidaq = appp->nidaqPlugin();
+    QxrdSynchronizerPluginPtr sync = appp->synchronizerPlugin();
 
-    if (nidaq) {
-      QCEP_DOC_OBJECT("nidaq", "NIDAQ Data Acquisition Plugin");
-      globalObject().setProperty("nidaq", newQObject(nidaq.data()));
+    if (sync) {
+      QCEP_DOC_OBJECT("syncPlugin", "Hardware Synchronizer Plugin");
+      globalObject().setProperty("syncPlugin", newQObject(sync.data()));
     }
   }
 

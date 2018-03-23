@@ -9,12 +9,13 @@
 
 #include "qxrdsynchronizer.h"
 #include "NIDAQmx.h"
+#include "qxrdacqcommon-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
 #include "qxrdsynchronizeddetectorchannel-ptr.h"
 #include "qxrdsynchronizedoutputchannel-ptr.h"
 #include "qxrdsynchronizedinputchannel-ptr.h"
 
-class QXRD_EXPORT QxrdNIDAQSynchronizer : public QxrdSynchronizer
+class QxrdNIDAQSynchronizer : public QxrdSynchronizer
 {
   Q_OBJECT
 
@@ -27,6 +28,8 @@ public:
 
   void initialize(QcepObjectWPtr parent);
   QString name() const;
+
+  void stopSynchronizer();
 
 public slots:
   void   changeExposureTime(double t, int n);
@@ -111,5 +114,7 @@ private:
   int                 m_InputDeviceCount;
   QStringList         m_InputDeviceNames;
 };
+
+Q_DECLARE_METATYPE(QxrdNIDAQSynchronizer*)
 
 #endif // QXRDNIDAQSYNCHRONIZER_H

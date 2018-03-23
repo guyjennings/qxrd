@@ -27,6 +27,8 @@
 #include "qxrdacquisitionexecutionthread-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrdacquisitioneventlog-ptr.h"
+#include "qxrdsynchronizerthread-ptr.h"
+#include "qxrdsynchronizer-ptr.h"
 
 class QXRD_EXPORT QxrdAcquisition : public QxrdAcqCommon
 {
@@ -89,8 +91,7 @@ public:
 
   QxrdSynchronizedAcquisitionPtr synchronizedAcquisition() const;
 
-  void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
-  QxrdNIDAQWPtr nidaqPlugin() const;
+  QxrdSynchronizerWPtr synchronizer();
 
 protected slots:
   void onIdleTimeout();
@@ -107,7 +108,8 @@ private:
   mutable QMutex                   m_Mutex;
 
   QxrdSynchronizedAcquisitionPtr   m_SynchronizedAcquisition;
-
+  QxrdSynchronizerThreadPtr        m_SynchronizerThread;
+  QxrdSynchronizerWPtr             m_Synchronizer;
   QTimer                           m_IdleTimer;
   QAtomicInt                       m_Idling;
 

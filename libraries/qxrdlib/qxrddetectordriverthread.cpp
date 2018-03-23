@@ -8,14 +8,19 @@
 #include <stdio.h>
 
 QxrdDetectorDriverThread::QxrdDetectorDriverThread(QString name) :
-  QxrdThread(name),
+  inherited(name),
   m_Detector(),
   m_DetectorDriver()
 {
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdDetectorDriverThread::QxrdDetectorDriverThread(%p)\n", this);
+  }
 }
 
 void QxrdDetectorDriverThread::initialize(QcepObjectWPtr parent)
 {
+  inherited::initialize(parent);
+
   m_Detector = QxrdDetectorSettings::findDetectorSettings(parent);
 
   QxrdDetectorSettingsPtr d(m_Detector);
@@ -28,9 +33,6 @@ void QxrdDetectorDriverThread::initialize(QcepObjectWPtr parent)
   }
 #endif
 
-  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdDetectorDriverThread::QxrdDetectorDriverThread(%p)\n", this);
-  }
 
   if (d) {
     setObjectName(d->get_DetectorTypeName()+"Thread");
@@ -93,11 +95,11 @@ void QxrdDetectorDriverThread::run()
 
 QxrdDetectorDriverWPtr QxrdDetectorDriverThread::detectorDriver() const
 {
-//  while (isRunning()) {
-//    if (m_Detector) return m_Detector;
+  while (isRunning()) {
+    if (m_DetectorDriver) return m_DetectorDriver;
 
-//    QThread::msleep(50);
-//  }
+    msleep(50);
+  }
 
   return m_DetectorDriver;
 }

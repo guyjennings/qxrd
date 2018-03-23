@@ -4,10 +4,10 @@
 #include "qwt_math.h"
 #include "qxrdacqcommon.h"
 #include "qxrdacquisitionparameterpack.h"
-#include "qxrdnidaq.h"
 #include "qxrdsynchronizeddetectorchannel.h"
 #include "qxrdsynchronizedoutputchannel.h"
 #include "qxrdsynchronizedinputchannel.h"
+#include "qxrdsynchronizer.h"
 
 QxrdSynchronizedAcquisition::QxrdSynchronizedAcquisition(QString name) :
   QcepObject(name),
@@ -28,6 +28,12 @@ void QxrdSynchronizedAcquisition::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 
   m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
+
+  QxrdAcqCommonPtr acq(m_Acquisition);
+
+  if (acq) {
+    m_Synchronizer = acq->synchronizer();
+  }
 }
 
 QxrdSynchronizedAcquisition::~QxrdSynchronizedAcquisition()
@@ -186,10 +192,10 @@ QString QxrdSynchronizedAcquisition::primaryCounterName()
 
   QString res = QString();
 
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    res = nidaq->detectorDeviceName(n);
+  if (sync) {
+    res = sync->detectorDeviceName(n);
   }
 
   return res;
@@ -209,10 +215,10 @@ int QxrdSynchronizedAcquisition::detectorDeviceCount()
 {
   int res = 0;
 
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    res = nidaq->detectorDeviceCount();
+  if (sync) {
+    res = sync->detectorDeviceCount();
   }
 
   return res;
@@ -222,10 +228,10 @@ QString QxrdSynchronizedAcquisition::detectorDeviceName(int n)
 {
   QString res = QString();
 
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    res = nidaq->detectorDeviceName(n);
+  if (sync) {
+    res = sync->detectorDeviceName(n);
   }
 
   return res;
@@ -281,10 +287,10 @@ int QxrdSynchronizedAcquisition::outputDeviceCount()
 {
   int res = 0;
 
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    res = nidaq->outputDeviceCount();
+  if (sync) {
+    res = sync->outputDeviceCount();
   }
 
   return res;
@@ -294,10 +300,10 @@ QString QxrdSynchronizedAcquisition::outputDeviceName(int n)
 {
   QString res = QString();
 
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    res = nidaq->outputDeviceName(n);
+  if (sync) {
+    res = sync->outputDeviceName(n);
   }
 
   return res;
@@ -353,10 +359,10 @@ int QxrdSynchronizedAcquisition::inputDeviceCount()
 {
   int res = 0;
 
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    res = nidaq->inputDeviceCount();
+  if (sync) {
+    res = sync->inputDeviceCount();
   }
 
   return res;
@@ -366,10 +372,10 @@ QString QxrdSynchronizedAcquisition::inputDeviceName(int n)
 {
   QString res = QString();
 
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    res = nidaq->inputDeviceName(n);
+  if (sync) {
+    res = sync->inputDeviceName(n);
   }
 
   return res;
@@ -439,16 +445,6 @@ double QxrdSynchronizedAcquisition::evaluateInput(int ch)
   return res;
 }
 
-void QxrdSynchronizedAcquisition::setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin)
-{
-  m_NIDAQPlugin = nidaqPlugin;
-}
-
-QxrdNIDAQWPtr QxrdSynchronizedAcquisition::nidaqPlugin() const
-{
-  return m_NIDAQPlugin;
-}
-
 QxrdAcquisitionParameterPackWPtr QxrdSynchronizedAcquisition::parms()
 {
   return m_AcquisitionParms;
@@ -485,10 +481,10 @@ void QxrdSynchronizedAcquisition::updateWaveforms()
       }
     }
 
-    QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+    QxrdSynchronizerPtr sync(m_Synchronizer);
 
-    if (nidaq) {
-      nidaq->updateSyncWaveforms(
+    if (sync) {
+      sync->updateSyncWaveforms(
             qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
     }
   }
@@ -516,10 +512,10 @@ void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionP
     }
   }
 
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    nidaq->prepareForDarkAcquistion(
+  if (sync) {
+    sync->prepareForDarkAcquistion(
           qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
   }
 
@@ -546,10 +542,10 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
     }
   }
 
-  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
 
-  if (nidaq) {
-    nidaq -> prepareForAcquisition(
+  if (sync) {
+    sync -> prepareForAcquisition(
           qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
   }
 

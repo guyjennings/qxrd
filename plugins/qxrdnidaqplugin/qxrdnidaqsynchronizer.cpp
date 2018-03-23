@@ -16,7 +16,11 @@
 #include "qxrddebug.h"
 #include <QMetaObject>
 
-#define DAQmxErrChk(functionCall) do { int error; if( DAQmxFailed(error=(functionCall)) ) { QxrdNIDAQPlugin::errorCheck(__FILE__,__LINE__,error); goto Error; } } while(0)
+#define DAQmxErrChk(functionCall) do { int error; \
+                                       if( DAQmxFailed(error=(functionCall)) ) { \
+                                           QxrdNIDAQSynchronizer::errorCheck(__FILE__,__LINE__,error); \
+                                           goto Error; \
+                                       } } while(0)
 
 QxrdNIDAQSynchronizer::QxrdNIDAQSynchronizer(QString name)
   : inherited(name),
@@ -75,6 +79,11 @@ void QxrdNIDAQSynchronizer::initialize(QcepObjectWPtr parent)
 QString QxrdNIDAQSynchronizer::name() const
 {
   return "NIDAQ Synchronizer";
+}
+
+void QxrdNIDAQSynchronizer::stopSynchronizer()
+{
+  closeTaskHandles();
 }
 
 void QxrdNIDAQSynchronizer::errorCheck(const char* file, int line, int err)
@@ -411,10 +420,10 @@ Error:
 
 static int32 CVICALLBACK syncCallback(TaskHandle taskHandle, int32 status, void *callbackData)
 {
-  QxrdNIDAQPlugin *plugin = reinterpret_cast<QxrdNIDAQPlugin*>(callbackData);
+  QxrdNIDAQSynchronizer *syncro = reinterpret_cast<QxrdNIDAQSynchronizer*>(callbackData);
 
-  if (plugin) {
-    return plugin->syncCallback(taskHandle, status);
+  if (syncro) {
+    return syncro->syncCallback(taskHandle, status);
   } else {
     return status;
   }
@@ -422,12 +431,12 @@ static int32 CVICALLBACK syncCallback(TaskHandle taskHandle, int32 status, void 
 
 static int32 CVICALLBACK aiCallback(TaskHandle taskHandle, int32 everyNSamplesEventType, uInt32 nSamples, void *callbackData)
 {
-  QxrdNIDAQPlugin *plugin = reinterpret_cast<QxrdNIDAQPlugin*>(callbackData);
+  QxrdNIDAQSynchronizer *syncro = reinterpret_cast<QxrdNIDAQSynchronizer*>(callbackData);
 
-  if (plugin) {
+  if (syncro) {
     INVOKE_CHECK(
-          QMetaObject::invokeMethod(plugin,
-            [=]() { plugin->aiCallback(taskHandle, everyNSamplesEventType, nSamples); }));
+          QMetaObject::invokeMethod(syncro,
+            [=]() { syncro->aiCallback(taskHandle, everyNSamplesEventType, nSamples); }));
   } else {
     return everyNSamplesEventType;
   }
@@ -849,7 +858,7 @@ int32 QxrdNIDAQSynchronizer::syncCallback(TaskHandle task, int32 status)
   m_SyncCounter += 1;
 
 //  if (qcepDebug(DEBUG_NIDAQ)) {
-//    printMessage(tr("QxrdNIDAQPlugin::syncCallback %1 = %2, state = %3")
+//    printMessage(tr("QxrdNIDAQSynchronizer::syncCallback %1 = %2, state = %3")
 //                 .arg(status)
 //                 .arg(m_SyncCounter)
 //                 .arg(state));
@@ -954,7 +963,7 @@ void QxrdNIDAQSynchronizer::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr 
   QxrdSynchronizedAcquisitionPtr  sync(s);
 
   if (qcepDebug(DEBUG_NIDAQ)) {
-    printMessage("QxrdNIDAQPlugin::updateSyncWaveforms");
+    printMessage("QxrdNIDAQSynchronizer::updateSyncWaveforms");
   }
 
   if (sync && parm) {
@@ -1006,10 +1015,10 @@ void QxrdNIDAQSynchronizer::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr 
 
 void QxrdNIDAQSynchronizer::prepareForAcquisition(QxrdSynchronizedAcquisitionWPtr s, QxrdAcquisitionParameterPackWPtr p)
 {
-  printMessage("QxrdNIDAQPlugin::prepareForAcquisition");
+  printMessage("QxrdNIDAQSynchronizer::prepareForAcquisition");
 }
 
 void QxrdNIDAQSynchronizer::prepareForDarkAcquistion(QxrdSynchronizedAcquisitionWPtr s, QxrdDarkAcquisitionParameterPackWPtr p)
 {
-  printMessage("QxrdNIDAQPlugin::prepareForDarkAcquisition");
+  printMessage("QxrdNIDAQSynchronizer::prepareForDarkAcquisition");
 }

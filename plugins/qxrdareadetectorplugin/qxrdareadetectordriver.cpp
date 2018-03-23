@@ -123,7 +123,7 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
     int xpmsec = (int)(acq->get_ExposureTime()*1000+0.5);
     int frame = m_FrameCounter % 8;
 
-    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(sharedFromThis(),
+    QcepUInt16ImageDataPtr image = QcepAllocator::newInt16Image(QcepObjectWPtr()/*sharedFromThis()*/,
                                                                 tr("areadet-%1").arg(frame),
                                                                 nCols, nRows,
                                                                 QcepAllocator::AllocateFromReserve);
@@ -192,7 +192,7 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
     if (m_ExposureFactor > 1) {
       if (m_SubframeCounter == 0) {
         m_AccumulatedData =
-            QcepAllocator::newInt32Image(sharedFromThis(),
+            QcepAllocator::newInt32Image(QcepObjectWPtr()/*sharedFromThis()*/,
                                          tr("areadet-%1").arg(frame),
                                          nCols, nRows,
                                          QcepAllocator::AllocateFromReserve);

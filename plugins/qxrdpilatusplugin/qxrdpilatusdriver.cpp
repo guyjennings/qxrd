@@ -498,7 +498,7 @@ void QxrdPilatusDriver::loadAndPush(QString f)
       QString dest = proc->filePathInRawOutputDirectory(f);
 
       QcepUInt32ImageDataPtr image =
-          QcepAllocator::newInt32Image(sharedFromThis(),
+          QcepAllocator::newInt32Image(QcepObjectWPtr()/*sharedFromThis()*/,
                                        "pilatus",
                                        0,0,
                                        QcepAllocator::AllocateFromReserve);
@@ -517,8 +517,8 @@ void QxrdPilatusDriver::loadAndPush(QString f)
       if (m_ExposureFactor > 1) {
         if (m_SubframeCounter == 0) {
           m_AccumulatedData =
-              QcepAllocator::newInt32Image(sharedFromThis(),
-                                           tr("areadet-%1").arg(m_FrameCounter),
+              QcepAllocator::newInt32Image(QcepObjectWPtr()/*sharedFromThis()*/,
+                                           tr("accum-%1").arg(m_FrameCounter),
                                            image->get_Width(), image->get_Height(),
                                            QcepAllocator::AllocateFromReserve);
         }

@@ -12,6 +12,10 @@
 class QXRD_EXPORT QxrdDetectorDriverThread : public QxrdThread
 {
   Q_OBJECT
+
+private:
+  typedef QxrdThread inherited;
+
 public:
   explicit QxrdDetectorDriverThread(QString name);
   virtual ~QxrdDetectorDriverThread();

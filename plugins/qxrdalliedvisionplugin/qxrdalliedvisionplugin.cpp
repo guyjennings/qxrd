@@ -18,15 +18,6 @@ void QxrdAlliedVisionPlugin::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 
-  QcepObjectWPtr me = sharedFromThis();
-
-  QSharedPointer<QxrdAlliedVisionPlugin> myself =
-      qSharedPointerDynamicCast<QxrdAlliedVisionPlugin>(me);
-
-  if (myself) {
-    printMessage("QxrdAlliedVisionPlugin::myself != NULL");
-  }
-
   printMessage("QxrdAlliedVisionPlugin::initialize");
 }
 

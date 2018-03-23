@@ -10,10 +10,10 @@
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 #include "qxrdsynchronizedacquisition-ptr.h"
-#include "qxrdnidaq-ptr.h"
 #include "qxrdsynchronizeddetectorchannel-ptr.h"
 #include "qxrdsynchronizedoutputchannel-ptr.h"
 #include "qxrdsynchronizedinputchannel-ptr.h"
+#include "qxrdsynchronizer-ptr.h"
 
 class QXRD_EXPORT QxrdSynchronizedAcquisition : public QcepObject
 {
@@ -93,15 +93,15 @@ public:
   void prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPackWPtr parms);
   void finishedAcquisition();
 //  void acquiredFrameAvailable(int currentPhase);
-  void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
-  QxrdNIDAQWPtr nidaqPlugin() const;
+//  void setNIDAQPlugin(QxrdNIDAQWPtr nidaqPlugin);
+//  QxrdNIDAQWPtr nidaqPlugin() const;
   QxrdAcquisitionParameterPackWPtr parms();
 
 private:
   QxrdAcqCommonWPtr                    m_Acquisition;
   QxrdAcquisitionParameterPackWPtr     m_AcquisitionParms;
   QxrdDarkAcquisitionParameterPackWPtr m_DarkAcquisitionParms;
-  QxrdNIDAQWPtr                        m_NIDAQPlugin;
+  QxrdSynchronizerWPtr                 m_Synchronizer;
   int                                  m_SyncMode;
 
   QVector<QxrdSynchronizedDetectorChannelPtr> m_Detectors;

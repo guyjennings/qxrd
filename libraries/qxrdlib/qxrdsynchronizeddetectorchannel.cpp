@@ -2,7 +2,7 @@
 #include "qxrddetectorsettings.h"
 #include "qxrdacqcommon.h"
 #include "qxrdsynchronizedacquisition.h"
-#include "qxrdnidaq.h"
+#include "qxrdsynchronizer.h"
 #include "qxrdexperiment.h"
 
 QxrdSynchronizedDetectorChannel::QxrdSynchronizedDetectorChannel(QString name)
@@ -23,24 +23,18 @@ void QxrdSynchronizedDetectorChannel::initialize(QcepObjectWPtr parent)
 
   if (acq) {
     m_SynchronizedAcquisition = acq->synchronizedAcquisition();
-  }
-
-  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
-
-  if (sync) {
-    m_NIDAQ = sync->nidaqPlugin();
-  } else {
-    printMessage("QxrdSynchronizedDetectorChannel::initialize parent not QxrdSynchronizedAcquisition");
+    m_Synchronizer            = acq->synchronizer();
   }
 }
 
 QString QxrdSynchronizedDetectorChannel::channelName()
 {
-  QString      res = "Unknown Channel";
-  QxrdNIDAQPtr nidaq(m_NIDAQ);
+  QString             res = "Unknown Channel";
 
-  if (nidaq) {
-    res = nidaq->detectorDeviceName(get_ChannelNumber());
+  QxrdSynchronizerPtr sync(m_Synchronizer);
+
+  if (sync) {
+    res = sync->detectorDeviceName(get_ChannelNumber());
   }
 
   return res;
