@@ -70,6 +70,8 @@ public slots:
 
   QxrdAcqCommonWPtr acquisition();
 
+  void restartSync();
+
 signals:
   void detectorCountChanged(int n);
   void outputCountChanged(int n);

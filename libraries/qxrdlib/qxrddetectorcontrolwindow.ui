@@ -228,16 +228,6 @@ Script Function: acquireCancel()</string>
                </property>
               </widget>
              </item>
-             <item row="16" column="2">
-              <widget class="QLabel" name="label_7">
-               <property name="text">
-                <string>Dark Summed:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
              <item row="14" column="3">
               <widget class="QSpinBox" name="m_PhasesInGroup">
                <property name="sizePolicy">
@@ -426,16 +416,6 @@ Script Property: &quot;acquisition.userComment3&quot;
                </property>
               </widget>
              </item>
-             <item row="15" column="2">
-              <widget class="QLabel" name="label_33">
-               <property name="text">
-                <string>Avg. Value</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_26">
                <property name="text">
@@ -443,16 +423,6 @@ Script Property: &quot;acquisition.userComment3&quot;
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="15" column="3">
-              <widget class="QLabel" name="m_AverageDisplay">
-               <property name="toolTip">
-                <string>Average value of acquired frames</string>
-               </property>
-               <property name="text">
-                <string>TextLabel</string>
                </property>
               </widget>
              </item>
@@ -490,30 +460,6 @@ Script Function: skippedExposures()</string>
                </property>
                <property name="value">
                 <number>0</number>
-               </property>
-              </widget>
-             </item>
-             <item row="16" column="3">
-              <widget class="QSpinBox" name="m_DarkSummedExposures">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>1</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>Number of exposures to sum for dark image
-Script Property: acquisition.darkSummedExposures
-Script Function: darkSummedExposures()</string>
-               </property>
-               <property name="keyboardTracking">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <number>9999999</number>
                </property>
               </widget>
              </item>
@@ -908,6 +854,74 @@ Script Property: &quot;acquisition.userComment4&quot;
                 <string>User Comment 1 (saved in data files)
 Script Property: &quot;acquisition.userComment1&quot;
 </string>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="3">
+              <widget class="QPushButton" name="m_EventLogButton">
+               <property name="text">
+                <string>Event Log...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="15" column="2">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Dark Summed:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="15" column="3">
+              <widget class="QSpinBox" name="m_DarkSummedExposures">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Number of exposures to sum for dark image
+Script Property: acquisition.darkSummedExposures
+Script Function: darkSummedExposures()</string>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>9999999</number>
+               </property>
+              </widget>
+             </item>
+             <item row="16" column="3">
+              <widget class="QPushButton" name="m_RestartDetectorsButton">
+               <property name="text">
+                <string>Restart Detectors...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QPushButton" name="m_DetectorInfoButton">
+               <property name="toolTip">
+                <string>Select New Log File...</string>
+               </property>
+               <property name="text">
+                <string>Info...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="qxrdresources.qrc">
+                 <normaloff>:/images/help-about.png</normaloff>:/images/help-about.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
                </property>
               </widget>
              </item>
@@ -1505,7 +1519,7 @@ Script Property: &quot;acquisition.userComment1&quot;
      <x>0</x>
      <y>0</y>
      <width>953</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -1533,7 +1547,7 @@ Script Property: &quot;acquisition.userComment1&quot;
    </widget>
    <widget class="QMenu" name="m_WindowMenu">
     <property name="title">
-     <string>Window</string>
+     <string>Wi&amp;ndow</string>
     </property>
     <addaction name="actionWindows"/>
    </widget>
@@ -1629,7 +1643,7 @@ Script Property: &quot;acquisition.userComment1&quot;
   </action>
   <action name="actionWindows">
    <property name="text">
-    <string>Windows</string>
+    <string>&amp;Windows</string>
    </property>
   </action>
  </widget>

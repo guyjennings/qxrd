@@ -75,7 +75,8 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
       updateWaveforms();
     }
 
-    connect(m_TestReadout, &QAbstractButton::clicked, this, &QxrdExtraIOWindow::initiateReadout);
+    connect(m_RestartButton, &QAbstractButton::clicked, this, &QxrdExtraIOWindow::restartSync);
+    connect(m_SyncInfoButton, &QAbstractButton::clicked, this, &QxrdExtraIOWindow::syncInfoWindow);
   }
 
   connect(m_NewDetectorButton,    &QToolButton::clicked, this, &QxrdExtraIOWindow::doNewDetector);
@@ -409,4 +410,24 @@ bool QxrdExtraIOWindow::askToDelete(QString thing, QVector<int> items)
   }
 
   return res;
+}
+
+void QxrdExtraIOWindow::restartSync()
+{
+  int reply = QMessageBox::question(this, "Restart SYNC Hardware", "Do you want to restart\nthe synchronization hardware?",
+                                    QMessageBox::Yes | QMessageBox::No,
+                                    QMessageBox::No);
+
+  if (reply == QMessageBox::Yes) {
+    QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+
+    if (sync) {
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(sync.data(), "restartSync"));
+    }
+  }
+}
+
+void QxrdExtraIOWindow::syncInfoWindow()
+{
 }

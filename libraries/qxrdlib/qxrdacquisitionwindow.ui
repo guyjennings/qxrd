@@ -363,16 +363,6 @@ Script Property: &quot;acquisition.skippedExposuresAtStart&quot;</string>
                </property>
               </widget>
              </item>
-             <item row="15" column="3">
-              <widget class="QLabel" name="m_AverageDisplay">
-               <property name="toolTip">
-                <string>Average value of acquired frames</string>
-               </property>
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-              </widget>
-             </item>
              <item row="19" column="2">
               <widget class="QPushButton" name="m_TriggerButton">
                <property name="enabled">
@@ -530,16 +520,6 @@ Script Function: fileindex()</string>
                </property>
               </widget>
              </item>
-             <item row="15" column="2">
-              <widget class="QLabel" name="label_10">
-               <property name="text">
-                <string>Avg. Value</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
-             </item>
              <item row="19" column="3">
               <widget class="QPushButton" name="m_DetectorOptionsButton">
                <property name="toolTip">
@@ -616,30 +596,6 @@ Script Function: acquire([fileName
                </property>
               </widget>
              </item>
-             <item row="16" column="3">
-              <widget class="QSpinBox" name="m_DarkSummedExposures">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>1</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="toolTip">
-                <string>Number of exposures to sum for dark image
-Script Property: acquisition.darkSummedExposures
-Script Function: darkSummedExposures()</string>
-               </property>
-               <property name="keyboardTracking">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <number>9999999</number>
-               </property>
-              </widget>
-             </item>
              <item row="13" column="0">
               <widget class="QLabel" name="label_2">
                <property name="text">
@@ -662,16 +618,6 @@ Script Function: darkSummedExposures()</string>
                 </size>
                </property>
               </spacer>
-             </item>
-             <item row="16" column="2">
-              <widget class="QLabel" name="label_7">
-               <property name="text">
-                <string>Dark Summed:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-               </property>
-              </widget>
              </item>
              <item row="14" column="3">
               <widget class="QSpinBox" name="m_PhasesInGroup">
@@ -943,6 +889,70 @@ Script Function: exposureTime()</string>
                </property>
               </widget>
              </item>
+             <item row="15" column="2">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Dark Summed:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="15" column="3">
+              <widget class="QSpinBox" name="m_DarkSummedExposures">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>Number of exposures to sum for dark image
+Script Property: acquisition.darkSummedExposures
+Script Function: darkSummedExposures()</string>
+               </property>
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>9999999</number>
+               </property>
+              </widget>
+             </item>
+             <item row="16" column="3">
+              <widget class="QPushButton" name="m_RestartDetectorsButton">
+               <property name="toolTip">
+                <string>Processing Options</string>
+               </property>
+               <property name="text">
+                <string>Restart Detectors...</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QPushButton" name="m_AcquisitionInfoButton">
+               <property name="toolTip">
+                <string>Select New Log File...</string>
+               </property>
+               <property name="text">
+                <string>Info...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="qxrdresources.qrc">
+                 <normaloff>:/images/help-about.png</normaloff>:/images/help-about.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
            <widget class="QWidget" name="m_WatcherPage"/>
@@ -971,7 +981,7 @@ Script Function: exposureTime()</string>
      <x>0</x>
      <y>0</y>
      <width>1244</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">

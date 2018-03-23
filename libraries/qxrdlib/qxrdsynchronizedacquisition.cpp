@@ -556,6 +556,11 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
   emit waveformsChanged();
 }
 
+void QxrdSynchronizedAcquisition::restartSync()
+{
+  printMessage("QxrdSynchronizedAcquisition::restartSync not yet implemented");
+}
+
 //void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)
 //{
 //  QxrdNIDAQPtr nidaq(m_NIDAQPlugin);

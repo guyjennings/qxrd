@@ -48,6 +48,9 @@ private slots:
   bool askToInsert(QString thing, int before, int count);
   bool askToDelete(QString thing, QVector<int> items);
 
+  void restartSync();
+  void syncInfoWindow();
+
 private:
   QxrdSynchronizedAcquisitionWPtr m_SynchronizedAcquisition;
   QxrdExtraIODetectorsModelPtr    m_DetectorsModel;
