@@ -70,7 +70,11 @@ void QxrdScriptEngineThread::run()
     m_ScriptEngine = engine;
   }
 
-  int rc = exec();
+  int rc = 0;
+
+  if (m_ScriptEngine) {
+    rc = exec();
+  }
 
   m_ScriptEngine = QxrdScriptEnginePtr();
 

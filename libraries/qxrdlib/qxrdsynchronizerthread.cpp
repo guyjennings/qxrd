@@ -55,7 +55,11 @@ void QxrdSynchronizerThread::run()
 
   syncp = QxrdSynchronizerPluginPtr();
 
-  int rc = exec();
+  int rc = 0;
+
+  if (m_Synchronizer) {
+    rc = exec();
+  }
 
   if (m_Synchronizer) {
     m_Synchronizer -> stopSynchronizer();

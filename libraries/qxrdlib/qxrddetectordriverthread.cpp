@@ -79,7 +79,11 @@ void QxrdDetectorDriverThread::run()
 
   det = QxrdDetectorSettingsPtr();
 
-  int rc = exec();
+  int rc = 0;
+
+  if (m_DetectorDriver) {
+    rc = exec();
+  }
 
   if (m_DetectorDriver) {
     m_DetectorDriver -> stopDetectorDriver();
