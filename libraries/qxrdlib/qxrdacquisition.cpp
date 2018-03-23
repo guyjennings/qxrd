@@ -55,8 +55,6 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
   
-  m_SynchronizedAcquisition -> initialize(sharedFromThis());
-  
   QxrdAcqCommonPtr acq(
         qSharedPointerDynamicCast<QxrdAcqCommon>(sharedFromThis()));
 
@@ -77,6 +75,8 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
   m_SynchronizerThread -> start();
 
   m_Synchronizer = m_SynchronizerThread -> synchronizer();
+
+  m_SynchronizedAcquisition -> initialize(sharedFromThis());
 }
 
 QxrdAcquisition::~QxrdAcquisition()

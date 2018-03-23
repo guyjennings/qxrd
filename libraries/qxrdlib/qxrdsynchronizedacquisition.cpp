@@ -555,6 +555,17 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
 void QxrdSynchronizedAcquisition::restartSync()
 {
   splashMessage("Restarting Synchronized Hardware...");
+
+  QxrdAcqCommonPtr    acq(m_Acquisition);
+  QxrdSynchronizerPtr sync(m_Synchronizer);
+  QxrdSynchronizedAcquisitionPtr acqs(
+        qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()));
+  QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
+
+  if (sync) {
+    sync -> stopSynchronizer();
+    sync -> startSynchronizer();
+  }
 }
 
 //void QxrdSynchronizedAcquisition::acquiredFrameAvailable(int frameNumber)

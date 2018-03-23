@@ -29,6 +29,7 @@ public:
   void initialize(QcepObjectWPtr parent);
   QString name() const;
 
+  void startSynchronizer();
   void stopSynchronizer();
 
 public slots:
@@ -63,6 +64,8 @@ public slots:
   int inputDeviceCount();
   QString inputDeviceName(int n);
 
+  void prepareForIdling        (QxrdSynchronizedAcquisitionWPtr      s,
+                                QxrdAcquisitionParameterPackWPtr     p);
   void updateSyncWaveforms     (QxrdSynchronizedAcquisitionWPtr      s,
                                 QxrdAcquisitionParameterPackWPtr     p);
   void prepareForAcquisition   (QxrdSynchronizedAcquisitionWPtr      s,

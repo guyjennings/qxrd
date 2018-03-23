@@ -17,6 +17,7 @@ private:
 public:
   QxrdSynchronizer(QString name);
 
+  virtual void startSynchronizer() = 0;
   virtual void stopSynchronizer() = 0;
 
   virtual QString name() const = 0;
@@ -30,6 +31,8 @@ public:
   virtual int inputDeviceCount() = 0;
   virtual QString inputDeviceName(int n) = 0;
 
+  virtual void prepareForIdling        (QxrdSynchronizedAcquisitionWPtr      s,
+                                        QxrdAcquisitionParameterPackWPtr     p) = 0;
   virtual void updateSyncWaveforms     (QxrdSynchronizedAcquisitionWPtr      s,
                                         QxrdAcquisitionParameterPackWPtr     p) = 0;
   virtual void prepareForAcquisition   (QxrdSynchronizedAcquisitionWPtr      s,

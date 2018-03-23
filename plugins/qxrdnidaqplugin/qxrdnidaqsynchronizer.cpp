@@ -74,6 +74,23 @@ void QxrdNIDAQSynchronizer::initialize(QcepObjectWPtr parent)
   m_DetectorDeviceCount = m_DetectorDeviceNames.count();
   m_OutputDeviceCount   = m_OutputDeviceNames.count();
   m_InputDeviceCount    = m_InputDeviceNames.count();
+
+  m_Acquisition =
+      QxrdAcqCommon::findAcquisition(parent);
+
+  QxrdAcqCommonPtr acq(m_Acquisition);
+
+  if (acq) {
+    m_SynchronizedAcquisition = acq->synchronizedAcquisition();
+  } else {
+    printMessage(tr("QxrdNIDAQSynchronizer::initialize acquisition == NULL"));
+  }
+
+  QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
+
+  if (sync == NULL) {
+    printMessage(tr("QxrdNIDAQSynchronizer::initialize syncAcquisition == NULL"));
+  }
 }
 
 QString QxrdNIDAQSynchronizer::name() const
@@ -84,6 +101,23 @@ QString QxrdNIDAQSynchronizer::name() const
 void QxrdNIDAQSynchronizer::stopSynchronizer()
 {
   closeTaskHandles();
+}
+
+void QxrdNIDAQSynchronizer::startSynchronizer()
+{
+  closeTaskHandles();
+
+  changeExposureTime(m_ExposureTime, m_SyncNPhases);
+
+  QxrdAcqCommonPtr acq(m_Acquisition);
+
+  if (acq) {
+    QxrdAcquisitionParameterPackPtr parms(acq->acquisitionParameterPack());
+
+    if (parms) {
+      updateSyncWaveforms(m_SynchronizedAcquisition, parms);
+    }
+  }
 }
 
 void QxrdNIDAQSynchronizer::errorCheck(const char* file, int line, int err)
@@ -957,7 +991,8 @@ QString QxrdNIDAQSynchronizer::inputDeviceName(int n)
   return m_InputDeviceNames.value(n);
 }
 
-void QxrdNIDAQSynchronizer::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr s, QxrdAcquisitionParameterPackWPtr p)
+void QxrdNIDAQSynchronizer::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr s,
+                                                QxrdAcquisitionParameterPackWPtr p)
 {
   QxrdAcquisitionParameterPackPtr parm(p);
   QxrdSynchronizedAcquisitionPtr  sync(s);
@@ -1013,12 +1048,26 @@ void QxrdNIDAQSynchronizer::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr 
   }
 }
 
-void QxrdNIDAQSynchronizer::prepareForAcquisition(QxrdSynchronizedAcquisitionWPtr s, QxrdAcquisitionParameterPackWPtr p)
+void QxrdNIDAQSynchronizer::prepareForIdling(QxrdSynchronizedAcquisitionWPtr s,
+                                             QxrdAcquisitionParameterPackWPtr p)
 {
-  printMessage("QxrdNIDAQSynchronizer::prepareForAcquisition");
+  printMessage("QxrdNIDAQSynchronizer::prepareForIdling");
+
+  updateSyncWaveforms(s, p);
 }
 
-void QxrdNIDAQSynchronizer::prepareForDarkAcquistion(QxrdSynchronizedAcquisitionWPtr s, QxrdDarkAcquisitionParameterPackWPtr p)
+void QxrdNIDAQSynchronizer::prepareForAcquisition(QxrdSynchronizedAcquisitionWPtr s,
+                                                  QxrdAcquisitionParameterPackWPtr p)
+{
+  printMessage("QxrdNIDAQSynchronizer::prepareForAcquisition");
+
+  updateSyncWaveforms(s, p);
+}
+
+void QxrdNIDAQSynchronizer::prepareForDarkAcquistion(QxrdSynchronizedAcquisitionWPtr s,
+                                                     QxrdDarkAcquisitionParameterPackWPtr p)
 {
   printMessage("QxrdNIDAQSynchronizer::prepareForDarkAcquisition");
+
+//  updateSyncWaveforms(s, p);
 }
