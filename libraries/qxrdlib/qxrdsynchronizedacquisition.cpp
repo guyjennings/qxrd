@@ -458,6 +458,9 @@ void QxrdSynchronizedAcquisition::finishedAcquisition()
 
 void QxrdSynchronizedAcquisition::updateWaveforms()
 {
+  QxrdSynchronizedAcquisitionPtr myself =
+      qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis());
+
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
@@ -467,8 +470,7 @@ void QxrdSynchronizedAcquisition::updateWaveforms()
       QxrdSynchronizedOutputChannelPtr out(output(i));
 
       if (out) {
-        out->recalculateWaveform(
-              qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+        out->recalculateWaveform(myself, parms);
       }
     }
 
@@ -476,16 +478,24 @@ void QxrdSynchronizedAcquisition::updateWaveforms()
       QxrdSynchronizedInputChannelPtr inp(input(i));
 
       if (inp) {
-        inp->prepareForInput(
-              qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+        inp->prepareForInput(myself, parms);
       }
     }
 
     QxrdSynchronizerPtr sync(m_Synchronizer);
 
     if (sync) {
-      sync->updateSyncWaveforms(
-            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(sync.data(),
+                                      [=]() { sync->updateSyncWaveforms(myself, parms); } ));
+#else
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(sync.data(),
+                                      "updateSyncWaveforms",
+                                      Q_ARG(QxrdSynchronizedAcquisitionWPtr, myself),
+                                      Q_ARG(QxrdAcquisitionParameterPackWPtr, parms)));
+#endif
     }
   }
 
@@ -494,6 +504,9 @@ void QxrdSynchronizedAcquisition::updateWaveforms()
 
 void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionParameterPackWPtr parms)
 {
+  QxrdSynchronizedAcquisitionPtr myself =
+      qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis());
+
 //  m_SyncMode = 0;
   for (int i=0; i<outputCount(); i++) {
     QxrdSynchronizedOutputChannelPtr out(output(i));
@@ -507,16 +520,24 @@ void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionP
     QxrdSynchronizedInputChannelPtr inp(input(i));
 
     if (inp) {
-      inp->prepareForDarkInput(
-            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+      inp->prepareForDarkInput(myself, parms);
     }
   }
 
   QxrdSynchronizerPtr sync(m_Synchronizer);
 
   if (sync) {
-    sync->prepareForDarkAcquistion(
-          qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(sync.data(),
+                                    [=]() { sync->prepareForDarkAcquistion(myself, parms); } ));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(sync.data(),
+                                    "prepareForDarkAcquisition",
+                                    Q_ARG(QxrdSynchronizedAcquisitionWPtr, myself),
+                                    Q_ARG(QxrdDarkAcquisitionParameterPackWPtr, parms)));
+#endif
   }
 
   emit waveformsChanged();
@@ -524,12 +545,14 @@ void QxrdSynchronizedAcquisition::prepareForDarkAcquisition(QxrdDarkAcquisitionP
 
 void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameterPackWPtr parms)
 {
+  QxrdSynchronizedAcquisitionPtr myself =
+      qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis());
+
   for (int i=0; i<outputCount(); i++) {
     QxrdSynchronizedOutputChannelPtr out(output(i));
 
     if (out) {
-      out->recalculateWaveform(
-            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+      out->recalculateWaveform(myself, parms);
     }
   }
 
@@ -537,16 +560,24 @@ void QxrdSynchronizedAcquisition::prepareForAcquisition(QxrdAcquisitionParameter
     QxrdSynchronizedInputChannelPtr inp(input(i));
 
     if (inp) {
-      inp->prepareForInput(
-            qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+      inp->prepareForInput(myself, parms);
     }
   }
 
   QxrdSynchronizerPtr sync(m_Synchronizer);
 
   if (sync) {
-    sync -> prepareForAcquisition(
-          qSharedPointerDynamicCast<QxrdSynchronizedAcquisition>(sharedFromThis()), parms);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(sync.data(),
+                                    [=]() { sync->prepareForAcquisition(myself, parms); } ));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(sync.data(),
+                                    "prepareForAcquisition",
+                                    Q_ARG(QxrdSynchronizedAcquisitionWPtr, myself),
+                                    Q_ARG(QxrdAcquisitionParameterPackWPtr, parms)));
+#endif
   }
 
   emit waveformsChanged();
@@ -563,8 +594,10 @@ void QxrdSynchronizedAcquisition::restartSync()
   QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
 
   if (sync) {
-    sync -> stopSynchronizer();
-    sync -> startSynchronizer();
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(sync.data(), &QxrdSynchronizer::stopSynchronizer));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(sync.data(), &QxrdSynchronizer::startSynchronizer));
   }
 }
 

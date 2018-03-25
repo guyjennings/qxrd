@@ -44,11 +44,15 @@ QxrdNIDAQSynchronizer::QxrdNIDAQSynchronizer(QString name)
 
 QxrdNIDAQSynchronizer::~QxrdNIDAQSynchronizer()
 {
+  THREAD_CHECK;
+
   closeTaskHandles();
 }
 
 void QxrdNIDAQSynchronizer::initialize(QcepObjectWPtr parent)
 {
+  THREAD_CHECK;
+
   inherited::initialize(parent);
 
   printMessage("QxrdNIDAQPlugin::initialize");
@@ -100,11 +104,15 @@ QString QxrdNIDAQSynchronizer::name() const
 
 void QxrdNIDAQSynchronizer::stopSynchronizer()
 {
+  THREAD_CHECK;
+
   closeTaskHandles();
 }
 
 void QxrdNIDAQSynchronizer::startSynchronizer()
 {
+  THREAD_CHECK;
+
   closeTaskHandles();
 
   changeExposureTime(m_ExposureTime, m_SyncNPhases);
@@ -139,6 +147,8 @@ void QxrdNIDAQSynchronizer::errorCheck(const char* file, int line, int err)
 
 void QxrdNIDAQSynchronizer::closeTaskHandles()
 {
+  THREAD_CHECK;
+
   clearSync();
   clearDetectorSync();
   clearOutputChannels();
@@ -489,6 +499,7 @@ static int32 CVICALLBACK aiCallback(TaskHandle taskHandle, int32 everyNSamplesEv
 
 void QxrdNIDAQSynchronizer::clearSync()
 {
+  THREAD_CHECK;
 
   if (m_SyncTask) {
     if (qcepDebug(DEBUG_NIDAQ)) {
@@ -505,6 +516,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::clearDetectorSync()
 {
+  THREAD_CHECK;
+
   if (m_SyncDetTasks.count() > 0) {
     if (qcepDebug(DEBUG_NIDAQ)) {
       printMessage(tr("Stopping %1 NIDAQ detector sync channel(s)").arg(m_SyncDetTasks.count()));
@@ -523,6 +536,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::clearOutputChannels()
 {
+  THREAD_CHECK;
+
   if (m_SyncAOTask) {
     if (qcepDebug(DEBUG_NIDAQ)) {
       printMessage(tr("Stopping NIDAQ output channel(s)"));
@@ -540,6 +555,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::clearInputChannels()
 {
+  THREAD_CHECK;
+
   if (m_SyncAITask) {
     if (qcepDebug(DEBUG_NIDAQ)) {
       printMessage(tr("Stopping NIDAQ input channel(s)"));
@@ -557,6 +574,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::changeExposureTime(double t, int n)
 {
+  THREAD_CHECK;
+
   m_ExposureTime = t;
   m_SyncNPhases  = n;
   m_SyncLongTime = m_ExposureTime*m_SyncNPhases;
@@ -590,6 +609,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::addDetectorSync(QxrdSynchronizedDetectorChannelWPtr p)
 {
+  THREAD_CHECK;
+
   QxrdSynchronizedDetectorChannelPtr sync(p);
   QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(p));
 
@@ -660,6 +681,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::addOutputChannel(QxrdSynchronizedOutputChannelWPtr p)
 {
+  THREAD_CHECK;
+
   QxrdSynchronizedOutputChannelPtr out(p);
   QxrdAcqCommonPtr                 acq(QxrdAcqCommon::findAcquisition(p));
 
@@ -724,6 +747,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::addInputChannel(QxrdSynchronizedInputChannelWPtr p)
 {
+  THREAD_CHECK;
+
   QxrdSynchronizedInputChannelPtr inp(p);
   QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(p));
 
@@ -804,6 +829,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::startSync()
 {
+  THREAD_CHECK;
+
   if (m_SyncTask) {
     if (qcepDebug(DEBUG_NIDAQ)) {
       printMessage(tr("Starting NIDAQ sync"));
@@ -818,6 +845,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::startDetectorSync()
 {
+  THREAD_CHECK;
+
   if (m_SyncDetTasks.count() > 0) {
     if (qcepDebug(DEBUG_NIDAQ)) {
       printMessage(tr("Starting %1 NIDAQ detector sync").arg(m_SyncDetTasks.count()));
@@ -834,6 +863,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::startOutputChannels()
 {
+  THREAD_CHECK;
+
   if (m_SyncAOTask) {
 
     int32 nWritten;
@@ -870,6 +901,8 @@ Error:
 
 void QxrdNIDAQSynchronizer::startInputChannels()
 {
+  THREAD_CHECK;
+
   if (m_SyncAITask) {
     if (qcepDebug(DEBUG_NIDAQ)) {
       printMessage(tr("Starting NIDAQ input channels"));
@@ -884,6 +917,8 @@ Error:
 
 int32 QxrdNIDAQSynchronizer::syncCallback(TaskHandle task, int32 status)
 {
+  THREAD_CHECK;
+
   QxrdAcqCommonPtr acq(m_Acquisition);
 
 
@@ -920,6 +955,8 @@ Error:
 
 int32 QxrdNIDAQSynchronizer::aiCallback(TaskHandle task, int32 eventType, int32 nSamples)
 {
+  THREAD_CHECK;
+
   QxrdAcqCommonPtr               acq(m_Acquisition);
   QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
   QVector<double>                buff;
@@ -1006,6 +1043,8 @@ QString QxrdNIDAQSynchronizer::inputDeviceName(int n)
 void QxrdNIDAQSynchronizer::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr s,
                                                 QxrdAcquisitionParameterPackWPtr p)
 {
+  THREAD_CHECK;
+
   QxrdAcquisitionParameterPackPtr parm(p);
   QxrdSynchronizedAcquisitionPtr  sync(s);
 
@@ -1072,6 +1111,8 @@ void QxrdNIDAQSynchronizer::updateSyncWaveforms(QxrdSynchronizedAcquisitionWPtr 
 void QxrdNIDAQSynchronizer::prepareForIdling(QxrdSynchronizedAcquisitionWPtr s,
                                              QxrdAcquisitionParameterPackWPtr p)
 {
+  THREAD_CHECK;
+
   printMessage("QxrdNIDAQSynchronizer::prepareForIdling");
 
   updateSyncWaveforms(s, p);
@@ -1080,6 +1121,8 @@ void QxrdNIDAQSynchronizer::prepareForIdling(QxrdSynchronizedAcquisitionWPtr s,
 void QxrdNIDAQSynchronizer::prepareForAcquisition(QxrdSynchronizedAcquisitionWPtr s,
                                                   QxrdAcquisitionParameterPackWPtr p)
 {
+  THREAD_CHECK;
+
   printMessage("QxrdNIDAQSynchronizer::prepareForAcquisition");
 
   updateSyncWaveforms(s, p);
@@ -1088,6 +1131,8 @@ void QxrdNIDAQSynchronizer::prepareForAcquisition(QxrdSynchronizedAcquisitionWPt
 void QxrdNIDAQSynchronizer::prepareForDarkAcquistion(QxrdSynchronizedAcquisitionWPtr s,
                                                      QxrdDarkAcquisitionParameterPackWPtr p)
 {
+  THREAD_CHECK;
+
   printMessage("QxrdNIDAQSynchronizer::prepareForDarkAcquisition");
 
 //  updateSyncWaveforms(s, p);
@@ -1095,6 +1140,8 @@ void QxrdNIDAQSynchronizer::prepareForDarkAcquistion(QxrdSynchronizedAcquisition
 
 void QxrdNIDAQSynchronizer::dumpTask(TaskHandle t)
 {
+  THREAD_CHECK;
+
   if (t) {
     char taskName[256];
     uInt32 numChans;
