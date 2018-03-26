@@ -189,7 +189,7 @@ QString QxrdAcqCommon::getFileName(QcepImageDataBaseWPtr imgp)
   QcepImageDataBasePtr img(imgp);
 
   if (img) {
-    int idxNum = img->get_ImageSequenceNumber();
+    int idxNum = img->get_FileIndex();
     int detNum = img->get_DetectorNumber();
     int phsNum = img->get_PhaseNumber();
     int imgNum = img->get_ImageNumber();

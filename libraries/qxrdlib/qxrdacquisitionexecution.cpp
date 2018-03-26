@@ -340,7 +340,7 @@ void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPt
                 nres -> set_DataType(QcepImageDataBase::Raw32Data);
                 nres -> set_FileTypeName(".raw");
                 nres -> set_FileExtension(det->get_Extension());
-                nres -> set_ImageSequenceNumber(fileIndex);
+                nres -> set_FileIndex(fileIndex);
                 nres -> set_NImages(postTrigger+preTrigger);
 
 //                QString name =
@@ -453,7 +453,7 @@ saveCancel:
               res[d][p][ii] -> set_FileTypeName(".raw");
               res[d][p][ii] -> set_FileExtension(dets[d]->get_Extension());
               res[d][p][ii] -> set_DataType(QcepImageDataBase::Raw32Data);
-              res[d][p][ii] -> set_ImageSequenceNumber(fileIndex);
+              res[d][p][ii] -> set_FileIndex(fileIndex);
               res[d][p][ii] -> set_PhaseNumber(p);
               res[d][p][ii] -> set_NPhases(nphases);
               res[d][p][ii] -> set_DetectorNumber(d);
@@ -504,7 +504,7 @@ saveCancel:
             res[d][p][0] -> set_FileTypeName(".raw");
             res[d][p][0] -> set_FileExtension(dets[d]->get_Extension());
             res[d][p][0] -> set_DataType(QcepImageDataBase::Raw32Data);
-            res[d][p][0] -> set_ImageSequenceNumber(fileIndex);
+            res[d][p][0] -> set_FileIndex(fileIndex);
             res[d][p][0] -> set_PhaseNumber(p);
             res[d][p][0] -> set_NPhases(nphases);
             res[d][p][0] -> set_DetectorNumber(d);
@@ -670,7 +670,7 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
       res[d] -> set_DataType(QcepImageDataBase::DarkData);
       res[d] -> set_FileTypeName(".dark");
       res[d] -> set_FileExtension(det->get_Extension());
-      res[d] -> set_ImageSequenceNumber(fileIndex);
+      res[d] -> set_FileIndex(fileIndex);
 
 //      QString name =
 //          acq->getFileBaseAndName(res[d]);
@@ -761,7 +761,7 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
       acq -> appendEvent(QxrdAcqCommon::AcquirePost, d);
 
       res[d] -> set_DataType(QcepImageDataBase::DarkData);
-      res[d] -> set_ImageSequenceNumber(fileIndex);
+      res[d] -> set_FileIndex(fileIndex);
       res[d] -> set_PhaseNumber(-1);
       res[d] -> set_DetectorNumber(d);
       res[d] -> set_ImageNumber(0);
@@ -832,7 +832,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
       accum->set_ExtraInputs(image->get_ExtraInputs());
       accum->set_ExposureTime(image->get_ExposureTime());
       accum->set_SummedExposures(srcsum);
-      accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
+      accum->set_FileIndex(image->get_FileIndex());
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
         printMessage(tr("Frame %1 summed").arg(nsummed));
@@ -853,7 +853,6 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
       accum->prop_Normalization()   -> incValue(image->get_Normalization());
       accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
       accum->prop_SummedExposures() -> incValue(srcsum);
-      accum->prop_ImageSequenceNumber() -> incValue(image->get_ImageSequenceNumber());
     }
   }
 }
@@ -894,7 +893,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
       accum->set_ExtraInputs(image->get_ExtraInputs());
       accum->set_ExposureTime(image->get_ExposureTime());
       accum->set_SummedExposures(srcsum);
-      accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
+      accum->set_FileIndex(image->get_FileIndex());
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
         printMessage(tr("Frame %1 summed").arg(nsummed));
@@ -915,7 +914,6 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
       accum->prop_Normalization()   -> incValue(image->get_Normalization());
       accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
       accum->prop_SummedExposures() -> incValue(srcsum);
-      accum->prop_ImageSequenceNumber() -> incValue(image->get_ImageSequenceNumber());
     }
   }
 }
@@ -956,7 +954,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
       accum->set_ExtraInputs(image->get_ExtraInputs());
       accum->set_ExposureTime(image->get_ExposureTime());
       accum->set_SummedExposures(srcsum);
-      accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
+      accum->set_FileIndex(image->get_FileIndex());
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
         printMessage(tr("Frame %1 summed").arg(nsummed));
@@ -977,7 +975,6 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt16ImageDataPtr im
       accum->prop_Normalization()   -> incValue(image->get_Normalization());
       accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
       accum->prop_SummedExposures() -> incValue(srcsum);
-      accum->prop_ImageSequenceNumber() -> incValue(image->get_ImageSequenceNumber());
     }
   }
 }
@@ -1018,7 +1015,7 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
       accum->set_ExtraInputs(image->get_ExtraInputs());
       accum->set_ExposureTime(image->get_ExposureTime());
       accum->set_SummedExposures(srcsum);
-      accum->set_ImageSequenceNumber(image->get_ImageSequenceNumber());
+      accum->set_FileIndex(image->get_FileIndex());
     } else {
       if (qcepDebug(DEBUG_ACQUIRE)) {
         printMessage(tr("Frame %1 summed").arg(nsummed));
@@ -1039,7 +1036,6 @@ void QxrdAcquisitionExecution::accumulateAcquiredImage(QcepUInt32ImageDataPtr im
       accum->prop_Normalization()   -> incValue(image->get_Normalization());
       accum->prop_ExtraInputs()     -> incValue(image->get_ExtraInputs());
       accum->prop_SummedExposures() -> incValue(srcsum);
-      accum->prop_ImageSequenceNumber() -> incValue(image->get_ImageSequenceNumber());
     }
   }
 }
