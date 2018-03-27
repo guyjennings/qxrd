@@ -467,10 +467,12 @@ static int32 CVICALLBACK syncCallback(TaskHandle taskHandle, int32 status, void 
   QxrdNIDAQSynchronizer *syncro = reinterpret_cast<QxrdNIDAQSynchronizer*>(callbackData);
 
   if (syncro) {
-    return syncro->syncCallback(taskHandle, status);
-  } else {
-    return status;
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(syncro,
+                                    [=]() { syncro -> syncCallback(taskHandle, status); }));
   }
+
+  return 0;
 }
 
 static int32 CVICALLBACK aiCallback(TaskHandle taskHandle, int32 everyNSamplesEventType, uInt32 nSamples, void *callbackData)
@@ -480,10 +482,10 @@ static int32 CVICALLBACK aiCallback(TaskHandle taskHandle, int32 everyNSamplesEv
   if (syncro) {
     INVOKE_CHECK(
           QMetaObject::invokeMethod(syncro,
-            [=]() { syncro->aiCallback(taskHandle, everyNSamplesEventType, nSamples); }));
-  } else {
-    return everyNSamplesEventType;
+                                    [=]() { syncro->aiCallback(taskHandle, everyNSamplesEventType, nSamples); }));
   }
+
+  return 0;
 }
 
 //static int32 CVICALLBACK aoCallback(TaskHandle taskHandle, int32 status, void *callbackData)
