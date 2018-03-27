@@ -594,10 +594,17 @@ void QxrdSynchronizedAcquisition::restartSync()
   QxrdAcquisitionParameterPackPtr parms(m_AcquisitionParms);
 
   if (sync) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
     INVOKE_CHECK(
           QMetaObject::invokeMethod(sync.data(), &QxrdSynchronizer::stopSynchronizer));
     INVOKE_CHECK(
           QMetaObject::invokeMethod(sync.data(), &QxrdSynchronizer::startSynchronizer));
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(sync.data(), "stopSynchronizer"));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(sync.data(), "startSynchronizer"));
+#endif
   }
 }
 
