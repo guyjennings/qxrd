@@ -20,7 +20,7 @@
 #include "qxrdintegrator.h"
 #include "qxrdpolartransform.h"
 #include "qxrdpolarnormalization.h"
-#include "qxrdsynchronizerplugin.h".h"
+#include "qxrdsynchronizerplugin.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdapplication.h"
 

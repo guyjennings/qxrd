@@ -461,6 +461,8 @@ saveCancel:
               res[d][p][ii] -> set_NImages(nPre+postTrigger);
               res[d][p][ii] -> set_FileName(acq->getFileName(res[d][p][ii]));
 
+              acq -> fillAcquisitionProperties(res[d][p][0]);
+
               acq -> appendEvent(QxrdAcqCommon::AcquireFrame, d, p);
 
               QxrdProcessor *proc = procs[d].data();
@@ -511,6 +513,8 @@ saveCancel:
             res[d][p][0] -> set_ImageNumber(i);
             res[d][p][0] -> set_NImages(nPre+postTrigger);
             res[d][p][0] -> set_FileName(acq->getFileName(res[d][p][0]));
+
+            acq -> fillAcquisitionProperties(res[d][p][0]);
 
             acq -> appendEvent(QxrdAcqCommon::AcquirePost, d, p);
 

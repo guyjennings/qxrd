@@ -101,7 +101,10 @@ public:
 
   virtual void unlock();
 
+  void fillAcquisitionProperties(QcepImageDataBasePtr img);
+
   enum {
+    EmptyFormatItem,
     IndexFormatItem,
     DetectorFormatItem,
     PhaseFormatItem,

@@ -382,3 +382,19 @@ void QxrdAcqCommon::restartDetectors()
     }
   }
 }
+
+void QxrdAcqCommon::fillAcquisitionProperties(QcepImageDataBasePtr img)
+{
+  if (img) {
+    img -> set_FileIndexWidth(get_FileIndexWidth());
+    img -> set_FilePhaseWidth(get_FilePhaseWidth());
+    img -> set_FileOverflowWidth(get_FileOverflowWidth());
+    img -> set_FileNumberWidth(get_FileNumberWidth());
+    img -> set_DetectorNumberWidth(get_DetectorNumberWidth());
+    img -> set_FileNameFormat1(get_FileNameFormat1());
+    img -> set_FileNameFormat2(get_FileNameFormat2());
+    img -> set_FileNameFormat3(get_FileNameFormat3());
+    img -> set_FileNameFormat4(get_FileNameFormat4());
+    img -> set_OverflowLevel(get_OverflowLevel());
+  }
+}
