@@ -101,6 +101,37 @@ void QxrdFileSaver::mkPath(QString filePath)
   }
 }
 
+QString QxrdFileSaver::uniqueFileName(QcepDataObjectPtr data,
+                                      bool              canOverwrite)
+{
+  QString res;
+
+  if (data) {
+    res = uniqueFileName(data->get_FileDirectory(),
+                         data,
+                         canOverwrite,
+                         data->get_FileExtension());
+  }
+
+  return res;
+}
+
+QString QxrdFileSaver::uniqueFileName(QcepDataObjectPtr data,
+                                      bool              canOverwrite,
+                                      QString           extension)
+{
+  QString res;
+
+  if (data) {
+    res = uniqueFileName(data->get_FileDirectory(),
+                         data,
+                         canOverwrite,
+                         extension);
+  }
+
+  return res;
+}
+
 QString QxrdFileSaver::uniqueFileName(QString           dirName,
                                       QcepDataObjectPtr data,
                                       bool              canOverwrite)
@@ -124,39 +155,27 @@ QString QxrdFileSaver::uniqueFileName(QString           dirName,
 {
   QDir dir(dirName);
 
-  QString name = dir.filePath(data->get_FileName() + data->get_FileTypeName() + extension);
+  QString path = dir.filePath(data->possibleFileName(extension));
 
-  QFileInfo f(name);
+  QFileInfo f(path);
 
   if (f.exists()) {
-    QxrdAcqCommonPtr acq(m_Acquisition);
-
-    int width = 5;
-
-    if (acq) {
-      width = acq->get_FileOverflowWidth();
-    }
-
     for (int i=1; ; i++) {
-      QString newname = dir.filePath(data->get_FileName()
-                                     + tr("_%1").arg(i, width, 10, QChar('0'))
-                                     + data->get_FileTypeName()
-                                     + extension);
-      QFileInfo f(newname);
+      QString newPath = dir.filePath(data->possibleFileName(extension, i));
+      QFileInfo f(newPath);
 
       if (!f.exists()) {
-        return newname;
+        return newPath;
       }
     }
   } else {
-    return name;
+    return path;
   }
 }
 
 #define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }
 
-void QxrdFileSaver::saveImageData(QString              dirName,
-                                  QcepImageDataBasePtr image,
+void QxrdFileSaver::saveImageData(QcepImageDataBasePtr image,
                                   QcepMaskDataPtr      overflow,
                                   int                  canOverwrite)
 {
@@ -167,20 +186,17 @@ void QxrdFileSaver::saveImageData(QString              dirName,
   if (thread() != QThread::currentThread()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveImageDataPrivate",
                                            Qt::QueuedConnection,
-                                           Q_ARG(QString, dirName),
                                            Q_ARG(QcepImageDataBasePtr, image),
                                            Q_ARG(QcepMaskDataPtr, overflow),
                                            Q_ARG(int, canOverwrite)));
   } else {
-    saveImageDataPrivate(dirName,
-                         image,
+    saveImageDataPrivate(image,
                          overflow,
                          canOverwrite);
   }
 }
 
-void QxrdFileSaver::saveImageDataPrivate(QString              dirName,
-                                         QcepImageDataBasePtr image,
+void QxrdFileSaver::saveImageDataPrivate(QcepImageDataBasePtr image,
                                          QcepMaskDataPtr      overflow,
                                          int                  canOverwrite)
 {
@@ -192,17 +208,17 @@ void QxrdFileSaver::saveImageDataPrivate(QString              dirName,
     QcepDoubleImageDataPtr dimage = qSharedPointerDynamicCast<QcepDoubleImageData>(image);
 
     if (dimage) {
-      saveDoubleDataPrivate(dirName, dimage, overflow, canOverwrite);
+      saveDoubleDataPrivate(dimage, overflow, canOverwrite);
     } else {
       QcepUInt32ImageDataPtr i32image = qSharedPointerDynamicCast<QcepUInt32ImageData>(image);
 
       if (i32image) {
-        saveRaw32DataPrivate(dirName, i32image, overflow, canOverwrite);
+        saveRaw32DataPrivate(i32image, overflow, canOverwrite);
       } else {
         QcepUInt16ImageDataPtr i16image = qSharedPointerDynamicCast<QcepUInt16ImageData>(image);
 
         if (i16image) {
-          saveRaw16DataPrivate(dirName, i16image, overflow, canOverwrite);
+          saveRaw16DataPrivate(i16image, overflow, canOverwrite);
         } else {
           criticalMessage(tr("QxrdFileSaver::saveImageData: unknown image type"));
 
@@ -213,8 +229,7 @@ void QxrdFileSaver::saveImageDataPrivate(QString              dirName,
   }
 }
 
-void QxrdFileSaver::saveDoubleData(QString                dirName,
-                                   QcepDoubleImageDataPtr image,
+void QxrdFileSaver::saveDoubleData(QcepDoubleImageDataPtr image,
                                    QcepMaskDataPtr        overflow,
                                    int                    canOverwrite)
 {
@@ -223,17 +238,15 @@ void QxrdFileSaver::saveDoubleData(QString                dirName,
   if (thread() != QThread::currentThread()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveDoubleDataPrivate",
                                            Qt::QueuedConnection,
-                                           Q_ARG(QString,dirName),
                                            Q_ARG(QcepDoubleImageDataPtr,image),
                                            Q_ARG(QcepMaskDataPtr,overflow),
                                            Q_ARG(int,canOverwrite)));
   } else {
-    saveDoubleDataPrivate(dirName, image, overflow, canOverwrite);
+    saveDoubleDataPrivate(image, overflow, canOverwrite);
   }
 }
 
-void QxrdFileSaver::saveDoubleDataPrivate(QString                dirName,
-                                          QcepDoubleImageDataPtr image,
+void QxrdFileSaver::saveDoubleDataPrivate(QcepDoubleImageDataPtr image,
                                           QcepMaskDataPtr        overflow,
                                           int                    canOverwrite)
 {
@@ -248,7 +261,7 @@ void QxrdFileSaver::saveDoubleDataPrivate(QString                dirName,
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
 
-    QString name = uniqueFileName(dirName, image, canOverwrite);
+    QString name = uniqueFileName(image, canOverwrite);
 
     printMessage(tr("Starting to save data in file \"%1\"").arg(name));
 
@@ -311,32 +324,29 @@ void QxrdFileSaver::saveDoubleDataPrivate(QString                dirName,
   decBacklog();
 }
 
-void QxrdFileSaver::saveInt32Data(QString                dirName,
-                                  QcepUInt32ImageDataPtr image,
+void QxrdFileSaver::saveInt32Data(QcepUInt32ImageDataPtr image,
                                   QcepMaskDataPtr        overflow,
                                   int                    canOverwrite)
 {
   if (image == NULL) {
     criticalMessage(tr("QxrdFileSaver::saveInt32Data: image == NULL"));
   } else {
-    saveRaw32Data(dirName, image, overflow, canOverwrite);
+    saveRaw32Data(image, overflow, canOverwrite);
   }
 }
 
-void QxrdFileSaver::saveInt16Data(QString                dirName,
-                                  QcepUInt16ImageDataPtr image,
+void QxrdFileSaver::saveInt16Data(QcepUInt16ImageDataPtr image,
                                   QcepMaskDataPtr        overflow,
                                   int                    canOverwrite)
 {
   if (image == NULL) {
     criticalMessage(tr("QxrdFileSaver::saveInt16Data: image == NULL"));
   } else {
-    saveRaw16Data(dirName, image, overflow, canOverwrite);
+    saveRaw16Data(image, overflow, canOverwrite);
   }
 }
 
-void QxrdFileSaver::saveMaskData(QString         dirName,
-                                 QcepMaskDataPtr image,
+void QxrdFileSaver::saveMaskData(QcepMaskDataPtr image,
                                  int             canOverwrite)
 {
   incBacklog();
@@ -344,16 +354,14 @@ void QxrdFileSaver::saveMaskData(QString         dirName,
   if (thread() != QThread::currentThread()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveMaskDataPrivate",
                                            Qt::QueuedConnection,
-                                           Q_ARG(QString,dirName),
                                            Q_ARG(QcepMaskDataPtr,image),
                                            Q_ARG(int,canOverwrite)));
   } else {
-    saveMaskDataPrivate(dirName, image, canOverwrite);
+    saveMaskDataPrivate(image, canOverwrite);
   }
 }
 
-void QxrdFileSaver::saveMaskDataPrivate(QString         dirName,
-                                        QcepMaskDataPtr image,
+void QxrdFileSaver::saveMaskDataPrivate(QcepMaskDataPtr image,
                                         int             canOverwrite)
 {
   THREAD_CHECK;
@@ -364,7 +372,7 @@ void QxrdFileSaver::saveMaskDataPrivate(QString         dirName,
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
 
-    QString name = uniqueFileName(dirName, image, canOverwrite);
+    QString name = uniqueFileName(image, canOverwrite);
 
     printMessage(tr("Starting to save data in file \"%1\"").arg(name));
 
@@ -414,8 +422,7 @@ void QxrdFileSaver::saveMaskDataPrivate(QString         dirName,
   decBacklog();
 }
 
-void QxrdFileSaver::saveRaw32Data(QString                dirName,
-                                  QcepUInt32ImageDataPtr image,
+void QxrdFileSaver::saveRaw32Data(QcepUInt32ImageDataPtr image,
                                   QcepMaskDataPtr        overflow,
                                   int                    canOverwrite)
 {
@@ -424,17 +431,15 @@ void QxrdFileSaver::saveRaw32Data(QString                dirName,
   if (thread() != QThread::currentThread()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw32DataPrivate",
                                            Qt::QueuedConnection,
-                                           Q_ARG(QString,dirName),
                                            Q_ARG(QcepUInt32ImageDataPtr,image),
                                            Q_ARG(QcepMaskDataPtr,overflow),
                                            Q_ARG(int,canOverwrite)));
   } else {
-    saveRaw32DataPrivate(dirName, image, overflow, canOverwrite);
+    saveRaw32DataPrivate(image, overflow, canOverwrite);
   }
 }
 
-void QxrdFileSaver::saveRaw32DataPrivate(QString                dirName,
-                                         QcepUInt32ImageDataPtr image,
+void QxrdFileSaver::saveRaw32DataPrivate(QcepUInt32ImageDataPtr image,
                                          QcepMaskDataPtr        overflow,
                                          int                    canOverwrite)
 {
@@ -449,7 +454,7 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString                dirName,
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
 
-    QString name = uniqueFileName(dirName, image, canOverwrite);
+    QString name = uniqueFileName(image, canOverwrite);
 
     printMessage(tr("Starting to save data in file \"%1\"").arg(name));
 
@@ -550,8 +555,7 @@ void QxrdFileSaver::saveRaw32DataPrivate(QString                dirName,
   decBacklog();
 }
 
-void QxrdFileSaver::saveRaw16Data(QString                dirName,
-                                  QcepUInt16ImageDataPtr image,
+void QxrdFileSaver::saveRaw16Data(QcepUInt16ImageDataPtr image,
                                   QcepMaskDataPtr        overflow,
                                   int                    canOverwrite)
 {
@@ -560,17 +564,15 @@ void QxrdFileSaver::saveRaw16Data(QString                dirName,
   if (thread() != QThread::currentThread()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveRaw16DataPrivate",
                                            Qt::QueuedConnection,
-                                           Q_ARG(QString,dirName),
                                            Q_ARG(QcepUInt16ImageDataPtr,image),
                                            Q_ARG(QcepMaskDataPtr,overflow),
                                            Q_ARG(int,canOverwrite)));
   } else {
-    saveRaw16DataPrivate(dirName, image, overflow, canOverwrite);
+    saveRaw16DataPrivate(image, overflow, canOverwrite);
   }
 }
 
-void QxrdFileSaver::saveRaw16DataPrivate(QString                dirName,
-                                         QcepUInt16ImageDataPtr image,
+void QxrdFileSaver::saveRaw16DataPrivate(QcepUInt16ImageDataPtr image,
                                          QcepMaskDataPtr        overflow,
                                          int                    canOverwrite)
 {
@@ -585,7 +587,7 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString                dirName,
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
 
-    QString name = uniqueFileName(dirName, image, canOverwrite);
+    QString name = uniqueFileName(image, canOverwrite);
 
     printMessage(tr("Starting to save data in file \"%1\"").arg(name));
 
@@ -653,8 +655,7 @@ void QxrdFileSaver::saveRaw16DataPrivate(QString                dirName,
   decBacklog();
 }
 
-void QxrdFileSaver::saveTextData(QString                dirName,
-                                 QcepDoubleImageDataPtr image,
+void QxrdFileSaver::saveTextData(QcepDoubleImageDataPtr image,
                                  QcepMaskDataPtr        overflow,
                                  int                    canOverwrite)
 {
@@ -663,17 +664,15 @@ void QxrdFileSaver::saveTextData(QString                dirName,
   if (thread() != QThread::currentThread()) {
     INVOKE_CHECK(QMetaObject::invokeMethod(this, "saveTextDataPrivate",
                                            Qt::QueuedConnection,
-                                           Q_ARG(QString,dirName),
                                            Q_ARG(QcepDoubleImageDataPtr,image),
                                            Q_ARG(QcepMaskDataPtr,overflow),
                                            Q_ARG(int,canOverwrite)));
   } else {
-    saveTextDataPrivate(dirName, image, overflow, canOverwrite);
+    saveTextDataPrivate(image, overflow, canOverwrite);
   }
 }
 
-void QxrdFileSaver::saveTextDataPrivate(QString                dirName,
-                                        QcepDoubleImageDataPtr image,
+void QxrdFileSaver::saveTextDataPrivate(QcepDoubleImageDataPtr image,
                                         QcepMaskDataPtr        overflow,
                                         int                    canOverwrite)
 {
@@ -685,7 +684,7 @@ void QxrdFileSaver::saveTextDataPrivate(QString                dirName,
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
 
-    QString name = uniqueFileName(dirName, image, canOverwrite, ".txt");
+    QString name = uniqueFileName(image, canOverwrite, ".txt");
 
     mkPath(name);
 
@@ -726,10 +725,8 @@ void QxrdFileSaver::saveTextDataPrivate(QString                dirName,
 
     if (proc) {
       if (proc->get_SaveOverflowFiles()) {
-        saveOverflowData(dirName, overflow);
+        saveOverflowData(name, overflow);
       }
-
-      proc -> set_FileName(dirName);
     }
   }
 

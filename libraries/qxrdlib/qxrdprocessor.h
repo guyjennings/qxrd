@@ -199,7 +199,11 @@ public:
 
   Q_INVOKABLE void processIdleImage(QcepImageDataBasePtr image);
 
+  void setCommonImageProperties(QcepImageDataBasePtr image);
   void setAcquiredImageProperties(QcepImageDataBasePtr image);
+  void setDarkImageProperties(QcepImageDataBasePtr image);
+  void setIdleImageProperties(QcepImageDataBasePtr image);
+  void setSubtractedImageProperties(QcepImageDataBasePtr image);
 
   QcepImageDataBasePtr doDarkSubtraction    (QcepImageDataBasePtr img);
   QcepImageDataBasePtr doBadPixels          (QcepImageDataBasePtr img);

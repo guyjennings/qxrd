@@ -337,9 +337,6 @@ void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPt
                 nres -> set_SummedExposures(0);
 
                 nres -> set_FileBase(fileBase);
-                nres -> set_DataType(QcepImageDataBase::Raw32Data);
-                nres -> set_FileTypeName(".raw");
-                nres -> set_FileExtension(det->get_Extension());
                 nres -> set_FileIndex(fileIndex);
                 nres -> set_NImages(postTrigger+preTrigger);
 
@@ -450,9 +447,6 @@ saveCancel:
         for (int ii=nPre; ii >= 1; ii--) {
           for (int p=0; p<nphases; p++) {
             for (int d=0; d<nDet; d++) {
-              res[d][p][ii] -> set_FileTypeName(".raw");
-              res[d][p][ii] -> set_FileExtension(dets[d]->get_Extension());
-              res[d][p][ii] -> set_DataType(QcepImageDataBase::Raw32Data);
               res[d][p][ii] -> set_FileIndex(fileIndex);
               res[d][p][ii] -> set_PhaseNumber(p);
               res[d][p][ii] -> set_NPhases(nphases);
@@ -503,9 +497,6 @@ saveCancel:
           for (int d=0; d<nDet; d++) {
 //            procs[d] -> processAcquiredImage(res[d][p][0], ovf[d][p][0], fileIndex, p, nphases, true);
 
-            res[d][p][0] -> set_FileTypeName(".raw");
-            res[d][p][0] -> set_FileExtension(dets[d]->get_Extension());
-            res[d][p][0] -> set_DataType(QcepImageDataBase::Raw32Data);
             res[d][p][0] -> set_FileIndex(fileIndex);
             res[d][p][0] -> set_PhaseNumber(p);
             res[d][p][0] -> set_NPhases(nphases);
@@ -671,9 +662,6 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
       QxrdDetectorSettingsPtr det = dets[d];
 
       res[d] -> set_FileBase(fileBase);
-      res[d] -> set_DataType(QcepImageDataBase::DarkData);
-      res[d] -> set_FileTypeName(".dark");
-      res[d] -> set_FileExtension(det->get_Extension());
       res[d] -> set_FileIndex(fileIndex);
 
 //      QString name =

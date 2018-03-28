@@ -41,42 +41,34 @@ public:
   };
 
 public slots:
-  void saveImageData         (QString                dirName,
-                              QcepImageDataBasePtr   image,
+  void saveImageData         (QcepImageDataBasePtr   image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
-  void saveDoubleData        (QString                dirName,
-                              QcepDoubleImageDataPtr image,
+  void saveDoubleData        (QcepDoubleImageDataPtr image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
-  void saveInt32Data         (QString                dirName,
-                              QcepUInt32ImageDataPtr image,
+  void saveInt32Data         (QcepUInt32ImageDataPtr image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
-  void saveInt16Data         (QString                dirName,
-                              QcepUInt16ImageDataPtr image,
+  void saveInt16Data         (QcepUInt16ImageDataPtr image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
-  void saveMaskData          (QString                dirName,
-                              QcepMaskDataPtr        image,
+  void saveMaskData          (QcepMaskDataPtr        image,
                               int                    canOverwrite);
 
-  void saveRaw32Data         (QString                dirName,
-                              QcepUInt32ImageDataPtr image,
+  void saveRaw32Data         (QcepUInt32ImageDataPtr image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
-  void saveRaw16Data         (QString                dirName,
-                              QcepUInt16ImageDataPtr image,
+  void saveRaw16Data         (QcepUInt16ImageDataPtr image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
-  void saveTextData          (QString                dirName,
-                              QcepDoubleImageDataPtr image,
+  void saveTextData          (QcepDoubleImageDataPtr image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
@@ -89,32 +81,26 @@ public slots:
                               QString                fileName = QString());
 
 private slots:
-  void saveImageDataPrivate  (QString                dirName,
-                              QcepImageDataBasePtr   image,
+  void saveImageDataPrivate  (QcepImageDataBasePtr   image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
-  void saveDoubleDataPrivate (QString                dirName,
-                              QcepDoubleImageDataPtr image,
+  void saveDoubleDataPrivate (QcepDoubleImageDataPtr image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
-  void saveMaskDataPrivate   (QString                dirName,
-                              QcepMaskDataPtr        image,
+  void saveMaskDataPrivate   (QcepMaskDataPtr        image,
                               int                    canOverwrite);
 
-  void saveRaw32DataPrivate  (QString                dirName,
-                              QcepUInt32ImageDataPtr image,
+  void saveRaw32DataPrivate  (QcepUInt32ImageDataPtr image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
-  void saveRaw16DataPrivate  (QString                dirName,
-                              QcepUInt16ImageDataPtr image,
+  void saveRaw16DataPrivate  (QcepUInt16ImageDataPtr image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
-  void saveTextDataPrivate   (QString                dirName,
-                              QcepDoubleImageDataPtr image,
+  void saveTextDataPrivate   (QcepDoubleImageDataPtr image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);
 
@@ -128,6 +114,14 @@ private slots:
 
 private:
   void mkPath(QString filePath);
+
+  QString uniqueFileName     (QcepDataObjectPtr      data,
+                              bool                   canOverwrite,
+                              QString                extension);
+
+  QString uniqueFileName     (QcepDataObjectPtr      data,
+                              bool                   canOverwrite);
+
   QString uniqueFileName     (QString                dirName,
                               QcepDataObjectPtr      data,
                               bool                   canOverwrite);
