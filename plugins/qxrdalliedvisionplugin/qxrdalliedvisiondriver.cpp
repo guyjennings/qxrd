@@ -182,6 +182,9 @@ void QxrdAlliedVisionDriver::onTimerTimeout()
           }
         }
       }
+
+      image -> set_ExposureTime(m_ExposureTime);
+      image -> set_SummedExposures(1);
 //    } else {
 //      printMessage("Allied Vision Detector Image == NULL");
     }
@@ -189,9 +192,6 @@ void QxrdAlliedVisionDriver::onTimerTimeout()
     if (qcepDebug(DEBUG_DETECTORIDLING)) {
       printMessage("enqueue Allied Vision detector acquired frame");
     }
-
-    image -> set_ExposureTime(m_ExposureTime);
-    image -> set_SummedExposures(1);
 
     if (m_ExposureFactor > 1) {
       if (m_SubframeCounter == 0) {

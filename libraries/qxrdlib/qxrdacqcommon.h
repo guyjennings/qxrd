@@ -86,8 +86,6 @@ public:
   QxrdAcquisitionParameterPackPtr acquisitionParameterPack();
   QxrdDarkAcquisitionParameterPackPtr darkAcquisitionParameterPack();
 
-  QString currentFileBase(int detNum, QString extension="");
-
   virtual QxrdDetectorSettingsPtr newDetector(int detType) = 0;
   virtual void appendDetector(QxrdDetectorSettingsPtr det) = 0;
   virtual void clearDetectors() = 0;
@@ -97,25 +95,13 @@ public:
 
   int cancelling();
   void indicateDroppedFrame(int n);
-  QString getFileName(QcepImageDataBaseWPtr imgp);
 
   virtual void unlock();
 
   void fillAcquisitionProperties(QcepImageDataBasePtr img);
 
-  enum {
-    EmptyFormatItem,
-    IndexFormatItem,
-    DetectorFormatItem,
-    PhaseFormatItem,
-    NumberFormatItem
-  };
-
 private slots:
   void restartDetectors();
-
-private:
-  QString fmtString(int i);
 
 signals:
   void acquireStarted();
@@ -175,9 +161,6 @@ public:
 
   Q_PROPERTY(QString qtVersion READ get_QtVersion STORED false)
   QCEP_STRING_PROPERTY(QtVersion)
-
-//  Q_PROPERTY(int detectorCount READ get_DetectorCount WRITE set_DetectorCount STORED false)
-//  QCEP_INTEGER_PROPERTY(DetectorCount)
 
   Q_PROPERTY(int    lastAcquired  READ get_LastAcquired WRITE set_LastAcquired STORED false)
   QCEP_INTEGER_PROPERTY(LastAcquired)

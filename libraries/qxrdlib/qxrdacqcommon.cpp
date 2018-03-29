@@ -28,7 +28,6 @@ QxrdAcqCommon::QxrdAcqCommon(QString name) :
   m_FilePattern(this,"filePattern","", "File Name Pattern"),
   m_QxrdVersion(this,"qxrdVersion",g_Application->applicationVersion(), "QXRD Version Number"),
   m_QtVersion(this,"qtVersion",qVersion(), "QT Version Number"),
-  //  m_DetectorCount(this, "detectorCount", 0, "Number of Detectors"),
   m_LastAcquired(this, "lastAcquired", 0, "Internal Acquisition Flag"),
   m_FileIndex(this,"fileIndex",0, "File Index"),
   m_FileIndexWidth(this, "fileIndexWidth", 5, "Digits in File Index Field"),
@@ -36,10 +35,10 @@ QxrdAcqCommon::QxrdAcqCommon(QString name) :
   m_FileOverflowWidth(this, "fileOverflowWidth", 5, "Digits in Overflow Index Field"),
   m_FileNumberWidth(this, "fileNumberWidth", 5, "Digits in File Number Field"),
   m_DetectorNumberWidth(this, "detectorNumberWidth", 2, "Digits in detector number field"),
-  m_FileNameFormat1(this, "fileNameFormat1", IndexFormatItem, "File name format 1st Item"),
-  m_FileNameFormat2(this, "fileNameFormat2", DetectorFormatItem, "File name format 2nd Item"),
-  m_FileNameFormat3(this, "fileNameFormat3", PhaseFormatItem, "File name format 3rd Item"),
-  m_FileNameFormat4(this, "fileNameFormat4", IndexFormatItem, "File name format 4th Item"),
+  m_FileNameFormat1(this, "fileNameFormat1", QcepImageDataBase::IndexFormatItem, "File name format 1st Item"),
+  m_FileNameFormat2(this, "fileNameFormat2", QcepImageDataBase::DetectorFormatItem, "File name format 2nd Item"),
+  m_FileNameFormat3(this, "fileNameFormat3", QcepImageDataBase::PhaseFormatItem, "File name format 3rd Item"),
+  m_FileNameFormat4(this, "fileNameFormat4", QcepImageDataBase::IndexFormatItem, "File name format 4th Item"),
   m_FileBase(this,"fileBase","", "File Base"),
   m_OverflowLevel(this, "overflowLevel", 65500, "Overflow level (per exposure)"),
   m_Raw16SaveTime(this,"raw16SaveTime", 0.1, "Time to save 16 bit images"),
@@ -145,131 +144,6 @@ int QxrdAcqCommon::activeDetectorCount() const
   }
 
   return nActive;
-}
-
-QString QxrdAcqCommon::fmtString(int f)
-{
-  QString res = "";
-
-  switch (f) {
-  case IndexFormatItem:
-    res = "-%2";
-    break;
-
-  case DetectorFormatItem:
-    res = "-%3";
-    break;
-
-  case PhaseFormatItem:
-    res = "-%4";
-    break;
-
-  case NumberFormatItem:
-    res = "-%5";
-    break;
-  }
-
-  return res;
-}
-
-QString QxrdAcqCommon::getFileName(QcepImageDataBaseWPtr imgp)
-{
-  QString res = "";
-
-  int idxWidth = get_FileIndexWidth();
-  int detWidth = get_DetectorNumberWidth();
-  int phsWidth = get_FilePhaseWidth();
-  int numWidth = get_FileNumberWidth();
-
-  int fmt1     = get_FileNameFormat1();
-  int fmt2     = get_FileNameFormat2();
-  int fmt3     = get_FileNameFormat3();
-  int fmt4     = get_FileNameFormat4();
-
-  QcepImageDataBasePtr img(imgp);
-
-  if (img) {
-    int idxNum = img->get_FileIndex();
-    int detNum = img->get_DetectorNumber();
-    int phsNum = img->get_PhaseNumber();
-    int imgNum = img->get_ImageNumber();
-    int nPhase = img->get_NPhases();
-    int nImages = img->get_NImages();
-
-    QString basString = img->get_FileBase();
-
-    QString idxString = tr("_%1").arg(idxNum,
-                                      idxWidth,
-                                      10,
-                                      QChar('0'));
-
-    QString detString = tr("_%1").arg(detNum,
-                                      detWidth,
-                                      10,
-                                      QChar('0'));
-
-    QString phsString = tr("_%1").arg(phsNum,
-                                      phsWidth,
-                                      10,
-                                      QChar('0'));
-
-    QString numString = tr("_%1").arg(imgNum,
-                                      numWidth,
-                                      10,
-                                      QChar('0'));
-
-    if (img->isDark()) {
-      phsString = "";
-      numString = "";
-    }
-
-    if (activeDetectorCount() <= 1) {
-      detString = "";
-    }
-
-    if (nPhase <= 1) {
-      phsString = "";
-    }
-
-    if (nImages <= 1) {
-      numString = "";
-    }
-
-    QString fmt =
-        "%1%" + tr("%1").arg(fmt1+1)
-        +"%"  + tr("%1").arg(fmt2+1)
-        +"%"  + tr("%1").arg(fmt3+1)
-        +"%"  + tr("%1").arg(fmt4+1);
-
-    res = tr(qPrintable(fmt))
-        .arg(basString)
-        .arg(idxString)
-        .arg(detString)
-        .arg(phsString)
-        .arg(numString);
-  }
-
-  return res;
-}
-
-QString QxrdAcqCommon::currentFileBase(int detNum, QString extension)
-{
-  QString fileBase, fileName;
-
-  QxrdDetectorSettingsPtr det = detector(detNum);
-  QString extent;
-
-  if (extension.length()) {
-    extent = extension;
-  } else if (det) {
-    extent = det->get_Extension();
-  } else {
-    extent = "tif";
-  }
-
-  fileBase = getFileName(QcepImageDataBaseWPtr());
-
-  return fileBase;
 }
 
 double QxrdAcqCommon::scalerValue(int i)

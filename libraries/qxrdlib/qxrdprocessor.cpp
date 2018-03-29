@@ -1762,7 +1762,12 @@ void QxrdProcessor::setAcquiredImageProperties(QcepImageDataBasePtr image)
   if (image) {
     setCommonImageProperties(image);
 
-    image -> set_DataType(QcepImageDataBase::Raw32Data);
+    if (image -> get_SummedExposures() <= 1) {
+      image -> set_DataType(QcepImageDataBase::Raw16Data);
+    } else {
+      image -> set_DataType(QcepImageDataBase::Raw32Data);
+    }
+
     image -> set_FileTypeName(".raw");
     image -> set_FileDirectory(rawOutputDirectory());
   }

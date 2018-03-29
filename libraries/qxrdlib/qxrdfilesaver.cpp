@@ -153,24 +153,43 @@ QString QxrdFileSaver::uniqueFileName(QString           dirName,
                                       bool              canOverwrite,
                                       QString           extension)
 {
-  QDir dir(dirName);
+  QString res = QString();
 
-  QString path = dir.filePath(data->possibleFileName(extension));
+  if (data) {
+    QDir dir(dirName);
 
-  QFileInfo f(path);
+    QString name = data->possibleFileName(extension);
+    QString path = dir.filePath(name);
 
-  if (f.exists()) {
-    for (int i=1; ; i++) {
-      QString newPath = dir.filePath(data->possibleFileName(extension, i));
-      QFileInfo f(newPath);
+    QFileInfo f(path);
 
-      if (!f.exists()) {
-        return newPath;
+    if (f.exists()) {
+      int i = data -> get_FileUniqueIndex()+1;
+
+      for ( ; ; i++) {
+        QString newName = data->possibleFileName(extension, i);
+        QString newPath = dir.filePath(newName);
+        QFileInfo f(newPath);
+
+        if (!f.exists()) {
+          data -> set_FileUniqueIndex(i);
+          data -> set_FileName(newName);
+          data -> set_FilePath(newPath);
+
+          res = newPath;
+
+          break;
+        }
       }
+    } else {
+      data -> set_FileName(name);
+      data -> set_FilePath(path);
+
+      res = path;
     }
-  } else {
-    return path;
   }
+
+  return res;
 }
 
 #define TIFFCHECK(a) if (res && ((a)==0)) { res = 0; }

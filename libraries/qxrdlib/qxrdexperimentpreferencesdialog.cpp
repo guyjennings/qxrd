@@ -170,10 +170,10 @@ void QxrdExperimentPreferencesDialog::initializeFormatMenu(QComboBox *cb)
 {
   cb -> clear();
   cb -> addItem("(empty)");
-  cb -> addItem("-<index>");
-  cb -> addItem("-<det>");
-  cb -> addItem("-<phase>");
-  cb -> addItem("-<num>");
+  cb -> addItem("_i<index>");
+  cb -> addItem("_d<det>");
+  cb -> addItem("_p<phase>");
+  cb -> addItem("_n<num>");
 }
 
 QString QxrdExperimentPreferencesDialog::experimentDirectory()

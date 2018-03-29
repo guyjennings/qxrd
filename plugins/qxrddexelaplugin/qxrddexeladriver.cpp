@@ -262,8 +262,10 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
                      .arg(fc).arg(buf).arg(det->get_DetectorIndex()));
       }
 
-      image -> set_ExposureTime(m_ExposureTime);
-      image -> set_SummedExposures(1);
+      if (image) {
+        image -> set_ExposureTime(m_ExposureTime);
+        image -> set_SummedExposures(1);
+      }
 
       if (m_ExposureFactor > 1) {
         if (m_SubframeCounter == 0) {
@@ -274,8 +276,10 @@ void QxrdDexelaDriver::onAcquiredFrame(int fc, int buf)
                                            QcepAllocator::AllocateFromReserve);
         }
 
-        m_AccumulatedData -> set_ExposureTime(m_ExposureTime);
-        m_AccumulatedData -> accumulateImage(image);
+        if (m_AccumulatedData) {
+          m_AccumulatedData -> set_ExposureTime(m_ExposureTime);
+          m_AccumulatedData -> accumulateImage(image);
+        }
 
         m_SubframeCounter++;
 

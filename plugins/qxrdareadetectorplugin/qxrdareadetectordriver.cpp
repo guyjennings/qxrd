@@ -180,14 +180,14 @@ void QxrdAreaDetectorDriver::onTimerTimeout()
           }
         }
       }
+
+      image -> set_ExposureTime(m_ExposureTime);
+      image -> set_SummedExposures(1);
     }
 
     if (qcepDebug(DEBUG_DETECTORIDLING)) {
       printMessage("enqueue area detector acquired frame");
     }
-
-    image -> set_ExposureTime(m_ExposureTime);
-    image -> set_SummedExposures(1);
 
     if (m_ExposureFactor > 1) {
       if (m_SubframeCounter == 0) {

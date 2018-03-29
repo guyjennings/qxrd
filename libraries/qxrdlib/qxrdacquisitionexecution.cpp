@@ -447,15 +447,17 @@ saveCancel:
         for (int ii=nPre; ii >= 1; ii--) {
           for (int p=0; p<nphases; p++) {
             for (int d=0; d<nDet; d++) {
-              res[d][p][ii] -> set_FileIndex(fileIndex);
-              res[d][p][ii] -> set_PhaseNumber(p);
-              res[d][p][ii] -> set_NPhases(nphases);
-              res[d][p][ii] -> set_DetectorNumber(d);
-              res[d][p][ii] -> set_ImageNumber(-ii);
-              res[d][p][ii] -> set_NImages(nPre+postTrigger);
-              res[d][p][ii] -> set_FileName(acq->getFileName(res[d][p][ii]));
+              if (res[d][p][ii]) {
+                res[d][p][ii] -> set_FileIndex(fileIndex);
+                res[d][p][ii] -> set_PhaseNumber(p);
+                res[d][p][ii] -> set_NPhases(nphases);
+                res[d][p][ii] -> set_DetectorNumber(d);
+                res[d][p][ii] -> set_DetectorCount(nDet);
+                res[d][p][ii] -> set_ImageNumber(-ii);
+                res[d][p][ii] -> set_NImages(nPre+postTrigger);
 
-              acq -> fillAcquisitionProperties(res[d][p][0]);
+                acq -> fillAcquisitionProperties(res[d][p][ii]);
+              }
 
               acq -> appendEvent(QxrdAcqCommon::AcquireFrame, d, p);
 
@@ -497,15 +499,17 @@ saveCancel:
           for (int d=0; d<nDet; d++) {
 //            procs[d] -> processAcquiredImage(res[d][p][0], ovf[d][p][0], fileIndex, p, nphases, true);
 
-            res[d][p][0] -> set_FileIndex(fileIndex);
-            res[d][p][0] -> set_PhaseNumber(p);
-            res[d][p][0] -> set_NPhases(nphases);
-            res[d][p][0] -> set_DetectorNumber(d);
-            res[d][p][0] -> set_ImageNumber(i);
-            res[d][p][0] -> set_NImages(nPre+postTrigger);
-            res[d][p][0] -> set_FileName(acq->getFileName(res[d][p][0]));
+            if (res[d][p][0]) {
+              res[d][p][0] -> set_FileIndex(fileIndex);
+              res[d][p][0] -> set_PhaseNumber(p);
+              res[d][p][0] -> set_NPhases(nphases);
+              res[d][p][0] -> set_DetectorNumber(d);
+              res[d][p][0] -> set_DetectorCount(nDet);
+              res[d][p][0] -> set_ImageNumber(i);
+              res[d][p][0] -> set_NImages(nPre+postTrigger);
 
-            acq -> fillAcquisitionProperties(res[d][p][0]);
+              acq -> fillAcquisitionProperties(res[d][p][0]);
+            }
 
             acq -> appendEvent(QxrdAcqCommon::AcquirePost, d, p);
 
@@ -661,13 +665,10 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
     for (int d=0; d<nDet; d++) {
       QxrdDetectorSettingsPtr det = dets[d];
 
-      res[d] -> set_FileBase(fileBase);
-      res[d] -> set_FileIndex(fileIndex);
-
-//      QString name =
-//          acq->getFileBaseAndName(res[d]);
-
-//      res[d] -> set_FileName(fn);
+      if (res[d]) {
+        res[d] -> set_FileBase(fileBase);
+        res[d] -> set_FileIndex(fileIndex);
+      }
     }
 
     for (int i=0; i<skipBefore; i++) {
@@ -745,20 +746,20 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
       }
     }
 
-    //saveCancel:
-
     for (int d=0; d<nDet; d++) {
-//      procs[d]->processDarkImage(res[d], overflow[d], fileIndex);
-
       acq -> appendEvent(QxrdAcqCommon::AcquirePost, d);
 
-      res[d] -> set_DataType(QcepImageDataBase::DarkData);
-      res[d] -> set_FileIndex(fileIndex);
-      res[d] -> set_PhaseNumber(-1);
-      res[d] -> set_DetectorNumber(d);
-      res[d] -> set_ImageNumber(0);
-      res[d] -> set_NPhases(-1);
-      res[d] -> set_FileName(acq->getFileName(res[d]));
+      if (res[d]) {
+        res[d] -> set_DataType(QcepImageDataBase::DarkData);
+        res[d] -> set_FileIndex(fileIndex);
+        res[d] -> set_PhaseNumber(-1);
+        res[d] -> set_DetectorNumber(d);
+        res[d] -> set_DetectorCount(nDet);
+        res[d] -> set_ImageNumber(0);
+        res[d] -> set_NPhases(-1);
+
+        acq -> fillAcquisitionProperties(res[d]);
+      }
 
       QxrdProcessor *p = procs[d].data();
 #if QT_VERSION >= QT_VERSION_CHECK(5,10,0)

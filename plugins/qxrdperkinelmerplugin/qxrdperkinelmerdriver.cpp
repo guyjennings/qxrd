@@ -1068,8 +1068,10 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
       printMessage("enqueue perkin elmer acquired frame");
     }
 
-    image -> set_ExposureTime(m_ExposureTime);
-    image -> set_SummedExposures(1);
+    if (image) {
+      image -> set_ExposureTime(m_ExposureTime);
+      image -> set_SummedExposures(1);
+    }
 
     if (m_ExposureFactor > 1) {
       if (m_SubframeCounter == 0) {
@@ -1080,8 +1082,10 @@ void QxrdPerkinElmerDriver::onEndFrame(int counter, unsigned int n1, unsigned in
                                          QcepAllocator::AllocateFromReserve);
       }
 
-      m_AccumulatedData -> set_ExposureTime(m_ExposureTime);
-      m_AccumulatedData -> accumulateImage(image);
+      if (m_AccumulatedData) {
+        m_AccumulatedData -> set_ExposureTime(m_ExposureTime);
+        m_AccumulatedData -> accumulateImage(image);
+      }
 
       m_SubframeCounter++;
 

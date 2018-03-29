@@ -312,8 +312,9 @@ void QxrdPilatusDriver::expose()
   QxrdAcqCommonPtr       acq(m_Acquisition);
 
   if (acq && det && det->checkDetectorEnabled()) {
-    m_CurrentFile = acq->currentFileBase(det->get_DetectorNumber(),
-                                         det->get_PilatusExtension());
+    //TODO: change this...
+//    m_CurrentFile = acq->currentFileBase(det->get_DetectorNumber(),
+//                                         det->get_PilatusExtension());
 
     if (det->get_ReadFilesLocally()) { // Check to see if file exists...
       if (det->get_DeleteFilesAfterReading()) {
@@ -503,16 +504,18 @@ void QxrdPilatusDriver::loadAndPush(QString f)
                                        0,0,
                                        QcepAllocator::AllocateFromReserve);
 
-      if (image->readImage(dest)) {
-        printMessage(tr("Read %1 successfully").arg(dest));
-      }
+      if (image) {
+        if (image->readImage(dest)) {
+          printMessage(tr("Read %1 successfully").arg(dest));
+        }
 
-      if (qcepDebug(DEBUG_DETECTORIDLING)) {
-        printMessage("enqueue pilatus acquired frame");
-      }
+        if (qcepDebug(DEBUG_DETECTORIDLING)) {
+          printMessage("enqueue pilatus acquired frame");
+        }
 
-      image -> set_ExposureTime(m_ExposureTime);
-      image -> set_SummedExposures(1);
+        image -> set_ExposureTime(m_ExposureTime);
+        image -> set_SummedExposures(1);
+      }
 
       if (m_ExposureFactor > 1) {
         if (m_SubframeCounter == 0) {
@@ -523,8 +526,10 @@ void QxrdPilatusDriver::loadAndPush(QString f)
                                            QcepAllocator::AllocateFromReserve);
         }
 
-        m_AccumulatedData -> set_ExposureTime(m_ExposureTime);
-        m_AccumulatedData -> accumulateImage(image);
+        if (m_AccumulatedData) {
+          m_AccumulatedData -> set_ExposureTime(m_ExposureTime);
+          m_AccumulatedData -> accumulateImage(image);
+        }
 
         m_SubframeCounter++;
 

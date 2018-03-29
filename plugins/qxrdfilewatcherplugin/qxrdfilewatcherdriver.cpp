@@ -175,13 +175,15 @@ void QxrdFileWatcherDriver::onTimerTimeout()
           }
         }
       }
+
+      image -> set_ExposureTime(acq->get_ExposureTime());
+      image -> set_SummedExposures(1);
     }
 
     if (qcepDebug(DEBUG_DETECTORIDLING)) {
       printMessage("enqueue file watcher acquired frame");
     }
 
-    image->set_SummedExposures(1);
     det->enqueueAcquiredFrame(image);
 
     m_FrameCounter++;
