@@ -344,10 +344,20 @@ void QxrdApplication::loadPlugins()
             }
           }
 
-          QObject *plugin = loader.instance();
           QString className = meta.value("className").toString();
+
+          QByteArray path = qgetenv("PATH");
+
+          if (className == "QxrdAlliedVisionPlugin") {
+            qputenv("PATH", "C:\\Program Files\\Allied Vision\\Vimba_2.1\\VimbaC\\Bin\\Win64;"
+                            "C:\\Program Files\\Allied Vision\\Vimba_2.1\\VimbaCPP\\Bin\\Win64");
+          }
+
+          QObject *plugin = loader.instance();
           QString errorString = "";
           QString pluginName = "";
+
+          qputenv("PATH", path);
 
           QxrdDetectorPlugin     *detPlugin   = qobject_cast<QxrdDetectorPlugin*>(plugin);
           QxrdSynchronizerPlugin *syncPlugin  = qobject_cast<QxrdSynchronizerPlugin*>(plugin);

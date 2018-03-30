@@ -20,6 +20,15 @@ void QxrdAlliedVisionPlugin::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 
   printMessage("QxrdAlliedVisionPlugin::initialize");
+
+  AVT::VmbAPI::CameraPtrVector cameras;
+
+  auto err1 = m_Vimba.Startup();
+  auto err2 = m_Vimba.GetCameras(cameras);
+
+  int nCameras = cameras.size();
+
+  printMessage(tr("Found %1 Allied Vision Cameras").arg(nCameras));
 }
 
 QString QxrdAlliedVisionPlugin::name() const

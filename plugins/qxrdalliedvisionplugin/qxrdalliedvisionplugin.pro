@@ -42,8 +42,8 @@ else:unix: LIBS += -L$$OUT_PWD/../../ -lqxrdlib
 
 win32{
   CONFIG(release, debug|release) {
-    LIBS += -L$${VIMBA_CLIBS} -lVimbaC -L$${VIMBA_CPPLIBS} -lVimbaCPP
+    LIBS += -L$${VIMBA_HEADER}/VimbaC/Lib/Win64/ -lVimbaC -L$${VIMBA_HEADER}/VimbaCPP/Lib/Win64/ -lVimbaCPP
   } else {
-    LIBS += -L$${VIMBA_CLIBS} -lVimbaC -L$${VIMBA_CPPLIBS} -lVimbaCPPd
+    LIBS += -L$${VIMBA_HEADER}/VimbaC/Lib/Win64/ -lVimbaC -L$${VIMBA_HEADER}/VimbaCPP/Lib/Win64/ -lVimbaCPP
   }
 }
