@@ -107,6 +107,7 @@ win32 {
 win32 {
   exists("c:/Program Files/Allied Vision/Vimba_2.1/VimbaCPP/Include/VimbaSystem.h") {
     DEFINES += HAVE_ALLIEDVISION
+    VIMBA_HEADER    = "c:/Program Files/Allied Vision/Vimba_2.1/"
     VIMBA_CHEADER   = "c:/Program Files/Allied Vision/Vimba_2.1/VimbaC/Include/"
     VIMBA_CPPHEADER = "c:/Program Files/Allied Vision/Vimba_2.1/VimbaCPP/Include/"
     contains(QMAKE_HOST.arch,x86_64) {

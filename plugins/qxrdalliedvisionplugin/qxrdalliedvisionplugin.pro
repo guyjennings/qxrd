@@ -10,6 +10,8 @@ DESTDIR = ../../plugins/
 
 include("../../source/submodules/qceplib/qceplib-base-include.pri")
 INCLUDEPATH += ../../libraries/qxrdlib/
+INCLUDEPATH += "$${VIMBA_HEADER}"
+DEPENDPATH  += "$${VIMBA_HEADER}"
 
 SOURCES += \
     qxrdalliedvisiondriver.cpp \
@@ -37,3 +39,11 @@ else:unix: LIBS += -L$$OUT_PWD/../../ -lqxrdlib
 
 #INCLUDEPATH += $$PWD/../../libraries/qxrdlib
 #DEPENDPATH += $$PWD/../../libraries/qxrdlib
+
+win32{
+  CONFIG(release, debug|release) {
+    LIBS += -L$${VIMBA_CLIBS} -lVimbaC -L$${VIMBA_CPPLIBS} -lVimbaCPP
+  } else {
+    LIBS += -L$${VIMBA_CLIBS} -lVimbaC -L$${VIMBA_CPPLIBS} -lVimbaCPPd
+  }
+}

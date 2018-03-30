@@ -4,7 +4,8 @@
 #include "qxrdalliedvisionplugin-ptr.h"
 
 QxrdAlliedVisionPlugin::QxrdAlliedVisionPlugin()
-  : inherited("alliedVisionPlugin")
+  : inherited("alliedVisionPlugin"),
+    m_Vimba(AVT::VmbAPI::VimbaSystem::GetInstance())
 {
 }
 

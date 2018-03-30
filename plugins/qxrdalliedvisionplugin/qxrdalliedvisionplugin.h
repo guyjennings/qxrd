@@ -3,6 +3,7 @@
 
 #include "qcepobject.h"
 #include "qxrddetectorplugin.h"
+#include "VimbaCPP/Include/VimbaCPP.h"
 
 class QxrdAlliedVisionPlugin :
     public QxrdDetectorPlugin
@@ -26,6 +27,9 @@ public:
                                          QxrdDetectorSettingsWPtr det,
                                          QxrdExperimentWPtr expt,
                                          QxrdAcqCommonWPtr acq);
+
+private:
+    AVT::VmbAPI::VimbaSystem& m_Vimba;
 };
 
 Q_DECLARE_METATYPE(QxrdAlliedVisionPlugin*)
