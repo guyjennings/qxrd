@@ -346,5 +346,7 @@ void QxrdImagePlotWidget::updateColorMap()
 
 void QxrdImagePlotWidget::replotGraph()
 {
-  m_Plot->replot();
+  if (m_Plot) {
+    m_Plot->replot();
+  }
 }
