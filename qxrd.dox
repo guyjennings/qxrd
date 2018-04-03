@@ -288,32 +288,41 @@ and nothing else - you would then do the dark subtraction and integration in sub
       dplg2 [label = "Detector Plugin 2"]
       nidaq [label = "NIDAQ Plugin"]
 
-      app -> win1 -> win2
-      app -> dplg1 -> dplg2 -> nidaq
+      app -> win1
+      app -> win2
+      app -> dplg1
+      app -> dplg2
+      app -> nidaq
     }
 
     subgraph cluster_experiment {
       label="Experiment Thread"
 
-      expt [label = "Experiment"]
-      acq  [label = "Acquisition"]
+      expt  [label = "Experiment"]
+      acq   [label = "Acquisition"]
       wset1 [label = "Window Settings 1"]
       wset2 [label = "Window Settings 2"]
 
       dset1 [label = "Detector Settings 1"]
       dset2 [label = "Detector Settings 2"]
 
+      proc1 [label = "Processor 1"]
+      proc2 [label = "Processor 2"]
+
       scrpt [label = "Script Engine"]
  //     jscrp [label = "JS Engine"]
 
-      acq -> dset1 -> dset2
+      acq   -> dset1
+      acq   -> dset2
 
-      expt -> acq
-      acq  -> wset1
-      wset1 -> wset2
+      expt  -> acq
+      expt  -> wset1
+      expt  -> wset2
       wset1 -> win1
       wset2 -> win2
-      expt -> scrpt
+      expt  -> scrpt
+      dset1 -> proc1
+      dset2 -> proc2
     }
 
     subgraph cluster_acqexec {
@@ -331,16 +340,15 @@ and nothing else - you would then do the dark subtraction and integration in sub
       label="Synchronizer Thread"
       sync [label = "NIDAQ Synchronizer"]
       acqxc -> sync
-      sync -> nidaq
+      sync  -> nidaq
     }
 
     subgraph cluster_detector1 {
       label="Detector 1 Thread"
       det1 [label = "Detector 1"]
-      proc1 [label = "Processor 1"]
       dset1 -> det1
-      det1 -> proc1
-      det1 -> dplg1
+      det1  -> proc1
+      det1  -> dplg1
       proc1 -> fsav
       acqxc -> det1
       acqxc -> proc1
@@ -349,13 +357,28 @@ and nothing else - you would then do the dark subtraction and integration in sub
     subgraph cluster_detector2 {
       label="Detector 2 Thread"
       det2 [label = "Detector 2"]
-      proc2 [label = "Processor 2"]
       dset2 -> det2
-      det2 -> proc2
-      det2 -> dplg2
+      det2  -> proc2
+      det2  -> dplg2
       proc2 -> fsav
       acqxc -> det2
       acqxc -> proc2
+    }
+
+    subgraph cluster_processor1 {
+      label="Processor Exec Thread 1"
+      color=lightseagreen
+      procx1 [label = "Processor Exec 1"]
+      proc1 -> procx1
+      det1  -> procx1
+    }
+
+    subgraph cluster_processor2 {
+      label="Processor Exec Thread 2"
+      color=lightseagreen
+      procx2 [label = "Processor Exec 2"]
+      proc2 -> procx2
+      det2  -> procx2
     }
 
     subgraph cluster_server {
