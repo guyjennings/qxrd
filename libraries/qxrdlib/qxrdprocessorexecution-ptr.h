@@ -1,0 +1,8 @@
+#ifndef QXRDPROCESSOREXECUTIONPTR_H
+#define QXRDPROCESSOREXECUTIONPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QxrdProcessorExecution)
+
+#endif // QXRDPROCESSOREXECUTIONPTR_H

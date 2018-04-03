@@ -7,7 +7,8 @@
 
 QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(QString name)
   : inherited(name),
-    m_Acquisition()
+    m_Acquisition(),
+    m_AcquisitionExecution()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionExecutionThread::QxrdAcquisitionExecutionThread(%p)\n", this);

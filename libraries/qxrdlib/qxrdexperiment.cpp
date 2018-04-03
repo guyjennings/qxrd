@@ -8,6 +8,7 @@
 #include "qxrdapplication-ptr.h"
 #include "qxrdapplication.h"
 #include "qxrdprocessor.h"
+#include "qxrdprocessorexecution.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdpolartransform.h"
 #include "qxrdpolarnormalization.h"
@@ -413,6 +414,7 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdCenterFinder*>("QxrdCenterFinder*");
 
   QxrdProcessor::registerMetaTypes();
+  QxrdProcessorExecution::registerMetaTypes();
 
   qRegisterMetaType<QxrdFileBrowserModelUpdater*>("QxrdFileBrowserModelUpdater*");
   qRegisterMetaType<QxrdFileSaver*>("QxrdFileSaver*");

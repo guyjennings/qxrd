@@ -2,6 +2,8 @@
 #include "qxrddetectordriverthread.h"
 #include "qxrddebug.h"
 #include "qxrdprocessor.h"
+#include "qxrdprocessorexecution.h"
+#include "qxrdprocessorexecutionthread.h"
 #include <stdio.h>
 #include "qcepmutexlocker.h"
 #include "qxrddetectorcontrolwindow.h"
@@ -162,6 +164,14 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
   m_DetectorDriverThread -> initialize(sharedFromThis());
 
   m_DetectorDriverThread -> start();
+
+  m_ProcessorExecutionThread =
+      QxrdProcessorExecutionThreadPtr(
+        new QxrdProcessorExecutionThread("processorExecutionThread"));
+
+  m_ProcessorExecutionThread -> initialize(sharedFromThis());
+
+  m_ProcessorExecutionThread -> start();
 }
 
 QxrdDetectorSettingsWPtr QxrdDetectorSettings::findDetectorSettings(QcepObjectWPtr p)

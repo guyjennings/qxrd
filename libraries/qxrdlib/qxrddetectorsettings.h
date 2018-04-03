@@ -10,6 +10,8 @@
 #include "qcepimagedata-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdprocessor-ptr.h"
+#include "qxrdprocessorexecution-ptr.h"
+#include "qxrdprocessorexecutionthread-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
@@ -132,6 +134,8 @@ protected:
 
   //TODO: should be in detector thread?
   QxrdProcessorPtr                     m_Processor;
+  QxrdProcessorExecutionWPtr           m_ProcessorExecution;
+  QxrdProcessorExecutionThreadPtr      m_ProcessorExecutionThread;
 
   QxrdDetectorControlWindowSettingsPtr m_DetectorControlWindowSettings;
   QxrdDetectorControlWindowPtr         m_DetectorControlWindow;

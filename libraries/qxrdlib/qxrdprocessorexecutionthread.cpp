@@ -1,0 +1,58 @@
+#include "qxrddebug.h"
+#include "qxrdprocessorexecutionthread.h"
+#include "qxrdprocessor.h"
+#include "qxrdprocessorexecution.h"
+
+QxrdProcessorExecutionThread::QxrdProcessorExecutionThread(QString name)
+  : inherited(name),
+    m_Processor(),
+    m_ProcessorExecution()
+{
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdProcessorExecutionThread::QxrdProcessorExecutionThread(%p)\n", this);
+  }
+}
+
+void QxrdProcessorExecutionThread::initialize(QcepObjectWPtr parent)
+{
+  inherited::initialize(parent);
+
+  m_Processor = QxrdProcessor::findProcessor(parent);
+}
+
+QxrdProcessorExecutionThread::~QxrdProcessorExecutionThread()
+{
+  shutdown();
+
+  if (qcepDebug(DEBUG_CONSTRUCTORS)) {
+    printf("QxrdProcessorExecutionThread::~QxrdProcessorExecutionThread(%p)\n", this);
+  }
+}
+
+void QxrdProcessorExecutionThread::shutdown()
+{
+  exit();
+
+  wait();
+}
+
+void QxrdProcessorExecutionThread::run()
+{
+  if (qcepDebug(DEBUG_THREADS)) {
+    printMessage("Processor Execution Thread Started");
+  }
+
+  m_ProcessorExecution =
+      QxrdProcessorExecutionPtr(
+        new QxrdProcessorExecution("processorExecution"));
+
+  m_ProcessorExecution -> initialize(sharedFromThis());
+
+  int rc = exec();
+
+  m_ProcessorExecution = QxrdProcessorExecutionPtr();
+
+  if (qcepDebug(DEBUG_THREADS)) {
+    printMessage(tr("Processor Execution Thread terminated with rc %1").arg(rc));
+  }
+}

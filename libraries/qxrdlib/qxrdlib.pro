@@ -330,7 +330,9 @@ SOURCES += qxrdlib.cpp \
     qxrdacquisitioneventlogmodel.cpp \
     qxrdsynchronizerplugin.cpp \
     qxrdsynchronizer.cpp \
-    qxrdsynchronizerthread.cpp
+    qxrdsynchronizerthread.cpp \
+    qxrdprocessorexecution.cpp \
+    qxrdprocessorexecutionthread.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -573,7 +575,11 @@ HEADERS += qxrdlib.h\
     qxrdsynchronizer.h \
     qxrdsynchronizer-ptr.h \
     qxrdsynchronizerthread.h \
-    qxrdsynchronizerthread-ptr.h
+    qxrdsynchronizerthread-ptr.h \
+    qxrdprocessorexecution.h \
+    qxrdprocessorexecution-ptr.h \
+    qxrdprocessorexecutionthread.h \
+    qxrdprocessorexecutionthread-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
