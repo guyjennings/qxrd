@@ -29,6 +29,9 @@ public:
                                          QxrdAcqCommonWPtr acq);
 
 private:
+    void errorCheck(const char* file, int line, int err);
+
+private:
     AVT::VmbAPI::VimbaSystem& m_Vimba;
 };
 
