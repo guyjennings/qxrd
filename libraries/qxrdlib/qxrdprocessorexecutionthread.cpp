@@ -56,3 +56,56 @@ void QxrdProcessorExecutionThread::run()
     printMessage(tr("Processor Execution Thread terminated with rc %1").arg(rc));
   }
 }
+
+void QxrdProcessorExecutionThread::processAcquiredImage(QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow)
+{
+  QxrdProcessorExecution* exec = m_ProcessorExecution.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+  INVOKE_CHECK(
+        QMetaObject::invokeMethod(exec,
+                                  [=]() { exec->processAcquiredImage(image, overflow);}))
+#else
+  INVOKE_CHECK(
+        QMetaObject::invokeMethod(exec,
+                                  "processAcquiredImage",
+                                  Q_ARG(QcepUInt32ImageDataPtr, image),
+                                  Q_ARG(QcepMaskDataPtr, overflow)
+                                  ))
+#endif
+}
+
+void QxrdProcessorExecutionThread::processDarkImage(QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow)
+{
+  QxrdProcessorExecution* exec = m_ProcessorExecution.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+  INVOKE_CHECK(
+        QMetaObject::invokeMethod(exec,
+                                  [=]() { exec->processDarkImage(image, overflow);}))
+#else
+  INVOKE_CHECK(
+        QMetaObject::invokeMethod(exec,
+                                  "processAcquiredImage",
+                                  Q_ARG(QcepDoubleImageDataPtr, image),
+                                  Q_ARG(QcepMaskDataPtr, overflow)
+                                  ))
+#endif
+}
+
+void QxrdProcessorExecutionThread::processIdleImage(QcepImageDataBasePtr image)
+{
+  QxrdProcessorExecution* exec = m_ProcessorExecution.data();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+  INVOKE_CHECK(
+        QMetaObject::invokeMethod(exec,
+                                  [=]() { exec->processIdleImage(image);}))
+#else
+  INVOKE_CHECK(
+        QMetaObject::invokeMethod(exec,
+                                  "processIdleImage",
+                                  Q_ARG(QcepImageDataBasePtr, image)
+                                  ))
+#endif
+}

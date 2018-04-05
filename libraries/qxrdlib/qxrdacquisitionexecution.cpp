@@ -13,6 +13,7 @@
 #include "qcepallocator.h"
 #include "qxrdsynchronizedacquisition.h"
 #include <QVector>
+#include "qxrdprocessorexecutionthread.h"
 
 QxrdAcquisitionExecution::QxrdAcquisitionExecution(QString name)
   : inherited(name),
@@ -214,7 +215,7 @@ void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPt
 
     int nDet = 0;
     QVector<QxrdDetectorSettingsPtr> dets;
-    QVector<QxrdProcessorPtr> procs;
+    QVector<QxrdProcessorExecutionThreadPtr> procs;
     QVector<QVector<QVector<QcepUInt32ImageDataPtr> > >res;
     QVector<QVector<QVector<QcepMaskDataPtr> > >      ovf;
 
@@ -224,7 +225,7 @@ void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPt
       if (det && det->isEnabled()) {
         nDet++;
         dets.append(det);
-        procs.append(det->processor());
+        procs.append(det->processorExecutionThread());
 
         res.resize(nDet);
         ovf.resize(nDet);
@@ -461,18 +462,7 @@ saveCancel:
 
               acq -> appendEvent(QxrdAcqCommon::AcquireFrame, d, p);
 
-              QxrdProcessor *proc = procs[d].data();
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-              INVOKE_CHECK(
-                    QMetaObject::invokeMethod(proc, [=]() { proc->processAcquiredImage(res[d][p][ii], ovf[d][p][ii]); } ));
-#else
-              INVOKE_CHECK(
-                    QMetaObject::invokeMethod(procs[d].data(),
-                                              "processAcquiredImage",
-                                              Q_ARG(QcepUInt32ImageDataPtr, res[d][p][ii]),
-                                              Q_ARG(QcepMaskDataPtr, ovf[d][p][ii])));
-#endif
+              procs[d] -> processAcquiredImage(res[d][p][ii], ovf[d][p][ii]);
 
               if (qcepDebug(DEBUG_ACQUIRETIME)) {
                 printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
@@ -513,18 +503,7 @@ saveCancel:
 
             acq -> appendEvent(QxrdAcqCommon::AcquirePost, d, p);
 
-            QxrdProcessor *proc = procs[d].data();
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-            INVOKE_CHECK(
-                  QMetaObject::invokeMethod(proc, [=]() { proc->processAcquiredImage(res[d][p][0], ovf[d][p][0]); } ));
-#else
-            INVOKE_CHECK(
-                  QMetaObject::invokeMethod(proc,
-                                            "processAcquiredImage",
-                                            Q_ARG(QcepUInt32ImageDataPtr, res[d][p][0]),
-                                            Q_ARG(QcepMaskDataPtr, ovf[d][p][0])));
-#endif
+            procs[d]->processAcquiredImage(res[d][p][0], ovf[d][p][0]);
 
             if (qcepDebug(DEBUG_ACQUIRETIME)) {
               printMessage(tr("processAcquiredImage(line %1) %2 msec idx:%3 pre:%4 ph:%5")
@@ -613,7 +592,7 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
 
     int nDet = 0;
     QVector<QxrdDetectorSettingsPtr> dets;
-    QVector<QxrdProcessorPtr> procs;
+    QVector<QxrdProcessorExecutionThreadPtr> procs;
     QVector<QcepDoubleImageDataPtr> res;
     QVector<QcepMaskDataPtr> overflow;
 
@@ -627,7 +606,7 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
       if (det && det->isEnabled()) {
         nDet++;
         dets.append(det);
-        procs.append(det->processor());
+        procs.append(det->processorExecutionThread());
 
         QcepDoubleImageDataPtr img = QcepAllocator::newDoubleImage(sharedFromThis(),
                                                                    tr("dark-%1").arg(i),
@@ -761,16 +740,7 @@ void QxrdAcquisitionExecution::executeDarkAcquisition(QxrdDarkAcquisitionParamet
         acq -> fillAcquisitionProperties(res[d]);
       }
 
-      QxrdProcessor *p = procs[d].data();
-#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
-      INVOKE_CHECK(
-            QMetaObject::invokeMethod(p, [=]() { p->processDarkImage(res[d], overflow[d]);} ));
-#else
-      INVOKE_CHECK(
-            QMetaObject::invokeMethod(p, "processDarkImage",
-                                      Q_ARG(QcepDoubleImageDataPtr, res[d]),
-                                      Q_ARG(QcepMaskDataPtr, overflow[d])));
-#endif
+      procs[d] -> processDarkImage(res[d], overflow[d]);
     }
 
     statusMessage(tr("Acquisition complete"));

@@ -10,6 +10,7 @@
 #include <QMetaProperty>
 #include "qxrddetectorsettings.h"
 #include "qxrdprocessor.h"
+#include "qxrdprocessorexecutionthread.h"
 #include "qxrdacquisitionparameterpack.h"
 #include "qxrddarkacquisitionparameterpack.h"
 #include "qxrdacquisitionscalermodel.h"
@@ -544,7 +545,7 @@ void QxrdAcquisition::onIdleTimeout()
           printMessage(tr("Tried to acquire frame from det %1 after %2 msec").arg(i).arg(tic.restart()));
         }
 
-        QxrdProcessorPtr proc = det->processor();
+        QxrdProcessorExecutionThreadPtr proc = det->processorExecutionThread();
 
         if (proc) {
 //          proc->processIdleImage(res);
