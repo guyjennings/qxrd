@@ -106,6 +106,8 @@ public slots:
   QxrdProcessorPtr processor();
   void startOrStop(bool enabled);
 
+  QxrdProcessorExecutionThreadPtr processorExecutionThread();
+
   virtual void beginFrame();
   virtual QcepImageDataBasePtr acquireFrameIfAvailable();
   virtual QcepImageDataBasePtr acquireFrame();

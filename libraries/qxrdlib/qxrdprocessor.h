@@ -191,30 +191,14 @@ public:
                           QcepMaskDataPtr overflow,
                           QcepDoubleList v);
 
-  Q_INVOKABLE void processAcquiredImage(QcepUInt32ImageDataPtr image,
-                                        QcepMaskDataPtr overflow);
+//  Q_INVOKABLE void processAcquiredImage(QcepUInt32ImageDataPtr image,
+//                                        QcepMaskDataPtr overflow);
 
-  Q_INVOKABLE void processDarkImage(QcepDoubleImageDataPtr image,
-                                    QcepMaskDataPtr overflow);
+//  Q_INVOKABLE void processDarkImage(QcepDoubleImageDataPtr image,
+//                                    QcepMaskDataPtr overflow);
 
-  Q_INVOKABLE void processIdleImage(QcepImageDataBasePtr image);
+//  Q_INVOKABLE void processIdleImage(QcepImageDataBasePtr image);
 
-  void setCommonImageProperties(QcepImageDataBasePtr image);
-  void setAcquiredImageProperties(QcepImageDataBasePtr image);
-  void setDarkImageProperties(QcepImageDataBasePtr image);
-  void setIdleImageProperties(QcepImageDataBasePtr image);
-  void setSubtractedImageProperties(QcepImageDataBasePtr image);
-
-  QcepImageDataBasePtr doDarkSubtraction    (QcepImageDataBasePtr img);
-  QcepImageDataBasePtr doBadPixels          (QcepImageDataBasePtr img);
-  QcepImageDataBasePtr doGainCorrection     (QcepImageDataBasePtr img);
-//  QcepDoubleVector     doCalculateROICounts (QcepImageDataBasePtr img);
-  void                 doSaveRawImage       (QcepImageDataBasePtr img,
-                                             QcepMaskDataPtr ovf);
-  void                 doSaveSubtractedImage(QcepImageDataBasePtr img,
-                                             QcepMaskDataPtr ovf);
-  void                 doSaveDarkImage      (QcepImageDataBasePtr img,
-                                             QcepMaskDataPtr ovf);
 
   QcepDoubleImageDataPtr processAcquiredInt16Image(QcepDoubleImageDataPtr processed, QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr processAcquiredInt32Image(QcepDoubleImageDataPtr processed, QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);

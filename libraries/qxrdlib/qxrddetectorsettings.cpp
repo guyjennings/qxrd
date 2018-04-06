@@ -277,6 +277,11 @@ QxrdProcessorPtr QxrdDetectorSettings::processor()
   return m_Processor;
 }
 
+QxrdProcessorExecutionThreadPtr QxrdDetectorSettings::processorExecutionThread()
+{
+  return m_ProcessorExecutionThread;
+}
+
 QxrdDetectorDriver *QxrdDetectorSettings::detectorDriver()
 {
   QxrdDetectorDriverPtr res;
