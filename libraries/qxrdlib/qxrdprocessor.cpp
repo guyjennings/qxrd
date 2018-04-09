@@ -637,7 +637,7 @@ QcepImageDataBaseWPtr QxrdProcessor::data() const
 
 void QxrdProcessor::newData(QcepImageDataBaseWPtr image)
 {
-  THREAD_CHECK;
+//  THREAD_CHECK;
 
   m_Data = image;
 //  m_Overflow = overflow;

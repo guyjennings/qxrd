@@ -77,28 +77,30 @@ QcepImageDataBasePtr QxrdProcessorExecution::doDarkSubtraction(QcepImageDataBase
 {
   THREAD_CHECK;
 
-  QcepImageDataBasePtr   res  = img;
+  QcepImageDataBasePtr   res;
 
   QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
     QcepDoubleImageDataPtr dark = proc->dark();
 
-    if (img && dark) {
+    if (dark == NULL) {
+      printMessage("No dark image available, skipping dark subtraction");
+    } else if (img && dark) {
       if (img->get_ExposureTime() != dark->get_ExposureTime()) {
         printMessage("Exposure times of acquired data and dark image are different, skipping");
-        return img;
+        return res;
       }
 
       if (img->get_Width() != dark->get_Width() ||
           img->get_Height() != dark->get_Height()) {
         printMessage("Dimensions of acquired data and dark image are different, skipping");
-        return img;
+        return res;
       }
 
       if (img->get_CameraGain() != dark->get_CameraGain()) {
         printMessage("Gains of acquired data and dark image are different, skipping");
-        return img;
+        return res;
       }
 
       int height = img->get_Height();
@@ -191,7 +193,7 @@ QcepImageDataBasePtr QxrdProcessorExecution::doBadPixels(QcepImageDataBasePtr im
 
   printMessage("Bad Pixel Correction not yet implemented");
 
-  return img;
+  return QcepImageDataBasePtr();
 }
 
 QcepImageDataBasePtr QxrdProcessorExecution::doGainCorrection(QcepImageDataBasePtr img)
@@ -200,7 +202,7 @@ QcepImageDataBasePtr QxrdProcessorExecution::doGainCorrection(QcepImageDataBaseP
 
   printMessage("Gain Correction not yet implemented");
 
-  return img;
+  return QcepImageDataBasePtr();
 }
 
 QcepDoubleVector QxrdProcessorExecution::doCalculateROICounts(QcepImageDataBasePtr img)
@@ -415,6 +417,8 @@ void QxrdProcessorExecution::processAcquiredImage(QcepUInt32ImageDataPtr image,
   THREAD_CHECK;
 
   QxrdProcessorPtr proc(m_Processor);
+  bool rawWasSaved    = false;
+  bool needsExtraSave = false;
 
   if (image && proc) {
     proc -> newData(image);
@@ -437,6 +441,8 @@ void QxrdProcessorExecution::processAcquiredImage(QcepUInt32ImageDataPtr image,
     if (proc -> get_SaveRawImages()) {
       doSaveRawImage(img, overflow);
 
+      rawWasSaved = true;
+
       int saveTime = tic.restart();
 
       if (qcepDebug(DEBUG_ACQUIRETIME)) {
@@ -445,7 +451,12 @@ void QxrdProcessorExecution::processAcquiredImage(QcepUInt32ImageDataPtr image,
     }
 
     if (img && proc -> get_PerformDarkSubtraction()) {
-      img = doDarkSubtraction(img);
+      QcepImageDataBasePtr subt = doDarkSubtraction(img);
+
+      if (subt) {
+        img = subt;
+        needsExtraSave = true;
+      }
 
       int subTime = tic.restart();
 
@@ -455,7 +466,12 @@ void QxrdProcessorExecution::processAcquiredImage(QcepUInt32ImageDataPtr image,
     }
 
     if (img && proc -> get_PerformBadPixels()) {
-      img = doBadPixels(img);
+      QcepImageDataBasePtr badp = doBadPixels(img);
+
+      if (badp) {
+        img = badp;
+        needsExtraSave = true;
+      }
 
       int pxlTime = tic.restart();
 
@@ -465,7 +481,12 @@ void QxrdProcessorExecution::processAcquiredImage(QcepUInt32ImageDataPtr image,
     }
 
     if (img && proc -> get_PerformGainCorrection()) {
-      img = doGainCorrection(img);
+      QcepImageDataBasePtr gainC = doGainCorrection(img);
+
+      if (gainC) {
+        img = gainC;
+        needsExtraSave = true;
+      }
 
       int gainTime = tic.restart();
 
@@ -502,7 +523,7 @@ void QxrdProcessorExecution::processAcquiredImage(QcepUInt32ImageDataPtr image,
       }
     }
 
-    if (img && proc -> get_SaveSubtracted()) {
+    if (img && proc -> get_SaveSubtracted() && (needsExtraSave || !rawWasSaved)) {
       doSaveSubtractedImage(img, overflow);
 
       proc -> set_DataPath(img -> get_FilePath());

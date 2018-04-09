@@ -61,7 +61,7 @@ void QxrdProcessorExecutionThread::processAcquiredImage(QcepUInt32ImageDataPtr i
 {
   QxrdProcessorExecution* exec = m_ProcessorExecution.data();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
   INVOKE_CHECK(
         QMetaObject::invokeMethod(exec,
                                   [=]() { exec->processAcquiredImage(image, overflow);}))
@@ -79,14 +79,14 @@ void QxrdProcessorExecutionThread::processDarkImage(QcepDoubleImageDataPtr image
 {
   QxrdProcessorExecution* exec = m_ProcessorExecution.data();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
   INVOKE_CHECK(
         QMetaObject::invokeMethod(exec,
                                   [=]() { exec->processDarkImage(image, overflow);}))
 #else
   INVOKE_CHECK(
         QMetaObject::invokeMethod(exec,
-                                  "processAcquiredImage",
+                                  "processDarkImage",
                                   Q_ARG(QcepDoubleImageDataPtr, image),
                                   Q_ARG(QcepMaskDataPtr, overflow)
                                   ))
@@ -97,7 +97,7 @@ void QxrdProcessorExecutionThread::processIdleImage(QcepImageDataBasePtr image)
 {
   QxrdProcessorExecution* exec = m_ProcessorExecution.data();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
   INVOKE_CHECK(
         QMetaObject::invokeMethod(exec,
                                   [=]() { exec->processIdleImage(image);}))
