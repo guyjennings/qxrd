@@ -1,7 +1,7 @@
 #include "qxrdmeasurecommand.h"
 #include <QToolButton>
 #include "qxrdimageplotmeasurer.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 QxrdMeasureCommand::QxrdMeasureCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
   : QcepPlotButtonCommand("measureCommand", "Measure", plot, set, ":/images/measure.png", true)

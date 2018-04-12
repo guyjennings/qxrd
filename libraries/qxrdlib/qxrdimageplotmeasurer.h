@@ -10,12 +10,12 @@ class QXRD_EXPORT QxrdImagePlotMeasurer : public QcepPlotMeasurer
   Q_OBJECT
 
 public:
-  QxrdImagePlotMeasurer(QxrdImagePlot *plot);
+  QxrdImagePlotMeasurer(QcepImagePlot *plot);
 
-  QxrdImagePlot *imagePlot() const;
+  QcepImagePlot *imagePlot() const;
 
 protected:
-  QxrdImagePlot *m_Plot;
+  QcepImagePlot *m_Plot;
 };
 
 #endif // QXRDIMAGEPLOTMEASURER_H

@@ -2,17 +2,17 @@
 #define QXRDDETECTORIMAGEPLOT_H
 
 #include "qxrdlib_global.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qxrdroipicker-ptr.h"
 
-class QXRD_EXPORT QxrdDetectorImagePlot : public QxrdImagePlot
+class QXRD_EXPORT QxrdDetectorImagePlot : public QcepImagePlot
 {
   Q_OBJECT
 
 public:
   QxrdDetectorImagePlot(QWidget *parent=0);
   //TODO: change to QcepObjectWPtr...
-  void initialize(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent);
+  void initialize(QcepImagePlotSettingsWPtr settings, QcepObjectWPtr parent);
 
   void contextMenuEvent(QContextMenuEvent *event);
 

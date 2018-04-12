@@ -3,7 +3,7 @@
 #include <QAction>
 #include <QMenu>
 #include "qxrdmaskpicker.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qxrdmaskstack.h"
 
 QxrdMaskPolygonsCommand::QxrdMaskPolygonsCommand(QcepPlotWidget *plot,

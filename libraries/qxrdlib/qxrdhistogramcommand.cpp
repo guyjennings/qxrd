@@ -1,7 +1,7 @@
 #include "qxrdhistogramcommand.h"
 #include <QToolButton>
 #include "qxrdhistogramselector.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 QxrdHistogramCommand::QxrdHistogramCommand(QcepPlotWidget            *plot,
                                            QcepPlotWidgetSettingsWPtr set)
@@ -22,7 +22,7 @@ QxrdHistogramCommand::QxrdHistogramCommand(QcepPlotWidget            *plot,
   setPlotPicker(m_HistogramSelector);
 
   connect(m_HistogramSelector, (void (QcepPlotMeasurer::*)( const QRectF &)) &QwtPlotPicker::selected,
-          m_Plot, &QxrdImagePlot::selectHistogram);
+          m_Plot, &QcepImagePlot::selectHistogram);
 }
 
 void QxrdHistogramCommand::enable()

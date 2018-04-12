@@ -1,5 +1,5 @@
 #include "qxrddisableringcommand.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 QxrdDisableRingCommand::QxrdDisableRingCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
   : QcepPlotContextMenuCommand("disableRingCommand", "Disable Ring", plot, set)

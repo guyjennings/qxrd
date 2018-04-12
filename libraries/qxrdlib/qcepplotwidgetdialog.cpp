@@ -2,8 +2,8 @@
 #include "qxrddebug.h"
 #include <stdio.h>
 #include "qxrdmainwindow.h"
-#include "qxrdimageplotsettings-ptr.h"
-#include "qxrdimageplotsettings.h"
+#include "qcepimageplotsettings-ptr.h"
+#include "qcepimageplotsettings.h"
 #include "qxrdacqcommon.h"
 #include "qcepimageplotwidget.h"
 #include "qcepplotwidgetsettings.h"
@@ -56,7 +56,7 @@ QcepPlotWidgetDialog::QcepPlotWidgetDialog(QWidget *parent,
 //      connect(m_Display_10pct, &QAbstractButton::clicked, plot, &QxrdImagePlot::set010Range);
 //      connect(m_Display_100pct, &QAbstractButton::clicked, plot, &QxrdImagePlot::set100Range);
 
-//      QxrdImagePlotSettingsPtr ps(plot->imagePlotSettings());
+//      QcepImagePlotSettingsPtr ps(plot->imagePlotSettings());
 
 //      if (ps) {
 //        ps -> prop_DisplayMinimumPct() -> linkTo(m_DisplayMinimumPct);

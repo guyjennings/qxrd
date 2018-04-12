@@ -2,11 +2,11 @@
 
 #include "qcepplotmeasurer.h"
 #include "qceprasterdata.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qxrdcenterfinder.h"
 #include "qwt_picker_machine.h"
 
-QxrdImagePlotMeasurer::QxrdImagePlotMeasurer(QxrdImagePlot *plot)
+QxrdImagePlotMeasurer::QxrdImagePlotMeasurer(QcepImagePlot *plot)
   : QcepPlotMeasurer(plot),
     m_Plot(plot)
 {
@@ -17,7 +17,7 @@ QxrdImagePlotMeasurer::QxrdImagePlotMeasurer(QxrdImagePlot *plot)
   setRubberBand(QwtPicker::PolygonRubberBand);
 }
 
-QxrdImagePlot* QxrdImagePlotMeasurer::imagePlot() const
+QcepImagePlot* QxrdImagePlotMeasurer::imagePlot() const
 {
   return m_Plot;
 }

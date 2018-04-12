@@ -1,19 +1,19 @@
-#ifndef QXRDIMAGEPLOTWIDGETDIALOG_H
-#define QXRDIMAGEPLOTWIDGETDIALOG_H
+#ifndef QCEPIMAGEPLOTWIDGETDIALOG_H
+#define QCEPIMAGEPLOTWIDGETDIALOG_H
 
 #include "qxrdlib_global.h"
 #include <QDialog>
-#include "ui_qxrdimageplotwidgetdialog.h"
+#include "ui_qcepimageplotwidgetdialog.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QxrdImagePlotWidgetDialog : public QDialog, public Ui::QxrdImagePlotWidgetDialog
+class QXRD_EXPORT QcepImagePlotWidgetDialog : public QDialog, public Ui::QcepImagePlotWidgetDialog
 {
   Q_OBJECT
 
 public:
-  explicit QxrdImagePlotWidgetDialog(QWidget *parent,
+  explicit QcepImagePlotWidgetDialog(QWidget *parent,
                                      QcepImagePlotWidgetSettingsWPtr settings);
-  ~QxrdImagePlotWidgetDialog();
+  ~QcepImagePlotWidgetDialog();
 
   void accept();
 
@@ -28,4 +28,4 @@ private:
   QcepImagePlotWidgetSettingsWPtr m_Settings;
 };
 
-#endif // QXRDIMAGEPLOTWIDGETDIALOG_H
+#endif // QCEPIMAGEPLOTWIDGETDIALOG_H

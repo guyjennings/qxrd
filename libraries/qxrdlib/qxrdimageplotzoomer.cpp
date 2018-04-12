@@ -1,7 +1,7 @@
 #include "qxrdimageplotzoomer.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
-QxrdImagePlotZoomer::QxrdImagePlotZoomer(QxrdImagePlot *plot)
+QxrdImagePlotZoomer::QxrdImagePlotZoomer(QcepImagePlot *plot)
   : QcepPlotZoomer(plot)
 {
 }

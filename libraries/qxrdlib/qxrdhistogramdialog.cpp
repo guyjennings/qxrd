@@ -8,7 +8,7 @@
 #include "qxrdhistogramdialogsettings.h"
 #include "qxrdhistogramplotwidgetsettings.h"
 #include <QtConcurrentRun>
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr set,
                                          QxrdExperimentWPtr expt,

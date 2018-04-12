@@ -3,14 +3,14 @@
 
 #include "qxrdlib_global.h"
 #include "qcepplotzoomer.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 class QXRD_EXPORT QxrdImagePlotZoomer : public QcepPlotZoomer
 {
   Q_OBJECT
 
 public:
-  QxrdImagePlotZoomer(QxrdImagePlot *plot);
+  QxrdImagePlotZoomer(QcepImagePlot *plot);
 
 //private:
 //  QxrdImagePlot *m_ImagePlot;

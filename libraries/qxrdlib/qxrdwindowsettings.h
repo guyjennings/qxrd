@@ -5,7 +5,7 @@
 #include "qxrdmainwindowsettings.h"
 #include "qcepobject.h"
 #include "qcepproperty.h"
-#include "qxrdimageplotsettings-ptr.h"
+#include "qcepimageplotsettings-ptr.h"
 #include "qxrdintegratorplotsettings-ptr.h"
 #include "qxrdfilebrowsersettings-ptr.h"
 #include "qxrdhistogramdialogsettings-ptr.h"
@@ -42,7 +42,7 @@ public:
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
 
-  QxrdImagePlotSettingsWPtr                    imagePlotSettings();
+  QcepImagePlotSettingsWPtr                    imagePlotSettings();
   QxrdIntegratorPlotSettingsWPtr               integratorPlotSettings();
   QxrdFileBrowserSettingsWPtr                  fileBrowserSettings();
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
@@ -57,7 +57,7 @@ signals:
 public slots:
   
 private:
-  QxrdImagePlotSettingsPtr                     m_ImagePlotSettings;
+  QcepImagePlotSettingsPtr                     m_ImagePlotSettings;
   QxrdIntegratorPlotSettingsPtr                m_IntegratorPlotSettings;
   QxrdFileBrowserSettingsPtr                   m_FileBrowserSettings;
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;

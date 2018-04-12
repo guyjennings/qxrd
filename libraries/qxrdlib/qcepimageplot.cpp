@@ -1,5 +1,5 @@
 #include "qxrddebug.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qceprasterdata.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdprocessor.h"
@@ -22,7 +22,7 @@
 #include "qwt_plot_piecewise_curve.h"
 #include "qcepplotwidgetdialog.h"
 
-QxrdImagePlot::QxrdImagePlot(QWidget *parent)
+QcepImagePlot::QcepImagePlot(QWidget *parent)
   : QcepPlot(parent),
     m_ObjectNamer(this, "imageGraph"),
     m_ImagePlotSettings(),
@@ -42,7 +42,7 @@ QxrdImagePlot::QxrdImagePlot(QWidget *parent)
 {
 }
 
-void QxrdImagePlot::initialize(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent)
+void QcepImagePlot::initialize(QcepImagePlotSettingsWPtr settings, QcepObjectWPtr parent)
 {
   QcepPlot::initialize(settings);
 
@@ -58,7 +58,7 @@ void QxrdImagePlot::initialize(QxrdImagePlotSettingsWPtr settings, QcepObjectWPt
 //  m_CenterMarker -> attach(this);
 }
 
-void QxrdImagePlot::printMessage(QString msg, QDateTime dt) const
+void QcepImagePlot::printMessage(QString msg, QDateTime dt) const
 {
   QcepObjectPtr parent(m_Parent);
 
@@ -67,7 +67,7 @@ void QxrdImagePlot::printMessage(QString msg, QDateTime dt) const
   }
 }
 
-void QxrdImagePlot::setProcessor(QxrdProcessorWPtr proc)
+void QcepImagePlot::setProcessor(QxrdProcessorWPtr proc)
 {
   m_Processor = proc;
 
@@ -80,19 +80,19 @@ void QxrdImagePlot::setProcessor(QxrdProcessorWPtr proc)
 //      onCenterChanged(cf->get_Center());
 
       connect(cf->prop_MarkedPoints(), &QxrdPowderPointVectorProperty::valueChanged,
-              this, &QxrdImagePlot::onMarkedPointsChanged);
+              this, &QcepImagePlot::onMarkedPointsChanged);
 
       onMarkedPointsChanged();
     }
   }
 }
 
-QxrdProcessorWPtr QxrdImagePlot::processor() const
+QxrdProcessorWPtr QcepImagePlot::processor() const
 {
   return m_Processor;
 }
 
-void QxrdImagePlot::setData(QcepImageDataBaseWPtr data)
+void QcepImagePlot::setData(QcepImageDataBaseWPtr data)
 {
   m_Data = data;
 
@@ -103,35 +103,35 @@ void QxrdImagePlot::setData(QcepImageDataBaseWPtr data)
   }
 }
 
-void QxrdImagePlot::setMask(QcepMaskDataWPtr mask)
+void QcepImagePlot::setMask(QcepMaskDataWPtr mask)
 {
   m_Mask = mask;
 }
 
-void QxrdImagePlot::autoScale()
+void QcepImagePlot::autoScale()
 {
   QcepPlot::autoScale();
 }
 
-void QxrdImagePlot::setAutoRange()
+void QcepImagePlot::setAutoRange()
 {
   if (g_Application) {
     g_Application->criticalMessage("QxrdImagePlot::setAutoRange To do...");
   }
 }
 
-void QxrdImagePlot::toggleShowROI()
+void QcepImagePlot::toggleShowROI()
 {
-  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+  QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
 
   if (set) {
     changeROIShown(!set->get_DisplayROI());
   }
 }
 
-void QxrdImagePlot::changeROIShown(bool shown)
+void QcepImagePlot::changeROIShown(bool shown)
 {
-  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+  QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
 
   if (set) {
     set->set_DisplayROI(shown);
@@ -168,7 +168,7 @@ void QxrdImagePlot::changeROIShown(bool shown)
 //  return m_DataRaster;
 //}
 
-QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
+QwtText QcepImagePlot::trackerTextF(const QPointF &pos)
 {
   QxrdProcessorPtr    processor = this->processor();
   QxrdCenterFinderPtr centerFinder;
@@ -179,7 +179,7 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
 
   QString res = tr("%1, %2").arg(pos.x()).arg(pos.y());
 
-  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+  QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
 
   if (set) {
     set->set_XMouse(pos.x());
@@ -243,10 +243,10 @@ QwtText QxrdImagePlot::trackerTextF(const QPointF &pos)
 }
 
 //TODO: remove
-void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
+void QcepImagePlot::contextMenuEvent(QContextMenuEvent * event)
 {
   if (m_ContextMenuEnabled) {
-    QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+    QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
 
     if (set) {
       QMenu plotMenu(NULL, NULL);
@@ -365,7 +365,7 @@ void QxrdImagePlot::contextMenuEvent(QContextMenuEvent * event)
   }
 }
 
-void QxrdImagePlot::zapPixel(int x, int y)
+void QcepImagePlot::zapPixel(int x, int y)
 {
   double sum = 0;
   int    npx = 0;
@@ -390,14 +390,14 @@ void QxrdImagePlot::zapPixel(int x, int y)
   }
 }
 
-void QxrdImagePlot::onMarkedPointsChanged()
+void QcepImagePlot::onMarkedPointsChanged()
 {
   displayPowderMarkers();
 
   replot();
 }
 
-void QxrdImagePlot::displayPowderMarkers()
+void QcepImagePlot::displayPowderMarkers()
 {
   clearPowderMarkers();
 
@@ -440,7 +440,7 @@ void QxrdImagePlot::displayPowderMarkers()
   }
 }
 
-void QxrdImagePlot::clearPowderMarkers()
+void QcepImagePlot::clearPowderMarkers()
 {
   foreach(QwtPlotCurve *curve, m_PowderPointCurves) {
     curve->detach();
@@ -450,9 +450,9 @@ void QxrdImagePlot::clearPowderMarkers()
   m_PowderPointCurves.clear();
 }
 
-void QxrdImagePlot::enableROIDisplay(bool enable)
+void QcepImagePlot::enableROIDisplay(bool enable)
 {
-  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+  QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
 
   if (set) {
     set->set_DisplayROI(enable);
@@ -461,7 +461,7 @@ void QxrdImagePlot::enableROIDisplay(bool enable)
   updateROIDisplay();
 }
 
-void QxrdImagePlot::setROIModel(QxrdROIModelWPtr model)
+void QcepImagePlot::setROIModel(QxrdROIModelWPtr model)
 {
   m_ROIModel = model;
 
@@ -470,20 +470,20 @@ void QxrdImagePlot::setROIModel(QxrdROIModelWPtr model)
   QxrdROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel) {
-    connect(roiModel.data(), &QAbstractItemModel::modelReset,    this, &QxrdImagePlot::updateROIDisplay);
-    connect(roiModel.data(), &QAbstractItemModel::dataChanged,   this, &QxrdImagePlot::roiDataChanged);
-    connect(roiModel.data(), &QAbstractItemModel::rowsInserted,  this, &QxrdImagePlot::roiRowsInserted);
-    connect(roiModel.data(), &QAbstractItemModel::rowsMoved,     this, &QxrdImagePlot::roiRowsMoved);
-    connect(roiModel.data(), &QAbstractItemModel::rowsRemoved,   this, &QxrdImagePlot::roiRowsRemoved);
+    connect(roiModel.data(), &QAbstractItemModel::modelReset,    this, &QcepImagePlot::updateROIDisplay);
+    connect(roiModel.data(), &QAbstractItemModel::dataChanged,   this, &QcepImagePlot::roiDataChanged);
+    connect(roiModel.data(), &QAbstractItemModel::rowsInserted,  this, &QcepImagePlot::roiRowsInserted);
+    connect(roiModel.data(), &QAbstractItemModel::rowsMoved,     this, &QcepImagePlot::roiRowsMoved);
+    connect(roiModel.data(), &QAbstractItemModel::rowsRemoved,   this, &QcepImagePlot::roiRowsRemoved);
   }
 }
 
-QxrdROIModelWPtr QxrdImagePlot::roiModel()
+QxrdROIModelWPtr QcepImagePlot::roiModel()
 {
   return m_ROIModel;
 }
 
-void QxrdImagePlot::setROISelection(QItemSelectionModel *select)
+void QcepImagePlot::setROISelection(QItemSelectionModel *select)
 {
   m_ROISelection = select;
 
@@ -491,16 +491,16 @@ void QxrdImagePlot::setROISelection(QItemSelectionModel *select)
 
   if (m_ROISelection) {
     connect(m_ROISelection, &QItemSelectionModel::selectionChanged,
-            this, &QxrdImagePlot::updateROISelection);
+            this, &QcepImagePlot::updateROISelection);
   }
 }
 
-QItemSelectionModel* QxrdImagePlot::roiSelection()
+QItemSelectionModel* QcepImagePlot::roiSelection()
 {
   return m_ROISelection;
 }
 
-void QxrdImagePlot::clearROIDisplay()
+void QcepImagePlot::clearROIDisplay()
 {
   foreach (QwtPlotCurve *curve, m_ROICurves) {
     curve->detach();
@@ -510,11 +510,11 @@ void QxrdImagePlot::clearROIDisplay()
   m_ROICurves.clear();
 }
 
-void QxrdImagePlot::updateROIDisplay()
+void QcepImagePlot::updateROIDisplay()
 {
   clearROIDisplay();
 
-  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+  QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
 
   if (set && set->get_DisplayROI() && m_ROIModel && m_ROISelection) {
     QxrdROIModelPtr roiModel(m_ROIModel);
@@ -573,7 +573,7 @@ void QxrdImagePlot::updateROIDisplay()
   replot();
 }
 
-void QxrdImagePlot::roiDataChanged(const QModelIndex & /*topLeft*/,
+void QcepImagePlot::roiDataChanged(const QModelIndex & /*topLeft*/,
                                    const QModelIndex & bottomRight,
                                    const QVector<int> & /*roles*/)
 {
@@ -590,23 +590,23 @@ void QxrdImagePlot::roiDataChanged(const QModelIndex & /*topLeft*/,
   }
 }
 
-void QxrdImagePlot::roiRowsInserted(const QModelIndex & /*parent*/, int /*first*/, int /*last*/)
+void QcepImagePlot::roiRowsInserted(const QModelIndex & /*parent*/, int /*first*/, int /*last*/)
 {
   updateROIDisplay();
 }
 
-void QxrdImagePlot::roiRowsMoved(const QModelIndex & /*parent*/, int /*start*/, int /*end*/,
+void QcepImagePlot::roiRowsMoved(const QModelIndex & /*parent*/, int /*start*/, int /*end*/,
                                  const QModelIndex & /*destination*/, int /*row*/)
 {
   updateROIDisplay();
 }
 
-void QxrdImagePlot::roiRowsRemoved(const QModelIndex & /*parent*/, int /*first*/, int /*last*/)
+void QcepImagePlot::roiRowsRemoved(const QModelIndex & /*parent*/, int /*first*/, int /*last*/)
 {
   updateROIDisplay();
 }
 
-void QxrdImagePlot::onLegendChecked(const QVariant &itemInfo, bool on, int index)
+void QcepImagePlot::onLegendChecked(const QVariant &itemInfo, bool on, int index)
 {
   QwtPlotItem *item = infoToItem(itemInfo);
 
@@ -633,7 +633,7 @@ void QxrdImagePlot::onLegendChecked(const QVariant &itemInfo, bool on, int index
   QcepPlot::onLegendChecked(itemInfo, on, index);
 }
 
-void QxrdImagePlot::selectROIItem(int n, bool selected)
+void QcepImagePlot::selectROIItem(int n, bool selected)
 {
   QwtPlotCurve *pc = m_ROICurves.value(n);
 
@@ -664,7 +664,7 @@ void QxrdImagePlot::selectROIItem(int n, bool selected)
   }
 }
 
-void QxrdImagePlot::selectROILabel(int i, bool on)
+void QcepImagePlot::selectROILabel(int i, bool on)
 {
   const QVariant itemInfo = itemToInfo(m_ROICurves.value(i));
 
@@ -677,7 +677,7 @@ void QxrdImagePlot::selectROILabel(int i, bool on)
   }
 }
 
-void QxrdImagePlot::updateROISelection(
+void QcepImagePlot::updateROISelection(
     const QItemSelection & /*selected*/,
     const QItemSelection & /*deselected*/)
 {
@@ -697,7 +697,7 @@ void QxrdImagePlot::updateROISelection(
   }
 }
 
-void QxrdImagePlot::moveSelectedROICenter(double x, double y)
+void QcepImagePlot::moveSelectedROICenter(double x, double y)
 {
   QxrdROIModelPtr roiModel(m_ROIModel);
 
@@ -712,7 +712,7 @@ void QxrdImagePlot::moveSelectedROICenter(double x, double y)
   }
 }
 
-void QxrdImagePlot::editSelectedROI(double x, double y)
+void QcepImagePlot::editSelectedROI(double x, double y)
 {
   QxrdROIModelPtr roiModel(m_ROIModel);
   QPointF pt(x,y);

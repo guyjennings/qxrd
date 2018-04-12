@@ -30,7 +30,7 @@ public:
 protected:
   QString                    m_Description;
   QcepPlotWidget            *m_PlotWidget;
-  QxrdImagePlot             *m_Plot;
+  QcepImagePlot             *m_Plot;
   QcepPlotWidgetSettingsWPtr m_Settings;
 };
 

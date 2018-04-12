@@ -72,7 +72,6 @@ SOURCES += qxrdlib.cpp \
     qxrdpowderpointpicker.cpp \
     qxrdintegrator.cpp \
     qxrdintegratorplot.cpp \
-    qxrdimageplot.cpp \
     qxrdserver.cpp \
     qxrdserverthread.cpp \
     qxrdacquisition.cpp \
@@ -110,7 +109,6 @@ SOURCES += qxrdlib.cpp \
     qxrdglobalpreferencesdialog.cpp \
     qxrdwelcomerecentitem.cpp \
     qxrdwindowsettings.cpp \
-    qxrdimageplotsettings.cpp \
     qxrdfilebrowsersettings.cpp \
     qxrdhistogramdialogsettings.cpp \
     triangulate.c \
@@ -259,7 +257,6 @@ SOURCES += qxrdlib.cpp \
     qxrddexeladialog.cpp \
     qxrdareadetectorsettings.cpp \
     qxrdperkinelmersettings.cpp \
-    qxrdimageplotwidgetdialog.cpp \
     qxrdintegratedplotwidgetsettings.cpp \
     qxrdcenteringplotwidgetsettings.cpp \
     qxrdextrainputsplotwidgetsettings.cpp \
@@ -332,7 +329,10 @@ SOURCES += qxrdlib.cpp \
     qcepmaskrasterdata.cpp \
     qcepoverflowrasterdata.cpp \
     qcepimageplotwidgetsettings.cpp \
-    qcepimageplotwidget.cpp
+    qcepimageplotwidget.cpp \
+    qcepimageplotwidgetdialog.cpp \
+    qcepimageplot.cpp \
+    qcepimageplotsettings.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -463,8 +463,6 @@ HEADERS += qxrdlib.h\
     qxrdzoomincommand-ptr.h \
     qxrdscalingsubmenucommand.h \
     qxrdcolormapsubmenucommand.h \
-    qxrdimageplotwidgetdialog.h \
-    qxrdimageplotwidgetdialog-ptr.h \
     qwt_plot_spectrogram-ptr.h \
     qxrdprocessor-ptr.h \
     qxrdprocessorstep.h \
@@ -584,7 +582,12 @@ HEADERS += qxrdlib.h\
     qcepimageplotwidgetsettings.h \
     qcepimageplotwidget.h \
     qceprasterdata-ptr.h \
-    qcepoverflowrasterdata-ptr.h
+    qcepoverflowrasterdata-ptr.h \
+    qcepimageplotwidgetdialog.h \
+    qcepimageplotwidgetdialog-ptr.h \
+    qcepimageplot.h \
+    qcepimageplotsettings-ptr.h \
+    qcepimageplotsettings.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -610,7 +613,6 @@ HEADERS += TODO.h \
     qxrdintegrator.h \
     qxrdintegrator-ptr.h \
     qxrdintegratorplot.h \
-    qxrdimageplot.h \
     qxrdserver.h \
     qxrdserver-ptr.h \
     qxrdserverthread.h \
@@ -670,7 +672,6 @@ HEADERS += TODO.h \
     qxrdglobalpreferencesdialog.h \
     qxrdwelcomerecentitem.h \
     qxrdwindowsettings.h \
-    qxrdimageplotsettings.h \
     qxrdfilebrowsersettings.h \
     qxrdhistogramdialogsettings.h \
     triangulate.h \
@@ -717,7 +718,6 @@ HEADERS += TODO.h \
     qxrdtodolist.h \
     qxrdtodolistitem.h \
     qxrdtodolistitem-ptr.h \
-    qxrdimageplotsettings-ptr.h \
     qxrddetectorimageplot.h \
     qxrdroitypedelegate.h \
     qxrdacquisitionscalermodel.h \
@@ -810,14 +810,14 @@ FORMS += qxrdwindow.ui \
     qxrdareadetectordialog.ui \
     qxrdfilewatcherdialog.ui \
     qxrddexeladialog.ui \
-    qxrdimageplotwidgetdialog.ui \
     qxrdwatcherwindow.ui \
     qxrdstartupwindow.ui \
     qxrdcorrectiondialogpage.ui \
     qxrdexposurepreferencesdialog.ui \
     qxrdacquisitioneventlogwindow.ui \
     qcepplotwidget.ui \
-    qcepplotwidgetdialog.ui
+    qcepplotwidgetdialog.ui \
+    qcepimageplotwidgetdialog.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS +=

@@ -30,7 +30,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
-          <widget class="QxrdImagePlotWidget" name="m_DetectorImage" native="true">
+          <widget class="QcepImagePlotWidget" name="m_DetectorImage" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -1653,15 +1653,15 @@ Script Function: darkSummedExposures()</string>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QcepImagePlotWidget</class>
+   <extends>QWidget</extends>
+   <header>qcepimageplotwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>QxrdExposureTimeSpinner</class>
    <extends>QDoubleSpinBox</extends>
    <header>qxrdexposuretimespinner.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QxrdImagePlotWidget</class>
-   <extends>QWidget</extends>
-   <header>qxrdimageplotwidget.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

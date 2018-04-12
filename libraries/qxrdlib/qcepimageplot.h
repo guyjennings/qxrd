@@ -17,20 +17,20 @@
 #include "qceprasterdata.h"
 #include "qcepmaskrasterdata.h"
 #include "qcepmaskcolormap.h"
-#include "qxrdimageplotsettings.h"
+#include "qcepimageplotsettings.h"
 #include "qxrdpowderpointpicker.h"
 #include "qxrdroimodel-ptr.h"
 #include <QItemSelectionModel>
 #include "qcepplotwidgetdialog-ptr.h"
 
-class QXRD_EXPORT QxrdImagePlot : public QcepPlot
+class QXRD_EXPORT QcepImagePlot : public QcepPlot
 {
   Q_OBJECT
 
 public:
-  QxrdImagePlot(QWidget *parent = 0);
+  QcepImagePlot(QWidget *parent = 0);
   //TODO: change to QcepObjectWPtr...
-  void initialize(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent);
+  void initialize(QcepImagePlotSettingsWPtr settings, QcepObjectWPtr parent);
   virtual void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
 
 signals:
@@ -115,7 +115,7 @@ private:
   QcepObjectNamer            m_ObjectNamer;
 
 protected:
-  QxrdImagePlotSettingsWPtr  m_ImagePlotSettings;
+  QcepImagePlotSettingsWPtr  m_ImagePlotSettings;
 
 private:
   QcepObjectWPtr             m_Parent;

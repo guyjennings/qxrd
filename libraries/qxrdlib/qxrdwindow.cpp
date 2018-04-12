@@ -5,7 +5,7 @@
 #include "qxrdexperiment.h"
 #include "qcepplotwidgetdialog.h"
 #include "qxrdacqcommon.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
 #include "qxrdprocessor.h"

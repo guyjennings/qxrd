@@ -1,6 +1,6 @@
-#include "qxrdimageplotsettings.h"
+#include "qcepimageplotsettings.h"
 
-QxrdImagePlotSettings::QxrdImagePlotSettings(QString name) :
+QcepImagePlotSettings::QcepImagePlotSettings(QString name) :
   QcepPlotSettings(name),
   m_DisplayMinimumPctle(this, "displayMinimumPctle", 0, "Minimum Displayed Value (as a percentile)"),
   m_DisplayMaximumPctle(this, "displayMaximumPctle", 100, "Maximum Displayed Value (as a percentile)"),
@@ -25,7 +25,7 @@ QxrdImagePlotSettings::QxrdImagePlotSettings(QString name) :
 {
 }
 
-void QxrdImagePlotSettings::initialize(QcepObjectWPtr parent)
+void QcepImagePlotSettings::initialize(QcepObjectWPtr parent)
 {
   inherited::initialize(parent);
 }

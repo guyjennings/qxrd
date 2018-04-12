@@ -1,7 +1,7 @@
 #include "qcepplotcontextmenucommand.h"
 #include <QAction>
 #include <QObject>
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 QcepPlotContextMenuCommand::QcepPlotContextMenuCommand(QString                    name,
                                                        QString                    desc,

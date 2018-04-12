@@ -11,7 +11,7 @@ class QXRD_EXPORT QxrdROIPicker : public QxrdImagePlotMeasurer
   Q_OBJECT
 
 public:
-  QxrdROIPicker(QxrdImagePlot *plot,
+  QxrdROIPicker(QcepImagePlot *plot,
                 bool useSelectedOnly,
                 bool canSelectEdges,
                 bool usePolygonsOnly,
@@ -71,7 +71,7 @@ class QxrdROICreator : public QxrdROIPicker
   Q_OBJECT
 
 public:
-  QxrdROICreator(QxrdImagePlot *plot);
+  QxrdROICreator(QcepImagePlot *plot);
 
   void begin();
   void move(const QPoint &pt);
@@ -91,7 +91,7 @@ class QxrdROISelector : public QxrdROIPicker
   Q_OBJECT
 
 public:
-  QxrdROISelector(QxrdImagePlot *plot);
+  QxrdROISelector(QcepImagePlot *plot);
 
   void move(const QPoint &pt);
   bool end(bool ok = true);
@@ -102,7 +102,7 @@ class QxrdROIAddNode : public QxrdROIPicker
   Q_OBJECT
 
 public:
-  QxrdROIAddNode(QxrdImagePlot *plot);
+  QxrdROIAddNode(QcepImagePlot *plot);
 
   void move(const QPoint &pt);
   bool end(bool ok = true);
@@ -113,7 +113,7 @@ class QxrdROIRemoveNode : public QxrdROIPicker
   Q_OBJECT
 
 public:
-  QxrdROIRemoveNode(QxrdImagePlot *plot);
+  QxrdROIRemoveNode(QcepImagePlot *plot);
 
   bool end(bool ok = true);
 };
@@ -123,7 +123,7 @@ class QxrdROIRotator : public QxrdROIPicker
   Q_OBJECT
 
 public:
-  QxrdROIRotator(QxrdImagePlot *plot);
+  QxrdROIRotator(QcepImagePlot *plot);
 
   void move(const QPoint &pt);
   bool end(bool ok = true);
@@ -134,7 +134,7 @@ class QxrdROIResizer : public QxrdROIPicker
   Q_OBJECT
 
 public:
-  QxrdROIResizer(QxrdImagePlot *plot);
+  QxrdROIResizer(QcepImagePlot *plot);
 
   void move(const QPoint &pt);
   bool end(bool ok = true);

@@ -1,9 +1,9 @@
 #include "qxrdplotslicer.h"
 #include "qceprasterdata.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qwt_picker_machine.h"
 
-QxrdPlotSlicer::QxrdPlotSlicer(QxrdImagePlot *plot)
+QxrdPlotSlicer::QxrdPlotSlicer(QcepImagePlot *plot)
   : QxrdImagePlotMeasurer(plot)
 {
   qRegisterMetaType< QVector<QPointF> >("QVector<QPointF>");

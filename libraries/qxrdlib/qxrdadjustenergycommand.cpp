@@ -1,5 +1,5 @@
 #include "qxrdadjustenergycommand.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 QxrdAdjustEnergyCommand::QxrdAdjustEnergyCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
   : QcepPlotContextMenuCommand("adjustEnergyCommand", "Adjust Energy to match Calibrant Ring", plot, set)

@@ -46,7 +46,7 @@ private:
   QcepDoubleImageDataPtr             m_Image;
   QwtPlotPiecewiseCurvePtr           m_TotalCurve;
   QwtPlotPiecewiseCurvePtr           m_SelectCurve;
-  QxrdImagePlot                     *m_Plot;
+  QcepImagePlot                     *m_Plot;
 };
 
 #endif // QXRDHISTOGRAMDIALOG_H

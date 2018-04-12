@@ -8,7 +8,7 @@
 
 //TODO: reimplement using QxrdPlotButtonCommand
 QxrdDetectorImagePlot::QxrdDetectorImagePlot(QWidget *parent)
-  : QxrdImagePlot(parent),
+  : QcepImagePlot(parent),
     m_ROICreator(NULL),
     m_ROISelector(NULL),
     m_ROIAddNode(NULL),
@@ -18,9 +18,9 @@ QxrdDetectorImagePlot::QxrdDetectorImagePlot(QWidget *parent)
 {
 }
 
-void QxrdDetectorImagePlot::initialize(QxrdImagePlotSettingsWPtr settings, QcepObjectWPtr parent)
+void QxrdDetectorImagePlot::initialize(QcepImagePlotSettingsWPtr settings, QcepObjectWPtr parent)
 {
-  QxrdImagePlot::initialize(settings, parent);
+  QcepImagePlot::initialize(settings, parent);
 
   m_ROICreator    = new QxrdROICreator(this);
   m_ROISelector   = new QxrdROISelector(this);
@@ -144,7 +144,7 @@ void QxrdDetectorImagePlot::classifyROIPoint(double x, double y)
 
 void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
 {
-  QxrdImagePlotSettingsPtr set(m_ImagePlotSettings);
+  QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
 
   if (set) {
     QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);

@@ -1,7 +1,7 @@
 #include "qxrdsetcentercommand.h"
 #include <QToolButton>
 #include "qxrdcenterfinderpicker.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qxrdcenterfinder.h"
 
 QxrdSetCenterCommand::QxrdSetCenterCommand(QcepPlotWidget            *plot,

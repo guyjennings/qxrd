@@ -1,5 +1,5 @@
 #include "qcepprintplotcommand.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 QcepPrintPlotCommand::QcepPrintPlotCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
   : QcepPlotContextMenuCommand("printPlotCommand", "Print Graph", plot, set)

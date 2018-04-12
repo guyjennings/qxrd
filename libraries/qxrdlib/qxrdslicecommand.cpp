@@ -1,7 +1,7 @@
 #include "qxrdslicecommand.h"
 #include <QToolButton>
 #include "qxrdplotslicer.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 QxrdSliceCommand::QxrdSliceCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
   : QcepPlotButtonCommand("sliceCommand", "Slice", plot, set, ":/images/slice.png", true)

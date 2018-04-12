@@ -1,6 +1,6 @@
 #include "qxrdroipicker.h"
 #include "qwt_picker_machine.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 //#include "qxrdprocessor.h"
 #include "qxrdroimodel.h"
 #include "qxrdroi.h"
@@ -9,7 +9,7 @@
 #include "qxrddebug.h"
 #include "qxrddetectorimageplot.h"
 
-QxrdROIPicker::QxrdROIPicker(QxrdImagePlot *plot,
+QxrdROIPicker::QxrdROIPicker(QcepImagePlot *plot,
                              bool useSelectedOnly,
                              bool canSelectEdges,
                              bool usePolygonsOnly,
@@ -38,7 +38,7 @@ QxrdROIPicker::QxrdROIPicker(QxrdImagePlot *plot,
 
 void QxrdROIPicker::printMessage(QString msg, QDateTime dt) const
 {
-  const QxrdImagePlot* imgPlot = imagePlot();
+  const QcepImagePlot* imgPlot = imagePlot();
 
   if (imgPlot) {
     imgPlot->printMessage(msg, dt);
@@ -93,7 +93,7 @@ void QxrdROIPicker::append(const QPoint &pt)
 {
 //  printMessage(tr("QxrdROIPicker::append(%1,%2)").arg(pt.x()).arg(pt.y()));
 
-  QxrdImagePlot *imgPlot = imagePlot();
+  QcepImagePlot *imgPlot = imagePlot();
 
   if (imgPlot) {
     QxrdROIModelPtr      roiModel  = imgPlot->roiModel();
@@ -292,7 +292,7 @@ bool QxrdROIPicker::end(bool ok)
   return QwtPlotPicker::end(ok);
 }
 
-QxrdROICreator::QxrdROICreator(QxrdImagePlot *plot) :
+QxrdROICreator::QxrdROICreator(QcepImagePlot *plot) :
   QxrdROIPicker(plot,
                 UseAllROIs,
                 CanSelectEdges,
@@ -345,7 +345,7 @@ void QxrdROICreator::move(const QPoint &pt)
 {
   QxrdROIPicker::move(pt);
 
-  QxrdImagePlot *imgPlot = imagePlot();
+  QcepImagePlot *imgPlot = imagePlot();
 
   if (imgPlot) {
     if (m_SelectedPoints.count() == 2) {
@@ -386,7 +386,7 @@ void QxrdROICreator::append(const QPoint &pt)
 
 bool QxrdROICreator::end(bool ok)
 {
-  QxrdImagePlot *imgPlot = imagePlot();
+  QcepImagePlot *imgPlot = imagePlot();
 
   if (imgPlot) {
     if (m_SelectedPoints.count() == 2) {
@@ -407,7 +407,7 @@ bool QxrdROICreator::end(bool ok)
   return QwtPlotPicker::end(ok);
 }
 
-QxrdROISelector::QxrdROISelector(QxrdImagePlot *plot) :
+QxrdROISelector::QxrdROISelector(QcepImagePlot *plot) :
   QxrdROIPicker(plot,
                 UseAllROIs,
                 CanSelectEdges,
@@ -428,7 +428,7 @@ void QxrdROISelector::move(const QPoint &pt)
 {
   QxrdROIPicker::move(pt);
 
-  QxrdImagePlot* imgPlot = imagePlot();
+  QcepImagePlot* imgPlot = imagePlot();
 
   if (imgPlot) {
     QxrdROIModelPtr      roiMod = imgPlot->roiModel();
@@ -465,7 +465,7 @@ bool QxrdROISelector::end(bool ok)
       printMessage(tr("Select ROI %1").arg(m_SelectedROI));
     }
 
-    QxrdImagePlot* imgPlot = imagePlot();
+    QcepImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
       QxrdROIModelPtr      roi = imgPlot->roiModel();
@@ -494,7 +494,7 @@ bool QxrdROISelector::end(bool ok)
   return QxrdROIPicker::end(ok);
 }
 
-QxrdROIAddNode::QxrdROIAddNode(QxrdImagePlot *plot) :
+QxrdROIAddNode::QxrdROIAddNode(QcepImagePlot *plot) :
   QxrdROIPicker(plot,
                 UseSelectedROIs,
                 CanSelectEdges,
@@ -515,7 +515,7 @@ void QxrdROIAddNode::move(const QPoint &pt)
 {
   QxrdROIPicker::move(pt);
 
-  QxrdImagePlot* imgPlot = imagePlot();
+  QcepImagePlot* imgPlot = imagePlot();
 
   if (imgPlot) {
     QxrdROIModelPtr      roiMod = imgPlot->roiModel();
@@ -560,7 +560,7 @@ bool QxrdROIAddNode::end(bool ok)
       printMessage(tr("Add node to ROI %1:%2").arg(m_SelectedROI).arg(m_SelectedShape));
     }
 
-    QxrdImagePlot* imgPlot = imagePlot();
+    QcepImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
       QxrdROIModelPtr      roiMod = imgPlot->roiModel();
@@ -584,7 +584,7 @@ bool QxrdROIAddNode::end(bool ok)
   return QxrdROIPicker::end(ok);
 }
 
-QxrdROIRemoveNode::QxrdROIRemoveNode(QxrdImagePlot *plot) :
+QxrdROIRemoveNode::QxrdROIRemoveNode(QcepImagePlot *plot) :
   QxrdROIPicker(plot,
                 UseSelectedROIs,
                 SelectPointsOnly,
@@ -608,7 +608,7 @@ bool QxrdROIRemoveNode::end(bool ok)
       printMessage(tr("Remove node %1 of ROI %2").arg(m_SelectedPoint).arg(m_SelectedROI));
     }
 
-    QxrdImagePlot* imgPlot = imagePlot();
+    QcepImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
       QxrdROIModelPtr      roiMod = imgPlot->roiModel();
@@ -627,7 +627,7 @@ bool QxrdROIRemoveNode::end(bool ok)
   return QxrdROIPicker::end(ok);
 }
 
-QxrdROIRotator::QxrdROIRotator(QxrdImagePlot *plot) :
+QxrdROIRotator::QxrdROIRotator(QcepImagePlot *plot) :
   QxrdROIPicker(plot,
                 UseSelectedROIs,
                 SelectPointsOnly,
@@ -648,7 +648,7 @@ void QxrdROIRotator::move(const QPoint &pt)
 {
   QxrdROIPicker::move(pt);
 
-  QxrdImagePlot* imgPlot = imagePlot();
+  QcepImagePlot* imgPlot = imagePlot();
 
   if (imgPlot) {
     QxrdROIModelPtr      roiMod = imgPlot->roiModel();
@@ -698,7 +698,7 @@ bool QxrdROIRotator::end(bool ok)
       printMessage(tr("Rotate ROI %1").arg(m_SelectedROI));
     }
 
-    QxrdImagePlot* imgPlot = imagePlot();
+    QcepImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
       QxrdROIModelPtr      roiMod = imgPlot->roiModel();
@@ -738,7 +738,7 @@ bool QxrdROIRotator::end(bool ok)
   return QxrdROIPicker::end(ok);
 }
 
-QxrdROIResizer::QxrdROIResizer(QxrdImagePlot *plot) :
+QxrdROIResizer::QxrdROIResizer(QcepImagePlot *plot) :
   QxrdROIPicker(plot,
                 UseSelectedROIs,
                 CanSelectEdges,
@@ -761,7 +761,7 @@ void QxrdROIResizer::move(const QPoint &pt)
 {
   QxrdROIPicker::move(pt);
 
-  QxrdImagePlot* imgPlot = imagePlot();
+  QcepImagePlot* imgPlot = imagePlot();
 
   if (imgPlot) {
     QxrdROIModelPtr      roiMod = imgPlot->roiModel();
@@ -821,7 +821,7 @@ bool QxrdROIResizer::end(bool ok)
       printMessage(tr("Resize ROI %1").arg(m_SelectedROI));
     }
 
-    QxrdImagePlot* imgPlot = imagePlot();
+    QcepImagePlot* imgPlot = imagePlot();
 
     if (imgPlot) {
       QxrdROIModelPtr      roiMod = imgPlot->roiModel();

@@ -1,16 +1,16 @@
 #include "qxrdmaskpicker.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qceprasterdata.h"
 #include "qwt_picker_machine.h"
 
-QxrdMaskPicker::QxrdMaskPicker(QxrdImagePlot *plot)
+QxrdMaskPicker::QxrdMaskPicker(QcepImagePlot *plot)
   : QxrdImagePlotMeasurer(plot),
     m_Plot(plot)
 {
   setTrackerMode(QwtPicker::AlwaysOn);
 }
 
-QxrdRectangularMaskPicker::QxrdRectangularMaskPicker(QxrdImagePlot *plot)
+QxrdRectangularMaskPicker::QxrdRectangularMaskPicker(QcepImagePlot *plot)
   : QxrdMaskPicker(plot)
 {
   qRegisterMetaType<QRectF>("QRectF");
@@ -19,7 +19,7 @@ QxrdRectangularMaskPicker::QxrdRectangularMaskPicker(QxrdImagePlot *plot)
   setRubberBand(QwtPicker::RectRubberBand);
 }
 
-QxrdCircularMaskPicker::QxrdCircularMaskPicker(QxrdImagePlot *plot)
+QxrdCircularMaskPicker::QxrdCircularMaskPicker(QcepImagePlot *plot)
   : QxrdMaskPicker(plot)
 {
   qRegisterMetaType<QRectF>("QRectF");
@@ -46,7 +46,7 @@ QPolygon QxrdCircularMaskPicker::adjustedPoints(const QPolygon &points) const
   return adjusted;
 }
 
-QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QxrdImagePlot *plot)
+QxrdPolygonalMaskPicker::QxrdPolygonalMaskPicker(QcepImagePlot *plot)
   : QxrdMaskPicker(plot)
 {
   qRegisterMetaType< QVector<QPointF> >("QVector<QPointF>");

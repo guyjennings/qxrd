@@ -1,6 +1,6 @@
 #include "qcepplotpreferencescommand.h"
 #include <QToolButton>
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 QcepPlotPreferencesCommand::QcepPlotPreferencesCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
   : QcepPlotContextMenuCommand("plotPreferencesCommand", "Edit Graph Preferences", plot, set)

@@ -1,7 +1,7 @@
 #include "qxrdpowderpointscommand.h"
 #include <QToolButton>
 #include "qxrdpowderpointpicker.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 
 QxrdPowderPointsCommand::QxrdPowderPointsCommand(QcepPlotWidget *plot,
                                                  QcepPlotWidgetSettingsWPtr set)

@@ -1,16 +1,16 @@
-#include "qxrdimageplotwidgetdialog.h"
+#include "qcepimageplotwidgetdialog.h"
 #include "qxrddebug.h"
 #include <stdio.h>
 #include "qxrdmainwindow.h"
-#include "qxrdimageplotsettings-ptr.h"
-#include "qxrdimageplotsettings.h"
+#include "qcepimageplotsettings-ptr.h"
+#include "qcepimageplotsettings.h"
 #include "qxrdacqcommon.h"
 #include "qcepimageplotwidget.h"
 #include "qcepimageplotwidgetsettings.h"
 #include <QComboBox>
 #include "qcepcolormaplibrary.h"
 
-QxrdImagePlotWidgetDialog::QxrdImagePlotWidgetDialog(QWidget *parent,
+QcepImagePlotWidgetDialog::QcepImagePlotWidgetDialog(QWidget *parent,
                                      QcepImagePlotWidgetSettingsWPtr settings) :
     QDialog(parent),
     m_Settings(settings)
@@ -93,7 +93,7 @@ QxrdImagePlotWidgetDialog::QxrdImagePlotWidgetDialog(QWidget *parent,
 //      connect(m_Display_10pct, &QAbstractButton::clicked, plot, &QxrdImagePlot::set010Range);
 //      connect(m_Display_100pct, &QAbstractButton::clicked, plot, &QxrdImagePlot::set100Range);
 
-//      QxrdImagePlotSettingsPtr ps(plot->imagePlotSettings());
+//      QcepImagePlotSettingsPtr ps(plot->imagePlotSettings());
 
 //      if (ps) {
 //        ps -> prop_DisplayMinimumPct() -> linkTo(m_DisplayMinimumPct);
@@ -122,24 +122,24 @@ QxrdImagePlotWidgetDialog::QxrdImagePlotWidgetDialog(QWidget *parent,
   }
 }
 
-QxrdImagePlotWidgetDialog::~QxrdImagePlotWidgetDialog()
+QcepImagePlotWidgetDialog::~QcepImagePlotWidgetDialog()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdImagePlotWidgetDialog::~QxrdImagePlotWidgetDialog(%p)\n", this);
   }
 }
 
-void QxrdImagePlotWidgetDialog::setMaxPct(double v)
+void QcepImagePlotWidgetDialog::setMaxPct(double v)
 {
   m_DisplayMaximumPct->setValue(v);
 }
 
-void QxrdImagePlotWidgetDialog::setMaxPctle(double v)
+void QcepImagePlotWidgetDialog::setMaxPctle(double v)
 {
   m_DisplayMaximumPctle->setValue(v);
 }
 
-void QxrdImagePlotWidgetDialog::changeEvent(QEvent *e)
+void QcepImagePlotWidgetDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
     switch (e->type()) {
@@ -151,7 +151,7 @@ void QxrdImagePlotWidgetDialog::changeEvent(QEvent *e)
     }
 }
 
-void QxrdImagePlotWidgetDialog::accept()
+void QcepImagePlotWidgetDialog::accept()
 {
   QcepImagePlotWidgetSettingsPtr set(m_Settings);
 

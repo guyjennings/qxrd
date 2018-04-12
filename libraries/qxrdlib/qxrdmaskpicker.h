@@ -7,22 +7,22 @@
 class QXRD_EXPORT QxrdMaskPicker : public QxrdImagePlotMeasurer
 {
 public:
-  QxrdMaskPicker(QxrdImagePlot *plot);
+  QxrdMaskPicker(QcepImagePlot *plot);
 
 protected:
-  QxrdImagePlot *m_Plot;
+  QcepImagePlot *m_Plot;
 };
 
 class QXRD_EXPORT QxrdRectangularMaskPicker : public QxrdMaskPicker
 {
 public:
-  QxrdRectangularMaskPicker(QxrdImagePlot *plot);
+  QxrdRectangularMaskPicker(QcepImagePlot *plot);
 };
 
 class QXRD_EXPORT QxrdCircularMaskPicker : public QxrdMaskPicker
 {
 public:
-  QxrdCircularMaskPicker(QxrdImagePlot *plot);
+  QxrdCircularMaskPicker(QcepImagePlot *plot);
 
   QPolygon adjustedPoints(const QPolygon &points) const;
 };
@@ -30,7 +30,7 @@ public:
 class QXRD_EXPORT QxrdPolygonalMaskPicker : public QxrdMaskPicker
 {
 public:
-  QxrdPolygonalMaskPicker(QxrdImagePlot *plot);
+  QxrdPolygonalMaskPicker(QcepImagePlot *plot);
 };
 
 #endif // QXRDMASKPICKER_H

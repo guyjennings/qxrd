@@ -2,7 +2,7 @@
 #include "qxrdsetcentercommand.h"
 #include "qxrdcontextseparatorcommand.h"
 #include "qxrdenableringcommand.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qxrdcenteringplotwidgetsettings.h"
 
 QxrdCenteringPlotWidget::QxrdCenteringPlotWidget(QWidget *parent) :

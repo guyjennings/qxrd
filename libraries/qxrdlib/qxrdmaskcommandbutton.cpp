@@ -2,7 +2,7 @@
 #include <QToolButton>
 #include <QStringList>
 #include "qxrdmaskpicker.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qxrdmaskstack.h"
 
 QxrdMaskCommandButton::QxrdMaskCommandButton(QString name,

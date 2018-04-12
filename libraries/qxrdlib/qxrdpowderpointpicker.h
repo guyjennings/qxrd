@@ -7,7 +7,7 @@
 class QXRD_EXPORT QxrdPowderPointPicker : public QxrdImagePlotMeasurer
 {
 public:
-  QxrdPowderPointPicker(QxrdImagePlot *plot);
+  QxrdPowderPointPicker(QcepImagePlot *plot);
 };
 
 #endif // QXRDPOWDERPOINTPICKER_H

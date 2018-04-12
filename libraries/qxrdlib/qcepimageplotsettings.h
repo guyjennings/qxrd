@@ -1,13 +1,13 @@
-#ifndef QXRDIMAGEPLOTSETTINGS_H
-#define QXRDIMAGEPLOTSETTINGS_H
+#ifndef QCEPIMAGEPLOTSETTINGS_H
+#define QCEPIMAGEPLOTSETTINGS_H
 
 #include "qxrdlib_global.h"
 #include <QObject>
 #include "qcepproperty.h"
 #include "qcepplotsettings.h"
-#include "qxrdimageplotsettings-ptr.h"
+#include "qcepimageplotsettings-ptr.h"
 
-class QXRD_EXPORT QxrdImagePlotSettings : public QcepPlotSettings
+class QXRD_EXPORT QcepImagePlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 
@@ -15,7 +15,7 @@ private:
   typedef QcepPlotSettings inherited;
 
 public:
-  Q_INVOKABLE QxrdImagePlotSettings(QString name);
+  Q_INVOKABLE QcepImagePlotSettings(QString name);
   void initialize(QcepObjectWPtr parent);
 
 public:
@@ -80,6 +80,6 @@ public:
   QCEP_DOUBLE_PROPERTY(MaskMouse)
 };
 
-Q_DECLARE_METATYPE(QxrdImagePlotSettings*)
+Q_DECLARE_METATYPE(QcepImagePlotSettings*)
 
-#endif // QXRDIMAGEPLOTSETTINGS_H
+#endif // QCEPIMAGEPLOTSETTINGS_H

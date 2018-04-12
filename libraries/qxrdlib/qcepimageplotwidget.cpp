@@ -10,12 +10,12 @@
 #include "qxrdslicecommand.h"
 #include "qxrdmeasurecommand.h"
 #include "qxrdhistogramcommand.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qcepimageplotwidgetsettings.h"
 #include "qxrdscalingsubmenucommand.h"
 #include "qxrdcolormapsubmenucommand.h"
-#include "qxrdimageplotwidgetdialog-ptr.h"
-#include "qxrdimageplotwidgetdialog.h"
+#include "qcepimageplotwidgetdialog-ptr.h"
+#include "qcepimageplotwidgetdialog.h"
 #include "qceprasterdata.h"
 #include "qcepmaskrasterdata.h"
 #include "qcepoverflowrasterdata.h"
@@ -134,9 +134,9 @@ void QcepImagePlotWidget::initialize(QcepImagePlotWidgetSettingsWPtr settings,
 
 void QcepImagePlotWidget::editPreferences()
 {
-  QxrdImagePlotWidgetDialogPtr prefs =
-      QxrdImagePlotWidgetDialogPtr(
-        new QxrdImagePlotWidgetDialog(NULL, m_ImageSettings));
+  QcepImagePlotWidgetDialogPtr prefs =
+      QcepImagePlotWidgetDialogPtr(
+        new QcepImagePlotWidgetDialog(NULL, m_ImageSettings));
 
   if (prefs) {
     prefs -> exec();

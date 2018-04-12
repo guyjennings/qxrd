@@ -1,9 +1,9 @@
 #include "qxrdcenterfinderpicker.h"
-#include "qxrdimageplot.h"
+#include "qcepimageplot.h"
 #include "qceprasterdata.h"
 #include "qwt_picker_machine.h"
 
-QxrdCenterFinderPicker::QxrdCenterFinderPicker(QxrdImagePlot *plot)
+QxrdCenterFinderPicker::QxrdCenterFinderPicker(QcepImagePlot *plot)
   : QxrdImagePlotMeasurer(plot)
 {
   setTrackerMode(QwtPicker::AlwaysOn);

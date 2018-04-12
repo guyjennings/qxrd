@@ -77,7 +77,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
-          <widget class="QxrdImagePlotWidget" name="m_ImagePlotWidget" native="true"/>
+          <widget class="QcepImagePlotWidget" name="m_ImagePlotWidget" native="true"/>
          </item>
         </layout>
        </widget>
@@ -782,7 +782,7 @@ If unselected, image pixels are masked out</string>
      <x>0</x>
      <y>0</y>
      <width>1298</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -814,15 +814,15 @@ If unselected, image pixels are masked out</string>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QcepImagePlotWidget</class>
+   <extends>QWidget</extends>
+   <header>qcepimageplotwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>QcepDatasetBrowserView</class>
    <extends>QTreeView</extends>
    <header>qcepdatasetbrowserview.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QxrdImagePlotWidget</class>
-   <extends>QWidget</extends>
-   <header>qxrdimageplotwidget.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>QxrdFileBrowserWidget</class>
