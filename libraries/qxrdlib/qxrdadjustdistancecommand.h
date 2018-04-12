@@ -2,7 +2,7 @@
 #define QXRDADJUSTDISTANCECOMMAND_H
 
 #include "qcepplotcontextmenucommand.h"
-#include "qxrdimageplot-ptr.h"
+#include "qcepimageplot-ptr.h"
 
 class QXRD_EXPORT QxrdAdjustDistanceCommand : public QcepPlotContextMenuCommand
 {

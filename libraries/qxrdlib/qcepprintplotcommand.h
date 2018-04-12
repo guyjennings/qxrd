@@ -1,5 +1,5 @@
-#ifndef QXRDPRINTPLOTCOMMAND_H
-#define QXRDPRINTPLOTCOMMAND_H
+#ifndef QCEPPRINTPLOTCOMMAND_H
+#define QCEPPRINTPLOTCOMMAND_H
 
 #include "qcepplotcontextmenucommand.h"
 
@@ -14,4 +14,4 @@ public:
   QAction *contextMenuAction(const QPoint &pos);
 };
 
-#endif // QXRDPRINTPLOTCOMMAND_H
+#endif // QCEPPRINTPLOTCOMMAND_H

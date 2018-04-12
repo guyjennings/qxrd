@@ -574,6 +574,7 @@ HEADERS += qxrdlib.h\
     qcepprintplotcommand.h \
     qcepplotpreferencescommand.h \
     qcepaxissubmenucommand.h \
+    qceprasterdata-ptr.h \
     qceprasterdata.h \
     qcepmaskrasterdata.h \
     qcepoverflowrasterdata.h \
@@ -581,13 +582,14 @@ HEADERS += qxrdlib.h\
     qcepimageplotwidget-ptr.h \
     qcepimageplotwidgetsettings.h \
     qcepimageplotwidget.h \
-    qceprasterdata-ptr.h \
     qcepoverflowrasterdata-ptr.h \
     qcepimageplotwidgetdialog.h \
     qcepimageplotwidgetdialog-ptr.h \
     qcepimageplot.h \
     qcepimageplotsettings-ptr.h \
-    qcepimageplotsettings.h
+    qcepimageplotsettings.h \
+    qcepmaskrasterdata-ptr.h \
+    qcepimageplot-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

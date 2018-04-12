@@ -294,14 +294,14 @@ void QcepPlotWidget::setLegendPosition(int legendPosition)
 void QcepPlotWidget::onLegendClicked(const QVariant & /*itemInfo*/, int /*index*/)
 {
 //  if (g_Application) {
-//    g_Application->printMessage(tr("QxrdPlot::onLegendClicked(%1,%2)").arg(itemInfo.toString()).arg(index));
+//    g_Application->printMessage(tr("QcepPlotWidget::onLegendClicked(%1,%2)").arg(itemInfo.toString()).arg(index));
 //  }
 }
 
 void QcepPlotWidget::onLegendChecked(const QVariant &itemInfo, bool on, int /*index*/)
 {
 //  if (g_Application) {
-//    g_Application->printMessage(tr("QxrdPlot::onLegendChecked(%1,%2,%3)").arg(itemInfo.toString()).arg(on).arg(index));
+//    g_Application->printMessage(tr("QcepPlotWidget::onLegendChecked(%1,%2,%3)").arg(itemInfo.toString()).arg(on).arg(index));
 //  }
 
   QwtPlotItem *item = m_Plot -> infoToItem(itemInfo);

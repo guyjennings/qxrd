@@ -1,13 +1,17 @@
 #ifndef QCEPIMAGEPLOTWIDGET_H
 #define QCEPIMAGEPLOTWIDGET_H
 
+#include "qxrdlib_global.h"
 #include "qcepplotwidget.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 #include "qceprasterdata-ptr.h"
-#include "qxrdmaskrasterdata-ptr.h"
+#include "qcepmaskrasterdata-ptr.h"
 #include "qcepoverflowrasterdata-ptr.h"
 #include "qwt_plot_spectrogram-ptr.h"
 #include "qxrdprocessor-ptr.h"
+#include "qcepimagedata-ptr.h"
+#include "qcepmaskdata-ptr.h"
+#include "qcepmaskrasterdata-ptr.h"
 
 class QXRD_EXPORT QcepImagePlotWidget : public QcepPlotWidget
 {

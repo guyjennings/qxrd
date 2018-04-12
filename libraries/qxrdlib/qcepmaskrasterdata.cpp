@@ -1,8 +1,5 @@
-#include "qxrddebug.h"
 #include "qcepmaskrasterdata.h"
-
 #include "qceprasterdata.h"
-#include "qxrdapplication.h"
 #include "qcepimageplotwidgetsettings.h"
 
 QcepMaskRasterData::QcepMaskRasterData(QcepMaskDataWPtr                mask,
@@ -11,11 +8,6 @@ QcepMaskRasterData::QcepMaskRasterData(QcepMaskDataWPtr                mask,
     m_MaskData(mask),
     m_Settings(set)
 {
-  if (g_Application && qcepDebug(DEBUG_IMAGES)) {
-    g_Application->printMessage(QObject::tr("QxrdMaskRasterData::QxrdMaskRasterData(%1,%2) [%3]")
-                                .HEXARG(mask.data()).HEXARG(set.data()).HEXARG(this));
-  }
-
   setIntervals();
 }
 

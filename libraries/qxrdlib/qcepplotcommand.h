@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include "qcepplotwidget-ptr.h"
-#include "qxrdimageplot-ptr.h"
+#include "qcepimageplot-ptr.h"
 #include "qcepplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QcepPlotCommand : public QcepObject

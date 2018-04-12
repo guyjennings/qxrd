@@ -1,5 +1,5 @@
-#ifndef QXRDIMAGEPLOT_H
-#define QXRDIMAGEPLOT_H
+#ifndef QCEPIMAGEPLOT_H
+#define QCEPIMAGEPLOT_H
 
 #include "qxrdlib_global.h"
 #include "qcepplot.h"
@@ -124,8 +124,8 @@ private:
   QcepMaskDataWPtr           m_Mask;
 //  QcepMaskDataWPtr            m_Overflow;
 
-//  QxrdRasterData            *m_DataRaster;
-//  QxrdMaskRasterData        *m_MaskRaster;
+//  QcepRasterData            *m_DataRaster;
+//  QcepMaskRasterData        *m_MaskRaster;
 
   QxrdProcessorWPtr          m_Processor;
 
@@ -143,4 +143,4 @@ private:
   QVector<QwtPlotCurve*>     m_ROICurves;
 };
 
-#endif
+#endif // QCEPIMAGEPLOT_H

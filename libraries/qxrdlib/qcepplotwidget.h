@@ -8,6 +8,10 @@
 #include "qcepplotwidgetsettings-ptr.h"
 #include "qcepplot-ptr.h"
 #include "qcepplotoverlay-ptr.h"
+#include <qwt_legend.h>
+#include <qwt_plot_zoomer.h>
+#include <qwt_plot_panner.h>
+#include <qwt_plot_magnifier.h>
 
 //TODO: implement mouse tracking
 class QXRD_EXPORT QcepPlotWidget : public QWidget, public Ui::QcepPlotWidget

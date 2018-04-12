@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qcepplotmeasurer.h"
-#include "qxrdimageplot-ptr.h"
+#include "qcepimageplot-ptr.h"
 
 class QXRD_EXPORT QxrdImagePlotMeasurer : public QcepPlotMeasurer
 {

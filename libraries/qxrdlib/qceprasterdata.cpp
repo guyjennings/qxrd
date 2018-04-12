@@ -1,6 +1,4 @@
-#include "qxrddebug.h"
 #include "qceprasterdata.h"
-#include "qxrdapplication.h"
 #include <QString>
 #include "qcepimageplotwidgetsettings.h"
 
@@ -11,13 +9,6 @@ QcepRasterData::QcepRasterData(QcepImageDataBaseWPtr           img,
     m_Settings(set),
     m_Range(QwtInterval(0,40000))
 {
-  if (qcepDebug(DEBUG_IMAGES)) {
-    if (g_Application) {
-      g_Application->printMessage(QObject::tr("QxrdRasterData::QxrdRasterData(%1,%2) [%3]")
-                        .HEXARG(img.data()).HEXARG(set.data()).HEXARG(this));
-    }
-  }
-
   setIntervals();
 }
 
