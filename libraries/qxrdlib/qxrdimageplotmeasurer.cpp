@@ -1,7 +1,7 @@
 #include "qxrdimageplotmeasurer.h"
 
 #include "qcepplotmeasurer.h"
-#include "qxrdrasterdata.h"
+#include "qceprasterdata.h"
 #include "qxrdimageplot.h"
 #include "qxrdcenterfinder.h"
 #include "qwt_picker_machine.h"

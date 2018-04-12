@@ -1,15 +1,15 @@
 #ifndef QXRDFITELLIPSESCOMMAND_H
 #define QXRDFITELLIPSESCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdFitEllipsesCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdFitEllipsesCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdFitEllipsesCommand(QxrdPlotWidget            *plot,
-                         QxrdPlotWidgetSettingsWPtr set);
+  QxrdFitEllipsesCommand(QcepPlotWidget            *plot,
+                         QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

@@ -1,18 +1,18 @@
 #ifndef QXRDCOLORMAPSUBMENUCOMMAND_H
 #define QXRDCOLORMAPSUBMENUCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
-#include "qxrdimageplotwidget-ptr.h"
-#include "qxrdimageplotwidgetsettings-ptr.h"
+#include "qcepplotcontextmenucommand.h"
+#include "qcepimageplotwidget-ptr.h"
+#include "qcepimageplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QxrdColorMapSubmenuCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdColorMapSubmenuCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
   QxrdColorMapSubmenuCommand(QString                         name,
-                             QxrdImagePlotWidget            *plot,
-                             QxrdImagePlotWidgetSettingsWPtr set);
+                             QcepImagePlotWidget            *plot,
+                             QcepImagePlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 

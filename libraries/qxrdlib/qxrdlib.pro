@@ -64,9 +64,6 @@ SOURCES += qxrdlib.cpp \
     qxrdimagedataformathis.cpp \
     qxrdimagedataformattiff.cpp \
     qxrdimagedataformatmar345.cpp \
-    qxrdrasterdata.cpp \
-    qxrdmaskrasterdata.cpp \
-    qxrdmaskcolormap.cpp \
     qxrdwindow.cpp \
     qxrdfilesaverthread.cpp \
     qxrdfilesaver.cpp \
@@ -211,14 +208,8 @@ SOURCES += qxrdlib.cpp \
     qxrdextraiowindowsettings.cpp \
     qxrdextraiowindow.cpp \
     qxrdcenteringplotwidget.cpp \
-    qxrdimageplotwidget.cpp \
     qxrdintegratedplotwidget.cpp \
     qxrdfilebrowserwidget.cpp \
-    qxrdplotwidget.cpp \
-    qxrdplotcommand.cpp \
-    qxrdzoomincommand.cpp \
-    qxrdzoomoutcommand.cpp \
-    qxrdzoomallcommand.cpp \
     qxrdmaskcirclescommand.cpp \
     qxrdmaskpolygonscommand.cpp \
     qxrdsetcentercommand.cpp \
@@ -244,12 +235,7 @@ SOURCES += qxrdlib.cpp \
     qxrdtraceringcommand.cpp \
     qxrdmissingringcommand.cpp \
     qxrdzappixelcommand.cpp \
-    qxrdplotbuttoncommand.cpp \
-    qxrdplotcontextmenucommand.cpp \
     qxrdcontextseparatorcommand.cpp \
-    qxrdautoscalecommand.cpp \
-    qxrdprintplotcommand.cpp \
-    qxrdplotpreferencescommand.cpp \
     qxrdprocessor.cpp \
     qxrddistortionplotwidget.cpp \
     qxrdextrainputsplotwidget.cpp \
@@ -273,9 +259,7 @@ SOURCES += qxrdlib.cpp \
     qxrddexeladialog.cpp \
     qxrdareadetectorsettings.cpp \
     qxrdperkinelmersettings.cpp \
-    qxrdimageplotwidgetsettings.cpp \
     qxrdimageplotwidgetdialog.cpp \
-    qxrdplotwidgetsettings.cpp \
     qxrdintegratedplotwidgetsettings.cpp \
     qxrdcenteringplotwidgetsettings.cpp \
     qxrdextrainputsplotwidgetsettings.cpp \
@@ -283,19 +267,11 @@ SOURCES += qxrdlib.cpp \
     qxrdhistogramplotwidgetsettings.cpp \
     qxrddistortionplotwidgetsettings.cpp \
     qxrdsliceplotwidgetsettings.cpp \
-    qxrdprintplotbutton.cpp \
-    qxrdplotpreferencesbutton.cpp \
-    qxrdaxissubmenucommand.cpp \
     qxrdscalingsubmenucommand.cpp \
     qxrdcolormapsubmenucommand.cpp \
-    qxrdplotwidgetdialog.cpp \
-    qxrdoverflowrasterdata.cpp \
-    qxrdcolormaplibrary.cpp \
-    qxrdcolormap.cpp \
     qxrdprocessorstep.cpp \
     qxrdzingerfinder.cpp \
     qxrdmaskcommandbutton.cpp \
-    qxrdplotoverlay.cpp \
     qxrdcentermarker.cpp \
     qxrdroioverlay.cpp \
     qxrdpowderoverlay.cpp \
@@ -332,7 +308,31 @@ SOURCES += qxrdlib.cpp \
     qxrdsynchronizer.cpp \
     qxrdsynchronizerthread.cpp \
     qxrdprocessorexecution.cpp \
-    qxrdprocessorexecutionthread.cpp
+    qxrdprocessorexecutionthread.cpp \
+    qcepplotwidget.cpp \
+    qcepplotwidgetsettings.cpp \
+    qcepplotwidgetdialog.cpp \
+    qcepplotcommand.cpp \
+    qcepplotoverlay.cpp \
+    qcepcolormaplibrary.cpp \
+    qcepcolormap.cpp \
+    qcepmaskcolormap.cpp \
+    qcepplotcontextmenucommand.cpp \
+    qcepautoscalecommand.cpp \
+    qcepzoomincommand.cpp \
+    qcepplotbuttoncommand.cpp \
+    qcepzoomoutcommand.cpp \
+    qcepzoomallcommand.cpp \
+    qcepprintplotbutton.cpp \
+    qcepplotpreferencesbutton.cpp \
+    qcepprintplotcommand.cpp \
+    qcepplotpreferencescommand.cpp \
+    qcepaxissubmenucommand.cpp \
+    qceprasterdata.cpp \
+    qcepmaskrasterdata.cpp \
+    qcepoverflowrasterdata.cpp \
+    qcepimageplotwidgetsettings.cpp \
+    qcepimageplotwidget.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -369,7 +369,6 @@ HEADERS += qxrdlib.h\
     qxrdextraiowindowsettings.h \
     qxrdextraiowindow.h \
     qxrdcenteringplotwidget.h \
-    qxrdimageplotwidget.h \
     qxrdintegratedplotwidget.h \
     qxrdfilebrowserwidget.h \
     qxrdacquisitionwindowsettings-ptr.h \
@@ -382,11 +381,6 @@ HEADERS += qxrdlib.h\
     qxrdintegrationwindowsettings-ptr.h \
     qxrdmaskingwindowsettings-ptr.h \
     qxrdscriptingwindowsettings-ptr.h \
-    qxrdplotwidget.h \
-    qxrdplotcommand.h \
-    qxrdzoomincommand.h \
-    qxrdzoomoutcommand.h \
-    qxrdzoomallcommand.h \
     qxrdmaskcirclescommand.h \
     qxrdmaskpolygonscommand.h \
     qxrdsetcentercommand.h \
@@ -394,7 +388,6 @@ HEADERS += qxrdlib.h\
     qxrdslicecommand.h \
     qxrdmeasurecommand.h \
     qxrdhistogramcommand.h \
-    qxrdplotcommand-ptr.h \
     qxrdfitcirclecommand.h \
     qxrdfitellipsecommand.h \
     qxrdfitellipsescommand.h \
@@ -413,14 +406,7 @@ HEADERS += qxrdlib.h\
     qxrdtraceringcommand.h \
     qxrdmissingringcommand.h \
     qxrdzappixelcommand.h \
-    qxrdplotbuttoncommand.h \
-    qxrdplotcontextmenucommand.h \
     qxrdcontextseparatorcommand.h \
-    qxrdautoscalecommand.h \
-    qxrdprintplotcommand.h \
-    qxrdimageplotwidget-ptr.h \
-    qxrdplotwidget-ptr.h \
-    qxrdplotpreferencescommand.h \
     qxrdprocessor.h \
     qxrddistortionplotwidget.h \
     qxrdextrainputsplotwidget.h \
@@ -460,10 +446,6 @@ HEADERS += qxrdlib.h\
     qxrdperkinelmersettings-ptr.h \
     qxrdalliedvisiondialog-ptr.h \
     qxrdsimulateddialog-ptr.h \
-    qxrdimageplotwidgetsettings.h \
-    qxrdimageplotwidgetsettings-ptr.h \
-    qxrdplotwidgetsettings.h \
-    qxrdplotwidgetsettings-ptr.h \
     qxrdcenteringplotwidgetsettings-ptr.h \
     qxrdintegratedplotwidgetsettings.h \
     qxrdintegratedplotwidgetsettings-ptr.h \
@@ -479,23 +461,12 @@ HEADERS += qxrdlib.h\
     qxrdsliceplotwidgetsettings.h \
     qxrdsliceplotwidgetsettings-ptr.h \
     qxrdzoomincommand-ptr.h \
-    qxrdprintplotbutton.h \
-    qxrdplotpreferencesbutton.h \
-    qxrdaxissubmenucommand.h \
     qxrdscalingsubmenucommand.h \
     qxrdcolormapsubmenucommand.h \
-    qxrdplotwidgetdialog.h \
-    qxrdplotwidgetdialog-ptr.h \
     qxrdimageplotwidgetdialog.h \
     qxrdimageplotwidgetdialog-ptr.h \
     qwt_plot_spectrogram-ptr.h \
-    qxrdoverflowrasterdata.h \
-    qxrdoverflowrasterdata-ptr.h \
     qxrdprocessor-ptr.h \
-    qxrdcolormaplibrary.h \
-    qxrdcolormaplibrary-ptr.h \
-    qxrdcolormap.h \
-    qxrdcolormap-ptr.h \
     qxrdprocessorstep.h \
     qxrdprocessorstep-ptr.h \
     qxrdzingerfinder.h \
@@ -503,8 +474,6 @@ HEADERS += qxrdlib.h\
     qwt_plot_picker-ptr.h \
     qxrdpowderpointpicker-ptr.h \
     qxrdmaskcommandbutton.h \
-    qxrdplotoverlay.h \
-    qxrdplotoverlay-ptr.h \
     qxrdcentermarker.h \
     qxrdroioverlay.h \
     qxrdpowderoverlay.h \
@@ -579,7 +548,43 @@ HEADERS += qxrdlib.h\
     qxrdprocessorexecution.h \
     qxrdprocessorexecution-ptr.h \
     qxrdprocessorexecutionthread.h \
-    qxrdprocessorexecutionthread-ptr.h
+    qxrdprocessorexecutionthread-ptr.h \
+    qcepplotwidget.h \
+    qcepplotwidget-ptr.h \
+    qcepplotwidgetsettings.h \
+    qcepplotwidgetsettings-ptr.h \
+    qcepplotwidgetdialog.h \
+    qcepplotwidgetdialog-ptr.h \
+    qcepplotcommand.h \
+    qcepplotcommand-ptr.h \
+    qcepplotoverlay.h \
+    qcepplotoverlay-ptr.h \
+    qcepcolormaplibrary.h \
+    qcepcolormaplibrary-ptr.h \
+    qcepcolormap.h \
+    qcepcolormap-ptr.h \
+    qcepmaskcolormap.h \
+    qcepplotcontextmenucommand.h \
+    qcepmaskcolormap-ptr.h \
+    qcepautoscalecommand.h \
+    qcepzoomincommand.h \
+    qcepplotbuttoncommand.h \
+    qcepzoomoutcommand.h \
+    qcepzoomallcommand.h \
+    qcepprintplotbutton.h \
+    qcepplotpreferencesbutton.h \
+    qcepprintplotcommand.h \
+    qcepplotpreferencescommand.h \
+    qcepaxissubmenucommand.h \
+    qceprasterdata.h \
+    qcepmaskrasterdata.h \
+    qcepoverflowrasterdata.h \
+    qcepimageplotwidgetsettings-ptr.h \
+    qcepimageplotwidget-ptr.h \
+    qcepimageplotwidgetsettings.h \
+    qcepimageplotwidget.h \
+    qceprasterdata-ptr.h \
+    qcepoverflowrasterdata-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -592,10 +597,6 @@ HEADERS += TODO.h \
     qxrdimagedataformathis.h \
     qxrdimagedataformattiff.h \
     qxrdimagedataformatmar345.h \
-    qxrdrasterdata.h \
-    qxrdrasterdata-ptr.h \
-    qxrdmaskrasterdata.h \
-    qxrdmaskcolormap.h \
     qxrdwindow.h \
     qxrdwindow-ptr.h \
     qxrdfilesaverthread.h \
@@ -802,7 +803,6 @@ FORMS += qxrdwindow.ui \
     qxrdinfowindow.ui \
     qxrdextraiowindow.ui \
     qxrdfilebrowserwidget.ui \
-    qxrdplotwidget.ui \
     qxrdalliedvisiondialog.ui \
     qxrdsimulateddialog.ui \
     qxrdperkinelmerdialog.ui \
@@ -810,13 +810,14 @@ FORMS += qxrdwindow.ui \
     qxrdareadetectordialog.ui \
     qxrdfilewatcherdialog.ui \
     qxrddexeladialog.ui \
-    qxrdplotwidgetdialog.ui \
     qxrdimageplotwidgetdialog.ui \
     qxrdwatcherwindow.ui \
     qxrdstartupwindow.ui \
     qxrdcorrectiondialogpage.ui \
     qxrdexposurepreferencesdialog.ui \
-    qxrdacquisitioneventlogwindow.ui
+    qxrdacquisitioneventlogwindow.ui \
+    qcepplotwidget.ui \
+    qcepplotwidgetdialog.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS +=

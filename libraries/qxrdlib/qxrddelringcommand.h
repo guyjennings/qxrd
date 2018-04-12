@@ -1,15 +1,15 @@
 #ifndef QXRDDELRINGCOMMAND_H
 #define QXRDDELRINGCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdDelRingCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdDelRingCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdDelRingCommand(QxrdPlotWidget            *plot,
-                     QxrdPlotWidgetSettingsWPtr set);
+  QxrdDelRingCommand(QcepPlotWidget            *plot,
+                     QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

@@ -5,7 +5,7 @@
 #include <qwt_plot_curve.h>
 
 QxrdExtraInputsPlotWidget::QxrdExtraInputsPlotWidget(QWidget *parent)
-  : QxrdPlotWidget(parent)
+  : QcepPlotWidget(parent)
 {
   m_Colors << Qt::black
            << QColor(170,110,40)
@@ -20,7 +20,7 @@ QxrdExtraInputsPlotWidget::QxrdExtraInputsPlotWidget(QWidget *parent)
 
 void QxrdExtraInputsPlotWidget::initialize(QxrdExtraInputsPlotWidgetSettingsWPtr settings)
 {
-  QxrdPlotWidget::initialize(settings);
+  QcepPlotWidget::initialize(settings);
 
   addPlotCommandSpacer();
 

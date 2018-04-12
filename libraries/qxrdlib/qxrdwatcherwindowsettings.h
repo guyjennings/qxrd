@@ -4,7 +4,7 @@
 #include "qxrdmainwindowsettings.h"
 #include "qxrdwatcher-ptr.h"
 #include "qxrdfilebrowsersettings-ptr.h"
-#include "qxrdimageplotwidgetsettings-ptr.h"
+#include "qcepimageplotwidgetsettings-ptr.h"
 #include "qxrdcenteringplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QxrdWatcherWindowSettings : public QxrdMainWindowSettings
@@ -24,7 +24,7 @@ public:
   void readSettings(QSettings *set);
 
   QxrdFileBrowserSettingsPtr          fileBrowserSettings();
-  QxrdImagePlotWidgetSettingsPtr      imagePlotWidgetSettings();
+  QcepImagePlotWidgetSettingsPtr      imagePlotWidgetSettings();
   QxrdCenteringPlotWidgetSettingsPtr  centeringPlotWidgetSettings();
 
 protected:
@@ -32,7 +32,7 @@ protected:
 
 private:
   QxrdFileBrowserSettingsPtr          m_FileBrowserSettings;
-  QxrdImagePlotWidgetSettingsPtr      m_ImagePlotWidgetSettings;
+  QcepImagePlotWidgetSettingsPtr      m_ImagePlotWidgetSettings;
   QxrdCenteringPlotWidgetSettingsPtr  m_CenteringPlotWidgetSettings;
 
 public:

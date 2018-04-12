@@ -1,6 +1,6 @@
 #include "qxrddebug.h"
 #include "qxrdimageplot.h"
-#include "qxrdrasterdata.h"
+#include "qceprasterdata.h"
 #include "qxrdcenterfinder.h"
 #include "qxrdprocessor.h"
 #include "qxrdapplication.h"
@@ -20,7 +20,7 @@
 #include "qxrdroi.h"
 #include "qxrdroieditordialog.h"
 #include "qwt_plot_piecewise_curve.h"
-#include "qxrdplotwidgetdialog.h"
+#include "qcepplotwidgetdialog.h"
 
 QxrdImagePlot::QxrdImagePlot(QWidget *parent)
   : QcepPlot(parent),

@@ -5,13 +5,13 @@
 #include "qxrdimageplotsettings-ptr.h"
 #include "qxrdimageplotsettings.h"
 #include "qxrdacqcommon.h"
-#include "qxrdimageplotwidget.h"
-#include "qxrdimageplotwidgetsettings.h"
+#include "qcepimageplotwidget.h"
+#include "qcepimageplotwidgetsettings.h"
 #include <QComboBox>
-#include "qxrdcolormaplibrary.h"
+#include "qcepcolormaplibrary.h"
 
 QxrdImagePlotWidgetDialog::QxrdImagePlotWidgetDialog(QWidget *parent,
-                                     QxrdImagePlotWidgetSettingsWPtr settings) :
+                                     QcepImagePlotWidgetSettingsWPtr settings) :
     QDialog(parent),
     m_Settings(settings)
 {
@@ -21,7 +21,7 @@ QxrdImagePlotWidgetDialog::QxrdImagePlotWidgetDialog(QWidget *parent,
 
   setupUi(this);
 
-  QxrdImagePlotWidgetSettingsPtr set(m_Settings);
+  QcepImagePlotWidgetSettingsPtr set(m_Settings);
 
   if (set) {
     set->prop_XAxisVis()            -> copyTo(m_XAxisVis);
@@ -57,8 +57,8 @@ QxrdImagePlotWidgetDialog::QxrdImagePlotWidgetDialog(QWidget *parent,
 
     m_DisplayParmsStack->setCurrentIndex(set->get_DisplayScalingMode());
 
-    for (int i=0; i<QxrdColorMapLibrary::colorMapCount(); i++) {
-      m_DisplayColorMap->addItem(QxrdColorMapLibrary::colorMapName(i));
+    for (int i=0; i<QcepColorMapLibrary::colorMapCount(); i++) {
+      m_DisplayColorMap->addItem(QcepColorMapLibrary::colorMapName(i));
     }
 
     set->prop_DisplayColorMap()     -> copyTo(m_DisplayColorMap);
@@ -153,7 +153,7 @@ void QxrdImagePlotWidgetDialog::changeEvent(QEvent *e)
 
 void QxrdImagePlotWidgetDialog::accept()
 {
-  QxrdImagePlotWidgetSettingsPtr set(m_Settings);
+  QcepImagePlotWidgetSettingsPtr set(m_Settings);
 
   if (set) {
     set->prop_XAxisVis()            -> copyFrom(m_XAxisVis);

@@ -1,0 +1,8 @@
+#ifndef QCEPOVERFLOWRASTERDATAPTR_H
+#define QCEPOVERFLOWRASTERDATAPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QcepOverflowRasterData)
+
+#endif // QCEPOVERFLOWRASTERDATAPTR_H

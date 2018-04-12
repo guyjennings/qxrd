@@ -1,7 +1,7 @@
 #include "qxrdmissingringcommand.h"
 
-QxrdMissingRingCommand::QxrdMissingRingCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand("missingRingCommand", "Missing Diffracted Ring", plot, set)
+QxrdMissingRingCommand::QxrdMissingRingCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
+  : QcepPlotContextMenuCommand("missingRingCommand", "Missing Diffracted Ring", plot, set)
 {
 
 }

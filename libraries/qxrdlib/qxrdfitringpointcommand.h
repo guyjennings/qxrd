@@ -1,15 +1,15 @@
 #ifndef QXRDFITRINGPOINTCOMMAND_H
 #define QXRDFITRINGPOINTCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdFitRingPointCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdFitRingPointCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdFitRingPointCommand(QxrdPlotWidget            *plot,
-                          QxrdPlotWidgetSettingsWPtr set);
+  QxrdFitRingPointCommand(QcepPlotWidget            *plot,
+                          QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

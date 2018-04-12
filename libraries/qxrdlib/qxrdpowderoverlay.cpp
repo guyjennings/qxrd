@@ -1,10 +1,10 @@
 #include "qxrdpowderoverlay.h"
 
 QxrdPowderOverlay::QxrdPowderOverlay(QString                    name,
-                                     QxrdPlotWidget            *plot,
-                                     QxrdPlotWidgetSettingsWPtr set,
+                                     QcepPlotWidget            *plot,
+                                     QcepPlotWidgetSettingsWPtr set,
                                      QxrdPowderRingsModelWPtr   rings) :
-  QxrdPlotOverlay(name, plot, set),
+  QcepPlotOverlay(name, plot, set),
   m_PowderRings(rings),
   m_PowderCurves()
 {

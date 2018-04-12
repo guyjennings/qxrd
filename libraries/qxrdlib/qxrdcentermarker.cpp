@@ -1,12 +1,12 @@
 #include "qxrdcentermarker.h"
-#include "qxrdplotwidget.h"
+#include "qcepplotwidget.h"
 #include "qxrdcenterfinder.h"
 
 QxrdCenterMarker::QxrdCenterMarker(QString                    name,
-                                   QxrdPlotWidget            *plot,
-                                   QxrdPlotWidgetSettingsWPtr set,
+                                   QcepPlotWidget            *plot,
+                                   QcepPlotWidgetSettingsWPtr set,
                                    QxrdCenterFinderWPtr       cf) :
-  QxrdPlotOverlay(name, plot, set),
+  QcepPlotOverlay(name, plot, set),
   m_CenterFinder(cf),
   m_CenterMarker(NULL)
 {

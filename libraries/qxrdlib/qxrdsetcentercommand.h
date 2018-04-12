@@ -1,17 +1,17 @@
 #ifndef QXRDSETCENTERCOMMAND_H
 #define QXRDSETCENTERCOMMAND_H
 
-#include "qxrdplotbuttoncommand.h"
+#include "qcepplotbuttoncommand.h"
 #include "qxrdcenterfinderpicker-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 
-class QXRD_EXPORT QxrdSetCenterCommand : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdSetCenterCommand : public QcepPlotButtonCommand
 {
   Q_OBJECT
 
 public:
-  QxrdSetCenterCommand(QxrdPlotWidget            *plot,
-                       QxrdPlotWidgetSettingsWPtr set,
+  QxrdSetCenterCommand(QcepPlotWidget            *plot,
+                       QcepPlotWidgetSettingsWPtr set,
                        QxrdCenterFinderWPtr       cf);
 
 private:

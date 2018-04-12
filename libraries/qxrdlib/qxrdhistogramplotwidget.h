@@ -1,10 +1,10 @@
 #ifndef QXRDHISTOGRAMPLOTWIDGET_H
 #define QXRDHISTOGRAMPLOTWIDGET_H
 
-#include "qxrdplotwidget.h"
+#include "qcepplotwidget.h"
 #include "qxrdhistogramplotwidgetsettings-ptr.h"
 
-class QxrdHistogramPlotWidget : public QxrdPlotWidget
+class QxrdHistogramPlotWidget : public QcepPlotWidget
 {
   Q_OBJECT
 

@@ -1,17 +1,17 @@
 #ifndef QXRDMASKPOLYGONSCOMMAND_H
 #define QXRDMASKPOLYGONSCOMMAND_H
 
-#include "qxrdplotbuttoncommand.h"
+#include "qcepplotbuttoncommand.h"
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdmaskpicker-ptr.h"
 
-class QXRD_EXPORT QxrdMaskPolygonsCommand : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdMaskPolygonsCommand : public QcepPlotButtonCommand
 {
   Q_OBJECT
 
 public:
-  QxrdMaskPolygonsCommand(QxrdPlotWidget            *plot,
-                          QxrdPlotWidgetSettingsWPtr set,
+  QxrdMaskPolygonsCommand(QcepPlotWidget            *plot,
+                          QcepPlotWidgetSettingsWPtr set,
                           QxrdMaskStackWPtr          maskStack);
 
 private:

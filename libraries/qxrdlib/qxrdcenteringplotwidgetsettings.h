@@ -1,9 +1,9 @@
 #ifndef QXRDCENTERINGPLOTWIDGETSETTINGS_H
 #define QXRDCENTERINGPLOTWIDGETSETTINGS_H
 
-#include "qxrdplotwidgetsettings.h"
+#include "qcepplotwidgetsettings.h"
 
-class QXRD_EXPORT QxrdCenteringPlotWidgetSettings : public QxrdPlotWidgetSettings
+class QXRD_EXPORT QxrdCenteringPlotWidgetSettings : public QcepPlotWidgetSettings
 {
   Q_OBJECT
 

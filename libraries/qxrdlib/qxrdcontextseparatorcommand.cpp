@@ -1,8 +1,8 @@
 #include "qxrdcontextseparatorcommand.h"
 #include <QAction>
 
-QxrdContextSeparatorCommand::QxrdContextSeparatorCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand("separatorCommand", "", plot, set)
+QxrdContextSeparatorCommand::QxrdContextSeparatorCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
+  : QcepPlotContextMenuCommand("separatorCommand", "", plot, set)
 {
 
 }

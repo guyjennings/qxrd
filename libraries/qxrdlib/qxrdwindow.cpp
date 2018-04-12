@@ -3,7 +3,7 @@
 #include "qxrdwindowsettings.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
-#include "qxrdplotwidgetdialog.h"
+#include "qcepplotwidgetdialog.h"
 #include "qxrdacqcommon.h"
 #include "qxrdimageplot.h"
 #include "qcepimagedata.h"
@@ -222,10 +222,10 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
 
   if (proc) {
     connect(proc.data(), &QxrdProcessor::dataAvailable,
-            m_ImagePlot, &QxrdImagePlotWidget::newImage);
+            m_ImagePlot, &QcepImagePlotWidget::newImage);
 
     connect(proc.data(), &QxrdProcessor::maskAvailable,
-            m_ImagePlot, &QxrdImagePlotWidget::newMask);
+            m_ImagePlot, &QcepImagePlotWidget::newMask);
 
     connect(proc->integrator()->prop_IntegrationXUnits(), &QcepIntProperty::valueChanged,
             this, &QxrdWindow::integrationXUnitsChanged);

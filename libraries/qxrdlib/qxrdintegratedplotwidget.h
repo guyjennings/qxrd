@@ -1,10 +1,10 @@
 #ifndef QXRDINTEGRATEDPLOTWIDGET_H
 #define QXRDINTEGRATEDPLOTWIDGET_H
 
-#include "qxrdplotwidget.h"
+#include "qcepplotwidget.h"
 #include "qxrdintegratedplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QxrdIntegratedPlotWidget : public QxrdPlotWidget
+class QXRD_EXPORT QxrdIntegratedPlotWidget : public QcepPlotWidget
 {
   Q_OBJECT
 

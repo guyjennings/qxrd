@@ -2,12 +2,12 @@
 #include "qxrdhistogramplotwidgetsettings.h"
 
 QxrdHistogramPlotWidget::QxrdHistogramPlotWidget(QWidget *parent)
-  : QxrdPlotWidget(parent)
+  : QcepPlotWidget(parent)
 {
 
 }
 
 void QxrdHistogramPlotWidget::initialize(QxrdHistogramPlotWidgetSettingsWPtr settings)
 {
-  QxrdPlotWidget::initialize(settings);
+  QcepPlotWidget::initialize(settings);
 }

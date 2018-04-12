@@ -1,15 +1,15 @@
 #ifndef QXRDADJUSTENERGYCOMMAND_H
 #define QXRDADJUSTENERGYCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdAdjustEnergyCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdAdjustEnergyCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdAdjustEnergyCommand(QxrdPlotWidget            *plot,
-                          QxrdPlotWidgetSettingsWPtr set);
+  QxrdAdjustEnergyCommand(QcepPlotWidget            *plot,
+                          QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

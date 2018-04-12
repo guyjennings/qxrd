@@ -1,15 +1,15 @@
 #ifndef QXRDFITPEAKCOMMAND_H
 #define QXRDFITPEAKCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdFitPeakCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdFitPeakCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdFitPeakCommand(QxrdPlotWidget            *plot,
-                     QxrdPlotWidgetSettingsWPtr set);
+  QxrdFitPeakCommand(QcepPlotWidget            *plot,
+                     QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

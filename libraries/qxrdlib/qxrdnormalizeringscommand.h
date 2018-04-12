@@ -1,16 +1,16 @@
 #ifndef QXRDNORMALIZERINGSCOMMAND_H
 #define QXRDNORMALIZERINGSCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdNormalizeRingsCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdNormalizeRingsCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
   QxrdNormalizeRingsCommand(QString                    name,
-                            QxrdPlotWidget            *plot,
-                            QxrdPlotWidgetSettingsWPtr set);
+                            QcepPlotWidget            *plot,
+                            QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

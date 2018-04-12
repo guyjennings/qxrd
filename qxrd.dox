@@ -271,11 +271,10 @@ and nothing else - you would then do the dark subtraction and integration in sub
 \page threading Threading Diagram
   \dot
   digraph threading {
+    newrank = true
+
     graph   [style=filled, color=lightblue]
     node    [shape=box, fontsize=8, style=filled, color=white]
-
-//    qxrd -> app
-//    qxrd -> expt
 
     subgraph cluster_application {
       label="Application/GUI Thread"
@@ -324,6 +323,9 @@ and nothing else - you would then do the dark subtraction and integration in sub
       dset1 -> proc1
       dset2 -> proc2
     }
+
+    qxrd -> app
+    qxrd -> expt
 
     subgraph cluster_acqexec {
       label="Acquisition Execution Thread"

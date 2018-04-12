@@ -3,7 +3,7 @@
 
 #include "qxrdmainwindowsettings.h"
 #include "qxrdfilebrowsersettings-ptr.h"
-#include "qxrdimageplotwidgetsettings-ptr.h"
+#include "qcepimageplotwidgetsettings-ptr.h"
 #include "qxrdcenteringplotwidgetsettings-ptr.h"
 #include "qxrdintegratedplotwidgetsettings-ptr.h"
 
@@ -24,13 +24,13 @@ public:
   void readSettings(QSettings *set);
 
   QxrdFileBrowserSettingsPtr          fileBrowserSettings();
-  QxrdImagePlotWidgetSettingsPtr      imagePlotWidgetSettings();
+  QcepImagePlotWidgetSettingsPtr      imagePlotWidgetSettings();
   QxrdCenteringPlotWidgetSettingsPtr  centeringPlotWidgetSettings();
   QxrdIntegratedPlotWidgetSettingsPtr integratedPlotWidgetSettings();
 
 private:
   QxrdFileBrowserSettingsPtr          m_FileBrowserSettings;
-  QxrdImagePlotWidgetSettingsPtr      m_ImagePlotWidgetSettings;
+  QcepImagePlotWidgetSettingsPtr      m_ImagePlotWidgetSettings;
   QxrdCenteringPlotWidgetSettingsPtr  m_CenteringPlotWidgetSettings;
   QxrdIntegratedPlotWidgetSettingsPtr m_IntegratedPlotWidgetSettings;
 };

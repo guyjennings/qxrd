@@ -1,10 +1,10 @@
 #include "qxrdroioverlay.h"
 
 QxrdROIOverlay::QxrdROIOverlay(QString                    name,
-                               QxrdPlotWidget            *plot,
-                               QxrdPlotWidgetSettingsWPtr set,
+                               QcepPlotWidget            *plot,
+                               QcepPlotWidgetSettingsWPtr set,
                                QxrdROIModelWPtr           roic) :
-  QxrdPlotOverlay(name, plot, set),
+  QcepPlotOverlay(name, plot, set),
   m_ROIModel(roic),
   m_ROICurves()
 {

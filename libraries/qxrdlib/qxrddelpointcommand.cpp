@@ -1,7 +1,7 @@
 #include "qxrddelpointcommand.h"
 
-QxrdDelPointCommand::QxrdDelPointCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand("deletePointCommand", "Delete point", plot, set)
+QxrdDelPointCommand::QxrdDelPointCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
+  : QcepPlotContextMenuCommand("deletePointCommand", "Delete point", plot, set)
 {
 
 }

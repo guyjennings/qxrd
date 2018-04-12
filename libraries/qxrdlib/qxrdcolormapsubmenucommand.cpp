@@ -1,11 +1,11 @@
 #include "qxrdcolormapsubmenucommand.h"
 #include <QMenu>
-#include "qxrdcolormaplibrary.h"
-#include "qxrdimageplotwidget.h"
-#include "qxrdimageplotwidgetsettings.h"
+#include "qcepcolormaplibrary.h"
+#include "qcepimageplotwidget.h"
+#include "qcepimageplotwidgetsettings.h"
 
-QxrdColorMapSubmenuCommand::QxrdColorMapSubmenuCommand(QString name, QxrdImagePlotWidget *plot, QxrdImagePlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand("colorMapSubmenu", "Color Map", plot, set)
+QxrdColorMapSubmenuCommand::QxrdColorMapSubmenuCommand(QString name, QcepImagePlotWidget *plot, QcepImagePlotWidgetSettingsWPtr set)
+  : QcepPlotContextMenuCommand("colorMapSubmenu", "Color Map", plot, set)
 {
 }
 
@@ -15,11 +15,11 @@ QAction* QxrdColorMapSubmenuCommand::contextMenuAction(const QPoint & /*pos*/)
 
   QMenu *colorMaps = new QMenu("Color Maps");
 
-  QxrdImagePlotWidgetSettingsPtr set(qSharedPointerDynamicCast<QxrdImagePlotWidgetSettings>(m_Settings));
+  QcepImagePlotWidgetSettingsPtr set(qSharedPointerDynamicCast<QcepImagePlotWidgetSettings>(m_Settings));
 
   if (set) {
-    for (int i=0; i<QxrdColorMapLibrary::colorMapCount(); i++) {
-      QAction *act = colorMaps -> addAction(QxrdColorMapLibrary::colorMapName(i),
+    for (int i=0; i<QcepColorMapLibrary::colorMapCount(); i++) {
+      QAction *act = colorMaps -> addAction(QcepColorMapLibrary::colorMapName(i),
                                             [=]() { setDisplayColorMap(i); });
 
       if (i == set->get_DisplayColorMap()) {
@@ -36,7 +36,7 @@ QAction* QxrdColorMapSubmenuCommand::contextMenuAction(const QPoint & /*pos*/)
 
 void QxrdColorMapSubmenuCommand::setDisplayColorMap(int n)
 {
-  QxrdImagePlotWidgetSettingsPtr set(qSharedPointerDynamicCast<QxrdImagePlotWidgetSettings>(m_Settings));
+  QcepImagePlotWidgetSettingsPtr set(qSharedPointerDynamicCast<QcepImagePlotWidgetSettings>(m_Settings));
 
   if (set) {
     set -> set_DisplayColorMap(n);

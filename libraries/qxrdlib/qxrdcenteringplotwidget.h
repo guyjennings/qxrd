@@ -1,11 +1,11 @@
 #ifndef QXRDCENTERINGPLOTWIDGET_H
 #define QXRDCENTERINGPLOTWIDGET_H
 
-#include "qxrdplotwidget.h"
+#include "qcepplotwidget.h"
 #include "qxrdcenteringplotwidgetsettings-ptr.h"
 #include "qxrdcenterfinder-ptr.h"
 
-class QXRD_EXPORT QxrdCenteringPlotWidget : public QxrdPlotWidget
+class QXRD_EXPORT QxrdCenteringPlotWidget : public QcepPlotWidget
 {
   Q_OBJECT
 

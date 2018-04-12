@@ -1,5 +1,5 @@
 #include "qxrdplotslicer.h"
-#include "qxrdrasterdata.h"
+#include "qceprasterdata.h"
 #include "qxrdimageplot.h"
 #include "qwt_picker_machine.h"
 

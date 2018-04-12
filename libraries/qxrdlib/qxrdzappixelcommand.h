@@ -1,15 +1,15 @@
 #ifndef QXRDZAPPIXELCOMMAND_H
 #define QXRDZAPPIXELCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdZapPixelCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdZapPixelCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdZapPixelCommand(QxrdPlotWidget            *plot,
-                      QxrdPlotWidgetSettingsWPtr set);
+  QxrdZapPixelCommand(QcepPlotWidget            *plot,
+                      QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

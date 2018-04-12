@@ -1,10 +1,10 @@
 #ifndef QXRDDISTORTIONPLOTWIDGET_H
 #define QXRDDISTORTIONPLOTWIDGET_H
 
-#include "qxrdplotwidget.h"
+#include "qcepplotwidget.h"
 #include "qxrddistortionplotwidgetsettings-ptr.h"
 
-class QxrdDistortionPlotWidget : public QxrdPlotWidget
+class QxrdDistortionPlotWidget : public QcepPlotWidget
 {
   Q_OBJECT
 

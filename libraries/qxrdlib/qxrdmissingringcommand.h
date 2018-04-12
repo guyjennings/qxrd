@@ -1,15 +1,15 @@
 #ifndef QXRDMISSINGRINGCOMMAND_H
 #define QXRDMISSINGRINGCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdMissingRingCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdMissingRingCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdMissingRingCommand(QxrdPlotWidget            *plot,
-                         QxrdPlotWidgetSettingsWPtr set);
+  QxrdMissingRingCommand(QcepPlotWidget            *plot,
+                         QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

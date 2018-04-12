@@ -3,8 +3,8 @@
 #include "qxrdimageplotmeasurer.h"
 #include "qxrdimageplot.h"
 
-QxrdMeasureCommand::QxrdMeasureCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand("measureCommand", "Measure", plot, set, ":/images/measure.png", true)
+QxrdMeasureCommand::QxrdMeasureCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
+  : QcepPlotButtonCommand("measureCommand", "Measure", plot, set, ":/images/measure.png", true)
 {
   m_Measurer = new QxrdImagePlotMeasurer(m_Plot);
   m_Measurer -> setEnabled(false);

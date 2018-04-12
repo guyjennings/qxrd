@@ -1,11 +1,11 @@
 #ifndef QXRDEXTRAOUTPUTSPLOTWIDGET_H
 #define QXRDEXTRAOUTPUTSPLOTWIDGET_H
 
-#include "qxrdplotwidget.h"
+#include "qcepplotwidget.h"
 #include "qxrdextraoutputsplotwidgetsettings-ptr.h"
 #include "qxrdsynchronizedoutputchannel-ptr.h"
 
-class QxrdExtraOutputsPlotWidget : public QxrdPlotWidget
+class QxrdExtraOutputsPlotWidget : public QcepPlotWidget
 {
   Q_OBJECT
 

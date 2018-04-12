@@ -1,6 +1,6 @@
 #include "qxrdmaskpicker.h"
 #include "qxrdimageplot.h"
-#include "qxrdrasterdata.h"
+#include "qceprasterdata.h"
 #include "qwt_picker_machine.h"
 
 QxrdMaskPicker::QxrdMaskPicker(QxrdImagePlot *plot)

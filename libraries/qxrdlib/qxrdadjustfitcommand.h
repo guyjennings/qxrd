@@ -1,15 +1,15 @@
 #ifndef QXRDADJUSTFITCOMMAND_H
 #define QXRDADJUSTFITCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdAdjustFitCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdAdjustFitCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdAdjustFitCommand(QxrdPlotWidget            *plot,
-                       QxrdPlotWidgetSettingsWPtr set);
+  QxrdAdjustFitCommand(QcepPlotWidget            *plot,
+                       QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

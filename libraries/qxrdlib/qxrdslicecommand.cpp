@@ -3,8 +3,8 @@
 #include "qxrdplotslicer.h"
 #include "qxrdimageplot.h"
 
-QxrdSliceCommand::QxrdSliceCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand("sliceCommand", "Slice", plot, set, ":/images/slice.png", true)
+QxrdSliceCommand::QxrdSliceCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
+  : QcepPlotButtonCommand("sliceCommand", "Slice", plot, set, ":/images/slice.png", true)
 {
   m_Slicer = new QxrdPlotSlicer(m_Plot);
   m_Slicer -> setEnabled(false);

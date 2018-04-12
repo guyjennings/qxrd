@@ -1,16 +1,16 @@
 #ifndef QXRDPOWDERPOINTSCOMMAND_H
 #define QXRDPOWDERPOINTSCOMMAND_H
 
-#include "qxrdplotbuttoncommand.h"
+#include "qcepplotbuttoncommand.h"
 #include "qxrdpowderpointpicker-ptr.h"
 
-class QXRD_EXPORT QxrdPowderPointsCommand : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdPowderPointsCommand : public QcepPlotButtonCommand
 {
   Q_OBJECT
 
 public:
-  QxrdPowderPointsCommand(QxrdPlotWidget            *plot,
-                          QxrdPlotWidgetSettingsWPtr set);
+  QxrdPowderPointsCommand(QcepPlotWidget            *plot,
+                          QcepPlotWidgetSettingsWPtr set);
 
 private:
   void selected(const QPointF &pt);

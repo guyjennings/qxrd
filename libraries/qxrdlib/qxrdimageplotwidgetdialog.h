@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include <QDialog>
 #include "ui_qxrdimageplotwidgetdialog.h"
-#include "qxrdimageplotwidgetsettings-ptr.h"
+#include "qcepimageplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QxrdImagePlotWidgetDialog : public QDialog, public Ui::QxrdImagePlotWidgetDialog
 {
@@ -12,7 +12,7 @@ class QXRD_EXPORT QxrdImagePlotWidgetDialog : public QDialog, public Ui::QxrdIma
 
 public:
   explicit QxrdImagePlotWidgetDialog(QWidget *parent,
-                                     QxrdImagePlotWidgetSettingsWPtr settings);
+                                     QcepImagePlotWidgetSettingsWPtr settings);
   ~QxrdImagePlotWidgetDialog();
 
   void accept();
@@ -25,7 +25,7 @@ private:
   void setMaxPctle(double v);
 
 private:
-  QxrdImagePlotWidgetSettingsWPtr m_Settings;
+  QcepImagePlotWidgetSettingsWPtr m_Settings;
 };
 
 #endif // QXRDIMAGEPLOTWIDGETDIALOG_H

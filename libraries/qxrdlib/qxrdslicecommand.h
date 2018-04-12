@@ -1,16 +1,16 @@
 #ifndef QXRDSLICECOMMAND_H
 #define QXRDSLICECOMMAND_H
 
-#include "qxrdplotbuttoncommand.h"
+#include "qcepplotbuttoncommand.h"
 #include "qxrdplotslicer-ptr.h"
 
-class QXRD_EXPORT QxrdSliceCommand : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdSliceCommand : public QcepPlotButtonCommand
 {
   Q_OBJECT
 
 public:
-  QxrdSliceCommand(QxrdPlotWidget            *plot,
-                   QxrdPlotWidgetSettingsWPtr set);
+  QxrdSliceCommand(QcepPlotWidget            *plot,
+                   QcepPlotWidgetSettingsWPtr set);
 
 private:
   void selected(const QVector<QPointF> &p);

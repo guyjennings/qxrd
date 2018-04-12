@@ -3,18 +3,18 @@
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
-#include "qxrdplotoverlay.h"
+#include "qcepplotoverlay.h"
 #include <qwt_plot_curve.h>
 #include "qxrdpowderringsmodel-ptr.h"
 
-class QXRD_EXPORT QxrdPowderOverlay : public QxrdPlotOverlay
+class QXRD_EXPORT QxrdPowderOverlay : public QcepPlotOverlay
 {
   Q_OBJECT
 
 public:
   QxrdPowderOverlay(QString                         name,
-                    QxrdPlotWidget                 *plot,
-                    QxrdPlotWidgetSettingsWPtr      set,
+                    QcepPlotWidget                 *plot,
+                    QcepPlotWidgetSettingsWPtr set,
                     QxrdPowderRingsModelWPtr        rings);
 
 private:

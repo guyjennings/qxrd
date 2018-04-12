@@ -14,14 +14,14 @@
 #include "qcepmaskdata-ptr.h"
 
 #include "qxrdprocessor-ptr.h"
-#include "qxrdrasterdata.h"
-#include "qxrdmaskrasterdata.h"
-#include "qxrdmaskcolormap.h"
+#include "qceprasterdata.h"
+#include "qcepmaskrasterdata.h"
+#include "qcepmaskcolormap.h"
 #include "qxrdimageplotsettings.h"
 #include "qxrdpowderpointpicker.h"
 #include "qxrdroimodel-ptr.h"
 #include <QItemSelectionModel>
-#include "qxrdplotwidgetdialog-ptr.h"
+#include "qcepplotwidgetdialog-ptr.h"
 
 class QXRD_EXPORT QxrdImagePlot : public QcepPlot
 {

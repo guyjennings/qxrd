@@ -1,15 +1,15 @@
 #ifndef QXRDADDPOINTCOMMAND_H
 #define QXRDADDPOINTCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdAddPointCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdAddPointCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdAddPointCommand(QxrdPlotWidget            *plot,
-                      QxrdPlotWidgetSettingsWPtr set);
+  QxrdAddPointCommand(QcepPlotWidget            *plot,
+                      QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

@@ -1,15 +1,15 @@
 #ifndef QXRDDISABLERINGCOMMAND_H
 #define QXRDDISABLERINGCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdDisableRingCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdDisableRingCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdDisableRingCommand(QxrdPlotWidget            *plot,
-                         QxrdPlotWidgetSettingsWPtr set);
+  QxrdDisableRingCommand(QcepPlotWidget            *plot,
+                         QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

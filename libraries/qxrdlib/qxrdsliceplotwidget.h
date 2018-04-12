@@ -1,10 +1,10 @@
 #ifndef QXRDSLICEPLOTWIDGET_H
 #define QXRDSLICEPLOTWIDGET_H
 
-#include "qxrdplotwidget.h"
+#include "qcepplotwidget.h"
 #include "qxrdsliceplotwidgetsettings-ptr.h"
 
-class QxrdSlicePlotWidget : public QxrdPlotWidget
+class QxrdSlicePlotWidget : public QcepPlotWidget
 {
   Q_OBJECT
 

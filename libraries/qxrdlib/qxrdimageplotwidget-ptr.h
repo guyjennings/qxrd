@@ -1,8 +1,0 @@
-#ifndef QXRDIMAGEPLOTWIDGETPTR_H
-#define QXRDIMAGEPLOTWIDGETPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdImagePlotWidget)
-
-#endif // QXRDIMAGEPLOTWIDGETPTR_H

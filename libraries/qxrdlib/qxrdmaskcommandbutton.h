@@ -1,18 +1,18 @@
 #ifndef QXRDMASKCOMMANDBUTTON_H
 #define QXRDMASKCOMMANDBUTTON_H
 
-#include "qxrdplotbuttoncommand.h"
+#include "qcepplotbuttoncommand.h"
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdmaskpicker-ptr.h"
 
-class QXRD_EXPORT QxrdMaskCommandButton : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdMaskCommandButton : public QcepPlotButtonCommand
 {
   Q_OBJECT
 
 public:
   QxrdMaskCommandButton(QString                    name,
-                        QxrdPlotWidget            *plot,
-                        QxrdPlotWidgetSettingsWPtr set,
+                        QcepPlotWidget            *plot,
+                        QcepPlotWidgetSettingsWPtr set,
                         QxrdMaskStackWPtr          maskStack);
 
 protected:

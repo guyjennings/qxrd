@@ -1,15 +1,15 @@
 #ifndef QXRDDELPOINTCOMMAND_H
 #define QXRDDELPOINTCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdDelPointCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdDelPointCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdDelPointCommand(QxrdPlotWidget            *plot,
-                      QxrdPlotWidgetSettingsWPtr set);
+  QxrdDelPointCommand(QcepPlotWidget            *plot,
+                      QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

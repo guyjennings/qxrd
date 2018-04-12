@@ -3,9 +3,9 @@
 #include "qxrdhistogramselector.h"
 #include "qxrdimageplot.h"
 
-QxrdHistogramCommand::QxrdHistogramCommand(QxrdPlotWidget            *plot,
-                                           QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand("histogramCommand",
+QxrdHistogramCommand::QxrdHistogramCommand(QcepPlotWidget            *plot,
+                                           QcepPlotWidgetSettingsWPtr set)
+  : QcepPlotButtonCommand("histogramCommand",
                           "Histogram",
                           plot,
                           set,
@@ -27,14 +27,14 @@ QxrdHistogramCommand::QxrdHistogramCommand(QxrdPlotWidget            *plot,
 
 void QxrdHistogramCommand::enable()
 {
-  QxrdPlotButtonCommand::enable();
+  QcepPlotButtonCommand::enable();
 
   m_HistogramSelector -> setEnabled(true);
 }
 
 void QxrdHistogramCommand::disable()
 {
-  QxrdPlotButtonCommand::disable();
+  QcepPlotButtonCommand::disable();
 
   m_HistogramSelector -> setEnabled(false);
 }

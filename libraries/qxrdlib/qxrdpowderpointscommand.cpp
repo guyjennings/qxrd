@@ -3,9 +3,9 @@
 #include "qxrdpowderpointpicker.h"
 #include "qxrdimageplot.h"
 
-QxrdPowderPointsCommand::QxrdPowderPointsCommand(QxrdPlotWidget *plot,
-                                                 QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotButtonCommand("powderPointsCommand", "Powder Points", plot, set, ":/images/powder_point.png", true)
+QxrdPowderPointsCommand::QxrdPowderPointsCommand(QcepPlotWidget *plot,
+                                                 QcepPlotWidgetSettingsWPtr set)
+  : QcepPlotButtonCommand("powderPointsCommand", "Powder Points", plot, set, ":/images/powder_point.png", true)
 {  
 //  appendMode(":/images/powder_point.png",      "Powder Points");
   appendMode(":/images/powder_point_ring.png", "Powder Point on Ring");

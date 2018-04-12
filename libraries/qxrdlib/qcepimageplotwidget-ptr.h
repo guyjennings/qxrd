@@ -1,0 +1,8 @@
+#ifndef QCEPIMAGEPLOTWIDGETPTR_H
+#define QCEPIMAGEPLOTWIDGETPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QcepImagePlotWidget)
+
+#endif // QCEPIMAGEPLOTWIDGETPTR_H

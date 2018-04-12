@@ -3,18 +3,18 @@
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
-#include "qxrdplotoverlay.h"
+#include "qcepplotoverlay.h"
 #include "qxrdcenterfinder-ptr.h"
 #include <qwt_plot_marker.h>
 
-class QXRD_EXPORT QxrdCenterMarker : public QxrdPlotOverlay
+class QXRD_EXPORT QxrdCenterMarker : public QcepPlotOverlay
 {
   Q_OBJECT
 
 public:
   QxrdCenterMarker(QString                    name,
-                   QxrdPlotWidget            *plot,
-                   QxrdPlotWidgetSettingsWPtr set,
+                   QcepPlotWidget            *plot,
+                   QcepPlotWidgetSettingsWPtr set,
                    QxrdCenterFinderWPtr       cf);
 
   void setPen(QPen pen);

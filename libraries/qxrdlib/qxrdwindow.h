@@ -13,7 +13,7 @@
 
 #include "qxrdmainwindow.h"
 #include "qxrdscriptengine.h"
-#include "qxrdplotwidgetdialog.h"
+#include "qcepplotwidgetdialog.h"
 #include "qxrdintegratorplot.h"
 #include "qxrdhistogramdialog.h"
 #include "qxrdhighlighter.h"

@@ -2,7 +2,7 @@
 #include "qxrdintegratedplotwidgetsettings.h"
 
 QxrdIntegratedPlotWidget::QxrdIntegratedPlotWidget(QWidget *parent) :
-  QxrdPlotWidget(parent)
+  QcepPlotWidget(parent)
 {
 }
 
@@ -12,7 +12,7 @@ QxrdIntegratedPlotWidget::~QxrdIntegratedPlotWidget()
 
 void QxrdIntegratedPlotWidget::initialize(QxrdIntegratedPlotWidgetSettingsWPtr settings)
 {
-  QxrdPlotWidget::initialize(settings);
+  QcepPlotWidget::initialize(settings);
 
   addPlotCommandSpacer();
 }

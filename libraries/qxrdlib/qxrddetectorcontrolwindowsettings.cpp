@@ -1,6 +1,6 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrddetectorimageplot.h"
-#include "qxrdimageplotwidgetsettings.h"
+#include "qcepimageplotwidgetsettings.h"
 #include "qxrddetectorsettings.h"
 
 QxrdDetectorControlWindowSettings::QxrdDetectorControlWindowSettings(QString name)
@@ -12,8 +12,8 @@ QxrdDetectorControlWindowSettings::QxrdDetectorControlWindowSettings(QString nam
     m_DetectorWindowRect(this, "detectorWindowRect", QRectF(), "Window Geometry")
 {
   m_ImagePlotWidgetSettings =
-      QxrdImagePlotWidgetSettingsPtr(
-        new QxrdImagePlotWidgetSettings("detectorPlotWidget"));
+      QcepImagePlotWidgetSettingsPtr(
+        new QcepImagePlotWidgetSettings("detectorPlotWidget"));
 }
 
 void QxrdDetectorControlWindowSettings::initialize(QcepObjectWPtr parent)
@@ -31,7 +31,7 @@ void QxrdDetectorControlWindowSettings::initialize(QcepObjectWPtr parent)
   m_ImagePlotWidgetSettings -> initialize(sharedFromThis());
 }
 
-QxrdImagePlotWidgetSettingsPtr QxrdDetectorControlWindowSettings::imagePlotWidgetSettings()
+QcepImagePlotWidgetSettingsPtr QxrdDetectorControlWindowSettings::imagePlotWidgetSettings()
 {
   return m_ImagePlotWidgetSettings;
 }

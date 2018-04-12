@@ -4,7 +4,7 @@
 #include "qxrdintegratorplotsettings.h"
 #include "qxrdfilebrowsersettings.h"
 #include "qxrdhistogramdialogsettings.h"
-#include "qxrdimageplotwidgetsettings.h"
+#include "qcepimageplotwidgetsettings.h"
 #include "qxrdcenteringplotwidgetsettings.h"
 #include "qxrdintegratedplotwidgetsettings.h"
 #include "qxrddistortionplotwidgetsettings.h"
@@ -14,7 +14,7 @@ QxrdWindowSettings::QxrdWindowSettings(QString name) :
   inherited(name, "Main Window"),
   m_WindowGeometry(this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(this, "windowState", QByteArray(), "Window State Settings"),
-  m_ImagePlotWidgetSettings(new QxrdImagePlotWidgetSettings(name+"ImagePlot")),
+  m_ImagePlotWidgetSettings(new QcepImagePlotWidgetSettings(name+"ImagePlot")),
   m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name+"CenteringPlot")),
   m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot")),
   m_DistortionPlotWidgetSettings(new QxrdDistortionPlotWidgetSettings(name+"DistortionPlot")),
@@ -57,7 +57,7 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdImagePlotSettings*>("QxrdImagePlotSettings*");
   qRegisterMetaType<QxrdIntegratorPlotSettings*>("QxrdIntegratorPlotSettings*");
   qRegisterMetaType<QxrdFileBrowserSettings*>("QxrdFileBrowserSettings*");
-  qRegisterMetaType<QxrdImagePlotWidgetSettings*>("QxrdImagePlotWidgetSettings*");
+  qRegisterMetaType<QcepImagePlotWidgetSettings*>("QcepImagePlotWidgetSettings*");
   qRegisterMetaType<QxrdCenteringPlotWidgetSettings*>("QxrdCenteringPlotWidgetSettings*");
   qRegisterMetaType<QxrdIntegratedPlotWidgetSettings*>("QxrdIntegratedPlotWidgetSettings*");
   qRegisterMetaType<QxrdDistortionPlotWidgetSettings*>("QxrdDistortionPlotWidgetSettings*");
@@ -195,7 +195,7 @@ QxrdHistogramDialogSettingsWPtr QxrdWindowSettings::histogramDialogSettings()
   return m_HistogramDialogSettings;
 }
 
-QxrdImagePlotWidgetSettingsPtr QxrdWindowSettings::imagePlotWidgetSettings()
+QcepImagePlotWidgetSettingsPtr QxrdWindowSettings::imagePlotWidgetSettings()
 {
   return m_ImagePlotWidgetSettings;
 }

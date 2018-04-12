@@ -1,7 +1,7 @@
 #include "qxrdzappixelcommand.h"
 
-QxrdZapPixelCommand::QxrdZapPixelCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand("zapPixelCommand", "Zap Pixel", plot, set)
+QxrdZapPixelCommand::QxrdZapPixelCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
+  : QcepPlotContextMenuCommand("zapPixelCommand", "Zap Pixel", plot, set)
 {
 
 }

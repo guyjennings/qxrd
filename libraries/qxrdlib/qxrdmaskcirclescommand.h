@@ -1,17 +1,17 @@
 #ifndef QXRDMASKCIRCLESCOMMAND_H
 #define QXRDMASKCIRCLESCOMMAND_H
 
-#include "qxrdplotbuttoncommand.h"
+#include "qcepplotbuttoncommand.h"
 #include "qxrdmaskstack-ptr.h"
 #include "qxrdmaskpicker-ptr.h"
 
-class QXRD_EXPORT QxrdMaskCirclesCommand : public QxrdPlotButtonCommand
+class QXRD_EXPORT QxrdMaskCirclesCommand : public QcepPlotButtonCommand
 {
   Q_OBJECT
 
 public:
-  QxrdMaskCirclesCommand(QxrdPlotWidget            *plot,
-                         QxrdPlotWidgetSettingsWPtr set,
+  QxrdMaskCirclesCommand(QcepPlotWidget            *plot,
+                         QcepPlotWidgetSettingsWPtr set,
                          QxrdMaskStackWPtr          maskStack);
 
 private:

@@ -2,11 +2,11 @@
 #include "qxrdsliceplotwidgetsettings.h"
 
 QxrdSlicePlotWidget::QxrdSlicePlotWidget(QWidget *parent)
-  : QxrdPlotWidget(parent)
+  : QcepPlotWidget(parent)
 {
 }
 
 void QxrdSlicePlotWidget::initialize(QxrdSlicePlotWidgetSettingsWPtr settings)
 {
-  QxrdPlotWidget::initialize(settings);
+  QcepPlotWidget::initialize(settings);
 }

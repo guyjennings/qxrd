@@ -52,10 +52,10 @@ void QxrdMaskingWindow::initialize(QcepObjectWPtr parent)
     m_MaskStack = proc->maskStack();
 
     connect(proc.data(), &QxrdProcessor::dataAvailable,
-            m_ImagePlotWidget, &QxrdImagePlotWidget::newImage);
+            m_ImagePlotWidget, &QcepImagePlotWidget::newImage);
 
     connect(proc.data(), &QxrdProcessor::maskAvailable,
-            m_ImagePlotWidget, &QxrdImagePlotWidget::newMask);
+            m_ImagePlotWidget, &QcepImagePlotWidget::newMask);
 
     m_MaskStackView -> setMaskStack(m_MaskStack);
     m_MaskStackView -> setProcessor(proc);

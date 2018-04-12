@@ -1,7 +1,7 @@
 #include "qxrdaddpointcommand.h"
 
-QxrdAddPointCommand::QxrdAddPointCommand(QxrdPlotWidget* plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand("addPointCommand", "Add Point", plot, set)
+QxrdAddPointCommand::QxrdAddPointCommand(QcepPlotWidget* plot, QcepPlotWidgetSettingsWPtr set)
+  : QcepPlotContextMenuCommand("addPointCommand", "Add Point", plot, set)
 {
 
 }

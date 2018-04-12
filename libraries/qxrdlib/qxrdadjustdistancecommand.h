@@ -1,16 +1,16 @@
 #ifndef QXRDADJUSTDISTANCECOMMAND_H
 #define QXRDADJUSTDISTANCECOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 #include "qxrdimageplot-ptr.h"
 
-class QXRD_EXPORT QxrdAdjustDistanceCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdAdjustDistanceCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdAdjustDistanceCommand(QxrdPlotWidget            *plot,
-                            QxrdPlotWidgetSettingsWPtr set);
+  QxrdAdjustDistanceCommand(QcepPlotWidget            *plot,
+                            QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

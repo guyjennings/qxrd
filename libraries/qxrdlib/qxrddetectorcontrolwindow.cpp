@@ -125,10 +125,10 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
     }
 
     connect(dp.data(),       &QxrdProcessor::dataAvailable,
-            m_DetectorImage, &QxrdImagePlotWidget::newImage);
+            m_DetectorImage, &QcepImagePlotWidget::newImage);
 
     connect(dp.data(),       &QxrdProcessor::maskAvailable,
-            m_DetectorImage, &QxrdImagePlotWidget::newMask);
+            m_DetectorImage, &QcepImagePlotWidget::newMask);
 
     connect(dp.data(),       &QxrdProcessor::dataAvailable,
             this,            &QxrdDetectorControlWindow::newImage);

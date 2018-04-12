@@ -1,0 +1,8 @@
+#ifndef QCEPCOLORMAPLIBRARYPTR_H
+#define QCEPCOLORMAPLIBRARYPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QcepColorMapLibrary)
+
+#endif // QCEPCOLORMAPLIBRARYPTR_H

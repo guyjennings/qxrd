@@ -3,18 +3,18 @@
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
-#include "qxrdplotoverlay.h"
+#include "qcepplotoverlay.h"
 #include "qxrdroimodel-ptr.h"
 #include <qwt_plot_curve.h>
 
-class QXRD_EXPORT QxrdROIOverlay : public QxrdPlotOverlay
+class QXRD_EXPORT QxrdROIOverlay : public QcepPlotOverlay
 {
   Q_OBJECT
 
 public:
   QxrdROIOverlay(QString                         name,
-                 QxrdPlotWidget                 *plot,
-                 QxrdPlotWidgetSettingsWPtr      set,
+                 QcepPlotWidget                 *plot,
+                 QcepPlotWidgetSettingsWPtr set,
                  QxrdROIModelWPtr roic);
 
 private:

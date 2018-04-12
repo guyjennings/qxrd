@@ -1,8 +1,8 @@
 #include "qxrddelringcommand.h"
 #include "qxrdimageplot.h"
 
-QxrdDelRingCommand::QxrdDelRingCommand(QxrdPlotWidget *plot, QxrdPlotWidgetSettingsWPtr set)
-  : QxrdPlotContextMenuCommand("deleteRingCommand", "Delete Ring", plot, set)
+QxrdDelRingCommand::QxrdDelRingCommand(QcepPlotWidget *plot, QcepPlotWidgetSettingsWPtr set)
+  : QcepPlotContextMenuCommand("deleteRingCommand", "Delete Ring", plot, set)
 {
 
 }

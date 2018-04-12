@@ -1,9 +1,9 @@
 #ifndef QXRDSLICEPLOTWIDGETSETTINGS_H
 #define QXRDSLICEPLOTWIDGETSETTINGS_H
 
-#include "qxrdplotwidgetsettings.h"
+#include "qcepplotwidgetsettings.h"
 
-class QXRD_EXPORT QxrdSlicePlotWidgetSettings : public QxrdPlotWidgetSettings
+class QXRD_EXPORT QxrdSlicePlotWidgetSettings : public QcepPlotWidgetSettings
 {
   Q_OBJECT
 

@@ -1,15 +1,15 @@
 #ifndef QXRDTRACERINGCOMMAND_H
 #define QXRDTRACERINGCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdTraceRingCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdTraceRingCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdTraceRingCommand(QxrdPlotWidget            *plot,
-                       QxrdPlotWidgetSettingsWPtr set);
+  QxrdTraceRingCommand(QcepPlotWidget            *plot,
+                       QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };

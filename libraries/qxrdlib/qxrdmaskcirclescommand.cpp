@@ -5,10 +5,10 @@
 #include "qxrdimageplot.h"
 #include "qxrdmaskstack.h"
 
-QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QxrdPlotWidget *plot,
-                                               QxrdPlotWidgetSettingsWPtr set,
+QxrdMaskCirclesCommand::QxrdMaskCirclesCommand(QcepPlotWidget *plot,
+                                               QcepPlotWidgetSettingsWPtr set,
                                                QxrdMaskStackWPtr maskStack) :
-  QxrdPlotButtonCommand("maskCirclesCommand",
+  QcepPlotButtonCommand("maskCirclesCommand",
                         "Mask Circles",
                         plot,
                         set,

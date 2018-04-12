@@ -4,10 +4,10 @@
 #include "qxrdimageplot.h"
 #include "qxrdcenterfinder.h"
 
-QxrdSetCenterCommand::QxrdSetCenterCommand(QxrdPlotWidget            *plot,
-                                           QxrdPlotWidgetSettingsWPtr set,
+QxrdSetCenterCommand::QxrdSetCenterCommand(QcepPlotWidget            *plot,
+                                           QcepPlotWidgetSettingsWPtr set,
                                            QxrdCenterFinderWPtr       cf)
-  : QxrdPlotButtonCommand("setCenterCommand", "Set Center", plot, set, ":/images/ringfinder.png", true),
+  : QcepPlotButtonCommand("setCenterCommand", "Set Center", plot, set, ":/images/ringfinder.png", true),
     m_CenterFinder(cf)
 {  
   m_Picker = new QxrdCenterFinderPicker(m_Plot);

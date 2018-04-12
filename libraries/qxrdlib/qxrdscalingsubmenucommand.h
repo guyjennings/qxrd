@@ -1,17 +1,17 @@
 #ifndef QXRDSCALINGSUBMENUCOMMAND_H
 #define QXRDSCALINGSUBMENUCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
-#include "qxrdimageplotwidget-ptr.h"
-#include "qxrdimageplotwidgetsettings-ptr.h"
+#include "qcepplotcontextmenucommand.h"
+#include "qcepimageplotwidget-ptr.h"
+#include "qcepimageplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QxrdScalingSubmenuCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdScalingSubmenuCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdScalingSubmenuCommand(QxrdImagePlotWidget            *plot,
-                            QxrdImagePlotWidgetSettingsWPtr set);
+  QxrdScalingSubmenuCommand(QcepImagePlotWidget            *plot,
+                            QcepImagePlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 

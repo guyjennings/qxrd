@@ -1,8 +1,0 @@
-#ifndef QXRDCOLORMAPLIBRARYPTR_H
-#define QXRDCOLORMAPLIBRARYPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdColorMapLibrary)
-
-#endif // QXRDCOLORMAPLIBRARYPTR_H

@@ -2,13 +2,13 @@
 #include "qxrddistortionplotwidgetsettings.h"
 
 QxrdDistortionPlotWidget::QxrdDistortionPlotWidget(QWidget *parent)
-  : QxrdPlotWidget(parent)
+  : QcepPlotWidget(parent)
 {
 }
 
 void QxrdDistortionPlotWidget::initialize(QxrdDistortionPlotWidgetSettingsWPtr settings)
 {
-  QxrdPlotWidget::initialize(settings);
+  QcepPlotWidget::initialize(settings);
 
   addPlotCommandSpacer();
 }

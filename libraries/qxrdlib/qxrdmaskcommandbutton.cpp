@@ -6,10 +6,10 @@
 #include "qxrdmaskstack.h"
 
 QxrdMaskCommandButton::QxrdMaskCommandButton(QString name,
-                                             QxrdPlotWidget *plot,
-                                             QxrdPlotWidgetSettingsWPtr set,
+                                             QcepPlotWidget *plot,
+                                             QcepPlotWidgetSettingsWPtr set,
                                              QxrdMaskStackWPtr maskStack) :
-  QxrdPlotButtonCommand("maskCommandButton", QString(), plot, set, QString(), true),
+  QcepPlotButtonCommand("maskCommandButton", QString(), plot, set, QString(), true),
   m_MaskStack(maskStack)
 {
   appendMode(":/images/mask_circles.png",           "Mask Circles");
@@ -42,7 +42,7 @@ QxrdMaskCommandButton::QxrdMaskCommandButton(QString name,
 
 void QxrdMaskCommandButton::changeMode(int i)
 {
-  QxrdPlotButtonCommand::changeMode(i);
+  QcepPlotButtonCommand::changeMode(i);
 
   switch (i) {
   default:

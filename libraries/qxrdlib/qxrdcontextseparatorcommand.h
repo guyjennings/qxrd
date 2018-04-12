@@ -1,15 +1,15 @@
 #ifndef QXRDCONTEXTSEPARATORCOMMAND_H
 #define QXRDCONTEXTSEPARATORCOMMAND_H
 
-#include "qxrdplotcontextmenucommand.h"
+#include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QxrdContextSeparatorCommand : public QxrdPlotContextMenuCommand
+class QXRD_EXPORT QxrdContextSeparatorCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 
 public:
-  QxrdContextSeparatorCommand(QxrdPlotWidget            *plot,
-                              QxrdPlotWidgetSettingsWPtr set);
+  QxrdContextSeparatorCommand(QcepPlotWidget            *plot,
+                              QcepPlotWidgetSettingsWPtr set);
 
   QAction *contextMenuAction(const QPoint &pos);
 };
