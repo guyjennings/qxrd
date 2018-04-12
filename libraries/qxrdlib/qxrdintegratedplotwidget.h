@@ -1,6 +1,7 @@
 #ifndef QXRDINTEGRATEDPLOTWIDGET_H
 #define QXRDINTEGRATEDPLOTWIDGET_H
 
+#include "qxrdlib_global.h"
 #include "qcepplotwidget.h"
 #include "qxrdintegratedplotwidgetsettings-ptr.h"
 

@@ -2,7 +2,7 @@
 #include "qxrdexperiment.h"
 #include "qxrdcenteringwindowsettings.h"
 #include "qxrdprocessor.h"
-#include "qxrdcenterfinder.h"
+#include "qcepcenterfinder.h"
 #include <QThread>
 
 QxrdCenteringWindow::QxrdCenteringWindow(QString name) :
@@ -30,7 +30,7 @@ void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
   QxrdExperimentPtr       exp(QxrdExperiment::findExperiment(m_Parent));
   QxrdDetectorSettingsPtr det(QxrdDetectorSettings::findDetectorSettings(m_Parent));
   QxrdProcessorPtr       proc(QxrdProcessor::findProcessor(m_Parent));
-  QxrdCenterFinderPtr      cf(QxrdCenterFinder::findCenterFinder(m_Parent));
+  QcepCenterFinderPtr      cf(QcepCenterFinder::findCenterFinder(m_Parent));
 
   if (cf == NULL) {
     if (proc) {
@@ -58,7 +58,15 @@ void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
 
     if (settings) {
       m_FileBrowserWidget    -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings(), proc);
+      m_ImagePlotWidget      -> initialize(settings->imagePlotWidgetSettings());
+      m_ImagePlotWidget   -> setCenterFinder(cf);
+
+      if (proc) {
+        m_ImagePlotWidget   -> setMaskStack(proc->maskStack());
+        m_ImagePlotWidget   -> setPowderRings(proc->powderRings());
+        m_ImagePlotWidget   -> setROIModel(proc->roiModel());
+      }
+
       m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings(), cf);
       m_IntegratedPlotWidget -> initialize(settings->integratedPlotWidgetSettings());
     } else {
@@ -74,14 +82,14 @@ void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
       cf->prop_TiltPlaneRotation()     -> linkTo(m_TiltPlaneRotation);
       cf->prop_TiltPlaneRotationStep() -> linkTo(m_TiltPlaneRotationStep);
 
-      connect(m_CenterMoveDown,      &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveDown);
-      connect(m_CenterMoveUp,        &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveUp);
-      connect(m_CenterMoveLeft,      &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveLeft);
-      connect(m_CenterMoveRight,     &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveRight);
-      connect(m_CenterMoveDownLeft,  &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveDownLeft);
-      connect(m_CenterMoveDownRight, &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveDownRight);
-      connect(m_CenterMoveUpLeft,    &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveUpLeft);
-      connect(m_CenterMoveUpRight,   &QToolButton::clicked, cf.data(), &QxrdCenterFinder::centerMoveUpRight);
+      connect(m_CenterMoveDown,      &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveDown);
+      connect(m_CenterMoveUp,        &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveUp);
+      connect(m_CenterMoveLeft,      &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveLeft);
+      connect(m_CenterMoveRight,     &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveRight);
+      connect(m_CenterMoveDownLeft,  &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveDownLeft);
+      connect(m_CenterMoveDownRight, &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveDownRight);
+      connect(m_CenterMoveUpLeft,    &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveUpLeft);
+      connect(m_CenterMoveUpRight,   &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveUpRight);
 
       connect(cf->prop_ImplementTilt(), &QcepBoolProperty::valueChanged,
               this, &QxrdCenteringWindow::onImplementTiltChanged);

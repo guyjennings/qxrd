@@ -4,14 +4,14 @@
 
 #include "qmath.h"
 #include "qxrdprocessor.h"
-#include "qxrddetectorgeometry.h"
+#include "qcepdetectorgeometry.h"
 #include "qcepallocator.h"
 #include "qcepimagedata.h"
 
 QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
   inherited(name),
   m_Processor(),
-  m_Geometry(new QxrdDetectorGeometry("testGeometry")),
+  m_Geometry(new QcepDetectorGeometry("testGeometry")),
   m_NRows(this, "nRows", 2048, "Number of Rows"),
   m_NCols(this, "nCols", 2048, "Number of Cols"),
   m_CenterX(this, "centerX", 1024, "X Center"),

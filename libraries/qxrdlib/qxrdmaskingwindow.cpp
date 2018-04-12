@@ -2,7 +2,7 @@
 #include "qxrdexperiment.h"
 #include "qxrdmaskingwindowsettings.h"
 #include "qxrdprocessor.h"
-#include "qxrdmaskstack.h"
+#include "qcepmaskstack.h"
 #include "qxrdzingerdialog.h"
 #include "qxrdprocessor.h"
 #include <QThread>
@@ -44,7 +44,11 @@ void QxrdMaskingWindow::initialize(QcepObjectWPtr parent)
 
     if (settings && proc) {
       m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings(), proc);
+      m_ImagePlotWidget   -> initialize(settings->imagePlotWidgetSettings());
+      m_ImagePlotWidget   -> setCenterFinder(proc->centerFinder());
+      m_ImagePlotWidget   -> setMaskStack(proc->maskStack());
+      m_ImagePlotWidget   -> setPowderRings(proc->powderRings());
+      m_ImagePlotWidget   -> setROIModel(proc->roiModel());
     }
   }
 
@@ -154,7 +158,7 @@ int QxrdMaskingWindow::maskStackSelectPopup()
   QxrdProcessorPtr proc(QxrdProcessor::findProcessor(m_Parent));
 
   if (proc) {
-    QxrdMaskStackPtr m = proc->maskStack();
+    QcepMaskStackPtr m = proc->maskStack();
 
     if (m) {
       int nmasks = m->maskCount();
@@ -183,7 +187,7 @@ void QxrdMaskingWindow::doHideMaskAll()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->hideMaskAllStack(n);
@@ -197,7 +201,7 @@ void QxrdMaskingWindow::doShowMaskAll()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->showMaskAllStack(n);
@@ -212,7 +216,7 @@ void QxrdMaskingWindow::doHideMaskRange()
 
   if (n >= 0) {
     QxrdProcessorPtr p(QxrdProcessor::findProcessor(m_Parent));
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m && p) {
       m->hideMaskRangeStack(n,
@@ -231,7 +235,7 @@ void QxrdMaskingWindow::doShowMaskRange()
 
   if (n >= 0) {
     QxrdProcessorPtr p(QxrdProcessor::findProcessor(m_Parent));
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m && p) {
       m->showMaskRangeStack(n,
@@ -273,7 +277,7 @@ void QxrdMaskingWindow::doInvertMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->invertMaskStack(n);
@@ -287,7 +291,7 @@ void QxrdMaskingWindow::doGrowMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->growMaskStack(n);
@@ -301,7 +305,7 @@ void QxrdMaskingWindow::doShrinkMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->shrinkMaskStack(n);
@@ -315,7 +319,7 @@ void QxrdMaskingWindow::doAndMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->andMaskStack(n);
@@ -329,7 +333,7 @@ void QxrdMaskingWindow::doOrMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->orMaskStack(n);
@@ -343,7 +347,7 @@ void QxrdMaskingWindow::doXorMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->xorMaskStack(n);
@@ -357,7 +361,7 @@ void QxrdMaskingWindow::doAndNotMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->andNotMaskStack(n);
@@ -371,7 +375,7 @@ void QxrdMaskingWindow::doOrNotMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->orNotMaskStack(n);
@@ -385,7 +389,7 @@ void QxrdMaskingWindow::doXorNotMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->xorNotMaskStack(n);
@@ -399,7 +403,7 @@ void QxrdMaskingWindow::doExchangeMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->exchangeMaskStack(n);
@@ -413,7 +417,7 @@ void QxrdMaskingWindow::doRollMask()
   int n = maskStackSelectPopup();
 
   if (n >= 0) {
-    QxrdMaskStackPtr m(m_MaskStack);
+    QcepMaskStackPtr m(m_MaskStack);
 
     if (m) {
       m->rollMaskStack(n);
@@ -423,7 +427,7 @@ void QxrdMaskingWindow::doRollMask()
 
 void QxrdMaskingWindow::doRollUpMask()
 {
-  QxrdMaskStackPtr m(m_MaskStack);
+  QcepMaskStackPtr m(m_MaskStack);
 
   if (m) {
     m->rollMaskStack(1);
@@ -433,7 +437,7 @@ void QxrdMaskingWindow::doRollUpMask()
 
 void QxrdMaskingWindow::doRollDownMask()
 {
-  QxrdMaskStackPtr m(m_MaskStack);
+  QcepMaskStackPtr m(m_MaskStack);
 
   if (m) {
     m->rollMaskStack(-1);
@@ -443,7 +447,7 @@ void QxrdMaskingWindow::doRollDownMask()
 
 void QxrdMaskingWindow::doClearMask()
 {
-  QxrdMaskStackPtr m(m_MaskStack);
+  QcepMaskStackPtr m(m_MaskStack);
 
   if (m) {
     m->clearMaskStack();
@@ -453,7 +457,7 @@ void QxrdMaskingWindow::doClearMask()
 
 void QxrdMaskingWindow::doClearMaskTop()
 {
-  QxrdMaskStackPtr m(m_MaskStack);
+  QcepMaskStackPtr m(m_MaskStack);
 
   if (m) {
     m->clearMaskStackTop();

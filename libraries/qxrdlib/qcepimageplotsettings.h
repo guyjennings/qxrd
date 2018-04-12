@@ -1,13 +1,13 @@
 #ifndef QCEPIMAGEPLOTSETTINGS_H
 #define QCEPIMAGEPLOTSETTINGS_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include <QObject>
 #include "qcepproperty.h"
 #include "qcepplotsettings.h"
 #include "qcepimageplotsettings-ptr.h"
 
-class QXRD_EXPORT QcepImagePlotSettings : public QcepPlotSettings
+class QCEP_EXPORT QcepImagePlotSettings : public QcepPlotSettings
 {
   Q_OBJECT
 

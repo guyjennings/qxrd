@@ -1,7 +1,7 @@
 #ifndef QCEPIMAGEPLOT_H
 #define QCEPIMAGEPLOT_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include "qcepplot.h"
 
 #include <qwt_color_map.h>
@@ -13,17 +13,16 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
-#include "qxrdprocessor-ptr.h"
 #include "qceprasterdata.h"
 #include "qcepmaskrasterdata.h"
 #include "qcepmaskcolormap.h"
 #include "qcepimageplotsettings.h"
-#include "qxrdpowderpointpicker.h"
-#include "qxrdroimodel-ptr.h"
+#include "qceppowderpointpicker.h"
+#include "qceproimodel-ptr.h"
 #include <QItemSelectionModel>
 #include "qcepplotwidgetdialog-ptr.h"
 
-class QXRD_EXPORT QcepImagePlot : public QcepPlot
+class QCEP_EXPORT QcepImagePlot : public QcepPlot
 {
   Q_OBJECT
 
@@ -63,19 +62,19 @@ public:
 //  const QxrdRasterData* raster() const;
 //  QxrdRasterData* raster();
 
-  QxrdProcessorWPtr processor() const;
-  void setProcessor(QxrdProcessorWPtr proc);
+//  QcepProcessorWPtr processor() const;
+//  void setProcessor(QcepProcessorWPtr proc);
 
-  virtual QwtText trackerTextF(const QPointF &pos);
+//  virtual QwtText trackerTextF(const QPointF &pos);
 
-  void contextMenuEvent(QContextMenuEvent *event);
+//  void contextMenuEvent(QContextMenuEvent *event);
 
   void enableROIDisplay(bool enable);
 
-  void setROIModel(QxrdROIModelWPtr model);
+  void setROIModel(QcepROIModelWPtr model);
   void setROISelection(QItemSelectionModel *select);
 
-  QxrdROIModelWPtr roiModel();
+  QcepROIModelWPtr roiModel();
   QItemSelectionModel            *roiSelection();
 
   void setData(QcepImageDataBaseWPtr data);
@@ -127,18 +126,18 @@ private:
 //  QcepRasterData            *m_DataRaster;
 //  QcepMaskRasterData        *m_MaskRaster;
 
-  QxrdProcessorWPtr          m_Processor;
+//  QcepProcessorWPtr          m_Processor;
 
 //  QwtPlotMarker             *m_CenterMarker;
 
-//  QxrdPowderPointPicker     *m_PowderPointPicker;
+//  QcepPowderPointPicker     *m_PowderPointPicker;
   QVector<QwtPlotCurve*>     m_PowderPointCurves;
 
   bool                       m_FirstTime;
 
   bool                       m_ContextMenuEnabled;
 
-  QxrdROIModelWPtr           m_ROIModel;
+  QcepROIModelWPtr           m_ROIModel;
   QItemSelectionModel       *m_ROISelection;
   QVector<QwtPlotCurve*>     m_ROICurves;
 };

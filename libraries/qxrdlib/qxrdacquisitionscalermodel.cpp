@@ -4,8 +4,8 @@
 #include "qxrdsynchronizedacquisition.h"
 #include "qxrdsynchronizedinputchannel.h"
 #include "qxrdprocessor.h"
-#include "qxrdroicalculator.h"
-#include "qxrdroi.h"
+#include "qceproicalculator.h"
+#include "qceproi.h"
 
 QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcqCommonWPtr acq)
   : m_Acquisition(acq)
@@ -63,7 +63,7 @@ int QxrdAcquisitionScalerModel::rowCount(const QModelIndex & /*parent*/) const
       if (d && d->isEnabled()) {
         nRows += 1;
 //        nRows += QxrdDetector::ExtraScalers;
-        nRows += d->roiCount()*QxrdROI::OutputCount;
+        nRows += d->roiCount()*QcepROI::OutputCount;
       }
     }
   }
@@ -152,7 +152,7 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
                 } else {
                   row -= 1;
 
-                  int nROI = d->roiCount()*QxrdROI::OutputCount;
+                  int nROI = d->roiCount()*QcepROI::OutputCount;
 
                   if (row < nROI) {
                     if (col == NumCol) {
@@ -162,11 +162,11 @@ QVariant QxrdAcquisitionScalerModel::data(const QModelIndex &index, int role) co
 
                       return val;
                     } else if (col == DescriptionCol) {
-                      int roiNum = row / QxrdROI::OutputCount;
-                      int optNum = row % QxrdROI::OutputCount;
+                      int roiNum = row / QcepROI::OutputCount;
+                      int optNum = row % QcepROI::OutputCount;
 
                       return tr("Detector %1 : ROI %2 : %3")
-                          .arg(det).arg(roiNum).arg(QxrdROI::outputName(optNum));
+                          .arg(det).arg(roiNum).arg(QcepROI::outputName(optNum));
                     }
                   } else {
                     row -= nROI;

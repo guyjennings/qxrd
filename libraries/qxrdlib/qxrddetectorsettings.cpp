@@ -12,7 +12,7 @@
 #include "qcepimagedata.h"
 #include "qcepimagequeue.h"
 #include "qxrdacqcommon.h"
-#include "qxrdroicalculator.h"
+#include "qceproicalculator.h"
 #include "qxrdareadetectorsettings.h"
 #include "qxrdfilewatchersettings.h"
 #include "qxrdperkinelmersettings.h"
@@ -308,7 +308,7 @@ int QxrdDetectorSettings::roiCount()
   int res = 0;
 
   if (m_Processor) {
-    QxrdROICalculatorPtr calc = m_Processor->roiCalculator();
+    QcepROICalculatorPtr calc = m_Processor->roiCalculator();
 
     if (calc) {
       res = calc->roiCount();
@@ -318,12 +318,12 @@ int QxrdDetectorSettings::roiCount()
   return res;
 }
 
-QxrdROIPtr QxrdDetectorSettings::roi(int i)
+QcepROIPtr QxrdDetectorSettings::roi(int i)
 {
-  QxrdROIPtr res;
+  QcepROIPtr res;
 
   if (m_Processor) {
-    QxrdROICalculatorPtr calc = m_Processor->roiCalculator();
+    QcepROICalculatorPtr calc = m_Processor->roiCalculator();
 
     if (calc) {
       res = calc->roi(i);

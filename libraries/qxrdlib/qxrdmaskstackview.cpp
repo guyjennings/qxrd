@@ -2,8 +2,8 @@
 #include <QListView>
 #include <QMenu>
 #include <QContextMenuEvent>
-#include "qxrdmaskstack.h"
-#include "qxrdmaskstackmodel.h"
+#include "qcepmaskstack.h"
+#include "qcepmaskstackmodel.h"
 #include "qxrdprocessor.h"
 
 QxrdMaskStackView::QxrdMaskStackView(QWidget *parent) :
@@ -14,15 +14,15 @@ QxrdMaskStackView::QxrdMaskStackView(QWidget *parent) :
 {
 }
 
-void QxrdMaskStackView::setMaskStack(QxrdMaskStackWPtr stk)
+void QxrdMaskStackView::setMaskStack(QcepMaskStackWPtr stk)
 {
   m_MaskStack = stk;
 
-  QxrdMaskStackPtr maskStack(m_MaskStack);
+  QcepMaskStackPtr maskStack(m_MaskStack);
 
   if (maskStack) {
-    m_MaskStackModel = QxrdMaskStackModelPtr(
-          new QxrdMaskStackModel(m_MaskStack));
+    m_MaskStackModel = QcepMaskStackModelPtr(
+          new QcepMaskStackModel(m_MaskStack));
 
     setModel(m_MaskStackModel.data());
   }
@@ -38,7 +38,7 @@ void QxrdMaskStackView::contextMenuEvent(QContextMenuEvent *event)
   QMenu menu(NULL, NULL);
 
   QModelIndexList selected = selectedIndexes();
-  QxrdMaskStack  *maskStack = m_MaskStack.data();
+  QcepMaskStack  *maskStack = m_MaskStack.data();
   QxrdProcessor  *proc      = m_Processor.data();
 
   if (proc) {

@@ -1,13 +1,13 @@
 #ifndef QCEPPLOTOVERLAY_H
 #define QCEPPLOTOVERLAY_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include "qcepplotwidget-ptr.h"
 #include "qcepplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QcepPlotOverlay : public QcepObject
+class QCEP_EXPORT QcepPlotOverlay : public QcepObject
 {
   Q_OBJECT
 

@@ -1,7 +1,7 @@
 #include "qxrdcenteringplotwidget.h"
-#include "qxrdsetcentercommand.h"
-#include "qxrdcontextseparatorcommand.h"
-#include "qxrdenableringcommand.h"
+#include "qcepsetcentercommand.h"
+#include "qcepcontextseparatorcommand.h"
+#include "qcepenableringcommand.h"
 #include "qcepimageplot.h"
 #include "qxrdcenteringplotwidgetsettings.h"
 
@@ -16,19 +16,19 @@ QxrdCenteringPlotWidget::~QxrdCenteringPlotWidget()
 }
 
 void QxrdCenteringPlotWidget::initialize(QxrdCenteringPlotWidgetSettingsWPtr settings,
-                                         QxrdCenterFinderWPtr cf)
+                                         QcepCenterFinderWPtr cf)
 {
   QcepPlotWidget::initialize(settings);
   m_CenterFinder = cf;
 
-  QxrdCenterFinderPtr c(m_CenterFinder);
+  QcepCenterFinderPtr c(m_CenterFinder);
 
   if (c) {
-    addPlotCommand(QcepPlotCommandPtr(new QxrdSetCenterCommand(this, settings, c)));
+    addPlotCommand(QcepPlotCommandPtr(new QcepSetCenterCommand(this, settings, c)));
   }
 
   addPlotCommandSpacer();
 
-  addPlotCommand(QcepPlotCommandPtr(new QxrdContextSeparatorCommand(this, settings)));
-  addPlotCommand(QcepPlotCommandPtr(new QxrdEnableRingCommand(this, settings)));
+  addPlotCommand(QcepPlotCommandPtr(new QcepContextSeparatorCommand(this, settings)));
+  addPlotCommand(QcepPlotCommandPtr(new QcepEnableRingCommand(this, settings)));
 }

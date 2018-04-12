@@ -1,8 +1,8 @@
 #include "qxrdcalibrantpropertiesdialog.h"
 #include "ui_qxrdcalibrantpropertiesdialog.h"
-#include "qxrdcalibrant.h"
+#include "qcepcalibrant.h"
 
-QxrdCalibrantPropertiesDialog::QxrdCalibrantPropertiesDialog(QWidget *parent, QxrdCalibrantPtr cal) :
+QxrdCalibrantPropertiesDialog::QxrdCalibrantPropertiesDialog(QWidget *parent, QcepCalibrantPtr cal) :
   QDialog(parent),
   m_Calibrant(cal)
 {

@@ -13,12 +13,12 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdfilesaver-ptr.h"
-#include "qxrdmaskstack-ptr.h"
+#include "qcepmaskstack-ptr.h"
 #include "qxrdzingerfinder-ptr.h"
-#include "qxrdcenterfinder-ptr.h"
-#include "qxrdpowderringsmodel-ptr.h"
-#include "qxrdroivector-ptr.h"
-#include "qxrdroimodel-ptr.h"
+#include "qcepcenterfinder-ptr.h"
+#include "qceppowderringsmodel-ptr.h"
+#include "qceproivector-ptr.h"
+#include "qceproimodel-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qcepintegrateddata-ptr.h"
 #include "qxrdresultserializer-ptr.h"
@@ -26,7 +26,7 @@
 #include "qxrdpolartransform-ptr.h"
 #include "qxrdpolarnormalization-ptr.h"
 #include "qxrdgeneratetestimage-ptr.h"
-#include "qxrdroicalculator-ptr.h"
+#include "qceproicalculator-ptr.h"
 #include <QWaitCondition>
 
 //TODO: separate processing steps into sub-objects
@@ -53,14 +53,14 @@ public:
   QxrdAcqCommonWPtr acquisition() const;
   QxrdDetectorSettingsWPtr detector() const;
   QxrdFileSaverWPtr    fileSaver() const;
-  QxrdCenterFinderWPtr centerFinder() const;
+  QcepCenterFinderWPtr centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
-  QxrdPowderRingsModelWPtr powderRings() const;
-  QxrdROIModelWPtr roiModel() const;
+  QcepPowderRingsModelWPtr powderRings() const;
+  QcepROIModelWPtr roiModel() const;
   QxrdPolarTransformPtr  polarTransform() const;
   QxrdPolarNormalizationPtr  polarNormalization() const;
   QxrdGenerateTestImageWPtr generateTestImage() const;
-  QxrdROICalculatorPtr roiCalculator() const;
+  QcepROICalculatorPtr roiCalculator() const;
 
   void readSettings(QSettings *settings);
   void writeSettings(QSettings *settings);
@@ -152,7 +152,7 @@ public:
   void loadDefaultImages();
 
   // masks...
-  QxrdMaskStackWPtr maskStack() const;
+  QcepMaskStackWPtr maskStack() const;
 
   void newEmptyMask();
   void duplicateMask();
@@ -511,7 +511,7 @@ protected:
   QcepDoubleImageDataPtr m_LiveData;
   QcepMaskDataPtr        m_Overflow;
 
-  QxrdMaskStackPtr       m_MaskStack;
+  QcepMaskStackPtr       m_MaskStack;
   QxrdZingerFinderPtr    m_ZingerFinder;
 
   QVector<QxrdProcessorStepPtr> m_ProcessorSteps;
@@ -519,19 +519,19 @@ protected:
 private:
   QxrdExperimentWPtr        m_Experiment;
   QxrdAcqCommonWPtr         m_Acquisition;
-  QxrdCenterFinderPtr       m_CenterFinder;
+  QcepCenterFinderPtr       m_CenterFinder;
   QxrdIntegratorPtr         m_Integrator;
   QxrdPolarTransformPtr     m_PolarTransform;
   QxrdPolarNormalizationPtr m_PolarNormalization;
   QxrdGenerateTestImagePtr  m_GenerateTestImage;
-  QxrdROICalculatorPtr      m_ROICalculator;
+  QcepROICalculatorPtr      m_ROICalculator;
   QxrdFileSaverWPtr         m_FileSaver;
 
   //TODO: store a data object, not a model
-  QxrdPowderRingsModelPtr        m_PowderRings;
+  QcepPowderRingsModelPtr   m_PowderRings;
 
-  QxrdROIVectorPtr       m_ROIVector;
-  QxrdROIModelPtr        m_ROIModel;
+  QcepROIVectorPtr       m_ROIVector;
+  QcepROIModelPtr        m_ROIModel;
 
   mutable QMutex         m_Mutex;
   QWaitCondition         m_ProcessWaiting;

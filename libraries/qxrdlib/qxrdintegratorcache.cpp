@@ -4,14 +4,14 @@
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
 #include "qcepintegrateddata.h"
-#include "qxrddetectorgeometry.h"
+#include "qcepdetectorgeometry.h"
 #include "qxrdapplication.h"
 #include "qxrdexperiment.h"
 #include "qcepdebug.h"
 #include "qcepallocator.h"
 #include "qxrdintegrator.h"
 #include "qxrdpolartransform.h"
-#include "qxrdcenterfinder.h"
+#include "qcepcenterfinder.h"
 #include "qcepmutexlocker.h"
 #include "qcepdataobject.h"
 
@@ -27,7 +27,7 @@
 QxrdIntegratorCache::QxrdIntegratorCache
   (QxrdIntegratorWPtr integ,
    QxrdPolarTransformWPtr xform,
-   QxrdCenterFinderWPtr cf) :
+   QcepCenterFinderWPtr cf) :
   inherited("integratorCache"),
   m_ThreadCount(QThreadPool::globalInstance()->maxThreadCount()),
   m_Oversample(1),
@@ -138,7 +138,7 @@ QxrdIntegratorCache::QxrdIntegratorCache
     m_HasChi       = true;
   }
 
-  QxrdCenterFinderPtr cfp(m_CenterFinder);
+  QcepCenterFinderPtr cfp(m_CenterFinder);
 
   if (cfp) {
     m_CenterX            = cfp->get_Center().x();
@@ -176,11 +176,11 @@ double QxrdIntegratorCache::getTTH(double x, double y)
   double rot  = m_TiltPlaneRotation*M_PI/180.0;
 
   if (m_ImplementTilt) {
-    return QxrdDetectorGeometry::getTwoTheta(m_CenterX, m_CenterY, m_DetectorDistance,
+    return QcepDetectorGeometry::getTwoTheta(m_CenterX, m_CenterY, m_DetectorDistance,
                                              x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                              cos(beta), sin(beta), cos(rot), sin(rot));
   } else {
-    return QxrdDetectorGeometry::getTwoTheta(m_CenterX, m_CenterY, m_DetectorDistance,
+    return QcepDetectorGeometry::getTwoTheta(m_CenterX, m_CenterY, m_DetectorDistance,
                                              x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                              1.0, 0.0, 1.0, 0.0);
   }
@@ -200,13 +200,13 @@ double QxrdIntegratorCache::getChi(double x, double y)
   double rot  = m_TiltPlaneRotation*M_PI/180.0;
 
   if (m_ImplementTilt) {
-    QxrdDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
+    QcepDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
                                   m_Energy,
                                   x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                   rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
                                   &q, &chi);
   } else {
-    QxrdDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
+    QcepDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
                                   m_Energy,
                                   x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                   0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0,
@@ -223,13 +223,13 @@ double QxrdIntegratorCache::getQ(double x, double y)
   double rot  = m_TiltPlaneRotation*M_PI/180.0;
 
   if (m_ImplementTilt) {
-    QxrdDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
+    QcepDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
                                   m_Energy,
                                   x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                   rot, cos(beta), sin(beta), 1.0, 0.0, cos(rot), sin(rot),
                                   &q, &chi);
   } else {
-    QxrdDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
+    QcepDetectorGeometry::getQChi(m_CenterX, m_CenterY, m_DetectorDistance,
                                   m_Energy,
                                   x, y, m_DetectorXPixelSize, m_DetectorYPixelSize,
                                   0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0,
@@ -307,19 +307,19 @@ double QxrdIntegratorCache::NormValue(double x, double y)
     }
 
     switch (m_EnableUserAbsorption) {
-    case QxrdCenterFinder::UserAbsorptionPixelCoords:
+    case QcepCenterFinder::UserAbsorptionPixelCoords:
       res *= m_UserAbsorptionFunctionValue.call(QScriptValue(), QScriptValueList() << x << y).toNumber();
       break;
 
-    case QxrdCenterFinder::UserAbsorptionFromCenter:
+    case QcepCenterFinder::UserAbsorptionFromCenter:
       res *= m_UserAbsorptionFunctionValue.call(QScriptValue(), QScriptValueList() << x - m_CenterX << y - m_CenterY).toNumber();
       break;
 
-    case QxrdCenterFinder::UserAbsorptionRChi:
+    case QcepCenterFinder::UserAbsorptionRChi:
       res *= m_UserAbsorptionFunctionValue.call(QScriptValue(), QScriptValueList() << getR(x,y) << chi).toNumber();
       break;
 
-    case QxrdCenterFinder::UserAbsorptionQChi:
+    case QcepCenterFinder::UserAbsorptionQChi:
       res *= m_UserAbsorptionFunctionValue.call(QScriptValue(), QScriptValueList() << getQ(x,y) << chi).toNumber();
       break;
 

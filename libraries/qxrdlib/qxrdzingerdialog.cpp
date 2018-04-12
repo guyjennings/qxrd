@@ -1,7 +1,7 @@
 #include "qxrdzingerdialog.h"
 #include "ui_qxrdzingerdialog.h"
-#include "qxrdmaskstack.h"
-#include "qxrdmaskstack-ptr.h"
+#include "qcepmaskstack.h"
+#include "qcepmaskstack-ptr.h"
 #include "qxrdprocessor.h"
 #include "qxrdzingerfinder.h"
 
@@ -17,7 +17,7 @@ QxrdZingerDialog::QxrdZingerDialog(QxrdProcessorWPtr procw,
   QxrdProcessorPtr proc(m_Processor);
 
   if (proc) {
-    QxrdMaskStackPtr masks(proc->maskStack());
+    QcepMaskStackPtr masks(proc->maskStack());
 
     if (masks) {
       m_ZingerAlgorithm -> addItem("Default", 0);

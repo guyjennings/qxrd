@@ -1,8 +1,0 @@
-#ifndef QXRDROICENTEREDSHAPEPTR_H
-#define QXRDROICENTEREDSHAPEPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdROICenteredShape)
-
-#endif // QXRDROICENTEREDSHAPEPTR_H

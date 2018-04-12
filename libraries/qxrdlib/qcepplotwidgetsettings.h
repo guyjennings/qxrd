@@ -1,13 +1,13 @@
 #ifndef QCEPPLOTWIDGETSETTINGS_H
 #define QCEPPLOTWIDGETSETTINGS_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include "qcepproperty.h"
 
 //TODO: implement mouse tracking
-class QXRD_EXPORT QcepPlotWidgetSettings : public QcepObject
+class QCEP_EXPORT QcepPlotWidgetSettings : public QcepObject
 {
   Q_OBJECT
 

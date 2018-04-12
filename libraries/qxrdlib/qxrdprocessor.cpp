@@ -11,9 +11,9 @@
 #include "qxrdprocessorstep.h"
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdfilesaver.h"
-#include "qxrdmaskstack.h"
+#include "qcepmaskstack.h"
 #include "qxrdzingerfinder.h"
-#include "qxrdcenterfinder.h"
+#include "qcepcenterfinder.h"
 #include "qxrdapplication.h"
 #include "qxrdacqcommon.h"
 #include "qxrdintegrator.h"
@@ -24,11 +24,11 @@
 #include "qxrdintegratorparmsdialog.h"
 #include "qxrdpolartransformdialog.h"
 #include "qxrdpolarnormalizationdialog.h"
-#include "qxrdroicalculator.h"
+#include "qceproicalculator.h"
 #include "qxrdfilesaver.h"
-#include "qxrdpowderringsmodel.h"
-#include "qxrdroivector.h"
-#include "qxrdroimodel.h"
+#include "qceppowderringsmodel.h"
+#include "qceproivector.h"
+#include "qceproimodel.h"
 #include <QFileInfo>
 #include <QThread>
 #include <QDir>
@@ -117,14 +117,14 @@ QxrdProcessor::QxrdProcessor(QString name) :
   //  m_ROIData(NULL, this),
   m_HistogramData()
 {
-  m_MaskStack = QxrdMaskStackPtr(
-        new QxrdMaskStack("maskStack"));
+  m_MaskStack = QcepMaskStackPtr(
+        new QcepMaskStack("maskStack"));
 
   m_ZingerFinder = QxrdZingerFinderPtr(
         new QxrdZingerFinder("zingerFinder"));
 
-  m_CenterFinder = QxrdCenterFinderPtr(
-        new QxrdCenterFinder("centerFinder"));
+  m_CenterFinder = QcepCenterFinderPtr(
+        new QcepCenterFinder("centerFinder"));
 
   m_Integrator = QxrdIntegratorPtr(
         new QxrdIntegrator("integrator"));
@@ -138,17 +138,17 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_GenerateTestImage = QxrdGenerateTestImagePtr(
         new QxrdGenerateTestImage("testImage"));
 
-  m_PowderRings = QxrdPowderRingsModelPtr(
-        new QxrdPowderRingsModel());
+  m_PowderRings = QcepPowderRingsModelPtr(
+        new QcepPowderRingsModel());
 
-  m_ROIVector = QxrdROIVectorPtr(
-        new QxrdROIVector("roiVector"));
+  m_ROIVector = QcepROIVectorPtr(
+        new QcepROIVector("roiVector"));
 
-  m_ROIModel = QxrdROIModelPtr(
-        new QxrdROIModel(m_ROIVector));
+  m_ROIModel = QcepROIModelPtr(
+        new QcepROIModel(m_ROIVector));
 
-  m_ROICalculator = QxrdROICalculatorPtr(
-        new QxrdROICalculator("roiCalculator", m_ROIVector, m_ROIModel));
+  m_ROICalculator = QcepROICalculatorPtr(
+        new QcepROICalculator("roiCalculator", m_ROIVector, m_ROIModel));
 
   m_AcquiredUInt16Images =
       QcepUInt16ImageQueuePtr(
@@ -249,10 +249,10 @@ void QxrdProcessor::initialize(QcepObjectWPtr parent)
 void QxrdProcessor::registerMetaTypes()
 {
   qRegisterMetaType<QxrdProcessor*>("QxrdProcessor*");
-  qRegisterMetaType<QxrdMaskStack*>("QxrdMaskStack*");
+  qRegisterMetaType<QcepMaskStack*>("QcepMaskStack*");
   qRegisterMetaType<QxrdZingerFinder*>("QxrdZingerFinder*");
-  qRegisterMetaType<QxrdROICalculator*>("QxrdROICalculator*");
-  qRegisterMetaType<QxrdROIVector*>("QxrdROIVector*");
+  qRegisterMetaType<QcepROICalculator*>("QxrdROICalculator*");
+  qRegisterMetaType<QcepROIVector*>("QxrdROIVector*");
   qRegisterMetaType<QcepImageBaseQueue*>("QcepImageBaseQueue*");
   qRegisterMetaType<QcepUInt16ImageQueue*>("QcepUInt16ImageQueue*");
   qRegisterMetaType<QcepInt16ImageQueue*>("QcepInt16ImageQueue*");
@@ -323,7 +323,7 @@ QxrdFileSaverWPtr QxrdProcessor::fileSaver() const
   return res;
 }
 
-QxrdCenterFinderWPtr QxrdProcessor::centerFinder() const
+QcepCenterFinderWPtr QxrdProcessor::centerFinder() const
 {
   if (m_CenterFinder == NULL) {
     printMessage("Problem QxrdProcessor::centerFinder == NULL");
@@ -346,12 +346,12 @@ QxrdGenerateTestImageWPtr QxrdProcessor::generateTestImage() const
   return m_GenerateTestImage;
 }
 
-QxrdROICalculatorPtr QxrdProcessor::roiCalculator() const
+QcepROICalculatorPtr QxrdProcessor::roiCalculator() const
 {
   return m_ROICalculator;
 }
 
-QxrdPowderRingsModelWPtr QxrdProcessor::powderRings() const
+QcepPowderRingsModelWPtr QxrdProcessor::powderRings() const
 {
   if (m_PowderRings == NULL) {
     printMessage("Problem QxrdProcessor::powderRings == NULL");
@@ -360,7 +360,7 @@ QxrdPowderRingsModelWPtr QxrdProcessor::powderRings() const
   return m_PowderRings;
 }
 
-QxrdROIModelWPtr QxrdProcessor::roiModel() const
+QcepROIModelWPtr QxrdProcessor::roiModel() const
 {
   if (m_ROIModel == NULL) {
     printMessage("Problem QxrdProcessor::roiModel == NULL");
@@ -1994,7 +1994,7 @@ int QxrdProcessor::newMaskHeight() const
   return h;
 }
 
-QxrdMaskStackWPtr QxrdProcessor::maskStack() const
+QcepMaskStackWPtr QxrdProcessor::maskStack() const
 {
   return m_MaskStack;
 }
@@ -2192,7 +2192,7 @@ void QxrdProcessor::maskPolygon(QVector<QPointF> poly)
 void QxrdProcessor::createMaskIfNeeded()
 {
   if (m_MaskStack == NULL) {
-    m_MaskStack = QxrdMaskStackPtr(new QxrdMaskStack("maskStack"));
+    m_MaskStack = QcepMaskStackPtr(new QcepMaskStack("maskStack"));
   }
 
   if (m_MaskStack && m_MaskStack -> isEmpty()) {
@@ -2307,7 +2307,7 @@ void QxrdProcessor::integrateData(QString name)
 
   QString path = filePathInDataDirectory(name);
 
-  QxrdCenterFinderPtr cf(centerFinder());
+  QcepCenterFinderPtr cf(centerFinder());
 
   if (cf && img && img -> readImage(path)) {
     printMessage(tr("Load image from %1").arg(path));
@@ -2532,7 +2532,7 @@ void QxrdProcessor::onCorrectedImageAvailable()
 {
   QcepDoubleImageDataPtr img = m_CorrectedImages -> dequeue();
   QcepMaskDataPtr mask = (img ? img->mask() : QcepMaskDataPtr());
-  QxrdCenterFinderPtr cf(centerFinder());
+  QcepCenterFinderPtr cf(centerFinder());
 
   if (img && cf) {
     m_IntegratedData -> enqueue(QtConcurrent::run(this, &QxrdProcessor::integrateImage,
@@ -2619,7 +2619,7 @@ void QxrdProcessor::displayIntegratedData(QcepIntegratedDataPtr data)
 void QxrdProcessor::integrateSaveAndDisplay()
 {
   QcepDoubleImageDataPtr dimg = qSharedPointerDynamicCast<QcepDoubleImageData>(data());
-  QxrdCenterFinderPtr cf(centerFinder());
+  QcepCenterFinderPtr cf(centerFinder());
 
   if (dimg) {
     if (qcepDebug(DEBUG_INTEGRATOR)) {
@@ -3270,7 +3270,7 @@ void QxrdProcessor::projectImages(QStringList names, int px, int py, int pz)
 
 void QxrdProcessor::fitPeakNear(double x, double y)
 {
-  QxrdCenterFinderPtr cf(centerFinder());
+  QcepCenterFinderPtr cf(centerFinder());
 
   if (cf) {
     cf->fitPeakNear(x,y);

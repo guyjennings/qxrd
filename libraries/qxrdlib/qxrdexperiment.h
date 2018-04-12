@@ -30,12 +30,12 @@
 #include "qxrdscriptenginethread-ptr.h"
 #include "qxrddetectorsettings.h"
 #include "qxrddetectorsettings-ptr.h"
-#include "qxrdcenterfinder-ptr.h"
+#include "qcepcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
-#include "qxrdcalibrantlibrary-ptr.h"
-#include "qxrdcalibrantlibrarymodel-ptr.h"
-#include "qxrdcalibrantdspacings-ptr.h"
-#include "qxrdcalibrantdspacingsmodel-ptr.h"
+#include "qcepcalibrantlibrary-ptr.h"
+#include "qcepcalibrantlibrarymodel-ptr.h"
+#include "qcepcalibrantdspacings-ptr.h"
+#include "qcepcalibrantdspacingsmodel-ptr.h"
 #include "qcepexperiment.h"
 #include "qcepdataset-ptr.h"
 #include "qcepdatasetmodel-ptr.h"
@@ -78,16 +78,16 @@ public:
   QxrdExperimentThreadWPtr experimentThread() const;
   QxrdAcqCommonWPtr acquisition() const;
   QxrdProcessorWPtr processor() const;
-  QxrdCenterFinderWPtr centerFinder() const;
+  QcepCenterFinderWPtr centerFinder() const;
   QxrdIntegratorWPtr integrator() const;
   QxrdServerWPtr specServer();
   QxrdServerThreadWPtr specServerThread();
   QxrdSimpleServerWPtr simpleServer();
   QxrdSimpleServerThreadWPtr simpleServerThread();
-  QxrdCalibrantLibraryWPtr calibrantLibrary() const;
-  QxrdCalibrantLibraryModelWPtr calibrantLibraryModel() const;
-  QxrdCalibrantDSpacingsWPtr calibrantDSpacings() const;
-  QxrdCalibrantDSpacingsModelWPtr calibrantDSpacingsModel() const;
+  QcepCalibrantLibraryWPtr calibrantLibrary() const;
+  QcepCalibrantLibraryModelWPtr calibrantLibraryModel() const;
+  QcepCalibrantDSpacingsWPtr calibrantDSpacings() const;
+  QcepCalibrantDSpacingsModelWPtr calibrantDSpacingsModel() const;
 
   QcepDatasetModelPtr dataset();
   QxrdFileSaverWPtr fileSaver() const;
@@ -188,10 +188,10 @@ private:
   QxrdSimpleServerThreadPtr       m_SimpleServerThread;
   QxrdSimpleServerWPtr            m_SimpleServer;
   QxrdProcessorPtr                m_Processor;
-  QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
-  QxrdCalibrantLibraryModelPtr    m_CalibrantLibraryModel;
-  QxrdCalibrantDSpacingsPtr       m_CalibrantDSpacings;
-  QxrdCalibrantDSpacingsModelPtr  m_CalibrantDSpacingsModel;
+  QcepCalibrantLibraryPtr         m_CalibrantLibrary;
+  QcepCalibrantLibraryModelPtr    m_CalibrantLibraryModel;
+  QcepCalibrantDSpacingsPtr       m_CalibrantDSpacings;
+  QcepCalibrantDSpacingsModelPtr  m_CalibrantDSpacingsModel;
   QxrdAcqCommonPtr                m_Acquisition;
   QxrdFileSaverThreadPtr          m_FileSaverThread;
   QxrdFileSaverWPtr               m_FileSaver;

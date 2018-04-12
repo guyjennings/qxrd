@@ -5,7 +5,7 @@
 #include <QObject>
 #include "qcepplotwidget.h"
 
-class QXRD_EXPORT QcepPlotContextMenuCommand : public QcepPlotCommand
+class QCEP_EXPORT QcepPlotContextMenuCommand : public QcepPlotCommand
 {
   Q_OBJECT
 

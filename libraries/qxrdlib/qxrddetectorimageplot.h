@@ -3,7 +3,7 @@
 
 #include "qxrdlib_global.h"
 #include "qcepimageplot.h"
-#include "qxrdroipicker-ptr.h"
+#include "qceproipicker-ptr.h"
 
 class QXRD_EXPORT QxrdDetectorImagePlot : public QcepImagePlot
 {
@@ -25,14 +25,6 @@ public:
 
   void classifyROIPoint(double x, double y);
 
-  typedef enum {
-    NewRectROI,
-    NewEllipseROI,
-    NewRectDonutROI,
-    NewEllipseDonutROI,
-    LastNewROIType
-  } NewROIType;
-
   static int newROITypeCount();
   static QString newROITypeName(int i);
 
@@ -47,12 +39,12 @@ signals:
 public slots:
 
 private:
-  QxrdROICreator    *m_ROICreator;
-  QxrdROISelector   *m_ROISelector;
-  QxrdROIAddNode    *m_ROIAddNode;
-  QxrdROIRemoveNode *m_ROIRemoveNode;
-  QxrdROIRotator    *m_ROIRotator;
-  QxrdROIResizer    *m_ROIResizer;
+  QcepROICreator    *m_ROICreator;
+  QcepROISelector   *m_ROISelector;
+  QcepROIAddNode    *m_ROIAddNode;
+  QcepROIRemoveNode *m_ROIRemoveNode;
+  QcepROIRotator    *m_ROIRotator;
+  QcepROIResizer    *m_ROIResizer;
 };
 
 #endif // QXRDDETECTORIMAGEPLOT_H

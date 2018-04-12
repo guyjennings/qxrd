@@ -1,9 +1,0 @@
-#ifndef QXRDCALIBRANTDSPACINGPTR_H
-#define QXRDCALIBRANTDSPACINGPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdCalibrantDSpacing)
-
-#endif // QXRDCALIBRANTDSPACINGPTR_H
-

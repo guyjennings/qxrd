@@ -3,7 +3,7 @@
 #include "qxrdprocessor.h"
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
-#include "qxrdcenterfinder.h"
+#include "qcepcenterfinder.h"
 #include "qcepintegrateddata.h"
 #include "qcepallocator.h"
 #include "qxrdapplication.h"
@@ -104,10 +104,10 @@ void QxrdIntegrator::initialize(QcepObjectWPtr parent)
   } else {
     m_CenterFinder = proc->centerFinder();
 
-    QxrdCenterFinderPtr cf(m_CenterFinder);
+    QcepCenterFinderPtr cf(m_CenterFinder);
 
     if (cf) {
-      connect(cf.data(), &QxrdCenterFinder::parameterChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
+      connect(cf.data(), &QcepCenterFinder::parameterChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
     }
   }
 }
@@ -220,7 +220,7 @@ double QxrdIntegrator::XValue(double x, double y) const
 {
   double xVal = 0;
 
-  QxrdCenterFinderPtr cf(m_CenterFinder);
+  QcepCenterFinderPtr cf(m_CenterFinder);
 
   if (cf) {
     switch(get_IntegrationXUnits()) {
@@ -242,7 +242,7 @@ double QxrdIntegrator::XValue(double x, double y) const
 }
 
 double QxrdIntegrator::XValue(double x, double y,
-                              int xUnits, QxrdCenterFinderPtr cf,
+                              int xUnits, QcepCenterFinderPtr cf,
                               double xc, double yc,
                               double dst, double nrg,
                               double pxl, double pxh,

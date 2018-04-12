@@ -9,8 +9,8 @@
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
 #include "qxrdprocessor.h"
-#include "qxrdcenterfinder.h"
-#include "qxrdcenterfinder.h"
+#include "qcepcenterfinder.h"
+#include "qcepcenterfinder.h"
 #include "qxrdintegrator.h"
 #include "qcepplotzoomer.h"
 #include "qxrdscriptengine.h"
@@ -98,13 +98,21 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
     m_DatasetBrowserView -> setDatasetModel(model);
 
     QxrdProcessorPtr     proc(exp->processor());
-    QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
+    QcepCenterFinderPtr  cf(proc?proc->centerFinder():QcepCenterFinderWPtr());
 
     QxrdWindowSettingsPtr settings(m_WindowSettings);
 
     if (settings) {
       m_FileBrowserWidget -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlot         -> initialize(settings->imagePlotWidgetSettings(), proc);
+      m_ImagePlot         -> initialize(settings->imagePlotWidgetSettings());
+      m_ImagePlot         -> setCenterFinder(cf);
+
+      if (proc) {
+        m_ImagePlot       -> setMaskStack(proc->maskStack());
+        m_ImagePlot       -> setPowderRings(proc->powderRings());
+        m_ImagePlot       -> setROIModel(proc->roiModel());
+      }
+
       m_CenterFinderPlot  -> initialize(settings->centeringPlotWidgetSettings(), cf);
       m_IntegratorPlot    -> initialize(settings->integratedPlotWidgetSettings());
       m_DistortionCorrectionPlot -> initialize(settings->distortionPlotWidgetSettings());
@@ -167,12 +175,12 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   connect(m_ActionRefineCenterTilt, &QAction::triggered, this, &QxrdWindow::doRefineCenterTilt);
 
   if (proc) {
-    QxrdCenterFinderPtr cf(proc->centerFinder());
+    QcepCenterFinderPtr cf(proc->centerFinder());
 
     if (cf) {
-      connect(m_ActionFindBeamCenter, &QAction::triggered, cf.data(), &QxrdCenterFinder::fitPowderCircle, Qt::DirectConnection);
-      connect(m_ActionClearMarkers, &QAction::triggered, cf.data(), &QxrdCenterFinder::deletePowderPoints, Qt::DirectConnection);
-      connect(m_ActionCalculateCalibrationPowder, &QAction::triggered, cf.data(), &QxrdCenterFinder::calculateCalibration);
+      connect(m_ActionFindBeamCenter, &QAction::triggered, cf.data(), &QcepCenterFinder::fitPowderCircle, Qt::DirectConnection);
+      connect(m_ActionClearMarkers, &QAction::triggered, cf.data(), &QcepCenterFinder::deletePowderPoints, Qt::DirectConnection);
+      connect(m_ActionCalculateCalibrationPowder, &QAction::triggered, cf.data(), &QcepCenterFinder::calculateCalibration);
     }
   }
 
@@ -1104,7 +1112,7 @@ void QxrdWindow::plotPowderRingRadii()
 //  QxrdExperimentPtr   expt(m_Experiment);
 
 //  if (expt) {
-//    QxrdCenterFinderPtr cf(expt->centerFinder());
+//    QcepCenterFinderPtr cf(expt->centerFinder());
 
 //    if (cf) {
 //      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);
@@ -1170,7 +1178,7 @@ void QxrdWindow::plotPowderRingTwoTheta()
 //  QxrdExperimentPtr   expt(m_Experiment);
 
 //  if (expt) {
-//    QxrdCenterFinderPtr cf(expt->centerFinder());
+//    QcepCenterFinderPtr cf(expt->centerFinder());
 
 //    if (cf) {
 ////      cf->updateCalibrantDSpacings();
@@ -1253,7 +1261,7 @@ void QxrdWindow::plotPowderRingCenters()
 //  QxrdExperimentPtr   expt(m_Experiment);
 
 //  if (expt) {
-//    QxrdCenterFinderPtr cf(expt->centerFinder());
+//    QcepCenterFinderPtr cf(expt->centerFinder());
 
 //    if (cf) {
 //      m_DistortionCorrectionPlot->detachItems(QwtPlotItem::Rtti_PlotCurve);

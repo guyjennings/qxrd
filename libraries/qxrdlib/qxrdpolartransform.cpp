@@ -63,7 +63,7 @@ QxrdIntegratorWPtr QxrdPolarTransform::integrator() const
 
 //  if (expt) {
 //    QxrdProcessorPtr proc(expt->dataProcessor());
-//    QxrdCenterFinderPtr  cf(expt->centerFinder());
+//    QcepCenterFinderPtr  cf(expt->centerFinder());
 //    QxrdIntegratorPtr    integ(expt->integrator());
 
 //    if (proc && cf) {
@@ -94,7 +94,7 @@ QcepDataObjectPtr QxrdPolarTransform::transform(QcepDoubleImageDataPtr img, Qcep
   QxrdExperimentPtr expt(experiment());
 
   if (expt) {
-    QxrdCenterFinderPtr  cf   (expt->centerFinder());
+    QcepCenterFinderPtr  cf   (expt->centerFinder());
     QxrdIntegratorPtr    integ(expt->integrator());
 
     if (cf) {

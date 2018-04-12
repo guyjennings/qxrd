@@ -3,7 +3,7 @@
 
 #include "qcepplotwidgetsettings.h"
 
-class QXRD_EXPORT QcepImagePlotWidgetSettings : public QcepPlotWidgetSettings
+class QCEP_EXPORT QcepImagePlotWidgetSettings : public QcepPlotWidgetSettings
 {
   Q_OBJECT
 

@@ -15,7 +15,7 @@
 #include "qcepdataarray-ptr.h"
 #include "qcepdatacolumn-ptr.h"
 #include "qcepdatacolumnscan-ptr.h"
-#include "qxrdroi-ptr.h"
+#include "qceproi-ptr.h"
 #include "qcepdatagroup-ptr.h"
 #include "qcepintegrateddata-ptr.h"
 #include "qcepobject-ptr.h"

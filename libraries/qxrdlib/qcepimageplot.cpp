@@ -1,11 +1,8 @@
-#include "qxrddebug.h"
+#include "qcepdebug.h"
 #include "qcepimageplot.h"
 #include "qceprasterdata.h"
-#include "qxrdcenterfinder.h"
-#include "qxrdprocessor.h"
-#include "qxrdapplication.h"
+#include "qcepcenterfinder.h"
 #include "qcepallocator.h"
-#include "qxrdacqcommon.h"
 #include <qwt_plot_rescaler.h>
 #include <qwt_plot_marker.h>
 #include <qwt_legend.h>
@@ -16,9 +13,9 @@
 #include <QTime>
 #include <QMenu>
 #include <QContextMenuEvent>
-#include "qxrdroimodel.h"
-#include "qxrdroi.h"
-#include "qxrdroieditordialog.h"
+#include "qceproimodel.h"
+#include "qceproi.h"
+#include "qceproieditordialog.h"
 #include "qwt_plot_piecewise_curve.h"
 #include "qcepplotwidgetdialog.h"
 
@@ -31,7 +28,7 @@ QcepImagePlot::QcepImagePlot(QWidget *parent)
 //    m_Overflow(NULL),
 //    m_DataRaster(NULL),
 //    m_MaskRaster(NULL),
-    m_Processor(),
+//    m_Processor(),
 //    m_CenterMarker(NULL),
     m_FirstTime(true),
     m_ContextMenuEnabled(true),
@@ -67,30 +64,30 @@ void QcepImagePlot::printMessage(QString msg, QDateTime dt) const
   }
 }
 
-void QcepImagePlot::setProcessor(QxrdProcessorWPtr proc)
-{
-  m_Processor = proc;
+//void QcepImagePlot::setProcessor(QxrdProcessorWPtr proc)
+//{
+//  m_Processor = proc;
 
-  QxrdProcessorPtr dp(m_Processor);
+//  QcepProcessorPtr dp(m_Processor);
 
-  if (dp) {
-    QxrdCenterFinderPtr cf(dp->centerFinder());
+//  if (dp) {
+//    QcepCenterFinderPtr cf(dp->centerFinder());
 
-    if (cf) {
-//      onCenterChanged(cf->get_Center());
+//    if (cf) {
+////      onCenterChanged(cf->get_Center());
 
-      connect(cf->prop_MarkedPoints(), &QxrdPowderPointVectorProperty::valueChanged,
-              this, &QcepImagePlot::onMarkedPointsChanged);
+//      connect(cf->prop_MarkedPoints(), &QcepPowderPointVectorProperty::valueChanged,
+//              this, &QcepImagePlot::onMarkedPointsChanged);
 
-      onMarkedPointsChanged();
-    }
-  }
-}
+//      onMarkedPointsChanged();
+//    }
+//  }
+//}
 
-QxrdProcessorWPtr QcepImagePlot::processor() const
-{
-  return m_Processor;
-}
+//QcepProcessorWPtr QcepImagePlot::processor() const
+//{
+//  return m_Processor;
+//}
 
 void QcepImagePlot::setData(QcepImageDataBaseWPtr data)
 {
@@ -115,9 +112,8 @@ void QcepImagePlot::autoScale()
 
 void QcepImagePlot::setAutoRange()
 {
-  if (g_Application) {
-    g_Application->criticalMessage("QxrdImagePlot::setAutoRange To do...");
-  }
+  //TODO:
+  printf("QxrdImagePlot::setAutoRange To do...\n");
 }
 
 void QcepImagePlot::toggleShowROI()
@@ -168,202 +164,202 @@ void QcepImagePlot::changeROIShown(bool shown)
 //  return m_DataRaster;
 //}
 
-QwtText QcepImagePlot::trackerTextF(const QPointF &pos)
-{
-  QxrdProcessorPtr    processor = this->processor();
-  QxrdCenterFinderPtr centerFinder;
+//QwtText QcepImagePlot::trackerTextF(const QPointF &pos)
+//{
+//  QcepProcessorPtr    processor = this->processor();
+//  QcepCenterFinderPtr centerFinder;
 
-  if (processor) {
-    centerFinder = processor->centerFinder();
-  }
+//  if (processor) {
+//    centerFinder = processor->centerFinder();
+//  }
 
-  QString res = tr("%1, %2").arg(pos.x()).arg(pos.y());
+//  QString res = tr("%1, %2").arg(pos.x()).arg(pos.y());
 
-  QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
+//  QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
 
-  if (set) {
-    set->set_XMouse(pos.x());
-    set->set_YMouse(pos.y());
-  }
+//  if (set) {
+//    set->set_XMouse(pos.x());
+//    set->set_YMouse(pos.y());
+//  }
 
-  QcepImageDataBasePtr data(m_Data);
+//  QcepImageDataBasePtr data(m_Data);
 
-  if (data) {
-    double val = data->getImageData(pos.x(),pos.y());
-    res += tr(", %1").arg(val);
+//  if (data) {
+//    double val = data->getImageData(pos.x(),pos.y());
+//    res += tr(", %1").arg(val);
 
-    if (set) {
-      set->set_ValMouse(val);
-    }
-  }
-
-  QcepMaskDataPtr mask(m_Mask);
-
-  if (mask) {
-    double maskv = mask->getImageData((int) pos.x(), (int) pos.y());
-    res += tr(", %1").arg(maskv);
-
-    if (set) {
-      set->set_MaskMouse(maskv);
-    }
-  }
-
-  if (centerFinder) {
-    double tth = centerFinder->getTTH(pos);
-    res += tr("\nTTH %1").arg(tth);
-
-    if (set) {
-      set->set_TTHMouse(tth);
-    }
-
-    double q = centerFinder->getQ(pos);
-    res += tr(", Q %1").arg(q);
-
-    if (set) {
-      set->set_QMouse(q);
-    }
-
-    double r = centerFinder->getR(pos);
-    res += tr(", R %1").arg(r);
-
-    if (set) {
-      set->set_RMouse(r);
-    }
-
-    double chi = centerFinder->getChi(pos);
-    res += tr(", Chi %1").arg(chi);
-
-//    if (ras && m_PowderPointPicker -> isEnabled()) {
-//      QPointF rpt = ras->optimizePeakPosition(pos);
-//      res += tr("\nPtx %1, Pty %2").arg(rpt.x()).arg(rpt.y());
+//    if (set) {
+//      set->set_ValMouse(val);
 //    }
-  }
+//  }
 
-  return res;
-}
+//  QcepMaskDataPtr mask(m_Mask);
+
+//  if (mask) {
+//    double maskv = mask->getImageData((int) pos.x(), (int) pos.y());
+//    res += tr(", %1").arg(maskv);
+
+//    if (set) {
+//      set->set_MaskMouse(maskv);
+//    }
+//  }
+
+//  if (centerFinder) {
+//    double tth = centerFinder->getTTH(pos);
+//    res += tr("\nTTH %1").arg(tth);
+
+//    if (set) {
+//      set->set_TTHMouse(tth);
+//    }
+
+//    double q = centerFinder->getQ(pos);
+//    res += tr(", Q %1").arg(q);
+
+//    if (set) {
+//      set->set_QMouse(q);
+//    }
+
+//    double r = centerFinder->getR(pos);
+//    res += tr(", R %1").arg(r);
+
+//    if (set) {
+//      set->set_RMouse(r);
+//    }
+
+//    double chi = centerFinder->getChi(pos);
+//    res += tr(", Chi %1").arg(chi);
+
+////    if (ras && m_PowderPointPicker -> isEnabled()) {
+////      QPointF rpt = ras->optimizePeakPosition(pos);
+////      res += tr("\nPtx %1, Pty %2").arg(rpt.x()).arg(rpt.y());
+////    }
+//  }
+
+//  return res;
+//}
 
 //TODO: remove
-void QcepImagePlot::contextMenuEvent(QContextMenuEvent * event)
-{
-  if (m_ContextMenuEnabled) {
-    QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
+//void QcepImagePlot::contextMenuEvent(QContextMenuEvent * event)
+//{
+//  if (m_ContextMenuEnabled) {
+//    QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
 
-    if (set) {
-      QMenu plotMenu(NULL, NULL);
+//    if (set) {
+//      QMenu plotMenu(NULL, NULL);
 
-      QAction *auSc = plotMenu.addAction("Autoscale");
-      QAction *prGr = plotMenu.addAction("Print Graph...");
+//      QAction *auSc = plotMenu.addAction("Autoscale");
+//      QAction *prGr = plotMenu.addAction("Print Graph...");
 
-      plotMenu.addSeparator();
+//      plotMenu.addSeparator();
 
-      QxrdProcessorPtr dp(m_Processor);
+//      QcepProcessorPtr dp(m_Processor);
 
-      if (dp) {
-        QxrdCenterFinderPtr cf(dp->centerFinder());
+//      if (dp) {
+//        QcepCenterFinderPtr cf(dp->centerFinder());
 
-        if (cf) {
-          QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
-          QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
+//        if (cf) {
+//          QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
+//          QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);
 
-          QWidget *canv = canvas();
+//          QWidget *canv = canvas();
 
-          QPoint evlocal = canv->mapFromParent(event->pos());
+//          QPoint evlocal = canv->mapFromParent(event->pos());
 
-          double x = xMap.invTransform(evlocal.x());
-          double y = yMap.invTransform(evlocal.y());
+//          double x = xMap.invTransform(evlocal.x());
+//          double y = yMap.invTransform(evlocal.y());
 
-          QxrdPowderPoint nearest = cf->nearestPowderPoint(x, y);
+//          QcepPowderPoint nearest = cf->nearestPowderPoint(x, y);
 
-          QAction *fitCircle        = plotMenu.addAction(tr("Fit Circle Center from Points on Ring %1").arg(nearest.n1()));
-          QAction *fitEllipse       = plotMenu.addAction(tr("Fit Ellipse from Points on Ring %1").arg(nearest.n1()));
-          QAction *fitEllipses      = plotMenu.addAction(tr("Fit Ellipses to all powder rings"));
+//          QAction *fitCircle        = plotMenu.addAction(tr("Fit Circle Center from Points on Ring %1").arg(nearest.n1()));
+//          QAction *fitEllipse       = plotMenu.addAction(tr("Fit Ellipse from Points on Ring %1").arg(nearest.n1()));
+//          QAction *fitEllipses      = plotMenu.addAction(tr("Fit Ellipses to all powder rings"));
 
-          QAction *adjustEnergy     = plotMenu.addAction(tr("Adjust Energy to match Calibrant Ring %1").arg(nearest.n1()));
-          QAction *adjustDistance   = plotMenu.addAction(tr("Adjust Detector Distance to match Calibrant Ring %1").arg(nearest.n1()));
+//          QAction *adjustEnergy     = plotMenu.addAction(tr("Adjust Energy to match Calibrant Ring %1").arg(nearest.n1()));
+//          QAction *adjustDistance   = plotMenu.addAction(tr("Adjust Detector Distance to match Calibrant Ring %1").arg(nearest.n1()));
 
-          QAction *adjustFit        = plotMenu.addAction(tr("Fit to nearby peak when adding powder points?"));
-          adjustFit->setCheckable(true); adjustFit->setChecked(cf->get_FitPowderPointPosition());
-          QAction *addPoint         = plotMenu.addAction(tr("Add point at (%1,%2)").arg(x).arg(y));
-          QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
-          QAction *delRing          = plotMenu.addAction(tr("Delete Ring %1").arg(nearest.n1()));
-          QAction *deleteAllPoints  = plotMenu.addAction(tr("Delete all Rings"));
-          QAction *disableRing      = plotMenu.addAction(tr("Disable Ring %1").arg(nearest.n1()));
-          QAction *enableRing       = plotMenu.addAction(tr("Enable Ring %1").arg(nearest.n1()));
-          QAction *normalizeRings   = plotMenu.addAction(tr("Normalize Powder Rings"));
-          QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
-          QAction *fitRingNear      = plotMenu.addAction(tr("Fit Point on Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
-          QAction *traceRingClockwise = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
-          QAction *missingRing      = plotMenu.addAction(tr("Missing Diffracted Ring near (%1,%2)").arg(x).arg(y));
-          //          QAction *traceRingParallel = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4] in parallel").arg(x).arg(y).arg(event->x()).arg(event->y()));
-          QAction *zapPixel         = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
+//          QAction *adjustFit        = plotMenu.addAction(tr("Fit to nearby peak when adding powder points?"));
+//          adjustFit->setCheckable(true); adjustFit->setChecked(cf->get_FitPowderPointPosition());
+//          QAction *addPoint         = plotMenu.addAction(tr("Add point at (%1,%2)").arg(x).arg(y));
+//          QAction *delPoint         = plotMenu.addAction(tr("Delete point at (%1,%2)").arg(nearest.x()).arg(nearest.y()));
+//          QAction *delRing          = plotMenu.addAction(tr("Delete Ring %1").arg(nearest.n1()));
+//          QAction *deleteAllPoints  = plotMenu.addAction(tr("Delete all Rings"));
+//          QAction *disableRing      = plotMenu.addAction(tr("Disable Ring %1").arg(nearest.n1()));
+//          QAction *enableRing       = plotMenu.addAction(tr("Enable Ring %1").arg(nearest.n1()));
+//          QAction *normalizeRings   = plotMenu.addAction(tr("Normalize Powder Rings"));
+//          QAction *fitPeakNear      = plotMenu.addAction(tr("Fit Diffracted Peak near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+//          QAction *fitRingNear      = plotMenu.addAction(tr("Fit Point on Diffracted Ring near (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+//          QAction *traceRingClockwise = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4]").arg(x).arg(y).arg(event->x()).arg(event->y()));
+//          QAction *missingRing      = plotMenu.addAction(tr("Missing Diffracted Ring near (%1,%2)").arg(x).arg(y));
+//          //          QAction *traceRingParallel = plotMenu.addAction(tr("Trace Diffracted Ring starting at (%1,%2) [%3,%4] in parallel").arg(x).arg(y).arg(event->x()).arg(event->y()));
+//          QAction *zapPixel         = plotMenu.addAction(tr("Zap (replace with avg of neighboring values) pixel [%1,%2]").arg((int)x).arg(int(y)));
 
-          QAction *action = plotMenu.exec(event->globalPos());
+//          QAction *action = plotMenu.exec(event->globalPos());
 
-          if (action == auSc) {
-            autoScale();
-          } else if (action == prGr) {
-            printGraph();
-          } else if (action == fitCircle) {
-            cf->fitPowderCircle(nearest.n1());
-          } else if (action == fitEllipse) {
-            cf->fitPowderEllipse(nearest.n1());
-          } else if (action == fitEllipses) {
-            cf->fitPowderEllipses();
-          } else if (action == adjustEnergy) {
-            cf->adjustEnergy(nearest.n1());
-          } else if (action == adjustDistance) {
-            cf->adjustDistance(nearest.n1());
-          } else if (action == adjustFit) {
-            cf->toggle_FitPowderPointPosition();
-          } else if (action == addPoint) {
-            cf->appendPowderPoint(x,y);
-          } else if (action == delPoint) {
-            cf->deletePowderPointNear(x,y);
-          } else if (action == delRing) {
-            cf->deletePowderRing(nearest.n1());
-          } else if (action == deleteAllPoints) {
-            cf->deletePowderPoints();
-          } else if (action == enableRing) {
-            cf->enablePowderRing(nearest.n1());
-          } else if (action == disableRing) {
-            cf->disablePowderRing(nearest.n1());
-          } else if (action == normalizeRings) {
-            cf->normalizePowderRings();
-          } else if (action == fitPeakNear) {
-            QMetaObject::invokeMethod(cf.data(), "fitPeakNear",
-                                      Q_ARG(double,x),
-                                      Q_ARG(double,y));
-          } else if (action == fitRingNear) {
-            QMetaObject::invokeMethod(cf.data(), "fitRingNear",
-                                      Q_ARG(double,x),
-                                      Q_ARG(double,y));
-          } else if (action == traceRingClockwise) {
-            QMetaObject::invokeMethod(cf.data(), "traceRingNear",
-                                      Q_ARG(double,x),
-                                      Q_ARG(double,y),
-                                      Q_ARG(double,25.0));
-          } else if (action == missingRing) {
-            cf->missingRingNear(x,y);
-//            QMetaObject::invokeMethod((cf.data(), "missingRingNear",
-//                                       Q_ARG(double,x),
-//                                       Q_ARG(double,y));
-//          } else if (action == traceRingParallel) {
-//            QMetaObject::invokeMethod(cf.data(), "traceRingNearParallel",
+//          if (action == auSc) {
+//            autoScale();
+//          } else if (action == prGr) {
+//            printGraph();
+//          } else if (action == fitCircle) {
+//            cf->fitPowderCircle(nearest.n1());
+//          } else if (action == fitEllipse) {
+//            cf->fitPowderEllipse(nearest.n1());
+//          } else if (action == fitEllipses) {
+//            cf->fitPowderEllipses();
+//          } else if (action == adjustEnergy) {
+//            cf->adjustEnergy(nearest.n1());
+//          } else if (action == adjustDistance) {
+//            cf->adjustDistance(nearest.n1());
+//          } else if (action == adjustFit) {
+//            cf->toggle_FitPowderPointPosition();
+//          } else if (action == addPoint) {
+//            cf->appendPowderPoint(x,y);
+//          } else if (action == delPoint) {
+//            cf->deletePowderPointNear(x,y);
+//          } else if (action == delRing) {
+//            cf->deletePowderRing(nearest.n1());
+//          } else if (action == deleteAllPoints) {
+//            cf->deletePowderPoints();
+//          } else if (action == enableRing) {
+//            cf->enablePowderRing(nearest.n1());
+//          } else if (action == disableRing) {
+//            cf->disablePowderRing(nearest.n1());
+//          } else if (action == normalizeRings) {
+//            cf->normalizePowderRings();
+//          } else if (action == fitPeakNear) {
+//            QMetaObject::invokeMethod(cf.data(), "fitPeakNear",
+//                                      Q_ARG(double,x),
+//                                      Q_ARG(double,y));
+//          } else if (action == fitRingNear) {
+//            QMetaObject::invokeMethod(cf.data(), "fitRingNear",
+//                                      Q_ARG(double,x),
+//                                      Q_ARG(double,y));
+//          } else if (action == traceRingClockwise) {
+//            QMetaObject::invokeMethod(cf.data(), "traceRingNear",
 //                                      Q_ARG(double,x),
 //                                      Q_ARG(double,y),
 //                                      Q_ARG(double,25.0));
-          } else if (action == zapPixel) {
-            this->zapPixel(qRound(x),qRound(y));
-          }
-        }
-      }
-    }
+//          } else if (action == missingRing) {
+//            cf->missingRingNear(x,y);
+////            QMetaObject::invokeMethod((cf.data(), "missingRingNear",
+////                                       Q_ARG(double,x),
+////                                       Q_ARG(double,y));
+////          } else if (action == traceRingParallel) {
+////            QMetaObject::invokeMethod(cf.data(), "traceRingNearParallel",
+////                                      Q_ARG(double,x),
+////                                      Q_ARG(double,y),
+////                                      Q_ARG(double,25.0));
+//          } else if (action == zapPixel) {
+//            this->zapPixel(qRound(x),qRound(y));
+//          }
+//        }
+//      }
+//    }
 
-    event->accept();
-  } else {
-    event->accept();
-  }
-}
+//    event->accept();
+//  } else {
+//    event->accept();
+//  }
+//}
 
 void QcepImagePlot::zapPixel(int x, int y)
 {
@@ -399,45 +395,45 @@ void QcepImagePlot::onMarkedPointsChanged()
 
 void QcepImagePlot::displayPowderMarkers()
 {
-  clearPowderMarkers();
+//  clearPowderMarkers();
 
-  QxrdProcessorPtr dp(m_Processor);
+//  QcepProcessorPtr dp(m_Processor);
 
-  if (dp) {
-    QxrdCenterFinderPtr cf(dp->centerFinder());
+//  if (dp) {
+//    QcepCenterFinderPtr cf(dp->centerFinder());
 
-    if (cf) {
-      int nrgs = cf->countPowderRings();
-      int npts = cf->countPowderRingPoints();
+//    if (cf) {
+//      int nrgs = cf->countPowderRings();
+//      int npts = cf->countPowderRingPoints();
 
-      for (int r=0; r<nrgs; r++) {
-        QVector<double> x,y;
+//      for (int r=0; r<nrgs; r++) {
+//        QVector<double> x,y;
 
-        for (int i=0; i<npts; i++) {
-          QxrdPowderPoint pt = cf->powderRingPoint(i);
+//        for (int i=0; i<npts; i++) {
+//          QcepPowderPoint pt = cf->powderRingPoint(i);
 
-          if (pt.n1() == r) {
-            x.append(pt.x());
-            y.append(pt.y());
-          }
-        }
+//          if (pt.n1() == r) {
+//            x.append(pt.x());
+//            y.append(pt.y());
+//          }
+//        }
 
-        if (x.count() > 0) {
-          QwtPlotCurve *pc = new QwtPlotCurve(tr("Ring %1").arg(r));
+//        if (x.count() > 0) {
+//          QwtPlotCurve *pc = new QwtPlotCurve(tr("Ring %1").arg(r));
 
-          setPlotCurveStyle(r, pc);
-          pc -> setSamples(x, y);
-          pc -> setStyle(QwtPlotCurve::NoCurve);
-          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
-          pc -> attach(this);
+//          setPlotCurveStyle(r, pc);
+//          pc -> setSamples(x, y);
+//          pc -> setStyle(QwtPlotCurve::NoCurve);
+//          pc -> setLegendAttribute(QwtPlotCurve::LegendShowSymbol, true);
+//          pc -> attach(this);
 
-          m_PowderPointCurves.append(pc);
-        }
-      }
+//          m_PowderPointCurves.append(pc);
+//        }
+//      }
 
-      replot();
-    }
-  }
+//      replot();
+//    }
+//  }
 }
 
 void QcepImagePlot::clearPowderMarkers()
@@ -461,13 +457,13 @@ void QcepImagePlot::enableROIDisplay(bool enable)
   updateROIDisplay();
 }
 
-void QcepImagePlot::setROIModel(QxrdROIModelWPtr model)
+void QcepImagePlot::setROIModel(QcepROIModelWPtr model)
 {
   m_ROIModel = model;
 
   updateROIDisplay();
 
-  QxrdROIModelPtr roiModel(m_ROIModel);
+  QcepROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel) {
     connect(roiModel.data(), &QAbstractItemModel::modelReset,    this, &QcepImagePlot::updateROIDisplay);
@@ -478,7 +474,7 @@ void QcepImagePlot::setROIModel(QxrdROIModelWPtr model)
   }
 }
 
-QxrdROIModelWPtr QcepImagePlot::roiModel()
+QcepROIModelWPtr QcepImagePlot::roiModel()
 {
   return m_ROIModel;
 }
@@ -517,13 +513,13 @@ void QcepImagePlot::updateROIDisplay()
   QcepImagePlotSettingsPtr set(m_ImagePlotSettings);
 
   if (set && set->get_DisplayROI() && m_ROIModel && m_ROISelection) {
-    QxrdROIModelPtr roiModel(m_ROIModel);
+    QcepROIModelPtr roiModel(m_ROIModel);
 
     if (roiModel) {
       int nROI = roiModel->rowCount(QModelIndex());
 
       for (int i=0; i<nROI; i++) {
-        QxrdROIPtr roi = roiModel->roi(i);
+        QcepROIPtr roi = roiModel->roi(i);
 
         if (roi) {
           QVector<QPointF> pts = roi->markerCoords();
@@ -585,7 +581,7 @@ void QcepImagePlot::roiDataChanged(const QModelIndex & /*topLeft*/,
 //  printMessage(tr("roiDataChanged t:%1 l:%2 b:%3 r:%4 n:%5")
 //               .arg(t).arg(l).arg(b).arg(r).arg(roles.count()));
 
-  if (r >= QxrdROIModel::OuterTypeCol) {
+  if (r >= QcepROIModel::OuterTypeCol) {
     updateROIDisplay();
   }
 }
@@ -616,7 +612,7 @@ void QcepImagePlot::onLegendChecked(const QVariant &itemInfo, bool on, int index
     int i = m_ROICurves.indexOf(pc);
 
     if (i >= 0) {
-      QxrdROIModelPtr roiModel(m_ROIModel);
+      QcepROIModelPtr roiModel(m_ROIModel);
 
       if (m_ROISelection && roiModel) {
         if (on) {
@@ -681,7 +677,7 @@ void QcepImagePlot::updateROISelection(
     const QItemSelection & /*selected*/,
     const QItemSelection & /*deselected*/)
 {
-  QxrdROIModelPtr roiModel(m_ROIModel);
+  QcepROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel && m_ROISelection) {
     int n = roiModel->roiCount();
@@ -699,7 +695,7 @@ void QcepImagePlot::updateROISelection(
 
 void QcepImagePlot::moveSelectedROICenter(double x, double y)
 {
-  QxrdROIModelPtr roiModel(m_ROIModel);
+  QcepROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel && m_ROISelection) {
     int n = roiModel->roiCount();
@@ -714,7 +710,7 @@ void QcepImagePlot::moveSelectedROICenter(double x, double y)
 
 void QcepImagePlot::editSelectedROI(double x, double y)
 {
-  QxrdROIModelPtr roiModel(m_ROIModel);
+  QcepROIModelPtr roiModel(m_ROIModel);
   QPointF pt(x,y);
 
   if (roiModel) {
@@ -724,7 +720,7 @@ void QcepImagePlot::editSelectedROI(double x, double y)
     int n = roiModel->roiCount();
 
     for (int i=0; i<n; i++) {
-      QxrdROIPtr roi = roiModel->roi(i);
+      QcepROIPtr roi = roiModel->roi(i);
 
       if (roi) {
         double dist = roi->nearestDistance(pt);
@@ -737,9 +733,9 @@ void QcepImagePlot::editSelectedROI(double x, double y)
     }
 
     if (nearest >= 0) {
-      QxrdROIPtr roi = roiModel->roi(nearest);
+      QcepROIPtr roi = roiModel->roi(nearest);
 
-      QxrdROIEditorDialog editor(roi, this);
+      QcepROIEditorDialog editor(roi, this);
 
       editor.setWindowTitle(tr("Edit ROI %1").arg(nearest));
 
@@ -750,9 +746,9 @@ void QcepImagePlot::editSelectedROI(double x, double y)
   }
 }
 
-//void QxrdImagePlot::roiMouseSelected(const QVector<QPointF> &p)
+//void QcepImagePlot::roiMouseSelected(const QVector<QPointF> &p)
 //{
-//  QxrdROIModelPtr roiModel(m_ROIModel);
+//  QcepROIModelPtr roiModel(m_ROIModel);
 
 //  if (roiModel && p.count() == 2) {
 //    QPointF del = p.value(1) - p.value(0);
@@ -779,9 +775,9 @@ void QcepImagePlot::editSelectedROI(double x, double y)
 //  }
 //}
 
-//void QxrdImagePlot::roiMouseAdded(const QVector<QPointF> &p)
+//void QcepImagePlot::roiMouseAdded(const QVector<QPointF> &p)
 //{
-//  QxrdROIModelPtr roiModel(m_ROIModel);
+//  QcepROIModelPtr roiModel(m_ROIModel);
 
 //  if (roiModel && p.count() == 2) {
 //    int roiId, inOut, roiType, roiPtIndex;
@@ -792,9 +788,9 @@ void QcepImagePlot::editSelectedROI(double x, double y)
 //  }
 //}
 
-//void QxrdImagePlot::roiMouseRemoved(const QPointF &pt)
+//void QcepImagePlot::roiMouseRemoved(const QPointF &pt)
 //{
-//  QxrdROIModelPtr roiModel(m_ROIModel);
+//  QcepROIModelPtr roiModel(m_ROIModel);
 
 //  if (roiModel) {
 //    int roiId, inOut, roiType, roiPtIndex;
@@ -805,10 +801,10 @@ void QcepImagePlot::editSelectedROI(double x, double y)
 //  }
 //}
 
-//void QxrdImagePlot::roiMouseRotated(const QVector<QPointF> &p)
+//void QcepImagePlot::roiMouseRotated(const QVector<QPointF> &p)
 //{
 //  if (p.count() == 2) {
-//    QxrdROIModelPtr roiModel(m_ROIModel);
+//    QcepROIModelPtr roiModel(m_ROIModel);
 
 //    if (roiModel && m_ROISelection) {
 //      int n = roiModel->roiCount();
@@ -822,9 +818,9 @@ void QcepImagePlot::editSelectedROI(double x, double y)
 //  }
 //}
 
-//void QxrdImagePlot::roiMouseResized(const QVector<QPointF> &p)
+//void QcepImagePlot::roiMouseResized(const QVector<QPointF> &p)
 //{
-//  QxrdROIModelPtr roiModel(m_ROIModel);
+//  QcepROIModelPtr roiModel(m_ROIModel);
 
 //  if (roiModel && p.count() == 2) {
 //    int roiId, inOut, roiType, roiPtIndex;
@@ -835,7 +831,7 @@ void QcepImagePlot::editSelectedROI(double x, double y)
 //  }
 //}
 
-//QPointF QxrdImagePlot::scaledDelta(double dx, double dy)
+//QPointF QcepImagePlot::scaledDelta(double dx, double dy)
 //{
 //  QwtScaleMap xMap = canvasMap(QwtPlot::xBottom);
 //  QwtScaleMap yMap = canvasMap(QwtPlot::yLeft);

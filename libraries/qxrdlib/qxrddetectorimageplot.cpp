@@ -1,9 +1,9 @@
 #include "qxrddetectorimageplot.h"
 #include <QMenu>
 #include <QContextMenuEvent>
-#include "qxrdroipicker.h"
-#include "qxrdroi.h"
-#include "qxrdroimodel.h"
+#include "qceproipicker.h"
+#include "qceproi.h"
+#include "qceproimodel.h"
 #include <QItemSelectionModel>
 
 //TODO: reimplement using QxrdPlotButtonCommand
@@ -22,12 +22,12 @@ void QxrdDetectorImagePlot::initialize(QcepImagePlotSettingsWPtr settings, QcepO
 {
   QcepImagePlot::initialize(settings, parent);
 
-  m_ROICreator    = new QxrdROICreator(this);
-  m_ROISelector   = new QxrdROISelector(this);
-  m_ROIAddNode    = new QxrdROIAddNode(this);
-  m_ROIRemoveNode = new QxrdROIRemoveNode(this);
-  m_ROIRotator    = new QxrdROIRotator(this);
-  m_ROIResizer    = new QxrdROIResizer(this);
+  m_ROICreator    = new QcepROICreator(this);
+  m_ROISelector   = new QcepROISelector(this);
+  m_ROIAddNode    = new QcepROIAddNode(this);
+  m_ROIRemoveNode = new QcepROIRemoveNode(this);
+  m_ROIRotator    = new QcepROIRotator(this);
+  m_ROIResizer    = new QcepROIResizer(this);
 }
 
 void QxrdDetectorImagePlot::disablePickers()
@@ -122,7 +122,7 @@ void QxrdDetectorImagePlot::enableROIResize()
 
 void QxrdDetectorImagePlot::classifyROIPoint(double x, double y)
 {
-  QxrdROIModelPtr      roiMod = roiModel();
+  QcepROIModelPtr      roiMod = roiModel();
   QItemSelectionModel *roiSel = roiSelection();
   QPointF pt(x,y);
 
@@ -130,7 +130,7 @@ void QxrdDetectorImagePlot::classifyROIPoint(double x, double y)
     int nRois = roiMod->rowCount(QModelIndex());
 
     for (int i=0; i<nRois; i++) {
-      QxrdROIPtr roi = roiMod->roi(i);
+      QcepROIPtr roi = roiMod->roi(i);
 
       bool isSelected = roiSel -> rowIntersectsSelection(i, QModelIndex());
       bool inInner    = roi -> pointInInner(pt);
@@ -208,7 +208,7 @@ void QxrdDetectorImagePlot::contextMenuEvent(QContextMenuEvent *event)
 
 int QxrdDetectorImagePlot::newROITypeCount()
 {
-  return LastNewROIType;
+  return QcepROI::LastNewROIType;
 }
 
 QString QxrdDetectorImagePlot::newROITypeName(int i)
@@ -216,19 +216,19 @@ QString QxrdDetectorImagePlot::newROITypeName(int i)
   QString res = "Unknown ROI Type";
 
   switch (i) {
-  case NewRectROI:
+  case QcepROI::NewRectROI:
     res = "Rectangular ROI";
     break;
 
-  case NewEllipseROI:
+  case QcepROI::NewEllipseROI:
     res = "Elliptical ROI";
     break;
 
-  case NewRectDonutROI:
+  case QcepROI::NewRectDonutROI:
     res = "Rectangle in Rectangle ROI";
     break;
 
-  case NewEllipseDonutROI:
+  case QcepROI::NewEllipseDonutROI:
     res = "Ellipse in Ellipse ROI";
     break;
   }

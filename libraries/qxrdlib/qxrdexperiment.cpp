@@ -9,14 +9,14 @@
 #include "qxrdapplication.h"
 #include "qxrdprocessor.h"
 #include "qxrdprocessorexecution.h"
-#include "qxrdcenterfinder.h"
+#include "qcepcenterfinder.h"
 #include "qxrdpolartransform.h"
 #include "qxrdpolarnormalization.h"
-#include "qxrdpowderpoint.h"
-#include "qxrdcalibrantlibrary.h"
-#include "qxrdcalibrantlibrarymodel.h"
-#include "qxrdcalibrantdspacings.h"
-#include "qxrdcalibrantdspacingsmodel.h"
+#include "qceppowderpoint.h"
+#include "qcepcalibrantlibrary.h"
+#include "qcepcalibrantlibrarymodel.h"
+#include "qcepcalibrantdspacings.h"
+#include "qcepcalibrantdspacingsmodel.h"
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
 #include "qxrdacqdummy.h"
@@ -206,20 +206,20 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
   }
 
   m_CalibrantLibrary =
-      QxrdCalibrantLibraryPtr(
-        new QxrdCalibrantLibrary("calibrantLibrary"));
+      QcepCalibrantLibraryPtr(
+        new QcepCalibrantLibrary("calibrantLibrary"));
 
   m_CalibrantLibraryModel =
-      QxrdCalibrantLibraryModelPtr(
-        new QxrdCalibrantLibraryModel(m_CalibrantLibrary));
+      QcepCalibrantLibraryModelPtr(
+        new QcepCalibrantLibraryModel(m_CalibrantLibrary));
 
   m_CalibrantDSpacings =
-      QxrdCalibrantDSpacingsPtr(
-        new QxrdCalibrantDSpacings());
+      QcepCalibrantDSpacingsPtr(
+        new QcepCalibrantDSpacings());
 
   m_CalibrantDSpacingsModel =
-      QxrdCalibrantDSpacingsModelPtr(
-        new QxrdCalibrantDSpacingsModel(m_CalibrantLibrary,
+      QcepCalibrantDSpacingsModelPtr(
+        new QcepCalibrantDSpacingsModel(m_CalibrantLibrary,
                                         m_CalibrantDSpacings));
 
   QxrdAppCommonPtr app(m_Application);
@@ -407,11 +407,11 @@ void QxrdExperiment::registerMetaTypes()
   QxrdAcquisition::registerMetaTypes();
   QxrdAcqDummy::registerMetaTypes();
 
-  qRegisterMetaType<QxrdCalibrantWPtr>("QxrdCalibrantWPtr");
-  qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
-  qRegisterMetaType<QxrdCalibrantDSpacings>("QxrdCalibrantDSpacings");
-  qRegisterMetaType<QxrdCalibrantLibrary*>("QxrdCalibrantLibrary*");
-  qRegisterMetaType<QxrdCenterFinder*>("QxrdCenterFinder*");
+  qRegisterMetaType<QcepCalibrantWPtr>("QcepCalibrantWPtr");
+  qRegisterMetaType<QcepCalibrantDSpacing>("QcepCalibrantDSpacing");
+  qRegisterMetaType<QcepCalibrantDSpacings>("QcepCalibrantDSpacings");
+  qRegisterMetaType<QcepCalibrantLibrary*>("QcepCalibrantLibrary*");
+  qRegisterMetaType<QcepCenterFinder*>("QcepCenterFinder*");
 
   QxrdProcessor::registerMetaTypes();
   QxrdProcessorExecution::registerMetaTypes();
@@ -419,11 +419,11 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdFileBrowserModelUpdater*>("QxrdFileBrowserModelUpdater*");
   qRegisterMetaType<QxrdFileSaver*>("QxrdFileSaver*");
   qRegisterMetaType<QxrdIntegrator*>("QxrdIntegrator*");
-  qRegisterMetaType<QxrdDetectorGeometry*>("QxrdDetectorGeometry*");
+  qRegisterMetaType<QcepDetectorGeometry*>("QxrdDetectorGeometry*");
   qRegisterMetaType<QxrdPolarNormalization*>("QxrdPolarNormalization*");
   qRegisterMetaType<QxrdPolarTransform*>("QxrdPolarTransform*");
-  qRegisterMetaType<QxrdPowderPoint>("QxrdPowderPoint");
-  qRegisterMetaType<QxrdPowderPointVector>("QxrdPowderPointVector");
+  qRegisterMetaType<QcepPowderPoint>("QxrdPowderPoint");
+  qRegisterMetaType<QcepPowderPointVector>("QxrdPowderPointVector");
   qRegisterMetaType<QxrdScriptEngine*>("QxrdScriptEngine*");
   qRegisterMetaType<QxrdServer*>("QxrdServer*");
   qRegisterMetaType<QxrdServerThread*>("QxrdServerThread*");
@@ -526,22 +526,22 @@ QxrdProcessorWPtr QxrdExperiment::processor() const
   return m_Processor;
 }
 
-QxrdCalibrantLibraryWPtr QxrdExperiment::calibrantLibrary() const
+QcepCalibrantLibraryWPtr QxrdExperiment::calibrantLibrary() const
 {
   return m_CalibrantLibrary;
 }
 
-QxrdCalibrantLibraryModelWPtr QxrdExperiment::calibrantLibraryModel() const
+QcepCalibrantLibraryModelWPtr QxrdExperiment::calibrantLibraryModel() const
 {
   return m_CalibrantLibraryModel;
 }
 
-QxrdCalibrantDSpacingsWPtr QxrdExperiment::calibrantDSpacings() const
+QcepCalibrantDSpacingsWPtr QxrdExperiment::calibrantDSpacings() const
 {
   return m_CalibrantDSpacings;
 }
 
-QxrdCalibrantDSpacingsModelWPtr QxrdExperiment::calibrantDSpacingsModel() const
+QcepCalibrantDSpacingsModelWPtr QxrdExperiment::calibrantDSpacingsModel() const
 {
   return m_CalibrantDSpacingsModel;
 }
@@ -551,14 +551,14 @@ QcepDatasetModelPtr QxrdExperiment::dataset()
   return m_DatasetModel;
 }
 
-QxrdCenterFinderWPtr QxrdExperiment::centerFinder() const
+QcepCenterFinderWPtr QxrdExperiment::centerFinder() const
 {
   QxrdProcessorPtr dp(m_Processor);
 
   if (dp) {
     return dp->centerFinder();
   } else {
-    return QxrdCenterFinderWPtr();
+    return QcepCenterFinderWPtr();
   }
 }
 

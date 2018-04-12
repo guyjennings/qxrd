@@ -1,7 +1,7 @@
 #include "qxrdzingerfinder.h"
 #include "qcepmaskdata.h"
-#include "qxrdmaskstack-ptr.h"
-#include "qxrdmaskstack.h"
+#include "qcepmaskstack-ptr.h"
+#include "qcepmaskstack.h"
 #include "qcepallocator.h"
 
 QxrdZingerFinder::QxrdZingerFinder(QString name) :
@@ -29,7 +29,7 @@ void QxrdZingerFinder::findZingers()
 {
   //TODO: reimplement
 //  QcepMaskDataPtr  mask;
-//  QxrdMaskStackPtr masks = maskStack();
+//  QcepMaskStackPtr masks = maskStack();
 
 //  if (get_ZingerMask() == ZingerNoMask) {
 //    mask = QcepMaskDataPtr();

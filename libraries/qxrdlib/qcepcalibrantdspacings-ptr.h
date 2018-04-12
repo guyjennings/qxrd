@@ -1,0 +1,9 @@
+#ifndef QCEPCALIBRANTDSPACINGSPTR_H
+#define QCEPCALIBRANTDSPACINGSPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QcepCalibrantDSpacings)
+
+#endif // QCEPCALIBRANTDSPACINGSPTR_H
+

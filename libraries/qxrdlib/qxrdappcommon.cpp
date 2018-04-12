@@ -1,9 +1,9 @@
 #include "qxrdappcommon.h"
 #include "qxrddebug.h"
 #include "qcepimagedataformattiff.h"
-#include "qxrdpowderpoint.h"
-#include "qxrdcalibrantdspacing.h"
-#include "qxrdcalibrantdspacings.h"
+#include "qceppowderpoint.h"
+#include "qcepcalibrantdspacing.h"
+#include "qcepcalibrantdspacings.h"
 #include "qxrdexperiment.h"
 #include "qxrdwindowsettings.h"
 #include "qxrddetectorcontrolwindowsettings.h"
@@ -45,10 +45,10 @@ QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
     m_WelcomeWindow(NULL)
 {
   QcepProperty::registerMetaTypes();
-  QxrdPowderPoint::registerMetaTypes();
-  QxrdPowderPointVector::registerMetaTypes();
-  QxrdCalibrantDSpacing::registerMetaTypes();
-  QxrdCalibrantDSpacings::registerMetaTypes();
+  QcepPowderPoint::registerMetaTypes();
+  QcepPowderPointVector::registerMetaTypes();
+  QcepCalibrantDSpacing::registerMetaTypes();
+  QcepCalibrantDSpacings::registerMetaTypes();
   QxrdExperiment::registerMetaTypes();
   QxrdWindowSettings::registerMetaTypes();
   QxrdDetectorControlWindowSettings::registerMetaTypes();

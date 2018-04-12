@@ -5,18 +5,18 @@
 #include "qcepallocator.h"
 #include "qxrdapplication.h"
 #include "qxrdprocessor.h"
-#include "qxrdroi.h"
+#include "qceproi.h"
 #include "qxrddetectorsettings.h"
 #include "qxrdserver.h"
 #include "qxrdsimpleserver.h"
-#include "qxrdcalibrantlibrary.h"
-#include "qxrdcalibrant.h"
+#include "qcepcalibrantlibrary.h"
+#include "qcepcalibrant.h"
 #include "qcepdatasetmodel.h"
 #include "qxrdgeneratetestimage.h"
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
 #include "qxrdsynchronizedacquisition.h"
-#include "qxrdcenterfinder.h"
+#include "qcepcenterfinder.h"
 #include "qxrdintegrator.h"
 #include "qxrdpolartransform.h"
 #include "qxrdpolarnormalization.h"
@@ -53,10 +53,10 @@ void QxrdJSEngine::initialize(QcepObjectWPtr parent)
 
   qRegisterMetaType< QVector<qreal> >("QVector<qreal>");
 
-  qmlRegisterType<QxrdROI>();
+  qmlRegisterType<QcepROI>();
   qmlRegisterType<QxrdDetectorSettings>();
 //  qmlRegisterType<QxrdPowderPoint>();
-  qmlRegisterType<QxrdCalibrant>();
+  qmlRegisterType<QcepCalibrant>();
 //  qmlRegisterType<QxrdCalibrantPtr>();
 //  qmlRegisterType<QPointF>();
 //  qmlRegisterType<QRectF>();
@@ -188,7 +188,7 @@ void QxrdJSEngine::initialize(QcepObjectWPtr parent)
 
 //      QCEP_DOC_OBJECT("centering", "Beam Center and Detector Alignment Options");
 
-      QxrdCenterFinderPtr cf(dp->centerFinder());
+      QcepCenterFinderPtr cf(dp->centerFinder());
 
       if (cf) {
         setGlobalProperty("centering",       newQObject(cf.data()));
@@ -226,7 +226,7 @@ void QxrdJSEngine::initialize(QcepObjectWPtr parent)
       }
     }
 
-    QxrdCalibrantLibraryPtr cals(expt->calibrantLibrary());
+    QcepCalibrantLibraryPtr cals(expt->calibrantLibrary());
 
     if (cals) {
 //      QCEP_DOC_OBJECT("calibrants", "Calibrant Library");
@@ -898,7 +898,7 @@ QJSValue QxrdJSEngine::roiFunc(int n, int m)
     QxrdDetectorSettingsPtr det = acq->detector(n);
 
     if (det) {
-      QxrdROIPtr roic = det->roi(m);
+      QcepROIPtr roic = det->roi(m);
 
       if (roic) {
         res = newQObject(roic.data());
@@ -918,10 +918,10 @@ QJSValue QxrdJSEngine::calibrantFunc(int n)
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt) {
-    QxrdCalibrantLibraryPtr lib(expt->calibrantLibrary());
+    QcepCalibrantLibraryPtr lib(expt->calibrantLibrary());
 
     if (lib) {
-      QxrdCalibrantPtr cal(lib->calibrant(n));
+      QcepCalibrantPtr cal(lib->calibrant(n));
 
       if (cal) {
         res = newQObject(cal.data());

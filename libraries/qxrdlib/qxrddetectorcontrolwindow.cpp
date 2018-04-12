@@ -2,20 +2,20 @@
 #include "ui_qxrddetectorcontrolwindow.h"
 #include "qxrdacqcommon.h"
 #include "qxrdprocessor.h"
-#include "qxrdroimodel.h"
-#include "qxrdroicalculator-ptr.h"
-#include "qxrdroicalculator.h"
+#include "qceproimodel.h"
+#include "qceproicalculator-ptr.h"
+#include "qceproicalculator.h"
 #include <QMessageBox>
 #include <QFileDialog>
-#include "qxrdroi.h"
+#include "qceproi.h"
 #include "qxrdappcommon.h"
 #include "qcepmutexlocker.h"
 #include "qxrddetectorsettings.h"
-#include "qxrdroitypedelegate.h"
-#include "qxrdroishape.h"
+#include "qceproitypedelegate.h"
+#include "qceproishape.h"
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdwindow.h"
-#include "qxrdroieditordialog.h"
+#include "qceproieditordialog.h"
 #include <QThread>
 #include "qxrdexperiment.h"
 #include "qcepdataobjectpropertiesmodel.h"
@@ -102,7 +102,7 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
 
     updateROIDisplay(dp->get_DisplayROIBorders());
 
-    QxrdROICalculatorPtr calc(dp->roiCalculator());
+    QcepROICalculatorPtr calc(dp->roiCalculator());
 
     if (calc) {
       m_ROIModel = calc->roiModel();
@@ -252,7 +252,19 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
   QxrdDetectorControlWindowSettingsPtr set(detectorControlWindowSettings());
 
   if (set) {
-    m_DetectorImage -> initialize(set->imagePlotWidgetSettings(), dp);
+    m_DetectorImage -> initialize(set->imagePlotWidgetSettings());
+
+    if (dp) {
+      QcepCenterFinderPtr     cf(dp->centerFinder());
+      QcepMaskStackPtr        ms(dp->maskStack());
+      QcepPowderRingsModelPtr pr(dp->powderRings());
+      QcepROIModelWPtr        ro(dp->roiModel());
+
+      m_DetectorImage -> setCenterFinder(cf);
+      m_DetectorImage -> setMaskStack(ms);
+      m_DetectorImage -> setPowderRings(pr);
+      m_DetectorImage -> setROIModel(ro);
+    }
   }
 }
 
@@ -375,7 +387,7 @@ void QxrdDetectorControlWindow::displayMessage(QString msg)
 QVector<int> QxrdDetectorControlWindow::selectedROIs()
 {
   QVector<int> res;
-  QxrdROIModelPtr roiModel(m_ROIModel);
+  QcepROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel) {
     int roiCount = roiModel->rowCount(QModelIndex());
@@ -394,15 +406,15 @@ QVector<int> QxrdDetectorControlWindow::selectedROIs()
 
 void QxrdDetectorControlWindow::doAppendROI()
 {
-  QxrdROIModelPtr roiModel(m_ROIModel);
+  QcepROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel) {
     QMenu menu;
 
-    for (int i=0; i<QxrdROIShape::roiTypeCount(); i++) {
-      for (int j=1; j<QxrdROIShape::roiTypeCount(); j++) {
-        menu.addAction(QxrdROI::roiTypeName(i,j),
-                       [=]() { appendROI(QxrdROI::roiTypeID(i,j));});
+    for (int i=0; i<QcepROIShape::roiTypeCount(); i++) {
+      for (int j=1; j<QcepROIShape::roiTypeCount(); j++) {
+        menu.addAction(QcepROI::roiTypeName(i,j),
+                       [=]() { appendROI(QcepROI::roiTypeID(i,j));});
       }
     }
 
@@ -412,11 +424,11 @@ void QxrdDetectorControlWindow::doAppendROI()
 
 void QxrdDetectorControlWindow::appendROI(int roiType)
 {
-  QxrdROIModelPtr roiModel(m_ROIModel);
+  QcepROIModelPtr roiModel(m_ROIModel);
 
   if (roiModel) {
-    QxrdROIPtr roi =
-        QxrdROI::newROICoordinates(roiType);
+    QcepROIPtr roi =
+        QcepROI::newROICoordinates(roiType);
 
     roiModel->append(roi);
   }
@@ -449,7 +461,7 @@ void QxrdDetectorControlWindow::doDeleteROI()
   }
 
   if (res == QMessageBox::Ok && m_ROIModel) {
-    QxrdROIModelPtr roiModel(m_ROIModel);
+    QcepROIModelPtr roiModel(m_ROIModel);
 
     if (roiModel) {
       for (int i=rois.count()-1; i>=0; i--) {
@@ -466,7 +478,7 @@ void QxrdDetectorControlWindow::doMoveROIDown()
   if (rois.count() != 1) {
     QMessageBox::information(this, "Only Move One", "Must have a single ROI selected before moving it", QMessageBox::Ok);
   } else {
-    QxrdROIModelPtr roiModel(m_ROIModel);
+    QcepROIModelPtr roiModel(m_ROIModel);
 
     if (roiModel) {
       roiModel->moveROIDown(rois.first());
@@ -481,7 +493,7 @@ void QxrdDetectorControlWindow::doMoveROIUp()
   if (rois.count() != 1) {
     QMessageBox::information(this, "Only Move One", "Must have a single ROI selected before moving it", QMessageBox::Ok);
   } else {
-    QxrdROIModelPtr roiModel(m_ROIModel);
+    QcepROIModelPtr roiModel(m_ROIModel);
 
     if (roiModel) {
       roiModel->moveROIUp(rois.first());
@@ -673,7 +685,7 @@ void QxrdDetectorControlWindow::doEditROI()
 {
   QxrdDetectorSettingsPtr dt(m_Detector);
   QxrdProcessorPtr        dp(m_Processor);
-  QxrdROIModelPtr         roiModel(m_ROIModel);
+  QcepROIModelPtr         roiModel(m_ROIModel);
 
   if (dt && dp) {
     QVector<int> rois = selectedROIs();
@@ -681,9 +693,9 @@ void QxrdDetectorControlWindow::doEditROI()
     if (rois.count() != 1) {
       QMessageBox::information(this, "Edit ROI", "Select one ROI to edit", QMessageBox::Ok);
     } else if (roiModel) {
-      QxrdROIPtr roi = roiModel->roi(rois.first());
+      QcepROIPtr roi = roiModel->roi(rois.first());
 
-      QxrdROIEditorDialog editor(roi, this);
+      QcepROIEditorDialog editor(roi, this);
 
       editor.setWindowTitle(tr("Edit ROI %2 of Detector %1")
                             .arg(dt->get_DetectorNumber())
@@ -699,7 +711,7 @@ void QxrdDetectorControlWindow::doEditROI()
 void QxrdDetectorControlWindow::doRecalculate()
 {
   QxrdProcessorPtr dp(m_Processor);
-  QxrdROIModelPtr  roiModel(m_ROIModel);
+  QcepROIModelPtr  roiModel(m_ROIModel);
 
   if (dp && roiModel) {
     roiModel->recalculate(dp->data(), dp->mask());
@@ -709,7 +721,7 @@ void QxrdDetectorControlWindow::doRecalculate()
 void QxrdDetectorControlWindow::doVisualizeBackground()
 {
   QxrdProcessorPtr dp(m_Processor);
-  QxrdROIModelPtr  roiModel(m_ROIModel);
+  QcepROIModelPtr  roiModel(m_ROIModel);
 
   if (dp) {
     QVector<int> rois = selectedROIs();
@@ -727,7 +739,7 @@ void QxrdDetectorControlWindow::doVisualizeBackground()
 void QxrdDetectorControlWindow::doVisualizePeak()
 {
   QxrdProcessorPtr dp(m_Processor);
-  QxrdROIModelPtr  roiModel(m_ROIModel);
+  QcepROIModelPtr  roiModel(m_ROIModel);
 
   if (dp) {
     QVector<int> rois = selectedROIs();

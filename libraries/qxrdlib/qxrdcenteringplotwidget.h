@@ -1,9 +1,10 @@
 #ifndef QXRDCENTERINGPLOTWIDGET_H
 #define QXRDCENTERINGPLOTWIDGET_H
 
+#include "qxrdlib_global.h"
 #include "qcepplotwidget.h"
 #include "qxrdcenteringplotwidgetsettings-ptr.h"
-#include "qxrdcenterfinder-ptr.h"
+#include "qcepcenterfinder-ptr.h"
 
 class QXRD_EXPORT QxrdCenteringPlotWidget : public QcepPlotWidget
 {
@@ -14,10 +15,10 @@ public:
   ~QxrdCenteringPlotWidget();
 
   //TODO: change to QcepObjectWPtr
-  void initialize(QxrdCenteringPlotWidgetSettingsWPtr settings, QxrdCenterFinderWPtr cf);
+  void initialize(QxrdCenteringPlotWidgetSettingsWPtr settings, QcepCenterFinderWPtr cf);
 
 private:
-  QxrdCenterFinderWPtr m_CenterFinder;
+  QcepCenterFinderWPtr m_CenterFinder;
 };
 
 #endif // QXRDCENTERINGPLOTWIDGET_H

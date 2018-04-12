@@ -1,14 +1,14 @@
 #ifndef QCEPOVERFLOWRASTERDATA_H
 #define QCEPOVERFLOWRASTERDATA_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 
 #include <qwt_raster_data.h>
 #include "qcepimagedata.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QcepOverflowRasterData : public QwtRasterData
+class QCEP_EXPORT QcepOverflowRasterData : public QwtRasterData
 {
 public:
   QcepOverflowRasterData(QcepImageDataBaseWPtr           img,

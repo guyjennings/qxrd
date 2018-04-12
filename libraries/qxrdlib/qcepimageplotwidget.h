@@ -1,19 +1,22 @@
 #ifndef QCEPIMAGEPLOTWIDGET_H
 #define QCEPIMAGEPLOTWIDGET_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include "qcepplotwidget.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 #include "qceprasterdata-ptr.h"
 #include "qcepmaskrasterdata-ptr.h"
 #include "qcepoverflowrasterdata-ptr.h"
 #include "qwt_plot_spectrogram-ptr.h"
-#include "qxrdprocessor-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 #include "qcepmaskrasterdata-ptr.h"
+#include "qcepmaskstack-ptr.h"
+#include "qcepcenterfinder-ptr.h"
+#include "qceppowderringsmodel-ptr.h"
+#include "qceproimodel-ptr.h"
 
-class QXRD_EXPORT QcepImagePlotWidget : public QcepPlotWidget
+class QCEP_EXPORT QcepImagePlotWidget : public QcepPlotWidget
 {
   Q_OBJECT
 
@@ -22,8 +25,12 @@ public:
   ~QcepImagePlotWidget();
 
   //TODO: change to QcepObjectWPtr
-  void initialize(QcepImagePlotWidgetSettingsWPtr settings,
-                  QxrdProcessorWPtr               processor);
+  void initialize(QcepImagePlotWidgetSettingsWPtr settings);
+
+  void setMaskStack   (QcepMaskStackWPtr masks);
+  void setCenterFinder(QcepCenterFinderWPtr center);
+  void setPowderRings (QcepPowderRingsModelWPtr powderRings);
+  void setROIModel    (QcepROIModelWPtr roiModel);
 
   void editPreferences();
 
@@ -71,7 +78,10 @@ protected:
 
 private:
   QcepImagePlotWidgetSettingsWPtr m_ImageSettings;
-  QxrdProcessorWPtr               m_Processor;
+  QcepMaskStackWPtr               m_MaskStack;
+  QcepCenterFinderWPtr            m_CenterFinder;
+  QcepPowderRingsModelWPtr        m_PowderRings;
+  QcepROIModelWPtr                m_ROIModel;
 };
 
 #endif // QCEPIMAGEPLOTWIDGET_H

@@ -3,7 +3,7 @@
 
 #include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QcepPrintPlotCommand : public QcepPlotContextMenuCommand
+class QCEP_EXPORT QcepPrintPlotCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 

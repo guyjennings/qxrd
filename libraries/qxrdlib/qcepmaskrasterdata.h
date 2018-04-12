@@ -1,14 +1,14 @@
 #ifndef QCEPMASKRASTERDATA_H
 #define QCEPMASKRASTERDATA_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 
 #include <qwt_raster_data.h>
 #include "qcepmaskdata.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QcepMaskRasterData : public QwtRasterData
+class QCEP_EXPORT QcepMaskRasterData : public QwtRasterData
 {
 public:
   QcepMaskRasterData(QcepMaskDataWPtr                mask,

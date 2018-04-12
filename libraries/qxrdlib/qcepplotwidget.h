@@ -14,7 +14,7 @@
 #include <qwt_plot_magnifier.h>
 
 //TODO: implement mouse tracking
-class QXRD_EXPORT QcepPlotWidget : public QWidget, public Ui::QcepPlotWidget
+class QCEP_EXPORT QcepPlotWidget : public QWidget, public Ui::QcepPlotWidget
 {
   Q_OBJECT
 

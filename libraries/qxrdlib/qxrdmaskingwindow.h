@@ -49,7 +49,7 @@ private:
 protected:
   void changeEvent(QEvent *e);
 
-  QxrdMaskStackWPtr             m_MaskStack;
+  QcepMaskStackWPtr             m_MaskStack;
 };
 
 #endif // QXRDMASKINGWINDOW_H

@@ -90,7 +90,11 @@ void QxrdIntegrationWindow::initialize(QcepObjectWPtr parent)
 
     if (settings && proc) {
       m_FileBrowserWidget     -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlotWidget       -> initialize(settings->imagePlotWidgetSettings(), proc);
+      m_ImagePlotWidget       -> initialize(settings->imagePlotWidgetSettings());
+      m_ImagePlotWidget       -> setCenterFinder(proc->centerFinder());
+      m_ImagePlotWidget       -> setMaskStack(proc->maskStack());
+      m_ImagePlotWidget       -> setPowderRings(proc->powderRings());
+      m_ImagePlotWidget       -> setROIModel(proc->roiModel());
       m_IntegratedPlotWigdget -> initialize(settings->integratedPlotWidgetSettings());
     }
   }

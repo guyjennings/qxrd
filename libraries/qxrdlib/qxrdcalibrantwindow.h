@@ -4,12 +4,12 @@
 #include "qcepmacros.h"
 #include "qxrdmainwindow.h"
 #include "ui_qxrdcalibrantwindow.h"
-#include "qxrdcalibrant-ptr.h"
-#include "qxrdcalibrantlibrary-ptr.h"
-#include "qxrdcalibrantlibrarymodel-ptr.h"
-#include "qxrdcalibrantdspacings-ptr.h"
-#include "qxrdcalibrantdspacingsmodel-ptr.h"
-#include "qxrdcenterfinder-ptr.h"
+#include "qcepcalibrant-ptr.h"
+#include "qcepcalibrantlibrary-ptr.h"
+#include "qcepcalibrantlibrarymodel-ptr.h"
+#include "qcepcalibrantdspacings-ptr.h"
+#include "qcepcalibrantdspacingsmodel-ptr.h"
+#include "qcepcenterfinder-ptr.h"
 #include "qxrdcalibrantwindowsettings-ptr.h"
 
 //TODO: implement
@@ -44,11 +44,11 @@ protected:
   void changeEvent(QEvent *e);
 
 private:
-  QxrdCenterFinderWPtr            m_CenterFinder;
-  QxrdCalibrantLibraryPtr         m_CalibrantLibrary;
-  QxrdCalibrantLibraryModelPtr    m_CalibrantLibraryModel;
-  QxrdCalibrantDSpacingsModelPtr  m_CalibrantDSpacingsModel;
-  QxrdCalibrantDSpacingsPtr       m_CalibrantDSpacings;
+  QcepCenterFinderWPtr            m_CenterFinder;
+  QcepCalibrantLibraryPtr         m_CalibrantLibrary;
+  QcepCalibrantLibraryModelPtr    m_CalibrantLibraryModel;
+  QcepCalibrantDSpacingsModelPtr  m_CalibrantDSpacingsModel;
+  QcepCalibrantDSpacingsPtr       m_CalibrantDSpacings;
 };
 
 #endif // QXRDCALIBRANTWINDOW_H

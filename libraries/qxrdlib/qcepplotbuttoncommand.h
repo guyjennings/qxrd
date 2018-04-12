@@ -4,7 +4,7 @@
 #include "qcepplotcommand.h"
 #include "qwt_plot_picker-ptr.h"
 
-class QXRD_EXPORT QcepPlotButtonCommand : public QcepPlotCommand
+class QCEP_EXPORT QcepPlotButtonCommand : public QcepPlotCommand
 {
   Q_OBJECT
 

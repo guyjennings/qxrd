@@ -1,9 +1,0 @@
-#ifndef QXRDCALIBRANTLIBRARYMODELPTR_H
-#define QXRDCALIBRANTLIBRARYMODELPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdCalibrantLibraryModel)
-
-#endif // QXRDCALIBRANTLIBRARYMODELPTR_H
-

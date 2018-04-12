@@ -6,7 +6,7 @@
 #include "ui_qxrddetectorcontrolwindow.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdprocessor-ptr.h"
-#include "qxrdroimodel-ptr.h"
+#include "qceproimodel-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
@@ -108,7 +108,7 @@ private:
   QxrdAcqCommonWPtr          m_Acquisition;
   QxrdDetectorSettingsWPtr   m_Detector;
   QxrdProcessorWPtr          m_Processor;
-  QxrdROIModelWPtr           m_ROIModel;
+  QcepROIModelWPtr           m_ROIModel;
 
   QcepDataObjectPropertiesModelPtr m_ImageProperties;
 

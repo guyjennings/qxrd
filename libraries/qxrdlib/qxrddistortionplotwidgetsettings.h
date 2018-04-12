@@ -1,6 +1,7 @@
 #ifndef QXRDDISTORTIONPLOTWIDGETSETTINGS_H
 #define QXRDDISTORTIONPLOTWIDGETSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepplotwidgetsettings.h"
 
 class QXRD_EXPORT QxrdDistortionPlotWidgetSettings : public QcepPlotWidgetSettings

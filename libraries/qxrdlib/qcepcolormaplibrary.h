@@ -1,14 +1,14 @@
 #ifndef QCEPCOLORMAPLIBRARY_H
 #define QCEPCOLORMAPLIBRARY_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepobject.h"
 #include "qcepcolormap-ptr.h"
 #include "qcepmaskcolormap-ptr.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QcepColorMapLibrary : public QcepObject
+class QCEP_EXPORT QcepColorMapLibrary : public QcepObject
 {
   Q_OBJECT
 

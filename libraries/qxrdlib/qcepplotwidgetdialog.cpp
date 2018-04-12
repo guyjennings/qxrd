@@ -1,10 +1,8 @@
 #include "qcepplotwidgetdialog.h"
-#include "qxrddebug.h"
+#include "qcepdebug.h"
 #include <stdio.h>
-#include "qxrdmainwindow.h"
 #include "qcepimageplotsettings-ptr.h"
 #include "qcepimageplotsettings.h"
-#include "qxrdacqcommon.h"
 #include "qcepimageplotwidget.h"
 #include "qcepplotwidgetsettings.h"
 
@@ -34,13 +32,13 @@ QcepPlotWidgetDialog::QcepPlotWidgetDialog(QWidget *parent,
 
     set->prop_LegendPosition()->copyTo(m_LegendPosition);
 
-    //  QxrdMainWindowPtr      win(m_MainWindow);
-//  QxrdImagePlotWidgetPtr wdg(m_PlotWidget);
-//  QxrdAcquisitionPtr     acq(m_Acquisition);
+    //  QcepMainWindowPtr      win(m_MainWindow);
+//  QcepImagePlotWidgetPtr wdg(m_PlotWidget);
+//  QcepAcquisitionPtr     acq(m_Acquisition);
 
 //  if (win) {
 //    connect(m_DisplayOptionsButton, &QAbstractButton::clicked,
-//            win.data(), &QxrdMainWindow::doEditPreferences);
+//            win.data(), &QcepMainWindow::doEditPreferences);
 //  }
 
 //  if (acq) {
@@ -48,13 +46,13 @@ QcepPlotWidgetDialog::QcepPlotWidgetDialog(QWidget *parent,
 //  }
 
 //  if (wdg) {
-//    QxrdImagePlot *plot = wdg->m_Plot;
+//    QcepImagePlot *plot = wdg->m_Plot;
 
 //    if (plot) {
-//      connect(m_AutoRange, &QAbstractButton::clicked, plot, &QxrdImagePlot::setAutoRange);
-//      connect(m_Display_5pct, &QAbstractButton::clicked, plot, &QxrdImagePlot::set005Range);
-//      connect(m_Display_10pct, &QAbstractButton::clicked, plot, &QxrdImagePlot::set010Range);
-//      connect(m_Display_100pct, &QAbstractButton::clicked, plot, &QxrdImagePlot::set100Range);
+//      connect(m_AutoRange, &QAbstractButton::clicked, plot, &QcepImagePlot::setAutoRange);
+//      connect(m_Display_5pct, &QAbstractButton::clicked, plot, &QcepImagePlot::set005Range);
+//      connect(m_Display_10pct, &QAbstractButton::clicked, plot, &QcepImagePlot::set010Range);
+//      connect(m_Display_100pct, &QAbstractButton::clicked, plot, &QcepImagePlot::set100Range);
 
 //      QcepImagePlotSettingsPtr ps(plot->imagePlotSettings());
 

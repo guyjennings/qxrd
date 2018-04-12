@@ -1,12 +1,12 @@
 #ifndef QCEPMASKCOLORMAP_H
 #define QCEPMASKCOLORMAP_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 #include <qwt_color_map.h>
 
-class QXRD_EXPORT QcepMaskColorMap : public QwtLinearColorMap
+class QCEP_EXPORT QcepMaskColorMap : public QwtLinearColorMap
 {
 public:
   QcepMaskColorMap(QcepImagePlotWidgetSettingsWPtr set,

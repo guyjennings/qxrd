@@ -15,7 +15,7 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qxrdpolartransform-ptr.h"
-#include "qxrdcenterfinder-ptr.h"
+#include "qcepcenterfinder-ptr.h"
 #include "qxrdscriptengine-ptr.h"
 #include <QScriptValue>
 
@@ -29,7 +29,7 @@ private:
 public:
   QxrdIntegratorCache(QxrdIntegratorWPtr integ,
                       QxrdPolarTransformWPtr xform,
-                      QxrdCenterFinderWPtr cf);
+                      QcepCenterFinderWPtr cf);
   virtual ~QxrdIntegratorCache();
 
   int get_NRows() const;
@@ -139,7 +139,7 @@ private:
   QVector<double>        m_SumValue;
   QxrdIntegratorWPtr     m_Integrator;
   QxrdPolarTransformWPtr m_PolarTransform;
-  QxrdCenterFinderWPtr   m_CenterFinder;
+  QcepCenterFinderWPtr   m_CenterFinder;
   QScriptValue           m_UserGeometryFunctionValue;
   QScriptValue           m_UserAbsorptionFunctionValue;
 };

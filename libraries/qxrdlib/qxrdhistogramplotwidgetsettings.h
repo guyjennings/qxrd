@@ -1,6 +1,7 @@
 #ifndef QXRDHISTOGRAMPLOTWIDGETSETTINGS_H
 #define QXRDHISTOGRAMPLOTWIDGETSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepplotwidgetsettings.h"
 
 class QXRD_EXPORT QxrdHistogramPlotWidgetSettings : public QcepPlotWidgetSettings

@@ -1,10 +1,8 @@
 #include "qcepimageplotwidgetdialog.h"
-#include "qxrddebug.h"
+#include "qcepdebug.h"
 #include <stdio.h>
-#include "qxrdmainwindow.h"
 #include "qcepimageplotsettings-ptr.h"
 #include "qcepimageplotsettings.h"
-#include "qxrdacqcommon.h"
 #include "qcepimageplotwidget.h"
 #include "qcepimageplotwidgetsettings.h"
 #include <QComboBox>
@@ -16,7 +14,7 @@ QcepImagePlotWidgetDialog::QcepImagePlotWidgetDialog(QWidget *parent,
     m_Settings(settings)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdImagePlotWidgetDialog::QxrdImagePlotWidgetDialog(%p)\n", this);
+    printf("QcepImagePlotWidgetDialog::QcepImagePlotWidgetDialog(%p)\n", this);
   }
 
   setupUi(this);
@@ -71,9 +69,9 @@ QcepImagePlotWidgetDialog::QcepImagePlotWidgetDialog(QWidget *parent,
     set->prop_DisplayROI()          -> copyTo(m_DisplayROI);
     set->prop_DisplayLog()          -> copyTo(m_DisplayImageLog);
 
-//  QxrdMainWindowPtr      win(m_MainWindow);
-//  QxrdImagePlotWidgetPtr wdg(m_PlotWidget);
-//  QxrdAcquisitionPtr     acq(m_Acquisition);
+//  QcepMainWindowPtr      win(m_MainWindow);
+//  QcepImagePlotWidgetPtr wdg(m_PlotWidget);
+//  QcepAcquisitionPtr     acq(m_Acquisition);
 
 //  if (win) {
 //    connect(m_DisplayOptionsButton, &QAbstractButton::clicked,
@@ -125,7 +123,7 @@ QcepImagePlotWidgetDialog::QcepImagePlotWidgetDialog(QWidget *parent,
 QcepImagePlotWidgetDialog::~QcepImagePlotWidgetDialog()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdImagePlotWidgetDialog::~QxrdImagePlotWidgetDialog(%p)\n", this);
+    printf("QcepImagePlotWidgetDialog::~QcepImagePlotWidgetDialog(%p)\n", this);
   }
 }
 

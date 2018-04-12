@@ -3,7 +3,7 @@
 
 #include "qcepplotbuttoncommand.h"
 
-class QXRD_EXPORT QcepPlotPreferencesButton : public QcepPlotButtonCommand
+class QCEP_EXPORT QcepPlotPreferencesButton : public QcepPlotButtonCommand
 {
   Q_OBJECT
 

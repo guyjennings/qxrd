@@ -3,7 +3,7 @@
 
 #include "qcepplotcontextmenucommand.h"
 
-class QXRD_EXPORT QcepAutoScaleCommand : public QcepPlotContextMenuCommand
+class QCEP_EXPORT QcepAutoScaleCommand : public QcepPlotContextMenuCommand
 {
   Q_OBJECT
 

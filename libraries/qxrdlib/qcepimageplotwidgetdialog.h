@@ -1,12 +1,12 @@
 #ifndef QCEPIMAGEPLOTWIDGETDIALOG_H
 #define QCEPIMAGEPLOTWIDGETDIALOG_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepimageplotwidgetdialog.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QcepImagePlotWidgetDialog : public QDialog, public Ui::QcepImagePlotWidgetDialog
+class QCEP_EXPORT QcepImagePlotWidgetDialog : public QDialog, public Ui::QcepImagePlotWidgetDialog
 {
   Q_OBJECT
 

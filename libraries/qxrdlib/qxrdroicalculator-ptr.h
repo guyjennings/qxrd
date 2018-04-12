@@ -1,9 +1,0 @@
-#ifndef QXRDROICALCULATORPTR_H
-#define QXRDROICALCULATORPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdROICalculator)
-
-#endif // QXRDROICALCULATORPTR_H
-

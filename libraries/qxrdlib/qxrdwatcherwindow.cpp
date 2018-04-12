@@ -33,14 +33,22 @@ void QxrdWatcherWindow::initialize(QcepObjectWPtr parent)
     m_DatasetBrowserView -> setDatasetModel(model);
 
     QxrdProcessorPtr     proc(QxrdProcessor::findProcessor(m_Parent));
-    QxrdCenterFinderPtr  cf(proc?proc->centerFinder():QxrdCenterFinderWPtr());
+    QcepCenterFinderPtr  cf(proc?proc->centerFinder():QcepCenterFinderWPtr());
 
     QxrdWatcherWindowSettingsPtr settings(
           qSharedPointerDynamicCast<QxrdWatcherWindowSettings>(m_Parent));
 
     if (settings) {
       m_FileBrowserWidget   -> initialize(settings->fileBrowserSettings(), exp, proc);
-      m_ImagePlotWidget     -> initialize(settings->imagePlotWidgetSettings(), proc);
+      m_ImagePlotWidget     -> initialize(settings->imagePlotWidgetSettings());
+      m_ImagePlotWidget     -> setCenterFinder(cf);
+
+      if (proc) {
+        m_ImagePlotWidget   -> setMaskStack(proc->maskStack());
+        m_ImagePlotWidget   -> setPowderRings(proc->powderRings());
+        m_ImagePlotWidget   -> setROIModel(proc->roiModel());
+      }
+
       m_CenteringPlotWidget -> initialize(settings->centeringPlotWidgetSettings(), cf);
     }
   }

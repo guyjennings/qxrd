@@ -6,10 +6,10 @@
 #include "qxrdwindow.h"
 #include "qxrdexperiment.h"
 #include "qxrdacqcommon.h"
-#include "qxrdcenterfinder.h"
+#include "qcepcenterfinder.h"
 #include "qxrdprocessor.h"
-#include "qxrdcalibrantlibrary.h"
-#include "qxrdcalibrant.h"
+#include "qcepcalibrantlibrary.h"
+#include "qcepcalibrant.h"
 #include "qxrdintegrator.h"
 #include "qcepmutexlocker.h"
 #include "qxrdgeneratetestimage.h"
@@ -28,9 +28,9 @@
 #include "qcepdatacolumnscan-ptr.h"
 #include "qcepdatasetmodel.h"
 #include "qxrdprocessor.h"
-#include "qxrdroicalculator.h"
-#include "qxrdroishape.h"
-#include "qxrdroi.h"
+#include "qceproicalculator.h"
+#include "qceproishape.h"
+#include "qceproi.h"
 //#include "qxrdroimodel.h"
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
@@ -1871,9 +1871,9 @@ QScriptValue QxrdScriptEngine::roiFunc2(int n, int i)
   return QScriptValue();
 }
 
-QxrdROIPtr QxrdScriptEngine::roiFunc3(int n, int i)
+QcepROIPtr QxrdScriptEngine::roiFunc3(int n, int i)
 {
-  QxrdROIPtr res;
+  QcepROIPtr res;
 
   QxrdAcqCommonPtr acq(acquisition());
 
@@ -2027,20 +2027,20 @@ void QxrdScriptEngine::initialize(QcepObjectWPtr parent)
 //                          QxrdPowderPointProperty::toScriptValue,
 //                          QxrdPowderPointProperty::fromScriptValue);
 
-  qRegisterMetaType<QxrdPowderPoint>("QxrdPowderPoint");
+  qRegisterMetaType<QcepPowderPoint>("QxrdPowderPoint");
   qScriptRegisterMetaType(this,
-                          QxrdPowderPoint::toScriptValue,
-                          QxrdPowderPoint::fromScriptValue);
+                          QcepPowderPoint::toScriptValue,
+                          QcepPowderPoint::fromScriptValue);
 
 //  qScriptRegisterSequenceMetaType< QVector<QxrdPowderPoint> >(this);
   qScriptRegisterMetaType(this,
-                          QxrdPowderPointVector::toScriptValue,
-                          QxrdPowderPointVector::fromScriptValue);
+                          QcepPowderPointVector::toScriptValue,
+                          QcepPowderPointVector::fromScriptValue);
 
-  qRegisterMetaType<QxrdCalibrantWPtr>("QxrdCalibrantWPtr");
+  qRegisterMetaType<QcepCalibrantWPtr>("QcepCalibrantWPtr");
   qScriptRegisterMetaType(this,
-                          QxrdCalibrant::toScriptValue,
-                          QxrdCalibrant::fromScriptValue);
+                          QcepCalibrant::toScriptValue,
+                          QcepCalibrant::fromScriptValue);
 
   qRegisterMetaType<QcepObjectPtr>("QcepObjectPtr");
   qScriptRegisterMetaType(this,
@@ -2112,12 +2112,12 @@ void QxrdScriptEngine::initialize(QcepObjectWPtr parent)
                           QcepMaskData::toScriptValue,
                           QcepMaskData::fromScriptValue);
 
-  qRegisterMetaType<QxrdCalibrantDSpacing>("QxrdCalibrantDSpacing");
-  qScriptRegisterSequenceMetaType<QxrdCalibrantDSpacings>(this);
+  qRegisterMetaType<QcepCalibrantDSpacing>("QxrdCalibrantDSpacing");
+  qScriptRegisterSequenceMetaType<QcepCalibrantDSpacings>(this);
 
   qScriptRegisterMetaType(this,
-                          QxrdCalibrantDSpacing::toScriptValue,
-                          QxrdCalibrantDSpacing::fromScriptValue);
+                          QcepCalibrantDSpacing::toScriptValue,
+                          QcepCalibrantDSpacing::fromScriptValue);
 
 //  qScriptRegisterMetaType(this,
 //                          QxrdCalibrantDSpacingVector::toScriptValue,
@@ -2133,30 +2133,30 @@ void QxrdScriptEngine::initialize(QcepObjectWPtr parent)
                           QxrdProcessor::toScriptValue,
                           QxrdProcessor::fromScriptValue);
 
-  qRegisterMetaType<QxrdCenterFinderPtr>("QxrdCenterFinderPtr");
+  qRegisterMetaType<QcepCenterFinderPtr>("QcepCenterFinderPtr");
   qScriptRegisterMetaType(this,
-                          QxrdCenterFinder::toScriptValue,
-                          QxrdCenterFinder::fromScriptValue);
+                          QcepCenterFinder::toScriptValue,
+                          QcepCenterFinder::fromScriptValue);
 
   qRegisterMetaType<QxrdIntegratorPtr>("QxrdIntegratorPtr");
   qScriptRegisterMetaType(this,
                           QxrdIntegrator::toScriptValue,
                           QxrdIntegrator::fromScriptValue);
 
-  qRegisterMetaType<QxrdROICalculatorPtr>("QxrdROICalculatorPtr");
+  qRegisterMetaType<QcepROICalculatorPtr>("QcepROICalculatorPtr");
   qScriptRegisterMetaType(this,
-                          QxrdROICalculator::toScriptValue,
-                          QxrdROICalculator::fromScriptValue);
+                          QcepROICalculator::toScriptValue,
+                          QcepROICalculator::fromScriptValue);
 
-  qRegisterMetaType<QxrdROIShapePtr>("QxrdROIShapePtr");
+  qRegisterMetaType<QcepROIShapePtr>("QcepROIShapePtr");
   qScriptRegisterMetaType(this,
-                          QxrdROIShape::toScriptValue,
-                          QxrdROIShape::fromScriptValue);
+                          QcepROIShape::toScriptValue,
+                          QcepROIShape::fromScriptValue);
 
-  qRegisterMetaType<QxrdROIPtr>("QxrdROIPtr");
+  qRegisterMetaType<QcepROIPtr>("QcepROIPtr");
   qScriptRegisterMetaType(this,
-                          QxrdROI::toScriptValue,
-                          QxrdROI::fromScriptValue);
+                          QcepROI::toScriptValue,
+                          QcepROI::fromScriptValue);
 
 //  qRegisterMetaType<QxrdROIModelPtr>("QxrdROIModelPtr");
 //  qScriptRegisterMetaType(this,
@@ -2325,7 +2325,7 @@ void QxrdScriptEngine::initialize(QcepObjectWPtr parent)
       }
     }
 
-    QxrdCalibrantLibraryPtr cals(expt->calibrantLibrary());
+    QcepCalibrantLibraryPtr cals(expt->calibrantLibrary());
 
     if (cals) {
       QCEP_DOC_OBJECT("calibrants", "Calibrant Library");

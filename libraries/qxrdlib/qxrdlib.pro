@@ -67,37 +67,27 @@ SOURCES += qxrdlib.cpp \
     qxrdwindow.cpp \
     qxrdfilesaverthread.cpp \
     qxrdfilesaver.cpp \
-    qxrdcenterfinder.cpp \
-    qxrdcenterfinderpicker.cpp \
-    qxrdpowderpointpicker.cpp \
     qxrdintegrator.cpp \
     qxrdintegratorplot.cpp \
     qxrdserver.cpp \
     qxrdserverthread.cpp \
     qxrdacquisition.cpp \
-    qxrdplotslicer.cpp \
     qxrdscriptengine.cpp \
     qxrdscriptenginethread.cpp \
-    qxrdmaskpicker.cpp \
-    qxrdimageplotmeasurer.cpp \
     qxrdexperimentpreferencesdialog.cpp \
     qxrdsharedpointer.cpp \
     qxrdresultserializer.cpp \
     qxrdhistogramdata.cpp \
     qxrdexposuretimespinner.cpp \
-    qxrddetectorgeometry.cpp \
     qxrdgeneratetestimage.cpp \
     qxrdsimpleserver.cpp \
     qxrdsimpleserverthread.cpp \
     qxrdcenterstepspinner.cpp \
-    qxrdmaskstackmodel.cpp \
-    qxrdmaskstack.cpp \
     qxrdmaskstackview.cpp \
     qxrdsynchronizedacquisition.cpp \
     qxrdfilebrowsermodel.cpp \
     qxrdfilebrowserview.cpp \
     qxrdhistogramdialog.cpp \
-    qxrdhistogramselector.cpp \
     qxrdthread.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
     qxrdhighlighter.cpp \
@@ -120,31 +110,17 @@ SOURCES += qxrdlib.cpp \
     qxrdpoint4d.cpp \
     qxrdplotvectorfielddata.cpp \
     qxrdscripteditwidget.cpp \
-    qxrdpowderpoint.cpp \
-    qxrdpowderpointproperty.cpp \
-    qxrdfitter.cpp \
-    qxrdfitterpeakpoint.cpp \
-    qxrdfitterringpoint.cpp \
-    qxrdfitterpeakorring.cpp \
-    qxrdfitterringcircle.cpp \
-    qxrdfitterringellipse.cpp \
     qxrdplanefitter.cpp \
-    qxrdcalibrant.cpp \
-    qxrdcalibrantlibrary.cpp \
-    qxrdcalibrantlibrarymodel.cpp \
-    qxrdcalibrantdspacingsmodel.cpp \
     qxrdimageplotzoomer.cpp \
     qxrdmainwindow.cpp \
     qxrdacquisitionparameterpack.cpp \
     qxrddarkacquisitionparameterpack.cpp \
     qxrddetectorcontrolwindow.cpp \
-    qxrdroicalculator.cpp \
     qxrdacquisitionexecutionthread.cpp \
     qxrdacquisitionexecution.cpp \
     qxrdtodolist.cpp \
     qxrdtodolistitem.cpp \
     qxrddetectorimageplot.cpp \
-    qxrdroitypedelegate.cpp \
     qxrdacquisitionscalermodel.cpp \
     qxrdzingerdialog.cpp \
     qxrdpolartransform.cpp \
@@ -153,27 +129,14 @@ SOURCES += qxrdlib.cpp \
     qxrdpolarnormalization.cpp \
     qxrdpolarnormalizationdialog.cpp \
     qxrdcalibrantpropertiesdialog.cpp \
-    qxrdcalibrantdspacings.cpp \
-    qxrdcalibrantdspacing.cpp \
     qxrdintegratorparmsdialog.cpp \
     qxrdintegratorplotsettings.cpp \
     qxrddetectorsettings.cpp \
     qxrddetectordriver.cpp \
     qxrddetectordriverthread.cpp \
     qxrdexperimentthread.cpp \
-    qxrdroishape.cpp \
-    qxrdroirectangle.cpp \
-    qxrdroiellipse.cpp \
-    qxrdroipolygon.cpp \
-    qxrdroirasterdata.cpp \
-    qxrdroipicker.cpp \
-    qxrdroicenteredshape.cpp \
-    qxrdroicache.cpp \
     qxrddetectorcontrolwindowsettings.cpp \
     qxrdjsengine.cpp \
-    qxrdroieditordialog.cpp \
-    qxrdpolygonpointsmodel.cpp \
-    qxrdfittedrings.cpp \
     qxrdplotcurvevector.cpp \
     commands/00generic/qxrdcommand.cpp \
     commands/00generic/qxrdapplicationcommand.cpp \
@@ -208,32 +171,6 @@ SOURCES += qxrdlib.cpp \
     qxrdcenteringplotwidget.cpp \
     qxrdintegratedplotwidget.cpp \
     qxrdfilebrowserwidget.cpp \
-    qxrdmaskcirclescommand.cpp \
-    qxrdmaskpolygonscommand.cpp \
-    qxrdsetcentercommand.cpp \
-    qxrdpowderpointscommand.cpp \
-    qxrdslicecommand.cpp \
-    qxrdmeasurecommand.cpp \
-    qxrdhistogramcommand.cpp \
-    qxrdfitcirclecommand.cpp \
-    qxrdfitellipsecommand.cpp \
-    qxrdfitellipsescommand.cpp \
-    qxrdadjustenergycommand.cpp \
-    qxrdadjustdistancecommand.cpp \
-    qxrdadjustfitcommand.cpp \
-    qxrdaddpointcommand.cpp \
-    qxrddelpointcommand.cpp \
-    qxrddelringcommand.cpp \
-    qxrddelallpointscommand.cpp \
-    qxrddisableringcommand.cpp \
-    qxrdenableringcommand.cpp \
-    qxrdnormalizeringscommand.cpp \
-    qxrdfitpeakcommand.cpp \
-    qxrdfitringpointcommand.cpp \
-    qxrdtraceringcommand.cpp \
-    qxrdmissingringcommand.cpp \
-    qxrdzappixelcommand.cpp \
-    qxrdcontextseparatorcommand.cpp \
     qxrdprocessor.cpp \
     qxrddistortionplotwidget.cpp \
     qxrdextrainputsplotwidget.cpp \
@@ -264,18 +201,8 @@ SOURCES += qxrdlib.cpp \
     qxrdhistogramplotwidgetsettings.cpp \
     qxrddistortionplotwidgetsettings.cpp \
     qxrdsliceplotwidgetsettings.cpp \
-    qxrdscalingsubmenucommand.cpp \
-    qxrdcolormapsubmenucommand.cpp \
     qxrdprocessorstep.cpp \
     qxrdzingerfinder.cpp \
-    qxrdmaskcommandbutton.cpp \
-    qxrdcentermarker.cpp \
-    qxrdroioverlay.cpp \
-    qxrdpowderoverlay.cpp \
-    qxrdpowderringsmodel.cpp \
-    qxrdroimodel.cpp \
-    qxrdroivector.cpp \
-    qxrdroi.cpp \
     qxrdwatcherwindow.cpp \
     qxrdwatcherwindowsettings.cpp \
     qxrdwatcher.cpp \
@@ -332,7 +259,80 @@ SOURCES += qxrdlib.cpp \
     qcepimageplotwidget.cpp \
     qcepimageplotwidgetdialog.cpp \
     qcepimageplot.cpp \
-    qcepimageplotsettings.cpp
+    qcepimageplotsettings.cpp \
+    qcepaddpointcommand.cpp \
+    qcepadjustdistancecommand.cpp \
+    qcepadjustenergycommand.cpp \
+    qcepadjustfitcommand.cpp \
+    qcephistogramcommand.cpp \
+    qcephistogramselector.cpp \
+    qcepmaskstack.cpp \
+    qcepmaskstackmodel.cpp \
+    qcepmaskcirclescommand.cpp \
+    qcepimageplotmeasurer.cpp \
+    qcepmaskpicker.cpp \
+    qcepmaskcommandbutton.cpp \
+    qcepmaskpolygonscommand.cpp \
+    qcepmeasurecommand.cpp \
+    qceppowderpointpicker.cpp \
+    qceppowderpointscommand.cpp \
+    qcepdetectorgeometry.cpp \
+    qcepcenterfinder.cpp \
+    qcepcenterfinderpicker.cpp \
+    qcepsetcentercommand.cpp \
+    qcepplotslicer.cpp \
+    qcepslicecommand.cpp \
+    qcepcolormapsubmenucommand.cpp \
+    qcepcontextseparatorcommand.cpp \
+    qcepdelallpointscommand.cpp \
+    qcepdelpointcommand.cpp \
+    qcepdelringcommand.cpp \
+    qcepdisableringcommand.cpp \
+    qcepenableringcommand.cpp \
+    qcepfitcirclecommand.cpp \
+    qcepfitellipsecommand.cpp \
+    qcepfitellipsescommand.cpp \
+    qcepfitpeakcommand.cpp \
+    qcepfitringpointcommand.cpp \
+    qcepmissingringcommand.cpp \
+    qcepnormalizeringscommand.cpp \
+    qcepscalingsubmenucommand.cpp \
+    qceptraceringcommand.cpp \
+    qcepzappixelcommand.cpp \
+    qcepfitter.cpp \
+    qcepfitterpeakorring.cpp \
+    qcepfitterpeakpoint.cpp \
+    qcepfitterringpoint.cpp \
+    qcepfitterringcircle.cpp \
+    qcepfitterringellipse.cpp \
+    qcepfittedrings.cpp \
+    qcepcalibrantlibrarymodel.cpp \
+    qcepcalibrantlibrary.cpp \
+    qcepcalibrant.cpp \
+    qcepcalibrantdspacingsmodel.cpp \
+    qcepcalibrantdspacings.cpp \
+    qcepcalibrantdspacing.cpp \
+    qcepcentermarker.cpp \
+    qceppowderpoint.cpp \
+    qceppowderpointproperty.cpp \
+    qceproimodel.cpp \
+    qceproi.cpp \
+    qceproicache.cpp \
+    qceproicalculator.cpp \
+    qceproicenteredshape.cpp \
+    qceproishape.cpp \
+    qceproipicker.cpp \
+    qceproiellipse.cpp \
+    qceproirectangle.cpp \
+    qceproieditordialog.cpp \
+    qceproipolygon.cpp \
+    qceproioverlay.cpp \
+    qceproirasterdata.cpp \
+    qceproitypedelegate.cpp \
+    qceproivector.cpp \
+    qceppolygonpointsmodel.cpp \
+    qceppowderringsmodel.cpp \
+    qceppowderoverlay.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -381,32 +381,6 @@ HEADERS += qxrdlib.h\
     qxrdintegrationwindowsettings-ptr.h \
     qxrdmaskingwindowsettings-ptr.h \
     qxrdscriptingwindowsettings-ptr.h \
-    qxrdmaskcirclescommand.h \
-    qxrdmaskpolygonscommand.h \
-    qxrdsetcentercommand.h \
-    qxrdpowderpointscommand.h \
-    qxrdslicecommand.h \
-    qxrdmeasurecommand.h \
-    qxrdhistogramcommand.h \
-    qxrdfitcirclecommand.h \
-    qxrdfitellipsecommand.h \
-    qxrdfitellipsescommand.h \
-    qxrdadjustenergycommand.h \
-    qxrdadjustdistancecommand.h \
-    qxrdadjustfitcommand.h \
-    qxrdaddpointcommand.h \
-    qxrddelpointcommand.h \
-    qxrddelringcommand.h \
-    qxrddelallpointscommand.h \
-    qxrddisableringcommand.h \
-    qxrdenableringcommand.h \
-    qxrdnormalizeringscommand.h \
-    qxrdfitpeakcommand.h \
-    qxrdfitringpointcommand.h \
-    qxrdtraceringcommand.h \
-    qxrdmissingringcommand.h \
-    qxrdzappixelcommand.h \
-    qxrdcontextseparatorcommand.h \
     qxrdprocessor.h \
     qxrddistortionplotwidget.h \
     qxrdextrainputsplotwidget.h \
@@ -461,8 +435,6 @@ HEADERS += qxrdlib.h\
     qxrdsliceplotwidgetsettings.h \
     qxrdsliceplotwidgetsettings-ptr.h \
     qxrdzoomincommand-ptr.h \
-    qxrdscalingsubmenucommand.h \
-    qxrdcolormapsubmenucommand.h \
     qwt_plot_spectrogram-ptr.h \
     qxrdprocessor-ptr.h \
     qxrdprocessorstep.h \
@@ -470,21 +442,6 @@ HEADERS += qxrdlib.h\
     qxrdzingerfinder.h \
     qxrdzingerfinder-ptr.h \
     qwt_plot_picker-ptr.h \
-    qxrdpowderpointpicker-ptr.h \
-    qxrdmaskcommandbutton.h \
-    qxrdcentermarker.h \
-    qxrdroioverlay.h \
-    qxrdpowderoverlay.h \
-    qxrdroioverlay-ptr.h \
-    qxrdpowderoverlay-ptr.h \
-    qxrdpowderringsmodel.h \
-    qxrdpowderringsmodel-ptr.h \
-    qxrdroimodel.h \
-    qxrdroimodel-ptr.h \
-    qxrdroivector.h \
-    qxrdroivector-ptr.h \
-    qxrdroi.h \
-    qxrdroi-ptr.h \
     qxrdwatcherwindow.h \
     qxrdwatcherwindow-ptr.h \
     qxrdwatcherwindowsettings.h \
@@ -589,7 +546,109 @@ HEADERS += qxrdlib.h\
     qcepimageplotsettings-ptr.h \
     qcepimageplotsettings.h \
     qcepmaskrasterdata-ptr.h \
-    qcepimageplot-ptr.h
+    qcepimageplot-ptr.h \
+    qcepaddpointcommand.h \
+    qcepadjustdistancecommand.h \
+    qcepadjustenergycommand.h \
+    qcepadjustfitcommand.h \
+    qcephistogramcommand.h \
+    qcephistogramselector.h \
+    qcephistogramselector-ptr.h \
+    qcepmaskstack.h \
+    qcepmaskstack-ptr.h \
+    qcepmaskstackmodel-ptr.h \
+    qcepmaskstackmodel.h \
+    qcepmaskcirclescommand.h \
+    qcepimageplotmeasurer.h \
+    qcepmaskpicker.h \
+    qcepmaskpicker-ptr.h \
+    qcepmaskcommandbutton.h \
+    qcepmaskpolygonscommand.h \
+    qcepimageplotmeasurer-ptr.h \
+    qcepmeasurecommand.h \
+    qceppowderpointpicker-ptr.h \
+    qceppowderpointpicker.h \
+    qceppowderpointscommand.h \
+    qcepdetectorgeometry.h \
+    qcepdetectorgeometry-ptr.h \
+    qcepcenterfinder-ptr.h \
+    qcepcenterfinder.h \
+    qcepcenterfinderpicker.h \
+    qcepsetcentercommand.h \
+    qcepplotslicer.h \
+    qcepplotslicer-ptr.h \
+    qcepslicecommand.h \
+    qcepcolormapsubmenucommand.h \
+    qcepcontextseparatorcommand.h \
+    qcepdelallpointscommand.h \
+    qcepdelpointcommand.h \
+    qcepdelringcommand.h \
+    qcepdisableringcommand.h \
+    qcepenableringcommand.h \
+    qcepfitcirclecommand.h \
+    qcepfitellipsecommand.h \
+    qcepfitellipsescommand.h \
+    qcepfitpeakcommand.h \
+    qcepfitringpointcommand.h \
+    qcepmissingringcommand.h \
+    qcepnormalizeringscommand.h \
+    qcepscalingsubmenucommand.h \
+    qceptraceringcommand.h \
+    qcepzappixelcommand.h \
+    qcepfitter.h \
+    qcepfitterpeakorring.h \
+    qcepfitterpeakpoint.h \
+    qcepfitterringpoint.h \
+    qcepfitterringcircle.h \
+    qcepfitterringellipse.h \
+    qcepfittedrings.h \
+    qcepfittedrings-ptr.h \
+    qcepcenterfinderpicker-ptr.h \
+    qcepcalibrantlibrary-ptr.h \
+    qcepcalibrantlibrarymodel-ptr.h \
+    qcepcalibrantlibrarymodel.h \
+    qcepcalibrantlibrary.h \
+    qcepcalibrant-ptr.h \
+    qcepcalibrant.h \
+    qcepcalibrantdspacingsmodel-ptr.h \
+    qcepcalibrantdspacingsmodel.h \
+    qcepcalibrantdspacings-ptr.h \
+    qcepcalibrantdspacings.h \
+    qcepcalibrantdspacing.h \
+    qcepcalibrantdspacing-ptr.h \
+    qcepcentermarker.h \
+    qceppowderpoint.h \
+    qceppowderpointproperty.h \
+    qceproimodel-ptr.h \
+    qceproimodel.h \
+    qceproi-ptr.h \
+    qceproi.h \
+    qceproicache-ptr.h \
+    qceproicache.h \
+    qceproicalculator-ptr.h \
+    qceproicalculator.h \
+    qceproicenteredshape-ptr.h \
+    qceproicenteredshape.h \
+    qceproishape-ptr.h \
+    qceproishape.h \
+    qceproipicker-ptr.h \
+    qceproipicker.h \
+    qceproiellipse.h \
+    qceproirectangle.h \
+    qceproieditordialog.h \
+    qceproipolygon-ptr.h \
+    qceproipolygon.h \
+    qceproioverlay-ptr.h \
+    qceproioverlay.h \
+    qceproirasterdata.h \
+    qceproitypedelegate.h \
+    qceproivector-ptr.h \
+    qceproivector.h \
+    qceppolygonpointsmodel.h \
+    qceppowderringsmodel-ptr.h \
+    qceppowderringsmodel.h \
+    qceppowderoverlay-ptr.h \
+    qceppowderoverlay.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -608,10 +667,6 @@ HEADERS += TODO.h \
     qxrdfilesaverthread-ptr.h \
     qxrdfilesaver.h \
     qxrdfilesaver-ptr.h \
-    qxrdcenterfinder.h \
-    qxrdcenterfinder-ptr.h \
-    qxrdcenterfinderpicker.h \
-    qxrdpowderpointpicker.h \
     qxrdintegrator.h \
     qxrdintegrator-ptr.h \
     qxrdintegratorplot.h \
@@ -621,24 +676,16 @@ HEADERS += TODO.h \
     qxrdserverthread-ptr.h \
     qxrdacquisition.h \
     qxrdacquisition-ptr.h \
-    qxrdplotslicer.h \
-    qxrdplotslicer-ptr.h \
     qxrdscriptengine.h \
     qxrdscriptengine-ptr.h \
     qxrdscriptenginethread.h \
     qxrdscriptenginethread-ptr.h \
-    qxrdmaskpicker.h \
-    qxrdmaskpicker-ptr.h \
-    qxrdimageplotmeasurer.h \
-    qxrdimageplotmeasurer-ptr.h \
     qxrdexperimentpreferencesdialog.h \
     qxrdsharedpointer.h \
     qxrdresultserializer.h \
     qxrdhistogramdata.h \
     qxrdhistogramdata-ptr.h \
     qxrdexposuretimespinner.h \
-    qxrddetectorgeometry.h \
-    qxrddetectorgeometry-ptr.h \
     qxrdgeneratetestimage.h \
     qxrdgeneratetestimage-ptr.h \
     qxrdsimpleserver.h \
@@ -646,10 +693,6 @@ HEADERS += TODO.h \
     qxrdsimpleserverthread.h \
     qxrdsimpleserverthread-ptr.h \
     qxrdcenterstepspinner.h \
-    qxrdmaskstackmodel.h \
-    qxrdmaskstackmodel-ptr.h \
-    qxrdmaskstack.h \
-    qxrdmaskstack-ptr.h \
     qxrdmaskstackview.h \
     qxrdsynchronizedacquisition.h \
     qxrdsynchronizedacquisition-ptr.h \
@@ -657,7 +700,6 @@ HEADERS += TODO.h \
     qxrdfilebrowsermodel-ptr.h \
     qxrdfilebrowserview.h \
     qxrdhistogramdialog.h \
-    qxrdhistogramselector.h \
     qxrdthread.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \
@@ -685,24 +727,8 @@ HEADERS += TODO.h \
     qxrdpoint4d.h \
     qxrdplotvectorfielddata.h \
     qxrdscripteditwidget.h \
-    qxrdpowderpoint.h \
-    qxrdpowderpointproperty.h \
-    qxrdfitter.h \
-    qxrdfitterpeakpoint.h \
-    qxrdfitterringpoint.h \
-    qxrdfitterpeakorring.h \
-    qxrdfitterringcircle.h \
-    qxrdfitterringellipse.h \
     triangulate.h \
     qxrdplanefitter.h \
-    qxrdcalibrant.h \
-    qxrdcalibrant-ptr.h \
-    qxrdcalibrantlibrary.h \
-    qxrdcalibrantlibrary-ptr.h \
-    qxrdcalibrantlibrarymodel.h \
-    qxrdcalibrantlibrarymodel-ptr.h \
-    qxrdcalibrantdspacingsmodel.h \
-    qxrdcalibrantdspacingsmodel-ptr.h \
     qxrdimageplotzoomer.h \
     qxrdmainwindow.h \
     qxrdacquisitionparameterpack.h \
@@ -711,8 +737,6 @@ HEADERS += TODO.h \
     qxrddarkacquisitionparameterpack-ptr.h \
     qxrddetectorcontrolwindow.h \
     qxrddetectorcontrolwindow-ptr.h \
-    qxrdroicalculator.h \
-    qxrdroicalculator-ptr.h \
     qxrdacquisitionexecutionthread.h \
     qxrdacquisitionexecutionthread-ptr.h \
     qxrdacquisitionexecution.h \
@@ -721,7 +745,6 @@ HEADERS += TODO.h \
     qxrdtodolistitem.h \
     qxrdtodolistitem-ptr.h \
     qxrddetectorimageplot.h \
-    qxrdroitypedelegate.h \
     qxrdacquisitionscalermodel.h \
     qxrdacquisitionscalermodel-ptr.h \
     qxrdzingerdialog.h \
@@ -733,10 +756,6 @@ HEADERS += TODO.h \
     qxrdpolarnormalizationdialog.h \
     qxrdpolarnormalization-ptr.h \
     qxrdcalibrantpropertiesdialog.h \
-    qxrdcalibrantdspacings.h \
-    qxrdcalibrantdspacing.h \
-    qxrdcalibrantdspacing-ptr.h \
-    qxrdcalibrantdspacings-ptr.h \
     qxrdintegratorparmsdialog.h \
     qxrdintegratorplotsettings.h \
     qxrdintegratorplotsettings-ptr.h \
@@ -751,29 +770,12 @@ HEADERS += TODO.h \
     qxrddetectordriverthread-ptr.h \
     qxrdexperimentthread.h \
     qxrdexperimentthread-ptr.h \
-    qxrdroishape.h \
-    qxrdroirectangle.h \
-    qxrdroiellipse.h \
-    qxrdroipolygon.h \
-    qxrdroishape-ptr.h \
-    qxrdroirasterdata.h \
-    qxrdroipicker.h \
-    qxrdroipicker-ptr.h \
     qxrddetectorimageplot-ptr.h \
-    qxrdroicenteredshape.h \
-    qxrdroicache.h \
-    qxrdroicache-ptr.h \
     qxrddetectorcontrolwindowsettings.h \
     qxrddetectorcontrolwindowsettings-ptr.h \
     qxrdexperimentsettings-ptr.h \
     qxrdjsengine.h \
     qxrdjsengine-ptr.h \
-    qxrdroieditordialog.h \
-    qxrdpolygonpointsmodel.h \
-    qxrdroipolygon-ptr.h \
-    qxrdroicenteredshape-ptr.h \
-    qxrdfittedrings.h \
-    qxrdfittedrings-ptr.h \
     qxrdplotcurvevector-ptr.h \
     qxrdplotcurvevector.h
 
@@ -791,7 +793,6 @@ FORMS += qxrdwindow.ui \
     qxrdpolarnormalizationdialog.ui \
     qxrdcalibrantpropertiesdialog.ui \
     qxrdintegratorparmsdialog.ui \
-    qxrdroieditordialog.ui \
     qxrdanalysiswindow.ui \
     qxrdcenteringwindow.ui \
     qxrdintegrationwindow.ui \
@@ -819,7 +820,8 @@ FORMS += qxrdwindow.ui \
     qxrdacquisitioneventlogwindow.ui \
     qcepplotwidget.ui \
     qcepplotwidgetdialog.ui \
-    qcepimageplotwidgetdialog.ui
+    qcepimageplotwidgetdialog.ui \
+    qceproieditordialog.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS +=

@@ -1,8 +1,0 @@
-#ifndef QXRDPOWDERRINGSMODELPTR_H
-#define QXRDPOWDERRINGSMODELPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdPowderRingsModel)
-
-#endif // QXRDPOWDERRINGSMODELPTR_H

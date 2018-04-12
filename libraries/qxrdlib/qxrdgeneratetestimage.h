@@ -9,8 +9,8 @@
 #include "qcepproperty.h"
 #include "qxrdprocessor-ptr.h"
 #include "qcepallocator-ptr.h"
-#include "qxrddetectorgeometry-ptr.h"
-#include "qxrddetectorgeometry.h"
+#include "qcepdetectorgeometry-ptr.h"
+#include "qcepdetectorgeometry.h"
 #include "qxrdgeneratetestimage-ptr.h"
 
 class QXRD_EXPORT QxrdGenerateTestImage : public QcepObject
@@ -43,7 +43,7 @@ public:
 
 private:
   QxrdProcessorWPtr         m_Processor;
-  QxrdDetectorGeometryPtr   m_Geometry;
+  QcepDetectorGeometryPtr   m_Geometry;
 
 public:
   Q_PROPERTY(int     nRows      READ get_NRows WRITE set_NRows)

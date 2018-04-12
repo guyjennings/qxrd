@@ -2,13 +2,14 @@
 #include "qxrddetectorimageplot.h"
 #include "qcepimageplotwidgetsettings.h"
 #include "qxrddetectorsettings.h"
+#include "qceproi.h"
 
 QxrdDetectorControlWindowSettings::QxrdDetectorControlWindowSettings(QString name)
   : inherited(name),
     m_DetectorWindowOpen(this, "detectorWindowOpen", 0, "Detector Window Open?"),
     m_DetectorWindowGeometry(this, "detectorWindowGeometry", QByteArray(), "Detector Window Geometry"),
     m_DetectorWindowState(this, "detectorWindowState", QByteArray(), "Detector Window State"),
-    m_DetectorWindowNewROIType(this, "detectorWindowNewROIType", QxrdDetectorImagePlot::NewRectROI, "Detector Window New ROI Type"),
+    m_DetectorWindowNewROIType(this, "detectorWindowNewROIType", QcepROI::NewRectROI, "Detector Window New ROI Type"),
     m_DetectorWindowRect(this, "detectorWindowRect", QRectF(), "Window Geometry")
 {
   m_ImagePlotWidgetSettings =

@@ -1,7 +1,7 @@
 #ifndef QCEPRASTERDATA_H
 #define QCEPRASTERDATA_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include "qcepmacros.h"
 
 #include <qwt_raster_data.h>
@@ -9,7 +9,7 @@
 #include "qcepmaskdata.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QcepRasterData : public QwtRasterData
+class QCEP_EXPORT QcepRasterData : public QwtRasterData
 {
 public:
   QcepRasterData(QcepImageDataBaseWPtr           img,

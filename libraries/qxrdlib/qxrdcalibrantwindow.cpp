@@ -1,12 +1,12 @@
 #include "qxrdcalibrantwindow.h"
 #include "qxrdexperiment.h"
 #include "qxrdcalibrantpropertiesdialog.h"
-#include "qxrdcalibrantlibrary.h"
-#include "qxrdcalibrantlibrarymodel.h"
-#include "qxrdcalibrantdspacings.h"
-#include "qxrdcalibrantdspacingsmodel.h"
-#include "qxrdcalibrant.h"
-#include "qxrdcenterfinder.h"
+#include "qcepcalibrantlibrary.h"
+#include "qcepcalibrantlibrarymodel.h"
+#include "qcepcalibrantdspacings.h"
+#include "qcepcalibrantdspacingsmodel.h"
+#include "qcepcalibrant.h"
+#include "qcepcenterfinder.h"
 #include <QClipboard>
 #include <QThread>
 
@@ -39,8 +39,8 @@ void QxrdCalibrantWindow::initialize(QcepObjectWPtr parent)
     printMessage("No experiment available for calibrant window");
   }
 
-  QxrdCalibrantLibraryModelPtr   lib(m_CalibrantLibraryModel);
-  QxrdCalibrantDSpacingsModelPtr dsp(m_CalibrantDSpacingsModel);
+  QcepCalibrantLibraryModelPtr   lib(m_CalibrantLibraryModel);
+  QcepCalibrantDSpacingsModelPtr dsp(m_CalibrantDSpacingsModel);
 
   if (lib) {
     m_CalibrantTableView     -> setModel(lib.data());
@@ -69,7 +69,7 @@ void QxrdCalibrantWindow::initialize(QcepObjectWPtr parent)
             this, &QxrdCalibrantWindow::onCalibrantChanged);
   }
 
-  QxrdCenterFinderPtr cfp(m_CenterFinder);
+  QcepCenterFinderPtr cfp(m_CenterFinder);
 
   if (cfp) {
     connect(cfp->prop_Energy(), &QcepDoubleProperty::valueChanged,
@@ -99,10 +99,10 @@ void QxrdCalibrantWindow::changeEvent(QEvent *e)
 
 void QxrdCalibrantWindow::onCalibrantChanged()
 {
-  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
-  QxrdCalibrantDSpacingsPtr dsp(m_CalibrantDSpacings);
-  QxrdCenterFinderPtr cf(m_CenterFinder);
-  QxrdCalibrantDSpacingsModelPtr model(m_CalibrantDSpacingsModel);
+  QcepCalibrantLibraryPtr lib(m_CalibrantLibrary);
+  QcepCalibrantDSpacingsPtr dsp(m_CalibrantDSpacings);
+  QcepCenterFinderPtr cf(m_CenterFinder);
+  QcepCalibrantDSpacingsModelPtr model(m_CalibrantDSpacingsModel);
 
   if (lib && dsp && cf && model) {
     double energy = cf->get_Energy();
@@ -110,7 +110,7 @@ void QxrdCalibrantWindow::onCalibrantChanged()
     dsp->clear();
 
     for (int i=0; i<lib->count(); i++) {
-      QxrdCalibrantPtr cal = lib->calibrant(i);
+      QcepCalibrantPtr cal = lib->calibrant(i);
 
       if (cal && cal->get_IsUsed()) {
         dsp->merge(cal->dSpacings(energy));
@@ -124,8 +124,8 @@ void QxrdCalibrantWindow::onCalibrantChanged()
 void QxrdCalibrantWindow::calibrantTableContextMenu(const QPoint &pos)
 {
   QModelIndex index  = m_CalibrantTableView->indexAt(pos);
-  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
-  QxrdCalibrantPtr cal;
+  QcepCalibrantLibraryPtr lib(m_CalibrantLibrary);
+  QcepCalibrantPtr cal;
 
   if (index.isValid() && lib) {
     cal = lib->calibrant(index.row());
@@ -243,7 +243,7 @@ void QxrdCalibrantWindow::onCalibrantDoubleClick(const QModelIndex &item)
 //  printf("Double click [%d,%d]\n", item.column(), item.row());
 
   if (item.column() == 0) {
-    QxrdCalibrantLibraryModelPtr lib(m_CalibrantLibraryModel);
+    QcepCalibrantLibraryModelPtr lib(m_CalibrantLibraryModel);
 
     if (lib) {
       lib->toggleIsUsed(item.row());
@@ -263,11 +263,11 @@ void QxrdCalibrantWindow::doDeleteCalibrant(int n)
 
 void QxrdCalibrantWindow::doCalibrantProperties(int n)
 {
-  QxrdCalibrantLibraryPtr lib(m_CalibrantLibrary);
-  QxrdCalibrantLibraryModelPtr mdl(m_CalibrantLibraryModel);
+  QcepCalibrantLibraryPtr lib(m_CalibrantLibrary);
+  QcepCalibrantLibraryModelPtr mdl(m_CalibrantLibraryModel);
 
   if (lib && mdl) {
-    QxrdCalibrantPtr cal = lib->calibrant(n);
+    QcepCalibrantPtr cal = lib->calibrant(n);
 
     QxrdCalibrantPropertiesDialog dlg(this, cal);
 

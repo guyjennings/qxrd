@@ -20,7 +20,7 @@
 #include <QScriptEngine>
 #include <QSemaphore>
 #include "qcepimagequeue-ptr.h"
-#include "qxrdroi-ptr.h"
+#include "qceproi-ptr.h"
 #include "qxrddetectordriverthread-ptr.h"
 #include "qxrddetectordriver-ptr.h"
 #include "qxrddetectorplugin-ptr.h"
@@ -114,7 +114,7 @@ public slots:
   int availableImageCount();
 
   int roiCount();
-  QxrdROIPtr roi(int i);
+  QcepROIPtr roi(int i);
 
   QcepDoubleVector scalerCounts();
   double scalerCounts(int chan);

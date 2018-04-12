@@ -12,7 +12,7 @@
 #include "qcepintegrateddata-ptr.h"
 #include "qxrdintegratorcache.h"
 #include "qxrdintegratorcache-ptr.h"
-#include "qxrdcenterfinder-ptr.h"
+#include "qcepcenterfinder-ptr.h"
 #include "qcepallocator-ptr.h"
 #include "qcepimagedata.h"
 #include "qcepimagedata-ptr.h"
@@ -112,7 +112,7 @@ public:
   double XValue(double x, double y) const;
   double XValue(QPointF pt) const;
   double XValue(double x, double y,
-                int xUnits, QxrdCenterFinderPtr cf,
+                int xUnits, QcepCenterFinderPtr cf,
                 double xc, double yc,
                 double dst, double nrg,
                 double pxl, double pxh,
@@ -158,7 +158,7 @@ public slots:
 
 private:
   QxrdExperimentWPtr     m_Experiment;
-  QxrdCenterFinderWPtr   m_CenterFinder;
+  QcepCenterFinderWPtr   m_CenterFinder;
   QxrdIntegratorCachePtr m_IntegratorCache;
 };
 

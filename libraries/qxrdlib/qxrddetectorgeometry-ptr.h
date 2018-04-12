@@ -1,8 +1,0 @@
-#ifndef QXRDDETECTORGEOMETRY_PTR_H
-#define QXRDDETECTORGEOMETRY_PTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdDetectorGeometry)
-
-#endif // QXRDDETECTORGEOMETRY_PTR_H

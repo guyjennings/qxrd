@@ -1,6 +1,7 @@
 #ifndef QXRDINTEGRATEDPLOTWIDGETSETTINGS_H
 #define QXRDINTEGRATEDPLOTWIDGETSETTINGS_H
 
+#include "qxrdlib_global.h"
 #include "qcepplotwidgetsettings.h"
 
 class QXRD_EXPORT QxrdIntegratedPlotWidgetSettings : public QcepPlotWidgetSettings

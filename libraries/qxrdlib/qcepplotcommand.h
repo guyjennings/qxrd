@@ -1,13 +1,13 @@
 #ifndef QCEPPLOTCOMMAND_H
 #define QCEPPLOTCOMMAND_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include "qcepobject.h"
 #include "qcepplotwidget-ptr.h"
 #include "qcepimageplot-ptr.h"
 #include "qcepplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QcepPlotCommand : public QcepObject
+class QCEP_EXPORT QcepPlotCommand : public QcepObject
 {
   Q_OBJECT
 

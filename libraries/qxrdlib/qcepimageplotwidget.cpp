@@ -2,18 +2,18 @@
 #include "qcepzoomincommand.h"
 #include "qcepzoomoutcommand.h"
 #include "qcepzoomallcommand.h"
-#include "qxrdmaskcommandbutton.h"
-#include "qxrdmaskcirclescommand.h"
-#include "qxrdmaskpolygonscommand.h"
-#include "qxrdsetcentercommand.h"
-#include "qxrdpowderpointscommand.h"
-#include "qxrdslicecommand.h"
-#include "qxrdmeasurecommand.h"
-#include "qxrdhistogramcommand.h"
+#include "qcepmaskcommandbutton.h"
+#include "qcepmaskcirclescommand.h"
+#include "qcepmaskpolygonscommand.h"
+#include "qcepsetcentercommand.h"
+#include "qceppowderpointscommand.h"
+#include "qcepslicecommand.h"
+#include "qcepmeasurecommand.h"
+#include "qcephistogramcommand.h"
 #include "qcepimageplot.h"
 #include "qcepimageplotwidgetsettings.h"
-#include "qxrdscalingsubmenucommand.h"
-#include "qxrdcolormapsubmenucommand.h"
+#include "qcepscalingsubmenucommand.h"
+#include "qcepcolormapsubmenucommand.h"
 #include "qcepimageplotwidgetdialog-ptr.h"
 #include "qcepimageplotwidgetdialog.h"
 #include "qceprasterdata.h"
@@ -22,12 +22,11 @@
 #include "qcepcolormaplibrary.h"
 #include "qcepcolormap.h"
 #include "qcepmaskcolormap.h"
-#include "qxrdprocessor.h"
-#include "qxrdmaskstack-ptr.h"
-#include "qxrdmaskstack.h"
-#include "qxrdcentermarker.h"
-#include "qxrdroioverlay.h"
-#include "qxrdpowderoverlay.h"
+#include "qcepmaskstack-ptr.h"
+#include "qcepmaskstack.h"
+#include "qcepcentermarker.h"
+#include "qceproioverlay.h"
+#include "qceppowderoverlay.h"
 
 QcepImagePlotWidget::QcepImagePlotWidget(QWidget *parent)
   : QcepPlotWidget(parent),
@@ -37,7 +36,12 @@ QcepImagePlotWidget::QcepImagePlotWidget(QWidget *parent)
     m_ImageSpectrogram(),
     m_MaskSpectrogram(),
     m_OverflowSpectrogram(),
-    m_PlotRescaler(NULL)
+    m_PlotRescaler(NULL),
+    m_ImageSettings(),
+    m_MaskStack(),
+    m_CenterFinder(),
+    m_PowderRings(),
+    m_ROIModel()
 {
   connect(&m_ImageTimer, &QTimer::timeout, this, &QcepImagePlotWidget::updateImage);
   connect(&m_ImageTimer, &QTimer::timeout, this, &QcepImagePlotWidget::updateMask);
@@ -49,61 +53,20 @@ QcepImagePlotWidget::~QcepImagePlotWidget()
 {
 }
 
-void QcepImagePlotWidget::initialize(QcepImagePlotWidgetSettingsWPtr settings,
-                                     QxrdProcessorWPtr processor)
+void QcepImagePlotWidget::initialize(QcepImagePlotWidgetSettingsWPtr settings)
 {
   QcepPlotWidget::initialize(settings);
 
   m_ImageSettings = settings;
-  m_Processor     = processor;
 
-  QxrdProcessorPtr p(m_Processor);
-
-  if (p) {
-    QxrdMaskStackPtr m(p->maskStack());
-
-    if (m) {
-      addPlotCommand(QcepPlotCommandPtr(new QxrdMaskCommandButton("Mask Commands", this, settings, m)));
-//      addPlotCommand(QcepPlotCommandPtr(new QxrdMaskCirclesCommand("Mask Circles", this, settings, m)));
-//      addPlotCommand(QcepPlotCommandPtr(new QxrdMaskPolygonsCommand("Mask Polygons", this, settings, m)));
-
-      connect(m.data(), &QxrdMaskStack::maskChanged,
-              this,     &QcepImagePlotWidget::maskChanged);
-    }
-
-    QxrdCenterFinderPtr c(p->centerFinder());
-
-    if (c) {
-      addPlotCommand(QcepPlotCommandPtr(
-                       new QxrdSetCenterCommand(this, settings, c)));
-
-      addPlotOverlay(QcepPlotOverlayPtr(
-                       new QxrdCenterMarker("Center Marker", this, settings, c)));
-    }
-
-    QxrdPowderRingsModelPtr pw(p->powderRings());
-
-    if (pw) {
-      addPlotOverlay(QcepPlotOverlayPtr(
-                       new QxrdPowderOverlay("Powder Rings", this, settings, pw)));
-    }
-
-    QxrdROIModelPtr rois(p->roiModel());
-
-    if (rois) {
-      addPlotOverlay(QcepPlotOverlayPtr(
-                        new QxrdROIOverlay("ROIs", this, settings, rois)));
-    }
-  }
-
-  addPlotCommand(QcepPlotCommandPtr(new QxrdPowderPointsCommand(this, settings)));
-  addPlotCommand(QcepPlotCommandPtr(new QxrdSliceCommand(this, settings)));
-  addPlotCommand(QcepPlotCommandPtr(new QxrdMeasureCommand(this, settings)));
-  addPlotCommand(QcepPlotCommandPtr(new QxrdHistogramCommand(this, settings)));
+  addPlotCommand(QcepPlotCommandPtr(new QcepPowderPointsCommand(this, settings)));
+  addPlotCommand(QcepPlotCommandPtr(new QcepSliceCommand(this, settings)));
+  addPlotCommand(QcepPlotCommandPtr(new QcepMeasureCommand(this, settings)));
+  addPlotCommand(QcepPlotCommandPtr(new QcepHistogramCommand(this, settings)));
   addPlotCommandSpacer();
 
-  addPlotCommand(QcepPlotCommandPtr(new QxrdScalingSubmenuCommand(this, settings)));
-  addPlotCommand(QcepPlotCommandPtr(new QxrdColorMapSubmenuCommand("Display", this, settings)));
+  addPlotCommand(QcepPlotCommandPtr(new QcepScalingSubmenuCommand(this, settings)));
+  addPlotCommand(QcepPlotCommandPtr(new QcepColorMapSubmenuCommand("Display", this, settings)));
 
   QcepImagePlotWidgetSettingsPtr set(m_ImageSettings);
 
@@ -130,6 +93,61 @@ void QcepImagePlotWidget::initialize(QcepImagePlotWidgetSettingsWPtr settings,
   }
 
   updateColorMap();
+}
+
+void QcepImagePlotWidget::setMaskStack(QcepMaskStackWPtr masks)
+{
+  m_MaskStack = masks;
+
+  QcepMaskStackPtr m(m_MaskStack);
+
+  if (m) {
+    addPlotCommand(QcepPlotCommandPtr(new QcepMaskCommandButton("Mask Commands", this, m_ImageSettings, m)));
+//      addPlotCommand(QcepPlotCommandPtr(new QcepMaskCirclesCommand("Mask Circles", this, m_ImageSettings, m)));
+//      addPlotCommand(QcepPlotCommandPtr(new QcepMaskPolygonsCommand("Mask Polygons", this, m_ImageSettings, m)));
+
+    connect(m.data(), &QcepMaskStack::maskChanged,
+            this,     &QcepImagePlotWidget::maskChanged);
+  }
+}
+
+void QcepImagePlotWidget::setCenterFinder(QcepCenterFinderWPtr center)
+{
+  m_CenterFinder = center;
+
+  QcepCenterFinderPtr c(m_CenterFinder);
+
+  if (c) {
+    addPlotCommand(QcepPlotCommandPtr(
+                     new QcepSetCenterCommand(this, m_ImageSettings, c)));
+
+    addPlotOverlay(QcepPlotOverlayPtr(
+                     new QcepCenterMarker("Center Marker", this, m_ImageSettings, c)));
+  }
+}
+
+void QcepImagePlotWidget::setPowderRings(QcepPowderRingsModelWPtr powderRings)
+{
+  m_PowderRings = powderRings;
+
+  QcepPowderRingsModelPtr pw(m_PowderRings);
+
+  if (pw) {
+    addPlotOverlay(QcepPlotOverlayPtr(
+                     new QcepPowderOverlay("Powder Rings", this, m_ImageSettings, pw)));
+  }
+}
+
+void QcepImagePlotWidget::setROIModel(QcepROIModelWPtr roiModel)
+{
+  m_ROIModel = roiModel;
+
+  QcepROIModelPtr rois(m_ROIModel);
+
+  if (rois) {
+    addPlotOverlay(QcepPlotOverlayPtr(
+                      new QcepROIOverlay("ROIs", this, m_ImageSettings, rois)));
+  }
 }
 
 void QcepImagePlotWidget::editPreferences()
@@ -195,17 +213,13 @@ void QcepImagePlotWidget::updateMask()
 
 void QcepImagePlotWidget::maskChanged()
 {
-  QxrdProcessorPtr p(m_Processor);
+  QcepMaskStackPtr m(m_MaskStack);
 
-  if (p) {
-    QxrdMaskStackPtr m(p->maskStack());
+  if (m) {
+    m_MaskData = m->mask();
 
-    if (m) {
-      m_MaskData = m->mask();
-    }
+    replotMask();
   }
-
-  replotMask();
 }
 
 void QcepImagePlotWidget::replotImage()

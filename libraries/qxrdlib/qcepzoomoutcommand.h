@@ -5,7 +5,7 @@
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
 
-class QXRD_EXPORT QcepZoomOutCommand : public QcepPlotButtonCommand
+class QCEP_EXPORT QcepZoomOutCommand : public QcepPlotButtonCommand
 {
   Q_OBJECT
 

@@ -6,7 +6,7 @@
 #include "qxrdprocessor.h"
 #include "qcepintegrateddata.h"
 #include "qxrdexperiment.h"
-#include "qxrdcenterfinder.h"
+#include "qcepcenterfinder.h"
 #include "qxrdintegrator.h"
 #include "qcepimagedataformattiff.h"
 #include <QDir>

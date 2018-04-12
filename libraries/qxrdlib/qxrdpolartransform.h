@@ -8,7 +8,7 @@
 #include "qcepproperty.h"
 
 #include "qxrdexperiment-ptr.h"
-#include "qxrdcenterfinder-ptr.h"
+#include "qcepcenterfinder-ptr.h"
 #include "qxrdintegrator-ptr.h"
 #include "qxrdintegratorcache-ptr.h"
 #include "qcepdataobject-ptr.h"

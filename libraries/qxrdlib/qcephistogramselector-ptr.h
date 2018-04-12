@@ -1,0 +1,8 @@
+#ifndef QCEPHISTOGRAMSELECTOR_PTR_H
+#define QCEPHISTOGRAMSELECTOR_PTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QcepHistogramSelector)
+
+#endif // QCEPHISTOGRAMSELECTOR_PTR_H

@@ -3,8 +3,8 @@
 
 #include "qxrdlib_global.h"
 #include <QTableView>
-#include "qxrdmaskstack-ptr.h"
-#include "qxrdmaskstackmodel-ptr.h"
+#include "qcepmaskstack-ptr.h"
+#include "qcepmaskstackmodel-ptr.h"
 #include "qxrdprocessor-ptr.h"
 
 class QXRD_EXPORT QxrdMaskStackView : public QTableView
@@ -12,7 +12,7 @@ class QXRD_EXPORT QxrdMaskStackView : public QTableView
   Q_OBJECT
 public:
   explicit QxrdMaskStackView(QWidget *parent = 0);
-  void setMaskStack(QxrdMaskStackWPtr stk);
+  void setMaskStack(QcepMaskStackWPtr stk);
   void setProcessor(QxrdProcessorWPtr proc);
   void contextMenuEvent ( QContextMenuEvent * event );
 
@@ -21,8 +21,8 @@ signals:
 public slots:
 
 private:
-  QxrdMaskStackWPtr     m_MaskStack;
-  QxrdMaskStackModelPtr m_MaskStackModel;
+  QcepMaskStackWPtr     m_MaskStack;
+  QcepMaskStackModelPtr m_MaskStackModel;
   QxrdProcessorWPtr     m_Processor;
 };
 

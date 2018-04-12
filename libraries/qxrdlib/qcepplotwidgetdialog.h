@@ -1,12 +1,12 @@
 #ifndef QCEPPLOTWIDGETDIALOG_H
 #define QCEPPLOTWIDGETDIALOG_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 #include <QDialog>
 #include "ui_qcepplotwidgetdialog.h"
 #include "qcepplotwidgetsettings-ptr.h"
 
-class QXRD_EXPORT QcepPlotWidgetDialog : public QDialog, public Ui::QcepPlotWidgetDialog
+class QCEP_EXPORT QcepPlotWidgetDialog : public QDialog, public Ui::QcepPlotWidgetDialog
 {
   Q_OBJECT
 
