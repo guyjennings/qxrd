@@ -49,6 +49,7 @@ void QxrdMaskingWindow::initialize(QcepObjectWPtr parent)
       m_ImagePlotWidget   -> setMaskStack(proc->maskStack());
       m_ImagePlotWidget   -> setPowderRings(proc->powderRings());
       m_ImagePlotWidget   -> setROIModel(proc->roiModel());
+      m_ImagePlotWidget   -> addPlotCommandSpacer();
     }
   }
 

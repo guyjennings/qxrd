@@ -264,6 +264,7 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
       m_DetectorImage -> setMaskStack(ms);
       m_DetectorImage -> setPowderRings(pr);
       m_DetectorImage -> setROIModel(ro);
+      m_DetectorImage -> addPlotCommandSpacer();
     }
   }
 }

@@ -113,6 +113,8 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
         m_ImagePlot       -> setROIModel(proc->roiModel());
       }
 
+      m_ImagePlot         -> addPlotCommandSpacer();
+
       m_CenterFinderPlot  -> initialize(settings->centeringPlotWidgetSettings(), cf);
       m_IntegratorPlot    -> initialize(settings->integratedPlotWidgetSettings());
       m_DistortionCorrectionPlot -> initialize(settings->distortionPlotWidgetSettings());

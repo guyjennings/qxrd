@@ -67,6 +67,8 @@ void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
         m_ImagePlotWidget   -> setROIModel(proc->roiModel());
       }
 
+      m_ImagePlotWidget     -> addPlotCommandSpacer();
+
       m_CenteringPlotWidget  -> initialize(settings->centeringPlotWidgetSettings(), cf);
       m_IntegratedPlotWidget -> initialize(settings->integratedPlotWidgetSettings());
     } else {
