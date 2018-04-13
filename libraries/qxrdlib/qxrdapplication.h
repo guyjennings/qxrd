@@ -68,12 +68,6 @@ public slots:
   void loadPreferences(QString path);
   void savePreferences(QString path);
 
-  void logMessage(QString msg) const;
-  void warningMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void statusMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
-  void printLine(QString msg) const;
-
   void processEventCounter();
 
   QString homePath();

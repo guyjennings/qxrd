@@ -81,13 +81,15 @@ void QxrdStartupWindow::appendSplashMessage(QString msg, QDateTime dt)
 {
   GUI_THREAD_CHECK;
 
-  appendMessage(msg, dt);
+  appendMessage(msg, "red", dt);
 
   activateWindow();
   raise();
 }
 
-void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)
+void QxrdStartupWindow::appendMessage(QString msg,
+                                      QString color,
+                                      QDateTime dt)
 {
   GUI_THREAD_CHECK;
 
@@ -109,7 +111,12 @@ void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)
                        "\">"+
                        secs +
                        "</span> : " +
-                       msg);
+                       "<span style=\"" +
+                       "color:" +
+                       color +
+                       "\">" +
+                       msg +
+                       "</span>");
 
   m_LastDateTime = dt;
 
@@ -120,7 +127,7 @@ void QxrdStartupWindow::appendMessage(QString msg, QDateTime dt)
 
 void QxrdStartupWindow::onMessageWindowLinesChanged(int newVal)
 {
-  appendMessage(tr("Message lines set to %1").arg(newVal));
+  appendMessage(tr("Message lines set to %1").arg(newVal), "green");
 
   m_Messages -> document() -> setMaximumBlockCount(newVal);
 }

@@ -51,14 +51,18 @@ void QxrdInfoWindow::initialize(QcepObjectWPtr parent)
     oh -> setSectionResizeMode(0, QHeaderView::ResizeToContents);
   }
 
-  QGridLayout *gl =
-      qobject_cast<QGridLayout*>(
-        m_GridView->layout());
+//  QGridLayout *gl =
+//      qobject_cast<QGridLayout*>(
+//        m_GridView->layout());
 
-  if (gl) {
-    gl -> setColumnStretch(0, 0);
-    gl -> setColumnStretch(1, 1);
-  }
+//  if (gl) {
+//    gl -> setColumnStretch(0, 0);
+//    gl -> setColumnStretch(1, 1);
+//  }
+
+//  QSplitter *sp = m_Splitter;
+
+//  sp -> set
 
   QHeaderView *hv =
     m_PropertiesView -> header();

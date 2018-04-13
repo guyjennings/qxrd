@@ -564,63 +564,6 @@ QxrdDetectorPluginPtr QxrdApplication::detectorPlugin(int detType)
 }
 
 
-void QxrdApplication::logMessage(QString /*msg*/) const
-{
-}
-
-void QxrdApplication::warningMessage(QString msg, QDateTime /*ts*/) const
-{
-  if (experiment(0)) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "warningMessage", Qt::BlockingQueuedConnection, Q_ARG(QString, msg)));
-  } else {
-    printf("%s\n", qPrintable(msg));
-  }
-}
-
-void QxrdApplication::statusMessage(QString msg, QDateTime ts) const
-{
-  if (qcepDebug(DEBUG_NOMESSAGES)) {
-  } else {
-    QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
-
-    message = message.replace("\n", " : ");
-
-    logMessage(message);
-
-    if (experiment(0)) {
-      INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "statusMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
-    } else {
-      printf("%s\n", qPrintable(message));
-    }
-  }
-}
-
-void QxrdApplication::criticalMessage(QString msg, QDateTime ts) const
-{
-  QString message = ts.toString("yyyy.MM.dd : hh:mm:ss.zzz ")+msg.trimmed();
-
-  message = message.replace("\n", " : ");
-
-  logMessage(message);
-
-  if (experiment(0)) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "criticalMessage", Qt::QueuedConnection, Q_ARG(QString, message)));
-  } else {
-    printf("%s\n", qPrintable(message));
-  }
-}
-
-void QxrdApplication::printLine(QString msg) const
-{
-  logMessage(msg);
-
-  if (experiment(0)) {
-    INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "printLine", Qt::QueuedConnection, Q_ARG(QString, msg)));
-  } else {
-    printf("%s\n", qPrintable(msg));
-  }
-}
-
 QString QxrdApplication::homePath()
 {
   return QDir::homePath();

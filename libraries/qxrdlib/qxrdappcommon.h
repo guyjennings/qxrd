@@ -40,6 +40,12 @@ public:
 
   void parseCommandLine(bool wantFullOptions);
 
+  Q_INVOKABLE void logMessage(QString msg) const;
+  Q_INVOKABLE void warningMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
+  Q_INVOKABLE void statusMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
+  Q_INVOKABLE void criticalMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
+  Q_INVOKABLE void printLine(QString msg) const;
+
   Q_INVOKABLE void splashMessage(QString msg, QDateTime dt=QDateTime::currentDateTime());
   Q_INVOKABLE void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
 

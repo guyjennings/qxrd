@@ -29,6 +29,7 @@ public slots:
   void appendSplashMessage       (QString   msg,
                                   QDateTime dt=QDateTime::currentDateTime());
   void appendMessage             (QString   msg,
+                                  QString color,
                                   QDateTime dt=QDateTime::currentDateTime());
 
   void onMessageWindowLinesChanged(int newVal);

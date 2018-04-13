@@ -491,10 +491,72 @@ void QxrdAppCommon::printMessage(QString msg, QDateTime dt) const
                                       "appendMessage",
                                       Qt::QueuedConnection,
                                       Q_ARG(QString, msg),
+                                      Q_ARG(QString, "black"),
                                       Q_ARG(QDateTime, dt)));
 
 //      processEvents();
     }
+  }
+}
+
+void QxrdAppCommon::logMessage(QString /*msg*/) const
+{
+  //TODO: implement
+}
+
+void QxrdAppCommon::warningMessage(QString msg, QDateTime dt) const
+{
+  if (get_GuiWanted()) {
+    if (m_StartupWindow) {
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(m_StartupWindow.data(),
+                                      "appendMessage",
+                                      Qt::QueuedConnection,
+                                      Q_ARG(QString, msg),
+                                      Q_ARG(QString, "yellow"),
+                                      Q_ARG(QDateTime, dt)));
+    }
+  }
+}
+
+void QxrdAppCommon::statusMessage(QString msg, QDateTime dt) const
+{
+  if (get_GuiWanted()) {
+    if (m_StartupWindow) {
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(m_StartupWindow.data(),
+                                      "appendMessage",
+                                      Qt::QueuedConnection,
+                                      Q_ARG(QString, msg),
+                                      Q_ARG(QString, "green"),
+                                      Q_ARG(QDateTime, dt)));
+    }
+  }
+}
+
+void QxrdAppCommon::criticalMessage(QString msg, QDateTime dt) const
+{
+  if (get_GuiWanted()) {
+    if (m_StartupWindow) {
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(m_StartupWindow.data(),
+                                      "appendMessage",
+                                      Qt::QueuedConnection,
+                                      Q_ARG(QString, msg),
+                                      Q_ARG(QString, "red"),
+                                      Q_ARG(QDateTime, dt)));
+    }
+  }
+}
+
+void QxrdAppCommon::printLine(QString msg) const
+{
+  logMessage(msg);
+
+  if (experiment(0)) {
+    INVOKE_CHECK(QMetaObject::invokeMethod(experiment(0).data(), "printLine", Qt::QueuedConnection, Q_ARG(QString, msg)));
+  } else {
+    printf("%s\n", qPrintable(msg));
   }
 }
 
