@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qcepproperty.h"
-#include "qspecserver.h"
+#include "qcepspecserver.h"
 #include "qxrdexperiment-ptr.h"
 #include "qcepobject.h"
 
@@ -42,7 +42,7 @@ public slots:
   void shutdown();
 
 private:
-  QSpecServer m_Server;
+  QcepSpecServer m_Server;
 };
 
 Q_DECLARE_METATYPE(QxrdServer*)

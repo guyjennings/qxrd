@@ -22,7 +22,7 @@ QxrdServer::QxrdServer(QString name) :
   connect(prop_RunSpecServer(), &QcepIntProperty::valueChanged, this, &QxrdServer::runModeChanged);
   connect(prop_SpecServerPort(), &QcepIntProperty::valueChanged, this, &QxrdServer::serverPortChanged);
 
-  connect(&m_Server, &QSpecServer::executeCommand,
+  connect(&m_Server, &QcepSpecServer::executeCommand,
           this,      &QxrdServer::executeCommand);
 }
 
