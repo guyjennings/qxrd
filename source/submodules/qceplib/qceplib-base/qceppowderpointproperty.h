@@ -120,7 +120,7 @@ private:
 
 #define QCEP_POWDERPOINT_PROPERTY(propname) \
 public: \
-  QxrdPowderPoint get_##propname() const \
+  QcepPowderPoint get_##propname() const \
 { \
   return m_##propname.value(); \
 } \

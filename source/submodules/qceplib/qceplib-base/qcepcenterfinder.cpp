@@ -1,29 +1,26 @@
 #include "qcepallocator.h"
 #include "qcepcenterfinder.h"
 #include "qcepcenterfinderpicker.h"
-#include "qxrdwindow.h"
+#include "qcepapplication.h"
 #include <qwt_plot_marker.h>
 #include "qcepmutexlocker.h"
 #include "levmar.h"
 #include <QMessageBox>
-#include "qxrdappcommon.h"
 #include <QtConcurrentMap>
-#include "qxrddebug.h"
+#include "qcepdebug.h"
 #include "qcepfitterpeakpoint.h"
 #include "qcepfitterringpoint.h"
 #include "qcepfitterringcircle.h"
 #include "qcepfitterringellipse.h"
 #include <QVector>
 #include "triangulate.h"
-#include "qxrdplanefitter.h"
+#include "qcepplanefitter.h"
 #include "qcepdatasetmodel-ptr.h"
 #include "qcepdatasetmodel.h"
 #include "qcepcalibrantlibrary.h"
-#include "qxrdexperiment.h"
 #include "qcepfittedrings.h"
 #include "qcepfittedrings-ptr.h"
 #include "qcepcalibrantdspacings.h"
-#include "qxrdprocessor.h"
 
 # ifdef LINSOLVERS_RETAIN_MEMORY
 #  ifdef _MSC_VER
@@ -120,24 +117,6 @@ QcepCenterFinderWPtr QcepCenterFinder::findCenterFinder(QcepObjectWPtr p)
   }
 
   return res;
-}
-
-//TODO: redo ...
-QxrdExperimentWPtr QcepCenterFinder::experiment() const
-{
-  QcepObjectPtr p(parentPtr());
-
-  while (p) {
-    QxrdExperimentWPtr e = qSharedPointerDynamicCast<QxrdExperiment>(p);
-
-    if (e) {
-      return e;
-    } else {
-      p = p -> parentPtr();
-    }
-  }
-
-  return QxrdExperimentWPtr();
 }
 
 QcepDoubleImageDataPtr QcepCenterFinder::data() const
@@ -343,9 +322,7 @@ void QcepCenterFinder::fitPowderCircle(int n)
 
   printMessage(message);
 
-  QxrdAppCommon *app = qobject_cast<QxrdAppCommon*>(g_Application);
-
-  if (app && app->get_GuiWanted()) {
+  if (g_Application && g_Application->get_GuiWanted()) {
     if (niter >= 0) {
       message.append(tr("Do you want to update the beam centering parameters?"));
 
@@ -390,9 +367,7 @@ void QcepCenterFinder::fitPowderEllipse(int n)
 
   printMessage(message);
 
-  QxrdAppCommon *app = qobject_cast<QxrdAppCommon*>(g_Application);
-
-  if (app && app->get_GuiWanted()) {
+  if (g_Application && g_Application->get_GuiWanted()) {
     if (fitter.reason() == QcepFitter::Successful) {
       message.append(tr("Do you want to update the beam centering parameters?"));
       if (QMessageBox::question(NULL, "Update Fitted Center?", message, QMessageBox::Ok | QMessageBox::No, QMessageBox::Ok) == QMessageBox::Ok) {
@@ -476,15 +451,11 @@ void QcepCenterFinder::setFittedRings(QcepFittedRingsPtr rings)
                    .arg(rings->rot(i)));
     }
 
-    QxrdExperimentPtr expt(experiment());
+    QcepDatasetModelPtr data(m_Dataset);
 
-    if (expt) {
-      QcepDatasetModelPtr data = expt->dataset();
-
-      if (data) {
-        data->remove("rings");
-        data->append("rings", rings);
-      }
+    if (data) {
+      data->remove("rings");
+      data->append("rings", rings);
     }
   }
 }
@@ -844,72 +815,68 @@ bool QcepCenterFinder::traceRingNear(double x0, double y0, double step)
     nreason[fit.reason()] += 1;
   }
 
-  QxrdExperimentPtr expt(experiment());
+  QcepDatasetModelPtr data(m_Dataset);
 
-  if (expt) {
-    QcepDatasetModelPtr data = expt->dataset();
+  if (data) {
+    QcepDataColumnScanPtr scan = data->columnScan(tr("fitted/ring%1").arg(get_RingIndex()));
 
-    if (data) {
-      QcepDataColumnScanPtr scan = data->columnScan(tr("fitted/ring%1").arg(get_RingIndex()));
+    if (scan == NULL) {
+      scan = data->newColumnScan(tr("fitted/ring%1").arg(get_RingIndex()));
+    }
 
-      if (scan == NULL) {
-        scan = data->newColumnScan(tr("fitted/ring%1").arg(get_RingIndex()));
-      }
+    if (scan) {
+      scan->clear();
 
-      if (scan) {
-        scan->clear();
+      scan->appendColumn("i");
+      scan->appendColumn("index");
+      scan->appendColumn("Reason");
+      scan->appendColumn("X0");
+      scan->appendColumn("Y0");
+      scan->appendColumn("pkht");
+      scan->appendColumn("bkgd");
+      scan->appendColumn("XFit");
+      scan->appendColumn("YFit");
+      scan->appendColumn("WdFit");
+      scan->appendColumn("HtFit");
+      scan->appendColumn("BkgdFit");
+      scan->appendColumn("BkgdXFit");
+      scan->appendColumn("BkgdYFit");
+      scan->appendColumn("RFit");
+      scan->appendColumn("AzFit");
+      scan->appendColumn("dx");
+      scan->appendColumn("dy");
+      scan->appendColumn("dr");
 
-        scan->appendColumn("i");
-        scan->appendColumn("index");
-        scan->appendColumn("Reason");
-        scan->appendColumn("X0");
-        scan->appendColumn("Y0");
-        scan->appendColumn("pkht");
-        scan->appendColumn("bkgd");
-        scan->appendColumn("XFit");
-        scan->appendColumn("YFit");
-        scan->appendColumn("WdFit");
-        scan->appendColumn("HtFit");
-        scan->appendColumn("BkgdFit");
-        scan->appendColumn("BkgdXFit");
-        scan->appendColumn("BkgdYFit");
-        scan->appendColumn("RFit");
-        scan->appendColumn("AzFit");
-        scan->appendColumn("dx");
-        scan->appendColumn("dy");
-        scan->appendColumn("dr");
+      scan->resizeRows(fits.count());
+      scan->column(2)->setFormatter(&QcepFitter::reasonString);
 
-        scan->resizeRows(fits.count());
-        scan->column(2)->setFormatter(&QcepFitter::reasonString);
+      for (int i=0; i<fits.count(); i++) {
+        QcepFitterRingPoint &fit = fits[i];
+        int col=0;
 
-        for (int i=0; i<fits.count(); i++) {
-          QcepFitterRingPoint &fit = fits[i];
-          int col=0;
+        double dx = fit.fittedX() - fit.x0();
+        double dy = fit.fittedY() - fit.y0();
+        double dr = sqrt(dx*dx + dy*dy);
 
-          double dx = fit.fittedX() - fit.x0();
-          double dy = fit.fittedY() - fit.y0();
-          double dr = sqrt(dx*dx + dy*dy);
-
-          scan->setValue(col++, i, i);
-          scan->setValue(col++, i, fit.index());
-          scan->setValue(col++, i, fit.reason());
-          scan->setValue(col++, i, fit.x0());
-          scan->setValue(col++, i, fit.y0());
-          scan->setValue(col++, i, fit.pkht());
-          scan->setValue(col++, i, fit.bkgd());
-          scan->setValue(col++, i, fit.fittedX());
-          scan->setValue(col++, i, fit.fittedY());
-          scan->setValue(col++, i, fit.fittedWidth());
-          scan->setValue(col++, i, fit.fittedHeight());
-          scan->setValue(col++, i, fit.fittedBkgd());
-          scan->setValue(col++, i, fit.fittedBkgdX());
-          scan->setValue(col++, i, fit.fittedBkgdY());
-          scan->setValue(col++, i, fit.fittedR());
-          scan->setValue(col++, i, fit.fittedAz()*180.0/M_PI);
-          scan->setValue(col++, i, dx);
-          scan->setValue(col++, i, dy);
-          scan->setValue(col++, i, dr);
-        }
+        scan->setValue(col++, i, i);
+        scan->setValue(col++, i, fit.index());
+        scan->setValue(col++, i, fit.reason());
+        scan->setValue(col++, i, fit.x0());
+        scan->setValue(col++, i, fit.y0());
+        scan->setValue(col++, i, fit.pkht());
+        scan->setValue(col++, i, fit.bkgd());
+        scan->setValue(col++, i, fit.fittedX());
+        scan->setValue(col++, i, fit.fittedY());
+        scan->setValue(col++, i, fit.fittedWidth());
+        scan->setValue(col++, i, fit.fittedHeight());
+        scan->setValue(col++, i, fit.fittedBkgd());
+        scan->setValue(col++, i, fit.fittedBkgdX());
+        scan->setValue(col++, i, fit.fittedBkgdY());
+        scan->setValue(col++, i, fit.fittedR());
+        scan->setValue(col++, i, fit.fittedAz()*180.0/M_PI);
+        scan->setValue(col++, i, dx);
+        scan->setValue(col++, i, dy);
+        scan->setValue(col++, i, dr);
       }
     }
   }
@@ -958,7 +925,7 @@ bool QcepCenterFinder::missingRingNear(double x, double y)
 //  double az  = atan2(dy, dx);
 //  double ast = step/r;
 
-//  QxrdFitterRingPoint fit(this, 0, x0, y0, 0, 0);
+//  QcepFitterRingPoint fit(this, 0, x0, y0, 0, 0);
 
 //  fit.fit();
 
@@ -969,14 +936,14 @@ bool QcepCenterFinder::missingRingNear(double x, double y)
 
 //  int nsteps = (int) ((2.0*M_PI)/ast)+1;
 
-//  QVector<QxrdFitterRingPoint> fits;
+//  QVector<QcepFitterRingPoint> fits;
 
 //  double tth = getTTH(x0, y0);
 //  for (int i=0; i<nsteps; i++) {
 //    double chi = ast*i*180.0/M_PI;
 //    QPointF xy  = getXY(tth, chi);
 
-//    fits.append(QxrdFitterRingPoint(this, i, xy.x(), xy.y(), pkht, bkgd));
+//    fits.append(QcepFitterRingPoint(this, i, xy.x(), xy.y(), pkht, bkgd));
 
 ////    if (qcepDebug(DEBUG_FITTING) || get_PeakFitDebug()) {
 ////      printMessage(tr("Fitting i: %1, x0: %2, y0: %3").arg(i).arg(fits[i].x0()).arg(fits[i].y0()));
@@ -988,7 +955,7 @@ bool QcepCenterFinder::missingRingNear(double x, double y)
 //      fits[i].fit();
 //    }
 //  } else {
-//    QFuture<void> fitDone = QtConcurrent::map(fits, &QxrdFitterRingPoint::fit);
+//    QFuture<void> fitDone = QtConcurrent::map(fits, &QcepFitterRingPoint::fit);
 
 //    fitDone.waitForFinished();
 //  }
@@ -999,10 +966,10 @@ bool QcepCenterFinder::missingRingNear(double x, double y)
 //    sums[i]=0;
 //  }
 
-//  QxrdPowderPointVector pts = get_MarkedPoints();
+//  QcepPowderPointVector pts = get_MarkedPoints();
 
 //  for (int i=0; i<nsteps; i++) {
-//    QxrdFitterRingPoint &r = fits[i];
+//    QcepFitterRingPoint &r = fits[i];
 
 //    if (qcepDebug(DEBUG_FITTING) || get_PeakFitDebug()) {
 //      printMessage(tr("Fitted %1 : x %2, y %3, w %4, ht %5, bk %6, bkx %7, bky %8, rzn %9")
@@ -1020,25 +987,25 @@ bool QcepCenterFinder::missingRingNear(double x, double y)
 //      sums[rz]++;
 //    }
 
-//    if (r.reason() == QxrdFitter::Successful) {
-//      pts.append(QxrdPowderPoint(get_RingIndex(), 0, r.fittedX(), r.fittedY(), r.fittedR(), r.fittedR(), r.fittedAz()));
+//    if (r.reason() == QcepFitter::Successful) {
+//      pts.append(QcepPowderPoint(get_RingIndex(), 0, r.fittedX(), r.fittedY(), r.fittedR(), r.fittedR(), r.fittedAz()));
 //    }
 //  }
 
 //  QString msg(tr("centering.traceRingNearParallel : Fitted %1/%2 : NR %3, OR %4, BdW %5, BdP %6, BdH %7")
-//      .arg(sums[QxrdFitter::Successful])
+//      .arg(sums[QcepFitter::Successful])
 //      .arg(nsteps)
-//      .arg(sums[QxrdFitter::NoResult])
-//      .arg(sums[QxrdFitter::OutsideData])
-//      .arg(sums[QxrdFitter::BadWidth])
-//      .arg(sums[QxrdFitter::BadPosition])
-//      .arg(sums[QxrdFitter::BadHeight])
+//      .arg(sums[QcepFitter::NoResult])
+//      .arg(sums[QcepFitter::OutsideData])
+//      .arg(sums[QcepFitter::BadWidth])
+//      .arg(sums[QcepFitter::BadPosition])
+//      .arg(sums[QcepFitter::BadHeight])
 //      );
 
 //  printMessage(msg);
 //  statusMessage(msg);
 
-//  if (sums[QxrdFitter::Successful]) {
+//  if (sums[QcepFitter::Successful]) {
 //    prop_RingIndex()->incValue(1);
 //    set_MarkedPoints(pts);
 //  }
@@ -1087,82 +1054,74 @@ void QcepCenterFinder::setPowderPoint(int i, int n1, int n2, int n3, double x, d
   set_MarkedPoints(pts);
 }
 
-QScriptValue QcepCenterFinder::getPowderPoint(int i)
-{
-  QxrdExperimentPtr exp(experiment());
+//QScriptValue QcepCenterFinder::getPowderPoint(int i)
+//{
+//  QcepScriptEnginePtr   eng(m_ScriptEngine);
+//  QcepPowderPointVector pts = get_MarkedPoints();
 
-  if (exp) {
-    QxrdScriptEnginePtr eng(exp->scriptEngine());
-    QcepPowderPointVector pts = get_MarkedPoints();
+//  if (eng) {
+//    if (i>=0 && i<get_MarkedPoints().count()) {
+//      QScriptValue val = eng->newObject();
 
-    if (eng) {
-      if (i>=0 && i<get_MarkedPoints().count()) {
-        QScriptValue val = eng->newObject();
+//      QcepPowderPoint &pt = pts[i];
+//      val.setProperty("n1", pt.n1());
+//      val.setProperty("n2", pt.n2());
+//      val.setProperty("x",  pt.x());
+//      val.setProperty("y",  pt.y());
+//      val.setProperty("r1", pt.r1());
+//      val.setProperty("r2", pt.r2());
+//      val.setProperty("az", pt.az());
 
-        QcepPowderPoint &pt = pts[i];
-        val.setProperty("n1", pt.n1());
-        val.setProperty("n2", pt.n2());
-        val.setProperty("x",  pt.x());
-        val.setProperty("y",  pt.y());
-        val.setProperty("r1", pt.r1());
-        val.setProperty("r2", pt.r2());
-        val.setProperty("az", pt.az());
+//      return val;
+//    }
+//  }
 
-        return val;
-      }
-    }
-  }
+//  return QScriptValue();
+//}
 
-  return QScriptValue();
-}
+//QScriptValue QcepCenterFinder::getPowderPoints()
+//{
+//  QcepScriptEnginePtr eng(m_ScriptEngine);
 
-QScriptValue QcepCenterFinder::getPowderPoints()
-{
-  QxrdExperimentPtr exp(experiment());
+//  if (eng) {
+//    QcepPowderPointVector pts = get_MarkedPoints();
 
-  if (exp) {
-    QxrdScriptEnginePtr eng(exp->scriptEngine());
+//    QScriptValue val = eng->newArray();
 
-    if (eng) {
-      QcepPowderPointVector pts = get_MarkedPoints();
+//    for (int i=0; i<pts.count(); i++) {
+//      QScriptValue item = eng->newObject();
 
-      QScriptValue val = eng->newArray();
+//      QcepPowderPoint &pt = pts[i];
+//      item.setProperty("n1", pt.n1());
+//      item.setProperty("n2", pt.n2());
+//      item.setProperty("x", pt.x());
+//      item.setProperty("y", pt.y());
+//      item.setProperty("r1", pt.r1());
+//      item.setProperty("r2", pt.r2());
+//      item.setProperty("az", pt.az());
 
-      for (int i=0; i<pts.count(); i++) {
-        QScriptValue item = eng->newObject();
+//      val.setProperty(tr("%1").arg(i), item);
+//    }
 
-        QcepPowderPoint &pt = pts[i];
-        item.setProperty("n1", pt.n1());
-        item.setProperty("n2", pt.n2());
-        item.setProperty("x", pt.x());
-        item.setProperty("y", pt.y());
-        item.setProperty("r1", pt.r1());
-        item.setProperty("r2", pt.r2());
-        item.setProperty("az", pt.az());
+//    return val;
+//  }
 
-        val.setProperty(tr("%1").arg(i), item);
-      }
+//  return QScriptValue();
+//}
 
-      return val;
-    }
-  }
+//void         QcepCenterFinder::setPowderPoint(int i, QScriptValue val)
+//{
+//  int   n1 = val.property("n1").toInteger();
+//  int   n2 = val.property("n2").toInteger();
+//  int   n3 = val.property("n3").toInteger();
+//  double x = val.property("x").toNumber();
+//  double y = val.property("y").toNumber();
+//  double r1 = val.property("r1").toNumber();
+//  double r2 = val.property("r2").toNumber();
+//  double az = val.property("az").toNumber();
 
-  return QScriptValue();
-}
-
-void         QcepCenterFinder::setPowderPoint(int i, QScriptValue val)
-{
-  int   n1 = val.property("n1").toInteger();
-  int   n2 = val.property("n2").toInteger();
-  int   n3 = val.property("n3").toInteger();
-  double x = val.property("x").toNumber();
-  double y = val.property("y").toNumber();
-  double r1 = val.property("r1").toNumber();
-  double r2 = val.property("r2").toNumber();
-  double az = val.property("az").toNumber();
-
-  setPowderPoint(i, n1, n2, n3, x, y, r1, r2, az);
-}
+//  setPowderPoint(i, n1, n2, n3, x, y, r1, r2, az);
+//}
 
 
 void QcepCenterFinder::setData(QcepDoubleImageDataPtr data)
@@ -1395,7 +1354,7 @@ private:
 //    }
 //  }
 
-//  QxrdPowderPointVector pts;
+//  QcepPowderPointVector pts;
 
 //  for (int i=1; i<mmax*mmax; i++) {
 //    QuadInt e = ex[i];
@@ -1404,7 +1363,7 @@ private:
 //      double tth = 2.0*asin(lambda/(2.0*d))*180.0/M_PI;
 
 //      if (tth <= 180) {
-//        pts.append(QxrdPowderPoint(e.h(), e.k(), e.l(), d, tth, 0, 0, 0));
+//        pts.append(QcepPowderPoint(e.h(), e.k(), e.l(), d, tth, 0, 0, 0));
 
 //        if (qcepDebug(DEBUG_CALIBRANT)) {
 //          printMessage(tr("%1(%2): [%3,%4,%5], d:%6, tth:%7").arg(i).arg(e.n()).arg(e.h()).arg(e.k()).arg(e.l()).arg(d).arg(tth));
@@ -1420,14 +1379,10 @@ double QcepCenterFinder::calibrantDSpacing(int n)
 {
   double res = qQNaN();
 
-  QxrdExperimentPtr expt(experiment());
+  QcepCalibrantDSpacingsPtr dsp(m_CalibrantDSpacings);
 
-  if (expt) {
-    QcepCalibrantDSpacingsPtr dsp(expt->calibrantDSpacings());
-
-    if (dsp) {
-      res = dsp->calibrantDSpacing(n);
-    }
+  if (dsp) {
+    res = dsp->calibrantDSpacing(n);
   }
 
   return res;
@@ -1437,14 +1392,10 @@ double QcepCenterFinder::calibrantTTH(int n)
 {
   double res = qQNaN();
 
-  QxrdExperimentPtr expt(experiment());
+  QcepCalibrantDSpacingsPtr dsp(m_CalibrantDSpacings);
 
-  if (expt) {
-    QcepCalibrantDSpacingsPtr dsp(expt->calibrantDSpacings());
-
-    if (dsp) {
-      res = dsp->calibrantTTH(n);
-    }
+  if (dsp) {
+    res = dsp->calibrantTTH(n);
   }
 
   return res;
@@ -1485,194 +1436,192 @@ static int nearby(double x1, double y1, double x2, double y2)
 void QcepCenterFinder::calculateCalibration()
 {
   printMessage("centering.calculateCalibration()");
-  QxrdExperimentPtr expt(experiment());
 
-  if (expt) {
-    QxrdProcessorPtr proc(expt->processor());
+  QcepDatasetModelPtr    dset(m_Dataset);
+  QcepDoubleImageDataPtr res = newData();
 
-    if (proc) {
-      QcepDoubleImageDataPtr res = newData();
-      res -> fill(nan(""));
+  if (dset) {
+    res -> fill(nan(""));
 
-      int wd = res->get_Width();
-      int ht = res->get_Height();
+    int wd = res->get_Width();
+    int ht = res->get_Height();
 
-      QxrdPlaneFitter f00, f01, f10, f11;
+    QcepPlaneFitter f00, f01, f10, f11;
 
-      int np = countPowderRingPoints();
+    int np = countPowderRingPoints();
 
-      QVector<XYZ> verts;
+    QVector<XYZ> verts;
 
-      for (int i=0; i<np; i++) {
-        QcepPowderPoint pt = powderPoint(i);
+    for (int i=0; i<np; i++) {
+      QcepPowderPoint pt = powderPoint(i);
 
-        if (pt.isValid()) {
-          double x = pt.x();
-          double y = pt.y();
-          double tth = getTTH(x, y);
-          double tthNom = calibrantTTH(pt.n1());
-          double disp = get_DetectorDistance()*(tan(tth*M_PI/180.0)/tan(tthNom*M_PI/180.0)-1.0);
+      if (pt.isValid()) {
+        double x = pt.x();
+        double y = pt.y();
+        double tth = getTTH(x, y);
+        double tthNom = calibrantTTH(pt.n1());
+        double disp = get_DetectorDistance()*(tan(tth*M_PI/180.0)/tan(tthNom*M_PI/180.0)-1.0);
 
-          XYZ p;
-          p.x = x;
-          p.y = y;
-          p.z = disp;
-          verts.append(p);
+        XYZ p;
+        p.x = x;
+        p.y = y;
+        p.z = disp;
+        verts.append(p);
 
-          if (nearby(x,y,0,0)) {
-            f00.addPoint(x,y,disp);
-          }
-
-          if (nearby(x,y,0,ht)) {
-            f01.addPoint(x,y,disp);
-          }
-
-          if (nearby(x,y,wd,0)) {
-            f10.addPoint(x,y,disp);
-          }
-
-          if (nearby(x,y,wd,ht)) {
-            f11.addPoint(x,y,disp);
-          }
-        }
-      }
-
-      XYZ pc;
-
-      pc.x = 0;  pc.y = 0;  pc.z = f00.value(0,0);   verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
-      pc.x = 0;  pc.y = ht; pc.z = f01.value(0,ht);  verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
-      pc.x = wd; pc.y = 0;  pc.z = f10.value(wd,0);  verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
-      pc.x = wd; pc.y = ht; pc.z = f11.value(wd,ht); verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
-
-      XYZ p = {0,0,0};
-
-      std::sort(verts.begin(), verts.end(), compareXYX);
-
-      int n = verts.count();
-
-      QVector<XYZ> uniq;
-
-      for (int i=0; i<n; i++) {
-        if (i==0 || differentVertices(verts[i], verts[i-1])) {
-          uniq.append(verts[i]);
-        }
-      }
-
-      int drop = verts.count() - uniq.count();
-
-      if (drop > 0) {
-        printMessage(tr("Dropped %1 duplicated vertices").arg(drop));
-      }
-
-      n = uniq.count();
-
-      uniq.append(p);
-      uniq.append(p);
-      uniq.append(p);
-
-      QVector<ITRIANGLE> tris(n*3);
-
-      int ntri = 0;
-
-      Triangulate(n, uniq.data(), tris.data(), &ntri);
-
-      printMessage(tr("Formed %1 triangles").arg(ntri));
-
-      int ndup = 0, nMsg = 0;
-
-      for (int i=0; i<ntri; i++) {
-        int p1 = tris[i].p1;
-        int p2 = tris[i].p2;
-        int p3 = tris[i].p3;
-
-        //        printMessage(tr("%1: (%2,%3) - (%4,%5) - (%6,%7)")
-        //                     .arg(i)
-        //                     .arg(uniq[p1].x).arg(uniq[p1].y)
-        //                     .arg(uniq[p2].x).arg(uniq[p2].y)
-        //                     .arg(uniq[p3].x).arg(uniq[p3].y)
-        //                     );
-
-        double x1 = uniq[p1].x;
-        double x2 = uniq[p2].x;
-        double x3 = uniq[p3].x;
-        double y1 = uniq[p1].y;
-        double y2 = uniq[p2].y;
-        double y3 = uniq[p3].y;
-        double z1 = uniq[p1].z;
-        double z2 = uniq[p2].z;
-        double z3 = uniq[p3].z;
-
-        double minX = qMax((double) 0,floor(qMin(qMin(x1,x2),x3)));
-        double maxX = qMin((double) wd,ceil(qMax(qMax(x1,x2),x3)));
-        double minY = qMax((double) 0,floor(qMin(qMin(y1,y2),y3)));
-        double maxY = qMin((double) ht,ceil(qMax(qMax(y1,y2),y3)));
-
-        double detT = (y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3);
-
-        int ndupt = 0;
-        int nptst = 0;
-
-        for (double y=minY; y<=maxY; y++) {
-          for (double x=minX; x<=maxX; x++) {
-            double l1 = ((y2 - y3)*(x - x3) + (x3 - x2)*(y - y3))/detT;
-            double l2 = ((y3 - y1)*(x - x3) + (x1 - x3)*(y - y3))/detT;
-            double l3 = 1 - l1 - l2;
-
-            if (0 < l1 && l1 < 1.0 &&
-                0 < l2 && l2 < 1.0 &&
-                0 < l3 && l3 < 1.0) {
-              double z = l1*z1 + l2*z2 + l3*z3;
-
-              double val = res->getImageData(x,y);
-
-              if (val == val) {
-                ndup += 1;
-                ndupt += 1;
-                res -> setImageData(x,y, i);
-              } else {
-                res -> setImageData(x,y, z);
-              }
-
-              nptst += 1;
-            }
-          }
+        if (nearby(x,y,0,0)) {
+          f00.addPoint(x,y,disp);
         }
 
-        if (ndupt > 0 && nMsg++ < 50) {
-          printMessage(tr("Triangle %1 : (%2,%3) - (%4,%5) - (%6,%7) : %8/%9 dups")
-                       .arg(i)
-                       .arg(uniq[p1].x).arg(uniq[p1].y)
-                       .arg(uniq[p2].x).arg(uniq[p2].y)
-                       .arg(uniq[p3].x).arg(uniq[p3].y)
-                       .arg(ndupt).arg(nptst));
+        if (nearby(x,y,0,ht)) {
+          f01.addPoint(x,y,disp);
+        }
+
+        if (nearby(x,y,wd,0)) {
+          f10.addPoint(x,y,disp);
+        }
+
+        if (nearby(x,y,wd,ht)) {
+          f11.addPoint(x,y,disp);
         }
       }
-
-      int nunset = 0;
-
-      for (int y=0; y<ht; y++) {
-        for (int x=0; x<wd; x++) {
-          double val = res->getImageData(x,y);
-
-          if (val!=val) {
-            nunset += 1;
-          }
-        }
-      }
-
-      for (int y=0; y<ht; y+=ht-1) {
-        for (int x=0; x<wd; x+=wd-1) {
-          double val = res->getImageData(x,y);
-
-          if (val!=val) {
-            printMessage(tr("[%1,%2] unset").arg(x).arg(y));
-          }
-        }
-      }
-
-      printMessage(tr("%1 duplicated points, %2 unset pixels").arg(ndup).arg(nunset));
-      proc->newData(res);
     }
+
+    XYZ pc;
+
+    pc.x = 0;  pc.y = 0;  pc.z = f00.value(0,0);   verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
+    pc.x = 0;  pc.y = ht; pc.z = f01.value(0,ht);  verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
+    pc.x = wd; pc.y = 0;  pc.z = f10.value(wd,0);  verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
+    pc.x = wd; pc.y = ht; pc.z = f11.value(wd,ht); verts.append(pc); printMessage(tr("appended (%1,%2,%3)").arg(pc.x).arg(pc.y).arg(pc.z));
+
+    XYZ p = {0,0,0};
+
+    std::sort(verts.begin(), verts.end(), compareXYX);
+
+    int n = verts.count();
+
+    QVector<XYZ> uniq;
+
+    for (int i=0; i<n; i++) {
+      if (i==0 || differentVertices(verts[i], verts[i-1])) {
+        uniq.append(verts[i]);
+      }
+    }
+
+    int drop = verts.count() - uniq.count();
+
+    if (drop > 0) {
+      printMessage(tr("Dropped %1 duplicated vertices").arg(drop));
+    }
+
+    n = uniq.count();
+
+    uniq.append(p);
+    uniq.append(p);
+    uniq.append(p);
+
+    QVector<ITRIANGLE> tris(n*3);
+
+    int ntri = 0;
+
+    Triangulate(n, uniq.data(), tris.data(), &ntri);
+
+    printMessage(tr("Formed %1 triangles").arg(ntri));
+
+    int ndup = 0, nMsg = 0;
+
+    for (int i=0; i<ntri; i++) {
+      int p1 = tris[i].p1;
+      int p2 = tris[i].p2;
+      int p3 = tris[i].p3;
+
+      //        printMessage(tr("%1: (%2,%3) - (%4,%5) - (%6,%7)")
+      //                     .arg(i)
+      //                     .arg(uniq[p1].x).arg(uniq[p1].y)
+      //                     .arg(uniq[p2].x).arg(uniq[p2].y)
+      //                     .arg(uniq[p3].x).arg(uniq[p3].y)
+      //                     );
+
+      double x1 = uniq[p1].x;
+      double x2 = uniq[p2].x;
+      double x3 = uniq[p3].x;
+      double y1 = uniq[p1].y;
+      double y2 = uniq[p2].y;
+      double y3 = uniq[p3].y;
+      double z1 = uniq[p1].z;
+      double z2 = uniq[p2].z;
+      double z3 = uniq[p3].z;
+
+      double minX = qMax((double) 0,floor(qMin(qMin(x1,x2),x3)));
+      double maxX = qMin((double) wd,ceil(qMax(qMax(x1,x2),x3)));
+      double minY = qMax((double) 0,floor(qMin(qMin(y1,y2),y3)));
+      double maxY = qMin((double) ht,ceil(qMax(qMax(y1,y2),y3)));
+
+      double detT = (y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3);
+
+      int ndupt = 0;
+      int nptst = 0;
+
+      for (double y=minY; y<=maxY; y++) {
+        for (double x=minX; x<=maxX; x++) {
+          double l1 = ((y2 - y3)*(x - x3) + (x3 - x2)*(y - y3))/detT;
+          double l2 = ((y3 - y1)*(x - x3) + (x1 - x3)*(y - y3))/detT;
+          double l3 = 1 - l1 - l2;
+
+          if (0 < l1 && l1 < 1.0 &&
+              0 < l2 && l2 < 1.0 &&
+              0 < l3 && l3 < 1.0) {
+            double z = l1*z1 + l2*z2 + l3*z3;
+
+            double val = res->getImageData(x,y);
+
+            if (val == val) {
+              ndup += 1;
+              ndupt += 1;
+              res -> setImageData(x,y, i);
+            } else {
+              res -> setImageData(x,y, z);
+            }
+
+            nptst += 1;
+          }
+        }
+      }
+
+      if (ndupt > 0 && nMsg++ < 50) {
+        printMessage(tr("Triangle %1 : (%2,%3) - (%4,%5) - (%6,%7) : %8/%9 dups")
+                     .arg(i)
+                     .arg(uniq[p1].x).arg(uniq[p1].y)
+                     .arg(uniq[p2].x).arg(uniq[p2].y)
+                     .arg(uniq[p3].x).arg(uniq[p3].y)
+                     .arg(ndupt).arg(nptst));
+      }
+    }
+
+    int nunset = 0;
+
+    for (int y=0; y<ht; y++) {
+      for (int x=0; x<wd; x++) {
+        double val = res->getImageData(x,y);
+
+        if (val!=val) {
+          nunset += 1;
+        }
+      }
+    }
+
+    for (int y=0; y<ht; y+=ht-1) {
+      for (int x=0; x<wd; x+=wd-1) {
+        double val = res->getImageData(x,y);
+
+        if (val!=val) {
+          printMessage(tr("[%1,%2] unset").arg(x).arg(y));
+        }
+      }
+    }
+
+    printMessage(tr("%1 duplicated points, %2 unset pixels").arg(ndup).arg(nunset));
+
+    dset->append("calibration", res);
   }
 }
 

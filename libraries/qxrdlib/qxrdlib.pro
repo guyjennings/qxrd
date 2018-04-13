@@ -101,7 +101,6 @@ SOURCES += qxrdlib.cpp \
     qxrdwindowsettings.cpp \
     qxrdfilebrowsersettings.cpp \
     qxrdhistogramdialogsettings.cpp \
-    triangulate.c \
     qxrddebug.cpp \
     qxrdhelpbrowser.cpp \
     qxrduserscriptdialog.cpp \
@@ -110,7 +109,6 @@ SOURCES += qxrdlib.cpp \
     qxrdpoint4d.cpp \
     qxrdplotvectorfielddata.cpp \
     qxrdscripteditwidget.cpp \
-    qxrdplanefitter.cpp \
     qxrdimageplotzoomer.cpp \
     qxrdmainwindow.cpp \
     qxrdacquisitionparameterpack.cpp \
@@ -232,107 +230,7 @@ SOURCES += qxrdlib.cpp \
     qxrdsynchronizer.cpp \
     qxrdsynchronizerthread.cpp \
     qxrdprocessorexecution.cpp \
-    qxrdprocessorexecutionthread.cpp \
-    qcepplotwidget.cpp \
-    qcepplotwidgetsettings.cpp \
-    qcepplotwidgetdialog.cpp \
-    qcepplotcommand.cpp \
-    qcepplotoverlay.cpp \
-    qcepcolormaplibrary.cpp \
-    qcepcolormap.cpp \
-    qcepmaskcolormap.cpp \
-    qcepplotcontextmenucommand.cpp \
-    qcepautoscalecommand.cpp \
-    qcepzoomincommand.cpp \
-    qcepplotbuttoncommand.cpp \
-    qcepzoomoutcommand.cpp \
-    qcepzoomallcommand.cpp \
-    qcepprintplotbutton.cpp \
-    qcepplotpreferencesbutton.cpp \
-    qcepprintplotcommand.cpp \
-    qcepplotpreferencescommand.cpp \
-    qcepaxissubmenucommand.cpp \
-    qceprasterdata.cpp \
-    qcepmaskrasterdata.cpp \
-    qcepoverflowrasterdata.cpp \
-    qcepimageplotwidgetsettings.cpp \
-    qcepimageplotwidget.cpp \
-    qcepimageplotwidgetdialog.cpp \
-    qcepimageplot.cpp \
-    qcepimageplotsettings.cpp \
-    qcepaddpointcommand.cpp \
-    qcepadjustdistancecommand.cpp \
-    qcepadjustenergycommand.cpp \
-    qcepadjustfitcommand.cpp \
-    qcephistogramcommand.cpp \
-    qcephistogramselector.cpp \
-    qcepmaskstack.cpp \
-    qcepmaskstackmodel.cpp \
-    qcepmaskcirclescommand.cpp \
-    qcepimageplotmeasurer.cpp \
-    qcepmaskpicker.cpp \
-    qcepmaskcommandbutton.cpp \
-    qcepmaskpolygonscommand.cpp \
-    qcepmeasurecommand.cpp \
-    qceppowderpointpicker.cpp \
-    qceppowderpointscommand.cpp \
-    qcepdetectorgeometry.cpp \
-    qcepcenterfinder.cpp \
-    qcepcenterfinderpicker.cpp \
-    qcepsetcentercommand.cpp \
-    qcepplotslicer.cpp \
-    qcepslicecommand.cpp \
-    qcepcolormapsubmenucommand.cpp \
-    qcepcontextseparatorcommand.cpp \
-    qcepdelallpointscommand.cpp \
-    qcepdelpointcommand.cpp \
-    qcepdelringcommand.cpp \
-    qcepdisableringcommand.cpp \
-    qcepenableringcommand.cpp \
-    qcepfitcirclecommand.cpp \
-    qcepfitellipsecommand.cpp \
-    qcepfitellipsescommand.cpp \
-    qcepfitpeakcommand.cpp \
-    qcepfitringpointcommand.cpp \
-    qcepmissingringcommand.cpp \
-    qcepnormalizeringscommand.cpp \
-    qcepscalingsubmenucommand.cpp \
-    qceptraceringcommand.cpp \
-    qcepzappixelcommand.cpp \
-    qcepfitter.cpp \
-    qcepfitterpeakorring.cpp \
-    qcepfitterpeakpoint.cpp \
-    qcepfitterringpoint.cpp \
-    qcepfitterringcircle.cpp \
-    qcepfitterringellipse.cpp \
-    qcepfittedrings.cpp \
-    qcepcalibrantlibrarymodel.cpp \
-    qcepcalibrantlibrary.cpp \
-    qcepcalibrant.cpp \
-    qcepcalibrantdspacingsmodel.cpp \
-    qcepcalibrantdspacings.cpp \
-    qcepcalibrantdspacing.cpp \
-    qcepcentermarker.cpp \
-    qceppowderpoint.cpp \
-    qceppowderpointproperty.cpp \
-    qceproimodel.cpp \
-    qceproi.cpp \
-    qceproicache.cpp \
-    qceproicalculator.cpp \
-    qceproicenteredshape.cpp \
-    qceproishape.cpp \
-    qceproipicker.cpp \
-    qceproiellipse.cpp \
-    qceproirectangle.cpp \
-    qceproieditordialog.cpp \
-    qceproipolygon.cpp \
-    qceproioverlay.cpp \
-    qceproirasterdata.cpp \
-    qceproitypedelegate.cpp \
-    qceproivector.cpp \
-    qceppolygonpointsmodel.cpp \
-    qceppowderringsmodel.cpp \
-    qceppowderoverlay.cpp
+    qxrdprocessorexecutionthread.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -435,13 +333,11 @@ HEADERS += qxrdlib.h\
     qxrdsliceplotwidgetsettings.h \
     qxrdsliceplotwidgetsettings-ptr.h \
     qxrdzoomincommand-ptr.h \
-    qwt_plot_spectrogram-ptr.h \
     qxrdprocessor-ptr.h \
     qxrdprocessorstep.h \
     qxrdprocessorstep-ptr.h \
     qxrdzingerfinder.h \
     qxrdzingerfinder-ptr.h \
-    qwt_plot_picker-ptr.h \
     qxrdwatcherwindow.h \
     qxrdwatcherwindow-ptr.h \
     qxrdwatcherwindowsettings.h \
@@ -503,152 +399,7 @@ HEADERS += qxrdlib.h\
     qxrdprocessorexecution.h \
     qxrdprocessorexecution-ptr.h \
     qxrdprocessorexecutionthread.h \
-    qxrdprocessorexecutionthread-ptr.h \
-    qcepplotwidget.h \
-    qcepplotwidget-ptr.h \
-    qcepplotwidgetsettings.h \
-    qcepplotwidgetsettings-ptr.h \
-    qcepplotwidgetdialog.h \
-    qcepplotwidgetdialog-ptr.h \
-    qcepplotcommand.h \
-    qcepplotcommand-ptr.h \
-    qcepplotoverlay.h \
-    qcepplotoverlay-ptr.h \
-    qcepcolormaplibrary.h \
-    qcepcolormaplibrary-ptr.h \
-    qcepcolormap.h \
-    qcepcolormap-ptr.h \
-    qcepmaskcolormap.h \
-    qcepplotcontextmenucommand.h \
-    qcepmaskcolormap-ptr.h \
-    qcepautoscalecommand.h \
-    qcepzoomincommand.h \
-    qcepplotbuttoncommand.h \
-    qcepzoomoutcommand.h \
-    qcepzoomallcommand.h \
-    qcepprintplotbutton.h \
-    qcepplotpreferencesbutton.h \
-    qcepprintplotcommand.h \
-    qcepplotpreferencescommand.h \
-    qcepaxissubmenucommand.h \
-    qceprasterdata-ptr.h \
-    qceprasterdata.h \
-    qcepmaskrasterdata.h \
-    qcepoverflowrasterdata.h \
-    qcepimageplotwidgetsettings-ptr.h \
-    qcepimageplotwidget-ptr.h \
-    qcepimageplotwidgetsettings.h \
-    qcepimageplotwidget.h \
-    qcepoverflowrasterdata-ptr.h \
-    qcepimageplotwidgetdialog.h \
-    qcepimageplotwidgetdialog-ptr.h \
-    qcepimageplot.h \
-    qcepimageplotsettings-ptr.h \
-    qcepimageplotsettings.h \
-    qcepmaskrasterdata-ptr.h \
-    qcepimageplot-ptr.h \
-    qcepaddpointcommand.h \
-    qcepadjustdistancecommand.h \
-    qcepadjustenergycommand.h \
-    qcepadjustfitcommand.h \
-    qcephistogramcommand.h \
-    qcephistogramselector.h \
-    qcephistogramselector-ptr.h \
-    qcepmaskstack.h \
-    qcepmaskstack-ptr.h \
-    qcepmaskstackmodel-ptr.h \
-    qcepmaskstackmodel.h \
-    qcepmaskcirclescommand.h \
-    qcepimageplotmeasurer.h \
-    qcepmaskpicker.h \
-    qcepmaskpicker-ptr.h \
-    qcepmaskcommandbutton.h \
-    qcepmaskpolygonscommand.h \
-    qcepimageplotmeasurer-ptr.h \
-    qcepmeasurecommand.h \
-    qceppowderpointpicker-ptr.h \
-    qceppowderpointpicker.h \
-    qceppowderpointscommand.h \
-    qcepdetectorgeometry.h \
-    qcepdetectorgeometry-ptr.h \
-    qcepcenterfinder-ptr.h \
-    qcepcenterfinder.h \
-    qcepcenterfinderpicker.h \
-    qcepsetcentercommand.h \
-    qcepplotslicer.h \
-    qcepplotslicer-ptr.h \
-    qcepslicecommand.h \
-    qcepcolormapsubmenucommand.h \
-    qcepcontextseparatorcommand.h \
-    qcepdelallpointscommand.h \
-    qcepdelpointcommand.h \
-    qcepdelringcommand.h \
-    qcepdisableringcommand.h \
-    qcepenableringcommand.h \
-    qcepfitcirclecommand.h \
-    qcepfitellipsecommand.h \
-    qcepfitellipsescommand.h \
-    qcepfitpeakcommand.h \
-    qcepfitringpointcommand.h \
-    qcepmissingringcommand.h \
-    qcepnormalizeringscommand.h \
-    qcepscalingsubmenucommand.h \
-    qceptraceringcommand.h \
-    qcepzappixelcommand.h \
-    qcepfitter.h \
-    qcepfitterpeakorring.h \
-    qcepfitterpeakpoint.h \
-    qcepfitterringpoint.h \
-    qcepfitterringcircle.h \
-    qcepfitterringellipse.h \
-    qcepfittedrings.h \
-    qcepfittedrings-ptr.h \
-    qcepcenterfinderpicker-ptr.h \
-    qcepcalibrantlibrary-ptr.h \
-    qcepcalibrantlibrarymodel-ptr.h \
-    qcepcalibrantlibrarymodel.h \
-    qcepcalibrantlibrary.h \
-    qcepcalibrant-ptr.h \
-    qcepcalibrant.h \
-    qcepcalibrantdspacingsmodel-ptr.h \
-    qcepcalibrantdspacingsmodel.h \
-    qcepcalibrantdspacings-ptr.h \
-    qcepcalibrantdspacings.h \
-    qcepcalibrantdspacing.h \
-    qcepcalibrantdspacing-ptr.h \
-    qcepcentermarker.h \
-    qceppowderpoint.h \
-    qceppowderpointproperty.h \
-    qceproimodel-ptr.h \
-    qceproimodel.h \
-    qceproi-ptr.h \
-    qceproi.h \
-    qceproicache-ptr.h \
-    qceproicache.h \
-    qceproicalculator-ptr.h \
-    qceproicalculator.h \
-    qceproicenteredshape-ptr.h \
-    qceproicenteredshape.h \
-    qceproishape-ptr.h \
-    qceproishape.h \
-    qceproipicker-ptr.h \
-    qceproipicker.h \
-    qceproiellipse.h \
-    qceproirectangle.h \
-    qceproieditordialog.h \
-    qceproipolygon-ptr.h \
-    qceproipolygon.h \
-    qceproioverlay-ptr.h \
-    qceproioverlay.h \
-    qceproirasterdata.h \
-    qceproitypedelegate.h \
-    qceproivector-ptr.h \
-    qceproivector.h \
-    qceppolygonpointsmodel.h \
-    qceppowderringsmodel-ptr.h \
-    qceppowderringsmodel.h \
-    qceppowderoverlay-ptr.h \
-    qceppowderoverlay.h
+    qxrdprocessorexecutionthread-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -718,7 +469,6 @@ HEADERS += TODO.h \
     qxrdwindowsettings.h \
     qxrdfilebrowsersettings.h \
     qxrdhistogramdialogsettings.h \
-    triangulate.h \
     qxrddebug.h \
     qxrdhelpbrowser.h \
     qxrduserscriptdialog.h \
@@ -727,8 +477,6 @@ HEADERS += TODO.h \
     qxrdpoint4d.h \
     qxrdplotvectorfielddata.h \
     qxrdscripteditwidget.h \
-    triangulate.h \
-    qxrdplanefitter.h \
     qxrdimageplotzoomer.h \
     qxrdmainwindow.h \
     qxrdacquisitionparameterpack.h \
@@ -817,11 +565,7 @@ FORMS += qxrdwindow.ui \
     qxrdstartupwindow.ui \
     qxrdcorrectiondialogpage.ui \
     qxrdexposurepreferencesdialog.ui \
-    qxrdacquisitioneventlogwindow.ui \
-    qcepplotwidget.ui \
-    qcepplotwidgetdialog.ui \
-    qcepimageplotwidgetdialog.ui \
-    qceproieditordialog.ui
+    qxrdacquisitioneventlogwindow.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS +=

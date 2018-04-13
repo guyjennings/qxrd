@@ -10,11 +10,12 @@
 #include "qcepdetectorgeometry.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepimagedata.h"
-#include "qxrdexperiment-ptr.h"
 #include <QScriptValue>
 #include "qceppowderpointproperty.h"
 #include "qcepcenterfinder-ptr.h"
 #include "qcepfittedrings-ptr.h"
+#include "qcepdatasetmodel-ptr.h"
+#include "qcepcalibrantdspacings-ptr.h"
 
 class QCEP_EXPORT QcepCenterFinder : public QcepDetectorGeometry
 {
@@ -26,6 +27,9 @@ private:
 public:
   Q_INVOKABLE QcepCenterFinder(QString name);
   void initialize(QcepObjectWPtr parent);
+
+  void setDataset(QcepDatasetModelWPtr dataset);
+  void setCalibrantDSpacings(QcepCalibrantDSpacingsWPtr dspacings);
 
   static QcepCenterFinderWPtr findCenterFinder(QcepObjectWPtr p);
 
@@ -236,9 +240,9 @@ public slots:
   double getPowderPointY(int i);
   void   setPowderPoint(int i, int n1, int n2, int n3, double x, double y, double r1, double r2, double az);
 
-  QScriptValue getPowderPoint(int i);
-  QScriptValue getPowderPoints();
-  void         setPowderPoint(int i, QScriptValue val);
+//  QScriptValue getPowderPoint(int i);
+//  QScriptValue getPowderPoints();
+//  void         setPowderPoint(int i, QScriptValue val);
 
   int countPowderRings() const;
   int countPowderRingPoints() const;
@@ -266,7 +270,6 @@ public:
   void setData(QcepDoubleImageDataPtr data);
   double imageValue(double x, double y);
 
-  QxrdExperimentWPtr     experiment() const;
   QcepDoubleImageDataPtr data() const;
   QcepDoubleImageDataPtr newData();
 
@@ -280,6 +283,8 @@ private:
 private:
   mutable QMutex             m_Mutex;
   QcepDoubleImageDataPtr     m_Data;
+  QcepDatasetModelWPtr       m_Dataset;
+  QcepCalibrantDSpacingsWPtr m_CalibrantDSpacings;
   int                        m_CenterFitRingNumber;
 };
 

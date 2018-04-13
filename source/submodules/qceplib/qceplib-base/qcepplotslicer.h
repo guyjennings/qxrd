@@ -12,7 +12,7 @@ public:
 //  virtual QwtText trackerTextF(const QPointF &pos) const;
 
 //private:
-//  QxrdImagePlot *m_Plot;
+//  QcepImagePlot *m_Plot;
 };
 
 #endif // QCEPPLOTSLICER_H

@@ -178,7 +178,7 @@ QVector<double> QcepROICalculator::values(QcepImageDataBasePtr img, QcepMaskData
 //        break;
 //      }
 
-//      QModelIndex index = m_ROIModel->index(i, QxrdROIModel::ValueCol);
+//      QModelIndex index = m_ROIModel->index(i, QcepROIModel::ValueCol);
 
 //      m_ROIModel->setData(index, res, Qt::DisplayRole);
 //    }

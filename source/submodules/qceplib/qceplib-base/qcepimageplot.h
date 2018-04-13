@@ -59,8 +59,8 @@ public slots:
   virtual void onLegendChecked(const QVariant &itemInfo, bool on, int index);
 
 public:
-//  const QxrdRasterData* raster() const;
-//  QxrdRasterData* raster();
+//  const QcepRasterData* raster() const;
+//  QcepRasterData* raster();
 
 //  QcepProcessorWPtr processor() const;
 //  void setProcessor(QcepProcessorWPtr proc);

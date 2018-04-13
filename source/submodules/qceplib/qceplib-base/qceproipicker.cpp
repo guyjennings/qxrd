@@ -266,7 +266,7 @@ void QcepROIPicker::append(const QPoint &pt)
 
 void QcepROIPicker::move(const QPoint &pt)
 {
-//  printMessage(tr("QxrdROIPicker::move(%1,%2)").arg(pt.x()).arg(pt.y()));
+//  printMessage(tr("QcepROIPicker::move(%1,%2)").arg(pt.x()).arg(pt.y()));
 
   int idx = m_SelectedPoints.count() - 1;
 
@@ -279,7 +279,7 @@ void QcepROIPicker::move(const QPoint &pt)
 
 bool QcepROIPicker::end(bool ok)
 {
-//  printMessage(tr("QxrdROIPicker::end(%1)").arg(ok));
+//  printMessage(tr("QcepROIPicker::end(%1)").arg(ok));
 
 //  for (int i=0; i<m_SelectedPoints.count(); i++) {
 //    QPoint p = m_SelectedPoints[i];
@@ -375,7 +375,7 @@ void QcepROICreator::move(const QPoint &pt)
 
 void QcepROICreator::append(const QPoint &pt)
 {
-  printMessage(tr("QxrdROICreator::append(QPoint(%1,%2))").arg(pt.x()).arg(pt.y()));
+  printMessage(tr("QcepROICreator::append(QPoint(%1,%2))").arg(pt.x()).arg(pt.y()));
 
   m_SelectedPoints.append(pt);
 
@@ -418,8 +418,8 @@ QcepROISelector::QcepROISelector(QcepImagePlot *plot) :
   setStateMachine(new QwtPickerDragLineMachine());
   setRubberBand(QwtPicker::PolygonRubberBand);
 
-//  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
-//          m_Plot, &QxrdImagePlot::roiMouseSelected);
+//  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QcepROIPicker::selected,
+//          m_Plot, &QcepImagePlot::roiMouseSelected);
 }
 
 void QcepROISelector::move(const QPoint &pt)
@@ -505,8 +505,8 @@ QcepROIAddNode::QcepROIAddNode(QcepImagePlot *plot) :
   setStateMachine(new QwtPickerDragLineMachine());
   setRubberBand(QwtPicker::PolygonRubberBand);
 
-//  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
-//          m_Plot, &QxrdImagePlot::roiMouseAdded);
+//  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QcepROIPicker::selected,
+//          m_Plot, &QcepImagePlot::roiMouseAdded);
 }
 
 void QcepROIAddNode::move(const QPoint &pt)
@@ -595,8 +595,8 @@ QcepROIRemoveNode::QcepROIRemoveNode(QcepImagePlot *plot) :
   setStateMachine(new QwtPickerClickPointMachine());
   setRubberBand(QwtPicker::CrossRubberBand);
 
-//  connect(this, (void (QcepPlotMeasurer::*)( const QPointF &)) &QxrdROIPicker::selected,
-//          m_Plot, &QxrdImagePlot::roiMouseRemoved);
+//  connect(this, (void (QcepPlotMeasurer::*)( const QPointF &)) &QcepROIPicker::selected,
+//          m_Plot, &QcepImagePlot::roiMouseRemoved);
 }
 
 bool QcepROIRemoveNode::end(bool ok)
@@ -638,8 +638,8 @@ QcepROIRotator::QcepROIRotator(QcepImagePlot *plot) :
   setStateMachine(new QwtPickerDragLineMachine());
   setRubberBand(QwtPicker::PolygonRubberBand);
 
-//  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
-//          m_Plot, &QxrdImagePlot::roiMouseRotated);
+//  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QcepROIPicker::selected,
+//          m_Plot, &QcepImagePlot::roiMouseRotated);
 }
 
 void QcepROIRotator::move(const QPoint &pt)
@@ -751,8 +751,8 @@ QcepROIResizer::QcepROIResizer(QcepImagePlot *plot) :
   setStateMachine(new QwtPickerDragLineMachine());
   setRubberBand(QwtPicker::PolygonRubberBand);
 
-//  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QxrdROIPicker::selected,
-//          m_Plot, &QxrdImagePlot::roiMouseResized);
+//  connect(this, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QcepROIPicker::selected,
+//          m_Plot, &QcepImagePlot::roiMouseResized);
 }
 
 void QcepROIResizer::move(const QPoint &pt)

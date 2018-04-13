@@ -26,7 +26,7 @@ void QcepFittedRings::initialize(QcepObjectWPtr parent)
   appendColumn("rot");
 }
 
-//QxrdFittedRingsPtr QxrdFittedRings::newFittedRings(QString name)
+//QcepFittedRingsPtr QcepFittedRings::newFittedRings(QString name)
 //{
 //  if (g_Allocator) {
 //    QcepMutexLocker lock(__FILE__, __LINE__, g_Allocator->mutex());
@@ -34,7 +34,7 @@ void QcepFittedRings::initialize(QcepObjectWPtr parent)
 //    if (g_Allocator->waitTillAvailable(
 //          QcepAllocator::WaitTillAvailable,
 //          QcepAllocator::columnScanSize(6, 0))) {
-//      QxrdFittedRingsPtr res(new QxrdFittedRings(name, 0));
+//      QcepFittedRingsPtr res(new QcepFittedRings(name, 0));
 
 //      if (res) {
 //        res -> moveToThread(NULL);
@@ -50,7 +50,7 @@ void QcepFittedRings::initialize(QcepObjectWPtr parent)
 //    }
 //  }
 
-//  return QxrdFittedRingsPtr();
+//  return QcepFittedRingsPtr();
 //}
 
 void QcepFittedRings::append(int n, double x, double y, double a, double b, double rot)

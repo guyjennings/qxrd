@@ -12,7 +12,6 @@
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
-//TODO: refer to actual data in QxrdROIVector
 class QCEP_EXPORT QcepROIModel : public QAbstractListModel
 {
   Q_OBJECT
@@ -23,8 +22,8 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
-//  static QScriptValue toScriptValue(QScriptEngine *engine, const QxrdROIModelPtr &coords);
-//  static void fromScriptValue(const QScriptValue &obj, QxrdROIModelPtr &coords);
+//  static QScriptValue toScriptValue(QScriptEngine *engine, const QcepROIModelPtr &coords);
+//  static void fromScriptValue(const QScriptValue &obj, QcepROIModelPtr &coords);
 
   int rowCount(const QModelIndex &parent) const;
   int columnCount(const QModelIndex &parent) const;

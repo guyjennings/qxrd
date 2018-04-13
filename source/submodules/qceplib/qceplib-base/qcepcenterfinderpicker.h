@@ -12,7 +12,7 @@ public:
   QcepCenterFinderPicker(QcepImagePlot *plot);
 
 //private:
-//  QxrdImagePlot *m_Plot;
+//  QcepImagePlot *m_Plot;
 };
 
 #endif // QCEPCENTERFINDERPICKER_H

@@ -18,7 +18,7 @@ QcepMeasureCommand::QcepMeasureCommand(QcepPlotWidget *plot, QcepPlotWidgetSetti
 //TODO: implement
 void QcepMeasureCommand::selected(const QVector<QPointF> &p)
 {
-  printf("QxrdMeasureCommand::selected\n");
+  printf("QcepMeasureCommand::selected\n");
 //  connect(m_Measurer, (void (QcepPlotMeasurer::*)( const QVector<QPointF> &)) &QwtPlotPicker::selected,
-//          dp.data(), &QxrdProcessor::printMeasuredPolygon);
+//          dp.data(), &QcepProcessor::printMeasuredPolygon);
 }

@@ -64,7 +64,7 @@ void QcepImagePlot::printMessage(QString msg, QDateTime dt) const
   }
 }
 
-//void QcepImagePlot::setProcessor(QxrdProcessorWPtr proc)
+//void QcepImagePlot::setProcessor(QcepProcessorWPtr proc)
 //{
 //  m_Processor = proc;
 
@@ -113,7 +113,7 @@ void QcepImagePlot::autoScale()
 void QcepImagePlot::setAutoRange()
 {
   //TODO:
-  printf("QxrdImagePlot::setAutoRange To do...\n");
+  printf("QcepImagePlot::setAutoRange To do...\n");
 }
 
 void QcepImagePlot::toggleShowROI()
@@ -136,30 +136,30 @@ void QcepImagePlot::changeROIShown(bool shown)
   }
 }
 
-//void QxrdImagePlot::onCenterXChanged(double cx)
+//void QcepImagePlot::onCenterXChanged(double cx)
 //{
 //  m_CenterMarker -> setXValue(cx);
 //  replot();
 //}
 
-//void QxrdImagePlot::onCenterYChanged(double cy)
+//void QcepImagePlot::onCenterYChanged(double cy)
 //{
 //  m_CenterMarker -> setYValue(cy);
 //  replot();
 //}
 
-//void QxrdImagePlot::onCenterChanged(QPointF c)
+//void QcepImagePlot::onCenterChanged(QPointF c)
 //{
 //  m_CenterMarker -> setValue(c);
 //  replot();
 //}
 
-//const QxrdRasterData* QxrdImagePlot::raster() const
+//const QcepRasterData* QcepImagePlot::raster() const
 //{
 //  return m_DataRaster;
 //}
 
-//QxrdRasterData* QxrdImagePlot::raster()
+//QcepRasterData* QcepImagePlot::raster()
 //{
 //  return m_DataRaster;
 //}
@@ -368,7 +368,7 @@ void QcepImagePlot::zapPixel(int x, int y)
 
   QcepImageDataBasePtr data(m_Data);
 
-  //TODO: move into QxrdImagePlotWidget
+  //TODO: move into QcepImagePlotWidget
   if (data) {
     for (int ix = x-1; ix <= x+1; ix++) {
       for (int iy = y-1; iy <= y+1; iy++) {

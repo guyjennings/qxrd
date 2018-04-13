@@ -21,20 +21,20 @@ void QcepROIModel::initialize(QcepObjectWPtr parent)
 {
 }
 
-//QScriptValue QxrdROIModel::toScriptValue(QScriptEngine *engine, const QxrdROIModelPtr &coords)
+//QScriptValue QcepROIModel::toScriptValue(QScriptEngine *engine, const QcepROIModelPtr &coords)
 //{
 //  return engine->newQObject(coords.data());
 //}
 
-//void QxrdROIModel::fromScriptValue(const QScriptValue &obj, QxrdROIModelPtr &coords)
+//void QcepROIModel::fromScriptValue(const QScriptValue &obj, QcepROIModelPtr &coords)
 //{
 //  QObject *qobj = obj.toQObject();
 
 //  if (qobj) {
-//    QxrdROIModel *qcoords = qobject_cast<QxrdROIModel*>(qobj);
+//    QcepROIModel *qcoords = qobject_cast<QcepROIModel*>(qobj);
 
 //    if (qcoords) {
-//      coords = QxrdROIModelPtr(qcoords);
+//      coords = QcepROIModelPtr(qcoords);
 //    }
 //  }
 //}

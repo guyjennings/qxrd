@@ -79,7 +79,7 @@ double QcepPowderPointProperty::subValue(int axis) const
 void QcepPowderPointProperty::setValue(QcepPowderPoint val, int index)
 {
   if (debug()) {
-    printMessage(tr("%1 QxrdPowderPointProperty::setValue(CctwDoubleVector3D %2, int %3) [%4]")
+    printMessage(tr("%1 QcepPowderPointProperty::setValue(QcepPowderPoint %2, int %3) [%4]")
                  .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
   }
 
@@ -226,7 +226,7 @@ void QcepPowderPointProperty::setValue(QcepPowderPoint val)
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    printMessage(tr("%1 QxrdPowderPointProperty::setValue(QxrdPowderPoint %2)")
+    printMessage(tr("%1 QcepPowderPointProperty::setValue(QcepPowderPoint %2)")
                  .arg(name()).arg(toString(val)));
   }
 
@@ -234,7 +234,7 @@ void QcepPowderPointProperty::setValue(QcepPowderPoint val)
     int newIndex = incIndex(1);
 
     if (debug()) {
-      printMessage(tr("%1: QxrdPowderPointProperty::setValue(QxrdPowderPoint %2) [%3]")
+      printMessage(tr("%1: QcepPowderPointProperty::setValue(QcepPowderPoint %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 
@@ -290,7 +290,7 @@ void QcepPowderPointProperty::setDefaultValue(QcepPowderPoint val)
 void QcepPowderPointProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    printMessage(tr("%1: QxrdPowderPointProperty::resetValue").arg(name()));
+    printMessage(tr("%1: QcepPowderPointProperty::resetValue").arg(name()));
   }
 
   setValue(defaultValue());
@@ -477,7 +477,7 @@ QcepPowderPointVector QcepPowderPointVectorProperty::defaultValue() const
 void QcepPowderPointVectorProperty::setValue(QcepPowderPointVector val, int index)
 {
   if (debug()) {
-    printMessage(tr("%1 QxrdPowderPointVectorProperty::setValue(QxrdPowderPointVector %2, int %3) [%4]")
+    printMessage(tr("%1 QcepPowderPointVectorProperty::setValue(QcepPowderPointVector %2, int %3) [%4]")
                  .arg(name()).arg(toString(val)).arg(index).arg(this->index()));
   }
 
@@ -528,13 +528,13 @@ void QcepPowderPointVectorProperty::setValue(QcepPowderPointVector val)
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    printMessage(tr("%1 QxrdPowderPointVectorProperty::setValue(QxrdPowderPointVector %2)")
+    printMessage(tr("%1 QcepPowderPointVectorProperty::setValue(QcepPowderPointVector %2)")
                  .arg(name()).arg(toString(val)));
   }
 
   if (val != m_Value) {
     if (debug()) {
-      printMessage(tr("%1: QxrdPowderPointVectorProperty::setValue(QxrdPowderPointVector %2) [%3]")
+      printMessage(tr("%1: QcepPowderPointVectorProperty::setValue(QcepPowderPointVector %2) [%3]")
                    .arg(name()).arg(toString(val)).arg(index()));
     }
 
@@ -558,7 +558,7 @@ void QcepPowderPointVectorProperty::setDefaultValue(QcepPowderPointVector val)
 void QcepPowderPointVectorProperty::resetValue()
 {
   if (qcepDebug(DEBUG_PROPERTIES)) {
-    printMessage(tr("%1: QxrdPowderPointVectorProperty::resetValue").arg(name()));
+    printMessage(tr("%1: QcepPowderPointVectorProperty::resetValue").arg(name()));
   }
 
   setValue(defaultValue());

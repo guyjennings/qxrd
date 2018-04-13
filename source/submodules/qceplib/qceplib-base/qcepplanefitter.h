@@ -1,12 +1,12 @@
-#ifndef QXRDPLANEFITTER_H
-#define QXRDPLANEFITTER_H
+#ifndef QCEPPLANEFITTER_H
+#define QCEPPLANEFITTER_H
 
-#include "qxrdlib_global.h"
+#include "qceplib_global.h"
 
-class QXRD_EXPORT QxrdPlaneFitter
+class QCEP_EXPORT QcepPlaneFitter
 {
 public:
-  QxrdPlaneFitter();
+  QcepPlaneFitter();
 
   void   addPoint(double x, double y, double z);
   double value(double x, double y);
@@ -23,4 +23,4 @@ private:
   double syz;
 };
 
-#endif // QXRDPLANEFITTER_H
+#endif // QCEPPLANEFITTER_H

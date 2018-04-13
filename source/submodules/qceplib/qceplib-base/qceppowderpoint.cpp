@@ -85,11 +85,11 @@ QString QcepPowderPoint::toString() const
 
 void QcepPowderPoint::registerMetaTypes()
 {
-  qRegisterMetaType< QcepPowderPoint >("QxrdPowderPoint");
+  qRegisterMetaType< QcepPowderPoint >("QcepPowderPoint");
 
-  qRegisterMetaTypeStreamOperators< QcepPowderPoint >("QxrdPowderPoint");
+  qRegisterMetaTypeStreamOperators< QcepPowderPoint >("QcepPowderPoint");
 
-  QcepProperty::registerCustomSaver("QxrdPowderPoint", QcepPowderPoint::customSaver);
+  QcepProperty::registerCustomSaver("QcepPowderPoint", QcepPowderPoint::customSaver);
 }
 
 QScriptValue QcepPowderPoint::toScriptValue(QScriptEngine *engine, const QcepPowderPoint &pt)
@@ -166,11 +166,11 @@ QString QcepPowderPointVector::toString() const
 
 void QcepPowderPointVector::registerMetaTypes()
 {
-  qRegisterMetaType< QcepPowderPointVector >("QxrdPowderPointVector");
+  qRegisterMetaType< QcepPowderPointVector >("QcepPowderPointVector");
 
-  qRegisterMetaTypeStreamOperators< QcepPowderPointVector >("QxrdPowderPointVector");
+  qRegisterMetaTypeStreamOperators< QcepPowderPointVector >("QcepPowderPointVector");
 
-  QcepProperty::registerCustomSaver("QxrdPowderPointVector", QcepPowderPointVector::customSaver);
+  QcepProperty::registerCustomSaver("QcepPowderPointVector", QcepPowderPointVector::customSaver);
 }
 
 QScriptValue QcepPowderPointVector::toScriptValue(QScriptEngine *engine,
