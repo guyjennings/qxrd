@@ -1,8 +1,0 @@
-#ifndef QCEPPLOTWIDGETSETTINGSPTR_H
-#define QCEPPLOTWIDGETSETTINGSPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QcepPlotWidgetSettings)
-
-#endif // QCEPPLOTWIDGETSETTINGSPTR_H

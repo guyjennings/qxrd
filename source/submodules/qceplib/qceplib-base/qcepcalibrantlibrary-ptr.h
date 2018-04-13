@@ -1,9 +1,0 @@
-#ifndef QCEPCALIBRANTLIBRARYPTR_H
-#define QCEPCALIBRANTLIBRARYPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QcepCalibrantLibrary)
-
-#endif // QCEPCALIBRANTLIBRARYPTR_H
-

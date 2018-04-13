@@ -1,8 +1,0 @@
-#ifndef QCEPPLOTWIDGETDIALOGPTR_H
-#define QCEPPLOTWIDGETDIALOGPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QcepPlotWidgetDialog)
-
-#endif // QCEPPLOTWIDGETDIALOGPTR_H
