@@ -363,9 +363,12 @@ QxrdDetectorSettingsPtr QxrdAcquisition::newDetector(int detType)
 {
   if (QThread::currentThread() != thread()) {
     QxrdDetectorSettingsPtr res;
-    QMetaObject::invokeMethod(this, "newDetector", Qt::BlockingQueuedConnection,
-                              Q_RETURN_ARG(QxrdDetectorSettingsPtr, res),
-                              Q_ARG(int, detType));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(this,
+                                    "newDetector",
+                                    Qt::BlockingQueuedConnection,
+                                    Q_RETURN_ARG(QxrdDetectorSettingsPtr, res),
+                                    Q_ARG(int, detType)));
 
     return res;
   } else {
@@ -379,8 +382,11 @@ QxrdDetectorSettingsPtr QxrdAcquisition::newDetector(int detType)
 void QxrdAcquisition::appendDetector(QxrdDetectorSettingsPtr det)
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "appendDetector", Qt::BlockingQueuedConnection,
-                              Q_ARG(QxrdDetectorSettingsPtr, det));
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(this,
+                                    "appendDetector",
+                                    Qt::BlockingQueuedConnection,
+                                    Q_ARG(QxrdDetectorSettingsPtr, det)));
   } else {
     if (det) {
       det -> set_DetectorNumber(m_Detectors.count());
@@ -393,7 +399,10 @@ void QxrdAcquisition::appendDetector(QxrdDetectorSettingsPtr det)
 void QxrdAcquisition::clearDetectors()
 {
   if (QThread::currentThread() != thread()) {
-    QMetaObject::invokeMethod(this, "clearDetectors", Qt::BlockingQueuedConnection);
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(this,
+                                    "clearDetectors",
+                                    Qt::BlockingQueuedConnection));
   } else {
     m_Detectors.resize(0);
   }

@@ -1,5 +1,6 @@
 #include "qxrdcalculatorwindow.h"
 #include <QThread>
+#include "qcepobject.h"
 
 QxrdCalculatorWindow::QxrdCalculatorWindow(QString name) :
   inherited(name)

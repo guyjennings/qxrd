@@ -120,6 +120,10 @@ public slots:
   QString backupFilePath(QString path, int n);
   bool    backupFileIfNeeded(FILE* f, int maxLenMB, QString path, int nBackups);
 
+  void haltAutosaveTimer();
+
+  void shutdownAndSave();
+
   void setExperimentFilePath(QString path);
 
   void saveExperimentAs(QString path);

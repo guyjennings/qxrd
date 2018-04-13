@@ -106,13 +106,21 @@ void QxrdAppCommon::initializeRoot()
 
 void QxrdAppCommon::finish()
 {
-  THREAD_CHECK;
+  GUI_THREAD_CHECK;
 
   foreach(QxrdExperimentPtr expt, m_Experiments) {
     if (expt) {
-      if (expt->isChanged() || expt->wasAutoSaved()) {
-        expt->saveExperiment();
-      }
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(expt.data(),
+                                      &QxrdExperiment::shutdownAndSave,
+                                      Qt::BlockingQueuedConnection));
+#else
+      INVOKE_CHECK(
+            QMetaObject::invokeMethod(expt.data(),
+                                      "shutdownAndSave",
+                                      Qt::BlockingQueuedConnection));
+#endif
 
       expt->closeWindows();
     }

@@ -1173,6 +1173,22 @@ void QxrdExperiment::saveExperimentCopyAs(QString path)
   writeSettings(&settings);
 }
 
+void QxrdExperiment::shutdownAndSave()
+{
+  THREAD_CHECK;
+
+  haltAutosaveTimer();
+
+  if (isChanged() || wasAutoSaved()) {
+    saveExperiment();
+  }
+}
+
+void QxrdExperiment::haltAutosaveTimer()
+{
+  m_AutoSaveTimer.stop();
+}
+
 void QxrdExperiment::autoSaveExperiment()
 {
   THREAD_CHECK;

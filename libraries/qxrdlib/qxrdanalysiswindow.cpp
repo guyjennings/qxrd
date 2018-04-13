@@ -1,5 +1,6 @@
 #include "qxrdanalysiswindow.h"
 #include <QThread>
+#include "qcepobject.h"
 
 QxrdAnalysisWindow::QxrdAnalysisWindow(QString name) :
   inherited(name)
