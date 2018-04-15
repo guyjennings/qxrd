@@ -27,8 +27,7 @@ public:
   virtual ~QxrdApplication();
   void initializeRoot();
 
-  void openStartupWindow();
-  void closeStartupWindow();
+  void parseCommandLine();
 
   void loadPlugins();
 
@@ -44,7 +43,7 @@ public:
   void setNewExperimentSettings(QSettings &settings, int type, QString filename);
 
 public slots:
-  void finish();
+  void shutdownDocuments();
 
   void createNewExperiment();
   void chooseExistingExperiment();
@@ -59,8 +58,8 @@ public slots:
 
   void onAutoSaveTimer();
 
-  void readApplicationSettings();
-  void writeApplicationSettings();
+//  void readApplicationSettings();
+//  void writeApplicationSettings();
 
   void doSavePreferences();
   void doLoadPreferences();
@@ -76,9 +75,6 @@ public slots:
 
   void lockerTimerElapsed();
 
-  virtual void setDefaultObjectData(QcepDataObject *obj);
-
-
   QxrdPluginInfoModelWPtr pluginInfo();
 
 public:
@@ -89,9 +85,9 @@ private:
   QString applicationVersion();
   QString applicationDescription();
   QIcon   applicationIcon();
+  QSettingsPtr applicationSettings();
 
 private:
-  QcepObjectNamer                 m_ObjectNamer;
   QTimer                          m_AutoSaveTimer;
 
   QxrdSynchronizerPluginPtr       m_SynchronizerPlugin;

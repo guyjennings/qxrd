@@ -28,8 +28,8 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qcepimagedataformattiff.h"
 #include "qxrdplugininfomodel.h"
-#include "qxrdstartupwindow.h"
-#include "qxrdstartupwindowsettings.h"
+#include "qcepstartupwindow.h"
+#include "qcepstartupwindowsettings.h"
 #include "qxrddetectorplugin.h"
 #include "qxrdsynchronizerplugin.h"
 #include <QTime>
@@ -59,7 +59,6 @@ void QxrdApplication::processEventCounter()
 
 QxrdApplication::QxrdApplication(int &argc, char **argv) :
   inherited(argc, argv),
-  m_ObjectNamer(this, "application"),
   m_SimulatedDetectorPlugin(NULL),
   m_PerkinElmerDetectorPlugin(NULL),
   m_DexelaPlugin(NULL),
@@ -199,7 +198,7 @@ QxrdApplication::~QxrdApplication()
 
 //  m_AppSaver->performSave();
 
-  finish();
+//  shutdownDocuments();
   onAutoSaveTimer();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -221,21 +220,21 @@ QxrdApplication::~QxrdApplication()
 //  }
 }
 
-void QxrdApplication::finish()
+void QxrdApplication::shutdownDocuments()
 {
+  GUI_THREAD_CHECK;
+
 #ifndef QT_NO_DEBUG
-  printf("QxrdApplication::finish()\n");
+  printf("QxrdApplication::shutdownDocuments()\n");
 #endif
 
   if (qcepDebug(DEBUG_APP)) {
-    printMessage("QxrdApplication::finish()");
+    printMessage("QxrdApplication::shutdownDocuments()");
   }
-
-  GUI_THREAD_CHECK;
 
   writeApplicationSettings();
 
-  inherited::finish();
+  inherited::shutdownDocuments();
 }
 
 QString QxrdApplication::applicationName()
@@ -258,37 +257,62 @@ QIcon QxrdApplication::applicationIcon()
   return QIcon(":/images/qxrd-icon-64x64.png");
 }
 
-void QxrdApplication::openStartupWindow()
-{
-  if (m_StartupWindowSettings) {
-    m_StartupWindow =
-        qSharedPointerDynamicCast<QxrdStartupWindow>(
-          m_StartupWindowSettings -> newWindow());
-
-    m_StartupWindow -> initialize(sharedFromThis());
-
-    m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrd-icon-256x256.png"));
-    m_StartupWindow -> setApplicationDescription(
-          "Data Acquisition for 2-D XRay Detectors\n"
-          "Guy Jennings\n"
-          "Version " + applicationVersion() + "\n"
-          "Build : " __DATE__ " : " __TIME__);
-
-    m_StartupWindow -> setWindowTitle(applicationDescription());
-    m_StartupWindow -> setWindowIcon(applicationIcon());
-    m_StartupWindow -> show();
-    m_StartupWindow -> raise();
-  }
-}
-
-void QxrdApplication::closeStartupWindow()
-{
-}
-
 void QxrdApplication::onAutoSaveTimer()
 {
   if (isChanged()) {
     writeApplicationSettings();
+  }
+}
+
+void QxrdApplication::parseCommandLine()
+{
+  GUI_THREAD_CHECK;
+
+  QCommandLineOption noStartOption("nostart", "Don't start detectors");
+  addCommandLineOption(&noStartOption);
+
+  QCommandLineOption startOption("start", "Start detectors");
+  addCommandLineOption(&startOption);
+
+  QCommandLineOption pluginOption("p", "Special plugin load");
+  addCommandLineOption(&pluginOption);
+
+  QCommandLineOption pluginDirOption({"P", "plugin"}, "Extra Plugin Search Directory (may be repeated)", "dir");
+  addCommandLineOption(&pluginDirOption);
+
+  QCommandLineOption noPluginOption("noplugins", "Don't load plugins");
+  addCommandLineOption(&noPluginOption);
+
+  inherited::parseCommandLine();
+
+  if (m_CommandLineParser -> isSet(noStartOption)) {
+    set_StartDetectors(false);
+  }
+
+  if (m_CommandLineParser -> isSet(startOption)) {
+    set_StartDetectors(true);
+  }
+
+  if (m_CommandLineParser -> isSet(pluginOption)) {
+    QDir appDir(qApp->applicationDirPath());
+
+    appDir.cd("plugins");
+
+    appendPlugin(appDir.absolutePath());
+  }
+
+  if (m_CommandLineParser -> isSet(pluginDirOption)) {
+    QStringList plugins(m_CommandLineParser -> values(pluginDirOption));
+
+    foreach(QString ds, plugins) {
+      QDir d(ds);
+
+      appendPlugin(d.absolutePath());
+    }
+  }
+
+  if (m_CommandLineParser -> isSet(noPluginOption)) {
+    set_LoadPlugins(false);
   }
 }
 
@@ -579,27 +603,35 @@ QString QxrdApplication::rootPath()
   return QDir::rootPath();
 }
 
-void QxrdApplication::readApplicationSettings()
+//void QxrdApplication::readApplicationSettings()
+//{
+//  QcepMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
+
+//  QxrdGlobalSettings set(this);
+
+//  set.beginGroup("application");
+//  readSettings(&set);
+//  set.endGroup();
+//}
+
+//void QxrdApplication::writeApplicationSettings()
+//{
+//  QcepMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
+
+//  QxrdGlobalSettings set(this);
+
+//  set.beginGroup("application");
+//  writeSettings(&set);
+//  set.endGroup();
+//  setChanged(0);
+//}
+
+QSettingsPtr QxrdApplication::applicationSettings()
 {
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
+  QSettingsPtr res =
+      QSettingsPtr(new QxrdGlobalSettings(this));
 
-  QxrdGlobalSettings set(this);
-
-  set.beginGroup("application");
-  readSettings(&set);
-  set.endGroup();
-}
-
-void QxrdApplication::writeApplicationSettings()
-{
-  QcepMutexLocker lock(__FILE__, __LINE__, &m_SettingsMutex);
-
-  QxrdGlobalSettings set(this);
-
-  set.beginGroup("application");
-  writeSettings(&set);
-  set.endGroup();
-  setChanged(0);
+  return res;
 }
 
 void QxrdApplication::doLoadPreferences()
@@ -683,15 +715,6 @@ bool QxrdApplication::event(QEvent *ev)
   }
 
   return res;
-}
-
-void QxrdApplication::setDefaultObjectData(QcepDataObject *obj)
-{
-  if (obj) {
-    obj->set_Creator(applicationName());
-    obj->set_Version(applicationVersion());
-    obj->set_QtVersion(QT_VERSION_STR);
-  }
 }
 
 void QxrdApplication::readDefaultSettings()

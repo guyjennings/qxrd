@@ -67,7 +67,7 @@
 #include "qxrddetectorcontrolwindowsettings.h"
 #include "qxrdwindowsettings.h"
 #include "qxrdhelpwindowsettings.h"
-#include "qxrdstartupwindowsettings.h"
+#include "qcepstartupwindowsettings.h"
 #include "qxrdwatcherwindowsettings-ptr.h"
 #include "qxrdwatcherwindowsettings.h"
 #include "qxrdhistogramdialogsettings.h"
@@ -450,7 +450,7 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdMaskingWindowSettings*>("QxrdMaskingWindowSettings*");
   qRegisterMetaType<QxrdScriptingWindowSettings*>("QxrdScriptingWindowSettings*");
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
-  qRegisterMetaType<QxrdStartupWindowSettings*>("QxrdStartupWindowSettings*");
+  qRegisterMetaType<QcepStartupWindowSettings*>("QxrdStartupWindowSettings*");
 }
 
 void QxrdExperiment::openWindow(QxrdMainWindowSettingsWPtr set)

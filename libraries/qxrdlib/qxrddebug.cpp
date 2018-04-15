@@ -32,16 +32,18 @@ int QxrdDebugDictionary::debugFlagCount()
 
 QString QxrdDebugDictionary::debugFlagName(int i)
 {
-  if (i < LAST_QCEP_DEBUG) {
+  if (i < inherited::debugFlagCount()) {
     return QcepDebugDictionary::debugFlagName(i);
   } else {
-    return debugFlagNameFrom(QxrdDebug::staticMetaObject, i-LAST_QCEP_DEBUG);
+    return debugFlagNameFrom(&QxrdDebug::staticMetaObject,
+                             i-inherited::debugFlagCount());
   }
 }
 
 int QxrdDebugDictionary::debugFlagCheck(QString name)
 {
-  int res = debugFlagCheckFrom(QxrdDebug::staticMetaObject, name);
+  int res = debugFlagCheckFrom(&QxrdDebug::staticMetaObject,
+                               name);
 
   if (res < 0) {
     res = inherited::debugFlagCheck(name);

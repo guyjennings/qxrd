@@ -19,21 +19,20 @@ public:
   virtual ~QxrdAppViewer();
   void initializeRoot();
 
-  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
+  void parseCommandLine();
 
-  void setDefaultObjectData(QcepDataObject *obj);
+  void criticalMessage(QString msg, QDateTime ts=QDateTime::currentDateTime()) const;
 
   void openExperiment(QString path);
 
-  void readApplicationSettings();
-  void writeApplicationSettings();
+  QSettingsPtr applicationSettings();
+
+//  void readApplicationSettings();
+//  void writeApplicationSettings();
 
   void editGlobalPreferences();
   void createNewExperiment();
   void chooseExistingExperiment();
-
-  void openStartupWindow();
-  void closeStartupWindow();
 
 private:
   QString applicationName();

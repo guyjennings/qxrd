@@ -209,8 +209,6 @@ SOURCES += qxrdlib.cpp \
     qxrdviewersettings.cpp \
     qxrdacqcommon.cpp \
     qxrdacqdummy.cpp \
-    qxrdstartupwindow.cpp \
-    qxrdstartupwindowsettings.cpp \
     qxrddetectorplugin.cpp \
     qxrdcorrectiondialogpage.cpp \
     qxrdexposurepreferencesdialog.cpp \
@@ -356,10 +354,6 @@ HEADERS += qxrdlib.h\
     qxrdresultserializer-ptr.h \
     qfilesystemwatcher-ptr.h \
     qtimer-ptr.h \
-    qxrdstartupwindow.h \
-    qxrdstartupwindow-ptr.h \
-    qxrdstartupwindowsettings.h \
-    qxrdstartupwindowsettings-ptr.h \
     qxrddetectorplugin.h \
     qxrddetectorplugin-ptr.h \
     qxrdcorrectiondialogpage.h \
@@ -562,7 +556,6 @@ FORMS += qxrdwindow.ui \
     qxrdfilewatcherdialog.ui \
     qxrddexeladialog.ui \
     qxrdwatcherwindow.ui \
-    qxrdstartupwindow.ui \
     qxrdcorrectiondialogpage.ui \
     qxrdexposurepreferencesdialog.ui \
     qxrdacquisitioneventlogwindow.ui

@@ -40,10 +40,6 @@ int main(int argc, char *argv[])
 
   g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(new QxrdDebugDictionary());
 
-  if (qcepDebug(DEBUG_APP)) {
-    printf("App starts\n");
-  }
-
   int res = 0;
 
   {
@@ -67,10 +63,6 @@ int main(int argc, char *argv[])
     }
 
     app = QxrdApplicationPtr();
-  }
-
-  if (qcepDebug(DEBUG_APP)) {
-    printf("App finishes\n");
   }
 
   int nObjAlloc = QcepObject::allocatedObjects();

@@ -4,8 +4,8 @@
 #include "qxrdexperimentthread.h"
 #include "qxrdexperiment.h"
 #include "qxrdviewersettings.h"
-#include "qxrdstartupwindow.h"
-#include "qxrdstartupwindowsettings.h"
+#include "qcepstartupwindow.h"
+#include "qcepstartupwindowsettings.h"
 
 QxrdAppViewer::QxrdAppViewer(int &argc, char **argv)
   : inherited(argc, argv)
@@ -19,8 +19,6 @@ QxrdAppViewer::~QxrdAppViewer()
 void QxrdAppViewer::initializeRoot()
 {
   inherited::initializeRoot();
-
-  parseCommandLine(false);
 
   int nWatches = get_WatcherList().length();
   int nFiles   = get_FileList().length();
@@ -38,40 +36,11 @@ void QxrdAppViewer::initializeRoot()
   }
 }
 
-void QxrdAppViewer::openStartupWindow()
+void QxrdAppViewer::parseCommandLine()
 {
-  if (m_StartupWindowSettings) {
-    m_StartupWindow =
-        qSharedPointerDynamicCast<QxrdStartupWindow>(
-          m_StartupWindowSettings -> newWindow());
+  GUI_THREAD_CHECK;
 
-    m_StartupWindow -> initialize(sharedFromThis());
-
-    m_StartupWindow -> setApplicationIcon(QIcon(":/images/qxrdviewer-icon-128x128.png"));
-    m_StartupWindow -> setApplicationDescription(
-          "Data Viewer for 2-D XRay Detector data\n"
-          "Guy Jennings\n"
-          "Version " + applicationVersion() + "\n"
-          "Build : " __DATE__ " : " __TIME__);
-
-    m_StartupWindow -> setWindowTitle(applicationDescription());
-    m_StartupWindow -> setWindowIcon(applicationIcon());
-    m_StartupWindow -> show();
-    m_StartupWindow -> raise();
-  }
-}
-
-void QxrdAppViewer::closeStartupWindow()
-{
-}
-
-void QxrdAppViewer::setDefaultObjectData(QcepDataObject *obj)
-{
-  if (obj) {
-    obj->set_Creator(applicationName());
-    obj->set_Version(applicationVersion());
-    obj->set_QtVersion(QT_VERSION_STR);
-  }
+  inherited::parseCommandLine();
 }
 
 void QxrdAppViewer::criticalMessage(QString msg, QDateTime ts) const
@@ -130,21 +99,29 @@ void QxrdAppViewer::chooseExistingExperiment()
 {
 }
 
-void QxrdAppViewer::readApplicationSettings()
+//void QxrdAppViewer::readApplicationSettings()
+//{
+//  QxrdViewerSettings set(this);
+
+//  set.beginGroup("application");
+//  readSettings(&set);
+//  set.endGroup();
+//}
+
+//void QxrdAppViewer::writeApplicationSettings()
+//{
+//  QxrdViewerSettings set(this);
+
+//  set.beginGroup("application");
+//  writeSettings(&set);
+//  set.endGroup();
+//  setChanged(0);
+//}
+
+QSettingsPtr QxrdAppViewer::applicationSettings()
 {
-  QxrdViewerSettings set(this);
+  QSettingsPtr res =
+      QSettingsPtr(new QxrdViewerSettings(this));
 
-  set.beginGroup("application");
-  readSettings(&set);
-  set.endGroup();
-}
-
-void QxrdAppViewer::writeApplicationSettings()
-{
-  QxrdViewerSettings set(this);
-
-  set.beginGroup("application");
-  writeSettings(&set);
-  set.endGroup();
-  setChanged(0);
+  return res;
 }

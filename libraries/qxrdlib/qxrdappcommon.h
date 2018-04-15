@@ -10,10 +10,7 @@
 #include "qxrdmainwindowsettings-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include <QTimer>
-#include "qcepallocator-ptr.h"
 #include "qxrddebug.h"
-#include "qxrdstartupwindow-ptr.h"
-#include "qxrdstartupwindowsettings-ptr.h"
 
 class QXRD_EXPORT QxrdAppCommon : public QcepApplication
 {
@@ -28,26 +25,15 @@ public:
   virtual ~QxrdAppCommon();
   void initializeRoot();
 
+  void shutdownDocuments();
+
   static QxrdAppCommonWPtr findApplication(QcepObjectWPtr p);
 
-  virtual void finish();
 
-  void appendCommand(QString cmd);
-  void appendScript(QString script);
-  void appendFile(QString file);
   void appendWatcher(QString patt);
   void appendPlugin(QString dir);
 
-  void parseCommandLine(bool wantFullOptions);
-
-  Q_INVOKABLE void logMessage(QString msg) const;
-  Q_INVOKABLE void warningMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
-  Q_INVOKABLE void statusMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
-  Q_INVOKABLE void criticalMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
-  Q_INVOKABLE void printLine(QString msg) const;
-
-  Q_INVOKABLE void splashMessage(QString msg, QDateTime dt=QDateTime::currentDateTime());
-  Q_INVOKABLE void printMessage(QString msg, QDateTime dt=QDateTime::currentDateTime()) const;
+  void parseCommandLine();
 
   void tiffWarning(const char* module, const char *msg);
   void tiffError(const char* module, const char *msg);
@@ -65,9 +51,6 @@ public:
 
   Q_INVOKABLE virtual void openWindow(QxrdMainWindowSettingsWPtr set);
 
-  void readSettings(QSettings *settings);
-  void writeSettings(QSettings *settings);
-
   virtual void doAboutQxrd();
   virtual void doOpenQXRDWebPage();
   virtual void doOpenURL(QString url);
@@ -80,44 +63,14 @@ public:
 
   QcepExperimentPtr experiment(int i) const;
 
-  QcepAllocatorWPtr allocator() const;
-
-  void possiblyQuit();
-  bool wantToQuit();
-
-  Q_ENUM(QcepDebugFlags)
   Q_ENUM(QxrdDebugFlags)
 
-  void debugChanged(qint64 newValue);
-
-  Q_INVOKABLE int  debugFlag(QString f);
-  Q_INVOKABLE QString debugFlagName(int i);
-  Q_INVOKABLE QString debugFlagOption(int i);
-  Q_INVOKABLE QString debugFlagDescription(int i);
-  Q_INVOKABLE int  debugFlagCount();
-  Q_INVOKABLE void listDebugFlags();
-
 public:
-  Q_PROPERTY(QStringList cmdList READ get_CmdList WRITE set_CmdList STORED false)
-  QCEP_STRING_LIST_PROPERTY(CmdList)
-
-  Q_PROPERTY(QStringList fileList READ get_FileList WRITE set_FileList STORED false)
-  QCEP_STRING_LIST_PROPERTY(FileList)
-
   Q_PROPERTY(QStringList watcherList READ get_WatcherList WRITE set_WatcherList STORED false)
   QCEP_STRING_LIST_PROPERTY(WatcherList)
 
   Q_PROPERTY(QStringList pluginList READ get_PluginList WRITE set_PluginList STORED false)
   QCEP_STRING_LIST_PROPERTY(PluginList)
-
-  Q_PROPERTY(qint64    debug         READ get_Debug WRITE set_Debug)
-  QCEP_INTEGER64_PROPERTY(Debug)
-
-  Q_PROPERTY(int    openNew         READ get_OpenNew WRITE set_OpenNew STORED false)
-  QCEP_INTEGER_PROPERTY(OpenNew)
-
-  Q_PROPERTY(int    freshStart         READ get_FreshStart WRITE set_FreshStart STORED false)
-  QCEP_INTEGER_PROPERTY(FreshStart)
 
   Q_PROPERTY(int    loadPlugins    READ get_LoadPlugins WRITE set_LoadPlugins STORED false)
   QCEP_INTEGER_PROPERTY(LoadPlugins)
@@ -131,26 +84,14 @@ public:
   Q_PROPERTY(int    fileBrowserLimit   READ get_FileBrowserLimit WRITE set_FileBrowserLimit)
   QCEP_INTEGER_PROPERTY(FileBrowserLimit)
 
-  Q_PROPERTY(int    messageWindowLines   READ get_MessageWindowLines WRITE set_MessageWindowLines)
-  QCEP_INTEGER_PROPERTY(MessageWindowLines)
-
-  Q_PROPERTY(int lockerCount READ get_LockerCount WRITE set_LockerCount STORED false)
-  QCEP_INTEGER_PROPERTY(LockerCount)
-
-  Q_PROPERTY(double lockerRate READ get_LockerRate WRITE set_LockerRate STORED false)
-  QCEP_DOUBLE_PROPERTY(LockerRate)
-
 protected:
-  QxrdStartupWindowSettingsPtr    m_StartupWindowSettings;
-  QxrdStartupWindowPtr            m_StartupWindow;
 
 private:
-  void hideSplash();
+//  void hideSplash();
   void setupTiffHandlers();
 
-  QcepAllocatorPtr                m_Allocator;
 
-  QTimer                          m_SplashTimer;
+//  QTimer                          m_SplashTimer;
 //  QxrdSplashScreenPtr             m_Splash;
 
   QxrdWelcomeWindowPtr            m_WelcomeWindow;

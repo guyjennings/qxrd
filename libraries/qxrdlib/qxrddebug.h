@@ -41,9 +41,9 @@ namespace QxrdDebug {
   public:
     QxrdDebugDictionary();
 
-    static int     debugFlagCount();
-    static QString debugFlagName(int i);
-    static int     debugFlagCheck(QString name);
+    int     debugFlagCount();
+    virtual QString debugFlagName(int i);
+    virtual int     debugFlagCheck(QString name);
   };
 }
 
