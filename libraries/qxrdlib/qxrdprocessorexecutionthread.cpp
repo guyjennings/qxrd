@@ -29,13 +29,6 @@ QxrdProcessorExecutionThread::~QxrdProcessorExecutionThread()
   }
 }
 
-void QxrdProcessorExecutionThread::shutdown()
-{
-  exit();
-
-  wait();
-}
-
 void QxrdProcessorExecutionThread::run()
 {
   if (qcepDebug(DEBUG_THREADS)) {

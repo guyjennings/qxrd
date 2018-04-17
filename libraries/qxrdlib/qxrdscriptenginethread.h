@@ -2,18 +2,18 @@
 #define QXRDSCRIPTENGINETHREAD_H
 
 #include "qxrdlib_global.h"
-#include "qxrdthread.h"
+#include "qcepthread.h"
 #include <QDateTime>
 #include "qxrdscriptengine-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include "qxrdexperiment-ptr.h"
 
-class QXRD_EXPORT QxrdScriptEngineThread : public QxrdThread
+class QXRD_EXPORT QxrdScriptEngineThread : public QcepThread
 {
   Q_OBJECT
 
 private:
-  typedef QxrdThread inherited;
+  typedef QcepThread inherited;
 
 public:
   Q_INVOKABLE QxrdScriptEngineThread(QString name);
@@ -21,7 +21,6 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
-  void shutdown();
   QxrdScriptEnginePtr scriptEngine() const;
 
 protected:

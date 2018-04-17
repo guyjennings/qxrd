@@ -20,10 +20,12 @@
 #include "qxrdwindow.h"
 #include "qxrdacquisition.h"
 #include "qxrdacqdummy.h"
-#include "qxrdserverthread.h"
-#include "qxrdserver.h"
-#include "qxrdsimpleserverthread.h"
-#include "qxrdsimpleserver.h"
+#include "qcepspecserversettings.h"
+#include "qcepspecserverthread.h"
+#include "qcepspecserver.h"
+#include "qcepsimpleserversettings.h"
+#include "qcepsimpleserverthread.h"
+#include "qcepsimpleserver.h"
 #include "qxrdscriptenginethread.h"
 #include "qxrdscriptengine.h"
 #include "qxrdexperimentpreferencesdialog.h"
@@ -75,8 +77,8 @@
 QxrdExperiment::QxrdExperiment(QString name) :
   inherited(name),
   m_Application(),
-  m_ServerThread(NULL),
-  m_Server(),
+  m_SpecServerThread(NULL),
+  m_SpecServer(),
   m_SimpleServerThread(NULL),
   m_SimpleServer(),
   m_Processor(),
@@ -281,24 +283,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
 //    m_DatasetModel -> newColumn("/group4/t", 1000);
 //    m_DatasetModel -> newColumn("/group4/sdev", 1000);
 
-    splashMessage("Starting SPEC Server");
-
-    m_ServerThread = QxrdServerThreadPtr(
-          new QxrdServerThread("specServerThread"));
-    m_ServerThread -> initialize(sharedFromThis());
-    m_ServerThread -> start();
-
-    m_Server = m_ServerThread -> server();
-
-    splashMessage("Starting Simple Socket Server");
-
-    m_SimpleServerThread = QxrdSimpleServerThreadPtr(
-          new QxrdSimpleServerThread("simpleServerThread"));
-    m_SimpleServerThread -> initialize(sharedFromThis());
-    m_SimpleServerThread -> start();
-
-    m_SimpleServer = m_SimpleServerThread -> server();
-
     m_ScriptEngine = QxrdScriptEnginePtr(
           new QxrdScriptEngine("scriptEngine"));
     m_ScriptEngine -> initialize(sharedFromThis());
@@ -307,27 +291,37 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
           new QxrdJSEngine("jsEngine"));
     m_ScriptEngineJS -> initialize(sharedFromThis());
 
-    QxrdScriptEnginePtr eng(m_ScriptEngine);
+    splashMessage("Starting SPEC Server");
 
-    QxrdServerPtr srv(m_Server);
+    m_SpecServerSettings =
+        QcepSpecServerSettingsPtr(
+          new QcepSpecServerSettings("specServerSettings"));
+    m_SpecServerSettings -> initialize(sharedFromThis());
 
-    if (srv && eng) {
-      connect(srv.data(),   &QxrdServer::executeCommand,
-              eng.data(),   &QxrdScriptEngine::evaluateSpecCommand);
+    m_SpecServerThread = QcepSpecServerThreadPtr(
+          new QcepSpecServerThread("specServerThread"));
+    m_SpecServerThread -> initialize(sharedFromThis(),
+                                     m_SpecServerSettings,
+                                     m_ScriptEngine);
+    m_SpecServerThread -> start();
 
-      connect(eng.data(),   &QxrdScriptEngine::specResultAvailable,
-              srv.data(),   &QxrdServer::finishedCommand);
-    }
+    m_SpecServer = m_SpecServerThread -> specServer();
 
-    QxrdSimpleServerPtr ssrv(m_SimpleServer);
+    splashMessage("Starting Simple Socket Server");
 
-    if (ssrv && eng) {
-      connect(ssrv.data(),  &QxrdSimpleServer::executeCommand,
-              eng.data(),   &QxrdScriptEngine::evaluateSimpleServerCommand);
+    m_SimpleServerSettings =
+        QcepSimpleServerSettingsPtr(
+          new QcepSimpleServerSettings("simpleServerSettings"));
+    m_SimpleServerSettings -> initialize(sharedFromThis());
 
-      connect(eng.data(),   &QxrdScriptEngine::simpleServerResultAvailable,
-              ssrv.data(),  &QxrdSimpleServer::finishedCommand);
-    }
+    m_SimpleServerThread = QcepSimpleServerThreadPtr(
+          new QcepSimpleServerThread("simpleServerThread"));
+    m_SimpleServerThread -> initialize(sharedFromThis(),
+                                       m_SimpleServerSettings,
+                                       m_ScriptEngine);
+    m_SimpleServerThread -> start();
+
+    m_SimpleServer = m_SimpleServerThread -> simpleServer();
 
     QxrdFileSaverPtr saver(m_FileSaver);
 
@@ -425,10 +419,11 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QcepPowderPoint>("QxrdPowderPoint");
   qRegisterMetaType<QcepPowderPointVector>("QxrdPowderPointVector");
   qRegisterMetaType<QxrdScriptEngine*>("QxrdScriptEngine*");
-  qRegisterMetaType<QxrdServer*>("QxrdServer*");
-  qRegisterMetaType<QxrdServerThread*>("QxrdServerThread*");
-  qRegisterMetaType<QxrdSimpleServer*>("QxrdSimpleServer*");
-  qRegisterMetaType<QxrdSimpleServerThread*>("QxrdSimpleServerThread*");
+  qRegisterMetaType<QcepServer*>("QcepServer*");
+  qRegisterMetaType<QcepSpecServer*>("QcepSpecServer*");
+  qRegisterMetaType<QcepSpecServerThread*>("QcepSpecServerThread*");
+  qRegisterMetaType<QcepSimpleServer*>("QcepSimpleServer*");
+  qRegisterMetaType<QcepSimpleServerThread*>("QcepSimpleServerThread*");
 
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
   qRegisterMetaType<QxrdGenerateTestImage*>("QxrdGenerateTestImage*");
@@ -501,22 +496,32 @@ QxrdFileSaverWPtr QxrdExperiment::fileSaver() const
   return m_FileSaver;
 }
 
-QxrdServerWPtr QxrdExperiment::specServer()
+QcepSpecServerSettingsWPtr QxrdExperiment::specServerSettings()
 {
-  return m_Server;
+  return m_SpecServerSettings;
 }
 
-QxrdServerThreadWPtr QxrdExperiment::specServerThread()
+QcepSpecServerWPtr QxrdExperiment::specServer()
 {
-  return m_ServerThread;
+  return m_SpecServer;
 }
 
-QxrdSimpleServerWPtr QxrdExperiment::simpleServer()
+QcepSpecServerThreadWPtr QxrdExperiment::specServerThread()
+{
+  return m_SpecServerThread;
+}
+
+QcepSimpleServerSettingsWPtr QxrdExperiment::simpleServerSettings()
+{
+  return m_SimpleServerSettings;
+}
+
+QcepSimpleServerWPtr QxrdExperiment::simpleServer()
 {
   return m_SimpleServer;
 }
 
-QxrdSimpleServerThreadWPtr QxrdExperiment::simpleServerThread()
+QcepSimpleServerThreadWPtr QxrdExperiment::simpleServerThread()
 {
   return m_SimpleServerThread;
 }
@@ -884,9 +889,6 @@ void QxrdExperiment::readSettings(QSettings *settings)
   if (settings) {
     inherited::readSettings(settings);
 
-    QxrdServerPtr srv(m_Server);
-    QxrdSimpleServerPtr ssrv(m_SimpleServer);
-
     splashMessage("Reading Acquisition Settings");
 
     if (m_Acquisition) {
@@ -929,17 +931,17 @@ void QxrdExperiment::readSettings(QSettings *settings)
 
     splashMessage("Reading Spec Server Settings");
 
-    if (srv) {
-      settings->beginGroup("specserver");
-      srv  -> readSettings(settings);
+    if (m_SpecServerSettings) {
+      settings->beginGroup("specServerSettings");
+      m_SpecServerSettings  -> readSettings(settings);
       settings->endGroup();
     }
 
     splashMessage("Reading Simple Server Settings");
 
-    if (ssrv) {
-      settings->beginGroup("simpleserver");
-      ssrv -> readSettings(settings);
+    if (m_SimpleServerSettings) {
+      settings->beginGroup("simpleServerSettings");
+      m_SimpleServerSettings -> readSettings(settings);
       settings->endGroup();
     }
 
@@ -1036,9 +1038,6 @@ void QxrdExperiment::writeSettings(QSettings *settings)
   if (settings) {
     inherited::writeSettings(settings);
 
-    QxrdServerPtr        srv(m_Server);
-    QxrdSimpleServerPtr  ssrv(m_SimpleServer);
-
     if (m_Acquisition) {
       settings->beginGroup("acquisition");
       m_Acquisition -> writeSettings(settings);
@@ -1057,15 +1056,15 @@ void QxrdExperiment::writeSettings(QSettings *settings)
       settings->endGroup();
     }
 
-    if (srv) {
-      settings->beginGroup("specserver");
-      srv  -> writeSettings(settings);
+    if (m_SpecServerSettings) {
+      settings->beginGroup("specServerSettings");
+      m_SpecServerSettings  -> writeSettings(settings);
       settings->endGroup();
     }
 
-    if (ssrv) {
-      settings->beginGroup("simpleserver");
-      ssrv -> writeSettings(settings);
+    if (m_SimpleServerSettings) {
+      settings->beginGroup("simpleServerSettings");
+      m_SimpleServerSettings -> writeSettings(settings);
       settings->endGroup();
     }
 

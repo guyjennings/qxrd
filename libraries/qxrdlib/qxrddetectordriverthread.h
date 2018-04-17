@@ -2,19 +2,19 @@
 #define QXRDDETECTORDRIVERTHREAD_H
 
 #include "qxrdlib_global.h"
-#include "qxrdthread.h"
+#include "qcepthread.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacquisition-ptr.h"
 #include "qxrddetectordriver-ptr.h"
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrddetectordriverthread-ptr.h"
 
-class QXRD_EXPORT QxrdDetectorDriverThread : public QxrdThread
+class QXRD_EXPORT QxrdDetectorDriverThread : public QcepThread
 {
   Q_OBJECT
 
 private:
-  typedef QxrdThread inherited;
+  typedef QcepThread inherited;
 
 public:
   explicit QxrdDetectorDriverThread(QString name);
@@ -24,8 +24,6 @@ public:
 
   void setDetectorDriver(QxrdDetectorDriverPtr detDriver);
   QxrdDetectorDriverWPtr detectorDriver() const;
-
-  void shutdown();
 
 signals:
 

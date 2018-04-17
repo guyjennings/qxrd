@@ -14,8 +14,6 @@ private:
 
 public:
   QxrdThread(QString name);
-
-  virtual void shutdown() = 0;
 };
 
 #endif // QXRDTHREAD_H

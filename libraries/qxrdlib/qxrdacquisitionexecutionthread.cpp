@@ -31,13 +31,6 @@ QxrdAcquisitionExecutionThread::~QxrdAcquisitionExecutionThread()
   }
 }
 
-void QxrdAcquisitionExecutionThread::shutdown()
-{
-  exit();
-
-  wait();
-}
-
 void QxrdAcquisitionExecutionThread::run()
 {
   if (qcepDebug(DEBUG_THREADS)) {

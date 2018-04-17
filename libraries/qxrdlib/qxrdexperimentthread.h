@@ -2,18 +2,18 @@
 #define QXRDEXPERIMENTTHREAD_H
 
 #include "qxrdlib_global.h"
-#include "qxrdthread.h"
+#include "qcepthread.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdexperimentthread-ptr.h"
 #include "qxrdappcommon-ptr.h"
 #include "qxrdexperimentsettings-ptr.h"
 
-class QXRD_EXPORT QxrdExperimentThread : public QxrdThread
+class QXRD_EXPORT QxrdExperimentThread : public QcepThread
 {
   Q_OBJECT
 
 private:
-  typedef QxrdThread inherited;
+  typedef QcepThread inherited;
 
 public:
   //TODO: pass parent pointer on initialization...
@@ -28,8 +28,6 @@ public:
                   int                       mode);
 
   static QxrdExperimentThreadWPtr findExperimentThread(QcepObjectWPtr parent);
-
-  void shutdown();
 
   QxrdExperimentPtr experiment() const;
 

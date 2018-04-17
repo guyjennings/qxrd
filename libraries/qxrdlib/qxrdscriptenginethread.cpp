@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 QxrdScriptEngineThread::QxrdScriptEngineThread(QString name)
-  : QxrdThread(name),
+  : inherited(name),
     m_ScriptEngine(NULL),
     m_Application(),
     m_Experiment()
@@ -34,13 +34,6 @@ QxrdScriptEngineThread::~QxrdScriptEngineThread()
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngineThread::~QxrdScriptEngineThread(%p)\n", this);
   }
-}
-
-void QxrdScriptEngineThread::shutdown()
-{
-  exit();
-
-  wait();
 }
 
 QxrdScriptEnginePtr QxrdScriptEngineThread::scriptEngine() const

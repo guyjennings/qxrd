@@ -2,24 +2,22 @@
 #define QXRDACQUISITIONEXECUTIONTHREAD_H
 
 #include "qxrdlib_global.h"
-#include "qxrdthread.h"
+#include "qcepthread.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdacquisitionexecution-ptr.h"
 
-class QXRD_EXPORT QxrdAcquisitionExecutionThread : public QxrdThread
+class QXRD_EXPORT QxrdAcquisitionExecutionThread : public QcepThread
 {
   Q_OBJECT
 
 private:
-  typedef QxrdThread inherited;
+  typedef QcepThread inherited;
 
 public:
   Q_INVOKABLE QxrdAcquisitionExecutionThread(QString name);
   ~QxrdAcquisitionExecutionThread();
 
   void initialize(QcepObjectWPtr parent);
-
-  void shutdown();
 
 signals:
 

@@ -64,8 +64,6 @@ public:
   void setWindow(QxrdWindowWPtr win);
 
 public slots:
-  static QString convertToString(QScriptValue result);
-
   void dumpLocks();
 
   void openScriptOutput(const QString& fileName);
@@ -77,9 +75,6 @@ public slots:
 
 private slots:
   void              evaluateScript(int src, QString cmd);
-
-private:
-  static QString convertHelper(QScriptValue result, int depth);
 
 private:
   static QScriptValue printFunc(QScriptContext *context, QScriptEngine *engine, void *u);

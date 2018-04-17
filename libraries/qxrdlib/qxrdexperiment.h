@@ -16,10 +16,12 @@
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacqcommon-ptr.h"
 #include "qxrdprocessor-ptr.h"
-#include "qxrdserverthread-ptr.h"
-#include "qxrdserver-ptr.h"
-#include "qxrdsimpleserverthread-ptr.h"
-#include "qxrdsimpleserver-ptr.h"
+#include "qcepspecserversettings-ptr.h"
+#include "qcepspecserverthread-ptr.h"
+#include "qcepspecserver-ptr.h"
+#include "qcepsimpleserversettings-ptr.h"
+#include "qcepsimpleserverthread-ptr.h"
+#include "qcepsimpleserver-ptr.h"
 #include "qxrdfilesaverthread-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 #include "qxrdwindow-ptr.h"
@@ -80,10 +82,12 @@ public:
   QxrdProcessorWPtr processor() const;
   QcepCenterFinderWPtr centerFinder() const;
   QxrdIntegratorWPtr integrator() const;
-  QxrdServerWPtr specServer();
-  QxrdServerThreadWPtr specServerThread();
-  QxrdSimpleServerWPtr simpleServer();
-  QxrdSimpleServerThreadWPtr simpleServerThread();
+  QcepSpecServerSettingsWPtr specServerSettings();
+  QcepSpecServerWPtr specServer();
+  QcepSpecServerThreadWPtr specServerThread();
+  QcepSimpleServerSettingsWPtr simpleServerSettings();
+  QcepSimpleServerWPtr simpleServer();
+  QcepSimpleServerThreadWPtr simpleServerThread();
   QcepCalibrantLibraryWPtr calibrantLibrary() const;
   QcepCalibrantLibraryModelWPtr calibrantLibraryModel() const;
   QcepCalibrantDSpacingsWPtr calibrantDSpacings() const;
@@ -187,10 +191,6 @@ public:
 private:
   QxrdAppCommonWPtr               m_Application;
   QxrdExperimentThreadWPtr        m_ExperimentThread;
-  QxrdServerThreadPtr             m_ServerThread;
-  QxrdServerWPtr                  m_Server;
-  QxrdSimpleServerThreadPtr       m_SimpleServerThread;
-  QxrdSimpleServerWPtr            m_SimpleServer;
   QxrdProcessorPtr                m_Processor;
   QcepCalibrantLibraryPtr         m_CalibrantLibrary;
   QcepCalibrantLibraryModelPtr    m_CalibrantLibraryModel;
@@ -202,6 +202,14 @@ private:
   QxrdScriptEnginePtr             m_ScriptEngine;
 
   QxrdJSEnginePtr                 m_ScriptEngineJS;
+
+  QcepSpecServerSettingsPtr       m_SpecServerSettings;
+  QcepSpecServerThreadPtr         m_SpecServerThread;
+  QcepSpecServerWPtr              m_SpecServer;
+
+  QcepSimpleServerSettingsPtr     m_SimpleServerSettings;
+  QcepSimpleServerThreadPtr       m_SimpleServerThread;
+  QcepSimpleServerWPtr            m_SimpleServer;
 
   QcepDatasetPtr                  m_Dataset;
   QcepDatasetModelPtr             m_DatasetModel;

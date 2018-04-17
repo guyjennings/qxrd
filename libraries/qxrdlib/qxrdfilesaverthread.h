@@ -4,19 +4,21 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
-#include "qxrdthread.h"
+#include "qcepthread.h"
 #include "qcepallocator-ptr.h"
 #include "qxrdfilesaver-ptr.h"
 
-class QXRD_EXPORT QxrdFileSaverThread : public QxrdThread
+class QXRD_EXPORT QxrdFileSaverThread : public QcepThread
 {
   Q_OBJECT
+
+private:
+  typedef QcepThread inherited;
 
 public:
   Q_INVOKABLE QxrdFileSaverThread(QString name);
   ~QxrdFileSaverThread();
 
-  void shutdown();
   QxrdFileSaverPtr fileSaver() const;
 
 protected:

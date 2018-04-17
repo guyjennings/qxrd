@@ -7,8 +7,6 @@
 #include "qxrdprocessor.h"
 #include "qceproi.h"
 #include "qxrddetectorsettings.h"
-#include "qxrdserver.h"
-#include "qxrdsimpleserver.h"
 #include "qcepcalibrantlibrary.h"
 #include "qcepcalibrant.h"
 #include "qcepdatasetmodel.h"
@@ -165,19 +163,19 @@ void QxrdJSEngine::initialize(QcepObjectWPtr parent)
       }
     }
 
-    QxrdSimpleServerPtr ssrv(expt->simpleServer());
+//    QcepSimpleServerPtr ssrv(expt->simpleServer());
 
-    if (ssrv) {
-//      QCEP_DOC_OBJECT("simpleServer", "Remote Control Text Based Socket Server");
-      setGlobalProperty("simpleServer", newQObject(ssrv.data()));
-    }
+//    if (ssrv) {
+////      QCEP_DOC_OBJECT("simpleServer", "Remote Control Text Based Socket Server");
+//      setGlobalProperty("simpleServer", newQObject(ssrv.data()));
+//    }
 
-    QxrdServerPtr srv(expt->specServer());
+//    QcepSpecServerPtr srv(expt->specServer());
 
-    if (srv) {
-//      QCEP_DOC_OBJECT("specServer", "Remote Control Server for use with Spec");
-      setGlobalProperty("specServer", newQObject(srv.data()));
-    }
+//    if (srv) {
+////      QCEP_DOC_OBJECT("specServer", "Remote Control Server for use with Spec");
+//      setGlobalProperty("specServer", newQObject(srv.data()));
+//    }
 
     //TODO: is this the appropriate one...
     QxrdProcessorPtr dp(expt->processor());

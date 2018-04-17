@@ -1,8 +1,0 @@
-#ifndef QXRDSIMPLESERVERTHREAD_PTR_H
-#define QXRDSIMPLESERVERTHREAD_PTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdSimpleServerThread)
-
-#endif // QXRDSIMPLESERVERTHREAD_PTR_H

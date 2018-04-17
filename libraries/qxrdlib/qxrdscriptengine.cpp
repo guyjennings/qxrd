@@ -15,8 +15,8 @@
 #include "qxrdgeneratetestimage.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepallocator.h"
-#include "qxrdserver.h"
-#include "qxrdsimpleserver.h"
+//#include "qcepspecserver.h"
+//#include "qcepsimpleserver.h"
 #include "qcepdocumentationdictionary.h"
 #include "qcepdatagroup.h"
 #include "qcepdatagroup-ptr.h"
@@ -214,71 +214,6 @@ void QxrdScriptEngine::loadScript(QString path)
         }
       }
     }
-  }
-}
-
-QString QxrdScriptEngine::convertToString(QScriptValue result)
-{
-  return QxrdScriptEngine::convertHelper(result, 0);
-}
-
-QString QxrdScriptEngine::convertHelper(QScriptValue result, int depth)
-{
-  if (depth >= 4) {
-    return "...";
-  } else if (result.isError()) {
-    return "ERROR : "+result.property("error").toString();
-  } else if (result.isArray()) {
-    int len = result.property("length").toInteger();
-
-    QString s = "[";
-
-    for (int i=0; i<len; i++) {
-      s += convertHelper(result.property(tr("%1").arg(i)), depth+1);
-
-      if (i<len-1) {
-        s += ", ";
-      }
-    }
-
-    s += "]";
-
-    return s;
-
-  } else if (result.isObject() || result.isQObject()) {
-    QScriptValueIterator it(result);
-
-    QString s = "{";
-
-    if (depth == 0) s += "\n";
-
-    while(it.hasNext()) {
-      it.next();
-
-      if (depth == 0) s += "  ";
-
-      s += it.name()+":";
-      s += convertHelper(it.value(), depth+1);
-
-      if (it.hasNext()) {
-        if (depth == 0) {
-          s += ",\n";
-        } else {
-          s += ", ";
-        }
-      }
-    }
-
-    if (depth == 0) {
-      s += "\n}";
-    } else {
-      s += "}";
-    }
-
-    return s;
-
-  } else {
-    return result.toString();
   }
 }
 
@@ -2283,19 +2218,19 @@ void QxrdScriptEngine::initialize(QcepObjectWPtr parent)
 //      globalObject().setProperty("singleAcquisition", newQObject(sacq.data(), QtOwnership, QScriptEngine::AutoCreateDynamicProperties));
 //    }
 
-    QxrdSimpleServerPtr ssrv(expt->simpleServer());
+//    QcepSimpleServerPtr ssrv(expt->simpleServer());
 
-    if (ssrv) {
-      QCEP_DOC_OBJECT("simpleServer", "Remote Control Text Based Socket Server");
-      globalObject().setProperty("simpleServer", newQObject(ssrv.data()));
-    }
+//    if (ssrv) {
+//      QCEP_DOC_OBJECT("simpleServer", "Remote Control Text Based Socket Server");
+//      globalObject().setProperty("simpleServer", newQObject(ssrv.data()));
+//    }
 
-    QxrdServerPtr srv(expt->specServer());
+//    QcepServerPtr srv(expt->specServer());
 
-    if (srv) {
-      QCEP_DOC_OBJECT("specServer", "Remote Control Server for use with Spec");
-      globalObject().setProperty("specServer", newQObject(srv.data()));
-    }
+//    if (srv) {
+//      QCEP_DOC_OBJECT("specServer", "Remote Control Server for use with Spec");
+//      globalObject().setProperty("specServer", newQObject(srv.data()));
+//    }
 
     m_Processor = expt->processor();
 

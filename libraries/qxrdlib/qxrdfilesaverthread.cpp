@@ -6,10 +6,9 @@
 #include "qcepintegrateddata.h"
 #include "qxrdapplication.h"
 #include "qcepmutexlocker.h"
-#include "qcepthread.h"
 
 QxrdFileSaverThread::QxrdFileSaverThread(QString name)
-  : QxrdThread(name),
+  : inherited(name),
     m_FileSaver()
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
@@ -52,13 +51,6 @@ void QxrdFileSaverThread::run()
   if (qcepDebug(DEBUG_THREADS)) {
     printf("File Saver Thread Terminated with rc %d\n", rc);
   }
-}
-
-void QxrdFileSaverThread::shutdown()
-{
-  exit();
-
-  wait();
 }
 
 QxrdFileSaverPtr QxrdFileSaverThread::fileSaver() const

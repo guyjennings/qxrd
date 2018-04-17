@@ -108,13 +108,6 @@ QxrdDetectorDriverWPtr QxrdDetectorDriverThread::detectorDriver() const
   return m_DetectorDriver;
 }
 
-void QxrdDetectorDriverThread::shutdown()
-{
-  exit();
-
-  wait();
-}
-
 void QxrdDetectorDriverThread::startDetectorDriver()
 {
   if (m_DetectorDriver) {

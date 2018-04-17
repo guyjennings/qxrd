@@ -81,10 +81,3 @@ QxrdSynchronizerWPtr QxrdSynchronizerThread::synchronizer() const
 
   return m_Synchronizer;
 }
-
-void QxrdSynchronizerThread::shutdown()
-{
-  exit();
-
-  wait();
-}

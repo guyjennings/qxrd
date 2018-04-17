@@ -69,19 +69,14 @@ SOURCES += qxrdlib.cpp \
     qxrdfilesaver.cpp \
     qxrdintegrator.cpp \
     qxrdintegratorplot.cpp \
-    qxrdserver.cpp \
-    qxrdserverthread.cpp \
     qxrdacquisition.cpp \
     qxrdscriptengine.cpp \
     qxrdscriptenginethread.cpp \
     qxrdexperimentpreferencesdialog.cpp \
-    qxrdsharedpointer.cpp \
     qxrdresultserializer.cpp \
     qxrdhistogramdata.cpp \
     qxrdexposuretimespinner.cpp \
     qxrdgeneratetestimage.cpp \
-    qxrdsimpleserver.cpp \
-    qxrdsimpleserverthread.cpp \
     qxrdcenterstepspinner.cpp \
     qxrdmaskstackview.cpp \
     qxrdsynchronizedacquisition.cpp \
@@ -415,10 +410,6 @@ HEADERS += TODO.h \
     qxrdintegrator.h \
     qxrdintegrator-ptr.h \
     qxrdintegratorplot.h \
-    qxrdserver.h \
-    qxrdserver-ptr.h \
-    qxrdserverthread.h \
-    qxrdserverthread-ptr.h \
     qxrdacquisition.h \
     qxrdacquisition-ptr.h \
     qxrdscriptengine.h \
@@ -433,10 +424,6 @@ HEADERS += TODO.h \
     qxrdexposuretimespinner.h \
     qxrdgeneratetestimage.h \
     qxrdgeneratetestimage-ptr.h \
-    qxrdsimpleserver.h \
-    qxrdsimpleserver-ptr.h \
-    qxrdsimpleserverthread.h \
-    qxrdsimpleserverthread-ptr.h \
     qxrdcenterstepspinner.h \
     qxrdmaskstackview.h \
     qxrdsynchronizedacquisition.h \

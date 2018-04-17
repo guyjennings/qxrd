@@ -29,14 +29,6 @@ void QxrdFileBrowserModelUpdaterThread::setModel(QxrdFileBrowserModelWPtr model)
   m_Model = model;
 }
 
-void QxrdFileBrowserModelUpdaterThread::shutdown()
-{
-//  INVOKE_CHECK(QMetaObject::invokeMethod(m_Updater.data(),"shutdown",Qt::QueuedConnection));
-  exit();
-
-  wait();
-}
-
 void QxrdFileBrowserModelUpdaterThread::run()
 {
   if (qcepDebug(DEBUG_THREADS)) {

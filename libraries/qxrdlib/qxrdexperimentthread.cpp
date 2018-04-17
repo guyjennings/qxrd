@@ -5,7 +5,7 @@
 #include "qxrdappcommon.h"
 
 QxrdExperimentThread::QxrdExperimentThread(QString name) :
-  QxrdThread(name),
+  inherited(name),
   m_Path(),
   m_Settings(),
   m_ExperimentMode()
@@ -71,13 +71,6 @@ void QxrdExperimentThread::run()
   if (qcepDebug(DEBUG_THREADS)) {
     printf("Experiment thread terminated with rd %d\n", rc);
   }
-}
-
-void QxrdExperimentThread::shutdown()
-{
-  exit();
-
-  wait();
 }
 
 QxrdExperimentPtr QxrdExperimentThread::experiment() const

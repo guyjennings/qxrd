@@ -5,8 +5,8 @@
 #include "qxrdapplication.h"
 #include "qcepallocator.h"
 #include "qxrdexperiment.h"
-#include "qxrdserver.h"
-#include "qxrdsimpleserver.h"
+#include "qcepspecserversettings.h"
+#include "qcepsimpleserversettings.h"
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QGridLayout>
@@ -46,7 +46,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     int runSpecServer = 0;
     int specServerPort = 0;
 
-    QxrdServerPtr srv(expt -> specServer());
+    QcepSpecServerSettingsPtr srv(expt -> specServerSettings());
 
     if (srv) {
       runSpecServer = srv -> get_RunSpecServer();
@@ -56,7 +56,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     int runSimpleServer = 0;
     int simpleServerPort = 0;
 
-    QxrdSimpleServerPtr ssrv(expt -> simpleServer());
+    QcepSimpleServerSettingsPtr ssrv(expt -> simpleServerSettings());
 
     if (ssrv) {
       runSimpleServer = ssrv -> get_RunSimpleServer();
@@ -295,8 +295,8 @@ void QxrdExperimentPreferencesDialog::accept()
   if (expt) {
     QxrdAcqCommonPtr acq(expt->acquisition());
     QxrdProcessorPtr proc = expt->processor();
-    QxrdServerPtr srv(expt -> specServer());
-    QxrdSimpleServerPtr ssrv(expt -> simpleServer());
+    QcepSpecServerSettingsPtr srv(expt -> specServerSettings());
+    QcepSimpleServerSettingsPtr ssrv(expt -> simpleServerSettings());
 
 //    expt->set_DetectorType(m_DetectorType->currentIndex());
 //    expt->set_DetectorSubType(m_DetectorSubType->currentIndex());
