@@ -59,7 +59,9 @@ INCLUDEPATH += qceplib
 INCLUDEPATH += $${PWD}/../libraries/qxrdlib/
 INCLUDEPATH += $${OUT_PWD}/../libraries/qxrdlib/
 
-CONFIG += qceplib-qwt qceplib-hdf5 qceplib-tiff
+CONFIG += qceplib-qwt
+CONFIG += qceplib-hdf5
+CONFIG += qceplib-tiff
 
 #CONFIG += qceplib-nexus
 
@@ -72,6 +74,7 @@ include(../source/submodules/qceplib/qceplib-levmar-include.pri)
 include(../source/submodules/qceplib/qceplib-szip-include.pri)
 include(../source/submodules/qceplib/qceplib-zlib-include.pri)
 include(../source/submodules/qceplib/qceplib-hdf5-include.pri)
+include(../source/submodules/qceplib/qceplib-bzip2-include.pri)
 include(../source/submodules/qceplib/qceplib-specserver-include.pri)
 ##include(submodules/qceplib/qceplib-nexus.pri)
 

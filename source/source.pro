@@ -79,7 +79,10 @@ DISTFILES += qxrd.dox \
     tiffconfig/macx/tiffconf.h \
     qxrd_tests.mac
 
-CONFIG += qceplib-qwt qceplib-hdf5 qceplib-tiff
+CONFIG += qceplib-qwt
+CONFIG += qceplib-hdf5
+CONFIG += qceplib-tiff
+CONFIG += qceplib-bzip2
 
 #CONFIG += qceplib-nexus
 
@@ -93,6 +96,7 @@ include(submodules/qceplib/qceplib-szip-include.pri)
 include(submodules/qceplib/qceplib-zlib-include.pri)
 include(submodules/qceplib/qceplib-hdf5-include.pri)
 include(submodules/qceplib/qceplib-specserver-include.pri)
+include(submodules/qceplib/qceplib-bzip2-include.pri)
 ##include(submodules/qceplib/qceplib-nexus.pri)
 
 #macx {

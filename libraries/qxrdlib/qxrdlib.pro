@@ -586,6 +586,7 @@ include(../../source/submodules/qceplib/qceplib-levmar-include.pri)
 include(../../source/submodules/qceplib/qceplib-szip-include.pri)
 include(../../source/submodules/qceplib/qceplib-zlib-include.pri)
 include(../../source/submodules/qceplib/qceplib-hdf5-include.pri)
+include(../../source/submodules/qceplib/qceplib-bzip2-include.pri)
 include(../../source/submodules/qceplib/qceplib-specserver-include.pri)
 
 INCLUDEPATH += $${OUT_PWD}/../qceplib/

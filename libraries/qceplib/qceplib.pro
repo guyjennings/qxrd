@@ -35,7 +35,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-CONFIG += qceplib-qwt qceplib-hdf5 qceplib-tiff
+CONFIG += qceplib-qwt
+CONFIG += qceplib-hdf5
+CONFIG += qceplib-tiff
+CONFIG += qceplib-bzip2
 
 DEFINES += QWT_MAKEDLL
 DEFINES += CBF_MAKEDLL
@@ -46,6 +49,7 @@ DEFINES += SZIP_MAKEDLL
 DEFINES += ZLIB_MAKEDLL
 DEFINES += HDF5_MAKEDLL
 DEFINES += SPECSERVER_MAKEDLL
+DEFINES += BZIP2_MAKEDLL
 
 #DEFINES += H5_BUILT_AS_DYNAMIC_LIB
 
@@ -59,6 +63,7 @@ include(../../source/submodules/qceplib/qceplib-szip.pri)
 include(../../source/submodules/qceplib/qceplib-zlib.pri)
 include(../../source/submodules/qceplib/qceplib-hdf5.pri)
 include(../../source/submodules/qceplib/qceplib-specserver.pri)
+include(../../source/submodules/qceplib/qceplib-bzip2.pri)
 
 unix {
     target.path = /usr/lib
