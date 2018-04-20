@@ -102,6 +102,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     expt -> prop_ScanMaxSaved()        -> copyTo(m_ScanFileBackups);
 
     expt -> prop_CompressOutputBZ2()   -> copyTo(m_CompressOutputBZ2);
+    expt -> prop_CompressLevelBZ2()    -> copyTo(m_CompressLevelBZ2);
 
     if (proc) {
       connect(m_SaveRawBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveRawBrowse);
@@ -348,6 +349,7 @@ void QxrdExperimentPreferencesDialog::accept()
     expt -> prop_ScanMaxSaved()      -> copyFrom(m_ScanFileBackups);
 
     expt -> prop_CompressOutputBZ2() -> copyFrom(m_CompressOutputBZ2);
+    expt -> prop_CompressLevelBZ2()  -> copyFrom(m_CompressLevelBZ2);
 
     if (acq) {
       acq -> prop_FileIndexWidth()      -> copyFrom(m_FileIndexWidth);

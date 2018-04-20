@@ -15,7 +15,7 @@
 #include "qcepimagedata.h"
 #include "tiffio.hxx"
 #include <sstream>
-#include "bzlib.h"
+#include "qcepbzlib.h"
 
 QxrdFileSaver::QxrdFileSaver()
   : QcepObject("fileSaver"),
@@ -285,25 +285,29 @@ void QxrdFileSaver::saveDoubleDataPrivate(QcepDoubleImageDataPtr image,
 
     QString name = uniqueFileName(image, canOverwrite);
 
-    printMessage(tr("Starting to save data in file \"%1\"").arg(name));
-
     mkPath(name);
 
     int compress = 0;
+    int level    = 0;
+
     std::ostringstream outStream;
 
     QxrdExperimentPtr expt(m_Experiment);
 
     if (expt && expt -> get_CompressOutputBZ2()) {
       compress = 1;
+      level    = expt -> get_CompressLevelBZ2();
+      name    += ".bz2";
     }
+
+    printMessage(tr("Starting to save data in file \"%1\"").arg(name));
 
     TIFF* tif;
 
     if (compress == 0) {
       tif = qcepTIFFOpen(qPrintable(name),"w");
     } else {
-      tif = TIFFStreamOpen(qPrintable(name), &outStream);
+      tif = qcepTIFFStreamOpen(qPrintable(name), &outStream);
     }
 
     int res = 1;
@@ -334,17 +338,22 @@ void QxrdFileSaver::saveDoubleDataPrivate(QcepDoubleImageDataPtr image,
       qcepTIFFClose(tif);
 
       if (compress) {
+        printMessage(tr("Started compressing data in file \"%1\" after %2 msec").
+                                      arg(name).arg(tic.elapsed()));
+
         int bzerror;
         unsigned int nbytes_in, nbytes_out;
 
-        FILE*   f   = fopen(qPrintable(name+".bz2"),"w");
-        BZFILE* bzf = BZ2_bzWriteOpen(&bzerror, f, 9, 0, 0);
+        FILE*   f   = fopen(qPrintable(name),"w");
+        BZFILE* bzf = qcepBZ2_bzWriteOpen(&bzerror, f, level, 0, 0);
 
-        const char* b = outStream.str().c_str();
-        int         n = outStream.str().length();
+        const std::string& tmp = outStream.str();
 
-        BZ2_bzWrite(&bzerror, bzf, (void*) b, n);
-        BZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
+        const char* b = tmp.c_str();
+        int         n = tmp.length();
+
+        qcepBZ2_bzWrite(&bzerror, bzf, (void*) b, n);
+        qcepBZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
 
         fclose(f);
       }
@@ -423,30 +432,37 @@ void QxrdFileSaver::saveMaskDataPrivate(QcepMaskDataPtr image,
   if (image == NULL) {
     criticalMessage(tr("QxrdFileSaver::saveMaskData: image == NULL"));
   } else {
+    QTime tic;
+    tic.start();
+
     int nrows = image -> get_Height();
     int ncols = image -> get_Width();
 
     QString name = uniqueFileName(image, canOverwrite);
 
-    printMessage(tr("Starting to save data in file \"%1\"").arg(name));
-
     mkPath(name);
 
     int compress = 0;
+    int level    = 0;
+
     std::ostringstream outStream;
 
     QxrdExperimentPtr expt(m_Experiment);
 
     if (expt && expt -> get_CompressOutputBZ2()) {
       compress = 1;
+      level    = expt -> get_CompressLevelBZ2();
+      name += ".bz2";
     }
+
+    printMessage(tr("Starting to save data in file \"%1\"").arg(name));
 
     TIFF* tif;
 
     if (compress == 0) {
       tif = qcepTIFFOpen(qPrintable(name),"w");
     } else {
-      tif = TIFFStreamOpen(qPrintable(name), &outStream);
+      tif = qcepTIFFStreamOpen(qPrintable(name), &outStream);
     }
 
     int res = 1;
@@ -478,17 +494,22 @@ void QxrdFileSaver::saveMaskDataPrivate(QcepMaskDataPtr image,
       qcepTIFFClose(tif);
 
       if (compress) {
+        printMessage(tr("Started compressing data in file \"%1\" after %2 msec").
+                                      arg(name).arg(tic.elapsed()));
+
         int bzerror;
         unsigned int nbytes_in, nbytes_out;
 
-        FILE*   f   = fopen(qPrintable(name+".bz2"),"w");
-        BZFILE* bzf = BZ2_bzWriteOpen(&bzerror, f, 9, 0, 0);
+        FILE*   f   = fopen(qPrintable(name),"w");
+        BZFILE* bzf = qcepBZ2_bzWriteOpen(&bzerror, f, level, 0, 0);
 
-        const char* b = outStream.str().c_str();
-        int         n = outStream.str().length();
+        const std::string& tmp = outStream.str();
 
-        BZ2_bzWrite(&bzerror, bzf, (void*) b, n);
-        BZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
+        const char* b = tmp.c_str();
+        int         n = tmp.length();
+
+        qcepBZ2_bzWrite(&bzerror, bzf, (void*) b, n);
+        qcepBZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
 
         fclose(f);
       }
@@ -496,6 +517,9 @@ void QxrdFileSaver::saveMaskDataPrivate(QcepMaskDataPtr image,
       image -> set_ObjectSaved(true);
 
       image -> saveMetaData(name);
+
+      printMessage(tr("Saved data in file \"%1\" after %2 msec").
+                                    arg(name).arg(tic.restart()));
     } else {
       res = 0;
     }
@@ -542,25 +566,29 @@ void QxrdFileSaver::saveRaw32DataPrivate(QcepUInt32ImageDataPtr image,
 
     QString name = uniqueFileName(image, canOverwrite);
 
-    printMessage(tr("Starting to save data in file \"%1\"").arg(name));
-
     mkPath(name);
 
     int compress = 0;
+    int level    = 0;
+
     std::ostringstream outStream;
 
     QxrdExperimentPtr expt(m_Experiment);
 
     if (expt && expt -> get_CompressOutputBZ2()) {
       compress = 1;
+      level    = expt -> get_CompressLevelBZ2();
+      name    += ".bz2";
     }
+
+    printMessage(tr("Starting to save data in file \"%1\"").arg(name));
 
     TIFF* tif;
 
     if (compress == 0) {
       tif = qcepTIFFOpen(qPrintable(name),"w");
     } else {
-      tif = TIFFStreamOpen(qPrintable(name), &outStream);
+      tif = qcepTIFFStreamOpen(qPrintable(name), &outStream);
     }
 
     int res = 1;
@@ -625,17 +653,22 @@ void QxrdFileSaver::saveRaw32DataPrivate(QcepUInt32ImageDataPtr image,
       qcepTIFFClose(tif);
 
       if (compress) {
+        printMessage(tr("Started compressing data in file \"%1\" after %2 msec").
+                                      arg(name).arg(tic.elapsed()));
+
         int bzerror;
         unsigned int nbytes_in, nbytes_out;
 
-        FILE*   f   = fopen(qPrintable(name+".bz2"),"w");
-        BZFILE* bzf = BZ2_bzWriteOpen(&bzerror, f, 9, 0, 0);
+        FILE*   f   = fopen(qPrintable(name),"w");
+        BZFILE* bzf = qcepBZ2_bzWriteOpen(&bzerror, f, level, 0, 0);
 
-        const char* b = outStream.str().c_str();
-        int         n = outStream.str().length();
+        const std::string& tmp = outStream.str();
 
-        BZ2_bzWrite(&bzerror, bzf, (void*) b, n);
-        BZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
+        const char* b = tmp.c_str();
+        int         n = tmp.length();
+
+        qcepBZ2_bzWrite(&bzerror, bzf, (void*) b, n);
+        qcepBZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
 
         fclose(f);
       }
@@ -707,25 +740,29 @@ void QxrdFileSaver::saveRaw16DataPrivate(QcepUInt16ImageDataPtr image,
 
     QString name = uniqueFileName(image, canOverwrite);
 
-    printMessage(tr("Starting to save data in file \"%1\"").arg(name));
-
     mkPath(name);
 
     int compress = 0;
+    int level    = 0;
+
     std::ostringstream outStream;
 
     QxrdExperimentPtr expt(m_Experiment);
 
     if (expt && expt -> get_CompressOutputBZ2()) {
       compress = 1;
+      level    = expt -> get_CompressLevelBZ2();
+      name += ".bz2";
     }
+
+    printMessage(tr("Starting to save data in file \"%1\"").arg(name));
 
     TIFF* tif;
 
     if (compress == 0) {
       tif = qcepTIFFOpen(qPrintable(name),"w");
     } else {
-      tif = TIFFStreamOpen(qPrintable(name), &outStream);
+      tif = qcepTIFFStreamOpen(qPrintable(name), &outStream);
     }
 
     int res = 1;
@@ -757,17 +794,22 @@ void QxrdFileSaver::saveRaw16DataPrivate(QcepUInt16ImageDataPtr image,
       qcepTIFFClose(tif);
 
       if (compress) {
+        printMessage(tr("Started compressing data in file \"%1\" after %2 msec").
+                                      arg(name).arg(tic.elapsed()));
+
         int bzerror;
         unsigned int nbytes_in, nbytes_out;
 
-        FILE*   f   = fopen(qPrintable(name+".bz2"),"w");
-        BZFILE* bzf = BZ2_bzWriteOpen(&bzerror, f, 9, 0, 0);
+        FILE*   f   = fopen(qPrintable(name),"w");
+        BZFILE* bzf = qcepBZ2_bzWriteOpen(&bzerror, f, level, 0, 0);
 
-        const char* b = outStream.str().c_str();
-        int         n = outStream.str().length();
+        const std::string& tmp = outStream.str();
 
-        BZ2_bzWrite(&bzerror, bzf, (void*) b, n);
-        BZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
+        const char* b = tmp.c_str();
+        int         n = tmp.length();
+
+        qcepBZ2_bzWrite(&bzerror, bzf, (void*) b, n);
+        qcepBZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
 
         fclose(f);
       }

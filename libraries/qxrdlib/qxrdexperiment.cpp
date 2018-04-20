@@ -110,7 +110,8 @@ QxrdExperiment::QxrdExperiment(QString name) :
   m_DefaultScript(this, "defaultScript", "", "Default script for experiment"),
   m_ExtraScriptFiles(this, "extraScriptFiles", QStringList(), "Additional script files for experiment"),
   m_IsReading(this, "isReading", 0, "Is being read?"),
-  m_CompressOutputBZ2(this, "compressOutputBZ2", 0, "Compress output files with bzip2")
+  m_CompressOutputBZ2(this, "compressOutputBZ2", 0, "Compress output files with bzip2"),
+  m_CompressLevelBZ2(this, "compressLevelBZ2", 3, "Compression level (1-9) for output files with bzip2")
 {
 #ifndef QT_NO_DEBUG
   printf("Constructing experiment\n");

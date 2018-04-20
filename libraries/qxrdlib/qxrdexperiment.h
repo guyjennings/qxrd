@@ -281,6 +281,9 @@ public:  // Properties
 
   Q_PROPERTY(bool compressOutputBZ2 READ get_CompressOutputBZ2 WRITE set_CompressOutputBZ2)
   QCEP_BOOLEAN_PROPERTY(CompressOutputBZ2)
+
+  Q_PROPERTY(int  compressLevelBZ2 READ get_CompressLevelBZ2 WRITE set_CompressLevelBZ2)
+  QCEP_INTEGER_PROPERTY(CompressLevelBZ2)
 };
 
 Q_DECLARE_METATYPE(QxrdExperiment*)
