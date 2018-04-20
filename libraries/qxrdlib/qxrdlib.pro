@@ -223,7 +223,9 @@ SOURCES += qxrdlib.cpp \
     qxrdsynchronizer.cpp \
     qxrdsynchronizerthread.cpp \
     qxrdprocessorexecution.cpp \
-    qxrdprocessorexecutionthread.cpp
+    qxrdprocessorexecutionthread.cpp \
+    qxrdoutputfileformatter.cpp \
+    qxrdoutputfileformattersettings.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -388,7 +390,11 @@ HEADERS += qxrdlib.h\
     qxrdprocessorexecution.h \
     qxrdprocessorexecution-ptr.h \
     qxrdprocessorexecutionthread.h \
-    qxrdprocessorexecutionthread-ptr.h
+    qxrdprocessorexecutionthread-ptr.h \
+    qxrdoutputfileformatter.h \
+    qxrdoutputfileformatter-ptr.h \
+    qxrdoutputfileformattersettings.h \
+    qxrdoutputfileformattersettings-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

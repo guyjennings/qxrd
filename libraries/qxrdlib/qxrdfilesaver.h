@@ -26,6 +26,9 @@ class QXRD_EXPORT QxrdFileSaver : public QcepObject
 {
   Q_OBJECT
 
+private:
+  typedef QcepObject inherited;
+
 public:
   Q_INVOKABLE QxrdFileSaver();
   ~QxrdFileSaver();

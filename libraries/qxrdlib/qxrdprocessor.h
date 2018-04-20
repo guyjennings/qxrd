@@ -28,6 +28,7 @@
 #include "qxrdgeneratetestimage-ptr.h"
 #include "qceproicalculator-ptr.h"
 #include <QWaitCondition>
+#include "qxrdoutputfileformattersettings-ptr.h"
 
 //TODO: separate processing steps into sub-objects
 //TODO: need separate settings class for experiment thread
@@ -526,6 +527,11 @@ private:
   QxrdGenerateTestImagePtr  m_GenerateTestImage;
   QcepROICalculatorPtr      m_ROICalculator;
   QxrdFileSaverWPtr         m_FileSaver;
+
+  QxrdOutputFileFormatterSettingsPtr m_DarkFileFormatterSettings;
+  QxrdOutputFileFormatterSettingsPtr m_MaskFileFormatterSettings;
+  QxrdOutputFileFormatterSettingsPtr m_RawFileFormatterSettings;
+  QxrdOutputFileFormatterSettingsPtr m_SubtractedFileFormatterSettings;
 
   //TODO: store a data object, not a model
   QcepPowderRingsModelPtr   m_PowderRings;

@@ -36,6 +36,7 @@
 #include <QtConcurrentRun>
 #include <QDirIterator>
 #include "qxrdresultserializer.h"
+#include "qxrdoutputfileformattersettings.h"
 
 //TODO: emit data available signals when appropriate...
 QxrdProcessor::QxrdProcessor(QString name) :
@@ -170,6 +171,22 @@ QxrdProcessor::QxrdProcessor(QString name) :
       QxrdHistogramSerializerPtr(
         new QxrdHistogramSerializer("histogramDataSerializer", prop_HistogramQueueLength()));
 
+  m_DarkFileFormatterSettings =
+      QxrdOutputFileFormatterSettingsPtr(
+        new QxrdOutputFileFormatterSettings("darkFileFormatterSettings"));
+
+  m_MaskFileFormatterSettings =
+      QxrdOutputFileFormatterSettingsPtr(
+        new QxrdOutputFileFormatterSettings("maskFileFormatterSettings"));
+
+  m_RawFileFormatterSettings =
+      QxrdOutputFileFormatterSettingsPtr(
+        new QxrdOutputFileFormatterSettings("rawFileFormatterSettings"));
+
+  m_SubtractedFileFormatterSettings =
+      QxrdOutputFileFormatterSettingsPtr(
+        new QxrdOutputFileFormatterSettings("subtractedFileFormatterSettings"));
+
   connect(m_CorrectedImages.data(), &QxrdResultSerializerBase::resultAvailable,
           this,                     &QxrdProcessor::onCorrectedImageAvailable);
 
@@ -236,6 +253,11 @@ void QxrdProcessor::initialize(QcepObjectWPtr parent)
   m_CorrectedImages     -> initialize(sharedFromThis());
   m_IntegratedData      -> initialize(sharedFromThis());
   m_HistogramData       -> initialize(sharedFromThis());
+
+  m_DarkFileFormatterSettings -> initialize(sharedFromThis());
+  m_MaskFileFormatterSettings -> initialize(sharedFromThis());
+  m_RawFileFormatterSettings  -> initialize(sharedFromThis());
+  m_SubtractedFileFormatterSettings -> initialize(sharedFromThis());
 
   QxrdAcqCommonPtr acqp(m_Acquisition);
 
@@ -445,6 +467,30 @@ void QxrdProcessor::readSettings(QSettings *settings)
     settings->endGroup();
   }
 
+  if (m_DarkFileFormatterSettings) {
+    settings->beginGroup("darkFileFormatterSettings");
+    m_DarkFileFormatterSettings->readSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_MaskFileFormatterSettings) {
+    settings->beginGroup("maskFileFormatterSettings");
+    m_MaskFileFormatterSettings->readSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_RawFileFormatterSettings) {
+    settings->beginGroup("rawFileFormatterSettings");
+    m_RawFileFormatterSettings->readSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_SubtractedFileFormatterSettings) {
+    settings->beginGroup("subtractedFileFormatterSettings");
+    m_SubtractedFileFormatterSettings->readSettings(settings);
+    settings->endGroup();
+  }
+
   int n = settings->beginReadArray("processorSteps");
 
   for (int i=0; i<n; i++) {
@@ -520,6 +566,30 @@ void QxrdProcessor::writeSettings(QSettings *settings)
   if (m_ROICalculator) {
     settings->beginGroup("roiCalculator");
     m_ROICalculator->writeSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_DarkFileFormatterSettings) {
+    settings->beginGroup("darkFileFormatterSettings");
+    m_DarkFileFormatterSettings->writeSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_MaskFileFormatterSettings) {
+    settings->beginGroup("maskFileFormatterSettings");
+    m_MaskFileFormatterSettings->writeSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_RawFileFormatterSettings) {
+    settings->beginGroup("rawFileFormatterSettings");
+    m_RawFileFormatterSettings->writeSettings(settings);
+    settings->endGroup();
+  }
+
+  if (m_SubtractedFileFormatterSettings) {
+    settings->beginGroup("subtractedFileFormatterSettings");
+    m_SubtractedFileFormatterSettings->writeSettings(settings);
     settings->endGroup();
   }
 
@@ -1681,24 +1751,25 @@ QcepDoubleImageDataPtr QxrdProcessor::processAcquiredImage(
 
 void QxrdProcessor::saveNamedImageData(QString name, QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr fs(fileSaver());
+//  QxrdFileSaverPtr fs(fileSaver());
 
-  if (fs) {
-    QxrdFileSaver *f = fs.data();
+//  if (fs) {
+//    QxrdFileSaver *f = fs.data();
 
-    //TODO: Handle 'name'...
-#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(f, [=]() { f->saveImageData(/*name,*/ image, overflow, canOverwrite); } ));
-#else
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(f, "saveImageData",
-//                                    Q_ARG(QString, name),
-                                    Q_ARG(QcepImageDataBasePtr, image),
-                                    Q_ARG(QcepMaskDataPtr, overflow),
-                                    Q_ARG(int, canOverwrite)));
-#endif
-  }
+//    //TODO: Handle 'name'...
+//#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
+//    INVOKE_CHECK(
+//          QMetaObject::invokeMethod(f, [=]() { f->saveImageData(/*name,*/ image, overflow, canOverwrite); } ));
+//#else
+//    INVOKE_CHECK(
+//          QMetaObject::invokeMethod(f, "saveImageData",
+////                                    Q_ARG(QString, name),
+//                                    Q_ARG(QcepImageDataBasePtr, image),
+//                                    Q_ARG(QcepMaskDataPtr, overflow),
+//                                    Q_ARG(int, canOverwrite)));
+//#endif
+//  }
+  m_SubtractedFileFormatterSettings -> saveImageData(name, image, overflow, canOverwrite);
 }
 
 void QxrdProcessor::saveNamedDoubleImageData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
@@ -1747,24 +1818,25 @@ void QxrdProcessor::saveNamedUInt16ImageData(QString name, QcepUInt16ImageDataPt
 
 void QxrdProcessor::saveNamedRawImageData(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr fs(fileSaver());
+//  QxrdFileSaverPtr fs(fileSaver());
 
-  if (fs) {
-    QxrdFileSaver *f = fs.data();
+//  if (fs) {
+//    QxrdFileSaver *f = fs.data();
 
-    //TODO: Handle 'name'...
-#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
-    INVOKE_CHECK(
-        QMetaObject::invokeMethod(f, [=]() { f->saveRaw16Data(/*name,*/ image, overflow, canOverwrite); } ));
-#else
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(f, "saveRaw16Data",
-//                                    Q_ARG(QString, name),
-                                    Q_ARG(QcepUInt16ImageDataPtr, image),
-                                    Q_ARG(QcepMaskDataPtr, overflow),
-                                    Q_ARG(int, canOverwrite)));
-#endif
-  }
+//    //TODO: Handle 'name'...
+//#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
+//    INVOKE_CHECK(
+//        QMetaObject::invokeMethod(f, [=]() { f->saveRaw16Data(/*name,*/ image, overflow, canOverwrite); } ));
+//#else
+//    INVOKE_CHECK(
+//          QMetaObject::invokeMethod(f, "saveRaw16Data",
+////                                    Q_ARG(QString, name),
+//                                    Q_ARG(QcepUInt16ImageDataPtr, image),
+//                                    Q_ARG(QcepMaskDataPtr, overflow),
+//                                    Q_ARG(int, canOverwrite)));
+//#endif
+//  }
+  m_RawFileFormatterSettings -> saveImageData(name, image, overflow, canOverwrite);
 }
 
 void QxrdProcessor::saveNamedUInt32ImageData(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)

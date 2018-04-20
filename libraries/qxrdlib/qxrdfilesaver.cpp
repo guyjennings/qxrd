@@ -16,9 +16,10 @@
 #include "tiffio.hxx"
 #include <sstream>
 #include "qcepbzlib.h"
+#include "zlib.h"
 
 QxrdFileSaver::QxrdFileSaver()
-  : QcepObject("fileSaver"),
+  : inherited("fileSaver"),
     m_Experiment(),
     m_Processor(),
     m_Acquisition()
