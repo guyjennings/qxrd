@@ -13,6 +13,9 @@
 #include <QThread>
 #include "tiffio.h"
 #include "qcepimagedata.h"
+#include "tiffio.hxx"
+#include <sstream>
+#include "bzlib.h"
 
 QxrdFileSaver::QxrdFileSaver()
   : QcepObject("fileSaver"),
@@ -286,7 +289,23 @@ void QxrdFileSaver::saveDoubleDataPrivate(QcepDoubleImageDataPtr image,
 
     mkPath(name);
 
-    TIFF* tif = qcepTIFFOpen(qPrintable(name),"w");
+    int compress = 0;
+    std::ostringstream outStream;
+
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt && expt -> get_CompressOutputBZ2()) {
+      compress = 1;
+    }
+
+    TIFF* tif;
+
+    if (compress == 0) {
+      tif = qcepTIFFOpen(qPrintable(name),"w");
+    } else {
+      tif = TIFFStreamOpen(qPrintable(name), &outStream);
+    }
+
     int res = 1;
 
     if (tif) {
@@ -313,6 +332,22 @@ void QxrdFileSaver::saveDoubleDataPrivate(QcepDoubleImageDataPtr image,
       }
 
       qcepTIFFClose(tif);
+
+      if (compress) {
+        int bzerror;
+        unsigned int nbytes_in, nbytes_out;
+
+        FILE*   f   = fopen(qPrintable(name+".bz2"),"w");
+        BZFILE* bzf = BZ2_bzWriteOpen(&bzerror, f, 9, 0, 0);
+
+        const char* b = outStream.str().c_str();
+        int         n = outStream.str().length();
+
+        BZ2_bzWrite(&bzerror, bzf, (void*) b, n);
+        BZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
+
+        fclose(f);
+      }
 
       image -> set_ObjectSaved(true);
 
@@ -397,7 +432,23 @@ void QxrdFileSaver::saveMaskDataPrivate(QcepMaskDataPtr image,
 
     mkPath(name);
 
-    TIFF* tif = qcepTIFFOpen(qPrintable(name),"w");
+    int compress = 0;
+    std::ostringstream outStream;
+
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt && expt -> get_CompressOutputBZ2()) {
+      compress = 1;
+    }
+
+    TIFF* tif;
+
+    if (compress == 0) {
+      tif = qcepTIFFOpen(qPrintable(name),"w");
+    } else {
+      tif = TIFFStreamOpen(qPrintable(name), &outStream);
+    }
+
     int res = 1;
 
     if (tif) {
@@ -425,6 +476,22 @@ void QxrdFileSaver::saveMaskDataPrivate(QcepMaskDataPtr image,
       }
 
       qcepTIFFClose(tif);
+
+      if (compress) {
+        int bzerror;
+        unsigned int nbytes_in, nbytes_out;
+
+        FILE*   f   = fopen(qPrintable(name+".bz2"),"w");
+        BZFILE* bzf = BZ2_bzWriteOpen(&bzerror, f, 9, 0, 0);
+
+        const char* b = outStream.str().c_str();
+        int         n = outStream.str().length();
+
+        BZ2_bzWrite(&bzerror, bzf, (void*) b, n);
+        BZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
+
+        fclose(f);
+      }
 
       image -> set_ObjectSaved(true);
 
@@ -479,7 +546,23 @@ void QxrdFileSaver::saveRaw32DataPrivate(QcepUInt32ImageDataPtr image,
 
     mkPath(name);
 
-    TIFF* tif = qcepTIFFOpen(qPrintable(name),"w");
+    int compress = 0;
+    std::ostringstream outStream;
+
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt && expt -> get_CompressOutputBZ2()) {
+      compress = 1;
+    }
+
+    TIFF* tif;
+
+    if (compress == 0) {
+      tif = qcepTIFFOpen(qPrintable(name),"w");
+    } else {
+      tif = TIFFStreamOpen(qPrintable(name), &outStream);
+    }
+
     int res = 1;
 
     if (tif) {
@@ -540,6 +623,22 @@ void QxrdFileSaver::saveRaw32DataPrivate(QcepUInt32ImageDataPtr image,
       }
 
       qcepTIFFClose(tif);
+
+      if (compress) {
+        int bzerror;
+        unsigned int nbytes_in, nbytes_out;
+
+        FILE*   f   = fopen(qPrintable(name+".bz2"),"w");
+        BZFILE* bzf = BZ2_bzWriteOpen(&bzerror, f, 9, 0, 0);
+
+        const char* b = outStream.str().c_str();
+        int         n = outStream.str().length();
+
+        BZ2_bzWrite(&bzerror, bzf, (void*) b, n);
+        BZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
+
+        fclose(f);
+      }
 
       image -> set_ObjectSaved(true);
 
@@ -612,7 +711,23 @@ void QxrdFileSaver::saveRaw16DataPrivate(QcepUInt16ImageDataPtr image,
 
     mkPath(name);
 
-    TIFF* tif = qcepTIFFOpen(qPrintable(name),"w");
+    int compress = 0;
+    std::ostringstream outStream;
+
+    QxrdExperimentPtr expt(m_Experiment);
+
+    if (expt && expt -> get_CompressOutputBZ2()) {
+      compress = 1;
+    }
+
+    TIFF* tif;
+
+    if (compress == 0) {
+      tif = qcepTIFFOpen(qPrintable(name),"w");
+    } else {
+      tif = TIFFStreamOpen(qPrintable(name), &outStream);
+    }
+
     int res = 1;
 
     if (tif) {
@@ -640,6 +755,22 @@ void QxrdFileSaver::saveRaw16DataPrivate(QcepUInt16ImageDataPtr image,
       }
 
       qcepTIFFClose(tif);
+
+      if (compress) {
+        int bzerror;
+        unsigned int nbytes_in, nbytes_out;
+
+        FILE*   f   = fopen(qPrintable(name+".bz2"),"w");
+        BZFILE* bzf = BZ2_bzWriteOpen(&bzerror, f, 9, 0, 0);
+
+        const char* b = outStream.str().c_str();
+        int         n = outStream.str().length();
+
+        BZ2_bzWrite(&bzerror, bzf, (void*) b, n);
+        BZ2_bzWriteClose(&bzerror, bzf, 0, &nbytes_in, &nbytes_out);
+
+        fclose(f);
+      }
 
       image -> set_ObjectSaved(true);
 

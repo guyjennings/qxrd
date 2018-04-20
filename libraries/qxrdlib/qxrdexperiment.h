@@ -278,6 +278,9 @@ public:  // Properties
 
   Q_PROPERTY(int isReading READ get_IsReading WRITE set_IsReading STORED false)
   QCEP_INTEGER_PROPERTY(IsReading)
+
+  Q_PROPERTY(bool compressOutputBZ2 READ get_CompressOutputBZ2 WRITE set_CompressOutputBZ2)
+  QCEP_BOOLEAN_PROPERTY(CompressOutputBZ2)
 };
 
 Q_DECLARE_METATYPE(QxrdExperiment*)

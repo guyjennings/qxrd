@@ -88,7 +88,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset resource="../../source/submodules/qceplib/qceplib-base/qcepresources.qrc">
                <normaloff>:/images/preferences.png</normaloff>:/images/preferences.png</iconset>
              </property>
             </widget>
@@ -245,15 +245,42 @@ Change only by saving a new experiment</string>
        <string>Image Saving</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="4" column="5">
-        <widget class="QPushButton" name="m_SaveDarkBrowse">
+       <item row="4" column="1" colspan="4">
+        <widget class="QLineEdit" name="m_SaveDarkSubdir"/>
+       </item>
+       <item row="2" column="1" colspan="4">
+        <widget class="QLineEdit" name="m_SaveRawSubdir"/>
+       </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="label_11">
          <property name="text">
-          <string>Browse...</string>
+          <string>Width of 'phase' field in saved file names</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="5">
-        <widget class="QComboBox" name="m_FileNameFormat4"/>
+       <item row="16" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Width of file index field in saved file names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="1">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>&lt;name&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="1" colspan="4">
+        <widget class="QSpinBox" name="m_FileIndexWidth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+        </widget>
        </item>
        <item row="7" column="5">
         <widget class="QPushButton" name="m_SaveSubtractedBrowse">
@@ -262,7 +289,17 @@ Change only by saving a new experiment</string>
          </property>
         </widget>
        </item>
-       <item row="20" column="0" colspan="6">
+       <item row="19" column="1" colspan="4">
+        <widget class="QSpinBox" name="m_FileOverflowWidth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="0" colspan="6">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -275,10 +312,36 @@ Change only by saving a new experiment</string>
          </property>
         </spacer>
        </item>
-       <item row="16" column="0">
-        <widget class="QLabel" name="label_11">
+       <item row="15" column="5">
+        <widget class="QComboBox" name="m_FileNameFormat4"/>
+       </item>
+       <item row="18" column="1" colspan="4">
+        <widget class="QSpinBox" name="m_FileNumberWidth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="2">
+        <widget class="QComboBox" name="m_FileNameFormat1"/>
+       </item>
+       <item row="17" column="1" colspan="4">
+        <widget class="QSpinBox" name="m_FilePhaseWidth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="5">
+        <widget class="QPushButton" name="m_SaveDarkBrowse">
          <property name="text">
-          <string>Width of 'phase' field in saved file names</string>
+          <string>Browse...</string>
          </property>
         </widget>
        </item>
@@ -289,31 +352,26 @@ Change only by saving a new experiment</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Width of file index field in saved file names</string>
+       <item row="7" column="1" colspan="4">
+        <widget class="QLineEdit" name="m_SaveSubtractedSubdir"/>
+       </item>
+       <item row="20" column="1" colspan="4">
+        <widget class="QSpinBox" name="m_DetectorNumberWidth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>20</number>
          </property>
         </widget>
+       </item>
+       <item row="15" column="4">
+        <widget class="QComboBox" name="m_FileNameFormat3"/>
        </item>
        <item row="2" column="0">
         <widget class="QCheckBox" name="m_SaveRawInSubdir">
          <property name="text">
           <string>Save Raw Data in Subdirectory?</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QCheckBox" name="m_SaveDarkInSubdir">
-         <property name="text">
-          <string>Save Dark Data in Subdirectory?</string>
-         </property>
-        </widget>
-       </item>
-       <item row="18" column="0">
-        <widget class="QLabel" name="label_12">
-         <property name="text">
-          <string>Width of 'overflow' field in saved file names</string>
          </property>
         </widget>
        </item>
@@ -333,7 +391,7 @@ Change only by saving a new experiment</string>
          </property>
         </widget>
        </item>
-       <item row="19" column="0">
+       <item row="20" column="0">
         <widget class="QLabel" name="label_13">
          <property name="text">
           <string>Width of 'detector number' field in saved file names</string>
@@ -347,94 +405,52 @@ Change only by saving a new experiment</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="3">
-        <widget class="QComboBox" name="m_FileNameFormat2"/>
-       </item>
-       <item row="17" column="0">
-        <widget class="QLabel" name="label_14">
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="m_SaveDarkInSubdir">
          <property name="text">
-          <string>Width of 'index' field in saved file names</string>
+          <string>Save Dark Data in Subdirectory?</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="4">
-        <widget class="QComboBox" name="m_FileNameFormat3"/>
+       <item row="15" column="3">
+        <widget class="QComboBox" name="m_FileNameFormat2"/>
        </item>
-       <item row="14" column="0">
+       <item row="19" column="0">
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Width of 'overflow' field in saved file names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
         <widget class="QLabel" name="label_8">
          <property name="text">
           <string>Output file numbering format</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="2">
-        <widget class="QComboBox" name="m_FileNameFormat1"/>
-       </item>
-       <item row="14" column="1">
-        <widget class="QLabel" name="label">
+       <item row="18" column="0">
+        <widget class="QLabel" name="label_14">
          <property name="text">
-          <string>&lt;name&gt;</string>
+          <string>Width of 'index' field in saved file names</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="1" colspan="4">
-        <widget class="QSpinBox" name="m_FileIndexWidth">
-         <property name="minimum">
-          <number>1</number>
+       <item row="14" column="0">
+        <widget class="QCheckBox" name="m_CompressOutputBZ2">
+         <property name="enabled">
+          <bool>true</bool>
          </property>
-         <property name="maximum">
-          <number>20</number>
+         <property name="toolTip">
+          <string>Save info about overflowed pixels in .overflow file</string>
          </property>
-        </widget>
-       </item>
-       <item row="16" column="1" colspan="4">
-        <widget class="QSpinBox" name="m_FilePhaseWidth">
-         <property name="minimum">
-          <number>1</number>
+         <property name="text">
+          <string>Compress Output Files with BZIP2</string>
          </property>
-         <property name="maximum">
-          <number>20</number>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item row="17" column="1" colspan="4">
-        <widget class="QSpinBox" name="m_FileNumberWidth">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>20</number>
-         </property>
-        </widget>
-       </item>
-       <item row="18" column="1" colspan="4">
-        <widget class="QSpinBox" name="m_FileOverflowWidth">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>20</number>
-         </property>
-        </widget>
-       </item>
-       <item row="19" column="1" colspan="4">
-        <widget class="QSpinBox" name="m_DetectorNumberWidth">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>20</number>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1" colspan="4">
-        <widget class="QLineEdit" name="m_SaveSubtractedSubdir"/>
-       </item>
-       <item row="4" column="1" colspan="4">
-        <widget class="QLineEdit" name="m_SaveDarkSubdir"/>
-       </item>
-       <item row="2" column="1" colspan="4">
-        <widget class="QLineEdit" name="m_SaveRawSubdir"/>
        </item>
       </layout>
      </widget>
@@ -667,6 +683,7 @@ Change only by saving a new experiment</string>
   </layout>
  </widget>
  <resources>
+  <include location="../../source/submodules/qceplib/qceplib-base/qcepresources.qrc"/>
   <include location="qxrdresources.qrc"/>
  </resources>
  <connections>
