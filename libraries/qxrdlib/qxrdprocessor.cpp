@@ -409,6 +409,42 @@ QxrdPolarNormalizationPtr QxrdProcessor::polarNormalization() const
   return m_PolarNormalization;
 }
 
+QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::rawFileFormatterSettings()
+{
+  if (m_RawFileFormatterSettings == NULL) {
+    printMessage("Problem QxrdProcessor::rawFileFormatterSettings == NULL");
+  }
+
+  return m_RawFileFormatterSettings;
+}
+
+QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::maskFileFormatterSettings()
+{
+  if (m_MaskFileFormatterSettings == NULL) {
+    printMessage("Problem QxrdProcessor::maskFileFormatterSettings == NULL");
+  }
+
+  return m_MaskFileFormatterSettings;
+}
+
+QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::darkFileFormatterSettings()
+{
+  if (m_DarkFileFormatterSettings == NULL) {
+    printMessage("Problem QxrdProcessor::darkFileFormatterSettings == NULL");
+  }
+
+  return m_DarkFileFormatterSettings;
+}
+
+QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::subtractedFileFormatterSettings()
+{
+  if (m_SubtractedFileFormatterSettings == NULL) {
+    printMessage("Problem QxrdProcessor::subtractedFileFormatterSettings == NULL");
+  }
+
+  return m_SubtractedFileFormatterSettings;
+}
+
 void QxrdProcessor::readSettings(QSettings *settings)
 {
   QcepObject::readSettings(settings);

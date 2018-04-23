@@ -16,16 +16,20 @@ private:
   typedef QcepObject inherited;
 
 public:
-  Q_INVOKABLE QxrdOutputFileFormatter(QString name);
+  QxrdOutputFileFormatter(QString name);
   ~QxrdOutputFileFormatter();
 
   void initialize(QcepObjectWPtr parent);
 
-  static void saveImageData(QxrdOutputFileFormatterSettingsPtr set,
-                            QString                            name,
-                            QcepImageDataBasePtr               img,
-                            QcepImageDataBasePtr               overflow,
-                            int                                canOverwrite);
+  virtual void saveImageData(QxrdOutputFileFormatterSettingsPtr set,
+                            QString                             name,
+                            QcepImageDataBasePtr                img,
+                            QcepImageDataBasePtr                overflow,
+                            int                                 canOverwrite);
+
+  virtual void saveImageData(QxrdOutputFileFormatterSettingsPtr set,
+                            QcepImageDataBasePtr                img,
+                            QcepImageDataBasePtr                overflow) = 0;
 };
 
 #endif // QXRDOUTPUTFILEFORMATTER_H

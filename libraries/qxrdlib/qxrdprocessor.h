@@ -104,6 +104,11 @@ public:
   QStringList ls(QString pattern) const;
   void cd(QString path);
 
+  QxrdOutputFileFormatterSettingsWPtr rawFileFormatterSettings();
+  QxrdOutputFileFormatterSettingsWPtr maskFileFormatterSettings();
+  QxrdOutputFileFormatterSettingsWPtr darkFileFormatterSettings();
+  QxrdOutputFileFormatterSettingsWPtr subtractedFileFormatterSettings();
+
   // dark operations...
   void loadDark(QString name);
   void saveDark(QString name, int canOverwrite=NoOverwrite);

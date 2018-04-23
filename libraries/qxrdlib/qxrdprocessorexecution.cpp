@@ -10,6 +10,7 @@
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
 #include "qcepallocator.h"
+#include "qxrdoutputfileformattersettings.h"
 
 QxrdProcessorExecution::QxrdProcessorExecution(QString name)
   : inherited(name),
@@ -239,73 +240,101 @@ void QxrdProcessorExecution::doSaveRawImage(QcepImageDataBasePtr img, QcepMaskDa
 {
   THREAD_CHECK;
 
-  QxrdFileSaverPtr  fsav(m_FileSaver);
+  QxrdProcessorPtr  proc(m_Processor);
 
-  if (fsav && img) {
-    QxrdFileSaver *f = fsav.data();
+  if (proc) {
+    QxrdOutputFileFormatterSettingsPtr fmt(proc->rawFileFormatterSettings());
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(
-            f, [=]() { f -> saveImageData(img, ovf, QxrdFileSaver::NoOverwrite); } ));
-#else
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(
-            f, "saveImageData",
-            Qt::QueuedConnection,
-            Q_ARG(QcepImageDataBasePtr, img),
-            Q_ARG(QcepMaskDataPtr, ovf),
-            Q_ARG(int, QxrdFileSaver::NoOverwrite)));
-#endif
+    if (fmt) {
+      fmt -> saveImageData(img, ovf);
+    }
   }
+//  QxrdFileSaverPtr  fsav(m_FileSaver);
+
+//  if (fsav && img) {
+//    QxrdFileSaver *f = fsav.data();
+
+//#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+//    INVOKE_CHECK(
+//          QMetaObject::invokeMethod(
+//            f, [=]() { f -> saveImageData(img, ovf, QxrdFileSaver::NoOverwrite); } ));
+//#else
+//    INVOKE_CHECK(
+//          QMetaObject::invokeMethod(
+//            f, "saveImageData",
+//            Qt::QueuedConnection,
+//            Q_ARG(QcepImageDataBasePtr, img),
+//            Q_ARG(QcepMaskDataPtr, ovf),
+//            Q_ARG(int, QxrdFileSaver::NoOverwrite)));
+//#endif
+//  }
 }
 
 void QxrdProcessorExecution::doSaveDarkImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
 {
   THREAD_CHECK;
 
-  QxrdFileSaverPtr  fsav(m_FileSaver);
+  QxrdProcessorPtr  proc(m_Processor);
 
-  if (fsav && img) {
-    QxrdFileSaver *f = fsav.data();
+  if (proc) {
+    QxrdOutputFileFormatterSettingsPtr fmt(proc->darkFileFormatterSettings());
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(
-            f, [=]() { f -> saveImageData(img, ovf, QxrdFileSaver::NoOverwrite); } ));
-#else
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(
-            f, "saveImageData",
-            Q_ARG(QcepImageDataBasePtr, img),
-            Q_ARG(QcepMaskDataPtr, ovf),
-            Q_ARG(int, QxrdFileSaver::NoOverwrite)));
-#endif
+    if (fmt) {
+      fmt -> saveImageData(img, ovf);
+    }
   }
+
+//  QxrdFileSaverPtr  fsav(m_FileSaver);
+
+//  if (fsav && img) {
+//    QxrdFileSaver *f = fsav.data();
+
+//#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+//    INVOKE_CHECK(
+//          QMetaObject::invokeMethod(
+//            f, [=]() { f -> saveImageData(img, ovf, QxrdFileSaver::NoOverwrite); } ));
+//#else
+//    INVOKE_CHECK(
+//          QMetaObject::invokeMethod(
+//            f, "saveImageData",
+//            Q_ARG(QcepImageDataBasePtr, img),
+//            Q_ARG(QcepMaskDataPtr, ovf),
+//            Q_ARG(int, QxrdFileSaver::NoOverwrite)));
+//#endif
+//  }
 }
 
 void QxrdProcessorExecution::doSaveSubtractedImage(QcepImageDataBasePtr img, QcepMaskDataPtr ovf)
 {
   THREAD_CHECK;
 
-  QxrdFileSaverPtr  fsav(m_FileSaver);
+  QxrdProcessorPtr  proc(m_Processor);
 
-  if (fsav && img) {
-    QxrdFileSaver *f = fsav.data();
+  if (proc) {
+    QxrdOutputFileFormatterSettingsPtr fmt(proc->subtractedFileFormatterSettings());
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(
-            f, [=]() { f -> saveImageData(img, ovf, QxrdFileSaver::NoOverwrite); } ));
-#else
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(
-            f, "saveImageData",
-            Q_ARG(QcepImageDataBasePtr, img),
-            Q_ARG(QcepMaskDataPtr, ovf),
-            Q_ARG(int, QxrdFileSaver::NoOverwrite)));
-#endif
+    if (fmt) {
+      fmt -> saveImageData(img, ovf);
+    }
   }
+//  QxrdFileSaverPtr  fsav(m_FileSaver);
+
+//  if (fsav && img) {
+//    QxrdFileSaver *f = fsav.data();
+
+//#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+//    INVOKE_CHECK(
+//          QMetaObject::invokeMethod(
+//            f, [=]() { f -> saveImageData(img, ovf, QxrdFileSaver::NoOverwrite); } ));
+//#else
+//    INVOKE_CHECK(
+//          QMetaObject::invokeMethod(
+//            f, "saveImageData",
+//            Q_ARG(QcepImageDataBasePtr, img),
+//            Q_ARG(QcepMaskDataPtr, ovf),
+//            Q_ARG(int, QxrdFileSaver::NoOverwrite)));
+//#endif
+//  }
 }
 
 void QxrdProcessorExecution::setCommonImageProperties(QcepImageDataBasePtr image)
