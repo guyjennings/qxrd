@@ -583,17 +583,17 @@ unix {
     INSTALLS += target
 }
 
-include(../../source/submodules/qceplib/qceplib-base-include.pri)
-include(../../source/submodules/qceplib/qceplib-qwt-include.pri)
-include(../../source/submodules/qceplib/qceplib-mar345-include.pri)
-include(../../source/submodules/qceplib/qceplib-cbf-include.pri)
-include(../../source/submodules/qceplib/qceplib-tiff-include.pri)
-include(../../source/submodules/qceplib/qceplib-levmar-include.pri)
-include(../../source/submodules/qceplib/qceplib-szip-include.pri)
-include(../../source/submodules/qceplib/qceplib-zlib-include.pri)
-include(../../source/submodules/qceplib/qceplib-hdf5-include.pri)
-include(../../source/submodules/qceplib/qceplib-bzip2-include.pri)
-include(../../source/submodules/qceplib/qceplib-specserver-include.pri)
+include(../qceplib/qceplib/qceplib-base-include.pri)
+include(../qceplib/qceplib/qceplib-qwt-include.pri)
+include(../qceplib/qceplib/qceplib-mar345-include.pri)
+include(../qceplib/qceplib/qceplib-cbf-include.pri)
+include(../qceplib/qceplib/qceplib-tiff-include.pri)
+include(../qceplib/qceplib/qceplib-levmar-include.pri)
+include(../qceplib/qceplib/qceplib-szip-include.pri)
+include(../qceplib/qceplib/qceplib-zlib-include.pri)
+include(../qceplib/qceplib/qceplib-hdf5-include.pri)
+include(../qceplib/qceplib/qceplib-bzip2-include.pri)
+include(../qceplib/qceplib/qceplib-specserver-include.pri)
 
 INCLUDEPATH += $${OUT_PWD}/../qceplib/
 

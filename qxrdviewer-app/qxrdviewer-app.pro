@@ -8,7 +8,6 @@ message(Destdir = $${DESTDIR})
 TEMPLATE = app
 TARGET   = qxrdviewer
 DESTDIR  = ../
-#DESTDIR  = ../app/
 
 macx {
   ICON = ../libraries/qxrdlib/images/qxrdviewer-icon.icns
@@ -54,8 +53,6 @@ win32 {
     CONFIG(debug, debug|release):CONFIG += console
 }
 
-INCLUDEPATH += qceplib
-
 INCLUDEPATH += $${PWD}/../libraries/qxrdlib/
 INCLUDEPATH += $${OUT_PWD}/../libraries/qxrdlib/
 
@@ -65,18 +62,18 @@ CONFIG += qceplib-tiff
 
 #CONFIG += qceplib-nexus
 
-include(../source/submodules/qceplib/qceplib-qwt-include.pri)
-include(../source/submodules/qceplib/qceplib-base-include.pri)
-include(../source/submodules/qceplib/qceplib-mar345-include.pri)
-include(../source/submodules/qceplib/qceplib-cbf-include.pri)
-include(../source/submodules/qceplib/qceplib-tiff-include.pri)
-include(../source/submodules/qceplib/qceplib-levmar-include.pri)
-include(../source/submodules/qceplib/qceplib-szip-include.pri)
-include(../source/submodules/qceplib/qceplib-zlib-include.pri)
-include(../source/submodules/qceplib/qceplib-hdf5-include.pri)
-include(../source/submodules/qceplib/qceplib-bzip2-include.pri)
-include(../source/submodules/qceplib/qceplib-specserver-include.pri)
-##include(submodules/qceplib/qceplib-nexus.pri)
+include(../libraries/qceplib/qceplib/qceplib-qwt-include.pri)
+include(../libraries/qceplib/qceplib/qceplib-base-include.pri)
+include(../libraries/qceplib/qceplib/qceplib-mar345-include.pri)
+include(../libraries/qceplib/qceplib/qceplib-cbf-include.pri)
+include(../libraries/qceplib/qceplib/qceplib-tiff-include.pri)
+include(../libraries/qceplib/qceplib/qceplib-levmar-include.pri)
+include(../libraries/qceplib/qceplib/qceplib-szip-include.pri)
+include(../libraries/qceplib/qceplib/qceplib-zlib-include.pri)
+include(../libraries/qceplib/qceplib/qceplib-hdf5-include.pri)
+include(../libraries/qceplib/qceplib/qceplib-bzip2-include.pri)
+include(../libraries/qceplib/qceplib/qceplib-specserver-include.pri)
+##include(../libraries/qceplib/qceplib/qceplib-nexus.pri)
 
 #macx {
 #}

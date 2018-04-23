@@ -1863,24 +1863,25 @@ void QxrdProcessor::saveNamedUInt32ImageData(QString name, QcepUInt32ImageDataPt
 
 void QxrdProcessor::saveNamedRawImageData(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite)
 {
-  QxrdFileSaverPtr fs(fileSaver());
+//  QxrdFileSaverPtr fs(fileSaver());
 
-  if (fs) {
-    QxrdFileSaver *f = fs.data();
+//  if (fs) {
+//    QxrdFileSaver *f = fs.data();
 
-    //TODO: Handle 'name'...
-#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
-    INVOKE_CHECK(
-        QMetaObject::invokeMethod(f, [=]() { f->saveRaw32Data(/*name,*/ image, overflow, canOverwrite); } ));
-#else
-    INVOKE_CHECK(
-          QMetaObject::invokeMethod(f, "saveRaw32Data",
-//                                    Q_ARG(QString, name),
-                                    Q_ARG(QcepUInt32ImageDataPtr, image),
-                                    Q_ARG(QcepMaskDataPtr, overflow),
-                                    Q_ARG(int, canOverwrite)));
-#endif
-  }
+//    //TODO: Handle 'name'...
+//#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
+//    INVOKE_CHECK(
+//        QMetaObject::invokeMethod(f, [=]() { f->saveRaw32Data(/*name,*/ image, overflow, canOverwrite); } ));
+//#else
+//    INVOKE_CHECK(
+//          QMetaObject::invokeMethod(f, "saveRaw32Data",
+////                                    Q_ARG(QString, name),
+//                                    Q_ARG(QcepUInt32ImageDataPtr, image),
+//                                    Q_ARG(QcepMaskDataPtr, overflow),
+//                                    Q_ARG(int, canOverwrite)));
+//#endif
+//  }
+  m_RawFileFormatterSettings -> saveImageData(name, image, overflow, canOverwrite);
 }
 
 void QxrdProcessor::saveNamedMaskData(QString name, QcepMaskDataPtr image, int canOverwrite)

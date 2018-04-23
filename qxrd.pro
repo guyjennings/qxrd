@@ -4,7 +4,7 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS = libraries plugins source viewer
+SUBDIRS = libraries plugins qxrd-app qxrdviewer-app
 
 #SUBDIRS = plugins
 

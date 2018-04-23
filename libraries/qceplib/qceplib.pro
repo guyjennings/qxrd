@@ -53,17 +53,17 @@ DEFINES += BZIP2_MAKEDLL
 
 #DEFINES += H5_BUILT_AS_DYNAMIC_LIB
 
-include(../../source/submodules/qceplib/qceplib-qwt.pri)
-include(../../source/submodules/qceplib/qceplib-base.pri)
-include(../../source/submodules/qceplib/qceplib-mar345.pri)
-include(../../source/submodules/qceplib/qceplib-cbf.pri)
-include(../../source/submodules/qceplib/qceplib-tiff.pri)
-include(../../source/submodules/qceplib/qceplib-levmar.pri)
-include(../../source/submodules/qceplib/qceplib-szip.pri)
-include(../../source/submodules/qceplib/qceplib-zlib.pri)
-include(../../source/submodules/qceplib/qceplib-hdf5.pri)
-include(../../source/submodules/qceplib/qceplib-specserver.pri)
-include(../../source/submodules/qceplib/qceplib-bzip2.pri)
+include(qceplib/qceplib-qwt.pri)
+include(qceplib/qceplib-base.pri)
+include(qceplib/qceplib-mar345.pri)
+include(qceplib/qceplib-cbf.pri)
+include(qceplib/qceplib-tiff.pri)
+include(qceplib/qceplib-levmar.pri)
+include(qceplib/qceplib-szip.pri)
+include(qceplib/qceplib-zlib.pri)
+include(qceplib/qceplib-hdf5.pri)
+include(qceplib/qceplib-specserver.pri)
+include(qceplib/qceplib-bzip2.pri)
 
 unix {
     target.path = /usr/lib

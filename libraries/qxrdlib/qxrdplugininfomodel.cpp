@@ -16,6 +16,7 @@ QxrdPluginInfoModel::QxrdPluginInfoModel()
   m_ClassNames.replace(PerkinElmerPlugin,     "QxrdPerkinElmerPlugin");
   m_ClassNames.replace(PilatusPlugin,         "QxrdPilatusPlugin");
   m_ClassNames.replace(SimulatedPlugin,       "QxrdSimulatedPlugin");
+  m_ClassNames.replace(AlliedVisionPlugin,    "QxrdAlliedVisionPlugin");
 }
 
 int QxrdPluginInfoModel::rowCount(const QModelIndex &parent) const
@@ -151,6 +152,8 @@ void QxrdPluginInfoModel::appendEntry(QString path,
     index = PilatusPlugin;
   } else if (className == "QxrdSimulatedPlugin") {
     index = SimulatedPlugin;
+  } else if (className == "QxrdAlliedVisionPlugin") {
+    index = AlliedVisionPlugin;
   }
 
   if (index >= 0) {

@@ -27,6 +27,7 @@ public:
     DexelaPlugin,
     PilatusPlugin,
     AreaDetectorPlugin,
+    AlliedVisionPlugin,
     LastPlugin
   };
 
