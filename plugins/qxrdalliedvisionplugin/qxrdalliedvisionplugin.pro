@@ -8,8 +8,8 @@ CONFIG += plugin
 
 DESTDIR = ../../plugins/
 
-include("../../libraries/qceplib/qceplib-base-include.pri")
-include("../../libraries/qceplib/qceplib-specserver-include.pri")
+include("../../libraries/qceplib/qceplib/qceplib-base-include.pri")
+include("../../libraries/qceplib/qceplib/qceplib-specserver-include.pri")
 INCLUDEPATH += ../../libraries/qxrdlib/
 INCLUDEPATH += "$${VIMBA_HEADER}"
 DEPENDPATH  += "$${VIMBA_HEADER}"

@@ -8,8 +8,9 @@ CONFIG += plugin
 
 DESTDIR = ../../plugins/
 
-include("../../libraries/qceplib/qceplib-base-include.pri")
-include("../../libraries/qceplib/qceplib-specserver-include.pri")
+include("../../libraries/qceplib/qceplib/qceplib-base-include.pri")
+include("../../libraries/qceplib/qceplib/qceplib-specserver-include.pri")
+INCLUDEPATH += ../../libraries/qxrdlib/
 
 contains(DEFINES,HAVE_NIDAQ) {
   INCLUDEPATH += "$${NIDAQ_HEADER}"
