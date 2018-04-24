@@ -28,7 +28,7 @@
 #include "qxrdgeneratetestimage-ptr.h"
 #include "qceproicalculator-ptr.h"
 #include <QWaitCondition>
-#include "qxrdoutputfileformattersettings-ptr.h"
+#include "qcepoutputfileformattersettings-ptr.h"
 
 //TODO: separate processing steps into sub-objects
 //TODO: need separate settings class for experiment thread
@@ -104,10 +104,10 @@ public:
   QStringList ls(QString pattern) const;
   void cd(QString path);
 
-  QxrdOutputFileFormatterSettingsWPtr rawFileFormatterSettings();
-  QxrdOutputFileFormatterSettingsWPtr maskFileFormatterSettings();
-  QxrdOutputFileFormatterSettingsWPtr darkFileFormatterSettings();
-  QxrdOutputFileFormatterSettingsWPtr subtractedFileFormatterSettings();
+  QcepOutputFileFormatterSettingsWPtr rawFileFormatterSettings();
+  QcepOutputFileFormatterSettingsWPtr maskFileFormatterSettings();
+  QcepOutputFileFormatterSettingsWPtr darkFileFormatterSettings();
+  QcepOutputFileFormatterSettingsWPtr subtractedFileFormatterSettings();
 
   // dark operations...
   void loadDark(QString name);
@@ -537,10 +537,10 @@ private:
   QcepROICalculatorPtr      m_ROICalculator;
   QxrdFileSaverWPtr         m_FileSaver;
 
-  QxrdOutputFileFormatterSettingsPtr m_DarkFileFormatterSettings;
-  QxrdOutputFileFormatterSettingsPtr m_MaskFileFormatterSettings;
-  QxrdOutputFileFormatterSettingsPtr m_RawFileFormatterSettings;
-  QxrdOutputFileFormatterSettingsPtr m_SubtractedFileFormatterSettings;
+  QcepOutputFileFormatterSettingsPtr m_DarkFileFormatterSettings;
+  QcepOutputFileFormatterSettingsPtr m_MaskFileFormatterSettings;
+  QcepOutputFileFormatterSettingsPtr m_RawFileFormatterSettings;
+  QcepOutputFileFormatterSettingsPtr m_SubtractedFileFormatterSettings;
 
   //TODO: store a data object, not a model
   QcepPowderRingsModelPtr   m_PowderRings;

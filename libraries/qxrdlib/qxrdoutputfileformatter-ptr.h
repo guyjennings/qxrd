@@ -1,8 +1,0 @@
-#ifndef QXRDOUTPUTFILEFORMATTERPTR_H
-#define QXRDOUTPUTFILEFORMATTERPTR_H
-
-#include "qcepsharedpointer.h"
-
-QCEP_SHAREDPOINTER(QxrdOutputFileFormatter)
-
-#endif // QXRDOUTPUTFILEFORMATTERPTR_H

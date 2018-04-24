@@ -36,7 +36,7 @@
 #include <QtConcurrentRun>
 #include <QDirIterator>
 #include "qxrdresultserializer.h"
-#include "qxrdoutputfileformattersettings.h"
+#include "qcepoutputfileformattersettings.h"
 
 //TODO: emit data available signals when appropriate...
 QxrdProcessor::QxrdProcessor(QString name) :
@@ -172,20 +172,20 @@ QxrdProcessor::QxrdProcessor(QString name) :
         new QxrdHistogramSerializer("histogramDataSerializer", prop_HistogramQueueLength()));
 
   m_DarkFileFormatterSettings =
-      QxrdOutputFileFormatterSettingsPtr(
-        new QxrdOutputFileFormatterSettings("darkFileFormatterSettings"));
+      QcepOutputFileFormatterSettingsPtr(
+        new QcepOutputFileFormatterSettings("darkFileFormatterSettings"));
 
   m_MaskFileFormatterSettings =
-      QxrdOutputFileFormatterSettingsPtr(
-        new QxrdOutputFileFormatterSettings("maskFileFormatterSettings"));
+      QcepOutputFileFormatterSettingsPtr(
+        new QcepOutputFileFormatterSettings("maskFileFormatterSettings"));
 
   m_RawFileFormatterSettings =
-      QxrdOutputFileFormatterSettingsPtr(
-        new QxrdOutputFileFormatterSettings("rawFileFormatterSettings"));
+      QcepOutputFileFormatterSettingsPtr(
+        new QcepOutputFileFormatterSettings("rawFileFormatterSettings"));
 
   m_SubtractedFileFormatterSettings =
-      QxrdOutputFileFormatterSettingsPtr(
-        new QxrdOutputFileFormatterSettings("subtractedFileFormatterSettings"));
+      QcepOutputFileFormatterSettingsPtr(
+        new QcepOutputFileFormatterSettings("subtractedFileFormatterSettings"));
 
   CONNECT_CHECK(
         connect(m_CorrectedImages.data(), &QxrdResultSerializerBase::resultAvailable,
@@ -412,7 +412,7 @@ QxrdPolarNormalizationPtr QxrdProcessor::polarNormalization() const
   return m_PolarNormalization;
 }
 
-QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::rawFileFormatterSettings()
+QcepOutputFileFormatterSettingsWPtr QxrdProcessor::rawFileFormatterSettings()
 {
   if (m_RawFileFormatterSettings == NULL) {
     printMessage("Problem QxrdProcessor::rawFileFormatterSettings == NULL");
@@ -421,7 +421,7 @@ QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::rawFileFormatterSettings()
   return m_RawFileFormatterSettings;
 }
 
-QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::maskFileFormatterSettings()
+QcepOutputFileFormatterSettingsWPtr QxrdProcessor::maskFileFormatterSettings()
 {
   if (m_MaskFileFormatterSettings == NULL) {
     printMessage("Problem QxrdProcessor::maskFileFormatterSettings == NULL");
@@ -430,7 +430,7 @@ QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::maskFileFormatterSettings()
   return m_MaskFileFormatterSettings;
 }
 
-QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::darkFileFormatterSettings()
+QcepOutputFileFormatterSettingsWPtr QxrdProcessor::darkFileFormatterSettings()
 {
   if (m_DarkFileFormatterSettings == NULL) {
     printMessage("Problem QxrdProcessor::darkFileFormatterSettings == NULL");
@@ -439,7 +439,7 @@ QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::darkFileFormatterSettings()
   return m_DarkFileFormatterSettings;
 }
 
-QxrdOutputFileFormatterSettingsWPtr QxrdProcessor::subtractedFileFormatterSettings()
+QcepOutputFileFormatterSettingsWPtr QxrdProcessor::subtractedFileFormatterSettings()
 {
   if (m_SubtractedFileFormatterSettings == NULL) {
     printMessage("Problem QxrdProcessor::subtractedFileFormatterSettings == NULL");

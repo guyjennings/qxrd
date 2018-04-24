@@ -10,7 +10,7 @@
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
 #include "qcepallocator.h"
-#include "qxrdoutputfileformattersettings.h"
+#include "qcepoutputfileformattersettings.h"
 
 QxrdProcessorExecution::QxrdProcessorExecution(QString name)
   : inherited(name),
@@ -243,7 +243,7 @@ void QxrdProcessorExecution::doSaveRawImage(QcepImageDataBasePtr img, QcepMaskDa
   QxrdProcessorPtr  proc(m_Processor);
 
   if (proc) {
-    QxrdOutputFileFormatterSettingsPtr fmt(proc->rawFileFormatterSettings());
+    QcepOutputFileFormatterSettingsPtr fmt(proc->rawFileFormatterSettings());
 
     if (fmt) {
       fmt -> saveImageData(img, ovf);
@@ -277,7 +277,7 @@ void QxrdProcessorExecution::doSaveDarkImage(QcepImageDataBasePtr img, QcepMaskD
   QxrdProcessorPtr  proc(m_Processor);
 
   if (proc) {
-    QxrdOutputFileFormatterSettingsPtr fmt(proc->darkFileFormatterSettings());
+    QcepOutputFileFormatterSettingsPtr fmt(proc->darkFileFormatterSettings());
 
     if (fmt) {
       fmt -> saveImageData(img, ovf);
@@ -311,7 +311,7 @@ void QxrdProcessorExecution::doSaveSubtractedImage(QcepImageDataBasePtr img, Qce
   QxrdProcessorPtr  proc(m_Processor);
 
   if (proc) {
-    QxrdOutputFileFormatterSettingsPtr fmt(proc->subtractedFileFormatterSettings());
+    QcepOutputFileFormatterSettingsPtr fmt(proc->subtractedFileFormatterSettings());
 
     if (fmt) {
       fmt -> saveImageData(img, ovf);
