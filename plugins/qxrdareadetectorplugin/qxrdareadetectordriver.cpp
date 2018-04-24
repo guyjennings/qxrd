@@ -22,7 +22,7 @@ QxrdAreaDetectorDriver::QxrdAreaDetectorDriver(QString name,
   printf("Area Detector Driver \"%s\" Constructed\n", qPrintable(name));
 #endif
 
-  connect(&m_Timer, &QTimer::timeout, this, &QxrdAreaDetectorDriver::onTimerTimeout);
+  CONNECT_CHECK(connect(&m_Timer, &QTimer::timeout, this, &QxrdAreaDetectorDriver::onTimerTimeout));
 }
 
 QxrdAreaDetectorDriver::~QxrdAreaDetectorDriver()

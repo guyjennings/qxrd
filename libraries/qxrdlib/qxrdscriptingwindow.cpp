@@ -29,14 +29,17 @@ void QxrdScriptingWindow::initialize(QcepObjectWPtr parent)
   if (eng) {
     m_DataIndex = eng -> nextDataIndex();
 
-    connect(this,          &QxrdScriptingWindow::evaluateCommand,
-            eng.data(),    &QxrdScriptEngine::evaluateCommand);
+    CONNECT_CHECK(
+          connect(this,          &QxrdScriptingWindow::evaluateCommand,
+                  eng.data(),    &QxrdScriptEngine::evaluateCommand));
 
-    connect(eng.data(),    &QxrdScriptEngine::resultAvailable,
-            this,          &QxrdScriptingWindow::resultAvailable);
+    CONNECT_CHECK(
+          connect(eng.data(),    &QxrdScriptEngine::resultAvailable,
+                  this,          &QxrdScriptingWindow::resultAvailable));
 
-    connect(m_EvalButton,  &QAbstractButton::clicked,
-            this,          &QxrdScriptingWindow::doEvaluate);
+    CONNECT_CHECK(
+          connect(m_EvalButton,  &QAbstractButton::clicked,
+                  this,          &QxrdScriptingWindow::doEvaluate));
   }
 }
 

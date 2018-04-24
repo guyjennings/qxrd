@@ -147,6 +147,9 @@ public slots:
   void autoSaveExperiment();
   int  wasAutoSaved();
 
+  void setOutputFormat(int fmt);
+  void setOutputCompression(int cmp, int lvl=0);
+
   void completeWork(int amt);
   void commenceWork(int amt);
   void finishedWork(int amt);

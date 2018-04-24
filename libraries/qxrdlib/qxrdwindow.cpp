@@ -132,118 +132,123 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   QxrdAcqCommonPtr   acq(QxrdAcqCommon::findAcquisition(m_Parent));
   QxrdProcessorPtr   proc(processor());
 
-  connect(m_ExecuteScriptJSButton, &QAbstractButton::clicked, m_ActionExecuteScriptJS, &QAction::triggered);
-  connect(m_ExecuteScriptButton, &QAbstractButton::clicked, m_ActionExecuteScript, &QAction::triggered);
-  connect(m_ActionExecuteScript, &QAction::triggered, this, &QxrdWindow::executeScript);
-  connect(m_ActionExecuteScriptJS, &QAction::triggered, this, &QxrdWindow::executeScriptJS);
-  connect(m_CancelScriptButton, &QAbstractButton::clicked, m_ActionCancelScript, &QAction::triggered);
-  connect(m_ActionCancelScript, &QAction::triggered, this, &QxrdWindow::cancelScript);
-  connect(m_LoadScriptButton, &QAbstractButton::clicked, m_ActionLoadScript, &QAction::triggered);
-  connect(m_ActionLoadScript, &QAction::triggered, this, &QxrdWindow::doLoadScript);
+  CONNECT_CHECK(connect(m_ExecuteScriptJSButton, &QAbstractButton::clicked, m_ActionExecuteScriptJS, &QAction::triggered));
+  CONNECT_CHECK(connect(m_ExecuteScriptButton, &QAbstractButton::clicked, m_ActionExecuteScript, &QAction::triggered));
+  CONNECT_CHECK(connect(m_ActionExecuteScript, &QAction::triggered, this, &QxrdWindow::executeScript));
+  CONNECT_CHECK(connect(m_ActionExecuteScriptJS, &QAction::triggered, this, &QxrdWindow::executeScriptJS));
+  CONNECT_CHECK(connect(m_CancelScriptButton, &QAbstractButton::clicked, m_ActionCancelScript, &QAction::triggered));
+  CONNECT_CHECK(connect(m_ActionCancelScript, &QAction::triggered, this, &QxrdWindow::cancelScript));
+  CONNECT_CHECK(connect(m_LoadScriptButton, &QAbstractButton::clicked, m_ActionLoadScript, &QAction::triggered));
+  CONNECT_CHECK(connect(m_ActionLoadScript, &QAction::triggered, this, &QxrdWindow::doLoadScript));
 
   if (app) {
-    connect(m_ActionLoadPreferences, &QAction::triggered, app.data(), &QxrdApplication::doLoadPreferences);
-    connect(m_ActionSavePreferences, &QAction::triggered, app.data(), &QxrdApplication::doSavePreferences);
+    CONNECT_CHECK(connect(m_ActionLoadPreferences, &QAction::triggered, app.data(), &QxrdApplication::doLoadPreferences));
+    CONNECT_CHECK(connect(m_ActionSavePreferences, &QAction::triggered, app.data(), &QxrdApplication::doSavePreferences));
   }
 
-  connect(m_ActionSaveExperimentAsText, &QAction::triggered, this, &QxrdWindow::doSaveExperimentAsText);
+  CONNECT_CHECK(connect(m_ActionSaveExperimentAsText, &QAction::triggered, this, &QxrdWindow::doSaveExperimentAsText));
 
-  connect(m_ActionSetupDetectors, &QAction::triggered, this, &QxrdWindow::doEditDetectorPreferences);
+  CONNECT_CHECK(connect(m_ActionSetupDetectors, &QAction::triggered, this, &QxrdWindow::doEditDetectorPreferences));
 
-  connect(m_ActionLoadData, &QAction::triggered, this, &QxrdWindow::doLoadData);
-  connect(m_ActionSaveData, &QAction::triggered, this, &QxrdWindow::doSaveData);
-  connect(m_ActionLoadDark, &QAction::triggered, this, &QxrdWindow::doLoadDark);
-  connect(m_ActionSaveDark, &QAction::triggered, this, &QxrdWindow::doSaveDark);
-  connect(m_ActionClearDark, &QAction::triggered, this, &QxrdWindow::doClearDark);
-  connect(m_ActionLoadMask, &QAction::triggered, this, &QxrdWindow::doLoadMask);
-  connect(m_ActionSaveMask, &QAction::triggered, this, &QxrdWindow::doSaveMask);
-  connect(m_ActionClearMask, &QAction::triggered, this, &QxrdWindow::doClearMask);
-  connect(m_ActionLoadGainMap, &QAction::triggered, this, &QxrdWindow::doLoadGainMap);
-  connect(m_ActionSaveGainMap, &QAction::triggered, this, &QxrdWindow::doSaveGainMap);
-  connect(m_ActionClearGainMap, &QAction::triggered, this, &QxrdWindow::doClearGainMap);
+  CONNECT_CHECK(connect(m_ActionLoadData, &QAction::triggered, this, &QxrdWindow::doLoadData));
+  CONNECT_CHECK(connect(m_ActionSaveData, &QAction::triggered, this, &QxrdWindow::doSaveData));
+  CONNECT_CHECK(connect(m_ActionLoadDark, &QAction::triggered, this, &QxrdWindow::doLoadDark));
+  CONNECT_CHECK(connect(m_ActionSaveDark, &QAction::triggered, this, &QxrdWindow::doSaveDark));
+  CONNECT_CHECK(connect(m_ActionClearDark, &QAction::triggered, this, &QxrdWindow::doClearDark));
+  CONNECT_CHECK(connect(m_ActionLoadMask, &QAction::triggered, this, &QxrdWindow::doLoadMask));
+  CONNECT_CHECK(connect(m_ActionSaveMask, &QAction::triggered, this, &QxrdWindow::doSaveMask));
+  CONNECT_CHECK(connect(m_ActionClearMask, &QAction::triggered, this, &QxrdWindow::doClearMask));
+  CONNECT_CHECK(connect(m_ActionLoadGainMap, &QAction::triggered, this, &QxrdWindow::doLoadGainMap));
+  CONNECT_CHECK(connect(m_ActionSaveGainMap, &QAction::triggered, this, &QxrdWindow::doSaveGainMap));
+  CONNECT_CHECK(connect(m_ActionClearGainMap, &QAction::triggered, this, &QxrdWindow::doClearGainMap));
 
-  connect(m_ActionAccumulateImages, &QAction::triggered, this, &QxrdWindow::doAccumulateImages);
-  connect(m_ActionAddImage, &QAction::triggered, this, &QxrdWindow::doAddImages);
-  connect(m_ActionSubtractImage, &QAction::triggered, this, &QxrdWindow::doSubtractImages);
-  connect(m_ActionProjectImagesX, &QAction::triggered, this, &QxrdWindow::doProjectAlongX);
-  connect(m_ActionProjectImagesY, &QAction::triggered, this, &QxrdWindow::doProjectAlongY);
-  connect(m_ActionProjectImagesZ, &QAction::triggered, this, &QxrdWindow::doProjectAlongZ);
-  connect(m_ActionCorrelateImage, &QAction::triggered, this, &QxrdWindow::doCorrelate);
-  connect(m_ActionProcessData, &QAction::triggered, this, &QxrdWindow::doProcessSequence);
+  CONNECT_CHECK(connect(m_ActionAccumulateImages, &QAction::triggered, this, &QxrdWindow::doAccumulateImages));
+  CONNECT_CHECK(connect(m_ActionAddImage, &QAction::triggered, this, &QxrdWindow::doAddImages));
+  CONNECT_CHECK(connect(m_ActionSubtractImage, &QAction::triggered, this, &QxrdWindow::doSubtractImages));
+  CONNECT_CHECK(connect(m_ActionProjectImagesX, &QAction::triggered, this, &QxrdWindow::doProjectAlongX));
+  CONNECT_CHECK(connect(m_ActionProjectImagesY, &QAction::triggered, this, &QxrdWindow::doProjectAlongY));
+  CONNECT_CHECK(connect(m_ActionProjectImagesZ, &QAction::triggered, this, &QxrdWindow::doProjectAlongZ));
+  CONNECT_CHECK(connect(m_ActionCorrelateImage, &QAction::triggered, this, &QxrdWindow::doCorrelate));
+  CONNECT_CHECK(connect(m_ActionProcessData, &QAction::triggered, this, &QxrdWindow::doProcessSequence));
 
-  connect(m_ActionReflectHorizontally, &QAction::triggered, this, &QxrdWindow::doReflectHorizontally);
-  connect(m_ActionReflectVertically, &QAction::triggered, this, &QxrdWindow::doReflectVertically);
+  CONNECT_CHECK(connect(m_ActionReflectHorizontally, &QAction::triggered, this, &QxrdWindow::doReflectHorizontally));
+  CONNECT_CHECK(connect(m_ActionReflectVertically, &QAction::triggered, this, &QxrdWindow::doReflectVertically));
 
-  connect(m_ActionRefineCenterTilt, &QAction::triggered, this, &QxrdWindow::doRefineCenterTilt);
+  CONNECT_CHECK(connect(m_ActionRefineCenterTilt, &QAction::triggered, this, &QxrdWindow::doRefineCenterTilt));
 
   if (proc) {
     QcepCenterFinderPtr cf(proc->centerFinder());
 
     if (cf) {
-      connect(m_ActionFindBeamCenter, &QAction::triggered, cf.data(), &QcepCenterFinder::fitPowderCircle, Qt::DirectConnection);
-      connect(m_ActionClearMarkers, &QAction::triggered, cf.data(), &QcepCenterFinder::deletePowderPoints, Qt::DirectConnection);
-      connect(m_ActionCalculateCalibrationPowder, &QAction::triggered, cf.data(), &QcepCenterFinder::calculateCalibration);
+      CONNECT_CHECK(connect(m_ActionFindBeamCenter, &QAction::triggered, cf.data(), &QcepCenterFinder::fitPowderCircle, Qt::DirectConnection));
+      CONNECT_CHECK(connect(m_ActionClearMarkers, &QAction::triggered, cf.data(), &QcepCenterFinder::deletePowderPoints, Qt::DirectConnection));
+      CONNECT_CHECK(connect(m_ActionCalculateCalibrationPowder, &QAction::triggered, cf.data(), &QcepCenterFinder::calculateCalibration));
     }
   }
 
-  connect(m_ActionPlotPowderRingPoints, &QAction::triggered, this, &QxrdWindow::plotPowderRingRadii);
-  connect(m_ActionPlotPowderRingTwoTheta, &QAction::triggered, this, &QxrdWindow::plotPowderRingTwoTheta);
-  connect(m_ActionPlotPowderRingCenters, &QAction::triggered, this, &QxrdWindow::plotPowderRingCenters);
+  CONNECT_CHECK(connect(m_ActionPlotPowderRingPoints, &QAction::triggered, this, &QxrdWindow::plotPowderRingRadii));
+  CONNECT_CHECK(connect(m_ActionPlotPowderRingTwoTheta, &QAction::triggered, this, &QxrdWindow::plotPowderRingTwoTheta));
+  CONNECT_CHECK(connect(m_ActionPlotPowderRingCenters, &QAction::triggered, this, &QxrdWindow::plotPowderRingCenters));
 
   if (proc) {
-    connect(m_ActionShowMaskRange, &QAction::triggered, proc.data(), (void (QxrdProcessor::*)()) &QxrdProcessor::showMaskRange);
-    connect(m_ActionHideMaskRange, &QAction::triggered, proc.data(), (void (QxrdProcessor::*)()) &QxrdProcessor::hideMaskRange);
-    connect(m_ActionShowMaskAll, &QAction::triggered, proc.data(), &QxrdProcessor::showMaskAll);
-    connect(m_ActionHideMaskAll, &QAction::triggered, proc.data(), &QxrdProcessor::hideMaskAll);
-    connect(m_ActionInvertMask, &QAction::triggered, proc.data(), &QxrdProcessor::invertMask);
-//    connect(m_ActionMaskCircles, &QAction::triggered, m_ImageMaskCirclesButton, &QAbstractButton::click);
-//    connect(m_ActionMaskPolygons, &QAction::triggered, m_ImageMaskPolygonsButton, &QAbstractButton::click);
+    CONNECT_CHECK(connect(m_ActionShowMaskRange, &QAction::triggered, proc.data(), (void (QxrdProcessor::*)()) &QxrdProcessor::showMaskRange));
+    CONNECT_CHECK(connect(m_ActionHideMaskRange, &QAction::triggered, proc.data(), (void (QxrdProcessor::*)()) &QxrdProcessor::hideMaskRange));
+    CONNECT_CHECK(connect(m_ActionShowMaskAll, &QAction::triggered, proc.data(), &QxrdProcessor::showMaskAll));
+    CONNECT_CHECK(connect(m_ActionHideMaskAll, &QAction::triggered, proc.data(), &QxrdProcessor::hideMaskAll));
+    CONNECT_CHECK(connect(m_ActionInvertMask, &QAction::triggered, proc.data(), &QxrdProcessor::invertMask));
+//    CONNECT_CHECK(connect(m_ActionMaskCircles, &QAction::triggered, m_ImageMaskCirclesButton, &QAbstractButton::click));
+//    CONNECT_CHECK(connect(m_ActionMaskPolygons, &QAction::triggered, m_ImageMaskPolygonsButton, &QAbstractButton::click));
 
-//    connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdProcessor::doCalculateROI);
-//    connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdProcessor::doCalculateHistogram);
+//    CONNECT_CHECK(connect(m_ActionROICalculate, &QAction::triggered, proc.data(), &QxrdProcessor::doCalculateROI));
+//    CONNECT_CHECK(connect(m_ActionHistogramCalculate, &QAction::triggered, proc.data(), &QxrdProcessor::doCalculateHistogram));
   }
 
   if (app) {
-    connect(m_ActionAboutQXRD, &QAction::triggered, app.data(), &QxrdApplication::doAboutQxrd);
-    connect(m_ActionOpenQXRDWebPage, &QAction::triggered, app.data(), &QxrdApplication::doOpenQXRDWebPage);
+    CONNECT_CHECK(connect(m_ActionAboutQXRD, &QAction::triggered, app.data(), &QxrdApplication::doAboutQxrd));
+    CONNECT_CHECK(connect(m_ActionOpenQXRDWebPage, &QAction::triggered, app.data(), &QxrdApplication::doOpenQXRDWebPage));
   }
 
-  connect(m_HelpHomeButton, &QAbstractButton::clicked, m_HelpBrowser, &QTextBrowser::home);
-  connect(m_HelpForwardButton, &QAbstractButton::clicked, m_HelpBrowser, &QTextBrowser::forward);
-  connect(m_HelpBackButton, &QAbstractButton::clicked, m_HelpBrowser, &QTextBrowser::backward);
+  CONNECT_CHECK(connect(m_HelpHomeButton, &QAbstractButton::clicked, m_HelpBrowser, &QTextBrowser::home));
+  CONNECT_CHECK(connect(m_HelpForwardButton, &QAbstractButton::clicked, m_HelpBrowser, &QTextBrowser::forward));
+  CONNECT_CHECK(connect(m_HelpBackButton, &QAbstractButton::clicked, m_HelpBrowser, &QTextBrowser::backward));
 
-  connect(m_HelpBrowser, &QTextBrowser::forwardAvailable, m_HelpForwardButton, &QWidget::setEnabled);
-  connect(m_HelpBrowser, &QTextBrowser::backwardAvailable, m_HelpBackButton, &QWidget::setEnabled);
+  CONNECT_CHECK(connect(m_HelpBrowser, &QTextBrowser::forwardAvailable, m_HelpForwardButton, &QWidget::setEnabled));
+  CONNECT_CHECK(connect(m_HelpBrowser, &QTextBrowser::backwardAvailable, m_HelpBackButton, &QWidget::setEnabled));
 
   m_HelpBrowser->initialize(QxrdExperiment::findExperiment(m_Parent));
 
 
-  connect(m_ActionIntegrate, &QAction::triggered, this, &QxrdWindow::doIntegrateSequence);
+  CONNECT_CHECK(connect(m_ActionIntegrate, &QAction::triggered, this, &QxrdWindow::doIntegrateSequence));
 
   if (proc) {
-    connect(m_ActionIntegrateCurrent, &QAction::triggered,
-            proc.data(), &QxrdProcessor::integrateSaveAndDisplay);
+    CONNECT_CHECK(
+          connect(m_ActionIntegrateCurrent, &QAction::triggered,
+                  proc.data(), &QxrdProcessor::integrateSaveAndDisplay));
   }
 
-  connect(m_ActionSaveCachedGeometry, &QAction::triggered, this, &QxrdWindow::doSaveCachedGeometry);
-  connect(m_ActionSaveCachedIntensity, &QAction::triggered, this, &QxrdWindow::doSaveCachedIntensity);
+  CONNECT_CHECK(connect(m_ActionSaveCachedGeometry, &QAction::triggered, this, &QxrdWindow::doSaveCachedGeometry));
+  CONNECT_CHECK(connect(m_ActionSaveCachedIntensity, &QAction::triggered, this, &QxrdWindow::doSaveCachedIntensity));
 
-//  connect(m_IntegratorDialog -> m_IntegrateOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences);
+//  CONNECT_CHECK(connect(m_IntegratorDialog -> m_IntegrateOptionsButton, &QAbstractButton::clicked, this, &QxrdWindow::doEditPreferences));
 
   if (proc) {
-    connect(proc.data(), &QxrdProcessor::dataAvailable,
-            m_ImagePlot, &QcepImagePlotWidget::newImage);
+    CONNECT_CHECK(
+          connect(proc.data(), &QxrdProcessor::dataAvailable,
+                  m_ImagePlot, &QcepImagePlotWidget::newImage));
 
-    connect(proc.data(), &QxrdProcessor::maskAvailable,
-            m_ImagePlot, &QcepImagePlotWidget::newMask);
+    CONNECT_CHECK(
+          connect(proc.data(), &QxrdProcessor::maskAvailable,
+                  m_ImagePlot, &QcepImagePlotWidget::newMask));
 
-    connect(proc->integrator()->prop_IntegrationXUnits(), &QcepIntProperty::valueChanged,
-            this, &QxrdWindow::integrationXUnitsChanged);
+    CONNECT_CHECK(
+          connect(proc->integrator()->prop_IntegrationXUnits(), &QcepIntProperty::valueChanged,
+                  this, &QxrdWindow::integrationXUnitsChanged));
+
     integrationXUnitsChanged(proc->integrator()->get_IntegrationXUnits());
 
-    connect(m_ActionIntegrateVsR,   &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsR);
-    connect(m_ActionIntegrateVsQ,   &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsQ);
-    connect(m_ActionIntegrateVsTTH, &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsTTH);
+    CONNECT_CHECK(connect(m_ActionIntegrateVsR,   &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsR));
+    CONNECT_CHECK(connect(m_ActionIntegrateVsQ,   &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsQ));
+    CONNECT_CHECK(connect(m_ActionIntegrateVsTTH, &QAction::triggered, proc->integrator().data(), &QxrdIntegrator::integrateVsTTH));
   }
 
   m_Highlighter = new QxrdHighlighter(m_ScriptEdit->document());
@@ -264,7 +269,7 @@ void QxrdWindow::initialize(QcepObjectWPtr parent)
   if (app) {
     m_Messages -> document() -> setMaximumBlockCount(app->get_MessageWindowLines());
 
-    connect(app->prop_MessageWindowLines(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onMessageWindowLinesChanged);
+    CONNECT_CHECK(connect(app->prop_MessageWindowLines(), &QcepIntProperty::valueChanged, this, &QxrdWindow::onMessageWindowLinesChanged));
 
 #ifdef QT_NO_DEBUG
     m_ActionRefineCenterTilt->setEnabled(false);

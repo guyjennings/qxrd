@@ -39,8 +39,9 @@ void QxrdInfoWindow::initialize(QcepObjectWPtr parent)
   m_ObjectSelection =
       m_ObjectView -> selectionModel();
 
-  connect(m_ObjectSelection, &QItemSelectionModel::selectionChanged,
-          this,              &QxrdInfoWindow::selectionChanged);
+  CONNECT_CHECK(
+        connect(m_ObjectSelection, &QItemSelectionModel::selectionChanged,
+                this,              &QxrdInfoWindow::selectionChanged));
 
   setupMenus(m_FileMenu, m_EditMenu, m_WindowMenu);
 

@@ -22,7 +22,7 @@ template <typename T>
 QxrdResultSerializer<T>::QxrdResultSerializer(QString name, QcepIntProperty *ctr)
  : QxrdResultSerializerBase(name, ctr)
 {
-  connect(&m_Watcher, &QFutureWatcherBase::finished, this, &QxrdResultSerializerBase::resultAvailable);
+  CONNECT_CHECK(connect(&m_Watcher, &QFutureWatcherBase::finished, this, &QxrdResultSerializerBase::resultAvailable));
 }
 
 template <typename T>

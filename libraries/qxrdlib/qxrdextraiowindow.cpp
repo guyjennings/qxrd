@@ -51,8 +51,9 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
       QxrdSynchronizedAcquisitionPtr sync(m_SynchronizedAcquisition);
 
       if (sync) {
-        connect(sync.data(), &QxrdSynchronizedAcquisition::waveformsChanged,
-                this,        &QxrdExtraIOWindow::updateWaveforms);
+        CONNECT_CHECK(
+              connect(sync.data(), &QxrdSynchronizedAcquisition::waveformsChanged,
+                      this,        &QxrdExtraIOWindow::updateWaveforms));
 
 
         QxrdSynchronizerPtr syncro(m_Synchronizer);
@@ -68,24 +69,24 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
         sync->prop_InputSampleRate()  -> linkTo(m_InputSampleRate);
       }
 
-      connect(acq->prop_ExposureTime(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
-      connect(acq->prop_PhasesInGroup(), &QcepIntProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged);
+      CONNECT_CHECK(connect(acq->prop_ExposureTime(), &QcepDoubleProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged));
+      CONNECT_CHECK(connect(acq->prop_PhasesInGroup(), &QcepIntProperty::valueChanged, this, &QxrdExtraIOWindow::waveformChanged));
 
       waveformChanged();
 
       updateWaveforms();
     }
 
-    connect(m_RestartButton, &QAbstractButton::clicked, this, &QxrdExtraIOWindow::restartSync);
-    connect(m_SyncInfoButton, &QAbstractButton::clicked, this, &QxrdExtraIOWindow::syncInfoWindow);
+    CONNECT_CHECK(connect(m_RestartButton, &QAbstractButton::clicked, this, &QxrdExtraIOWindow::restartSync));
+    CONNECT_CHECK(connect(m_SyncInfoButton, &QAbstractButton::clicked, this, &QxrdExtraIOWindow::syncInfoWindow));
   }
 
-  connect(m_NewDetectorButton,    &QToolButton::clicked, this, &QxrdExtraIOWindow::doNewDetector);
-  connect(m_NewOutputButton,      &QToolButton::clicked, this, &QxrdExtraIOWindow::doNewOutput);
-  connect(m_NewInputButton,       &QToolButton::clicked, this, &QxrdExtraIOWindow::doNewInput);
-  connect(m_DeleteDetectorButton, &QToolButton::clicked, this, &QxrdExtraIOWindow::doDeleteDetector);
-  connect(m_DeleteOutputButton,   &QToolButton::clicked, this, &QxrdExtraIOWindow::doDeleteOutput);
-  connect(m_DeleteInputButton,    &QToolButton::clicked, this, &QxrdExtraIOWindow::doDeleteInput);
+  CONNECT_CHECK(connect(m_NewDetectorButton,    &QToolButton::clicked, this, &QxrdExtraIOWindow::doNewDetector));
+  CONNECT_CHECK(connect(m_NewOutputButton,      &QToolButton::clicked, this, &QxrdExtraIOWindow::doNewOutput));
+  CONNECT_CHECK(connect(m_NewInputButton,       &QToolButton::clicked, this, &QxrdExtraIOWindow::doNewInput));
+  CONNECT_CHECK(connect(m_DeleteDetectorButton, &QToolButton::clicked, this, &QxrdExtraIOWindow::doDeleteDetector));
+  CONNECT_CHECK(connect(m_DeleteOutputButton,   &QToolButton::clicked, this, &QxrdExtraIOWindow::doDeleteOutput));
+  CONNECT_CHECK(connect(m_DeleteInputButton,    &QToolButton::clicked, this, &QxrdExtraIOWindow::doDeleteInput));
 
   m_DetectorsModel =
       QxrdExtraIODetectorsModelPtr(

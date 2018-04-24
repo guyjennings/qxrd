@@ -84,24 +84,25 @@ void QxrdCenteringWindow::initialize(QcepObjectWPtr parent)
       cf->prop_TiltPlaneRotation()     -> linkTo(m_TiltPlaneRotation);
       cf->prop_TiltPlaneRotationStep() -> linkTo(m_TiltPlaneRotationStep);
 
-      connect(m_CenterMoveDown,      &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveDown);
-      connect(m_CenterMoveUp,        &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveUp);
-      connect(m_CenterMoveLeft,      &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveLeft);
-      connect(m_CenterMoveRight,     &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveRight);
-      connect(m_CenterMoveDownLeft,  &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveDownLeft);
-      connect(m_CenterMoveDownRight, &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveDownRight);
-      connect(m_CenterMoveUpLeft,    &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveUpLeft);
-      connect(m_CenterMoveUpRight,   &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveUpRight);
+      CONNECT_CHECK(connect(m_CenterMoveDown,      &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveDown));
+      CONNECT_CHECK(connect(m_CenterMoveUp,        &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveUp));
+      CONNECT_CHECK(connect(m_CenterMoveLeft,      &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveLeft));
+      CONNECT_CHECK(connect(m_CenterMoveRight,     &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveRight));
+      CONNECT_CHECK(connect(m_CenterMoveDownLeft,  &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveDownLeft));
+      CONNECT_CHECK(connect(m_CenterMoveDownRight, &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveDownRight));
+      CONNECT_CHECK(connect(m_CenterMoveUpLeft,    &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveUpLeft));
+      CONNECT_CHECK(connect(m_CenterMoveUpRight,   &QToolButton::clicked, cf.data(), &QcepCenterFinder::centerMoveUpRight));
 
-      connect(cf->prop_ImplementTilt(), &QcepBoolProperty::valueChanged,
-              this, &QxrdCenteringWindow::onImplementTiltChanged);
+      CONNECT_CHECK(
+            connect(cf->prop_ImplementTilt(), &QcepBoolProperty::valueChanged,
+                    this, &QxrdCenteringWindow::onImplementTiltChanged));
 
       onImplementTiltChanged(cf->get_ImplementTilt());
 
-      connect(cf->prop_CenterStep(),            &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged);
-      connect(cf->prop_DetectorDistanceStep(),  &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged);
-      connect(cf->prop_DetectorTiltStep(),      &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged);
-      connect(cf->prop_TiltPlaneRotationStep(), &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged);
+      CONNECT_CHECK(connect(cf->prop_CenterStep(),            &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged));
+      CONNECT_CHECK(connect(cf->prop_DetectorDistanceStep(),  &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged));
+      CONNECT_CHECK(connect(cf->prop_DetectorTiltStep(),      &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged));
+      CONNECT_CHECK(connect(cf->prop_TiltPlaneRotationStep(), &QcepDoubleProperty::valueChanged, this, &QxrdCenteringWindow::onStepSizesChanged));
 
       cf->prop_Energy()               -> linkTo(m_Energy);
       cf->prop_DetectorDistance()     -> linkTo(m_DetectorDistance);

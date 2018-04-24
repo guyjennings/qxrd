@@ -48,14 +48,17 @@ void QxrdSynchronizedAcquisition::setupAcquisition()
   QxrdAcqCommonPtr acq(m_Acquisition);
 
   if (acq) {
-    connect(acq->prop_ExposureTime(),  &QcepDoubleProperty::valueChanged,
-            this,                      &QxrdSynchronizedAcquisition::updateWaveforms);
+    CONNECT_CHECK(
+          connect(acq->prop_ExposureTime(),  &QcepDoubleProperty::valueChanged,
+                  this,                      &QxrdSynchronizedAcquisition::updateWaveforms));
 
-    connect(acq->prop_PhasesInGroup(), &QcepIntProperty::valueChanged,
-            this,                      &QxrdSynchronizedAcquisition::updateWaveforms);
+    CONNECT_CHECK(
+          connect(acq->prop_PhasesInGroup(), &QcepIntProperty::valueChanged,
+                  this,                      &QxrdSynchronizedAcquisition::updateWaveforms));
 
-    connect(this,                      &QcepObject::propertyWasChanged,
-            this,                      &QxrdSynchronizedAcquisition::updateWaveforms);
+    CONNECT_CHECK(
+          connect(this,                      &QcepObject::propertyWasChanged,
+                  this,                      &QxrdSynchronizedAcquisition::updateWaveforms));
 
     updateWaveforms();
   }

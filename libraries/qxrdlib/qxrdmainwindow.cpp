@@ -38,14 +38,17 @@ void QxrdMainWindow::setupMenus(QMenu *file, QMenu *edit, QMenu *window)
   QxrdAcqCommonPtr acq(QxrdAcqCommon::findAcquisition(m_Parent));
 
   if (acq) {
-    connect(acq.data(), &QxrdAcqCommon::acquireStarted,
-            this,       &QxrdMainWindow::acquireStarted);
+    CONNECT_CHECK(
+          connect(acq.data(), &QxrdAcqCommon::acquireStarted,
+                  this,       &QxrdMainWindow::acquireStarted));
 
-    connect(acq.data(), &QxrdAcqCommon::acquiredFrame,
-            this,       &QxrdMainWindow::acquiredFrame);
+    CONNECT_CHECK(
+          connect(acq.data(), &QxrdAcqCommon::acquiredFrame,
+                  this,       &QxrdMainWindow::acquiredFrame));
 
-    connect(acq.data(), &QxrdAcqCommon::acquireComplete,
-            this,       &QxrdMainWindow::acquireComplete);
+    CONNECT_CHECK(
+          connect(acq.data(), &QxrdAcqCommon::acquireComplete,
+                  this,       &QxrdMainWindow::acquireComplete));
   }
 }
 
@@ -113,8 +116,9 @@ void QxrdMainWindow::populateWindowsMenu()
         act -> setCheckable(true);
         act -> setChecked(enabled);
 
-        connect(act, &QAction::triggered,
-                [=]() {acq->configureDetector(i);});
+        CONNECT_CHECK(
+              connect(act, &QAction::triggered,
+                      [=]() {acq->configureDetector(i);}));
 
         configMenu -> addAction(act);
 
@@ -128,8 +132,9 @@ void QxrdMainWindow::populateWindowsMenu()
         act2 -> setCheckable(true);
         act2 -> setChecked(enabled);
 
-        connect(act2, &QAction::triggered,
-                [=]() {acq->openDetectorControlWindow(i);});
+        CONNECT_CHECK(
+              connect(act2, &QAction::triggered,
+                      [=]() {acq->openDetectorControlWindow(i);}));
 
         ctrlMenu -> addAction(act2);
       }

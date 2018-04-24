@@ -23,7 +23,7 @@ QxrdSimulatedDriver::QxrdSimulatedDriver(QString name,
   printf("Simulated Driver \"%s\" Constructed\n", qPrintable(name));
 #endif
 
-  connect(&m_Timer, &QTimer::timeout, this, &QxrdSimulatedDriver::onTimerTimeout);
+  CONNECT_CHECK(connect(&m_Timer, &QTimer::timeout, this, &QxrdSimulatedDriver::onTimerTimeout));
 }
 
 QxrdSimulatedDriver::~QxrdSimulatedDriver()

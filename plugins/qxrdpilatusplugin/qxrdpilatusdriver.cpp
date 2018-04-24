@@ -54,8 +54,9 @@ void QxrdPilatusDriver::startDetectorDriver()
       printMessage("Connected to pilatus...");
     }
 
-    connect(&m_PilatusSocket, &QTcpSocket::readyRead,
-            this, &QxrdPilatusDriver::readyRead);
+    CONNECT_CHECK(
+          connect(&m_PilatusSocket, &QTcpSocket::readyRead,
+                  this, &QxrdPilatusDriver::readyRead));
 
     sendCommand("telemetry");
     sendCommand("nimages 1");

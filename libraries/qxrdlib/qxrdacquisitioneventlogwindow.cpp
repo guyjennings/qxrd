@@ -20,8 +20,8 @@ QxrdAcquisitionEventLogWindow::QxrdAcquisitionEventLogWindow(QxrdAcqCommonWPtr a
 
     m_EventLog -> setModel(m_AcquisitionEventLogModel.data());
 
-    connect(m_ClearButton,       &QAbstractButton::clicked, this, &QxrdAcquisitionEventLogWindow::doClearEventLog);
-    connect(m_PauseResumeButton, &QAbstractButton::clicked, this, &QxrdAcquisitionEventLogWindow::doPauseResume);
+    CONNECT_CHECK(connect(m_ClearButton,       &QAbstractButton::clicked, this, &QxrdAcquisitionEventLogWindow::doClearEventLog));
+    CONNECT_CHECK(connect(m_PauseResumeButton, &QAbstractButton::clicked, this, &QxrdAcquisitionEventLogWindow::doPauseResume));
 
     updateButtonTitles();
 

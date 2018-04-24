@@ -77,7 +77,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
     m_Application -> setQuitOnLastWindowClosed(false);
   }
 
-  connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdApplication::onAutoSaveTimer);
+  CONNECT_CHECK(connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdApplication::onAutoSaveTimer));
 
   m_AutoSaveTimer.start(5000);
 
@@ -89,7 +89,7 @@ void QxrdApplication::initializeRoot()
 {
   inherited::initializeRoot();
 
-  connect(&m_LockerTimer, &QTimer::timeout, this, &QxrdApplication::lockerTimerElapsed);
+  CONNECT_CHECK(connect(&m_LockerTimer, &QTimer::timeout, this, &QxrdApplication::lockerTimerElapsed));
 
   m_LastLockerTime.start();
   m_LockerTimer.start(5000);

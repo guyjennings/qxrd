@@ -23,7 +23,7 @@ QxrdAlliedVisionDriver::QxrdAlliedVisionDriver(QString name,
   printf("Allied Vision Driver \"%s\" Constructed\n", qPrintable(name));
 #endif
 
-  connect(&m_Timer, &QTimer::timeout, this, &QxrdAlliedVisionDriver::onTimerTimeout);
+  CONNECT_CHECK(connect(&m_Timer, &QTimer::timeout, this, &QxrdAlliedVisionDriver::onTimerTimeout));
 }
 
 QxrdAlliedVisionDriver::~QxrdAlliedVisionDriver()

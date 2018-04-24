@@ -79,8 +79,9 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
       QcepImageBaseQueuePtr(
         new QcepImageBaseQueue("acquired"));
 
-  connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
-          this,           &QxrdDetectorSettings::startOrStop);
+  CONNECT_CHECK(
+        connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
+                this,           &QxrdDetectorSettings::startOrStop));
 }
 
 void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
@@ -151,8 +152,9 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
   QxrdAcqCommonPtr a(m_Acquisition);
 
   if (a) {
-    connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
-            a.data(),       &QxrdAcqCommon::detectorStateChanged);
+    CONNECT_CHECK(
+          connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
+                  a.data(),       &QxrdAcqCommon::detectorStateChanged));
   }
 
   m_AcquiredImages -> initialize(sharedFromThis());
@@ -706,4 +708,18 @@ void QxrdDetectorSettings::registerMetaTypes()
   qRegisterMetaType<QxrdDetectorDriver*>("QxrdDetectorDriver*");
   qRegisterMetaType<QxrdDetectorDriverPtr>("QxrdDetectorDriverPtr");
   qRegisterMetaType<QxrdDetectorDriverWPtr>("QxrdDetectorDriverWPtr");
+}
+
+void QxrdDetectorSettings::setOutputFormat(int fmt)
+{
+  if (m_Processor) {
+    m_Processor -> setOutputFormat(fmt);
+  }
+}
+
+void QxrdDetectorSettings::setOutputCompression(int cmp, int lvl)
+{
+  if (m_Processor) {
+    m_Processor -> setOutputCompression(cmp, lvl);
+  }
 }

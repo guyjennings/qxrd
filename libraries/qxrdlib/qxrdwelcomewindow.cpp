@@ -24,15 +24,15 @@ QxrdWelcomeWindow::QxrdWelcomeWindow(QxrdAppCommonWPtr appw) :
 
     statusBar() -> addPermanentWidget(m_StatusMsg);
 
-    connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdWelcomeWindow::clearStatusMessage);
+    CONNECT_CHECK(connect(&m_StatusTimer, &QTimer::timeout, this, &QxrdWelcomeWindow::clearStatusMessage));
 
-    connect(m_ActionEditApplicationPreferences, &QAction::triggered, app.data(), &QxrdAppCommon::editGlobalPreferences);
-    connect(m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdAppCommon::createNewExperiment);
-    connect(m_ActionOpenExperiment, &QAction::triggered, app.data(), &QxrdAppCommon::chooseExistingExperiment);
-    connect(m_ActionExitApplication, &QAction::triggered, app.data(), &QxrdAppCommon::possiblyQuit);
+    CONNECT_CHECK(connect(m_ActionEditApplicationPreferences, &QAction::triggered, app.data(), &QxrdAppCommon::editGlobalPreferences));
+    CONNECT_CHECK(connect(m_ActionNewExperiment, &QAction::triggered, app.data(), &QxrdAppCommon::createNewExperiment));
+    CONNECT_CHECK(connect(m_ActionOpenExperiment, &QAction::triggered, app.data(), &QxrdAppCommon::chooseExistingExperiment));
+    CONNECT_CHECK(connect(m_ActionExitApplication, &QAction::triggered, app.data(), &QxrdAppCommon::possiblyQuit));
 
-    connect(m_NewExperiment, &QAbstractButton::clicked, m_ActionNewExperiment, &QAction::trigger);
-    connect(m_OpenExistingExperiment, &QAbstractButton::clicked, m_ActionOpenExperiment, &QAction::trigger);
+    CONNECT_CHECK(connect(m_NewExperiment, &QAbstractButton::clicked, m_ActionNewExperiment, &QAction::trigger));
+    CONNECT_CHECK(connect(m_OpenExistingExperiment, &QAbstractButton::clicked, m_ActionOpenExperiment, &QAction::trigger));
 
     QStringList recents = app->get_RecentExperiments();
 
@@ -66,7 +66,7 @@ void QxrdWelcomeWindow::setupRecentExperimentsMenu(QAction *action)
 
   action->setMenu(m_RecentExperimentsMenu);
 
-  connect(m_RecentExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWelcomeWindow::populateRecentExperimentsMenu);
+  CONNECT_CHECK(connect(m_RecentExperimentsMenu, &QMenu::aboutToShow, this, &QxrdWelcomeWindow::populateRecentExperimentsMenu));
 }
 
 void QxrdWelcomeWindow::populateRecentExperimentsMenu()
@@ -83,7 +83,7 @@ void QxrdWelcomeWindow::populateRecentExperimentsMenu()
     foreach (QString exp, recent) {
       QAction *action = new QAction(exp, m_RecentExperimentsMenu);
 
-      connect(action, &QAction::triggered, [=] {app->openRecentExperiment(exp);});
+      CONNECT_CHECK(connect(action, &QAction::triggered, [=] {app->openRecentExperiment(exp);}));
 
       m_RecentExperimentsMenu -> addAction(action);
     }
@@ -101,7 +101,7 @@ void QxrdWelcomeWindow::appendRecentExperiment(QString title)
 
     m_GridLayout->addWidget(item, m_InsertRow++, 0, 1, 2);
 
-    connect(item, &QAbstractButton::clicked, [=] {app->openRecentExperiment(title);});
+    CONNECT_CHECK(connect(item, &QAbstractButton::clicked, [=] {app->openRecentExperiment(title);}));
   }
 }
 

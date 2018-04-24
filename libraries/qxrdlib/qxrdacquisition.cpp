@@ -41,13 +41,13 @@ QxrdAcquisition::QxrdAcquisition(QString name) :
       QxrdSynchronizedAcquisitionPtr(
         new QxrdSynchronizedAcquisition("synchronizedAcquisition"));
 
-  connect(prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
-  connect(prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
-  connect(prop_SummedExposures(), &QcepIntProperty::valueChanged,  this, &QxrdAcquisition::updateSaveTimes);
-  connect(prop_DarkSummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes);
-  connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::onExposureTimeChanged);
+  CONNECT_CHECK(connect(prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes));
+  CONNECT_CHECK(connect(prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes));
+  CONNECT_CHECK(connect(prop_SummedExposures(), &QcepIntProperty::valueChanged,  this, &QxrdAcquisition::updateSaveTimes));
+  CONNECT_CHECK(connect(prop_DarkSummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes));
+  CONNECT_CHECK(connect(prop_ExposureTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::onExposureTimeChanged));
 
-  connect(&m_IdleTimer, &QTimer::timeout, this, &QxrdAcquisition::onIdleTimeout);
+  CONNECT_CHECK(connect(&m_IdleTimer, &QTimer::timeout, this, &QxrdAcquisition::onIdleTimeout));
 
   m_IdleTimer.start(1000);
 }

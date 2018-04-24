@@ -55,36 +55,36 @@ void QxrdFileBrowserWidget::initialize(QxrdFileBrowserSettingsWPtr settings,
   m_Model -> setNameFilters(QStringList("*.tif"));
   m_Model -> setNameFilterDisables(false);
 
-  connect(m_Model.data(), &QAbstractItemModel::modelReset, this, &QxrdFileBrowserWidget::onModelReset);
-  connect(m_Model.data(), &QxrdFileBrowserModel::fileUpdated, this, &QxrdFileBrowserWidget::onFileUpdated);
+  CONNECT_CHECK(connect(m_Model.data(), &QAbstractItemModel::modelReset, this, &QxrdFileBrowserWidget::onModelReset));
+  CONNECT_CHECK(connect(m_Model.data(), &QxrdFileBrowserModel::fileUpdated, this, &QxrdFileBrowserWidget::onFileUpdated));
 
-  connect(m_PrevDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doPreviousDirectory);
-  connect(m_UpDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doUpDirectory);
-  connect(m_ChangeDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doChangeDirectory);
-  connect(m_HomeDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doHomeDirectory);
-  connect(m_AcquisitionDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doAcquisitionDirectory);
-  connect(m_RefreshButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doRefreshBrowser);
-  connect(m_OpenButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doOpen);
-  connect(m_ProcessButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doProcess);
-  connect(m_IntegrateButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doIntegrate);
-  connect(m_AccumulateButton, &QPushButton::clicked, this, &QxrdFileBrowserWidget::doSumImages);
+  CONNECT_CHECK(connect(m_PrevDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doPreviousDirectory));
+  CONNECT_CHECK(connect(m_UpDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doUpDirectory));
+  CONNECT_CHECK(connect(m_ChangeDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doChangeDirectory));
+  CONNECT_CHECK(connect(m_HomeDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doHomeDirectory));
+  CONNECT_CHECK(connect(m_AcquisitionDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doAcquisitionDirectory));
+  CONNECT_CHECK(connect(m_RefreshButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doRefreshBrowser));
+  CONNECT_CHECK(connect(m_OpenButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doOpen));
+  CONNECT_CHECK(connect(m_ProcessButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doProcess));
+  CONNECT_CHECK(connect(m_IntegrateButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doIntegrate));
+  CONNECT_CHECK(connect(m_AccumulateButton, &QPushButton::clicked, this, &QxrdFileBrowserWidget::doSumImages));
 
   QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
   if (set) {
-    connect(set -> prop_RootDirectory(), &QcepStringProperty::valueChanged, this, &QxrdFileBrowserWidget::onRootDirectoryChanged);
-    connect(set -> prop_BrowserFilter(), &QcepIntProperty::valueChanged, this, &QxrdFileBrowserWidget::onFilterChanged);
-    connect(set -> prop_BrowserSelector(), &QcepStringProperty::valueChanged, this, &QxrdFileBrowserWidget::onSelectorChanged);
+    CONNECT_CHECK(connect(set -> prop_RootDirectory(), &QcepStringProperty::valueChanged, this, &QxrdFileBrowserWidget::onRootDirectoryChanged));
+    CONNECT_CHECK(connect(set -> prop_BrowserFilter(), &QcepIntProperty::valueChanged, this, &QxrdFileBrowserWidget::onFilterChanged));
+    CONNECT_CHECK(connect(set -> prop_BrowserSelector(), &QcepStringProperty::valueChanged, this, &QxrdFileBrowserWidget::onSelectorChanged));
 
     onRootDirectoryChanged(set->get_RootDirectory());
     onFilterChanged(set->get_BrowserFilter());
     onSelectorChanged(set->get_BrowserSelector());
   }
 
-  connect(m_FileBrowser, &QAbstractItemView::pressed, this, &QxrdFileBrowserWidget::mousePressed);
-  connect(m_FileBrowser, &QAbstractItemView::doubleClicked, this, &QxrdFileBrowserWidget::doubleClicked);
+  CONNECT_CHECK(connect(m_FileBrowser, &QAbstractItemView::pressed, this, &QxrdFileBrowserWidget::mousePressed));
+  CONNECT_CHECK(connect(m_FileBrowser, &QAbstractItemView::doubleClicked, this, &QxrdFileBrowserWidget::doubleClicked));
 
-  connect(m_RootDirectoryCombo, (void (QComboBox::*)(int)) &QComboBox::activated, this, &QxrdFileBrowserWidget::doSelectComboItem);
+  CONNECT_CHECK(connect(m_RootDirectoryCombo, (void (QComboBox::*)(int)) &QComboBox::activated, this, &QxrdFileBrowserWidget::doSelectComboItem));
 
   if (set) {
     set->prop_BrowserFilter() -> linkTo(m_FilterChoices);

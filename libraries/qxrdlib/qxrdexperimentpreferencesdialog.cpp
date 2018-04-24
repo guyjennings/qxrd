@@ -78,16 +78,16 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     m_DetectorsList->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_DetectorsList->setModel(m_DetectorsModel.data());
 
-    connect(m_AddDetector,      &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::addDetector);
-    connect(m_RemoveDetector,   &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::removeDetector);
-    connect(m_MoveDetectorDown, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::moveDetectorDown);
-    connect(m_MoveDetectorUp,   &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::moveDetectorUp);
-    connect(m_ConfigureDetector,&QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::configureDetector);
-    connect(m_DetectorsList,    &QTreeView::doubleClicked, this, &QxrdExperimentPreferencesDialog::detectorDoubleClicked);
+    CONNECT_CHECK(connect(m_AddDetector,      &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::addDetector));
+    CONNECT_CHECK(connect(m_RemoveDetector,   &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::removeDetector));
+    CONNECT_CHECK(connect(m_MoveDetectorDown, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::moveDetectorDown));
+    CONNECT_CHECK(connect(m_MoveDetectorUp,   &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::moveDetectorUp));
+    CONNECT_CHECK(connect(m_ConfigureDetector,&QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::configureDetector));
+    CONNECT_CHECK(connect(m_DetectorsList,    &QTreeView::doubleClicked, this, &QxrdExperimentPreferencesDialog::detectorDoubleClicked));
 
-    connect(m_CurrentLogFileBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::currentLogFileBrowse);
-    connect(m_DataDirectoryBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::dataDirectoryBrowse);
-    connect(m_IntegratedScansFileBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::integratedScansFileBrowse);
+    CONNECT_CHECK(connect(m_CurrentLogFileBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::currentLogFileBrowse));
+    CONNECT_CHECK(connect(m_DataDirectoryBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::dataDirectoryBrowse));
+    CONNECT_CHECK(connect(m_IntegratedScansFileBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::integratedScansFileBrowse));
 
     expt -> prop_ExperimentDirectory() -> copyTo(m_ExperimentDirectory);
     expt -> prop_DataDirectory()       -> copyTo(m_DataDirectory);
@@ -105,10 +105,10 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     expt -> prop_CompressLevelBZ2()    -> copyTo(m_CompressLevelBZ2);
 
     if (proc) {
-      connect(m_SaveRawBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveRawBrowse);
-      connect(m_SaveDarkBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveDarkBrowse);
-      connect(m_SaveSubtractedBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveSubtractedBrowse);
-      connect(m_SaveIntegratedBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveIntegratedBrowse);
+      CONNECT_CHECK(connect(m_SaveRawBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveRawBrowse));
+      CONNECT_CHECK(connect(m_SaveDarkBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveDarkBrowse));
+      CONNECT_CHECK(connect(m_SaveSubtractedBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveSubtractedBrowse));
+      CONNECT_CHECK(connect(m_SaveIntegratedBrowse, &QAbstractButton::clicked, this, &QxrdExperimentPreferencesDialog::saveIntegratedBrowse));
 
       proc -> prop_SaveRawInSubdirectory()         -> copyTo(m_SaveRawInSubdir);
       proc -> prop_SaveRawSubdirectory()           -> copyTo(m_SaveRawSubdir);
