@@ -72,21 +72,21 @@ QxrdSynchronizedAcquisitionPlot::QxrdSynchronizedAcquisitionPlot(QWidget *parent
 //      sync -> prop_SyncAcquisitionPhaseShift()    -> linkTo(m_SyncAcqPhaseShift);
 //      sync -> prop_SyncAcquisitionManualValue()   -> linkTo(m_ManualOutputVolts);
 
-//      connect(sync -> prop_SyncAcquisitionOutputDevice(), &QcepStringProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::deviceChanged);
-//      connect(sync -> prop_SyncAcquisitionOutputChannel(), &QcepStringProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged);
-//      connect(sync -> prop_SyncAcquisitionMode(), &QcepIntProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged);
-//      connect(sync -> prop_SyncAcquisitionWaveform(), &QcepIntProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged);
-//      connect(sync -> prop_SyncAcquisitionMinimum(), &QcepDoubleProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged);
-//      connect(sync -> prop_SyncAcquisitionMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged);
-//      connect(sync -> prop_SyncAcquisitionSymmetry(), &QcepDoubleProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged);
-//      connect(sync -> prop_SyncAcquisitionPhaseShift(), &QcepDoubleProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged);
+//      CONNECT_CHECK(connect(sync -> prop_SyncAcquisitionOutputDevice(), &QcepStringProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::deviceChanged));
+//      CONNECT_CHECK(connect(sync -> prop_SyncAcquisitionOutputChannel(), &QcepStringProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged));
+//      CONNECT_CHECK(connect(sync -> prop_SyncAcquisitionMode(), &QcepIntProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged));
+//      CONNECT_CHECK(connect(sync -> prop_SyncAcquisitionWaveform(), &QcepIntProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged));
+//      CONNECT_CHECK(connect(sync -> prop_SyncAcquisitionMinimum(), &QcepDoubleProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged));
+//      CONNECT_CHECK(connect(sync -> prop_SyncAcquisitionMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged));
+//      CONNECT_CHECK(connect(sync -> prop_SyncAcquisitionSymmetry(), &QcepDoubleProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged));
+//      CONNECT_CHECK(connect(sync -> prop_SyncAcquisitionPhaseShift(), &QcepDoubleProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged));
 
-//      connect(m_ManualOutput, &QAbstractButton::clicked, sync.data(), &QxrdSynchronizedAcquisition::setManualOutput);
-//      connect(m_ManualTrigger, &QAbstractButton::clicked, sync.data(), &QxrdSynchronizedAcquisition::triggerOnce);
+//      CONNECT_CHECK(connect(m_ManualOutput, &QAbstractButton::clicked, sync.data(), &QxrdSynchronizedAcquisition::setManualOutput));
+//      CONNECT_CHECK(connect(m_ManualTrigger, &QAbstractButton::clicked, sync.data(), &QxrdSynchronizedAcquisition::triggerOnce));
 //    }
 
-//    connect(acq->prop_ExposureTime(), &QcepDoubleProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged);
-//    connect(acq->prop_PhasesInGroup(), &QcepIntProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged);
+//    CONNECT_CHECK(connect(acq->prop_ExposureTime(), &QcepDoubleProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged));
+//    CONNECT_CHECK(connect(acq->prop_PhasesInGroup(), &QcepIntProperty::valueChanged, this, &QxrdSynchronizedAcquisitionDialog::waveformChanged));
 
 //    deviceChanged();
 //    waveformChanged();

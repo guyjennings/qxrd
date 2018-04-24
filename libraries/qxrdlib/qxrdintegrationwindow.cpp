@@ -33,8 +33,9 @@ void QxrdIntegrationWindow::initialize(QcepObjectWPtr parent)
   }
 
   if (proc) {
-    connect(m_IntegrateButton, &QAbstractButton::clicked,
-            proc.data(), &QxrdProcessor::integrateSaveAndDisplay);
+    CONNECT_CHECK(
+          connect(m_IntegrateButton, &QAbstractButton::clicked,
+                  proc.data(), &QxrdProcessor::integrateSaveAndDisplay));
   }
 
   QxrdIntegratorPtr integ(m_Integrator);
@@ -60,19 +61,24 @@ void QxrdIntegrationWindow::initialize(QcepObjectWPtr parent)
     integ -> prop_EnableUserAbsorption() -> linkTo(m_EnableUserAbsorption);
     integ -> prop_UserAbsorptionFunction() -> linkTo(m_UserAbsorptionFunction);
 
-    connect(m_UserAbsorptionEdit, &QAbstractButton::clicked,
-            this, &QxrdIntegrationWindow::editUserAbsorption);
+    CONNECT_CHECK(
+          connect(m_UserAbsorptionEdit, &QAbstractButton::clicked,
+                  this, &QxrdIntegrationWindow::editUserAbsorption));
 
     integ -> prop_EnableUserGeometry() -> linkTo(m_EnableUserGeometry);
     integ -> prop_UserGeometryFunction() -> linkTo(m_UserGeometryFunction);
-    connect(m_UserGeometryEdit, &QAbstractButton::clicked,
-            this, &QxrdIntegrationWindow::editUserGeometry);
 
-    connect(integ -> prop_EnablePolarizationCorrections(), &QcepBoolProperty::valueChanged,
-            this, &QxrdIntegrationWindow::onEnablePolarizationChanged);
+    CONNECT_CHECK(
+          connect(m_UserGeometryEdit, &QAbstractButton::clicked,
+                  this, &QxrdIntegrationWindow::editUserGeometry));
 
-    connect(integ -> prop_EnableAbsorptionCorrections(), &QcepBoolProperty::valueChanged,
-            this, &QxrdIntegrationWindow::onEnableAbsorptionChanged);
+    CONNECT_CHECK(
+          connect(integ -> prop_EnablePolarizationCorrections(), &QcepBoolProperty::valueChanged,
+                  this, &QxrdIntegrationWindow::onEnablePolarizationChanged));
+
+    CONNECT_CHECK(
+          connect(integ -> prop_EnableAbsorptionCorrections(), &QcepBoolProperty::valueChanged,
+                  this, &QxrdIntegrationWindow::onEnableAbsorptionChanged));
 
     onEnablePolarizationChanged(integ -> get_EnablePolarizationCorrections());
     onEnableAbsorptionChanged(integ -> get_EnableAbsorptionCorrections());
@@ -138,8 +144,9 @@ void QxrdIntegrationWindow::editUserAbsorption()
                                                       integ -> get_UserAbsorptionScript(),
                                                       integ -> defaultUserAbsorptionScript());
 
-      connect(m_EditUserAbsorption.data(), &QDialog::accepted,
-              this, &QxrdIntegrationWindow::onEditedUserAbsorption);
+      CONNECT_CHECK(
+            connect(m_EditUserAbsorption.data(), &QDialog::accepted,
+                    this, &QxrdIntegrationWindow::onEditedUserAbsorption));
     }
 
     m_EditUserAbsorption -> show();
@@ -157,8 +164,9 @@ void QxrdIntegrationWindow::editUserGeometry()
                                                     integ -> get_UserGeometryScript(),
                                                     integ -> defaultUserGeometryScript());
 
-      connect(m_EditUserGeometry.data(), &QDialog::accepted,
-              this, &QxrdIntegrationWindow::onEditedUserGeometry);
+      CONNECT_CHECK(
+            connect(m_EditUserGeometry.data(), &QDialog::accepted,
+                    this, &QxrdIntegrationWindow::onEditedUserGeometry));
     }
 
     m_EditUserGeometry -> show();

@@ -20,7 +20,7 @@ QxrdFileWatcherDriver::QxrdFileWatcherDriver(QString name, QxrdFileWatcherPlugin
   printf("File Watcher Driver \"%s\" Constructed\n", qPrintable(name));
 #endif
 
-  connect(&m_Timer, &QTimer::timeout, this, &QxrdFileWatcherDriver::onTimerTimeout);
+  CONNECT_CHECK(connect(&m_Timer, &QTimer::timeout, this, &QxrdFileWatcherDriver::onTimerTimeout));
 }
 
 QxrdFileWatcherDriver::~QxrdFileWatcherDriver()

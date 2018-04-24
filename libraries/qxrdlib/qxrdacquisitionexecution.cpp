@@ -30,8 +30,9 @@ QxrdAcquisitionExecution::QxrdAcquisitionExecution(QString name)
 
   m_IdleTimer = QTimerPtr(new QTimer());
 
-  connect(m_IdleTimer.data(), &QTimer::timeout,
-          this,               &QxrdAcquisitionExecution::doAcquireIdle);
+  CONNECT_CHECK(
+        connect(m_IdleTimer.data(), &QTimer::timeout,
+                this,               &QxrdAcquisitionExecution::doAcquireIdle));
 }
 
 void QxrdAcquisitionExecution::initialize(QcepObjectWPtr parent)

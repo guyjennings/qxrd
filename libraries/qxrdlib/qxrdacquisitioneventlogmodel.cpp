@@ -8,8 +8,9 @@ QxrdAcquisitionEventLogModel::QxrdAcquisitionEventLogModel(QxrdAcquisitionEventL
   QxrdAcquisitionEventLogPtr log(m_AcquisitionEventLog);
 
   if (log) {
-    connect(log.data(), &QxrdAcquisitionEventLog::eventLogChanged,
-            this,       &QxrdAcquisitionEventLogModel::onEventLogChanged);
+    CONNECT_CHECK(
+          connect(log.data(), &QxrdAcquisitionEventLog::eventLogChanged,
+                  this,       &QxrdAcquisitionEventLogModel::onEventLogChanged));
   }
 }
 

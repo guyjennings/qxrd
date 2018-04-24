@@ -56,84 +56,109 @@ void QxrdMaskingWindow::initialize(QcepObjectWPtr parent)
   if (proc) {
     m_MaskStack = proc->maskStack();
 
-    connect(proc.data(), &QxrdProcessor::dataAvailable,
-            m_ImagePlotWidget, &QcepImagePlotWidget::newImage);
+    CONNECT_CHECK(
+          connect(proc.data(), &QxrdProcessor::dataAvailable,
+                  m_ImagePlotWidget, &QcepImagePlotWidget::newImage));
 
-    connect(proc.data(), &QxrdProcessor::maskAvailable,
-            m_ImagePlotWidget, &QcepImagePlotWidget::newMask);
+    CONNECT_CHECK(
+          connect(proc.data(), &QxrdProcessor::maskAvailable,
+                  m_ImagePlotWidget, &QcepImagePlotWidget::newMask));
 
     m_MaskStackView -> setMaskStack(m_MaskStack);
     m_MaskStackView -> setProcessor(proc);
   }
 
-  connect(m_HideMaskAll, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doHideMaskAll);
+  CONNECT_CHECK(
+        connect(m_HideMaskAll, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doHideMaskAll));
 
-  connect(m_ShowMaskAll, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doShowMaskAll);
+  CONNECT_CHECK(
+        connect(m_ShowMaskAll, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doShowMaskAll));
 
-  connect(m_HideMaskRange, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doHideMaskRange);
+  CONNECT_CHECK(
+        connect(m_HideMaskRange, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doHideMaskRange));
 
-  connect(m_ShowMaskRange, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doShowMaskRange);
+  CONNECT_CHECK(
+        connect(m_ShowMaskRange, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doShowMaskRange));
 
-  connect(m_InvertMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doInvertMask);
+  CONNECT_CHECK(
+        connect(m_InvertMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doInvertMask));
 
-  connect(m_GrowMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doGrowMask);
+  CONNECT_CHECK(
+        connect(m_GrowMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doGrowMask));
 
-  connect(m_ShrinkMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doShrinkMask);
+  CONNECT_CHECK(
+        connect(m_ShrinkMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doShrinkMask));
 
-  connect(m_AndMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doAndMask);
+  CONNECT_CHECK(
+        connect(m_AndMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doAndMask));
 
-  connect(m_OrMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doOrMask);
+  CONNECT_CHECK(
+        connect(m_OrMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doOrMask));
 
-  connect(m_XorMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doXorMask);
+  CONNECT_CHECK(
+        connect(m_XorMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doXorMask));
 
-  connect(m_AndNotMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doAndNotMask);
+  CONNECT_CHECK(
+        connect(m_AndNotMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doAndNotMask));
 
-  connect(m_OrNotMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doOrNotMask);
+  CONNECT_CHECK(
+        connect(m_OrNotMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doOrNotMask));
 
-  connect(m_XorNotMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doXorNotMask);
+  CONNECT_CHECK(
+        connect(m_XorNotMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doXorNotMask));
 
-  connect(m_ExchangeMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doExchangeMask);
+  CONNECT_CHECK(
+        connect(m_ExchangeMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doExchangeMask));
 
-  connect(m_RollUpMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doRollUpMask);
+  CONNECT_CHECK(
+        connect(m_RollUpMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doRollUpMask));
 
-  connect(m_RollDownMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doRollDownMask);
+  CONNECT_CHECK(
+        connect(m_RollDownMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doRollDownMask));
 
-  connect(m_RollMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doRollMask);
+  CONNECT_CHECK(
+        connect(m_RollMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doRollMask));
 
-  connect(m_NewMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doNewMask);
+  CONNECT_CHECK(
+        connect(m_NewMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doNewMask));
 
-  connect(m_PushMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doPushMask);
+  CONNECT_CHECK(
+        connect(m_PushMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doPushMask));
 
-  connect(m_ClearMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doClearMask);
+  CONNECT_CHECK(
+        connect(m_ClearMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doClearMask));
 
-  connect(m_ClearMaskTop, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doClearMaskTop);
+  CONNECT_CHECK(
+        connect(m_ClearMaskTop, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doClearMaskTop));
 
-  connect(m_UndoMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doUndoMask);
+  CONNECT_CHECK(
+        connect(m_UndoMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doUndoMask));
 
-  connect(m_ZingerMask, &QAbstractButton::clicked,
-          this, &QxrdMaskingWindow::doZingersMask);
+  CONNECT_CHECK(
+        connect(m_ZingerMask, &QAbstractButton::clicked,
+                this, &QxrdMaskingWindow::doZingersMask));
 }
 
 QxrdMaskingWindow::~QxrdMaskingWindow()

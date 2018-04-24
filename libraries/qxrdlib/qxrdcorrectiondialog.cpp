@@ -21,10 +21,11 @@ QxrdCorrectionDialog::QxrdCorrectionDialog(QWidget *parent,
 
   setupUi(this);
 
-  connect(m_CorrectionOptionsButton, &QAbstractButton::clicked,
-          this, &QxrdCorrectionDialog::doEditPreferences);
+  CONNECT_CHECK(
+        connect(m_CorrectionOptionsButton, &QAbstractButton::clicked,
+                this, &QxrdCorrectionDialog::doEditPreferences));
 
-  connect(m_ApplyToAll, &QCheckBox::toggled, this, &QxrdCorrectionDialog::applyToAll);
+  CONNECT_CHECK(connect(m_ApplyToAll, &QCheckBox::toggled, this, &QxrdCorrectionDialog::applyToAll));
 
   QxrdProcessorPtr proc(m_Processor);
 

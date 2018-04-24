@@ -90,25 +90,25 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
     exp  -> prop_DataDirectory() -> linkTo(this -> m_DataDirectory);
     exp  -> prop_ScanFileName() -> linkTo(this -> m_ScanFileName);
 
-    connect(m_LogFileName, &QLineEdit::editingFinished, exp.data(), &QxrdExperiment::openNewLogFile);
+    CONNECT_CHECK(connect(m_LogFileName, &QLineEdit::editingFinished, exp.data(), &QxrdExperiment::openNewLogFile));
 
     if (acqp) {
-      connect(m_ActionAcquire,     &QAction::triggered, acqp.data(), &QxrdAcqCommon::acquire);
-      connect(m_ActionAcquireOnce, &QAction::triggered, acqp.data(), &QxrdAcqCommon::acquireOnce);
-      connect(m_ActionCancel,      &QAction::triggered, acqp.data(), &QxrdAcqCommon::cancel);
-      connect(m_ActionAcquireDark, &QAction::triggered, acqp.data(), &QxrdAcqCommon::acquireDark);
-      connect(m_ActionTrigger,     &QAction::triggered, acqp.data(), &QxrdAcqCommon::trigger);
+      CONNECT_CHECK(connect(m_ActionAcquire,     &QAction::triggered, acqp.data(), &QxrdAcqCommon::acquire));
+      CONNECT_CHECK(connect(m_ActionAcquireOnce, &QAction::triggered, acqp.data(), &QxrdAcqCommon::acquireOnce));
+      CONNECT_CHECK(connect(m_ActionCancel,      &QAction::triggered, acqp.data(), &QxrdAcqCommon::cancel));
+      CONNECT_CHECK(connect(m_ActionAcquireDark, &QAction::triggered, acqp.data(), &QxrdAcqCommon::acquireDark));
+      CONNECT_CHECK(connect(m_ActionTrigger,     &QAction::triggered, acqp.data(), &QxrdAcqCommon::trigger));
 
-      connect(m_BrowseLogFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::browseLogFile);
-      connect(m_BrowseScanFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::browseScanFile);
+      CONNECT_CHECK(connect(m_BrowseLogFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::browseLogFile));
+      CONNECT_CHECK(connect(m_BrowseScanFileButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::browseScanFile));
 
-      connect(m_AcquireButton, &QAbstractButton::clicked, m_ActionAcquire, &QAction::triggered);
-      connect(m_AcquireOnceButton, &QAbstractButton::clicked, m_ActionAcquireOnce, &QAction::triggered);
-      connect(m_CancelButton, &QAbstractButton::clicked, m_ActionCancel, &QAction::triggered);
-      connect(m_TriggerButton, &QAbstractButton::clicked, m_ActionTrigger, &QAction::triggered);
-      connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered);
+      CONNECT_CHECK(connect(m_AcquireButton, &QAbstractButton::clicked, m_ActionAcquire, &QAction::triggered));
+      CONNECT_CHECK(connect(m_AcquireOnceButton, &QAbstractButton::clicked, m_ActionAcquireOnce, &QAction::triggered));
+      CONNECT_CHECK(connect(m_CancelButton, &QAbstractButton::clicked, m_ActionCancel, &QAction::triggered));
+      CONNECT_CHECK(connect(m_TriggerButton, &QAbstractButton::clicked, m_ActionTrigger, &QAction::triggered));
+      CONNECT_CHECK(connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered));
 
-      connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcqCommon::clearDropped);
+      CONNECT_CHECK(connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcqCommon::clearDropped));
 
       acqp -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
       acqp -> prop_SummedExposures() -> linkTo(this -> m_SummedExposures);
@@ -133,13 +133,13 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
     }
   }
 
-  connect(m_RestartDetectorsButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::restartDetectors);
-  connect(m_AcquisitionInfoButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::acquisitionInfoWindow);
-  connect(m_ExposureOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditExposurePreferences);
-  connect(m_ProcessorOptionsButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::doEditCorrection);
-  connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences);
-  connect(m_AcquireOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditPreferences);
-  connect(m_EventLogButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::eventLogWindow);
+  CONNECT_CHECK(connect(m_RestartDetectorsButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::restartDetectors));
+  CONNECT_CHECK(connect(m_AcquisitionInfoButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::acquisitionInfoWindow));
+  CONNECT_CHECK(connect(m_ExposureOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditExposurePreferences));
+  CONNECT_CHECK(connect(m_ProcessorOptionsButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::doEditCorrection));
+  CONNECT_CHECK(connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences));
+  CONNECT_CHECK(connect(m_AcquireOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditPreferences));
+  CONNECT_CHECK(connect(m_EventLogButton, &QAbstractButton::clicked, this, &QxrdAcquisitionWindow::eventLogWindow));
 }
 
 QxrdAcquisitionWindow::~QxrdAcquisitionWindow()

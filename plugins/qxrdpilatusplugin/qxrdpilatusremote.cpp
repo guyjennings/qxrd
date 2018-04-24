@@ -8,7 +8,7 @@ QxrdPilatusRemote::QxrdPilatusRemote()
 {
   printMessage("Constructed Pilatus Remote Object");
 
-  connect(&m_Process, &QProcess::readyRead, this, &QxrdPilatusRemote::onReadyRead);
+  CONNECT_CHECK(connect(&m_Process, &QProcess::readyRead, this, &QxrdPilatusRemote::onReadyRead));
 }
 
 void QxrdPilatusRemote::connectToRemote(QString sshCmd)

@@ -36,9 +36,10 @@ QxrdHistogramDialog::QxrdHistogramDialog(QxrdHistogramDialogSettingsWPtr set,
 //    m_Plot->init(set->histogramPlotSettings());
 //  }
 
-  connect(this, &QxrdHistogramDialog::newHistogramCurves,
-          this, &QxrdHistogramDialog::onNewHistogramCurves,
-          Qt::QueuedConnection);
+  CONNECT_CHECK(
+        connect(this, &QxrdHistogramDialog::newHistogramCurves,
+                this, &QxrdHistogramDialog::onNewHistogramCurves,
+                Qt::QueuedConnection));
 
   QxrdHistogramDialogSettingsPtr settings(m_HistogramDialogSettings);
 

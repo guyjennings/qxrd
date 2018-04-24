@@ -89,16 +89,16 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
     dp->prop_CalculateROICounts()      -> linkTo(m_CalculateROICounts);
     dp->prop_DisplayROIBorders()       -> linkTo(m_DisplayROIBorders);
 
-    connect(dp->prop_DisplayROIBorders(), &QcepBoolProperty::valueChanged, this, &QxrdDetectorControlWindow::updateROIDisplay);
+    CONNECT_CHECK(connect(dp->prop_DisplayROIBorders(), &QcepBoolProperty::valueChanged, this, &QxrdDetectorControlWindow::updateROIDisplay));
 
-    connect(m_BrowseDarkImage,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseDark);
-    connect(m_ClearDarkImage,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearDark);
-    connect(m_BrowseBadPixels,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseBadPixels);
-    connect(m_ClearBadPixels,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearBadPixels);
-    connect(m_BrowseGainImage,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseGainCorrection);
-    connect(m_ClearGainImage,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearGainCorrection);
-    connect(m_ActionLoadDarkImage, &QAction::triggered, this, &QxrdDetectorControlWindow::doBrowseDark);
-    connect(m_ActionLoadMask,      &QAction::triggered, this, &QxrdDetectorControlWindow::doBrowseMask);
+    CONNECT_CHECK(connect(m_BrowseDarkImage,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseDark));
+    CONNECT_CHECK(connect(m_ClearDarkImage,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearDark));
+    CONNECT_CHECK(connect(m_BrowseBadPixels,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseBadPixels));
+    CONNECT_CHECK(connect(m_ClearBadPixels,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearBadPixels));
+    CONNECT_CHECK(connect(m_BrowseGainImage,     &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doBrowseGainCorrection));
+    CONNECT_CHECK(connect(m_ClearGainImage,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doClearGainCorrection));
+    CONNECT_CHECK(connect(m_ActionLoadDarkImage, &QAction::triggered, this, &QxrdDetectorControlWindow::doBrowseDark));
+    CONNECT_CHECK(connect(m_ActionLoadMask,      &QAction::triggered, this, &QxrdDetectorControlWindow::doBrowseMask));
 
     updateROIDisplay(dp->get_DisplayROIBorders());
 
@@ -111,30 +111,34 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
 //      m_ROIWidget->setItemDelegateForColumn(QxrdROIModel::InnerTypeCol, new QxrdROITypeDelegate());
       m_ROIWidget->setModel(m_ROIModel.data());
 
-      connect(m_NewROI,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doAppendROI);
-      connect(m_DeleteROI,   &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doDeleteROI);
-      connect(m_MoveROIDown, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doMoveROIDown);
-      connect(m_MoveROIUp,   &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doMoveROIUp);
+      CONNECT_CHECK(connect(m_NewROI,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doAppendROI));
+      CONNECT_CHECK(connect(m_DeleteROI,   &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doDeleteROI));
+      CONNECT_CHECK(connect(m_MoveROIDown, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doMoveROIDown));
+      CONNECT_CHECK(connect(m_MoveROIUp,   &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doMoveROIUp));
 
-      connect(m_EditROIButton,          &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doEditROI);
-      connect(m_RecalculateButton,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doRecalculate);
-      connect(m_VisualizeROIBackground, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doVisualizeBackground);
-      connect(m_VisualizeROIPeak,       &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doVisualizePeak);
+      CONNECT_CHECK(connect(m_EditROIButton,          &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doEditROI));
+      CONNECT_CHECK(connect(m_RecalculateButton,      &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doRecalculate));
+      CONNECT_CHECK(connect(m_VisualizeROIBackground, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doVisualizeBackground));
+      CONNECT_CHECK(connect(m_VisualizeROIPeak,       &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::doVisualizePeak));
 
       m_ROIWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     }
 
-    connect(dp.data(),       &QxrdProcessor::dataAvailable,
-            m_DetectorImage, &QcepImagePlotWidget::newImage);
+    CONNECT_CHECK(
+          connect(dp.data(),       &QxrdProcessor::dataAvailable,
+                  m_DetectorImage, &QcepImagePlotWidget::newImage));
 
-    connect(dp.data(),       &QxrdProcessor::maskAvailable,
-            m_DetectorImage, &QcepImagePlotWidget::newMask);
+    CONNECT_CHECK(
+          connect(dp.data(),       &QxrdProcessor::maskAvailable,
+                  m_DetectorImage, &QcepImagePlotWidget::newMask));
 
-    connect(dp.data(),       &QxrdProcessor::dataAvailable,
-            this,            &QxrdDetectorControlWindow::newImage);
+    CONNECT_CHECK(
+          connect(dp.data(),       &QxrdProcessor::dataAvailable,
+                  this,            &QxrdDetectorControlWindow::newImage));
 
-    connect(dp.data(),       &QxrdProcessor::darkAvailable,
-            this,            &QxrdDetectorControlWindow::newImage);
+    CONNECT_CHECK(
+          connect(dp.data(),       &QxrdProcessor::darkAvailable,
+                  this,            &QxrdDetectorControlWindow::newImage));
 
     m_ImageInfoTable -> horizontalHeader() -> setSectionResizeMode(QHeaderView::ResizeToContents);
 
@@ -145,26 +149,28 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
 //    m_DetectorImage->setROIModel(m_ROIModel);
 //    m_DetectorImage->setROISelection(m_ROIWidget->selectionModel());
 
-//    connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableZooming);
-//    connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_DetectorImage, &QcepPlot::zoomOut);
-//    connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdImagePlot::autoScale);
+//    CONNECT_CHECK(connect(m_ImageZoomInButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableZooming));
+//    CONNECT_CHECK(connect(m_ImageZoomOutButton, &QAbstractButton::clicked, m_DetectorImage, &QcepPlot::zoomOut));
+//    CONNECT_CHECK(connect(m_ImageZoomAllButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdImagePlot::autoScale));
 
-//    connect(m_ROICreateButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROICreate);
-//    connect(m_ROISelectButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROISelect);
-//    connect(m_ROIAddNodeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIAddNode);
-//    connect(m_ROIRemoveNodeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIRemoveNode);
+//    CONNECT_CHECK(connect(m_ROICreateButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROICreate));
+//    CONNECT_CHECK(connect(m_ROISelectButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROISelect));
+//    CONNECT_CHECK(connect(m_ROIAddNodeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIAddNode));
+//    CONNECT_CHECK(connect(m_ROIRemoveNodeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIRemoveNode));
 
-//    connect(m_DetectorImage,   &QxrdDetectorImagePlot::changeROICreateType, this, &QxrdDetectorControlWindow::onChangeROICreateType);
-//    connect(m_ROIRotateButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIRotate);
-//    connect(m_ROIResizeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIResize);
+//    CONNECT_CHECK(connect(m_DetectorImage,   &QxrdDetectorImagePlot::changeROICreateType, this, &QxrdDetectorControlWindow::onChangeROICreateType));
+//    CONNECT_CHECK(connect(m_ROIRotateButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIRotate));
+//    CONNECT_CHECK(connect(m_ROIResizeButton, &QAbstractButton::clicked, m_DetectorImage, &QxrdDetectorImagePlot::enableROIResize));
   }
 
   if (app) {
-    connect(app->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged,
-            this, &QxrdDetectorControlWindow::onUpdateIntervalMsecChanged);
+    CONNECT_CHECK(
+          connect(app->prop_UpdateIntervalMsec(), &QcepIntProperty::valueChanged,
+                  this, &QxrdDetectorControlWindow::onUpdateIntervalMsecChanged));
 
-    connect(&m_UpdateTimer, &QTimer::timeout,
-            this, &QxrdDetectorControlWindow::updateImageDisplay);
+    CONNECT_CHECK(
+          connect(&m_UpdateTimer, &QTimer::timeout,
+                  this, &QxrdDetectorControlWindow::updateImageDisplay));
 
     m_UpdateTimer.start(app->get_UpdateIntervalMsec());
   }
@@ -186,37 +192,37 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
     expt  -> prop_DataDirectory() -> linkTo(this -> m_DataDirectory);
     expt  -> prop_ScanFileName() -> linkTo(this -> m_ScanFileName);
 
-    connect(m_LogFileName, &QLineEdit::editingFinished, expt.data(), &QxrdExperiment::openNewLogFile);
+    CONNECT_CHECK(connect(m_LogFileName, &QLineEdit::editingFinished, expt.data(), &QxrdExperiment::openNewLogFile));
 
-//    connect(expt->prop_FontSize(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setFontSize);
-//    connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setSpacing);
+//    CONNECT_CHECK(connect(expt->prop_FontSize(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setFontSize));
+//    CONNECT_CHECK(connect(expt->prop_Spacing(), &QcepIntProperty::valueChanged, this, &QxrdDetectorControlWindow::setSpacing));
   }
 
   if (dt) {
-    connect(dt->prop_DetectorNumber(),   &QcepIntProperty::valueChanged,    this, &QxrdDetectorControlWindow::updateTitle);
-    connect(dt->prop_DetectorTypeName(), &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateTitle);
-    connect(dt->prop_DetectorName(),     &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateTitle);
+    CONNECT_CHECK(connect(dt->prop_DetectorNumber(),   &QcepIntProperty::valueChanged,    this, &QxrdDetectorControlWindow::updateTitle));
+    CONNECT_CHECK(connect(dt->prop_DetectorTypeName(), &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateTitle));
+    CONNECT_CHECK(connect(dt->prop_DetectorName(),     &QcepStringProperty::valueChanged, this, &QxrdDetectorControlWindow::updateTitle));
 
     updateTitle();
   }
 
   if (acqp) {
-    connect(m_ActionAcquire,     &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquire);
-    connect(m_ActionAcquireOnce, &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquireOnce);
-    connect(m_ActionCancel,      &QAction::triggered, this, &QxrdDetectorControlWindow::doCancel);
-    connect(m_ActionAcquireDark, &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquireDark);
-    connect(m_ActionTrigger,     &QAction::triggered, acqp.data(), &QxrdAcqCommon::trigger);
+    CONNECT_CHECK(connect(m_ActionAcquire,     &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquire));
+    CONNECT_CHECK(connect(m_ActionAcquireOnce, &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquireOnce));
+    CONNECT_CHECK(connect(m_ActionCancel,      &QAction::triggered, this, &QxrdDetectorControlWindow::doCancel));
+    CONNECT_CHECK(connect(m_ActionAcquireDark, &QAction::triggered, this, &QxrdDetectorControlWindow::doAcquireDark));
+    CONNECT_CHECK(connect(m_ActionTrigger,     &QAction::triggered, acqp.data(), &QxrdAcqCommon::trigger));
 
-    connect(m_BrowseLogFileButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::browseLogFile);
-    connect(m_BrowseScanFileButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::browseScanFile);
+    CONNECT_CHECK(connect(m_BrowseLogFileButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::browseLogFile));
+    CONNECT_CHECK(connect(m_BrowseScanFileButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::browseScanFile));
 
-    connect(m_AcquireButton, &QAbstractButton::clicked, m_ActionAcquire, &QAction::triggered);
-    connect(m_AcquireOnceButton, &QAbstractButton::clicked, m_ActionAcquireOnce, &QAction::triggered);
-    connect(m_CancelButton, &QAbstractButton::clicked, m_ActionCancel, &QAction::triggered);
-    connect(m_TriggerButton, &QAbstractButton::clicked, m_ActionTrigger, &QAction::triggered);
-    connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered);
+    CONNECT_CHECK(connect(m_AcquireButton, &QAbstractButton::clicked, m_ActionAcquire, &QAction::triggered));
+    CONNECT_CHECK(connect(m_AcquireOnceButton, &QAbstractButton::clicked, m_ActionAcquireOnce, &QAction::triggered));
+    CONNECT_CHECK(connect(m_CancelButton, &QAbstractButton::clicked, m_ActionCancel, &QAction::triggered));
+    CONNECT_CHECK(connect(m_TriggerButton, &QAbstractButton::clicked, m_ActionTrigger, &QAction::triggered));
+    CONNECT_CHECK(connect(m_DarkAcquireButton, &QAbstractButton::clicked, m_ActionAcquireDark, &QAction::triggered));
 
-    connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcqCommon::clearDropped);
+    CONNECT_CHECK(connect(m_ClearDroppedButton, &QAbstractButton::clicked, acqp.data(), &QxrdAcqCommon::clearDropped));
 
 
     acqp -> prop_ExposureTime() -> linkTo(this -> m_ExposureTime);
@@ -241,13 +247,13 @@ void QxrdDetectorControlWindow::initialize(QcepObjectWPtr parent)
     acqp -> prop_RetryDropped() -> linkTo(this -> m_RetryDropped);
   }
 
-  connect(m_EventLogButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::openEventLog);
-  connect(m_DetectorInfoButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::detectorInfoWindow);
-  connect(m_RestartDetectorsButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::restartDetectors);
+  CONNECT_CHECK(connect(m_EventLogButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::openEventLog));
+  CONNECT_CHECK(connect(m_DetectorInfoButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::detectorInfoWindow));
+  CONNECT_CHECK(connect(m_RestartDetectorsButton, &QAbstractButton::clicked, this, &QxrdDetectorControlWindow::restartDetectors));
 
-  connect(m_ExposureOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditExposurePreferences);
-  connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences);
-  connect(m_AcquireOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditPreferences);
+  CONNECT_CHECK(connect(m_ExposureOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditExposurePreferences));
+  CONNECT_CHECK(connect(m_DetectorOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditDetectorPreferences));
+  CONNECT_CHECK(connect(m_AcquireOptionsButton, &QAbstractButton::clicked, this, &QxrdMainWindow::doEditPreferences));
 
   QxrdDetectorControlWindowSettingsPtr set(detectorControlWindowSettings());
 

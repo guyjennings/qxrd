@@ -54,31 +54,31 @@ QxrdIntegrator::QxrdIntegrator(QString name)
     printf("QxrdIntegrator::QxrdIntegrator(%p)\n", this);
   }
 
-  connect(this->prop_Oversample(),         &QcepIntProperty::valueChanged,    this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(this->prop_IntegrationStep(),    &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(this->prop_IntegrationNSteps(),  &QcepIntProperty::valueChanged,    this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(this->prop_IntegrationMinimum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(this->prop_IntegrationMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(this->prop_IntegrationXUnits(),  &QcepIntProperty::valueChanged,    this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
+  CONNECT_CHECK(connect(this->prop_Oversample(),         &QcepIntProperty::valueChanged,    this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(this->prop_IntegrationStep(),    &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(this->prop_IntegrationNSteps(),  &QcepIntProperty::valueChanged,    this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(this->prop_IntegrationMinimum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(this->prop_IntegrationMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(this->prop_IntegrationXUnits(),  &QcepIntProperty::valueChanged,    this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
 
-  connect(prop_EnableGeometricCorrections(), &QcepBoolProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_EnablePolarizationCorrections(), &QcepBoolProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_Polarization(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_EnableAbsorptionCorrections(), &QcepBoolProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_AttenuationLength(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
+  CONNECT_CHECK(connect(prop_EnableGeometricCorrections(), &QcepBoolProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_EnablePolarizationCorrections(), &QcepBoolProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_Polarization(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_EnableAbsorptionCorrections(), &QcepBoolProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_AttenuationLength(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
 
-  connect(prop_EnableUserGeometry(), &QcepIntProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_UserGeometryScript(), &QcepStringProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_UserGeometryFunction(), &QcepStringProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
+  CONNECT_CHECK(connect(prop_EnableUserGeometry(), &QcepIntProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_UserGeometryScript(), &QcepStringProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_UserGeometryFunction(), &QcepStringProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
 
-  connect(prop_EnableUserAbsorption(), &QcepIntProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_UserAbsorptionScript(), &QcepStringProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_UserAbsorptionFunction(), &QcepStringProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
+  CONNECT_CHECK(connect(prop_EnableUserAbsorption(), &QcepIntProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_UserAbsorptionScript(), &QcepStringProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_UserAbsorptionFunction(), &QcepStringProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
 
-  connect(prop_ScalingFactor(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_SelfNormalization(), &QcepBoolProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_SelfNormalizationMinimum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
-  connect(prop_SelfNormalizationMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
+  CONNECT_CHECK(connect(prop_ScalingFactor(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_SelfNormalization(), &QcepBoolProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_SelfNormalizationMinimum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
+  CONNECT_CHECK(connect(prop_SelfNormalizationMaximum(), &QcepDoubleProperty::valueChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
 }
 
 QxrdIntegrator::~QxrdIntegrator()
@@ -107,7 +107,7 @@ void QxrdIntegrator::initialize(QcepObjectWPtr parent)
     QcepCenterFinderPtr cf(m_CenterFinder);
 
     if (cf) {
-      connect(cf.data(), &QcepCenterFinder::parameterChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection);
+      CONNECT_CHECK(connect(cf.data(), &QcepCenterFinder::parameterChanged, this, &QxrdIntegrator::onIntegrationParametersChanged, Qt::DirectConnection));
     }
   }
 }

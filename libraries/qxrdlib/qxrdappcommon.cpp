@@ -46,10 +46,10 @@ void QxrdAppCommon::initializeRoot()
 
   inherited::initializeRoot();
 
-//  connect(m_Application.data(),  &QApplication::aboutToQuit,
-//          this,                  &QxrdAppCommon::shutdownDocuments);
-//  connect(&m_SplashTimer,        &QTimer::timeout,
-//          this,                  &QxrdAppCommon::hideSplash);
+//  CONNECT_CHECK(connect(m_Application.data(),  &QApplication::aboutToQuit,
+//          this,                  &QxrdAppCommon::shutdownDocuments));
+//  CONNECT_CHECK(connect(&m_SplashTimer,        &QTimer::timeout,
+//          this,                  &QxrdAppCommon::hideSplash));
 
   setupTiffHandlers();
 }

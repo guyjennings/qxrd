@@ -58,22 +58,24 @@ void QxrdCalibrantWindow::initialize(QcepObjectWPtr parent)
   m_CalibrantDSpacingsView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
   m_CalibrantDSpacingsView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-  connect(m_CalibrantTableView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantWindow::calibrantTableContextMenu);
-  connect(m_CalibrantDSpacingsView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantWindow::calibrantDSpacingsContextMenu);
+  CONNECT_CHECK(connect(m_CalibrantTableView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantWindow::calibrantTableContextMenu));
+  CONNECT_CHECK(connect(m_CalibrantDSpacingsView, &QTableView::customContextMenuRequested, this, &QxrdCalibrantWindow::calibrantDSpacingsContextMenu));
 
-  connect(m_CalibrantTableView, &QTableView::clicked,       this, &QxrdCalibrantWindow::onCalibrantClick);
-  connect(m_CalibrantTableView, &QTableView::doubleClicked, this, &QxrdCalibrantWindow::onCalibrantDoubleClick);
+  CONNECT_CHECK(connect(m_CalibrantTableView, &QTableView::clicked,       this, &QxrdCalibrantWindow::onCalibrantClick));
+  CONNECT_CHECK(connect(m_CalibrantTableView, &QTableView::doubleClicked, this, &QxrdCalibrantWindow::onCalibrantDoubleClick));
 
   if (lib) {
-    connect(lib.data(), &QAbstractItemModel::dataChanged,
-            this, &QxrdCalibrantWindow::onCalibrantChanged);
+    CONNECT_CHECK(
+          connect(lib.data(), &QAbstractItemModel::dataChanged,
+                  this, &QxrdCalibrantWindow::onCalibrantChanged));
   }
 
   QcepCenterFinderPtr cfp(m_CenterFinder);
 
   if (cfp) {
-    connect(cfp->prop_Energy(), &QcepDoubleProperty::valueChanged,
-            this, &QxrdCalibrantWindow::onCalibrantChanged);
+    CONNECT_CHECK(
+          connect(cfp->prop_Energy(), &QcepDoubleProperty::valueChanged,
+                  this, &QxrdCalibrantWindow::onCalibrantChanged));
   } else {
     printMessage("No center finder for calibrant window");
   }

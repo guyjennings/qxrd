@@ -256,9 +256,9 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
 //          qSharedPointerDynamicCast<QxrdApplication>(app));
 
     if (m_Acquisition) {
-      connect(m_Acquisition.data(), &QxrdAcqCommon::acquireStarted, this, &QxrdExperiment::acquireStarted);
-      connect(m_Acquisition.data(), &QxrdAcqCommon::acquireComplete, this, &QxrdExperiment::acquireComplete);
-      connect(m_Acquisition.data(), &QxrdAcqCommon::acquiredFrame, this, &QxrdExperiment::acquiredFrame);
+      CONNECT_CHECK(connect(m_Acquisition.data(), &QxrdAcqCommon::acquireStarted, this, &QxrdExperiment::acquireStarted));
+      CONNECT_CHECK(connect(m_Acquisition.data(), &QxrdAcqCommon::acquireComplete, this, &QxrdExperiment::acquireComplete));
+      CONNECT_CHECK(connect(m_Acquisition.data(), &QxrdAcqCommon::acquiredFrame, this, &QxrdExperiment::acquiredFrame));
     }
 
     m_Dataset = QcepAllocator::newDataset(sharedFromThis(), "dataset");
@@ -388,8 +388,8 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
     printMessage(tr("Running on host %1").arg(QHostInfo::localHostName()));
     printMessage(tr("Current directory %1").arg(QDir::currentPath()));
 
-    connect(prop_WorkCompleted(),   &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage);
-    connect(prop_WorkTarget(),      &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage);
+    CONNECT_CHECK(connect(prop_WorkCompleted(),   &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage));
+    CONNECT_CHECK(connect(prop_WorkTarget(),      &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage));
   }
 }
 
@@ -987,7 +987,7 @@ void QxrdExperiment::readSettings(QSettings *settings)
 
   prop_IsReading()->incValue(-1);
 
-  connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdExperiment::autoSaveExperiment);
+  CONNECT_CHECK(connect(&m_AutoSaveTimer, &QTimer::timeout, this, &QxrdExperiment::autoSaveExperiment));
 
   m_AutoSaveTimer.start(5000);
 }

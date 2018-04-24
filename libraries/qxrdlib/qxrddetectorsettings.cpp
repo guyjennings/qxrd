@@ -79,8 +79,9 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
       QcepImageBaseQueuePtr(
         new QcepImageBaseQueue("acquired"));
 
-  connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
-          this,           &QxrdDetectorSettings::startOrStop);
+  CONNECT_CHECK(
+        connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
+                this,           &QxrdDetectorSettings::startOrStop));
 }
 
 void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
@@ -151,8 +152,9 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
   QxrdAcqCommonPtr a(m_Acquisition);
 
   if (a) {
-    connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
-            a.data(),       &QxrdAcqCommon::detectorStateChanged);
+    CONNECT_CHECK(
+          connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
+                  a.data(),       &QxrdAcqCommon::detectorStateChanged));
   }
 
   m_AcquiredImages -> initialize(sharedFromThis());

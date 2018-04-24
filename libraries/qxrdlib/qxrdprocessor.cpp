@@ -187,39 +187,42 @@ QxrdProcessor::QxrdProcessor(QString name) :
       QxrdOutputFileFormatterSettingsPtr(
         new QxrdOutputFileFormatterSettings("subtractedFileFormatterSettings"));
 
-  connect(m_CorrectedImages.data(), &QxrdResultSerializerBase::resultAvailable,
-          this,                     &QxrdProcessor::onCorrectedImageAvailable);
+  CONNECT_CHECK(
+        connect(m_CorrectedImages.data(), &QxrdResultSerializerBase::resultAvailable,
+                this,                     &QxrdProcessor::onCorrectedImageAvailable));
 
-  connect(m_IntegratedData.data(),  &QxrdResultSerializerBase::resultAvailable,
-          this,                     &QxrdProcessor::onIntegratedDataAvailable);
+  CONNECT_CHECK(
+        connect(m_IntegratedData.data(),  &QxrdResultSerializerBase::resultAvailable,
+                this,                     &QxrdProcessor::onIntegratedDataAvailable));
 
-//  connect(&m_ROIData,         &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onROIDataAvailable);
+  //  CONNECT_CHECK(connect(&m_ROIData,         &QxrdResultSerializerBase::resultAvailable, this, &QxrdProcessor::onROIDataAvailable));
 
-  connect(m_HistogramData.data(),   &QxrdResultSerializerBase::resultAvailable,
-          this,                     &QxrdProcessor::onHistogramDataAvailable);
+  CONNECT_CHECK(
+        connect(m_HistogramData.data(),   &QxrdResultSerializerBase::resultAvailable,
+                this,                     &QxrdProcessor::onHistogramDataAvailable));
 
-  connect(prop_SaveRawImages(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformDarkSubtraction(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformBadPixels(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformGainCorrection(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveSubtracted(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveAsText(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformIntegration(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_DisplayIntegratedData(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveIntegratedData(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformDarkSubtractionTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformBadPixelsTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformGainCorrectionTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveSubtractedTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveAsTextTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_PerformIntegrationTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_DisplayIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-  connect(prop_SaveIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
+  CONNECT_CHECK(connect(prop_SaveRawImages(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_PerformDarkSubtraction(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_PerformBadPixels(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_PerformGainCorrection(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_SaveSubtracted(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_SaveAsText(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_PerformIntegration(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_DisplayIntegratedData(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_SaveIntegratedData(), &QcepBoolProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_PerformDarkSubtractionTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_PerformBadPixelsTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_PerformGainCorrectionTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_SaveSubtractedTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_SaveAsTextTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_PerformIntegrationTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_DisplayIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+  CONNECT_CHECK(connect(prop_SaveIntegratedDataTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
 
-//  connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onMaskPathChanged);
-  connect(prop_DarkImagePath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onDarkImagePathChanged);
-  connect(prop_BadPixelsPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onBadPixelsPathChanged);
-  connect(prop_GainMapPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onGainMapPathChanged);
+//  CONNECT_CHECK(connect(prop_MaskPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onMaskPathChanged));
+  CONNECT_CHECK(connect(prop_DarkImagePath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onDarkImagePathChanged));
+  CONNECT_CHECK(connect(prop_BadPixelsPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onBadPixelsPathChanged));
+  CONNECT_CHECK(connect(prop_GainMapPath(), &QcepStringProperty::valueChanged, this, &QxrdProcessor::onGainMapPathChanged));
 }
 
 QxrdProcessor::~QxrdProcessor()
@@ -262,9 +265,9 @@ void QxrdProcessor::initialize(QcepObjectWPtr parent)
   QxrdAcqCommonPtr acqp(m_Acquisition);
 
   if (acqp) {
-    connect(acqp -> prop_SummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-    connect(acqp -> prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
-    connect(acqp -> prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime);
+    CONNECT_CHECK(connect(acqp -> prop_SummedExposures(), &QcepIntProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+    CONNECT_CHECK(connect(acqp -> prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
+    CONNECT_CHECK(connect(acqp -> prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdProcessor::updateEstimatedProcessingTime));
   }
 }
 

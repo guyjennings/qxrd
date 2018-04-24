@@ -90,20 +90,25 @@ void QxrdDexelaDriver::startDetectorDriver()
 
           printMessage(tr("Detector dimensions %1 x %2, nBuffers %3").arg(xDim).arg(yDim).arg(nBuf));
 
-          connect(acq -> prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
-                  this,                       &QxrdDexelaDriver::restartDetector);
+          CONNECT_CHECK(
+                connect(acq -> prop_ExposureTime(), &QcepDoubleProperty::valueChanged,
+                        this,                       &QxrdDexelaDriver::restartDetector));
 
-          connect(det -> prop_ExposureFactor(), &QcepIntProperty::valueChanged,
-                  this,                         &QxrdDexelaDriver::restartDetector);
+          CONNECT_CHECK(
+                connect(det -> prop_ExposureFactor(), &QcepIntProperty::valueChanged,
+                        this,                         &QxrdDexelaDriver::restartDetector));
 
-          connect(det -> prop_HardwareSync(),   &QcepBoolProperty::valueChanged,
-                  this,                         &QxrdDexelaDriver::restartDetector);
+          CONNECT_CHECK(
+                connect(det -> prop_HardwareSync(),   &QcepBoolProperty::valueChanged,
+                        this,                         &QxrdDexelaDriver::restartDetector));
 
-          connect(det -> prop_HBinning(),       &QcepIntProperty::valueChanged,
-                  this,                         &QxrdDexelaDriver::restartDetector);
+          CONNECT_CHECK(
+                connect(det -> prop_HBinning(),       &QcepIntProperty::valueChanged,
+                        this,                         &QxrdDexelaDriver::restartDetector));
 
-          connect(det -> prop_VBinning(),       &QcepIntProperty::valueChanged,
-                  this,                         &QxrdDexelaDriver::restartDetector);
+          CONNECT_CHECK(
+                connect(det -> prop_VBinning(),       &QcepIntProperty::valueChanged,
+                        this,                         &QxrdDexelaDriver::restartDetector));
 
           changeExposureTime(acq->get_ExposureTime());
 

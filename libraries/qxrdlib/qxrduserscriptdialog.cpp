@@ -1,6 +1,7 @@
 #include "qxrduserscriptdialog.h"
 #include "ui_qxrduserscriptdialog.h"
 #include <stdio.h>
+#include "qcepmacros.h"
 
 QxrdUserScriptDialog::QxrdUserScriptDialog(QString title, QxrdExperimentWPtr experiment, QString editable, QString def, QWidget *parent) :
   QDialog(parent),
@@ -15,7 +16,7 @@ QxrdUserScriptDialog::QxrdUserScriptDialog(QString title, QxrdExperimentWPtr exp
   m_ScriptEditor->setText(editable);
   m_ScriptEditor->setExperiment(m_Experiment);
 
-  connect(m_ButtonBar, &QDialogButtonBox::clicked, this, &QxrdUserScriptDialog::onButtonClicked);
+  CONNECT_CHECK(connect(m_ButtonBar, &QDialogButtonBox::clicked, this, &QxrdUserScriptDialog::onButtonClicked));
 }
 
 QxrdUserScriptDialog::~QxrdUserScriptDialog()

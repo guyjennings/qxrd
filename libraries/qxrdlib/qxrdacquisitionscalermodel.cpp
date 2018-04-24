@@ -13,20 +13,24 @@ QxrdAcquisitionScalerModel::QxrdAcquisitionScalerModel(QxrdAcqCommonWPtr acq)
   QxrdAcqCommonPtr acqr(m_Acquisition);
 
   if (acqr) {
-    connect(acqr.data(),               &QxrdAcqCommon::detectorStateChanged,
-            this,                      &QxrdAcquisitionScalerModel::forceFullUpdate);
+    CONNECT_CHECK(
+          connect(acqr.data(),               &QxrdAcqCommon::detectorStateChanged,
+                  this,                      &QxrdAcquisitionScalerModel::forceFullUpdate));
 
-    connect(acqr.data(),               &QxrdAcqCommon::extraInputsChanged,
-            this,                      &QxrdAcquisitionScalerModel::forceFullUpdate);
+    CONNECT_CHECK(
+          connect(acqr.data(),               &QxrdAcqCommon::extraInputsChanged,
+                  this,                      &QxrdAcquisitionScalerModel::forceFullUpdate));
 
-    connect(acqr->prop_ScalerValues(), &QcepDoubleVectorProperty::valueChanged,
-            this,                      &QxrdAcquisitionScalerModel::forceFullUpdate);
+    CONNECT_CHECK(
+          connect(acqr->prop_ScalerValues(), &QcepDoubleVectorProperty::valueChanged,
+                  this,                      &QxrdAcquisitionScalerModel::forceFullUpdate));
 
     QxrdSynchronizedAcquisitionPtr sync(acqr->synchronizedAcquisition());
 
     if (sync) {
-      connect(sync.data(),   &QxrdSynchronizedAcquisition::inputCountChanged,
-              this,          &QxrdAcquisitionScalerModel::forceFullUpdate);
+      CONNECT_CHECK(
+            connect(sync.data(),   &QxrdSynchronizedAcquisition::inputCountChanged,
+                    this,          &QxrdAcquisitionScalerModel::forceFullUpdate));
     }
   }
 }

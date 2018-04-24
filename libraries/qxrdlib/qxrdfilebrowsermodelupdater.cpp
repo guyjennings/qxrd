@@ -40,14 +40,18 @@ void QxrdFileBrowserModelUpdater::setBrowserModel(QxrdFileBrowserModelWPtr brows
   QxrdFileBrowserModelPtr model(m_BrowserModel);
 
   if (model) {
-    connect(model.data(),              &QxrdFileBrowserModel::rootChanged,
-            this,                      &QxrdFileBrowserModelUpdater::changeRoot);
+    CONNECT_CHECK(
+          connect(model.data(),              &QxrdFileBrowserModel::rootChanged,
+                  this,                      &QxrdFileBrowserModelUpdater::changeRoot));
   }
 
-  connect(m_FileSystemWatcher.data(),  &QFileSystemWatcher::directoryChanged,
-          this,                        &QxrdFileBrowserModelUpdater::changeContents, Qt::DirectConnection);
-  connect(&m_UpdateTimer,              &QTimer::timeout,
-          this,                        &QxrdFileBrowserModelUpdater::updateTimeout);
+  CONNECT_CHECK(
+        connect(m_FileSystemWatcher.data(),  &QFileSystemWatcher::directoryChanged,
+                this,                        &QxrdFileBrowserModelUpdater::changeContents, Qt::DirectConnection));
+
+  CONNECT_CHECK(
+        connect(&m_UpdateTimer,              &QTimer::timeout,
+                this,                        &QxrdFileBrowserModelUpdater::updateTimeout));
 
   m_UpdateTimer.setSingleShot(true);
   m_UpdateTimer.start(m_UpdateInterval);
