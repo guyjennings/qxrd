@@ -272,3 +272,25 @@ void QxrdAcqCommon::fillAcquisitionProperties(QcepImageDataBasePtr img)
     img -> set_OverflowLevel(get_OverflowLevel());
   }
 }
+
+void QxrdAcqCommon::setOutputFormat(int fmt)
+{
+  for (int i=0; i<detectorCount(); i++) {
+    QxrdDetectorSettingsPtr det = detector(i);
+
+    if (det) {
+      det -> setOutputFormat(fmt);
+    }
+  }
+}
+
+void QxrdAcqCommon::setOutputCompression(int cmp, int lvl)
+{
+  for (int i=0; i<detectorCount(); i++) {
+    QxrdDetectorSettingsPtr det = detector(i);
+
+    if (det) {
+      det -> setOutputCompression(cmp, lvl);
+    }
+  }
+}

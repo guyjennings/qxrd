@@ -1411,3 +1411,17 @@ void QxrdExperiment::defaultWindowSettings()
                          new QxrdScriptingWindowSettings(
                            "scriptingWindowSettings")));
 }
+
+void QxrdExperiment::setOutputFormat(int fmt)
+{
+  QxrdAcqCommonPtr acq(acquisition());
+
+  acq->setOutputFormat(fmt);
+}
+
+void QxrdExperiment::setOutputCompression(int cmp, int lvl)
+{
+  QxrdAcqCommonPtr acq(acquisition());
+
+  acq->setOutputCompression(cmp, lvl);
+}

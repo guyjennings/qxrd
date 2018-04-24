@@ -30,6 +30,10 @@ public:
   virtual void saveImageData(QxrdOutputFileFormatterSettingsPtr set,
                             QcepImageDataBasePtr                img,
                             QcepImageDataBasePtr                overflow) = 0;
+
+protected:
+  void    mkPath           (QString filePath);
+  QString uniqueFileName   (QcepImageDataBasePtr      data);
 };
 
 #endif // QXRDOUTPUTFILEFORMATTER_H

@@ -100,6 +100,10 @@ public:
 
   void fillAcquisitionProperties(QcepImageDataBasePtr img);
 
+public slots:
+  void setOutputFormat(int fmt);
+  void setOutputCompression(int cmp, int lvl=0);
+
 private slots:
   void restartDetectors();
 

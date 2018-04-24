@@ -28,9 +28,12 @@ public:
 private:
   QTime                              m_Tic;
   int                                m_Compression;
+  int                                m_CompressionLevel;
   QxrdOutputFileFormatterSettingsPtr m_Settings;
   QString                            m_FileName;
   std::ostringstream                 m_OutputStream;
+  const char*                        m_OutputBuffer;
+  int                                m_OutputCount;
   TIFF*                              m_OutputTIFF;
   QcepImageDataBasePtr               m_Image;
   int                                m_NRows;
@@ -53,6 +56,11 @@ private:
                       QcepImageDataBasePtr               overflow);
 
   void endOutputData();
+
+  void compressOutputData();
+  void compressOutputDataBzip2();
+  void compressOutputDataGzip();
+  void compressOutputDataZip();
 };
 
 #endif // QXRDOUTPUTFILEFORMATTERTIFF_H

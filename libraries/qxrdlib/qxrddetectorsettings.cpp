@@ -707,3 +707,17 @@ void QxrdDetectorSettings::registerMetaTypes()
   qRegisterMetaType<QxrdDetectorDriverPtr>("QxrdDetectorDriverPtr");
   qRegisterMetaType<QxrdDetectorDriverWPtr>("QxrdDetectorDriverWPtr");
 }
+
+void QxrdDetectorSettings::setOutputFormat(int fmt)
+{
+  if (m_Processor) {
+    m_Processor -> setOutputFormat(fmt);
+  }
+}
+
+void QxrdDetectorSettings::setOutputCompression(int cmp, int lvl)
+{
+  if (m_Processor) {
+    m_Processor -> setOutputCompression(cmp, lvl);
+  }
+}

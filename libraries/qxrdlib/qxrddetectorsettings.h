@@ -129,6 +129,9 @@ public slots:
 
   virtual void configureDetector();
 
+  void setOutputFormat(int fmt);
+  void setOutputCompression(int cmp, int lvl=0);
+
 protected:
   QxrdAppCommonWPtr                    m_Application;
   QxrdExperimentWPtr                   m_Experiment;

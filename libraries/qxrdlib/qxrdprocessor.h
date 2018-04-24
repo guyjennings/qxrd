@@ -290,6 +290,10 @@ public:
   void powderRing(double cx, double cy, double radius, double width, double strength, int oversample);
   void ellipse(double cx, double cy, double a, double e, double ang, double width, double strength, int oversample);
 
+public slots:
+  void setOutputFormat(int fmt);
+  void setOutputCompression(int cmp, int lvl=0);
+
 protected:
   void subtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);
   void unsubtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);

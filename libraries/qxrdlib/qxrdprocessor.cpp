@@ -3519,3 +3519,44 @@ void QxrdProcessor::ellipse(double cx, double cy, double a, double e, double ang
   newData(m_Data);
 }
 
+void QxrdProcessor::setOutputFormat(int fmt)
+{
+  if (m_RawFileFormatterSettings) {
+    m_RawFileFormatterSettings -> set_OutputFormat(fmt);
+  }
+
+  if (m_DarkFileFormatterSettings) {
+    m_DarkFileFormatterSettings -> set_OutputFormat(fmt);
+  }
+
+  if (m_MaskFileFormatterSettings) {
+    m_MaskFileFormatterSettings -> set_OutputFormat(fmt);
+  }
+
+  if (m_SubtractedFileFormatterSettings) {
+    m_SubtractedFileFormatterSettings -> set_OutputFormat(fmt);
+  }
+}
+
+void QxrdProcessor::setOutputCompression(int cmp, int lvl)
+{
+  if (m_RawFileFormatterSettings) {
+    m_RawFileFormatterSettings -> set_CompressFormat(cmp);
+    m_RawFileFormatterSettings -> set_CompressLevel(lvl);
+  }
+
+  if (m_DarkFileFormatterSettings) {
+    m_DarkFileFormatterSettings -> set_CompressFormat(cmp);
+    m_DarkFileFormatterSettings -> set_CompressLevel(lvl);
+  }
+
+  if (m_MaskFileFormatterSettings) {
+    m_MaskFileFormatterSettings -> set_CompressFormat(cmp);
+    m_MaskFileFormatterSettings -> set_CompressLevel(lvl);
+  }
+
+  if (m_SubtractedFileFormatterSettings) {
+    m_SubtractedFileFormatterSettings -> set_CompressFormat(cmp);
+    m_SubtractedFileFormatterSettings -> set_CompressLevel(lvl);
+  }
+}

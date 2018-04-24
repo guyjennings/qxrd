@@ -227,7 +227,10 @@ SOURCES += qxrdlib.cpp \
     qxrdoutputfileformatter.cpp \
     qxrdoutputfileformattersettings.cpp \
     qxrdoutputfileformattertiff.cpp \
-    qxrdoutputfileformatterhdf.cpp
+    qxrdoutputfileformatterhdf.cpp \
+    qxrdoutputfileformattertiff-bzip2.cpp \
+    qxrdoutputfileformattertiff-zip.cpp \
+    qxrdoutputfileformattertiff-gzip.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \

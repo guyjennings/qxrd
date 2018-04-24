@@ -57,11 +57,15 @@ QxrdOutputFileFormatterPtr QxrdOutputFileFormatterSettings::newOutputFormatter(Q
 
   switch (get_OutputFormat()) {
   case OutputFormatTIFF:
-    res = QxrdOutputFileFormatterPtr(new QxrdOutputFileFormatterTIFF(name));
+    res = QxrdOutputFileFormatterPtr(
+          new QxrdOutputFileFormatterTIFF(name),
+          &QObject::deleteLater);
     break;
 
   case OutputFormatHDF:
-    res = QxrdOutputFileFormatterPtr(new QxrdOutputFileFormatterHDF(name));
+    res = QxrdOutputFileFormatterPtr(
+          new QxrdOutputFileFormatterHDF(name),
+          &QObject::deleteLater);
     break;
   }
 

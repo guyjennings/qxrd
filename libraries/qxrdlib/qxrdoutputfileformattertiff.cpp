@@ -7,7 +7,6 @@
 QxrdOutputFileFormatterTIFF::QxrdOutputFileFormatterTIFF(QString name)
   : inherited(name)
 {
-
 }
 
 void QxrdOutputFileFormatterTIFF::saveImageData(QxrdOutputFileFormatterSettingsPtr set,
@@ -20,7 +19,8 @@ void QxrdOutputFileFormatterTIFF::saveImageData(QxrdOutputFileFormatterSettingsP
     m_Image = img;
     m_NRows = m_Image -> get_Height();
     m_NCols = m_Image -> get_Width();
-    m_Compression = m_Settings -> get_CompressFormat();
+    m_Compression      = m_Settings -> get_CompressFormat();
+    m_CompressionLevel = m_Settings -> get_CompressLevel();
 
     QcepDoubleImageDataPtr dimage = qSharedPointerDynamicCast<QcepDoubleImageData>(img);
 
@@ -112,13 +112,31 @@ void QxrdOutputFileFormatterTIFF::saveInt32Data (QxrdOutputFileFormatterSettings
 
 void QxrdOutputFileFormatterTIFF::tiffCheck(int stat, const char *file, int line)
 {
-  if (stat) {
+  if (stat < 0) {
     printMessage(tr("TIFF Error %1 : File \"%2\", Line %3").arg(stat).arg(file).arg(line));
   }
 }
 
 void QxrdOutputFileFormatterTIFF::beginOutputData(int nBits, int pixFormat)
 {
+  switch(m_Compression) {
+  case QxrdOutputFileFormatterSettings::OutputCompressionNone:
+    m_Image -> set_FileExtension(".tif");
+    break;
+
+  case QxrdOutputFileFormatterSettings::OutputCompressionBZIP2:
+    m_Image -> set_FileExtension(".tif.bz2");
+    break;
+
+  case QxrdOutputFileFormatterSettings::OutputCompressionGZIP:
+    m_Image -> set_FileExtension(".tif.gz");
+    break;
+
+  case QxrdOutputFileFormatterSettings::OutputCompressionZIP:
+    m_Image -> set_FileExtension(".tif.zip");
+    break;
+  }
+
   m_FileName = uniqueFileName(m_Image);
 
   mkPath(m_FileName);
@@ -154,6 +172,12 @@ void QxrdOutputFileFormatterTIFF::endOutputData()
   if (m_Compression) {
     printMessage(tr("Started compressing data in file \"%1\" after %2 msec")
                  .arg(m_FileName).arg(m_Tic.elapsed()));
+
+    const std::string& tmp = m_OutputStream.str();
+    m_OutputBuffer = tmp.c_str();
+    m_OutputCount  = tmp.length();
+
+    compressOutputData();
   }
 
   m_Image -> set_ObjectSaved(true);
@@ -164,4 +188,24 @@ void QxrdOutputFileFormatterTIFF::endOutputData()
 
   printMessage(tr("Saved data in file \"%1\" after %2 msec")
                .arg(m_FileName).arg(m_Tic.elapsed()));
+}
+
+void QxrdOutputFileFormatterTIFF::compressOutputData()
+{
+  switch (m_Compression) {
+  case QxrdOutputFileFormatterSettings::OutputCompressionNone:
+    break;
+
+  case QxrdOutputFileFormatterSettings::OutputCompressionBZIP2:
+    compressOutputDataBzip2();
+    break;
+
+  case QxrdOutputFileFormatterSettings::OutputCompressionGZIP:
+    compressOutputDataGzip();
+    break;
+
+  case QxrdOutputFileFormatterSettings::OutputCompressionZIP:
+    compressOutputDataZip();
+    break;
+  }
 }
