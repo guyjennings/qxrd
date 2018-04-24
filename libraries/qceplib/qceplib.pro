@@ -39,6 +39,7 @@ CONFIG += qceplib-qwt
 CONFIG += qceplib-hdf5
 CONFIG += qceplib-tiff
 CONFIG += qceplib-bzip2
+CONFIG += qceplib-libzip
 
 DEFINES += QWT_MAKEDLL
 DEFINES += CBF_MAKEDLL
@@ -50,6 +51,7 @@ DEFINES += ZLIB_MAKEDLL
 DEFINES += HDF5_MAKEDLL
 DEFINES += SPECSERVER_MAKEDLL
 DEFINES += BZIP2_MAKEDLL
+DEFINES += LIBZIP_MAKEDLL
 
 #DEFINES += H5_BUILT_AS_DYNAMIC_LIB
 
@@ -64,6 +66,7 @@ include(qceplib/qceplib-zlib.pri)
 include(qceplib/qceplib-hdf5.pri)
 include(qceplib/qceplib-specserver.pri)
 include(qceplib/qceplib-bzip2.pri)
+#include(qceplib/qceplib-libzip.pri)
 
 unix {
     target.path = /usr/lib
