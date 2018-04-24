@@ -1,3 +1,3 @@
-[submodule "source/submodules/qceplib"]
+[submodule "libraries/qceplib/qceplib"]
 	path = libraries/qceplib/qceplib
 	url = git://git.code.sf.net/p/qceplib/code
