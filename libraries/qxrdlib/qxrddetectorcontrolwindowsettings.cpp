@@ -14,7 +14,7 @@ QxrdDetectorControlWindowSettings::QxrdDetectorControlWindowSettings(QString nam
 {
   m_ImagePlotWidgetSettings =
       QcepImagePlotWidgetSettingsPtr(
-        new QcepImagePlotWidgetSettings("detectorPlotWidget"));
+        NEWPTR(QcepImagePlotWidgetSettings("detectorPlotWidget")));
 }
 
 void QxrdDetectorControlWindowSettings::initialize(QcepObjectWPtr parent)

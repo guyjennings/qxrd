@@ -22,7 +22,7 @@ void QxrdMaskStackView::setMaskStack(QcepMaskStackWPtr stk)
 
   if (maskStack) {
     m_MaskStackModel = QcepMaskStackModelPtr(
-          new QcepMaskStackModel(m_MaskStack));
+          NEWPTR(QcepMaskStackModel(m_MaskStack)));
 
     setModel(m_MaskStackModel.data());
   }

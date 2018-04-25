@@ -50,7 +50,7 @@ void QxrdDexelaSettings::configureDetector()
 
   QxrdDexelaDialogPtr dlg =
       QxrdDexelaDialogPtr(
-        new QxrdDexelaDialog(myself));
+        NEWPTR(QxrdDexelaDialog(myself)));
 
   if (dlg) {
     dlg->exec();

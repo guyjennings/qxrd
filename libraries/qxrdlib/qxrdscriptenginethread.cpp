@@ -55,7 +55,7 @@ void QxrdScriptEngineThread::run()
 
   {
     QxrdScriptEnginePtr engine = QxrdScriptEnginePtr(
-          new QxrdScriptEngine("scriptEngine"));
+          NEWPTR(QxrdScriptEngine("scriptEngine")));
 
     if (engine) {
       engine -> initialize(sharedFromThis());

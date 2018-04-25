@@ -6,8 +6,8 @@
 
 QxrdExtraIOWindowSettings::QxrdExtraIOWindowSettings(QString name)
   : inherited(name, "Extra IO Window"),
-    m_ExtraInputsPlotWidgetSettings(new QxrdExtraInputsPlotWidgetSettings(name+"Inputs")),
-    m_ExtraOutputsPlotWidgetSettings(new QxrdExtraOutputsPlotWidgetSettings(name+"Outputs"))
+    m_ExtraInputsPlotWidgetSettings(NEWPTR(QxrdExtraInputsPlotWidgetSettings(name+"Inputs"))),
+    m_ExtraOutputsPlotWidgetSettings(NEWPTR(QxrdExtraOutputsPlotWidgetSettings(name+"Outputs")))
 {
 
 }
@@ -33,8 +33,7 @@ QcepMainWindowPtr QxrdExtraIOWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdExtraIOWindow("Extra I/O"),
-        &QObject::deleteLater);
+        NEWPTR(QxrdExtraIOWindow("Extra I/O")));
 
   return m_Window;
 }

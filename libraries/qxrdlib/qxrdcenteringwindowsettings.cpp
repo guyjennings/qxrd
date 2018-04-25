@@ -8,10 +8,10 @@
 
 QxrdCenteringWindowSettings::QxrdCenteringWindowSettings(QString name)
   : inherited(name, "Centering Window"),
-    m_FileBrowserSettings(new QxrdFileBrowserSettings(name+"Browser")),
-    m_ImagePlotWidgetSettings(new QcepImagePlotWidgetSettings(name+"ImagePlot")),
-    m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name+"CenteringPlot")),
-    m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot"))
+    m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name+"Browser"))),
+    m_ImagePlotWidgetSettings(NEWPTR(QcepImagePlotWidgetSettings(name+"ImagePlot"))),
+    m_CenteringPlotWidgetSettings(NEWPTR(QxrdCenteringPlotWidgetSettings(name+"CenteringPlot"))),
+    m_IntegratedPlotWidgetSettings(NEWPTR(QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot")))
 {
 
 }
@@ -32,8 +32,7 @@ QcepMainWindowPtr QxrdCenteringWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdCenteringWindow("Centering"),
-        &QObject::deleteLater);
+        NEWPTR(QxrdCenteringWindow("Centering")));
 
   return m_Window;
 }

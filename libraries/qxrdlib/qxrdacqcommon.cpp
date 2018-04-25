@@ -71,11 +71,11 @@ void QxrdAcqCommon::initialize(QcepObjectWPtr parent)
 
   m_ScalerModel =
       QxrdAcquisitionScalerModelPtr(
-        new QxrdAcquisitionScalerModel(acq));
+        NEWPTR(QxrdAcquisitionScalerModel(acq)));
 
   m_AcquisitionEventLog =
       QxrdAcquisitionEventLogPtr(
-        new QxrdAcquisitionEventLog("eventLog"));
+        NEWPTR(QxrdAcquisitionEventLog("eventLog")));
 
   if (m_AcquisitionEventLog) {
     m_AcquisitionEventLog -> initialize(sharedFromThis());
@@ -111,7 +111,7 @@ QxrdAcquisitionEventLogWPtr QxrdAcqCommon::acquisitionEventLog() const
 QxrdAcquisitionParameterPackPtr QxrdAcqCommon::acquisitionParameterPack()
 {
   return QxrdAcquisitionParameterPackPtr(
-        new QxrdAcquisitionParameterPack (get_FilePattern(),
+         new QxrdAcquisitionParameterPack (get_FilePattern(),
                                           get_ExposureTime(),
                                           get_SummedExposures(),
                                           get_PreTriggerFiles(),

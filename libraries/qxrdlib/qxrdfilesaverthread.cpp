@@ -41,7 +41,7 @@ void QxrdFileSaverThread::run()
     printf("File Saver Thread Started\n");
   }
 
-  m_FileSaver = QxrdFileSaverPtr(new QxrdFileSaver());
+  m_FileSaver = QxrdFileSaverPtr(NEWPTR(QxrdFileSaver()));
   m_FileSaver -> initialize(sharedFromThis());
 
   int rc = exec();

@@ -57,7 +57,7 @@ void QxrdPilatusSettings::configureDetector()
 
   QxrdPilatusDialogPtr dlog =
       QxrdPilatusDialogPtr(
-        new QxrdPilatusDialog(myself));
+        NEWPTR(QxrdPilatusDialog(myself)));
 
   if (dlog) {
     dlog->exec();

@@ -84,7 +84,7 @@ QxrdDetectorDriverPtr QxrdAlliedVisionPlugin::createDetector(QString name,
         qSharedPointerDynamicCast<QxrdAlliedVisionSettings>(det));
 
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdAlliedVisionDriver(name, plugin, set, expt, acq));
+      QxrdDetectorDriverPtr(NEWPTR(QxrdAlliedVisionDriver(name, plugin, set, expt, acq)));
 
   return res;
 }

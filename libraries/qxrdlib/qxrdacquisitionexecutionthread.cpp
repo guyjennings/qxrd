@@ -39,7 +39,7 @@ void QxrdAcquisitionExecutionThread::run()
 
   m_AcquisitionExecution =
       QxrdAcquisitionExecutionPtr(
-        new QxrdAcquisitionExecution("acquisitionExecution"));
+        NEWPTR(QxrdAcquisitionExecution("acquisitionExecution")));
 
   m_AcquisitionExecution -> initialize(sharedFromThis());
 

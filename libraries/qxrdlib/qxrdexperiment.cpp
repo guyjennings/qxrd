@@ -197,25 +197,25 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
 
   m_Processor =
       QxrdProcessorPtr(
-        new QxrdProcessor("processor"));
+        NEWPTR(QxrdProcessor("processor")));
 
   if (get_ExperimentMode() == QxrdExperiment::AcquisitionAllowed) {
     m_Acquisition =
         QxrdAcqCommonPtr(
-          new QxrdAcquisition("acquisition"));
+          NEWPTR(QxrdAcquisition("acquisition")));
   } else {
     m_Acquisition =
         QxrdAcqCommonPtr(
-          new QxrdAcqDummy("dummyAcq"));
+          NEWPTR(QxrdAcqDummy("dummyAcq")));
   }
 
   m_CalibrantLibrary =
       QcepCalibrantLibraryPtr(
-        new QcepCalibrantLibrary("calibrantLibrary"));
+        NEWPTR(QcepCalibrantLibrary("calibrantLibrary")));
 
   m_CalibrantLibraryModel =
       QcepCalibrantLibraryModelPtr(
-        new QcepCalibrantLibraryModel(m_CalibrantLibrary));
+        NEWPTR(QcepCalibrantLibraryModel(m_CalibrantLibrary)));
 
   m_CalibrantDSpacings =
       QcepCalibrantDSpacingsPtr(
@@ -223,8 +223,8 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
 
   m_CalibrantDSpacingsModel =
       QcepCalibrantDSpacingsModelPtr(
-        new QcepCalibrantDSpacingsModel(m_CalibrantLibrary,
-                                        m_CalibrantDSpacings));
+        NEWPTR(QcepCalibrantDSpacingsModel(m_CalibrantLibrary,
+                                        m_CalibrantDSpacings)));
 
   QxrdAppCommonPtr app(m_Application);
 
@@ -234,7 +234,7 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
     splashMessage("Initializing File Saver");
 
     m_FileSaverThread = QxrdFileSaverThreadPtr(
-          new QxrdFileSaverThread("fileSaverThread"));
+          NEWPTR(QxrdFileSaverThread("fileSaverThread")));
     m_FileSaverThread -> initialize(sharedFromThis());
     m_FileSaverThread -> start();
 
@@ -264,7 +264,7 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
     m_Dataset = QcepAllocator::newDataset(sharedFromThis(), "dataset");
 
     m_DatasetModel = QcepDatasetModelPtr(
-          new QcepDatasetModel(myself, m_Dataset));
+          NEWPTR(QcepDatasetModel(myself, m_Dataset)));
 
 //    m_DatasetModel -> newGroup("/group1");
 //    m_DatasetModel -> newGroup("/group2");
@@ -286,22 +286,22 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
 //    m_DatasetModel -> newColumn("/group4/sdev", 1000);
 
     m_ScriptEngine = QxrdScriptEnginePtr(
-          new QxrdScriptEngine("scriptEngine"));
+          NEWPTR(QxrdScriptEngine("scriptEngine")));
     m_ScriptEngine -> initialize(sharedFromThis());
 
     m_ScriptEngineJS = QxrdJSEnginePtr(
-          new QxrdJSEngine("jsEngine"));
+          NEWPTR(QxrdJSEngine("jsEngine")));
     m_ScriptEngineJS -> initialize(sharedFromThis());
 
     splashMessage("Starting SPEC Server");
 
     m_SpecServerSettings =
         QcepSpecServerSettingsPtr(
-          new QcepSpecServerSettings("specServerSettings"));
+          NEWPTR(QcepSpecServerSettings("specServerSettings")));
     m_SpecServerSettings -> initialize(sharedFromThis());
 
     m_SpecServerThread = QcepSpecServerThreadPtr(
-          new QcepSpecServerThread("specServerThread"));
+          NEWPTR(QcepSpecServerThread("specServerThread")));
     m_SpecServerThread -> initialize(sharedFromThis(),
                                      m_SpecServerSettings,
                                      m_ScriptEngine);
@@ -313,11 +313,11 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
 
     m_SimpleServerSettings =
         QcepSimpleServerSettingsPtr(
-          new QcepSimpleServerSettings("simpleServerSettings"));
+          NEWPTR(QcepSimpleServerSettings("simpleServerSettings")));
     m_SimpleServerSettings -> initialize(sharedFromThis());
 
     m_SimpleServerThread = QcepSimpleServerThreadPtr(
-          new QcepSimpleServerThread("simpleServerThread"));
+          NEWPTR(QcepSimpleServerThread("simpleServerThread")));
     m_SimpleServerThread -> initialize(sharedFromThis(),
                                        m_SimpleServerSettings,
                                        m_ScriptEngine);
@@ -397,6 +397,7 @@ void QxrdExperiment::registerMetaTypes()
 {
   inherited::registerMetaTypes();
 
+  qRegisterMetaType<QFileInfo>("QFileInfo");
   qRegisterMetaType< QList<QwtLegendData> >("QList<QwtLegendData>");
   qRegisterMetaType<QxrdExperiment*>("QxrdExperiment*");
 
@@ -1156,7 +1157,7 @@ void QxrdExperiment::saveExperimentAs(QString path)
 
 void QxrdExperiment::saveExperimentAsText(QString filePath)
 {
-  QcepFileFormatterPtr fmt = QcepFileFormatterPtr(new QcepFileFormatterText(filePath));
+  QcepFileFormatterPtr fmt = QcepFileFormatterPtr(NEWPTR(QcepFileFormatterText(filePath)));
 
   fmt -> beginWriteFile();
 
@@ -1182,6 +1183,14 @@ void QxrdExperiment::shutdownAndSave()
 
   if (isChanged() || wasAutoSaved()) {
     saveExperiment();
+  }
+
+  if (m_SimpleServerThread) {
+    m_SimpleServerThread -> shutdown();
+  }
+
+  if (m_SpecServerThread) {
+    m_SpecServerThread -> shutdown();
   }
 }
 
@@ -1245,7 +1254,7 @@ void QxrdExperiment::openWatcher(QString patt)
   THREAD_CHECK;
 
   QxrdWatcherWindowSettingsPtr set(
-        new QxrdWatcherWindowSettings("watcherWindowSettings"));
+        NEWPTR(QxrdWatcherWindowSettings("watcherWindowSettings")));
 
   if (set) {
     set -> initialize(sharedFromThis());
@@ -1360,56 +1369,56 @@ void QxrdExperiment::defaultWindowSettings()
   inherited::defaultWindowSettings();
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdWindowSettings(
-                           "mainWindowSettings")));
+                         NEWPTR(QxrdWindowSettings(
+                           "mainWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAcquisitionWindowSettings(
-                           "acquisitionWindowSettings")));
+                         NEWPTR(QxrdAcquisitionWindowSettings(
+                           "acquisitionWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAnalysisWindowSettings(
-                           "analysisWindowSettings")));
+                         NEWPTR(QxrdAnalysisWindowSettings(
+                           "analysisWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCalculatorWindowSettings(
-                           "calculatorWindowSettings")));
+                         NEWPTR(QxrdCalculatorWindowSettings(
+                           "calculatorWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCalibrantWindowSettings(
-                           "calibrantWindowSettings")));
+                         NEWPTR(QxrdCalibrantWindowSettings(
+                           "calibrantWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCenteringWindowSettings(
-                           "centeringWindowSettings")));
+                         NEWPTR(QxrdCenteringWindowSettings(
+                           "centeringWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdWatcherWindowSettings(
-                           "watcherWindowSettings")));
+                         NEWPTR(QxrdWatcherWindowSettings(
+                           "watcherWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdExtraIOWindowSettings(
-                           "extraIOWindowSettings")));
+                         NEWPTR(QxrdExtraIOWindowSettings(
+                           "extraIOWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdHelpWindowSettings(
-                           "helpWindowSettings")));
+                         NEWPTR(QxrdHelpWindowSettings(
+                           "helpWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdInfoWindowSettings(
-                           "infoWindowSettings")));
+                         NEWPTR(QxrdInfoWindowSettings(
+                           "infoWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdIntegrationWindowSettings(
-                           "integrationWindowSettings")));
+                         NEWPTR(QxrdIntegrationWindowSettings(
+                           "integrationWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdMaskingWindowSettings(
-                           "maskingWindowSettings")));
+                         NEWPTR(QxrdMaskingWindowSettings(
+                           "maskingWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdScriptingWindowSettings(
-                           "scriptingWindowSettings")));
+                         NEWPTR(QxrdScriptingWindowSettings(
+                           "scriptingWindowSettings"))));
 }
 
 void QxrdExperiment::setOutputFormat(int fmt)

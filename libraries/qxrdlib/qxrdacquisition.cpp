@@ -39,7 +39,7 @@ QxrdAcquisition::QxrdAcquisition(QString name) :
 
   m_SynchronizedAcquisition =
       QxrdSynchronizedAcquisitionPtr(
-        new QxrdSynchronizedAcquisition("synchronizedAcquisition"));
+        NEWPTR(QxrdSynchronizedAcquisition("synchronizedAcquisition")));
 
   CONNECT_CHECK(connect(prop_Raw16SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes));
   CONNECT_CHECK(connect(prop_Raw32SaveTime(), &QcepDoubleProperty::valueChanged, this, &QxrdAcquisition::updateSaveTimes));
@@ -61,7 +61,7 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
 
   m_ExecutionThread =
       QxrdAcquisitionExecutionThreadPtr(
-        new QxrdAcquisitionExecutionThread("acquisitionExecutionThread"));
+        NEWPTR(QxrdAcquisitionExecutionThread("acquisitionExecutionThread")));
 
   m_ExecutionThread -> initialize(sharedFromThis());
 
@@ -69,7 +69,7 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
 
   m_SynchronizerThread =
       QxrdSynchronizerThreadPtr(
-        new QxrdSynchronizerThread("synchronizerThread"));
+        NEWPTR(QxrdSynchronizerThread("synchronizerThread")));
 
   m_SynchronizerThread -> initialize(sharedFromThis());
 

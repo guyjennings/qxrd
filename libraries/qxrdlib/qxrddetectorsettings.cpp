@@ -69,15 +69,15 @@ QxrdDetectorSettings::QxrdDetectorSettings(QString name, int detType) :
 
   m_Processor =
       QxrdProcessorPtr(
-        new QxrdProcessor("processor"));
+        NEWPTR(QxrdProcessor("processor")));
 
   m_DetectorControlWindowSettings =
       QxrdDetectorControlWindowSettingsPtr(
-        new QxrdDetectorControlWindowSettings("controlWindowSettings"));
+        NEWPTR(QxrdDetectorControlWindowSettings("controlWindowSettings")));
 
   m_AcquiredImages =
       QcepImageBaseQueuePtr(
-        new QcepImageBaseQueue("acquired"));
+        NEWPTR(QcepImageBaseQueue("acquired")));
 
   CONNECT_CHECK(
         connect(prop_Enabled(), &QcepBoolProperty::valueChanged,
@@ -97,24 +97,19 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
   m_Acquisition = QxrdAcqCommon::findAcquisition(parent);
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdAcquisitionWindowSettings(
-                           "acquisitionWindowSettings")));
+                         NEWPTR(QxrdAcquisitionWindowSettings("acquisitionWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdCenteringWindowSettings(
-                           "centeringWindowSettings")));
+                         NEWPTR(QxrdCenteringWindowSettings("centeringWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdInfoWindowSettings(
-                           "infoWindowSettings")));
+                         NEWPTR(QxrdInfoWindowSettings("infoWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdIntegrationWindowSettings(
-                           "integrationWindowSettings")));
+                         NEWPTR(QxrdIntegrationWindowSettings("integrationWindowSettings"))));
 
   appendWindowSettings(QcepMainWindowSettingsPtr(
-                         new QxrdMaskingWindowSettings(
-                           "maskingWindowSettings")));
+                         NEWPTR(QxrdMaskingWindowSettings("maskingWindowSettings"))));
 
   for (int i=0; i<windowSettingsCount(); i++) {
     QcepMainWindowSettingsPtr set = windowSettings(i);
@@ -161,7 +156,7 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
 
   m_DetectorDriverThread =
       QxrdDetectorDriverThreadPtr(
-        new QxrdDetectorDriverThread("detectorDriverThread"));
+        NEWPTR(QxrdDetectorDriverThread("detectorDriverThread")));
 
   m_DetectorDriverThread -> initialize(sharedFromThis());
 
@@ -169,7 +164,7 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
 
   m_ProcessorExecutionThread =
       QxrdProcessorExecutionThreadPtr(
-        new QxrdProcessorExecutionThread("processorExecutionThread"));
+        NEWPTR(QxrdProcessorExecutionThread("processorExecutionThread")));
 
   m_ProcessorExecutionThread -> initialize(sharedFromThis());
 
@@ -501,7 +496,7 @@ void QxrdDetectorSettings::openControlWindow()
   if (m_DetectorControlWindow == NULL) {
     m_DetectorControlWindow =
         QxrdDetectorControlWindowPtr(
-          new QxrdDetectorControlWindow("detector"));
+          NEWPTR(QxrdDetectorControlWindow("detector")));
 
     if (m_DetectorControlWindow) {
       m_DetectorControlWindow -> initialize(sharedFromThis());
@@ -627,43 +622,43 @@ QxrdDetectorSettingsPtr QxrdDetectorSettings::newDetector(QcepObjectWPtr parent,
   switch (detType) {
   case Simulated:
     det = QxrdDetectorSettingsPtr(
-          new QxrdSimulatedSettings("simulated"));
+          NEWPTR(QxrdSimulatedSettings("simulated")));
     break;
 
   case PerkinElmer:
     det = QxrdDetectorSettingsPtr(
-          new QxrdPerkinElmerSettings("perkinElmer"));
+          NEWPTR(QxrdPerkinElmerSettings("perkinElmer")));
     break;
 
   case Pilatus:
     det = QxrdDetectorSettingsPtr(
-          new QxrdPilatusSettings("pilatus"));
+          NEWPTR(QxrdPilatusSettings("pilatus")));
     break;
 
   case AreaDetector:
     det = QxrdDetectorSettingsPtr(
-          new QxrdAreaDetectorSettings("epicsArea"));
+          NEWPTR(QxrdAreaDetectorSettings("epicsArea")));
     break;
 
   case FileWatcher:
     det = QxrdDetectorSettingsPtr(
-          new QxrdFileWatcherSettings("fileWatcher"));
+          NEWPTR(QxrdFileWatcherSettings("fileWatcher")));
     break;
 
   case Dexela:
     det = QxrdDetectorSettingsPtr(
-          new QxrdDexelaSettings("dexela"));
+          NEWPTR(QxrdDexelaSettings("dexela")));
     break;
 
   case AlliedVision:
     det = QxrdDetectorSettingsPtr(
-          new QxrdAlliedVisionSettings("alliedVision"));
+          NEWPTR(QxrdAlliedVisionSettings("alliedVision")));
     break;
   }
 
   if (det == NULL) {
     det = QxrdDetectorSettingsPtr(
-          new QxrdSimulatedSettings("simulated"));
+          NEWPTR(QxrdSimulatedSettings("simulated")));
   }
 
   if (det) {

@@ -46,7 +46,7 @@ void QxrdAlliedVisionSettings::configureDetector()
 
   QxrdAlliedVisionDialogPtr dlog =
       QxrdAlliedVisionDialogPtr(
-        new QxrdAlliedVisionDialog(myself));
+        NEWPTR(QxrdAlliedVisionDialog(myself)));
 
   if (dlog) {
     dlog->exec();

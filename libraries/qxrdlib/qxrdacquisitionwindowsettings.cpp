@@ -5,7 +5,7 @@
 
 QxrdAcquisitionWindowSettings::QxrdAcquisitionWindowSettings(QString name)
   : inherited(name, "Acquisition Window"),
-    m_FileBrowserSettings(new QxrdFileBrowserSettings(name+"Browser"))
+    m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name+"Browser")))
 {
 }
 
@@ -25,8 +25,7 @@ QcepMainWindowPtr QxrdAcquisitionWindowSettings::newWindow()
   } else {
     m_Window =
         QxrdMainWindowPtr(
-          new QxrdAcquisitionWindow("Acquisition"),
-          &QObject::deleteLater);
+          NEWPTR(QxrdAcquisitionWindow("Acquisition")));
   }
 
   return m_Window;

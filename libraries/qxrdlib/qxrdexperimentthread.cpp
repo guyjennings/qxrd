@@ -49,7 +49,7 @@ void QxrdExperimentThread::run()
 
   QxrdExperimentPtr expt =
       QxrdExperimentPtr(
-        new QxrdExperiment("experiment"));
+        NEWPTR(QxrdExperiment("experiment")));
 
   expt -> initialize(sharedFromThis(),
                      m_Path,

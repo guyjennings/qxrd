@@ -45,7 +45,7 @@ void QxrdFileBrowserModel::initialize(QcepObjectWPtr parent)
 
   m_UpdaterThread =
       QxrdFileBrowserModelUpdaterThreadPtr(
-        new QxrdFileBrowserModelUpdaterThread("updaterThread"));
+        NEWPTR(QxrdFileBrowserModelUpdaterThread("updaterThread")));
 
   m_UpdaterThread -> initialize(m_Parent);
   m_UpdaterThread -> setModel(sharedFromThis());

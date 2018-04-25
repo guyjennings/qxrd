@@ -6,8 +6,8 @@
 
 QxrdMaskingWindowSettings::QxrdMaskingWindowSettings(QString name)
   : inherited(name, "Masking Window"),
-    m_FileBrowserSettings(new QxrdFileBrowserSettings(name+"Browser")),
-    m_ImagePlotWidgetSettings(new QcepImagePlotWidgetSettings(name+"ImagePlot"))
+    m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name+"Browser"))),
+    m_ImagePlotWidgetSettings(NEWPTR(QcepImagePlotWidgetSettings(name+"ImagePlot")))
 {
 
 }
@@ -26,8 +26,7 @@ QcepMainWindowPtr QxrdMaskingWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdMaskingWindow("Masking"),
-        &QObject::deleteLater);
+        NEWPTR(QxrdMaskingWindow("Masking")));
 
   return m_Window;
 }

@@ -7,9 +7,9 @@
 
 QxrdIntegrationWindowSettings::QxrdIntegrationWindowSettings(QString name)
   : inherited(name, "Integration Window"),
-    m_FileBrowserSettings(new QxrdFileBrowserSettings(name+"Browser")),
-    m_ImagePlotWidgetSettings(new QcepImagePlotWidgetSettings(name+"ImagePlot")),
-    m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot"))
+    m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name+"Browser"))),
+    m_ImagePlotWidgetSettings(NEWPTR(QcepImagePlotWidgetSettings(name+"ImagePlot"))),
+    m_IntegratedPlotWidgetSettings(NEWPTR(QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot")))
 {
 
 }
@@ -29,8 +29,7 @@ QcepMainWindowPtr QxrdIntegrationWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdIntegrationWindow("Integration"),
-        &QcepObject::deleteLater);
+        NEWPTR(QxrdIntegrationWindow("Integration")));
 
   return m_Window;
 }

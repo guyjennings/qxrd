@@ -20,8 +20,7 @@ QcepMainWindowPtr QxrdScriptingWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdScriptingWindow(get_Name()),
-        &QObject::deleteLater);
+        NEWPTR(QxrdScriptingWindow(get_Name())));
 
   return m_Window;
 }

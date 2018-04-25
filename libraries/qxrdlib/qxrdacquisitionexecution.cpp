@@ -28,7 +28,7 @@ QxrdAcquisitionExecution::QxrdAcquisitionExecution(QString name)
     printf("QxrdAcquisitionExecution::QxrdAcquisitionExecution(%p)\n", this);
   }
 
-  m_IdleTimer = QTimerPtr(new QTimer());
+  m_IdleTimer = QTimerPtr(NEWPTR(QTimer()));
 
   CONNECT_CHECK(
         connect(m_IdleTimer.data(), &QTimer::timeout,

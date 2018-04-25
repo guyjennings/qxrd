@@ -37,7 +37,7 @@ void QxrdProcessorExecutionThread::run()
 
   m_ProcessorExecution =
       QxrdProcessorExecutionPtr(
-        new QxrdProcessorExecution("processorExecution"));
+        NEWPTR(QxrdProcessorExecution("processorExecution")));
 
   m_ProcessorExecution -> initialize(sharedFromThis());
 

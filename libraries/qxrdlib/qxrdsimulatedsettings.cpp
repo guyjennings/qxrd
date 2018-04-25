@@ -46,7 +46,7 @@ void QxrdSimulatedSettings::configureDetector()
 
   QxrdSimulatedDialogPtr dlog =
       QxrdSimulatedDialogPtr(
-        new QxrdSimulatedDialog(myself));
+        NEWPTR(QxrdSimulatedDialog(myself)));
 
   if (dlog) {
     dlog->exec();

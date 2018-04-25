@@ -4,7 +4,7 @@
 QxrdHistogramDialogSettings::QxrdHistogramDialogSettings(QString name) :
   QcepObject(name),
   m_HistogramRect(this, "histogramRect", QRectF(), "Histogram Selection Rectangle"),
-  m_HistogramPlotWidgetSettings(new QxrdHistogramPlotWidgetSettings(name))
+  m_HistogramPlotWidgetSettings(NEWPTR(QxrdHistogramPlotWidgetSettings(name)))
 {
 }
 

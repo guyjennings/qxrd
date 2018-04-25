@@ -14,14 +14,14 @@ QxrdWindowSettings::QxrdWindowSettings(QString name) :
   inherited(name, "Main Window"),
   m_WindowGeometry(this, "windowGeometry", QByteArray(), "Window Geometry Settings"),
   m_WindowState(this, "windowState", QByteArray(), "Window State Settings"),
-  m_ImagePlotWidgetSettings(new QcepImagePlotWidgetSettings(name+"ImagePlot")),
-  m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name+"CenteringPlot")),
-  m_IntegratedPlotWidgetSettings(new QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot")),
-  m_DistortionPlotWidgetSettings(new QxrdDistortionPlotWidgetSettings(name+"DistortionPlot")),
-  m_ImagePlotSettings(new QcepImagePlotSettings(name+"ImagePlotSettings")),
-  m_IntegratorPlotSettings(new QxrdIntegratorPlotSettings(name+"IntegratorPlotSettings")),
-  m_FileBrowserSettings(new QxrdFileBrowserSettings(name+"FileBrowser")),
-  m_HistogramDialogSettings(new QxrdHistogramDialogSettings(name+"HistogramPlot"))
+  m_ImagePlotWidgetSettings(NEWPTR(QcepImagePlotWidgetSettings(name+"ImagePlot"))),
+  m_CenteringPlotWidgetSettings(NEWPTR(QxrdCenteringPlotWidgetSettings(name+"CenteringPlot"))),
+  m_IntegratedPlotWidgetSettings(NEWPTR(QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot"))),
+  m_DistortionPlotWidgetSettings(NEWPTR(QxrdDistortionPlotWidgetSettings(name+"DistortionPlot"))),
+  m_ImagePlotSettings(NEWPTR(QcepImagePlotSettings(name+"ImagePlotSettings"))),
+  m_IntegratorPlotSettings(NEWPTR(QxrdIntegratorPlotSettings(name+"IntegratorPlotSettings"))),
+  m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name+"FileBrowser"))),
+  m_HistogramDialogSettings(NEWPTR(QxrdHistogramDialogSettings(name+"HistogramPlot")))
 {
 }
 
@@ -45,8 +45,7 @@ QcepMainWindowPtr QxrdWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdWindow("mainWindow"),
-        &QObject::deleteLater);
+        NEWPTR(QxrdWindow("mainWindow")));
 
   return m_Window;
 }

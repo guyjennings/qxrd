@@ -64,7 +64,7 @@ QxrdExperimentPreferencesDialog::QxrdExperimentPreferencesDialog(QxrdExperimentW
     }
 
     m_DetectorsModel =
-        QxrdDetectorListModelPtr(new QxrdDetectorListModel());
+        QxrdDetectorListModelPtr(NEWPTR(QxrdDetectorListModel()));
 
 
     if (acq) {

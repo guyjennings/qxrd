@@ -36,7 +36,7 @@ void QxrdFileBrowserModelUpdaterThread::run()
   }
 
   m_Updater = QxrdFileBrowserModelUpdaterPtr(
-        new QxrdFileBrowserModelUpdater("browserModelUpdater"));
+        NEWPTR(QxrdFileBrowserModelUpdater("browserModelUpdater")));
 
   m_Updater -> initialize(sharedFromThis());
 

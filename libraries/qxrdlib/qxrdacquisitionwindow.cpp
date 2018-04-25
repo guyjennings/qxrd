@@ -70,7 +70,7 @@ void QxrdAcquisitionWindow::initialize(QcepObjectWPtr parent)
     }
 
     m_DetectorsModel =
-        QxrdDetectorListModelPtr(new QxrdDetectorListModel());
+        QxrdDetectorListModelPtr(NEWPTR(QxrdDetectorListModel()));
 
     QxrdAcqCommonPtr acqp(m_Acquisition);
 
@@ -254,7 +254,7 @@ void QxrdAcquisitionWindow::eventLogWindow()
   if (m_AcquisitionEventLog == NULL) {
     m_AcquisitionEventLog =
         QxrdAcquisitionEventLogWindowPtr(
-          new QxrdAcquisitionEventLogWindow(m_Acquisition));
+          NEWPTR(QxrdAcquisitionEventLogWindow(m_Acquisition)));
   }
 
   if (m_AcquisitionEventLog) {
@@ -285,7 +285,7 @@ void QxrdAcquisitionWindow::acquisitionInfoWindow()
   if (m_InfoWindow == NULL) {
     m_InfoWindow =
         QxrdInfoWindowPtr(
-          new QxrdInfoWindow("extraIOInfo", m_Acquisition));
+          NEWPTR(QxrdInfoWindow("extraIOInfo", m_Acquisition)));
 
     m_InfoWindow -> initialize(m_Acquisition);
   }

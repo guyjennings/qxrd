@@ -197,9 +197,9 @@ QcepIntegratedDataPtr QxrdIntegrator::performIntegration(QcepDoubleImageDataPtr 
       dimg->get_Height() != cache->get_NRows()) {
 
     cache = QxrdIntegratorCachePtr(
-          new QxrdIntegratorCache(qSharedPointerDynamicCast<QxrdIntegrator>(sharedFromThis()),
+          NEWPTR(QxrdIntegratorCache(qSharedPointerDynamicCast<QxrdIntegrator>(sharedFromThis()),
                                   QxrdPolarTransformWPtr(),
-                                  m_CenterFinder));
+                                  m_CenterFinder)));
 
     cache -> initialize(sharedFromThis());
 
@@ -574,7 +574,7 @@ void QxrdIntegrator::fromScriptValue(const QScriptValue &obj, QxrdIntegratorPtr 
     QxrdIntegrator *f = qobject_cast<QxrdIntegrator*>(qobj);
 
     if (f) {
-      proc = QxrdIntegratorPtr(f);
+      proc = QxrdIntegratorPtr(f, &QObject::deleteLater);
     }
   }
 }

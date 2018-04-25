@@ -25,7 +25,7 @@ void QxrdPolarNormalization::initialize(QcepObjectWPtr parent)
 
 //QxrdPolarNormalizationPtr QxrdPolarNormalization::newPolarNormalization()
 //{
-//  QxrdPolarNormalizationPtr norm(new QxrdPolarNormalization("polarNormalization"));
+//  QxrdPolarNormalizationPtr norm(NEWPTR(QxrdPolarNormalization("polarNormalization")));
 
 //  return norm;
 //}

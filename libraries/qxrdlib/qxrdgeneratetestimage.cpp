@@ -11,7 +11,7 @@
 QxrdGenerateTestImage::QxrdGenerateTestImage(QString name) :
   inherited(name),
   m_Processor(),
-  m_Geometry(new QcepDetectorGeometry("testGeometry")),
+  m_Geometry(NEWPTR (QcepDetectorGeometry("testGeometry"))),
   m_NRows(this, "nRows", 2048, "Number of Rows"),
   m_NCols(this, "nCols", 2048, "Number of Cols"),
   m_CenterX(this, "centerX", 1024, "X Center"),

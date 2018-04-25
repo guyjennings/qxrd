@@ -22,7 +22,7 @@ void QxrdAreaDetectorSettings::configureDetector()
 
   QxrdAreaDetectorDialogPtr dlg =
       QxrdAreaDetectorDialogPtr(
-        new QxrdAreaDetectorDialog(myself));
+        NEWPTR(QxrdAreaDetectorDialog(myself)));
 
   if (dlg) {
     dlg->exec();

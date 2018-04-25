@@ -19,7 +19,7 @@ void QxrdFileWatcherSettings::configureDetector()
 
   QxrdFileWatcherDialogPtr dlg =
       QxrdFileWatcherDialogPtr(
-        new QxrdFileWatcherDialog(myself));
+        NEWPTR(QxrdFileWatcherDialog(myself)));
 
   if (dlg) {
     dlg->exec();

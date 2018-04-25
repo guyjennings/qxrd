@@ -80,7 +80,7 @@ void QxrdAppViewer::createNewExperiment()
 {
   QxrdExperimentThreadPtr expthr =
       QxrdExperimentThreadPtr(
-        new QxrdExperimentThread("experimentThread"));
+        NEWPTR(QxrdExperimentThread("experimentThread")));
 
   if (expthr) {
     expthr -> initialize(sharedFromThis(),
@@ -121,7 +121,7 @@ void QxrdAppViewer::chooseExistingExperiment()
 QSettingsPtr QxrdAppViewer::applicationSettings()
 {
   QSettingsPtr res =
-      QSettingsPtr(new QxrdViewerSettings(this));
+      QSettingsPtr(NEWPTR(QxrdViewerSettings(this)));
 
   return res;
 }

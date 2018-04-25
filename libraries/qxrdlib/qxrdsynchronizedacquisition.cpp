@@ -87,7 +87,7 @@ void QxrdSynchronizedAcquisition::readSettings(QSettings *settings)
     settings -> setArrayIndex(i);
 
     QxrdSynchronizedDetectorChannelPtr det(
-          new QxrdSynchronizedDetectorChannel(tr("detector-%1").arg(i)));
+          NEWPTR(QxrdSynchronizedDetectorChannel(tr("detector-%1").arg(i))));
 
     if (det) {
       det -> initialize(sharedFromThis());
@@ -106,7 +106,7 @@ void QxrdSynchronizedAcquisition::readSettings(QSettings *settings)
     settings -> setArrayIndex(i);
 
     QxrdSynchronizedOutputChannelPtr out(
-          new QxrdSynchronizedOutputChannel(tr("output-%1").arg(i)));
+          NEWPTR(QxrdSynchronizedOutputChannel(tr("output-%1").arg(i))));
 
     if (out) {
       out -> initialize(sharedFromThis());
@@ -125,7 +125,7 @@ void QxrdSynchronizedAcquisition::readSettings(QSettings *settings)
     settings -> setArrayIndex(i);
 
     QxrdSynchronizedInputChannelPtr inp(
-          new QxrdSynchronizedInputChannel(tr("input-%1").arg(i)));
+          NEWPTR(QxrdSynchronizedInputChannel(tr("input-%1").arg(i))));
 
     if (inp) {
       inp -> initialize(sharedFromThis());
@@ -243,7 +243,7 @@ QString QxrdSynchronizedAcquisition::detectorDeviceName(int n)
 void QxrdSynchronizedAcquisition::newDetector(int before)
 {
   QxrdSynchronizedDetectorChannelPtr det(
-        new QxrdSynchronizedDetectorChannel(tr("detector")));
+        NEWPTR(QxrdSynchronizedDetectorChannel(tr("detector"))));
 
   if (det) {
     det->initialize(sharedFromThis());
@@ -315,7 +315,7 @@ QString QxrdSynchronizedAcquisition::outputDeviceName(int n)
 void QxrdSynchronizedAcquisition::newOutput(int before)
 {
   QxrdSynchronizedOutputChannelPtr out(
-        new QxrdSynchronizedOutputChannel(tr("output")));
+        NEWPTR(QxrdSynchronizedOutputChannel(tr("output"))));
 
   if (out) {
     out -> initialize(sharedFromThis());
@@ -387,7 +387,7 @@ QString QxrdSynchronizedAcquisition::inputDeviceName(int n)
 void QxrdSynchronizedAcquisition::newInput(int before)
 {
   QxrdSynchronizedInputChannelPtr inp(
-        new QxrdSynchronizedInputChannel(tr("input")));
+        NEWPTR(QxrdSynchronizedInputChannel(tr("input"))));
 
   if (inp) {
     inp -> initialize(sharedFromThis());

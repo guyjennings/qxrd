@@ -71,8 +71,8 @@ QxrdIntegratorWPtr QxrdPolarTransform::integrator() const
 //      QcepMaskDataPtr        mask = proc->mask();
 
 //      m_IntegratorCache =
-//          QxrdIntegratorCachePtr(new QxrdIntegratorCache(
-//                                   expt, integ, sharedFromThis(), cf));
+//          QxrdIntegratorCachePtr(NEWPTR(QxrdIntegratorCache(
+//                                   expt, integ, sharedFromThis(), cf)));
 
 //      QcepDatasetModelPtr    ds  = expt->dataset();
 
@@ -99,10 +99,10 @@ QcepDataObjectPtr QxrdPolarTransform::transform(QcepDoubleImageDataPtr img, Qcep
 
     if (cf) {
       QxrdIntegratorCachePtr integCache =
-          QxrdIntegratorCachePtr(new QxrdIntegratorCache(
-                                   integ,
-                                   qSharedPointerDynamicCast<QxrdPolarTransform>(sharedFromThis()),
-                                   cf));
+          QxrdIntegratorCachePtr(NEWPTR(QxrdIntegratorCache(
+                                          integ,
+                                          qSharedPointerDynamicCast<QxrdPolarTransform>(sharedFromThis()),
+                                          cf)));
 
       integCache -> initialize(sharedFromThis());
 

@@ -24,11 +24,11 @@ void QxrdCenteringPlotWidget::initialize(QxrdCenteringPlotWidgetSettingsWPtr set
   QcepCenterFinderPtr c(m_CenterFinder);
 
   if (c) {
-    addPlotCommand(QcepPlotCommandPtr(new QcepSetCenterCommand(this, settings, c)));
+    addPlotCommand(QcepPlotCommandPtr(NEWPTR(QcepSetCenterCommand(this, settings, c))));
   }
 
   addPlotCommandSpacer();
 
-  addPlotCommand(QcepPlotCommandPtr(new QcepContextSeparatorCommand(this, settings)));
-  addPlotCommand(QcepPlotCommandPtr(new QcepEnableRingCommand(this, settings)));
+  addPlotCommand(QcepPlotCommandPtr(NEWPTR(QcepContextSeparatorCommand(this, settings))));
+  addPlotCommand(QcepPlotCommandPtr(NEWPTR(QcepEnableRingCommand(this, settings))));
 }

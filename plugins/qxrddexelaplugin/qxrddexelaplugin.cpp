@@ -58,7 +58,7 @@ QxrdDetectorDriverPtr QxrdDexelaPlugin::createDetector(QString name,
 
   QxrdDetectorDriverPtr res =
       QxrdDetectorDriverPtr(
-        new QxrdDexelaDriver(name, plugin, set, expt, acq));
+        NEWPTR(QxrdDexelaDriver(name, plugin, set, expt, acq)));
 
   return res;
 }

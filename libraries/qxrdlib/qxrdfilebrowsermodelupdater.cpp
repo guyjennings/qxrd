@@ -35,7 +35,7 @@ void QxrdFileBrowserModelUpdater::setBrowserModel(QxrdFileBrowserModelWPtr brows
 
   m_FileSystemWatcher =
       QFileSystemWatcherPtr(
-        new QFileSystemWatcher(this));
+        NEWPTR(QFileSystemWatcher(this)));
 
   QxrdFileBrowserModelPtr model(m_BrowserModel);
 

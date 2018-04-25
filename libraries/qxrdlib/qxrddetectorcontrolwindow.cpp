@@ -898,7 +898,7 @@ void QxrdDetectorControlWindow::newImage(QcepImageDataBasePtr img)
 
   m_ImageProperties =
       QcepDataObjectPropertiesModelPtr(
-        new QcepDataObjectPropertiesModel(img));
+        NEWPTR(QcepDataObjectPropertiesModel(img)));
 
   m_ImageInfoTable -> setModel(m_ImageProperties.data());
 }
@@ -924,7 +924,7 @@ void QxrdDetectorControlWindow::detectorInfoWindow()
   if (m_InfoWindow == NULL) {
     m_InfoWindow =
         QxrdInfoWindowPtr(
-          new QxrdInfoWindow("detectorInfo", m_Detector));
+          NEWPTR(QxrdInfoWindow("detectorInfo", m_Detector)));
 
     m_InfoWindow -> initialize(m_Detector);
   }
@@ -940,7 +940,7 @@ void QxrdDetectorControlWindow::openEventLog()
   if (m_AcquisitionEventLog == NULL) {
     m_AcquisitionEventLog =
         QxrdAcquisitionEventLogWindowPtr(
-          new QxrdAcquisitionEventLogWindow(m_Acquisition));
+          NEWPTR(QxrdAcquisitionEventLogWindow(m_Acquisition)));
   }
 
   if (m_AcquisitionEventLog) {

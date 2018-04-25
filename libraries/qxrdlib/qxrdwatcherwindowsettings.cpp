@@ -7,9 +7,9 @@
 
 QxrdWatcherWindowSettings::QxrdWatcherWindowSettings(QString name)
   : inherited(name, "Watcher Window"),
-    m_FileBrowserSettings(new QxrdFileBrowserSettings(name)),
-    m_ImagePlotWidgetSettings(new QcepImagePlotWidgetSettings(name)),
-    m_CenteringPlotWidgetSettings(new QxrdCenteringPlotWidgetSettings(name)),
+    m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name))),
+    m_ImagePlotWidgetSettings(NEWPTR(QcepImagePlotWidgetSettings(name))),
+    m_CenteringPlotWidgetSettings(NEWPTR(QxrdCenteringPlotWidgetSettings(name))),
     m_Pattern(this, "pattern", "", "Watched Pattern")
 {
 
@@ -30,8 +30,7 @@ QcepMainWindowPtr QxrdWatcherWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdWatcherWindow("Watcher"),
-        &QObject::deleteLater);
+        NEWPTR(QxrdWatcherWindow("Watcher")));
 
   return m_Window;
 }

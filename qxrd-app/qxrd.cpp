@@ -38,14 +38,14 @@ int main(int argc, char *argv[])
     return 0;
   }
 
-  g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(new QxrdDebugDictionary());
+  g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(NEWPTR(QxrdDebugDictionary()));
 
   int res = 0;
 
   {
     QxrdApplicationPtr app =
         QxrdApplicationPtr(
-          new QxrdApplication(argc, argv));
+          NEWPTR(QxrdApplication(argc, argv)));
 
     if (app) {
       app->initializeRoot();

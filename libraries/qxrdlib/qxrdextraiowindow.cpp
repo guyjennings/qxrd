@@ -90,15 +90,15 @@ void QxrdExtraIOWindow::initialize(QcepObjectWPtr parent)
 
   m_DetectorsModel =
       QxrdExtraIODetectorsModelPtr(
-        new QxrdExtraIODetectorsModel(m_SynchronizedAcquisition));
+        NEWPTR(QxrdExtraIODetectorsModel(m_SynchronizedAcquisition)));
 
   m_OutputsModel =
       QxrdExtraIOOutputsModelPtr(
-        new QxrdExtraIOOutputsModel(m_SynchronizedAcquisition));
+        NEWPTR(QxrdExtraIOOutputsModel(m_SynchronizedAcquisition)));
 
   m_InputsModel =
       QxrdExtraIOInputsModelPtr(
-        new QxrdExtraIOInputsModel(m_SynchronizedAcquisition));
+        NEWPTR(QxrdExtraIOInputsModel(m_SynchronizedAcquisition)));
 
   m_DetectorsTable -> setModel(m_DetectorsModel.data());
   m_OutputsTable   -> setModel(m_OutputsModel.data());
@@ -435,7 +435,7 @@ void QxrdExtraIOWindow::syncInfoWindow()
   if (m_InfoWindow == NULL) {
     m_InfoWindow =
         QxrdInfoWindowPtr(
-          new QxrdInfoWindow("extraIOInfo"));
+          NEWPTR(QxrdInfoWindow("extraIOInfo")));
 
     m_InfoWindow -> initialize(m_SynchronizedAcquisition);
   }

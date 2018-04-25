@@ -29,14 +29,14 @@ int main(int argc, char *argv[])
 
   printf("Start qxrd viewer\n");
 
-  g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(new QxrdDebugDictionary());
+  g_DebugLevel = QSharedPointer<QxrdDebugDictionary>(NEWPTR(QxrdDebugDictionary()));
 
   int res = 0;
 
   {
     QxrdAppViewerPtr app =
         QxrdAppViewerPtr(
-          new QxrdAppViewer(argc, argv));
+          NEWPTR(QxrdAppViewer(argc, argv)));
 
     if (app) {
       app -> initializeRoot();

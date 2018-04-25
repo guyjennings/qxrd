@@ -29,7 +29,7 @@ QxrdSynchronizerPtr QxrdNIDAQPlugin::createSynchronizer(QString name)
 //        qSharedPointerDynamicCast<QxrdNIDAQPlugin>(sharedFromThis()));
 
   QxrdSynchronizerPtr res =
-      QxrdSynchronizerPtr(new QxrdNIDAQSynchronizer(name));
+      QxrdSynchronizerPtr(NEWPTR(QxrdNIDAQSynchronizer(name)));
 
   return res;
 }

@@ -82,7 +82,7 @@ QxrdApplication::QxrdApplication(int &argc, char **argv) :
   m_AutoSaveTimer.start(5000);
 
   m_PluginInfo =
-      QxrdPluginInfoModelPtr(new QxrdPluginInfoModel());
+      QxrdPluginInfoModelPtr(NEWPTR(QxrdPluginInfoModel()));
 }
 
 void QxrdApplication::initializeRoot()
@@ -393,7 +393,7 @@ void QxrdApplication::loadPlugins()
               splashMessage("Area detector plugin already loaded");
             } else {
               m_AreaDetectorPlugin =
-                  QxrdDetectorPluginPtr(detPlugin);
+                  QxrdDetectorPluginPtr(detPlugin, &QObject::deleteLater);
               if (m_AreaDetectorPlugin) {
                 splashMessage(tr("Area Detector Plugin loaded from %1").arg(fileName));
 
@@ -405,7 +405,7 @@ void QxrdApplication::loadPlugins()
               splashMessage("Allied Vision Detector Plugin already loaded");
             } else {
               m_AlliedVisionPlugin =
-                  QxrdDetectorPluginPtr(detPlugin);
+                  QxrdDetectorPluginPtr(detPlugin, &QObject::deleteLater);
               if (m_AlliedVisionPlugin) {
                 splashMessage(tr("Allied Vision Plugin loaded from %1").arg(fileName));
 
@@ -417,7 +417,7 @@ void QxrdApplication::loadPlugins()
               splashMessage("Dexela Detector Plugin already loaded");
             } else {
               m_DexelaPlugin =
-                  QxrdDetectorPluginPtr(detPlugin);
+                  QxrdDetectorPluginPtr(detPlugin, &QObject::deleteLater);
               if (m_DexelaPlugin) {
                 splashMessage(tr("Dexela Plugin loaded from %1").arg(fileName));
 
@@ -429,7 +429,7 @@ void QxrdApplication::loadPlugins()
               splashMessage("NIDAQ Plugin already loaded");
             } else {
               m_SynchronizerPlugin =
-                  QxrdSynchronizerPluginPtr(syncPlugin);
+                  QxrdSynchronizerPluginPtr(syncPlugin, &QObject::deleteLater);
               if (m_SynchronizerPlugin) {
                 splashMessage(tr("Synchronizer Plugin loaded from %1").arg(fileName));
 
@@ -441,7 +441,7 @@ void QxrdApplication::loadPlugins()
               splashMessage("Perkin Elmer Plugin already loaded");
             } else {
               m_PerkinElmerDetectorPlugin =
-                  QxrdDetectorPluginPtr(detPlugin);
+                  QxrdDetectorPluginPtr(detPlugin, &QObject::deleteLater);
               if (m_PerkinElmerDetectorPlugin) {
                 splashMessage(tr("Perkin Elmer Plugin loaded from %1").arg(fileName));
 
@@ -453,7 +453,7 @@ void QxrdApplication::loadPlugins()
               splashMessage("Pilatus Plugin already loaded");
             } else {
               m_PilatusDetectorPlugin =
-                  QxrdDetectorPluginPtr(detPlugin);
+                  QxrdDetectorPluginPtr(detPlugin, &QObject::deleteLater);
               if (m_PilatusDetectorPlugin) {
                 splashMessage(tr("Pilatus Plugin loaded from %1").arg(fileName));
 
@@ -465,7 +465,7 @@ void QxrdApplication::loadPlugins()
               splashMessage("Simulated Detector Plugin already loaded");
             } else {
               m_SimulatedDetectorPlugin =
-                  QxrdDetectorPluginPtr(detPlugin);
+                  QxrdDetectorPluginPtr(detPlugin, &QObject::deleteLater);
               if (m_SimulatedDetectorPlugin) {
                 splashMessage(tr("Simulated Detector Plugin loaded from %1").arg(fileName));
 
@@ -477,7 +477,7 @@ void QxrdApplication::loadPlugins()
               splashMessage("File Watcher Plugin already loaded");
             } else {
               m_FileWatcherPlugin =
-                  QxrdDetectorPluginPtr(detPlugin);
+                  QxrdDetectorPluginPtr(detPlugin, &QObject::deleteLater);
               if (m_FileWatcherPlugin) {
                 splashMessage(tr("File Watcher Plugin loaded from %1").arg(fileName));
 
@@ -625,7 +625,7 @@ QString QxrdApplication::rootPath()
 QSettingsPtr QxrdApplication::applicationSettings()
 {
   QSettingsPtr res =
-      QSettingsPtr(new QxrdGlobalSettings(this));
+      QSettingsPtr(NEWPTR(QxrdGlobalSettings(this)));
 
   return res;
 }
@@ -737,7 +737,7 @@ void QxrdApplication::createNewExperiment()
 
   QxrdExperimentThreadPtr expthr =
       QxrdExperimentThreadPtr(
-        new QxrdExperimentThread("experimentThread"));
+        NEWPTR(QxrdExperimentThread("experimentThread")));
 
   if (expthr) {
     expthr -> initialize(sharedFromThis(), "", QxrdExperimentSettingsPtr(), QxrdExperiment::AcquisitionAllowed);
@@ -765,12 +765,12 @@ void QxrdApplication::openExperiment(QString path)
 {
   if (path.length() > 0) {
     QxrdExperimentSettingsPtr settings(
-          new QxrdExperimentSettings(
-            QxrdExperimentSettings::latestAutoPath(path)));
+          NEWPTR(QxrdExperimentSettings(
+            QxrdExperimentSettings::latestAutoPath(path))));
 
     QxrdExperimentThreadPtr expthr =
         QxrdExperimentThreadPtr(
-          new QxrdExperimentThread("experimentThread"));
+          NEWPTR(QxrdExperimentThread("experimentThread")));
 
     splashMessage(tr("===== Opening Experiment %1").arg(path));
 

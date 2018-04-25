@@ -16,7 +16,7 @@ QxrdAcquisitionEventLogWindow::QxrdAcquisitionEventLogWindow(QxrdAcqCommonWPtr a
 
     m_AcquisitionEventLogModel =
         QxrdAcquisitionEventLogModelPtr(
-          new QxrdAcquisitionEventLogModel(log));
+          NEWPTR(QxrdAcquisitionEventLogModel(log)));
 
     m_EventLog -> setModel(m_AcquisitionEventLogModel.data());
 

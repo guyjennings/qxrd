@@ -119,73 +119,73 @@ QxrdProcessor::QxrdProcessor(QString name) :
   m_HistogramData()
 {
   m_MaskStack = QcepMaskStackPtr(
-        new QcepMaskStack("maskStack"));
+        NEWPTR(QcepMaskStack("maskStack")));
 
   m_ZingerFinder = QxrdZingerFinderPtr(
-        new QxrdZingerFinder("zingerFinder"));
+        NEWPTR(QxrdZingerFinder("zingerFinder")));
 
   m_CenterFinder = QcepCenterFinderPtr(
-        new QcepCenterFinder("centerFinder"));
+        NEWPTR(QcepCenterFinder("centerFinder")));
 
   m_Integrator = QxrdIntegratorPtr(
-        new QxrdIntegrator("integrator"));
+        NEWPTR(QxrdIntegrator("integrator")));
 
   m_PolarTransform = QxrdPolarTransformPtr(
-        new QxrdPolarTransform("polarTransform"));
+        NEWPTR(QxrdPolarTransform("polarTransform")));
 
   m_PolarNormalization = QxrdPolarNormalizationPtr(
-        new QxrdPolarNormalization("polarNormalization"));
+        NEWPTR(QxrdPolarNormalization("polarNormalization")));
 
   m_GenerateTestImage = QxrdGenerateTestImagePtr(
-        new QxrdGenerateTestImage("testImage"));
+        NEWPTR(QxrdGenerateTestImage("testImage")));
 
   m_PowderRings = QcepPowderRingsModelPtr(
-        new QcepPowderRingsModel());
+        NEWPTR(QcepPowderRingsModel()));
 
   m_ROIVector = QcepROIVectorPtr(
-        new QcepROIVector("roiVector"));
+        NEWPTR(QcepROIVector("roiVector")));
 
   m_ROIModel = QcepROIModelPtr(
-        new QcepROIModel(m_ROIVector));
+        NEWPTR(QcepROIModel(m_ROIVector)));
 
   m_ROICalculator = QcepROICalculatorPtr(
-        new QcepROICalculator("roiCalculator", m_ROIVector, m_ROIModel));
+        NEWPTR(QcepROICalculator("roiCalculator", m_ROIVector, m_ROIModel)));
 
   m_AcquiredUInt16Images =
       QcepUInt16ImageQueuePtr(
-        new QcepUInt16ImageQueue("acquiredUInt16Images"));
+        NEWPTR(QcepUInt16ImageQueue("acquiredUInt16Images")));
 
   m_AcquiredUInt32Images =
       QcepUInt32ImageQueuePtr(
-        new QcepUInt32ImageQueue("acquiredInt32Images"));
+        NEWPTR(QcepUInt32ImageQueue("acquiredInt32Images")));
 
   m_CorrectedImages =
       QxrdDoubleSerializerPtr(
-        new QxrdDoubleSerializer("correctedImagesSerializer", prop_CorrectionQueueLength()));
+        NEWPTR(QxrdDoubleSerializer("correctedImagesSerializer", prop_CorrectionQueueLength())));
 
   m_IntegratedData =
       QxrdIntegratedSerializerPtr(
-        new QxrdIntegratedSerializer("integratedDataSerializer", prop_IntegrationQueueLength()));
+        NEWPTR(QxrdIntegratedSerializer("integratedDataSerializer", prop_IntegrationQueueLength())));
 
   m_HistogramData =
       QxrdHistogramSerializerPtr(
-        new QxrdHistogramSerializer("histogramDataSerializer", prop_HistogramQueueLength()));
+        NEWPTR(QxrdHistogramSerializer("histogramDataSerializer", prop_HistogramQueueLength())));
 
   m_DarkFileFormatterSettings =
       QcepOutputFileFormatterSettingsPtr(
-        new QcepOutputFileFormatterSettings("darkFileFormatterSettings"));
+        NEWPTR(QcepOutputFileFormatterSettings("darkFileFormatterSettings")));
 
   m_MaskFileFormatterSettings =
       QcepOutputFileFormatterSettingsPtr(
-        new QcepOutputFileFormatterSettings("maskFileFormatterSettings"));
+        NEWPTR(QcepOutputFileFormatterSettings("maskFileFormatterSettings")));
 
   m_RawFileFormatterSettings =
       QcepOutputFileFormatterSettingsPtr(
-        new QcepOutputFileFormatterSettings("rawFileFormatterSettings"));
+        NEWPTR(QcepOutputFileFormatterSettings("rawFileFormatterSettings")));
 
   m_SubtractedFileFormatterSettings =
       QcepOutputFileFormatterSettingsPtr(
-        new QcepOutputFileFormatterSettings("subtractedFileFormatterSettings"));
+        NEWPTR(QcepOutputFileFormatterSettings("subtractedFileFormatterSettings")));
 
   CONNECT_CHECK(
         connect(m_CorrectedImages.data(), &QxrdResultSerializerBase::resultAvailable,
@@ -2304,7 +2304,7 @@ void QxrdProcessor::maskPolygon(QVector<QPointF> poly)
 void QxrdProcessor::createMaskIfNeeded()
 {
   if (m_MaskStack == NULL) {
-    m_MaskStack = QcepMaskStackPtr(new QcepMaskStack("maskStack"));
+    m_MaskStack = QcepMaskStackPtr(NEWPTR(QcepMaskStack("maskStack")));
   }
 
   if (m_MaskStack && m_MaskStack -> isEmpty()) {

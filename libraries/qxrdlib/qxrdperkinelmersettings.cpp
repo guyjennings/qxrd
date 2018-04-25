@@ -154,7 +154,7 @@ void QxrdPerkinElmerSettings::configureDetector()
 
   QxrdPerkinElmerDialogPtr dlog =
       QxrdPerkinElmerDialogPtr(
-        new QxrdPerkinElmerDialog(myself));
+        NEWPTR(QxrdPerkinElmerDialog(myself)));
 
   if (dlog) {
     dlog->exec();

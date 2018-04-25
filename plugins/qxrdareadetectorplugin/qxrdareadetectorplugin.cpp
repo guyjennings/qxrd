@@ -37,7 +37,7 @@ QxrdDetectorDriverPtr QxrdAreaDetectorPlugin::createDetector(QString name,
         qSharedPointerDynamicCast<QxrdAreaDetectorSettings>(det));
 
   QxrdDetectorDriverPtr res =
-      QxrdDetectorDriverPtr(new QxrdAreaDetectorDriver(name, plugin, set, expt, acq));
+      QxrdDetectorDriverPtr(NEWPTR(QxrdAreaDetectorDriver(name, plugin, set, expt, acq)));
 
   return res;
 }

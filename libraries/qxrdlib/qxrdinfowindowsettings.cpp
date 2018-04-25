@@ -19,8 +19,7 @@ QcepMainWindowPtr QxrdInfoWindowSettings::newWindow()
 
   m_Window =
       QxrdMainWindowPtr(
-        new QxrdInfoWindow("Info"),
-        &QObject::deleteLater);
+        NEWPTR(QxrdInfoWindow("Info")));
 
   return m_Window;
 }

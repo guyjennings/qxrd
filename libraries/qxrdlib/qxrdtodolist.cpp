@@ -3,8 +3,8 @@
 #include "qcepmacros.h"
 #include <QFont>
 
-#define TODO(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(new QxrdToDoListItem(parent,id++,true,d1,d2,s)));
-#define DONE(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(new QxrdToDoListItem(parent,id++,false,d1,d2,s)));
+#define TODO(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(NEWPTR(QxrdToDoListItem(parent,id++,true,d1,d2,s))));
+#define DONE(d1,d2,s) m_Items.append(QxrdToDoListItemPtr(NEWPTR(QxrdToDoListItem(parent,id++,false,d1,d2,s))));
 
 QxrdToDoList::QxrdToDoList(QObject *parent)
   : QAbstractListModel()
