@@ -17,7 +17,7 @@ QxrdFileBrowserModelUpdaterThread::QxrdFileBrowserModelUpdaterThread(QString nam
 
 QxrdFileBrowserModelUpdaterThread::~QxrdFileBrowserModelUpdaterThread()
 {
-  shutdown();
+//  shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdFileBrowserModelUpdaterThread::~QxrdFileBrowserModelUpdaterThread(%p)\n", this);

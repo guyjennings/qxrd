@@ -24,7 +24,7 @@ void QxrdAcquisitionExecutionThread::initialize(QcepObjectWPtr parent)
 
 QxrdAcquisitionExecutionThread::~QxrdAcquisitionExecutionThread()
 {
-  shutdown();
+//  shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionExecutionThread::~QxrdAcquisitionExecutionThread(%p)\n", this);

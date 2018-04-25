@@ -17,6 +17,7 @@ QxrdFileBrowserWidget::QxrdFileBrowserWidget(QWidget *parent) :
 
 QxrdFileBrowserWidget::~QxrdFileBrowserWidget()
 {
+  shutdown();
 }
 
 void QxrdFileBrowserWidget::changeEvent(QEvent *e)
@@ -95,6 +96,13 @@ void QxrdFileBrowserWidget::initialize(QxrdFileBrowserSettingsWPtr settings,
 
   if (set) {
     m_RootDirectoryCombo -> setItemText(0, set->get_RootDirectory());
+  }
+}
+
+void QxrdFileBrowserWidget::shutdown()
+{
+  if (m_Model) {
+    m_Model -> shutdown();
   }
 }
 

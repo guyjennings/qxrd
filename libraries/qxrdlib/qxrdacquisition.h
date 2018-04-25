@@ -42,6 +42,7 @@ public:
   ~QxrdAcquisition();
 
   void initialize(QcepObjectWPtr parent);
+  void shutdown();
 
   static void registerMetaTypes();
 
@@ -61,7 +62,7 @@ public slots:
 
   void clearDropped();
 
-  void shutdown();
+//  void shutdown();
 
   void unlock();
 

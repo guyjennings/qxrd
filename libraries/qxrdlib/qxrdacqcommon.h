@@ -26,6 +26,7 @@ public:
   ~QxrdAcqCommon();
 
   virtual void initialize(QcepObjectWPtr);
+  virtual void shutdown() = 0;
 
   static QxrdAcqCommonWPtr findAcquisition(QcepObjectWPtr p);
 

@@ -1185,12 +1185,24 @@ void QxrdExperiment::shutdownAndSave()
     saveExperiment();
   }
 
-  if (m_SimpleServerThread) {
-    m_SimpleServerThread -> shutdown();
+  if (m_Processor) {
+    m_Processor -> shutdown();
+  }
+
+  if (m_Acquisition) {
+    m_Acquisition -> shutdown();
+  }
+
+  if (m_FileSaverThread) {
+    m_FileSaverThread -> shutdown();
   }
 
   if (m_SpecServerThread) {
     m_SpecServerThread -> shutdown();
+  }
+
+  if (m_SimpleServerThread) {
+    m_SimpleServerThread -> shutdown();
   }
 }
 

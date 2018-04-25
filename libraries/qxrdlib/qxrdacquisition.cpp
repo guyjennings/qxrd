@@ -80,6 +80,25 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
   m_SynchronizedAcquisition -> initialize(sharedFromThis());
 }
 
+void QxrdAcquisition::shutdown()
+{
+  for (int i=0; i<detectorCount(); i++) {
+    QxrdDetectorSettingsPtr det = detector(i);
+
+    if (det) {
+      det -> shutdown();
+    }
+  }
+
+  if (m_ExecutionThread) {
+    m_ExecutionThread -> shutdown();
+  }
+
+  if (m_SynchronizerThread) {
+    m_SynchronizerThread -> shutdown();
+  }
+}
+
 QxrdAcquisition::~QxrdAcquisition()
 {
 #ifndef QT_NO_DEBUG
@@ -224,22 +243,22 @@ int  QxrdAcquisition::acquisitionStatus(double time)
   }
 }
 
-void QxrdAcquisition::shutdown()
-{
-  if (qcepDebug(DEBUG_APP)) {
-    printMessage("QxrdAcquisition::shutdown()");
-  }
+//void QxrdAcquisition::shutdown()
+//{
+//  if (qcepDebug(DEBUG_APP)) {
+//    printMessage("QxrdAcquisition::shutdown()");
+//  }
 
-  for (int i=0; i<detectorCount(); i++) {
-    QxrdDetectorSettingsPtr det = detector(i);
+//  for (int i=0; i<detectorCount(); i++) {
+//    QxrdDetectorSettingsPtr det = detector(i);
 
-    if (det) {
-     det -> shutdownAcquisition();
-    }
-  }
+//    if (det) {
+//     det -> shutdownAcquisition();
+//    }
+//  }
 
-  thread()->exit();
-}
+//  thread()->exit();
+//}
 
 void QxrdAcquisition::updateSaveTimes()
 {

@@ -34,7 +34,7 @@ void QxrdExperimentThread::initialize(QcepObjectWPtr parent,
 
 QxrdExperimentThread::~QxrdExperimentThread()
 {
-  shutdown();
+//  shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdExperimentThread::~QxrdExperimentThread(%p)\n", this);

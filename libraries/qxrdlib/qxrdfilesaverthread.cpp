@@ -28,7 +28,7 @@ QxrdFileSaverThread::QxrdFileSaverThread(QString name)
 
 QxrdFileSaverThread::~QxrdFileSaverThread()
 {
-  shutdown();
+//  shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdFileSaverThread::~QxrdFileSaverThread(%p)\n", this);

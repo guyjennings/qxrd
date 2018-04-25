@@ -78,12 +78,20 @@ void QxrdAppCommon::shutdownDocuments()
     }
   }
 
-  while (!m_ExperimentThreads.isEmpty()) {
-    QxrdExperimentThreadPtr t = m_ExperimentThreads.takeFirst();
+//  while (!m_ExperimentThreads.isEmpty()) {
+//    QxrdExperimentThreadPtr t = m_ExperimentThreads.takeFirst();
 
-    if (t) {
-      t->quit();
-      t->wait();
+//    if (t) {
+//      t->shutdown();
+//    }
+//  }
+
+  for (int i=0; i<m_ExperimentThreads.count(); i++) {
+    QxrdExperimentThreadPtr expt =
+        m_ExperimentThreads.value(i);
+
+    if (expt) {
+      expt -> shutdown();
     }
   }
 

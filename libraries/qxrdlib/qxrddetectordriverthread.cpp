@@ -45,7 +45,7 @@ QxrdDetectorDriverThread::~QxrdDetectorDriverThread()
   printf("Detector driver thread destroyed\n");
 #endif
 
-  shutdown();
+//  shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorDriverThread::~QxrdDetectorDriverThread(%p)\n", this);

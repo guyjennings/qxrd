@@ -24,6 +24,8 @@ public:
   ~QxrdFileBrowserModel();
   void initialize(QcepObjectWPtr parent);
 
+  void shutdown();
+
   typedef QAbstractTableModel inherited;
 
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;

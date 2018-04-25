@@ -30,7 +30,7 @@ void QxrdSynchronizerThread::initialize(QcepObjectWPtr parent)
 
 QxrdSynchronizerThread::~QxrdSynchronizerThread()
 {
-  shutdown();
+//  shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdSynchronizerThread::~QxrdSynchronizerThread(%p)\n", this);

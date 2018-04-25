@@ -22,7 +22,7 @@ void QxrdProcessorExecutionThread::initialize(QcepObjectWPtr parent)
 
 QxrdProcessorExecutionThread::~QxrdProcessorExecutionThread()
 {
-  shutdown();
+//  shutdown();
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdProcessorExecutionThread::~QxrdProcessorExecutionThread(%p)\n", this);

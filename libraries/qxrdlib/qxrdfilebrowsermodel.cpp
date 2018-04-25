@@ -54,6 +54,13 @@ void QxrdFileBrowserModel::initialize(QcepObjectWPtr parent)
   m_Updater = m_UpdaterThread->updater();
 }
 
+void QxrdFileBrowserModel::shutdown()
+{
+  if (m_UpdaterThread) {
+    m_UpdaterThread -> shutdown();
+  }
+}
+
 QVariant QxrdFileBrowserModel::headerData
   (int section, Qt::Orientation orientation, int role) const
 {

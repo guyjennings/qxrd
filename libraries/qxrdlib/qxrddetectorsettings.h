@@ -39,6 +39,8 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
+  void shutdown();
+
   virtual ~QxrdDetectorSettings();
 
   static QxrdDetectorSettingsWPtr findDetectorSettings(QcepObjectWPtr p);

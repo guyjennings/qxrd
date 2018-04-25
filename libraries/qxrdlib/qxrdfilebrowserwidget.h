@@ -24,6 +24,7 @@ public:
   void initialize(QxrdFileBrowserSettingsWPtr settings,
             QxrdExperimentWPtr          experiment,
             QxrdProcessorWPtr processor);
+  void shutdown();
 
 protected:
   void changeEvent(QEvent *e);
