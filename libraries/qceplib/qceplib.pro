@@ -66,7 +66,7 @@ include(qceplib/qceplib-zlib.pri)
 include(qceplib/qceplib-hdf5.pri)
 include(qceplib/qceplib-specserver.pri)
 include(qceplib/qceplib-bzip2.pri)
-#include(qceplib/qceplib-libzip.pri)
+include(qceplib/qceplib-libzip.pri)
 
 unix {
     target.path = /usr/lib
