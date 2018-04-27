@@ -2,7 +2,6 @@
 #define QXRDSIMULATEDDETECTORPLUGIN_H
 
 #include "qcepobject.h"
-#include <QTimer>
 #include "qxrddetectorplugin.h"
 
 class QxrdFileWatcherPlugin :

@@ -4,7 +4,6 @@
 #include "qxrddetectordriver.h"
 #include "qxrdpilatussettings-ptr.h"
 #include "qxrdpilatusremote-ptr.h"
-#include <QTimer>
 #include <QTcpSocket>
 #include "qxrdpilatusplugin-ptr.h"
 #include "qcepimagedata-ptr.h"

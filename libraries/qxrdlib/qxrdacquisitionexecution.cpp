@@ -28,11 +28,9 @@ QxrdAcquisitionExecution::QxrdAcquisitionExecution(QString name)
     printf("QxrdAcquisitionExecution::QxrdAcquisitionExecution(%p)\n", this);
   }
 
-  m_IdleTimer = QTimerPtr(NEWPTR(QTimer()));
-
   CONNECT_CHECK(
-        connect(m_IdleTimer.data(), &QTimer::timeout,
-                this,               &QxrdAcquisitionExecution::doAcquireIdle));
+        connect(&m_IdleTimer, &QTimer::timeout,
+                this,         &QxrdAcquisitionExecution::doAcquireIdle));
 }
 
 void QxrdAcquisitionExecution::initialize(QcepObjectWPtr parent)
@@ -162,7 +160,7 @@ void QxrdAcquisitionExecution::startIdling()
 {
   set_Acquiring(false);
 
-  m_IdleTimer->start(5000);
+  m_IdleTimer.start(5000);
 
   QxrdAcqCommonPtr acq(m_Acquisition);
 
@@ -177,7 +175,7 @@ void QxrdAcquisitionExecution::stopIdling()
 {
   set_Acquiring(true);
 
-  m_IdleTimer->stop();
+  m_IdleTimer.stop();
 }
 
 void QxrdAcquisitionExecution::executeAcquisition(QxrdAcquisitionParameterPackPtr parmsp)

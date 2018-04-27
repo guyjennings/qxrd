@@ -4,7 +4,6 @@
 #include "qxrdlib_global.h"
 #include <QMainWindow>
 #include <QProgressBar>
-#include <QTimer>
 #include <QPointer>
 #include <QScriptValue>
 #include <QJSValue>

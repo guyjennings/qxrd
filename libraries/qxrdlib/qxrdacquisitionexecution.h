@@ -4,7 +4,7 @@
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include "qxrdacqcommon-ptr.h"
-#include "qtimer-ptr.h"
+#include <QTimer>
 #include "qxrdacquisitionparameterpack-ptr.h"
 #include "qxrddarkacquisitionparameterpack-ptr.h"
 #include "qcepimagedata-ptr.h"
@@ -49,7 +49,7 @@ public:
 
 private:
   QxrdAcqCommonWPtr m_Acquisition;
-  QTimerPtr         m_IdleTimer;
+  QTimer            m_IdleTimer;
 };
 
 Q_DECLARE_METATYPE(QxrdAcquisitionExecution*)

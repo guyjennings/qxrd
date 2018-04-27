@@ -3,7 +3,6 @@
 
 #include "qxrddetectordriver.h"
 #include "qxrddexelasettings-ptr.h"
-#include <QTimer>
 #include <QMutex>
 #include "BusScanner.h"
 #include "qxrddexelaplugin-ptr.h"

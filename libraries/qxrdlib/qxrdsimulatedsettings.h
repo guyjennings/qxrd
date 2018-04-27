@@ -4,7 +4,6 @@
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 #include "qxrddetectorsettings.h"
-#include <QTimer>
 
 class QXRD_EXPORT QxrdSimulatedSettings : public QxrdDetectorSettings
 {

@@ -9,7 +9,6 @@
 #include <QStringList>
 #include <QDateTime>
 #include <QMutex>
-#include <QTimer>
 
 #include "qxrdfilebrowsermodelupdaterthread-ptr.h"
 #include "qxrdfilebrowsermodelupdater-ptr.h"
@@ -81,7 +80,6 @@ private:
   double             m_HighlightFadeTime;
   int                m_HighlightSaturation;
   int                m_HighlightHue;
-  QTimer            *m_Timer;
 };
 
 #endif // QXRDFILEBROWSERMODEL_H

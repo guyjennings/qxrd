@@ -9,7 +9,6 @@
 #include "qxrdprocessor-ptr.h"
 #include <QLabel>
 #include <QProgressBar>
-#include <QTimer>
 #include <QStatusBar>
 
 class QXRD_EXPORT QxrdMainWindow : public QcepMainWindow
