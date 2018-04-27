@@ -52,16 +52,18 @@ void QxrdExperimentThread::run()
         NEWPTR(QxrdExperiment("experiment")));
 
   expt -> initialize(sharedFromThis(),
-                     m_Path,
-                     m_ExperimentMode);
-
-  m_Experiment = expt;
+                             m_Path,
+                             m_ExperimentMode);
 
   printMessage("Start reading experiment settings");
 
   expt -> readSettings(m_Settings.data());
 
   printMessage("Finished reading experiment settings");
+
+  m_Experiment = expt;
+
+  expt         = QxrdExperimentPtr();
 
   int rc = exec();
 
