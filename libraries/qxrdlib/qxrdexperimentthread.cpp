@@ -47,23 +47,25 @@ void QxrdExperimentThread::run()
     printf("Experiment thread started\n");
   }
 
-  QxrdExperimentPtr expt =
-      QxrdExperimentPtr(
-        NEWPTR(QxrdExperiment("experiment")));
+  {
+    QxrdExperimentPtr expt =
+        QxrdExperimentPtr(
+          NEWPTR(QxrdExperiment("experiment")));
 
-  expt -> initialize(sharedFromThis(),
-                     m_Path,
-                     m_ExperimentMode);
+    if (expt) {
+      expt -> initialize(sharedFromThis(),
+                         m_Path,
+                         m_ExperimentMode);
 
-  printMessage("Start reading experiment settings");
+      printMessage("Start reading experiment settings");
 
-  expt -> readSettings(m_Settings.data());
+      expt -> readSettings(m_Settings.data());
 
-  printMessage("Finished reading experiment settings");
+      printMessage("Finished reading experiment settings");
+    }
 
-  m_Experiment = expt;
-
-  expt         = QxrdExperimentPtr();
+    m_Experiment = expt;
+  }
 
   int rc = exec();
 

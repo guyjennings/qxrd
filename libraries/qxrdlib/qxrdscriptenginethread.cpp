@@ -60,6 +60,7 @@ void QxrdScriptEngineThread::run()
     if (engine) {
       engine -> initialize(sharedFromThis());
     }
+
     m_ScriptEngine = engine;
   }
 

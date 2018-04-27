@@ -46,11 +46,14 @@ void QxrdSynchronizerThread::run()
   QxrdSynchronizerPluginPtr syncp(m_SynchronizerPlugin);
 
   if (syncp) {
-    m_Synchronizer = syncp->createSynchronizer("synchronizer");
+    QxrdSynchronizerPtr sync =
+        syncp->createSynchronizer("synchronizer");
 
-    if (m_Synchronizer) {
-      m_Synchronizer -> initialize(sharedFromThis());
+    if (sync) {
+      sync -> initialize(sharedFromThis());
     }
+
+    m_Synchronizer = sync;
   }
 
   syncp = QxrdSynchronizerPluginPtr();

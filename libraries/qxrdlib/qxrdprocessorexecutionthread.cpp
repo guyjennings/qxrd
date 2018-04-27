@@ -35,11 +35,17 @@ void QxrdProcessorExecutionThread::run()
     printMessage("Processor Execution Thread Started");
   }
 
-  m_ProcessorExecution =
-      QxrdProcessorExecutionPtr(
-        NEWPTR(QxrdProcessorExecution("processorExecution")));
+  {
+    QxrdProcessorExecutionPtr procExec =
+        QxrdProcessorExecutionPtr(
+          NEWPTR(QxrdProcessorExecution("processorExecution")));
 
-  m_ProcessorExecution -> initialize(sharedFromThis());
+    if (procExec) {
+      procExec -> initialize(sharedFromThis());
+    }
+
+    m_ProcessorExecution = procExec;
+  }
 
   int rc = exec();
 

@@ -35,12 +35,19 @@ void QxrdFileBrowserModelUpdaterThread::run()
     printf("Browser Model Updater Thread Started\n");
   }
 
-  m_Updater = QxrdFileBrowserModelUpdaterPtr(
-        NEWPTR(QxrdFileBrowserModelUpdater("browserModelUpdater")));
+  {
+    QxrdFileBrowserModelUpdaterPtr updater =
+        QxrdFileBrowserModelUpdaterPtr(
+          NEWPTR(QxrdFileBrowserModelUpdater("browserModelUpdater")));
 
-  m_Updater -> initialize(sharedFromThis());
+    if (updater) {
+      updater -> initialize(sharedFromThis());
 
-  m_Updater -> setBrowserModel(m_Model);
+      updater -> setBrowserModel(m_Model);
+    }
+
+    m_Updater = updater;
+  }
 
   int rc = exec();
 

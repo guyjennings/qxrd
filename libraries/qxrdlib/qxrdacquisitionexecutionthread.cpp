@@ -37,11 +37,17 @@ void QxrdAcquisitionExecutionThread::run()
     printf("Acquisition Execution Thread Started\n");
   }
 
-  m_AcquisitionExecution =
-      QxrdAcquisitionExecutionPtr(
-        NEWPTR(QxrdAcquisitionExecution("acquisitionExecution")));
+  {
+    QxrdAcquisitionExecutionPtr acqexec =
+        QxrdAcquisitionExecutionPtr(
+          NEWPTR(QxrdAcquisitionExecution("acquisitionExecution")));
 
-  m_AcquisitionExecution -> initialize(sharedFromThis());
+    if (acqexec) {
+      acqexec -> initialize(sharedFromThis());
+    }
+
+    m_AcquisitionExecution = acqexec;
+  }
 
   int rc = exec();
 
