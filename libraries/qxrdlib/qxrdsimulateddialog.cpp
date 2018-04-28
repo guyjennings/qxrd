@@ -1,31 +1,34 @@
 #include "qxrdsimulateddialog.h"
 #include "qxrdsimulatedsettings.h"
 
-QxrdSimulatedDialog::QxrdSimulatedDialog(
-    QxrdSimulatedSettingsPtr set, QWidget *parent) :
+QxrdSimulatedDialog::QxrdSimulatedDialog(QxrdSimulatedSettingsWPtr set, QWidget *parent) :
   QxrdDetectorDialog(parent),
   m_Settings(set)
 {
   setupUi(this);
 
-  if (m_Settings) {
-    setWindowTitle(tr("Configure %1 %2: \"%3\"")
-                   .arg(m_Settings->get_DetectorTypeName())
-                   .arg(m_Settings->get_DetectorNumber())
-                   .arg(m_Settings->get_DetectorName()));
+  QxrdSimulatedSettingsPtr simset(m_Settings);
 
-    m_Settings->prop_DetectorNumber()   -> copyTo(m_DetectorNumber);
-    m_Settings->prop_DetectorName()     -> copyTo(m_DetectorName);
-    m_Settings->prop_DetectorTypeName() -> copyTo(m_DetectorType);
-    m_Settings->prop_ExposureFactor()   -> copyTo(m_ExposureFactor);
+  if (simset) {
+    setWindowTitle(tr("Configure %1 %2: \"%3\"")
+                   .arg(simset->get_DetectorTypeName())
+                   .arg(simset->get_DetectorNumber())
+                   .arg(simset->get_DetectorName()));
+
+    simset->prop_DetectorNumber()   -> copyTo(m_DetectorNumber);
+    simset->prop_DetectorName()     -> copyTo(m_DetectorName);
+    simset->prop_DetectorTypeName() -> copyTo(m_DetectorType);
+    simset->prop_ExposureFactor()   -> copyTo(m_ExposureFactor);
   }
 }
 
 void QxrdSimulatedDialog::accept()
 {
-  if (m_Settings) {
-    m_Settings->prop_DetectorName()     -> copyFrom(m_DetectorName);
-    m_Settings->prop_ExposureFactor()   -> copyFrom(m_ExposureFactor);
+  QxrdSimulatedSettingsPtr simset(m_Settings);
+
+  if (simset) {
+    simset->prop_DetectorName()     -> copyFrom(m_DetectorName);
+    simset->prop_ExposureFactor()   -> copyFrom(m_ExposureFactor);
   }
 
   QxrdDetectorDialog::accept();

@@ -12,13 +12,13 @@ class QXRD_EXPORT QxrdPerkinElmerDialog : public QxrdDetectorDialog, public Ui::
 
 public:
   explicit QxrdPerkinElmerDialog(
-      QxrdPerkinElmerSettingsPtr set,
+      QxrdPerkinElmerSettingsWPtr set,
       QWidget *parent = 0);
 
   void accept();
 
 private:
-  QxrdPerkinElmerSettingsPtr m_Settings;
+  QxrdPerkinElmerSettingsWPtr m_Settings;
 };
 
 #endif // QXRDPERKINELMERDIALOG_H

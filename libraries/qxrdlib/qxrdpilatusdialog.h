@@ -12,13 +12,13 @@ class QXRD_EXPORT QxrdPilatusDialog : public QxrdDetectorDialog, public Ui::Qxrd
 
 public:
   explicit QxrdPilatusDialog(
-      QxrdPilatusSettingsPtr set,
+      QxrdPilatusSettingsWPtr set,
       QWidget *parent = 0);
 
   void accept();
 
 private:
-  QxrdPilatusSettingsPtr m_Settings;
+  QxrdPilatusSettingsWPtr m_Settings;
 };
 
 #endif // QXRDPILATUSDIALOG_H

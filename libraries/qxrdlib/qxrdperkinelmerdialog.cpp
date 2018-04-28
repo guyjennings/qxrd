@@ -1,22 +1,23 @@
 #include "qxrdperkinelmerdialog.h"
 #include "qxrdperkinelmersettings.h"
 
-QxrdPerkinElmerDialog::QxrdPerkinElmerDialog(
-    QxrdPerkinElmerSettingsPtr set, QWidget *parent) :
+QxrdPerkinElmerDialog::QxrdPerkinElmerDialog(QxrdPerkinElmerSettingsWPtr set, QWidget *parent) :
   QxrdDetectorDialog(parent),
   m_Settings(set)
 {
   setupUi(this);
 
-  if (m_Settings) {
-    setWindowTitle(tr("Configure %1 %2: \"%3\"")
-                   .arg(m_Settings->get_DetectorTypeName())
-                   .arg(m_Settings->get_DetectorNumber())
-                   .arg(m_Settings->get_DetectorName()));
+  QxrdPerkinElmerSettingsPtr pset(m_Settings);
 
-    m_Settings->prop_DetectorNumber()   -> copyTo(m_DetectorNumber);
-    m_Settings->prop_DetectorName()     -> copyTo(m_DetectorName);
-    m_Settings->prop_DetectorTypeName() -> copyTo(m_DetectorType);
+  if (pset) {
+    setWindowTitle(tr("Configure %1 %2: \"%3\"")
+                   .arg(pset->get_DetectorTypeName())
+                   .arg(pset->get_DetectorNumber())
+                   .arg(pset->get_DetectorName()));
+
+    pset->prop_DetectorNumber()   -> copyTo(m_DetectorNumber);
+    pset->prop_DetectorName()     -> copyTo(m_DetectorName);
+    pset->prop_DetectorTypeName() -> copyTo(m_DetectorType);
 
     for (int i=0; i<10; i++) {
       m_DetectorIndex->addItem(tr("%1").arg(i));
@@ -45,30 +46,32 @@ QxrdPerkinElmerDialog::QxrdPerkinElmerDialog(
       m_DetectorTiming->addItem(mode);
     }
 
-    m_Settings->prop_DetectorIndex()    -> copyTo(m_DetectorIndex);
-    m_Settings->prop_DetectorSubType()  -> copyTo(m_DetectorSubType);
-    m_Settings->prop_DetectorAddress()  -> copyTo(m_DetectorAddress);
-    m_Settings->prop_DetectorGain()     -> copyTo(m_DetectorGain);
-    m_Settings->prop_DetectorBinning()  -> copyTo(m_DetectorBinning);
-    m_Settings->prop_DetectorTiming()   -> copyTo(m_DetectorTiming);
-    m_Settings->prop_ExposureFactor()   -> copyTo(m_ExposureFactor);
-    m_Settings->prop_HardwareSync()     -> copyTo(m_HardwareSync);
+    pset->prop_DetectorIndex()    -> copyTo(m_DetectorIndex);
+    pset->prop_DetectorSubType()  -> copyTo(m_DetectorSubType);
+    pset->prop_DetectorAddress()  -> copyTo(m_DetectorAddress);
+    pset->prop_DetectorGain()     -> copyTo(m_DetectorGain);
+    pset->prop_DetectorBinning()  -> copyTo(m_DetectorBinning);
+    pset->prop_DetectorTiming()   -> copyTo(m_DetectorTiming);
+    pset->prop_ExposureFactor()   -> copyTo(m_ExposureFactor);
+    pset->prop_HardwareSync()     -> copyTo(m_HardwareSync);
   }
 }
 
 void QxrdPerkinElmerDialog::accept()
 {
-  if (m_Settings) {
-    m_Settings->prop_DetectorName()     -> copyFrom(m_DetectorName);
+  QxrdPerkinElmerSettingsPtr pset(m_Settings);
 
-    m_Settings->prop_DetectorIndex()    -> copyFrom(m_DetectorIndex);
-    m_Settings->prop_DetectorSubType()  -> copyFrom(m_DetectorSubType);
-    m_Settings->prop_DetectorAddress()  -> copyFrom(m_DetectorAddress);
-    m_Settings->prop_DetectorGain()     -> copyFrom(m_DetectorGain);
-    m_Settings->prop_DetectorBinning()  -> copyFrom(m_DetectorBinning);
-    m_Settings->prop_DetectorTiming()   -> copyFrom(m_DetectorTiming);
-    m_Settings->prop_ExposureFactor()   -> copyFrom(m_ExposureFactor);
-    m_Settings->prop_HardwareSync()     -> copyFrom(m_HardwareSync);
+  if (pset) {
+    pset->prop_DetectorName()     -> copyFrom(m_DetectorName);
+
+    pset->prop_DetectorIndex()    -> copyFrom(m_DetectorIndex);
+    pset->prop_DetectorSubType()  -> copyFrom(m_DetectorSubType);
+    pset->prop_DetectorAddress()  -> copyFrom(m_DetectorAddress);
+    pset->prop_DetectorGain()     -> copyFrom(m_DetectorGain);
+    pset->prop_DetectorBinning()  -> copyFrom(m_DetectorBinning);
+    pset->prop_DetectorTiming()   -> copyFrom(m_DetectorTiming);
+    pset->prop_ExposureFactor()   -> copyFrom(m_ExposureFactor);
+    pset->prop_HardwareSync()     -> copyFrom(m_HardwareSync);
   }
 
   QxrdDetectorDialog::accept();

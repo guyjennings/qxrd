@@ -1,31 +1,34 @@
 #include "qxrdfilewatcherdialog.h"
 #include "qxrdfilewatchersettings.h"
 
-QxrdFileWatcherDialog::QxrdFileWatcherDialog(
-    QxrdFileWatcherSettingsPtr set, QWidget *parent) :
+QxrdFileWatcherDialog::QxrdFileWatcherDialog(QxrdFileWatcherSettingsWPtr set, QWidget *parent) :
   QxrdDetectorDialog(parent),
   m_Settings(set)
 {
   setupUi(this);
 
-  if (m_Settings) {
-    setWindowTitle(tr("Configure %1 %2: \"%3\"")
-                   .arg(m_Settings->get_DetectorTypeName())
-                   .arg(m_Settings->get_DetectorNumber())
-                   .arg(m_Settings->get_DetectorName()));
+  QxrdFileWatcherSettingsPtr wset(m_Settings);
 
-    m_Settings->prop_DetectorNumber()   -> copyTo(m_DetectorNumber);
-    m_Settings->prop_DetectorName()     -> copyTo(m_DetectorName);
-    m_Settings->prop_DetectorTypeName() -> copyTo(m_DetectorType);
-    m_Settings->prop_ExposureFactor()   -> copyTo(m_ExposureFactor);
+  if (wset) {
+    setWindowTitle(tr("Configure %1 %2: \"%3\"")
+                   .arg(wset->get_DetectorTypeName())
+                   .arg(wset->get_DetectorNumber())
+                   .arg(wset->get_DetectorName()));
+
+    wset->prop_DetectorNumber()   -> copyTo(m_DetectorNumber);
+    wset->prop_DetectorName()     -> copyTo(m_DetectorName);
+    wset->prop_DetectorTypeName() -> copyTo(m_DetectorType);
+    wset->prop_ExposureFactor()   -> copyTo(m_ExposureFactor);
   }
 }
 
 void QxrdFileWatcherDialog::accept()
 {
-  if (m_Settings) {
-    m_Settings->prop_DetectorName()     -> copyFrom(m_DetectorName);
-    m_Settings->prop_ExposureFactor()   -> copyFrom(m_ExposureFactor);
+  QxrdFileWatcherSettingsPtr wset(m_Settings);
+
+  if (wset) {
+    wset->prop_DetectorName()     -> copyFrom(m_DetectorName);
+    wset->prop_ExposureFactor()   -> copyFrom(m_ExposureFactor);
   }
 
   QxrdDetectorDialog::accept();

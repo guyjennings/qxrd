@@ -12,13 +12,13 @@ class QXRD_EXPORT QxrdFileWatcherDialog : public QxrdDetectorDialog, public Ui::
 
 public:
   explicit QxrdFileWatcherDialog(
-      QxrdFileWatcherSettingsPtr set,
+      QxrdFileWatcherSettingsWPtr set,
       QWidget *parent = 0);
 
   void accept();
 
 private:
-  QxrdFileWatcherSettingsPtr m_Settings;
+  QxrdFileWatcherSettingsWPtr m_Settings;
 };
 
 #endif // QXRDFILEWATCHERDIALOG_H

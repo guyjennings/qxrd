@@ -12,13 +12,13 @@ class QXRD_EXPORT QxrdAlliedVisionDialog : public QxrdDetectorDialog, public Ui:
 
 public:
   explicit QxrdAlliedVisionDialog(
-      QxrdAlliedVisionSettingsPtr set,
+      QxrdAlliedVisionSettingsWPtr set,
       QWidget *parent = 0);
 
   void accept();
 
 private:
-  QxrdAlliedVisionSettingsPtr m_Settings;
+  QxrdAlliedVisionSettingsWPtr m_Settings;
 };
 
 #endif // QXRDALLIEDVISIONDIALOG_H

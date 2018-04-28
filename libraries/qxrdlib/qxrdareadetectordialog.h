@@ -12,13 +12,13 @@ class QXRD_EXPORT QxrdAreaDetectorDialog : public QxrdDetectorDialog, public Ui:
 
 public:
   explicit QxrdAreaDetectorDialog(
-      QxrdAreaDetectorSettingsPtr set,
+      QxrdAreaDetectorSettingsWPtr set,
       QWidget *parent = 0);
 
   void accept();
 
 private:
-  QxrdAreaDetectorSettingsPtr m_Settings;
+  QxrdAreaDetectorSettingsWPtr m_Settings;
 };
 
 #endif // QXRDAREADETECTORDIALOG_H

@@ -12,13 +12,13 @@ class QXRD_EXPORT QxrdSimulatedDialog : public QxrdDetectorDialog, public Ui::Qx
 
 public:
   explicit QxrdSimulatedDialog(
-      QxrdSimulatedSettingsPtr set,
+      QxrdSimulatedSettingsWPtr set,
       QWidget *parent = 0);
 
   void accept();
 
 private:
-  QxrdSimulatedSettingsPtr m_Settings;
+  QxrdSimulatedSettingsWPtr m_Settings;
 };
 
 #endif // QXRDSIMULATEDDIALOG_H

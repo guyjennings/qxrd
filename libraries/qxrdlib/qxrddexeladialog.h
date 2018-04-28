@@ -12,13 +12,13 @@ class QXRD_EXPORT QxrdDexelaDialog : public QxrdDetectorDialog, public Ui::QxrdD
 
 public:
   explicit QxrdDexelaDialog(
-      QxrdDexelaSettingsPtr set,
+      QxrdDexelaSettingsWPtr set,
       QWidget *parent = 0);
 
   void accept();
 
 private:
-  QxrdDexelaSettingsPtr m_Settings;
+  QxrdDexelaSettingsWPtr m_Settings;
 };
 
 #endif // QXRDDEXELADIALOG_H
