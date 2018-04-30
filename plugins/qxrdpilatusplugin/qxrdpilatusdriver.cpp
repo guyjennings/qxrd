@@ -36,6 +36,13 @@ QxrdPilatusDriver::~QxrdPilatusDriver()
 #endif
 }
 
+void QxrdPilatusDriver::haltDetectorDriver()
+{
+  THREAD_CHECK;
+
+  stopDetectorDriver();
+}
+
 void QxrdPilatusDriver::startDetectorDriver()
 {
   THREAD_CHECK;

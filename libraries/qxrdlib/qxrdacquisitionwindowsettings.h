@@ -2,7 +2,7 @@
 #define QXRDACQUISITIONWINDOWSETTINGS_H
 
 #include "qxrdmainwindowsettings.h"
-#include "qxrdfilebrowsersettings-ptr.h"
+#include "qcepfilebrowsersettings-ptr.h"
 
 class QXRD_EXPORT QxrdAcquisitionWindowSettings : public QxrdMainWindowSettings
 {
@@ -21,10 +21,10 @@ public:
   void writeSettings(QSettings *set);
   void readSettings(QSettings *set);
 
-  QxrdFileBrowserSettingsPtr fileBrowserSettings();
+  QcepFileBrowserSettingsPtr fileBrowserSettings();
 
 private:
-  QxrdFileBrowserSettingsPtr m_FileBrowserSettings;
+  QcepFileBrowserSettingsPtr m_FileBrowserSettings;
 };
 
 Q_DECLARE_METATYPE(QxrdAcquisitionWindowSettings*)

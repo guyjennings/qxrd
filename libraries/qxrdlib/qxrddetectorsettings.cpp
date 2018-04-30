@@ -174,17 +174,18 @@ void QxrdDetectorSettings::initialize(QcepObjectWPtr parent)
 void QxrdDetectorSettings::shutdown()
 {
   if (m_Processor) {
-    m_Processor -> shutdown();
+    m_Processor -> haltProcessor();
   }
 
   if (m_ProcessorExecutionThread) {
-    m_ProcessorExecutionThread -> shutdown();
+    m_ProcessorExecutionThread -> haltProcessorExecution();
   }
 
   if (m_DetectorDriverThread) {
-    m_DetectorDriverThread -> shutdown();
+    m_DetectorDriverThread -> haltDetectorDriver();
   }
 }
+
 QxrdDetectorSettingsWPtr QxrdDetectorSettings::findDetectorSettings(QcepObjectWPtr p)
 {
   QxrdDetectorSettingsWPtr res =

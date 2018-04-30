@@ -74,6 +74,10 @@ void QxrdProcessorExecution::registerMetaTypes()
   qRegisterMetaType<QxrdProcessorExecutionThread*>("QxrdProcessorExecutionThread*");
 }
 
+void QxrdProcessorExecution::haltProcessorExecution()
+{
+}
+
 QcepImageDataBasePtr QxrdProcessorExecution::doDarkSubtraction(QcepImageDataBasePtr img)
 {
   THREAD_CHECK;

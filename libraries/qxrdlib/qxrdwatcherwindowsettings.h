@@ -3,7 +3,7 @@
 
 #include "qxrdmainwindowsettings.h"
 #include "qxrdwatcher-ptr.h"
-#include "qxrdfilebrowsersettings-ptr.h"
+#include "qcepfilebrowsersettings-ptr.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 #include "qxrdcenteringplotwidgetsettings-ptr.h"
 
@@ -23,7 +23,7 @@ public:
   void writeSettings(QSettings *set);
   void readSettings(QSettings *set);
 
-  QxrdFileBrowserSettingsPtr          fileBrowserSettings();
+  QcepFileBrowserSettingsPtr          fileBrowserSettings();
   QcepImagePlotWidgetSettingsPtr      imagePlotWidgetSettings();
   QxrdCenteringPlotWidgetSettingsPtr  centeringPlotWidgetSettings();
 
@@ -31,7 +31,7 @@ protected:
   QxrdWatcherWPtr  m_Watcher;
 
 private:
-  QxrdFileBrowserSettingsPtr          m_FileBrowserSettings;
+  QcepFileBrowserSettingsPtr          m_FileBrowserSettings;
   QcepImagePlotWidgetSettingsPtr      m_ImagePlotWidgetSettings;
   QxrdCenteringPlotWidgetSettingsPtr  m_CenteringPlotWidgetSettings;
 

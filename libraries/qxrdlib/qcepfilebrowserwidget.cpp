@@ -1,7 +1,7 @@
 #include "qxrddebug.h"
-#include "qxrdfilebrowserwidget.h"
-#include "qxrdfilebrowsersettings.h"
-#include "qxrdfilebrowsermodel.h"
+#include "qcepfilebrowserwidget.h"
+#include "qcepfilebrowsersettings.h"
+#include "qcepfilebrowsermodel.h"
 #include <QMenu>
 #include <QDir>
 #include <QFileDialog>
@@ -9,18 +9,18 @@
 #include "qxrdprocessor.h"
 #include "qcepdatasetmodel.h"
 
-QxrdFileBrowserWidget::QxrdFileBrowserWidget(QWidget *parent) :
+QcepFileBrowserWidget::QcepFileBrowserWidget(QWidget *parent) :
   QWidget(parent)
 {
   setupUi(this);
 }
 
-QxrdFileBrowserWidget::~QxrdFileBrowserWidget()
+QcepFileBrowserWidget::~QcepFileBrowserWidget()
 {
-  shutdown();
+  haltBrowser();
 }
 
-void QxrdFileBrowserWidget::changeEvent(QEvent *e)
+void QcepFileBrowserWidget::changeEvent(QEvent *e)
 {
   QWidget::changeEvent(e);
   switch (e->type()) {
@@ -32,15 +32,15 @@ void QxrdFileBrowserWidget::changeEvent(QEvent *e)
   }
 }
 
-void QxrdFileBrowserWidget::initialize(QxrdFileBrowserSettingsWPtr settings,
+void QcepFileBrowserWidget::initialize(QcepFileBrowserSettingsWPtr settings,
                                  QxrdExperimentWPtr          experiment,
                                  QxrdProcessorWPtr       processor)
 {
   m_FileBrowserSettings = settings;
   m_Experiment          = experiment;
   m_Processor           = processor;
-  m_Model = QxrdFileBrowserModelPtr(
-        NEWPTR(QxrdFileBrowserModel("fileBrowserModel")));
+  m_Model = QcepFileBrowserModelPtr(
+        NEWPTR(QcepFileBrowserModel("fileBrowserModel")));
 
   m_Model -> initialize(experiment);
   m_Model -> setRootPath(QDir::currentPath());
@@ -56,36 +56,36 @@ void QxrdFileBrowserWidget::initialize(QxrdFileBrowserSettingsWPtr settings,
   m_Model -> setNameFilters(QStringList("*.tif"));
   m_Model -> setNameFilterDisables(false);
 
-  CONNECT_CHECK(connect(m_Model.data(), &QAbstractItemModel::modelReset, this, &QxrdFileBrowserWidget::onModelReset));
-  CONNECT_CHECK(connect(m_Model.data(), &QxrdFileBrowserModel::fileUpdated, this, &QxrdFileBrowserWidget::onFileUpdated));
+  CONNECT_CHECK(connect(m_Model.data(), &QAbstractItemModel::modelReset, this, &QcepFileBrowserWidget::onModelReset));
+  CONNECT_CHECK(connect(m_Model.data(), &QcepFileBrowserModel::fileUpdated, this, &QcepFileBrowserWidget::onFileUpdated));
 
-  CONNECT_CHECK(connect(m_PrevDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doPreviousDirectory));
-  CONNECT_CHECK(connect(m_UpDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doUpDirectory));
-  CONNECT_CHECK(connect(m_ChangeDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doChangeDirectory));
-  CONNECT_CHECK(connect(m_HomeDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doHomeDirectory));
-  CONNECT_CHECK(connect(m_AcquisitionDirectoryButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doAcquisitionDirectory));
-  CONNECT_CHECK(connect(m_RefreshButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doRefreshBrowser));
-  CONNECT_CHECK(connect(m_OpenButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doOpen));
-  CONNECT_CHECK(connect(m_ProcessButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doProcess));
-  CONNECT_CHECK(connect(m_IntegrateButton, &QAbstractButton::clicked, this, &QxrdFileBrowserWidget::doIntegrate));
-  CONNECT_CHECK(connect(m_AccumulateButton, &QPushButton::clicked, this, &QxrdFileBrowserWidget::doSumImages));
+  CONNECT_CHECK(connect(m_PrevDirectoryButton, &QAbstractButton::clicked, this, &QcepFileBrowserWidget::doPreviousDirectory));
+  CONNECT_CHECK(connect(m_UpDirectoryButton, &QAbstractButton::clicked, this, &QcepFileBrowserWidget::doUpDirectory));
+  CONNECT_CHECK(connect(m_ChangeDirectoryButton, &QAbstractButton::clicked, this, &QcepFileBrowserWidget::doChangeDirectory));
+  CONNECT_CHECK(connect(m_HomeDirectoryButton, &QAbstractButton::clicked, this, &QcepFileBrowserWidget::doHomeDirectory));
+  CONNECT_CHECK(connect(m_AcquisitionDirectoryButton, &QAbstractButton::clicked, this, &QcepFileBrowserWidget::doAcquisitionDirectory));
+  CONNECT_CHECK(connect(m_RefreshButton, &QAbstractButton::clicked, this, &QcepFileBrowserWidget::doRefreshBrowser));
+  CONNECT_CHECK(connect(m_OpenButton, &QAbstractButton::clicked, this, &QcepFileBrowserWidget::doOpen));
+  CONNECT_CHECK(connect(m_ProcessButton, &QAbstractButton::clicked, this, &QcepFileBrowserWidget::doProcess));
+  CONNECT_CHECK(connect(m_IntegrateButton, &QAbstractButton::clicked, this, &QcepFileBrowserWidget::doIntegrate));
+  CONNECT_CHECK(connect(m_AccumulateButton, &QPushButton::clicked, this, &QcepFileBrowserWidget::doSumImages));
 
-  QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
+  QcepFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
   if (set) {
-    CONNECT_CHECK(connect(set -> prop_RootDirectory(), &QcepStringProperty::valueChanged, this, &QxrdFileBrowserWidget::onRootDirectoryChanged));
-    CONNECT_CHECK(connect(set -> prop_BrowserFilter(), &QcepIntProperty::valueChanged, this, &QxrdFileBrowserWidget::onFilterChanged));
-    CONNECT_CHECK(connect(set -> prop_BrowserSelector(), &QcepStringProperty::valueChanged, this, &QxrdFileBrowserWidget::onSelectorChanged));
+    CONNECT_CHECK(connect(set -> prop_RootDirectory(), &QcepStringProperty::valueChanged, this, &QcepFileBrowserWidget::onRootDirectoryChanged));
+    CONNECT_CHECK(connect(set -> prop_BrowserFilter(), &QcepIntProperty::valueChanged, this, &QcepFileBrowserWidget::onFilterChanged));
+    CONNECT_CHECK(connect(set -> prop_BrowserSelector(), &QcepStringProperty::valueChanged, this, &QcepFileBrowserWidget::onSelectorChanged));
 
     onRootDirectoryChanged(set->get_RootDirectory());
     onFilterChanged(set->get_BrowserFilter());
     onSelectorChanged(set->get_BrowserSelector());
   }
 
-  CONNECT_CHECK(connect(m_FileBrowser, &QAbstractItemView::pressed, this, &QxrdFileBrowserWidget::mousePressed));
-  CONNECT_CHECK(connect(m_FileBrowser, &QAbstractItemView::doubleClicked, this, &QxrdFileBrowserWidget::doubleClicked));
+  CONNECT_CHECK(connect(m_FileBrowser, &QAbstractItemView::pressed, this, &QcepFileBrowserWidget::mousePressed));
+  CONNECT_CHECK(connect(m_FileBrowser, &QAbstractItemView::doubleClicked, this, &QcepFileBrowserWidget::doubleClicked));
 
-  CONNECT_CHECK(connect(m_RootDirectoryCombo, (void (QComboBox::*)(int)) &QComboBox::activated, this, &QxrdFileBrowserWidget::doSelectComboItem));
+  CONNECT_CHECK(connect(m_RootDirectoryCombo, (void (QComboBox::*)(int)) &QComboBox::activated, this, &QcepFileBrowserWidget::doSelectComboItem));
 
   if (set) {
     set->prop_BrowserFilter() -> linkTo(m_FilterChoices);
@@ -99,14 +99,14 @@ void QxrdFileBrowserWidget::initialize(QxrdFileBrowserSettingsWPtr settings,
   }
 }
 
-void QxrdFileBrowserWidget::shutdown()
+void QcepFileBrowserWidget::haltBrowser()
 {
   if (m_Model) {
-    m_Model -> shutdown();
+    m_Model -> haltFileBrowser();
   }
 }
 
-void QxrdFileBrowserWidget::onFilterChanged(int newfilter)
+void QcepFileBrowserWidget::onFilterChanged(int newfilter)
 {
   switch (newfilter) {
   case 0: // Image Files (*.tif)
@@ -139,7 +139,7 @@ void QxrdFileBrowserWidget::onFilterChanged(int newfilter)
   }
 }
 
-void QxrdFileBrowserWidget::onSelectorChanged(QString str)
+void QcepFileBrowserWidget::onSelectorChanged(QString str)
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QRegExp pattern(str, Qt::CaseSensitive, QRegExp::Wildcard);
@@ -160,7 +160,7 @@ void QxrdFileBrowserWidget::onSelectorChanged(QString str)
   }
 }
 
-void QxrdFileBrowserWidget::doSelectComboItem(int index)
+void QcepFileBrowserWidget::doSelectComboItem(int index)
 {
   QString path = m_RootDirectoryCombo->itemText(index);
 
@@ -169,7 +169,7 @@ void QxrdFileBrowserWidget::doSelectComboItem(int index)
   }
 }
 
-void QxrdFileBrowserWidget::onRootDirectoryChanged(QString str)
+void QcepFileBrowserWidget::onRootDirectoryChanged(QString str)
 {
   m_Model -> setRootPath(str);
 
@@ -183,9 +183,9 @@ void QxrdFileBrowserWidget::onRootDirectoryChanged(QString str)
   }
 }
 
-void QxrdFileBrowserWidget::doPushDirectory(QString newDir)
+void QcepFileBrowserWidget::doPushDirectory(QString newDir)
 {
-  QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
+  QcepFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
   if (set && newDir != "") {
     m_DirectoryStack.append(set->get_RootDirectory());
@@ -196,9 +196,9 @@ void QxrdFileBrowserWidget::doPushDirectory(QString newDir)
   }
 }
 
-void QxrdFileBrowserWidget::doPreviousDirectory()
+void QcepFileBrowserWidget::doPreviousDirectory()
 {
-  QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
+  QcepFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
   if (set && !m_DirectoryStack.isEmpty()) {
     set->set_RootDirectory(m_DirectoryStack.takeLast());
@@ -207,9 +207,9 @@ void QxrdFileBrowserWidget::doPreviousDirectory()
   }
 }
 
-void QxrdFileBrowserWidget::doChangeDirectory()
+void QcepFileBrowserWidget::doChangeDirectory()
 {
-  QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
+  QcepFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
   if (set) {
     QString newRoot = QFileDialog::getExistingDirectory(this, "New browser directory...", set->get_RootDirectory(), 0);
@@ -220,9 +220,9 @@ void QxrdFileBrowserWidget::doChangeDirectory()
   }
 }
 
-void QxrdFileBrowserWidget::doUpDirectory()
+void QcepFileBrowserWidget::doUpDirectory()
 {
-  QxrdFileBrowserSettingsPtr set(m_FileBrowserSettings);
+  QcepFileBrowserSettingsPtr set(m_FileBrowserSettings);
 
   if (set) {
     QDir dir(set->get_RootDirectory());
@@ -233,21 +233,21 @@ void QxrdFileBrowserWidget::doUpDirectory()
   }
 }
 
-void QxrdFileBrowserWidget::doHomeDirectory()
+void QcepFileBrowserWidget::doHomeDirectory()
 {
   doPushDirectory(QDir::currentPath());
 }
 
-void QxrdFileBrowserWidget::doAcquisitionDirectory()
+void QcepFileBrowserWidget::doAcquisitionDirectory()
 {
-  QxrdExperimentPtr exp(m_Experiment);
+  QcepExperimentPtr exp(m_Experiment);
 
   if (exp) {
     doPushDirectory(exp->get_ExperimentDirectory());
   }
 }
 
-void QxrdFileBrowserWidget::doOpen()
+void QcepFileBrowserWidget::doOpen()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -293,7 +293,7 @@ void QxrdFileBrowserWidget::doOpen()
   }
 }
 
-void QxrdFileBrowserWidget::doOpenDark()
+void QcepFileBrowserWidget::doOpenDark()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -321,7 +321,7 @@ void QxrdFileBrowserWidget::doOpenDark()
   }
 }
 
-void QxrdFileBrowserWidget::doOpenMask()
+void QcepFileBrowserWidget::doOpenMask()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -349,7 +349,7 @@ void QxrdFileBrowserWidget::doOpenMask()
   }
 }
 
-void QxrdFileBrowserWidget::doOpenGainMap()
+void QcepFileBrowserWidget::doOpenGainMap()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -377,7 +377,7 @@ void QxrdFileBrowserWidget::doOpenGainMap()
   }
 }
 
-void QxrdFileBrowserWidget::doProcess()
+void QcepFileBrowserWidget::doProcess()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -405,7 +405,7 @@ void QxrdFileBrowserWidget::doProcess()
   }
 }
 
-void QxrdFileBrowserWidget::doIntegrate()
+void QcepFileBrowserWidget::doIntegrate()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -433,7 +433,7 @@ void QxrdFileBrowserWidget::doIntegrate()
   }
 }
 
-void QxrdFileBrowserWidget::doSumImages()
+void QcepFileBrowserWidget::doSumImages()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -463,7 +463,7 @@ void QxrdFileBrowserWidget::doSumImages()
   }
 }
 
-void QxrdFileBrowserWidget::doClearAccumulator()
+void QcepFileBrowserWidget::doClearAccumulator()
 {
   QxrdProcessorPtr proc(m_Processor);
 
@@ -482,7 +482,7 @@ void QxrdFileBrowserWidget::doClearAccumulator()
   }
 }
 
-void QxrdFileBrowserWidget::doIntegrateAndAccumulate()
+void QcepFileBrowserWidget::doIntegrateAndAccumulate()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -512,7 +512,7 @@ void QxrdFileBrowserWidget::doIntegrateAndAccumulate()
   }
 }
 
-void QxrdFileBrowserWidget::doSaveAccumulator()
+void QcepFileBrowserWidget::doSaveAccumulator()
 {
 //  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
 //  QModelIndexList rows = sel->selectedRows();
@@ -561,7 +561,7 @@ void QxrdFileBrowserWidget::doSaveAccumulator()
   }
 }
 
-void QxrdFileBrowserWidget::doAdd()
+void QcepFileBrowserWidget::doAdd()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -591,7 +591,7 @@ void QxrdFileBrowserWidget::doAdd()
   }
 }
 
-void QxrdFileBrowserWidget::doSubtract()
+void QcepFileBrowserWidget::doSubtract()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -621,7 +621,7 @@ void QxrdFileBrowserWidget::doSubtract()
   }
 }
 
-void QxrdFileBrowserWidget::doProjectX()
+void QcepFileBrowserWidget::doProjectX()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -651,7 +651,7 @@ void QxrdFileBrowserWidget::doProjectX()
   }
 }
 
-void QxrdFileBrowserWidget::doProjectY()
+void QcepFileBrowserWidget::doProjectY()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -681,7 +681,7 @@ void QxrdFileBrowserWidget::doProjectY()
   }
 }
 
-void QxrdFileBrowserWidget::doProjectZ()
+void QcepFileBrowserWidget::doProjectZ()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -711,7 +711,7 @@ void QxrdFileBrowserWidget::doProjectZ()
   }
 }
 
-void QxrdFileBrowserWidget::doCorrelate()
+void QcepFileBrowserWidget::doCorrelate()
 {
   QItemSelectionModel *sel = m_FileBrowser->selectionModel();
   QModelIndexList rows = sel->selectedRows();
@@ -741,7 +741,7 @@ void QxrdFileBrowserWidget::doCorrelate()
   }
 }
 
-void QxrdFileBrowserWidget::doEvaluate(QString filePath)
+void QcepFileBrowserWidget::doEvaluate(QString filePath)
 {
 //  QItemSelectionModel *sel = m_FileBrowser->selectionModel();
 //  QModelIndexList rows = sel->selectedRows();
@@ -771,12 +771,12 @@ void QxrdFileBrowserWidget::doEvaluate(QString filePath)
   }
 }
 
-void QxrdFileBrowserWidget::doRefreshBrowser()
+void QcepFileBrowserWidget::doRefreshBrowser()
 {
   m_Model->refresh();
 }
 
-void QxrdFileBrowserWidget::mousePressed(QModelIndex index)
+void QcepFileBrowserWidget::mousePressed(QModelIndex index)
 {
   if (QApplication::mouseButtons() & Qt::RightButton) {
     //    g_Application->printMessage("Right mouse pressed");
@@ -845,35 +845,35 @@ void QxrdFileBrowserWidget::mousePressed(QModelIndex index)
   }
 }
 
-void QxrdFileBrowserWidget::doubleClicked(QModelIndex /*index*/)
+void QcepFileBrowserWidget::doubleClicked(QModelIndex /*index*/)
 {
   doOpen();
 }
 
-void QxrdFileBrowserWidget::onRowCountChanged(int oldCount, int newCount)
+void QcepFileBrowserWidget::onRowCountChanged(int oldCount, int newCount)
 {
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt && qcepDebug(DEBUG_DISPLAY)) {
     expt->printMessage(
-          tr("QxrdFileBrowser::onRowCountChanged(%1,%2)").arg(oldCount).arg(newCount));
+          tr("QcepFileBrowserWidget::onRowCountChanged(%1,%2)").arg(oldCount).arg(newCount));
   }
 
 //  m_FileBrowser->resizeColumnsToContents();
 }
 
-void QxrdFileBrowserWidget::onModelReset()
+void QcepFileBrowserWidget::onModelReset()
 {
 //  m_FileBrowser->resizeColumnsToContents();
 //  m_FileBrowser->resizeRowsToContents();
 }
 
-void QxrdFileBrowserWidget::onFileUpdated(QFileInfo file)
+void QcepFileBrowserWidget::onFileUpdated(QFileInfo file)
 {
   QxrdExperimentPtr expt(m_Experiment);
 
   if (expt && qcepDebug(DEBUG_DISPLAY)) {
     expt->printMessage(
-          tr("QxrdFileBrowser::fileUpdated(\"%1\",\"%2\")").arg(file.filePath()).arg(file.lastModified().toString()));
+          tr("QcepFileBrowserWidget::onFileUpdated(\"%1\",\"%2\")").arg(file.filePath()).arg(file.lastModified().toString()));
   }
 }

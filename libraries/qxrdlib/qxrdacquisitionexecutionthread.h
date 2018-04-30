@@ -18,6 +18,7 @@ public:
   ~QxrdAcquisitionExecutionThread();
 
   void initialize(QcepObjectWPtr parent);
+  void haltAcquisitionExecution();
 
 signals:
 

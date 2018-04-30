@@ -1,0 +1,10 @@
+#ifndef QCEPFILEBROWSERSETTINGSPTR_H
+#define QCEPFILEBROWSERSETTINGSPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QcepFileBrowserSettings)
+QCEP_SHAREDPOINTER(QcepInputFileBrowserSettings)
+QCEP_SHAREDPOINTER(QcepOutputFileBrowserSettings)
+
+#endif // QCEPFILEBROWSERSETTINGSPTR_H

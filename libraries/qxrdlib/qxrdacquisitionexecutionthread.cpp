@@ -58,6 +58,23 @@ void QxrdAcquisitionExecutionThread::run()
   }
 }
 
+void QxrdAcquisitionExecutionThread::haltAcquisitionExecution()
+{
+  if (m_AcquisitionExecution) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(),
+                                    &QxrdAcquisitionExecution::haltAcquisitionExecution,
+                                    Qt::BlockingQueuedConnection))
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_AcquisitionExecution.data(),
+                                    "haltAcquisitionExecution",
+                                    Qt::BlockingQueuedConnection))
+#endif
+  }
+}
+
 void QxrdAcquisitionExecutionThread::doAcquire()
 {
   if (m_AcquisitionExecution) {

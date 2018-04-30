@@ -22,6 +22,8 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
+  void haltDetectorDriver();
+
   void setDetectorDriver(QxrdDetectorDriverPtr detDriver);
   QxrdDetectorDriverWPtr detectorDriver() const;
 

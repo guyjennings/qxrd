@@ -1,5 +1,5 @@
-#ifndef QXRDFILEBROWSERMODELUPDATER_H
-#define QXRDFILEBROWSERMODELUPDATER_H
+#ifndef QCEPFILEBROWSERMODELUPDATER_H
+#define QCEPFILEBROWSERMODELUPDATER_H
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
@@ -8,10 +8,10 @@
 #include <QDateTime>
 #include <QFileInfo>
 #include <QVector>
-#include "qxrdfilebrowsermodel-ptr.h"
-#include "qxrdfilebrowsermodel.h"
+#include "qcepfilebrowsermodel-ptr.h"
+#include "qcepfilebrowsermodel.h"
 
-class QXRD_EXPORT QxrdFileBrowserModelUpdater : public QcepObject
+class QXRD_EXPORT QcepFileBrowserModelUpdater : public QcepObject
 {
     Q_OBJECT
 
@@ -19,15 +19,16 @@ private:
   typedef QcepObject inherited;
 
 public:
-  explicit QxrdFileBrowserModelUpdater(QString name);
+  explicit QcepFileBrowserModelUpdater(QString name);
   void initialize(QcepObjectWPtr parent);
-  virtual ~QxrdFileBrowserModelUpdater();
+  virtual ~QcepFileBrowserModelUpdater();
 
   bool updateNeeded();
-  void setBrowserModel(QxrdFileBrowserModelWPtr browser);
+  void setBrowserModel(QcepFileBrowserModelWPtr browser);
 
 public slots:
 //  void shutdown();
+  void haltUpdater();
   void changeRoot(const QString &path);
   void changeContents(const QString &path);
   void updateTimeout();
@@ -36,7 +37,7 @@ public slots:
   void generateFileUpdates(int doIt);
 
 private:
-  QxrdFileBrowserModelWPtr m_BrowserModel;
+  QcepFileBrowserModelWPtr m_BrowserModel;
   QString                  m_RootPath;
   QFileSystemWatcherPtr    m_FileSystemWatcher;
   QAtomicInt               m_UpdateNeeded;
@@ -48,4 +49,4 @@ private:
   QAtomicInt               m_GenerateUpdates;
 };
 
-#endif // QXRDFILEBROWSERMODELUPDATER_H
+#endif // QCEPFILEBROWSERMODELUPDATER_H

@@ -1,30 +1,30 @@
-#ifndef QXRDFILEBROWSERWIDGET_H
-#define QXRDFILEBROWSERWIDGET_H
+#ifndef QCEPFILEBROWSERWIDGET_H
+#define QCEPFILEBROWSERWIDGET_H
 
 #include "qxrdlib_global.h"
 #include "qcepmacros.h"
 
 #include <QWidget>
-#include "ui_qxrdfilebrowserwidget.h"
-#include "qxrdfilebrowsersettings-ptr.h"
+#include "ui_qcepfilebrowserwidget.h"
+#include "qcepfilebrowsersettings-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdprocessor-ptr.h"
-#include "qxrdfilebrowsermodel-ptr.h"
+#include "qcepfilebrowsermodel-ptr.h"
 #include <QFileInfo>
 #include <QMutex>
 
-class QXRD_EXPORT QxrdFileBrowserWidget : public QWidget, public Ui::QxrdFileBrowserWidget
+class QXRD_EXPORT QcepFileBrowserWidget : public QWidget, public Ui::QcepFileBrowserWidget
 {
   Q_OBJECT
 
 public:
-  explicit QxrdFileBrowserWidget(QWidget *parent = 0);
-  ~QxrdFileBrowserWidget();
+  explicit QcepFileBrowserWidget(QWidget *parent = 0);
+  ~QcepFileBrowserWidget();
   //TODO: change to QcepObjectWPtr
-  void initialize(QxrdFileBrowserSettingsWPtr settings,
+  void initialize(QcepFileBrowserSettingsWPtr settings,
             QxrdExperimentWPtr          experiment,
             QxrdProcessorWPtr processor);
-  void shutdown();
+  void haltBrowser();
 
 protected:
   void changeEvent(QEvent *e);
@@ -65,12 +65,12 @@ public slots:
   void onFileUpdated(QFileInfo file);
 
 private:
-  QxrdFileBrowserSettingsWPtr  m_FileBrowserSettings;
+  QcepFileBrowserSettingsWPtr  m_FileBrowserSettings;
   mutable QMutex               m_Mutex;
   QxrdExperimentWPtr           m_Experiment;
   QxrdProcessorWPtr            m_Processor;
-  QxrdFileBrowserModelPtr      m_Model;
+  QcepFileBrowserModelPtr      m_Model;
   QStringList                  m_DirectoryStack;
 };
 
-#endif // QXRDFILEBROWSERWIDGET_H
+#endif // QCEPFILEBROWSERWIDGET_H

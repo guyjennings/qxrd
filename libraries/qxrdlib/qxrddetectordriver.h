@@ -18,6 +18,7 @@ public:
                      QxrdAcqCommonWPtr acq);
 
 public slots:
+  virtual void haltDetectorDriver() = 0;
   virtual void startDetectorDriver() = 0;
   virtual void stopDetectorDriver() = 0;
   virtual void changeExposureTime(double exposure) = 0;

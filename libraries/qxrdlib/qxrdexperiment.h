@@ -105,6 +105,8 @@ public:
   QxrdJSEngineWPtr     jsEngine();
 
 public slots:
+  void haltExperiment();
+
   void newLogFile(QString path);
   void openNewLogFile();
 

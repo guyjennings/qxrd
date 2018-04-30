@@ -23,7 +23,7 @@
 #include "qxrdtodolist.h"
 #include "qxrdpolartransformdialog.h"
 #include "qxrdpolarnormalizationdialog.h"
-#include "qxrdfilebrowsersettings.h"
+#include "qcepfilebrowsersettings.h"
 #include "qxrdintegratorplotsettings.h"
 #include "qxrdapplication-ptr.h"
 #include "qxrdapplication.h"

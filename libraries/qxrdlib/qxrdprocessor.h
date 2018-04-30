@@ -48,7 +48,7 @@ public:
 
   static QxrdProcessorWPtr findProcessor(QcepObjectWPtr p);
 
-  void shutdown();
+  void haltProcessor();
 
   QxrdExperimentWPtr   experiment() const;
   QxrdAcqCommonWPtr acquisition() const;

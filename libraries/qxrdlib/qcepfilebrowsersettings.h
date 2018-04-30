@@ -1,16 +1,16 @@
-#ifndef QXRDFILEBROWSERSETTINGS_H
-#define QXRDFILEBROWSERSETTINGS_H
+#ifndef QCEPFILEBROWSERSETTINGS_H
+#define QCEPFILEBROWSERSETTINGS_H
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
 #include "qcepproperty.h"
-#include "qxrdfilebrowsersettings-ptr.h"
+#include "qcepfilebrowsersettings-ptr.h"
 
-class QXRD_EXPORT QxrdFileBrowserSettings : public QcepObject
+class QXRD_EXPORT QcepFileBrowserSettings : public QcepObject
 {
   Q_OBJECT
 public:
-  Q_INVOKABLE QxrdFileBrowserSettings(QString name);
+  Q_INVOKABLE QcepFileBrowserSettings(QString name);
 
 public:
   Q_PROPERTY(int browserFilter READ get_BrowserFilter WRITE set_BrowserFilter)
@@ -23,6 +23,6 @@ public:
   QCEP_STRING_PROPERTY(RootDirectory)
 };
 
-Q_DECLARE_METATYPE(QxrdFileBrowserSettings*)
+Q_DECLARE_METATYPE(QcepFileBrowserSettings*)
 
-#endif // QXRDFILEBROWSERSETTINGS_H
+#endif // QCEPFILEBROWSERSETTINGS_H

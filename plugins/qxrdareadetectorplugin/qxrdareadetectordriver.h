@@ -20,13 +20,14 @@ public:
   virtual ~QxrdAreaDetectorDriver();
 
 public slots:
-  virtual void startDetectorDriver();
-  virtual void stopDetectorDriver();
-  virtual void changeExposureTime(double exposure);
-  virtual void beginAcquisition(double exposure);
-  virtual void endAcquisition();
-  virtual void shutdownAcquisition();
-  virtual void beginFrame();
+  void haltDetectorDriver();
+  void startDetectorDriver();
+  void stopDetectorDriver();
+  void changeExposureTime(double exposure);
+  void beginAcquisition(double exposure);
+  void endAcquisition();
+  void shutdownAcquisition();
+  void beginFrame();
 
 private slots:
   void onTimerTimeout();

@@ -80,21 +80,16 @@ SOURCES += qxrdlib.cpp \
     qxrdcenterstepspinner.cpp \
     qxrdmaskstackview.cpp \
     qxrdsynchronizedacquisition.cpp \
-    qxrdfilebrowsermodel.cpp \
-    qxrdfilebrowserview.cpp \
     qxrdhistogramdialog.cpp \
     qxrdthread.cpp \
     qxrdsynchronizedacquisitionplot.cpp \
     qxrdhighlighter.cpp \
-    qxrdfilebrowsermodelupdater.cpp \
-    qxrdfilebrowsermodelupdaterthread.cpp \
     qxrdintegratorcache.cpp \
     qxrdexperiment.cpp \
     qxrdwelcomewindow.cpp \
     qxrdglobalpreferencesdialog.cpp \
     qxrdwelcomerecentitem.cpp \
     qxrdwindowsettings.cpp \
-    qxrdfilebrowsersettings.cpp \
     qxrdhistogramdialogsettings.cpp \
     qxrddebug.cpp \
     qxrdhelpbrowser.cpp \
@@ -163,7 +158,6 @@ SOURCES += qxrdlib.cpp \
     qxrdextraiowindow.cpp \
     qxrdcenteringplotwidget.cpp \
     qxrdintegratedplotwidget.cpp \
-    qxrdfilebrowserwidget.cpp \
     qxrdprocessor.cpp \
     qxrddistortionplotwidget.cpp \
     qxrdextrainputsplotwidget.cpp \
@@ -223,7 +217,13 @@ SOURCES += qxrdlib.cpp \
     qxrdsynchronizer.cpp \
     qxrdsynchronizerthread.cpp \
     qxrdprocessorexecution.cpp \
-    qxrdprocessorexecutionthread.cpp
+    qxrdprocessorexecutionthread.cpp \
+    qcepfilebrowserview.cpp \
+    qcepfilebrowserwidget.cpp \
+    qcepfilebrowsersettings.cpp \
+    qcepfilebrowsermodelupdaterthread.cpp \
+    qcepfilebrowsermodelupdater.cpp \
+    qcepfilebrowsermodel.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -261,7 +261,6 @@ HEADERS += qxrdlib.h\
     qxrdextraiowindow.h \
     qxrdcenteringplotwidget.h \
     qxrdintegratedplotwidget.h \
-    qxrdfilebrowserwidget.h \
     qxrdacquisitionwindowsettings-ptr.h \
     qxrdanalysiswindowsettings-ptr.h \
     qxrdcalculatorwindowsettings-ptr.h \
@@ -388,7 +387,17 @@ HEADERS += qxrdlib.h\
     qxrdprocessorexecution.h \
     qxrdprocessorexecution-ptr.h \
     qxrdprocessorexecutionthread.h \
-    qxrdprocessorexecutionthread-ptr.h
+    qxrdprocessorexecutionthread-ptr.h \
+    qcepfilebrowserview.h \
+    qcepfilebrowserwidget.h \
+    qcepfilebrowsersettings.h \
+    qcepfilebrowsersettings-ptr.h \
+    qcepfilebrowsermodelupdaterthread.h \
+    qcepfilebrowsermodelupdaterthread-ptr.h \
+    qcepfilebrowsermodelupdater.h \
+    qcepfilebrowsermodelupdater-ptr.h \
+    qcepfilebrowsermodel.h \
+    qcepfilebrowsermodel-ptr.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/
@@ -428,17 +437,10 @@ HEADERS += TODO.h \
     qxrdmaskstackview.h \
     qxrdsynchronizedacquisition.h \
     qxrdsynchronizedacquisition-ptr.h \
-    qxrdfilebrowsermodel.h \
-    qxrdfilebrowsermodel-ptr.h \
-    qxrdfilebrowserview.h \
     qxrdhistogramdialog.h \
     qxrdthread.h \
     qxrdsynchronizedacquisitionplot.h \
     qxrdhighlighter.h \
-    qxrdfilebrowsermodelupdater.h \
-    qxrdfilebrowsermodelupdater-ptr.h \
-    qxrdfilebrowsermodelupdaterthread.h \
-    qxrdfilebrowsermodelupdaterthread-ptr.h \
     qxrdintegratorcache.h \
     qxrdintegratorcache-ptr.h \
     qxrdexperiment.h \
@@ -448,7 +450,6 @@ HEADERS += TODO.h \
     qxrdglobalpreferencesdialog.h \
     qxrdwelcomerecentitem.h \
     qxrdwindowsettings.h \
-    qxrdfilebrowsersettings.h \
     qxrdhistogramdialogsettings.h \
     qxrddebug.h \
     qxrdhelpbrowser.h \
@@ -489,7 +490,6 @@ HEADERS += TODO.h \
     qxrdintegratorplotsettings.h \
     qxrdintegratorplotsettings-ptr.h \
     qxrdhistogramdialogsettings-ptr.h \
-    qxrdfilebrowsersettings-ptr.h \
     qxrdwindowsettings-ptr.h \
     qxrddetectorsettings.h \
     qxrddetectorsettings-ptr.h \
@@ -534,7 +534,6 @@ FORMS += qxrdwindow.ui \
     qxrdcalculatorwindow.ui \
     qxrdinfowindow.ui \
     qxrdextraiowindow.ui \
-    qxrdfilebrowserwidget.ui \
     qxrdalliedvisiondialog.ui \
     qxrdsimulateddialog.ui \
     qxrdperkinelmerdialog.ui \
@@ -545,7 +544,8 @@ FORMS += qxrdwindow.ui \
     qxrdwatcherwindow.ui \
     qxrdcorrectiondialogpage.ui \
     qxrdexposurepreferencesdialog.ui \
-    qxrdacquisitioneventlogwindow.ui
+    qxrdacquisitioneventlogwindow.ui \
+    qcepfilebrowserwidget.ui
 
 contains(DEFINES, HAVE_DATAVIS) {
   FORMS +=

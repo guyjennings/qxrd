@@ -33,6 +33,13 @@ QxrdSimulatedDriver::~QxrdSimulatedDriver()
 #endif
 }
 
+void QxrdSimulatedDriver::haltDetectorDriver()
+{
+  THREAD_CHECK;
+
+  stopDetectorDriver();
+}
+
 void QxrdSimulatedDriver::startDetectorDriver()
 {
   THREAD_CHECK;

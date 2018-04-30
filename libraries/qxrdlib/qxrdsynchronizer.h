@@ -17,6 +17,7 @@ private:
 public:
   QxrdSynchronizer(QString name);
 
+  virtual void haltSynchronizer() = 0;
   virtual void startSynchronizer() = 0;
   virtual void stopSynchronizer() = 0;
 

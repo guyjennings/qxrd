@@ -1,6 +1,6 @@
-#include "qxrdfilebrowsersettings.h"
+#include "qcepfilebrowsersettings.h"
 
-QxrdFileBrowserSettings::QxrdFileBrowserSettings(QString name) :
+QcepFileBrowserSettings::QcepFileBrowserSettings(QString name) :
   QcepObject(name),
   m_BrowserFilter(this, "browserFilter",1, "Browser Filter"),
   m_BrowserSelector(this, "browserSelector","", "Browser Selector"),

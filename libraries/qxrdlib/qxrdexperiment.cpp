@@ -42,7 +42,7 @@
 #include "qcepdatacolumn.h"
 #include "qcepfileformattertext.h"
 #include "qxrdacquisitionexecution.h"
-#include "qxrdfilebrowsermodelupdater.h"
+#include "qcepfilebrowsermodelupdater.h"
 #include "qxrdsynchronizedacquisition.h"
 #include "qcepdataexportparameters.h"
 #include "qcepdataimportparameters.h"
@@ -307,8 +307,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
                                      m_ScriptEngine);
     m_SpecServerThread -> start();
 
-    m_SpecServer = m_SpecServerThread -> specServer();
-
     splashMessage("Starting Simple Socket Server");
 
     m_SimpleServerSettings =
@@ -322,8 +320,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
                                        m_SimpleServerSettings,
                                        m_ScriptEngine);
     m_SimpleServerThread -> start();
-
-    m_SimpleServer = m_SimpleServerThread -> simpleServer();
 
     QxrdFileSaverPtr saver(m_FileSaver);
 
@@ -390,6 +386,10 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
 
     CONNECT_CHECK(connect(prop_WorkCompleted(),   &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage));
     CONNECT_CHECK(connect(prop_WorkTarget(),      &QcepIntProperty::valueChanged, this, &QxrdExperiment::updateCompletionPercentage));
+
+    m_SpecServer = m_SpecServerThread -> specServer();
+
+    m_SimpleServer = m_SimpleServerThread -> simpleServer();
   }
 }
 
@@ -413,7 +413,7 @@ void QxrdExperiment::registerMetaTypes()
   QxrdProcessor::registerMetaTypes();
   QxrdProcessorExecution::registerMetaTypes();
 
-  qRegisterMetaType<QxrdFileBrowserModelUpdater*>("QxrdFileBrowserModelUpdater*");
+  qRegisterMetaType<QcepFileBrowserModelUpdater*>("QcepFileBrowserModelUpdater*");
   qRegisterMetaType<QxrdFileSaver*>("QxrdFileSaver*");
   qRegisterMetaType<QxrdIntegrator*>("QxrdIntegrator*");
   qRegisterMetaType<QcepDetectorGeometry*>("QxrdDetectorGeometry*");
@@ -1186,24 +1186,31 @@ void QxrdExperiment::shutdownAndSave()
   }
 
   if (m_Processor) {
-    m_Processor -> shutdown();
+    m_Processor -> haltProcessor();
   }
 
   if (m_Acquisition) {
-    m_Acquisition -> shutdown();
+    m_Acquisition -> haltAcquisition();
   }
 
   if (m_FileSaverThread) {
-    m_FileSaverThread -> shutdown();
+    m_FileSaverThread -> haltFileSaver();
   }
 
   if (m_SpecServerThread) {
-    m_SpecServerThread -> shutdown();
+    m_SpecServerThread -> haltSpecServer();
   }
 
   if (m_SimpleServerThread) {
-    m_SimpleServerThread -> shutdown();
+    m_SimpleServerThread -> haltSimpleServer();
   }
+}
+
+void QxrdExperiment::haltExperiment()
+{
+  THREAD_CHECK;
+
+  haltAutosaveTimer();
 }
 
 void QxrdExperiment::haltAutosaveTimer()

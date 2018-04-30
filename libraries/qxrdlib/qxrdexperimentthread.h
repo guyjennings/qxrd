@@ -21,6 +21,8 @@ public:
 
   ~QxrdExperimentThread();
 
+  void haltExperiment();
+
   void initialize(QcepObjectWPtr parent);
   void initialize(QcepObjectWPtr            parent,
                   QString                   path,

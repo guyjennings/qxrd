@@ -33,6 +33,13 @@ QxrdAlliedVisionDriver::~QxrdAlliedVisionDriver()
 #endif
 }
 
+void QxrdAlliedVisionDriver::haltDetectorDriver()
+{
+  THREAD_CHECK;
+
+  stopDetectorDriver();
+}
+
 void QxrdAlliedVisionDriver::startDetectorDriver()
 {
   THREAD_CHECK;

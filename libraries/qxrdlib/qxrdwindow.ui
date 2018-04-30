@@ -30,7 +30,7 @@
         </attribute>
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0">
-          <widget class="QxrdFileBrowserWidget" name="m_FileBrowserWidget" native="true"/>
+          <widget class="QcepFileBrowserWidget" name="m_FileBrowserWidget" native="true"/>
          </item>
         </layout>
        </widget>
@@ -1343,9 +1343,9 @@
    <header>qcepdatasetbrowserview.h</header>
   </customwidget>
   <customwidget>
-   <class>QxrdFileBrowserWidget</class>
+   <class>QcepFileBrowserWidget</class>
    <extends>QWidget</extends>
-   <header>qxrdfilebrowserwidget.h</header>
+   <header>qcepfilebrowserwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -21,6 +21,8 @@ public:
 
   void initialize(QcepObjectWPtr parent);
 
+  void haltProcessorExecution();
+
   Q_INVOKABLE void processAcquiredImage(QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow);
   Q_INVOKABLE void processDarkImage    (QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow);
   Q_INVOKABLE void processIdleImage    (QcepImageDataBasePtr image);

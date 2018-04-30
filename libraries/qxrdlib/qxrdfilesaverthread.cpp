@@ -70,3 +70,20 @@ QxrdFileSaverPtr QxrdFileSaverThread::fileSaver() const
 
   return QxrdFileSaverPtr();
 }
+
+void QxrdFileSaverThread::haltFileSaver()
+{
+  if (m_FileSaver) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_FileSaver.data(),
+                                    &QxrdFileSaver::haltFileSaver,
+                                    Qt::BlockingQueuedConnection))
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_FileSaver.data(),
+                                    "haltFileSaver",
+                                    Qt::BlockingQueuedConnection))
+#endif
+  }
+}

@@ -1,12 +1,12 @@
 #include "qxrdmaskingwindowsettings.h"
 #include "qxrdmaskingwindow.h"
-#include "qxrdfilebrowsersettings.h"
+#include "qcepfilebrowsersettings.h"
 #include "qcepimageplotwidgetsettings.h"
 #include <QThread>
 
 QxrdMaskingWindowSettings::QxrdMaskingWindowSettings(QString name)
   : inherited(name, "Masking Window"),
-    m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name+"Browser"))),
+    m_FileBrowserSettings(NEWPTR(QcepFileBrowserSettings(name+"Browser"))),
     m_ImagePlotWidgetSettings(NEWPTR(QcepImagePlotWidgetSettings(name+"ImagePlot")))
 {
 
@@ -57,7 +57,7 @@ void QxrdMaskingWindowSettings::writeSettings(QSettings *set)
   set->endGroup();
 }
 
-QxrdFileBrowserSettingsPtr QxrdMaskingWindowSettings::fileBrowserSettings()
+QcepFileBrowserSettingsPtr QxrdMaskingWindowSettings::fileBrowserSettings()
 {
   return m_FileBrowserSettings;
 }

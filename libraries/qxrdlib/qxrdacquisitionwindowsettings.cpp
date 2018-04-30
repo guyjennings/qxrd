@@ -1,11 +1,11 @@
 #include "qxrdacquisitionwindowsettings.h"
 #include "qxrdacquisitionwindow.h"
-#include "qxrdfilebrowsersettings.h"
+#include "qcepfilebrowsersettings.h"
 #include <QThread>
 
 QxrdAcquisitionWindowSettings::QxrdAcquisitionWindowSettings(QString name)
   : inherited(name, "Acquisition Window"),
-    m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name+"Browser")))
+    m_FileBrowserSettings(NEWPTR(QcepFileBrowserSettings(name+"Browser")))
 {
 }
 
@@ -49,7 +49,7 @@ void QxrdAcquisitionWindowSettings::writeSettings(QSettings *set)
   set->endGroup();
 }
 
-QxrdFileBrowserSettingsPtr QxrdAcquisitionWindowSettings::fileBrowserSettings()
+QcepFileBrowserSettingsPtr QxrdAcquisitionWindowSettings::fileBrowserSettings()
 {
   return m_FileBrowserSettings;
 }

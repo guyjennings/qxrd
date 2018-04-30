@@ -1,16 +1,16 @@
-#include "qxrdfilebrowserview.h"
+#include "qcepfilebrowserview.h"
 #include <QTime>
 #include <stdio.h>
 #include "qxrdapplication.h"
 
-QxrdFileBrowserView::QxrdFileBrowserView(QWidget *parent) :
+QcepFileBrowserView::QcepFileBrowserView(QWidget *parent) :
   inherited(parent)
 {
   setSortingEnabled(true);
   sortByColumn(0, Qt::AscendingOrder);
 }
 
-void QxrdFileBrowserView::paintEvent(QPaintEvent *event)
+void QcepFileBrowserView::paintEvent(QPaintEvent *event)
 {
   QTime tic;
   tic.start();
@@ -22,12 +22,12 @@ void QxrdFileBrowserView::paintEvent(QPaintEvent *event)
   if (elapsed > 1000) {
     if (g_Application) {
       g_Application->printMessage(
-            tr("QxrdFileBrowserView::paintEvent took %1 msec").arg(elapsed));
+            tr("QcepFileBrowserView::paintEvent took %1 msec").arg(elapsed));
     }
   }
 }
 
-void	QxrdFileBrowserView::dataChanged (const QModelIndex & topLeft, const QModelIndex & bottomRight , const QVector<int> &roles)
+void	QcepFileBrowserView::dataChanged (const QModelIndex & topLeft, const QModelIndex & bottomRight , const QVector<int> &roles)
 {
   QTime tic;
   tic.start();
@@ -39,12 +39,12 @@ void	QxrdFileBrowserView::dataChanged (const QModelIndex & topLeft, const QModel
   if (elapsed > 1000) {
     if (g_Application) {
       g_Application->printMessage(
-            tr("QxrdFileBrowserView::dataChanged took %1 msec").arg(elapsed));
+            tr("QcepFileBrowserView::dataChanged took %1 msec").arg(elapsed));
     }
   }
 }
 
-QModelIndex	QxrdFileBrowserView::indexAt ( const QPoint & point ) const
+QModelIndex	QcepFileBrowserView::indexAt ( const QPoint & point ) const
 {
   QTime tic;
   tic.start();
@@ -56,14 +56,14 @@ QModelIndex	QxrdFileBrowserView::indexAt ( const QPoint & point ) const
   if (elapsed > 1000) {
     if (g_Application) {
       g_Application->printMessage(
-            tr("QxrdFileBrowserView::indexAt took %1 msec").arg(elapsed));
+            tr("QcepFileBrowserView::indexAt took %1 msec").arg(elapsed));
     }
   }
 
   return result;
 }
 
-void	QxrdFileBrowserView::keyboardSearch ( const QString & search )
+void	QcepFileBrowserView::keyboardSearch ( const QString & search )
 {
   QTime tic;
   tic.start();
@@ -75,12 +75,12 @@ void	QxrdFileBrowserView::keyboardSearch ( const QString & search )
   if (elapsed > 1000) {
     if (g_Application) {
       g_Application->printMessage(
-            tr("QxrdFileBrowserView::keyboardSearch took %1 msec").arg(elapsed));
+            tr("QcepFileBrowserView::keyboardSearch took %1 msec").arg(elapsed));
     }
   }
 }
 
-void	QxrdFileBrowserView::reset ()
+void	QcepFileBrowserView::reset ()
 {
   QTime tic;
   tic.start();
@@ -92,12 +92,12 @@ void	QxrdFileBrowserView::reset ()
   if (elapsed > 1000) {
     if (g_Application) {
       g_Application->printMessage(
-            tr("QxrdFileBrowserView::reset took %1 msec").arg(elapsed));
+            tr("QcepFileBrowserView::reset took %1 msec").arg(elapsed));
     }
   }
 }
 
-void	QxrdFileBrowserView::scrollTo ( const QModelIndex & index, ScrollHint hint )
+void	QcepFileBrowserView::scrollTo ( const QModelIndex & index, ScrollHint hint )
 {
   QTime tic;
   tic.start();
@@ -109,12 +109,12 @@ void	QxrdFileBrowserView::scrollTo ( const QModelIndex & index, ScrollHint hint 
   if (elapsed > 1000) {
     if (g_Application) {
       g_Application->printMessage(
-            tr("QxrdFileBrowserView::scrollTo took %1 msec").arg(elapsed));
+            tr("QcepFileBrowserView::scrollTo took %1 msec").arg(elapsed));
     }
   }
 }
 
-void	QxrdFileBrowserView::selectAll ()
+void	QcepFileBrowserView::selectAll ()
 {
   QTime tic;
   tic.start();
@@ -126,12 +126,12 @@ void	QxrdFileBrowserView::selectAll ()
   if (elapsed > 1000) {
     if (g_Application) {
       g_Application->printMessage(
-            tr("QxrdFileBrowserView::selectAll took %1 msec").arg(elapsed));
+            tr("QcepFileBrowserView::selectAll took %1 msec").arg(elapsed));
     }
   }
 }
 
-void	QxrdFileBrowserView::setModel ( QAbstractItemModel * model )
+void	QcepFileBrowserView::setModel ( QAbstractItemModel * model )
 {
   QTime tic;
   tic.start();
@@ -143,12 +143,12 @@ void	QxrdFileBrowserView::setModel ( QAbstractItemModel * model )
   if (elapsed > 1000) {
     if (g_Application) {
       g_Application->printMessage(
-            tr("QxrdFileBrowserView::setModel took %1 msec").arg(elapsed));
+            tr("QcepFileBrowserView::setModel took %1 msec").arg(elapsed));
     }
   }
 }
 
-void	QxrdFileBrowserView::setSelectionModel ( QItemSelectionModel * selectionModel )
+void	QcepFileBrowserView::setSelectionModel ( QItemSelectionModel * selectionModel )
 {
   QTime tic;
   tic.start();
@@ -160,12 +160,12 @@ void	QxrdFileBrowserView::setSelectionModel ( QItemSelectionModel * selectionMod
   if (elapsed > 1000) {
     if (g_Application) {
       g_Application->printMessage(
-            tr("QxrdFileBrowserView::setSelectionModel took %1 msec").arg(elapsed));
+            tr("QcepFileBrowserView::setSelectionModel took %1 msec").arg(elapsed));
     }
   }
 }
 
-QRect	QxrdFileBrowserView::visualRect ( const QModelIndex & index ) const
+QRect	QcepFileBrowserView::visualRect ( const QModelIndex & index ) const
 {
   QTime tic;
   tic.start();
@@ -177,7 +177,7 @@ QRect	QxrdFileBrowserView::visualRect ( const QModelIndex & index ) const
   if (elapsed > 1000) {
     if (g_Application) {
       g_Application->printMessage(
-            tr("QxrdFileBrowserView::visualRect took %1 msec").arg(elapsed));
+            tr("QcepFileBrowserView::visualRect took %1 msec").arg(elapsed));
     }
   }
 

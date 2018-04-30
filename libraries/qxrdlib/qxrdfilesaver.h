@@ -44,6 +44,8 @@ public:
   };
 
 public slots:
+  void haltFileSaver();
+
   void saveImageData         (QcepImageDataBasePtr   image,
                               QcepMaskDataPtr        overflow,
                               int                    canOverwrite);

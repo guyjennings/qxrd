@@ -91,7 +91,7 @@ void QxrdAppCommon::shutdownDocuments()
         m_ExperimentThreads.value(i);
 
     if (expt) {
-      expt -> shutdown();
+      expt -> haltExperiment();
     }
   }
 

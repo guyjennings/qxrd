@@ -1,13 +1,13 @@
 #include "qxrdwatcherwindowsettings.h"
 #include "qxrdwatcherwindow.h"
-#include "qxrdfilebrowsersettings.h"
+#include "qcepfilebrowsersettings.h"
 #include "qcepimageplotwidgetsettings.h"
 #include "qxrdcenteringplotwidgetsettings.h"
 #include <QThread>
 
 QxrdWatcherWindowSettings::QxrdWatcherWindowSettings(QString name)
   : inherited(name, "Watcher Window"),
-    m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name))),
+    m_FileBrowserSettings(NEWPTR(QcepFileBrowserSettings(name))),
     m_ImagePlotWidgetSettings(NEWPTR(QcepImagePlotWidgetSettings(name))),
     m_CenteringPlotWidgetSettings(NEWPTR(QxrdCenteringPlotWidgetSettings(name))),
     m_Pattern(this, "pattern", "", "Watched Pattern")
@@ -77,7 +77,7 @@ void QxrdWatcherWindowSettings::writeSettings(QSettings *set)
 //  set->endGroup();
 }
 
-QxrdFileBrowserSettingsPtr QxrdWatcherWindowSettings::fileBrowserSettings()
+QcepFileBrowserSettingsPtr QxrdWatcherWindowSettings::fileBrowserSettings()
 {
   return m_FileBrowserSettings;
 }

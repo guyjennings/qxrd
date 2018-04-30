@@ -18,6 +18,7 @@ public:
   ~QxrdSynchronizerThread();
 
   void initialize(QcepObjectWPtr parent);
+  void haltSynchronizer();
 
   QxrdSynchronizerWPtr synchronizer() const;
 

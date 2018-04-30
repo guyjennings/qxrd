@@ -1,6 +1,6 @@
 #include "qxrdcenteringwindowsettings.h"
 #include "qxrdcenteringwindow.h"
-#include "qxrdfilebrowsersettings.h"
+#include "qcepfilebrowsersettings.h"
 #include "qcepimageplotwidgetsettings.h"
 #include "qxrdcenteringplotwidgetsettings.h"
 #include "qxrdintegratedplotwidgetsettings.h"
@@ -8,7 +8,7 @@
 
 QxrdCenteringWindowSettings::QxrdCenteringWindowSettings(QString name)
   : inherited(name, "Centering Window"),
-    m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name+"Browser"))),
+    m_FileBrowserSettings(NEWPTR(QcepFileBrowserSettings(name+"Browser"))),
     m_ImagePlotWidgetSettings(NEWPTR(QcepImagePlotWidgetSettings(name+"ImagePlot"))),
     m_CenteringPlotWidgetSettings(NEWPTR(QxrdCenteringPlotWidgetSettings(name+"CenteringPlot"))),
     m_IntegratedPlotWidgetSettings(NEWPTR(QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot")))
@@ -79,7 +79,7 @@ void QxrdCenteringWindowSettings::writeSettings(QSettings *set)
   set->endGroup();
 }
 
-QxrdFileBrowserSettingsPtr QxrdCenteringWindowSettings::fileBrowserSettings()
+QcepFileBrowserSettingsPtr QxrdCenteringWindowSettings::fileBrowserSettings()
 {
   return m_FileBrowserSettings;
 }

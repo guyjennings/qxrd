@@ -1,5 +1,5 @@
-#ifndef QXRDFILEBROWSERMODEL_H
-#define QXRDFILEBROWSERMODEL_H
+#ifndef QCEPFILEBROWSERMODEL_H
+#define QCEPFILEBROWSERMODEL_H
 
 #include "qxrdlib_global.h"
 #include "qcepobject.h"
@@ -10,20 +10,20 @@
 #include <QDateTime>
 #include <QMutex>
 
-#include "qxrdfilebrowsermodelupdaterthread-ptr.h"
-#include "qxrdfilebrowsermodelupdater-ptr.h"
-#include "qxrdfilebrowsermodel-ptr.h"
+#include "qcepfilebrowsermodelupdaterthread-ptr.h"
+#include "qcepfilebrowsermodelupdater-ptr.h"
+#include "qcepfilebrowsermodel-ptr.h"
 
-class QXRD_EXPORT QxrdFileBrowserModel : public QAbstractTableModel, public QEnableSharedFromThis<QxrdFileBrowserModel>
+class QXRD_EXPORT QcepFileBrowserModel : public QAbstractTableModel, public QEnableSharedFromThis<QcepFileBrowserModel>
 {
   Q_OBJECT
 
 public:
-  explicit QxrdFileBrowserModel(QString name);
-  ~QxrdFileBrowserModel();
+  explicit QcepFileBrowserModel(QString name);
+  ~QcepFileBrowserModel();
   void initialize(QcepObjectWPtr parent);
 
-  void shutdown();
+  void haltFileBrowser();
 
   typedef QAbstractTableModel inherited;
 
@@ -66,8 +66,8 @@ private:
 private:
   QcepObjectWPtr     m_Parent;
   mutable QMutex     m_Mutex;
-  QxrdFileBrowserModelUpdaterThreadPtr m_UpdaterThread;
-  QxrdFileBrowserModelUpdaterWPtr m_Updater;
+  QcepFileBrowserModelUpdaterThreadPtr m_UpdaterThread;
+  QcepFileBrowserModelUpdaterWPtr m_Updater;
   QString            m_RootPath;
   QStringList        m_NameFilters;
   QVector<QFileInfo> m_DirList;
@@ -82,4 +82,4 @@ private:
   int                m_HighlightHue;
 };
 
-#endif // QXRDFILEBROWSERMODEL_H
+#endif // QCEPFILEBROWSERMODEL_H

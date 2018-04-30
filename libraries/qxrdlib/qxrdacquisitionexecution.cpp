@@ -62,6 +62,11 @@ void QxrdAcquisitionExecution::setAcquisition(QxrdAcqCommonWPtr acq)
   m_Acquisition = acq;
 }
 
+void QxrdAcquisitionExecution::haltAcquisitionExecution()
+{
+  m_IdleTimer.stop();
+}
+
 void QxrdAcquisitionExecution::doAcquire()
 {
   QxrdAcqCommonPtr acq(m_Acquisition);

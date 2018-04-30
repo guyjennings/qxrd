@@ -292,9 +292,9 @@ void QxrdProcessor::registerMetaTypes()
 }
 
 //TODO: is this needed...
-void QxrdProcessor::shutdown()
+void QxrdProcessor::haltProcessor()
 {
-  thread()->exit();
+//  thread()->exit();
 }
 
 QxrdProcessorWPtr QxrdProcessor::findProcessor(QcepObjectWPtr p)

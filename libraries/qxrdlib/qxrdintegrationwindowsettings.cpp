@@ -1,13 +1,13 @@
 #include "qxrdintegrationwindowsettings.h"
 #include "qxrdintegrationwindow.h"
-#include "qxrdfilebrowsersettings.h"
+#include "qcepfilebrowsersettings.h"
 #include "qcepimageplotwidgetsettings.h"
 #include "qxrdintegratedplotwidgetsettings.h"
 #include <QThread>
 
 QxrdIntegrationWindowSettings::QxrdIntegrationWindowSettings(QString name)
   : inherited(name, "Integration Window"),
-    m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name+"Browser"))),
+    m_FileBrowserSettings(NEWPTR(QcepFileBrowserSettings(name+"Browser"))),
     m_ImagePlotWidgetSettings(NEWPTR(QcepImagePlotWidgetSettings(name+"ImagePlot"))),
     m_IntegratedPlotWidgetSettings(NEWPTR(QxrdIntegratedPlotWidgetSettings(name+"IntegratedPlot")))
 {
@@ -68,7 +68,7 @@ void QxrdIntegrationWindowSettings::writeSettings(QSettings *set)
   set->endGroup();
 }
 
-QxrdFileBrowserSettingsPtr QxrdIntegrationWindowSettings::fileBrowserSettings()
+QcepFileBrowserSettingsPtr QxrdIntegrationWindowSettings::fileBrowserSettings()
 {
   return m_FileBrowserSettings;
 }

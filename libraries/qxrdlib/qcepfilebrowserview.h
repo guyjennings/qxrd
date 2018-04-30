@@ -1,16 +1,16 @@
-#ifndef QXRDFILEBROWSERVIEW_H
-#define QXRDFILEBROWSERVIEW_H
+#ifndef QCEPFILEBROWSERVIEW_H
+#define QCEPFILEBROWSERVIEW_H
 
 #include "qxrdlib_global.h"
 #include <QTableView>
 
-class QXRD_EXPORT QxrdFileBrowserView : public QTableView
+class QXRD_EXPORT QcepFileBrowserView : public QTableView
 {
   Q_OBJECT
 public:
   typedef QTableView inherited;
 
-  explicit QxrdFileBrowserView(QWidget *parent = 0);
+  explicit QcepFileBrowserView(QWidget *parent = 0);
 
 signals:
 
@@ -31,4 +31,4 @@ public:
   virtual QRect	visualRect ( const QModelIndex & index ) const;
 };
 
-#endif // QXRDFILEBROWSERVIEW_H
+#endif // QCEPFILEBROWSERVIEW_H

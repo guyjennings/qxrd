@@ -84,3 +84,20 @@ QxrdSynchronizerWPtr QxrdSynchronizerThread::synchronizer() const
 
   return m_Synchronizer;
 }
+
+void QxrdSynchronizerThread::haltSynchronizer()
+{
+  if (m_Synchronizer) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_Synchronizer.data(),
+                                    &QxrdSynchronizer::haltSynchronizer,
+                                    Qt::BlockingQueuedConnection))
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_Synchronizer.data(),
+                                    "haltSynchronizer",
+                                    Qt::BlockingQueuedConnection))
+#endif
+  }
+}

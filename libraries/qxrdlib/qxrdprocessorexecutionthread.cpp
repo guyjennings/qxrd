@@ -56,6 +56,23 @@ void QxrdProcessorExecutionThread::run()
   }
 }
 
+void QxrdProcessorExecutionThread::haltProcessorExecution()
+{
+  if (m_ProcessorExecution) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
+  INVOKE_CHECK(
+        QMetaObject::invokeMethod(m_ProcessorExecution.data(),
+                                  &QxrdProcessorExecution::haltProcessorExecution,
+                                  Qt::BlockingQueuedConnection))
+#else
+  INVOKE_CHECK(
+        QMetaObject::invokeMethod(m_ProcessorExecution.data(),
+                                  "haltProcessorExecution",
+                                  Qt::BlockingQueuedConnection))
+#endif
+  }
+}
+
 void QxrdProcessorExecutionThread::processAcquiredImage(QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow)
 {
   QxrdProcessorExecution* exec = m_ProcessorExecution.data();

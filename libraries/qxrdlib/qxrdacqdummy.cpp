@@ -16,7 +16,7 @@ void QxrdAcqDummy::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 }
 
-void QxrdAcqDummy::shutdown()
+void QxrdAcqDummy::haltAcquisition()
 {
 }
 

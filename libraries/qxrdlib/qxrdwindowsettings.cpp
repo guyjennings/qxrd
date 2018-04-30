@@ -2,7 +2,7 @@
 #include "qxrdwindow.h"
 #include "qcepimageplotsettings.h"
 #include "qxrdintegratorplotsettings.h"
-#include "qxrdfilebrowsersettings.h"
+#include "qcepfilebrowsersettings.h"
 #include "qxrdhistogramdialogsettings.h"
 #include "qcepimageplotwidgetsettings.h"
 #include "qxrdcenteringplotwidgetsettings.h"
@@ -20,7 +20,7 @@ QxrdWindowSettings::QxrdWindowSettings(QString name) :
   m_DistortionPlotWidgetSettings(NEWPTR(QxrdDistortionPlotWidgetSettings(name+"DistortionPlot"))),
   m_ImagePlotSettings(NEWPTR(QcepImagePlotSettings(name+"ImagePlotSettings"))),
   m_IntegratorPlotSettings(NEWPTR(QxrdIntegratorPlotSettings(name+"IntegratorPlotSettings"))),
-  m_FileBrowserSettings(NEWPTR(QxrdFileBrowserSettings(name+"FileBrowser"))),
+  m_FileBrowserSettings(NEWPTR(QcepFileBrowserSettings(name+"FileBrowser"))),
   m_HistogramDialogSettings(NEWPTR(QxrdHistogramDialogSettings(name+"HistogramPlot")))
 {
 }
@@ -55,7 +55,7 @@ void QxrdWindowSettings::registerMetaTypes()
   qRegisterMetaType<QxrdWindowSettings*>("QxrdWindowSettings*");
   qRegisterMetaType<QcepImagePlotSettings*>("QcepImagePlotSettings*"); //TODO: move into Qcep-related class
   qRegisterMetaType<QxrdIntegratorPlotSettings*>("QxrdIntegratorPlotSettings*");
-  qRegisterMetaType<QxrdFileBrowserSettings*>("QxrdFileBrowserSettings*");
+  qRegisterMetaType<QcepFileBrowserSettings*>("QcepFileBrowserSettings*");
   qRegisterMetaType<QcepImagePlotWidgetSettings*>("QcepImagePlotWidgetSettings*");
   qRegisterMetaType<QxrdCenteringPlotWidgetSettings*>("QxrdCenteringPlotWidgetSettings*");
   qRegisterMetaType<QxrdIntegratedPlotWidgetSettings*>("QxrdIntegratedPlotWidgetSettings*");
@@ -184,7 +184,7 @@ QxrdIntegratorPlotSettingsWPtr QxrdWindowSettings::integratorPlotSettings()
   return m_IntegratorPlotSettings;
 }
 
-QxrdFileBrowserSettingsWPtr QxrdWindowSettings::fileBrowserSettings()
+QcepFileBrowserSettingsWPtr QxrdWindowSettings::fileBrowserSettings()
 {
   return m_FileBrowserSettings;
 }

@@ -1,14 +1,14 @@
 #include "qxrddebug.h"
-#include "qxrdfilebrowsermodelupdater.h"
+#include "qcepfilebrowsermodelupdater.h"
 #include "qxrdappcommon.h"
 #include <QThread>
 #include <QDirIterator>
 #include <QFileSystemWatcher>
-#include "qxrdfilebrowsermodel.h"
-#include "qxrdfilebrowsermodelupdaterthread.h"
-#include "qxrdfilebrowsermodelupdaterthread-ptr.h"
+#include "qcepfilebrowsermodel.h"
+#include "qcepfilebrowsermodelupdaterthread.h"
+#include "qcepfilebrowsermodelupdaterthread-ptr.h"
 
-QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QString name) :
+QcepFileBrowserModelUpdater::QcepFileBrowserModelUpdater(QString name) :
   inherited(name),
   m_BrowserModel(),
   m_RootPath(""),
@@ -24,58 +24,71 @@ QxrdFileBrowserModelUpdater::QxrdFileBrowserModelUpdater(QString name) :
   }
 }
 
-void QxrdFileBrowserModelUpdater::initialize(QcepObjectWPtr parent)
+void QcepFileBrowserModelUpdater::initialize(QcepObjectWPtr parent)
 {
+  THREAD_CHECK;
+
   inherited::initialize(parent);
 }
 
-void QxrdFileBrowserModelUpdater::setBrowserModel(QxrdFileBrowserModelWPtr browser)
+void QcepFileBrowserModelUpdater::haltUpdater()
 {
+  THREAD_CHECK;
+
+  m_UpdateTimer.stop();
+}
+
+void QcepFileBrowserModelUpdater::setBrowserModel(QcepFileBrowserModelWPtr browser)
+{
+  THREAD_CHECK;
+
   m_BrowserModel = browser;
 
   m_FileSystemWatcher =
       QFileSystemWatcherPtr(
         NEWPTR(QFileSystemWatcher(this)));
 
-  QxrdFileBrowserModelPtr model(m_BrowserModel);
+  QcepFileBrowserModelPtr model(m_BrowserModel);
 
   if (model) {
     CONNECT_CHECK(
-          connect(model.data(),              &QxrdFileBrowserModel::rootChanged,
-                  this,                      &QxrdFileBrowserModelUpdater::changeRoot));
+          connect(model.data(),              &QcepFileBrowserModel::rootChanged,
+                  this,                      &QcepFileBrowserModelUpdater::changeRoot));
   }
 
   CONNECT_CHECK(
         connect(m_FileSystemWatcher.data(),  &QFileSystemWatcher::directoryChanged,
-                this,                        &QxrdFileBrowserModelUpdater::changeContents, Qt::DirectConnection));
+                this,                        &QcepFileBrowserModelUpdater::changeContents, Qt::DirectConnection));
 
   CONNECT_CHECK(
         connect(&m_UpdateTimer,              &QTimer::timeout,
-                this,                        &QxrdFileBrowserModelUpdater::updateTimeout));
+                this,                        &QcepFileBrowserModelUpdater::updateTimeout));
 
   m_UpdateTimer.setSingleShot(true);
   m_UpdateTimer.start(m_UpdateInterval);
 }
 
-QxrdFileBrowserModelUpdater::~QxrdFileBrowserModelUpdater()
+QcepFileBrowserModelUpdater::~QcepFileBrowserModelUpdater()
 {
 #ifndef QT_NO_DEBUG
   printf("Deleting file browser model updater\n");
 #endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
-    printf("QxrdFileBrowserModelUpdater::~QxrdFileBrowserModelUpdater(%p)\n", this);
+    printf("QcepFileBrowserModelUpdater::~QcepFileBrowserModelUpdater(%p)\n", this);
   }
 
   if (qcepDebug(DEBUG_APP)) {
-    printMessage("QxrdFileBrowserModelUpdater::~QxrdFileBrowserModelUpdater");
+    printMessage("QcepFileBrowserModelUpdater::~QcepFileBrowserModelUpdater");
   }
 }
 
-void QxrdFileBrowserModelUpdater::changeRoot(const QString& path)
+void QcepFileBrowserModelUpdater::changeRoot(const QString& path)
 {
+  THREAD_CHECK;
+
   if (qcepDebug(DEBUG_BROWSER)) {
-    printMessage(tr("QxrdFileBrowserModelUpdater::changeRoot %1").arg(path));
+    printMessage(tr("QcepFileBrowserModelUpdater::changeRoot %1").arg(path));
   }
 
   QStringList dirs = m_FileSystemWatcher->directories();
@@ -90,25 +103,29 @@ void QxrdFileBrowserModelUpdater::changeRoot(const QString& path)
   }
 }
 
-void QxrdFileBrowserModelUpdater::needUpdate()
+void QcepFileBrowserModelUpdater::needUpdate()
 {
   m_UpdateNeeded.fetchAndStoreOrdered(1);
 }
 
-void QxrdFileBrowserModelUpdater::changeContents(const QString& path)
+void QcepFileBrowserModelUpdater::changeContents(const QString& path)
 {
+  THREAD_CHECK;
+
   if (qcepDebug(DEBUG_BROWSER)) {
-    printMessage(tr("QxrdFileBrowserModelUpdater::changeContents %1").arg(path));
+    printMessage(tr("QcepFileBrowserModelUpdater::changeContents %1").arg(path));
   }
 
   m_UpdateNeeded.fetchAndStoreOrdered(1);
 }
 
-void QxrdFileBrowserModelUpdater::updateTimeout()
+void QcepFileBrowserModelUpdater::updateTimeout()
 {
+  THREAD_CHECK;
+
   if (m_UpdateNeeded.fetchAndStoreOrdered(0)) {
     if (qcepDebug(DEBUG_BROWSER)) {
-      printMessage(tr("QxrdFileBrowserModelUpdater::updateTimeout update needed %1").arg(m_RootPath));
+      printMessage(tr("QcepFileBrowserModelUpdater::updateTimeout update needed %1").arg(m_RootPath));
     }
 
     updateContents();
@@ -117,7 +134,7 @@ void QxrdFileBrowserModelUpdater::updateTimeout()
   m_UpdateTimer.start(m_UpdateInterval);
 }
 
-bool QxrdFileBrowserModelUpdater::updateNeeded()
+bool QcepFileBrowserModelUpdater::updateNeeded()
 {
   return m_UpdateNeeded.fetchAndAddOrdered(0);
 }
@@ -126,11 +143,11 @@ static void checkSortInterrupt()
 {
   QThread *curr = QThread::currentThread();
 
-  QxrdFileBrowserModelUpdaterThread *upthrd =
-      qobject_cast<QxrdFileBrowserModelUpdaterThread*>(curr);
+  QcepFileBrowserModelUpdaterThread *upthrd =
+      qobject_cast<QcepFileBrowserModelUpdaterThread*>(curr);
 
   if (upthrd) {
-    QxrdFileBrowserModelUpdaterPtr updater
+    QcepFileBrowserModelUpdaterPtr updater
         = upthrd->updater();
 
     if (updater && updater->updateNeeded()) {
@@ -181,14 +198,16 @@ static bool fileDateGreaterThan(QFileInfo f1, QFileInfo f2)
   return f1.lastModified() > f2.lastModified();
 }
 
-void QxrdFileBrowserModelUpdater::updateContents()
+void QcepFileBrowserModelUpdater::updateContents()
 {
+  THREAD_CHECK;
+
   QTime tic;
   tic.start();
 
   m_UpdateNeeded.fetchAndStoreOrdered(0);
 
-  QxrdFileBrowserModelPtr model(m_BrowserModel);
+  QcepFileBrowserModelPtr model(m_BrowserModel);
 
   if (model) {
     QDirIterator iterd(m_RootPath);
@@ -331,7 +350,7 @@ void QxrdFileBrowserModelUpdater::updateContents()
   }
 }
 
-void QxrdFileBrowserModelUpdater::generateFileUpdates(int doIt)
+void QcepFileBrowserModelUpdater::generateFileUpdates(int doIt)
 {
   if (doIt) {
     m_PreviousUpdate = QDateTime::currentDateTime();

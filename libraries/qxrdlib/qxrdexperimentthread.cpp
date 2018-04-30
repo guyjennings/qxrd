@@ -62,9 +62,9 @@ void QxrdExperimentThread::run()
       expt -> readSettings(m_Settings.data());
 
       printMessage("Finished reading experiment settings");
-    }
 
-    m_Experiment = expt;
+      m_Experiment = expt;
+    }
   }
 
   int rc = exec();
@@ -77,10 +77,30 @@ void QxrdExperimentThread::run()
   }
 }
 
+void QxrdExperimentThread::haltExperiment()
+{
+  if (m_Experiment) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_Experiment.data(),
+                                    &QxrdExperiment::haltExperiment,
+                                    Qt::BlockingQueuedConnection))
+#else
+    INVOKE_CHECK(
+          QMetaObject::invokeMethod(m_Experiment.data(),
+                                    "haltExperiment",
+                                    Qt::BlockingQueuedConnection))
+#endif
+  }
+}
 QxrdExperimentPtr QxrdExperimentThread::experiment() const
 {
   while (isRunning()) {
     if (m_Experiment) return m_Experiment;
+
+    if (g_Application) {
+      g_Application -> processEvents();
+    }
 
     msleep(50);
   }

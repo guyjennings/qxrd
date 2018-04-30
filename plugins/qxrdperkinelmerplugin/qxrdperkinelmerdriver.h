@@ -25,6 +25,7 @@ public:
   virtual ~QxrdPerkinElmerDriver();
 
 public slots:
+  void haltDetectorDriver();
   void startDetectorDriver();
   void stopDetectorDriver();
 

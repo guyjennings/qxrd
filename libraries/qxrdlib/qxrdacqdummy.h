@@ -20,7 +20,7 @@ public:
   ~QxrdAcqDummy();
 
   void initialize(QcepObjectWPtr parent);
-  void shutdown();
+  void haltAcquisition();
 
   static void registerMetaTypes();
 

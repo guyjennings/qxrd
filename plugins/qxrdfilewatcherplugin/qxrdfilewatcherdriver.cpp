@@ -30,6 +30,13 @@ QxrdFileWatcherDriver::~QxrdFileWatcherDriver()
 #endif
 }
 
+void QxrdFileWatcherDriver::haltDetectorDriver()
+{
+  THREAD_CHECK;
+
+  stopDetectorDriver();
+}
+
 void QxrdFileWatcherDriver::startDetectorDriver()
 {
   THREAD_CHECK;

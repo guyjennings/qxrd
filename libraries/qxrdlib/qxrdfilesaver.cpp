@@ -44,6 +44,10 @@ QxrdFileSaver::~QxrdFileSaver()
   }
 }
 
+void QxrdFileSaver::haltFileSaver()
+{
+}
+
 void QxrdFileSaver::setExperiment(QxrdExperimentWPtr expt)
 {
   m_Experiment = expt;

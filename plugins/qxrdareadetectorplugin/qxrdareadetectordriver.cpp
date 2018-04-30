@@ -32,6 +32,13 @@ QxrdAreaDetectorDriver::~QxrdAreaDetectorDriver()
 #endif
 }
 
+void QxrdAreaDetectorDriver::haltDetectorDriver()
+{
+  THREAD_CHECK;
+
+  stopDetectorDriver();
+}
+
 void QxrdAreaDetectorDriver::startDetectorDriver()
 {
   THREAD_CHECK;

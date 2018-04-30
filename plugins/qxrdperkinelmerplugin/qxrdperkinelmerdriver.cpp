@@ -368,6 +368,13 @@ void QxrdPerkinElmerDriver::acquisitionError(const char *fn, int ln, int n)
  XRD 1621 AN        14
  */
 
+void QxrdPerkinElmerDriver::haltDetectorDriver()
+{
+  THREAD_CHECK;
+
+  stopDetectorDriver();
+}
+
 void QxrdPerkinElmerDriver::startDetectorDriver()
 {
   THREAD_CHECK;

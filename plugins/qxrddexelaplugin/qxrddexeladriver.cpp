@@ -40,6 +40,13 @@ QxrdDexelaDriver::~QxrdDexelaDriver()
 
 QMutex           QxrdDexelaDriver::m_Mutex;
 
+void QxrdDexelaDriver::haltDetectorDriver()
+{
+  THREAD_CHECK;
+
+  stopDetectorDriver();
+}
+
 void QxrdDexelaDriver::startDetectorDriver()
 {
   THREAD_CHECK;

@@ -7,7 +7,7 @@
 #include "qcepproperty.h"
 #include "qcepimageplotsettings-ptr.h"
 #include "qxrdintegratorplotsettings-ptr.h"
-#include "qxrdfilebrowsersettings-ptr.h"
+#include "qcepfilebrowsersettings-ptr.h"
 #include "qxrdhistogramdialogsettings-ptr.h"
 #include "qxrdwindowsettings-ptr.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
@@ -44,7 +44,7 @@ public:
 
   QcepImagePlotSettingsWPtr                    imagePlotSettings();
   QxrdIntegratorPlotSettingsWPtr               integratorPlotSettings();
-  QxrdFileBrowserSettingsWPtr                  fileBrowserSettings();
+  QcepFileBrowserSettingsWPtr                  fileBrowserSettings();
   QxrdHistogramDialogSettingsWPtr              histogramDialogSettings();
 
   QcepImagePlotWidgetSettingsPtr               imagePlotWidgetSettings();
@@ -59,7 +59,7 @@ public slots:
 private:
   QcepImagePlotSettingsPtr                     m_ImagePlotSettings;
   QxrdIntegratorPlotSettingsPtr                m_IntegratorPlotSettings;
-  QxrdFileBrowserSettingsPtr                   m_FileBrowserSettings;
+  QcepFileBrowserSettingsPtr                   m_FileBrowserSettings;
   QxrdHistogramDialogSettingsPtr               m_HistogramDialogSettings;
   QcepImagePlotWidgetSettingsPtr               m_ImagePlotWidgetSettings;
   QxrdCenteringPlotWidgetSettingsPtr           m_CenteringPlotWidgetSettings;

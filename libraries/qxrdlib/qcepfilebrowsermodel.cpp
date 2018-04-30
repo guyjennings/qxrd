@@ -1,4 +1,4 @@
-#include "qxrdfilebrowsermodel.h"
+#include "qcepfilebrowsermodel.h"
 #include <QTime>
 #include <stdio.h>
 #include <QStringList>
@@ -7,11 +7,11 @@
 #include <QPixmap>
 #include "qcepdebug.h"
 #include "qxrdapplication.h"
-#include "qxrdfilebrowsermodelupdater.h"
-#include "qxrdfilebrowsermodelupdaterthread.h"
+#include "qcepfilebrowsermodelupdater.h"
+#include "qcepfilebrowsermodelupdaterthread.h"
 #include "qcepmutexlocker.h"
 
-QxrdFileBrowserModel::QxrdFileBrowserModel(QString name) :
+QcepFileBrowserModel::QcepFileBrowserModel(QString name) :
   QAbstractTableModel(),
   m_Parent(),
   m_Mutex(QMutex::Recursive),
@@ -28,7 +28,7 @@ QxrdFileBrowserModel::QxrdFileBrowserModel(QString name) :
 {
 }
 
-QxrdFileBrowserModel::~QxrdFileBrowserModel()
+QcepFileBrowserModel::~QcepFileBrowserModel()
 {
 #ifndef QT_NO_DEBUG
   printf("Deleting file browser model\n");
@@ -39,13 +39,13 @@ QxrdFileBrowserModel::~QxrdFileBrowserModel()
 //  }
 }
 
-void QxrdFileBrowserModel::initialize(QcepObjectWPtr parent)
+void QcepFileBrowserModel::initialize(QcepObjectWPtr parent)
 {
   m_Parent = parent;
 
   m_UpdaterThread =
-      QxrdFileBrowserModelUpdaterThreadPtr(
-        NEWPTR(QxrdFileBrowserModelUpdaterThread("updaterThread")));
+      QcepFileBrowserModelUpdaterThreadPtr(
+        NEWPTR(QcepFileBrowserModelUpdaterThread("updaterThread")));
 
   m_UpdaterThread -> initialize(m_Parent);
   m_UpdaterThread -> setModel(sharedFromThis());
@@ -54,14 +54,14 @@ void QxrdFileBrowserModel::initialize(QcepObjectWPtr parent)
   m_Updater = m_UpdaterThread->updater();
 }
 
-void QxrdFileBrowserModel::shutdown()
+void QcepFileBrowserModel::haltFileBrowser()
 {
   if (m_UpdaterThread) {
-    m_UpdaterThread -> shutdown();
+    m_UpdaterThread -> haltUpdater();
   }
 }
 
-QVariant QxrdFileBrowserModel::headerData
+QVariant QcepFileBrowserModel::headerData
   (int section, Qt::Orientation orientation, int role) const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
@@ -87,7 +87,7 @@ QVariant QxrdFileBrowserModel::headerData
   return QVariant();
 }
 
-QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
+QVariant QcepFileBrowserModel::data(const QModelIndex &idx, int role) const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -148,7 +148,7 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
     if (lastMod > (m_HighlightOnTime+m_HighlightFadeTime)) {
       return QColor(Qt::white);
     } else if (info.exists()){
-      QxrdFileBrowserModel *model = const_cast<QxrdFileBrowserModel*>(this);
+      QcepFileBrowserModel *model = const_cast<QcepFileBrowserModel*>(this);
       emit model->dataChanged(index, index);
 //      printf("Data %d changed after %g\n", index.row(), lastMod);
 
@@ -167,12 +167,12 @@ QVariant QxrdFileBrowserModel::data(const QModelIndex &idx, int role) const
   return QVariant();
 }
 
-int	QxrdFileBrowserModel::columnCount ( const QModelIndex & /*parent*/ ) const
+int	QcepFileBrowserModel::columnCount ( const QModelIndex & /*parent*/ ) const
 {
   return 3;
 }
 
-int	QxrdFileBrowserModel::rowCount ( const QModelIndex & /*parent*/ ) const
+int	QcepFileBrowserModel::rowCount ( const QModelIndex & /*parent*/ ) const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -183,7 +183,7 @@ int	QxrdFileBrowserModel::rowCount ( const QModelIndex & /*parent*/ ) const
   }
 }
 
-void QxrdFileBrowserModel::setNameFilters(QStringList filters)
+void QcepFileBrowserModel::setNameFilters(QStringList filters)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -192,11 +192,11 @@ void QxrdFileBrowserModel::setNameFilters(QStringList filters)
   updateModel();
 }
 
-void QxrdFileBrowserModel::setNameFilterDisables(bool /*disables*/)
+void QcepFileBrowserModel::setNameFilterDisables(bool /*disables*/)
 {
 }
 
-QFileInfo QxrdFileBrowserModel::fileInfo(const QModelIndex &index) const
+QFileInfo QcepFileBrowserModel::fileInfo(const QModelIndex &index) const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -218,21 +218,21 @@ QFileInfo QxrdFileBrowserModel::fileInfo(const QModelIndex &index) const
   return info;
 }
 
-QString QxrdFileBrowserModel::fileName(const QModelIndex &index) const
+QString QcepFileBrowserModel::fileName(const QModelIndex &index) const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return fileInfo(index).fileName();
 }
 
-QString QxrdFileBrowserModel::filePath(const QModelIndex &index) const
+QString QcepFileBrowserModel::filePath(const QModelIndex &index) const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return fileInfo(index).filePath();
 }
 
-void QxrdFileBrowserModel::setRootPath(QString path)
+void QcepFileBrowserModel::setRootPath(QString path)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -243,60 +243,60 @@ void QxrdFileBrowserModel::setRootPath(QString path)
   emit rootChanged(m_RootPath);
 }
 
-QString QxrdFileBrowserModel::rootPath() const
+QString QcepFileBrowserModel::rootPath() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_RootPath;
 }
 
-QStringList QxrdFileBrowserModel::nameFilters() const
+QStringList QcepFileBrowserModel::nameFilters() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_NameFilters;
 }
 
-int QxrdFileBrowserModel::sortedColumn() const
+int QcepFileBrowserModel::sortedColumn() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_SortedColumn;
 }
 
-Qt::SortOrder QxrdFileBrowserModel::sortOrder() const
+Qt::SortOrder QcepFileBrowserModel::sortOrder() const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return m_SortOrder;
 }
 
-void QxrdFileBrowserModel::refresh()
+void QcepFileBrowserModel::refresh()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   updateModel();
 }
 
-void QxrdFileBrowserModel::updateModel()
+void QcepFileBrowserModel::updateModel()
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QxrdFileBrowserModelUpdaterPtr updater(m_Updater);
+  QcepFileBrowserModelUpdaterPtr updater(m_Updater);
 
   if (updater) {
     updater -> needUpdate();
   }
 }
 
-bool QxrdFileBrowserModel::isDir(const QModelIndex &index) const
+bool QcepFileBrowserModel::isDir(const QModelIndex &index) const
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
   return fileInfo(index).isDir();
 }
 
-void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
+void QcepFileBrowserModel::sort (int column, Qt::SortOrder order)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -304,7 +304,7 @@ void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
     m_SortedColumn = column;
     m_SortOrder    = order;
 
-    QxrdFileBrowserModelUpdaterPtr updater(m_Updater);
+    QcepFileBrowserModelUpdaterPtr updater(m_Updater);
 
     if (updater) {
       updater -> needUpdate();
@@ -312,7 +312,7 @@ void QxrdFileBrowserModel::sort (int column, Qt::SortOrder order)
   }
 }
 
-void QxrdFileBrowserModel::newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files, int limit, int trueSize)
+void QcepFileBrowserModel::newDataAvailable(QVector<QFileInfo> dirs, QVector<QFileInfo> files, int limit, int trueSize)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
@@ -326,7 +326,7 @@ void QxrdFileBrowserModel::newDataAvailable(QVector<QFileInfo> dirs, QVector<QFi
   endResetModel();
 }
 
-void QxrdFileBrowserModel::updatedFile(QFileInfo file)
+void QcepFileBrowserModel::updatedFile(QFileInfo file)
 {
 //  QxrdExperimentPtr expt(m_Experiment);
 
@@ -339,11 +339,11 @@ void QxrdFileBrowserModel::updatedFile(QFileInfo file)
   emit fileUpdated(file);
 }
 
-void QxrdFileBrowserModel::generateFileUpdates(int doIt)
+void QcepFileBrowserModel::generateFileUpdates(int doIt)
 {
   QcepMutexLocker lock(__FILE__, __LINE__, &m_Mutex);
 
-  QxrdFileBrowserModelUpdaterPtr updater(m_Updater);
+  QcepFileBrowserModelUpdaterPtr updater(m_Updater);
 
   if (updater) {
     updater -> generateFileUpdates(doIt);

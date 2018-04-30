@@ -2,7 +2,7 @@
 #define QXRDINTEGRATIONWINDOWSETTINGS_H
 
 #include "qxrdmainwindowsettings.h"
-#include "qxrdfilebrowsersettings-ptr.h"
+#include "qcepfilebrowsersettings-ptr.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 #include "qxrdintegratedplotwidgetsettings-ptr.h"
 
@@ -22,12 +22,12 @@ public:
   void writeSettings(QSettings *set);
   void readSettings(QSettings *set);
 
-  QxrdFileBrowserSettingsPtr          fileBrowserSettings();
+  QcepFileBrowserSettingsPtr          fileBrowserSettings();
   QcepImagePlotWidgetSettingsPtr imagePlotWidgetSettings();
   QxrdIntegratedPlotWidgetSettingsPtr integratedPlotWidgetSettings();
 
 private:
-  QxrdFileBrowserSettingsPtr          m_FileBrowserSettings;
+  QcepFileBrowserSettingsPtr          m_FileBrowserSettings;
   QcepImagePlotWidgetSettingsPtr      m_ImagePlotWidgetSettings;
   QxrdIntegratedPlotWidgetSettingsPtr m_IntegratedPlotWidgetSettings;
 };

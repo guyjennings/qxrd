@@ -19,6 +19,8 @@ public:
   Q_INVOKABLE QxrdFileSaverThread(QString name);
   ~QxrdFileSaverThread();
 
+  void haltFileSaver();
+
   QxrdFileSaverPtr fileSaver() const;
 
 protected:

@@ -80,7 +80,7 @@ void QxrdAcquisition::initialize(QcepObjectWPtr parent)
   m_SynchronizedAcquisition -> initialize(sharedFromThis());
 }
 
-void QxrdAcquisition::shutdown()
+void QxrdAcquisition::haltAcquisition()
 {
   for (int i=0; i<detectorCount(); i++) {
     QxrdDetectorSettingsPtr det = detector(i);
@@ -91,11 +91,11 @@ void QxrdAcquisition::shutdown()
   }
 
   if (m_ExecutionThread) {
-    m_ExecutionThread -> shutdown();
+    m_ExecutionThread -> haltAcquisitionExecution();
   }
 
   if (m_SynchronizerThread) {
-    m_SynchronizerThread -> shutdown();
+    m_SynchronizerThread -> haltSynchronizer();
   }
 }
 

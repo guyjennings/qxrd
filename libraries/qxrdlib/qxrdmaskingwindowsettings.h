@@ -2,7 +2,7 @@
 #define QXRDMASKINGWINDOWSETTINGS_H
 
 #include "qxrdmainwindowsettings.h"
-#include "qxrdfilebrowsersettings-ptr.h"
+#include "qcepfilebrowsersettings-ptr.h"
 #include "qcepimageplotwidgetsettings-ptr.h"
 
 class QXRD_EXPORT QxrdMaskingWindowSettings : public QxrdMainWindowSettings
@@ -21,11 +21,11 @@ public:
   void writeSettings(QSettings *set);
   void readSettings(QSettings *set);
 
-  QxrdFileBrowserSettingsPtr     fileBrowserSettings();
+  QcepFileBrowserSettingsPtr     fileBrowserSettings();
   QcepImagePlotWidgetSettingsPtr imagePlotWidgetSettings();
 
 private:
-  QxrdFileBrowserSettingsPtr     m_FileBrowserSettings;
+  QcepFileBrowserSettingsPtr     m_FileBrowserSettings;
   QcepImagePlotWidgetSettingsPtr m_ImagePlotWidgetSettings;
 };
 

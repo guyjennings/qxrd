@@ -29,6 +29,7 @@ public:
   void initialize(QcepObjectWPtr parent);
   QString name() const;
 
+  void haltSynchronizer();
   void startSynchronizer();
   void stopSynchronizer();
 

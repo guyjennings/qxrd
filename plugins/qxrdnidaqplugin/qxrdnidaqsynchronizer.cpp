@@ -102,6 +102,13 @@ QString QxrdNIDAQSynchronizer::name() const
   return "NIDAQ Synchronizer";
 }
 
+void QxrdNIDAQSynchronizer::haltSynchronizer()
+{
+  THREAD_CHECK;
+
+  stopSynchronizer();
+}
+
 void QxrdNIDAQSynchronizer::stopSynchronizer()
 {
   THREAD_CHECK;

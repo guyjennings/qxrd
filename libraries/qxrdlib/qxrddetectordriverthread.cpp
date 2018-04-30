@@ -110,6 +110,25 @@ QxrdDetectorDriverWPtr QxrdDetectorDriverThread::detectorDriver() const
   return m_DetectorDriver;
 }
 
+void QxrdDetectorDriverThread::haltDetectorDriver()
+{
+  if (m_DetectorDriver) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(),
+                                &QxrdDetectorDriver::haltDetectorDriver,
+                                Qt::BlockingQueuedConnection)
+    )
+#else
+    INVOKE_CHECK(
+      QMetaObject::invokeMethod(m_DetectorDriver.data(),
+                                "haltDetectorDriver",
+                                Qt::BlockingQueuedConnection)
+    )
+#endif
+  }
+}
+
 void QxrdDetectorDriverThread::startDetectorDriver()
 {
   if (m_DetectorDriver) {
