@@ -29,7 +29,15 @@ void QxrdScriptEngineThread::initialize(QcepObjectWPtr parent)
 
 QxrdScriptEngineThread::~QxrdScriptEngineThread()
 {
-//  shutdown();
+#ifndef QT_NO_DEBUG
+  printf("Shutdown script engine thread\n");
+#endif
+
+  shutdown();
+
+#ifndef QT_NO_DEBUG
+  printf("Deleting script engine thread\n");
+#endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdScriptEngineThread::~QxrdScriptEngineThread(%p)\n", this);

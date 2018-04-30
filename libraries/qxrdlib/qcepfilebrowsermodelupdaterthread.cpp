@@ -1,9 +1,7 @@
-#include "qxrddebug.h"
+#include "qcepdebug.h"
 #include "qcepfilebrowsermodelupdaterthread.h"
 #include "qcepfilebrowsermodel.h"
 #include "qcepfilebrowsermodelupdater.h"
-#include "qxrdapplication.h"
-#include "qcepmutexlocker.h"
 
 QcepFileBrowserModelUpdaterThread::QcepFileBrowserModelUpdaterThread(QString name) :
   inherited(name),
@@ -17,7 +15,15 @@ QcepFileBrowserModelUpdaterThread::QcepFileBrowserModelUpdaterThread(QString nam
 
 QcepFileBrowserModelUpdaterThread::~QcepFileBrowserModelUpdaterThread()
 {
-//  shutdown();
+#ifndef QT_NO_DEBUG
+  printf("Shutdown file browser model updater thread\n");
+#endif
+
+  shutdown();
+
+#ifndef QT_NO_DEBUG
+  printf("Deleting file browser model updater thread\n");
+#endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QcepFileBrowserModelUpdaterThread::~QcepFileBrowserModelUpdaterThread(%p)\n", this);

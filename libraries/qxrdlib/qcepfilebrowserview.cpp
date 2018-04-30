@@ -1,7 +1,7 @@
 #include "qcepfilebrowserview.h"
 #include <QTime>
 #include <stdio.h>
-#include "qxrdapplication.h"
+#include "qcepapplication.h"
 
 QcepFileBrowserView::QcepFileBrowserView(QWidget *parent) :
   inherited(parent)

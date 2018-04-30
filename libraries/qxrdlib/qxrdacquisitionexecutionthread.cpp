@@ -24,7 +24,15 @@ void QxrdAcquisitionExecutionThread::initialize(QcepObjectWPtr parent)
 
 QxrdAcquisitionExecutionThread::~QxrdAcquisitionExecutionThread()
 {
-//  shutdown();
+#ifndef QT_NO_DEBUG
+  printf("Shutdown acquisition execution thread\n");
+#endif
+
+  shutdown();
+
+#ifndef QT_NO_DEBUG
+  printf("Deleting acquisition execution thread\n");
+#endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdAcquisitionExecutionThread::~QxrdAcquisitionExecutionThread(%p)\n", this);

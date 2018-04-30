@@ -42,10 +42,14 @@ void QxrdDetectorDriverThread::initialize(QcepObjectWPtr parent)
 QxrdDetectorDriverThread::~QxrdDetectorDriverThread()
 {
 #ifndef QT_NO_DEBUG
-  printf("Detector driver thread destroyed\n");
+  printf("Shutting down detector driver thread\n");
 #endif
 
-//  shutdown();
+  shutdown();
+
+#ifndef QT_NO_DEBUG
+  printf("Deleting detector driver thread\n");
+#endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdDetectorDriverThread::~QxrdDetectorDriverThread(%p)\n", this);

@@ -22,7 +22,15 @@ void QxrdProcessorExecutionThread::initialize(QcepObjectWPtr parent)
 
 QxrdProcessorExecutionThread::~QxrdProcessorExecutionThread()
 {
-//  shutdown();
+#ifndef QT_NO_DEBUG
+  printf("Shutdown processor execution thread\n");
+#endif
+
+  shutdown();
+
+#ifndef QT_NO_DEBUG
+  printf("Deleting processor execution thread\n");
+#endif
 
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdProcessorExecutionThread::~QxrdProcessorExecutionThread(%p)\n", this);

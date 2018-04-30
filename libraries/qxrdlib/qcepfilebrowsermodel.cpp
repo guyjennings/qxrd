@@ -6,7 +6,6 @@
 #include <QSize>
 #include <QPixmap>
 #include "qcepdebug.h"
-#include "qxrdapplication.h"
 #include "qcepfilebrowsermodelupdater.h"
 #include "qcepfilebrowsermodelupdaterthread.h"
 #include "qcepmutexlocker.h"
