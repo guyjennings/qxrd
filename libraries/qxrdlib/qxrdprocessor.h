@@ -12,7 +12,6 @@
 #include "qxrddetectorsettings-ptr.h"
 #include "qxrdexperiment-ptr.h"
 #include "qxrdacqcommon-ptr.h"
-#include "qxrdfilesaver-ptr.h"
 #include "qcepmaskstack-ptr.h"
 #include "qxrdzingerfinder-ptr.h"
 #include "qcepcenterfinder-ptr.h"
@@ -53,7 +52,6 @@ public:
   QxrdExperimentWPtr   experiment() const;
   QxrdAcqCommonWPtr acquisition() const;
   QxrdDetectorSettingsWPtr detector() const;
-  QxrdFileSaverWPtr    fileSaver() const;
   QcepCenterFinderWPtr centerFinder() const;
   QxrdIntegratorPtr      integrator() const;
   QcepPowderRingsModelWPtr powderRings() const;
@@ -108,6 +106,7 @@ public:
   QcepOutputFileFormatterSettingsWPtr maskFileFormatterSettings();
   QcepOutputFileFormatterSettingsWPtr darkFileFormatterSettings();
   QcepOutputFileFormatterSettingsWPtr subtractedFileFormatterSettings();
+  QcepOutputFileFormatterSettingsWPtr textFileFormatterSettings();
 
   // dark operations...
   void loadDark(QString name);
@@ -206,8 +205,8 @@ public:
 //  Q_INVOKABLE void processIdleImage(QcepImageDataBasePtr image);
 
 
-  QcepDoubleImageDataPtr processAcquiredInt16Image(QcepDoubleImageDataPtr processed, QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
-  QcepDoubleImageDataPtr processAcquiredInt32Image(QcepDoubleImageDataPtr processed, QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+//  QcepDoubleImageDataPtr processAcquiredInt16Image(QcepDoubleImageDataPtr processed, QcepUInt16ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
+//  QcepDoubleImageDataPtr processAcquiredInt32Image(QcepDoubleImageDataPtr processed, QcepUInt32ImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow);
   QcepDoubleImageDataPtr processAcquiredDoubleImage(QcepDoubleImageDataPtr processed, QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark, QcepMaskDataPtr mask, QcepMaskDataPtr overflow, QcepDoubleList v);
   QcepDoubleImageDataPtr processAcquiredImage(QcepDoubleImageDataPtr processed,
@@ -299,11 +298,11 @@ protected:
   void unsubtractDarkImage(QcepDoubleImageDataPtr image, QcepDoubleImageDataPtr dark);
 
   void saveNamedImageData(QString name, QcepImageDataBasePtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
-  void saveNamedDoubleImageData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
-  void saveNamedUInt16ImageData(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
-  void saveNamedUInt32ImageData(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
-  void saveNamedRawImageData(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
-  void saveNamedRawImageData(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+//  void saveNamedDoubleImageData(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+//  void saveNamedUInt16ImageData(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+//  void saveNamedUInt32ImageData(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+//  void saveNamedRawImageData(QString name, QcepUInt16ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
+//  void saveNamedRawImageData(QString name, QcepUInt32ImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
   void saveNamedMaskData(QString name, QcepMaskDataPtr mask, int canOverwrite=NoOverwrite);
   void saveNamedImageDataAsText(QString name, QcepDoubleImageDataPtr image, QcepMaskDataPtr overflow, int canOverwrite=NoOverwrite);
 
@@ -535,12 +534,12 @@ private:
   QxrdPolarNormalizationPtr m_PolarNormalization;
   QxrdGenerateTestImagePtr  m_GenerateTestImage;
   QcepROICalculatorPtr      m_ROICalculator;
-  QxrdFileSaverWPtr         m_FileSaver;
 
   QcepOutputFileFormatterSettingsPtr m_DarkFileFormatterSettings;
   QcepOutputFileFormatterSettingsPtr m_MaskFileFormatterSettings;
   QcepOutputFileFormatterSettingsPtr m_RawFileFormatterSettings;
   QcepOutputFileFormatterSettingsPtr m_SubtractedFileFormatterSettings;
+  QcepOutputFileFormatterSettingsPtr m_TextFileFormatterSettings;
 
   //TODO: store a data object, not a model
   QcepPowderRingsModelPtr   m_PowderRings;

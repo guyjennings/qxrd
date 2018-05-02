@@ -31,8 +31,6 @@
 #include "qxrdexperimentpreferencesdialog.h"
 #include "qxrdexperimentsettings.h"
 #include <QFileDialog>
-#include "qxrdfilesaverthread.h"
-#include "qxrdfilesaver.h"
 #include "qcepmutexlocker.h"
 #include "qxrdacquisition-ptr.h"
 #include "qcepdataset.h"
@@ -83,8 +81,6 @@ QxrdExperiment::QxrdExperiment(QString name) :
   m_SimpleServer(),
   m_Processor(),
   m_Acquisition(),
-  m_FileSaverThread(NULL),
-  m_FileSaver(),
   m_ScriptEngine(),
   m_ScriptEngineJS(),
   m_LogFile(NULL),
@@ -231,15 +227,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
   if (app) {
     QxrdExperimentPtr myself(qSharedPointerDynamicCast<QxrdExperiment>(sharedFromThis()));
 
-    splashMessage("Initializing File Saver");
-
-    m_FileSaverThread = QxrdFileSaverThreadPtr(
-          NEWPTR(QxrdFileSaverThread("fileSaverThread")));
-    m_FileSaverThread -> initialize(sharedFromThis());
-    m_FileSaverThread -> start();
-
-    m_FileSaver = m_FileSaverThread -> fileSaver();
-
     splashMessage("Initializing Data Processing");
 
     m_Processor -> initialize(sharedFromThis());
@@ -251,9 +238,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
     m_CalibrantLibrary -> initialize(sharedFromThis());
 
     m_CalibrantDSpacings -> initialize(sharedFromThis());
-
-//    QxrdApplicationPtr appp(
-//          qSharedPointerDynamicCast<QxrdApplication>(app));
 
     if (m_Acquisition) {
       CONNECT_CHECK(connect(m_Acquisition.data(), &QxrdAcqCommon::acquireStarted, this, &QxrdExperiment::acquireStarted));
@@ -320,15 +304,6 @@ void QxrdExperiment::initialize(QcepObjectWPtr parent,
                                        m_SimpleServerSettings,
                                        m_ScriptEngine);
     m_SimpleServerThread -> start();
-
-    QxrdFileSaverPtr saver(m_FileSaver);
-
-    if (saver) {
-      saver -> initialize(m_FileSaverThread);
-      saver -> setProcessor(m_Processor);
-      saver -> setExperiment(myself);
-      saver -> setAcquisition(m_Acquisition);
-    }
 
 #ifdef Q_OS_WIN32
     QDir::setCurrent(QDir::homePath());
@@ -414,7 +389,6 @@ void QxrdExperiment::registerMetaTypes()
   QxrdProcessorExecution::registerMetaTypes();
 
   qRegisterMetaType<QcepFileBrowserModelUpdater*>("QcepFileBrowserModelUpdater*");
-  qRegisterMetaType<QxrdFileSaver*>("QxrdFileSaver*");
   qRegisterMetaType<QxrdIntegrator*>("QxrdIntegrator*");
   qRegisterMetaType<QcepDetectorGeometry*>("QxrdDetectorGeometry*");
   qRegisterMetaType<QxrdPolarNormalization*>("QxrdPolarNormalization*");
@@ -432,7 +406,6 @@ void QxrdExperiment::registerMetaTypes()
   qRegisterMetaType<QxrdGenerateTestImage*>("QxrdGenerateTestImage*");
   qRegisterMetaType<QxrdMainWindowSettings*>("QxrdMainWindowSettings*");
   qRegisterMetaType<QxrdAcquisitionWindowSettings*>("QxrdAcquisitionWindowSettings*");
-  qRegisterMetaType<QxrdFileSaverThread*>("QxrdFileSaverThread*");
 
   QxrdExtraIOWindowSettings::registerMetaTypes();
   QxrdHistogramDialogSettings::registerMetaTypes();
@@ -492,11 +465,6 @@ QxrdAppCommonWPtr QxrdExperiment::application() const
 QxrdAcqCommonWPtr QxrdExperiment::acquisition() const
 {
   return m_Acquisition;
-}
-
-QxrdFileSaverWPtr QxrdExperiment::fileSaver() const
-{
-  return m_FileSaver;
 }
 
 QcepSpecServerSettingsWPtr QxrdExperiment::specServerSettings()
@@ -1191,10 +1159,6 @@ void QxrdExperiment::shutdownAndSave()
 
   if (m_Acquisition) {
     m_Acquisition -> haltAcquisition();
-  }
-
-  if (m_FileSaverThread) {
-    m_FileSaverThread -> haltFileSaver();
   }
 
   if (m_SpecServerThread) {

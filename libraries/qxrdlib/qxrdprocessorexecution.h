@@ -5,7 +5,6 @@
 #include "qcepobject.h"
 #include "qxrdprocessor-ptr.h"
 #include "qxrdacqcommon-ptr.h"
-#include "qxrdfilesaver-ptr.h"
 #include "qcepimagedata-ptr.h"
 #include "qcepmaskdata-ptr.h"
 
@@ -52,7 +51,6 @@ public:
 private:
   QxrdProcessorWPtr m_Processor;
   QxrdAcqCommonWPtr m_Acquisition;
-  QxrdFileSaverWPtr m_FileSaver;
 };
 
 Q_DECLARE_METATYPE(QxrdProcessorExecution*)

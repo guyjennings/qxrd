@@ -5,7 +5,7 @@
 #include "qxrdacqcommon.h"
 #include "qxrdprocessorexecutionthread.h"
 #include "qxrdexperiment.h"
-#include "qxrdfilesaver.h"
+//#include "qxrdfilesaver.h"
 #include <QThread>
 #include "qcepimagedata.h"
 #include "qcepmaskdata.h"
@@ -16,8 +16,8 @@ QxrdProcessorExecution::QxrdProcessorExecution(QString name)
   : inherited(name),
     m_Processing(this, "processing", 0, "Is processing?"),
     m_Processor(),
-    m_Acquisition(),
-    m_FileSaver()
+    m_Acquisition()/*,
+    m_FileSaver()*/
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdProcessorExecution::QxrdProcessorExecution(%p)\n", this);
@@ -38,9 +38,9 @@ void QxrdProcessorExecution::initialize(QcepObjectWPtr parent)
 
   QxrdExperimentPtr expt = QxrdExperiment::findExperiment(parent);
 
-  if (expt) {
-    m_FileSaver = expt->fileSaver();
-  }
+//  if (expt) {
+//    m_FileSaver = expt->fileSaver();
+//  }
 
   QxrdProcessorPtr proc(m_Processor);
 
@@ -54,11 +54,11 @@ void QxrdProcessorExecution::initialize(QcepObjectWPtr parent)
     printMessage("QxrdProcessorExecution::initialize m_Acquisition == NULL");
   }
 
-  QxrdFileSaverPtr sav(m_FileSaver);
+//  QxrdFileSaverPtr sav(m_FileSaver);
 
-  if (sav == NULL) {
-    printMessage("QxrdProcessorExecution::initialize m_FileSaver == NULL");
-  }
+//  if (sav == NULL) {
+//    printMessage("QxrdProcessorExecution::initialize m_FileSaver == NULL");
+//  }
 }
 
 QxrdProcessorExecution::~QxrdProcessorExecution()

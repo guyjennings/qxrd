@@ -22,8 +22,6 @@
 #include "qcepsimpleserversettings-ptr.h"
 #include "qcepsimpleserverthread-ptr.h"
 #include "qcepsimpleserver-ptr.h"
-#include "qxrdfilesaverthread-ptr.h"
-#include "qxrdfilesaver-ptr.h"
 #include "qxrdwindow-ptr.h"
 #include "qxrdwindowsettings-ptr.h"
 #include "qxrdscriptengine.h"
@@ -94,7 +92,6 @@ public:
   QcepCalibrantDSpacingsModelWPtr calibrantDSpacingsModel() const;
 
   QcepDatasetModelPtr dataset();
-  QxrdFileSaverWPtr fileSaver() const;
 
   FILE* logFile();
 
@@ -202,8 +199,6 @@ private:
   QcepCalibrantDSpacingsPtr       m_CalibrantDSpacings;
   QcepCalibrantDSpacingsModelPtr  m_CalibrantDSpacingsModel;
   QxrdAcqCommonPtr                m_Acquisition;
-  QxrdFileSaverThreadPtr          m_FileSaverThread;
-  QxrdFileSaverWPtr               m_FileSaver;
   QxrdScriptEnginePtr             m_ScriptEngine;
 
   QxrdJSEnginePtr                 m_ScriptEngineJS;

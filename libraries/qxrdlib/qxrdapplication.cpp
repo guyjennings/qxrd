@@ -9,8 +9,6 @@
 #include "qxrdintegrator.h"
 #include "qxrdacquisition.h"
 #include "qcepallocator.h"
-#include "qxrdfilesaverthread.h"
-#include "qxrdfilesaver.h"
 #include "qxrdscriptenginethread.h"
 #include "qxrdscriptengine.h"
 #include "qxrdglobalpreferencesdialog.h"
