@@ -36,6 +36,7 @@ public:
 
 private:
   QString applicationName();
+  QString applicationMnemonic();
   QString applicationVersion();
   QString applicationDescription();
   QIcon   applicationIcon();

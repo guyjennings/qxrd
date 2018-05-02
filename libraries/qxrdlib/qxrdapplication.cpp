@@ -236,6 +236,11 @@ QString QxrdApplication::applicationName()
   return QStringLiteral("QXRD");
 }
 
+QString QxrdApplication::applicationMnemonic()
+{
+  return QStringLiteral("qxrd");
+}
+
 QString QxrdApplication::applicationVersion()
 {
   return QStringLiteral(STR(QXRD_VERSION));

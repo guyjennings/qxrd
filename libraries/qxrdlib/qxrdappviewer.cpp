@@ -53,6 +53,11 @@ QString QxrdAppViewer::applicationName()
   return QStringLiteral("QXRDVIEWER");
 }
 
+QString QxrdAppViewer::applicationMnemonic()
+{
+  return QStringLiteral("qxrdviewer");
+}
+
 QString QxrdAppViewer::applicationVersion()
 {
   return QStringLiteral(STR(QXRD_VERSION));
