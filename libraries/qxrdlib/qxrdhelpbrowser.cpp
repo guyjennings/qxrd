@@ -5,7 +5,7 @@
 #include "qxrddebug.h"
 
 QxrdHelpBrowser::QxrdHelpBrowser(QWidget *parent) :
-  QTextBrowser(parent)
+  inherited(parent)
 {
   if (qcepDebug(DEBUG_CONSTRUCTORS)) {
     printf("QxrdHelpBrowser::QxrdHelpBrowser(%p)\n", this);
@@ -85,7 +85,7 @@ QVariant QxrdHelpBrowser::loadResource(int type, const QUrl &name)
     }
   }
 
-  QVariant res = QTextBrowser::loadResource(type, name);
+  QVariant res = inherited::loadResource(type, name);
 
 //  printf("QxrdHelpBrowser::loadResource res.typeName = %s\n", res.typeName());
 

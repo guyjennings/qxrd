@@ -75,7 +75,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -173,7 +173,7 @@
             </property>
             <layout class="QGridLayout" name="gridLayout_13">
              <item row="0" column="0">
-              <widget class="QTextEdit" name="m_Messages">
+              <widget class="QcepTextBrowser" name="m_Messages">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
@@ -245,7 +245,7 @@
               </widget>
              </item>
              <item row="0" column="0" colspan="6">
-              <widget class="QTextEdit" name="m_ScriptEdit">
+              <widget class="QcepTextEdit" name="m_ScriptEdit">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
@@ -375,6 +375,9 @@
        </widget>
       </widget>
       <widget class="QTabWidget" name="m_RightTabs">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
        <widget class="QWidget" name="tab_10">
         <attribute name="title">
          <string>Tab 1</string>
@@ -396,7 +399,7 @@
      <x>0</x>
      <y>0</y>
      <width>1131</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -694,7 +697,7 @@
   </action>
   <action name="m_ActionSetCenter">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
      <normaloff>:/images/ringfinder.png</normaloff>:/images/ringfinder.png</iconset>
    </property>
    <property name="text">
@@ -727,7 +730,7 @@
   </action>
   <action name="m_ActionMaskCircles">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
      <normaloff>:/images/mask_circles.png</normaloff>:/images/mask_circles.png</iconset>
    </property>
    <property name="text">
@@ -739,7 +742,7 @@
   </action>
   <action name="m_ActionMaskPolygons">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
      <normaloff>:/images/mask_polygon.png</normaloff>:/images/mask_polygon.png</iconset>
    </property>
    <property name="text">
@@ -751,7 +754,7 @@
   </action>
   <action name="m_ActionInvertMask">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
      <normaloff>:/images/mask_polygon_invert.png</normaloff>:/images/mask_polygon_invert.png</iconset>
    </property>
    <property name="text">
@@ -917,7 +920,7 @@
   </action>
   <action name="m_ActionClearGainMap">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
      <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
    </property>
    <property name="text">
@@ -929,7 +932,7 @@
   </action>
   <action name="m_ActionClearMask">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
      <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
    </property>
    <property name="text">
@@ -941,7 +944,7 @@
   </action>
   <action name="m_ActionClearDark">
    <property name="icon">
-    <iconset resource="qxrdresources.qrc">
+    <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
      <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
    </property>
    <property name="text">
@@ -1332,6 +1335,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QcepTextBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header>qceptextbrowser.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QxrdHelpBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header>qxrdhelpbrowser.h</header>
+  </customwidget>
+  <customwidget>
    <class>QcepImagePlotWidget</class>
    <extends>QWidget</extends>
    <header>qcepimageplotwidget.h</header>
@@ -1347,11 +1360,6 @@
    <extends>QWidget</extends>
    <header>qcepfilebrowserwidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QxrdHelpBrowser</class>
-   <extends>QTextBrowser</extends>
-   <header>qxrdhelpbrowser.h</header>
   </customwidget>
   <customwidget>
    <class>QxrdIntegratedPlotWidget</class>
@@ -1371,6 +1379,11 @@
    <header>qxrddistortionplotwidget.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>QcepTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>qceptextedit.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>m_CentralTabs</tabstop>
@@ -1379,6 +1392,7 @@
   <tabstop>m_ScriptEdit</tabstop>
  </tabstops>
  <resources>
+  <include location="../qceplib/qceplib/qceplib-base/qcepresources.qrc"/>
   <include location="qxrdresources.qrc"/>
  </resources>
  <connections/>

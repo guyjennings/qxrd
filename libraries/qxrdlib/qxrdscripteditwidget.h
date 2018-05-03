@@ -2,13 +2,17 @@
 #define QXRDSCRIPTEDITWIDGET_H
 
 #include "qxrdlib_global.h"
-#include <QTextEdit>
+#include "qceptextedit.h"
 #include "qxrdhighlighter.h"
 #include "qxrdexperiment-ptr.h"
 
-class QXRD_EXPORT QxrdScriptEditWidget : public QTextEdit
+class QXRD_EXPORT QxrdScriptEditWidget : public QcepTextEdit
 {
   Q_OBJECT
+
+private:
+  typedef QcepTextEdit inherited;
+
 public:
   explicit QxrdScriptEditWidget(QWidget *parent = 0);
 

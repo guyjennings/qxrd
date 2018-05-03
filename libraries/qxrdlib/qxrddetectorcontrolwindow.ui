@@ -1342,7 +1342,7 @@ Script Function: darkSummedExposures()</string>
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
                <normaloff>:/images/preferences.png</normaloff>:/images/preferences.png</iconset>
              </property>
             </widget>
@@ -1370,7 +1370,7 @@ Script Function: darkSummedExposures()</string>
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
                <normaloff>:/images/mask_polygon_invert.png</normaloff>:/images/mask_polygon_invert.png</iconset>
              </property>
             </widget>
@@ -1384,7 +1384,7 @@ Script Function: darkSummedExposures()</string>
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
                <normaloff>:/images/mask_polygon.png</normaloff>:/images/mask_polygon.png</iconset>
              </property>
             </widget>
@@ -1426,7 +1426,7 @@ Script Function: darkSummedExposures()</string>
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
                <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
              </property>
             </widget>
@@ -1440,7 +1440,7 @@ Script Function: darkSummedExposures()</string>
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="qxrdresources.qrc">
+              <iconset resource="../qceplib/qceplib/qceplib-base/qcepresources.qrc">
                <normaloff>:/images/list-add.png</normaloff>:/images/list-add.png</iconset>
              </property>
             </widget>
@@ -1489,7 +1489,7 @@ Script Function: darkSummedExposures()</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0">
-          <widget class="QTextEdit" name="m_Messages">
+          <widget class="QcepTextEdit" name="m_Messages">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -1523,7 +1523,7 @@ Script Function: darkSummedExposures()</string>
      <x>0</x>
      <y>0</y>
      <width>953</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -1659,12 +1659,18 @@ Script Function: darkSummedExposures()</string>
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>QcepTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>qceptextedit.h</header>
+  </customwidget>
+  <customwidget>
    <class>QxrdExposureTimeSpinner</class>
    <extends>QDoubleSpinBox</extends>
    <header>qxrdexposuretimespinner.h</header>
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../qceplib/qceplib/qceplib-base/qcepresources.qrc"/>
   <include location="qxrdresources.qrc"/>
  </resources>
  <connections/>

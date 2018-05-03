@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0" colspan="2">
-     <widget class="QTextBrowser" name="m_Output"/>
+     <widget class="QcepTextBrowser" name="m_Output"/>
     </item>
     <item row="1" column="0">
      <widget class="QLineEdit" name="m_InputText"/>
@@ -36,7 +36,7 @@
      <x>0</x>
      <y>0</y>
      <width>717</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="m_FileMenu">
@@ -65,6 +65,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QcepTextBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header>qceptextbrowser.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -2,12 +2,16 @@
 #define QXRDHELPBROWSER_H
 
 #include "qxrdlib_global.h"
-#include <QTextBrowser>
+#include "qceptextbrowser.h"
 #include "qxrdexperiment-ptr.h"
 
-class QXRD_EXPORT QxrdHelpBrowser : public QTextBrowser
+class QXRD_EXPORT QxrdHelpBrowser : public QcepTextBrowser
 {
   Q_OBJECT
+
+private:
+  typedef QcepTextBrowser inherited;
+
 public:
   explicit QxrdHelpBrowser(QWidget *parent = 0);
   virtual ~QxrdHelpBrowser();

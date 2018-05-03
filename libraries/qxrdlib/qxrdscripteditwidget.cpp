@@ -4,7 +4,7 @@
 #include "qxrdexperiment.h"
 
 QxrdScriptEditWidget::QxrdScriptEditWidget(QWidget *parent) :
-  QTextEdit(parent),
+  inherited(parent),
   m_Highlighter(NULL)
 {
   m_Highlighter = new QxrdHighlighter(document());
