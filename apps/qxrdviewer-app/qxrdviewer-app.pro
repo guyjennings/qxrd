@@ -1,69 +1,36 @@
 TEMPLATE = app
-TARGET   = qxrd
+TARGET   = qxrdviewer
 DESTDIR  = ../
 
-include("../qxrd.version.pri")
-include("../qxrd.platform.pri")
-include("../compiler.pri")
-include("../extras-app.pri")
+include("qxrdviewer.version.pri")
+include("../../qxrd.platform.pri")
+include("../../compiler.pri")
+include("../../extras-app.pri")
 
 DEFINES += QXRD_VERSION=\"$$VERSION\"
-
-OTHER_FILES += \
-    qxrd.rc \
-    simpleServerTest.mac \
-    testScripts.js \
-    testScriptPlot.js \
-    testImage.js \
-    tilt_test.js \
-    testscript.js \
-    racetest.js \
-    racetest.mac \
-    unsubtractDark.js \
-    qxrdexampleusergeometry.js \
-    qxrdexampleuserabsorption.js \
-    qxrd_macrocounter.mac \
-    calgrid.js \
-    findring.js \
-    dumpRings.js
-
-DISTFILES += qxrd.dox \
-    download/index.php \
-    tiffconfig/win32/tif_config.h \
-    tiffconfig/win32/tiffconf.h \
-    tiffconfig/macx/tif_config.h \
-    tiffconfig/macx/tiffconf.h \
-    qxrd_tests.mac
 
 CONFIG += qceplib-qwt
 CONFIG += qceplib-hdf5
 CONFIG += qceplib-tiff
-CONFIG += qceplib-bzip2
 
 #CONFIG += qceplib-nexus
 
-include(../libraries/qceplib/qceplib/qceplib-qwt-include.pri)
-include(../libraries/qceplib/qceplib/qceplib-base-include.pri)
-include(../libraries/qceplib/qceplib/qceplib-mar345-include.pri)
-include(../libraries/qceplib/qceplib/qceplib-cbf-include.pri)
-include(../libraries/qceplib/qceplib/qceplib-tiff-include.pri)
-include(../libraries/qceplib/qceplib/qceplib-levmar-include.pri)
-include(../libraries/qceplib/qceplib/qceplib-szip-include.pri)
-include(../libraries/qceplib/qceplib/qceplib-zlib-include.pri)
-include(../libraries/qceplib/qceplib/qceplib-hdf5-include.pri)
-include(../libraries/qceplib/qceplib/qceplib-specserver-include.pri)
-include(../libraries/qceplib/qceplib/qceplib-bzip2-include.pri)
-##include(../libraries/qceplib/qceplib/qceplib-nexus.pri)
+include(../../libraries/qceplib/qceplib/qceplib-qwt-include.pri)
+include(../../libraries/qceplib/qceplib/qceplib-base-include.pri)
+include(../../libraries/qceplib/qceplib/qceplib-mar345-include.pri)
+include(../../libraries/qceplib/qceplib/qceplib-cbf-include.pri)
+include(../../libraries/qceplib/qceplib/qceplib-tiff-include.pri)
+include(../../libraries/qceplib/qceplib/qceplib-levmar-include.pri)
+include(../../libraries/qceplib/qceplib/qceplib-szip-include.pri)
+include(../../libraries/qceplib/qceplib/qceplib-zlib-include.pri)
+include(../../libraries/qceplib/qceplib/qceplib-hdf5-include.pri)
+include(../../libraries/qceplib/qceplib/qceplib-bzip2-include.pri)
+include(../../libraries/qceplib/qceplib/qceplib-specserver-include.pri)
 
-INCLUDEPATH += $${PWD}/../libraries/qxrdlib/
-INCLUDEPATH += $${OUT_PWD}/../libraries/qxrdlib/
+INCLUDEPATH += $${PWD}/../../libraries/qxrdlib/
+INCLUDEPATH += $${OUT_PWD}/../../libraries/qxrdlib/
 
-#macx {
-#}
-
-SOURCES += qxrd.cpp
-
-OTHER_FILES += testImage.js
+SOURCES += qxrdviewer.cpp
 
 macx:
 else:unix:LIBS += -ltiff
@@ -71,14 +38,8 @@ else:win32 {
     INCLUDEPATH += .
 }
 
-OTHER_FILES += qxrd.rc \
-    qxrd.nsi \
-    qxrd-qt5.nsi \
-    HeaderTemplates.txt \
-    vcredist_vs2013_x86.exe \
-    vcredist_vs2013_x64.exe \
-    vcredist_vs2017_x86.exe \
-    vcredist_vs2017_x64.exe
+OTHER_FILES += qxrd-viewer.rc \
+    qxrd-viewer.nsi
 
 win32 {
 # Copy QT Libraries into app directory
@@ -241,20 +202,20 @@ never {
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ -lqceplib
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ -lqceplibd
-else:unix: LIBS += -L$$OUT_PWD/../ -lqceplib
+else:unix: LIBS += -L$$OUT_PWD/../../ -lqceplib
 
-INCLUDEPATH += $$PWD/../libraries/qceplib
-DEPENDPATH += $$PWD/../libraries/qceplib
+INCLUDEPATH += $$PWD/../../libraries/qceplib
+DEPENDPATH += $$PWD/../../libraries/qceplib
 
-INCLUDEPATH += $$OUT_PWD/../libraries/qceplib
-DEPENDPATH  += $$OUT_PWD/../libraries/qceplib
+INCLUDEPATH += $$OUT_PWD/../../libraries/qceplib
+DEPENDPATH  += $$OUT_PWD/../../libraries/qceplib
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ -lqxrdlib
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ -lqxrdlibd
-else:unix: LIBS += -L$$OUT_PWD/../ -lqxrdlib
+else:unix: LIBS += -L$$OUT_PWD/../../ -lqxrdlib
 
-INCLUDEPATH += $$PWD/../libraries/qxrdlib
-DEPENDPATH += $$PWD/../libraries/qxrdlib
+INCLUDEPATH += $$PWD/../../libraries/qxrdlib
+DEPENDPATH += $$PWD/../../libraries/qxrdlib
 
-INCLUDEPATH += $$OUT_PWD/../libraries/qxrdlib
-DEPENDPATH  += $$OUT_PWD/../libraries/qxrdlib
+INCLUDEPATH += $$OUT_PWD/../../libraries/qxrdlib
+DEPENDPATH  += $$OUT_PWD/../../libraries/qxrdlib

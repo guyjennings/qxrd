@@ -5,9 +5,7 @@ QT += \
   network \
   qml \
   script \
-  concurrent \
-#  scripttools \
-  testlib
+  concurrent
 
 *g++* {
     QMAKE_CXXFLAGS += -g
@@ -15,10 +13,10 @@ QT += \
     QMAKE_LFLAGS += -g
 }
 
-MOC_DIR = moc
-UI_DIR = ui
+MOC_DIR     = moc
+UI_DIR      = ui
 OBJECTS_DIR = obj
-RCC_DIR = rcc
+RCC_DIR     = rcc
 
 win32 {
     CONFIG(debug, debug|release):CONFIG += console

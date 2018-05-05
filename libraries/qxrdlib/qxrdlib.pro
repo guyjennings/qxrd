@@ -567,7 +567,7 @@ include(../qceplib/qceplib/qceplib-hdf5-include.pri)
 include(../qceplib/qceplib/qceplib-bzip2-include.pri)
 include(../qceplib/qceplib/qceplib-specserver-include.pri)
 
-INCLUDEPATH += $${OUT_PWD}/../qceplib/
+INCLUDEPATH += $${OUT_PWD}/../qceplib/ui/
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../ -lqceplib
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../ -lqceplibd
