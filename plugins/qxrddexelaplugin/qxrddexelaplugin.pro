@@ -1,5 +1,5 @@
 include("../../qxrd.version.pri")
-include("../../qxrd.platform.pri")
+#include("../../qxrd.platform.pri")
 
 QT += widgets qml network script concurrent
 
@@ -44,4 +44,9 @@ win32{
     } else {
         LIBS += -L"$${DEX_SDK}/lib/Win32/"
     }
+}
+
+macx {
+  dummyTarget.target   = dmg
+  QMAKE_EXTRA_TARGETS += dummyTarget
 }

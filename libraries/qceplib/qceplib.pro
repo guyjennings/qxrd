@@ -4,10 +4,10 @@
 #
 #-------------------------------------------------
 
-QT       += widgets qml network script concurrent
-
 TEMPLATE = lib
 DESTDIR  = ../../
+
+QT       += widgets qml network script concurrent
 
 qtHaveModule(datavisualization) {
     QT += datavisualization
@@ -20,6 +20,11 @@ win32:CONFIG(debug, debug|release) {
   TARGET = qceplibd
 } else {
   TARGET = qceplib
+}
+
+macx {
+  dummyTarget.target   = dmg
+  QMAKE_EXTRA_TARGETS += dummyTarget
 }
 
 DEFINES += QCEPLIB_LIBRARY

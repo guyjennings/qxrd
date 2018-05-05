@@ -1,5 +1,5 @@
 include("../qxrd.version.pri")
-include("../qxrd.platform.pri")
+#include("../qxrd.platform.pri")
 
 TEMPLATE = subdirs
 
@@ -32,3 +32,10 @@ contains(DEFINES,HAVE_ALLIEDVISION) {
 }
 
 CONFIG += ordered
+
+macx{
+  dmg.depends          = FORCE
+  dmg.CONFIG          += recursive
+  dmg.recurse_target   = dmg
+  QMAKE_EXTRA_TARGETS += dmg
+}

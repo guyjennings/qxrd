@@ -4,8 +4,11 @@
 #
 #-------------------------------------------------
 
+TEMPLATE = lib
+DESTDIR = ../../
+
 include("../../qxrd.version.pri")
-include("../../qxrd.platform.pri")
+#include("../../qxrd.platform.pri")
 
 QT       += widgets qml network script scripttools concurrent
 QT       += testlib
@@ -18,8 +21,10 @@ win32:CONFIG(debug, debug|release) {
   TARGET = qxrdlib
 }
 
-TEMPLATE = lib
-DESTDIR = ../../
+macx {
+  dummyTarget.target   = dmg
+  QMAKE_EXTRA_TARGETS += dummyTarget
+}
 
 qtHaveModule(datavisualization):qtHaveModule(charts) {
   message("QtDataVisualization and QtCharts available")

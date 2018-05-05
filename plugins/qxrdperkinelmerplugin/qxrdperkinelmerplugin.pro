@@ -1,5 +1,5 @@
 include("../../qxrd.version.pri")
-include("../../qxrd.platform.pri")
+#include("../../qxrd.platform.pri")
 
 QT += widgets qml network script concurrent
 
@@ -41,3 +41,8 @@ else:unix: LIBS += -L$$OUT_PWD/../../ -lqxrdlib
 
 INCLUDEPATH += $$PWD/../../libraries/qxrdlib
 DEPENDPATH += $$PWD/../../libraries/qxrdlib
+
+macx {
+  dummyTarget.target   = dmg
+  QMAKE_EXTRA_TARGETS += dummyTarget
+}
