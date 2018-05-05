@@ -7,13 +7,6 @@
 TEMPLATE = lib
 DESTDIR  = ../../
 
-QT       += widgets qml network script concurrent
-
-qtHaveModule(datavisualization) {
-    QT += datavisualization
-    DEFINES += HAVE_DATAVIS
-}
-
 win32:CONFIG   += skip_target_version_ext
 
 win32:CONFIG(debug, debug|release) {
@@ -22,10 +15,8 @@ win32:CONFIG(debug, debug|release) {
   TARGET = qceplib
 }
 
-macx {
-  dummyTarget.target   = dmg
-  QMAKE_EXTRA_TARGETS += dummyTarget
-}
+include("../../compiler.pri")
+include("../../extras-lib.pri")
 
 DEFINES += QCEPLIB_LIBRARY
 

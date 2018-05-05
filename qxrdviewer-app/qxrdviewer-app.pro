@@ -4,12 +4,10 @@ DESTDIR  = ../
 
 include("qxrdviewer.version.pri")
 include("../qxrd.platform.pri")
+include("../compiler.pri")
+include("../extras-app.pri")
 
 DEFINES += QXRD_VERSION=\"$$VERSION\"
-
-message(Libraries: $$[QT_INSTALL_LIBS])
-message(Binary files (executables): $$[QT_INSTALL_BINS])
-message(Destdir = $${DESTDIR})
 
 CONFIG += qceplib-qwt
 CONFIG += qceplib-hdf5

@@ -2,14 +2,12 @@ TEMPLATE = app
 TARGET   = qse
 DESTDIR  = ../
 
-include(qse.version.pri)
+include("qse.version.pri")
 include("../qxrd.platform.pri")
+include("../compiler.pri")
+include("../extras-app.pri")
 
 DEFINES += QSE_VERSION=\"$$VERSION\"
-
-message(Libraries: $$[QT_INSTALL_LIBS])
-message(Binary files (executables): $$[QT_INSTALL_BINS])
-message(Destdir = $${DESTDIR})
 
 CONFIG += qceplib-qwt
 CONFIG += qceplib-hdf5

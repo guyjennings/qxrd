@@ -1,7 +1,6 @@
 include("../../qxrd.version.pri")
-#include("../../qxrd.platform.pri")
-
-QT += widgets qml network script concurrent
+include("../../compiler.pri")
+include("../../extras-lib.pri")
 
 TEMPLATE = lib
 CONFIG += plugin
@@ -47,9 +46,4 @@ win32{
   } else {
     LIBS += -L$${VIMBA_HEADER}/VimbaC/Lib/Win64/ -lVimbaC -L$${VIMBA_HEADER}/VimbaCPP/Lib/Win64/ -lVimbaCPP
   }
-}
-
-macx {
-  dummyTarget.target   = dmg
-  QMAKE_EXTRA_TARGETS += dummyTarget
 }

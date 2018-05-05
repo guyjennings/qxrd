@@ -1,4 +1,4 @@
-message(dmg $${TARGET} $${PWD})
+#message(dmg $${TARGET} $${PWD})
 
 #dmg.target   = dmg
 #dmg.depends  = $${TARGET}.app

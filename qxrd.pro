@@ -11,7 +11,9 @@ SUBDIRS = libraries plugins qxrd-app qxrdviewer-app qsw-app qxia-app qse-app
 CONFIG += ordered
 
 include("qxrd.version.pri")
+include("compiler.pri")
 #include("qxrd.platform.pri")
+include("extras-recurse.pri")
 
 message(Version = $${VERSION})
 message(Host Arch = $${QMAKE_HOST.arch})
@@ -108,17 +110,4 @@ website.commands += && \
     ssh www12.xor.aps.anl.gov ln -s
 
 # rsync -avP -e ssh dox/html/ guyjennings,qxrd@web.sourceforge.net:htdocs/
-
-#for(m, QT) {
-#  message("QT contains $${m}")
-#}
-
-macx{
-  dmg.depends          =  FORCE
-#  dmg.target           =  dmg
-  dmg.CONFIG          +=  recursive
-  dmg.recurse_target   =  dmg
-
-  QMAKE_EXTRA_TARGETS +=  dmg
-}
 

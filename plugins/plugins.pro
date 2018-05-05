@@ -1,5 +1,7 @@
 include("../qxrd.version.pri")
-#include("../qxrd.platform.pri")
+include("plugin-tests.pri")
+include("../compiler.pri")
+include("../extras-recurse.pri")
 
 TEMPLATE = subdirs
 
@@ -8,8 +10,6 @@ SUBDIRS =  \
   qxrdareadetectorplugin \
   qxrdsimulatedplugin \
   qxrdfilewatcherplugin
-
-message(DEFINES == $$DEFINES)
 
 contains(DEFINES,HAVE_PERKIN_ELMER) {
   message("HAVE_PERKIN_ELMER")
@@ -32,10 +32,3 @@ contains(DEFINES,HAVE_ALLIEDVISION) {
 }
 
 CONFIG += ordered
-
-macx{
-  dmg.depends          = FORCE
-  dmg.CONFIG          += recursive
-  dmg.recurse_target   = dmg
-  QMAKE_EXTRA_TARGETS += dmg
-}
