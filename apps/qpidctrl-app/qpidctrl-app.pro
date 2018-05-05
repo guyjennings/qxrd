@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET   = qpidctrl
-DESTDIR  = ../
+DESTDIR  = ../../
 
 include("qpidctrl.version.pri")
 include("../../qxrd.platform.pri")

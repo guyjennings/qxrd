@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET   = qxia
-DESTDIR  = ../
+DESTDIR  = ../../
 
 include("qxia.version.pri")
 include("../../qxrd.platform.pri")
