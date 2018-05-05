@@ -164,3 +164,13 @@ macx {
 }
 
 !isEmpty(QXRD_PLUGIN_PATH):DEFINES += QXRD_PLUGIN_PATH=\"$$QXRD_PLUGIN_PATH\"
+
+macx{
+  include("dmg.pri")
+} else:unix {
+  include("rpm.pri")
+} else:win32 {
+  include("nsis.pri")
+}
+
+

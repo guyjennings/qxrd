@@ -1,0 +1,1 @@
+message(dmg $${TARGET} $${PWD})
