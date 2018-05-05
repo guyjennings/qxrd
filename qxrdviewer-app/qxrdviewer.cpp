@@ -4,7 +4,7 @@
 #include "qcepallocator.h"
 #include "qxrdappviewer.h"
 #include "qxrdappviewer-ptr.h"
-#include "qxrdwindow.h"
+//#include "qxrdwindow.h"
 #include <stdio.h>
 #include "qcepdataobject.h"
 

@@ -1,60 +1,15 @@
-include("../qxrd.version.pri")
-include("../qxrd.platform.pri")
-
-message(Libraries: $$[QT_INSTALL_LIBS])
-message(Binary files (executables): $$[QT_INSTALL_BINS])
-message(Destdir = $${DESTDIR})
-
 TEMPLATE = app
 TARGET   = qxrdviewer
 DESTDIR  = ../
 
-macx {
-  ICON = ../libraries/qxrdlib/images/qxrdviewer-icon.icns
-}
-
-win32 {
-    RC_FILE = qxrdviewer.rc
-}
-
-OTHER_FILES += qxrdviewer.rc
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
-
-CONFIG += qt
-
-QT += network \
-    qml \
-    script \
-    scripttools \
-    testlib
-
-unix {
-    message(Version = $${VERSION})
-    message(Plugin path = $${QXRD_PLUGIN_PATH})
-}
+include("qxrdviewer.version.pri")
+include("../qxrd.platform.pri")
 
 DEFINES += QXRD_VERSION=\"$$VERSION\"
 
-
-*g++* { 
-    QMAKE_CXXFLAGS += -g
-    QMAKE_CFLAGS += -g
-    QMAKE_LFLAGS += -g
-}
-
-MOC_DIR = moc
-UI_DIR = ui
-OBJECTS_DIR = obj
-RCC_DIR = rcc
-message(Building: $${TARGET})
-
-win32 { 
-    CONFIG(debug, debug|release):CONFIG += console
-}
-
-INCLUDEPATH += $${PWD}/../libraries/qxrdlib/
-INCLUDEPATH += $${OUT_PWD}/../libraries/qxrdlib/
+message(Libraries: $$[QT_INSTALL_LIBS])
+message(Binary files (executables): $$[QT_INSTALL_BINS])
+message(Destdir = $${DESTDIR})
 
 CONFIG += qceplib-qwt
 CONFIG += qceplib-hdf5
@@ -73,11 +28,9 @@ include(../libraries/qceplib/qceplib/qceplib-zlib-include.pri)
 include(../libraries/qceplib/qceplib/qceplib-hdf5-include.pri)
 include(../libraries/qceplib/qceplib/qceplib-bzip2-include.pri)
 include(../libraries/qceplib/qceplib/qceplib-specserver-include.pri)
-##include(../libraries/qceplib/qceplib/qceplib-nexus.pri)
 
-#macx {
-#}
-
+INCLUDEPATH += $${PWD}/../libraries/qxrdlib/
+INCLUDEPATH += $${OUT_PWD}/../libraries/qxrdlib/
 
 SOURCES += qxrdviewer.cpp
 

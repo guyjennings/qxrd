@@ -1,3 +1,38 @@
+macx {
+  ICON = $${TARGET}-icon.icns
+}
+
+win32 {
+  RC_FILE = $${TARGET}.rc
+}
+
+OTHER_FILES += $${TARGET}-icon.icns $${TARGET}.rc $${TARGET}.nsi
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets concurrent
+
+CONFIG += qt
+
+QT += network \
+    qml \
+    script \
+    scripttools \
+    testlib
+
+*g++* {
+    QMAKE_CXXFLAGS += -g
+    QMAKE_CFLAGS += -g
+    QMAKE_LFLAGS += -g
+}
+
+MOC_DIR = moc
+UI_DIR = ui
+OBJECTS_DIR = obj
+RCC_DIR = rcc
+
+win32 {
+    CONFIG(debug, debug|release):CONFIG += console
+}
+
 macx{
   QMAKE_MAC_SDK=macosx10.12
   QXRDSUFFIX = -macx

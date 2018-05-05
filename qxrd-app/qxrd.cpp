@@ -4,9 +4,8 @@
 #include "qcepallocator.h"
 #include "qxrdapplication.h"
 #include "qxrdapplication-ptr.h"
-#include "qxrdwindow.h"
 #include <stdio.h>
-#include "qcepdataobject.h"
+//#include "qcepdataobject.h"
 #include "qceprunguard.h"
 #include <QMessageBox>
 
