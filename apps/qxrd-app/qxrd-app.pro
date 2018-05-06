@@ -56,7 +56,8 @@ include(../../libraries/qceplib/qceplib/qceplib-bzip2-include.pri)
 ##include(../../libraries/qceplib/qceplib/qceplib-nexus.pri)
 
 INCLUDEPATH += $${PWD}/../../libraries/qxrdlib/
-INCLUDEPATH += $${OUT_PWD}/../../libraries/qxrdlib/
+INCLUDEPATH += $${OUT_PWD}/../../libraries/qceplib/ui/
+INCLUDEPATH += $${OUT_PWD}/../../libraries/qxrdlib/ui/
 
 #macx {
 #}

@@ -28,7 +28,8 @@ include(../../libraries/qceplib/qceplib/qceplib-bzip2-include.pri)
 include(../../libraries/qceplib/qceplib/qceplib-specserver-include.pri)
 
 INCLUDEPATH += $${PWD}/../../libraries/qxrdlib/
-INCLUDEPATH += $${OUT_PWD}/../../libraries/qxrdlib/
+INCLUDEPATH += $${OUT_PWD}/../../libraries/qceplib/ui/
+INCLUDEPATH += $${OUT_PWD}/../../libraries/qxrdlib/ui/
 
 SOURCES += \
   qse-app.cpp

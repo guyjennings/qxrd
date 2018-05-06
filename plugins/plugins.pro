@@ -31,4 +31,9 @@ contains(DEFINES,HAVE_ALLIEDVISION) {
   SUBDIRS += qxrdalliedvisionplugin
 }
 
+contains(DEFINES,HAVE_STELLARNET) {
+  message("HAVE_STELLARNET")
+  SUBDIRS += qstellarnetplugin
+}
+
 CONFIG += ordered

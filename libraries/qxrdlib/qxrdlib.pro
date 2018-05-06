@@ -201,7 +201,8 @@ SOURCES += qxrdlib.cpp \
     qcepfilebrowsersettings.cpp \
     qcepfilebrowsermodelupdaterthread.cpp \
     qcepfilebrowsermodelupdater.cpp \
-    qcepfilebrowsermodel.cpp
+    qcepfilebrowsermodel.cpp \
+    qstellarnetplugininterface.cpp
 
 HEADERS += qxrdlib.h\
         qxrdlib_global.h \
@@ -375,7 +376,8 @@ HEADERS += qxrdlib.h\
     qcepfilebrowsermodelupdater.h \
     qcepfilebrowsermodelupdater-ptr.h \
     qcepfilebrowsermodel.h \
-    qcepfilebrowsermodel-ptr.h
+    qcepfilebrowsermodel-ptr.h \
+    qstellarnetplugininterface.h
 
 INCLUDEPATH += commands/00generic/
 INCLUDEPATH += commands/specremote/

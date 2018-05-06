@@ -1,0 +1,8 @@
+#ifndef QSTELLARNETPLUGINPTR_H
+#define QSTELLARNETPLUGINPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QStellarNetPlugin)
+
+#endif // QSTELLARNETPLUGINPTR_H

@@ -86,3 +86,7 @@ macx {
 } else:unix {
 # look for vimba on Linux
 }
+
+//StellarNet
+
+DEFINES += HAVE_STELLARNET

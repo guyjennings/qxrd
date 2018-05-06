@@ -1,0 +1,8 @@
+#ifndef QSWEXPERIMENTTHREADPTR_H
+#define QSWEXPERIMENTTHREADPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QswExperimentThread)
+
+#endif // QSWEXPERIMENTTHREADPTR_H

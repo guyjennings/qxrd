@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qsw-images/gspectrum-48x48.png</file>
+        <file>qsw-images/gspectrum.svg</file>
+        <file>qsw-images/qxrd-icon-48x48.png</file>
+    </qresource>
+</RCC>

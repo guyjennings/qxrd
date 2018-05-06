@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 QxrdDebugDictionary::QxrdDebugDictionary()
-  : QcepDebugDictionary()
+  : inherited()
 {
   setMessage(DEBUG_ACQUIRE,      "Acquisition Operations");
   setMessage(DEBUG_PROCESS,      "Processing Operations");

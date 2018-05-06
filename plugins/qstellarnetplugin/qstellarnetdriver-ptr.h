@@ -1,0 +1,8 @@
+#ifndef QSTELLARNETDRIVERPTR_H
+#define QSTELLARNETDRIVERPTR_H
+
+#include "qcepsharedpointer.h"
+
+QCEP_SHAREDPOINTER(QStellarNetDriver)
+
+#endif // QSTELLARNETDRIVERPTR_H
