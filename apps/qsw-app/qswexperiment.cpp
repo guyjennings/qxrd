@@ -2,7 +2,7 @@
 #include "qcepimagedata-ptr.h"
 
 #ifdef Q_OS_WIN
-#include "StellarNet.h"
+//#include "StellarNet.h"
 #endif
 
 QswExperiment::QswExperiment(QString name)
@@ -19,7 +19,7 @@ void QswExperiment::initialize(QcepObjectWPtr parent)
   inherited::initialize(parent);
 
 #ifdef Q_OS_WIN
-  OpenStellarNetLibrary();
+//  OpenStellarNetLibrary();
 #endif
 
   connect(&m_Timer, &QTimer::timeout,
@@ -47,7 +47,7 @@ void QswExperiment::onTimerTimeout()
   QVector<float> s(2051);
 
 #ifdef Q_OS_WIN
-  ReadSpectrometer(NULL, 1, s.data());
+//  ReadSpectrometer(NULL, 1, s.data());
 #endif
 
   s.resize(2048);
@@ -58,7 +58,7 @@ void QswExperiment::onTimerTimeout()
 void QswExperiment::updateReadoutRate()
 {
 #ifdef Q_OS_WIN
-  InitializeSpectrometer(m_IntegrationPeriod, m_ScanAverages, 1, 0, 0);
+//  InitializeSpectrometer(m_IntegrationPeriod, m_ScanAverages, 1, 0, 0);
 #endif
 
   m_Timer.start(m_IntegrationPeriod*m_ScanAverages);

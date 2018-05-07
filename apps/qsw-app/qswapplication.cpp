@@ -3,7 +3,6 @@
 #include "qswexperimentthread.h"
 #include "qswexperiment.h"
 #include "qcepplotwidgetsettings.h"
-#include "qcepallocator.h"
 #include "qswglobalsettings.h"
 
 QswApplication::QswApplication(int &argc, char **argv)
@@ -21,11 +20,6 @@ QswApplication::QswApplication(int &argc, char **argv)
 void QswApplication::initializeRoot()
 {
   inherited::initializeRoot();
-
-  m_Allocator =
-      QcepAllocatorPtr(
-        new QcepAllocator("allocator"));
-  m_Allocator -> initialize(sharedFromThis());
 
   m_PlotSettings =
       QcepPlotWidgetSettingsPtr(
@@ -57,22 +51,22 @@ void QswApplication::initializeRoot()
 
 QString QswApplication::applicationName()
 {
-  return "QSW";
+  return QStringLiteral("QSW");
 }
 
 QString QswApplication::applicationMnemonic()
 {
-  return "qsw";
+  return QStringLiteral("qsw");
 }
 
 QString QswApplication::applicationVersion()
 {
-  return "0.1";
+  return QStringLiteral(STR(QSW_VERSION));
 }
 
 QString QswApplication::applicationDescription()
 {
-  return "QSW SpectraWiz Spectrometer Readout";
+  return QStringLiteral("QSW SpectraWiz Spectrometer Readout");
 }
 
 QIcon QswApplication::applicationIcon()

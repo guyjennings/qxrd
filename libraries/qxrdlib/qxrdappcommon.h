@@ -29,9 +29,7 @@ public:
 
   static QxrdAppCommonWPtr findApplication(QcepObjectWPtr p);
 
-
   void appendWatcher(QString patt);
-  void appendPlugin(QString dir);
 
   void parseCommandLine();
 
@@ -68,12 +66,6 @@ public:
 public:
   Q_PROPERTY(QStringList watcherList READ get_WatcherList WRITE set_WatcherList STORED false)
   QCEP_STRING_LIST_PROPERTY(WatcherList)
-
-  Q_PROPERTY(QStringList pluginList READ get_PluginList WRITE set_PluginList STORED false)
-  QCEP_STRING_LIST_PROPERTY(PluginList)
-
-  Q_PROPERTY(int    loadPlugins    READ get_LoadPlugins WRITE set_LoadPlugins STORED false)
-  QCEP_INTEGER_PROPERTY(LoadPlugins)
 
   Q_PROPERTY(int    startDetectors READ get_StartDetectors WRITE set_StartDetectors STORED false)
   QCEP_INTEGER_PROPERTY(StartDetectors)

@@ -1,24 +1,12 @@
-!ifndef VERSION
-!define VERSION 0.4.x
-!endif
-
-!ifndef PREFIX
-!define PREFIX ""
-!endif
-
-!ifndef PREFIXSTR
-!define PREFIXSTR ""
-!endif
-
 !include MUI2.nsh
 
-Name "QXRD"
+Name "QCEPLIBS"
 
-OutFile "${APPDIR}\qxrd-setup-${VERSION}${PREFIX}.exe"
+OutFile "${APPDIR}\setup-qceplibs-${VERSION}${PREFIX}.exe"
 !ifdef WIN64
-InstallDir "$PROGRAMFILES64\qxrd\qxrd-${VERSION}${PREFIX}"
+InstallDir "$PROGRAMFILES64\qxrd\qxrd-${LIBVERSION}${PREFIX}"
 !else
-InstallDir "$PROGRAMFILES\qxrd\qxrd-${VERSION}${PREFIX}"
+InstallDir "$PROGRAMFILES\qxrd\qxrd-${LIBVERSION}${PREFIX}"
 !endif
 ;InstallDirRegKey HKLM "Software\qxrd\qxrd-${VERSION}${PREFIX}" "install_dir"
 RequestExecutionLevel admin
@@ -26,8 +14,8 @@ RequestExecutionLevel admin
 Var StartMenuFolder
 
 !define MUI_ABORTWARNING
-!define MUI_ICON "libraries\qxrdlib\images\qxrd-icon.ico"
-!define MUI_UNICON "libraries\qxrdlib\images\qxrd-icon.ico"
+!define MUI_ICON   "apps\qxrd-app\qxrd-icon.ico"
+!define MUI_UNICON "apps\qxrd-app\qxrd-icon.ico"
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "gpl.txt"
@@ -44,11 +32,9 @@ Var StartMenuFolder
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "English"
 
-Section "Extract qxrd"
+Section "Extract libs"
   SetShellVarContext all
   SetOutPath "$INSTDIR"
-  File "${APPDIR}\qxrd.exe"
-  File "${APPDIR}\qxrdviewer.exe"
   File "${APPDIR}\vcredist*.exe"
   File "${APPDIR}\*.dll"
 
@@ -63,21 +49,18 @@ Section "Extract qxrd"
   SetOutPath "$INSTDIR"
 
 ;  WriteRegStr HKLM "Software\qxrd\qxrd-${VERSION}${PREFIX}" "install_dir" $INSTDIR
-  WriteUninstaller "$INSTDIR\uninstall.exe"
+  WriteUninstaller "$INSTDIR\uninstall-qceplibs.exe"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
   CreateDirectory "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\ QXRD ${VERSION} ${PREFIXSTR}.lnk" "$INSTDIR\qxrd.exe"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\ QXRDVIEWER ${VERSION} ${PREFIXSTR}.lnk" "$INSTDIR\qxrdviewer.exe"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Fresh Start.lnk" "$INSTDIR\qxrd.exe" "-fresh"
-  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+  CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Uninstall.lnk" "$INSTDIR\uninstall-qceplibs.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QXRD ${VERSION} ${PREFIXSTR}" \
-                 "DisplayName" "QXRD ${VERSION} ${PREFIXSTR} -- Data Acquisition for Perkin-Elmer XRD Detectors"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QXRD ${VERSION} ${PREFIXSTR}" \
-                 "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QCEPLIBS ${VERSION} ${PREFIXSTR}" \
+                 "DisplayName" "QCEPLIBS ${VERSION} ${PREFIXSTR} -- Libraries for CEP Software"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QCEPLIBS ${VERSION} ${PREFIXSTR}" \
+                 "UninstallString" "$\"$INSTDIR\uninstall-qceplibs.exe$\""
   ExecWait "$INSTDIR\vcredist*.exe /install /quiet /norestart"
 SectionEnd
 
@@ -88,22 +71,17 @@ Section "Uninstall"
   Delete "$INSTDIR\plugins\*.*"
   RMDir  "$INSTDIR\plugins"
   Delete "$INSTDIR\*.dll"
-  Delete "$INSTDIR\qxrd.exe"
-  Delete "$INSTDIR\qxrdviewer.exe"
   Delete "$INSTDIR\vcredist*.exe"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
   Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\ QXRD ${VERSION} ${PREFIXSTR}.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\ QXRDVIEWER ${VERSION} ${PREFIXSTR}.lnk"
-  Delete "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}\Fresh Start.lnk"
   RMDir "$SMPROGRAMS\$StartMenuFolder\QXRD ${VERSION} ${PREFIXSTR}"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
 
 ;  DeleteRegKey /ifempty HKLM "Software\qxrd\qxrd${PREFIX}-${VERSION}"
 ;  DeleteRegKey /ifempty HKLM "Software\qxrd"
-  Delete "$INSTDIR\uninstall.exe"
+  Delete "$INSTDIR\uninstall-qceplibs.exe"
   RMDir  "$INSTDIR"
 
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QXRD ${VERSION} ${PREFIXSTR}"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\QCEPLIBS ${VERSION} ${PREFIXSTR}"
 SectionEnd

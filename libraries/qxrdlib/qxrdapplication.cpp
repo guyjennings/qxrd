@@ -273,15 +273,6 @@ void QxrdApplication::parseCommandLine()
   QCommandLineOption startOption("start", "Start detectors");
   addCommandLineOption(&startOption);
 
-  QCommandLineOption pluginOption("p", "Special plugin load");
-  addCommandLineOption(&pluginOption);
-
-  QCommandLineOption pluginDirOption({"P", "plugin"}, "Extra Plugin Search Directory (may be repeated)", "dir");
-  addCommandLineOption(&pluginDirOption);
-
-  QCommandLineOption noPluginOption("noplugins", "Don't load plugins");
-  addCommandLineOption(&noPluginOption);
-
   inherited::parseCommandLine();
 
   if (m_CommandLineParser -> isSet(noStartOption)) {
@@ -290,28 +281,6 @@ void QxrdApplication::parseCommandLine()
 
   if (m_CommandLineParser -> isSet(startOption)) {
     set_StartDetectors(true);
-  }
-
-  if (m_CommandLineParser -> isSet(pluginOption)) {
-    QDir appDir(qApp->applicationDirPath());
-
-    appDir.cd("plugins");
-
-    appendPlugin(appDir.absolutePath());
-  }
-
-  if (m_CommandLineParser -> isSet(pluginDirOption)) {
-    QStringList plugins(m_CommandLineParser -> values(pluginDirOption));
-
-    foreach(QString ds, plugins) {
-      QDir d(ds);
-
-      appendPlugin(d.absolutePath());
-    }
-  }
-
-  if (m_CommandLineParser -> isSet(noPluginOption)) {
-    set_LoadPlugins(false);
   }
 }
 

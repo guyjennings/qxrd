@@ -3,7 +3,6 @@ TARGET   = qpidctrl
 DESTDIR  = ../../
 
 include("qpidctrl.version.pri")
-include("../../qxrd.platform.pri")
 include("../../compiler.pri")
 include("../../extras-app.pri")
 

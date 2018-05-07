@@ -28,6 +28,7 @@ bool QStellarNetPlugin::readSpectrometer(
     int chan,
     float *dataBuffer)
 {
+  return false;
 }
 
 int QStellarNetPlugin::getDeviceCount()

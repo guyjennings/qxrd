@@ -3,7 +3,6 @@ TARGET   = qavrg
 DESTDIR  = ../../
 
 include("qavrg.version.pri")
-include("../../qxrd.platform.pri")
 include("../../compiler.pri")
 include("../../extras-app.pri")
 

@@ -3,7 +3,6 @@ TARGET   = qxrayeye
 DESTDIR  = ../../
 
 include("qxrayeye.version.pri")
-include("../../qxrd.platform.pri")
 include("../../compiler.pri")
 include("../../extras-app.pri")
 

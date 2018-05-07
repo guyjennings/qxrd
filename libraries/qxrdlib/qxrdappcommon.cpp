@@ -21,8 +21,6 @@
 QxrdAppCommon::QxrdAppCommon(int &argc, char **argv)
   : inherited(argc, argv),
     m_WatcherList(this, "watcherList", QStringList(), "File patterns to watch for"),
-    m_PluginList(this, "pluginList", QStringList(), "Plugin directories"),
-    m_LoadPlugins(this, "loadPlugins", 1, "Load plugins"),
     m_StartDetectors(this, "startDetectors", 1, "Start Detectors when opening experiments"),
     m_CurrentDirectory(this, "currentDirectory", QDir::homePath(), "Current Directory"),
     //  m_OpenDirectly(m_Saver, this,"openDirectly", false, "Open Last Experiment at Startup"),
@@ -117,11 +115,6 @@ QxrdAppCommonWPtr QxrdAppCommon::findApplication(QcepObjectWPtr p)
 void QxrdAppCommon::appendWatcher(QString patt)
 {
   prop_WatcherList()->appendValue(patt);
-}
-
-void QxrdAppCommon::appendPlugin(QString dir)
-{
-  prop_PluginList()->appendValue(dir);
 }
 
 void QxrdAppCommon::parseCommandLine()

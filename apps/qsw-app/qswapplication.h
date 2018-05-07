@@ -38,7 +38,6 @@ public:
   QcepExperimentPtr experiment(int i) const;
 
 private:
-  QcepAllocatorPtr          m_Allocator;
   QswMainWindowPtr          m_MainWindow;
   QswExperimentThreadPtr    m_ExperimentThread;
   QswExperimentWPtr         m_Experiment;

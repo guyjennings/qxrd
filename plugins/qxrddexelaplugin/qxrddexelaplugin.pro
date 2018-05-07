@@ -1,6 +1,7 @@
 include("../../qxrd.version.pri")
 include("../../compiler.pri")
 include("../../extras-lib.pri")
+include("../dexela-test.pri")
 
 TEMPLATE = lib
 CONFIG += plugin

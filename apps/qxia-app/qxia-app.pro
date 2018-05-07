@@ -3,7 +3,6 @@ TARGET   = qxia
 DESTDIR  = ../../
 
 include("qxia.version.pri")
-include("../../qxrd.platform.pri")
 include("../../compiler.pri")
 include("../../extras-app.pri")
 

@@ -3,7 +3,6 @@ TARGET   = qse
 DESTDIR  = ../../
 
 include("qse.version.pri")
-include("../../qxrd.platform.pri")
 include("../../compiler.pri")
 include("../../extras-app.pri")
 

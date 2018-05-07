@@ -1,6 +1,7 @@
 include("../../qxrd.version.pri")
 include("../../compiler.pri")
 include("../../extras-lib.pri")
+include("../allied-vision-test.pri")
 
 TEMPLATE = lib
 CONFIG += plugin

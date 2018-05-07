@@ -12,7 +12,6 @@ CONFIG += ordered
 
 include("qxrd.version.pri")
 include("compiler.pri")
-#include("qxrd.platform.pri")
 include("extras-recurse.pri")
 
 message(Version = $${VERSION})
@@ -20,14 +19,26 @@ message(Host Arch = $${QMAKE_HOST.arch})
 message(Target = $${TARGET})
 message(QT Version $$[QT_VERSION])
 
-win32 {
- include(nsis.pri)
+macx {
+} else:unix {
+} else:win32 {
+ include("qxrd.exe.pri")
 }
 
 DISTFILES += libraries source plugins viewer \
-    qxrdviewer.desktop
+    qxrdviewer.desktop \
+    app.nsi libs.nsi
 
-OTHER_FILES += qxrd.nsi qxrd-qt5.nsi qxrd.dox Doxyfile qxrd.spec.in qxrd.desktop readme.markdown test/qxrd-macro-counter.mac
+OTHER_FILES += \
+  qxrd-qt5.nsi \
+  qxrd.dox \
+  Doxyfile \
+  qxrd.spec.in \
+  qxrd.desktop \
+  readme.markdown \
+  test/qxrd-macro-counter.mac \
+  vcredist_vs2017_x86.exe \
+  vcredist_vs2017_x64.exe
 
 QMAKE_EXTRA_TARGETS += tarball
 
@@ -108,6 +119,38 @@ website.commands += && rsync \
 
 website.commands += && \
     ssh www12.xor.aps.anl.gov ln -s
+
+win32 {
+  NSISVERSION = $${VERSION}
+  include(nsis-libs.pri)
+
+  NSISTARGET = qxrd
+  include(nsis-app.pri)
+
+  NSISTARGET = qxrdviewer
+  include(nsis-app.pri)
+
+  NSISTARGET = qavrg
+  include(nsis-app.pri)
+
+  NSISTARGET = qmca
+  include(nsis-app.pri)
+
+  NSISTARGET = qpidctrl
+  include(nsis-app.pri)
+
+  NSISTARGET = qse
+  include(nsis-app.pri)
+
+  NSISTARGET = qsw
+  include(nsis-app.pri)
+
+  NSISTARGET = qxia
+  include(nsis-app.pri)
+
+  NSISTARGET = qxrayeye
+  include(nsis-app.pri)
+}
 
 # rsync -avP -e ssh dox/html/ guyjennings,qxrd@web.sourceforge.net:htdocs/
 

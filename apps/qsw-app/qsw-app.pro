@@ -3,7 +3,6 @@ TARGET   = qsw
 DESTDIR  = ../../
 
 include("qsw.version.pri")
-include("../../qxrd.platform.pri")
 include("../../compiler.pri")
 include("../../extras-app.pri")
 
