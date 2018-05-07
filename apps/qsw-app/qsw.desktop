@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=QSW
+Comment=Stellar Wiz Spectrometer Interface
+Exec=qsw %f
+Icon=qsw-icon
+Terminal=false
+Type=Application
+MimeType=text/plain
+Categories=Education;Science;Qt;

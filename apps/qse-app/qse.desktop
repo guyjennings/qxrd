@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=QSE
+Comment=SPEC Data File Analysis and Visualization
+Exec=qse %f
+Icon=qse-icon
+Terminal=false
+Type=Application
+MimeType=text/plain
+Categories=Education;Science;Qt;
