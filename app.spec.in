@@ -1,0 +1,14 @@
+
+%package -n @APP@-app
+Version: @VERSION@
+Summary: @APP@ - @DESC@
+
+%description -n @APP@-app
+@APP@ - @DESC@
+
+%files -n @APP@-app
+%{_bindir}/@APP@
+#%{_datadir}/applications/@APP@.desktop
+%{_datadir}/icons/hicolor/*/*/@APP@*.png
+
+

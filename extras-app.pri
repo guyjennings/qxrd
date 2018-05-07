@@ -1,7 +1,7 @@
 macx{
   include("dmg.pri")
 } else:unix {
-  include("rpm.pri")
+#  include("rpm.pri")
 } else:win32 {
 #  include("nsis.pri")
 }

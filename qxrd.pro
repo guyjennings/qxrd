@@ -21,8 +21,9 @@ message(QT Version $$[QT_VERSION])
 
 macx {
 } else:unix {
+  include("qxrd.rpm.pri")
 } else:win32 {
- include("qxrd.exe.pri")
+  include("qxrd.exe.pri")
 }
 
 DISTFILES += libraries source plugins viewer \
